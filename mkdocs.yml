@@ -1,0 +1,9 @@
+site_name: Financial Math Book
+theme:
+  name: material
+
+nav:
+  - Home: index.md
+
+plugins:
+  - search
