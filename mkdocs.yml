@@ -341,8 +341,6 @@ nav:
             - Understanding Correlation: ch17/correlation/understanding.md
         - 17.2 Ecological Correlation:
             - Ecological Correlation and Simpson's Paradox: ch17/ecological_correlation/ecological_correlation.md
-        - 17.3 Survivorship Bias:
-            - Survivorship Bias and Correlation: ch17/survivorship_bias/survivorship_bias.md
         - 17.3 Correlation, Causation, and Confounding:
             - Confounding Variables and Spurious Correlations: ch17/confounding/confounding.md
         - 17.4 Causation:
