@@ -22,7 +22,7 @@ After completing this chapter, you will be able to:
 |---------|-------|-------------|
 | 18.1 | [Correlation](correlation/understanding.md) | Definition, types, properties, and limitations of correlation |
 | 18.2 | [Ecological Correlation](ecological_correlation/ecological_correlation.md) | Group-level correlations and the ecological fallacy |
-| 18.3 | [Correlation, Causation, and Confounding](correlation_causation_confounding/confounding.md) | Distinguishing association from causation |
+| 18.3 | [Correlation, Causation, and Confounding](confounding/confounding.md) | Distinguishing association from causation |
 | 18.4 | [Causation](causation/causation.md) | Criteria and methods for establishing causal relationships |
 | 18.5 | [Correlation Tests](correlation_test/correlation_tests.md) | Pearson, Spearman, and Kendall tests with Python implementations |
 | 18.6 | [Exercises](exercises/exercises.md) | Practice problems and coding exercises |
