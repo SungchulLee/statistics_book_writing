@@ -2,45 +2,225 @@ site_name: Financial Math Book
 theme:
   name: material
 
-nav:
-  - Home: index.md
-  - Chapter 1:
-      - 1.1 Overview: ch01/index.md
-      - 1.2 BS PDE Derivation:
-          - Delta Hedging: ch01/bs_pde_derivation/delta_hedging.md
-          - Martingale: ch01/bs_pde_derivation/martingale.md
-          - Equilibrium: ch01/bs_pde_derivation/equilbrium.md
-          - Change of Numeraire: ch01/bs_pde_derivation/change_of_numeraire.md
-      - 1.3 BS PDE Solution:
-          - Feynman-Kac Formula: ch01/bs_pde_solution/feynman_kac.md
-          - Heat Equation: ch01/bs_pde_solution/heat_equation.md
-          - Green Function: ch01/bs_pde_solution/green_function.md
-          - Various Transforms: ch01/bs_pde_solution/fourier_mellin_laplace_transforms.md
-          - Change of Numeraire: ch01/bs_pde_solution/change_of_numeraire.md
-          - Viscosity Solutions: ch01/bs_pde_solution/viscosity_solutions.md
-      - 1.3 Mathematical Backups:
-          - Martingale Representation Theorem: ch01/math_backups/martingale_representation_theorem.md
-          - Girsanov Theorem: ch01/math_backups/girsanov_theorem.md
-          - Fundamental Theorem of Asset Pricing: ch01/math_backups/fundamental_theorem_of_asset_pricing.md
-          - Separating Hyperplane Theorem: ch01/math_backups/separating_hyperplane_theorem.md
-
-  - Chapter 2:
-      - 2.1 Overview: ch02/index.md
-
-plugins:
-  - search
-
 markdown_extensions:
-  - pymdownx.arithmatex:
-      generic: true
-  - pymdownx.superfences
   - admonition
   - toc:
       permalink: true
+  - pymdownx.superfences
+  - pymdownx.arithmatex:
+      generic: true
 
 extra_javascript:
   - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
 
 
+nav:
+  - Home: index.md
+
+  - Chapter 0 Prerequisites:
+      - 0.1 Mathematical Background (Review):
+          - Sets, Functions, and Logic: ch00/math/logic_sets.md
+          - Sequences, Limits, and Asymptotics: ch00/math/limits.md
+          - Linear Algebra Notation and Conventions: ch00/math/linear_algebra.md
+      - 0.2 Computational Tools:
+          - Python and Jupyter Basics: ch00/tools/python_basics.md
+          - NumPy Arrays: ch00/tools/numpy_basics.md
+          - Data Handling with pandas: ch00/tools/pandas_basics.md
+          - Basic Visualization with Matplotlib: ch00/tools/matplotlib_basics.md
+
+  - Chapter 1 Data Collection and Learning from Data:
+      - 1.1 Classical Approach—Design Your Data Collection:
+          - Populations and Samples: ch01/classical/population_sample.md
+          - Parameters vs Statistics: ch01/classical/parameters_statistics.md
+          - Observational Studies: ch01/classical/observational.md
+          - Confounding and Association vs Causation: ch01/classical/confounding_causation.md
+          - Controlled Experiments: ch01/classical/experiments.md
+          - Randomization and Blinding: ch01/classical/randomization_blinding.md
+          - Sample Surveys and Sampling Methods: ch01/classical/surveys.md
+          - Bias and Nonresponse: ch01/classical/bias_nonresponse.md
+      - 1.2 Modern Approach—Analyze the Data You Have:
+          - Statistical Models vs Learning Algorithms: ch01/modern/models_vs_algorithms.md
+          - Prediction vs Inference: ch01/modern/prediction_vs_inference.md
+      - 1.3 Three Learning Paradigms:
+          - Unsupervised Learning (Pattern Discovery): ch01/paradigms/unsupervised.md
+          - Supervised Learning (Prediction with Labels): ch01/paradigms/supervised.md
+          - Reinforcement Learning (Sequential Decisions): ch01/paradigms/reinforcement.md
+      - 1.4 Two Approaches to Data Analysis:
+          - Design Your Data Collection (Classical): ch01/contrast/design_data.md
+          - Analyze the Data You Have (Modern): ch01/contrast/analyze_available.md
+          - Strengths and Limitations of Each: ch01/contrast/tradeoffs.md
+
+  - Chapter 2 Descriptive Statistics:
+      - 2.1 Exploratory Data Analysis:
+          - Histograms and Density Plots: ch02/exploration/histograms.md
+          - ECDF and Quantiles: ch02/exploration/ecdf.md
+      - 2.2 Shape of Distributions:
+          - Modality: ch02/shape/modality.md
+          - Skewness and Kurtosis: ch02/shape/skewness_kurtosis.md
+          - Outliers and Leverage: ch02/shape/outliers.md
+      - 2.3 Numerical Summaries:
+          - Mean, Median, Mode: ch02/center/mean_median_mode.md
+          - Variance and Standard Deviation: ch02/spread/variance_std.md
+          - IQR and Robust Measures: ch02/spread/robust.md
+      - 2.4 Visualization:
+          - Boxplots: ch02/visualization/boxplots.md
+          - Violin Plots: ch02/visualization/violin.md
+          - Group Comparisons: ch02/visualization/group_comparison.md
+
+  - Chapter 3 Probability, Random Variables, and Limit Theorems:
+      - 3.1 Probability Theory:
+          - Sample Spaces and Events: ch03/probability/sample_space.md
+          - Axioms of Probability: ch03/probability/axioms.md
+          - Conditional Probability: ch03/probability/conditional.md
+          - Bayes' Theorem: ch03/probability/bayes.md
+      - 3.2 Independence:
+          - Independence of Events: ch03/probability/independence.md
+          - Conditional Independence: ch03/probability/conditional_independence.md
+      - 3.3 Random Variables:
+          - Discrete Random Variables: ch03/rv/discrete.md
+          - Continuous Random Variables: ch03/rv/continuous.md
+          - PMF, PDF, and CDF: ch03/rv/pmf_pdf_cdf.md
+      - 3.4 Expectation and Moments:
+          - Expectation and Linearity: ch03/rv/expectation.md
+          - Variance and Covariance: ch03/rv/variance_covariance.md
+          - Moment Generating Functions: ch03/rv/mgf.md
+      - 3.5 Limit Theorems:
+          - Law of Large Numbers: ch03/limits/lln.md
+          - Central Limit Theorem: ch03/limits/clt.md
+          - Berry–Esseen Theorem: ch03/limits/berry_esseen.md
+
+  - Chapter 4 Distributions and Dependence:
+      - 4.1 Discrete Distributions:
+          - Bernoulli and Binomial: ch04/distributions/binomial.md
+          - Geometric and Negative Binomial: ch04/distributions/geometric.md
+          - Poisson Distribution: ch04/distributions/poisson.md
+      - 4.2 Continuous Distributions:
+          - Uniform Distribution: ch04/distributions/uniform.md
+          - Exponential Distribution: ch04/distributions/exponential.md
+          - Normal Distribution: ch04/distributions/normal.md
+      - 4.3 Multivariate Structure:
+          - Joint Distributions: ch04/joint/joint.md
+          - Marginal and Conditional Distributions: ch04/joint/marginal_conditional.md
+          - Covariance and Correlation: ch04/dependence/covariance_correlation.md
+          - Independence vs Zero Correlation: ch04/dependence/independence_vs_zero_corr.md
+
+  - Chapter 5 Sampling Distributions:
+      - 5.1 Foundations:
+          - Statistics as Random Variables: ch05/foundations/statistics_as_rv.md
+          - Repeated Sampling Concept: ch05/foundations/repeated_sampling.md
+      - 5.2 The Four Fundamental Sampling Distributions:
+          - Normal Distribution (Z): ch05/distributions/normal.md
+          - Student's t Distribution: ch05/distributions/student_t.md
+          - Chi-Square Distribution (χ²): ch05/distributions/chi_square.md
+          - F Distribution: ch05/distributions/f_distribution.md
+      - 5.3 Applications to Common Statistics:
+          - Sampling Distribution of the Mean: ch05/applications/sample_mean.md
+          - Standard Error: ch05/applications/standard_error.md
+          - Sampling Distribution of Proportions: ch05/applications/sample_proportion.md
+
+  - Chapter 6 General Statistical Estimation:
+      - 6.1 Estimator Quality:
+          - Bias–Variance Tradeoff: ch06/estimation/bias_variance.md
+          - Mean Squared Error: ch06/estimation/mse.md
+      - 6.2 Estimation Methods:
+          - Likelihood Function: ch06/estimation/likelihood.md
+          - Method of Moments: ch06/estimation/moments.md
+
+  - Chapter 7 Estimation of Mean and Variance:
+      - 7.1 Estimation of the Mean:
+          - Sample Mean as Estimator: ch07/mean/sample_mean.md
+          - Bias and Consistency: ch07/mean/bias_consistency.md
+      - 7.2 Estimation of the Variance:
+          - Naive Variance Estimator: ch07/variance/naive.md
+          - Bessel's Correction: ch07/variance/bessels.md
+      - 7.3 Gaussian MLE:
+          - MLE of μ and σ²: ch07/mle/gaussian_mle.md
+
+  - Chapter 8 Confidence Intervals:
+      - 8.1 Foundations:
+          - Confidence Level and Coverage: ch08/ci/coverage.md
+      - 8.2 One-Sample Intervals:
+          - CI for μ: ch08/ci/ci_mu.md
+          - CI for p: ch08/ci/ci_p.md
+          - CI for σ²: ch08/ci/ci_sigma2.md
+      - 8.3 Paired-Sample Intervals:
+          - CI for μ_D (Mean of Differences): ch08/ci/ci_mu_paired.md
+      - 8.4 Two-Sample Intervals:
+          - CI for μ₁−μ₂: ch08/ci/ci_mu_diff.md
+          - CI for p₁−p₂: ch08/ci/ci_p_diff.md
+          - CI for σ₁²/σ₂²: ch08/ci/ci_variance_ratio.md
+
+  - Chapter 9 Hypothesis Testing:
+      - 9.1 Foundations:
+          - Null and Alternative Hypotheses: ch09/tests/hypotheses.md
+          - Test Statistics and p-values: ch09/tests/pvalues.md
+      - 9.2 One-Sample Tests:
+          - Tests for μ, p, σ²: ch09/tests/one_sample.md
+      - 9.3 Paired-Sample Tests:
+          - Paired t-test for μ_D: ch09/tests/paired_t_test.md
+          - When to Use Paired vs Two-Sample: ch09/tests/paired_vs_two_sample.md
+      - 9.4 Two-Sample Tests:
+          - Tests for μ₁−μ₂, p₁−p₂, σ₁²/σ₂²: ch09/tests/two_sample.md
+      - 9.5 Errors and Power:
+          - Type I and II Errors: ch09/tests/errors.md
+          - Power Analysis: ch09/tests/power.md
+          - CI ↔ Test Duality: ch09/tests/duality.md
+
+  - Chapter 10 Chi-Square Tests:
+      - 10.1 Chi-Square Distribution and Asymptotics:
+          - Chi-Square Distribution: ch10/chi_square/distribution.md
+          - Degrees of Freedom and Asymptotic Theory: ch10/chi_square/degrees_of_freedom.md
+      - 10.2 Chi-Square Tests for Categorical Data:
+          - Goodness-of-Fit Test: ch10/chi_square/gof.md
+          - Test of Independence: ch10/chi_square/independence.md
+          - Test of Homogeneity: ch10/chi_square/homogeneity.md
+      - 10.3 Practical Considerations:
+          - Expected Cell Counts and Validity Conditions: ch10/chi_square/validity_conditions.md
+          - Effect Size and Cramér's V: ch10/chi_square/effect_size.md
+
+  - Chapter 11 Analysis of Variance (ANOVA):
+      - 11.1 One-Way ANOVA:
+          - Model and Assumptions: ch11/anova/one_way_model.md
+          - F-Test: ch11/anova/f_test.md
+      - 11.2 Two-Way ANOVA:
+          - Main Effects and Blocking: ch11/anova/two_way.md
+          - Interaction Effects: ch11/anova/interaction.md
+      - 11.3 Post-Hoc Comparisons:
+          - Tukey HSD: ch11/anova/tukey.md
+
+  - Chapter 12 Linear Regression:
+      - 12.1 Linear Models:
+          - Simple Linear Regression: ch12/linear/simple.md
+          - Multiple Linear Regression: ch12/linear/multiple.md
+      - 12.2 Estimation and Inference:
+          - Least Squares Estimation: ch12/linear/least_squares.md
+          - Confidence Intervals for Coefficients: ch12/linear/ci_coeff.md
+          - Hypothesis Tests for Coefficients: ch12/linear/tests_coeff.md
+      - 12.3 Diagnostics:
+          - Residual Analysis: ch12/linear/residuals.md
+          - Multicollinearity and Influence: ch12/linear/influence.md
+
+  - Chapter 13 Logistic Regression:
+      - 13.1 Binary Response Models:
+          - Logit Link and Odds: ch13/logistic/logit.md
+          - Likelihood for Logistic Regression: ch13/logistic/likelihood.md
+      - 13.2 Estimation and Inference:
+          - Maximum Likelihood Estimation: ch13/logistic/mle.md
+          - Wald and Likelihood Ratio Tests: ch13/logistic/tests.md
+      - 13.3 Model Evaluation:
+          - Confusion Matrix and ROC: ch13/logistic/metrics.md
+
+  - Chapter 14 Multiclass Classification and Softmax Regression:
+      - 14.1 Multiclass Response Models:
+          - Multinomial Logistic Regression: ch14/softmax/multinomial.md
+          - Softmax Function and Probability Simplex: ch14/softmax/softmax.md
+      - 14.2 Estimation and Optimization:
+          - Cross-Entropy Loss: ch14/softmax/cross_entropy.md
+          - Gradient-Based Optimization: ch14/softmax/optimization.md
+      - 14.3 Model Evaluation and Case Studies:
+          - Multiclass Metrics (Accuracy, Confusion Matrix): ch14/softmax/metrics.md
+          - MNIST Case Study: ch14/softmax/mnist.md
 
 
+plugins:
+  - search
