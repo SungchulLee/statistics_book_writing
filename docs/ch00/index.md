@@ -20,7 +20,7 @@ This book takes you from foundational prerequisites through advanced statistical
 
 ### Part III — Statistical Inference
 
-- **[Chapter 6: General Statistical Estimation](../ch06/estimation/bias_variance.md)**
+- **[Chapter 6: General Statistical Estimation](../ch06/estimator_quality/bias_variance.md)**
 - **[Chapter 7: Estimation of Mean and Variance](../ch07/mean/sample_mean.md)**
 - **[Chapter 8: Confidence Intervals](../ch08/foundations/coverage.md)**
 - **[Chapter 9: Hypothesis Testing](../ch09/foundations/hypotheses.md)**

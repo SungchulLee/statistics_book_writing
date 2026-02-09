@@ -132,11 +132,11 @@ nav:
 
     - 6 General Statistical Estimation:
         - 6.1 Estimator Quality:
-            - Bias–Variance Tradeoff: ch06/estimation/bias_variance.md
-            - Mean Squared Error: ch06/estimation/mse.md
+            - Bias–Variance Tradeoff: ch06/estimator_quality/bias_variance.md
+            - Mean Squared Error: ch06/estimator_quality/mse.md
         - 6.2 Estimation Methods:
-            - Likelihood Function: ch06/estimation/likelihood.md
-            - Method of Moments: ch06/estimation/moments.md
+            - Likelihood Function: ch06/estimation_methods/likelihood.md
+            - Method of Moments: ch06/estimation_methods/moments.md
 
     - 7 Estimation of Mean and Variance:
         - 7.1 Estimation of the Mean:
