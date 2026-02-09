@@ -104,8 +104,8 @@ nav:
         - 4.3 Multivariate Structure:
             - Joint Distributions: ch04/joint/joint.md
             - Marginal and Conditional Distributions: ch04/joint/marginal_conditional.md
-            - Covariance and Correlation: ch04/dependence/covariance_correlation.md
-            - Independence vs Zero Correlation: ch04/dependence/independence_vs_zero_corr.md
+            - Covariance and Correlation: ch04/joint/covariance_correlation.md
+            - Independence vs Zero Correlation: ch04/joint/independence_vs_zero_corr.md
 
     - 5 Sampling Distributions:
         - 5.1 Foundations:
