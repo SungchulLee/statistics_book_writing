@@ -314,8 +314,8 @@ nav:
             - Bootstrapping as an Alternative: ch15/non_normal_data/bootstrapping.md
             - Non-Parametric Methods: ch15/non_normal_data/nonparametric.md
         - 15.7 Applications:
-            - Normality in t-Tests, Regression, and ANOVA: ch_normality/applications/applications.md
-        - 15.8 Exercises: ch_normality/exercises/exercises.md
+            - Normality in t-Tests, Regression, and ANOVA: ch15/applications/applications.md
+        - 15.8 Exercises: ch15/exercises/exercises.md
 
     - 16 Variance Tests:
         - Chapter Overview: ch16/index.md
