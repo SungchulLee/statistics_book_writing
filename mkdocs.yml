@@ -360,7 +360,7 @@ nav:
         - 18.4 Overview and Comparison:
             - Regularization Methods Comparison: ch18/overview/overview.md
         - 18.5 Code:
-            - Ridge, Lasso, and Elastic Net Comparison: ch18/regularization_comparison.py
+            - Ridge, Lasso, and Elastic Net Comparison: ch18/code/regularization_comparison.py
 
     - 19 Non-Parametric Tests:
         - Chapter Overview: ch19/index.md
