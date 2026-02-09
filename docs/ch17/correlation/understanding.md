@@ -377,7 +377,7 @@ See: [Anscombe's Quartet (Wikipedia)](https://en.wikipedia.org/wiki/Anscombe%27s
 
 ### Correlation Is Not Causation
 
-This principle is so important that it warrants its own section. See [Section 18.4: Correlation, Causation, and Confounding](../correlation_causation_confounding/confounding.md) for a thorough treatment.
+This principle is so important that it warrants its own section. See [Section 17.3: Correlation, Causation, and Confounding](../confounding/confounding.md) for a thorough treatment.
 
 ---
 
