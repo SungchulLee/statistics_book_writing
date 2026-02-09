@@ -147,6 +147,14 @@ nav:
             - Bessel's Correction: ch07/variance/bessels.md
         - 7.3 Gaussian MLE:
             - MLE of μ and σ²: ch07/mle/gaussian_mle.md
+        - 7.4 Code:
+            - Sample Mean Properties: ch07/code/sample_mean_properties.py
+            - Consistency and Convergence: ch07/code/consistency_convergence.py
+            - Variance Estimators: ch07/code/variance_estimators.py
+            - Bessel's Correction: ch07/code/bessels_correction.py
+            - Gaussian MLE: ch07/code/gaussian_mle.py
+            - Return Estimation: ch07/code/return_estimation.py
+        - 7.5 Exercises: ch07/exercises/exercises.md
 
     - 8 Confidence Intervals:
         - 8.1 Foundations:
