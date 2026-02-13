@@ -487,7 +487,6 @@ nav:
         - Chapter Overview: ch15/index.md
         - 15.1 Introduction to Variance Testing:
             - Why Test Variances: ch15/introduction/motivation.md
-            - Overview of Variance Tests: ch15/introduction/introduction.md
             - Assumptions Common to Variance Tests: ch15/introduction/common_assumptions.md
         - 15.2 Chi-Square Test for Variance:
             - One-Sample Chi-Square Variance Test: ch15/chi_square_test/chi_square_variance.md

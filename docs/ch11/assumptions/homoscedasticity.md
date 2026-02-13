@@ -27,7 +27,7 @@ stat, p_value = levene(group1, group2, group3)
 print(f"Levene's Test: F = {stat:.4f}, p-value = {p_value:.4f}")
 ```
 
-A significant result ($p < 0.05$) indicates that the assumption of equal variances is violated. For a detailed treatment of Levene's test and related robust variance tests, see [Robust Variance Tests](../../ch16/robust_tests/robust_tests.md).
+A significant result ($p < 0.05$) indicates that the assumption of equal variances is violated. For a detailed treatment of Levene's test and related robust variance tests, see [Robust Variance Tests](../../ch15/robust_tests/levene.md).
 
 ### Bartlett's Test
 
@@ -40,7 +40,7 @@ stat, p_value = bartlett(group1, group2, group3)
 print(f"Bartlett's Test: χ² = {stat:.4f}, p-value = {p_value:.4f}")
 ```
 
-For a full discussion of Bartlett's test, see [Bartlett's Test](../../ch16/bartlett_test/bartlett_test.md).
+For a full discussion of Bartlett's test, see [Bartlett's Test](../../ch15/bartlett_test/bartlett_test.md).
 
 ### F-Test of Equality of Variances (Two Groups)
 
@@ -67,7 +67,7 @@ $$
 !!! warning "Sensitivity to Normality"
     The F-test of equality of variances is extremely sensitive to non-normality. Even approximate normality may not be sufficient to make the test valid. For this reason, Levene's test or Brown-Forsythe test are generally preferred in practice.
 
-For a detailed treatment, see [F-Test for Comparing Two Variances](../../ch16/f_test/f_test_two_variances.md).
+For a detailed treatment, see [F-Test for Comparing Two Variances](../../ch15/f_test/f_test_two_variances.md).
 
 ### Residuals vs. Fitted Values Plot
 

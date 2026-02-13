@@ -24,7 +24,7 @@ stat, p_value = kruskal(group1, group2, group3)
 print(f"Kruskal-Wallis: H = {stat:.4f}, p-value = {p_value:.4f}")
 ```
 
-The Kruskal-Wallis test is less sensitive to outliers and skewed distributions but assumes that the distributions have the same shape (differing only in location). For a detailed treatment, see [Kruskal-Wallis Test](../../ch19/two_sample_nonparametric/two_sample.md).
+The Kruskal-Wallis test is less sensitive to outliers and skewed distributions but assumes that the distributions have the same shape (differing only in location). For a detailed treatment, see [Kruskal-Wallis Test](../../ch16/multi_group_nonparametric/kruskal_wallis.md).
 
 ## Data Transformations
 
@@ -138,7 +138,7 @@ p_value = np.mean(np.array(perm_f_stats) >= observed_f)
 print(f"Permutation test p-value: {p_value:.4f}")
 ```
 
-For a detailed treatment, see [Permutation Tests](../../ch20/permutation/permutation.md).
+For a detailed treatment, see [Permutation Tests](../../ch17/permutation/foundations.md).
 
 ## Summary of Remedies by Violation
 

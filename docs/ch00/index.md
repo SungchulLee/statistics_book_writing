@@ -25,20 +25,29 @@ This book takes you from foundational prerequisites through advanced statistical
 - **[Chapter 8: Confidence Intervals](../ch08/foundations/coverage.md)**
 - **[Chapter 9: Hypothesis Testing](../ch09/foundations/hypotheses.md)**
 
-### Part IV — Advanced Methods
+### Part IV — Testing and Diagnostics
 
-- **[Chapter 10: Chi-Square Tests](../ch10/distribution/distribution.md)**
-- **[Chapter 11: Analysis of Variance (ANOVA)](../ch11/anova_one_way/one_way_model.md)**
-- **[Chapter 12: Linear Regression](../ch12/index.md)**
-- **[Chapter 13: Logistic Regression](../ch13/logistic_regression/logit.md)**
-- **[Chapter 14: Multiclass Classification and Softmax Regression](../ch14/softmax_regression/multinomial.md)**
-- **[Chapter 15: Normality Tests](../ch15/index.md)**
-- **[Chapter 16: Variance Tests](../ch16/index.md)**
-- **[Chapter 17: Correlation and Causation](../ch17/index.md)**
+- **[Chapter 10: Chi-Square Tests](../ch10/index.md)**
+- **[Chapter 11: ANOVA](../ch11/index.md)**
+- **[Chapter 12: Correlation and Causation](../ch12/index.md)**
+- **[Chapter 13: Linear Regression](../ch13/index.md)**
+- **[Chapter 14: Normality Tests](../ch14/index.md)**
+- **[Chapter 15: Variance Tests](../ch15/index.md)**
+
+### Part V — Non-Parametric and Resampling Methods
+
+- **[Chapter 16: Non-Parametric Tests](../ch16/index.md)**
+- **[Chapter 17: Resampling Methods](../ch17/index.md)**
+
+### Part VI — Advanced Modeling
+
 - **[Chapter 18: Regularization Techniques](../ch18/index.md)**
-- **[Chapter 19: Non-Parametric Tests](../ch19/index.md)**
-- **[Chapter 20: Resampling Methods](../ch20/index.md)**
-- **[Chapter 21: Mathematical Backup for Linear Regression](../ch21/index.md)**
+- **[Chapter 19: Logistic Regression](../ch19/index.md)**
+- **[Chapter 20: Multiclass Classification and Softmax Regression](../ch20/index.md)**
+
+### Appendix
+
+- **[Appendix A: Linear Algebra for Regression](../ch21/index.md)**
 
 ## How to Use This Book
 

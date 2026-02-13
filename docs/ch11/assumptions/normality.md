@@ -67,6 +67,6 @@ Look for:
 
 ## What to Do If Normality Is Violated
 
-- **Data transformations:** Log, square root, or Box-Cox transformations can reduce skewness and make residuals more normal (see [Transformations to Achieve Normality](../../ch15/non_normal_data/transformations.md)).
-- **Non-parametric alternatives:** The Kruskal-Wallis test compares medians instead of means and does not require normality (see [Kruskal-Wallis Test](../../ch19/two_sample_nonparametric/two_sample.md)).
-- **Bootstrapping:** Resampling methods can provide valid inference without distributional assumptions (see [Bootstrapping](../../ch20/bootstrap/bootstrap.md)).
+- **Data transformations:** Log, square root, or Box-Cox transformations can reduce skewness and make residuals more normal (see [Transformations to Achieve Normality](../../ch14/non_normal_data/transformations.md)).
+- **Non-parametric alternatives:** The Kruskal-Wallis test compares medians instead of means and does not require normality (see [Kruskal-Wallis Test](../../ch16/multi_group_nonparametric/kruskal_wallis.md)).
+- **Bootstrapping:** Resampling methods can provide valid inference without distributional assumptions (see [The Bootstrap Principle](../../ch17/bootstrap/principle.md)).
