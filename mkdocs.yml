@@ -44,6 +44,8 @@ nav:
             - Bias and Nonresponse: ch01/classical/bias_nonresponse.md
             - Survivorship Bias: ch01/classical/survivorship_bias.md
             - Strengths and Limitations: ch01/contrast/tradeoffs.md
+            - Design Your Data Collection: ch01/contrast/design_data.md
+            - Analyze Available Data: ch01/contrast/analyze_available.md
         - 1.2 Modern Approach—Analyze the Data You Have:
             - Statistical Models vs Learning Algorithms: ch01/modern/models_vs_algorithms.md
             - Prediction vs Inference: ch01/modern/prediction_vs_inference.md
@@ -170,6 +172,8 @@ nav:
             - MoM for Common Distributions: ch06/estimation_methods/moments_examples.md
             - Generalized Method of Moments (GMM): ch06/estimation_methods/gmm.md
             - MoM vs MLE Comparison: ch06/estimation_methods/moments_vs_mle.md
+            - Likelihood and Estimation Overview: ch06/estimation_methods/likelihood.md
+            - Method of Moments Overview: ch06/estimation_methods/moments.md
         - 6.4 Bayesian Estimation:
             - Prior, Likelihood, and Posterior: ch06/bayesian/prior_posterior.md
             - Conjugate Priors: ch06/bayesian/conjugate_priors.md
@@ -255,11 +259,13 @@ nav:
             - t-Test for μ (Unknown σ): ch09/one_sample_tests/t_test_mean.md
             - Z-Test for p (Proportion): ch09/one_sample_tests/z_test_proportion.md
             - Chi-Square Test for σ²: ch09/one_sample_tests/chi2_test_variance.md
+            - One-Sample Tests Overview: ch09/one_sample_tests/one_sample.md
         - 9.3 Two-Sample Tests:
             - Two-Sample Z-Test for μ₁−μ₂: ch09/two_sample_tests/z_test_two_means.md
             - Two-Sample t-Test (Pooled and Welch): ch09/two_sample_tests/t_test_two_means.md
             - Two-Sample Z-Test for p₁−p₂: ch09/two_sample_tests/z_test_two_proportions.md
             - F-Test for σ₁²/σ₂²: ch09/two_sample_tests/f_test_two_variances.md
+            - Two-Sample Tests Overview: ch09/two_sample_tests/two_sample.md
         - 9.4 Paired-Sample Tests:
             - Paired t-test for μ_D: ch09/paired_sample_tests/paired_t_test.md
             - When to Use Paired vs Two-Sample: ch09/paired_sample_tests/paired_vs_two_sample.md
@@ -354,24 +360,29 @@ nav:
             - Kendall's Tau: ch12/correlation/kendall.md
             - Partial Correlation: ch12/correlation/partial.md
             - Point-Biserial and Phi Coefficients: ch12/correlation/special_cases.md
+            - Understanding Correlation: ch12/correlation/understanding.md
         - 12.2 Ecological Correlation:
             - Ecological Fallacy: ch12/ecological_correlation/ecological_fallacy.md
             - Simpson's Paradox: ch12/ecological_correlation/simpsons_paradox.md
             - Aggregation Bias: ch12/ecological_correlation/aggregation_bias.md
+            - Ecological Correlation Overview: ch12/ecological_correlation/ecological_correlation.md
         - 12.3 Correlation, Causation, and Confounding:
             - Confounding Variables: ch12/confounding/confounding_variables.md
             - Spurious Correlations: ch12/confounding/spurious_correlations.md
             - Lurking Variables and Common Causes: ch12/confounding/lurking_variables.md
+            - Confounding Overview: ch12/confounding/confounding.md
         - 12.4 Causation:
             - Criteria for Causal Inference: ch12/causation/causal_criteria.md
             - Randomized Experiments and Causation: ch12/causation/experiments_causation.md
             - Instrumental Variables (Introduction): ch12/causation/instrumental_variables.md
             - Directed Acyclic Graphs (DAGs): ch12/causation/dags.md
+            - Causation Overview: ch12/causation/causation.md
         - 12.5 Correlation Tests:
             - Testing Pearson's r (t-Test for Correlation): ch12/correlation_test/test_pearson.md
             - Testing Spearman's ρ: ch12/correlation_test/test_spearman.md
             - Testing Kendall's τ: ch12/correlation_test/test_kendall.md
             - Comparing Two Correlations: ch12/correlation_test/comparing_correlations.md
+            - Correlation Tests Overview: ch12/correlation_test/correlation_tests.md
         - 12.6 Correlation Matrix and Visualization:
             - Correlation Heatmaps: ch12/visualization/heatmaps.md
             - Pair Plots and Scatter Matrices: ch12/visualization/pairplots.md
@@ -416,11 +427,13 @@ nav:
             - R² and Adjusted R²: ch13/performance/r_squared.md
             - MAE, MSE, and RMSE: ch13/performance/mae_mse_rmse.md
             - MAPE and Other Relative Metrics: ch13/performance/relative_metrics.md
+            - Performance Metrics Overview: ch13/performance/metrics.md
         - 13.8 Model Selection Criteria:
             - AIC (Akaike Information Criterion): ch13/model_selection/aic.md
             - BIC (Bayesian Information Criterion): ch13/model_selection/bic.md
             - Cross-Validation for Model Selection: ch13/model_selection/cross_validation.md
             - Stepwise and Best-Subset Selection: ch13/model_selection/stepwise_subset.md
+            - AIC and BIC Overview: ch13/model_selection/aic_bic.md
         - 13.9 Package Usage:
             - statsmodels OLS Interface: ch13/package_usage/statsmodels.md
             - sklearn LinearRegression Interface: ch13/package_usage/sklearn.md
@@ -457,6 +470,7 @@ nav:
             - Sample Size Effects on Power: ch14/limitations/sample_size_power.md
             - Sensitivity vs Practical Significance: ch14/limitations/sensitivity_practical.md
             - Choosing the Right Test: ch14/limitations/choosing_test.md
+            - Limitations Overview: ch14/limitations/limitations.md
         - 14.6 Dealing with Non-Normal Data:
             - Transformations to Achieve Normality: ch14/non_normal_data/transformations.md
             - Bootstrapping as an Alternative: ch14/non_normal_data/bootstrapping.md
@@ -465,6 +479,7 @@ nav:
             - Normality in t-Tests and ANOVA: ch14/applications/t_tests_anova.md
             - Normality in Regression (Residual Diagnostics): ch14/applications/regression_residuals.md
             - Normality of Financial Returns: ch14/applications/financial_returns.md
+            - Applications Overview: ch14/applications/applications.md
         - 14.8 Code:
             - Graphical Normality Checks: ch14/code/graphical_checks.py
             - Formal Normality Test Suite: ch14/code/normality_tests.py
@@ -487,6 +502,7 @@ nav:
         - Chapter Overview: ch15/index.md
         - 15.1 Introduction to Variance Testing:
             - Why Test Variances: ch15/introduction/motivation.md
+            - Overview of Variance Tests: ch15/introduction/introduction.md
             - Assumptions Common to Variance Tests: ch15/introduction/common_assumptions.md
         - 15.2 Chi-Square Test for Variance:
             - One-Sample Chi-Square Variance Test: ch15/chi_square_test/chi_square_variance.md
@@ -505,14 +521,17 @@ nav:
             - Brown-Forsythe Test: ch15/robust_tests/brown_forsythe.md
             - Fligner-Killeen Test: ch15/robust_tests/fligner_killeen.md
             - Comparison of Robust Methods: ch15/robust_tests/comparison.md
+            - Robust Tests Overview: ch15/robust_tests/robust_tests.md
         - 15.6 Advanced Methods:
             - Bootstrap Variance Testing: ch15/advanced_methods/bootstrap_variance.md
             - Bayesian Variance Testing: ch15/advanced_methods/bayesian_variance.md
             - Likelihood Ratio Test for Variances: ch15/advanced_methods/likelihood_ratio.md
+            - Advanced Methods Overview: ch15/advanced_methods/advanced_methods.md
         - 15.7 Applications:
             - Pre-Test for ANOVA Homoscedasticity: ch15/applications/anova_pretest.md
             - Variance Testing in Regression: ch15/applications/regression_variance.md
             - Financial Volatility Comparisons: ch15/applications/financial_volatility.md
+            - Applications Overview: ch15/applications/applications.md
         - 15.8 Code:
             - Chi-Squared Test for Variance: ch15/code/chi2_test_for_variance.py
             - F-Test of Equality of Variances: ch15/code/f_test_variances.py
@@ -542,14 +561,17 @@ nav:
             - Sign Test: ch16/one_sample_nonparametric/sign_test.md
             - Wilcoxon Signed-Rank Test: ch16/one_sample_nonparametric/wilcoxon_signed_rank.md
             - Binomial Test: ch16/one_sample_nonparametric/binomial_test.md
+            - One-Sample Tests Overview: ch16/one_sample_nonparametric/one_sample.md
         - 16.3 Paired-Sample Non-Parametric Tests:
             - Paired Sign Test: ch16/paired_sample_nonparametric/paired_sign.md
             - Wilcoxon Signed-Rank for Paired Data: ch16/paired_sample_nonparametric/paired_wilcoxon.md
             - Paired Permutation Test: ch16/paired_sample_nonparametric/paired_permutation.md
+            - Paired Tests Overview: ch16/paired_sample_nonparametric/paired.md
         - 16.4 Two-Sample Non-Parametric Tests:
             - Wilcoxon Rank-Sum Test: ch16/two_sample_nonparametric/rank_sum.md
             - Mann-Whitney U Test: ch16/two_sample_nonparametric/mann_whitney.md
             - Kolmogorov-Smirnov Two-Sample Test: ch16/two_sample_nonparametric/ks_two_sample.md
+            - Two-Sample Tests Overview: ch16/two_sample_nonparametric/two_sample.md
         - 16.5 Multi-Group Non-Parametric Tests:
             - Kruskal-Wallis Test: ch16/multi_group_nonparametric/kruskal_wallis.md
             - Friedman Test (Repeated Measures): ch16/multi_group_nonparametric/friedman.md
@@ -572,6 +594,7 @@ nav:
             - The Bootstrap Principle: ch17/bootstrap/principle.md
             - Non-Parametric Bootstrap: ch17/bootstrap/nonparametric.md
             - Parametric Bootstrap: ch17/bootstrap/parametric.md
+            - Bootstrap Overview: ch17/bootstrap/bootstrap.md
         - 17.2 Bootstrap Confidence Intervals:
             - Percentile Method: ch17/bootstrap_ci/percentile.md
             - BCa (Bias-Corrected and Accelerated): ch17/bootstrap_ci/bca.md
@@ -586,10 +609,12 @@ nav:
             - Permutation Test for Two-Sample Location: ch17/permutation/two_sample.md
             - Permutation Test for Correlation: ch17/permutation/correlation.md
             - Permutation Test for Paired Data: ch17/permutation/paired.md
+            - Permutation Tests Overview: ch17/permutation/permutation.md
         - 17.5 Comparison and Practical Guidance:
             - Bootstrap vs Permutation Tests: ch17/comparison/bootstrap_vs_permutation.md
             - Number of Resamples and Convergence: ch17/comparison/convergence.md
             - When Resampling Fails: ch17/comparison/limitations.md
+            - Comparison Overview: ch17/comparison/comparison.md
         - 17.6 Code:
             - Bootstrap CI Methods: ch17/code/bootstrap_ci.py
             - Bootstrap Hypothesis Tests: ch17/code/bootstrap_tests.py
@@ -608,16 +633,19 @@ nav:
             - Geometric Interpretation (L2 Penalty): ch18/ridge/geometry.md
             - Bayesian Interpretation (Gaussian Prior): ch18/ridge/bayesian.md
             - Ridge Trace and Choosing λ: ch18/ridge/lambda_selection.md
+            - Ridge Regression Overview: ch18/ridge/ridge.md
         - 18.3 Lasso Regression:
             - Lasso Formulation and Sparsity: ch18/lasso/formulation.md
             - Geometric Interpretation (L1 Penalty): ch18/lasso/geometry.md
             - Bayesian Interpretation (Laplace Prior): ch18/lasso/bayesian.md
             - Coordinate Descent Algorithm: ch18/lasso/coordinate_descent.md
             - Lasso for Feature Selection: ch18/lasso/feature_selection.md
+            - Lasso Regression Overview: ch18/lasso/lasso.md
         - 18.4 Elastic Net:
             - Elastic Net Formulation: ch18/elastic_net/formulation.md
             - Advantages over Pure Ridge and Lasso: ch18/elastic_net/advantages.md
             - Grouping Effect for Correlated Features: ch18/elastic_net/grouping_effect.md
+            - Elastic Net Overview: ch18/elastic_net/elastic_net.md
         - 18.5 Hyperparameter Tuning:
             - Cross-Validation for λ Selection: ch18/tuning/cross_validation.md
             - Regularization Path: ch18/tuning/regularization_path.md
@@ -625,6 +653,7 @@ nav:
         - 18.6 Overview and Comparison:
             - Ridge vs Lasso vs Elastic Net: ch18/overview/comparison.md
             - Guidelines for Choosing a Method: ch18/overview/guidelines.md
+            - Overview: ch18/overview/overview.md
         - 18.7 Code:
             - Ridge Regression Examples: ch18/code/ridge_examples.py
             - Lasso Regression Examples: ch18/code/lasso_examples.py
@@ -649,6 +678,7 @@ nav:
             - Precision, Recall, and F1-Score: ch19/evaluation/precision_recall.md
             - ROC Curve and AUC: ch19/evaluation/roc_auc.md
             - Calibration and Brier Score: ch19/evaluation/calibration.md
+            - Evaluation Metrics Overview: ch19/evaluation/metrics.md
         - 19.4 Regularized Logistic Regression:
             - L1 and L2 Regularization for Logistic Regression: ch19/regularized/regularization.md
             - Feature Selection via Penalized Likelihood: ch19/regularized/feature_selection.md
