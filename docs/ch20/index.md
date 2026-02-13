@@ -1,34 +1,24 @@
-# Resampling Methods: Overview
+# Chapter 20: Multiclass Classification and Softmax Regression
 
-## What Are Resampling Methods?
+## Overview
 
-Resampling methods are modern, computationally intensive approaches to statistical inference that construct the sampling distribution of a statistic **empirically** by repeatedly drawing samples from the observed data, rather than relying on theoretical distributional assumptions.
+This chapter extends binary classification to the multiclass setting. We develop softmax regression (multinomial logistic regression), discuss cross-entropy loss and optimization, multiclass evaluation metrics, and compare strategies like one-vs-rest and one-vs-one.
 
-Unlike rank-based non-parametric methods (Chapter 15), which replace values with ranks, resampling methods work directly with the original data values. They leverage computational power to approximate distributions that would be difficult or impossible to derive analytically.
+## Learning Objectives
 
-## The Two Primary Resampling Methods
+After completing this chapter, you should be able to understand and apply the key concepts covered in each section below.
 
-| Method | Resampling Type | Primary Use | Key Output |
-|---|---|---|---|
-| **Bootstrap** | With replacement | Estimation | Confidence intervals, standard errors |
-| **Permutation Test** | Without replacement (shuffling labels) | Hypothesis testing | p-values |
+## Prerequisites
 
-## When to Use Resampling Methods
+- Previous chapters in the sequence
 
-Resampling methods are especially valuable when:
+## Sections
 
-- The theoretical sampling distribution is unknown or difficult to derive.
-- The statistic of interest is complex (e.g., median, ratio of variances, regression coefficients).
-- Sample sizes are small and asymptotic approximations are unreliable.
-- No parametric or rank-based test exists for the specific problem.
-
-## Historical Context
-
-- The **bootstrap** was introduced by Bradley Efron in 1979 and revolutionized statistical practice by making distribution-free inference accessible for virtually any statistic.
-- **Permutation tests** date back to R.A. Fisher in the 1930s but became practical only with modern computing power.
-
-## Chapter Structure
-
-- **16.1 Bootstrap**: Confidence intervals, standard errors, hypothesis testing via bootstrap
-- **16.2 Permutation Tests**: Hypothesis testing via label shuffling
-- **16.3 Comparison**: When to use bootstrap vs permutation tests
+| Section | Topic |
+|---|---|
+| 20.1 | Softmax Regression |
+| 20.2 | Estimation and Optimization |
+| 20.3 | Model Evaluation and Case Studies |
+| 20.4 | One-vs-Rest and One-vs-One Strategies |
+| 20.5 | Code |
+| 20.6 | Exercises |

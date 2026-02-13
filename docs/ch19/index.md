@@ -1,54 +1,33 @@
-# Chapter 19: Non-Parametric Tests
+# Chapter 13: Logistic Regression
 
 ## Overview
 
-Non-parametric tests are statistical methods that do not assume a specific parametric form (such as normality) for the underlying population distribution. They are sometimes called **distribution-free tests** because their validity does not depend on the data following a particular distribution.
+Logistic regression models the probability of a binary outcome as a function of predictor variables. Unlike linear regression, which predicts a continuous response, logistic regression predicts the log-odds of belonging to a particular class. It is the foundational model for binary classification and serves as a stepping stone to more complex classification methods.
 
-These methods are especially valuable when:
+## Learning Objectives
 
-- The normality assumption required by parametric tests (t-tests, ANOVA) is violated.
-- The data are ordinal (ranks) rather than interval or ratio scale.
-- The sample size is too small to invoke the Central Limit Theorem.
-- The data contain outliers that would distort parametric results.
+After completing this chapter, you should be able to:
 
-## Key Idea — Ranks Replace Raw Values
+- Explain why linear regression is inappropriate for binary outcomes
+- Define the logit link function and interpret odds and odds ratios
+- Write the likelihood function for logistic regression
+- Describe how MLE is used to estimate logistic regression coefficients
+- Perform Wald and likelihood ratio tests for coefficient significance
+- Evaluate model performance using confusion matrix, ROC curve, and AUC
+- Implement logistic regression using both sklearn and statsmodels
 
-Most non-parametric tests work by converting raw observations to **ranks** and then operating on those ranks. Because ranks are bounded and equi-spaced, extreme values (outliers) cannot exert the disproportionate influence they have on means and variances. The trade-off is a modest loss of statistical power when the parametric assumptions actually hold.
+## Chapter Outline
 
-## Chapter Roadmap
-
-| Section | Test | Parametric Counterpart | Use Case |
-|:--------|:-----|:----------------------|:---------|
-| 19.1 | Runs Test | — | Test randomness of a binary sequence |
-| 19.1 | Sign Test | One-sample t-test | Test median with paired or single-sample data |
-| 19.1 | Wilcoxon Signed-Rank Test | One-sample t-test | Test median using both sign and magnitude |
-| 19.2 | Paired Sign Test | Paired t-test | Paired differences, direction only |
-| 19.2 | Paired Wilcoxon Signed-Rank Test | Paired t-test | Paired differences, direction and magnitude |
-| 19.3 | Wilcoxon Rank-Sum Test | Two-sample t-test | Compare two independent groups |
-| 19.3 | Mann–Whitney U Test | Two-sample t-test | Compare two independent groups (with ties) |
-| 19.3 | Kruskal–Wallis H Test | One-way ANOVA | Compare three or more independent groups |
-| 19.3 | Mood's Median Test | One-way ANOVA | Compare medians of multiple groups |
-
-## Choosing the Right Non-Parametric Test
-
-```
-Is the data a single binary sequence?
-├── Yes → Runs Test (randomness)
-└── No
-    ├── One sample or paired?
-    │   ├── Only signs matter → Sign Test
-    │   └── Signs + magnitudes → Wilcoxon Signed-Rank Test
-    └── Two or more independent samples?
-        ├── Two groups
-        │   ├── No ties → Wilcoxon Rank-Sum Test
-        │   └── Ties present → Mann–Whitney U Test
-        └── Three+ groups
-            ├── Compare distributions → Kruskal–Wallis H Test
-            └── Compare medians only → Mood's Median Test
-```
+| Section | Topic |
+|---|---|
+| 13.1 | Logistic Regression: Logit Link, Odds, Odds Ratios |
+| 13.2 | Estimation and Inference: MLE, Wald and LR Tests |
+| 13.3 | Model Evaluation: Confusion Matrix, ROC, AUC, Classification Metrics |
+| 13.4 | Code |
+| 13.5 | Exercises |
 
 ## Prerequisites
 
-- Chapter 9: Hypothesis Testing (null/alternative hypotheses, p-values, Type I/II errors)
-- Chapter 5: Sampling Distributions (normal approximation)
-- Chapter 15: Normality Tests (when to abandon parametric methods)
+- Linear regression (Chapter 12)
+- Maximum likelihood estimation (Chapter 5–6)
+- Probability fundamentals (Chapter 3)

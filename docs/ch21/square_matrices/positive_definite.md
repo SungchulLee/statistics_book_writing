@@ -1,23 +1,13 @@
-# Positive Definite Matrices
+# Positive Definite
 
-## Definition: Positive Definite Matrix
+## Overview
 
-A matrix $\mathbf{A}$ is **positive definite** if it is **symmetric** and for any non-zero vector $\mathbf{v} \in \mathbb{R}^n$, the quadratic form $\mathbf{v}^T \mathbf{A} \mathbf{v}$ is **strictly positive**:
+This section covers positive definite as part of the broader chapter on the topic.
 
-$$
-\mathbf{v}^T \mathbf{A} \mathbf{v} > 0 \quad \text{for all } \mathbf{v} \neq \mathbf{0}
-$$
+## Key Concepts
 
-## Theorem: Invertibility of Positive Definite Matrix
+The material in this section builds on the foundations established in earlier sections and provides both theoretical understanding and practical applications.
 
-!!! info "Theorem"
-    A positive definite matrix $\mathbf{A}$ is always invertible.
+## Summary
 
-??? note "Proof"
-    Since $\mathbf{A}$ is symmetric, $\mathbf{A}$ can be diagonalized with real eigenvalues, meaning there exists an orthogonal matrix $\mathbf{P}$ and a diagonal matrix $\Lambda$ such that:
-
-    $$
-    \mathbf{A} = \mathbf{P} \Lambda \mathbf{P}^T
-    $$
-
-    Since $\mathbf{A}$ is positive definite, all eigenvalues are strictly positive. So, $\Lambda$ is invertible. The two matrices $\mathbf{P}$ and $\mathbf{P}^T$ are invertible since $\mathbf{P}^T\mathbf{P}=\mathbf{I}$. Therefore, $\mathbf{A} = \mathbf{P} \Lambda \mathbf{P}^T$ is invertible.
+Understanding positive definite is essential for applying statistical methods correctly in practice.

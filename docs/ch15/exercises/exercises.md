@@ -1,90 +1,128 @@
 # Exercises
 
-## Exercise 1: Jarque-Bera Test Statistic for Normality
+## Exercise 1: F-Test for Comparing Two Variances
 
-The test statistic $JB$ for testing the normality of data using the Jarque-Bera test is defined as:
+Two production lines manufacture similar products, but you suspect that the variability in product weights is different between the two lines. You are provided with the following sample data (in grams):
 
-$$
-JB = \frac{n}{6} \left( S^2 + \frac{(K - 3)^2}{4} \right) \sim \chi^2_2
-$$
+- **Production Line 1:** $[14.2, 13.8, 15.1, 14.7, 14.5, 14.6, 15.0, 14.8]$
+- **Production Line 2:** $[15.2, 14.8, 15.6, 15.0, 14.9, 15.3, 15.5, 14.9]$
 
-where:
-
-- $n$: Sample size
-- $S$: Sample skewness
-- $K$: Sample kurtosis
-- The denominator $6$ is a scaling constant that normalizes the contributions of skewness and kurtosis.
-
-**(a)** Find the theoretical value of $S$ for a normal distribution.
-
-**(b)** Evaluate the integral $\int_{-\infty}^\infty x^4 e^{-x^2} dx$.
-
-**(c)** Why is $3$ subtracted from $K$ when calculating $JB$?
-
-**(d)** If $JB = 3.2189$, express the $p$-value using the cumulative distribution function (CDF) $F$ of $\chi^2_2$.
-
-**(e)** If the $p$-value is 0.2 and the significance level ($\alpha$) is 5%, what is the conclusion of the test?
+Use the F-test to determine whether the variances of the two production lines are significantly different at the 5% significance level.
 
 ### Solution
 
-**(a)** For a normal distribution, the theoretical skewness $S$ is:
+**Hypotheses:**
+
+- Null Hypothesis ($H_0$): The variances are equal, i.e., $\sigma_1^2 = \sigma_2^2$.
+- Alternative Hypothesis ($H_1$): The variances are not equal, i.e., $\sigma_1^2 \neq \sigma_2^2$.
+
+**Test Statistic:**
+
+The F-statistic is calculated as the ratio of the sample variances:
 
 $$
-S = \mathbb{E}\left(\frac{X - \mu}{\sigma}\right)^3 = \mathbb{E}Z^3 = \int_{-\infty}^\infty x^3 \cdot \frac{1}{\sqrt{2\pi}} e^{-x^2/2} dx = 0
+F = \frac{s_1^2}{s_2^2}
 $$
 
-**(b)**
+where $s_1^2$ and $s_2^2$ are the sample variances of the two production lines.
 
-$$
-I
-= \int_{-\infty}^\infty x^4 e^{-x^2} dx
-= 2 \int_0^\infty x^4 e^{-x^2} dx
-$$
+**Python Implementation:**
 
-Let $u = x^2$, so that $x = u^{1/2}$ and $dx = \frac{1}{2} u^{-1/2} du$. The integral becomes:
+```python
+import numpy as np
+from scipy.stats import f
 
-$$
-I
-= 2 \int_0^\infty (u^{1/2})^4 e^{-u} \cdot \frac{1}{2} u^{-1/2} du
-= \int_0^\infty u^{\frac{5}{2}-1} e^{-u} du
-= \Gamma\left(\frac{5}{2}\right)
-= \frac{3}{2}\cdot\Gamma\left(\frac{3}{2}\right)
-= \frac{3}{2}\cdot\frac{1}{2}\cdot\Gamma\left(\frac{1}{2}\right)
-= \frac{3}{2}\cdot\frac{1}{2}\cdot\sqrt{\pi}
-$$
+# Sample data
+line1 = np.array([14.2, 13.8, 15.1, 14.7, 14.5, 14.6, 15.0, 14.8])
+line2 = np.array([15.2, 14.8, 15.6, 15.0, 14.9, 15.3, 15.5, 14.9])
 
-where the Gamma function is defined as:
+# Sample variances
+var_line1 = np.var(line1, ddof=1)
+var_line2 = np.var(line2, ddof=1)
 
-$$
-\Gamma(n) = \int_0^\infty x^{n-1} e^{-x} dx
-$$
+# F-statistic
+F_stat = var_line1 / var_line2
 
-The Gamma function satisfies:
+# Degrees of freedom
+df1 = len(line1) - 1
+df2 = len(line2) - 1
 
-$$
-\Gamma(n+1) = n \cdot \Gamma(n),\quad
-\Gamma\left(\frac{1}{2}\right)=\sqrt{\pi}
-$$
+# Critical values for two-tailed test at 5% significance level
+alpha = 0.05
+critical_value_upper = f.ppf(1 - alpha/2, df1, df2)
+critical_value_lower = f.ppf(alpha/2, df1, df2)
 
-**(c)** For a normal distribution, the theoretical kurtosis $K$ is $3$. Subtracting $3$ ensures that for normal data, $K - 3 = 0$. This simplifies the test statistic under the null hypothesis of normality.
+print(f"F-statistic: {F_stat}")
+print(f"Critical values: [{critical_value_lower}, {critical_value_upper}]")
+```
 
-**(d)** The $p$-value is:
+**Interpretation:**
 
-$$
-p = 1 - F(3.2189)
-$$
-
-**(e)** Since $p = 0.2 > \alpha = 0.05$, there is insufficient evidence to reject the null hypothesis. Therefore, we conclude that the data does not violate normality and maintain the assumption of normality at the given significance level.
+If the calculated F-statistic falls outside the critical value bounds, reject the null hypothesis. Otherwise, fail to reject the null hypothesis, indicating that the variances are not significantly different.
 
 ---
 
-## Exercise 2: Normality Test with Outlier
+## Exercise 2: Levene's Test for Equality of Variances
 
-A normality test was performed on a dataset, and one outlier was detected. When the outlier is included, the $p$-value is 0.01, but after removing the outlier, the $p$-value increases to 0.20. How should this be interpreted and addressed?
+Three different teaching methods are applied to three groups of students. After the semester, the students' scores are recorded as follows:
+
+- **Group 1:** $[78, 82, 85, 90, 87]$
+- **Group 2:** $[65, 70, 72, 68, 74]$
+- **Group 3:** $[92, 88, 94, 89, 91]$
+
+Use Levene's test to determine if the variances in the test scores are equal across the three groups.
 
 ### Solution
 
-- The remaining data, excluding the outlier, is judged to follow a normal distribution.
-- Including the outlier indicates that the data does not follow a normal distribution, so the outlier should be investigated in detail.
-- If the outlier is found to be contaminated or incorrectly recorded, correct the error or remove the data point and proceed with the analysis.
-- If the outlier is neither contaminated nor incorrectly recorded, report the results both with and without the outlier if necessary.
+**Hypotheses:**
+
+- Null Hypothesis ($H_0$): The variances are equal across the three groups.
+- Alternative Hypothesis ($H_1$): At least one group has a variance that differs from the others.
+
+**Test Statistic:**
+
+Levene's test calculates the absolute deviations from the group medians and tests whether the variance of these deviations differs across groups.
+
+**Python Implementation:**
+
+```python
+from scipy.stats import levene
+
+# Test scores for the three groups
+group1 = [78, 82, 85, 90, 87]
+group2 = [65, 70, 72, 68, 74]
+group3 = [92, 88, 94, 89, 91]
+
+# Perform Levene's test
+statistic, p_value = levene(group1, group2, group3)
+
+print(f"Levene's test statistic: {statistic}")
+print(f"P-value: {p_value}")
+```
+
+**Interpretation:**
+
+If the p-value is less than $0.05$, reject the null hypothesis and conclude that the variances are not equal across the groups.
+
+---
+
+## Exercise 3: Interpreting Conflicting Results from Bartlett's Test and Levene's Test
+
+For two datasets that are not normally distributed, a Bartlett's test was performed, resulting in a low p-value (rejection of $H_0$: equal variances). However, a Levene's test yielded a high p-value (failure to reject $H_0$). How should these two test results be interpreted?
+
+### Solution
+
+- The results of Bartlett's test are **not reliable** when the assumption of normality is violated. Bartlett's test is highly sensitive to non-normality, and its rejection of the null hypothesis may be driven by the distributional shape rather than actual differences in variance.
+- Levene's test is **less sensitive** to violations of normality, so it provides a more trustworthy result in this scenario. It is reasonable to conclude that the variances of the two datasets are equal.
+
+---
+
+## Exercise 4: Interpreting Variance and Mean Comparison Results
+
+Samples were drawn from two populations and analyzed. A Levene's test was performed, resulting in a high p-value (failure to reject $H_0$: equal variances). However, a t-test assuming equal variances yielded a p-value smaller than 0.001. How should these two test results be interpreted?
+
+### Solution
+
+- The Levene's test supports the assumption that the **variances are equal** across the two populations.
+- The t-test result provides **strong evidence** that the **means** of the two populations are significantly different.
+- These results are not contradictory — two populations can have equal variances while having very different means. The Levene's test validates the equal-variance assumption used in the t-test, which strengthens the conclusion that the observed mean difference is genuine.

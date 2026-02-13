@@ -1,6 +1,6 @@
 site_name: Financial Math Book
 theme:
-  name: material
+    name: material
 
 markdown_extensions:
     - admonition
@@ -29,8 +29,10 @@ nav:
             - NumPy Arrays: ch00/tools/numpy_basics.md
             - Data Handling with pandas: ch00/tools/pandas_basics.md
             - Basic Visualization with Matplotlib: ch00/tools/matplotlib_basics.md
+        - 0.3 Exercises: ch00/exercises/exercises.md
 
     - 1 Data Collection and Learning from Data:
+        - Chapter Overview: ch01/index.md
         - 1.1 Classical Approach—Design Your Data Collection:
             - Populations and Samples: ch01/classical/population_sample.md
             - Parameters vs Statistics: ch01/classical/parameters_statistics.md
@@ -41,6 +43,7 @@ nav:
             - Sample Surveys and Sampling Methods: ch01/classical/surveys.md
             - Bias and Nonresponse: ch01/classical/bias_nonresponse.md
             - Survivorship Bias: ch01/classical/survivorship_bias.md
+            - Strengths and Limitations: ch01/contrast/tradeoffs.md
         - 1.2 Modern Approach—Analyze the Data You Have:
             - Statistical Models vs Learning Algorithms: ch01/modern/models_vs_algorithms.md
             - Prediction vs Inference: ch01/modern/prediction_vs_inference.md
@@ -48,12 +51,10 @@ nav:
             - Unsupervised Learning (Pattern Discovery): ch01/paradigms/unsupervised.md
             - Supervised Learning (Prediction with Labels): ch01/paradigms/supervised.md
             - Reinforcement Learning (Sequential Decisions): ch01/paradigms/reinforcement.md
-        - 1.4 Two Approaches to Data Analysis:
-            - Design Your Data Collection (Classical): ch01/contrast/design_data.md
-            - Analyze the Data You Have (Modern): ch01/contrast/analyze_available.md
-            - Strengths and Limitations of Each: ch01/contrast/tradeoffs.md
+        - 1.4 Exercises: ch01/exercises/exercises.md
 
     - 2 Descriptive Statistics:
+        - Chapter Overview: ch02/index.md
         - 2.1 Exploratory Data Analysis:
             - Histograms and Density Plots: ch02/exploration/histograms.md
             - ECDF, Quantiles, and Q-Q Plots: ch02/exploration/ecdf.md
@@ -69,8 +70,10 @@ nav:
             - Boxplots: ch02/visualization/boxplots.md
             - Violin Plots: ch02/visualization/violin.md
             - Group Comparisons: ch02/visualization/group_comparison.md
+        - 2.5 Exercises: ch02/exercises/exercises.md
 
     - 3 Probability, Random Variables, and Limit Theorems:
+        - Chapter Overview: ch03/index.md
         - 3.1 Probability Theory:
             - Sample Spaces and Events: ch03/probability/sample_space.md
             - Axioms of Probability: ch03/probability/axioms.md
@@ -91,8 +94,10 @@ nav:
             - Law of Large Numbers: ch03/limits/lln.md
             - Central Limit Theorem: ch03/limits/clt.md
             - Berry–Esseen Theorem: ch03/limits/berry_esseen.md
+        - 3.6 Exercises: ch03/exercises/exercises.md
 
     - 4 Distributions and Dependence:
+        - Chapter Overview: ch04/index.md
         - 4.1 Discrete Distributions:
             - Bernoulli and Binomial: ch04/discrete_distributions/binomial.md
             - Geometric and Negative Binomial: ch04/discrete_distributions/geometric.md
@@ -106,59 +111,112 @@ nav:
             - Marginal and Conditional Distributions: ch04/joint/marginal_conditional.md
             - Covariance and Correlation: ch04/joint/covariance_correlation.md
             - Independence vs Zero Correlation: ch04/joint/independence_vs_zero_corr.md
+        - 4.4 Code:
+            - Normal PDF with scipy.stats: ch04/code/normal_pdf.py
+            - Normal Random Variates: ch04/code/normal_rvs.py
+            - Normal CDF and Quantiles: ch04/code/normal_cdf.py
+            - Student-t PDF: ch04/code/t_pdf.py
+            - Chi-Square PDF: ch04/code/chi_square_pdf.py
+            - F-Distribution PDF: ch04/code/f_pdf.py
+        - 4.5 Exercises: ch04/exercises/exercises.md
 
     - 5 Sampling Distributions:
+        - Chapter Overview: ch05/index.md
         - 5.1 Foundations:
             - Statistics as Random Variables: ch05/foundations/statistics_as_rv.md
             - Repeated Sampling Concept: ch05/foundations/repeated_sampling.md
-        - 5.2 Maximum Likelihood Estimation:
-            - Introduction to MLE: ch05/mle/intro_mle.md
-            - Capture-Recapture Method: ch05/mle/capture_recapture.md
-            - MLE for Normal Distribution: ch05/mle/mle_normal.md
-            - MLE for Bernoulli Distribution: ch05/mle/mle_bernoulli.md
-        - 5.3 The Four Fundamental Sampling Distributions:
+        - 5.2 The Four Fundamental Sampling Distributions:
             - Normal Distribution (Z): ch05/distributions/normal.md
             - Student's t Distribution: ch05/distributions/student_t.md
             - Chi-Square Distribution (χ²): ch05/distributions/chi_square.md
             - F Distribution: ch05/distributions/f_distribution.md
-        - 5.4 Applications to Common Statistics:
+        - 5.3 Applications to Common Statistics:
             - Sampling Distribution of the Mean: ch05/applications/sample_mean.md
             - Standard Error: ch05/applications/standard_error.md
             - Sampling Distribution of Proportions: ch05/applications/sample_proportion.md
             - Sampling Distribution of the Variance: ch05/applications/sample_variance.md
             - Difference of Two Sample Means: ch05/applications/diff_means.md
             - Difference of Two Sample Proportions: ch05/applications/diff_proportions.md
+        - 5.4 Code:
+            - Sampling Distribution of X̄ (Uniform): ch05/code/xbar_uniform.py
+            - Sampling Distribution of X̄ (Exponential): ch05/code/xbar_exponential.py
+            - Sampling Distribution of X̄ (Normal): ch05/code/xbar_normal.py
+            - Sampling Distribution of X̄ (Bernoulli): ch05/code/xbar_bernoulli.py
+            - Sampling Distribution of S² (Normal): ch05/code/s2_normal.py
+            - Standard Error of X̄: ch05/code/se_xbar.py
+            - Standard Error of S²: ch05/code/se_s2.py
         - 5.5 Exercises: ch05/exercises/exercises.md
 
     - 6 General Statistical Estimation:
+        - Chapter Overview: ch06/index.md
         - 6.1 Estimator Quality:
             - Bias–Variance Tradeoff: ch06/estimator_quality/bias_variance.md
             - Mean Squared Error: ch06/estimator_quality/mse.md
-        - 6.2 Estimation Methods:
-            - Likelihood Function: ch06/estimation_methods/likelihood.md
-            - Method of Moments: ch06/estimation_methods/moments.md
+            - Consistency and Asymptotic Normality: ch06/estimator_quality/consistency.md
+            - Efficiency and Cramér–Rao Lower Bound: ch06/estimator_quality/efficiency_crlb.md
+            - Sufficiency and Minimal Sufficiency: ch06/estimator_quality/sufficiency.md
+        - 6.2 Maximum Likelihood Estimation:
+            - Likelihood Function: ch06/mle/likelihood.md
+            - Introduction to MLE: ch06/mle/intro_mle.md
+            - MLE for Bernoulli Distribution: ch06/mle/mle_bernoulli.md
+            - MLE for Normal Distribution: ch06/mle/mle_normal.md
+            - MLE for Poisson Distribution: ch06/mle/mle_poisson.md
+            - MLE for Exponential Distribution: ch06/mle/mle_exponential.md
+            - Capture-Recapture Method: ch06/mle/capture_recapture.md
+            - Asymptotic Properties of MLE: ch06/mle/mle_asymptotics.md
+            - Fisher Information and Standard Errors: ch06/mle/fisher_information.md
+        - 6.3 Method of Moments:
+            - Method of Moments Foundations: ch06/estimation_methods/moments_foundations.md
+            - MoM for Common Distributions: ch06/estimation_methods/moments_examples.md
+            - Generalized Method of Moments (GMM): ch06/estimation_methods/gmm.md
+            - MoM vs MLE Comparison: ch06/estimation_methods/moments_vs_mle.md
+        - 6.4 Bayesian Estimation:
+            - Prior, Likelihood, and Posterior: ch06/bayesian/prior_posterior.md
+            - Conjugate Priors: ch06/bayesian/conjugate_priors.md
+            - MAP Estimation: ch06/bayesian/map_estimation.md
+        - 6.5 Code:
+            - Estimation Methods Comparison: ch06/code/estimation_methods.py
+            - MLE Optimization Examples: ch06/code/mle_optimization.py
+            - Fisher Information Computation: ch06/code/fisher_information.py
+            - Bayesian Estimation Demonstrations: ch06/code/bayesian_estimation.py
+            - Capture-Recapture MLE: ch06/code/capture_recapture.py
+            - Log-Likelihood Visualization: ch06/code/log_likelihood.py
+        - 6.6 Exercises: ch06/exercises/exercises.md
 
     - 7 Estimation of Mean and Variance:
+        - Chapter Overview: ch07/index.md
         - 7.1 Estimation of the Mean:
             - Sample Mean as Estimator: ch07/mean/sample_mean.md
             - Bias and Consistency: ch07/mean/bias_consistency.md
+            - Efficiency of the Sample Mean: ch07/mean/efficiency.md
+            - Trimmed and Winsorized Means: ch07/mean/robust_means.md
         - 7.2 Estimation of the Variance:
             - Naive Variance Estimator: ch07/variance/naive.md
             - Bessel's Correction: ch07/variance/bessels.md
+            - MSE of Variance Estimators: ch07/variance/mse_comparison.md
+            - Robust Variance Estimators (MAD, IQR-based): ch07/variance/robust_variance.md
         - 7.3 Gaussian MLE:
             - MLE of μ and σ²: ch07/mle/gaussian_mle.md
-        - 7.4 Code:
+            - Bias of Gaussian MLE for σ²: ch07/mle/mle_bias.md
+            - Sufficiency and Completeness: ch07/mle/sufficiency_completeness.md
+        - 7.4 Estimation Under Non-Normality:
+            - Heavy-Tailed Distributions: ch07/non_normal/heavy_tails.md
+            - Skewed Distributions: ch07/non_normal/skewed.md
+        - 7.5 Code:
             - Sample Mean Properties: ch07/code/sample_mean_properties.py
             - Consistency and Convergence: ch07/code/consistency_convergence.py
             - Variance Estimators: ch07/code/variance_estimators.py
             - Bessel's Correction: ch07/code/bessels_correction.py
             - Gaussian MLE: ch07/code/gaussian_mle.py
             - Return Estimation: ch07/code/return_estimation.py
-        - 7.5 Exercises: ch07/exercises/exercises.md
+            - Robust Estimators Comparison: ch07/code/robust_estimators.py
+        - 7.6 Exercises: ch07/exercises/exercises.md
 
     - 8 Confidence Intervals:
+        - Chapter Overview: ch08/index.md
         - 8.1 Foundations:
             - Confidence Level and Coverage: ch08/foundations/coverage.md
+            - Interpretation and Common Pitfalls: ch08/foundations/interpretation.md
         - 8.2 One-Sample Intervals:
             - CI for μ: ch08/one_sample_intervals/ci_mu.md
             - CI for p: ch08/one_sample_intervals/ci_p.md
@@ -169,15 +227,39 @@ nav:
             - CI for σ₁²/σ₂²: ch08/two_sample_intervals/ci_variance_ratio.md
         - 8.4 Paired-Sample Intervals:
             - CI for μ_D (Mean of Differences): ch08/paired_sample_intervals/ci_mu_paired.md
+            - When to Use Paired vs Independent Designs: ch08/paired_sample_intervals/paired_vs_independent.md
+            - Paired Interval for Proportions (McNemar): ch08/paired_sample_intervals/ci_paired_proportions.md
+        - 8.5 Sample Size Determination:
+            - Sample Size for Desired Margin of Error: ch08/sample_size/margin_of_error.md
+            - Sample Size for Comparing Two Groups: ch08/sample_size/two_group_sample_size.md
+        - 8.6 Code:
+            - Confidence Interval Demonstrations: ch08/code/confidence_intervals.py
+            - Sample Size Calculations: ch08/code/sample_size.py
+            - Mean CI Coverage Simulation: ch08/code/ci_mean_sim.py
+            - Proportion CI Coverage Simulation: ch08/code/ci_prop_sim.py
+            - Variance CI Coverage Simulation: ch08/code/ci_var_sim.py
+            - Paired Mean CI Coverage Simulation: ch08/code/ci_paired_sim.py
+            - Difference of Means CI Simulation: ch08/code/ci_diff_means_sim.py
+            - One-Sample Mean CI Computation: ch08/code/ci_mean_calc.py
+            - One-Sample Proportion CI Computation: ch08/code/ci_prop_calc.py
+        - 8.7 Exercises: ch08/exercises/exercises.md
 
     - 9 Hypothesis Testing:
+        - Chapter Overview: ch09/index.md
         - 9.1 Foundations:
             - Null and Alternative Hypotheses: ch09/foundations/hypotheses.md
             - Test Statistics and p-values: ch09/foundations/pvalues.md
+            - Significance Level and Decision Rules: ch09/foundations/significance_level.md
         - 9.2 One-Sample Tests:
-            - Tests for μ, p, σ²: ch09/one_sample_tests/one_sample.md
+            - Z-Test for μ (Known σ): ch09/one_sample_tests/z_test_mean.md
+            - t-Test for μ (Unknown σ): ch09/one_sample_tests/t_test_mean.md
+            - Z-Test for p (Proportion): ch09/one_sample_tests/z_test_proportion.md
+            - Chi-Square Test for σ²: ch09/one_sample_tests/chi2_test_variance.md
         - 9.3 Two-Sample Tests:
-            - Tests for μ₁−μ₂, p₁−p₂, σ₁²/σ₂²: ch09/two_sample_tests/two_sample.md
+            - Two-Sample Z-Test for μ₁−μ₂: ch09/two_sample_tests/z_test_two_means.md
+            - Two-Sample t-Test (Pooled and Welch): ch09/two_sample_tests/t_test_two_means.md
+            - Two-Sample Z-Test for p₁−p₂: ch09/two_sample_tests/z_test_two_proportions.md
+            - F-Test for σ₁²/σ₂²: ch09/two_sample_tests/f_test_two_variances.md
         - 9.4 Paired-Sample Tests:
             - Paired t-test for μ_D: ch09/paired_sample_tests/paired_t_test.md
             - When to Use Paired vs Two-Sample: ch09/paired_sample_tests/paired_vs_two_sample.md
@@ -185,9 +267,25 @@ nav:
             - Type I and II Errors: ch09/errors_and_power/errors.md
             - Power Analysis: ch09/errors_and_power/power.md
             - CI ↔ Test Duality: ch09/errors_and_power/duality.md
-        - 9.6 Exercises: ch09/exercises/exercises.md
+        - 9.6 Multiple Testing:
+            - Family-Wise Error Rate: ch09/multiple_testing/fwer.md
+            - Bonferroni and Holm Corrections: ch09/multiple_testing/bonferroni_holm.md
+            - False Discovery Rate (Benjamini–Hochberg): ch09/multiple_testing/fdr.md
+        - 9.7 Code:
+            - Hypothesis Testing Demonstrations: ch09/code/hypothesis_tests.py
+            - Power Analysis and Sample Size: ch09/code/power_analysis.py
+            - Multiple Testing Corrections: ch09/code/multiple_testing.py
+            - One-Sample Mean Test: ch09/code/test_mean.py
+            - One-Sample Proportion Test: ch09/code/test_proportion.py
+            - One-Sample Variance Test: ch09/code/test_variance.py
+            - F-Test for Two Variances: ch09/code/test_var_ratio.py
+            - Paired Mean Test: ch09/code/test_paired.py
+            - Two-Sample Mean Test: ch09/code/test_two_means.py
+            - Two-Sample Proportion Test: ch09/code/test_two_props.py
+        - 9.8 Exercises: ch09/exercises/exercises.md
 
     - 10 Chi-Square Tests:
+        - Chapter Overview: ch10/index.md
         - 10.1 Chi-Square Distribution and Asymptotics:
             - Chi-Square Distribution: ch10/distribution/distribution.md
             - Degrees of Freedom and Asymptotic Theory: ch10/distribution/degrees_of_freedom.md
@@ -198,9 +296,17 @@ nav:
         - 10.3 Practical Considerations:
             - Expected Cell Counts and Validity Conditions: ch10/practice/validity_conditions.md
             - Effect Size and Cramér's V: ch10/practice/effect_size.md
-        - 10.4 Exercises: ch10/exercises/exercises.md
+        - 10.4 Code:
+            - Chi-Square Goodness-of-Fit (Manual): ch10/code/gof_manual.py
+            - Chi-Square Goodness-of-Fit (scipy): ch10/code/gof_scipy.py
+            - Independence Test (Manual with Plot): ch10/code/independence_manual.py
+            - Independence Test Template Function: ch10/code/independence_template.py
+            - Homogeneity Test (scipy): ch10/code/homogeneity_basic.py
+            - Homogeneity Residual Heatmap: ch10/code/homogeneity_residuals.py
+        - 10.5 Exercises: ch10/exercises/exercises.md
 
     - 11 ANOVA:
+        - Chapter Overview: ch11/index.md
         - 11.1 One-Way ANOVA:
             - Model and Assumptions: ch11/anova_one_way/one_way_model.md
             - F-Test Procedure: ch11/anova_one_way/f_test.md
@@ -209,6 +315,9 @@ nav:
             - Interaction Effects: ch11/anova_two_way/interaction.md
         - 11.3 Post-Hoc Comparisons:
             - Tukey HSD: ch11/post_hoc/tukey.md
+            - Bonferroni and Scheffé Methods: ch11/post_hoc/bonferroni_scheffe.md
+            - Dunnett's Test (vs Control): ch11/post_hoc/dunnett.md
+            - Games–Howell (Unequal Variances): ch11/post_hoc/games_howell.md
         - 11.4 Welch's ANOVA:
             - Welch's One-Way ANOVA: ch11/anova_welch/welch_one_way.md
             - Welch's Two-Way ANOVA: ch11/anova_welch/welch_two_way.md
@@ -223,178 +332,360 @@ nav:
             - Influential Data Points: ch11/diagnostics/influential_points.md
             - Handling Assumption Violations: ch11/diagnostics/handling_violations.md
         - 11.7 Practical Applications:
+            - A/B Testing and Experimental Design: ch11/practical_applications/ab_testing.md
+            - Financial Applications of ANOVA: ch11/practical_applications/finance_applications.md
             - Case Studies: ch11/practical_applications/case_studies.md
         - 11.8 Code:
-            - Chi-Squared Test for Variance: ch11/code/chi2_test_for_variance.py
-            - F-Test of Equality of Variances: ch11/code/f_test_equality_of_variances.py
-            - Bartlett's Test: ch11/code/bartlett_test.py
-            - Levene's Test: ch11/code/levene_test.py
-            - Chi-Square Distribution: ch11/code/chi_square_distribution.py
             - ANOVA Diagnostics: ch11/code/anova_diagnostics.py
+            - Post-Hoc Comparison Examples: ch11/code/post_hoc_comparisons.py
+            - One-Way ANOVA End-to-End Pipeline: ch11/code/oneway_pipeline.py
+            - One-Way ANOVA with scipy and Plots: ch11/code/oneway_scipy.py
+            - Two-Way ANOVA End-to-End Pipeline: ch11/code/twoway_pipeline.py
+            - Interaction Effect Plot: ch11/code/interaction_plot.py
+            - Welch ANOVA Type I Error and Power Simulation: ch11/code/welch_simulation.py
+            - Two-Way Welch ANOVA (Robust HC3): ch11/code/welch_twoway_robust.py
         - 11.9 Exercises: ch11/exercises/exercises.md
 
-    - 12 Linear Regression:
+    - 12 Correlation and Causation:
         - Chapter Overview: ch12/index.md
-        - 12.1 Linear Regression:
-            - Simple Linear Regression: ch12/linear_regression/simple.md
-            - Multiple Linear Regression: ch12/linear_regression/multiple.md
-        - 12.2 Estimation and Inference:
-            - Least Squares Estimation: ch12/estimation_inference/least_squares.md
-            - Sampling Distributions (Simple OLS): ch12/estimation_inference/sampling_dist_simple.md
-            - Confidence Intervals for Coefficients: ch12/estimation_inference/ci_coeff.md
-            - Sampling Distributions and Tests (General OLS): ch12/estimation_inference/tests_coeff.md
-        - 12.3 Testing Coefficients:
-            - Hypothesis Tests (t-tests): ch12/testing_coefficients/hypothesis_tests.md
-            - p-values and Confidence Intervals: ch12/testing_coefficients/pvalues_ci.md
-            - Interpretation of Significance: ch12/testing_coefficients/significance.md
-        - 12.4 Interaction and Polynomial Extensions:
-            - Interaction Terms: ch12/interaction_polynomial/interaction_terms.md
-            - Polynomial Regression: ch12/interaction_polynomial/polynomial_regression.md
-        - 12.5 Assumptions and Diagnostics:
-            - Assumptions Overview (LINE): ch12/assumptions/index.md
-            - Linearity Assumption: ch12/assumptions/linearity_overview.md
-            - Independence Assumption: ch12/assumptions/independence_overview.md
-            - Homoscedasticity Assumption: ch12/assumptions/homoscedasticity_overview.md
-            - Normality Assumption: ch12/assumptions/normality_overview.md
-            - Checking Linearity: ch12/assumptions/checking_linearity.md
-            - Checking Independence: ch12/assumptions/checking_independence.md
-            - Checking Homoscedasticity: ch12/assumptions/checking_homoscedasticity.md
-            - Checking Normality: ch12/assumptions/checking_normality.md
-        - 12.6 Diagnostics:
-            - Residual Analysis: ch12/diagnostics/residuals.md
-            - Multicollinearity and Influence: ch12/diagnostics/influence.md
-        - 12.7 Performance Metrics:
-            - R², Adjusted R², MAE, MSE, RMSE: ch12/performance/metrics.md
-        - 12.8 Model Selection Criteria:
-            - AIC and BIC: ch12/model_selection/aic_bic.md
-        - 12.9 Package Usage:
-            - sklearn vs statsmodels Comparison: ch12/package_usage/comparison.md
-        - 12.10 Code:
-            - CI for Slope (Caffeine Example): ch12/code/ci_slope_example.py
-            - CI and Prediction Bands: ch12/code/ci_prediction_bands.py
-            - OLS Regression Output Reproduction: ch12/code/ols_regression_output.py
-            - Multiple Regression Diagnostics: ch12/code/multiple_regression_diagnostics.py
-            - Testing Coefficients Examples: ch12/code/testing_coefficients.py
-        - 12.11 Exercises: ch12/exercises/exercises.md
+        - 12.1 Correlation:
+            - Pearson Correlation Coefficient: ch12/correlation/pearson.md
+            - Spearman Rank Correlation: ch12/correlation/spearman.md
+            - Kendall's Tau: ch12/correlation/kendall.md
+            - Partial Correlation: ch12/correlation/partial.md
+            - Point-Biserial and Phi Coefficients: ch12/correlation/special_cases.md
+        - 12.2 Ecological Correlation:
+            - Ecological Fallacy: ch12/ecological_correlation/ecological_fallacy.md
+            - Simpson's Paradox: ch12/ecological_correlation/simpsons_paradox.md
+            - Aggregation Bias: ch12/ecological_correlation/aggregation_bias.md
+        - 12.3 Correlation, Causation, and Confounding:
+            - Confounding Variables: ch12/confounding/confounding_variables.md
+            - Spurious Correlations: ch12/confounding/spurious_correlations.md
+            - Lurking Variables and Common Causes: ch12/confounding/lurking_variables.md
+        - 12.4 Causation:
+            - Criteria for Causal Inference: ch12/causation/causal_criteria.md
+            - Randomized Experiments and Causation: ch12/causation/experiments_causation.md
+            - Instrumental Variables (Introduction): ch12/causation/instrumental_variables.md
+            - Directed Acyclic Graphs (DAGs): ch12/causation/dags.md
+        - 12.5 Correlation Tests:
+            - Testing Pearson's r (t-Test for Correlation): ch12/correlation_test/test_pearson.md
+            - Testing Spearman's ρ: ch12/correlation_test/test_spearman.md
+            - Testing Kendall's τ: ch12/correlation_test/test_kendall.md
+            - Comparing Two Correlations: ch12/correlation_test/comparing_correlations.md
+        - 12.6 Correlation Matrix and Visualization:
+            - Correlation Heatmaps: ch12/visualization/heatmaps.md
+            - Pair Plots and Scatter Matrices: ch12/visualization/pairplots.md
+        - 12.7 Code:
+            - Correlation Analysis Demonstrations: ch12/code/correlation_analysis.py
+            - Causal Inference Simulations: ch12/code/causal_simulations.py
+            - Correlation Visualization: ch12/code/corr_viz.py
+        - 12.8 Exercises: ch12/exercises/exercises.md
 
-    - 13 Logistic Regression:
-        - 13.1 Logistic Regression:
-            - Logit Link and Odds: ch13/logistic_regression/logit.md
-            - Likelihood for Logistic Regression: ch13/logistic_regression/likelihood.md
+    - 13 Linear Regression:
+        - Chapter Overview: ch13/index.md
+        - 13.1 Linear Regression:
+            - Simple Linear Regression: ch13/linear_regression/simple.md
+            - Multiple Linear Regression: ch13/linear_regression/multiple.md
         - 13.2 Estimation and Inference:
-            - Maximum Likelihood Estimation: ch13/estimation_inference/mle.md
-            - Wald and Likelihood Ratio Tests: ch13/estimation_inference/tests.md
-        - 13.3 Model Evaluation:
-            - Confusion Matrix and ROC: ch13/evaluation/metrics.md
+            - Least Squares Estimation: ch13/estimation_inference/least_squares.md
+            - Sampling Distributions (Simple OLS): ch13/estimation_inference/sampling_dist_simple.md
+            - Confidence Intervals for Coefficients: ch13/estimation_inference/ci_coeff.md
+            - Sampling Distributions and Tests (General OLS): ch13/estimation_inference/tests_coeff.md
+        - 13.3 Testing Coefficients:
+            - Hypothesis Tests (t-tests): ch13/testing_coefficients/hypothesis_tests.md
+            - p-values and Confidence Intervals: ch13/testing_coefficients/pvalues_ci.md
+            - Interpretation of Significance: ch13/testing_coefficients/significance.md
+        - 13.4 Interaction and Polynomial Extensions:
+            - Interaction Terms: ch13/interaction_polynomial/interaction_terms.md
+            - Polynomial Regression: ch13/interaction_polynomial/polynomial_regression.md
+        - 13.5 Assumptions and Diagnostics:
+            - Assumptions Overview (LINE): ch13/assumptions/index.md
+            - Linearity Assumption: ch13/assumptions/linearity_overview.md
+            - Independence Assumption: ch13/assumptions/independence_overview.md
+            - Homoscedasticity Assumption: ch13/assumptions/homoscedasticity_overview.md
+            - Normality Assumption: ch13/assumptions/normality_overview.md
+            - Checking Linearity: ch13/assumptions/checking_linearity.md
+            - Checking Independence: ch13/assumptions/checking_independence.md
+            - Checking Homoscedasticity: ch13/assumptions/checking_homoscedasticity.md
+            - Checking Normality: ch13/assumptions/checking_normality.md
+        - 13.6 Diagnostics:
+            - Residual Analysis: ch13/diagnostics/residuals.md
+            - Multicollinearity and VIF: ch13/diagnostics/multicollinearity.md
+            - Influence and Leverage (Cook's Distance, DFFITS): ch13/diagnostics/influence.md
+        - 13.7 Performance Metrics:
+            - R² and Adjusted R²: ch13/performance/r_squared.md
+            - MAE, MSE, and RMSE: ch13/performance/mae_mse_rmse.md
+            - MAPE and Other Relative Metrics: ch13/performance/relative_metrics.md
+        - 13.8 Model Selection Criteria:
+            - AIC (Akaike Information Criterion): ch13/model_selection/aic.md
+            - BIC (Bayesian Information Criterion): ch13/model_selection/bic.md
+            - Cross-Validation for Model Selection: ch13/model_selection/cross_validation.md
+            - Stepwise and Best-Subset Selection: ch13/model_selection/stepwise_subset.md
+        - 13.9 Package Usage:
+            - statsmodels OLS Interface: ch13/package_usage/statsmodels.md
+            - sklearn LinearRegression Interface: ch13/package_usage/sklearn.md
+            - Comparison and When to Use Which: ch13/package_usage/comparison.md
+        - 13.10 Code:
+            - CI for Slope (Caffeine Example): ch13/code/ci_slope_example.py
+            - CI and Prediction Bands: ch13/code/ci_prediction_bands.py
+            - OLS Regression Output Reproduction: ch13/code/ols_regression_output.py
+            - Multiple Regression Diagnostics: ch13/code/multi_reg_diag.py
+            - Testing Coefficients Examples: ch13/code/testing_coefficients.py
+            - Model Selection Comparison: ch13/code/model_selection.py
+        - 13.11 Exercises: ch13/exercises/exercises.md
 
-    - 14 Multiclass Classification and Softmax Regression:
-        - 14.1 Softmax Regression:
-            - Multinomial Logistic Regression: ch14/softmax_regression/multinomial.md
-            - Softmax Function and Probability Simplex: ch14/softmax_regression/softmax.md
-        - 14.2 Estimation and Optimization:
-            - Cross-Entropy Loss: ch14/optimization/cross_entropy.md
-            - Gradient-Based Optimization: ch14/optimization/optimization.md
-        - 14.3 Model Evaluation and Case Studies:
-            - Multiclass Metrics (Accuracy, Confusion Matrix): ch14/case_studies/metrics.md
-            - MNIST Case Study: ch14/case_studies/mnist.md
+    - 14 Normality Tests:
+        - Chapter Overview: ch14/index.md
+        - 14.1 Introduction to Normality:
+            - What Is Normality and Why It Matters: ch14/introduction/normality.md
+            - Central Role in Statistical Inference: ch14/introduction/role_in_inference.md
+            - Normality in Financial Data: ch14/introduction/financial_context.md
+        - 14.2 Graphical Methods:
+            - Histogram and Density Plots: ch14/graphical_methods/histogram_density.md
+            - Q-Q Plots: ch14/graphical_methods/qq_plots.md
+            - Boxplots and Their Interpretation: ch14/graphical_methods/boxplots.md
+        - 14.3 Descriptive Statistics as Normality Indicators:
+            - Skewness and Kurtosis: ch14/descriptive_statistics/skewness_kurtosis.md
+            - Skewtest and Kurtosistest: ch14/descriptive_statistics/skewtest_kurtosistest.md
+            - D'Agostino's K-Squared Test: ch14/descriptive_statistics/dagostino.md
+            - Jarque-Bera Test: ch14/descriptive_statistics/jarque_bera.md
+        - 14.4 Formal Tests for Normality:
+            - Kolmogorov-Smirnov and Lilliefors Tests: ch14/formal_tests/ks_lilliefors.md
+            - Anderson-Darling Test: ch14/formal_tests/anderson_darling.md
+            - Shapiro-Wilk Test: ch14/formal_tests/shapiro_wilk.md
+        - 14.5 Limitations and Pitfalls:
+            - Sample Size Effects on Power: ch14/limitations/sample_size_power.md
+            - Sensitivity vs Practical Significance: ch14/limitations/sensitivity_practical.md
+            - Choosing the Right Test: ch14/limitations/choosing_test.md
+        - 14.6 Dealing with Non-Normal Data:
+            - Transformations to Achieve Normality: ch14/non_normal_data/transformations.md
+            - Bootstrapping as an Alternative: ch14/non_normal_data/bootstrapping.md
+            - Non-Parametric Methods: ch14/non_normal_data/nonparametric.md
+        - 14.7 Applications:
+            - Normality in t-Tests and ANOVA: ch14/applications/t_tests_anova.md
+            - Normality in Regression (Residual Diagnostics): ch14/applications/regression_residuals.md
+            - Normality of Financial Returns: ch14/applications/financial_returns.md
+        - 14.8 Code:
+            - Graphical Normality Checks: ch14/code/graphical_checks.py
+            - Formal Normality Test Suite: ch14/code/normality_tests.py
+            - Transformation Demonstrations: ch14/code/transformations.py
+            - Q-Q Plot with Normality Tests: ch14/code/qq_plot_basic.py
+            - Q-Q Plot Confidence Band Simulation: ch14/code/qq_confidence_band.py
+            - Distribution Shapes via Boxplots: ch14/code/boxplot_shapes.py
+            - Skewness Test: ch14/code/skewtest.py
+            - Kurtosis Test: ch14/code/kurtosistest.py
+            - D'Agostino K² Test: ch14/code/dagostino_test.py
+            - Jarque-Bera Test: ch14/code/jarque_bera.py
+            - Kolmogorov-Smirnov Test: ch14/code/ks_test.py
+            - Lilliefors Test: ch14/code/lilliefors_test.py
+            - Anderson-Darling Test: ch14/code/anderson_darling.py
+            - Shapiro-Wilk Test: ch14/code/shapiro_wilk.py
+            - Shapiro-Wilk Power Simulation: ch14/code/shapiro_power_sim.py
+        - 14.9 Exercises: ch14/exercises/exercises.md
 
-    - 15 Normality Tests:
+    - 15 Variance Tests:
         - Chapter Overview: ch15/index.md
-        - 15.1 Introduction to Normality:
-            - What Is Normality and Why It Matters: ch15/introduction/normality.md
-        - 15.2 Graphical Methods:
-            - Histogram and Density Plots: ch15/graphical_methods/histogram_density.md
-            - Q-Q Plots: ch15/graphical_methods/qq_plots.md
-            - Boxplots and Their Interpretation: ch15/graphical_methods/boxplots.md
-        - 15.3 Descriptive Statistics as Normality Indicators:
-            - Skewness and Kurtosis: ch15/descriptive_statistics/skewness_kurtosis.md
-            - Skewtest and Kurtosistest: ch15/descriptive_statistics/skewtest_kurtosistest.md
-            - D'Agostino's K-Squared Test: ch15/descriptive_statistics/dagostino.md
-            - Jarque-Bera Test: ch15/descriptive_statistics/jarque_bera.md
-        - 15.4 Formal Tests for Normality:
-            - Kolmogorov-Smirnov and Lilliefors Tests: ch15/formal_tests/ks_lilliefors.md
-            - Anderson-Darling Test: ch15/formal_tests/anderson_darling.md
-            - Shapiro-Wilk Test: ch15/formal_tests/shapiro_wilk.md
-        - 15.5 Limitations and Pitfalls:
-            - Sensitivity, Power, and Practical Considerations: ch15/limitations/limitations.md
-        - 15.6 Dealing with Non-Normal Data:
-            - Transformations to Achieve Normality: ch15/non_normal_data/transformations.md
-            - Bootstrapping as an Alternative: ch15/non_normal_data/bootstrapping.md
-            - Non-Parametric Methods: ch15/non_normal_data/nonparametric.md
+        - 15.1 Introduction to Variance Testing:
+            - Why Test Variances: ch15/introduction/motivation.md
+            - Overview of Variance Tests: ch15/introduction/introduction.md
+            - Assumptions Common to Variance Tests: ch15/introduction/common_assumptions.md
+        - 15.2 Chi-Square Test for Variance:
+            - One-Sample Chi-Square Variance Test: ch15/chi_square_test/chi_square_variance.md
+            - Derivation and Distribution Theory: ch15/chi_square_test/derivation.md
+            - Confidence Interval for σ²: ch15/chi_square_test/ci_variance.md
+        - 15.3 F-Test for Comparing Two Variances:
+            - Two-Sample F-Test: ch15/f_test/f_test_two_variances.md
+            - F-Distribution and Degrees of Freedom: ch15/f_test/f_distribution_details.md
+            - Sensitivity to Non-Normality: ch15/f_test/sensitivity.md
+        - 15.4 Bartlett's Test:
+            - Bartlett's Test for Equality of Variances: ch15/bartlett_test/bartlett_test.md
+            - Derivation and Chi-Square Approximation: ch15/bartlett_test/derivation.md
+            - Limitations Under Non-Normality: ch15/bartlett_test/limitations.md
+        - 15.5 Robust Tests:
+            - Levene's Test: ch15/robust_tests/levene.md
+            - Brown-Forsythe Test: ch15/robust_tests/brown_forsythe.md
+            - Fligner-Killeen Test: ch15/robust_tests/fligner_killeen.md
+            - Comparison of Robust Methods: ch15/robust_tests/comparison.md
+        - 15.6 Advanced Methods:
+            - Bootstrap Variance Testing: ch15/advanced_methods/bootstrap_variance.md
+            - Bayesian Variance Testing: ch15/advanced_methods/bayesian_variance.md
+            - Likelihood Ratio Test for Variances: ch15/advanced_methods/likelihood_ratio.md
         - 15.7 Applications:
-            - Normality in t-Tests, Regression, and ANOVA: ch15/applications/applications.md
-        - 15.8 Exercises: ch15/exercises/exercises.md
+            - Pre-Test for ANOVA Homoscedasticity: ch15/applications/anova_pretest.md
+            - Variance Testing in Regression: ch15/applications/regression_variance.md
+            - Financial Volatility Comparisons: ch15/applications/financial_volatility.md
+        - 15.8 Code:
+            - Chi-Squared Test for Variance: ch15/code/chi2_test_for_variance.py
+            - F-Test of Equality of Variances: ch15/code/f_test_variances.py
+            - Bartlett's Test: ch15/code/bartlett_test.py
+            - Levene's Test: ch15/code/levene_test.py
+            - Chi-Square Distribution: ch15/code/chi_square_distribution.py
+            - Robust Variance Tests Comparison: ch15/code/robust_tests_comparison.py
+            - F-Test Tail Region Visualization: ch15/code/f_test_tail_plot.py
+            - F-Test Normality Sensitivity and Robust Alternatives: ch15/code/f_test_robust_alt.py
+            - F-Test Power Simulation: ch15/code/f_test_power_sim.py
+            - Bartlett Test Non-Normality Sensitivity: ch15/code/bartlett_sensitivity.py
+            - Levene Test Normal vs Skewed Simulation: ch15/code/levene_simulation.py
+            - Brown-Forsythe Test (scipy): ch15/code/brown_forsythe.py
+            - Fligner-Killeen Test (scipy): ch15/code/fligner_killeen.py
+            - Bootstrap Variance Test: ch15/code/bootstrap_var_test.py
+            - Bayesian Variance Test: ch15/code/bayesian_var_test.py
+        - 15.9 Exercises: ch15/exercises/exercises.md
 
-    - 16 Variance Tests:
+    - 16 Non-Parametric Tests:
         - Chapter Overview: ch16/index.md
-        - 16.1 Introduction to Variance Testing:
-            - Overview of Variance Tests: ch16/introduction/introduction.md
-        - 16.2 Chi-Square Test for Variance:
-            - One-Sample Chi-Square Variance Test: ch16/chi_square_test/chi_square_variance.md
-        - 16.3 F-Test for Comparing Two Variances:
-            - Two-Sample F-Test: ch16/f_test/f_test_two_variances.md
-        - 16.4 Bartlett's Test:
-            - Bartlett's Test for Equality of Variances: ch16/bartlett_test/bartlett_test.md
-        - 16.5 Robust Tests:
-            - Levene's, Brown-Forsythe, and Fligner-Killeen Tests: ch16/robust_tests/robust_tests.md
-        - 16.6 Advanced Methods:
-            - Bootstrapping and Bayesian Variance Testing: ch16/advanced_methods/advanced_methods.md
-        - 16.7 Applications:
-            - Variance Testing in Regression and ANOVA: ch16/applications/applications.md
+        - 16.1 Foundations:
+            - When and Why to Use Non-Parametric Tests: ch16/foundations/motivation.md
+            - Ranks and Rank Transformations: ch16/foundations/ranks.md
+            - Power Comparison with Parametric Tests: ch16/foundations/power_comparison.md
+        - 16.2 One-Sample Non-Parametric Tests:
+            - Runs Test for Randomness: ch16/one_sample_nonparametric/runs_test.md
+            - Sign Test: ch16/one_sample_nonparametric/sign_test.md
+            - Wilcoxon Signed-Rank Test: ch16/one_sample_nonparametric/wilcoxon_signed_rank.md
+            - Binomial Test: ch16/one_sample_nonparametric/binomial_test.md
+        - 16.3 Paired-Sample Non-Parametric Tests:
+            - Paired Sign Test: ch16/paired_sample_nonparametric/paired_sign.md
+            - Wilcoxon Signed-Rank for Paired Data: ch16/paired_sample_nonparametric/paired_wilcoxon.md
+            - Paired Permutation Test: ch16/paired_sample_nonparametric/paired_permutation.md
+        - 16.4 Two-Sample Non-Parametric Tests:
+            - Wilcoxon Rank-Sum Test: ch16/two_sample_nonparametric/rank_sum.md
+            - Mann-Whitney U Test: ch16/two_sample_nonparametric/mann_whitney.md
+            - Kolmogorov-Smirnov Two-Sample Test: ch16/two_sample_nonparametric/ks_two_sample.md
+        - 16.5 Multi-Group Non-Parametric Tests:
+            - Kruskal-Wallis Test: ch16/multi_group_nonparametric/kruskal_wallis.md
+            - Friedman Test (Repeated Measures): ch16/multi_group_nonparametric/friedman.md
+            - Mood's Median Test: ch16/multi_group_nonparametric/median_test.md
+            - Post-Hoc Dunn's Test: ch16/multi_group_nonparametric/dunn.md
+        - 16.6 Non-Parametric Correlation:
+            - Spearman's ρ (Revisited): ch16/correlation/spearman.md
+            - Kendall's τ (Revisited): ch16/correlation/kendall.md
+        - 16.7 Code:
+            - Runs Test: ch16/code/runs_test.py
+            - Sign Test: ch16/code/sign_test.py
+            - Wilcoxon Tests: ch16/code/wilcoxon_tests.py
+            - Two-Sample and Multi-Group Tests: ch16/code/two_sample_tests.py
+            - Non-Parametric Test Suite: ch16/code/nonparametric_suite.py
         - 16.8 Exercises: ch16/exercises/exercises.md
 
-    - 17 Correlation and Causation:
+    - 17 Resampling Methods:
         - Chapter Overview: ch17/index.md
-        - 17.1 Correlation:
-            - Understanding Correlation: ch17/correlation/understanding.md
-        - 17.2 Ecological Correlation:
-            - Ecological Correlation and Simpson's Paradox: ch17/ecological_correlation/ecological_correlation.md
-        - 17.3 Correlation, Causation, and Confounding:
-            - Confounding Variables and Spurious Correlations: ch17/confounding/confounding.md
-        - 17.4 Causation:
-            - Establishing Causal Relationships: ch17/causation/causation.md
-        - 17.5 Correlation Tests:
-            - Pearson, Spearman, and Kendall Tests: ch17/correlation_test/correlation_tests.md
-        - 17.6 Exercises: ch17/exercises/exercises.md
+        - 17.1 Bootstrap Foundations:
+            - The Bootstrap Principle: ch17/bootstrap/principle.md
+            - Non-Parametric Bootstrap: ch17/bootstrap/nonparametric.md
+            - Parametric Bootstrap: ch17/bootstrap/parametric.md
+        - 17.2 Bootstrap Confidence Intervals:
+            - Percentile Method: ch17/bootstrap_ci/percentile.md
+            - BCa (Bias-Corrected and Accelerated): ch17/bootstrap_ci/bca.md
+            - Bootstrap-t Method: ch17/bootstrap_ci/bootstrap_t.md
+            - Comparison of Bootstrap CI Methods: ch17/bootstrap_ci/comparison.md
+        - 17.3 Bootstrap Hypothesis Testing:
+            - Bootstrap Test for a Single Mean: ch17/bootstrap_testing/single_mean.md
+            - Bootstrap Test for Two Means: ch17/bootstrap_testing/two_means.md
+            - Bootstrap Test for Correlation: ch17/bootstrap_testing/correlation.md
+        - 17.4 Permutation Tests:
+            - Permutation Test Foundations: ch17/permutation/foundations.md
+            - Permutation Test for Two-Sample Location: ch17/permutation/two_sample.md
+            - Permutation Test for Correlation: ch17/permutation/correlation.md
+            - Permutation Test for Paired Data: ch17/permutation/paired.md
+        - 17.5 Comparison and Practical Guidance:
+            - Bootstrap vs Permutation Tests: ch17/comparison/bootstrap_vs_permutation.md
+            - Number of Resamples and Convergence: ch17/comparison/convergence.md
+            - When Resampling Fails: ch17/comparison/limitations.md
+        - 17.6 Code:
+            - Bootstrap CI Methods: ch17/code/bootstrap_ci.py
+            - Bootstrap Hypothesis Tests: ch17/code/bootstrap_tests.py
+            - Permutation Test Demonstrations: ch17/code/permutation_tests.py
+            - Resampling Methods Comparison: ch17/code/resampling_methods.py
+        - 17.7 Exercises: ch17/exercises/exercises.md
 
     - 18 Regularization Techniques:
         - Chapter Overview: ch18/index.md
-        - 18.1 Ridge Regression:
-            - Ridge Regression (L2 Regularization): ch18/ridge/ridge.md
-        - 18.2 Lasso Regression:
-            - Lasso Regression (L1 Regularization): ch18/lasso/lasso.md
-        - 18.3 Elastic Net:
-            - Elastic Net Regularization: ch18/elastic_net/elastic_net.md
-        - 18.4 Overview and Comparison:
-            - Regularization Methods Comparison: ch18/overview/overview.md
-        - 18.5 Code:
-            - Ridge, Lasso, and Elastic Net Comparison: ch18/code/regularization_comparison.py
+        - 18.1 Motivation for Regularization:
+            - Overfitting and the Bias–Variance Tradeoff: ch18/motivation/overfitting.md
+            - Ill-Conditioned Design Matrices: ch18/motivation/ill_conditioning.md
+            - Multicollinearity and Regularization: ch18/motivation/multicollinearity.md
+        - 18.2 Ridge Regression:
+            - Ridge Formulation and Closed-Form Solution: ch18/ridge/formulation.md
+            - Geometric Interpretation (L2 Penalty): ch18/ridge/geometry.md
+            - Bayesian Interpretation (Gaussian Prior): ch18/ridge/bayesian.md
+            - Ridge Trace and Choosing λ: ch18/ridge/lambda_selection.md
+        - 18.3 Lasso Regression:
+            - Lasso Formulation and Sparsity: ch18/lasso/formulation.md
+            - Geometric Interpretation (L1 Penalty): ch18/lasso/geometry.md
+            - Bayesian Interpretation (Laplace Prior): ch18/lasso/bayesian.md
+            - Coordinate Descent Algorithm: ch18/lasso/coordinate_descent.md
+            - Lasso for Feature Selection: ch18/lasso/feature_selection.md
+        - 18.4 Elastic Net:
+            - Elastic Net Formulation: ch18/elastic_net/formulation.md
+            - Advantages over Pure Ridge and Lasso: ch18/elastic_net/advantages.md
+            - Grouping Effect for Correlated Features: ch18/elastic_net/grouping_effect.md
+        - 18.5 Hyperparameter Tuning:
+            - Cross-Validation for λ Selection: ch18/tuning/cross_validation.md
+            - Regularization Path: ch18/tuning/regularization_path.md
+            - Information Criteria for Regularized Models: ch18/tuning/information_criteria.md
+        - 18.6 Overview and Comparison:
+            - Ridge vs Lasso vs Elastic Net: ch18/overview/comparison.md
+            - Guidelines for Choosing a Method: ch18/overview/guidelines.md
+        - 18.7 Code:
+            - Ridge Regression Examples: ch18/code/ridge_examples.py
+            - Lasso Regression Examples: ch18/code/lasso_examples.py
+            - Elastic Net Examples: ch18/code/elastic_net_examples.py
+            - Ridge, Lasso, and Elastic Net Comparison: ch18/code/reg_compare.py
+            - Cross-Validation and λ Tuning: ch18/code/cv_tuning.py
+        - 18.8 Exercises: ch18/exercises/exercises.md
 
-    - 19 Non-Parametric Tests:
+    - 19 Logistic Regression:
         - Chapter Overview: ch19/index.md
-        - 19.1 One-Sample Non-Parametric Tests:
-            - Runs Test, Sign Test, and Wilcoxon Signed-Rank: ch19/one_sample_nonparametric/one_sample.md
-        - 19.2 Paired-Sample Non-Parametric Tests:
-            - Paired Sign Test and Wilcoxon Signed-Rank: ch19/paired_sample_nonparametric/paired.md
-        - 19.3 Two-Sample and Multi-Group Tests:
-            - Rank-Sum, Mann-Whitney U, Kruskal-Wallis, and Median Test: ch19/two_sample_nonparametric/two_sample.md
-        - 19.4 Code:
-            - Runs Test: ch19/code/runs_test.py
-            - Sign Test: ch19/code/sign_test.py
-            - Two-Sample and Multi-Group Tests: ch19/code/two_sample_tests.py
+        - 19.1 Logistic Regression:
+            - Logit Link and Odds: ch19/logistic_regression/logit.md
+            - Odds Ratios and Interpretation: ch19/logistic_regression/odds_ratios.md
+            - Likelihood for Logistic Regression: ch19/logistic_regression/likelihood.md
+        - 19.2 Estimation and Inference:
+            - Maximum Likelihood Estimation: ch19/estimation_inference/mle.md
+            - Newton–Raphson and IRLS Algorithms: ch19/estimation_inference/algorithms.md
+            - Wald and Likelihood Ratio Tests: ch19/estimation_inference/tests.md
+            - Deviance and Goodness-of-Fit: ch19/estimation_inference/deviance.md
+        - 19.3 Model Evaluation:
+            - Confusion Matrix: ch19/evaluation/confusion_matrix.md
+            - Precision, Recall, and F1-Score: ch19/evaluation/precision_recall.md
+            - ROC Curve and AUC: ch19/evaluation/roc_auc.md
+            - Calibration and Brier Score: ch19/evaluation/calibration.md
+        - 19.4 Regularized Logistic Regression:
+            - L1 and L2 Regularization for Logistic Regression: ch19/regularized/regularization.md
+            - Feature Selection via Penalized Likelihood: ch19/regularized/feature_selection.md
+        - 19.5 Code:
+            - Logistic Regression Demonstrations: ch19/code/logistic_regression.py
+            - ROC and Evaluation Metrics: ch19/code/evaluation_metrics.py
+            - Regularized Logistic Regression: ch19/code/regularized_logistic.py
+        - 19.6 Exercises: ch19/exercises/exercises.md
 
-    - 20 Resampling Methods:
+    - 20 Multiclass Classification and Softmax Regression:
         - Chapter Overview: ch20/index.md
-        - 20.1 Bootstrap:
-            - Bootstrap Confidence Intervals and Hypothesis Testing: ch20/bootstrap/bootstrap.md
-        - 20.2 Permutation Tests:
-            - Permutation Tests for Means, Correlations, and Paired Data: ch20/permutation/permutation.md
-        - 20.3 Comparison:
-            - Bootstrap vs Permutation Tests: ch20/comparison/comparison.md
+        - 20.1 Softmax Regression:
+            - Multinomial Logistic Regression: ch20/softmax_regression/multinomial.md
+            - Softmax Function and Probability Simplex: ch20/softmax_regression/softmax.md
+            - Numerical Stability (Log-Sum-Exp Trick): ch20/softmax_regression/numerical_stability.md
+        - 20.2 Estimation and Optimization:
+            - Cross-Entropy Loss: ch20/optimization/cross_entropy.md
+            - Gradient-Based Optimization: ch20/optimization/optimization.md
+            - Regularization for Softmax: ch20/optimization/regularization.md
+        - 20.3 Model Evaluation and Case Studies:
+            - Multiclass Metrics (Accuracy, Confusion Matrix): ch20/case_studies/metrics.md
+            - Macro, Micro, and Weighted Averaging: ch20/case_studies/averaging.md
+            - MNIST Case Study: ch20/case_studies/mnist.md
+        - 20.4 One-vs-Rest and One-vs-One Strategies:
+            - OvR (One-vs-Rest) Approach: ch20/strategies/ovr.md
+            - OvO (One-vs-One) Approach: ch20/strategies/ovo.md
+            - Comparison with Softmax: ch20/strategies/comparison.md
+        - 20.5 Code:
+            - Softmax Regression Implementation: ch20/code/softmax_implementation.py
+            - Multiclass Evaluation Metrics: ch20/code/multiclass_metrics.py
+            - MNIST Classification: ch20/code/mnist_classification.py
+        - 20.6 Exercises: ch20/exercises/exercises.md
 
-    - 21 Mathematical Backup for Linear Regression:
+    - Appendix A — Linear Algebra for Regression:
         - Chapter Overview: ch21/index.md
-        - 21.1 Square Matrices:
+        - A.1 Square Matrices:
             - Similar Matrices: ch21/square_matrices/similar_matrices.md
             - Diagonal Form of Diagonalizable Matrices: ch21/square_matrices/diagonalizable.md
             - Jordan Canonical Form: ch21/square_matrices/jordan_form.md
@@ -405,7 +696,7 @@ nav:
             - Gram Matrices: ch21/square_matrices/gram_matrices.md
             - Projection Matrices: ch21/square_matrices/projection.md
             - Orthogonal Projection Matrices: ch21/square_matrices/orthogonal_projection.md
-        - 21.2 Linear Algebra and Statistics:
+        - A.2 Linear Algebra and Statistics:
             - Chi-Squared Distribution and Quadratic Forms: ch21/linalg_statistics/chi_squared_quadratic.md
             - Sampling Distributions (Simple OLS): ch21/linalg_statistics/sampling_dist_simple_ols.md
             - Sampling Distributions (General OLS): ch21/linalg_statistics/sampling_dist_general_ols.md

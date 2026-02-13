@@ -1,77 +1,161 @@
 # Ridge Regression (L2 Regularization)
 
-## Introduction
+## Motivation: The Problem with OLS
 
-Ridge Regression, also known as Tikhonov regularization, is a technique used to address the problem of **multicollinearity** in linear regression models. When independent variables are highly correlated, the ordinary least squares (OLS) estimates can become unstable, leading to large variances and potentially poor predictions. Ridge Regression introduces a penalty term to the regression model, which shrinks the coefficients towards zero, thereby reducing the model's complexity and variance, and improving prediction accuracy.
-
-## Ridge Regression Objective
-
-The Ridge Regression model modifies the linear regression cost function by adding a regularization term equal to the squared magnitude of the coefficients. This addition controls the size of the coefficients and, consequently, the flexibility of the model.
-
-Given a dataset $\{(x_i, y_i)\}_{i=1}^n$ where $x_i \in \mathbb{R}^p$ is a vector of predictors and $y_i \in \mathbb{R}$ is the response variable, the Ridge Regression objective function is:
+Ordinary least squares (OLS) minimizes the residual sum of squares:
 
 $$
-J(\mathbf{w}) = \sum_{i=1}^n \left( y_i - \mathbf{w}^T \mathbf{x}_i \right)^2 + \lambda \sum_{j=1}^p w_j^2
+\hat{\boldsymbol{\beta}}_{\text{OLS}} = \arg\min_{\boldsymbol{\beta}} \|\mathbf{y} - \mathbf{X}\boldsymbol{\beta}\|^2
 $$
 
-where:
+with the closed-form solution $\hat{\boldsymbol{\beta}}_{\text{OLS}} = (\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top \mathbf{y}$.
 
-- $\mathbf{w}$ is the vector of regression coefficients.
-- $\lambda \geq 0$ is a regularization parameter controlling the strength of the penalty.
-- The first term is the **sum of squared errors (SSE)**, the standard measure of model fit in OLS regression.
-- The second term, $\lambda \sum_{j=1}^p w_j^2$, is the **L2 regularization term** that penalizes large coefficients.
+This estimator is **unbiased** and, by the Gauss–Markov theorem, has the minimum variance among all linear unbiased estimators (BLUE). However, OLS can perform poorly when:
 
-When $\lambda = 0$, Ridge Regression reduces to ordinary least squares. As $\lambda$ increases, the magnitude of the coefficients is constrained more, leading to a more regularized model.
+1. **Multicollinearity.** When predictors are highly correlated, $\mathbf{X}^\top\mathbf{X}$ is nearly singular. Small changes in the data cause large changes in $\hat{\boldsymbol{\beta}}$, inflating variance.
 
-## Understanding the Regularization Term
+2. **High-dimensional settings.** When $p$ (number of predictors) is close to or exceeds $n$ (number of observations), OLS is ill-defined or severely overfit.
 
-The L2 regularization term limits the size of the coefficients by adding a penalty for large values. This shrinks coefficients towards zero but **never makes them exactly zero** (unlike Lasso Regression, which can produce sparse models). By shrinking the coefficients, Ridge Regression can reduce the model's variance without substantially increasing bias, which is particularly beneficial in the presence of multicollinearity.
+3. **Prediction accuracy.** The bias–variance tradeoff (Chapter 6) tells us that introducing a small amount of bias can substantially reduce variance, improving MSE and prediction accuracy.
 
-The parameter $\lambda$ determines the balance between fitting the data well (low SSE) and keeping the coefficients small:
+## Ridge Regression Formulation
 
-- **Large $\lambda$**: The model becomes more biased and simple, with coefficients close to zero, potentially underfitting the data.
-- **Small $\lambda$**: The model resembles the OLS solution, which may overfit the data if multicollinearity is present.
-
-## Solving the Ridge Regression Problem
-
-Ridge Regression can be solved analytically by modifying the normal equations used in linear regression. The normal equation for OLS regression is:
+**Ridge regression** (Hoerl and Kennard, 1970) adds an L2 penalty to the OLS objective:
 
 $$
-\mathbf{w}_{\text{OLS}} = (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T \mathbf{y}
+\hat{\boldsymbol{\beta}}_{\text{ridge}} = \arg\min_{\boldsymbol{\beta}} \left\{ \|\mathbf{y} - \mathbf{X}\boldsymbol{\beta}\|^2 + \lambda \|\boldsymbol{\beta}\|^2 \right\}
 $$
 
-where $\mathbf{X}$ is the design matrix of predictors and $\mathbf{y}$ is the vector of responses.
+where $\lambda \geq 0$ is the **regularization parameter** (also called the **tuning parameter** or **penalty strength**), and $\|\boldsymbol{\beta}\|^2 = \sum_{j=1}^p \beta_j^2$.
 
-In Ridge Regression, the solution is obtained by solving the modified normal equations:
+!!! note "Centering and Scaling"
+    The intercept $\beta_0$ is typically **not penalized**. In practice, we center $\mathbf{y}$ and standardize each column of $\mathbf{X}$ to have mean 0 and unit variance before applying ridge regression, so that the penalty treats all coefficients equally.
+
+## Closed-Form Solution
+
+The ridge estimator has a closed-form solution:
 
 $$
-\mathbf{w}_{\text{Ridge}} = (\mathbf{X}^T \mathbf{X} + \lambda \mathbf{I})^{-1} \mathbf{X}^T \mathbf{y}
+\hat{\boldsymbol{\beta}}_{\text{ridge}} = (\mathbf{X}^\top\mathbf{X} + \lambda \mathbf{I})^{-1}\mathbf{X}^\top\mathbf{y}
 $$
 
-Here $\mathbf{I}$ is the identity matrix of appropriate dimensions. The addition of $\lambda \mathbf{I}$ makes the matrix $\mathbf{X}^T \mathbf{X} + \lambda \mathbf{I}$ **non-singular**, ensuring that the inverse exists even when $\mathbf{X}^T \mathbf{X}$ is nearly singular due to multicollinearity.
+*Derivation.* Take the gradient of the objective and set to zero:
 
-## Choosing the Regularization Parameter $\lambda$
+$$
+\frac{\partial}{\partial \boldsymbol{\beta}}\left[\|\mathbf{y} - \mathbf{X}\boldsymbol{\beta}\|^2 + \lambda\|\boldsymbol{\beta}\|^2\right] = -2\mathbf{X}^\top(\mathbf{y} - \mathbf{X}\boldsymbol{\beta}) + 2\lambda\boldsymbol{\beta} = \mathbf{0}
+$$
 
-The effectiveness of Ridge Regression depends on the appropriate choice of $\lambda$:
+$$
+(\mathbf{X}^\top\mathbf{X} + \lambda\mathbf{I})\boldsymbol{\beta} = \mathbf{X}^\top\mathbf{y}
+$$
 
-- Too small a value may fail to address multicollinearity.
-- Too large a value may lead to underfitting.
+Since $\mathbf{X}^\top\mathbf{X} + \lambda\mathbf{I}$ is positive definite for $\lambda > 0$ (even when $\mathbf{X}^\top\mathbf{X}$ is singular), the solution always exists and is unique.
 
-The optimal value of $\lambda$ is typically chosen using **cross-validation**, where the model is trained on different subsets of the data and tested on the remaining data to evaluate its performance. The value of $\lambda$ that minimizes the cross-validation error is selected as the best regularization parameter.
+## Geometric Interpretation
 
-## Advantages and Limitations
+Ridge regression can be equivalently formulated as a **constrained optimization**:
 
-### Advantages
+$$
+\min_{\boldsymbol{\beta}} \|\mathbf{y} - \mathbf{X}\boldsymbol{\beta}\|^2 \quad \text{subject to} \quad \|\boldsymbol{\beta}\|^2 \leq t
+$$
 
-1. **Reduces multicollinearity**: Ridge Regression addresses multicollinearity by shrinking the coefficients, leading to more stable estimates.
-2. **Better prediction accuracy**: By penalizing large coefficients, Ridge Regression can produce models with lower variance and better generalization to new data.
-3. **Continuous shrinkage**: Unlike Lasso Regression, which can set some coefficients to exactly zero, Ridge Regression shrinks coefficients continuously, which can be beneficial when all predictors are believed to be relevant.
+where $t$ is determined by $\lambda$ through the KKT conditions. Geometrically:
 
-### Limitations
+- The OLS objective defines elliptical contours in coefficient space
+- The constraint $\|\boldsymbol{\beta}\|^2 \leq t$ is a **sphere** (in $p$ dimensions, a hypersphere)
+- The ridge solution is where the smallest elliptical contour touches the sphere
 
-1. **No feature selection**: Ridge Regression does not perform feature selection, as all coefficients are shrunk towards zero but not exactly to zero. This can result in models that are harder to interpret when there are many predictors.
-2. **Bias–variance tradeoff**: While Ridge Regression reduces variance, it introduces bias into the model. Finding the right balance is crucial to avoid underfitting or overfitting.
+This sphere constraint shrinks all coefficients toward zero but typically does **not** set any exactly to zero.
 
-## Summary
+## SVD Interpretation
 
-Ridge Regression is a powerful regularization technique that mitigates the effects of multicollinearity in linear regression models by penalizing large coefficients. By introducing a regularization parameter $\lambda$, Ridge Regression controls the complexity of the model, leading to improved prediction accuracy and more stable estimates. The careful selection of $\lambda$ through cross-validation is essential for achieving optimal results.
+Using the singular value decomposition $\mathbf{X} = \mathbf{U}\mathbf{D}\mathbf{V}^\top$ (where $d_1 \geq d_2 \geq \cdots \geq d_p \geq 0$ are singular values):
+
+$$
+\hat{\boldsymbol{\beta}}_{\text{ridge}} = \sum_{j=1}^p \frac{d_j^2}{d_j^2 + \lambda} \cdot \frac{\mathbf{u}_j^\top \mathbf{y}}{d_j}\,\mathbf{v}_j
+$$
+
+Compare with OLS:
+
+$$
+\hat{\boldsymbol{\beta}}_{\text{OLS}} = \sum_{j=1}^p \frac{\mathbf{u}_j^\top \mathbf{y}}{d_j}\,\mathbf{v}_j
+$$
+
+The factor $\frac{d_j^2}{d_j^2 + \lambda}$ is a **shrinkage factor** between 0 and 1. Components with small singular values (the unstable directions) are shrunk the most. This is precisely where OLS has high variance, so ridge regression stabilizes the estimate.
+
+## Bias and Variance of Ridge
+
+$$
+\text{Bias}(\hat{\boldsymbol{\beta}}_{\text{ridge}}) = -\lambda(\mathbf{X}^\top\mathbf{X} + \lambda\mathbf{I})^{-1}\boldsymbol{\beta}
+$$
+
+$$
+\text{Cov}(\hat{\boldsymbol{\beta}}_{\text{ridge}}) = \sigma^2 (\mathbf{X}^\top\mathbf{X} + \lambda\mathbf{I})^{-1}\mathbf{X}^\top\mathbf{X}(\mathbf{X}^\top\mathbf{X} + \lambda\mathbf{I})^{-1}
+$$
+
+As $\lambda$ increases:
+
+- Bias increases (coefficients are pulled further from their OLS values)
+- Variance decreases (the inverse is better conditioned)
+- There exists an optimal $\lambda^*$ that minimizes total MSE
+
+**Theorem (Hoerl and Kennard, 1970).** There always exists a $\lambda > 0$ such that $\text{MSE}(\hat{\boldsymbol{\beta}}_{\text{ridge}}) < \text{MSE}(\hat{\boldsymbol{\beta}}_{\text{OLS}})$.
+
+## Choosing $\lambda$: Cross-Validation
+
+The optimal $\lambda$ is unknown and must be estimated from data. The standard approach is **$k$-fold cross-validation**:
+
+1. Divide data into $k$ folds (typically $k = 5$ or $10$)
+2. For each candidate $\lambda$ in a grid:
+    - For each fold $j$: train on $k-1$ folds, predict on fold $j$, record prediction error
+    - Average the prediction error across folds: $\text{CV}(\lambda) = \frac{1}{k}\sum_{j=1}^k \text{MSE}_j(\lambda)$
+3. Select $\hat{\lambda} = \arg\min_\lambda \text{CV}(\lambda)$
+
+!!! tip "One-Standard-Error Rule"
+    Instead of choosing the $\lambda$ with minimum CV error, select the largest $\lambda$ within one standard error of the minimum. This gives a more parsimonious (simpler) model with similar predictive performance.
+
+**Leave-one-out CV for ridge** has a closed-form shortcut:
+
+$$
+\text{CV}_{\text{LOO}}(\lambda) = \frac{1}{n}\sum_{i=1}^n \left(\frac{y_i - \hat{y}_i(\lambda)}{1 - h_{ii}(\lambda)}\right)^2
+$$
+
+where $h_{ii}(\lambda) = [\mathbf{X}(\mathbf{X}^\top\mathbf{X} + \lambda\mathbf{I})^{-1}\mathbf{X}^\top]_{ii}$ is the $i$-th diagonal of the hat matrix.
+
+## Ridge Regression as Bayesian MAP
+
+Ridge regression is equivalent to the **maximum a posteriori** (MAP) estimate in a Bayesian linear model with a Gaussian prior:
+
+$$
+\boldsymbol{\beta} \sim N(\mathbf{0}, \tau^2 \mathbf{I}), \quad \mathbf{y} \mid \boldsymbol{\beta} \sim N(\mathbf{X}\boldsymbol{\beta}, \sigma^2\mathbf{I})
+$$
+
+The posterior mode is:
+
+$$
+\hat{\boldsymbol{\beta}}_{\text{MAP}} = (\mathbf{X}^\top\mathbf{X} + \frac{\sigma^2}{\tau^2}\mathbf{I})^{-1}\mathbf{X}^\top\mathbf{y}
+$$
+
+Setting $\lambda = \sigma^2/\tau^2$ recovers the ridge solution. Larger $\lambda$ corresponds to a stronger prior belief that $\boldsymbol{\beta}$ is close to zero.
+
+## Effective Degrees of Freedom
+
+In OLS, the degrees of freedom equal the number of parameters $p$. In ridge regression, the **effective degrees of freedom** are:
+
+$$
+\text{df}(\lambda) = \text{tr}\left[\mathbf{X}(\mathbf{X}^\top\mathbf{X} + \lambda\mathbf{I})^{-1}\mathbf{X}^\top\right] = \sum_{j=1}^p \frac{d_j^2}{d_j^2 + \lambda}
+$$
+
+As $\lambda \to 0$, $\text{df} \to p$ (OLS). As $\lambda \to \infty$, $\text{df} \to 0$ (constant model). This allows direct comparison of model complexity across different $\lambda$ values.
+
+## Key Properties Summary
+
+| Property | Value |
+|---|---|
+| Penalty | $\lambda\sum_{j=1}^p \beta_j^2$ (L2) |
+| Solution | Closed-form: $(\mathbf{X}^\top\mathbf{X} + \lambda\mathbf{I})^{-1}\mathbf{X}^\top\mathbf{y}$ |
+| Feature selection | No (shrinks but doesn't zero out) |
+| Handles multicollinearity | Yes |
+| Works when $p > n$ | Yes |
+| Bayesian interpretation | Gaussian prior on $\boldsymbol{\beta}$ |
+| Geometric constraint | $\ell_2$-ball (sphere) |
