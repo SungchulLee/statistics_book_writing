@@ -120,6 +120,8 @@ nav:
             - Student-t PDF: ch04/code/t_pdf.py
             - Chi-Square PDF: ch04/code/chi_square_pdf.py
             - F-Distribution PDF: ch04/code/f_pdf.py
+            - Normal PPF (Quantile Function): ch04/code/normal_ppf.py
+            - Normal Survival Function: ch04/code/normal_sf.py
         - 4.5 Exercises: ch04/exercises/exercises.md
 
     - 5 Sampling Distributions:
