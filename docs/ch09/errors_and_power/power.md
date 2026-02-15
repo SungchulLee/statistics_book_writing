@@ -115,9 +115,213 @@ plot_power(mu_0=50, mu_a=52, sigma=10, n=25)
 
 These values illustrate why detecting small effects requires substantially larger sample sizes.
 
+## Power Analysis Using statsmodels
+
+Statsmodels provides comprehensive power analysis functions for various test types:
+
+### One-Sample t-Test
+
+```python
+from statsmodels.stats.power import TTestPower
+import numpy as np
+
+# Power analysis for one-sample t-test
+analysis = TTestPower()
+
+# Scenario: How many subjects needed to detect a 5-point difference?
+# Assume μ₀ = 0, μ_a = 5, σ = 15
+effect_size = 5 / 15  # Cohen's d = 0.333
+
+n_needed = analysis.solve_power(effect_size=effect_size, alpha=0.05,
+                                power=0.80, alternative='two-sided')
+print(f"One-sample t-test:")
+print(f"  Effect size (Cohen's d): {effect_size:.3f}")
+print(f"  Sample size needed for 80% power: {int(np.ceil(n_needed))}")
+
+# Power for a given sample size
+power = analysis.power(effect_size=effect_size, nobs=50, alpha=0.05,
+                      alternative='two-sided')
+print(f"  Power with n=50: {power:.3f}")
+```
+
+### Two-Sample t-Test (Independent Samples)
+
+```python
+from statsmodels.stats.power import TTestIndPower
+
+# Power analysis for two-sample t-test
+analysis = TTestIndPower()
+
+# Scenario: Two-group comparison (equal sample sizes)
+# Effect size: Cohen's d = 0.5 (medium effect)
+effect_size = 0.5
+
+n_per_group = analysis.solve_power(effect_size=effect_size, alpha=0.05,
+                                   power=0.80, ratio=1.0,
+                                   alternative='two-sided')
+print(f"\nTwo-sample t-test (equal n):")
+print(f"  Effect size (Cohen's d): {effect_size:.3f}")
+print(f"  Sample size per group for 80% power: {int(np.ceil(n_per_group))}")
+print(f"  Total sample size: {2 * int(np.ceil(n_per_group))}")
+
+# Unequal sample sizes (e.g., 2:1 ratio)
+n_treatment = analysis.solve_power(effect_size=effect_size, alpha=0.05,
+                                   power=0.80, ratio=2.0,
+                                   alternative='two-sided')
+n_control = n_treatment / 2
+print(f"\nTwo-sample t-test (2:1 ratio):")
+print(f"  Treatment n: {int(np.ceil(n_treatment))}")
+print(f"  Control n: {int(np.ceil(n_control))}")
+```
+
+### Test for Proportions (A/B Testing)
+
+```python
+from statsmodels.stats.power import proportions_ztest
+import statsmodels.stats.api as sms
+
+# Example: A/B test for conversion rates
+# Control: 1.1% conversion rate
+# Treatment: 1.65% conversion rate
+p0 = 0.011  # Control baseline
+p1 = 0.0165  # Treatment goal
+
+# Calculate effect size (h = 2 * arcsin(√p1) - 2 * arcsin(√p0))
+effect_size = sms.proportion_effectsize(p1, p0)
+
+# Required sample size
+analysis = sms.FTestAnovaPower()  # or use proportions_ztest
+n_needed = sms.tt_solve_power(effect_size=effect_size, alpha=0.05,
+                              power=0.80, alternative='larger')
+
+# Alternative: Use proportion_effectsize with proportions_ztest
+from statsmodels.stats.proportion import proportions_ztest
+n_ab = proportions_ztest(effect_size=effect_size, alpha=0.05,
+                         power=0.80, alternative='larger')
+
+print(f"\nA/B Test (Proportions):")
+print(f"  Control rate: {p0:.2%}")
+print(f"  Treatment goal: {p1:.2%}")
+print(f"  Effect size: {effect_size:.4f}")
+print(f"  Sample size per group for 80% power: {int(np.ceil(n_ab))}")
+```
+
+### One-Way ANOVA
+
+```python
+from statsmodels.stats.power import FTestAnovaPower
+
+# Power analysis for one-way ANOVA
+analysis = FTestAnovaPower()
+
+# Scenario: 4 groups, medium effect size (f = 0.25)
+effect_size = 0.25  # Medium effect in ANOVA
+k_groups = 4
+
+n_per_group = analysis.solve_power(effect_size=effect_size, alpha=0.05,
+                                   power=0.80, k_groups=k_groups)
+print(f"\nOne-way ANOVA (4 groups):")
+print(f"  Effect size (Cohen's f): {effect_size:.3f}")
+print(f"  Sample size per group for 80% power: {int(np.ceil(n_per_group))}")
+print(f"  Total sample size: {k_groups * int(np.ceil(n_per_group))}")
+```
+
+### Power Curves: Visualizing Sample Size vs. Power
+
+```python
+import matplotlib.pyplot as plt
+
+# Create power curves for different effect sizes
+fig, ax = plt.subplots(figsize=(10, 6))
+
+analysis = TTestPower()
+sample_sizes = np.arange(10, 200, 5)
+
+for d in [0.2, 0.5, 0.8]:
+    power_values = [analysis.power(effect_size=d, nobs=n, alpha=0.05)
+                    for n in sample_sizes]
+    ax.plot(sample_sizes, power_values, linewidth=2, label=f"d = {d:.1f}")
+
+# Add reference lines
+ax.axhline(0.80, color='red', linestyle='--', linewidth=1, label='Power = 0.80')
+ax.axhline(0.90, color='orange', linestyle='--', linewidth=1, label='Power = 0.90')
+
+ax.set_xlabel('Sample Size (n)', fontsize=12)
+ax.set_ylabel('Power', fontsize=12)
+ax.set_title('Power Curves: Sample Size vs. Power\n(One-Sample t-Test, α = 0.05)')
+ax.legend(fontsize=11)
+ax.grid(True, alpha=0.3)
+ax.set_ylim([0, 1])
+
+plt.tight_layout()
+plt.show()
+```
+
+### Power Analysis Workflow
+
+```python
+def design_study(test_type, effect_size, alpha=0.05, power=0.80,
+                 **kwargs):
+    """
+    Comprehensive power analysis for study design.
+
+    Parameters:
+    -----------
+    test_type : str
+        Type of test ('one-sample', 'two-sample', 'anova', 'proportions')
+    effect_size : float
+        Standardized effect size
+    alpha : float
+        Significance level
+    power : float
+        Desired statistical power
+    **kwargs : dict
+        Additional parameters (e.g., k_groups for ANOVA)
+
+    Returns:
+    --------
+    dict : Sample size requirements and recommendations
+    """
+    results = {'test_type': test_type, 'alpha': alpha, 'power': power}
+
+    if test_type == 'one-sample':
+        analysis = TTestPower()
+        n = analysis.solve_power(effect_size=effect_size, alpha=alpha,
+                                power=power, alternative='two-sided')
+        results['sample_size'] = int(np.ceil(n))
+
+    elif test_type == 'two-sample':
+        analysis = TTestIndPower()
+        n = analysis.solve_power(effect_size=effect_size, alpha=alpha,
+                                power=power, ratio=1.0, alternative='two-sided')
+        results['sample_size_per_group'] = int(np.ceil(n))
+        results['total_sample_size'] = 2 * int(np.ceil(n))
+
+    elif test_type == 'anova':
+        analysis = FTestAnovaPower()
+        k = kwargs.get('k_groups', 3)
+        n = analysis.solve_power(effect_size=effect_size, alpha=alpha,
+                                power=power, k_groups=k)
+        results['k_groups'] = k
+        results['sample_size_per_group'] = int(np.ceil(n))
+        results['total_sample_size'] = k * int(np.ceil(n))
+
+    return results
+
+# Example usage
+print("\n" + "="*60)
+print("STUDY DESIGN: Two-Sample Comparison")
+print("="*60)
+design = design_study('two-sample', effect_size=0.5)
+for key, value in design.items():
+    print(f"{key:.<30} {value}")
+```
+
 ## Key Takeaways
 
 - Power is the probability of correctly detecting a true effect.
 - Always conduct a power analysis before a study to ensure adequate sample size.
 - Increasing sample size is the most practical way to increase power.
 - There is a direct tradeoff between $\alpha$, $\beta$, sample size, and effect size.
+- Statsmodels provides convenient functions for power analysis across many test types.
+- Use power curves to visualize the relationship between sample size and power.

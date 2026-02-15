@@ -186,7 +186,139 @@ The mean shifts dramatically when outliers are introduced, while the median bare
 
 ---
 
-## 3. Mode
+## 3. Trimmed Mean
+
+The **trimmed mean** (or truncated mean) is the arithmetic mean calculated after removing a specified percentage of observations from both tails of the sorted distribution. This hybrid approach offers robustness against outliers while still utilizing most of the data.
+
+### Definition
+
+For a dataset with $n$ observations sorted as $x_{(1)} \le x_{(2)} \le \cdots \le x_{(n)}$, the $p$-trimmed mean removes $\lceil p \cdot n / 2 \rceil$ observations from each tail and averages the remaining values:
+
+$$
+\bar{x}_{p\%} = \frac{1}{n - 2\lceil p \cdot n / 2 \rceil} \sum_{i=\lceil p \cdot n / 2 \rceil + 1}^{n - \lceil p \cdot n / 2 \rceil} x_{(i)}
+$$
+
+### Example: Population Data
+
+Using U.S. state population data, compare the mean, 10% trimmed mean, and median:
+
+```python
+import pandas as pd
+from scipy.stats import trim_mean
+
+# Load state data
+state = pd.read_csv('state.csv')
+
+# Regular mean (sensitive to outliers like California)
+mean_pop = state['Population'].mean()
+print(f"Mean Population: {mean_pop:,.0f}")
+
+# 10% trimmed mean (removes 5% from each tail)
+trimmed_mean_pop = trim_mean(state['Population'], 0.1)
+print(f"10% Trimmed Mean: {trimmed_mean_pop:,.0f}")
+
+# Median (completely robust)
+median_pop = state['Population'].median()
+print(f"Median Population: {median_pop:,.0f}")
+```
+
+**Output:**
+```
+Mean Population: 6,162,876
+10% Trimmed Mean: 4,783,697
+Median Population: 4,436,370
+```
+
+The trimmed mean occupies a middle ground: it's less influenced by extreme values (California's 37M population) than the mean, yet uses more data than the median alone. This makes it valuable when a moderate level of robustness is desired without completely ignoring the tails.
+
+### When to Use Trimmed Mean
+
+- **Moderate robustness:** You want outlier resistance but don't want to discard data entirely.
+- **Academic traditions:** Some fields prefer trimmed means for hypothesis testing (e.g., psychology, education).
+- **Olympic scoring:** Judges' scores are often averaged after trimming the highest and lowest.
+
+---
+
+## 4. Weighted Mean and Weighted Median
+
+When observations have differing importance or frequency, the **weighted mean** and **weighted median** assign each value a weight reflecting its significance.
+
+### Weighted Mean
+
+The weighted mean is the sum of weighted values divided by the sum of weights:
+
+$$
+\bar{x}_w = \frac{\sum_{i=1}^{n} w_i x_i}{\sum_{i=1}^{n} w_i}
+$$
+
+where $w_i$ are the weights.
+
+### Example: Murder Rate by State Population
+
+When computing the national murder rate, states with larger populations should influence the average more heavily. Use the state's population as a weight:
+
+```python
+import pandas as pd
+import numpy as np
+
+state = pd.read_csv('state.csv')
+
+# Unweighted mean murder rate
+unweighted_mean = state['Murder.Rate'].mean()
+print(f"Unweighted Mean Murder Rate: {unweighted_mean:.3f}")
+
+# Weighted mean (weighted by population)
+weighted_mean = np.average(state['Murder.Rate'], weights=state['Population'])
+print(f"Weighted Mean Murder Rate: {weighted_mean:.3f}")
+```
+
+**Output:**
+```
+Unweighted Mean Murder Rate: 4.066
+Weighted Mean Murder Rate: 4.446
+```
+
+The weighted mean is higher because highly populated states (CA, TX, FL, NY) tend to have higher murder rates than small states. The unweighted mean treats Montana (population 990K) and California (population 37M) as equal—a distortion that the weighted mean corrects.
+
+### Weighted Median
+
+The **weighted median** is the value where the cumulative weight reaches 50% of the total weight. Unlike the weighted mean, it requires a specialized function:
+
+```python
+import pandas as pd
+import wquantiles
+
+state = pd.read_csv('state.csv')
+
+# Unweighted median
+unweighted_median = state['Murder.Rate'].median()
+print(f"Unweighted Median: {unweighted_median:.1f}")
+
+# Weighted median (weighted by population)
+weighted_median = wquantiles.median(state['Murder.Rate'],
+                                    weights=state['Population'])
+print(f"Weighted Median: {weighted_median:.1f}")
+```
+
+**Output:**
+```
+Unweighted Median: 4.0
+Weighted Median: 4.4
+```
+
+### When to Use Weighted Statistics
+
+**Financial Data:** Portfolio returns are weighted by asset values.
+
+**Survey Data:** Responses are weighted to match population demographics.
+
+**Aggregated Data:** When data represents groups (e.g., state-level statistics), weight by group size.
+
+**Importance Weighting:** Some observations are more reliable or relevant than others.
+
+---
+
+## 5. Mode
 
 The **mode** is the value that occurs most frequently in a dataset. A dataset may be unimodal (one mode), bimodal (two modes), multimodal (more than two modes), or have no mode if all values appear equally often.
 
@@ -215,7 +347,7 @@ print(f"{modes = }")  # Returns all modes: [2, 3]
 
 ---
 
-## 4. Comparing Mean, Median, and Mode
+## 6. Comparing Mean, Median, Mode, and Other Measures
 
 **Mean** is best for continuous, symmetrically distributed data without outliers. It uses all data points but is sensitive to extremes.
 

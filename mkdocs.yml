@@ -68,11 +68,14 @@ nav:
             - Mean, Median, Mode: ch02/center/mean_median_mode.md
             - Variance and Standard Deviation: ch02/spread/variance_std.md
             - IQR and Robust Measures: ch02/spread/robust.md
+            - Median Absolute Deviation: ch02/spread/median_absolute_deviation.md
         - 2.4 Visualization:
             - Boxplots: ch02/visualization/boxplots.md
             - Violin Plots: ch02/visualization/violin.md
             - Group Comparisons: ch02/visualization/group_comparison.md
-        - 2.5 Exercises: ch02/exercises/exercises.md
+        - 2.5 Code:
+            - Group Comparison Examples: ch02/code/group_comparison_examples.py
+        - 2.6 Exercises: ch02/exercises/exercises.md
 
     - 3 Probability, Random Variables, and Limit Theorems:
         - Chapter Overview: ch03/index.md
@@ -122,6 +125,11 @@ nav:
             - F-Distribution PDF: ch04/code/f_pdf.py
             - Normal PPF (Quantile Function): ch04/code/normal_ppf.py
             - Normal Survival Function: ch04/code/normal_sf.py
+            - Exponential PDF: ch04/code/exponential_pdf.py
+            - Uniform PDF: ch04/code/uniform_pdf.py
+            - Logistic PDF (vs Normal): ch04/code/logistic_pdf.py
+            - Log-Normal PDF: ch04/code/lognormal_pdf.py
+            - Weibull PDF and Hazard: ch04/code/weibull_pdf.py
         - 4.5 Exercises: ch04/exercises/exercises.md
 
     - 5 Sampling Distributions:
@@ -141,7 +149,9 @@ nav:
             - Sampling Distribution of the Variance: ch05/applications/sample_variance.md
             - Difference of Two Sample Means: ch05/applications/diff_means.md
             - Difference of Two Sample Proportions: ch05/applications/diff_proportions.md
-        - 5.4 Code:
+        - 5.4 Visualization:
+            - Sampling Distribution Visualization: ch05/applications/sampling_dist_visualization.md
+        - 5.5 Code:
             - Sampling Distribution of X̄ (Uniform): ch05/code/xbar_uniform.py
             - Sampling Distribution of X̄ (Exponential): ch05/code/xbar_exponential.py
             - Sampling Distribution of X̄ (Normal): ch05/code/xbar_normal.py
@@ -149,7 +159,8 @@ nav:
             - Sampling Distribution of S² (Normal): ch05/code/s2_normal.py
             - Standard Error of X̄: ch05/code/se_xbar.py
             - Standard Error of S²: ch05/code/se_s2.py
-        - 5.5 Exercises: ch05/exercises/exercises.md
+            - Sampling Distribution Income Visualization: ch05/code/sampling_dist_income_visualization.py
+        - 5.6 Exercises: ch05/exercises/exercises.md
 
     - 6 General Statistical Estimation:
         - Chapter Overview: ch06/index.md
@@ -311,6 +322,9 @@ nav:
             - Independence Test Template Function: ch10/code/independence_template.py
             - Homogeneity Test (scipy): ch10/code/homogeneity_basic.py
             - Homogeneity Residual Heatmap: ch10/code/homogeneity_residuals.py
+            - Fisher's Exact Test (2×2): ch10/code/fisher_exact.py
+            - McNemar's Test (Paired Binary): ch10/code/mcnemar_test.py
+            - Cochran's Q Test (k Related Outcomes): ch10/code/cochran_q.py
         - 10.5 Exercises: ch10/exercises/exercises.md
 
     - 11 ANOVA:
@@ -392,6 +406,7 @@ nav:
             - Correlation Analysis Demonstrations: ch12/code/correlation_analysis.py
             - Causal Inference Simulations: ch12/code/causal_simulations.py
             - Correlation Visualization: ch12/code/corr_viz.py
+            - Correlation Ellipse Plot: ch12/code/correlation_ellipses.py
         - 12.8 Exercises: ch12/exercises/exercises.md
 
     - 13 Linear Regression:
@@ -436,7 +451,10 @@ nav:
             - Cross-Validation for Model Selection: ch13/model_selection/cross_validation.md
             - Stepwise and Best-Subset Selection: ch13/model_selection/stepwise_subset.md
             - AIC and BIC Overview: ch13/model_selection/aic_bic.md
-        - 13.9 Package Usage:
+        - 13.9 Splines and GAMs:
+            - Splines and GAMs Overview: ch13/splines_gams/index.md
+            - Generalized Additive Models: ch13/splines_gams/generalized_additive_models.md
+        - 13.10 Package Usage:
             - statsmodels OLS Interface: ch13/package_usage/statsmodels.md
             - sklearn LinearRegression Interface: ch13/package_usage/sklearn.md
             - Comparison and When to Use Which: ch13/package_usage/comparison.md
@@ -447,7 +465,10 @@ nav:
             - Multiple Regression Diagnostics: ch13/code/multi_reg_diag.py
             - Testing Coefficients Examples: ch13/code/testing_coefficients.py
             - Model Selection Comparison: ch13/code/model_selection.py
-        - 13.11 Exercises: ch13/exercises/exercises.md
+            - Weighted Least Squares: ch13/code/weighted_regression.py
+            - GAM Housing Analysis: ch13/code/gam_housing_analysis.py
+            - Regression Diagnostics (Housing): ch13/code/regression_diagnostics_housing.py
+        - 13.12 Exercises: ch13/exercises/exercises.md
 
     - 14 Normality Tests:
         - Chapter Overview: ch14/index.md
@@ -459,6 +480,7 @@ nav:
             - Histogram and Density Plots: ch14/graphical_methods/histogram_density.md
             - Q-Q Plots: ch14/graphical_methods/qq_plots.md
             - Boxplots and Their Interpretation: ch14/graphical_methods/boxplots.md
+            - Q-Q Plots for Financial Returns: ch14/graphical_methods/qq_plots_financial.md
         - 14.3 Descriptive Statistics as Normality Indicators:
             - Skewness and Kurtosis: ch14/descriptive_statistics/skewness_kurtosis.md
             - Skewtest and Kurtosistest: ch14/descriptive_statistics/skewtest_kurtosistest.md
@@ -498,6 +520,7 @@ nav:
             - Anderson-Darling Test: ch14/code/anderson_darling.py
             - Shapiro-Wilk Test: ch14/code/shapiro_wilk.py
             - Shapiro-Wilk Power Simulation: ch14/code/shapiro_power_sim.py
+            - Q-Q Plot Financial Returns: ch14/code/qq_plot_financial_returns.py
         - 14.9 Exercises: ch14/exercises/exercises.md
 
     - 15 Variance Tests:
@@ -596,11 +619,13 @@ nav:
             - The Bootstrap Principle: ch17/bootstrap/principle.md
             - Non-Parametric Bootstrap: ch17/bootstrap/nonparametric.md
             - Parametric Bootstrap: ch17/bootstrap/parametric.md
+            - Resampling Method: ch17/bootstrap/resampling_method.md
             - Bootstrap Overview: ch17/bootstrap/bootstrap.md
         - 17.2 Bootstrap Confidence Intervals:
             - Percentile Method: ch17/bootstrap_ci/percentile.md
             - BCa (Bias-Corrected and Accelerated): ch17/bootstrap_ci/bca.md
             - Bootstrap-t Method: ch17/bootstrap_ci/bootstrap_t.md
+            - Visualization of Confidence Levels: ch17/bootstrap_ci/visualization_confidence_levels.md
             - Comparison of Bootstrap CI Methods: ch17/bootstrap_ci/comparison.md
         - 17.3 Bootstrap Hypothesis Testing:
             - Bootstrap Test for a Single Mean: ch17/bootstrap_testing/single_mean.md
@@ -622,6 +647,9 @@ nav:
             - Bootstrap Hypothesis Tests: ch17/code/bootstrap_tests.py
             - Permutation Test Demonstrations: ch17/code/permutation_tests.py
             - Resampling Methods Comparison: ch17/code/resampling_methods.py
+            - A/B Testing Permutation: ch17/code/ab_testing_permutation.py
+            - Bootstrap CI Visualization: ch17/code/bootstrap_ci_visualization.py
+            - Bootstrap Median: ch17/code/bootstrap_median.py
         - 17.7 Exercises: ch17/exercises/exercises.md
 
     - 18 Regularization Techniques:
@@ -662,6 +690,7 @@ nav:
             - Elastic Net Examples: ch18/code/elastic_net_examples.py
             - Ridge, Lasso, and Elastic Net Comparison: ch18/code/reg_compare.py
             - Cross-Validation and λ Tuning: ch18/code/cv_tuning.py
+            - Lasso Housing Regularization Path: ch18/code/lasso_housing_regularization_path.py
         - 18.8 Exercises: ch18/exercises/exercises.md
 
     - 19 Logistic Regression:
@@ -680,6 +709,7 @@ nav:
             - Precision, Recall, and F1-Score: ch19/evaluation/precision_recall.md
             - ROC Curve and AUC: ch19/evaluation/roc_auc.md
             - Calibration and Brier Score: ch19/evaluation/calibration.md
+            - Handling Imbalanced Data: ch19/evaluation/imbalanced_data.md
             - Evaluation Metrics Overview: ch19/evaluation/metrics.md
         - 19.4 Regularized Logistic Regression:
             - L1 and L2 Regularization for Logistic Regression: ch19/regularized/regularization.md
@@ -731,6 +761,9 @@ nav:
             - Chi-Squared Distribution and Quadratic Forms: ch21/linalg_statistics/chi_squared_quadratic.md
             - Sampling Distributions (Simple OLS): ch21/linalg_statistics/sampling_dist_simple_ols.md
             - Sampling Distributions (General OLS): ch21/linalg_statistics/sampling_dist_general_ols.md
+
+    - Appendix B — Bonus Code:
+        - Kaplan-Meier Survival Curves and Log-Rank Test: ch_bonus/code/kaplan_meier.py
 
 plugins:
     - search

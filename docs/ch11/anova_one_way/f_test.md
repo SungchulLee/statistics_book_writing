@@ -475,3 +475,202 @@ ax.set_title('F-distribution with Highlighted p-value Region')
 
 plt.show()
 ```
+
+---
+
+## 4. Permutation-Based One-Way ANOVA
+
+Permutation tests for ANOVA provide a non-parametric alternative that requires no distributional assumptions. Two approaches are commonly used: testing the variance of group means or computing the F-statistic directly.
+
+### Approach 1: Permutation Test Using Variance of Group Means
+
+This approach tests whether the variance among group means is unusually large under the null hypothesis.
+
+#### Algorithm
+
+1. **Calculate observed variance of group means**:
+   $$\text{Var}(\bar{y}_{1\cdot}, \bar{y}_{2\cdot}, \ldots, \bar{y}_{k\cdot})$$
+
+2. **Permute data B times**:
+   - Pool all observations
+   - Randomly reassign observations to groups (maintaining group sizes)
+   - Calculate variance of group means for each permutation
+
+3. **Calculate p-value**:
+   $$p\text{-value} = \frac{\#\{\text{Perm Var} \geq \text{Obs Var}\}}{B}$$
+
+#### Example: Four Web Pages
+
+Suppose we test session times for four different web pages:
+
+```python
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Session time data for four pages
+four_sessions = pd.DataFrame({
+    'Time': [164, 178, 175, 155, 172, 182, 180, 179, 165, 166,
+             172, 161, 171, 173, 158, 161, 179, 159, 167, 162],
+    'Page': ['Page 1']*5 + ['Page 2']*5 + ['Page 3']*5 + ['Page 4']*5
+})
+
+# Observed variance of group means
+obs_variance = four_sessions.groupby('Page')['Time'].mean().var()
+print(f"Observed variance of means: {obs_variance:.2f}")
+
+# Permutation test
+def perm_test_anova(df, group_col='Page', value_col='Time', n_perms=3000):
+    """
+    Permutation test for ANOVA using variance of group means.
+
+    Parameters:
+    -----------
+    df : DataFrame
+        Data with groups and values
+    group_col : str
+        Name of column with group labels
+    value_col : str
+        Name of column with values
+    n_perms : int
+        Number of permutations
+
+    Returns:
+    --------
+    p_value : float
+        Permutation test p-value
+    perm_vars : array
+        Permuted variances
+    """
+    groups = df[group_col].unique()
+    group_sizes = {g: (df[group_col] == g).sum() for g in groups}
+
+    obs_var = df.groupby(group_col)[value_col].mean().var()
+
+    perm_vars = np.zeros(n_perms)
+    for i in range(n_perms):
+        # Shuffle values and reassign to groups
+        shuffled_values = np.random.permutation(df[value_col].values)
+        perm_df = df.copy()
+        perm_df[value_col] = shuffled_values
+
+        # Calculate variance of group means
+        perm_vars[i] = perm_df.groupby(group_col)[value_col].mean().var()
+
+    p_value = np.mean(perm_vars >= obs_var)
+    return p_value, perm_vars, obs_var
+
+# Run permutation test
+np.random.seed(42)
+p_val, perm_vars, obs_var = perm_test_anova(four_sessions)
+
+print(f"Permutation test p-value: {p_val:.4f}")
+print(f"Conclusion: {'Reject H₀' if p_val < 0.05 else 'Fail to reject H₀'}")
+
+# Visualization
+fig, ax = plt.subplots(figsize=(10, 6))
+ax.hist(perm_vars, bins=30, alpha=0.7, color='steelblue', edgecolor='black')
+ax.axvline(obs_var, color='red', linewidth=2, label=f'Observed = {obs_var:.2f}')
+ax.set_xlabel('Variance of Group Means')
+ax.set_ylabel('Frequency')
+ax.set_title(f'Permutation Distribution of Group Mean Variance (p={p_val:.3f})')
+ax.legend()
+ax.spines['top'].set_visible(False)
+ax.spines['right'].set_visible(False)
+plt.tight_layout()
+plt.show()
+```
+
+### Approach 2: Permutation Test Using F-Statistic
+
+While the variance-based approach is intuitive, we can also use the F-statistic as our test statistic for a more direct comparison with the parametric ANOVA.
+
+#### Algorithm
+
+1. **Calculate observed F-statistic**:
+   $$F_{\text{obs}} = \frac{\text{MSB}}{\text{MSW}}$$
+
+2. **Permute data B times**:
+   - Pool all observations
+   - Randomly reassign to groups
+   - Calculate F-statistic for each permutation
+
+3. **Calculate p-value**:
+   $$p\text{-value} = \frac{\#\{F_b \geq F_{\text{obs}}\}}{B}$$
+
+#### Example: F-Statistic Based Test
+
+```python
+from scipy import stats
+
+def perm_test_anova_f(df, group_col='Page', value_col='Time', n_perms=3000):
+    """
+    Permutation test for ANOVA using F-statistic.
+    """
+    groups = df[group_col].unique()
+    group_sizes = {g: (df[group_col] == g).sum() for g in groups}
+
+    # Observed F-statistic
+    model = smf.ols(f'{value_col} ~ C({group_col})', data=df).fit()
+    anova_table = sm.stats.anova_lm(model)
+    f_obs = anova_table['F'].iloc[0]
+
+    perm_f_stats = np.zeros(n_perms)
+    for i in range(n_perms):
+        # Shuffle values
+        shuffled_values = np.random.permutation(df[value_col].values)
+        perm_df = df.copy()
+        perm_df[value_col] = shuffled_values
+
+        # Calculate F-statistic
+        perm_model = smf.ols(f'{value_col} ~ C({group_col})', data=perm_df).fit()
+        perm_anova = sm.stats.anova_lm(perm_model)
+        perm_f_stats[i] = perm_anova['F'].iloc[0]
+
+    p_value = np.mean(perm_f_stats >= f_obs)
+    return p_value, perm_f_stats, f_obs
+
+# Run F-based permutation test
+import statsmodels.formula.api as smf
+import statsmodels.api as sm
+
+p_val_f, perm_f, obs_f = perm_test_anova_f(four_sessions)
+print(f"\nF-statistic based permutation test:")
+print(f"Observed F: {obs_f:.4f}")
+print(f"p-value: {p_val_f:.4f}")
+```
+
+### Comparison: Permutation vs. Parametric ANOVA
+
+Both approaches give similar results when parametric assumptions hold:
+
+```python
+# Parametric ANOVA
+f_stat, p_param = stats.f_oneway(
+    four_sessions[four_sessions.Page == 'Page 1']['Time'],
+    four_sessions[four_sessions.Page == 'Page 2']['Time'],
+    four_sessions[four_sessions.Page == 'Page 3']['Time'],
+    four_sessions[four_sessions.Page == 'Page 4']['Time']
+)
+
+print(f"\nParametric ANOVA:")
+print(f"F-statistic: {f_stat:.4f}")
+print(f"p-value: {p_param:.4f}")
+
+print(f"\nPermutation ANOVA (variance-based):")
+print(f"p-value: {p_val:.4f}")
+```
+
+### Advantages of Permutation ANOVA
+
+1. **No distributional assumptions**: Works with any data distribution
+2. **Naturally handles unequal variances**: No need for Levene's test
+3. **Exact Type I error control**: p-value is exact (not approximate)
+4. **Intuitive interpretation**: Results reflect actual randomization
+
+### When to Use Permutation ANOVA
+
+- **Small samples**: n < 30 per group
+- **Non-normal data**: Verified with Q-Q plots or Shapiro-Wilk test
+- **Unequal variances**: When Levene's test rejects homogeneity
+- **Robustness check**: Compare results to parametric ANOVA

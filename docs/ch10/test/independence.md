@@ -489,3 +489,185 @@ if p_value < alpha:
 else:
     print("We do not have enough evidence to reject the null hypothesis that X and Y are independent.")
 ```
+
+---
+
+## 4. Resampling-Based Chi-Square Test
+
+For situations with small sample sizes, low expected cell frequencies, or when you want a distribution-free approach, permutation/resampling-based chi-square tests provide an alternative to the asymptotic chi-square distribution.
+
+### Algorithm
+
+The resampling approach tests independence by:
+
+1. **Calculate observed chi-square statistic** from the actual contingency table
+2. **Generate expected cell probabilities** under independence
+3. **Simulate B contingency tables** by randomly allocating observations according to independence assumption
+4. **Calculate chi-square for each simulated table**
+5. **Compute p-value**: proportion of simulated chi-squares as extreme as or more extreme than observed
+
+### Example: Headline Click Rates (A/B Testing)
+
+Three headlines are tested with users; we measure whether they clicked or not. This is typical in digital marketing A/B testing.
+
+**Observed Data:**
+
+```python
+import numpy as np
+import pandas as pd
+import random
+from scipy import stats
+
+# Click rates for three headlines
+headlines = pd.DataFrame({
+    'Click': [14, 8, 12],
+    'No-click': [986, 992, 988],
+    'Headline': ['Headline A', 'Headline B', 'Headline C']
+})
+
+# Create contingency table
+click_rate = headlines.copy()
+clicks = click_rate.set_index('Headline')[['Click', 'No-click']]
+
+print("Observed Contingency Table:")
+print(clicks)
+print(f"\nTotal: {clicks.values.sum()}")
+```
+
+### Resampling Approach (Without Replacement)
+
+```python
+def chi2_stat(observed, expected):
+    """Calculate chi-square statistic."""
+    pearson_residuals = []
+    for row, expect in zip(observed, expected):
+        pearson_residuals.append([(observe - expect) ** 2 / expect
+                                  for observe in row])
+    return np.sum(pearson_residuals)
+
+# Observed chi-square
+row_average = clicks.mean(axis=1)
+expected = np.array([[row_average['Click'], row_average['Click'], row_average['Click']],
+                     [row_average['No-click'], row_average['No-click'], row_average['No-click']]])
+
+chi2_obs = chi2_stat(clicks.values, row_average.values)
+print(f"Observed chi-square: {chi2_obs:.4f}")
+
+# Resampling approach
+def perm_fun_chisq(box):
+    """
+    Generate permuted contingency table by random allocation.
+
+    Parameters:
+    -----------
+    box : list
+        Binary response (1 = click, 0 = no-click) for all users
+
+    Returns:
+    --------
+    float : Chi-square statistic for permuted table
+    """
+    random.shuffle(box)
+    # Allocate first 1000 to Headline A, next 1000 to B, last 1000 to C
+    sample_clicks = [sum(box[0:1000]),
+                     sum(box[1000:2000]),
+                     sum(box[2000:3000])]
+    sample_noclicks = [1000 - n for n in sample_clicks]
+    return chi2_stat([sample_clicks, sample_noclicks], row_average.values)
+
+# Create box: 1 for each click, 0 for each non-click
+box = [1] * 34 + [0] * 2966
+
+# Run permutation test
+random.seed(42)
+perm_chi2 = [perm_fun_chisq(box) for _ in range(2000)]
+
+p_value_resamp = sum(np.array(perm_chi2) >= chi2_obs) / len(perm_chi2)
+print(f"Resampling p-value: {p_value_resamp:.4f}")
+```
+
+### Resampling Approach (With Replacement)
+
+Alternatively, sample with replacement from the box:
+
+```python
+def sample_with_replacement(box):
+    """
+    Generate permuted contingency table by sampling with replacement.
+    """
+    sample_clicks = [sum(random.sample(box, 1000)),
+                     sum(random.sample(box, 1000)),
+                     sum(random.sample(box, 1000))]
+    sample_noclicks = [1000 - n for n in sample_clicks]
+    return chi2_stat([sample_clicks, sample_noclicks], row_average.values)
+
+# Run with-replacement resampling
+random.seed(42)
+perm_chi2_wr = [sample_with_replacement(box) for _ in range(2000)]
+
+p_value_wr = sum(np.array(perm_chi2_wr) >= chi2_obs) / len(perm_chi2_wr)
+print(f"Resampling (with replacement) p-value: {p_value_wr:.4f}")
+```
+
+### Comparison: Resampling vs. Parametric
+
+```python
+# Parametric chi-square test
+chi2_param, p_param, df, expected_param = stats.chi2_contingency(clicks.values)
+
+print(f"\nComparison:")
+print(f"Parametric chi-square: {chi2_param:.4f}, p-value: {p_param:.4f}")
+print(f"Resampling (without repl): p-value: {p_value_resamp:.4f}")
+print(f"Resampling (with repl): p-value: {p_value_wr:.4f}")
+```
+
+### Visualization
+
+```python
+import matplotlib.pyplot as plt
+
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 5))
+
+# Resampling distribution (without replacement)
+ax1.hist(perm_chi2, bins=40, alpha=0.7, color='steelblue', edgecolor='black')
+ax1.axvline(chi2_obs, color='red', linewidth=2, label=f'Observed = {chi2_obs:.2f}')
+ax1.set_xlabel('Chi-square Statistic')
+ax1.set_ylabel('Frequency')
+ax1.set_title(f'Resampling Distribution (without replacement)\np-value = {p_value_resamp:.4f}')
+ax1.legend()
+ax1.spines['top'].set_visible(False)
+ax1.spines['right'].set_visible(False)
+
+# Resampling distribution (with replacement)
+ax2.hist(perm_chi2_wr, bins=40, alpha=0.7, color='forestgreen', edgecolor='black')
+ax2.axvline(chi2_obs, color='red', linewidth=2, label=f'Observed = {chi2_obs:.2f}')
+ax2.set_xlabel('Chi-square Statistic')
+ax2.set_ylabel('Frequency')
+ax2.set_title(f'Resampling Distribution (with replacement)\np-value = {p_value_wr:.4f}')
+ax2.legend()
+ax2.spines['top'].set_visible(False)
+ax2.spines['right'].set_visible(False)
+
+plt.tight_layout()
+plt.show()
+```
+
+### Advantages of Resampling Chi-Square
+
+1. **No distributional assumptions**: Does not rely on chi-square approximation
+2. **Small cell counts**: Works even when expected cell counts < 5
+3. **Exact**: p-value is exact (not approximate)
+4. **Flexible**: Can be applied to any contingency table size
+
+### When to Use Resampling
+
+- **Small expected frequencies**: Any expected cell count < 5
+- **Small sample sizes**: n < 20-30
+- **Robustness check**: Compare against parametric chi-square
+- **Pedagogical value**: Directly tests the null hypothesis through randomization
+
+### Computational Considerations
+
+- Use 2,000-5,000 permutations for most applications
+- Without-replacement is more conservative; with-replacement is more liberal
+- Both approaches typically give similar p-values for moderate sample sizes
