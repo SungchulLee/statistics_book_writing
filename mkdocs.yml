@@ -1,4 +1,4 @@
-site_name: Financial Math Book
+site_name: Introductory Statisitcs
 theme:
     name: material
 
@@ -47,7 +47,7 @@ nav:
             - Sampling Distributions (General OLS): ch00/linalg_regression/linalg_statistics/sampling_dist_general_ols.md
         - 0.5 Exercises: ch00/exercises/exercises.md
 
-    - 1 Data Collection and Learning from Data:
+    - 1 Data Collection:
         - Chapter Overview: ch01/index.md
         - 1.1 Classical Approach—Design Your Data Collection:
             - Populations and Samples: ch01/classical/population_sample.md
@@ -93,7 +93,7 @@ nav:
             - Group Comparison Examples: ch02/code/group_comparison_examples.py
         - 2.6 Exercises: ch02/exercises/exercises.md
 
-    - 3 Probability, Random Variables, and Limit Theorems:
+    - 3 Foundations of Probability:
         - Chapter Overview: ch03/index.md
         - 3.1 Probability Theory:
             - Sample Spaces and Events: ch03/probability/sample_space.md
@@ -117,7 +117,7 @@ nav:
             - Berry–Esseen Theorem: ch03/limits/berry_esseen.md
         - 3.6 Exercises: ch03/exercises/exercises.md
 
-    - 4 Distributions and Dependence:
+    - 4 Distributions:
         - Chapter Overview: ch04/index.md
         - 4.1 Discrete Distributions:
             - Bernoulli and Binomial: ch04/discrete_distributions/binomial.md
@@ -178,7 +178,7 @@ nav:
             - Sampling Distribution Income Visualization: ch05/code/sampling_dist_income_visualization.py
         - 5.6 Exercises: ch05/exercises/exercises.md
 
-    - 6 General Statistical Estimation:
+    - 6 Statistical Estimation:
         - Chapter Overview: ch06/index.md
         - 6.1 Estimator Quality:
             - Bias–Variance Tradeoff: ch06/estimator_quality/bias_variance.md
@@ -216,7 +216,8 @@ nav:
             - Log-Likelihood Visualization: ch06/code/log_likelihood.py
         - 6.6 Exercises: ch06/exercises/exercises.md
 
-    - 7 Estimation of Mean and Variance:
+    - 7 Estimation of μ and σ²: 
+
         - Chapter Overview: ch07/index.md
         - 7.1 Estimation of the Mean:
             - Sample Mean as Estimator: ch07/mean/sample_mean.md
@@ -748,7 +749,7 @@ nav:
             - Logistic vs Linear Visualization: ch19/code/logistic_vs_linear_visualization.py
         - 19.6 Exercises: ch19/exercises/exercises.md
 
-    - 20 Multiclass Classification and Softmax Regression:
+    - 20 Softmax Regression:
         - Chapter Overview: ch20/index.md
         - 20.1 Softmax Regression:
             - Multinomial Logistic Regression: ch20/softmax_regression/multinomial.md
