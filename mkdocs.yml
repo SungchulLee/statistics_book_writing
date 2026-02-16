@@ -29,24 +29,23 @@ nav:
             - NumPy Arrays: ch00/tools/numpy_basics.md
             - Data Handling with pandas: ch00/tools/pandas_basics.md
             - Basic Visualization with Matplotlib: ch00/tools/matplotlib_basics.md
-        - 0.3 Linear Algebra for Regression:
+        - 0.3 Square Matrices:
             - Chapter Overview: ch00/linalg_regression/index.md
-            - 0.3.1 Square Matrices:
-                - Similar Matrices: ch00/linalg_regression/square_matrices/similar_matrices.md
-                - Diagonal Form of Diagonalizable Matrices: ch00/linalg_regression/square_matrices/diagonalizable.md
-                - Jordan Canonical Form: ch00/linalg_regression/square_matrices/jordan_form.md
-                - Trace and Eigenvalues: ch00/linalg_regression/square_matrices/trace_eigenvalues.md
-                - Idempotent Matrices: ch00/linalg_regression/square_matrices/idempotent.md
-                - Symmetric Matrices: ch00/linalg_regression/square_matrices/symmetric.md
-                - Positive Definite Matrices: ch00/linalg_regression/square_matrices/positive_definite.md
-                - Gram Matrices: ch00/linalg_regression/square_matrices/gram_matrices.md
-                - Projection Matrices: ch00/linalg_regression/square_matrices/projection.md
-                - Orthogonal Projection Matrices: ch00/linalg_regression/square_matrices/orthogonal_projection.md
-            - 0.3.2 Linear Algebra and Statistics:
-                - Chi-Squared Distribution and Quadratic Forms: ch00/linalg_regression/linalg_statistics/chi_squared_quadratic.md
-                - Sampling Distributions (Simple OLS): ch00/linalg_regression/linalg_statistics/sampling_dist_simple_ols.md
-                - Sampling Distributions (General OLS): ch00/linalg_regression/linalg_statistics/sampling_dist_general_ols.md
-        - 0.4 Exercises: ch00/exercises/exercises.md
+            - Similar Matrices: ch00/linalg_regression/square_matrices/similar_matrices.md
+            - Diagonal Form of Diagonalizable Matrices: ch00/linalg_regression/square_matrices/diagonalizable.md
+            - Jordan Canonical Form: ch00/linalg_regression/square_matrices/jordan_form.md
+            - Trace and Eigenvalues: ch00/linalg_regression/square_matrices/trace_eigenvalues.md
+            - Idempotent Matrices: ch00/linalg_regression/square_matrices/idempotent.md
+            - Symmetric Matrices: ch00/linalg_regression/square_matrices/symmetric.md
+            - Positive Definite Matrices: ch00/linalg_regression/square_matrices/positive_definite.md
+            - Gram Matrices: ch00/linalg_regression/square_matrices/gram_matrices.md
+            - Projection Matrices: ch00/linalg_regression/square_matrices/projection.md
+            - Orthogonal Projection Matrices: ch00/linalg_regression/square_matrices/orthogonal_projection.md
+        - 0.4 Linear Algebra and Statistics:
+            - Chi-Squared Distribution and Quadratic Forms: ch00/linalg_regression/linalg_statistics/chi_squared_quadratic.md
+            - Sampling Distributions (Simple OLS): ch00/linalg_regression/linalg_statistics/sampling_dist_simple_ols.md
+            - Sampling Distributions (General OLS): ch00/linalg_regression/linalg_statistics/sampling_dist_general_ols.md
+        - 0.5 Exercises: ch00/exercises/exercises.md
 
     - 1 Data Collection and Learning from Data:
         - Chapter Overview: ch01/index.md
