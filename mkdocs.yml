@@ -29,7 +29,24 @@ nav:
             - NumPy Arrays: ch00/tools/numpy_basics.md
             - Data Handling with pandas: ch00/tools/pandas_basics.md
             - Basic Visualization with Matplotlib: ch00/tools/matplotlib_basics.md
-        - 0.3 Exercises: ch00/exercises/exercises.md
+        - 0.3 Linear Algebra for Regression:
+            - Chapter Overview: ch00/linalg_regression/index.md
+            - 0.3.1 Square Matrices:
+                - Similar Matrices: ch00/linalg_regression/square_matrices/similar_matrices.md
+                - Diagonal Form of Diagonalizable Matrices: ch00/linalg_regression/square_matrices/diagonalizable.md
+                - Jordan Canonical Form: ch00/linalg_regression/square_matrices/jordan_form.md
+                - Trace and Eigenvalues: ch00/linalg_regression/square_matrices/trace_eigenvalues.md
+                - Idempotent Matrices: ch00/linalg_regression/square_matrices/idempotent.md
+                - Symmetric Matrices: ch00/linalg_regression/square_matrices/symmetric.md
+                - Positive Definite Matrices: ch00/linalg_regression/square_matrices/positive_definite.md
+                - Gram Matrices: ch00/linalg_regression/square_matrices/gram_matrices.md
+                - Projection Matrices: ch00/linalg_regression/square_matrices/projection.md
+                - Orthogonal Projection Matrices: ch00/linalg_regression/square_matrices/orthogonal_projection.md
+            - 0.3.2 Linear Algebra and Statistics:
+                - Chi-Squared Distribution and Quadratic Forms: ch00/linalg_regression/linalg_statistics/chi_squared_quadratic.md
+                - Sampling Distributions (Simple OLS): ch00/linalg_regression/linalg_statistics/sampling_dist_simple_ols.md
+                - Sampling Distributions (General OLS): ch00/linalg_regression/linalg_statistics/sampling_dist_general_ols.md
+        - 0.4 Exercises: ch00/exercises/exercises.md
 
     - 1 Data Collection and Learning from Data:
         - Chapter Overview: ch01/index.md
@@ -756,26 +773,38 @@ nav:
             - MNIST Classification: ch20/code/mnist_classification.py
         - 20.6 Exercises: ch20/exercises/exercises.md
 
-    - Appendix A — Linear Algebra for Regression:
+    - 21 Survival Models:
         - Chapter Overview: ch21/index.md
-        - A.1 Square Matrices:
-            - Similar Matrices: ch21/square_matrices/similar_matrices.md
-            - Diagonal Form of Diagonalizable Matrices: ch21/square_matrices/diagonalizable.md
-            - Jordan Canonical Form: ch21/square_matrices/jordan_form.md
-            - Trace and Eigenvalues: ch21/square_matrices/trace_eigenvalues.md
-            - Idempotent Matrices: ch21/square_matrices/idempotent.md
-            - Symmetric Matrices: ch21/square_matrices/symmetric.md
-            - Positive Definite Matrices: ch21/square_matrices/positive_definite.md
-            - Gram Matrices: ch21/square_matrices/gram_matrices.md
-            - Projection Matrices: ch21/square_matrices/projection.md
-            - Orthogonal Projection Matrices: ch21/square_matrices/orthogonal_projection.md
-        - A.2 Linear Algebra and Statistics:
-            - Chi-Squared Distribution and Quadratic Forms: ch21/linalg_statistics/chi_squared_quadratic.md
-            - Sampling Distributions (Simple OLS): ch21/linalg_statistics/sampling_dist_simple_ols.md
-            - Sampling Distributions (General OLS): ch21/linalg_statistics/sampling_dist_general_ols.md
+        - 21.1 Introduction to Survival Analysis:
+            - Time-to-Event Data and Censoring: ch21/introduction/time_to_event.md
+            - Types of Censoring (Right, Left, Interval): ch21/introduction/censoring_types.md
+            - Survival and Hazard Functions: ch21/introduction/survival_hazard_functions.md
+            - Financial Applications (Default, Churn, Duration): ch21/introduction/financial_applications.md
+        - 21.2 Non-Parametric Methods:
+            - Kaplan-Meier Estimator: ch21/nonparametric/kaplan_meier.md
+            - Nelson-Aalen Cumulative Hazard: ch21/nonparametric/nelson_aalen.md
+            - Log-Rank Test: ch21/nonparametric/log_rank_test.md
+            - Confidence Intervals for Survival Curves: ch21/nonparametric/survival_ci.md
+        - 21.3 Parametric Survival Models:
+            - Exponential Model (Constant Hazard): ch21/parametric/exponential.md
+            - Weibull Model (Monotone Hazard): ch21/parametric/weibull.md
+            - Log-Normal and Log-Logistic Models: ch21/parametric/lognormal_loglogistic.md
+            - Maximum Likelihood for Censored Data: ch21/parametric/mle_censored.md
+        - 21.4 Cox Proportional Hazards Model:
+            - Partial Likelihood and the Cox Model: ch21/cox/partial_likelihood.md
+            - Interpreting Hazard Ratios: ch21/cox/hazard_ratios.md
+            - Proportional Hazards Assumption: ch21/cox/ph_assumption.md
+            - Model Diagnostics (Schoenfeld Residuals): ch21/cox/diagnostics.md
+        - 21.5 Model Comparison and Selection:
+            - Non-Parametric vs Parametric vs Semi-Parametric: ch21/comparison/model_comparison.md
+            - AIC and Concordance Index: ch21/comparison/model_selection.md
+        - 21.6 Code:
+            - Kaplan-Meier Survival Curves and Log-Rank Test: ch21/code/kaplan_meier.py
+            - Parametric Survival Models: ch21/code/parametric_models.py
+            - Cox Proportional Hazards: ch21/code/cox_model.py
+            - Survival Model Comparison: ch21/code/model_comparison.py
+        - 21.7 Exercises: ch21/exercises/exercises.md
 
-    - Appendix B — Bonus Code:
-        - Kaplan-Meier Survival Curves and Log-Rank Test: ch_bonus/code/kaplan_meier.py
 
 plugins:
     - search
