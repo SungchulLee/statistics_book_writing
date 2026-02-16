@@ -175,6 +175,6 @@ The balance coefficient changes from negative to positive once student status is
 - **For inference:** Ignoring confounders leads to biased coefficient estimates and incorrect odds ratio interpretations
 - **Best practice:** Always consider domain knowledge and collect data on potential confounders
 
-See also: [Confounding and Association vs. Causation](/ch01/classical/confounding_causation.md) for a broader discussion of confounding across statistical methods.
+See also: [Confounding and Association vs. Causation](../../ch01/classical/confounding_causation.md) for a broader discussion of confounding across statistical methods.
 
 
