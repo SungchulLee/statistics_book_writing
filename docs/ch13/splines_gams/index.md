@@ -8,6 +8,7 @@ Beyond polynomial regression, splines and generalized additive models (GAMs) pro
 
 This section covers:
 
+- **Step Functions** — Piecewise constant functions for capturing regime changes
 - **Splines** — Piecewise polynomial functions that provide smooth, local adaptability
 - **Generalized Additive Models (GAMs)** — Flexible semi-parametric regression using smooth functions of predictors
 

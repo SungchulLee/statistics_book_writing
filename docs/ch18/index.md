@@ -8,6 +8,7 @@ This chapter covers regularization methods that address overfitting and multicol
 - **19.2 Lasso Regression (L1 Regularization)** — Shrinks coefficients toward zero using an L1 penalty; performs automatic feature selection by driving some coefficients exactly to zero.
 - **19.3 Elastic Net** — Combines L1 and L2 penalties for flexible regularization that handles correlated predictors and performs variable selection.
 - **19.4 Overview and Comparison** — Side-by-side comparison of Ridge, Lasso, and Elastic Net with guidance on choosing the right method.
+- **19.5 Dimensionality Reduction Methods** — Alternative approaches using Principal Components Regression (PCR) and Partial Least Squares (PLS) for high-dimensional settings.
 
 ## Key Themes
 
@@ -15,3 +16,4 @@ This chapter covers regularization methods that address overfitting and multicol
 2. **Sparsity and interpretability**: L1-based methods produce sparse models that are easier to interpret.
 3. **Multicollinearity management**: L2-based methods stabilize coefficient estimates when predictors are correlated.
 4. **Hyperparameter tuning**: Cross-validation is the standard approach for selecting regularization strength.
+5. **Dimensionality reduction**: When $p$ is large or $p > n$, PCA-based and supervised reduction methods offer alternatives to coefficient shrinkage.

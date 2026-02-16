@@ -468,6 +468,11 @@ nav:
             - Weighted Least Squares: ch13/code/weighted_regression.py
             - GAM Housing Analysis: ch13/code/gam_housing_analysis.py
             - Regression Diagnostics (Housing): ch13/code/regression_diagnostics_housing.py
+            - RSS Surface Visualization: ch13/code/rss_surface_visualization.py
+            - 3D Regression Plane: ch13/code/regression_plane_3d.py
+            - CV Polynomial Model Selection: ch13/code/cv_polynomial_model_selection.py
+            - Step Functions: ch13/code/step_functions.py
+            - Splines with Patsy: ch13/code/splines_patsy_examples.py
         - 13.12 Exercises: ch13/exercises/exercises.md
 
     - 14 Normality Tests:
@@ -680,7 +685,11 @@ nav:
             - Cross-Validation for λ Selection: ch18/tuning/cross_validation.md
             - Regularization Path: ch18/tuning/regularization_path.md
             - Information Criteria for Regularized Models: ch18/tuning/information_criteria.md
-        - 18.6 Overview and Comparison:
+        - 18.6 Dimensionality Reduction Methods:
+            - PCR and PLS Overview: ch18/pcr_pls/index.md
+            - Principal Components Regression: ch18/pcr_pls/principal_components_regression.md
+            - Partial Least Squares: ch18/pcr_pls/partial_least_squares.md
+        - 18.7 Overview and Comparison:
             - Ridge vs Lasso vs Elastic Net: ch18/overview/comparison.md
             - Guidelines for Choosing a Method: ch18/overview/guidelines.md
             - Overview: ch18/overview/overview.md
@@ -691,7 +700,8 @@ nav:
             - Ridge, Lasso, and Elastic Net Comparison: ch18/code/reg_compare.py
             - Cross-Validation and λ Tuning: ch18/code/cv_tuning.py
             - Lasso Housing Regularization Path: ch18/code/lasso_housing_regularization_path.py
-        - 18.8 Exercises: ch18/exercises/exercises.md
+            - PCR and PLS Examples: ch18/code/pcr_pls_examples.py
+        - 18.9 Exercises: ch18/exercises/exercises.md
 
     - 19 Logistic Regression:
         - Chapter Overview: ch19/index.md
@@ -708,6 +718,7 @@ nav:
             - Confusion Matrix: ch19/evaluation/confusion_matrix.md
             - Precision, Recall, and F1-Score: ch19/evaluation/precision_recall.md
             - ROC Curve and AUC: ch19/evaluation/roc_auc.md
+            - Decision Threshold Tuning: ch19/evaluation/threshold_tuning.md
             - Calibration and Brier Score: ch19/evaluation/calibration.md
             - Handling Imbalanced Data: ch19/evaluation/imbalanced_data.md
             - Evaluation Metrics Overview: ch19/evaluation/metrics.md
@@ -718,6 +729,7 @@ nav:
             - Logistic Regression Demonstrations: ch19/code/logistic_regression.py
             - ROC and Evaluation Metrics: ch19/code/evaluation_metrics.py
             - Regularized Logistic Regression: ch19/code/regularized_logistic.py
+            - Logistic vs Linear Visualization: ch19/code/logistic_vs_linear_visualization.py
         - 19.6 Exercises: ch19/exercises/exercises.md
 
     - 20 Multiclass Classification and Softmax Regression:

@@ -50,7 +50,7 @@ A statistically significant interaction term indicates that the relationship bet
 
 ---
 
-## Example: Study Hours, Sleep, and Performance
+## Example 1: Study Hours, Sleep, and Performance
 
 Consider a study on the effect of study hours and sleep on student exam performance. Without an interaction term, the model assumes that additional study hours have the same benefit regardless of how much a student sleeps.
 
@@ -61,6 +61,66 @@ $$
 $$
 
 If $\beta_3 > 0$, more sleep amplifies the benefit of studying. If $\beta_3 < 0$, studying more provides diminishing returns for students who sleep less.
+
+---
+
+## Example 2: Marketing Effectiveness (TV and Radio)
+
+A classic example from advertising analytics examines how TV and Radio advertising spending affect Sales. The main effects model assumes each medium has an independent effect:
+
+$$
+\text{Sales} = \beta_0 + \beta_1 \cdot \text{TV} + \beta_2 \cdot \text{Radio} + \epsilon
+$$
+
+However, there may be a **synergistic effect**: advertising on both TV and Radio together might be more effective than the sum of their individual effects. Adding an interaction term captures this:
+
+$$
+\text{Sales} = \beta_0 + \beta_1 \cdot \text{TV} + \beta_2 \cdot \text{Radio} + \beta_3 \cdot (\text{TV} \times \text{Radio}) + \epsilon
+$$
+
+**Interpretation**:
+- If $\beta_3 > 0$: Combining TV and Radio advertising creates a synergistic boost in sales beyond what each medium provides independently.
+- If $\beta_3 < 0$: There is a diminishing effect—spending heavily on both media simultaneously may be less efficient.
+
+This model can be fit using statsmodels' formula syntax for convenience:
+
+```python
+import statsmodels.api as sm
+
+# Using formula syntax (R-like)
+# The * operator includes main effects and the interaction
+model = sm.ols('Sales ~ TV + Radio + TV*Radio', data=advertising).fit()
+print(model.summary())
+```
+
+---
+
+## Example 3: Income and Student Status Interaction
+
+Consider a model examining how balance (credit card debt) depends on income and student status. A **qualitative variable** (student: yes/no) can interact with a continuous variable (income):
+
+$$
+\text{Balance} = \beta_0 + \beta_1 \cdot \text{Income} + \beta_2 \cdot \text{Student} + \beta_3 \cdot (\text{Income} \times \text{Student}) + \epsilon
+$$
+
+Where Student is coded as 1 (yes) or 0 (no).
+
+**Interpretation**:
+- $\beta_1$: The effect of Income on Balance for **non-students** is $\beta_1$.
+- $\beta_1 + \beta_3$: The effect of Income on Balance for **students** is $\beta_1 + \beta_3$.
+- If $\beta_3 \neq 0$: The relationship between Income and Balance **differs by student status**.
+
+This type of interaction reveals whether different groups respond differently to the same predictor—a crucial insight for segmentation and targeted analysis.
+
+```python
+# Example with categorical variable
+# statsmodels automatically encodes categorical variables
+model = sm.ols('Balance ~ Income + C(Student) + Income:C(Student)',
+                data=credit).fit()
+print(model.summary())
+```
+
+Visual representation of such interactions often shows two separate regression lines (one for each group) with different slopes, demonstrating the differential effect of Income on Balance.
 
 ---
 

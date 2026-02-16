@@ -159,6 +159,80 @@ model, y_pred = perform_regression(x, y)
 plot_regression_and_residuals(x, y, y_pred)
 ```
 
+#### Linear vs. Quadratic Residual Comparison
+
+To better diagnose model misspecification, directly comparing residuals from competing models can be insightful. Consider data that follows a quadratic relationship:
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+import statsmodels.api as sm
+from statsmodels.nonparametric.smoothers_lowess import lowess
+
+# Generate quadratic data
+np.random.seed(42)
+x = np.random.uniform(-3, 3, 100)
+y_true = 2 + 0.5 * x - 1.5 * x**2
+y = y_true + np.random.normal(0, 1, len(x))
+
+# Fit linear model
+X_linear = sm.add_constant(x)
+model_linear = sm.OLS(y, X_linear).fit()
+residuals_linear = model_linear.resid
+y_pred_linear = model_linear.fittedvalues
+
+# Fit quadratic model
+X_quad = sm.add_constant(np.column_stack([x, x**2]))
+model_quad = sm.OLS(y, X_quad).fit()
+residuals_quad = model_quad.resid
+y_pred_quad = model_quad.fittedvalues
+
+# Plot residuals with LOWESS smoothing
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 5))
+
+# Linear model residuals
+ax1.scatter(y_pred_linear, residuals_linear, alpha=0.6)
+ax1.axhline(y=0, color='r', linestyle='--', linewidth=2)
+
+# Add LOWESS smooth to highlight curvature
+lowess_result = lowess(residuals_linear, y_pred_linear, frac=0.3)
+ax1.plot(lowess_result[:, 0], lowess_result[:, 1], 'b-', linewidth=2.5,
+         label='LOWESS Trend')
+
+ax1.set_xlabel('Fitted Values')
+ax1.set_ylabel('Residuals')
+ax1.set_title('Linear Model: Clear Non-linearity Pattern')
+ax1.legend()
+ax1.grid(True, alpha=0.3)
+
+# Quadratic model residuals
+ax2.scatter(y_pred_quad, residuals_quad, alpha=0.6)
+ax2.axhline(y=0, color='r', linestyle='--', linewidth=2)
+
+# Add LOWESS smooth
+lowess_result_quad = lowess(residuals_quad, y_pred_quad, frac=0.3)
+ax2.plot(lowess_result_quad[:, 0], lowess_result_quad[:, 1], 'b-', linewidth=2.5,
+         label='LOWESS Trend')
+
+ax2.set_xlabel('Fitted Values')
+ax2.set_ylabel('Residuals')
+ax2.set_title('Quadratic Model: Non-linearity Removed')
+ax2.legend()
+ax2.grid(True, alpha=0.3)
+
+plt.tight_layout()
+plt.show()
+
+# Summary comparison
+print("Model Comparison:")
+print(f"Linear Model R²:    {model_linear.rsquared:.4f}")
+print(f"Quadratic Model R²: {model_quad.rsquared:.4f}")
+print(f"Linear Model RSS:    {np.sum(residuals_linear**2):.2f}")
+print(f"Quadratic Model RSS: {np.sum(residuals_quad**2):.2f}")
+```
+
+**Key Insight**: The LOWESS (Locally Weighted Scatterplot Smoothing) smooth curve through the residuals makes the violation pattern obvious. In the linear model, the curve dips below and above zero, indicating systematic underprediction and overprediction. The quadratic model's residuals scatter randomly, indicating the form of non-linearity has been captured.
+
 ### Fix: Polynomial Regression
 
 Adding polynomial features to match the true data-generating process resolves the pattern in residuals:
