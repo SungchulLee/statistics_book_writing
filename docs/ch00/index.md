@@ -1,64 +1,73 @@
-# Financial Math Book
+# Chapter 0: Prerequisites
 
-Welcome to the **Financial Math Book**, a comprehensive guide to statistics, probability, and data analysis with applications in quantitative finance.
+## Overview
 
-## What This Book Covers
+This chapter establishes the mathematical and computational foundations needed for the rest of the book. It begins with a review of core mathematical concepts (logic, sets, sequences, limits, and linear algebra notation), introduces the essential Python tools used throughout (NumPy, pandas, Matplotlib), and then develops the advanced linear algebra of square matrices and their connections to statistical theory via quadratic forms and OLS sampling distributions.
 
-This book takes you from foundational prerequisites through advanced statistical modeling, building both theoretical understanding and practical Python skills at every step.
+---
 
-### Part I — Foundations
+## Chapter Structure
 
-- **[Chapter 0: Prerequisites](index.md)** — mathematical background and computational tools
-- **[Chapter 1: Data Collection and Learning from Data](../ch01/classical/population_sample.md)** — classical and modern approaches
-- **[Chapter 2: Descriptive Statistics](../ch02/exploration/histograms.md)** — exploring and summarizing data
+### 0.1 Mathematical Background
 
-### Part II — Probability and Distributions
+A review of the foundational mathematical language used throughout the book:
 
-- **[Chapter 3: Probability, Random Variables, and Limit Theorems](../ch03/probability/sample_space.md)**
-- **[Chapter 4: Distributions and Dependence](../ch04/discrete_distributions/binomial.md)**
-- **[Chapter 5: Sampling Distributions](../ch05/foundations/statistics_as_rv.md)**
+- **Sets, Functions, and Logic** -- Covers propositional logic (statements, connectives, truth tables), set operations (union, intersection, complement), functions, and quantifiers that provide the precise language needed for probability and inference.
+- **Sequences, Limits, and Asymptotics** -- Reviews sequences, convergence, monotone sequences, series, and asymptotic notation, forming the mathematical backbone for the Law of Large Numbers, the Central Limit Theorem, and estimator consistency.
+- **Linear Algebra Notation and Conventions** -- Establishes vector and matrix notation (column vectors, dot products, norms), matrix operations, the design matrix, and key results (rank, inverse, determinant) used in regression and multivariate statistics.
 
-### Part III — Statistical Inference
+### 0.2 Computational Tools
 
-- **[Chapter 6: General Statistical Estimation](../ch06/estimator_quality/bias_variance.md)**
-- **[Chapter 7: Estimation of Mean and Variance](../ch07/mean/sample_mean.md)**
-- **[Chapter 8: Confidence Intervals](../ch08/foundations/coverage.md)**
-- **[Chapter 9: Hypothesis Testing](../ch09/foundations/hypotheses.md)**
+An introduction to the Python ecosystem for statistical computing:
 
-### Part IV — Testing and Diagnostics
+- **Python and Jupyter Basics** -- Covers choosing a Python distribution (Anaconda), package management, Jupyter notebooks, and the core language features needed for statistical work.
+- **NumPy Arrays** -- Introduces the ndarray, array creation, vectorized arithmetic, broadcasting, indexing, and the numerical operations that underpin every scientific Python library.
+- **Data Handling with pandas** -- Covers the Series and DataFrame data structures, data loading, cleaning, transformation, grouping, and summarization for structured data analysis.
+- **Basic Visualization with Matplotlib** -- Introduces the Figure-Axes model, line plots, scatter plots, histograms, bar charts, customization, and the plotting patterns used throughout the book.
 
-- **[Chapter 10: Chi-Square Tests](../ch10/index.md)**
-- **[Chapter 11: ANOVA](../ch11/index.md)**
-- **[Chapter 12: Correlation and Causation](../ch12/index.md)**
-- **[Chapter 13: Linear Regression](../ch13/index.md)**
-- **[Chapter 14: Normality Tests](../ch14/index.md)**
-- **[Chapter 15: Variance Tests](../ch15/index.md)**
+### 0.3 Square Matrices
 
-### Part V — Non-Parametric and Resampling Methods
+A systematic treatment of special matrix types that arise in regression and multivariate statistics:
 
-- **[Chapter 16: Non-Parametric Tests](../ch16/index.md)**
-- **[Chapter 17: Resampling Methods](../ch17/index.md)**
+- **Similar Matrices** -- Defines matrix similarity and its invariants (eigenvalues, trace, determinant), establishing the foundation for matrix decompositions.
+- **Diagonal Form of Diagonalizable Matrices** -- Covers eigendecomposition and the conditions under which a matrix can be diagonalized, enabling simplified computation of matrix powers and functions.
+- **Jordan Canonical Form** -- Extends diagonalization to non-diagonalizable matrices via Jordan blocks, providing a complete canonical form for square matrices.
+- **Trace and Eigenvalues** -- Establishes the relationship between the trace of a matrix and the sum of its eigenvalues, a key identity used in quadratic form calculations.
+- **Idempotent Matrices** -- Defines matrices satisfying A^2 = A and derives their eigenvalue properties, providing the algebraic foundation for projection and hat matrices.
+- **Symmetric Matrices** -- Covers the spectral theorem for real symmetric matrices, guaranteeing real eigenvalues and orthogonal eigenvectors, with direct applications to covariance matrices.
+- **Positive Definite Matrices** -- Defines positive definiteness via quadratic forms and eigenvalue conditions, essential for understanding covariance matrices and optimization in statistics.
+- **Gram Matrices** -- Introduces X^T X matrices, their positive semi-definiteness, and their central role in least squares estimation and normal equations.
+- **Projection Matrices** -- Covers general projection matrices and their geometric interpretation as mappings onto subspaces, key to understanding least squares residuals.
+- **Orthogonal Projection Matrices** -- Specializes projections to the orthogonal case, deriving the hat matrix H = X(X^T X)^{-1} X^T used in regression diagnostics.
 
-### Part VI — Advanced Modeling
+### 0.4 Linear Algebra and Statistics
 
-- **[Chapter 18: Regularization Techniques](../ch18/index.md)**
-- **[Chapter 19: Logistic Regression](../ch19/index.md)**
-- **[Chapter 20: Multiclass Classification and Softmax Regression](../ch20/index.md)**
+Connects matrix theory to statistical inference:
 
-### Appendix
+- **Chi-Squared Distribution and Quadratic Forms** -- Links quadratic forms of normal random vectors to the chi-squared distribution, a result used extensively in hypothesis testing and confidence intervals.
+- **Sampling Distributions (Simple OLS)** -- Derives the exact sampling distributions of the slope and intercept estimators in simple linear regression using projection matrices.
+- **Sampling Distributions (General OLS)** -- Extends the sampling distribution results to the general multiple regression setting, establishing the distributional theory for the OLS estimator vector.
 
-- **[Appendix A: Linear Algebra for Regression](../ch21/index.md)**
+### 0.5 Exercises
 
-## How to Use This Book
+Practice problems covering mathematical foundations, computational tools, matrix algebra, and the connections between linear algebra and statistical theory.
 
-Each section pairs mathematical exposition with runnable Python code. To get started:
+---
 
-1. Review the [prerequisites](math/logic_sets.md) to ensure the necessary background is in place.
-2. Set up your Python environment following the [computational tools guide](tools/python_basics.md).
-3. Work through the chapters sequentially — later chapters build on concepts introduced earlier.
+## Prerequisites
 
-## Conventions
+This is the foundational chapter of the book. It assumes:
 
-- Mathematical notation follows standard conventions; see [Linear Algebra Notation and Conventions](math/linear_algebra.md) for details.
-- Python code uses NumPy, pandas, Matplotlib, and SciPy throughout. All code is compatible with Python 3.10+.
-- Sections marked with $\star$ contain optional advanced material.
+- **High school algebra and basic calculus** -- Familiarity with functions, limits, derivatives, and integrals.
+- **Introductory linear algebra** -- Basic exposure to vectors, matrices, and systems of linear equations.
+
+---
+
+## Key Takeaways
+
+1. Precise mathematical language (logic, sets, functions) prevents ambiguity in later work with probability and statistical inference.
+2. Sequences, limits, and asymptotic notation provide the deterministic framework that underpins the convergence theorems of statistics.
+3. Linear algebra notation and the design matrix formulation are the language of multivariate statistics and regression.
+4. Python, NumPy, pandas, and Matplotlib form the computational toolkit used for data analysis throughout the book.
+5. Special matrix types (idempotent, symmetric, positive definite, projection) have direct statistical interpretations in regression and hypothesis testing.
+6. Quadratic forms of normal vectors follow chi-squared distributions, connecting matrix algebra to the sampling distributions used in inference.
