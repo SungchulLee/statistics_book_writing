@@ -198,6 +198,8 @@ nav:
             - Consistency and Asymptotic Normality: ch06/estimator_quality/consistency.md
             - Efficiency and Cramér–Rao Lower Bound: ch06/estimator_quality/efficiency_crlb.md
             - Sufficiency and Minimal Sufficiency: ch06/estimator_quality/sufficiency.md
+            - Bias Variance: ch06/estimator_quality/bias_variance.py
+            - Mse: ch06/estimator_quality/mse.py
         - 6.2 Maximum Likelihood Estimation:
             - Likelihood Function: ch06/mle/likelihood.md
             - Introduction to Maximum Likelihood Estimation: ch06/mle/intro_mle.md
@@ -407,6 +409,11 @@ nav:
             - Two-Way Welch Analysis of Variance (Robust HC3): ch11/code/welch_twoway_robust.py
             - Analysis of Variance F-Statistic Simulation: ch11/code/anova_f_simulation.py
             - Manual Analysis of Variance with Fisher Method: ch11/code/anova_manual_computation.py
+            - Bartlett Test: ch11/code/bartlett_test.py
+            - Chi2 Test For Variance: ch11/code/chi2_test_for_variance.py
+            - Chi Square Distribution: ch11/code/chi_square_distribution.py
+            - F Test Equality Of Variances: ch11/code/f_test_equality_of_variances.py
+            - Levene Test: ch11/code/levene_test.py
         - 11.9 Exercises: ch11/exercises/exercises.md
 
     - 12 Correlation and Causation:
@@ -451,6 +458,7 @@ nav:
             - Covariance from Scratch: ch12/code/covariance_from_scratch.py
             - Regression Correlation Plot: ch12/code/regression_correlation_plot.py
             - Confounding and Causation Demo: ch12/code/confounding_causation_demo.py
+            - Correlation Causation: ch12/code/correlation_causation.py
         - 12.8 Exercises: ch12/exercises/exercises.md
 
     - 13 Linear Regression:
@@ -838,6 +846,9 @@ nav:
             - Survival Model Comparison: ch21/code/model_comparison.py
         - 21.7 Exercises: ch21/exercises/exercises.md
 
+    - Bonus Chapter:
+        - Code:
+            - Kaplan Meier: ch_bonus/code/kaplan_meier.py
 
 plugins:
     - search
