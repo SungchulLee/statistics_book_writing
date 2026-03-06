@@ -7,7 +7,9 @@ The one-sample t-test tests hypotheses about the population mean when $\sigma$ i
 ## Test Statistic
 
 $$
+
 t = \frac{\bar{X} - \mu_0}{S / \sqrt{n}} \sim t_{n-1} \text{ under } H_0
+
 $$
 
 ## Assumptions

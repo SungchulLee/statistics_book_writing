@@ -10,13 +10,17 @@ In the context of linear regression, the independence assumption means that the 
 Formally, the assumption requires:
 
 $$
+
 \text{Cov}(\epsilon_i, \epsilon_j) = 0 \quad \text{for all } i \neq j
+
 $$
 
 This can also be expressed in matrix form. Under the independence assumption, the variance-covariance matrix of the errors is diagonal:
 
 $$
+
 \text{Var}(\boldsymbol{\epsilon}) = \sigma^2 \mathbf{I}_n
+
 $$
 
 **Why It Matters:**
@@ -34,7 +38,9 @@ The **Durbin-Watson (DW) test** is a widely used statistical test to detect the 
 The Durbin-Watson statistic is defined as:
 
 $$
+
 DW = \frac{\sum_{t=2}^{n}(e_t - e_{t-1})^2}{\sum_{t=1}^{n} e_t^2}
+
 $$
 
 where $e_t$ is the residual at time $t$.
@@ -48,7 +54,9 @@ The DW statistic ranges between 0 and 4:
 **Relationship to autocorrelation:**
 
 $$
+
 DW \approx 2(1 - \hat{\rho})
+
 $$
 
 where $\hat{\rho}$ is the estimated first-order autocorrelation coefficient of the residuals.
@@ -129,7 +137,9 @@ The **Breusch-Godfrey test** is an extension of the Durbin-Watson test and is mo
 The test regresses the residuals on the original predictors and lagged residuals:
 
 $$
+
 e_t = \alpha_0 + \alpha_1 X_{1t} + \cdots + \rho_1 e_{t-1} + \rho_2 e_{t-2} + \cdots + \rho_p e_{t-p} + u_t
+
 $$
 
 The test statistic is $nR^2$ from this auxiliary regression, which follows a $\chi^2(p)$ distribution under $H_0$.

@@ -20,6 +20,10 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+# =============================================================================
+# Main
+# =============================================================================
+
 
 def simulate_income_data(n=10000, seed=1):
     """

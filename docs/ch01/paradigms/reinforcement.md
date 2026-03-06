@@ -22,7 +22,9 @@ At each time step $t$, the agent:
 The agent's goal is to learn a policy $\pi^*$ that maximizes the expected cumulative (discounted) reward:
 
 $$
+
 \pi^* = \arg\max_\pi \; E\left[\sum_{t=0}^{\infty} \gamma^t \, r_t \right]
+
 $$
 
 where $\gamma \in [0, 1)$ is the **discount factor** that controls how much the agent values future rewards relative to immediate ones.

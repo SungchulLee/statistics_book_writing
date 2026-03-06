@@ -9,7 +9,9 @@ The **Chi-Square Test of Independence** and the **Chi-Square Test of Homogeneity
 Both tests use the same **χ² test statistic**:
 
 $$
+
 \chi^2 = \sum \frac{(O_{ij} - E_{ij})^2}{E_{ij}}
+
 $$
 
 and the same **sampling distribution** (χ² with $(r-1)(c-1)$ degrees of freedom).
@@ -17,7 +19,9 @@ and the same **sampling distribution** (χ² with $(r-1)(c-1)$ degrees of freedo
 The **expected counts** are computed the same way:
 
 $$
+
 E_{ij} = \frac{(\text{row total})(\text{column total})}{\text{grand total}}
+
 $$
 
 So if you only looked at the calculations, you could not tell which test you were doing. The difference lies in **how the data were collected** and **what question you are answering**.
@@ -88,6 +92,7 @@ For each country, we asked how people in the country feel about the hospital qua
 **Observed:**
 
 $$
+
 \begin{array}{cccc}
 \text{Hospital Quality} & \text{US} & \text{Canada} & \text{Mexico} \\ \hline
 \text{5 Star} & 541 & 75 & 231 \\
@@ -96,6 +101,7 @@ $$
 \text{2 Star} & 282 & 50 & 345 \\
 \text{1 Star} & 65 & 19 & 120
 \end{array}
+
 $$
 
 Is the hospital satisfaction level distribution homogeneous among the countries, or do some differ?

@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""
+Ab Testing Permutation
+======================
+Educational script demonstrating ab testing permutation.
+"""
+
 # ======================================================================
 # A/B Testing with Permutation Tests
 # ======================================================================
@@ -271,105 +277,108 @@ ax = axes[1, 0]
 ax.hist(perm_diffs, bins=30, alpha=0.6, color='steelblue', label='Permutation', edgecolor='black')
 # Overlay theoretical t-distribution
 from scipy.stats import t as t_dist
-df_t = nA + nB - 2
-x_range = np.linspace(min(perm_diffs), max(perm_diffs), 100)
-# Scale t-distribution to match histogram
-scale = len(perm_diffs) * (perm_diffs[1] - perm_diffs[0])
-ax.plot(x_range, scale * t_dist.pdf(x_range / (session_times.Time.std() * np.sqrt(1/nA + 1/nB)), df_t),
-        'r-', linewidth=2, label='t-distribution')
-ax.axvline(obs_diff, color='black', linewidth=2, label=f'Observed = {obs_diff:.2f}')
-ax.set_xlabel('Difference in Means')
-ax.set_ylabel('Frequency')
-ax.set_title('Permutation vs. Parametric Distributions\n(Page Stickiness)')
-ax.legend()
-ax.spines['top'].set_visible(False)
-ax.spines['right'].set_visible(False)
-
-# Plot 4: Sample sizes and power considerations
-ax = axes[1, 1]
-sample_sizes = np.array([100, 200, 500, 1000, 2000, 5000])
-effect_sizes = [0.2, 0.5, 0.8]
-colors = ['blue', 'green', 'red']
-
-for d, color in zip(effect_sizes, colors):
-    powers = []
-    for n in sample_sizes:
-        z_alpha = stats.norm.ppf(0.975)  # 0.05 two-sided
-        z_beta = stats.norm.ppf(0.80)    # 0.80 power
-        # Approximate power for two-sample test
-        ncp = d * np.sqrt(n / 2)  # non-centrality parameter
-        power = 1 - stats.nct.cdf(stats.t.ppf(0.975, 2*n-2), 2*n-2, ncp)
-        powers.append(power)
-    ax.plot(sample_sizes, powers, 'o-', linewidth=2, markersize=6,
-            label=f'd = {d:.1f}', color=color)
-
-ax.axhline(0.80, color='gray', linestyle='--', alpha=0.5, label='80% Power')
-ax.set_xlabel('Sample Size (per group)')
-ax.set_ylabel('Statistical Power')
-ax.set_title('Power Analysis: Effect Size vs. Sample Size')
-ax.set_xscale('log')
-ax.set_ylim([0, 1.05])
-ax.legend()
-ax.grid(True, alpha=0.3)
-ax.spines['top'].set_visible(False)
-ax.spines['right'].set_visible(False)
-
-plt.tight_layout()
-plt.savefig('ab_testing_permutation_analysis.png', dpi=150, bbox_inches='tight')
-print("\nVisualization saved as 'ab_testing_permutation_analysis.png'")
-plt.show()
 
 
-# =============================================================================
-# 5. SUMMARY TABLE: Test Comparison
-# =============================================================================
+if __name__ == "__main__":
+    df_t = nA + nB - 2
+    x_range = np.linspace(min(perm_diffs), max(perm_diffs), 100)
+    # Scale t-distribution to match histogram
+    scale = len(perm_diffs) * (perm_diffs[1] - perm_diffs[0])
+    ax.plot(x_range, scale * t_dist.pdf(x_range / (session_times.Time.std() * np.sqrt(1/nA + 1/nB)), df_t),
+            'r-', linewidth=2, label='t-distribution')
+    ax.axvline(obs_diff, color='black', linewidth=2, label=f'Observed = {obs_diff:.2f}')
+    ax.set_xlabel('Difference in Means')
+    ax.set_ylabel('Frequency')
+    ax.set_title('Permutation vs. Parametric Distributions\n(Page Stickiness)')
+    ax.legend()
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
 
-print("\n" + "=" * 70)
-print("5. SUMMARY: Permutation vs. Parametric Tests")
-print("=" * 70)
+    # Plot 4: Sample sizes and power considerations
+    ax = axes[1, 1]
+    sample_sizes = np.array([100, 200, 500, 1000, 2000, 5000])
+    effect_sizes = [0.2, 0.5, 0.8]
+    colors = ['blue', 'green', 'red']
 
-summary_data = {
-    'Test': [
-        'Page Stickiness',
-        'A/B Conversion',
-        'Headline Clicks'
-    ],
-    'Permutation p-value': [
-        f'{p_perm:.4f}',
-        f'{p_ab:.4f}',
-        'N/A (chi-square used)'
-    ],
-    'Parametric p-value': [
-        f'{p_ttest:.4f}',
-        f'{p_chi2:.4f}',
-        f'{p_chi2_h:.4f}'
-    ],
-    'Conclusion': [
-        'Agree' if abs(p_perm - p_ttest) < 0.05 else 'Differ',
-        'Agree' if abs(p_ab - p_chi2) < 0.05 else 'Differ',
-        'N/A'
-    ]
-}
+    for d, color in zip(effect_sizes, colors):
+        powers = []
+        for n in sample_sizes:
+            z_alpha = stats.norm.ppf(0.975)  # 0.05 two-sided
+            z_beta = stats.norm.ppf(0.80)    # 0.80 power
+            # Approximate power for two-sample test
+            ncp = d * np.sqrt(n / 2)  # non-centrality parameter
+            power = 1 - stats.nct.cdf(stats.t.ppf(0.975, 2*n-2), 2*n-2, ncp)
+            powers.append(power)
+        ax.plot(sample_sizes, powers, 'o-', linewidth=2, markersize=6,
+                label=f'd = {d:.1f}', color=color)
 
-summary_df = pd.DataFrame(summary_data)
-print("\n" + summary_df.to_string(index=False))
+    ax.axhline(0.80, color='gray', linestyle='--', alpha=0.5, label='80% Power')
+    ax.set_xlabel('Sample Size (per group)')
+    ax.set_ylabel('Statistical Power')
+    ax.set_title('Power Analysis: Effect Size vs. Sample Size')
+    ax.set_xscale('log')
+    ax.set_ylim([0, 1.05])
+    ax.legend()
+    ax.grid(True, alpha=0.3)
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
 
-print("\n" + "=" * 70)
-print("KEY INSIGHTS")
-print("=" * 70)
-print("""
-1. Permutation tests provide p-values similar to parametric tests when
-   assumptions (normality, equal variances) are met.
+    plt.tight_layout()
+    plt.savefig('ab_testing_permutation_analysis.png', dpi=150, bbox_inches='tight')
+    print("\nVisualization saved as 'ab_testing_permutation_analysis.png'")
+    plt.show()
 
-2. Permutation tests are more robust to violations of distributional assumptions,
-   especially with smaller sample sizes.
 
-3. A/B testing context: Permutation tests naturally align with the concept of
-   randomization in controlled experiments.
+    # =============================================================================
+    # 5. SUMMARY TABLE: Test Comparison
+    # =============================================================================
 
-4. Computational efficiency: Modern computers make 1,000-5,000 permutations
-   feasible for sample sizes up to ~10,000.
+    print("\n" + "=" * 70)
+    print("5. SUMMARY: Permutation vs. Parametric Tests")
+    print("=" * 70)
 
-5. Interpretation: A permutation test p-value directly reflects the proportion
-   of random shuffles producing statistics as extreme as observed.
-""")
+    summary_data = {
+        'Test': [
+            'Page Stickiness',
+            'A/B Conversion',
+            'Headline Clicks'
+        ],
+        'Permutation p-value': [
+            f'{p_perm:.4f}',
+            f'{p_ab:.4f}',
+            'N/A (chi-square used)'
+        ],
+        'Parametric p-value': [
+            f'{p_ttest:.4f}',
+            f'{p_chi2:.4f}',
+            f'{p_chi2_h:.4f}'
+        ],
+        'Conclusion': [
+            'Agree' if abs(p_perm - p_ttest) < 0.05 else 'Differ',
+            'Agree' if abs(p_ab - p_chi2) < 0.05 else 'Differ',
+            'N/A'
+        ]
+    }
+
+    summary_df = pd.DataFrame(summary_data)
+    print("\n" + summary_df.to_string(index=False))
+
+    print("\n" + "=" * 70)
+    print("KEY INSIGHTS")
+    print("=" * 70)
+    print("""
+    1. Permutation tests provide p-values similar to parametric tests when
+       assumptions (normality, equal variances) are met.
+
+    2. Permutation tests are more robust to violations of distributional assumptions,
+       especially with smaller sample sizes.
+
+    3. A/B testing context: Permutation tests naturally align with the concept of
+       randomization in controlled experiments.
+
+    4. Computational efficiency: Modern computers make 1,000-5,000 permutations
+       feasible for sample sizes up to ~10,000.
+
+    5. Interpretation: A permutation test p-value directly reflects the proportion
+       of random shuffles producing statistics as extreme as observed.
+    """)

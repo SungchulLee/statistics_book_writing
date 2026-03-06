@@ -11,7 +11,9 @@ In simpler terms, MLE finds the parameter values that make the observed data mos
 The MLE is formally defined as:
 
 $$
+
 \hat{\theta}_{MLE} = \arg \max_{\theta} L(\theta \mid \mathbf{x}) = \arg \max_{\theta} \prod_{i=1}^n f(x_i \mid \theta)
+
 $$
 
 Here, $\theta$ represents the parameters we want to estimate, and $L(\theta \mid \mathbf{x})$ is the likelihood function, which is the product of the probability density function (or probability mass function for discrete data) evaluated at the observed data points $\mathbf{x} = (x_1, x_2, \ldots, x_n)$.
@@ -21,7 +23,9 @@ Here, $\theta$ represents the parameters we want to estimate, and $L(\theta \mid
 For ease of computation, we often work with the log-likelihood function:
 
 $$
+
 \log L(\theta \mid \mathbf{x}) = \sum_{i=1}^n \log f(x_i \mid \theta)
+
 $$
 
 This transformation simplifies maximization by turning the product of probabilities into a sum of log-probabilities. Since $\log$ is a monotonically increasing function, maximizing the log-likelihood is equivalent to maximizing the likelihood itself.
@@ -31,11 +35,13 @@ This transformation simplifies maximization by turning the product of probabilit
 The key equivalences in the MLE framework:
 
 $$
+
 \text{argmax}_{\theta}\; L
 \quad\Leftrightarrow\quad
 \text{argmax}_{\theta}\; \ell
 \quad\Leftrightarrow\quad
 \text{argmin}_{\theta}\; J
+
 $$
 
 where $L$ is the likelihood, $\ell = \log L$ is the log-likelihood, and $J = -\ell$ is the cost function (negative log-likelihood).

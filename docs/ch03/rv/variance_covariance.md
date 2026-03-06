@@ -13,7 +13,9 @@ While the expected value summarizes the center of a distribution, **variance** m
 The **variance** of a random variable $X$ is the expected squared deviation from the mean:
 
 $$
+
 \text{Var}(X) = E\left[(X - \mu)^2\right] = E[X^2] - (E[X])^2
+
 $$
 
 where $\mu = E[X]$. The second form, $E[X^2] - (E[X])^2$, is often more convenient for computation.
@@ -23,7 +25,9 @@ where $\mu = E[X]$. The second form, $E[X^2] - (E[X])^2$, is often more convenie
 The **standard deviation** is the square root of variance, returning the spread to the original units:
 
 $$
+
 \sigma_X = \text{SD}(X) = \sqrt{\text{Var}(X)}
+
 $$
 
 ---
@@ -39,7 +43,9 @@ $$
 For general (possibly dependent) random variables:
 
 $$
+
 \text{Var}(X + Y) = \text{Var}(X) + \text{Var}(Y) + 2\text{Cov}(X, Y)
+
 $$
 
 ---
@@ -51,7 +57,9 @@ $$
 The **covariance** of $X$ and $Y$ measures how they co-vary:
 
 $$
+
 \text{Cov}(X, Y) = E\left[(X - \mu_X)(Y - \mu_Y)\right] = E[XY] - E[X] \cdot E[Y]
+
 $$
 
 - $\text{Cov}(X, Y) > 0$: $X$ and $Y$ tend to move in the same direction.
@@ -72,7 +80,9 @@ $$
 The **Pearson correlation coefficient** normalizes covariance to lie in $[-1, 1]$:
 
 $$
+
 \rho(X, Y) = \frac{\text{Cov}(X, Y)}{\sigma_X \cdot \sigma_Y}
+
 $$
 
 - $\rho = 1$: perfect positive linear relationship
@@ -88,13 +98,17 @@ $$
 For any random variables $X_1, \ldots, X_n$:
 
 $$
+
 \text{Var}\left(\sum_{i=1}^n X_i\right) = \sum_{i=1}^n \text{Var}(X_i) + 2\sum_{i < j} \text{Cov}(X_i, X_j)
+
 $$
 
 If all $X_i$ are pairwise uncorrelated, the cross terms vanish and:
 
 $$
+
 \text{Var}\left(\sum_{i=1}^n X_i\right) = \sum_{i=1}^n \text{Var}(X_i)
+
 $$
 
 ---
@@ -104,11 +118,15 @@ $$
 ### Example: Variance of a Fair Die
 
 $$
+
 E[X] = 3.5, \quad E[X^2] = \frac{1^2 + 2^2 + \cdots + 6^2}{6} = \frac{91}{6}
+
 $$
 
 $$
+
 \text{Var}(X) = \frac{91}{6} - 3.5^2 = \frac{91}{6} - \frac{49}{4} = \frac{35}{12} \approx 2.917
+
 $$
 
 ### Example: Bernoulli Random Variable
@@ -116,7 +134,9 @@ $$
 For $X \sim \text{Bernoulli}(p)$:
 
 $$
+
 E[X] = p, \quad E[X^2] = p, \quad \text{Var}(X) = p - p^2 = p(1-p)
+
 $$
 
 The variance is maximized at $p = 0.5$ (maximum uncertainty) and equals zero at $p = 0$ or $p = 1$ (certainty).
@@ -126,7 +146,9 @@ The variance is maximized at $p = 0.5$ (maximum uncertainty) and equals zero at 
 Two assets with returns $R_1$ and $R_2$, weights $w_1$ and $w_2$ ($w_1 + w_2 = 1$). The portfolio return is $R_p = w_1 R_1 + w_2 R_2$:
 
 $$
+
 \text{Var}(R_p) = w_1^2 \sigma_1^2 + w_2^2 \sigma_2^2 + 2w_1 w_2 \text{Cov}(R_1, R_2)
+
 $$
 
 When $\rho < 1$, diversification reduces portfolio variance below the weighted average of individual variances.

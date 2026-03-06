@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""
+Bayesian Estimation
+===================
+Educational script demonstrating bayesian estimation.
+"""
+
 # ======================================================================
 # 09_bayesian_01_conjugate_and_mcmc.py
 # ======================================================================

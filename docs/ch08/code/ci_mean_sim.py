@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""
+Ci Mean Sim
+===========
+Educational script demonstrating ci mean sim.
+"""
+
 # ================================================================
 # 11_confidence_interval_01_mean_confidence_interval_simulation.py
 # ================================================================

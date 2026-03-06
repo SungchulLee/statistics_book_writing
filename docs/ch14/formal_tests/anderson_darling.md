@@ -18,7 +18,9 @@ To compute the Anderson-Darling test statistic $A^2$, follow these steps:
 2. **Standardize the Data**: Standardize each data point to have a mean of 0 and a variance of 1. Note that this transformation does not impose normality on the data. For each data point $X_i$, calculate the standardized value $Z_i$:
 
     $$
+
     Z_i = \frac{X_i - \mu}{\sigma}
+
     $$
 
     where $\mu$ is the sample mean and $\sigma$ is the sample standard deviation.
@@ -28,15 +30,16 @@ To compute the Anderson-Darling test statistic $A^2$, follow these steps:
 4. **Compute Test Statistic $A^2$**:
 
     $$
+
     A^2 = -n - \frac{1}{n} \sum_{i=1}^{n} \left[ (2i-1) \left( \ln(F(Z_{(i)})) + \ln(1 - F(Z_{(n+1-i)})) \right) \right]
+
     $$
 
     where $n$ is the sample size and $F(Z_{(i)})$ is the CDF of the normal distribution at each ordered standardized data point $Z_{(i)}$.
 
     This formula adjusts for the lower and upper tails, giving the test higher sensitivity to deviations in the distribution tails.
 
-## Deriving the $p$-Value
-
+## Deriving the p-Value
 After calculating the test statistic $A^2$, it is compared to critical values specific to the Anderson-Darling distribution for the desired distribution type and sample size. Critical values are selected based on the significance level $\alpha$ (e.g., 0.01, 0.05, or 0.10).
 
 - If $A^2$ is greater than the critical value for a given $\alpha$, the $p$-value will be below $\alpha$, leading to rejection of the null hypothesis.
@@ -74,16 +77,13 @@ for significance_level, critical_value in zip(result.significance_level, result.
 
 ---
 
-## Can I Get a $p$-Value from `stats.anderson`?
-
+## Can I Get a p-Value from `stats.anderson`?
 The `stats.anderson()` function in SciPy does **not** directly provide a $p$-value; it only returns the test statistic and critical values at specific significance levels.
 
-### Why No Direct $p$-Value?
-
+### Why No Direct p-Value?
 The Anderson-Darling test has predefined critical values based on simulation or theoretical distribution tables for each significance level (e.g., 15%, 10%, 5%, 2.5%, and 1% for the normal distribution). Since the Anderson-Darling statistic distribution varies depending on the sample size and the specific distribution being tested, calculating an exact $p$-value is complex.
 
-### Approximate $p$-Values (for Normality Testing)
-
+### Approximate p-Values (for Normality Testing)
 If you need an approximate $p$-value for normality testing, there are two options:
 
 **Option 1: Use `statsmodels`**

@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""
+Corr Viz
+========
+Educational script demonstrating corr viz.
+"""
+
 # ======================================================================
 # 20_correlation_02_heatmap_and_pairplot.py
 # ======================================================================

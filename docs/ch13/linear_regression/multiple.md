@@ -5,13 +5,17 @@
 Multiple linear regression extends simple linear regression to include multiple predictor variables:
 
 $$
+
 y_i = \beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + \cdots + \beta_p x_{ip} + \varepsilon_i
+
 $$
 
 In matrix notation, this can be written compactly as:
 
 $$
+
 \mathbf{y} = X\boldsymbol{\beta} + \boldsymbol{\varepsilon}
+
 $$
 
 where $X$ is the $n \times (p+1)$ design matrix (with a column of ones for the intercept), $\boldsymbol{\beta}$ is the $(p+1) \times 1$ coefficient vector, and $\boldsymbol{\varepsilon}$ is the $n \times 1$ error vector.
@@ -21,7 +25,9 @@ where $X$ is the $n \times (p+1)$ design matrix (with a column of ones for the i
 In many applications, the effect of one predictor on the response depends on the level of another predictor. An **interaction term** captures this combined effect. For example, with predictors TV and Radio:
 
 $$
+
 \hat{y} = \beta_0 + \beta_1 \cdot \text{TV} + \beta_2 \cdot \text{Radio} + \beta_3 \cdot (\text{TV} \times \text{Radio})
+
 $$
 
 A positive and significant interaction coefficient $\beta_3$ indicates a **synergistic effect**: the combined impact of both predictors is greater than the sum of their individual effects.

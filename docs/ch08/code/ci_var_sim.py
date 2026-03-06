@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""
+Ci Var Sim
+==========
+Educational script demonstrating ci var sim.
+"""
+
 # ====================================================================
 # 11_confidence_interval_03_variance_confidence_interval_simulation.py
 # ====================================================================

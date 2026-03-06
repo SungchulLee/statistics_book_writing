@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""
+Welch Simulation
+================
+Educational script demonstrating welch simulation.
+"""
+
 # ======================================================================
 # 14_welch_anova_05_simulation_typeI_power.py
 # ======================================================================

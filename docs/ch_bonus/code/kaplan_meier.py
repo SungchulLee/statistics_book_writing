@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""
+Kaplan Meier
+============
+Educational script demonstrating kaplan meier.
+"""
+
 # ======================================================================
 # bonus_survival_01_kaplan_meier.py
 # ======================================================================

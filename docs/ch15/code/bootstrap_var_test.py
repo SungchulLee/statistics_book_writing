@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""
+Bootstrap Var Test
+==================
+Educational script demonstrating bootstrap var test.
+"""
+
 # ======================================================================
 # 24_bootvar_01_twosample_nonparametric_percentile_CI_and_pvalue.py
 # ======================================================================

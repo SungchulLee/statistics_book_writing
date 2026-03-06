@@ -1,5 +1,4 @@
-# Paired t-Test for $\mu_D$
-
+# Paired t-Test for mu_D
 ## Paired-Sample t Test
 
 The paired sample t-test, also known as the dependent sample t-test or the matched pairs t-test, is a statistical procedure used to compare two population means where you have two samples in which observations in one sample can be paired with observations in the other sample. Common scenarios include case-control studies, repeated measures, and experiments where individuals are measured before and after a treatment.
@@ -9,6 +8,7 @@ The paired sample t-test, also known as the dependent sample t-test or the match
 The hypotheses focus on the differences between the paired observations, rather than on the individual values:
 
 - **Null Hypothesis ($H_0$)**: The mean difference between the paired observations is zero.
+
   $$ H_0: \mu_d = 0 $$
 
 - **Alternative Hypothesis ($H_a$)**: The mean difference between the paired observations is not zero:

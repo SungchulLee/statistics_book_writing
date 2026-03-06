@@ -260,5 +260,8 @@ def compare_two_correlations(r1, n1, r2, n2, alpha=0.05):
     print(f"  p-value = {p_value:.4f}")
     print(f"  {'Reject' if p_value < alpha else 'Fail to reject'} H₀: ρ₁ = ρ₂ at α = {alpha}")
 
-# Example: is the height-weight correlation different for men vs women?
-compare_two_correlations(r1=0.72, n1=100, r2=0.65, n2=120)
+
+
+if __name__ == "__main__":
+    # Example: is the height-weight correlation different for men vs women?
+    compare_two_correlations(r1=0.72, n1=100, r2=0.65, n2=120)

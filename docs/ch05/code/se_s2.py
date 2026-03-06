@@ -1,5 +1,15 @@
+"""
+Se S2
+=====
+Educational script demonstrating se s2.
+"""
+
 import matplotlib.pyplot as plt
 import numpy as np
+
+# =============================================================================
+# Main
+# =============================================================================
 
 def main():
     S_square = []

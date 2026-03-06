@@ -13,6 +13,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy import stats
 
+# =============================================================================
+# Main
+# =============================================================================
+
 
 def consistency_visualization(seed=42):
     """

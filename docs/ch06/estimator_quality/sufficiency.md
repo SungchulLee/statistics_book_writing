@@ -9,7 +9,9 @@ A statistic $T(\mathbf{X})$ is **sufficient** for $\theta$ if the conditional di
 $T(\mathbf{X})$ is sufficient for $\theta$ if and only if:
 
 $$
+
 f(\mathbf{x}; \theta) = g(T(\mathbf{x}), \theta) \cdot h(\mathbf{x})
+
 $$
 
 ## Minimal Sufficiency

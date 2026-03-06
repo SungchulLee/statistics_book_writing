@@ -1,6 +1,16 @@
 #!/usr/bin/env python3
+"""
+Levene Simulation
+=================
+Educational script demonstrating levene simulation.
+"""
+
 import numpy as np
 from scipy.stats import levene
+
+# =============================================================================
+# Main
+# =============================================================================
 
 rng = np.random.default_rng(0)
 

@@ -9,13 +9,17 @@ Levene's test (using the group mean) and the Brown–Forsythe test (using the gr
 **Null Hypothesis ($H_0$):** The population variances are equal across the groups:
 
 $$
+
 H_0: \sigma_1^2 = \sigma_2^2 = \dots = \sigma_k^2
+
 $$
 
 **Alternative Hypothesis ($H_1$):** At least one group has a variance that differs from the others:
 
 $$
+
 H_1: \sigma_i^2 \neq \sigma_j^2 \quad \text{for at least one pair} \quad i \neq j
+
 $$
 
 These tests essentially evaluate whether the variances across different groups are homogeneous. If the null hypothesis is rejected, it indicates that at least one of the group variances is significantly different.
@@ -32,7 +36,9 @@ These tests do **not** require the assumption of normality, making them more rob
 Both tests transform the data by computing the absolute deviations of each observation from the group center — the **mean** for Levene's test, or the **median** for the Brown–Forsythe test. The absolute deviations are then used to construct an ANOVA-like test statistic:
 
 $$
+
 W = \frac{(N - k)}{(k - 1)} \cdot \frac{\sum_{i=1}^{k} n_i (\bar{Z}_i - \bar{Z})^2}{\sum_{i=1}^{k} \sum_{j=1}^{n_i} (Z_{ij} - \bar{Z}_i)^2} \sim F_{k-1, \, N-k}
+
 $$
 
 where:
@@ -47,7 +53,9 @@ where:
 The absolute deviations are computed as:
 
 $$
+
 Z_{ij} = |X_{ij} - \tilde{X}_i|
+
 $$
 
 where $X_{ij}$ is the original data point, and $\tilde{X}_i$ is the group **mean** (Levene's test) or the group **median** (Brown–Forsythe test).
@@ -55,16 +63,18 @@ where $X_{ij}$ is the original data point, and $\tilde{X}_i$ is the group **mean
 ### Decision Rule
 
 $$
+
 W > F_{\text{critical}} \quad \Rightarrow \quad \text{Reject } H_0
+
 $$
 
 ### Example Problem and Solution
 
 **Example:** A researcher wants to test whether the variances in exam scores differ between three groups of students taught by different instructors. The exam scores are:
 
-- Group 1: $65, 70, 75, 80, 85$
-- Group 2: $60, 65, 70, 75, 90$
-- Group 3: $55, 60, 65, 70, 95$
+- Group 1: \$65, 70, 75, 80, 85$
+- Group 2: \$60, 65, 70, 75, 90$
+- Group 3: \$55, 60, 65, 70, 95$
 
 Test whether the variances are equal at a 5% significance level using the Brown–Forsythe test.
 
@@ -108,13 +118,17 @@ The Fligner–Killeen test is a non-parametric test for comparing variances acro
 **Null Hypothesis ($H_0$):** The population variances are equal across the groups:
 
 $$
+
 H_0: \sigma_1^2 = \sigma_2^2 = \dots = \sigma_k^2
+
 $$
 
 **Alternative Hypothesis ($H_1$):** At least one group has a variance that differs from the others:
 
 $$
+
 H_1: \sigma_i^2 \neq \sigma_j^2 \quad \text{for at least one pair} \quad i \neq j
+
 $$
 
 ### Test Statistic
@@ -124,7 +138,9 @@ $$
 For each observation $X_{ij}$ in group $i$, compute the absolute deviation from the group median $\tilde{X}_i$:
 
 $$
+
 Z_{ij} = |X_{ij} - \tilde{X}_i|
+
 $$
 
 **Step 2 — Rank the Absolute Deviations:**
@@ -132,7 +148,9 @@ $$
 Rank the absolute deviations $Z_{ij}$ across all groups (pooled ranks):
 
 $$
+
 R_{ij} = \text{rank}(|X_{ij} - \tilde{X}_i|)
+
 $$
 
 where $R_{ij}$ represents the rank of the absolute deviation $Z_{ij}$ in the combined data.
@@ -142,7 +160,9 @@ where $R_{ij}$ represents the rank of the absolute deviation $Z_{ij}$ in the com
 The test statistic is computed based on the ranks $R_{ij}$, weighted by group size $n_i$. A popular version of the Fligner–Killeen test statistic is:
 
 $$
+
 H = \sum_{i=1}^k n_i \left( \bar{R}_i - \bar{R} \right)^2 \sim \chi^2_{k-1}
+
 $$
 
 where:
@@ -152,13 +172,17 @@ where:
 - $\bar{R}_i$ is the mean rank of the absolute deviations within group $i$:
 
 $$
+
 \bar{R}_i = \frac{1}{n_i} \sum_{j=1}^{n_i} R_{ij}
+
 $$
 
 - $\bar{R}$ is the overall mean rank of the absolute deviations across all groups:
 
 $$
+
 \bar{R} = \frac{1}{N} \sum_{i=1}^k \sum_{j=1}^{n_i} R_{ij}
+
 $$
 
 where $N = \sum_{i=1}^k n_i$ is the total number of observations.
@@ -177,5 +201,7 @@ The test statistic follows an asymptotic chi-square distribution with $k - 1$ de
 ### Decision Rule
 
 $$
+
 H > \chi^2_{\text{critical}} \quad \Rightarrow \quad \text{Reject } H_0
+
 $$

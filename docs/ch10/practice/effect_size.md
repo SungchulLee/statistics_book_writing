@@ -9,7 +9,9 @@ The chi-square test statistic tells us whether there is a statistically signific
 **Cramér's V** is the most commonly used effect size measure for chi-square tests. It is defined as:
 
 $$
+
 V = \sqrt{\frac{\chi^2}{n \cdot (q - 1)}}
+
 $$
 
 where:
@@ -41,7 +43,9 @@ These thresholds are approximate and context-dependent. In some fields, even a "
 For a $2 \times 2$ table, $q - 1 = 1$, so Cramér's V simplifies to:
 
 $$
+
 V = \sqrt{\frac{\chi^2}{n}} = |\phi|
+
 $$
 
 where $\phi$ is the **phi coefficient**, another common measure of association for $2 \times 2$ tables.

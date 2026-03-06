@@ -221,4 +221,7 @@ def plot_shrinkage_operators(lam=1.0):
     plt.savefig("shrinkage_operators.png", dpi=150)
     plt.show()
 
-plot_shrinkage_operators()
+
+
+if __name__ == "__main__":
+    plot_shrinkage_operators()

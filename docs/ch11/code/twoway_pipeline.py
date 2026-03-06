@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""
+Twoway Pipeline
+===============
+Educational script demonstrating twoway pipeline.
+"""
+
 # ======================================================================
 # 13_anova2_09_end_to_end_pipeline.py
 # ======================================================================

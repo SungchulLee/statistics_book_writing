@@ -17,7 +17,9 @@ Non-linear relationships appear frequently in practice:
 Polynomial regression extends linear regression by including polynomial terms of the predictors:
 
 $$
+
 Y = \beta_0 + \beta_1 X + \beta_2 X^2 + \beta_3 X^3 + \cdots + \beta_d X^d + \epsilon
+
 $$
 
 where $X^2, X^3, \ldots, X^d$ are the polynomial terms of the predictor $X$, and $d$ is the **degree** of the polynomial.
@@ -54,7 +56,9 @@ The sign and magnitude of the coefficients indicate the direction and strength o
 In a study on the relationship between age and income, a linear model might miss the reality that income increases with age until a certain point, after which it plateaus or decreases (e.g., after retirement). A quadratic model captures this:
 
 $$
+
 \text{Income} = \beta_0 + \beta_1 \cdot \text{Age} + \beta_2 \cdot \text{Age}^2 + \epsilon
+
 $$
 
 If $\beta_1 > 0$ and $\beta_2 < 0$, the model describes income that rises with age, reaches a peak, and then declines—an inverted-U relationship.
@@ -66,7 +70,9 @@ If $\beta_1 > 0$ and $\beta_2 < 0$, the model describes income that rises with a
 In some cases, both interaction terms and polynomial regression can be combined to capture more complex relationships. For instance, an interaction term can be included between a linear predictor and a polynomial term:
 
 $$
+
 Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \beta_3 X_1^2 + \beta_4 (X_1 \times X_2) + \epsilon
+
 $$
 
 This models a situation where the non-linear relationship between $X_1$ and $Y$ depends on the level of $X_2$.

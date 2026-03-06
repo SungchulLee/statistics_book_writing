@@ -11,7 +11,9 @@ This section introduces three foundational non-parametric tests that operate on 
 The **Wald–Wolfowitz runs test** checks whether a two-valued data sequence is random. A **run** is a maximal consecutive subsequence of identical elements. For example, in the sequence
 
 $$
+
 \underbrace{+ + +}_{\text{run 1}} \; \underbrace{- -}_{\text{run 2}} \; \underbrace{+}_{\text{run 3}} \; \underbrace{- - -}_{\text{run 4}}
+
 $$
 
 there are 4 runs. Too few runs suggest the data are clustered (positive autocorrelation); too many suggest systematic alternation.
@@ -19,11 +21,15 @@ there are 4 runs. Too few runs suggest the data are clustered (positive autocorr
 ### Hypotheses
 
 $$
+
 H_0: \text{The elements of the sequence are mutually independent (random).}
+
 $$
 
 $$
+
 H_a: \text{The elements are not independent.}
+
 $$
 
 ### Test Statistic
@@ -33,7 +39,9 @@ Given a sequence of length $N$ containing $N_+$ values of one type and $N_- = N 
 **Number of runs:**
 
 $$
+
 R = \frac{N_+ + N_- + 1 - \sum_{i=1}^{N-1} x_i \, x_{i+1}}{2}
+
 $$
 
 where the data are coded as $+1$ and $-1$.
@@ -41,17 +49,23 @@ where the data are coded as $+1$ and $-1$.
 **Mean and standard deviation under $H_0$:**
 
 $$
+
 \mu_R = \frac{2 \, N_+ \, N_-}{N} + 1
+
 $$
 
 $$
+
 \sigma_R = \sqrt{\frac{(\mu_R - 1)(\mu_R - 2)}{N - 1}}
+
 $$
 
 **Standardized test statistic (normal approximation):**
 
 $$
+
 Z = \frac{R - \mu_R}{\sigma_R}
+
 $$
 
 Under $H_0$, $Z \xrightarrow{d} \mathcal{N}(0,1)$ for large $N$.
@@ -59,7 +73,9 @@ Under $H_0$, $Z \xrightarrow{d} \mathcal{N}(0,1)$ for large $N$.
 **p-value (two-sided):**
 
 $$
+
 p = 2 \, \Phi(-|Z|)
+
 $$
 
 ### Implementation
@@ -171,13 +187,17 @@ Observations exactly equal to $m_0$ (or tied pairs where $d_i = 0$) are **exclud
 ### Test Statistic
 
 $$
+
 T = \sum_{i=1}^{N} \operatorname{sign}(d_i) \quad \text{(excluding ties)}
+
 $$
 
 Equivalently, let $\hat{p} = n_+ / n$ where $n = n_+ + n_-$. The normal approximation gives:
 
 $$
+
 Z = \frac{\hat{p} - 0.5}{\sqrt{0.25 / n}}
+
 $$
 
 ### Example Data
@@ -279,11 +299,15 @@ The **Wilcoxon signed-rank test** extends the sign test by considering not only 
 For paired data with differences $d_i = x_i - y_i$:
 
 $$
+
 H_0: \text{The median of } d_i \text{ is zero}
+
 $$
 
 $$
+
 H_a: \text{The median of } d_i \text{ is not zero (two-sided)}
+
 $$
 
 ### Test Statistic
@@ -293,7 +317,9 @@ $$
 3. The test statistic is:
 
 $$
+
 T = \sum_{i=1}^{N} \operatorname{sign}(d_i) \times \text{Rank}(|d_i|)
+
 $$
 
 This gives more weight to observations that deviate further from zero, unlike the sign test which treats all non-zero differences equally.

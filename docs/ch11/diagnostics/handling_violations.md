@@ -35,7 +35,9 @@ Transformations can simultaneously address violations of normality and homosceda
 Used when the data is positively skewed or when the variance increases with the mean:
 
 $$
+
 Y' = \log(Y) \quad \text{or} \quad Y' = \log(Y + c) \text{ if } Y \text{ contains zeros}
+
 $$
 
 ```python
@@ -49,7 +51,9 @@ data['log_response'] = np.log(data['response'])
 Useful for count data that follow a Poisson-like distribution:
 
 $$
+
 Y' = \sqrt{Y}
+
 $$
 
 ```python
@@ -61,7 +65,9 @@ data['sqrt_response'] = np.sqrt(data['response'])
 A family of power transformations parameterized by $\lambda$ that can be optimized to achieve the best approximation to normality:
 
 $$
+
 Y'(\lambda) = \begin{cases} \frac{Y^\lambda - 1}{\lambda} & \text{if } \lambda \neq 0 \\ \log(Y) & \text{if } \lambda = 0 \end{cases}
+
 $$
 
 ```python

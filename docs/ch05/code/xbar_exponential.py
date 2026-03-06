@@ -1,5 +1,15 @@
+"""
+Xbar Exponential
+================
+Educational script demonstrating xbar exponential.
+"""
+
 import matplotlib.pyplot as plt
 import numpy as np
+
+# =============================================================================
+# Main
+# =============================================================================
 
 # Set a random seed for reproducibility
 np.random.seed(1)

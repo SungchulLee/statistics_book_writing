@@ -7,7 +7,9 @@ Residual analysis is a critical step in evaluating how well a linear regression 
 A residual is the difference between an observed value and its corresponding predicted value:
 
 $$
+
 e_i = y_i - \hat{y}_i
+
 $$
 
 where $y_i$ is the observed value and $\hat{y}_i$ is the predicted value from the regression model.

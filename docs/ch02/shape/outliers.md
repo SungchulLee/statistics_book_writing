@@ -43,7 +43,9 @@ Data points beyond $1.5 \times \text{IQR}$ from $Q_1$ or $Q_3$ are flagged as ou
 The Z-score measures how many standard deviations a data point is from the mean. Points with $|Z| > 3$ are typically considered outliers:
 
 $$
+
 Z = \frac{x - \mu}{\sigma}
+
 $$
 
 ### IQR Method
@@ -65,7 +67,9 @@ Cook's Distance identifies influential data points that have a large impact on r
 The five-number summary provides a concise description that naturally highlights potential outliers through the box plot:
 
 $$
+
 \text{Min} \quad Q_1 \quad \text{Median} \quad Q_3 \quad \text{Max}
+
 $$
 
 ```python

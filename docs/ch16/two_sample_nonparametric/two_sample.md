@@ -45,8 +45,7 @@ $$U = \min(U_1, U_2)$$
 - If the p-value is small (e.g., $p < 0.05$): Reject $H_0$; the two groups have significantly different distributions.
 - If the p-value is large: Fail to reject $H_0$; no evidence of a difference.
 
-### Which Group is Larger if $H_0$ is Rejected?
-
+### Which Group is Larger if H_0 is Rejected?
 Compare the **mean rank** of each group. A higher mean rank indicates that the values in that group tend to be larger.
 
 ### Python Implementation

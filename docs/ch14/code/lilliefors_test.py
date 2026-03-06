@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""
+Lilliefors Test
+===============
+Educational script demonstrating lilliefors test.
+"""
+
 # ======================================================================
 # 33_lillie_01_normal_basic_bootstrap.py
 # ======================================================================

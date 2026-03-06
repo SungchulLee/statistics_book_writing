@@ -13,6 +13,7 @@ The bootstrap method for constructing confidence intervals follows these steps:
 3. **Extract quantiles**: Use the percentiles of bootstrap statistics to form the interval
 
 For an $\alpha$ significance level, the confidence interval is:
+
 $$[\hat{F}_{\alpha/2}^*, \, \hat{F}_{1-\alpha/2}^*]$$
 
 where $\hat{F}_q^*$ denotes the $q$-th quantile of the bootstrap distribution.

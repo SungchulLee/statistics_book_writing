@@ -10,6 +10,10 @@ import numpy as np
 import pandas as pd
 from scipy import stats
 
+# =============================================================================
+# Main
+# =============================================================================
+
 
 def load_and_split_data(url, test_ratio=0.3):
     """Load dataset and perform train/test split."""

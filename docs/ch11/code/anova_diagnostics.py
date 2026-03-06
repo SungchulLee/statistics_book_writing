@@ -147,6 +147,10 @@ def run_full_diagnostics(data, response_col, group_col, title="ANOVA Diagnostics
 def main():
     # --- Example 1: Iris Dataset ---
     import seaborn as sns
+
+# =============================================================================
+# Main
+# =============================================================================
     iris = sns.load_dataset("iris")
     run_full_diagnostics(iris, 'sepal_length', 'species',
                          title="ANOVA: Iris Sepal Length by Species")

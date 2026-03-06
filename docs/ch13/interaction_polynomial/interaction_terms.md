@@ -19,7 +19,9 @@ When interactions are present but not modeled, the resulting regression may be m
 An interaction between two variables $X_1$ and $X_2$ is added to the regression model as a product term:
 
 $$
+
 Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \beta_3 (X_1 \times X_2) + \epsilon
+
 $$
 
 where:
@@ -57,7 +59,9 @@ Consider a study on the effect of study hours and sleep on student exam performa
 An interaction term between study hours and sleep might reveal that the benefit of additional study hours **diminishes** when sleep is inadequate. Formally:
 
 $$
+
 \text{Score} = \beta_0 + \beta_1 \cdot \text{StudyHours} + \beta_2 \cdot \text{Sleep} + \beta_3 \cdot (\text{StudyHours} \times \text{Sleep}) + \epsilon
+
 $$
 
 If $\beta_3 > 0$, more sleep amplifies the benefit of studying. If $\beta_3 < 0$, studying more provides diminishing returns for students who sleep less.
@@ -69,13 +73,17 @@ If $\beta_3 > 0$, more sleep amplifies the benefit of studying. If $\beta_3 < 0$
 A classic example from advertising analytics examines how TV and Radio advertising spending affect Sales. The main effects model assumes each medium has an independent effect:
 
 $$
+
 \text{Sales} = \beta_0 + \beta_1 \cdot \text{TV} + \beta_2 \cdot \text{Radio} + \epsilon
+
 $$
 
 However, there may be a **synergistic effect**: advertising on both TV and Radio together might be more effective than the sum of their individual effects. Adding an interaction term captures this:
 
 $$
+
 \text{Sales} = \beta_0 + \beta_1 \cdot \text{TV} + \beta_2 \cdot \text{Radio} + \beta_3 \cdot (\text{TV} \times \text{Radio}) + \epsilon
+
 $$
 
 **Interpretation**:
@@ -100,7 +108,9 @@ print(model.summary())
 Consider a model examining how balance (credit card debt) depends on income and student status. A **qualitative variable** (student: yes/no) can interact with a continuous variable (income):
 
 $$
+
 \text{Balance} = \beta_0 + \beta_1 \cdot \text{Income} + \beta_2 \cdot \text{Student} + \beta_3 \cdot (\text{Income} \times \text{Student}) + \epsilon
+
 $$
 
 Where Student is coded as 1 (yes) or 0 (no).
@@ -129,7 +139,9 @@ Visual representation of such interactions often shows two separate regression l
 Interactions are not limited to pairs of variables. A **three-way interaction** among $X_1$, $X_2$, and $X_3$ takes the form:
 
 $$
+
 Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \beta_3 X_3 + \beta_4 X_1 X_2 + \beta_5 X_1 X_3 + \beta_6 X_2 X_3 + \beta_7 X_1 X_2 X_3 + \epsilon
+
 $$
 
 In practice, three-way and higher-order interactions are difficult to interpret and are used sparingly. Most applied work focuses on two-way interactions.

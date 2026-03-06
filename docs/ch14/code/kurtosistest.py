@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""
+Kurtosistest
+============
+Educational script demonstrating kurtosistest.
+"""
+
 # ======================================================================
 # 29_kurt_01_basic_kurtosistest.py
 # ======================================================================

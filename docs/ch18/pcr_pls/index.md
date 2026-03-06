@@ -18,55 +18,52 @@ Dimensionality reduction is valuable when:
 
 ### Principal Components Regression (PCR)
 
-**Unsupervised dimensionality reduction**: Constructs principal components by maximizing variance in the predictor space $X$, then regresses the response on these components.
-
-**Algorithm**:
+### **Unsupervised dimensionality reduction**: Constructs principal components by maximizing variance in the predictor space X, then regresses the response on these components.
+### **Algorithm**:
 1. Standardize predictors
 2. Perform PCA to extract principal components
 3. Select optimal number of components via cross-validation
 4. Regress response on selected components
 
-**Advantages**:
+### **Advantages**:
 - Eliminates multicollinearity (components are uncorrelated)
 - Handles $p > n$ settings naturally
 - Simple, well-understood method
 - PCA components have clear interpretation in terms of variance
 
-**Disadvantages**:
+### **Disadvantages**:
 - Unsupervised: PCA maximizes $X$ variance, not covariance with $y$
 - May require many components to capture response variation
 - Loss of original feature interpretability
 - Components are linear combinations of all predictors
 
-**When to use**: When predictor variance aligns with response variation, or as a baseline for comparison.
+### **When to use**: When predictor variance aligns with response variation, or as a baseline for comparison.
 
 ---
 
 ### Partial Least Squares (PLS)
 
-**Supervised dimensionality reduction**: Constructs components by maximizing covariance between predictors and response, balancing explaining variance in $X$ with predicting $y$.
-
-**Algorithm**:
+### **Supervised dimensionality reduction**: Constructs components by maximizing covariance between predictors and response, balancing explaining variance in X with predicting y.
+### **Algorithm**:
 1. Standardize predictors and response
 2. Iteratively construct components that maximize covariance of $X$ with $y$
 3. Select optimal number of components via cross-validation
 4. Regress response on selected components
 
-**Advantages**:
+### **Advantages**:
 - Supervised: Components are chosen to predict response
 - Often requires fewer components than PCR (more efficient)
 - Excellent for high-dimensional prediction problems
 - Components respect covariance structure between $X$ and $y$
 - Originated in chemometrics; proven in practice
 
-**Disadvantages**:
+### **Disadvantages**:
 - Components still lack direct interpretability
 - Theory less developed than OLS (fewer asymptotic results)
 - Standardization required and can affect results
 - Must tune number of components
 
-**When to use**: When prediction accuracy is the goal and $p$ is large; typically outperforms PCR.
-
+### **When to use**: When prediction accuracy is the goal and p is large; typically outperforms PCR.
 ---
 
 ## Comparison: PCR vs PLS
@@ -80,7 +77,7 @@ Dimensionality reduction is valuable when:
 | **When it excels** | Variance in $X$ important | Predicting $y$ is goal |
 | **Interpretability** | Same loss as PLS | Same loss as PCR |
 
-**Rule of thumb**: In practice, PLS often outperforms PCR because its supervised component selection aligns better with the prediction objective.
+### **Rule of thumb**: In practice, PLS often outperforms PCR because its supervised component selection aligns better with the prediction objective.
 
 ---
 
@@ -94,7 +91,7 @@ Dimensionality reduction is valuable when:
 | **PCR** | Dimension reduction | N/A | Low | Excellent |
 | **PLS** | Dimension reduction | N/A | Low | Excellent |
 
-**Decision tree**:
+### **Decision tree**:
 - **Need feature selection?** → Lasso or Elastic Net
 - **Want all features + stability?** → Ridge
 - **$p$ very large or $p > n$?** → PCR or PLS
@@ -121,7 +118,7 @@ See `code/pcr_pls_examples.py` for:
 
 ### When to Use PCR or PLS
 
-**Choose PCR/PLS if**:
+### **Choose PCR/PLS if**:
 - $p > n$ (more predictors than observations)
 - Multicollinearity is severe
 - $p$ is large (50+ predictors) even if $p < n$
@@ -129,7 +126,7 @@ See `code/pcr_pls_examples.py` for:
 - Prediction accuracy is paramount
 - Interpretability of individual coefficients is not critical
 
-**Choose Ridge/Lasso if**:
+### **Choose Ridge/Lasso if**:
 - Feature selection is important
 - You need to understand which predictors matter
 - $p$ is moderate (< 50) and $p < n$
@@ -176,4 +173,4 @@ Dimensionality reduction methods (PCR and PLS) offer powerful alternatives to sh
 2. **Multicollinearity is severe** across many predictors
 3. **Prediction accuracy** is prioritized over interpretability
 
-**Key distinction**: PLS's supervised component construction usually outperforms PCR's unsupervised approach, making PLS the preferred choice when prediction is the goal. Choose PCR only when variance in predictor space (not covariance with response) is the primary concern.
+### **Key distinction**: PLS's supervised component construction usually outperforms PCR's unsupervised approach, making PLS the preferred choice when prediction is the goal. Choose PCR only when variance in predictor space (not covariance with response) is the primary concern.

@@ -11,56 +11,72 @@ Starting from $\partial J/\partial \mathbf{Z}^o = \hat{\mathbf{Y}}-\mathbf{Y}$,
 the chain rule gives:
 
 $$
+
 \underset{100 \times 10}{\frac{\partial J}{\partial \mathbf{W}^o}}
 = \underset{100 \times n}{\mathbf{H}^T}\;
   \bigl(\underset{n \times 10}{\hat{\mathbf{Y}}-\mathbf{Y}}\bigr)
+
 $$
 
 $$
+
 \underset{1 \times 10}{\frac{\partial J}{\partial \mathbf{b}^o}}
 = \underset{1 \times n}{\mathbf{1}}\;
   \bigl(\underset{n \times 10}{\hat{\mathbf{Y}}-\mathbf{Y}}\bigr)
+
 $$
 
 ??? note "Element-wise proof for $\partial J/\partial \mathbf{W}^o$"
     Since $z_{ic}^o = \sum_\alpha h_{i\alpha}\,w_{\alpha c}^o + b_{1c}^o$:
 
     $$
+
     \frac{\partial J}{\partial w_{\alpha c}^o}
     = \sum_i \frac{\partial J}{\partial z_{ic}^o}\,\frac{\partial z_{ic}^o}{\partial w_{\alpha c}^o}
     = \sum_i (\hat{y}_{ic}-y_{ic})\,h_{i\alpha}
     = \bigl[\mathbf{H}^T(\hat{\mathbf{Y}}-\mathbf{Y})\bigr]_{\alpha c}
+
     $$
 
 ??? note "Element-wise proof for $\partial J/\partial \mathbf{b}^o$"
+
     $$
+
     \frac{\partial J}{\partial b_{1c}^o}
     = \sum_i (\hat{y}_{ic}-y_{ic})
     = \bigl[\mathbf{1}(\hat{\mathbf{Y}}-\mathbf{Y})\bigr]_{1c}
+
     $$
 
 ### Backpropagation to the Hidden Layer
 
 $$
+
 \underset{n \times 100}{\frac{\partial J}{\partial \mathbf{H}}}
 = \bigl(\hat{\mathbf{Y}}-\mathbf{Y}\bigr)\;\mathbf{W}^{oT}
+
 $$
 
 ??? note "Element-wise proof"
+
     $$
+
     \frac{\partial J}{\partial h_{i\alpha}}
     = \sum_c (\hat{y}_{ic}-y_{ic})\,w_{\alpha c}^o
     = \sum_c (\hat{y}_{ic}-y_{ic})\,w_{c\alpha}^{oT}
     = \bigl[(\hat{\mathbf{Y}}-\mathbf{Y})\,\mathbf{W}^{oT}\bigr]_{i\alpha}
+
     $$
 
 Passing through the logistic activation
 $\mathbf{H}=\operatorname{logistic}(\mathbf{Z}^h)$:
 
 $$
+
 \underset{n \times 100}{\frac{\partial J}{\partial \mathbf{Z}^h}}
 = \mathbf{H}\odot(1-\mathbf{H})\odot
   \bigl[(\hat{\mathbf{Y}}-\mathbf{Y})\,\mathbf{W}^{oT}\bigr]
+
 $$
 
 where $\odot$ denotes element-wise (Hadamard) multiplication.
@@ -68,17 +84,21 @@ where $\odot$ denotes element-wise (Hadamard) multiplication.
 ### Hidden-Layer Gradients
 
 $$
+
 \underset{784 \times 100}{\frac{\partial J}{\partial \mathbf{W}^h}}
 = \mathbf{X}^T\;
   \bigl[\mathbf{H}\odot(1-\mathbf{H})\odot
         (\hat{\mathbf{Y}}-\mathbf{Y})\,\mathbf{W}^{oT}\bigr]
+
 $$
 
 $$
+
 \underset{1 \times 100}{\frac{\partial J}{\partial \mathbf{b}^h}}
 = \mathbf{1}\;
   \bigl[\mathbf{H}\odot(1-\mathbf{H})\odot
         (\hat{\mathbf{Y}}-\mathbf{Y})\,\mathbf{W}^{oT}\bigr]
+
 $$
 
 ## Implementation: NumPy from Scratch

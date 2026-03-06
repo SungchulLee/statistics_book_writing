@@ -9,7 +9,9 @@ The **Lasso** (Least Absolute Shrinkage and Selection Operator), introduced by T
 ## Lasso Formulation
 
 $$
+
 \hat{\boldsymbol{\beta}}_{\text{lasso}} = \arg\min_{\boldsymbol{\beta}} \left\{ \frac{1}{2n}\|\mathbf{y} - \mathbf{X}\boldsymbol{\beta}\|^2 + \lambda \|\boldsymbol{\beta}\|_1 \right\}
+
 $$
 
 where $\|\boldsymbol{\beta}\|_1 = \sum_{j=1}^p |\beta_j|$ is the L1 norm.
@@ -17,7 +19,9 @@ where $\|\boldsymbol{\beta}\|_1 = \sum_{j=1}^p |\beta_j|$ is the L1 norm.
 The equivalent constrained form is:
 
 $$
+
 \min_{\boldsymbol{\beta}} \|\mathbf{y} - \mathbf{X}\boldsymbol{\beta}\|^2 \quad \text{subject to} \quad \sum_{j=1}^p |\beta_j| \leq t
+
 $$
 
 ## Why L1 Produces Sparsity: Geometric Argument
@@ -38,13 +42,17 @@ This geometric argument explains the fundamental difference:
 Unlike the L2 penalty, the L1 norm $|\beta_j|$ is **not differentiable** at $\beta_j = 0$. We use the **subdifferential**:
 
 $$
+
 \partial |\beta_j| = \begin{cases} \{+1\} & \beta_j > 0 \\ [-1, +1] & \beta_j = 0 \\ \{-1\} & \beta_j < 0 \end{cases}
+
 $$
 
 For the special case of **orthonormal design** ($\mathbf{X}^\top\mathbf{X} = n\mathbf{I}$), the Lasso solution has a closed form:
 
 $$
+
 \hat{\beta}_j^{\text{lasso}} = S_\lambda(\hat{\beta}_j^{\text{OLS}}) = \text{sign}(\hat{\beta}_j^{\text{OLS}})\max(|\hat{\beta}_j^{\text{OLS}}| - \lambda, 0)
+
 $$
 
 This is the **soft-thresholding** operator: coefficients within $[-\lambda, \lambda]$ are set to exactly zero, and larger coefficients are shrunk by $\lambda$.
@@ -52,7 +60,9 @@ This is the **soft-thresholding** operator: coefficients within $[-\lambda, \lam
 Compare with ridge (orthonormal case):
 
 $$
+
 \hat{\beta}_j^{\text{ridge}} = \frac{\hat{\beta}_j^{\text{OLS}}}{1 + \lambda}
+
 $$
 
 Ridge applies proportional shrinkage; Lasso applies translational shrinkage with hard cutoff.
@@ -76,17 +86,20 @@ Each coordinate update has the soft-thresholding form, making the algorithm effi
 As $\lambda$ varies from $\lambda_{\max}$ (where all coefficients are zero) down to 0 (OLS), coefficients enter the model one at a time. The path $\hat{\beta}_j(\lambda)$ is **piecewise linear** in $\lambda$ (the LARS result of Efron et al., 2004).
 
 $$
+
 \lambda_{\max} = \frac{1}{n}\|\mathbf{X}^\top\mathbf{y}\|_\infty = \max_j \left|\frac{1}{n}\sum_{i=1}^n x_{ij}y_i\right|
+
 $$
 
 For $\lambda \geq \lambda_{\max}$, the Lasso solution is $\hat{\boldsymbol{\beta}} = \mathbf{0}$.
 
-## Choosing $\lambda$
-
+## Choosing lambda
 As with ridge, $\lambda$ is selected by **cross-validation**:
 
 $$
+
 \hat{\lambda} = \arg\min_\lambda \text{CV}(\lambda)
+
 $$
 
 The standard practice is to compute the full solution path on a grid of $\lambda$ values (typically 100 values on a log scale from $\lambda_{\max}$ to $0.001 \cdot \lambda_{\max}$), compute CV error at each, and select the optimal $\lambda$.
@@ -114,7 +127,9 @@ The standard practice is to compute the full solution path on a grid of $\lambda
 The Lasso is the MAP estimator under a **Laplace (double-exponential) prior**:
 
 $$
+
 \beta_j \overset{\text{iid}}{\sim} \text{Laplace}(0, 1/\lambda)
+
 $$
 
 The Laplace distribution has a sharp peak at zero and heavier tails than the Gaussian, which encourages exact sparsity in the MAP estimate.

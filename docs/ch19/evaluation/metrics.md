@@ -117,8 +117,7 @@ Lower log-loss indicates better-calibrated probabilities. A perfect model has lo
 | Probability calibration matters | Log-loss, Brier score |
 | Comparing models overall | AUC |
 
-## McFadden's Pseudo-$R^2$
-
+## McFadden's Pseudo-R-squared
 Unlike linear regression, logistic regression has no natural $R^2$. **McFadden's pseudo-$R^2$** provides a rough analog:
 
 $$R^2_{\text{McFadden}} = 1 - \frac{\ell(\hat{\boldsymbol{\beta}})}{\ell(\hat{\beta}_0)}$$

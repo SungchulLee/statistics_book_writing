@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""
+Independence Manual
+===================
+Educational script demonstrating independence manual.
+"""
+
 # ======================================================================
 # 17_independence_01_manual_expected_with_plot.py
 # ======================================================================

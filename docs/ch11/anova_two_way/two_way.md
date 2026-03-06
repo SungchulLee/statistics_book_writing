@@ -97,7 +97,9 @@ Both **Linear Regression** and **Two-Way ANOVA** evaluate the effects of two ind
 In linear regression, when there are two continuous independent variables, $x_1$ and $x_2$, the model is expressed as:
 
 $$
+
 y = \alpha + \beta_1 x_1 + \beta_2 x_2 + \gamma x_1 x_2
+
 $$
 
 where $\alpha$ is the intercept, $\beta_1$ and $\beta_2$ represent the effects of $x_1$ and $x_2$ on $y$, and $\gamma$ represents the interaction effect between $x_1$ and $x_2$.
@@ -111,7 +113,9 @@ The hypotheses for this model are:
 In contrast, **Two-Way ANOVA** deals with categorical independent variables (factors), and the model is represented as:
 
 $$
+
 y = \alpha + \sum_{i=1}^{a} \beta^{(1)}_i 1_{C^{(1)}_i} + \sum_{j=1}^{b} \beta^{(2)}_j 1_{C^{(2)}_j} + \sum_{i=1}^{a} \sum_{j=1}^{b} \beta_{ij} 1_{C^{(1)}_i C^{(2)}_j} + \text{noise}
+
 $$
 
 where $C^{(1)}_i$ are the $a$ levels of Factor A, $C^{(2)}_j$ are the $b$ levels of Factor B, $1_{C^{(1)}_i}$ and $1_{C^{(2)}_j}$ are indicator functions, $\beta^{(1)}_i$ represents the effect of Factor A (Main Effect A), $\beta^{(2)}_j$ represents the effect of Factor B (Main Effect B), and $\beta_{ij}$ represents the interaction effect.
@@ -137,7 +141,9 @@ In a **Two-Way ANOVA without Replication**, each combination of the levels of th
 **Decomposition:**
 
 $$
+
 SST=SSA+SSB+SSAB
+
 $$
 
 ### Two-Way ANOVA with Replication
@@ -154,7 +160,9 @@ In a **Two-Way ANOVA with Replication**, there are **multiple observations** for
 **Decomposition:**
 
 $$
+
 SST=SSA+SSB+SSAB+SSE
+
 $$
 
 ### Summary Comparison

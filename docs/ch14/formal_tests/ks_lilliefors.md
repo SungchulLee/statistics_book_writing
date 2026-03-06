@@ -20,7 +20,9 @@ We compute the Kolmogorov-Smirnov test statistic $D$ based on the largest absolu
 2. **Compute the Empirical CDF**: For each ordered data point $X_{(i)}$, define the ECDF as the proportion of data points less than or equal to $X_{(i)}$:
 
     $$
+
     F_{\text{emp}}(X_{(i)}) = \frac{i}{n}
+
     $$
 
     where $n$ is the total sample size and $i$ is the rank of the data point.
@@ -28,7 +30,9 @@ We compute the Kolmogorov-Smirnov test statistic $D$ based on the largest absolu
 3. **Compute the Theoretical CDF**: The theoretical CDF for the normal distribution $F_{\text{norm}}(X_{(i)})$ evaluated at $X_{(i)}$ is:
 
     $$
+
     F_{\text{norm}}(X_{(i)}) = \Phi\left( \frac{X_{(i)} - \mu}{\sigma} \right)
+
     $$
 
     where $\Phi$ is the standard normal CDF, and $\mu$ and $\sigma$ are the sample mean and standard deviation, respectively.
@@ -36,7 +40,9 @@ We compute the Kolmogorov-Smirnov test statistic $D$ based on the largest absolu
 4. **Test Statistic $D$**: The K-S test statistic $D$ is the maximum absolute difference between the empirical CDF and the theoretical CDF at any sample point:
 
     $$
+
     D = \max_i \left| F_{\text{emp}}(X_{(i)}) - F_{\text{norm}}(X_{(i)}) \right|
+
     $$
 
     In other words, $D$ measures the largest vertical distance between the two CDFs over the data range.

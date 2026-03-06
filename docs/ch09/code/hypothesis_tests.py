@@ -130,60 +130,63 @@ print("=" * 60)
 
 from statsmodels.stats.power import TTestPower, TTestIndPower
 
-# One-sample: How many subjects to detect a 5-point difference?
-analysis = TTestPower()
-effect_size = 5 / 15  # Cohen's d = (μ₁ - μ₀) / σ
-n_needed = analysis.solve_power(effect_size=effect_size, alpha=0.05,
-                                 power=0.80, alternative='two-sided')
-print(f"One-sample: effect size d = {effect_size:.3f}")
-print(f"  n needed for 80% power: {int(np.ceil(n_needed))}")
 
-# Power for a given n
-power = analysis.power(effect_size=effect_size, nobs=50, alpha=0.05,
-                       alternative='two-sided')
-print(f"  Power with n=50: {power:.3f}")
 
-# Two-sample: How many per group?
-analysis2 = TTestIndPower()
-n_each = analysis2.solve_power(effect_size=0.5, alpha=0.05, power=0.80,
-                                ratio=1.0, alternative='two-sided')
-print(f"\nTwo-sample: medium effect d = 0.5")
-print(f"  n per group for 80% power: {int(np.ceil(n_each))}")
+if __name__ == "__main__":
+    # One-sample: How many subjects to detect a 5-point difference?
+    analysis = TTestPower()
+    effect_size = 5 / 15  # Cohen's d = (μ₁ - μ₀) / σ
+    n_needed = analysis.solve_power(effect_size=effect_size, alpha=0.05,
+                                     power=0.80, alternative='two-sided')
+    print(f"One-sample: effect size d = {effect_size:.3f}")
+    print(f"  n needed for 80% power: {int(np.ceil(n_needed))}")
 
-# Power curve
-print("\nPower curve (one-sample, d=0.33):")
-for n in [10, 20, 30, 50, 75, 100, 150, 200]:
-    pwr = analysis.power(effect_size=effect_size, nobs=n, alpha=0.05)
-    bar = "█" * int(pwr * 40)
-    print(f"  n={n:>4}: power={pwr:.3f} {bar}")
+    # Power for a given n
+    power = analysis.power(effect_size=effect_size, nobs=50, alpha=0.05,
+                           alternative='two-sided')
+    print(f"  Power with n=50: {power:.3f}")
 
-# =============================================================================
-# 6. CI–Test Duality
-# =============================================================================
+    # Two-sample: How many per group?
+    analysis2 = TTestIndPower()
+    n_each = analysis2.solve_power(effect_size=0.5, alpha=0.05, power=0.80,
+                                    ratio=1.0, alternative='two-sided')
+    print(f"\nTwo-sample: medium effect d = 0.5")
+    print(f"  n per group for 80% power: {int(np.ceil(n_each))}")
 
-print("\n" + "=" * 60)
-print("6. CI-TEST DUALITY DEMONSTRATION")
-print("=" * 60)
+    # Power curve
+    print("\nPower curve (one-sample, d=0.33):")
+    for n in [10, 20, 30, 50, 75, 100, 150, 200]:
+        pwr = analysis.power(effect_size=effect_size, nobs=n, alpha=0.05)
+        bar = "█" * int(pwr * 40)
+        print(f"  n={n:>4}: power={pwr:.3f} {bar}")
 
-data = np.array([52, 48, 55, 50, 47, 53, 49, 51, 54, 46])
-n = len(data)
-xbar = data.mean()
-s = data.std(ddof=1)
-alpha = 0.05
+    # =============================================================================
+    # 6. CI–Test Duality
+    # =============================================================================
 
-# 95% CI
-t_c = stats.t.ppf(1 - alpha/2, df=n-1)
-me = t_c * s / np.sqrt(n)
-ci = (xbar - me, xbar + me)
-print(f"95% CI: ({ci[0]:.2f}, {ci[1]:.2f})")
+    print("\n" + "=" * 60)
+    print("6. CI-TEST DUALITY DEMONSTRATION")
+    print("=" * 60)
 
-# Test various μ₀ values
-for mu0 in [48, 49, 50, 51, 52, 53]:
-    t_stat, p_val = stats.ttest_1samp(data, mu0)
-    in_ci = ci[0] <= mu0 <= ci[1]
-    reject = p_val < alpha
-    print(f"  μ₀={mu0}: p={p_val:.4f}, "
-          f"{'reject' if reject else 'fail to reject':>15}, "
-          f"{'in CI' if in_ci else 'NOT in CI':>10}")
+    data = np.array([52, 48, 55, 50, 47, 53, 49, 51, 54, 46])
+    n = len(data)
+    xbar = data.mean()
+    s = data.std(ddof=1)
+    alpha = 0.05
 
-print("\nDuality: reject H₀ ⟺ μ₀ is NOT in the CI")
+    # 95% CI
+    t_c = stats.t.ppf(1 - alpha/2, df=n-1)
+    me = t_c * s / np.sqrt(n)
+    ci = (xbar - me, xbar + me)
+    print(f"95% CI: ({ci[0]:.2f}, {ci[1]:.2f})")
+
+    # Test various μ₀ values
+    for mu0 in [48, 49, 50, 51, 52, 53]:
+        t_stat, p_val = stats.ttest_1samp(data, mu0)
+        in_ci = ci[0] <= mu0 <= ci[1]
+        reject = p_val < alpha
+        print(f"  μ₀={mu0}: p={p_val:.4f}, "
+              f"{'reject' if reject else 'fail to reject':>15}, "
+              f"{'in CI' if in_ci else 'NOT in CI':>10}")
+
+    print("\nDuality: reject H₀ ⟺ μ₀ is NOT in the CI")

@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""
+Exponential Pdf
+===============
+Educational script demonstrating exponential pdf.
+"""
+
 # ======================================
 # 01_scipy_stats_09_exponential_pdf.py
 # ======================================
@@ -20,23 +26,26 @@ import matplotlib.pyplot as plt
 import numpy as np
 import scipy.stats as stats
 
-# Rate parameters to compare
-lambdas = [0.5, 1.0, 2.0]
-x = np.linspace(0, 6, 300)
 
-fig, ax = plt.subplots(figsize=(12, 4))
 
-for lam in lambdas:
-    # SciPy uses scale = 1/λ for the exponential distribution.
-    rv = stats.expon(scale=1 / lam)
-    ax.plot(x, rv.pdf(x), label=rf'$\lambda={lam}$')
+if __name__ == "__main__":
+    # Rate parameters to compare
+    lambdas = [0.5, 1.0, 2.0]
+    x = np.linspace(0, 6, 300)
 
-ax.set_xlabel('x')
-ax.set_ylabel('f(x)')
-ax.set_title('Exponential Distribution – PDF')
-ax.legend()
-ax.spines['top'].set_visible(False)
-ax.spines['right'].set_visible(False)
+    fig, ax = plt.subplots(figsize=(12, 4))
 
-plt.tight_layout()
-plt.show()
+    for lam in lambdas:
+        # SciPy uses scale = 1/λ for the exponential distribution.
+        rv = stats.expon(scale=1 / lam)
+        ax.plot(x, rv.pdf(x), label=rf'$\lambda={lam}$')
+
+    ax.set_xlabel('x')
+    ax.set_ylabel('f(x)')
+    ax.set_title('Exponential Distribution – PDF')
+    ax.legend()
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+
+    plt.tight_layout()
+    plt.show()

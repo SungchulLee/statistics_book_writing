@@ -5,7 +5,9 @@
 Let $x^{(i)}$ be $m$ i.i.d. samples from $B(p)$. Then, $p$ can be estimated by $\hat{p}$ where:
 
 $$
+
 \hat{p} = \frac{\sum_{i=1}^m x^{(i)}}{m}
+
 $$
 
 ## Derivation
@@ -13,31 +15,41 @@ $$
 ### Data
 
 $$
+
 \{x^{(i)} : i = 1, \ldots, m\}
+
 $$
 
 ### Model
 
 $$
+
 x^{(i)} \sim B(p)
+
 $$
 
 ### Likelihood Function
 
 $$
+
 L(p) = \prod_{i=1}^m p^{x^{(i)}} (1 - p)^{1 - x^{(i)}}
+
 $$
 
 ### Log-Likelihood Function
 
 $$
+
 \ell(p) = \sum_{i=1}^m x^{(i)} \log(p) + (1 - x^{(i)}) \log(1 - p)
+
 $$
 
 ### Cost Function
 
 $$
+
 J(p) = -\sum_{i=1}^m x^{(i)} \log(p) + (1 - x^{(i)}) \log(1 - p)
+
 $$
 
 !!! note "Connection to Cross-Entropy"
@@ -46,16 +58,19 @@ $$
 ### Maximum Likelihood Principle
 
 $$
+
 \text{argmax}_{p}\; L
 \quad\Leftrightarrow\quad
 \text{argmax}_{p}\; \ell
 \quad\Leftrightarrow\quad
 \text{argmin}_{p}\; J
+
 $$
 
 ### MLE Solution
 
 $$
+
 \begin{array}{llcll}
 \displaystyle\frac{\partial J}{\partial p} = 0
 &\Rightarrow&
@@ -63,6 +78,7 @@ $$
 &\Rightarrow&
 \displaystyle\hat{p} = \frac{\sum_{i=1}^m x^{(i)}}{m}
 \end{array}
+
 $$
 
 ## Python Implementation: Log-Likelihood and MLE

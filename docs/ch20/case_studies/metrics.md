@@ -6,7 +6,9 @@ The simplest multiclass metric counts the fraction of correct
 predictions:
 
 $$
+
 \text{Accuracy} = \frac{1}{n}\sum_{i=1}^{n}\mathbf{1}[\hat{y}_i = y_i]
+
 $$
 
 Accuracy works well when classes are roughly balanced but can be

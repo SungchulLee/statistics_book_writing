@@ -12,12 +12,10 @@ A test with high power is more likely to detect a true effect when one exists. R
 
 Four key factors determine the power of a test:
 
-### 1. Significance Level ($\alpha$)
-
+### 1. Significance Level (alpha)
 Increasing $\alpha$ (e.g., from 0.01 to 0.05) makes it easier to reject $H_0$, thus increasing power. However, this also increases the risk of a Type I error.
 
-### 2. Sample Size ($n$)
-
+### 2. Sample Size (n)
 Larger sample sizes increase power because they reduce the standard error of the test statistic, making it easier to detect true differences. This is often the most practical lever for increasing power.
 
 ### 3. Effect Size
@@ -27,8 +25,7 @@ The effect size measures the magnitude of the true difference or effect. Larger 
 - **Cohen's $d$** for comparing means: $d = \frac{\mu_1 - \mu_0}{\sigma}$
 - **Proportion difference** for comparing proportions
 
-### 4. Population Variability ($\sigma$)
-
+### 4. Population Variability (sigma)
 Lower variability in the population makes it easier to detect true effects, increasing power. While researchers cannot usually control population variability, they can reduce measurement error through better study design.
 
 ## Power Analysis in Practice

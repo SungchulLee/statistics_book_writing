@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""
+Weibull Pdf
+===========
+Educational script demonstrating weibull pdf.
+"""
+
 # ======================================================================
 # 04_weibull_01_pdf_and_hazard.py
 # ======================================================================

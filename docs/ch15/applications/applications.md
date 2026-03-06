@@ -11,13 +11,17 @@ In regression analysis, one of the key assumptions is **homoscedasticity** — t
 **Homoscedasticity:** The variance of the residuals is constant across all levels of the independent variable(s):
 
 $$
+
 \text{Var}(\epsilon_i) = \sigma^2 \quad \text{for all } i
+
 $$
 
 **Heteroscedasticity:** The variance of the residuals varies with the independent variable(s):
 
 $$
+
 \text{Var}(\epsilon_i) = f(x_i) \quad \text{for all } i
+
 $$
 
 Heteroscedasticity can lead to inefficiencies in the estimation of regression coefficients and incorrect p-values, which may affect hypothesis testing. Therefore, it is important to test for heteroscedasticity before proceeding with regression analysis.
@@ -70,13 +74,17 @@ If heteroscedasticity is detected, possible solutions include:
 **1. Transforming the Dependent Variable:** Applying a log or square root transformation may stabilize the variance:
 
 $$
+
 Y' = \log(Y) \quad \text{or} \quad Y' = \sqrt{Y}
+
 $$
 
 **2. Weighted Least Squares (WLS):** Assigning weights to observations based on the estimated variance gives more importance to observations with smaller variances:
 
 $$
+
 \hat{\beta} = (X^T W X)^{-1} X^T W Y
+
 $$
 
 **3. Robust Standard Errors:** Using robust standard errors that account for heteroscedasticity without altering the regression coefficients.

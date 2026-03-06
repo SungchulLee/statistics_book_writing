@@ -17,7 +17,9 @@ Let $X_1, X_2, \ldots, X_n$ be i.i.d. random variables with:
 Let $F_n(x) = P\left(\frac{\bar{X} - \mu}{\sigma / \sqrt{n}} \leq x\right)$ be the CDF of the standardized sample mean, and let $\Phi(x)$ be the CDF of the standard normal. Then:
 
 $$
+
 \sup_{x \in \mathbb{R}} \left|F_n(x) - \Phi(x)\right| \leq \frac{C \cdot \rho}{\sigma^3 \sqrt{n}}
+
 $$
 
 where $C$ is a universal constant. The best known value is $C \leq 0.4748$ (Shevtsova, 2011).
@@ -54,7 +56,9 @@ The Berry–Esseen theorem **quantifies** what the CLT merely asserts qualitativ
 For $X_i \sim \text{Bernoulli}(0.5)$: $\mu = 0.5$, $\sigma^2 = 0.25$, $\rho = E[|X_i - 0.5|^3] = 0.125$.
 
 $$
+
 \text{Bound} = \frac{0.4748 \times 0.125}{0.25^{3/2} \sqrt{n}} = \frac{0.4748}{n^{1/2}}
+
 $$
 
 For $n = 100$: bound $\approx 0.0475$, meaning the CDF is within 4.75% of the normal CDF at every point.
@@ -64,7 +68,9 @@ For $n = 100$: bound $\approx 0.0475$, meaning the CDF is within 4.75% of the no
 For $X_i \sim \text{Exponential}(1)$: $\mu = 1$, $\sigma^2 = 1$, $\rho = E[|X_i - 1|^3] = 2 + e^{-1} \approx 2.368$.
 
 $$
+
 \text{Bound} = \frac{0.4748 \times 2.368}{\sqrt{n}} \approx \frac{1.124}{\sqrt{n}}
+
 $$
 
 For $n = 100$: bound $\approx 0.112$. The larger bound reflects the exponential distribution's skewness—it converges to normality more slowly than the symmetric Bernoulli.

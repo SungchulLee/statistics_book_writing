@@ -5,7 +5,9 @@
 Residual analysis is a critical diagnostic tool in ANOVA. Residuals are the differences between the observed data points and the predicted values from the model:
 
 $$
+
 e_{ij} = Y_{ij} - \hat{Y}_{ij} = Y_{ij} - \bar{Y}_{i\cdot}
+
 $$
 
 where $Y_{ij}$ is the observed value for observation $j$ in group $i$ and $\bar{Y}_{i\cdot}$ is the mean of group $i$. In a correctly specified model, residuals should be randomly distributed around zero with constant variance and no systematic patterns.
@@ -46,7 +48,9 @@ Individual points far from the zero line may be outliers that exert disproportio
 Standardized residuals divide each residual by an estimate of its standard deviation, placing all residuals on a common scale:
 
 $$
+
 r_i = \frac{e_i}{\hat{\sigma}\sqrt{1 - h_{ii}}}
+
 $$
 
 where $\hat{\sigma}$ is the estimated standard deviation and $h_{ii}$ is the leverage of observation $i$. Under the model assumptions, standardized residuals should approximately follow a standard normal distribution.

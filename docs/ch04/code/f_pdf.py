@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""
+F Pdf
+=====
+Educational script demonstrating f pdf.
+"""
+
 # ===============================
 # 01_scipy_stats_08_f_pdf.py
 # ===============================
@@ -25,79 +31,82 @@ import numpy as np
 import matplotlib.pyplot as plt
 import scipy.stats as stats
 
-# -------------------------
-# Parameters (edit freely)
-# -------------------------
-d1 = 5.0                 # numerator degrees of freedom (> 0)
-d2 = 12.0                # denominator degrees of freedom (> 0)
-show_refs = True         # draw mean/mode reference lines when defined
-shade_central_mass = False
-central_mass = 0.90      # e.g., 90% central probability region
-use_logx = False         # set True to use log-scale on x for skewed shapes
 
-# -------------------------
-# Distribution object
-# -------------------------
-f_dist = stats.f(dfn=d1, dfd=d2)
 
-# x-grid from quantiles (avoid 0 and 1 endpoints to prevent infinities)
-p_lo, p_hi = 1e-6, 1 - 1e-6
-x_lo = f_dist.ppf(p_lo)
-x_hi = f_dist.ppf(p_hi)
-x = np.linspace(x_lo, x_hi, 600)
+if __name__ == "__main__":
+    # -------------------------
+    # Parameters (edit freely)
+    # -------------------------
+    d1 = 5.0                 # numerator degrees of freedom (> 0)
+    d2 = 12.0                # denominator degrees of freedom (> 0)
+    show_refs = True         # draw mean/mode reference lines when defined
+    shade_central_mass = False
+    central_mass = 0.90      # e.g., 90% central probability region
+    use_logx = False         # set True to use log-scale on x for skewed shapes
 
-# PDF values
-y = f_dist.pdf(x)
+    # -------------------------
+    # Distribution object
+    # -------------------------
+    f_dist = stats.f(dfn=d1, dfd=d2)
 
-# Mean (if exists) and mode (if d1 > 2)
-mean = None
-if d2 > 2:
-    mean = d2 / (d2 - 2)
+    # x-grid from quantiles (avoid 0 and 1 endpoints to prevent infinities)
+    p_lo, p_hi = 1e-6, 1 - 1e-6
+    x_lo = f_dist.ppf(p_lo)
+    x_hi = f_dist.ppf(p_hi)
+    x = np.linspace(x_lo, x_hi, 600)
 
-mode = None
-if d1 > 2:
-    mode = ((d1 - 2) / d1) * (d2 / (d2 + 2))
-else:
-    mode = 0.0  # density peaks at 0 when d1 ≤ 2
+    # PDF values
+    y = f_dist.pdf(x)
 
-# Optional shading of central mass
-if shade_central_mass:
-    alpha = (1 - central_mass) / 2.0
-    a = f_dist.ppf(alpha)
-    b = f_dist.ppf(1 - alpha)
+    # Mean (if exists) and mode (if d1 > 2)
+    mean = None
+    if d2 > 2:
+        mean = d2 / (d2 - 2)
 
-# -------------------------
-# Plot
-# -------------------------
-fig, ax = plt.subplots(figsize=(12, 3))
+    mode = None
+    if d1 > 2:
+        mode = ((d1 - 2) / d1) * (d2 / (d2 + 2))
+    else:
+        mode = 0.0  # density peaks at 0 when d1 ≤ 2
 
-ax.plot(x, y, lw=2, label=f"F PDF (d1={d1:g}, d2={d2:g})")
+    # Optional shading of central mass
+    if shade_central_mass:
+        alpha = (1 - central_mass) / 2.0
+        a = f_dist.ppf(alpha)
+        b = f_dist.ppf(1 - alpha)
 
-if shade_central_mass:
-    mask = (x >= a) & (x <= b)
-    ax.fill_between(x[mask], 0, y[mask], alpha=0.25,
-                    label=f"{int(central_mass*100)}% central mass")
+    # -------------------------
+    # Plot
+    # -------------------------
+    fig, ax = plt.subplots(figsize=(12, 3))
 
-if show_refs:
-    if mean is not None and np.isfinite(mean):
-        ax.axvline(mean, linestyle='--', alpha=0.85, label=f"mean = {mean:.3g}")
-    if mode is not None and np.isfinite(mode):
-        ax.axvline(mode, linestyle=':',  alpha=0.85, label=f"mode ≈ {mode:.3g}")
+    ax.plot(x, y, lw=2, label=f"F PDF (d1={d1:g}, d2={d2:g})")
 
-ax.set_title("F Distribution — PDF")
-ax.set_xlabel("x")
-ax.set_ylabel("density")
-ax.grid(True, linestyle=":")
-ax.legend(frameon=False, loc="best")
+    if shade_central_mass:
+        mask = (x >= a) & (x <= b)
+        ax.fill_between(x[mask], 0, y[mask], alpha=0.25,
+                        label=f"{int(central_mass*100)}% central mass")
 
-if use_logx:
-    ax.set_xscale("log")
+    if show_refs:
+        if mean is not None and np.isfinite(mean):
+            ax.axvline(mean, linestyle='--', alpha=0.85, label=f"mean = {mean:.3g}")
+        if mode is not None and np.isfinite(mode):
+            ax.axvline(mode, linestyle=':',  alpha=0.85, label=f"mode ≈ {mode:.3g}")
 
-plt.tight_layout()
-plt.show()
+    ax.set_title("F Distribution — PDF")
+    ax.set_xlabel("x")
+    ax.set_ylabel("density")
+    ax.grid(True, linestyle=":")
+    ax.legend(frameon=False, loc="best")
 
-# -------------------------
-# Notes:
-# - For very small d1 or d2, the F PDF can be highly skewed; log-x can help.
-# - The variance formula only applies when d2 > 4; it is infinite otherwise.
-# -------------------------
+    if use_logx:
+        ax.set_xscale("log")
+
+    plt.tight_layout()
+    plt.show()
+
+    # -------------------------
+    # Notes:
+    # - For very small d1 or d2, the F PDF can be highly skewed; log-x can help.
+    # - The variance formula only applies when d2 > 4; it is infinite otherwise.
+    # -------------------------

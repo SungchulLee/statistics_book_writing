@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""
+F Test Robust Alt
+=================
+Educational script demonstrating f test robust alt.
+"""
+
 # ======================================================================
 # 19_f_test_05_normality_and_robust_alternatives.py
 # ======================================================================

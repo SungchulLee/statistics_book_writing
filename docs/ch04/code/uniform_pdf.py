@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""
+Uniform Pdf
+===========
+Educational script demonstrating uniform pdf.
+"""
+
 # ===================================
 # 01_scipy_stats_10_uniform_pdf.py
 # ===================================
@@ -20,23 +26,26 @@ import matplotlib.pyplot as plt
 import numpy as np
 import scipy.stats as stats
 
-# Several Uniform distributions to compare
-intervals = [(0, 1), (-2, 2), (1, 5)]
-x = np.linspace(-3, 6, 500)
 
-fig, ax = plt.subplots(figsize=(12, 4))
 
-for a, b in intervals:
-    rv = stats.uniform(loc=a, scale=b - a)
-    ax.plot(x, rv.pdf(x), label=f'Uniform({a}, {b})')
+if __name__ == "__main__":
+    # Several Uniform distributions to compare
+    intervals = [(0, 1), (-2, 2), (1, 5)]
+    x = np.linspace(-3, 6, 500)
 
-ax.set_xlabel('x')
-ax.set_ylabel('f(x)')
-ax.set_title('Uniform Distribution – PDF')
-ax.legend()
-ax.set_ylim(bottom=-0.05)
-ax.spines['top'].set_visible(False)
-ax.spines['right'].set_visible(False)
+    fig, ax = plt.subplots(figsize=(12, 4))
 
-plt.tight_layout()
-plt.show()
+    for a, b in intervals:
+        rv = stats.uniform(loc=a, scale=b - a)
+        ax.plot(x, rv.pdf(x), label=f'Uniform({a}, {b})')
+
+    ax.set_xlabel('x')
+    ax.set_ylabel('f(x)')
+    ax.set_title('Uniform Distribution – PDF')
+    ax.legend()
+    ax.set_ylim(bottom=-0.05)
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+
+    plt.tight_layout()
+    plt.show()

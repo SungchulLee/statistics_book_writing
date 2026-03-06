@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""
+Test Two Means
+==============
+Educational script demonstrating test two means.
+"""
+
 # ===============================================
 # 13_testing_06_diff_two_means_simple.py
 # ===============================================

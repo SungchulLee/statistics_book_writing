@@ -7,9 +7,11 @@
 The key innovation of GAMs is replacing linear terms with smooth functions while maintaining interpretability:
 
 **Linear Regression:**
+
 $$Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \cdots + \beta_p X_p + \epsilon$$
 
 **Generalized Additive Model:**
+
 $$Y = \beta_0 + f_1(X_1) + f_2(X_2) + \cdots + f_p(X_p) + \epsilon$$
 
 where each $f_j$ is a smooth function (typically a spline) learned from the data.
@@ -97,12 +99,14 @@ This decomposes the fitting problem into univariate smoothing problems, making G
 
 ### Linear Terms
 A linear term is included as:
+
 $$f_j(X_j) = \beta_j X_j$$
 
 This has no smoothness penalty and is useful when a relationship is genuinely linear.
 
 ### Spline Terms (s)
 Represented by basis functions with a smoothness penalty:
+
 $$f_j(X_j) = \sum_{k=1}^{K_j} b_{jk}(X_j) c_{jk} + \lambda_j \int [f_j''(x)]^2 dx$$
 
 Common choices:
@@ -213,6 +217,7 @@ Once smooth functions are estimated, compare models using:
 - **Deviance** (residual sum of squares for Gaussian responses)
 - **Effective DoF** (reflects model complexity)
 - **AIC/BIC** with eDoF in place of parameter count:
+
   $$\text{AIC} = -2 \log L + 2 \cdot \text{eDoF}$$
 
 ### Adjusting Model Complexity

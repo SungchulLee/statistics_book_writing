@@ -12,8 +12,7 @@ $$\ell(\mu, \sigma^2) = -\frac{n}{2}\log(2\pi) - \frac{n}{2}\log(\sigma^2) - \fr
 
 ## Deriving the MLEs
 
-### MLE of $\mu$
-
+### MLE of mu
 Differentiate with respect to $\mu$:
 
 $$\frac{\partial \ell}{\partial \mu} = \frac{1}{\sigma^2}\sum_{i=1}^n (x_i - \mu) = \frac{n}{\sigma^2}(\bar{x} - \mu)$$
@@ -24,8 +23,7 @@ $$\bar{x} - \mu = 0 \implies \boxed{\hat{\mu}_{\text{MLE}} = \bar{X} = \frac{1}{
 
 The MLE of the mean is the **sample mean**.
 
-### MLE of $\sigma^2$
-
+### MLE of sigma-squared
 Differentiate with respect to $\sigma^2$ (treating $\sigma^2$ as a single variable):
 
 $$\frac{\partial \ell}{\partial \sigma^2} = -\frac{n}{2\sigma^2} + \frac{1}{2\sigma^4}\sum_{i=1}^n (x_i - \mu)^2$$
@@ -50,8 +48,7 @@ This is negative definite (both diagonal entries are negative), confirming a max
 
 ## Properties of the Gaussian MLEs
 
-### Properties of $\hat{\mu} = \bar{X}$
-
+### Properties of mu-hat = X-bar
 | Property | Result |
 |----------|--------|
 | Bias | $E[\hat{\mu}] = \mu$ (unbiased) |
@@ -61,8 +58,7 @@ This is negative definite (both diagonal entries are negative), confirming a max
 | Sufficiency | Sufficient for $\mu$ (given $\sigma^2$) |
 | Consistency | $\hat{\mu} \xrightarrow{p} \mu$ |
 
-### Properties of $\hat{\sigma}^2_{\text{MLE}}$
-
+### Properties of sigma-squared (MLE)
 | Property | Result |
 |----------|--------|
 | Bias | $E[\hat{\sigma}^2] = \frac{n-1}{n}\sigma^2$ (biased) |
@@ -91,8 +87,7 @@ $$\text{Var}(\hat{\mu}) \geq \frac{\sigma^2}{n}, \quad \text{Var}(\hat{\sigma}^2
 
 The MLE of $\mu$ achieves the CRLB exactly. The MLE of $\sigma^2$ does *not* achieve the CRLB in finite samples (it has variance $2(n-1)\sigma^4/n^2 < 2\sigma^4/n$), but it does asymptotically.
 
-## Alternative Parametrization: $(\mu, \sigma)$
-
+## Alternative Parametrization: (mu, sigma)
 If we parametrize by $(\mu, \sigma)$ instead of $(\mu, \sigma^2)$, the MLE of $\sigma$ is:
 
 $$\hat{\sigma}_{\text{MLE}} = \sqrt{\hat{\sigma}^2_{\text{MLE}}} = \sqrt{\frac{1}{n}\sum_{i=1}^n (X_i - \bar{X})^2}$$
@@ -126,17 +121,17 @@ The log-likelihood function $\ell(\mu, \sigma^2)$ forms a surface over the $(\mu
 
 ## Confidence Regions from the Likelihood
 
-### For $\mu$ (σ² known)
+### For mu (σ² known)
 
 $$\bar{X} \pm z_{\alpha/2}\frac{\sigma}{\sqrt{n}}$$
 
-### For $\mu$ (σ² unknown)
+### For mu (σ² unknown)
 
 $$\bar{X} \pm t_{n-1, \alpha/2}\frac{S}{\sqrt{n}}$$
 
 where $S = \sqrt{S^2}$ and $t_{n-1}$ is the Student's $t$-distribution with $n-1$ degrees of freedom.
 
-### For $\sigma^2$
+### For sigma-squared
 
 $$\left(\frac{(n-1)S^2}{\chi^2_{n-1, \alpha/2}}, \quad \frac{(n-1)S^2}{\chi^2_{n-1, 1-\alpha/2}}\right)$$
 

@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""
+Weighted Regression
+===================
+Educational script demonstrating weighted regression.
+"""
+
 # ======================================================================
 # 13_wls_01_weighted_least_squares.py
 # ======================================================================

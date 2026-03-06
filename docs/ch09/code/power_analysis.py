@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""
+Power Analysis
+==============
+Educational script demonstrating power analysis.
+"""
+
 # ======================================================================
 # 14_power_01_sample_size_and_power_curves.py
 # ======================================================================

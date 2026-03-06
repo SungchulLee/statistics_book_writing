@@ -1,5 +1,4 @@
-# Student's $t$ Distribution
-
+# Student's t Distribution
 ## Overview
 
 The Student's $t$ distribution arises when estimating the mean of a normally distributed population using the **sample standard deviation** $S$ instead of the known population standard deviation $\sigma$. It accounts for the additional uncertainty introduced by estimating $\sigma$.
@@ -11,7 +10,9 @@ The Student's $t$ distribution arises when estimating the mean of a normally dis
 Let $Z \sim N(0,1)$ and $V \sim \chi^2_d$ be independent. Then the ratio:
 
 $$
+
 T = \frac{Z}{\sqrt{V/d}} \sim t_d
+
 $$
 
 follows the Student's $t$ distribution with $d$ degrees of freedom.
@@ -30,10 +31,12 @@ The degrees of freedom $d = n - 1$ reflects the number of independent pieces of 
 ## Properties
 
 $$
+
 \begin{aligned}
 \text{Mean} &= 0 \quad \text{for } d > 1 \\
 \text{Variance} &= \frac{d}{d - 2} \quad \text{for } d > 2
 \end{aligned}
+
 $$
 
 As $d \to \infty$, the variance approaches 1 and $t_d \to N(0, 1)$.
@@ -43,7 +46,9 @@ As $d \to \infty$, the variance approaches 1 and $t_d \to N(0, 1)$.
 ## PDF
 
 $$
+
 f_T(x) = \frac{1}{\sqrt{d}\,B\!\left(\tfrac{1}{2}, \tfrac{d}{2}\right)} \left(1 + \frac{x^2}{d}\right)^{-\frac{d+1}{2}}
+
 $$
 
 where $B(\cdot, \cdot)$ is the Beta function.
@@ -100,12 +105,13 @@ plt.show()
 
 ---
 
-## Why $t$?
-
+## Why t?
 When the population is normal and $\sigma$ is unknown, replacing $\sigma$ with $S$ yields:
 
 $$
+
 \frac{\bar{X} - \mu}{S / \sqrt{n}} \sim t_{n-1}
+
 $$
 
 This arises because:
@@ -140,14 +146,11 @@ plt.show()
 
 ---
 
-## Interpreting the Role of $t$
-
-### Large $n$: CLT Justifies $z$
-
+## Interpreting the Role of t
+### Large n: CLT Justifies z
 When $n$ is large, $S \approx \sigma$, and the difference between $t_{n-1}$ and $N(0,1)$ is negligible. In practice, $z$ is just as good.
 
-### Small $n$: Where $t$ Shines — But Only Under Normality
-
+### Small n: Where t Shines — But Only Under Normality
 The $t$ distribution matters most for small $n$. Its heavier tails properly account for the extra variability from using $S$ instead of $\sigma$. However, this result is **exact only if the population is normal**.
 
 ### Non-Normal Populations

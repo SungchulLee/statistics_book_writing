@@ -1,5 +1,4 @@
-# Chi-Square Distribution ($\chi^2$)
-
+# Chi-Square Distribution (chi-squared)
 ## Overview
 
 The **chi-square distribution** arises naturally as the distribution of a sum of squared standard normal random variables. It plays a central role in inference about population variance, goodness-of-fit tests, and tests of independence.
@@ -11,7 +10,9 @@ The **chi-square distribution** arises naturally as the distribution of a sum of
 If $Z_1, Z_2, \ldots, Z_d$ are independent standard normal random variables, then:
 
 $$
+
 \sum_{i=1}^d Z_i^2 \sim \chi^2_d
+
 $$
 
 The parameter $d$ is called the **degrees of freedom**.
@@ -32,10 +33,12 @@ The shape of the $\chi^2$ distribution depends critically on $d$:
 ### Basic Properties
 
 $$
+
 \begin{aligned}
 \text{Mean} &= d \\
 \text{Variance} &= 2d \\
 \end{aligned}
+
 $$
 
 For $d = 1$, the distribution is highly skewed. For larger $d$, it becomes more symmetric.
@@ -45,7 +48,9 @@ For $d = 1$, the distribution is highly skewed. For larger $d$, it becomes more 
 If $X_1 \sim \chi^2_{d_1}$ and $X_2 \sim \chi^2_{d_2}$ are **independent**, then:
 
 $$
+
 X_1 + X_2 \sim \chi^2_{d_1 + d_2}
+
 $$
 
 This is useful when analyzing total variability across independent components.
@@ -55,7 +60,9 @@ This is useful when analyzing total variability across independent components.
 ## PDF
 
 $$
+
 f(x; d) = \frac{1}{2^{d/2}\,\Gamma(d/2)} \, x^{(d/2)-1} \, e^{-x/2}, \quad x > 0
+
 $$
 
 ```python
@@ -162,7 +169,9 @@ plt.show()
 The chi-square distribution arises in the study of **sample variance**. For i.i.d. $X_i \sim N(\mu, \sigma^2)$:
 
 $$
+
 \frac{(n-1)S^2}{\sigma^2} = \sum_{i=1}^n \left(\frac{X_i - \bar{X}}{\sigma}\right)^2 \sim \chi^2_{n-1}
+
 $$
 
 This result allows us to construct confidence intervals and hypothesis tests for $\sigma^2$.

@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""
+Test Two Props
+==============
+Educational script demonstrating test two props.
+"""
+
 # ===============================================
 # 13_testing_07_diff_two_proportions_simple.py
 # ===============================================

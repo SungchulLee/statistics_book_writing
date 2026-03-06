@@ -79,9 +79,11 @@ This means $\bar{X}_n \to \mu$ almost surely, not just in probability.
 How fast does $\bar{X}_n$ converge to $\mu$?
 
 **MSE convergence rate:**
+
 $$\text{MSE}(\bar{X}_n) = \frac{\sigma^2}{n} = O(1/n)$$
 
 **Standard error convergence rate:**
+
 $$\text{SE}(\bar{X}_n) = \frac{\sigma}{\sqrt{n}} = O(1/\sqrt{n})$$
 
 This $O(1/\sqrt{n})$ rate is fundamental — it means:
@@ -99,8 +101,7 @@ MSE-consistency implies consistency in probability (by Markov's inequality).
 
 ## Conditions for Consistency
 
-### When $\bar{X}$ is Consistent
-
+### When X-bar is Consistent
 The sample mean is consistent under various relaxations of the iid assumption:
 
 1. **Independent, not identically distributed**: If $E[X_i] = \mu$ for all $i$ and $\frac{1}{n^2}\sum_{i=1}^n \text{Var}(X_i) \to 0$, then $\bar{X}_n \xrightarrow{p} \mu$.
@@ -109,8 +110,7 @@ The sample mean is consistent under various relaxations of the iid assumption:
 
 3. **Weakly dependent time series**: If autocorrelations decay fast enough (e.g., $\sum_{k=0}^\infty |\rho_k| < \infty$), then $\bar{X}_n$ is consistent.
 
-### When $\bar{X}$ Fails to be Consistent
-
+### When X-bar Fails to be Consistent
 1. **Infinite variance** (e.g., Cauchy distribution): $\bar{X}_n$ is still consistent if $E[|X|] < \infty$ (by Khintchine's WLLN), even though $\text{Var}(X)$ doesn't exist.
 
 2. **Infinite mean** (e.g., Cauchy): $E[X]$ doesn't exist, so there is no $\mu$ for $\bar{X}$ to converge to. The sample mean fluctuates wildly and does not converge.

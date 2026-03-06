@@ -11,7 +11,9 @@ A **random variable** is a function that maps outcomes from a sample space to re
 A **random variable** $X$ is formally defined as a function:
 
 $$
+
 X : \Omega \longrightarrow \mathbb{R}
+
 $$
 
 where $\Omega$ is the sample space and $\mathbb{R}$ is the set of real numbers.
@@ -27,10 +29,12 @@ Imagine each outcome $\omega \in \Omega$ as having a "brick" of a certain weight
 After transferring all bricks, the arrangement of weights along $\mathbb{R}$ defines the **distribution of $X$**:
 
 $$
+
 \begin{aligned}
 \mathbb{P}(X = a) &= \text{Weight of the bricks at } a \\
 \mathbb{P}(X \in A) &= \text{Weight of the bricks in the set } A
 \end{aligned}
+
 $$
 
 ---
@@ -40,7 +44,9 @@ $$
 For a discrete random variable $X$, the **PMF** assigns a probability to each specific value:
 
 $$
+
 p_{x_i} = P(X = x_i) = \text{Weight of the brick at } x_i
+
 $$
 
 The PMF must satisfy:
@@ -57,7 +63,9 @@ The PMF must satisfy:
 Let $X$ represent the outcome of rolling a fair six-sided die:
 
 $$
+
 P(X = x) = \frac{1}{6}, \quad \text{for } x = 1, 2, 3, 4, 5, 6
+
 $$
 
 ### Example: Number of Heads in 3 Coin Flips
@@ -65,12 +73,14 @@ $$
 Let $X$ represent the number of heads when flipping a fair coin 3 times. The possible values are $\{0, 1, 2, 3\}$:
 
 $$
+
 \begin{aligned}
 P(X = 0) &= \frac{1}{8} \\
 P(X = 1) &= \frac{3}{8} \\
 P(X = 2) &= \frac{3}{8} \\
 P(X = 3) &= \frac{1}{8}
 \end{aligned}
+
 $$
 
 ### Example: Baseball Cards
@@ -80,21 +90,25 @@ Hugo plans to purchase packs of baseball cards until he obtains his favorite pla
 **Solution:**
 
 $$
+
 \begin{aligned}
 P(X=1) &= 0.2 \\
 P(X=2) &= 0.8 \times 0.2 = 0.16 \\
 P(X=3) &= 0.8^2 \times 0.2 = 0.128 \\
 P(X=4) &= 1 - P(X=1) - P(X=2) - P(X=3) = 0.512
 \end{aligned}
+
 $$
 
 Therefore:
 
 $$
+
 \begin{aligned}
 P(X \geq 2) &= 1 - P(X=1) = 0.8 \\
 P(X = 4) &= 0.512
 \end{aligned}
+
 $$
 
 Note that $P(X=4) = 0.512$ includes both the probability of finding the card on the 4th pack and the probability of never finding it—Hugo stops at 4 regardless.
@@ -110,7 +124,9 @@ Let $D = |D_1 - D_2|$ where $D_1, D_2$ are rolls of 3-sided dice. The nine equal
 | **3** | 2 | 1 | 0 |
 
 $$
+
 P(D=0) = \frac{3}{9}, \quad P(D=1) = \frac{4}{9}, \quad P(D=2) = \frac{2}{9}
+
 $$
 
 ---

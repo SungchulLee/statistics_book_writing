@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""
+Homogeneity Residuals
+=====================
+Educational script demonstrating homogeneity residuals.
+"""
+
 # ======================================================================
 # 18_homog_04_residual_heatmap_posthoc.py
 # ======================================================================

@@ -7,7 +7,9 @@ The F-test for comparing two variances is a statistical test used to determine w
 **Null Hypothesis ($H_0$):** The two population variances are equal:
 
 $$
+
 H_0: \sigma_1^2 = \sigma_2^2
+
 $$
 
 **Alternative Hypothesis ($H_1$):** The two population variances are not equal:
@@ -15,13 +17,17 @@ $$
 - **Two-tailed test** (variances are simply different):
 
 $$
+
 H_1: \sigma_1^2 \neq \sigma_2^2
+
 $$
 
 - **One-tailed test** (one variance is greater or smaller than the other):
 
 $$
+
 H_1: \sigma_1^2 > \sigma_2^2 \quad \text{or} \quad H_1: \sigma_1^2 < \sigma_2^2
+
 $$
 
 The choice between one-tailed and two-tailed depends on the research question. In many applications, the two-tailed version is used when there is no prior expectation about which variance is larger.
@@ -41,14 +47,18 @@ If these assumptions are violated, particularly normality, the F-test may lead t
 The F-test statistic is based on the ratio of the two sample variances. Given two independent samples with sample variances $s_1^2$ and $s_2^2$ from populations with variances $\sigma_1^2$ and $\sigma_2^2$, under $H_0$ with $\sigma := \sigma_1 = \sigma_2$:
 
 $$
+
 \frac{s_1^2}{s_2^2} = \frac{\dfrac{(n_1-1)s_1^2/\sigma^2}{n_1-1}}{\dfrac{(n_2-1)s_2^2/\sigma^2}{n_2-1}} = \frac{\dfrac{\chi^2_{n_1-1}}{n_1-1}}{\dfrac{\chi^2_{n_2-1}}{n_2-1}} \sim F_{n_1-1, \, n_2-1}
+
 $$
 
 The sample variances $s_1^2$ and $s_2^2$ are calculated as:
 
 $$
+
 s_1^2 = \frac{1}{n_1 - 1} \sum_{i=1}^{n_1} (X_{1i} - \bar{X}_1)^2, \qquad
 s_2^2 = \frac{1}{n_2 - 1} \sum_{i=1}^{n_2} (X_{2i} - \bar{X}_2)^2
+
 $$
 
 where $X_{1i}$ and $X_{2i}$ are individual observations in samples 1 and 2, $\bar{X}_1$ and $\bar{X}_2$ are the sample means, and $n_1$ and $n_2$ are the sample sizes.
@@ -86,7 +96,9 @@ To determine whether the difference between the two sample variances is statisti
 **Step 2 — Compute the Test Statistic:**
 
 $$
+
 F = \frac{s_1^2}{s_2^2} = \frac{25}{16} = 1.5625
+
 $$
 
 **Step 3 — Determine Critical Values:**
@@ -98,7 +110,7 @@ For $df_1 = 14$ and $df_2 = 19$ degrees of freedom at $\alpha = 0.05$ (two-taile
 
 **Step 4 — Decision Rule:**
 
-Since $F = 1.5625$ falls between the critical values ($0.390 < 1.5625 < 2.657$), we fail to reject the null hypothesis.
+Since $F = 1.5625$ falls between the critical values (\$0.390 < 1.5625 < 2.657$), we fail to reject the null hypothesis.
 
 **Step 5 — Conclusion:**
 

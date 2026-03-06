@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""
+Group Comparison Examples
+=========================
+Educational script demonstrating group comparison examples.
+"""
+
 # ======================================================================
 # group_comparison_examples.py
 # ======================================================================

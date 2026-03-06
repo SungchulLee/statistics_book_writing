@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""
+Ci Paired Sim
+=============
+Educational script demonstrating ci paired sim.
+"""
+
 # ============================================================
 # 11_confidence_interval_05_paired_mean_confidence_interval_simulation.py
 # ============================================================

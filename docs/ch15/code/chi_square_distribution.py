@@ -17,6 +17,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 import scipy.stats as stats
 
+# =============================================================================
+# Main
+# =============================================================================
+
 
 def plot_pdf_sampling(df, seed):
     """Plot chi-square PDF against histogram of random samples."""

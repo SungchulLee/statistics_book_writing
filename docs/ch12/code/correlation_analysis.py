@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""
+Correlation Analysis
+====================
+Educational script demonstrating correlation analysis.
+"""
+
 # ======================================================================
 # 20_correlation_01_pearson_spearman_kendall.py
 # ======================================================================

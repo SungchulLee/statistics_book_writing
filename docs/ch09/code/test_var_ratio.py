@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""
+Test Var Ratio
+==============
+Educational script demonstrating test var ratio.
+"""
+
 # ===============================================
 # 13_testing_04_ratio_two_variances_simple.py
 # ===============================================

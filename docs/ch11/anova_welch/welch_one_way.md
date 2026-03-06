@@ -45,7 +45,9 @@ The **Welch-Satterthwaite equation** provides an approximation for the **degrees
 The formula for the effective degrees of freedom is:
 
 $$
+
 \text{df} = \frac{\left( \sum_{i=1}^k \frac{w_i}{n_i} \right)^2}{\sum_{i=1}^k \frac{\left( \frac{w_i}{n_i} \right)^2}{n_i - 1}}
+
 $$
 
 **Components of the Formula:**

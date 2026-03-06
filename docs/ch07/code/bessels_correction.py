@@ -15,6 +15,10 @@ import matplotlib.pyplot as plt
 from scipy import stats
 from scipy.special import gamma as gamma_func
 
+# =============================================================================
+# Main
+# =============================================================================
+
 
 def unbiasedness_across_distributions(n_sim=200_000, seed=42):
     """

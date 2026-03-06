@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""
+Test Mean
+=========
+Educational script demonstrating test mean.
+"""
+
 # ===============================================
 # 13_testing_01_mean_one_sample_simple.py
 # ===============================================

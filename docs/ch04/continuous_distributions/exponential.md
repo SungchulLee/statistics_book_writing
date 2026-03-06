@@ -11,7 +11,9 @@ The **exponential distribution** models the time between events in a Poisson pro
 A random variable $X$ follows an exponential distribution with rate parameter $\lambda > 0$:
 
 $$
+
 X \sim \text{Exponential}(\lambda), \qquad f(x) = \lambda e^{-\lambda x}, \quad x \geq 0
+
 $$
 
 **Alternative parameterization:** Some texts use the scale parameter $\beta = 1/\lambda$, writing $f(x) = \frac{1}{\beta}e^{-x/\beta}$. SciPy uses the scale parameterization.
@@ -19,13 +21,17 @@ $$
 ### CDF
 
 $$
+
 F(x) = 1 - e^{-\lambda x}, \quad x \geq 0
+
 $$
 
 ### Survival Function
 
 $$
+
 S(x) = P(X > x) = e^{-\lambda x}
+
 $$
 
 ---
@@ -33,12 +39,14 @@ $$
 ## Properties
 
 $$
+
 \begin{aligned}
 E[X] &= \frac{1}{\lambda} \\[4pt]
 \text{Var}(X) &= \frac{1}{\lambda^2} \\[4pt]
 \text{SD}(X) &= \frac{1}{\lambda} \\[4pt]
 \text{Median} &= \frac{\ln 2}{\lambda}
 \end{aligned}
+
 $$
 
 Note that $\text{Mean} = \text{SD} = 1/\lambda$, a distinctive feature of the exponential distribution.
@@ -46,17 +54,23 @@ Note that $\text{Mean} = \text{SD} = 1/\lambda$, a distinctive feature of the ex
 ### Derivation of Mean
 
 $$
+
 E[X] = \int_0^{\infty} x \lambda e^{-\lambda x}\,dx = \left[-x e^{-\lambda x}\right]_0^{\infty} + \int_0^{\infty} e^{-\lambda x}\,dx = \frac{1}{\lambda}
+
 $$
 
 ### Derivation of Variance
 
 $$
+
 E[X^2] = \int_0^{\infty} x^2 \lambda e^{-\lambda x}\,dx = \frac{2}{\lambda^2}
+
 $$
 
 $$
+
 \text{Var}(X) = E[X^2] - (E[X])^2 = \frac{2}{\lambda^2} - \frac{1}{\lambda^2} = \frac{1}{\lambda^2}
+
 $$
 
 ---
@@ -66,13 +80,17 @@ $$
 The exponential distribution is the **only** continuous distribution with the memoryless property:
 
 $$
+
 P(X > s + t \mid X > s) = P(X > t) \quad \text{for all } s, t \geq 0
+
 $$
 
 ### Proof
 
 $$
+
 P(X > s + t \mid X > s) = \frac{P(X > s + t)}{P(X > s)} = \frac{e^{-\lambda(s+t)}}{e^{-\lambda s}} = e^{-\lambda t} = P(X > t)
+
 $$
 
 **Interpretation:** If you have already waited $s$ units of time, the remaining wait time has the same distribution as if you had just started. The process "forgets" its history.
@@ -84,11 +102,13 @@ $$
 If events arrive according to a Poisson process with rate $\lambda$, then:
 
 $$
+
 \begin{aligned}
 \text{Number of events in } [0, t] &\sim \text{Poisson}(\lambda t) \\
 \text{Time between consecutive events} &\sim \text{Exponential}(\lambda) \\
 \text{Time to the } n\text{-th event} &\sim \text{Gamma}(n, \lambda)
 \end{aligned}
+
 $$
 
 ---
@@ -98,13 +118,17 @@ $$
 If $X_1 \sim \text{Exp}(\lambda_1)$ and $X_2 \sim \text{Exp}(\lambda_2)$ are independent, then:
 
 $$
+
 \min(X_1, X_2) \sim \text{Exp}(\lambda_1 + \lambda_2)
+
 $$
 
 ### Proof
 
 $$
+
 P(\min(X_1, X_2) > t) = P(X_1 > t) \cdot P(X_2 > t) = e^{-\lambda_1 t} \cdot e^{-\lambda_2 t} = e^{-(\lambda_1 + \lambda_2)t}
+
 $$
 
 This generalizes to $n$ independent exponentials: $\min(X_1, \ldots, X_n) \sim \text{Exp}\left(\sum_{i=1}^n \lambda_i\right)$.
@@ -118,7 +142,9 @@ This generalizes to $n$ independent exponentials: $\min(X_1, \ldots, X_n) \sim \
 **Solution:** The rate is $\lambda = 12$ per hour $= 0.2$ per minute.
 
 $$
+
 P(X > 10) = e^{-0.2 \times 10} = e^{-2} \approx 0.1353
+
 $$
 
 Expected time between orders: $E[X] = 1/0.2 = 5$ minutes.

@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""
+F Test Tail Plot
+================
+Educational script demonstrating f test tail plot.
+"""
+
 # ======================================================================
 # 19_f_test_02_plot_tail_regions.py
 # ======================================================================

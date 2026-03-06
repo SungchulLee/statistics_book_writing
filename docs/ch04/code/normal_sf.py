@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""
+Normal Sf
+=========
+Educational script demonstrating normal sf.
+"""
+
 # ======================================
 # normal_sf.py  (Survival Function)
 # ======================================
@@ -16,43 +22,46 @@ import matplotlib.pyplot as plt
 import numpy as np
 import scipy.stats as stats
 
-# Parameters
-mu = 0        # mean (μ)
-sigma = 1     # standard deviation (σ)
 
-# Build the frozen distribution
-dist = stats.norm(loc=mu, scale=sigma)
 
-# x-grid
-x = np.linspace(mu - 3 * sigma, mu + 3 * sigma, 400)
+if __name__ == "__main__":
+    # Parameters
+    mu = 0        # mean (μ)
+    sigma = 1     # standard deviation (σ)
 
-# CDF and SF
-cdf = dist.cdf(x)
-sf = dist.sf(x)
+    # Build the frozen distribution
+    dist = stats.norm(loc=mu, scale=sigma)
 
-# ── Plot ────────────────────────────────────────────────────
-fig, ax = plt.subplots(figsize=(12, 3))
+    # x-grid
+    x = np.linspace(mu - 3 * sigma, mu + 3 * sigma, 400)
 
-ax.plot(x, cdf, lw=2, label='CDF  P(X ≤ x)')
-ax.plot(x, sf,  lw=2, label='SF   P(X > x)')
+    # CDF and SF
+    cdf = dist.cdf(x)
+    sf = dist.sf(x)
 
-# Reference lines at x = 0
-ax.axvline(0, ls=':', color='gray', alpha=0.6)
-ax.axhline(0.5, ls=':', color='gray', alpha=0.6)
+    # ── Plot ────────────────────────────────────────────────────
+    fig, ax = plt.subplots(figsize=(12, 3))
 
-# Annotate the complementary relationship
-ax.annotate(
-    "CDF + SF = 1",
-    xy=(1.2, 0.5), fontsize=12,
-    bbox=dict(boxstyle='round,pad=0.3', fc='lightyellow', ec='gray')
-)
+    ax.plot(x, cdf, lw=2, label='CDF  P(X ≤ x)')
+    ax.plot(x, sf,  lw=2, label='SF   P(X > x)')
 
-ax.set_xlabel('x')
-ax.set_ylabel('Probability')
-ax.set_ylim(-0.03, 1.03)
-ax.legend(loc='center left', frameon=False)
-ax.set_title(f"Normal({mu}, {sigma}) — CDF vs Survival Function", fontsize=13)
-ax.grid(True, linestyle=':', alpha=0.5)
+    # Reference lines at x = 0
+    ax.axvline(0, ls=':', color='gray', alpha=0.6)
+    ax.axhline(0.5, ls=':', color='gray', alpha=0.6)
 
-plt.tight_layout()
-plt.show()
+    # Annotate the complementary relationship
+    ax.annotate(
+        "CDF + SF = 1",
+        xy=(1.2, 0.5), fontsize=12,
+        bbox=dict(boxstyle='round,pad=0.3', fc='lightyellow', ec='gray')
+    )
+
+    ax.set_xlabel('x')
+    ax.set_ylabel('Probability')
+    ax.set_ylim(-0.03, 1.03)
+    ax.legend(loc='center left', frameon=False)
+    ax.set_title(f"Normal({mu}, {sigma}) — CDF vs Survival Function", fontsize=13)
+    ax.grid(True, linestyle=':', alpha=0.5)
+
+    plt.tight_layout()
+    plt.show()

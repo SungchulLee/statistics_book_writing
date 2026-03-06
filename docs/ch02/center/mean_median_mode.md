@@ -13,12 +13,14 @@ The mean is the arithmetic average of a set of numbers, calculated by summing al
 ### Formulas
 
 $$
+
 \begin{array}{lllll}
 \text{Population Mean} && \mu &=& \displaystyle\frac{\sum_{i=1}^N x_i}{N} \\[10pt]
 \text{Sample Mean} && \bar{x} &=& \displaystyle\frac{\sum_{i=1}^n x_i}{n} \\[10pt]
 \text{Expected Value} && \mathbb{E}[X] &=& \displaystyle\sum_i x_i \, \mathbb{P}(X = x_i) \quad \text{(discrete)} \\[6pt]
 &&& =& \displaystyle\int_{-\infty}^{\infty} x \, f_X(x) \, dx \quad \text{(continuous)}
 \end{array}
+
 $$
 
 ### Example
@@ -26,7 +28,9 @@ $$
 For the dataset 70, 85, 90, 95, 100:
 
 $$
+
 \bar{x} = \frac{70 + 85 + 90 + 95 + 100}{5} = \frac{440}{5} = 88
+
 $$
 
 ### Mean as Balancing Point
@@ -34,7 +38,9 @@ $$
 The mean is the value where the sum of deviations equals zero:
 
 $$
+
 \mu = \frac{\sum_{i=1}^N x_i}{N} \quad \Rightarrow \quad \sum_{i=1}^N (x_i - \mu) = 0
+
 $$
 
 This means the mean is the "center of gravity" of the data.
@@ -195,7 +201,9 @@ The **trimmed mean** (or truncated mean) is the arithmetic mean calculated after
 For a dataset with $n$ observations sorted as $x_{(1)} \le x_{(2)} \le \cdots \le x_{(n)}$, the $p$-trimmed mean removes $\lceil p \cdot n / 2 \rceil$ observations from each tail and averages the remaining values:
 
 $$
+
 \bar{x}_{p\%} = \frac{1}{n - 2\lceil p \cdot n / 2 \rceil} \sum_{i=\lceil p \cdot n / 2 \rceil + 1}^{n - \lceil p \cdot n / 2 \rceil} x_{(i)}
+
 $$
 
 ### Example: Population Data
@@ -248,7 +256,9 @@ When observations have differing importance or frequency, the **weighted mean** 
 The weighted mean is the sum of weighted values divided by the sum of weights:
 
 $$
+
 \bar{x}_w = \frac{\sum_{i=1}^{n} w_i x_i}{\sum_{i=1}^{n} w_i}
+
 $$
 
 where $w_i$ are the weights.

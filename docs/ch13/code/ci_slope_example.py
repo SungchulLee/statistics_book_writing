@@ -6,6 +6,10 @@ Example: Study Hours vs Caffeine Consumption (n=20 students)
 
 from scipy import stats
 
+# =============================================================================
+# Main
+# =============================================================================
+
 
 def main():
     # Regression output

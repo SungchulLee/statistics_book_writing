@@ -1,37 +1,41 @@
 # Performance Metrics
 
-## R-squared ($R^2$)
-
+## R-squared (R-squared)
 ### Definition
 
 $R^2$ represents the proportion of the variance in the dependent variable that is predictable from the independent variables:
 
 $$
+
 R^2 = 1 - \frac{SS_{\text{Residual}}}{SS_{\text{Total}}}
+
 $$
 
 where:
 
 $$
+
 \begin{array}{lll}
 SS_{\text{Total}} &=& \displaystyle \sum_{i}\left(y_{i}-\bar{y}\right)^{2} \\[8pt]
 SS_{\text{Residual}} &=& \displaystyle \sum_{i}\left(y_{i}-\hat{y}_{i}\right)^{2}
 \end{array}
+
 $$
 
 $R^2$ values range from 0 to 1, with higher values indicating a better fit. However, $R^2$ always increases as more predictors are added, even if they do not improve predictive power, which can lead to overfitting.
 
-### Decomposition of $SS_{\text{Total}}$
-
+### Decomposition of SS_Total
 The total variation in $y$ decomposes cleanly into explained and unexplained components:
 
 $$
+
 \begin{array}{lll}
 SS_{\text{Total}} &=& \displaystyle \sum_{i}\left(y_{i}-\bar{y}\right)^{2} \\[10pt]
 &=& \displaystyle \sum_{i}\left(\left(y_{i}-\hat{y}_{i}\right) + \left(\hat{y}_{i}-\bar{y}\right)\right)^{2} \\[10pt]
 &=& \displaystyle \sum_{i}\left(y_{i}-\hat{y}_{i}\right)^{2} + \sum_{i}\left(\hat{y}_{i}-\bar{y}\right)^{2} \\[10pt]
 &=& \displaystyle SS_{\text{Residual}} + SS_{\text{Treatment}}
 \end{array}
+
 $$
 
 where $SS_{\text{Treatment}}$ represents the variation explained by the regression model. The cross terms vanish due to the properties of OLS estimation.
@@ -41,6 +45,7 @@ where $SS_{\text{Treatment}}$ represents the variation explained by the regressi
 In simple linear regression, $SS_{\text{Treatment}}$ can be expressed in terms of the correlation coefficient:
 
 $$
+
 \begin{array}{lll}
 SS_{\text{Treatment}} &=& \displaystyle \sum_{i}\left(\hat{y}_{i} - \bar{y}\right)^{2} \\[10pt]
 &\approx& \displaystyle \beta^2 \sum_{i}\left(x_i - \bar{x}\right)^{2} \\[10pt]
@@ -48,12 +53,15 @@ SS_{\text{Treatment}} &=& \displaystyle \sum_{i}\left(\hat{y}_{i} - \bar{y}\righ
 &\approx& \displaystyle n\sigma_x^2\left(\rho\frac{\sigma_y}{\sigma_x}\right)^2 \\[10pt]
 &=& \displaystyle n\sigma_y^2\rho^2
 \end{array}
+
 $$
 
 Therefore:
 
 $$
+
 R^2 = \frac{SS_{\text{Treatment}}}{SS_{\text{Total}}} \approx \frac{n\sigma_y^2 \rho^2}{n\sigma_y^2} = \rho^2
+
 $$
 
 In simple linear regression, $R^2$ is approximately the square of the correlation coefficient between $x$ and $y$.
@@ -62,14 +70,15 @@ In simple linear regression, $R^2$ is approximately the square of the correlatio
     - [R-squared or coefficient of determination (Khan Academy)](https://www.khanacademy.org/math/ap-statistics/bivariate-data-ap/assessing-fit-least-squares-regression/v/r-squared-or-coefficient-of-determination)
     - [R-squared intuition (Khan Academy)](https://www.khanacademy.org/math/ap-statistics/bivariate-data-ap/assessing-fit-least-squares-regression/a/r-squared-intuition)
 
-## Adjusted $R^2$
-
+## Adjusted R-squared
 ### Definition
 
 Adjusted $R^2$ accounts for the number of predictors, penalizing unnecessary complexity:
 
 $$
+
 \text{Adjusted } R^2 = 1 - \left(1 - R^2\right) \frac{n - 1}{n - p - 1}
+
 $$
 
 where $n$ is the sample size and $p$ is the number of predictors (excluding the intercept).
@@ -79,13 +88,14 @@ where $n$ is the sample size and $p$ is the number of predictors (excluding the 
 The adjustment replaces the raw sums of squares with their unbiased estimates (divided by degrees of freedom):
 
 $$
+
 \text{Adjusted } R^2 = 1 - \frac{SS_{\text{Residual}} / (n - p - 1)}{SS_{\text{Total}} / (n - 1)}
+
 $$
 
 This ensures that adding a predictor only improves Adjusted $R^2$ if the reduction in $SS_{\text{Residual}}$ justifies the lost degree of freedom.
 
-### Key Differences from $R^2$
-
+### Key Differences from R-squared
 - **Model Complexity**: Adjusted $R^2$ accounts for the number of predictors; $R^2$ does not.
 - **Model Comparison**: Adjusted $R^2$ is better for comparing models with different numbers of predictors.
 - **Direction**: Adjusted $R^2$ can decrease when adding a predictor that does not improve the model, while $R^2$ can only increase.
@@ -93,11 +103,13 @@ This ensures that adding a predictor only improves Adjusted $R^2$ if the reducti
 ## Other Performance Metrics
 
 $$
+
 \begin{array}{lll}
 \text{MAE} && \displaystyle\frac{1}{n}\sum_{i=1}^n|y_i-\hat{y}_i| \\[10pt]
 \text{MSE} && \displaystyle\frac{1}{n}\sum_{i=1}^n(y_i-\hat{y}_i)^2 \\[10pt]
 \text{RMSE} && \displaystyle\sqrt{\frac{1}{n}\sum_{i=1}^n(y_i-\hat{y}_i)^2}
 \end{array}
+
 $$
 
 - **MAE (Mean Absolute Error)**: Average absolute difference between predicted and actual values. Less sensitive to outliers than MSE. Provides error in the same units as the response.

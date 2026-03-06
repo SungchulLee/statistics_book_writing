@@ -33,6 +33,7 @@ where:
 - Each principal component is a linear combination: $Z_j = \sum_{i=1}^p v_{ij} X_i$
 
 The components are ordered by the variance they explain:
+
 $$\text{Var}(Z_1) \geq \text{Var}(Z_2) \geq \cdots \geq \text{Var}(Z_p)$$
 
 ### Step 3: Regress on Principal Components
@@ -43,8 +44,7 @@ $$y = \beta_0 + \beta_1 Z_1 + \beta_2 Z_2 + \cdots + \beta_M Z_M + \epsilon$$
 
 where $M \leq p$ is selected by cross-validation (Step 4).
 
-### Step 4: Choose $M$ via Cross-Validation
-
+### Step 4: Choose M via Cross-Validation
 The number of components $M$ is a tuning parameter:
 
 - **Too few components** ($M$ small): Underfitting; lose information from excluded predictors

@@ -58,13 +58,12 @@ Another way to see it: computing $\bar{X}$ "uses up" one piece of information fr
 
 ## Properties
 
-### Variance of $\tilde{S}^2$
-
+### Variance of S-tilde-squared
 For normal populations:
 
 $$\text{Var}(\tilde{S}^2) = \frac{2(n-1)}{n^2}\sigma^4$$
 
-### MSE of $\tilde{S}^2$
+### MSE of S-tilde-squared
 
 $$\text{MSE}(\tilde{S}^2) = \text{Var}(\tilde{S}^2) + [\text{Bias}(\tilde{S}^2)]^2 = \frac{2(n-1)}{n^2}\sigma^4 + \frac{\sigma^4}{n^2} = \frac{2n-1}{n^2}\sigma^4$$
 
@@ -84,8 +83,7 @@ $$\tilde{S}^2 = \frac{n-1}{n}S^2 \approx S^2 \quad \text{for large } n$$
 
 The bias $-\sigma^2/n \to 0$, and the ratio $(n-1)/n \to 1$.
 
-## Comparison: Divide by $n$ vs $n-1$ vs $n+1$
-
+## Comparison: Divide by n vs n-1 vs n+1
 | Estimator | Divisor | Bias | MSE (Normal) | Notes |
 |-----------|---------|------|--------------|-------|
 | $\tilde{S}^2$ | $n$ | $-\sigma^2/n$ | $\frac{2n-1}{n^2}\sigma^4$ | MLE; biased |
@@ -94,8 +92,7 @@ The bias $-\sigma^2/n \to 0$, and the ratio $(n-1)/n \to 1$.
 
 **Surprising fact:** $\text{MSE}(\tilde{S}^2) < \text{MSE}(S^2)$ for all $n$. The biased estimator has lower MSE than the unbiased one! This is a textbook example of the bias-variance tradeoff.
 
-## When $\mu$ is Known
-
+## When mu is Known
 If the true mean $\mu$ is known (rare in practice), we can use:
 
 $$\hat{\sigma}^2_\mu = \frac{1}{n}\sum_{i=1}^n (X_i - \mu)^2$$

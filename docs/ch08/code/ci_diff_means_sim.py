@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""
+Ci Diff Means Sim
+=================
+Educational script demonstrating ci diff means sim.
+"""
+
 # ==========================================================================
 # 11_confidence_interval_06_diff_two_means_confidence_interval_simulation.py
 # ==========================================================================

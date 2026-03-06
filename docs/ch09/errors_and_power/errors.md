@@ -31,8 +31,7 @@ A lower $\beta$ implies a lower risk of retaining a false null hypothesis.
 | **Reject $H_0$** | Type I Error ($\alpha$) | Correct Decision (Power = $1 - \beta$) |
 | **Fail to reject $H_0$** | Correct Decision | Type II Error ($\beta$) |
 
-## The Tradeoff Between $\alpha$ and $\beta$
-
+## The Tradeoff Between alpha and beta
 There is an inherent tradeoff between the two error types:
 
 - **Decreasing $\alpha$** (making it harder to reject $H_0$) reduces the chance of a Type I error but increases the chance of a Type II error.

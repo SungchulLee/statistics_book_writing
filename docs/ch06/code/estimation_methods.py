@@ -242,4 +242,7 @@ def fisher_information_numerical(dist_name="norm", true_params={"loc": 5, "scale
     print(f"  Numerical:   I(μ) = {I_numerical:.6f}")
     print(f"  Theoretical: I(μ) = {I_theoretical:.6f}")
 
-fisher_information_numerical()
+
+
+if __name__ == "__main__":
+    fisher_information_numerical()

@@ -1,5 +1,15 @@
+"""
+Capture Recapture
+=================
+Educational script demonstrating capture recapture.
+"""
+
 import matplotlib.pyplot as plt
 from scipy import special
+
+# =============================================================================
+# Main
+# =============================================================================
 
 def prob(n, c, r, t):
     """
@@ -66,13 +76,16 @@ def draw(prob_list, mle_n, c=10, r=10, t=3):
     ax.legend()
     plt.show()
 
-# Parameters for capture-recapture model
-c = 5  # Birds captured and tagged in the first stage
-r = 6  # Birds recaptured in the second stage
-t = 2  # Tagged birds in the recapture stage
 
-# Calculate probabilities and MLE
-prob_list, mle_n = capture_recapture(c, r, t)
 
-# Plot the probability distribution and highlight the MLE
-draw(prob_list, mle_n, c, r, t)
+if __name__ == "__main__":
+    # Parameters for capture-recapture model
+    c = 5  # Birds captured and tagged in the first stage
+    r = 6  # Birds recaptured in the second stage
+    t = 2  # Tagged birds in the recapture stage
+
+    # Calculate probabilities and MLE
+    prob_list, mle_n = capture_recapture(c, r, t)
+
+    # Plot the probability distribution and highlight the MLE
+    draw(prob_list, mle_n, c, r, t)

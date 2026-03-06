@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""
+S2 Normal
+=========
+Educational script demonstrating s2 normal.
+"""
+
 # ===================================================
 # s2_normal.py  (Sampling Distribution of S²)
 # ===================================================

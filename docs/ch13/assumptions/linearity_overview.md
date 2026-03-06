@@ -9,7 +9,9 @@ The assumption of linearity posits that there is a straight-line relationship be
 In a simple linear regression model with one independent variable, the relationship can be expressed as:
 
 $$
+
 Y = \beta_0 + \beta_1 X + \epsilon
+
 $$
 
 where:
@@ -23,13 +25,17 @@ where:
 For multiple linear regression with $p$ predictors:
 
 $$
+
 Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \cdots + \beta_p X_p + \epsilon
+
 $$
 
 The linearity assumption requires that the expected value of $Y$ is a linear function of the $X$ variables:
 
 $$
+
 E[Y \mid X_1, \ldots, X_p] = \beta_0 + \beta_1 X_1 + \cdots + \beta_p X_p
+
 $$
 
 ## Importance

@@ -32,7 +32,9 @@ In practice, sampling from $\hat{F}_n$ means **sampling with replacement** from 
 The simplest bootstrap application is estimating the standard error of $\hat{\theta}$:
 
 $$
+
 \widehat{\text{SE}}_{\text{boot}} = \sqrt{\frac{1}{B-1}\sum_{b=1}^B \left(\hat{\theta}^{*(b)} - \bar{\hat{\theta}}^*\right)^2}
+
 $$
 
 where $\bar{\hat{\theta}}^* = \frac{1}{B}\sum_{b=1}^B \hat{\theta}^{*(b)}$.
@@ -46,7 +48,9 @@ This works for *any* statistic, not just the mean. Typical choices: $B = 1{,}000
 If $\hat{\theta}$ is approximately normal:
 
 $$
+
 \hat{\theta} \pm z_{\alpha/2} \cdot \widehat{\text{SE}}_{\text{boot}}
+
 $$
 
 This is the simplest but assumes normality of the sampling distribution.
@@ -56,7 +60,9 @@ This is the simplest but assumes normality of the sampling distribution.
 Use the quantiles of the bootstrap distribution directly:
 
 $$
+
 \left[\hat{\theta}^*_{(\alpha/2)}, \quad \hat{\theta}^*_{(1-\alpha/2)}\right]
+
 $$
 
 where $\hat{\theta}^*_{(q)}$ is the $q$-th quantile of the bootstrap replicates.
@@ -70,7 +76,9 @@ where $\hat{\theta}^*_{(q)}$ is the $q$-th quantile of the bootstrap replicates.
 Based on the pivot $\hat{\theta}^* - \hat{\theta}$:
 
 $$
+
 \left[2\hat{\theta} - \hat{\theta}^*_{(1-\alpha/2)}, \quad 2\hat{\theta} - \hat{\theta}^*_{(\alpha/2)}\right]
+
 $$
 
 Note the reversal of quantiles. This corrects for bias in the bootstrap distribution.
@@ -80,17 +88,23 @@ Note the reversal of quantiles. This corrects for bias in the bootstrap distribu
 The **BCa interval** adjusts for both bias and skewness:
 
 $$
+
 \left[\hat{\theta}^*_{(\alpha_1)}, \quad \hat{\theta}^*_{(\alpha_2)}\right]
+
 $$
 
 where $\alpha_1$ and $\alpha_2$ are modified percentiles:
 
 $$
+
 \alpha_1 = \Phi\left(\hat{z}_0 + \frac{\hat{z}_0 + z_{\alpha/2}}{1 - \hat{a}(\hat{z}_0 + z_{\alpha/2})}\right)
+
 $$
 
 $$
+
 \alpha_2 = \Phi\left(\hat{z}_0 + \frac{\hat{z}_0 + z_{1-\alpha/2}}{1 - \hat{a}(\hat{z}_0 + z_{1-\alpha/2})}\right)
+
 $$
 
 Here $\hat{z}_0$ is the **bias correction** (proportion of bootstrap replicates below $\hat{\theta}$, converted to z-score) and $\hat{a}$ is the **acceleration** (estimated via jackknife). BCa has better theoretical coverage properties than percentile or basic intervals.
@@ -116,7 +130,9 @@ To test $H_0: \theta = \theta_0$:
 4. The bootstrap p-value is:
 
 $$
+
 p = \frac{1}{B}\sum_{b=1}^B \mathbf{1}\left(|t^{*(b)}| \geq |t_{\text{obs}}|\right)
+
 $$
 
 ### Two-Sample Test
@@ -148,13 +164,17 @@ The **jackknife** (Quenouille, 1949; Tukey, 1958) predates the bootstrap and is 
 **Jackknife replicates:**
 
 $$
+
 \hat{\theta}_{(-i)} = g(x_1, \ldots, x_{i-1}, x_{i+1}, \ldots, x_n)
+
 $$
 
 **Jackknife estimate of bias:**
 
 $$
+
 \widehat{\text{Bias}}_{\text{jack}} = (n-1)\left(\bar{\hat{\theta}}_{(\cdot)} - \hat{\theta}\right)
+
 $$
 
 where $\bar{\hat{\theta}}_{(\cdot)} = \frac{1}{n}\sum_{i=1}^n \hat{\theta}_{(-i)}$.
@@ -162,7 +182,9 @@ where $\bar{\hat{\theta}}_{(\cdot)} = \frac{1}{n}\sum_{i=1}^n \hat{\theta}_{(-i)
 **Jackknife standard error:**
 
 $$
+
 \widehat{\text{SE}}_{\text{jack}} = \sqrt{\frac{n-1}{n}\sum_{i=1}^n \left(\hat{\theta}_{(-i)} - \bar{\hat{\theta}}_{(\cdot)}\right)^2}
+
 $$
 
 The jackknife is deterministic (no random resampling), which is sometimes advantageous. However, it fails for non-smooth statistics like the median.

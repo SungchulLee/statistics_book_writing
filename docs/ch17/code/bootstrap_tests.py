@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""
+Bootstrap Tests
+===============
+Educational script demonstrating bootstrap tests.
+"""
+
 # ======================================================================
 # 25_bootstrap_02_hypothesis_tests.py
 # ======================================================================

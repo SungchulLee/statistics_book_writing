@@ -9,6 +9,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy import stats
 
+# =============================================================================
+# Main
+# =============================================================================
+
 
 def generate_data(n, sigma, seed=0):
     """

@@ -9,7 +9,9 @@ The **standard normal distribution** $Z \sim N(0, 1)$ is the most fundamental sa
 A random variable $Z$ has the **standard normal distribution** if its PDF is:
 
 $$
+
 \varphi(z) = \frac{1}{\sqrt{2\pi}} \exp\!\left(-\frac{z^2}{2}\right), \quad z \in \mathbb{R}.
+
 $$
 
 Key properties:
@@ -28,13 +30,17 @@ Key properties:
 If $X \sim N(\mu, \sigma^2)$, then:
 
 $$
+
 Z = \frac{X - \mu}{\sigma} \sim N(0, 1).
+
 $$
 
 More importantly, if $X_1, \dots, X_n$ are i.i.d. $N(\mu, \sigma^2)$, then the sample mean $\bar{X} \sim N(\mu, \sigma^2/n)$, and:
 
 $$
+
 Z = \frac{\bar{X} - \mu}{\sigma / \sqrt{n}} \sim N(0, 1).
+
 $$
 
 This is an **exact** result when the population is normal and $\sigma$ is known.
@@ -44,7 +50,9 @@ This is an **exact** result when the population is normal and $\sigma$ is known.
 For **any** population with finite variance $\sigma^2 < \infty$, the CLT guarantees:
 
 $$
+
 \frac{\bar{X} - \mu}{\sigma / \sqrt{n}} \xrightarrow{d} N(0, 1) \quad \text{as } n \to \infty.
+
 $$
 
 This makes $Z$ the default reference distribution for large-sample inference, even when the underlying population is non-normal.
@@ -61,40 +69,52 @@ When $\sigma$ is unknown and $n$ is small, the **Student's $t$ distribution** re
 
 ## Common Z-Based Pivotal Quantities
 
-### Sample Mean (Known $\sigma$)
+### Sample Mean (Known sigma)
 
 $$
+
 Z = \frac{\bar{X} - \mu}{\sigma / \sqrt{n}} \sim N(0, 1)
+
 $$
 
 **Confidence interval:**
 
 $$
+
 \bar{X} \pm z_{\alpha/2} \cdot \frac{\sigma}{\sqrt{n}}
-$$
-
-### Sample Proportion (Large $n$)
 
 $$
+
+### Sample Proportion (Large n)
+
+$$
+
 Z = \frac{\hat{p} - p}{\sqrt{p(1-p)/n}} \approx N(0, 1)
+
 $$
 
 **Confidence interval:**
 
 $$
+
 \hat{p} \pm z_{\alpha/2} \cdot \sqrt{\frac{\hat{p}(1-\hat{p})}{n}}
-$$
-
-### Difference of Two Means (Known $\sigma_1, \sigma_2$)
 
 $$
+
+### Difference of Two Means (Known sigma_1, sigma_2)
+
+$$
+
 Z = \frac{(\bar{X}_1 - \bar{X}_2) - (\mu_1 - \mu_2)}{\sqrt{\sigma_1^2/n_1 + \sigma_2^2/n_2}} \sim N(0, 1)
-$$
-
-### Difference of Two Proportions (Large $n_1, n_2$)
 
 $$
+
+### Difference of Two Proportions (Large n_1, n_2)
+
+$$
+
 Z = \frac{(\hat{p}_1 - \hat{p}_2) - (p_1 - p_2)}{\sqrt{\frac{p_1(1-p_1)}{n_1} + \frac{p_2(1-p_2)}{n_2}}} \approx N(0, 1)
+
 $$
 
 ## Critical Values

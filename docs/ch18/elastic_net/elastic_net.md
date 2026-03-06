@@ -9,7 +9,9 @@ Elastic Net is a regularization technique that combines the strengths of both Ri
 The Elastic Net regression model introduces a penalty that is a linear combination of the Ridge and Lasso penalties:
 
 $$
+
 J(\mathbf{w}) = \sum_{i=1}^n \left( y_i - \mathbf{w}^T \mathbf{x}_i \right)^2 + \lambda_1 \sum_{j=1}^p |w_j| + \lambda_2 \sum_{j=1}^p w_j^2
+
 $$
 
 where:
@@ -55,7 +57,9 @@ Elastic Net introduces two regularization parameters, $\lambda_1$ and $\lambda_2
 In practice, a common approach is to use a single regularization parameter $\lambda$ and a mixing parameter $\alpha$:
 
 $$
+
 J(\mathbf{w}) = \sum_{i=1}^n \left( y_i - \mathbf{w}^T \mathbf{x}_i \right)^2 + \lambda \left( \alpha \sum_{j=1}^p |w_j| + (1-\alpha) \sum_{j=1}^p w_j^2 \right)
+
 $$
 
 where:

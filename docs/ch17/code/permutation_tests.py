@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""
+Permutation Tests
+=================
+Educational script demonstrating permutation tests.
+"""
+
 # ======================================================================
 # 25_permutation_01_two_sample_and_anova.py
 # ======================================================================

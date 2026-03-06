@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""
+Bootstrap Ci
+============
+Educational script demonstrating bootstrap ci.
+"""
+
 # ======================================================================
 # 25_bootstrap_01_ci_methods.py
 # ======================================================================

@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""
+Fisher Exact
+============
+Educational script demonstrating fisher exact.
+"""
+
 # ======================================================================
 # 17_fisher_exact_test.py
 # ======================================================================

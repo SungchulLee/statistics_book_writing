@@ -11,7 +11,9 @@ In simple linear regression, the key inferential results depend on knowing the *
 ### Statement
 
 $$
+
 \frac{\hat{\beta}_1 - \beta_1}{s\sqrt{\dfrac{1}{\sum_{i=1}^n(x_i - \bar{x})^2}}} \sim t_{n-2}
+
 $$
 
 ### Components
@@ -23,7 +25,9 @@ $$
 **Residual standard deviation** $s$: Measures the variability in $y$ not explained by the linear relationship with $x$:
 
 $$
+
 s = \sqrt{\frac{\sum_{i=1}^n (y_i - \hat{y}_i)^2}{n - 2}}
+
 $$
 
 where $\hat{y}_i$ is the fitted value and $n - 2$ accounts for estimating both $\beta_0$ and $\beta_1$.
@@ -37,7 +41,9 @@ where $\hat{y}_i$ is the fitted value and $n - 2$ accounts for estimating both $
 **Step 1: Model Assumptions.** Consider the simple linear regression model:
 
 $$
+
 y_i = \beta_0 + \beta_1 x_i + \varepsilon_i
+
 $$
 
 where $\varepsilon_i \overset{\text{i.i.d.}}{\sim} N(0, \sigma^2)$.
@@ -45,47 +51,60 @@ where $\varepsilon_i \overset{\text{i.i.d.}}{\sim} N(0, \sigma^2)$.
 **Step 2: OLS Estimator.** The least squares estimator for $\beta_1$ is:
 
 $$
+
 \hat{\beta}_1 = \frac{\sum_{i=1}^n (x_i - \bar{x})(y_i - \bar{y})}{\sum_{i=1}^n (x_i - \bar{x})^2}
+
 $$
 
 **Step 3: Distribution of $\hat{\beta}_1$.** Since $\hat{\beta}_1$ is a linear combination of the normally distributed $y_i$ values:
 
 $$
+
 \hat{\beta}_1 \sim N\!\left(\beta_1,\; \frac{\sigma^2}{\sum_{i=1}^n (x_i - \bar{x})^2}\right)
+
 $$
 
 **Step 4: Standardization with known $\sigma$.** Dividing by the true standard deviation yields a standard normal:
 
 $$
+
 \frac{\hat{\beta}_1 - \beta_1}{\sigma\sqrt{\dfrac{1}{\sum_{i=1}^n(x_i - \bar{x})^2}}} \sim N(0, 1)
+
 $$
 
 **Step 5: Estimating $\sigma^2$.** Since $\sigma^2$ is unknown, we use the unbiased estimator:
 
 $$
+
 s^2 = \frac{\sum_{i=1}^n (y_i - \hat{y}_i)^2}{n - 2}
+
 $$
 
 **Step 6: Substitution.** Replacing $\sigma$ with $s$:
 
 $$
+
 \frac{\hat{\beta}_1 - \beta_1}{s\sqrt{\dfrac{1}{\sum_{i=1}^n(x_i - \bar{x})^2}}}
+
 $$
 
 **Step 7: $t$-distribution result.** The numerator is normal, $s^2$ follows a scaled chi-squared distribution with $n - 2$ degrees of freedom, and the two are independent. By the definition of the $t$-distribution as the ratio of a standard normal to the square root of an independent chi-squared divided by its degrees of freedom:
 
 $$
+
 \frac{\hat{\beta}_1 - \beta_1}{s\sqrt{\dfrac{1}{\sum_{i=1}^n(x_i - \bar{x})^2}}} \sim t_{n-2} \qquad \blacksquare
+
 $$
 
 ---
 
-## 2. Expectation of Response at a Given Point $x_0$
-
+## 2. Expectation of Response at a Given Point x_0
 ### Statement
 
 $$
+
 \frac{(\hat{\beta}_0 + \hat{\beta}_1 x_0) - (\beta_0 + \beta_1 x_0)}{s\sqrt{\dfrac{1}{n} + \dfrac{(x_0 - \bar{x})^2}{\sum_{i=1}^n(x_i - \bar{x})^2}}} \sim t_{n-2}
+
 $$
 
 ### Components
@@ -106,7 +125,9 @@ This means the confidence band for the mean response is narrowest at $\bar{x}$ a
 **Step 1: Prediction error decomposition.** The difference between estimated and true mean response is:
 
 $$
+
 (\hat{\beta}_0 + \hat{\beta}_1 x_0) - (\beta_0 + \beta_1 x_0) = (\hat{\beta}_0 - \beta_0) + (\hat{\beta}_1 - \beta_1)x_0
+
 $$
 
 This has mean zero since both estimators are unbiased.
@@ -120,29 +141,36 @@ This has mean zero since both estimators are unbiased.
 Combining via $\text{Var}(\hat{\beta}_0 + \hat{\beta}_1 x_0) = \text{Var}(\hat{\beta}_0) + x_0^2\,\text{Var}(\hat{\beta}_1) + 2x_0\,\text{Cov}(\hat{\beta}_0, \hat{\beta}_1)$:
 
 $$
+
 \text{Var}(\hat{\beta}_0 + \hat{\beta}_1 x_0) = \sigma^2\!\left(\frac{1}{n} + \frac{(x_0 - \bar{x})^2}{SS_x}\right)
+
 $$
 
 **Step 3: Standardization.** With known $\sigma$:
 
 $$
+
 \frac{(\hat{\beta}_0 + \hat{\beta}_1 x_0) - (\beta_0 + \beta_1 x_0)}{\sigma\sqrt{\dfrac{1}{n} + \dfrac{(x_0 - \bar{x})^2}{SS_x}}} \sim N(0, 1)
+
 $$
 
 **Step 4: Substituting $s$ for $\sigma$.** Replacing $\sigma$ with the residual standard error $s$ and applying the same $t$-distribution argument as before:
 
 $$
+
 \frac{(\hat{\beta}_0 + \hat{\beta}_1 x_0) - (\beta_0 + \beta_1 x_0)}{s\sqrt{\dfrac{1}{n} + \dfrac{(x_0 - \bar{x})^2}{SS_x}}} \sim t_{n-2} \qquad \blacksquare
+
 $$
 
 ---
 
-## 3. Response (Prediction) at a Given Point $x_0$
-
+## 3. Response (Prediction) at a Given Point x_0
 ### Statement
 
 $$
+
 \frac{(\hat{\beta}_0 + \hat{\beta}_1 x_0) - (\beta_0 + \beta_1 x_0 + \varepsilon)}{s\sqrt{1 + \dfrac{1}{n} + \dfrac{(x_0 - \bar{x})^2}{\sum_{i=1}^n(x_i - \bar{x})^2}}} \sim t_{n-2}
+
 $$
 
 ### Components
@@ -164,25 +192,33 @@ The leading $1$ term is the critical difference from the mean response case. It 
 **Step 1: Prediction error.** Define the prediction error:
 
 $$
+
 \hat{y}_0 - y_0 = (\hat{\beta}_0 + \hat{\beta}_1 x_0) - (\beta_0 + \beta_1 x_0 + \varepsilon) = (\hat{\beta}_0 - \beta_0) + (\hat{\beta}_1 - \beta_1)x_0 - \varepsilon
+
 $$
 
 **Step 2: Variance decomposition.** The error $\varepsilon$ is independent of the estimators $\hat{\beta}_0$ and $\hat{\beta}_1$ (which depend on the training data), so:
 
 $$
+
 \text{Var}(\hat{y}_0 - y_0) = \underbrace{\sigma^2\!\left(\frac{1}{n} + \frac{(x_0 - \bar{x})^2}{SS_x}\right)}_{\text{estimation uncertainty}} + \underbrace{\sigma^2}_{\text{irreducible noise}} = \sigma^2\!\left(1 + \frac{1}{n} + \frac{(x_0 - \bar{x})^2}{SS_x}\right)
+
 $$
 
 **Step 3: Standardization with known $\sigma$.** The prediction error is normally distributed with mean zero:
 
 $$
+
 \frac{\hat{y}_0 - y_0}{\sigma\sqrt{1 + \dfrac{1}{n} + \dfrac{(x_0 - \bar{x})^2}{SS_x}}} \sim N(0, 1)
+
 $$
 
 **Step 4: Substituting $s$ for $\sigma$.** Replacing $\sigma$ with $s$ yields the $t$-distribution:
 
 $$
+
 \frac{(\hat{\beta}_0 + \hat{\beta}_1 x_0) - (\beta_0 + \beta_1 x_0 + \varepsilon)}{s\sqrt{1 + \dfrac{1}{n} + \dfrac{(x_0 - \bar{x})^2}{SS_x}}} \sim t_{n-2} \qquad \blacksquare
+
 $$
 
 ---

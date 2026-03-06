@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""
+F Test Power Sim
+================
+Educational script demonstrating f test power sim.
+"""
+
 # ======================================================================
 # 19_f_test_06_power_simulation_sketch.py
 # ======================================================================

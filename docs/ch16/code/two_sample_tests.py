@@ -12,6 +12,10 @@ Includes:
 import numpy as np
 import scipy.stats as stats
 
+# =============================================================================
+# Main
+# =============================================================================
+
 
 def load_student_data():
     """Pre/post treatment scores for 15 students."""

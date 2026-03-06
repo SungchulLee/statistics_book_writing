@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""
+Bayesian Var Test
+=================
+Educational script demonstrating bayesian var test.
+"""
+
 # ======================================================================
 # 25_bayes_01_posterior_sigma2_and_ratio.py
 # ======================================================================

@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""
+Model Selection
+===============
+Educational script demonstrating model selection.
+"""
+
 # ======================================================================
 # 21_model_selection_01_aic_bic_cv.py
 # ======================================================================

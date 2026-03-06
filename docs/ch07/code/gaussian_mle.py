@@ -14,6 +14,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy import stats, optimize
 
+# =============================================================================
+# Main
+# =============================================================================
+
 
 def mle_analytical_vs_numerical(seed=42):
     """

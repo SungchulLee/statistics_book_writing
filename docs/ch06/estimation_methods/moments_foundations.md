@@ -9,7 +9,9 @@ The **Method of Moments (MoM)** equates population moments to sample moments to 
 For a distribution with $p$ parameters $\theta_1, \ldots, \theta_p$, the MoM sets:
 
 $$
+
 \mu_k'(\theta_1, \ldots, \theta_p) = m_k' = \frac{1}{n}\sum_{i=1}^n X_i^k, \quad k = 1, \ldots, p
+
 $$
 
 ## Properties

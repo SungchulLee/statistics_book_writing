@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""
+Independence Template
+=====================
+Educational script demonstrating independence template.
+"""
+
 # ======================================================================
 # 17_independence_04_template_function.py
 # ======================================================================

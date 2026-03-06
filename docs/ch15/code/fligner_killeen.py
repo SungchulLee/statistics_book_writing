@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""
+Fligner Killeen
+===============
+Educational script demonstrating fligner killeen.
+"""
+
 # ======================================================================
 # 23_fk_01_basic_scipy.py
 # ======================================================================

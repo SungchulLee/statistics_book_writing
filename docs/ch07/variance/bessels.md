@@ -32,8 +32,7 @@ Therefore:
 
 $$E\left[\frac{1}{n-1}\sum_{i=1}^n (X_i - \bar{X})^2\right] = \frac{(n-1)\sigma^2}{n-1} = \sigma^2$$
 
-### Why $n-1$? The Degrees of Freedom Argument
-
+### Why n-1? The Degrees of Freedom Argument
 The $n$ deviations $d_i = X_i - \bar{X}$ are subject to the constraint:
 
 $$\sum_{i=1}^n d_i = \sum_{i=1}^n (X_i - \bar{X}) = 0$$
@@ -44,8 +43,7 @@ This means only $n-1$ of the deviations are free to vary independently. We say t
 - Mean unknown, variance of $X$: divide by $n - 1$
 - Regression with $p$ coefficients: residual variance uses $n - p$
 
-## Distribution of $S^2$
-
+## Distribution of S-squared
 ### For Normal Populations
 
 If $X_i \sim N(\mu, \sigma^2)$, then:
@@ -58,8 +56,7 @@ $$E[S^2] = \sigma^2 \cdot \frac{n-1}{n-1} = \sigma^2 \quad \text{(confirming unb
 
 $$\text{Var}(S^2) = \frac{2\sigma^4}{n-1}$$
 
-### Independence of $\bar{X}$ and $S^2$
-
+### Independence of X-bar and S-squared
 For normal populations, $\bar{X}$ and $S^2$ are **independent**. This is a remarkable property unique to the normal distribution (by Cochran's theorem) and is crucial for the derivation of the $t$-distribution used in hypothesis testing.
 
 ## Properties

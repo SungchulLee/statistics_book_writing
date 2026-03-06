@@ -42,7 +42,9 @@ The **expected frequencies** are the theoretical counts we would expect in each 
 If we expect the counts to be evenly distributed across all categories, then each category's expected frequency is simply:
 
 $$
+
 E_i = \frac{\text{Total Sample Size}}{\text{Number of Categories}}
+
 $$
 
 where $E_i$ is the expected frequency for each category.
@@ -50,7 +52,9 @@ where $E_i$ is the expected frequency for each category.
 For example, if we have 300 customers distributed equally across three age groups, each age group's expected frequency would be:
 
 $$
+
 E_i = \frac{300}{3} = 100
+
 $$
 
 ### Proportional Distribution
@@ -58,7 +62,9 @@ $$
 Often, the expected distribution is not uniform but rather follows specific proportions. In this case, the expected frequency for each category is calculated by:
 
 $$
+
 E_i = p_i \times \text{Total Sample Size}
+
 $$
 
 where $p_i$ is the expected proportion for category $i$.
@@ -74,7 +80,9 @@ For instance, if a company believes 40% of its customers are aged 18-25, 30% are
 The test statistic for the Chi-Square Goodness-of-Fit Test is calculated using the formula
 
 $$
+
 \chi^2 = \sum_{i=1}^k \frac{(O_i - E_i)^2}{E_i}
+
 $$
 
 where:
@@ -87,7 +95,9 @@ where:
 The degrees of freedom ($\text{df}$) for the Chi-Square Goodness-of-Fit Test is calculated as
 
 $$
+
 \text{df} = k - 1
+
 $$
 
 where $k$ is the number of categories.
@@ -95,6 +105,7 @@ where $k$ is the number of categories.
 ## Critical Region
 
 $$
+
 \begin{array}{lll}
 \text{Null} & \text{The observed data follows the expected distribution} \\
 & \text{Observed frequencies are close to expected frequencies} \\
@@ -104,6 +115,7 @@ $$
 & \text{Observed frequencies are quite different from expected frequencies} \\
 & O_{i} \not\approx E_{i} \quad \Rightarrow \quad \text{statistic} \approx \text{large positive number}
 \end{array}
+
 $$
 
 ## Critical Value and p-Value
@@ -164,18 +176,22 @@ Kenny wants to use the recorded results to conduct a $\chi^2$ goodness-of-fit te
 | Tie      | 7        | 8        | $(7 - 8)^2 / 8 = 0.125$     |
 | $\chi^2$ |          |          | 5.25                         |
 
-Total games: 24. Expected frequency for each outcome (if outcomes are evenly distributed): $24 / 3 = 8$.
+Total games: 24. Expected frequency for each outcome (if outcomes are evenly distributed): \$24 / 3 = 8$.
 
 **Step 3: Calculate the $\chi^2$ Test Statistic**
 
 $$
+
 \chi^2 = \frac{(4 - 8)^2}{8} + \frac{(13 - 8)^2}{8} + \frac{(7 - 8)^2}{8} = 5.25
+
 $$
 
 **Step 4: Degrees of Freedom**
 
 $$
+
 \text{df} = k - 1 = 3 - 1 = 2
+
 $$
 
 **Step 5: Find the p-value**
@@ -183,7 +199,9 @@ $$
 Using a chi-square distribution with 2 degrees of freedom, the p-value for $\chi^2 = 5.25$ is approximately:
 
 $$
+
 p \approx 0.0725
+
 $$
 
 **Conclusion**: With a p-value of approximately 0.0725, if Kenny is testing at a significance level of 0.05, he would fail to reject the null hypothesis. This suggests there is not strong evidence that the distribution of his outcomes significantly deviates from an even distribution.
@@ -276,6 +294,7 @@ print(f"{p_value = }")
 We have a die. To test whether it is loaded, we roll it 60 times, and here is the outcome. Decide whether this die is loaded.
 
 $$
+
 \begin{array}{crr}
  & \text{observed} & \text{expected} \\
 \text{value} & \text{frequency} & \text{frequency} \\ \hline
@@ -287,6 +306,7 @@ $$
 6 & 9 & 10 \\ \hline
 \text{sum} & 60 & 60
 \end{array}
+
 $$
 
 ### Why Not Test Each Category Individually?
@@ -322,11 +342,13 @@ Not too fast. We can run a similar test for each row. If we have many rows, we w
 ### Hypotheses
 
 $$
+
 \begin{array}{lll}
 \text{Null} & \text{Die is not loaded} \\
 \\
 \text{Alternative} & \text{Die is loaded}
 \end{array}
+
 $$
 
 ### Test Statistic
@@ -347,6 +369,7 @@ if __name__ == "__main__":
 ### Critical Region
 
 $$
+
 \begin{array}{lll}
 \text{Null} & \text{Die is not loaded} \\
 & \text{Observed frequencies are close to expected frequencies} \\
@@ -356,21 +379,26 @@ $$
 & \text{Observed frequencies are quite different from expected frequencies} \\
 & O_i \not\approx E_i \quad \Rightarrow \quad \text{statistic} \approx \text{large positive number}
 \end{array}
+
 $$
 
 ### Sampling Distribution
 
 $$
+
 \sum_{i=1}^k \frac{(O_i - E_i)^2}{E_i}
 = \sum_{i=1}^k \left(\frac{\left(\sum_{j=1}^{n} X_j\right) - np_i}{\sqrt{np_i}}\right)^2
 \approx \sum_{i=1}^k Z_i^2
 = \chi^2_{k-1}
+
 $$
 
 In this die case:
 
 $$
+
 \sum_{i=1}^6 \frac{(O_i - E_i)^2}{E_i} \approx \chi^2_5
+
 $$
 
 ### Conditions for Test (Rule of Thumb)
@@ -380,7 +408,9 @@ The $\chi^2$ approximation is good when all the expected frequencies are five or
 ### p-value
 
 $$
+
 \text{p-value} = P\left(\sum_{i=1}^k \frac{(O_i - E_i)^2}{E_i} \ge \text{statistic} \;\middle|\; H_0\right)
+
 $$
 
 ### Conclusion

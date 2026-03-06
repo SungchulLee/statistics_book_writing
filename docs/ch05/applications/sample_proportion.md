@@ -9,7 +9,9 @@ The **sampling distribution of the sample proportion** $\hat{p}$ describes how t
 Let $X_1, \dots, X_n$ be i.i.d. $\text{Bernoulli}(p)$, where $X_i = 1$ (success) or $X_i = 0$ (failure). The sample proportion is:
 
 $$
+
 \hat{p} = \frac{1}{n}\sum_{i=1}^n X_i = \frac{\text{number of successes}}{n}.
+
 $$
 
 ## Properties
@@ -17,7 +19,9 @@ $$
 ### Expected Value (Unbiasedness)
 
 $$
+
 E[\hat{p}] = p.
+
 $$
 
 The sample proportion is an **unbiased estimator** of the population proportion.
@@ -27,15 +31,19 @@ The sample proportion is an **unbiased estimator** of the population proportion.
 Since $\text{Var}(X_i) = p(1-p)$:
 
 $$
+
 \text{Var}(\hat{p}) = \frac{p(1-p)}{n}, \qquad
 \text{SE}(\hat{p}) = \sqrt{\frac{p(1-p)}{n}}.
+
 $$
 
 !!! note
     Unlike $\text{SE}(\bar{X}) = \sigma/\sqrt{n}$, the standard error of $\hat{p}$ depends on the parameter $p$ itself. In practice, $p$ is unknown, so we substitute $\hat{p}$:
 
     $$
+
     \widehat{\text{SE}}(\hat{p}) = \sqrt{\frac{\hat{p}(1-\hat{p})}{n}}.
+
     $$
 
 ### Shape (Normal Approximation)
@@ -43,13 +51,17 @@ $$
 By the CLT, for sufficiently large $n$:
 
 $$
+
 \frac{\hat{p} - p}{\sqrt{p(1-p)/n}} \xrightarrow{d} N(0, 1).
+
 $$
 
 The **rule of thumb** for the normal approximation to be valid:
 
 $$
+
 np \geq 5 \quad \text{and} \quad n(1-p) \geq 5.
+
 $$
 
 This ensures both success and failure counts are large enough for the bell-curve approximation.
@@ -59,7 +71,9 @@ This ensures both success and failure counts are large enough for the bell-curve
 **Problem.** True proportion $p = 0.4$, sample size $n = 100$.
 
 $$
+
 \text{SE}(\hat{p}) = \sqrt{\frac{0.4 \times 0.6}{100}} = \sqrt{0.0024} \approx 0.049.
+
 $$
 
 Across repeated samples of size 100, $\hat{p}$ will typically vary about 0.049 around the true $p = 0.4$.
@@ -73,15 +87,21 @@ Across repeated samples of size 100, $\hat{p}$ will typically vary about 0.049 a
 **Solution.**
 
 $$
+
 \text{SE} = \sqrt{\frac{0.60 \times 0.40}{100}} \approx 0.049
+
 $$
 
 $$
+
 Z = \frac{0.65 - 0.60}{0.049} \approx 1.02
+
 $$
 
 $$
+
 P(\hat{p} > 0.65) = P(Z > 1.02) \approx 0.154
+
 $$
 
 ```python
@@ -96,26 +116,36 @@ print(f"P(p_hat > 0.65) = {stats.norm.sf(1.02):.4f}")
 **Exact Binomial.** Since $\hat{p} > 0.35$ means $X \geq 4$ (where $X \sim \text{Binomial}(10, 0.3)$):
 
 $$
+
 P(X \geq 4) = 1 - P(X \leq 3)
+
 $$
 
 $$
+
 P(X = 0) = 0.0282, \quad P(X = 1) = 0.1211, \quad P(X = 2) = 0.2335, \quad P(X = 3) = 0.2668
+
 $$
 
 $$
+
 P(X \geq 4) = 1 - 0.6496 = 0.3504
+
 $$
 
 **Normal Approximation.** Check conditions: $np = 3 < 5$ — the normal approximation is questionable.
 
 $$
+
 \text{SE} = \sqrt{\frac{0.3 \times 0.7}{10}} \approx 0.1449, \qquad
 Z = \frac{0.35 - 0.30}{0.1449} \approx 0.345
+
 $$
 
 $$
+
 P(\hat{p} > 0.35) \approx P(Z > 0.345) \approx 0.365
+
 $$
 
 **Comparison:**
@@ -144,17 +174,20 @@ print(f"Normal approx: {approx:.4f}")
 For independent samples from two populations with proportions $p_1$ and $p_2$:
 
 $$
+
 Z = \frac{(\hat{p}_1 - \hat{p}_2) - (p_1 - p_2)}{\sqrt{\frac{p_1(1-p_1)}{n_1} + \frac{p_2(1-p_2)}{n_2}}} \approx N(0, 1)
+
 $$
 
 **Confidence interval:**
 
 $$
+
 (\hat{p}_1 - \hat{p}_2) \pm z_{\alpha/2} \sqrt{\frac{\hat{p}_1(1-\hat{p}_1)}{n_1} + \frac{\hat{p}_2(1-\hat{p}_2)}{n_2}}
+
 $$
 
-## Simulation: Sampling Distribution of $\hat{p}$
-
+## Simulation: Sampling Distribution of p-hat
 ```python
 import matplotlib.pyplot as plt
 import numpy as np

@@ -9,7 +9,9 @@ In numerous real-world applications, such as in business, healthcare, and educat
 If we know the population variance $\sigma^2$, the confidence interval for the population mean $\mu$ based on a sample of size $n$ is
 
 $$
+
 \bar{X} \pm z_{\alpha/2} \times \frac{\sigma}{\sqrt{n}}
+
 $$
 
 where
@@ -25,17 +27,20 @@ The quantity $\sigma / \sqrt{n}$ is the standard error of the sample mean.
 ### Conditions for Validity
 
 $$
+
 \bar{x}\pm z_{\alpha/2}\frac{\sigma}{\sqrt{n}}
 \quad\text{if}\quad
 \begin{cases}
 n \text{ is large, e.g., } n \ge 30, \text{ so that CLT approximation works} \\
 n \text{ is small relative to } N, \text{ e.g., } n \le 0.1N, \text{ so that IID approximation works}
 \end{cases}
+
 $$
 
 When $\sigma$ is unknown and $n$ is large, using the sample standard deviation $s$ in place of $\sigma$ is justified by the Law of Large Numbers:
 
 $$
+
 \bar{x}\pm z_{\alpha/2}\frac{s}{\sqrt{n}}
 \quad\text{if}\quad
 \begin{cases}
@@ -43,6 +48,7 @@ n \ge 30 \text{ (CLT)} \\
 n \ge 30 \text{ (LLN for } s \approx \sigma\text{)} \\
 n \le 0.1N \text{ (IID)}
 \end{cases}
+
 $$
 
 ### Python Code
@@ -80,7 +86,9 @@ In practice, the population variance $\sigma^2$ is often unknown. When this is t
 The confidence interval for the population mean $\mu$ when the population variance is unknown is given by
 
 $$
+
 \bar{X} \pm t_{\alpha/2, \, n-1} \times \frac{s}{\sqrt{n}}
+
 $$
 
 where
@@ -95,6 +103,7 @@ where
 ### Conditions for Validity
 
 $$
+
 \bar{x}\pm t_{\alpha/2,n-1}\frac{s}{\sqrt{n}}
 \quad\text{if}\quad
 \begin{cases}
@@ -102,6 +111,7 @@ n \text{ is small, e.g., } n < 30, \text{ so that CLT approximation does not wor
 \text{population distribution is normal, so that sampling distribution is known exactly} \\
 n \le 0.1N \text{ (IID)}
 \end{cases}
+
 $$
 
 ### Python Code
@@ -140,13 +150,17 @@ Suppose we collect a random sample of size $n = 40$ from a population. The sampl
 **Solution.** For a 95% confidence level, the critical value $z_{\alpha/2}$ is approximately 1.96. Substituting:
 
 $$
+
 85 \pm 1.96 \times \frac{12}{\sqrt{40}}
+
 $$
 
 Standard error: $\text{SE} = 12 / \sqrt{40} \approx 1.8974$. Margin of error: $1.96 \times 1.8974 \approx 3.717$.
 
 $$
+
 \boxed{(81.283,\ 88.717)}
+
 $$
 
 We are 95% confident that the true population mean $\mu$ lies within $(81.283, 88.717)$.
@@ -158,11 +172,15 @@ A random sample of 100 adult males yields a mean height of 175 cm and a standard
 **Solution.** Since $n = 100 \ge 30$, we use the standard normal distribution with the sample standard deviation.
 
 $$
+
 \text{SE} = \frac{6}{\sqrt{100}} = 0.6, \qquad \text{ME} = 1.96 \times 0.6 = 1.176
+
 $$
 
 $$
+
 \boxed{(173.82,\ 176.18) \text{ cm}}
+
 $$
 
 ```python
@@ -189,13 +207,17 @@ An astronomer measures the distance to a distant star. Measurements are iid with
 **Solution.** We need
 
 $$
+
 1.96 \sqrt{\frac{4}{n}} \leq 0.5
+
 $$
 
 Solving for $n$:
 
 $$
+
 n \geq \frac{4 \times 1.96^2}{0.5^2} = 61.4656
+
 $$
 
 Since $n$ must be an integer, at least **62 measurements** are required.
@@ -207,15 +229,18 @@ A random sample of size $n = 25$ yields $\bar{X} = 50$ and $s = 8$. Construct a 
 **Solution.** With $df = 24$ and 95% confidence, $t_{\alpha/2, 24} \approx 2.064$.
 
 $$
+
 \text{SE} = \frac{8}{\sqrt{25}} = 1.6, \qquad \text{ME} = 2.064 \times 1.6 \approx 3.302
+
 $$
 
 $$
+
 \boxed{(46.698,\ 53.302)}
+
 $$
 
-### Example 5: Computation of $t_*$
-
+### Example 5: Computation of t*
 What is the critical value $t_*$ for a 98% confidence interval with $n = 15$ observations?
 
 **Solution.**
@@ -249,11 +274,15 @@ Quality control specialists sample 50 bottles from a batch. The sample yields a 
 **Solution.**
 
 $$
+
 \text{SE} = \frac{5}{\sqrt{50}} \approx 0.707, \qquad \text{ME} = 1.96 \times 0.707 \approx 1.386
+
 $$
 
 $$
+
 \boxed{(501.61,\ 504.39) \text{ mL}}
+
 $$
 
 Since the target of 500 mL is not in the interval, there is evidence that the batch mean deviates from the target.
@@ -265,7 +294,9 @@ Nadia must determine the minimum sample size for a margin of error of 10 km at 9
 **Solution.** For 90% confidence, $z_* \approx 1.645$.
 
 $$
+
 n = \left\lceil\left(\frac{1.645 \times 15}{10}\right)^2\right\rceil = \left\lceil 6.09\right\rceil = 7
+
 $$
 
 ```python
@@ -289,11 +320,15 @@ A sample of 25 bottles of soda has a mean volume of 500 ml and a sample standard
 **Solution.** With $df = 24$, $t_{0.025, 24} \approx 2.064$.
 
 $$
+
 \text{ME} = 2.064 \times \frac{10}{\sqrt{25}} = 2.064 \times 2 = 4.128
+
 $$
 
 $$
+
 \boxed{(495.872,\ 504.128)}
+
 $$
 
 ### Exercise: One-Sample z CI for Exam Scores
@@ -303,7 +338,9 @@ A random sample of 36 students' scores yields a mean of 78 with known $\sigma = 
 **Solution.** $\text{ME} = 1.96 \times 12/\sqrt{36} = 1.96 \times 2 = 3.92$.
 
 $$
+
 \boxed{(74.08,\ 81.92)}
+
 $$
 
 ### Exercise: Sample Size Determination
@@ -313,7 +350,9 @@ Estimate a population mean with margin of error 5 at 95% confidence, given $\sig
 **Solution.**
 
 $$
+
 n = \left(\frac{1.96 \times 20}{5}\right)^2 = (7.84)^2 = 61.47 \implies \boxed{n = 62}
+
 $$
 
 ### Exercise: Interpretation

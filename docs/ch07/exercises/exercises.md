@@ -116,8 +116,9 @@ Using MLE invariance, find the MLE of:
 
 (c) The 99th percentile $\mu + 2.326\sigma$
 
-### Exercise 7.3.4 — Constrained MLE ($\mu = 0$)
-(a) Derive the constrained MLE of $\sigma^2$ and show it is unbiased.
+### Exercise 7.3.4 — Constrained MLE (mu = 0)
+
+(a) Derive the constrained MLE of sigma-squared and show it is unbiased.
 
 (b) Compare its variance with the unrestricted MLE.
 

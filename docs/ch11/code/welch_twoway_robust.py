@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""
+Welch Twoway Robust
+===================
+Educational script demonstrating welch twoway robust.
+"""
+
 # ===================================================================================
 # 15_welch2_02_robust_ols_HC3_wald.py
 # ===================================================================================

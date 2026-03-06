@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""
+Interaction Plot
+================
+Educational script demonstrating interaction plot.
+"""
+
 # ======================================================================
 # 13_anova2_05_interaction_plot.py
 # ======================================================================

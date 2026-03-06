@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""
+Ks Test
+=======
+Educational script demonstrating ks test.
+"""
+
 # ======================================================================
 # 32_ks_01_basic_one_sample_kstest_fixed_params.py
 # ======================================================================

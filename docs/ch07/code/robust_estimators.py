@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""
+Robust Estimators
+=================
+Educational script demonstrating robust estimators.
+"""
+
 # ======================================================================
 # 07_robust_01_trimmed_weighted_mad.py
 # ======================================================================

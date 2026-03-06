@@ -21,7 +21,9 @@ Use the F-test to determine whether the variances of the two production lines ar
 The F-statistic is calculated as the ratio of the sample variances:
 
 $$
+
 F = \frac{s_1^2}{s_2^2}
+
 $$
 
 where $s_1^2$ and $s_2^2$ are the sample variances of the two production lines.

@@ -13,7 +13,9 @@ Given a joint distribution of two random variables, the **marginal distribution*
 From the joint PMF $p_{X,Y}(x,y)$, the marginal PMFs are obtained by summing over the other variable:
 
 $$
+
 p_X(x) = \sum_y p_{X,Y}(x, y), \qquad p_Y(y) = \sum_x p_{X,Y}(x, y)
+
 $$
 
 ### Continuous Case
@@ -21,7 +23,9 @@ $$
 From the joint PDF $f_{X,Y}(x,y)$, the marginal PDFs are:
 
 $$
+
 f_X(x) = \int_{-\infty}^{\infty} f_{X,Y}(x, y)\,dy, \qquad f_Y(y) = \int_{-\infty}^{\infty} f_{X,Y}(x, y)\,dx
+
 $$
 
 **Intuition:** Marginalizing "integrates out" the other variable, projecting the joint distribution onto a single axis.
@@ -35,7 +39,9 @@ $$
 The conditional PMF of $Y$ given $X = x$ is:
 
 $$
+
 p_{Y|X}(y \mid x) = \frac{p_{X,Y}(x, y)}{p_X(x)}, \qquad p_X(x) > 0
+
 $$
 
 ### Continuous Case
@@ -43,19 +49,25 @@ $$
 The conditional PDF of $Y$ given $X = x$ is:
 
 $$
+
 f_{Y|X}(y \mid x) = \frac{f_{X,Y}(x, y)}{f_X(x)}, \qquad f_X(x) > 0
+
 $$
 
 ### Conditional Expectation
 
 $$
+
 E[Y \mid X = x] = \begin{cases} \sum_y y \cdot p_{Y|X}(y \mid x) & \text{(discrete)} \\ \int_{-\infty}^{\infty} y \cdot f_{Y|X}(y \mid x)\,dy & \text{(continuous)} \end{cases}
+
 $$
 
 ### Conditional Variance
 
 $$
+
 \text{Var}(Y \mid X = x) = E[Y^2 \mid X = x] - (E[Y \mid X = x])^2
+
 $$
 
 ---
@@ -67,19 +79,25 @@ $$
 The joint distribution can always be factored as:
 
 $$
+
 f_{X,Y}(x, y) = f_{Y|X}(y \mid x) \cdot f_X(x) = f_{X|Y}(x \mid y) \cdot f_Y(y)
+
 $$
 
 ### Law of Total Expectation
 
 $$
+
 E[Y] = E[E[Y \mid X]] = \begin{cases} \sum_x E[Y \mid X = x] \cdot p_X(x) & \text{(discrete)} \\ \int E[Y \mid X = x] \cdot f_X(x)\,dx & \text{(continuous)} \end{cases}
+
 $$
 
 ### Law of Total Variance (Eve's Law)
 
 $$
+
 \text{Var}(Y) = E[\text{Var}(Y \mid X)] + \text{Var}(E[Y \mid X])
+
 $$
 
 The total variance decomposes into the mean of conditional variances (unexplained variance) plus the variance of conditional means (explained variance).
@@ -91,7 +109,9 @@ The total variance decomposes into the mean of conditional variances (unexplaine
 Combining the multiplication rule and marginal distributions yields Bayes' theorem:
 
 $$
+
 f_{X|Y}(x \mid y) = \frac{f_{Y|X}(y \mid x) \cdot f_X(x)}{f_Y(y)} = \frac{f_{Y|X}(y \mid x) \cdot f_X(x)}{\int f_{Y|X}(y \mid x) \cdot f_X(x)\,dx}
+
 $$
 
 This is the foundation of Bayesian inference: update the prior $f_X(x)$ with the likelihood $f_{Y|X}(y \mid x)$ to obtain the posterior $f_{X|Y}(x \mid y)$.
@@ -114,11 +134,15 @@ Find $P(Y = 1 \mid X = 1)$ and $E[Y \mid X = 1]$.
 **Solution:**
 
 $$
+
 P(Y = 1 \mid X = 1) = \frac{p_{X,Y}(1,1)}{p_X(1)} = \frac{0.25}{0.45} = \frac{5}{9} \approx 0.556
+
 $$
 
 $$
+
 E[Y \mid X = 1] = 0 \cdot \frac{0.10}{0.45} + 1 \cdot \frac{0.25}{0.45} + 2 \cdot \frac{0.10}{0.45} = \frac{0.45}{0.45} = 1.0
+
 $$
 
 ---
@@ -132,13 +156,17 @@ $$
 **Marginal of $X$:**
 
 $$
+
 f_X(x) = \int_x^1 2\,dy = 2(1 - x), \quad 0 \leq x \leq 1
+
 $$
 
 **Conditional PDF of $Y$ given $X = x$:**
 
 $$
+
 f_{Y|X}(y \mid x) = \frac{f_{X,Y}(x,y)}{f_X(x)} = \frac{2}{2(1-x)} = \frac{1}{1-x}, \quad x \leq y \leq 1
+
 $$
 
 This is $\text{Uniform}(x, 1)$.
@@ -146,13 +174,17 @@ This is $\text{Uniform}(x, 1)$.
 **Conditional expectation:**
 
 $$
+
 E[Y \mid X = x] = \frac{x + 1}{2}
+
 $$
 
 **Verification via Law of Total Expectation:**
 
 $$
+
 E[Y] = \int_0^1 \frac{x+1}{2} \cdot 2(1-x)\,dx = \int_0^1 (x+1)(1-x)\,dx = \int_0^1 (1 - x^2)\,dx = \frac{2}{3}
+
 $$
 
 ---

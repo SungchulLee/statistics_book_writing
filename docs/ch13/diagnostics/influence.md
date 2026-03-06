@@ -16,7 +16,9 @@ Outliers and influential points can substantially impact regression results. Und
 For each observation $i$, Cook's Distance $D_i$ is:
 
 $$
+
 D_i = \frac{\sum_{j=1}^n (\hat{y}_{j} - \hat{y}_{j(i)})^2}{p \cdot s^2}
+
 $$
 
 where:
@@ -26,12 +28,13 @@ where:
 - $p$ is the number of predictors (including the intercept).
 - $s^2$ is the mean squared error of the model.
 
-### Computing $s^2$
-
+### Computing s-squared
 The residual variance is computed using $n - p$ as the denominator:
 
 $$
+
 s^2 = \frac{\sum_{i=1}^n (y_i - \hat{y}_i)^2}{n - p}
+
 $$
 
 This accounts for the degrees of freedom lost from estimating $p$ parameters. In simple linear regression ($p = 2$: one slope plus intercept), this gives $n - 2$. For multiple regression, use $n - p$ where $p$ includes all estimated parameters.

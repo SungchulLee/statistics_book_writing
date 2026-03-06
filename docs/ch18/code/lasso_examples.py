@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""
+Lasso Examples
+==============
+Educational script demonstrating lasso examples.
+"""
+
 # ======================================================================
 # 18_lasso_01_regularization_path_and_cv.py
 # ======================================================================

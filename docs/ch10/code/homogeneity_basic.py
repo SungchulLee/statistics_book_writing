@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""
+Homogeneity Basic
+=================
+Educational script demonstrating homogeneity basic.
+"""
+
 # ======================================================================
 # 18_homog_01_scipy_basic.py
 # ======================================================================

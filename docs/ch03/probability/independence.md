@@ -11,13 +11,17 @@ Two events are **independent** if knowing that one has occurred provides no info
 Events $A$ and $B$ are **independent** if and only if:
 
 $$
+
 P(A \cap B) = P(A) \cdot P(B)
+
 $$
 
 Equivalently, if $P(B) > 0$:
 
 $$
+
 P(A \mid B) = P(A)
+
 $$
 
 **Interpretation:** Conditioning on $B$ does not change the probability of $A$—learning that $B$ occurred gives no new information about $A$.
@@ -37,7 +41,9 @@ These two concepts are frequently confused but are fundamentally different:
 If $A$ and $B$ are mutually exclusive with $P(A) > 0$ and $P(B) > 0$, then they are **not** independent:
 
 $$
+
 P(A \cap B) = 0 \neq P(A) \cdot P(B) > 0
+
 $$
 
 ---
@@ -47,7 +53,9 @@ $$
 Events $A_1, A_2, \ldots, A_n$ are **mutually independent** if for every subset $S \subseteq \{1, 2, \ldots, n\}$:
 
 $$
+
 P\left(\bigcap_{i \in S} A_i\right) = \prod_{i \in S} P(A_i)
+
 $$
 
 **Pairwise independence** alone is not sufficient for mutual independence. Pairwise independence requires only that every pair satisfies the product rule, but mutual independence requires the product rule for all subsets of any size.
@@ -61,7 +69,9 @@ $$
 Flip a fair coin twice. Let $A$ = "first flip is heads" and $B$ = "second flip is heads."
 
 $$
+
 P(A) = \frac{1}{2}, \quad P(B) = \frac{1}{2}, \quad P(A \cap B) = \frac{1}{4} = P(A) \cdot P(B)
+
 $$
 
 The flips are independent—the outcome of the first flip has no effect on the second.
@@ -71,7 +81,9 @@ The flips are independent—the outcome of the first flip has no effect on the s
 Roll a fair die. Let $A$ = "result is even" = $\{2, 4, 6\}$ and $B$ = "result is $\leq 3$" = $\{1, 2, 3\}$.
 
 $$
+
 P(A) = \frac{1}{2}, \quad P(B) = \frac{1}{2}, \quad P(A \cap B) = P(\{2\}) = \frac{1}{6}
+
 $$
 
 Since $\frac{1}{6} \neq \frac{1}{2} \cdot \frac{1}{2} = \frac{1}{4}$, events $A$ and $B$ are **not** independent.
@@ -87,7 +99,9 @@ Flip two fair coins. Define:
 Every pair is independent: $P(A \cap B) = P(A)P(B)$, $P(A \cap C) = P(A)P(C)$, $P(B \cap C) = P(B)P(C)$, each equaling $\frac{1}{4}$. However:
 
 $$
+
 P(A \cap B \cap C) = P(\{HH\}) = \frac{1}{4} \neq P(A) \cdot P(B) \cdot P(C) = \frac{1}{8}
+
 $$
 
 The events are pairwise independent but not mutually independent.

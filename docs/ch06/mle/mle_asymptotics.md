@@ -7,13 +7,17 @@ Under regularity conditions, MLE possesses three key asymptotic properties.
 ## Consistency
 
 $$
+
 \hat{\theta}_{MLE} \xrightarrow{P} \theta_0 \quad \text{as } n \to \infty
+
 $$
 
 ## Asymptotic Normality
 
 $$
+
 \sqrt{n}(\hat{\theta}_{MLE} - \theta_0) \xrightarrow{d} N\left(0, \frac{1}{I(\theta_0)}\right)
+
 $$
 
 ## Asymptotic Efficiency

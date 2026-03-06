@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""
+Test Paired
+===========
+Educational script demonstrating test paired.
+"""
+
 # ===============================================
 # 13_testing_05_paired_mean_simple.py
 # ===============================================

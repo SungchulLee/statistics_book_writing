@@ -11,19 +11,25 @@ The **Central Limit Theorem (CLT)** is one of the most important results in all 
 If $X_1, X_2, \ldots, X_n$ are i.i.d. random variables with mean $\mu$ and variance $\sigma^2$, then the standardized sample mean converges in distribution to a standard normal:
 
 $$
+
 \frac{\bar{X} - \mu}{\sigma / \sqrt{n}} \xrightarrow{d} N(0, 1) \quad \text{as } n \to \infty
+
 $$
 
 Equivalently, the sample mean is approximately normally distributed for large $n$:
 
 $$
+
 \bar{X} \sim N\left(\mu, \frac{\sigma^2}{n}\right)
+
 $$
 
 Or in terms of the sum $S_n = \sum_{i=1}^n X_i$:
 
 $$
+
 S_n \approx N(n\mu, \, n\sigma^2)
+
 $$
 
 ---
@@ -33,7 +39,9 @@ $$
 The Law of Large Numbers tells us **where** the sample mean converges: $\bar{X} \to \mu$. The CLT tells us **how fast** and **in what shape** the fluctuations around $\mu$ behave:
 
 $$
+
 \frac{\sqrt{n}}{\sigma}(\bar{X} - \mu) = \frac{S_n - n\mu}{\sqrt{n\sigma^2}} \xrightarrow{d} N(0, 1)
+
 $$
 
 The LLN says the deviation $\bar{X} - \mu \to 0$. By rescaling by $\sqrt{n}$, the CLT reveals that these deviations have a non-trivial normal structure.
@@ -42,8 +50,7 @@ The LLN says the deviation $\bar{X} - \mu \to 0$. By rescaling by $\sqrt{n}$, th
 
 ## Practical Guidelines
 
-### Minimum Sample Size ($n \geq 30$)
-
+### Minimum Sample Size (n >= 30)
 A commonly cited rule of thumb is that $n \geq 30$ is "large enough" for the CLT approximation to hold:
 
 - If the population is approximately symmetric, even $n \approx 15$–20 may suffice.
@@ -55,7 +62,9 @@ A commonly cited rule of thumb is that $n \geq 30$ is "large enough" for the CLT
 When dealing with sample proportions (binomial data), the CLT requires:
 
 $$
+
 np \geq 5 \quad \text{and} \quad n(1-p) \geq 5
+
 $$
 
 Some textbooks use the stricter rule $np \geq 10$ and $n(1-p) \geq 10$.
@@ -65,13 +74,17 @@ Some textbooks use the stricter rule $np \geq 10$ and $n(1-p) \geq 10$.
 When sampling without replacement from a finite population of size $N$, draws are not independent. The finite population correction is:
 
 $$
+
 \text{Var}(\bar{X}_n) = \frac{\sigma^2}{n} \cdot \frac{N - n}{N - 1}
+
 $$
 
 The correction is negligible if the sampling fraction is small:
 
 $$
+
 \frac{n}{N} \leq 10\%
+
 $$
 
 If this holds, we can safely treat the sample as i.i.d.
@@ -85,13 +98,17 @@ If this holds, we can safely treat the sample as i.i.d.
 For $X \sim \text{Binomial}(n, p)$ with large $n$:
 
 $$
+
 X \approx N(np, \, np(1-p))
+
 $$
 
 With **continuity correction**:
 
 $$
+
 P(X \leq k) \approx P\left(Z \leq \frac{k + 0.5 - np}{\sqrt{np(1-p)}}\right)
+
 $$
 
 ### Approximation to the Poisson
@@ -99,7 +116,9 @@ $$
 For $X \sim \text{Poisson}(\lambda)$ with large $\lambda$:
 
 $$
+
 X \approx N(\lambda, \lambda)
+
 $$
 
 ---

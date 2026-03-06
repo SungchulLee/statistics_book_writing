@@ -9,9 +9,9 @@ markdown_extensions:
     - pymdownx.superfences
     - pymdownx.arithmatex:
         generic: true
-    - pymdownx.details
 
 extra_javascript:
+    - javascripts/mathjax.js
     - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
 
 
@@ -43,8 +43,8 @@ nav:
             - Orthogonal Projection Matrices: ch00/linalg_regression/square_matrices/orthogonal_projection.md
         - 0.4 Linear Algebra and Statistics:
             - Chi-Squared Distribution and Quadratic Forms: ch00/linalg_regression/linalg_statistics/chi_squared_quadratic.md
-            - Sampling Distributions (Simple OLS): ch00/linalg_regression/linalg_statistics/sampling_dist_simple_ols.md
-            - Sampling Distributions (General OLS): ch00/linalg_regression/linalg_statistics/sampling_dist_general_ols.md
+            - Sampling Distributions (Simple Ordinary Least Squares): ch00/linalg_regression/linalg_statistics/sampling_dist_simple_ols.md
+            - Sampling Distributions (General Ordinary Least Squares): ch00/linalg_regression/linalg_statistics/sampling_dist_general_ols.md
         - 0.5 Exercises: ch00/exercises/exercises.md
 
     - 1 Data Collection:
@@ -75,7 +75,7 @@ nav:
         - Chapter Overview: ch02/index.md
         - 2.1 Exploratory Data Analysis:
             - Histograms and Density Plots: ch02/exploration/histograms.md
-            - ECDF, Quantiles, and Q-Q Plots: ch02/exploration/ecdf.md
+            - Empirical Distribution and Quantile-Quantile Plots: ch02/exploration/ecdf.md
         - 2.2 Shape of Distributions:
             - Modality: ch02/shape/modality.md
             - Skewness and Kurtosis: ch02/shape/skewness_kurtosis.md
@@ -83,7 +83,7 @@ nav:
         - 2.3 Numerical Summaries:
             - Mean, Median, Mode: ch02/center/mean_median_mode.md
             - Variance and Standard Deviation: ch02/spread/variance_std.md
-            - IQR and Robust Measures: ch02/spread/robust.md
+            - Interquartile Range and Robust Measures: ch02/spread/robust.md
             - Median Absolute Deviation: ch02/spread/median_absolute_deviation.md
         - 2.4 Visualization:
             - Boxplots: ch02/visualization/boxplots.md
@@ -91,6 +91,8 @@ nav:
             - Group Comparisons: ch02/visualization/group_comparison.md
         - 2.5 Code:
             - Group Comparison Examples: ch02/code/group_comparison_examples.py
+            - Descriptive Statistics (Weed Prices): ch02/code/descriptive_stats_weed_prices.py
+            - Advanced Measures (Geometric Mean, Chebyshev): ch02/code/descriptive_measures_advanced.py
         - 2.6 Exercises: ch02/exercises/exercises.md
 
     - 3 Foundations of Probability:
@@ -106,7 +108,7 @@ nav:
         - 3.3 Random Variables:
             - Discrete Random Variables: ch03/rv/discrete.md
             - Continuous Random Variables: ch03/rv/continuous.md
-            - PMF, PDF, and CDF: ch03/rv/pmf_pdf_cdf.md
+            - 'Mass, Density, and Cumulative Distribution Functions': ch03/rv/pmf_pdf_cdf.md
         - 3.4 Expectation and Moments:
             - Expectation and Linearity: ch03/rv/expectation.md
             - Variance and Covariance: ch03/rv/variance_covariance.md
@@ -115,7 +117,10 @@ nav:
             - Law of Large Numbers: ch03/limits/lln.md
             - Central Limit Theorem: ch03/limits/clt.md
             - Berry–Esseen Theorem: ch03/limits/berry_esseen.md
-        - 3.6 Exercises: ch03/exercises/exercises.md
+        - 3.6 Code:
+            - Central Limit Theorem Multi-Distribution Visualization: ch03/code/clt_visualization.py
+            - Gambler's Paradox (Law of Large Numbers Failure): ch03/code/gambler_paradox_lln.py
+        - 3.7 Exercises: ch03/exercises/exercises.md
 
     - 4 Distributions:
         - Chapter Overview: ch04/index.md
@@ -133,19 +138,24 @@ nav:
             - Covariance and Correlation: ch04/joint/covariance_correlation.md
             - Independence vs Zero Correlation: ch04/joint/independence_vs_zero_corr.md
         - 4.4 Code:
-            - Normal PDF with scipy.stats: ch04/code/normal_pdf.py
+            - Normal Density Function with scipy.stats: ch04/code/normal_pdf.py
             - Normal Random Variates: ch04/code/normal_rvs.py
-            - Normal CDF and Quantiles: ch04/code/normal_cdf.py
-            - Student-t PDF: ch04/code/t_pdf.py
-            - Chi-Square PDF: ch04/code/chi_square_pdf.py
-            - F-Distribution PDF: ch04/code/f_pdf.py
-            - Normal PPF (Quantile Function): ch04/code/normal_ppf.py
+            - Normal Cumulative Distribution and Quantiles: ch04/code/normal_cdf.py
+            - Student-t Density Function: ch04/code/t_pdf.py
+            - Chi-Square Density Function: ch04/code/chi_square_pdf.py
+            - F-Distribution Density Function: ch04/code/f_pdf.py
+            - Normal Percent Point Function (Quantile Function): ch04/code/normal_ppf.py
             - Normal Survival Function: ch04/code/normal_sf.py
-            - Exponential PDF: ch04/code/exponential_pdf.py
-            - Uniform PDF: ch04/code/uniform_pdf.py
-            - Logistic PDF (vs Normal): ch04/code/logistic_pdf.py
-            - Log-Normal PDF: ch04/code/lognormal_pdf.py
-            - Weibull PDF and Hazard: ch04/code/weibull_pdf.py
+            - Exponential Density Function: ch04/code/exponential_pdf.py
+            - Uniform Density Function: ch04/code/uniform_pdf.py
+            - Logistic Density Function (vs Normal): ch04/code/logistic_pdf.py
+            - Log-Normal Density Function: ch04/code/lognormal_pdf.py
+            - Weibull Density Function and Hazard: ch04/code/weibull_pdf.py
+            - Discrete Distributions Suite: ch04/code/discrete_distributions_suite.py
+            - Bivariate Normal Distribution: ch04/code/bivariate_normal.py
+            - Gaussian 2D Conditional Distributions: ch04/code/gaussian_2d_conditionals.py
+            - Gaussian 2D Eigendecomposition: ch04/code/gaussian_2d_eigendecomposition.py
+            - Inverse Transform Sampling: ch04/code/inverse_transform_sampling.py
         - 4.5 Exercises: ch04/exercises/exercises.md
 
     - 5 Sampling Distributions:
@@ -176,6 +186,8 @@ nav:
             - Standard Error of X̄: ch05/code/se_xbar.py
             - Standard Error of S²: ch05/code/se_s2.py
             - Sampling Distribution Income Visualization: ch05/code/sampling_dist_income_visualization.py
+            - Bootstrap Standard Error: ch05/code/bootstrap_standard_error.py
+            - Financial Crisis Central Limit Theorem Failure: ch05/code/financial_crisis_clt.py
         - 5.6 Exercises: ch05/exercises/exercises.md
 
     - 6 Statistical Estimation:
@@ -188,32 +200,34 @@ nav:
             - Sufficiency and Minimal Sufficiency: ch06/estimator_quality/sufficiency.md
         - 6.2 Maximum Likelihood Estimation:
             - Likelihood Function: ch06/mle/likelihood.md
-            - Introduction to MLE: ch06/mle/intro_mle.md
-            - MLE for Bernoulli Distribution: ch06/mle/mle_bernoulli.md
-            - MLE for Normal Distribution: ch06/mle/mle_normal.md
-            - MLE for Poisson Distribution: ch06/mle/mle_poisson.md
-            - MLE for Exponential Distribution: ch06/mle/mle_exponential.md
+            - Introduction to Maximum Likelihood Estimation: ch06/mle/intro_mle.md
+            - Maximum Likelihood for Bernoulli Distribution: ch06/mle/mle_bernoulli.md
+            - Maximum Likelihood for Normal Distribution: ch06/mle/mle_normal.md
+            - Maximum Likelihood for Poisson Distribution: ch06/mle/mle_poisson.md
+            - Maximum Likelihood for Exponential Distribution: ch06/mle/mle_exponential.md
             - Capture-Recapture Method: ch06/mle/capture_recapture.md
-            - Asymptotic Properties of MLE: ch06/mle/mle_asymptotics.md
+            - Asymptotic Properties of Maximum Likelihood: ch06/mle/mle_asymptotics.md
             - Fisher Information and Standard Errors: ch06/mle/fisher_information.md
         - 6.3 Method of Moments:
             - Method of Moments Foundations: ch06/estimation_methods/moments_foundations.md
-            - MoM for Common Distributions: ch06/estimation_methods/moments_examples.md
-            - Generalized Method of Moments (GMM): ch06/estimation_methods/gmm.md
-            - MoM vs MLE Comparison: ch06/estimation_methods/moments_vs_mle.md
+            - Method of Moments for Common Distributions: ch06/estimation_methods/moments_examples.md
+            - Generalized Method of Moments: ch06/estimation_methods/gmm.md
+            - Method of Moments vs Maximum Likelihood Comparison: ch06/estimation_methods/moments_vs_mle.md
             - Likelihood and Estimation Overview: ch06/estimation_methods/likelihood.md
             - Method of Moments Overview: ch06/estimation_methods/moments.md
         - 6.4 Bayesian Estimation:
             - Prior, Likelihood, and Posterior: ch06/bayesian/prior_posterior.md
             - Conjugate Priors: ch06/bayesian/conjugate_priors.md
-            - MAP Estimation: ch06/bayesian/map_estimation.md
+            - Maximum a Posteriori Estimation: ch06/bayesian/map_estimation.md
         - 6.5 Code:
             - Estimation Methods Comparison: ch06/code/estimation_methods.py
-            - MLE Optimization Examples: ch06/code/mle_optimization.py
+            - Maximum Likelihood Optimization Examples: ch06/code/mle_optimization.py
             - Fisher Information Computation: ch06/code/fisher_information.py
             - Bayesian Estimation Demonstrations: ch06/code/bayesian_estimation.py
-            - Capture-Recapture MLE: ch06/code/capture_recapture.py
+            - Capture-Recapture Maximum Likelihood: ch06/code/capture_recapture.py
             - Log-Likelihood Visualization: ch06/code/log_likelihood.py
+            - Bayesian Beta Conjugate Prior: ch06/code/bayesian_beta_conjugate.py
+            - Geometric and Poisson Maximum Likelihood: ch06/code/geometric_poisson_mle.py
         - 6.6 Exercises: ch06/exercises/exercises.md
 
     - 7 Estimation of μ and σ²: 
@@ -227,11 +241,11 @@ nav:
         - 7.2 Estimation of the Variance:
             - Naive Variance Estimator: ch07/variance/naive.md
             - Bessel's Correction: ch07/variance/bessels.md
-            - MSE of Variance Estimators: ch07/variance/mse_comparison.md
-            - Robust Variance Estimators (MAD, IQR-based): ch07/variance/robust_variance.md
-        - 7.3 Gaussian MLE:
-            - MLE of μ and σ²: ch07/mle/gaussian_mle.md
-            - Bias of Gaussian MLE for σ²: ch07/mle/mle_bias.md
+            - Mean Squared Error of Variance Estimators: ch07/variance/mse_comparison.md
+            - Robust Variance Estimators: ch07/variance/robust_variance.md
+        - 7.3 Gaussian Maximum Likelihood:
+            - Maximum Likelihood Estimation of μ and σ²: ch07/mle/gaussian_mle.md
+            - Bias of Gaussian Maximum Likelihood for σ²: ch07/mle/mle_bias.md
             - Sufficiency and Completeness: ch07/mle/sufficiency_completeness.md
         - 7.4 Estimation Under Non-Normality:
             - Heavy-Tailed Distributions: ch07/non_normal/heavy_tails.md
@@ -241,9 +255,10 @@ nav:
             - Consistency and Convergence: ch07/code/consistency_convergence.py
             - Variance Estimators: ch07/code/variance_estimators.py
             - Bessel's Correction: ch07/code/bessels_correction.py
-            - Gaussian MLE: ch07/code/gaussian_mle.py
+            - Gaussian Maximum Likelihood: ch07/code/gaussian_mle.py
             - Return Estimation: ch07/code/return_estimation.py
             - Robust Estimators Comparison: ch07/code/robust_estimators.py
+            - Cauchy Law of Large Numbers Failure: ch07/code/cauchy_lln_failure.py
         - 7.6 Exercises: ch07/exercises/exercises.md
 
     - 8 Confidence Intervals:
@@ -252,15 +267,15 @@ nav:
             - Confidence Level and Coverage: ch08/foundations/coverage.md
             - Interpretation and Common Pitfalls: ch08/foundations/interpretation.md
         - 8.2 One-Sample Intervals:
-            - CI for μ: ch08/one_sample_intervals/ci_mu.md
-            - CI for p: ch08/one_sample_intervals/ci_p.md
-            - CI for σ²: ch08/one_sample_intervals/ci_sigma2.md
+            - Confidence Interval for μ: ch08/one_sample_intervals/ci_mu.md
+            - Confidence Interval for p: ch08/one_sample_intervals/ci_p.md
+            - Confidence Interval for σ²: ch08/one_sample_intervals/ci_sigma2.md
         - 8.3 Two-Sample Intervals:
-            - CI for μ₁−μ₂: ch08/two_sample_intervals/ci_mu_diff.md
-            - CI for p₁−p₂: ch08/two_sample_intervals/ci_p_diff.md
-            - CI for σ₁²/σ₂²: ch08/two_sample_intervals/ci_variance_ratio.md
+            - Confidence Interval for μ₁−μ₂: ch08/two_sample_intervals/ci_mu_diff.md
+            - Confidence Interval for p₁−p₂: ch08/two_sample_intervals/ci_p_diff.md
+            - Confidence Interval for σ₁²/σ₂²: ch08/two_sample_intervals/ci_variance_ratio.md
         - 8.4 Paired-Sample Intervals:
-            - CI for μ_D (Mean of Differences): ch08/paired_sample_intervals/ci_mu_paired.md
+            - Confidence Interval for μ_D (Mean of Differences): ch08/paired_sample_intervals/ci_mu_paired.md
             - When to Use Paired vs Independent Designs: ch08/paired_sample_intervals/paired_vs_independent.md
             - Paired Interval for Proportions (McNemar): ch08/paired_sample_intervals/ci_paired_proportions.md
         - 8.5 Sample Size Determination:
@@ -269,13 +284,13 @@ nav:
         - 8.6 Code:
             - Confidence Interval Demonstrations: ch08/code/confidence_intervals.py
             - Sample Size Calculations: ch08/code/sample_size.py
-            - Mean CI Coverage Simulation: ch08/code/ci_mean_sim.py
-            - Proportion CI Coverage Simulation: ch08/code/ci_prop_sim.py
-            - Variance CI Coverage Simulation: ch08/code/ci_var_sim.py
-            - Paired Mean CI Coverage Simulation: ch08/code/ci_paired_sim.py
-            - Difference of Means CI Simulation: ch08/code/ci_diff_means_sim.py
-            - One-Sample Mean CI Computation: ch08/code/ci_mean_calc.py
-            - One-Sample Proportion CI Computation: ch08/code/ci_prop_calc.py
+            - Mean Confidence Interval Coverage Simulation: ch08/code/ci_mean_sim.py
+            - Proportion Confidence Interval Coverage Simulation: ch08/code/ci_prop_sim.py
+            - Variance Confidence Interval Coverage Simulation: ch08/code/ci_var_sim.py
+            - Paired Mean Confidence Interval Coverage Simulation: ch08/code/ci_paired_sim.py
+            - Difference of Means Confidence Interval Simulation: ch08/code/ci_diff_means_sim.py
+            - One-Sample Mean Confidence Interval Computation: ch08/code/ci_mean_calc.py
+            - One-Sample Proportion Confidence Interval Computation: ch08/code/ci_prop_calc.py
         - 8.7 Exercises: ch08/exercises/exercises.md
 
     - 9 Hypothesis Testing:
@@ -302,7 +317,7 @@ nav:
         - 9.5 Errors and Power:
             - Type I and II Errors: ch09/errors_and_power/errors.md
             - Power Analysis: ch09/errors_and_power/power.md
-            - CI ↔ Test Duality: ch09/errors_and_power/duality.md
+            - Confidence Interval and Test Duality: ch09/errors_and_power/duality.md
         - 9.6 Multiple Testing:
             - Family-Wise Error Rate: ch09/multiple_testing/fwer.md
             - Bonferroni and Holm Corrections: ch09/multiple_testing/bonferroni_holm.md
@@ -318,6 +333,13 @@ nav:
             - Paired Mean Test: ch09/code/test_paired.py
             - Two-Sample Mean Test: ch09/code/test_two_means.py
             - Two-Sample Proportion Test: ch09/code/test_two_props.py
+            - Coin Toss Simulation: ch09/code/coin_toss_simulation.py
+            - Two-Sample t-Test (Weed Prices): ch09/code/ttest_weed_prices.py
+            - Type I/II Error Visualization: ch09/code/type12_error_visualization.py
+            - Rejection Region Demo: ch09/code/rejection_region_demo.py
+            - Height/Weight Hypothesis Tests: ch09/code/height_weight_hypothesis_test.py
+            - P-Hacking Demonstration: ch09/code/p_hacking_demo.py
+            - False Discovery Rate and Resampling Multiple Testing: ch09/code/fdr_resampling_demo.py
         - 9.8 Exercises: ch09/exercises/exercises.md
 
     - 10 Chi-Square Tests:
@@ -344,22 +366,22 @@ nav:
             - Cochran's Q Test (k Related Outcomes): ch10/code/cochran_q.py
         - 10.5 Exercises: ch10/exercises/exercises.md
 
-    - 11 ANOVA:
+    - 11 Analysis of Variance:
         - Chapter Overview: ch11/index.md
-        - 11.1 One-Way ANOVA:
+        - 11.1 One-Way Analysis of Variance:
             - Model and Assumptions: ch11/anova_one_way/one_way_model.md
             - F-Test Procedure: ch11/anova_one_way/f_test.md
-        - 11.2 Two-Way ANOVA:
+        - 11.2 Two-Way Analysis of Variance:
             - Main Effects and Blocking: ch11/anova_two_way/two_way.md
             - Interaction Effects: ch11/anova_two_way/interaction.md
         - 11.3 Post-Hoc Comparisons:
-            - Tukey HSD: ch11/post_hoc/tukey.md
+            - Tukey Honestly Significant Difference: ch11/post_hoc/tukey.md
             - Bonferroni and Scheffé Methods: ch11/post_hoc/bonferroni_scheffe.md
             - Dunnett's Test (vs Control): ch11/post_hoc/dunnett.md
             - Games–Howell (Unequal Variances): ch11/post_hoc/games_howell.md
-        - 11.4 Welch's ANOVA:
-            - Welch's One-Way ANOVA: ch11/anova_welch/welch_one_way.md
-            - Welch's Two-Way ANOVA: ch11/anova_welch/welch_two_way.md
+        - 11.4 Welch's Analysis of Variance:
+            - Welch's One-Way Analysis of Variance: ch11/anova_welch/welch_one_way.md
+            - Welch's Two-Way Analysis of Variance: ch11/anova_welch/welch_two_way.md
         - 11.5 Assumptions:
             - Assumptions Overview: ch11/assumptions/assumptions_overview.md
             - Checking Normality of Residuals: ch11/assumptions/normality.md
@@ -372,17 +394,19 @@ nav:
             - Handling Assumption Violations: ch11/diagnostics/handling_violations.md
         - 11.7 Practical Applications:
             - A/B Testing and Experimental Design: ch11/practical_applications/ab_testing.md
-            - Financial Applications of ANOVA: ch11/practical_applications/finance_applications.md
+            - Financial Applications of Analysis of Variance: ch11/practical_applications/finance_applications.md
             - Case Studies: ch11/practical_applications/case_studies.md
         - 11.8 Code:
-            - ANOVA Diagnostics: ch11/code/anova_diagnostics.py
+            - Analysis of Variance Diagnostics: ch11/code/anova_diagnostics.py
             - Post-Hoc Comparison Examples: ch11/code/post_hoc_comparisons.py
-            - One-Way ANOVA End-to-End Pipeline: ch11/code/oneway_pipeline.py
-            - One-Way ANOVA with scipy and Plots: ch11/code/oneway_scipy.py
-            - Two-Way ANOVA End-to-End Pipeline: ch11/code/twoway_pipeline.py
+            - One-Way Analysis of Variance End-to-End Pipeline: ch11/code/oneway_pipeline.py
+            - One-Way Analysis of Variance with scipy and Plots: ch11/code/oneway_scipy.py
+            - Two-Way Analysis of Variance End-to-End Pipeline: ch11/code/twoway_pipeline.py
             - Interaction Effect Plot: ch11/code/interaction_plot.py
-            - Welch ANOVA Type I Error and Power Simulation: ch11/code/welch_simulation.py
-            - Two-Way Welch ANOVA (Robust HC3): ch11/code/welch_twoway_robust.py
+            - Welch Analysis of Variance Type I Error and Power Simulation: ch11/code/welch_simulation.py
+            - Two-Way Welch Analysis of Variance (Robust HC3): ch11/code/welch_twoway_robust.py
+            - Analysis of Variance F-Statistic Simulation: ch11/code/anova_f_simulation.py
+            - Manual Analysis of Variance with Fisher Method: ch11/code/anova_manual_computation.py
         - 11.9 Exercises: ch11/exercises/exercises.md
 
     - 12 Correlation and Causation:
@@ -408,7 +432,7 @@ nav:
             - Criteria for Causal Inference: ch12/causation/causal_criteria.md
             - Randomized Experiments and Causation: ch12/causation/experiments_causation.md
             - Instrumental Variables (Introduction): ch12/causation/instrumental_variables.md
-            - Directed Acyclic Graphs (DAGs): ch12/causation/dags.md
+            - Directed Acyclic Graphs: ch12/causation/dags.md
             - Causation Overview: ch12/causation/causation.md
         - 12.5 Correlation Tests:
             - Testing Pearson's r (t-Test for Correlation): ch12/correlation_test/test_pearson.md
@@ -424,6 +448,9 @@ nav:
             - Causal Inference Simulations: ch12/code/causal_simulations.py
             - Correlation Visualization: ch12/code/corr_viz.py
             - Correlation Ellipse Plot: ch12/code/correlation_ellipses.py
+            - Covariance from Scratch: ch12/code/covariance_from_scratch.py
+            - Regression Correlation Plot: ch12/code/regression_correlation_plot.py
+            - Confounding and Causation Demo: ch12/code/confounding_causation_demo.py
         - 12.8 Exercises: ch12/exercises/exercises.md
 
     - 13 Linear Regression:
@@ -433,9 +460,9 @@ nav:
             - Multiple Linear Regression: ch13/linear_regression/multiple.md
         - 13.2 Estimation and Inference:
             - Least Squares Estimation: ch13/estimation_inference/least_squares.md
-            - Sampling Distributions (Simple OLS): ch13/estimation_inference/sampling_dist_simple.md
+            - Sampling Distributions (Simple Ordinary Least Squares): ch13/estimation_inference/sampling_dist_simple.md
             - Confidence Intervals for Coefficients: ch13/estimation_inference/ci_coeff.md
-            - Sampling Distributions and Tests (General OLS): ch13/estimation_inference/tests_coeff.md
+            - Sampling Distributions and Tests (General Least Squares): ch13/estimation_inference/tests_coeff.md
         - 13.3 Testing Coefficients:
             - Hypothesis Tests (t-tests): ch13/testing_coefficients/hypothesis_tests.md
             - p-values and Confidence Intervals: ch13/testing_coefficients/pvalues_ci.md
@@ -455,41 +482,44 @@ nav:
             - Checking Normality: ch13/assumptions/checking_normality.md
         - 13.6 Diagnostics:
             - Residual Analysis: ch13/diagnostics/residuals.md
-            - Multicollinearity and VIF: ch13/diagnostics/multicollinearity.md
+            - Multicollinearity and Variance Inflation Factor: ch13/diagnostics/multicollinearity.md
             - Influence and Leverage (Cook's Distance, DFFITS): ch13/diagnostics/influence.md
         - 13.7 Performance Metrics:
             - R² and Adjusted R²: ch13/performance/r_squared.md
-            - MAE, MSE, and RMSE: ch13/performance/mae_mse_rmse.md
-            - MAPE and Other Relative Metrics: ch13/performance/relative_metrics.md
+            - 'Mean Absolute, Mean Squared, and Root Mean Squared Error': ch13/performance/mae_mse_rmse.md
+            - Mean Absolute Percentage Error and Other Relative Metrics: ch13/performance/relative_metrics.md
             - Performance Metrics Overview: ch13/performance/metrics.md
         - 13.8 Model Selection Criteria:
-            - AIC (Akaike Information Criterion): ch13/model_selection/aic.md
-            - BIC (Bayesian Information Criterion): ch13/model_selection/bic.md
+            - Akaike Information Criterion: ch13/model_selection/aic.md
+            - Bayesian Information Criterion: ch13/model_selection/bic.md
             - Cross-Validation for Model Selection: ch13/model_selection/cross_validation.md
             - Stepwise and Best-Subset Selection: ch13/model_selection/stepwise_subset.md
-            - AIC and BIC Overview: ch13/model_selection/aic_bic.md
-        - 13.9 Splines and GAMs:
-            - Splines and GAMs Overview: ch13/splines_gams/index.md
+            - Akaike and Bayesian Information Criteria Overview: ch13/model_selection/aic_bic.md
+        - 13.9 Splines and Generalized Additive Models:
+            - Splines and Generalized Additive Models Overview: ch13/splines_gams/index.md
             - Generalized Additive Models: ch13/splines_gams/generalized_additive_models.md
         - 13.10 Package Usage:
-            - statsmodels OLS Interface: ch13/package_usage/statsmodels.md
+            - statsmodels Ordinary Least Squares Interface: ch13/package_usage/statsmodels.md
             - sklearn LinearRegression Interface: ch13/package_usage/sklearn.md
             - Comparison and When to Use Which: ch13/package_usage/comparison.md
         - 13.10 Code:
-            - CI for Slope (Caffeine Example): ch13/code/ci_slope_example.py
-            - CI and Prediction Bands: ch13/code/ci_prediction_bands.py
-            - OLS Regression Output Reproduction: ch13/code/ols_regression_output.py
+            - Confidence Interval for Slope (Caffeine Example): ch13/code/ci_slope_example.py
+            - Confidence Interval and Prediction Bands: ch13/code/ci_prediction_bands.py
+            - Ordinary Least Squares Regression Output Reproduction: ch13/code/ols_regression_output.py
             - Multiple Regression Diagnostics: ch13/code/multi_reg_diag.py
             - Testing Coefficients Examples: ch13/code/testing_coefficients.py
             - Model Selection Comparison: ch13/code/model_selection.py
             - Weighted Least Squares: ch13/code/weighted_regression.py
-            - GAM Housing Analysis: ch13/code/gam_housing_analysis.py
+            - Generalized Additive Model Housing Analysis: ch13/code/gam_housing_analysis.py
             - Regression Diagnostics (Housing): ch13/code/regression_diagnostics_housing.py
-            - RSS Surface Visualization: ch13/code/rss_surface_visualization.py
+            - Residual Sum of Squares Surface Visualization: ch13/code/rss_surface_visualization.py
             - 3D Regression Plane: ch13/code/regression_plane_3d.py
-            - CV Polynomial Model Selection: ch13/code/cv_polynomial_model_selection.py
+            - Cross-Validation Polynomial Model Selection: ch13/code/cv_polynomial_model_selection.py
             - Step Functions: ch13/code/step_functions.py
             - Splines with Patsy: ch13/code/splines_patsy_examples.py
+            - Regression (Weed Price vs Demographics): ch13/code/regression_weed_demographics.py
+            - Ordinary Least Squares Simulation (Monte Carlo): ch13/code/ols_simulation.py
+            - Subset and Stepwise Selection: ch13/code/subset_stepwise_selection.py
         - 13.12 Exercises: ch13/exercises/exercises.md
 
     - 14 Normality Tests:
@@ -500,9 +530,9 @@ nav:
             - Normality in Financial Data: ch14/introduction/financial_context.md
         - 14.2 Graphical Methods:
             - Histogram and Density Plots: ch14/graphical_methods/histogram_density.md
-            - Q-Q Plots: ch14/graphical_methods/qq_plots.md
+            - Quantile-Quantile Plots: ch14/graphical_methods/qq_plots.md
             - Boxplots and Their Interpretation: ch14/graphical_methods/boxplots.md
-            - Q-Q Plots for Financial Returns: ch14/graphical_methods/qq_plots_financial.md
+            - Quantile-Quantile Plots for Financial Returns: ch14/graphical_methods/qq_plots_financial.md
         - 14.3 Descriptive Statistics as Normality Indicators:
             - Skewness and Kurtosis: ch14/descriptive_statistics/skewness_kurtosis.md
             - Skewtest and Kurtosistest: ch14/descriptive_statistics/skewtest_kurtosistest.md
@@ -522,7 +552,7 @@ nav:
             - Bootstrapping as an Alternative: ch14/non_normal_data/bootstrapping.md
             - Non-Parametric Methods: ch14/non_normal_data/nonparametric.md
         - 14.7 Applications:
-            - Normality in t-Tests and ANOVA: ch14/applications/t_tests_anova.md
+            - Normality in t-Tests and Analysis of Variance: ch14/applications/t_tests_anova.md
             - Normality in Regression (Residual Diagnostics): ch14/applications/regression_residuals.md
             - Normality of Financial Returns: ch14/applications/financial_returns.md
             - Applications Overview: ch14/applications/applications.md
@@ -530,8 +560,8 @@ nav:
             - Graphical Normality Checks: ch14/code/graphical_checks.py
             - Formal Normality Test Suite: ch14/code/normality_tests.py
             - Transformation Demonstrations: ch14/code/transformations.py
-            - Q-Q Plot with Normality Tests: ch14/code/qq_plot_basic.py
-            - Q-Q Plot Confidence Band Simulation: ch14/code/qq_confidence_band.py
+            - Quantile-Quantile Plot with Normality Tests: ch14/code/qq_plot_basic.py
+            - Quantile-Quantile Plot Confidence Band Simulation: ch14/code/qq_confidence_band.py
             - Distribution Shapes via Boxplots: ch14/code/boxplot_shapes.py
             - Skewness Test: ch14/code/skewtest.py
             - Kurtosis Test: ch14/code/kurtosistest.py
@@ -542,7 +572,7 @@ nav:
             - Anderson-Darling Test: ch14/code/anderson_darling.py
             - Shapiro-Wilk Test: ch14/code/shapiro_wilk.py
             - Shapiro-Wilk Power Simulation: ch14/code/shapiro_power_sim.py
-            - Q-Q Plot Financial Returns: ch14/code/qq_plot_financial_returns.py
+            - Quantile-Quantile Plot Financial Returns: ch14/code/qq_plot_financial_returns.py
         - 14.9 Exercises: ch14/exercises/exercises.md
 
     - 15 Variance Tests:
@@ -575,7 +605,7 @@ nav:
             - Likelihood Ratio Test for Variances: ch15/advanced_methods/likelihood_ratio.md
             - Advanced Methods Overview: ch15/advanced_methods/advanced_methods.md
         - 15.7 Applications:
-            - Pre-Test for ANOVA Homoscedasticity: ch15/applications/anova_pretest.md
+            - Pre-Test for Analysis of Variance Homoscedasticity: ch15/applications/anova_pretest.md
             - Variance Testing in Regression: ch15/applications/regression_variance.md
             - Financial Volatility Comparisons: ch15/applications/financial_volatility.md
             - Applications Overview: ch15/applications/applications.md
@@ -645,10 +675,10 @@ nav:
             - Bootstrap Overview: ch17/bootstrap/bootstrap.md
         - 17.2 Bootstrap Confidence Intervals:
             - Percentile Method: ch17/bootstrap_ci/percentile.md
-            - BCa (Bias-Corrected and Accelerated): ch17/bootstrap_ci/bca.md
+            - Bias-Corrected and Accelerated Bootstrap: ch17/bootstrap_ci/bca.md
             - Bootstrap-t Method: ch17/bootstrap_ci/bootstrap_t.md
             - Visualization of Confidence Levels: ch17/bootstrap_ci/visualization_confidence_levels.md
-            - Comparison of Bootstrap CI Methods: ch17/bootstrap_ci/comparison.md
+            - Comparison of Bootstrap Confidence Interval Methods: ch17/bootstrap_ci/comparison.md
         - 17.3 Bootstrap Hypothesis Testing:
             - Bootstrap Test for a Single Mean: ch17/bootstrap_testing/single_mean.md
             - Bootstrap Test for Two Means: ch17/bootstrap_testing/two_means.md
@@ -665,13 +695,15 @@ nav:
             - When Resampling Fails: ch17/comparison/limitations.md
             - Comparison Overview: ch17/comparison/comparison.md
         - 17.6 Code:
-            - Bootstrap CI Methods: ch17/code/bootstrap_ci.py
+            - Bootstrap Confidence Interval Methods: ch17/code/bootstrap_ci.py
             - Bootstrap Hypothesis Tests: ch17/code/bootstrap_tests.py
             - Permutation Test Demonstrations: ch17/code/permutation_tests.py
             - Resampling Methods Comparison: ch17/code/resampling_methods.py
             - A/B Testing Permutation: ch17/code/ab_testing_permutation.py
-            - Bootstrap CI Visualization: ch17/code/bootstrap_ci_visualization.py
+            - Bootstrap Confidence Interval Visualization: ch17/code/bootstrap_ci_visualization.py
             - Bootstrap Median: ch17/code/bootstrap_median.py
+            - Resampling (Shoe Sales A/B Test): ch17/code/resampling_shoe_sales.py
+            - Cross-Validation Methods Comparison: ch17/code/cv_methods_comparison.py
         - 17.7 Exercises: ch17/exercises/exercises.md
 
     - 18 Regularization Techniques:
@@ -703,7 +735,7 @@ nav:
             - Regularization Path: ch18/tuning/regularization_path.md
             - Information Criteria for Regularized Models: ch18/tuning/information_criteria.md
         - 18.6 Dimensionality Reduction Methods:
-            - PCR and PLS Overview: ch18/pcr_pls/index.md
+            - Principal Components and Partial Least Squares Overview: ch18/pcr_pls/index.md
             - Principal Components Regression: ch18/pcr_pls/principal_components_regression.md
             - Partial Least Squares: ch18/pcr_pls/partial_least_squares.md
         - 18.7 Overview and Comparison:
@@ -717,7 +749,7 @@ nav:
             - Ridge, Lasso, and Elastic Net Comparison: ch18/code/reg_compare.py
             - Cross-Validation and λ Tuning: ch18/code/cv_tuning.py
             - Lasso Housing Regularization Path: ch18/code/lasso_housing_regularization_path.py
-            - PCR and PLS Examples: ch18/code/pcr_pls_examples.py
+            - Principal Components and Partial Least Squares Examples: ch18/code/pcr_pls_examples.py
         - 18.9 Exercises: ch18/exercises/exercises.md
 
     - 19 Logistic Regression:
@@ -728,13 +760,13 @@ nav:
             - Likelihood for Logistic Regression: ch19/logistic_regression/likelihood.md
         - 19.2 Estimation and Inference:
             - Maximum Likelihood Estimation: ch19/estimation_inference/mle.md
-            - Newton–Raphson and IRLS Algorithms: ch19/estimation_inference/algorithms.md
+            - Newton–Raphson and Iteratively Reweighted Least Squares: ch19/estimation_inference/algorithms.md
             - Wald and Likelihood Ratio Tests: ch19/estimation_inference/tests.md
             - Deviance and Goodness-of-Fit: ch19/estimation_inference/deviance.md
         - 19.3 Model Evaluation:
             - Confusion Matrix: ch19/evaluation/confusion_matrix.md
             - Precision, Recall, and F1-Score: ch19/evaluation/precision_recall.md
-            - ROC Curve and AUC: ch19/evaluation/roc_auc.md
+            - Receiver Operating Characteristic and Area Under Curve: ch19/evaluation/roc_auc.md
             - Decision Threshold Tuning: ch19/evaluation/threshold_tuning.md
             - Calibration and Brier Score: ch19/evaluation/calibration.md
             - Handling Imbalanced Data: ch19/evaluation/imbalanced_data.md
@@ -744,9 +776,10 @@ nav:
             - Feature Selection via Penalized Likelihood: ch19/regularized/feature_selection.md
         - 19.5 Code:
             - Logistic Regression Demonstrations: ch19/code/logistic_regression.py
-            - ROC and Evaluation Metrics: ch19/code/evaluation_metrics.py
+            - Receiver Operating Characteristic and Evaluation Metrics: ch19/code/evaluation_metrics.py
             - Regularized Logistic Regression: ch19/code/regularized_logistic.py
             - Logistic vs Linear Visualization: ch19/code/logistic_vs_linear_visualization.py
+            - Linear and Quadratic Discriminant Analysis Classification: ch19/code/lda_qda_classification.py
         - 19.6 Exercises: ch19/exercises/exercises.md
 
     - 20 Softmax Regression:
@@ -764,8 +797,8 @@ nav:
             - Macro, Micro, and Weighted Averaging: ch20/case_studies/averaging.md
             - MNIST Case Study: ch20/case_studies/mnist.md
         - 20.4 One-vs-Rest and One-vs-One Strategies:
-            - OvR (One-vs-Rest) Approach: ch20/strategies/ovr.md
-            - OvO (One-vs-One) Approach: ch20/strategies/ovo.md
+            - One-vs-Rest Approach: ch20/strategies/ovr.md
+            - One-vs-One Approach: ch20/strategies/ovo.md
             - Comparison with Softmax: ch20/strategies/comparison.md
         - 20.5 Code:
             - Softmax Regression Implementation: ch20/code/softmax_implementation.py
@@ -797,7 +830,7 @@ nav:
             - Model Diagnostics (Schoenfeld Residuals): ch21/cox/diagnostics.md
         - 21.5 Model Comparison and Selection:
             - Non-Parametric vs Parametric vs Semi-Parametric: ch21/comparison/model_comparison.md
-            - AIC and Concordance Index: ch21/comparison/model_selection.md
+            - Akaike Information Criterion and Concordance Index: ch21/comparison/model_selection.md
         - 21.6 Code:
             - Kaplan-Meier Survival Curves and Log-Rank Test: ch21/code/kaplan_meier.py
             - Parametric Survival Models: ch21/code/parametric_models.py

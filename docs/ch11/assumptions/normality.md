@@ -30,7 +30,9 @@ plt.show()
 The Shapiro-Wilk test evaluates the null hypothesis that the data is drawn from a normal distribution. A significant result ($p < 0.05$) suggests a departure from normality.
 
 $$
+
 W = \frac{\left(\sum_{i=1}^n a_i x_{(i)}\right)^2}{\sum_{i=1}^n (x_i - \bar{x})^2}
+
 $$
 
 where $x_{(i)}$ are the ordered sample values and $a_i$ are constants generated from the means, variances, and covariances of the order statistics of a sample of size $n$ from a normal distribution.

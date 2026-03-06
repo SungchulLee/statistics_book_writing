@@ -14,6 +14,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy import stats
 
+# =============================================================================
+# Main
+# =============================================================================
+
 
 def verify_unbiasedness(mu=10.0, sigma=3.0, n=20, n_sim=100_000, seed=42):
     """

@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""
+Xbar Normal
+===========
+Educational script demonstrating xbar normal.
+"""
+
 # ================================================
 # xbar_normal.py
 # ================================================

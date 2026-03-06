@@ -17,7 +17,9 @@ A possible outcome $\omega$ of an experiment is called a **sample**.
 The **sample space** $\Omega$ is the set of all possible outcomes (samples) of an experiment:
 
 $$
+
 \Omega = \{\omega_1, \omega_2, \omega_3, \ldots\}
+
 $$
 
 ### Event
@@ -25,7 +27,9 @@ $$
 An **event** $A$ is any subset of $\Omega$. It represents a collection of outcomes of interest.
 
 $$
+
 A \subseteq \Omega
+
 $$
 
 ---
@@ -35,10 +39,12 @@ $$
 For each outcome $\omega \in \Omega$, we attach a "brick" with a certain weight representing its probability. Different bricks may have different weights, but the total weight of all bricks across the sample space is 1. This weight distribution over $\Omega$ defines a **probability measure**:
 
 $$
+
 \begin{aligned}
 P(\omega) &= \text{Weight of the brick attached to } \omega \\
 P(A) &= \sum_{\omega \in A} P(\omega) = \text{Total weight of the bricks attached to } A
 \end{aligned}
+
 $$
 
 ---

@@ -5,7 +5,9 @@
 **Maximum A Posteriori (MAP)** estimation finds the mode of the posterior distribution:
 
 $$
+
 \hat{\theta}_{MAP} = \arg\max_{\theta} \pi(\theta \mid \mathbf{x}) = \arg\max_{\theta} [\log f(\mathbf{x} \mid \theta) + \log \pi(\theta)]
+
 $$
 
 ## Relationship to MLE

@@ -13,12 +13,14 @@ The **range**, **interquartile range (IQR)**, and **percentiles** are measures o
 The range is the simplest measure of dispersion: the difference between the maximum and minimum values.
 
 $$
+
 \text{Range} = \text{Max} - \text{Min}
+
 $$
 
 ### Example
 
-For the dataset 70, 85, 90, 95, 100: Range = $100 - 70 = 30$.
+For the dataset 70, 85, 90, 95, 100: Range = \$100 - 70 = 30$.
 
 ### Computing Range
 
@@ -45,7 +47,9 @@ The range is highly sensitive to outliers because it depends entirely on the two
 The IQR measures the spread of the middle 50% of the data, effectively reducing the impact of outliers. It is the difference between the third quartile ($Q_3$, the 75th percentile) and the first quartile ($Q_1$, the 25th percentile).
 
 $$
+
 \text{IQR} = Q_3 - Q_1
+
 $$
 
 ### Example
@@ -122,21 +126,27 @@ The $p$-th percentile is the value below which $p\%$ of the data falls.
 ### Percentiles and Deciles
 
 $$
+
 \begin{array}{llll}
 D_1 = P_{10}, & D_2 = P_{20}, & \ldots, & D_9 = P_{90}
 \end{array}
+
 $$
 
 ### Percentiles and Quartiles
 
 $$
+
 Q_1 = P_{25}, \quad Q_2 = P_{50}, \quad Q_3 = P_{75}
+
 $$
 
 ### Percentiles and Median
 
 $$
+
 \text{Median} = Q_2 = D_5 = P_{50}
+
 $$
 
 ---

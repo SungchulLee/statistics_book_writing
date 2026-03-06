@@ -302,59 +302,62 @@ plt.show()
 # Normality test
 from scipy import stats
 
-shapiro_stat, shapiro_p = stats.shapiro(results.resid)
-print(f"\nShapiro-Wilk Test for Normality:")
-print(f"  Test Statistic: {shapiro_stat:.4f}")
-print(f"  p-value: {shapiro_p:.4f}")
-if shapiro_p < 0.05:
-    print(f"  Conclusion: Residuals deviate from normality (p < 0.05)")
-else:
-    print(f"  Conclusion: Residuals appear normally distributed (p >= 0.05)")
 
-# ======================================================================
-# 8. Summary Report
-# ======================================================================
 
-print("\n" + "="*70)
-print("DIAGNOSTIC SUMMARY REPORT")
-print("="*70)
+if __name__ == "__main__":
+    shapiro_stat, shapiro_p = stats.shapiro(results.resid)
+    print(f"\nShapiro-Wilk Test for Normality:")
+    print(f"  Test Statistic: {shapiro_stat:.4f}")
+    print(f"  p-value: {shapiro_p:.4f}")
+    if shapiro_p < 0.05:
+        print(f"  Conclusion: Residuals deviate from normality (p < 0.05)")
+    else:
+        print(f"  Conclusion: Residuals appear normally distributed (p >= 0.05)")
 
-summary_report = f"""
-Dataset Information:
-  Total observations: {len(house_98105)}
-  Predictors: {len(predictors)}
-  Response: {outcome}
+    # ======================================================================
+    # 8. Summary Report
+    # ======================================================================
 
-Model Performance:
-  R²: {results.rsquared:.4f}
-  Adjusted R²: {results.rsquared_adj:.4f}
-  RMSE: ${np.sqrt(results.mse_resid):,.0f}
-  AIC: {results.aic:.1f}
+    print("\n" + "="*70)
+    print("DIAGNOSTIC SUMMARY REPORT")
+    print("="*70)
 
-Outlier Analysis:
-  Observations with |studentized resid| > 2.5: {(np.abs(studentized_resids) > 2.5).sum()}
-  Observations with high leverage (> 3×mean): {(hat_values > 3*hat_values.mean()).sum()}
-  Observations with high influence (Cook's D > 0.08): {(cooks_dist > 0.08).sum()}
+    summary_report = f"""
+    Dataset Information:
+      Total observations: {len(house_98105)}
+      Predictors: {len(predictors)}
+      Response: {outcome}
 
-Impact of Influential Observations:
-  Observations removed: {(~mask_keep).sum()}
-  R² change: {filt_r2 - orig_r2:+.4f}
-  RMSE change: ${filt_rmse - orig_rmse:+,.0f}
-  Largest coefficient change: {pct_change.abs().max():.1f}%
+    Model Performance:
+      R²: {results.rsquared:.4f}
+      Adjusted R²: {results.rsquared_adj:.4f}
+      RMSE: ${np.sqrt(results.mse_resid):,.0f}
+      AIC: {results.aic:.1f}
 
-Assumption Checks:
-  Breusch-Pagan test p-value: {bp_test[1]:.4f} {'✗ Heteroskedasticity detected' if bp_test[1] < 0.05 else '✓ No heteroskedasticity'}
-  Shapiro-Wilk test p-value: {shapiro_p:.4f} {'✗ Non-normality' if shapiro_p < 0.05 else '✓ Normal residuals'}
+    Outlier Analysis:
+      Observations with |studentized resid| > 2.5: {(np.abs(studentized_resids) > 2.5).sum()}
+      Observations with high leverage (> 3×mean): {(hat_values > 3*hat_values.mean()).sum()}
+      Observations with high influence (Cook's D > 0.08): {(cooks_dist > 0.08).sum()}
 
-Recommendations:
-  1. Investigate {(~mask_keep).sum()} high-influence points for data quality issues
-  2. Consider robust regression if heteroskedasticity is severe
-  3. Check if residual non-normality impacts prediction intervals
-  4. Consider Box-Cox transformation for the response if needed
-"""
+    Impact of Influential Observations:
+      Observations removed: {(~mask_keep).sum()}
+      R² change: {filt_r2 - orig_r2:+.4f}
+      RMSE change: ${filt_rmse - orig_rmse:+,.0f}
+      Largest coefficient change: {pct_change.abs().max():.1f}%
 
-print(summary_report)
+    Assumption Checks:
+      Breusch-Pagan test p-value: {bp_test[1]:.4f} {'✗ Heteroskedasticity detected' if bp_test[1] < 0.05 else '✓ No heteroskedasticity'}
+      Shapiro-Wilk test p-value: {shapiro_p:.4f} {'✗ Non-normality' if shapiro_p < 0.05 else '✓ Normal residuals'}
 
-print("="*70)
-print("ANALYSIS COMPLETE")
-print("="*70)
+    Recommendations:
+      1. Investigate {(~mask_keep).sum()} high-influence points for data quality issues
+      2. Consider robust regression if heteroskedasticity is severe
+      3. Check if residual non-normality impacts prediction intervals
+      4. Consider Box-Cox transformation for the response if needed
+    """
+
+    print(summary_report)
+
+    print("="*70)
+    print("ANALYSIS COMPLETE")
+    print("="*70)

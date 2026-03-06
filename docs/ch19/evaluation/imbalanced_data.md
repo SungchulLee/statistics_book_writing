@@ -20,7 +20,9 @@ When training on imbalanced data, the model learns class probabilities from the 
 One approach is to increase the **cost (weight) of minority class errors** during training:
 
 $$
+
 \ell_{\text{weighted}} = -\sum_{i=1}^{n} w_i \left[ y^{(i)} \log \hat{p}_i + (1 - y^{(i)}) \log(1 - \hat{p}_i) \right]
+
 $$
 
 where $w_i$ is a weight assigned to observation $i$.
@@ -30,7 +32,9 @@ where $w_i$ is a weight assigned to observation $i$.
 A common choice is **inverse class frequency weighting**:
 
 $$
+
 w_{\text{minority}} = \frac{1}{p_{\text{minority}}}, \quad w_{\text{majority}} = \frac{1}{p_{\text{majority}}}
+
 $$
 
 or simply: $w_{\text{minority}} = 1, w_{\text{majority}} = p_{\text{minority}} / p_{\text{majority}}$.
@@ -113,7 +117,9 @@ For each minority sample $x_i$:
 1. Find $k$ nearest neighbors in the minority class (typically $k=5$).
 2. Randomly select one neighbor $x_{\text{neighbor}}$.
 3. Generate a synthetic point:
+
    $$x_{\text{synthetic}} = x_i + \lambda (x_{\text{neighbor}} - x_i)$$
+
    where $\lambda \in [0, 1]$ is random.
 
 ### Example: Loan Data with SMOTE

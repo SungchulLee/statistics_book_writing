@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""
+Shapiro Power Sim
+=================
+Educational script demonstrating shapiro power sim.
+"""
+
 # ======================================================================
 # 35_sw_03_power_simulation_lognormal.py
 # ======================================================================

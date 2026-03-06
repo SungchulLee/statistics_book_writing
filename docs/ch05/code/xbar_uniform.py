@@ -1,5 +1,15 @@
+"""
+Xbar Uniform
+============
+Educational script demonstrating xbar uniform.
+"""
+
 import matplotlib.pyplot as plt
 import numpy as np
+
+# =============================================================================
+# Main
+# =============================================================================
 
 # Set a random seed for reproducibility
 np.random.seed(1)

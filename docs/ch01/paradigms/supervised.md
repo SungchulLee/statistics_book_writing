@@ -17,7 +17,9 @@ In **supervised learning**, the model is trained on a **labeled dataset**—each
 The target variable $Y$ is **continuous**. The goal is to predict a numerical value.
 
 $$
+
 \hat{y} = f(x) \quad \text{where } y \in \mathbb{R}
+
 $$
 
 **Examples:**
@@ -33,7 +35,9 @@ $$
 The target variable $Y$ is **categorical**. The goal is to assign an input to one of $K$ classes.
 
 $$
+
 \hat{y} = f(x) \quad \text{where } y \in \{1, 2, \ldots, K\}
+
 $$
 
 **Examples:**

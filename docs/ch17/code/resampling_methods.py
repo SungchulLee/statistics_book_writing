@@ -286,4 +286,7 @@ def bootstrap_vs_permutation_comparison(x, y, B=10_000):
     print(f"  CI excludes 0:       {'Yes' if ci[0] > 0 or ci[1] < 0 else 'No'}")
     print(f"  Perm rejects at 5%:  {'Yes' if p_perm < 0.05 else 'No'}")
 
-bootstrap_vs_permutation_comparison(treatment, control)
+
+
+if __name__ == "__main__":
+    bootstrap_vs_permutation_comparison(treatment, control)

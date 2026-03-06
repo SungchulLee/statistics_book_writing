@@ -13,8 +13,7 @@ Normality tests are typically applied before using parametric statistical method
 
 A normality test is useful to determine whether it is appropriate to use these methods or if alternative approaches (such as transformations or non-parametric tests) should be considered.
 
-## Case Study 1: Testing Normality in $t$-Test Assumptions
-
+## Case Study 1: Testing Normality in t-Test Assumptions
 A two-sample $t$-test assumes that data within each sample is normally distributed. Before performing the $t$-test, it is essential to check the normality of both groups.
 
 ```python

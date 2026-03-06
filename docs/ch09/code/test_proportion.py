@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""
+Test Proportion
+===============
+Educational script demonstrating test proportion.
+"""
+
 # ===============================================
 # 13_testing_02_proportion_one_sample_simple.py
 # ===============================================

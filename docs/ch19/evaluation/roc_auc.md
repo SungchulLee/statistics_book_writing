@@ -13,7 +13,9 @@ For a classifier that outputs probability scores, we vary the decision threshold
 
 1. For each threshold $\tau$: classify as positive if $\hat{p} \geq \tau$.
 2. Compute FPR and TPR:
+
    $$\text{TPR} = \frac{\text{TP}}{\text{TP} + \text{FN}}, \quad \text{FPR} = \frac{\text{FP}}{\text{FP} + \text{TN}}$$
+
 3. Plot the (FPR, TPR) pair.
 4. Repeat for all threshold values; connect the points to form the curve.
 
@@ -45,13 +47,17 @@ Varying the threshold from 0 to 1 produces a curve that typically starts near (0
 The **AUC** is the area under the ROC curve, ranging from 0 to 1:
 
 $$
+
 \text{AUC} = \int_0^1 \text{TPR}(\text{FPR}) \, d(\text{FPR})
+
 $$
 
 In practice, AUC is computed numerically using the **trapezoidal rule**:
 
 $$
+
 \text{AUC} \approx \sum_{i=1}^{m} \frac{\text{TPR}_i + \text{TPR}_{i-1}}{2} \cdot (\text{FPR}_i - \text{FPR}_{i-1})
+
 $$
 
 ### Interpretation of AUC

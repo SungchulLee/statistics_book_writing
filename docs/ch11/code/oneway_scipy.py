@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""
+Oneway Scipy
+============
+Educational script demonstrating oneway scipy.
+"""
+
 # ======================================================================
 # 13_anova_04_anova_scipy_with_plots.py
 # ======================================================================

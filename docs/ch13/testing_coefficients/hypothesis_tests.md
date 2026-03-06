@@ -16,7 +16,9 @@ The hypotheses are:
 The **t-statistic** is calculated for each coefficient:
 
 $$
+
 t = \frac{\hat{\beta}_i}{SE(\hat{\beta}_i)}
+
 $$
 
 where:
@@ -45,7 +47,9 @@ The **p-value** is the probability of observing a t-statistic as extreme as (or 
 While p-values provide a binary significance decision, **confidence intervals** (CIs) give a range of plausible values for the coefficient. A 95% CI is computed as:
 
 $$
+
 CI = \hat{\beta}_i \pm \left( t_{\alpha/2} \times SE(\hat{\beta}_i) \right)
+
 $$
 
 where $t_{\alpha/2}$ is the critical value from the t-distribution at the desired confidence level.

@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""
+Qq Plot Basic
+=============
+Educational script demonstrating qq plot basic.
+"""
+
 # ======================================================================
 # 26_qq_01_basic_probplot_and_tests.py
 # ======================================================================

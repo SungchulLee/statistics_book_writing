@@ -141,41 +141,44 @@ axes[0].set_ylim([0, 1.05])
 
 from sklearn.metrics import precision_recall_curve, average_precision_score
 
-precision, recall, pr_thresholds = precision_recall_curve(y_test, y_prob)
-ap = average_precision_score(y_test, y_prob)
-print(f"Average Precision = {ap:.4f}")
 
-axes[1].plot(recall, precision, 'r-', lw=2, label=f'PR (AP = {ap:.3f})')
-axes[1].set_xlabel('Recall')
-axes[1].set_ylabel('Precision')
-axes[1].set_title('Precision-Recall Curve')
-axes[1].legend()
 
-plt.tight_layout()
-plt.savefig('roc_pr_curves.png', dpi=150, bbox_inches='tight')
-plt.show()
+if __name__ == "__main__":
+    precision, recall, pr_thresholds = precision_recall_curve(y_test, y_prob)
+    ap = average_precision_score(y_test, y_prob)
+    print(f"Average Precision = {ap:.4f}")
 
-# =============================================================================
-# 6. Threshold Selection
-# =============================================================================
+    axes[1].plot(recall, precision, 'r-', lw=2, label=f'PR (AP = {ap:.3f})')
+    axes[1].set_xlabel('Recall')
+    axes[1].set_ylabel('Precision')
+    axes[1].set_title('Precision-Recall Curve')
+    axes[1].legend()
 
-print("\n" + "=" * 60)
-print("6. THRESHOLD SELECTION")
-print("=" * 60)
+    plt.tight_layout()
+    plt.savefig('roc_pr_curves.png', dpi=150, bbox_inches='tight')
+    plt.show()
 
-print(f"{'Threshold':>10} {'Acc':>7} {'Prec':>7} {'Recall':>7} {'F1':>7}")
-print("-" * 42)
-for threshold in [0.3, 0.4, 0.5, 0.6, 0.7]:
-    y_pred_t = (y_prob >= threshold).astype(int)
-    acc = accuracy_score(y_test, y_pred_t)
-    prec = precision_score(y_test, y_pred_t, zero_division=0)
-    rec = recall_score(y_test, y_pred_t, zero_division=0)
-    f1 = f1_score(y_test, y_pred_t, zero_division=0)
-    print(f"{threshold:>10.1f} {acc:>7.3f} {prec:>7.3f} {rec:>7.3f} {f1:>7.3f}")
+    # =============================================================================
+    # 6. Threshold Selection
+    # =============================================================================
 
-# Youden's J statistic: optimal threshold on ROC
-j_scores = tpr - fpr
-optimal_idx = np.argmax(j_scores)
-optimal_threshold = thresholds[optimal_idx]
-print(f"\nOptimal threshold (Youden's J): {optimal_threshold:.3f}")
-print(f"  TPR = {tpr[optimal_idx]:.3f}, FPR = {fpr[optimal_idx]:.3f}")
+    print("\n" + "=" * 60)
+    print("6. THRESHOLD SELECTION")
+    print("=" * 60)
+
+    print(f"{'Threshold':>10} {'Acc':>7} {'Prec':>7} {'Recall':>7} {'F1':>7}")
+    print("-" * 42)
+    for threshold in [0.3, 0.4, 0.5, 0.6, 0.7]:
+        y_pred_t = (y_prob >= threshold).astype(int)
+        acc = accuracy_score(y_test, y_pred_t)
+        prec = precision_score(y_test, y_pred_t, zero_division=0)
+        rec = recall_score(y_test, y_pred_t, zero_division=0)
+        f1 = f1_score(y_test, y_pred_t, zero_division=0)
+        print(f"{threshold:>10.1f} {acc:>7.3f} {prec:>7.3f} {rec:>7.3f} {f1:>7.3f}")
+
+    # Youden's J statistic: optimal threshold on ROC
+    j_scores = tpr - fpr
+    optimal_idx = np.argmax(j_scores)
+    optimal_threshold = thresholds[optimal_idx]
+    print(f"\nOptimal threshold (Youden's J): {optimal_threshold:.3f}")
+    print(f"  TPR = {tpr[optimal_idx]:.3f}, FPR = {fpr[optimal_idx]:.3f}")

@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""
+Evaluation Metrics
+==================
+Educational script demonstrating evaluation metrics.
+"""
+
 # ======================================================================
 # 19_evaluation_01_roc_confusion_precision_recall.py
 # ======================================================================

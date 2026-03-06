@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""
+Qq Confidence Band
+==================
+Educational script demonstrating qq confidence band.
+"""
+
 # ======================================================================
 # 26_qq_02_confidence_band_simulation.py
 # ======================================================================

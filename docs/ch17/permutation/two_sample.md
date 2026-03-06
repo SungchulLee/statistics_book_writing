@@ -15,6 +15,7 @@ Under the null hypothesis of no difference between groups:
 ### Algorithm
 
 1. **Compute the observed test statistic** from the actual data:
+
    $$T_{obs} = |\bar{X}_1 - \bar{X}_2|$$
 
 2. **Combine all observations** into a pooled dataset of size $n_1 + n_2$
@@ -25,6 +26,7 @@ Under the null hypothesis of no difference between groups:
    - Calculate the test statistic for this permutation
 
 4. **Compute the p-value**:
+
    $$p\text{-value} = \frac{\#\{T_b \geq T_{obs}\}}{B}$$
 
 ## Example: Web Page A/B Test

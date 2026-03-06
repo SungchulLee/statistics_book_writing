@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""
+Correlation Ellipses
+====================
+Educational script demonstrating correlation ellipses.
+"""
+
 # ======================================================================
 # correlation_ellipses.py
 # ======================================================================

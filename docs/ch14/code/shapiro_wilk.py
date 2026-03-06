@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""
+Shapiro Wilk
+============
+Educational script demonstrating shapiro wilk.
+"""
+
 # ======================================================================
 # 35_sw_01_basic_shapiro_wilk.py
 # ======================================================================

@@ -23,8 +23,7 @@ Discuss why the combined correlation might differ from the within-group correlat
 
 ---
 
-### Exercise 2: Visualize Correlation Across a Range of $\rho$
-
+### Exercise 2: Visualize Correlation Across a Range of rho
 Write a function that generates bivariate normal samples for $\rho \in \{-0.99, -0.8, -0.5, 0, 0.5, 0.8, 0.99\}$ and displays them in a single row of subplots. For each subplot, also print the sample Pearson $r$ in the title.
 
 ---

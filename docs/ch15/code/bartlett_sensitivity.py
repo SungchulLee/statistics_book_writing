@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""
+Bartlett Sensitivity
+====================
+Educational script demonstrating bartlett sensitivity.
+"""
+
 # ======================================================================
 # 20_bartlett_04_sensitivity_non_normality.py
 # ======================================================================

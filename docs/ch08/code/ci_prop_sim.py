@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""
+Ci Prop Sim
+===========
+Educational script demonstrating ci prop sim.
+"""
+
 # ======================================================================
 # 11_confidence_interval_02_proportion_confidence_interval_simulation.py
 # ======================================================================

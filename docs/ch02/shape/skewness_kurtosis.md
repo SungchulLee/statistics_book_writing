@@ -93,6 +93,7 @@ if __name__ == "__main__":
 Box plots provide a quick visual diagnostic for skewness:
 
 $$
+
 \begin{array}{lll}
 \text{Left\_Box} > \text{Right\_Box} &\Rightarrow& \text{Skew to Left} \\
 \text{Left\_Box} < \text{Right\_Box} &\Rightarrow& \text{Skew to Right} \\
@@ -100,6 +101,7 @@ $$
 \text{Left\_Box} = \text{Right\_Box},\; \text{Left\_Whisker} < \text{Right\_Whisker} &\Rightarrow& \text{Skew to Right} \\
 \text{Left\_Box} = \text{Right\_Box},\; \text{Left\_Whisker} = \text{Right\_Whisker} &\Rightarrow& \text{Symmetric} \\
 \end{array}
+
 $$
 
 ### Box Plot: Symmetric Distribution
@@ -187,7 +189,9 @@ if __name__ == "__main__":
 ### Definition
 
 $$
+
 \text{Skewness}(X) = E\left(\frac{X - \mu}{\sigma}\right)^3 \approx \frac{1}{n}\sum_{i=1}^{n}\left(\frac{x_i - \bar{x}}{s}\right)^3
+
 $$
 
 - **Skewness = 0:** Symmetric distribution.
@@ -257,13 +261,17 @@ if __name__ == "__main__":
 Kurtosis measures the "tailedness" of a distribution—how much probability mass is in the tails relative to the center.
 
 $$
+
 \text{Kurtosis}(X) = E\left(\frac{X - \mu}{\sigma}\right)^4 \approx \frac{1}{n}\sum_{i=1}^{n}\left(\frac{x_i - \bar{x}}{s}\right)^4
+
 $$
 
 **Excess Kurtosis** subtracts the kurtosis of the normal distribution (which equals 3):
 
 $$
+
 \text{Excess Kurtosis}(X) = \text{Kurtosis}(X) - 3
+
 $$
 
 - **Excess Kurtosis = 0 (Mesokurtic):** Normal-like tails.

@@ -11,7 +11,9 @@ The **normal distribution** (also called the Gaussian distribution) is one of th
 A normal distribution is characterized by its mean $\mu$ (center) and variance $\sigma^2$ (spread). The PDF is:
 
 $$
+
 f(x; \mu, \sigma^2) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{(x - \mu)^2}{2\sigma^2}\right)
+
 $$
 
 We write $X \sim N(\mu, \sigma^2)$.
@@ -21,7 +23,9 @@ We write $X \sim N(\mu, \sigma^2)$.
 The special case with $\mu = 0$ and $\sigma = 1$ is the **standard normal distribution**:
 
 $$
+
 Z \sim N(0, 1), \qquad f(z) = \frac{1}{\sqrt{2\pi}} \exp\left(-\frac{z^2}{2}\right)
+
 $$
 
 ---
@@ -31,10 +35,12 @@ $$
 Any normal variable can be converted to a standard normal via the **Z-score transformation**:
 
 $$
+
 \begin{aligned}
 \textbf{Standardization:} \quad & X \sim N(\mu, \sigma^2) \implies Z = \frac{X - \mu}{\sigma} \sim N(0, 1) \\[6pt]
 \textbf{Reverse:} \quad & Z \sim N(0, 1) \implies X = Z\sigma + \mu \sim N(\mu, \sigma^2)
 \end{aligned}
+
 $$
 
 ---
@@ -44,11 +50,13 @@ $$
 ### Closure Properties
 
 $$
+
 \begin{aligned}
 (1) &\quad X \sim \text{Normal} \implies aX + b \sim \text{Normal} \\[4pt]
 (2) &\quad X \sim \text{Normal}, \; Y \sim \text{Normal}, \; X \perp Y \implies X + Y \sim \text{Normal} \\[4pt]
 (3) &\quad (X, Y) \sim \text{Multivariate Normal} \implies X + Y \sim \text{Normal}
 \end{aligned}
+
 $$
 
 **Warning:** $X \sim \text{Normal}$ and $Y \sim \text{Normal}$ does **not** imply $X + Y \sim \text{Normal}$ unless independence or joint normality holds.
@@ -58,13 +66,17 @@ $$
 For $a > 0$ and $X \sim N(\mu, \sigma^2)$:
 
 $$
+
 P(aX + b \leq x) = P\left(X \leq \frac{x - b}{a}\right) = \int_{-\infty}^{(x-b)/a} \frac{1}{\sqrt{2\pi\sigma^2}} e^{-\frac{(s-\mu)^2}{2\sigma^2}} ds
+
 $$
 
 Differentiating with respect to $x$:
 
 $$
+
 f_{aX+b}(x) = \frac{1}{\sqrt{2\pi(a\sigma)^2}} \exp\left(-\frac{(x - (a\mu + b))^2}{2a^2\sigma^2}\right)
+
 $$
 
 Therefore $aX + b \sim N(a\mu + b, \, a^2\sigma^2)$.
@@ -78,11 +90,13 @@ Therefore $aX + b \sim N(a\mu + b, \, a^2\sigma^2)$.
 ### 68–95–99.7 Rule
 
 $$
+
 \begin{aligned}
 P(\mu - \sigma < X < \mu + \sigma) &\approx 68\% \\
 P(\mu - 2\sigma < X < \mu + 2\sigma) &\approx 95\% \\
 P(\mu - 3\sigma < X < \mu + 3\sigma) &\approx 99.7\%
 \end{aligned}
+
 $$
 
 ---
@@ -96,7 +110,9 @@ The PDF of $N(0, 1)$ is $f(x) = \frac{1}{\sqrt{2\pi}} e^{-x^2/2}$. We verify:
 Let $I = \int_{-\infty}^{\infty} e^{-x^2/2}\,dx$. Then:
 
 $$
+
 I^2 = \int\!\!\int e^{-(x^2+y^2)/2}\,dx\,dy = \int_0^{2\pi}\!\int_0^{\infty} e^{-r^2/2}\,r\,dr\,d\theta = 2\pi
+
 $$
 
 So $I = \sqrt{2\pi}$, confirming $\int f(x)\,dx = 1$.
@@ -110,7 +126,9 @@ The integrand $x \cdot e^{-x^2/2}$ is an **odd function**, so the integral over 
 By integration by parts:
 
 $$
+
 \frac{1}{\sqrt{2\pi}} \int_{-\infty}^{\infty} x^2 e^{-x^2/2}\,dx = \frac{1}{\sqrt{2\pi}} \int_{-\infty}^{\infty} e^{-x^2/2}\,dx = 1
+
 $$
 
 ---
@@ -120,18 +138,22 @@ $$
 The CDF has no closed form and is computed numerically:
 
 $$
+
 \Phi(x) = N(x) = \int_{-\infty}^x \frac{1}{\sqrt{2\pi}} e^{-s^2/2}\,ds
-$$
-
-### Properties of $\Phi$
 
 $$
+
+### Properties of Phi
+
+$$
+
 \begin{aligned}
 (1) &\quad P(a \leq Z \leq b) = \Phi(b) - \Phi(a) \\
 (2) &\quad P(Z \geq x) = P(Z \leq -x) = \Phi(-x) \\
 (3) &\quad P(Z \geq x) = 1 - \Phi(x) \\
 (4) &\quad P(Z \leq 0) = P(Z \geq 0) = 0.5
 \end{aligned}
+
 $$
 
 ---
@@ -143,7 +165,9 @@ $$
 **Solution:** Complete the square: $-x^2 - 2x = -(x+1)^2 + 1$. Then:
 
 $$
+
 \int_{-\infty}^{\infty} e^{-x^2-2x}\,dx = e \int_{-\infty}^{\infty} e^{-(x+1)^2}\,dx = e\sqrt{2\pi \cdot \tfrac{1}{2}} \cdot \underbrace{\int \frac{1}{\sqrt{\pi}} e^{-(x+1)^2}\,dx}_{=1 \text{ (PDF of } N(-1, 1/2))} = e\sqrt{\pi}
+
 $$
 
 ---
@@ -262,7 +286,9 @@ print(f"P({z1} ≤ Z ≤ {z2}) = {stats.norm().cdf(z2) - stats.norm().cdf(z1):.4
 The Central Limit Theorem explains the ubiquity of the normal distribution: the distribution of sample means is approximately normal for large $n$, regardless of the original population distribution:
 
 $$
+
 \bar{X} \sim N\left(\mu, \frac{\sigma^2}{n}\right) \quad \text{as } n \to \infty
+
 $$
 
 This makes the normal distribution the foundation for confidence intervals, hypothesis testing, and quality control.

@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""
+Causal Simulations
+==================
+Educational script demonstrating causal simulations.
+"""
+
 # ======================================================================
 # 20_causal_01_confounding_and_spurious_correlation.py
 # ======================================================================

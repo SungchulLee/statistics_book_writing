@@ -1,5 +1,4 @@
-# Chapter 7: Estimation of $\mu$ and $\sigma^2$
-
+# Chapter 7: Estimation of mu and sigma-squared
 ## Overview
 
 This chapter applies the general estimation theory developed in Chapter 6 to the two most fundamental population parameters: the mean $\mu$ and the variance $\sigma^2$. It examines the sample mean and sample variance as estimators in detail --- their bias, consistency, efficiency, and MSE --- derives the Gaussian MLEs, and explores robust alternatives for situations where the normality assumption fails, such as heavy-tailed or skewed distributions.

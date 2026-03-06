@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""
+Dagostino Test
+==============
+Educational script demonstrating dagostino test.
+"""
+
 # ======================================================================
 # 30_k2_01_basic_normaltest.py
 # ======================================================================

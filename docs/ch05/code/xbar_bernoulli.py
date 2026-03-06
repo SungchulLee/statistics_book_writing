@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""
+Xbar Bernoulli
+==============
+Educational script demonstrating xbar bernoulli.
+"""
+
 # ================================================
 # xbar_bernoulli.py  (Sampling Distribution of p̂)
 # ================================================

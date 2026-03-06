@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""
+Boxplot Shapes
+==============
+Educational script demonstrating boxplot shapes.
+"""
+
 # ======================================================================
 # 27_boxnorm_04_shapes_via_boxplots_examples.py
 # ======================================================================

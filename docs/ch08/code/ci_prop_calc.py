@@ -22,6 +22,10 @@ import argparse, sys, csv, math
 import numpy as np
 from scipy.stats import norm, beta
 
+# =============================================================================
+# Main
+# =============================================================================
+
 def load_data(csv_path: str) -> np.ndarray:
     arr = []
     with open(csv_path, 'r', newline='') as f:

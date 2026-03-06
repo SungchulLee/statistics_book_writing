@@ -1,5 +1,15 @@
+"""
+Se Xbar
+=======
+Educational script demonstrating se xbar.
+"""
+
 import matplotlib.pyplot as plt
 import numpy as np
+
+# =============================================================================
+# Main
+# =============================================================================
 
 # Fix the random seed for reproducibility
 np.random.seed(0)

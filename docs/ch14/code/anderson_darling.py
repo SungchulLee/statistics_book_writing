@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""
+Anderson Darling
+================
+Educational script demonstrating anderson darling.
+"""
+
 # ======================================================================
 # 34_ad_01_basic_anderson_normal.py
 # ======================================================================

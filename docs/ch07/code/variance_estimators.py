@@ -14,6 +14,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy import stats
 
+# =============================================================================
+# Main
+# =============================================================================
+
 
 def bias_verification(sigma=3.0, n_sim=200_000, seed=42):
     """

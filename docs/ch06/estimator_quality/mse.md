@@ -97,6 +97,7 @@ For a normal population:
 **Variance:** $\text{Var}(\tilde{S}^2) = \frac{2(n-1)}{n^2}\sigma^4$.
 
 **MSE:**
+
 $$\text{MSE}(\tilde{S}^2) = \frac{2(n-1)}{n^2}\sigma^4 + \frac{\sigma^4}{n^2} = \frac{2n-1}{n^2}\sigma^4$$
 
 ### Example 3: Comparing Biased vs Unbiased Variance Estimators

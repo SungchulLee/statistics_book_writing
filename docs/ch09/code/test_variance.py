@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""
+Test Variance
+=============
+Educational script demonstrating test variance.
+"""
+
 # ===============================================
 # 13_testing_03_variance_one_sample_simple.py
 # ===============================================

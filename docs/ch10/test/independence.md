@@ -28,7 +28,9 @@ A contingency table is a matrix format table that shows the frequency distributi
 Under the independence assumption, the expected frequency for each cell is computed as:
 
 $$
+
 E_{ij} = \frac{\text{(Row Total for Row } i\text{)} \times \text{(Column Total for Column } j\text{)}}{\text{Grand Total}}
+
 $$
 
 ## Test Statistic
@@ -36,7 +38,9 @@ $$
 The test statistic for the Chi-Square Test of Independence is calculated using the formula:
 
 $$
+
 \chi^2 = \sum_{i=1}^r \sum_{j=1}^c \frac{(O_{ij} - E_{ij})^2}{E_{ij}}
+
 $$
 
 where:
@@ -49,7 +53,9 @@ where:
 The degrees of freedom ($\text{df}$) for the test is calculated as:
 
 $$
+
 \text{df} = (r - 1) \times (c - 1)
+
 $$
 
 where $r$ is the number of rows and $c$ is the number of columns.
@@ -57,6 +63,7 @@ where $r$ is the number of rows and $c$ is the number of columns.
 ## Critical Region
 
 $$
+
 \begin{array}{lll}
 \text{Null} & \text{They are independent} \\
 & \text{Observed frequencies are close to expected frequencies} \\
@@ -66,6 +73,7 @@ $$
 & \text{Observed frequencies are quite different from expected frequencies} \\
 & O_{ij} \not\approx E_{ij} \quad \Rightarrow \quad \text{statistic} \approx \text{large positive number}
 \end{array}
+
 $$
 
 ## Critical Value and p-Value
@@ -95,6 +103,7 @@ We randomly selected several people and recorded their sex and dominant hand. He
 **Observed:**
 
 $$
+
 \begin{array}{crr|r}
  & \text{men} & \text{women} & \text{row sum} \\ \hline
 \text{right-handed} & 934 & 1{,}070 & 2{,}004 \\
@@ -102,6 +111,7 @@ $$
 \text{ambidextrous} & 20 & 8 & 28 \\ \hline
 \text{column sum} & 1{,}067 & 1{,}170 & 2{,}237
 \end{array}
+
 $$
 
 Is there any relationship between sex and the dominant hand, or are these two variables independent?
@@ -109,11 +119,13 @@ Is there any relationship between sex and the dominant hand, or are these two va
 ### Hypotheses
 
 $$
+
 \begin{array}{lll}
 \text{Null} & \text{They are independent} \\
 \\
 \text{Alternative} & \text{They are not independent}
 \end{array}
+
 $$
 
 ### Expected Frequencies
@@ -121,6 +133,7 @@ $$
 **Expected:**
 
 $$
+
 \begin{array}{ccc|r}
  & \text{men} & \text{women} & \text{row sum} \\ \hline
 \text{right-handed} & 956 & 1{,}048 & 2{,}004 \\
@@ -128,26 +141,35 @@ $$
 \text{ambidextrous} & 13 & 15 & 28 \\ \hline
 \text{column sum} & 1{,}067 & 1{,}170 & 2{,}237
 \end{array}
+
 $$
 
 **How to compute expected frequencies**: If they are independent,
 
 $$
+
 P(\text{men}) = \frac{1067}{2237}, \quad P(\text{right-handed}) = \frac{2004}{2237}
+
 $$
 
 $$
+
 \Rightarrow P(\text{men}, \text{right-handed}) = \frac{1067}{2237} \times \frac{2004}{2237}
+
 $$
 
 $$
+
 \Rightarrow \text{expected frequency}(\text{men}, \text{right-handed}) = \frac{1067}{2237} \times \frac{2004}{2237} \times 2237 \approx 956
+
 $$
 
 ### p-value
 
 $$
+
 \text{p-value} = P\left(\sum_{i=1}^{r}\sum_{j=1}^{c}\frac{(O_{ij}-E_{ij})^2}{E_{ij}} \ge \text{statistic} \;\middle|\; H_0\right)
+
 $$
 
 ### Conclusion
@@ -303,6 +325,7 @@ We randomly sample 100 individuals. For each individual, we determine whether th
 **Step 2: Observed Frequencies with Totals**
 
 $$
+
 \begin{array}{c|c|c|c|c}
  & \text{Right Foot} & \text{Left Foot} & \text{Both Same} & \text{Row Total} \\
 \hline
@@ -312,15 +335,19 @@ $$
 \hline
 \text{Col Total} & 25 & 25 & 50 & 100
 \end{array}
+
 $$
 
 **Step 3: Expected Frequencies**
 
 $$
+
 E_{ij} = \frac{\text{(Row Total for Row } i\text{)} \times \text{(Column Total for Column } j\text{)}}{\text{Grand Total}}
+
 $$
 
 $$
+
 \begin{array}{c|c|c|c}
  & \text{Right Foot} & \text{Left Foot} & \text{Both Same} \\
 \hline
@@ -328,6 +355,7 @@ $$
 \text{Left Hand} & 6.25 & 6.25 & 12.5 \\
 \text{Both Same} & 13.25 & 13.25 & 26.5
 \end{array}
+
 $$
 
 **Step 4: Test Statistic**
@@ -335,13 +363,17 @@ $$
 Computing each term $(O_{ij} - E_{ij})^2 / E_{ij}$ and summing:
 
 $$
+
 \chi^2 \approx 5.5 + 1.136 + 0.818 + 2.89 + 1.21 + 0.18 + 0.118 + 0.005 + 0.085 \approx 11.94
+
 $$
 
 **Step 5: Degrees of Freedom**
 
 $$
+
 \text{df} = (3 - 1)(3 - 1) = 4
+
 $$
 
 **Step 6: p-value**

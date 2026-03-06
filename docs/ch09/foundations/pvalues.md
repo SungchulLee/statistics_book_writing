@@ -17,8 +17,7 @@ where $\bar{x}$ is the sample mean, $\mu_0$ is the mean under the null hypothesi
 
 ---
 
-## Significance Level ($\alpha$) and Error Types
-
+## Significance Level (alpha) and Error Types
 Understanding errors in hypothesis testing is essential for correctly interpreting the results of statistical tests. When conducting a hypothesis test, two potential types of errors can occur:
 
 - **Type I Error**: A Type I error, often called a "false positive," occurs when the null hypothesis $H_0$ is true, but we mistakenly reject it in favor of the alternative hypothesis $H_a$. This Type I error is analogous to convicting an innocent person in a trial. The **significance level** $\alpha$ represents the threshold we set for rejecting the null hypothesis but does not directly represent the probability of committing a Type I error. Instead, $\alpha$ is the probability of rejecting $H_0$ when true, which is the potential for a Type I error. For example, if we set $\alpha = 0.05$, there is a 5% risk of incorrectly rejecting $H_0$.

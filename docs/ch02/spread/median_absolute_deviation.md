@@ -15,7 +15,9 @@ The MAD is computed in three steps:
 3. Find the median of these deviations: $\text{MAD} = \text{median}(d_1, d_2, \ldots, d_n)$
 
 $$
+
 \text{MAD} = \text{median}(|x_i - \text{median}(x)|)
+
 $$
 
 ### Standardization Constant
@@ -23,7 +25,9 @@ $$
 To make MAD directly comparable to standard deviation (particularly for normally distributed data), multiply by a standardization constant:
 
 $$
+
 \text{Standardized MAD} = 0.6745 \times \text{MAD}
+
 $$
 
 The constant 0.6745 is the 75th percentile of the standard normal distribution, chosen so that for normally distributed data, standardized MAD ≈ standard deviation.

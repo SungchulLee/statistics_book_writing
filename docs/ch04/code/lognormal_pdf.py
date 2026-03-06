@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""
+Lognormal Pdf
+=============
+Educational script demonstrating lognormal pdf.
+"""
+
 # =====================================
 # 01_scipy_stats_12_lognormal_pdf.py
 # =====================================
@@ -23,23 +29,26 @@ import matplotlib.pyplot as plt
 import numpy as np
 import scipy.stats as stats
 
-mu = 0                              # μ of underlying Normal
-sigmas = [0.5, 1.0, 1.5, 2.0]      # σ values to compare
-x = np.linspace(0.001, 8, 500)
 
-fig, ax = plt.subplots(figsize=(12, 4))
 
-for sigma in sigmas:
-    rv = stats.lognorm(s=sigma, scale=np.exp(mu))
-    ax.plot(x, rv.pdf(x), label=rf'$\sigma={sigma}$')
+if __name__ == "__main__":
+    mu = 0                              # μ of underlying Normal
+    sigmas = [0.5, 1.0, 1.5, 2.0]      # σ values to compare
+    x = np.linspace(0.001, 8, 500)
 
-ax.set_xlabel('x')
-ax.set_ylabel('f(x)')
-ax.set_title(r'Log-Normal Distribution – PDF ($\mu=0$, varying $\sigma$)')
-ax.legend()
-ax.set_ylim(bottom=-0.02)
-ax.spines['top'].set_visible(False)
-ax.spines['right'].set_visible(False)
+    fig, ax = plt.subplots(figsize=(12, 4))
 
-plt.tight_layout()
-plt.show()
+    for sigma in sigmas:
+        rv = stats.lognorm(s=sigma, scale=np.exp(mu))
+        ax.plot(x, rv.pdf(x), label=rf'$\sigma={sigma}$')
+
+    ax.set_xlabel('x')
+    ax.set_ylabel('f(x)')
+    ax.set_title(r'Log-Normal Distribution – PDF ($\mu=0$, varying $\sigma$)')
+    ax.legend()
+    ax.set_ylim(bottom=-0.02)
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+
+    plt.tight_layout()
+    plt.show()

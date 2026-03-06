@@ -5,7 +5,9 @@
 **Precision** measures the reliability of positive predictions. Of all instances we predicted as positive, what fraction were actually positive?
 
 $$
+
 \text{Precision} = \frac{\text{TP}}{\text{TP} + \text{FP}}
+
 $$
 
 Precision is the **positive predictive value (PPV)**. It answers the question: "If the model says default, how confident can we be?"
@@ -21,7 +23,9 @@ Precision is the **positive predictive value (PPV)**. It answers the question: "
 **Recall** (also called **sensitivity** or **true positive rate**) measures how well the model identifies positive instances:
 
 $$
+
 \text{Recall} = \frac{\text{TP}}{\text{TP} + \text{FN}}
+
 $$
 
 Recall answers the question: "Of all true defaults, what fraction did we catch?"
@@ -75,7 +79,9 @@ Actual Paid Off       8,148  14,523
 When precision and recall are both important, the **F1 score** provides a single summary metric:
 
 $$
+
 F_1 = 2 \cdot \frac{\text{Precision} \cdot \text{Recall}}{\text{Precision} + \text{Recall}}
+
 $$
 
 The F1 score is the **harmonic mean** of precision and recall, ranging from 0 to 1. It is often preferred when:

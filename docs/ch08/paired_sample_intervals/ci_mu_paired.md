@@ -9,7 +9,9 @@ When two related measurements are taken on the same subjects — such as pre-tes
 Let $d_i = X_{i,1} - X_{i,2}$ represent the difference between the two measurements for the $i$-th subject. The confidence interval for the mean of the paired differences is
 
 $$
+
 \bar{d} \pm t_{\alpha/2, \, n-1} \times \frac{s_d}{\sqrt{n}}
+
 $$
 
 where
@@ -25,6 +27,7 @@ The formula is essentially the same as for a confidence interval for a single me
 ### Conditions for Validity
 
 $$
+
 \bar{x}_d \pm t_{\alpha/2,n-1}\frac{s_d}{\sqrt{n}}
 \quad\text{if}\quad
 \begin{cases}
@@ -32,14 +35,17 @@ n < 30 \text{ (CLT does not apply)} \\
 \text{population of differences is normal} \\
 n \le 0.1N \text{ (IID)}
 \end{cases}
+
 $$
 
 For large $n$ ($\ge 30$), the normality condition is less strict due to the Central Limit Theorem. The z-interval variants apply analogously:
 
 $$
+
 \bar{x}_d \pm z_{\alpha/2}\frac{\sigma_d}{\sqrt{n}} \quad (\sigma_d \text{ known, large } n)
 \qquad\text{or}\qquad
 \bar{x}_d \pm z_{\alpha/2}\frac{s_d}{\sqrt{n}} \quad (s_d \text{ plug-in, large } n)
+
 $$
 
 ### Python Code
@@ -72,7 +78,9 @@ print(f"{confidence_interval = }")
 A researcher measures the blood pressure of 10 patients before and after a treatment. The differences (before minus after) are:
 
 $$
+
 d = [5, 3, 4, -2, 0, 6, -1, 2, 3, 4]
+
 $$
 
 Construct a 95% confidence interval for the mean difference in blood pressure.
@@ -80,19 +88,27 @@ Construct a 95% confidence interval for the mean difference in blood pressure.
 **Solution.**
 
 $$
+
 \bar{d} = \frac{5+3+4+(-2)+0+6+(-1)+2+3+4}{10} = \frac{24}{10} = 2.4
+
 $$
 
 $$
+
 s_d \approx 2.17, \qquad df = 9, \qquad t_{0.025, 9} \approx 2.262
+
 $$
 
 $$
+
 \text{SE} = \frac{2.17}{\sqrt{10}} \approx 0.686, \qquad \text{ME} = 2.262 \times 0.686 \approx 1.552
+
 $$
 
 $$
+
 \boxed{(0.848,\ 3.952)}
+
 $$
 
 We are 95% confident that the true mean difference in blood pressure after the treatment is between 0.848 and 3.952.
@@ -114,19 +130,27 @@ Construct and interpret a 95% confidence interval for the mean difference.
 **Solution.**
 
 $$
+
 \bar{d} = \frac{9+5+8+6+6}{5} = 6.8
+
 $$
 
 $$
+
 s_d \approx 1.643, \qquad n = 5, \qquad df = 4, \qquad t_{0.025,4} \approx 2.776
+
 $$
 
 $$
+
 \text{SE} = \frac{1.643}{\sqrt{5}} \approx 0.735, \qquad \text{ME} = 2.776 \times 0.735 \approx 2.04
+
 $$
 
 $$
+
 \boxed{(4.76,\ 8.84)}
+
 $$
 
 We are 95% confident that the true mean difference in snaps between the dominant and non-dominant hands lies within $(4.76, 8.84)$.
@@ -296,11 +320,15 @@ A sample of 10 pairs yields $\bar{d} = 4.5$ and $s_d = 2.0$. Construct a 99% CI 
 **Solution.** With $df = 9$ and 99% confidence, $t_{0.005, 9} \approx 3.2498$.
 
 $$
+
 \text{SE} = \frac{2.0}{\sqrt{10}} \approx 0.6325, \qquad \text{ME} = 3.2498 \times 0.6325 \approx 2.056
+
 $$
 
 $$
+
 \boxed{(2.444,\ 6.556)}
+
 $$
 
 ```python
