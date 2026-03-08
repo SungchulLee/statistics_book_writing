@@ -106,7 +106,7 @@ Two teaching methods are compared. Method A: $n_1 = 30$, $\bar{X}_1 = 78$, $s_1 
 
 ## Exercise 6: Paired CI
 
-Ten students take a pre-test and post-test after a training program. The differences (post − pre) are: \$5, 3, 8, 2, 7, 1, 6, 4, 9, 5$.
+Ten students take a pre-test and post-test after a training program. The differences (post − pre) are: $5, 3, 8, 2, 7, 1, 6, 4, 9, 5$.
 
 **(a)** Construct a 95% CI for the mean improvement $\mu_D$.
 

@@ -17,17 +17,13 @@ Variance measures the average of the squared deviations from the mean. By squari
 **Population variance:**
 
 $$
-
 \sigma^2 = \frac{\sum_{i=1}^{N} (x_i - \mu)^2}{N}
-
 $$
 
 **Sample variance (with Bessel's correction):**
 
 $$
-
 s^2 = \frac{\sum_{i=1}^{n} (x_i - \bar{x})^2}{n - 1}
-
 $$
 
 The denominator $n - 1$ corrects for the downward bias that arises from using the sample mean $\bar{x}$ instead of the true population mean $\mu$.
@@ -37,7 +33,7 @@ The denominator $n - 1$ corrects for the downward bias that arises from using th
 For the dataset 70, 85, 90, 95, 100 with mean $\bar{x} = 88$:
 
 1. Squared deviations: $(70-88)^2 = 324$, $(85-88)^2 = 9$, $(90-88)^2 = 4$, $(95-88)^2 = 49$, $(100-88)^2 = 144$
-2. Sum: \$324 + 9 + 4 + 49 + 144 = 530$
+2. Sum: $324 + 9 + 4 + 49 + 144 = 530$
 3. Sample variance: $s^2 = 530 / 4 = 132.5$
 
 ### Computing Variance in Python
@@ -73,17 +69,13 @@ The standard deviation is the square root of the variance. It returns the measur
 **Population standard deviation:**
 
 $$
-
 \sigma = \sqrt{\frac{\sum_{i=1}^{N} (x_i - \mu)^2}{N}}
-
 $$
 
 **Sample standard deviation:**
 
 $$
-
 s = \sqrt{\frac{\sum_{i=1}^{n} (x_i - \bar{x})^2}{n - 1}}
-
 $$
 
 ### Example

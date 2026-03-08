@@ -9,9 +9,7 @@ The hypotheses for the Chi-Square test for variance are formulated as follows:
 **Null Hypothesis ($H_0$):** The population variance $\sigma^2$ is equal to some specified value $\sigma_0^2$:
 
 $$
-
 H_0: \sigma^2 = \sigma_0^2
-
 $$
 
 **Alternative Hypothesis ($H_1$):** The population variance differs from the specified value $\sigma_0^2$. This can be expressed depending on whether we are conducting a two-tailed or one-tailed test:
@@ -19,17 +17,13 @@ $$
 - **Two-tailed test** (variance is simply different):
 
 $$
-
 H_1: \sigma^2 \neq \sigma_0^2
-
 $$
 
 - **One-tailed test** (variance is greater or less than the specified value):
 
 $$
-
 H_1: \sigma^2 > \sigma_0^2 \quad \text{or} \quad H_1: \sigma^2 < \sigma_0^2
-
 $$
 
 ## Assumptions
@@ -47,9 +41,7 @@ If these assumptions are violated, especially the assumption of normality, the t
 The test statistic for the Chi-Square test for variance is based on the sample variance $s^2$ and the hypothesized population variance $\sigma_0^2$:
 
 $$
-
 \frac{(n - 1) s^2}{\sigma_0^2} = \sum_{i=1}^n \left(\frac{X_i - \bar{X}}{\sigma_0}\right)^2 \sim \chi^2_{n-1}
-
 $$
 
 where:
@@ -67,9 +59,7 @@ To determine whether to reject the null hypothesis, we compare the test statisti
 **For a two-tailed test**, we check both the lower and upper tails of the chi-square distribution:
 
 $$
-
 \chi^2_{\text{lower}} < \chi^2 < \chi^2_{\text{upper}}
-
 $$
 
 If the calculated test statistic falls within this range, we fail to reject the null hypothesis. If it falls outside, we reject $H_0$.
@@ -99,9 +89,7 @@ The critical values are derived from chi-square distribution tables and depend o
 - Hypothesized variance $\sigma_0^2 = 0.04$
 
 $$
-
 \chi^2 = \frac{(25 - 1) \times 0.05}{0.04} = \frac{24 \times 0.05}{0.04} = 30
-
 $$
 
 **Step 3 — Determine Critical Values:**
@@ -113,7 +101,7 @@ For $n - 1 = 24$ degrees of freedom and $\alpha = 0.05$ (two-tailed):
 
 **Step 4 — Decision Rule:**
 
-Since the test statistic ($\chi^2 = 30$) lies between the lower and upper critical values (\$13.848 < 30 < 36.415$), we fail to reject the null hypothesis.
+Since the test statistic ($\chi^2 = 30$) lies between the lower and upper critical values ($13.848 < 30 < 36.415$), we fail to reject the null hypothesis.
 
 **Step 5 — Conclusion:**
 
@@ -124,9 +112,7 @@ There is insufficient evidence to suggest that the population variance differs f
 In addition to hypothesis testing, we can construct a confidence interval for the population variance using the chi-square distribution. The $100(1 - \alpha)\%$ confidence interval for the population variance $\sigma^2$ is:
 
 $$
-
 \left( \frac{(n - 1) s^2}{\chi^2_{\text{upper}}}, \quad \frac{(n - 1) s^2}{\chi^2_{\text{lower}}} \right)
-
 $$
 
 where $\chi^2_{\text{upper}}$ and $\chi^2_{\text{lower}}$ are the critical values of the chi-square distribution for $n - 1$ degrees of freedom, and $s^2$ is the sample variance.
@@ -134,9 +120,7 @@ where $\chi^2_{\text{upper}}$ and $\chi^2_{\text{lower}}$ are the critical value
 Using the previous scenario, the 95% confidence interval for the population variance is:
 
 $$
-
 \left( \frac{24 \times 0.05}{36.415}, \quad \frac{24 \times 0.05}{13.848} \right) = (0.0329, \; 0.0867)
-
 $$
 
 Thus, the 95% confidence interval for the population variance is between $0.0329$ and $0.0867$ grams$^2$.

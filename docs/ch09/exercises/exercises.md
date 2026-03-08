@@ -301,7 +301,7 @@ Since $|0| < 1.96$, **fail to reject** $H_0$. No significant difference.
 
 **(2)** Sampling distribution: **(b) $t_9$** (paired differences with $n=10$, $df = 9$).
 
-**Full test:** $\bar{d} = 1.7$, $s_d \approx 0.483$, $t = 1.7 / (0.483/\sqrt{10}) \approx 11.11$. Critical value $t_{0.05,9} \approx 1.833$. Since \$11.11 > 1.833$, **reject** $H_0$. The workout program significantly reduces body fat.
+**Full test:** $\bar{d} = 1.7$, $s_d \approx 0.483$, $t = 1.7 / (0.483/\sqrt{10}) \approx 11.11$. Critical value $t_{0.05,9} \approx 1.833$. Since $11.11 > 1.833$, **reject** $H_0$. The workout program significantly reduces body fat.
 
 ### Dietary Plan and Cholesterol Levels
 
@@ -309,4 +309,4 @@ Since $|0| < 1.96$, **fail to reject** $H_0$. No significant difference.
 
 $$t = \frac{7.5}{2.61/\sqrt{12}} = \frac{7.5}{0.754} \approx 9.95$$
 
-With $df = 11$ and $t_{0.05, 11} \approx 1.796$: since \$9.95 > 1.796$, **reject** $H_0$. The dietary plan significantly reduces cholesterol.
+With $df = 11$ and $t_{0.05, 11} \approx 1.796$: since $9.95 > 1.796$, **reject** $H_0$. The dietary plan significantly reduces cholesterol.
