@@ -5,9 +5,7 @@
 We say a dataset is **normally distributed** if it follows a bell-shaped curve known as the **normal distribution**. The normal distribution is a continuous probability distribution defined by the probability density function (PDF):
 
 $$
-
 f(x) = \frac{1}{\sigma \sqrt{2\pi}} \exp \left( -\frac{(x - \mu)^2}{2\sigma^2} \right)
-
 $$
 
 where

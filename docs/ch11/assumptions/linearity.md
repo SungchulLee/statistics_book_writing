@@ -5,9 +5,7 @@
 Although linearity is not always explicitly stated as a requirement for ANOVA, it becomes relevant when ANOVA is viewed through the lens of the general linear model. In the one-way ANOVA framework, the model is:
 
 $$
-
 Y_{ij} = \mu + \alpha_i + \varepsilon_{ij}
-
 $$
 
 where $\mu$ is the overall mean, $\alpha_i$ is the effect of group $i$, and $\varepsilon_{ij}$ is the random error. This model is inherently linear in the parameters. Linearity becomes more explicitly important in two-way ANOVA, ANCOVA (analysis of covariance), and when ANOVA is extended to include continuous covariates.

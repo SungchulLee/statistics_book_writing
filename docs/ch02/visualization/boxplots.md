@@ -35,7 +35,6 @@ plt.show()
 Box plots provide a quick diagnostic for distribution shape:
 
 $$
-
 \begin{array}{lll}
 \text{Left\_Box} > \text{Right\_Box} &\Rightarrow& \text{Left-skewed} \\
 \text{Left\_Box} < \text{Right\_Box} &\Rightarrow& \text{Right-skewed} \\
@@ -43,7 +42,6 @@ $$
 \text{Boxes equal, Left\_Whisker} < \text{Right\_Whisker} &\Rightarrow& \text{Right-skewed} \\
 \text{Both equal} &\Rightarrow& \text{Symmetric} \\
 \end{array}
-
 $$
 
 ## Paired Histogram and Box Plot

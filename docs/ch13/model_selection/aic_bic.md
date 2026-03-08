@@ -7,9 +7,7 @@ When building statistical models, a core challenge is balancing model complexity
 AIC measures the trade-off between model accuracy and complexity:
 
 $$
-
 AIC = -2 \ln(L) + 2k
-
 $$
 
 where:
@@ -26,9 +24,7 @@ AIC emphasizes **predictive accuracy** and is often used when the main objective
 BIC is similar to AIC but applies a stronger penalty for model complexity:
 
 $$
-
 BIC = -2 \ln(L) + k \ln(n)
-
 $$
 
 where:

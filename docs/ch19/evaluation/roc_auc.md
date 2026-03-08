@@ -47,17 +47,13 @@ Varying the threshold from 0 to 1 produces a curve that typically starts near (0
 The **AUC** is the area under the ROC curve, ranging from 0 to 1:
 
 $$
-
 \text{AUC} = \int_0^1 \text{TPR}(\text{FPR}) \, d(\text{FPR})
-
 $$
 
 In practice, AUC is computed numerically using the **trapezoidal rule**:
 
 $$
-
 \text{AUC} \approx \sum_{i=1}^{m} \frac{\text{TPR}_i + \text{TPR}_{i-1}}{2} \cdot (\text{FPR}_i - \text{FPR}_{i-1})
-
 $$
 
 ### Interpretation of AUC

@@ -7,17 +7,13 @@ The MLE estimator for the variance of a Normal distribution is biased.
 ## MLE Estimator
 
 $$
-
 \hat{\sigma}^2_{MLE} = \frac{1}{n}\sum_{i=1}^n (X_i - \bar{X})^2
-
 $$
 
 ## Bias Calculation
 
 $$
-
 E[\hat{\sigma}^2_{MLE}] = \frac{n-1}{n}\sigma^2 \neq \sigma^2
-
 $$
 
 The bias is $-\sigma^2/n$, which vanishes as $n \to \infty$ (consistency).

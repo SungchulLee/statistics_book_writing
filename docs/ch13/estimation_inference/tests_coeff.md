@@ -11,9 +11,7 @@ This section extends the inferential results from simple linear regression to th
 Consider the model in matrix form:
 
 $$
-
 \mathbf{y} = \mathbf{X}\beta + \varepsilon
-
 $$
 
 where:
@@ -26,9 +24,7 @@ where:
 The OLS estimator is:
 
 $$
-
 \hat{\beta} = (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T \mathbf{y}
-
 $$
 
 ---
@@ -39,9 +35,7 @@ $$
 Under the assumptions of the linear regression model:
 
 $$
-
 \hat{\beta} \sim N\!\left(\beta,\; \sigma^2 (\mathbf{X}^T \mathbf{X})^{-1}\right)
-
 $$
 
 That is, $\hat{\beta}$ is normally distributed with:
@@ -54,33 +48,25 @@ That is, $\hat{\beta}$ is normally distributed with:
 Substituting $\mathbf{y} = \mathbf{X}\beta + \varepsilon$ into the OLS formula:
 
 $$
-
 \hat{\beta} = (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T (\mathbf{X}\beta + \varepsilon) = \beta + (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T \varepsilon
-
 $$
 
 **Unbiasedness**: Since $E(\varepsilon) = \mathbf{0}$:
 
 $$
-
 E(\hat{\beta}) = \beta + (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T E(\varepsilon) = \beta
-
 $$
 
 **Covariance**: Let $\mathbf{A} = (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T$. Then $\hat{\beta} - \beta = \mathbf{A}\varepsilon$ and:
 
 $$
-
 \text{Var}(\hat{\beta}) = \mathbf{A}\,\text{Var}(\varepsilon)\,\mathbf{A}^T = \mathbf{A}(\sigma^2 I_N)\mathbf{A}^T = \sigma^2 \mathbf{A}\mathbf{A}^T
-
 $$
 
 Computing $\mathbf{A}\mathbf{A}^T$:
 
 $$
-
 \mathbf{A}\mathbf{A}^T = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1} = (\mathbf{X}^T\mathbf{X})^{-1}
-
 $$
 
 Therefore $\text{Var}(\hat{\beta}) = \sigma^2(\mathbf{X}^T\mathbf{X})^{-1}$.
@@ -99,25 +85,19 @@ This result provides the foundation for all inference in multiple regression: co
 The residual variance estimator
 
 $$
-
 s^2 = \frac{1}{N - p - 1} \sum_{i=1}^N (y^{(i)} - \hat{y}^{(i)})^2
-
 $$
 
 has the sampling distribution:
 
 $$
-
 \frac{(N - p - 1)\,s^2}{\sigma^2} \sim \chi^2_{N-p-1}
-
 $$
 
 Equivalently:
 
 $$
-
 s^2 \sim \sigma^2 \frac{\chi^2_{N-p-1}}{N - p - 1}
-
 $$
 
 ### Key Properties
@@ -133,9 +113,7 @@ $$
 **Step 1: Express residuals via projection.** Define the hat matrix $\mathbf{P} = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T$ and the residual-maker matrix $\mathbf{M} = I_N - \mathbf{P}$. The residual vector is:
 
 $$
-
 \mathbf{e} = \mathbf{y} - \mathbf{X}\hat{\beta} = (I_N - \mathbf{P})\mathbf{y} = \mathbf{M}\varepsilon
-
 $$
 
 where the last equality uses $\mathbf{M}\mathbf{X} = \mathbf{0}$.
@@ -143,9 +121,7 @@ where the last equality uses $\mathbf{M}\mathbf{X} = \mathbf{0}$.
 **Step 2: Residual sum of squares as a quadratic form.**
 
 $$
-
 \text{RSS} = \mathbf{e}^T\mathbf{e} = \varepsilon^T \mathbf{M}^T \mathbf{M}\,\varepsilon = \varepsilon^T \mathbf{M}\,\varepsilon
-
 $$
 
 since $\mathbf{M}$ is symmetric and idempotent ($\mathbf{M}^2 = \mathbf{M}$).
@@ -153,17 +129,13 @@ since $\mathbf{M}$ is symmetric and idempotent ($\mathbf{M}^2 = \mathbf{M}$).
 **Step 3: Chi-squared distribution.** Since $\varepsilon \sim N(\mathbf{0}, \sigma^2 I_N)$ and $\mathbf{M}$ is a symmetric idempotent matrix with rank $\text{tr}(\mathbf{M}) = N - (p+1) = N - p - 1$:
 
 $$
-
 \frac{\varepsilon^T \mathbf{M}\,\varepsilon}{\sigma^2} = \frac{\text{RSS}}{\sigma^2} \sim \chi^2_{N-p-1}
-
 $$
 
 **Step 4: Conclusion.** Dividing by the degrees of freedom:
 
 $$
-
 s^2 = \frac{\text{RSS}}{N - p - 1} \sim \sigma^2\frac{\chi^2_{N-p-1}}{N - p - 1} \qquad \blacksquare
-
 $$
 
 ---
@@ -175,9 +147,7 @@ $$
 Under the null hypothesis $H_0: \beta_j = 0$, the test statistic:
 
 $$
-
 t_j = \frac{\hat{\beta}_j}{s\sqrt{v_j}} \sim t_{N-p-1}
-
 $$
 
 where $v_j = \left((\mathbf{X}^T\mathbf{X})^{-1}\right)_{jj}$ is the $j$-th diagonal element of $(\mathbf{X}^T\mathbf{X})^{-1}$.
@@ -189,9 +159,7 @@ The $t$-statistic $t_j$ tests whether the $j$-th predictor contributes to the mo
 The denominator $s\sqrt{v_j}$ is the **standard error** of $\hat{\beta}_j$:
 
 $$
-
 \text{SE}(\hat{\beta}_j) = s\sqrt{v_j}
-
 $$
 
 ### Proof
@@ -199,25 +167,19 @@ $$
 **Step 1: Distribution of $\hat{\beta}_j$ under $H_0$.** From the sampling distribution of $\hat{\beta}$, each component satisfies:
 
 $$
-
 \hat{\beta}_j \sim N(\beta_j, \sigma^2 v_j)
-
 $$
 
 Under $H_0: \beta_j = 0$:
 
 $$
-
 \frac{\hat{\beta}_j}{\sigma\sqrt{v_j}} \sim N(0, 1)
-
 $$
 
 **Step 2: Independent chi-squared in the denominator.** From the distribution of $s^2$:
 
 $$
-
 \frac{(N-p-1)s^2}{\sigma^2} \sim \chi^2_{N-p-1}
-
 $$
 
 and this is independent of $\hat{\beta}_j$ (since $\hat{\beta}$ depends on $\mathbf{P}\varepsilon$ while $s^2$ depends on $\mathbf{M}\varepsilon$, and $\mathbf{PM} = \mathbf{0}$).
@@ -225,9 +187,7 @@ and this is independent of $\hat{\beta}_j$ (since $\hat{\beta}$ depends on $\mat
 **Step 3: Form the $t$-ratio.** By the definition of the $t$-distribution:
 
 $$
-
 t_j = \frac{\hat{\beta}_j / (\sigma\sqrt{v_j})}{\sqrt{s^2/\sigma^2}} = \frac{\hat{\beta}_j}{s\sqrt{v_j}} \sim t_{N-p-1} \qquad \blacksquare
-
 $$
 
 ### General Confidence Interval
@@ -235,9 +195,7 @@ $$
 For a $(1 - \alpha)$ confidence interval for $\beta_j$:
 
 $$
-
 \hat{\beta}_j \pm t_{N-p-1}(1 - \alpha/2)\; s\sqrt{v_j}
-
 $$
 
 ---

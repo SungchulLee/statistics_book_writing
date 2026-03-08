@@ -128,9 +128,7 @@ if __name__ == "__main__":
 Kendall's $\tau$ also measures the strength of a **monotonic** relationship, but it is based on the number of concordant and discordant pairs rather than ranks. It tends to be more robust for small sample sizes and has better statistical properties for hypothesis testing.
 
 $$
-
 \tau = \frac{(\text{number of concordant pairs}) - (\text{number of discordant pairs})}{\binom{n}{2}}
-
 $$
 
 ```python

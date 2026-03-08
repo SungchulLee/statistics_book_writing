@@ -6,11 +6,9 @@ The **softmax** function maps a vector of $C$ real-valued logits
 $\mathbf{z}=(z_1,\ldots,z_C)$ to a probability distribution:
 
 $$
-
 \operatorname{softmax}(\mathbf{z})_c
 = \frac{e^{z_c}}{\sum_{c'=1}^{C}e^{z_{c'}}},
 \qquad c=1,\ldots,C
-
 $$
 
 ### Properties
@@ -29,10 +27,8 @@ we subtract $\max_c z_c$.
 The output of softmax lies on the **probability simplex**
 
 $$
-
 \Delta^{C-1} = \Bigl\{\mathbf{p}\in\mathbb{R}^C : p_c\ge 0,\;
 \sum_c p_c = 1\Bigr\}
-
 $$
 
 For $C=3$ this is a triangle in 3D space; for $C=10$ (MNIST) it is a
@@ -43,12 +39,10 @@ For $C=3$ this is a triangle in 3D space; for $C=10$ (MNIST) it is a
 When $C=2$ with logits $(z_1,z_2)$:
 
 $$
-
 \operatorname{softmax}(\mathbf{z})_1
 = \frac{e^{z_1}}{e^{z_1}+e^{z_2}}
 = \frac{1}{1+e^{-(z_1-z_2)}}
 = \sigma(z_1-z_2)
-
 $$
 
 Thus the binary softmax is exactly the sigmoid applied to the difference
@@ -59,10 +53,8 @@ of the two logits.
 A common variant introduces a temperature parameter $\tau>0$:
 
 $$
-
 \operatorname{softmax}(\mathbf{z}/\tau)_c
 = \frac{e^{z_c/\tau}}{\sum_{c'}e^{z_{c'}/\tau}}
-
 $$
 
 As $\tau\to 0$ the distribution collapses to a point mass on

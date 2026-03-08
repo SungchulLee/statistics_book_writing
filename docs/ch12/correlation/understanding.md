@@ -150,15 +150,12 @@ if __name__ == "__main__":
 The strength and direction of the linear relationship between two variables $X$ and $Y$ are captured by the **Pearson correlation coefficient**:
 
 $$
-
 \rho = \rho_{X,Y} = \frac{\text{Cov}(X, Y)}{\sqrt{\text{Var}(X)}\;\sqrt{\text{Var}(Y)}}
-
 $$
 
 where:
 
 $$
-
 \begin{aligned}
 \mathbb{E}[X] &\approx \bar{x} = \frac{\sum_{i=1}^n x_i}{n} \\[6pt]
 \mathbb{E}[Y] &\approx \bar{y} = \frac{\sum_{i=1}^n y_i}{n} \\[6pt]
@@ -166,15 +163,12 @@ $$
 \text{Var}(Y) &= \mathbb{E}\!\left[(Y - \mathbb{E}[Y])^2\right] \approx S_y^2 = \frac{\sum_{i=1}^n (y_i - \bar{y})^2}{n-1} \\[6pt]
 \text{Cov}(X,Y) &= \mathbb{E}\!\left[(X - \mathbb{E}[X])(Y - \mathbb{E}[Y])\right] \approx S_{xy} = \frac{\sum_{i=1}^n (x_i - \bar{x})(y_i - \bar{y})}{n-1}
 \end{aligned}
-
 $$
 
 The sample correlation coefficient can equivalently be written as:
 
 $$
-
 r = \frac{n\left(\sum_{i=1}^n x_i y_i\right) - \left(\sum_{i=1}^n x_i\right)\left(\sum_{i=1}^n y_i\right)}{\sqrt{\left[n\sum_{i=1}^n x_i^2 - \left(\sum_{i=1}^n x_i\right)^2\right]\left[n\sum_{i=1}^n y_i^2 - \left(\sum_{i=1}^n y_i\right)^2\right]}}
-
 $$
 
 ### Interpretation of Pearson's rho
@@ -199,7 +193,6 @@ Special values:
 ## Properties of Correlation
 
 $$
-
 \begin{aligned}
 (1) &\quad \rho_{Y,X} = \rho_{X,Y} & \text{(symmetry)} \\[4pt]
 (2) &\quad \rho_{X+a,\,Y} = \rho_{X,Y} & \text{(translation invariance)} \\
@@ -207,7 +200,6 @@ $$
 (3) &\quad \rho_{aX,\,Y} = \rho_{X,Y} \quad \text{for } a > 0 & \text{(scale invariance)} \\
     &\quad \rho_{X,\,aY} = \rho_{X,Y} \quad \text{for } a > 0
 \end{aligned}
-
 $$
 
 These properties tell us that correlation measures the *shape* of the relationship, not its location or scale.

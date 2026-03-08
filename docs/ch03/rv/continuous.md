@@ -19,9 +19,7 @@ For continuous random variables, the weight (probability) is **spread continuous
 For a continuous random variable $X$, the **PDF** $f(x)$ describes the density of probability at each point:
 
 $$
-
 f(x)\,dx = \text{Weight of the bricks within the interval } [x, x + dx]
-
 $$
 
 Key properties of the PDF:
@@ -39,9 +37,7 @@ Note that $f(x)$ itself is **not** a probability—it can exceed 1. Only the **a
 For a **discrete** random variable, we can ask $P(X = a)$ and get a positive answer. For a **continuous** random variable:
 
 $$
-
 P(X = a) = 0 \quad \text{for any specific value } a
-
 $$
 
 This is because there are infinitely many possible values, and the "weight" at any single point is zero. We can only meaningfully ask about the probability that $X$ falls within a range.
@@ -53,9 +49,7 @@ This is because there are infinitely many possible values, and the "weight" at a
 The most important continuous distribution is the **normal distribution** with mean $\mu$ and variance $\sigma^2$. Its PDF is:
 
 $$
-
 f(x) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{(x - \mu)^2}{2\sigma^2}\right)
-
 $$
 
 The area under this curve between any two values gives the probability that $X$ falls within that range.

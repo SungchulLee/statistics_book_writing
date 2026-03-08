@@ -5,9 +5,7 @@
 The test statistic $JB$ for testing the normality of data using the Jarque-Bera test is defined as:
 
 $$
-
 JB = \frac{n}{6} \left( S^2 + \frac{(K - 3)^2}{4} \right) \sim \chi^2_2
-
 $$
 
 where:
@@ -32,25 +30,20 @@ where:
 **(a)** For a normal distribution, the theoretical skewness $S$ is:
 
 $$
-
 S = \mathbb{E}\left(\frac{X - \mu}{\sigma}\right)^3 = \mathbb{E}Z^3 = \int_{-\infty}^\infty x^3 \cdot \frac{1}{\sqrt{2\pi}} e^{-x^2/2} dx = 0
-
 $$
 
 **(b)**
 
 $$
-
 I
 = \int_{-\infty}^\infty x^4 e^{-x^2} dx
 = 2 \int_0^\infty x^4 e^{-x^2} dx
-
 $$
 
 Let $u = x^2$, so that $x = u^{1/2}$ and $dx = \frac{1}{2} u^{-1/2} du$. The integral becomes:
 
 $$
-
 I
 = 2 \int_0^\infty (u^{1/2})^4 e^{-u} \cdot \frac{1}{2} u^{-1/2} du
 = \int_0^\infty u^{\frac{5}{2}-1} e^{-u} du
@@ -58,24 +51,19 @@ I
 = \frac{3}{2}\cdot\Gamma\left(\frac{3}{2}\right)
 = \frac{3}{2}\cdot\frac{1}{2}\cdot\Gamma\left(\frac{1}{2}\right)
 = \frac{3}{2}\cdot\frac{1}{2}\cdot\sqrt{\pi}
-
 $$
 
 where the Gamma function is defined as:
 
 $$
-
 \Gamma(n) = \int_0^\infty x^{n-1} e^{-x} dx
-
 $$
 
 The Gamma function satisfies:
 
 $$
-
 \Gamma(n+1) = n \cdot \Gamma(n),\quad
 \Gamma\left(\frac{1}{2}\right)=\sqrt{\pi}
-
 $$
 
 **(c)** For a normal distribution, the theoretical kurtosis $K$ is $3$. Subtracting $3$ ensures that for normal data, $K - 3 = 0$. This simplifies the test statistic under the null hypothesis of normality.
@@ -83,9 +71,7 @@ $$
 **(d)** The $p$-value is:
 
 $$
-
 p = 1 - F(3.2189)
-
 $$
 
 **(e)** Since $p = 0.2 > \alpha = 0.05$, there is insufficient evidence to reject the null hypothesis. Therefore, we conclude that the data does not violate normality and maintain the assumption of normality at the given significance level.

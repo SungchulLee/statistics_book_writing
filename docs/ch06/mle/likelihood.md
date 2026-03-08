@@ -9,17 +9,13 @@ The **likelihood function** is the joint density of the observed data, viewed as
 Given i.i.d. observations $\mathbf{x} = (x_1, \ldots, x_n)$:
 
 $$
-
 L(\theta \mid \mathbf{x}) = \prod_{i=1}^n f(x_i \mid \theta)
-
 $$
 
 ## Log-Likelihood
 
 $$
-
 \ell(\theta) = \log L(\theta \mid \mathbf{x}) = \sum_{i=1}^n \log f(x_i \mid \theta)
-
 $$
 
 ## Key Properties

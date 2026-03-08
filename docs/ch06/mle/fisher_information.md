@@ -7,9 +7,7 @@ The **Fisher information** measures the amount of information a random variable 
 ## Definition
 
 $$
-
 I(\theta) = E\left[\left(\frac{\partial}{\partial\theta} \log f(X;\theta)\right)^2\right] = -E\left[\frac{\partial^2}{\partial\theta^2} \log f(X;\theta)\right]
-
 $$
 
 For $n$ i.i.d. observations: $I_n(\theta) = n \cdot I(\theta)$.
@@ -19,9 +17,7 @@ For $n$ i.i.d. observations: $I_n(\theta) = n \cdot I(\theta)$.
 The asymptotic standard error of the MLE is:
 
 $$
-
 \text{SE}(\hat{\theta}_{MLE}) \approx \frac{1}{\sqrt{I_n(\hat{\theta})}}
-
 $$
 
 ## Examples

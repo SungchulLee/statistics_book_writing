@@ -16,9 +16,7 @@ The skewness test provides a test statistic and a $p$-value. If the $p$-value is
 1. **Calculate the sample skewness**: We first compute the sample skewness using the formula
 
     $$
-
     \text{Skewness} = \frac{1}{n} \sum_{i=1}^{n} \left( \frac{x_i - \bar{x}}{\sigma} \right)^3
-
     $$
 
     where $n$ is the number of data points, $x_i$ are the individual data points, $\bar{x}$ is the mean, and $\sigma$ is the standard deviation.
@@ -75,9 +73,7 @@ The kurtosis test provides a test statistic and a $p$-value. If the $p$-value is
 1. **Calculate the sample excess kurtosis**: We first compute the sample excess kurtosis using the formula
 
     $$
-
     \text{Excess Kurtosis} = \frac{1}{n} \sum_{i=1}^{n} \left( \frac{x_i - \bar{x}}{\sigma} \right)^4 - 3
-
     $$
 
     where $n$ is the number of data points, $x_i$ are the individual data points, $\bar{x}$ is the mean, and $\sigma$ is the standard deviation.

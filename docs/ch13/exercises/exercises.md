@@ -42,9 +42,7 @@ Kurtosis:                       6.741   Cond. No.                         457.
     **(a)** The predicted value of sales is:
 
     $$
-
     \hat{y} = 3.0451 + 0.0470 \cdot x_1 + 0.1797 \cdot x_2 - 0.0030 \cdot x_3
-
     $$
 
     This equation combines the intercept and coefficients for each advertising medium to predict sales.
@@ -78,49 +76,37 @@ Since the sample size is large, use the normal distribution instead of the $t$-d
     **(a)** Predict the weight for a height of 179 cm:
 
     $$
-
     X = \mu_X + \sigma_X \quad \rightarrow \quad \hat{Y} = \mu_Y + r\sigma_Y = 70 + 0.59 \times 7 = 74.13
-
     $$
 
     **(b)** Predict the height for a weight of 74.13 kg:
 
     $$
-
     Y = \mu_Y + r\sigma_Y \quad \rightarrow \quad \hat{X} = \mu_X + r^2\sigma_X = 173 + 0.59^2 \times 6 = 175.09
-
     $$
 
     **(c)** 95% Confidence Interval for the Mean Predicted Weight:
 
     $$
-
     \hat{Y} \pm z_{0.025} \cdot SE(\hat{Y}) = (72.13, \; 76.13)
-
     $$
 
     where:
 
     $$
-
     SE(\hat{Y}) = s_Y \sqrt{\frac{1}{n} + \frac{(X - \bar{X})^2}{\sum (X_i - \bar{X})^2}}
-
     $$
 
     **(d)** 95% Confidence Interval for the Predicted Weight:
 
     $$
-
     \hat{Y} \pm z_{0.025} \cdot SE_{\text{prediction}} = (60.10, \; 88.16)
-
     $$
 
     where:
 
     $$
-
     SE_{\text{prediction}} = s_Y \sqrt{1 + \frac{1}{n} + \frac{(X - \bar{X})^2}{\sum (X_i - \bar{X})^2}}
-
     $$
 
 ---
@@ -142,9 +128,7 @@ Test whether there is a significant difference between the two countries' mean s
     Two Sample $t$-Test (pooled variance):
 
     $$
-
     H_0: \mu_A = \mu_B \quad \text{vs} \quad H_1: \mu_A \neq \mu_B
-
     $$
 
     ```python
@@ -285,9 +269,7 @@ Test whether there is a significant difference between the two countries' mean a
     Two Sample $t$-Test (Welch's, unpooled variance):
 
     $$
-
     H_0: \mu_A = \mu_B \quad \text{vs} \quad H_1: \mu_A \neq \mu_B
-
     $$
 
     ```python
@@ -337,9 +319,7 @@ Test whether there is a significant difference between the two countries' mean a
     Two Sample $t$-Test (pooled variance):
 
     $$
-
     H_0: \mu_A = \mu_B \quad \text{vs} \quad H_1: \mu_A \neq \mu_B
-
     $$
 
     ```python
@@ -388,9 +368,7 @@ Test whether there is a significant difference between the two models' mean dist
     Two Sample $t$-Test (Welch's, unpooled variance):
 
     $$
-
     H_0: \mu_A = \mu_B \quad \text{vs} \quad H_1: \mu_A \neq \mu_B
-
     $$
 
     ```python

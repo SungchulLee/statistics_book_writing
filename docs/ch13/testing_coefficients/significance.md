@@ -77,9 +77,7 @@ p-values are useful but should not be the sole criterion. Practical significance
 When testing multiple predictors, the probability of finding a significant result by chance increases. Adjustments such as the **Bonferroni correction** can control the false positive rate:
 
 $$
-
 \alpha_{\text{adjusted}} = \frac{\alpha}{m}
-
 $$
 
 where $m$ is the number of comparisons.

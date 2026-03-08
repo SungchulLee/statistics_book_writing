@@ -10,9 +10,7 @@ Homoscedasticity means that the spread (variance) of the residuals is the same a
 Formally:
 
 $$
-
 \text{Var}(\epsilon_i \mid X_i) = \sigma^2 \quad \text{for all } i
-
 $$
 
 **Why It Matters:**
@@ -67,9 +65,7 @@ The **Breusch-Pagan test** is a formal statistical test used to detect heterosce
 The test regresses the squared residuals $e_i^2$ on the independent variables:
 
 $$
-
 e_i^2 = \gamma_0 + \gamma_1 X_{1i} + \gamma_2 X_{2i} + \cdots + \gamma_p X_{pi} + u_i
-
 $$
 
 The test statistic is $nR^2$ from this auxiliary regression, which follows a $\chi^2(p)$ distribution under $H_0$.
@@ -106,9 +102,7 @@ The **White test** is another statistical test that not only checks for heterosc
 The White test includes not only the original independent variables but also their **squares** and **cross-products** in the auxiliary regression:
 
 $$
-
 e_i^2 = \gamma_0 + \gamma_1 X_{1i} + \gamma_2 X_{2i} + \gamma_3 X_{1i}^2 + \gamma_4 X_{2i}^2 + \gamma_5 X_{1i} X_{2i} + u_i
-
 $$
 
 This makes it more general but also uses more degrees of freedom.

@@ -7,11 +7,9 @@ $A$ is the $n\times(p+1)$ design matrix (with a column of ones for the
 intercept), the predicted probability for observation $i$ is
 
 $$
-
 \sigma^{(i)} = \sigma\!\bigl(z^{(i)}\bigr),
 \qquad
 z^{(i)} = A[i,:]\,\boldsymbol{\theta}
-
 $$
 
 ## Bernoulli Likelihood
@@ -21,11 +19,9 @@ success probability $\sigma^{(i)}$. The likelihood of the entire dataset
 is
 
 $$
-
 \mathcal{L}(\boldsymbol{\theta})
 = \prod_{i=1}^{n}\bigl[\sigma^{(i)}\bigr]^{y^{(i)}}
   \bigl[1-\sigma^{(i)}\bigr]^{1-y^{(i)}}
-
 $$
 
 ## Cross-Entropy Loss (Negative Log-Likelihood)
@@ -34,13 +30,11 @@ Taking the negative logarithm gives the **cross-entropy loss** (also called
 the **log-loss**):
 
 $$
-
 \ell = -\sum_{i=1}^{n}
   \Bigl[
     y^{(i)}\log\sigma^{(i)}
     + \bigl(1-y^{(i)}\bigr)\log\bigl(1-\sigma^{(i)}\bigr)
   \Bigr]
-
 $$
 
 Minimizing $\ell$ with respect to $\boldsymbol{\theta}$ is equivalent to
@@ -72,9 +66,7 @@ If $q$ denotes the model distribution and $p$ the empirical (true)
 distribution, the cross-entropy is
 
 $$
-
 H(p, q) = -\sum_x p(x)\log q(x)
-
 $$
 
 The cross-entropy decomposes as $H(p,q) = H(p) + D_{\mathrm{KL}}(p\|q)$,
@@ -89,20 +81,16 @@ In practice a small constant $\varepsilon$ (e.g. $10^{-6}$) is added
 inside the logarithm to avoid $\log 0$:
 
 $$
-
 \ell \approx -\sum_{i=1}^{n}
   \Bigl[
     y^{(i)}\log\bigl(\sigma^{(i)}+\varepsilon\bigr)
     + \bigl(1-y^{(i)}\bigr)\log\bigl(1-\sigma^{(i)}+\varepsilon\bigr)
   \Bigr]
-
 $$
 
 Alternatively, many frameworks compute the loss directly from the logits
 $z^{(i)}$ using the numerically stable identity:
 
 $$
-
 -\log\sigma(z) = \log(1+e^{-z}) = \operatorname{softplus}(-z)
-
 $$

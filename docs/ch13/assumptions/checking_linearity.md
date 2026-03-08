@@ -73,9 +73,7 @@ plt.show()
 For a predictor $X_j$ in a multiple regression model, the partial residual is defined as:
 
 $$
-
 e_j^{(\text{partial})} = \hat{\beta}_j X_j + e
-
 $$
 
 where $\hat{\beta}_j$ is the estimated coefficient for $X_j$ and $e$ is the ordinary residual from the full model.
@@ -113,17 +111,13 @@ If the relationship between the dependent variable and an independent variable i
 A quadratic polynomial model for a single predictor:
 
 $$
-
 Y = \beta_0 + \beta_1 X + \beta_2 X^2 + \epsilon
-
 $$
 
 A cubic polynomial model:
 
 $$
-
 Y = \beta_0 + \beta_1 X + \beta_2 X^2 + \beta_3 X^3 + \epsilon
-
 $$
 
 Note that these are still **linear regression** models because they are linear in the parameters $\beta_0, \beta_1, \beta_2, \beta_3$.

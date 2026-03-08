@@ -5,13 +5,11 @@
 A **statistic** is any function of the observed data. Because the data arise from random sampling, the statistic itself is a **random variable** — its value changes from sample to sample. Recognizing this is the conceptual foundation of all sampling-distribution theory.
 
 $$
-
 \text{Population}
 \;\xrightarrow{\text{draw sample}}\;
 \mathbf{x} = (x_1, x_2, \dots, x_n)
 \;\xrightarrow{\text{compute}}\;
 T(\mathbf{x})
-
 $$
 
 Before the sample is drawn, $T(\mathbf{X})$ is a random variable; after the sample is observed, $T(\mathbf{x})$ is a realized number.
@@ -35,7 +33,6 @@ Before the sample is drawn, $T(\mathbf{X})$ is a random variable; after the samp
 - **Estimator** $\hat{\theta}(\mathbf{X})$: a statistic used specifically to estimate $\theta$.
 
 $$
-
 \begin{array}{ccccc}
 \text{Population}
 &\rightarrow&
@@ -48,7 +45,6 @@ $$
 &\rightarrow&
 \text{Estimator } \hat{\theta}(\mathbf{X})
 \end{array}
-
 $$
 
 ## Common Statistics and Their Targets
@@ -69,9 +65,7 @@ Each of these is a random variable whose distribution depends on the population 
 An estimator $\hat{\theta}$ is **unbiased** if its expected value equals the true parameter:
 
 $$
-
-E[\hat{\theta}(\mathbf{X})] = \theta.
-
+E[\hat{\theta}(\mathbf{X})] = \theta
 $$
 
 Unbiasedness means that across infinitely many repeated samples, the estimator is correct *on average* — it neither systematically overestimates nor underestimates $\theta$.
@@ -137,18 +131,14 @@ Maximum Likelihood Estimation (MLE) is a method for estimating parameters by fin
 Given i.i.d. observations $\mathbf{x} = (x_1, \dots, x_n)$ from a distribution $f(x \mid \theta)$, the MLE is:
 
 $$
-
 \hat{\theta}_{\text{MLE}} = \arg\max_{\theta} \; L(\theta \mid \mathbf{x})
-= \arg\max_{\theta} \prod_{i=1}^n f(x_i \mid \theta).
-
+= \arg\max_{\theta} \prod_{i=1}^n f(x_i \mid \theta)
 $$
 
 For computational convenience, we maximize the **log-likelihood**:
 
 $$
-
-\ell(\theta \mid \mathbf{x}) = \sum_{i=1}^n \log f(x_i \mid \theta).
-
+\ell(\theta \mid \mathbf{x}) = \sum_{i=1}^n \log f(x_i \mid \theta)
 $$
 
 ### MLE for Normal Distribution Parameters
@@ -158,26 +148,20 @@ Let $x^{(1)}, \dots, x^{(m)}$ be i.i.d. draws from $N(\mu, \sigma^2)$.
 **Likelihood:**
 
 $$
-
 L(\mu, \sigma^2) = \prod_{i=1}^m \frac{1}{\sqrt{2\pi\sigma^2}} \exp\!\left(-\frac{(x^{(i)} - \mu)^2}{2\sigma^2}\right)
-
 $$
 
 **Log-likelihood:**
 
 $$
-
 \ell(\mu, \sigma^2) = -\frac{1}{2\sigma^2}\sum_{i=1}^m (x^{(i)} - \mu)^2 - \frac{m}{2}\log\sigma^2 + \text{const.}
-
 $$
 
 **MLE solutions:**
 
 $$
-
 \hat{\mu} = \frac{1}{m}\sum_{i=1}^m x^{(i)}, \qquad
-\hat{\sigma}^2 = \frac{1}{m}\sum_{i=1}^m (x^{(i)} - \hat{\mu})^2.
-
+\hat{\sigma}^2 = \frac{1}{m}\sum_{i=1}^m (x^{(i)} - \hat{\mu})^2
 $$
 
 !!! note
@@ -190,25 +174,19 @@ Let $x^{(1)}, \dots, x^{(m)}$ be i.i.d. draws from $\text{Bernoulli}(p)$.
 **Likelihood:**
 
 $$
-
 L(p) = \prod_{i=1}^m p^{x^{(i)}}(1-p)^{1-x^{(i)}}
-
 $$
 
 **Log-likelihood:**
 
 $$
-
 \ell(p) = \sum_{i=1}^m \left[ x^{(i)} \log p + (1-x^{(i)})\log(1-p) \right]
-
 $$
 
 **MLE solution:**
 
 $$
-
-\hat{p} = \frac{1}{m}\sum_{i=1}^m x^{(i)}.
-
+\hat{p} = \frac{1}{m}\sum_{i=1}^m x^{(i)}
 $$
 
 ```python
@@ -254,17 +232,13 @@ The **capture–recapture method** estimates population size $N$ using two sampl
 The number of marked individuals in the recapture follows a **hypergeometric distribution**:
 
 $$
-
-P(m \mid N) = \frac{\binom{M}{m}\binom{N-M}{n-m}}{\binom{N}{n}}.
-
+P(m \mid N) = \frac{\binom{M}{m}\binom{N-M}{n-m}}{\binom{N}{n}}
 $$
 
 The MLE of $N$ is:
 
 $$
-
-\hat{N} = \frac{M \cdot n}{m}.
-
+\hat{N} = \frac{M \cdot n}{m}
 $$
 
 This follows from the proportionality argument $m/n \approx M/N$.
@@ -272,9 +246,7 @@ This follows from the proportionality argument $m/n \approx M/N$.
 **Example.** If $M = 50$ fish are marked, and a second sample of $n = 40$ yields $m = 10$ marked fish:
 
 $$
-
-\hat{N} = \frac{50 \times 40}{10} = 200.
-
+\hat{N} = \frac{50 \times 40}{10} = 200
 $$
 
 ```python

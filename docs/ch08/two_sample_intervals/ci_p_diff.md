@@ -9,9 +9,7 @@ In many practical situations, we compare the proportions of two populations — 
 Let $p_1$ and $p_2$ be the population proportions for two independent groups. The confidence interval for $p_1 - p_2$ is
 
 $$
-
 (\hat{p}_1 - \hat{p}_2) \pm z_{\alpha/2} \times \sqrt{\frac{\hat{p}_1(1 - \hat{p}_1)}{n_1} + \frac{\hat{p}_2(1 - \hat{p}_2)}{n_2}}
-
 $$
 
 where $\hat{p}_1 = x_1/n_1$ and $\hat{p}_2 = x_2/n_2$ are the sample proportions.
@@ -63,27 +61,19 @@ Sample 1: $n_1 = 200$, $x_1 = 120$ successes. Sample 2: $n_2 = 250$, $x_2 = 130$
 **Solution.**
 
 $$
-
 \hat{p}_1 = 0.60, \qquad \hat{p}_2 = 0.52
-
 $$
 
 $$
-
 \text{SE} = \sqrt{\frac{0.60 \times 0.40}{200} + \frac{0.52 \times 0.48}{250}} = \sqrt{0.0012 + 0.001} = \sqrt{0.0022} \approx 0.0469
-
 $$
 
 $$
-
 \text{ME} = 1.96 \times 0.0469 \approx 0.0919
-
 $$
 
 $$
-
 \boxed{(-0.0119,\ 0.1719)}
-
 $$
 
 We are 95% confident that the true difference lies between $-0.0119$ and $0.1719$. Since the interval includes zero, there is no statistically significant difference at the 95% level.
@@ -226,25 +216,17 @@ In two independent samples, 150 out of 200 prefer a brand in sample 1, and 120 o
 **Solution.**
 
 $$
-
 \hat{p}_1 = 0.75, \qquad \hat{p}_2 = 0.67
-
 $$
 
 $$
-
 \text{SE} = \sqrt{\frac{0.75 \times 0.25}{200} + \frac{0.67 \times 0.33}{180}} \approx 0.047
-
 $$
 
 $$
-
 \text{ME} = 1.96 \times 0.047 \approx 0.092
-
 $$
 
 $$
-
 \boxed{(-0.012,\ 0.172)}
-
 $$

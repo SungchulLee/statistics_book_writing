@@ -7,9 +7,7 @@ Confidence intervals are a fundamental concept in inferential statistics, provid
 Confidence intervals address this by offering a range of plausible values for the population parameter, with an associated confidence level (usually 90%, 95%, or 99%). The general form of a confidence interval is given by
 
 $$
-
 \text{Point Estimate} \pm \text{Margin of Error}
-
 $$
 
 The margin of error is determined by the variability in the data (e.g., the standard deviation), the sample size, and the desired confidence level. The margin of error tends to be smaller for larger sample sizes because the sample provides a more precise estimate of the population parameter.
@@ -23,9 +21,7 @@ The wider the interval, the greater the uncertainty acknowledged in the estimate
 A confidence interval for a population parameter is an interval computed from sample data that is likely to cover the true value of the parameter with a specified probability, known as the confidence level. Mathematically, a confidence interval for a parameter $\theta$ is given by:
 
 $$
-
 \hat{\theta} \pm \text{Margin of Error}
-
 $$
 
 where $\hat{\theta}$ is the point estimate of the parameter (e.g., the sample mean $\bar{X}$), and the margin of error is a function of the standard error and the desired confidence level.
@@ -43,14 +39,12 @@ The **population** refers to the entire data set or all possible observations we
 A **parameter** is a numerical value that summarizes some characteristic of the entire population. It is a fixed, usually unknown, value that describes a particular feature, such as the population mean ($\mu$), population proportion ($p$), population variance ($\sigma^2$), or population standard deviation ($\sigma$). Parameters represent the true value of the population but are often unknown because obtaining data from every member of the population is infeasible. Instead, we collect a **sample** (a population subset) and use this sample to compute statistics to estimate the population parameter.
 
 $$
-
 \begin{array}{ccc}
 \textbf{Population} & \longrightarrow & \textbf{Parameter} \\
 \text{All adult men in a country} & & \text{Population mean height } (\mu) \\
 \text{All registered voters} & & \text{Population proportion of voters supporting a candidate } (p) \\
 \text{All manufactured products from a factory} & & \text{Population defect rate } (\theta) \\
 \end{array}
-
 $$
 
 In most real-world situations, we cannot directly measure the population parameter, so we rely on **sample statistics** to estimate these unknown parameters.
@@ -66,29 +60,23 @@ A **statistic** is any numerical value that summarizes or describes some aspect 
 An **estimator** is a formula or method used to estimate a population parameter from sample data. For example, the estimator for the population mean $\mu$ is the sample mean:
 
 $$
-
 \bar{x} = \frac{1}{n}\sum_{i=1}^n x_i
-
 $$
 
 The estimator for the population proportion $p$ is the sample proportion:
 
 $$
-
 \hat{p} = \frac{x}{n}
-
 $$
 
 An **estimate** is the specific numerical value calculated from sample data using the estimator. For instance, if we compute $\bar{x} = 10$ from a specific sample, then 10 is the estimate of $\mu$.
 
 $$
-
 \begin{array}{cccc}
 \textbf{Population} & \longrightarrow & \textbf{Parameter} & (\mu, p, \sigma^2, \text{etc.}) \\
 \downarrow & & \uparrow & \\
 \textbf{Sample} & \longrightarrow & \textbf{Estimate} & (\bar{x}, \hat{p}, s^2, \text{etc.}) \\
 \end{array}
-
 $$
 
 ---
@@ -98,9 +86,7 @@ $$
 A **confidence interval** provides a range of values likely to contain the true population parameter. The general form is
 
 $$
-
 \text{estimate} \pm \text{margin of error}
-
 $$
 
 The **estimate** is the sample statistic (e.g., sample mean or sample proportion), and the **margin of error** captures the uncertainty in that estimate. The margin of error consists of two components: the **standard error** (which reflects the variability in the sample) and a **critical value** from a probability distribution, typically either the standard normal distribution or the $t$-distribution.
@@ -109,14 +95,12 @@ The **estimate** is the sample statistic (e.g., sample mean or sample proportion
 - For smaller samples (typically $n < 30$), we use the **$t$-distribution**, which adjusts for the additional uncertainty due to small sample sizes. When we use the $t$-distribution, we must ensure the original population follows the normal distribution.
 
 $$
-
 \begin{array}{cccc}
 \textbf{Population} & \longrightarrow & \textbf{Parameter} \\
 \downarrow & & \uparrow \\
 \textbf{Sample} & \longrightarrow & \textbf{Estimate} \\
 & & \textbf{Estimate} & \pm & \textbf{Margin of Error} \\
 \end{array}
-
 $$
 
 ---
@@ -154,9 +138,7 @@ One way to make this determination is by constructing a confidence interval for 
 The **significance level** of a hypothesis test ($\alpha$) corresponds to the **confidence level** of a confidence interval:
 
 $$
-
 \textbf{significance level} = 1 - \textbf{confidence level}
-
 $$
 
 ---
@@ -168,7 +150,6 @@ The following simulation scripts help visualize coverage properties of confidenc
 ### Summary of Simulation Parameters
 
 $$
-
 \begin{array}{llll}
 \text{Parameter} & \text{Estimate} & \text{Sampling Distribution} & \text{CI Formula} \\
 \hline
@@ -181,7 +162,6 @@ p & \hat{p} & \displaystyle\frac{\hat{p}-p}{\sqrt{\hat{p}(1-\hat{p})/n}}\approx 
 \mu_1-\mu_2 & \bar{x}_1-\bar{x}_2 & \text{Welch or pooled } t & \displaystyle(\bar{x}_1-\bar{x}_2)\pm t_{\alpha/2,\text{df}}\cdot\text{SE} \\[8pt]
 p_1-p_2 & \hat{p}_1-\hat{p}_2 & z & \displaystyle(\hat{p}_1-\hat{p}_2)\pm z_{\alpha/2}\cdot\text{SE}
 \end{array}
-
 $$
 
 ### Finite Population Correction (FPC)
@@ -189,9 +169,7 @@ $$
 If the data are sampled *without replacement* from a finite population of size $N$, the **finite population correction (FPC)** may be applied to the standard error:
 
 $$
-
 \text{SE}_\text{FPC} = \frac{s}{\sqrt{n}} \sqrt{\frac{N-n}{N-1}}, \qquad \text{when } n > 0.1N \text{ is not negligible.}
-
 $$
 
 ### Mean CI Simulation

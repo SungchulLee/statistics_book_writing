@@ -11,9 +11,7 @@ The **F distribution** arises as the ratio of two independent chi-square random 
 Let $X_1^2 \sim \chi^2_{d_1}$ and $X_2^2 \sim \chi^2_{d_2}$ be independent. Then:
 
 $$
-
 F = \frac{X_1^2 / d_1}{X_2^2 / d_2} \sim F_{d_1, d_2}
-
 $$
 
 where $d_1$ is the numerator degrees of freedom and $d_2$ is the denominator degrees of freedom.
@@ -21,9 +19,7 @@ where $d_1$ is the numerator degrees of freedom and $d_2$ is the denominator deg
 Since each $\chi^2$ is a sum of squared standard normals:
 
 $$
-
 X_1^2 = \sum_{i=1}^{d_1} Z_i^2, \qquad X_2^2 = \sum_{i=1}^{d_2} Z_i'^2
-
 $$
 
 ---
@@ -51,9 +47,7 @@ The chi-square distribution has a single degrees-of-freedom parameter controllin
 - **Mode:** For $d_1 > 2$:
 
 $$
-
 \text{Mode} = \frac{d_2(d_1 - 2)}{d_1(d_2 + 2)}
-
 $$
 
 ---
@@ -110,9 +104,7 @@ The F distribution arises naturally when comparing the variances of two independ
 For samples from normal populations:
 
 $$
-
 \frac{(n_1-1)S_1^2}{\sigma_1^2} \sim \chi^2_{n_1-1}, \qquad \frac{(n_2-1)S_2^2}{\sigma_2^2} \sim \chi^2_{n_2-1}
-
 $$
 
 These are independent because the two samples are independent.
@@ -122,9 +114,7 @@ These are independent because the two samples are independent.
 Dividing each by its degrees of freedom and taking the ratio:
 
 $$
-
 \frac{S_1^2 / \sigma_1^2}{S_2^2 / \sigma_2^2} \sim F_{n_1-1, \, n_2-1}
-
 $$
 
 ### Step 3: Under the Null Hypothesis
@@ -132,9 +122,7 @@ $$
 If we test $H_0: \sigma_1^2 = \sigma_2^2$, the population variances cancel:
 
 $$
-
 \frac{S_1^2}{S_2^2} \sim F_{n_1-1, \, n_2-1}
-
 $$
 
 This is the **F-test for equality of two variances**.

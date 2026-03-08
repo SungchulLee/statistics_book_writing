@@ -9,9 +9,7 @@ Descriptive statistics quantify the shape of a distribution and assess how close
 The formula for skewness is:
 
 $$
-
 \text{Skewness} = \frac{1}{n} \sum_{i=1}^{n} \left( \frac{x_i - \bar{x}}{s} \right)^3
-
 $$
 
 where
@@ -45,17 +43,13 @@ print(f"Skewness: {skewness_value:.4f}")
 The formula for kurtosis is:
 
 $$
-
 \text{Kurtosis} = \frac{1}{n} \sum_{i=1}^{n} \left( \frac{x_i - \bar{x}}{s} \right)^4
-
 $$
 
 and the formula for **excess kurtosis** is:
 
 $$
-
 \text{Excess Kurtosis} = \frac{1}{n} \sum_{i=1}^{n} \left( \frac{x_i - \bar{x}}{s} \right)^4 - 3
-
 $$
 
 The subtraction of 3 ensures that a normal distribution has an excess kurtosis of 0 (for easier comparison). The `scipy.stats.kurtosis` function computes this **excess kurtosis**, not the raw kurtosis.

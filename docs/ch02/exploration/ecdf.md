@@ -9,9 +9,7 @@ The **empirical cumulative distribution function (ECDF)** and **quantiles** prov
 For a sample $x_1, x_2, \ldots, x_n$, the ECDF is defined as
 
 $$
-
 \hat{F}(t) = \frac{1}{n} \sum_{i=1}^{n} \mathbf{1}(x_i \le t)
-
 $$
 
 where $\mathbf{1}(\cdot)$ is the indicator function. Key properties:
@@ -82,31 +80,25 @@ The $p$-th **percentile** $P_p$ is the value below which $p\%$ of the data falls
 The three quartiles divide the data into four equal parts:
 
 $$
-
 \begin{array}{llll}
 \text{First Quartile} & Q_1 &=& P_{25} \\
 \text{Second Quartile} & Q_2 &=& P_{50} \\
 \text{Third Quartile} & Q_3 &=& P_{75} \\
 \end{array}
-
 $$
 
 ### Deciles
 
 $$
-
 \begin{array}{llll}
 D_1 = P_{10}, \quad D_2 = P_{20}, \quad \ldots, \quad D_9 = P_{90}
 \end{array}
-
 $$
 
 ### Relationship to Median
 
 $$
-
 \text{Median} = Q_2 = D_5 = P_{50}
-
 $$
 
 ## Computing Quantiles in Python
@@ -162,9 +154,7 @@ plt.show()
 The five-number summary captures the key quantiles of a distribution:
 
 $$
-
 \text{Min} \quad Q_1 \quad \text{Median} \quad Q_3 \quad \text{Max}
-
 $$
 
 ```python

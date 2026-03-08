@@ -5,7 +5,6 @@
 A **sampling distribution** is the probability distribution of a given statistic based on a random sample. When we draw multiple random samples from the same population and calculate a statistic (such as the sample mean or sample proportion) for each sample, the resulting values form a distribution. This distribution is known as the **sampling distribution** of that statistic.
 
 $$
-
 \left.
 \begin{array}{ccccc}
 \text{Population} &\rightarrow& \text{Sample } \mathbf{x}_1 &\rightarrow& \hat{\theta}(\mathbf{x}_1) \\
@@ -22,7 +21,6 @@ $$
 \text{Distribution of } \hat{\theta}(\mathbf{x}_1), \hat{\theta}(\mathbf{x}_2), \cdots, \hat{\theta}(\mathbf{x}_n), \cdots \\
 \text{or Distribution of } \hat{\theta}(\mathbf{x})
 \end{array}
-
 $$
 
 ## Why Are Sampling Distributions Important?
@@ -45,7 +43,6 @@ The **Sample Distribution** refers to the distribution of values within a specif
 The **Sampling Distribution** describes the distribution of a statistic or estimator (such as the sample mean or sample proportion) computed from multiple samples of the same size drawn from the population. It helps us understand the variability of a statistic and is central to statistical inference.
 
 $$
-
 \begin{array}{ccccccc}
 \text{Population}
 &\rightarrow&
@@ -57,7 +54,6 @@ $$
 \text{Distribution of} && \text{Distribution of} && \text{Distribution of} \\
 \text{Whole Population} && \text{Numbers in Particular Sample } \mathbf{x} && \text{Infinitely Many Estimates } \hat{\theta}(\mathbf{x}_i)
 \end{array}
-
 $$
 
 ## Simulation 1: Uniform Population

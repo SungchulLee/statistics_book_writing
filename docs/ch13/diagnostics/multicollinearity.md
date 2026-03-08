@@ -64,9 +64,7 @@ The **Variance Inflation Factor (VIF)** quantifies how much the variance of a re
 For predictor $X_j$, the VIF is:
 
 $$
-
 \text{VIF}_j = \frac{1}{1 - R_j^2}
-
 $$
 
 where $R_j^2$ is the $R^2$ from regressing $X_j$ on all other predictors.

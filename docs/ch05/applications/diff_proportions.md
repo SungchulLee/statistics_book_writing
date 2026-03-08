@@ -13,25 +13,19 @@ Let $\hat{p}_1$ and $\hat{p}_2$ be sample proportions from two independent sampl
 **Expected value:**
 
 $$
-
 E[\hat{p}_1 - \hat{p}_2] = p_1 - p_2
-
 $$
 
 **Variance:**
 
 $$
-
 \text{Var}(\hat{p}_1 - \hat{p}_2) = \frac{p_1(1-p_1)}{n_1} + \frac{p_2(1-p_2)}{n_2}
-
 $$
 
 **Standard error:**
 
 $$
-
 \text{SE}(\hat{p}_1 - \hat{p}_2) = \sqrt{\frac{p_1(1-p_1)}{n_1} + \frac{p_2(1-p_2)}{n_2}}
-
 $$
 
 ### Normal Approximation
@@ -39,17 +33,13 @@ $$
 For sufficiently large $n_1$ and $n_2$ (with $n_i p_i \geq 5$ and $n_i(1-p_i) \geq 5$ for both $i$):
 
 $$
-
 Z = \frac{(\hat{p}_1 - \hat{p}_2) - (p_1 - p_2)}{\sqrt{\frac{p_1(1-p_1)}{n_1} + \frac{p_2(1-p_2)}{n_2}}} \approx N(0, 1)
-
 $$
 
 In practice, since $p_1$ and $p_2$ are unknown, we substitute the sample proportions:
 
 $$
-
 Z \approx \frac{(\hat{p}_1 - \hat{p}_2) - (p_1 - p_2)}{\sqrt{\frac{\hat{p}_1(1-\hat{p}_1)}{n_1} + \frac{\hat{p}_2(1-\hat{p}_2)}{n_2}}}
-
 $$
 
 ## Confidence Interval
@@ -57,9 +47,7 @@ $$
 A $(1 - \alpha)$ confidence interval for $p_1 - p_2$:
 
 $$
-
 (\hat{p}_1 - \hat{p}_2) \pm z_{\alpha/2} \sqrt{\frac{\hat{p}_1(1-\hat{p}_1)}{n_1} + \frac{\hat{p}_2(1-\hat{p}_2)}{n_2}}
-
 $$
 
 ## Hypothesis Testing
@@ -68,24 +56,18 @@ $$
 Use the estimated standard error:
 
 $$
-
 Z = \frac{(\hat{p}_1 - \hat{p}_2) - d_0}{\sqrt{\frac{\hat{p}_1(1-\hat{p}_1)}{n_1} + \frac{\hat{p}_2(1-\hat{p}_2)}{n_2}}}
-
 $$
 
 ### For H_0: p_1 = p_2 (Special Case)
 Under the null, $p_1 = p_2 = p$. Use the **pooled proportion**:
 
 $$
-
 \hat{p}_{\text{pool}} = \frac{X_1 + X_2}{n_1 + n_2}
-
 $$
 
 $$
-
 Z = \frac{\hat{p}_1 - \hat{p}_2}{\sqrt{\hat{p}_{\text{pool}}(1-\hat{p}_{\text{pool}})\left(\frac{1}{n_1} + \frac{1}{n_2}\right)}}
-
 $$
 
 ## Conditions for Validity
@@ -93,9 +75,7 @@ $$
 The normal approximation requires all four of the following:
 
 $$
-
-n_1 \hat{p}_1 \geq 5, \quad n_1(1 - \hat{p}_1) \geq 5, \quad n_2 \hat{p}_2 \geq 5, \quad n_2(1 - \hat{p}_2) \geq 5.
-
+n_1 \hat{p}_1 \geq 5, \quad n_1(1 - \hat{p}_1) \geq 5, \quad n_2 \hat{p}_2 \geq 5, \quad n_2(1 - \hat{p}_2) \geq 5
 $$
 
 When these conditions are not met, exact methods (Fisher's exact test) or simulation-based approaches should be used.
@@ -107,24 +87,18 @@ When these conditions are not met, exact methods (Fisher's exact test) or simula
 **Solution.**
 
 $$
-
 \hat{p}_1 - \hat{p}_2 = 0.60 - 0.45 = 0.15
-
 $$
 
 $$
-
 \text{SE} = \sqrt{\frac{0.60 \times 0.40}{200} + \frac{0.45 \times 0.55}{200}}
 = \sqrt{\frac{0.24}{200} + \frac{0.2475}{200}}
 = \sqrt{0.0012 + 0.001238}
 \approx 0.0494
-
 $$
 
 $$
-
 \text{CI} = 0.15 \pm 1.96 \times 0.0494 = 0.15 \pm 0.097 = (0.053, \; 0.247)
-
 $$
 
 ```python

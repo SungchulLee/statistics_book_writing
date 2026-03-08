@@ -7,9 +7,7 @@ When the goal is to estimate the variability in a population, we construct a con
 ### Formula
 
 $$
-
 \left[\frac{(n-1)s^2}{\chi^2_{\alpha/2,\,n-1}},\;\frac{(n-1)s^2}{\chi^2_{1-\alpha/2,\,n-1}}\right]
-
 $$
 
 where
@@ -23,9 +21,7 @@ where
 The pivotal quantity is
 
 $$
-
 \frac{(n-1)s^2}{\sigma^2} \sim \chi^2_{n-1}
-
 $$
 
 This result holds **exactly** when the population is normally distributed.
@@ -33,14 +29,12 @@ This result holds **exactly** when the population is normally distributed.
 ### Conditions for Validity
 
 $$
-
 \text{Chi-square CI for } \sigma^2
 \quad\text{if}\quad
 \begin{cases}
 \text{population distribution is normal, so that sampling distribution is known exactly} \\
 n \le 0.1N \text{ (IID approximation)}
 \end{cases}
-
 $$
 
 !!! warning "Critical Normality Assumption"

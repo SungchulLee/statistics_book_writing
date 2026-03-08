@@ -5,9 +5,7 @@
 Ordinary least squares (OLS) minimizes the residual sum of squares:
 
 $$
-
 \hat{\boldsymbol{\beta}}_{\text{OLS}} = \arg\min_{\boldsymbol{\beta}} \|\mathbf{y} - \mathbf{X}\boldsymbol{\beta}\|^2
-
 $$
 
 with the closed-form solution $\hat{\boldsymbol{\beta}}_{\text{OLS}} = (\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top \mathbf{y}$.
@@ -25,9 +23,7 @@ This estimator is **unbiased** and, by the Gauss–Markov theorem, has the minim
 **Ridge regression** (Hoerl and Kennard, 1970) adds an L2 penalty to the OLS objective:
 
 $$
-
 \hat{\boldsymbol{\beta}}_{\text{ridge}} = \arg\min_{\boldsymbol{\beta}} \left\{ \|\mathbf{y} - \mathbf{X}\boldsymbol{\beta}\|^2 + \lambda \|\boldsymbol{\beta}\|^2 \right\}
-
 $$
 
 where $\lambda \geq 0$ is the **regularization parameter** (also called the **tuning parameter** or **penalty strength**), and $\|\boldsymbol{\beta}\|^2 = \sum_{j=1}^p \beta_j^2$.
@@ -40,23 +36,17 @@ where $\lambda \geq 0$ is the **regularization parameter** (also called the **tu
 The ridge estimator has a closed-form solution:
 
 $$
-
 \hat{\boldsymbol{\beta}}_{\text{ridge}} = (\mathbf{X}^\top\mathbf{X} + \lambda \mathbf{I})^{-1}\mathbf{X}^\top\mathbf{y}
-
 $$
 
 *Derivation.* Take the gradient of the objective and set to zero:
 
 $$
-
 \frac{\partial}{\partial \boldsymbol{\beta}}\left[\|\mathbf{y} - \mathbf{X}\boldsymbol{\beta}\|^2 + \lambda\|\boldsymbol{\beta}\|^2\right] = -2\mathbf{X}^\top(\mathbf{y} - \mathbf{X}\boldsymbol{\beta}) + 2\lambda\boldsymbol{\beta} = \mathbf{0}
-
 $$
 
 $$
-
 (\mathbf{X}^\top\mathbf{X} + \lambda\mathbf{I})\boldsymbol{\beta} = \mathbf{X}^\top\mathbf{y}
-
 $$
 
 Since $\mathbf{X}^\top\mathbf{X} + \lambda\mathbf{I}$ is positive definite for $\lambda > 0$ (even when $\mathbf{X}^\top\mathbf{X}$ is singular), the solution always exists and is unique.
@@ -66,9 +56,7 @@ Since $\mathbf{X}^\top\mathbf{X} + \lambda\mathbf{I}$ is positive definite for $
 Ridge regression can be equivalently formulated as a **constrained optimization**:
 
 $$
-
 \min_{\boldsymbol{\beta}} \|\mathbf{y} - \mathbf{X}\boldsymbol{\beta}\|^2 \quad \text{subject to} \quad \|\boldsymbol{\beta}\|^2 \leq t
-
 $$
 
 where $t$ is determined by $\lambda$ through the KKT conditions. Geometrically:
@@ -84,17 +72,13 @@ This sphere constraint shrinks all coefficients toward zero but typically does *
 Using the singular value decomposition $\mathbf{X} = \mathbf{U}\mathbf{D}\mathbf{V}^\top$ (where $d_1 \geq d_2 \geq \cdots \geq d_p \geq 0$ are singular values):
 
 $$
-
 \hat{\boldsymbol{\beta}}_{\text{ridge}} = \sum_{j=1}^p \frac{d_j^2}{d_j^2 + \lambda} \cdot \frac{\mathbf{u}_j^\top \mathbf{y}}{d_j}\,\mathbf{v}_j
-
 $$
 
 Compare with OLS:
 
 $$
-
 \hat{\boldsymbol{\beta}}_{\text{OLS}} = \sum_{j=1}^p \frac{\mathbf{u}_j^\top \mathbf{y}}{d_j}\,\mathbf{v}_j
-
 $$
 
 The factor $\frac{d_j^2}{d_j^2 + \lambda}$ is a **shrinkage factor** between 0 and 1. Components with small singular values (the unstable directions) are shrunk the most. This is precisely where OLS has high variance, so ridge regression stabilizes the estimate.
@@ -102,15 +86,11 @@ The factor $\frac{d_j^2}{d_j^2 + \lambda}$ is a **shrinkage factor** between 0 a
 ## Bias and Variance of Ridge
 
 $$
-
 \text{Bias}(\hat{\boldsymbol{\beta}}_{\text{ridge}}) = -\lambda(\mathbf{X}^\top\mathbf{X} + \lambda\mathbf{I})^{-1}\boldsymbol{\beta}
-
 $$
 
 $$
-
 \text{Cov}(\hat{\boldsymbol{\beta}}_{\text{ridge}}) = \sigma^2 (\mathbf{X}^\top\mathbf{X} + \lambda\mathbf{I})^{-1}\mathbf{X}^\top\mathbf{X}(\mathbf{X}^\top\mathbf{X} + \lambda\mathbf{I})^{-1}
-
 $$
 
 As $\lambda$ increases:
@@ -136,9 +116,7 @@ The optimal $\lambda$ is unknown and must be estimated from data. The standard a
 **Leave-one-out CV for ridge** has a closed-form shortcut:
 
 $$
-
 \text{CV}_{\text{LOO}}(\lambda) = \frac{1}{n}\sum_{i=1}^n \left(\frac{y_i - \hat{y}_i(\lambda)}{1 - h_{ii}(\lambda)}\right)^2
-
 $$
 
 where $h_{ii}(\lambda) = [\mathbf{X}(\mathbf{X}^\top\mathbf{X} + \lambda\mathbf{I})^{-1}\mathbf{X}^\top]_{ii}$ is the $i$-th diagonal of the hat matrix.
@@ -148,17 +126,13 @@ where $h_{ii}(\lambda) = [\mathbf{X}(\mathbf{X}^\top\mathbf{X} + \lambda\mathbf{
 Ridge regression is equivalent to the **maximum a posteriori** (MAP) estimate in a Bayesian linear model with a Gaussian prior:
 
 $$
-
 \boldsymbol{\beta} \sim N(\mathbf{0}, \tau^2 \mathbf{I}), \quad \mathbf{y} \mid \boldsymbol{\beta} \sim N(\mathbf{X}\boldsymbol{\beta}, \sigma^2\mathbf{I})
-
 $$
 
 The posterior mode is:
 
 $$
-
 \hat{\boldsymbol{\beta}}_{\text{MAP}} = (\mathbf{X}^\top\mathbf{X} + \frac{\sigma^2}{\tau^2}\mathbf{I})^{-1}\mathbf{X}^\top\mathbf{y}
-
 $$
 
 Setting $\lambda = \sigma^2/\tau^2$ recovers the ridge solution. Larger $\lambda$ corresponds to a stronger prior belief that $\boldsymbol{\beta}$ is close to zero.
@@ -168,9 +142,7 @@ Setting $\lambda = \sigma^2/\tau^2$ recovers the ridge solution. Larger $\lambda
 In OLS, the degrees of freedom equal the number of parameters $p$. In ridge regression, the **effective degrees of freedom** are:
 
 $$
-
 \text{df}(\lambda) = \text{tr}\left[\mathbf{X}(\mathbf{X}^\top\mathbf{X} + \lambda\mathbf{I})^{-1}\mathbf{X}^\top\right] = \sum_{j=1}^p \frac{d_j^2}{d_j^2 + \lambda}
-
 $$
 
 As $\lambda \to 0$, $\text{df} \to p$ (OLS). As $\lambda \to \infty$, $\text{df} \to 0$ (constant model). This allows direct comparison of model complexity across different $\lambda$ values.

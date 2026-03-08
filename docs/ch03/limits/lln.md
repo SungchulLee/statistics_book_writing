@@ -11,9 +11,7 @@ The **Law of Large Numbers (LLN)** is a fundamental theorem in probability theor
 For a sequence of i.i.d. random variables $X_1, X_2, \ldots, X_n$ with finite mean $\mu$, the sample mean converges to the population mean **in probability**:
 
 $$
-
 \bar{X} = \frac{S_n}{n} \xrightarrow{P} \mu \quad \text{as } n \to \infty
-
 $$
 
 where $S_n = X_1 + X_2 + \cdots + X_n$.
@@ -21,9 +19,7 @@ where $S_n = X_1 + X_2 + \cdots + X_n$.
 More precisely, for any fixed $\varepsilon > 0$:
 
 $$
-
 P\left(\left|\frac{S_n}{n} - \mu\right| > \varepsilon\right) \to 0 \quad \text{as } n \to \infty
-
 $$
 
 **Interpretation:** As we collect more data, the probability that the sample mean deviates from $\mu$ by more than any fixed amount $\varepsilon$ goes to zero. For example, flipping a fair coin many times will result in the proportion of heads converging to 0.5.
@@ -35,17 +31,13 @@ $$
 The SLLN provides a stronger form of convergence known as **almost sure convergence**:
 
 $$
-
 \bar{X} = \frac{S_n}{n} \xrightarrow{\text{a.s.}} \mu \quad \text{as } n \to \infty
-
 $$
 
 Equivalently, for any fixed $\varepsilon > 0$:
 
 $$
-
 P\left(\omega \in \Omega : \frac{S_n(\omega)}{n} \to \mu\right) = 1
-
 $$
 
 **Difference from WLLN:** The WLLN says the probability of a large deviation goes to zero for each $n$, but individual sample paths might still occasionally deviate. The SLLN guarantees that **every sample path** (except a set of probability zero) converges to $\mu$.

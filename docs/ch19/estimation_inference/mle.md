@@ -5,9 +5,7 @@
 The cross-entropy loss is
 
 $$
-
 \ell = -\sum_{i=1}^{n}\bigl[y^{(i)}\log\sigma^{(i)} + (1-y^{(i)})\log(1-\sigma^{(i)})\bigr]
-
 $$
 
 Using the sigmoid derivative $\sigma'(z)=\sigma(z)(1-\sigma(z))$, the
@@ -17,21 +15,17 @@ matrix expression.
 ### Element-wise Derivation
 
 $$
-
 \frac{\partial\ell}{\partial\boldsymbol{\theta}}
 = -\sum_{i=1}^{n}\left[
   \frac{y^{(i)}}{\sigma^{(i)}}\,\sigma^{(i)}(1-\sigma^{(i)})\,A[i,:]^T
   - \frac{1-y^{(i)}}{1-\sigma^{(i)}}\,\sigma^{(i)}(1-\sigma^{(i)})\,A[i,:]^T
 \right]
-
 $$
 
 The sigmoid terms cancel, leaving
 
 $$
-
 \nabla\ell = \sum_{i=1}^{n}\bigl(\sigma^{(i)}-y^{(i)}\bigr)\,A[i,:]^T
-
 $$
 
 ### Matrix Form
@@ -40,9 +34,7 @@ Writing the residuals as a column vector
 $\boldsymbol{\sigma}-\mathbf{y}$ and stacking the design-matrix rows:
 
 $$
-
 \nabla\ell = A^T(\boldsymbol{\sigma}-\mathbf{y})
-
 $$
 
 This is the same form as the gradient for linear regression with squared
@@ -54,19 +46,15 @@ $\boldsymbol{\sigma}-\mathbf{y}$.
 Differentiating the gradient a second time:
 
 $$
-
 \nabla^2\ell
 = \sum_{i=1}^{n}\sigma^{(i)}(1-\sigma^{(i)})\;A[i,:]^T\,A[i,:]
 = A^T B\, A
-
 $$
 
 where $B$ is the $n\times n$ diagonal matrix
 
 $$
-
 B = \operatorname{diag}\!\bigl(\sigma^{(1)}(1-\sigma^{(1)}),\;\ldots,\;\sigma^{(n)}(1-\sigma^{(n)})\bigr)
-
 $$
 
 Since every diagonal entry of $B$ satisfies
@@ -79,10 +67,8 @@ cross-entropy loss is convex.
 The first-order update is
 
 $$
-
 \boldsymbol{\theta} \leftarrow \boldsymbol{\theta} - \alpha\,\nabla\ell
 = \boldsymbol{\theta} - \alpha\,A^T(\boldsymbol{\sigma}-\mathbf{y})
-
 $$
 
 where $\alpha$ is the learning rate.
@@ -92,27 +78,21 @@ where $\alpha$ is the learning rate.
 The Newton (second-order) update uses the Hessian:
 
 $$
-
 \boldsymbol{\theta}
 = \boldsymbol{\theta}_0 - (A^TBA)^{-1}\,A^T(\boldsymbol{\sigma}-\mathbf{y})
-
 $$
 
 This can be rewritten as a **weighted least-squares** normal equation.
 Define the *working response*
 
 $$
-
 \mathbf{z} = A\boldsymbol{\theta}_0 - B^{-1}(\boldsymbol{\sigma}-\mathbf{y})
-
 $$
 
 Then the update becomes
 
 $$
-
 \boldsymbol{\theta} = (A^TBA)^{-1}\,A^TB\,\mathbf{z}
-
 $$
 
 This is exactly the solution to the weighted least-squares problem

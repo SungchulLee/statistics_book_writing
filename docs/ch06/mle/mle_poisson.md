@@ -9,17 +9,13 @@ We derive the MLE for the Poisson distribution $X \sim \text{Poisson}(\lambda)$ 
 The log-likelihood is:
 
 $$
-
 \ell(\lambda) = \left(\sum_{i=1}^n x_i\right) \log \lambda - n\lambda - \sum_{i=1}^n \log(x_i!)
-
 $$
 
 Setting the derivative to zero:
 
 $$
-
 \frac{d\ell}{d\lambda} = \frac{\sum x_i}{\lambda} - n = 0 \implies \hat{\lambda}_{MLE} = \bar{X}
-
 $$
 
 ## Properties

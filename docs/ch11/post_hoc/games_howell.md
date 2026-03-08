@@ -7,9 +7,7 @@ The Games-Howell procedure is a post-hoc test that does not assume equal varianc
 ## Test Statistic
 
 $$
-
 q_{ij} = \frac{\bar{X}_i - \bar{X}_j}{\sqrt{(S_i^2/n_i + S_j^2/n_j)/2}}
-
 $$
 
 with Welch-Satterthwaite degrees of freedom.

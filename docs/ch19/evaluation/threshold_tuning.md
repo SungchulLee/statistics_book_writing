@@ -11,12 +11,10 @@ Adjusting the threshold directly affects the precision-recall tradeoff and confu
 By convention, most binary classifiers use a threshold of 0.5:
 
 $$
-
 \hat{y} = \begin{cases}
 1 & \text{if } P(Y=1|\mathbf{x}) \geq 0.5 \\
 0 & \text{otherwise}
 \end{cases}
-
 $$
 
 Under this rule, an observation is classified as positive if the predicted probability exceeds 50%.
@@ -138,17 +136,13 @@ If you know the cost of each error type, you can compute the optimal threshold a
 The optimal threshold is approximately:
 
 $$
-
 t^* = \frac{C_{FN}}{C_{FP} + C_{FN}}
-
 $$
 
 For example, if a missed default costs \$1,000 and a false alarm costs \$50:
 
 $$
-
 t^* = \frac{1000}{1000 + 50} \approx 0.95
-
 $$
 
 This high threshold reflects the asymmetric costs.

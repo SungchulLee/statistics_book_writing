@@ -22,21 +22,17 @@ Because we almost never observe the full population, we rely on sample statistic
 ### Mean
 
 $$
-
 \text{Parameter: } \mu = \frac{1}{N}\sum_{i=1}^{N} x_i
 \qquad\longleftrightarrow\qquad
 \text{Statistic: } \bar{x} = \frac{1}{n}\sum_{i=1}^{n} x_i
-
 $$
 
 ### Variance
 
 $$
-
 \text{Parameter: } \sigma^2 = \frac{1}{N}\sum_{i=1}^{N}(x_i - \mu)^2
 \qquad\longleftrightarrow\qquad
 \text{Statistic: } s^2 = \frac{1}{n-1}\sum_{i=1}^{n}(x_i - \bar{x})^2
-
 $$
 
 The sample variance uses $n-1$ (Bessel's correction) so that $E[s^2] = \sigma^2$, making it an **unbiased** estimator.
@@ -44,11 +40,9 @@ The sample variance uses $n-1$ (Bessel's correction) so that $E[s^2] = \sigma^2$
 ### Proportion
 
 $$
-
 \text{Parameter: } p
 \qquad\longleftrightarrow\qquad
 \text{Statistic: } \hat{p} = \frac{\text{number of successes}}{n}
-
 $$
 
 ## Sampling Variability

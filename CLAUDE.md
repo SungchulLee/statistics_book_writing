@@ -89,7 +89,9 @@ YAML quoting rules for nav titles:
 - **`\boldsymbol`**: Requires the AMS extension. If rendering fails, use `\mathbf` for roman letters or ensure the MathJax config loads `boldsymbol`.
 - **LaTeX in headings**: Avoid `$...$` in `#` headings — MathJax in headings breaks the auto-generated TOC anchor links. Use plain text or Unicode symbols in headings instead.
 - **Display math**: Always wrap `$$...$$` blocks with blank lines above and below. Missing blank lines cause MathJax to fail silently.
+- **No blank lines inside display math**: Never place a blank line inside a `$$...$$` block — MathJax treats the blank line as the end of the block, breaking the equation. This means bullet lists, numbered lists, or any Markdown that requires blank lines must live *outside* the `$$...$$` delimiters. For example, annotating individual terms (diagonal vs off-diagonal) must be done in a Markdown list after the closing `$$`, not interleaved inside it.
 - **Escaping in MkDocs**: Backslashes in MathJax sometimes need doubling (`\\alpha`) inside certain admonition or HTML blocks — test when in doubt.
+- **No trailing punctuation in display math**: Never place `.` or `,` at the end of a `$$...$$` block, or immediately before `\blacksquare` / `\square` (end-of-proof markers). Punctuation after display math should appear in the surrounding prose, not inside the delimiters.
 
 ## Admonitions and Details
 

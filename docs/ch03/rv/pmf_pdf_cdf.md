@@ -9,12 +9,10 @@ The three fundamental functions that characterize the distribution of a random v
 ## PMF and PDF
 
 $$
-
 \begin{aligned}
 \textbf{PMF:} \quad & p_{x_i} = \text{The weight of the brick assigned to the discrete value } x_i \\[8pt]
 \textbf{PDF:} \quad & f(x)\,dx = \text{The weight of the bricks within the continuous interval } [x, x + dx]
 \end{aligned}
-
 $$
 
 ---
@@ -24,13 +22,11 @@ $$
 The CDF $F(x)$ gives the cumulative probability that the random variable $X$ takes a value less than or equal to $x$:
 
 $$
-
 F(x) = \mathbb{P}(X \leq x) =
 \begin{cases}
 \displaystyle\sum_{x_i \leq x} p_{x_i}, & \text{if } X \text{ is discrete} \\[10pt]
 \displaystyle\int_{-\infty}^x f(s)\,ds, & \text{if } X \text{ is continuous}
 \end{cases}
-
 $$
 
 In the brick metaphor: $F(x)$ is the **total weight of all bricks stacked from $-\infty$ up to $x$**.
@@ -49,9 +45,7 @@ In the brick metaphor: $F(x)$ is the **total weight of all bricks stacked from $
 The PDF and CDF are related by integration and differentiation:
 
 $$
-
 \text{CDF} = \int \text{PDF} \qquad \text{and} \qquad \text{PDF} = \frac{d}{dx} \text{CDF}
-
 $$
 
 ```python
@@ -94,9 +88,7 @@ plt.show()
 The **PPF** is the inverse of the CDF. Given a cumulative probability $p$, the PPF returns the value $x$ such that $P(X \leq x) = p$:
 
 $$
-
 \text{PPF}(p) = F^{-1}(p) = \inf\{x : F(x) \geq p\}
-
 $$
 
 ### Example: 95th Percentile of Standard Normal

@@ -16,9 +16,7 @@ The two-sample t-test compares the means of two independent samples to determine
 When both groups are assumed to have the same population variance:
 
 $$
-
 t = \frac{\bar{X}_1 - \bar{X}_2}{S_p\sqrt{1/n_1 + 1/n_2}}
-
 $$
 
 where the pooled standard deviation is:
@@ -32,9 +30,7 @@ $$S_p^2 = \frac{(n_1-1)S_1^2 + (n_2-1)S_2^2}{n_1+n_2-2}$$
 When variances may differ, Welch's test is more robust:
 
 $$
-
 t = \frac{\bar{X}_1 - \bar{X}_2}{\sqrt{S_1^2/n_1 + S_2^2/n_2}}
-
 $$
 
 **Degrees of freedom** (Satterthwaite approximation):

@@ -10,9 +10,7 @@ linear predictor through the **sigmoid (logistic) function**.
 ## The Sigmoid Function
 
 $$
-
 \sigma(z) = \frac{1}{1+e^{-z}}
-
 $$
 
 The sigmoid maps every real number to $(0,1)$ and is therefore a valid model
@@ -24,19 +22,15 @@ The derivative has a remarkably clean form that simplifies gradient
 computations throughout logistic regression:
 
 $$
-
 \sigma'(z) = \frac{e^{-z}}{(1+e^{-z})^2} = \sigma(z)\bigl(1-\sigma(z)\bigr)
-
 $$
 
 ??? note "Derivation"
     Write $\sigma = (1+e^{-z})^{-1}$ and apply the chain rule:
 
     $$
-
     \sigma' = -\,(1+e^{-z})^{-2}\cdot(-e^{-z})
             = \frac{e^{-z}}{(1+e^{-z})^2}
-
     $$
 
     Factor as $\frac{1}{1+e^{-z}} \cdot \frac{e^{-z}}{1+e^{-z}}
@@ -47,9 +41,7 @@ $$
 Define the **logit** of a probability $p$:
 
 $$
-
 \operatorname{logit}(p) = \log\frac{p}{1-p}
-
 $$
 
 The ratio $p/(1-p)$ is the **odds** of the event, and the logit is the
@@ -57,20 +49,16 @@ The ratio $p/(1-p)$ is the **odds** of the event, and the logit is the
 log-odds:
 
 $$
-
 \operatorname{logit}\bigl(P(Y=1\mid\mathbf{x})\bigr) = \mathbf{x}^T\boldsymbol{\theta}
-
 $$
 
 Equivalently, for the $i$-th observation with feature vector
 $A[i,:]$ (the design-matrix row, including a leading 1 for the intercept):
 
 $$
-
 z^{(i)} = A[i,:]\,\boldsymbol{\theta},
 \qquad
 \sigma^{(i)} = \sigma\!\bigl(z^{(i)}\bigr)
-
 $$
 
 ## Interpretation via Odds
@@ -100,9 +88,7 @@ As with linear regression, logistic regression can suffer from **confounding**: 
 Consider predicting credit card default ($Y$) using account balance ($X_1$). A bivariate logistic regression shows a negative relationship:
 
 $$
-
 \log\frac{P(\text{Default}=1)}{P(\text{Default}=0)} = \beta_0 + \beta_1 \cdot \text{Balance}
-
 $$
 
 You might find $\beta_1 < 0$, suggesting that higher balance reduces default risk. However, this may be **misleading**.
@@ -122,9 +108,7 @@ The confounder is **student status** ($X_2$). In the data:
 **Bivariate model** (ignoring student status):
 
 $$
-
 \log\frac{P(\text{Default}=1)}{1-P(\text{Default}=1)} = \beta_0 + \beta_1 \cdot \text{Balance}
-
 $$
 
 This shows $\beta_1 < 0$: higher balance → lower default probability.
@@ -134,9 +118,7 @@ This shows $\beta_1 < 0$: higher balance → lower default probability.
 **Multivariate model** (including student status):
 
 $$
-
 \log\frac{P(\text{Default}=1)}{1-P(\text{Default}=1)} = \beta_0 + \beta_1 \cdot \text{Balance} + \beta_2 \cdot \text{Student}
-
 $$
 
 Once we control for student status, the relationship between balance and default may reverse or change dramatically:
@@ -151,9 +133,7 @@ This reversal is an example of **Simpson's paradox** in classification: an assoc
 In the bivariate model:
 
 $$
-
 \text{Odds Ratio}_{X_1} = e^{\beta_1} \approx 0.99
-
 $$
 
 ("For every \$1 increase in balance, odds decrease by 1%")
@@ -161,9 +141,7 @@ $$
 In the multivariate model:
 
 $$
-
 \text{Odds Ratio}_{X_1 | X_2} = e^{\hat{\beta}_1} \approx 1.01
-
 $$
 
 ("For every \$1 increase in balance, *controlling for student status*, odds increase by 1%")

@@ -83,9 +83,7 @@ A **set** is an unordered collection of distinct objects called **elements** (or
 ### De Morgan's Laws
 
 $$
-
 (A \cup B)^c = A^c \cap B^c, \qquad (A \cap B)^c = A^c \cup B^c
-
 $$
 
 These laws generalize to arbitrary (even uncountable) collections of sets and are used frequently in probability theory when manipulating events.
@@ -123,9 +121,7 @@ A bijection has an **inverse** $f^{-1}: B \to A$ satisfying $f^{-1}(f(x)) = x$ f
 The **indicator function** of a set $A$ is defined as
 
 $$
-
 \mathbf{1}_A(x) = \begin{cases} 1 & \text{if } x \in A, \\ 0 & \text{if } x \notin A. \end{cases}
-
 $$
 
 Indicator functions appear throughout probability and statistics—for instance, in defining Bernoulli random variables and in expressing likelihoods.

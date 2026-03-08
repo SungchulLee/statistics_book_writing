@@ -5,9 +5,7 @@
 A **histogram** is one of the most fundamental tools in exploratory data analysis. It divides the range of a continuous variable into equal-width intervals (bins) and displays the count or density of observations falling into each bin as rectangular bars. When normalized so that the total area equals one, the histogram approximates a **density plot**—a smooth curve estimating the underlying probability density function (PDF).
 
 $$
-
 \text{Histogram height (density)} = \frac{\text{count in bin}}{\text{total count} \times \text{bin width}}
-
 $$
 
 Histograms reveal distributional features at a glance: center, spread, skewness, modality, gaps, and outliers.
@@ -146,9 +144,7 @@ plt.show()
 When data arrives as a frequency table with unequal bin widths, the bar heights must be adjusted so that each bar's **area** (not height) represents the percentage.
 
 $$
-
 \text{height}_i = \frac{\text{percent}_i}{\text{width}_i}
-
 $$
 
 | Income Level (\$) | Percent |

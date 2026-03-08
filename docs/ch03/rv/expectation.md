@@ -13,9 +13,7 @@ The **expected value** (or **expectation**) of a random variable is its long-run
 For a discrete random variable $X$ with PMF $p_{x_i}$:
 
 $$
-
 E[X] = \sum_i x_i \cdot P(X = x_i) = \sum_i x_i \cdot p_{x_i}
-
 $$
 
 In the brick metaphor: $E[X]$ is the **center of mass** of the bricks placed along the real line.
@@ -25,9 +23,7 @@ In the brick metaphor: $E[X]$ is the **center of mass** of the bricks placed alo
 For a continuous random variable $X$ with PDF $f(x)$:
 
 $$
-
 E[X] = \int_{-\infty}^{\infty} x \cdot f(x) \, dx
-
 $$
 
 ---
@@ -37,13 +33,11 @@ $$
 To compute the expected value of a function $g(X)$ without first finding the distribution of $g(X)$:
 
 $$
-
 E[g(X)] =
 \begin{cases}
 \displaystyle\sum_i g(x_i) \cdot P(X = x_i), & \text{discrete} \\[10pt]
 \displaystyle\int_{-\infty}^{\infty} g(x) \cdot f(x) \, dx, & \text{continuous}
 \end{cases}
-
 $$
 
 This avoids the often tedious step of deriving the distribution of $g(X)$.
@@ -55,17 +49,13 @@ This avoids the often tedious step of deriving the distribution of $g(X)$.
 For any random variables $X$ and $Y$ (not necessarily independent) and constants $a, b, c$:
 
 $$
-
 E[aX + bY + c] = aE[X] + bE[Y] + c
-
 $$
 
 This extends to any finite sum:
 
 $$
-
 E\left[\sum_{i=1}^{n} X_i\right] = \sum_{i=1}^{n} E[X_i]
-
 $$
 
 **Key insight:** Linearity holds **regardless of whether the random variables are independent or dependent**. This makes it an exceptionally powerful tool.
@@ -89,18 +79,14 @@ Note that property 5 requires independence; properties 1–4 do not.
 ### Example: Expected Value of a Fair Die
 
 $$
-
 E[X] = \sum_{x=1}^{6} x \cdot \frac{1}{6} = \frac{1+2+3+4+5+6}{6} = 3.5
-
 $$
 
 ### Example: Expected Number of Heads in n Coin Flips
 Let $X_i = 1$ if flip $i$ is heads, 0 otherwise. Then $X = \sum_{i=1}^n X_i$ counts the total heads. By linearity:
 
 $$
-
 E[X] = \sum_{i=1}^n E[X_i] = \sum_{i=1}^n p = np
-
 $$
 
 For a fair coin with $n = 100$: $E[X] = 50$.
@@ -114,9 +100,7 @@ Divide the process into phases: phase $i$ begins when you have $i-1$ distinct co
 By linearity:
 
 $$
-
 E[T] = \sum_{i=1}^{n} \frac{n}{n - i + 1} = n \sum_{k=1}^{n} \frac{1}{k} = nH_n \approx n \ln n
-
 $$
 
 For $n = 50$ types: $E[T] \approx 50 \times \ln(50) \approx 225$ purchases.
@@ -126,9 +110,7 @@ For $n = 50$ types: $E[T] \approx 50 \times \ln(50) \approx 225$ purchases.
 For $X \sim \text{Exponential}(\lambda)$ with PDF $f(x) = \lambda e^{-\lambda x}$ for $x \geq 0$:
 
 $$
-
 E[X] = \int_0^{\infty} x \cdot \lambda e^{-\lambda x} \, dx = \frac{1}{\lambda}
-
 $$
 
 ---

@@ -9,9 +9,7 @@ In many statistical problems, we are interested in estimating a population propo
 The general form of a confidence interval for a population proportion $p$ is
 
 $$
-
 \hat{p} \pm z_{\alpha/2} \times \sqrt{\frac{\hat{p}(1 - \hat{p})}{n}}
-
 $$
 
 where
@@ -25,7 +23,6 @@ where
 ### Conditions for Validity
 
 $$
-
 \hat{p}\pm z_{\alpha/2}\sqrt{\frac{\hat{p}(1-\hat{p})}{n}}
 \quad\text{if}\quad
 \begin{cases}
@@ -33,7 +30,6 @@ n\hat{p}\ge 10 \text{ and } n(1-\hat{p})\ge 10 \text{ (CLT)} \\
 n \ge 30 \text{ (LLN)} \\
 n \le 0.1N \text{ (IID)}
 \end{cases}
-
 $$
 
 The sample size $n$ must be large enough so that the sampling distribution of the proportion is approximately normal.
@@ -75,15 +71,12 @@ The Wald interval is named after [Abraham Wald](https://en.wikipedia.org/wiki/Ab
 The Wilson interval comes from *inverting* the z-test for proportions:
 
 $$
-
 \frac{(\hat{p} - p)^2}{p(1-p)/n} = z_{\alpha/2}^2
-
 $$
 
 Solving for $p$ gives:
 
 $$
-
 \text{CI} =
 \frac{
 \hat{p} + \frac{z^2}{2n} \pm
@@ -91,15 +84,12 @@ z \sqrt{\frac{\hat{p}(1-\hat{p})}{n} + \frac{z^2}{4n^2}}
 }{
 1 + \frac{z^2}{n}
 }
-
 $$
 
 The center of the interval is **not** $\hat{p}$, but a **shrunken value** toward 0.5:
 
 $$
-
 \tilde{p} = \frac{\hat{p} + \frac{z^2}{2n}}{1 + \frac{z^2}{n}}
-
 $$
 
 The interval stays within $[0, 1]$ and performs much better for small or skewed samples, with nearly nominal coverage even for $n < 30$.
@@ -113,9 +103,7 @@ Agresti and Coull observed that the Wilson formula can be approximated simply by
 - Compute a Wald-style interval using the adjusted proportion:
 
 $$
-
 \tilde{p} \pm z_{\alpha/2} \sqrt{\frac{\tilde{p}(1 - \tilde{p})}{n'}}
-
 $$
 
 Coverage is very close to Wilson; easy to explain and compute by hand. Becomes identical to Wilson when $n$ is large.
@@ -139,29 +127,21 @@ A random sample of 200 voters is taken, and 120 say they support a particular ca
 **Solution.**
 
 $$
-
 \hat{p} = \frac{120}{200} = 0.60
-
 $$
 
 For 95% confidence, $z_{\alpha/2} \approx 1.96$.
 
 $$
-
 \text{SE} = \sqrt{\frac{0.60 \times 0.40}{200}} = \sqrt{0.0012} \approx 0.03464
-
 $$
 
 $$
-
 \text{ME} = 1.96 \times 0.03464 \approx 0.0679
-
 $$
 
 $$
-
 \boxed{(0.5321,\ 0.6679)}
-
 $$
 
 We are 95% confident that the true proportion of voters who support the candidate is between 0.5321 and 0.6679.
@@ -225,21 +205,15 @@ A random sample of 100 vehicles is selected, and 74 pass the inspection. Constru
 **Solution.**
 
 $$
-
 \hat{p} = \frac{74}{100} = 0.74, \qquad \text{SE} = \sqrt{\frac{0.74 \times 0.26}{100}} \approx 0.04386
-
 $$
 
 $$
-
 \text{ME} = 1.96 \times 0.04386 \approx 0.086
-
 $$
 
 $$
-
 \boxed{(0.6540,\ 0.8260)}
-
 $$
 
 We are 95% confident that the true pass rate lies between 65.40% and 82.60%.
@@ -251,19 +225,13 @@ In a survey of 200 people, 120 prefer product A over product B. Construct a 90% 
 **Solution.**
 
 $$
-
 \hat{p} = 0.60, \qquad z_{0.05} \approx 1.645
-
 $$
 
 $$
-
 \text{ME} = 1.645 \times \sqrt{\frac{0.60 \times 0.40}{200}} \approx 1.645 \times 0.03464 \approx 0.057
-
 $$
 
 $$
-
 \boxed{(0.543,\ 0.657)}
-
 $$

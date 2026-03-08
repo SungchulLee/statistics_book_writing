@@ -7,9 +7,7 @@ When comparing the variability of two independent populations, we construct a co
 ### Formula
 
 $$
-
 \left[\frac{s_1^2 / s_2^2}{F_{\alpha/2,\, n_1-1,\, n_2-1}},\;\; \frac{s_1^2 / s_2^2}{F_{1-\alpha/2,\, n_1-1,\, n_2-1}}\right]
-
 $$
 
 where
@@ -22,9 +20,7 @@ where
 The pivotal quantity is
 
 $$
-
 \frac{s_1^2 / \sigma_1^2}{s_2^2 / \sigma_2^2} \sim F_{n_1-1, \, n_2-1}
-
 $$
 
 This result holds exactly when both populations are normally distributed.
@@ -32,14 +28,12 @@ This result holds exactly when both populations are normally distributed.
 ### Conditions for Validity
 
 $$
-
 \text{F-interval for } \sigma_1^2/\sigma_2^2
 \quad\text{if}\quad
 \begin{cases}
 \text{both population distributions are normal} \\
 n_i \le 0.1 N_i \text{ for each group (IID approximation)}
 \end{cases}
-
 $$
 
 !!! warning "Normality Requirement"

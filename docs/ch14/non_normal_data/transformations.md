@@ -9,25 +9,19 @@ Popular transformations include:
 **Log Transformation**: Suitable for positively skewed data.
 
 $$
-
 X' = \log(X)
-
 $$
 
 **Square Root Transformation**: Also used for right-skewed data, particularly when there are small values.
 
 $$
-
 X' = \sqrt{X}
-
 $$
 
 **Box-Cox Transformation**: A more flexible transformation that finds an optimal power parameter $\lambda$ to transform the data.
 
 $$
-
 X' = \frac{X^\lambda - 1}{\lambda}, \quad \lambda \neq 0
-
 $$
 
 ## Python Implementation

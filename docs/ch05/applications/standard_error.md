@@ -13,9 +13,7 @@ The **standard error** (SE) quantifies how much a sample statistic varies from s
 The SD measures how spread out **individual observations** are around the population mean:
 
 $$
-
 \text{SD} = \sqrt{\text{Var}(X)}
-
 $$
 
 ### Standard Error (SE)
@@ -23,9 +21,7 @@ $$
 The SE measures how spread out a **sample statistic** is around the true parameter:
 
 $$
-
 \text{SE} = \sqrt{\text{Var}(\hat{\theta}(X_1, \dots, X_n))}
-
 $$
 
 ### Key Distinction
@@ -33,17 +29,13 @@ $$
 - **Standard deviation** measures the spread of individual data points around the mean.
 
 $$
-
 \text{SD} = \sqrt{\text{Var}(X)}
-
 $$
 
 - **Standard error** measures the spread of sample statistics (e.g., means) around the population parameter.
 
 $$
-
 \text{SE} = \sqrt{\text{Var}(\hat{\theta}(X_1, \dots, X_n))}
-
 $$
 
 | | Standard Deviation | Standard Error |
@@ -60,7 +52,6 @@ $$
 A unifying pattern in inferential statistics:
 
 $$
-
 \begin{array}{lllllll}
 \displaystyle
 \frac{\text{unbiased\_estimator} - \text{parameter}}{\text{standard\_error}}
@@ -83,7 +74,6 @@ z \;\text{ or }\; t_{n-1} \\[16pt]
 &\approx&
 z
 \end{array}
-
 $$
 
 ## Example: Running Out of Water
@@ -95,7 +85,6 @@ $$
 **Solution.** Let $X_i$ be the water consumption of the $i$-th person. Assuming independence, by the CLT the sample mean $\bar{X}$ is approximately normally distributed with mean 2 and standard deviation $0.7/\sqrt{50} \approx 0.0990$.
 
 $$
-
 \begin{array}{lll}
 \displaystyle
 P\!\left(\bar{X} > \frac{110}{50}\right)
@@ -108,7 +97,6 @@ P(Z > 2.020) \\[8pt]
 &\approx&
 0.0217
 \end{array}
-
 $$
 
 ## Python: Standard Error of X-bar

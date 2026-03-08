@@ -9,17 +9,13 @@ We derive the MLE for the Exponential distribution $X \sim \text{Exp}(\lambda)$ 
 The log-likelihood is:
 
 $$
-
 \ell(\lambda) = n \log \lambda - \lambda \sum_{i=1}^n x_i
-
 $$
 
 Setting the score to zero:
 
 $$
-
 \frac{d\ell}{d\lambda} = \frac{n}{\lambda} - \sum_{i=1}^n x_i = 0 \implies \hat{\lambda}_{MLE} = \frac{n}{\sum_{i=1}^n x_i} = \frac{1}{\bar{X}}
-
 $$
 
 ## Properties

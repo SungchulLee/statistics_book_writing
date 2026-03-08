@@ -9,9 +9,7 @@ When data contains outliers or comes from heavy-tailed distributions, robust alt
 The $\alpha$-trimmed mean removes the smallest and largest $\alpha$ fraction of observations:
 
 $$
-
 \bar{X}_{\text{trim}(\alpha)} = \frac{1}{n - 2\lfloor n\alpha \rfloor} \sum_{i=\lfloor n\alpha \rfloor + 1}^{n - \lfloor n\alpha \rfloor} X_{(i)}
-
 $$
 
 ## Winsorized Mean

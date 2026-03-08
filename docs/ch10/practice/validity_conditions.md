@@ -47,9 +47,7 @@ When some expected cell counts fall below 5:
 4. **Yates' continuity correction**: For $2 \times 2$ tables, apply the correction:
 
 $$
-
 \chi^2_{\text{Yates}} = \sum \frac{(|O_{ij} - E_{ij}| - 0.5)^2}{E_{ij}}
-
 $$
 
 This correction reduces the chi-square statistic slightly, producing a more conservative (larger) p-value.

@@ -11,9 +11,7 @@ The **Poisson distribution** models the number of events occurring in a fixed in
 A random variable $X$ follows a Poisson distribution with rate parameter $\lambda > 0$:
 
 $$
-
 X \sim \text{Poisson}(\lambda), \qquad P(X = k) = \frac{e^{-\lambda} \lambda^k}{k!}, \quad k = 0, 1, 2, \ldots
-
 $$
 
 The parameter $\lambda$ represents both the mean and the variance of the distribution.
@@ -21,9 +19,7 @@ The parameter $\lambda$ represents both the mean and the variance of the distrib
 ### Verifying the PMF Sums to 1
 
 $$
-
 \sum_{k=0}^{\infty} \frac{e^{-\lambda} \lambda^k}{k!} = e^{-\lambda} \sum_{k=0}^{\infty} \frac{\lambda^k}{k!} = e^{-\lambda} \cdot e^{\lambda} = 1
-
 $$
 
 using the Taylor expansion of $e^{\lambda}$.
@@ -33,13 +29,11 @@ using the Taylor expansion of $e^{\lambda}$.
 ## Properties
 
 $$
-
 \begin{aligned}
 E[X] &= \lambda \\
 \text{Var}(X) &= \lambda \\
 \text{SD}(X) &= \sqrt{\lambda}
 \end{aligned}
-
 $$
 
 The equality of mean and variance is a defining characteristic of the Poisson distribution and is often used as a diagnostic check.
@@ -47,9 +41,7 @@ The equality of mean and variance is a defining characteristic of the Poisson di
 ### Derivation of Mean
 
 $$
-
 E[X] = \sum_{k=0}^{\infty} k \cdot \frac{e^{-\lambda}\lambda^k}{k!} = \lambda e^{-\lambda} \sum_{k=1}^{\infty} \frac{\lambda^{k-1}}{(k-1)!} = \lambda e^{-\lambda} \cdot e^{\lambda} = \lambda
-
 $$
 
 ### Derivation of Variance
@@ -57,17 +49,13 @@ $$
 First compute $E[X(X-1)]$:
 
 $$
-
 E[X(X-1)] = \sum_{k=2}^{\infty} k(k-1) \frac{e^{-\lambda}\lambda^k}{k!} = \lambda^2 e^{-\lambda} \sum_{k=2}^{\infty} \frac{\lambda^{k-2}}{(k-2)!} = \lambda^2
-
 $$
 
 Then:
 
 $$
-
 \text{Var}(X) = E[X^2] - (E[X])^2 = E[X(X-1)] + E[X] - (E[X])^2 = \lambda^2 + \lambda - \lambda^2 = \lambda
-
 $$
 
 ---
@@ -77,9 +65,7 @@ $$
 The Poisson distribution arises as a limit of the binomial when $n$ is large, $p$ is small, and $\lambda = np$ remains constant:
 
 $$
-
 \lim_{n \to \infty} \binom{n}{k} p^k (1-p)^{n-k} = \frac{e^{-\lambda}\lambda^k}{k!} \qquad \text{where } p = \frac{\lambda}{n}
-
 $$
 
 ### Proof Sketch
@@ -87,10 +73,8 @@ $$
 With $p = \lambda/n$:
 
 $$
-
 \binom{n}{k}\left(\frac{\lambda}{n}\right)^k\left(1 - \frac{\lambda}{n}\right)^{n-k}
 = \frac{n!}{k!(n-k)!} \cdot \frac{\lambda^k}{n^k} \cdot \left(1 - \frac{\lambda}{n}\right)^n \cdot \left(1 - \frac{\lambda}{n}\right)^{-k}
-
 $$
 
 As $n \to \infty$: $\frac{n!}{(n-k)! \, n^k} \to 1$, $\left(1 - \frac{\lambda}{n}\right)^n \to e^{-\lambda}$, and $\left(1 - \frac{\lambda}{n}\right)^{-k} \to 1$.
@@ -104,9 +88,7 @@ As $n \to \infty$: $\frac{n!}{(n-k)! \, n^k} \to 1$, $\left(1 - \frac{\lambda}{n
 If $X_1 \sim \text{Poisson}(\lambda_1)$ and $X_2 \sim \text{Poisson}(\lambda_2)$ are independent, then:
 
 $$
-
 X_1 + X_2 \sim \text{Poisson}(\lambda_1 + \lambda_2)
-
 $$
 
 This extends to any finite sum of independent Poisson random variables.
@@ -126,15 +108,11 @@ The Poisson distribution is intimately connected to the **Poisson process**. If 
 **Solution:**
 
 $$
-
 P(X = 5) = \frac{e^{-3} \cdot 3^5}{5!} = \frac{0.0498 \cdot 243}{120} = 0.1008
-
 $$
 
 $$
-
 P(X \leq 2) = \sum_{k=0}^{2} \frac{e^{-3} \cdot 3^k}{k!} = e^{-3}(1 + 3 + 4.5) = 0.0498 \cdot 8.5 = 0.4232
-
 $$
 
 ---

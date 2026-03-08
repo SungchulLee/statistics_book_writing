@@ -13,9 +13,7 @@ This test determines if the variance of a single population differs from a speci
 The test statistic for a sample of size $n$ and sample variance $s^2$ is:
 
 $$
-
 \chi^2 = \frac{(n - 1) s^2}{\sigma_0^2}
-
 $$
 
 where $\sigma_0^2$ is the hypothesized population variance.
@@ -27,9 +25,7 @@ The F-test compares the variances of two independent samples. It tests the null 
 The test statistic is the ratio of the two sample variances:
 
 $$
-
 F = \frac{s_1^2}{s_2^2}
-
 $$
 
 where $s_1^2$ and $s_2^2$ are the sample variances of the two groups.
@@ -41,9 +37,7 @@ Bartlett's test assesses equality of variances across multiple groups under the 
 The test statistic is:
 
 $$
-
 T = \frac{(N - k) \ln(S_p^2) - \sum_{i=1}^k (n_i - 1) \ln(S_i^2)}{1 + \frac{1}{3(k - 1)} \left( \sum_{i=1}^k \frac{1}{n_i - 1} - \frac{1}{N - k} \right)}
-
 $$
 
 where $N$ is the total sample size, $k$ is the number of groups, $S_p^2$ is the pooled variance, and $S_i^2$ are the sample variances.

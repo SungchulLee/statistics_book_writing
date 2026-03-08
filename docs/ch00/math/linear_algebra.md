@@ -9,9 +9,7 @@ Linear algebra is the language of multivariate statistics. Regression, principal
 Vectors are denoted by lowercase bold letters. Unless stated otherwise, all vectors are **column vectors**:
 
 $$
-
 \mathbf{x} = \begin{pmatrix} x_1 \\ x_2 \\ \vdots \\ x_n \end{pmatrix} \in \mathbb{R}^n
-
 $$
 
 A row vector is written as the transpose $\mathbf{x}^T = (x_1, x_2, \dots, x_n)$.
@@ -36,9 +34,7 @@ In data analysis, an observation vector $\mathbf{x}_i \in \mathbb{R}^p$ represen
 Matrices are denoted by uppercase bold letters:
 
 $$
-
 \mathbf{A} = \begin{pmatrix} a_{11} & a_{12} & \cdots & a_{1n} \\ a_{21} & a_{22} & \cdots & a_{2n} \\ \vdots & \vdots & \ddots & \vdots \\ a_{m1} & a_{m2} & \cdots & a_{mn} \end{pmatrix} \in \mathbb{R}^{m \times n}
-
 $$
 
 The element in row $i$, column $j$ is $a_{ij}$ or $[\mathbf{A}]_{ij}$.
@@ -60,9 +56,7 @@ The element in row $i$, column $j$ is $a_{ij}$ or $[\mathbf{A}]_{ij}$.
 For $\mathbf{A} \in \mathbb{R}^{m \times k}$ and $\mathbf{B} \in \mathbb{R}^{k \times n}$:
 
 $$
-
 [\mathbf{AB}]_{ij} = \sum_{\ell=1}^{k} a_{i\ell}\, b_{\ell j}
-
 $$
 
 The result $\mathbf{AB} \in \mathbb{R}^{m \times n}$. Matrix multiplication is **not commutative** in general: $\mathbf{AB} \neq \mathbf{BA}$.
@@ -70,9 +64,7 @@ The result $\mathbf{AB} \in \mathbb{R}^{m \times n}$. Matrix multiplication is *
 ### Transpose
 
 $$
-
 [\mathbf{A}^T]_{ij} = a_{ji}
-
 $$
 
 **Properties:**
@@ -86,9 +78,7 @@ $$
 For a square matrix $\mathbf{A} \in \mathbb{R}^{n \times n}$:
 
 $$
-
 \text{tr}(\mathbf{A}) = \sum_{i=1}^n a_{ii}
-
 $$
 
 **Properties:**
@@ -106,9 +96,7 @@ The **determinant** $\det(\mathbf{A})$ or $|\mathbf{A}|$ is a scalar that encode
 For a $2 \times 2$ matrix:
 
 $$
-
 \det\begin{pmatrix} a & b \\ c & d \end{pmatrix} = ad - bc
-
 $$
 
 **Properties:**
@@ -125,9 +113,7 @@ The determinant appears in the density of the multivariate normal distribution: 
 The **inverse** of a square matrix $\mathbf{A}$ (when it exists) satisfies:
 
 $$
-
 \mathbf{A}^{-1}\mathbf{A} = \mathbf{A}\mathbf{A}^{-1} = \mathbf{I}
-
 $$
 
 **Properties:**
@@ -148,9 +134,7 @@ In regression, the design matrix $\mathbf{X}$ must have full column rank for the
 For a square matrix $\mathbf{A} \in \mathbb{R}^{n \times n}$, a scalar $\lambda$ and nonzero vector $\mathbf{v}$ satisfying
 
 $$
-
 \mathbf{A}\mathbf{v} = \lambda \mathbf{v}
-
 $$
 
 are an **eigenvalue–eigenvector pair**.
@@ -185,9 +169,7 @@ Covariance matrices $\boldsymbol{\Sigma}$ are always positive semi-definite. If 
 A **quadratic form** associated with a symmetric matrix $\mathbf{A}$ is
 
 $$
-
 Q(\mathbf{x}) = \mathbf{x}^T \mathbf{A} \mathbf{x} = \sum_{i=1}^n \sum_{j=1}^n a_{ij} x_i x_j
-
 $$
 
 Quadratic forms appear frequently in statistics:
@@ -201,9 +183,7 @@ Quadratic forms appear frequently in statistics:
 The **orthogonal projection** onto the column space of $\mathbf{X}$ (assuming full column rank) is
 
 $$
-
 \mathbf{H} = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T
-
 $$
 
 This is the **hat matrix** in regression, so named because $\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}$.
@@ -228,15 +208,11 @@ The following derivative identities are used in deriving estimators:
 **Deriving OLS:** Minimize $(\mathbf{y} - \mathbf{X}\boldsymbol{\beta})^T(\mathbf{y} - \mathbf{X}\boldsymbol{\beta})$ with respect to $\boldsymbol{\beta}$:
 
 $$
-
 \frac{\partial}{\partial \boldsymbol{\beta}}\bigl[\mathbf{y}^T\mathbf{y} - 2\boldsymbol{\beta}^T\mathbf{X}^T\mathbf{y} + \boldsymbol{\beta}^T\mathbf{X}^T\mathbf{X}\boldsymbol{\beta}\bigr] = -2\mathbf{X}^T\mathbf{y} + 2\mathbf{X}^T\mathbf{X}\boldsymbol{\beta} = \mathbf{0}
-
 $$
 
 $$
-
 \hat{\boldsymbol{\beta}} = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}
-
 $$
 
 ## Notational Conventions Used in This Book

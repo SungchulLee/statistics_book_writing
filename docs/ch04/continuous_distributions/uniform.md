@@ -11,9 +11,7 @@ The **uniform distribution** assigns equal probability to all values in an inter
 A random variable $X$ follows a continuous uniform distribution on $[a, b]$:
 
 $$
-
 X \sim \text{Uniform}(a, b), \qquad f(x) = \begin{cases} \frac{1}{b - a} & \text{if } a \leq x \leq b \\ 0 & \text{otherwise} \end{cases}
-
 $$
 
 The PDF is constant over the interval, reflecting equal likelihood for all values.
@@ -21,9 +19,7 @@ The PDF is constant over the interval, reflecting equal likelihood for all value
 ### CDF
 
 $$
-
 F(x) = \begin{cases} 0 & x < a \\ \frac{x - a}{b - a} & a \leq x \leq b \\ 1 & x > b \end{cases}
-
 $$
 
 ---
@@ -31,35 +27,27 @@ $$
 ## Properties
 
 $$
-
 \begin{aligned}
 E[X] &= \frac{a + b}{2} \\[4pt]
 \text{Var}(X) &= \frac{(b - a)^2}{12} \\[4pt]
 \text{SD}(X) &= \frac{b - a}{2\sqrt{3}}
 \end{aligned}
-
 $$
 
 ### Derivation of Mean
 
 $$
-
 E[X] = \int_a^b x \cdot \frac{1}{b-a}\,dx = \frac{1}{b-a} \cdot \frac{x^2}{2}\bigg|_a^b = \frac{b^2 - a^2}{2(b-a)} = \frac{a+b}{2}
-
 $$
 
 ### Derivation of Variance
 
 $$
-
 E[X^2] = \int_a^b x^2 \cdot \frac{1}{b-a}\,dx = \frac{1}{b-a} \cdot \frac{x^3}{3}\bigg|_a^b = \frac{a^2 + ab + b^2}{3}
-
 $$
 
 $$
-
 \text{Var}(X) = E[X^2] - (E[X])^2 = \frac{a^2 + ab + b^2}{3} - \frac{(a+b)^2}{4} = \frac{(b-a)^2}{12}
-
 $$
 
 ---
@@ -69,17 +57,13 @@ $$
 The special case $U \sim \text{Uniform}(0, 1)$ is the **standard uniform distribution**. Any uniform variable can be related to it:
 
 $$
-
 X = a + (b - a)U \sim \text{Uniform}(a, b) \quad \text{where } U \sim \text{Uniform}(0, 1)
-
 $$
 
 Conversely:
 
 $$
-
 U = \frac{X - a}{b - a} \sim \text{Uniform}(0, 1) \quad \text{where } X \sim \text{Uniform}(a, b)
-
 $$
 
 ---
@@ -95,9 +79,7 @@ The uniform distribution plays a central role in simulation through the **probab
 ### Proof
 
 $$
-
 P(F(X) \leq u) = P(X \leq F^{-1}(u)) = F(F^{-1}(u)) = u
-
 $$
 
 which is the CDF of $\text{Uniform}(0, 1)$.
@@ -111,15 +93,11 @@ This theorem is the basis for generating random samples from any distribution us
 The discrete counterpart assigns equal probability to a finite set of values $\{a, a+1, \ldots, b\}$:
 
 $$
-
 P(X = k) = \frac{1}{b - a + 1}, \quad k = a, a+1, \ldots, b
-
 $$
 
 $$
-
 E[X] = \frac{a + b}{2}, \qquad \text{Var}(X) = \frac{(b - a + 1)^2 - 1}{12}
-
 $$
 
 ---
@@ -131,15 +109,11 @@ $$
 **Solution:**
 
 $$
-
 P(X > 1) = \frac{3 - 1}{3 - (-2)} = \frac{2}{5} = 0.40
-
 $$
 
 $$
-
 E[X] = \frac{-2 + 3}{2} = 0.5\%
-
 $$
 
 ---

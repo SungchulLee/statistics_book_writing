@@ -7,9 +7,7 @@ The independence assumption states that the residuals (errors) of the regression
 Formally, for any two distinct observations $i$ and $j$:
 
 $$
-
 \text{Cov}(\epsilon_i, \epsilon_j) = 0 \quad \text{for all } i \neq j
-
 $$
 
 ## Importance

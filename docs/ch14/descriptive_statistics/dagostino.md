@@ -20,9 +20,7 @@ The test statistic combines the z-scores of the skewness and kurtosis into a sin
 3. **Combine the Measures**: We compute the z-scores $Z_{\text{skewness}}$ and $Z_{\text{kurtosis}}$ of both the skewness and kurtosis, and the test statistic $K^2$ is formed by summing the squares of these z-scores:
 
     $$
-
     K^2 = Z_{\text{skewness}}^2 + Z_{\text{kurtosis}}^2
-
     $$
 
     This test statistic follows a chi-squared distribution with 2 degrees of freedom.
@@ -37,9 +35,7 @@ Given a sample of size $n$:
 **1. Compute the sample skewness $S$:**
 
 $$
-
 S = \frac{\frac{1}{n} \sum_{i=1}^n (x_i - \bar{x})^3}{\left(\frac{1}{n} \sum_{i=1}^n (x_i - \bar{x})^2\right)^{3/2}}
-
 $$
 
 where $x_i$ is the $i$-th observation, $\bar{x}$ is the sample mean, the numerator measures the third moment (asymmetry), and the denominator normalizes it to make it dimensionless.
@@ -49,17 +45,13 @@ where $x_i$ is the $i$-th observation, $\bar{x}$ is the sample mean, the numerat
 2.1 Compute the standard error of skewness $\text{SE}_{S}$:
 
 $$
-
 \text{SE}_{S} = \sqrt{\frac{6n (n-1)}{(n-2)(n+1)(n+3)}}
-
 $$
 
 2.2 Standardize $S$ to obtain $Z_{\text{skewness}}$:
 
 $$
-
 Z_{\text{skewness}} = \frac{S}{\text{SE}_{S}}
-
 $$
 
 **Key Notes:**
@@ -73,9 +65,7 @@ Given a sample of size $n$:
 **1. Compute the sample kurtosis $K$:**
 
 $$
-
 K = \frac{\frac{1}{n} \sum_{i=1}^n (x_i - \bar{x})^4}{\left(\frac{1}{n} \sum_{i=1}^n (x_i - \bar{x})^2\right)^2}
-
 $$
 
 where $x_i$ is the $i$-th observation, $\bar{x}$ is the sample mean, the numerator measures the fourth moment (tailedness), and the denominator normalizes it.
@@ -83,25 +73,19 @@ where $x_i$ is the $i$-th observation, $\bar{x}$ is the sample mean, the numerat
 **2. Adjust $K$ to excess kurtosis:**
 
 $$
-
 K_{\text{excess}} = K - 3
-
 $$
 
 **3. Compute the standard error of kurtosis $\text{SE}_{K}$:**
 
 $$
-
 \text{SE}_{K} = \sqrt{\frac{24n(n-1)^2}{(n-3)(n-2)(n+3)(n+5)}}
-
 $$
 
 **4. Standardize $K_{\text{excess}}$:**
 
 $$
-
 Z_{\text{kurtosis}} = \frac{K_{\text{excess}}}{\text{SE}_{K}}
-
 $$
 
 **Key Notes:**

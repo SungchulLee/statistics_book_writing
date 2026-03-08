@@ -5,9 +5,7 @@
 Bayesian inference combines prior beliefs with observed data through Bayes' theorem:
 
 $$
-
 \pi(\theta \mid \mathbf{x}) = \frac{f(\mathbf{x} \mid \theta) \pi(\theta)}{f(\mathbf{x})} \propto f(\mathbf{x} \mid \theta) \pi(\theta)
-
 $$
 
 ## Components

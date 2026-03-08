@@ -47,9 +47,7 @@ For a full discussion of Bartlett's test, see [Bartlett's Test](../../ch15/bartl
 When comparing exactly two groups, the F-test for equality of variances uses the ratio of sample variances:
 
 $$
-
 F_{d_1,d_2} = \frac{S_1^2}{S_2^2}
-
 $$
 
 where $d_1 = n_1 - 1$ and $d_2 = n_2 - 1$ are the degrees of freedom. Under the null hypothesis $\sigma_1^2 = \sigma_2^2$, this ratio follows an $F$-distribution.
@@ -57,17 +55,13 @@ where $d_1 = n_1 - 1$ and $d_2 = n_2 - 1$ are the degrees of freedom. Under the 
 This test is derived from the relationship between the chi-squared distribution and sample variance:
 
 $$
-
 \chi^2_{n-1} = \frac{(n-1)S^2}{\sigma^2}
 \quad\Rightarrow\quad
 \frac{\chi^2_{n-1}}{n-1} = \frac{S^2}{\sigma^2}
-
 $$
 
 $$
-
 F_{d_1,d_2} := \frac{\chi^2_{d_1}/d_1}{\chi^2_{d_2}/d_2} = \frac{S_1^2/\sigma_1^2}{S_2^2/\sigma_2^2} = \frac{S_1^2}{S_2^2} \quad \text{if } \sigma_1 = \sigma_2
-
 $$
 
 !!! warning "Sensitivity to Normality"

@@ -35,11 +35,11 @@ Additionally, depending on the research question and the nature of the hypothesi
 
 - **One-tailed Test**: We use a one-tailed test when the research hypothesis claims the direction of the effect or relationship between variables. For example, if we hypothesize that a new teaching method leads to higher test scores than the traditional method, we would conduct a one-tailed test to determine whether the mean score of the new method is *greater than* that of the traditional method, i.e.,
 
-$$H_0: \mu \leq \mu_0 \quad \text{versus} \quad H_a: \mu > \mu_0.$$
+$$H_0: \mu \leq \mu_0 \quad \text{versus} \quad H_a: \mu > \mu_0$$
 
 - **Two-tailed Test**: A two-tailed test is appropriate when the research hypothesis does not specify a direction but only claims that the effect exists. This test checks for differences in either direction. For instance, if we are testing whether a new medication has a different effect compared to a placebo, without specifying whether it is better or worse, we would use a two-tailed test to examine whether the population mean differs from the control group's mean, i.e.,
 
-$$H_0: \mu = \mu_0 \quad \text{versus} \quad H_a: \mu \neq \mu_0.$$
+$$H_0: \mu = \mu_0 \quad \text{versus} \quad H_a: \mu \neq \mu_0$$
 
 In summary, the choice between a simple and composite hypothesis depends on whether we fully specify the population parameters or allow flexibility in our assumptions. The decision between one-tailed and two-tailed tests depends on whether we look for effects in a specific direction or test for any difference. Both concepts are crucial for designing valid hypothesis tests that answer specific research questions.
 

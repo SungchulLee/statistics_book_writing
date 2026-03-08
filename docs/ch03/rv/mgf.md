@@ -11,13 +11,11 @@ The **moment generating function (MGF)** is a powerful tool that encodes all the
 The **moment generating function** of a random variable $X$ is defined as:
 
 $$
-
 M_X(t) = E\left[e^{tX}\right] =
 \begin{cases}
 \displaystyle\sum_x e^{tx} \cdot P(X = x), & \text{discrete} \\[10pt]
 \displaystyle\int_{-\infty}^{\infty} e^{tx} f(x) \, dx, & \text{continuous}
 \end{cases}
-
 $$
 
 The MGF exists if $M_X(t)$ is finite for all $t$ in some open interval containing 0.
@@ -29,29 +27,23 @@ The MGF exists if $M_X(t)$ is finite for all $t$ in some open interval containin
 The Taylor expansion of $e^{tX}$ reveals the connection to moments:
 
 $$
-
 M_X(t) = E\left[e^{tX}\right] = E\left[\sum_{k=0}^{\infty} \frac{(tX)^k}{k!}\right] = \sum_{k=0}^{\infty} \frac{t^k}{k!} E[X^k]
-
 $$
 
 Taking derivatives and evaluating at $t = 0$ extracts individual moments:
 
 $$
-
 M_X^{(n)}(0) = \frac{d^n}{dt^n} M_X(t) \bigg|_{t=0} = E[X^n]
-
 $$
 
 Specifically:
 
 $$
-
 \begin{aligned}
 M_X'(0) &= E[X] \\
 M_X''(0) &= E[X^2] \\
 \text{Var}(X) &= M_X''(0) - \left[M_X'(0)\right]^2
 \end{aligned}
-
 $$
 
 ---
@@ -63,9 +55,7 @@ $$
 If two random variables $X$ and $Y$ have MGFs that exist and are equal in an open interval around 0:
 
 $$
-
 M_X(t) = M_Y(t) \quad \Longrightarrow \quad X \stackrel{d}{=} Y
-
 $$
 
 This makes the MGF a tool for **identifying distributions**.
@@ -75,9 +65,7 @@ This makes the MGF a tool for **identifying distributions**.
 For $Y = aX + b$:
 
 $$
-
 M_Y(t) = e^{bt} M_X(at)
-
 $$
 
 ### Sum of Independent Variables
@@ -85,9 +73,7 @@ $$
 If $X \perp\!\!\!\perp Y$:
 
 $$
-
 M_{X+Y}(t) = M_X(t) \cdot M_Y(t)
-
 $$
 
 This extends to $n$ independent variables: $M_{S_n}(t) = \prod_{i=1}^n M_{X_i}(t)$.
@@ -114,15 +100,12 @@ This extends to $n$ independent variables: $M_{S_n}(t) = \prod_{i=1}^n M_{X_i}(t
 For $X \sim N(\mu, \sigma^2)$, the MGF is:
 
 $$
-
 M_X(t) = \exp\left(\mu t + \frac{\sigma^2 t^2}{2}\right)
-
 $$
 
 Extracting moments:
 
 $$
-
 \begin{aligned}
 M_X'(t) &= \left(\mu + \sigma^2 t\right) M_X(t) \\
 M_X'(0) &= \mu = E[X] \\[6pt]
@@ -130,7 +113,6 @@ M_X''(t) &= \left(\sigma^2 + (\mu + \sigma^2 t)^2\right) M_X(t) \\
 M_X''(0) &= \sigma^2 + \mu^2 = E[X^2] \\[6pt]
 \text{Var}(X) &= (\sigma^2 + \mu^2) - \mu^2 = \sigma^2
 \end{aligned}
-
 $$
 
 ### Example: Sum of Independent Normals
@@ -138,9 +120,7 @@ $$
 If $X_1 \sim N(\mu_1, \sigma_1^2)$ and $X_2 \sim N(\mu_2, \sigma_2^2)$ are independent:
 
 $$
-
 M_{X_1 + X_2}(t) = \exp\left((\mu_1 + \mu_2)t + \frac{(\sigma_1^2 + \sigma_2^2)t^2}{2}\right)
-
 $$
 
 By uniqueness, $X_1 + X_2 \sim N(\mu_1 + \mu_2, \sigma_1^2 + \sigma_2^2)$.
@@ -150,9 +130,7 @@ By uniqueness, $X_1 + X_2 \sim N(\mu_1 + \mu_2, \sigma_1^2 + \sigma_2^2)$.
 For i.i.d. $X_i$ with mean $\mu$, variance $\sigma^2$, let $Z_n = \frac{\bar{X} - \mu}{\sigma/\sqrt{n}}$. The MGF of $Z_n$ satisfies:
 
 $$
-
 M_{Z_n}(t) = \left[M_{\frac{X_i - \mu}{\sigma}}\left(\frac{t}{\sqrt{n}}\right)\right]^n \to e^{t^2/2} \quad \text{as } n \to \infty
-
 $$
 
 The limit $e^{t^2/2}$ is the MGF of $N(0,1)$, proving convergence in distribution.

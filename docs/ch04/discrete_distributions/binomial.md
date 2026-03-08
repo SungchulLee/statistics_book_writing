@@ -13,35 +13,27 @@ The **Bernoulli distribution** models a single trial with two outcomes (success/
 A random variable $X$ follows a Bernoulli distribution if it takes value 1 (success) with probability $p$ and value 0 (failure) with probability $1 - p$:
 
 $$
-
 X \sim \text{Bernoulli}(p), \qquad P(X = x) = p^x (1 - p)^{1-x}, \quad x \in \{0, 1\}
-
 $$
 
 ### Properties
 
 $$
-
 \begin{aligned}
 E[X] &= p \\
 \text{Var}(X) &= p(1 - p) \\
 \text{SD}(X) &= \sqrt{p(1 - p)}
 \end{aligned}
-
 $$
 
 ### Derivation of Variance
 
 $$
-
 E[X^2] = 0^2 \cdot (1-p) + 1^2 \cdot p = p
-
 $$
 
 $$
-
 \text{Var}(X) = E[X^2] - (E[X])^2 = p - p^2 = p(1 - p)
-
 $$
 
 ---
@@ -53,9 +45,7 @@ $$
 If $X_1, X_2, \ldots, X_n$ are independent $\text{Bernoulli}(p)$ random variables, then $Y = \sum_{i=1}^n X_i$ follows a **binomial distribution**:
 
 $$
-
 Y \sim \text{Binomial}(n, p), \qquad P(Y = k) = \binom{n}{k} p^k (1 - p)^{n-k}, \quad k = 0, 1, \ldots, n
-
 $$
 
 The binomial coefficient $\binom{n}{k} = \frac{n!}{k!(n-k)!}$ counts the number of ways to choose $k$ successes from $n$ trials.
@@ -63,13 +53,11 @@ The binomial coefficient $\binom{n}{k} = \frac{n!}{k!(n-k)!}$ counts the number 
 ### Properties
 
 $$
-
 \begin{aligned}
 E[Y] &= np \\
 \text{Var}(Y) &= np(1 - p) \\
 \text{SD}(Y) &= \sqrt{np(1 - p)}
 \end{aligned}
-
 $$
 
 ### Derivation of Mean and Variance
@@ -77,17 +65,13 @@ $$
 Since $Y = \sum_{i=1}^n X_i$ where $X_i \overset{\text{iid}}{\sim} \text{Bernoulli}(p)$:
 
 $$
-
 E[Y] = \sum_{i=1}^n E[X_i] = np
-
 $$
 
 By independence:
 
 $$
-
 \text{Var}(Y) = \sum_{i=1}^n \text{Var}(X_i) = np(1 - p)
-
 $$
 
 ### Verifying the PMF Sums to 1
@@ -95,9 +79,7 @@ $$
 By the binomial theorem:
 
 $$
-
 \sum_{k=0}^n \binom{n}{k} p^k (1-p)^{n-k} = (p + (1-p))^n = 1^n = 1
-
 $$
 
 ---
@@ -107,21 +89,17 @@ $$
 Several identities are useful for working with binomial distributions:
 
 $$
-
 \begin{aligned}
 (1) &\quad \binom{n}{k} = \binom{n}{n-k} \quad \text{(symmetry)} \\[4pt]
 (2) &\quad \binom{n}{k} = \binom{n-1}{k-1} + \binom{n-1}{k} \quad \text{(Pascal's rule)} \\[4pt]
 (3) &\quad k\binom{n}{k} = n\binom{n-1}{k-1} \quad \text{(absorption identity)}
 \end{aligned}
-
 $$
 
 The absorption identity is particularly useful for computing $E[Y]$ directly from the PMF:
 
 $$
-
 E[Y] = \sum_{k=0}^n k \binom{n}{k} p^k (1-p)^{n-k} = np \sum_{k=1}^n \binom{n-1}{k-1} p^{k-1} (1-p)^{n-k} = np
-
 $$
 
 ---
@@ -133,9 +111,7 @@ $$
 **Solution:**
 
 $$
-
 P(Y = 7) = \binom{10}{7} (0.6)^7 (0.4)^3 = 120 \cdot 0.0280 \cdot 0.064 = 0.2150
-
 $$
 
 Expected number of up days: $E[Y] = 10 \times 0.6 = 6$.
@@ -202,9 +178,7 @@ print(f"Theoretical var:  {n*p*(1-p):.4f},  Sample var:  {samples.var():.4f}")
 For large $n$, the binomial distribution is well approximated by a normal distribution:
 
 $$
-
 Y \sim \text{Binomial}(n, p) \approx N(np, \, np(1-p)) \quad \text{when } np \geq 5 \text{ and } n(1-p) \geq 5
-
 $$
 
 With continuity correction, $P(Y \leq k) \approx \Phi\left(\frac{k + 0.5 - np}{\sqrt{np(1-p)}}\right)$.

@@ -9,9 +9,7 @@ The **sampling distribution of the sample mean** $\bar{X}$ describes how $\bar{X
 Let $X_1, X_2, \dots, X_n$ be i.i.d. from a population with mean $\mu$ and variance $\sigma^2 < \infty$. The sample mean is:
 
 $$
-
-\bar{X} = \frac{1}{n}\sum_{i=1}^n X_i.
-
+\bar{X} = \frac{1}{n}\sum_{i=1}^n X_i
 $$
 
 ## Properties
@@ -19,9 +17,7 @@ $$
 ### Expected Value (Unbiasedness)
 
 $$
-
-E[\bar{X}] = \mu.
-
+E[\bar{X}] = \mu
 $$
 
 The sample mean is an **unbiased estimator** of the population mean: on average, it neither overestimates nor underestimates $\mu$.
@@ -29,10 +25,8 @@ The sample mean is an **unbiased estimator** of the population mean: on average,
 ### Variance and Standard Error
 
 $$
-
 \text{Var}(\bar{X}) = \frac{\sigma^2}{n}, \qquad
-\text{SE}(\bar{X}) = \frac{\sigma}{\sqrt{n}}.
-
+\text{SE}(\bar{X}) = \frac{\sigma}{\sqrt{n}}
 $$
 
 As $n$ increases, the standard error decreases — larger samples yield more precise estimates of $\mu$.
@@ -42,17 +36,13 @@ As $n$ increases, the standard error decreases — larger samples yield more pre
 By the CLT, for sufficiently large $n$:
 
 $$
-
-\frac{\bar{X} - \mu}{\sigma/\sqrt{n}} \xrightarrow{d} N(0, 1),
-
+\frac{\bar{X} - \mu}{\sigma/\sqrt{n}} \xrightarrow{d} N(0, 1)
 $$
 
 so that approximately:
 
 $$
-
-\bar{X} \sim N\!\left(\mu, \frac{\sigma^2}{n}\right).
-
+\bar{X} \sim N\!\left(\mu, \frac{\sigma^2}{n}\right)
 $$
 
 This holds regardless of the population's shape, as long as $\sigma^2 < \infty$.
@@ -74,9 +64,7 @@ This holds regardless of the population's shape, as long as $\sigma^2 < \infty$.
 **Problem.** Population has $\mu = 100$, $\sigma = 4$. For $n = 25$:
 
 $$
-
-\text{SE}(\bar{X}) = \frac{4}{\sqrt{25}} = 0.8.
-
+\text{SE}(\bar{X}) = \frac{4}{\sqrt{25}} = 0.8
 $$
 
 If we repeatedly draw samples of size 25, the sample means will cluster around 100 with a typical deviation of 0.8.
@@ -90,16 +78,12 @@ If we repeatedly draw samples of size 25, the sample means will cluster around 1
 **Solution.**
 
 $$
-
 \text{SE} = \frac{20}{\sqrt{25}} = 4, \qquad
 Z = \frac{155 - 150}{4} = 1.25
-
 $$
 
 $$
-
 P(\bar{X} > 155) = P(Z > 1.25) = 1 - \Phi(1.25) \approx 0.1056
-
 $$
 
 ```python
@@ -114,22 +98,16 @@ print(f"P(X_bar > 155) = {stats.norm.sf(1.25):.4f}")
 **Solution.**
 
 $$
-
 \text{SE} = \frac{1.5}{\sqrt{49}} = 0.2143
-
 $$
 
 $$
-
 Z_1 = \frac{6.8 - 7}{0.2143} \approx -0.93, \qquad
 Z_2 = \frac{7.2 - 7}{0.2143} \approx 0.93
-
 $$
 
 $$
-
 P(6.8 < \bar{X} < 7.2) = \Phi(0.93) - \Phi(-0.93) \approx 0.6476
-
 $$
 
 ```python
@@ -144,16 +122,12 @@ print(f"P(6.8 < X_bar < 7.2) = {stats.norm.cdf(0.93) - stats.norm.cdf(-0.93):.4f
 **Solution.** Because the population is normal, the result is exact even for $n = 5$:
 
 $$
-
 \text{SE} = \frac{10}{\sqrt{5}} \approx 4.47, \qquad
 Z = \frac{72 - 70}{4.47} \approx 0.447
-
 $$
 
 $$
-
 P(\bar{X} > 72) \approx 0.3274
-
 $$
 
 ```python
@@ -168,16 +142,12 @@ print(f"P(X_bar > 72) = {stats.norm.sf(0.447):.4f}")
 **Solution.** Running out means $\bar{X} > 110/50 = 2.2$:
 
 $$
-
 \text{SE} = \frac{0.7}{\sqrt{50}} \approx 0.0990, \qquad
 Z = \frac{2.2 - 2}{0.0990} \approx 2.020
-
 $$
 
 $$
-
 P(\bar{X} > 2.2) = P(Z > 2.020) \approx 0.0217
-
 $$
 
 ### Example 5: Lightbulbs (No Normality Assumption)
@@ -193,16 +163,12 @@ $$
 **Solution.** Even though the population is skewed, $n = 100$ is large enough for the CLT:
 
 $$
-
 \text{SE} = \frac{500}{\sqrt{100}} = 50, \qquad
 Z = \frac{2100 - 2000}{50} = 2
-
 $$
 
 $$
-
 P(\bar{X} > 2100) = P(Z > 2) \approx 0.0228
-
 $$
 
 ```python
@@ -215,9 +181,7 @@ print(f"P(X_bar > 2100) = {stats.norm.sf(2):.4f}")
 ### Known Variances or Large Samples
 
 $$
-
 Z = \frac{(\bar{X}_1 - \bar{X}_2) - (\mu_1 - \mu_2)}{\sqrt{\sigma_1^2/n_1 + \sigma_2^2/n_2}} \sim N(0, 1)
-
 $$
 
 ### Example: Two Cupcake Shifts
@@ -227,27 +191,19 @@ $$
 **Solution.**
 
 $$
-
 \text{SE} = \sqrt{\frac{16}{40} + \frac{9}{40}} = \sqrt{0.625} \approx 0.7906
-
 $$
 
 $$
-
 P(\bar{X}_A - \bar{X}_B > 6): \quad Z = \frac{6 - 5}{0.7906} \approx 1.265, \quad P = 0.1030
-
 $$
 
 $$
-
 P(\bar{X}_A - \bar{X}_B < -6): \quad Z = \frac{-6 - 5}{0.7906} \approx -13.91, \quad P \approx 0
-
 $$
 
 $$
-
 P(|\bar{X}_A - \bar{X}_B| > 6) \approx 0.1030
-
 $$
 
 ```python

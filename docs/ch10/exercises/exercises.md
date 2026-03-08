@@ -34,15 +34,11 @@ If the null hypothesis is not rejected, the data is considered to follow normali
 **(c)**
 
 $$
-
 \chi^2 = \sum \frac{(O_i - E_i)^2}{E_i} = \frac{(10-20)^2}{20} + \frac{(30-25)^2}{25} + \frac{(50-40)^2}{40} + \frac{(10-15)^2}{15}
-
 $$
 
 $$
-
 = 5.00 + 1.00 + 2.50 + 1.67 = 10.17
-
 $$
 
 **Note**: The original source states $\chi^2 = 5.63$, which may use different observed/expected values. Using the values as given above, $\chi^2 \approx 10.17$.
@@ -106,13 +102,10 @@ Test whether the payment method and day of the week are independent. The signifi
 **(b)**
 
 $$
-
 E_{ij} = \frac{\text{Row Total} \times \text{Column Total}}{\text{Grand Total}}
-
 $$
 
 $$
-
 \begin{array}{|c|c|c|c|c|}
 \hline
   & \text{Cash} & \text{Card} & \text{Mobile} & \text{Row Total} \\
@@ -124,31 +117,24 @@ $$
 \text{Col Total} & 70 & 110 & 50 & 230 \\
 \hline
 \end{array}
-
 $$
 
 **(c)**
 
 $$
-
 \chi^2 = \sum \frac{(O_{ij} - E_{ij})^2}{E_{ij}} \approx 2.34
-
 $$
 
 **(d)**
 
 $$
-
 df = (2 - 1)(3 - 1) = 2
-
 $$
 
 **(e)**
 
 $$
-
 \text{Critical value} = G(1 - \alpha)
-
 $$
 
 where $G$ is the inverse CDF (percent point function) of the $\chi^2$ distribution with 2 degrees of freedom.
@@ -183,17 +169,13 @@ Participants should be randomly assigned to Drug A and Drug B to eliminate confo
 2. **Pooled Proportion**:
 
 $$
-
 \hat{p} = \frac{x_1 + x_2}{n_1 + n_2} = \frac{60 + 55}{100 + 100} = 0.575
-
 $$
 
 3. **Test Statistic**:
 
 $$
-
 z = \frac{\hat{p}_1 - \hat{p}_2}{\sqrt{\hat{p}(1 - \hat{p}) \left( \frac{1}{n_1} + \frac{1}{n_2} \right)}}
-
 $$
 
 4. **Result**: The calculated $z$-value is approximately $0.715$. Since $|z| < 1.96$, we do not reject the null hypothesis. There is no significant difference in the performance of Drug A and Drug B.
@@ -203,7 +185,6 @@ $$
 1. **Contingency Table**:
 
 $$
-
 \begin{array}{|c|c|c|}
 \hline
  & \text{Success} & \text{Failure} \\
@@ -212,13 +193,11 @@ $$
 \text{Drug B} & 55 & 45 \\
 \hline
 \end{array}
-
 $$
 
 2. **Expected Frequencies**:
 
 $$
-
 \begin{array}{|c|c|c|c|}
 \hline
  & \text{Success} & \text{Failure} & \text{Row Total} \\
@@ -230,15 +209,12 @@ $$
 \text{Col Total} & 115 & 85 & 200 \\
 \hline
 \end{array}
-
 $$
 
 3. **Test Statistic**:
 
 $$
-
 \chi^2 = \sum \frac{(O_{ij} - E_{ij})^2}{E_{ij}} = 0.512
-
 $$
 
 ```python

@@ -9,9 +9,7 @@
 - **Null Hypothesis** ($H_0$): All group means are equal.
 
 $$
-
 H_0: \mu_1 = \mu_2 = \mu_3 = \dots = \mu_k
-
 $$
 
 where $\mu_1, \mu_2, \dots, \mu_k$ represent the population means for each of the $k$ groups.
@@ -33,11 +31,9 @@ $$ \bar{y}_{i\cdot} = \frac{1}{n_i} \sum_{j=1}^{n_i} y_{ij} $$
 Calculate the total variation $SST$, which is given by
 
 $$
-
 SST
 =\displaystyle
 \sum_{i=1}^{k}\sum_{j=1}^{n_i} \left( y_{ij} - \bar{y}_{\cdot\cdot} \right)^2
-
 $$
 
 ### Step 4: Calculate Within-Group Variation SSW
@@ -45,9 +41,7 @@ $$
 Calculate the within-group variation $SSW$, which is given by
 
 $$
-
 SSW = \sum_{i=1}^{k} \sum_{j=1}^{n_i} \left( y_{ij} - \bar{y}_{i\cdot} \right)^2
-
 $$
 
 ### Step 5: Calculate Between-Group Variation SSB
@@ -55,11 +49,9 @@ $$
 Calculate the between-group variation $SSB$, which is given by
 
 $$
-
 SSB
 = \sum_{i=1}^{k} \sum_{j=1}^{n_i} \left( \bar{y}_{i\cdot} - \bar{y}_{\cdot\cdot} \right)^2
 = \sum_{i=1}^{k} n_i \left( \bar{y}_{i\cdot} - \bar{y}_{\cdot\cdot} \right)^2
-
 $$
 
 ### Step 6: Check the Partition of the Total Variation
@@ -77,7 +69,6 @@ SST
 &=&
 SSW + SSB
 \end{array}
-
 $$
 
 ### Step 7: Calculate the F-Statistic
@@ -94,9 +85,7 @@ $$\begin{array}{cccccccccc}
 The test statistic for ANOVA is the F-statistic, calculated as the ratio of the mean square between groups (MSB) to the mean square within groups (MSW):
 
 $$
-
 F = \frac{\text{MSB}}{\text{MSW}} = \frac{\text{SSB}/(k-1)}{\text{SSW}/(N-k)}
-
 $$
 
 Where:
@@ -111,9 +100,7 @@ Where:
 The sampling distribution of $F$ under $H_0$ is
 
 $$
-
 F\sim F_{k-1,N-k}
-
 $$
 
 - Compare the calculated F-statistic with the critical value from the F-distribution table (based on $k-1$ and $N-k$ degrees of freedom), or
@@ -331,9 +318,7 @@ For each value in the dataset:
 **Summing all these values**:
 
 $$
-
 SST = 0 + 1 + 4 + 1 + 1 + 1 + 9 + 0 + 4 + 1 + 1 + 4 + 9 + 0 + 1 = 37
-
 $$
 
 ### Step 4: Calculate Within-Group Variation SSW
@@ -357,9 +342,7 @@ $$ SSW_{\text{Coffee}} = 0 + 1 + 4 + 1 + 4 = 10.00 $$
 **Summing these values**:
 
 $$
-
 SSW = 5.20 + 5.20 + 10.00 = 20.40
-
 $$
 
 ### Step 5: Calculate Between-Group Variation SSB
@@ -377,9 +360,7 @@ $$ SSB = \sum_{i=1}^{k} n_i (\bar{X}_{i\cdot} - \bar{X}_{\cdot\cdot})^2 $$
 **Summing these values**:
 
 $$
-
 SSB = 1.8 + 9.8 + 5.0 = 16.6
-
 $$
 
 ### Step 6: Check the Partition of the Total Variation

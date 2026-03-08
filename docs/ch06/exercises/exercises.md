@@ -26,9 +26,7 @@
 **Exercise 4.** Consider estimating $\theta$ from $X_1, \ldots, X_n \overset{\text{iid}}{\sim} \text{Bernoulli}(\theta)$ with the Bayesian-inspired estimator:
 
 $$
-
 \hat{\theta}_B = \frac{\sum X_i + a}{n + a + b}
-
 $$
 
 (a) Compute $\text{Bias}(\hat{\theta}_B)$ and $\text{Var}(\hat{\theta}_B)$.

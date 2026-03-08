@@ -11,17 +11,13 @@
 Events $A$ and $B$ are **conditionally independent** given event $C$ (with $P(C) > 0$) if:
 
 $$
-
 P(A \cap B \mid C) = P(A \mid C) \cdot P(B \mid C)
-
 $$
 
 Equivalently, if $P(B \cap C) > 0$:
 
 $$
-
 P(A \mid B \cap C) = P(A \mid C)
-
 $$
 
 **Interpretation:** Once we know $C$ has occurred, learning that $B$ has occurred provides no additional information about $A$.
@@ -39,17 +35,13 @@ Two events can be (unconditionally) independent but become dependent after condi
 Suppose a fire alarm ($C$) can be triggered by either a fire ($A$) or burnt toast ($B$). The two causes are independent:
 
 $$
-
 P(A \cap B) = P(A) \cdot P(B)
-
 $$
 
 But given the alarm went off ($C$), learning there is no fire makes burnt toast more likely:
 
 $$
-
 P(B \mid A^c \cap C) > P(B \mid C)
-
 $$
 
 So $A \perp\!\!\!\perp B$ but $A \not\perp\!\!\!\perp B \mid C$.
@@ -67,9 +59,7 @@ A coin is chosen at random: coin 1 has $P(\text{H}) = 0.3$ and coin 2 has $P(\te
 Given the coin ($C$), the flips are independent:
 
 $$
-
 P(A \cap B \mid C) = P(A \mid C) \cdot P(B \mid C)
-
 $$
 
 But without knowing the coin, the flips are dependent—if the first flip is heads, it is more likely that the biased-toward-heads coin was chosen, which increases the probability of the second flip being heads.
@@ -85,9 +75,7 @@ Two students, $A$ and $B$, take the same exam. Let event $A_{\text{pass}}$ and $
 Given $C$, whether student $A$ passes provides little information about student $B$ (their abilities are separate). But unconditionally, learning $A$ passed makes it more likely the exam was easy, which in turn makes $B$ passing more likely.
 
 $$
-
 A_{\text{pass}} \perp\!\!\!\perp B_{\text{pass}} \mid C \quad \text{but} \quad A_{\text{pass}} \not\perp\!\!\!\perp B_{\text{pass}}
-
 $$
 
 ### Example: Dice with Known Sum
@@ -95,9 +83,7 @@ $$
 Roll two fair dice. Let $A$ = "die 1 shows 4" and $B$ = "die 2 shows 3." These are independent. But condition on $C$ = "the sum is 7":
 
 $$
-
 P(A \mid C) = \frac{1}{6}, \quad P(B \mid C) = \frac{1}{6}, \quad P(A \cap B \mid C) = \frac{1}{6}
-
 $$
 
 Here $P(A \cap B \mid C) = 1/6 \neq (1/6)(1/6)$, so $A$ and $B$ are **not** conditionally independent given $C$. In fact, knowing die 1 is 4 and the sum is 7 determines die 2 is 3 with certainty.

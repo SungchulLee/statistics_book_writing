@@ -18,9 +18,7 @@ To compute the Anderson-Darling test statistic $A^2$, follow these steps:
 2. **Standardize the Data**: Standardize each data point to have a mean of 0 and a variance of 1. Note that this transformation does not impose normality on the data. For each data point $X_i$, calculate the standardized value $Z_i$:
 
     $$
-
     Z_i = \frac{X_i - \mu}{\sigma}
-
     $$
 
     where $\mu$ is the sample mean and $\sigma$ is the sample standard deviation.
@@ -30,9 +28,7 @@ To compute the Anderson-Darling test statistic $A^2$, follow these steps:
 4. **Compute Test Statistic $A^2$**:
 
     $$
-
     A^2 = -n - \frac{1}{n} \sum_{i=1}^{n} \left[ (2i-1) \left( \ln(F(Z_{(i)})) + \ln(1 - F(Z_{(n+1-i)})) \right) \right]
-
     $$
 
     where $n$ is the sample size and $F(Z_{(i)})$ is the CDF of the normal distribution at each ordered standardized data point $Z_{(i)}$.

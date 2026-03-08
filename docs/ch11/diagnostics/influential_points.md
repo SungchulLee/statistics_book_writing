@@ -9,9 +9,7 @@ In ANOVA, certain data points can exert a disproportionate influence on the resu
 Cook's distance combines the residual of each observation with its leverage to assess its overall influence on the fitted model. It measures how much the fitted values change when observation $i$ is removed:
 
 $$
-
 D_i = \frac{r_i^2}{p} \cdot \frac{h_{ii}}{1 - h_{ii}}
-
 $$
 
 where $r_i$ is the standardized residual, $h_{ii}$ is the leverage, and $p$ is the number of parameters in the model (number of groups in one-way ANOVA).
@@ -43,9 +41,7 @@ Common thresholds for identifying influential points:
 Leverage measures how far an observation's predictor values are from the mean of the predictor values. In one-way ANOVA, leverage depends on the group size:
 
 $$
-
 h_{ii} = \frac{1}{n_i}
-
 $$
 
 where $n_i$ is the size of the group to which observation $i$ belongs. Points in smaller groups have higher leverage.
@@ -68,9 +64,7 @@ plt.show()
 DFFITS measures the influence of each observation on its own fitted value:
 
 $$
-
 \text{DFFITS}_i = r_i^* \sqrt{\frac{h_{ii}}{1 - h_{ii}}}
-
 $$
 
 where $r_i^*$ is the externally studentized residual. A common threshold is $|\text{DFFITS}_i| > 2\sqrt{p/n}$.

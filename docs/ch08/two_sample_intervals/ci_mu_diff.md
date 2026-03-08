@@ -11,9 +11,7 @@ When comparing two populations, we are often interested in the difference betwee
 ### Known Variances (z-Interval)
 
 $$
-
 (\bar{X}_1 - \bar{X}_2) \pm z_{\alpha/2} \times \sqrt{\frac{\sigma_1^2}{n_1} + \frac{\sigma_2^2}{n_2}}
-
 $$
 
 where $\sigma_1^2$ and $\sigma_2^2$ are the known population variances, $z_{\alpha/2}$ is the critical value satisfying $P(Z > z_{\alpha/2}) = \alpha/2$.
@@ -21,17 +19,13 @@ where $\sigma_1^2$ and $\sigma_2^2$ are the known population variances, $z_{\alp
 ### Unknown, Unequal Variances — Welch's t-Interval
 
 $$
-
 (\bar{X}_1 - \bar{X}_2) \pm t_{\alpha/2, \, \text{df}} \times \sqrt{\frac{s_1^2}{n_1} + \frac{s_2^2}{n_2}}
-
 $$
 
 where the degrees of freedom are computed using the **Welch–Satterthwaite equation**:
 
 $$
-
 \text{df} = \frac{\left(\frac{s_1^2}{n_1} + \frac{s_2^2}{n_2}\right)^2}{\frac{1}{n_1 - 1}\left(\frac{s_1^2}{n_1}\right)^2 + \frac{1}{n_2 - 1}\left(\frac{s_2^2}{n_2}\right)^2}
-
 $$
 
 !!! tip "Default Choice"
@@ -40,17 +34,13 @@ $$
 ### Unknown, Equal Variances — Pooled t-Interval
 
 $$
-
 (\bar{X}_1 - \bar{X}_2) \pm t_{\alpha/2, \, n_1+n_2-2} \times \sqrt{s_p^2\left(\frac{1}{n_1} + \frac{1}{n_2}\right)}
-
 $$
 
 where the **pooled variance** is
 
 $$
-
 s_p^2 = \frac{(n_1 - 1)s_1^2 + (n_2 - 1)s_2^2}{n_1 + n_2 - 2}
-
 $$
 
 and $\text{df} = n_1 + n_2 - 2$.
@@ -60,9 +50,7 @@ and $\text{df} = n_1 + n_2 - 2$.
 For $n_1 \ge 30$ and $n_2 \ge 30$, the normal approximation can be used even with unknown, unequal variances:
 
 $$
-
 (\bar{X}_1 - \bar{X}_2) \pm z_{\alpha/2} \times \sqrt{\frac{s_1^2}{n_1} + \frac{s_2^2}{n_2}}
-
 $$
 
 ### Python Code
@@ -107,31 +95,23 @@ Two independent samples: Sample 1 has $n_1 = 30$, $\bar{X}_1 = 100$, $s_1 = 15$;
 **Solution.**
 
 $$
-
 \text{SE} = \sqrt{\frac{225}{30} + \frac{400}{25}} = \sqrt{7.5 + 16} = \sqrt{23.5} \approx 4.847
-
 $$
 
 Welch–Satterthwaite degrees of freedom:
 
 $$
-
 \text{df} = \frac{(7.5 + 16)^2}{\frac{7.5^2}{29} + \frac{16^2}{24}} \approx 48.35 \approx 48
-
 $$
 
 With $t_{0.025, 48} \approx 2.011$:
 
 $$
-
 \text{ME} = 2.011 \times 4.847 \approx 9.75
-
 $$
 
 $$
-
 \boxed{(0.25,\ 19.75)}
-
 $$
 
 We are 95% confident that the true difference between the population means lies between 0.25 and 19.75.
@@ -242,9 +222,7 @@ Two independent samples: population A with $\sigma_A = 15$ ($n_A = 36$) and popu
 **Solution.**
 
 $$
-
 \sigma_{\bar{X}_A - \bar{X}_B} = \sqrt{\frac{15^2}{36} + \frac{20^2}{49}} \approx \boxed{3.80}
-
 $$
 
 ### Exercise: 95% CI for Difference of Means
@@ -254,19 +232,13 @@ Sample 1: $\bar{X}_1 = 55$, $s_1 = 8$, $n_1 = 30$. Sample 2: $\bar{X}_2 = 50$, $
 **Solution.** Since both $n_1, n_2 \ge 30$, we can use the $z$-approximation:
 
 $$
-
 \text{SE} = \sqrt{\frac{64}{30} + \frac{100}{35}} = \sqrt{2.133 + 2.857} = \sqrt{4.99} \approx 2.233
-
 $$
 
 $$
-
 \text{ME} = 1.96 \times 2.233 \approx 4.38
-
 $$
 
 $$
-
 \boxed{(0.62,\ 9.38)}
-
 $$

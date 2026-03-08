@@ -3,9 +3,7 @@
 Simple linear regression models the relationship between a single independent variable $X$ and a dependent variable $Y$ as a straight line:
 
 $$
-
 Y = \beta_0 + \beta_1 X + \varepsilon
-
 $$
 
 where:
@@ -545,9 +543,7 @@ plt.show()
 The objective is to find parameters $\alpha$ and $\beta$ that minimize the mean squared error:
 
 $$
-
 l = \frac{1}{n} \sum_{i=1}^n (\alpha + \beta x_i - y_i)^2
-
 $$
 
 ### Normal Equations
@@ -555,7 +551,6 @@ $$
 Setting the partial derivatives to zero:
 
 $$
-
 \begin{array}{lll}
 \displaystyle \frac{\partial l}{\partial \alpha} = \frac{2}{n} \sum_{i=1}^n \left((\alpha + \beta x_i) - y_i\right) = 0
 & \Rightarrow &
@@ -564,7 +559,6 @@ $$
 & \Rightarrow &
 2\alpha \bar{x} + 2\beta \overline{x^2} - 2\overline{xy} = 0
 \end{array}
-
 $$
 
 ### Solution
@@ -572,7 +566,6 @@ $$
 Solving the normal equations yields:
 
 $$
-
 \begin{array}{lll}
 \beta
 &=&
@@ -583,7 +576,6 @@ $$
 = \rho \frac{\sigma_y}{\sigma_x} \\[8pt]
 \alpha &=& \displaystyle -\rho \frac{\sigma_y}{\sigma_x} \bar{x} + \bar{y}
 \end{array}
-
 $$
 
 ### Regression Line Equation
@@ -591,21 +583,17 @@ $$
 Substituting back:
 
 $$
-
 \begin{array}{lll}
 y &=& \alpha + \beta x \\[4pt]
   &=& \displaystyle -\rho \frac{\sigma_y}{\sigma_x}\bar{x} + \bar{y} + \rho \frac{\sigma_y}{\sigma_x} x \\[4pt]
   &=& \displaystyle \rho \frac{\sigma_y}{\sigma_x}(x - \bar{x}) + \bar{y}
 \end{array}
-
 $$
 
 In standardized form:
 
 $$
-
 \frac{y - \bar{y}}{\sigma_y} = \rho \frac{x - \bar{x}}{\sigma_x}
-
 $$
 
 This elegant result says: the predicted value of $y$ in standard units equals $r$ times the observed value of $x$ in standard units.

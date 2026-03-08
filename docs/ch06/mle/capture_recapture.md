@@ -19,9 +19,7 @@ Other names for this method include capture-recapture, capture-mark-recapture, m
 4. **Estimation**: Using the assumption that the proportion of marked individuals in the second sample represents the proportion of the entire population that was marked in the first sample, the population size $N$ can be estimated:
 
 $$
-
 \hat{N} = \frac{M \cdot n}{m}
-
 $$
 
 ## Assumptions
@@ -40,9 +38,7 @@ Imagine a pond where we want to estimate the fish population:
 3. **Estimation**:
 
 $$
-
 \hat{N} = \frac{M \cdot n}{m} = \frac{50 \cdot 40}{10} = 200
-
 $$
 
 The estimated fish population in the pond is 200.
@@ -54,9 +50,7 @@ The estimated fish population in the pond is 200.
 The probability of observing $m$ marked individuals in a recapture sample of size $n$, given the population size $N$, is:
 
 $$
-
 P(m \mid N) = \frac{\binom{M}{m} \binom{N-M}{n-m}}{\binom{N}{n}}
-
 $$
 
 where:
@@ -70,9 +64,7 @@ where:
 The likelihood function $L(N)$ is proportional to this probability:
 
 $$
-
 L(N) = P(m \mid N) \propto \frac{\binom{M}{m} \binom{N-M}{n-m}}{\binom{N}{n}}
-
 $$
 
 where $M$, $n$, and $m$ are known from the experiment, and $N$ is the parameter to be estimated.
@@ -82,9 +74,7 @@ where $M$, $n$, and $m$ are known from the experiment, and $N$ is the parameter 
 Ignoring constants that do not depend on $N$, the likelihood becomes:
 
 $$
-
 L(N) \propto \frac{(N-M)!}{(N-n)!(N)!}
-
 $$
 
 ### Maximizing the Likelihood
@@ -92,9 +82,7 @@ $$
 Taking the natural logarithm of the likelihood $\ell(N) = \log L(N)$ and differentiating with respect to $N$, we get the MLE of $N$:
 
 $$
-
 \hat{N} = \frac{M \cdot n}{m}
-
 $$
 
 ### Intuition Behind the MLE
@@ -102,11 +90,9 @@ $$
 The estimate $\hat{N}$ is based on the idea that the proportion of marked individuals in the recaptured sample ($m/n$) reflects the proportion of marked individuals in the entire population ($M/N$):
 
 $$
-
 \frac{m}{n} \approx \frac{M}{N}
 \quad\Longrightarrow\quad
 \hat{N} = \frac{M \cdot n}{m}
-
 $$
 
 ## Properties of the MLE
@@ -116,9 +102,7 @@ $$
 For small sample sizes, $\hat{N}$ can be slightly biased. The **Chapman estimator** provides a bias-corrected alternative:
 
 $$
-
 \hat{N}_{\text{Chapman}} = \frac{(M+1)(n+1)}{m+1} - 1
-
 $$
 
 ### Variance
@@ -126,9 +110,7 @@ $$
 The variance of the MLE can be approximated as:
 
 $$
-
 \text{Var}(\hat{N}) \approx \frac{M^2 \cdot n \cdot (n-m)}{m^3}
-
 $$
 
 ## Extensions and Variations

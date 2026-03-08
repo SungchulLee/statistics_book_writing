@@ -31,9 +31,7 @@ Common scenarios that violate independence:
 The Durbin-Watson test is primarily used in regression to detect autocorrelation in residuals, but it can be applied to ANOVA residuals when observations have a natural ordering (e.g., time series data).
 
 $$
-
 d = \frac{\sum_{i=2}^{n}(e_i - e_{i-1})^2}{\sum_{i=1}^{n}e_i^2}
-
 $$
 
 where $e_i$ are the residuals ordered by time or sequence.

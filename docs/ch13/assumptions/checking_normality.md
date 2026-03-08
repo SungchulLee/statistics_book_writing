@@ -8,9 +8,7 @@ Normality of the residuals is one of the key assumptions in linear regression. T
 Normality in linear regression refers to the residuals being normally distributed, meaning that when plotted, they should form a bell-shaped curve centered around zero:
 
 $$
-
 \epsilon_i \sim N(0, \sigma^2)
-
 $$
 
 **Why It Matters:**
@@ -119,9 +117,7 @@ The **Shapiro-Wilk test** is a statistical test specifically designed to test th
 **Test Statistic:**
 
 $$
-
 W = \frac{\left(\sum_{i=1}^n a_i x_{(i)}\right)^2}{\sum_{i=1}^n (x_i - \bar{x})^2}
-
 $$
 
 where $x_{(i)}$ are the ordered residuals and $a_i$ are constants generated from the expected values of order statistics of a standard normal distribution.
@@ -166,9 +162,7 @@ The **Anderson-Darling test** is another statistical test that is particularly s
 **Test Statistic:**
 
 $$
-
 A^2 = -n - \sum_{i=1}^{n} \frac{2i-1}{n} \left[\ln F(x_{(i)}) + \ln(1-F(x_{(n+1-i)}))\right]
-
 $$
 
 where $F$ is the CDF of the hypothesized normal distribution and $x_{(i)}$ are the ordered residuals.
@@ -209,9 +203,7 @@ The **Jarque-Bera test** is a goodness-of-fit test that specifically tests wheth
 **Test Statistic:**
 
 $$
-
 JB = \frac{n}{6}\left(S^2 + \frac{(K-3)^2}{4}\right)
-
 $$
 
 where:

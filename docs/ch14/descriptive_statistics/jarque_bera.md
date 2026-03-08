@@ -14,9 +14,7 @@ The Jarque-Bera test is a statistical test used to assess whether a dataset foll
 We compute the test statistic $JB$ using the following formula:
 
 $$
-
 JB = \frac{n}{6} \left( S^2 + \frac{(K - 3)^2}{4} \right)
-
 $$
 
 where
@@ -31,41 +29,31 @@ where
 1. **Compute the Sample Mean**:
 
     $$
-
     \bar{X} = \frac{1}{n} \sum_{i=1}^{n} X_i
-
     $$
 
 2. **Compute the Sample Skewness ($S$)**:
 
     $$
-
     S = \frac{1}{n} \sum_{i=1}^{n} \left( \frac{X_i - \bar{X}}{\sigma} \right)^3
-
     $$
 
     where $\sigma^2$ is the sample variance:
 
     $$
-
     \sigma^2 = \frac{1}{n-1} \sum_{i=1}^{n} (X_i - \bar{X})^2
-
     $$
 
 3. **Compute the Sample Kurtosis ($K$)**:
 
     $$
-
     K = \frac{1}{n} \sum_{i=1}^{n} \left( \frac{X_i - \bar{X}}{\sigma} \right)^4
-
     $$
 
 4. **Calculate the Jarque-Bera Statistic ($JB$)**:
 
     $$
-
     JB = \frac{n}{6} \left( S^2 + \frac{(K - 3)^2}{4} \right)
-
     $$
 
     This statistic combines the squared skewness and the squared deviation of the kurtosis from 3 (the kurtosis of a normal distribution), weighted by sample size $n$.
@@ -135,9 +123,7 @@ The Jarque-Bera test is **not** an approximation of D'Agostino's K-squared test.
 - The test statistic is:
 
     $$
-
     JB = \frac{n}{6} \left( S^2 + \frac{(K - 3)^2}{4} \right)
-
     $$
 
 - Combines skewness and kurtosis into a single test statistic, assuming the sample follows a chi-square distribution with 2 degrees of freedom under the null hypothesis.
@@ -150,9 +136,7 @@ The Jarque-Bera test is **not** an approximation of D'Agostino's K-squared test.
 - The test statistic is:
 
     $$
-
     K^2 = Z_{\text{skewness}}^2 + Z_{\text{kurtosis}}^2
-
     $$
 
 - Like the Jarque-Bera test, $K^2$ follows a chi-square distribution with 2 degrees of freedom, but D'Agostino's test uses separate transformations for skewness and kurtosis, which makes it more robust and sensitive to deviations from normality.

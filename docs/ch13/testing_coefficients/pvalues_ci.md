@@ -40,9 +40,7 @@ A **95% confidence interval** means that if we were to take 100 different sample
 The formula for a 95% CI:
 
 $$
-
 CI = \hat{\beta}_i \pm \left( t_{\alpha/2} \times SE(\hat{\beta}_i) \right)
-
 $$
 
 where:

@@ -7,9 +7,7 @@ Homoscedasticity refers to the assumption that the variance of the errors (resid
 Formally:
 
 $$
-
 \text{Var}(\epsilon_i \mid X_i) = \sigma^2 \quad \text{for all } i
-
 $$
 
 where $\sigma^2$ is a constant that does not depend on the value of $X_i$.
@@ -17,9 +15,7 @@ where $\sigma^2$ is a constant that does not depend on the value of $X_i$.
 The opposite condition, **heteroscedasticity**, occurs when the variance of errors changes systematically with the level of the independent variable:
 
 $$
-
 \text{Var}(\epsilon_i \mid X_i) = \sigma_i^2 \quad \text{(not constant)}
-
 $$
 
 ## Importance

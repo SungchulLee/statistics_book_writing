@@ -5,9 +5,7 @@
 The normality assumption asserts that the residuals of the regression model are normally distributed, with a mean of zero:
 
 $$
-
 \epsilon_i \sim N(0, \sigma^2)
-
 $$
 
 This means that when the residuals are plotted, they should form a bell-shaped (Gaussian) curve centered around zero.

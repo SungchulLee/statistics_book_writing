@@ -20,9 +20,7 @@ When training on imbalanced data, the model learns class probabilities from the 
 One approach is to increase the **cost (weight) of minority class errors** during training:
 
 $$
-
 \ell_{\text{weighted}} = -\sum_{i=1}^{n} w_i \left[ y^{(i)} \log \hat{p}_i + (1 - y^{(i)}) \log(1 - \hat{p}_i) \right]
-
 $$
 
 where $w_i$ is a weight assigned to observation $i$.
@@ -32,9 +30,7 @@ where $w_i$ is a weight assigned to observation $i$.
 A common choice is **inverse class frequency weighting**:
 
 $$
-
 w_{\text{minority}} = \frac{1}{p_{\text{minority}}}, \quad w_{\text{majority}} = \frac{1}{p_{\text{majority}}}
-
 $$
 
 or simply: $w_{\text{minority}} = 1, w_{\text{majority}} = p_{\text{minority}} / p_{\text{majority}}$.

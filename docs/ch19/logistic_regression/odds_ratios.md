@@ -5,17 +5,13 @@
 In logistic regression, the coefficient $\theta_j$ has a direct interpretation through the **odds ratio**. Recall that the logit model relates the log-odds linearly to the features:
 
 $$
-
 \operatorname{logit}\bigl(P(Y=1\mid\mathbf{x})\bigr) = \mathbf{x}^T\boldsymbol{\theta}
-
 $$
 
 which is equivalent to
 
 $$
-
 \log\left(\frac{p}{1-p}\right) = \mathbf{x}^T\boldsymbol{\theta}
-
 $$
 
 where $p = P(Y=1\mid\mathbf{x})$.
@@ -25,9 +21,7 @@ where $p = P(Y=1\mid\mathbf{x})$.
 When we increase feature $x_j$ by one unit while holding all other features constant, the log-odds increases by $\theta_j$. Therefore, the **odds multiply by $e^{\theta_j}$**:
 
 $$
-
 \frac{\text{odds}_{\text{new}}}{\text{odds}_{\text{old}}} = e^{\theta_j}
-
 $$
 
 ### Example
@@ -67,9 +61,7 @@ When conducting inference via Maximum Likelihood Estimation, we obtain standard 
 If a 95% CI for $\theta_j$ is $[\theta_j^L, \theta_j^U]$, then the 95% CI for $OR_j = e^{\theta_j}$ is:
 
 $$
-
 [e^{\theta_j^L}, e^{\theta_j^U}]
-
 $$
 
 **Important:** A confidence interval for $OR_j$ that excludes 1.0 indicates that the coefficient $\theta_j$ is statistically significantly different from zero at the corresponding confidence level.

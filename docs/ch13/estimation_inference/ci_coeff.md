@@ -11,9 +11,7 @@ Given the sampling distributions derived in the [previous section](sampling_dist
 ### Slope
 
 $$
-
 \hat{\beta}_1 \pm t_{n-2}(0.975)\; s\sqrt{\frac{1}{\sum_{i=1}^n(x_i-\bar{x})^2}}
-
 $$
 
 This interval quantifies the uncertainty in the estimated rate of change of $y$ with respect to $x$. If the interval excludes zero, we have evidence at the 5% significance level that $x$ has a linear effect on $y$.
@@ -21,9 +19,7 @@ This interval quantifies the uncertainty in the estimated rate of change of $y$ 
 ### Response Expectation (Mean Response at x_0)
 
 $$
-
 (\hat{\beta}_0+\hat{\beta}_1 x_0) \pm t_{n-2}(0.975)\; s\sqrt{\frac{1}{n}+\frac{(x_0-\bar{x})^2}{\sum_{i=1}^n(x_i-\bar{x})^2}}
-
 $$
 
 This confidence interval captures the true mean of $y$ at a specific value $x_0$. The interval is narrowest when $x_0 = \bar{x}$ and widens as $x_0$ moves away from the center of the data, producing the characteristic "bowtie" shape when plotted across all $x_0$ values.
@@ -31,9 +27,7 @@ This confidence interval captures the true mean of $y$ at a specific value $x_0$
 ### Response (Prediction Interval at x_0)
 
 $$
-
 (\hat{\beta}_0+\hat{\beta}_1 x_0) \pm t_{n-2}(0.975)\; s\sqrt{1+\frac{1}{n}+\frac{(x_0-\bar{x})^2}{\sum_{i=1}^n(x_i-\bar{x})^2}}
-
 $$
 
 This prediction interval captures where a **new individual observation** at $x_0$ is likely to fall. It is always wider than the confidence interval for the mean response because it includes the irreducible noise term $\sigma^2$ (the leading 1 under the square root).
@@ -73,15 +67,11 @@ From the regression output we extract:
 The 95% confidence interval is:
 
 $$
-
 \hat{\beta}_1 \pm t_{18}(0.975) \times \text{SE}(\hat{\beta}_1) = 0.164 \pm 2.1009 \times 0.057
-
 $$
 
 $$
-
 = 0.164 \pm 0.1198 = (0.0442,\; 0.2838)
-
 $$
 
 **Interpretation**: We are 95% confident that the true slope relating caffeine consumption to study hours lies between 0.044 and 0.284. Since this interval does not contain zero, there is statistically significant evidence of a positive linear relationship.

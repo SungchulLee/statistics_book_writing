@@ -8,9 +8,7 @@ The **sampling distribution of the sample variance** $S^2$ describes how the var
 Let $X_1, X_2, \dots, X_n$ be i.i.d. from a population with mean $\mu$ and variance $\sigma^2$. The sample variance is:
 
 $$
-
-S^2 = \frac{1}{n-1}\sum_{i=1}^n (X_i - \bar{X})^2.
-
+S^2 = \frac{1}{n-1}\sum_{i=1}^n (X_i - \bar{X})^2
 $$
 
 ## Properties
@@ -18,9 +16,7 @@ $$
 ### Expected Value (Unbiasedness)
 
 $$
-
-E[S^2] = \sigma^2.
-
+E[S^2] = \sigma^2
 $$
 
 This unbiasedness is why we divide by $n-1$ (degrees of freedom) rather than $n$ — Bessel's correction compensates for the loss of one degree of freedom when estimating $\mu$ from the sample.
@@ -30,43 +26,33 @@ This unbiasedness is why we divide by $n-1$ (degrees of freedom) rather than $n$
 If the population is **normal**, the scaled sample variance follows a chi-square distribution:
 
 $$
-
 \frac{(n-1)S^2}{\sigma^2} = \sum_{i=1}^n \left(\frac{X_i - \bar{X}}{\sigma}\right)^2 \sim \chi^2_{n-1}
-
 $$
 
 Equivalently:
 
 $$
-
-S^2 \sim \frac{\sigma^2}{n-1} \cdot \chi^2_{n-1}.
-
+S^2 \sim \frac{\sigma^2}{n-1} \cdot \chi^2_{n-1}
 $$
 
 ### Variance of S-squared
 Under normality:
 
 $$
-
-\text{Var}(S^2) = \frac{2\sigma^4}{n-1}.
-
+\text{Var}(S^2) = \frac{2\sigma^4}{n-1}
 $$
 
 **Derivation.** Since $\text{Var}(\chi^2_{n-1}) = 2(n-1)$:
 
 $$
-
 \text{Var}\!\left(\frac{(n-1)S^2}{\sigma^2}\right) = 2(n-1) \;\;\Longrightarrow\;\;
-\text{Var}(S^2) = \frac{2\sigma^4}{n-1}.
-
+\text{Var}(S^2) = \frac{2\sigma^4}{n-1}
 $$
 
 ### Standard Error of S-squared
 
 $$
-
-\text{SE}(S^2) = \sigma^2 \sqrt{\frac{2}{n-1}} \sim O\!\left(\frac{1}{\sqrt{n}}\right).
-
+\text{SE}(S^2) = \sigma^2 \sqrt{\frac{2}{n-1}} \sim O\!\left(\frac{1}{\sqrt{n}}\right)
 $$
 
 ## Speed of Convergence
@@ -88,9 +74,7 @@ The critical distinction between $\bar{X}$ and $S^2$ lies not in speed but in **
 ❌ **Sample variance $S^2$** relies on:
 
 $$
-
-\frac{(n-1)S^2}{\sigma^2} \sim \chi^2_{n-1},
-
+\frac{(n-1)S^2}{\sigma^2} \sim \chi^2_{n-1}
 $$
 
 which **only holds under normality**. For skewed, heavy-tailed, or otherwise non-normal populations, this chi-squared result no longer applies, and $S^2$ can behave unpredictably even with large samples.
@@ -103,19 +87,15 @@ which **only holds under normality**. For skewed, heavy-tailed, or otherwise non
 **Solution.** For $Y \sim \chi^2_{n-1}$, $EY = n-1$ and $\text{Var}(Y) = 2(n-1)$.
 
 $$
-
 E\!\left[\frac{(n-1)S^2}{\sigma^2}\right] = n - 1
 \;\;\Longrightarrow\;\;
 E[S^2] = \sigma^2 = 25
-
 $$
 
 $$
-
 \text{Var}\!\left(\frac{(n-1)S^2}{\sigma^2}\right) = 2(n-1)
 \;\;\Longrightarrow\;\;
 \text{Var}(S^2) = \frac{2\sigma^4}{n-1} = \frac{2(25^2)}{9} = \frac{1250}{9} \approx 138.89
-
 $$
 
 ### Example 2: Probability Involving S-squared (Normal Population)
@@ -124,15 +104,11 @@ $$
 **Solution.**
 
 $$
-
 \frac{(n-1)S^2}{\sigma^2} = \frac{9 \times 30}{25} = 10.8
-
 $$
 
 $$
-
 P(S^2 > 30) = P(\chi^2_9 > 10.8) \approx 0.2897
-
 $$
 
 ```python
@@ -155,17 +131,13 @@ Chebyshev's inequality could provide a bound if $\text{Var}(S^2)$ were known, bu
 Using the chi-square pivot (under normality):
 
 $$
-
 P\!\left(\chi^2_{\alpha/2, \, n-1} \leq \frac{(n-1)S^2}{\sigma^2} \leq \chi^2_{1-\alpha/2, \, n-1}\right) = 1 - \alpha
-
 $$
 
 Rearranging:
 
 $$
-
 \left[\frac{(n-1)S^2}{\chi^2_{1-\alpha/2, \, n-1}}, \;\; \frac{(n-1)S^2}{\chi^2_{\alpha/2, \, n-1}}\right]
-
 $$
 
 !!! note

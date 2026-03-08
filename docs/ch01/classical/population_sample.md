@@ -35,10 +35,8 @@ To ensure that a sample is representative of the population, **random sampling**
 **Population parameters** are characteristics of the entire population, such as the population mean ($\mu$) or population variance ($\sigma^2$):
 
 $$
-
 \mu = \frac{1}{N}\sum_{i=1}^{N} x_i, \qquad
 \sigma^2 = \frac{1}{N}\sum_{i=1}^{N}(x_i - \mu)^2
-
 $$
 
 where $N$ is the total number of individuals in the population.
@@ -46,10 +44,8 @@ where $N$ is the total number of individuals in the population.
 **Sample statistics** are values calculated from the sample, such as the sample mean ($\bar{x}$) or sample variance ($s^2$). These are used to **estimate** the population parameters:
 
 $$
-
 \bar{x} = \frac{1}{n}\sum_{i=1}^{n} x_i, \qquad
 s^2 = \frac{1}{n-1}\sum_{i=1}^{n}(x_i - \bar{x})^2
-
 $$
 
 where $n$ is the number of samples. Note that the sample variance uses $n-1$ (Bessel's correction) rather than $n$ to provide an unbiased estimate of the population variance.

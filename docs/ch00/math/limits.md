@@ -9,9 +9,7 @@ Sequences and their limiting behavior are the mathematical backbone of statistic
 A **sequence** is an ordered list of real numbers indexed by the natural numbers:
 
 $$
-
 (a_n)_{n=1}^{\infty} = a_1,\, a_2,\, a_3,\, \dots
-
 $$
 
 Equivalently, a sequence is a function $a: \mathbb{N} \to \mathbb{R}$.
@@ -36,9 +34,7 @@ Equivalently, a sequence is a function $a: \mathbb{N} \to \mathbb{R}$.
 A sequence $(a_n)$ **converges** to a limit $L \in \mathbb{R}$, written $\lim_{n \to \infty} a_n = L$ or $a_n \to L$, if:
 
 $$
-
-\forall\, \varepsilon > 0,\;\; \exists\, N \in \mathbb{N} \text{ such that } n > N \implies |a_n - L| < \varepsilon.
-
+\forall\, \varepsilon > 0,\;\; \exists\, N \in \mathbb{N} \text{ such that } n > N \implies |a_n - L| < \varepsilon
 $$
 
 If no such $L$ exists, the sequence **diverges**.
@@ -66,9 +62,7 @@ This technique is used to establish bounds on tail probabilities and approximati
 A **series** is the sequence of partial sums of a sequence:
 
 $$
-
 S_N = \sum_{n=1}^{N} a_n
-
 $$
 
 The series **converges** if $\lim_{N \to \infty} S_N$ exists and is finite.
@@ -89,9 +83,7 @@ The geometric series identity is used to derive the PMF normalizations for geome
 ### Definition
 
 $$
-
-\lim_{x \to a} f(x) = L \quad \Longleftrightarrow \quad \forall\, \varepsilon > 0,\; \exists\, \delta > 0 \text{ s.t. } 0 < |x - a| < \delta \implies |f(x) - L| < \varepsilon.
-
+\lim_{x \to a} f(x) = L \quad \Longleftrightarrow \quad \forall\, \varepsilon > 0,\; \exists\, \delta > 0 \text{ s.t. } 0 < |x - a| < \delta \implies |f(x) - L| < \varepsilon
 $$
 
 ### Continuity
@@ -107,9 +99,7 @@ Continuous functions preserve limits: if $a_n \to L$ and $f$ is continuous at $L
 ### Derivative
 
 $$
-
 f'(x) = \lim_{h \to 0} \frac{f(x+h) - f(x)}{h}
-
 $$
 
 ### Key Rules
@@ -128,17 +118,13 @@ $$
 For $f: \mathbb{R}^n \to \mathbb{R}$, the **partial derivative** with respect to $x_i$ is
 
 $$
-
 \frac{\partial f}{\partial x_i} = \lim_{h \to 0} \frac{f(x_1, \dots, x_i + h, \dots, x_n) - f(x_1, \dots, x_n)}{h}
-
 $$
 
 The **gradient** is the vector of all partial derivatives:
 
 $$
-
 \nabla f = \left(\frac{\partial f}{\partial x_1}, \dots, \frac{\partial f}{\partial x_n}\right)
-
 $$
 
 Gradients are used extensively in maximum likelihood estimation and gradient-based optimization (Chapters 6, 7, 13, 14).
@@ -148,9 +134,7 @@ Gradients are used extensively in maximum likelihood estimation and gradient-bas
 ### Definite Integral
 
 $$
-
 \int_a^b f(x)\, dx
-
 $$
 
 represents the signed area under $f$ from $a$ to $b$. For probability, this computes $P(a \leq X \leq b)$ when $f$ is a probability density function.
@@ -160,9 +144,7 @@ represents the signed area under $f$ from $a$ to $b$. For probability, this comp
 If $F'(x) = f(x)$, then
 
 $$
-
 \int_a^b f(x)\, dx = F(b) - F(a)
-
 $$
 
 ### Key Integrals
@@ -180,29 +162,21 @@ $$
 The Taylor series of $f$ about $x = a$ is
 
 $$
-
 f(x) = \sum_{k=0}^{\infty} \frac{f^{(k)}(a)}{k!}(x - a)^k = f(a) + f'(a)(x-a) + \frac{f''(a)}{2!}(x-a)^2 + \cdots
-
 $$
 
 ### Important Expansions
 
 $$
-
 e^x = 1 + x + \frac{x^2}{2!} + \frac{x^3}{3!} + \cdots
-
 $$
 
 $$
-
 \ln(1 + x) = x - \frac{x^2}{2} + \frac{x^3}{3} - \cdots \qquad (|x| \leq 1,\; x \neq -1)
-
 $$
 
 $$
-
 (1 + x)^n \approx 1 + nx + \frac{n(n-1)}{2}x^2 + \cdots
-
 $$
 
 Taylor approximations are the workhorse behind the delta method, the derivation of the Central Limit Theorem via moment generating functions, and asymptotic expansions of test statistics.
@@ -229,9 +203,7 @@ Asymptotic notation describes the growth rate of functions and sequences, which 
 In statistics, we often write:
 
 $$
-
 \hat{\theta}_n - \theta = O_p(n^{-1/2})
-
 $$
 
 This means the estimation error shrinks at rate $1/\sqrt{n}$, which is the standard rate for many estimators (e.g., the sample mean). The subscript $p$ indicates **convergence in probability**, formalized in Chapter 3.

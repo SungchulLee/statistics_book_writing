@@ -7,17 +7,13 @@ Bartlett's test assesses the equality of variances across multiple groups. It is
 **Null Hypothesis ($H_0$):** The variances are equal across the groups:
 
 $$
-
 H_0: \sigma_1^2 = \sigma_2^2 = \dots = \sigma_k^2
-
 $$
 
 **Alternative Hypothesis ($H_1$):** At least one group has a variance that differs from the others:
 
 $$
-
 H_1: \sigma_i^2 \neq \sigma_j^2 \quad \text{for at least one pair} \quad i \neq j
-
 $$
 
 ## Assumptions
@@ -31,9 +27,7 @@ $$
 The test statistic for Bartlett's test is derived from the ratio of the pooled variance to the individual sample variances:
 
 $$
-
 T = \frac{(N - k) \ln(S_p^2) - \sum_{i=1}^k (n_i - 1) \ln(S_i^2)}{1 + \frac{1}{3(k - 1)} \left( \sum_{i=1}^k \frac{1}{n_i - 1} - \frac{1}{N - k} \right)} \sim \chi^2_{k-1}
-
 $$
 
 where:
@@ -43,9 +37,7 @@ where:
 - $S_p^2$ is the pooled variance:
 
 $$
-
 S_p^2 = \frac{\sum_{i=1}^k (n_i - 1) S_i^2}{N - k}
-
 $$
 
 - $S_i^2$ is the sample variance for group $i$.
@@ -55,9 +47,7 @@ The test statistic $T$ follows a chi-square distribution with $k - 1$ degrees of
 ## Decision Rule
 
 $$
-
 T > \chi^2_{\text{critical}} \quad \Rightarrow \quad \text{Reject } H_0
-
 $$
 
 ## Limitations

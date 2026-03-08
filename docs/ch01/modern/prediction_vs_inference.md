@@ -9,9 +9,7 @@ Data analysis serves two fundamentally different goals: **prediction** (forecast
 In a **prediction** task, the goal is to estimate the value of an outcome variable $Y$ for new observations as accurately as possible, given input features $X$. The emphasis is on minimizing prediction error, not on understanding *why* the prediction works.
 
 $$
-
 \hat{Y} = \hat{f}(X)
-
 $$
 
 The quality of $\hat{f}$ is judged by a loss function evaluated on **unseen data**, such as mean squared error (MSE) or classification accuracy. The internal structure of $\hat{f}$—whether it is a linear formula or a deep neural network—is secondary to its predictive performance.

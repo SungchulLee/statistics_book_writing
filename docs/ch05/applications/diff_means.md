@@ -11,15 +11,11 @@ Let $X_1^{(1)}, \dots, X_{n_1}^{(1)}$ be i.i.d. from population 1 with mean $\mu
 ### Common Properties (All Cases)
 
 $$
-
 E[\bar{X}_1 - \bar{X}_2] = \mu_1 - \mu_2
-
 $$
 
 $$
-
 \text{Var}(\bar{X}_1 - \bar{X}_2) = \frac{\sigma_1^2}{n_1} + \frac{\sigma_2^2}{n_2}
-
 $$
 
 ## Case A: Population Variances Known
@@ -27,17 +23,13 @@ $$
 When $\sigma_1^2$ and $\sigma_2^2$ are known:
 
 $$
-
 Z = \frac{(\bar{X}_1 - \bar{X}_2) - (\mu_1 - \mu_2)}{\sqrt{\frac{\sigma_1^2}{n_1} + \frac{\sigma_2^2}{n_2}}} \sim N(0, 1)
-
 $$
 
 **Confidence interval:**
 
 $$
-
 (\bar{X}_1 - \bar{X}_2) \pm z_{\alpha/2} \sqrt{\frac{\sigma_1^2}{n_1} + \frac{\sigma_2^2}{n_2}}
-
 $$
 
 ## Case B: Large Sample Sizes
@@ -45,68 +37,52 @@ $$
 When $n_1$ and $n_2$ are both large (CLT applies), replace $\sigma_i^2$ with $S_i^2$:
 
 $$
-
 Z = \frac{(\bar{X}_1 - \bar{X}_2) - (\mu_1 - \mu_2)}{\sqrt{\frac{S_1^2}{n_1} + \frac{S_2^2}{n_2}}} \approx N(0, 1)
-
 $$
 
 **Confidence interval:**
 
 $$
-
 (\bar{X}_1 - \bar{X}_2) \pm z_{\alpha/2} \sqrt{\frac{S_1^2}{n_1} + \frac{S_2^2}{n_2}}
-
 $$
 
 ## Case C: Normal Populations, Equal Variances (Pooled t)
 When both populations are normal and $\sigma_1^2 = \sigma_2^2 = \sigma^2$:
 
 $$
-
 T = \frac{(\bar{X}_1 - \bar{X}_2) - (\mu_1 - \mu_2)}{\sqrt{S_p^2\!\left(\frac{1}{n_1} + \frac{1}{n_2}\right)}} \sim t_{n_1 + n_2 - 2}
-
 $$
 
 where the **pooled variance** is:
 
 $$
-
 S_p^2 = \frac{(n_1 - 1)S_1^2 + (n_2 - 1)S_2^2}{n_1 + n_2 - 2}
 = \frac{\sum_{i=1}^{n_1}(X_i^{(1)} - \bar{X}_1)^2 + \sum_{i=1}^{n_2}(X_i^{(2)} - \bar{X}_2)^2}{n_1 + n_2 - 2}
-
 $$
 
 **Confidence interval:**
 
 $$
-
 (\bar{X}_1 - \bar{X}_2) \pm t_{\alpha/2, \, n_1+n_2-2} \sqrt{S_p^2\!\left(\frac{1}{n_1} + \frac{1}{n_2}\right)}
-
 $$
 
 ## Case D: Normal Populations, Unequal Variances (Welch's t)
 When both populations are normal but $\sigma_1^2 \neq \sigma_2^2$:
 
 $$
-
 T = \frac{(\bar{X}_1 - \bar{X}_2) - (\mu_1 - \mu_2)}{\sqrt{\frac{S_1^2}{n_1} + \frac{S_2^2}{n_2}}} \sim t_\nu
-
 $$
 
 where the **Welch–Satterthwaite degrees of freedom** are:
 
 $$
-
 \nu = \frac{\left(\frac{S_1^2}{n_1} + \frac{S_2^2}{n_2}\right)^2}{\frac{\left(\frac{S_1^2}{n_1}\right)^2}{n_1} + \frac{\left(\frac{S_2^2}{n_2}\right)^2}{n_2}}
-
 $$
 
 **Confidence interval:**
 
 $$
-
 (\bar{X}_1 - \bar{X}_2) \pm t_{\alpha/2, \, \nu} \sqrt{\frac{S_1^2}{n_1} + \frac{S_2^2}{n_2}}
-
 $$
 
 ## Case E: Conservative Degrees of Freedom
@@ -114,17 +90,13 @@ $$
 When the Welch formula is inconvenient, a conservative (safe) alternative uses:
 
 $$
-
 \text{df} = \min(n_1 - 1, \; n_2 - 1)
-
 $$
 
 This always underestimates the true degrees of freedom, producing wider confidence intervals.
 
 $$
-
 T = \frac{(\bar{X}_1 - \bar{X}_2) - (\mu_1 - \mu_2)}{\sqrt{\frac{S_1^2}{n_1} + \frac{S_2^2}{n_2}}} \sim t_{\min(n_1-1, \, n_2-1)}
-
 $$
 
 ## Decision Guide
@@ -144,37 +116,27 @@ $$
 **Solution.** Since $\sigma_A, \sigma_B$ are known (Case A):
 
 $$
-
 \text{SE} = \sqrt{\frac{4^2}{40} + \frac{3^2}{40}} = \sqrt{\frac{16 + 9}{40}} = \sqrt{0.625} \approx 0.7906
-
 $$
 
 **Upper tail:**
 
 $$
-
 Z = \frac{6 - (130 - 125)}{0.7906} = \frac{1}{0.7906} \approx 1.265
-
 $$
 
 $$
-
 P(\bar{X}_A - \bar{X}_B > 6) = P(Z > 1.265) \approx 0.1030
-
 $$
 
 **Lower tail:**
 
 $$
-
 Z = \frac{-6 - (130 - 125)}{0.7906} = \frac{-11}{0.7906} \approx -13.91
-
 $$
 
 $$
-
 P(\bar{X}_A - \bar{X}_B < -6) \approx 0.0000
-
 $$
 
 **Answer:** $P(|\bar{X}_A - \bar{X}_B| > 6) \approx 0.1030$.
@@ -197,9 +159,7 @@ print(f"P(|X_bar_A - X_bar_B| > 6) = {prob:.4f}")
 **Solution.**
 
 $$
-
 \text{SE} = \sqrt{\frac{15^2}{36} + \frac{20^2}{49}} = \sqrt{6.25 + 8.16} = \sqrt{14.41} \approx 3.80
-
 $$
 
 ## Summary
@@ -215,9 +175,7 @@ $$
 In all cases, the confidence interval takes the form:
 
 $$
-
 (\bar{X}_1 - \bar{X}_2) \pm (\text{critical value}) \times \text{SE}
-
 $$
 
 The choice of critical value ($z^*$ or $t^*$) and SE formula depend on the case.

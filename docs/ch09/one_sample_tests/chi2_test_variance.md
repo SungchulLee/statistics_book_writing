@@ -7,9 +7,7 @@ The chi-square test for variance tests whether the population variance equals a 
 ## Test Statistic
 
 $$
-
 \chi^2 = \frac{(n-1)S^2}{\sigma_0^2} \sim \chi^2_{n-1} \text{ under } H_0
-
 $$
 
 ## Assumption

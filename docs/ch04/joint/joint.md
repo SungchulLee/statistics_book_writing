@@ -11,20 +11,16 @@ A **joint distribution** describes the probabilistic behavior of two or more ran
 For discrete random variables $X$ and $Y$, the **joint probability mass function** is:
 
 $$
-
 p_{X,Y}(x, y) = P(X = x, Y = y)
-
 $$
 
 ### Requirements
 
 $$
-
 \begin{aligned}
 (1) &\quad p_{X,Y}(x, y) \geq 0 \quad \text{for all } (x, y) \\
 (2) &\quad \sum_x \sum_y p_{X,Y}(x, y) = 1
 \end{aligned}
-
 $$
 
 ### Computing Probabilities
@@ -32,9 +28,7 @@ $$
 For any region $A \subseteq \mathbb{R}^2$:
 
 $$
-
 P((X, Y) \in A) = \sum_{(x,y) \in A} p_{X,Y}(x, y)
-
 $$
 
 ---
@@ -44,36 +38,28 @@ $$
 For continuous random variables $X$ and $Y$, the **joint probability density function** $f_{X,Y}(x, y)$ satisfies:
 
 $$
-
 P((X, Y) \in A) = \iint_A f_{X,Y}(x, y)\,dx\,dy
-
 $$
 
 ### Requirements
 
 $$
-
 \begin{aligned}
 (1) &\quad f_{X,Y}(x, y) \geq 0 \quad \text{for all } (x, y) \\
 (2) &\quad \int_{-\infty}^{\infty}\int_{-\infty}^{\infty} f_{X,Y}(x, y)\,dx\,dy = 1
 \end{aligned}
-
 $$
 
 ### Joint CDF
 
 $$
-
 F_{X,Y}(x, y) = P(X \leq x, Y \leq y) = \int_{-\infty}^x \int_{-\infty}^y f_{X,Y}(s, t)\,dt\,ds
-
 $$
 
 The PDF is recovered by differentiation:
 
 $$
-
 f_{X,Y}(x, y) = \frac{\partial^2}{\partial x \, \partial y} F_{X,Y}(x, y)
-
 $$
 
 ---
@@ -83,15 +69,11 @@ $$
 Two random variables $X$ and $Y$ are **independent** if and only if the joint distribution factors:
 
 $$
-
 \text{Discrete:} \quad p_{X,Y}(x, y) = p_X(x) \cdot p_Y(y) \quad \text{for all } x, y
-
 $$
 
 $$
-
 \text{Continuous:} \quad f_{X,Y}(x, y) = f_X(x) \cdot f_Y(y) \quad \text{for all } x, y
-
 $$
 
 Equivalently, $F_{X,Y}(x,y) = F_X(x) \cdot F_Y(y)$ for all $x, y$.
@@ -105,31 +87,23 @@ Equivalently, $F_{X,Y}(x,y) = F_X(x) \cdot F_Y(y)$ for all $x, y$.
 For a function $g(X, Y)$:
 
 $$
-
 \text{Discrete:} \quad E[g(X,Y)] = \sum_x \sum_y g(x,y) \cdot p_{X,Y}(x,y)
-
 $$
 
 $$
-
 \text{Continuous:} \quad E[g(X,Y)] = \int\!\!\int g(x,y) \cdot f_{X,Y}(x,y)\,dx\,dy
-
 $$
 
 ### Linearity (always holds)
 
 $$
-
 E[aX + bY + c] = aE[X] + bE[Y] + c
-
 $$
 
 ### Variance of a Sum
 
 $$
-
 \text{Var}(X + Y) = \text{Var}(X) + \text{Var}(Y) + 2\text{Cov}(X, Y)
-
 $$
 
 If $X \perp Y$: $\text{Var}(X + Y) = \text{Var}(X) + \text{Var}(Y)$.
@@ -151,15 +125,11 @@ Compute $P(X + Y \leq 2)$ and $E[XY]$.
 **Solution:**
 
 $$
-
 P(X+Y \leq 2) = p(0,0) + p(0,1) + p(0,2) + p(1,0) + p(1,1) + p(2,0) = 0.10 + 0.15 + 0.05 + 0.10 + 0.25 + 0.05 = 0.70
-
 $$
 
 $$
-
 E[XY] = \sum_x \sum_y xy \cdot p(x,y) = 0 + 0 + 0 + 0 + 1(1)(0.25) + 1(2)(0.10) + 0 + 2(1)(0.10) + 2(2)(0.10) = 0.85
-
 $$
 
 ---
@@ -171,23 +141,17 @@ $$
 **Solution:** Verification:
 
 $$
-
 \int_0^1 \int_0^y 6(1-y)\,dx\,dy = \int_0^1 6y(1-y)\,dy = 6\left[\frac{y^2}{2} - \frac{y^3}{3}\right]_0^1 = 6\left(\frac{1}{2} - \frac{1}{3}\right) = 1 \checkmark
-
 $$
 
 $$
-
 P\left(X < \tfrac{1}{2}, Y < \tfrac{1}{2}\right) = \int_0^{1/2}\!\int_0^y 6(1-y)\,dx\,dy = \int_0^{1/2} 6y(1-y)\,dy = 6\left[\frac{y^2}{2} - \frac{y^3}{3}\right]_0^{1/2} = \frac{5}{8} \cdot \frac{6}{8} = \frac{5}{16}
-
 $$
 
 Wait — let us recompute carefully:
 
 $$
-
 \int_0^{1/2} 6y(1-y)\,dy = 6\left[\frac{y^2}{2} - \frac{y^3}{3}\right]_0^{1/2} = 6\left(\frac{1}{8} - \frac{1}{24}\right) = 6 \cdot \frac{2}{24} = \frac{1}{2}
-
 $$
 
 So $P(X < 1/2, Y < 1/2) = 1/2$.

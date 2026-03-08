@@ -7,9 +7,7 @@ When data contains outliers, classical variance estimators can be severely affec
 ## Median Absolute Deviation (MAD)
 
 $$
-
 \text{MAD} = \text{Median}(|X_i - \text{Median}(X)|)
-
 $$
 
 For Normal data, $\sigma \approx 1.4826 \cdot \text{MAD}$.
@@ -17,9 +15,7 @@ For Normal data, $\sigma \approx 1.4826 \cdot \text{MAD}$.
 ## IQR-based Estimator
 
 $$
-
 \hat{\sigma}_{IQR} = \frac{\text{IQR}}{1.349}
-
 $$
 
 ## Comparison

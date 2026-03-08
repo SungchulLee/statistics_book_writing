@@ -19,17 +19,13 @@ We compute the Shapiro-Wilk test statistic $W$ using the following steps:
 3. **Covariance Matrix**: We use a covariance matrix $\Sigma$ of the order statistics from the normal distribution to generate weights $a_i$. These weights are computed to optimize the sensitivity of the test to departures from normality. The vector of weights is denoted by $\mathbf{a}^T = [a_1, a_2, \dots, a_n]$:
 
     $$
-
     [a_1, a_2, \dots, a_n] = \frac{[m_1, m_2, \dots, m_n]\Sigma^{-1}}{\sqrt{[m_1, m_2, \dots, m_n]\Sigma^{-1}\Sigma^{-1}[m_1, m_2, \dots, m_n]^T}}
-
     $$
 
 4. **Test Statistic $W$**: Then, we compute the test statistic $W$ as:
 
     $$
-
     W = \frac{\left( \sum_{i=1}^{n} a_i X_{(i)} \right)^2}{\sum_{i=1}^{n} (X_i - \bar{X})^2}
-
     $$
 
     where

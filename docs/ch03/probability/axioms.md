@@ -13,25 +13,19 @@ These axioms capture the essential rules in an accessible form:
 1. **Non-negativity:** For any event $A$,
 
 $$
-
 P(A) \geq 0
-
 $$
 
 2. **Normalization:** The probability of the entire sample space is 1:
 
 $$
-
 P(\Omega) = 1
-
 $$
 
 3. **Additivity:** For any two mutually exclusive events $A$ and $B$ (i.e., $A \cap B = \emptyset$),
 
 $$
-
 P(A \cup B) = P(A) + P(B)
-
 $$
 
 ---
@@ -41,13 +35,11 @@ $$
 A **probability measure** $P$ is a real-valued function defined on events that satisfies:
 
 $$
-
 \begin{aligned}
 (1) &\quad P(\Omega) = 1, \quad P(\emptyset) = 0 \\[6pt]
 (2) &\quad 0 \leq P(A) \leq 1 \quad \text{for any event } A \\[6pt]
 (3) &\quad P\left(\bigcup_{i=1}^{\infty} A_i\right) = \sum_{i=1}^{\infty} P(A_i) \quad \text{for any sequence of disjoint events } A_i
 \end{aligned}
-
 $$
 
 The key difference from the naive axioms is axiom (3): **countable additivity** extends the finite additivity rule to an infinite (countable) collection of disjoint events.
@@ -61,9 +53,7 @@ The key difference from the naive axioms is axiom (3): **countable additivity** 
 Let $A = \{2, 4, 6\}$ (even) and $B = \{1, 3, 5\}$ (odd) when rolling a fair six-sided die. Since $A \cap B = \emptyset$:
 
 $$
-
 P(A \cup B) = P(A) + P(B) = \frac{3}{6} + \frac{3}{6} = 1
-
 $$
 
 This satisfies the normalization axiom since $A \cup B = \Omega$.

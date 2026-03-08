@@ -11,28 +11,23 @@
 ### Definition
 
 $$
-
 \text{Cov}(X, Y) = E[(X - \mu_X)(Y - \mu_Y)] = E[XY] - E[X]E[Y]
-
 $$
 
 ### Proof of Equivalent Forms
 
 $$
-
 \begin{aligned}
 \text{Cov}(X,Y) &= E[(X - \mu_X)(Y - \mu_Y)] \\
 &= E[XY - X\mu_Y - \mu_X Y + \mu_X \mu_Y] \\
 &= E[XY] - \mu_Y E[X] - \mu_X E[Y] + \mu_X \mu_Y \\
 &= E[XY] - E[X]E[Y]
 \end{aligned}
-
 $$
 
 ### Properties
 
 $$
-
 \begin{aligned}
 (1) &\quad \text{Cov}(X, X) = \text{Var}(X) \\[4pt]
 (2) &\quad \text{Cov}(X, Y) = \text{Cov}(Y, X) \quad \text{(symmetry)} \\[4pt]
@@ -40,7 +35,6 @@ $$
 (4) &\quad \text{Cov}\left(\sum_i X_i, \sum_j Y_j\right) = \sum_i \sum_j \text{Cov}(X_i, Y_j) \quad \text{(bilinearity)} \\[4pt]
 (5) &\quad X \perp Y \implies \text{Cov}(X, Y) = 0
 \end{aligned}
-
 $$
 
 **Warning:** The converse of (5) is **false** in general. Zero covariance does not imply independence.
@@ -50,23 +44,17 @@ $$
 The general formula for the variance of a sum follows from bilinearity:
 
 $$
-
 \text{Var}\left(\sum_{i=1}^n X_i\right) = \sum_{i=1}^n \text{Var}(X_i) + 2\sum_{i < j} \text{Cov}(X_i, X_j)
-
 $$
 
 For two variables:
 
 $$
-
 \text{Var}(X + Y) = \text{Var}(X) + \text{Var}(Y) + 2\text{Cov}(X, Y)
-
 $$
 
 $$
-
 \text{Var}(X - Y) = \text{Var}(X) + \text{Var}(Y) - 2\text{Cov}(X, Y)
-
 $$
 
 ---
@@ -78,39 +66,31 @@ $$
 The **Pearson correlation coefficient** normalizes covariance by the standard deviations:
 
 $$
-
 \rho(X, Y) = \text{Corr}(X, Y) = \frac{\text{Cov}(X, Y)}{\sigma_X \sigma_Y} = \frac{\text{Cov}(X, Y)}{\sqrt{\text{Var}(X)\,\text{Var}(Y)}}
-
 $$
 
 ### Properties
 
 $$
-
 \begin{aligned}
 (1) &\quad -1 \leq \rho(X, Y) \leq 1 \\[4pt]
 (2) &\quad \rho(X, Y) = \pm 1 \iff Y = aX + b \text{ for some } a \neq 0 \\[4pt]
 (3) &\quad \rho(aX + b, \, cY + d) = \text{sign}(ac) \cdot \rho(X, Y) \\[4pt]
 (4) &\quad \rho(X, Y) = 0 \text{ means } X, Y \text{ are **uncorrelated** (no linear relationship)}
 \end{aligned}
-
 $$
 
 ### Proof that |rho| <= 1 (Cauchy–Schwarz)
 By the Cauchy–Schwarz inequality:
 
 $$
-
 |E[UV]|^2 \leq E[U^2] \cdot E[V^2]
-
 $$
 
 Setting $U = X - \mu_X$ and $V = Y - \mu_Y$:
 
 $$
-
 |\text{Cov}(X,Y)|^2 \leq \text{Var}(X) \cdot \text{Var}(Y) \implies |\rho(X,Y)| \leq 1
-
 $$
 
 ---
@@ -136,15 +116,11 @@ $$
 For a random vector $\mathbf{X} = (X_1, X_2, \ldots, X_n)^\top$, the **covariance matrix** is:
 
 $$
-
 \boldsymbol{\Sigma} = \text{Cov}(\mathbf{X}) = E[(\mathbf{X} - \boldsymbol{\mu})(\mathbf{X} - \boldsymbol{\mu})^\top]
-
 $$
 
 $$
-
 \Sigma_{ij} = \text{Cov}(X_i, X_j), \qquad \Sigma_{ii} = \text{Var}(X_i)
-
 $$
 
 The covariance matrix is always symmetric and positive semi-definite.
@@ -152,9 +128,7 @@ The covariance matrix is always symmetric and positive semi-definite.
 ### Correlation Matrix
 
 $$
-
 R_{ij} = \frac{\Sigma_{ij}}{\sqrt{\Sigma_{ii} \Sigma_{jj}}} = \rho(X_i, X_j)
-
 $$
 
 The diagonal entries of $\mathbf{R}$ are all 1.
@@ -173,39 +147,27 @@ The diagonal entries of $\mathbf{R}$ are all 1.
 **Solution:**
 
 $$
-
 E[X] = 0(0.3) + 1(0.7) = 0.7, \quad E[Y] = 0(0.5) + 1(0.5) = 0.5
-
 $$
 
 $$
-
 E[XY] = 0(0) \cdot 0.2 + 0(1) \cdot 0.1 + 1(0) \cdot 0.3 + 1(1) \cdot 0.4 = 0.4
-
 $$
 
 $$
-
 \text{Cov}(X,Y) = E[XY] - E[X]E[Y] = 0.4 - 0.7 \cdot 0.5 = 0.05
-
 $$
 
 $$
-
 \text{Var}(X) = E[X^2] - (E[X])^2 = 0.7 - 0.49 = 0.21
-
 $$
 
 $$
-
 \text{Var}(Y) = E[Y^2] - (E[Y])^2 = 0.5 - 0.25 = 0.25
-
 $$
 
 $$
-
 \rho(X,Y) = \frac{0.05}{\sqrt{0.21 \cdot 0.25}} = \frac{0.05}{0.2291} \approx 0.218
-
 $$
 
 ---

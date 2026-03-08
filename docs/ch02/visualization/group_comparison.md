@@ -287,13 +287,11 @@ print(dh)
 Two-way frequency tables directly relate to joint, marginal, and conditional distributions:
 
 $$
-
 \begin{array}{ll}
 \text{Chain rule:} & p(x, y) = p(x) \, p(y|x) \\
 \text{Marginalization:} & p(x) = \sum_y p(x, y) \\
 \text{Conditioning:} & p(y|x) = \frac{p(x, y)}{p(x)}
 \end{array}
-
 $$
 
 ---
@@ -301,12 +299,10 @@ $$
 ## 9. Data Types and Appropriate Visualizations
 
 $$
-
 \text{Data} \begin{cases}
 \text{Categorical Data: Pie Chart, Bar Chart, Mosaic Plot, \ldots} \\
 \text{Quantitative Data: Histogram, Box Plot, Stem Plot, Time Plot, \ldots}
 \end{cases}
-
 $$
 
 ## Summary

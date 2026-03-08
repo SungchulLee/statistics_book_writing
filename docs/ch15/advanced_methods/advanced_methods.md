@@ -18,17 +18,13 @@ In modern statistics, especially when traditional parametric tests fail due to v
 **Null Hypothesis ($H_0$):** The variances are equal across the groups:
 
 $$
-
 H_0: \sigma_1^2 = \sigma_2^2 = \dots = \sigma_k^2
-
 $$
 
 **Alternative Hypothesis ($H_1$):** At least one group has a variance different from the others:
 
 $$
-
 H_1: \sigma_i^2 \neq \sigma_j^2 \quad \text{for at least one pair} \quad i \neq j
-
 $$
 
 ### Python Implementation
@@ -91,17 +87,13 @@ In Bayesian variance testing, we estimate the posterior distribution of variance
 **Null Hypothesis ($H_0$):** The variances are equal across groups:
 
 $$
-
 H_0: \sigma_1^2 = \sigma_2^2 = \dots = \sigma_k^2
-
 $$
 
 **Alternative Hypothesis ($H_1$):** At least one group has a different variance:
 
 $$
-
 H_1: \sigma_i^2 \neq \sigma_j^2 \quad \text{for at least one pair} \quad i \neq j
-
 $$
 
 ### Bayesian Inference Process
@@ -109,33 +101,25 @@ $$
 **1. Prior Distribution:** Choose a prior distribution for the variance parameters $\sigma_i^2$. A common choice is the inverse-gamma distribution:
 
 $$
-
 \sigma_i^2 \sim \text{InverseGamma}(\alpha, \beta)
-
 $$
 
 **2. Likelihood:** Model the likelihood of the data given the variances. For normally distributed data:
 
 $$
-
 X_i \sim \mathcal{N}(0, \sigma_i^2)
-
 $$
 
 **3. Posterior Distribution:** Use Bayes' theorem to combine the prior and likelihood to obtain the posterior distribution for the variances:
 
 $$
-
 P(\sigma_i^2 \mid \text{data}) \propto P(\text{data} \mid \sigma_i^2) \, P(\sigma_i^2)
-
 $$
 
 **4. Bayes Factor:** To test for equality of variances, calculate the Bayes Factor which quantifies the strength of evidence for the null hypothesis vs. the alternative:
 
 $$
-
 BF = \frac{P(\text{data} \mid H_0)}{P(\text{data} \mid H_1)}
-
 $$
 
 A Bayes Factor greater than 1 supports the null hypothesis, while a value less than 1 supports the alternative hypothesis.

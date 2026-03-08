@@ -7,9 +7,7 @@ The one-sample Z-test for proportions tests whether a population proportion equa
 ## Test Statistic
 
 $$
-
 Z = \frac{\hat{p} - p_0}{\sqrt{p_0(1-p_0)/n}}
-
 $$
 
 where $\hat{p} = X/n$ is the sample proportion.
