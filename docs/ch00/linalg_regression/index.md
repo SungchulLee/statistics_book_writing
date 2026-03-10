@@ -1,20 +1,13 @@
-# Appendix A: Linear Algebra for Regression
+# Linear Algebra for Regression
 
+This appendix develops the matrix theory needed for regression analysis, from special matrix types to sampling distribution derivations.
 
 !!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
-## Overview
-
-This appendix provides the linear algebra foundations needed for understanding regression. We cover special matrix types (diagonal, idempotent, symmetric, positive definite, projection), and connect matrix theory to statistical results (quadratic forms, sampling distributions).
-
-## Learning Objectives
-
-After completing this chapter, you should be able to understand and apply the key concepts covered in each section below.
+    This is a section landing page and does not follow the five-section structure.
 
 ## Sections
 
 | Section | Topic |
 |---|---|
-| A.1 | Square Matrices |
-| A.2 | Linear Algebra and Statistics |
+| A.1 | Square Matrices (similar, diagonalizable, idempotent, symmetric, positive definite, projection) |
+| A.2 | Linear Algebra and Statistics (quadratic forms, OLS sampling distributions) |
