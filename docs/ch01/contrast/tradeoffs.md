@@ -1,69 +1,53 @@
 # Strengths and Limitations of Each Approach
 
+The classical and modern approaches are complementary, not competing. Understanding their tradeoffs guides the choice of methodology for any given problem.
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
-## Overview
-
-The **classical** (design-your-data-collection) and **modern** (analyze-the-data-you-have) approaches are not competitors—they are complementary tools that address different aspects of data analysis. Understanding their respective strengths and limitations is essential for choosing the right methodology for a given problem.
-
-## Side-by-Side Comparison
+## Definition
 
 | Dimension | Classical (Designed Collection) | Modern (Algorithmic Learning) |
 |---|---|---|
-| **Starting point** | Research question → design → data | Existing data → algorithm → insight |
-| **Data source** | Controlled experiments, surveys | Observational logs, databases, sensors |
-| **Primary goal** | Inference and causal understanding | Prediction and pattern discovery |
-| **Causality** | Strong (via randomization) | Weak (association only, without extra techniques) |
-| **Uncertainty quantification** | Built-in (CIs, p-values, standard errors) | Requires additional effort (bootstrap, calibration) |
-| **Scalability** | Limited by cost and logistics | Scales to billions of observations |
-| **Data types** | Structured, numeric, tabular | Any: text, images, audio, graphs |
-| **Assumptions** | Explicit and verifiable | Minimal or implicit |
-| **Interpretability** | High (parameters have meaning) | Often low (black-box models) |
-| **Bias control** | By design (randomization, blinding) | Post-hoc adjustment (reweighting, matching) |
-| **Cost** | High (designing and running studies) | Lower (data often already exists) |
-| **Speed** | Slow (months to years for data collection) | Fast (immediate analysis of existing data) |
-| **Overfitting risk** | Low (simple models, small parameter space) | High (must be managed carefully) |
+| Starting point | Research question then design then data | Existing data then algorithm then insight |
+| Primary goal | Inference and causal understanding | Prediction and pattern discovery |
+| Causality | Strong (via randomization) | Weak (association only) |
+| Scalability | Limited by cost | Scales to billions of observations |
+| Interpretability | High | Often low (black-box models) |
+| Uncertainty | Built-in (CIs, p-values) | Requires bootstrap, calibration |
 
-## When to Use Which
+## Explanation
 
-### Favor the Classical Approach When:
+**Favor the classical approach** when causal claims are needed (clinical trials, A/B tests, policy evaluation), regulatory standards require designed experiments, or precise uncertainty quantification with probabilistic guarantees is essential.
 
-- You need to establish a **causal relationship** (e.g., "Does this drug work?").
-- **Regulatory standards** require designed experiments (e.g., FDA clinical trials).
-- The population is well-defined and accessible for sampling.
-- You need precise **uncertainty quantification** with clear probabilistic guarantees.
-- The stakes of an incorrect conclusion are very high.
+**Favor the modern approach** when prediction is the primary goal, data already exists in large volumes, data is high-dimensional or unstructured, or speed of iteration matters.
 
-### Favor the Modern Approach When:
+**Combine both** when you need causal inference at scale (double/debiased ML, causal forests), when classical design (randomization) generates data analyzed by modern algorithms, or when post-hoc interpretability tools (SHAP, LIME) make black-box predictions understandable.
 
-- You need the best possible **prediction** and interpretability is secondary.
-- The data already exists in large volumes and collection is not feasible.
-- The data is **high-dimensional** or **unstructured** (images, text, time series).
-- You are solving a problem where the relationships are too complex for a simple statistical model.
-- Speed of iteration matters (e.g., A/B testing in tech, real-time fraud detection).
+## Examples
 
-### Combine Both When:
+```python
+import numpy as np
+from scipy import stats
 
-- You want **causal inference at scale** (e.g., double/debiased machine learning, causal forests).
-- You use **classical principles** (randomization, stratification) to design data collection and then **modern algorithms** to analyze the resulting data.
-- You apply **post-hoc interpretability tools** (SHAP, LIME) to make black-box predictions more understandable.
-- You need both accurate predictions and defensible causal claims (common in policy evaluation and quantitative finance).
+np.random.seed(42)
+n = 500
+true_effect = 2.0
 
-## Example: A/B Testing Meets Machine Learning
+# Classical: A/B test with randomization
+group = np.random.choice([0, 1], size=n)
+outcome = 10 + true_effect * group + np.random.normal(0, 5, n)
+t_stat, p_val = stats.ttest_ind(outcome[group == 1], outcome[group == 0])
+print("=== Classical A/B Test ===")
+print(f"Estimated effect: {outcome[group==1].mean() - outcome[group==0].mean():.2f}")
+print(f"p-value: {p_val:.4f}")
 
-A technology company wants to know whether a new recommendation algorithm increases user engagement:
-
-1. **Classical component**: Run a randomized A/B test—randomly assign users to the old (control) or new (treatment) algorithm. This ensures a valid causal comparison.
-2. **Modern component**: Use machine learning to estimate heterogeneous treatment effects—which *types* of users benefit most from the new algorithm? Causal forests or meta-learners can answer this question at a granularity that classical methods alone cannot achieve.
-
-This combination leverages the causal validity of randomization and the predictive power of modern algorithms.
-
-## Key Takeaways
-
-- Neither approach is universally superior; each has clear strengths and well-understood limitations.
-- The classical approach excels at **causal inference with quantified uncertainty** but is limited in scale and flexibility.
-- The modern approach excels at **scalable prediction and pattern discovery** but struggles with causality and interpretability.
-- The most powerful analyses combine both: classical design principles ensure validity, while modern algorithms unlock the full information content of the data.
-- As a practitioner, your job is to match the methodology to the question, the data, and the decision at hand.
+# Modern: prediction from observational features
+from numpy.polynomial.polynomial import polyfit
+X = np.random.randn(n, 3)
+y = 2*X[:, 0] - X[:, 1] + 0.5*X[:, 2] + np.random.randn(n)
+# Simple least squares prediction
+beta = np.linalg.lstsq(X, y, rcond=None)[0]
+y_pred = X @ beta
+mse = np.mean((y - y_pred)**2)
+print("\n=== Modern Prediction ===")
+print(f"Coefficients: {beta.round(3)}")
+print(f"MSE: {mse:.3f}")
+```
