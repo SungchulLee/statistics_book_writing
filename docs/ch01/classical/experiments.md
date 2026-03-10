@@ -1,79 +1,44 @@
 # Controlled Experiments
 
+A controlled experiment is the gold standard for establishing causal relationships, using random assignment and manipulation of variables to isolate treatment effects from confounders.
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+## Definition
 
-## Overview
+A **controlled experiment** is a research design in which the investigator manipulates one or more independent variables (treatments), randomly assigns subjects to treatment and control groups, and measures the effect on a dependent variable. The **control group** receives a placebo or standard treatment; the **treatment group** receives the intervention. Random assignment ensures confounders are distributed evenly across groups.
 
-A **controlled experiment** is a structured research design in which the researcher actively manipulates one or more **independent variables** to observe their effects on a **dependent variable**, while holding other factors constant. Controlled experiments are fundamental in scientific research because they can establish **causality** by controlling extraneous variables.
+## Explanation
 
-## Key Characteristics
+The key advantage of controlled experiments over observational studies is the ability to establish **causation**, not merely association. Randomization ensures that any systematic differences between groups (age, health, socioeconomic status) balance out on average, so observed differences in outcomes can be attributed to the treatment.
 
-- **Direct manipulation** of variables by the researcher.
-- **Random assignment** of subjects to different experimental groups (e.g., treatment and control groups).
-- **Controls** for confounding factors, enhancing the study's **internal validity**.
-- The investigator—not the subject—decides who goes into which group.
-
-## Structure of a Controlled Experiment
-
-A typical controlled experiment follows this structure:
-
-```
-Population
-    │
-    ▼
-Random Assignment
-    ├──────────────────┐
-    ▼                  ▼
-Treatment Group    Control Group
-(receives            (receives
- intervention)        placebo / standard)
-    │                  │
-    ▼                  ▼
-Measure Outcome    Measure Outcome
-    │                  │
-    └──────┬───────────┘
-           ▼
-    Compare Results
-```
-
-## Control Group vs. Experimental Group
-
-The **control group** receives either no treatment, a placebo, or a standard treatment. The **experimental (treatment) group** receives the intervention being tested. By comparing outcomes between the two groups, researchers can isolate the effect of the treatment from other influences.
-
-## Placebo and Placebo Effect
-
-A **placebo** is an inert treatment (e.g., a sugar pill) that looks identical to the real treatment. It is given to the control group to account for the **placebo effect**—the phenomenon where patients experience real improvements simply because they *believe* they are receiving treatment. Without a placebo control, it would be impossible to distinguish genuine treatment effects from psychological effects of receiving care.
-
-## Why Controlled Experiments Minimize Confounding
-
-In observational studies, confounding is a major concern because the researcher has no control over group assignment. In a controlled experiment, **randomization** ensures that potential confounders are distributed roughly equally across groups. This means any observed difference in outcomes can be attributed to the treatment rather than to pre-existing differences between groups.
+The **placebo effect** -- genuine improvement from believing one is treated -- is controlled by giving the control group an inert treatment identical in appearance. Without a placebo control, treatment effects and psychological effects are confounded.
 
 | | Controlled Experiment | Observational Study |
 |---|---|---|
-| **Who chooses groups?** | Investigators | Subjects |
-| **Confounding** | Minimized | Many potential confounders |
-| **Causation** | Can establish | Can only identify association |
+| Group assignment | Investigator (random) | Subject (self-selected) |
+| Confounding | Minimized by randomization | Many potential confounders |
+| Causal claims | Yes | Association only |
 
-## Example: Enriched vs. Deprived Environments
+Limitations: ethical constraints (cannot assign harmful treatments), artificiality of lab settings, high cost and time, and limited generalizability from tightly controlled conditions.
 
-UC Berkeley psychology researchers divided rats into two groups. Rats raised in **enriched environments** with diverse experiences developed heavier, denser brain cortices suited for higher-order activity and greater resilience, compared to rats raised in **deprived environments**. This is a controlled experiment because the researchers **assigned** rats to the two conditions and **manipulated** the environment.
+## Examples
 
-## Limitations of Controlled Experiments
+```python
+import numpy as np
+from scipy import stats
 
-While controlled experiments are the gold standard for causal inference, they have practical limitations:
+np.random.seed(42)
+n_per_group = 100
+true_effect = 5.0
 
-- **Ethical constraints**: It may be unethical to assign humans to harmful conditions (e.g., forcing subjects to smoke).
-- **Artificiality**: Laboratory conditions may not reflect real-world behavior.
-- **Cost and time**: Large-scale experiments with human subjects can be extremely expensive and time-consuming.
-- **Generalizability**: Results obtained under tightly controlled conditions may not generalize to broader populations.
+# Simulate a randomized experiment
+control = np.random.normal(50, 10, n_per_group)
+treatment = np.random.normal(50 + true_effect, 10, n_per_group)
 
-When controlled experiments are not feasible, researchers fall back on observational studies combined with statistical adjustment techniques to approximate causal conclusions.
-
-## Key Takeaways
-
-- Controlled experiments allow researchers to establish cause-and-effect relationships by manipulating variables and using random assignment.
-- The control group and placebo are essential for isolating the treatment effect.
-- Randomization distributes potential confounders evenly across groups, minimizing bias.
-- When ethical or practical constraints prevent experimentation, observational methods with appropriate statistical controls are used instead.
+t_stat, p_value = stats.ttest_ind(treatment, control)
+diff = treatment.mean() - control.mean()
+print(f"Control mean:   {control.mean():.2f}")
+print(f"Treatment mean: {treatment.mean():.2f}")
+print(f"Difference:     {diff:.2f} (true effect = {true_effect})")
+print(f"t-statistic:    {t_stat:.3f}")
+print(f"p-value:        {p_value:.4f}")
+```
