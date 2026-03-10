@@ -1,63 +1,48 @@
-# Statistical Models vs. Learning Algorithms
+# Statistical Models vs Learning Algorithms
 
+The shift from parametric statistical models to flexible learning algorithms is one of the most important transitions in data analysis, reflecting different goals: understanding versus prediction.
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+## Definition
 
-## Overview
+A **statistical model** specifies a family of probability distributions indexed by interpretable parameters (e.g., $Y = \beta_0 + \beta_1 X + \varepsilon$). A **learning algorithm** is a computational procedure that identifies patterns in data without necessarily specifying a full probabilistic model (e.g., random forests, neural networks).
 
-The classical approach to data analysis asks: *"How should I collect data to answer my question?"* The modern approach asks: *"Given the data I already have, what can I learn from it?"* This shift in perspective—from **designed data collection** to **algorithmic learning from available data**—represents one of the most important transitions in the history of data analysis.
-
-## Statistical Models
-
-A **statistical model** is a formal mathematical description of a data-generating process. It specifies a family of probability distributions indexed by parameters. The goal is typically to **estimate parameters** and **quantify uncertainty** about them.
-
-Key characteristics:
-
-- Built on explicit **assumptions** about the data (e.g., normality, independence, linearity).
-- Parameters have **interpretable meaning** (e.g., $\beta_1$ in a regression is the expected change in $Y$ per unit change in $X$).
-- Inference is a primary goal: confidence intervals, hypothesis tests, and causal reasoning.
-- Performance depends on whether the assumptions adequately describe reality.
-
-**Example:** Linear regression assumes $Y = \beta_0 + \beta_1 X + \epsilon$, where $\epsilon \sim N(0, \sigma^2)$. The parameters $\beta_0, \beta_1, \sigma^2$ are estimated from data, and their uncertainty is quantified via standard errors and confidence intervals.
-
-## Learning Algorithms
-
-A **learning algorithm** is a computational procedure that identifies patterns in data—often without specifying a full probabilistic model of the data-generating process. The goal is typically **prediction** or **pattern discovery**.
-
-Key characteristics:
-
-- Fewer assumptions about the data-generating process; the algorithm "lets the data speak."
-- The learned function may be a **black box** (e.g., a deep neural network with millions of parameters) that is not easily interpretable.
-- Evaluated primarily by **predictive accuracy** on unseen data (generalization).
-- Can handle complex, high-dimensional, and unstructured data (images, text, audio).
-
-**Example:** A random forest or neural network trained to predict housing prices. The model may achieve excellent predictions without providing a simple formula linking features to price.
-
-## Comparison
+## Explanation
 
 | Aspect | Statistical Model | Learning Algorithm |
 |---|---|---|
-| **Primary goal** | Inference and understanding | Prediction and pattern discovery |
-| **Assumptions** | Explicit (distributional, structural) | Minimal or implicit |
-| **Interpretability** | High (parameters have meaning) | Often low (black box) |
-| **Data requirements** | Works well with small, structured data | Thrives on large, complex data |
-| **Uncertainty quantification** | Built in (CIs, p-values) | Requires additional techniques |
-| **Overfitting risk** | Lower (fewer parameters, regularized by assumptions) | Higher (must be managed via cross-validation, regularization) |
-| **Flexibility** | Limited by model specification | Highly flexible |
+| Primary goal | Inference and understanding | Prediction and pattern discovery |
+| Assumptions | Explicit (distributional, structural) | Minimal or implicit |
+| Interpretability | High (parameters have meaning) | Often low (black box) |
+| Data requirements | Works with small, structured data | Thrives on large, complex data |
+| Overfitting risk | Lower (fewer parameters) | Higher (managed via cross-validation) |
 
-## The Spectrum, Not a Dichotomy
+The boundary is blurred in practice: regularized regression (LASSO, Ridge) is a model enhanced with algorithmic regularization; Bayesian neural networks combine deep learning with probabilistic uncertainty; gradient boosting can be viewed as iterative model fitting.
 
-In practice, the boundary between statistical models and learning algorithms is blurred. Many modern methods combine elements of both:
+The choice depends on the goal: if you need to **understand why**, favor interpretable models; if you need to **predict what**, algorithms often excel.
 
-- **Regularized regression** (LASSO, Ridge) is a statistical model enhanced with algorithmic regularization to improve prediction.
-- **Bayesian neural networks** combine deep learning's flexibility with probabilistic uncertainty quantification.
-- **Gradient boosting** can be viewed as a flexible statistical model fit via an iterative algorithm.
+## Examples
 
-The choice between a model-driven and an algorithm-driven approach depends on the goal: if you need to **understand why**, favor interpretable statistical models; if you need to **predict what**, learning algorithms often excel.
+```python
+import numpy as np
 
-## Key Takeaways
+np.random.seed(42)
+n = 200
+x = np.random.uniform(0, 10, n)
+y = 3 + 2 * x - 0.1 * x**2 + np.random.normal(0, 2, n)
 
-- Statistical models emphasize interpretability, assumptions, and inference; learning algorithms emphasize flexibility, scalability, and prediction.
-- Neither approach is universally superior—the best choice depends on the problem, the data, and the goal.
-- Modern data science increasingly blends both perspectives, using statistical rigor to guide algorithmic learning and using algorithmic tools to extend classical models.
+# Statistical model: linear regression (interpretable)
+X_lin = np.column_stack([np.ones(n), x])
+beta_lin = np.linalg.lstsq(X_lin, y, rcond=None)[0]
+y_pred_lin = X_lin @ beta_lin
+mse_lin = np.mean((y - y_pred_lin)**2)
+
+# More flexible model: polynomial regression
+X_poly = np.column_stack([np.ones(n), x, x**2])
+beta_poly = np.linalg.lstsq(X_poly, y, rcond=None)[0]
+y_pred_poly = X_poly @ beta_poly
+mse_poly = np.mean((y - y_pred_poly)**2)
+
+print(f"Linear model MSE:     {mse_lin:.3f}  (coeffs: {beta_lin.round(3)})")
+print(f"Polynomial model MSE: {mse_poly:.3f}  (coeffs: {beta_poly.round(3)})")
+print(f"True: y = 3 + 2x - 0.1x^2 + noise")
+```
