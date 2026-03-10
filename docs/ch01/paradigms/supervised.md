@@ -1,111 +1,52 @@
-# Supervised Learning (Prediction with Labels)
+# Supervised Learning
 
+Supervised learning trains a model on labeled input-output pairs to predict outcomes on new data. It is the most widely used paradigm, powering credit scoring, forecasting, fraud detection, and image recognition.
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+## Definition
 
-## Overview
+Given a training set $\{(\mathbf{x}_i, y_i)\}_{i=1}^n$, supervised learning finds a function $\hat{f}$ that minimizes a loss function measuring discrepancy between predictions $\hat{y}_i = \hat{f}(\mathbf{x}_i)$ and true labels $y_i$. The two main tasks are:
 
-In **supervised learning**, the model is trained on a **labeled dataset**—each input $X$ has a corresponding known output $Y$. The goal is for the model to learn the mapping $f: X \to Y$ and make accurate predictions on new, unseen data.
+- **Regression**: $y \in \mathbb{R}$ (continuous target). Loss: MSE.
+- **Classification**: $y \in \{1, \ldots, K\}$ (categorical target). Loss: cross-entropy or misclassification rate.
 
-## Key Characteristics
+## Explanation
 
-- **Labeled data**: The training set consists of input–output pairs $\{(x_i, y_i)\}_{i=1}^{n}$.
-- **Clear objective**: Minimize a loss function that measures the discrepancy between predictions $\hat{y}_i$ and true labels $y_i$.
-- **Evaluation is straightforward**: Accuracy, MSE, AUC, and other metrics can be computed on held-out test data.
+The workflow is: choose a model family, train on labeled data (minimize loss), validate (tune hyperparameters via cross-validation), test on held-out data, and deploy. Common methods include linear/logistic regression, decision trees, random forests, gradient boosting, and neural networks.
 
-## Two Main Tasks
+Evaluation is straightforward because ground-truth labels exist: accuracy, MSE, AUC, precision, recall, and F1-score can all be computed on test data. Overfitting (fitting noise instead of signal) is managed through regularization, cross-validation, and train/test splitting.
 
-### Regression
-
-The target variable $Y$ is **continuous**. The goal is to predict a numerical value.
-
-$$
-\hat{y} = f(x) \quad \text{where } y \in \mathbb{R}
-$$
-
-**Examples:**
-
-- Predicting house prices from features (size, location, age).
-- Forecasting next-quarter revenue from macroeconomic indicators.
-- Estimating option prices from underlying asset characteristics.
-
-**Common methods:** Linear regression, Ridge/LASSO, decision trees, random forests, gradient boosting, neural networks.
-
-### Classification
-
-The target variable $Y$ is **categorical**. The goal is to assign an input to one of $K$ classes.
-
-$$
-\hat{y} = f(x) \quad \text{where } y \in \{1, 2, \ldots, K\}
-$$
-
-**Examples:**
-
-- Classifying emails as spam or not spam (binary).
-- Recognizing handwritten digits 0–9 (multiclass).
-- Predicting whether a borrower will default on a loan (binary).
-
-**Common methods:** Logistic regression, support vector machines, decision trees, random forests, gradient boosting, neural networks.
-
-## The Supervised Learning Workflow
-
-```
-Training Data {(x_i, y_i)}
-        │
-        ▼
-  Choose Model Family
-        │
-        ▼
-  Train (minimize loss)
-        │
-        ▼
-  Validate (tune hyperparameters)
-        │
-        ▼
-  Test (evaluate on held-out data)
-        │
-        ▼
-  Deploy for Prediction
-```
-
-## Example: Predicting Default
+## Examples
 
 ```python
 import numpy as np
-from sklearn.linear_model import LogisticRegression
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score, classification_report
+from scipy.special import expit  # logistic function
 
 np.random.seed(42)
+n = 1000
 
-# Simulate data: income and debt-to-income ratio → default (0/1)
-n = 1_000
+# Simulate binary classification: loan default
 income = np.random.normal(60, 20, n).clip(10)
 dti = np.random.normal(0.3, 0.15, n).clip(0.01, 1.0)
 log_odds = -3 + 0.01 * (50 - income) + 5 * (dti - 0.3)
-prob = 1 / (1 + np.exp(-log_odds))
+prob = expit(log_odds)
 default = np.random.binomial(1, prob)
 
-X = np.column_stack([income, dti])
-y = default
+# Train/test split
+train, test = np.arange(700), np.arange(700, n)
+X = np.column_stack([np.ones(n), income, dti])
 
-# Train-test split
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=0)
+# Fit logistic regression via IRLS (simplified: use lstsq on log-odds)
+from scipy.optimize import minimize
+def neg_log_lik(beta):
+    z = X[train] @ beta
+    return -np.sum(default[train] * z - np.log(1 + np.exp(z)))
 
-# Fit logistic regression
-model = LogisticRegression()
-model.fit(X_train, y_train)
-
-# Evaluate
-y_pred = model.predict(X_test)
-print(f"Accuracy: {accuracy_score(y_test, y_pred):.3f}")
-print(classification_report(y_test, y_pred, target_names=["No Default", "Default"]))
+result = minimize(neg_log_lik, np.zeros(3), method='BFGS')
+beta_hat = result.x
+probs_test = expit(X[test] @ beta_hat)
+preds = (probs_test > 0.5).astype(int)
+accuracy = np.mean(preds == default[test])
+print(f"Test accuracy: {accuracy:.3f}")
+print(f"Default rate (test): {default[test].mean():.3f}")
+print(f"Coefficients: {beta_hat.round(4)}")
 ```
-
-## Key Takeaways
-
-- Supervised learning requires labeled data and optimizes a well-defined loss function.
-- The two main tasks are **regression** (continuous target) and **classification** (categorical target).
-- Model evaluation on held-out data is essential to assess generalization.
-- In finance, supervised learning powers credit scoring, algorithmic trading signals, fraud detection, and many other applications.
