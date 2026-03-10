@@ -1,5 +1,9 @@
 # Modality
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 The **modality** of a distribution describes the number of distinct peaks (modes) in its shape. Identifying modality is a critical first step in exploratory data analysis because it reveals whether the data comes from a single population or is a mixture of distinct subgroups.

@@ -1,5 +1,9 @@
 # t-Test for μ (Unknown σ)
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 The one-sample t-test tests hypotheses about the population mean when $\sigma$ is unknown.

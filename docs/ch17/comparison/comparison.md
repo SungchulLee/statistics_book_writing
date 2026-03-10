@@ -1,5 +1,9 @@
 # Comparison: Bootstrap vs Permutation Tests
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 The **Bootstrap** and **Permutation Test** are two widely used resampling techniques. While they share the principle of using observed data to construct sampling distributions, they differ fundamentally in purpose, methodology, and application.

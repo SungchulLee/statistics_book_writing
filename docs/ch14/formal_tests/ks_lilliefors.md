@@ -1,5 +1,9 @@
 # Kolmogorov-Smirnov Test and Lilliefors Test
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 While graphical methods and descriptive statistics provide insight into data distribution, formal statistical tests offer more rigorous methods for assessing normality. These tests evaluate whether the observed data significantly deviates from the expected normal distribution, providing a statistical basis for the decision.
 
 ## Kolmogorov-Smirnov Test

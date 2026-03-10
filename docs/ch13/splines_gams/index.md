@@ -1,5 +1,9 @@
 # Splines and Generalized Additive Models
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 Beyond polynomial regression, splines and generalized additive models (GAMs) provide flexible methods for capturing non-linear relationships while maintaining interpretability and computational efficiency.

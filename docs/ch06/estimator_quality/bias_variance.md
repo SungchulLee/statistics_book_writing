@@ -1,5 +1,9 @@
 # Bias–Variance Tradeoff
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Introduction
 
 Every statistical estimator faces a fundamental tension: **simplicity versus flexibility**. A simple estimator may systematically miss the true parameter value (high bias), while a flexible estimator may be overly sensitive to the particular sample drawn (high variance). The **bias–variance tradeoff** formalizes this tension and reveals that minimizing total estimation error requires balancing these two competing sources of error.

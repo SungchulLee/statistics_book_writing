@@ -1,5 +1,9 @@
 # Python and Jupyter Basics
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Why Python for Statistics?
 
 Python is a general-purpose programming language that has become the dominant tool for data analysis, scientific computing, and machine learning. Its readability, extensive library ecosystem, and active community make it an ideal choice for statistical work ranging from exploratory analysis to production-grade modeling.

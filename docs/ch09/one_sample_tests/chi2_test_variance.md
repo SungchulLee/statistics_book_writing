@@ -1,5 +1,9 @@
 # Chi-Square Test for σ²
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 The chi-square test for variance tests whether the population variance equals a hypothesized value.

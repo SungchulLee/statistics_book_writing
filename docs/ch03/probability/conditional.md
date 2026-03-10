@@ -1,5 +1,9 @@
 # Conditional Probability
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 **Conditional probability** quantifies how the probability of an event changes when we learn that another event has occurred. It is one of the most important concepts in probability theory, forming the basis for Bayesian reasoning, statistical inference, and decision-making under uncertainty.

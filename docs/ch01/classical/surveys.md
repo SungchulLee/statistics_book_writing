@@ -1,5 +1,9 @@
 # Sample Surveys and Sampling Methods
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 **Sample surveys** are studies in which researchers gather data by selecting a representative sample from a larger population. By focusing on a sample instead of the entire population, surveys allow for efficient and cost-effective data collection while still enabling inferences about the population.

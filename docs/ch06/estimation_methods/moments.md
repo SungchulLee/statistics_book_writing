@@ -1,5 +1,9 @@
 # Method of Moments
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Introduction
 
 The **Method of Moments (MoM)** is one of the oldest and most intuitive approaches to parameter estimation. The idea is simple: equate population moments (which are functions of unknown parameters) to their sample counterparts, then solve for the parameters. This yields estimators that are easy to compute, often available in closed form, and provide good starting points for more sophisticated methods like MLE.

@@ -1,5 +1,9 @@
 # Exercises: General Statistical Estimation
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Conceptual
 
 **Exercise 1.** Let $X_1, \ldots, X_n \overset{\text{iid}}{\sim} \text{Uniform}(0, \theta)$. Consider two estimators of $\theta$:

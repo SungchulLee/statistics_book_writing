@@ -1,5 +1,9 @@
 # Sampling Distributions for Simple OLS Estimators
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 In simple linear regression, the key inferential results depend on knowing the **sampling distributions** of the estimated coefficients and predictions. Under the classical assumptions—linearity, independence, homoscedasticity, and normality of errors—these distributions take elegant closed forms based on the $t$-distribution. This section derives the sampling distributions for three fundamental quantities: the slope estimator, the expected response at a given point, and an individual predicted response.

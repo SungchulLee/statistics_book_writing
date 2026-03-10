@@ -1,5 +1,9 @@
 # Chapter 18: Regularization Techniques
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 Regularization techniques address the fundamental problems of overfitting, multicollinearity, and instability in linear regression by adding penalty terms to the loss function. By deliberately introducing a small amount of bias, regularized estimators can substantially reduce variance and improve out-of-sample prediction. This chapter covers Ridge regression (L2), Lasso regression (L1), Elastic Net (combined L1+L2), hyperparameter tuning strategies, and dimensionality reduction alternatives including Principal Components Regression and Partial Least Squares.

@@ -1,5 +1,9 @@
 # Sampling Distribution Visualization: Effect of Sample Size
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 This section demonstrates how the **sampling distribution** of the sample mean becomes more concentrated as sample size increases. Using realistic income data, we visualize the three-way distinction between the population distribution, a sample distribution, and the sampling distribution.

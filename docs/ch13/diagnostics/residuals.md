@@ -1,5 +1,9 @@
 # Residual Analysis
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 Residual analysis is a critical step in evaluating how well a linear regression model fits a dataset. By examining the residuals—differences between observed values and predicted values—we gain insights into the model's accuracy and whether key assumptions hold.
 
 ## Understanding Residuals

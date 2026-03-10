@@ -1,5 +1,9 @@
 # Bartlett's Test for Equality of Variances
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 Bartlett's test assesses the equality of variances across multiple groups. It is most appropriate when the data are normally distributed, as it is highly sensitive to deviations from normality. While Bartlett's test is powerful under the assumption of normality, it can lead to incorrect conclusions if the data are non-normal.
 
 ## Hypotheses

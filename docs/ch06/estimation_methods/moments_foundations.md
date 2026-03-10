@@ -1,5 +1,9 @@
 # Method of Moments Foundations
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 The **Method of Moments (MoM)** equates population moments to sample moments to estimate parameters.

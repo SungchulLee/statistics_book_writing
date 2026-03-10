@@ -1,5 +1,9 @@
 # Hypothesis Tests for Regression Coefficients (t-tests)
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 In linear regression, a key objective is to evaluate the impact of each predictor on the dependent variable. Hypothesis tests for regression coefficients, typically conducted using **t-tests**, assess whether the predictors significantly contribute to the model.
 
 ---

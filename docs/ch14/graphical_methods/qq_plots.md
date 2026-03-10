@@ -1,5 +1,9 @@
 # Q-Q Plots (Quantile-Quantile Plots)
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 A **Q-Q plot** compares the quantiles of the dataset with the quantiles of a theoretical normal distribution. If the data is normally distributed, the points on the Q-Q plot should fall along a straight diagonal line. Deviations from this line indicate departures from normality.

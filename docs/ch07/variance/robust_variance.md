@@ -1,5 +1,9 @@
 # Robust Variance Estimators (MAD, IQR-based)
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 When data contains outliers, classical variance estimators can be severely affected. Robust alternatives include the MAD and IQR-based estimators.

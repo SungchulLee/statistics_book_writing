@@ -1,5 +1,9 @@
 # Least Squares Estimation
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 This section derives the optimal parameters for linear regression from three perspectives: the ordinary least squares (OLS) criterion, the maximum likelihood principle under Gaussian errors, and the normal equation with its vector calculus proof.
 
 ---

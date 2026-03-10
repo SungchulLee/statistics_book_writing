@@ -1,5 +1,9 @@
 # Chapter 13: Linear Regression
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 This chapter provides a comprehensive treatment of linear regression, from simple models with a single predictor through multiple regression with interaction, polynomial, and spline-based extensions. The chapter covers the full modeling workflow: estimation via ordinary least squares, inference on coefficients, assumption checking and diagnostics, performance evaluation, model selection, and practical implementation in Python using both statsmodels and scikit-learn.

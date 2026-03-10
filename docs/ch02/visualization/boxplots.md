@@ -1,5 +1,9 @@
 # Boxplots
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 A **box plot** (or box-and-whisker plot) is a standardized way of displaying the distribution of data based on the five-number summary: minimum, first quartile ($Q_1$), median ($Q_2$), third quartile ($Q_3$), and maximum. It provides a compact visual summary of center, spread, skewness, and outliers simultaneously.

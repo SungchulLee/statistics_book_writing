@@ -1,5 +1,9 @@
 # Sampling Distributions for General OLS Estimators
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 This section extends the inferential results from simple linear regression to the **multiple linear regression** setting using matrix notation. We derive the sampling distributions of the OLS coefficient vector $\hat{\beta}$, the residual variance estimator $s^2$, and the $t$-statistic for testing individual coefficients.

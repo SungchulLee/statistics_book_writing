@@ -1,5 +1,9 @@
 # Generalized Additive Models (GAMs)
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 **Generalized Additive Models (GAMs)** extend linear regression by allowing smooth, non-parametric functions of predictors instead of assuming linear relationships. GAMs provide a flexible middle ground between rigid linear models and overly complex black-box methods like neural networks.

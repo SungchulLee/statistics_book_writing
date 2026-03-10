@@ -1,5 +1,9 @@
 # Chapter 17: Resampling Methods
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 Resampling methods are computationally intensive approaches to statistical inference that construct the sampling distribution of a statistic empirically by repeatedly drawing samples from the observed data. Unlike parametric methods that rely on theoretical distributional assumptions, and unlike rank-based non-parametric methods that replace values with ranks, resampling methods work directly with the original data values. This chapter covers the two primary resampling paradigms --- the bootstrap (for estimation and confidence intervals) and permutation tests (for hypothesis testing) --- along with practical guidance on choosing between them.

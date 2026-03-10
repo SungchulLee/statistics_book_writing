@@ -1,5 +1,9 @@
 # 18.5 Causation
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Understanding Causation
 
 Causation is a fundamental concept in statistics, science, and everyday reasoning. It refers to a relationship where one event (the cause) directly produces or influences another event (the effect). While correlations can suggest a relationship, causation goes further by implying that changes in one variable are **responsible** for changes in another.

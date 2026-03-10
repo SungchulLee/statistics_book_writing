@@ -1,5 +1,9 @@
 # F-Test for Comparing Two Variances
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 The F-test for comparing two variances is a statistical test used to determine whether the variances of two independent samples are significantly different. It is based on the ratio of the sample variances and assumes that both samples come from normally distributed populations. The F-test is particularly useful for assessing the homogeneity of variances, which is often a critical assumption in methods such as ANOVA.
 
 ## Hypotheses

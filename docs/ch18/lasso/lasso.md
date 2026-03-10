@@ -1,5 +1,9 @@
 # Lasso Regression (L1 Regularization)
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Motivation: Sparsity and Feature Selection
 
 Ridge regression shrinks coefficients toward zero but never sets them exactly to zero. In many applications — especially when $p$ is large — we want an estimator that automatically **selects** relevant features by setting irrelevant coefficients to exactly zero.

@@ -1,5 +1,9 @@
 # Chapter 3: Foundations of Probability
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 This chapter builds the probability foundation that underpins all of statistical inference. Starting from sample spaces and the axioms of probability, it develops conditional probability, Bayes' theorem, and independence. It then formalizes random variables (discrete and continuous), their distributions (PMF, PDF, CDF), and summary measures (expectation, variance, covariance, moment generating functions). The chapter culminates with the powerful limit theorems -- the Law of Large Numbers and the Central Limit Theorem -- that connect probability theory to practical statistics.

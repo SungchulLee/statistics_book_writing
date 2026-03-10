@@ -1,5 +1,9 @@
 # Expectation and Linearity
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 The **expected value** (or **expectation**) of a random variable is its long-run average value over many repetitions of an experiment. It provides a single number summarizing the "center" of a distribution. The **linearity of expectation** is one of the most powerful and widely used properties in all of probability.

@@ -1,5 +1,9 @@
 # Robust Tests for Equality of Variances
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Levene's Test and Brown–Forsythe Test
 
 Levene's test (using the group mean) and the Brown–Forsythe test (using the group median) are robust statistical tests for assessing the equality of variances across multiple groups. Unlike the F-test, which is highly sensitive to departures from normality, these tests are more robust to non-normal data. The Brown–Forsythe test, which uses the median instead of the mean, is especially effective when the data contain outliers.

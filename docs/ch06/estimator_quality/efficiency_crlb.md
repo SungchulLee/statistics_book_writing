@@ -1,5 +1,9 @@
 # Efficiency and Cramér–Rao Lower Bound
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 The **Cramér–Rao Lower Bound (CRLB)** provides a lower bound on the variance of any unbiased estimator.

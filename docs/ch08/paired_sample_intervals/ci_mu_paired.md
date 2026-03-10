@@ -1,5 +1,9 @@
 # CI for μ_D (Mean of Differences)
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Paired-Sample Confidence Interval
 
 When two related measurements are taken on the same subjects — such as pre-test and post-test scores, or before-and-after measurements — we use paired data to analyze the difference between the two measurements. The paired difference confidence interval estimates the mean difference $\mu_d$ between these two related measurements.

@@ -1,5 +1,9 @@
 # Paired Interval for Proportions (McNemar)
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 McNemar's test and the associated confidence interval address paired binary data, such as before/after treatment comparisons on the same subjects.

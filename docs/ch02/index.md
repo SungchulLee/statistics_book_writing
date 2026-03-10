@@ -1,5 +1,9 @@
 # Chapter 2: Descriptive Statistics
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 This chapter develops the tools for exploring, summarizing, and visualizing data before any formal modeling or inference. It covers graphical methods for examining distributions (histograms, ECDFs, Q-Q plots), numerical measures of shape, center, and spread, and a range of visualization techniques for comparing distributions across groups. Together, these tools form the foundation of exploratory data analysis (EDA).

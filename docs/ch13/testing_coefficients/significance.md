@@ -1,5 +1,9 @@
 # Interpretation of Significance
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 Interpreting the significance of regression coefficients is a critical step in understanding linear regression results. Significance tells us whether a predictor variable has a meaningful relationship with the outcome variable, beyond what would be expected by random chance.
 
 ---

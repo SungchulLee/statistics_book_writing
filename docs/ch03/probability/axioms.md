@@ -1,5 +1,9 @@
 # Axioms of Probability
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 The axioms of probability formalize the intuitive idea of assigning "weights" (probabilities) to outcomes and events. We present three equivalent formulations—from the most intuitive to the most rigorous.

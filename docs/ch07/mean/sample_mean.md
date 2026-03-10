@@ -1,5 +1,9 @@
 # Sample Mean as Estimator
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Introduction
 
 The **sample mean** $\bar{X} = \frac{1}{n}\sum_{i=1}^n X_i$ is the most fundamental estimator in all of statistics. It serves as the natural estimator for the population mean $\mu = E[X]$ and plays a central role in estimation theory, hypothesis testing, and nearly every branch of applied statistics and finance. Understanding its properties — why it works, when it works optimally, and when it fails — is essential for statistical practice.

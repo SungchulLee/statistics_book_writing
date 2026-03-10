@@ -1,5 +1,9 @@
 # Chapter 7 Exercises: Estimation of Mean and Variance
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Section 7.1: Estimation of the Mean
 
 ### Exercise 7.1.1 — Unbiasedness of the Sample Mean

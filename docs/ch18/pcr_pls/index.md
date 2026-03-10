@@ -1,5 +1,9 @@
 # Dimensionality Reduction: PCR and PLS
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 When the number of predictors $p$ is large (especially when $p > n$, more predictors than observations), or when severe multicollinearity exists among predictors, coefficient shrinkage methods (Ridge, Lasso) become less efficient. **Dimensionality reduction methods** provide an alternative: instead of shrinking coefficients, they construct a smaller number of latent variables (principal components or PLS components) and regress on these.

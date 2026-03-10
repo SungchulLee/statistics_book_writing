@@ -1,5 +1,9 @@
 # Elastic Net Regularization
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Introduction
 
 Elastic Net is a regularization technique that combines the strengths of both Ridge Regression and Lasso Regression. While Ridge Regression (L2 regularization) is effective at shrinking coefficients, it does not perform variable selection. Lasso Regression (L1 regularization) can set some coefficients to exactly zero for feature selection, but it can struggle with correlated variables, often selecting one and ignoring others. Elastic Net addresses these limitations by incorporating both L1 and L2 penalties into its objective function, creating a more flexible and robust regularization approach.

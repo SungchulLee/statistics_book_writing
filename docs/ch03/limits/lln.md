@@ -1,5 +1,9 @@
 # Law of Large Numbers
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 The **Law of Large Numbers (LLN)** is a fundamental theorem in probability theory describing how the average of a large number of independent and identically distributed (i.i.d.) random variables converges to the expected value as the sample size increases. It provides the theoretical basis for why sample averages are reliable estimators of population means.

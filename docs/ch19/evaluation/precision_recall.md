@@ -1,5 +1,9 @@
 # Precision, Recall, and F1 Score
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Precision: Positive Predictive Value
 
 **Precision** measures the reliability of positive predictions. Of all instances we predicted as positive, what fraction were actually positive?

@@ -1,5 +1,9 @@
 # Homoscedasticity Assumption
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Definition
 
 Homoscedasticity refers to the assumption that the variance of the errors (residuals) is constant across all levels of the independent variables. When this assumption holds, the spread of residuals should be roughly the same across the range of predicted values.

@@ -1,5 +1,9 @@
 # Chi-Square Test for Variance
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 The Chi-Square test for variance determines if the variance of a population differs from a specified value. It is a one-sample test, typically applied when the population variance is known or hypothesized. This test is highly sensitive to the assumption that the data follow a normal distribution, and any significant deviation from normality can lead to unreliable results.
 
 ## Hypotheses

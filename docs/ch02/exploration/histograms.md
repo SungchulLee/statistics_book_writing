@@ -1,5 +1,9 @@
 # Histograms and Density Plots
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 A **histogram** is one of the most fundamental tools in exploratory data analysis. It divides the range of a continuous variable into equal-width intervals (bins) and displays the count or density of observations falling into each bin as rectangular bars. When normalized so that the total area equals one, the histogram approximates a **density plot**—a smooth curve estimating the underlying probability density function (PDF).

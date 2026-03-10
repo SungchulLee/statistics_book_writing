@@ -1,5 +1,9 @@
 # Degrees of Freedom and Asymptotic Theory
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Degrees of Freedom in Chi-Square Tests
 
 The degrees of freedom determine the shape of the chi-square distribution used as the reference distribution under $H_0$. The calculation depends on which chi-square test is being performed.

@@ -1,5 +1,9 @@
 # Sampling Distribution of the Mean
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 The **sampling distribution of the sample mean** $\bar{X}$ describes how $\bar{X}$ varies across repeated samples of size $n$ from a population. This is the single most important sampling distribution in statistics — it underpins confidence intervals for $\mu$, $t$-tests, and much of applied statistics.

@@ -1,4 +1,8 @@
 # Sampling Distribution of S-squared
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 The **sampling distribution of the sample variance** $S^2$ describes how the variance computed from a random sample behaves across repeated samples drawn from a population. This concept is critical for understanding how precisely we can estimate the true population variance $\sigma^2$.

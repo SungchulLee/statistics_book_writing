@@ -1,5 +1,9 @@
 # Sample Spaces and Events
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 Probability theory is built upon a set of fundamental rules known as **Kolmogorov's Axioms**, named after the Russian mathematician Andrey Kolmogorov. These axioms provide a formal foundation for reasoning about probability and ensure consistency when calculating the likelihood of events.

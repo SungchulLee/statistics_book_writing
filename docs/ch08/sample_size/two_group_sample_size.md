@@ -1,5 +1,9 @@
 # Sample Size for Comparing Two Groups
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 When comparing two groups, the required sample size per group depends on the desired power, significance level, and effect size.

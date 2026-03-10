@@ -1,5 +1,9 @@
 # NumPy Arrays
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 **NumPy** (Numerical Python) is the foundational library for numerical computing in Python. At its core is the `ndarray`—a fast, memory-efficient, multidimensional array that supports vectorized arithmetic and broadcasting. Nearly every scientific Python library (Pandas, SciPy, Scikit-Learn, Matplotlib) is built on top of NumPy arrays.

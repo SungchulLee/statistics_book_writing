@@ -1,5 +1,9 @@
 # Uniform Distribution
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 The **uniform distribution** assigns equal probability to all values in an interval $[a, b]$. It is the simplest continuous distribution and serves as the foundation for random number generation, simulation, and probability integral transforms.

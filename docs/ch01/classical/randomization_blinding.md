@@ -1,5 +1,9 @@
 # Randomization and Blinding
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 **Randomization** and **blinding** are two of the most important tools for ensuring that the results of a controlled experiment are valid and unbiased. Randomization controls what you *can* control; blinding guards against what you *cannot* directly control—human expectation and bias.

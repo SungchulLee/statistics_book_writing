@@ -1,5 +1,9 @@
 # Statistical Models vs. Learning Algorithms
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 The classical approach to data analysis asks: *"How should I collect data to answer my question?"* The modern approach asks: *"Given the data I already have, what can I learn from it?"* This shift in perspective—from **designed data collection** to **algorithmic learning from available data**—represents one of the most important transitions in the history of data analysis.

@@ -1,5 +1,9 @@
 # Heavy-Tailed Distributions
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 When the underlying distribution has heavy tails, the sample mean can have poor performance due to extreme observations. This is particularly relevant in finance, where asset returns exhibit substantially heavier tails than the normal distribution.

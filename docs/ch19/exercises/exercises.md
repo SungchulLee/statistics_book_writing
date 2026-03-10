@@ -1,5 +1,9 @@
 # Chapter 13: Exercises
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Exercise 1: Logit and Odds
 
 A logistic regression model for loan default ($Y = 1$) has: $\log\frac{p}{1-p} = -2.5 + 0.8\,\text{DTI} - 0.03\,\text{Credit Score}$

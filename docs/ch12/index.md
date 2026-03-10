@@ -1,5 +1,9 @@
 # Chapter 12: Correlation and Causation
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 This chapter explores the fundamental concepts of correlation and causation -- two ideas that are central to statistical reasoning and data interpretation. While correlation quantifies the strength and direction of the relationship between two variables, causation implies that changes in one variable directly produce changes in another. The chapter covers how to measure, test, and visualize correlations, how to recognize pitfalls such as ecological fallacy and confounding, and how to reason about causal relationships using modern frameworks like directed acyclic graphs.

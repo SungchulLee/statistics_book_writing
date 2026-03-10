@@ -1,5 +1,9 @@
 # Bootstrapping as an Alternative
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 When data is non-normal, or when assumptions of normality cannot be met, **bootstrapping** provides a powerful alternative. Bootstrapping is a resampling technique that generates multiple samples from the observed data by sampling with replacement. This method allows for the estimation of sampling distributions, confidence intervals, and hypothesis testing without the need for parametric assumptions.
 
 ## Python Implementation

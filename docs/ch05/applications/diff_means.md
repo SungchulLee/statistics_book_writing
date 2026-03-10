@@ -1,5 +1,9 @@
 # Sampling Distribution of the Difference of Two Sample Means
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 When comparing two populations, we often examine the difference $\bar{X}_1 - \bar{X}_2$. The sampling distribution of this difference determines the appropriate test statistic, confidence interval formula, and distributional reference — which vary depending on what is known about the population variances and sample sizes.

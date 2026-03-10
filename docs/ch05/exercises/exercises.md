@@ -1,5 +1,9 @@
 # Exercises
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Exercise 1: Capture-Recapture Method
 
 We aim to estimate the total number of fish, $N$, in a pond using the **capture-recapture method**.

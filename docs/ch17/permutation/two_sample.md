@@ -1,5 +1,9 @@
 # Two-Sample Permutation Tests
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 The two-sample permutation test is a non-parametric method for testing whether two independent samples differ in location (typically their means). Unlike the t-test, it requires no assumptions about normality or equal variances. It is particularly useful in A/B testing and causal inference.

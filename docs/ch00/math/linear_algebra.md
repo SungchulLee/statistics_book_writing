@@ -1,5 +1,9 @@
 # Linear Algebra Notation and Conventions
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 Linear algebra is the language of multivariate statistics. Regression, principal component analysis, ANOVA decompositions, and multivariate distributions all rely on matrix and vector operations. This section establishes the notation used throughout the book and reviews the essential results.
 
 ## Vectors

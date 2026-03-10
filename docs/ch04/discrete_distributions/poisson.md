@@ -1,5 +1,9 @@
 # Poisson Distribution
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 The **Poisson distribution** models the number of events occurring in a fixed interval of time or space, given a known average rate. It is widely used in finance (trade arrivals, default counts), insurance (claim frequency), and queueing theory.

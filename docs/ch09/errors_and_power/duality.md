@@ -1,5 +1,9 @@
 # Confidence Interval ↔ Hypothesis Test Duality
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## The Duality Principle
 
 There is a deep connection between confidence intervals and hypothesis tests. A $(1 - \alpha) \times 100\%$ confidence interval and a hypothesis test at significance level $\alpha$ are two sides of the same coin:

@@ -1,5 +1,9 @@
 # Chapter 5: Sampling Distributions
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 This chapter bridges probability theory and statistical inference by showing that statistics computed from random samples are themselves random variables with their own distributions. It introduces the four fundamental sampling distributions (Normal, Student's $t$, chi-square, and $F$), derives the sampling distributions of the most commonly used statistics, and demonstrates how sample size governs the precision of estimation through the standard error.

@@ -1,5 +1,9 @@
 # Regularization Path
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 The **regularization path** traces how model coefficients change as the regularization parameter (lambda, $\lambda$) varies from large (high regularization, sparse solutions) to small (low regularization, close to OLS). Understanding the regularization path is essential for:

@@ -1,5 +1,9 @@
 # Skewness and Kurtosis
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 Descriptive statistics quantify the shape of a distribution and assess how closely it resembles a normal distribution. Two key measures for evaluating normality are **skewness** and **kurtosis**. These metrics describe the asymmetry and peakedness of the data distribution, respectively.
 
 ## Skewness

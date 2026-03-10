@@ -1,5 +1,9 @@
 # Checking Normality in Linear Regression
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 Normality of the residuals is one of the key assumptions in linear regression. This assumption posits that the residuals (errors) of the model should follow a normal distribution. Although the linearity assumption is more critical for the validity of the regression coefficients, checking the normality of residuals is important for ensuring the validity of confidence intervals, hypothesis tests, and prediction intervals. This section outlines methods to check for normality in linear regression, including visual inspections and statistical tests.
 
 ## 1. Understanding Normality in Regression

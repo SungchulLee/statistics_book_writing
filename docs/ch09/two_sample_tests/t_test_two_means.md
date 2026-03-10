@@ -1,5 +1,9 @@
 # Two-Sample t-Test (Pooled and Welch)
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 The two-sample t-test compares the means of two independent samples to determine if they differ significantly. It is widely used in A/B testing, clinical trials, and experimental design.

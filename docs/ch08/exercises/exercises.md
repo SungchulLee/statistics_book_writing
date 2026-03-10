@@ -1,5 +1,9 @@
 # Chapter 8: Exercises
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Exercise 1: Interpreting Confidence Intervals
 
 A researcher computes a 95% CI for the mean cholesterol level and obtains $(188.3, 205.7)$.

@@ -1,5 +1,9 @@
 # Introduction to MLE
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 Maximum Likelihood Estimation (MLE) is a method used to estimate the parameters of a statistical model by maximizing the likelihood function. The likelihood function measures how well the model, with certain parameters, explains the observed data. The MLE estimates are the parameters that make the observed data most probable.

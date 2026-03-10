@@ -1,5 +1,9 @@
 # Repeated Sampling Concept
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 A **sampling distribution** is the probability distribution of a given statistic based on a random sample. When we draw multiple random samples from the same population and calculate a statistic (such as the sample mean or sample proportion) for each sample, the resulting values form a distribution. This distribution is known as the **sampling distribution** of that statistic.

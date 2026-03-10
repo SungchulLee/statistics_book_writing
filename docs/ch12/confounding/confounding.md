@@ -1,5 +1,9 @@
 # 18.4 Correlation, Causation, and Confounding
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Correlation vs. Causation
 
 **Correlation** measures the strength and direction of a linear relationship between two variables, quantified by the correlation coefficient ($-1$ to $1$). **Causation** implies that a change in one variable directly causes a change in another.

@@ -1,5 +1,9 @@
 # Exponential Distribution
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 The **exponential distribution** models the time between events in a Poisson process. It is the continuous analogue of the geometric distribution and the only continuous distribution with the memoryless property. Common applications include modeling inter-arrival times, waiting times, and component lifetimes.

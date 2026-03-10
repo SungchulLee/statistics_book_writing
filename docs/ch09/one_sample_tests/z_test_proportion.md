@@ -1,5 +1,9 @@
 # Z-Test for p (Proportion)
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 The one-sample Z-test for proportions tests whether a population proportion equals a hypothesized value.

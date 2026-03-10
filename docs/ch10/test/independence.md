@@ -1,5 +1,9 @@
 # Test of Independence
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 An **Independence Test** is a statistical technique used to determine if there is a significant relationship between two categorical variables. Essentially, it helps answer the question: "Do the occurrences of one variable affect the occurrences of another?" If the two variables are independent, changes in one variable should have no effect on the distribution of the other.

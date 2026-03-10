@@ -1,5 +1,9 @@
 # Skewness and Kurtosis
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 **Skewness** and **kurtosis** are numerical measures that quantify the shape of a distribution beyond what the mean and variance capture. Skewness measures asymmetry, while kurtosis measures the heaviness of the tails relative to a normal distribution.

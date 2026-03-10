@@ -1,5 +1,9 @@
 # Exercises
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## 1. Writing Null and Alternative Hypotheses
 
 [Writing null and alternative hypotheses (Khan Academy)](https://www.khanacademy.org/math/ap-statistics/xfb5d8e68:inference-categorical-proportions/idea-significance-tests/e/writing-null-and-alternative-hypotheses-informal)

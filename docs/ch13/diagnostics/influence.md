@@ -1,5 +1,9 @@
 # Multicollinearity and Influence
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Identifying Outliers and Influential Points
 
 Outliers and influential points can substantially impact regression results. Understanding them is essential for model refinement.

@@ -1,5 +1,9 @@
 # Interaction Terms
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Why Use Interaction Terms?
 
 In many real-world scenarios, the effect of one variable on the outcome is not constant but changes depending on another variable. **Interaction terms** model this combined effect of two or more independent variables on the dependent variable.

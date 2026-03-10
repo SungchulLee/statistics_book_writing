@@ -1,5 +1,9 @@
 # Bootstrap Confidence Intervals: Visual Interpretation of Confidence Levels
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 This section demonstrates how to visualize bootstrap confidence intervals at different confidence levels (e.g., 90% vs 95%). Visual comparison clarifies what "confidence level" truly means: the procedure's long-run coverage property, not a probability statement about a particular interval.

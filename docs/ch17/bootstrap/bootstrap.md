@@ -1,5 +1,9 @@
 # Bootstrap Methods
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Motivation
 
 Many statistical procedures require knowing the sampling distribution of an estimator $\hat{\theta}$. In simple cases (e.g., the sample mean from a normal population), the sampling distribution has a known closed form. But for complex statistics — medians, correlation coefficients, regression coefficients with heteroscedasticity, ratio estimators — the exact sampling distribution may be unknown or intractable.

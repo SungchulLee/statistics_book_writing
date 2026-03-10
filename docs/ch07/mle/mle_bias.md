@@ -1,5 +1,9 @@
 # Bias of Gaussian MLE for σ²
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 The MLE estimator for the variance of a Normal distribution is biased.

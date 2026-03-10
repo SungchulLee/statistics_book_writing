@@ -1,5 +1,9 @@
 # Sampling Distribution of Proportions
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 The **sampling distribution of the sample proportion** $\hat{p}$ describes how the proportion of successes varies across repeated random samples from a binary population. It is the foundation for inference about population proportions — polls, quality control, clinical trials, and A/B tests all rely on it.

@@ -1,5 +1,9 @@
 # Efficiency of the Sample Mean
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 The sample mean $\bar{X}$ achieves the Cramér–Rao lower bound for estimating the mean of a Normal distribution, making it the most efficient unbiased estimator.

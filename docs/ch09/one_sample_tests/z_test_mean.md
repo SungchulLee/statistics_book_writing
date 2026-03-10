@@ -1,5 +1,9 @@
 # Z-Test for μ (Known σ)
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 The one-sample Z-test tests hypotheses about the population mean when $\sigma$ is known.

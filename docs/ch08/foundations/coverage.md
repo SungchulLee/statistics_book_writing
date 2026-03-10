@@ -1,5 +1,9 @@
 # Confidence Level and Coverage
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## What Is a Confidence Interval?
 
 Confidence intervals are a fundamental concept in inferential statistics, providing a way to quantify the uncertainty associated with estimating a population parameter. When working with sample data, there is always some sampling variability — differences between the sample and the population — since samples represent only a portion of the population. A point estimate, such as the sample mean, gives a single best guess for the population parameter (e.g., the population mean). However, this estimate does not reflect the uncertainty inherent in using a sample to make inferences about the entire population.

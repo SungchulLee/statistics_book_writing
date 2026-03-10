@@ -1,5 +1,9 @@
 # Paired-Sample Non-Parametric Tests
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Paired-Sample Wilcoxon Signed-Rank Test
 
 The **Paired-Sample Wilcoxon Signed-Rank Test** is a non-parametric test used to determine whether the median difference between paired observations is significantly different from zero. It serves as a non-parametric alternative to the paired t-test when the data do not meet the normality assumption.

@@ -1,5 +1,9 @@
 # 18.2 Ecological Correlation
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 Ecological correlation refers to the statistical relationship between variables that are **aggregated over groups or regions** rather than being measured at the individual level. The phenomenon where an ecological correlation misrepresents the relationship at the individual level is known as the **ecological fallacy**.
 
 ---

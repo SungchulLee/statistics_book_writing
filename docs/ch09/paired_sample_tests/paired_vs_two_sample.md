@@ -1,5 +1,9 @@
 # When to Use Paired vs Two-Sample Tests
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 Choosing between a paired-sample test and a two-sample test is a fundamental decision in hypothesis testing. The choice depends on the study design and how the data were collected, not on the data values themselves.

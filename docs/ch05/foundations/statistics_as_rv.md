@@ -1,5 +1,9 @@
 # Statistics as Random Variables
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 A **statistic** is any function of the observed data. Because the data arise from random sampling, the statistic itself is a **random variable** — its value changes from sample to sample. Recognizing this is the conceptual foundation of all sampling-distribution theory.

@@ -1,5 +1,9 @@
 # Bayes' Theorem
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 **Bayes' theorem** provides a systematic way to update probabilities when new evidence is observed. It reverses the direction of conditioning: given $P(B \mid A)$, it computes $P(A \mid B)$. This theorem is the foundation of Bayesian statistics and has widespread applications in medical diagnosis, spam filtering, machine learning, and finance.

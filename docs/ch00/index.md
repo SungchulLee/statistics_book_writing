@@ -1,5 +1,9 @@
 # Chapter 0: Prerequisites
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 This chapter establishes the mathematical and computational foundations needed for the rest of the book. It begins with a review of core mathematical concepts (logic, sets, sequences, limits, and linear algebra notation), introduces the essential Python tools used throughout (NumPy, pandas, Matplotlib), and then develops the advanced linear algebra of square matrices and their connections to statistical theory via quadratic forms and OLS sampling distributions.

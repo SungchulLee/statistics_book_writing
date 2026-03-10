@@ -1,5 +1,9 @@
 # Supervised Learning (Prediction with Labels)
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 In **supervised learning**, the model is trained on a **labeled dataset**—each input $X$ has a corresponding known output $Y$. The goal is for the model to learn the mapping $f: X \to Y$ and make accurate predictions on new, unseen data.

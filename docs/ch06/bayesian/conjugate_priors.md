@@ -1,5 +1,9 @@
 # Conjugate Priors
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 A prior distribution is **conjugate** for a given likelihood if the posterior distribution belongs to the same family as the prior. This property greatly simplifies Bayesian computation.

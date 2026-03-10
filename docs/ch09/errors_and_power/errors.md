@@ -1,5 +1,9 @@
 # Type I and Type II Errors
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 When conducting a hypothesis test, two potential types of errors can occur. Understanding these errors is essential for correctly interpreting the results of statistical tests and for designing studies that minimize the risk of incorrect conclusions.

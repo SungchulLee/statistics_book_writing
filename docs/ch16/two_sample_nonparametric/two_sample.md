@@ -1,5 +1,9 @@
 # Two-Sample Non-Parametric Tests
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## 1. Mann-Whitney U Test (Wilcoxon Rank-Sum Test)
 
 The **Mann-Whitney U test**, also known as the **Wilcoxon rank-sum test**, is a non-parametric statistical test used to compare the distributions of two independent groups. It is particularly useful when the assumptions of a parametric test, such as the independent two-sample t-test, are not met (e.g., non-normality or ordinal data).

@@ -1,5 +1,9 @@
 # Goodness-of-Fit Test
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 The **Goodness-of-Fit Test** is a statistical procedure used to evaluate the degree to which an observed frequency distribution matches an expected distribution, usually for discrete or categorical data. This test assesses whether the observed frequencies of events across different categories align with the expected frequencies predicted by a specific theoretical model or hypothesis. By comparing observed and expected counts, the test determines if any significant differences exist, which might suggest that the observed data does not fit the expected pattern.

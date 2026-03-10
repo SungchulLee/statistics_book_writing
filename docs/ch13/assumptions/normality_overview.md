@@ -1,5 +1,9 @@
 # Normality Assumption
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Definition
 
 The normality assumption asserts that the residuals of the regression model are normally distributed, with a mean of zero:

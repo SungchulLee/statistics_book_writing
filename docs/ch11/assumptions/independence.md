@@ -1,5 +1,9 @@
 # Checking Independence of Observations
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Why Independence Matters
 
 The independence assumption states that each observation should be unrelated to every other observation, both within and across groups. This is arguably the most critical assumption in ANOVA because violations of independence cannot be corrected by transformations or alternative test statistics—they require fundamentally different modeling approaches (e.g., mixed-effects models, repeated measures ANOVA).

@@ -1,5 +1,9 @@
 # Median Absolute Deviation (MAD)
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 The **Median Absolute Deviation (MAD)** is a robust measure of statistical dispersion that measures the spread of data around the median. Unlike variance and standard deviation, MAD is resistant to outliers, making it an ideal complement to the median for describing skewed or contaminated datasets.

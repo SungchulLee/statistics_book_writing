@@ -1,5 +1,9 @@
 # Trimmed and Winsorized Means
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 When data contains outliers or comes from heavy-tailed distributions, robust alternatives to the sample mean may perform better.

@@ -1,5 +1,9 @@
 # Controlled Experiments
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 A **controlled experiment** is a structured research design in which the researcher actively manipulates one or more **independent variables** to observe their effects on a **dependent variable**, while holding other factors constant. Controlled experiments are fundamental in scientific research because they can establish **causality** by controlling extraneous variables.

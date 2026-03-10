@@ -1,5 +1,9 @@
 # 18.6 Correlation Tests
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 This section covers three widely used statistical tests for assessing the significance of the relationship between two variables: Pearson's correlation, Spearman's rank correlation, and Kendall's tau.
 
 ---

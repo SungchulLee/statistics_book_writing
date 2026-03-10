@@ -1,5 +1,9 @@
 # Populations and Samples
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 In statistics, understanding the difference between **population** and **sample** is crucial for any analysis, including regression, ANOVA, or any other statistical test. These two concepts form the foundation of inferential statistics, where we make conclusions about a larger group based on data from a smaller group.

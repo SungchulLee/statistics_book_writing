@@ -1,5 +1,9 @@
 # Parameters vs. Statistics
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 A core distinction in statistical inference is between **parameters**—fixed but unknown quantities that describe a population—and **statistics**—computable quantities derived from a sample that serve as estimates of those parameters. Every inferential procedure (confidence intervals, hypothesis tests, regression) rests on this distinction.

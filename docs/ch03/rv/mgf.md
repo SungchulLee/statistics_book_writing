@@ -1,5 +1,9 @@
 # Moment Generating Functions
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 The **moment generating function (MGF)** is a powerful tool that encodes all the moments of a random variable into a single function. It provides an elegant way to compute expectations, prove limit theorems, and characterize distributions. If two random variables have the same MGF, they have the same distribution.

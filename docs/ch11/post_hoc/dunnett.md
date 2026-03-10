@@ -1,5 +1,9 @@
 # Dunnett's Test (vs Control)
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 Dunnett's test compares each of $k-1$ treatment groups to a single control group, while controlling the FWER.

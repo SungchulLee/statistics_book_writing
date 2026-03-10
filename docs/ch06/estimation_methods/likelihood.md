@@ -1,5 +1,9 @@
 # Likelihood Function
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Introduction
 
 The **likelihood function** is the cornerstone of parametric statistical inference. Given observed data, the likelihood function measures how "likely" each candidate parameter value is to have generated that data. Unlike a probability distribution, which assigns probabilities to outcomes given fixed parameters, the likelihood function fixes the data and treats the parameter as the variable.

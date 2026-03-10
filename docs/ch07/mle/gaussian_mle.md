@@ -1,5 +1,9 @@
 # MLE of μ and σ²
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Introduction
 
 The **Maximum Likelihood Estimators of the Gaussian (Normal) distribution parameters** are among the most important results in statistics. For $X_1, \ldots, X_n \sim N(\mu, \sigma^2)$, the MLE provides closed-form estimators for both the mean $\mu$ and variance $\sigma^2$. This section derives these estimators, analyzes their properties, and connects the results to the broader theory of estimation.

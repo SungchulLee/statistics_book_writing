@@ -1,5 +1,9 @@
 # Gradient-Based Optimization
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Full Gradient Derivation (Two-Layer Network)
 
 We derive the gradients for the two-layer model (hidden layer with

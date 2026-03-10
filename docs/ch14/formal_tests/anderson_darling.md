@@ -1,5 +1,9 @@
 # Anderson-Darling Test
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 The **Anderson-Darling test** is an enhancement of the Kolmogorov-Smirnov test, designed to assess whether a sample comes from a specific distribution, such as the normal distribution. It is particularly sensitive to deviations in the tails, making it especially useful for detecting departures from normality in smaller samples.

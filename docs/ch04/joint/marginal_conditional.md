@@ -1,5 +1,9 @@
 # Marginal and Conditional Distributions
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 Given a joint distribution of two random variables, the **marginal distribution** recovers the distribution of each variable individually, while the **conditional distribution** describes one variable given a specific value of the other. These concepts are essential for Bayesian reasoning, regression, and understanding dependence.

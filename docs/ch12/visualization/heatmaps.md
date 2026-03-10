@@ -1,5 +1,9 @@
 # Heatmaps for Correlation Matrices
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 A **heatmap** is a two-dimensional visualization that uses color intensity to represent numerical values in a matrix. For correlation matrices, heatmaps reveal patterns of association across many variables simultaneously, making them indispensable for exploratory analysis of multivariate datasets. Colors (typically blue for negative correlation, white for zero, red for positive) encode the strength and direction of relationships at a glance.

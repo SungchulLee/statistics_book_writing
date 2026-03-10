@@ -1,5 +1,9 @@
 # Unsupervised Learning (Pattern Discovery)
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 In **unsupervised learning**, the model is given data **without explicit labels or outcomes**. The task is to uncover hidden patterns, structures, or relationships within the data. There is no "correct answer" to learn from—the algorithm must discover structure on its own.

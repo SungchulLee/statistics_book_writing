@@ -1,5 +1,9 @@
 # Cross-Entropy Loss
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Definition
 
 For $n$ observations with $C$ classes, the **categorical cross-entropy

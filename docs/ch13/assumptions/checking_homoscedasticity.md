@@ -1,5 +1,9 @@
 # Checking Homoscedasticity in Linear Regression
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 Homoscedasticity, one of the key assumptions in linear regression, refers to the condition where the variance of the residuals (errors) is constant across all levels of the independent variables. If this assumption is violated, meaning the residuals exhibit non-constant variance (heteroscedasticity), it can lead to inefficient estimates, biased standard errors, and unreliable hypothesis tests. This section provides an overview of methods to check for homoscedasticity in linear regression, including visual inspections and statistical tests.
 
 ## 1. Understanding Homoscedasticity

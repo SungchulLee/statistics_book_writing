@@ -1,5 +1,9 @@
 # Checking Normality of Residuals
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Why Normality Matters
 
 The residuals (differences between observed and predicted values) should be normally distributed for each group. This assumption ensures that the F-statistic follows the correct $F$-distribution under the null hypothesis. When residuals deviate substantially from normality, the p-values produced by ANOVA may be inaccurate, potentially leading to incorrect conclusions.

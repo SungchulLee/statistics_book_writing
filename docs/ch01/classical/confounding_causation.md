@@ -1,5 +1,9 @@
 # Confounding and Association vs. Causation
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 One of the most critical concepts in statistical reasoning is the distinction between **association** (correlation) and **causation**. Two variables may move together without one causing the other. The culprit behind many spurious associations is the **confounding variable**—a third factor related to both the presumed cause and the observed effect.

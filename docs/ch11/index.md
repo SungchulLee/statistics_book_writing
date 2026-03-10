@@ -1,5 +1,9 @@
 # Chapter 11: ANOVA
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 Analysis of Variance (ANOVA) extends hypothesis testing to compare means across three or more groups simultaneously, avoiding the inflated Type I error rate that would result from performing multiple pairwise t-tests. This chapter covers one-way and two-way ANOVA models, a comprehensive suite of post-hoc comparison methods, Welch's ANOVA for heteroscedastic data, assumption checking and diagnostic tools, and practical applications including A/B testing and financial analysis.

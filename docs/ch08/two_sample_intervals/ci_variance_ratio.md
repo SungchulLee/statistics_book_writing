@@ -1,5 +1,9 @@
 # CI for σ₁² / σ₂²
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Confidence Interval for the Ratio of Two Variances
 
 When comparing the variability of two independent populations, we construct a confidence interval for the ratio $\theta = \sigma_1^2 / \sigma_2^2$. This is based on the F-distribution.

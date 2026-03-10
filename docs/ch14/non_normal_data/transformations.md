@@ -1,5 +1,9 @@
 # Transformations to Achieve Normality
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 When data deviates significantly from normality, certain statistical methods that rely on normality assumptions may no longer be appropriate. One common approach is to apply a transformation to make the data more normal.
 
 ## Common Transformations

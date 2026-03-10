@@ -1,5 +1,9 @@
 # ROC Curve and AUC
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Receiver Operating Characteristic (ROC) Curve
 
 The **ROC curve** (Receiver Operating Characteristic) is a powerful tool for evaluating binary classifiers across all possible classification thresholds. It plots:

@@ -1,5 +1,9 @@
 # Checking Linearity in Linear Regression
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 Linearity is a foundational assumption in linear regression that posits a straight-line relationship between the dependent variable and each independent variable. Ensuring that this assumption holds is critical for the validity of the regression model. If the relationship between the variables is not linear, the model may yield biased estimates, resulting in poor predictions and incorrect inferences. This section explores various methods for assessing linearity in linear regression.
 
 ## 1. Visual Inspection Using Scatterplots

@@ -1,5 +1,9 @@
 # Consistency and Asymptotic Normality
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 An estimator $\hat{\theta}_n$ is **consistent** for $\theta$ if $\hat{\theta}_n \xrightarrow{P} \theta$ as $n \to \infty$.

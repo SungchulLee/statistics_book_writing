@@ -1,5 +1,9 @@
 # Continuous Random Variables
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 A **continuous random variable** can take on any value within a continuous range (an interval or union of intervals on the real line). Unlike discrete random variables, the probability of any single specific value is zero—instead, probabilities are defined over intervals.

@@ -1,5 +1,9 @@
 # Independence vs Zero Correlation
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 A common misconception is that uncorrelated random variables are independent. While **independence implies zero correlation**, the converse is **false** in general. This section clarifies the distinction with proofs, counterexamples, and the special case where the two notions coincide.

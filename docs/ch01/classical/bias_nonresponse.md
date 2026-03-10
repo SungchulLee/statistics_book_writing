@@ -1,5 +1,9 @@
 # Bias and Nonresponse
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 Even with careful survey design, various **biases** can distort results and lead to incorrect conclusions. Understanding the sources of bias—and the historical disasters they have caused—is essential for anyone working with data.

@@ -1,5 +1,9 @@
 # Expected Cell Counts and Validity Conditions
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 The chi-square test statistic is an **approximation** based on the asymptotic behavior of the multinomial distribution. For this approximation to be reliable, certain conditions must be met. When these conditions are violated, the p-values produced by the chi-square test may be inaccurate, potentially leading to incorrect conclusions.

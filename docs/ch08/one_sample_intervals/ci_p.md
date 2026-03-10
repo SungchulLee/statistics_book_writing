@@ -1,5 +1,9 @@
 # CI for p
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## One-Sample Proportion Confidence Interval
 
 In many statistical problems, we are interested in estimating a population proportion $p$ — the fraction of individuals in a population that have a certain characteristic. For example, the proportion of voters who support a particular candidate or the proportion of defective items in a batch.

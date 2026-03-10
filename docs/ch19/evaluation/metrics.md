@@ -1,5 +1,9 @@
 # Confusion Matrix, ROC Curve, and Classification Metrics
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## The Classification Decision
 
 Logistic regression outputs a predicted probability $\hat{p} = P(Y = 1 \mid \mathbf{x})$. To make a binary classification decision, we apply a **threshold** $c$ (default $c = 0.5$):

@@ -1,5 +1,9 @@
 # 1.1 Survivorship Bias
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Understanding Survivorship Bias
 
 Survivorship bias occurs when only the "survivors" or successful instances of a given situation are considered, while those that did not survive or failed are ignored. This can lead to skewed perceptions and incorrect conclusions, particularly when analyzing correlations.

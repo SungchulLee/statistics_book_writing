@@ -1,5 +1,9 @@
 # Logit Link and Odds
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## From Linear Models to Classification
 
 In linear regression the response variable $y$ is continuous. When the response

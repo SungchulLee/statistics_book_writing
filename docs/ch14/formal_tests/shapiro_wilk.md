@@ -1,5 +1,9 @@
 # Shapiro-Wilk Test
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 The Shapiro-Wilk test is a popular method for assessing the normality of a dataset. It evaluates whether the sample data comes from a normally distributed population by calculating a test statistic and corresponding $p$-value.

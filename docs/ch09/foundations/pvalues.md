@@ -1,5 +1,9 @@
 # Test Statistics and P-values
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Test Statistic
 
 A **test statistic** is a calculated value from the sample data that, when compared to a threshold from a theoretical distribution, helps decide whether to reject the null hypothesis, $H_0$. The choice of test statistic depends on the data type and the hypothesis we test. Standard test statistics include the z-statistic, t-statistic, and chi-square statistic.

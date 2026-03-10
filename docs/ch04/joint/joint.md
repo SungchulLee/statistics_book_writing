@@ -1,5 +1,9 @@
 # Joint Distributions
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 A **joint distribution** describes the probabilistic behavior of two or more random variables simultaneously. While individual (marginal) distributions tell us about each variable in isolation, joint distributions capture how variables relate to and depend on each other.

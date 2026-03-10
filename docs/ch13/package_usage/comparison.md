@@ -1,5 +1,9 @@
 # sklearn vs statsmodels Comparison
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 Python offers two primary libraries for regression modeling: **scikit-learn** (`sklearn`) and **statsmodels**. They serve different purposes and are best suited for different workflows.

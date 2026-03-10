@@ -1,5 +1,9 @@
 # Boxplots and Their Interpretation
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 A **boxplot** summarizes the distribution by showing the median, quartiles, and potential outliers. While not explicitly designed for normality testing, boxplots can hint at skewness and whether the data is symmetric, which are characteristics of normally distributed data.

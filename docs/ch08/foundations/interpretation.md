@@ -1,5 +1,9 @@
 # Interpretation and Common Misconceptions
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## The Repeated-Sampling Interpretation
 
 A 95% confidence interval does **not** mean "there is a 95% probability that $\mu$ is in this interval." The parameter $\mu$ is a fixed (but unknown) number — it either is or is not in the interval.

@@ -1,5 +1,9 @@
 # Jarque-Bera Test
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 The Jarque-Bera test is a statistical test used to assess whether a dataset follows a normal distribution by evaluating two key features of the data: skewness and kurtosis. It is widely used in econometrics and financial applications, where normality is a crucial assumption for many statistical models and methods.

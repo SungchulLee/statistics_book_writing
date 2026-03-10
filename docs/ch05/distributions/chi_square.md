@@ -1,4 +1,8 @@
 # Chi-Square Distribution (chi-squared)
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 The **chi-square distribution** arises naturally as the distribution of a sum of squared standard normal random variables. It plays a central role in inference about population variance, goodness-of-fit tests, and tests of independence.

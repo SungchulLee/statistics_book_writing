@@ -1,5 +1,9 @@
 # Mean Squared Error
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Introduction
 
 The **Mean Squared Error (MSE)** is the most widely used criterion for evaluating the quality of a statistical estimator. It measures the average squared deviation of an estimator from the true parameter value, capturing both systematic error (bias) and random fluctuation (variance) in a single quantity.

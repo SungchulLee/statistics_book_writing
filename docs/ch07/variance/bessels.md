@@ -1,5 +1,9 @@
 # Bessel's Correction
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Introduction
 
 **Bessel's correction** refers to the use of $n-1$ instead of $n$ in the denominator of the sample variance formula, yielding an unbiased estimator of the population variance. Named after Friedrich Bessel, this correction accounts for the fact that estimating the mean from the same data "uses up" one degree of freedom, causing the naive estimator (dividing by $n$) to systematically underestimate the true variance.

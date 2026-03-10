@@ -1,4 +1,8 @@
 # Paired t-Test for mu_D
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Paired-Sample t Test
 
 The paired sample t-test, also known as the dependent sample t-test or the matched pairs t-test, is a statistical procedure used to compare two population means where you have two samples in which observations in one sample can be paired with observations in the other sample. Common scenarios include case-control studies, repeated measures, and experiments where individuals are measured before and after a treatment.

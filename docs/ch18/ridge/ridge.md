@@ -1,5 +1,9 @@
 # Ridge Regression (L2 Regularization)
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Motivation: The Problem with OLS
 
 Ordinary least squares (OLS) minimizes the residual sum of squares:

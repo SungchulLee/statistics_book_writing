@@ -1,5 +1,9 @@
 # Comparing Correlations
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 This section covers comparing correlations as part of the broader chapter on the topic.

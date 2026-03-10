@@ -1,5 +1,9 @@
 # Q-Q Plots for Financial Data: Detecting Non-Normality in Asset Returns
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 Q-Q plots are particularly valuable in finance for diagnosing departures from normality in asset returns. Many financial models assume returns follow a normal distribution, but empirical data often exhibit **heavy tails** and **skewness**, leading to significant underestimation of tail risk. This section focuses on using Q-Q plots to visualize these departures in financial data.

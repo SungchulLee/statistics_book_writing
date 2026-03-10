@@ -1,5 +1,9 @@
 # Post-Hoc Comparisons: Tukey HSD
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## 1. Post-Hoc Tests in One-Way ANOVA
 
 When conducting a **one-way ANOVA**, we may find that there is a significant difference between the group means. However, a significant result from the ANOVA test does not tell us which specific groups are different from each other. **Post-hoc tests** are used in this case to identify the specific pairs of groups that differ significantly. These tests help control for Type I error (false positives) when making multiple comparisons.

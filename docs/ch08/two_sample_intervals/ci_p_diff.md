@@ -1,5 +1,9 @@
 # CI for p₁ − p₂
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Two-Sample Proportion Confidence Interval
 
 In many practical situations, we compare the proportions of two populations — for instance, the proportion of people who support two different policies or the defect rates from two production lines.

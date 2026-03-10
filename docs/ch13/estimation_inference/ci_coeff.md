@@ -1,5 +1,9 @@
 # Confidence Intervals for Simple OLS Estimators
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 Given the sampling distributions derived in the [previous section](sampling_dist_simple.md), we can construct confidence intervals for the slope, the expected response, and individual predictions in simple linear regression. Each confidence interval takes the standard form: **point estimate $\pm$ critical value $\times$ standard error**.

@@ -1,5 +1,9 @@
 # Polynomial Regression
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Why Use Polynomial Regression?
 
 **Polynomial regression** models non-linear relationships by including powers of the predictors in the regression equation. Unlike simple linear regression, which assumes a straight-line relationship, polynomial regression can model curves of various shapes.

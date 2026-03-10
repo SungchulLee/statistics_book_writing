@@ -1,5 +1,9 @@
 # Independence of Events
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 Two events are **independent** if knowing that one has occurred provides no information about whether the other has occurred. Independence is a fundamental concept that simplifies probability calculations and underpins key results like the Law of Large Numbers and the Central Limit Theorem.

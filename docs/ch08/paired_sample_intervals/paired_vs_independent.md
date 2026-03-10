@@ -1,5 +1,9 @@
 # When to Use Paired vs Independent Designs
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 Choosing between paired and independent designs affects both the confidence interval width and interpretation.

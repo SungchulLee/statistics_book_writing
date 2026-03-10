@@ -1,5 +1,9 @@
 # 19.1 One-Sample Non-Parametric Tests
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 This section introduces three foundational non-parametric tests that operate on a single sample (or treat paired data as a single sample of differences): the **Runs Test** for randomness, the **Sign Test** for the median, and the **Wilcoxon Signed-Rank Test** which uses both the sign and magnitude of deviations.
 
 ---

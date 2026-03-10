@@ -1,5 +1,9 @@
 # Violin Plots
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 A **violin plot** combines a box plot with a kernel density estimate (KDE) on each side, showing the full distribution shape alongside summary statistics. Where a box plot reduces the distribution to five numbers plus outliers, a violin plot reveals multimodality, skewness, and density variations that box plots hide.

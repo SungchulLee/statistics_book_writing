@@ -1,5 +1,9 @@
 # Limitations and Pitfalls of Normality Tests
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 While formal normality tests provide valuable insights, they have limitations. In practice, these tests can be influenced by factors such as sample size, the power of the test, and the distribution of real-world data. Understanding these pitfalls is crucial for making informed decisions about the appropriateness of normality tests.
 
 ## Sensitivity to Sample Size

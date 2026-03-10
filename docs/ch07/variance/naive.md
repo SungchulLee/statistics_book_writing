@@ -1,5 +1,9 @@
 # Naive Variance Estimator
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Introduction
 
 The **naive variance estimator** divides the sum of squared deviations by $n$ (the sample size) rather than by $n-1$. While this is the most intuitive approach — simply averaging the squared deviations from the sample mean — it turns out to be biased. Understanding *why* it is biased provides deep insight into the nature of estimation and motivates Bessel's correction.

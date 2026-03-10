@@ -1,5 +1,9 @@
 # The Bootstrap Resampling Method
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 The **bootstrap** is a powerful, distribution-free method for estimating the sampling distribution of a statistic without making parametric assumptions. By repeatedly resampling (with replacement) from a single sample, we can approximate the sampling distribution and compute standard errors, confidence intervals, and other inferential quantities.

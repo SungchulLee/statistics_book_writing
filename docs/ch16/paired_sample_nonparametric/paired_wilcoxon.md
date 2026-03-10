@@ -1,5 +1,9 @@
 # Paired Wilcoxon
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 This section covers paired wilcoxon as part of the broader chapter on the topic.

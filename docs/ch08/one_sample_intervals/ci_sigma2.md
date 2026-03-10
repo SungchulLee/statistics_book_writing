@@ -1,5 +1,9 @@
 # CI for σ²
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Confidence Interval for the Population Variance
 
 When the goal is to estimate the variability in a population, we construct a confidence interval for the population variance $\sigma^2$ (or equivalently, the population standard deviation $\sigma$).

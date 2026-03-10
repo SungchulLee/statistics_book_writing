@@ -1,5 +1,9 @@
 # Odds Ratios and Coefficient Interpretation
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## The Odds and Odds Ratio
 
 In logistic regression, the coefficient $\theta_j$ has a direct interpretation through the **odds ratio**. Recall that the logit model relates the log-odds linearly to the features:

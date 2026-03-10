@@ -1,5 +1,9 @@
 # Effect Size and Cramér's V
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 The chi-square test statistic tells us whether there is a statistically significant association, but it does not tell us how **strong** that association is. For large samples, even trivially small deviations from independence can produce highly significant p-values. Effect size measures address this limitation by quantifying the **magnitude** of the association, independent of sample size.

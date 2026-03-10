@@ -1,5 +1,9 @@
 # CI for μ
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## One-Sample z Confidence Interval
 
 In numerous real-world applications, such as in business, healthcare, and education, estimating the population mean $\mu$ from a random sample is often essential. When the population variance is known, we can utilize the standard normal distribution to construct a confidence interval.

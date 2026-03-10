@@ -1,5 +1,9 @@
 # Strengths and Limitations of Each Approach
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 The **classical** (design-your-data-collection) and **modern** (analyze-the-data-you-have) approaches are not competitors—they are complementary tools that address different aspects of data analysis. Understanding their respective strengths and limitations is essential for choosing the right methodology for a given problem.

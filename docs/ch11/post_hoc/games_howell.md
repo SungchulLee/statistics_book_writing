@@ -1,5 +1,9 @@
 # Games–Howell (Unequal Variances)
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 The Games-Howell procedure is a post-hoc test that does not assume equal variances or equal sample sizes.

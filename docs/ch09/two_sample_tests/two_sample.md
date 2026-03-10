@@ -1,5 +1,9 @@
 # Two-Sample Tests
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## 1. Two Sample z Test
 
 The two sample z-test determines whether the means of two independent samples differ significantly, given that the population variances are known. It applies when comparing two groups under different conditions and assumes normally distributed, independent samples.

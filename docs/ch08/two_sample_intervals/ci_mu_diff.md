@@ -1,5 +1,9 @@
 # CI for μ₁ − μ₂
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Two-Sample Confidence Interval for the Difference of Means
 
 When comparing two populations, we are often interested in the difference between their means. A confidence interval for $\mu_1 - \mu_2$ provides a range of plausible values for this difference, considering sampling variability.

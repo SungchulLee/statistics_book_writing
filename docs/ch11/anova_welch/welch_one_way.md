@@ -1,5 +1,9 @@
 # Welch's One-Way ANOVA
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 **Welch's ANOVA** (Analysis of Variance) is a statistical test used to determine whether the means of two or more groups are significantly different when the assumption of **equal variances** (homoscedasticity) is violated. It is an alternative to the traditional one-way ANOVA, which assumes equal variances among groups.
 
 ## 1. When to Use Welch's ANOVA

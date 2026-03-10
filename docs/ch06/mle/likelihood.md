@@ -1,5 +1,9 @@
 # Likelihood Function
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 The **likelihood function** is the joint density of the observed data, viewed as a function of the parameters.

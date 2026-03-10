@@ -1,5 +1,9 @@
 # Exercises
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Exercise 1: Statsmodels Package Interpretation
 
 The following is the result of performing a linear regression analysis using the `statsmodels` package. The analysis predicts **sales** based on advertising expenses allocated to **TV**, **radio**, and **newspaper** media:

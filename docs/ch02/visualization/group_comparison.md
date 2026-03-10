@@ -1,5 +1,9 @@
 # Group Comparisons
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 Effective data visualization often requires comparing distributions, frequencies, or relationships across groups. This section covers the major visualization tools for group comparisons: scatter plots, line plots, bar plots, pie charts, pair plots, stem-and-leaf plots, dot plots, frequency tables, and mosaic plots.

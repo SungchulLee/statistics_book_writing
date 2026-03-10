@@ -1,5 +1,9 @@
 # Confusion Matrix
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Definition and Setup
 
 The **confusion matrix** (also called a **contingency table**) summarizes the performance of a classification model by comparing predicted labels to actual labels. For binary classification, it is a 2×2 table:

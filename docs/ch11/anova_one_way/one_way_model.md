@@ -1,5 +1,9 @@
 # One-Way ANOVA: Model and Assumptions
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## 1. One-Way ANOVA (Analysis of Variance)
 
 ### A. One-Way ANOVA

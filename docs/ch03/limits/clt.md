@@ -1,5 +1,9 @@
 # Central Limit Theorem
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 The **Central Limit Theorem (CLT)** is one of the most important results in all of probability and statistics. It states that the sampling distribution of the sample mean of a sufficiently large number of i.i.d. random variables is approximately normal, **regardless** of the original distribution, provided the population has finite mean and variance.

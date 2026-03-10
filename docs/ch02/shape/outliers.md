@@ -1,5 +1,9 @@
 # Outliers and Leverage
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 **Outliers** are data points that significantly differ from other observations in a dataset. They may be unusually high or low and can arise due to variability in the data, errors in data collection, or they may indicate special cases that deserve further investigation. Detecting and understanding outliers is crucial because they can distort statistical analyses such as the mean, variance, and regression models.

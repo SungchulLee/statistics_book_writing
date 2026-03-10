@@ -1,5 +1,9 @@
 # ECDF and Quantiles
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 The **empirical cumulative distribution function (ECDF)** and **quantiles** provide complementary views of a distribution that avoid the bin-width sensitivity of histograms. The ECDF maps every data value to the proportion of observations at or below that value, producing a step function that converges to the true CDF as the sample size grows. Quantiles invert this relationship, answering: "At what value does a given fraction of the data fall below?"

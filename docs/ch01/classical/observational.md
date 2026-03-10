@@ -1,5 +1,9 @@
 # Observational Studies
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 An **observational study** is a type of research in which the investigator observes and records information about subjects **without altering** the study environment. The primary goal is to assess associations between variables in a real-world context. Unlike experimental studies, observational studies do not involve intervention by the researcher, making them ideal for investigating relationships and patterns in natural settings.

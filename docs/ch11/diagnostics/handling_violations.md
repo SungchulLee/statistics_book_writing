@@ -1,5 +1,9 @@
 # Handling Assumption Violations
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 When diagnostic checks reveal that one or more ANOVA assumptions are violated, it is important to take corrective actions to ensure valid conclusions. The appropriate response depends on the nature and severity of the violation. This section provides a systematic guide to addressing each type of violation.

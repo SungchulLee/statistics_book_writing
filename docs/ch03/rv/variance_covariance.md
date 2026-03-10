@@ -1,5 +1,9 @@
 # Variance and Covariance
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 While the expected value summarizes the center of a distribution, **variance** measures how spread out the distribution is around the mean. **Covariance** and **correlation** capture the degree to which two random variables move together. These concepts are essential for risk measurement, portfolio theory, and statistical inference.

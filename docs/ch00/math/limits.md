@@ -1,5 +1,9 @@
 # Sequences, Limits, and Asymptotics
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 Sequences and their limiting behavior are the mathematical backbone of statistical inference. The Law of Large Numbers, the Central Limit Theorem, and the consistency of estimators are all statements about limits of sequences of random variables. This section reviews the deterministic foundations; the probabilistic extensions appear in Chapter 3.
 
 ## Sequences

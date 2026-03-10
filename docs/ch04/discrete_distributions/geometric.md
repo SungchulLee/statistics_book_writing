@@ -1,5 +1,9 @@
 # Geometric and Negative Binomial Distributions
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 The **geometric distribution** models the number of trials until the first success, while the **negative binomial distribution** generalizes this to the number of trials until the $r$-th success. Both arise naturally in sequential experiments with independent Bernoulli trials.

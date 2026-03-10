@@ -1,5 +1,9 @@
 # Introduction to Variance Testing
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Motivation
 
 Several statistical tests have been developed to assess whether the observed differences in variances across groups or populations are statistically significant. These tests evaluate whether the variability in one or more samples is higher, lower, or equal compared to others. Each test has specific assumptions about the data (e.g., normality, independence) and is suited to different types of analysis.

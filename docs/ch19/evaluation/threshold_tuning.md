@@ -1,5 +1,9 @@
 # Decision Threshold Tuning
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 In binary classification, logistic regression produces predicted probabilities in $[0,1]$. To make a hard prediction (positive or negative), we must choose a **decision threshold**. The default threshold of 0.5 is not always optimal—the right choice depends on the costs of false positives and false negatives.

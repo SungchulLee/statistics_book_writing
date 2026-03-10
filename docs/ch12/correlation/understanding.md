@@ -1,5 +1,9 @@
 # 18.1 Correlation
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Understanding the Relationship Between Variables
 
 Correlation is a fundamental concept in statistics that describes the strength and direction of the relationship between two variables. It is a crucial tool for data analysis and helps in understanding how changes in one variable are associated with changes in another.

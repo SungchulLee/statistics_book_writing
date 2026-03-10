@@ -1,5 +1,9 @@
 # MLE for Normal Distribution
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 Let $x^{(i)}$ be $m$ i.i.d. samples from $N(\mu, \sigma^2)$. Then, $\mu$ and $\sigma^2$ can be estimated by $\hat{\mu}$ and $\hat{\sigma}^2$ where:

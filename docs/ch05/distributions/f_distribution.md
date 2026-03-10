@@ -1,5 +1,9 @@
 # F Distribution
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 The **F distribution** arises as the ratio of two independent chi-square random variables, each divided by their degrees of freedom. It is fundamental for comparing variances between two populations and for Analysis of Variance (ANOVA).

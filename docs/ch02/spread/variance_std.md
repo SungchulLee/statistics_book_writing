@@ -1,5 +1,9 @@
 # Variance and Standard Deviation
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 Variance and standard deviation are the most widely used measures of statistical dispersion. They quantify how much individual data points deviate from the mean, providing essential information about the spread and consistency of a dataset.

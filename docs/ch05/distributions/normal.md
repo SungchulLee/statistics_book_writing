@@ -1,5 +1,9 @@
 # Normal Distribution (Z)
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 The **standard normal distribution** $Z \sim N(0, 1)$ is the most fundamental sampling distribution. It arises naturally whenever we standardize a normally distributed statistic, and — via the Central Limit Theorem — it serves as the large-sample approximation for a wide variety of estimators.

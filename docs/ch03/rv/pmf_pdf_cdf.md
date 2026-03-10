@@ -1,5 +1,9 @@
 # PMF, PDF, and CDF
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 The three fundamental functions that characterize the distribution of a random variable are the Probability Mass Function (PMF) for discrete variables, the Probability Density Function (PDF) for continuous variables, and the Cumulative Distribution Function (CDF) for both.

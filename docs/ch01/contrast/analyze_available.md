@@ -1,5 +1,9 @@
 # Analyze the Data You Have (Modern Approach)
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 The **modern approach** to data analysis starts with data that **already exists**—transaction logs, sensor readings, social media posts, financial market data—and asks: *"What can I learn from this?"* Rather than designing a collection process, the analyst applies algorithms to discover patterns, make predictions, and extract insights from available data.

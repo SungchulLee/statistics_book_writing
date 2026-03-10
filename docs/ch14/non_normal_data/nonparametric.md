@@ -1,5 +1,9 @@
 # Non-Parametric Methods
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 Another strategy for dealing with non-normal data is to use **non-parametric methods**. These methods do not assume a specific distribution for the data and are often used when data is ordinal or when normality assumptions are violated.
 
 ## Common Non-Parametric Tests

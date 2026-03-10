@@ -1,5 +1,9 @@
 # Skewtest and Kurtosistest
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Skewtest
 
 The **skewness test**, provided by `scipy.stats.skewtest()`, is a formal statistical test that evaluates whether the skewness of a dataset significantly deviates from zero, indicating whether the data is symmetric or not.

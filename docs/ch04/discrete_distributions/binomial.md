@@ -1,5 +1,9 @@
 # Bernoulli and Binomial Distributions
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 The **Bernoulli distribution** models a single trial with two outcomes (success/failure), while the **binomial distribution** extends this to count the number of successes in $n$ independent trials. Together, they form the foundation of discrete probability modeling.

@@ -1,5 +1,9 @@
 # Prediction vs. Inference
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 Data analysis serves two fundamentally different goals: **prediction** (forecasting an outcome as accurately as possible) and **inference** (understanding the relationship between variables). While both use models and data, they prioritize different qualities and lead to different methodological choices.

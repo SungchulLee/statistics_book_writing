@@ -1,5 +1,9 @@
 # One-Sample Tests
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## 1. One Sample z Test
 
 The one sample z test is a statistical method used to determine whether the mean of a single sample of data differs significantly from a known or hypothesized population mean, given that the population standard deviation is known.

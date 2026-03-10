@@ -1,5 +1,9 @@
 # Principal Components Regression (PCR)
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 **Principal Components Regression (PCR)** combines dimensionality reduction with regression. Instead of regressing the response directly on all predictors, PCR first extracts principal components (linear combinations of predictors that capture most variance) and then regresses the response on these components.

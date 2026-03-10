@@ -1,5 +1,9 @@
 # Advanced Methods for Variance Testing
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 In modern statistics, especially when traditional parametric tests fail due to violated assumptions or limited sample sizes, advanced methods for variance testing provide more flexibility and robustness. These methods often use computational techniques such as bootstrapping, or Bayesian approaches, to make inferences when normality and homoscedasticity assumptions are violated.
 
 ## Bootstrapping Methods for Variance Testing

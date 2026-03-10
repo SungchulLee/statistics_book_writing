@@ -1,5 +1,9 @@
 # Chi-Square Distribution
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 The **chi-square distribution** arises naturally when summing squares of independent standard normal random variables. If $Z_1, Z_2, \dots, Z_k$ are independent standard normal variables, then

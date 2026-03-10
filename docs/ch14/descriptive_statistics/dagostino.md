@@ -1,5 +1,9 @@
 # D'Agostino's K-Squared Test
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 **D'Agostino's K-squared test** is a formal statistical test used to evaluate whether a given sample follows a normal distribution by combining two key measures: **skewness** and **kurtosis**. The test examines both the asymmetry (skewness) and the "tailedness" (kurtosis) of the data distribution and computes a combined test statistic that assesses the overall deviation from normality. It is especially useful when considering skewness and kurtosis in a single test.

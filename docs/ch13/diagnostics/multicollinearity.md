@@ -1,5 +1,9 @@
 # Multicollinearity
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 **Multicollinearity** occurs when two or more independent variables in a regression model are highly correlated. This creates challenges for estimation and inference:

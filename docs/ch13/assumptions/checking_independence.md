@@ -1,5 +1,9 @@
 # Checking Independence in Linear Regression
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 Independence is a key assumption in linear regression that ensures the observations (and their residuals) are not correlated with one another. This assumption is critical for making valid inferences and obtaining accurate estimates of regression coefficients. If independence is violated, the model may produce biased results, underestimated standard errors, and incorrect significance tests. This section explores various methods to check for independence in linear regression, with a focus on identifying and addressing autocorrelation and other forms of dependence among observations.
 
 ## 1. Understanding the Independence Assumption

@@ -1,5 +1,9 @@
 # Bias and Consistency of the Sample Mean
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Introduction
 
 Two fundamental questions about any estimator are: (1) Does it systematically over- or underestimate the true parameter? (**bias**) and (2) Does it converge to the true value as the sample size grows? (**consistency**). For the sample mean $\bar{X}$, the answers are reassuringly simple — it is unbiased and consistent under very mild conditions — but the precise statements and their implications are worth studying carefully.

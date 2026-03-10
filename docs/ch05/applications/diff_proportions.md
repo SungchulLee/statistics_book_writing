@@ -1,5 +1,9 @@
 # Sampling Distribution of the Difference of Two Sample Proportions
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 When comparing proportions from two independent populations (e.g., treatment vs control, brand A vs brand B), the relevant statistic is $\hat{p}_1 - \hat{p}_2$. Its sampling distribution enables confidence intervals and hypothesis tests for the difference $p_1 - p_2$.

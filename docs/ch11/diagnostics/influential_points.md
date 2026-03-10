@@ -1,5 +1,9 @@
 # Influential Data Points
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 In ANOVA, certain data points can exert a disproportionate influence on the results, leading to skewed conclusions. These influential data points may be outliers (unusual response values) or leverage points (unusual predictor values), and they can significantly affect the estimated group means, variances, and the overall F-statistic. Identifying and addressing these points is crucial to ensure the robustness of the ANOVA results.

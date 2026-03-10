@@ -1,5 +1,9 @@
 # AIC and BIC: Model Selection Criteria
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 When building statistical models, a core challenge is balancing model complexity against model fit. **Akaike Information Criterion (AIC)** and **Bayesian Information Criterion (BIC)** are two widely used techniques that address this trade-off by penalizing models for the number of parameters they use.
 
 ## Akaike Information Criterion (AIC)

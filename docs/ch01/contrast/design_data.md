@@ -1,5 +1,9 @@
 # Design Your Data Collection (Classical Approach)
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 The **classical approach** to data analysis begins with a clear research question and then designs a data collection strategy tailored to answer it. The data does not yet exist when the study is planned—the researcher controls *how* it is gathered, *from whom*, and *under what conditions*. This deliberate design is the hallmark of traditional statistical practice.

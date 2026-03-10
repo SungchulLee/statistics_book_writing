@@ -1,5 +1,9 @@
 # Histogram and Density Plots
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 Graphical methods offer a visual approach to assessing whether a dataset follows a normal distribution. While these methods are not formal statistical tests, they provide insights that are useful in understanding data distribution.
 
 ## Overview

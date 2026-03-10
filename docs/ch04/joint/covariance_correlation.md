@@ -1,5 +1,9 @@
 # Covariance and Correlation
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 **Covariance** and **correlation** quantify the linear relationship between two random variables. Covariance measures the direction and magnitude of co-movement (in original units), while correlation normalizes this to a dimensionless quantity between $-1$ and $+1$.

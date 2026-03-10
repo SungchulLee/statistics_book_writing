@@ -1,5 +1,9 @@
 # Exercises
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Exercise 1: F-Test for Comparing Two Variances
 
 Two production lines manufacture similar products, but you suspect that the variability in product weights is different between the two lines. You are provided with the following sample data (in grams):

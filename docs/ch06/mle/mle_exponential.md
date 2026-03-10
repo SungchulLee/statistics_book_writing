@@ -1,5 +1,9 @@
 # MLE for Exponential Distribution
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 We derive the MLE for the Exponential distribution $X \sim \text{Exp}(\lambda)$ with density $f(x; \lambda) = \lambda e^{-\lambda x}$ for $x > 0$.

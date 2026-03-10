@@ -1,5 +1,9 @@
 # Exercises
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Exercise 1: Normality Test Using Goodness-of-Fit Test
 
 A researcher divided independently obtained data into 4 intervals to check whether the data follows a normal distribution and counted the frequencies for each interval. The data is as follows:

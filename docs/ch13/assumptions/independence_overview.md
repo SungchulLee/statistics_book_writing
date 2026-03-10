@@ -1,5 +1,9 @@
 # Independence Assumption
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Definition
 
 The independence assumption states that the residuals (errors) of the regression model are independent of each other. In other words, the error for one observation should not be related to the error for another observation.

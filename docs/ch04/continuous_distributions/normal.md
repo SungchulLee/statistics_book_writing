@@ -1,5 +1,9 @@
 # Normal Distribution
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 The **normal distribution** (also called the Gaussian distribution) is one of the most fundamental probability distributions in statistics. It describes continuous data that cluster around a central value, tapering off symmetrically on both sides in a characteristic "bell curve."

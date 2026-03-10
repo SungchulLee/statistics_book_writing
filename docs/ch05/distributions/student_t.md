@@ -1,4 +1,8 @@
 # Student's t Distribution
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 The Student's $t$ distribution arises when estimating the mean of a normally distributed population using the **sample standard deviation** $S$ instead of the known population standard deviation $\sigma$. It accounts for the additional uncertainty introduced by estimating $\sigma$.

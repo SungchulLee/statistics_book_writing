@@ -1,5 +1,9 @@
 # ANOVA Exercises
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Exercise 1: Test Scores Based on Test Time
 
 A psychologist wants to determine if there is a significant difference in test scores based on the time students take the test. Three groups of students (morning, afternoon, and evening) take a standardized test, and their test scores are as follows:

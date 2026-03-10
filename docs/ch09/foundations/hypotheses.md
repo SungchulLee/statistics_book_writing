@@ -1,5 +1,9 @@
 # Null and Alternative Hypotheses
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Introduction to Hypothesis Testing
 
 Hypothesis testing is a cornerstone of statistical analysis, providing a systematic, data-grounded approach to decision-making. It involves making an assumption about a population parameter and then determining whether the data provide sufficient evidence to reject this assumption. This process is used across various fields to test theories and hypotheses, enabling researchers and analysts to make informed decisions based on empirical data.

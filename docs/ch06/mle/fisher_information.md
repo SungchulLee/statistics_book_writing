@@ -1,5 +1,9 @@
 # Fisher Information and Standard Errors
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 The **Fisher information** measures the amount of information a random variable carries about a parameter.

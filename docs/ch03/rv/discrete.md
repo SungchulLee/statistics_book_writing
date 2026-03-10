@@ -1,5 +1,9 @@
 # Discrete Random Variables
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 A **random variable** is a function that maps outcomes from a sample space to real numbers. A **discrete random variable** takes on a countable number of distinct values.

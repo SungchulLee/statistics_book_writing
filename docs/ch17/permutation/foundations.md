@@ -1,5 +1,9 @@
 # Permutation Tests: Foundations
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 Permutation tests are a resampling-based approach to hypothesis testing that does not rely on parametric assumptions. Rather than assuming a particular probability distribution (like the normal distribution), permutation tests use the observed data to generate a distribution of the test statistic under the null hypothesis by randomly shuffling or rearranging the data.

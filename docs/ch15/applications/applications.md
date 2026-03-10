@@ -1,5 +1,9 @@
 # Applications in Regression and ANOVA
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 Testing for the equality of variances is a crucial step in many statistical methods, especially in regression analysis and Analysis of Variance (ANOVA). In both techniques, assumptions about the homogeneity of variances (homoscedasticity) play a fundamental role in ensuring valid and reliable inferences.
 
 ## Variance Testing in Regression

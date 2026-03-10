@@ -1,5 +1,9 @@
 # Data Handling with pandas
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 **pandas** is the primary library for structured data manipulation in Python. Built on top of NumPy, it provides two core data structures—`Series` (1-D) and `DataFrame` (2-D)—along with a rich set of tools for loading, cleaning, transforming, and summarizing data. Throughout this book, pandas is used to prepare datasets for statistical analysis.

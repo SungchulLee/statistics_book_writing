@@ -1,5 +1,9 @@
 # Assumptions in ANOVA
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 Before interpreting the results of an ANOVA, it is crucial to verify that certain assumptions are met to ensure the validity of the analysis. ANOVA is a powerful tool, but its validity depends on these assumptions being satisfied. Violations can lead to misleading results—inflated Type I error rates, reduced power, or biased estimates—making it essential to test these assumptions before drawing conclusions.
 
 ## Summary of Assumptions

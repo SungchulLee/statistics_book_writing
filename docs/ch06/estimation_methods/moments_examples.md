@@ -1,5 +1,9 @@
 # MoM for Common Distributions
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 We derive Method of Moments estimators for several standard distributions.

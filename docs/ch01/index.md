@@ -1,5 +1,9 @@
 # Chapter 1: Data Collection
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 This chapter explores how data is collected and how we learn from it. It contrasts two fundamental philosophies: the classical approach, where the researcher designs the data collection process before gathering data, and the modern approach, where the analyst works with data that already exists. The chapter concludes by introducing the three major machine learning paradigms -- supervised, unsupervised, and reinforcement learning -- that define how algorithms extract knowledge from data.

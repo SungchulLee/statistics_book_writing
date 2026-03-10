@@ -1,5 +1,9 @@
 # Checking Homoscedasticity (Equal Variance)
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Why Homoscedasticity Matters
 
 The assumption of homoscedasticity (also called homogeneity of variances) states that the variance of residuals should be approximately the same across all groups. In the ANOVA framework, the F-statistic pools the within-group variances into a single estimate of the common variance $\sigma^2$. If the true variances differ across groups, this pooled estimate is a weighted average that does not accurately represent any single group, leading to:

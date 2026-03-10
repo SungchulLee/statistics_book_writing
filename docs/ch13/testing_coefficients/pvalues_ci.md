@@ -1,5 +1,9 @@
 # Understanding p-values and Confidence Intervals for Coefficients
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 In linear regression analysis, understanding **p-values** and **confidence intervals** is essential for interpreting the significance and precision of regression coefficients. These statistical measures provide insight into how strongly the predictors influence the dependent variable and the uncertainty associated with the estimated effects.
 
 ---

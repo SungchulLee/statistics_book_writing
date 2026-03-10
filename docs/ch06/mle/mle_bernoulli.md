@@ -1,5 +1,9 @@
 # MLE for Bernoulli Distribution
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 Let $x^{(i)}$ be $m$ i.i.d. samples from $B(p)$. Then, $p$ can be estimated by $\hat{p}$ where:

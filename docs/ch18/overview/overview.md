@@ -1,5 +1,9 @@
 # Overview of Regularization Methods and Their Applications
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Introduction
 
 Regularization techniques play a crucial role in enhancing the performance of machine learning models, particularly when dealing with complex datasets prone to overfitting. Overfitting occurs when a model captures not just the underlying patterns in the data but also the noise, leading to poor generalization on new, unseen data. Regularization methods mitigate this risk by adding a penalty to the loss function, thereby discouraging overly complex models.

@@ -1,5 +1,9 @@
 # Partial Least Squares (PLS)
 
+
+!!! warning "Incomplete page"
+    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+
 ## Overview
 
 **Partial Least Squares (PLS)** is a dimensionality reduction method that, unlike PCA (used in PCR), constructs components by considering the relationship between predictors and the response. PLS finds linear combinations of predictors that are highly correlated with the response, making it particularly useful when prediction is the goal.
