@@ -1,17 +1,131 @@
-# Role In Inference
+# Central Role in Statistical Inference
 
+## Why Normality Matters
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+Many of the most widely used statistical procedures rely on the assumption that the data, or some function of the data, follows a normal distribution. This assumption is not a mere technicality. It directly determines whether the $p$-values, confidence intervals, and test statistics produced by these methods are valid. When normality holds, the theoretical sampling distributions that underpin classical inference are exact. When it fails, the resulting conclusions may be misleading.
 
-## Overview
+Understanding where the normality assumption enters and how sensitive each procedure is to violations allows the practitioner to decide when a normality test is necessary and when the assumption can safely be relaxed.
 
-This section covers role in inference as part of the broader chapter on the topic.
+## Normality in Common Inferential Procedures
 
-## Key Concepts
+### The One-Sample and Two-Sample t-Tests
 
-The material in this section builds on the foundations established in earlier sections and provides both theoretical understanding and practical applications.
+The one-sample $t$-test evaluates whether the population mean $\mu$ equals a hypothesized value $\mu_0$. The test statistic is
+
+$$
+t = \frac{\bar{X} - \mu_0}{S / \sqrt{n}}
+$$
+
+where $\bar{X}$ is the sample mean, $S$ is the sample standard deviation, and $n$ is the sample size. Under the assumption that $X_1, X_2, \ldots, X_n \overset{\text{iid}}{\sim} N(\mu, \sigma^2)$, the statistic $t$ follows a $t$-distribution with $n - 1$ degrees of freedom exactly, for any sample size $n$.
+
+The two-sample $t$-test for comparing means $\mu_1$ and $\mu_2$ similarly requires normality in both populations. When the population distributions are normal and variances are equal, the pooled test statistic
+
+$$
+t = \frac{\bar{X}_1 - \bar{X}_2}{S_p \sqrt{1/n_1 + 1/n_2}}
+$$
+
+follows a $t$-distribution with $n_1 + n_2 - 2$ degrees of freedom, where $S_p$ is the pooled standard deviation.
+
+### The F-Test and Analysis of Variance
+
+In one-way ANOVA, the $F$-statistic compares the between-group variance to the within-group variance:
+
+$$
+F = \frac{\text{MSB}}{\text{MSW}}
+$$
+
+where MSB is the mean square between groups and MSW is the mean square within groups. Under the null hypothesis that all group means are equal, and assuming that observations within each group are independently drawn from normal populations with equal variances, the statistic $F$ follows an $F$-distribution with $k - 1$ and $N - k$ degrees of freedom, where $k$ is the number of groups and $N$ is the total sample size.
+
+### Confidence Intervals
+
+A $100(1 - \alpha)\%$ confidence interval for the population mean, when the population variance is unknown, takes the form
+
+$$
+\bar{X} \pm t_{\alpha/2,\, n-1} \cdot \frac{S}{\sqrt{n}}
+$$
+
+The coverage guarantee (that $100(1 - \alpha)\%$ of such intervals contain the true $\mu$ in repeated sampling) depends on the sampling distribution of $\bar{X}$ being normal and $S^2$ being independent of $\bar{X}$. Both properties follow from the normality of the underlying data.
+
+## The Central Limit Theorem as Justification
+
+The **Central Limit Theorem (CLT)** provides an important relaxation of the strict normality requirement. It states that for independent and identically distributed random variables $X_1, X_2, \ldots, X_n$ with mean $\mu$ and finite variance $\sigma^2$,
+
+$$
+\frac{\bar{X} - \mu}{\sigma / \sqrt{n}} \xrightarrow{d} N(0, 1) \quad \text{as } n \to \infty
+$$
+
+This convergence in distribution means that, for sufficiently large $n$, the sampling distribution of the standardized sample mean is approximately normal regardless of the shape of the population distribution. In practice, this justifies the use of $z$-tests and approximate $t$-tests even when the data themselves are not normally distributed, provided $n$ is large enough.
+
+However, the CLT comes with important caveats:
+
+- **"Large enough" depends on the population shape.** For symmetric distributions close to normal, $n \geq 20$ may suffice. For heavily skewed or heavy-tailed distributions, $n$ may need to be several hundred.
+- **The CLT applies to the sample mean, not to other statistics.** Statistics such as the sample variance, median, or correlation coefficient have their own asymptotic distributions that may require normality or different conditions.
+- **Exact versus approximate inference.** When $n$ is small, the CLT approximation is unreliable, and the exact distributional results that require normality become essential.
+
+## What Breaks When Normality Fails
+
+When the normality assumption is violated, several problems can arise:
+
+**Inflated Type I error rates.** If the true sampling distribution has heavier tails than the assumed $t$-distribution, the actual significance level may exceed the nominal $\alpha$. This means the test rejects the null hypothesis more often than it should.
+
+**Reduced power.** If the actual distribution is skewed, the $t$-test may lose power relative to alternative procedures (such as nonparametric tests) that do not assume normality.
+
+**Invalid confidence intervals.** The coverage probability of a $t$-based confidence interval may drop below $1 - \alpha$ when the data distribution is sufficiently non-normal, particularly for small samples.
+
+**Sensitivity of variance-based procedures.** The $F$-test for equality of variances and the chi-squared test for a single variance are especially sensitive to non-normality. Even moderate departures can produce severely distorted $p$-values.
+
+??? warning "Variance Tests Are More Sensitive Than Mean Tests"
+    Tests involving means (such as the $t$-test) are relatively robust to mild non-normality because of the CLT. Tests involving variances (such as the $F$-test for comparing two variances or the chi-squared test for a single variance) are far more sensitive to non-normality and can produce misleading results even with moderately large samples.
+
+## Practical Guidance
+
+The following guidelines help determine when normality testing is most important:
+
+1. **Small samples ($n < 30$)**: The CLT provides little protection. Check normality using graphical methods (Q-Q plots, histograms) and formal tests (Shapiro-Wilk) before applying parametric procedures.
+2. **Moderate samples ($30 \leq n \leq 100$)**: The CLT offers some protection for mean-based inference, but variance-based inference still requires approximate normality. Use graphical diagnostics as a quick check.
+3. **Large samples ($n > 100$)**: Mean-based inference is generally robust. However, formal normality tests become very powerful and may reject normality for trivial departures. Focus on whether the departures are practically meaningful rather than statistically significant.
+
+## Python Example
+
+```python
+import numpy as np
+from scipy import stats
+
+# ===================================================================
+# Demonstrate how non-normality affects the t-test's Type I error rate
+# ===================================================================
+
+np.random.seed(42)
+n = 15
+alpha = 0.05
+n_simulations = 10_000
+
+# --- Normal population: Type I error should be close to alpha ---
+rejections_normal = 0
+for _ in range(n_simulations):
+    sample = np.random.normal(loc=0, scale=1, size=n)
+    _, p = stats.ttest_1samp(sample, popmean=0)
+    if p < alpha:
+        rejections_normal += 1
+
+# --- Exponential population (skewed): actual Type I error may differ ---
+rejections_exp = 0
+for _ in range(n_simulations):
+    sample = np.random.exponential(scale=1, size=n) - 1  # mean = 0
+    _, p = stats.ttest_1samp(sample, popmean=0)
+    if p < alpha:
+        rejections_exp += 1
+
+if __name__ == "__main__":
+    print(f"Type I error rate (normal data):      "
+          f"{rejections_normal / n_simulations:.4f}")
+    print(f"Type I error rate (exponential data):  "
+          f"{rejections_exp / n_simulations:.4f}")
+    print(f"Nominal alpha:                         {alpha:.4f}")
+```
+
+The simulation above shows that, for small $n$ and a skewed population, the actual Type I error rate of the $t$-test can deviate noticeably from the nominal $\alpha = 0.05$. With normally distributed data, the empirical rejection rate is close to 0.05 as expected.
 
 ## Summary
 
-Understanding role in inference is essential for applying statistical methods correctly in practice.
+The normality assumption enters statistical inference through the exact distributional results that underlie $t$-tests, $F$-tests, and confidence intervals. The CLT relaxes this requirement for large samples and mean-based procedures, but small-sample inference, variance-based tests, and procedures beyond the sample mean still require careful attention to normality. Testing for normality is therefore not an abstract exercise but a practical safeguard for the validity of statistical conclusions.
