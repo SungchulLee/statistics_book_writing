@@ -1,53 +1,130 @@
 # Positive Definite Matrices
 
-Positive definiteness characterizes matrices whose quadratic forms are strictly positive, making them the natural mathematical objects for covariance matrices and optimization in statistics.
+A symmetric matrix is positive definite when the quadratic form $\mathbf{x}^T\mathbf{A}\mathbf{x}$ is strictly positive for every nonzero vector $\mathbf{x}$. This condition is the matrix analogue of a positive real number and guarantees that $\mathbf{A}$ is invertible, has a unique Cholesky factorization, and defines a genuine inner product. In statistics, positive definiteness is the criterion that separates well-posed covariance matrices (invertible, leading to finite-density multivariate normals) from degenerate ones. This section presents the definition, equivalent characterizations, and the Cholesky decomposition.
 
 ## Definition
 
-A symmetric matrix $A$ is **positive definite** (written $A \succ 0$) if for all nonzero $\mathbf{x} \in \mathbb{R}^n$:
+!!! info "Definition -- Positive Definite and Positive Semi-Definite"
+    A symmetric matrix $\mathbf{A} \in \mathbb{R}^{n \times n}$ is:
+
+    - **Positive definite** ($\mathbf{A} \succ 0$) if $\mathbf{x}^T\mathbf{A}\mathbf{x} > 0$ for every $\mathbf{x} \neq \mathbf{0}$.
+    - **Positive semi-definite** ($\mathbf{A} \succeq 0$) if $\mathbf{x}^T\mathbf{A}\mathbf{x} \geq 0$ for every $\mathbf{x}$.
+    - **Negative definite** ($\mathbf{A} \prec 0$) if $-\mathbf{A} \succ 0$.
+    - **Indefinite** if $\mathbf{x}^T\mathbf{A}\mathbf{x}$ takes both positive and negative values.
+
+!!! warning "Symmetry is assumed"
+    Some authors define positive definiteness for non-symmetric matrices, but in this book (and in nearly all of statistics), positive definiteness always refers to symmetric matrices.
+
+## Equivalent Characterizations
+
+The following conditions are equivalent for a symmetric matrix $\mathbf{A} \in \mathbb{R}^{n \times n}$.
+
+!!! tip "Theorem -- Equivalent Conditions for Positive Definiteness"
+    The following are equivalent:
+
+    1. $\mathbf{A} \succ 0$ (the quadratic form condition).
+    2. All eigenvalues of $\mathbf{A}$ are strictly positive: $\lambda_i > 0$ for $i = 1, \dots, n$.
+    3. All **leading principal minors** are positive: $\det(\mathbf{A}_k) > 0$ for $k = 1, \dots, n$, where $\mathbf{A}_k$ is the upper-left $k \times k$ submatrix.
+    4. $\mathbf{A}$ has a **Cholesky decomposition**: $\mathbf{A} = \mathbf{L}\mathbf{L}^T$ for a unique lower-triangular matrix $\mathbf{L}$ with positive diagonal entries.
+    5. There exists an invertible matrix $\mathbf{B}$ such that $\mathbf{A} = \mathbf{B}^T\mathbf{B}$.
+
+### Proof Sketch (Eigenvalue Characterization)
+
+By the Spectral Theorem, $\mathbf{A} = \mathbf{Q}\boldsymbol{\Lambda}\mathbf{Q}^T$ with orthogonal $\mathbf{Q}$. Setting $\mathbf{z} = \mathbf{Q}^T\mathbf{x}$ (a bijection since $\mathbf{Q}$ is orthogonal):
 
 $$
-\mathbf{x}^T A \mathbf{x} > 0
+\mathbf{x}^T\mathbf{A}\mathbf{x} = \mathbf{z}^T\boldsymbol{\Lambda}\mathbf{z} = \sum_{i=1}^n \lambda_i z_i^2
 $$
 
-Equivalently, $A$ is positive definite if and only if all its eigenvalues are strictly positive: $\lambda_i > 0$ for all $i$.
+This is positive for all $\mathbf{z} \neq \mathbf{0}$ if and only if every $\lambda_i > 0$. $\square$
 
-A matrix is **positive semi-definite** ($A \succeq 0$) if $\mathbf{x}^T A \mathbf{x} \geq 0$ for all $\mathbf{x}$.
+For **positive semi-definiteness**, all conditions above relax to "$\geq 0$" for eigenvalues and leading minors, and condition (5) allows $\mathbf{B}$ to be rank-deficient.
 
-## Explanation
+## The Cholesky Decomposition
 
-Several equivalent characterizations exist:
+!!! info "Definition -- Cholesky Decomposition"
+    The **Cholesky decomposition** of a positive definite matrix $\mathbf{A}$ is the unique factorization
 
-- All eigenvalues positive.
-- All leading principal minors positive (Sylvester's criterion).
-- There exists an invertible matrix $L$ such that $A = L^T L$ (Cholesky decomposition).
-- The quadratic form $f(\mathbf{x}) = \mathbf{x}^T A \mathbf{x}$ has a unique minimum at $\mathbf{x} = \mathbf{0}$.
+    $$
+    \mathbf{A} = \mathbf{L}\mathbf{L}^T
+    $$
 
-In statistics, the population covariance matrix $\Sigma$ is positive semi-definite by construction. It is positive definite when no linear combination of the variables is deterministic (i.e., no perfect multicollinearity). The sample covariance is positive definite when $n > p$ and the data are in general position.
+    where $\mathbf{L}$ is lower triangular with strictly positive diagonal entries.
 
-Positive definiteness of $X^TX$ is required for the OLS solution $\hat{\boldsymbol{\beta}} = (X^TX)^{-1}X^T\mathbf{y}$ to exist uniquely.
+The Cholesky decomposition is the matrix analogue of taking the square root of a positive number. It is numerically stable, requires roughly $n^3/3$ operations (half the cost of a general $\mathbf{LU}$ decomposition), and is the preferred method for solving linear systems involving positive definite matrices.
 
-## Examples
+### Example
 
-```python
-import numpy as np
+For the matrix
 
-# Build a positive definite matrix via A = L^T L
-L = np.array([[2, 0, 0],
-              [1, 3, 0],
-              [0.5, 0.5, 1]])
-A = L.T @ L
-print("A:\n", A)
+$$
+\mathbf{A} = \begin{pmatrix} 4 & 2 \\ 2 & 5 \end{pmatrix}
+$$
 
-eigenvalues = np.linalg.eigvalsh(A)
-print("Eigenvalues:", eigenvalues.round(4))
-print("All positive:", np.all(eigenvalues > 0))
+**Eigenvalue check:** The eigenvalues satisfy $\lambda^2 - 9\lambda + 16 = 0$, giving $\lambda = (9 \pm \sqrt{17})/2$. Both are positive (approximately 6.56 and 2.44), so $\mathbf{A} \succ 0$.
 
-# Cholesky decomposition (only works for PD matrices)
-L_chol = np.linalg.cholesky(A)
-print("Cholesky factor matches:", np.allclose(L_chol @ L_chol.T, A))
+**Leading minors:** $\det(\mathbf{A}_1) = 4 > 0$ and $\det(\mathbf{A}_2) = 16 > 0$. Both positive, confirming positive definiteness.
 
-# Quadratic form is positive for random vectors
-x = np.random.randn(3)
-print(f"x'Ax = {x @ A @ x:.4f} > 0")
-```
+**Cholesky decomposition:** Solve for $\mathbf{L}$:
+
+$$
+\begin{pmatrix} 4 & 2 \\ 2 & 5 \end{pmatrix} = \begin{pmatrix} l_{11} & 0 \\ l_{21} & l_{22} \end{pmatrix}\begin{pmatrix} l_{11} & l_{21} \\ 0 & l_{22} \end{pmatrix}
+$$
+
+From $l_{11}^2 = 4$: $l_{11} = 2$. From $l_{21}l_{11} = 2$: $l_{21} = 1$. From $l_{21}^2 + l_{22}^2 = 5$: $l_{22} = 2$. So
+
+$$
+\mathbf{L} = \begin{pmatrix} 2 & 0 \\ 1 & 2 \end{pmatrix}
+$$
+
+## Properties
+
+### Positive Definite Matrices Are Invertible
+
+If $\mathbf{A} \succ 0$, all eigenvalues are positive, so $\det(\mathbf{A}) = \prod_i \lambda_i > 0$. Therefore $\mathbf{A}$ is invertible, and $\mathbf{A}^{-1}$ is also positive definite (its eigenvalues are $1/\lambda_i > 0$).
+
+### Sums and Scalar Multiples
+
+If $\mathbf{A} \succ 0$ and $\mathbf{B} \succ 0$, then $\mathbf{A} + \mathbf{B} \succ 0$ and $c\mathbf{A} \succ 0$ for any $c > 0$. The set of positive definite matrices forms an open convex cone.
+
+### Congruence Preserves Positive Definiteness
+
+If $\mathbf{A} \succ 0$ and $\mathbf{B}$ is an $n \times m$ matrix with $\operatorname{rank}(\mathbf{B}) = m$, then $\mathbf{B}^T\mathbf{A}\mathbf{B} \succ 0$ (in $\mathbb{R}^{m \times m}$).
+
+**Proof.** For any $\mathbf{y} \neq \mathbf{0}$ in $\mathbb{R}^m$, set $\mathbf{x} = \mathbf{B}\mathbf{y}$. Since $\mathbf{B}$ has full column rank, $\mathbf{x} \neq \mathbf{0}$, so $\mathbf{y}^T(\mathbf{B}^T\mathbf{A}\mathbf{B})\mathbf{y} = \mathbf{x}^T\mathbf{A}\mathbf{x} > 0$. $\square$
+
+This result explains why $\mathbf{X}^T\mathbf{X}$ is positive definite whenever $\mathbf{X}$ has full column rank: it is the congruence of $\mathbf{I}_n \succ 0$ by $\mathbf{X}$.
+
+### Schur Complement
+
+If a symmetric positive definite matrix is partitioned as
+
+$$
+\mathbf{M} = \begin{pmatrix} \mathbf{A} & \mathbf{B} \\ \mathbf{B}^T & \mathbf{C} \end{pmatrix} \succ 0
+$$
+
+then the **Schur complement** $\mathbf{S} = \mathbf{C} - \mathbf{B}^T\mathbf{A}^{-1}\mathbf{B}$ is also positive definite. The Schur complement appears in the conditional variance of multivariate normal distributions.
+
+## Connection to Statistics
+
+### Covariance Matrices
+
+The covariance matrix $\boldsymbol{\Sigma} = E[(\mathbf{X} - \boldsymbol{\mu})(\mathbf{X} - \boldsymbol{\mu})^T]$ is always positive semi-definite. It is positive definite if and only if no component of $\mathbf{X}$ is an exact linear combination of the others. When $\boldsymbol{\Sigma} \succ 0$, the multivariate normal density is well-defined:
+
+$$
+f(\mathbf{x}) = \frac{1}{(2\pi)^{p/2}|\boldsymbol{\Sigma}|^{1/2}}\exp\!\Bigl(-\frac{1}{2}(\mathbf{x} - \boldsymbol{\mu})^T\boldsymbol{\Sigma}^{-1}(\mathbf{x} - \boldsymbol{\mu})\Bigr)
+$$
+
+The positive definiteness of $\boldsymbol{\Sigma}$ ensures that $|\boldsymbol{\Sigma}| > 0$ (the density is finite) and the exponent is always negative (the density decays in all directions).
+
+### OLS Existence
+
+The OLS estimator $\hat{\boldsymbol{\beta}} = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}$ requires $\mathbf{X}^T\mathbf{X}$ to be invertible. Since $\mathbf{X}^T\mathbf{X}$ is always positive semi-definite, it is invertible (positive definite) precisely when $\mathbf{X}$ has full column rank.
+
+### Mahalanobis Distance
+
+The Mahalanobis distance $d^2 = (\mathbf{x} - \boldsymbol{\mu})^T\boldsymbol{\Sigma}^{-1}(\mathbf{x} - \boldsymbol{\mu})$ is a quadratic form in $\boldsymbol{\Sigma}^{-1}$, which is positive definite when $\boldsymbol{\Sigma}$ is. This ensures $d^2 \geq 0$ with equality only at $\mathbf{x} = \boldsymbol{\mu}$, making it a genuine distance-like measure.
+
+## Summary
+
+Positive definiteness is the matrix property ensuring that a quadratic form is strictly positive, which translates to invertibility, well-defined densities, and unique least-squares solutions. The key equivalent characterizations -- positive eigenvalues, positive leading minors, and existence of a Cholesky factorization -- provide different computational and theoretical tools. In statistics, positive definiteness of $\boldsymbol{\Sigma}$ underlies the multivariate normal distribution, and positive definiteness of $\mathbf{X}^T\mathbf{X}$ guarantees the existence of OLS estimators.
