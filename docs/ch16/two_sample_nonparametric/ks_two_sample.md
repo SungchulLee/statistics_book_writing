@@ -1,17 +1,107 @@
-# Ks Two Sample
+# Kolmogorov-Smirnov Two-Sample Test
 
+The [Wilcoxon rank-sum](rank_sum.md) and [Mann-Whitney U](mann_whitney.md) tests are primarily sensitive to **location shifts** -- differences in the central tendency of two distributions. The **Kolmogorov-Smirnov (KS) two-sample test** takes a broader view: it compares the *entire* empirical cumulative distribution functions (ECDFs) of two samples and can detect differences in location, spread, shape, or any other distributional feature.
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+This generality makes the KS test a versatile diagnostic tool, though it comes at the cost of lower power against specific alternatives (such as pure location shifts) compared to rank-based tests.
 
-## Overview
+## Intuition
 
-This section covers ks two sample as part of the broader chapter on the topic.
+Given two independent samples, each sample generates an empirical CDF -- a step function that jumps by $1/n$ at each observed value. If the two populations are identical, their ECDFs should track each other closely. The KS test measures the largest vertical gap between the two ECDFs and rejects $H_0$ when this gap is too large to be explained by sampling variability alone.
 
-## Key Concepts
+## Hypotheses
 
-The material in this section builds on the foundations established in earlier sections and provides both theoretical understanding and practical applications.
+$$
+H_0 \colon F_X = F_Y \quad \text{(the two populations have the same continuous distribution)}
+$$
+
+$$
+H_a \colon F_X \ne F_Y \quad \text{(the distributions differ in some way)}
+$$
+
+The test is inherently two-sided: it detects *any* difference between the distributions.
+
+## Test Statistic
+
+Let $\hat{F}_1(x)$ and $\hat{F}_2(x)$ be the ECDFs of the two samples of sizes $n_1$ and $n_2$. The KS statistic is the supremum of the absolute difference:
+
+$$
+D_{n_1, n_2} = \sup_{x \in \mathbb{R}} \left|\hat{F}_1(x) - \hat{F}_2(x)\right|
+$$
+
+In practice, $D$ is computed by combining and sorting all $N = n_1 + n_2$ observations and evaluating $|\hat{F}_1 - \hat{F}_2|$ at each observed value (and just before each jump).
+
+## Null Distribution
+
+Under $H_0$ with continuous distributions, the null distribution of $D_{n_1, n_2}$ does not depend on the common distribution $F$ -- the test is distribution-free.
+
+For large samples, the scaled statistic
+
+$$
+\sqrt{\frac{n_1 \, n_2}{n_1 + n_2}} \, D_{n_1, n_2}
+$$
+
+converges in distribution to the **Kolmogorov distribution**, whose CDF is
+
+$$
+K(t) = 1 - 2\sum_{k=1}^{\infty} (-1)^{k-1} e^{-2k^2 t^2}
+$$
+
+The asymptotic $p$-value is $p = 1 - K(c)$ where $c = \sqrt{n_1 n_2 / (n_1 + n_2)} \cdot D$.
+
+For small samples, exact $p$-values are computed by enumeration or dynamic programming.
+
+## Worked Example
+
+Two manufacturing processes produce ball bearings. We measure diameter (mm) for samples from each process.
+
+**Process A** ($n_1 = 5$): 10.1, 10.3, 10.2, 10.5, 10.4
+
+**Process B** ($n_2 = 5$): 10.0, 10.2, 10.6, 10.8, 10.4
+
+**Step 1.** Sort the combined sample and compute ECDFs:
+
+| Value | $\hat{F}_1(x)$ | $\hat{F}_2(x)$ | $|\hat{F}_1 - \hat{F}_2|$ |
+|:-----:|:-----:|:-----:|:-----:|
+| 10.0 | 0/5 = 0.0 | 1/5 = 0.2 | 0.2 |
+| 10.1 | 1/5 = 0.2 | 1/5 = 0.2 | 0.0 |
+| 10.2 | 2/5 = 0.4 | 2/5 = 0.4 | 0.0 |
+| 10.3 | 3/5 = 0.6 | 2/5 = 0.4 | 0.2 |
+| 10.4 | 4/5 = 0.8 | 3/5 = 0.6 | 0.2 |
+| 10.5 | 5/5 = 1.0 | 3/5 = 0.6 | 0.4 |
+| 10.6 | 5/5 = 1.0 | 4/5 = 0.8 | 0.2 |
+| 10.8 | 5/5 = 1.0 | 5/5 = 1.0 | 0.0 |
+
+**Step 2.** The KS statistic is $D = 0.4$, occurring at $x = 10.5$.
+
+**Step 3.** Scaled statistic: $\sqrt{5 \times 5 / 10} \times 0.4 = \sqrt{2.5} \times 0.4 \approx 0.632$.
+
+Using the Kolmogorov distribution (or exact tables for $n_1 = n_2 = 5$), the $p$-value is approximately $0.73$.
+
+At $\alpha = 0.05$, we fail to reject $H_0$. The two processes do not show a significant difference in diameter distributions.
+
+## What the KS Test Detects
+
+Unlike rank-based tests that focus on location, the KS test is sensitive to differences in:
+
+- **Location** -- one distribution shifted relative to the other
+- **Scale** -- one distribution more spread out
+- **Shape** -- different skewness, kurtosis, or modality
+- **Any combination** of the above
+
+!!! warning "Lower power for specific alternatives"
+    The KS test's generality comes at a cost. For a pure location shift, the Wilcoxon rank-sum test will typically have higher power. The KS test is most useful when the nature of the difference is unknown or when differences in shape or spread are of interest.
+
+## Comparison with Rank-Based Tests
+
+| Feature | Wilcoxon Rank-Sum | KS Two-Sample |
+|:--------|:-----------------|:--------------|
+| Detects location shift | High power | Moderate power |
+| Detects spread difference | Low power | Moderate power |
+| Detects shape difference | Low power | Moderate power |
+| Test statistic | Sum of ranks ($W$) | Maximum ECDF gap ($D$) |
+| Handles ties | Via midranks | Requires continuity |
+| Effect size interpretation | $P(X > Y)$ via $U$ | Maximum distributional gap |
 
 ## Summary
 
-Understanding ks two sample is essential for applying statistical methods correctly in practice.
+The Kolmogorov-Smirnov two-sample test compares the entire empirical distribution functions of two independent samples by computing the maximum absolute difference $D = \sup|\hat{F}_1(x) - \hat{F}_2(x)|$. It is distribution-free under the null hypothesis of identical continuous distributions and can detect differences in location, spread, and shape. This versatility makes it a useful complement to rank-based tests, especially when the alternative hypothesis is not restricted to a location shift. For pure location alternatives, the Wilcoxon rank-sum test generally provides higher power.
