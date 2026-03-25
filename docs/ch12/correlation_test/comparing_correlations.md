@@ -1,17 +1,152 @@
-# Comparing Correlations
+# Comparing Two Correlations
 
+In many applications, we need to determine not just whether a single correlation is significant, but whether two correlations differ from each other. For example: is the correlation between study hours and GPA stronger for men than for women? Is the association between two biomarkers stronger in the treatment group than in the control group? This section covers the standard methods for testing whether two correlation coefficients are equal.
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
+---
 
-## Overview
+## Two Settings
 
-This section covers comparing correlations as part of the broader chapter on the topic.
+There are two distinct settings for comparing correlations:
 
-## Key Concepts
+1. **Independent samples**: the two correlations come from different, unrelated groups. For example, $r_1$ is the height-weight correlation among men and $r_2$ is the height-weight correlation among women.
 
-The material in this section builds on the foundations established in earlier sections and provides both theoretical understanding and practical applications.
+2. **Dependent (overlapping) samples**: the two correlations come from the same sample and share a variable. For example, $r_{XY}$ and $r_{XZ}$ both involve the same variable $X$.
+
+The methods differ substantially between these two cases.
+
+---
+
+## Fisher's z-Transformation
+
+Both methods rely on **Fisher's z-transformation**, which stabilizes the variance of the sample correlation and makes its distribution approximately normal:
+
+$$
+z = \frac{1}{2} \ln\!\left(\frac{1 + r}{1 - r}\right) = \text{arctanh}(r)
+$$
+
+For a sample of size $n$ from a bivariate normal distribution, the transformed correlation $z$ is approximately normally distributed:
+
+$$
+z \;\dot\sim\; N\!\left(\frac{1}{2}\ln\!\left(\frac{1+\rho}{1-\rho}\right),\; \frac{1}{n-3}\right)
+$$
+
+The key property is that the variance $1/(n-3)$ does **not depend on** $\rho$, unlike the variance of $r$ itself. This makes $z$ much more amenable to inference.
+
+---
+
+## Comparing Two Independent Correlations
+
+Given two independent samples of sizes $n_1$ and $n_2$ with sample correlations $r_1$ and $r_2$, we test
+
+$$
+H_0\!: \rho_1 = \rho_2 \quad \text{vs} \quad H_1\!: \rho_1 \neq \rho_2
+$$
+
+Apply the Fisher z-transformation to each:
+
+$$
+z_1 = \text{arctanh}(r_1), \quad z_2 = \text{arctanh}(r_2)
+$$
+
+Under $H_0$, the difference $z_1 - z_2$ has approximate variance $\frac{1}{n_1 - 3} + \frac{1}{n_2 - 3}$. The test statistic is
+
+$$
+Z = \frac{z_1 - z_2}{\sqrt{\frac{1}{n_1 - 3} + \frac{1}{n_2 - 3}}}
+$$
+
+Under $H_0$, $Z$ follows approximately a standard normal distribution. Reject $H_0$ at level $\alpha$ if $|Z| > z_{\alpha/2}$.
+
+### Example
+
+A researcher finds $r_1 = 0.65$ ($n_1 = 50$) for men and $r_2 = 0.40$ ($n_2 = 60$) for women.
+
+$$
+z_1 = \text{arctanh}(0.65) = 0.7753, \quad z_2 = \text{arctanh}(0.40) = 0.4236
+$$
+
+$$
+Z = \frac{0.7753 - 0.4236}{\sqrt{\frac{1}{47} + \frac{1}{57}}} = \frac{0.3517}{\sqrt{0.02128 + 0.01754}} = \frac{0.3517}{0.1970} = 1.785
+$$
+
+The two-sided p-value is $2 \times P(Z > 1.785) \approx 0.074$. At $\alpha = 0.05$, we do not reject $H_0$; there is insufficient evidence that the correlations differ between men and women.
+
+---
+
+## Comparing Two Dependent Correlations
+
+When two correlations share a common variable (e.g., $r_{XY}$ and $r_{XZ}$ from the same sample of size $n$), the Fisher z-test for independent samples does not apply because $r_{XY}$ and $r_{XZ}$ are correlated.
+
+### Steiger's Test (Williams' Modification)
+
+To test $H_0\!: \rho_{XY} = \rho_{XZ}$, the test statistic proposed by Williams (1959), building on Steiger (1980), is
+
+$$
+t = (r_{XY} - r_{XZ}) \sqrt{\frac{(n-1)(1 + r_{YZ})}{2\left(\frac{n-1}{n-3}\right)|R| + \bar{r}^2(1 - r_{YZ})^3}}
+$$
+
+where $|R|$ is the determinant of the $3 \times 3$ correlation matrix of $(X, Y, Z)$ and $\bar{r} = (r_{XY} + r_{XZ})/2$.
+
+Under $H_0$, this statistic follows approximately a $t$-distribution with $n - 3$ degrees of freedom.
+
+A simpler (but less accurate) approximation replaces the denominator with a formula involving only $r_{YZ}$:
+
+$$
+t \approx (r_{XY} - r_{XZ}) \sqrt{\frac{(n-3)(1 + r_{YZ})}{2(1 - r_{XY}^2 - r_{XZ}^2 - r_{YZ}^2 + 2 r_{XY} r_{XZ} r_{YZ})}}
+$$
+
+This is the version most commonly implemented in software.
+
+---
+
+## Computation in Python
+
+```python
+import numpy as np
+from scipy import stats
+
+# Comparing two independent correlations
+r1, n1 = 0.65, 50
+r2, n2 = 0.40, 60
+
+z1 = np.arctanh(r1)
+z2 = np.arctanh(r2)
+se = np.sqrt(1 / (n1 - 3) + 1 / (n2 - 3))
+Z_stat = (z1 - z2) / se
+p_value = 2 * (1 - stats.norm.cdf(abs(Z_stat)))
+
+print(f"z1 = {z1:.4f}, z2 = {z2:.4f}")
+print(f"Z statistic = {Z_stat:.4f}")
+print(f"Two-sided p-value = {p_value:.4f}")
+```
+
+For comparing dependent correlations, the `pingouin` library provides `pingouin.corr` with options for comparing overlapping correlations, and the `cocor` R package offers a comprehensive suite of comparison tests.
+
+---
+
+## Confidence Interval for the Difference
+
+For two independent correlations, a $(1 - \alpha)$ confidence interval for $\rho_1 - \rho_2$ can be constructed by back-transforming:
+
+$$
+(z_1 - z_2) \pm z_{\alpha/2} \sqrt{\frac{1}{n_1 - 3} + \frac{1}{n_2 - 3}}
+$$
+
+gives a confidence interval for $\zeta_1 - \zeta_2$ (where $\zeta = \text{arctanh}(\rho)$). To convert back to the correlation scale, apply $\tanh$ to each endpoint. Note that this gives a confidence interval for $\zeta_1 - \zeta_2$, not directly for $\rho_1 - \rho_2$, because the tanh transformation is nonlinear.
+
+---
+
+## Assumptions
+
+Both comparison methods assume:
+
+1. **Bivariate normality** within each sample.
+2. **Random sampling** from the respective populations.
+3. **Sufficient sample size** (typically $n \ge 25$ for each group for the normal approximation to be adequate).
+
+When normality is violated, bootstrap methods provide a nonparametric alternative for comparing correlations.
+
+---
 
 ## Summary
 
-Understanding comparing correlations is essential for applying statistical methods correctly in practice.
+Comparing two correlations requires different methods depending on whether the samples are independent or overlapping. For independent samples, Fisher's z-transformation converts each correlation to a normally distributed variable, and a simple $Z$-test compares the transformed values. For dependent samples with a shared variable, Steiger's test (Williams' modification) accounts for the correlation between the two coefficients. In both cases, the Fisher z-transformation is the key tool that stabilizes the variance and enables standard normal-theory inference.
