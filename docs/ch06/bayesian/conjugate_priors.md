@@ -1,6 +1,6 @@
 # Conjugate Priors
 
-In Bayesian inference, computing the posterior distribution requires evaluating the integral $\int f(x \mid \theta)\,\pi(\theta)\,d\theta$, which is often intractable for arbitrary prior-likelihood combinations. Conjugate priors provide an elegant shortcut: when the prior belongs to a specific distributional family matched to the likelihood, the posterior is guaranteed to belong to that same family with updated parameters. This closed-form result eliminates the need for numerical integration or MCMC in simple models, making conjugate priors the foundation of tractable Bayesian analysis.
+In Bayesian inference, computing the posterior distribution requires evaluating the integral $\int f(x \mid \theta) \pi(\theta) \, d\theta$, which is often intractable for arbitrary prior-likelihood combinations. Conjugate priors provide an elegant shortcut: when the prior belongs to a specific distributional family matched to the likelihood, the posterior is guaranteed to belong to that same family with updated parameters. This closed-form result eliminates the need for numerical integration or MCMC in simple models, making conjugate priors the foundation of tractable Bayesian analysis.
 
 ## Definition
 
@@ -10,7 +10,7 @@ In other words, observing data only changes the parameters of the prior distribu
 
 ## Common Conjugate Pairs
 
-The following table lists the most commonly encountered conjugate pairs. In each case, the Gamma distribution uses the rate parameterization, where $\text{Gamma}(\alpha, \beta)$ has density proportional to $\theta^{\alpha-1}e^{-\beta\theta}$.
+The following table lists the most commonly encountered conjugate pairs. In each case, the Gamma distribution uses the rate parameterization, where $\text{Gamma}(\alpha, \beta)$ has density proportional to $\theta^{\alpha - 1} e^{-\beta \theta}$.
 
 | Likelihood | Conjugate Prior | Posterior |
 |---|---|---|
