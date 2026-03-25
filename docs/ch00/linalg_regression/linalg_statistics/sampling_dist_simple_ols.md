@@ -1,73 +1,183 @@
-# Sampling Distribution of Simple OLS Estimators
+# Sampling Distributions (Simple Ordinary Least Squares)
 
-Under the normal linear model, the OLS slope and intercept in simple regression have exact sampling distributions that follow from projection matrix algebra.
+Before developing the general multiple-regression theory, it is instructive to derive the sampling distributions of the estimators in **simple linear regression** -- the model with a single predictor. Working through the simple case builds intuition for how normality of errors propagates to normality of estimators, why the degrees of freedom are $n - 2$, and how the t-statistic arises. The simple-case formulas also make the role of each algebraic quantity (sum of squares, cross-products) transparent in a way that matrix notation can obscure.
 
-## Definition
+## The Simple Linear Regression Model
 
-Consider the simple linear regression model $Y_i = \beta_0 + \beta_1 x_i + \varepsilon_i$ with $\varepsilon_i \overset{iid}{\sim} N(0, \sigma^2)$. The OLS estimators are
-
-$$
-\hat{\beta}_1 = \frac{\sum_{i=1}^n (x_i - \bar{x})(Y_i - \bar{Y})}{\sum_{i=1}^n (x_i - \bar{x})^2}, \qquad \hat{\beta}_0 = \bar{Y} - \hat{\beta}_1 \bar{x}
-$$
-
-Their sampling distributions are
+The model is
 
 $$
-\hat{\beta}_1 \sim N\!\left(\beta_1,\; \frac{\sigma^2}{S_{xx}}\right), \qquad \hat{\beta}_0 \sim N\!\left(\beta_0,\; \sigma^2\!\left(\frac{1}{n} + \frac{\bar{x}^2}{S_{xx}}\right)\right)
+Y_i = \beta_0 + \beta_1 x_i + \varepsilon_i, \quad i = 1, \dots, n
 $$
 
-where $S_{xx} = \sum (x_i - \bar{x})^2$.
+where:
 
-## Explanation
+- $x_1, \dots, x_n$ are fixed (non-random) predictor values, not all equal.
+- $\varepsilon_1, \dots, \varepsilon_n$ are independent $N(0, \sigma^2)$ random variables.
+- $\beta_0$ (intercept) and $\beta_1$ (slope) are unknown parameters.
+- $\sigma^2$ is the unknown error variance.
 
-Each estimator is a linear combination of the $Y_i$, which are independent normals. A linear combination of independent normal random variables is itself normal, so the only task is computing the mean and variance.
+Since $\varepsilon_i \sim N(0, \sigma^2)$ and the $x_i$ are fixed, each response is $Y_i \sim N(\beta_0 + \beta_1 x_i, \sigma^2)$, independently.
 
-For $\hat{\beta}_1$, write $\hat{\beta}_1 = \sum c_i Y_i$ with $c_i = (x_i - \bar{x})/S_{xx}$. Then $E[\hat{\beta}_1] = \beta_1$ (unbiased) and $\text{Var}(\hat{\beta}_1) = \sigma^2 \sum c_i^2 = \sigma^2/S_{xx}$.
+## OLS Estimators
 
-The residual sum of squares satisfies $(n-2)S^2/\sigma^2 \sim \chi^2(n-2)$ and is independent of $\hat{\beta}_1$ (a consequence of the projection decomposition). This independence yields the pivotal quantity
+The OLS estimators minimize $\sum_{i=1}^n (Y_i - \beta_0 - \beta_1 x_i)^2$. The closed-form solutions are:
 
 $$
-\frac{\hat{\beta}_1 - \beta_1}{S/\sqrt{S_{xx}}} \sim t(n-2)
+\hat{\beta}_1 = \frac{\sum_{i=1}^n (x_i - \bar{x})(Y_i - \bar{Y})}{\sum_{i=1}^n (x_i - \bar{x})^2} = \frac{S_{xy}}{S_{xx}}
 $$
 
-which is the basis for confidence intervals and hypothesis tests on the slope.
+$$
+\hat{\beta}_0 = \bar{Y} - \hat{\beta}_1 \bar{x}
+$$
 
-## Examples
+where $\bar{x} = \frac{1}{n}\sum_i x_i$, $\bar{Y} = \frac{1}{n}\sum_i Y_i$, $S_{xx} = \sum_i(x_i - \bar{x})^2$, and $S_{xy} = \sum_i(x_i - \bar{x})(Y_i - \bar{Y})$.
 
-```python
-import numpy as np
-from scipy import stats
+## Linearity of the Estimators
 
-np.random.seed(0)
-beta0, beta1, sigma = 2.0, 3.0, 1.5
-n = 30
+A key observation is that both estimators are **linear functions of the responses** $Y_1, \dots, Y_n$.
 
-# Simulate many OLS fits
-n_sims = 50_000
-b1_vals = np.empty(n_sims)
-x = np.linspace(0, 10, n)
-Sxx = np.sum((x - x.mean())**2)
+For the slope, since $S_{xy} = \sum_i(x_i - \bar{x})Y_i$ (because $\sum_i(x_i - \bar{x})\bar{Y} = 0$):
 
-for i in range(n_sims):
-    eps = np.random.normal(0, sigma, n)
-    y = beta0 + beta1 * x + eps
-    b1_vals[i] = np.sum((x - x.mean()) * (y - y.mean())) / Sxx
+$$
+\hat{\beta}_1 = \sum_{i=1}^n c_i Y_i, \quad \text{where } c_i = \frac{x_i - \bar{x}}{S_{xx}}
+$$
 
-theoretical_var = sigma**2 / Sxx
-print(f"Simulated mean of b1: {b1_vals.mean():.4f}, expected: {beta1}")
-print(f"Simulated var of b1:  {b1_vals.var():.6f}, expected: {theoretical_var:.6f}")
+The weights $c_i$ satisfy two useful identities:
 
-# Verify t-distribution of pivotal quantity
-t_vals = np.empty(n_sims)
-for i in range(n_sims):
-    eps = np.random.normal(0, sigma, n)
-    y = beta0 + beta1 * x + eps
-    b1 = np.sum((x - x.mean()) * (y - y.mean())) / Sxx
-    b0 = y.mean() - b1 * x.mean()
-    resid = y - b0 - b1 * x
-    s2 = np.sum(resid**2) / (n - 2)
-    t_vals[i] = (b1 - beta1) / np.sqrt(s2 / Sxx)
+$$
+\sum_{i=1}^n c_i = 0, \qquad \sum_{i=1}^n c_i^2 = \frac{1}{S_{xx}}
+$$
 
-stat, pval = stats.kstest(t_vals, 't', args=(n - 2,))
-print(f"KS test against t({n-2}): p = {pval:.4f}")
-```
+Since $\hat{\beta}_1$ is a linear combination of independent normal random variables, it is itself normal.
+
+## Sampling Distribution of the Slope
+
+!!! tip "Theorem -- Distribution of the Slope Estimator"
+    Under the simple linear regression model with normal errors:
+
+    $$
+    \hat{\beta}_1 \sim N\!\left(\beta_1,\; \frac{\sigma^2}{S_{xx}}\right)
+    $$
+
+**Proof.**
+
+*Mean:*
+
+$$
+E[\hat{\beta}_1] = \sum_i c_i E[Y_i] = \sum_i c_i(\beta_0 + \beta_1 x_i) = \beta_0\sum_i c_i + \beta_1\sum_i c_i x_i
+$$
+
+Since $\sum_i c_i = 0$ and $\sum_i c_i x_i = \sum_i \frac{(x_i - \bar{x})x_i}{S_{xx}} = \frac{S_{xx}}{S_{xx}} = 1$:
+
+$$
+E[\hat{\beta}_1] = \beta_1
+$$
+
+So $\hat{\beta}_1$ is **unbiased**.
+
+*Variance:*
+
+$$
+\operatorname{Var}(\hat{\beta}_1) = \sum_i c_i^2 \operatorname{Var}(Y_i) = \sigma^2 \sum_i c_i^2 = \frac{\sigma^2}{S_{xx}}
+$$
+
+*Normality:* Since $\hat{\beta}_1$ is a linear combination of independent normal random variables, it is normal. $\square$
+
+## Sampling Distribution of the Intercept
+
+!!! tip "Theorem -- Distribution of the Intercept Estimator"
+    Under the same model:
+
+    $$
+    \hat{\beta}_0 \sim N\!\left(\beta_0,\; \sigma^2\left(\frac{1}{n} + \frac{\bar{x}^2}{S_{xx}}\right)\right)
+    $$
+
+**Proof.**
+
+*Mean:* $E[\hat{\beta}_0] = E[\bar{Y}] - E[\hat{\beta}_1]\bar{x} = (\beta_0 + \beta_1\bar{x}) - \beta_1\bar{x} = \beta_0$. Unbiased.
+
+*Variance:* Since $\hat{\beta}_0 = \bar{Y} - \hat{\beta}_1\bar{x}$ and $\operatorname{Cov}(\bar{Y}, \hat{\beta}_1) = 0$ (because $\sum_i c_i = 0$):
+
+$$
+\operatorname{Var}(\hat{\beta}_0) = \operatorname{Var}(\bar{Y}) + \bar{x}^2\operatorname{Var}(\hat{\beta}_1) = \frac{\sigma^2}{n} + \frac{\bar{x}^2\sigma^2}{S_{xx}} = \sigma^2\!\left(\frac{1}{n} + \frac{\bar{x}^2}{S_{xx}}\right)
+$$
+
+$\square$
+
+## Residual Sum of Squares and Estimation of Variance
+
+The residual sum of squares is
+
+$$
+\text{SSE} = \sum_{i=1}^n (Y_i - \hat{\beta}_0 - \hat{\beta}_1 x_i)^2
+$$
+
+!!! tip "Theorem -- Distribution of SSE"
+    Under the normal simple linear regression model:
+
+    $$
+    \frac{\text{SSE}}{\sigma^2} \sim \chi^2_{n-2}
+    $$
+
+    and SSE is independent of $(\hat{\beta}_0, \hat{\beta}_1)$.
+
+The degrees of freedom are $n - 2$ because two parameters ($\beta_0$ and $\beta_1$) are estimated. The unbiased estimator of $\sigma^2$ is
+
+$$
+s^2 = \frac{\text{SSE}}{n - 2}
+$$
+
+with $E[s^2] = \sigma^2$.
+
+## The t-Statistics
+
+Since $\sigma^2$ is unknown in practice, we replace it with $s^2$ in the standard errors. This converts normal distributions into t-distributions.
+
+!!! tip "Theorem -- t-Distribution for Slope"
+    The statistic
+
+    $$
+    T = \frac{\hat{\beta}_1 - \beta_1}{s / \sqrt{S_{xx}}} \sim t_{n-2}
+    $$
+
+    has a Student's t-distribution with $n - 2$ degrees of freedom.
+
+**Proof sketch.** The numerator $(\hat{\beta}_1 - \beta_1)/(\sigma/\sqrt{S_{xx}}) \sim N(0,1)$ and the denominator involves $s/\sigma = \sqrt{\text{SSE}/((n-2)\sigma^2)}$. Since $\text{SSE}/\sigma^2 \sim \chi^2_{n-2}$ and is independent of $\hat{\beta}_1$, the ratio has the form $N(0,1)/\sqrt{\chi^2_{n-2}/(n-2)}$, which defines the $t_{n-2}$ distribution. $\square$
+
+Similarly, for the intercept:
+
+$$
+\frac{\hat{\beta}_0 - \beta_0}{s\sqrt{1/n + \bar{x}^2/S_{xx}}} \sim t_{n-2}
+$$
+
+## Confidence Intervals
+
+The t-distribution results immediately yield confidence intervals.
+
+A $100(1 - \alpha)\%$ confidence interval for $\beta_1$ is
+
+$$
+\hat{\beta}_1 \pm t_{\alpha/2,\,n-2} \cdot \frac{s}{\sqrt{S_{xx}}}
+$$
+
+and for $\beta_0$:
+
+$$
+\hat{\beta}_0 \pm t_{\alpha/2,\,n-2} \cdot s\sqrt{\frac{1}{n} + \frac{\bar{x}^2}{S_{xx}}}
+$$
+
+where $t_{\alpha/2,\,n-2}$ is the upper $\alpha/2$ quantile of the $t_{n-2}$ distribution.
+
+## Example
+
+Suppose $n = 5$ data points with $\bar{x} = 3$, $S_{xx} = 10$, $\hat{\beta}_1 = 2.5$, $\hat{\beta}_0 = 1.0$, and $\text{SSE} = 6.0$.
+
+- **Estimated variance:** $s^2 = 6.0 / 3 = 2.0$, so $s = \sqrt{2} \approx 1.414$.
+- **Standard error of slope:** $\text{SE}(\hat{\beta}_1) = s/\sqrt{S_{xx}} = \sqrt{2}/\sqrt{10} = \sqrt{0.2} \approx 0.447$.
+- **t-statistic for $H_0: \beta_1 = 0$:** $T = 2.5 / 0.447 \approx 5.59$, compared to $t_{3}$.
+- **95% CI for slope:** $2.5 \pm 3.182 \times 0.447 \approx 2.5 \pm 1.42 = (1.08, 3.92)$ (using $t_{0.025, 3} = 3.182$).
+
+## Summary
+
+In simple linear regression with normal errors, the slope estimator $\hat{\beta}_1$ and the intercept estimator $\hat{\beta}_0$ are normally distributed with means equal to the true parameters (unbiased) and variances that depend on $\sigma^2$ and the spread of the predictor values $S_{xx}$. The residual sum of squares $\text{SSE}/\sigma^2$ follows a $\chi^2_{n-2}$ distribution and is independent of the estimators. Replacing $\sigma$ with $s = \sqrt{\text{SSE}/(n-2)}$ in the standardized estimators produces t-statistics with $n - 2$ degrees of freedom, which form the basis for hypothesis tests and confidence intervals.
