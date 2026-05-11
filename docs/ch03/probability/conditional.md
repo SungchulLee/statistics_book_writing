@@ -1,9 +1,5 @@
 # Conditional Probability
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Overview
 
 **Conditional probability** quantifies how the probability of an event changes when we learn that another event has occurred. It is one of the most important concepts in probability theory, forming the basis for Bayesian reasoning, statistical inference, and decision-making under uncertainty.
@@ -160,3 +156,141 @@ medical_test_simulation()
 - Conditioning restricts the sample space to $B$ and renormalizes probabilities.
 - The multiplication rule connects joint and conditional probabilities.
 - The law of total probability decomposes $P(A)$ across a partition of the sample space.
+
+## Exercises
+
+**Exercise 1.**
+A jar contains 4 red and 6 blue marbles. Two marbles are drawn without replacement. What is the probability that the second marble is red given that the first marble is blue?
+
+??? success "Solution to Exercise 1"
+    Let $B_1$ = "first marble is blue" and $R_2$ = "second marble is red."
+
+    After drawing one blue marble, the jar contains 4 red and 5 blue marbles (9 total). Therefore:
+
+    $$
+    P(R_2 \mid B_1) = \frac{4}{9}
+    $$
+
+---
+
+**Exercise 2.**
+In a factory, Machine A produces 60% of the items and Machine B produces 40%. Machine A has a defect rate of 2%, while Machine B has a defect rate of 5%. An item is selected at random and found to be defective. Using the law of total probability, compute the probability that the item is defective.
+
+??? success "Solution to Exercise 2"
+    Let $A$ = "produced by Machine A", $B$ = "produced by Machine B", and $D$ = "defective." We have:
+
+    $$
+    P(A) = 0.60, \quad P(B) = 0.40
+    $$
+
+    $$
+    P(D \mid A) = 0.02, \quad P(D \mid B) = 0.05
+    $$
+
+    By the law of total probability:
+
+    $$
+    P(D) = P(D \mid A) P(A) + P(D \mid B) P(B) = 0.02 \times 0.60 + 0.05 \times 0.40 = 0.012 + 0.020 = 0.032
+    $$
+
+    The overall defect rate is 3.2%.
+
+---
+
+**Exercise 3.**
+Prove that if $P(B) > 0$, then $P(\cdot \mid B)$ satisfies the three axioms of probability. That is, show that conditional probability is itself a valid probability measure on the restricted sample space.
+
+??? success "Solution to Exercise 3"
+    We verify the three axioms for $P(\cdot \mid B)$:
+
+    **Non-negativity:** For any event $A$, $P(A \cap B) \geq 0$ and $P(B) > 0$, so:
+
+    $$
+    P(A \mid B) = \frac{P(A \cap B)}{P(B)} \geq 0
+    $$
+
+    **Normalization:**
+
+    $$
+    P(\Omega \mid B) = \frac{P(\Omega \cap B)}{P(B)} = \frac{P(B)}{P(B)} = 1
+    $$
+
+    **Countable additivity:** If $A_1, A_2, \ldots$ are mutually disjoint events, then $A_1 \cap B, A_2 \cap B, \ldots$ are also mutually disjoint, so:
+
+    $$
+    P\!\left(\bigcup_i A_i \mid B\right) = \frac{P\!\left(\bigcup_i (A_i \cap B)\right)}{P(B)} = \frac{\sum_i P(A_i \cap B)}{P(B)} = \sum_i P(A_i \mid B)
+    $$
+
+    All three axioms hold, so $P(\cdot \mid B)$ is a valid probability measure. $\square$
+
+---
+
+**Exercise 4.**
+Two fair dice are rolled. Let $A$ = "the sum is at least 10" and $B$ = "both dice show 5 or higher." Compute $P(A \mid B)$.
+
+??? success "Solution to Exercise 4"
+    First, identify the event $B$ = "both dice show 5 or higher." Each die can be 5 or 6, so $B = \{(5,5),(5,6),(6,5),(6,6)\}$ with $|B| = 4$ and $P(B) = 4/36$.
+
+    Next, $A \cap B$ = outcomes in $B$ where the sum is at least 10:
+
+    - $(5,5)$: sum $= 10$ (yes)
+    - $(5,6)$: sum $= 11$ (yes)
+    - $(6,5)$: sum $= 11$ (yes)
+    - $(6,6)$: sum $= 12$ (yes)
+
+    All four outcomes in $B$ have sum $\geq 10$, so $A \cap B = B$ and $P(A \cap B) = 4/36$.
+
+    $$
+    P(A \mid B) = \frac{P(A \cap B)}{P(B)} = \frac{4/36}{4/36} = 1
+    $$
+
+    Given that both dice show 5 or higher, the sum is guaranteed to be at least 10.
+
+---
+
+**Exercise 5.**
+**The chain rule** for joint probabilities: $P(A_1, A_2, A_3) = P(A_1) P(A_2 \mid A_1) P(A_3 \mid A_1, A_2)$. Use this to compute $P(\text{3 hearts in a row})$ when drawing 3 cards from a standard 52-card deck without replacement.
+
+??? success "Solution to Exercise 5"
+    Let $H_i$ be "the $i$-th card is a heart." There are 13 hearts in a 52-card deck.
+
+    $$
+    P(H_1, H_2, H_3) = P(H_1) P(H_2 \mid H_1) P(H_3 \mid H_1, H_2)
+    $$
+
+    $P(H_1) = 13/52 = 1/4$.
+
+    After drawing one heart, the deck has 51 cards including 12 hearts: $P(H_2 \mid H_1) = 12/51$.
+
+    After drawing two hearts, the deck has 50 cards including 11 hearts: $P(H_3 \mid H_1, H_2) = 11/50$.
+
+    Joint: $P(H_1, H_2, H_3) = (1/4)(12/51)(11/50) = 132/10200 = 11/850 \approx 0.0129$.
+
+    About 1.3% probability of drawing 3 hearts in a row.
+
+    **General chain rule:** $P(A_1, \ldots, A_n) = \prod_{i=1}^n P(A_i \mid A_1, \ldots, A_{i-1})$. This is the foundation of sequential probability models — Markov chains, hidden Markov models, sequential Bayesian updating.
+
+---
+
+**Exercise 6.**
+**The Monty Hall problem.** Three doors; one hides a car, two hide goats. You pick door 1. The host (who knows what's behind each door) opens door 3, revealing a goat, and offers you a chance to switch. What is the probability of winning if you switch vs. stay?
+
+??? success "Solution to Exercise 6"
+    Let $C_i$ be "car is behind door $i$" (uniform prior $P(C_i) = 1/3$ for $i = 1, 2, 3$). Let $H_3$ be "host opens door 3."
+
+    The host's behavior: if you picked the car (door 1, $C_1$), the host picks randomly between doors 2 and 3, so $P(H_3 \mid C_1) = 1/2$. If the car is behind door 2 ($C_2$), the host must open door 3, so $P(H_3 \mid C_2) = 1$. If the car is behind door 3, the host cannot open it, so $P(H_3 \mid C_3) = 0$.
+
+    By Bayes:
+
+    $P(C_1 \mid H_3) = (1/2)(1/3) / P(H_3) = (1/6)/P(H_3)$.
+
+    $P(C_2 \mid H_3) = (1)(1/3) / P(H_3) = (1/3)/P(H_3)$.
+
+    $P(C_3 \mid H_3) = (0)(1/3) / P(H_3) = 0$.
+
+    Normalizing: $P(H_3) = 1/6 + 1/3 + 0 = 1/2$. So $P(C_1 \mid H_3) = 1/3$, $P(C_2 \mid H_3) = 2/3$, $P(C_3 \mid H_3) = 0$.
+
+    **Stay**: win with probability $P(C_1 \mid H_3) = 1/3$.
+    **Switch**: win with probability $P(C_2 \mid H_3) = 2/3$.
+
+    Switching doubles your winning probability. The intuition: your initial pick had probability 1/3 of being correct; the door the host doesn't open carries the remaining 2/3 probability because the host's choice gives information. This problem famously confused even mathematicians when it was popularized — the answer feels wrong until you formalize it with Bayes' theorem.

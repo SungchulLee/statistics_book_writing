@@ -1,9 +1,5 @@
 # Outliers and Leverage
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Overview
 
 **Outliers** are data points that significantly differ from other observations in a dataset. They may be unusually high or low and can arise due to variability in the data, errors in data collection, or they may indicate special cases that deserve further investigation. Detecting and understanding outliers is crucial because they can distort statistical analyses such as the mean, variance, and regression models.
@@ -140,3 +136,102 @@ plt.show()
 ## Summary
 
 Outliers deserve careful attention rather than automatic removal. Understanding their source—whether error, natural variation, or a genuinely rare event—determines the appropriate response. The combination of visual tools (box plots, scatter plots) and numerical methods (Z-scores, IQR fences, Cook's Distance) provides a robust framework for outlier detection and management.
+
+## Exercises
+
+**Exercise 1.**
+For the dataset $4, 7, 8, 12, 14, 15, 16, 18, 19, 22, 25, 55$: (a) find $Q_1, Q_2, Q_3$; (b) compute the IQR; (c) apply the $1.5 \times \mathrm{IQR}$ rule and identify outliers; (d) describe the boxplot.
+
+??? success "Solution to Exercise 1"
+    (a) Lower half $\{4, 7, 8, 12, 14, 15\}$ → $Q_1 = (8 + 12)/2 = 10$. Full median $(15 + 16)/2 = 15.5$. Upper half $\{16, 18, 19, 22, 25, 55\}$ → $Q_3 = (19 + 22)/2 = 20.5$.
+
+    (b) $\mathrm{IQR} = 20.5 - 10 = 10.5$.
+
+    (c) Lower fence $= 10 - 1.5 \times 10.5 = -5.75$; upper fence $= 20.5 + 15.75 = 36.25$. Only $55 > 36.25$, so it is flagged as an outlier.
+
+    (d) Box from 10 to 20.5 with a line at 15.5. Lower whisker reaches 4; upper whisker stops at 25 (the largest non-outlier). The point 55 appears as an isolated dot beyond the upper whisker. The right-side tail reveals positive skew.
+
+---
+
+**Exercise 2.**
+**Why is $1.5$ the multiplier in the boxplot fence rule?** Derive what this number corresponds to under the normal distribution.
+
+??? success "Solution to Exercise 2"
+    For a standard normal: $Q_1 \approx -0.6745$, $Q_3 \approx 0.6745$, $\mathrm{IQR} \approx 1.349$. The upper fence is
+
+    $$
+    Q_3 + 1.5 \cdot \mathrm{IQR} \approx 0.6745 + 2.024 \approx 2.698
+    $$
+
+    The tail probability beyond this point is $P(Z > 2.698) \approx 0.0035$. With both tails, about 0.7% of normal data lies outside the fences.
+
+    Tukey chose 1.5 (heuristically — there is no formal derivation) so that for normal data, **roughly 1 in 100 observations** is flagged. This produces a small but non-zero rate of "outliers" in clean normal data — useful for highlighting truly unusual values without overwhelming the analyst.
+
+    Larger samples generate more flagged points in absolute terms even when the data is purely normal. For very large $n$, alternatives like $3 \times \mathrm{IQR}$ (Tukey's "far out") or distribution-aware tests (Grubbs', Dixon's) are sometimes preferred.
+
+---
+
+**Exercise 3.**
+The **Z-score method** flags points with $|Z| > 3$. Under a normal distribution, what fraction of data is flagged? Why does this rule fail in the presence of multiple outliers?
+
+??? success "Solution to Exercise 3"
+    Under normality, $P(|Z| > 3) \approx 0.0027$ — about 0.27% of clean normal data is flagged.
+
+    **Failure mechanism (masking):** if multiple outliers are present, they inflate the sample mean and SD. A point that would be 5 SDs from the *true* mean might be only 2 SDs from the *contaminated* sample mean — failing to be flagged. The outliers protect each other.
+
+    **Fix:** use *robust* estimators of location and scale instead. The **modified Z-score** uses the median and MAD:
+
+    $$
+    M_i = 0.6745 \cdot \frac{x_i - \mathrm{median}(x)}{\mathrm{MAD}}
+    $$
+
+    Flag $|M_i| > 3.5$ (Iglewicz and Hoaglin 1993). Because MAD has breakdown 50%, masking is much harder to engineer.
+
+---
+
+**Exercise 4.**
+Distinguish three categories of outliers: (a) **error outliers**, (b) **mixture outliers**, (c) **influential outliers in regression**. For each, give an example and a recommended action.
+
+??? success "Solution to Exercise 4"
+    **(a) Error outliers** — data-entry mistakes, instrument failures, miscoded values. Example: a height recorded as 7.2 m instead of 72 in (1.83 m). *Action:* investigate and correct or remove. Document the decision.
+
+    **(b) Mixture outliers** — genuine observations from a different population than most of the data. Example: a wholesale customer in a dataset of retail transactions. *Action:* either model the mixture explicitly (mixture models, robust regression with heavy-tailed errors) or exclude with a clear rule and reported sensitivity.
+
+    **(c) Influential outliers in regression** — points whose removal substantially changes fitted coefficients. Example: a single high-leverage point at extreme $x$. *Action:* compute **Cook's distance** and **DFBETAS** to quantify influence. If influential, refit without the point and report both estimates; if the conclusions disagree, the data is too sensitive to that point and additional samples are needed.
+
+    The danger of conflating these categories: removing "outliers" indiscriminately can delete genuinely informative observations (mixture or influential) while keeping error outliers if their values happen to be near the bulk. *Investigate before removing.*
+
+---
+
+**Exercise 5.**
+**Cook's distance** for observation $i$ in a regression with $p$ parameters is
+
+$$
+D_i = \frac{(\hat y - \hat y_{(i)})^T (\hat y - \hat y_{(i)})}{p \, s^2} = \frac{e_i^2}{p \, s^2} \cdot \frac{h_{ii}}{(1 - h_{ii})^2}
+$$
+
+where $h_{ii}$ is the leverage and $e_i$ the residual. Why is Cook's distance more informative than either residual or leverage alone?
+
+??? success "Solution to Exercise 5"
+    Cook's distance combines two things that each must be true for an observation to be influential:
+
+    - **Large residual** ($e_i^2$ large) — the point is poorly fit by the model.
+    - **Large leverage** ($h_{ii}/(1 - h_{ii})^2$ large) — the point's $x$-value is far from the mean of $x$'s, so the model has to "stretch" to fit it.
+
+    A point with high residual but low leverage (extreme $y$ at typical $x$) is anomalous but does not drag the regression line — the abundance of other typical points anchors the slope. A point with high leverage but low residual (extreme $x$ that happens to be fit perfectly) is supported by the model — it's a powerful but consistent point.
+
+    Only points with **both** large residual AND large leverage actually change the fitted coefficients when removed. Cook's distance is constructed to detect exactly this combination. Conventional threshold: investigate $D_i > 4/n$ or $D_i > 1$.
+
+---
+
+**Exercise 6.**
+**Winsorization** at the 5%/95% level replaces values below the 5th percentile with the 5th-percentile value and values above the 95th with the 95th-percentile value. Compare this with **trimming** (deleting the extremes) and with **leaving outliers alone**. When is each appropriate?
+
+??? success "Solution to Exercise 6"
+    **Trimming**: discard observations below the 5th and above the 95th percentile. Result: $n$ shrinks. Useful when extreme values are clearly errors or contamination. The standard error of the resulting estimator can be smaller (less noise) but the sample size shrinks.
+
+    **Winsorization**: replace extremes with the cut-off values. Result: $n$ unchanged but the data is squashed at the tails. Useful when extreme values are believed real but you want them to have bounded influence in a non-robust analysis (e.g., a sample mean computation). The squashed values retain partial influence on quantile-based statistics but not on tail-sensitive statistics like mean and variance.
+
+    **Leave alone**: most appropriate when the analysis uses robust statistics (median, MAD, M-estimators) that are insensitive to extremes anyway, or when the extremes are the very phenomenon of interest (financial crisis returns, drug super-responders).
+
+    **Recommendation:** never silently apply any of these. Always (1) plot the data to see whether the extremes look like errors or genuine signal; (2) report results both with and without the extremes; (3) when in doubt, prefer robust methods that don't require deciding upfront which points are "real."

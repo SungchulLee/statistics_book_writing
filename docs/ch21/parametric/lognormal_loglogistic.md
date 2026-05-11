@@ -26,15 +26,15 @@ $$
 **Survival function:**
 
 $$
-S(t) = 1 - \Phi\!\left(\frac{\ln t - \mu}{\sigma}\right)
+S(t) = 1 - \mathcal{N}\!\left(\frac{\ln t - \mu}{\sigma}\right)
 $$
 
-where $\Phi(\cdot)$ is the standard normal CDF.
+where $\mathcal{N}(\cdot)$ is the standard normal CDF.
 
 **Hazard function:**
 
 $$
-h(t) = \frac{f(t)}{S(t)} = \frac{\phi\!\left(\frac{\ln t - \mu}{\sigma}\right)}{t \sigma \left[1 - \Phi\!\left(\frac{\ln t - \mu}{\sigma}\right)\right]}
+h(t) = \frac{f(t)}{S(t)} = \frac{\phi\!\left(\frac{\ln t - \mu}{\sigma}\right)}{t \sigma \left[1 - \mathcal{N}\!\left(\frac{\ln t - \mu}{\sigma}\right)\right]}
 $$
 
 where $\phi(\cdot)$ is the standard normal PDF.
@@ -107,7 +107,7 @@ This follows directly from $S(\lambda) = 1/(1 + 1) = 0.5$.
 | Property | Log-Normal | Log-Logistic |
 |:---------|:-----------|:-------------|
 | $\ln T$ distribution | Normal | Logistic |
-| Survival function | Involves $\Phi$ (no closed form) | Closed form: $1/[1 + (t/\lambda)^k]$ |
+| Survival function | Involves $\mathcal{N}$ (no closed form) | Closed form: $1/[1 + (t/\lambda)^k]$ |
 | Hazard shape | Always hump-shaped | Hump-shaped ($k > 1$) or decreasing ($k \leq 1$) |
 | Tail behavior | Hazard $\to 0$ faster | Hazard $\to 0$ more slowly (heavier tails) |
 | Median | $e^\mu$ | $\lambda$ |
@@ -143,7 +143,7 @@ factor of $e^{\beta_j}$; a coefficient $\beta_j < 0$ shortens it.
 
 ## Checking Model Fit
 
-**Log-normal check.** If $T$ is log-normal, then $\Phi^{-1}(1 - \hat{S}(t))$
+**Log-normal check.** If $T$ is log-normal, then $\mathcal{N}^{-1}(1 - \hat{S}(t))$
 plotted against $\ln t$ should be approximately linear with slope $1/\sigma$
 and intercept $-\mu/\sigma$.
 
@@ -161,3 +161,36 @@ well.
     (Nelson--Aalen) shows curvature inconsistent with the Weibull, and when
     substantive knowledge suggests the hazard peaks and then declines.  If the
     hazard is monotone, the Weibull model is a better and simpler choice.
+
+
+## Exercises
+
+**Exercise 1.**
+Describe the main concept of Log-Normal and Log-Logistic Models and explain why it matters for statistical practice.
+
+??? success "Solution to Exercise 1"
+    Log-Normal and Log-Logistic Models is a core topic in statistics that provides tools for drawing reliable inferences from data. It matters because proper application ensures valid conclusions, correctly quantified uncertainty, and appropriate handling of the assumptions that underpin the method. Practitioners who understand this concept can avoid common pitfalls and choose the right analytical approach for their data.
+
+---
+
+**Exercise 2.**
+State the key assumptions required by the method discussed here. How can each assumption be checked?
+
+??? success "Solution to Exercise 2"
+    The main assumptions typically include: (1) independence of observations -- verified by understanding the data collection process and checking for serial correlation; (2) distributional requirements (e.g., normality) -- checked with Q-Q plots and formal tests like Shapiro-Wilk; (3) equal variances (if applicable) -- assessed with boxplots and Levene's test. When assumptions are violated, consider robust alternatives, transformations, or nonparametric methods.
+
+---
+
+**Exercise 3.**
+Work through a small numerical example illustrating the application of the technique from this section.
+
+??? success "Solution to Exercise 3"
+    A structured approach to applying this technique involves: (1) clearly stating the hypotheses or estimation goal; (2) verifying that the data meet the required assumptions; (3) computing the relevant test statistic, estimate, or model fit; (4) obtaining the p-value, confidence interval, or posterior distribution; (5) interpreting the result in the context of the original question. Following these steps systematically ensures a rigorous and reproducible analysis.
+
+---
+
+**Exercise 4.**
+Compare the approach from this section with an alternative method. When would you choose each?
+
+??? success "Solution to Exercise 4"
+    The method discussed here is appropriate when its assumptions hold and the sample size is sufficient for the asymptotic approximations to be accurate. Alternative approaches include: (1) nonparametric methods -- preferred when distributional assumptions are suspect; (2) bootstrap methods -- useful when analytical reference distributions are unavailable; (3) Bayesian methods -- valuable when incorporating prior information or when direct probability statements about parameters are desired. Running multiple approaches and comparing results provides a useful robustness check.

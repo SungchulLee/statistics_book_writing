@@ -1,9 +1,5 @@
 # Degrees of Freedom and Asymptotic Theory
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Degrees of Freedom in Chi-Square Tests
 
 The degrees of freedom determine the shape of the chi-square distribution used as the reference distribution under $H_0$. The calculation depends on which chi-square test is being performed.
@@ -85,3 +81,61 @@ The chi-square approximation improves with:
 - Fewer categories with very small expected frequencies.
 
 As a practical guideline, the approximation is generally reliable when all expected frequencies are at least 5.
+
+## Exercises
+
+**Exercise 1.**
+A contingency table has 4 rows and 3 columns. How many degrees of freedom does the chi-square test of independence have? Explain the formula.
+
+??? success "Solution to Exercise 1"
+    The degrees of freedom are:
+
+    $$
+    df = (r-1)(c-1) = (4-1)(3-1) = 3 \times 2 = 6
+    $$
+
+    The formula arises because the expected frequencies are computed from the marginal totals. With $r$ rows and $c$ columns, there are $r + c$ marginal totals, but they are subject to the constraint that row and column marginals both sum to $n$, giving $r + c - 1$ constraints. The number of free parameters is $(r \times c) - 1 - (r + c - 1) = rc - r - c + 1 = (r-1)(c-1)$.
+
+---
+
+**Exercise 2.**
+A goodness-of-fit test for a normal distribution uses 8 bins. Two parameters ($\mu$ and $\sigma$) are estimated from the data. What are the degrees of freedom?
+
+??? success "Solution to Exercise 2"
+    For a goodness-of-fit test with $k$ bins and $p$ estimated parameters:
+
+    $$
+    df = k - 1 - p = 8 - 1 - 2 = 5
+    $$
+
+    Each estimated parameter reduces the degrees of freedom by 1 because it introduces an additional constraint: the expected frequencies are computed using the estimated (not hypothesized) parameter values, which reduces the discrepancy between observed and expected.
+
+---
+
+**Exercise 3.**
+A chi-square test has $n = 50$ observations in 10 categories with equal expected frequencies. Check whether the rule-of-thumb condition (all expected frequencies at least 5) is satisfied.
+
+??? success "Solution to Exercise 3"
+    With $n = 50$ and $k = 10$ equal categories, each expected frequency is:
+
+    $$
+    E_i = \frac{n}{k} = \frac{50}{10} = 5
+    $$
+
+    The condition $E_i \geq 5$ is satisfied (exactly at the boundary). The chi-square approximation should be adequate, though some statisticians recommend $E_i \geq 5$ as a minimum and prefer $E_i \geq 10$ for greater reliability.
+
+---
+
+**Exercise 4.**
+If one of the 10 categories in Exercise 3 had only 2 expected observations, what remedial action could be taken?
+
+??? success "Solution to Exercise 4"
+    When expected frequencies are too small, common remedies include:
+
+    1. **Combine adjacent categories**: Merge the low-frequency category with a neighboring category to create a combined category with a larger expected count. This reduces $k$ and increases the expected frequency in the combined cell.
+
+    2. **Use an exact test**: Fisher's exact test or a permutation test does not rely on the chi-square approximation and can handle small expected frequencies.
+
+    3. **Collect more data**: If possible, increasing $n$ proportionally increases all expected frequencies.
+
+    The first option (combining categories) is most common in practice. The combined categories should be scientifically meaningful — adjacent or similar categories should be merged rather than arbitrary ones.

@@ -1,9 +1,5 @@
 # CI for μ₁ − μ₂
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Two-Sample Confidence Interval for the Difference of Means
 
 When comparing two populations, we are often interested in the difference between their means. A confidence interval for $\mu_1 - \mu_2$ provides a range of plausible values for this difference, considering sampling variability.
@@ -219,30 +215,87 @@ if __name__ == "__main__":
 
 ## Exercises
 
-### Exercise: Standard Error of the Difference
+**Exercise 1.**
+Two independent samples: $\sigma_A = 15, n_A = 36$; $\sigma_B = 20, n_B = 49$. Compute $\mathrm{SE}(\bar X_A - \bar X_B)$.
 
-Two independent samples: population A with $\sigma_A = 15$ ($n_A = 36$) and population B with $\sigma_B = 20$ ($n_B = 49$). What is the standard error of $\bar{X}_A - \bar{X}_B$?
+??? success "Solution to Exercise 1"
+    $\mathrm{SE} = \sqrt{15^2/36 + 20^2/49} = \sqrt{6.25 + 8.16} = \sqrt{14.41} \approx 3.80$.
 
-**Solution.**
+---
 
-$$
-\sigma_{\bar{X}_A - \bar{X}_B} = \sqrt{\frac{15^2}{36} + \frac{20^2}{49}} \approx \boxed{3.80}
-$$
+**Exercise 2.**
+Sample 1: $\bar X_1 = 55, s_1 = 8, n_1 = 30$. Sample 2: $\bar X_2 = 50, s_2 = 10, n_2 = 35$. 95% CI for $\mu_1 - \mu_2$.
 
-### Exercise: 95% CI for Difference of Means
+??? success "Solution to Exercise 2"
+    $\mathrm{SE} = \sqrt{64/30 + 100/35} \approx 2.233$. With large $n$'s, use $z$: ME = $1.96 \cdot 2.233 \approx 4.38$.
 
-Sample 1: $\bar{X}_1 = 55$, $s_1 = 8$, $n_1 = 30$. Sample 2: $\bar{X}_2 = 50$, $s_2 = 10$, $n_2 = 35$. Construct a 95% CI.
+    CI: $(5 - 4.38, 5 + 4.38) = (0.62, 9.38)$. Does *not* include 0 — evidence of a difference.
 
-**Solution.** Since both $n_1, n_2 \ge 30$, we can use the $z$-approximation:
+---
 
-$$
-\text{SE} = \sqrt{\frac{64}{30} + \frac{100}{35}} = \sqrt{2.133 + 2.857} = \sqrt{4.99} \approx 2.233
-$$
+**Exercise 3.**
+Welch's CI for two teaching methods: A ($n = 30, \bar X = 78, s = 8$), B ($n = 35, \bar X = 82, s = 10$). 95% CI for $\mu_A - \mu_B$.
 
-$$
-\text{ME} = 1.96 \times 2.233 \approx 4.38
-$$
+??? success "Solution to Exercise 3"
+    $\mathrm{SE} = \sqrt{64/30 + 100/35} \approx 2.234$.
 
-$$
-\boxed{(0.62,\ 9.38)}
-$$
+    Welch's df: $\nu = (2.133 + 2.857)^2/[2.133^2/29 + 2.857^2/34] = 24.9/0.397 \approx 62.7$. Use $t_{62}$.
+
+    $t_{0.975, 62} \approx 2.00$. CI: $(78 - 82) \pm 2.00 \cdot 2.234 = -4 \pm 4.47 = (-8.47, 0.47)$.
+
+    Contains 0 — cannot conclude a significant difference at 5% level. Mostly negative, suggesting Method B may be better, but evidence inconclusive.
+
+---
+
+**Exercise 4.**
+**Pooled vs Welch.** When to use each, and what assumption distinguishes them?
+
+??? success "Solution to Exercise 4"
+    **Pooled $t$-test:** assumes $\sigma_1 = \sigma_2$. Pools both samples to estimate the common $\sigma$. Df $= n_1 + n_2 - 2$.
+
+    **Welch's $t$-test:** allows $\sigma_1 \ne \sigma_2$. Uses separate variances. Approximate df via Welch-Satterthwaite formula.
+
+    **When to use pooled:** when variances are *known* to be equal (e.g., by experimental design). Modest efficiency gain.
+
+    **When to use Welch:** default. Doesn't require equal variances; nearly as efficient as pooled when variances are actually equal.
+
+    Modern recommendation: **always use Welch** unless equal-variance is structurally guaranteed. R's `t.test` defaults to Welch. The cost of "wrongly" using Welch when variances are equal is small; the cost of "wrongly" pooling when they aren't can be substantial.
+
+---
+
+**Exercise 5.**
+**Paired vs independent.** $n = 50$ subjects measured pre/post treatment. Should the two-sample CI from this exercise apply?
+
+??? success "Solution to Exercise 5"
+    **No.** The pre/post measurements are *paired* — same subject twice. They are *not* independent. Using a two-sample CI would treat them as independent and ignore the within-subject correlation.
+
+    **Correct approach:** compute differences $D_i = \mathrm{post}_i - \mathrm{pre}_i$ for each subject. One-sample CI on $D$ using $\bar D, s_D, n - 1$ degrees of freedom.
+
+    **Why this matters:** if pre/post are positively correlated (typical), $\mathrm{Var}(D) < \mathrm{Var}(\mathrm{pre}) + \mathrm{Var}(\mathrm{post})$. Paired analysis has smaller SE, tighter CI, more power.
+
+    The two-sample CI loses information about pairing and gives wider intervals than necessary. Always match the analysis to the design.
+
+---
+
+**Exercise 6.**
+**Effect size.** In addition to the CI for $\mu_1 - \mu_2$, report **Cohen's $d$** = (effect)/(pooled SD). Interpret.
+
+??? success "Solution to Exercise 6"
+    For Exercise 3: pooled SD $= \sqrt{((29 \cdot 64) + (34 \cdot 100))/63} = \sqrt{(1856 + 3400)/63} = \sqrt{83.4} \approx 9.13$.
+
+    Cohen's $d = (78 - 82)/9.13 \approx -0.44$.
+
+    **Interpretation:**
+
+    - $|d| = 0.2$: small effect.
+    - $|d| = 0.5$: medium effect.
+    - $|d| = 0.8$: large effect.
+
+    A $d$ of $-0.44$ is a "medium-small" effect — Method B's mean is about 0.44 SDs above A's mean. The CI didn't quite reach significance, but the effect size is non-negligible.
+
+    Always report both:
+
+    - **Statistical significance** (CI excludes 0, $p < \alpha$).
+    - **Practical significance** (effect size large enough to matter).
+
+    Effect sizes are dimensionless and comparable across studies and disciplines — useful for meta-analysis. Significance tests are sample-size-dependent; effect sizes are not.

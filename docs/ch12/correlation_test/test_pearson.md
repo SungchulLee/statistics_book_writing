@@ -169,3 +169,65 @@ print(f"95% CI for rho: ({ci_r[0]:.3f}, {ci_r[1]:.3f})")
 ## Summary
 
 The t-test for Pearson's $r$ determines whether the observed sample correlation provides statistically significant evidence against $H_0\!: \rho = 0$. The test statistic $t = r\sqrt{n-2}/\sqrt{1-r^2}$ follows a $t$-distribution with $n-2$ degrees of freedom under bivariate normality. Confidence intervals for $\rho$ use Fisher's z-transformation to handle the skewed sampling distribution of $r$. The test requires bivariate normality, independence, and a linear relationship; when these assumptions are violated, rank-based tests such as [Spearman's test](test_spearman.md) or [Kendall's test](test_kendall.md) are preferred.
+
+## Exercises
+
+**Exercise 1.**
+Generate data with a monotonic but nonlinear relationship:
+
+$$
+y = e^{0.1x} + \epsilon, \quad x \sim U(0, 30), \quad \epsilon \sim N(0, 1)
+$$
+
+1. Compute Pearson's $r$, Spearman's $\rho_s$, and Kendall's $\tau$
+2. Explain why Spearman and Kendall detect the relationship more effectively than Pearson
+
+??? success "Solution to Exercise 1"
+
+    The relationship $y = e^{0.1x}$ is monotonically increasing but exponential, not linear. Pearson's $r$ measures linear association, so it underestimates the strength of this curved relationship. Spearman's $\rho_s$ and Kendall's $\tau$ measure monotonic association using ranks, so they capture the relationship regardless of its functional form. Both rank-based measures will be closer to 1 than Pearson's $r$ because the monotone structure is perfectly preserved in the ranks even though the linear fit is poor.
+
+---
+
+**Exercise 2.**
+Using the age-income data:
+
+```python
+age    = [18, 25, 57, 45, 26, 64, 37, 40, 24, 33]
+income = [15000, 29000, 68000, 52000, 32000, 80000, 41000, 45000, 26000, 33000]
+```
+
+1. Compute all three correlation coefficients and their p-values
+2. At $\alpha = 0.01$, can you reject $H_0: \rho = 0$?
+3. Add an outlier (age=20, income=200000) and recompute. Which test is most affected?
+
+??? success "Solution to Exercise 2"
+
+    1. All three correlation coefficients will show a strong positive association between age and income. Pearson's $r$, Spearman's $\rho_s$, and Kendall's $\tau$ should all be positive and statistically significant.
+
+    2. With $n = 10$, the p-values for all three tests are likely below 0.01 given the strong positive relationship, so we can reject $H_0$ at the 1% level.
+
+    3. Adding the outlier (age=20, income=200000) will dramatically affect Pearson's $r$ because it is sensitive to extreme values. The outlier pulls the correlation toward zero or even negative because a young person with very high income contradicts the overall trend. Spearman's $\rho_s$ and Kendall's $\tau$ are much less affected because they use ranks — the outlier receives extreme ranks in income but not in age, limiting its influence to one rank pair.
+
+---
+
+**Exercise 3.**
+For a true $\rho = 0.3$:
+
+1. Generate bivariate normal samples with $n \in \{10, 30, 100, 500, 1000\}$
+2. For each $n$, compute Pearson's $r$ and its p-value
+3. Plot p-value vs. sample size and discuss the relationship between sample size and statistical significance
+
+```python
+import numpy as np
+from scipy import stats
+
+np.random.seed(0)
+rho = 0.3
+sample_sizes = [10, 30, 100, 500, 1000]
+
+# Your code here
+```
+
+??? success "Solution to Exercise 3"
+
+    As $n$ increases, the p-value decreases monotonically for a fixed true $\rho = 0.3$. With $n = 10$, the p-value may be well above 0.05 (failing to detect the real correlation). By $n = 100$, the p-value is typically below 0.05, and by $n = 1000$, it is extremely small. This demonstrates that statistical significance depends on both effect size and sample size. A moderate correlation ($\rho = 0.3$) can be non-significant with small samples and highly significant with large samples. This underscores the importance of reporting effect sizes alongside p-values.

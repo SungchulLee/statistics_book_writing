@@ -1,9 +1,5 @@
 # Histograms and Density Plots
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Overview
 
 A **histogram** is one of the most fundamental tools in exploratory data analysis. It divides the range of a continuous variable into equal-width intervals (bins) and displays the count or density of observations falling into each bin as rectangular bars. When normalized so that the total area equals one, the histogram approximates a **density plot**—a smooth curve estimating the underlying probability density function (PDF).
@@ -206,3 +202,105 @@ The number of bins profoundly affects interpretation. Too few bins over-smooth a
 ## Summary
 
 Histograms and density plots are the first line of exploration for any continuous variable. They expose the shape of the distribution—symmetric or skewed, unimodal or multimodal, heavy-tailed or light-tailed—guiding every subsequent modeling and inference decision.
+
+## Exercises
+
+**Exercise 1.**
+A researcher collects 20 exam scores: $55, 62, 67, 70, 71, 73, 74, 75, 76, 78, 80, 81, 83, 85, 87, 88, 90, 92, 95, 98$.
+
+**(a)** Using Sturges' rule, how many bins should the histogram have?
+**(b)** Apply 4 equal-width bins spanning the range. Specify bin edges and counts.
+**(c)** Explain why too few bins hide structure and too many bins fabricate it.
+
+??? success "Solution to Exercise 1"
+    (a) Sturges' rule: $k = \lceil \log_2 n \rceil + 1$. With $n = 20$, $k = \lceil 4.32 \rceil + 1 = 6$.
+
+    (b) Range $= 43$; bin width $= 43/4 = 10.75$:
+
+    - $[55, 65.75)$: 2 values (55, 62)
+    - $[65.75, 76.5)$: 7 values (67, 70, 71, 73, 74, 75, 76)
+    - $[76.5, 87.25)$: 6 values (78, 80, 81, 83, 85, 87)
+    - $[87.25, 98]$: 5 values (88, 90, 92, 95, 98)
+
+    (c) Too few bins merge distinct features — a bimodal distribution can look unimodal if both modes land in the same bin. Too many bins create sampling-noise peaks and valleys that do not reflect the true density. The "right" number balances bias (from over-smoothing) and variance (from noisy bins), which is the same trade-off behind nonparametric density estimation.
+
+---
+
+**Exercise 2.**
+Compare **Sturges' rule** ($k = 1 + \log_2 n$), the **square-root rule** ($k = \lceil \sqrt n \rceil$), and the **Freedman–Diaconis rule** (bin width $h = 2 \cdot \mathrm{IQR}/n^{1/3}$). When does each fail?
+
+??? success "Solution to Exercise 2"
+    **Sturges:** assumes approximately normal data and undercounts bins for large $n$ — only 10 bins at $n = 1024$, which over-smooths for big samples. Fails for skewed or heavy-tailed data.
+
+    **Square-root:** simple and reasonable for moderate $n$ but ignores the data's spread. Tends to over-bin sparse data and under-bin dense data.
+
+    **Freedman–Diaconis:** uses the IQR (robust to outliers) and scales as $n^{-1/3}$ (the asymptotically optimal rate for histogram MISE). Generally the best default. Fails when the IQR is zero or very small (e.g., heavily discrete data) — in that case fall back to Scott's rule using SD.
+
+    Modern practice: use Matplotlib's `bins='auto'` which combines Freedman–Diaconis with Sturges, picking the larger of the two.
+
+---
+
+**Exercise 3.**
+Show that with `density=True`, the total area under the histogram equals 1. Why is this normalization required to compare a histogram with a theoretical PDF?
+
+??? success "Solution to Exercise 3"
+    Let bins have widths $w_1, \ldots, w_k$ and counts $c_1, \ldots, c_k$ with $\sum c_i = n$. With density normalization, the height of bin $i$ is $h_i = c_i / (n w_i)$. The total area:
+
+    $$
+    \sum_i w_i \cdot h_i = \sum_i w_i \cdot \frac{c_i}{n w_i} = \frac{1}{n}\sum_i c_i = 1
+    $$
+
+    Any PDF $f$ satisfies $\int f(x)\,dx = 1$. Without normalization, the histogram heights would be in counts (totaling $n$, not 1), and direct overlay with $f$ would mismatch by a factor of $n \cdot w$. Density normalization places both on the same scale (probability per unit $x$), enabling direct visual comparison and goodness-of-fit assessment.
+
+---
+
+**Exercise 4.**
+A histogram of 1000 i.i.d. samples from $N(0, 1)$ uses 30 equal-width bins on $[-4, 4]$. (a) Estimate the expected count in the bin containing zero. (b) Estimate the standard deviation of that count.
+
+??? success "Solution to Exercise 4"
+    Bin width $w = 8/30 \approx 0.267$. The bin containing zero is $[-w/2, w/2] = [-0.133, 0.133]$.
+
+    (a) Probability a single observation falls in this bin: $P(-0.133 < Z < 0.133) \approx 2 \cdot 0.133 \cdot \phi(0) \approx 2 \cdot 0.133 \cdot 0.399 \approx 0.106$. Expected count $\approx 1000 \times 0.106 = 106$.
+
+    (b) The count is binomial: $\mathrm{Var} = np(1-p) = 1000 \cdot 0.106 \cdot 0.894 \approx 95$, so SD $\approx 9.7$.
+
+    The relative noise (SD/mean) is $\approx 9\%$ in this central bin — small enough that the histogram tracks the density faithfully. In a tail bin where $p \approx 0.001$, expected count is only 1 and SD is also $\approx 1$ — the relative noise is 100%, which is why histogram tails look ragged and density estimates need different treatment in the tails.
+
+---
+
+**Exercise 5.**
+The **kernel density estimate (KDE)** smooths the histogram by replacing each observation with a kernel function $K_h(x - x_i)$. Write the KDE formula. Why is KDE generally preferred over histograms for visualization?
+
+??? success "Solution to Exercise 5"
+    The KDE is
+
+    $$
+    \hat f(x) = \frac{1}{n h} \sum_{i=1}^n K\!\left(\frac{x - x_i}{h}\right)
+    $$
+
+    where $K$ is a kernel function (usually Gaussian: $K(u) = \frac{1}{\sqrt{2\pi}}e^{-u^2/2}$) integrating to 1, and $h > 0$ is the bandwidth.
+
+    **Advantages over histograms:**
+
+    - **Smoothness**: KDE produces a continuous curve, easier to read and compare across plots.
+    - **No bin-edge artifacts**: the histogram's appearance changes discontinuously as bin edges shift; KDE is invariant to such shifts.
+    - **Better convergence rate** for smooth densities: optimal $O(n^{-4/5})$ MISE for Gaussian kernel vs. $O(n^{-2/3})$ for histograms.
+    - **Adaptive bandwidth methods** (Silverman's rule, plug-in selectors) automate the smoothness choice.
+
+    **Disadvantages:** KDE can over-smooth (hide modes) or under-smooth (create spurious peaks). It can also produce non-zero density in implausible regions (e.g., negative values for income data). Boundary-corrected KDEs address the latter.
+
+---
+
+**Exercise 6.**
+Sketch what histograms of the following look like and identify which distributional feature each reveals: (a) heights of adult humans; (b) annual household income; (c) age at death in a developed country; (d) the digit-sum of phone numbers.
+
+??? success "Solution to Exercise 6"
+    (a) **Heights of adults**: roughly symmetric, bell-shaped, possibly slightly bimodal (males and females have distinct modes). Reveals approximate normality conditional on sex, mixture structure unconditionally.
+
+    (b) **Annual household income**: strongly right-skewed with a long upper tail. Mean $\gg$ median. Often fitted by a lognormal or Pareto distribution. Reveals economic inequality through the heavy upper tail.
+
+    (c) **Age at death** (developed country): bimodal — a small peak near 0 (infant mortality) and a large peak in the 70s–80s. Reveals competing causes of mortality (early-life vs. age-related). With improving health care, the infant peak has shrunk; the old-age peak has shifted right.
+
+    (d) **Digit-sum of phone numbers**: approximately bell-shaped (CLT in action). The digit-sum is a sum of nearly independent uniform digits, so its distribution approaches normal. Reveals the central limit theorem in everyday data.
+
+    Together these illustrate that histogram shape encodes *qualitative* information that summary statistics alone miss. Always plot first; summarize second.

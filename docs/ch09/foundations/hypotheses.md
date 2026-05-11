@@ -1,9 +1,5 @@
 # Null and Alternative Hypotheses
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Introduction to Hypothesis Testing
 
 Hypothesis testing is a cornerstone of statistical analysis, providing a systematic, data-grounded approach to decision-making. It involves making an assumption about a population parameter and then determining whether the data provide sufficient evidence to reject this assumption. This process is used across various fields to test theories and hypotheses, enabling researchers and analysts to make informed decisions based on empirical data.
@@ -65,3 +61,85 @@ The choice of significance level ($\alpha$), the threshold for rejecting the nul
 Hypothesis testing is ubiquitous in scientific research, policy-making, medicine, economics, and business, among other fields. It provides a framework for decision-making where stakes are high, and we must make decisions under uncertainty. For instance, in clinical trials, hypothesis testing helps ascertain new drugs' effectiveness. In economics, it can evaluate the impact of policy changes or economic factors on certain variables of interest.
 
 Understanding hypothesis testing is, therefore, essential for students and professionals who engage in data-driven decision-making. It provides the tools needed to test assumptions and validate theories against real-world data.
+
+## Exercises
+
+**Exercise 1.**
+Restaurant owner suspects drink machine dispenses too much (target 530 mL). Sample of 30. State hypotheses.
+
+??? success "Solution to Exercise 1"
+    $H_0: \mu = 530$ vs $H_1: \mu > 530$ (one-sided, suspect overflow).
+
+    Alternative direction comes from the research question. Null always contains equality. Statement is about the population parameter $\mu$, not the sample mean.
+
+---
+
+**Exercise 2.**
+Write hypotheses for: (a) drug reduces blood pressure vs. placebo; (b) coin biased toward heads; (c) two processes have different variances.
+
+??? success "Solution to Exercise 2"
+    (a) $H_0: \mu_{\text{drug}} = \mu_{\text{placebo}}$ vs $H_1: \mu_{\text{drug}} < \mu_{\text{placebo}}$ (one-sided reduction).
+
+    (b) $H_0: p = 0.5$ vs $H_1: p > 0.5$ (one-sided).
+
+    (c) $H_0: \sigma_1^2 = \sigma_2^2$ vs $H_1: \sigma_1^2 \ne \sigma_2^2$ (two-sided).
+
+    Directional claim → one-sided; "different/not equal" → two-sided.
+
+---
+
+**Exercise 3.**
+**Type I and Type II errors** for the drink machine. Describe each.
+
+??? success "Solution to Exercise 3"
+    Type I: reject true $H_0$ — conclude machine overfills when it doesn't. Probability $\alpha$. Cost: unnecessary recalibration.
+
+    Type II: fail to reject false $H_0$ — miss that machine overfills. Probability $\beta$. Cost: continued waste, customer overcharge.
+
+    Trade-off: smaller $\alpha$ → larger $\beta$ (less power). Setting $\alpha$ requires weighing costs.
+
+---
+
+**Exercise 4.**
+**One-sided vs two-sided.** When appropriate? Cost of one-sided?
+
+??? success "Solution to Exercise 4"
+    One-sided: only one direction is of interest. More power in that direction (uses full $\alpha$ on one tail).
+
+    Two-sided: any departure matters. Critical value $z_{\alpha/2}$ — slightly harder to reject.
+
+    **Cost of one-sided:** if truth is in the unchosen direction, you'll never detect it. Critical in safety contexts.
+
+    Modern default: two-sided unless prior knowledge rules out one direction. Journals often require justification for one-sided.
+
+---
+
+**Exercise 5.**
+**Why $\alpha = 0.05$?** When to depart?
+
+??? success "Solution to Exercise 5"
+    Convention from Fisher (1925) — not a deep justification. "1 in 20" is psychologically manageable.
+
+    Depart when:
+
+    - High-stakes (drug approval): $\alpha = 0.01$ or smaller.
+    - Multiple testing: $\alpha/m$ (Bonferroni).
+    - Exploratory: $\alpha = 0.10$ to find weak signals.
+    - Physics "discovery": $5\sigma$ ($\alpha \approx 6 \times 10^{-7}$).
+
+    2019 ASA statement: don't blindly use 0.05. Report exact p-values, effect sizes, CIs.
+
+---
+
+**Exercise 6.**
+**Hypothesis test vs CI.** When to use each?
+
+??? success "Solution to Exercise 6"
+    Test answers: does data contradict $H_0$?
+    CI answers: what's the plausible range of $\theta$?
+
+    Mathematical equivalence: two-sided test at level $\alpha$ rejects $H_0: \theta = \theta_0$ iff $\theta_0 \notin$ $(1-\alpha)$ CI.
+
+    Use test for specific hypotheses (regulatory, science). Use CI for reporting uncertainty. **Modern preference: CIs primary, tests supplementary.**
+
+    Effect size + CI is more informative than a binary "significant or not."

@@ -1,9 +1,5 @@
 # Naive Variance Estimator
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Introduction
 
 The **naive variance estimator** divides the sum of squared deviations by $n$ (the sample size) rather than by $n-1$. While this is the most intuitive approach — simply averaging the squared deviations from the sample mean — it turns out to be biased. Understanding *why* it is biased provides deep insight into the nature of estimation and motivates Bessel's correction.
@@ -128,3 +124,88 @@ The naive variance estimator $\tilde{S}^2 = \frac{1}{n}\sum(X_i - \bar{X})^2$ is
 | Bias | $-\sigma^2/n$ |
 | MSE (Normal) | $\frac{2n-1}{n^2}\sigma^4$ |
 | Key identity | $\sum(X_i - \bar{X})^2 = \sum(X_i - \mu)^2 - n(\bar{X}-\mu)^2$ |
+
+## Exercises
+
+**Exercise 1.**
+Prove $\mathbb{E}[(1/n)\sum(X_i - \bar X)^2] = (n-1)\sigma^2/n$.
+
+??? success "Solution to Exercise 1"
+    Use the identity $\sum(X_i - \bar X)^2 = \sum(X_i - \mu)^2 - n(\bar X - \mu)^2$.
+
+    $\mathbb{E}[\sum(X_i - \mu)^2] = n\sigma^2$. $\mathbb{E}[n(\bar X - \mu)^2] = n \cdot \sigma^2/n = \sigma^2$.
+
+    $\mathbb{E}[\sum(X_i - \bar X)^2] = (n-1)\sigma^2$. Divide by $n$: $(n-1)\sigma^2/n$. $\square$
+
+    The naive estimator is biased downward by $\sigma^2/n$. Bessel's correction multiplies by $n/(n-1)$ to fix this.
+
+---
+
+**Exercise 2.**
+**Known-mean variance.** When $\mu$ is known, $\hat\sigma^2 = (1/n)\sum(X_i - \mu)^2$. (a) Unbiased? (b) Variance under normality. (c) Efficiency gain over $S^2$.
+
+??? success "Solution to Exercise 2"
+    (a) $\mathbb{E}[\hat\sigma^2] = (1/n) \cdot n\sigma^2 = \sigma^2$. **Unbiased** (no Bessel correction needed; no dof used by estimating $\mu$).
+
+    (b) $n\hat\sigma^2/\sigma^2 \sim \chi^2_n$ (sum of $n$ squared standard normals). $\mathrm{Var}(\hat\sigma^2) = 2\sigma^4/n$.
+
+    (c) $\mathrm{Var}(S^2) = 2\sigma^4/(n-1)$ (one fewer dof). Efficiency gain: $(n-1)/n$.
+
+    For $n = 10$: gain is 10% (knowing $\mu$ is worth ~1 extra observation). For $n = 100$: 1% (negligible).
+
+---
+
+**Exercise 3.**
+**Why the bias?** Intuitively, why does the naive estimator underestimate $\sigma^2$?
+
+??? success "Solution to Exercise 3"
+    $\bar X$ minimizes $\sum(X_i - c)^2$ over $c$. So $\sum(X_i - \bar X)^2 \le \sum(X_i - \mu)^2$ always.
+
+    Taking expectations: $\mathbb{E}[\sum(X_i - \bar X)^2] \le \mathbb{E}[\sum(X_i - \mu)^2] = n\sigma^2$. Specifically, smaller by exactly $\sigma^2$ (the variance of $n\bar X^2$).
+
+    **Conceptually:** by fitting $\bar X$ to the data, the residuals $(X_i - \bar X)$ are "smaller than they would be from the truth" because $\bar X$ has adapted to the sample. This is the same "double counting" issue that motivates degrees-of-freedom corrections throughout statistics (regression $R^2$, AIC penalties, etc.).
+
+---
+
+**Exercise 4.**
+**Estimator $\hat\sigma^2_{c}$ family.** Compute the bias of $\hat\sigma^2_c = (1/c)\sum(X_i - \bar X)^2$ for $c = n, n-1, n+1$.
+
+??? success "Solution to Exercise 4"
+    Using $\mathbb{E}[\sum(X_i - \bar X)^2] = (n-1)\sigma^2$:
+
+    - $c = n$ (MLE): bias = $(n-1)\sigma^2/n - \sigma^2 = -\sigma^2/n$. Underestimates.
+    - $c = n - 1$ (unbiased): bias = 0.
+    - $c = n + 1$ (MSE-optimal): bias = $(n-1)\sigma^2/(n+1) - \sigma^2 = -2\sigma^2/(n+1)$. Underestimates more than MLE.
+
+    Trade-off: smaller divisor → less bias but more variance. Larger divisor → more bias but less variance (more shrinkage).
+
+---
+
+**Exercise 5.**
+**Sample variance with known mean is better than unknown mean.** Specifically, the variance estimator is unbiased without correction. Show this preserves chi-squared distribution.
+
+??? success "Solution to Exercise 5"
+    With $\mu$ known: $(X_i - \mu)/\sigma \sim N(0, 1)$, so $(X_i - \mu)^2/\sigma^2 \sim \chi^2_1$ and $\sum(X_i - \mu)^2/\sigma^2 \sim \chi^2_n$.
+
+    With $\mu$ estimated: $\sum(X_i - \bar X)^2/\sigma^2 \sim \chi^2_{n-1}$ (loses one dof for $\bar X$).
+
+    The difference of one dof is captured by Bessel's correction. The deeper reason: residuals from $\bar X$ are constrained to sum to zero, removing one dof.
+
+---
+
+**Exercise 6.**
+**Naive variance in regression context.** Why does linear regression report **residual variance** $\hat\sigma^2 = \mathrm{SSE}/(n - p)$ rather than $\mathrm{SSE}/n$ or $\mathrm{SSE}/(n-1)$?
+
+??? success "Solution to Exercise 6"
+    Linear regression with $p$ parameters estimates the residual variance from $\mathrm{SSE} = \sum(Y_i - \hat Y_i)^2$.
+
+    Each fitted parameter removes one dof. With $p$ parameters (including intercept), the residuals have $n - p$ effective dof.
+
+    $\hat\sigma^2 = \mathrm{SSE}/(n - p)$ is unbiased: $\mathbb{E}[\mathrm{SSE}/\sigma^2] = n - p$.
+
+    **Edge cases:**
+
+    - $p = 1$ (intercept only): same as sample variance with Bessel's correction, divides by $n - 1$.
+    - $p = n$ (perfect fit): no dof left, variance undefined. Reflects overfitting.
+
+    Degrees-of-freedom corrections generalize Bessel's correction to multi-parameter settings — same principle, more parameters to subtract.

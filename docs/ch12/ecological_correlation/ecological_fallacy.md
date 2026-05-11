@@ -101,3 +101,58 @@ The ecological fallacy is closely related to [Simpson's paradox](simpsons_parado
 ## Summary
 
 The ecological fallacy occurs when correlations observed at the group level are wrongly attributed to individuals. Robinson's paradox demonstrates that ecological correlations can even reverse sign compared to individual-level correlations. This happens because aggregation eliminates within-group variation, which may carry a different signal than between-group variation. To avoid the ecological fallacy, analyze data at the appropriate level and use multilevel models when group structure is present.
+
+## Exercises
+
+**Exercise 1.**
+Define the ecological fallacy and explain why conclusions about groups cannot be directly applied to individuals.
+
+??? success "Solution to Exercise 1"
+    The **ecological fallacy** is the error of inferring individual-level relationships from group-level (aggregate) data. It occurs because correlations or associations observed at the group level do not necessarily hold at the individual level.
+
+    Group-level data reflect between-group variation only, while individual behavior involves both between-group and within-group variation. The within-group relationship may differ in magnitude or even direction from the between-group relationship.
+
+    **Example:** Countries with higher average chocolate consumption have more Nobel laureates per capita (ecological correlation). Concluding that individuals who eat more chocolate are more likely to win Nobel prizes is the ecological fallacy. The country-level association may be driven by wealth (rich countries both consume more chocolate and fund more research).
+
+---
+
+**Exercise 2.**
+Construct a numerical example where the ecological correlation is positive but the individual-level correlation is negative.
+
+??? success "Solution to Exercise 2"
+    Consider two groups:
+
+    - **Group A** (wealthy city): individuals' $X$ values average 80, $Y$ values average 90. Within the group, higher $X$ is associated with lower $Y$ (individual $r = -0.5$).
+    - **Group B** (poor city): individuals' $X$ values average 20, $Y$ values average 30. Within the group, higher $X$ is also associated with lower $Y$ (individual $r = -0.5$).
+
+    At the group level: Group A has higher $\bar{X}$ (80 vs 20) and higher $\bar{Y}$ (90 vs 30). The ecological correlation between group means is $r = +1$.
+
+    This is a Simpson's paradox structure: within each group, the relationship is negative, but the between-group trend is positive because the groups differ systematically in both variables. Analyzing only the group-level data would produce the wrong sign.
+
+---
+
+**Exercise 3.**
+A newspaper reports: "States with higher average income have lower crime rates, proving that higher income reduces crime." Identify the ecological fallacy and suggest a better analysis.
+
+??? success "Solution to Exercise 3"
+    The ecological fallacy is inferring that higher income *for individuals* reduces their likelihood of committing crimes, based on *state-level* aggregate data. The state-level correlation conflates multiple mechanisms:
+
+    - States with higher average income may have better policing, education, and social services (institutional factors).
+    - The relationship between individual income and individual criminality may be different from the state-level pattern.
+    - High-income states may have high income inequality, which could increase crime even though the average is high.
+
+    **Better analysis:** Use individual-level data linking personal income to criminal behavior, controlling for confounders like education, age, neighborhood characteristics, and employment status. Panel data (tracking individuals over time) or natural experiments (e.g., lottery winners) would provide stronger causal evidence.
+
+---
+
+**Exercise 4.**
+Explain the concept of the "modifiable areal unit problem" (MAUP) and how it relates to the ecological fallacy.
+
+??? success "Solution to Exercise 4"
+    The **Modifiable Areal Unit Problem** (MAUP) is the observation that statistical results based on aggregated spatial data depend on how the geographic units are defined. It has two components:
+
+    1. **Scale effect:** Changing the level of aggregation (e.g., census tracts vs. counties vs. states) changes the correlation. Larger units show stronger ecological correlations because more individual-level variation is averaged away.
+
+    2. **Zonation effect:** At the same scale, different ways of drawing boundaries produce different results. Gerrymandering is an extreme example.
+
+    MAUP relates to the ecological fallacy because both involve the loss of information from aggregation. The ecological fallacy is the interpretive error of treating aggregate results as individual-level truths. MAUP shows that even the aggregate results themselves are not stable -- they depend on arbitrary choices about the units of analysis. Together, they demonstrate that aggregate data are fundamentally limited for individual-level inference.

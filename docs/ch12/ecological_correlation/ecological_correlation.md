@@ -1,9 +1,6 @@
 # 18.2 Ecological Correlation
 
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 Ecological correlation refers to the statistical relationship between variables that are **aggregated over groups or regions** rather than being measured at the individual level. The phenomenon where an ecological correlation misrepresents the relationship at the individual level is known as the **ecological fallacy**.
 
 ---
@@ -143,3 +140,49 @@ Ecological correlations are useful for identifying broad trends and generating h
 ## Summary
 
 These examples highlight the importance of understanding the context when interpreting ecological correlations. While such correlations can provide valuable insights into group-level patterns, they should not be assumed to apply directly to individuals within those groups. To avoid the ecological fallacy, it is crucial to consider additional data and analysis at the individual level whenever possible.
+## Exercises
+
+**Exercise 1.**
+A study of 50 countries finds a correlation of $r = 0.78$ between national average income and national average life expectancy. Explain why it would be incorrect to conclude that a specific individual earning more money will live longer.
+
+??? success "Solution to Exercise 1"
+    This is an example of the **ecological fallacy** -- attributing a group-level relationship to individuals. The correlation of $r = 0.78$ describes the relationship between *country-level averages*, not between individual income and individual life expectancy.
+
+    At the individual level, the correlation is likely much weaker because within any single country, the variation in income and life expectancy is much greater than the between-country variation in averages. Additionally, the country-level correlation captures the effects of national infrastructure, healthcare systems, and public health policies, which benefit all citizens regardless of individual income.
+
+---
+
+**Exercise 2.**
+Construct a hypothetical example where the ecological correlation (at the group level) is positive but the individual-level correlation within every group is negative.
+
+??? success "Solution to Exercise 2"
+    Consider two schools measuring hours of TV watched ($X$) and test scores ($Y$):
+
+    - **School A (affluent):** Average TV = 1 hr, average score = 90. Within School A, students who watch more TV score lower ($r_{\text{within}} = -0.4$).
+    - **School B (less affluent):** Average TV = 3 hrs, average score = 70. Within School B, the same negative pattern holds ($r_{\text{within}} = -0.3$).
+    - **School C (middle):** Average TV = 2 hrs, average score = 80. Within-school $r = -0.35$.
+
+    The ecological correlation across the three school averages: as average TV increases (1, 2, 3), average scores decrease (90, 80, 70), giving $r_{\text{eco}} \approx -1.0$.
+
+    Wait -- that gives a negative ecological correlation too. Let me reverse: if we consider schools where the high-average-TV school happens to have higher scores due to confounding:
+
+    - **School A:** Average exercise = 2 hrs, average BMI = 22. Within school: more exercise correlates with lower BMI ($r = -0.5$).
+    - **School B:** Average exercise = 5 hrs, average BMI = 25. Within school: same negative pattern ($r = -0.4$).
+
+    The ecological correlation is positive ($r_{\text{eco}} > 0$: more average exercise, higher average BMI) because School B is a sports academy where students are heavier due to muscle mass, not fat. But within each school, individuals who exercise more have lower BMI.
+
+---
+
+**Exercise 3.**
+Explain why aggregating data to a higher level (e.g., from individuals to counties) generally increases the magnitude of the observed correlation. What mathematical property drives this effect?
+
+??? success "Solution to Exercise 3"
+    Aggregation increases the correlation magnitude because averaging reduces **within-group variance** (noise) while preserving **between-group variance** (signal). By the law of total variance:
+
+    $$
+    \text{Var}(X) = \text{Var}(E[X|G]) + E[\text{Var}(X|G)]
+    $$
+
+    When we aggregate to the group level, we observe only $E[X|G]$, eliminating the within-group variance $E[\text{Var}(X|G)]$. The signal-to-noise ratio increases, making the correlation between group means stronger than the individual-level correlation.
+
+    This means ecological correlations are systematically inflated relative to individual-level correlations, making them unreliable as estimates of individual-level relationships.

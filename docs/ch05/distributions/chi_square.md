@@ -1,8 +1,5 @@
 # Chi-Square Distribution (chi-squared)
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Overview
 
 The **chi-square distribution** arises naturally as the distribution of a sum of squared standard normal random variables. It plays a central role in inference about population variance, goodness-of-fit tests, and tests of independence.
@@ -238,3 +235,55 @@ plt.show()
 - It governs inference about population variance when the population is normal.
 - The additivity property makes it useful for combining independent variance components.
 - The exactness of the chi-square result for $S^2$ depends critically on normality.
+
+## Exercises
+
+**Exercise 1.**
+If $X \sim \chi^2_5$ and $Y \sim \chi^2_8$ are independent, what is the distribution of $X + Y$? Compute $E[X+Y]$ and $\text{Var}(X+Y)$.
+
+??? success "Solution to Exercise 1"
+    By the additivity property of the chi-square distribution, the sum of independent chi-square random variables is chi-square with degrees of freedom equal to the sum:
+
+    $$
+    X + Y \sim \chi^2_{5+8} = \chi^2_{13}
+    $$
+
+    $$
+    E[X+Y] = 13, \quad \text{Var}(X+Y) = 2 \times 13 = 26
+    $$
+
+---
+
+**Exercise 2.**
+A random sample of $n = 20$ observations is drawn from a $N(\mu, 9)$ population. What is the exact distribution of $\frac{(n-1)S^2}{\sigma^2}$? Find the probability that $S^2 > 15$ (where $\sigma^2 = 9$).
+
+??? success "Solution to Exercise 2"
+    Since the population is normal, the sampling distribution is exact:
+
+    $$
+    \frac{(n-1)S^2}{\sigma^2} = \frac{19 S^2}{9} \sim \chi^2_{19}
+    $$
+
+    We need $P(S^2 > 15) = P\!\left(\frac{19 S^2}{9} > \frac{19 \times 15}{9}\right) = P(\chi^2_{19} > 31.67)$.
+
+    From chi-square tables or software, $P(\chi^2_{19} > 31.67) \approx 0.034$. There is approximately a 3.4% chance that the sample variance exceeds 15 when $\sigma^2 = 9$.
+
+---
+
+**Exercise 3.**
+Explain why the chi-square distribution is right-skewed for small degrees of freedom but becomes approximately symmetric for large degrees of freedom.
+
+??? success "Solution to Exercise 3"
+    The chi-square distribution with $k$ degrees of freedom is a sum of $k$ independent $\chi^2_1$ variables, each of which is the square of a standard normal. The $\chi^2_1$ distribution is heavily right-skewed (it can only be non-negative, with most mass near 0 and a long right tail).
+
+    For small $k$, the sum of a few such skewed variables remains skewed. As $k$ increases, the CLT applies: the sum of many independent random variables converges to a normal distribution. Specifically, the skewness of $\chi^2_k$ is $\sqrt{8/k}$, which decreases to 0 as $k \to \infty$. For $k = 2$, skewness is 2 (highly skewed); for $k = 50$, skewness is 0.4 (nearly symmetric).
+
+---
+
+**Exercise 4.**
+A researcher draws a sample of $n = 10$ from an exponential population and computes $\frac{(n-1)S^2}{\sigma^2}$. She assumes it follows a $\chi^2_9$ distribution. Is this valid? Explain what goes wrong.
+
+??? success "Solution to Exercise 4"
+    This is **not valid**. The result $\frac{(n-1)S^2}{\sigma^2} \sim \chi^2_{n-1}$ holds **only when the population is normal**. The exponential distribution is right-skewed with excess kurtosis $\kappa = 6$, which causes the distribution of $S^2$ to have much heavier tails than a $\chi^2_9$ distribution.
+
+    Specifically, the variance of $S^2$ for a non-normal population depends on the kurtosis: $\text{Var}(S^2) \approx \frac{2\sigma^4}{n-1}(1 + \kappa/2)$. For the exponential distribution, this is $\frac{2\sigma^4}{9}(1 + 3) = \frac{8\sigma^4}{9}$, which is 4 times larger than the chi-square theory predicts ($\frac{2\sigma^4}{9}$). Confidence intervals and hypothesis tests based on the chi-square assumption would have incorrect coverage and inflated Type I error rates.

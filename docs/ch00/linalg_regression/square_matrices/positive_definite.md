@@ -128,3 +128,78 @@ The Mahalanobis distance $d^2 = (\mathbf{x} - \boldsymbol{\mu})^T\boldsymbol{\Si
 ## Summary
 
 Positive definiteness is the matrix property ensuring that a quadratic form is strictly positive, which translates to invertibility, well-defined densities, and unique least-squares solutions. The key equivalent characterizations -- positive eigenvalues, positive leading minors, and existence of a Cholesky factorization -- provide different computational and theoretical tools. In statistics, positive definiteness of $\boldsymbol{\Sigma}$ underlies the multivariate normal distribution, and positive definiteness of $\mathbf{X}^T\mathbf{X}$ guarantees the existence of OLS estimators.
+
+## Exercises
+
+**Exercise 1.**
+Determine whether $\mathbf{A} = \begin{pmatrix} 4 & 2 \\ 2 & 3 \end{pmatrix}$ is positive definite using the leading-minors criterion.
+
+??? success "Solution to Exercise 1"
+    The leading minors are:
+
+    - First leading minor: $a_{11} = 4 > 0$
+    - Second leading minor: $\det(\mathbf{A}) = 4 \times 3 - 2 \times 2 = 12 - 4 = 8 > 0$
+
+    Since all leading minors are strictly positive, $\mathbf{A}$ is positive definite. Equivalently, the eigenvalues are $\lambda = \frac{7 \pm \sqrt{49 - 32}}{2} = \frac{7 \pm \sqrt{17}}{2}$, both positive.
+
+---
+
+**Exercise 2.**
+Prove that if $\mathbf{A}$ is positive definite, then all diagonal entries $a_{ii} > 0$.
+
+??? success "Solution to Exercise 2"
+    Let $\mathbf{e}_i$ be the $i$-th standard basis vector ($1$ in position $i$, $0$ elsewhere). Since $\mathbf{e}_i \neq \mathbf{0}$ and $\mathbf{A}$ is positive definite:
+
+    $$
+    \mathbf{e}_i^T \mathbf{A} \mathbf{e}_i > 0
+    $$
+
+    But $\mathbf{e}_i^T \mathbf{A} \mathbf{e}_i = a_{ii}$, so $a_{ii} > 0$ for all $i$. Note that the converse is false: positive diagonal entries do not guarantee positive definiteness (e.g., $\begin{pmatrix} 1 & 2 \\ 2 & 1 \end{pmatrix}$ has positive diagonal entries but eigenvalues $3$ and $-1$). $\square$
+
+---
+
+**Exercise 3.**
+Find the Cholesky decomposition $\mathbf{A} = \mathbf{L}\mathbf{L}^T$ of $\mathbf{A} = \begin{pmatrix} 4 & 6 \\ 6 & 13 \end{pmatrix}$.
+
+??? success "Solution to Exercise 3"
+    We seek a lower-triangular $\mathbf{L} = \begin{pmatrix} l_{11} & 0 \\ l_{21} & l_{22} \end{pmatrix}$ such that $\mathbf{L}\mathbf{L}^T = \mathbf{A}$.
+
+    From $l_{11}^2 = 4$: $l_{11} = 2$.
+
+    From $l_{21} l_{11} = 6$: $l_{21} = 3$.
+
+    From $l_{21}^2 + l_{22}^2 = 13$: $9 + l_{22}^2 = 13$, so $l_{22} = 2$.
+
+    $$
+    \mathbf{L} = \begin{pmatrix} 2 & 0 \\ 3 & 2 \end{pmatrix}
+    $$
+
+    Verification: $\mathbf{L}\mathbf{L}^T = \begin{pmatrix} 4 & 6 \\ 6 & 13 \end{pmatrix} = \mathbf{A}$.
+
+---
+
+**Exercise 4.**
+A covariance matrix $\boldsymbol{\Sigma}$ has eigenvalues $\lambda_1 = 0.01$ and $\lambda_2 = 100$. Is $\boldsymbol{\Sigma}$ positive definite? Discuss the practical implications for computing $\boldsymbol{\Sigma}^{-1}$.
+
+??? success "Solution to Exercise 4"
+    Yes, $\boldsymbol{\Sigma}$ is positive definite because both eigenvalues are strictly positive. However, the condition number is $\kappa = \lambda_{\max}/\lambda_{\min} = 100/0.01 = 10{,}000$, which is very large.
+
+    The practical implications are:
+
+    - **Numerical instability:** Floating-point errors in computing $\boldsymbol{\Sigma}^{-1}$ are amplified by the condition number. The eigenvalue $1/\lambda_1 = 100$ of $\boldsymbol{\Sigma}^{-1}$ can be significantly corrupted.
+    - **Near-singularity:** The data are nearly collinear in the direction of the smallest eigenvalue, meaning the two variables are nearly perfectly correlated.
+    - **Remedies:** Use Cholesky decomposition rather than explicit inversion, apply regularization (ridge regression), or use the pseudo-inverse if appropriate.
+
+---
+
+**Exercise 5.**
+Prove that if $\boldsymbol{\Sigma}$ is positive definite, the Mahalanobis distance $d^2(\mathbf{x}) = (\mathbf{x} - \boldsymbol{\mu})^T\boldsymbol{\Sigma}^{-1}(\mathbf{x} - \boldsymbol{\mu})$ equals zero if and only if $\mathbf{x} = \boldsymbol{\mu}$.
+
+??? success "Solution to Exercise 5"
+    Since $\boldsymbol{\Sigma}$ is positive definite, $\boldsymbol{\Sigma}^{-1}$ is also positive definite (its eigenvalues are $1/\lambda_i > 0$).
+
+    Let $\mathbf{z} = \mathbf{x} - \boldsymbol{\mu}$. Then $d^2 = \mathbf{z}^T\boldsymbol{\Sigma}^{-1}\mathbf{z}$.
+
+    By positive definiteness of $\boldsymbol{\Sigma}^{-1}$: $\mathbf{z}^T\boldsymbol{\Sigma}^{-1}\mathbf{z} \geq 0$ for all $\mathbf{z}$, with equality if and only if $\mathbf{z} = \mathbf{0}$.
+
+    Therefore $d^2 = 0$ if and only if $\mathbf{x} - \boldsymbol{\mu} = \mathbf{0}$, i.e., $\mathbf{x} = \boldsymbol{\mu}$. This confirms that the Mahalanobis distance is a proper distance-like measure (satisfying definiteness). $\square$

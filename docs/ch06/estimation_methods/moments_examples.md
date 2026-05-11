@@ -187,3 +187,111 @@ $$
     $$
 
     The MoM estimates suggest a $\text{Beta}(9.1, 11.1)$ distribution, which is unimodal and slightly left-skewed (mean 0.45).
+
+## Exercises
+
+**Exercise 1.**
+Gamma claims data: 2.1, 0.8, 3.5, 1.2, 5.7, 0.4, 2.8, 1.9, 4.3, 0.6. (a) MoM estimates of $\alpha, \beta$. (b) MLE via scipy. (c) Visual comparison.
+
+??? success "Solution to Exercise 1"
+    (a) Sample moments: $\bar x = 2.33$, $m_2 \approx 2.77$.
+
+    Gamma$(\alpha, \beta)$ with $\mathbb{E}[X] = \alpha\beta$, $\mathrm{Var}(X) = \alpha\beta^2$:
+
+    $\hat\beta = m_2/\bar x \approx 1.19$, $\hat\alpha = \bar x^2/m_2 \approx 1.96$.
+
+    (b) MLE via `scipy.stats.gamma.fit(x, floc=0)`: typical output $\hat\alpha \approx 1.69$, $\hat\beta \approx 1.38$.
+
+    (c) Plot histogram + overlaid densities. With $n = 10$, both estimators have large variance and the curves are similar but not identical. Distinguishing requires more data.
+
+---
+
+**Exercise 2.**
+**MoM for Uniform$(a, b)$.** Derive the MoM estimators using $\mathbb{E}[X], \mathbb{E}[X^2]$.
+
+??? success "Solution to Exercise 2"
+    Population moments: $\mathbb{E}[X] = (a+b)/2$. $\mathrm{Var}(X) = (b-a)^2/12$. So $\mathbb{E}[X^2] = (a+b)^2/4 + (b-a)^2/12$.
+
+    Set sample equal to population: $\bar X = (a+b)/2$ and $m_2 = (b-a)^2/12$ where $m_2 = $ sample variance (using $n$).
+
+    From the second: $b - a = \sqrt{12 m_2}$. Combined with $a + b = 2\bar X$:
+
+    $\hat a_{\text{MoM}} = \bar X - \sqrt{3 m_2}$, $\hat b_{\text{MoM}} = \bar X + \sqrt{3 m_2}$.
+
+    **Issue:** if any observation falls outside $[\hat a, \hat b]$, the estimate is impossible. MLE handles this with order statistics: $\hat a_{\text{MLE}} = \min X_i$, $\hat b_{\text{MLE}} = \max X_i$ — guaranteed feasible.
+
+    Demonstrates that MoM can fail boundary constraints that MLE respects.
+
+---
+
+**Exercise 3.**
+**MoM for Beta$(\alpha, \beta)$.** Derive from $\mathbb{E}[X], \mathrm{Var}(X)$.
+
+??? success "Solution to Exercise 3"
+    Beta$(\alpha, \beta)$: $\mathbb{E}[X] = \alpha/(\alpha+\beta)$, $\mathrm{Var}(X) = \alpha\beta/[(\alpha+\beta)^2(\alpha+\beta+1)]$.
+
+    Let $m = \bar X$, $v = m_2$ (sample variance). Solve:
+
+    $\alpha + \beta = m(1 - m)/v - 1$. Then $\hat\alpha = m \cdot (m(1-m)/v - 1)$, $\hat\beta = (1-m)(m(1-m)/v - 1)$.
+
+    **Validity:** requires $v < m(1-m)$ (the variance of a Beta is bounded above by the variance of a Bernoulli with the same mean). If sample $v > m(1-m)$, MoM fails (no Beta fits). This rules out using MoM on data with extreme overdispersion.
+
+---
+
+**Exercise 4.**
+**MoM for log-normal.** Given $X = e^Y$ where $Y \sim N(\mu, \sigma^2)$, derive MoM for $\mu, \sigma$.
+
+??? success "Solution to Exercise 4"
+    $\mathbb{E}[X] = e^{\mu + \sigma^2/2}$, $\mathrm{Var}(X) = (e^{\sigma^2} - 1) e^{2\mu + \sigma^2}$.
+
+    Compute squared coefficient of variation: $\mathrm{CV}^2 = \mathrm{Var}(X)/(\mathbb{E}[X])^2 = e^{\sigma^2} - 1$.
+
+    So $\hat\sigma^2_{\text{MoM}} = \ln(1 + \mathrm{CV}^2_{\text{sample}}) = \ln(1 + s^2/\bar X^2)$.
+
+    $\hat\mu_{\text{MoM}} = \ln \bar X - \hat\sigma^2_{\text{MoM}}/2$.
+
+    **Easier alternative (MLE-style):** transform first: $Y_i = \ln X_i$ are i.i.d. $N(\mu, \sigma^2)$. Standard $\hat\mu = \bar Y$, $\hat\sigma^2 = s_Y^2$. Cleaner and more efficient than MoM. MoM on the original scale forgoes the convenient log-transformation.
+
+---
+
+**Exercise 5.**
+**Why MoM can be inefficient.** Compare MoM and MLE for Uniform$(0, \theta)$.
+
+??? success "Solution to Exercise 5"
+    MoM: $\bar X = \theta/2 \Rightarrow \hat\theta_{\text{MoM}} = 2\bar X$. $\mathrm{Var}(\hat\theta_{\text{MoM}}) = 4 \mathrm{Var}(\bar X) = 4 \theta^2/(12n) = \theta^2/(3n)$.
+
+    MLE: $\hat\theta_{\text{MLE}} = X_{(n)}$. Bias-corrected $((n+1)/n) X_{(n)}$ has $\mathrm{Var} = \theta^2/[n(n+2)]$.
+
+    Ratio: $\mathrm{Var}(\hat\theta_{\text{MoM}})/\mathrm{Var}(\hat\theta_{\text{MLE}}) = (n+2)/3 \to \infty$.
+
+    MoM is *infinitely* worse than MLE as $n \to \infty$ for this problem. The sample mean discards information about the maximum; the MLE exploits it.
+
+    **General lesson:** MoM is naive and uses only low-order moments. MLE uses the full likelihood and can be far more efficient when the distribution has "structure" beyond moments — particularly distributions with bounded support (uniform endpoints) or heavy tails.
+
+    MoM remains useful when MLE is intractable or as a starting point for iterative MLE optimization.
+
+---
+
+**Exercise 6.**
+**Generalized Method of Moments (GMM).** When you have more moment conditions than parameters, propose a weighting scheme to combine them.
+
+??? success "Solution to Exercise 6"
+    Suppose $\theta \in \mathbb{R}^k$ and $m \ge k$ moment conditions $\mathbb{E}[g_j(X; \theta)] = 0$ for $j = 1, \ldots, m$.
+
+    **GMM estimator:**
+
+    $$
+    \hat\theta = \arg\min_\theta \left[\sum_i \mathbf g(X_i; \theta)\right]^T W \left[\sum_i \mathbf g(X_i; \theta)\right]
+    $$
+
+    where $W$ is a positive-definite $m \times m$ weight matrix.
+
+    **Optimal $W$:** $W^* = \Omega^{-1}$, the inverse covariance matrix of the moment conditions. This minimizes asymptotic variance.
+
+    **Two-step GMM:**
+
+    1. Use $W = I$ (identity) for initial $\hat\theta^{(1)}$.
+    2. Estimate $\Omega$ at $\hat\theta^{(1)}$, set $W = \hat\Omega^{-1}$.
+    3. Reoptimize.
+
+    GMM is the foundation of empirical economics (Hansen's 1982 paper won the Nobel) and underlies instrumental-variables estimation when more instruments than endogenous variables are available.

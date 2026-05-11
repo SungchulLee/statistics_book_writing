@@ -1,9 +1,5 @@
 # Confidence Interval ↔ Hypothesis Test Duality
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## The Duality Principle
 
 There is a deep connection between confidence intervals and hypothesis tests. A $(1 - \alpha) \times 100\%$ confidence interval and a hypothesis test at significance level $\alpha$ are two sides of the same coin:
@@ -100,3 +96,47 @@ print(f"Both methods agree: {reject_test == reject_ci}")
 - Confidence intervals are often more informative because they show the range of plausible values, not just a binary reject/fail-to-reject decision.
 - When reporting results, it is good practice to report both the p-value and the confidence interval.
 - The duality holds exactly for two-sided tests; one-sided tests correspond to one-sided confidence bounds.
+
+## Exercises
+
+**Exercise 1.**
+A 95% confidence interval for $\mu$ is $(12.3, 18.7)$. Without computing a test statistic, determine the result of a two-sided test of $H_0: \mu = 10$ at $\alpha = 0.05$.
+
+??? success "Solution to Exercise 1"
+    Since $\mu_0 = 10$ falls **outside** the 95% confidence interval $(12.3, 18.7)$, we **reject** $H_0: \mu = 10$ at $\alpha = 0.05$. By the duality between confidence intervals and hypothesis tests, any value outside the $(1-\alpha)$ CI would be rejected at significance level $\alpha$.
+
+---
+
+**Exercise 2.**
+A researcher conducts a two-sided test of $H_0: \mu = 50$ and obtains a p-value of 0.03. What can you conclude about whether 50 is inside or outside the 95% and 99% confidence intervals?
+
+??? success "Solution to Exercise 2"
+    Since $p = 0.03 < 0.05$, the test rejects $H_0$ at $\alpha = 0.05$. By duality, $\mu_0 = 50$ is **outside** the 95% confidence interval.
+
+    Since $p = 0.03 > 0.01$, the test does not reject $H_0$ at $\alpha = 0.01$. By duality, $\mu_0 = 50$ is **inside** the 99% confidence interval.
+
+---
+
+**Exercise 3.**
+Explain why a confidence interval provides more information than a hypothesis test, even though they are mathematically equivalent.
+
+??? success "Solution to Exercise 3"
+    A hypothesis test produces a binary decision: reject or fail to reject $H_0$ for a single hypothesized value $\mu_0$. A confidence interval simultaneously shows which values of $\mu_0$ would be rejected and which would not. It provides:
+
+    1. The **direction** of the effect (is the estimate above or below $\mu_0$?).
+    2. The **magnitude** of the effect (how far is the estimate from $\mu_0$?).
+    3. The **precision** of the estimate (how wide is the interval?).
+
+    For example, a CI of $(0.1, 15.2)$ and a CI of $(7.5, 7.8)$ both reject $\mu_0 = 0$ at the 5% level, but the first suggests a highly uncertain estimate, while the second indicates a precise estimate near 7.65.
+
+---
+
+**Exercise 4.**
+Does the duality between confidence intervals and hypothesis tests hold for one-sided tests? If so, what is the corresponding confidence bound?
+
+??? success "Solution to Exercise 4"
+    The duality extends to one-sided tests, but the corresponding confidence construct is a **one-sided confidence bound** rather than a two-sided interval.
+
+    For a one-sided test $H_0: \mu \leq \mu_0$ vs $H_1: \mu > \mu_0$ at level $\alpha$, the corresponding construct is a lower confidence bound: $(\bar{x} - z_\alpha \cdot \text{SE},\; \infty)$. We reject $H_0$ if and only if $\mu_0$ falls below this lower bound.
+
+    Similarly, for $H_0: \mu \geq \mu_0$ vs $H_1: \mu < \mu_0$, the corresponding construct is an upper confidence bound: $(-\infty,\; \bar{x} + z_\alpha \cdot \text{SE})$. The one-sided bound uses $z_\alpha$ rather than $z_{\alpha/2}$, reflecting the one-tailed nature of the test.

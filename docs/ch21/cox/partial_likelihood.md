@@ -161,3 +161,58 @@ $$
     event times.  Between event times the estimate is constant.  Smoothing
     techniques can produce a continuous estimate if needed, but the step
     function is the standard output.
+
+
+## Exercises
+
+**Exercise 1.**
+Write the partial likelihood for the Cox proportional hazards model and explain why it is called "partial."
+
+??? success "Solution to Exercise 1"
+    For ordered event times $t_{(1)} < t_{(2)} < \dots < t_{(D)}$ with corresponding subjects $j_1, j_2, \dots, j_D$, the partial likelihood is:
+
+    $$
+    L(\boldsymbol{\beta}) = \prod_{i=1}^D \frac{\exp(\mathbf{x}_{j_i}^T\boldsymbol{\beta})}{\sum_{k \in R(t_{(i)})} \exp(\mathbf{x}_k^T\boldsymbol{\beta})}
+    $$
+
+    where $R(t_{(i)})$ is the risk set at time $t_{(i)}$ (all subjects still under observation).
+
+    It is called "partial" because it uses only the order of events, not the actual event times or the baseline hazard $h_0(t)$. By eliminating $h_0(t)$, the Cox model avoids specifying the baseline hazard function, making it semi-parametric.
+
+---
+
+**Exercise 2.**
+In a Cox model, $\hat{\beta} = 0.5$ for a treatment indicator. Interpret this as a hazard ratio.
+
+??? success "Solution to Exercise 2"
+    The hazard ratio is $\text{HR} = e^{\hat{\beta}} = e^{0.5} = 1.649$.
+
+    Interpretation: the treatment group has a hazard (instantaneous risk of the event) that is 1.649 times the control group's hazard at every time point (proportional hazards assumption). Equivalently, the treatment increases the hazard by about 65%.
+
+    If the event is death, $\text{HR} = 1.649$ means the treatment group has a 65% higher instantaneous risk of death at any given time compared to control. If $\text{HR} < 1$, the treatment is protective.
+
+---
+
+**Exercise 3.**
+Explain the proportional hazards assumption. How is it expressed mathematically?
+
+??? success "Solution to Exercise 3"
+    The proportional hazards assumption states that the hazard ratio between any two subjects is constant over time:
+
+    $$
+    \frac{h(t \mid \mathbf{x}_i)}{h(t \mid \mathbf{x}_j)} = \frac{h_0(t)\exp(\mathbf{x}_i^T\boldsymbol{\beta})}{h_0(t)\exp(\mathbf{x}_j^T\boldsymbol{\beta})} = \exp\!\left((\mathbf{x}_i - \mathbf{x}_j)^T\boldsymbol{\beta}\right)
+    $$
+
+    The baseline hazard $h_0(t)$ cancels, making the ratio independent of time. If the ratio changes over time (e.g., a treatment works well initially but its effect fades), the PH assumption is violated and the Cox model is misspecified. Schoenfeld residuals and log-log survival plots are used to check this assumption.
+
+---
+
+**Exercise 4.**
+Why can the Cox model handle censored observations? Explain how censored subjects enter the partial likelihood.
+
+??? success "Solution to Exercise 4"
+    Censored subjects contribute to the partial likelihood through the **risk set** but not as events. At each event time $t_{(i)}$, the risk set $R(t_{(i)})$ includes all subjects who are still alive and under observation -- both those who will eventually experience the event and those who will be censored later.
+
+    A censored subject contributes to the denominators of the partial likelihood (they were "at risk" before being censored) but never appears in a numerator (they did not have an observed event). This is valid under the assumption that censoring is non-informative (the reason for censoring is unrelated to the event risk).
+
+    This elegant handling of censoring -- without discarding censored observations or imputing event times -- is a key advantage of the Cox model.

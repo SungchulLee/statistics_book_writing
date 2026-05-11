@@ -1,9 +1,6 @@
 # MNIST Case Study
 
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Overview
 
 This section applies the theory from Chapters 13–14 to the MNIST
@@ -226,3 +223,40 @@ The jump from a linear model to a single hidden layer is substantial
 because the hidden layer can learn non-linear feature combinations.
 The CNN goes further by exploiting the spatial structure of images
 through weight sharing and local connectivity.
+
+## Exercises
+
+**Exercise 1.**
+MNIST-Style Classification
+
+A softmax classifier with $C = 10$ digit classes and $d = 784$ input features (28 x 28 pixel images) is trained on MNIST.
+
+**(a)** How many parameters does this model have (weights and biases)?
+
+**(b)** After training, the confusion matrix reveals that digits 4 and 9 are frequently confused (high off-diagonal entries in the (4,9) and (9,4) cells). Propose two strategies to reduce this confusion.
+
+**(c)** The test accuracy is 92%. A two-layer network with 256 hidden units and ReLU activation achieves 97%. Explain the source of this improvement in terms of the model's representational capacity.
+
+**(d)** For a test image that the model classifies as digit 3 with $\hat{p}_3 = 0.52$ and $\hat{p}_5 = 0.35$, should we trust this prediction? How could you use the softmax output to flag uncertain predictions?
+
+??? success "Solution to Exercise 1"
+
+    **(a)** The weight matrix has $C \times d = 10 \times 784 = 7{,}840$ entries, and the bias vector has $C = 10$ entries. Total: $7{,}840 + 10 = 7{,}850$ parameters.
+
+    **(b)** Two strategies to reduce 4/9 confusion:
+
+    1. **Feature engineering or data augmentation**: Digits 4 and 9 share structural features (a vertical stroke on the right). Adding slightly rotated, scaled, or thickened versions of 4s and 9s to the training set would help the model learn the distinguishing features (the closed vs. open top loop).
+
+    2. **Increase model capacity**: A two-layer network or CNN can learn nonlinear feature combinations (e.g., detecting the presence of a closed loop at the top for 9 vs. the open angular junction for 4) that a single linear layer cannot represent. Convolutional layers are particularly effective because they detect local spatial patterns.
+
+    **(c)** A single-layer softmax model computes $\mathbf{z} = \mathbf{W}\mathbf{x} + \mathbf{b}$, which is a linear function of the raw pixels. It can only learn linear decision boundaries in the 784-dimensional pixel space. A two-layer network computes $\mathbf{h} = \text{ReLU}(\mathbf{W}_1 \mathbf{x} + \mathbf{b}_1)$ followed by $\mathbf{z} = \mathbf{W}_2 \mathbf{h} + \mathbf{b}_2$. The hidden layer with ReLU activation learns a nonlinear feature representation $\mathbf{h}$ where digits are more linearly separable. With 256 hidden units, the model can detect and combine stroke patterns, curves, and intersections — intermediate features that are more discriminative than raw pixel values.
+
+    **(d)** The prediction $\hat{p}_3 = 0.52$ should not be trusted with high confidence. The maximum probability is barely above $1/C = 0.10$, and the second-most-likely class ($\hat{p}_5 = 0.35$) is close behind, indicating substantial uncertainty.
+
+    A simple uncertainty flagging strategy: define a confidence threshold $\tau$ (e.g., $\tau = 0.80$) and flag any prediction where $\max_k \hat{p}_k < \tau$ as "uncertain." Alternatively, use the **entropy** of the predicted distribution:
+
+    $$
+    H(\hat{\mathbf{p}}) = -\sum_k \hat{p}_k \log \hat{p}_k
+    $$
+
+    High entropy indicates high uncertainty. For a 10-class problem, maximum entropy is $\log(10) \approx 2.30$ (uniform prediction). A threshold on entropy provides a principled way to route uncertain examples to human review or a more powerful model.

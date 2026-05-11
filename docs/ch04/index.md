@@ -1,9 +1,5 @@
 # Chapter 4: Distributions
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Overview
 
 This chapter catalogs the most important probability distributions used in statistics and data science, covering both discrete and continuous families. It then develops the multivariate framework needed to analyze the joint behavior of multiple random variables, including joint, marginal, and conditional distributions, as well as covariance and correlation. Together, these tools form the distributional foundation for all subsequent chapters on sampling, estimation, and inference.

@@ -151,3 +151,53 @@ When residual diagnostics reveal non-normality, several approaches can help:
 ## Summary
 
 In linear regression, the normality assumption applies to the error terms, not to the predictors or the unconditional response. Normality is needed for exact $t$-tests, $F$-tests, and prediction intervals, but OLS point estimates remain valid without it. Diagnostics should be performed on the residuals using Q-Q plots, formal tests, and histograms. When non-normality is detected, the practical impact depends on the sample size and whether the goal is estimation, testing, or prediction.
+
+## Exercises
+
+**Exercise 1.**
+After fitting a linear regression, you create a Q-Q plot of the residuals and observe the points curving upward at both ends. What does this suggest about the residual distribution?
+
+??? success "Solution to Exercise 1"
+    Points curving upward at both tails (forming an S-shape with the right tail above the line and the left tail below) indicate **heavy tails** (leptokurtosis). The residuals have more extreme values than a normal distribution predicts.
+
+    This could be caused by outliers, a misspecified model (e.g., missing nonlinear terms or important predictors), or the underlying error distribution genuinely having heavier tails. The regression coefficient estimates remain unbiased (OLS does not require normality), but inference (p-values, confidence intervals) may be unreliable, especially for small samples.
+
+---
+
+**Exercise 2.**
+Describe two types of residual plots used to assess normality and one used to assess homoscedasticity in linear regression.
+
+??? success "Solution to Exercise 2"
+    **Normality diagnostics:**
+
+    1. **Q-Q plot of residuals:** Plots residual quantiles against theoretical normal quantiles. Linearity indicates normality.
+    2. **Histogram of residuals:** Should be approximately bell-shaped and symmetric around zero.
+
+    **Homoscedasticity diagnostic:**
+
+    1. **Residuals vs. fitted values plot:** Plot $e_i$ against $\hat{y}_i$. Under homoscedasticity, the spread should be constant (horizontal band). A funnel shape (spread increasing with $\hat{y}$) indicates heteroscedasticity.
+
+---
+
+**Exercise 3.**
+A Shapiro-Wilk test on regression residuals gives $p = 0.12$ with $n = 40$. Can you conclude that the errors are normally distributed?
+
+??? success "Solution to Exercise 3"
+    No. Failing to reject the null ($p = 0.12 > 0.05$) means there is insufficient evidence to conclude the residuals are non-normal. It does not prove normality -- it may simply reflect low power (especially with $n = 40$).
+
+    The correct interpretation is: "The data are consistent with normality, but normality has not been proven." This is the classic limitation of hypothesis testing -- absence of evidence is not evidence of absence. Supplement with Q-Q plots and consider whether the sample size provides adequate power to detect the departures of concern.
+
+---
+
+**Exercise 4.**
+When regression residuals fail a normality test, list three approaches (in order of preference) to address the issue.
+
+??? success "Solution to Exercise 4"
+
+    1. **Transform the response variable:** Apply a Box-Cox, log, or square root transformation to $Y$. This often normalizes residuals and stabilizes variance simultaneously. Re-fit the model and re-check residuals.
+
+    2. **Use robust or bootstrap inference:** If the residuals are non-normal but the model structure is correct, use heteroscedasticity-consistent (HC) standard errors or bootstrap confidence intervals, which are valid without normality.
+
+    3. **Use a generalized linear model:** If the response is inherently non-normal (e.g., counts, proportions, strictly positive), switch to an appropriate GLM (Poisson, logistic, Gamma) that models the correct distribution directly.
+
+    Additionally, check for model misspecification (missing predictors, nonlinear terms) before blaming the error distribution -- non-normal residuals often indicate a model problem rather than a distributional issue.

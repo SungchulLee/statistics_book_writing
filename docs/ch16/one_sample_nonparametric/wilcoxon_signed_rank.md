@@ -135,7 +135,7 @@ Z = \frac{43 - 27.5}{9.811} \approx 1.580
 $$
 
 $$
-p = 2\,\Phi(-1.580) \approx 0.114
+p = 2\,\mathcal{N}(-1.580) \approx 0.114
 $$
 
 At $\alpha = 0.05$, we fail to reject $H_0$. There is insufficient evidence that the median reaction time differs from 250 ms.
@@ -155,3 +155,159 @@ The signed-rank test achieves nearly the same power as the $t$-test under normal
 ## Summary
 
 The Wilcoxon signed-rank test extends the sign test by ranking the absolute deviations from the hypothesized median and weighting each sign by its rank. This produces a more powerful test whenever the distribution of deviations is symmetric, at the cost of an additional assumption. The test statistic $T = \min(W^+, W^-)$ can be evaluated exactly for small samples or via a normal approximation for larger samples.
+
+## Exercises
+
+**Exercise 1.**
+Using the cholesterol data below, perform a Wilcoxon signed-rank test.
+
+| Patient | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |
+|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| Difference | 10 | 5 | $-5$ | 15 | 2 | 5 | 10 | $-3$ | 15 | 10 |
+
+**(a)** Compute the absolute differences $|d_i|$ and rank them from smallest to largest. Assign signed ranks.
+
+**(b)** Compute the test statistic $W^+ = \sum \text{(ranks of positive differences)}$.
+
+**(c)** For $n = 10$, under $H_0$ the expected value of $W^+$ is $n(n+1)/4$ and the variance is $n(n+1)(2n+1)/24$. Compute the $z$-statistic and the approximate p-value.
+
+**(d)** Compare the conclusion with the sign test result.
+
+??? success "Solution to Exercise 1"
+
+    **(a)** Sorted $|d_i|$: 2, 3, 5, 5, 5, 10, 10, 10, 15, 15.
+
+    - 2 → rank 1
+    - 3 → rank 2
+    - 5, 5, 5 → ranks 3, 4, 5 → average rank 4
+    - 10, 10, 10 → ranks 6, 7, 8 → average rank 7
+    - 15, 15 → ranks 9, 10 → average rank 9.5
+
+    | Patient | $d_i$ | $|d_i|$ | Rank | Signed rank |
+    |:---:|:---:|:---:|:---:|:---:|
+    | 5 | 2 | 2 | 1 | $+1$ |
+    | 8 | $-3$ | 3 | 2 | $-2$ |
+    | 3 | $-5$ | 5 | 4 | $-4$ |
+    | 2 | 5 | 5 | 4 | $+4$ |
+    | 6 | 5 | 5 | 4 | $+4$ |
+    | 1 | 10 | 10 | 7 | $+7$ |
+    | 7 | 10 | 10 | 7 | $+7$ |
+    | 10 | 10 | 10 | 7 | $+7$ |
+    | 4 | 15 | 15 | 9.5 | $+9.5$ |
+    | 9 | 15 | 15 | 9.5 | $+9.5$ |
+
+    **(b)**
+
+    $$
+    W^+ = 1 + 4 + 4 + 7 + 7 + 7 + 9.5 + 9.5 = 49
+    $$
+
+    $$
+    W^- = 2 + 4 = 6
+    $$
+
+    Check: $W^+ + W^- = 49 + 6 = 55 = n(n+1)/2 = 10 \times 11/2$.
+
+    **(c)** Under $H_0$:
+
+    $$
+    E[W^+] = \frac{n(n+1)}{4} = \frac{10 \times 11}{4} = 27.5
+    $$
+
+    $$
+    \text{Var}(W^+) = \frac{n(n+1)(2n+1)}{24} = \frac{10 \times 11 \times 21}{24} = \frac{2310}{24} = 96.25
+    $$
+
+    $$
+    z = \frac{W^+ - E[W^+]}{\sqrt{\text{Var}(W^+)}} = \frac{49 - 27.5}{\sqrt{96.25}} = \frac{21.5}{9.811} \approx 2.19
+    $$
+
+    For a one-sided test, the p-value is:
+
+    $$
+    p = P(Z \ge 2.19) = 1 - \mathcal{N}(2.19) \approx 0.0143
+    $$
+
+    **(d)** The Wilcoxon signed-rank test gives $p \approx 0.014$, which is significant at $\alpha = 0.05$, whereas the sign test gave $p \approx 0.055$, which was not significant. The Wilcoxon test reaches significance because it uses the magnitudes of the differences — the larger positive differences (10 and 15) receive high ranks that contribute substantially to $W^+$. The sign test treats all positive differences equally, wasting this information.
+
+**(a)** Compute the absolute differences $|d_i|$ and rank them from smallest to largest. Assign signed ranks.
+
+**(b)** Compute the test statistic $W^+ = \sum \text{(ranks of positive differences)}$.
+
+**(c)** For $n = 10$, under $H_0$ the expected value of $W^+$ is $n(n+1)/4$ and the variance is $n(n+1)(2n+1)/24$. Compute the $z$-statistic and the approximate p-value.
+
+**(d)** Compare the conclusion with the sign test result from Exercise 1.
+
+??? success "Solution to Exercise 1"
+
+    **(a)** Absolute differences and ranks:
+
+    | Patient | $d_i$ | $|d_i|$ | Rank | Signed rank |
+    |:---:|:---:|:---:|:---:|:---:|
+    | 5 | 2 | 2 | 1 | $+1$ |
+    | 3 | $-5$ | 5 | 3 | $-3$ |
+    | 8 | $-3$ | 3 | 2 | $-2$ |
+    | 2 | 5 | 5 | 3 | $+3$ |
+    | 6 | 5 | 5 | 3 | $+3$ |
+    | 1 | 10 | 10 | 6.5 | $+6.5$ |
+    | 7 | 10 | 10 | 6.5 | $+6.5$ |
+    | 10 | 10 | 10 | 6.5 | $+6.5$ |
+    | 4 | 15 | 15 | 9.5 | $+9.5$ |
+    | 9 | 15 | 15 | 9.5 | $+9.5$ |
+
+    Tied values of $|d_i|$ receive the average of the ranks they would occupy. The three values of 5 occupy ranks 2, 3, 4, so each gets rank 3. The three values of 10 occupy ranks 6, 7, 8, so each gets rank $(6+7+8)/3 = 7$. Let me re-rank properly:
+
+    Sorted $|d_i|$: 2, 3, 5, 5, 5, 10, 10, 10, 15, 15.
+
+    - 2 → rank 1
+    - 3 → rank 2
+    - 5, 5, 5 → ranks 3, 4, 5 → average rank 4
+    - 10, 10, 10 → ranks 6, 7, 8 → average rank 7
+    - 15, 15 → ranks 9, 10 → average rank 9.5
+
+    | Patient | $d_i$ | $|d_i|$ | Rank | Signed rank |
+    |:---:|:---:|:---:|:---:|:---:|
+    | 5 | 2 | 2 | 1 | $+1$ |
+    | 8 | $-3$ | 3 | 2 | $-2$ |
+    | 3 | $-5$ | 5 | 4 | $-4$ |
+    | 2 | 5 | 5 | 4 | $+4$ |
+    | 6 | 5 | 5 | 4 | $+4$ |
+    | 1 | 10 | 10 | 7 | $+7$ |
+    | 7 | 10 | 10 | 7 | $+7$ |
+    | 10 | 10 | 10 | 7 | $+7$ |
+    | 4 | 15 | 15 | 9.5 | $+9.5$ |
+    | 9 | 15 | 15 | 9.5 | $+9.5$ |
+
+    **(b)**
+
+    $$
+    W^+ = 1 + 4 + 4 + 7 + 7 + 7 + 9.5 + 9.5 = 49
+    $$
+
+    $$
+    W^- = 2 + 4 = 6
+    $$
+
+    Check: $W^+ + W^- = 49 + 6 = 55 = n(n+1)/2 = 10 \times 11/2$.
+
+    **(c)** Under $H_0$:
+
+    $$
+    E[W^+] = \frac{n(n+1)}{4} = \frac{10 \times 11}{4} = 27.5
+    $$
+
+    $$
+    \text{Var}(W^+) = \frac{n(n+1)(2n+1)}{24} = \frac{10 \times 11 \times 21}{24} = \frac{2310}{24} = 96.25
+    $$
+
+    $$
+    z = \frac{W^+ - E[W^+]}{\sqrt{\text{Var}(W^+)}} = \frac{49 - 27.5}{\sqrt{96.25}} = \frac{21.5}{9.811} \approx 2.19
+    $$
+
+    For a one-sided test, the p-value is:
+
+    $$
+    p = P(Z \ge 2.19) = 1 - \mathcal{N}(2.19) \approx 0.0143
+    $$
+
+    **(d)** The Wilcoxon signed-rank test gives $p \approx 0.014$, which is significant at $\alpha = 0.05$, whereas the sign test gave $p \approx 0.055$, which was not significant. The Wilcoxon test reaches significance because it uses the magnitudes of the differences — the larger positive differences (10 and 15) receive high ranks that contribute substantially to $W^+$. The sign test treats all positive differences equally, wasting this information.

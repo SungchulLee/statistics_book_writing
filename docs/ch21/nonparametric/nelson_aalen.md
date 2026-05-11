@@ -136,3 +136,27 @@ several settings:
 | Range | $[0, \infty)$ | $[0, 1]$ |
 | Bias (small samples) | Slightly less | Slightly more |
 | Large-sample equivalence | $\hat{H} \approx -\ln \hat{S}_{\text{KM}}$ | $\hat{S}_{\text{KM}} \approx \exp(-\hat{H})$ |
+
+## Exercises
+
+**Exercise 1.**
+Nelson-Aalen Estimator
+
+Using the data from Exercise 2, compute the Nelson--Aalen estimate of the
+cumulative hazard $\hat{H}(t)$ at each event time and compare
+$\exp(-\hat{H}(12))$ with $\hat{S}_{\text{KM}}(12)$.
+
+??? success "Solution to Exercise 1"
+
+    | $t_{(j)}$ | $d_j/n_j$ | $\hat{H}(t_{(j)})$ |
+    |:----------:|:---------:|:-------------------:|
+    | 3 | 0.100 | 0.100 |
+    | 7 | 0.125 | 0.225 |
+    | 8 | 0.143 | 0.368 |
+    | 12 | 0.200 | 0.568 |
+    | 15 | 0.333 | 0.901 |
+    | 20 | 1.000 | 1.901 |
+
+    $\exp(-\hat{H}(12)) = \exp(-0.568) = 0.567$ vs
+    $\hat{S}_{\text{KM}}(12) = 0.540$. The Nelson--Aalen-based estimate is
+    slightly higher, as expected.

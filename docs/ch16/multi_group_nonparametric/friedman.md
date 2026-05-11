@@ -111,3 +111,70 @@ where $q_\alpha$ is the critical value from the studentized range distribution. 
 ## Summary
 
 The Friedman test extends non-parametric group comparison to repeated-measures and randomized block designs by ranking observations within each block. The test statistic $\chi^2_F$ measures the variance of treatment rank sums and follows an approximate $\chi^2_{k-1}$ distribution under the null hypothesis. The test is the non-parametric analogue of repeated-measures ANOVA and is applicable whenever the data within blocks can be meaningfully ranked, even if they are ordinal. Post-hoc procedures such as the Nemenyi test identify which specific treatments differ.
+
+## Exercises
+
+**Exercise 1.**
+Four panelists rate three brands of coffee on a 1--10 scale:
+
+| Panelist | Brand A | Brand B | Brand C |
+|:---:|:---:|:---:|:---:|
+| 1 | 7 | 5 | 8 |
+| 2 | 6 | 8 | 7 |
+| 3 | 5 | 4 | 9 |
+| 4 | 8 | 6 | 7 |
+
+**(a)** Rank the brands within each panelist (block) from 1 to 3.
+
+**(b)** Compute the rank sums $R_j$ for each brand across all panelists.
+
+**(c)** Compute the Friedman test statistic:
+
+$$
+\chi_F^2 = \frac{12}{bk(k+1)} \sum_{j=1}^{k} R_j^2 - 3b(k+1)
+$$
+
+where $b = 4$ (panelists) and $k = 3$ (brands).
+
+**(d)** Under $H_0$, $\chi_F^2 \sim \chi^2(k-1)$. Test at $\alpha = 0.05$.
+
+??? success "Solution to Exercise 1"
+
+    **(a)** Ranking within each panelist (1 = lowest, 3 = highest):
+
+    | Panelist | Brand A | Brand B | Brand C |
+    |:---:|:---:|:---:|:---:|
+    | 1 | 2 | 1 | 3 |
+    | 2 | 1 | 3 | 2 |
+    | 3 | 2 | 1 | 3 |
+    | 4 | 3 | 1 | 2 |
+
+    **(b)** Rank sums:
+
+    $$
+    R_A = 2 + 1 + 2 + 3 = 8
+    $$
+
+    $$
+    R_B = 1 + 3 + 1 + 1 = 6
+    $$
+
+    $$
+    R_C = 3 + 2 + 3 + 2 = 10
+    $$
+
+    Check: $R_A + R_B + R_C = 24 = bk(k+1)/2 = 4 \times 3 \times 4/2 = 24$.
+
+    **(c)**
+
+    $$
+    \chi_F^2 = \frac{12}{4 \times 3 \times 4}(8^2 + 6^2 + 10^2) - 3 \times 4 \times 4
+    $$
+
+    $$
+    = \frac{12}{48}(64 + 36 + 100) - 48 = \frac{12 \times 200}{48} - 48 = 50 - 48 = 2.0
+    $$
+
+    **(d)** Under $H_0$, $\chi_F^2 \sim \chi^2(2)$. The critical value at $\alpha = 0.05$ is 5.991.
+
+    Since $\chi_F^2 = 2.0 < 5.991$, we fail to reject $H_0$. There is no statistically significant difference in the ratings of the three coffee brands. The p-value is $P(\chi^2(2) > 2.0) \approx 0.368$. With only 4 panelists, the test has limited power to detect moderate differences.

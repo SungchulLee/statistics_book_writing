@@ -139,3 +139,55 @@ The output demonstrates that normality tests strongly reject for the simulated r
 ## Summary
 
 Empirical financial returns violate normality through fat tails, negative skewness, and volatility clustering. These departures are not marginal: they have direct consequences for risk measurement (VaR underestimation), option pricing (mispriced tail risk), and hypothesis testing (distorted $p$-values). The Jarque-Bera and Anderson-Darling tests are particularly well-suited for detecting these departures. Practitioners working with financial data should routinely test for normality and use models that accommodate heavy tails and time-varying volatility.
+
+## Exercises
+
+**Exercise 1.**
+Daily returns for a stock have sample skewness $-0.3$ and sample excess kurtosis $4.2$. Based on these descriptive statistics, would you expect a normal Q-Q plot to be linear? Explain.
+
+??? success "Solution to Exercise 1"
+    No. Normal data have skewness $= 0$ and excess kurtosis $= 0$. Excess kurtosis of 4.2 indicates much heavier tails than normal (leptokurtic), meaning extreme returns occur more frequently than a normal model predicts. The negative skewness of $-0.3$ indicates a slight left tail asymmetry (large negative returns are more extreme than large positive ones).
+
+    On a Q-Q plot, the heavy tails would appear as points curving away from the reference line at both ends (below the line on the left, above on the right for the positive kurtosis), and the negative skewness would make the left-tail departure more pronounced. The central portion might look approximately linear.
+
+---
+
+**Exercise 2.**
+Explain why the normal distribution is a poor model for daily stock returns. What stylized facts of financial returns violate normality?
+
+??? success "Solution to Exercise 2"
+    Key stylized facts that violate normality:
+
+    1. **Heavy tails (excess kurtosis):** Extreme returns (crashes, rallies) occur far more frequently than a normal distribution predicts. Daily returns typically have excess kurtosis of 3-10+.
+    2. **Negative skewness:** Large negative returns (crashes) tend to be more extreme than large positive returns.
+    3. **Volatility clustering:** Periods of high volatility tend to cluster together (GARCH effects), violating the i.i.d. assumption underlying the normal model.
+    4. **Time-varying parameters:** The mean and variance of returns change over time.
+
+    These features mean that risk measures based on normality (e.g., VaR computed from normal quantiles) systematically underestimate tail risk.
+
+---
+
+**Exercise 3.**
+The $t$-distribution with $\nu$ degrees of freedom is sometimes used as an alternative to the normal for modeling returns. Why does it better capture heavy tails?
+
+??? success "Solution to Exercise 3"
+    The $t$-distribution has heavier tails than the normal, with the heaviness controlled by the degrees of freedom $\nu$. For small $\nu$ (e.g., 3-5), the tails are much heavier; as $\nu \to \infty$, the $t$-distribution converges to the normal.
+
+    The tail probability $P(|X| > x)$ decays polynomially ($\sim x^{-\nu}$) for the $t$-distribution versus exponentially ($\sim e^{-x^2/2}$) for the normal. This means the $t$-distribution assigns much higher probability to extreme events, better matching the observed frequency of large stock moves.
+
+    Fitting a $t$-distribution to daily returns typically yields $\hat{\nu} \approx 3\text{-}8$, producing more realistic VaR and Expected Shortfall estimates than the normal.
+
+---
+
+**Exercise 4.**
+A risk manager uses the Jarque-Bera test on 252 daily returns and obtains $p < 0.001$. What should they conclude and what action should they take?
+
+??? success "Solution to Exercise 4"
+    The Jarque-Bera test strongly rejects normality, confirming what is nearly universally true for daily financial returns. The conclusion is that normal-based risk models will underestimate tail risk.
+
+    Actions:
+
+    1. **Use heavy-tailed distributions** (Student's $t$, generalized hyperbolic) for VaR and Expected Shortfall calculations.
+    2. **Apply historical simulation** or **filtered historical simulation** instead of parametric normal methods.
+    3. **Consider GARCH models** to account for volatility clustering (conditional normality with time-varying variance).
+    4. **Stress testing:** Supplement statistical models with scenario-based stress tests for extreme events.

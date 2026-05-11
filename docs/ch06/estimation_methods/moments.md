@@ -1,9 +1,5 @@
 # Method of Moments
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Introduction
 
 The **Method of Moments (MoM)** is one of the oldest and most intuitive approaches to parameter estimation. The idea is simple: equate population moments (which are functions of unknown parameters) to their sample counterparts, then solve for the parameters. This yields estimators that are easy to compute, often available in closed form, and provide good starting points for more sophisticated methods like MLE.
@@ -25,6 +21,7 @@ $$\mu_k = E[(X - \mu)^k]$$
 where $\mu = E[X] = \mu_1'$.
 
 These moments are functions of the unknown parameter $\theta$:
+
 - $\mu_1'(\theta) = E_\theta[X]$ (mean)
 - $\mu_2'(\theta) = E_\theta[X^2]$ (second raw moment)
 - $\mu_2(\theta) = \text{Var}_\theta(X)$ (variance)
@@ -64,6 +61,7 @@ The resulting estimators $\hat{\theta}_{\text{MoM}}$ are the **Method of Moments
 ### When to Use Central Moments
 
 Sometimes it is more convenient to match central moments instead of (or in addition to) raw moments. For example, if $\theta = (\mu, \sigma^2)$, one can set:
+
 - $E[X] = \bar{X}$ (first raw moment)
 - $\text{Var}(X) = m_2$ (second central moment)
 
@@ -76,6 +74,7 @@ This is equivalent and often simplifies the algebra.
 Let $X_1, \ldots, X_n \sim N(\mu, \sigma^2)$. Two unknown parameters require two moment equations.
 
 **Population moments:**
+
 - $\mu_1' = E[X] = \mu$
 - $\mu_2' = E[X^2] = \sigma^2 + \mu^2$
 
@@ -112,6 +111,7 @@ This coincides with the MLE.
 Let $X_1, \ldots, X_n \sim \text{Gamma}(\alpha, \beta)$ with density $f(x) = \frac{\beta^\alpha}{\Gamma(\alpha)} x^{\alpha-1} e^{-\beta x}$. Two parameters require two equations.
 
 **Population moments:**
+
 - $E[X] = \alpha/\beta$
 - $\text{Var}(X) = \alpha/\beta^2$
 
@@ -132,6 +132,7 @@ The MoM estimators are available in closed form, while the MLE for the Gamma dis
 Let $X_1, \ldots, X_n \sim \text{Uniform}(a, b)$. Two parameters require two equations.
 
 **Population moments:**
+
 - $E[X] = (a + b)/2$
 - $\text{Var}(X) = (b - a)^2/12$
 
@@ -150,6 +151,7 @@ $$\hat{a}_{\text{MoM}} = \bar{X} - \sqrt{3 m_2}, \qquad \hat{b}_{\text{MoM}} = \
 Let $X_1, \ldots, X_n \sim \text{Beta}(\alpha, \beta)$.
 
 **Population moments:**
+
 - $E[X] = \frac{\alpha}{\alpha + \beta}$
 - $\text{Var}(X) = \frac{\alpha\beta}{(\alpha+\beta)^2(\alpha+\beta+1)}$
 
@@ -225,6 +227,7 @@ $$W^* = \left[E[g(X_i, \theta_0) g(X_i, \theta_0)^T]\right]^{-1} = S^{-1}$$
 where $S$ is the long-run covariance matrix of the moment conditions. This yields the most efficient GMM estimator among all choices of $W$.
 
 In practice, $S$ is unknown and estimated from the data, typically using a two-step procedure:
+
 1. Estimate $\hat{\theta}^{(1)}$ with $W = I$ (identity matrix)
 2. Estimate $\hat{S}$ using residuals from step 1
 3. Re-estimate $\hat{\theta}^{(2)}$ with $W = \hat{S}^{-1}$
@@ -253,6 +256,7 @@ The Method of Moments and GMM are extensively used in quantitative finance:
 ### Method of L-Moments
 
 **L-moments** are linear combinations of order statistics that provide an alternative to conventional moments. They are:
+
 - More robust to outliers than conventional moments
 - Always uniquely define a distribution (unlike conventional moments, which may not exist for heavy-tailed distributions)
 - Particularly useful for fitting extreme value distributions in risk management
@@ -260,6 +264,7 @@ The Method of Moments and GMM are extensively used in quantitative finance:
 ### Higher Moment Matching
 
 For distributions with more than two parameters, higher moments (skewness, kurtosis) are matched:
+
 - $\hat{\gamma} = m_3/m_2^{3/2}$ matches population skewness
 - $\hat{\kappa} = m_4/m_2^2$ matches population kurtosis
 
@@ -288,3 +293,85 @@ The Method of Moments provides estimators by equating sample moments to populati
 | GMM objective | $\min_\theta \bar{g}_n(\theta)^T W \bar{g}_n(\theta)$ |
 | Optimal weight | $W^* = S^{-1}$ |
 | J-test | $J = n \bar{g}_n(\hat{\theta})^T \hat{S}^{-1} \bar{g}_n(\hat{\theta}) \sim \chi^2_{q-p}$ |
+
+## Exercises
+
+**Exercise 1.**
+A random sample from a Uniform$(0, \theta)$ distribution has sample mean $\bar{x} = 3.5$. Find the Method of Moments estimator $\hat{\theta}$.
+
+??? success "Solution to Exercise 1"
+    The first population moment of Uniform$(0, \theta)$ is:
+
+    $$
+    \mu_1' = E[X] = \frac{\theta}{2}
+    $$
+
+    Setting the first population moment equal to the first sample moment:
+
+    $$
+    \frac{\theta}{2} = \bar{x} = 3.5 \implies \hat{\theta} = 2\bar{x} = 7.0
+    $$
+
+---
+
+**Exercise 2.**
+For a Gamma$(\alpha, \beta)$ distribution with mean $\alpha\beta$ and variance $\alpha\beta^2$, derive the Method of Moments estimators for $\alpha$ and $\beta$ in terms of $\bar{x}$ and $s^2$.
+
+??? success "Solution to Exercise 2"
+    Setting population moments equal to sample moments:
+
+    $$
+    \alpha\beta = \bar{x} \quad \text{and} \quad \alpha\beta^2 = s^2
+    $$
+
+    Dividing the second equation by the first:
+
+    $$
+    \frac{\alpha\beta^2}{\alpha\beta} = \frac{s^2}{\bar{x}} \implies \hat{\beta} = \frac{s^2}{\bar{x}}
+    $$
+
+    Substituting back:
+
+    $$
+    \hat{\alpha} = \frac{\bar{x}}{\hat{\beta}} = \frac{\bar{x}^2}{s^2}
+    $$
+
+---
+
+**Exercise 3.**
+The Method of Moments estimator for the variance of a normal distribution is $\hat{\sigma}^2_{\text{MoM}} = \frac{1}{n}\sum(X_i - \bar{X})^2$, while the unbiased estimator divides by $n-1$. Show that the MoM estimator is biased and compute the bias.
+
+??? success "Solution to Exercise 3"
+    The expectation of the MoM estimator is:
+
+    $$
+    E[\hat{\sigma}^2_{\text{MoM}}] = E\!\left[\frac{1}{n}\sum_{i=1}^n (X_i - \bar{X})^2\right] = \frac{1}{n} \cdot (n-1)\sigma^2 = \frac{n-1}{n}\sigma^2
+    $$
+
+    The bias is:
+
+    $$
+    \text{Bias} = E[\hat{\sigma}^2_{\text{MoM}}] - \sigma^2 = \frac{n-1}{n}\sigma^2 - \sigma^2 = -\frac{\sigma^2}{n}
+    $$
+
+    The MoM estimator underestimates the true variance by $\sigma^2/n$. This bias vanishes as $n \to \infty$, so the estimator is asymptotically unbiased.
+
+---
+
+**Exercise 4.**
+Compare the Method of Moments and Maximum Likelihood Estimation approaches. In what situations would you prefer MoM over MLE?
+
+??? success "Solution to Exercise 4"
+    **Prefer MoM when:**
+
+    - The likelihood function is difficult or impossible to write down analytically (e.g., complex generative models).
+    - A quick, closed-form estimate is needed as a starting point for iterative MLE optimization.
+    - The model has many parameters and MLE is computationally expensive, but a reasonable approximation suffices.
+    - Robustness to model misspecification is desired (GMM with appropriate moment conditions can be more robust than MLE under misspecification).
+
+    **Prefer MLE when:**
+
+    - Efficiency matters: MLE achieves the Cramér-Rao lower bound asymptotically, while MoM is generally less efficient.
+    - The likelihood is tractable and the model is believed to be correctly specified.
+    - Small-sample performance is important: MLE typically has better finite-sample properties.
+    - Invariance to reparameterization is needed: the MLE of $g(\theta)$ is $g(\hat{\theta}_{\text{MLE}})$, a property MoM does not have.

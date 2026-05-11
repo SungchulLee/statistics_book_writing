@@ -1,9 +1,5 @@
 # CI for μ
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## One-Sample z Confidence Interval
 
 In numerous real-world applications, such as in business, healthcare, and education, estimating the population mean $\mu$ from a random sample is often essential. When the population variance is known, we can utilize the standard normal distribution to construct a confidence interval.
@@ -245,88 +241,74 @@ Felix randomly selected 50 points on a car part and measured coating thickness. 
 
 ## Exercises
 
-### Exercise: 95% CI for Mean Amount of Liquid
+**Exercise 1.**
+50 bottles, $\bar X = 503$ mL, $s = 5$ mL. 95% CI for $\mu$.
 
-Quality control specialists sample 50 bottles from a batch. The sample yields a mean of 503 mL and a standard deviation of 5 mL. Construct a 95% confidence interval for the mean amount of liquid.
+??? success "Solution to Exercise 1"
+    Large $n$, use $z$: $\mathrm{SE} = 5/\sqrt{50} \approx 0.707$. ME = $1.96 \cdot 0.707 \approx 1.39$.
 
-**Solution.**
+    CI: $(501.6, 504.4)$ mL.
 
-$$
-\text{SE} = \frac{5}{\sqrt{50}} \approx 0.707, \qquad \text{ME} = 1.96 \times 0.707 \approx 1.386
-$$
+    Target 500 mL is outside the CI — evidence the batch mean exceeds target.
 
-$$
-\boxed{(501.61,\ 504.39) \text{ mL}}
-$$
+---
 
-Since the target of 500 mL is not in the interval, there is evidence that the batch mean deviates from the target.
+**Exercise 2.**
+**Sample size planning.** Target ME = 10 km, $\sigma = 15$ km, 90% confidence. Required $n$?
 
-### Exercise: Smallest Sample Size with Given Margin of Error
+??? success "Solution to Exercise 2"
+    $z_{0.05} = 1.645$. $n = (1.645 \cdot 15/10)^2 = (2.47)^2 \approx 6.09$. Round up: $n = 7$.
 
-Nadia must determine the minimum sample size for a margin of error of 10 km at 90% confidence. The estimated standard deviation is 15 km.
+    Very small — feasible. For higher confidence (95%), $z = 1.96$ and $n \approx 9$. For larger $\sigma$ (say 30): $n \approx 25$.
 
-**Solution.** For 90% confidence, $z_* \approx 1.645$.
+    Sample size scales as $\sigma^2$ and $z^2$ — quadratic in both.
 
-$$
-n = \left\lceil\left(\frac{1.645 \times 15}{10}\right)^2\right\rceil = \left\lceil 6.09\right\rceil = 7
-$$
+---
 
-```python
-from math import ceil
-from scipy import stats
+**Exercise 3.**
+**$t$-interval with small sample.** $n = 25$ bottles, $\bar X = 500$ mL, $s = 10$ mL. 95% CI.
 
-confidence_level = 0.90
-alpha = 1 - confidence_level
-z_star = stats.norm().ppf(1 - alpha / 2)
-sigma = 15
-max_margin_of_error = 10
+??? success "Solution to Exercise 3"
+    $\sigma$ unknown, use $t$: $t_{0.025, 24} = 2.064$. ME = $2.064 \cdot 10/\sqrt{25} = 4.13$.
 
-min_sample_size = ceil((z_star * sigma / max_margin_of_error) ** 2)
-print(f"{min_sample_size = }")
-```
+    CI: $(495.87, 504.13)$.
 
-### Exercise: Confidence Interval for Population Mean (t-interval)
+    Note $t_{0.025, 24} > z_{0.025}$ — $t$ intervals are wider than $z$ intervals at the same confidence level to account for uncertainty in $s$.
 
-A sample of 25 bottles of soda has a mean volume of 500 ml and a sample standard deviation of 10 ml. Construct a 95% confidence interval.
+---
 
-**Solution.** With $df = 24$, $t_{0.025, 24} \approx 2.064$.
+**Exercise 4.**
+**Exam scores with known $\sigma$.** $n = 36$, $\bar X = 78$, $\sigma = 12$. 95% CI.
 
-$$
-\text{ME} = 2.064 \times \frac{10}{\sqrt{25}} = 2.064 \times 2 = 4.128
-$$
+??? success "Solution to Exercise 4"
+    Known $\sigma$, use $z$: ME = $1.96 \cdot 12/\sqrt{36} = 1.96 \cdot 2 = 3.92$.
 
-$$
-\boxed{(495.872,\ 504.128)}
-$$
+    CI: $(74.08, 81.92)$.
 
-### Exercise: One-Sample z CI for Exam Scores
+    With known $\sigma$, the $z$ interval is the same regardless of sample size beyond the SE formula. Cleanest scenario but rarely realistic (we usually don't know $\sigma$).
 
-A random sample of 36 students' scores yields a mean of 78 with known $\sigma = 12$. Construct a 95% CI.
+---
 
-**Solution.** $\text{ME} = 1.96 \times 12/\sqrt{36} = 1.96 \times 2 = 3.92$.
+**Exercise 5.**
+**Confidence level trade-off.** A 90% CI is $(72, 78)$. (a) Interpretation. (b) Why a 99% CI is wider.
 
-$$
-\boxed{(74.08,\ 81.92)}
-$$
+??? success "Solution to Exercise 5"
+    (a) Correct interpretation: "If we repeated this sampling and CI construction many times, ~90% of resulting intervals would contain the true mean." NOT "there is a 90% probability $\mu \in (72, 78)$" — the parameter is fixed.
 
-### Exercise: Sample Size Determination
+    (b) 99% CI uses $z_{0.005} = 2.576$ vs 90% using $z_{0.05} = 1.645$. Ratio of widths: $2.576/1.645 \approx 1.57$. The 99% CI is 57% wider.
 
-Estimate a population mean with margin of error 5 at 95% confidence, given $\sigma = 20$.
+    Higher confidence requires accommodating more variability — wider interval. Lower confidence is tighter but less reliable. Trade-off: precision vs. assurance.
 
-**Solution.**
+---
 
-$$
-n = \left(\frac{1.96 \times 20}{5}\right)^2 = (7.84)^2 = 61.47 \implies \boxed{n = 62}
-$$
+**Exercise 6.**
+**Light bulbs.** $n = 25$, $\bar X = 1200$ h, $s = 150$ h. (a) 95% CI. (b) 99% CI. (c) $n$ for ME = 20 h.
 
-### Exercise: Interpretation
+??? success "Solution to Exercise 6"
+    (a) $t_{0.025, 24} = 2.064$. ME = $2.064 \cdot 150/5 = 61.9$. CI: $(1138.1, 1261.9)$.
 
-A 90% confidence interval for the mean weight is (72, 78). Does this mean the probability of the true mean being between 72 and 78 is 90%?
+    (b) $t_{0.005, 24} = 2.797$. ME = $2.797 \cdot 30 = 83.9$. CI: $(1116.1, 1283.9)$. Wider as expected.
 
-**Solution.** No. The 90% confidence interval means that if we were to take many samples and compute a 90% CI for each, approximately 90% of those intervals would contain the true population mean. However, the true population mean is a fixed (unknown) value — it either lies within (72, 78) or it does not. The 90% refers to the confidence in the **procedure**, not the probability for this specific interval.
+    (c) Using $z$-approximation (large $n$ will result): $n = (1.96 \cdot 150/20)^2 = (14.7)^2 \approx 216.1$. Round up: $n = 217$.
 
-### Exercise: Wider Confidence Interval
-
-Will a 99% confidence interval be wider or narrower than a 95% CI? Why?
-
-**Solution.** A 99% CI will always be **wider** than a 95% CI. To be 99% confident that the true population mean is captured by the interval, we need to account for more variability by expanding the range. A higher confidence level requires a larger critical value, which increases the margin of error.
+    Achieving ME of 20 requires nearly 9× more samples than the original $n = 25$. Reducing ME from $\sim 62$ to 20 requires $217/25 \approx 8.7\times$ more data — quadratic in ME reduction.

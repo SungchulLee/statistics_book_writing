@@ -1,9 +1,5 @@
 # F Distribution
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Overview
 
 The **F distribution** arises as the ratio of two independent chi-square random variables, each divided by their degrees of freedom. It is fundamental for comparing variances between two populations and for Analysis of Variance (ANOVA).
@@ -171,3 +167,110 @@ print(f"F_0.95(5, 20) = {f_95:.4f}")
 - It governs comparisons of variances and is the foundation of ANOVA.
 - Both numerator and denominator degrees of freedom affect the shape of the distribution.
 - The exactness of the F-test depends critically on normality; robust alternatives are often preferred in practice.
+
+## Exercises
+
+**Exercise 1.**
+Two independent normal samples with common $\sigma^2$, $n_1 = 15$, $n_2 = 10$. Compute $P(S_1^2/S_2^2 > 1.5)$.
+
+??? success "Solution to Exercise 1"
+    Under equal variances, $F = S_1^2/S_2^2 \sim F_{14, 9}$ (numerator df = $n_1 - 1 = 14$, denominator df = $n_2 - 1 = 9$).
+
+    Derivation: $S_i^2 \sim \sigma^2 \chi^2_{n_i - 1}/(n_i - 1)$. Ratio of independent scaled chi-squares each divided by df is exactly $F$.
+
+    Numerical: $P(F_{14, 9} > 1.5) \approx 0.274$ — about 27%.
+
+    The $F$ distribution is highly skewed for small df; non-trivial probability in the tails even for modest values of the ratio.
+
+---
+
+**Exercise 2.**
+**Construction.** Derive $F = (U/d_1)/(V/d_2)$ where $U \sim \chi^2_{d_1}$ and $V \sim \chi^2_{d_2}$ independent. State the mean and what it tells you.
+
+??? success "Solution to Exercise 2"
+    Definition: if $U \sim \chi^2_{d_1}$ and $V \sim \chi^2_{d_2}$ are independent, then $F = (U/d_1)/(V/d_2) \sim F_{d_1, d_2}$.
+
+    Mean: $\mathbb{E}[F] = \mathbb{E}[U/d_1] / \mathbb{E}[V/d_2]$ — wait, this is wrong; for ratios we cannot split the expectation. Actually $\mathbb{E}[U/d_1] = 1$, and $\mathbb{E}[1/(V/d_2)] = d_2 \cdot \mathbb{E}[1/V] = d_2 / (d_2 - 2)$ for $d_2 > 2$ (using moment of inverse chi-square).
+
+    So $\mathbb{E}[F_{d_1, d_2}] = d_2/(d_2 - 2)$ for $d_2 > 2$, slightly greater than 1.
+
+    **Asymmetry:** $F > 1$ on average, even under the null of equal variances. This is because $1/V$ has positive bias relative to $1/\mathbb{E}[V]$ — Jensen's inequality applied to the convex function $1/v$.
+
+    For inference, one-tailed tests at the $\alpha$ level use $F$ critical values from tables; two-tailed tests are uncommon because of $F$'s asymmetry.
+
+---
+
+**Exercise 3.**
+**ANOVA $F$-test.** State the F-statistic for testing equality of $k$ group means under one-way ANOVA. What are the degrees of freedom?
+
+??? success "Solution to Exercise 3"
+    One-way ANOVA: groups $i = 1, \ldots, k$ with $n_i$ observations each, total $n = \sum n_i$. Total/between/within sum of squares:
+
+    - $\mathrm{SST} = \sum_{ij}(Y_{ij} - \bar Y_{..})^2$
+    - $\mathrm{SSB} = \sum_i n_i (\bar Y_{i\cdot} - \bar Y_{..})^2$
+    - $\mathrm{SSW} = \sum_{ij}(Y_{ij} - \bar Y_{i\cdot})^2$
+
+    F-statistic:
+
+    $$
+    F = \frac{\mathrm{SSB}/(k-1)}{\mathrm{SSW}/(n-k)} \sim F_{k-1, n-k}
+    $$
+
+    Under $H_0$: equal means, both numerator and denominator estimate $\sigma^2$; under $H_1$: numerator is inflated by between-group variance, denominator unchanged. Large $F$ → reject.
+
+    Degrees of freedom: $k - 1$ for between (one less than the number of group means), $n - k$ for within (each group contributes $n_i - 1$, summing to $n - k$).
+
+---
+
+**Exercise 4.**
+**$F$ vs. $t$.** For $k = 2$ groups, show that $F_{1, n-2}$ has the same distribution as the square of $t_{n-2}$.
+
+??? success "Solution to Exercise 4"
+    From the definitions: $t = Z/\sqrt{V/(n-2)}$ where $Z \sim N(0,1)$ and $V \sim \chi^2_{n-2}$ independent.
+
+    So $t^2 = Z^2/(V/(n-2))$. Now $Z^2 \sim \chi^2_1$ (square of standard normal).
+
+    $$
+    t^2 = \frac{Z^2/1}{V/(n-2)} \sim F_{1, n-2}
+    $$
+
+    by the definition of $F$. $\square$
+
+    **Practical implication:** for $k = 2$ groups, the ANOVA $F$-test and the two-sample $t$-test are equivalent: $F_{\text{obs}} = t_{\text{obs}}^2$. Reject $H_0$ at level $\alpha$ in ANOVA iff $F > F_{1, n-2, 1-\alpha} = t_{n-2, 1-\alpha/2}^2$. Same decision; the two tests are different formulations of the same procedure.
+
+---
+
+**Exercise 5.**
+**Reciprocal relationship.** Show that $F_{d_1, d_2}$ and $1/F_{d_2, d_1}$ have the same distribution.
+
+??? success "Solution to Exercise 5"
+    Let $F = (U/d_1)/(V/d_2)$ with $U \sim \chi^2_{d_1}$, $V \sim \chi^2_{d_2}$ independent. Then
+
+    $$
+    \frac{1}{F} = \frac{V/d_2}{U/d_1} \sim F_{d_2, d_1}
+    $$
+
+    by definition (with degrees of freedom swapped).
+
+    **Practical:** to compute $P(F_{d_1, d_2} < c)$, use $P(1/F_{d_1, d_2} > 1/c) = P(F_{d_2, d_1} > 1/c)$ — convenient when tables only list upper-tail critical values. Lower-tail of $F_{d_1, d_2}$ at $\alpha$ equals reciprocal of upper-tail of $F_{d_2, d_1}$ at $\alpha$.
+
+---
+
+**Exercise 6.**
+**Robustness to non-normality.** The $F$-test assumes normality of the underlying populations. Discuss the impact of violations and propose alternatives.
+
+??? success "Solution to Exercise 6"
+    **Non-normality effects:**
+
+    - **Light tails or symmetric distributions:** $F$ remains approximately valid for moderate $n$.
+    - **Heavy tails:** $F$-test is non-robust — the sample variances $s_i^2$ have inflated variability, distorting the null distribution.
+    - **Strong skew:** $F$ distribution under $H_0$ no longer matches the data's behavior.
+
+    **Alternatives:**
+
+    - **Levene's test** for equal variances: uses $|X_{ij} - \tilde X_i|$ (absolute deviations from group median) rather than squared deviations. More robust to non-normality.
+    - **Bartlett's test:** more powerful for normal data but sensitive to non-normality.
+    - **Brown-Forsythe test:** variant of Levene using median rather than mean — most robust against heavy tails.
+    - **Permutation test:** non-parametric alternative; relabel observations and recompute $F$ to build null distribution.
+
+    Practical recommendation: in industrial quality control or biological experiments with moderate $n$ and approximate normality, $F$-test is fine. For heavy-tailed data (financial returns, biological counts), use Levene/Brown-Forsythe.

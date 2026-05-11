@@ -1,9 +1,6 @@
 # Generalized Additive Models (GAMs)
 
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Overview
 
 **Generalized Additive Models (GAMs)** extend linear regression by allowing smooth, non-parametric functions of predictors instead of assuming linear relationships. GAMs provide a flexible middle ground between rigid linear models and overly complex black-box methods like neural networks.
@@ -53,6 +50,7 @@ The smooth functions $f_j$ are typically represented as linear combinations of b
 $$f_j(X_j) = \sum_{k=1}^{K_j} b_{jk}(X_j) \cdot c_{jk}$$
 
 where:
+
 - $b_{jk}$ are basis functions (e.g., B-splines, thin-plate splines)
 - $c_{jk}$ are coefficients learned from data
 - $K_j$ is the number of basis functions for variable $j$
@@ -64,6 +62,7 @@ To avoid overfitting while allowing flexibility, GAMs use a roughness penalty:
 $$\text{Loss} = \frac{1}{n} \sum_{i=1}^{n} \left(y_i - \beta_0 - \sum_{j=1}^{p} f_j(x_{ij})\right)^2 + \sum_{j=1}^{p} \lambda_j \int [f_j''(x)]^2 dx$$
 
 where:
+
 - The first term is the sum of squared residuals
 - $\lambda_j$ controls the smoothness of the $j$-th function: larger $\lambda_j$ results in smoother (less wiggly) functions
 - The integral term measures the "roughness" (second derivative squared)
@@ -114,6 +113,7 @@ Represented by basis functions with a smoothness penalty:
 $$f_j(X_j) = \sum_{k=1}^{K_j} b_{jk}(X_j) c_{jk} + \lambda_j \int [f_j''(x)]^2 dx$$
 
 Common choices:
+
 - **Cubic B-splines**: Smooth, locally-supported, computationally efficient
 - **Thin-plate splines**: Optimal in a smoothness sense, but computationally expensive
 
@@ -318,3 +318,41 @@ Generalized Additive Models provide a powerful, interpretable approach to non-li
 - **Trade-offs** between flexibility and interpretability make GAMs ideal when moderate non-linearity is expected
 
 When data suggests non-linear relationships and interpretation is important, GAMs offer an excellent balance between the simplicity of linear regression and the flexibility of fully non-parametric methods.
+## Exercises
+
+**Exercise 1.**
+Write the general form of a GAM with three predictors and explain how it differs from a standard multiple linear regression model.
+
+??? success "Solution to Exercise 1"
+    A GAM with three predictors is:
+
+    $$
+    E[Y] = \beta_0 + f_1(X_1) + f_2(X_2) + f_3(X_3)
+    $$
+
+    where $f_1, f_2, f_3$ are smooth (typically nonparametric) functions estimated from the data.
+
+    In standard multiple linear regression, $E[Y] = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \beta_3 X_3$, each $f_j$ is constrained to be linear ($f_j(X_j) = \beta_j X_j$). A GAM relaxes this constraint, allowing each predictor to have a flexible nonlinear relationship with $Y$ while maintaining the additive structure (no interactions between the smooth functions).
+
+---
+
+**Exercise 2.**
+Explain the role of the smoothing parameter in a GAM. What happens when it is set too high or too low?
+
+??? success "Solution to Exercise 2"
+    The smoothing parameter $\lambda$ controls the tradeoff between fitting the data closely and having a smooth function:
+
+    - **$\lambda$ too low:** The smooth function overfits the data, capturing noise and producing a wiggly curve with high variance.
+    - **$\lambda$ too high:** The smooth function is oversmoothed, approaching a straight line. This introduces bias by missing genuine nonlinear patterns but reduces variance.
+
+    In practice, $\lambda$ is selected by cross-validation (e.g., generalized cross-validation, GCV) to balance bias and variance.
+
+---
+
+**Exercise 3.**
+Describe one advantage and one limitation of GAMs compared to polynomial regression for modeling nonlinear relationships.
+
+??? success "Solution to Exercise 3"
+    **Advantage:** GAMs automatically adapt the degree of flexibility to each predictor using data-driven smoothing, whereas polynomial regression requires choosing the degree in advance. GAMs avoid Runge's phenomenon (wild oscillation at boundaries) that plagues high-degree polynomials.
+
+    **Limitation:** GAMs assume an additive structure ($f_1(X_1) + f_2(X_2)$) and do not natively capture interactions between predictors. Polynomial regression can include interaction terms ($X_1 X_2$, $X_1^2 X_2$) directly. To model interactions in GAMs, tensor product smooths or explicit interaction terms must be added, increasing complexity.

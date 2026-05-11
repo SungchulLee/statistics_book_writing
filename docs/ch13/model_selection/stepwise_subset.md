@@ -120,3 +120,66 @@ Stepwise methods remain widely used in practice, but they have well-known drawba
 
 !!! note "Modern alternatives"
     Regularization methods (ridge, lasso, elastic net) address many of these criticisms by shrinking coefficients toward zero rather than performing hard inclusion/exclusion decisions. Lasso in particular performs variable selection as a byproduct of its $\ell_1$ penalty, providing a principled alternative to stepwise methods.
+
+## Exercises
+
+**Exercise 1.**
+Describe the difference between forward selection, backward elimination, and best-subset selection. Which is computationally most expensive?
+
+??? success "Solution to Exercise 1"
+    **Forward selection** starts with no predictors and adds one at a time, choosing at each step the predictor that most improves the model (e.g., largest reduction in AIC). It stops when no addition improves the criterion.
+
+    **Backward elimination** starts with all predictors and removes one at a time, choosing the predictor whose removal least degrades the model. It stops when every remaining predictor is significant or contributes to the criterion.
+
+    **Best-subset selection** evaluates all $2^p$ possible subsets of $p$ predictors and selects the best model of each size, then uses a criterion (AIC, BIC, adjusted $R^2$) to choose among sizes.
+
+    Best-subset is by far the most expensive: $2^p$ models must be fitted. With $p = 20$, that is over 1 million models. Forward and backward selection fit at most $O(p^2)$ models, making them feasible for larger $p$. However, stepwise methods may miss the globally best subset because they are greedy.
+
+---
+
+**Exercise 2.**
+Explain why stepwise selection can inflate Type I error rates and produce overfit models if p-values are not adjusted.
+
+??? success "Solution to Exercise 2"
+    At each step, stepwise selection tests multiple candidate predictors and selects the one with the smallest p-value (or largest improvement). This is a form of multiple testing: even if all predictors are truly unrelated to the response, the best among $p$ candidates is likely to have a small p-value by chance.
+
+    The resulting p-values are not valid for inference because they do not account for the search process. A predictor that enters the model with $p = 0.03$ may have been selected from 20 candidates, making the true significance level much higher. Additionally, the model selected by stepwise methods tends to overfit training data because it was optimized to that specific dataset.
+
+    Remedies include: using information criteria (AIC, BIC) instead of p-values, cross-validation for final model assessment, and regularization methods (LASSO) that simultaneously select variables and shrink coefficients.
+
+---
+
+**Exercise 3.**
+With $p = 5$ predictors, how many models must best-subset selection evaluate? List all possible model sizes.
+
+??? success "Solution to Exercise 3"
+    With $p = 5$ predictors, the total number of subsets is $2^5 = 32$ (including the null model with no predictors).
+
+    Models by size:
+
+    - Size 0 (intercept only): $\binom{5}{0} = 1$ model
+    - Size 1: $\binom{5}{1} = 5$ models
+    - Size 2: $\binom{5}{2} = 10$ models
+    - Size 3: $\binom{5}{3} = 10$ models
+    - Size 4: $\binom{5}{4} = 5$ models
+    - Size 5 (full model): $\binom{5}{5} = 1$ model
+
+    Total: $1 + 5 + 10 + 10 + 5 + 1 = 32$ models. Best-subset selection finds the best model at each size (6 candidates), then uses AIC/BIC/CV to select among the 6.
+
+---
+
+**Exercise 4.**
+Compare LASSO variable selection with stepwise selection. Why is LASSO generally preferred in modern practice?
+
+??? success "Solution to Exercise 4"
+    **LASSO** adds an $L_1$ penalty to the regression objective, shrinking some coefficients exactly to zero and thereby performing variable selection and estimation simultaneously. The regularization parameter $\lambda$ controls the trade-off between fit and sparsity.
+
+    **Advantages of LASSO over stepwise:**
+
+    1. **Continuous path:** LASSO produces a continuous path of models as $\lambda$ varies, avoiding the discrete, greedy decisions of stepwise methods.
+    2. **Shrinkage:** Non-selected coefficients are shrunk toward zero, reducing overfitting even for included predictors.
+    3. **Valid inference:** Post-selection inference methods exist for LASSO (e.g., selective inference). Stepwise p-values are invalid without correction.
+    4. **Scalability:** LASSO handles $p > n$ (more predictors than observations), where stepwise methods fail.
+    5. **Cross-validation integration:** $\lambda$ is chosen by CV, providing an honest estimate of test error.
+
+    Stepwise methods remain useful when interpretability of each selection step is desired or when computational resources for regularization paths are limited.

@@ -1,9 +1,6 @@
 # Homoscedasticity Assumption
 
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Definition
 
 Homoscedasticity refers to the assumption that the variance of the errors (residuals) is constant across all levels of the independent variables. When this assumption holds, the spread of residuals should be roughly the same across the range of predicted values.
@@ -53,3 +50,24 @@ Homoscedasticity is essential because heteroscedasticity leads to:
 - **Robust Standard Errors:** Heteroscedasticity-consistent (HC) standard errors (White's robust standard errors) provide valid inference without transforming the model.
 
 For detailed diagnostic methods, see [Checking Homoscedasticity](checking_homoscedasticity.md).
+## Exercises
+
+**Exercise 1.**
+In a simple linear regression of salary on years of experience, the variance of residuals increases with experience level. Explain why OLS estimates remain unbiased under heteroscedasticity but are no longer efficient.
+
+??? success "Solution to Exercise 1"
+    OLS estimates are unbiased because the Gauss-Markov proof of unbiasedness ($E[\hat{\beta}] = \beta$) requires only that $E[\varepsilon|X] = 0$, which does not depend on constant variance.
+
+    However, OLS is no longer **efficient** (no longer BLUE) because it assigns equal weight to all observations. Under heteroscedasticity, observations with larger variance carry less information about the regression line. Weighted least squares (which weights observations inversely to their variance) produces more efficient estimates.
+
+---
+
+**Exercise 2.**
+Write the mathematical definition of heteroscedasticity and explain how it differs from homoscedasticity.
+
+??? success "Solution to Exercise 2"
+    **Homoscedasticity:** $\text{Var}(\varepsilon_i | X_i) = \sigma^2$ for all $i$ (constant variance).
+
+    **Heteroscedasticity:** $\text{Var}(\varepsilon_i | X_i) = \sigma_i^2$ where $\sigma_i^2$ varies with $X_i$ (non-constant variance).
+
+    Under homoscedasticity, the spread of residuals is the same across all values of $X$. Under heteroscedasticity, the spread changes systematically -- for example, increasing with $X$ (fan-shaped residual plot) or differing across groups.

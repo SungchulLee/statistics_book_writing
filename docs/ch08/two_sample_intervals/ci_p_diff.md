@@ -1,9 +1,5 @@
 # CI for p₁ − p₂
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Two-Sample Proportion Confidence Interval
 
 In many practical situations, we compare the proportions of two populations — for instance, the proportion of people who support two different policies or the defect rates from two production lines.
@@ -211,26 +207,57 @@ if __name__ == "__main__":
 
 ---
 
-## Exercise
+## Exercises
 
-### Exercise: 95% CI for Difference Between Two Proportions
+**Exercise 1.**
+In two independent samples, 150 out of 200 prefer a brand in sample 1, and 120 out of 180 prefer the same brand in sample 2. Construct a 95% CI for the difference in proportions.
 
-In two independent samples, 150 out of 200 prefer a brand in sample 1, and 120 out of 180 prefer the same brand in sample 2. Construct a 95% CI.
+??? success "Solution to Exercise 1"
+    $$
+    \hat{p}_1 = \frac{150}{200} = 0.75, \qquad \hat{p}_2 = \frac{120}{180} \approx 0.667
+    $$
 
-**Solution.**
+    $$
+    \text{SE} = \sqrt{\frac{0.75 \times 0.25}{200} + \frac{0.667 \times 0.333}{180}} \approx \sqrt{0.000938 + 0.001234} \approx 0.0466
+    $$
 
-$$
-\hat{p}_1 = 0.75, \qquad \hat{p}_2 = 0.67
-$$
+    $$
+    \text{ME} = 1.96 \times 0.0466 \approx 0.091
+    $$
 
-$$
-\text{SE} = \sqrt{\frac{0.75 \times 0.25}{200} + \frac{0.67 \times 0.33}{180}} \approx 0.047
-$$
+    $$
+    (0.083 - 0.091,\ 0.083 + 0.091) = (-0.008,\ 0.175)
+    $$
 
-$$
-\text{ME} = 1.96 \times 0.047 \approx 0.092
-$$
+    Since the interval includes zero, the difference is not statistically significant at the 5% level.
 
-$$
-\boxed{(-0.012,\ 0.172)}
-$$
+---
+
+**Exercise 2.**
+For the data in Exercise 1, verify that the validity conditions for the normal approximation are satisfied.
+
+??? success "Solution to Exercise 2"
+    The conditions require $n_i\hat{p}_i \geq 5$ and $n_i(1-\hat{p}_i) \geq 5$:
+
+    - Sample 1: $200 \times 0.75 = 150 \geq 5$ and $200 \times 0.25 = 50 \geq 5$
+    - Sample 2: $180 \times 0.667 = 120 \geq 5$ and $180 \times 0.333 = 60 \geq 5$
+
+    All conditions are met.
+
+---
+
+**Exercise 3.**
+Explain why the Newcombe (Wilson-based) method is recommended over the Wald method for confidence intervals on the difference of proportions.
+
+??? success "Solution to Exercise 3"
+    The Wald method uses the sample proportions directly in the standard error formula, which can produce poor coverage when the true proportions are near 0 or 1, or when sample sizes are moderate. The Wald interval can even produce intervals outside $[-1, 1]$.
+
+    The Newcombe method constructs the CI for the difference by combining Wilson confidence intervals for each individual proportion. The Wilson interval adds a correction term ($z^2/(2n)$) that "shrinks" extreme proportions toward 0.5, producing more stable intervals. Simulation studies consistently show that the Newcombe method achieves coverage closer to the nominal level across a wider range of parameter values and sample sizes.
+
+---
+
+**Exercise 4.**
+If the confidence interval for $p_1 - p_2$ is $(0.03, 0.15)$, interpret this result in context and state whether there is evidence of a significant difference.
+
+??? success "Solution to Exercise 4"
+    The 95% confidence interval $(0.03, 0.15)$ means we are 95% confident that the true difference $p_1 - p_2$ lies between 0.03 and 0.15. Since the entire interval is positive (it does not contain zero), we conclude that $p_1$ is significantly greater than $p_2$ at the 5% level. The estimated difference is between 3 and 15 percentage points in favor of group 1.

@@ -115,7 +115,7 @@ $$
 z = \frac{\hat{\beta}_j}{\text{se}(\hat{\beta}_j)} \;\xrightarrow{d}\; N(0, 1)
 $$
 
-The p-value is $2[1 - \Phi(|z|)]$.  Alternatively, the likelihood ratio test
+The p-value is $2[1 - \mathcal{N}(|z|)]$.  Alternatively, the likelihood ratio test
 compares the partial log-likelihood with and without the covariate.
 
 ## Common Misinterpretations
@@ -150,3 +150,42 @@ Additional pitfalls:
 | Continuous (1-unit) | $e^{\hat{\beta}}$ | Hazard change per unit increase |
 | Continuous ($c$-unit) | $e^{c\hat{\beta}}$ | Hazard change per $c$-unit increase |
 | Categorical ($G$ levels) | $e^{\hat{\beta}_g}$ | Level $g$ vs reference level |
+
+## Exercises
+
+**Exercise 1.**
+Cox Model Interpretation
+
+A Cox model for employee turnover includes three covariates. The estimated
+coefficients and standard errors are:
+
+| Covariate | $\hat{\beta}$ | $\text{se}(\hat{\beta})$ |
+|:----------|:-------------:|:------------------------:|
+| Salary (per \$10k) | $-0.18$ | $0.06$ |
+| Remote work (1 = yes) | $-0.42$ | $0.15$ |
+| Manager (1 = yes) | $0.31$ | $0.12$ |
+
+**(a)** Compute and interpret the hazard ratio for each covariate.
+
+**(b)** Compute a 95% confidence interval for the hazard ratio of remote work.
+
+**(c)** Which covariates are significant at the 5% level?
+
+??? success "Solution to Exercise 1"
+
+    **(a)**
+
+    - Salary: $\text{HR} = e^{-0.18} = 0.835$. Each \$10k increase in salary is
+      associated with a 16.5% reduction in turnover hazard.
+    - Remote work: $\text{HR} = e^{-0.42} = 0.657$. Remote workers have a 34.3%
+      lower turnover hazard than on-site workers.
+    - Manager: $\text{HR} = e^{0.31} = 1.363$. Managers have a 36.3% higher
+      turnover hazard than non-managers.
+
+    **(b)** CI for $\beta$: $-0.42 \pm 1.96 \times 0.15 = (-0.714, -0.126)$.
+    CI for HR: $(e^{-0.714}, e^{-0.126}) = (0.490, 0.882)$. Since the interval
+    excludes 1, remote work significantly reduces turnover.
+
+    **(c)** Wald test: $|z| = |\hat{\beta}|/\text{se}$. Salary: $3.00$;
+    Remote: $2.80$; Manager: $2.58$. All three exceed $z_{0.025} = 1.96$, so
+    all three are significant at the 5% level.

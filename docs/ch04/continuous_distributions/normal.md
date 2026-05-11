@@ -1,9 +1,5 @@
 # Normal Distribution
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Overview
 
 The **normal distribution** (also called the Gaussian distribution) is one of the most fundamental probability distributions in statistics. It describes continuous data that cluster around a central value, tapering off symmetrically on both sides in a characteristic "bell curve."
@@ -124,16 +120,16 @@ $$
 The CDF has no closed form and is computed numerically:
 
 $$
-\Phi(x) = N(x) = \int_{-\infty}^x \frac{1}{\sqrt{2\pi}} e^{-s^2/2}\,ds
+\mathcal{N}(x) = N(x) = \int_{-\infty}^x \frac{1}{\sqrt{2\pi}} e^{-s^2/2}\,ds
 $$
 
 ### Properties of Phi
 
 $$
 \begin{aligned}
-(1) &\quad P(a \leq Z \leq b) = \Phi(b) - \Phi(a) \\
-(2) &\quad P(Z \geq x) = P(Z \leq -x) = \Phi(-x) \\
-(3) &\quad P(Z \geq x) = 1 - \Phi(x) \\
+(1) &\quad P(a \leq Z \leq b) = \mathcal{N}(b) - \mathcal{N}(a) \\
+(2) &\quad P(Z \geq x) = P(Z \leq -x) = \mathcal{N}(-x) \\
+(3) &\quad P(Z \geq x) = 1 - \mathcal{N}(x) \\
 (4) &\quad P(Z \leq 0) = P(Z \geq 0) = 0.5
 \end{aligned}
 $$
@@ -295,3 +291,107 @@ print(samples)  # Same output every time with seed 42
 - Linear transformations and sums of independent normals remain normal.
 - The CDF has no closed form but is efficiently computed numerically.
 - The CLT explains why the normal distribution appears so frequently in nature and statistics.
+
+## Exercises
+
+**Exercise 1.**
+$X \sim N(70, 100)$ (scores). (a) $P(60 < X < 80)$. (b) 90th percentile. (c) Expected count $> 85$ from $n = 200$. (d) Distribution of $(X - 70)/10$.
+
+??? success "Solution to Exercise 1"
+    (a) Standardize: $P(-1 < Z < 1) = 0.8413 - 0.1587 = 0.6827$.
+
+    (b) $x_{0.90} = 70 + 1.2816 \cdot 10 = 82.82$.
+
+    (c) $P(X > 85) = P(Z > 1.5) = 0.0668$. Expected: $200 \cdot 0.0668 \approx 13.4 \approx 13$ students.
+
+    (d) $Y = (X - 70)/10 \sim N(0, 1)$ (standardization). $P(X > 85) = P(Y > 1.5)$.
+
+---
+
+**Exercise 2.**
+**Empirical (68-95-99.7) rule.** Prove $P(|Z| \le k) \approx 0.683, 0.954, 0.997$ for $k = 1, 2, 3$ where $Z \sim N(0, 1)$.
+
+??? success "Solution to Exercise 2"
+    From standard normal tables: $P(Z \le 1) = 0.8413$, so $P(|Z| \le 1) = 2 \cdot 0.8413 - 1 = 0.6827$.
+
+    Similarly: $P(|Z| \le 2) = 2 \cdot 0.9772 - 1 = 0.9545$.
+
+    $P(|Z| \le 3) = 2 \cdot 0.9987 - 1 = 0.9973$.
+
+    **Implications:**
+
+    - "Two-sigma event" has probability $\approx 5\%$ — significance.
+    - "Three-sigma event" has probability $\approx 0.3\%$ — strong evidence.
+    - "Five-sigma" (physics standard): $P(|Z| > 5) \approx 5.7 \times 10^{-7}$.
+
+    These thresholds form the qualitative basis for "how rare is this observation under the null."
+
+---
+
+**Exercise 3.**
+**Linear combination of independent normals.** $X_1 \sim N(\mu_1, \sigma_1^2)$, $X_2 \sim N(\mu_2, \sigma_2^2)$ independent. Find the distribution of $aX_1 + bX_2 + c$.
+
+??? success "Solution to Exercise 3"
+    By the MGF approach: $M_{aX_1 + bX_2 + c}(t) = e^{ct} M_{X_1}(at) M_{X_2}(bt) = e^{ct} \exp(a\mu_1 t + a^2\sigma_1^2 t^2/2) \exp(b\mu_2 t + b^2\sigma_2^2 t^2/2)$.
+
+    $= \exp\!\left((c + a\mu_1 + b\mu_2)t + (a^2\sigma_1^2 + b^2\sigma_2^2) t^2/2\right)$.
+
+    This is the MGF of $N(a\mu_1 + b\mu_2 + c, a^2\sigma_1^2 + b^2\sigma_2^2)$.
+
+    So $aX_1 + bX_2 + c \sim N(a\mu_1 + b\mu_2 + c, a^2\sigma_1^2 + b^2\sigma_2^2)$. The normal family is **closed** under linear combinations — a defining property.
+
+---
+
+**Exercise 4.**
+**Standardization** turns any normal random variable into standard normal. Prove that $\Phi^{-1}(F_X(x)) = (x - \mu)/\sigma$ for $X \sim N(\mu, \sigma^2)$.
+
+??? success "Solution to Exercise 4"
+    For $X \sim N(\mu, \sigma^2)$:
+
+    $F_X(x) = P(X \le x) = P((X - \mu)/\sigma \le (x - \mu)/\sigma) = \Phi((x - \mu)/\sigma)$.
+
+    Applying $\Phi^{-1}$ to both sides: $\Phi^{-1}(F_X(x)) = (x - \mu)/\sigma$. $\square$
+
+    **Use:** the **quantile-quantile (Q-Q) plot** plots sample quantiles against the corresponding standard-normal quantiles. If the data is normal with any mean/variance, the points fall on a line with slope $\sigma$ and intercept $\mu$ — providing a visual check for normality with extraction of parameters.
+
+---
+
+**Exercise 5.**
+**Maximum-likelihood estimation for normal.** Given an i.i.d. sample $X_1, \ldots, X_n \sim N(\mu, \sigma^2)$ with both parameters unknown, derive the MLEs.
+
+??? success "Solution to Exercise 5"
+    Log-likelihood:
+
+    $$
+    \ell(\mu, \sigma^2) = -\frac{n}{2}\ln(2\pi\sigma^2) - \frac{1}{2\sigma^2}\sum (X_i - \mu)^2
+    $$
+
+    Partial w.r.t. $\mu$: $\partial \ell/\partial \mu = \sum(X_i - \mu)/\sigma^2 = 0 \Rightarrow \hat\mu = \bar X$.
+
+    Partial w.r.t. $\sigma^2$: $\partial \ell/\partial \sigma^2 = -n/(2\sigma^2) + \sum(X_i - \mu)^2/(2\sigma^4) = 0 \Rightarrow \hat\sigma^2 = (1/n)\sum(X_i - \hat\mu)^2$.
+
+    Both MLEs in closed form. The MLE for variance divides by $n$, not $n - 1$ — so it is biased ($\mathbb{E}[\hat\sigma^2_{\text{MLE}}] = \frac{n-1}{n}\sigma^2$). For unbiased estimation use Bessel's correction with denominator $n - 1$.
+
+---
+
+**Exercise 6.**
+**Q-Q plot interpretation.** A Q-Q plot of a sample vs. the standard normal shows points falling below the reference line in the right tail. Interpret this pattern.
+
+??? success "Solution to Exercise 6"
+    The Q-Q plot's $y$-axis is the sample quantile and $x$-axis is the standard-normal quantile. The reference line $y = \mu + \sigma x$ shows where points fall if the data is normal.
+
+    **"Below the line in the right tail"** means: at large positive $x$ (large standard-normal quantile), the sample's quantile is *smaller* than the line predicts. In other words, the sample's upper extreme values are less extreme than expected from a normal — the **right tail is thinner** than normal.
+
+    This indicates a **light-tailed** distribution (e.g., uniform, beta on bounded support, truncated normal). The opposite pattern — points above the line in the right tail — indicates **heavy tails** (e.g., $t$, lognormal).
+
+    Diagnostic patterns:
+
+    | Pattern | Distribution |
+    |---|---|
+    | Straight line | Normal |
+    | S-curve | Light tails (both sides) |
+    | Inverse S | Heavy tails (both sides) |
+    | Concave-up | Right-skewed |
+    | Concave-down | Left-skewed |
+
+    The Q-Q plot is far more informative than a single goodness-of-fit $p$-value because it shows *where* the model fits well and where it fails.

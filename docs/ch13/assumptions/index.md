@@ -1,9 +1,6 @@
 # Assumptions and Diagnostics for Linear Regression
 
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 Linear regression is a fundamental statistical method used to model the relationship between a dependent variable and one or more independent variables. However, for the results of a linear regression model to be valid, certain assumptions must be met. These assumptions ensure that the model is appropriately specified and that the statistical inferences made from the model are reliable.
 
 ## The Four Key Assumptions

@@ -1,9 +1,6 @@
 # AIC and BIC: Model Selection Criteria
 
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 When building statistical models, a core challenge is balancing model complexity against model fit. **Akaike Information Criterion (AIC)** and **Bayesian Information Criterion (BIC)** are two widely used techniques that address this trade-off by penalizing models for the number of parameters they use.
 
 ## Akaike Information Criterion (AIC)
@@ -84,3 +81,40 @@ AIC and BIC are essential tools for model selection that help avoid overfitting 
 - Use **BIC** when model simplicity, interpretability, or large sample sizes are priorities.
 
 Neither should be used in isolation. They are best complemented with other methods such as cross-validation, which provides additional validation by assessing generalization to new data. By considering multiple criteria, analysts can make more informed decisions that balance fit, complexity, and predictive performance.
+## Exercises
+
+**Exercise 1.**
+Define AIC and BIC mathematically and explain the key difference in their penalty terms.
+
+??? success "Solution to Exercise 1"
+    $$
+    \text{AIC} = -2\ln(\hat{L}) + 2k
+    $$
+
+    $$
+    \text{BIC} = -2\ln(\hat{L}) + k\ln(n)
+    $$
+
+    where $\hat{L}$ is the maximized likelihood, $k$ is the number of parameters, and $n$ is the sample size.
+
+    The key difference is the penalty: AIC penalizes by $2k$ regardless of sample size, while BIC penalizes by $k\ln(n)$, which is larger than $2k$ when $n > e^2 \approx 7.4$ (i.e., almost always in practice). BIC therefore favors simpler models, especially for large samples.
+
+---
+
+**Exercise 2.**
+Three candidate models have AIC values of 245.3, 243.1, and 248.7. Which model is preferred? If the AIC difference between the best and second-best models is only 0.5, what would you conclude?
+
+??? success "Solution to Exercise 2"
+    The model with the **lowest AIC (243.1)** is preferred. Lower AIC indicates a better balance between goodness of fit and complexity.
+
+    If the difference were only 0.5, the two models would be considered **essentially equivalent** in terms of information-theoretic support. A common guideline: AIC differences less than 2 indicate substantial support for both models, differences of 4-7 indicate considerably less support for the higher-AIC model, and differences greater than 10 indicate essentially no support.
+
+---
+
+**Exercise 3.**
+Explain why BIC is consistent (selects the true model as $n \to \infty$) but AIC is not. In what practical scenario would you prefer AIC over BIC?
+
+??? success "Solution to Exercise 3"
+    BIC's penalty $k\ln(n)$ grows without bound as $n \to \infty$, so for any overly complex model, the penalty eventually dominates the likelihood improvement, ensuring BIC selects the true model. AIC's fixed penalty $2k$ does not grow with $n$, so it may continue to select slightly overfit models even with infinite data.
+
+    **Prefer AIC** when the goal is **prediction** rather than identifying the true model. AIC is asymptotically equivalent to leave-one-out cross-validation, making it better for selecting models that minimize prediction error. BIC's stronger penalty may exclude predictors that improve prediction even though they are not "truly" in the population model.

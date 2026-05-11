@@ -1,9 +1,6 @@
 # Chapter 16: Non-Parametric Tests
 
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Overview
 
 Non-parametric tests are statistical methods that do not assume a specific parametric form (such as normality) for the underlying population distribution. They are also called **distribution-free tests** because their validity does not depend on the data following a particular distribution. This chapter provides a comprehensive treatment of rank-based and sign-based tests for one-sample, paired-sample, two-sample, and multi-group settings, along with non-parametric correlation measures.

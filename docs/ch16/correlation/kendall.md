@@ -120,7 +120,7 @@ Z = \frac{9}{\sqrt{28.33}} \approx \frac{9}{5.323} \approx 1.691
 $$
 
 $$
-p = 2\,\Phi(-1.691) \approx 0.091
+p = 2\,\mathcal{N}(-1.691) \approx 0.091
 $$
 
 At $\alpha = 0.05$, we fail to reject $H_0$. With only 6 observations, the test lacks power to detect a moderate concordance.
@@ -153,3 +153,48 @@ At $\alpha = 0.05$, we fail to reject $H_0$. With only 6 observations, the test 
 ## Summary
 
 Kendall's $\tau$ measures monotonic association by comparing the number of concordant and discordant observation pairs. The hypothesis test uses the $S = C - D$ statistic, which under independence is approximately normal with mean zero. The tau-b variant adjusts for ties in either variable. Compared to Spearman's $r_s$, Kendall's $\tau$ tends to be smaller in magnitude but offers a clearer probability interpretation and better small-sample distributional properties.
+
+## Exercises
+
+**Exercise 1.**
+Using the same data from Exercise 7, compute Kendall's tau.
+
+**(a)** For each pair of students $(i, j)$ with $i < j$, determine whether the pair is concordant or discordant. A pair is concordant if the math ranks and English ranks are ordered in the same direction.
+
+**(b)** Compute Kendall's tau:
+
+$$
+\tau = \frac{C - D}{\binom{n}{2}}
+$$
+
+where $C$ is the number of concordant pairs and $D$ is the number of discordant pairs.
+
+**(c)** Compare Kendall's tau with Spearman's rho from Exercise 7. Why is $|\tau| < |r_s|$ in general?
+
+??? success "Solution to Exercise 1"
+
+    **(a)** With $n = 8$, there are $\binom{8}{2} = 28$ pairs. Since math ranks are already $1, 2, \ldots, 8$, a pair $(i,j)$ with $i < j$ is concordant if the English rank of student $j$ exceeds that of student $i$.
+
+    English ranks in order of math rank: 3, 1, 2, 5, 4, 8, 6, 7.
+
+    For each student, count how many subsequent English ranks are larger (concordant):
+
+    - Student 1 (English 3): compared with 1, 2, 5, 4, 8, 6, 7 → larger: 5, 4, 8, 6, 7 → $C_1 = 5$, $D_1 = 2$
+    - Student 2 (English 1): compared with 2, 5, 4, 8, 6, 7 → larger: all 6 → $C_2 = 6$, $D_2 = 0$
+    - Student 3 (English 2): compared with 5, 4, 8, 6, 7 → larger: all 5 → $C_3 = 5$, $D_3 = 0$
+    - Student 4 (English 5): compared with 4, 8, 6, 7 → larger: 8, 6, 7 → $C_4 = 3$, $D_4 = 1$
+    - Student 5 (English 4): compared with 8, 6, 7 → larger: all 3 → $C_5 = 3$, $D_5 = 0$
+    - Student 6 (English 8): compared with 6, 7 → larger: none → $C_6 = 0$, $D_6 = 2$
+    - Student 7 (English 6): compared with 7 → larger: 7 → $C_7 = 1$, $D_7 = 0$
+
+    Totals: $C = 5 + 6 + 5 + 3 + 3 + 0 + 1 = 23$, $D = 2 + 0 + 0 + 1 + 0 + 2 + 0 = 5$.
+
+    Check: $C + D = 28 = \binom{8}{2}$.
+
+    **(b)**
+
+    $$
+    \tau = \frac{23 - 5}{28} = \frac{18}{28} \approx 0.643
+    $$
+
+    **(c)** For these data, $\tau = 0.643$ while $r_s = 0.833$. Kendall's tau is generally smaller in magnitude than Spearman's rho for the same data because they use different scales. Spearman's rho squares the rank differences (amplifying large discrepancies), while Kendall's tau counts pairwise concordances (a binary classification). Roughly, $\tau \approx \frac{2}{\pi}\arcsin(r_s)$ for bivariate normal data, which gives $|\tau| < |r_s|$ except at the extremes $\pm 1$, where they agree. Despite the different magnitudes, both measures indicate a strong positive monotonic association.

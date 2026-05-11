@@ -51,3 +51,71 @@ $$
 $$
 
 where $z_{\alpha/2}$ is the standard normal critical value and $\sigma / \sqrt{n}$ is the asymptotic standard error.
+
+## Exercises
+
+**Exercise 1.**
+Prove that the sample mean $\bar{X}_n$ is a consistent estimator of $\mu = E[X]$ using Chebyshev's inequality, assuming $\text{Var}(X) = \sigma^2 < \infty$.
+
+??? success "Solution to Exercise 1"
+    By Chebyshev's inequality, for any $\varepsilon > 0$:
+
+    $$
+    P(|\bar{X}_n - \mu| \geq \varepsilon) \leq \frac{\text{Var}(\bar{X}_n)}{\varepsilon^2} = \frac{\sigma^2}{n\varepsilon^2}
+    $$
+
+    As $n \to \infty$:
+
+    $$
+    P(|\bar{X}_n - \mu| \geq \varepsilon) \leq \frac{\sigma^2}{n\varepsilon^2} \to 0
+    $$
+
+    Therefore $\bar{X}_n \xrightarrow{p} \mu$, which is the definition of consistency. $\square$
+
+---
+
+**Exercise 2.**
+The sample median is also a consistent estimator of the population mean for symmetric distributions. Explain intuitively why it converges to $\mu$, and state one advantage of the sample median over the sample mean.
+
+??? success "Solution to Exercise 2"
+    For a symmetric distribution, the population mean and median coincide. The sample median converges to the population median by the Glivenko-Cantelli theorem (the empirical CDF converges uniformly to the true CDF, so quantiles converge). Since the population median equals $\mu$ for symmetric distributions, the sample median is consistent for $\mu$.
+
+    **Advantage of the median:** It is robust to outliers. For heavy-tailed distributions (e.g., Cauchy), the sample mean can be highly variable and may not even be consistent (the Cauchy has no finite mean), while the sample median remains consistent and stable. Even for distributions with finite variance, the median has bounded influence function, meaning a single extreme observation cannot drastically change the estimate.
+
+---
+
+**Exercise 3.**
+Show that if $\hat{\theta}_n$ is a consistent estimator of $\theta$ and $g$ is a continuous function, then $g(\hat{\theta}_n)$ is a consistent estimator of $g(\theta)$. State the theorem you are using.
+
+??? success "Solution to Exercise 3"
+    This is the **Continuous Mapping Theorem**: if $\hat{\theta}_n \xrightarrow{p} \theta$ and $g$ is continuous at $\theta$, then $g(\hat{\theta}_n) \xrightarrow{p} g(\theta)$.
+
+    **Application:** Since $S^2 = \frac{1}{n-1}\sum(X_i - \bar{X})^2 \xrightarrow{p} \sigma^2$ (the sample variance is consistent for the population variance), the continuous function $g(x) = \sqrt{x}$ gives:
+
+    $$
+    S = \sqrt{S^2} \xrightarrow{p} \sqrt{\sigma^2} = \sigma
+    $$
+
+    So the sample standard deviation is a consistent estimator of $\sigma$. $\square$
+
+---
+
+**Exercise 4.**
+Define asymptotic normality of an estimator $\hat{\theta}_n$. If $\hat{\theta}_n$ is the MLE and regularity conditions hold, state the asymptotic distribution of $\sqrt{n}(\hat{\theta}_n - \theta_0)$.
+
+??? success "Solution to Exercise 4"
+    An estimator $\hat{\theta}_n$ is **asymptotically normal** if:
+
+    $$
+    \sqrt{n}(\hat{\theta}_n - \theta_0) \xrightarrow{d} N(0, v^2)
+    $$
+
+    for some variance $v^2$, where $\xrightarrow{d}$ denotes convergence in distribution.
+
+    For the MLE under standard regularity conditions (the parameter space is open, the model is identifiable, the log-likelihood is twice differentiable, etc.):
+
+    $$
+    \sqrt{n}(\hat{\theta}_{\text{MLE}} - \theta_0) \xrightarrow{d} N\!\left(0, \frac{1}{I(\theta_0)}\right)
+    $$
+
+    where $I(\theta_0) = -E\!\left[\frac{\partial^2}{\partial\theta^2}\log f(X;\theta_0)\right]$ is the Fisher information for a single observation. Equivalently, $\hat{\theta}_{\text{MLE}} \approx N(\theta_0, 1/(nI(\theta_0)))$ for large $n$. This result implies the MLE achieves the Cramer-Rao lower bound asymptotically, making it asymptotically efficient.

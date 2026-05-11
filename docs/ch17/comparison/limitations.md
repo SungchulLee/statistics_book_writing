@@ -120,3 +120,14 @@ The bootstrap assumes that the parameter of interest can be expressed as a smoot
 ## Summary
 
 Resampling methods fail when the standard assumptions (independence, finite variance, smoothness, adequate sample size) are violated. The most common failure modes are dependent data (where the iid bootstrap underestimates uncertainty), extreme order statistics (where the bootstrap distribution cannot reach beyond the observed data range), heavy tails (where variance estimates are unstable), and small samples (where the empirical distribution is too coarse). Recognizing these limitations and knowing the appropriate remedies — block bootstrap, subsampling, parametric bootstrap, or specialized tail methods — is essential for responsible use of resampling techniques.
+
+## Exercises
+
+**Exercise 1.**
+Simulate an AR(1) process $X_t = 0.7 X_{t-1} + \varepsilon_t$ with $\varepsilon_t \sim N(0, 1)$ and $n = 200$.
+
+(a) Apply the standard (iid) bootstrap to estimate the 95% CI for $E[X]$. What coverage do you observe in simulation?
+
+(b) Apply the **moving block bootstrap** with block lengths $\ell = 5, 10, 20$.
+
+(c) Compare the widths and coverage of both approaches. Explain why the iid bootstrap fails for dependent data.

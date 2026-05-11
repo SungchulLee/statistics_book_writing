@@ -106,3 +106,70 @@ With $n - 2 = 6$ degrees of freedom, $p \approx 0.10$ (two-sided). At $\alpha = 
 ## Summary
 
 Spearman's $r_s$ is the Pearson correlation coefficient applied to the ranks of the observations, providing a non-parametric measure of monotonic association. The hypothesis test uses a $t$-approximation for large samples and the exact permutation distribution for small samples. Ties are handled by using midranks in the full Pearson formula. Spearman's $r_s$ achieves an ARE of $3/\pi \approx 0.955$ relative to Pearson's $r$ under bivariate normality and can be substantially more informative under non-normality or non-linearity.
+
+## Exercises
+
+**Exercise 1.**
+A teacher ranks 8 students by their performance on a math test and an English test:
+
+| Student | Math rank | English rank |
+|:---:|:---:|:---:|
+| 1 | 1 | 3 |
+| 2 | 2 | 1 |
+| 3 | 3 | 2 |
+| 4 | 4 | 5 |
+| 5 | 5 | 4 |
+| 6 | 6 | 8 |
+| 7 | 7 | 6 |
+| 8 | 8 | 7 |
+
+**(a)** Compute the rank differences $d_i$ and $d_i^2$.
+
+**(b)** Compute Spearman's rank correlation coefficient:
+
+$$
+r_s = 1 - \frac{6 \sum d_i^2}{n(n^2 - 1)}
+$$
+
+**(c)** Test whether $r_s$ is significantly different from zero using the $t$-approximation:
+
+$$
+t = r_s \sqrt{\frac{n-2}{1 - r_s^2}}
+$$
+
+with $n - 2$ degrees of freedom.
+
+??? success "Solution to Exercise 1"
+
+    **(a)**
+
+    | Student | Math | English | $d_i$ | $d_i^2$ |
+    |:---:|:---:|:---:|:---:|:---:|
+    | 1 | 1 | 3 | $-2$ | 4 |
+    | 2 | 2 | 1 | 1 | 1 |
+    | 3 | 3 | 2 | 1 | 1 |
+    | 4 | 4 | 5 | $-1$ | 1 |
+    | 5 | 5 | 4 | 1 | 1 |
+    | 6 | 6 | 8 | $-2$ | 4 |
+    | 7 | 7 | 6 | 1 | 1 |
+    | 8 | 8 | 7 | 1 | 1 |
+
+    $$
+    \sum d_i^2 = 4 + 1 + 1 + 1 + 1 + 4 + 1 + 1 = 14
+    $$
+
+    **(b)**
+
+    $$
+    r_s = 1 - \frac{6 \times 14}{8(64 - 1)} = 1 - \frac{84}{504} = 1 - 0.1667 = 0.8333
+    $$
+
+    **(c)** The $t$-statistic:
+
+    $$
+    t = 0.8333 \sqrt{\frac{6}{1 - 0.6944}} = 0.8333 \sqrt{\frac{6}{0.3056}} = 0.8333 \sqrt{19.63} = 0.8333 \times 4.431 = 3.692
+    $$
+
+    With 6 degrees of freedom, the critical value for a two-sided test at $\alpha = 0.05$ is $t_{0.025, 6} = 2.447$.
+
+    Since $|t| = 3.69 > 2.447$, we reject $H_0$. The p-value is approximately 0.010. There is a statistically significant positive monotonic association between math and English performance ($r_s = 0.83$).

@@ -1,9 +1,5 @@
 # Test of Homogeneity
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Homogeneity Test vs Independence Test
 
 The **Chi-Square Test of Independence** and the **Chi-Square Test of Homogeneity** use **the exact same computational procedure** — but they **differ in purpose, experimental design, and interpretation**.
@@ -339,3 +335,111 @@ def main():
 if __name__ == "__main__":
     main()
 ```
+
+## Exercises
+
+**Exercise 1.**
+Drug A: 60/100 successes. B: 55/100. (a) Controlling confounders? (b) $z$-test. (c) $\chi^2$ test. Show equivalence.
+
+??? success "Solution to Exercise 1"
+    (a) **Randomize** participants to A or B. Random assignment balances confounders (age, gender, severity) across groups in expectation.
+
+    (b) Pooled $\hat p = 115/200 = 0.575$. $\mathrm{SE} = \sqrt{0.575 \cdot 0.425 \cdot (1/100 + 1/100)} \approx 0.0699$.
+
+    $z = (0.60 - 0.55)/0.0699 \approx 0.715$. $|z| < 1.96$. Fail to reject.
+
+    (c) Expected: all cells 57.5 (success) or 42.5 (failure). $\chi^2 = 4 \cdot (2.5)^2/57.5 + 4 \cdot (2.5)^2/42.5 \approx 0.512$. $0.512 < 3.84$. Fail to reject.
+
+    Equivalence: $z^2 = 0.715^2 = 0.511 \approx \chi^2$. For $2 \times 2$ tables, $\chi^2$ test ≡ two-sided $z$-test for proportions.
+
+---
+
+**Exercise 2.**
+**Test of homogeneity** vs independence. What's the difference?
+
+??? success "Solution to Exercise 2"
+    Both use chi-square with same statistic and df. Difference is in the **sampling design**:
+
+    **Homogeneity:** fixed margins for one variable (e.g., $n_A = n_B = 100$ pre-specified). Test whether the distribution of the other variable is the same across rows.
+
+    **Independence:** total $n$ is fixed; cell counts randomly distributed. Test whether two variables are independent.
+
+    **Same math, different interpretation.** A drug trial with pre-assigned sample sizes is homogeneity. An observational study of customer preferences is independence.
+
+    Practically: indistinguishable in computation; conceptually distinct because of design assumptions.
+
+---
+
+**Exercise 3.**
+**Multi-population homogeneity.** Three drugs compared: A (60/100), B (55/100), C (45/100). Test if all three have the same success rate.
+
+??? success "Solution to Exercise 3"
+    Table: success row = (60, 55, 45), failure row = (40, 45, 55). Total = 300; success total = 160.
+
+    Pooled $\hat p_{\text{success}} = 160/300 \approx 0.533$.
+
+    Expected per group: success 53.33, failure 46.67.
+
+    $\chi^2 = \sum (O - E)^2/E$:
+
+    - A: $(60-53.33)^2/53.33 + (40-46.67)^2/46.67 \approx 0.834 + 0.953 = 1.787$.
+    - B: $(55-53.33)^2/53.33 + (45-46.67)^2/46.67 \approx 0.052 + 0.060 = 0.112$.
+    - C: $(45-53.33)^2/53.33 + (55-46.67)^2/46.67 \approx 1.302 + 1.488 = 2.790$.
+
+    Total $\chi^2 \approx 4.69$. df = $(3-1)(2-1) = 2$. Critical $\chi^2_{2, 0.05} = 5.99$. **Fail to reject** at 5%.
+
+    Although Drug C has visibly lower success rate (45% vs 60%), the test doesn't reach significance.
+
+---
+
+**Exercise 4.**
+**Post-hoc analysis** after rejecting homogeneity. What's recommended?
+
+??? success "Solution to Exercise 4"
+    After omnibus chi-square rejects $H_0$, find which groups differ.
+
+    **Options:**
+
+    - **Pairwise chi-square** with Bonferroni correction: 3 groups → 3 pairwise tests at $\alpha/3$.
+    - **Adjusted residuals:** $r_{ij} = (O - E)/\sqrt{E \cdot (1 - p_i)(1 - p_j)}$. $|r| > 2$ indicates significant cell.
+    - **Z-test for two proportions** between specific groups of interest.
+
+    Important: control family-wise error or false discovery rate when making multiple comparisons.
+
+---
+
+**Exercise 5.**
+**McNemar's test** for paired/matched binary data. Define and contrast with chi-square.
+
+??? success "Solution to Exercise 5"
+    Setup: same subjects measured twice (pre/post, two raters). Binary outcomes.
+
+    Matched table:
+    | | After + | After - |
+    |---|---|---|
+    | Before + | $a$ | $b$ |
+    | Before - | $c$ | $d$ |
+
+    **McNemar's statistic:** $\chi^2 = (b - c)^2/(b + c)$. df = 1.
+
+    Tests whether the marginal proportions changed (e.g., "did treatment shift success rate?").
+
+    **Contrast with chi-square:** chi-square for independence assumes independent observations. McNemar accounts for pairing — uses only the discordant pairs ($b$, $c$).
+
+    Example: agree-disagree pairs in survey, before-after improvements in treatment.
+
+---
+
+**Exercise 6.**
+**Power analysis** for chi-square homogeneity.
+
+??? success "Solution to Exercise 6"
+    Effect size: $w = \sqrt{\sum (p_{ij} - p_{ij,0})^2/p_{ij,0}}$ where $p_{ij,0}$ is expected under $H_0$.
+
+    Cohen's conventions: $w = 0.1$ (small), 0.3 (medium), 0.5 (large).
+
+    Required $n$ for 80% power, $\alpha = 0.05$, df = 2: $\lambda \approx 9.63$, $n = \lambda/w^2$.
+
+    Small effect: $n \approx 963$. Medium: $n \approx 107$. Large: $n \approx 39$.
+
+    Use `statsmodels.stats.power.GofChisquarePower` or formal computation. Sample-size planning is essential — underpowered chi-square tests are common in applied research.

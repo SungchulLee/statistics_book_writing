@@ -118,3 +118,57 @@ else:
 - Still uses the group mean, which is sensitive to outliers and skewness. The Brown-Forsythe modification addresses this by using the median.
 - The $F$-distribution approximation is asymptotic; very small samples may show some size distortion.
 - Less powerful than Bartlett's test when the data are truly normal.
+
+## Exercises
+
+**Exercise 1.**
+Three different teaching methods are applied to three groups of students. After the semester, the students' scores are recorded as follows:
+
+- **Group 1:** $[78, 82, 85, 90, 87]$
+- **Group 2:** $[65, 70, 72, 68, 74]$
+- **Group 3:** $[92, 88, 94, 89, 91]$
+
+Use Levene's test to determine if the variances in the test scores are equal across the three groups.
+
+??? success "Solution to Exercise 1"
+
+    **Hypotheses:**
+
+    - Null Hypothesis ($H_0$): The variances are equal across the three groups.
+    - Alternative Hypothesis ($H_1$): At least one group has a variance that differs from the others.
+
+    **Test Statistic:**
+
+    Levene's test calculates the absolute deviations from the group medians and tests whether the variance of these deviations differs across groups.
+
+    **Python Implementation:**
+
+    ```python
+    from scipy.stats import levene
+
+    # Test scores for the three groups
+    group1 = [78, 82, 85, 90, 87]
+    group2 = [65, 70, 72, 68, 74]
+    group3 = [92, 88, 94, 89, 91]
+
+    # Perform Levene's test
+    statistic, p_value = levene(group1, group2, group3)
+
+    print(f"Levene's test statistic: {statistic}")
+    print(f"P-value: {p_value}")
+    ```
+
+    **Interpretation:**
+
+    If the p-value is less than $0.05$, reject the null hypothesis and conclude that the variances are not equal across the groups.
+
+---
+
+**Exercise 2.**
+Samples were drawn from two populations and analyzed. A Levene's test was performed, resulting in a high p-value (failure to reject $H_0$: equal variances). However, a t-test assuming equal variances yielded a p-value smaller than 0.001. How should these two test results be interpreted?
+
+??? success "Solution to Exercise 2"
+
+    - The Levene's test supports the assumption that the **variances are equal** across the two populations.
+    - The t-test result provides **strong evidence** that the **means** of the two populations are significantly different.
+    - These results are not contradictory — two populations can have equal variances while having very different means. The Levene's test validates the equal-variance assumption used in the t-test, which strengthens the conclusion that the observed mean difference is genuine.

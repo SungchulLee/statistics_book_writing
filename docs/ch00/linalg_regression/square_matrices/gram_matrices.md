@@ -123,3 +123,53 @@ When $\mathbf{X}$ is the centered data matrix (observations minus column means),
 ## Summary
 
 The Gram matrix $\mathbf{X}^T\mathbf{X}$ collects all pairwise inner products of the columns of $\mathbf{X}$ into a symmetric positive semi-definite matrix. It is positive definite exactly when the columns are linearly independent, which is the condition for OLS to have a unique solution. The eigenvalues of the Gram matrix control the numerical stability of regression through the condition number, and its off-diagonal structure measures the correlation among predictors.
+
+## Exercises
+
+**Exercise 1.**
+Let $\mathbf{X} = \begin{pmatrix} 1 & 2 \\ 1 & 3 \\ 1 & 5 \end{pmatrix}$. Compute the Gram matrix $\mathbf{X}^T\mathbf{X}$ and verify that it is symmetric and positive definite.
+
+??? success "Solution to Exercise 1"
+    $$
+    \mathbf{X}^T\mathbf{X} = \begin{pmatrix} 1 & 1 & 1 \\ 2 & 3 & 5 \end{pmatrix}\begin{pmatrix} 1 & 2 \\ 1 & 3 \\ 1 & 5 \end{pmatrix} = \begin{pmatrix} 3 & 10 \\ 10 & 38 \end{pmatrix}
+    $$
+
+    Symmetry is immediate from $(\mathbf{X}^T\mathbf{X})^T = \mathbf{X}^T\mathbf{X}$. For positive definiteness, the leading minors are $3 > 0$ and $\det = 3 \times 38 - 10^2 = 114 - 100 = 14 > 0$, so $\mathbf{X}^T\mathbf{X}$ is positive definite. Equivalently, $\mathbf{X}$ has rank 2 (the two columns are linearly independent), so $\mathbf{X}^T\mathbf{X}$ is positive definite.
+
+---
+
+**Exercise 2.**
+Prove that $\mathbf{X}^T\mathbf{X}$ is always positive semi-definite for any real matrix $\mathbf{X}$, and that it is positive definite if and only if $\mathbf{X}$ has full column rank.
+
+??? success "Solution to Exercise 2"
+    For any vector $\mathbf{v} \neq \mathbf{0}$:
+
+    $$
+    \mathbf{v}^T(\mathbf{X}^T\mathbf{X})\mathbf{v} = (\mathbf{X}\mathbf{v})^T(\mathbf{X}\mathbf{v}) = \lVert \mathbf{X}\mathbf{v} \rVert^2 \geq 0
+    $$
+
+    This is zero if and only if $\mathbf{X}\mathbf{v} = \mathbf{0}$, i.e., $\mathbf{v} \in \ker(\mathbf{X})$. If $\mathbf{X}$ has full column rank, $\ker(\mathbf{X}) = \{\mathbf{0}\}$, so $\mathbf{v}^T(\mathbf{X}^T\mathbf{X})\mathbf{v} > 0$ for all $\mathbf{v} \neq \mathbf{0}$, which is positive definiteness. Conversely, if $\mathbf{X}$ does not have full column rank, there exists $\mathbf{v} \neq \mathbf{0}$ with $\mathbf{X}\mathbf{v} = \mathbf{0}$, making the quadratic form zero. $\square$
+
+---
+
+**Exercise 3.**
+If the columns of $\mathbf{X}$ are nearly collinear, explain how the condition number of $\mathbf{X}^T\mathbf{X}$ relates to the stability of OLS estimates. What is the condition number in terms of eigenvalues?
+
+??? success "Solution to Exercise 3"
+    The condition number of $\mathbf{X}^T\mathbf{X}$ is $\kappa = \lambda_{\max}/\lambda_{\min}$, where $\lambda_{\max}$ and $\lambda_{\min}$ are the largest and smallest eigenvalues.
+
+    When columns are nearly collinear, $\lambda_{\min}$ is close to zero, making $\kappa$ very large. Since $\operatorname{Var}(\hat{\boldsymbol{\beta}}) = \sigma^2(\mathbf{X}^T\mathbf{X})^{-1}$ and the eigenvalues of $(\mathbf{X}^T\mathbf{X})^{-1}$ are $1/\lambda_i$, a small $\lambda_{\min}$ produces a large variance $\sigma^2/\lambda_{\min}$ in the direction of the corresponding eigenvector. A large condition number also means small perturbations to $\mathbf{y}$ cause large changes in $\hat{\boldsymbol{\beta}}$, making the estimates numerically unstable.
+
+---
+
+**Exercise 4.**
+Show that the sample covariance matrix $\mathbf{S} = \frac{1}{n-1}\mathbf{X}_c^T\mathbf{X}_c$ (where $\mathbf{X}_c$ is the mean-centered data matrix) is positive semi-definite. Under what condition is it positive definite?
+
+??? success "Solution to Exercise 4"
+    Since $\mathbf{S} = \frac{1}{n-1}\mathbf{X}_c^T\mathbf{X}_c$ is a positive scalar multiple of a Gram matrix, it inherits positive semi-definiteness:
+
+    $$
+    \mathbf{v}^T\mathbf{S}\mathbf{v} = \frac{1}{n-1}\lVert \mathbf{X}_c \mathbf{v} \rVert^2 \geq 0
+    $$
+
+    $\mathbf{S}$ is positive definite if and only if $\mathbf{X}_c$ has full column rank, which requires $n - 1 \geq p$ (since centering reduces the rank by at most 1). In practice, this means we need more observations than variables ($n > p$) for the sample covariance matrix to be invertible. When $p > n$, $\mathbf{S}$ is singular and techniques like regularization or dimensionality reduction are needed. $\square$

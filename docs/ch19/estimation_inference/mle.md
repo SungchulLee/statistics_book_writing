@@ -1,9 +1,6 @@
 # Maximum Likelihood Estimation
 
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Gradient of the Cross-Entropy Loss
 
 The cross-entropy loss is
@@ -22,6 +19,7 @@ $$
 \frac{\partial\ell}{\partial\boldsymbol{\theta}}
 = -\sum_{i=1}^{n}\left[
   \frac{y^{(i)}}{\sigma^{(i)}}\,\sigma^{(i)}(1-\sigma^{(i)})\,A[i,:]^T
+
   - \frac{1-y^{(i)}}{1-\sigma^{(i)}}\,\sigma^{(i)}(1-\sigma^{(i)})\,A[i,:]^T
 \right]
 $$
@@ -111,6 +109,7 @@ step. This procedure is known as **iteratively reweighted least squares
 (IRLS)** (Rubin, 1983).
 
 !!! info "IRLS Algorithm"
+
     1. Initialize $\boldsymbol{\theta}_0$.
     2. Compute $\boldsymbol{\sigma} = \sigma(A\boldsymbol{\theta}_0)$.
     3. Form $B = \operatorname{diag}(\sigma^{(i)}(1-\sigma^{(i)}))$.
@@ -222,3 +221,41 @@ Scikit-learn's `LogisticRegression` uses L-BFGS (a quasi-Newton method)
 by default, which approximates the Hessian without forming or inverting
 it explicitly. For small datasets the `solver='newton-cg'` option gives
 exact Newton steps, equivalent to IRLS.
+
+## Exercises
+
+**Exercise 1.**
+MLE for Logistic Regression
+
+Given 4 observations: $(x_1, y_1) = (1, 0)$, $(x_2, y_2) = (2, 0)$, $(x_3, y_3) = (3, 1)$, $(x_4, y_4) = (4, 1)$ with model $\log\frac{p}{1-p} = \beta_0 + \beta_1 x$.
+
+**(a)** Write the log-likelihood as a function of $\beta_0$ and $\beta_1$.
+
+**(b)** Explain why there is no closed-form solution and numerical optimization is needed.
+
+**(c)** Use Python to find $\hat{\beta}_0$ and $\hat{\beta}_1$.
+
+??? success "Solution to Exercise 1"
+
+    **(a)** $p_i = \frac{1}{1 + e^{-(\beta_0 + \beta_1 x_i)}}$
+
+    $\ell(\beta_0, \beta_1) = \sum_{i=1}^4 \left[y_i \log p_i + (1-y_i)\log(1-p_i)\right]$
+
+    $= \log(1-p_1) + \log(1-p_2) + \log p_3 + \log p_4$
+
+    **(b)** The score equations $\frac{\partial \ell}{\partial \beta_0} = 0$ and $\frac{\partial \ell}{\partial \beta_1} = 0$ involve $p_i$, which is a nonlinear function of $\beta$. The equations cannot be solved algebraically.
+
+    **(c)**
+
+    ```python
+    from sklearn.linear_model import LogisticRegression
+    import numpy as np
+
+    X = np.array([[1], [2], [3], [4]])
+    y = np.array([0, 0, 1, 1])
+
+    model = LogisticRegression(penalty=None, solver='lbfgs')
+    model.fit(X, y)
+    print(f"β₀ = {model.intercept_[0]:.4f}")
+    print(f"β₁ = {model.coef_[0][0]:.4f}")
+    ```

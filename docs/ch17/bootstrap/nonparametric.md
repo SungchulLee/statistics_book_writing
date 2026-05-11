@@ -116,3 +116,14 @@ The Monte Carlo standard error of the bootstrap standard error is approximately 
 ## Summary
 
 The nonparametric bootstrap replaces the unknown population distribution with the empirical distribution and uses repeated resampling to approximate the sampling distribution of any statistic. It requires no distributional assumptions and provides estimates of standard errors, bias, and distributional shape that would be analytically intractable for most statistics. The method is consistent under regularity conditions and serves as the foundation for the bootstrap confidence intervals and hypothesis tests developed in subsequent sections.
+
+## Exercises
+
+**Exercise 1.**
+A bootstrap sample of size $n$ drawn from a dataset of size $n$ contains, on average, only about 63.2% of the unique original observations.
+
+(a) Derive this result. (Hint: The probability that observation $i$ is *not* selected in any of the $n$ draws is $(1 - 1/n)^n$.)
+
+(b) What happens to this percentage as $n \to \infty$?
+
+(c) The "out-of-bag" observations (those not in the bootstrap sample) are used in random forests for validation. Why does this work?

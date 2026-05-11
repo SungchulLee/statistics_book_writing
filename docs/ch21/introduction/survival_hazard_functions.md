@@ -170,3 +170,30 @@ $$
     whether default risk peaks in the first year or grows steadily.  The
     survival function answers cumulative questions; the hazard function answers
     instantaneous questions about risk dynamics.
+
+## Exercises
+
+**Exercise 1.**
+Survival and Hazard Function Relationships
+
+A continuous random variable $T$ has hazard function $h(t) = 0.05$ for all
+$t \geq 0$.
+
+**(a)** Identify the distribution of $T$ and state its parameter.
+
+**(b)** Compute the survival function $S(t)$ and evaluate $S(10)$.
+
+**(c)** Compute the cumulative hazard $H(20)$.
+
+**(d)** What is the median survival time?
+
+??? success "Solution to Exercise 1"
+
+    **(a)** The constant hazard $h(t) = 0.05$ implies $T \sim \text{Exp}(\lambda = 0.05)$.
+
+    **(b)** $S(t) = e^{-0.05t}$, so $S(10) = e^{-0.5} \approx 0.607$.
+
+    **(c)** $H(20) = 0.05 \times 20 = 1.0$.
+
+    **(d)** Solve $S(t_{0.5}) = 0.5$: $e^{-0.05 t_{0.5}} = 0.5$, so
+    $t_{0.5} = \ln(2)/0.05 = 13.86$.

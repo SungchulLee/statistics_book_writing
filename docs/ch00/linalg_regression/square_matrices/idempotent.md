@@ -1,10 +1,10 @@
 # Idempotent Matrices
 
-An operation that produces the same result when applied twice is called **idempotent**. In matrix algebra, idempotent matrices satisfy $\mathbf{A}^2 = \mathbf{A}$: applying the transformation a second time does nothing new. This property characterizes projections, and projection matrices are everywhere in regression. The hat matrix $\mathbf{H}$ that produces fitted values and the residual-maker matrix $\mathbf{M} = \mathbf{I} - \mathbf{H}$ that produces residuals are both idempotent. The eigenvalue structure of idempotent matrices (only 0s and 1s) directly yields degrees-of-freedom counts in ANOVA and regression theory.
+An operation that produces the same result when applied twice is called **idempotent**. In matrix algebra, idempotent matrices satisfy $\mathbf{A}^2 = \mathbf{A}$: applying the transformation a second time changes nothing. This property characterizes projections, and projection matrices are everywhere in regression. The hat matrix $\mathbf{H}$ that produces fitted values and the residual-maker matrix $\mathbf{M} = \mathbf{I} - \mathbf{H}$ that produces residuals are both idempotent. Their eigenvalues are restricted to $\{0, 1\}$, which translates directly into degrees-of-freedom counts in ANOVA and regression theory.
 
 ## Definition
 
-!!! info "Definition -- Idempotent Matrix"
+!!! info "Definition — Idempotent Matrix"
     A square matrix $\mathbf{A} \in \mathbb{R}^{n \times n}$ is **idempotent** if
 
     $$
@@ -17,35 +17,33 @@ The identity matrix $\mathbf{I}$ and the zero matrix $\mathbf{0}$ are trivially 
 
 ## Eigenvalues of Idempotent Matrices
 
-!!! tip "Theorem -- Eigenvalues Are 0 or 1"
+!!! tip "Theorem — Eigenvalues Are 0 or 1"
     If $\mathbf{A}$ is idempotent and $\lambda$ is an eigenvalue of $\mathbf{A}$, then $\lambda \in \{0, 1\}$.
 
-**Proof.** Let $\mathbf{A}\mathbf{v} = \lambda\mathbf{v}$ with $\mathbf{v} \neq \mathbf{0}$. Then
+**Proof.** Let $\mathbf{A}\mathbf{v} = \lambda\mathbf{v}$ with $\mathbf{v} \ne \mathbf{0}$. Then
 
 $$
-\mathbf{A}^2\mathbf{v} = \mathbf{A}(\mathbf{A}\mathbf{v}) = \mathbf{A}(\lambda\mathbf{v}) = \lambda\mathbf{A}\mathbf{v} = \lambda^2\mathbf{v}
+\mathbf{A}^2\mathbf{v} = \mathbf{A}(\lambda\mathbf{v}) = \lambda^2 \mathbf{v}
 $$
 
-Since $\mathbf{A}^2 = \mathbf{A}$, we also have $\mathbf{A}^2\mathbf{v} = \mathbf{A}\mathbf{v} = \lambda\mathbf{v}$. Equating the two expressions gives $\lambda^2\mathbf{v} = \lambda\mathbf{v}$, so $(\lambda^2 - \lambda)\mathbf{v} = \mathbf{0}$. Since $\mathbf{v} \neq \mathbf{0}$, we must have $\lambda^2 - \lambda = 0$, which gives $\lambda(\lambda - 1) = 0$. $\square$
+But $\mathbf{A}^2 = \mathbf{A}$ also gives $\mathbf{A}^2\mathbf{v} = \mathbf{A}\mathbf{v} = \lambda\mathbf{v}$. Equating: $(\lambda^2 - \lambda)\mathbf{v} = \mathbf{0}$, so $\lambda(\lambda - 1) = 0$. $\square$
 
 ## Trace Equals Rank
 
-!!! tip "Theorem -- Trace-Rank Identity for Idempotent Matrices"
+!!! tip "Theorem — Trace-Rank Identity for Idempotent Matrices"
     If $\mathbf{A} \in \mathbb{R}^{n \times n}$ is idempotent, then
 
     $$
     \operatorname{tr}(\mathbf{A}) = \operatorname{rank}(\mathbf{A})
     $$
 
-**Proof.** Since the eigenvalues of $\mathbf{A}$ are either 0 or 1, and $\operatorname{tr}(\mathbf{A}) = \sum_{i=1}^n \lambda_i$, the trace counts the number of eigenvalues equal to 1. The rank of a matrix equals the number of nonzero eigenvalues (counted with algebraic multiplicity). For an idempotent matrix, the nonzero eigenvalues are exactly the eigenvalues equal to 1. Therefore $\operatorname{tr}(\mathbf{A}) = \operatorname{rank}(\mathbf{A})$. $\square$
+**Proof.** The trace equals the sum of eigenvalues (with multiplicity). Eigenvalues are 0 or 1, so the trace counts the number of $1$'s — which equals the dimension of the eigenvalue-1 eigenspace. For an idempotent matrix, this eigenspace is exactly the column space (Exercise 1), so its dimension equals the rank. $\square$
 
-This result has a direct statistical interpretation: the trace of the hat matrix equals the number of parameters, and the trace of the residual-maker matrix equals the residual degrees of freedom.
+This identity has a direct statistical interpretation: the trace of the hat matrix equals the number of estimated parameters, and the trace of the residual-maker matrix equals the residual degrees of freedom.
 
 ## Key Properties
 
-Several useful properties follow directly from the definition.
-
-### Complement Is Idempotent
+### Complement is idempotent
 
 If $\mathbf{A}$ is idempotent, then $\mathbf{I} - \mathbf{A}$ is also idempotent:
 
@@ -53,72 +51,172 @@ $$
 (\mathbf{I} - \mathbf{A})^2 = \mathbf{I} - 2\mathbf{A} + \mathbf{A}^2 = \mathbf{I} - 2\mathbf{A} + \mathbf{A} = \mathbf{I} - \mathbf{A}
 $$
 
-This is the algebraic reason that both the hat matrix $\mathbf{H}$ and the residual-maker $\mathbf{I} - \mathbf{H}$ are projections.
+This is why both the hat matrix $\mathbf{H}$ and the residual-maker $\mathbf{I} - \mathbf{H}$ are projections.
 
-### Rank Complement
+### Rank decomposition
 
-Since $\operatorname{tr}(\mathbf{I} - \mathbf{A}) = n - \operatorname{tr}(\mathbf{A})$:
-
-$$
-\operatorname{rank}(\mathbf{I} - \mathbf{A}) = n - \operatorname{rank}(\mathbf{A})
-$$
-
-### Product of Commuting Idempotent Matrices
-
-If $\mathbf{A}$ and $\mathbf{B}$ are both idempotent and $\mathbf{A}\mathbf{B} = \mathbf{B}\mathbf{A}$, then $\mathbf{A}\mathbf{B}$ is idempotent:
+Combining trace-rank with linearity of trace:
 
 $$
-(\mathbf{A}\mathbf{B})^2 = \mathbf{A}\mathbf{B}\mathbf{A}\mathbf{B} = \mathbf{A}\mathbf{A}\mathbf{B}\mathbf{B} = \mathbf{A}^2\mathbf{B}^2 = \mathbf{A}\mathbf{B}
+\operatorname{rank}(\mathbf{A}) + \operatorname{rank}(\mathbf{I} - \mathbf{A}) = \operatorname{tr}(\mathbf{A}) + \operatorname{tr}(\mathbf{I} - \mathbf{A}) = \operatorname{tr}(\mathbf{I}) = n
 $$
 
-### Column Space Is the Set of Fixed Points
+### Column space is the set of fixed points
 
-A vector $\mathbf{x}$ is in the column space of an idempotent matrix $\mathbf{A}$ if and only if $\mathbf{A}\mathbf{x} = \mathbf{x}$. That is, the column space of $\mathbf{A}$ is exactly the set of vectors that are unchanged by the transformation.
+A vector $\mathbf{x}$ lies in the column space of an idempotent $\mathbf{A}$ if and only if $\mathbf{A}\mathbf{x} = \mathbf{x}$. The column space is exactly the eigenvalue-1 eigenspace; the null space is the eigenvalue-0 eigenspace. The two together decompose $\mathbb{R}^n$.
 
-**Proof.** If $\mathbf{x} = \mathbf{A}\mathbf{y}$ for some $\mathbf{y}$, then $\mathbf{A}\mathbf{x} = \mathbf{A}^2\mathbf{y} = \mathbf{A}\mathbf{y} = \mathbf{x}$. Conversely, if $\mathbf{A}\mathbf{x} = \mathbf{x}$, then $\mathbf{x}$ is in the column space of $\mathbf{A}$ (take $\mathbf{y} = \mathbf{x}$). $\square$
+### Diagonalizability
+
+Every idempotent matrix is diagonalizable. Reason: its minimal polynomial divides $\lambda^2 - \lambda = \lambda(\lambda - 1)$, which has distinct roots; a matrix is diagonalizable iff its minimal polynomial has distinct roots.
+
+### Product of commuting idempotents
+
+If $\mathbf{A}$ and $\mathbf{B}$ are idempotent and $\mathbf{A}\mathbf{B} = \mathbf{B}\mathbf{A}$, then $\mathbf{A}\mathbf{B}$ is idempotent. (Without commutativity this can fail.)
 
 ## Example
 
-Consider the $3 \times 3$ matrix
+Consider
 
 $$
-\mathbf{A} = \frac{1}{3}\begin{pmatrix} 1 & 1 & 1 \\ 1 & 1 & 1 \\ 1 & 1 & 1 \end{pmatrix}
+\mathbf{A} = \frac{1}{3}\begin{pmatrix} 1 & 1 & 1 \\ 1 & 1 & 1 \\ 1 & 1 & 1 \end{pmatrix} = \frac{1}{3} \mathbf{1}\mathbf{1}^T
 $$
 
-**Idempotency check:** Each row of $\mathbf{A}$ is $\frac{1}{3}(1, 1, 1)$, and multiplying $\mathbf{A}$ by any column of $\mathbf{A}$ yields $\frac{1}{3} \cdot \frac{1}{3}(1 + 1 + 1) = \frac{1}{3}$, so $\mathbf{A}^2 = \mathbf{A}$.
+**Idempotency:** $\mathbf{A}^2 = \frac{1}{9}\mathbf{1}\mathbf{1}^T\mathbf{1}\mathbf{1}^T = \frac{1}{9}\mathbf{1}(3)\mathbf{1}^T = \frac{1}{3}\mathbf{1}\mathbf{1}^T = \mathbf{A}$.
 
-**Trace and rank:** $\operatorname{tr}(\mathbf{A}) = \frac{1}{3} + \frac{1}{3} + \frac{1}{3} = 1 = \operatorname{rank}(\mathbf{A})$.
+**Trace and rank:** $\operatorname{tr}(\mathbf{A}) = 1 = \operatorname{rank}(\mathbf{A})$.
 
-**Eigenvalues:** The eigenvalues are $\lambda_1 = 1$ (with eigenvector $(1, 1, 1)^T$) and $\lambda_2 = \lambda_3 = 0$.
+**Eigenvalues:** $\lambda_1 = 1$ with eigenvector $(1,1,1)^T$; $\lambda_2 = \lambda_3 = 0$ with eigenspace orthogonal to $(1,1,1)^T$.
 
-**Geometric interpretation:** This matrix projects every vector onto the span of $\mathbf{1}_3 = (1, 1, 1)^T$, mapping any vector to the vector whose entries are all equal to the mean of the original entries. In regression, this is the hat matrix for the intercept-only model.
+**Geometric interpretation:** $\mathbf{A}$ projects every vector onto the span of $\mathbf{1}$ — it replaces each entry of $\mathbf{x}$ with the sample mean. This is the hat matrix of the intercept-only regression model.
 
 ## Idempotent Matrices in Regression
 
-### The Hat Matrix
+### The hat matrix
 
-In the linear model $\mathbf{y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon}$ with design matrix $\mathbf{X} \in \mathbb{R}^{n \times p}$ of full column rank:
+In the linear model $\mathbf{y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon}$ with $\mathbf{X} \in \mathbb{R}^{n \times p}$ of full column rank,
 
 $$
 \mathbf{H} = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T
 $$
 
-The hat matrix satisfies $\mathbf{H}^2 = \mathbf{H}$ (idempotent) and $\mathbf{H}^T = \mathbf{H}$ (symmetric). Its trace gives the number of parameters: $\operatorname{tr}(\mathbf{H}) = p$.
+is symmetric and idempotent. Its trace gives the number of parameters: $\operatorname{tr}(\mathbf{H}) = p$ (Exercise 4).
 
-### The Residual-Maker Matrix
+### The residual-maker matrix
 
-The residual vector is $\mathbf{e} = \mathbf{y} - \hat{\mathbf{y}} = (\mathbf{I} - \mathbf{H})\mathbf{y} = \mathbf{M}\mathbf{y}$. The matrix $\mathbf{M} = \mathbf{I} - \mathbf{H}$ is idempotent with $\operatorname{tr}(\mathbf{M}) = n - p$, which is the residual degrees of freedom.
+$\mathbf{M} = \mathbf{I} - \mathbf{H}$ is symmetric and idempotent with $\operatorname{tr}(\mathbf{M}) = n - p$, the residual degrees of freedom. Residuals are $\mathbf{e} = \mathbf{M}\mathbf{y}$.
 
-### Degrees of Freedom via Trace
+### ANOVA decomposition
 
-The ANOVA decomposition
+The Pythagorean decomposition $\mathbf{y} = \mathbf{H}\mathbf{y} + \mathbf{M}\mathbf{y}$ with $\mathbf{H}\mathbf{M} = \mathbf{0}$ gives
 
 $$
-\mathbf{y}^T\mathbf{y} = \hat{\mathbf{y}}^T\hat{\mathbf{y}} + \mathbf{e}^T\mathbf{e}
+\|\mathbf{y}\|^2 = \|\mathbf{H}\mathbf{y}\|^2 + \|\mathbf{M}\mathbf{y}\|^2
 $$
 
-(when the model includes an intercept and we center $\mathbf{y}$) splits the total sum of squares into model and residual sums of squares. The degrees of freedom associated with each term are $\operatorname{tr}(\mathbf{H}) = p$ and $\operatorname{tr}(\mathbf{M}) = n - p$, summing to $n$.
+— the sum-of-squares identity whose degrees of freedom are $\operatorname{tr}(\mathbf{H}) = p$ and $\operatorname{tr}(\mathbf{M}) = n - p$, summing to $n$.
 
 ## Summary
 
-Idempotent matrices satisfy $\mathbf{A}^2 = \mathbf{A}$, have eigenvalues restricted to 0 and 1, and obey $\operatorname{tr}(\mathbf{A}) = \operatorname{rank}(\mathbf{A})$. The complement $\mathbf{I} - \mathbf{A}$ is also idempotent with complementary rank. In regression, the hat matrix and residual-maker matrix are both idempotent, and their traces directly give the degrees of freedom used in F-tests, t-tests, and confidence intervals.
+Idempotent matrices satisfy $\mathbf{A}^2 = \mathbf{A}$, have eigenvalues restricted to $\{0, 1\}$, and obey $\operatorname{tr}(\mathbf{A}) = \operatorname{rank}(\mathbf{A})$. The complement $\mathbf{I} - \mathbf{A}$ is also idempotent. In regression, both the hat matrix and the residual-maker are idempotent, and their traces directly give the degrees of freedom used in F-tests, t-tests, and confidence intervals.
+
+## Exercises
+
+**Exercise 1.**
+Let $\mathbf{A}$ be idempotent. Prove that $\mathbf{x} \in \operatorname{Col}(\mathbf{A})$ if and only if $\mathbf{A}\mathbf{x} = \mathbf{x}$.
+
+??? success "Solution to Exercise 1"
+    ($\Rightarrow$) If $\mathbf{x} \in \operatorname{Col}(\mathbf{A})$, write $\mathbf{x} = \mathbf{A}\mathbf{y}$. Then $\mathbf{A}\mathbf{x} = \mathbf{A}^2 \mathbf{y} = \mathbf{A}\mathbf{y} = \mathbf{x}$.
+
+    ($\Leftarrow$) If $\mathbf{A}\mathbf{x} = \mathbf{x}$, then $\mathbf{x}$ is expressed as $\mathbf{A}$ times $\mathbf{x}$ itself, so $\mathbf{x} \in \operatorname{Col}(\mathbf{A})$. $\square$
+
+    Consequence: the column space coincides with the eigenvalue-1 eigenspace, and the null space coincides with the eigenvalue-0 eigenspace. The two are complementary subspaces of $\mathbb{R}^n$.
+
+---
+
+**Exercise 2.**
+Prove that if $\mathbf{A}$ is idempotent, then so is $\mathbf{I} - \mathbf{A}$. What is $\operatorname{rank}(\mathbf{I} - \mathbf{A})$ in terms of $\operatorname{rank}(\mathbf{A})$?
+
+??? success "Solution to Exercise 2"
+    Direct computation:
+
+    $$
+    (\mathbf{I} - \mathbf{A})^2 = \mathbf{I} - 2\mathbf{A} + \mathbf{A}^2 = \mathbf{I} - 2\mathbf{A} + \mathbf{A} = \mathbf{I} - \mathbf{A}
+    $$
+
+    By the trace-rank identity, $\operatorname{rank}(\mathbf{I} - \mathbf{A}) = \operatorname{tr}(\mathbf{I} - \mathbf{A}) = n - \operatorname{tr}(\mathbf{A}) = n - \operatorname{rank}(\mathbf{A})$. $\square$
+
+---
+
+**Exercise 3.**
+Prove that every idempotent matrix is diagonalizable. Give one example of a non-symmetric idempotent matrix.
+
+??? success "Solution to Exercise 3"
+    The minimal polynomial of an idempotent $\mathbf{A}$ divides $\lambda^2 - \lambda = \lambda(\lambda - 1)$, which factors into distinct linear factors. A matrix is diagonalizable iff its minimal polynomial splits into distinct linear factors. Hence $\mathbf{A}$ is diagonalizable.
+
+    Non-symmetric example:
+
+    $$
+    \mathbf{A} = \begin{pmatrix} 1 & 1 \\ 0 & 0 \end{pmatrix}, \quad \mathbf{A}^2 = \begin{pmatrix} 1 & 1 \\ 0 & 0 \end{pmatrix} = \mathbf{A}
+    $$
+
+    Eigenvalues: $1$ with eigenvector $(1, 0)^T$ and $0$ with eigenvector $(-1, 1)^T$. The matrix projects onto the $x$-axis along the line $y = -x$ — an **oblique** (non-orthogonal) projection.
+
+---
+
+**Exercise 4.**
+For the hat matrix $\mathbf{H} = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T$ with $\mathbf{X} \in \mathbb{R}^{n \times p}$ of full column rank, prove that $\mathbf{H}$ is symmetric and idempotent, and that $\operatorname{tr}(\mathbf{H}) = p$.
+
+??? success "Solution to Exercise 4"
+    **Symmetric:** $\mathbf{X}^T\mathbf{X}$ is symmetric, hence so is its inverse. Therefore
+
+    $$
+    \mathbf{H}^T = \mathbf{X}\bigl[(\mathbf{X}^T\mathbf{X})^{-1}\bigr]^T \mathbf{X}^T = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T = \mathbf{H}
+    $$
+
+    **Idempotent:**
+
+    $$
+    \mathbf{H}^2 = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\underbrace{\mathbf{X}^T\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}}_{\mathbf{I}_p}\mathbf{X}^T = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T = \mathbf{H}
+    $$
+
+    **Trace:** by the cyclic property of trace,
+
+    $$
+    \operatorname{tr}(\mathbf{H}) = \operatorname{tr}\!\bigl((\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}\bigr) = \operatorname{tr}(\mathbf{I}_p) = p
+    $$
+
+    $\square$
+
+---
+
+**Exercise 5.**
+Show that $\mathbf{H}\mathbf{X} = \mathbf{X}$ and $\mathbf{M}\mathbf{X} = \mathbf{0}$ for $\mathbf{M} = \mathbf{I} - \mathbf{H}$. Interpret each statement geometrically.
+
+??? success "Solution to Exercise 5"
+    Compute directly:
+
+    $$
+    \mathbf{H}\mathbf{X} = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X} = \mathbf{X}, \qquad \mathbf{M}\mathbf{X} = (\mathbf{I} - \mathbf{H})\mathbf{X} = \mathbf{X} - \mathbf{X} = \mathbf{0}
+    $$
+
+    **Geometric meaning of $\mathbf{H}\mathbf{X} = \mathbf{X}$:** each column of $\mathbf{X}$ already lies in the column space of $\mathbf{X}$, so projecting it onto that space leaves it unchanged. $\mathbf{H}$ acts as the identity on $\operatorname{Col}(\mathbf{X})$.
+
+    **Geometric meaning of $\mathbf{M}\mathbf{X} = \mathbf{0}$:** residuals are orthogonal to the column space of $\mathbf{X}$. This is precisely the normal-equation condition $\mathbf{X}^T \mathbf{e} = \mathbf{0}$ that defines OLS: the fitted values capture all of the linear signal in $\mathbf{X}$, leaving nothing in the residuals that can be explained by any column of $\mathbf{X}$.
+
+---
+
+**Exercise 6.**
+Let $\mathbf{A}, \mathbf{B}$ be symmetric idempotent matrices in $\mathbb{R}^{n \times n}$ with $\mathbf{A}\mathbf{B} = \mathbf{0}$. Prove that $\mathbf{A} + \mathbf{B}$ is also symmetric idempotent, and that $\operatorname{rank}(\mathbf{A} + \mathbf{B}) = \operatorname{rank}(\mathbf{A}) + \operatorname{rank}(\mathbf{B})$. (This is the foundation of Cochran's theorem, which decomposes $\chi^2$ statistics in ANOVA.)
+
+??? success "Solution to Exercise 6"
+    **Symmetry:** $(\mathbf{A} + \mathbf{B})^T = \mathbf{A}^T + \mathbf{B}^T = \mathbf{A} + \mathbf{B}$.
+
+    **Idempotency:** Note $\mathbf{A}\mathbf{B} = \mathbf{0}$ implies $\mathbf{B}\mathbf{A} = (\mathbf{A}\mathbf{B})^T = \mathbf{0}$ (using symmetry). Then
+
+    $$
+    (\mathbf{A} + \mathbf{B})^2 = \mathbf{A}^2 + \mathbf{A}\mathbf{B} + \mathbf{B}\mathbf{A} + \mathbf{B}^2 = \mathbf{A} + \mathbf{0} + \mathbf{0} + \mathbf{B} = \mathbf{A} + \mathbf{B}
+    $$
+
+    **Rank:** by the trace-rank identity, $\operatorname{rank}(\mathbf{A} + \mathbf{B}) = \operatorname{tr}(\mathbf{A} + \mathbf{B}) = \operatorname{tr}(\mathbf{A}) + \operatorname{tr}(\mathbf{B}) = \operatorname{rank}(\mathbf{A}) + \operatorname{rank}(\mathbf{B})$. $\square$
+
+    Statistical use: in the ANOVA decomposition $\mathbf{y} = \mathbf{P}_1\mathbf{y} + \mathbf{P}_2\mathbf{y} + \cdots$ with mutually orthogonal projection matrices $\mathbf{P}_i$, this exercise guarantees that the ranks (and therefore the $\chi^2$ degrees of freedom) add up to $n$.

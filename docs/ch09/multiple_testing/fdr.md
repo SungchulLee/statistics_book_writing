@@ -192,3 +192,75 @@ def benjamini_hochberg(p_values, alpha=0.05):
 - For the definition of FWER and why unadjusted testing is problematic, see [Family-Wise Error Rate](fwer.md).
 - For FWER-controlling procedures (Bonferroni and Holm), see [Bonferroni and Holm Corrections](bonferroni_holm.md).
 - The BH procedure is implemented in `scipy.stats.false_discovery_control` (SciPy 1.11+) and `statsmodels.stats.multitest.multipletests`.
+
+## Exercises
+
+**Exercise 1.**
+Apply the Benjamini-Hochberg (BH) procedure at FDR level $q = 0.10$ to the following 6 p-values: 0.001, 0.008, 0.039, 0.041, 0.23, 0.76. Which hypotheses are rejected?
+
+??? success "Solution to Exercise 1"
+    Sort the p-values and compute BH thresholds $q \cdot j/m$:
+
+    | Rank $j$ | $p_{(j)}$ | Threshold $q \cdot j/m = 0.10 \cdot j/6$ | $p_{(j)} \leq$ threshold? |
+    |---|---|---|---|
+    | 1 | 0.001 | 0.0167 | Yes |
+    | 2 | 0.008 | 0.0333 | Yes |
+    | 3 | 0.039 | 0.0500 | Yes |
+    | 4 | 0.041 | 0.0667 | Yes |
+    | 5 | 0.230 | 0.0833 | No |
+    | 6 | 0.760 | 0.1000 | No |
+
+    The largest $j$ with $p_{(j)} \leq q \cdot j/m$ is $j = 4$. Reject the 4 hypotheses corresponding to $p_{(1)}$ through $p_{(4)}$. Under BH with $q = 0.10$, the expected false discovery proportion among these 4 rejections is at most 10%.
+
+---
+
+**Exercise 2.**
+Define the False Discovery Rate (FDR) and explain how it differs from the Family-Wise Error Rate (FWER).
+
+??? success "Solution to Exercise 2"
+    The **FDR** is the expected proportion of false discoveries among all rejected hypotheses:
+
+    $$
+    \text{FDR} = E\!\left[\frac{V}{R \vee 1}\right]
+    $$
+
+    where $V$ is the number of false rejections, $R$ is the total number of rejections, and $R \vee 1 = \max(R, 1)$ avoids division by zero.
+
+    The **FWER** is the probability of making at least one false rejection: $\text{FWER} = P(V \geq 1)$.
+
+    Key differences:
+
+    - FWER is more stringent: it controls the probability of *any* false positive, while FDR allows some false positives as long as they are a small fraction of all discoveries.
+    - FDR is more powerful: it rejects more hypotheses because it tolerates a controlled rate of errors among discoveries.
+    - When all nulls are true ($m_0 = m$), FDR = FWER (since any rejection is false). When many alternatives are true, FDR $\ll$ FWER.
+    - FDR is preferred in large-scale testing (genomics, neuroimaging) where thousands of tests are performed and some false discoveries are acceptable.
+
+---
+
+**Exercise 3.**
+Prove that the BH procedure controls FDR at level $q$ when the test statistics are independent.
+
+??? success "Solution to Exercise 3"
+    Under independence, the BH procedure controls FDR at exactly $q \cdot m_0/m \leq q$, where $m_0$ is the number of true nulls.
+
+    The key insight: for each true null $H_i$, the p-value $p_i$ is Uniform$(0,1)$ and independent of the others. The BH procedure rejects $H_i$ when $p_i \leq q \cdot R_i/m$ for some data-dependent rank $R_i$.
+
+    The formal proof (Benjamini & Hochberg, 1995) proceeds by showing:
+
+    $$
+    \text{FDR} = E\!\left[\frac{V}{R \vee 1}\right] = \sum_{i \in \mathcal{H}_0} E\!\left[\frac{1}{R \vee 1} \cdot \mathbf{1}(H_i \text{ rejected})\right] = \frac{m_0}{m} \cdot q \leq q
+    $$
+
+    The final equality relies on the independence of p-values corresponding to true nulls from those corresponding to false nulls. $\square$
+
+---
+
+**Exercise 4.**
+A genomics study tests 10,000 genes. Using BH at $q = 0.05$, the procedure rejects 500 hypotheses. How many of these rejections are expected to be false discoveries? How would FWER control (Bonferroni) compare?
+
+??? success "Solution to Exercise 4"
+    Under BH at $q = 0.05$: the expected number of false discoveries is at most $q \times R = 0.05 \times 500 = 25$ genes. This means about 475 out of 500 discoveries are expected to be real.
+
+    Under Bonferroni at $\alpha = 0.05$: the per-test threshold is $0.05/10000 = 5 \times 10^{-6}$. Only p-values below this extremely stringent threshold are rejected. In practice, Bonferroni might reject only 20-50 genes (far fewer than 500), missing many true discoveries.
+
+    This illustrates the power advantage of FDR control: BH discovers 500 genes (accepting ~25 false) while Bonferroni discovers far fewer (accepting ~0 false). The choice depends on the cost of false discoveries versus missed discoveries.

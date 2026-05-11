@@ -134,3 +134,70 @@ Partial correlations are closely related to the coefficients and tests in multip
 ## Summary
 
 Partial correlation measures the linear association between two variables after controlling for one or more additional variables. It is computed either through a closed-form formula involving pairwise correlations or by correlating regression residuals. A large marginal correlation that vanishes (or shrinks substantially) after controlling for a third variable signals that the apparent association is driven by a common influence rather than a direct relationship. Partial correlation is essential for disentangling confounded relationships and forms the statistical foundation for many regression diagnostics.
+
+## Exercises
+
+**Exercise 1.**
+The correlations among three variables are $r_{XY} = 0.80$, $r_{XZ} = 0.90$, $r_{YZ} = 0.85$. Compute the partial correlation $r_{XY \cdot Z}$.
+
+??? success "Solution to Exercise 1"
+    The partial correlation formula is:
+
+    $$
+    r_{XY \cdot Z} = \frac{r_{XY} - r_{XZ} \cdot r_{YZ}}{\sqrt{(1 - r_{XZ}^2)(1 - r_{YZ}^2)}}
+    $$
+
+    Substituting:
+
+    $$
+    r_{XY \cdot Z} = \frac{0.80 - (0.90)(0.85)}{\sqrt{(1 - 0.81)(1 - 0.7225)}} = \frac{0.80 - 0.765}{\sqrt{0.19 \times 0.2775}} = \frac{0.035}{\sqrt{0.052725}} = \frac{0.035}{0.2296} \approx 0.152
+    $$
+
+    After controlling for $Z$, the correlation between $X$ and $Y$ drops from 0.80 to 0.15. Much of the apparent association was due to both variables' relationship with $Z$.
+
+---
+
+**Exercise 2.**
+Explain how partial correlation can be interpreted using residuals from linear regression.
+
+??? success "Solution to Exercise 2"
+    The partial correlation $r_{XY \cdot Z}$ equals the Pearson correlation between the residuals of two regressions:
+
+    1. Regress $X$ on $Z$ to get residuals $e_X = X - \hat{X}$ (the part of $X$ not explained by $Z$).
+    2. Regress $Y$ on $Z$ to get residuals $e_Y = Y - \hat{Y}$ (the part of $Y$ not explained by $Z$).
+
+    Then $r_{XY \cdot Z} = r(e_X, e_Y)$.
+
+    Intuitively, partial correlation removes the linear influence of $Z$ from both $X$ and $Y$, then measures the remaining linear association. If $Z$ completely accounts for the $X$-$Y$ relationship, the residuals will be uncorrelated ($r_{XY \cdot Z} = 0$). If $X$ and $Y$ have a direct relationship beyond what $Z$ explains, $r_{XY \cdot Z}$ will be nonzero.
+
+---
+
+**Exercise 3.**
+Give an example where the partial correlation $r_{XY \cdot Z}$ has the opposite sign of the marginal correlation $r_{XY}$.
+
+??? success "Solution to Exercise 3"
+    Consider: $Z$ causes both $X$ and $Y$ strongly and positively, but $X$ has a direct negative effect on $Y$.
+
+    Concretely: $Z = $ study hours, $X = $ caffeine consumption, $Y = $ sleep quality. Students who study more drink more coffee ($r_{XZ} > 0$) and have better grades that reduce anxiety, improving sleep ($r_{YZ} > 0$). This makes $r_{XY} > 0$ (both are associated with studying).
+
+    However, the direct effect of caffeine on sleep is negative. After controlling for study hours: $r_{XY \cdot Z} < 0$.
+
+    Numerically: if $r_{XY} = 0.40$, $r_{XZ} = 0.70$, $r_{YZ} = 0.65$:
+
+    $$
+    r_{XY \cdot Z} = \frac{0.40 - 0.455}{\sqrt{0.51 \times 0.5775}} = \frac{-0.055}{0.5427} \approx -0.101
+    $$
+
+    The sign reversal illustrates Simpson's paradox in correlation form.
+
+---
+
+**Exercise 4.**
+When is the partial correlation equal to zero even though the marginal correlation is nonzero? What does this imply about the relationship between $X$ and $Y$?
+
+??? success "Solution to Exercise 4"
+    The partial correlation $r_{XY \cdot Z} = 0$ when $r_{XY} = r_{XZ} \cdot r_{YZ}$ (the numerator of the partial correlation formula vanishes). This occurs when the entire association between $X$ and $Y$ is explained by their mutual relationship with $Z$.
+
+    This implies that $X$ and $Y$ have no direct linear association after removing the influence of $Z$. The marginal correlation was entirely due to confounding by $Z$ (or mediation through $Z$).
+
+    In a DAG, this is consistent with $Z$ being a common cause ($X \leftarrow Z \to Y$) with no direct edge between $X$ and $Y$. Conditioning on $Z$ blocks the only path connecting $X$ and $Y$, rendering them conditionally independent (at least linearly).

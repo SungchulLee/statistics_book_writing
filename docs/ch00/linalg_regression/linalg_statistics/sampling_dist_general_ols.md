@@ -195,3 +195,85 @@ All of these distributions rely on three ingredients: (1) $\hat{\boldsymbol{\bet
 ## Summary
 
 The matrix formulation of OLS compresses the simple-regression sampling theory into a unified framework. The estimator $\hat{\boldsymbol{\beta}}$ is multivariate normal with covariance $\sigma^2(\mathbf{X}^T\mathbf{X})^{-1}$, the residual sum of squares $\text{SSE}/\sigma^2$ is chi-squared with $n - p$ degrees of freedom, and the two are independent. These three facts, which follow from the orthogonal projection structure of OLS and the normality of the errors, generate all the standard t-tests for individual coefficients and F-tests for groups of coefficients. The Gauss-Markov theorem further shows that OLS is optimal among linear unbiased estimators even without the normality assumption.
+
+## Exercises
+
+**Exercise 1.**
+Consider a multiple regression model $\mathbf{y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon}$ with $n = 30$ observations, $p = 4$ parameters (including the intercept), and $\text{SSE} = 52$. Compute $s^2$ and find the degrees of freedom for the t-statistics used to test individual coefficients.
+
+??? success "Solution to Exercise 1"
+    The unbiased variance estimator is:
+
+    $$
+    s^2 = \frac{\text{SSE}}{n - p} = \frac{52}{30 - 4} = \frac{52}{26} = 2.0
+    $$
+
+    The t-statistics for individual coefficients follow a $t_{n-p} = t_{26}$ distribution under their respective null hypotheses. Each t-statistic has $26$ degrees of freedom.
+
+---
+
+**Exercise 2.**
+Prove that the OLS residual vector $\mathbf{e} = \mathbf{M}\mathbf{y}$ satisfies $\mathbf{X}^T\mathbf{e} = \mathbf{0}$, where $\mathbf{M} = \mathbf{I} - \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T$.
+
+??? success "Solution to Exercise 2"
+    We compute directly:
+
+    $$
+    \mathbf{X}^T\mathbf{e} = \mathbf{X}^T\mathbf{M}\mathbf{y} = \mathbf{X}^T\bigl(\mathbf{I} - \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\bigr)\mathbf{y}
+    $$
+
+    $$
+    = \mathbf{X}^T\mathbf{y} - \mathbf{X}^T\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y} = \mathbf{X}^T\mathbf{y} - \mathbf{X}^T\mathbf{y} = \mathbf{0}
+    $$
+
+    This shows the residuals are orthogonal to every column of $\mathbf{X}$, which is the matrix form of the normal equations. $\square$
+
+---
+
+**Exercise 3.**
+In a model with $p = 3$ predictors (plus intercept, so $p = 4$), you wish to test $H_0: \beta_2 = \beta_3 = 0$ using the general F-test. State the distribution of the F-statistic under $H_0$, identify $q$, and explain what "restricted" and "unrestricted" SSE mean in this context.
+
+??? success "Solution to Exercise 3"
+    We are testing $q = 2$ restrictions (setting two coefficients to zero). The F-statistic is:
+
+    $$
+    F = \frac{(\text{SSE}_R - \text{SSE}_U)/q}{\text{SSE}_U/(n-p)} \sim F_{q,\, n-p} = F_{2,\, n-4}
+    $$
+
+    Here $\text{SSE}_R$ is the residual sum of squares from the restricted model that excludes $X_2$ and $X_3$ (fitting only the intercept and $X_1$), and $\text{SSE}_U$ is the residual sum of squares from the full (unrestricted) model with all four parameters. The F-statistic measures whether the reduction in SSE from including $X_2$ and $X_3$ is large enough relative to the noise level $s^2 = \text{SSE}_U/(n-4)$.
+
+---
+
+**Exercise 4.**
+Show that under the Gauss-Markov assumptions (without normality), $\operatorname{Var}(\hat{\boldsymbol{\beta}}) = \sigma^2(\mathbf{X}^T\mathbf{X})^{-1}$. (Hint: substitute $\mathbf{y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon}$ into $\hat{\boldsymbol{\beta}} = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}$.)
+
+??? success "Solution to Exercise 4"
+    Substituting $\mathbf{y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon}$:
+
+    $$
+    \hat{\boldsymbol{\beta}} = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T(\mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon}) = \boldsymbol{\beta} + (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\boldsymbol{\varepsilon}
+    $$
+
+    Since $\hat{\boldsymbol{\beta}} - \boldsymbol{\beta} = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\boldsymbol{\varepsilon}$, we have (treating $\mathbf{X}$ as fixed):
+
+    $$
+    \operatorname{Var}(\hat{\boldsymbol{\beta}}) = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T \operatorname{Var}(\boldsymbol{\varepsilon})\, \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}
+    $$
+
+    With $\operatorname{Var}(\boldsymbol{\varepsilon}) = \sigma^2\mathbf{I}$:
+
+    $$
+    = \sigma^2 (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1} = \sigma^2(\mathbf{X}^T\mathbf{X})^{-1}
+    $$
+
+    No normality assumption was needed -- only $E[\boldsymbol{\varepsilon}] = \mathbf{0}$ and $\operatorname{Var}(\boldsymbol{\varepsilon}) = \sigma^2\mathbf{I}$. $\square$
+
+---
+
+**Exercise 5.**
+Explain conceptually why $\hat{\boldsymbol{\beta}}$ and $\text{SSE}$ are independent when errors are normal. What geometric property of the hat matrix makes this possible?
+
+??? success "Solution to Exercise 5"
+    The key geometric property is that the hat matrix $\mathbf{H}$ and the residual-maker matrix $\mathbf{M} = \mathbf{I} - \mathbf{H}$ project onto orthogonal subspaces. Specifically, $\hat{\boldsymbol{\beta}}$ depends on $\mathbf{y}$ only through $\mathbf{H}\mathbf{y}$ (the projection onto the column space of $\mathbf{X}$), while $\text{SSE} = \mathbf{y}^T\mathbf{M}\mathbf{y}$ depends on $\mathbf{y}$ only through $\mathbf{M}\mathbf{y}$ (the projection onto the orthogonal complement).
+
+    Since $\mathbf{H}\mathbf{M} = \mathbf{0}$, the vectors $\mathbf{H}\mathbf{y}$ and $\mathbf{M}\mathbf{y}$ are uncorrelated. Under the normality assumption, uncorrelated normal random vectors are independent. This orthogonal decomposition is the geometric reason that t-statistics and F-statistics have their stated distributions.

@@ -1,9 +1,6 @@
 # Ridge Regression (L2 Regularization)
 
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Motivation: The Problem with OLS
 
 Ordinary least squares (OLS) minimizes the residual sum of squares:
@@ -162,3 +159,72 @@ As $\lambda \to 0$, $\text{df} \to p$ (OLS). As $\lambda \to \infty$, $\text{df}
 | Works when $p > n$ | Yes |
 | Bayesian interpretation | Gaussian prior on $\boldsymbol{\beta}$ |
 | Geometric constraint | $\ell_2$-ball (sphere) |
+
+
+## Exercises
+
+**Exercise 1.**
+Write the ridge regression optimization problem and its closed-form solution. How does $\lambda$ affect the solution?
+
+??? success "Solution to Exercise 1"
+    The ridge optimization problem is:
+
+    $$
+    \hat{\boldsymbol{\beta}}_{\text{ridge}} = \arg\min_{\boldsymbol{\beta}} \left\{ \lVert \mathbf{y} - \mathbf{X}\boldsymbol{\beta} \rVert^2 + \lambda \lVert \boldsymbol{\beta} \rVert^2 \right\}
+    $$
+
+    The closed-form solution is:
+
+    $$
+    \hat{\boldsymbol{\beta}}_{\text{ridge}} = (\mathbf{X}^T\mathbf{X} + \lambda\mathbf{I})^{-1}\mathbf{X}^T\mathbf{y}
+    $$
+
+    As $\lambda \to 0$, $\hat{\boldsymbol{\beta}}_{\text{ridge}} \to \hat{\boldsymbol{\beta}}_{\text{OLS}}$. As $\lambda \to \infty$, $\hat{\boldsymbol{\beta}}_{\text{ridge}} \to \mathbf{0}$. The penalty $\lambda$ controls the bias-variance tradeoff: larger $\lambda$ increases bias but reduces variance.
+
+---
+
+**Exercise 2.**
+Show that ridge regression is biased. Derive the bias in terms of $\lambda$ and the true $\boldsymbol{\beta}$.
+
+??? success "Solution to Exercise 2"
+    $$
+    E[\hat{\boldsymbol{\beta}}_{\text{ridge}}] = (\mathbf{X}^T\mathbf{X} + \lambda\mathbf{I})^{-1}\mathbf{X}^T E[\mathbf{y}] = (\mathbf{X}^T\mathbf{X} + \lambda\mathbf{I})^{-1}\mathbf{X}^T\mathbf{X}\boldsymbol{\beta}
+    $$
+
+    $$
+    = \mathbf{W}\boldsymbol{\beta} \neq \boldsymbol{\beta}
+    $$
+
+    where $\mathbf{W} = (\mathbf{X}^T\mathbf{X} + \lambda\mathbf{I})^{-1}\mathbf{X}^T\mathbf{X}$. The bias is:
+
+    $$
+    \text{Bias} = (\mathbf{W} - \mathbf{I})\boldsymbol{\beta} = -\lambda(\mathbf{X}^T\mathbf{X} + \lambda\mathbf{I})^{-1}\boldsymbol{\beta}
+    $$
+
+    The bias increases with $\lambda$ and with the magnitude of $\boldsymbol{\beta}$. Despite this bias, the total MSE can be smaller than OLS because the variance reduction exceeds the squared bias. $\square$
+
+---
+
+**Exercise 3.**
+Explain why ridge regression helps with multicollinearity. What happens to the condition number of $\mathbf{X}^T\mathbf{X} + \lambda\mathbf{I}$?
+
+??? success "Solution to Exercise 3"
+    Multicollinearity means $\mathbf{X}^T\mathbf{X}$ has eigenvalues near zero, making it nearly singular with a large condition number $\kappa = \lambda_{\max}/\lambda_{\min}$.
+
+    Adding $\lambda\mathbf{I}$ shifts all eigenvalues by $\lambda$: if the eigenvalues of $\mathbf{X}^T\mathbf{X}$ are $d_1 \geq \dots \geq d_p$, the eigenvalues of $\mathbf{X}^T\mathbf{X} + \lambda\mathbf{I}$ are $d_1 + \lambda \geq \dots \geq d_p + \lambda$. The new condition number is:
+
+    $$
+    \kappa_{\text{ridge}} = \frac{d_1 + \lambda}{d_p + \lambda} < \frac{d_1}{d_p} = \kappa_{\text{OLS}}
+    $$
+
+    The smallest eigenvalue increases from $d_p$ (near zero) to $d_p + \lambda$, dramatically improving numerical stability and reducing the variance of $\hat{\boldsymbol{\beta}}$.
+
+---
+
+**Exercise 4.**
+A ridge regression with $\lambda = 1$ on standardized data gives $\hat{\beta}_1 = 0.45$ and $\hat{\beta}_2 = 0.38$. OLS gives $\hat{\beta}_1 = 1.2$ and $\hat{\beta}_2 = -0.8$. Interpret the difference.
+
+??? success "Solution to Exercise 4"
+    The OLS estimates ($1.2$ and $-0.8$) are large in magnitude and have opposite signs, which is characteristic of multicollinearity: the predictors are correlated, and OLS produces unstable, inflated coefficients that partially cancel each other.
+
+    Ridge regression ($0.45$ and $0.38$) shrinks both coefficients toward zero and produces more similar magnitudes. The sign reversal of $\hat{\beta}_2$ (from $-0.8$ to $+0.38$) suggests the OLS negative coefficient was an artifact of collinearity, not a genuine negative relationship. Ridge produces more stable, interpretable estimates at the cost of some bias.

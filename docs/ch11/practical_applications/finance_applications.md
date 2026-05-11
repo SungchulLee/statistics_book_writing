@@ -104,3 +104,62 @@ A significant interaction is particularly informative: it reveals that some stra
     **Step 4: Decision.** With $k - 1 = 2$ and $N - k = 9$ degrees of freedom, the critical value at $\alpha = 0.05$ is $F_{0.05, 2, 9} \approx 4.26$. Since $38.8 \gg 4.26$, we reject $H_0$ and conclude that the three funds have significantly different mean returns.
 
     **Step 5: Post-hoc analysis.** A Tukey HSD test would then identify which specific fund pairs differ. Given the group means, Fund C's substantially higher average return is likely the primary driver of the significant F-test. See [Tukey HSD](../post_hoc/tukey.md) for the pairwise comparison procedure.
+
+## Exercises
+
+**Exercise 1.**
+An analyst compares the mean monthly returns of three investment strategies over 60 months. The ANOVA F-statistic is 4.21 with $df_1 = 2$ and $df_2 = 177$. At $\alpha = 0.05$, is there a significant difference among the strategies?
+
+??? success "Solution to Exercise 1"
+    With $df_1 = 2$ and $df_2 = 177$, the critical value $F_{0.05, 2, 177} \approx 3.05$.
+
+    Since $F = 4.21 > 3.05$, we reject $H_0$ at the 5% level. There is significant evidence that at least one strategy has a different mean monthly return.
+
+    The p-value can be computed from the F-distribution: $P(F_{2, 177} > 4.21) \approx 0.016$. Post-hoc pairwise comparisons (e.g., Tukey's HSD) are needed to determine which strategies differ.
+
+---
+
+**Exercise 2.**
+Explain why financial return data often violate ANOVA assumptions. Describe which assumption is most commonly violated and suggest a remedy.
+
+??? success "Solution to Exercise 2"
+    Financial returns commonly violate:
+
+    1. **Normality:** Returns exhibit heavy tails (excess kurtosis) and sometimes skewness. Extreme events (crashes, rallies) occur more frequently than the normal distribution predicts. This is the most commonly violated assumption.
+
+    2. **Independence:** Returns may be serially correlated (autocorrelation in daily returns) or exhibit volatility clustering (GARCH effects), violating the independence assumption.
+
+    3. **Equal variances:** Different strategies or asset classes often have different volatilities.
+
+    **Remedy for non-normality:** With $n = 60$ months per group, the CLT provides some protection for the F-test. For stronger robustness:
+
+    - Use the Kruskal-Wallis test (nonparametric alternative).
+    - Use bootstrap ANOVA to avoid distributional assumptions.
+    - Apply a rank transformation before ANOVA.
+    - For serial dependence, use Newey-West standard errors or block bootstrap.
+
+---
+
+**Exercise 3.**
+A portfolio manager claims their fund's mean return differs from two benchmark indices. Should they use one-way ANOVA or Dunnett's test? Explain.
+
+??? success "Solution to Exercise 3"
+    **Dunnett's test** is more appropriate because the manager is comparing a single treatment (their fund) against multiple controls (the two benchmarks), not comparing all groups pairwise.
+
+    Dunnett's test is designed for "many-to-one" comparisons and is more powerful than Tukey's HSD or Bonferroni for this specific comparison structure. It controls the FWER while using only the $k - 1$ comparisons of interest (fund vs. each benchmark), rather than all $\binom{k}{2}$ pairwise comparisons.
+
+    One-way ANOVA could be used as a preliminary omnibus test, but it tests whether any group differs from any other -- a broader question than what the manager is asking. If the two benchmarks differ from each other but the fund matches both, ANOVA might reject while the manager's specific question is unanswered.
+
+---
+
+**Exercise 4.**
+Describe how to use ANOVA to test whether mean stock returns differ across calendar months (the "January effect" and other seasonal anomalies).
+
+??? success "Solution to Exercise 4"
+    **Setup:** Collect monthly returns for a stock or index over $T$ years. The response variable is the monthly return, and the factor is the calendar month (12 levels: Jan, Feb, ..., Dec). Each year contributes one observation per month, so the design is a one-way ANOVA with $k = 12$ groups and approximately $T$ observations per group.
+
+    **ANOVA test:** The null hypothesis is $H_0: \mu_{\text{Jan}} = \mu_{\text{Feb}} = \dots = \mu_{\text{Dec}}$ (no seasonal pattern). Rejecting $H_0$ indicates that at least one month has a significantly different mean return.
+
+    **Follow-up:** Use Tukey's HSD or Dunnett's test to identify which months differ. To test specifically for the January effect, compare January's mean to the average of the other 11 months.
+
+    **Caveats:** Returns may be serially correlated across months, violating independence. Using non-overlapping annual data or applying robust standard errors helps. Also, calendar anomalies found in historical data may have diminished due to increased awareness and trading.

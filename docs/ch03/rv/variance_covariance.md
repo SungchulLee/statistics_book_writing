@@ -1,9 +1,5 @@
 # Variance and Covariance
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Overview
 
 While the expected value summarizes the center of a distribution, **variance** measures how spread out the distribution is around the mean. **Covariance** and **correlation** capture the degree to which two random variables move together. These concepts are essential for risk measurement, portfolio theory, and statistical inference.
@@ -225,3 +221,146 @@ portfolio_variance_demo()
 - Uncorrelated ($\rho = 0$) does **not** imply independence.
 - For independent variables, the variance of a sum equals the sum of variances; for dependent variables, covariance terms must be included.
 - In finance, the covariance structure of asset returns determines the diversification benefit of portfolios.
+
+## Exercises
+
+**Exercise 1.**
+PMF: $P(X = 1, 2, 3, 4) = 0.1, 0.3, 0.4, 0.2$. (a) $\mathbb{E}[X]$. (b) $\mathbb{E}[X^2]$, $\mathrm{Var}(X)$. (c) $Y = 3X + 5$: $\mathbb{E}[Y]$, $\mathrm{Var}(Y)$.
+
+??? success "Solution to Exercise 1"
+    (a) $\mathbb{E}[X] = 1(0.1) + 2(0.3) + 3(0.4) + 4(0.2) = 2.7$.
+
+    (b) $\mathbb{E}[X^2] = 1(0.1) + 4(0.3) + 9(0.4) + 16(0.2) = 8.1$. $\mathrm{Var}(X) = 8.1 - 7.29 = 0.81$.
+
+    (c) $\mathbb{E}[Y] = 3 \cdot 2.7 + 5 = 13.1$. $\mathrm{Var}(Y) = 9 \cdot 0.81 = 7.29$. Constant shift does not affect variance; multiplication scales variance by the square.
+
+---
+
+**Exercise 2.**
+**Prove the variance-of-sum formula:** $\mathrm{Var}(X + Y) = \mathrm{Var}(X) + \mathrm{Var}(Y) + 2\mathrm{Cov}(X, Y)$.
+
+??? success "Solution to Exercise 2"
+    Let $\mu_X = \mathbb{E}[X]$ and $\mu_Y = \mathbb{E}[Y]$. Then $\mathbb{E}[X + Y] = \mu_X + \mu_Y$, and
+
+    $$
+    \mathrm{Var}(X + Y) = \mathbb{E}[(X + Y - \mu_X - \mu_Y)^2] = \mathbb{E}[((X - \mu_X) + (Y - \mu_Y))^2]
+    $$
+
+    Expand the square:
+
+    $$
+    = \mathbb{E}[(X - \mu_X)^2] + 2\mathbb{E}[(X - \mu_X)(Y - \mu_Y)] + \mathbb{E}[(Y - \mu_Y)^2]
+    $$
+
+    $$
+    = \mathrm{Var}(X) + 2\mathrm{Cov}(X, Y) + \mathrm{Var}(Y)
+    $$
+
+    $\square$
+
+    **Generalization:** $\mathrm{Var}(\sum_i X_i) = \sum_i \mathrm{Var}(X_i) + 2\sum_{i < j} \mathrm{Cov}(X_i, X_j)$. The double-sum structure is why correlations affect portfolio variance in finance: $N$ assets contribute $N(N-1)/2$ correlation terms in addition to $N$ variance terms.
+
+---
+
+**Exercise 3.**
+**Uncorrelated $\ne$ independent.** Let $X \sim \mathrm{Uniform}(-1, 1)$ and $Y = X^2$. Show $\mathrm{Cov}(X, Y) = 0$ but $X$ and $Y$ are dependent.
+
+??? success "Solution to Exercise 3"
+    By symmetry of the uniform around 0: $\mathbb{E}[X] = 0$. Also $\mathbb{E}[X^3] = 0$ (odd function over symmetric domain).
+
+    $\mathrm{Cov}(X, Y) = \mathbb{E}[XY] - \mathbb{E}[X]\mathbb{E}[Y] = \mathbb{E}[X \cdot X^2] - 0 = \mathbb{E}[X^3] = 0$.
+
+    So $X$ and $Y$ are *uncorrelated*. But knowing $X = 0.5$ tells you exactly that $Y = 0.25$ — they are *deterministically dependent*. The correlation coefficient measures only the linear association, missing the quadratic structure.
+
+    **Lesson:** zero correlation is a *necessary* but not *sufficient* condition for independence. For multivariate normals (and a few special distributions), zero correlation does imply independence — but this is an exception, not the rule. Always plot the data; don't rely on correlation alone.
+
+---
+
+**Exercise 4.**
+**Portfolio variance with two assets.** Two assets have $\sigma_1 = 0.20$, $\sigma_2 = 0.30$, $\rho = 0.30$. Find the portfolio weights $w_1, w_2$ ($w_1 + w_2 = 1$, both non-negative) minimizing portfolio variance.
+
+??? success "Solution to Exercise 4"
+    Portfolio variance:
+
+    $$
+    \sigma_p^2(w_1) = w_1^2 \sigma_1^2 + (1 - w_1)^2 \sigma_2^2 + 2 w_1(1 - w_1)\rho \sigma_1 \sigma_2
+    $$
+
+    Take the derivative with respect to $w_1$ and set to zero:
+
+    $$
+    \frac{d\sigma_p^2}{dw_1} = 2 w_1 \sigma_1^2 - 2(1 - w_1)\sigma_2^2 + 2(1 - 2w_1)\rho \sigma_1 \sigma_2 = 0
+    $$
+
+    Solve: $w_1^* = (\sigma_2^2 - \rho\sigma_1\sigma_2)/(\sigma_1^2 + \sigma_2^2 - 2\rho\sigma_1\sigma_2)$.
+
+    With $\sigma_1 = 0.20$, $\sigma_2 = 0.30$, $\rho = 0.30$:
+
+    Numerator: $0.09 - 0.30 \cdot 0.20 \cdot 0.30 = 0.09 - 0.018 = 0.072$.
+
+    Denominator: $0.04 + 0.09 - 2 \cdot 0.30 \cdot 0.20 \cdot 0.30 = 0.13 - 0.036 = 0.094$.
+
+    $w_1^* = 0.072/0.094 \approx 0.766$, $w_2^* \approx 0.234$.
+
+    The minimum-variance portfolio puts more weight on the lower-volatility asset, as expected. The minimum variance is $\sigma_p^2 = 0.766^2 \cdot 0.04 + 0.234^2 \cdot 0.09 + 2 \cdot 0.766 \cdot 0.234 \cdot 0.018 \approx 0.0354$ — smaller than either individual variance alone.
+
+---
+
+**Exercise 5.**
+**Covariance matrix.** Compute the $2 \times 2$ covariance matrix of $(X, Y)$ where $X \sim N(0, 1)$ and $Y = aX + Z$ with $Z \sim N(0, \sigma_Z^2)$ independent of $X$. What is $\rho(X, Y)$?
+
+??? success "Solution to Exercise 5"
+    Marginal variances:
+
+    $\mathrm{Var}(X) = 1$, $\mathrm{Var}(Y) = a^2 \cdot 1 + \sigma_Z^2 = a^2 + \sigma_Z^2$.
+
+    Covariance:
+
+    $\mathrm{Cov}(X, Y) = \mathrm{Cov}(X, aX + Z) = a \mathrm{Var}(X) + \mathrm{Cov}(X, Z) = a + 0 = a$.
+
+    Covariance matrix:
+
+    $$
+    \boldsymbol{\Sigma} = \begin{pmatrix} 1 & a \\ a & a^2 + \sigma_Z^2 \end{pmatrix}
+    $$
+
+    Correlation:
+
+    $$
+    \rho(X, Y) = \frac{a}{\sqrt{1 \cdot (a^2 + \sigma_Z^2)}} = \frac{a}{\sqrt{a^2 + \sigma_Z^2}}
+    $$
+
+    Special cases:
+
+    - $\sigma_Z = 0$: $\rho = a/|a| = \pm 1$ — $Y$ is a deterministic function of $X$.
+    - $\sigma_Z \to \infty$: $\rho \to 0$ — noise dominates, $X$ and $Y$ become essentially independent.
+
+    This factorization $Y = aX + Z$ underlies linear regression. The coefficient $a$ is the regression slope; the correlation $\rho$ measures how much of $Y$'s variation is explained by $X$.
+
+---
+
+**Exercise 6.**
+**Variance estimation from a sample.** Show that for an i.i.d. sample $X_1, \ldots, X_n$, the **sample covariance** $\hat{\mathrm{Cov}}(X, Y) = \frac{1}{n-1}\sum_i (X_i - \bar X)(Y_i - \bar Y)$ is an unbiased estimator of $\mathrm{Cov}(X, Y)$.
+
+??? success "Solution to Exercise 6"
+    Expand: $\sum_i (X_i - \bar X)(Y_i - \bar Y) = \sum_i X_i Y_i - n \bar X \bar Y$.
+
+    Take expectations:
+
+    $\mathbb{E}\sum X_i Y_i = n(\mathrm{Cov}(X, Y) + \mu_X \mu_Y)$ (each term contributes $\mathbb{E}[X_i Y_i] = \mathrm{Cov}(X, Y) + \mu_X \mu_Y$).
+
+    $\mathbb{E}[n \bar X \bar Y]$: using independence across observations,
+
+    $$
+    \mathbb{E}[\bar X \bar Y] = \frac{1}{n^2}\sum_{i, j} \mathbb{E}[X_i Y_j] = \frac{1}{n^2}\left[n(\mathrm{Cov}(X, Y) + \mu_X \mu_Y) + n(n - 1)\mu_X \mu_Y\right]
+    $$
+
+    $= (\mathrm{Cov}(X, Y) + \mu_X \mu_Y)/n + (n - 1)\mu_X \mu_Y / n = \mathrm{Cov}(X, Y)/n + \mu_X \mu_Y$.
+
+    So $\mathbb{E}[n \bar X \bar Y] = \mathrm{Cov}(X, Y) + n\mu_X \mu_Y$.
+
+    Subtracting: $\mathbb{E}[\sum_i (X_i - \bar X)(Y_i - \bar Y)] = n(\mathrm{Cov}(X, Y) + \mu_X \mu_Y) - \mathrm{Cov}(X, Y) - n\mu_X \mu_Y = (n - 1)\mathrm{Cov}(X, Y)$.
+
+    Dividing by $n - 1$: $\mathbb{E}[\hat{\mathrm{Cov}}] = \mathrm{Cov}(X, Y)$. $\square$
+
+    The $n - 1$ denominator is **Bessel's correction** for covariance, identical to the correction for sample variance: estimating $\mu_X$ and $\mu_Y$ from the data "uses up" one degree of freedom.

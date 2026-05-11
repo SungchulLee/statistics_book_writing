@@ -131,3 +131,23 @@ The sign-flip permutation test generalizes the Wilcoxon signed-rank test: using 
 ## Summary
 
 The permutation test for paired data exploits the symmetry of the differences under $H_0$ by randomly flipping the signs of the observed differences. Each sign-flip configuration is equally likely under the null, producing an exact conditional distribution of the test statistic. The test is distribution-free (requiring only symmetry of differences under $H_0$), works with any test statistic (mean, Wilcoxon rank sum, trimmed mean), and provides exact $p$-values for any sample size. It is the nonparametric counterpart to the paired $t$-test.
+
+## Exercises
+
+**Exercise 1.**
+Implement the **paired sign-flip permutation test** for the following before/after data (blood pressure readings):
+
+| Patient | Before | After |
+|---|---|---|
+| 1 | 148 | 140 |
+| 2 | 142 | 138 |
+| 3 | 136 | 132 |
+| 4 | 155 | 147 |
+| 5 | 129 | 131 |
+| 6 | 161 | 152 |
+| 7 | 138 | 135 |
+| 8 | 144 | 139 |
+
+(a) Compute the exact p-value by enumerating all $2^8 = 256$ sign-flip permutations.
+
+(b) Compare with the paired $t$-test and the Wilcoxon signed-rank test.

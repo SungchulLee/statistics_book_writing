@@ -2,9 +2,6 @@
 
 This chapter establishes the mathematical and computational foundations needed for the rest of the book, covering core math, Python tools, and the linear algebra of square matrices connected to statistical theory.
 
-!!! warning "Incomplete page"
-    This is a chapter landing page and does not follow the five-section structure.
-
 ## Chapter Structure
 
 ### 0.1 Mathematical Background

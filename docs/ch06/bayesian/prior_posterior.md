@@ -46,3 +46,82 @@ The full posterior distribution is the complete Bayesian answer to an inference 
     $$
 
     The posterior mean is a weighted average of the prior mean $\mu_0$ and the sample mean $\bar{x}$, with weights determined by their relative precisions (inverse variances). As $n$ increases, the data dominate and the posterior concentrates around $\bar{x}$, regardless of the prior. Because the posterior is symmetric and unimodal, the mean, median, and MAP all coincide in this case.
+
+## Exercises
+
+**Exercise 1.**
+State Bayes' theorem for a parameter $\theta$ given data $\mathbf{x}$. Identify and name each component (prior, likelihood, posterior, marginal likelihood).
+
+??? success "Solution to Exercise 1"
+    Bayes' theorem states:
+
+    $$
+    \underbrace{\pi(\theta \mid \mathbf{x})}_{\text{posterior}} = \frac{\overbrace{L(\mathbf{x} \mid \theta)}^{\text{likelihood}} \cdot \overbrace{\pi(\theta)}^{\text{prior}}}{\underbrace{m(\mathbf{x})}_{\text{marginal likelihood}}}
+    $$
+
+    - **Prior** $\pi(\theta)$: the distribution of $\theta$ before seeing data, encoding prior beliefs.
+    - **Likelihood** $L(\mathbf{x} \mid \theta)$: the probability of the observed data given $\theta$.
+    - **Marginal likelihood** $m(\mathbf{x}) = \int L(\mathbf{x} \mid \theta)\pi(\theta)\,d\theta$: a normalizing constant ensuring the posterior integrates to 1.
+    - **Posterior** $\pi(\theta \mid \mathbf{x})$: the updated distribution of $\theta$ after observing data.
+
+---
+
+**Exercise 2.**
+Suppose the prior for a coin's probability of heads is $p \sim \text{Uniform}(0, 1)$. You flip the coin once and observe heads. Compute the posterior distribution $\pi(p \mid H)$.
+
+??? success "Solution to Exercise 2"
+    The prior is $\pi(p) = 1$ for $p \in (0, 1)$ (which is $\text{Beta}(1, 1)$). The likelihood for one head is $L(H \mid p) = p$.
+
+    By Bayes' theorem:
+
+    $$
+    \pi(p \mid H) = \frac{p \cdot 1}{\int_0^1 p \, dp} = \frac{p}{1/2} = 2p
+    $$
+
+    This is the $\text{Beta}(2, 1)$ density. The posterior mean is $E[p \mid H] = 2/3$, shifted upward from the prior mean of $1/2$, reflecting the evidence from observing heads.
+
+---
+
+**Exercise 3.**
+Explain the relationship between the posterior mode (MAP estimate) and the MLE. Under what condition does the MAP estimate equal the MLE?
+
+??? success "Solution to Exercise 3"
+    The **MAP (Maximum A Posteriori)** estimate maximizes the posterior:
+
+    $$
+    \hat{\theta}_{\text{MAP}} = \arg\max_\theta \bigl[L(\mathbf{x} \mid \theta) \cdot \pi(\theta)\bigr] = \arg\max_\theta \bigl[\log L(\mathbf{x} \mid \theta) + \log \pi(\theta)\bigr]
+    $$
+
+    The **MLE** maximizes the likelihood alone: $\hat{\theta}_{\text{MLE}} = \arg\max_\theta L(\mathbf{x} \mid \theta)$.
+
+    The MAP equals the MLE when the prior is flat (uniform/non-informative), i.e., $\pi(\theta) \propto c$ (constant), because $\log \pi(\theta)$ becomes a constant that does not affect the optimization. The MAP also approaches the MLE as $n \to \infty$, because the likelihood dominates the prior for large samples.
+
+---
+
+**Exercise 4.**
+A prior $\pi(\theta)$ assigns probability 0.7 to $\theta = 0$ and 0.3 to $\theta = 1$. The likelihood satisfies $P(X = 1 \mid \theta = 0) = 0.2$ and $P(X = 1 \mid \theta = 1) = 0.9$. After observing $X = 1$, compute the posterior probabilities $P(\theta = 0 \mid X = 1)$ and $P(\theta = 1 \mid X = 1)$.
+
+??? success "Solution to Exercise 4"
+    By Bayes' theorem for discrete $\theta$:
+
+    $$
+    P(\theta = 0 \mid X = 1) = \frac{P(X = 1 \mid \theta = 0) \cdot P(\theta = 0)}{P(X = 1)}
+    $$
+
+    First compute the marginal:
+
+    $$
+    P(X = 1) = 0.2 \times 0.7 + 0.9 \times 0.3 = 0.14 + 0.27 = 0.41
+    $$
+
+    Then:
+
+    $$
+    P(\theta = 0 \mid X = 1) = \frac{0.14}{0.41} \approx 0.341
+    $$
+
+    $$
+    P(\theta = 1 \mid X = 1) = \frac{0.27}{0.41} \approx 0.659
+    $$
+
+    The observation $X = 1$ shifted the posterior toward $\theta = 1$ (from prior 0.3 to posterior 0.659), because $X = 1$ is much more likely under $\theta = 1$.

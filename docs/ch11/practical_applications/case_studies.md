@@ -1,9 +1,6 @@
 # ANOVA Practical Applications
 
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 This section presents complete worked examples demonstrating ANOVA assumption testing and diagnostics using Python. Each case study follows the full workflow: fit the model, check assumptions, and address any violations.
 
 ## Case Study 1: Iris Species (Plant Morphology)
@@ -210,3 +207,55 @@ These case studies demonstrate a consistent workflow for ANOVA analysis:
 6. **Perform post-hoc tests** if the overall ANOVA is significant.
 
 By following this workflow, you can ensure that your ANOVA results are robust and that conclusions are well-supported by the data.
+## Exercises
+
+**Exercise 1.**
+An e-commerce company tests four different checkout page designs (A, B, C, D) on conversion rates. Each design is shown to 200 randomly selected visitors. Describe how to set up this as a one-way ANOVA problem: define the groups, response variable, null hypothesis, and the key assumptions to verify.
+
+??? success "Solution to Exercise 1"
+
+    - **Groups:** The four checkout page designs (A, B, C, D), $k = 4$.
+    - **Response variable:** Conversion rate (or a suitable continuous metric such as time-to-purchase or cart value). If using the binary converted/not-converted outcome, ANOVA on proportions requires large samples or an alternative approach like logistic regression.
+    - **Null hypothesis:** $H_0: \mu_A = \mu_B = \mu_C = \mu_D$ (the population mean response is the same across all four designs).
+    - **Assumptions to verify:**
+        1. **Independence:** Random assignment ensures visitors in different groups are independent. Verify no visitor appears in multiple groups.
+        2. **Normality:** With $n = 200$ per group, the Central Limit Theorem ensures approximate normality of group means.
+        3. **Homoscedasticity:** Check with Levene's test. If violated, use Welch's ANOVA.
+
+---
+
+**Exercise 2.**
+In financial ANOVA, a portfolio manager compares mean monthly returns of three sector ETFs (Technology, Healthcare, Energy) over 60 months. What additional assumption concern arises in this setting that does not typically arise in a standard experimental design?
+
+??? success "Solution to Exercise 2"
+    The primary additional concern is **independence.** Monthly returns for different sector ETFs are measured over the **same time periods**, so they are likely correlated due to common market factors (e.g., interest rate changes, macroeconomic shocks). This violates the independence assumption of standard one-way ANOVA.
+
+    Additionally, financial returns are often measured sequentially over time, introducing potential **autocorrelation** within each group. The effective sample size may be much smaller than 60, leading to inflated F-statistics and false positives.
+
+    Appropriate remedies include using **repeated-measures ANOVA** (treating month as a blocking factor), a **mixed-effects model**, or **HAC (Newey-West) standard errors** that account for both autocorrelation and cross-sectional dependence.
+
+---
+
+**Exercise 3.**
+Describe the complete ANOVA workflow for a practical case study, from data collection through to final conclusions. Include at least six distinct steps.
+
+??? success "Solution to Exercise 3"
+
+    1. **Define the research question and hypotheses.** State the groups, response variable, and the null/alternative hypotheses.
+
+    2. **Collect data** using random sampling and random assignment to treatment groups. Ensure adequate sample sizes for the desired power.
+
+    3. **Exploratory data analysis.** Compute group means, standard deviations, and sample sizes. Create boxplots to visualize group distributions and identify potential outliers.
+
+    4. **Fit the ANOVA model** using software (e.g., `scipy.stats.f_oneway` or `statsmodels`). Record the F-statistic and p-value.
+
+    5. **Check assumptions:**
+        - Normality: Q-Q plot and Shapiro-Wilk test on residuals.
+        - Homoscedasticity: Levene's test and residual-vs-fitted plot.
+        - Independence: Review study design; Durbin-Watson test if data are ordered.
+
+    6. **Address violations** if detected: switch to Welch's ANOVA, apply transformations, or use non-parametric alternatives.
+
+    7. **Perform post-hoc tests** if the overall ANOVA is significant (e.g., Tukey HSD, Games-Howell, or Dunnett depending on the context).
+
+    8. **Report results** including effect sizes (eta-squared), confidence intervals for pairwise differences, and a clear statement of conclusions in context.

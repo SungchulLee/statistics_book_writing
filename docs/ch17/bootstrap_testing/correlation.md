@@ -111,3 +111,14 @@ The permutation approach is the most powerful for testing zero correlation becau
 ## Summary
 
 Bootstrap methods for testing correlation take two forms. For testing $H_0: \rho = 0$, the permutation approach (shuffling one variable) is preferred because it directly enforces independence under the null. For testing $H_0: \rho = \rho_0$ with nonzero $\rho_0$ or for constructing confidence intervals, the bootstrap resamples pairs with replacement and applies percentile, BCa, or bootstrap-$t$ intervals. Both approaches avoid the bivariate normality assumption required by the classical test.
+
+## Exercises
+
+**Exercise 1.**
+Use the bootstrap to estimate the standard error and 95% CI for the **correlation coefficient** between two variables. Generate $n = 50$ observations from a bivariate normal with $\rho = 0.6$.
+
+(a) Compute the bootstrap SE with $B = 5{,}000$.
+
+(b) Compare the percentile CI with Fisher's $z$-transformation CI.
+
+(c) Repeat with $\rho = 0.95$. Does the percentile interval capture the skewness near the boundary?

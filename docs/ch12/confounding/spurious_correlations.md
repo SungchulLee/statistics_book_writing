@@ -107,3 +107,44 @@ Only by ruling out alternative explanations -- through randomized experiments, c
 ## Summary
 
 Spurious correlations are statistical associations that do not reflect direct causal relationships. They arise from confounding variables, shared trends, coincidence, data dredging, and collider bias. The existence of spurious correlations is the primary reason that correlation does not imply causation. Identifying and ruling out alternative explanations for an observed correlation is a necessary step before drawing causal conclusions.
+
+## Exercises
+
+**Exercise 1.**
+Simulate an investment scenario to illustrate survivorship bias:
+
+1. Generate 1000 "companies" with random annual returns drawn from $N(0.05, 0.3)$ over 10 years
+2. A company "survives" if its cumulative return never drops below $-90\%$
+3. Compute the average annual return for survivors vs. all companies
+4. Discuss how focusing only on survivors inflates perceived returns
+
+```python
+import numpy as np
+
+np.random.seed(42)
+n_companies = 1000
+n_years = 10
+
+# Your simulation here
+```
+
+??? success "Solution to Exercise 1"
+
+    Companies that experience a cumulative return drop below $-90\%$ are removed from the survivor set. The surviving companies are a biased sample — they include companies that happened to have favorable return sequences while excluding those that suffered catastrophic losses. The average annual return for survivors will be higher than the average for all companies because the worst performers have been removed. This is survivorship bias: analyzing only the survivors creates a spuriously positive picture of investment performance. In practice, mutual fund databases and stock indices suffer from this bias because delisted or merged funds disappear from the historical record.
+
+---
+
+**Exercise 2.**
+For each scenario below, identify the survivorship bias and explain what data is missing:
+
+1. A study finds that people who take a particular supplement live longer on average.
+2. An analysis of successful restaurants finds they all have outdoor seating.
+3. A review of top-performing mutual funds over 20 years shows consistent market-beating returns.
+
+??? success "Solution to Exercise 2"
+
+    1. **Supplement study**: People who take supplements may be healthier to begin with (healthy user bias). Those who became too ill to continue the supplement or died early are not included in the "supplement user" group. Missing data: people who started and stopped the supplement due to illness or death.
+
+    2. **Restaurant analysis**: Only surviving (successful) restaurants are studied. Restaurants that had outdoor seating but failed are not in the dataset. Missing data: all restaurants that opened with outdoor seating but subsequently closed. The analysis cannot determine whether outdoor seating contributes to success.
+
+    3. **Mutual funds**: Funds that performed poorly over 20 years were likely closed, merged, or renamed. Only the funds that survived (and therefore tended to perform well) remain in the database. Missing data: the full universe of funds that existed at the start of the 20-year period, including those that were subsequently liquidated.

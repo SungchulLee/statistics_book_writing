@@ -1,9 +1,6 @@
 # Welch's Two-Way ANOVA
 
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 **Welch's Two-Way ANOVA** is an extension of Welch's one-way ANOVA that allows the comparison of means across two independent factors when the assumption of **equal variances** is violated. It adjusts for heteroscedasticity (unequal variances) by using weighted means and incorporates the interaction effects between the two factors.
 
 ## 1. When to Use Welch's Two-Way ANOVA
@@ -126,3 +123,34 @@ print(post_hoc_fert)
 ## 9. Summary
 
 Welch's Two-Way ANOVA is a robust method for analyzing the effects of two factors on a dependent variable when group variances are unequal. It extends the principles of Welch's one-way ANOVA to factorial designs, ensuring accurate results even under heteroscedasticity. For practical applications, software tools like `pingouin` in Python make it easy to implement.
+## Exercises
+
+**Exercise 1.**
+A two-factor experiment measures crop yield across three soil types and two fertilizers. The cell variances range from 2.1 to 14.8, and sample sizes are unbalanced (ranging from 5 to 15). Explain why standard two-way ANOVA is inappropriate and describe how Welch's two-way ANOVA addresses the issue.
+
+??? success "Solution to Exercise 1"
+    Standard two-way ANOVA assumes homoscedasticity (equal variances across all cells). Here the largest cell variance (14.8) is about seven times the smallest (2.1), and the sample sizes are unequal. This combination causes the pooled variance estimate to be unrepresentative, leading to biased F-statistics and incorrect p-values.
+
+    Welch's two-way ANOVA addresses this by computing **weighted means** where each cell is weighted by $w_{ij} = n_{ij}/s_{ij}^2$, giving less influence to cells with higher variance. The degrees of freedom are adjusted using the **Welch-Satterthwaite equation** to account for the unequal variances, producing F-statistics that follow the correct reference distribution.
+
+---
+
+**Exercise 2.**
+In Welch's two-way ANOVA, the weight for cell $(i, j)$ is $w_{ij} = n_{ij}/s_{ij}^2$. Given three cells with $(n, s^2) = (10, 4.0)$, $(8, 12.0)$, and $(15, 3.0)$, compute the weights and explain which cell has the most influence on the weighted grand mean.
+
+??? success "Solution to Exercise 2"
+    Weights:
+
+    - Cell 1: $w_1 = 10/4.0 = 2.50$
+    - Cell 2: $w_2 = 8/12.0 = 0.667$
+    - Cell 3: $w_3 = 15/3.0 = 5.00$
+
+    Cell 3 has the largest weight (5.00) because it combines the largest sample size with the smallest variance, making its mean the most precisely estimated. Cell 2 has the smallest weight because its high variance and small sample size make its mean estimate the least reliable.
+
+---
+
+**Exercise 3.**
+After running Welch's two-way ANOVA and finding significant main effects for both factors but a non-significant interaction, which post-hoc test would you use, and why?
+
+??? success "Solution to Exercise 3"
+    The **Games-Howell test** is the appropriate post-hoc procedure. Since Welch's ANOVA was used because of unequal variances, the post-hoc test must also not assume equal variances. Games-Howell uses separate variance estimates for each pairwise comparison and adjusts degrees of freedom via the Welch-Satterthwaite equation. Tukey's HSD would be inappropriate because it assumes equal variances across all groups.

@@ -1,9 +1,5 @@
 # Statistics as Random Variables
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Overview
 
 A **statistic** is any function of the observed data. Because the data arise from random sampling, the statistic itself is a **random variable** — its value changes from sample to sample. Recognizing this is the conceptual foundation of all sampling-distribution theory.
@@ -293,3 +289,98 @@ plt.show()
 | MLE | The parameter value maximizing the likelihood of the observed data |
 
 Understanding that statistics are random variables is the gateway to all of inferential statistics: confidence intervals, hypothesis tests, and prediction intervals all rely on knowing — or approximating — the distribution of the relevant statistic.
+
+## Exercises
+
+**Exercise 1.**
+**Capture-recapture.** Mark $M = 50$ fish, release; later catch $n = 40$ and find $m = 10$ marked. (a) Derive the hypergeometric likelihood $P(m \mid N)$. (b) Find the MLE $\hat N$.
+
+??? success "Solution to Exercise 1"
+    (a) $P(m \mid N) = \binom{M}{m} \binom{N - M}{n - m} / \binom{N}{n}$ — hypergeometric. With given values: $P(N) = \binom{50}{10}\binom{N-50}{30}/\binom{N}{40}$.
+
+    (b) Differentiating log-likelihood and solving: $\hat N = Mn/m = 50 \cdot 40 / 10 = 200$. The MLE has the intuitive form "(marked in pop) × (caught total) / (marked caught)" — a proportional reasoning argument.
+
+    Capture-recapture is the foundational method in wildlife population estimation; modifications (closed/open populations, multiple recaptures, mark loss) give a rich family of estimators.
+
+---
+
+**Exercise 2.**
+**MLE for Bernoulli.** Coin tossed 100 times, 40 heads. (a) Write the likelihood $L(p)$. (b) Find $\hat p_{\text{MLE}}$.
+
+??? success "Solution to Exercise 2"
+    (a) $L(p) = \binom{100}{40} p^{40}(1-p)^{60} \propto p^{40}(1-p)^{60}$ (constant prefactor doesn't affect maximization).
+
+    (b) Log-likelihood: $\ell(p) = 40\ln p + 60\ln(1-p)$. Derivative: $40/p - 60/(1-p) = 0 \Rightarrow p = 0.4$.
+
+    $\hat p_{\text{MLE}} = 0.4 = $ sample proportion. In general for $X \sim \mathrm{Binomial}(n, p)$, the MLE is $\hat p = X/n$.
+
+---
+
+**Exercise 3.**
+**MLE of normal parameters.** Given i.i.d. $X_1, \ldots, X_n \sim N(\mu, \sigma^2)$, find both MLEs.
+
+??? success "Solution to Exercise 3"
+    Log-likelihood: $\ell(\mu, \sigma^2) = -(n/2)\ln(2\pi\sigma^2) - (1/(2\sigma^2))\sum(X_i - \mu)^2$.
+
+    $\partial \ell/\partial \mu = (1/\sigma^2)\sum(X_i - \mu) = 0 \Rightarrow \hat\mu = \bar X$.
+
+    $\partial \ell/\partial \sigma^2 = -n/(2\sigma^2) + (1/(2\sigma^4))\sum(X_i - \hat\mu)^2 = 0 \Rightarrow \hat\sigma^2 = (1/n)\sum(X_i - \bar X)^2$.
+
+    **Note:** MLE divides by $n$, not $n - 1$. So $\hat\sigma^2_{\text{MLE}}$ is biased: $\mathbb{E}[\hat\sigma^2] = ((n-1)/n)\sigma^2$. For unbiased estimation use $s^2 = \sum(X_i - \bar X)^2/(n - 1)$ (Bessel's correction).
+
+    The MLE/unbiased distinction is a recurring theme: MLE is asymptotically optimal but may be finite-sample biased.
+
+---
+
+**Exercise 4.**
+**Sufficient statistics.** A statistic $T(X)$ is **sufficient** for $\theta$ if the conditional distribution $X \mid T$ doesn't depend on $\theta$. State the **Fisher-Neyman factorization theorem** and use it to verify $\sum X_i$ is sufficient for $\lambda$ when $X_i \sim \mathrm{Poisson}(\lambda)$.
+
+??? success "Solution to Exercise 4"
+    **Fisher-Neyman factorization theorem:** $T(X)$ is sufficient for $\theta$ iff the joint density factors as
+
+    $$
+    f(x \mid \theta) = g(T(x), \theta) \cdot h(x)
+    $$
+
+    where $g$ depends on $\theta$ only through $T(x)$, and $h$ doesn't depend on $\theta$.
+
+    **For Poisson:** $f(x_1, \ldots, x_n \mid \lambda) = \prod_i \frac{e^{-\lambda} \lambda^{x_i}}{x_i!} = e^{-n\lambda} \lambda^{\sum x_i} / \prod_i x_i!$.
+
+    The likelihood factors as $g(\sum x_i, \lambda) \cdot h(x) = (e^{-n\lambda} \lambda^{\sum x_i}) \cdot (1/\prod x_i!)$. Hence $T(X) = \sum X_i$ is sufficient.
+
+    **Significance:** all the information in $X_1, \ldots, X_n$ about $\lambda$ is concentrated in $\sum X_i$. The MLE depends on the data only through $T$; the full data is unnecessary for inference. This is the foundation of efficient estimation via the Rao-Blackwell theorem.
+
+---
+
+**Exercise 5.**
+**Fisher information.** For $X \sim N(\mu, \sigma^2)$ with $\sigma^2$ known, compute the Fisher information about $\mu$. Why does this quantity matter?
+
+??? success "Solution to Exercise 5"
+    Score function: $\partial \log f/\partial \mu = (x - \mu)/\sigma^2$.
+
+    Fisher information: $I(\mu) = \mathbb{E}\!\left[(\partial \log f / \partial \mu)^2\right] = \mathbb{E}[(X - \mu)^2/\sigma^4] = \sigma^2/\sigma^4 = 1/\sigma^2$.
+
+    For an i.i.d. sample of size $n$: $I_n(\mu) = n/\sigma^2$.
+
+    **Why it matters: Cramér-Rao bound.** The variance of any unbiased estimator of $\mu$ is at least $1/I_n(\mu) = \sigma^2/n$. Since $\mathrm{Var}(\bar X) = \sigma^2/n$ exactly, $\bar X$ achieves the Cramér-Rao lower bound — **efficient**. No unbiased estimator can be better.
+
+    Fisher information quantifies the "information content" of the sample about the parameter and provides a lower bound on estimator variance. Used in MLE asymptotics, experimental design, and information geometry.
+
+---
+
+**Exercise 6.**
+**Asymptotic normality of the MLE.** State the general result: $\sqrt n (\hat\theta_{\text{MLE}} - \theta) \xrightarrow{d} N(0, 1/I(\theta))$ where $I(\theta)$ is the Fisher information per observation. Verify for Poisson.
+
+??? success "Solution to Exercise 6"
+    For Poisson($\lambda$): $\hat\lambda_{\text{MLE}} = \bar X$. Fisher info per observation: $I(\lambda) = 1/\lambda$ (since $\partial \log f/\partial \lambda = X/\lambda - 1$, and $\mathbb{E}[(X/\lambda - 1)^2] = \mathrm{Var}(X)/\lambda^2 = 1/\lambda$).
+
+    Asymptotic distribution: $\sqrt n(\bar X - \lambda) \xrightarrow{d} N(0, \lambda)$, which matches $1/I(\lambda) = \lambda$.
+
+    Direct check via CLT: $\bar X = (1/n)\sum X_i$ with $\mathrm{Var}(X_i) = \lambda$, so $\sqrt n(\bar X - \lambda) \to N(0, \lambda)$ by CLT. ✓
+
+    **General significance:** MLEs are asymptotically normal with variance equal to the inverse Fisher information per observation. This gives:
+
+    - **Asymptotic CIs:** $\hat\theta \pm 1.96/\sqrt{n I(\hat\theta)}$ (using $I(\hat\theta)$ as a plug-in estimate of $I(\theta)$).
+    - **Asymptotic efficiency:** MLEs achieve the Cramér-Rao bound asymptotically.
+
+    These results justify the central role of likelihood-based inference in modern statistics.

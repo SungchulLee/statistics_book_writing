@@ -1,9 +1,6 @@
 # Chapter 14: Normality Tests
 
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Overview
 
 Many statistical methods -- $t$-tests, ANOVA, linear regression, confidence intervals -- assume that data (or residuals) follow a normal distribution. Before applying these methods, practitioners need tools to check whether the normality assumption is reasonable. This chapter provides a complete toolkit for assessing normality, from visual diagnostics and descriptive statistics through formal hypothesis tests, along with strategies for dealing with data that fails the normality assumption.

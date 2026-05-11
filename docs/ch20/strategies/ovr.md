@@ -133,3 +133,41 @@ y_pred = model.predict(X_test)
 
 See [Comparison with Softmax](comparison.md) for a discussion of when OVR is
 preferred over native multinomial softmax regression.
+
+## Exercises
+
+**Exercise 1.**
+One-vs-Rest versus Softmax
+
+Consider a 4-class problem where a one-vs-rest (OvR) approach trains 4 binary classifiers, and a softmax model is trained natively.
+
+**(a)** The OvR classifiers produce the following scores for a test example:
+
+| Classifier | P(class $k$ vs rest) |
+|:---:|:---:|
+| Class 1 vs rest | 0.80 |
+| Class 2 vs rest | 0.65 |
+| Class 3 vs rest | 0.40 |
+| Class 4 vs rest | 0.55 |
+
+Do these probabilities form a valid probability distribution? Explain.
+
+**(b)** How would you make a prediction from the OvR scores? What is the predicted class?
+
+**(c)** A softmax model produces $\hat{\mathbf{p}} = (0.45, 0.30, 0.10, 0.15)^\top$ for the same example. How do these probabilities differ fundamentally from the OvR scores?
+
+**(d)** State two advantages of native softmax regression over the OvR approach.
+
+??? success "Solution to Exercise 1"
+
+    **(a)** The scores sum to $0.80 + 0.65 + 0.40 + 0.55 = 2.40 \ne 1$. They do **not** form a valid probability distribution. Each OvR classifier independently estimates the probability that the example belongs to its class versus all others. These individual binary probabilities are not constrained to sum to 1, and their magnitudes depend on the decision boundary of each separate binary model.
+
+    **(b)** The standard OvR prediction assigns the class with the highest score: $\arg\max_k \text{score}_k = 1$, since Class 1 has the highest score (0.80). While simple, this rule can lead to ties and does not produce calibrated probabilities. One could normalize the scores by dividing by their sum ($0.80/2.40 = 0.333$), but this is ad hoc and does not guarantee well-calibrated probabilities.
+
+    **(c)** The softmax probabilities $\hat{\mathbf{p}} = (0.45, 0.30, 0.10, 0.15)^\top$ sum to exactly 1 and are jointly estimated by a single model. They represent a coherent probability distribution over all classes, calibrated through the softmax function. The OvR scores, by contrast, come from independently trained classifiers that do not communicate during training.
+
+    **(d)** Two advantages of native softmax over OvR:
+
+    1. **Calibrated probabilities**: Softmax inherently produces a valid probability distribution (non-negative, sums to 1) without post-hoc normalization. This makes the outputs directly interpretable as class probabilities and suitable for downstream probabilistic reasoning.
+
+    2. **Joint training**: The softmax model's weight matrix is optimized to separate all classes simultaneously, allowing the model to share information across class boundaries. OvR trains each classifier independently, so it cannot exploit the structure of the multiclass problem. For example, features useful for distinguishing Class 1 from Class 2 might also help distinguish Class 3 from Class 4, but OvR cannot leverage this.

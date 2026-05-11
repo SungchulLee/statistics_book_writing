@@ -62,34 +62,34 @@ Under $H_0$ and for sufficiently large samples, $Z$ is approximately standard no
 
 Let $z_{\alpha}$ denote the upper $\alpha$-quantile of the standard normal distribution and $z_{\text{obs}}$ the observed value of the test statistic.
 
-### Two-sided test ($H_a: p_1 \neq p_2$)
+### Two-sided test (Hₐ: p₁ ≠ p₂)
 
 **Rejection region**: reject $H_0$ if $|z_{\text{obs}}| > z_{\alpha/2}$.
 
 **P-value**:
 
 $$
-p\text{-value} = 2\bigl[1 - \Phi(|z_{\text{obs}}|)\bigr]
+p\text{-value} = 2\bigl[1 - \mathcal{N}(|z_{\text{obs}}|)\bigr]
 $$
 
-### Left-tailed test ($H_a: p_1 < p_2$)
+### Left-tailed test (Hₐ: p₁ < p₂)
 
 **Rejection region**: reject $H_0$ if $z_{\text{obs}} < -z_{\alpha}$.
 
 **P-value**:
 
 $$
-p\text{-value} = \Phi(z_{\text{obs}})
+p\text{-value} = \mathcal{N}(z_{\text{obs}})
 $$
 
-### Right-tailed test ($H_a: p_1 > p_2$)
+### Right-tailed test (Hₐ: p₁ > p₂)
 
 **Rejection region**: reject $H_0$ if $z_{\text{obs}} > z_{\alpha}$.
 
 **P-value**:
 
 $$
-p\text{-value} = 1 - \Phi(z_{\text{obs}})
+p\text{-value} = 1 - \mathcal{N}(z_{\text{obs}})
 $$
 
 ## Assumptions
@@ -145,7 +145,7 @@ $$
 **Step 5: Compute the p-value.**
 
 $$
-p\text{-value} = 2\bigl[1 - \Phi(1.582)\bigr] = 2(1 - 0.9431) = 2(0.0569) \approx 0.114
+p\text{-value} = 2\bigl[1 - \mathcal{N}(1.582)\bigr] = 2(1 - 0.9431) = 2(0.0569) \approx 0.114
 $$
 
 **Step 6: Make the decision.** Since $p \approx 0.114 > 0.05 = \alpha$, we fail to reject $H_0$. At the 5% significance level, there is insufficient evidence to conclude that the conversion rates differ between the two page designs.
@@ -214,3 +214,79 @@ because the confidence interval does not assume $p_1 = p_2$. The pooled standard
 - [Two-Sample Z-Test for Means](z_test_two_means.md): comparing means when variances are known
 - [Two-Sample t-Test](t_test_two_means.md): comparing means when variances are unknown
 - [F-Test for Two Variances](f_test_two_variances.md): testing equality of population variances
+
+## Exercises
+
+**Exercise 1.**
+Treatment A: 60/200 quit. B: 54/180 quit. Test at $\alpha = 0.05$.
+
+??? success "Solution to Exercise 1"
+    $\hat p_1 = 0.30$, $\hat p_2 = 0.30$. Pooled: $\hat p = (60+54)/(200+180) = 114/380 = 0.30$.
+
+    $z = (0.30 - 0.30)/\mathrm{SE} = 0$. Fail to reject. No difference detected.
+
+---
+
+**Exercise 2.**
+A/B test: A converts 240/2000, B converts 270/2000. Test $H_0: p_A = p_B$ at $\alpha = 0.05$.
+
+??? success "Solution to Exercise 2"
+    $\hat p_A = 0.120$, $\hat p_B = 0.135$. Pooled: $\hat p = 510/4000 = 0.1275$.
+
+    $\mathrm{SE} = \sqrt{0.1275 \cdot 0.8725 \cdot (1/2000 + 1/2000)} = \sqrt{0.0001113} \approx 0.01055$.
+
+    $z = (0.135 - 0.120)/0.01055 \approx 1.42$. P-value (two-sided) $\approx 0.156$. Fail to reject.
+
+    Despite a 12.5% relative lift, not statistically significant at this $n$. Would need larger sample.
+
+---
+
+**Exercise 3.**
+**Sample size for A/B test.** What $n$ per arm detects a lift from 12% to 13.5% with 80% power at $\alpha = 0.05$?
+
+??? success "Solution to Exercise 3"
+    Effect size: $|p_1 - p_2| = 0.015$. Avg variance: $\approx 0.1275 \cdot 0.8725 \approx 0.1112$.
+
+    Formula: $n \approx 2 \cdot ((z_{\alpha/2} + z_\beta)^2 \cdot p(1-p))/(\Delta)^2 = 2 \cdot ((1.96 + 0.84)^2 \cdot 0.1112)/0.000225 \approx 7741$.
+
+    Roughly 8000 per arm. A/B tests of small effects need large samples — common in tech.
+
+---
+
+**Exercise 4.**
+**Pooled vs unpooled SE.** Why use pooled SE for hypothesis test but unpooled for CI?
+
+??? success "Solution to Exercise 4"
+    Under $H_0: p_1 = p_2 = p$, the pooled estimator $\hat p_{\text{pool}}$ is the best estimate of common $p$. Use it in the SE for the test.
+
+    For the CI on $p_1 - p_2$ (not assuming equality), use $\hat p_1, \hat p_2$ separately.
+
+    Modern A/B testing platforms sometimes use unpooled SE for tests too — the conservative choice; tests slightly less powerful but valid under unequal proportions.
+
+---
+
+**Exercise 5.**
+**Conditions** for two-proportion $z$-test.
+
+??? success "Solution to Exercise 5"
+    - Random independent samples from each population.
+    - Large enough sample sizes: $n_1 \hat p_1 \ge 10$, $n_1(1 - \hat p_1) \ge 10$, and similarly for sample 2.
+    - For pooled version: $n \hat p_{\text{pool}}, n (1 - \hat p_{\text{pool}})$ both $\ge 10$.
+
+    When conditions fail: Fisher's exact test.
+
+---
+
+**Exercise 6.**
+**Effect size for two proportions.** Define relative risk and odds ratio.
+
+??? success "Solution to Exercise 6"
+    **Risk difference:** $p_1 - p_2$. Absolute.
+
+    **Relative risk (RR):** $p_1/p_2$. Ratio.
+
+    **Odds ratio (OR):** $[p_1/(1-p_1)]/[p_2/(1-p_2)]$. Used in case-control studies and logistic regression.
+
+    For rare events ($p$ small), $\mathrm{OR} \approx \mathrm{RR}$. For common events, they differ.
+
+    Reporting: include risk difference (clinically interpretable), relative risk (effect magnitude), and OR (statistical convention). Each has its place.

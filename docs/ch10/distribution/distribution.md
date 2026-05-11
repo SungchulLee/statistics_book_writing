@@ -1,9 +1,5 @@
 # Chi-Square Distribution
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Overview
 
 The **chi-square distribution** arises naturally when summing squares of independent standard normal random variables. If $Z_1, Z_2, \dots, Z_k$ are independent standard normal variables, then
@@ -143,3 +139,55 @@ $$
 $$
 
 However, there was some controversy in practical applications, and it was not settled for 20 years until Fisher's 1922 and 1924 papers.
+
+## Exercises
+
+**Exercise 1.**
+A fair die is rolled 120 times, producing the following counts: 1 (18), 2 (22), 3 (17), 4 (25), 5 (19), 6 (19). Compute the chi-square test statistic. With 5 degrees of freedom, the critical value at $\alpha = 0.05$ is 11.07. Is there evidence the die is unfair?
+
+??? success "Solution to Exercise 1"
+    Under $H_0$ (fair die), each expected count is $E_i = 120/6 = 20$.
+
+    $$
+    \chi^2 = \frac{(18-20)^2}{20} + \frac{(22-20)^2}{20} + \frac{(17-20)^2}{20} + \frac{(25-20)^2}{20} + \frac{(19-20)^2}{20} + \frac{(19-20)^2}{20}
+    $$
+
+    $$
+    = \frac{4+4+9+25+1+1}{20} = \frac{44}{20} = 2.2
+    $$
+
+    Since $\chi^2 = 2.2 < 11.07$, we **fail to reject** $H_0$. There is no evidence that the die is unfair.
+
+---
+
+**Exercise 2.**
+Explain why the chi-square statistic uses $E_i$ in the denominator rather than $O_i$.
+
+??? success "Solution to Exercise 2"
+    The denominator $E_i$ serves as a standardization factor. Each term $(O_i - E_i)^2 / E_i$ is approximately a squared standard normal variable because:
+
+    $$
+    \text{Var}(O_i) \approx E_i \quad \text{(when } np_i(1-p_i) \approx np_i = E_i\text{)}
+    $$
+
+    Using $E_i$ ensures that categories with larger expected counts contribute to the test statistic in proportion to the surprise of the deviation. A deviation of 5 from an expected count of 100 is much less noteworthy than a deviation of 5 from an expected count of 10, and the $E_i$ denominator appropriately downweights the former.
+
+---
+
+**Exercise 3.**
+The chi-square test statistic is derived as an approximation. What assumption makes the approximation $\sqrt{np_i(1-p_i)} \approx \sqrt{np_i} = \sqrt{E_i}$ valid?
+
+??? success "Solution to Exercise 3"
+    The approximation requires that each $p_i$ is moderate to small, so that $1 - p_i \approx 1$. This holds when the number of categories $k$ is reasonably large and probabilities are spread out (no single category dominates). For example, if $k = 6$ and $p_i = 1/6$, then $1 - p_i = 5/6 \approx 0.83$, which is close enough to 1 for practical purposes.
+
+    The approximation breaks down when a category has very high probability (e.g., $p_i = 0.9$, making $1 - p_i = 0.1$ far from 1). In such cases, the actual variance $np_i(1-p_i)$ is much smaller than $np_i$, and the simple chi-square test statistic may not follow the $\chi^2$ distribution as closely.
+
+---
+
+**Exercise 4.**
+Pearson's chi-square test was published in 1900, but the correct degrees of freedom were not established until Fisher's work in 1922-1924. Explain intuitively why the degrees of freedom for a goodness-of-fit test with $k$ categories is $k - 1$, not $k$.
+
+??? success "Solution to Exercise 4"
+    The degrees of freedom are $k - 1$ because the $k$ observed counts are subject to one constraint: they must sum to $n$ (the total sample size). That is, $\sum_{i=1}^k O_i = n$. This means only $k-1$ of the observed counts are free to vary independently; the last one is determined by $n - \sum_{i=1}^{k-1} O_i$.
+
+    Similarly, the deviations $O_i - E_i$ satisfy $\sum_{i=1}^k (O_i - E_i) = 0$, so the $k$ standardized deviations are not independent. This constraint reduces the dimension of the variation from $k$ to $k-1$, which is why the limiting distribution is $\chi^2_{k-1}$ rather than $\chi^2_k$.

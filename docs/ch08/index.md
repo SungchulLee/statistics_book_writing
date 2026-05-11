@@ -1,9 +1,5 @@
 # Chapter 8: Confidence Intervals
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Overview
 
 Confidence intervals quantify the uncertainty in estimating population parameters by providing a range of plausible values together with a specified level of confidence. This chapter develops the theory and construction of confidence intervals for means, proportions, and variances across one-sample, two-sample, and paired-sample designs. It also addresses the practical question of how large a sample is needed to achieve a desired margin of error.

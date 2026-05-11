@@ -1,8 +1,5 @@
 # Student's t Distribution
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Overview
 
 The Student's $t$ distribution arises when estimating the mean of a normally distributed population using the **sample standard deviation** $S$ instead of the known population standard deviation $\sigma$. It accounts for the additional uncertainty introduced by estimating $\sigma$.
@@ -192,3 +189,107 @@ plt.show()
 - It has heavier tails than the normal, especially for small degrees of freedom.
 - As $d \to \infty$, the $t$ distribution converges to $N(0,1)$.
 - The exactness of the $t$ result depends critically on the normality of the population.
+
+## Exercises
+
+**Exercise 1.**
+Salaries are normal with $\mu = \$40{,}000$. Sample $n = 9$, $s = \$8{,}000$. Compute $P(\bar X \ge \$45{,}000)$.
+
+??? success "Solution to Exercise 1"
+    $\mathrm{SE} = s/\sqrt n = 8000/3 \approx 2667$. Test statistic: $t = (45000 - 40000)/2667 \approx 1.875$.
+
+    Under $t_8$: $P(T \ge 1.875) \approx 0.048$ — about 4.8%.
+
+    Note: we use $t$ instead of $z$ because $\sigma$ is unknown and $s$ is estimated from the sample, introducing additional uncertainty.
+
+---
+
+**Exercise 2.**
+**Derive the $t$-distribution.** Show that if $Z \sim N(0, 1)$ and $V \sim \chi^2_\nu$ independent, then $T = Z/\sqrt{V/\nu} \sim t_\nu$.
+
+??? success "Solution to Exercise 2"
+    By definition, $t_\nu$ is the distribution of $Z/\sqrt{V/\nu}$ where $Z \sim N(0, 1)$ and $V \sim \chi^2_\nu$ are independent.
+
+    Derivation of PDF: condition on $V = v$. Given $V = v$, $T = Z/\sqrt{v/\nu}$, so $T \mid V \sim N(0, \nu/v)$. Density:
+
+    $$
+    f_{T \mid V}(t \mid v) = \frac{1}{\sqrt{2\pi \nu/v}} e^{-vt^2/(2\nu)}
+    $$
+
+    Marginal of $T$: integrate over $v$ using $V \sim \chi^2_\nu$ density. Result:
+
+    $$
+    f_T(t) = \frac{\Gamma((\nu+1)/2)}{\sqrt{\nu\pi}\,\Gamma(\nu/2)} \left(1 + \frac{t^2}{\nu}\right)^{-(\nu+1)/2}
+    $$
+
+    The $t$ density has polynomial tails $\sim t^{-(\nu+1)}$, heavier than normal's $e^{-t^2/2}$.
+
+---
+
+**Exercise 3.**
+**$t$ approaches normal.** Show $t_\nu \to N(0, 1)$ as $\nu \to \infty$.
+
+??? success "Solution to Exercise 3"
+    From the $t$ definition $T = Z/\sqrt{V/\nu}$ with $V \sim \chi^2_\nu$. Note $V/\nu = (1/\nu)\sum_{i=1}^\nu Z_i^2 \to 1$ in probability by LLN. So $\sqrt{V/\nu} \to 1$, and $T \to Z \sim N(0, 1)$.
+
+    More precisely: by Slutsky's theorem, $T = Z/\sqrt{V/\nu} \xrightarrow{d} Z/1 = Z$.
+
+    **Practical:** for $\nu \ge 30$, the $t$ distribution is nearly indistinguishable from normal; $t_{30}$ critical values are within 2% of $z$ critical values. This is why $n \ge 30$ is the rule of thumb for using $z$ instead of $t$.
+
+---
+
+**Exercise 4.**
+**Why use $t$ instead of $z$.** A statistician computes $z = (\bar X - \mu_0)/(\sigma/\sqrt n)$ but realizes $\sigma$ is unknown. They substitute $s$. Show that the resulting $t = (\bar X - \mu_0)/(s/\sqrt n) \sim t_{n-1}$.
+
+??? success "Solution to Exercise 4"
+    Under the null $\mu = \mu_0$, $\bar X \sim N(\mu_0, \sigma^2/n)$, so $Z = (\bar X - \mu_0)/(\sigma/\sqrt n) \sim N(0, 1)$.
+
+    The sample variance $s^2$ scaled by $\sigma^2$ has chi-squared distribution: $(n-1)s^2/\sigma^2 \sim \chi^2_{n-1}$ (for normal data).
+
+    $\bar X$ and $s^2$ are independent for normal data (a non-trivial fact specific to normality).
+
+    Therefore:
+
+    $$
+    t = \frac{\bar X - \mu_0}{s/\sqrt n} = \frac{(\bar X - \mu_0)/(\sigma/\sqrt n)}{\sqrt{((n-1) s^2/\sigma^2)/(n-1)}} = \frac{Z}{\sqrt{V/(n-1)}}
+    $$
+
+    with $V \sim \chi^2_{n-1}$ independent of $Z$. By the definition of the $t$, this is $t_{n-1}$.
+
+    Using $s$ instead of $\sigma$ adds a chi-squared denominator — the $t$ distribution accounts for this extra uncertainty by having heavier tails than normal.
+
+---
+
+**Exercise 5.**
+**Heavy tails of the $t$.** For $t_3$, compute $P(|T| > 2)$ and $P(|T| > 4)$. Compare with the normal.
+
+??? success "Solution to Exercise 5"
+    $t_3$: $P(|T| > 2) = 2 \cdot P(T > 2)$. From $t_3$ table: $P(T > 2) \approx 0.07$, so $P(|T| > 2) \approx 0.14$.
+
+    $P(|T| > 4) \approx 2 \cdot 0.014 = 0.028$.
+
+    Normal: $P(|Z| > 2) \approx 0.046$, $P(|Z| > 4) \approx 6 \times 10^{-5}$.
+
+    Comparison at $|x| = 4$: normal probability is $6 \times 10^{-5}$ (essentially zero); $t_3$ probability is $0.028$ — over 400 times larger. The $t_3$ assigns vastly more probability to extreme outcomes than the normal.
+
+    **Practical consequence:** small-sample $t$-tests have lower power than $z$-tests at the same significance level because critical values are larger to compensate for heavier tails. The trade-off is between assumptions (known $\sigma$) and tail conservativeness.
+
+---
+
+**Exercise 6.**
+**Welch's $t$-test.** For two independent samples with unequal variances, Welch's test uses $t = (\bar X_1 - \bar X_2)/\sqrt{s_1^2/n_1 + s_2^2/n_2}$ with degrees of freedom approximated by the Welch–Satterthwaite formula. State this formula and explain why it is not an integer.
+
+??? success "Solution to Exercise 6"
+    **Welch–Satterthwaite degrees of freedom:**
+
+    $$
+    \nu_{WS} = \frac{(s_1^2/n_1 + s_2^2/n_2)^2}{(s_1^2/n_1)^2/(n_1 - 1) + (s_2^2/n_2)^2/(n_2 - 1)}
+    $$
+
+    This formula approximates the distribution of the linear combination $s_1^2/n_1 + s_2^2/n_2$ as a scaled chi-squared with $\nu_{WS}$ degrees of freedom. The approximation is moment-matching: equate the first two moments of the $\chi^2$ approximation to the exact distribution.
+
+    **Why non-integer:** $\nu_{WS}$ depends on the *sample* variances $s_1^2, s_2^2$ — quantities that can take any positive real value. The formula doesn't produce integer outputs except by accident.
+
+    Implementation: use $t_{\nu_{WS}}$ critical values with $\nu_{WS}$ rounded down (conservative) or use it directly in software that accepts non-integer df.
+
+    Welch's test is the **default two-sample $t$-test** in R (`t.test`) and SciPy (`scipy.stats.ttest_ind(equal_var=False)`) precisely because it doesn't require the equal-variance assumption that the original Student's $t$-test makes.

@@ -1,9 +1,6 @@
 # Influential Data Points
 
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Overview
 
 In ANOVA, certain data points can exert a disproportionate influence on the results, leading to skewed conclusions. These influential data points may be outliers (unusual response values) or leverage points (unusual predictor values), and they can significantly affect the estimated group means, variances, and the overall F-statistic. Identifying and addressing these points is crucial to ensure the robustness of the ANOVA results.
@@ -106,3 +103,41 @@ influence = model.get_influence()
 summary = influence.summary_frame()
 print(summary[['hat_diag', 'cooks_d', 'dffits', 'student_resid']].describe())
 ```
+## Exercises
+
+**Exercise 1.**
+In a one-way ANOVA with three groups ($n = 10$ each), one observation has Cook's distance $D_i = 1.2$. The commonly used threshold is $D_i > 4/N$. Determine whether this point is influential and explain what Cook's distance measures.
+
+??? success "Solution to Exercise 1"
+    The threshold is $4/N = 4/30 \approx 0.133$. Since $D_i = 1.2 \gg 0.133$, this observation is highly influential.
+
+    Cook's distance measures the overall influence of observation $i$ on all fitted values simultaneously. It combines leverage (how unusual the observation's predictor values are) and residual size (how far the observation is from the fitted model). A large Cook's distance means that removing the observation would substantially change the estimated group means and the F-statistic.
+
+---
+
+**Exercise 2.**
+Distinguish between an outlier, a leverage point, and an influential point in the ANOVA context. Give an example where a point has high leverage but is not influential.
+
+??? success "Solution to Exercise 2"
+
+    - **Outlier:** An observation with an unusually large residual (far from its group mean).
+    - **Leverage point:** An observation with unusual predictor values. In ANOVA this typically means belonging to a group with very few observations, giving it more influence on the group mean.
+    - **Influential point:** An observation that substantially changes the results when removed. It typically has both high leverage and a large residual.
+
+    **Example of high leverage without influence:** In a one-way ANOVA, if one group has only $n = 3$ observations while others have $n = 30$, each observation in the small group has high leverage (large hat value). But if those observations are close to their group mean, their residuals are small and they are not influential (Cook's distance remains low).
+
+---
+
+**Exercise 3.**
+A DFFITS value exceeds $2\sqrt{p/n}$ for an observation in group B. Explain what DFFITS measures and how it differs from Cook's distance.
+
+??? success "Solution to Exercise 3"
+    DFFITS measures the change in the **fitted value** for observation $i$ when that observation is deleted, scaled by its standard error. Formally:
+
+    $$
+    \text{DFFITS}_i = \frac{\hat{Y}_i - \hat{Y}_{i(i)}}{s_{(i)} \sqrt{h_{ii}}}
+    $$
+
+    where $\hat{Y}_{i(i)}$ is the fitted value when observation $i$ is excluded.
+
+    The key difference from Cook's distance is that DFFITS focuses on the effect on a **single fitted value** (the observation's own prediction), while Cook's distance measures the effect on **all fitted values simultaneously**. An observation can have a large DFFITS but moderate Cook's distance if its influence is localized.

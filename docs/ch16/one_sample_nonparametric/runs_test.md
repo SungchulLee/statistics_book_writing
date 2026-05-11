@@ -61,10 +61,10 @@ $$
 is approximately standard normal under $H_0$. The two-sided $p$-value is
 
 $$
-p = 2 \, \Phi(-|Z|)
+p = 2 \, \mathcal{N}(-|Z|)
 $$
 
-where $\Phi$ is the standard normal CDF.
+where $\mathcal{N}$ is the standard normal CDF.
 
 !!! note "Exact distribution for small samples"
     For small $N$, exact critical values can be obtained from tables of the runs distribution. The exact null distribution is computed by enumerating all $\binom{N}{n_1}$ equally likely arrangements and counting the number of runs in each.
@@ -101,7 +101,7 @@ $$
 Z = \frac{8 - 8.467}{1.857} \approx -0.251
 $$
 
-**Step 5.** Compute the $p$-value: $p = 2\,\Phi(-0.251) \approx 0.802$.
+**Step 5.** Compute the $p$-value: $p = 2\,\mathcal{N}(-0.251) \approx 0.802$.
 
 Since $p = 0.802 \gg 0.05$, we fail to reject $H_0$. The data are consistent with a random sequence.
 
@@ -125,3 +125,68 @@ Since $p = 0.802 \gg 0.05$, we fail to reject $H_0$. The data are consistent wit
 ## Summary
 
 The Wald-Wolfowitz runs test provides a simple, distribution-free method for detecting departures from randomness in a sequence. By counting the number of maximal consecutive blocks of identical elements and comparing to the expected count under independence, the test identifies both clustering and alternation patterns. The normal approximation is reliable for sequences with at least 10 elements of each type; for smaller samples, exact tables should be consulted.
+
+## Exercises
+
+**Exercise 1.**
+A coin is flipped 20 times, producing the sequence:
+
+$$
+H, H, T, T, T, H, H, H, H, T, T, H, T, H, H, T, T, T, H, H
+$$
+
+**(a)** Count the number of runs $R$ in this sequence.
+
+**(b)** Let $n_H = 11$ and $n_T = 9$. Under the null hypothesis of randomness, compute the expected number of runs:
+
+$$
+E[R] = \frac{2 n_H n_T}{n_H + n_T} + 1
+$$
+
+and the variance:
+
+$$
+\text{Var}(R) = \frac{2 n_H n_T (2 n_H n_T - n_H - n_T)}{(n_H + n_T)^2 (n_H + n_T - 1)}
+$$
+
+**(c)** Compute the $z$-statistic and perform a two-sided test at $\alpha = 0.05$.
+
+??? success "Solution to Exercise 1"
+
+    **(a)** Identifying the runs (maximal consecutive identical elements):
+
+    - Run 1: HH
+    - Run 2: TTT
+    - Run 3: HHHH
+    - Run 4: TT
+    - Run 5: H
+    - Run 6: T
+    - Run 7: HH
+    - Run 8: TTT
+    - Run 9: HH
+
+    The number of runs is $R = 9$.
+
+    **(b)** With $n_H = 11$ and $n_T = 9$:
+
+    $$
+    E[R] = \frac{2(11)(9)}{20} + 1 = \frac{198}{20} + 1 = 9.9 + 1 = 10.9
+    $$
+
+    $$
+    \text{Var}(R) = \frac{2(11)(9)(2 \times 11 \times 9 - 11 - 9)}{20^2 \times 19} = \frac{198(198 - 20)}{400 \times 19} = \frac{198 \times 178}{7600} = \frac{35244}{7600} \approx 4.637
+    $$
+
+    **(c)**
+
+    $$
+    z = \frac{R - E[R]}{\sqrt{\text{Var}(R)}} = \frac{9 - 10.9}{\sqrt{4.637}} = \frac{-1.9}{2.153} \approx -0.883
+    $$
+
+    Two-sided p-value:
+
+    $$
+    p = 2 \times P(Z \le -0.883) = 2 \times \mathcal{N}(-0.883) \approx 2 \times 0.189 = 0.377
+    $$
+
+    Since $p = 0.377 \gg 0.05$, we fail to reject $H_0$. The sequence does not show statistically significant evidence of non-randomness. The observed number of runs (9) is close to the expected value (10.9), consistent with a random sequence.

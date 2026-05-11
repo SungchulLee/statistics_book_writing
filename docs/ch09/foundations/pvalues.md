@@ -1,9 +1,5 @@
 # Test Statistics and P-values
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Test Statistic
 
 A **test statistic** is a calculated value from the sample data that, when compared to a threshold from a theoretical distribution, helps decide whether to reject the null hypothesis, $H_0$. The choice of test statistic depends on the data type and the hypothesis we test. Standard test statistics include the z-statistic, t-statistic, and chi-square statistic.
@@ -133,3 +129,115 @@ Based on the p-value and the predetermined significance level, the decision is m
 ### Step 7: Concluding the Hypothesis Test
 
 The final step involves interpreting the results in the context of the research question. This final step includes considering the implications of the decision, discussing potential errors, and suggesting further research if needed.
+
+## Exercises
+
+**Exercise 1.**
+**Define p-value formally** and explain its relationship to the test statistic distribution under $H_0$.
+
+??? success "Solution to Exercise 1"
+    **P-value:** the probability, under $H_0$, of obtaining a test statistic at least as extreme as the observed value.
+
+    Formally: $p = P_{H_0}(T \ge t_{\text{obs}})$ (one-sided) or $p = 2 \min[P_{H_0}(T \ge t_{\text{obs}}), P_{H_0}(T \le t_{\text{obs}})]$ (two-sided).
+
+    Computed as the tail area of the null distribution beyond the observed statistic.
+
+    Under $H_0$, the p-value itself is **uniformly distributed** on $[0, 1]$ (probability integral transform). This justifies the decision rule "reject if $p \le \alpha$" — it gives Type I error rate exactly $\alpha$.
+
+---
+
+**Exercise 2.**
+**Vegetarian teens.** Evie samples 25 students, finds 20% vegetarian. Tests $H_0: p = 0.06$ vs $H_1: p > 0.06$. Compute the exact p-value.
+
+??? success "Solution to Exercise 2"
+    Observed: $X = 5$ vegetarians in $n = 25$. Under $H_0$: $X \sim \mathrm{Binomial}(25, 0.06)$.
+
+    P-value: $P(X \ge 5) = 1 - P(X \le 4) = 1 - \sum_{k=0}^4 \binom{25}{k}(0.06)^k (0.94)^{25-k}$.
+
+    Numerical: $P(X \le 4) \approx 0.9979$. So $p \approx 0.0021$.
+
+    Strong evidence at school's veggie rate exceeds 6%. Reject $H_0$ at $\alpha = 0.01$.
+
+    Normal approximation would give: $z = (0.20 - 0.06)/\sqrt{0.06 \cdot 0.94/25} \approx 2.95$, $p \approx 0.0016$ — close but slightly different (exact is preferred for small $n$ with small $p$).
+
+---
+
+**Exercise 3.**
+**Multilingual Americans.** $\hat p = 40/120 \approx 0.333$, test $H_0: p = 0.26$ vs $H_1: p > 0.26$. Compute p-value via normal approximation.
+
+??? success "Solution to Exercise 3"
+    $\mathrm{SE} = \sqrt{0.26 \cdot 0.74/120} \approx 0.0400$. $z = (0.333 - 0.26)/0.0400 \approx 1.83$.
+
+    P-value: $P(Z > 1.83) = 1 - \Phi(1.83) \approx 0.034$. Reject $H_0$ at $\alpha = 0.05$.
+
+    Conclusion: evidence that more than 26% of Americans speak multiple languages.
+
+    Check: $np_0 = 31.2 \ge 10$, $n(1-p_0) = 88.8 \ge 10$. Normal approximation valid.
+
+---
+
+**Exercise 4.**
+**Common p-value misinterpretations.** List three.
+
+??? success "Solution to Exercise 4"
+    1. **"$p$-value is the probability $H_0$ is true."** WRONG. P-value is a probability assuming $H_0$, not about $H_0$. To get $P(H_0 \mid \text{data})$, need Bayes' theorem with a prior.
+
+    2. **"$1 - p$ is the probability $H_1$ is true."** WRONG. Same confusion.
+
+    3. **"$p < 0.05$ means a large effect."** WRONG. P-value depends on both effect size and sample size. With $n = 10^6$, a tiny irrelevant effect can have $p < 10^{-10}$. Always report effect size and CI alongside p-value.
+
+    Other misconceptions: "p = 0.05 means 5% chance of error" (probability statement about hypothesis, not procedure); "if $p > 0.05$, $H_0$ is true" (failing to reject ≠ accepting).
+
+---
+
+**Exercise 5.**
+**Simulation-based p-value.** Demonstrate for the vegetarian example.
+
+??? success "Solution to Exercise 5"
+    ```python
+    import numpy as np
+    rng = np.random.default_rng(42)
+    p0, n, x_obs = 0.06, 25, 5
+    n_sim = 10_000
+    samples = rng.binomial(n, p0, size=n_sim)
+    p_value = (samples >= x_obs).mean()
+    print(f"Simulated p-value: {p_value:.4f}")
+    ```
+
+    Expected: $p \approx 0.002$, matching exact binomial.
+
+    **Advantages of simulation:**
+
+    - Works for any test statistic, not just standard ones.
+    - Automatically handles continuity correction.
+    - Reveals the *shape* of the null distribution (histogram).
+
+    **Disadvantages:**
+
+    - Monte Carlo error: $\mathrm{SE} \approx \sqrt{p(1-p)/n_{\text{sim}}}$. For $p = 0.002$, need $n_{\text{sim}} \approx 10^6$ for 3-digit accuracy.
+    - Slower than analytic when both available.
+
+---
+
+**Exercise 6.**
+**P-value vs effect size.** Why is the p-value alone insufficient?
+
+??? success "Solution to Exercise 6"
+    P-value confounds **effect size** and **sample size**:
+
+    - Tiny effect + huge $n$: $p$ small, but practical significance negligible.
+    - Large effect + small $n$: $p$ large (no significance), but effect may be important.
+
+    Two A/B tests:
+    - Test 1: 10000 users, 51% vs 50% conversion. $p = 0.045$. Effect: 1pp.
+    - Test 2: 100 users, 70% vs 50% conversion. $p = 0.003$. Effect: 20pp.
+
+    Test 1 is "more significant" by p-value but Test 2 has a far larger effect.
+
+    **Always report:**
+
+    - Effect size (raw or standardized like Cohen's $d$).
+    - Confidence interval (range of plausible effects).
+    - P-value (evidence against $H_0$).
+
+    Together these tell the full story. P-value alone is impoverished.

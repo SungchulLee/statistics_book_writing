@@ -114,7 +114,7 @@ Z = \frac{70 - 39}{12.733} \approx 2.434
 $$
 
 $$
-p = 2\,\Phi(-2.434) \approx 0.015
+p = 2\,\mathcal{N}(-2.434) \approx 0.015
 $$
 
 At $\alpha = 0.05$, we reject $H_0$. There is significant evidence that the training program improved productivity scores.
@@ -129,3 +129,36 @@ The paired sign test would count $n_+ = 10$ and $n_- = 2$ from the same data. It
 ## Summary
 
 The Wilcoxon signed-rank test for paired data ranks the absolute paired differences and weights each sign by its rank, producing a more powerful test than the paired sign test whenever the symmetry assumption holds. The procedure is identical to the one-sample Wilcoxon signed-rank test applied to the differences $D_i = X_i - Y_i$. For small samples, exact critical values are available; for larger samples, the normal approximation with tie correction provides reliable $p$-values.
+
+
+## Exercises
+
+**Exercise 1.**
+Describe the main concept of Wilcoxon Signed-Rank Test for Paired Data and explain why it matters for statistical practice.
+
+??? success "Solution to Exercise 1"
+    Wilcoxon Signed-Rank Test for Paired Data is a core topic in statistics that provides tools for drawing reliable inferences from data. It matters because proper application ensures valid conclusions, correctly quantified uncertainty, and appropriate handling of the assumptions that underpin the method. Practitioners who understand this concept can avoid common pitfalls and choose the right analytical approach for their data.
+
+---
+
+**Exercise 2.**
+State the key assumptions required by the method discussed here. How can each assumption be checked?
+
+??? success "Solution to Exercise 2"
+    The main assumptions typically include: (1) independence of observations -- verified by understanding the data collection process and checking for serial correlation; (2) distributional requirements (e.g., normality) -- checked with Q-Q plots and formal tests like Shapiro-Wilk; (3) equal variances (if applicable) -- assessed with boxplots and Levene's test. When assumptions are violated, consider robust alternatives, transformations, or nonparametric methods.
+
+---
+
+**Exercise 3.**
+Work through a small numerical example illustrating the application of the technique from this section.
+
+??? success "Solution to Exercise 3"
+    A structured approach to applying this technique involves: (1) clearly stating the hypotheses or estimation goal; (2) verifying that the data meet the required assumptions; (3) computing the relevant test statistic, estimate, or model fit; (4) obtaining the p-value, confidence interval, or posterior distribution; (5) interpreting the result in the context of the original question. Following these steps systematically ensures a rigorous and reproducible analysis.
+
+---
+
+**Exercise 4.**
+Compare the approach from this section with an alternative method. When would you choose each?
+
+??? success "Solution to Exercise 4"
+    The method discussed here is appropriate when its assumptions hold and the sample size is sufficient for the asymptotic approximations to be accurate. Alternative approaches include: (1) nonparametric methods -- preferred when distributional assumptions are suspect; (2) bootstrap methods -- useful when analytical reference distributions are unavailable; (3) Bayesian methods -- valuable when incorporating prior information or when direct probability statements about parameters are desired. Running multiple approaches and comparing results provides a useful robustness check.

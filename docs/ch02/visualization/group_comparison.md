@@ -1,9 +1,5 @@
 # Group Comparisons
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Overview
 
 Effective data visualization often requires comparing distributions, frequencies, or relationships across groups. This section covers the major visualization tools for group comparisons: scatter plots, line plots, bar plots, pie charts, pair plots, stem-and-leaf plots, dot plots, frequency tables, and mosaic plots.
@@ -312,3 +308,110 @@ $$
 ## Summary
 
 Different group comparison tasks call for different visualization tools. Bar plots and pie charts work for categorical data; histograms, box plots, and violin plots reveal the shape of continuous distributions; scatter plots and pair plots expose bivariate relationships; and frequency tables bridge visualization with probability. Choosing the right tool depends on the data type, the number of groups, and the specific aspect of the comparison you want to emphasize.
+
+## Exercises
+
+**Exercise 1.**
+A two-way frequency table shows the following counts for 200 patients:
+
+|  | Treatment A | Treatment B | Total |
+|:---|:---:|:---:|:---:|
+| Improved | 60 | 40 | 100 |
+| Not improved | 40 | 60 | 100 |
+| Total | 100 | 100 | 200 |
+
+Compute the joint relative frequency of (Treatment A, Improved) and the conditional probability of improvement given Treatment A.
+
+??? success "Solution to Exercise 1"
+    The **joint relative frequency** of (Treatment A, Improved) is:
+
+    $$
+    \frac{60}{200} = 0.30
+    $$
+
+    The **conditional probability** of improvement given Treatment A is:
+
+    $$
+    P(\text{Improved} \mid \text{Treatment A}) = \frac{60}{100} = 0.60
+    $$
+
+    For comparison, the conditional probability of improvement given Treatment B is $40/100 = 0.40$. Treatment A appears to have a higher improvement rate.
+
+---
+
+**Exercise 2.**
+For each of the following scenarios, identify the most appropriate plot type and justify your choice: (a) comparing the age distributions of three patient groups, (b) showing how stock prices change over 12 months, (c) displaying the market share of five competing brands.
+
+??? success "Solution to Exercise 2"
+    **(a) Comparing age distributions of three patient groups:** **Side-by-side boxplots** or **violin plots**. Boxplots provide a compact comparison of center, spread, and outliers across groups. Violin plots are better if the distributions may be multimodal or if the full shape matters.
+
+    **(b) Stock prices over 12 months:** A **line plot** with time on the x-axis and price on the y-axis. Line plots are the standard choice for time series data because the connecting lines emphasize temporal continuity and trends.
+
+    **(c) Market share of five competing brands:** A **pie chart** or **bar chart**. A pie chart is appropriate when showing proportions of a whole with a small number of categories. A bar chart is often preferred because it is easier to compare magnitudes accurately (humans judge bar lengths more precisely than pie slice angles).
+
+---
+
+**Exercise 3.**
+A segmented (stacked) bar chart shows the composition of responses ("Agree," "Neutral," "Disagree") for three different departments. In what situation would a stacked bar chart be more informative than a grouped bar chart, and vice versa?
+
+??? success "Solution to Exercise 3"
+    A **stacked bar chart** is more informative when the primary interest is comparing the **total** across groups and seeing how each category contributes to that total. It makes it easy to see the overall size of each bar and the proportion of each component.
+
+    A **grouped (side-by-side) bar chart** is more informative when the primary interest is comparing **individual categories** across groups. For example, if you want to know which department has the highest "Agree" count, a grouped bar chart makes this comparison straightforward because the bars for the same response category are placed next to each other.
+
+    In short: use stacked when composition is the focus; use grouped when direct category-level comparison is the focus.
+
+---
+
+**Exercise 4.**
+A scatter plot of two variables shows a strong curved (quadratic) relationship but the Pearson correlation coefficient is close to zero. Explain why this can happen and what it implies about using correlation as a summary alongside a scatter plot.
+
+??? success "Solution to Exercise 4"
+    The Pearson correlation measures only **linear** association. If the relationship between $X$ and $Y$ is a symmetric curve (e.g., $Y = X^2$ centered at zero), the positive and negative halves cancel out, producing a correlation near zero even though $X$ and $Y$ are strongly related.
+
+    This illustrates why a scatter plot should always accompany correlation as a summary. The scatter plot reveals the shape of the relationship (linear, curved, clustered), while the correlation coefficient only captures the linear component. Relying on correlation alone could lead to the false conclusion that the two variables are unrelated.
+
+---
+
+**Exercise 5.**
+Anscombe's quartet consists of four datasets with **identical** summary statistics (mean, variance, correlation, regression line) but dramatically different scatter plots. What lesson does this convey about exploratory data analysis?
+
+??? success "Solution to Exercise 5"
+    Anscombe (1973) constructed four datasets — each with 11 points — that share the following statistics to two decimal places:
+
+    - Mean of $x$ = 9, mean of $y$ = 7.5.
+    - Variance of $x$ = 11, variance of $y$ = 4.12.
+    - Correlation $r$ = 0.816.
+    - OLS regression: $y = 3 + 0.5x$.
+
+    Yet their scatter plots show:
+
+    - Dataset 1: a noisy but roughly linear relationship.
+    - Dataset 2: a clean quadratic curve.
+    - Dataset 3: a perfect linear trend with one outlier displacing the regression.
+    - Dataset 4: most points have $x = 8$, with one influential point at $x = 19$ driving the entire correlation.
+
+    **Lesson:** summary statistics, no matter how comprehensive, can hide qualitatively different data structures. The same warning applies to modern variants like the **Datasaurus Dozen** (Matejka & Fitzmaurice 2017), which shows 13 wildly different shapes — including a dinosaur silhouette — sharing identical summary statistics. **Always plot the data**, especially before reporting or interpreting summary statistics. Tukey's exhortation: "Far better an approximate answer to the right question, which is often vague, than an exact answer to the wrong question."
+
+---
+
+**Exercise 6.**
+**Multiple-comparison adjustment** becomes necessary when comparing many groups in a single figure. If a pairwise comparison of 5 groups is conducted at $\alpha = 0.05$, what is the family-wise probability of at least one false positive, and how would you correct for it?
+
+??? success "Solution to Exercise 6"
+    With 5 groups, the number of pairwise comparisons is $\binom{5}{2} = 10$. Under independence (a rough approximation), the probability of *no* false positive in any of 10 tests is $(1 - 0.05)^{10} \approx 0.599$. The family-wise error rate is approximately
+
+    $$
+    P(\text{at least one false positive}) \approx 1 - 0.599 = 0.401
+    $$
+
+    A 40% chance of a spurious significance — far higher than the nominal 5%.
+
+    **Corrections:**
+
+    - **Bonferroni:** test each pairwise comparison at $\alpha/10 = 0.005$. Simple, conservative.
+    - **Tukey's HSD** (honestly significant difference): controls family-wise error exactly for pairwise comparisons of means after ANOVA. More powerful than Bonferroni.
+    - **Holm–Bonferroni:** step-down procedure ordering $p$-values and rejecting sequentially with decreasing $\alpha$ thresholds. Uniformly more powerful than Bonferroni.
+    - **Benjamini–Hochberg (FDR control):** controls the *expected proportion* of false positives among declared significant tests rather than the probability of any false positive. Appropriate when many tests are conducted exploratorily.
+
+    Visualization: when comparing many groups in a single figure, *do not* annotate every pairwise $p$-value. Either pre-specify a few of-interest comparisons, or use an omnibus test (ANOVA, Kruskal-Wallis) first, then make pairwise comparisons only if the omnibus is significant.

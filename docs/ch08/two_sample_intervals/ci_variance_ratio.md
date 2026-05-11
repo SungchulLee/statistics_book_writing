@@ -1,9 +1,5 @@
 # CI for σ₁² / σ₂²
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Confidence Interval for the Ratio of Two Variances
 
 When comparing the variability of two independent populations, we construct a confidence interval for the ratio $\theta = \sigma_1^2 / \sigma_2^2$. This is based on the F-distribution.
@@ -152,3 +148,49 @@ if __name__ == "__main__":
 - If the CI includes 1, there is no evidence that the two population variances differ.
 - The F-distribution is asymmetric, so the CI is not centered symmetrically around the point estimate.
 - For non-Normal data, consider bootstrap-based alternatives.
+
+## Exercises
+
+**Exercise 1.**
+Two independent samples from normal populations yield $s_1^2 = 25$ ($n_1 = 16$) and $s_2^2 = 10$ ($n_2 = 21$). Compute the point estimate for $\sigma_1^2/\sigma_2^2$ and construct the 95% confidence interval using $F_{15,20,0.025} = 0.392$ and $F_{15,20,0.975} = 2.573$.
+
+??? success "Solution to Exercise 1"
+    The point estimate is:
+
+    $$
+    \frac{s_1^2}{s_2^2} = \frac{25}{10} = 2.5
+    $$
+
+    The 95% confidence interval is:
+
+    $$
+    \left(\frac{s_1^2/s_2^2}{F_{0.975}},\; \frac{s_1^2/s_2^2}{F_{0.025}}\right) = \left(\frac{2.5}{2.573},\; \frac{2.5}{0.392}\right) = (0.972,\; 6.378)
+    $$
+
+    Since the interval includes 1, we do not have sufficient evidence to conclude that the variances differ at the 5% level.
+
+---
+
+**Exercise 2.**
+Explain why the F-based confidence interval is asymmetric around the point estimate. Illustrate with the interval from Exercise 1.
+
+??? success "Solution to Exercise 2"
+    The F-distribution is right-skewed (it is defined only for positive values and has a longer right tail), so the critical values $F_{\alpha/2}$ and $F_{1-\alpha/2}$ are not equidistant from 1. In Exercise 1, the point estimate is 2.5. The lower bound of the CI is $2.5/2.573 = 0.972$ (distance 1.528 below the estimate), while the upper bound is $2.5/0.392 = 6.378$ (distance 3.878 above the estimate). The interval extends much farther to the right than to the left, reflecting the F-distribution's skewness.
+
+---
+
+**Exercise 3.**
+If a confidence interval for $\sigma_1^2/\sigma_2^2$ is $(1.5, 4.2)$, what does this tell us about the relationship between the two population variances?
+
+??? success "Solution to Exercise 3"
+    Since the entire interval is above 1, we can conclude with the given confidence level that $\sigma_1^2 > \sigma_2^2$. Specifically, we are confident that the first population's variance is between 1.5 and 4.2 times larger than the second population's variance. This would be relevant, for example, when deciding whether to use the pooled $t$-test (which assumes equal variances) or Welch's $t$-test.
+
+---
+
+**Exercise 4.**
+The F-test for equal variances is known to be highly sensitive to non-normality. Explain why, and name one alternative approach.
+
+??? success "Solution to Exercise 4"
+    The F-distribution derivation assumes both populations are exactly normal. Even mild departures from normality (such as slight skewness or heavy tails) cause the distribution of $S_1^2/S_2^2$ to deviate substantially from the F-distribution. The kurtosis of the population directly affects the variance of $S^2$, so heavy-tailed populations produce a much more dispersed ratio than the F-theory predicts, leading to inflated Type I error rates.
+
+    An alternative is **Levene's test**, which tests the equality of variances by applying a one-way ANOVA to the absolute deviations $|X_{ij} - \bar{X}_j|$ (or deviations from the median for Brown-Forsythe). This approach is much more robust to non-normality. Bootstrap confidence intervals for the variance ratio are another non-parametric alternative.

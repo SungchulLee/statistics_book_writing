@@ -156,3 +156,72 @@ The `scipy.stats.kendalltau` function computes tau-b by default. For hypothesis 
 ## Summary
 
 Kendall's tau measures monotonic association by comparing concordant and discordant pairs. The tau-b variant adjusts for ties and is the standard choice in practice. Compared to Spearman's $r_s$, Kendall's tau tends to be smaller in absolute value for the same data but offers a direct probabilistic interpretation and better small-sample properties. Both are robust, rank-based alternatives to Pearson's $r$ for nonlinear monotonic relationships.
+
+## Exercises
+
+**Exercise 1.**
+Compute Kendall's $\tau$ for the data: $X = (1, 2, 3, 4, 5)$, $Y = (2, 4, 1, 3, 5)$.
+
+??? success "Solution to Exercise 1"
+    Count concordant and discordant pairs among all $\binom{5}{2} = 10$ pairs:
+
+    | Pair $(i,j)$ | $X_j - X_i$ | $Y_j - Y_i$ | Concordant? |
+    |---|---|---|---|
+    | (1,2) | + | + | C |
+    | (1,3) | + | $-$ | D |
+    | (1,4) | + | + | C |
+    | (1,5) | + | + | C |
+    | (2,3) | + | $-$ | D |
+    | (2,4) | + | $-$ | D |
+    | (2,5) | + | + | C |
+    | (3,4) | + | + | C |
+    | (3,5) | + | + | C |
+    | (4,5) | + | + | C |
+
+    Concordant: $C = 7$, Discordant: $D = 3$.
+
+    $$
+    \tau = \frac{C - D}{\binom{n}{2}} = \frac{7 - 3}{10} = 0.4
+    $$
+
+---
+
+**Exercise 2.**
+Explain the conceptual difference between Kendall's $\tau$ and Spearman's $\rho$, even though both measure monotonic association.
+
+??? success "Solution to Exercise 2"
+    **Kendall's $\tau$** counts the proportion of concordant minus discordant pairs among all pairs of observations. It has a direct probabilistic interpretation: $\tau = P(\text{concordant}) - P(\text{discordant})$ for a randomly chosen pair.
+
+    **Spearman's $\rho$** is the Pearson correlation applied to the ranks. It measures the linear association between ranks and is sensitive to the magnitude of rank differences.
+
+    Key differences: (1) $\tau$ is based on pairwise comparisons (ordinal), while $\rho$ uses actual rank values; (2) $\tau$ tends to be smaller in absolute value than $\rho$ for the same data; (3) $\tau$ has simpler asymptotic properties and its standard error is easier to compute; (4) $\rho$ is more powerful for detecting linear rank relationships, while $\tau$ is more robust.
+
+---
+
+**Exercise 3.**
+Why is Kendall's $\tau$ preferred over Pearson's $r$ when data contain outliers or have a nonlinear but monotonic relationship?
+
+??? success "Solution to Exercise 3"
+    Kendall's $\tau$ is based only on the ordinal pattern (which observation is larger), not on the actual values. This makes it:
+
+    1. **Robust to outliers:** A single extreme value changes at most $n - 1$ pairwise comparisons (out of $\binom{n}{2}$), and only if it changes the ordering. Pearson's $r$, which uses squared deviations, is heavily influenced by a single extreme point.
+
+    2. **Appropriate for nonlinear monotonic relationships:** If $Y$ is a monotonically increasing but nonlinear function of $X$ (e.g., $Y = e^X$), Kendall's $\tau = 1$ (perfect concordance) while Pearson's $r < 1$ because $r$ measures only linear association.
+
+    3. **Distribution-free:** No normality assumption is required for the validity of inference based on $\tau$.
+
+---
+
+**Exercise 4.**
+How are ties handled in Kendall's $\tau$? State the formula for $\tau_b$ (the version adjusted for ties).
+
+??? success "Solution to Exercise 4"
+    When ties exist, a pair with $X_i = X_j$ or $Y_i = Y_j$ is neither concordant nor discordant. The basic $\tau_a$ formula $\tau_a = (C - D)/\binom{n}{2}$ does not account for ties, so $|\tau_a| < 1$ even for perfectly monotonic data with ties.
+
+    Kendall's $\tau_b$ adjusts the denominator:
+
+    $$
+    \tau_b = \frac{C - D}{\sqrt{(C + D + T_X)(C + D + T_Y)}}
+    $$
+
+    where $T_X$ is the number of pairs tied on $X$ only, and $T_Y$ is the number of pairs tied on $Y$ only. This ensures $\tau_b$ can reach $\pm 1$ when the data are as concordant (or discordant) as possible given the tie structure. Most software reports $\tau_b$ by default.

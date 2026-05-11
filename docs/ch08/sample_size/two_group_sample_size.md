@@ -1,9 +1,5 @@
 # Sample Size for Comparing Two Groups
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Overview
 
 Before collecting data for a two-group comparison, a researcher must determine how many subjects to enroll in each group. Too few subjects yield a test with low power --- the study may fail to detect a real treatment effect, wasting time and resources. Too many subjects are costly and may expose unnecessary participants to an inferior treatment. Sample size formulas translate the desired power, significance level, and minimum meaningful effect size into a concrete number of observations per group. These formulas connect directly to the Type I error rate $\alpha$, the Type II error rate $\beta$, and the power $1 - \beta$ introduced in previous chapters.
@@ -28,7 +24,7 @@ $$
 n = \frac{2(z_{\alpha/2} + z_\beta)^2 \sigma^2}{\delta^2}
 $$
 
-where $z_{\alpha/2} = \Phi^{-1}(1 - \alpha/2)$ is the upper $\alpha/2$ quantile of the standard normal, and $z_\beta = \Phi^{-1}(1 - \beta)$ is the upper $\beta$ quantile. The numerator reflects the combined stringency of the Type I and Type II error requirements, while the denominator is the squared effect size --- the signal we want to detect.
+where $z_{\alpha/2} = \mathcal{N}^{-1}(1 - \alpha/2)$ is the upper $\alpha/2$ quantile of the standard normal, and $z_\beta = \mathcal{N}^{-1}(1 - \beta)$ is the upper $\beta$ quantile. The numerator reflects the combined stringency of the Type I and Type II error requirements, while the denominator is the squared effect size --- the signal we want to detect.
 
 ### Worked Example
 
@@ -113,3 +109,53 @@ n = \frac{2(z_{\alpha/2} + z_\beta)^2}{d^2}
 $$
 
 Common benchmarks are $d = 0.2$ (small), $d = 0.5$ (medium), and $d = 0.8$ (large).
+
+## Exercises
+
+**Exercise 1.**
+A researcher wants to detect a difference of $\delta = 5$ units between two groups with $\sigma = 10$, using $\alpha = 0.05$ (two-sided) and power $= 0.80$. Compute the required sample size per group.
+
+??? success "Solution to Exercise 1"
+    The critical values are $z_{0.025} = 1.96$ and $z_{0.20} = 0.842$ (since power $= 1 - \beta = 0.80$ gives $\beta = 0.20$).
+
+    $$
+    n = \frac{2(z_{\alpha/2} + z_\beta)^2 \sigma^2}{\delta^2} = \frac{2(1.96 + 0.842)^2 \times 100}{25} = \frac{2 \times 7.8505 \times 100}{25} = \frac{1570.1}{25} = 62.8
+    $$
+
+    Rounding up, $n = 63$ per group (126 total).
+
+---
+
+**Exercise 2.**
+Using the effect size formulation, compute the required sample size per group to detect a "medium" effect ($d = 0.5$) with 80% power at $\alpha = 0.05$.
+
+??? success "Solution to Exercise 2"
+    $$
+    n = \frac{2(z_{\alpha/2} + z_\beta)^2}{d^2} = \frac{2(1.96 + 0.842)^2}{0.25} = \frac{2 \times 7.8505}{0.25} = \frac{15.701}{0.25} = 62.8
+    $$
+
+    Rounding up, $n = 63$ per group. This is a widely cited benchmark: detecting a medium effect size at 80% power requires about 63 subjects per group.
+
+---
+
+**Exercise 3.**
+If the sample size is fixed at $n = 30$ per group and $\sigma = 10$ with $\alpha = 0.05$, what is the minimum detectable difference $\delta$ at 80% power?
+
+??? success "Solution to Exercise 3"
+    Rearranging the formula:
+
+    $$
+    \delta = \sqrt{\frac{2(z_{\alpha/2} + z_\beta)^2 \sigma^2}{n}} = \sqrt{\frac{2(1.96 + 0.842)^2 \times 100}{30}} = \sqrt{\frac{1570.1}{30}} = \sqrt{52.34} \approx 7.23
+    $$
+
+    With 30 subjects per group, the study can detect a difference of about 7.23 units (or a standardized effect of $d = 7.23/10 = 0.72$) with 80% power.
+
+---
+
+**Exercise 4.**
+Explain intuitively why doubling the sample size does not double the detectable effect size. What is the precise relationship between $n$ and $\delta$?
+
+??? success "Solution to Exercise 4"
+    From the formula $n = 2(z_{\alpha/2} + z_\beta)^2 \sigma^2 / \delta^2$, solving for $\delta$ gives $\delta \propto 1/\sqrt{n}$. Doubling $n$ reduces the minimum detectable difference by a factor of $\sqrt{2} \approx 1.414$, not by a factor of 2.
+
+    Intuitively, the standard error of the difference in means is $\sigma\sqrt{2/n}$, which decreases as $1/\sqrt{n}$. Since the power to detect $\delta$ depends on the ratio $\delta / \text{SE}$, improving precision by a factor of $\sqrt{2}$ (from doubling $n$) allows detecting a difference that is $\sqrt{2}$ times smaller. This diminishing-returns relationship means that halving the detectable effect size requires **quadrupling** the sample size.

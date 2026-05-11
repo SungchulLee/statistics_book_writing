@@ -1,9 +1,6 @@
 # 18.6 Correlation Tests
 
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 This section covers three widely used statistical tests for assessing the significance of the relationship between two variables: Pearson's correlation, Spearman's rank correlation, and Kendall's tau.
 
 ---
@@ -213,3 +210,54 @@ if __name__ == "__main__":
 ```
 
 **Interpretation**: Since all p-values are well below $\alpha = 0.05$, we reject $H_0: \rho = 0$ and conclude that there is a statistically significant positive relationship between age and income in this sample. Note that this does not establish a causal relationship—confounders such as experience, education, and industry could influence both variables.
+## Exercises
+
+**Exercise 1.**
+For a sample of $n = 25$ observations, the Pearson correlation is $r = 0.42$. Test the null hypothesis $H_0: \rho = 0$ at $\alpha = 0.05$ using the $t$-test for correlation.
+
+??? success "Solution to Exercise 1"
+    The test statistic is:
+
+    $$
+    t = \frac{r\sqrt{n-2}}{\sqrt{1-r^2}} = \frac{0.42\sqrt{23}}{\sqrt{1-0.1764}} = \frac{0.42 \times 4.796}{\sqrt{0.8236}} = \frac{2.014}{0.9075} = 2.219
+    $$
+
+    With $df = n - 2 = 23$, the critical value for a two-tailed test at $\alpha = 0.05$ is $t_{0.025, 23} \approx 2.069$.
+
+    Since $|t| = 2.219 > 2.069$, we reject $H_0$ and conclude that there is a statistically significant linear relationship between the two variables at the 5% level.
+
+---
+
+**Exercise 2.**
+Explain the difference between testing $H_0: \rho = 0$ and testing $H_0: \rho = \rho_0$ for some $\rho_0 \neq 0$. Why does the second test require Fisher's $z$-transformation?
+
+??? success "Solution to Exercise 2"
+    When $\rho = 0$, the sampling distribution of $r$ is symmetric and the $t$-statistic $r\sqrt{(n-2)/(1-r^2)}$ follows an exact $t$-distribution with $n-2$ degrees of freedom.
+
+    When $\rho \neq 0$, the sampling distribution of $r$ is **skewed** (especially for $|\rho|$ close to 1), so the $t$-test is no longer valid. Fisher's $z$-transformation:
+
+    $$
+    z = \frac{1}{2}\ln\frac{1+r}{1-r} = \text{arctanh}(r)
+    $$
+
+    transforms $r$ to an approximately normal distribution with mean $\text{arctanh}(\rho)$ and standard error $1/\sqrt{n-3}$, enabling valid hypothesis tests and confidence intervals for any $\rho_0$.
+
+---
+
+**Exercise 3.**
+Two independent samples of sizes $n_1 = 40$ and $n_2 = 35$ yield Pearson correlations $r_1 = 0.55$ and $r_2 = 0.30$. Test whether the two population correlations are equal at $\alpha = 0.05$.
+
+??? success "Solution to Exercise 3"
+    Apply Fisher's $z$-transformation to each:
+
+    $$
+    z_1 = \text{arctanh}(0.55) = 0.6184, \quad z_2 = \text{arctanh}(0.30) = 0.3095
+    $$
+
+    The test statistic for comparing two independent correlations:
+
+    $$
+    Z = \frac{z_1 - z_2}{\sqrt{\frac{1}{n_1-3} + \frac{1}{n_2-3}}} = \frac{0.6184 - 0.3095}{\sqrt{\frac{1}{37} + \frac{1}{32}}} = \frac{0.3089}{\sqrt{0.02703 + 0.03125}} = \frac{0.3089}{\sqrt{0.05828}} = \frac{0.3089}{0.2414} = 1.28
+    $$
+
+    The critical value for a two-tailed test at $\alpha = 0.05$ is $z_{0.025} = 1.96$. Since $|Z| = 1.28 < 1.96$, we fail to reject $H_0$. There is insufficient evidence to conclude that the two population correlations differ.

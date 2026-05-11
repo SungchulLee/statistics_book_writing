@@ -137,7 +137,7 @@ Z = \frac{32 - 21}{7} \approx 1.571
 $$
 
 $$
-p = 2\,\Phi(-1.571) \approx 0.116
+p = 2\,\mathcal{N}(-1.571) \approx 0.116
 $$
 
 At $\alpha = 0.05$, we fail to reject $H_0$. Although Stock A's returns tend to be higher (76.2% of pairwise comparisons), the small sample sizes do not provide sufficient evidence at the 5% level.
@@ -165,3 +165,134 @@ Values near 0.5 indicate no effect; values near 0 or 1 indicate strong stochasti
 ## Summary
 
 The Mann-Whitney $U$ test counts pairwise wins between two independent groups and tests whether one group systematically produces larger values. The $U$ statistic is a linear function of the Wilcoxon rank-sum statistic, so the two tests are equivalent. The key advantage of the Mann-Whitney formulation is its interpretability: $U_1 / (n_1 n_2)$ directly estimates $P(X > Y)$, providing a natural effect size measure alongside the hypothesis test.
+
+## Exercises
+
+**Exercise 1.**
+A researcher compares reaction times (in milliseconds) between two independent groups:
+
+- **Group A** (caffeine): 210, 230, 215, 240, 225
+- **Group B** (placebo): 250, 260, 235, 270, 245, 255
+
+**(a)** Combine both groups and rank all observations from smallest to largest.
+
+**(b)** Compute the rank sum $R_A$ for Group A, and then compute the Mann-Whitney $U$ statistic for Group A:
+
+$$
+U_A = R_A - \frac{n_A(n_A + 1)}{2}
+$$
+
+**(c)** Using the normal approximation with $E[U] = n_A n_B / 2$ and $\text{Var}(U) = n_A n_B (n_A + n_B + 1)/12$, compute the $z$-statistic and the two-sided p-value.
+
+**(d)** Interpret the result in the context of the study.
+
+??? success "Solution to Exercise 1"
+
+    **(a)** Combined and sorted:
+
+    | Value | Group | Rank |
+    |:---:|:---:|:---:|
+    | 210 | A | 1 |
+    | 215 | A | 2 |
+    | 225 | A | 3 |
+    | 230 | A | 4 |
+    | 235 | B | 5 |
+    | 240 | A | 6 |
+    | 245 | B | 7 |
+    | 250 | B | 8 |
+    | 255 | B | 9 |
+    | 260 | B | 10 |
+    | 270 | B | 11 |
+
+    **(b)** $R_A = 1 + 2 + 3 + 4 + 6 = 16$ with $n_A = 5$, $n_B = 6$.
+
+    $$
+    U_A = R_A - \frac{n_A(n_A + 1)}{2} = 16 - \frac{5 \times 6}{2} = 16 - 15 = 1
+    $$
+
+    A small value of $U_A$ indicates that Group A observations tend to have low ranks (fast reaction times).
+
+    **(c)**
+
+    $$
+    E[U] = \frac{n_A n_B}{2} = \frac{5 \times 6}{2} = 15
+    $$
+
+    $$
+    \text{Var}(U) = \frac{n_A n_B(n_A + n_B + 1)}{12} = \frac{5 \times 6 \times 12}{12} = 30
+    $$
+
+    $$
+    z = \frac{U_A - E[U]}{\sqrt{\text{Var}(U)}} = \frac{1 - 15}{\sqrt{30}} = \frac{-14}{5.477} \approx -2.556
+    $$
+
+    Two-sided p-value:
+
+    $$
+    p = 2 \times P(Z \le -2.556) = 2 \times \mathcal{N}(-2.556) \approx 2 \times 0.0053 = 0.0106
+    $$
+
+    **(d)** With $p \approx 0.011 < 0.05$, we reject $H_0$ at the 5% level. There is statistically significant evidence that the caffeine and placebo groups have different reaction time distributions. The caffeine group tends to have faster reaction times, consistent with the stimulant effect of caffeine.
+
+- **Group A** (caffeine): 210, 230, 215, 240, 225
+- **Group B** (placebo): 250, 260, 235, 270, 245, 255
+
+**(a)** Combine both groups and rank all observations from smallest to largest.
+
+**(b)** Compute the rank sum $R_A$ for Group A, and then compute the Mann-Whitney $U$ statistic for Group A:
+
+$$
+U_A = R_A - \frac{n_A(n_A + 1)}{2}
+$$
+
+**(c)** Using the normal approximation with $E[U] = n_A n_B / 2$ and $\text{Var}(U) = n_A n_B (n_A + n_B + 1)/12$, compute the $z$-statistic and the two-sided p-value.
+
+**(d)** Interpret the result in the context of the study.
+
+??? success "Solution to Exercise 1"
+
+    **(a)** Combined and sorted:
+
+    | Value | Group | Rank |
+    |:---:|:---:|:---:|
+    | 210 | A | 1 |
+    | 215 | A | 2 |
+    | 225 | A | 3 |
+    | 230 | A | 4 |
+    | 235 | B | 5 |
+    | 240 | A | 6 |
+    | 245 | B | 7 |
+    | 250 | B | 8 |
+    | 255 | B | 9 |
+    | 260 | B | 10 |
+    | 270 | B | 11 |
+
+    **(b)** $R_A = 1 + 2 + 3 + 4 + 6 = 16$ with $n_A = 5$, $n_B = 6$.
+
+    $$
+    U_A = R_A - \frac{n_A(n_A + 1)}{2} = 16 - \frac{5 \times 6}{2} = 16 - 15 = 1
+    $$
+
+    A small value of $U_A$ indicates that Group A observations tend to have low ranks (fast reaction times).
+
+    **(c)**
+
+    $$
+    E[U] = \frac{n_A n_B}{2} = \frac{5 \times 6}{2} = 15
+    $$
+
+    $$
+    \text{Var}(U) = \frac{n_A n_B(n_A + n_B + 1)}{12} = \frac{5 \times 6 \times 12}{12} = 30
+    $$
+
+    $$
+    z = \frac{U_A - E[U]}{\sqrt{\text{Var}(U)}} = \frac{1 - 15}{\sqrt{30}} = \frac{-14}{5.477} \approx -2.556
+    $$
+
+    Two-sided p-value:
+
+    $$
+    p = 2 \times P(Z \le -2.556) = 2 \times \mathcal{N}(-2.556) \approx 2 \times 0.0053 = 0.0106
+    $$
+
+    **(d)** With $p \approx 0.011 < 0.05$, we reject $H_0$ at the 5% level. There is statistically significant evidence that the caffeine and placebo groups have different reaction time distributions. The caffeine group tends to have faster reaction times, consistent with the stimulant effect of caffeine.

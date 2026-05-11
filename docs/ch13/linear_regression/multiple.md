@@ -1,9 +1,6 @@
 # Multiple Linear Regression
 
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## The Model
 
 Multiple linear regression extends simple linear regression to include multiple predictor variables:
@@ -257,3 +254,38 @@ Key findings from this comparison:
 - All models show residual normality violations, but the interaction model shows the most severe deviations.
 
 The **TV, Radio, and Interaction Model** is preferred for predictive power, while the **TV and Radio Model** may be preferable when interpretability and coefficient stability are priorities.
+## Exercises
+
+**Exercise 1.**
+In a multiple regression $Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \varepsilon$, interpret $\beta_1$ precisely. How does this interpretation differ from the slope in a simple regression of $Y$ on $X_1$ alone?
+
+??? success "Solution to Exercise 1"
+    In multiple regression, $\beta_1$ is the expected change in $Y$ for a one-unit increase in $X_1$, **holding $X_2$ constant** (ceteris paribus). This is a partial or conditional effect.
+
+    In simple regression of $Y$ on $X_1$, the slope captures the **marginal** (unconditional) effect, which includes both the direct effect of $X_1$ and any indirect effect through $X_2$ (if $X_1$ and $X_2$ are correlated). If $X_1$ and $X_2$ are correlated, the simple regression slope is biased for the partial effect due to omitted variable bias.
+
+---
+
+**Exercise 2.**
+A multiple regression with $p = 5$ predictors has $R^2 = 0.85$ and adjusted $R^2 = 0.82$. Adding a sixth predictor increases $R^2$ to $0.853$ but adjusted $R^2$ drops to $0.818$. Should the sixth predictor be included? Explain.
+
+??? success "Solution to Exercise 2"
+    No. The increase in $R^2$ from 0.850 to 0.853 is trivial (0.3%), and the **decrease** in adjusted $R^2$ from 0.820 to 0.818 indicates that the new predictor does not improve the model enough to justify the added complexity.
+
+    Adjusted $R^2$ penalizes for additional predictors: $\bar{R}^2 = 1 - (1-R^2)(n-1)/(n-p-1)$. A decrease means the penalty for the extra parameter outweighs the gain in explained variance. The new predictor is not contributing meaningful predictive power.
+
+---
+
+**Exercise 3.**
+Explain the concept of omitted variable bias. If the true model is $Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \varepsilon$ but we fit $Y = \gamma_0 + \gamma_1 X_1 + u$, derive the relationship between $\gamma_1$ and $\beta_1$.
+
+??? success "Solution to Exercise 3"
+    Let $\delta$ be the coefficient from regressing $X_2$ on $X_1$: $X_2 = \delta_0 + \delta_1 X_1 + v$. Then the omitted variable bias formula gives:
+
+    $$
+    \text{plim}(\hat{\gamma}_1) = \beta_1 + \beta_2 \delta_1
+    $$
+
+    The bias is $\beta_2 \delta_1$, which is nonzero when both: (1) $X_2$ affects $Y$ ($\beta_2 \neq 0$), and (2) $X_2$ is correlated with $X_1$ ($\delta_1 \neq 0$).
+
+    The sign of the bias depends on the product $\beta_2 \delta_1$. For example, if education ($X_2$) positively affects income ($\beta_2 > 0$) and is positively correlated with experience ($\delta_1 > 0$), then omitting education causes $\hat{\gamma}_1$ to overestimate the true effect of experience.

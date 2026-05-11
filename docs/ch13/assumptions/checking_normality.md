@@ -1,9 +1,6 @@
 # Checking Normality in Linear Regression
 
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 Normality of the residuals is one of the key assumptions in linear regression. This assumption posits that the residuals (errors) of the model should follow a normal distribution. Although the linearity assumption is more critical for the validity of the regression coefficients, checking the normality of residuals is important for ensuring the validity of confidence intervals, hypothesis tests, and prediction intervals. This section outlines methods to check for normality in linear regression, including visual inspections and statistical tests.
 
 ## 1. Understanding Normality in Regression
@@ -262,3 +259,37 @@ print(f'Kurtosis: {kurtosis:.4f}')
 4. **Focus on the tails** — Departures in the tails of the distribution are more problematic than minor deviations near the center.
 
 If residuals are found to be non-normal, various remedies including transforming the dependent variable (log, Box-Cox), using robust regression techniques, or applying bootstrap methods can help address the issue. Properly assessing and addressing the normality assumption ensures more reliable inference from your linear regression models.
+## Exercises
+
+**Exercise 1.**
+A Q-Q plot of regression residuals shows points following the reference line in the center but deviating upward at the right tail and downward at the left tail. Describe the type of distributional departure this indicates and its potential impact on regression inference.
+
+??? success "Solution to Exercise 1"
+    This pattern indicates **heavy tails (leptokurtosis)** -- the residuals have more extreme values than a normal distribution predicts. The tails are "fatter" than normal.
+
+    Impact on regression inference: Heavy tails increase the likelihood of extreme residuals, which can inflate the estimated variance $\hat{\sigma}^2$. This leads to wider confidence intervals and reduced power for $t$-tests. Additionally, extreme observations may be influential, potentially biasing coefficient estimates if they have high leverage.
+
+---
+
+**Exercise 2.**
+For a regression with $n = 500$ observations, the Shapiro-Wilk test rejects normality ($p < 0.001$) but the Q-Q plot shows only minor deviations at the tails. Should the researcher be concerned? Explain.
+
+??? success "Solution to Exercise 2"
+    The researcher should **not be overly concerned**. With $n = 500$, the Shapiro-Wilk test has very high power and can detect trivial departures from normality that have no practical impact on inference. The Q-Q plot showing only minor tail deviations confirms that the departure is slight.
+
+    Moreover, with $n = 500$, the **Central Limit Theorem** ensures that the sampling distributions of the OLS estimators and test statistics are approximately normal regardless of the error distribution. The $t$-tests and $F$-tests remain approximately valid. The researcher should proceed with the analysis.
+
+---
+
+**Exercise 3.**
+List four formal tests for normality of residuals and explain one advantage and one disadvantage of each.
+
+??? success "Solution to Exercise 3"
+
+    1. **Shapiro-Wilk test.** Advantage: most powerful test for small to moderate samples. Disadvantage: overly sensitive for large samples, rejecting trivial departures.
+
+    2. **Anderson-Darling test.** Advantage: gives more weight to the tails than the Shapiro-Wilk test, making it better at detecting heavy-tailed departures. Disadvantage: less commonly available in software.
+
+    3. **Jarque-Bera test.** Advantage: specifically tests skewness and kurtosis, the two key aspects of non-normality. Disadvantage: relies on asymptotic theory and performs poorly for small samples.
+
+    4. **Kolmogorov-Smirnov (Lilliefors) test.** Advantage: tests the entire distribution, not just moments. Disadvantage: less powerful than Shapiro-Wilk for detecting normality violations; the standard KS test requires known parameters (Lilliefors corrects for estimated parameters).

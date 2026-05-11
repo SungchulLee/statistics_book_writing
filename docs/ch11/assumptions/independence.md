@@ -1,9 +1,6 @@
 # Checking Independence of Observations
 
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Why Independence Matters
 
 The independence assumption states that each observation should be unrelated to every other observation, both within and across groups. This is arguably the most critical assumption in ANOVA because violations of independence cannot be corrected by transformations or alternative test statistics—they require fundamentally different modeling approaches (e.g., mixed-effects models, repeated measures ANOVA).
@@ -78,3 +75,35 @@ Look for:
 - **Repeated-measures ANOVA:** If the same subjects appear in multiple groups, use a design that accounts for within-subject correlation.
 - **Generalized estimating equations (GEE):** Provide population-averaged estimates while accounting for correlation structures.
 - **Time-series methods:** If data are collected over time with autocorrelation, specialized time-series ANOVA approaches may be needed.
+## Exercises
+
+**Exercise 1.**
+A researcher measures blood pressure in 30 patients, 10 from each of three clinics. Patients within the same clinic share the same physician. Explain why the independence assumption of one-way ANOVA may be violated and suggest an alternative modeling approach.
+
+??? success "Solution to Exercise 1"
+    Patients within the same clinic are likely to have correlated outcomes because they share the same physician, treatment protocols, and clinic environment. This creates a **clustered data structure** where within-cluster observations are more similar than between-cluster observations, violating the independence assumption.
+
+    An appropriate alternative is a **mixed-effects model** (also called a hierarchical or multilevel model) that includes clinic as a random effect. This accounts for the within-clinic correlation while still estimating the fixed effect of the treatment groups.
+
+---
+
+**Exercise 2.**
+A quality control engineer collects measurements from a production line every 5 minutes over an 8-hour shift, recording 96 observations split across three machine settings. The Durbin-Watson statistic is $d = 0.87$. Interpret this result and explain how it affects the ANOVA conclusions.
+
+??? success "Solution to Exercise 2"
+    A Durbin-Watson statistic of $d = 0.87$ is substantially below 2, indicating **positive autocorrelation** in the residuals. Adjacent measurements tend to be similar, which is expected in time-ordered production data.
+
+    This autocorrelation means the effective sample size is smaller than the nominal 96, causing standard errors to be underestimated and the F-statistic to be inflated. The ANOVA is likely to produce false positives. The engineer should use a time-series ANOVA approach, include time as a covariate, or use Newey-West (HAC) standard errors to obtain valid inference.
+
+---
+
+**Exercise 3.**
+Describe three study design features that help ensure the independence assumption is satisfied in a one-way ANOVA. For each, give an example of what could go wrong if that feature is absent.
+
+??? success "Solution to Exercise 3"
+
+    1. **Random sampling from the population.** Without random sampling, observations may be systematically related. For example, surveying only friends of existing participants creates network-based dependence.
+
+    2. **Random assignment to treatment groups.** Without randomization, pre-existing similarities among group members introduce confounding. For example, if patients self-select into treatment groups, those with more severe conditions may cluster in one group.
+
+    3. **No repeated measures on the same subject.** If the same subject appears in multiple groups (e.g., before-and-after measurements treated as independent), within-subject correlation violates independence. A repeated-measures ANOVA or paired design is needed instead.

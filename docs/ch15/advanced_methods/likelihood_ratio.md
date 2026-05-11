@@ -158,3 +158,52 @@ print(f"Correction factor: {C:.4f}")
 print(f"Bartlett statistic (corrected): {T:.3f}")
 print(f"P-value: {p_value:.4f}")
 ```
+
+
+## Exercises
+
+**Exercise 1.**
+Write the likelihood ratio test statistic for testing $H_0: \sigma^2 = \sigma_0^2$ versus $H_a: \sigma^2 \neq \sigma_0^2$ for normal data.
+
+??? success "Solution to Exercise 1"
+    The likelihood ratio statistic is:
+
+    $$
+    \Lambda = \frac{L(\sigma_0^2)}{L(\hat{\sigma}^2)} = \left(\frac{\hat{\sigma}^2}{\sigma_0^2}\right)^{n/2} \exp\!\left(-\frac{n}{2}\left(\frac{\hat{\sigma}^2}{\sigma_0^2} - 1\right)\right)
+    $$
+
+    where $\hat{\sigma}^2 = \frac{1}{n}\sum(x_i - \bar{x})^2$ is the MLE. The test statistic $-2\log\Lambda \sim \chi^2_1$ asymptotically under $H_0$.
+
+---
+
+**Exercise 2.**
+Compare the likelihood ratio test with the chi-squared test for a single variance. Are they equivalent?
+
+??? success "Solution to Exercise 2"
+    The classical chi-squared test uses $\chi^2 = (n-1)s^2/\sigma_0^2 \sim \chi^2_{n-1}$, which is exact under normality. The likelihood ratio test uses $-2\log\Lambda \sim \chi^2_1$ asymptotically.
+
+    They are not exactly equivalent in finite samples -- the chi-squared test is exact while the LRT uses an asymptotic approximation. However, for large $n$, they give nearly identical results. The LRT generalizes more easily to complex hypotheses (e.g., testing equality of $k$ variances simultaneously).
+
+---
+
+**Exercise 3.**
+For testing $H_0: \sigma_1^2 = \sigma_2^2 = \dots = \sigma_k^2$, show that the LRT statistic is related to Bartlett's test.
+
+??? success "Solution to Exercise 3"
+    Bartlett's test statistic is the likelihood ratio test for equality of $k$ variances from normal populations. The LRT compares the pooled variance estimate under $H_0$ with the product of individual variance estimates:
+
+    $$
+    -2\log\Lambda = \sum_{j=1}^k (n_j - 1)\log\!\left(\frac{s_p^2}{s_j^2}\right)
+    $$
+
+    where $s_p^2 = \sum(n_j-1)s_j^2/\sum(n_j-1)$. Bartlett's test applies a correction factor $C$ to improve the chi-squared approximation: the corrected statistic is $-2\log\Lambda / C \sim \chi^2_{k-1}$.
+
+---
+
+**Exercise 4.**
+Why is the likelihood ratio test for variances sensitive to non-normality, and what alternatives exist?
+
+??? success "Solution to Exercise 4"
+    The LRT assumes the data are normally distributed -- the likelihood function $L(\sigma^2)$ is the normal likelihood. Under non-normality, the likelihood is misspecified, and the asymptotic $\chi^2$ distribution no longer holds. Heavy tails inflate the variance estimates, distorting the test statistic.
+
+    Alternatives: (1) Levene's test (based on absolute deviations, robust to non-normality), (2) Brown-Forsythe test (uses median instead of mean), (3) bootstrap LRT (replaces the $\chi^2$ reference with a bootstrap reference distribution), (4) Fligner-Killeen test (rank-based, distribution-free).

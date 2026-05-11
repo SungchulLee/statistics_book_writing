@@ -1,9 +1,6 @@
 # Sampling Distributions for General OLS Estimators
 
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Overview
 
 This section extends the inferential results from simple linear regression to the **multiple linear regression** setting using matrix notation. We derive the sampling distributions of the OLS coefficient vector $\hat{\beta}$, the residual variance estimator $s^2$, and the $t$-statistic for testing individual coefficients.
@@ -75,7 +72,7 @@ $$
 
 Therefore $\text{Var}(\hat{\beta}) = \sigma^2(\mathbf{X}^T\mathbf{X})^{-1}$.
 
-**Normality**: Since $\hat{\beta} - \beta = \mathbf{A}\varepsilon$ is a linear transformation of the multivariate normal vector $\varepsilon$, $\hat{\beta}$ is itself multivariate normal. $\blacksquare$
+**Normality**: Since $\hat{\beta} - \beta = \mathbf{A}\varepsilon$ is a linear transformation of the multivariate normal vector $\varepsilon$, $\hat{\beta}$ is itself multivariate normal. $\square$
 
 ### Implications
 
@@ -139,7 +136,7 @@ $$
 **Step 4: Conclusion.** Dividing by the degrees of freedom:
 
 $$
-s^2 = \frac{\text{RSS}}{N - p - 1} \sim \sigma^2\frac{\chi^2_{N-p-1}}{N - p - 1} \qquad \blacksquare
+s^2 = \frac{\text{RSS}}{N - p - 1} \sim \sigma^2\frac{\chi^2_{N-p-1}}{N - p - 1} \qquad \square
 $$
 
 ---
@@ -191,7 +188,7 @@ and this is independent of $\hat{\beta}_j$ (since $\hat{\beta}$ depends on $\mat
 **Step 3: Form the $t$-ratio.** By the definition of the $t$-distribution:
 
 $$
-t_j = \frac{\hat{\beta}_j / (\sigma\sqrt{v_j})}{\sqrt{s^2/\sigma^2}} = \frac{\hat{\beta}_j}{s\sqrt{v_j}} \sim t_{N-p-1} \qquad \blacksquare
+t_j = \frac{\hat{\beta}_j / (\sigma\sqrt{v_j})}{\sqrt{s^2/\sigma^2}} = \frac{\hat{\beta}_j}{s\sqrt{v_j}} \sim t_{N-p-1} \qquad \square
 $$
 
 ### General Confidence Interval
@@ -211,6 +208,7 @@ $$
 Using the Advertising dataset, reproduce the main regression output for the model $\text{Sales} \sim \text{TV} + \text{Radio} + \text{Newspaper}$ by computing coefficients, standard errors, $t$-statistics, $p$-values, and confidence intervals from scratch.
 
 !!! info "Reference"
+
     - [Khan Academy: Using Least-Squares Regression Output](https://www.khanacademy.org/math/ap-statistics/bivariate-data-ap/least-squares-regression/v/using-least-squares-regression-output)
     - [Khan Academy: Interpreting Computer Regression Data](https://www.khanacademy.org/math/ap-statistics/bivariate-data-ap/assessing-fit-least-squares-regression/v/interpreting-computer-regression-data)
 
@@ -287,3 +285,37 @@ Each row of the regression table contains:
 - **[0.025, 0.975]**: The 95% confidence interval $\hat{\beta}_j \pm t_{N-p-1}(0.975) \cdot s\sqrt{v_j}$.
 
 A predictor is statistically significant at the 5% level when its $p$-value is less than 0.05, equivalently when its 95% confidence interval excludes zero.
+## Exercises
+
+**Exercise 1.**
+In a multiple regression with $p = 4$ predictors and $n = 50$, derive the degrees of freedom for the $t$-test of an individual coefficient and the $F$-test for overall significance.
+
+??? success "Solution to Exercise 1"
+
+    - **$t$-test for individual coefficient $\beta_j$:** $t = \hat{\beta}_j / \text{SE}(\hat{\beta}_j) \sim t_{n-p-1} = t_{45}$ under $H_0: \beta_j = 0$.
+
+    - **$F$-test for overall significance:** Tests $H_0: \beta_1 = \beta_2 = \beta_3 = \beta_4 = 0$. $F = (\text{SSR}/p) / (\text{SSE}/(n-p-1)) \sim F_{p, n-p-1} = F_{4, 45}$ under $H_0$.
+
+---
+
+**Exercise 2.**
+In a regression output, predictor $X_3$ has $\hat{\beta}_3 = 2.1$ with $p = 0.04$, but when $X_4$ is added to the model, $\hat{\beta}_3$ changes to $0.3$ with $p = 0.72$. Explain this phenomenon.
+
+??? success "Solution to Exercise 2"
+    This is a consequence of **multicollinearity** or **confounding**. When $X_4$ is added:
+
+    1. If $X_3$ and $X_4$ are correlated, adding $X_4$ "absorbs" the variation that $X_3$ was previously explaining. The partial effect of $X_3$ (holding $X_4$ constant) is much smaller than its marginal effect (ignoring $X_4$).
+
+    2. The standard error of $\hat{\beta}_3$ increases due to multicollinearity (VIF increases), further reducing the $t$-statistic.
+
+    This illustrates that coefficient estimates and their significance depend on which other predictors are in the model. The change from significant to non-significant suggests that $X_3$'s apparent effect was partly (or largely) due to its correlation with $X_4$.
+
+---
+
+**Exercise 3.**
+Explain why a significant $F$-test for overall model significance does not guarantee that any individual predictor will have a significant $t$-test. Construct a conceptual example.
+
+??? success "Solution to Exercise 3"
+    The $F$-test tests the joint hypothesis $H_0: \beta_1 = \cdots = \beta_p = 0$. Individual $t$-tests test each $\beta_j = 0$ separately. These can disagree when predictors are highly correlated.
+
+    **Example:** Two predictors $X_1$ and $X_2$ with $r = 0.95$ both strongly predict $Y$. The $F$-test is significant because together they explain substantial variance. But individually, each $t$-test is non-significant because the shared variance is split between them, and the standard errors are inflated by multicollinearity ($\text{VIF} \approx 10$). Neither predictor adds much beyond the other, but together they are clearly important.

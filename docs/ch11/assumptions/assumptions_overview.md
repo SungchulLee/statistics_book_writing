@@ -45,3 +45,59 @@ A systematic approach to assumption checking proceeds as follows:
 5. **Check linearity** if the model includes continuous covariates. Use scatter plots and partial-residual plots to detect curvature.
 
 When one or more assumptions are violated, the appropriate remedy depends on which assumption fails. The [Handling Assumption Violations](../diagnostics/handling_violations.md) page provides a decision framework covering transformations, non-parametric alternatives (Kruskal-Wallis), and robust methods (Welch's ANOVA).
+
+## Exercises
+
+**Exercise 1.**
+List the three standard assumptions for one-way ANOVA and explain what happens to the F-test if each is violated.
+
+??? success "Solution to Exercise 1"
+    The three assumptions are:
+
+    1. **Independence:** Observations within and between groups are independent. Violation (e.g., repeated measures, clustered data) inflates the Type I error rate because the effective sample size is smaller than the nominal $n$.
+
+    2. **Normality:** The residuals (or equivalently, the observations within each group) are normally distributed. Moderate violations are tolerable with large samples (by the CLT), but severe skewness or heavy tails can distort the F-distribution, especially with small or unequal group sizes.
+
+    3. **Homoscedasticity (equal variances):** All groups have the same population variance $\sigma^2$. Unequal variances inflate or deflate the F-statistic depending on whether larger variances are associated with smaller or larger groups. The Welch ANOVA is a robust alternative when this assumption fails.
+
+---
+
+**Exercise 2.**
+A Levene's test for homogeneity of variances yields a p-value of 0.02. Should you proceed with standard ANOVA? Suggest an alternative approach.
+
+??? success "Solution to Exercise 2"
+    A Levene's test p-value of 0.02 provides evidence against the equal-variance assumption at the 5% level. Proceeding with standard ANOVA risks an incorrect F-test: if the larger variance is in the smaller group, the F-test is liberal (too many false positives); if in the larger group, it is conservative (loss of power).
+
+    Alternatives:
+
+    1. **Welch's ANOVA:** Does not assume equal variances and adjusts the degrees of freedom accordingly. This is the recommended default.
+    2. **Transformation:** Apply a variance-stabilizing transformation (e.g., log or square root) to equalize variances, then run standard ANOVA.
+    3. **Nonparametric test:** Use the Kruskal-Wallis test, which does not assume normality or equal variances.
+
+---
+
+**Exercise 3.**
+Explain why ANOVA is considered robust to moderate violations of the normality assumption when sample sizes are large and balanced.
+
+??? success "Solution to Exercise 3"
+    ANOVA's robustness comes from two factors:
+
+    1. **Central Limit Theorem:** The group means $\bar{X}_j$ are approximately normal even when individual observations are not, as long as $n_j$ is reasonably large (often $n_j \geq 20-30$ suffices). Since the F-statistic is based on comparing group means, normality of the means is what matters.
+
+    2. **Balanced designs:** When group sizes are equal ($n_1 = n_2 = \dots = n_k$), the F-test is robust to unequal variances because the pooled variance estimate weights each group equally. With unbalanced designs, the F-test becomes sensitive to heteroscedasticity.
+
+    However, ANOVA is not robust to heavy tails in small samples, severe skewness, or outliers. In these cases, transformations or nonparametric alternatives should be considered.
+
+---
+
+**Exercise 4.**
+Describe how to use residual plots to assess the assumptions of normality and homoscedasticity after fitting an ANOVA model.
+
+??? success "Solution to Exercise 4"
+    After fitting the ANOVA model, compute the residuals $e_{ij} = x_{ij} - \bar{x}_j$ (observation minus group mean). Then:
+
+    1. **Normality check:** Create a Q-Q plot of the residuals against theoretical normal quantiles. If the points lie approximately along a straight line, the normality assumption is reasonable. Systematic curvature indicates skewness; heavy tails appear as S-shaped departures. Alternatively, apply a Shapiro-Wilk test to the residuals.
+
+    2. **Homoscedasticity check:** Plot residuals against the fitted values (group means) or group labels. The spread of residuals should be approximately equal across groups. A funnel shape (spread increasing with the mean) suggests heteroscedasticity. Alternatively, compare group-wise residual variances numerically or use Levene's test.
+
+    3. **Independence check:** If data have a natural ordering (time, space), plot residuals in that order to check for patterns. Autocorrelation in residuals indicates violation of independence.

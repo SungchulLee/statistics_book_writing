@@ -172,3 +172,44 @@ Lower IBS indicates better overall predictive performance.
 | BIC | Parametric (full likelihood) | Fit vs complexity (stronger penalty) | Consistent model selection |
 | C-index | All | Discrimination | Model-agnostic |
 | IBS | All | Discrimination + calibration | Comprehensive evaluation |
+
+## Exercises
+
+**Exercise 1.**
+Model Selection
+
+Three parametric models are fitted to the same dataset of 200 subjects with
+120 events:
+
+| Model | Parameters ($p$) | Log-Likelihood |
+|:------|:----------------:|:--------------:|
+| Exponential | 1 | $-458.2$ |
+| Weibull | 2 | $-441.6$ |
+| Log-logistic | 2 | $-443.1$ |
+
+**(a)** Compute the AIC for each model.
+
+**(b)** Perform a likelihood ratio test of exponential vs Weibull at
+$\alpha = 0.05$.
+
+**(c)** A Cox model fitted to the same data yields a concordance index of
+$C = 0.72$, while the Weibull model yields $C = 0.74$. Which model
+discriminates better?
+
+??? success "Solution to Exercise 1"
+
+    **(a)** AIC = $-2\ell + 2p$:
+
+    - Exponential: $-2(-458.2) + 2(1) = 918.4$
+    - Weibull: $-2(-441.6) + 2(2) = 887.2$
+    - Log-logistic: $-2(-443.1) + 2(2) = 890.2$
+
+    The Weibull model has the lowest AIC (887.2).
+
+    **(b)** $\Lambda = 2(-441.6 - (-458.2)) = 2 \times 16.6 = 33.2$. Under $H_0$,
+    $\Lambda \sim \chi^2_1$. Since $33.2 \gg 3.84 = \chi^2_{1, 0.05}$, we reject
+    $H_0$. The Weibull model fits significantly better than the exponential.
+
+    **(c)** The Weibull model ($C = 0.74$) discriminates slightly better than the
+    Cox model ($C = 0.72$), suggesting that the Weibull distributional assumption
+    is appropriate for this dataset and provides a small gain in predictive accuracy.

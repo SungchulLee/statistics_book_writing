@@ -1,9 +1,6 @@
 # Welch's One-Way ANOVA
 
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 **Welch's ANOVA** (Analysis of Variance) is a statistical test used to determine whether the means of two or more groups are significantly different when the assumption of **equal variances** (homoscedasticity) is violated. It is an alternative to the traditional one-way ANOVA, which assumes equal variances among groups.
 
 ## 1. When to Use Welch's ANOVA
@@ -127,3 +124,42 @@ print(post_hoc)
 ## 10. Summary
 
 Welch's ANOVA is an extension of one-way ANOVA designed to compare means when the assumption of equal variances is violated. It is robust, flexible, and essential for analyzing data with heteroscedasticity. Post hoc tests like the Games-Howell test are recommended to identify which groups differ.
+
+## Exercises
+
+**Exercise 1.**
+Three investment strategies are compared based on monthly returns (%). The data show:
+
+| Strategy | $n$ | $\bar{Y}$ | $s^2$ |
+|----------|-----|-----------|-------|
+| Momentum | 36 | 1.8 | 12.5 |
+| Value | 24 | 1.2 | 3.1 |
+| Index | 48 | 1.0 | 5.8 |
+
+**(a)** Explain why the standard one-way ANOVA F-test may be inappropriate for these data.
+
+**(b)** Welch's ANOVA uses the test statistic
+
+$$
+F_W = \frac{\sum_{i=1}^{k} w_i (\bar{Y}_i - \tilde{Y})^2 / (k-1)}{1 + \frac{2(k-2)}{k^2-1} \sum_{i=1}^{k} \frac{(1 - w_i/\sum w_j)^2}{n_i - 1}}
+$$
+
+where $w_i = n_i / s_i^2$ and $\tilde{Y} = \sum w_i \bar{Y}_i / \sum w_i$. Compute the weights $w_1, w_2, w_3$ and the weighted grand mean $\tilde{Y}$.
+
+**(c)** Without completing the full calculation, explain conceptually why Welch's approach gives more weight to groups with smaller variances.
+
+??? success "Solution to Exercise 1"
+
+    **(a)** The group variances differ substantially: $s_1^2 = 12.5$, $s_2^2 = 3.1$, $s_3^2 = 5.8$. The largest variance is about four times the smallest. Combined with the unequal sample sizes ($n = 36, 24, 48$), the standard F-test's assumption of homoscedasticity is violated. The pooled variance estimate would not accurately represent any single group's variability.
+
+    **(b)** Weights: $w_1 = 36/12.5 = 2.88$, $w_2 = 24/3.1 = 7.74$, $w_3 = 48/5.8 = 8.28$.
+
+    Sum of weights: $\sum w_i = 2.88 + 7.74 + 8.28 = 18.90$.
+
+    Weighted grand mean:
+
+    $$
+    \tilde{Y} = \frac{2.88 \times 1.8 + 7.74 \times 1.2 + 8.28 \times 1.0}{18.90} = \frac{5.184 + 9.288 + 8.280}{18.90} = \frac{22.752}{18.90} = 1.204
+    $$
+
+    **(c)** The weight $w_i = n_i / s_i^2$ is inversely proportional to the group's variance. Groups with smaller variances provide more precise estimates of their population means, so they receive greater weight in the analysis. This is analogous to weighted least squares, where observations with lower variance contribute more to the estimate. The Momentum strategy, despite having the largest sample size, receives the lowest weight because its high variance ($s^2 = 12.5$) makes its sample mean a less reliable estimate of its population mean.

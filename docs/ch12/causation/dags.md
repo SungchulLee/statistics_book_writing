@@ -151,3 +151,51 @@ The principle is that more control variables are not always better. The DAG tell
 ## Summary
 
 Directed acyclic graphs (DAGs) represent causal relationships using nodes (variables) and directed edges (causal arrows). The three fundamental structures -- chains, forks, and colliders -- determine how conditioning on a variable affects the flow of information between other variables. The d-separation criterion generalizes these rules to complex graphs, and the backdoor criterion identifies which variables to control for when estimating causal effects. DAGs provide a principled framework for avoiding common errors such as conditioning on colliders or blocking causal pathways, and they are essential tools for any researcher working with observational data.
+
+## Exercises
+
+**Exercise 1.**
+Draw a DAG representing the following causal structure: smoking causes lung cancer, smoking causes yellow teeth, and lung cancer does not cause yellow teeth. Identify whether yellow teeth is a confounder, mediator, or collider in the relationship between smoking and lung cancer.
+
+??? success "Solution to Exercise 1"
+    The DAG is: Smoking $\to$ Lung Cancer, Smoking $\to$ Yellow Teeth. There is no arrow between Lung Cancer and Yellow Teeth.
+
+    Yellow teeth is **neither** a confounder, mediator, nor collider for the smoking-cancer relationship. It is a separate effect of smoking (a "descendant" of smoking on a different causal path). Conditioning on yellow teeth is unnecessary and generally harmless, though it slightly reduces efficiency.
+
+    A confounder would be a common cause of both smoking and lung cancer. A mediator would lie on the causal path between them. A collider would be a common effect of both.
+
+---
+
+**Exercise 2.**
+In the DAG: $X \to Z \to Y$, explain why $Z$ is a mediator and what happens to the association between $X$ and $Y$ when you condition on $Z$.
+
+??? success "Solution to Exercise 2"
+    $Z$ is a **mediator** because it lies on the causal path from $X$ to $Y$. The effect of $X$ on $Y$ operates through $Z$: $X$ causes $Z$, which in turn causes $Y$.
+
+    When you condition on $Z$ (e.g., include $Z$ as a covariate in regression), you block the causal path $X \to Z \to Y$. This means the association between $X$ and $Y$ disappears (or is reduced to only the direct effect if there is also a direct arrow $X \to Y$).
+
+    This is important in practice: if you want to estimate the **total** causal effect of $X$ on $Y$, you should not condition on a mediator. If you want only the **direct** effect (not through $Z$), then conditioning on $Z$ is appropriate.
+
+---
+
+**Exercise 3.**
+Consider the DAG: $X \to Z \leftarrow Y$. Explain why $Z$ is a collider and what paradoxical effect conditioning on $Z$ has.
+
+??? success "Solution to Exercise 3"
+    $Z$ is a **collider** because two arrows point into it from $X$ and $Y$. In this structure, $X$ and $Y$ are marginally independent (no causal connection between them).
+
+    However, conditioning on the collider $Z$ creates a **spurious association** between $X$ and $Y$. This is called "collider bias" or "Berkson's paradox." Intuitively: if you know $Z$ occurred, then knowing $X$ was not the cause makes $Y$ more likely to be the cause (and vice versa), inducing a negative correlation.
+
+    **Example:** Talent ($X$) and Beauty ($Y$) may be independent in the population, but among actors ($Z = $ became an actor, which requires either talent or beauty), they appear negatively correlated. Conditioning on $Z$ opened a path that was blocked unconditionally.
+
+---
+
+**Exercise 4.**
+Given the DAG: $U \to X$, $U \to Y$, $X \to Y$, where $U$ is unobserved, explain the problem of confounding and state the back-door criterion for identifying the causal effect of $X$ on $Y$.
+
+??? success "Solution to Exercise 4"
+    The variable $U$ is an unobserved common cause (confounder) of $X$ and $Y$. The causal path $X \to Y$ gives the true causal effect, but the back-door path $X \leftarrow U \to Y$ creates a spurious association. Without adjusting for $U$, the observed association between $X$ and $Y$ conflates the causal effect with confounding.
+
+    The **back-door criterion** (Pearl, 1993) states: a set of variables $\mathbf{Z}$ is sufficient for identifying the causal effect of $X$ on $Y$ if (1) $\mathbf{Z}$ blocks every back-door path from $X$ to $Y$, and (2) no variable in $\mathbf{Z}$ is a descendant of $X$.
+
+    In this DAG, since $U$ is unobserved and no observed variable blocks the path $X \leftarrow U \to Y$, the causal effect of $X$ on $Y$ is **not identifiable** from observational data without additional assumptions (e.g., an instrumental variable).

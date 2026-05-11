@@ -1,9 +1,5 @@
 # Goodness-of-Fit Test
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Overview
 
 The **Goodness-of-Fit Test** is a statistical procedure used to evaluate the degree to which an observed frequency distribution matches an expected distribution, usually for discrete or categorical data. This test assesses whether the observed frequencies of events across different categories align with the expected frequencies predicted by a specific theoretical model or hypothesis. By comparing observed and expected counts, the test determines if any significant differences exist, which might suggest that the observed data does not fit the expected pattern.
@@ -491,3 +487,109 @@ def main():
 if __name__ == "__main__":
     main()
 ```
+
+## Exercises
+
+**Exercise 1.**
+GoF for normality: 4 bins. Observed $[10, 30, 50, 10]$, Expected $[20, 25, 40, 15]$. Test at $\alpha = 0.05$.
+
+??? success "Solution to Exercise 1"
+    Conditions: independence ✓, all $E_i \ge 5$ ✓.
+
+    $H_0$: normal; $H_1$: not normal.
+
+    $\chi^2 = (10-20)^2/20 + (30-25)^2/25 + (50-40)^2/40 + (10-15)^2/15$
+    $= 5.0 + 1.0 + 2.5 + 1.67 = 10.17$.
+
+    df = 4 - 1 = 3 (assuming $\mu, \sigma$ given; subtract more if estimated from data).
+
+    Critical $\chi^2_{3, 0.05} = 7.815$. $10.17 > 7.815$. **Reject.** Data is not well-fit by the normal model.
+
+---
+
+**Exercise 2.**
+**Df adjustment for estimated parameters.** Why does df decrease when parameters are estimated from the data?
+
+??? success "Solution to Exercise 2"
+    If you specify the null distribution completely (e.g., "uniform on $\{1, \ldots, 6\}$"), df = (# cells) - 1.
+
+    If you estimate $k$ parameters from the data (e.g., fit normal by estimating $\mu, \sigma$), df = (# cells) - 1 - $k$.
+
+    For Exercise 1: if $\mu, \sigma$ were estimated from data, df = 4 - 1 - 2 = 1, and critical value would be different.
+
+    **Reason:** estimating parameters "uses up" information. The fitted distribution will be closer to the data than the true distribution would be — the test must compensate.
+
+---
+
+**Exercise 3.**
+**Fair die test.** Roll 60 times: $(8, 12, 9, 11, 10, 10)$. Test if fair.
+
+??? success "Solution to Exercise 3"
+    $H_0$: $p_i = 1/6$ for each face. Expected: 10 each.
+
+    $\chi^2 = (8-10)^2/10 + (12-10)^2/10 + (9-10)^2/10 + (11-10)^2/10 + (10-10)^2/10 + (10-10)^2/10$
+    $= 0.4 + 0.4 + 0.1 + 0.1 + 0 + 0 = 1.0$.
+
+    df = 5. Critical $\chi^2_{5, 0.05} = 11.07$. $1.0 \ll 11.07$. **Fail to reject.** No evidence of unfairness.
+
+---
+
+**Exercise 4.**
+**Sample size effect.** Repeat Exercise 3 with $n = 6000$, observed $(800, 1200, 900, 1100, 1000, 1000)$. Same shape, 100× scale.
+
+??? success "Solution to Exercise 4"
+    Expected: 1000 each.
+
+    $\chi^2 = 200^2/1000 + 200^2/1000 + 100^2/1000 + 100^2/1000 + 0 + 0$
+    $= 40 + 40 + 10 + 10 = 100$.
+
+    $\chi^2 = 100 \gg 11.07$. **Reject overwhelmingly.**
+
+    Same departure shape, but with 100× the sample size, the deviations are clearly significant. P-value extremely small.
+
+    **Lesson:** statistical significance scales with $n$; same effect size becomes more detectable at larger $n$. Always check effect size, not just p-value.
+
+---
+
+**Exercise 5.**
+**Kolmogorov-Smirnov** as alternative to chi-square GoF. When?
+
+??? success "Solution to Exercise 5"
+    K-S test compares empirical CDF $\hat F_n$ to theoretical CDF $F_0$ via $D_n = \sup_x |\hat F_n(x) - F_0(x)|$.
+
+    **Advantages:**
+
+    - No binning required (works on raw continuous data).
+    - More sensitive to shape differences than $\chi^2$ at moderate $n$.
+
+    **Disadvantages:**
+
+    - Requires fully specified $F_0$ (no estimated parameters). Lilliefors variant adjusts for normal-with-estimated-parameters.
+    - Limited for discrete distributions.
+
+    Use K-S for continuous data with fully specified null. Use $\chi^2$ for categorical/binned data or when parameters are estimated.
+
+---
+
+**Exercise 6.**
+**Shapiro-Wilk** for normality. Why is it preferred over chi-square for normality testing?
+
+??? success "Solution to Exercise 6"
+    Shapiro-Wilk is specifically designed to test normality and has higher power than chi-square or K-S against most alternatives.
+
+    Test statistic: $W = (\sum a_i x_{(i)})^2/\sum (x_i - \bar x)^2$ where $a_i$ are constants depending on $n$.
+
+    Under normality, $W$ is close to 1; departures reduce $W$.
+
+    **Advantages over chi-square GoF for normality:**
+
+    - No binning (uses raw data).
+    - Tailored to detect normality departures.
+    - Works for small samples (10-50).
+
+    **Caveats:**
+
+    - For very large samples (> 5000), Shapiro-Wilk becomes too sensitive — detects trivial departures.
+    - For very small samples (< 10), power is low.
+
+    Available in `scipy.stats.shapiro`. Default normality test in many software packages.

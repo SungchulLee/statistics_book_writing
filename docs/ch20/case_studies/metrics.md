@@ -1,9 +1,6 @@
 # Multiclass Metrics
 
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Accuracy
 
 The simplest multiclass metric counts the fraction of correct
@@ -104,3 +101,76 @@ def draw_loss_and_accuracy(loss_trace, accuracy_trace):
     plt.tight_layout()
     plt.show()
 ```
+
+## Exercises
+
+**Exercise 1.**
+Confusion Matrix and Per-Class Metrics
+
+A 3-class classifier produces the following confusion matrix on a test set of 100 examples:
+
+|  | Predicted A | Predicted B | Predicted C |
+|:---:|:---:|:---:|:---:|
+| **Actual A** | 25 | 5 | 0 |
+| **Actual B** | 3 | 32 | 5 |
+| **Actual C** | 2 | 3 | 25 |
+
+**(a)** Compute the overall accuracy.
+
+**(b)** Compute the precision, recall, and F1-score for each class.
+
+**(c)** Compute the macro-averaged and micro-averaged F1-scores.
+
+**(d)** Which class has the worst performance? What does the confusion matrix reveal about common misclassifications?
+
+??? success "Solution to Exercise 1"
+
+    **(a)** Overall accuracy is the fraction of correct predictions (diagonal sum):
+
+    $$
+    \text{Accuracy} = \frac{25 + 32 + 25}{100} = \frac{82}{100} = 0.82
+    $$
+
+    **(b)** For each class:
+
+    **Class A:**
+
+    - Precision $= 25 / (25 + 3 + 2) = 25/30 \approx 0.833$
+    - Recall $= 25 / (25 + 5 + 0) = 25/30 \approx 0.833$
+    - $F_1 = 2 \times 0.833 \times 0.833 / (0.833 + 0.833) = 0.833$
+
+    **Class B:**
+
+    - Precision $= 32 / (5 + 32 + 3) = 32/40 = 0.800$
+    - Recall $= 32 / (3 + 32 + 5) = 32/40 = 0.800$
+    - $F_1 = 0.800$
+
+    **Class C:**
+
+    - Precision $= 25 / (0 + 5 + 25) = 25/30 \approx 0.833$
+    - Recall $= 25 / (2 + 3 + 25) = 25/30 \approx 0.833$
+    - $F_1 = 0.833$
+
+    **(c)** **Macro-averaged F1** (unweighted mean across classes):
+
+    $$
+    F_1^{\text{macro}} = \frac{0.833 + 0.800 + 0.833}{3} = \frac{2.467}{3} \approx 0.822
+    $$
+
+    **Micro-averaged F1**: In the micro approach, we sum all true positives, false positives, and false negatives across classes.
+
+    - Total TP $= 25 + 32 + 25 = 82$
+    - Total FP $= (3+2) + (5+3) + (0+5) = 5 + 8 + 5 = 18$
+    - Total FN $= (5+0) + (3+5) + (2+3) = 5 + 8 + 5 = 18$
+
+    $$
+    \text{Precision}_{\text{micro}} = \frac{82}{82 + 18} = 0.82, \quad \text{Recall}_{\text{micro}} = \frac{82}{82 + 18} = 0.82
+    $$
+
+    $$
+    F_1^{\text{micro}} = 0.82
+    $$
+
+    For this balanced dataset (30, 40, 30 examples per class), micro and macro F1 are similar.
+
+    **(d)** Class B has the worst F1-score (0.800). The confusion matrix shows that Class B loses 3 examples to Class A and 5 examples to Class C. The most common error is predicting Class B when the true class is A (5 misclassifications) and predicting Class C when the true class is B (5 misclassifications). This suggests that the decision boundaries between B and its neighbors may need refinement.

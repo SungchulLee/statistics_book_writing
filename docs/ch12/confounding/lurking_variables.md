@@ -103,3 +103,57 @@ The concept of lurking variables motivates several important topics in this chap
 ## Summary
 
 A lurking variable is an unmeasured variable that affects both the exposure and the outcome, creating a distorted association between them. The most common form is a common cause that simultaneously drives both observed variables. Because lurking variables are unmeasured, they cannot be controlled for statistically. Randomized experiments, careful subject-matter reasoning, sensitivity analysis, and replication across diverse settings are the primary defenses against lurking variable bias.
+
+## Exercises
+
+**Exercise 1.**
+Ice cream sales and drowning deaths are positively correlated. Identify the lurking variable and explain the causal structure.
+
+??? success "Solution to Exercise 1"
+    The lurking variable is **temperature (season/weather)**. Hot weather causes both increased ice cream consumption and increased swimming activity, which leads to more drownings. The causal structure is:
+
+    Temperature $\to$ Ice cream sales, Temperature $\to$ Drownings.
+
+    There is no causal link from ice cream to drownings. The observed positive correlation is entirely spurious, driven by the common cause. Conditioning on temperature (or season) would eliminate the association between ice cream sales and drowning deaths.
+
+---
+
+**Exercise 2.**
+A study finds a strong positive correlation between the number of firefighters at a fire and the amount of damage caused. Should the city reduce the number of firefighters sent to fires?
+
+??? success "Solution to Exercise 2"
+    No. The lurking variable is **fire severity**. Larger, more intense fires cause both more damage and the dispatch of more firefighters. The causal structure is:
+
+    Fire severity $\to$ Number of firefighters, Fire severity $\to$ Damage.
+
+    The correlation between firefighters and damage is not causal -- it is confounded by fire severity. Reducing the number of firefighters would likely increase damage, not decrease it. The correct analysis would condition on fire severity (e.g., compare damage for fires of similar size with different numbers of firefighters dispatched).
+
+---
+
+**Exercise 3.**
+Define Simpson's paradox and give a concrete example where the direction of an association reverses after conditioning on a lurking variable.
+
+??? success "Solution to Exercise 3"
+    **Simpson's paradox** occurs when the direction of an association between two variables reverses or disappears after conditioning on a third variable (a confounder).
+
+    **Example:** A hospital reports that Treatment A has a higher overall survival rate than Treatment B. However, when patients are stratified by disease severity:
+
+    - Among mild cases: Treatment B has higher survival.
+    - Among severe cases: Treatment B has higher survival.
+
+    The paradox arises because Treatment A is disproportionately given to mild cases (who have high survival regardless), while Treatment B is given to severe cases. Disease severity is the lurking variable that confounds the comparison. The correct conclusion (from the stratified analysis) is that Treatment B is superior.
+
+---
+
+**Exercise 4.**
+A regression of salary on years of experience shows a positive coefficient. When "department" is added as a control variable, the coefficient for experience becomes negative. Explain how this is possible and which result is more trustworthy.
+
+??? success "Solution to Exercise 4"
+    This reversal can occur if **department** is a lurking variable that is positively correlated with both experience and salary:
+
+    - Experienced employees tend to be in lower-paying departments (perhaps they entered the company when those departments were growing).
+    - Within any given department, more experience is associated with lower salary (perhaps newer hires are paid market rates that have increased over time, i.e., salary compression).
+
+    Without controlling for department, the positive cross-department variation masks the negative within-department pattern.
+
+    Which result is more trustworthy depends on the causal question. If department is a confounder (causes both experience and salary), conditioning on it gives a better estimate of the within-department return to experience. However, if department is a mediator (experience causes people to move to certain departments), conditioning on it removes part of the causal effect, and the unconditional estimate may be more appropriate for the total effect.

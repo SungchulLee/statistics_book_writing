@@ -1,9 +1,6 @@
 # Advanced Methods for Variance Testing
 
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 In modern statistics, especially when traditional parametric tests fail due to violated assumptions or limited sample sizes, advanced methods for variance testing provide more flexibility and robustness. These methods often use computational techniques such as bootstrapping, or Bayesian approaches, to make inferences when normality and homoscedasticity assumptions are violated.
 
 ## Bootstrapping Methods for Variance Testing
@@ -175,3 +172,57 @@ The posterior distribution provides a probability distribution for each variance
 - **Small Sample Sizes:** When the sample size is small, bootstrapping provides a flexible and non-parametric alternative to traditional tests.
 - **Non-Normal Data:** When the assumption of normality is violated, bootstrapping or Bayesian methods are more reliable than parametric tests like the F-test or Bartlett's test.
 - **Incorporating Prior Knowledge:** Bayesian methods are ideal when prior knowledge about the population variances is available and can be incorporated into the analysis.
+
+
+## Exercises
+
+**Exercise 1.**
+Compare the likelihood ratio test, Wald test, and score test for testing hypotheses about variances. Under what conditions do they give similar results?
+
+??? success "Solution to Exercise 1"
+    All three tests are asymptotically equivalent under the null hypothesis: as $n \to \infty$, their test statistics converge to the same $\chi^2$ distribution, and their p-values agree.
+
+    In finite samples, they can differ: the likelihood ratio test is generally most reliable (invariant to parameterization), the Wald test can be unreliable when the parameter is near a boundary, and the score test only requires estimation under $H_0$.
+
+    They give similar results when: (1) the sample size is large, (2) the data are approximately normal, and (3) the true parameter is not near the boundary of the parameter space.
+
+---
+
+**Exercise 2.**
+Describe a scenario where advanced variance testing methods (bootstrap, Bayesian) are preferable to the classical chi-squared test.
+
+??? success "Solution to Exercise 2"
+    When the data are heavily non-normal (e.g., financial returns with excess kurtosis of 5+), the chi-squared test for variance is unreliable because its derivation requires exact normality.
+
+    The **bootstrap** approach resamples the data to build a reference distribution for the variance statistic without assuming normality. The **Bayesian** approach places a prior on $\sigma^2$ and computes the posterior, allowing probability statements about the variance.
+
+    Both methods are preferred when: (1) normality is clearly violated, (2) the sample size is too small for asymptotic methods to be reliable, or (3) the analyst wants to incorporate prior information (Bayesian) or avoid distributional assumptions entirely (bootstrap).
+
+---
+
+**Exercise 3.**
+The bootstrap test for equal variances resamples under the null. Describe the resampling procedure.
+
+??? success "Solution to Exercise 3"
+    Under $H_0: \sigma_1^2 = \sigma_2^2$, the two samples come from populations with equal variance. The bootstrap procedure:
+
+    1. Pool all observations from both groups.
+    2. For each bootstrap replicate, draw $n_1$ observations (with replacement) for group 1 and $n_2$ for group 2 from the pooled sample.
+    3. Compute the test statistic (e.g., ratio of sample variances $s_1^{*2}/s_2^{*2}$) for each bootstrap replicate.
+    4. The p-value is the proportion of bootstrap test statistics as extreme as or more extreme than the observed statistic.
+
+    By resampling from the pooled data, the null hypothesis of equal variances is enforced.
+
+---
+
+**Exercise 4.**
+In a Bayesian test for $\sigma^2$, the conjugate prior for the variance of normal data is the inverse-gamma distribution. If the prior is $\sigma^2 \sim \text{Inv-Gamma}(\alpha_0, \beta_0)$ and we observe $n$ data points, state the posterior distribution.
+
+??? success "Solution to Exercise 4"
+    The posterior is:
+
+    $$
+    \sigma^2 \mid \mathbf{x} \sim \text{Inv-Gamma}\!\left(\alpha_0 + \frac{n}{2},\; \beta_0 + \frac{1}{2}\sum_{i=1}^n(x_i - \bar{x})^2\right)
+    $$
+
+    The posterior incorporates both prior information ($\alpha_0, \beta_0$) and data ($n$ and the sum of squared deviations). A 95% credible interval for $\sigma^2$ is obtained from the 2.5th and 97.5th percentiles of this inverse-gamma distribution. Unlike the frequentist confidence interval, the Bayesian credible interval has a direct probability interpretation: there is a 95% posterior probability that $\sigma^2$ lies in the interval.

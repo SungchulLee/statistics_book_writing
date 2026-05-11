@@ -1,9 +1,5 @@
 # Independence vs Zero Correlation
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Overview
 
 A common misconception is that uncorrelated random variables are independent. While **independence implies zero correlation**, the converse is **false** in general. This section clarifies the distinction with proofs, counterexamples, and the special case where the two notions coincide.
@@ -245,3 +241,122 @@ print(f"  Independent? {np.isclose(p_joint, p_prod, atol=0.005)}")
 - For jointly normal random variables, zero correlation **does** imply independence — a unique and powerful property.
 - Always consider whether the assumption of joint normality holds before equating uncorrelated with independent.
 - In practice, checking independence requires examining the full joint distribution, not just the correlation coefficient.
+
+## Exercises
+
+**Exercise 1.**
+$X$ symmetric with $\mathbb{E}[X] = 0$, $\mathbb{E}[X^2] = 1$, $\mathbb{E}[X^3] = 0$. $Y = X^2$. (a) $\mathrm{Cov}(X, Y)$. (b) $\rho(X, Y)$. (c) Are they independent?
+
+??? success "Solution to Exercise 1"
+    (a) $\mathrm{Cov}(X, Y) = \mathbb{E}[XY] - \mathbb{E}[X]\mathbb{E}[Y] = \mathbb{E}[X^3] - 0 = 0$.
+
+    (b) $\rho(X, Y) = 0/(\sigma_X \sigma_Y) = 0$.
+
+    (c) **Not independent.** $Y = X^2$ is a deterministic function of $X$. Knowing $X = 3$ determines $Y = 9$. The correlation coefficient detects only the *linear* component of the relationship; the quadratic dependence has zero linear component because positive and negative $X$ values produce identical $Y$ values.
+
+    **Lesson:** zero correlation is necessary but not sufficient for independence. Always plot the data.
+
+---
+
+**Exercise 2.**
+**When zero correlation does imply independence.** State the case for which zero correlation guarantees independence, and prove it.
+
+??? success "Solution to Exercise 2"
+    **Special case:** if $(X, Y)$ is **jointly normal**, zero correlation implies independence.
+
+    **Proof:** for bivariate normal,
+
+    $$
+    f(x, y) = \frac{1}{2\pi\sigma_X\sigma_Y\sqrt{1-\rho^2}}\exp\!\left(-\frac{Q(x, y)}{2(1-\rho^2)}\right)
+    $$
+
+    where $Q$ contains a cross-term $-2\rho(x - \mu_X)(y - \mu_Y)/(\sigma_X \sigma_Y)$. When $\rho = 0$, this cross-term vanishes and $Q$ factors as a sum of terms involving only $x$ and only $y$. The density factors:
+
+    $$
+    f(x, y) = f_X(x) \cdot f_Y(y)
+    $$
+
+    which is the definition of independence. $\square$
+
+    **Note:** the assumption of *joint* normality is crucial — both $X$ and $Y$ marginally normal is not enough. Counterexamples exist where $X, Y$ are each $N(0, 1)$ but they are not jointly normal and zero correlation does not imply independence.
+
+---
+
+**Exercise 3.**
+**Distance correlation** addresses the limitation of Pearson by being zero if and only if independence holds. Define distance correlation conceptually and state its main advantage.
+
+??? success "Solution to Exercise 3"
+    **Distance correlation** (Székely, Rizzo, Bakirov 2007) is a measure of dependence that satisfies:
+
+    $$
+    \mathrm{dCor}(X, Y) = 0 \iff X \perp\!\!\!\perp Y
+    $$
+
+    **Definition (informal):** compute pairwise distances within $X$-samples and within $Y$-samples, then double-center each distance matrix, and compute a "correlation" between the centered distance matrices.
+
+    **Advantages over Pearson:**
+
+    - Detects **nonlinear** dependence (e.g., $Y = X^2$).
+    - Detects dependence even when $X$ and $Y$ have different dimensions.
+    - Always lies in $[0, 1]$ (like absolute Pearson, but always non-negative).
+    - $\mathrm{dCor} = 0$ iff independent (full diagnostic, unlike Pearson).
+
+    **Cost:** computational complexity $O(n^2)$ in sample size, vs. $O(n)$ for Pearson. For exploratory work with $n < 10^4$, distance correlation is increasingly the recommended dependence measure.
+
+---
+
+**Exercise 4.**
+**Mutual information** $I(X; Y) = \mathbb{E}\!\left[\log \frac{p(X, Y)}{p(X) p(Y)}\right]$. Show $I(X; Y) \ge 0$ and $I(X; Y) = 0$ iff $X \perp\!\!\!\perp Y$.
+
+??? success "Solution to Exercise 4"
+    Mutual information is the **Kullback-Leibler divergence** between the joint distribution $p(X, Y)$ and the product of marginals $p(X) p(Y)$:
+
+    $$
+    I(X; Y) = D_{KL}(p(X, Y) \| p(X) p(Y))
+    $$
+
+    KL divergence is non-negative ($D_{KL}(p \| q) \ge 0$ by Jensen's inequality applied to the convex function $-\log$), with equality iff $p = q$ almost everywhere.
+
+    So $I(X; Y) \ge 0$, with equality iff $p(X, Y) = p(X) p(Y)$ — which is exactly independence.
+
+    $\square$
+
+    **Use:** mutual information is the information-theoretic measure of dependence. Detects arbitrary nonlinear and high-order dependencies. Estimating $I$ from data is challenging (especially for continuous variables) but methods exist (k-nearest-neighbor estimators, kernel density estimation, mutual-information neural estimation).
+
+---
+
+**Exercise 5.**
+**Rank correlation.** Spearman's $\rho_S$ is the Pearson correlation between ranks. Show that Spearman's $\rho_S$ captures *monotonic* dependence (unlike Pearson, which captures only linear), and is invariant to any monotonic transformation.
+
+??? success "Solution to Exercise 5"
+    Replace each $X_i$ with its rank $R_i^X$ (from 1 to $n$), and similarly for $Y_i$. Spearman's correlation is
+
+    $$
+    \rho_S = \frac{\mathrm{Cov}(R^X, R^Y)}{\sigma_{R^X} \sigma_{R^Y}}
+    $$
+
+    **Monotonic dependence:** if $Y = g(X)$ for monotonic increasing $g$, then $R^Y = R^X$ exactly (ranks preserved), so $\rho_S = 1$. If $g$ is monotonic decreasing, $R^Y = n + 1 - R^X$, so $\rho_S = -1$. Captures *any* monotonic relationship.
+
+    **Pearson contrast:** Pearson's $\rho$ would only be 1 for linear $g$; for $Y = X^3$ with $X$ uniform on $[-1, 1]$, Pearson $\rho < 1$, but Spearman $\rho_S = 1$ because the relationship is perfectly monotonic.
+
+    **Invariance:** applying any monotonic transformation $f$ to $X$ preserves $R^X$, so $\rho_S$ is invariant under such transformations. This makes Spearman a robust correlation measure when outliers may distort linear correlation.
+
+    Spearman is preferred when (1) relationships may be nonlinear but monotonic, (2) outliers are present, or (3) variables are ordinal.
+
+---
+
+**Exercise 6.**
+**Practical test for independence.** Given a sample $(X_i, Y_i)_{i=1}^n$, propose two complementary tests for independence and discuss when each is appropriate.
+
+??? success "Solution to Exercise 6"
+    **Test 1 — Pearson correlation test:** under $H_0$ (and joint normality), the statistic $t = \rho\sqrt{n-2}/\sqrt{1 - \rho^2}$ follows $t_{n-2}$. Reject if $|t|$ exceeds the critical value.
+
+    *Appropriate when:* relationship is plausibly linear and data is approximately bivariate normal.
+
+    **Test 2 — Distance correlation test:** compute $\mathrm{dCor}^2$ on the sample, scaled by $n$. Under $H_0$, asymptotic distribution involves a sum of weighted chi-squared variables; the test is calibrated by permutation (randomly permuting $Y$ values and recomputing $\mathrm{dCor}^2$ to build the null distribution).
+
+    *Appropriate when:* relationship may be nonlinear, no assumption about marginals, or distance correlation makes sense (large enough $n$).
+
+    **Combine for robustness:** Pearson catches strong linear signal cheaply; distance correlation catches subtler nonlinear signal but at higher computational cost. A standard workflow: scan many variable pairs with Pearson, then re-examine the apparently "uncorrelated" pairs with distance correlation or mutual information.
+
+    Practical considerations: power for both tests scales with $n$; for $n < 30$, statistical significance is hard to achieve even with substantial dependence. Visualization (scatter plots) often diagnoses dependence faster than any formal test.

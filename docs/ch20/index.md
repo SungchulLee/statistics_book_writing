@@ -1,9 +1,6 @@
 # Chapter 20: Softmax Regression
 
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Overview
 
 This chapter extends binary logistic regression to the multiclass setting by developing softmax regression (multinomial logistic regression). Starting from the softmax function and its geometric interpretation on the probability simplex, we derive the cross-entropy loss and its gradients, explore regularization and optimization strategies, and evaluate multiclass models using confusion matrices and averaging schemes. The chapter also covers alternative decomposition strategies---one-vs-rest and one-vs-one---and concludes with a hands-on MNIST case study.

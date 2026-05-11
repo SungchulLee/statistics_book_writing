@@ -123,3 +123,67 @@ The total sum of squares decomposition in ANOVA can be written as a sum of quadr
 ## Summary
 
 A projection matrix is an idempotent matrix that decomposes $\mathbb{R}^n$ into a direct sum of its column space and null space. Every vector splits into a component in each subspace, and applying the projection a second time does nothing new. The trace equals the dimension of the target subspace. When the projection is additionally symmetric, it becomes an orthogonal projection, which is the type that appears most frequently in regression and ANOVA.
+
+## Exercises
+
+**Exercise 1.**
+Verify that $\mathbf{P} = \begin{pmatrix} 1 & 0 \\ 0 & 0 \end{pmatrix}$ is a projection matrix. What subspace does it project onto? What is the complementary projection $\mathbf{I} - \mathbf{P}$?
+
+??? success "Solution to Exercise 1"
+    Check idempotency:
+
+    $$
+    \mathbf{P}^2 = \begin{pmatrix} 1 & 0 \\ 0 & 0 \end{pmatrix}\begin{pmatrix} 1 & 0 \\ 0 & 0 \end{pmatrix} = \begin{pmatrix} 1 & 0 \\ 0 & 0 \end{pmatrix} = \mathbf{P}
+    $$
+
+    The column space of $\mathbf{P}$ is $\text{span}\{(1, 0)^T\}$, so $\mathbf{P}$ projects onto the $x_1$-axis. The complementary projection is:
+
+    $$
+    \mathbf{I} - \mathbf{P} = \begin{pmatrix} 0 & 0 \\ 0 & 1 \end{pmatrix}
+    $$
+
+    which projects onto the $x_2$-axis. Since $\mathbf{P}$ is also symmetric, this is an orthogonal projection.
+
+---
+
+**Exercise 2.**
+Prove that if $\mathbf{P}$ is idempotent, then $\operatorname{rank}(\mathbf{P}) = \operatorname{tr}(\mathbf{P})$.
+
+??? success "Solution to Exercise 2"
+    Since $\mathbf{P}$ is idempotent, its eigenvalues are either 0 or 1 (if $\mathbf{P}\mathbf{v} = \lambda\mathbf{v}$, then $\mathbf{P}^2\mathbf{v} = \lambda^2\mathbf{v} = \lambda\mathbf{v}$, so $\lambda^2 = \lambda$ and $\lambda \in \{0, 1\}$).
+
+    The rank equals the number of nonzero eigenvalues, which is the number of eigenvalues equal to 1. The trace equals the sum of all eigenvalues, which is also the number of eigenvalues equal to 1 (since the rest are 0).
+
+    Therefore $\operatorname{rank}(\mathbf{P}) = \operatorname{tr}(\mathbf{P})$. $\square$
+
+---
+
+**Exercise 3.**
+Give an example of an oblique (non-orthogonal) projection matrix. Verify it is idempotent but not symmetric.
+
+??? success "Solution to Exercise 3"
+    Consider $\mathbf{P} = \begin{pmatrix} 1 & 1 \\ 0 & 0 \end{pmatrix}$.
+
+    Idempotency:
+
+    $$
+    \mathbf{P}^2 = \begin{pmatrix} 1 & 1 \\ 0 & 0 \end{pmatrix}\begin{pmatrix} 1 & 1 \\ 0 & 0 \end{pmatrix} = \begin{pmatrix} 1 & 1 \\ 0 & 0 \end{pmatrix} = \mathbf{P}
+    $$
+
+    But $\mathbf{P}^T = \begin{pmatrix} 1 & 0 \\ 1 & 0 \end{pmatrix} \neq \mathbf{P}$, so $\mathbf{P}$ is not symmetric.
+
+    This matrix projects onto $\text{span}\{(1, 0)^T\}$ along the direction $(1, 0)^T + \ker(\mathbf{P}) = (1, 0)^T + \text{span}\{(-1, 1)^T\}$. The projection direction is oblique (not perpendicular) to the target subspace.
+
+---
+
+**Exercise 4.**
+In the regression decomposition $\mathbf{y} = \mathbf{H}\mathbf{y} + (\mathbf{I} - \mathbf{H})\mathbf{y}$, explain why $\mathbf{H}\mathbf{y}$ and $(\mathbf{I} - \mathbf{H})\mathbf{y}$ are orthogonal. What additional property (beyond idempotency) is required?
+
+??? success "Solution to Exercise 4"
+    The orthogonality of $\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}$ and $\mathbf{e} = (\mathbf{I} - \mathbf{H})\mathbf{y}$ requires that $\mathbf{H}$ be symmetric (not just idempotent). With symmetry:
+
+    $$
+    \hat{\mathbf{y}}^T\mathbf{e} = \mathbf{y}^T\mathbf{H}^T(\mathbf{I} - \mathbf{H})\mathbf{y} = \mathbf{y}^T\mathbf{H}(\mathbf{I} - \mathbf{H})\mathbf{y} = \mathbf{y}^T(\mathbf{H} - \mathbf{H}^2)\mathbf{y} = \mathbf{0}
+    $$
+
+    If $\mathbf{H}$ were idempotent but not symmetric (oblique projection), the decomposition $\mathbf{y} = \mathbf{H}\mathbf{y} + (\mathbf{I} - \mathbf{H})\mathbf{y}$ still holds but the two components are not orthogonal. The OLS hat matrix is both idempotent and symmetric, which is what makes the sums-of-squares decomposition and the Pythagorean theorem work.

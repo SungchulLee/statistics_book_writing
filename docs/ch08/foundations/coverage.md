@@ -1,9 +1,5 @@
 # Confidence Level and Coverage
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## What Is a Confidence Interval?
 
 Confidence intervals are a fundamental concept in inferential statistics, providing a way to quantify the uncertainty associated with estimating a population parameter. When working with sample data, there is always some sampling variability — differences between the sample and the population — since samples represent only a portion of the population. A point estimate, such as the sample mean, gives a single best guess for the population parameter (e.g., the population mean). However, this estimate does not reflect the uncertainty inherent in using a sample to make inferences about the entire population.
@@ -360,3 +356,51 @@ def main():
 if __name__ == "__main__":
     main()
 ```
+
+## Exercises
+
+**Exercise 1.**
+A 95% confidence interval for the mean is constructed from 100 independent samples. Approximately how many of these intervals would you expect to fail to contain the true mean?
+
+??? success "Solution to Exercise 1"
+    By definition, a 95% confidence interval has a 5% probability of not containing the true parameter value. Out of 100 independent samples, the expected number of intervals that fail to cover the true mean is:
+
+    $$
+    100 \times 0.05 = 5
+    $$
+
+    The actual number will vary from experiment to experiment (following a Binomial(100, 0.05) distribution), but we expect approximately 5 failures.
+
+---
+
+**Exercise 2.**
+Explain why a 95% confidence interval does NOT mean there is a 95% probability that the true parameter lies within the interval. What is the correct interpretation?
+
+??? success "Solution to Exercise 2"
+    The parameter $\mu$ is a fixed (unknown) constant, not a random variable. Once the interval is computed from data, $\mu$ either lies inside it or it does not — there is no probability involved for that specific interval.
+
+    The correct interpretation is **frequentist**: if we repeated the sampling procedure many times and constructed a 95% CI each time, approximately 95% of those intervals would contain the true $\mu$. The "95%" refers to the long-run proportion of intervals that cover $\mu$, not to the probability that any particular interval contains $\mu$.
+
+---
+
+**Exercise 3.**
+A researcher uses a z-interval with the sample standard deviation $s$ plugged in for $\sigma$ (the "z-plugin" method) when $n = 10$. Will the actual coverage be above or below the nominal 95%? Explain why.
+
+??? success "Solution to Exercise 3"
+    The actual coverage will be **below** 95%. The z-interval assumes $\sigma$ is known and uses $z_{0.025} = 1.96$ as the critical value. When $\sigma$ is unknown and estimated by $s$, there is additional variability from the estimation of $\sigma$ that the z-interval does not account for.
+
+    For small $n$, $s$ can substantially underestimate $\sigma$, producing intervals that are too narrow. The $t$-interval corrects for this by using the wider $t_{n-1}$ critical value (e.g., $t_{9, 0.025} = 2.262 > 1.96$), which accounts for the uncertainty in estimating $\sigma$. As $n \to \infty$, $s \to \sigma$ and the z- and t-intervals converge.
+
+---
+
+**Exercise 4.**
+If sampling without replacement from a finite population of size $N = 500$ with a sample of $n = 100$, compute the finite population correction factor. How does it affect the width of the confidence interval compared to sampling with replacement?
+
+??? success "Solution to Exercise 4"
+    The finite population correction factor is:
+
+    $$
+    \text{FPC} = \sqrt{\frac{N - n}{N - 1}} = \sqrt{\frac{500 - 100}{500 - 1}} = \sqrt{\frac{400}{499}} = \sqrt{0.8016} \approx 0.895
+    $$
+
+    The standard error is multiplied by 0.895, so the confidence interval width is reduced by about 10.5% compared to the infinite-population (with-replacement) case. This makes sense because sampling 100 out of 500 individuals (20% of the population) provides more information than sampling 100 from an infinite population — we have already observed a substantial fraction of the population.

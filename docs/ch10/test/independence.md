@@ -1,9 +1,5 @@
 # Test of Independence
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Overview
 
 An **Independence Test** is a statistical technique used to determine if there is a significant relationship between two categorical variables. Essentially, it helps answer the question: "Do the occurrences of one variable affect the occurrences of another?" If the two variables are independent, changes in one variable should have no effect on the distribution of the other.
@@ -675,3 +671,107 @@ plt.show()
 - Use 2,000-5,000 permutations for most applications
 - Without-replacement is more conservative; with-replacement is more liberal
 - Both approaches typically give similar p-values for moderate sample sizes
+
+## Exercises
+
+**Exercise 1.**
+Test payment method (cash/card/mobile) × day (weekend/weekday). Data: Weekend (30, 50, 20), Weekday (40, 60, 30). Test at $\alpha = 0.01$.
+
+??? success "Solution to Exercise 1"
+    $H_0$: independent. Row totals: 100, 130. Col totals: 70, 110, 50. Grand: 230.
+
+    Expected: $E_{ij} = $ row $\times$ col / 230. E.g., $E_{11} = 100 \cdot 70/230 \approx 30.43$.
+
+    $\chi^2 = \sum (O - E)^2/E \approx 2.34$. df = $(2-1)(3-1) = 2$.
+
+    Critical $\chi^2_{2, 0.01} = 9.21$. $2.34 < 9.21$. **Fail to reject.** No evidence of association.
+
+---
+
+**Exercise 2.**
+**Cramer's V** effect size: $V = \sqrt{\chi^2/(N \cdot \min(r-1, c-1))}$. Compute for Exercise 1.
+
+??? success "Solution to Exercise 2"
+    $V = \sqrt{2.34/(230 \cdot 1)} \approx \sqrt{0.0102} \approx 0.10$.
+
+    Interpretation:
+
+    - $V \le 0.1$: weak.
+    - $V \approx 0.3$: moderate.
+    - $V \ge 0.5$: strong.
+
+    $V = 0.10$ — weak (or essentially no) association. Combined with non-rejection, conclude payment method and day-of-week are essentially independent.
+
+    Useful for context: a chi-square can be "significant" with large $N$ even when $V$ is tiny (trivial effect).
+
+---
+
+**Exercise 3.**
+**Odds ratio** for $2 \times 2$ table. Define and compute for Smoker × Cancer = (50, 30) vs (10, 100).
+
+??? success "Solution to Exercise 3"
+    Table (smoker yes/no × cancer yes/no): $(50, 30) / (10, 100)$.
+
+    OR = $(50 \cdot 100)/(30 \cdot 10) = 5000/300 \approx 16.7$.
+
+    Interpretation: odds of cancer are 16.7 times higher among smokers vs. non-smokers.
+
+    $\ln(\mathrm{OR}) = 2.81$. SE of $\ln(\mathrm{OR})$ = $\sqrt{1/50 + 1/30 + 1/10 + 1/100} \approx \sqrt{0.157} \approx 0.396$.
+
+    95% CI for $\ln(\mathrm{OR})$: $2.81 \pm 1.96 \cdot 0.396 = (2.03, 3.59)$. Exponentiate: OR CI $= (7.62, 36.2)$.
+
+    Strong association. Don't include 1 — significant.
+
+---
+
+**Exercise 4.**
+**Independence in higher dimensions.** Can chi-square handle $r \times c \times s$ contingency tables?
+
+??? success "Solution to Exercise 4"
+    Yes — multi-way tables (3+ variables). df = $(r-1)(c-1)(s-1) \cdots$.
+
+    More complex hypotheses:
+
+    - **Complete independence:** all variables mutually independent.
+    - **Joint independence:** one variable independent of the joint of others.
+    - **Conditional independence:** two variables independent given the third.
+
+    Standard chi-square tests joint independence. **Log-linear models** generalize to all these patterns and provide a unified framework. Used in social-science research with many categorical variables.
+
+---
+
+**Exercise 5.**
+**Simpson's paradox** in contingency tables.
+
+??? success "Solution to Exercise 5"
+    A binary treatment-outcome association reverses when conditioning on a third variable.
+
+    **Berkeley admissions example:** overall, women were admitted at lower rate than men. Conditioned on department, women were admitted at the same or higher rate within each department. The aggregate apparent discrimination disappears once you account for department.
+
+    Why: women applied disproportionately to competitive (low-admit) departments. The marginal association reflects department choice + department admission rates, not within-department discrimination.
+
+    **Lesson:** marginal contingency tables can mislead. Always consider whether relevant covariates should be controlled. Aggregated data hides within-group patterns.
+
+---
+
+**Exercise 6.**
+**Fisher's exact test** vs chi-square. When to use Fisher's?
+
+??? success "Solution to Exercise 6"
+    Fisher's exact test computes exact p-values for $2 \times 2$ contingency tables (no asymptotic approximation).
+
+    Compare with chi-square's approximate distribution.
+
+    **Use Fisher's when:**
+
+    - Small samples (expected counts < 5).
+    - Sparse tables.
+    - When exact p-value is required.
+
+    **Use chi-square when:**
+
+    - Large $n$ (Cochran's rule satisfied).
+    - Multi-way tables.
+    - Computational simplicity desired.
+
+    Available in scipy: `scipy.stats.fisher_exact`. R: `fisher.test`. Both default to two-sided test.

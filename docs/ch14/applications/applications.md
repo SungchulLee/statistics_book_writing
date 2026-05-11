@@ -1,9 +1,6 @@
 # Applications of Normality Tests in Statistics
 
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 Normality tests are an essential part of statistical analysis because many common statistical methods rely on the assumption that the data is normally distributed.
 
 ## When to Apply a Normality Test
@@ -116,3 +113,58 @@ Before applying ANOVA, the Shapiro-Wilk test is used to check if the data in eac
 ## Conclusion
 
 Normality tests are crucial in various applications where parametric methods such as $t$-tests, ANOVA, and linear regression are used. Ensuring that the data (or residuals) follow a normal distribution allows these methods to produce valid results. When normality assumptions are violated, transformations or non-parametric alternatives can often be applied. In practice, combining normality tests with graphical assessments helps provide a clearer picture of the underlying data distribution.
+
+## Exercises
+
+**Exercise 1.**
+A researcher performs a one-sample t-test on $n = 15$ observations and obtains $t = 2.35$. Before interpreting the result, they should check for normality. Explain why, and describe what could go wrong if the data are heavily skewed.
+
+??? success "Solution to Exercise 1"
+    The one-sample t-test assumes the data come from a normal distribution (or that $n$ is large enough for the CLT). With $n = 15$, the CLT may not provide sufficient approximation if the data are heavily skewed.
+
+    If the data are right-skewed, the sampling distribution of $\bar{X}$ is also skewed, and the t-distribution is a poor approximation. This can lead to: (1) incorrect p-values (the actual Type I error rate differs from the nominal $\alpha$), (2) confidence intervals with incorrect coverage, and (3) reduced power to detect real effects. With heavy skewness and $n = 15$, a nonparametric test (Wilcoxon signed-rank) or a bootstrap test would be more reliable.
+
+---
+
+**Exercise 2.**
+Name three statistical methods that rely on normality assumptions and state for each how robust it is to non-normality.
+
+??? success "Solution to Exercise 2"
+
+    1. **t-test for a mean:** Moderately robust. With $n \geq 30$ and moderate skewness, the CLT ensures approximate validity. Not robust to heavy tails or extreme outliers in small samples.
+
+    2. **F-test for equality of variances:** Not robust. The F-test is highly sensitive to non-normality; even mild departures can severely inflate the Type I error rate. Levene's or Brown-Forsythe tests are preferred alternatives.
+
+    3. **Linear regression (OLS):** The OLS estimates are valid (unbiased, BLUE) without normality. However, inference (t-tests, F-tests, confidence intervals) requires normality of errors or large $n$. Prediction intervals are especially sensitive to non-normality.
+
+---
+
+**Exercise 3.**
+Explain the practical workflow for checking normality before performing a statistical test.
+
+??? success "Solution to Exercise 3"
+    A recommended workflow:
+
+    1. **Visual inspection first:** Create a histogram or density plot and a Q-Q plot of the data (or residuals for regression). Look for skewness, heavy tails, outliers, or multimodality.
+
+    2. **Formal test:** Apply a normality test (Shapiro-Wilk for $n < 50$, Anderson-Darling or D'Agostino for larger samples) as a supplement to visual methods.
+
+    3. **Interpret results together:** If the Q-Q plot shows approximate linearity and the formal test does not reject at a reasonable level, proceed with normal-theory methods. If both suggest non-normality, consider alternatives.
+
+    4. **Choose a remedy if needed:** Apply a transformation (log, Box-Cox), use a nonparametric test, or use bootstrap methods.
+
+    5. **Report the assessment:** State which normality checks were performed and their results, even if normality is supported.
+
+---
+
+**Exercise 4.**
+For a large sample ($n = 5000$), a Shapiro-Wilk test rejects normality with $p < 0.001$, but the Q-Q plot looks nearly linear. How should you proceed?
+
+??? success "Solution to Exercise 4"
+    With $n = 5000$, formal tests have extremely high power and will detect trivially small departures from normality that have no practical impact on inference. A Shapiro-Wilk p-value of $< 0.001$ does not mean the data are "far" from normal -- it means the departure is statistically detectable.
+
+    Since the Q-Q plot looks nearly linear, the departure is likely small. You should:
+
+    1. **Proceed with normal-theory methods:** For $n = 5000$, the CLT provides strong protection, and the t-test/ANOVA/regression inference will be very accurate even with slight non-normality.
+    2. **Report both findings:** Note that the formal test rejects normality but visual inspection suggests approximate normality.
+    3. **Consider effect size:** Quantify the degree of non-normality using skewness and kurtosis coefficients rather than relying on a binary reject/fail-to-reject decision.

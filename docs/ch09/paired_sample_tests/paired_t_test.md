@@ -1,8 +1,5 @@
 # Paired t-Test for mu_D
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Paired-Sample t Test
 
 The paired sample t-test, also known as the dependent sample t-test or the matched pairs t-test, is a statistical procedure used to compare two population means where you have two samples in which observations in one sample can be paired with observations in the other sample. Common scenarios include case-control studies, repeated measures, and experiments where individuals are measured before and after a treatment.
@@ -166,3 +163,92 @@ else:
 ## Conclusion
 
 The paired sample t-test is an essential tool for analyzing data where pairs of related or dependent samples are compared. It is particularly useful in before-and-after studies, or when the same subjects are exposed to two different conditions. This test helps to control for variability between subjects, thereby focusing more accurately on the effects of the treatments or conditions being tested. By accounting for the dependency in the paired samples, this test provides a more powerful and sensitive analysis than two independent sample tests when the paired design is appropriate.
+
+## Exercises
+
+**Exercise 1.**
+Workout program: 10 participants measured before/after. Differences yield $\bar d = 1.7$, $s_d \approx 0.483$. Test at $\alpha = 0.05$.
+
+??? success "Solution to Exercise 1"
+    Paired sample → $t_9$.
+
+    $t = 1.7/(0.483/\sqrt{10}) = 1.7/0.153 \approx 11.13$.
+
+    Critical: $t_{0.05, 9} = 1.833$ (one-sided). $11.13 \gg 1.833$. **Reject overwhelmingly.** Workout reduces body fat significantly.
+
+---
+
+**Exercise 2.**
+Diet plan: 12 participants, $\bar d = 7.5$ mg/dL reduction, $s_d \approx 2.61$. Test at $\alpha = 0.05$.
+
+??? success "Solution to Exercise 2"
+    $t = 7.5/(2.61/\sqrt{12}) = 7.5/0.754 \approx 9.95$.
+
+    Critical: $t_{0.05, 11} = 1.796$. $9.95 \gg 1.796$. **Reject.** Diet reduces cholesterol.
+
+---
+
+**Exercise 3.**
+**Why paired beats independent.** For Exercise 1, suppose ignoring pairing: treat 10 before-values and 10 after-values as independent samples. What changes?
+
+??? success "Solution to Exercise 3"
+    Before: mean 28.2, SD 2.66. After: mean 26.5, SD 2.42. Pooled SD ≈ 2.55.
+
+    Independent $t$ = $(28.2 - 26.5)/\sqrt{2.55^2(1/10 + 1/10)} = 1.7/1.14 \approx 1.49$. Critical (one-sided df = 18): 1.734. **Fail to reject.**
+
+    Paired analysis ($t \approx 11.1$) gives overwhelming significance; independent ($t \approx 1.5$) fails to detect.
+
+    **Why:** the within-subject correlation is high (each subject has similar before/after percentages). Paired analysis exploits this; independent analysis treats it as noise.
+
+    **Lesson:** always match analysis to design. Ignoring pairing wastes information.
+
+---
+
+**Exercise 4.**
+**Conditions** for paired $t$-test.
+
+??? success "Solution to Exercise 4"
+    1. **Random pairs / matched subjects:** appropriate pairing (same subject, twins, matched controls).
+    2. **Independence between pairs:** subjects do not influence each other.
+    3. **Approximate normality of differences $D_i$:** check Q-Q plot of differences.
+
+    Note: the differences must be normal, *not* the pre or post values individually. If differences are not normal: use Wilcoxon signed-rank test.
+
+---
+
+**Exercise 5.**
+**Wilcoxon signed-rank** as nonparametric alternative. Briefly describe.
+
+??? success "Solution to Exercise 5"
+    For paired data:
+
+    1. Compute differences $D_i$.
+    2. Rank $|D_i|$ (ignore signs).
+    3. Sum ranks of positive and negative differences separately.
+    4. Test statistic: smaller of the two sums (or both compared to critical values).
+
+    Under $H_0: \mathrm{median}(D) = 0$, the test has a known null distribution (tabulated for small $n$, normal approximation for large $n$).
+
+    **Advantages:** doesn't assume normality. Robust to outliers.
+
+    **Disadvantages:** less powerful than paired $t$-test when normality holds. Lower interpretability.
+
+    Modern practice: paired $t$ for clean normal differences; Wilcoxon for skewed or outlier-prone.
+
+---
+
+**Exercise 6.**
+**Power for paired** vs unpaired. If subjects are paired with correlation $\rho$, how much smaller is $n$ for paired analysis?
+
+??? success "Solution to Exercise 6"
+    Variance of paired difference: $\sigma_D^2 = 2\sigma^2(1 - \rho)$. Unpaired: $2\sigma^2$.
+
+    Ratio: $\sigma_D^2/\sigma_{\text{unp}}^2 = 1 - \rho$.
+
+    Required $n$ for same power scales linearly with variance:
+
+    $n_{\text{paired}}/n_{\text{unp}} = 1 - \rho$.
+
+    For $\rho = 0.5$: half the data needed for paired. For $\rho = 0.9$: 1/10 as much.
+
+    **Practical implication:** when feasible, pairing saves substantial sample-size budget. Especially valuable for expensive studies (clinical trials).

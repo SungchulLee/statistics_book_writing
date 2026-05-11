@@ -145,3 +145,51 @@ The `scipy.stats.pearsonr` function returns both the sample correlation and a tw
 ## Summary
 
 The Pearson correlation coefficient $r$ quantifies the strength and direction of the linear relationship between two variables. It ranges from $-1$ (perfect negative) to $+1$ (perfect positive), with $0$ indicating no linear association. While powerful and widely used, $r$ captures only linear relationships and is sensitive to outliers. Always pair the numerical value of $r$ with a scatter plot to verify that the linear model is appropriate.
+
+## Exercises
+
+**Exercise 1.**
+Using the height-weight dataset, compute the Pearson correlation coefficient for:
+
+1. Males only
+2. Females only
+3. Combined dataset
+
+```python
+import pandas as pd
+
+url = "https://raw.githubusercontent.com/beccadsouza/Machine-Learning-Python/master/Datasets/height-weight.csv"
+data = pd.read_csv(url)
+
+# Your code here
+```
+
+Discuss why the combined correlation might differ from the within-group correlations.
+
+??? success "Solution to Exercise 1"
+
+    Computing the Pearson correlation separately for males and females and then for the combined dataset will typically reveal different values because the combined dataset includes between-group variation. If males tend to be both taller and heavier than females, combining the groups introduces an additional source of positive covariation (the group difference), which can inflate the overall correlation relative to the within-group correlations. This is an example of ecological correlation effects.
+
+---
+
+**Exercise 2.**
+Write a function that generates bivariate normal samples for $\rho \in \{-0.99, -0.8, -0.5, 0, 0.5, 0.8, 0.99\}$ and displays them in a single row of subplots. For each subplot, also print the sample Pearson $r$ in the title.
+
+??? success "Solution to Exercise 2"
+
+    Use `numpy.random.multivariate_normal` with the appropriate covariance matrix $\Sigma = \begin{pmatrix} 1 & \rho \\ \rho & 1 \end{pmatrix}$ for each value of $\rho$. Generate $n = 200$ samples per subplot, compute Pearson $r$ with `numpy.corrcoef`, and display using `matplotlib.pyplot.subplots(1, 7)`. The scatter plots should show progressively tighter ellipses as $|\rho|$ increases, collapsing to a line at $\pm 0.99$.
+
+---
+
+**Exercise 3.**
+Reproduce Anscombe's quartet using `scipy` or manually. Compute the Pearson $r$ for each of the four datasets and verify that they are nearly identical despite very different scatter plot patterns.
+
+```python
+# Hint: Anscombe's quartet is available in seaborn
+import seaborn as sns
+anscombe = sns.load_dataset("anscombe")
+```
+
+??? success "Solution to Exercise 3"
+
+    All four datasets in Anscombe's quartet yield Pearson $r \approx 0.816$, yet the scatter plots reveal very different relationships: a linear trend, a curved relationship, a perfect linear trend with one outlier, and a dataset where one extreme point drives the correlation. This demonstrates that Pearson $r$ alone is insufficient to characterize a relationship — visual inspection is always necessary.

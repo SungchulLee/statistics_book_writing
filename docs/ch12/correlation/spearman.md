@@ -138,3 +138,71 @@ The `scipy.stats.spearmanr` function handles ties automatically using midranks. 
 ## Summary
 
 Spearman's rank correlation $r_s$ measures the strength and direction of any monotonic relationship between two variables. By operating on ranks rather than raw values, it is robust to outliers and applicable to ordinal data. While Pearson's $r$ is optimal for linear relationships with normally distributed data, Spearman's $r_s$ is the preferred choice when the relationship is monotonic but nonlinear, when the data contain outliers, or when the measurement scale is ordinal.
+
+## Exercises
+
+**Exercise 1.**
+Compute Spearman's rank correlation for $X = (10, 20, 30, 40, 50)$ and $Y = (15, 25, 5, 35, 45)$.
+
+??? success "Solution to Exercise 1"
+    Assign ranks: $R_X = (1, 2, 3, 4, 5)$, $R_Y = (2, 3, 1, 4, 5)$.
+
+    Compute rank differences $d_i = R_{X,i} - R_{Y,i}$: $d = (-1, -1, 2, 0, 0)$.
+
+    $$
+    \sum d_i^2 = 1 + 1 + 4 + 0 + 0 = 6
+    $$
+
+    Using the shortcut formula:
+
+    $$
+    r_s = 1 - \frac{6\sum d_i^2}{n(n^2 - 1)} = 1 - \frac{6 \times 6}{5 \times 24} = 1 - \frac{36}{120} = 1 - 0.3 = 0.7
+    $$
+
+---
+
+**Exercise 2.**
+Explain why Spearman's $r_s$ is exactly the Pearson correlation of the ranks. Why does this make $r_s$ robust to outliers?
+
+??? success "Solution to Exercise 2"
+    By definition, $r_s = r(\text{rank}(X), \text{rank}(Y))$: the Pearson correlation applied to the rank-transformed data. The shortcut formula $1 - 6\sum d_i^2/[n(n^2-1)]$ is algebraically equivalent (when there are no ties).
+
+    This makes $r_s$ robust to outliers because ranking discards information about the magnitude of observations. An extreme outlier (e.g., changing $X_5 = 50$ to $X_5 = 5000$) does not change its rank (still rank 5), so $r_s$ is unchanged. In contrast, Pearson's $r$ would be heavily influenced because it uses the actual values in computing covariances and variances.
+
+---
+
+**Exercise 3.**
+Data: $X = (1, 2, 3, 4, 5)$, $Y = (1, 4, 9, 16, 25)$ (i.e., $Y = X^2$). Compute Pearson's $r$ and Spearman's $r_s$. Why do they differ?
+
+??? success "Solution to Exercise 3"
+    **Spearman's $r_s$:** Since $Y = X^2$ is a strictly increasing function on positive $X$, the ranks of $Y$ are identical to the ranks of $X$. Therefore $r_s = 1.0$.
+
+    **Pearson's $r$:** $\bar{X} = 3$, $\bar{Y} = 11$. Computing:
+
+    $$
+    \sum(X_i - 3)(Y_i - 11) = (-2)(-10) + (-1)(-7) + (0)(-2) + (1)(5) + (2)(14) = 20 + 7 + 0 + 5 + 28 = 60
+    $$
+
+    $$
+    \sum(X_i-3)^2 = 10, \quad \sum(Y_i - 11)^2 = 100 + 49 + 4 + 25 + 196 = 374
+    $$
+
+    $$
+    r = \frac{60}{\sqrt{10 \times 374}} = \frac{60}{61.16} \approx 0.981
+    $$
+
+    Pearson's $r \approx 0.98 < 1$ because it measures linear association, and $Y = X^2$ is nonlinear (though nearly linear in this range). Spearman's $r_s = 1$ because the relationship is perfectly monotonic.
+
+---
+
+**Exercise 4.**
+Under what conditions does Spearman's $r_s$ equal Pearson's $r$ exactly?
+
+??? success "Solution to Exercise 4"
+    Spearman's $r_s$ equals Pearson's $r$ when the ranks are a linear function of the original values, which happens when:
+
+    1. **The data have no ties and the values are equally spaced** (or more generally, when both $X$ and $Y$ have the same distribution of values such that ranking is a linear transformation).
+
+    2. **Both variables are uniformly distributed** on their range (ranks are proportional to the values).
+
+    In practice, $r_s \approx r$ when the relationship between $X$ and $Y$ is approximately linear and neither variable has extreme outliers. The two measures diverge when (a) the relationship is nonlinear but monotonic ($r_s > r$), (b) outliers are present ($r$ is distorted, $r_s$ is not), or (c) the relationship is linear but with outliers ($r$ may be pulled toward zero, $r_s$ remains stable).

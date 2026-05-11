@@ -1,9 +1,5 @@
 # Sampling Distribution of Proportions
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Overview
 
 The **sampling distribution of the sample proportion** $\hat{p}$ describes how the proportion of successes varies across repeated random samples from a binary population. It is the foundation for inference about population proportions — polls, quality control, clinical trials, and A/B tests all rely on it.
@@ -206,3 +202,103 @@ plt.show()
 | Normal approx. valid when | $np \geq 5$ and $n(1-p) \geq 5$ |
 | Key difference from $\bar{X}$ | SE depends on the parameter itself |
 | For small $n$ | Use exact binomial, not normal approximation |
+
+## Exercises
+
+**Exercise 1.**
+Population: $p = 0.60$. Sample $n = 100$. Compute $P(\hat p > 0.65)$.
+
+??? success "Solution to Exercise 1"
+    $\mathrm{SE}(\hat p) = \sqrt{p(1-p)/n} = \sqrt{0.24/100} \approx 0.049$. $Z = (0.65 - 0.60)/0.049 \approx 1.02$.
+
+    $P(\hat p > 0.65) = 1 - \Phi(1.02) \approx 0.154$. About 15.4%.
+
+    Conditions: $np = 60 \ge 10$ and $n(1-p) = 40 \ge 10$, so normal approximation is valid.
+
+---
+
+**Exercise 2.**
+**Small-sample issue.** Population: $p = 0.30$. Sample $n = 10$. Compute $P(\hat p > 0.35)$ exactly and via normal approximation. Why does the normal approximation work or fail here?
+
+??? success "Solution to Exercise 2"
+    Exact: $\hat p > 0.35$ ⟺ $X \ge 4$ where $X \sim \mathrm{Binomial}(10, 0.3)$.
+
+    $P(X < 4) = P(X = 0,1,2,3) = 0.028 + 0.121 + 0.233 + 0.267 = 0.650$. So $P(X \ge 4) = 0.350$.
+
+    Normal approx: $\mathrm{SE} = \sqrt{0.21/10} \approx 0.145$. $Z = 0.05/0.145 \approx 0.345$. $P(Z > 0.345) \approx 0.365$.
+
+    Difference: exact 0.350 vs. normal 0.365 — about 1.5 percentage points off. Normal works reasonably (the binomial is not too skewed at $p = 0.3$) but the small $np = 3$ violates the usual rule of thumb ($np \ge 10$). For better accuracy, apply continuity correction or use exact binomial.
+
+---
+
+**Exercise 3.**
+**Prove $\hat p$ is unbiased and find its SE.** Show $\mathbb{E}[\hat p] = p$ and $\mathrm{Var}(\hat p) = p(1-p)/n$.
+
+??? success "Solution to Exercise 3"
+    $\hat p = X/n$ where $X = \sum X_i$ with $X_i \sim \mathrm{Bernoulli}(p)$ i.i.d.
+
+    $\mathbb{E}[\hat p] = \mathbb{E}[X]/n = np/n = p$. Unbiased.
+
+    $\mathrm{Var}(\hat p) = \mathrm{Var}(X)/n^2 = np(1-p)/n^2 = p(1-p)/n$.
+
+    $\mathrm{SE}(\hat p) = \sqrt{p(1-p)/n}$.
+
+    $\square$
+
+    The SE is maximized at $p = 1/2$ (worst case). At $p = 1/2$, $\mathrm{SE} = 1/(2\sqrt n)$.
+
+---
+
+**Exercise 4.**
+**Sample-size planning.** What sample size is needed to estimate $p$ with margin of error $\pm 3$ percentage points at 95% confidence, when $p$ is unknown?
+
+??? success "Solution to Exercise 4"
+    Margin of error: $\mathrm{ME} = z_{0.975} \cdot \mathrm{SE} = 1.96 \sqrt{p(1-p)/n} \le 0.03$.
+
+    Worst case at $p = 1/2$: $\mathrm{SE} = 1/(2\sqrt n)$, so $1.96/(2\sqrt n) \le 0.03 \Rightarrow \sqrt n \ge 1.96/0.06 \approx 32.67 \Rightarrow n \ge 1068$.
+
+    This is the origin of the "$n \approx 1000$" rule for opinion polls: with $n = 1000$, the margin of error at 95% confidence is at most $\pm 3.1$ pp regardless of $p$.
+
+    If $p$ is suspected to be far from 0.5 (say $p \approx 0.1$), then $p(1-p) = 0.09$ instead of 0.25, requiring only $n \approx 0.09 \cdot 1068/0.25 \approx 385$. Knowledge of approximate $p$ reduces required $n$.
+
+---
+
+**Exercise 5.**
+**Wilson score interval.** Why is the **Wilson score** confidence interval preferred to the standard Wald CI $\hat p \pm z \sqrt{\hat p(1-\hat p)/n}$ for binomial proportions?
+
+??? success "Solution to Exercise 5"
+    **Wald CI problems:**
+
+    - Asymmetric coverage especially near $p = 0$ or $p = 1$.
+    - Can produce intervals extending below 0 or above 1 (e.g., $\hat p = 0.05, n = 50$: CI = $0.05 \pm 0.06 = (-0.01, 0.11)$).
+    - Coverage probability oscillates wildly with $n$ — far from nominal $1 - \alpha$.
+
+    **Wilson score interval:**
+
+    $$
+    p_{\mathrm{Wilson}} = \frac{\hat p + z^2/(2n) \pm z\sqrt{\hat p(1-\hat p)/n + z^2/(4n^2)}}{1 + z^2/n}
+    $$
+
+    Solves $|p - \hat p| \le z\sqrt{p(1-p)/n}$ for $p$, inverting the test rather than substituting $\hat p$ for $p$ in the SE.
+
+    **Advantages:** stays in $[0, 1]$, much better coverage near boundaries, recommended by modern practice (R's `prop.test`, Python's `statsmodels.stats.proportion.proportion_confint(method="wilson")`).
+
+---
+
+**Exercise 6.**
+**Difference of proportions.** Two independent samples: $\hat p_1$ from $n_1$, $\hat p_2$ from $n_2$. Derive the SE of $\hat p_1 - \hat p_2$.
+
+??? success "Solution to Exercise 6"
+    By independence: $\mathrm{Var}(\hat p_1 - \hat p_2) = \mathrm{Var}(\hat p_1) + \mathrm{Var}(\hat p_2) = p_1(1-p_1)/n_1 + p_2(1-p_2)/n_2$.
+
+    $\mathrm{SE}(\hat p_1 - \hat p_2) = \sqrt{p_1(1-p_1)/n_1 + p_2(1-p_2)/n_2}$.
+
+    For inference (test $H_0: p_1 = p_2 = p$), substitute the pooled estimator $\hat p_{\text{pool}} = (X_1 + X_2)/(n_1 + n_2)$ in the SE.
+
+    For confidence intervals (estimating $p_1 - p_2$ without assuming equality), substitute $\hat p_1$ and $\hat p_2$ separately:
+
+    $$
+    \mathrm{CI}: (\hat p_1 - \hat p_2) \pm z\sqrt{\hat p_1(1-\hat p_1)/n_1 + \hat p_2(1-\hat p_2)/n_2}
+    $$
+
+    This is the basis of two-proportion $z$-tests and CIs in A/B testing and clinical trials.

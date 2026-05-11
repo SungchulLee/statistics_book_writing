@@ -96,3 +96,26 @@ The following decision principles emerge from the ARE analysis:
 ## Summary
 
 The asymptotic relative efficiency provides a principled framework for comparing non-parametric and parametric tests. The Wilcoxon family of rank-based tests achieves an ARE of $3/\pi \approx 0.955$ under normality, meaning they lose less than 5% efficiency in the best case for parametric methods. Under non-normal distributions the ARE can exceed 1, making rank tests more powerful. The worst-case ARE for the Wilcoxon rank-sum test is bounded below by 0.864, ensuring that the efficiency cost of choosing a non-parametric test is always modest. These results provide strong justification for using rank-based methods when distributional assumptions are in doubt.
+
+## Exercises
+
+**Exercise 1.**
+For each scenario below, state whether you would use a parametric or non-parametric test, name the specific test, and justify your choice.
+
+**(a)** You want to compare the mean blood pressure of two groups (drug vs. placebo). Both groups have $n = 50$ observations, and Q-Q plots suggest approximate normality.
+
+**(b)** You have 8 observations of customer satisfaction ratings (on a 1--5 Likert scale) from two store locations and want to test if the locations differ.
+
+**(c)** You have paired before/after measurements for 12 subjects, but the differences are heavily right-skewed with one extreme outlier.
+
+**(d)** You want to test whether three teaching methods produce different exam score distributions. Group sizes are 8, 10, and 7, and Shapiro-Wilk tests reject normality in two of the three groups.
+
+??? success "Solution to Exercise 1"
+
+    **(a)** **Parametric: two-sample $t$-test** (or Welch's $t$-test). With $n = 50$ per group and approximate normality confirmed by Q-Q plots, the conditions for a parametric test are well satisfied. The $t$-test will have higher power than a non-parametric alternative under these conditions.
+
+    **(b)** **Non-parametric: Mann-Whitney U test** (Wilcoxon rank-sum test). Likert-scale data are ordinal, not continuous, so means and standard deviations are not meaningful. The small sample size ($n = 8$) and discrete nature of the data make non-parametric methods more appropriate.
+
+    **(c)** **Non-parametric: Wilcoxon signed-rank test** (or even the sign test if symmetry of differences is in doubt). The heavy skewness and extreme outlier violate the normality assumption of the paired $t$-test. With only 12 observations, the CLT does not provide reliable normal approximations for highly skewed data. The Wilcoxon signed-rank test, based on ranks, is resistant to the outlier.
+
+    **(d)** **Non-parametric: Kruskal-Wallis test**. Since normality is rejected in two of three groups, one-way ANOVA assumptions are violated. The sample sizes are relatively small (7--10), offering insufficient data for the CLT to compensate. The Kruskal-Wallis test does not require normality and is the appropriate multi-group comparison. If the Kruskal-Wallis test is significant, follow up with Dunn's test for pairwise comparisons.

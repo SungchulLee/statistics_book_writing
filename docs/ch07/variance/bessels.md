@@ -1,9 +1,5 @@
 # Bessel's Correction
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Introduction
 
 **Bessel's correction** refers to the use of $n-1$ instead of $n$ in the denominator of the sample variance formula, yielding an unbiased estimator of the population variance. Named after Friedrich Bessel, this correction accounts for the fact that estimating the mean from the same data "uses up" one degree of freedom, causing the naive estimator (dividing by $n$) to systematically underestimate the true variance.
@@ -44,6 +40,7 @@ $$\sum_{i=1}^n d_i = \sum_{i=1}^n (X_i - \bar{X}) = 0$$
 This means only $n-1$ of the deviations are free to vary independently. We say there are $n-1$ **degrees of freedom**. Dividing by the degrees of freedom ($n-1$) instead of the number of observations ($n$) corrects the bias.
 
 **General principle:** When estimating a variance using $k$ estimated parameters, divide by $n - k$:
+
 - Mean unknown, variance of $X$: divide by $n - 1$
 - Regression with $p$ coefficients: residual variance uses $n - p$
 
@@ -161,3 +158,97 @@ Bessel's correction ($n-1$ in the denominator) produces an unbiased estimator of
 | Variance (Normal) | $\text{Var}(S^2) = 2\sigma^4/(n-1)$ |
 | $S$ is biased for $\sigma$ | $E[S] < \sigma$ (Jensen's inequality) |
 | General regression | $\hat{\sigma}^2 = \text{RSS}/(n-p)$ |
+
+## Exercises
+
+**Exercise 1.**
+**Chi-squared distribution of $S^2$** for normal data. (a) Show $(n-1)S^2/\sigma^2 \sim \chi^2_{n-1}$. (b) 95% CI for $\sigma^2$ with $n = 20, S^2 = 16$. (c) Why asymmetric?
+
+??? success "Solution to Exercise 1"
+    (a) $\sum(X_i - \bar X)^2/\sigma^2 = \sum(X_i - \mu)^2/\sigma^2 - n(\bar X - \mu)^2/\sigma^2$. The first is $\chi^2_n$, the second is $\chi^2_1$ and independent (Cochran's theorem). So the difference is $\chi^2_{n-1}$.
+
+    (b) $\chi^2_{19, 0.025} = 8.907$, $\chi^2_{19, 0.975} = 32.852$. CI: $(19 \cdot 16/32.852, 19 \cdot 16/8.907) = (9.25, 34.13)$.
+
+    (c) Chi-squared is right-skewed; quantiles are asymmetric. Upper bound farther from $S^2$ than lower. The asymmetry shrinks as $n \to \infty$ (chi-squared approaches normal by CLT applied to squared standard normals).
+
+---
+
+**Exercise 2.**
+**Bias of $S$.** (a) Why $\mathbb{E}[S] < \sigma$. (b) For $n = 5$, compute $c_4$. (c) Used in practice?
+
+??? success "Solution to Exercise 2"
+    (a) $\sqrt{\cdot}$ is concave. Jensen: $\mathbb{E}[\sqrt{S^2}] < \sqrt{\mathbb{E}[S^2]} = \sigma$. Strict because $S^2$ has nontrivial variance.
+
+    (b) $c_4 = \sqrt{2/(n-1)} \cdot \Gamma(n/2)/\Gamma((n-1)/2)$. For $n = 5$: $c_4 = \sqrt{2/4} \cdot \Gamma(2.5)/\Gamma(2) = (1/\sqrt 2) \cdot (3\sqrt\pi/4)/1 \approx 0.940$.
+
+    Bias-corrected SD: $S/c_4$.
+
+    (c) Rarely used; bias is small ($\sim 6\%$ at $n = 5$, $< 1\%$ at $n \ge 30$). SPC charts (Shewhart) use $c_4$; most other applications report $S$ uncorrected.
+
+---
+
+**Exercise 3.**
+**Realized volatility.** 78 five-minute returns per day. (a) Naive bias fraction. (b) Does Bessel matter? (c) 21-day rolling window?
+
+??? success "Solution to Exercise 3"
+    (a) Naive bias = $-\sigma^2/n = -\sigma^2/78 \approx -1.3\%$ of true variance. Negligible.
+
+    (b) Bessel correction: factor $78/77 \approx 1.013$. Smaller than microstructure noise and intraday volatility patterns. Doesn't matter.
+
+    (c) 21-day rolling = 21 daily variance estimates. SE of mean variance estimate: $\sqrt{2 \sigma^4/(n_{\text{day}} - 1)}/\sqrt{21}$. Trade-off: smoother estimates but lag volatility regime changes by 10 days on average. Half-life of regime shift: ~10 days.
+
+---
+
+**Exercise 4.**
+**Bessel's correction generalization.** For regression with $p$ parameters, residual variance estimator divides by $n - p$. Why?
+
+??? success "Solution to Exercise 4"
+    Residuals $e_i = Y_i - \hat Y_i$ satisfy linear constraints (normal equations: $\mathbf X^T \mathbf e = 0$). $\mathbf X$ has $p$ columns, so there are $p$ linear constraints, leaving $n - p$ effective dof.
+
+    $\mathbb{E}[\mathrm{SSE}/\sigma^2] = n - p$ (chi-squared distribution under normality). So $\hat\sigma^2 = \mathrm{SSE}/(n - p)$ is unbiased.
+
+    Generalizes Bessel's correction: $n - 1$ is the case $p = 1$ (intercept only).
+
+    Connection to t-test/F-test: residual variance with $n - p$ dof determines the appropriate $t$ critical value (df $= n - p$).
+
+---
+
+**Exercise 5.**
+**Why divide by $n - 1$ exactly?** Could other denominators be justified?
+
+??? success "Solution to Exercise 5"
+    **Unbiasedness:** $n - 1$ is the unique divisor making $S^2$ unbiased.
+
+    **MSE-optimal:** $n + 1$ minimizes MSE (Exercise from earlier section).
+
+    **MLE:** $n$ is the MLE divisor (for normal data).
+
+    **Justification for $n - 1$:** unbiasedness is a "clean" property — averages of unbiased estimators are unbiased; expectations are interpretable. Statistical convention favors $n - 1$ even though it's not MSE-optimal.
+
+    Different fields make different choices:
+
+    - Engineering / SPC: $n - 1$ for sample variance, $c_4$-corrected for SD.
+    - Machine learning: often $n$ (MLE) without thinking about bias.
+    - Bayesian: posterior credible intervals based on $\chi^2_{n-1}$.
+    - Robust statistics: median absolute deviation, irrelevant divisor choice.
+
+---
+
+**Exercise 6.**
+**Why bias correction matters for very small samples but not large samples.** Concrete demonstration with $n = 3, 10, 100$.
+
+??? success "Solution to Exercise 6"
+    Naive vs unbiased estimator difference: $\hat\sigma^2_{\text{naive}}/\hat\sigma^2_{\text{unbiased}} = (n-1)/n$.
+
+    | $n$ | $(n-1)/n$ | Discrepancy |
+    |---|---|---|
+    | 3 | 0.667 | 33% |
+    | 10 | 0.900 | 10% |
+    | 100 | 0.990 | 1% |
+    | 1000 | 0.999 | 0.1% |
+
+    For $n = 3$: missing the Bessel correction means underestimating variance by 1/3 — a serious error.
+
+    For $n = 100$: 1% — within rounding error of most measurements. Bessel correction is mostly conventional.
+
+    **Practical implication:** for small samples (< 30), always use Bessel correction. For large samples (> 100), the choice is mostly academic. Real-data noise typically dominates the small bias correction.

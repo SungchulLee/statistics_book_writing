@@ -1,9 +1,5 @@
 # Discrete Random Variables
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Overview
 
 A **random variable** is a function that maps outcomes from a sample space to real numbers. A **discrete random variable** takes on a countable number of distinct values.
@@ -162,3 +158,123 @@ plot_pmf(values, probs, "PMF: Baseball Card Packs Purchased")
 - A discrete random variable maps outcomes to a countable set of real numbers.
 - The PMF gives the probability of each possible value and must sum to 1.
 - The "brick" metaphor provides intuition: each outcome carries a weight (probability), and the random variable relocates these weights to the real line.
+
+## Exercises
+
+**Exercise 1.**
+A discrete random variable $X$ has the PMF: $P(X=0) = 0.1$, $P(X=1) = 0.3$, $P(X=2) = c$, $P(X=3) = 0.2$. Find the value of $c$ and compute $P(X \geq 2)$.
+
+??? success "Solution to Exercise 1"
+    Since the PMF must sum to 1:
+
+    $$
+    0.1 + 0.3 + c + 0.2 = 1 \implies c = 0.4
+    $$
+
+    Therefore:
+
+    $$
+    P(X \geq 2) = P(X=2) + P(X=3) = 0.4 + 0.2 = 0.6
+    $$
+
+---
+
+**Exercise 2.**
+Two fair four-sided dice (with faces 1, 2, 3, 4) are rolled. Let $S$ be the sum of the two dice. Write out the PMF of $S$ and verify that the probabilities sum to 1.
+
+??? success "Solution to Exercise 2"
+    There are $4 \times 4 = 16$ equally likely outcomes. The possible sums range from 2 to 8:
+
+    | $s$ | Outcomes | $P(S = s)$ |
+    |:---:|:---|:---:|
+    | 2 | $(1,1)$ | $1/16$ |
+    | 3 | $(1,2),(2,1)$ | $2/16$ |
+    | 4 | $(1,3),(2,2),(3,1)$ | $3/16$ |
+    | 5 | $(1,4),(2,3),(3,2),(4,1)$ | $4/16$ |
+    | 6 | $(2,4),(3,3),(4,2)$ | $3/16$ |
+    | 7 | $(3,4),(4,3)$ | $2/16$ |
+    | 8 | $(4,4)$ | $1/16$ |
+
+    Verification: $1 + 2 + 3 + 4 + 3 + 2 + 1 = 16$, so $\sum P(S=s) = 16/16 = 1$. $\square$
+
+---
+
+**Exercise 3.**
+A loaded coin has $P(\text{Heads}) = 0.7$. The coin is flipped 3 times. Let $X$ be the number of heads. Write the PMF of $X$.
+
+??? success "Solution to Exercise 3"
+    Each flip is independent with $p = 0.7$ (heads) and $q = 0.3$ (tails). The number of heads in 3 flips follows a Binomial distribution:
+
+    $$
+    P(X = k) = \binom{3}{k} (0.7)^k (0.3)^{3-k}
+    $$
+
+    Computing each value:
+
+    $$
+    P(X=0) = \binom{3}{0}(0.7)^0(0.3)^3 = 0.027
+    $$
+
+    $$
+    P(X=1) = \binom{3}{1}(0.7)^1(0.3)^2 = 3 \times 0.063 = 0.189
+    $$
+
+    $$
+    P(X=2) = \binom{3}{2}(0.7)^2(0.3)^1 = 3 \times 0.147 = 0.441
+    $$
+
+    $$
+    P(X=3) = \binom{3}{3}(0.7)^3(0.3)^0 = 0.343
+    $$
+
+    Check: $0.027 + 0.189 + 0.441 + 0.343 = 1.000$. $\square$
+
+---
+
+**Exercise 4.**
+Explain why a continuous random variable (e.g., the exact height of a randomly selected person) cannot be described by a PMF. What replaces the PMF in the continuous case?
+
+??? success "Solution to Exercise 4"
+    A PMF assigns positive probability to individual values: $P(X = x) > 0$ for each value in the support. For a continuous random variable, the support is an uncountable interval (e.g., all real numbers in $[150, 200]$ cm). If every individual value had positive probability, the sum (or integral) over uncountably many values would diverge to infinity, violating the normalization axiom $P(\Omega) = 1$.
+
+    Instead, a continuous random variable is described by a **probability density function (PDF)** $f(x)$, where $f(x) \geq 0$ and $\int_{-\infty}^{\infty} f(x)\,dx = 1$. The PDF gives density, not probability: $P(X = x) = 0$ for any single value, but $P(a \leq X \leq b) = \int_a^b f(x)\,dx$ gives the probability over an interval.
+
+---
+
+**Exercise 5.**
+**Geometric distribution.** $X$ = number of trials until first success in i.i.d. Bernoulli($p$). Derive PMF, $\mathbb{E}[X]$, and $\mathrm{Var}(X)$.
+
+??? success "Solution to Exercise 5"
+    **PMF:** $X = k$ requires $k - 1$ failures then a success: $P(X = k) = (1 - p)^{k-1} p$ for $k = 1, 2, \ldots$.
+
+    Normalization: $\sum_{k=1}^\infty (1-p)^{k-1} p = p/p = 1$. ✓
+
+    **Expectation:** by tail-sum formula, $\mathbb{E}[X] = \sum_{n=0}^\infty P(X > n) = \sum_{n=0}^\infty (1-p)^n = 1/p$.
+
+    **Variance:** $\mathrm{Var}(X) = (1-p)/p^2$ (derivation by similar calculation involving $\mathbb{E}[X(X-1)]$).
+
+    For $p = 0.5$: mean 2 trials, variance 2, SD $\sqrt 2$. Geometric is the discrete analog of the exponential and inherits the memoryless property: $P(X > m + n \mid X > m) = P(X > n)$.
+
+---
+
+**Exercise 6.**
+**Poisson approximation to the binomial.** Show that as $n \to \infty$ with $np \to \lambda$ constant, Binomial$(n, p)$ → Poisson$(\lambda)$.
+
+??? success "Solution to Exercise 6"
+    Substitute $p = \lambda/n$ in the binomial PMF:
+
+    $$
+    P(X = k) = \binom{n}{k}\left(\frac{\lambda}{n}\right)^k \left(1 - \frac{\lambda}{n}\right)^{n-k}
+    $$
+
+    Rearrange:
+
+    $$
+    = \frac{\lambda^k}{k!} \cdot \underbrace{\frac{n!}{(n-k)! n^k}}_{\to 1} \cdot \underbrace{\left(1 - \frac{\lambda}{n}\right)^n}_{\to e^{-\lambda}} \cdot \underbrace{\left(1 - \frac{\lambda}{n}\right)^{-k}}_{\to 1}
+    $$
+
+    As $n \to \infty$: $P(X = k) \to \frac{\lambda^k e^{-\lambda}}{k!}$ — the Poisson PMF.
+
+    **Use:** for rare events ($p$ small, $n$ large), Poisson is much simpler than binomial. Applications: number of car accidents per day in a city, defects per chip, calls per minute, mutations per genome.
+
+    Rule of thumb: Poisson works well when $n \ge 20$, $p \le 0.05$, and $np \le 10$. Otherwise stick with the binomial or use the normal approximation if $np \ge 10$.

@@ -1,9 +1,6 @@
 # Two-Sample Permutation Tests
 
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Overview
 
 The two-sample permutation test is a non-parametric method for testing whether two independent samples differ in location (typically their means). Unlike the t-test, it requires no assumptions about normality or equal variances. It is particularly useful in A/B testing and causal inference.
@@ -11,6 +8,7 @@ The two-sample permutation test is a non-parametric method for testing whether t
 ## Null Hypothesis
 
 Under the null hypothesis of no difference between groups:
+
 - The observed difference in means (or other statistic) is due to random variation
 - Group labels are arbitrary—shuffling them should produce test statistics as extreme as the observed value with the given p-value probability
 
@@ -237,3 +235,17 @@ where $T_b = \bar{X}_{1,b} - \bar{X}_{2,b}$ (without absolute value)
 ## Summary
 
 Two-sample permutation tests provide a powerful, assumption-free alternative to t-tests. They are especially valuable in A/B testing contexts where the randomization design naturally leads to the null hypothesis of no difference between treatment groups. The permutation distribution directly reflects what we would expect to observe if groups were randomly shuffled under the null hypothesis.
+
+## Exercises
+
+**Exercise 1.**
+Given two samples:
+
+- Group A: 14.2, 16.8, 13.5, 15.9, 17.3, 12.8, 16.1, 14.7
+- Group B: 11.3, 13.6, 10.9, 12.4, 14.1, 11.8, 13.2, 12.7
+
+(a) Perform a two-sample permutation test for the difference in means.
+
+(b) Perform a permutation test using the **median** difference as the test statistic.
+
+(c) Compare both p-values with the Welch $t$-test.

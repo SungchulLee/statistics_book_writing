@@ -1,9 +1,6 @@
 # 18.4 Correlation, Causation, and Confounding
 
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Correlation vs. Causation
 
 **Correlation** measures the strength and direction of a linear relationship between two variables, quantified by the correlation coefficient ($-1$ to $1$). **Causation** implies that a change in one variable directly causes a change in another.
@@ -265,3 +262,56 @@ Given a correlation between reading books and academic performance, design an ex
 ### Exercise: Analyzing Real Data
 
 Using a dataset with variables like exercise, diet, weight loss, and stress levels, perform a correlation analysis and then use multiple regression to control for potential confounders.
+## Exercises
+
+**Exercise 1.**
+A study finds that ice cream sales and drowning deaths are positively correlated ($r = 0.85$). Identify the most likely confounder and explain the mechanism by which it creates a spurious association.
+
+??? success "Solution to Exercise 1"
+    The most likely confounder is **temperature (or season)**. During summer months, higher temperatures cause both increased ice cream consumption and more people swimming (leading to more drowning deaths). The correlation between ice cream sales and drowning is **spurious** -- it arises because both variables are driven by the same underlying cause (temperature), not because one causes the other.
+
+    Formally, if $Z$ = temperature, $X$ = ice cream sales, and $Y$ = drowning deaths, then $Z \to X$ and $Z \to Y$, but there is no direct path $X \to Y$.
+
+---
+
+**Exercise 2.**
+In a multiple regression model, adding a control variable for education reduces the coefficient of income on health outcomes from $\hat{\beta} = 0.45$ to $\hat{\beta} = 0.12$. Interpret this change in terms of confounding.
+
+??? success "Solution to Exercise 2"
+    The large reduction (from 0.45 to 0.12) indicates that **education is a confounder** in the relationship between income and health. Education affects both income (more education leads to higher income) and health (more education leads to better health behaviors and outcomes).
+
+    The unadjusted coefficient (0.45) overestimates the direct effect of income on health because it captures both the direct effect and the indirect effect through the income-education pathway. After controlling for education, the remaining coefficient (0.12) represents a more accurate estimate of the effect of income on health that operates through channels other than education.
+
+---
+
+**Exercise 3.**
+Explain the difference between a confounding variable and a mediating variable. Why is it important to distinguish between the two when deciding which variables to include in a regression model?
+
+??? success "Solution to Exercise 3"
+    A **confounder** is a variable that causes both the treatment and the outcome, creating a spurious association. Controlling for a confounder removes bias and reveals the true causal effect.
+
+    A **mediator** is a variable that lies on the causal pathway between treatment and outcome ($X \to M \to Y$). Controlling for a mediator removes part of the true causal effect, leading to an underestimate of the total effect.
+
+    The distinction matters because: controlling for a confounder is **necessary** for valid causal inference, while controlling for a mediator is **harmful** if the goal is to estimate the total effect. For example, if exercise affects weight loss partly through increased metabolism ($\text{exercise} \to \text{metabolism} \to \text{weight loss}$), controlling for metabolism would remove a real causal pathway and underestimate the benefit of exercise.
+
+---
+
+**Exercise 4.**
+Simpson's paradox occurs when a trend in aggregated data reverses when the data are disaggregated by a confounding variable. Construct a simple numerical example with two treatments and two subgroups where Treatment A has a higher overall success rate but Treatment B has a higher success rate within every subgroup.
+
+??? success "Solution to Exercise 4"
+    | | Subgroup 1 (easy cases) | Subgroup 2 (hard cases) | Overall |
+    |---|---|---|---|
+    | Treatment A | 90/100 (90%) | 5/10 (50%) | 95/110 (86.4%) |
+    | Treatment B | 9/10 (90%) | 50/100 (50%) | 59/110 (53.6%) |
+
+    Wait -- this gives equal rates within subgroups. Let me adjust:
+
+    | | Subgroup 1 (easy cases) | Subgroup 2 (hard cases) | Overall |
+    |---|---|---|---|
+    | Treatment A | 87/100 (87%) | 4/10 (40%) | 91/110 (82.7%) |
+    | Treatment B | 9/10 (90%) | 55/100 (55%) | 64/110 (58.2%) |
+
+    Within Subgroup 1: B (90%) > A (87%). Within Subgroup 2: B (55%) > A (40%). But overall: A (82.7%) > B (58.2%).
+
+    The paradox arises because Treatment A is disproportionately applied to easy cases (100 out of 110), inflating its overall rate. The subgroup (case difficulty) is the confounder.

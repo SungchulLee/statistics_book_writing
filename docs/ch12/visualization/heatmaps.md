@@ -1,9 +1,6 @@
 # Heatmaps for Correlation Matrices
 
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Overview
 
 A **heatmap** is a two-dimensional visualization that uses color intensity to represent numerical values in a matrix. For correlation matrices, heatmaps reveal patterns of association across many variables simultaneously, making them indispensable for exploratory analysis of multivariate datasets. Colors (typically blue for negative correlation, white for zero, red for positive) encode the strength and direction of relationships at a glance.
@@ -94,6 +91,7 @@ plt.show()
 ```
 
 With annotations, specific correlation pairs are easy to identify:
+
 - SPY (S&P 500 total market) correlates highly with QQQ (tech-heavy Nasdaq) and DIA (large-cap), as expected
 - GLD (gold) often shows lower or negative correlation with equity ETFs, making it a hedge
 
@@ -198,3 +196,38 @@ A portfolio with correlations near 0.8 offers poor diversification. A portfolio 
 
 Heatmaps transform a correlation matrix into a visual format where patterns emerge instantly. For investors, they reveal diversification potential; for data scientists, they expose multicollinearity. Combined with clustering or subsetting techniques, heatmaps remain one of the most practical tools for multivariate exploratory analysis.
 
+## Exercises
+
+**Exercise 1.**
+A correlation heatmap of a 10-variable financial dataset shows a 2-by-2 block of dark red in one corner and a 3-by-3 block of dark blue elsewhere. Interpret what these patterns suggest about the variable relationships and any implications for portfolio diversification.
+
+??? success "Solution to Exercise 1"
+    The **dark red block** indicates a cluster of two variables with strong positive correlations (close to $+1$). These variables move together -- for example, two stocks in the same sector.
+
+    The **dark blue block** indicates a cluster of three variables with strong negative correlations (close to $-1$). These variables move in opposite directions.
+
+    For **portfolio diversification**, the negatively correlated cluster is valuable: combining these assets reduces portfolio risk because losses in one tend to be offset by gains in another. The positively correlated pair offers no diversification benefit when combined; holding both is essentially doubling down on the same risk factor.
+
+---
+
+**Exercise 2.**
+Explain why using hierarchical clustering to reorder the rows and columns of a correlation heatmap can reveal structure that a default (alphabetical) ordering misses.
+
+??? success "Solution to Exercise 2"
+    In alphabetical ordering, correlated variables may be scattered across the matrix, making patterns difficult to spot. **Hierarchical clustering** groups variables with similar correlation profiles adjacent to each other, forming visible **blocks** along the diagonal.
+
+    The reordering algorithm computes a distance metric (e.g., $1 - |r|$) between all pairs of variables and builds a dendrogram. Variables that are highly correlated are placed next to each other, so clusters of positive correlation appear as contiguous red blocks and clusters of negative correlation appear as off-diagonal blue blocks. This makes latent factor structures, redundant variables, and diversification opportunities immediately apparent.
+
+---
+
+**Exercise 3.**
+When creating a heatmap for a symmetric correlation matrix, only the lower (or upper) triangle is typically displayed. Explain why, and describe one situation where showing the full matrix might be preferred.
+
+??? success "Solution to Exercise 3"
+    A correlation matrix is symmetric ($r_{ij} = r_{ji}$), so the upper and lower triangles contain identical information. Displaying only one triangle:
+
+    - Eliminates visual redundancy.
+    - Removes the diagonal (always 1.0), which carries no information.
+    - Makes the plot cleaner and easier to read.
+
+    The **full matrix** might be preferred when the heatmap is annotated with different information in each triangle -- for example, showing Pearson correlations in the lower triangle and Spearman correlations in the upper triangle, allowing direct comparison of the two measures.

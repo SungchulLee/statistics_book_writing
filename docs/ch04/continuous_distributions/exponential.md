@@ -1,9 +1,5 @@
 # Exponential Distribution
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Overview
 
 The **exponential distribution** models the time between events in a Poisson process. It is the continuous analogue of the geometric distribution and the only continuous distribution with the memoryless property. Common applications include modeling inter-arrival times, waiting times, and component lifetimes.
@@ -230,3 +226,109 @@ plt.show()
 - It connects directly to the Poisson process: Poisson counts and exponential inter-arrival times are two views of the same phenomenon.
 - The minimum of independent exponentials is again exponential, with rates summing.
 - In SciPy, use `stats.expon(scale=1/lambda)` to work with rate parameterization.
+
+## Exercises
+
+**Exercise 1.**
+Component lifetime $T \sim \mathrm{Exp}(0.5)$ years. (a) $P(T > 3)$. (b) $P(T > 3 \mid T > 2)$. (c) For two independent components, distribution and $\mathbb{E}$ of $\min(T_1, T_2)$.
+
+??? success "Solution to Exercise 1"
+    (a) $P(T > 3) = e^{-1.5} \approx 0.223$.
+
+    (b) By memoryless: $P(T > 3 \mid T > 2) = P(T > 1) = e^{-0.5} \approx 0.607$. Direct: $P(T > 3)/P(T > 2) = e^{-1.5}/e^{-1} = e^{-0.5}$.
+
+    (c) $\min(T_1, T_2) \sim \mathrm{Exp}(\lambda_1 + \lambda_2) = \mathrm{Exp}(1.0)$. $\mathbb{E}[\min] = 1$ year (half of single component).
+
+---
+
+**Exercise 2.**
+**Prove the memoryless property** of the exponential and show it is the *only* continuous distribution with this property.
+
+??? success "Solution to Exercise 2"
+    Survival function: $\bar F(t) = e^{-\lambda t}$. Then
+
+    $$
+    P(T > s + t \mid T > s) = \bar F(s + t)/\bar F(s) = e^{-\lambda(s+t)}/e^{-\lambda s} = e^{-\lambda t} = P(T > t)
+    $$
+
+    $\square$
+
+    **Uniqueness:** suppose $\bar F$ is continuous, decreasing, $\bar F(0) = 1$, and memoryless: $\bar F(s + t) = \bar F(s) \bar F(t)$. By Cauchy's functional equation (solved under continuity), the only such function is $\bar F(t) = e^{-\lambda t}$ for some $\lambda > 0$.
+
+    So the exponential is the unique memoryless continuous distribution — corresponding precisely to the geometric being the unique discrete memoryless.
+
+---
+
+**Exercise 3.**
+**Derive the PDF, mean, and variance** of $\mathrm{Exp}(\lambda)$.
+
+??? success "Solution to Exercise 3"
+    PDF: differentiate CDF $F(t) = 1 - e^{-\lambda t}$: $f(t) = \lambda e^{-\lambda t}$ for $t \ge 0$.
+
+    Mean: $\mathbb{E}[T] = \int_0^\infty t \lambda e^{-\lambda t} dt$. Integration by parts (or use tail formula): $\mathbb{E}[T] = \int_0^\infty e^{-\lambda t} dt = 1/\lambda$.
+
+    Second moment: $\mathbb{E}[T^2] = \int_0^\infty t^2 \lambda e^{-\lambda t} dt = 2/\lambda^2$ (via integration by parts twice).
+
+    Variance: $\mathrm{Var}(T) = 2/\lambda^2 - 1/\lambda^2 = 1/\lambda^2$.
+
+    Note: mean and SD both equal $1/\lambda$ — a distinctive feature of the exponential. CV = 1.
+
+---
+
+**Exercise 4.**
+**Connection to Poisson process.** If events occur in a Poisson process with rate $\lambda$, derive the distribution of the $k$-th arrival time $T_k$.
+
+??? success "Solution to Exercise 4"
+    $T_k = \sum_{i=1}^k X_i$ where $X_i$ are i.i.d. $\mathrm{Exp}(\lambda)$ (inter-arrival times).
+
+    Sum of $k$ i.i.d. exponentials is the **gamma (Erlang) distribution**:
+
+    $$
+    T_k \sim \mathrm{Gamma}(\text{shape} = k, \text{rate} = \lambda)
+    $$
+
+    PDF: $f_{T_k}(t) = \lambda^k t^{k-1} e^{-\lambda t} / (k-1)!$ for $t \ge 0$.
+
+    $\mathbb{E}[T_k] = k/\lambda$, $\mathrm{Var}(T_k) = k/\lambda^2$.
+
+    This is the fundamental link between exponential inter-arrival times and Poisson counts, and the foundation of renewal theory in queuing and reliability analysis.
+
+---
+
+**Exercise 5.**
+**Maximum-likelihood estimation.** Given i.i.d. $T_1, \ldots, T_n \sim \mathrm{Exp}(\lambda)$, derive the MLE $\hat\lambda$.
+
+??? success "Solution to Exercise 5"
+    Likelihood: $L(\lambda) = \prod_i \lambda e^{-\lambda T_i} = \lambda^n e^{-\lambda \sum T_i}$.
+
+    Log-likelihood: $\ell(\lambda) = n \ln \lambda - \lambda \sum T_i$.
+
+    Derivative: $\ell'(\lambda) = n/\lambda - \sum T_i = 0 \Rightarrow \hat\lambda = n/\sum T_i = 1/\bar T$.
+
+    **Properties:**
+
+    - $\hat\lambda$ is the reciprocal of the sample mean — natural since $\mathbb{E}[T] = 1/\lambda$.
+    - Asymptotically unbiased but slightly biased in finite samples: $\mathbb{E}[\hat\lambda] = n\lambda/(n - 1)$ (for $n \ge 2$).
+    - Asymptotically normal with $\sqrt n (\hat\lambda - \lambda) \xrightarrow{d} N(0, \lambda^2)$.
+
+    The reciprocal of the sample mean is the standard estimator for rate parameters across many distributions.
+
+---
+
+**Exercise 6.**
+**Hazard function.** The hazard rate is $h(t) = f(t)/\bar F(t)$. Show that the exponential has *constant* hazard, and discuss what this means physically.
+
+??? success "Solution to Exercise 6"
+    $h(t) = \lambda e^{-\lambda t} / e^{-\lambda t} = \lambda$.
+
+    **Constant hazard:** the instantaneous failure rate $h(t) = \lambda$ does not depend on $t$. Interpretation: an item that has not yet failed has the same probability of failing in the next small interval, regardless of its age.
+
+    This is **direct expression of memorylessness**: future risk doesn't depend on past survival.
+
+    **Comparison with non-constant hazards:**
+
+    - **Increasing hazard** (e.g., Weibull with $k > 1$): items wear out. Older items more likely to fail. Mechanical components.
+    - **Decreasing hazard** ($k < 1$): items burn in. Older items less likely to fail. Electronic components after initial defects.
+    - **Bathtub curve**: high initial (burn-in) + flat middle + increasing (wearout). Combination of the above.
+
+    Real-world reliability is rarely exactly exponential, but the exponential is a useful baseline because (a) its parameter has a direct meaning (mean lifetime), (b) it's mathematically tractable, and (c) memorylessness corresponds to "completely random" failure, the natural null hypothesis for failure modeling.

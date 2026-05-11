@@ -1,9 +1,6 @@
 # Interaction Terms
 
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Why Use Interaction Terms?
 
 In many real-world scenarios, the effect of one variable on the outcome is not constant but changes depending on another variable. **Interaction terms** model this combined effect of two or more independent variables on the dependent variable.
@@ -83,6 +80,7 @@ $$
 $$
 
 **Interpretation**:
+
 - If $\beta_3 > 0$: Combining TV and Radio advertising creates a synergistic boost in sales beyond what each medium provides independently.
 - If $\beta_3 < 0$: There is a diminishing effect—spending heavily on both media simultaneously may be less efficient.
 
@@ -110,6 +108,7 @@ $$
 Where Student is coded as 1 (yes) or 0 (no).
 
 **Interpretation**:
+
 - $\beta_1$: The effect of Income on Balance for **non-students** is $\beta_1$.
 - $\beta_1 + \beta_3$: The effect of Income on Balance for **students** is $\beta_1 + \beta_3$.
 - If $\beta_3 \neq 0$: The relationship between Income and Balance **differs by student status**.
@@ -143,3 +142,38 @@ In practice, three-way and higher-order interactions are difficult to interpret 
 ## Summary
 
 Interaction terms extend the multiple regression framework by allowing the effect of one predictor to depend on the level of another. They are essential for accurately modeling many real-world relationships and should be tested whenever theory or domain knowledge suggests that predictor effects are not purely additive.
+## Exercises
+
+**Exercise 1.**
+In the model $Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \beta_3 X_1 X_2 + \varepsilon$, interpret $\beta_3$ in terms of how the effect of $X_1$ on $Y$ changes with $X_2$.
+
+??? success "Solution to Exercise 1"
+    The partial effect of $X_1$ on $Y$ is:
+
+    $$
+    \frac{\partial E[Y]}{\partial X_1} = \beta_1 + \beta_3 X_2
+    $$
+
+    So $\beta_3$ represents the **change in the slope of $X_1$** for each one-unit increase in $X_2$. If $\beta_3 > 0$, the effect of $X_1$ on $Y$ becomes stronger as $X_2$ increases. If $\beta_3 < 0$, the effect weakens. If $\beta_3 = 0$, the effect of $X_1$ is the same regardless of $X_2$ (no interaction).
+
+---
+
+**Exercise 2.**
+A model predicting salary includes experience, education (binary: 0 = no degree, 1 = degree), and their interaction. The estimated equation is $\hat{Y} = 30000 + 2000 X_1 + 10000 X_2 + 1500 X_1 X_2$. Write separate regression equations for individuals with and without a degree and interpret the difference.
+
+??? success "Solution to Exercise 2"
+    **Without degree** ($X_2 = 0$): $\hat{Y} = 30000 + 2000 X_1$. Each additional year of experience increases salary by \$2,000.
+
+    **With degree** ($X_2 = 1$): $\hat{Y} = (30000 + 10000) + (2000 + 1500) X_1 = 40000 + 3500 X_1$. Each additional year of experience increases salary by \$3,500.
+
+    The interaction term (\$1,500) means that having a degree amplifies the return to experience by \$1,500 per year. Degree holders start higher (\$40,000 vs. \$30,000) and gain more from each year of experience (\$3,500 vs. \$2,000).
+
+---
+
+**Exercise 3.**
+Explain why it is generally inappropriate to remove a main effect ($X_1$ or $X_2$) from a model while retaining their interaction term ($X_1 X_2$). What statistical principle does this violate?
+
+??? success "Solution to Exercise 3"
+    This violates the **hierarchy principle** (or marginality principle), which states that if an interaction term is included, all lower-order terms that compose it must also be present.
+
+    Removing a main effect while keeping the interaction changes the interpretation of the remaining terms. For example, dropping $X_1$ from $Y = \beta_0 + \beta_2 X_2 + \beta_3 X_1 X_2 + \varepsilon$ forces the model to assume that $X_1$ has zero effect when $X_2 = 0$, which is a strong and usually unjustified constraint. It also makes the interaction coefficient dependent on the coding of $X_2$, destroying interpretability.

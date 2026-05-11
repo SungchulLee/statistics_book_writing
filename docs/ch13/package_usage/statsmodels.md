@@ -172,3 +172,55 @@ for i in range(X_with_const.shape[1]):
 
 !!! tip "When to use statsmodels"
     Use `statsmodels` when your primary goal is statistical inference: testing hypotheses about coefficients, constructing confidence intervals, and diagnosing model assumptions. For pure prediction tasks where inference is not needed, `sklearn.linear_model.LinearRegression` offers a simpler interface.
+
+## Exercises
+
+**Exercise 1.**
+The following is the result of performing a linear regression analysis using the `statsmodels` package. The analysis predicts **sales** based on advertising expenses allocated to **TV**, **radio**, and **newspaper** media:
+
+```
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                  Sales   R-squared:                       0.894
+Model:                            OLS   Adj. R-squared:                  0.891
+Method:                 Least Squares   F-statistic:                     381.2
+Date:                Mon, 11 Nov 2024   Prob (F-statistic):           5.60e-66
+Time:                        02:39:45   Log-Likelihood:                -273.89
+No. Observations:                 140   AIC:                             555.8
+Df Residuals:                     136   BIC:                             567.5
+Df Model:                           3                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+Intercept      3.0451      0.391      7.782      0.000       2.271       3.819
+TV             0.0470      0.002     27.653      0.000       0.044       0.050
+Radio          0.1797      0.011     16.665      0.000       0.158       0.201
+Newspaper     -0.0030      0.007     -0.428      0.669      -0.017       0.011
+==============================================================================
+Omnibus:                       50.782   Durbin-Watson:                   2.089
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):              131.355
+Skew:                          -1.459   Prob(JB):                     3.00e-29
+Kurtosis:                       6.741   Cond. No.                         457.
+==============================================================================
+```
+
+**(a)** If advertising expenses for TV, radio, and newspapers are denoted by $x_1$, $x_2$, and $x_3$, respectively, and sales are denoted by $y$, what is the predicted value $\hat{y}$ based on the regression results?
+
+**(b)** The coefficient for newspaper advertising is $-0.0030$. Can this be interpreted as suggesting that newspaper advertising decreases sales? Discuss its validity based on the $p$-value.
+
+**(c)** What do the Jarque-Bera (JB) statistic (131.355) and its $p$-value (3.00e-29) signify?
+
+??? success "Solution to Exercise 1"
+
+    **(a)** The predicted value of sales is:
+
+    $$
+    \hat{y} = 3.0451 + 0.0470 \cdot x_1 + 0.1797 \cdot x_2 - 0.0030 \cdot x_3
+    $$
+
+    This equation combines the intercept and coefficients for each advertising medium to predict sales.
+
+    **(b)** The $p$-value for the newspaper coefficient is $0.669$, which is much greater than the standard significance level of 0.05. This means we fail to reject the null hypothesis that the coefficient is zero. While the coefficient is negative, its large $p$-value implies this result is not statistically meaningful. It would be more appropriate to conclude that newspaper advertising does not have a statistically significant impact on sales, rather than interpreting it as having a negative effect.
+
+    **(c)** The Jarque-Bera test assesses whether the residuals follow a normal distribution. The extremely small $p$-value ($3.00 \times 10^{-29}$) indicates that the null hypothesis (residuals are normally distributed) is strongly rejected. This suggests the residuals are likely **not normally distributed**, which could imply model issues such as non-normal errors or the presence of outliers.

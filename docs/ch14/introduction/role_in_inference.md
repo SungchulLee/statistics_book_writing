@@ -129,3 +129,49 @@ The simulation above shows that, for small $n$ and a skewed population, the actu
 ## Summary
 
 The normality assumption enters statistical inference through the exact distributional results that underlie $t$-tests, $F$-tests, and confidence intervals. The CLT relaxes this requirement for large samples and mean-based procedures, but small-sample inference, variance-based tests, and procedures beyond the sample mean still require careful attention to normality. Testing for normality is therefore not an abstract exercise but a practical safeguard for the validity of statistical conclusions.
+
+
+## Exercises
+
+**Exercise 1.**
+List three fundamental results in statistics that rely on the normal distribution. For each, state whether normality is required exactly or only approximately.
+
+??? success "Solution to Exercise 1"
+
+    1. **t-test for a mean:** Requires exact normality for the test statistic to follow a $t$-distribution with finite $n$. Approximately normal data suffice for moderate $n$ (by the CLT).
+
+    2. **Confidence intervals for regression coefficients:** OLS estimates require normally distributed errors for exact $t$-based inference. For large $n$, asymptotic normality of the estimator suffices.
+
+    3. **Chi-squared test for variance:** Requires exact normality ($\sum(X_i - \bar{X})^2/\sigma^2 \sim \chi^2_{n-1}$ only if $X_i$ are normal). No CLT rescue -- the chi-squared distribution of the variance estimator depends on normality even asymptotically.
+
+---
+
+**Exercise 2.**
+Explain how the Central Limit Theorem provides "approximate normality" for inference and what its limitations are.
+
+??? success "Solution to Exercise 2"
+    The CLT states $\sqrt{n}(\bar{X}_n - \mu) \xrightarrow{d} N(0, \sigma^2)$. This allows us to use normal-based inference (z-tests, confidence intervals) for the sample mean even when the data are not normally distributed, provided $n$ is "large enough."
+
+    Limitations: (1) "Large enough" depends on the underlying distribution -- symmetric distributions converge fast ($n \geq 20$), but heavily skewed or heavy-tailed distributions may need $n > 100$. (2) The CLT applies to the mean, not to other statistics (variance, quantiles, correlation) which may converge more slowly. (3) The CLT does not apply when the variance is infinite (e.g., Cauchy distribution).
+
+---
+
+**Exercise 3.**
+A statistician argues that normality testing is unnecessary because "the CLT will save us." Under what conditions is this argument valid, and when does it fail?
+
+??? success "Solution to Exercise 3"
+    The argument is valid when: (1) the sample size is large ($n \geq 30$-$50$ for mildly non-normal data); (2) the inference concerns means or linear combinations of data; (3) the underlying distribution has finite variance.
+
+    The argument fails when: (1) $n$ is small (the CLT approximation is poor); (2) the data are heavily skewed or have extreme outliers; (3) the inference involves variances, quantiles, or other non-linear statistics; (4) the distribution has infinite variance; (5) exact distributional results are needed (e.g., prediction intervals, which depend on the error distribution, not just the mean).
+
+---
+
+**Exercise 4.**
+Explain why prediction intervals require stronger normality assumptions than confidence intervals for the mean.
+
+??? success "Solution to Exercise 4"
+    A **confidence interval for the mean** depends on the sampling distribution of $\bar{X}$, which is approximately normal by the CLT even for non-normal data.
+
+    A **prediction interval** for a future observation $X_{n+1}$ depends on the distribution of $X_{n+1}$ itself, not just its mean. The interval is $\bar{X} \pm t_{\alpha/2} \cdot s\sqrt{1 + 1/n}$, and its coverage probability depends on $X_{n+1}$ actually following a normal distribution.
+
+    If $X_{n+1}$ comes from a skewed or heavy-tailed distribution, the prediction interval will have incorrect coverage: too narrow for heavy tails (missing extreme values) and too wide or too narrow for skewed data (asymmetric coverage). No CLT can fix this because we are predicting a single observation, not a mean.

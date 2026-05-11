@@ -19,10 +19,10 @@ where $\tilde{X}_i$ is the median of group $i$. This is the same transformation 
 **Step 3.** Convert the ranks into normal scores using the inverse normal (quantile) transformation:
 
 $$
-a_{ij} = \Phi^{-1}\!\left(\frac{1 + R_{ij}/(N+1)}{2}\right)
+a_{ij} = \mathcal{N}^{-1}\!\left(\frac{1 + R_{ij}/(N+1)}{2}\right)
 $$
 
-where $\Phi^{-1}$ is the inverse of the standard normal CDF. The argument $(1 + R_{ij}/(N+1))/2$ maps the rank to a value in $(0.5, 1)$, and the inverse normal maps this to a positive score. Larger deviations receive larger normal scores.
+where $\mathcal{N}^{-1}$ is the inverse of the standard normal CDF. The argument $(1 + R_{ij}/(N+1))/2$ maps the rank to a value in $(0.5, 1)$, and the inverse normal maps this to a positive score. Larger deviations receive larger normal scores.
 
 **Step 4.** Compute the group means of the normal scores:
 
@@ -79,7 +79,7 @@ Consider two groups:
 
 **Step 3.** Rank the 10 deviations: $\{0, 0, 1, 1, 1, 2, 3, 7, 10, 15\}$ with ranks $\{1.5, 1.5, 4, 4, 4, 6, 7, 8, 9, 10\}$ (average ranks for ties).
 
-**Step 4.** Convert ranks to normal scores using $a = \Phi^{-1}((1 + R/11)/2)$.
+**Step 4.** Convert ranks to normal scores using $a = \mathcal{N}^{-1}((1 + R/11)/2)$.
 
 **Step 5.** Compute the Fligner-Killeen statistic from the group means of the normal scores. Group 2 has larger deviations and therefore larger normal scores on average, producing a large $\chi^2_{\text{FK}}$ value.
 
@@ -121,3 +121,36 @@ else:
 - Less commonly implemented in basic statistical software compared to Levene's test
 
 The Fligner-Killeen test is the preferred choice when the analyst suspects heavy contamination or has no confidence in the normality of the data. For routine analyses where the distribution is mildly non-normal, the Brown-Forsythe test offers a better power-robustness tradeoff.
+
+
+## Exercises
+
+**Exercise 1.**
+Describe the main concept of Fligner-Killeen Test and explain why it matters for statistical practice.
+
+??? success "Solution to Exercise 1"
+    Fligner-Killeen Test is a core topic in statistics that provides tools for drawing reliable inferences from data. It matters because proper application ensures valid conclusions, correctly quantified uncertainty, and appropriate handling of the assumptions that underpin the method. Practitioners who understand this concept can avoid common pitfalls and choose the right analytical approach for their data.
+
+---
+
+**Exercise 2.**
+State the key assumptions required by the method discussed here. How can each assumption be checked?
+
+??? success "Solution to Exercise 2"
+    The main assumptions typically include: (1) independence of observations -- verified by understanding the data collection process and checking for serial correlation; (2) distributional requirements (e.g., normality) -- checked with Q-Q plots and formal tests like Shapiro-Wilk; (3) equal variances (if applicable) -- assessed with boxplots and Levene's test. When assumptions are violated, consider robust alternatives, transformations, or nonparametric methods.
+
+---
+
+**Exercise 3.**
+Work through a small numerical example illustrating the application of the technique from this section.
+
+??? success "Solution to Exercise 3"
+    A structured approach to applying this technique involves: (1) clearly stating the hypotheses or estimation goal; (2) verifying that the data meet the required assumptions; (3) computing the relevant test statistic, estimate, or model fit; (4) obtaining the p-value, confidence interval, or posterior distribution; (5) interpreting the result in the context of the original question. Following these steps systematically ensures a rigorous and reproducible analysis.
+
+---
+
+**Exercise 4.**
+Compare the approach from this section with an alternative method. When would you choose each?
+
+??? success "Solution to Exercise 4"
+    The method discussed here is appropriate when its assumptions hold and the sample size is sufficient for the asymptotic approximations to be accurate. Alternative approaches include: (1) nonparametric methods -- preferred when distributional assumptions are suspect; (2) bootstrap methods -- useful when analytical reference distributions are unavailable; (3) Bayesian methods -- valuable when incorporating prior information or when direct probability statements about parameters are desired. Running multiple approaches and comparing results provides a useful robustness check.

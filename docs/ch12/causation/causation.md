@@ -1,9 +1,6 @@
 # 18.5 Causation
 
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Understanding Causation
 
 Causation is a fundamental concept in statistics, science, and everyday reasoning. It refers to a relationship where one event (the cause) directly produces or influences another event (the effect). While correlations can suggest a relationship, causation goes further by implying that changes in one variable are **responsible** for changes in another.
@@ -116,3 +113,56 @@ Understanding causation is essential for making informed decisions and advancing
 - Experimental design
 
 By applying the criteria for causation and using appropriate research methods—including RCTs, longitudinal studies, and statistical controls—we can better understand the causes of various phenomena and develop effective interventions in health, economics, and social policy.
+## Exercises
+
+**Exercise 1.**
+A news article reports: "People who eat organic food have a 25% lower cancer rate." Evaluate this claim using Bradford Hill's criteria. Which criteria are satisfied by this observational finding alone, and which require additional evidence?
+
+??? success "Solution to Exercise 1"
+    The observational finding alone may satisfy:
+
+    - **Strength of association:** A 25% reduction is a moderately strong association.
+    - **Consistency:** This can be assessed only if multiple studies across different populations show the same result.
+
+    Criteria that require additional evidence:
+
+    - **Temporality:** The study must confirm that organic food consumption preceded the cancer diagnosis (prospective design needed).
+    - **Biological plausibility:** A mechanism must be proposed (e.g., reduced pesticide exposure).
+    - **Dose-response:** Higher organic food consumption should correspond to greater risk reduction.
+    - **Experiment:** A randomized trial would be needed to rule out confounding (organic food consumers may also exercise more, smoke less, etc.).
+
+    The observational finding alone is insufficient to establish causation.
+
+---
+
+**Exercise 2.**
+Explain reverse causality with an example. How does a randomized controlled trial (RCT) eliminate the possibility of reverse causation?
+
+??? success "Solution to Exercise 2"
+    **Reverse causality** occurs when the assumed cause is actually the effect. For example, a study finds that people who take vitamins are healthier. The assumed direction is vitamins cause health, but the reverse may be true: healthier people are more likely to take vitamins because they are more health-conscious.
+
+    An **RCT** eliminates reverse causation by randomly assigning participants to treatment and control groups **before** measuring the outcome. Since the treatment is assigned by the researcher (not chosen by the participant), the outcome cannot have caused the treatment assignment. The temporal ordering is guaranteed by design.
+
+---
+
+**Exercise 3.**
+A city observes that neighborhoods with more police officers have higher crime rates and considers reducing police presence. Identify the logical flaw in this reasoning and explain what type of confound is at work.
+
+??? success "Solution to Exercise 3"
+    The logical flaw is **confusing correlation with causation** while ignoring a common cause. Police officers are not causing crime; rather, neighborhoods with higher crime rates receive more police officers as a response. The confounding variable is the **underlying crime level**, which causes both the increased police presence and the observed crime rate.
+
+    This is an example of **allocation bias** (or confounding by indication): the treatment (police presence) is assigned based on the very outcome it is supposed to affect (crime). Reducing police presence based on this correlation would likely increase crime, the opposite of the intended effect.
+
+---
+
+**Exercise 4.**
+Design a study to test whether a new tutoring program causes improved test scores. Specify the treatment, control, randomization procedure, and how you would address potential confounders.
+
+??? success "Solution to Exercise 4"
+
+    1. **Treatment group:** Students randomly assigned to receive the tutoring program.
+    2. **Control group:** Students randomly assigned to a no-tutoring condition (or a placebo condition such as unstructured study time).
+    3. **Randomization:** Use a random number generator to assign each student to treatment or control with equal probability. Stratified randomization by baseline test scores can improve balance.
+    4. **Confounders addressed by randomization:** Socioeconomic status, prior academic performance, motivation, and parental involvement are balanced in expectation across groups.
+    5. **Measurement:** Administer the same standardized test to both groups at the end of the study period.
+    6. **Analysis:** Compare mean test scores using a two-sample $t$-test or ANOVA. The causal effect is estimated by $\bar{Y}_{\text{treatment}} - \bar{Y}_{\text{control}}$.

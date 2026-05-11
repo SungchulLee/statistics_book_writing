@@ -1,9 +1,6 @@
 # Linearity Assumption
 
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Definition
 
 The assumption of linearity posits that there is a straight-line relationship between the dependent variable and each independent variable. This means that the change in the dependent variable is proportional to the change in the independent variables.
@@ -59,3 +56,26 @@ To check the linearity assumption:
 - **Non-linear Models:** Consider using non-linear regression models if transformations do not resolve the issue.
 
 For detailed diagnostic methods, see [Checking Linearity](checking_linearity.md).
+## Exercises
+
+**Exercise 1.**
+A simple linear regression of test scores on study hours produces a residual plot with a clear parabolic pattern. Write the mathematical model that would capture this nonlinearity and explain how it remains within the linear regression framework.
+
+??? success "Solution to Exercise 1"
+    The appropriate model is:
+
+    $$
+    Y = \beta_0 + \beta_1 X + \beta_2 X^2 + \varepsilon
+    $$
+
+    Despite the $X^2$ term, this is still a **linear regression** model because "linear" refers to linearity in the **parameters** ($\beta_0, \beta_1, \beta_2$), not in the predictors. The model can be estimated by OLS after creating a new variable $X_2 = X^2$ and fitting $Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \varepsilon$.
+
+---
+
+**Exercise 2.**
+Explain the difference between a violation of linearity and a violation of the correct functional form. Can a model satisfy the linearity assumption yet still be misspecified?
+
+??? success "Solution to Exercise 2"
+    The **linearity assumption** states that $E[Y|X]$ is a linear function of the parameters. A **misspecified functional form** means the model omits relevant predictors or transformations, even if the included terms enter linearly.
+
+    Yes, a model can satisfy linearity yet be misspecified. For example, $Y = \beta_0 + \beta_1 X + \varepsilon$ satisfies linearity in parameters, but if the true relationship is $Y = \beta_0 + \beta_1 X + \beta_2 Z + \varepsilon$ (omitting variable $Z$), the model is misspecified due to omitted variable bias, even though the linearity assumption is not violated.

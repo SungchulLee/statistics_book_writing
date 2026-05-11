@@ -1,9 +1,5 @@
 # One-Sample Tests
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## 1. One Sample z Test
 
 The one sample z test is a statistical method used to determine whether the mean of a single sample of data differs significantly from a known or hypothesized population mean, given that the population standard deviation is known.
@@ -647,3 +643,57 @@ group_b = np.array([45, 50, 55, 60, 65])
 chi2_stat, p_value, table = moods_median_test(group_a, group_b)
 print(f"Chi-Square: {chi2_stat:.4f}, P-value: {p_value:.4f}")
 ```
+
+## Exercises
+
+**Exercise 1.**
+A sample of 36 observations has $\bar{x} = 52$ and $s = 6$. Test $H_0: \mu = 50$ vs $H_1: \mu \neq 50$ at $\alpha = 0.05$ using a one-sample $t$-test.
+
+??? success "Solution to Exercise 1"
+    The test statistic is:
+
+    $$
+    t = \frac{\bar{x} - \mu_0}{s/\sqrt{n}} = \frac{52 - 50}{6/\sqrt{36}} = \frac{2}{1} = 2.0
+    $$
+
+    With $df = 35$, the critical value is $t_{35, 0.025} \approx 2.030$. Since $|t| = 2.0 < 2.030$, we **fail to reject** $H_0$ at $\alpha = 0.05$ (just barely). The p-value is approximately 0.053.
+
+---
+
+**Exercise 2.**
+Explain when you would use a z-test versus a $t$-test for a one-sample test of the mean.
+
+??? success "Solution to Exercise 2"
+    Use the **z-test** when the population standard deviation $\sigma$ is known. The test statistic $Z = (\bar{X} - \mu_0)/(\sigma/\sqrt{n})$ follows a standard normal distribution exactly.
+
+    Use the **$t$-test** when $\sigma$ is unknown and must be estimated by the sample standard deviation $s$. The test statistic $T = (\bar{X} - \mu_0)/(S/\sqrt{n})$ follows a $t_{n-1}$ distribution (assuming normality). In practice, $\sigma$ is almost never known, so the $t$-test is the standard choice. For large $n$ ($n \geq 30$ as a rough guideline), the $t$ and $z$ distributions are nearly identical.
+
+---
+
+**Exercise 3.**
+A researcher has a small sample ($n = 8$) from a population suspected to be non-normal. Which one-sample test should they use to test the location parameter, and why?
+
+??? success "Solution to Exercise 3"
+    The researcher should use the **Wilcoxon signed-rank test** or the **sign test**. Both are nonparametric tests that do not require the normality assumption.
+
+    The **Wilcoxon signed-rank test** is preferred when the distribution is symmetric but non-normal, as it uses the ranks and signs of the deviations from the hypothesized median, making it more powerful than the sign test. The **sign test** only uses the direction (above or below the hypothesized value) and works for any continuous distribution, but is less powerful. The $t$-test should not be used because with $n = 8$ and non-normal data, the $t$-distribution approximation can be unreliable.
+
+---
+
+**Exercise 4.**
+In a one-sample proportion test, 45 out of 100 voters support a measure. Test $H_0: p = 0.50$ vs $H_1: p < 0.50$ at $\alpha = 0.05$.
+
+??? success "Solution to Exercise 4"
+    $\hat{p} = 45/100 = 0.45$. Under $H_0$, the standard error is:
+
+    $$
+    \text{SE}_0 = \sqrt{\frac{p_0(1-p_0)}{n}} = \sqrt{\frac{0.50 \times 0.50}{100}} = 0.05
+    $$
+
+    The test statistic is:
+
+    $$
+    z = \frac{\hat{p} - p_0}{\text{SE}_0} = \frac{0.45 - 0.50}{0.05} = -1.0
+    $$
+
+    For a left-tailed test, the critical value is $z_{0.05} = -1.645$. Since $z = -1.0 > -1.645$, we **fail to reject** $H_0$. The p-value is $P(Z < -1.0) = 0.159$. There is insufficient evidence to conclude that fewer than 50% of voters support the measure.

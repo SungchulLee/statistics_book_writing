@@ -1,9 +1,5 @@
 # Geometric and Negative Binomial Distributions
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Overview
 
 The **geometric distribution** models the number of trials until the first success, while the **negative binomial distribution** generalizes this to the number of trials until the $r$-th success. Both arise naturally in sequential experiments with independent Bernoulli trials.
@@ -225,3 +221,115 @@ $$
 - Both distributions arise from sequences of independent Bernoulli trials.
 - The mean $1/p$ of the geometric distribution has an intuitive interpretation: lower success probability means longer expected wait.
 - The geometric distribution is the discrete analogue of the exponential distribution, sharing the memoryless property.
+
+## Exercises
+
+**Exercise 1.**
+Sales calls, $p = 0.1$. $Y$ = calls until first sale. (a) Distribution? (b) $P(Y = 5)$, $P(Y > 10)$. (c) Given 8 failures, $P(Y > 15)$. (d) Mean, variance.
+
+??? success "Solution to Exercise 1"
+    (a) $Y \sim \mathrm{Geometric}(0.1)$.
+
+    (b) $P(Y = 5) = (0.9)^4 \cdot 0.1 = 0.0656$. $P(Y > 10) = (0.9)^{10} \approx 0.349$.
+
+    (c) By memoryless property: $P(Y > 15 \mid Y > 8) = P(Y > 7) = (0.9)^7 \approx 0.478$. Past failures don't predict future success.
+
+    (d) $\mathbb{E}[Y] = 1/p = 10$. $\mathrm{Var}(Y) = (1-p)/p^2 = 0.9/0.01 = 90$.
+
+---
+
+**Exercise 2.**
+**Prove the memoryless property** of the geometric distribution: $P(Y > m + n \mid Y > m) = P(Y > n)$.
+
+??? success "Solution to Exercise 2"
+    $P(Y > k) = (1 - p)^k$ (survival function).
+
+    $$
+    P(Y > m + n \mid Y > m) = \frac{P(Y > m + n)}{P(Y > m)} = \frac{(1-p)^{m+n}}{(1-p)^m} = (1-p)^n = P(Y > n)
+    $$
+
+    $\square$
+
+    The geometric distribution is the **unique** discrete distribution with the memoryless property. Combined with the exponential (the unique continuous memoryless distribution), these two distributions together model "completely random" waiting times.
+
+---
+
+**Exercise 3.**
+**Negative binomial.** Define $Z$ = number of trials until the $r$-th success in i.i.d. Bernoulli($p$) trials. Derive the PMF, $\mathbb{E}[Z]$, and $\mathrm{Var}(Z)$.
+
+??? success "Solution to Exercise 3"
+    $Z = k$ requires exactly $r - 1$ successes in the first $k - 1$ trials and a success on trial $k$:
+
+    $$
+    P(Z = k) = \binom{k-1}{r-1} p^r (1-p)^{k-r}, \quad k = r, r+1, \ldots
+    $$
+
+    $Z$ can be written as the sum of $r$ independent geometric random variables $Y_1, \ldots, Y_r$ (waiting time for each success). So:
+
+    $$
+    \mathbb{E}[Z] = r/p, \qquad \mathrm{Var}(Z) = r(1-p)/p^2
+    $$
+
+    For $r = 1$ this reduces to the geometric distribution. The negative binomial generalizes the geometric to multiple successes and underlies models for overdispersed count data.
+
+---
+
+**Exercise 4.**
+**Coupon collector problem.** How many independent random draws (with replacement) are needed to collect all $n$ types of coupons? Find $\mathbb{E}[T]$ where $T$ is the total number of draws.
+
+??? success "Solution to Exercise 4"
+    Decompose: let $T_i$ = number of draws to get the $i$-th *new* coupon type after $i - 1$ types have been collected. Each $T_i$ is geometric with success probability $(n - i + 1)/n$ — once $i - 1$ types are collected, drawing any of the $n - i + 1$ remaining types counts as success.
+
+    So $\mathbb{E}[T_i] = n/(n - i + 1)$.
+
+    Total $T = \sum_{i=1}^n T_i$, and by linearity:
+
+    $$
+    \mathbb{E}[T] = \sum_{i=1}^n \frac{n}{n - i + 1} = n \sum_{j=1}^n \frac{1}{j} \approx n \ln n + n\gamma
+    $$
+
+    where $\gamma \approx 0.5772$ is Euler's constant. For $n = 365$ (birthday-distinct days), $\mathbb{E}[T] \approx 365 \cdot 6.49 \approx 2370$ draws.
+
+    The geometric distribution is the building block of this classic problem and many similar sequential search problems.
+
+---
+
+**Exercise 5.**
+**Geometric as discretized exponential.** Show that the geometric distribution arises as the discrete-time analog of an exponential, with $p$ corresponding to $\lambda \Delta t$ in the small-$\Delta t$ limit.
+
+??? success "Solution to Exercise 5"
+    Suppose we sample a Poisson process with rate $\lambda$ at times $\Delta t, 2\Delta t, 3\Delta t, \ldots$ For each interval $[(k-1)\Delta t, k\Delta t]$, the probability of an event is $p = 1 - e^{-\lambda \Delta t} \approx \lambda \Delta t$ for small $\Delta t$.
+
+    Let $K$ = first interval with an event. Then $K \sim \mathrm{Geometric}(p)$ with $p = 1 - e^{-\lambda \Delta t}$. The waiting time is $T_{\text{disc}} = K \cdot \Delta t$.
+
+    As $\Delta t \to 0$:
+
+    $\mathbb{E}[T_{\text{disc}}] = \Delta t / p = \Delta t / (1 - e^{-\lambda \Delta t}) \to 1/\lambda$, matching the exponential mean.
+
+    The continuous limit recovers the exponential. The geometric is the discrete-time arrival process; the exponential is its continuous-time counterpart.
+
+---
+
+**Exercise 6.**
+**Inverse-transform sampling for geometric.** Given $U \sim \mathrm{Uniform}(0, 1)$, derive a formula to generate $X \sim \mathrm{Geometric}(p)$.
+
+??? success "Solution to Exercise 6"
+    Geometric CDF: $F(k) = 1 - (1 - p)^k$ for $k = 1, 2, \ldots$.
+
+    The inverse CDF: $F(k) \ge u$ iff $(1 - p)^k \le 1 - u$ iff $k \ge \ln(1 - u)/\ln(1 - p)$.
+
+    Therefore:
+
+    $$
+    X = \lceil \ln(1 - U)/\ln(1 - p) \rceil
+    $$
+
+    Since $1 - U$ has the same uniform distribution as $U$, we can use the equivalent:
+
+    $$
+    X = \lceil \ln(U)/\ln(1 - p) \rceil
+    $$
+
+    This is efficient (closed-form) and replaces simulating individual Bernoulli trials until the first success, which can be slow when $p$ is small.
+
+    **Python:** `np.ceil(np.log(np.random.rand()) / np.log(1 - p)).astype(int)`.

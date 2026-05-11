@@ -17,24 +17,24 @@ $$
 where $\alpha_1$ and $\alpha_2$ replace the simple $\alpha/2$ and $1 - \alpha/2$ of the percentile method. These adjusted levels are:
 
 $$
-\alpha_1 = \Phi\!\left(\hat{z}_0 + \frac{\hat{z}_0 + z_{\alpha/2}}{1 - \hat{a}(\hat{z}_0 + z_{\alpha/2})}\right)
+\alpha_1 = \mathcal{N}\!\left(\hat{z}_0 + \frac{\hat{z}_0 + z_{\alpha/2}}{1 - \hat{a}(\hat{z}_0 + z_{\alpha/2})}\right)
 $$
 
 $$
-\alpha_2 = \Phi\!\left(\hat{z}_0 + \frac{\hat{z}_0 + z_{1-\alpha/2}}{1 - \hat{a}(\hat{z}_0 + z_{1-\alpha/2})}\right)
+\alpha_2 = \mathcal{N}\!\left(\hat{z}_0 + \frac{\hat{z}_0 + z_{1-\alpha/2}}{1 - \hat{a}(\hat{z}_0 + z_{1-\alpha/2})}\right)
 $$
 
-Here $\Phi$ is the standard normal CDF, $z_q = \Phi^{-1}(q)$ is the $q$-th standard normal quantile, and the two correction factors $\hat{z}_0$ and $\hat{a}$ are defined below.
+Here $\mathcal{N}$ is the standard normal CDF, $z_q = \mathcal{N}^{-1}(q)$ is the $q$-th standard normal quantile, and the two correction factors $\hat{z}_0$ and $\hat{a}$ are defined below.
 
 ## The Bias Correction Factor
 
 The **bias correction** $\hat{z}_0$ measures how far the center of the bootstrap distribution is from the observed estimate $\hat{\theta}$. It is defined as:
 
 $$
-\hat{z}_0 = \Phi^{-1}\!\left(\frac{\#\{\hat{\theta}^{*(b)} < \hat{\theta}\}}{B}\right)
+\hat{z}_0 = \mathcal{N}^{-1}\!\left(\frac{\#\{\hat{\theta}^{*(b)} < \hat{\theta}\}}{B}\right)
 $$
 
-This is the proportion of bootstrap replicates that fall below the observed statistic, converted to a z-score. If the bootstrap distribution is centered exactly at $\hat{\theta}$, then half the replicates fall below, and $\hat{z}_0 = \Phi^{-1}(0.5) = 0$. In that case, the bias correction has no effect.
+This is the proportion of bootstrap replicates that fall below the observed statistic, converted to a z-score. If the bootstrap distribution is centered exactly at $\hat{\theta}$, then half the replicates fall below, and $\hat{z}_0 = \mathcal{N}^{-1}(0.5) = 0$. In that case, the bias correction has no effect.
 
 When $\hat{z}_0 \neq 0$, the bootstrap distribution is biased relative to $\hat{\theta}$. The BCa interval shifts the quantile cutoffs to compensate.
 
@@ -61,7 +61,7 @@ The numerator captures the skewness of the jackknife distribution, and the denom
 2. Generate $B$ bootstrap replicates $\hat{\theta}^{*(1)}, \ldots, \hat{\theta}^{*(B)}$
 3. Compute the **bias correction** $\hat{z}_0$:
     - Count the proportion of replicates below $\hat{\theta}$
-    - Convert to a z-score via $\hat{z}_0 = \Phi^{-1}(\text{proportion})$
+    - Convert to a z-score via $\hat{z}_0 = \mathcal{N}^{-1}(\text{proportion})$
 4. Compute the **acceleration** $\hat{a}$:
     - For each $i = 1, \ldots, n$: compute $\hat{\theta}_{(-i)}$ (leave-one-out)
     - Apply the skewness formula above
@@ -99,16 +99,16 @@ The BCa interval is also **transformation invariant**: for any monotone increasi
 Consider a sample of $n = 15$ observations from a right-skewed distribution. The sample variance is $s^2 = 8.4$.
 
 1. Generate $B = 10{,}000$ bootstrap replicates of $s^2$
-2. Suppose 62% of the replicates fall below $s^2 = 8.4$, so $\hat{z}_0 = \Phi^{-1}(0.62) = 0.305$
+2. Suppose 62% of the replicates fall below $s^2 = 8.4$, so $\hat{z}_0 = \mathcal{N}^{-1}(0.62) = 0.305$
 3. Compute the $n = 15$ jackknife values $s^2_{(-1)}, \ldots, s^2_{(-15)}$ and find $\hat{a} = 0.042$
 4. The adjusted quantiles for a 95% interval are:
 
 $$
-\alpha_1 = \Phi\!\left(0.305 + \frac{0.305 + (-1.96)}{1 - 0.042(0.305 + (-1.96))}\right) \approx \Phi(-1.44) \approx 0.075
+\alpha_1 = \mathcal{N}\!\left(0.305 + \frac{0.305 + (-1.96)}{1 - 0.042(0.305 + (-1.96))}\right) \approx \mathcal{N}(-1.44) \approx 0.075
 $$
 
 $$
-\alpha_2 = \Phi\!\left(0.305 + \frac{0.305 + 1.96}{1 - 0.042(0.305 + 1.96)}\right) \approx \Phi(2.65) \approx 0.996
+\alpha_2 = \mathcal{N}\!\left(0.305 + \frac{0.305 + 1.96}{1 - 0.042(0.305 + 1.96)}\right) \approx \mathcal{N}(2.65) \approx 0.996
 $$
 
 The BCa interval uses the 7.5th and 99.6th percentiles of the bootstrap distribution instead of the standard 2.5th and 97.5th. This shift upward reflects both the positive bias correction and the positive acceleration, producing a wider and higher interval appropriate for the right-skewed distribution of $s^2$.
@@ -116,3 +116,10 @@ The BCa interval uses the 7.5th and 99.6th percentiles of the bootstrap distribu
 ## Summary
 
 The BCa method improves upon the percentile interval by adjusting the quantile cutoffs using two correction factors: the bias correction $\hat{z}_0$ (measuring median bias in the bootstrap distribution) and the acceleration $\hat{a}$ (measuring how the standard error varies with the parameter, estimated via jackknife). These corrections yield second-order accurate, transformation-invariant confidence intervals. The BCa interval is the recommended default when computational cost permits the additional jackknife calculations.
+
+## Exercises
+
+**Exercise 1.**
+Explain the difference between the **percentile** and **BCa** bootstrap confidence intervals. When does the BCa interval substantially differ from the percentile interval?
+
+## Computation

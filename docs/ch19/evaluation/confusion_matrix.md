@@ -1,9 +1,6 @@
 # Confusion Matrix
 
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Definition and Setup
 
 The **confusion matrix** (also called a **contingency table**) summarizes the performance of a classification model by comparing predicted labels to actual labels. For binary classification, it is a 2×2 table:
@@ -38,6 +35,7 @@ Actual Paid Off       8,148  14,523
 ```
 
 Here:
+
 - **TN = 14,523:** Correctly predicted paid-off loans
 - **FP = 8,148:** Predicted default but actually paid off (false alarm)
 - **FN = 8,335:** Predicted paid-off but actually defaulted (missed default)
@@ -68,6 +66,7 @@ However, accuracy alone can be misleading, especially with **imbalanced datasets
   $$\text{Specificity} = \frac{\text{TN}}{\text{TN} + \text{FP}}$$
 
 For our example:
+
 - Recall = $14,336 / (14,336 + 8,335) \approx 0.6323$ (63.23% of actual defaults detected)
 - Specificity = $14,523 / (14,523 + 8,148) \approx 0.6406$ (64.06% of actual paid-offs identified)
 
@@ -87,3 +86,39 @@ Actual Pos  [ 8335] [14336]
 ```
 
 This visual form makes it easy to see where the model makes errors: larger off-diagonal values indicate higher misclassification rates.
+
+## Exercises
+
+**Exercise 1.**
+Model Evaluation
+
+A spam classifier produces the following confusion matrix on a test set of 1000 emails:
+
+|  | Predicted Spam | Predicted Not Spam |
+|---|---|---|
+| **Actual Spam** | 85 | 15 |
+| **Actual Not Spam** | 30 | 870 |
+
+**(a)** Compute accuracy, precision, recall, specificity, and F1 score.
+
+**(b)** If the cost of a missed spam is 3× the cost of a false alarm, should you lower or raise the classification threshold?
+
+**(c)** What is the False Positive Rate?
+
+??? success "Solution to Exercise 1"
+
+    **(a)** TP=85, FN=15, FP=30, TN=870
+
+    Accuracy $= (85+870)/1000 = 0.955$
+
+    Precision $= 85/(85+30) = 0.739$
+
+    Recall $= 85/(85+15) = 0.850$
+
+    Specificity $= 870/(870+30) = 0.967$
+
+    F1 $= 2 \times 0.739 \times 0.850/(0.739+0.850) = 0.791$
+
+    **(b)** Since missed spam (FN) is costlier, we should **lower** the threshold to increase recall (catch more spam), accepting more false positives.
+
+    **(c)** FPR $= FP/(FP+TN) = 30/900 = 0.033$

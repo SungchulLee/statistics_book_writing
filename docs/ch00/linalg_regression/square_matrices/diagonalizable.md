@@ -109,3 +109,89 @@ where $\mathbf{z} = \mathbf{Q}^T\mathbf{x}$. This decouples a quadratic form int
 ## Summary
 
 A matrix is diagonalizable when it has a full set of $n$ linearly independent eigenvectors, which allows the factorization $\mathbf{A} = \mathbf{P}\boldsymbol{\Lambda}\mathbf{P}^{-1}$. This decomposition reduces matrix operations to scalar operations on eigenvalues. Symmetric matrices -- including all covariance matrices -- are always diagonalizable, which makes eigendecomposition a fundamental tool in statistical theory. Matrices that fail to be diagonalizable require the Jordan canonical form, discussed next.
+
+## Exercises
+
+**Exercise 1.**
+Diagonalize the matrix $\mathbf{A} = \begin{pmatrix} 4 & 1 \\ 0 & 3 \end{pmatrix}$ by finding its eigenvalues, eigenvectors, and the matrices $\mathbf{P}$ and $\boldsymbol{\Lambda}$.
+
+??? success "Solution to Exercise 1"
+    The characteristic polynomial is $\det(\mathbf{A} - \lambda\mathbf{I}) = (4-\lambda)(3-\lambda) = 0$, giving eigenvalues $\lambda_1 = 4$ and $\lambda_2 = 3$.
+
+    For $\lambda_1 = 4$: $(\mathbf{A} - 4\mathbf{I})\mathbf{v} = \begin{pmatrix} 0 & 1 \\ 0 & -1 \end{pmatrix}\mathbf{v} = \mathbf{0}$, so $\mathbf{v}_1 = \begin{pmatrix} 1 \\ 0 \end{pmatrix}$.
+
+    For $\lambda_2 = 3$: $(\mathbf{A} - 3\mathbf{I})\mathbf{v} = \begin{pmatrix} 1 & 1 \\ 0 & 0 \end{pmatrix}\mathbf{v} = \mathbf{0}$, so $\mathbf{v}_2 = \begin{pmatrix} -1 \\ 1 \end{pmatrix}$.
+
+    Therefore:
+
+    $$
+    \mathbf{P} = \begin{pmatrix} 1 & -1 \\ 0 & 1 \end{pmatrix}, \quad \boldsymbol{\Lambda} = \begin{pmatrix} 4 & 0 \\ 0 & 3 \end{pmatrix}, \quad \mathbf{A} = \mathbf{P}\boldsymbol{\Lambda}\mathbf{P}^{-1}
+    $$
+
+---
+
+**Exercise 2.**
+Prove that if $\mathbf{A}$ is diagonalizable with $\mathbf{A} = \mathbf{P}\boldsymbol{\Lambda}\mathbf{P}^{-1}$, then $\mathbf{A}^k = \mathbf{P}\boldsymbol{\Lambda}^k\mathbf{P}^{-1}$ for any positive integer $k$.
+
+??? success "Solution to Exercise 2"
+    We proceed by induction. The base case $k = 1$ holds by definition.
+
+    Assume $\mathbf{A}^k = \mathbf{P}\boldsymbol{\Lambda}^k\mathbf{P}^{-1}$. Then:
+
+    $$
+    \mathbf{A}^{k+1} = \mathbf{A}^k \cdot \mathbf{A} = \mathbf{P}\boldsymbol{\Lambda}^k\mathbf{P}^{-1} \cdot \mathbf{P}\boldsymbol{\Lambda}\mathbf{P}^{-1} = \mathbf{P}\boldsymbol{\Lambda}^k\boldsymbol{\Lambda}\mathbf{P}^{-1} = \mathbf{P}\boldsymbol{\Lambda}^{k+1}\mathbf{P}^{-1}
+    $$
+
+    The key cancellation is $\mathbf{P}^{-1}\mathbf{P} = \mathbf{I}$. Since $\boldsymbol{\Lambda}^k = \operatorname{diag}(\lambda_1^k, \dots, \lambda_n^k)$, computing matrix powers reduces to computing scalar powers of eigenvalues. $\square$
+
+---
+
+**Exercise 3.**
+Let $\boldsymbol{\Sigma}$ be a $2 \times 2$ covariance matrix with eigenvalues $\lambda_1 = 5$ and $\lambda_2 = 2$. Without computing $\boldsymbol{\Sigma}$ explicitly, find $\operatorname{tr}(\boldsymbol{\Sigma})$, $\det(\boldsymbol{\Sigma})$, and the eigenvalues of $\boldsymbol{\Sigma}^{-1}$.
+
+??? success "Solution to Exercise 3"
+    Since the trace is the sum of eigenvalues:
+
+    $$
+    \operatorname{tr}(\boldsymbol{\Sigma}) = \lambda_1 + \lambda_2 = 5 + 2 = 7
+    $$
+
+    Since the determinant is the product of eigenvalues:
+
+    $$
+    \det(\boldsymbol{\Sigma}) = \lambda_1 \cdot \lambda_2 = 5 \times 2 = 10
+    $$
+
+    The eigenvalues of $\boldsymbol{\Sigma}^{-1}$ are the reciprocals of the eigenvalues of $\boldsymbol{\Sigma}$:
+
+    $$
+    \lambda_1(\boldsymbol{\Sigma}^{-1}) = \frac{1}{5} = 0.2, \quad \lambda_2(\boldsymbol{\Sigma}^{-1}) = \frac{1}{2} = 0.5
+    $$
+
+---
+
+**Exercise 4.**
+Give an example of a $2 \times 2$ real matrix that is not diagonalizable. Prove that it cannot be diagonalized by showing it has fewer than two linearly independent eigenvectors.
+
+??? success "Solution to Exercise 4"
+    Consider $\mathbf{A} = \begin{pmatrix} 2 & 1 \\ 0 & 2 \end{pmatrix}$. The characteristic polynomial is $(2 - \lambda)^2 = 0$, so $\lambda = 2$ is the only eigenvalue (with algebraic multiplicity 2).
+
+    The eigenspace for $\lambda = 2$ is the null space of:
+
+    $$
+    \mathbf{A} - 2\mathbf{I} = \begin{pmatrix} 0 & 1 \\ 0 & 0 \end{pmatrix}
+    $$
+
+    This has rank 1, so the null space has dimension 1 (geometric multiplicity = 1). The only eigenvector (up to scaling) is $\mathbf{v} = \begin{pmatrix} 1 \\ 0 \end{pmatrix}$.
+
+    Since we need 2 linearly independent eigenvectors to form $\mathbf{P}$ but only have 1, the matrix is not diagonalizable. $\square$
+
+---
+
+**Exercise 5.**
+Explain why every real symmetric matrix is diagonalizable and why the diagonalizing matrix can be chosen to be orthogonal. Why is this property important for covariance matrices?
+
+??? success "Solution to Exercise 5"
+    The Spectral Theorem guarantees that every real symmetric matrix has $n$ real eigenvalues (counting multiplicity) and a full set of $n$ orthonormal eigenvectors. Specifically, eigenvectors corresponding to distinct eigenvalues are orthogonal, and for repeated eigenvalues, the eigenspace can be orthonormalized via Gram-Schmidt. Arranging these eigenvectors as columns of $\mathbf{Q}$ gives an orthogonal matrix ($\mathbf{Q}^T\mathbf{Q} = \mathbf{I}$), so $\mathbf{A} = \mathbf{Q}\boldsymbol{\Lambda}\mathbf{Q}^T$.
+
+    For covariance matrices $\boldsymbol{\Sigma}$, this spectral decomposition is the foundation of Principal Component Analysis (PCA). The eigenvectors give the principal component directions, the eigenvalues give the variance explained by each component, and the orthogonality of $\mathbf{Q}$ means the principal components are uncorrelated. The decomposition also simplifies computation: $\boldsymbol{\Sigma}^{-1} = \mathbf{Q}\boldsymbol{\Lambda}^{-1}\mathbf{Q}^T$ and $\boldsymbol{\Sigma}^{1/2} = \mathbf{Q}\boldsymbol{\Lambda}^{1/2}\mathbf{Q}^T$.

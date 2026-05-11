@@ -60,3 +60,77 @@ Conjugate priors are most useful when:
 - **Interpretability** matters: the prior parameters often have a natural interpretation as "pseudo-observations" (e.g., $\alpha$ and $\beta$ in the Beta prior act like prior counts of successes and failures).
 
 However, conjugate priors restrict the choice of prior family to match the likelihood, which may not always represent genuine prior beliefs. For complex models or when prior flexibility is important, non-conjugate priors combined with computational methods such as MCMC or variational inference are preferred.
+
+## Exercises
+
+**Exercise 1.**
+The Beta distribution is the conjugate prior for the Binomial likelihood. If the prior is $\text{Beta}(2, 5)$ and we observe 3 successes in 10 trials, find the posterior distribution and the posterior mean.
+
+??? success "Solution to Exercise 1"
+    With a $\text{Beta}(\alpha, \beta)$ prior and $k$ successes in $n$ trials, the posterior is $\text{Beta}(\alpha + k, \beta + n - k)$.
+
+    Here $\alpha = 2$, $\beta = 5$, $k = 3$, $n = 10$:
+
+    $$
+    \text{Posterior} = \text{Beta}(2 + 3, 5 + 7) = \text{Beta}(5, 12)
+    $$
+
+    The posterior mean is:
+
+    $$
+    E[p \mid \text{data}] = \frac{\alpha + k}{\alpha + k + \beta + n - k} = \frac{5}{5 + 12} = \frac{5}{17} \approx 0.294
+    $$
+
+    This is a compromise between the prior mean $2/7 \approx 0.286$ and the sample proportion $3/10 = 0.3$.
+
+---
+
+**Exercise 2.**
+Show that the Gamma distribution is the conjugate prior for the Poisson likelihood. If $X_1, \dots, X_n \overset{\text{iid}}{\sim} \text{Poisson}(\lambda)$ and $\lambda \sim \text{Gamma}(\alpha, \beta)$, derive the posterior distribution of $\lambda$.
+
+??? success "Solution to Exercise 2"
+    The Poisson likelihood for $n$ observations is:
+
+    $$
+    L(\lambda) = \prod_{i=1}^n \frac{\lambda^{x_i} e^{-\lambda}}{x_i!} \propto \lambda^{\sum x_i} e^{-n\lambda}
+    $$
+
+    The Gamma$(\alpha, \beta)$ prior (with rate parameterization) is:
+
+    $$
+    \pi(\lambda) \propto \lambda^{\alpha - 1} e^{-\beta\lambda}
+    $$
+
+    The posterior is:
+
+    $$
+    \pi(\lambda \mid \mathbf{x}) \propto \lambda^{\sum x_i} e^{-n\lambda} \cdot \lambda^{\alpha - 1} e^{-\beta\lambda} = \lambda^{\alpha + \sum x_i - 1} e^{-(\beta + n)\lambda}
+    $$
+
+    This is the kernel of a $\text{Gamma}(\alpha + \sum x_i, \beta + n)$ distribution, confirming conjugacy. $\square$
+
+---
+
+**Exercise 3.**
+Explain what it means for a prior to be "non-informative" or "weakly informative." Give an example of a weakly informative conjugate prior for a normal mean $\mu$ when $\sigma^2$ is known.
+
+??? success "Solution to Exercise 3"
+    A **non-informative** (or "vague") prior is intended to let the data dominate the posterior, encoding minimal prior knowledge. A **weakly informative** prior constrains the parameter to a reasonable range without strongly favoring any particular value.
+
+    For a normal mean $\mu$ with known $\sigma^2$, the conjugate prior is $\mu \sim N(\mu_0, \tau^2)$. A weakly informative choice sets $\tau$ very large relative to the data scale -- e.g., if we expect $\mu$ to be between $-100$ and $100$, we might use $\mu_0 = 0$ and $\tau = 100$. This prior barely influences the posterior when $n$ is moderate but prevents extreme estimates.
+
+    In the limit $\tau \to \infty$, we obtain the improper flat prior $\pi(\mu) \propto 1$, which is non-informative. The posterior mean then equals the MLE $\bar{x}$.
+
+---
+
+**Exercise 4.**
+With a conjugate Normal-Gamma prior, the posterior for the normal mean and precision $(\mu, \tau)$ is also Normal-Gamma. Describe intuitively why conjugate priors are computationally convenient and name one limitation.
+
+??? success "Solution to Exercise 4"
+    **Convenience:** Conjugate priors are computationally convenient because the posterior has the same distributional family as the prior -- only the parameters change. This means:
+
+    - The posterior can be written in closed form (no numerical integration needed).
+    - Updating with new data simply updates the hyperparameters: $(\alpha, \beta) \to (\alpha', \beta')$.
+    - Sequential updating is trivial: each new observation updates the hyperparameters incrementally.
+
+    **Limitation:** Conjugate priors may not accurately represent the analyst's genuine prior beliefs. For example, a Beta prior for a binomial proportion is unimodal (or U-shaped), but the analyst might believe the true probability is bimodal (e.g., near 0.2 or 0.8). Forcing beliefs into the conjugate family sacrifices expressiveness for computational tractability. Modern MCMC methods allow arbitrary priors, reducing the need for conjugacy.

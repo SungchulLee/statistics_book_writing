@@ -129,3 +129,68 @@ The `scipy.stats.spearmanr` function uses the t-approximation for larger samples
 ## Summary
 
 The hypothesis test for Spearman's $r_s$ uses the same t-statistic formula as the Pearson test, applied to the ranks of the data. The test is distribution-free and does not require normality, making it robust to outliers and applicable to ordinal data. For small samples, exact permutation-based p-values are available. The Spearman test is preferred over the Pearson test when the data are non-normal, contain outliers, or exhibit a monotonic but nonlinear relationship.
+
+## Exercises
+
+**Exercise 1.**
+Test whether Spearman's $r_s = 0.55$ from a sample of $n = 20$ is significantly different from zero at $\alpha = 0.05$.
+
+??? success "Solution to Exercise 1"
+    The test statistic is:
+
+    $$
+    t = r_s \sqrt{\frac{n-2}{1-r_s^2}} = 0.55\sqrt{\frac{18}{1 - 0.3025}} = 0.55\sqrt{\frac{18}{0.6975}} = 0.55\sqrt{25.806} = 0.55 \times 5.080 = 2.794
+    $$
+
+    With $df = n - 2 = 18$, the critical value $t_{0.025, 18} = 2.101$. Since $|t| = 2.794 > 2.101$, we reject $H_0$ at $\alpha = 0.05$. There is significant evidence of a monotonic association.
+
+---
+
+**Exercise 2.**
+Explain why the t-distribution approximation for Spearman's test is more accurate for large $n$. What is the exact test for small $n$?
+
+??? success "Solution to Exercise 2"
+    The test statistic $t = r_s\sqrt{(n-2)/(1-r_s^2)}$ has an approximate $t_{n-2}$ distribution under $H_0$. This approximation works well for $n \geq 10$ and becomes exact in the limit.
+
+    For small $n$, the exact distribution of $r_s$ under $H_0$ is discrete (because ranks can only take integer values) and is computed by enumerating all $n!$ permutations of one rank vector. Statistical software (e.g., `scipy.stats.spearmanr`) computes exact p-values for small $n$ and switches to the t-approximation for larger samples.
+
+    The exact test is a permutation test: it compares the observed $r_s$ to the distribution of $r_s$ values obtained from all possible permutations of the $Y$-ranks, assuming independence.
+
+---
+
+**Exercise 3.**
+A dataset of 50 countries shows Spearman's $r_s = 0.72$ between GDP per capita rank and life expectancy rank. Construct an approximate 95% confidence interval for the population $\rho_s$.
+
+??? success "Solution to Exercise 3"
+    Apply Fisher's z-transformation (which can also be used for Spearman's $r_s$ as an approximation):
+
+    $$
+    z_r = \frac{1}{2}\ln\frac{1 + 0.72}{1 - 0.72} = \frac{1}{2}\ln(6.143) = \frac{1}{2}(1.815) = 0.9076
+    $$
+
+    The standard error is approximately $1/\sqrt{n-3} = 1/\sqrt{47} = 0.1459$.
+
+    The 95% CI for $z_\rho$ is $0.9076 \pm 1.96 \times 0.1459 = (0.6216, 1.1936)$.
+
+    Back-transforming: $r = \frac{e^{2z}-1}{e^{2z}+1}$:
+
+    - Lower: $\tanh(0.6216) = 0.553$
+    - Upper: $\tanh(1.1936) = 0.832$
+
+    The 95% CI for $\rho_s$ is approximately $(0.55, 0.83)$.
+
+---
+
+**Exercise 4.**
+When is Spearman's test preferred over Pearson's test of correlation? List three scenarios.
+
+??? success "Solution to Exercise 4"
+    Spearman's test is preferred when:
+
+    1. **The relationship is monotonic but nonlinear:** Pearson's $r$ measures only linear association and may underestimate the strength of a curved but monotonic relationship. Spearman's $r_s$ captures any monotonic pattern.
+
+    2. **The data contain outliers:** Spearman's $r_s$ is based on ranks and is therefore robust to extreme values. A single outlier can dramatically change Pearson's $r$ but barely affects $r_s$.
+
+    3. **The data are ordinal:** When measurements are on an ordinal scale (e.g., Likert ratings, rankings), the numerical values have no meaningful interval interpretation. Spearman's $r_s$ is appropriate because it uses only rank information, while Pearson's $r$ assumes interval-scale data.
+
+    Additionally, Spearman's test does not require the bivariate normality assumption needed for exact inference with Pearson's $r$.

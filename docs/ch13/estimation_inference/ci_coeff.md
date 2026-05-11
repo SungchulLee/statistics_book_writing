@@ -1,9 +1,6 @@
 # Confidence Intervals for Simple OLS Estimators
 
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Overview
 
 Given the sampling distributions derived in the [previous section](sampling_dist_simple.md), we can construct confidence intervals for the slope, the expected response, and individual predictions in simple linear regression. Each confidence interval takes the standard form: **point estimate $\pm$ critical value $\times$ standard error**.
@@ -281,3 +278,39 @@ plot_intervals(x, y, y_hat, x0, lower, upper, lower2, upper2)
 ```
 
 The left panel shows the confidence band for the mean response—notice its characteristic "bowtie" shape, narrowest at $\bar{x}$. The right panel shows the wider prediction band that accounts for individual observation variability.
+## Exercises
+
+**Exercise 1.**
+In a simple linear regression with $n = 20$, $\hat{\beta}_1 = 3.5$, and $\text{SE}(\hat{\beta}_1) = 1.2$, construct a 95% confidence interval for $\beta_1$.
+
+??? success "Solution to Exercise 1"
+    With $n - 2 = 18$ degrees of freedom, the critical value is $t_{0.025, 18} = 2.101$.
+
+    $$
+    \hat{\beta}_1 \pm t_{0.025, 18} \cdot \text{SE}(\hat{\beta}_1) = 3.5 \pm 2.101 \times 1.2 = 3.5 \pm 2.521
+    $$
+
+    The 95% confidence interval is $(0.979, 6.021)$. Since this interval does not contain zero, $\beta_1$ is significantly different from zero at the 5% level.
+
+---
+
+**Exercise 2.**
+Explain the relationship between the 95% confidence interval for $\beta_1$ and the two-sided $t$-test of $H_0: \beta_1 = 0$ at $\alpha = 0.05$. When do they lead to the same conclusion?
+
+??? success "Solution to Exercise 2"
+    The 95% confidence interval and the two-sided $t$-test at $\alpha = 0.05$ are **equivalent**: rejecting $H_0: \beta_1 = 0$ at the 5% level occurs if and only if the 95% confidence interval does not contain zero.
+
+    This is because the $t$-test rejects when $|\hat{\beta}_1/\text{SE}| > t_{\alpha/2, n-2}$, which is equivalent to $0 \notin (\hat{\beta}_1 \pm t_{\alpha/2} \cdot \text{SE})$. They always lead to the same conclusion for any significance level $\alpha$ matched with a $(1-\alpha)$ confidence interval.
+
+---
+
+**Exercise 3.**
+As sample size $n$ increases, what happens to the width of the confidence interval for $\beta_1$? Explain the mathematical reason.
+
+??? success "Solution to Exercise 3"
+    The width decreases. The confidence interval width is $2 t_{\alpha/2, n-2} \cdot \text{SE}(\hat{\beta}_1)$. As $n$ increases:
+
+    1. $\text{SE}(\hat{\beta}_1) = \hat{\sigma}/\sqrt{\sum(x_i - \bar{x})^2}$ decreases because the denominator grows with $n$.
+    2. $t_{\alpha/2, n-2} \to z_{\alpha/2}$ (the $t$ critical value approaches the $z$ critical value as $df \to \infty$).
+
+    Both effects narrow the interval, reflecting the increased precision of the estimate with more data.

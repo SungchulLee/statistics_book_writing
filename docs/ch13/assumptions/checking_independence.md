@@ -1,9 +1,6 @@
 # Checking Independence in Linear Regression
 
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 Independence is a key assumption in linear regression that ensures the observations (and their residuals) are not correlated with one another. This assumption is critical for making valid inferences and obtaining accurate estimates of regression coefficients. If independence is violated, the model may produce biased results, underestimated standard errors, and incorrect significance tests. This section explores various methods to check for independence in linear regression, with a focus on identifying and addressing autocorrelation and other forms of dependence among observations.
 
 ## 1. Understanding the Independence Assumption
@@ -199,3 +196,43 @@ Sometimes, dependence among observations arises from the data collection process
 | Data structure review | Conceptual | Clustering, hierarchical dependence | Cross-sectional clustered data |
 
 Ensuring independence in linear regression is crucial for valid statistical inference and reliable predictions. By employing tests like the Durbin-Watson test, Breusch-Godfrey test, and examining residual plots, you can diagnose potential violations of the independence assumption. In cases where independence is violated, it is important to address the issue through appropriate modeling techniques, such as adding lagged variables, using generalized least squares, or employing mixed-effects models for clustered data.
+## Exercises
+
+**Exercise 1.**
+A regression model for quarterly sales data yields a Durbin-Watson statistic of $d = 0.95$. Interpret this result and recommend an appropriate remedy.
+
+??? success "Solution to Exercise 1"
+    A Durbin-Watson statistic of $d = 0.95$ is substantially below 2, indicating **positive first-order autocorrelation** in the residuals. Adjacent quarterly observations have similar residuals, which is common in time-series data.
+
+    This violates the independence assumption, causing standard errors to be underestimated. Recommended remedies:
+
+    1. **Include lagged variables** (e.g., $Y_{t-1}$) as predictors to capture the temporal dependence.
+    2. **Use Newey-West (HAC) standard errors** that are robust to autocorrelation.
+    3. **Fit an autoregressive model** (e.g., AR(1) errors) using generalized least squares.
+
+---
+
+**Exercise 2.**
+Explain why the independence assumption cannot be verified by looking at the data alone and must instead be ensured through study design. Give two examples of study designs that guarantee independence.
+
+??? success "Solution to Exercise 2"
+    Independence is a property of the **data-generating process**, not of the observed data. Correlated data can produce residual plots that appear random by chance, and independent data can show apparent patterns due to sampling variability.
+
+    Study designs that guarantee independence:
+
+    1. **Simple random sampling** from a population where each unit is selected independently with equal probability.
+    2. **Randomized controlled experiment** where subjects are randomly assigned to treatment conditions with no repeated measures.
+
+---
+
+**Exercise 3.**
+Students nested within classrooms violate the independence assumption. Explain the specific consequences for regression inference and name the modeling approach that addresses this issue.
+
+??? success "Solution to Exercise 3"
+    Students in the same classroom share the same teacher, curriculum, and classroom environment, creating **within-cluster correlation**. This means:
+
+    - The effective sample size is smaller than the nominal $n$.
+    - Standard errors are underestimated, leading to inflated $t$-statistics and artificially small p-values.
+    - Confidence intervals are too narrow.
+
+    The appropriate approach is a **mixed-effects (hierarchical/multilevel) model** that includes classroom as a random effect. This accounts for the within-classroom correlation while correctly estimating standard errors for the fixed effects.

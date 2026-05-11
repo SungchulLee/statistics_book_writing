@@ -170,3 +170,88 @@ print(f"Phi coefficient  = {phi:.4f}")
 ## Summary
 
 The point-biserial and phi coefficients are special cases of the Pearson correlation for binary data. The point-biserial coefficient measures the association between a binary grouping variable and a continuous outcome, and its test is equivalent to the two-sample t-test. The phi coefficient measures the association between two binary variables in a $2 \times 2$ table, and its test is equivalent to the chi-square test of independence. Recognizing these connections unifies several seemingly distinct statistical procedures under the single framework of correlation.
+
+## Exercises
+
+**Exercise 1.**
+Compute the point-biserial correlation between gender (coded 0 = female, 1 = male) and test score for the data: females scored $\{78, 82, 85, 88\}$ and males scored $\{90, 92, 88, 95\}$.
+
+??? success "Solution to Exercise 1"
+    Let $X$ = gender (0/1), $Y$ = score. Female mean: $\bar{Y}_0 = 83.25$. Male mean: $\bar{Y}_1 = 91.25$. Overall: $\bar{Y} = 87.25$, $n_0 = n_1 = 4$, $n = 8$.
+
+    The point-biserial correlation is:
+
+    $$
+    r_{pb} = \frac{\bar{Y}_1 - \bar{Y}_0}{s_Y}\sqrt{\frac{n_0 n_1}{n^2}}
+    $$
+
+    $s_Y^2 = \frac{1}{7}\sum(Y_i - 87.25)^2 = \frac{1}{7}(85.5625 + 27.5625 + 5.0625 + 0.5625 + 7.5625 + 22.5625 + 0.5625 + 60.0625) = \frac{209.5}{7} = 29.929$
+
+    $s_Y = 5.471$
+
+    $$
+    r_{pb} = \frac{91.25 - 83.25}{5.471}\sqrt{\frac{16}{64}} = \frac{8}{5.471} \times 0.5 = 0.731
+    $$
+
+---
+
+**Exercise 2.**
+Show that the point-biserial correlation is equivalent to the Pearson correlation between a binary variable and a continuous variable.
+
+??? success "Solution to Exercise 2"
+    Let $X \in \{0, 1\}$ with $P(X = 1) = p = n_1/n$. The Pearson correlation is:
+
+    $$
+    r = \frac{\sum(X_i - \bar{X})(Y_i - \bar{Y})}{\sqrt{\sum(X_i - \bar{X})^2 \sum(Y_i - \bar{Y})^2}}
+    $$
+
+    Since $\bar{X} = p$, we have $(X_i - p) = 1 - p$ for group 1 and $-p$ for group 0. The numerator becomes:
+
+    $$
+    \sum(X_i - p)(Y_i - \bar{Y}) = (1-p)\sum_{i \in \text{group 1}}(Y_i - \bar{Y}) - p\sum_{i \in \text{group 0}}(Y_i - \bar{Y})
+    $$
+
+    Since $\sum_{i \in \text{group 1}}(Y_i - \bar{Y}) = n_1(\bar{Y}_1 - \bar{Y})$ and similarly for group 0, this simplifies to $n \cdot p(1-p)(\bar{Y}_1 - \bar{Y}_0)$. The denominator involves $\sqrt{n \cdot p(1-p) \cdot \sum(Y_i - \bar{Y})^2}$, and the ratio yields the point-biserial formula. $\square$
+
+---
+
+**Exercise 3.**
+Compute the phi coefficient for the following $2 \times 2$ table:
+
+|  | Passed | Failed |
+|---|---|---|
+| Studied | 40 | 10 |
+| Did not study | 20 | 30 |
+
+??? success "Solution to Exercise 3"
+    For a $2 \times 2$ table with cells $a, b, c, d$: $a = 40, b = 10, c = 20, d = 30$.
+
+    $$
+    \phi = \frac{ad - bc}{\sqrt{(a+b)(c+d)(a+c)(b+d)}}
+    $$
+
+    $$
+    = \frac{40 \times 30 - 10 \times 20}{\sqrt{50 \times 50 \times 60 \times 40}} = \frac{1200 - 200}{\sqrt{6{,}000{,}000}} = \frac{1000}{2449.5} \approx 0.408
+    $$
+
+    The phi coefficient of 0.41 indicates a moderate positive association between studying and passing.
+
+---
+
+**Exercise 4.**
+Explain the relationship between the phi coefficient and the chi-squared test statistic for a $2 \times 2$ table. How can you obtain one from the other?
+
+??? success "Solution to Exercise 4"
+    The phi coefficient and chi-squared statistic are directly related:
+
+    $$
+    \chi^2 = n\phi^2 \quad \Leftrightarrow \quad \phi = \sqrt{\chi^2/n}
+    $$
+
+    where $n$ is the total sample size. From Exercise 3, $\phi = 0.408$ and $n = 100$:
+
+    $$
+    \chi^2 = 100 \times 0.408^2 = 100 \times 0.1665 = 16.65
+    $$
+
+    This means the phi coefficient is a normalized version of the chi-squared statistic: $\chi^2$ depends on sample size (larger $n$ gives larger $\chi^2$ for the same association), while $\phi$ is scale-free and bounded between $-1$ and $1$. The chi-squared test with 1 degree of freedom and the test of $\phi = 0$ are equivalent.

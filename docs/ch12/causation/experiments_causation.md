@@ -130,3 +130,59 @@ Natural experiments approximate the logic of RCTs by exploiting quasi-random var
 ## Summary
 
 Randomized experiments are the gold standard for establishing causal relationships because random assignment eliminates confounding, both measured and unmeasured. The key design elements -- randomization, blinding, and placebo control -- ensure that the only systematic difference between groups is the treatment itself. When RCTs are infeasible due to ethical, practical, or cost constraints, natural experiments and quasi-experimental designs can approximate the benefits of randomization. Understanding why randomization enables causal inference clarifies both its power and the limitations of observational studies.
+
+## Exercises
+
+**Exercise 1.**
+Explain why random assignment in an experiment eliminates confounding, even from unobserved variables.
+
+??? success "Solution to Exercise 1"
+    Random assignment ensures that the treatment group and control group are, on average, identical in all characteristics -- both observed and unobserved -- before the treatment is applied. Because assignment is determined by a random mechanism (coin flip, random number generator), it is independent of all pre-treatment variables.
+
+    Any confounder $U$ (observed or not) satisfies $U \perp T$ where $T$ is the treatment indicator. This means $E[Y \mid T=1] - E[Y \mid T=0] = E[Y(1)] - E[Y(0)]$, the true average treatment effect, because there are no back-door paths from $T$ to $Y$ (the randomization "cuts" all such paths).
+
+    With large enough sample sizes, the law of large numbers ensures the groups are balanced on every variable. With small samples, imbalances can occur by chance, which is why we still use hypothesis tests and confidence intervals.
+
+---
+
+**Exercise 2.**
+A randomized experiment finds that a tutoring program increases test scores by 8 points ($p = 0.02$). A colleague argues this does not prove causation because "correlation does not imply causation." Is the colleague correct?
+
+??? success "Solution to Exercise 2"
+    The colleague is **incorrect** in this context. The statement "correlation does not imply causation" applies to observational studies where confounders may explain the association. In a properly randomized experiment, the causal interpretation is valid because:
+
+    1. Random assignment eliminates confounding.
+    2. The researcher controls the timing (treatment before outcome), establishing temporal precedence.
+    3. The comparison group (control) provides the counterfactual.
+
+    The 8-point increase is a valid estimate of the causal effect, subject to the usual caveats of statistical inference (sampling variability, as reflected by $p = 0.02$). The main threats to causal inference in experiments are practical issues (non-compliance, attrition, spillover effects), not confounding.
+
+---
+
+**Exercise 3.**
+Define the concepts of internal validity and external validity for a randomized experiment. Give an example where an experiment has high internal validity but questionable external validity.
+
+??? success "Solution to Exercise 3"
+    **Internal validity:** The extent to which the experiment correctly measures the causal effect within the study. Requires proper randomization, no attrition bias, no spillover effects, and adherence to the treatment protocol.
+
+    **External validity:** The extent to which the results generalize to other populations, settings, or time periods.
+
+    **Example:** A randomized trial of a math app conducted in a single wealthy suburban school district shows a 12-point improvement in test scores (high internal validity -- proper randomization, low attrition). However, the results may not generalize to under-resourced urban schools where students have less internet access, different baseline skills, and different motivational profiles (questionable external validity).
+
+---
+
+**Exercise 4.**
+In the potential outcomes framework, define the Average Treatment Effect (ATE) and explain the "fundamental problem of causal inference."
+
+??? success "Solution to Exercise 4"
+    For individual $i$, let $Y_i(1)$ be the potential outcome under treatment and $Y_i(0)$ be the potential outcome under control. The individual treatment effect is $\tau_i = Y_i(1) - Y_i(0)$.
+
+    The **Average Treatment Effect** is:
+
+    $$
+    \text{ATE} = E[Y(1) - Y(0)] = E[Y(1)] - E[Y(0)]
+    $$
+
+    The **fundamental problem of causal inference** is that for each individual, we observe only one potential outcome: either $Y_i(1)$ (if treated) or $Y_i(0)$ (if not treated), never both. The individual causal effect $\tau_i$ is therefore unobservable.
+
+    Randomization solves this at the group level: because $T \perp (Y(1), Y(0))$, we have $E[Y \mid T=1] = E[Y(1)]$ and $E[Y \mid T=0] = E[Y(0)]$, so the difference in group means estimates the ATE even though individual effects remain unknown.

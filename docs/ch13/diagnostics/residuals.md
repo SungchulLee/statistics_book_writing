@@ -1,9 +1,6 @@
 # Residual Analysis
 
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 Residual analysis is a critical step in evaluating how well a linear regression model fits a dataset. By examining the residuals—differences between observed values and predicted values—we gain insights into the model's accuracy and whether key assumptions hold.
 
 ## Understanding Residuals
@@ -326,3 +323,37 @@ If residual analysis reveals violations:
 - **Weighted Least Squares (WLS)**: Assign different weights to observations based on variance, handling non-constant variance directly.
 - **Robust Regression**: Minimize the influence of outliers for greater resilience to assumption deviations.
 - **Polynomial Features**: Add polynomial terms when residual plots suggest non-linearity.
+## Exercises
+
+**Exercise 1.**
+Explain the difference between raw residuals, standardized residuals, and studentized (externally studentized) residuals. Which is most appropriate for identifying outliers and why?
+
+??? success "Solution to Exercise 1"
+
+    - **Raw residuals:** $e_i = Y_i - \hat{Y}_i$. Have unequal variances ($\text{Var}(e_i) = \sigma^2(1 - h_{ii})$), making direct comparison across observations misleading.
+
+    - **Standardized (internally studentized) residuals:** $r_i = e_i / (\hat{\sigma}\sqrt{1 - h_{ii}})$. Scale each residual by its estimated standard deviation. Approximately follow $N(0,1)$ under the model assumptions.
+
+    - **Externally studentized residuals:** $t_i = e_i / (\hat{\sigma}_{(i)}\sqrt{1 - h_{ii}})$, where $\hat{\sigma}_{(i)}$ is estimated with observation $i$ deleted. Follow an exact $t$-distribution with $n - p - 2$ degrees of freedom.
+
+    **Externally studentized residuals** are most appropriate for outlier detection because they use a variance estimate that is not inflated by the potential outlier itself, providing a more honest assessment of whether the observation is extreme.
+
+---
+
+**Exercise 2.**
+A residual plot shows residuals randomly scattered around zero with no visible pattern. What can you conclude about the model assumptions? Which assumptions does this plot NOT address?
+
+??? success "Solution to Exercise 2"
+    A residual-vs-fitted plot with random scatter around zero supports the assumptions of **linearity** (no systematic curvature) and **homoscedasticity** (constant spread). It also confirms that the mean of the errors is approximately zero.
+
+    However, this plot does **not** address: (1) **normality** of residuals (requires a Q-Q plot or histogram), (2) **independence** (requires residual-vs-order plot or Durbin-Watson test), or (3) **outliers/influence** (requires Cook's distance or leverage diagnostics, since a single influential point can create a "good-looking" residual plot by pulling the line toward it).
+
+---
+
+**Exercise 3.**
+A scale-location plot shows a clear upward trend. Describe what this indicates and how it differs from a standard residual-vs-fitted plot.
+
+??? success "Solution to Exercise 3"
+    A **scale-location plot** displays $\sqrt{|\text{standardized residuals}|}$ against fitted values. An upward trend means the **spread** of residuals (measured by their absolute magnitude) increases with the fitted values, indicating **heteroscedasticity**.
+
+    It differs from the standard residual-vs-fitted plot in that it focuses specifically on the **magnitude** (not sign) of residuals. The standard plot can show heteroscedasticity as a funnel shape, but the scale-location plot makes increasing variance easier to detect because it removes the sign of the residuals and uses a square-root scale to stabilize the variance of the plotted quantity.

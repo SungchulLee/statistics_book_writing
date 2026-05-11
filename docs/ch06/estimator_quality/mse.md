@@ -1,9 +1,5 @@
 # Mean Squared Error
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Introduction
 
 The **Mean Squared Error (MSE)** is the most widely used criterion for evaluating the quality of a statistical estimator. It measures the average squared deviation of an estimator from the true parameter value, capturing both systematic error (bias) and random fluctuation (variance) in a single quantity.
@@ -49,6 +45,7 @@ For unbiased estimators, MSE and variance are identical. Comparing unbiased esti
 ### Consistency and MSE
 
 An estimator is **MSE-consistent** if $\text{MSE}(\hat{\theta}_n) \to 0$ as $n \to \infty$. By the decomposition, this requires both:
+
 - $\text{Bias}(\hat{\theta}_n) \to 0$
 - $\text{Var}(\hat{\theta}_n) \to 0$
 
@@ -184,3 +181,117 @@ MSE is the fundamental criterion for evaluating estimator quality. Its decomposi
 | MSE of $\bar{X}$ | $\sigma^2 / n$ |
 | Relative Efficiency | $\text{MSE}(\hat{\theta}_2) / \text{MSE}(\hat{\theta}_1)$ |
 | Cramér-Rao Bound | $\text{Var}(\hat{\theta}) \geq 1/I(\theta)$ |
+
+## Exercises
+
+**Exercise 1.**
+$X_i \sim \mathrm{Uniform}(0, \theta)$ i.i.d. Two estimators: $\hat\theta_1 = 2\bar X$ and $\hat\theta_2 = ((n+1)/n) X_{(n)}$. (a) Both unbiased? (b) Variances? (c) Which has smaller MSE?
+
+??? success "Solution to Exercise 1"
+    (a) $\mathbb{E}[X] = \theta/2$, so $\mathbb{E}[\hat\theta_1] = \theta$.
+
+    $\mathbb{E}[X_{(n)}] = n\theta/(n+1)$, so $\mathbb{E}[\hat\theta_2] = ((n+1)/n) \cdot n\theta/(n+1) = \theta$.
+
+    Both unbiased. ✓
+
+    (b) $\mathrm{Var}(\hat\theta_1) = 4 \mathrm{Var}(\bar X) = 4 \theta^2/(12n) = \theta^2/(3n)$.
+
+    $\mathrm{Var}(X_{(n)}) = n\theta^2/[(n+1)^2(n+2)]$. So $\mathrm{Var}(\hat\theta_2) = \theta^2/[n(n+2)]$.
+
+    (c) Both unbiased: MSE = Var. $\hat\theta_2$ has variance $\theta^2/[n(n+2)] = O(1/n^2)$, vs $\hat\theta_1$ at $\theta^2/(3n) = O(1/n)$.
+
+    **$\hat\theta_2$ has lower MSE for every $n \ge 2$, with a faster (super-)linear convergence rate**. This is a notable example: the MLE-based estimator (max-based) is $n$-consistent rather than $\sqrt n$-consistent. For uniform endpoints, sample extremes are far more informative than sample means.
+
+---
+
+**Exercise 2.**
+**MSE-optimal scaling of $S^2$.** Among estimators of $\sigma^2$ of the form $c \sum(X_i - \bar X)^2$ for $X_i \sim N(\mu, \sigma^2)$, find the $c$ that minimizes MSE.
+
+??? success "Solution to Exercise 2"
+    Let $T = \sum(X_i - \bar X)^2$. Then $T \sim \sigma^2 \chi^2_{n-1}$, so $\mathbb{E}[T] = (n-1)\sigma^2$, $\mathrm{Var}(T) = 2(n-1)\sigma^4$.
+
+    For $\hat\sigma^2_c = c T$:
+
+    $\mathbb{E}[\hat\sigma^2_c] = c(n-1)\sigma^2$, $\mathrm{Bias} = (c(n-1) - 1)\sigma^2$, $\mathrm{Var} = 2 c^2 (n-1) \sigma^4$.
+
+    $\mathrm{MSE}(c) = 2 c^2(n-1) \sigma^4 + (c(n-1) - 1)^2 \sigma^4$.
+
+    Minimize: $d \mathrm{MSE}/dc = 4c(n-1)\sigma^4 + 2(c(n-1) - 1)(n-1)\sigma^4 = 0$.
+
+    $4c + 2(c(n-1) - 1) = 0 \Rightarrow 2c + c(n-1) = 1 \Rightarrow c(n+1) = 1 \Rightarrow c^* = 1/(n+1)$.
+
+    So **$\hat\sigma^2_{\text{MSE}} = (1/(n+1))\sum(X_i - \bar X)^2$** minimizes MSE — between MLE ($c = 1/n$) and unbiased ($c = 1/(n-1)$), tilted toward smaller denominator for more shrinkage.
+
+    Rarely used in practice because the "unbiased" $s^2$ has the cleaner interpretation. But it demonstrates that the optimal-MSE estimator may differ from both MLE and unbiased estimators.
+
+---
+
+**Exercise 3.**
+**MSE for biased estimator.** $\hat\theta$ is biased with $\mathbb{E}[\hat\theta] = \theta + b/n$ and $\mathrm{Var}(\hat\theta) = v/n$. Compute MSE and the asymptotic behavior.
+
+??? success "Solution to Exercise 3"
+    $\mathrm{MSE} = \mathrm{Var} + \mathrm{Bias}^2 = v/n + b^2/n^2$.
+
+    For large $n$: $\mathrm{MSE} \approx v/n + O(1/n^2)$. The variance dominates; bias contributes only the lower-order term.
+
+    Asymptotic consistency: $\mathrm{MSE} \to 0 \Rightarrow \hat\theta \to \theta$ in $L^2$ and hence in probability. The estimator is consistent despite finite-sample bias.
+
+    **Insight:** $O(1/n)$ bias is "invisible" asymptotically — it disappears faster than the noise. This is why MLEs (typically with $O(1/n)$ bias) are asymptotically efficient.
+
+    Estimators with $O(1)$ bias (constant, like $\hat\theta = c$) are inconsistent — the bias term in MSE doesn't shrink.
+
+---
+
+**Exercise 4.**
+**Cramér-Rao + MSE.** For an unbiased estimator, MSE = Var. CRLB gives Var $\ge 1/(n I(\theta))$. State the analog for biased estimators.
+
+??? success "Solution to Exercise 4"
+    **Biased CRLB:** for any estimator $\hat\theta$ (biased or not):
+
+    $$
+    \mathrm{Var}(\hat\theta) \ge \frac{(1 + b'(\theta))^2}{n I(\theta)}
+    $$
+
+    where $b(\theta) = \mathbb{E}[\hat\theta] - \theta$ is the bias function.
+
+    For unbiased estimators, $b' = 0$, recovering the standard CRLB.
+
+    For biased estimators: if $b'(\theta) = -1$ (e.g., a constant estimator $\hat\theta = c$), the bound is 0 — trivially achieved by zero-variance constant estimators.
+
+    More generally, biased CRLB gives: MSE = Var + bias$^2 \ge (1 + b')^2/(nI) + b^2$.
+
+    Practical use: shrinkage estimators (ridge, James-Stein) deliberately introduce bias to reduce variance, lowering MSE below the unbiased CRLB. This is provably impossible for unbiased estimators but routine for biased ones.
+
+---
+
+**Exercise 5.**
+**Practical shrinkage example.** A poll of $n$ people gives $\hat p = X/n$. Consider the shrunk estimator $\hat p_{\text{shr}} = w \hat p + (1 - w) p_0$ for some target $p_0$ (e.g., 0.5). Find the optimal $w$ (assume the true $p$ equals $p_0$).
+
+??? success "Solution to Exercise 5"
+    If true $p = p_0$: bias of $\hat p_{\text{shr}} = w p_0 + (1 - w) p_0 - p_0 = 0$. Variance: $w^2 \mathrm{Var}(\hat p) = w^2 p_0(1 - p_0)/n$.
+
+    MSE $= w^2 p_0(1-p_0)/n$. Minimized at $w = 0$ (i.e., always estimate $p_0$).
+
+    **More realistic case:** true $p$ is uncertain (random with $\mathbb{E}[p] = p_0$, $\mathrm{Var}(p) = \tau^2$). Bias squared = $(1 - w)^2(p - p_0)^2$. Expected MSE over $p$:
+
+    $w^2 p_0(1-p_0)/n + (1-w)^2 \tau^2$.
+
+    Minimize: $w^* = \tau^2/(\tau^2 + p_0(1-p_0)/n)$. Closer to 1 (less shrinkage) when $\tau^2$ is large (prior uncertain); closer to 0 (more shrinkage) when $\tau^2$ is small (prior confident).
+
+    This is the **empirical Bayes** shrinkage estimator. Used in election polling aggregation, A/B testing with many small experiments, and James-Stein-style multivariate shrinkage.
+
+---
+
+**Exercise 6.**
+**MSE for $\bar X$ under different population distributions.** Compute MSE of $\bar X$ as estimator of $\mu$ for: (a) $N(\mu, \sigma^2)$; (b) $\mathrm{Exp}(1/\mu)$; (c) population with infinite second moment.
+
+??? success "Solution to Exercise 6"
+    (a) Normal: $\mathrm{MSE}(\bar X) = \mathrm{Var}(\bar X) = \sigma^2/n$ (unbiased). Achieves CRLB; UMVUE.
+
+    (b) Exponential with mean $\mu$, variance $\mu^2$: $\bar X$ unbiased; $\mathrm{Var}(\bar X) = \mu^2/n$. So $\mathrm{MSE} = \mu^2/n$. Compare to CRLB: $I(\mu) = 1/\mu^2$, CRLB $= \mu^2/n$. $\bar X$ is efficient for exponential mean.
+
+    (c) Infinite variance (e.g., Pareto with shape $\le 2$): $\mathrm{Var}(\bar X) = \infty$, $\mathrm{MSE} = \infty$.
+
+    For Cauchy (no finite mean), $\bar X$ is not even a meaningful estimator of "center" — better to use the sample median, which is consistent for the Cauchy median.
+
+    **General lesson:** $\bar X$ is the canonical estimator, optimal for normal/exponential, but breaks down for heavy-tailed populations. Always verify finiteness of moments before using mean-based estimators.

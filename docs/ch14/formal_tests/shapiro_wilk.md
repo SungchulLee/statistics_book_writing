@@ -1,9 +1,6 @@
 # Shapiro-Wilk Test
 
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Overview
 
 The Shapiro-Wilk test is a popular method for assessing the normality of a dataset. It evaluates whether the sample data comes from a normally distributed population by calculating a test statistic and corresponding $p$-value.
@@ -74,3 +71,54 @@ else:
 ```
 
 In summary, the Shapiro-Wilk test uses the ordered sample data and precomputed weights to compute the test statistic $W$ to determine whether the data is likely to have come from a normal distribution. It is generally considered one of the most powerful normality tests, particularly for small to moderate sample sizes.
+
+## Exercises
+
+**Exercise 1.**
+The Shapiro-Wilk test statistic $W$ ranges from 0 to 1. Explain what values close to 1 and values far from 1 indicate.
+
+??? success "Solution to Exercise 1"
+    The Shapiro-Wilk statistic $W$ measures how well the order statistics match the expected normal order statistics. $W$ close to 1 indicates the data are consistent with normality (the Q-Q plot is approximately linear). $W$ significantly less than 1 indicates departures from normality.
+
+    Formally, $W = (\sum a_i x_{(i)})^2 / \sum(x_i - \bar{x})^2$, where the $a_i$ are optimal coefficients for the normal distribution. The numerator is the squared regression of the order statistics on expected normal scores; the denominator is the total variance. When data are normal, these are nearly equal, giving $W \approx 1$.
+
+---
+
+**Exercise 2.**
+A Shapiro-Wilk test on $n = 25$ observations yields $W = 0.94$ with $p = 0.15$. Interpret this result.
+
+??? success "Solution to Exercise 2"
+    With $W = 0.94$ and $p = 0.15 > 0.05$, we fail to reject the null hypothesis of normality. The data are consistent with having come from a normal distribution.
+
+    $W = 0.94$ is reasonably close to 1, suggesting only minor departures (if any) from normality. With $n = 25$, the test has moderate power, so large departures would likely have been detected. However, subtle non-normality might be missed.
+
+    As always, supplement with a Q-Q plot for visual assessment.
+
+---
+
+**Exercise 3.**
+Why is the Shapiro-Wilk test considered the most powerful normality test for small to moderate sample sizes?
+
+??? success "Solution to Exercise 3"
+    The Shapiro-Wilk test achieves high power because:
+
+    1. **Uses all order statistics:** Unlike the KS test (which uses only the maximum deviation), Shapiro-Wilk uses the entire ordered sample in a linear combination, extracting maximum information.
+    2. **Optimal weights:** The coefficients $a_i$ are derived from the expected values and covariance matrix of normal order statistics, making the test statistic optimally sensitive to departures from normality.
+    3. **Correlation-based:** $W$ is essentially the squared correlation between the ordered data and the expected normal quantiles (the Q-Q correlation). This directly measures "how normal" the data look.
+
+    Simulation studies consistently show Shapiro-Wilk outperforms KS, Lilliefors, and Anderson-Darling for $n < 50$, and remains competitive for larger $n$.
+
+---
+
+**Exercise 4.**
+Can the Shapiro-Wilk test distinguish between different types of non-normality (skewness vs. heavy tails)? How can you determine the nature of the departure?
+
+??? success "Solution to Exercise 4"
+    The Shapiro-Wilk test is **omnibus**: it detects any departure from normality but does not indicate the type. A small $p$-value tells you the data are non-normal but not whether the issue is skewness, heavy tails, bimodality, or something else.
+
+    To determine the nature of the departure:
+
+    1. **Q-Q plot:** S-shaped curves indicate heavy/light tails; asymmetric curvature indicates skewness; steps or jumps indicate discreteness or rounding.
+    2. **Skewness and kurtosis:** Compute sample skewness (asymmetry) and excess kurtosis (tail heaviness) to identify the direction.
+    3. **Separate tests:** Run `skewtest` and `kurtosistest` individually to isolate the source.
+    4. **Histogram:** Visual inspection can reveal multimodality, which moment-based diagnostics miss.

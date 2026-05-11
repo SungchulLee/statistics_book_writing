@@ -1,9 +1,5 @@
 # Standard Error
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Overview
 
 > **References:** [YouTube — Standard Error](https://www.youtube.com/watch?v=A82brFpdr9g) | [Blog — SD vs SE](https://statisticsbyjim.com/basics/difference-standard-deviation-vs-standard-error/)
@@ -274,3 +270,109 @@ def main():
 if __name__ == "__main__":
     main()
 ```
+
+## Exercises
+
+**Exercise 1.**
+$\sigma = 50$. (a) Compute $\mathrm{SE}$ for $n = 25, 100$. (b) For $\mathrm{SE} = 5, n = 16$, infer $\sigma$ and compute $\mathrm{SE}$ at $n = 64$.
+
+??? success "Solution to Exercise 1"
+    (a) $\mathrm{SE}_{25} = 50/\sqrt{25} = 10$. $\mathrm{SE}_{100} = 50/\sqrt{100} = 5$. SE halved when $n$ quadruples.
+
+    (b) From $\sigma/\sqrt{16} = 5$: $\sigma = 20$. At $n = 64$: $\mathrm{SE} = 20/\sqrt{64} = 2.5$. Quadrupling $n$ halves SE.
+
+---
+
+**Exercise 2.**
+**SE vs. SD.** A researcher reports "sample mean $= 50$, SD $= 8$" for $n = 100$. (a) What is the SE of the sample mean? (b) Explain to a non-technical reader the difference between the two.
+
+??? success "Solution to Exercise 2"
+    (a) Estimated SE (using $s$ instead of $\sigma$): $\mathrm{SE} = 8/\sqrt{100} = 0.8$.
+
+    (b) **SD = 8:** describes how much individual observations vary in the data set. A typical individual is about 8 units from the mean.
+
+    **SE = 0.8:** describes how much the sample mean varies across different samples. The true population mean is likely within about 1.6 units (≈ 2 SEs) of 50.
+
+    The SD doesn't change as you collect more data; the SE shrinks at rate $1/\sqrt n$. Reporting an SD when an SE is meant — or vice versa — is a common error in scientific writing.
+
+---
+
+**Exercise 3.**
+**Bootstrap SE.** When the population is not normal and $\sigma$ is unknown, the **bootstrap** provides an SE estimate. Describe the procedure for computing SE($\bar X$) via bootstrap.
+
+??? success "Solution to Exercise 3"
+    Given an i.i.d. sample $X_1, \ldots, X_n$:
+
+    1. Draw a bootstrap sample $X_1^*, \ldots, X_n^*$ by sampling with replacement from the original sample.
+    2. Compute $\bar X^*$ from the bootstrap sample.
+    3. Repeat steps 1-2 $B$ times (typically $B = 1000$ to 10000), yielding $\bar X^*_1, \ldots, \bar X^*_B$.
+    4. Estimate SE as the sample SD of the bootstrap replicates: $\hat{\mathrm{SE}}_{\text{boot}} = \sqrt{(1/(B-1))\sum(\bar X^*_b - \bar X^*_\cdot)^2}$.
+
+    **Why it works:** the bootstrap distribution approximates the sampling distribution under repeated sampling. Asymptotically, $\hat{\mathrm{SE}}_{\text{boot}} \to \sigma/\sqrt n$, but the bootstrap captures distributional shape (skew, heavy tails) better than the normal approximation.
+
+    Especially valuable when no closed-form SE exists (medians, ratios, regression coefficients in complex models).
+
+---
+
+**Exercise 4.**
+**SE of a function.** Use the **delta method** to compute $\mathrm{SE}(g(\hat\theta))$ when $\hat\theta$ has $\mathrm{SE}(\hat\theta)$ and $g$ is differentiable.
+
+??? success "Solution to Exercise 4"
+    **Delta method:** if $\sqrt n(\hat\theta - \theta) \xrightarrow{d} N(0, \sigma^2)$, then for differentiable $g$ with $g'(\theta) \ne 0$:
+
+    $$
+    \sqrt n(g(\hat\theta) - g(\theta)) \xrightarrow{d} N(0, [g'(\theta)]^2 \sigma^2)
+    $$
+
+    In SE form: $\mathrm{SE}(g(\hat\theta)) \approx |g'(\hat\theta)| \cdot \mathrm{SE}(\hat\theta)$.
+
+    **Example:** $g(\hat p) = \log(\hat p/(1 - \hat p))$ (logit). $g'(\hat p) = 1/(\hat p(1 - \hat p))$. So $\mathrm{SE}(\hat\eta) = \mathrm{SE}(\hat p)/(\hat p(1 - \hat p))$.
+
+    The delta method is the workhorse for SE computation when the estimator is a transformation of a simpler estimator with known SE.
+
+---
+
+**Exercise 5.**
+**Pooled SE for two samples.** Independent samples from two populations with means $\mu_1, \mu_2$ and (unknown) variances. Derive SE of $\bar X_1 - \bar X_2$ under (a) equal variance assumption (pooled), (b) unequal variances (Welch).
+
+??? success "Solution to Exercise 5"
+    By independence: $\mathrm{Var}(\bar X_1 - \bar X_2) = \sigma_1^2/n_1 + \sigma_2^2/n_2$.
+
+    **(a) Pooled (assume $\sigma_1 = \sigma_2 = \sigma$):**
+
+    Pool: $s_p^2 = ((n_1 - 1)s_1^2 + (n_2 - 1)s_2^2)/(n_1 + n_2 - 2)$.
+
+    $\mathrm{SE}_{\text{pool}} = s_p \sqrt{1/n_1 + 1/n_2}$.
+
+    Used in the standard two-sample $t$-test when variances are believed equal. Slightly more efficient when this assumption holds.
+
+    **(b) Welch (unequal variances):**
+
+    $\mathrm{SE}_{\text{Welch}} = \sqrt{s_1^2/n_1 + s_2^2/n_2}$.
+
+    No pooling, each sample contributes its own variance. Welch's degrees of freedom (non-integer) used for the $t$ critical value.
+
+    Modern recommendation: prefer Welch by default — it doesn't require the strong equal-variance assumption and works nearly as well even when variances are equal.
+
+---
+
+**Exercise 6.**
+**SE under sampling without replacement.** A population of size $N$, sample of size $n$ drawn without replacement. Compute SE($\bar X$) and identify the **finite-population correction**.
+
+??? success "Solution to Exercise 6"
+    For sampling without replacement from a finite population:
+
+    $$
+    \mathrm{Var}(\bar X) = \frac{\sigma^2}{n}\!\left(1 - \frac{n}{N}\right)
+    $$
+
+    So $\mathrm{SE}(\bar X) = (\sigma/\sqrt n) \sqrt{1 - n/N}$. The factor $\sqrt{1 - n/N}$ is the **finite-population correction (FPC)**.
+
+    **Limits:**
+
+    - $n/N \to 0$ (sampling fraction tiny): FPC $\to 1$, recovers standard $\sigma/\sqrt n$. Use for national surveys ($n = 1000, N \approx 10^8$).
+    - $n/N \to 1$ (census): FPC $\to 0$, no sampling variability. Census produces deterministic estimates.
+
+    **When FPC matters:** auditing (sampling 100 of 500 invoices, $n/N = 0.2$, FPC $\approx 0.89$). The FPC narrows confidence intervals by about 11% — non-trivial.
+
+    Most introductory statistics formulas ignore FPC because typical scientific samples have small $n/N$.

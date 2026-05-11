@@ -1,9 +1,6 @@
 # Anderson-Darling Test
 
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Overview
 
 The **Anderson-Darling test** is an enhancement of the Kolmogorov-Smirnov test, designed to assess whether a sample comes from a specific distribution, such as the normal distribution. It is particularly sensitive to deviations in the tails, making it especially useful for detecting departures from normality in smaller samples.
@@ -143,3 +140,55 @@ else:
 ### Recommendation
 
 If your focus is **normality testing** with a **clear $p$-value interpretation**, use `normal_ad`. For flexibility to test against multiple distributions, use `stats.anderson` and interpret results based on the provided critical values.
+
+## Exercises
+
+**Exercise 1.**
+The Anderson-Darling test gives more weight to the tails of the distribution than the Kolmogorov-Smirnov test. Explain how the weighting function achieves this.
+
+??? success "Solution to Exercise 1"
+    The Anderson-Darling statistic is:
+
+    $$
+    A^2 = -n - \frac{1}{n}\sum_{i=1}^n (2i-1)[\ln F(x_{(i)}) + \ln(1 - F(x_{(n+1-i)}))]
+    $$
+
+    This can be expressed as a weighted integral of the squared difference between the empirical and theoretical CDFs: $A^2 = n\int_{-\infty}^{\infty} \frac{[F_n(x) - F(x)]^2}{F(x)(1-F(x))}dF(x)$.
+
+    The weighting function $w(x) = 1/[F(x)(1-F(x))]$ is large in the tails (where $F(x)$ is near 0 or 1) and small in the center. This gives the Anderson-Darling test higher sensitivity to tail departures than the KS test (which weights all parts of the distribution equally), making it better at detecting heavy-tailed or light-tailed alternatives.
+
+---
+
+**Exercise 2.**
+An Anderson-Darling test on 50 observations yields $A^2 = 0.85$. Using critical values $0.631$ (10%), $0.752$ (5%), $1.035$ (1%), determine the conclusion at $\alpha = 0.05$.
+
+??? success "Solution to Exercise 2"
+    Since $A^2 = 0.85 > 0.752$ (the 5% critical value), we reject $H_0$ (normality) at the 5% significance level. However, $A^2 = 0.85 < 1.035$ (the 1% critical value), so we would not reject at the 1% level.
+
+    Conclusion: there is evidence of non-normality at the 5% level ($0.01 < p < 0.05$). Visual inspection (Q-Q plot) should be used to identify the nature of the departure.
+
+---
+
+**Exercise 3.**
+Compare the power of the Anderson-Darling, Shapiro-Wilk, and Kolmogorov-Smirnov tests for detecting departures from normality.
+
+??? success "Solution to Exercise 3"
+    Simulation studies generally show:
+
+    1. **Shapiro-Wilk** has the highest power overall, especially for small to moderate $n$ and for a wide range of alternatives (skewed, heavy-tailed, light-tailed).
+    2. **Anderson-Darling** has nearly comparable power to Shapiro-Wilk and is superior to KS. Its tail-weighting makes it particularly good at detecting heavy-tailed alternatives.
+    3. **Kolmogorov-Smirnov (Lilliefors)** has the lowest power because it uses the maximum deviation without weighting, giving equal attention to the center (where departures are small) and the tails (where they matter most).
+
+    Recommendation: use Shapiro-Wilk as the primary test, Anderson-Darling as an alternative (especially for larger $n$), and KS only when testing against a fully specified distribution (not for composite normality testing).
+
+---
+
+**Exercise 4.**
+The Anderson-Darling test can be adapted for distributions other than the normal (e.g., exponential, Weibull). Explain the general principle.
+
+??? success "Solution to Exercise 4"
+    The Anderson-Darling test is a general goodness-of-fit test: it compares the empirical CDF to any specified theoretical CDF $F_0(x)$. For normality testing, $F_0 = \mathcal{N}((x-\hat{\mu})/\hat{\sigma})$ with estimated parameters.
+
+    To test whether data follow an exponential distribution: use $F_0(x) = 1 - e^{-x/\hat{\lambda}}$. For Weibull: use the Weibull CDF with estimated shape and scale parameters.
+
+    The test statistic formula is the same in all cases; only $F_0$ changes. Critical values differ by distribution family because the null distribution of $A^2$ depends on the number of estimated parameters and the shape of the reference distribution. Specialized critical value tables or simulation-based p-values are used for each family.

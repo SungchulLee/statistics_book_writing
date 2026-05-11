@@ -155,3 +155,73 @@ R^2_{\text{adj}} = 1 - (1 - 0.968)\frac{5 - 1}{5 - 1 - 1} = 1 - 0.032 \times \fr
 $$
 
 The model explains about 96.8% of the total variability in $Y$, with the adjusted value of 95.7% reflecting the penalty for one predictor.
+
+## Exercises
+
+**Exercise 1.**
+A model has SSE $= 200$ and SST $= 1000$. Compute $R^2$. If we add a useless predictor (random noise), what happens to $R^2$ and why is adjusted $R^2$ needed?
+
+??? success "Solution to Exercise 1"
+    $$
+    R^2 = 1 - \frac{\text{SSE}}{\text{SST}} = 1 - \frac{200}{1000} = 0.80
+    $$
+
+    Adding any predictor (even random noise) can only decrease SSE (or leave it unchanged) because OLS minimizes SSE over a larger parameter space. So $R^2$ increases (or stays the same) regardless of whether the predictor is useful. This means $R^2$ always favors more complex models.
+
+    **Adjusted $R^2$** corrects for this by penalizing additional parameters:
+
+    $$
+    R^2_{\text{adj}} = 1 - \frac{\text{SSE}/(n-p)}{\text{SST}/(n-1)} = 1 - \frac{n-1}{n-p}(1 - R^2)
+    $$
+
+    Adding a useless predictor increases $p$ without meaningfully reducing SSE, so the penalty $\frac{n-1}{n-p}$ grows and $R^2_{\text{adj}}$ decreases. This makes adjusted $R^2$ a better criterion for model comparison.
+
+---
+
+**Exercise 2.**
+Can $R^2$ be negative? Under what circumstances?
+
+??? success "Solution to Exercise 2"
+    For the training data with an intercept, $R^2 \geq 0$ by construction (OLS with an intercept guarantees SSE $\leq$ SST). However, $R^2$ can be negative in two scenarios:
+
+    1. **Test data:** When applying a model fitted on training data to test data, the predictions may be worse than simply predicting the test-set mean. This gives SSE $>$ SST (computed with the test-set mean), so $R^2 < 0$.
+
+    2. **No intercept:** If the model is fitted without an intercept, the prediction does not pass through $\bar{y}$, and SSE can exceed SST.
+
+    A negative $R^2$ on test data indicates the model's predictions are worse than a constant baseline (just predicting the mean). This is a sign of severe overfitting or model misspecification.
+
+---
+
+**Exercise 3.**
+Derive the relationship between $R^2$ and the Pearson correlation $r$ between $y$ and $\hat{y}$ in simple linear regression.
+
+??? success "Solution to Exercise 3"
+    In simple linear regression (one predictor), the Pearson correlation between $y$ and $\hat{y}$ equals $|r_{xy}|$ (the absolute correlation between $x$ and $y$). The $R^2$ is:
+
+    $$
+    R^2 = r_{xy}^2
+    $$
+
+    More generally (multiple regression), $R^2 = r_{y\hat{y}}^2$ -- the squared correlation between observed and fitted values. This holds because:
+
+    $$
+    R^2 = 1 - \frac{\text{SSE}}{\text{SST}} = \frac{\text{SSR}}{\text{SST}} = \frac{\lVert\hat{\mathbf{y}} - \bar{y}\mathbf{1}\rVert^2}{\lVert\mathbf{y} - \bar{y}\mathbf{1}\rVert^2} = r_{y\hat{y}}^2
+    $$
+
+    This relationship provides the interpretation: $R^2$ is the proportion of variance in $y$ that is linearly explained by the model. $\square$
+
+---
+
+**Exercise 4.**
+A model has $R^2 = 0.95$ on training data and $R^2 = 0.60$ on test data. Diagnose the likely problem and suggest remedies.
+
+??? success "Solution to Exercise 4"
+    The large gap between training $R^2$ (0.95) and test $R^2$ (0.60) is a classic sign of **overfitting**. The model fits the training data very well (including its noise) but fails to generalize.
+
+    Remedies:
+
+    1. **Regularization:** Apply ridge or LASSO regression to shrink coefficients and reduce variance.
+    2. **Feature selection:** Remove predictors that contribute noise rather than signal (use cross-validation or information criteria).
+    3. **More data:** Increasing $n$ reduces overfitting by providing more information relative to model complexity.
+    4. **Simpler model:** Reduce the number of predictors or the polynomial degree.
+    5. **Cross-validation:** Use CV during model development instead of relying on training $R^2$, which always overstates performance.

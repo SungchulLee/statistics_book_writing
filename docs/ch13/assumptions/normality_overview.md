@@ -1,9 +1,6 @@
 # Normality Assumption
 
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Definition
 
 The normality assumption asserts that the residuals of the regression model are normally distributed, with a mean of zero:
@@ -49,3 +46,28 @@ Normality of residuals is crucial because many inferential statistics in linear 
 - **Larger samples:** With sufficiently large samples, the Central Limit Theorem ensures that test statistics are approximately normally distributed even if the errors are not.
 
 For detailed diagnostic methods, see [Checking Normality](checking_normality.md).
+## Exercises
+
+**Exercise 1.**
+A researcher fits a regression model with $n = 15$ observations. The Q-Q plot of residuals shows substantial right skew. Explain why normality matters more in this setting than it would with $n = 500$.
+
+??? success "Solution to Exercise 1"
+    With only $n = 15$, the **Central Limit Theorem** does not provide a good approximation. The exact distributions of the $t$-statistics for individual coefficients and the $F$-statistic for overall significance depend on the normality of the errors. Right-skewed residuals mean the actual sampling distribution differs from the assumed $t$-distribution, producing inaccurate p-values and confidence intervals.
+
+    With $n = 500$, the CLT ensures that the sampling distributions are approximately normal regardless of the error distribution, so moderate departures from normality have negligible impact on inference.
+
+---
+
+**Exercise 2.**
+Explain why normality is not required for unbiased estimation of $\hat{\beta}$ but is required for exact validity of $t$-tests on the coefficients.
+
+??? success "Solution to Exercise 2"
+    The OLS estimator $\hat{\beta} = (X^T X)^{-1} X^T Y$ is a linear function of $Y$. Its expectation is:
+
+    $$
+    E[\hat{\beta}] = (X^T X)^{-1} X^T E[Y] = (X^T X)^{-1} X^T X \beta = \beta
+    $$
+
+    This derivation uses only $E[\varepsilon] = 0$, not normality. Hence $\hat{\beta}$ is unbiased regardless of the error distribution.
+
+    The $t$-test statistic $t = \hat{\beta}_j / \text{SE}(\hat{\beta}_j)$ follows an exact $t$-distribution only when $\varepsilon \sim N(0, \sigma^2 I)$. Without normality, the ratio does not have an exact $t$-distribution for finite samples, so p-values from $t$-tables are only approximate.

@@ -1,9 +1,5 @@
 # CI for μ_D (Mean of Differences)
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Paired-Sample Confidence Interval
 
 When two related measurements are taken on the same subjects — such as pre-test and post-test scores, or before-and-after measurements — we use paired data to analyze the difference between the two measurements. The paired difference confidence interval estimates the mean difference $\mu_d$ between these two related measurements.
@@ -291,36 +287,97 @@ if __name__ == "__main__":
 
 ---
 
-## Exercise
+## Exercises
 
-### Exercise: 99% CI for Mean Difference (Paired Data)
+**Exercise 1.**
+Paired data: $n = 10$ pairs, $\bar d = 4.5$, $s_d = 2.0$. 99% CI for $\mu_D$.
 
-A sample of 10 pairs yields $\bar{d} = 4.5$ and $s_d = 2.0$. Construct a 99% CI for the mean difference. Assume the difference distribution is normal.
+??? success "Solution to Exercise 1"
+    $t_{0.005, 9} = 3.250$. $\mathrm{SE} = 2.0/\sqrt{10} \approx 0.633$. ME = $3.250 \cdot 0.633 \approx 2.06$.
 
-**Solution.** With $df = 9$ and 99% confidence, $t_{0.005, 9} \approx 3.2498$.
+    CI: $(4.5 - 2.06, 4.5 + 2.06) = (2.44, 6.56)$.
 
-$$
-\text{SE} = \frac{2.0}{\sqrt{10}} \approx 0.6325, \qquad \text{ME} = 3.2498 \times 0.6325 \approx 2.056
-$$
+---
 
-$$
-\boxed{(2.444,\ 6.556)}
-$$
+**Exercise 2.**
+Pre/post training differences: $5, 3, 8, 2, 7, 1, 6, 4, 9, 5$. (a) 95% CI for $\mu_D$. (b) Is training effective at $\alpha = 0.05$?
 
-```python
-import numpy as np
-from scipy import stats
+??? success "Solution to Exercise 2"
+    (a) $\bar D = 50/10 = 5.0$. $s_D = \sqrt{\sum(D_i - 5)^2/9} = \sqrt{60/9} \approx 2.58$.
 
-confidence_level = 0.99
-alpha = 1 - confidence_level
-n = 10
-df = n - 1
+    $t_{0.025, 9} = 2.262$. ME = $2.262 \cdot 2.58/\sqrt{10} \approx 1.85$.
 
-t_star = stats.t(df).ppf(1 - alpha / 2)
-d_bar = 4.5
-s = 2
+    CI: $(3.15, 6.85)$.
 
-left = d_bar - t_star * s / np.sqrt(n)
-right = d_bar + t_star * s / np.sqrt(n)
-print(f"({left:.3f}, {right:.3f})")
-```
+    (b) Entire CI > 0 — training effective at 5% level. Mean improvement is at least 3.15 points; estimated 5 points.
+
+---
+
+**Exercise 3.**
+**Why paired vs unpaired matters.** Suppose pre and post scores have $\mathrm{SD} = 10$ each, $\rho(\mathrm{pre}, \mathrm{post}) = 0.8$. Compare SE of mean difference for paired vs treating as independent.
+
+??? success "Solution to Exercise 3"
+    Independent (unpaired) approximation: $\mathrm{Var}(\bar X_{\text{post}} - \bar X_{\text{pre}}) = (\sigma^2 + \sigma^2)/n = 200/n$. SE = $\sqrt{200/n}$.
+
+    Paired: $\mathrm{Var}(\bar D) = \mathrm{Var}(\mathrm{post} - \mathrm{pre})/n = (\sigma^2 + \sigma^2 - 2\rho\sigma^2)/n = 2\sigma^2(1-\rho)/n = 40/n$.
+
+    For $n = 10$: paired SE $= \sqrt{4} = 2$. Independent SE $= \sqrt{20} \approx 4.47$.
+
+    Paired is more than 2× tighter. With paired analysis, the same data gives more confident conclusions because the within-subject correlation is exploited.
+
+---
+
+**Exercise 4.**
+**When pairing fails.** What if some subjects "improve" because they were already improving, not because of the intervention? Discuss confounders.
+
+??? success "Solution to Exercise 4"
+    Pre/post designs without a control group are vulnerable to:
+
+    - **Regression to the mean:** subjects selected for low pre-scores tend to score higher next time regardless of intervention.
+    - **Maturation:** natural improvement over time (children growing, patients recovering).
+    - **Practice effects:** taking the test once improves performance the second time.
+    - **History:** other events between pre and post that affect outcome.
+
+    **Solution:** add a control group that takes both tests but doesn't receive the intervention. Then compare the **difference of differences**: $\bar D_{\text{treatment}} - \bar D_{\text{control}}$. This isolates the intervention effect from other temporal factors.
+
+    Pre/post alone is suggestive evidence; controlled pre/post is rigorous evidence.
+
+---
+
+**Exercise 5.**
+**Sign test for paired data.** Non-parametric alternative to $t$-test on differences. State and apply to Exercise 2.
+
+??? success "Solution to Exercise 5"
+    **Sign test:** count positive differences ($+$), negative ($-$). Under $H_0: \mu_D = 0$, expect 50/50 split.
+
+    Exercise 2: all 10 differences are positive. Test statistic = number of positives = 10.
+
+    Under $H_0 \sim \mathrm{Binomial}(10, 0.5)$: $P(X = 10) = (1/2)^{10} \approx 0.001$. Two-sided $p$-value $\approx 0.002$ — strongly reject.
+
+    **Advantages over $t$-test:** doesn't assume normality of differences. Works for ordinal data.
+
+    **Disadvantages:** less powerful when normality holds (ignores magnitude of differences, only sign). Wilcoxon signed-rank test compromises: uses ranks of |D_i|, more powerful than sign but doesn't assume normality.
+
+---
+
+**Exercise 6.**
+**Crossover design.** Subjects receive both treatments in random order. Briefly discuss why this design and the appropriate analysis.
+
+??? success "Solution to Exercise 6"
+    **Crossover design:** each subject receives treatment A and B in random order, with a washout period between. Each subject contributes both an A-response and B-response.
+
+    **Advantages:**
+
+    - Each subject serves as their own control (paired analysis).
+    - Maximum precision for the same number of subjects.
+    - Eliminates between-subject variability.
+
+    **Analysis:** paired $t$-test on $D_i = X_{A,i} - X_{B,i}$ (or Wilcoxon signed-rank for non-normal).
+
+    **Concerns:**
+
+    - **Carryover effect:** B may be influenced by previous exposure to A. Washout period must be long enough.
+    - **Period effect:** seasonal or temporal patterns (different time for A and B).
+    - **Order effect:** asymmetric carryover between treatments.
+
+    Standard analysis includes period and order as covariates if needed. Used heavily in pharmacology (bioequivalence trials) and sensory studies.

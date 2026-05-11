@@ -1,9 +1,6 @@
 # 18.1 Correlation
 
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Understanding the Relationship Between Variables
 
 Correlation is a fundamental concept in statistics that describes the strength and direction of the relationship between two variables. It is a crucial tool for data analysis and helps in understanding how changes in one variable are associated with changes in another.
@@ -387,3 +384,70 @@ This principle is so important that it warrants its own section. See [Section 17
 ## Summary
 
 Correlation is a foundational concept in statistics that provides insight into linear relationships between variables. Understanding how to measure and interpret correlation helps identify patterns and inform decisions across disciplines. However, it is crucial to recognize its limitations—particularly that correlation does not imply causation—and to complement correlation analysis with other statistical methods to gain a comprehensive understanding of the data.
+## Exercises
+
+**Exercise 1.**
+A dataset of 50 cities yields a Pearson correlation of $r = 0.72$ between average temperature and per-capita ice cream consumption. Compute the coefficient of determination and interpret it in context.
+
+??? success "Solution to Exercise 1"
+    The coefficient of determination is:
+
+    $$
+    R^2 = r^2 = 0.72^2 = 0.5184
+    $$
+
+    This means that approximately **51.8%** of the variation in per-capita ice cream consumption across cities can be explained by the linear relationship with average temperature. The remaining 48.2% is attributable to other factors (e.g., income levels, cultural preferences, availability of ice cream shops).
+
+---
+
+**Exercise 2.**
+Two variables have a Pearson correlation of $r = 0.05$ but a Spearman rank correlation of $r_s = 0.91$. Explain how this is possible and which measure is more appropriate for these data.
+
+??? success "Solution to Exercise 2"
+    This occurs when the relationship between the two variables is **strongly monotonic but highly nonlinear**. For example, if $Y = e^X$ for positive $X$, the relationship is perfectly monotonic (as $X$ increases, $Y$ always increases) but the relationship is exponential, not linear.
+
+    Pearson's $r$ measures only **linear** association, so it is close to zero for a curved relationship. Spearman's $r_s$ measures **monotonic** association based on ranks, so it captures the strong increasing trend regardless of the functional form.
+
+    Spearman's correlation is more appropriate here because it correctly identifies the strong monotonic relationship that Pearson's correlation misses.
+
+---
+
+**Exercise 3.**
+Prove that for any dataset, $-1 \leq r \leq 1$, where $r$ is the Pearson correlation coefficient. (Hint: use the Cauchy-Schwarz inequality.)
+
+??? success "Solution to Exercise 3"
+    The Pearson correlation is defined as:
+
+    $$
+    r = \frac{\sum_{i=1}^n (x_i - \bar{x})(y_i - \bar{y})}{\sqrt{\sum_{i=1}^n (x_i - \bar{x})^2} \sqrt{\sum_{i=1}^n (y_i - \bar{y})^2}}
+    $$
+
+    Let $a_i = x_i - \bar{x}$ and $b_i = y_i - \bar{y}$. Then $r = \frac{\sum a_i b_i}{\|\mathbf{a}\| \|\mathbf{b}\|}$.
+
+    By the **Cauchy-Schwarz inequality**:
+
+    $$
+    \left|\sum_{i=1}^n a_i b_i\right| \leq \sqrt{\sum a_i^2} \sqrt{\sum b_i^2}
+    $$
+
+    Dividing both sides by $\|\mathbf{a}\| \|\mathbf{b}\|$:
+
+    $$
+    |r| \leq 1
+    $$
+
+    Therefore $-1 \leq r \leq 1$. Equality holds when $\mathbf{a}$ and $\mathbf{b}$ are proportional, i.e., $y_i = a + bx_i$ for constants $a$ and $b$. $\square$
+
+---
+
+**Exercise 4.**
+A researcher computes the Pearson correlation between height (in cm) and weight (in kg) for a sample of adults and obtains $r = 0.68$. If height is converted to inches and weight to pounds, will the correlation change? Justify your answer mathematically.
+
+??? success "Solution to Exercise 4"
+    No, the Pearson correlation will not change. Linear transformations of the form $X' = aX + b$ and $Y' = cY + d$ (with $a, c > 0$) do not affect the correlation because:
+
+    $$
+    r_{X',Y'} = \frac{\text{Cov}(aX+b, cY+d)}{\sqrt{\text{Var}(aX+b)} \sqrt{\text{Var}(cY+d)}} = \frac{ac \cdot \text{Cov}(X,Y)}{|a| \cdot \sigma_X \cdot |c| \cdot \sigma_Y} = \frac{\text{Cov}(X,Y)}{\sigma_X \sigma_Y} = r_{X,Y}
+    $$
+
+    Converting cm to inches ($X' = X/2.54$) and kg to pounds ($Y' = 2.205Y$) are positive linear transformations, so the correlation remains $r = 0.68$.

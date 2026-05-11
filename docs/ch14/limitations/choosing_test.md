@@ -22,10 +22,10 @@ where the weights $a_i$ are derived from the covariance matrix of the normal ord
 
 ### Anderson-Darling Test
 
-The Anderson-Darling test is based on the empirical distribution function (EDF). It computes a weighted measure of the distance between the EDF $F_n(x)$ and the hypothesized normal CDF $\Phi(x)$:
+The Anderson-Darling test is based on the empirical distribution function (EDF). It computes a weighted measure of the distance between the EDF $F_n(x)$ and the hypothesized normal CDF $\mathcal{N}(x)$:
 
 $$
-A^2 = -n - \sum_{i=1}^{n} \frac{2i - 1}{n} \left[\ln \Phi(Z_{(i)}) + \ln\left(1 - \Phi(Z_{(n+1-i)})\right)\right]
+A^2 = -n - \sum_{i=1}^{n} \frac{2i - 1}{n} \left[\ln \mathcal{N}(Z_{(i)}) + \ln\left(1 - \mathcal{N}(Z_{(n+1-i)})\right)\right]
 $$
 
 where $Z_{(i)} = (X_{(i)} - \bar{X}) / S$ are the standardized order statistics. The Anderson-Darling statistic places more weight on the tails of the distribution compared to the Kolmogorov-Smirnov test.
@@ -39,7 +39,7 @@ where $Z_{(i)} = (X_{(i)} - \bar{X}) / S$ are the standardized order statistics.
 The Kolmogorov-Smirnov (KS) test measures the maximum absolute distance between the EDF and the hypothesized CDF:
 
 $$
-D = \sup_x \left| F_n(x) - \Phi(x) \right|
+D = \sup_x \left| F_n(x) - \mathcal{N}(x) \right|
 $$
 
 When testing against a normal distribution with estimated parameters, the Lilliefors correction must be applied because the standard KS critical values assume fully specified parameters.
@@ -135,3 +135,51 @@ The output illustrates that different tests may give different $p$-values for th
 ## Summary
 
 No single normality test is universally optimal. The Shapiro-Wilk test is the best default for small to moderate samples due to its broad power. The Anderson-Darling test excels at detecting tail departures and has no sample size restriction. The Jarque-Bera test is efficient when skewness or kurtosis is the suspected issue, but it requires at least moderate sample sizes. The Kolmogorov-Smirnov test, while widely known, is generally the least powerful for normality testing. In all cases, formal tests should be accompanied by graphical diagnostics.
+
+
+## Exercises
+
+**Exercise 1.**
+A researcher must test for normality on a sample of $n = 25$. Recommend a test and explain why.
+
+??? success "Solution to Exercise 1"
+    For $n = 25$, the **Shapiro-Wilk test** is recommended. It has the highest power among normality tests for small to moderate sample sizes and detects a wide range of departures (skewness, heavy tails, multimodality).
+
+    The Anderson-Darling test is a reasonable alternative, particularly if tail departures are of primary concern. Moment-based tests (D'Agostino, Jarque-Bera) have insufficient power at $n = 25$ and should be avoided. The KS/Lilliefors test has lower power than both Shapiro-Wilk and Anderson-Darling.
+
+    Always supplement the formal test with a Q-Q plot for visual assessment.
+
+---
+
+**Exercise 2.**
+For a large dataset ($n = 10{,}000$), explain why formal normality tests may be unhelpful and what approach is better.
+
+??? success "Solution to Exercise 2"
+    With $n = 10{,}000$, every normality test has extremely high power and will reject normality for trivially small departures that have no practical impact on inference. The rejection tells you the data are not *exactly* normal (which is always true for real data) but not whether the departure matters.
+
+    Better approach: (1) use Q-Q plots to visually assess the degree of non-normality; (2) compute skewness and kurtosis to quantify departures; (3) assess whether the departure is practically relevant for the intended analysis (e.g., does it affect confidence interval coverage or test size?); (4) compare results from normal-theory methods with robust alternatives as a sensitivity check.
+
+---
+
+**Exercise 3.**
+Create a decision flowchart for choosing a normality test based on sample size and the type of departure suspected.
+
+??? success "Solution to Exercise 3"
+
+    1. **Always start with a Q-Q plot** (any $n$).
+    2. If $n < 50$: use **Shapiro-Wilk** (best overall power).
+    3. If $50 \leq n \leq 5000$: use **Shapiro-Wilk** or **Anderson-Darling** (AD is better for tail-specific departures).
+    4. If $n > 5000$: formal tests are overpowered; rely on **Q-Q plots**, **skewness/kurtosis** values, and practical significance assessment.
+    5. If you suspect **skewness specifically**: supplement with `skewtest`.
+    6. If you suspect **heavy tails specifically**: supplement with `kurtosistest` or Anderson-Darling (which upweights tails).
+    7. If testing for a **specific alternative** (e.g., $t$-distribution): use a Q-Q plot against that distribution.
+
+---
+
+**Exercise 4.**
+Two tests disagree: Shapiro-Wilk rejects normality ($p = 0.03$) but Anderson-Darling does not ($p = 0.08$). How should you proceed?
+
+??? success "Solution to Exercise 4"
+    Disagreement is not uncommon because the tests have different sensitivities. Shapiro-Wilk is generally more powerful overall, while Anderson-Darling is more sensitive to tail departures. The disagreement suggests the non-normality is mild and possibly concentrated in the center rather than the tails.
+
+    Proceed by: (1) examining the Q-Q plot to identify the nature and degree of the departure; (2) if the departure is mild (Q-Q plot nearly linear), proceed with normal-theory methods; (3) run a sensitivity analysis with a nonparametric alternative; (4) report both test results and the visual assessment for transparency.

@@ -1,9 +1,6 @@
 # Checking Linearity
 
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Why Linearity Is Relevant in ANOVA
 
 Although linearity is not always explicitly stated as a requirement for ANOVA, it becomes relevant when ANOVA is viewed through the lens of the general linear model. In the one-way ANOVA framework, the model is:
@@ -61,3 +58,34 @@ plt.show()
 - **Nonlinear transformations:** Transform the dependent variable or covariates (e.g., log, square root).
 - **Generalized additive models (GAMs):** Use smooth functions of covariates instead of assuming a linear relationship.
 - **Nonparametric methods:** If the nonlinearity is severe, consider non-parametric alternatives that make no assumptions about functional form.
+## Exercises
+
+**Exercise 1.**
+In a one-way ANOVA with purely categorical factors and no continuous covariates, explain why the linearity assumption is automatically satisfied.
+
+??? success "Solution to Exercise 1"
+    The one-way ANOVA model $Y_{ij} = \mu + \alpha_i + \varepsilon_{ij}$ uses indicator variables for group membership. These indicator variables enter the model linearly by definition. Since there is no continuous predictor, there is no functional relationship that could be nonlinear. Linearity becomes a concern only when continuous covariates are included, as in ANCOVA or regression-based formulations.
+
+---
+
+**Exercise 2.**
+An ANCOVA model includes a continuous covariate (pre-test score) along with group indicators. The residual-vs-fitted plot shows a clear U-shaped pattern. Explain what this indicates and propose two remedies.
+
+??? success "Solution to Exercise 2"
+    A U-shaped pattern in the residual-vs-fitted plot indicates that the relationship between the covariate and the response is **nonlinear** -- the linear model systematically underpredicts at the extremes and overpredicts in the middle.
+
+    Two remedies:
+
+    1. **Add a polynomial term.** Include $X^2$ (and possibly $X^3$) for the covariate in the model to capture the curvature within the linear regression framework.
+
+    2. **Apply a nonlinear transformation.** Transform the covariate (e.g., $\log(X)$ or $\sqrt{X}$) so that its relationship with the response becomes approximately linear.
+
+---
+
+**Exercise 3.**
+Explain the difference between detecting nonlinearity via a scatterplot of $Y$ versus $X$ and detecting it via a residual plot. In which scenario might one method succeed where the other fails?
+
+??? success "Solution to Exercise 3"
+    A **scatterplot** of $Y$ versus $X$ shows the raw relationship between the variables, which may be obscured by the influence of other predictors in a multiple regression or ANOVA setting. A **residual plot** shows the relationship after removing the effects of all other predictors, isolating the contribution of the variable in question.
+
+    In multiple regression or ANCOVA, the scatterplot of $Y$ versus a single covariate can appear linear even when the partial relationship (after adjusting for other predictors) is nonlinear. The residual plot would detect this. Conversely, in simple regression the two methods are largely equivalent.

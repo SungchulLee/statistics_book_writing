@@ -121,3 +121,16 @@ These methods are less commonly recommended but can be useful in specific contex
 ## Summary
 
 The percentile, BCa, and bootstrap-$t$ methods form a hierarchy of increasing sophistication. The percentile method is simplest but has only first-order accuracy. BCa and bootstrap-$t$ both achieve second-order accuracy through different mechanisms: BCa adjusts quantile levels using bias and acceleration corrections, while the bootstrap-$t$ studentizes the statistic to create an approximate pivot. For general use, BCa is the recommended default; the bootstrap-$t$ is preferred when a standard error formula is readily available.
+
+## Exercises
+
+**Exercise 1.**
+Generate 100 observations from a $\chi^2_3$ distribution (which is right-skewed with true mean 3).
+
+(a) Compute the 95% bootstrap CI for the mean using all four methods (Normal, Percentile, Basic, BCa) with $B = 10{,}000$.
+
+(b) Compare with the standard $t$-interval.
+
+(c) Which intervals are symmetric about $\bar{X}$? Which are not?
+
+(d) Repeat 2,000 times to estimate the coverage probability of each method.

@@ -147,3 +147,52 @@ If diagnostics reveal non-normality in the $t$-test or ANOVA setting, several al
 ## Summary
 
 The normality assumption in $t$-tests applies to the raw data, while in ANOVA it applies to the residuals. Both procedures are moderately robust to non-normality, with the $t$-test being more robust than the $F$-test. Checking normality should involve both graphical methods (Q-Q plots of residuals) and formal tests (Shapiro-Wilk). When violations are detected, the practitioner should assess whether the departure is practically significant before switching to alternative methods.
+
+## Exercises
+
+**Exercise 1.**
+A researcher applies a t-test to a sample of $n = 12$ observations that are moderately right-skewed. Should they be concerned about the normality assumption?
+
+??? success "Solution to Exercise 1"
+    With $n = 12$, the CLT provides only limited protection, so moderate skewness is a concern. The t-test assumes normality for exact validity; with skewed data and small $n$, the actual Type I error rate can deviate from the nominal $\alpha$, and confidence intervals may have incorrect coverage.
+
+    The researcher should: (1) assess the degree of skewness with a Q-Q plot, (2) consider a nonparametric alternative (Wilcoxon signed-rank test), (3) try a log transformation if the data are positive and right-skewed. If the skewness is mild, the t-test may still be approximately valid, but reporting the sensitivity analysis is good practice.
+
+---
+
+**Exercise 2.**
+ANOVA is often described as "robust to non-normality." Qualify this statement: when is ANOVA robust, and when is it not?
+
+??? success "Solution to Exercise 2"
+    ANOVA is robust when: (1) sample sizes are large ($n_j \geq 20$-$30$ per group), because the CLT normalizes group means; (2) group sizes are equal (balanced design), which protects against variance heterogeneity; (3) departures from normality are moderate (mild skewness, no extreme outliers).
+
+    ANOVA is NOT robust when: (1) sample sizes are small and unequal with heterogeneous variances; (2) data are heavily skewed or have outliers in small samples; (3) the data are severely non-normal (e.g., bimodal, heavy-tailed). In these cases, the F-test's Type I error rate can be substantially inflated or deflated.
+
+---
+
+**Exercise 3.**
+Compare the Welch t-test and the Mann-Whitney U test as alternatives when normality is questionable. When is each preferred?
+
+??? success "Solution to Exercise 3"
+    **Welch t-test:** Does not assume equal variances but still assumes approximate normality (or large $n$). It tests whether the means differ. Preferred when: data are approximately normal or $n$ is large, and the research question is about means.
+
+    **Mann-Whitney U test:** A nonparametric test that does not assume normality. Under the assumption of equal shape distributions, it tests whether one group tends to have larger values (stochastic dominance). Preferred when: data are ordinal, heavily skewed, contain outliers, or $n$ is small.
+
+    Key difference: the Welch test is about means; the Mann-Whitney is about the entire distribution (or medians under symmetry). If the distributions have different shapes, the Mann-Whitney tests something other than a location shift.
+
+---
+
+**Exercise 4.**
+A one-way ANOVA with $k = 4$ groups and $n_j = 8$ per group rejects $H_0$ ($p = 0.02$). A Shapiro-Wilk test on the residuals gives $p = 0.04$. Should the ANOVA result be trusted?
+
+??? success "Solution to Exercise 4"
+    The Shapiro-Wilk rejection ($p = 0.04$) raises a concern but does not invalidate the ANOVA automatically. With $n_j = 8$ (small groups), the t/F-distribution approximations are more sensitive to non-normality.
+
+    Recommended actions:
+
+    1. Examine Q-Q plots and histograms of residuals to assess the degree of non-normality.
+    2. Run a nonparametric alternative (Kruskal-Wallis test) as a sensitivity check. If it also rejects, the ANOVA conclusion is supported.
+    3. If the non-normality is due to outliers, consider robust ANOVA methods or trimmed means.
+    4. Report both the ANOVA and Kruskal-Wallis results, noting the normality concern.
+
+    If the Kruskal-Wallis also gives $p < 0.05$, confidence in the conclusion increases. If results diverge, the normality violation may be responsible.

@@ -1,9 +1,6 @@
 # Q-Q Plots for Financial Data: Detecting Non-Normality in Asset Returns
 
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Overview
 
 Q-Q plots are particularly valuable in finance for diagnosing departures from normality in asset returns. Many financial models assume returns follow a normal distribution, but empirical data often exhibit **heavy tails** and **skewness**, leading to significant underestimation of tail risk. This section focuses on using Q-Q plots to visualize these departures in financial data.
@@ -175,3 +172,50 @@ Use Expected Shortfall (CVaR) instead of VaR; it better captures tail behavior f
 - **Financial returns exhibit heavy tails**, showing an S-shaped pattern in Q-Q plots
 - **Ignoring non-normality** leads to systematic underestimation of tail risk
 - **Practical solutions**: use alternative distributions, non-parametric methods, or robust risk measures tailored to observed tail behavior
+
+
+## Exercises
+
+**Exercise 1.**
+Daily stock returns plotted on a normal Q-Q plot show points that follow a straight line in the center but curve sharply away at both extremes. Interpret this pattern.
+
+??? success "Solution to Exercise 1"
+    This is the classic signature of **heavy tails** (leptokurtosis) in financial return data. The central returns are approximately normally distributed, but extreme returns (both large losses and large gains) are far more extreme than a normal distribution would predict.
+
+    The left tail curving below the line means large negative returns are more negative than expected; the right tail curving above the line means large positive returns are more positive than expected. This excess tail probability is why normal-based risk models (VaR, option pricing) systematically underestimate the likelihood of extreme events.
+
+---
+
+**Exercise 2.**
+If you plot financial returns against the quantiles of a $t$-distribution with 5 degrees of freedom and the Q-Q plot appears linear, what does this suggest about the return distribution?
+
+??? success "Solution to Exercise 2"
+    A linear Q-Q plot against $t_5$ quantiles suggests the returns are well-modeled by a $t$-distribution with approximately 5 degrees of freedom. This means the returns have heavier tails than normal but not as extreme as, say, a Cauchy distribution.
+
+    The $t_5$ distribution has excess kurtosis of $6/(5-4) = 6$, meaning the data have substantially heavier tails than normal (which has excess kurtosis of 0). This is a common finding for daily equity returns, where estimated degrees of freedom typically range from 3 to 8.
+
+---
+
+**Exercise 3.**
+Explain how Q-Q plots can be used to calibrate risk models. Why is the tail region most important?
+
+??? success "Solution to Exercise 3"
+    Risk measures like Value-at-Risk (VaR) and Expected Shortfall depend on the tail of the return distribution (the 1st or 5th percentile). A Q-Q plot directly shows whether the model's tail matches the data's tail.
+
+    If the Q-Q plot is linear throughout, the model fits well and risk estimates are reliable. If the tails curve away (as they do for the normal model applied to financial returns), the model underestimates tail risk.
+
+    The tail region is most important because: (1) risk management is fundamentally about extreme events; (2) a model that fits the center well but misses the tails gives false confidence; (3) regulatory requirements (Basel accords) explicitly require accurate tail modeling.
+
+---
+
+**Exercise 4.**
+Compare Q-Q plots of daily returns versus monthly returns against normal quantiles. Which is more likely to appear linear, and why?
+
+??? success "Solution to Exercise 4"
+    **Monthly returns** are more likely to appear approximately linear (closer to normal) because:
+
+    1. **Aggregation effect:** Monthly returns are the sum of ~21 daily returns. By the CLT, sums of i.i.d. random variables converge to normality, even if individual daily returns are non-normal.
+    2. **Reduced kurtosis:** Aggregation reduces excess kurtosis approximately by a factor of $1/\sqrt{T}$ where $T$ is the number of days.
+    3. **Less volatility clustering:** The GARCH effects that make daily returns non-normal are partially averaged out over a month.
+
+    However, monthly returns are not perfectly normal -- they still exhibit some heavy tails and skewness, just less pronounced than daily returns. The convergence to normality is slow for heavy-tailed distributions.

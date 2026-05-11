@@ -1,9 +1,5 @@
 # Two-Sample Tests
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## 1. Two Sample z Test
 
 The two sample z-test determines whether the means of two independent samples differ significantly, given that the population variances are known. It applies when comparing two groups under different conditions and assumes normally distributed, independent samples.
@@ -364,3 +360,64 @@ If $H_0$ is rejected, compare **mean ranks** of the two groups. A higher mean ra
 ### Note
 
 The Mann-Whitney U test and Wilcoxon rank-sum test are statistically equivalent. The terminology varies by software (e.g., "Mann-Whitney U" in SPSS, "Wilcoxon rank-sum" in R).
+
+## Exercises
+
+**Exercise 1.**
+Two independent samples have: Group 1 ($n_1 = 25$, $\bar{x}_1 = 78$, $s_1 = 10$) and Group 2 ($n_2 = 30$, $\bar{x}_2 = 72$, $s_2 = 12$). Conduct a two-sample $t$-test of $H_0: \mu_1 = \mu_2$ at $\alpha = 0.05$ using the pooled standard error (assume equal variances).
+
+??? success "Solution to Exercise 1"
+    The pooled variance is:
+
+    $$
+    s_p^2 = \frac{(n_1 - 1)s_1^2 + (n_2 - 1)s_2^2}{n_1 + n_2 - 2} = \frac{24 \times 100 + 29 \times 144}{53} = \frac{2400 + 4176}{53} = \frac{6576}{53} \approx 124.08
+    $$
+
+    The pooled standard error is:
+
+    $$
+    \text{SE} = \sqrt{s_p^2\left(\frac{1}{n_1} + \frac{1}{n_2}\right)} = \sqrt{124.08 \times (0.04 + 0.0333)} = \sqrt{124.08 \times 0.0733} = \sqrt{9.095} \approx 3.016
+    $$
+
+    The test statistic is:
+
+    $$
+    t = \frac{78 - 72}{3.016} = \frac{6}{3.016} \approx 1.989
+    $$
+
+    With $df = 53$, $t_{53, 0.025} \approx 2.006$. Since $|t| = 1.989 < 2.006$, we just barely **fail to reject** $H_0$ at $\alpha = 0.05$.
+
+---
+
+**Exercise 2.**
+Explain when Welch's $t$-test should be preferred over the pooled $t$-test, and what happens if the pooled test is used when variances are unequal.
+
+??? success "Solution to Exercise 2"
+    Welch's $t$-test should be preferred when the two groups have **unequal variances** ($\sigma_1^2 \neq \sigma_2^2$). It does not assume equal variances and uses the Welch-Satterthwaite approximation for degrees of freedom.
+
+    If the pooled $t$-test is used when variances are unequal, the pooled variance estimate is incorrect: it averages two different variances, which can be misleading especially when sample sizes also differ. If the group with the larger variance has the smaller sample size, the Type I error rate inflates above $\alpha$. If the larger-variance group has the larger sample size, the test becomes conservative (Type I error below $\alpha$). Welch's test avoids both problems and is widely recommended as the default.
+
+---
+
+**Exercise 3.**
+A study finds a statistically significant difference between two groups with $p = 0.001$ and a mean difference of 0.5 units. The standard deviation in both groups is 50. Comment on the practical significance of this result.
+
+??? success "Solution to Exercise 3"
+    The standardized effect size is $d = 0.5/50 = 0.01$, which is extremely small. Despite the tiny $p$-value (high statistical significance), the actual difference of 0.5 units relative to a standard deviation of 50 is negligible in practical terms.
+
+    This illustrates the distinction between **statistical significance** and **practical significance**. With a large enough sample size, even trivially small differences can achieve statistical significance. The $p$-value only tells us the difference is unlikely to be exactly zero, not that the difference is meaningful. Researchers should always report effect sizes and consider whether the magnitude of the difference is large enough to matter in the applied context.
+
+---
+
+**Exercise 4.**
+When should the Mann-Whitney U test be preferred over the two-sample $t$-test?
+
+??? success "Solution to Exercise 4"
+    The Mann-Whitney U test (Wilcoxon rank-sum test) should be preferred when:
+
+    1. **The data are not normally distributed**, especially for small samples where the CLT does not provide adequate protection for the $t$-test.
+    2. **The data are ordinal** rather than interval/ratio (e.g., Likert scale ratings), where means are not meaningful but ranks are.
+    3. **Outliers are present** that could unduly influence the $t$-test. The Mann-Whitney test is based on ranks, which are robust to outliers.
+    4. **The distributions are skewed** and the interest is in comparing central tendencies or stochastic ordering rather than means specifically.
+
+    The Mann-Whitney test is less powerful than the $t$-test when the normality assumption holds (asymptotic relative efficiency is $3/\pi \approx 0.955$), so for clearly normal data, the $t$-test is preferred.

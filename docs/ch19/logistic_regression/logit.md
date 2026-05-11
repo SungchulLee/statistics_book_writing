@@ -1,9 +1,6 @@
 # Logit Link and Odds
 
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## From Linear Models to Classification
 
 In linear regression the response variable $y$ is continuous. When the response
@@ -151,6 +148,7 @@ $$
 ("For every \$1 increase in balance, *controlling for student status*, odds increase by 1%")
 
 The different interpretations reflect that:
+
 - The first is a **marginal** (unconditional) effect
 - The second is a **conditional** (partial) effect
 
@@ -187,4 +185,27 @@ The balance coefficient changes from negative to positive once student status is
 
 See also: [Confounding and Association vs. Causation](../../ch01/classical/confounding_causation.md) for a broader discussion of confounding across statistical methods.
 
+## Exercises
 
+**Exercise 1.**
+A logistic regression model for loan default ($Y = 1$) has: $\log\frac{p}{1-p} = -2.5 + 0.8\,\text{DTI} - 0.03\,\text{Credit Score}$
+
+where DTI is debt-to-income ratio and Credit Score is FICO score.
+
+**(a)** For a borrower with DTI = 3.0 and Credit Score = 700, compute the predicted probability of default.
+
+**(b)** Interpret the coefficient 0.8 for DTI in terms of odds ratios.
+
+**(c)** What DTI ratio gives a 50% default probability for a borrower with Credit Score = 650?
+
+??? success "Solution to Exercise 1"
+
+    **(a)** $\text{logit} = -2.5 + 0.8(3) - 0.03(700) = -2.5 + 2.4 - 21 = -21.1$
+
+    $\hat{p} = \frac{1}{1 + e^{21.1}} \approx 6.7 \times 10^{-10}$. Very low default probability.
+
+    **(b)** $e^{0.8} \approx 2.23$. A one-unit increase in DTI multiplies the odds of default by 2.23 (a 123% increase), holding credit score constant.
+
+    **(c)** Set $p = 0.5 \Rightarrow \text{logit} = 0$: $0 = -2.5 + 0.8\,\text{DTI} - 0.03(650)$
+
+    $0.8\,\text{DTI} = 2.5 + 19.5 = 22$, so $\text{DTI} = 27.5$.

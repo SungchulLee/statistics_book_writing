@@ -99,3 +99,19 @@ When features are constructed from a common source (e.g., polynomial terms, inte
 ## Summary
 
 The elastic net's grouping effect ensures that highly correlated predictors receive similar coefficients, with the difference bounded by a quantity that decreases with correlation strength and L2 penalty weight. This property, formalized by the Zou-Hastie grouping theorem, distinguishes the elastic net from the lasso, which has no grouping guarantee. The grouping effect is controlled by the mixing parameter $\alpha$: smaller $\alpha$ strengthens grouping at the expense of sparsity. In applications where correlated predictors represent related concepts (biological pathways, economic indicators), the grouping effect produces more stable and interpretable models.
+
+## Exercises
+
+**Exercise 1.**
+Explain the "grouping effect" of Elastic Net. Why does Lasso fail with highly correlated predictors? Give an example where $X_1 = X_2 + \varepsilon$ (with small $\varepsilon$) and describe what Lasso, Ridge, and Elastic Net would do.
+
+---
+
+**Exercise 2.**
+Create a dataset where predictors come in correlated groups: $X_1, X_2, X_3$ are highly correlated ($\rho = 0.95$) and all have nonzero effects. $X_4, X_5, X_6$ are another correlated group with nonzero effects. The remaining 14 predictors are noise.
+
+(a) Fit Lasso. Does it select one predictor per group or multiple?
+
+(b) Fit Elastic Net with $\alpha = 0.5$. Compare the selected features.
+
+(c) Plot the coefficient paths for both methods.

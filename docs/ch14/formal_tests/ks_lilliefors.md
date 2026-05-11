@@ -1,9 +1,6 @@
 # Kolmogorov-Smirnov Test and Lilliefors Test
 
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 While graphical methods and descriptive statistics provide insight into data distribution, formal statistical tests offer more rigorous methods for assessing normality. These tests evaluate whether the observed data significantly deviates from the expected normal distribution, providing a statistical basis for the decision.
 
 ## Kolmogorov-Smirnov Test
@@ -32,10 +29,10 @@ We compute the Kolmogorov-Smirnov test statistic $D$ based on the largest absolu
 3. **Compute the Theoretical CDF**: The theoretical CDF for the normal distribution $F_{\text{norm}}(X_{(i)})$ evaluated at $X_{(i)}$ is:
 
     $$
-    F_{\text{norm}}(X_{(i)}) = \Phi\left( \frac{X_{(i)} - \mu}{\sigma} \right)
+    F_{\text{norm}}(X_{(i)}) = \mathcal{N}\left( \frac{X_{(i)} - \mu}{\sigma} \right)
     $$
 
-    where $\Phi$ is the standard normal CDF, and $\mu$ and $\sigma$ are the sample mean and standard deviation, respectively.
+    where $\mathcal{N}$ is the standard normal CDF, and $\mu$ and $\sigma$ are the sample mean and standard deviation, respectively.
 
 4. **Test Statistic $D$**: The K-S test statistic $D$ is the maximum absolute difference between the empirical CDF and the theoretical CDF at any sample point:
 
@@ -157,3 +154,49 @@ else:
 
 - For **general distribution testing** (e.g., checking if data fits a specific distribution like exponential or Weibull with fixed parameters), **`stats.kstest`** is the better choice.
 - For **normality testing with unknown parameters**, **`lilliefors` from `statsmodels`** is preferred because it provides a more accurate assessment, accounting for the parameter estimation process.
+
+## Exercises
+
+**Exercise 1.**
+Explain the difference between the Kolmogorov-Smirnov test and the Lilliefors test. When must you use Lilliefors instead of KS?
+
+??? success "Solution to Exercise 1"
+    The **Kolmogorov-Smirnov test** compares the empirical CDF to a fully specified theoretical CDF (all parameters known). For example, testing whether data come from $N(0, 1)$ exactly.
+
+    The **Lilliefors test** is a modification for composite hypotheses where parameters are estimated from the data. For normality testing, you typically estimate $\mu$ and $\sigma$ from the data, then compare to $N(\hat{\mu}, \hat{\sigma}^2)$.
+
+    You must use Lilliefors (not KS) whenever parameters are estimated from the same data being tested. Using KS critical values with estimated parameters is invalid: estimating parameters makes the empirical CDF closer to the theoretical CDF (the fit is optimized), so KS p-values are too large (conservative) and the test loses power.
+
+---
+
+**Exercise 2.**
+The KS test statistic is $D_n = \sup_x |F_n(x) - F_0(x)|$. Explain geometrically what this measures.
+
+??? success "Solution to Exercise 2"
+    $D_n$ is the maximum vertical distance between the empirical CDF (a step function) and the theoretical CDF (a smooth curve) over all values of $x$. Geometrically, it is the tallest gap between the two curves.
+
+    If the data come from $F_0$, the empirical CDF should closely track the theoretical CDF by the Glivenko-Cantelli theorem, and $D_n$ should be small. A large $D_n$ indicates that at some point in the distribution, the observed data deviate substantially from what the theoretical distribution predicts -- either too many or too few observations in some region.
+
+---
+
+**Exercise 3.**
+Why is the KS/Lilliefors test generally less powerful than the Shapiro-Wilk or Anderson-Darling test for detecting non-normality?
+
+??? success "Solution to Exercise 3"
+    The KS test uses only the maximum deviation $D_n$, which is a single number summarizing the worst-case discrepancy. This has two drawbacks:
+
+    1. **No tail weighting:** The KS test treats deviations in the center of the distribution (where data are dense) the same as deviations in the tails (where they matter more for normality). The Anderson-Darling test upweights tail deviations.
+
+    2. **Single-point focus:** By using only the supremum, KS ignores the pattern of deviations. The Shapiro-Wilk test uses all order statistics in a correlation-based calculation, extracting more information from the data.
+
+    The KS test was designed as a general goodness-of-fit test (for any distribution), not specifically for normality. Specialized tests like Shapiro-Wilk exploit the specific structure of the normal distribution.
+
+---
+
+**Exercise 4.**
+A Lilliefors test on $n = 30$ observations gives $D_n = 0.14$. The critical value at $\alpha = 0.05$ is $0.161$. What is the conclusion?
+
+??? success "Solution to Exercise 4"
+    Since $D_n = 0.14 < 0.161$, we fail to reject $H_0$ at $\alpha = 0.05$. The data are consistent with normality according to the Lilliefors test.
+
+    However, with $n = 30$, the test has limited power (especially against subtle alternatives like mild heavy tails). The failure to reject does not prove normality -- it may simply reflect insufficient sample size. Supplementing with a Q-Q plot provides additional visual evidence about the nature and degree of any departures.

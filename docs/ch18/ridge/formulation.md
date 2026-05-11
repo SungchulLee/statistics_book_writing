@@ -108,3 +108,36 @@ This quantity decreases monotonically from $p$ (when $\lambda = 0$) to $0$ (as $
 ## Summary
 
 Ridge regression adds the penalty $\lambda\|\boldsymbol{\beta}\|_2^2$ to the OLS objective, yielding the closed-form solution $\hat{\boldsymbol{\beta}}_{\text{ridge}} = (\mathbf{X}^\top\mathbf{X} + \lambda\mathbf{I})^{-1}\mathbf{X}^\top\mathbf{y}$. This solution always exists and is unique for $\lambda > 0$. Through the SVD lens, ridge applies differential shrinkage that targets the most unstable coefficient directions, reducing variance at the cost of introducing bias. The effective degrees of freedom provide a continuous complexity measure that decreases with $\lambda$.
+
+## Exercises
+
+**Exercise 1.**
+Consider the Ridge regression estimator $\hat{\boldsymbol{\beta}}_{\text{ridge}} = (\mathbf{X}^\top\mathbf{X} + \lambda\mathbf{I})^{-1}\mathbf{X}^\top\mathbf{y}$.
+
+(a) Show that as $\lambda \to 0$, $\hat{\boldsymbol{\beta}}_{\text{ridge}} \to \hat{\boldsymbol{\beta}}_{\text{OLS}}$.
+
+(b) Show that as $\lambda \to \infty$, $\hat{\boldsymbol{\beta}}_{\text{ridge}} \to \mathbf{0}$.
+
+(c) Prove that $\mathbf{X}^\top\mathbf{X} + \lambda\mathbf{I}$ is positive definite for all $\lambda > 0$, even when $\mathbf{X}^\top\mathbf{X}$ is singular.
+
+---
+
+**Exercise 2.**
+The effective degrees of freedom for Ridge regression is $\text{df}(\lambda) = \sum_{j=1}^p \frac{d_j^2}{d_j^2 + \lambda}$ where $d_j$ are the singular values of $\mathbf{X}$.
+
+(a) Show that $\text{df}(0) = p$ and $\text{df}(\infty) = 0$.
+
+(b) Is $\text{df}(\lambda)$ monotonically decreasing in $\lambda$?
+
+(c) How would you define an analogous quantity for Lasso?
+
+---
+
+**Exercise 3.**
+Implement Ridge regression **from scratch** (without sklearn):
+
+(a) Write a function that takes $\mathbf{X}, \mathbf{y}, \lambda$ and returns $\hat{\boldsymbol{\beta}}_{\text{ridge}}$ using the closed-form formula.
+
+(b) Implement leave-one-out CV using the hat matrix shortcut.
+
+(c) Verify your implementation matches `sklearn.linear_model.Ridge`.

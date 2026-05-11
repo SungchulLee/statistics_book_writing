@@ -48,10 +48,10 @@ The **BCa method** adjusts for both bias and skewness in the bootstrap distribut
 The adjusted percentiles are:
 
 $$
-\alpha_1 = \Phi\!\left(\hat{z}_0 + \frac{\hat{z}_0 + z_{\alpha/2}}{1 - \hat{a}(\hat{z}_0 + z_{\alpha/2})}\right), \quad \alpha_2 = \Phi\!\left(\hat{z}_0 + \frac{\hat{z}_0 + z_{1-\alpha/2}}{1 - \hat{a}(\hat{z}_0 + z_{1-\alpha/2})}\right)
+\alpha_1 = \mathcal{N}\!\left(\hat{z}_0 + \frac{\hat{z}_0 + z_{\alpha/2}}{1 - \hat{a}(\hat{z}_0 + z_{\alpha/2})}\right), \quad \alpha_2 = \mathcal{N}\!\left(\hat{z}_0 + \frac{\hat{z}_0 + z_{1-\alpha/2}}{1 - \hat{a}(\hat{z}_0 + z_{1-\alpha/2})}\right)
 $$
 
-where $\Phi$ is the standard normal CDF and $z_{\alpha/2}$ is the standard normal quantile. When both $\hat{z}_0 = 0$ and $\hat{a} = 0$, the BCa method reduces to the percentile method. In practice, BCa intervals generally provide better coverage than the simple percentile method.
+where $\mathcal{N}$ is the standard normal CDF and $z_{\alpha/2}$ is the standard normal quantile. When both $\hat{z}_0 = 0$ and $\hat{a} = 0$, the BCa method reduces to the percentile method. In practice, BCa intervals generally provide better coverage than the simple percentile method.
 
 ## Worked Example
 
@@ -129,3 +129,71 @@ if __name__ == "__main__":
 ```
 
 The bootstrap distribution of the sample mean reflects the skewness in the original data. Because the resampling procedure makes no assumption about the population distribution, the resulting confidence interval adapts to the actual shape of the sampling distribution rather than forcing symmetry.
+
+
+## Exercises
+
+**Exercise 1.**
+Describe the nonparametric bootstrap procedure for constructing a confidence interval for the population mean without assuming normality.
+
+??? success "Solution to Exercise 1"
+
+    1. From the original sample of size $n$, draw $B$ bootstrap samples (each of size $n$, sampled with replacement).
+    2. For each bootstrap sample $b = 1, \dots, B$, compute $\bar{X}^*_b$ (the bootstrap sample mean).
+    3. Construct the confidence interval from the bootstrap distribution of $\bar{X}^*$:
+       - **Percentile method:** Use the $\alpha/2$ and $1-\alpha/2$ quantiles of the $B$ bootstrap means.
+       - **Bootstrap-t method:** Compute bootstrap t-statistics and use their quantiles.
+    4. A typical choice is $B = 10{,}000$ bootstrap replicates.
+
+    No normality assumption is needed. The bootstrap distribution of $\bar{X}^*$ mimics the sampling distribution of $\bar{X}$, allowing valid inference even for skewed or heavy-tailed data.
+
+---
+
+**Exercise 2.**
+When does the bootstrap fail or perform poorly? List two conditions.
+
+??? success "Solution to Exercise 2"
+
+    1. **Extreme quantiles with small $n$:** The bootstrap cannot generate values outside the range of the original sample. For estimating extreme quantiles (e.g., 99th percentile) with small $n$, the bootstrap underestimates tail variability.
+
+    2. **Dependent data:** The standard nonparametric bootstrap assumes i.i.d. observations. If data are dependent (time series, spatial data), resampling individual observations destroys the dependence structure, producing invalid results. Block bootstrap or stationary bootstrap is needed instead.
+
+    Additional cases: (3) very small $n$ (the empirical distribution is a poor approximation of the population); (4) irregular statistics (e.g., the maximum of a sample, where the bootstrap distribution does not converge properly).
+
+---
+
+**Exercise 3.**
+Compare the bootstrap confidence interval with the t-interval for the mean when data are right-skewed. Which is expected to have better coverage?
+
+??? success "Solution to Exercise 3"
+    For right-skewed data with moderate $n$, the bootstrap percentile interval is expected to have better coverage because it does not assume symmetry of the sampling distribution.
+
+    The t-interval $\bar{X} \pm t_{\alpha/2} s/\sqrt{n}$ is symmetric around $\bar{X}$, but the true sampling distribution of $\bar{X}$ is skewed (inherited from the data). This causes the t-interval to over-cover on one side and under-cover on the other.
+
+    The bootstrap percentile interval captures the asymmetry naturally: if the bootstrap distribution of $\bar{X}^*$ is skewed, the resulting interval will be asymmetric, better matching the true sampling distribution. For the best performance with skewed data, the bias-corrected and accelerated (BCa) bootstrap interval is recommended.
+
+---
+
+**Exercise 4.**
+Write Python code to compute a 95% bootstrap confidence interval for the median of a dataset.
+
+??? success "Solution to Exercise 4"
+    ```python
+    import numpy as np
+
+    rng = np.random.default_rng(42)
+    data = rng.exponential(scale=5, size=50)  # skewed data
+
+    B = 10000
+    boot_medians = np.array([
+        np.median(rng.choice(data, size=len(data), replace=True))
+        for _ in range(B)
+    ])
+
+    ci_lower = np.percentile(boot_medians, 2.5)
+    ci_upper = np.percentile(boot_medians, 97.5)
+    print(f"Sample median: {np.median(data):.3f}")
+    print(f"95% Bootstrap CI: ({ci_lower:.3f}, {ci_upper:.3f})")
+    ```
+
+    This uses the percentile method. The interval is valid without normality assumptions and works for any statistic (mean, median, correlation, etc.) by simply changing the computed statistic inside the loop.

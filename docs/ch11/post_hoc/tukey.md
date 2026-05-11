@@ -1,9 +1,6 @@
 # Post-Hoc Comparisons: Tukey HSD
 
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## 1. Post-Hoc Tests in One-Way ANOVA
 
 When conducting a **one-way ANOVA**, we may find that there is a significant difference between the group means. However, a significant result from the ANOVA test does not tell us which specific groups are different from each other. **Post-hoc tests** are used in this case to identify the specific pairs of groups that differ significantly. These tests help control for Type I error (false positives) when making multiple comparisons.
@@ -323,3 +320,102 @@ print(pairwise_tukeyhsd(endog=vc_data['len'], groups=vc_data['dose'], alpha=0.05
 1. **Run Two-Way ANOVA**: Identify significant main and interaction effects.
 2. **Post-Hoc for Main Effects**: Use Tukey's HSD or another pairwise test for each significant main effect.
 3. **Post-Hoc for Interaction**: If the interaction effect is significant, use Tukey's HSD on combined factor levels or perform simple effects analysis.
+
+## Exercises
+
+**Exercise 1.**
+Workout: HIIT $\bar Y = 8.8$, Strength $6.4$, Yoga $4.4$, $n = 5$ each, $\mathrm{MSW} = 1.43$. (a) Omnibus ANOVA. (b) Tukey HSD. (c) Interpret.
+
+??? success "Solution to Exercise 1"
+    (a) $\mathrm{SSB} = 5 \cdot [(8.8-6.53)^2 + (6.4-6.53)^2 + (4.4-6.53)^2] \approx 48.53$.
+
+    $\mathrm{SSW} = 17.20$. $F = (48.53/2)/(17.20/12) = 24.27/1.43 \approx 16.93$.
+
+    $F_{0.05, 2, 12} = 3.89$. Reject $H_0$.
+
+    (b) HSD = $q_{0.05, 3, 12} \cdot \sqrt{\mathrm{MSW}/n} = 3.77 \cdot \sqrt{1.43/5} \approx 2.02$.
+
+    Pairwise: HIIT-Strength = 2.4 > 2.02 ✓; HIIT-Yoga = 4.4 > 2.02 ✓; Strength-Yoga = 2.0 ≮ 2.02 ✗.
+
+    (c) HIIT is significantly better than both. Strength vs Yoga: not significant. Can't distinguish those two.
+
+---
+
+**Exercise 2.**
+**Why Tukey HSD over Bonferroni pairwise t-tests?**
+
+??? success "Solution to Exercise 2"
+    Tukey HSD uses the **Studentized range** distribution, exactly calibrated for pairwise comparisons of means.
+
+    Bonferroni applies the Bonferroni correction to pairwise $t$-tests: tests at $\alpha/k$ where $k = \binom{g}{2}$.
+
+    **Comparison:**
+
+    - **Tukey:** more powerful for pairwise comparisons of means; exactly controls family-wise error.
+    - **Bonferroni:** simple, very general (works for any tests), but conservative for many comparisons.
+
+    For balanced one-way ANOVA pairwise comparisons, Tukey is the standard. For complex contrasts or mixed designs, Bonferroni or Scheffé's method may be needed.
+
+---
+
+**Exercise 3.**
+**Other post-hoc tests.** Briefly describe Bonferroni, Scheffé, Dunnett.
+
+??? success "Solution to Exercise 3"
+    **Bonferroni:** test each comparison at $\alpha/k$. Works for any tests but conservative.
+
+    **Scheffé:** allows arbitrary contrasts (linear combinations of means, not just pairwise). Most conservative but most general.
+
+    **Dunnett:** compares all groups to a single control group. More powerful than Tukey when only control comparisons matter.
+
+    **Fisher's LSD:** uses pooled variance from ANOVA but doesn't adjust for multiple testing. Liberal — useful only as quick screening.
+
+    Choose based on the hypotheses:
+    - All pairwise: Tukey.
+    - All pairs against control: Dunnett.
+    - Arbitrary linear contrasts: Scheffé.
+
+---
+
+**Exercise 4.**
+**Family-wise vs comparison-wise error.**
+
+??? success "Solution to Exercise 4"
+    **Comparison-wise:** Type I error rate for any single comparison.
+
+    **Family-wise:** Type I error rate for at least one error among all comparisons in a family.
+
+    Without correction, family-wise error grows with number of comparisons. Tukey, Bonferroni, etc. control family-wise.
+
+    Alternative: **False Discovery Rate (FDR)** controls expected proportion of false rejections among declared significant. Less conservative; useful for many comparisons (e.g., genomics).
+
+---
+
+**Exercise 5.**
+**Studentized range distribution.** Brief intro.
+
+??? success "Solution to Exercise 5"
+    Studentized range $q$: distribution of $(\max \bar Y_i - \min \bar Y_i)/\sqrt{\mathrm{MSW}/n}$ under $H_0$.
+
+    Depends on:
+
+    - Number of groups $g$.
+    - Within-group df ($N - g$).
+
+    Tables: critical values $q_{\alpha, g, df}$ exist.
+
+    Connection to Tukey HSD: HSD = $q_{\alpha} \sqrt{\mathrm{MSW}/n}$. Compare each pairwise difference to HSD.
+
+---
+
+**Exercise 6.**
+**Unbalanced designs** and Tukey.
+
+??? success "Solution to Exercise 6"
+    With unequal $n_i$: use **Tukey-Kramer** modification:
+
+    $\mathrm{HSD}_{ij} = q_{\alpha} \sqrt{(\mathrm{MSW}/2)(1/n_i + 1/n_j)}$.
+
+    Each pair has its own HSD threshold (depending on $n_i, n_j$). Conservative but valid.
+
+    Pure Tukey assumes equal $n$; Tukey-Kramer is the standard extension. R's `TukeyHSD` and Python's `statsmodels` use Tukey-Kramer when sizes differ.

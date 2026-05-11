@@ -158,3 +158,75 @@ When $\boldsymbol{\mu} = \mathbf{0}$, this simplifies to $E[\mathbf{z}^T\mathbf{
 ## Summary
 
 The trace is a linear, similarity-invariant functional that equals the sum of eigenvalues. Its cyclic property $\operatorname{tr}(\mathbf{A}\mathbf{B}) = \operatorname{tr}(\mathbf{B}\mathbf{A})$ is the workhorse identity for manipulating matrix expressions in statistical proofs. In statistics, the trace connects the diagonal entries of a covariance matrix (marginal variances) to its eigenvalues (principal-component variances), counts the effective number of parameters in a projection, and computes expected values of quadratic forms.
+
+## Exercises
+
+**Exercise 1.**
+Let $\mathbf{A} = \begin{pmatrix} 3 & 1 \\ 1 & 3 \end{pmatrix}$. Compute $\operatorname{tr}(\mathbf{A})$ and verify it equals the sum of the eigenvalues.
+
+??? success "Solution to Exercise 1"
+    The trace is $\operatorname{tr}(\mathbf{A}) = 3 + 3 = 6$.
+
+    The eigenvalues satisfy $\det(\mathbf{A} - \lambda\mathbf{I}) = (3-\lambda)^2 - 1 = \lambda^2 - 6\lambda + 8 = 0$, giving $\lambda_1 = 4$ and $\lambda_2 = 2$.
+
+    Sum of eigenvalues: $4 + 2 = 6 = \operatorname{tr}(\mathbf{A})$. Also, $\det(\mathbf{A}) = 9 - 1 = 8 = 4 \times 2 = \lambda_1 \lambda_2$.
+
+---
+
+**Exercise 2.**
+Using the cyclic property, prove that $\operatorname{tr}(\mathbf{A}\mathbf{B}) = \operatorname{tr}(\mathbf{B}\mathbf{A})$ for any matrices $\mathbf{A}$ ($m \times n$) and $\mathbf{B}$ ($n \times m$).
+
+??? success "Solution to Exercise 2"
+    The $(i,i)$ entry of $\mathbf{A}\mathbf{B}$ is $\sum_{k=1}^n a_{ik} b_{ki}$, so:
+
+    $$
+    \operatorname{tr}(\mathbf{A}\mathbf{B}) = \sum_{i=1}^m \sum_{k=1}^n a_{ik} b_{ki}
+    $$
+
+    The $(k,k)$ entry of $\mathbf{B}\mathbf{A}$ is $\sum_{i=1}^m b_{ki} a_{ik}$, so:
+
+    $$
+    \operatorname{tr}(\mathbf{B}\mathbf{A}) = \sum_{k=1}^n \sum_{i=1}^m b_{ki} a_{ik}
+    $$
+
+    Both double sums are over the same terms $a_{ik} b_{ki}$ for $i = 1, \dots, m$ and $k = 1, \dots, n$. By commutativity of addition:
+
+    $$
+    \operatorname{tr}(\mathbf{A}\mathbf{B}) = \operatorname{tr}(\mathbf{B}\mathbf{A})
+    $$
+
+    Note: $\mathbf{A}\mathbf{B}$ is $m \times m$ and $\mathbf{B}\mathbf{A}$ is $n \times n$; they may have different sizes but always have equal traces. $\square$
+
+---
+
+**Exercise 3.**
+Show that for the hat matrix $\mathbf{H} = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T$, the trace equals the number of predictors $p$ (including the intercept) using the cyclic property.
+
+??? success "Solution to Exercise 3"
+    Apply the cyclic property by grouping factors:
+
+    $$
+    \operatorname{tr}(\mathbf{H}) = \operatorname{tr}\bigl(\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\bigr) = \operatorname{tr}\bigl(\mathbf{X}^T\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\bigr) = \operatorname{tr}(\mathbf{I}_p) = p
+    $$
+
+    The cyclic rearrangement moves $\mathbf{X}^T$ from the right to the left, producing the $p \times p$ identity matrix. This result holds regardless of $n$ and the specific entries of $\mathbf{X}$.
+
+---
+
+**Exercise 4.**
+Let $\mathbf{z} \sim N(\mathbf{0}, \mathbf{I}_n)$ and let $\mathbf{A}$ be a symmetric idempotent matrix of rank $r$. Using the identity $E[\mathbf{z}^T\mathbf{A}\mathbf{z}] = \operatorname{tr}(\mathbf{A})$, show that $E[\mathbf{z}^T\mathbf{A}\mathbf{z}] = r$.
+
+??? success "Solution to Exercise 4"
+    Since $\mathbf{z} \sim N(\mathbf{0}, \mathbf{I}_n)$, we have $\boldsymbol{\mu} = \mathbf{0}$, and the identity gives:
+
+    $$
+    E[\mathbf{z}^T\mathbf{A}\mathbf{z}] = \operatorname{tr}(\mathbf{A})
+    $$
+
+    Since $\mathbf{A}$ is symmetric idempotent, its eigenvalues are all 0 or 1, and the number of eigenvalues equal to 1 is the rank $r$. Therefore:
+
+    $$
+    \operatorname{tr}(\mathbf{A}) = \sum_{i=1}^n \lambda_i = r \cdot 1 + (n-r) \cdot 0 = r
+    $$
+
+    This result explains why $\text{SSE}/\sigma^2 \sim \chi^2_{n-p}$: the residual-maker matrix $\mathbf{M} = \mathbf{I} - \mathbf{H}$ has rank $n - p$, so $E[\text{SSE}/\sigma^2] = \operatorname{tr}(\mathbf{M}) = n - p$, matching the mean of the $\chi^2_{n-p}$ distribution.

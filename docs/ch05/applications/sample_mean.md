@@ -1,9 +1,5 @@
 # Sampling Distribution of the Mean
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Overview
 
 The **sampling distribution of the sample mean** $\bar{X}$ describes how $\bar{X}$ varies across repeated samples of size $n$ from a population. This is the single most important sampling distribution in statistics — it underpins confidence intervals for $\mu$, $t$-tests, and much of applied statistics.
@@ -87,7 +83,7 @@ Z = \frac{155 - 150}{4} = 1.25
 $$
 
 $$
-P(\bar{X} > 155) = P(Z > 1.25) = 1 - \Phi(1.25) \approx 0.1056
+P(\bar{X} > 155) = P(Z > 1.25) = 1 - \mathcal{N}(1.25) \approx 0.1056
 $$
 
 ```python
@@ -111,7 +107,7 @@ Z_2 = \frac{7.2 - 7}{0.2143} \approx 0.93
 $$
 
 $$
-P(6.8 < \bar{X} < 7.2) = \Phi(0.93) - \Phi(-0.93) \approx 0.6476
+P(6.8 < \bar{X} < 7.2) = \mathcal{N}(0.93) - \mathcal{N}(-0.93) \approx 0.6476
 $$
 
 ```python
@@ -268,7 +264,7 @@ plt.show()
 
 - The efficiency of $\bar{X}$ is linked to the rate $\text{Var}(\bar{X}) = \sigma^2/n$ — it achieves the Cramér–Rao lower bound under normality.
 - For populations with **infinite variance** (e.g., Cauchy), the CLT does not apply and $\bar{X}$ may not converge.
-- The **Berry–Esseen theorem** quantifies the rate of CLT convergence: $\sup_z |P(Z_n \leq z) - \Phi(z)| \leq C \cdot \rho / (\sigma^3 \sqrt{n})$, where $\rho = E[|X - \mu|^3]$.
+- The **Berry–Esseen theorem** quantifies the rate of CLT convergence: $\sup_z |P(Z_n \leq z) - \mathcal{N}(z)| \leq C \cdot \rho / (\sigma^3 \sqrt{n})$, where $\rho = E[|X - \mu|^3]$.
 
 ## Summary
 
@@ -279,3 +275,81 @@ plt.show()
 | $\text{SE}(\bar{X})$ | $\sigma/\sqrt{n}$ |
 | Shape | Normal (exact if pop. is normal; approximate via CLT for large $n$) |
 | Key insight | Larger $n$ → smaller SE → more precise estimate |
+
+## Exercises
+
+**Exercise 1.**
+**Mean and SE of the sample mean.** Sample of $n = 9$ from a population with $\mu = 75$, $\sigma = 18$. Compute (a) $\mathbb{E}[\bar X]$, (b) $\mathrm{SE}(\bar X)$.
+
+??? success "Solution to Exercise 1"
+    (a) $\mathbb{E}[\bar X] = \mu = 75$. The sample mean is unbiased regardless of $n$.
+
+    (b) $\mathrm{SE}(\bar X) = \sigma/\sqrt n = 18/3 = 6$. Quadrupling $n$ to 36 would halve the SE to 3.
+
+---
+
+**Exercise 2.**
+Apple weights are normally distributed with $\mu = 150$ g, $\sigma = 20$ g. Sample of $n = 25$. Compute $P(\bar X > 155)$.
+
+??? success "Solution to Exercise 2"
+    $\mathrm{SE} = 20/\sqrt{25} = 4$. $Z = (155 - 150)/4 = 1.25$.
+
+    $P(\bar X > 155) = 1 - \Phi(1.25) = 0.1056$. About 10.6%.
+
+    Note: normality of the population is given, so $\bar X$ is exactly normal for any $n$ — no CLT needed.
+
+---
+
+**Exercise 3.**
+Students' sleep: $\mu = 7$ h, $\sigma = 1.5$ h. Sample $n = 49$. Compute $P(6.8 < \bar X < 7.2)$.
+
+??? success "Solution to Exercise 3"
+    $\mathrm{SE} = 1.5/7 \approx 0.214$.
+
+    $Z_1 = (6.8 - 7)/0.214 \approx -0.93$. $Z_2 = (7.2 - 7)/0.214 \approx 0.93$.
+
+    $P(6.8 < \bar X < 7.2) = \Phi(0.93) - \Phi(-0.93) = 0.6476$. About 64.8%.
+
+    Under the CLT (justified by $n = 49 \ge 30$), $\bar X$ is approximately normal even if individual sleep durations are not.
+
+---
+
+**Exercise 4.**
+**Small sample, normal population.** Weights $X \sim N(70, 100)$ kg. Sample $n = 5$. Compute $P(\bar X > 72)$. Why is this valid despite small $n$?
+
+??? success "Solution to Exercise 4"
+    $\mathrm{SE} = 10/\sqrt 5 \approx 4.47$. $Z = (72 - 70)/4.47 \approx 0.447$.
+
+    $P(\bar X > 72) = 1 - \Phi(0.447) \approx 0.327$. About 32.7%.
+
+    **Validity:** the *population* is normal, so $\bar X = (1/n)\sum X_i$ is *exactly* normal for any $n$ (sums of independent normals are normal). The CLT is not needed; the result is exact.
+
+    Contrast with **Exercise 5** below for the case when normality is not given.
+
+---
+
+**Exercise 5.**
+**Lightbulbs without normality.** Lifespan: $\mu = 800$ h, $\sigma = 100$ h, distribution unspecified. Sample $n = 5$. What can you say about $P(\bar X > 810)$?
+
+??? success "Solution to Exercise 5"
+    $\mathrm{SE} = 100/\sqrt 5 \approx 44.7$. Naively: $Z = 10/44.7 \approx 0.224$, giving $P \approx 0.41$.
+
+    **But:** $n = 5$ is too small for the CLT, and the population shape is unspecified. The sampling distribution of $\bar X$ may be heavily skewed (e.g., if lifetimes are exponential) or have heavy tails. The normal approximation could be far off.
+
+    **Conservative bound** via **Chebyshev's inequality:** $P(|\bar X - 800| \ge 10) \le \sigma^2/(n \cdot 10^2) = 10000/(5 \cdot 100) = 20$ — vacuous.
+
+    Practical conclusion: without distributional assumption or larger $n$, give up on a point answer and report only the conservative bound. Real lightbulb lifetimes often follow Weibull distributions, which would allow exact computation if assumed.
+
+---
+
+**Exercise 6.**
+**Skewed population + large $n$.** Daily sales right-skewed with $\mu = \$2000$, $\sigma = \$500$. Sample $n = 100$. Compute $P(\bar X > \$2100)$.
+
+??? success "Solution to Exercise 6"
+    $\mathrm{SE} = 500/10 = 50$. $Z = (2100 - 2000)/50 = 2$.
+
+    $P(\bar X > 2100) = 1 - \Phi(2) = 0.0228$. About 2.3%.
+
+    **Why valid:** $n = 100$ is large, so by CLT $\bar X$ is approximately normal regardless of population shape. Skewness of the population is irrelevant for $\bar X$'s distribution at this $n$.
+
+    **Caveat:** if the population skewness is severe (e.g., lognormal with $\sigma_{\log} > 1$), even $n = 100$ may show residual skew in $\bar X$. Berry-Esseen bound: error in normal approximation $\sim \mathbb{E}|X|^3/(\sigma^3 \sqrt n)$. For mildly skewed sales data, $n = 100$ is usually plenty; for heavily right-skewed data, larger $n$ or bootstrap is safer.

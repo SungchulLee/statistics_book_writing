@@ -110,3 +110,14 @@ where $\alpha$ is the mixing parameter between L1 and L2. The denominator $1 + (
 ## Summary
 
 Coordinate descent solves the lasso by cycling through coordinates and applying the soft-thresholding operator to each one. The algorithm is efficient ($O(n)$ per coordinate update), guaranteed to converge to the global optimum for separable non-smooth penalties, and naturally accommodates warm starts for computing the full regularization path. Its simplicity and efficiency have made it the standard algorithm for lasso and elastic net, implemented in widely used packages such as `glmnet` and `scikit-learn`.
+
+## Exercises
+
+**Exercise 1.**
+Implement the coordinate descent algorithm for Lasso:
+
+(a) Write the soft-thresholding operator $S_\lambda(z)$.
+
+(b) Implement the full coordinate descent loop with convergence check.
+
+(c) Compare your solution paths with `sklearn.linear_model.Lasso`.

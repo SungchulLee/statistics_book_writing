@@ -112,3 +112,15 @@ The simulation demonstrates that the $t$-test maintains a Type I error rate clos
 ## Summary
 
 Not all departures from normality are created equal. The practical significance of non-normality depends on which statistical procedure is being used, how large the sample is, and what type of departure is present. Mean-based tests are robust to a wide range of non-normal distributions, while variance-based tests are fragile. When a normality test rejects, the appropriate response is not automatically to abandon parametric methods, but rather to assess whether the specific departure matters for the specific analysis at hand.
+
+## Exercises
+
+**Exercise 1.**
+A normality test was performed on a dataset, and one outlier was detected. When the outlier is included, the $p$-value is 0.01, but after removing the outlier, the $p$-value increases to 0.20. How should this be interpreted and addressed?
+
+??? success "Solution to Exercise 1"
+
+    - The remaining data, excluding the outlier, is judged to follow a normal distribution.
+    - Including the outlier indicates that the data does not follow a normal distribution, so the outlier should be investigated in detail.
+    - If the outlier is found to be contaminated or incorrectly recorded, correct the error or remove the data point and proceed with the analysis.
+    - If the outlier is neither contaminated nor incorrectly recorded, report the results both with and without the outlier if necessary.

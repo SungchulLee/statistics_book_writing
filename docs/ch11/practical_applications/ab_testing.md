@@ -101,3 +101,64 @@ where $\sigma_\alpha = \sqrt{\frac{1}{k}\sum_{i=1}^k \alpha_i^2}$ measures the s
 
 !!! warning "Multiple comparisons without correction"
     When testing $k$ groups, the number of pairwise comparisons is $\binom{k}{2}$. Performing each at level $\alpha$ without correction inflates the family-wise error rate to $1 - (1 - \alpha)^{\binom{k}{2}}$, which can be substantial. For example, with $k = 5$ groups and $\alpha = 0.05$, the FWER reaches approximately $0.40$. Always apply a multiple comparison correction such as Bonferroni or Tukey HSD.
+
+## Exercises
+
+**Exercise 1.**
+A website runs an A/B test with three variants (A, B, C) for a checkout button. After 2 weeks, the conversion rates are: A = 5.2% ($n_A = 3000$), B = 6.1% ($n_B = 3000$), C = 5.8% ($n_C = 3000$). Why is it insufficient to simply compare each pair with a z-test?
+
+??? success "Solution to Exercise 1"
+    Comparing all three pairs (A vs B, A vs C, B vs C) involves 3 hypothesis tests, inflating the family-wise error rate. At $\alpha = 0.05$ per test, the FWER under the global null is $1 - 0.95^3 \approx 0.143$ -- nearly three times the intended level.
+
+    Instead, one should either:
+
+    1. **Use ANOVA (or a chi-squared test for proportions)** as an omnibus test first. If it rejects, follow up with pairwise comparisons using a multiple testing correction (Bonferroni, Tukey, or Dunnett if comparing to a control).
+    2. **Pre-specify a single primary comparison** (e.g., best variant vs. control) and adjust only for that comparison.
+    3. **Apply Bonferroni:** use $\alpha/3 = 0.0167$ for each pairwise comparison.
+
+---
+
+**Exercise 2.**
+An A/B test is stopped early because the treatment group shows a "significant" improvement after 3 days. Explain the statistical problem with early stopping without pre-specified stopping rules.
+
+??? success "Solution to Exercise 2"
+    Early stopping without pre-specified rules inflates the Type I error rate through **optional stopping** (also called peeking). If you check for significance at multiple time points and stop as soon as $p < 0.05$, you are effectively performing multiple tests on accumulating data.
+
+    The more frequently you peek, the higher the probability of observing $p < 0.05$ by chance under the null. Simulations show that continuous monitoring can inflate the actual Type I error rate to 20-30% even with a nominal $\alpha = 0.05$.
+
+    Proper approaches include:
+
+    - **Sequential testing** (group sequential designs): pre-specify the number of interim analyses and use adjusted significance boundaries (e.g., O'Brien-Fleming, Pocock).
+    - **Always-valid p-values** or confidence sequences that maintain Type I error control under continuous monitoring.
+    - **Fixed-horizon testing:** commit to a sample size in advance and analyze only at the end.
+
+---
+
+**Exercise 3.**
+A company runs an A/B test for 1 week and finds a p-value of 0.04 with an estimated 0.3% increase in conversion rate. The CEO asks to launch the new feature immediately. What additional considerations should the data scientist raise?
+
+??? success "Solution to Exercise 3"
+
+    1. **Practical significance:** A 0.3% increase may be statistically significant but economically negligible. The confidence interval should be examined: if it includes effects too small to matter, the finding may not justify the implementation cost.
+
+    2. **Duration:** One week may not capture weekly cycles, seasonal effects, or novelty effects. The improvement might fade (users initially curious about the new feature revert to baseline behavior).
+
+    3. **Sample ratio mismatch:** Verify that the randomization was balanced. If the treatment and control groups have unexpected size differences, the experiment may be contaminated.
+
+    4. **Multiple metrics:** If the primary metric improved but secondary metrics (revenue per user, retention) degraded, the net effect could be negative.
+
+    5. **Segment effects:** The aggregate improvement might mask heterogeneity: the feature may help one user segment while harming another.
+
+---
+
+**Exercise 4.**
+Explain the difference between using ANOVA and the chi-squared test for an A/B/C test on conversion rates. When is each appropriate?
+
+??? success "Solution to Exercise 4"
+    **Chi-squared test for independence:** Used when the outcome is categorical (e.g., converted vs. not converted). Constructs a contingency table of group $\times$ outcome and tests whether the conversion rate differs across groups. Appropriate for binary or multi-category outcomes.
+
+    **ANOVA:** Used when the outcome is continuous (e.g., revenue per user, time on page). Tests whether the group means differ. Requires approximate normality and equal variances (or use Welch's ANOVA).
+
+    For **conversion rates** (binary outcome), the chi-squared test or a logistic regression is more appropriate because the data are Bernoulli-distributed, not normal. ANOVA can approximate the chi-squared test for large samples (both are asymptotically equivalent for binary data), but the chi-squared test is the natural choice.
+
+    For **continuous metrics** (revenue, engagement time), ANOVA is appropriate. If the data are heavily skewed (common for revenue, which has many zeros), consider a transformation, a nonparametric test, or a bootstrap approach.

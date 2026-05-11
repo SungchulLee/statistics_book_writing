@@ -1,9 +1,6 @@
 # Splines and Generalized Additive Models
 
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Overview
 
 In [polynomial regression](../interaction_polynomial/polynomial_regression.md), a single polynomial of degree $d$ is fit to the entire range of a predictor. This global approach has a fundamental limitation: increasing the degree to capture local curvature in one region can introduce unwanted oscillations elsewhere (Runge's phenomenon). Splines overcome this by fitting low-degree polynomials within local intervals and joining them smoothly at boundaries called **knots**. Generalized Additive Models (GAMs) extend this idea to multiple predictors, modeling the response as an additive combination of smooth functions -- one for each predictor -- without specifying the functional form in advance.

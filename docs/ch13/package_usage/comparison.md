@@ -1,9 +1,6 @@
 # sklearn vs statsmodels Comparison
 
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Overview
 
 Python offers two primary libraries for regression modeling: **scikit-learn** (`sklearn`) and **statsmodels**. They serve different purposes and are best suited for different workflows.
@@ -140,3 +137,22 @@ print(f"Ridge CV R²: {cv_scores.mean():.4f} ± {cv_scores.std():.4f}")
 ## Summary
 
 `statsmodels` excels at statistical inference and diagnostics, while `sklearn` excels at prediction and model deployment. The two libraries are complementary, and using both in a regression workflow provides the most complete analysis.
+## Exercises
+
+**Exercise 1.**
+A data scientist needs to fit a linear regression model and obtain p-values for each coefficient, 95% confidence intervals, and a comprehensive model summary. Should they use `sklearn` or `statsmodels`? Justify your answer.
+
+??? success "Solution to Exercise 1"
+    **`statsmodels`** is the clear choice. Its `OLS` class provides a `.summary()` method that includes coefficient estimates, standard errors, $t$-statistics, p-values, confidence intervals, $R^2$, adjusted $R^2$, $F$-statistic, AIC, BIC, and residual diagnostics -- all in one output.
+
+    `sklearn`'s `LinearRegression` does not provide any inferential statistics (no p-values, no standard errors, no confidence intervals). It is designed for prediction, not inference.
+
+---
+
+**Exercise 2.**
+Explain one advantage of `sklearn` over `statsmodels` for building predictive models, particularly when using techniques like cross-validation and pipelines.
+
+??? success "Solution to Exercise 2"
+    `sklearn` provides a consistent API with `.fit()`, `.predict()`, and `.score()` methods that integrate seamlessly with its ecosystem of tools: `cross_val_score` for cross-validation, `Pipeline` for chaining preprocessing and modeling steps, `GridSearchCV` for hyperparameter tuning, and `StandardScaler` for feature scaling.
+
+    `statsmodels` lacks this standardized interface and does not natively support cross-validation pipelines, making it cumbersome for model selection and evaluation in a predictive modeling workflow.

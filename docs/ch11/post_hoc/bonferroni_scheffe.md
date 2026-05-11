@@ -1,9 +1,6 @@
 # Bonferroni and Scheffe Methods
 
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Overview
 
 When a one-way ANOVA rejects the null hypothesis, it tells us that at least one group mean differs from the rest -- but not which group or groups are responsible. A natural next step is to test individual comparisons: pairwise differences such as $\mu_i - \mu_j$, or more complex linear combinations of the group means. The difficulty is that performing many tests simultaneously inflates the probability of at least one false positive. If we test $m$ independent comparisons each at level $\alpha$, the family-wise error rate (FWER) can be as high as $1 - (1 - \alpha)^m$, which grows quickly with $m$.
@@ -163,3 +160,32 @@ The two methods address the same problem -- controlling the FWER -- but are opti
     Using Bonferroni for data-driven comparisons violates the method's assumptions. If the choice of which comparisons to test was influenced by the data, the actual number of "implicit" comparisons exceeds $m$, and the FWER is no longer controlled at $\alpha$. In such cases, Scheffe's method is the correct choice because its guarantee holds regardless of how contrasts are selected.
 
 As a rule of thumb: if the number of planned comparisons satisfies $m < k - 1$, Bonferroni is typically more powerful than Scheffe. When $m$ approaches or exceeds $\binom{k}{2}$, or when the comparisons are not pre-specified, Scheffe becomes the preferred method.
+
+## Exercises
+
+**Exercise 1.**
+A researcher performs a one-way ANOVA with $k = 5$ groups and $n = 10$ observations per group, yielding $\text{MS}_W = 4.0$. The researcher wants to test the following three planned contrasts at $\alpha = 0.05$:
+
+- $C_1$: $\mu_1 - \mu_2 = 0$ (comparing groups 1 and 2)
+- $C_2$: $\mu_3 - \frac{1}{2}(\mu_4 + \mu_5) = 0$ (comparing group 3 to the average of groups 4 and 5)
+- $C_3$: $\mu_4 - \mu_5 = 0$ (comparing groups 4 and 5)
+
+**(a)** What is the Bonferroni-adjusted significance level for each contrast?
+
+**(b)** For $C_1$, suppose $\bar{Y}_1 = 12.0$ and $\bar{Y}_2 = 9.5$. Compute the test statistic and determine whether the contrast is significant using the Bonferroni correction.
+
+**(c)** Would Scheffe's method be more or less powerful than Bonferroni for these three specific contrasts? Explain.
+
+??? success "Solution to Exercise 1"
+
+    **(a)** With $m = 3$ planned contrasts and $\alpha = 0.05$, the Bonferroni-adjusted level is $\alpha^* = 0.05 / 3 = 0.0167$ per contrast.
+
+    **(b)** For contrast $C_1: \mu_1 - \mu_2$, the test statistic is
+
+    $$
+    t = \frac{\bar{Y}_1 - \bar{Y}_2}{\sqrt{\text{MS}_W \left(\frac{1}{n_1} + \frac{1}{n_2}\right)}} = \frac{12.0 - 9.5}{\sqrt{4.0 \times (1/10 + 1/10)}} = \frac{2.5}{\sqrt{0.8}} = \frac{2.5}{0.894} = 2.80
+    $$
+
+    The critical value from $t_{45}$ at $\alpha^*/2 = 0.0083$ is approximately $t_{0.0083, 45} \approx 2.50$. Since $2.80 > 2.50$, the contrast is significant: groups 1 and 2 differ at the Bonferroni-corrected level.
+
+    **(c)** Scheffe's method would be less powerful for these three specific contrasts. Scheffe controls the FWER for all possible contrasts (not just the three being tested), so its critical value is determined by $\sqrt{(k-1) F_{0.05, k-1, N-k}} = \sqrt{4 \times F_{0.05, 4, 45}} \approx \sqrt{4 \times 2.58} = 3.21$. This is larger than the Bonferroni critical value of approximately 2.50. Bonferroni is more powerful when the number of planned contrasts is small relative to the total number of possible contrasts.

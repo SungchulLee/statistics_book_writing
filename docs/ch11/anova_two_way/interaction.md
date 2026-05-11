@@ -1,9 +1,6 @@
 # Two-Way ANOVA: Interaction Effects
 
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## 1. Procedure for Conducting Two-Way ANOVA
 
 [kor|](https://www.youtube.com/watch?v=i4NHIGvTB-g) [eng|](https://www.youtube.com/playlist?list=PLWtoq-EhUJe2TjJYfZUQtuq7a0dQCnOWp) [wiki|](https://en.wikipedia.org/wiki/Two-way_analysis_of_variance)
@@ -254,3 +251,52 @@ The R output provides the same ANOVA table with Df, Sum Sq, Mean Sq, F value, an
 
 - Both `Teaching_Method` and `Study_Time` have statistically significant main effects on `Score`.
 - The interaction between `Teaching_Method` and `Study_Time` is not statistically significant, suggesting that the effect of teaching method on scores does not depend on study time.
+## Exercises
+
+**Exercise 1.**
+In the two-way ANOVA model $Y_{ijk} = \mu + \alpha_i + \beta_j + (\alpha\beta)_{ij} + \varepsilon_{ijk}$, explain in words what the interaction term $(\alpha\beta)_{ij}$ represents. Give a concrete example from an educational context where you would expect a significant interaction.
+
+??? success "Solution to Exercise 1"
+    The interaction term $(\alpha\beta)_{ij}$ captures the additional effect on the response that occurs when Factor A is at level $i$ and Factor B is at level $j$, beyond what would be predicted by the main effects $\alpha_i$ and $\beta_j$ alone. It measures the degree to which the effect of one factor depends on the level of the other.
+
+    **Example:** Suppose Factor A is teaching method (lecture vs. hands-on) and Factor B is student background (STEM vs. humanities). The main effect of hands-on teaching might be positive overall, but if it is much more beneficial for STEM students than humanities students, the interaction term would be significant. The non-parallel lines in an interaction plot would confirm this.
+
+---
+
+**Exercise 2.**
+A $2 \times 3$ factorial experiment with $c = 4$ replicates per cell yields $\text{SSA} = 30$, $\text{SSB} = 80$, $\text{SSAB} = 24$, $\text{SSE} = 60$. Construct the full ANOVA table and test all three effects at $\alpha = 0.05$.
+
+??? success "Solution to Exercise 2"
+    Degrees of freedom: $a - 1 = 1$, $b - 1 = 2$, $(a-1)(b-1) = 2$, $ab(c-1) = 6 \times 3 = 18$.
+
+    | Source | SS | df | MS | F |
+    |--------|-----|-----|-------|-------|
+    | Factor A | 30 | 1 | 30.0 | 9.00 |
+    | Factor B | 80 | 2 | 40.0 | 12.00 |
+    | Interaction | 24 | 2 | 12.0 | 3.60 |
+    | Error | 60 | 18 | 3.333 | |
+    | Total | 194 | 23 | | |
+
+    Critical values at $\alpha = 0.05$: $F_{0.05, 1, 18} \approx 4.41$, $F_{0.05, 2, 18} \approx 3.55$.
+
+    - **Factor A:** $F = 9.00 > 4.41$, reject $H_0$. Significant main effect.
+    - **Factor B:** $F = 12.00 > 3.55$, reject $H_0$. Significant main effect.
+    - **Interaction:** $F = 3.60 > 3.55$, reject $H_0$. Significant interaction (barely).
+
+---
+
+**Exercise 3.**
+Using the tooth growth dataset (supplement type OJ vs. VC, dose levels 0.5, 1.0, 2.0), the interaction plot shows that OJ produces higher tooth length than VC at low doses but the two supplements converge at dose 2.0. Explain why a researcher should not interpret the main effects of supplement type without also considering the significant interaction.
+
+??? success "Solution to Exercise 3"
+    When a significant interaction is present, the main effects are misleading because the effect of one factor depends on the level of the other. Reporting that OJ produces greater tooth growth on average (main effect) ignores the fact that this advantage disappears at the highest dose level. At dose 2.0, the two supplements are equally effective, so the main effect of supplement type is driven entirely by the lower dose levels. Proper interpretation requires examining simple effects: the effect of supplement at each dose level separately.
+
+---
+
+**Exercise 4.**
+Explain the difference between a two-way ANOVA without replication and one with replication. In the without-replication case, why is the interaction sum of squares confounded with the error term?
+
+??? success "Solution to Exercise 4"
+    In two-way ANOVA **with replication**, each combination of factor levels has multiple observations, allowing the total variability to be decomposed into $\text{SSA} + \text{SSB} + \text{SSAB} + \text{SSE}$. The within-cell variability provides an independent estimate of error ($\text{SSE}$).
+
+    In two-way ANOVA **without replication**, each cell has only one observation. With a single observation per cell, there is no within-cell variability to estimate $\text{SSE}$ separately. The residual $\text{SSAB}$ then serves as the error term, meaning the interaction effect cannot be tested independently. Any true interaction is absorbed into the error, potentially masking both the interaction and inflating the error variance.

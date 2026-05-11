@@ -156,3 +156,44 @@ so $\hat{t}_{0.5} = 5$ months.
     non-parametric estimate via the cumulative hazard.  For large samples the
     two estimators are nearly identical, since
     $\hat{S}_{\text{KM}}(t) \approx \exp(-\hat{H}_{\text{NA}}(t))$.
+
+## Exercises
+
+**Exercise 1.**
+Kaplan-Meier Estimation
+
+Ten patients are followed after diagnosis. Their observed times (in months) and
+event indicators ($\delta$: 1 = death, 0 = censored) are:
+
+| Subject | Time | $\delta$ |
+|:-------:|:----:|:--------:|
+| 1 | 3 | 1 |
+| 2 | 5 | 0 |
+| 3 | 7 | 1 |
+| 4 | 8 | 1 |
+| 5 | 10 | 0 |
+| 6 | 12 | 1 |
+| 7 | 12 | 0 |
+| 8 | 15 | 1 |
+| 9 | 18 | 0 |
+| 10 | 20 | 1 |
+
+**(a)** Compute the Kaplan--Meier estimate $\hat{S}(t)$ at each event time.
+
+**(b)** What is the estimated median survival time?
+
+??? success "Solution to Exercise 1"
+
+    **(a)** Distinct event times: 3, 7, 8, 12, 15, 20.
+
+    | $t_{(j)}$ | $n_j$ | $d_j$ | $1 - d_j/n_j$ | $\hat{S}(t_{(j)})$ |
+    |:----------:|:-----:|:-----:|:--------------:|:-------------------:|
+    | 3 | 10 | 1 | 0.900 | 0.900 |
+    | 7 | 8 | 1 | 0.875 | 0.788 |
+    | 8 | 7 | 1 | 0.857 | 0.675 |
+    | 12 | 5 | 1 | 0.800 | 0.540 |
+    | 15 | 3 | 1 | 0.667 | 0.360 |
+    | 20 | 1 | 1 | 0.000 | 0.000 |
+
+    **(b)** $\hat{S}(12) = 0.540 > 0.5$ and $\hat{S}(15) = 0.360 < 0.5$, so
+    the median survival time is $\hat{t}_{0.5} = 15$ months.

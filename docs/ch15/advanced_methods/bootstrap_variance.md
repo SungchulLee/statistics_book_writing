@@ -129,3 +129,48 @@ f_stat, p_val = bootstrap_variance_test(x, y)
 print(f"Variance ratio: {f_stat:.4f}")
 print(f"Bootstrap p-value: {p_val:.4f}")
 ```
+
+
+## Exercises
+
+**Exercise 1.**
+Describe the bootstrap procedure for testing $H_0: \sigma_1^2 = \sigma_2^2$ for two independent samples.
+
+??? success "Solution to Exercise 1"
+
+    1. Compute the observed test statistic $T_{\text{obs}} = s_1^2/s_2^2$ (or $|s_1^2 - s_2^2|$).
+    2. Pool both samples to create a combined dataset (enforcing $H_0$).
+    3. For $b = 1, \dots, B$: draw bootstrap samples of sizes $n_1$ and $n_2$ from the pooled data, compute $T_b^*$.
+    4. The p-value is the proportion of $T_b^*$ values as extreme as $T_{\text{obs}}$.
+
+    This procedure is valid without normality because the bootstrap reference distribution adapts to the actual data distribution.
+
+---
+
+**Exercise 2.**
+Why is the bootstrap particularly useful for variance testing compared to classical methods?
+
+??? success "Solution to Exercise 2"
+    Classical variance tests (chi-squared, F-test) are highly sensitive to non-normality -- even mild departures can severely distort Type I error rates. The bootstrap avoids distributional assumptions entirely, making it reliable for skewed, heavy-tailed, or otherwise non-normal data.
+
+    Additionally, the bootstrap can test complex hypotheses about variances (ratios, functions of variances) that do not have simple classical test statistics.
+
+---
+
+**Exercise 3.**
+How many bootstrap replicates $B$ are typically needed for reliable variance testing? What determines this choice?
+
+??? success "Solution to Exercise 3"
+    For hypothesis testing, $B = 1000$ is often sufficient for approximate p-values, but $B = 10{,}000$ or more is recommended for precise p-values (especially when testing at small $\alpha$ levels like 0.01).
+
+    The required $B$ depends on: (1) the desired precision of the p-value ($\text{SE}(\hat{p}) \approx \sqrt{p(1-p)/B}$), (2) the significance level (smaller $\alpha$ requires larger $B$), and (3) the test statistic's variability. For $\alpha = 0.05$, $B = 2000$ gives p-value standard error of about 0.005.
+
+---
+
+**Exercise 4.**
+A bootstrap test for equal variances produces a p-value of 0.047, while Levene's test gives $p = 0.12$. Discuss the possible reasons for disagreement.
+
+??? success "Solution to Exercise 4"
+    The tests may disagree because they test slightly different things and have different sensitivities. Levene's test is based on absolute deviations from group means/medians, while the bootstrap may use the variance ratio directly. Levene's test is designed to be robust to non-normality, but the bootstrap adapts more flexibly to the data's actual distribution.
+
+    Other reasons: (1) the bootstrap p-value has Monte Carlo error (run with larger $B$ to check stability), (2) the data may have features (outliers, skewness) that affect the two statistics differently, (3) the tests have different power profiles against different alternatives.

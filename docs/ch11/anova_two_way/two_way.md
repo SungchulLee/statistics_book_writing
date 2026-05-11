@@ -1,9 +1,6 @@
 # Two-Way ANOVA: Main Effects and Blocking
 
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## 1. Two-Way ANOVA (Analysis of Variance)
 
 ### A. Two-Way ANOVA
@@ -208,3 +205,116 @@ Two-Way ANOVA is a powerful statistical method used to examine the effects of tw
 
 - **Assumption Sensitivity**: As with One-Way ANOVA, the results of Two-Way ANOVA can be sensitive to violations of assumptions, especially homogeneity of variance.
 - **Complexity with Interaction**: Interpreting the interaction effect can be challenging, especially if the interaction is significant but the main effects are not. Graphical methods (like interaction plots) are often used to interpret these effects.
+
+## Exercises
+
+**Exercise 1.**
+Two factors: Training (online vs in-person) × Experience (junior vs senior), $n = 4$ per cell. Cell means: 12.5, 18.5, 15.0, 22.5. (a)-(d) Compute two-way ANOVA.
+
+??? success "Solution to Exercise 1"
+    (a) Row means: Online 15.5, In-person 18.75. Col means: Junior 13.75, Senior 20.5. Grand: 17.125.
+
+    (b) $\mathrm{SSA}$ (Training) = 42.25, $\mathrm{SSB}$ (Experience) = 182.25, $\mathrm{SSAB}$ (Interaction) = 2.25, $\mathrm{SSW}$ = 20.0.
+
+    (c) ANOVA table:
+
+    | Source | SS | df | MS | F |
+    |---|---|---|---|---|
+    | Training | 42.25 | 1 | 42.25 | 25.35 |
+    | Experience | 182.25 | 1 | 182.25 | 109.35 |
+    | Interaction | 2.25 | 1 | 2.25 | 1.35 |
+    | Within | 20.0 | 12 | 1.667 | |
+    | Total | 246.75 | 15 | | |
+
+    Critical $F_{1, 12, 0.05} = 4.75$. Both main effects significant; interaction not significant.
+
+    (d) Effect of training method on productivity does NOT depend on experience level. In-person uniformly better, by about the same amount for juniors and seniors. **Additive** model is adequate.
+
+---
+
+**Exercise 2.**
+**Interaction interpretation.** What does a significant interaction mean for marginal effects?
+
+??? success "Solution to Exercise 2"
+    Significant interaction: effect of factor A depends on level of factor B (and vice versa).
+
+    **Marginal effects become misleading** when interaction is present:
+
+    - "Drug A increases blood pressure by 10 on average" — but might increase by 20 in elderly and decrease by 5 in young.
+    - The "marginal" effect averages over groups, hiding heterogeneity.
+
+    **Best practice with significant interaction:**
+
+    - Report **simple effects** (effect of A at each level of B).
+    - Interpret marginal effects with caution.
+    - Visualize interaction plot (each level of B as separate line).
+
+    Without interaction (Exercise 1): marginal effects are accurate descriptions. Each factor effect is the same across other factor's levels.
+
+---
+
+**Exercise 3.**
+**Crossed vs nested designs.**
+
+??? success "Solution to Exercise 3"
+    **Crossed:** every level of A appears with every level of B (Exercise 1: training × experience). Standard two-way ANOVA.
+
+    **Nested:** levels of one factor are unique to each level of another (departments nested within schools — different departments per school). Different analysis: hierarchical/mixed-effects models.
+
+    Crossed designs allow estimating interaction; nested designs don't (the "interaction" is confounded with factor B).
+
+    Common confusion: random vs fixed factors. Random factors (e.g., subjects) introduce additional variance components. Use mixed models.
+
+---
+
+**Exercise 4.**
+**Higher-order interactions.** Three-factor ANOVA has main effects, 2-way interactions, and 3-way interaction. What does the 3-way mean?
+
+??? success "Solution to Exercise 4"
+    3-way interaction (A × B × C): the 2-way A × B interaction depends on the level of C.
+
+    Example: drug effect depends on disease type, but the disease-dependence varies by age group.
+
+    **Higher-order interactions are hard to interpret.** Often suggests reorganizing the analysis:
+
+    - Subset to specific level of C and reanalyze.
+    - Look at the 2-way interaction within each level of C.
+
+    Practical advice: with $k$ factors, the number of interactions grows as $2^k - k - 1$. Beyond 2-way, often work in regression framework with explicit terms rather than ANOVA decomposition.
+
+---
+
+**Exercise 5.**
+**Sums-of-squares Type I/II/III** for unbalanced designs.
+
+??? success "Solution to Exercise 5"
+    For balanced designs, the orthogonality makes SS decomposition unambiguous. For unbalanced:
+
+    **Type I (sequential):** SS for each factor adjusted for previously entered factors. Order-dependent.
+
+    **Type II:** SS for each factor adjusted for other main effects, but not interactions. Symmetric across main effects.
+
+    **Type III:** SS for each factor adjusted for everything else (including interactions). Most commonly reported. SAS default.
+
+    R's `aov()` uses Type I; `car::Anova(type="III")` for Type III. For balanced designs, all types agree.
+
+---
+
+**Exercise 6.**
+**Two-way vs separate one-way analyses.** Why is two-way preferred when both factors are studied?
+
+??? success "Solution to Exercise 6"
+    Two-way ANOVA:
+
+    - **Estimates interaction** (cannot be done with separate one-ways).
+    - **More efficient:** combines noise across cells for a better $\mathrm{MSW}$ estimate.
+    - **Power:** smaller residual variance → easier to detect main effects.
+    - **Control for confounding:** main effect of A is estimated holding B fixed.
+
+    Separate one-ways:
+
+    - Lose interaction information.
+    - Inflated noise estimates (each separate analysis ignores other factor).
+    - Potential confounding if factor levels are correlated.
+
+    **Always use multi-way ANOVA (or regression) when multiple factors are manipulated.** This is the foundation of factorial experimental design (Fisher's seminal contribution).

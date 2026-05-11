@@ -83,3 +83,73 @@ Because of this fragility, more robust alternatives are preferred in practice:
 
 !!! warning "When to Use the F-Test"
     Use the classical F-test only when you have strong evidence that both populations are normally distributed (for example, from a Shapiro-Wilk test or Q-Q plots). Otherwise, prefer Levene's or Brown-Forsythe test.
+
+## Exercises
+
+**Exercise 1.**
+Two independent samples from normal populations yield $s_1^2 = 25$ ($n_1 = 16$) and $s_2^2 = 10$ ($n_2 = 21$). Test $H_0: \sigma_1^2 = \sigma_2^2$ versus $H_a: \sigma_1^2 \neq \sigma_2^2$ at $\alpha = 0.05$.
+
+??? success "Solution to Exercise 1"
+    The F-statistic is:
+
+    $$
+    F = \frac{s_1^2}{s_2^2} = \frac{25}{10} = 2.5
+    $$
+
+    Under $H_0$, $F \sim F_{n_1 - 1, n_2 - 1} = F_{15, 20}$.
+
+    For a two-sided test at $\alpha = 0.05$, the critical values are $F_{0.025, 15, 20} \approx 2.57$ and $F_{0.975, 15, 20} \approx 1/F_{0.025, 20, 15} \approx 1/2.76 \approx 0.362$.
+
+    Since $0.362 < 2.5 < 2.57$, the test statistic falls within the acceptance region. We fail to reject $H_0$ at the 5% level. There is insufficient evidence to conclude the variances differ.
+
+---
+
+**Exercise 2.**
+Explain why the F-test for comparing two variances is sensitive to departures from normality. What alternative test is more robust?
+
+??? success "Solution to Exercise 2"
+    The F-test relies on the ratio $s_1^2/s_2^2$ following an F-distribution under $H_0$, which requires both populations to be exactly normal. The sample variance is sensitive to heavy tails and outliers (since it involves squared deviations), and the F-distribution of the ratio is particularly fragile: even mild departures from normality can inflate the Type I error rate substantially.
+
+    Simulation studies show that for heavy-tailed distributions (e.g., $t$-distributions with small degrees of freedom), the actual rejection rate of the F-test at nominal $\alpha = 0.05$ can exceed 15-20%.
+
+    **Robust alternatives** include:
+
+    - **Levene's test:** Based on absolute deviations from group means.
+    - **Brown-Forsythe test:** Based on absolute deviations from group medians (even more robust).
+    - **Bartlett's test:** More powerful under normality but also sensitive to non-normality.
+
+---
+
+**Exercise 3.**
+Derive the F-test statistic from the chi-squared distributions of the sample variances. That is, show that $(s_1^2/\sigma_1^2)/(s_2^2/\sigma_2^2) \sim F_{n_1-1, n_2-1}$ under normality.
+
+??? success "Solution to Exercise 3"
+    Under normality:
+
+    $$
+    \frac{(n_1-1)s_1^2}{\sigma_1^2} \sim \chi^2_{n_1-1}, \quad \frac{(n_2-1)s_2^2}{\sigma_2^2} \sim \chi^2_{n_2-1}
+    $$
+
+    and these are independent (since the samples are independent). By definition, the ratio of two independent chi-squared random variables, each divided by their degrees of freedom, follows an F-distribution:
+
+    $$
+    F = \frac{\chi^2_{n_1-1}/(n_1-1)}{\chi^2_{n_2-1}/(n_2-1)} = \frac{s_1^2/\sigma_1^2}{s_2^2/\sigma_2^2}
+    $$
+
+    Under $H_0: \sigma_1^2 = \sigma_2^2$, this simplifies to $F = s_1^2/s_2^2 \sim F_{n_1-1, n_2-1}$. $\square$
+
+---
+
+**Exercise 4.**
+If $F = s_1^2/s_2^2 \sim F_{d_1, d_2}$, show that $1/F = s_2^2/s_1^2 \sim F_{d_2, d_1}$. Why does this property matter for the two-sided test?
+
+??? success "Solution to Exercise 4"
+    If $F = (U/d_1)/(V/d_2)$ where $U \sim \chi^2_{d_1}$ and $V \sim \chi^2_{d_2}$ are independent, then:
+
+    $$
+    \frac{1}{F} = \frac{V/d_2}{U/d_1} \sim F_{d_2, d_1}
+    $$
+
+    by the definition of the F-distribution with the roles of numerator and denominator swapped.
+
+    This matters for the two-sided test because the F-distribution is not symmetric. The lower critical value $F_{\alpha/2, d_1, d_2}$ can be computed as $1/F_{1-\alpha/2, d_2, d_1}$, which is useful since many tables only provide upper-tail critical values. It also means that convention typically places the larger variance in the numerator ($F \geq 1$), converting the two-sided test to a one-sided test with doubled significance level.

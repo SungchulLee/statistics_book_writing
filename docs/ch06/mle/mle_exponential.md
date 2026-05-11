@@ -83,3 +83,75 @@ $$
 $$
 
 This means the estimator becomes more precise as the sample size increases, with standard error proportional to $\lambda / \sqrt{n}$.
+
+## Exercises
+
+**Exercise 1.**
+Derive the MLE of $\lambda$ for an i.i.d. sample $x_1, \dots, x_n$ from $\text{Exp}(\lambda)$ (where the density is $f(x;\lambda) = \lambda e^{-\lambda x}$ for $x > 0$).
+
+??? success "Solution to Exercise 1"
+    The log-likelihood is:
+
+    $$
+    \ell(\lambda) = \sum_{i=1}^n \bigl(\log\lambda - \lambda x_i\bigr) = n\log\lambda - \lambda\sum_{i=1}^n x_i
+    $$
+
+    Setting the derivative to zero:
+
+    $$
+    \frac{d\ell}{d\lambda} = \frac{n}{\lambda} - \sum_{i=1}^n x_i = 0 \implies \hat{\lambda} = \frac{n}{\sum_{i=1}^n x_i} = \frac{1}{\bar{X}}
+    $$
+
+    The second derivative is $-n/\lambda^2 < 0$, confirming this is a maximum.
+
+---
+
+**Exercise 2.**
+A call center receives calls with exponentially distributed inter-arrival times. In a sample of 50 inter-arrival times, $\bar{x} = 4.2$ minutes. Find the MLE of the rate $\lambda$ and construct an approximate 95% confidence interval using asymptotic normality.
+
+??? success "Solution to Exercise 2"
+    The MLE is $\hat{\lambda} = 1/\bar{x} = 1/4.2 \approx 0.2381$ calls per minute.
+
+    The asymptotic variance is $\hat{\lambda}^2/n = 0.2381^2/50 = 0.001133$, giving $\text{SE}(\hat{\lambda}) = \sqrt{0.001133} \approx 0.03367$.
+
+    The 95% confidence interval is:
+
+    $$
+    \hat{\lambda} \pm 1.96 \times \text{SE}(\hat{\lambda}) = 0.2381 \pm 0.0660 = (0.172, 0.304)
+    $$
+
+    In terms of mean inter-arrival time $1/\lambda$: the MLE is 4.2 minutes, and by the invariance property, the interval for $1/\lambda$ is approximately $(1/0.304, 1/0.172) = (3.29, 5.81)$ minutes.
+
+---
+
+**Exercise 3.**
+Show that the MLE $\hat{\lambda} = 1/\bar{X}$ is biased for $\lambda$ in finite samples. Compute the exact bias for $n = 2$.
+
+??? success "Solution to Exercise 3"
+    The sum $S = \sum X_i \sim \text{Gamma}(n, \lambda)$, so $\bar{X} = S/n$. The MLE is $\hat{\lambda} = n/S$.
+
+    For the Gamma$(n, \lambda)$ distribution, $E[1/S] = \lambda/(n-1)$ (this is a known result for the inverse of a Gamma random variable when $n > 1$). Therefore:
+
+    $$
+    E[\hat{\lambda}] = E\!\left[\frac{n}{S}\right] = \frac{n\lambda}{n-1}
+    $$
+
+    The bias is:
+
+    $$
+    \text{Bias}(\hat{\lambda}) = \frac{n\lambda}{n-1} - \lambda = \frac{\lambda}{n-1}
+    $$
+
+    For $n = 2$: $\text{Bias} = \lambda/(2-1) = \lambda$. The MLE overestimates $\lambda$ by a factor of $n/(n-1)$. A bias-corrected estimator is $\tilde{\lambda} = (n-1)/\sum X_i$.
+
+---
+
+**Exercise 4.**
+Compare the MLE $\hat{\lambda} = 1/\bar{X}$ with the Method of Moments estimator for $\lambda$. Are they the same?
+
+??? success "Solution to Exercise 4"
+    For the exponential distribution, $E[X] = 1/\lambda$. The MOM estimator sets $\bar{X} = 1/\hat{\lambda}$, giving $\hat{\lambda}_{\text{MOM}} = 1/\bar{X}$.
+
+    This is identical to the MLE. The coincidence occurs because the exponential is a one-parameter exponential family, and for such families the score equation $\partial\ell/\partial\lambda = 0$ and the first moment equation $\bar{X} = E_\lambda[X]$ yield the same estimator.
+
+    Both estimators share the same finite-sample bias of $\lambda/(n-1)$ and the same asymptotic variance $\lambda^2/n$.

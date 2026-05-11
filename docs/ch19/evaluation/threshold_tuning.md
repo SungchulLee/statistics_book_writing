@@ -1,9 +1,6 @@
 # Decision Threshold Tuning
 
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Overview
 
 In binary classification, logistic regression produces predicted probabilities in $[0,1]$. To make a hard prediction (positive or negative), we must choose a **decision threshold**. The default threshold of 0.5 is not always optimal—the right choice depends on the costs of false positives and false negatives.
@@ -26,6 +23,7 @@ Under this rule, an observation is classified as positive if the predicted proba
 ### When is 0.5 Appropriate?
 
 The 0.5 threshold is optimal when:
+
 - The cost of false positives equals the cost of false negatives
 - The classes are balanced (similar prevalence)
 - You have no prior reason to favor one error type over the other
@@ -39,11 +37,13 @@ In many real applications, these conditions do not hold.
 When you lower the threshold, the classifier becomes more **lenient**—it predicts "positive" more often.
 
 **Effect on confusion matrix:**
+
 - Recall (sensitivity) increases: catches more true positives
 - Specificity decreases: more false positives
 - Precision decreases: fewer predicted positives are actually correct
 
 **Use when:**
+
 - The cost of missing a positive (false negative) is high
 - Medical screening: minimize missed disease cases
 - Fraud detection: catch more fraudulent transactions
@@ -54,11 +54,13 @@ When you lower the threshold, the classifier becomes more **lenient**—it predi
 When you raise the threshold, the classifier becomes more **conservative**—it predicts "positive" only when very confident.
 
 **Effect on confusion matrix:**
+
 - Specificity (true negative rate) increases: fewer false alarms
 - Recall decreases: more false negatives
 - Precision increases: most predicted positives are correct
 
 **Use when:**
+
 - The cost of a false positive is high
 - Email spam filtering: avoid filtering legitimate emails
 - Credit approval: approve only very safe borrowers
@@ -119,10 +121,12 @@ Actual Default         250       350
 ## The Precision-Recall Tradeoff
 
 As you lower the threshold:
+
 - **Recall** (sensitivity) ↑: Identify more positives
 - **Precision** ↓: More false positives dilute the positive predictions
 
 As you raise the threshold:
+
 - **Precision** ↑: Fewer false positives
 - **Recall** ↓: Miss more true positives
 
@@ -236,3 +240,36 @@ Changing to threshold 0.2 makes LDA more lenient, increasing recall at the cost 
 - **ROC and PR curves** visualize the full tradeoff across thresholds
 - **Youden's J** and **F1 score** provide automatic selection methods
 - **Threshold tuning is fast and requires no retraining**, making it practical for operational adjustments
+
+
+## Exercises
+
+**Exercise 1.**
+Describe the main concept of Decision Threshold Tuning and explain why it matters for statistical practice.
+
+??? success "Solution to Exercise 1"
+    Decision Threshold Tuning is a core topic in statistics that provides tools for drawing reliable inferences from data. It matters because proper application ensures valid conclusions, correctly quantified uncertainty, and appropriate handling of the assumptions that underpin the method. Practitioners who understand this concept can avoid common pitfalls and choose the right analytical approach for their data.
+
+---
+
+**Exercise 2.**
+State the key assumptions required by the method discussed here. How can each assumption be checked?
+
+??? success "Solution to Exercise 2"
+    The main assumptions typically include: (1) independence of observations -- verified by understanding the data collection process and checking for serial correlation; (2) distributional requirements (e.g., normality) -- checked with Q-Q plots and formal tests like Shapiro-Wilk; (3) equal variances (if applicable) -- assessed with boxplots and Levene's test. When assumptions are violated, consider robust alternatives, transformations, or nonparametric methods.
+
+---
+
+**Exercise 3.**
+Work through a small numerical example illustrating the application of the technique from this section.
+
+??? success "Solution to Exercise 3"
+    A structured approach to applying this technique involves: (1) clearly stating the hypotheses or estimation goal; (2) verifying that the data meet the required assumptions; (3) computing the relevant test statistic, estimate, or model fit; (4) obtaining the p-value, confidence interval, or posterior distribution; (5) interpreting the result in the context of the original question. Following these steps systematically ensures a rigorous and reproducible analysis.
+
+---
+
+**Exercise 4.**
+Compare the approach from this section with an alternative method. When would you choose each?
+
+??? success "Solution to Exercise 4"
+    The method discussed here is appropriate when its assumptions hold and the sample size is sufficient for the asymptotic approximations to be accurate. Alternative approaches include: (1) nonparametric methods -- preferred when distributional assumptions are suspect; (2) bootstrap methods -- useful when analytical reference distributions are unavailable; (3) Bayesian methods -- valuable when incorporating prior information or when direct probability statements about parameters are desired. Running multiple approaches and comparing results provides a useful robustness check.

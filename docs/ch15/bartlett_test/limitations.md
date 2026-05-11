@@ -67,6 +67,7 @@ Despite its limitations, Bartlett's test remains useful in specific settings:
 - **Large, well-behaved samples.** With large sample sizes from nearly normal populations, the chi-square approximation is accurate.
 
 !!! tip "Decision Rule for Practitioners"
+
     1. Test normality in each group (Shapiro-Wilk or Q-Q plots).
     2. If normality holds: use Bartlett's test for maximum power.
     3. If normality is doubtful: use the Brown-Forsythe test (Section 15.5).
@@ -75,3 +76,13 @@ Despite its limitations, Bartlett's test remains useful in specific settings:
 ## Historical Context
 
 Bartlett published the test in 1937 as an extension of the F-test to $k > 2$ groups. For decades it was the standard test for homogeneity of variances. The recognition of its extreme sensitivity to non-normality led to the development of robust alternatives by Levene (1960), Brown and Forsythe (1974), and Fligner and Killeen (1976). Today, most statistical software defaults to Levene's test or Brown-Forsythe rather than Bartlett's test for routine use.
+
+## Exercises
+
+**Exercise 1.**
+For two datasets that are not normally distributed, a Bartlett's test was performed, resulting in a low p-value (rejection of $H_0$: equal variances). However, a Levene's test yielded a high p-value (failure to reject $H_0$). How should these two test results be interpreted?
+
+??? success "Solution to Exercise 1"
+
+    - The results of Bartlett's test are **not reliable** when the assumption of normality is violated. Bartlett's test is highly sensitive to non-normality, and its rejection of the null hypothesis may be driven by the distributional shape rather than actual differences in variance.
+    - Levene's test is **less sensitive** to violations of normality, so it provides a more trustworthy result in this scenario. It is reasonable to conclude that the variances of the two datasets are equal.

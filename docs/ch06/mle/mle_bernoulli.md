@@ -1,9 +1,5 @@
 # MLE for Bernoulli Distribution
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Overview
 
 Let $x^{(i)}$ be $m$ i.i.d. samples from $B(p)$. Then, $p$ can be estimated by $\hat{p}$ where:
@@ -183,3 +179,87 @@ ax.set_xlabel("Probability (p)")
 ax.set_ylabel("Log-likelihood")
 plt.show()
 ```
+
+## Exercises
+
+**Exercise 1.**
+A coin is flipped 20 times, producing 13 heads and 7 tails. Write the log-likelihood function and find the MLE $\hat{p}$ analytically.
+
+??? success "Solution to Exercise 1"
+    Let $k = 13$ heads out of $n = 20$ flips. The log-likelihood is:
+
+    $$
+    \ell(p) = k \log p + (n-k) \log(1-p) = 13\log p + 7\log(1-p)
+    $$
+
+    Setting the derivative to zero:
+
+    $$
+    \frac{d\ell}{dp} = \frac{13}{p} - \frac{7}{1-p} = 0
+    $$
+
+    $$
+    13(1-p) = 7p \implies 13 - 13p = 7p \implies 13 = 20p \implies \hat{p} = \frac{13}{20} = 0.65
+    $$
+
+    The second derivative is $-13/p^2 - 7/(1-p)^2 < 0$, confirming this is a maximum.
+
+---
+
+**Exercise 2.**
+For the Bernoulli MLE, show that $\hat{p} = \bar{x}$ (the sample proportion) is always the MLE, regardless of the sample size or the observed data.
+
+??? success "Solution to Exercise 2"
+    For $n$ independent Bernoulli trials with $k = \sum x_i$ successes, the log-likelihood is:
+
+    $$
+    \ell(p) = k \log p + (n-k)\log(1-p)
+    $$
+
+    Taking the derivative and setting to zero:
+
+    $$
+    \frac{d\ell}{dp} = \frac{k}{p} - \frac{n-k}{1-p} = 0 \implies k(1-p) = (n-k)p \implies k = np
+    $$
+
+    $$
+    \hat{p} = \frac{k}{n} = \frac{\sum x_i}{n} = \bar{x}
+    $$
+
+    This holds for any values of $k$ and $n$ with $0 \leq k \leq n$. $\square$
+
+---
+
+**Exercise 3.**
+Compute the Fisher information for a single Bernoulli observation and derive the asymptotic variance of $\hat{p}$.
+
+??? success "Solution to Exercise 3"
+    For a single Bernoulli$(p)$ observation, the log-likelihood is $\ell(p) = x\log p + (1-x)\log(1-p)$. The second derivative is:
+
+    $$
+    \frac{d^2\ell}{dp^2} = -\frac{x}{p^2} - \frac{1-x}{(1-p)^2}
+    $$
+
+    Taking the negative expectation (using $E[X] = p$):
+
+    $$
+    I(p) = -E\!\left[\frac{d^2\ell}{dp^2}\right] = \frac{p}{p^2} + \frac{1-p}{(1-p)^2} = \frac{1}{p} + \frac{1}{1-p} = \frac{1}{p(1-p)}
+    $$
+
+    The asymptotic variance of $\hat{p}$ based on $n$ observations is:
+
+    $$
+    \text{Var}(\hat{p}) \approx \frac{1}{nI(p)} = \frac{p(1-p)}{n}
+    $$
+
+    This is the familiar formula for the variance of a sample proportion.
+
+---
+
+**Exercise 4.**
+If you observe 0 heads in 10 flips, the MLE gives $\hat{p} = 0$. Explain why this is problematic and describe one alternative approach.
+
+??? success "Solution to Exercise 4"
+    The MLE $\hat{p} = 0$ implies the coin can never land heads, which is an extreme conclusion from only 10 observations. The problem is that MLE can produce boundary estimates that are unreasonable, especially in small samples.
+
+    One alternative is **Laplace smoothing** (or the Bayesian approach with a uniform prior): add one "pseudo-success" and one "pseudo-failure" to the data, giving $\hat{p}_{\text{Laplace}} = (0+1)/(10+2) = 1/12 \approx 0.083$. This avoids the zero estimate while remaining data-driven. More formally, this corresponds to the posterior mean under a Beta$(1,1)$ (uniform) prior, yielding $\hat{p}_{\text{Bayes}} = (k+1)/(n+2)$.

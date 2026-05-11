@@ -1,9 +1,5 @@
 # PMF, PDF, and CDF
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Overview
 
 The three fundamental functions that characterize the distribution of a random variable are the Probability Mass Function (PMF) for discrete variables, the Probability Density Function (PDF) for continuous variables, and the Cumulative Distribution Function (CDF) for both.
@@ -240,3 +236,101 @@ plt.show()
 - The **CDF** accumulates probability from $-\infty$ to $x$ and applies to both types.
 - The **PPF** inverts the CDF: given a probability, it returns the corresponding quantile.
 - Integration connects PDF → CDF; differentiation connects CDF → PDF.
+
+## Exercises
+
+**Exercise 1.**
+$X$ = number of heads in 3 fair coin flips. (a) Write PMF; (b) write CDF; (c) compute $P(1 \le X \le 2)$ two ways.
+
+??? success "Solution to Exercise 1"
+    (a) $X \sim \mathrm{Binomial}(3, 1/2)$:
+
+    | $x$ | $p(x)$ |
+    |:---:|:---:|
+    | 0 | $1/8$ |
+    | 1 | $3/8$ |
+    | 2 | $3/8$ |
+    | 3 | $1/8$ |
+
+    (b) $F(x) = 0, 1/8, 4/8, 7/8, 1$ on intervals $(-\infty, 0), [0, 1), [1, 2), [2, 3), [3, \infty)$.
+
+    (c) PMF: $p(1) + p(2) = 3/8 + 3/8 = 3/4$. CDF: $F(2) - F(0^-) = 7/8 - 0 = 7/8$. Wait — to use CDF for $P(1 \le X \le 2)$ with integer-valued $X$: $P(1 \le X \le 2) = F(2) - F(1^-) = F(2) - F(0) = 7/8 - 1/8 = 6/8 = 3/4$. Both methods agree.
+
+---
+
+**Exercise 2.**
+For a continuous RV $X$ with PDF $f(x) = c \cdot x^2$ on $[0, 1]$ and 0 elsewhere: (a) find $c$; (b) compute $F(x)$; (c) find $P(0.3 < X < 0.7)$.
+
+??? success "Solution to Exercise 2"
+    (a) $\int_0^1 c x^2 \, dx = c/3 = 1$, so $c = 3$.
+
+    (b) $F(x) = \int_0^x 3 t^2 \, dt = x^3$ for $x \in [0, 1]$; $F(x) = 0$ for $x < 0$; $F(x) = 1$ for $x > 1$.
+
+    (c) $P(0.3 < X < 0.7) = F(0.7) - F(0.3) = 0.343 - 0.027 = 0.316$.
+
+---
+
+**Exercise 3.**
+**Differentiate CDF to PDF.** For a continuous $X$ with $F(x) = 1 - e^{-\lambda x}$ for $x \ge 0$, compute the PDF $f(x)$. What distribution is this?
+
+??? success "Solution to Exercise 3"
+    $f(x) = F'(x) = \lambda e^{-\lambda x}$ for $x \ge 0$.
+
+    This is the **Exponential distribution** with rate $\lambda$. Properties:
+    - Mean $1/\lambda$, variance $1/\lambda^2$.
+    - Memoryless: $P(X > s + t \mid X > s) = P(X > t)$.
+    - Waiting time between events in a Poisson process with rate $\lambda$.
+
+---
+
+**Exercise 4.**
+**Inverse transform sampling.** Show that if $U \sim \mathrm{Uniform}(0, 1)$ and $F$ is a continuous strictly-increasing CDF, then $X = F^{-1}(U)$ has CDF $F$.
+
+??? success "Solution to Exercise 4"
+    Compute $P(X \le x) = P(F^{-1}(U) \le x)$. Apply $F$ to both sides (which is monotone increasing, preserving inequalities):
+
+    $$
+    P(F^{-1}(U) \le x) = P(F(F^{-1}(U)) \le F(x)) = P(U \le F(x)) = F(x)
+    $$
+
+    using $F \circ F^{-1} = \mathrm{id}$ for invertible $F$ and the uniform's CDF being $P(U \le u) = u$ for $u \in [0, 1]$.
+
+    So $X$ has CDF $F$. $\square$
+
+    **Use:** to generate samples from any distribution with known $F^{-1}$, draw $U$ uniformly and apply $F^{-1}$. This is how many random-number-generation routines work internally for non-trivial distributions.
+
+---
+
+**Exercise 5.**
+**Quantile vs. percentile vs. PPF.** Clarify these three terms with examples. State the relationship between the PPF and the survival function.
+
+??? success "Solution to Exercise 5"
+    **Quantile:** for $p \in [0, 1]$, the $p$-th quantile $q_p = F^{-1}(p)$ is the value such that $P(X \le q_p) = p$. Quantile = PPF evaluation.
+
+    **Percentile:** the $p$-percentile for $p \in [0, 100]$ is $q_{p/100}$. Just a unit convention — "95th percentile" means $q_{0.95}$.
+
+    **PPF (Percent Point Function):** the inverse CDF function itself, $\mathrm{PPF}(p) = F^{-1}(p)$.
+
+    **Survival function:** $S(x) = 1 - F(x) = P(X > x)$. The inverse survival function (ISF) gives "the value above which a given probability mass lies": $\mathrm{ISF}(p) = S^{-1}(p) = F^{-1}(1 - p) = \mathrm{PPF}(1 - p)$.
+
+    In scipy.stats: `dist.ppf(0.95)` gives the 95th percentile; `dist.isf(0.05)` gives the value with 5% upper tail probability, which equals the 95th percentile. The ISF avoids numerical loss-of-precision when computing tail quantiles ($1 - F$ near 0 has poor precision; using $S$ directly is better).
+
+---
+
+**Exercise 6.**
+**Improper integrals.** A proposed PDF is $f(x) = 1/(x \ln^2 x)$ for $x \ge 2$. Does this define a valid distribution? Compute $\mathbb{E}[X]$.
+
+??? success "Solution to Exercise 6"
+    **Normalization:** $\int_2^\infty \frac{1}{x \ln^2 x} dx$. Let $u = \ln x$, $du = dx/x$:
+
+    $$
+    \int_{\ln 2}^\infty \frac{1}{u^2} du = \left[-\frac{1}{u}\right]_{\ln 2}^\infty = \frac{1}{\ln 2} \approx 1.443
+    $$
+
+    So $f(x)$ is **not** normalized. Define $c = \ln 2$, redefine $f(x) = c/(x \ln^2 x)$, then $\int f = 1$ and we have a valid PDF.
+
+    **Expectation:** $\mathbb{E}[X] = \int_2^\infty x \cdot \frac{c}{x \ln^2 x} dx = c \int_2^\infty \frac{1}{\ln^2 x} dx$.
+
+    The integrand decays like $1/\ln^2 x$, which is *not* integrable at infinity (the integral diverges). So $\mathbb{E}[X] = \infty$ — the distribution has a finite normalization but infinite mean.
+
+    **Lesson:** "valid distribution" (CDF properties hold) is a weaker requirement than "finite expectation". Heavy-tailed distributions like this one need quantile-based summaries instead of mean-based ones. This was the topic of Exercise 5 in the LLN page: distributions with infinite mean break the LLN.

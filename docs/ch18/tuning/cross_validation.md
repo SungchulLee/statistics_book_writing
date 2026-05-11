@@ -120,3 +120,14 @@ Alternatively, fix $\alpha$ based on domain knowledge and optimize only over $\l
 ## Summary
 
 Cross-validation estimates test error by rotating through held-out folds, providing a data-driven method for selecting the regularization parameter $\lambda$. The minimum CV error identifies $\lambda_{\min}$; the one-standard-error rule identifies the more parsimonious $\lambda_{1\text{SE}}$. Practical implementation requires a logarithmic $\lambda$ grid starting from $\lambda_{\max}$, standardization within folds to avoid data leakage, and warm starts for computational efficiency. For the elastic net, either a two-dimensional grid search over $(\lambda, \alpha)$ or a fixed $\alpha$ with one-dimensional $\lambda$ optimization provides effective tuning.
+
+## Exercises
+
+**Exercise 1.**
+Consider predicting monthly stock returns using Fama-French factors and macroeconomic variables. Simulate a dataset with $p = 50$ potential predictors and $n = 120$ monthly observations.
+
+(a) Why is regularization essential in this setting?
+
+(b) Compare out-of-sample $R^2$ for OLS, Ridge, Lasso, and Elastic Net using rolling-window cross-validation (train on 60 months, predict next month, roll forward).
+
+(c) Which predictors does Lasso select? Are they stable across rolling windows?

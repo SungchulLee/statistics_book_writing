@@ -169,3 +169,56 @@ print(f"95% credible interval for ratio: ({np.percentile(ratio, 2.5):.2f}, {np.p
 - Requires specifying a prior, which may be controversial
 - Conjugate analysis assumes normality; non-normal data require more complex models
 - Computational cost increases with model complexity (though MCMC makes this manageable)
+
+
+## Exercises
+
+**Exercise 1.**
+With a non-informative prior $\sigma^2 \sim \text{Inv-Gamma}(0.001, 0.001)$ and a sample of $n = 20$ with $\sum(x_i - \bar{x})^2 = 180$, find the posterior distribution and a 95% credible interval for $\sigma^2$.
+
+??? success "Solution to Exercise 1"
+    The posterior is $\text{Inv-Gamma}(0.001 + 10, 0.001 + 90) = \text{Inv-Gamma}(10.001, 90.001)$.
+
+    The mean of the posterior is $\beta/(\alpha - 1) = 90.001/9.001 \approx 10.0$, close to $s^2 = 180/19 \approx 9.47$.
+
+    The 95% credible interval is obtained from the inverse-gamma quantiles. Using the relationship to the chi-squared distribution: $\sigma^2 \mid \mathbf{x}$ has $2\beta/\sigma^2 \sim \chi^2_{2\alpha}$, giving approximately $(5.3, 21.7)$.
+
+---
+
+**Exercise 2.**
+Compare the Bayesian credible interval with the frequentist confidence interval for variance. What is the key philosophical difference?
+
+??? success "Solution to Exercise 2"
+    **Frequentist CI:** $P(L < \sigma^2 < U) = 0.95$ means that if we repeated the experiment many times, 95% of the computed intervals would contain the true $\sigma^2$. The parameter is fixed; the interval is random.
+
+    **Bayesian credible interval:** $P(L < \sigma^2 < U \mid \text{data}) = 0.95$ means there is a 95% posterior probability that $\sigma^2$ lies in this interval, given the observed data and the prior. The interval is fixed (given the data); the parameter is treated as random.
+
+    With non-informative priors and large $n$, the two intervals are numerically similar. The Bayesian interval has the advantage of direct probability interpretation but requires specifying a prior.
+
+---
+
+**Exercise 3.**
+How does the choice of prior affect the Bayesian variance test for small samples? Illustrate with a strongly informative prior.
+
+??? success "Solution to Exercise 3"
+    With a strongly informative prior $\sigma^2 \sim \text{Inv-Gamma}(50, 500)$ (prior mean = $500/49 \approx 10.2$, tight around 10), the posterior for small $n$ is heavily influenced by the prior.
+
+    If the data suggest $s^2 = 25$ with $n = 5$, the posterior mean will be pulled toward the prior mean of 10, producing a credible interval centered below the data estimate. With $n = 100$, the data overwhelm the prior, and the posterior is nearly identical to the frequentist result.
+
+    For small samples, prior sensitivity analysis is essential: compute the posterior under several priors (informative, weakly informative, non-informative) and check whether conclusions change.
+
+---
+
+**Exercise 4.**
+Describe how to use the Bayes factor to compare two hypotheses about variance: $H_0: \sigma^2 = \sigma_0^2$ versus $H_1: \sigma^2 \neq \sigma_0^2$.
+
+??? success "Solution to Exercise 4"
+    The Bayes factor $BF_{01}$ is the ratio of marginal likelihoods:
+
+    $$
+    BF_{01} = \frac{P(\text{data} \mid H_0)}{P(\text{data} \mid H_1)}
+    $$
+
+    Under $H_0$, $\sigma^2$ is fixed at $\sigma_0^2$, so the marginal likelihood is just the likelihood evaluated at $\sigma_0^2$. Under $H_1$, the marginal likelihood integrates the likelihood over the prior for $\sigma^2$.
+
+    $BF_{01} > 1$ favors $H_0$; $BF_{01} < 1$ favors $H_1$. Common interpretation: $BF > 10$ is strong evidence, $BF > 100$ is decisive. Unlike p-values, the Bayes factor can provide evidence *for* the null hypothesis, not just against it.

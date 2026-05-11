@@ -6,10 +6,10 @@ Normality tests are hypothesis tests, and like all hypothesis tests, their abili
 
 ## Power of a Normality Test
 
-The **power** of a normality test is the probability of rejecting the null hypothesis $H_0$: "the data are normally distributed" when the data truly come from a non-normal distribution. Formally, if $F$ denotes the true distribution of the data and $\Phi$ denotes the normal CDF, then
+The **power** of a normality test is the probability of rejecting the null hypothesis $H_0$: "the data are normally distributed" when the data truly come from a non-normal distribution. Formally, if $F$ denotes the true distribution of the data and $\mathcal{N}$ denotes the normal CDF, then
 
 $$
-\text{Power} = P\left(\text{Reject } H_0 \mid F \neq \Phi\right)
+\text{Power} = P\left(\text{Reject } H_0 \mid F \neq \mathcal{N}\right)
 $$
 
 Power depends on three factors:
@@ -29,7 +29,7 @@ This low power is problematic because small-sample inference is precisely the se
 
 ## Large-Sample Behavior
 
-As $n$ grows, the power of any consistent normality test converges to 1 for any fixed non-normal distribution. This means that, with enough data, the test will eventually reject $H_0$ no matter how close the true distribution is to normal. Formally, for any distribution $F \neq \Phi$ and any $\alpha > 0$,
+As $n$ grows, the power of any consistent normality test converges to 1 for any fixed non-normal distribution. This means that, with enough data, the test will eventually reject $H_0$ no matter how close the true distribution is to normal. Formally, for any distribution $F \neq \mathcal{N}$ and any $\alpha > 0$,
 
 $$
 \lim_{n \to \infty} P\left(\text{Reject } H_0 \mid F\right) = 1
@@ -115,3 +115,50 @@ Based on the sample size and power relationship, the following approach is recom
 ## Summary
 
 The power of normality tests increases monotonically with sample size, creating a practical paradox. Small samples lack the power to detect violations that would invalidate parametric inference. Large samples detect every trivial departure, even when the CLT ensures that parametric procedures remain valid. Effective use of normality testing requires matching the interpretation to the sample size and supplementing formal tests with graphical methods and domain knowledge.
+
+
+## Exercises
+
+**Exercise 1.**
+A Shapiro-Wilk test on $n = 500$ observations of mildly skewed data gives $p = 0.001$. On $n = 20$ observations from the same distribution, $p = 0.35$. Explain the discrepancy.
+
+??? success "Solution to Exercise 1"
+    The discrepancy is due to the relationship between power and sample size. With $n = 500$, the test has very high power to detect even small departures from normality. The mild skewness, though practically insignificant, is statistically detectable. With $n = 20$, the test has low power and cannot detect the same mild departure.
+
+    The p-value is not a measure of the degree of non-normality; it measures the evidence against normality given the sample size. The same degree of skewness produces a tiny p-value with large $n$ and a large p-value with small $n$. This is why effect-size measures (actual skewness and kurtosis values) are more informative than p-values for assessing practical normality.
+
+---
+
+**Exercise 2.**
+Plot the power of the Shapiro-Wilk test as a function of $n$ for a $t_5$ alternative. Describe the general shape of the curve.
+
+??? success "Solution to Exercise 2"
+    The power curve starts near $\alpha$ (the significance level) for very small $n$ (where the test cannot distinguish $t_5$ from normal) and increases monotonically toward 1 as $n$ grows.
+
+    For the $t_5$ distribution (moderately heavy-tailed): power is approximately $\alpha = 0.05$ at $n = 5$, rises to about 0.3-0.4 at $n = 30$, reaches 0.8 around $n = 80$-$100$, and exceeds 0.95 by $n = 200$.
+
+    The curve is S-shaped (sigmoid) on a linear scale: slow initial growth, steep middle section, and saturation near 1. The steepness depends on how different the alternative is from normal -- more extreme alternatives (e.g., $t_3$) produce steeper curves.
+
+---
+
+**Exercise 3.**
+Explain the concept of a "power analysis for normality testing." Is it commonly performed in practice?
+
+??? success "Solution to Exercise 3"
+    A power analysis for normality testing would determine the sample size needed to detect a specific departure from normality (e.g., excess kurtosis of 2) with a given probability (e.g., 80% power) at a given significance level.
+
+    It is **rarely performed** in practice for several reasons: (1) the researcher usually does not know the specific alternative distribution in advance; (2) the goal of normality testing is typically to assess whether normal-based methods are reliable, not to identify the true distribution; (3) power tables for normality tests against specific alternatives are available but not widely used.
+
+    Instead, practitioners rely on rules of thumb: Shapiro-Wilk has good power for $n \geq 20$, and for $n > 200$, formal tests are overpowered and visual methods are preferred.
+
+---
+
+**Exercise 4.**
+For a fixed degree of non-normality, how does the p-value of a normality test scale with sample size $n$? Give an approximate relationship.
+
+??? success "Solution to Exercise 4"
+    For a fixed alternative (fixed departure from normality), the test statistic grows approximately as $\sqrt{n}$ (for many normality tests, the standardized statistic scales with $\sqrt{n}$). This means the p-value decreases roughly exponentially with $n$.
+
+    More precisely, the test statistic $T_n$ satisfies $T_n \approx \sqrt{n} \cdot \delta + Z$ where $\delta$ is the non-centrality parameter (measuring the departure) and $Z$ is noise. The p-value is approximately $P(Z > c - \sqrt{n}\delta)$, which decreases to 0 as $n \to \infty$ for any $\delta > 0$.
+
+    Practical implication: doubling the sample size roughly doubles the evidence against normality (in terms of the test statistic), making rejection inevitable for large enough $n$, regardless of how close to normal the data are.

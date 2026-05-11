@@ -170,3 +170,75 @@ where SST is the total sum of squares, SSR is the regression sum of squares, and
 ## Summary
 
 Orthogonal projection matrices are symmetric idempotent matrices that map vectors to the nearest point in a subspace. The formula $\mathbf{P}_{\mathbf{X}} = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T$ is the hat matrix of regression, and the complementary projection $\mathbf{I} - \mathbf{P}_{\mathbf{X}}$ produces residuals. The orthogonality of fitted values and residuals yields the Pythagorean decomposition of sums of squares, which is the geometric foundation of ANOVA and $R^2$.
+
+## Exercises
+
+**Exercise 1.**
+Let $\mathbf{X} = \begin{pmatrix} 1 & 1 \\ 1 & 2 \\ 1 & 3 \end{pmatrix}$. Compute the hat matrix $\mathbf{H} = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T$ and verify that $\operatorname{tr}(\mathbf{H}) = 2$.
+
+??? success "Solution to Exercise 1"
+    First compute:
+
+    $$
+    \mathbf{X}^T\mathbf{X} = \begin{pmatrix} 3 & 6 \\ 6 & 14 \end{pmatrix}, \quad (\mathbf{X}^T\mathbf{X})^{-1} = \frac{1}{6}\begin{pmatrix} 14 & -6 \\ -6 & 3 \end{pmatrix}
+    $$
+
+    Then:
+
+    $$
+    \mathbf{H} = \mathbf{X} \cdot \frac{1}{6}\begin{pmatrix} 14 & -6 \\ -6 & 3 \end{pmatrix} \cdot \mathbf{X}^T = \frac{1}{6}\begin{pmatrix} 5 & 2 & -1 \\ 2 & 2 & 2 \\ -1 & 2 & 5 \end{pmatrix}
+    $$
+
+    The trace is $\operatorname{tr}(\mathbf{H}) = (5 + 2 + 5)/6 = 12/6 = 2$, which equals the number of columns in $\mathbf{X}$ (i.e., $p = 2$). This confirms the general result $\operatorname{tr}(\mathbf{H}) = \operatorname{rank}(\mathbf{H}) = p$.
+
+---
+
+**Exercise 2.**
+Prove the Pythagorean decomposition: $\lVert \mathbf{y} \rVert^2 = \lVert \hat{\mathbf{y}} \rVert^2 + \lVert \mathbf{e} \rVert^2$ where $\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}$ and $\mathbf{e} = (\mathbf{I} - \mathbf{H})\mathbf{y}$.
+
+??? success "Solution to Exercise 2"
+    Since $\mathbf{y} = \hat{\mathbf{y}} + \mathbf{e}$:
+
+    $$
+    \lVert \mathbf{y} \rVert^2 = (\hat{\mathbf{y}} + \mathbf{e})^T(\hat{\mathbf{y}} + \mathbf{e}) = \lVert \hat{\mathbf{y}} \rVert^2 + 2\hat{\mathbf{y}}^T\mathbf{e} + \lVert \mathbf{e} \rVert^2
+    $$
+
+    The cross term vanishes because:
+
+    $$
+    \hat{\mathbf{y}}^T\mathbf{e} = (\mathbf{H}\mathbf{y})^T(\mathbf{I} - \mathbf{H})\mathbf{y} = \mathbf{y}^T\mathbf{H}^T(\mathbf{I} - \mathbf{H})\mathbf{y} = \mathbf{y}^T\mathbf{H}(\mathbf{I} - \mathbf{H})\mathbf{y}
+    $$
+
+    Using $\mathbf{H}(\mathbf{I} - \mathbf{H}) = \mathbf{H} - \mathbf{H}^2 = \mathbf{H} - \mathbf{H} = \mathbf{0}$, the cross term is zero, giving $\lVert \mathbf{y} \rVert^2 = \lVert \hat{\mathbf{y}} \rVert^2 + \lVert \mathbf{e} \rVert^2$. $\square$
+
+---
+
+**Exercise 3.**
+Show that the hat matrix $\mathbf{H}$ minimizes $\lVert \mathbf{y} - \mathbf{X}\boldsymbol{\beta} \rVert^2$ by proving that $\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}$ is the closest point in $\text{col}(\mathbf{X})$ to $\mathbf{y}$.
+
+??? success "Solution to Exercise 3"
+    Let $\mathbf{z} = \mathbf{X}\boldsymbol{\beta}$ be any vector in $\text{col}(\mathbf{X})$. We need to show $\lVert \mathbf{y} - \hat{\mathbf{y}} \rVert \leq \lVert \mathbf{y} - \mathbf{z} \rVert$.
+
+    Write $\mathbf{y} - \mathbf{z} = (\mathbf{y} - \hat{\mathbf{y}}) + (\hat{\mathbf{y}} - \mathbf{z})$. Since $\mathbf{y} - \hat{\mathbf{y}} = \mathbf{e} \in \text{col}(\mathbf{X})^\perp$ and $\hat{\mathbf{y}} - \mathbf{z} \in \text{col}(\mathbf{X})$, these two vectors are orthogonal. By the Pythagorean theorem:
+
+    $$
+    \lVert \mathbf{y} - \mathbf{z} \rVert^2 = \lVert \mathbf{y} - \hat{\mathbf{y}} \rVert^2 + \lVert \hat{\mathbf{y}} - \mathbf{z} \rVert^2 \geq \lVert \mathbf{y} - \hat{\mathbf{y}} \rVert^2
+    $$
+
+    Equality holds if and only if $\mathbf{z} = \hat{\mathbf{y}}$, confirming that $\hat{\mathbf{y}}$ is the unique closest point. $\square$
+
+---
+
+**Exercise 4.**
+Explain the geometric interpretation of $R^2 = \lVert \hat{\mathbf{y}} \rVert^2 / \lVert \mathbf{y} \rVert^2$ in terms of the angle between $\mathbf{y}$ and its projection $\hat{\mathbf{y}}$. What does $R^2 = 1$ mean geometrically?
+
+??? success "Solution to Exercise 4"
+    Let $\theta$ be the angle between $\mathbf{y}$ and $\hat{\mathbf{y}}$ in $\mathbb{R}^n$. Since $\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}$ is the projection of $\mathbf{y}$ onto $\text{col}(\mathbf{X})$:
+
+    $$
+    \cos\theta = \frac{\hat{\mathbf{y}}^T\mathbf{y}}{\lVert \hat{\mathbf{y}} \rVert \lVert \mathbf{y} \rVert} = \frac{\lVert \hat{\mathbf{y}} \rVert^2}{\lVert \hat{\mathbf{y}} \rVert \lVert \mathbf{y} \rVert} = \frac{\lVert \hat{\mathbf{y}} \rVert}{\lVert \mathbf{y} \rVert}
+    $$
+
+    Therefore $R^2 = \cos^2\theta$: it is the squared cosine of the angle between the response vector and its projection onto the model subspace.
+
+    $R^2 = 1$ means $\cos^2\theta = 1$, so $\theta = 0$: the response vector $\mathbf{y}$ lies exactly in $\text{col}(\mathbf{X})$. Geometrically, the data fits the model perfectly with zero residual.

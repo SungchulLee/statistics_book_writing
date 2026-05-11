@@ -165,3 +165,35 @@ change across predefined time windows.
 | Stratification | Remedy | Allows different baseline hazards |
 | Time-varying coefficients | Remedy | Allows $\beta(t)$ to change with time |
 | Piecewise model | Remedy | Different $\beta$ in each time interval |
+
+## Exercises
+
+**Exercise 1.**
+Proportional Hazards Assumption
+
+A Schoenfeld test for a Cox model with two covariates (age and treatment)
+yields:
+
+| Covariate | $\chi^2$ | p-value |
+|:----------|:--------:|:-------:|
+| Age | 1.23 | 0.267 |
+| Treatment | 6.89 | 0.009 |
+| GLOBAL | 7.54 | 0.023 |
+
+**(a)** For which covariate(s) does the PH assumption appear to be violated?
+
+**(b)** Suggest two remedies for the violation.
+
+??? success "Solution to Exercise 1"
+
+    **(a)** The PH assumption is violated for treatment ($p = 0.009 < 0.05$) but
+    not for age ($p = 0.267$). The global test also rejects ($p = 0.023$),
+    confirming at least one violation.
+
+    **(b)** Two remedies:
+
+    1. **Stratification:** Fit a stratified Cox model with separate baseline
+       hazards for each treatment group, estimating only the age effect as a
+       regression coefficient.
+    2. **Time-varying coefficient:** Include a treatment $\times \ln(t)$
+       interaction term to allow the treatment effect to change over time.

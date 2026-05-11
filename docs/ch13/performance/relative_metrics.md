@@ -147,3 +147,67 @@ $$
 $$
 
 A MASE of 0.175 indicates the model's average error is only 17.5% of the naive baseline's error, confirming strong predictive performance relative to predicting the mean.
+
+## Exercises
+
+**Exercise 1.**
+Compute the Mean Absolute Percentage Error (MAPE) for actual values $y = (100, 200, 50, 300)$ and predictions $\hat{y} = (110, 180, 55, 290)$.
+
+??? success "Solution to Exercise 1"
+    $$
+    \text{MAPE} = \frac{1}{n}\sum_{i=1}^n \left|\frac{y_i - \hat{y}_i}{y_i}\right| \times 100\%
+    $$
+
+    $$
+    = \frac{1}{4}\left(\left|\frac{-10}{100}\right| + \left|\frac{20}{200}\right| + \left|\frac{-5}{50}\right| + \left|\frac{10}{300}\right|\right) \times 100\%
+    $$
+
+    $$
+    = \frac{1}{4}(0.10 + 0.10 + 0.10 + 0.0333) \times 100\% = \frac{0.3333}{4} \times 100\% = 8.33\%
+    $$
+
+---
+
+**Exercise 2.**
+Explain why MAPE is undefined or problematic when actual values are zero or near zero. What alternative metric can be used?
+
+??? success "Solution to Exercise 2"
+    MAPE divides by $y_i$, so it is undefined when $y_i = 0$ (division by zero). When $y_i$ is close to zero, even small absolute errors produce enormous percentage errors, dominating the metric.
+
+    **Alternatives:**
+
+    - **Symmetric MAPE (sMAPE):** Uses $|y_i| + |\hat{y}_i|$ in the denominator, avoiding division by zero (unless both are zero) and treating over- and under-predictions symmetrically.
+    - **Mean Absolute Scaled Error (MASE):** Normalizes by the MAE of a naive forecast, avoiding division by individual $y_i$ values.
+    - **Log-based metrics:** If $y_i > 0$, use RMSLE (root mean squared log error) $= \sqrt{\frac{1}{n}\sum(\log y_i - \log \hat{y}_i)^2}$, which measures relative errors on the log scale.
+
+---
+
+**Exercise 3.**
+MAPE treats over-predictions and under-predictions asymmetrically in percentage terms. Show this with an example.
+
+??? success "Solution to Exercise 3"
+    Consider $y = 100$:
+
+    - Over-prediction: $\hat{y} = 200$, percentage error $= |100-200|/100 = 100\%$.
+    - Under-prediction: $\hat{y} = 0$, percentage error $= |100-0|/100 = 100\%$.
+
+    But now consider $y = 200$:
+
+    - Over-prediction: $\hat{y} = 300$, percentage error $= 100/200 = 50\%$.
+    - Under-prediction: $\hat{y} = 100$, percentage error $= 100/200 = 50\%$.
+
+    The asymmetry is more subtle: MAPE penalizes errors on small values more heavily than on large values. A \$10 error on a \$20 item (50%) is penalized more than a \$10 error on a \$200 item (5%). This means MAPE-optimized models tend to under-predict large values (because percentage errors are small in the denominator).
+
+---
+
+**Exercise 4.**
+When is MAPE a good choice for evaluating forecasting models? Name two application domains where relative errors are more meaningful than absolute errors.
+
+??? success "Solution to Exercise 4"
+    MAPE is a good choice when the scale of the variable varies widely and relative accuracy matters more than absolute accuracy:
+
+    1. **Retail demand forecasting:** A 10% error on an item selling 1000 units (off by 100) is operationally comparable to a 10% error on an item selling 10 units (off by 1). MAPE treats both equally, while MAE would ignore the small item's error.
+
+    2. **Financial forecasting:** Predicting stock prices or revenues across companies of different sizes. A \$1 error on a \$10 stock (10%) is more significant than a \$1 error on a \$1000 stock (0.1%). MAPE captures this scale-invariance.
+
+    MAPE is less suitable when values can be zero or negative (e.g., profit/loss), when the distribution is heavily skewed, or when equal absolute accuracy is desired across all observations.

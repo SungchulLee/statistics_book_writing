@@ -1,9 +1,5 @@
 # Bias and Consistency of the Sample Mean
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Introduction
 
 Two fundamental questions about any estimator are: (1) Does it systematically over- or underestimate the true parameter? (**bias**) and (2) Does it converge to the true value as the sample size grows? (**consistency**). For the sample mean $\bar{X}$, the answers are reassuringly simple — it is unbiased and consistent under very mild conditions — but the precise statements and their implications are worth studying carefully.
@@ -21,6 +17,7 @@ $$E[\bar{X}] = \mu \quad \text{for all } n \geq 1$$
 $$E[\bar{X}] = E\left[\frac{1}{n}\sum_{i=1}^n X_i\right] = \frac{1}{n}\sum_{i=1}^n E[X_i] = \frac{1}{n} \cdot n\mu = \mu$$
 
 This holds under minimal conditions:
+
 - Observations need not be identically distributed (only requires $E[X_i] = \mu$ for all $i$)
 - Observations need not be independent
 - No distributional assumptions are needed
@@ -91,6 +88,7 @@ $$\text{MSE}(\bar{X}_n) = \frac{\sigma^2}{n} = O(1/n)$$
 $$\text{SE}(\bar{X}_n) = \frac{\sigma}{\sqrt{n}} = O(1/\sqrt{n})$$
 
 This $O(1/\sqrt{n})$ rate is fundamental — it means:
+
 - Doubling accuracy requires 4× the data
 - For 10× accuracy, you need 100× the data
 - This rate cannot be improved (in general) without additional assumptions
@@ -159,3 +157,84 @@ The sample mean is unbiased (zero bias for all $n$) and consistent (converges to
 | MSE rate | $O(1/n)$ | $\text{Var}(X) < \infty$ |
 | SE rate | $O(1/\sqrt{n})$ | $\text{Var}(X) < \infty$ |
 | CLT | $\sqrt{n}(\bar{X}-\mu)/\sigma \to N(0,1)$ | iid, $\text{Var}(X) < \infty$ |
+
+## Exercises
+
+**Exercise 1.**
+$X_1, \ldots, X_n$ have $\mathbb{E}[X_i] = \mu$. Show $\bar X$ is unbiased. Does this need independence?
+
+??? success "Solution to Exercise 1"
+    By linearity (no independence needed): $\mathbb{E}[\bar X] = (1/n)\sum \mathbb{E}[X_i] = \mu$. $\square$
+
+    Unbiasedness only requires equal means. The estimator's *variance* depends on independence, but its *expected value* does not.
+
+---
+
+**Exercise 2.**
+Correlated data: $X_i$ have common mean $\mu$, variance $\sigma^2$, pairwise correlation $\rho$. (a) Derive $\mathrm{Var}(\bar X)$. (b) Is $\bar X$ consistent? (c) Fund of 20 hedge funds, 15% vol, $\rho = 0.4$ — find SE.
+
+??? success "Solution to Exercise 2"
+    (a) $\mathrm{Var}(\bar X) = (1/n^2)[n\sigma^2 + n(n-1)\rho\sigma^2] = \sigma^2[1 + (n-1)\rho]/n$.
+
+    (b) As $n \to \infty$, $\mathrm{Var}(\bar X) \to \rho\sigma^2$ (positive limit). $\bar X$ is **inconsistent** unless $\rho = 0$. Positive correlation creates an irreducible variance floor.
+
+    (c) $\mathrm{Var}(\bar X) = 0.15^2 \cdot 8.6/20 = 0.00968$. $\mathrm{SE} \approx 0.098$ (9.8%). Effective independent sample size $\approx 2.4$ — almost no benefit from 20 funds because their correlations are high.
+
+---
+
+**Exercise 3.**
+**Define consistency.** State the Weak LLN and Strong LLN, and show $\bar X$ is consistent for $\mu$ under each.
+
+??? success "Solution to Exercise 3"
+    **Consistency:** $\hat\theta_n \to \theta$ as $n \to \infty$, in some mode.
+
+    **Weak consistency** (in probability): $\bar X \xrightarrow{P} \mu$. Follows from **WLLN**: for i.i.d. data with finite mean, $P(|\bar X - \mu| > \varepsilon) \to 0$.
+
+    **Strong consistency** (almost surely): $\bar X \to \mu$ with probability 1. Follows from **SLLN**.
+
+    Proof outline (WLLN via Chebyshev): with finite variance $\sigma^2$, $P(|\bar X - \mu| > \varepsilon) \le \mathrm{Var}(\bar X)/\varepsilon^2 = \sigma^2/(n\varepsilon^2) \to 0$. $\square$
+
+---
+
+**Exercise 4.**
+**Bias-variance trade-off** for the median. Show that for normal data, the median is **biased** if $\mu$ is replaced by the population median (still works), but its **MSE asymptotically exceeds** that of the mean.
+
+??? success "Solution to Exercise 4"
+    For symmetric distributions like normal: population mean = population median, both equal $\mu$. Sample median is unbiased for $\mu$ (by symmetry of the sampling distribution).
+
+    Asymptotic variance of sample median = $\pi\sigma^2/(2n)$ vs. mean $\sigma^2/n$. Ratio = $\pi/2 \approx 1.57$.
+
+    MSE(median) $> $ MSE(mean) by factor $\pi/2$ — the price for robustness.
+
+    For non-symmetric distributions, population mean $\ne$ population median, so they target different quantities. Compare each to its own target, not to each other.
+
+---
+
+**Exercise 5.**
+**Effect of finite-population sampling.** $X_i$ drawn without replacement from a finite population of size $N$, mean $\mu$. Derive $\mathrm{Var}(\bar X)$.
+
+??? success "Solution to Exercise 5"
+    $\mathrm{Var}(\bar X) = (\sigma^2/n) \cdot (N - n)/(N - 1)$.
+
+    Derivation: pairs of distinct draws have covariance $-\sigma^2/(N-1)$ (sampling without replacement). Sum over all pairs and individual variances, divide by $n^2$.
+
+    The factor $(N-n)/(N-1)$ is the **finite-population correction (FPC)**:
+
+    - $n = N$ (census): FPC = 0, $\mathrm{Var}(\bar X) = 0$. We've measured everyone.
+    - $n \ll N$: FPC $\approx 1$, $\mathrm{Var}(\bar X) \approx \sigma^2/n$. Standard formula.
+
+    Often ignored when $n/N < 5\%$. Important in auditing, recount, or small population surveys.
+
+---
+
+**Exercise 6.**
+**Bias of MoM estimator.** For Pareto$(\alpha)$ on $[1, \infty)$, $\mathbb{E}[X] = \alpha/(\alpha - 1)$. MoM: $\hat\alpha = \bar X/(\bar X - 1)$. Is it unbiased? Consistent?
+
+??? success "Solution to Exercise 6"
+    **Consistency:** by LLN, $\bar X \to \mu = \alpha/(\alpha - 1)$. Hence $\hat\alpha \to \mu/(\mu - 1) = \alpha$. Consistent.
+
+    **Unbiasedness:** $\mathbb{E}[\hat\alpha] = \mathbb{E}[\bar X/(\bar X - 1)]$. By Jensen's inequality (since $g(x) = x/(x-1)$ is convex on $x > 1$), $\mathbb{E}[g(\bar X)] > g(\mathbb{E}[\bar X]) = \alpha$. So **MoM is biased upward**.
+
+    For large $n$: $\bar X \to \mu$ and Jensen gap $\to 0$, so bias $\to 0$. Asymptotically unbiased but finite-sample biased.
+
+    Most MoM estimators have this pattern: consistent (by LLN) but biased in finite samples. The bias is $O(1/n)$, vanishing slower than the variance $O(1/\sqrt n)$.

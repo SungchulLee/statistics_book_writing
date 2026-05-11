@@ -105,3 +105,46 @@ Unlike rank-based tests that focus on location, the KS test is sensitive to diff
 ## Summary
 
 The Kolmogorov-Smirnov two-sample test compares the entire empirical distribution functions of two independent samples by computing the maximum absolute difference $D = \sup|\hat{F}_1(x) - \hat{F}_2(x)|$. It is distribution-free under the null hypothesis of identical continuous distributions and can detect differences in location, spread, and shape. This versatility makes it a useful complement to rank-based tests, especially when the alternative hypothesis is not restricted to a location shift. For pure location alternatives, the Wilcoxon rank-sum test generally provides higher power.
+
+## Exercises
+
+**Exercise 1.**
+Two groups of students take different preparation courses, and their exam scores are:
+
+- **Course 1**: 72, 78, 85, 90, 65
+- **Course 2**: 80, 88, 92, 95, 85, 76
+
+**(a)** Compute the empirical CDF $\hat{F}_1(x)$ and $\hat{F}_2(x)$ for each group.
+
+**(b)** Find the Kolmogorov-Smirnov test statistic $D = \max_x |\hat{F}_1(x) - \hat{F}_2(x)|$.
+
+**(c)** Explain what a large value of $D$ indicates about the two distributions.
+
+??? success "Solution to Exercise 1"
+
+    **(a)** Sort each sample and compute the ECDF (each jump has size $1/n_i$):
+
+    **Course 1** ($n_1 = 5$): 65, 72, 78, 85, 90. ECDF jumps by $1/5 = 0.2$ at each value.
+
+    **Course 2** ($n_2 = 6$): 76, 80, 85, 88, 92, 95. ECDF jumps by $1/6 \approx 0.167$ at each value.
+
+    **(b)** To find $D$, evaluate $|\hat{F}_1(x) - \hat{F}_2(x)|$ at every observed value:
+
+    | $x$ | $\hat{F}_1(x)$ | $\hat{F}_2(x)$ | $|\hat{F}_1 - \hat{F}_2|$ |
+    |:---:|:---:|:---:|:---:|
+    | 65 | 0.2 | 0 | 0.200 |
+    | 72 | 0.4 | 0 | 0.400 |
+    | 76 | 0.4 | 1/6 | 0.233 |
+    | 78 | 0.6 | 1/6 | 0.433 |
+    | 80 | 0.6 | 2/6 | 0.267 |
+    | 85 | 0.8 | 3/6 | 0.300 |
+    | 88 | 0.8 | 4/6 | 0.133 |
+    | 90 | 1.0 | 4/6 | 0.333 |
+    | 92 | 1.0 | 5/6 | 0.167 |
+    | 95 | 1.0 | 1.0 | 0.000 |
+
+    $$
+    D = \max_x |\hat{F}_1(x) - \hat{F}_2(x)| = 0.433 \text{ (at } x = 78\text{)}
+    $$
+
+    **(c)** A large value of $D$ indicates that the two empirical CDFs differ substantially, suggesting the two samples come from different underlying distributions. The KS test is sensitive to differences in both location (shift) and shape. For these data, $D = 0.433$ suggests Course 2 students tend to score higher, but with $n_1 = 5$ and $n_2 = 6$, the critical value at $\alpha = 0.05$ is approximately $c(\alpha)\sqrt{(n_1 + n_2)/(n_1 n_2)} = 1.36\sqrt{11/30} \approx 0.823$, so $D = 0.433 < 0.823$ and we would not reject $H_0$ at this sample size.

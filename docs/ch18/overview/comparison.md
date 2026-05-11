@@ -102,3 +102,19 @@ Ridge has the advantage of a closed-form solution and a LOOCV shortcut. Lasso an
 ## Summary
 
 Ridge regression provides smooth, non-sparse shrinkage that handles multicollinearity well. Lasso provides sparse solutions through the L1 penalty but can be unstable with correlated predictors and is limited to $n$ features when $p > n$. The elastic net combines both penalties, achieving sparsity, grouping of correlated features, solution uniqueness, and no upper limit on selected features. The choice among them depends on the specific characteristics of the problem: the degree of true sparsity, the correlation structure of predictors, the ratio of $p$ to $n$, and whether the goal is prediction or interpretation.
+
+## Exercises
+
+**Exercise 1.**
+For orthonormal design ($\mathbf{X}^\top\mathbf{X} = n\mathbf{I}$), derive the closed-form solutions for Ridge and Lasso. Explain geometrically why Lasso produces exact zeros but Ridge does not.
+
+---
+
+**Exercise 2.**
+Generate $n = 100$ observations from the model $y = 3x_1 - 2x_2 + 0.5x_3 + \varepsilon$ where $\varepsilon \sim N(0, 1)$, along with 17 noise predictors ($x_4, \ldots, x_{20}$).
+
+(a) Fit OLS, Ridge, Lasso, and Elastic Net. Compare the coefficient estimates.
+
+(b) Which methods correctly identify the 3 true predictors?
+
+(c) Use 5-fold CV to select the best $\lambda$ for each method. Report test MSE.

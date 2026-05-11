@@ -1,9 +1,5 @@
 # CI for p
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## One-Sample Proportion Confidence Interval
 
 In many statistical problems, we are interested in estimating a population proportion $p$ — the fraction of individuals in a population that have a certain characteristic. For example, the proportion of voters who support a particular candidate or the proportion of defective items in a batch.
@@ -202,40 +198,78 @@ The 99% CI is approximately $(0.222, 0.578)$.
 
 ## Exercises
 
-### Exercise: Confidence Interval for Pass Rate
+**Exercise 1.**
+74/100 vehicles pass. 95% CI for $p$.
 
-A random sample of 100 vehicles is selected, and 74 pass the inspection. Construct a 95% confidence interval for the pass rate.
+??? success "Solution to Exercise 1"
+    $\hat p = 0.74$. $\mathrm{SE} = \sqrt{0.74 \cdot 0.26/100} \approx 0.0439$. ME = $1.96 \cdot 0.0439 \approx 0.086$.
 
-**Solution.**
+    CI: $(0.654, 0.826)$.
 
-$$
-\hat{p} = \frac{74}{100} = 0.74, \qquad \text{SE} = \sqrt{\frac{0.74 \times 0.26}{100}} \approx 0.04386
-$$
+---
 
-$$
-\text{ME} = 1.96 \times 0.04386 \approx 0.086
-$$
+**Exercise 2.**
+120/200 prefer A. 90% CI for $p$.
 
-$$
-\boxed{(0.6540,\ 0.8260)}
-$$
+??? success "Solution to Exercise 2"
+    $\hat p = 0.60$. $z_{0.05} = 1.645$. ME = $1.645 \sqrt{0.60 \cdot 0.40/200} \approx 0.057$.
 
-We are 95% confident that the true pass rate lies between 65.40% and 82.60%.
+    CI: $(0.543, 0.657)$.
 
-### Exercise: 90% CI for Population Proportion
+---
 
-In a survey of 200 people, 120 prefer product A over product B. Construct a 90% confidence interval.
+**Exercise 3.**
+280/500 voters support. (a) Wald 95% CI. (b) Wilson 95% CI. (c) Evidence $p > 0.5$?
 
-**Solution.**
+??? success "Solution to Exercise 3"
+    (a) $\hat p = 0.56$. ME = $1.96 \cdot 0.0222 = 0.0435$. Wald CI: $(0.517, 0.604)$.
 
-$$
-\hat{p} = 0.60, \qquad z_{0.05} \approx 1.645
-$$
+    (b) Wilson CI: center $= (0.56 + 1.96^2/1000)/(1 + 1.96^2/500) \approx 0.555$. CI $\approx (0.517, 0.603)$. Almost identical to Wald — Wilson and Wald agree when $n$ large and $\hat p$ moderate.
 
-$$
-\text{ME} = 1.645 \times \sqrt{\frac{0.60 \times 0.40}{200}} \approx 1.645 \times 0.03464 \approx 0.057
-$$
+    (c) Entire CI above 0.5: evidence at 5% level that majority support the measure.
 
-$$
-\boxed{(0.543,\ 0.657)}
-$$
+---
+
+**Exercise 4.**
+**Wilson interval near boundary.** Compare Wald and Wilson CIs for $n = 20$, $X = 2$ (so $\hat p = 0.1$).
+
+??? success "Solution to Exercise 4"
+    Wald: ME $= 1.96 \sqrt{0.1 \cdot 0.9/20} \approx 0.131$. Wald CI: $(0.1 - 0.131, 0.1 + 0.131) = (-0.031, 0.231)$ — **extends below 0**.
+
+    Wilson: center $\approx (0.1 + 1.96^2/40)/(1 + 1.96^2/20) \approx 0.196/1.192 \approx 0.164$. Half-width: $1.96\sqrt{0.1 \cdot 0.9/20 + 1.96^2/1600}/1.192 \approx 0.110$. CI $\approx (0.054, 0.274)$ — stays in $[0, 1]$.
+
+    Wilson is far better near boundaries. Default to Wilson for binomial CIs.
+
+---
+
+**Exercise 5.**
+**Sample size for proportion CI.** Find $n$ so that 95% CI has ME $\le 0.03$, regardless of $\hat p$.
+
+??? success "Solution to Exercise 5"
+    $\mathrm{ME} = 1.96\sqrt{\hat p(1-\hat p)/n} \le 0.03$.
+
+    Worst case at $\hat p = 1/2$: $\hat p(1-\hat p) = 0.25$.
+
+    $1.96 \sqrt{0.25/n} \le 0.03 \Rightarrow n \ge (1.96)^2 \cdot 0.25/(0.03)^2 = 0.9604/0.0009 \approx 1068$.
+
+    **$n = 1068$** suffices for ME $\le 0.03$ at 95% confidence, *regardless* of true $p$. Origin of the "$n \approx 1000$" rule for polls.
+
+    If $p$ is suspected near 0.1 or 0.9: $p(1-p) = 0.09$, requiring $n \ge 385$. Knowledge of $p$ approximate value can reduce required $n$ by 60%.
+
+---
+
+**Exercise 6.**
+**Continuity correction.** When does it improve the CI? Apply to Exercise 1.
+
+??? success "Solution to Exercise 6"
+    Continuity correction adds $1/(2n)$ to the half-width when using the normal approximation to the binomial. For Exercise 1: ME with correction $\approx 0.086 + 1/200 = 0.091$.
+
+    CI with correction: $(0.649, 0.831)$ vs without: $(0.654, 0.826)$. Slightly wider.
+
+    **When to use:**
+
+    - Small to moderate $n$ where continuity matters.
+    - When tail probabilities matter (one-sided tests).
+    - When the discreteness of the binomial is non-negligible.
+
+    Modern practice: rather than correction, use exact methods (Clopper-Pearson) or Wilson interval. Continuity correction is a legacy of pre-computer-era approximations.

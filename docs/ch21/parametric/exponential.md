@@ -184,3 +184,27 @@ of events in a time interval of length $t$ among $n$ subjects at risk follows
 approximately a Poisson distribution with rate $n\lambda t$.  This connection
 links survival analysis to counting process theory and provides an alternative
 route to the asymptotic properties of the MLE.
+
+## Exercises
+
+**Exercise 1.**
+Exponential Model MLE
+
+A reliability study tracks 30 components. By the study end, 18 have failed and
+12 are still operating. The total observed time (events + censored) is
+$\sum t_i = 4{,}200$ hours.
+
+**(a)** Compute the MLE $\hat{\lambda}$ assuming an exponential model.
+
+**(b)** Estimate the mean time to failure.
+
+**(c)** Compute a 95% confidence interval for $\lambda$.
+
+??? success "Solution to Exercise 1"
+
+    **(a)** $\hat{\lambda} = d / \sum t_i = 18/4200 = 0.00429$ per hour.
+
+    **(b)** $1/\hat{\lambda} = 233.3$ hours.
+
+    **(c)** $\text{se}(\hat{\lambda}) = \hat{\lambda}/\sqrt{d} = 0.00429/\sqrt{18} = 0.00101$.
+    CI: $0.00429 \pm 1.96 \times 0.00101 = (0.00231, 0.00627)$.

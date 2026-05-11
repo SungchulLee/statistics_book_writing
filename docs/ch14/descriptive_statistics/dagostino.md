@@ -1,9 +1,6 @@
 # D'Agostino's K-Squared Test
 
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Overview
 
 **D'Agostino's K-squared test** is a formal statistical test used to evaluate whether a given sample follows a normal distribution by combining two key measures: **skewness** and **kurtosis**. The test examines both the asymmetry (skewness) and the "tailedness" (kurtosis) of the data distribution and computes a combined test statistic that assesses the overall deviation from normality. It is especially useful when considering skewness and kurtosis in a single test.
@@ -139,3 +136,65 @@ D'Agostino's K-squared test is commonly used in situations where the assumption 
 - **Assumes Continuous Data**: The test is designed for continuous data. Applying it to categorical or ordinal data is not appropriate.
 
 D'Agostino's K-squared test is a powerful method for checking whether data is normally distributed, accounting for skewness and kurtosis. By combining these two important aspects of distribution shape, the test provides a robust assessment of normality. However, like all normality tests, it should be used with graphical methods (e.g., Q-Q plots) and other statistical tests to understand the data's distribution comprehensively.
+
+## Exercises
+
+**Exercise 1.**
+D'Agostino's K-squared test combines tests for skewness and kurtosis. State the null hypothesis and the test statistic formula.
+
+??? success "Solution to Exercise 1"
+    The null hypothesis is $H_0$: the data come from a normal distribution.
+
+    The test statistic is:
+
+    $$
+    K^2 = Z_1^2 + Z_2^2
+    $$
+
+    where $Z_1$ is the standardized skewness statistic (a transformation of the sample skewness $\sqrt{b_1}$) and $Z_2$ is the standardized kurtosis statistic (a transformation of the sample kurtosis $b_2$). Under $H_0$, $K^2 \sim \chi^2_2$ approximately.
+
+    The test is omnibus: it detects departures from normality due to skewness, kurtosis, or both. A large $K^2$ (small p-value) indicates non-normality.
+
+---
+
+**Exercise 2.**
+A sample of $n = 100$ has skewness $= 0.8$ and excess kurtosis $= 1.5$. Without computing the exact test statistic, explain qualitatively whether D'Agostino's test is likely to reject normality.
+
+??? success "Solution to Exercise 2"
+    Both values are noticeably different from their normal benchmarks (skewness $= 0$, excess kurtosis $= 0$). Skewness of 0.8 indicates moderate right-skewness, and excess kurtosis of 1.5 indicates heavier tails than normal.
+
+    With $n = 100$, the test has reasonable power to detect these departures. The skewness contribution $Z_1^2$ will be moderately large, and the kurtosis contribution $Z_2^2$ will also be positive. Since $K^2 = Z_1^2 + Z_2^2$, both components add to the test statistic, making rejection likely.
+
+---
+
+**Exercise 3.**
+Compare D'Agostino's test with the Shapiro-Wilk test. What are the relative strengths of each?
+
+??? success "Solution to Exercise 3"
+    **D'Agostino's K-squared:**
+
+    - Strengths: Works well for moderate to large $n$ ($n \geq 20$). Provides separate insights about skewness and kurtosis. Computationally simple.
+    - Weaknesses: Less powerful than Shapiro-Wilk for small samples. May miss departures that do not affect skewness or kurtosis (e.g., bimodality with symmetric modes).
+
+    **Shapiro-Wilk:**
+
+    - Strengths: Most powerful test for small to moderate $n$. Detects a wide range of departures including those not captured by moments alone.
+    - Weaknesses: Originally limited to $n \leq 5000$ (though modern implementations handle larger $n$). Does not distinguish between skewness and kurtosis departures.
+
+---
+
+**Exercise 4.**
+Explain why D'Agostino's test is sometimes called a "moment-based" normality test and how this connects to the Jarque-Bera test.
+
+??? success "Solution to Exercise 4"
+    D'Agostino's test is "moment-based" because it evaluates normality through the third and fourth central moments (skewness and kurtosis), which are the first moments to differ from their normal values for many alternative distributions.
+
+    The **Jarque-Bera test** uses a similar approach:
+
+    $$
+    JB = \frac{n}{6}\left(S^2 + \frac{(K-3)^2}{4}\right)
+    $$
+
+    where $S$ is sample skewness and $K$ is sample kurtosis. Under $H_0$, $JB \sim \chi^2_2$.
+
+    The main difference: D'Agostino's test applies normalizing transformations to the skewness and kurtosis statistics before combining them, improving the chi-squared approximation for finite samples. The Jarque-Bera test uses the raw moments, which can have poor finite-sample properties. D'Agostino's test is therefore preferred for sample sizes below 200.

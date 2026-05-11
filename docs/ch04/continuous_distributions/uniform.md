@@ -1,9 +1,5 @@
 # Uniform Distribution
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Overview
 
 The **uniform distribution** assigns equal probability to all values in an interval $[a, b]$. It is the simplest continuous distribution and serves as the foundation for random number generation, simulation, and probability integral transforms.
@@ -193,3 +189,106 @@ plt.show()
 - The standard uniform $U(0,1)$ is the building block for random number generation via the inverse transform method.
 - The probability integral transform establishes that applying the CDF to any continuous random variable yields a uniform result.
 - Despite its simplicity, the uniform distribution is foundational to Monte Carlo simulation and computational statistics.
+
+## Exercises
+
+**Exercise 1.**
+$U \sim \mathrm{Uniform}(0, 1)$, $X = -(1/\lambda)\ln(1 - U)$. (a) Find CDF of $X$. (b) Identify the distribution. (c) Explain inverse transform method. (d) Show $1 - U \sim \mathrm{Uniform}(0, 1)$.
+
+??? success "Solution to Exercise 1"
+    (a) $P(X \le x) = P(-(1/\lambda)\ln(1 - U) \le x) = P(U \le 1 - e^{-\lambda x}) = 1 - e^{-\lambda x}$.
+
+    (b) This is the CDF of $\mathrm{Exp}(\lambda)$. So $X \sim \mathrm{Exp}(\lambda)$.
+
+    (c) **Inverse transform method:** for any distribution with invertible CDF $F$, set $X = F^{-1}(U)$ where $U \sim \mathrm{Uniform}(0, 1)$. Result: $X$ has CDF $F$. Universal recipe for sampling from distributions with closed-form quantile functions.
+
+    (d) $P(1 - U \le t) = P(U \ge 1 - t) = 1 - (1 - t) = t$. So $1 - U \sim \mathrm{Uniform}(0, 1)$. The simpler formula $X = -(1/\lambda) \ln U$ is therefore equivalent.
+
+---
+
+**Exercise 2.**
+**Mean, variance of Uniform$(a, b)$.** Derive both from the PDF.
+
+??? success "Solution to Exercise 2"
+    PDF: $f(x) = 1/(b - a)$ on $[a, b]$.
+
+    $\mathbb{E}[X] = \int_a^b x/(b - a) dx = (b^2 - a^2)/(2(b - a)) = (a + b)/2$.
+
+    $\mathbb{E}[X^2] = \int_a^b x^2/(b - a) dx = (b^3 - a^3)/(3(b - a)) = (a^2 + ab + b^2)/3$.
+
+    $\mathrm{Var}(X) = \mathbb{E}[X^2] - (\mathbb{E}[X])^2 = (a^2 + ab + b^2)/3 - (a + b)^2/4 = (b - a)^2/12$.
+
+    **Standard cases:** Uniform(0, 1) has mean 1/2 and variance 1/12. Uniform(-1, 1) has mean 0 and variance 1/3.
+
+---
+
+**Exercise 3.**
+**Sum of two uniforms.** Show that if $U_1, U_2 \sim \mathrm{Uniform}(0, 1)$ are independent, $U_1 + U_2$ has a **triangular distribution** on $[0, 2]$.
+
+??? success "Solution to Exercise 3"
+    Convolve the PDFs:
+
+    $$
+    f_{U_1 + U_2}(s) = \int_{-\infty}^\infty f_{U_1}(s - u) f_{U_2}(u) du
+    $$
+
+    For $u \in [0, 1]$ and $s - u \in [0, 1]$, the integrand is 1; otherwise 0. The region of integration:
+
+    - For $s \in [0, 1]$: $u \in [0, s]$, integral = $s$.
+    - For $s \in [1, 2]$: $u \in [s - 1, 1]$, integral = $2 - s$.
+
+    Result: $f_{U_1 + U_2}(s) = \min(s, 2 - s)$ for $s \in [0, 2]$, a triangle peaking at $s = 1$ with height 1.
+
+    The CLT for sums of uniforms predicts approximate normality for sums of 6+ uniforms — fast convergence. This is the basis of the Marsaglia-Bray algorithm for normal random number generation.
+
+---
+
+**Exercise 4.**
+**Order statistics of uniforms.** For $U_1, \ldots, U_n$ i.i.d. $\mathrm{Uniform}(0, 1)$, the $k$-th order statistic $U_{(k)}$ has distribution $\mathrm{Beta}(k, n - k + 1)$. Derive the CDF.
+
+??? success "Solution to Exercise 4"
+    $U_{(k)} \le u$ iff at least $k$ of the $U_i$'s are $\le u$. The number of $U_i$'s $\le u$ is $\mathrm{Binomial}(n, u)$ (each independently with probability $u$).
+
+    $$
+    P(U_{(k)} \le u) = P(\mathrm{Binomial}(n, u) \ge k) = \sum_{j=k}^n \binom{n}{j} u^j (1 - u)^{n - j}
+    $$
+
+    By the incomplete-beta function identity, this equals $I_u(k, n - k + 1)$ — the regularized incomplete beta function. So $U_{(k)} \sim \mathrm{Beta}(k, n - k + 1)$.
+
+    $\mathbb{E}[U_{(k)}] = k/(n + 1)$ (well-known beta mean). The expected $k$-th order statistic divides $[0, 1]$ into $n + 1$ equal pieces, providing the **plotting positions** used in Q-Q plots.
+
+---
+
+**Exercise 5.**
+**Maximum-entropy property.** Among all distributions on a bounded interval $[a, b]$, the uniform distribution has the maximum **differential entropy**. State the differential entropy formula and verify.
+
+??? success "Solution to Exercise 5"
+    Differential entropy: $h(X) = -\int f(x) \ln f(x) dx$.
+
+    For $X \sim \mathrm{Uniform}(a, b)$: $h(X) = -\int_a^b (1/(b-a)) \ln(1/(b-a)) dx = \ln(b - a)$.
+
+    **Claim:** any other distribution $g$ on $[a, b]$ has $h(g) \le \ln(b - a)$. Proof via the non-negativity of KL divergence:
+
+    $0 \le D_{KL}(g \| f) = \int g \ln(g/f) dx = -h(g) - \int g \ln f \, dx = -h(g) + \ln(b - a)$,
+
+    so $h(g) \le \ln(b - a) = h(f)$, with equality iff $g = f$ a.e.
+
+    **Interpretation:** in the absence of information beyond the support, the uniform distribution is the "least informative" — assigning equal mass everywhere. This makes it the natural prior in non-informative Bayesian analysis on bounded parameters.
+
+---
+
+**Exercise 6.**
+**Probability integral transform.** Prove that if $X$ has continuous CDF $F$, then $U = F(X) \sim \mathrm{Uniform}(0, 1)$.
+
+??? success "Solution to Exercise 6"
+    $P(U \le u) = P(F(X) \le u) = P(X \le F^{-1}(u)) = F(F^{-1}(u)) = u$, using continuity of $F$ (which makes $F^{-1}$ well-defined and $F \circ F^{-1} = \mathrm{id}$).
+
+    So $U$ has CDF $u$ on $[0, 1]$, i.e., $U \sim \mathrm{Uniform}(0, 1)$.
+
+    **Use:** the probability integral transform underlies many statistical tests:
+
+    - **Kolmogorov-Smirnov test:** transform data using the hypothesized $F$; under the null, the transformed data is uniform.
+    - **Copula models:** decompose joint distributions into marginals (via PIT to uniform) and a copula linking the uniforms.
+    - **Validation of distributional forecasts:** transformed observations should be uniform if the forecast distribution is correctly specified.
+
+    This is the dual of inverse transform sampling: one transforms uniforms to other distributions, the other transforms other distributions to uniforms. Both rely on the same CDF/inverse CDF machinery.

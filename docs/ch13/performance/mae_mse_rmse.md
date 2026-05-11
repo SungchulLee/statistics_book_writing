@@ -123,3 +123,61 @@ $$
 $$
 
 Notice that RMSE ($2.93$) is substantially larger than MAE ($2.2$). This gap is driven by the single large error $e_5 = 6$, which contributes $36/43 \approx 84\%$ of MSE but only $6/11 \approx 55\%$ of the total absolute error. This example illustrates how RMSE disproportionately reflects the influence of outlying residuals.
+
+## Exercises
+
+**Exercise 1.**
+Given actual values $y = (3, 5, 2, 8)$ and predictions $\hat{y} = (2.5, 5.5, 1.5, 7)$, compute the MAE, MSE, and RMSE.
+
+??? success "Solution to Exercise 1"
+    Errors: $e = (0.5, -0.5, 0.5, 1.0)$.
+
+    $$
+    \text{MAE} = \frac{1}{4}(|0.5| + |-0.5| + |0.5| + |1.0|) = \frac{2.5}{4} = 0.625
+    $$
+
+    $$
+    \text{MSE} = \frac{1}{4}(0.25 + 0.25 + 0.25 + 1.0) = \frac{1.75}{4} = 0.4375
+    $$
+
+    $$
+    \text{RMSE} = \sqrt{0.4375} \approx 0.6614
+    $$
+
+---
+
+**Exercise 2.**
+Explain why MSE penalizes large errors more heavily than MAE. Give a practical scenario where MAE is preferred.
+
+??? success "Solution to Exercise 2"
+    MSE squares each error, so an error of 10 contributes $10^2 = 100$ to the sum, while an error of 1 contributes only $1$. This means a single large error dominates the MSE. MAE uses absolute values, so the same errors contribute 10 and 1 respectively -- a 10:1 ratio instead of 100:1.
+
+    **MAE is preferred when:** outliers are expected and should not disproportionately influence model evaluation. For example, in real estate price prediction, a few luxury homes with large prediction errors should not dominate the assessment of model quality. MAE evaluates the "typical" error magnitude, while MSE evaluates the "worst-case-penalized" error.
+
+---
+
+**Exercise 3.**
+Show that the value $c$ that minimizes $\sum(y_i - c)^2$ is the mean $\bar{y}$, while the value that minimizes $\sum|y_i - c|$ is the median.
+
+??? success "Solution to Exercise 3"
+    **MSE minimizer (mean):** Differentiate $f(c) = \sum(y_i - c)^2$ with respect to $c$:
+
+    $$
+    f'(c) = -2\sum(y_i - c) = -2(n\bar{y} - nc) = 0 \implies c = \bar{y}
+    $$
+
+    **MAE minimizer (median):** The function $g(c) = \sum|y_i - c|$ is piecewise linear and convex. Its derivative is $g'(c) = -\#\{y_i > c\} + \#\{y_i < c\}$. Setting $g'(c) = 0$ requires equal numbers of observations above and below $c$, which defines the median.
+
+    This connection explains why models optimized for MSE (e.g., OLS) predict the conditional mean, while models optimized for MAE (e.g., quantile regression at $\tau = 0.5$) predict the conditional median. $\square$
+
+---
+
+**Exercise 4.**
+Why is RMSE preferred over MSE for reporting model performance? What is its unit?
+
+??? success "Solution to Exercise 4"
+    RMSE $= \sqrt{\text{MSE}}$ is preferred because it has the **same units** as the response variable $y$, making it directly interpretable. If $y$ is measured in dollars, RMSE is in dollars and represents the "typical" prediction error magnitude. MSE is in dollars-squared, which is unintuitive.
+
+    RMSE also has a statistical interpretation: for a model with normally distributed errors, approximately 68% of predictions fall within $\pm$ RMSE of the actual value, and about 95% fall within $\pm 2 \cdot$ RMSE.
+
+    However, RMSE shares MSE's sensitivity to outliers (since it is a monotonic transformation of MSE). For robustness, report both RMSE and MAE.

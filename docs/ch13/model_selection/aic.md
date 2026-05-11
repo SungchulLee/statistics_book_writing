@@ -129,3 +129,27 @@ Consider three candidate models for a dataset with $n = 50$ observations:
 Model B has the lowest AIC (39.4), suggesting the best balance between fit and complexity. Model C achieves a slightly lower SSE than Model B, but its three additional parameters are not justified by the modest improvement in fit — the complexity penalty of $2 \times 8 = 16$ versus $2 \times 5 = 10$ outweighs the gain.
 
 The delta values are $\Delta_A = 10.4$, $\Delta_B = 0$, and $\Delta_C = 3.1$. Under Burnham and Anderson's guidelines, Model A has essentially no support, Model B is the best, and Model C has noticeably less support but cannot be dismissed entirely.
+
+## Exercises
+
+**Exercise 1.**
+Two linear regression models, **Model A** and **Model B**, were fitted to the same dataset. The results show that:
+
+- Model A has a higher $R^2$ value.
+- Model B has a lower AIC (Akaike Information Criterion).
+
+**(a)** Between Model A (higher $R^2$) and Model B (lower AIC), which model should be selected?
+
+**(b)** Why is AIC preferred over $R^2$ for model selection?
+
+??? success "Solution to Exercise 1"
+
+    **(a)** It is generally recommended to prioritize the model with the **lower AIC** (Model B in this case).
+
+    **(b)** Three key reasons:
+
+    1. **Limitations of $R^2$**: $R^2$ measures the proportion of variance explained but does not penalize for model complexity. A model with more predictors can artificially increase $R^2$, even if those predictors do not improve true predictive performance, leading to overfitting.
+
+    2. **Strengths of AIC**: AIC balances model fit (how well the model explains the data) and model simplicity (penalizing additional predictors). This helps select the model likely to have better predictive performance on unseen data.
+
+    3. **Key Difference**: $R^2$ focuses solely on explanatory power, while AIC accounts for both explanation and complexity. AIC is therefore a more reliable criterion for comparing models in terms of prediction accuracy.

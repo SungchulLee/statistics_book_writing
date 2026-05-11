@@ -1,9 +1,5 @@
 # Normal Distribution (Z)
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Overview
 
 The **standard normal distribution** $Z \sim N(0, 1)$ is the most fundamental sampling distribution. It arises naturally whenever we standardize a normally distributed statistic, and — via the Central Limit Theorem — it serves as the large-sample approximation for a wide variety of estimators.
@@ -130,3 +126,74 @@ The standard normal is the building block for other sampling distributions:
 ## Summary
 
 The standard normal distribution is the cornerstone of sampling theory. It provides exact results for normal populations with known variance, and approximate results for large samples from any finite-variance population via the CLT. Its simplicity and universality make it the first distribution to consider in any inferential problem.
+
+## Exercises
+
+**Exercise 1.**
+Let $X_1, \ldots, X_n$ be i.i.d. $N(\mu, \sigma^2)$ with $\sigma$ known. Derive the distribution of $\bar{X}$ and the standardized statistic $Z = \frac{\bar{X} - \mu}{\sigma/\sqrt{n}}$.
+
+??? success "Solution to Exercise 1"
+    Since each $X_i \sim N(\mu, \sigma^2)$ and the $X_i$ are independent, the sample mean $\bar{X} = \frac{1}{n}\sum_{i=1}^n X_i$ is a linear combination of independent normals. Therefore:
+
+    $$
+    \bar{X} \sim N\!\left(\mu, \frac{\sigma^2}{n}\right)
+    $$
+
+    Standardizing:
+
+    $$
+    Z = \frac{\bar{X} - \mu}{\sigma/\sqrt{n}} \sim N(0, 1)
+    $$
+
+    This follows because subtracting the mean and dividing by the standard deviation of a normal random variable always produces a standard normal.
+
+---
+
+**Exercise 2.**
+A machine fills bottles with a mean of 500 mL and a known standard deviation of 5 mL (normally distributed). A sample of $n = 25$ bottles has a sample mean of 498 mL. Find the probability that the sample mean is 498 mL or less.
+
+??? success "Solution to Exercise 2"
+    Under the assumption $\mu = 500$ and $\sigma = 5$:
+
+    $$
+    Z = \frac{498 - 500}{5/\sqrt{25}} = \frac{-2}{1} = -2
+    $$
+
+    $$
+    P(\bar{X} \leq 498) = P(Z \leq -2) = \mathcal{N}(-2) \approx 0.0228
+    $$
+
+    There is approximately a 2.28% chance of observing a sample mean of 498 mL or less if the true mean is 500 mL.
+
+---
+
+**Exercise 3.**
+If $Z_1, Z_2, Z_3$ are independent standard normal variables, what is the distribution of $Z_1^2 + Z_2^2 + Z_3^2$? What are the mean and variance of this distribution?
+
+??? success "Solution to Exercise 3"
+    By definition, the sum of squares of $k$ independent standard normal variables follows a chi-square distribution with $k$ degrees of freedom:
+
+    $$
+    Z_1^2 + Z_2^2 + Z_3^2 \sim \chi^2_3
+    $$
+
+    The mean and variance of a $\chi^2_k$ distribution are $E[\chi^2_k] = k$ and $\text{Var}(\chi^2_k) = 2k$. Therefore:
+
+    $$
+    E[Z_1^2 + Z_2^2 + Z_3^2] = 3, \quad \text{Var}(Z_1^2 + Z_2^2 + Z_3^2) = 6
+    $$
+
+---
+
+**Exercise 4.**
+Explain why the normal distribution plays a central role in sampling theory even when the population is not normal. What theorem justifies this, and what are its limitations?
+
+??? success "Solution to Exercise 4"
+    The **Central Limit Theorem (CLT)** justifies the central role of the normal distribution. It states that for any population with finite mean $\mu$ and finite variance $\sigma^2$, the standardized sample mean $Z_n = \frac{\bar{X}_n - \mu}{\sigma/\sqrt{n}}$ converges in distribution to $N(0,1)$ as $n \to \infty$, regardless of the shape of the original population.
+
+    **Limitations:**
+
+    - The CLT is an asymptotic result; for small $n$, the approximation may be poor, especially for highly skewed or heavy-tailed distributions.
+    - The population must have a finite variance; for distributions with infinite variance (e.g., Cauchy), the CLT does not apply.
+    - The Berry-Esseen theorem quantifies the rate of convergence: the approximation error is $O(1/\sqrt{n})$, and skewed distributions converge more slowly.
+    - For inference about variance (not the mean), normality of the population is required for exact chi-square results; the CLT does not rescue variance-based inference in the same way.

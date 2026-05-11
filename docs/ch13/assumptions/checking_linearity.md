@@ -1,9 +1,6 @@
 # Checking Linearity in Linear Regression
 
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 Linearity is a foundational assumption in linear regression that posits a straight-line relationship between the dependent variable and each independent variable. Ensuring that this assumption holds is critical for the validity of the regression model. If the relationship between the variables is not linear, the model may yield biased estimates, resulting in poor predictions and incorrect inferences. This section explores various methods for assessing linearity in linear regression.
 
 ## 1. Visual Inspection Using Scatterplots
@@ -159,3 +156,33 @@ print(model.summary())
 | Polynomial Terms | Formal | Testing specific non-linear relationships | Significant higher-order coefficients |
 
 Ensuring the linearity assumption in linear regression is critical for producing accurate and interpretable models. The methods discussed provide robust tools for diagnosing and addressing potential violations of this assumption. By carefully checking linearity and making necessary adjustments, you can enhance the reliability of your linear regression models and the validity of the conclusions drawn from them.
+## Exercises
+
+**Exercise 1.**
+A component-plus-residual (CPR) plot for predictor $X_2$ in a multiple regression shows a clear U-shaped curve. Describe two ways to modify the model to address this non-linearity.
+
+??? success "Solution to Exercise 1"
+
+    1. **Add a polynomial term:** Include $X_2^2$ as an additional predictor in the model, changing the specification to $Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \beta_3 X_2^2 + \varepsilon$. This captures the quadratic relationship within the linear regression framework.
+
+    2. **Apply a transformation:** Transform $X_2$ using $\log(X_2)$, $\sqrt{X_2}$, or another monotone transformation that linearizes the relationship before fitting the regression.
+
+---
+
+**Exercise 2.**
+Explain the difference between a scatterplot of $Y$ vs. $X_j$ and a partial residual plot for $X_j$ in a multiple regression. When would they give different conclusions about linearity?
+
+??? success "Solution to Exercise 2"
+    A **scatterplot** of $Y$ vs. $X_j$ shows the marginal relationship, which may be confounded by the effects of other predictors. A **partial residual plot** (component-plus-residual plot) plots $e + \hat{\beta}_j X_j$ vs. $X_j$, isolating the relationship between $Y$ and $X_j$ after removing the effects of all other predictors.
+
+    They differ when other predictors are correlated with $X_j$. For example, if $X_1$ and $X_2$ are positively correlated and both affect $Y$, the scatterplot of $Y$ vs. $X_2$ might appear linear (because $X_1$'s effect reinforces $X_2$'s), while the partial residual plot reveals a nonlinear partial relationship after adjusting for $X_1$.
+
+---
+
+**Exercise 3.**
+A regression of house price on square footage appears linear in a scatterplot, but the residual-vs-fitted plot shows a subtle curvature. Explain why these diagnostics can disagree and which one to trust.
+
+??? success "Solution to Exercise 3"
+    The scatterplot shows the raw data, which may have large variance that masks subtle nonlinearity. The residual-vs-fitted plot removes the linear trend, making any remaining curvature more visible because the $y$-axis scale is compressed to the residual range.
+
+    The **residual-vs-fitted plot** should be trusted because it directly assesses whether the model's linear assumption is adequate. The scatterplot is useful for initial exploration but cannot detect subtle departures from linearity when the signal-to-noise ratio is low.

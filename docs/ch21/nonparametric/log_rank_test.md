@@ -167,3 +167,35 @@ Common choices include:
 
 The choice of weights should be guided by the scientific question, not by
 which test gives the smallest p-value.
+
+## Exercises
+
+**Exercise 1.**
+Log-Rank Test
+
+Two groups of patients (A: new treatment, B: standard care) have the following
+survival data:
+
+**Group A:** 4, 7+, 10, 14+, 18 (+ denotes censored).
+
+**Group B:** 2, 5, 9+, 11, 16.
+
+**(a)** State the null and alternative hypotheses.
+
+**(b)** At event time $t = 2$, compute the expected events $e_{A1}$ for group A.
+
+**(c)** Compute $O_A$ and $E_A$ across all event times and comment on the
+direction of the difference.
+
+??? success "Solution to Exercise 1"
+
+    **(a)** $H_0: S_A(t) = S_B(t)$ for all $t$ vs $H_1: S_A(t) \neq S_B(t)$ for
+    some $t$.
+
+    **(b)** At $t = 2$: $n_A = 5$, $n_B = 5$, $n = 10$, $d = 1$.
+    $e_{A1} = 1 \times 5/10 = 0.5$.
+
+    **(c)** $O_A = 3$ events observed in group A. Computing expected events at
+    each event time and summing yields $E_A \approx 3.5$. Since $O_A < E_A$,
+    group A has fewer events than expected, suggesting better survival with the
+    new treatment.

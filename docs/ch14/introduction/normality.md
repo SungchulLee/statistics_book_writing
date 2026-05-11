@@ -58,3 +58,62 @@ Not all data follows a normal distribution. Some common examples of non-normal d
 - **Bounded or Discrete Data**: Proportions, counts, and Likert-scale responses are inherently non-normal due to their restricted range or discrete nature.
 
 Understanding when data deviates from normality is essential for choosing the appropriate statistical tools and methods for analysis.
+
+
+## Exercises
+
+**Exercise 1.**
+State the probability density function of the normal distribution $N(\mu, \sigma^2)$ and identify the roles of the two parameters.
+
+??? success "Solution to Exercise 1"
+    The PDF is:
+
+    $$
+    f(x) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\!\left(-\frac{(x-\mu)^2}{2\sigma^2}\right), \quad x \in \mathbb{R}
+    $$
+
+    - $\mu$ (mean) is the center of the distribution -- it determines the location of the peak and the axis of symmetry.
+    - $\sigma^2$ (variance) controls the spread. Larger $\sigma^2$ produces a wider, flatter bell curve; smaller $\sigma^2$ produces a taller, narrower one.
+    - $\sigma$ (standard deviation) is in the same units as $x$, making it more interpretable than $\sigma^2$.
+
+---
+
+**Exercise 2.**
+State the 68-95-99.7 rule for the normal distribution and verify the 95% figure using the standard normal CDF.
+
+??? success "Solution to Exercise 2"
+    The 68-95-99.7 rule states that for $X \sim N(\mu, \sigma^2)$:
+
+    - $P(\mu - \sigma < X < \mu + \sigma) \approx 0.683$
+    - $P(\mu - 2\sigma < X < \mu + 2\sigma) \approx 0.954$
+    - $P(\mu - 3\sigma < X < \mu + 3\sigma) \approx 0.997$
+
+    For the 95% figure with $Z \sim N(0,1)$: $P(-2 < Z < 2) = \mathcal{N}(2) - \mathcal{N}(-2) = 0.9772 - 0.0228 = 0.9544 \approx 95.4\%$.
+
+    The exact 95% interval uses $z = 1.96$: $P(-1.96 < Z < 1.96) = 0.95$.
+
+---
+
+**Exercise 3.**
+If $X \sim N(70, 100)$ (mean 70, variance 100), find $P(X > 85)$.
+
+??? success "Solution to Exercise 3"
+    Standardize: $Z = (X - \mu)/\sigma = (85 - 70)/10 = 1.5$.
+
+    $$
+    P(X > 85) = P(Z > 1.5) = 1 - \mathcal{N}(1.5) = 1 - 0.9332 = 0.0668
+    $$
+
+    There is approximately a 6.7% probability of exceeding 85.
+
+---
+
+**Exercise 4.**
+Explain why the normal distribution arises so frequently in practice, referencing the Central Limit Theorem.
+
+??? success "Solution to Exercise 4"
+    The Central Limit Theorem (CLT) states that the sum (or average) of $n$ independent, identically distributed random variables with finite mean and variance converges in distribution to a normal distribution as $n \to \infty$, regardless of the original distribution.
+
+    Many real-world measurements are the aggregate effect of numerous small, independent factors. Height is influenced by many genes and environmental factors; measurement errors are the sum of many small instrumental imprecisions; financial returns (approximately) aggregate many independent information shocks. In each case, the CLT drives the aggregate toward normality.
+
+    The CLT also explains why normal-based methods (t-tests, regression) work well even for non-normal data when $n$ is large: the sampling distribution of the mean is approximately normal regardless.

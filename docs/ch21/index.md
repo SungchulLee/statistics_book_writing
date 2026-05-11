@@ -1,9 +1,6 @@
 # Chapter 21: Survival Models
 
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Overview
 
 This chapter introduces survival analysis, the branch of statistics concerned with modeling time-to-event data in the presence of censoring. We develop the core mathematical framework---survival and hazard functions---and progress from non-parametric estimators (Kaplan--Meier, Nelson--Aalen) through fully parametric models (exponential, Weibull, log-normal, log-logistic) to the semi-parametric Cox proportional hazards model. The chapter concludes with model comparison strategies and practical applications in finance, medicine, and engineering.

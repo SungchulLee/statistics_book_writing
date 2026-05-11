@@ -1,9 +1,6 @@
 # Simple Linear Regression
 
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 Simple linear regression models the relationship between a single independent variable $X$ and a dependent variable $Y$ as a straight line:
 
 $$
@@ -722,3 +719,151 @@ axes[1, 1].set_title(f"{ticker_wmt} Daily Returns Histogram")
 plt.tight_layout()
 plt.show()
 ```
+
+## Exercises
+
+**Exercise 1.**
+Statistical information on height and weight of 100 men sampled from a specific group:
+
+- **Height**: Mean = 173 cm, Standard Deviation = 6 cm
+- **Weight**: Mean = 70 kg, Standard Deviation = 7 kg
+- **Correlation between Height and Weight**: 0.59
+
+Since the sample size is large, use the normal distribution instead of the $t$-distribution.
+
+**(a)** What is the predicted weight of a man whose height is 179 cm?
+
+**(b)** Suppose the predicted weight obtained above represents the weight of a certain man. What is the predicted height of this man?
+
+**(c)** What is the 95% confidence interval for the mean predicted weight when the height is 179 cm?
+
+**(d)** What is the 95% confidence interval for the predicted weight when the height is 179 cm?
+
+??? success "Solution to Exercise 1"
+
+    **(a)** Predict the weight for a height of 179 cm:
+
+    $$
+    X = \mu_X + \sigma_X \quad \rightarrow \quad \hat{Y} = \mu_Y + r\sigma_Y = 70 + 0.59 \times 7 = 74.13
+    $$
+
+    **(b)** Predict the height for a weight of 74.13 kg:
+
+    $$
+    Y = \mu_Y + r\sigma_Y \quad \rightarrow \quad \hat{X} = \mu_X + r^2\sigma_X = 173 + 0.59^2 \times 6 = 175.09
+    $$
+
+    **(c)** 95% Confidence Interval for the Mean Predicted Weight:
+
+    $$
+    \hat{Y} \pm z_{0.025} \cdot SE(\hat{Y}) = (72.13, \; 76.13)
+    $$
+
+    where:
+
+    $$
+    SE(\hat{Y}) = s_Y \sqrt{\frac{1}{n} + \frac{(X - \bar{X})^2}{\sum (X_i - \bar{X})^2}}
+    $$
+
+    **(d)** 95% Confidence Interval for the Predicted Weight:
+
+    $$
+    \hat{Y} \pm z_{0.025} \cdot SE_{\text{prediction}} = (60.10, \; 88.16)
+    $$
+
+    where:
+
+    $$
+    SE_{\text{prediction}} = s_Y \sqrt{1 + \frac{1}{n} + \frac{(X - \bar{X})^2}{\sum (X_i - \bar{X})^2}}
+    $$
+
+---
+
+**Exercise 2.**
+Use housing data and do the following:
+
+**(a)** Plot the regression line using $x = \text{df.median\_income}$ and $y = \text{df.median\_house\_value}$.
+
+**(b)** Compute the regression prediction of `median_house_value` when `median_income` is 8.
+
+```python
+import os
+import tarfile
+import urllib
+from sklearn import metrics
+from sklearn.linear_model import LinearRegression
+
+DOWNLOAD_ROOT = "https://raw.githubusercontent.com/ageron/handson-ml2/master/"
+HOUSING_PATH = os.path.join("datasets", "housing")
+HOUSING_URL = DOWNLOAD_ROOT + "datasets/housing/housing.tgz"
+
+def fetch_housing_data(housing_url=HOUSING_URL, housing_path=HOUSING_PATH):
+    if not os.path.isdir(housing_path):
+        os.makedirs(housing_path)
+    tgz_path = os.path.join(housing_path, "housing.tgz")
+    urllib.request.urlretrieve(housing_url, tgz_path)
+    housing_tgz = tarfile.open(tgz_path)
+    housing_tgz.extractall(path=housing_path)
+    housing_tgz.close()
+
+def load_housing_data(housing_path=HOUSING_PATH):
+    csv_path = os.path.join(housing_path, "housing.csv")
+    return pd.read_csv(csv_path)
+
+def main():
+    fetch_housing_data()
+    pass
+
+if __name__ == "__main__":
+    main()
+```
+
+??? success "Solution to Exercise 2"
+
+    ```python
+    import os
+    import tarfile
+    import urllib
+    import numpy as np
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    from sklearn.linear_model import LinearRegression
+
+    DOWNLOAD_ROOT = "https://raw.githubusercontent.com/ageron/handson-ml2/master/"
+    HOUSING_PATH = os.path.join("datasets", "housing")
+    HOUSING_URL = DOWNLOAD_ROOT + "datasets/housing/housing.tgz"
+
+    def fetch_housing_data(housing_url=HOUSING_URL, housing_path=HOUSING_PATH):
+        if not os.path.isdir(housing_path):
+            os.makedirs(housing_path)
+        tgz_path = os.path.join(housing_path, "housing.tgz")
+        urllib.request.urlretrieve(housing_url, tgz_path)
+        housing_tgz = tarfile.open(tgz_path)
+        housing_tgz.extractall(path=housing_path)
+        housing_tgz.close()
+
+    def load_housing_data(housing_path=HOUSING_PATH):
+        csv_path = os.path.join(housing_path, "housing.csv")
+        return pd.read_csv(csv_path)
+
+    def main():
+        fetch_housing_data()
+
+        print("(a)")
+        df = load_housing_data()
+        x = np.array(df.median_income).reshape((-1, 1))
+        y = np.array(df.median_house_value)
+        model = LinearRegression()
+        model.fit(x, y)
+        y_pred = model.predict(x)
+        fig, ax = plt.subplots(figsize=(15, 4))
+        ax.plot(x, y, ',')
+        ax.plot(x, y_pred, '--r')
+        plt.show()
+
+        print("(b)")
+        print(model.predict([[8]])[0])
+
+    if __name__ == "__main__":
+        main()
+    ```

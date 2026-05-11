@@ -120,3 +120,48 @@ The output shows that the empirical tail probability exceeds the normal predicti
 ## Summary
 
 Financial returns violate the normality assumption through excess kurtosis, negative skewness, and volatility clustering. These departures are not minor statistical curiosities; they have direct consequences for risk measurement, hypothesis testing, and confidence interval construction. When working with financial data, practitioners should test for normality, consider robust alternatives, and use risk models that account for heavy tails.
+
+
+## Exercises
+
+**Exercise 1.**
+Explain why the efficient market hypothesis (EMH) implies that stock returns should be approximately normally distributed, and why this prediction fails empirically.
+
+??? success "Solution to Exercise 1"
+    Under the EMH, prices fully reflect all available information, and price changes are driven by unpredictable new information arriving randomly. If many small, independent information shocks drive returns, the CLT suggests the aggregate return should be approximately normal.
+
+    This prediction fails empirically because: (1) information shocks are not independent -- volatility clusters (large moves follow large moves); (2) shocks are not identically distributed -- their variance changes over time; (3) some shocks are large and rare (earnings surprises, geopolitical events), violating the "many small independent" assumption. The result is heavy tails and volatility clustering, both inconsistent with the normal model.
+
+---
+
+**Exercise 2.**
+What is the practical consequence of assuming normality for Value-at-Risk (VaR) calculations when returns are actually heavy-tailed?
+
+??? success "Solution to Exercise 2"
+    Normal VaR at the $\alpha$ level is $\text{VaR}_\alpha = -\mu + z_\alpha \sigma$. If returns have heavier tails, the true $\alpha$-quantile is more extreme than $z_\alpha \sigma$.
+
+    Consequence: the normal VaR **underestimates** potential losses. For example, the normal 99% VaR might predict a maximum daily loss of 2.3% for a portfolio, but the actual 1% worst-case loss could be 4% or more. This leads to insufficient capital reserves, unexpected breaches of risk limits, and potential regulatory violations.
+
+---
+
+**Exercise 3.**
+The log-normal distribution is often used for stock prices rather than returns. Explain the relationship between log-normal prices and normally distributed log-returns.
+
+??? success "Solution to Exercise 3"
+    If the stock price $S_t$ is log-normally distributed, then $\log(S_t/S_{t-1}) = \log S_t - \log S_{t-1}$ (the log-return) is normally distributed. Equivalently, $S_t = S_0 \exp(\sum r_i)$ where $r_i$ are log-returns.
+
+    This model (geometric Brownian motion) underlies the Black-Scholes option pricing formula. It ensures prices remain positive (a log-normal variable is always positive) while allowing returns to be negative.
+
+    The model fails for the same reasons returns are not truly normal: heavy tails, volatility clustering, and jumps. Extensions include jump-diffusion models, stochastic volatility models, and GARCH processes.
+
+---
+
+**Exercise 4.**
+Explain why normality is a more reasonable assumption for portfolio returns than for individual stock returns.
+
+??? success "Solution to Exercise 4"
+    Portfolio returns are weighted averages of individual stock returns. By diversification (combining many weakly correlated assets), the CLT drives the portfolio return distribution toward normality. Specifically, the sum of many weakly dependent random variables with finite variance converges to normality.
+
+    The convergence is faster when: (1) the portfolio contains many assets, (2) the assets are not too highly correlated, and (3) no single asset dominates the portfolio weight. Well-diversified portfolios with 30+ stocks often have return distributions that are closer to normal than individual stocks.
+
+    However, during market crises, correlations spike (contagion), reducing the effective diversification and making portfolio returns more heavy-tailed than normal -- precisely when accurate risk modeling matters most.

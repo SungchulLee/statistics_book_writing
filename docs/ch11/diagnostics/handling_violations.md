@@ -1,9 +1,6 @@
 # Handling Assumption Violations
 
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Overview
 
 When diagnostic checks reveal that one or more ANOVA assumptions are violated, it is important to take corrective actions to ensure valid conclusions. The appropriate response depends on the nature and severity of the violation. This section provides a systematic guide to addressing each type of violation.
@@ -153,3 +150,49 @@ For a detailed treatment, see [Permutation Tests](../../ch17/permutation/foundat
 | Non-independence | Mixed-effects models, repeated-measures ANOVA, GEE |
 | Nonlinearity | Polynomial terms, transformations, GAMs |
 | Outliers/Influential points | Robust estimators, sensitivity analysis, transformations |
+## Exercises
+
+**Exercise 1.**
+A one-way ANOVA with four groups yields a significant F-test ($p = 0.008$), but Levene's test rejects the null of equal variances ($p = 0.003$) and the Shapiro-Wilk test on the residuals is non-significant ($p = 0.34$). Outline a step-by-step plan for obtaining valid inference.
+
+??? success "Solution to Exercise 1"
+
+    1. **Normality:** The Shapiro-Wilk test is non-significant, so normality is not a concern. No action needed.
+
+    2. **Homoscedasticity:** Levene's test strongly rejects equal variances. The standard ANOVA F-test results are unreliable.
+
+    3. **Recommended action:** Re-run the analysis using **Welch's one-way ANOVA**, which does not assume equal variances. If Welch's ANOVA is still significant, follow up with the **Games-Howell post-hoc test** (designed for unequal variances) rather than Tukey's HSD.
+
+    4. **Optional:** Try a variance-stabilizing transformation (e.g., log) and check whether it resolves the heteroscedasticity. If so, the standard ANOVA on the transformed data may be used.
+
+---
+
+**Exercise 2.**
+Both the normality and homoscedasticity assumptions are violated in a dataset with three groups of sizes $n = 12, 15, 10$. Recommend an analysis strategy, justifying each choice.
+
+??? success "Solution to Exercise 2"
+    With both assumptions violated, the options in order of preference are:
+
+    1. **Kruskal-Wallis test.** This non-parametric alternative to one-way ANOVA does not assume normality or equal variances. It compares median ranks rather than means and is appropriate for ordinal or skewed data.
+
+    2. **Bootstrap ANOVA.** Use resampling to obtain the null distribution of the F-statistic without distributional assumptions. This preserves the mean-comparison framework while relaxing assumptions.
+
+    3. **Transformation + Welch's ANOVA.** If a transformation (e.g., log or Box-Cox) can approximately normalize the data, Welch's ANOVA handles the remaining heteroscedasticity.
+
+    The unequal sample sizes make the standard ANOVA particularly sensitive to heteroscedasticity, further supporting the use of Welch's ANOVA or non-parametric methods.
+
+---
+
+**Exercise 3.**
+Explain why simply removing outliers detected by Cook's distance is not always the best strategy in ANOVA diagnostics. What should a researcher do instead?
+
+??? success "Solution to Exercise 3"
+    Removing outliers can introduce **selection bias** and reduce sample size, potentially eliminating valid observations that represent genuine population variability. The researcher should instead:
+
+    1. **Investigate the outlier.** Determine whether it results from a data entry error, measurement malfunction, or a legitimately extreme observation.
+
+    2. **Perform a sensitivity analysis.** Run the ANOVA with and without the outlier and compare results. If conclusions are the same, the outlier is not influential.
+
+    3. **Use robust methods.** Trimmed means, Winsorized ANOVA, or M-estimators down-weight extreme observations without discarding them.
+
+    4. **Report both analyses.** If conclusions differ, report results with and without the outlier and discuss the discrepancy.

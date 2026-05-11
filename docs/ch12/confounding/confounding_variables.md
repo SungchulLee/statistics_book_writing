@@ -109,3 +109,59 @@ Controlling for a mediator is not necessarily wrong, but it answers a different 
 ## Summary
 
 A confounding variable is a common cause of both the exposure and the outcome that distorts the observed association between them. Confounding can inflate, reduce, or reverse the true effect. It can be addressed through study design (randomization, restriction, matching) or analysis (stratification, regression, propensity scores). The key to handling confounding correctly is understanding the underlying causal structure, which distinguishes confounders from mediators and colliders.
+
+## Exercises
+
+**Exercise 1.**
+For each of the following correlations, identify at least one plausible confounding variable:
+
+1. Countries with more chocolate consumption per capita win more Nobel Prizes.
+2. Students who eat breakfast perform better on exams.
+3. Cities with more police officers have higher crime rates.
+4. People who own more books tend to have higher incomes.
+
+??? success "Solution to Exercise 1"
+
+    1. **National wealth (GDP per capita)** confounds both chocolate consumption and Nobel Prizes. Wealthier countries can afford more chocolate and also invest more in education and research infrastructure.
+
+    2. **Socioeconomic status** confounds breakfast eating and exam performance. Students from higher-income families are more likely to eat breakfast regularly and also have access to better educational resources, tutoring, and study environments.
+
+    3. **City size and population density** confound the number of police officers and crime rate. Larger cities hire more police officers and also have higher crime rates due to population density, poverty concentration, and other urban factors.
+
+    4. **Education level** confounds book ownership and income. People with more education tend to buy more books and also tend to earn higher incomes. Parental education and socioeconomic background may also confound both variables.
+
+---
+
+**Exercise 2.**
+Using the California housing dataset:
+
+1. Compute the full correlation matrix
+2. Identify the variable most strongly correlated with `median_house_value`
+3. Discuss potential confounders in the relationship between `median_income` and `median_house_value`
+4. Create a scatter plot matrix for the four most correlated variables
+
+```python
+import os, tarfile, urllib.request
+import pandas as pd
+
+DOWNLOAD_ROOT = "https://raw.githubusercontent.com/ageron/handson-ml2/master/"
+HOUSING_PATH = os.path.join("datasets", "housing")
+HOUSING_URL = DOWNLOAD_ROOT + "datasets/housing/housing.tgz"
+
+def fetch_housing_data():
+    if not os.path.isdir(HOUSING_PATH):
+        os.makedirs(HOUSING_PATH)
+    tgz_path = os.path.join(HOUSING_PATH, "housing.tgz")
+    urllib.request.urlretrieve(HOUSING_URL, tgz_path)
+    with tarfile.open(tgz_path) as f:
+        f.extractall(path=HOUSING_PATH)
+
+def load_housing_data():
+    return pd.read_csv(os.path.join(HOUSING_PATH, "housing.csv"))
+
+# Your analysis here
+```
+
+??? success "Solution to Exercise 2"
+
+    `median_income` is the variable most strongly correlated with `median_house_value`. Potential confounders in this relationship include geographic location (proximity to the coast, urban vs. rural), housing age, and local amenities (school quality, employment opportunities). These variables affect both median income (through sorting of residents) and house values (through demand). The scatter plot matrix for the top four correlated variables will reveal that many relationships are nonlinear and that outliers (e.g., capped house values at \$500,000) can distort correlation estimates.

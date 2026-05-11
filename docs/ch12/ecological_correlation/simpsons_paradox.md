@@ -129,3 +129,32 @@ While often illustrated with proportions and contingency tables, Simpson's parad
 ## Summary
 
 Simpson's paradox occurs when an association reverses direction after stratifying by a confounding variable. It arises because aggregation changes the weighting of subgroups, allowing a confounding variable to distort the overall relationship. The Berkeley admissions case and the kidney stone treatment example illustrate that aggregate data can be deeply misleading. Resolving the paradox requires identifying the correct causal structure and analyzing the data at the appropriate level.
+
+## Exercises
+
+**Exercise 1.**
+Create a synthetic dataset with two groups where a trend reverses when the groups are combined:
+
+1. Generate Group A: $x \sim U(0, 5)$, $y = -0.5x + 10 + \epsilon$
+2. Generate Group B: $x \sim U(5, 10)$, $y = -0.5x + 5 + \epsilon$
+3. Plot each group separately and combined
+4. Compute the Pearson $r$ within each group and for the combined data
+
+Explain why the combined correlation can be positive even though both within-group correlations are negative.
+
+??? success "Solution to Exercise 1"
+
+    Within each group, $y$ decreases as $x$ increases (slope $= -0.5$), giving a negative within-group correlation. However, Group B has higher $x$ values (5--10) and lower $y$ values overall (because of the lower intercept), while Group A has lower $x$ values (0--5) and higher $y$ values. When combined, the between-group pattern (low $x$ with high $y$ for Group A, high $x$ with lower $y$ for Group B) is overwhelmed by the fact that within each range, the combined data trace an upward-sloping pattern driven by the group offset. The combined correlation can be positive because the between-group difference in intercepts creates an overall positive association that masks the within-group negative slopes.
+
+---
+
+**Exercise 2.**
+Using the UC Berkeley admissions data, compute:
+
+1. The overall admission rate for men and women
+2. The admission rate for men and women in each department
+3. Identify which departments contribute most to the paradox
+
+??? success "Solution to Exercise 2"
+
+    The overall admission rate for men is higher than for women, suggesting possible gender bias. However, when stratified by department, women are admitted at equal or higher rates in most departments. The paradox arises because women disproportionately applied to more competitive departments (with lower overall admission rates), while men disproportionately applied to less competitive departments (with higher overall admission rates). The departments contributing most to the paradox are those with the largest discrepancy between male and female application rates combined with very different overall admission rates.

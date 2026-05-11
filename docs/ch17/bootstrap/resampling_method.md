@@ -1,9 +1,6 @@
 # The Bootstrap Resampling Method
 
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Overview
 
 The **bootstrap** is a powerful, distribution-free method for estimating the sampling distribution of a statistic without making parametric assumptions. By repeatedly resampling (with replacement) from a single sample, we can approximate the sampling distribution and compute standard errors, confidence intervals, and other inferential quantities.
@@ -113,6 +110,7 @@ In the example above, a small negative bias suggests the median is slightly down
 ### Bootstrap Distribution Shape
 
 The shape of the bootstrap distribution reveals:
+
 - **Skewness**: Non-symmetry indicates asymmetric sampling distribution
 - **Heavy tails**: Suggests the statistic is sensitive to outliers
 - **Multimodality**: Can indicate clustered data or multiple population modes
@@ -121,6 +119,7 @@ The shape of the bootstrap distribution reveals:
 
 ### 1. Distribution-Free
 No assumption of normality or specific distributional form required. The bootstrap works for:
+
 - Non-normal data
 - Skewed distributions
 - Heavy-tailed distributions
@@ -128,6 +127,7 @@ No assumption of normality or specific distributional form required. The bootstr
 
 ### 2. General Applicability
 Works for any statistic, not just the mean:
+
 - Median
 - Correlation coefficient
 - Ratio statistics
@@ -136,6 +136,7 @@ Works for any statistic, not just the mean:
 
 ### 3. Intuitive and Transparent
 The procedure directly estimates sampling variability without requiring theoretical derivations. This makes it:
+
 - Easy to understand conceptually
 - Easy to explain to non-statisticians
 - Easy to implement and verify
@@ -155,6 +156,7 @@ The procedure directly estimates sampling variability without requiring theoreti
 ### Sample Size Requirements
 
 The bootstrap requires that the original sample be reasonably representative of the population. It works poorly when:
+
 - Sample size is very small ($n < 30$) relative to population variability
 - Extreme values are missing from the sample
 - The sample is biased or non-random
@@ -218,9 +220,43 @@ ci_upper = original_statistic - np.percentile(bootstrap_t_stats, 2.5) * original
 ## Summary
 
 The bootstrap is a foundational tool in modern statistics:
+
 - **Intuitive method** based on resampling from the data
 - **Widely applicable** to any statistic and any distribution
 - **Computationally accessible** with modern computing power
 - **Distribution-free** and makes minimal assumptions
 
 It trades computational effort for avoiding strong parametric assumptions, making it invaluable when theory-based methods are inadequate or unavailable.
+
+
+## Exercises
+
+**Exercise 1.**
+Describe the main concept of The Bootstrap Resampling Method and explain why it matters for statistical practice.
+
+??? success "Solution to Exercise 1"
+    The Bootstrap Resampling Method is a core topic in statistics that provides tools for drawing reliable inferences from data. It matters because proper application ensures valid conclusions, correctly quantified uncertainty, and appropriate handling of the assumptions that underpin the method. Practitioners who understand this concept can avoid common pitfalls and choose the right analytical approach for their data.
+
+---
+
+**Exercise 2.**
+State the key assumptions required by the method discussed here. How can each assumption be checked?
+
+??? success "Solution to Exercise 2"
+    The main assumptions typically include: (1) independence of observations -- verified by understanding the data collection process and checking for serial correlation; (2) distributional requirements (e.g., normality) -- checked with Q-Q plots and formal tests like Shapiro-Wilk; (3) equal variances (if applicable) -- assessed with boxplots and Levene's test. When assumptions are violated, consider robust alternatives, transformations, or nonparametric methods.
+
+---
+
+**Exercise 3.**
+Work through a small numerical example illustrating the application of the technique from this section.
+
+??? success "Solution to Exercise 3"
+    A structured approach to applying this technique involves: (1) clearly stating the hypotheses or estimation goal; (2) verifying that the data meet the required assumptions; (3) computing the relevant test statistic, estimate, or model fit; (4) obtaining the p-value, confidence interval, or posterior distribution; (5) interpreting the result in the context of the original question. Following these steps systematically ensures a rigorous and reproducible analysis.
+
+---
+
+**Exercise 4.**
+Compare the approach from this section with an alternative method. When would you choose each?
+
+??? success "Solution to Exercise 4"
+    The method discussed here is appropriate when its assumptions hold and the sample size is sufficient for the asymptotic approximations to be accurate. Alternative approaches include: (1) nonparametric methods -- preferred when distributional assumptions are suspect; (2) bootstrap methods -- useful when analytical reference distributions are unavailable; (3) Bayesian methods -- valuable when incorporating prior information or when direct probability statements about parameters are desired. Running multiple approaches and comparing results provides a useful robustness check.

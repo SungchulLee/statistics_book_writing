@@ -1,9 +1,5 @@
 # Marginal and Conditional Distributions
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Overview
 
 Given a joint distribution of two random variables, the **marginal distribution** recovers the distribution of each variable individually, while the **conditional distribution** describes one variable given a specific value of the other. These concepts are essential for Bayesian reasoning, regression, and understanding dependence.
@@ -255,3 +251,116 @@ plt.show()
 - The Law of Total Expectation and Law of Total Variance connect marginal and conditional moments.
 - The multiplication rule $f_{X,Y} = f_{Y|X} \cdot f_X$ provides the foundation for Bayes' theorem and Bayesian inference.
 - Conditional expectation $E[Y \mid X]$ is itself a random variable (a function of $X$) and represents the best prediction of $Y$ given $X$.
+
+## Exercises
+
+**Exercise 1.**
+Joint PDF $f(x, y) = 6(1 - y)$ for $0 \le x \le y \le 1$. (a) Verify $\int f = 1$. (b) Find $f_Y$. (c) Find $f_{X \mid Y}$. (d) Compute $\mathbb{E}[X \mid Y = y]$.
+
+??? success "Solution to Exercise 1"
+    (a) $\int_0^1 \int_0^y 6(1-y) dx \, dy = \int_0^1 6y(1-y) dy = 1$. ✓
+
+    (b) $f_Y(y) = \int_0^y 6(1-y) dx = 6y(1-y)$ on $[0, 1]$. (This is $\mathrm{Beta}(2, 2)$.)
+
+    (c) $f_{X \mid Y}(x \mid y) = 6(1-y)/[6y(1-y)] = 1/y$ on $[0, y]$. So $X \mid Y = y \sim \mathrm{Uniform}(0, y)$.
+
+    (d) $\mathbb{E}[X \mid Y = y] = y/2$.
+
+---
+
+**Exercise 2.**
+**Law of total expectation.** Use Exercise 1's distribution to compute $\mathbb{E}[X]$ via $\mathbb{E}[X] = \mathbb{E}[\mathbb{E}[X \mid Y]]$ and verify directly.
+
+??? success "Solution to Exercise 2"
+    By iteration: $\mathbb{E}[X] = \mathbb{E}[\mathbb{E}[X \mid Y]] = \mathbb{E}[Y/2] = \mathbb{E}[Y]/2$.
+
+    $\mathbb{E}[Y] = \int_0^1 y \cdot 6y(1-y) dy = 6\int_0^1(y^2 - y^3) dy = 6(1/3 - 1/4) = 1/2$.
+
+    So $\mathbb{E}[X] = 1/4$.
+
+    **Direct verification:** $\mathbb{E}[X] = \int_0^1 \int_0^y x \cdot 6(1-y) dx \, dy = \int_0^1 3 y^2 (1-y) dy = 3(1/3 - 1/4) = 1/4$. ✓
+
+    The two methods agree, confirming the law of total expectation. The iterated approach is often computationally easier.
+
+---
+
+**Exercise 3.**
+**Law of total variance.** Derive the formula $\mathrm{Var}(X) = \mathbb{E}[\mathrm{Var}(X \mid Y)] + \mathrm{Var}(\mathbb{E}[X \mid Y])$. Apply to Exercise 1.
+
+??? success "Solution to Exercise 3"
+    **Derivation:**
+
+    $\mathrm{Var}(X) = \mathbb{E}[X^2] - (\mathbb{E}[X])^2$.
+
+    $\mathbb{E}[X^2] = \mathbb{E}[\mathbb{E}[X^2 \mid Y]] = \mathbb{E}[\mathrm{Var}(X \mid Y) + (\mathbb{E}[X \mid Y])^2]$.
+
+    So $\mathrm{Var}(X) = \mathbb{E}[\mathrm{Var}(X \mid Y)] + \mathbb{E}[(\mathbb{E}[X \mid Y])^2] - (\mathbb{E}[X])^2 = \mathbb{E}[\mathrm{Var}(X \mid Y)] + \mathrm{Var}(\mathbb{E}[X \mid Y])$. $\square$
+
+    **Application:** $\mathrm{Var}(X \mid Y = y) = y^2/12$ (variance of Uniform(0, y)). So $\mathbb{E}[\mathrm{Var}(X \mid Y)] = \mathbb{E}[Y^2]/12$.
+
+    $\mathbb{E}[Y^2] = \int_0^1 y^2 \cdot 6y(1-y) dy = 6\int_0^1(y^3 - y^4) dy = 6(1/4 - 1/5) = 3/10$.
+
+    $\mathrm{Var}(\mathbb{E}[X \mid Y]) = \mathrm{Var}(Y/2) = \mathrm{Var}(Y)/4 = (3/10 - 1/4)/4 = (1/20)/4 = 1/80$.
+
+    $\mathrm{Var}(X) = (3/10)/12 + 1/80 = 1/40 + 1/80 = 3/80$.
+
+    The decomposition splits total variance into the "within-group" component $\mathbb{E}[\mathrm{Var}(X \mid Y)]$ and the "between-group" component $\mathrm{Var}(\mathbb{E}[X \mid Y])$ — the basis of ANOVA.
+
+---
+
+**Exercise 4.**
+**Marginal can be misleading.** Construct an example where the marginal distribution of $X$ is symmetric, but the conditional $X \mid Y = y$ is asymmetric for every $y$.
+
+??? success "Solution to Exercise 4"
+    Take $Y \sim \mathrm{Bernoulli}(0.5)$ and:
+
+    - $X \mid Y = 0 \sim \mathrm{Exp}(1)$ (right-skewed, support $[0, \infty)$).
+    - $X \mid Y = 1 \sim -\mathrm{Exp}(1)$ (left-skewed, support $(-\infty, 0]$).
+
+    Marginal of $X$: $f_X(x) = 0.5 \cdot \mathbf 1\{x \ge 0\} e^{-x} + 0.5 \cdot \mathbf 1\{x \le 0\} e^x$, which is the **Laplace distribution** — symmetric around 0.
+
+    Yet conditional on either value of $Y$, $X$ is highly asymmetric. Mixture of two asymmetric distributions can produce symmetric marginal.
+
+    **Lesson:** marginal distributions hide structure. In particular, modeling only the marginal of $X$ without considering the conditioning variable can give a misleading picture of the underlying mechanism. Always think about which variables to condition on.
+
+---
+
+**Exercise 5.**
+**Bivariate normal marginals and conditionals.** $(X, Y)$ bivariate normal with means $(\mu_X, \mu_Y)$, variances $(\sigma_X^2, \sigma_Y^2)$, correlation $\rho$. State the marginal of $X$ and conditional $Y \mid X = x$.
+
+??? success "Solution to Exercise 5"
+    **Marginal:** $X \sim N(\mu_X, \sigma_X^2)$. Marginals of jointly normal are normal (a property of the multivariate normal).
+
+    **Conditional:**
+
+    $$
+    Y \mid X = x \sim N\!\left(\mu_Y + \rho\frac{\sigma_Y}{\sigma_X}(x - \mu_X), \, \sigma_Y^2(1 - \rho^2)\right)
+    $$
+
+    Key observations:
+
+    - Conditional mean is **linear** in $x$. This is the regression line $\mathbb{E}[Y \mid X = x] = \alpha + \beta x$ with $\beta = \rho \sigma_Y/\sigma_X$.
+    - Conditional variance does *not* depend on $x$: **homoscedasticity**. A distinguishing feature of bivariate normal.
+    - Conditional variance is reduced by factor $(1 - \rho^2)$: knowing $X$ explains fraction $\rho^2$ of the variance. This is exactly $R^2$.
+
+    Linear regression theory in introductory statistics is essentially derived from these formulas under the bivariate-normal assumption.
+
+---
+
+**Exercise 6.**
+**Bayes' theorem in continuous form.** State the version of Bayes for densities and derive the posterior $\pi(\theta \mid x)$ from prior $\pi(\theta)$ and likelihood $f(x \mid \theta)$.
+
+??? success "Solution to Exercise 6"
+    **Bayes for densities:**
+
+    $$
+    \pi(\theta \mid x) = \frac{f(x \mid \theta) \pi(\theta)}{\int f(x \mid \theta) \pi(\theta) d\theta} = \frac{f(x \mid \theta) \pi(\theta)}{f(x)}
+    $$
+
+    The denominator $f(x) = \int f(x \mid \theta) \pi(\theta) d\theta$ is the **marginal likelihood** or **evidence**, often denoted $Z$ in machine learning contexts.
+
+    **In words:** posterior is proportional to likelihood times prior. The proportionality constant ensures normalization.
+
+    **Common shorthand:** $\pi(\theta \mid x) \propto f(x \mid \theta) \pi(\theta)$. Computing $Z$ is often the hard part (typically requires numerical integration); proportionality is sometimes all that's needed (e.g., for MCMC sampling which doesn't require $Z$).
+
+    Bayesian inference uses this formula iteratively as data arrives: prior → posterior (after data 1) → posterior (after data 1, 2) → ..., each time treating the previous posterior as the new prior.

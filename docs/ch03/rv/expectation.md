@@ -1,9 +1,5 @@
 # Expectation and Linearity
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Overview
 
 The **expected value** (or **expectation**) of a random variable is its long-run average value over many repetitions of an experiment. It provides a single number summarizing the "center" of a distribution. The **linearity of expectation** is one of the most powerful and widely used properties in all of probability.
@@ -192,3 +188,120 @@ linearity_demonstration()
 - **LOTUS** lets us compute $E[g(X)]$ directly from the distribution of $X$.
 - **Linearity of expectation** always holds, even for dependent variables—it is one of the most useful tools in probability.
 - The product rule $E[XY] = E[X]E[Y]$ requires independence; linearity does not.
+
+## Exercises
+
+**Exercise 1.**
+A discrete random variable $X$ has the distribution: $P(X=-1) = 0.3$, $P(X=0) = 0.4$, $P(X=2) = 0.3$. Compute $E[X]$ and $E[X^2]$.
+
+??? success "Solution to Exercise 1"
+    $$
+    E[X] = (-1)(0.3) + (0)(0.4) + (2)(0.3) = -0.3 + 0 + 0.6 = 0.3
+    $$
+
+    Using LOTUS for $g(X) = X^2$:
+
+    $$
+    E[X^2] = (-1)^2(0.3) + (0)^2(0.4) + (2)^2(0.3) = 0.3 + 0 + 1.2 = 1.5
+    $$
+
+---
+
+**Exercise 2.**
+Let $X_1, X_2, \ldots, X_{100}$ be the indicator variables for 100 independent coin flips, where $X_i = 1$ if the $i$-th flip is heads (probability 0.5) and $X_i = 0$ otherwise. Using linearity of expectation, find $E\!\left[\sum_{i=1}^{100} X_i\right]$.
+
+??? success "Solution to Exercise 2"
+    By linearity of expectation:
+
+    $$
+    E\!\left[\sum_{i=1}^{100} X_i\right] = \sum_{i=1}^{100} E[X_i]
+    $$
+
+    Each $X_i$ is a Bernoulli random variable with $E[X_i] = P(X_i = 1) = 0.5$. Therefore:
+
+    $$
+    E\!\left[\sum_{i=1}^{100} X_i\right] = 100 \times 0.5 = 50
+    $$
+
+    We expect 50 heads in 100 flips. Importantly, linearity holds regardless of whether the flips are independent — the same answer would apply even if the flips were dependent.
+
+---
+
+**Exercise 3.**
+A fair six-sided die is rolled. Let $Y = (X - 3.5)^2$ where $X$ is the number showing. Compute $E[Y]$ using LOTUS.
+
+??? success "Solution to Exercise 3"
+    By LOTUS, $E[Y] = E[(X-3.5)^2] = \sum_{x=1}^{6} (x - 3.5)^2 \cdot P(X=x)$. Since $P(X=x) = 1/6$ for each value:
+
+    $$
+    E[Y] = \frac{1}{6}\left[(1-3.5)^2 + (2-3.5)^2 + (3-3.5)^2 + (4-3.5)^2 + (5-3.5)^2 + (6-3.5)^2\right]
+    $$
+
+    $$
+    = \frac{1}{6}\left[6.25 + 2.25 + 0.25 + 0.25 + 2.25 + 6.25\right] = \frac{17.5}{6} \approx 2.917
+    $$
+
+    Note: this is precisely $\text{Var}(X)$ for a fair die, since $E[X] = 3.5$.
+
+---
+
+**Exercise 4.**
+Let $X$ and $Y$ be independent random variables with $E[X] = 2$, $E[Y] = 3$, $E[X^2] = 5$, and $E[Y^2] = 11$. Compute $E[XY]$ and $E[(X+Y)^2]$.
+
+??? success "Solution to Exercise 4"
+    Since $X$ and $Y$ are independent:
+
+    $$
+    E[XY] = E[X] \cdot E[Y] = 2 \times 3 = 6
+    $$
+
+    For $E[(X+Y)^2]$, expand the square:
+
+    $$
+    E[(X+Y)^2] = E[X^2 + 2XY + Y^2] = E[X^2] + 2E[XY] + E[Y^2]
+    $$
+
+    $$
+    = 5 + 2(6) + 11 = 5 + 12 + 11 = 28
+    $$
+
+---
+
+**Exercise 5.**
+**Tail-sum formula for expectation.** Prove that for a non-negative random variable $X$, $\mathbb{E}[X] = \int_0^\infty P(X > t) dt$ (continuous) or $\sum_{n=0}^\infty P(X > n)$ (integer-valued).
+
+??? success "Solution to Exercise 5"
+    **Continuous case:** by Fubini's theorem:
+
+    $$
+    \int_0^\infty P(X > t) dt = \int_0^\infty \int_t^\infty f(x) dx \, dt = \int_0^\infty f(x) \int_0^x dt \, dx = \int_0^\infty x f(x) dx = \mathbb{E}[X]
+    $$
+
+    where the interchange is justified by non-negativity.
+
+    **Integer-valued case:**
+
+    $$
+    \sum_{n=0}^\infty P(X > n) = \sum_{n=0}^\infty \sum_{k=n+1}^\infty P(X = k) = \sum_{k=1}^\infty P(X = k) \sum_{n=0}^{k-1} 1 = \sum_{k=1}^\infty k P(X = k) = \mathbb{E}[X]
+    $$
+
+    **Use:** the tail-sum formula lets you compute expectations from survival probabilities (sometimes easier than the standard PDF integral). Example: for a geometric random variable counting trials until first success, $P(X > n) = (1 - p)^n$, so $\mathbb{E}[X] = \sum_{n=0}^\infty (1 - p)^n = 1/p$.
+
+---
+
+**Exercise 6.**
+**Conditional expectation as a random variable.** Let $X, Y$ be jointly distributed. Define $g(y) = \mathbb{E}[X \mid Y = y]$ and the random variable $\mathbb{E}[X \mid Y] = g(Y)$. Prove the **law of total expectation**: $\mathbb{E}[X] = \mathbb{E}[\mathbb{E}[X \mid Y]]$.
+
+??? success "Solution to Exercise 6"
+    By definition, $g(y) = \mathbb{E}[X \mid Y = y] = \int x f_{X \mid Y}(x \mid y) dx$.
+
+    $\mathbb{E}[g(Y)] = \int g(y) f_Y(y) dy = \int \int x f_{X \mid Y}(x \mid y) f_Y(y) dx \, dy = \int \int x f_{X, Y}(x, y) dx \, dy = \int x f_X(x) dx = \mathbb{E}[X]$.
+
+    $\square$
+
+    Used everywhere in probability, statistics, and dynamic-programming approaches to expectation:
+
+    - **Conditional expectation as optimal predictor:** $\mathbb{E}[X \mid Y]$ minimizes $\mathbb{E}[(X - g(Y))^2]$ over all functions $g$.
+    - **Towering** (iterated expectation): $\mathbb{E}[X] = \mathbb{E}[\mathbb{E}[X \mid Y]] = \mathbb{E}[\mathbb{E}[\mathbb{E}[X \mid Y, Z] \mid Y]]$, etc.
+    - **MCMC / variance reduction**: replacing $X$ with $\mathbb{E}[X \mid Y]$ (when possible) reduces estimator variance via the Rao-Blackwell theorem.
+    - **Reinforcement learning**: Bellman equation $V(s) = \mathbb{E}[R + \gamma V(s') \mid s]$ is iterated conditional expectation.

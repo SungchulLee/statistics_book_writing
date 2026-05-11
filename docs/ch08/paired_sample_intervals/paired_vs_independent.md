@@ -1,9 +1,5 @@
 # When to Use Paired vs Independent Designs
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Overview
 
 The choice between a paired design and an independent design directly affects the width of confidence intervals and the power of hypothesis tests. A paired design can produce substantially narrower intervals when subjects exhibit natural variation that is large relative to the treatment effect. Conversely, misapplying an independent-sample method to paired data wastes information about within-subject correlation, while misapplying a paired method to independent data violates the dependence assumption. Understanding when each design is appropriate --- and why --- is essential for efficient statistical practice.
@@ -107,3 +103,49 @@ The paired standard error (1.22) is roughly 24 times smaller than the independen
 
 !!! warning "Do Not Mix Methods"
     Applying an independent-sample confidence interval to paired data ignores the correlation and produces intervals that are too wide, wasting statistical power. Applying a paired-sample interval to truly independent data violates the assumption of dependence and can produce intervals that are too narrow or too wide depending on the structure of the data.
+
+## Exercises
+
+**Exercise 1.**
+A study measures blood pressure before and after a medication in 30 patients. The within-pair correlation is $\rho = 0.85$. Explain why a paired design is more powerful than an independent-samples design in this case.
+
+??? success "Solution to Exercise 1"
+    With $\rho = 0.85$, the variance of the paired differences is:
+
+    $$
+    \text{Var}(D) = \sigma_1^2 + \sigma_2^2 - 2\rho\sigma_1\sigma_2
+    $$
+
+    The high positive correlation means $2\rho\sigma_1\sigma_2$ is large, which substantially reduces $\text{Var}(D)$ compared to the independent-sample variance $\sigma_1^2 + \sigma_2^2$. A smaller variance of differences leads to a smaller standard error, narrower confidence intervals, and more statistical power. Each patient serves as their own control, removing between-patient variability from the comparison.
+
+---
+
+**Exercise 2.**
+For each scenario, determine whether a paired or independent design is more appropriate: (a) comparing test scores of students before and after a tutoring program, (b) comparing average heights of randomly selected men and women.
+
+??? success "Solution to Exercise 2"
+    **(a) Paired design.** Each student is measured twice (before and after), creating natural pairs. The paired design accounts for individual differences in baseline ability, isolating the effect of the tutoring program.
+
+    **(b) Independent design.** Men and women are separate, unrelated groups with no natural pairing. There is no meaningful way to match a specific man to a specific woman. An independent two-sample approach is appropriate.
+
+---
+
+**Exercise 3.**
+A researcher has paired data but accidentally analyzes it as independent samples. If the true within-pair correlation is $\rho = 0.7$ and both groups have $\sigma = 10$, compare the standard error of the difference under both analyses when $n = 25$ pairs.
+
+??? success "Solution to Exercise 3"
+    **Paired analysis:** $\text{Var}(D) = \sigma_1^2 + \sigma_2^2 - 2\rho\sigma_1\sigma_2 = 100 + 100 - 2(0.7)(100) = 60$. So $\text{SE}_{\text{paired}} = \sqrt{60/25} = \sqrt{2.4} \approx 1.549$.
+
+    **Independent analysis (incorrect):** $\text{SE}_{\text{indep}} = \sqrt{\sigma_1^2/n_1 + \sigma_2^2/n_2} = \sqrt{100/25 + 100/25} = \sqrt{8} \approx 2.828$.
+
+    The incorrect independent analysis produces a standard error that is $2.828/1.549 \approx 1.83$ times larger. The confidence interval would be 83% wider than necessary, substantially reducing the chance of detecting a real effect.
+
+---
+
+**Exercise 4.**
+Describe a scenario where carryover effects make a paired (crossover) design inappropriate despite the availability of repeated measurements.
+
+??? success "Solution to Exercise 4"
+    In a drug trial comparing a new analgesic to a placebo, each patient receives both treatments in sequence. If the new drug has a long-lasting biological effect (e.g., it permanently alters pain receptor sensitivity), then the response to the placebo in the second period is contaminated by the residual effect of the drug from the first period. This **carryover effect** means the second measurement does not reflect the true placebo response.
+
+    In this case, even though repeated measurements are available, the paired analysis is invalid because the difference $D_i = X_{i,\text{drug}} - X_{i,\text{placebo}}$ is biased. An independent-samples design with separate groups (one receiving the drug, the other the placebo) would avoid this problem entirely.

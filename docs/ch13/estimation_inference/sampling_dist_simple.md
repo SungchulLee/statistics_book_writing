@@ -1,9 +1,6 @@
 # Sampling Distributions for Simple OLS Estimators
 
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Overview
 
 In simple linear regression, the key inferential results depend on knowing the **sampling distributions** of the estimated coefficients and predictions. Under the classical assumptions—linearity, independence, homoscedasticity, and normality of errors—these distributions take elegant closed forms based on the $t$-distribution. This section derives the sampling distributions for three fundamental quantities: the slope estimator, the expected response at a given point, and an individual predicted response.
@@ -79,7 +76,7 @@ $$
 **Step 7: $t$-distribution result.** The numerator is normal, $s^2$ follows a scaled chi-squared distribution with $n - 2$ degrees of freedom, and the two are independent. By the definition of the $t$-distribution as the ratio of a standard normal to the square root of an independent chi-squared divided by its degrees of freedom:
 
 $$
-\frac{\hat{\beta}_1 - \beta_1}{s\sqrt{\dfrac{1}{\sum_{i=1}^n(x_i - \bar{x})^2}}} \sim t_{n-2} \qquad \blacksquare
+\frac{\hat{\beta}_1 - \beta_1}{s\sqrt{\dfrac{1}{\sum_{i=1}^n(x_i - \bar{x})^2}}} \sim t_{n-2} \qquad \square
 $$
 
 ---
@@ -135,7 +132,7 @@ $$
 **Step 4: Substituting $s$ for $\sigma$.** Replacing $\sigma$ with the residual standard error $s$ and applying the same $t$-distribution argument as before:
 
 $$
-\frac{(\hat{\beta}_0 + \hat{\beta}_1 x_0) - (\beta_0 + \beta_1 x_0)}{s\sqrt{\dfrac{1}{n} + \dfrac{(x_0 - \bar{x})^2}{SS_x}}} \sim t_{n-2} \qquad \blacksquare
+\frac{(\hat{\beta}_0 + \hat{\beta}_1 x_0) - (\beta_0 + \beta_1 x_0)}{s\sqrt{\dfrac{1}{n} + \dfrac{(x_0 - \bar{x})^2}{SS_x}}} \sim t_{n-2} \qquad \square
 $$
 
 ---
@@ -184,7 +181,7 @@ $$
 **Step 4: Substituting $s$ for $\sigma$.** Replacing $\sigma$ with $s$ yields the $t$-distribution:
 
 $$
-\frac{(\hat{\beta}_0 + \hat{\beta}_1 x_0) - (\beta_0 + \beta_1 x_0 + \varepsilon)}{s\sqrt{1 + \dfrac{1}{n} + \dfrac{(x_0 - \bar{x})^2}{SS_x}}} \sim t_{n-2} \qquad \blacksquare
+\frac{(\hat{\beta}_0 + \hat{\beta}_1 x_0) - (\beta_0 + \beta_1 x_0 + \varepsilon)}{s\sqrt{1 + \dfrac{1}{n} + \dfrac{(x_0 - \bar{x})^2}{SS_x}}} \sim t_{n-2} \qquad \square
 $$
 
 ---
@@ -198,3 +195,44 @@ $$
 | Individual response at $x_0$ | $s\sqrt{1 + \dfrac{1}{n} + \dfrac{(x_0-\bar{x})^2}{SS_x}}$ | $t_{n-2}$ |
 
 All three statistics share the same $t_{n-2}$ distribution but differ in their standard errors, reflecting the increasing sources of uncertainty from slope estimation alone, to mean prediction, to individual prediction.
+## Exercises
+
+**Exercise 1.**
+State the sampling distribution of $\hat{\beta}_1$ in simple linear regression under the classical assumptions. What parameters does it depend on?
+
+??? success "Solution to Exercise 1"
+    Under the classical assumptions ($\varepsilon_i \sim N(0, \sigma^2)$, independent):
+
+    $$
+    \hat{\beta}_1 \sim N\left(\beta_1, \frac{\sigma^2}{\sum_{i=1}^n (x_i - \bar{x})^2}\right)
+    $$
+
+    It depends on: the true slope $\beta_1$, the error variance $\sigma^2$, and the spread of the predictor values $\sum(x_i - \bar{x})^2$. Greater spread in $X$ and smaller error variance both lead to a more precise estimate.
+
+---
+
+**Exercise 2.**
+Explain why $\hat{\sigma}^2 = \text{SSE}/(n-2)$ is an unbiased estimator of $\sigma^2$ in simple linear regression, while $\text{SSE}/n$ is biased.
+
+??? success "Solution to Exercise 2"
+    The residuals $e_i = Y_i - \hat{Y}_i$ are constrained by two linear restrictions (the normal equations), so only $n - 2$ of them are free to vary. This means $\text{SSE}/\sigma^2 \sim \chi^2_{n-2}$, and:
+
+    $$
+    E\left[\frac{\text{SSE}}{\sigma^2}\right] = n - 2 \implies E[\text{SSE}] = (n-2)\sigma^2 \implies E\left[\frac{\text{SSE}}{n-2}\right] = \sigma^2
+    $$
+
+    Dividing by $n$ instead gives $E[\text{SSE}/n] = (n-2)\sigma^2/n < \sigma^2$, which underestimates $\sigma^2$.
+
+---
+
+**Exercise 3.**
+A researcher wants to estimate the slope with high precision. Based on the formula for $\text{Var}(\hat{\beta}_1)$, give two practical strategies to reduce the standard error.
+
+??? success "Solution to Exercise 3"
+    From $\text{Var}(\hat{\beta}_1) = \sigma^2 / \sum(x_i - \bar{x})^2$:
+
+    1. **Increase the spread of $X$ values.** Collecting data at more extreme values of $X$ increases $\sum(x_i - \bar{x})^2$, reducing variance. In experimental settings, this means choosing treatment levels that are far apart rather than closely spaced.
+
+    2. **Increase the sample size $n$.** More observations increase $\sum(x_i - \bar{x})^2$ (assuming the new observations have similar spread), reducing variance proportionally.
+
+    A third strategy is to reduce $\sigma^2$ by controlling for extraneous sources of variability (adding covariates or improving measurement precision), though this changes the model.

@@ -1,9 +1,5 @@
 # MLE of μ and σ²
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Introduction
 
 The **Maximum Likelihood Estimators of the Gaussian (Normal) distribution parameters** are among the most important results in statistics. For $X_1, \ldots, X_n \sim N(\mu, \sigma^2)$, the MLE provides closed-form estimators for both the mean $\mu$ and variance $\sigma^2$. This section derives these estimators, analyzes their properties, and connects the results to the broader theory of estimation.
@@ -184,3 +180,100 @@ The Gaussian MLEs — $\hat{\mu} = \bar{X}$ and $\hat{\sigma}^2 = \frac{1}{n}\su
 | $\hat{\mu}$ distribution | $N(\mu, \sigma^2/n)$ |
 | $n\hat{\sigma}^2/\sigma^2$ distribution | $\chi^2_{n-1}$ |
 | $t$-statistic | $(\bar{X}-\mu)/(S/\sqrt{n}) \sim t_{n-1}$ |
+
+## Exercises
+
+**Exercise 1.**
+Derive $\hat\mu_{\text{MLE}} = \bar X$ and $\hat\sigma^2_{\text{MLE}} = (1/n)\sum(X_i - \bar X)^2$ for $N(\mu, \sigma^2)$, and verify second-order conditions.
+
+??? success "Solution to Exercise 1"
+    Log-lik: $\ell(\mu, \sigma^2) = -(n/2)\ln(2\pi\sigma^2) - (1/(2\sigma^2))\sum(x_i - \mu)^2$.
+
+    $\partial\ell/\partial\mu = (1/\sigma^2)\sum(x_i - \mu) = 0 \Rightarrow \hat\mu = \bar X$.
+
+    $\partial\ell/\partial\sigma^2 = -n/(2\sigma^2) + (1/(2\sigma^4))\sum(x_i - \mu)^2 = 0$; plugging in $\hat\mu$ gives $\hat\sigma^2_{\text{MLE}} = (1/n)\sum(x_i - \bar X)^2$.
+
+    **Hessian:** $\partial^2\ell/\partial\mu^2 = -n/\sigma^2 < 0$; $\partial^2\ell/\partial(\sigma^2)^2 = -n/(2\sigma^4) < 0$ at the MLE; mixed partial vanishes in expectation. Negative-definite — confirms a maximum.
+
+---
+
+**Exercise 2.**
+**Fisher information matrix** for $N(\mu, \sigma^2)$. Show off-diagonals are zero and verify $\bar X$ achieves the CRLB exactly.
+
+??? success "Solution to Exercise 2"
+    $I_{\mu\mu} = n/\sigma^2$, $I_{\sigma^2 \sigma^2} = n/(2\sigma^4)$, $I_{\mu \sigma^2} = \mathbb{E}[-(X-\mu)/\sigma^4] = 0$.
+
+    Diagonal Fisher info: $\mu$ and $\sigma^2$ are **orthogonal parameters**. Estimating one doesn't affect the asymptotic variance of estimating the other.
+
+    $\mathrm{Var}(\bar X) = \sigma^2/n = 1/I_{\mu\mu}$ — $\bar X$ achieves the CRLB **exactly** for any $n$, not just asymptotically. The MLE for $\mu$ is fully efficient.
+
+    For $\sigma^2$: $\mathrm{Var}(\hat\sigma^2_{\text{MLE}}) = 2(n-1)\sigma^4/n^2$, CRLB = $2\sigma^4/n$. Slightly above CRLB — asymptotically efficient.
+
+---
+
+**Exercise 3.**
+**MLE invariance.** Find the MLE of (a) $\sigma$, (b) $\mathrm{CV} = \sigma/\mu$, (c) the 99th percentile $\mu + 2.326\sigma$.
+
+??? success "Solution to Exercise 3"
+    By MLE invariance, $\widehat{g(\theta)} = g(\hat\theta_{\text{MLE}})$:
+
+    (a) $\hat\sigma = \sqrt{\hat\sigma^2_{\text{MLE}}}$.
+
+    (b) $\widehat{\mathrm{CV}} = \hat\sigma/\bar X$.
+
+    (c) $\widehat{q_{0.99}} = \bar X + 2.326 \hat\sigma$.
+
+    **Caveat:** invariance preserves MLE point estimates but not unbiasedness. $\hat\sigma$ is biased (Jensen's inequality on concave $\sqrt{\cdot}$); bias correction available via the $c_4$ constant.
+
+---
+
+**Exercise 4.**
+**Constrained MLE with $\mu = 0$.** Derive $\hat\sigma^2$ when $\mu$ is known to be zero. Compare its variance with the unconstrained MLE.
+
+??? success "Solution to Exercise 4"
+    With $\mu = 0$: $\hat\sigma^2_0 = (1/n) \sum X_i^2$. $\mathbb{E}[\hat\sigma^2_0] = (1/n) \cdot n\sigma^2 = \sigma^2$ — **unbiased** (no Bessel correction needed because $\mu$ is known, not estimated).
+
+    $n\hat\sigma^2_0/\sigma^2 \sim \chi^2_n$, so $\mathrm{Var}(\hat\sigma^2_0) = 2\sigma^4/n$.
+
+    Unconstrained: $\mathrm{Var}(\hat\sigma^2_{\text{MLE}}) = 2\sigma^4(n-1)/n^2$.
+
+    Constrained has slightly larger variance per observation (one extra dof), but is unbiased. The "cost" of estimating $\mu$ is a $-1$ in dof.
+
+---
+
+**Exercise 5.**
+**Parametric VaR.** Given $\hat\mu = 0.0003$, $\hat\sigma = 0.012$ from 252 daily returns: (a) 1-day 99% VaR. (b) 10-day VaR via square-root rule. (c) If true kurtosis is 3 (excess), does normal VaR over- or under-estimate?
+
+??? success "Solution to Exercise 5"
+    (a) $\mathrm{VaR}_{0.99}^{\text{1-day}} = -(\hat\mu + z_{0.01} \hat\sigma) = -(0.0003 - 2.326 \cdot 0.012) = 0.0276$ (2.76% loss).
+
+    (b) $\mathrm{VaR}_{0.99}^{\text{10-day}} = \sqrt{10} \cdot 0.0276 \approx 0.0873$ (8.73%). Valid under i.i.d. zero-drift assumption.
+
+    (c) Heavy tails (excess kurtosis 3 > 0) mean the true 99th percentile loss is *larger* than normal predicts. Normal VaR **underestimates** real risk. Conservative practice: use $t$-distribution-based VaR or empirical quantiles for risk management.
+
+---
+
+**Exercise 6.**
+**Monte Carlo verification.** Simulate 10000 samples of $n = 20$ from $N(5, 9)$. Verify $\mathbb{E}[\hat\mu], \mathbb{E}[\hat\sigma^2_{\text{MLE}}], \mathbb{E}[S^2]$.
+
+??? success "Solution to Exercise 6"
+    ```python
+    import numpy as np
+    rng = np.random.default_rng(0)
+    R, n, mu, var = 10_000, 20, 5.0, 9.0
+    samples = rng.normal(mu, np.sqrt(var), (R, n))
+    mu_hat = samples.mean(axis=1)
+    sig2_mle = samples.var(axis=1, ddof=0)
+    s2 = samples.var(axis=1, ddof=1)
+    print(f"E[mu_hat]   = {mu_hat.mean():.4f}   (true {mu})")
+    print(f"E[sig2_MLE] = {sig2_mle.mean():.4f} (true {(n-1)/n*var:.4f})")
+    print(f"E[S^2]      = {s2.mean():.4f}       (true {var})")
+    ```
+
+    Expected:
+
+    - $\mathbb{E}[\bar X] \approx 5.00$ (unbiased).
+    - $\mathbb{E}[\hat\sigma^2_{\text{MLE}}] \approx 8.55 = (19/20) \cdot 9$ (biased downward by $\sigma^2/n$).
+    - $\mathbb{E}[S^2] \approx 9.00$ (Bessel-corrected, unbiased).
+
+    Confirms theoretical results and demonstrates the bias of the MLE for variance.

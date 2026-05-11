@@ -150,3 +150,61 @@ When normality is violated, bootstrap methods provide a nonparametric alternativ
 ## Summary
 
 Comparing two correlations requires different methods depending on whether the samples are independent or overlapping. For independent samples, Fisher's z-transformation converts each correlation to a normally distributed variable, and a simple $Z$-test compares the transformed values. For dependent samples with a shared variable, Steiger's test (Williams' modification) accounts for the correlation between the two coefficients. In both cases, the Fisher z-transformation is the key tool that stabilizes the variance and enables standard normal-theory inference.
+
+## Exercises
+
+**Exercise 1.**
+Two independent samples yield $r_1 = 0.65$ ($n_1 = 50$) and $r_2 = 0.40$ ($n_2 = 60$). Test whether the two population correlations are equal using Fisher's z-transformation at $\alpha = 0.05$.
+
+??? success "Solution to Exercise 1"
+    Apply Fisher's z-transformation: $z_r = \frac{1}{2}\ln\frac{1+r}{1-r}$.
+
+    $$
+    z_1 = \frac{1}{2}\ln\frac{1.65}{0.35} = \frac{1}{2}\ln(4.714) = \frac{1}{2}(1.5506) = 0.7753
+    $$
+
+    $$
+    z_2 = \frac{1}{2}\ln\frac{1.40}{0.60} = \frac{1}{2}\ln(2.333) = \frac{1}{2}(0.8473) = 0.4236
+    $$
+
+    The test statistic is:
+
+    $$
+    Z = \frac{z_1 - z_2}{\sqrt{\frac{1}{n_1-3} + \frac{1}{n_2-3}}} = \frac{0.7753 - 0.4236}{\sqrt{\frac{1}{47} + \frac{1}{57}}} = \frac{0.3517}{\sqrt{0.02128 + 0.01754}} = \frac{0.3517}{0.1970} = 1.785
+    $$
+
+    Since $|Z| = 1.785 < 1.96$, we fail to reject $H_0: \rho_1 = \rho_2$ at $\alpha = 0.05$.
+
+---
+
+**Exercise 2.**
+Explain why comparing correlations directly (without transformation) is problematic when correlations are far from zero.
+
+??? success "Solution to Exercise 2"
+    The sampling distribution of $r$ is skewed when $\rho \neq 0$: it is compressed toward the boundary ($\pm 1$) on the side closer to $\rho$ and stretched on the other side. As $|\rho| \to 1$, the distribution becomes increasingly skewed and its variance decreases.
+
+    Fisher's z-transformation $z_r = \frac{1}{2}\ln\frac{1+r}{1-r}$ stabilizes the variance and symmetrizes the distribution. After transformation, $z_r$ is approximately $N(z_\rho, 1/(n-3))$ regardless of $\rho$. Without the transformation, the standard error of $r$ depends on $\rho$, making comparisons unreliable.
+
+---
+
+**Exercise 3.**
+Two correlations are computed from the **same** sample: $r_{XY} = 0.70$ and $r_{XZ} = 0.50$ with $n = 100$. Why can't you use the independent-samples test to compare them?
+
+??? success "Solution to Exercise 3"
+    The independent-samples test assumes $r_1$ and $r_2$ come from separate, unrelated samples. When both correlations come from the same sample, they share the variable $X$ and the same observations, making them dependent. Their covariance depends on $r_{YZ}$ (the correlation between $Y$ and $Z$ in the sample).
+
+    Ignoring the dependence and using the independent-samples test would overestimate the standard error of the difference (treating the two correlations as more variable than they actually are), reducing power.
+
+    The correct test uses **Steiger's (1980) method** or **Hotelling's (1940) test**, which accounts for the correlation between the two correlation coefficients through the formula involving $r_{XY}$, $r_{XZ}$, and $r_{YZ}$.
+
+---
+
+**Exercise 4.**
+A researcher reports that the correlation between height and income is $r = 0.15$ in a sample of $n = 2000$. Is this "small" correlation statistically significant? Is it practically important?
+
+??? success "Solution to Exercise 4"
+    Testing $H_0: \rho = 0$: $t = r\sqrt{n-2}/\sqrt{1-r^2} = 0.15\sqrt{1998}/\sqrt{0.9775} = 0.15 \times 44.7/0.9887 = 6.78$.
+
+    With $df = 1998$, $t = 6.78$ is highly significant ($p < 0.0001$). The correlation is statistically distinguishable from zero.
+
+    However, $r^2 = 0.0225$: height explains only 2.25% of the variance in income. Practically, this is a weak association. With $n = 2000$, even tiny correlations become significant. This illustrates the importance of distinguishing statistical significance (is the effect nonzero?) from practical significance (is the effect large enough to matter?). Effect size measures like $r^2$ are essential for interpretation.

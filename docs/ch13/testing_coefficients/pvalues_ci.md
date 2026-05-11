@@ -1,9 +1,6 @@
 # Understanding p-values and Confidence Intervals for Coefficients
 
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 In linear regression analysis, understanding **p-values** and **confidence intervals** is essential for interpreting the significance and precision of regression coefficients. These statistical measures provide insight into how strongly the predictors influence the dependent variable and the uncertainty associated with the estimated effects.
 
 ---
@@ -102,3 +99,26 @@ Suppose a regression output provides the following for the predictor "advertisin
 ## Summary
 
 Understanding p-values and confidence intervals for regression coefficients is crucial for informed decision-making. p-values assess whether a predictor is statistically significant, while confidence intervals provide a measure of precision and uncertainty. Together, these tools guide researchers and analysts in evaluating the strength and reliability of the model's findings.
+## Exercises
+
+**Exercise 1.**
+A regression coefficient has $\hat{\beta}_1 = 4.2$, $\text{SE} = 1.5$, and $p = 0.008$ (two-sided). Construct the 99% confidence interval and explain why the p-value and CI convey the same information.
+
+??? success "Solution to Exercise 1"
+    With $p = 0.008 < 0.01$, the coefficient is significant at the 1% level, so the 99% CI should not contain zero. Using $t_{0.005, df} \approx 2.807$ (for large $df$):
+
+    $$
+    \hat{\beta}_1 \pm t_{0.005} \times \text{SE} = 4.2 \pm 2.807 \times 1.5 = 4.2 \pm 4.211 = (-0.011, 8.411)
+    $$
+
+    This barely includes zero, consistent with $p = 0.008$ being close to 0.01. The p-value and CI convey the same information: the p-value is the smallest $\alpha$ for which the $(1-\alpha)$ CI excludes zero. Since $p = 0.008$, the 99.2% CI is the narrowest interval that still excludes zero.
+
+---
+
+**Exercise 2.**
+A research paper reports "the effect of treatment was statistically significant ($p = 0.04$)" but does not report the coefficient estimate or confidence interval. Explain why this reporting is incomplete and what additional information is needed.
+
+??? success "Solution to Exercise 2"
+    The p-value alone tells us only that the effect is unlikely to be exactly zero -- it says nothing about the **magnitude** or **practical significance** of the effect. A statistically significant effect can be trivially small with a large sample.
+
+    The report should include: (1) the **coefficient estimate** $\hat{\beta}$, which quantifies the effect size; (2) the **confidence interval**, which conveys both the estimate and its precision; and (3) **context** for whether the effect size is practically meaningful. For example, "$\hat{\beta} = 0.3$ with 95% CI $(0.01, 0.59)$" shows the effect is significant but the CI is wide, indicating considerable uncertainty about the true magnitude.

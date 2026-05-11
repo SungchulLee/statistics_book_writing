@@ -122,3 +122,56 @@ This means the sign test requires roughly $\pi/2 \approx 1.57$ times as many obs
 ## Summary
 
 The sign test converts a median hypothesis into a binomial proportion test by encoding each observation as above ($+$) or below ($-$) the hypothesized value. Its minimal assumptions make it the most broadly applicable one-sample non-parametric test, at the cost of lower power compared to the [Wilcoxon signed-rank test](wilcoxon_signed_rank.md), which additionally exploits the magnitudes of deviations.
+
+## Exercises
+
+**Exercise 1.**
+A nutrition study claims that a new diet reduces cholesterol. The cholesterol levels (mg/dL) of 10 patients are measured before and after the diet:
+
+| Patient | Before | After | Difference (Before $-$ After) |
+|:---:|:---:|:---:|:---:|
+| 1 | 220 | 210 | 10 |
+| 2 | 240 | 235 | 5 |
+| 3 | 195 | 200 | $-5$ |
+| 4 | 260 | 245 | 15 |
+| 5 | 230 | 228 | 2 |
+| 6 | 215 | 210 | 5 |
+| 7 | 250 | 240 | 10 |
+| 8 | 205 | 208 | $-3$ |
+| 9 | 235 | 220 | 15 |
+| 10 | 245 | 235 | 10 |
+
+**(a)** State the null and alternative hypotheses for a one-sided sign test.
+
+**(b)** Count the number of positive and negative signs (ignoring zeros). Compute the test statistic.
+
+**(c)** Under $H_0$, what distribution does the number of positive signs follow? Compute the p-value.
+
+**(d)** At $\alpha = 0.05$, what is your conclusion?
+
+??? success "Solution to Exercise 1"
+
+    **(a)** Let $\tilde{\mu}_d$ denote the population median of the paired differences.
+
+    - $H_0$: $\tilde{\mu}_d = 0$ (the diet has no effect)
+    - $H_1$: $\tilde{\mu}_d > 0$ (the diet reduces cholesterol)
+
+    **(b)** Counting signs of the differences: 8 positive ($+$), 2 negative ($-$), 0 zeros. The test statistic for the sign test is the number of positive signs: $S^+ = 8$.
+
+    **(c)** Under $H_0$, each difference is equally likely to be positive or negative, so $S^+ \sim \text{Binomial}(n = 10, p = 0.5)$.
+
+    For a one-sided test ($H_1$: median $> 0$), the p-value is:
+
+    $$
+    p = P(S^+ \ge 8) = P(S^+ = 8) + P(S^+ = 9) + P(S^+ = 10)
+    $$
+
+    $$
+    = \binom{10}{8}(0.5)^{10} + \binom{10}{9}(0.5)^{10} + \binom{10}{10}(0.5)^{10}
+    $$
+
+    $$
+    = \frac{45 + 10 + 1}{1024} = \frac{56}{1024} \approx 0.0547
+    $$
+
+    **(d)** Since $p \approx 0.055 > 0.05$, we fail to reject $H_0$ at the 5% significance level. The evidence for a cholesterol reduction is suggestive but not statistically significant by the sign test. Note that the sign test is conservative because it discards magnitude information — the Wilcoxon signed-rank test may yield a different conclusion.

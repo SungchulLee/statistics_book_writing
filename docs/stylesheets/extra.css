@@ -1,0 +1,36 @@
+/* Figure and caption - full width, left-aligned */
+.md-content figure {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+.md-content figure img,
+.md-content figure svg {
+    display: block;
+    max-width: 100%;
+}
+
+.md-content figure figcaption {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    text-align: left;
+    font-style: normal;
+    margin-top: 0.5em;
+    color: var(--md-default-fg-color);
+    opacity: 1;
+}
+
+/* Collapse all nav items by default, including the active one */
+.md-nav__item--nested > .md-nav__toggle {
+    display: none;
+}
+
+.md-nav__item--nested > .md-nav {
+    display: none;
+}
+
+.md-nav__item--nested > .md-nav__toggle:checked ~ .md-nav {
+    display: block;
+}

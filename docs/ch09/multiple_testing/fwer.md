@@ -112,3 +112,77 @@ FWER control is most appropriate when:
 - The researcher needs to make definitive claims about individual hypotheses
 
 When the number of tests is very large and some false positives are tolerable, the [false discovery rate (FDR)](fdr.md) provides a less conservative framework that retains more statistical power. For the specific procedures used to control FWER, see [Bonferroni and Holm Corrections](bonferroni_holm.md).
+
+## Exercises
+
+**Exercise 1.**
+Define the Family-Wise Error Rate (FWER). If 10 independent tests are each conducted at $\alpha = 0.05$ with all nulls true, compute the exact FWER.
+
+??? success "Solution to Exercise 1"
+    The FWER is the probability of at least one Type I error among all $m$ tests:
+
+    $$
+    \text{FWER} = P(V \geq 1)
+    $$
+
+    With $m = 10$ independent tests, each with $P(\text{reject} \mid H_0) = 0.05$:
+
+    $$
+    \text{FWER} = 1 - P(\text{no rejections}) = 1 - (1 - 0.05)^{10} = 1 - 0.95^{10} \approx 1 - 0.5987 = 0.4013
+    $$
+
+    There is a 40% chance of at least one false positive, far exceeding the nominal 5% per-test level.
+
+---
+
+**Exercise 2.**
+Explain the difference between strong and weak control of the FWER.
+
+??? success "Solution to Exercise 2"
+    **Weak control** guarantees FWER $\leq \alpha$ only under the complete null hypothesis (i.e., when all $m$ null hypotheses are simultaneously true). It does not protect against false positives when some nulls are false.
+
+    **Strong control** guarantees FWER $\leq \alpha$ regardless of which and how many null hypotheses are true -- under any configuration of true and false nulls. This is a much stronger guarantee and is the standard requirement for multiple testing procedures.
+
+    For example, a procedure with only weak control might have FWER = 5% when all nulls are true, but FWER = 30% when 5 out of 10 nulls are false. A procedure with strong control maintains FWER $\leq 5\%$ in both scenarios. Bonferroni and Holm both provide strong control.
+
+---
+
+**Exercise 3.**
+Show that the FWER of unadjusted tests approaches 1 as the number of tests $m \to \infty$ (assuming all nulls are true and tests are independent).
+
+??? success "Solution to Exercise 3"
+    Under independence with all nulls true:
+
+    $$
+    \text{FWER} = 1 - (1 - \alpha)^m
+    $$
+
+    As $m \to \infty$:
+
+    $$
+    (1 - \alpha)^m \to 0 \quad \text{(since } 0 < 1 - \alpha < 1\text{)}
+    $$
+
+    Therefore $\text{FWER} \to 1$. For example, with $\alpha = 0.05$:
+
+    - $m = 10$: FWER $\approx 0.40$
+    - $m = 50$: FWER $\approx 0.92$
+    - $m = 100$: FWER $\approx 0.994$
+
+    With just 100 independent tests, it is virtually certain that at least one false positive occurs. This makes FWER control essential in large-scale testing.
+
+---
+
+**Exercise 4.**
+A clinical trial tests a drug on 3 primary endpoints (blood pressure, cholesterol, weight). The company claims success if any one endpoint shows a significant improvement at $\alpha = 0.05$. Calculate the FWER under independence and explain why regulatory agencies require multiple testing adjustment.
+
+??? success "Solution to Exercise 4"
+    If the drug has no effect on any endpoint (all three nulls are true) and the tests are independent:
+
+    $$
+    \text{FWER} = 1 - (1 - 0.05)^3 = 1 - 0.857 = 0.143
+    $$
+
+    The company has a 14.3% chance of claiming success by chance -- nearly three times the intended 5% rate. With 5 endpoints, FWER $\approx 0.226$; with 10, FWER $\approx 0.401$.
+
+    Regulatory agencies (e.g., FDA, EMA) require multiple testing adjustment because a drug approval based on any one of several endpoints without correction inflates the false approval rate. Common approaches include Bonferroni correction, gatekeeping procedures (hierarchical testing of endpoints in a pre-specified order), or split-alpha strategies (allocating different $\alpha$ levels to different endpoints summing to 0.05).

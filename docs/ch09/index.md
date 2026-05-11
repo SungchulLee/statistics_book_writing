@@ -1,9 +1,5 @@
 # Chapter 9: Hypothesis Testing
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Overview
 
 Hypothesis testing provides a formal framework for making decisions about population parameters based on sample data. This chapter covers the complete hypothesis testing pipeline: formulating null and alternative hypotheses, computing test statistics and p-values, performing one-sample, two-sample, and paired-sample tests for means, proportions, and variances, analyzing errors and power, and applying multiple testing corrections when many hypotheses are tested simultaneously.

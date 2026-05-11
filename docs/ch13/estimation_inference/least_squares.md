@@ -1,9 +1,6 @@
 # Least Squares Estimation
 
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 This section derives the optimal parameters for linear regression from three perspectives: the ordinary least squares (OLS) criterion, the maximum likelihood principle under Gaussian errors, and the normal equation with its vector calculus proof.
 
 ---
@@ -306,3 +303,62 @@ Represent the square loss function in terms of matrix operations using the desig
     $$
     J(\boldsymbol{\theta}) = \frac{1}{2m} \| \mathbf{X}\boldsymbol{\theta} - \mathbf{y} \|^2 = \frac{1}{2m} (\mathbf{X}\boldsymbol{\theta} - \mathbf{y})^T (\mathbf{X}\boldsymbol{\theta} - \mathbf{y})
     $$
+## Exercises
+
+**Exercise 1.**
+Derive the OLS estimator $\hat{\beta}_1 = \sum(x_i - \bar{x})(y_i - \bar{y}) / \sum(x_i - \bar{x})^2$ for simple linear regression by minimizing $\sum_{i=1}^n (y_i - \beta_0 - \beta_1 x_i)^2$.
+
+??? success "Solution to Exercise 1"
+    Let $S(\beta_0, \beta_1) = \sum_{i=1}^n (y_i - \beta_0 - \beta_1 x_i)^2$. Taking partial derivatives and setting them to zero:
+
+    $$
+    \frac{\partial S}{\partial \beta_0} = -2\sum(y_i - \beta_0 - \beta_1 x_i) = 0 \implies \hat{\beta}_0 = \bar{y} - \hat{\beta}_1 \bar{x}
+    $$
+
+    $$
+    \frac{\partial S}{\partial \beta_1} = -2\sum x_i(y_i - \beta_0 - \beta_1 x_i) = 0
+    $$
+
+    Substituting $\hat{\beta}_0 = \bar{y} - \hat{\beta}_1 \bar{x}$:
+
+    $$
+    \sum x_i(y_i - \bar{y} + \hat{\beta}_1 \bar{x} - \hat{\beta}_1 x_i) = 0
+    $$
+
+    $$
+    \sum x_i(y_i - \bar{y}) = \hat{\beta}_1 \sum x_i(x_i - \bar{x})
+    $$
+
+    Since $\sum x_i(y_i - \bar{y}) = \sum(x_i - \bar{x})(y_i - \bar{y})$ and $\sum x_i(x_i - \bar{x}) = \sum(x_i - \bar{x})^2$:
+
+    $$
+    \hat{\beta}_1 = \frac{\sum(x_i - \bar{x})(y_i - \bar{y})}{\sum(x_i - \bar{x})^2}
+    $$
+
+    $\square$
+
+---
+
+**Exercise 2.**
+Show that the OLS residuals sum to zero: $\sum_{i=1}^n e_i = 0$, where $e_i = y_i - \hat{y}_i$.
+
+??? success "Solution to Exercise 2"
+    From the first normal equation (setting $\partial S / \partial \beta_0 = 0$):
+
+    $$
+    \sum_{i=1}^n (y_i - \hat{\beta}_0 - \hat{\beta}_1 x_i) = 0
+    $$
+
+    Since $e_i = y_i - \hat{\beta}_0 - \hat{\beta}_1 x_i$, this directly gives $\sum_{i=1}^n e_i = 0$.
+
+    This result holds for any regression model with an intercept term. $\square$
+
+---
+
+**Exercise 3.**
+Explain geometrically what the least squares solution represents in the column space of the design matrix $X$. What is the relationship between the fitted values $\hat{Y}$ and the residuals $e$?
+
+??? success "Solution to Exercise 3"
+    The fitted values $\hat{Y} = X\hat{\beta} = X(X^TX)^{-1}X^TY = HY$ are the **orthogonal projection** of $Y$ onto the column space of $X$. The residual vector $e = Y - \hat{Y} = (I - H)Y$ is orthogonal to the column space.
+
+    Geometrically, OLS finds the point in the column space of $X$ that is closest to $Y$ in Euclidean distance. The Pythagorean theorem gives the decomposition $\|Y\|^2 = \|\hat{Y}\|^2 + \|e\|^2$, which corresponds to $\text{SST} = \text{SSR} + \text{SSE}$ (when $Y$ and $\hat{Y}$ are centered).

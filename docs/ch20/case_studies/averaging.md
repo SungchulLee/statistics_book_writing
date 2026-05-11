@@ -153,3 +153,46 @@ metrics (like macro).
 4. **Weighted** as a balanced default in scikit-learn's `classification_report`.
 5. When classes are approximately balanced, all three averages converge to
    similar values, and the choice matters less.
+
+## Exercises
+
+**Exercise 1.**
+Macro, Micro, and Weighted Averaging
+
+Consider a test set with 3 classes of highly imbalanced size:
+
+| Class | Support | Precision | Recall |
+|:---:|:---:|:---:|:---:|
+| 0 | 900 | 0.95 | 0.98 |
+| 1 | 80 | 0.70 | 0.50 |
+| 2 | 20 | 0.40 | 0.30 |
+
+**(a)** Compute the macro-averaged precision and recall.
+
+**(b)** Compute the weighted-averaged precision and recall (weighted by support).
+
+**(c)** Explain why macro-averaging is preferred when minority class performance matters, and why micro-averaging can be misleading with imbalanced data.
+
+??? success "Solution to Exercise 1"
+
+    **(a)** Macro-averaged (simple unweighted mean):
+
+    $$
+    \text{Precision}_{\text{macro}} = \frac{0.95 + 0.70 + 0.40}{3} = \frac{2.05}{3} \approx 0.683
+    $$
+
+    $$
+    \text{Recall}_{\text{macro}} = \frac{0.98 + 0.50 + 0.30}{3} = \frac{1.78}{3} \approx 0.593
+    $$
+
+    **(b)** Weighted-averaged (weighted by support, total $= 1000$):
+
+    $$
+    \text{Precision}_{\text{weighted}} = \frac{900(0.95) + 80(0.70) + 20(0.40)}{1000} = \frac{855 + 56 + 8}{1000} = 0.919
+    $$
+
+    $$
+    \text{Recall}_{\text{weighted}} = \frac{900(0.98) + 80(0.50) + 20(0.30)}{1000} = \frac{882 + 40 + 6}{1000} = 0.928
+    $$
+
+    **(c)** Macro-averaging treats all classes equally regardless of size. The poor performance on Class 2 (precision 0.40, recall 0.30) pulls down the macro-averaged metrics to 0.68 and 0.59, flagging that the model struggles on rare classes. Weighted-averaging (and similarly micro-averaging, which is equivalent to accuracy for single-label classification) is dominated by the majority class (Class 0, 90% of the data), producing metrics above 0.90 that obscure the near-failure on minority classes. When the cost of misclassifying minority classes is high (e.g., rare disease detection, fraud), macro-averaging provides a more honest assessment of model quality.

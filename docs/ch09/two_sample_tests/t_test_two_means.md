@@ -1,9 +1,5 @@
 # Two-Sample t-Test (Pooled and Welch)
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Overview
 
 The two-sample t-test compares the means of two independent samples to determine if they differ significantly. It is widely used in A/B testing, clinical trials, and experimental design.
@@ -60,6 +56,7 @@ For two-sample comparisons, **Cohen's d** measures practical significance:
 $$d = \frac{\bar{X}_1 - \bar{X}_2}{S_p}$$
 
 Interpretation:
+
 - $|d| < 0.2$: Small effect
 - $0.2 \leq |d| < 0.5$: Small to medium effect
 - $0.5 \leq |d| < 0.8$: Medium effect
@@ -149,3 +146,92 @@ t_stat, p_value, df = sm.stats.ttest_ind(group1, group2,
 - **Mann-Whitney U test**: Non-parametric alternative for non-normal data
 - **Permutation test**: Assumption-free resampling approach
 - **Bootstrap confidence interval**: For confidence intervals without distributional assumptions
+
+## Exercises
+
+**Exercise 1.**
+Program A: $\bar X_1 = 55\,000, s_1 = 7\,500, n_1 = 14$. Program B: $\bar X_2 = 60\,000, s_2 = 8\,000, n_2 = 16$. Pooled $t$-test at $\alpha = 0.05$.
+
+??? success "Solution to Exercise 1"
+    $S_p^2 = (13 \cdot 56\,250\,000 + 15 \cdot 64\,000\,000)/28 \approx 60\,402\,679$.
+
+    $t = -5000/\sqrt{60\,402\,679 \cdot (1/14 + 1/16)} = -5000/\sqrt{8\,089\,358} \approx -1.76$.
+
+    Critical: $t_{0.025, 28} = \pm 2.048$. $|t| = 1.76 < 2.048$. **Fail to reject.**
+
+---
+
+**Exercise 2.**
+Norway ($\bar X = 64.3, s = 18.2, n = 65$) vs US ($\bar X = 53.4, s = 23.9, n = 75$) income. Welch test.
+
+??? success "Solution to Exercise 2"
+    $\mathrm{SE} = \sqrt{18.2^2/65 + 23.9^2/75} = \sqrt{5.10 + 7.62} = \sqrt{12.72} \approx 3.57$.
+
+    $t = (64.3 - 53.4)/3.57 \approx 3.06$. Strong significance.
+
+    Welch df: $\nu \approx (12.72)^2/[(5.10)^2/64 + (7.62)^2/74] \approx 137$. Effectively $z$-test for this large df.
+
+    P-value $\approx 0.003$. Reject $H_0$. Norwegian income significantly higher.
+
+---
+
+**Exercise 3.**
+US ($\bar X = 25.5, s = 3.8, n = 108$) vs Canada ($\bar X = 26.3, s = 3.2, n = 102$) marriage age. Pooled $t$-test.
+
+??? success "Solution to Exercise 3"
+    $S_p^2 = (107 \cdot 14.44 + 101 \cdot 10.24)/208 \approx 12.40$.
+
+    $t = -0.8/\sqrt{12.40 \cdot (1/108 + 1/102)} = -0.8/\sqrt{0.2362} \approx -1.65$.
+
+    Critical: $t_{0.025, 208} \approx \pm 1.97$. $|t| < 1.97$. Fail to reject.
+
+    P-value $\approx 0.10$. Borderline; not significant at 5% but close. Larger samples might detect a real difference.
+
+---
+
+**Exercise 4.**
+Electric cars Model A ($\bar X = 168, s = 5.4, n = 5$) vs B ($\bar X = 172, s = 7.5, n = 5$). Welch.
+
+??? success "Solution to Exercise 4"
+    $\mathrm{SE} = \sqrt{29.16/5 + 56.25/5} = \sqrt{17.08} \approx 4.13$.
+
+    $t = -4/4.13 \approx -0.97$. Welch df: $\nu \approx (17.08)^2/[5.83^2/4 + 11.25^2/4] \approx 7.3$.
+
+    Critical: $t_{0.025, 7} \approx 2.36$. $|t| < 2.36$. Fail to reject.
+
+    Tiny sample sizes — low power. Cannot conclude difference even if it exists.
+
+---
+
+**Exercise 5.**
+**Welch vs pooled.** When does pooled $t$-test fail (give wrong $\alpha$) under unequal variances?
+
+??? success "Solution to Exercise 5"
+    Pooled $t$ assumes $\sigma_1 = \sigma_2$. Under unequal variances, the pooled SE estimator is biased, and the test statistic doesn't have an exact $t$ distribution.
+
+    **Failure modes:**
+
+    - **Unequal $n$ and unequal $\sigma$:** can inflate Type I error dramatically. If the smaller sample has larger variance, $\alpha$ can exceed nominal level by factor 2-3.
+    - **Equal $n$:** pooled test is robust to unequal variances. $\alpha$ stays near nominal.
+
+    **Welch's test:** doesn't assume equal variances. Slightly less powerful when variances actually are equal (small efficiency loss).
+
+    **Modern default:** Welch (R's `t.test`, scipy's `ttest_ind(equal_var=False)`). Avoids the risk of inflated $\alpha$.
+
+---
+
+**Exercise 6.**
+**Effect size and sample-size planning** for two-sample $t$-test.
+
+??? success "Solution to Exercise 6"
+    Cohen's $d = (\mu_1 - \mu_2)/\sigma_{\text{pooled}}$. For Exercise 1: $d = -5000/7766 \approx -0.64$.
+
+    Sample size (per group) for two-sample $t$-test:
+
+    $$
+    n = \frac{2(z_{\alpha/2} + z_\beta)^2}{d^2}
+    $$
+
+    For 80% power at $\alpha = 0.05$: $n \approx 16/d^2$. For $d = 0.5$ (medium): $n \approx 64$. For $d = 0.8$ (large): $n \approx 25$.
+
+    Small effects require large samples — common scaling in social science and medical research. Conduct power analysis *before* the study.

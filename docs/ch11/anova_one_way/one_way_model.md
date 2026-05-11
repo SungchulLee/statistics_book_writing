@@ -1,9 +1,6 @@
 # One-Way ANOVA: Model and Assumptions
 
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## 1. One-Way ANOVA (Analysis of Variance)
 
 ### A. One-Way ANOVA
@@ -115,3 +112,70 @@ Before conducting a One-Way ANOVA, certain assumptions must be met:
 
 - **Assumption Sensitivity**: The results of a One-Way ANOVA can be sensitive to violations of assumptions, particularly homogeneity of variance and normality.
 - **Only Detects Overall Difference**: While One-Way ANOVA can detect if there is a significant difference between groups, it does not specify which groups are different. Post-hoc tests are needed for detailed comparisons.
+## Exercises
+
+**Exercise 1.**
+A researcher plans to compare average customer satisfaction scores across four different retail store layouts. Each layout will be tested with an independent group of 20 customers. State the three assumptions required for a valid one-way ANOVA and, for each assumption, name one diagnostic method that can be used to verify it.
+
+??? success "Solution to Exercise 1"
+    The three assumptions are:
+
+    1. **Independence of observations.** Verified by reviewing the study design: customers must be randomly sampled and randomly assigned to layouts, with no customer appearing in more than one group.
+
+    2. **Normality.** The satisfaction scores within each group should be approximately normally distributed. This can be checked using a Q-Q plot of the residuals or the Shapiro-Wilk test.
+
+    3. **Homogeneity of variance (homoscedasticity).** The variances of the satisfaction scores should be approximately equal across the four groups. This can be checked using Levene's test.
+
+---
+
+**Exercise 2.**
+Explain why performing six separate two-sample $t$-tests to compare all pairs among four group means inflates the family-wise Type I error rate. If each test uses $\alpha = 0.05$, compute an upper bound on the probability of at least one false positive across all six tests.
+
+??? success "Solution to Exercise 2"
+    With six independent tests each at $\alpha = 0.05$, the probability of making at least one Type I error is bounded by:
+
+    $$
+    1 - (1 - 0.05)^6 = 1 - 0.95^6 \approx 1 - 0.735 = 0.265
+    $$
+
+    So the family-wise error rate can be as high as approximately $26.5\%$, far exceeding the nominal $5\%$ level. One-way ANOVA avoids this inflation by testing all group means simultaneously with a single F-test.
+
+---
+
+**Exercise 3.**
+Show that for $k = 2$ groups with equal variances, the one-way ANOVA F-statistic equals the square of the two-sample (pooled) $t$-statistic. Start from the definitions of SSB, SSW, and the pooled $t$-statistic.
+
+??? success "Solution to Exercise 3"
+    For $k = 2$ groups of sizes $n_1$ and $n_2$ with pooled variance $s_p^2 = \text{SSW}/(n_1 + n_2 - 2)$:
+
+    $$
+    \text{SSB} = \frac{n_1 n_2}{n_1 + n_2}(\bar{Y}_1 - \bar{Y}_2)^2
+    $$
+
+    $$
+    F = \frac{\text{SSB}/1}{\text{SSW}/(N-2)} = \frac{n_1 n_2 (\bar{Y}_1 - \bar{Y}_2)^2}{(n_1+n_2) s_p^2}
+    $$
+
+    The pooled two-sample $t$-statistic is:
+
+    $$
+    t = \frac{\bar{Y}_1 - \bar{Y}_2}{s_p \sqrt{1/n_1 + 1/n_2}}
+    $$
+
+    Squaring:
+
+    $$
+    t^2 = \frac{(\bar{Y}_1 - \bar{Y}_2)^2}{s_p^2 (1/n_1 + 1/n_2)} = \frac{n_1 n_2 (\bar{Y}_1 - \bar{Y}_2)^2}{(n_1 + n_2) s_p^2} = F
+    $$
+
+    Therefore $F = t^2$ when $k = 2$. $\square$
+
+---
+
+**Exercise 4.**
+A marketing team observes group variances of $s_1^2 = 4.2$, $s_2^2 = 18.7$, and $s_3^2 = 5.1$ across three advertising strategies with sample sizes $n_1 = 15$, $n_2 = 10$, $n_3 = 20$. Explain why the standard one-way ANOVA may produce misleading results and recommend a more appropriate test.
+
+??? success "Solution to Exercise 4"
+    The largest variance ($18.7$) is more than four times the smallest ($4.2$), and the sample sizes are unequal. When the group with the largest variance also has the smallest sample size ($n_2 = 10$), the pooled variance in standard ANOVA underestimates the true variability for group 2 and overestimates it for the others. This makes the F-test liberal, rejecting $H_0$ more often than the nominal $\alpha$ level.
+
+    The appropriate alternative is **Welch's one-way ANOVA**, which uses separate variance estimates for each group and adjusts the degrees of freedom via the Welch-Satterthwaite equation, maintaining the correct Type I error rate under heteroscedasticity.

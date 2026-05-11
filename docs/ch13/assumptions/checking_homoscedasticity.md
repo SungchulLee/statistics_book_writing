@@ -1,9 +1,6 @@
 # Checking Homoscedasticity in Linear Regression
 
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 Homoscedasticity, one of the key assumptions in linear regression, refers to the condition where the variance of the residuals (errors) is constant across all levels of the independent variables. If this assumption is violated, meaning the residuals exhibit non-constant variance (heteroscedasticity), it can lead to inefficient estimates, biased standard errors, and unreliable hypothesis tests. This section provides an overview of methods to check for homoscedasticity in linear regression, including visual inspections and statistical tests.
 
 ## 1. Understanding Homoscedasticity
@@ -184,3 +181,35 @@ plt.show()
 | White | Formal | General heteroscedasticity + nonlinearity | Very general | Uses many degrees of freedom |
 
 Checking for homoscedasticity is essential in linear regression analysis to ensure the validity and efficiency of the model's estimates. If heteroscedasticity is detected, it can often be addressed by transforming the dependent variable, using weighted least squares, or employing robust standard errors (such as HC0, HC1, HC2, or HC3 estimators) to correct for the non-constant variance.
+## Exercises
+
+**Exercise 1.**
+A residual-vs-fitted plot shows residuals forming a clear funnel shape that widens to the right. Name the formal statistical test you would use to confirm this visual diagnosis and state its null hypothesis.
+
+??? success "Solution to Exercise 1"
+    The **Breusch-Pagan test** is appropriate. Its null hypothesis is $H_0$: the variance of the errors is constant (homoscedasticity). The test regresses the squared residuals on the original predictors and tests whether the resulting $R^2$ is significantly different from zero. A significant result confirms heteroscedasticity.
+
+    Alternatively, the **White test** can be used; it also tests for heteroscedasticity but additionally checks for nonlinearity by including squared predictors and cross-products.
+
+---
+
+**Exercise 2.**
+After detecting heteroscedasticity, a researcher applies a log transformation to the response variable and the funnel pattern disappears. Explain why this works for data where variance is proportional to the mean.
+
+??? success "Solution to Exercise 2"
+    When $\text{Var}(Y|X) \propto E[Y|X]$ (variance proportional to the mean), larger fitted values have larger residual spread, creating the funnel shape. The log transformation compresses large values more than small values.
+
+    By the delta method, if $Y$ has variance proportional to $\mu^2$, then $\text{Var}(\log Y) \approx \text{Var}(Y)/\mu^2 = \text{constant}$. This stabilizes the variance, making residuals approximately homoscedastic.
+
+---
+
+**Exercise 3.**
+Compare and contrast three remedies for heteroscedasticity: (1) weighted least squares, (2) robust standard errors, and (3) variable transformation. In which situations is each preferred?
+
+??? success "Solution to Exercise 3"
+
+    1. **Weighted least squares (WLS):** Assigns weights inversely proportional to the error variance. Preferred when the form of heteroscedasticity is known (e.g., variance proportional to a known variable). Produces efficient estimates.
+
+    2. **Robust (HC) standard errors:** Leaves the OLS coefficient estimates unchanged but corrects the standard errors. Preferred when the goal is valid inference without changing the model or making assumptions about the variance structure.
+
+    3. **Variable transformation:** Transforms $Y$ (e.g., log, square root) to stabilize variance. Preferred when the transformation also improves linearity or normality, addressing multiple assumption violations simultaneously. However, it changes the interpretation of the coefficients.

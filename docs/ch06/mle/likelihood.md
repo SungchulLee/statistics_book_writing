@@ -87,3 +87,69 @@ The log-likelihood converts products to sums, which offers three practical advan
 - **Numerical stability**: products of many small probabilities cause underflow; sums of log-probabilities do not.
 - **Differentiation**: sums are easier to differentiate than products, simplifying the search for the maximum.
 - **Additivity**: for independent observations, the total log-likelihood is the sum of individual contributions, making it easy to add or remove data points.
+
+## Exercises
+
+**Exercise 1.**
+Write the likelihood function and log-likelihood function for $n$ independent observations $x_1, \dots, x_n$ from a $N(\mu, \sigma^2)$ distribution, treating both $\mu$ and $\sigma^2$ as unknown.
+
+??? success "Solution to Exercise 1"
+    The likelihood is:
+
+    $$
+    L(\mu, \sigma^2) = \prod_{i=1}^n \frac{1}{\sqrt{2\pi\sigma^2}} \exp\!\left(-\frac{(x_i - \mu)^2}{2\sigma^2}\right) = (2\pi\sigma^2)^{-n/2} \exp\!\left(-\frac{1}{2\sigma^2}\sum_{i=1}^n(x_i - \mu)^2\right)
+    $$
+
+    The log-likelihood is:
+
+    $$
+    \ell(\mu, \sigma^2) = -\frac{n}{2}\log(2\pi) - \frac{n}{2}\log(\sigma^2) - \frac{1}{2\sigma^2}\sum_{i=1}^n(x_i - \mu)^2
+    $$
+
+---
+
+**Exercise 2.**
+Explain the difference between the likelihood function $L(\theta; \mathbf{x})$ and the probability function $P(\mathbf{x}; \theta)$. Why is the likelihood not a probability distribution over $\theta$?
+
+??? success "Solution to Exercise 2"
+    The **probability function** $P(\mathbf{x}; \theta)$ treats $\theta$ as fixed and $\mathbf{x}$ as the variable. For fixed $\theta$, it sums (or integrates) to 1 over all possible data outcomes.
+
+    The **likelihood function** $L(\theta; \mathbf{x})$ treats $\mathbf{x}$ as fixed (the observed data) and $\theta$ as the variable. It uses the same formula as the probability function but reverses the roles.
+
+    The likelihood is not a probability distribution over $\theta$ because it does not integrate to 1 over the parameter space. In fact, $\int L(\theta; \mathbf{x})\,d\theta$ can be any positive number (or even infinite). To obtain a proper distribution over $\theta$, one must multiply by a prior and normalize (Bayesian approach), yielding the posterior distribution.
+
+---
+
+**Exercise 3.**
+For a sample of size $n = 3$ with observations $x_1 = 2, x_2 = 5, x_3 = 3$ from a $\text{Poisson}(\lambda)$ distribution, compute the likelihood and log-likelihood at $\lambda = 3$ and $\lambda = 4$. Which value is more likely?
+
+??? success "Solution to Exercise 3"
+    The Poisson likelihood is $L(\lambda) = \prod_{i=1}^n \frac{\lambda^{x_i} e^{-\lambda}}{x_i!}$.
+
+    At $\lambda = 3$: $L(3) = \frac{3^2 e^{-3}}{2!} \cdot \frac{3^5 e^{-3}}{5!} \cdot \frac{3^3 e^{-3}}{3!} = \frac{3^{10} e^{-9}}{2! \cdot 5! \cdot 3!}$
+
+    $$
+    = \frac{59049 \times 0.0001234}{2 \times 120 \times 6} = \frac{7.2876}{1440} \approx 0.005061
+    $$
+
+    At $\lambda = 4$: $L(4) = \frac{4^{10} e^{-12}}{1440} = \frac{1048576 \times 6.144 \times 10^{-6}}{1440} \approx 0.004473$
+
+    The log-likelihoods: $\ell(3) = 10\ln 3 - 9 - \ln 1440 \approx -5.287$ and $\ell(4) = 10\ln 4 - 12 - \ln 1440 \approx -5.411$.
+
+    Since $\ell(3) > \ell(4)$, $\lambda = 3$ is more likely. Note: the MLE is $\hat{\lambda} = \bar{x} = 10/3 \approx 3.33$.
+
+---
+
+**Exercise 4.**
+Explain why maximizing the log-likelihood is equivalent to maximizing the likelihood. State one practical advantage of working with the log-likelihood.
+
+??? success "Solution to Exercise 4"
+    Since the logarithm is a strictly increasing function, $L(\theta_1) > L(\theta_2)$ if and only if $\ell(\theta_1) > \ell(\theta_2)$. Therefore the value of $\theta$ that maximizes $L$ also maximizes $\ell$, and vice versa.
+
+    **Practical advantage:** The log-likelihood converts products into sums:
+
+    $$
+    \ell(\theta) = \sum_{i=1}^n \log f(x_i; \theta)
+    $$
+
+    This is easier to differentiate (sum rule vs. product rule) and avoids numerical underflow. For large $n$, the likelihood $L(\theta) = \prod f(x_i; \theta)$ can be astronomically small (a product of $n$ numbers less than 1), causing floating-point underflow. The log-likelihood, being a sum, remains in a numerically tractable range.

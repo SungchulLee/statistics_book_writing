@@ -124,3 +124,68 @@ Stone (1977) proved that, for linear regression, AIC model selection is asymptot
 
 !!! warning "Cross-validation is not free of assumptions"
     Cross-validation assumes that observations are exchangeable (roughly, that their order does not matter). For time series data, standard random-fold CV violates the temporal structure and produces misleadingly optimistic estimates. Time series data requires specialized CV strategies such as rolling-window or expanding-window cross-validation.
+
+## Exercises
+
+**Exercise 1.**
+Explain the difference between k-fold cross-validation and leave-one-out cross-validation (LOOCV). What are the trade-offs in bias and variance of the estimated test error?
+
+??? success "Solution to Exercise 1"
+    **k-fold CV** splits the data into $k$ roughly equal folds, trains on $k-1$ folds, and tests on the held-out fold, rotating through all $k$ folds. The CV estimate is the average test error across folds. Common choice: $k = 5$ or $10$.
+
+    **LOOCV** is the special case $k = n$: each observation serves as its own test set. The model is trained $n$ times, each time on $n-1$ observations.
+
+    **Bias-variance trade-off:**
+
+    - LOOCV has low bias (training sets are nearly the full dataset) but high variance (the $n$ training sets overlap heavily, making the $n$ error estimates highly correlated).
+    - 5- or 10-fold CV has slightly higher bias (training sets are smaller) but lower variance (less overlap between training sets reduces correlation among estimates).
+
+    In practice, 5- or 10-fold CV tends to give a better estimate of test error because the variance reduction outweighs the small increase in bias.
+
+---
+
+**Exercise 2.**
+A data scientist fits a polynomial regression and uses the training data to select the degree that minimizes training error. They find degree 15 is best. Why is this problematic, and how would cross-validation help?
+
+??? success "Solution to Exercise 2"
+    Using training error to select model complexity always favors the most complex model because training error decreases monotonically as the model becomes more flexible. A degree-15 polynomial will likely overfit the training data, memorizing noise and performing poorly on new data.
+
+    Cross-validation addresses this by estimating test error (performance on unseen data). For each candidate degree $d$:
+
+    1. Split data into $k$ folds.
+    2. For each fold, fit a degree-$d$ polynomial on the remaining data and compute the prediction error on the held-out fold.
+    3. Average the errors across folds.
+
+    The degree that minimizes the CV error balances fit and complexity. Typically, CV would select a much lower degree (e.g., 2-4) that generalizes better.
+
+---
+
+**Exercise 3.**
+In stratified k-fold cross-validation, what is the stratification based on, and when is it important?
+
+??? success "Solution to Exercise 3"
+    In stratified k-fold CV, the folds are constructed so that each fold has approximately the same distribution of the response variable as the full dataset. For classification, this means each fold has roughly the same proportion of each class.
+
+    Stratification is important when:
+
+    1. **Class imbalance:** If only 5% of observations belong to the minority class, a random fold might contain zero minority examples, making the test error estimate unreliable.
+    2. **Small datasets:** With limited data, each fold must be representative to avoid high-variance CV estimates.
+    3. **Ordinal or grouped responses:** Ensuring each fold spans the range of the outcome variable.
+
+    For regression, stratification can be based on binned values of $Y$. Most CV implementations in scikit-learn support stratified splitting via `StratifiedKFold`.
+
+---
+
+**Exercise 4.**
+Explain the "one-standard-error rule" for model selection via cross-validation and its rationale.
+
+??? success "Solution to Exercise 4"
+    The one-standard-error rule selects the simplest model whose CV error is within one standard error of the minimum CV error. That is:
+
+    1. Compute the mean CV error $\overline{\text{CV}}_d$ and its standard error $\text{SE}_d$ for each model $d$.
+    2. Find the model $d^*$ with the minimum $\overline{\text{CV}}_{d^*}$.
+    3. Select the simplest model $d$ such that $\overline{\text{CV}}_d \leq \overline{\text{CV}}_{d^*} + \text{SE}_{d^*}$.
+
+    **Rationale:** The CV error estimate is noisy, and the model with the absolute minimum may be more complex than necessary. Models within one SE of the minimum are statistically indistinguishable in predictive performance. Among these, the simplest model is preferred for parsimony, interpretability, and robustness.
+
+    This rule was popularized by Breiman et al. (1984) in the context of CART and is widely used in regularization (e.g., LASSO cross-validation).

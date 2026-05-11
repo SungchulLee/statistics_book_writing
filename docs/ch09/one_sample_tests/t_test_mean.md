@@ -1,9 +1,5 @@
 # One-Sample t-Test for the Mean
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Overview
 
 In practice, the population standard deviation $\sigma$ is almost never known. The $z$-test for the mean requires $\sigma$, so it cannot be applied directly to most real-world problems. The one-sample $t$-test resolves this by replacing $\sigma$ with the sample standard deviation $S$. This substitution introduces additional uncertainty --- $S$ is itself a random variable --- and the $t$-distribution accounts for this extra variability through heavier tails than the standard normal. As the sample size grows, $S$ converges to $\sigma$, the $t$-distribution converges to the standard normal, and the $t$-test and $z$-test become equivalent.
@@ -114,3 +110,91 @@ Guidelines for when the normality assumption matters most:
 
 !!! warning "Outliers Remain Problematic"
     Even with large $n$, individual outliers can inflate $S$ and shift $\bar{X}$, potentially masking a real effect or creating a spurious one. Always inspect the data for outliers before applying the $t$-test.
+
+## Exercises
+
+**Exercise 1.**
+Cereal: claimed mean 500g. Sample $n = 25$, $\bar X = 490$, $s = 15$. Test at $\alpha = 0.01$.
+
+??? success "Solution to Exercise 1"
+    $H_0: \mu = 500$ vs $H_1: \mu \ne 500$.
+
+    $t = (490 - 500)/(15/\sqrt{25}) = -10/3 = -3.33$.
+
+    Critical: $t_{0.005, 24} = \pm 2.797$. $|t| = 3.33 > 2.797$. **Reject.**
+
+    Strong evidence the mean is below 500g.
+
+---
+
+**Exercise 2.**
+**Conditions for $t$-test.** State and explain.
+
+??? success "Solution to Exercise 2"
+    1. **Random sample / independence:** $X_i$ are independent (or at least exchangeable). For sampling without replacement, the sampling fraction should be < 10%.
+
+    2. **Normality:** the underlying population is approximately normal, OR $n$ is large enough for the CLT to give $\bar X$ approximate normality.
+
+    For small $n$ (< 30) with non-normal data, $t$-test may have wrong size. Check normality via Q-Q plot.
+
+    For very heavy-tailed or skewed data: use Wilcoxon signed-rank (non-parametric) or bootstrap test.
+
+---
+
+**Exercise 3.**
+**One-sided test.** Same data as Exercise 1, but test $H_1: \mu < 500$ (suspect mean below claim).
+
+??? success "Solution to Exercise 3"
+    Critical: $t_{0.01, 24} = -2.492$. $t = -3.33 < -2.492$. **Reject.**
+
+    P-value: $P(T_{24} < -3.33) \approx 0.0014$.
+
+    Decision unchanged: still reject. But the p-value is half of the two-sided value, reflecting that we put all $\alpha$ on one tail.
+
+---
+
+**Exercise 4.**
+**Effect size.** Compute Cohen's $d$ for the cereal exercise.
+
+??? success "Solution to Exercise 4"
+    Cohen's $d = (\bar X - \mu_0)/s = (490 - 500)/15 = -0.67$.
+
+    Interpretation:
+
+    - $|d| = 0.2$: small.
+    - $|d| = 0.5$: medium.
+    - $|d| = 0.8$: large.
+
+    $d = -0.67$ is "medium-large." Statistical significance + meaningful effect size — both signal a real problem with cereal weights.
+
+    Always report effect size alongside p-value. P-value alone (especially with large $n$) can flag trivial effects.
+
+---
+
+**Exercise 5.**
+**Sample size for power.** What $n$ gives 90% power to detect a 5g decrease at $\alpha = 0.01$, assuming $\sigma \approx 15$?
+
+??? success "Solution to Exercise 5"
+    $n = ((z_{\alpha/2} + z_\beta) \sigma/\Delta)^2$ (approximate using $z$ since $n$ will be moderate).
+
+    $z_{0.005} = 2.576$, $z_{0.10} = 1.282$. $\Delta = 5$, $\sigma = 15$.
+
+    $n = ((2.576 + 1.282) \cdot 15/5)^2 = (11.57)^2 \approx 134$.
+
+    Detecting smaller effects with high power requires larger samples. To detect 10g: $n \approx 34$. Quadratic in $1/\Delta$.
+
+---
+
+**Exercise 6.**
+**Multiple testing.** A QA engineer runs $t$-tests on 20 production lines. At $\alpha = 0.05$, what's the family-wise false-positive rate under all-true nulls?
+
+??? success "Solution to Exercise 6"
+    $P(\text{at least one false rejection}) = 1 - (1 - 0.05)^{20} \approx 0.642$.
+
+    Expected number of false rejections: $20 \cdot 0.05 = 1$.
+
+    To control family-wise error at $\alpha = 0.05$: use Bonferroni — test each at $\alpha/20 = 0.0025$. Very conservative.
+
+    Alternative — FDR (Benjamini-Hochberg): controls expected proportion of false positives among declared positives. Less conservative; standard in high-throughput testing.
+
+    Without correction, false alarms are nearly guaranteed in multi-test scenarios.

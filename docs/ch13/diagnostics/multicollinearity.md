@@ -1,9 +1,6 @@
 # Multicollinearity
 
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Overview
 
 **Multicollinearity** occurs when two or more independent variables in a regression model are highly correlated. This creates challenges for estimation and inference:
@@ -74,6 +71,7 @@ $$
 where $R_j^2$ is the $R^2$ from regressing $X_j$ on all other predictors.
 
 **Interpretation**:
+
 - **VIF = 1**: No correlation with other predictors
 - **VIF < 5**: Generally acceptable (rule of thumb)
 - **VIF > 5**: Concerning level of multicollinearity
@@ -231,3 +229,37 @@ Understanding multicollinearity involves recognizing that:
 ## Summary
 
 Understanding multicollinearity is essential for applying statistical methods correctly in practice. Use VIF to detect it, understand the consequences for your modeling goals, and choose an appropriate remedy based on your context.
+## Exercises
+
+**Exercise 1.**
+A regression model with three predictors yields $\text{VIF}_1 = 1.2$, $\text{VIF}_2 = 8.5$, and $\text{VIF}_3 = 12.3$. Interpret these values and recommend which predictors may need attention.
+
+??? success "Solution to Exercise 1"
+    VIF (Variance Inflation Factor) measures how much the variance of a coefficient estimate is inflated due to multicollinearity. A common threshold is VIF > 5 (moderate concern) or VIF > 10 (serious concern).
+
+    - $\text{VIF}_1 = 1.2$: No multicollinearity concern. $X_1$ is nearly uncorrelated with the other predictors.
+    - $\text{VIF}_2 = 8.5$: Moderate multicollinearity. The standard error of $\hat{\beta}_2$ is inflated by a factor of $\sqrt{8.5} \approx 2.9$.
+    - $\text{VIF}_3 = 12.3$: Serious multicollinearity. The standard error of $\hat{\beta}_3$ is inflated by $\sqrt{12.3} \approx 3.5$.
+
+    Predictors $X_2$ and $X_3$ are likely highly correlated. Consider removing one, combining them, or using ridge regression.
+
+---
+
+**Exercise 2.**
+Explain why multicollinearity does not bias OLS coefficient estimates but makes them unreliable. What specific quantity is affected?
+
+??? success "Solution to Exercise 2"
+    OLS estimates remain **unbiased** under multicollinearity because $E[\hat{\beta}] = \beta$ requires only that $E[\varepsilon|X] = 0$, which is unrelated to correlations among predictors.
+
+    However, multicollinearity inflates the **variance** of the estimates. The covariance matrix is $\text{Var}(\hat{\beta}) = \sigma^2 (X^T X)^{-1}$, and when predictors are highly correlated, $(X^T X)$ is nearly singular, making $(X^T X)^{-1}$ have very large diagonal entries. This means individual coefficients have wide confidence intervals, are sensitive to small data changes, and may have large $p$-values even when the predictors are jointly significant.
+
+---
+
+**Exercise 3.**
+A model predicting house price includes both "total square footage" and "number of rooms." These variables have a correlation of $r = 0.92$. Propose two approaches to address this multicollinearity while retaining the predictive information from both variables.
+
+??? success "Solution to Exercise 3"
+
+    1. **Create a composite variable:** Replace the two correlated predictors with "square footage per room" ($X_{\text{new}} = \text{sqft}/\text{rooms}$), which captures the size information more efficiently in a single variable.
+
+    2. **Ridge regression:** Use $L_2$ regularization, which adds a penalty $\lambda \|\beta\|^2$ to the loss function. This shrinks correlated coefficients toward each other, reducing variance at the cost of a small bias. Ridge regression stabilizes the estimates without discarding either variable.

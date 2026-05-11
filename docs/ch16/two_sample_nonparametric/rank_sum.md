@@ -117,7 +117,7 @@ $$
 **Step 5.** Two-sided $p$-value:
 
 $$
-p = 2\,\Phi(-2.402) \approx 0.016
+p = 2\,\mathcal{N}(-2.402) \approx 0.016
 $$
 
 At $\alpha = 0.05$, we reject $H_0$. Group A's scores are significantly higher than Group B's.
@@ -139,3 +139,66 @@ For small samples ($n_1, n_2 \le 20$), exact critical values are available in pu
 ## Summary
 
 The Wilcoxon rank-sum test compares two independent samples by combining the observations, assigning ranks, and computing the rank sum for one group. Under the null hypothesis, large or small rank sums are unlikely, and the test detects any systematic tendency for one group to produce larger values. The normal approximation is reliable for moderate to large samples, while exact tables handle small samples. The rank-sum test is equivalent to the Mann-Whitney $U$ test and achieves an ARE of $3/\pi \approx 0.955$ relative to the two-sample $t$-test under normality.
+
+
+## Exercises
+
+**Exercise 1.**
+Apply the Wilcoxon rank-sum test to: Group A = {3, 5, 7, 9} and Group B = {6, 8, 10, 12, 14}. Compute the test statistic $W$.
+
+??? success "Solution to Exercise 1"
+    Combined and ranked: 3(1), 5(2), 6(3), 7(4), 8(5), 9(6), 10(7), 12(8), 14(9).
+
+    Group A ranks: 1, 2, 4, 6. Sum $W_A = 13$.
+
+    Group B ranks: 3, 5, 7, 8, 9. Sum $W_B = 32$.
+
+    Using the smaller group (A, $n_1 = 4$) as the reference: $W = W_A = 13$.
+
+    Under $H_0$, the expected rank sum for Group A is $n_1(n_1 + n_2 + 1)/2 = 4(10)/2 = 20$. Since $W = 13 < 20$, Group A tends to have smaller values, consistent with the data.
+
+---
+
+**Exercise 2.**
+Explain the relationship between the Wilcoxon rank-sum test and the Mann-Whitney U test. Are they equivalent?
+
+??? success "Solution to Exercise 2"
+    Yes, they are equivalent tests that use different but related test statistics. The Mann-Whitney $U$ counts the number of pairs $(x_i, y_j)$ where $x_i < y_j$:
+
+    $$
+    U = W_A - \frac{n_1(n_1+1)}{2}
+    $$
+
+    where $W_A$ is the Wilcoxon rank sum for Group A. They always give the same p-value. The choice of statistic is a matter of convention: the rank-sum form is simpler to compute, while the $U$ statistic has a cleaner probabilistic interpretation ($U/(n_1 n_2)$ estimates $P(X < Y)$).
+
+---
+
+**Exercise 3.**
+What does the Wilcoxon rank-sum test actually test? Is it a test for equal medians?
+
+??? success "Solution to Exercise 3"
+    The Wilcoxon rank-sum test tests $H_0$: the two populations have the same distribution, against $H_a$: one population tends to produce larger values (stochastic dominance).
+
+    It is commonly described as a "test for equal medians," but this is only accurate when the two distributions have the same shape (differing only in location). If the distributions differ in shape (e.g., different variances or skewness), the test can reject even when medians are equal.
+
+    Under the location-shift model ($Y = X + \Delta$), the test is equivalent to testing $H_0: \Delta = 0$, and rejection implies different medians (and means).
+
+---
+
+**Exercise 4.**
+For large samples, the rank-sum test uses a normal approximation. State the formula for the z-statistic.
+
+??? success "Solution to Exercise 4"
+    Under $H_0$, the rank sum $W$ has:
+
+    $$
+    E[W] = \frac{n_1(n_1 + n_2 + 1)}{2}, \quad \text{Var}(W) = \frac{n_1 n_2 (n_1 + n_2 + 1)}{12}
+    $$
+
+    The z-statistic is:
+
+    $$
+    Z = \frac{W - E[W]}{\sqrt{\text{Var}(W)}} \approx N(0,1)
+    $$
+
+    A continuity correction of $\pm 0.5$ is sometimes applied. This approximation is accurate for $n_1, n_2 \geq 10$. For smaller samples, exact p-values from the permutation distribution should be used.

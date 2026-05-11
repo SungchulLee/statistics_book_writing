@@ -143,3 +143,73 @@ The MoM estimator exists and is unique when:
 3. The sample moments $(M_1', \ldots, M_p')$ fall within the range of this mapping.
 
 Condition 2 is crucial: if two different parameter values produce the same first $p$ moments, the system is not identifiable through moments alone. For most standard distributions (normal, gamma, beta, Poisson, exponential), conditions 1 and 2 are satisfied, guaranteeing a well-defined MoM estimator.
+
+## Exercises
+
+**Exercise 1.**
+For a sample from $\text{Uniform}(0, \theta)$, derive the Method of Moments estimator for $\theta$.
+
+??? success "Solution to Exercise 1"
+    The first population moment is:
+
+    $$
+    E[X] = \frac{\theta}{2}
+    $$
+
+    Setting the first sample moment equal to the population moment:
+
+    $$
+    \bar{X} = \frac{\hat{\theta}}{2} \implies \hat{\theta}_{\text{MOM}} = 2\bar{X}
+    $$
+
+    For example, if $\bar{X} = 3.5$ from a sample, then $\hat{\theta}_{\text{MOM}} = 7.0$.
+
+---
+
+**Exercise 2.**
+For a sample from $\text{Gamma}(\alpha, \beta)$ with $E[X] = \alpha/\beta$ and $\text{Var}(X) = \alpha/\beta^2$, derive the Method of Moments estimators for $\alpha$ and $\beta$ using the first two moments.
+
+??? success "Solution to Exercise 2"
+    The first two population moments give:
+
+    $$
+    E[X] = \frac{\alpha}{\beta}, \quad E[X^2] = \text{Var}(X) + (E[X])^2 = \frac{\alpha}{\beta^2} + \frac{\alpha^2}{\beta^2} = \frac{\alpha(\alpha + 1)}{\beta^2}
+    $$
+
+    Setting sample moments equal to population moments: $\bar{X} = \alpha/\beta$ and $\overline{X^2} = \alpha(\alpha+1)/\beta^2$.
+
+    From the first equation: $\beta = \alpha/\bar{X}$. The sample variance is $S^2 = \overline{X^2} - \bar{X}^2 = \alpha/\beta^2$. Substituting $\beta = \alpha/\bar{X}$:
+
+    $$
+    S^2 = \frac{\alpha}{\alpha^2/\bar{X}^2} = \frac{\bar{X}^2}{\alpha} \implies \hat{\alpha}_{\text{MOM}} = \frac{\bar{X}^2}{S^2}
+    $$
+
+    $$
+    \hat{\beta}_{\text{MOM}} = \frac{\hat{\alpha}}{\bar{X}} = \frac{\bar{X}}{S^2}
+    $$
+
+---
+
+**Exercise 3.**
+Compare the Method of Moments estimator and the MLE for the parameter $p$ of a Bernoulli distribution. Are they the same? Explain why or why not.
+
+??? success "Solution to Exercise 3"
+    Both estimators give $\hat{p} = \bar{X}$ (the sample proportion), so they are identical for the Bernoulli distribution.
+
+    **MOM:** $E[X] = p$, so setting $\bar{X} = \hat{p}$ gives $\hat{p}_{\text{MOM}} = \bar{X}$.
+
+    **MLE:** The log-likelihood is $\ell(p) = k\log p + (n-k)\log(1-p)$ where $k = \sum X_i$. Setting $\ell'(p) = 0$ gives $\hat{p}_{\text{MLE}} = k/n = \bar{X}$.
+
+    This is not a coincidence. For one-parameter exponential families, the MLE is always a function of the sufficient statistic $\sum X_i$, and the MOM estimator based on the first moment is also a function of $\sum X_i$. When the moment equation and the score equation have the same solution, the two estimators coincide.
+
+---
+
+**Exercise 4.**
+Give an example where the Method of Moments estimator is not consistent. What condition on the moment equations ensures consistency?
+
+??? success "Solution to Exercise 4"
+    The Method of Moments estimator is consistent when the function mapping population moments to parameters is continuous and the moment equations have a unique solution. Consistency follows from the law of large numbers ($\bar{X}^k \xrightarrow{p} E[X^k]$) combined with the continuous mapping theorem.
+
+    An example of potential failure: if the distribution is heavy-tailed and the required population moments do not exist (e.g., trying to use $E[X^2]$ for a Cauchy distribution, which has no finite variance), the sample moments do not converge, and the MOM estimator is not consistent.
+
+    Another failure mode: if the moment equations have multiple solutions, the MOM estimator may converge to the wrong root. The condition for consistency is: (1) the required population moments exist, (2) the mapping from moments to parameters is continuous, and (3) the solution is unique.

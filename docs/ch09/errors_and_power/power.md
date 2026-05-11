@@ -1,9 +1,5 @@
 # Power Analysis
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Definition of Power
 
 The **power** of a hypothesis test is the probability that the test correctly rejects a false null hypothesis. It is the complement of the Type II error rate:
@@ -326,3 +322,51 @@ for key, value in design.items():
 - There is a direct tradeoff between $\alpha$, $\beta$, sample size, and effect size.
 - Statsmodels provides convenient functions for power analysis across many test types.
 - Use power curves to visualize the relationship between sample size and power.
+
+## Exercises
+
+**Exercise 1.**
+A test has $\alpha = 0.05$ and power $= 0.80$. What are the probabilities of Type I error, Type II error, correct rejection, and correct non-rejection?
+
+??? success "Solution to Exercise 1"
+
+    - **Type I error** ($\alpha$): $P(\text{reject } H_0 \mid H_0 \text{ true}) = 0.05$
+    - **Type II error** ($\beta$): $P(\text{fail to reject } H_0 \mid H_0 \text{ false}) = 1 - \text{power} = 1 - 0.80 = 0.20$
+    - **Correct rejection (power)**: $P(\text{reject } H_0 \mid H_0 \text{ false}) = 0.80$
+    - **Correct non-rejection**: $P(\text{fail to reject } H_0 \mid H_0 \text{ true}) = 1 - \alpha = 0.95$
+
+---
+
+**Exercise 2.**
+A researcher wants 90% power to detect an effect size of $d = 0.3$ at $\alpha = 0.05$ (two-sided, two-sample $t$-test). Using the formula $n = 2(z_{\alpha/2} + z_\beta)^2/d^2$, estimate the required sample size per group.
+
+??? success "Solution to Exercise 2"
+    With $\alpha = 0.05$: $z_{0.025} = 1.96$. With power $= 0.90$: $\beta = 0.10$, so $z_{0.10} = 1.282$.
+
+    $$
+    n = \frac{2(1.96 + 1.282)^2}{0.3^2} = \frac{2(3.242)^2}{0.09} = \frac{2 \times 10.511}{0.09} = \frac{21.022}{0.09} \approx 233.6
+    $$
+
+    Rounding up, $n = 234$ per group (468 total). Detecting a small effect with high power requires a substantial sample size.
+
+---
+
+**Exercise 3.**
+List four ways to increase the power of a test. Which is typically the most practical?
+
+??? success "Solution to Exercise 3"
+
+    1. **Increase sample size $n$**: More data reduces the standard error, making it easier to detect a true effect. This is typically the most practical approach.
+    2. **Increase $\alpha$**: A less stringent significance level (e.g., $\alpha = 0.10$ instead of $0.05$) increases power but also increases the Type I error rate.
+    3. **Increase the effect size**: A larger true difference is easier to detect. This is usually not under the researcher's control but can sometimes be achieved through better experimental design (e.g., more extreme treatments).
+    4. **Reduce variability ($\sigma$)**: More precise measurements or more homogeneous samples reduce $\sigma$, increasing the signal-to-noise ratio. This can be achieved through better measurement instruments, controlling for confounders, or using paired designs.
+
+---
+
+**Exercise 4.**
+Explain the tradeoff between Type I error ($\alpha$) and Type II error ($\beta$) when the sample size is fixed. Why can't both be made arbitrarily small simultaneously?
+
+??? success "Solution to Exercise 4"
+    With a fixed sample size and effect size, there is a direct tradeoff: reducing $\alpha$ (making it harder to reject $H_0$) increases $\beta$ (making it harder to detect a true effect), and vice versa. This is because both error rates depend on the position of the rejection threshold relative to the distributions under $H_0$ and $H_1$.
+
+    Moving the threshold to make rejections rarer (smaller $\alpha$) simultaneously makes it harder to detect the alternative (larger $\beta$). The only way to reduce both simultaneously is to increase the sample size (which shrinks both distributions' standard errors) or increase the effect size (which separates the two distributions further). With infinite data, both $\alpha$ and $\beta$ can approach zero; with finite data, a tradeoff is unavoidable.

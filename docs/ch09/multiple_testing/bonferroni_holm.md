@@ -95,3 +95,70 @@ Under Bonferroni, every hypothesis faces the threshold $\alpha/m$. Under Holm, o
 | Best use case | Quick adjustment, few tests | Default choice over Bonferroni |
 
 In practice, there is rarely a reason to prefer Bonferroni over Holm, since Holm provides the same FWER guarantee with strictly greater (or equal) power.
+
+## Exercises
+
+**Exercise 1.**
+A researcher performs 5 hypothesis tests with p-values 0.008, 0.025, 0.040, 0.060, 0.120. Apply the Bonferroni correction at $\alpha = 0.05$ and state which hypotheses are rejected.
+
+??? success "Solution to Exercise 1"
+    The Bonferroni adjusted threshold is $\alpha/m = 0.05/5 = 0.01$.
+
+    Compare each p-value to 0.01:
+
+    | Test | p-value | $< 0.01$? | Decision |
+    |---|---|---|---|
+    | 1 | 0.008 | Yes | Reject |
+    | 2 | 0.025 | No | Fail to reject |
+    | 3 | 0.040 | No | Fail to reject |
+    | 4 | 0.060 | No | Fail to reject |
+    | 5 | 0.120 | No | Fail to reject |
+
+    Only test 1 is rejected. Bonferroni is conservative: test 2 with $p = 0.025$ is not rejected despite being significant at the unadjusted level.
+
+---
+
+**Exercise 2.**
+Apply the Holm (step-down) procedure to the same p-values from Exercise 1 at $\alpha = 0.05$. Compare the results with Bonferroni.
+
+??? success "Solution to Exercise 2"
+    Sort the p-values: $p_{(1)} = 0.008, p_{(2)} = 0.025, p_{(3)} = 0.040, p_{(4)} = 0.060, p_{(5)} = 0.120$.
+
+    Holm thresholds: $\alpha/(m - j + 1)$ for the $j$-th ordered test:
+
+    | Step $j$ | $p_{(j)}$ | Threshold $\alpha/(m-j+1)$ | $p_{(j)} < $ threshold? | Decision |
+    |---|---|---|---|---|
+    | 1 | 0.008 | 0.05/5 = 0.010 | Yes | Reject |
+    | 2 | 0.025 | 0.05/4 = 0.0125 | No | Stop |
+
+    Once we fail to reject at step 2, we stop and do not reject any remaining tests.
+
+    Result: only test 1 is rejected -- the same as Bonferroni in this case. However, Holm is uniformly more powerful than Bonferroni (it can never reject fewer hypotheses), and with different p-value configurations, Holm would reject more.
+
+---
+
+**Exercise 3.**
+Prove that the Bonferroni correction controls the family-wise error rate (FWER) at level $\alpha$. Use the union bound.
+
+??? success "Solution to Exercise 3"
+    Let $\mathcal{H}_0$ denote the set of true null hypotheses, with $|\mathcal{H}_0| = m_0 \leq m$. The FWER is:
+
+    $$
+    \text{FWER} = P\!\left(\bigcup_{i \in \mathcal{H}_0} \{p_i < \alpha/m\}\right) \leq \sum_{i \in \mathcal{H}_0} P(p_i < \alpha/m) = m_0 \cdot \frac{\alpha}{m} \leq m \cdot \frac{\alpha}{m} = \alpha
+    $$
+
+    The first inequality is Boole's inequality (union bound). The second equality uses the fact that under the true null, p-values are uniformly distributed on $(0,1)$, so $P(p_i < \alpha/m) = \alpha/m$. The final inequality uses $m_0 \leq m$.
+
+    This proof makes no assumptions about the dependence structure of the tests, which is why Bonferroni is valid under arbitrary dependence but potentially conservative. $\square$
+
+---
+
+**Exercise 4.**
+Explain why Bonferroni is conservative (has FWER $\ll \alpha$) when the number of true nulls $m_0$ is much less than $m$, or when the tests are positively correlated.
+
+??? success "Solution to Exercise 4"
+    **When $m_0 \ll m$:** The proof uses $m_0 \leq m$, so the actual FWER is at most $m_0 \alpha/m$. If only 10 out of 1000 nulls are true ($m_0 = 10$), the true FWER is at most $10 \times 0.05/1000 = 0.0005$, far below the nominal $\alpha = 0.05$. The Bonferroni threshold is calibrated for the worst case ($m_0 = m$).
+
+    **Under positive correlation:** The union bound $P(\cup A_i) \leq \sum P(A_i)$ is tight only when events are mutually exclusive. When tests are positively correlated (which is common when test statistics share data), the events $\{p_i < \alpha/m\}$ tend to occur together, making the union much smaller than the sum. The actual FWER can be much less than $\alpha$.
+
+    Both sources of conservatism reduce power: true effects are harder to detect. The Holm procedure partially addresses the first issue; resampling-based methods (e.g., permutation FWER) address the second.

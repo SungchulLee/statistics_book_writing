@@ -1,9 +1,6 @@
 # Multicollinearity and Influence
 
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Identifying Outliers and Influential Points
 
 Outliers and influential points can substantially impact regression results. Understanding them is essential for model refinement.
@@ -144,3 +141,38 @@ plt.show()
 - **Center variables**: Subtracting the mean from predictors before creating interaction terms can substantially reduce multicollinearity.
 - **Regularization**: Ridge regression (L2 penalty) directly addresses multicollinearity by shrinking coefficients toward zero.
 - **Principal Component Regression**: Use PCA to create uncorrelated components from the original predictors.
+## Exercises
+
+**Exercise 1.**
+In a regression with $p = 3$ predictors and $n = 50$ observations, an observation has leverage $h_{ii} = 0.18$. Determine whether this is a high-leverage point using the standard threshold and explain what high leverage means geometrically.
+
+??? success "Solution to Exercise 1"
+    The standard threshold for high leverage is $2(p+1)/n = 2 \times 4/50 = 0.16$. Since $h_{ii} = 0.18 > 0.16$, this is a high-leverage point.
+
+    Geometrically, leverage measures how far an observation's predictor values are from the center of the predictor space. A high-leverage point lies far from the mean of the $X$ values, giving it disproportionate influence on the regression line. The regression line is "pulled" toward high-leverage points.
+
+---
+
+**Exercise 2.**
+Observation 17 has Cook's distance $D_{17} = 0.95$ in a regression with $n = 30$ and $p = 2$. Using the threshold $D > 4/n$, assess its influence and describe what would happen to the regression if this observation were removed.
+
+??? success "Solution to Exercise 2"
+    The threshold is $4/n = 4/30 = 0.133$. Since $D_{17} = 0.95 \gg 0.133$, this observation is highly influential.
+
+    Removing observation 17 would substantially change the estimated regression coefficients $\hat{\beta}$. The direction and magnitude of the change depend on whether the observation has a large residual (pulling the line toward it) or lies along the current trend. The researcher should investigate whether this point is a data error, an outlier from a different population, or a valid but extreme observation.
+
+---
+
+**Exercise 3.**
+Explain the relationship between leverage ($h_{ii}$), studentized residual ($r_i$), and Cook's distance ($D_i$). Can an observation have high Cook's distance but low leverage?
+
+??? success "Solution to Exercise 3"
+    Cook's distance combines leverage and residual size:
+
+    $$
+    D_i = \frac{r_i^2}{p+1} \cdot \frac{h_{ii}}{1 - h_{ii}}
+    $$
+
+    where $r_i$ is the internally studentized residual and $h_{ii}$ is the leverage.
+
+    An observation can have high $D_i$ with moderate leverage if its studentized residual is very large (a clear outlier near the center of the predictor space). However, in practice, truly high Cook's distance usually involves at least moderate leverage, because observations near the center of $X$ have limited ability to shift the entire regression line even with a large residual.

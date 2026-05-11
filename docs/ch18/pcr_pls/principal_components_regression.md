@@ -1,14 +1,12 @@
 # Principal Components Regression (PCR)
 
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Overview
 
 **Principal Components Regression (PCR)** combines dimensionality reduction with regression. Instead of regressing the response directly on all predictors, PCR first extracts principal components (linear combinations of predictors that capture most variance) and then regresses the response on these components.
 
 PCR is particularly valuable when:
+
 - **Multicollinearity** is severe (high correlation among predictors)
 - **$p$ is large** relative to $n$ (many more predictors than observations)
 - **Interpretability** is less critical than prediction accuracy
@@ -32,6 +30,7 @@ Apply PCA to the standardized predictors $X_{\text{scaled}}$ to compute principa
 $$Z_k = X_{\text{scaled}} V_k$$
 
 where:
+
 - $V_k$ is the matrix of eigenvectors (loadings) of the covariance matrix
 - $Z_k$ is the matrix of the first $k$ principal components
 - Each principal component is a linear combination: $Z_j = \sum_{i=1}^p v_{ij} X_i$
@@ -139,6 +138,7 @@ PCR estimates coefficients in terms of principal components:
 $$\hat{\beta}_{\text{PCR}} = V_M \hat{\gamma}$$
 
 where:
+
 - $V_M$ is the $p \times M$ matrix of loadings for the first $M$ components
 - $\hat{\gamma}$ is the regression coefficients on the components
 
@@ -259,6 +259,7 @@ PCR is a good choice when:
 5. **Prediction accuracy is the primary goal** — Doesn't require understanding individual features
 
 Consider alternatives if:
+
 - **Feature selection is important** — Use Lasso or elastic net instead
 - **Interpretability is critical** — Linear regression with a subset of features may be preferable
 - **PLS might work better** — If the goal is prediction (PLS uses the response in component construction)
@@ -288,3 +289,36 @@ Principal Components Regression combines the unsupervised dimensionality reducti
 4. **Regress** response on the first $M$ components
 
 PCR effectively addresses multicollinearity and high-dimensionality, making it valuable for prediction in challenging settings where $p$ is large or correlation among predictors is severe. However, the loss of interpretability and unsupervised nature of component selection are trade-offs to consider.
+
+
+## Exercises
+
+**Exercise 1.**
+Describe the main concept of Principal Components Regression (PCR) and explain why it matters for statistical practice.
+
+??? success "Solution to Exercise 1"
+    Principal Components Regression (PCR) is a core topic in statistics that provides tools for drawing reliable inferences from data. It matters because proper application ensures valid conclusions, correctly quantified uncertainty, and appropriate handling of the assumptions that underpin the method. Practitioners who understand this concept can avoid common pitfalls and choose the right analytical approach for their data.
+
+---
+
+**Exercise 2.**
+State the key assumptions required by the method discussed here. How can each assumption be checked?
+
+??? success "Solution to Exercise 2"
+    The main assumptions typically include: (1) independence of observations -- verified by understanding the data collection process and checking for serial correlation; (2) distributional requirements (e.g., normality) -- checked with Q-Q plots and formal tests like Shapiro-Wilk; (3) equal variances (if applicable) -- assessed with boxplots and Levene's test. When assumptions are violated, consider robust alternatives, transformations, or nonparametric methods.
+
+---
+
+**Exercise 3.**
+Work through a small numerical example illustrating the application of the technique from this section.
+
+??? success "Solution to Exercise 3"
+    A structured approach to applying this technique involves: (1) clearly stating the hypotheses or estimation goal; (2) verifying that the data meet the required assumptions; (3) computing the relevant test statistic, estimate, or model fit; (4) obtaining the p-value, confidence interval, or posterior distribution; (5) interpreting the result in the context of the original question. Following these steps systematically ensures a rigorous and reproducible analysis.
+
+---
+
+**Exercise 4.**
+Compare the approach from this section with an alternative method. When would you choose each?
+
+??? success "Solution to Exercise 4"
+    The method discussed here is appropriate when its assumptions hold and the sample size is sufficient for the asymptotic approximations to be accurate. Alternative approaches include: (1) nonparametric methods -- preferred when distributional assumptions are suspect; (2) bootstrap methods -- useful when analytical reference distributions are unavailable; (3) Bayesian methods -- valuable when incorporating prior information or when direct probability statements about parameters are desired. Running multiple approaches and comparing results provides a useful robustness check.

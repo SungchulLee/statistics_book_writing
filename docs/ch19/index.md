@@ -1,9 +1,6 @@
 # Chapter 19: Logistic Regression
 
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Overview
 
 Logistic regression models the probability of a binary outcome as a function of predictor variables. Unlike linear regression, which predicts a continuous response, logistic regression maps the linear predictor through the sigmoid function to produce probabilities in the interval (0, 1). This chapter covers the logistic model formulation and interpretation, maximum likelihood estimation and inference procedures, a comprehensive treatment of classification evaluation metrics, and regularization techniques adapted for the logistic setting.

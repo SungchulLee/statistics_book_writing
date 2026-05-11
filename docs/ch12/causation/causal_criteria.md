@@ -127,3 +127,46 @@ When evaluating whether an observed correlation is causal:
 ## Summary
 
 Establishing causation from observational data requires evidence beyond correlation. Bradford Hill's nine criteria provide a qualitative framework for evaluating causal claims, with temporality being the only strictly necessary criterion. The counterfactual framework provides a formal definition of causal effects through potential outcomes and identifies the assumptions (particularly ignorability) needed to estimate causal effects from non-experimental data. Together, these frameworks guide researchers from observed associations to justified causal conclusions.
+
+## Exercises
+
+**Exercise 1.**
+For each of the following claims, evaluate which of the five criteria for causation (temporal precedence, covariation, elimination of confounders, plausibility, experimental evidence) are met:
+
+1. "Smoking causes lung cancer"
+2. "Wearing a seatbelt prevents death in car accidents"
+3. "Eating organic food causes better health"
+4. "Social media use causes depression in teenagers"
+
+??? success "Solution to Exercise 1"
+
+    1. **Smoking causes lung cancer**: All five criteria are strongly met. Temporal precedence (smoking precedes cancer by years), covariation (dose-response relationship), elimination of confounders (extensive studies controlling for other risk factors), plausibility (carcinogens in smoke damage DNA), and experimental evidence (animal studies; human evidence is quasi-experimental due to ethical constraints, but prospective cohort studies provide strong support).
+
+    2. **Wearing a seatbelt prevents death**: Temporal precedence (wearing precedes the accident), covariation (strong statistical association between seatbelt use and survival), plausibility (physics of force distribution), experimental evidence (crash test data). Elimination of confounders is partially met — cautious drivers may be more likely to wear seatbelts, but the mechanical argument is very strong.
+
+    3. **Eating organic food causes better health**: Covariation may exist but is weak. Temporal precedence is met trivially. Elimination of confounders is the weakest criterion — people who buy organic food tend to be wealthier, more health-conscious, and engage in more exercise. Plausibility is debatable (lower pesticide exposure, but unclear clinical significance). Experimental evidence is very limited. The causal claim is not well supported.
+
+    4. **Social media use causes depression in teenagers**: Covariation exists in many studies. Temporal precedence is difficult to establish (does social media use precede depression, or do depressed teens use more social media?). Elimination of confounders is challenging (loneliness, family dynamics, and pre-existing mental health conditions confound). Plausibility exists (social comparison, cyberbullying). Experimental evidence is limited and ethically constrained. The causal claim remains contested.
+
+---
+
+**Exercise 2.**
+Design a study to test the causal relationship between sleep duration and academic performance. Specify:
+
+1. The type of study (observational, RCT, longitudinal)
+2. How you would control for confounders
+3. What variables you would measure
+4. Potential ethical constraints
+5. How you would interpret the results
+
+??? success "Solution to Exercise 2"
+
+    1. **Study type**: A longitudinal observational study with repeated measures is most feasible. A true RCT (randomly assigning sleep durations) would be ideal but raises ethical concerns about sleep deprivation.
+
+    2. **Controlling for confounders**: Measure and adjust for socioeconomic status, prior academic performance, mental health, caffeine intake, screen time, extracurricular activities, and course difficulty. Use regression or propensity score matching to control for these confounders.
+
+    3. **Variables to measure**: Sleep duration and quality (via actigraphy or sleep diaries), GPA or standardized test scores, demographics, health behaviors, mental health scales, and time-varying confounders measured at each follow-up.
+
+    4. **Ethical constraints**: Cannot ethically force students to sleep specific amounts. Must rely on natural variation or gentle interventions (sleep hygiene education). Need informed consent and IRB approval.
+
+    5. **Interpretation**: If the association between sleep and academic performance persists after controlling for confounders and the temporal ordering is correct (sleep measured before performance outcomes), the evidence supports a causal interpretation but cannot definitively prove causation due to potential unmeasured confounders. Effect sizes and confidence intervals should be reported alongside p-values.

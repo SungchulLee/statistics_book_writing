@@ -108,3 +108,16 @@ In practice, both methods are often used together:
 ## Summary
 
 The bootstrap approximates the sampling distribution and is best for confidence intervals, standard errors, and bias estimation. The permutation test approximates the null distribution under exchangeability and is best for exact hypothesis testing. For two-sample comparisons under a strong null ($F_X = F_Y$), both methods are valid and the permutation test offers exact Type I error control. For more general inference — confidence intervals, testing non-exchangeable nulls, or estimating distributional properties — the bootstrap is the appropriate tool.
+
+## Exercises
+
+**Exercise 1.**
+Download daily returns for two stocks (e.g., AAPL and MSFT) over the past year.
+
+(a) Use a permutation test to test whether the mean daily returns differ.
+
+(b) Use the bootstrap to compute 95% CIs for the Sharpe ratio of each stock.
+
+(c) Test whether the Sharpe ratios differ using a permutation test with $\text{SR}_1 - \text{SR}_2$ as the test statistic.
+
+(d) Why is the bootstrap especially useful for the Sharpe ratio? (Hint: consider the sampling distribution of a ratio.)

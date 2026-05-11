@@ -1,9 +1,6 @@
 # Interpretation of Significance
 
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 Interpreting the significance of regression coefficients is a critical step in understanding linear regression results. Significance tells us whether a predictor variable has a meaningful relationship with the outcome variable, beyond what would be expected by random chance.
 
 ---
@@ -102,3 +99,32 @@ Statistical significance does not always imply practical importance. Always inte
 | F-test | Joint significance of all predictors in the model |
 
 By using these tools together and understanding their limitations, analysts can make more informed decisions about the relationships between predictors and outcomes in linear regression.
+## Exercises
+
+**Exercise 1.**
+A predictor has $\hat{\beta} = 0.002$ with $p < 0.001$ in a regression on $n = 100{,}000$ observations. Is this result practically significant? Explain the distinction between statistical and practical significance.
+
+??? success "Solution to Exercise 1"
+    The result is **statistically significant** (the coefficient is reliably different from zero) but may not be **practically significant** (the effect size of 0.002 may be too small to matter in context).
+
+    With $n = 100{,}000$, even tiny effects become statistically significant because the standard error shrinks as $1/\sqrt{n}$. Statistical significance means "unlikely to be zero," while practical significance means "large enough to matter for decisions." The researcher should evaluate whether a 0.002-unit change in $Y$ per unit change in $X$ is meaningful in the application domain.
+
+---
+
+**Exercise 2.**
+Explain why a non-significant p-value ($p = 0.15$) does not prove that the coefficient is zero. What does it actually mean?
+
+??? success "Solution to Exercise 2"
+    A p-value of 0.15 means that if $\beta = 0$, there is a 15% probability of observing a test statistic as extreme as (or more extreme than) the one obtained. This is **not** proof that $\beta = 0$; it means we lack sufficient evidence to reject $H_0$.
+
+    The failure to reject could be due to: (1) the true effect really is zero (or very small), (2) the sample size is too small to detect a real effect (insufficient power), or (3) high variance in the data obscuring a genuine relationship. A power analysis or confidence interval provides more information than the p-value alone.
+
+---
+
+**Exercise 3.**
+In a model with five predictors, all individual $t$-tests are non-significant ($p > 0.05$) but the overall $F$-test is significant ($p = 0.01$). Interpret this seemingly contradictory result.
+
+??? success "Solution to Exercise 3"
+    This apparent contradiction arises from **multicollinearity**. The five predictors are likely correlated with each other, so each individual predictor's unique contribution (measured by its $t$-test) is small after accounting for the others. However, **collectively** they explain a significant amount of variance in $Y$ (detected by the $F$-test).
+
+    The $F$-test tests whether all five coefficients are simultaneously zero and has more power for detecting joint effects. The individual $t$-tests suffer from inflated standard errors due to multicollinearity, reducing their power. Remedies include removing redundant predictors, using regularization, or computing VIF values to identify the collinear pairs.

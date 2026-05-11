@@ -1,9 +1,5 @@
 # Covariance and Correlation
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Overview
 
 **Covariance** and **correlation** quantify the linear relationship between two random variables. Covariance measures the direction and magnitude of co-movement (in original units), while correlation normalizes this to a dimensionless quantity between $-1$ and $+1$.
@@ -285,3 +281,119 @@ print(f"Corr(X,Y) = {corr_XY:.4f}")
 - Correlation captures only **linear** dependence; zero correlation does not imply independence.
 - The covariance matrix generalizes pairwise covariances to vector-valued random variables and is fundamental to portfolio theory, PCA, and multivariate statistics.
 - The variance of a sum formula $\text{Var}(X + Y) = \text{Var}(X) + \text{Var}(Y) + 2\text{Cov}(X,Y)$ simplifies to additive variances only under independence or zero correlation.
+
+## Exercises
+
+**Exercise 1.**
+Let $X$ and $Y$ have the joint distribution given by $P(X=0,Y=0) = 0.2$, $P(X=0,Y=1) = 0.1$, $P(X=1,Y=0) = 0.3$, $P(X=1,Y=1) = 0.4$. Compute $\text{Cov}(X,Y)$ and $\rho(X,Y)$.
+
+??? success "Solution to Exercise 1"
+    First compute the marginals and expectations:
+
+    $$
+    E[X] = 0 \cdot 0.3 + 1 \cdot 0.7 = 0.7, \quad E[Y] = 0 \cdot 0.5 + 1 \cdot 0.5 = 0.5
+    $$
+
+    $$
+    E[XY] = 0 \cdot 0 \cdot 0.2 + 0 \cdot 1 \cdot 0.1 + 1 \cdot 0 \cdot 0.3 + 1 \cdot 1 \cdot 0.4 = 0.4
+    $$
+
+    $$
+    \text{Cov}(X,Y) = E[XY] - E[X]E[Y] = 0.4 - 0.7 \times 0.5 = 0.4 - 0.35 = 0.05
+    $$
+
+    For correlation, we need the variances:
+
+    $$
+    \text{Var}(X) = E[X^2] - (E[X])^2 = 0.7 - 0.49 = 0.21
+    $$
+
+    $$
+    \text{Var}(Y) = E[Y^2] - (E[Y])^2 = 0.5 - 0.25 = 0.25
+    $$
+
+    $$
+    \rho(X,Y) = \frac{0.05}{\sqrt{0.21 \times 0.25}} = \frac{0.05}{\sqrt{0.0525}} = \frac{0.05}{0.2291} \approx 0.218
+    $$
+
+---
+
+**Exercise 2.**
+Prove that $\text{Var}(aX + bY) = a^2\text{Var}(X) + b^2\text{Var}(Y) + 2ab\,\text{Cov}(X,Y)$ using the definition of variance and linearity of expectation.
+
+??? success "Solution to Exercise 2"
+    Let $\mu_X = E[X]$ and $\mu_Y = E[Y]$. Then $E[aX + bY] = a\mu_X + b\mu_Y$. By definition:
+
+    $$
+    \text{Var}(aX + bY) = E\!\left[(aX + bY - a\mu_X - b\mu_Y)^2\right] = E\!\left[(a(X - \mu_X) + b(Y - \mu_Y))^2\right]
+    $$
+
+    Expanding the square:
+
+    $$
+    = E\!\left[a^2(X-\mu_X)^2 + 2ab(X-\mu_X)(Y-\mu_Y) + b^2(Y-\mu_Y)^2\right]
+    $$
+
+    By linearity of expectation:
+
+    $$
+    = a^2 E[(X-\mu_X)^2] + 2ab\,E[(X-\mu_X)(Y-\mu_Y)] + b^2 E[(Y-\mu_Y)^2]
+    $$
+
+    $$
+    = a^2\text{Var}(X) + 2ab\,\text{Cov}(X,Y) + b^2\text{Var}(Y)
+    $$
+
+    $\square$
+
+---
+
+**Exercise 3.**
+Let $X \sim \text{Uniform}(-1,1)$ and $Y = X^2$. Show that $\text{Cov}(X,Y) = 0$ but $X$ and $Y$ are not independent.
+
+??? success "Solution to Exercise 3"
+    By symmetry of the Uniform$(-1,1)$ distribution, $E[X] = 0$. Using the shortcut formula:
+
+    $$
+    \text{Cov}(X,Y) = E[XY] - E[X]E[Y] = E[X \cdot X^2] - 0 \cdot E[Y] = E[X^3]
+    $$
+
+    Since $g(x) = x^3$ is an odd function and $X$ has a symmetric distribution around 0:
+
+    $$
+    E[X^3] = \int_{-1}^{1} x^3 \cdot \frac{1}{2}\,dx = \frac{1}{2}\left[\frac{x^4}{4}\right]_{-1}^{1} = \frac{1}{2}\left(\frac{1}{4} - \frac{1}{4}\right) = 0
+    $$
+
+    So $\text{Cov}(X,Y) = 0$. However, $X$ and $Y$ are clearly **not independent** because $Y$ is a deterministic function of $X$: knowing $X$ completely determines $Y = X^2$. This demonstrates that zero correlation does not imply independence.
+
+---
+
+**Exercise 4.**
+A portfolio consists of two assets with returns $R_1$ and $R_2$, weighted $w$ and $1-w$ respectively. Derive the portfolio variance $\text{Var}(R_p)$ where $R_p = wR_1 + (1-w)R_2$, and find the weight $w^*$ that minimizes portfolio variance when $\text{Var}(R_1) = \sigma_1^2$, $\text{Var}(R_2) = \sigma_2^2$, and $\text{Cov}(R_1, R_2) = \sigma_{12}$.
+
+??? success "Solution to Exercise 4"
+    Using the variance of a linear combination:
+
+    $$
+    \text{Var}(R_p) = w^2 \sigma_1^2 + (1-w)^2 \sigma_2^2 + 2w(1-w)\sigma_{12}
+    $$
+
+    To minimize, take the derivative with respect to $w$ and set it to zero:
+
+    $$
+    \frac{d}{dw}\text{Var}(R_p) = 2w\sigma_1^2 - 2(1-w)\sigma_2^2 + 2(1-2w)\sigma_{12} = 0
+    $$
+
+    $$
+    w\sigma_1^2 - \sigma_2^2 + w\sigma_2^2 + \sigma_{12} - 2w\sigma_{12} = 0
+    $$
+
+    $$
+    w(\sigma_1^2 + \sigma_2^2 - 2\sigma_{12}) = \sigma_2^2 - \sigma_{12}
+    $$
+
+    $$
+    w^* = \frac{\sigma_2^2 - \sigma_{12}}{\sigma_1^2 + \sigma_2^2 - 2\sigma_{12}}
+    $$
+
+    This is the **minimum-variance portfolio weight**. When $\sigma_{12} < 0$ (negative correlation), diversification is especially effective and the minimum-variance portfolio has lower risk than either individual asset.

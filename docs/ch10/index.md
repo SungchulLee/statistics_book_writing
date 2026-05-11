@@ -1,9 +1,5 @@
 # Chapter 10: Chi-Square Tests
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Overview
 
 Chi-square tests are the primary tools for analyzing categorical data. This chapter develops the connection between the chi-square distribution and categorical frequency data, then applies it to three major tests: the goodness-of-fit test (does an observed distribution match a hypothesized one?), the test of independence (are two categorical variables associated?), and the test of homogeneity (do multiple populations share the same distribution?). Practical considerations such as expected cell count requirements and effect size measurement with Cramer's V are also covered.

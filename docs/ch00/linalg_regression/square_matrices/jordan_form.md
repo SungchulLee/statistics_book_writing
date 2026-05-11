@@ -103,3 +103,77 @@ While the Jordan form itself rarely appears in applied statistics (because the m
 ## Summary
 
 The Jordan canonical form is the most general similarity reduction for a square matrix: every matrix is similar to a block-diagonal matrix of Jordan blocks. When every block is $1 \times 1$, the matrix is diagonalizable; otherwise, the superdiagonal ones in larger blocks capture the "deficiency" in the eigenvector count. For the symmetric matrices that dominate statistics (covariance matrices, projection matrices), the Jordan form always reduces to a diagonal, but the Jordan theory completes the theoretical picture and is needed for non-symmetric settings such as time-series companion matrices.
+
+## Exercises
+
+**Exercise 1.**
+Write the Jordan canonical form of a $3 \times 3$ matrix whose characteristic polynomial is $(\lambda - 2)^2(\lambda - 5)$ and whose eigenvalue $\lambda = 2$ has geometric multiplicity 1.
+
+??? success "Solution to Exercise 1"
+    Since $\lambda = 2$ has algebraic multiplicity 2 but geometric multiplicity 1, it produces a single $2 \times 2$ Jordan block. The eigenvalue $\lambda = 5$ has algebraic and geometric multiplicity 1, giving a $1 \times 1$ block. The Jordan form is:
+
+    $$
+    \mathbf{J} = \begin{pmatrix} 2 & 1 & 0 \\ 0 & 2 & 0 \\ 0 & 0 & 5 \end{pmatrix}
+    $$
+
+    The superdiagonal 1 in the $(1,2)$ position reflects the deficiency: we are one eigenvector short for $\lambda = 2$.
+
+---
+
+**Exercise 2.**
+Compute $\mathbf{J}^3$ for the Jordan block $\mathbf{J}_2(3) = \begin{pmatrix} 3 & 1 \\ 0 & 3 \end{pmatrix}$ using the formula for powers of Jordan blocks.
+
+??? success "Solution to Exercise 2"
+    For a $2 \times 2$ Jordan block $\mathbf{J}_2(\lambda)$, the power formula gives:
+
+    $$
+    \mathbf{J}_2(\lambda)^k = \begin{pmatrix} \lambda^k & k\lambda^{k-1} \\ 0 & \lambda^k \end{pmatrix}
+    $$
+
+    With $\lambda = 3$ and $k = 3$:
+
+    $$
+    \mathbf{J}_2(3)^3 = \begin{pmatrix} 27 & 3 \cdot 9 \\ 0 & 27 \end{pmatrix} = \begin{pmatrix} 27 & 27 \\ 0 & 27 \end{pmatrix}
+    $$
+
+    One can verify by direct multiplication: $\mathbf{J}^2 = \begin{pmatrix} 9 & 6 \\ 0 & 9 \end{pmatrix}$, then $\mathbf{J}^3 = \mathbf{J}^2 \cdot \mathbf{J} = \begin{pmatrix} 27 & 27 \\ 0 & 27 \end{pmatrix}$.
+
+---
+
+**Exercise 3.**
+Prove that a matrix is diagonalizable if and only if every Jordan block in its Jordan form is $1 \times 1$.
+
+??? success "Solution to Exercise 3"
+    ($\Rightarrow$) If $\mathbf{A}$ is diagonalizable, then $\mathbf{A} = \mathbf{P}\boldsymbol{\Lambda}\mathbf{P}^{-1}$ where $\boldsymbol{\Lambda}$ is diagonal. A diagonal matrix is already in Jordan form with each block being $1 \times 1$ (no superdiagonal ones).
+
+    ($\Leftarrow$) If every Jordan block is $1 \times 1$, the Jordan form is $\mathbf{J} = \operatorname{diag}(\lambda_1, \dots, \lambda_n)$, which is a diagonal matrix. Since $\mathbf{A} = \mathbf{P}\mathbf{J}\mathbf{P}^{-1}$ with $\mathbf{J}$ diagonal, $\mathbf{A}$ is diagonalizable.
+
+    The Jordan blocks are $1 \times 1$ precisely when the geometric multiplicity equals the algebraic multiplicity for every eigenvalue. $\square$
+
+---
+
+**Exercise 4.**
+Explain why a $3 \times 3$ matrix with eigenvalues $\lambda_1 = 1$, $\lambda_2 = 2$, $\lambda_3 = 3$ (all distinct) is necessarily diagonalizable, regardless of any other properties.
+
+??? success "Solution to Exercise 4"
+    Eigenvectors corresponding to distinct eigenvalues are always linearly independent. Since the matrix is $3 \times 3$ and has 3 distinct eigenvalues, it has 3 linearly independent eigenvectors.
+
+    With $n = 3$ linearly independent eigenvectors, the matrix $\mathbf{P}$ formed by these eigenvectors is invertible, and $\mathbf{A} = \mathbf{P}\operatorname{diag}(1, 2, 3)\mathbf{P}^{-1}$.
+
+    Equivalently, each eigenvalue has algebraic multiplicity 1, so its geometric multiplicity is also 1 (since geometric multiplicity is always at least 1 and at most the algebraic multiplicity). Thus every Jordan block is $1 \times 1$ and the matrix is diagonalizable.
+
+---
+
+**Exercise 5.**
+In a VAR(1) model $\mathbf{y}_t = \mathbf{A}\mathbf{y}_{t-1} + \boldsymbol{\varepsilon}_t$, the process is stationary when all eigenvalues of $\mathbf{A}$ satisfy $|\lambda_i| < 1$. Explain what the Jordan form reveals when $\mathbf{A}$ has a unit eigenvalue ($|\lambda| = 1$) with a $2 \times 2$ Jordan block.
+
+??? success "Solution to Exercise 5"
+    If $\lambda = 1$ has a $2 \times 2$ Jordan block, then $\mathbf{J}_2(1) = \begin{pmatrix} 1 & 1 \\ 0 & 1 \end{pmatrix}$. The power formula gives:
+
+    $$
+    \mathbf{J}_2(1)^k = \begin{pmatrix} 1 & k \\ 0 & 1 \end{pmatrix}
+    $$
+
+    The off-diagonal entry grows linearly in $k$, which means the impulse responses do not decay -- they grow without bound. The process exhibits a linear (polynomial) trend rather than a constant level.
+
+    By contrast, a unit eigenvalue with a $1 \times 1$ block produces $\lambda^k = 1$, giving a unit root (random walk) behavior without a deterministic trend. The Jordan form thus distinguishes between different types of non-stationarity: unit roots (random walks) from deterministic trends.

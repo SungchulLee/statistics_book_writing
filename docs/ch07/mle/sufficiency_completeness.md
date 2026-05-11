@@ -76,3 +76,67 @@ Since $(\bar{X}, S^2)$ is complete and sufficient for $(\mu, \sigma^2)$ in the n
 
     - $\bar{X}$ is the UMVUE of $\mu$ with variance $\sigma^2/20$. No other unbiased estimator of $\mu$ can have variance smaller than $\sigma^2/20$.
     - $S^2$ is the UMVUE of $\sigma^2$ with variance $2\sigma^4/19$. The MLE $\hat{\sigma}^2_{\text{MLE}} = (19/20)S^2$ has lower MSE but is biased, so it does not qualify as a UMVUE.
+
+## Exercises
+
+**Exercise 1.**
+For a random sample from $\text{Bernoulli}(p)$, show that $T = \sum X_i$ is a complete sufficient statistic.
+
+??? success "Solution to Exercise 1"
+    **Sufficiency:** The joint PMF is $p^{\sum x_i}(1-p)^{n - \sum x_i}$, which depends on $\mathbf{x}$ only through $T = \sum x_i$. By the factorization theorem, $T$ is sufficient.
+
+    **Completeness:** $T \sim \text{Binomial}(n, p)$. To show completeness, we need: if $E[g(T)] = 0$ for all $p \in (0,1)$, then $g(T) = 0$ a.s.
+
+    $$
+    E[g(T)] = \sum_{t=0}^n g(t)\binom{n}{t}p^t(1-p)^{n-t} = (1-p)^n \sum_{t=0}^n g(t)\binom{n}{t}\left(\frac{p}{1-p}\right)^t = 0
+    $$
+
+    Setting $r = p/(1-p) \in (0, \infty)$, this is a polynomial in $r$ of degree $n$ that is identically zero. A polynomial that is zero everywhere has all coefficients zero, so $g(t)\binom{n}{t} = 0$ for all $t$, hence $g(t) = 0$ for all $t$. $\square$
+
+---
+
+**Exercise 2.**
+State the Lehmann-Scheffe theorem and use it to find the UMVUE of $p(1-p)$ for a Bernoulli sample.
+
+??? success "Solution to Exercise 2"
+    **Lehmann-Scheffe Theorem:** If $T$ is a complete sufficient statistic and $h(T)$ is an unbiased estimator of $\tau(\theta)$, then $h(T)$ is the unique UMVUE of $\tau(\theta)$.
+
+    We seek an unbiased estimator of $\tau(p) = p(1-p)$ that is a function of $T = \sum X_i \sim \text{Bin}(n, p)$.
+
+    Consider $h(T) = \frac{T(n - T)}{n(n-1)}$:
+
+    $$
+    E\!\left[\frac{T(n-T)}{n(n-1)}\right] = \frac{E[nT - T^2]}{n(n-1)} = \frac{n \cdot np - (np(1-p) + n^2p^2)}{n(n-1)}
+    $$
+
+    $$
+    = \frac{n^2p - np + np^2 - n^2p^2}{n(n-1)} = \frac{np(n-1)(1-p)}{n(n-1)} = p(1-p)
+    $$
+
+    Since $T$ is complete and sufficient and $h(T)$ is unbiased for $p(1-p)$, the Lehmann-Scheffe theorem guarantees it is the UMVUE. $\square$
+
+---
+
+**Exercise 3.**
+Explain the relationship between completeness and the uniqueness of unbiased estimators based on sufficient statistics.
+
+??? success "Solution to Exercise 3"
+    Completeness of a sufficient statistic $T$ means there is no nontrivial function of $T$ with expectation identically zero: $E[g(T)] = 0$ for all $\theta$ implies $g(T) = 0$ a.s.
+
+    This ensures **uniqueness** of unbiased estimators: if $h_1(T)$ and $h_2(T)$ are both unbiased for $\tau(\theta)$, then $E[h_1(T) - h_2(T)] = 0$ for all $\theta$. By completeness, $h_1(T) - h_2(T) = 0$ a.s., so $h_1 = h_2$.
+
+    Without completeness, multiple unbiased functions of $T$ could exist, and the Rao-Blackwell theorem would not guarantee a unique best estimator. Completeness closes this gap, making the UMVUE unique (if it exists).
+
+---
+
+**Exercise 4.**
+For the Uniform$(0, \theta)$ distribution, $T = X_{(n)} = \max(X_1, \dots, X_n)$ is sufficient but not complete. Show that completeness fails by finding a nontrivial function $g(T)$ with $E[g(T)] = 0$ for all $\theta > 0$.
+
+??? success "Solution to Exercise 4"
+    The density of $T = X_{(n)}$ is $f_T(t) = nt^{n-1}/\theta^n$ for $0 < t < \theta$.
+
+    Consider $g(t) = t^n - \frac{n}{n+1}\theta^n$. Wait -- this involves $\theta$, so it is not a valid function of $T$ alone.
+
+    Actually, $T = X_{(n)}$ *is* complete for the Uniform$(0, \theta)$ family. A better example: consider the Uniform$(\theta, \theta + 1)$ family. Here $T = (X_{(1)}, X_{(n)})$ is sufficient. The range $R = X_{(n)} - X_{(1)}$ satisfies $E[R]$ that does not depend on $\theta$ (it depends only on $n$). So $g(X_{(1)}, X_{(n)}) = X_{(n)} - X_{(1)} - E[R]$ has $E[g(T)] = 0$ for all $\theta$, but $g \neq 0$ a.s. This shows $T$ is sufficient but not complete.
+
+    The lesson: completeness is a property of the statistical model, not just the sufficient statistic. Location families with bounded support often fail completeness.

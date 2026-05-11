@@ -125,3 +125,73 @@ Consider the same three models from the AIC page, with $n = 50$:
 Both AIC and BIC select Model B as the best. However, BIC penalizes Model C more heavily: the BIC gap between B and C ($57.8 - 49.0 = 8.8$) is larger than the AIC gap ($42.5 - 39.4 = 3.1$), reflecting BIC's stronger penalty against the three additional parameters in Model C.
 
 In this case AIC and BIC agree, but with a larger sample or a smaller improvement from Model C's extra predictors, BIC would be even more decisive in favoring Model B.
+
+## Exercises
+
+**Exercise 1.**
+A linear regression with $p = 3$ predictors and $n = 100$ observations has a maximized log-likelihood of $\ell_1 = -150$. A nested model with $p = 5$ predictors has $\ell_2 = -145$. Compute BIC for both models and determine which is preferred.
+
+??? success "Solution to Exercise 1"
+    BIC $= -2\ell + k\ln(n)$, where $k$ is the number of estimated parameters.
+
+    Model 1 ($k = 3 + 1 = 4$ including intercept, plus $\sigma^2$, so $k = 5$):
+
+    $$
+    \text{BIC}_1 = -2(-150) + 5\ln(100) = 300 + 5(4.605) = 300 + 23.03 = 323.03
+    $$
+
+    Model 2 ($k = 5 + 1 + 1 = 7$):
+
+    $$
+    \text{BIC}_2 = -2(-145) + 7\ln(100) = 290 + 7(4.605) = 290 + 32.24 = 322.24
+    $$
+
+    Model 2 has slightly lower BIC (322.24 vs 323.03), so it is marginally preferred. The improvement in fit ($\Delta\ell = 5$) barely justifies the added complexity.
+
+---
+
+**Exercise 2.**
+Compare the penalty terms of AIC ($2k$) and BIC ($k\ln n$). For what sample size $n$ does BIC penalize complexity more heavily than AIC?
+
+??? success "Solution to Exercise 2"
+    BIC penalizes more heavily than AIC when $k\ln n > 2k$, i.e., $\ln n > 2$, which gives $n > e^2 \approx 7.39$.
+
+    For any sample size $n \geq 8$, BIC imposes a stricter penalty per parameter than AIC. In practice, since $n$ is almost always much larger than 8, BIC consistently selects simpler (more parsimonious) models than AIC.
+
+    As $n$ grows, BIC's penalty grows without bound ($\ln n \to \infty$), while AIC's penalty remains constant at 2 per parameter. This means BIC increasingly favors simpler models for larger datasets. BIC is consistent (selects the true model as $n \to \infty$ if it is among the candidates), while AIC is efficient (minimizes prediction error) but may overfit.
+
+---
+
+**Exercise 3.**
+Explain the Bayesian justification for BIC. In what sense does BIC approximate a Bayesian model comparison?
+
+??? success "Solution to Exercise 3"
+    BIC approximates the log marginal likelihood $\log m(\mathbf{y} \mid M)$, which is the key quantity in Bayesian model comparison:
+
+    $$
+    \log m(\mathbf{y} \mid M) \approx \ell(\hat{\theta}) - \frac{k}{2}\ln n + O(1)
+    $$
+
+    Since $\text{BIC} = -2\ell(\hat{\theta}) + k\ln n$, we have $\text{BIC} \approx -2\log m(\mathbf{y} \mid M) + \text{constant}$.
+
+    Minimizing BIC is approximately equivalent to maximizing the marginal likelihood, which integrates over the parameter space with respect to the prior. This integration naturally penalizes models with more parameters because a complex model "spreads" its prior probability over a larger parameter space (Occam's razor). The $k\ln n$ penalty is the leading-order term in the Laplace approximation to this integral.
+
+---
+
+**Exercise 4.**
+When would you prefer AIC over BIC for model selection, and vice versa?
+
+??? success "Solution to Exercise 4"
+    **Prefer AIC when:**
+
+    - The goal is **prediction**: AIC minimizes the expected Kullback-Leibler divergence and is asymptotically equivalent to leave-one-out cross-validation. It selects models that predict well.
+    - The true model is not among the candidates (AIC performs better in misspecified settings).
+    - You want to avoid underfitting at the cost of slight overfitting.
+
+    **Prefer BIC when:**
+
+    - The goal is **model identification**: finding the true data-generating process. BIC is consistent -- it selects the true model with probability approaching 1 as $n \to \infty$.
+    - Parsimony is important (e.g., scientific interpretation requires the simplest adequate model).
+    - The sample size is large and you want to guard against overfitting.
+
+    In practice, reporting both criteria and noting any disagreements provides the most informative analysis.

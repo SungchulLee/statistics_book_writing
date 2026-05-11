@@ -1,9 +1,5 @@
 # Chapter 6: Statistical Estimation
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Overview
 
 This chapter formalizes the central question of statistical inference: given observed data, how do we construct good estimators, and how do we measure what "good" means? It develops the theoretical framework for evaluating estimator quality --- bias, variance, mean squared error, consistency, efficiency, and sufficiency --- and then presents three systematic methods for constructing estimators: Maximum Likelihood Estimation, the Method of Moments, and Bayesian estimation.

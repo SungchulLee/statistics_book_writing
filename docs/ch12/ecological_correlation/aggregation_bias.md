@@ -101,3 +101,65 @@ Understanding aggregation bias provides the unified framework for recognizing wh
 ## Summary
 
 Aggregation bias is the systematic distortion of statistical relationships that occurs when data are analyzed at a more aggregated level than they were generated. Averaging inflates correlations, distorts regression slopes, and can reverse associations. The bias arises from the loss of within-group variation and the potential for confounding at the group level. Individual-level analysis and multilevel models are the primary defenses against aggregation bias.
+
+## Exercises
+
+**Exercise 1.**
+A study of 100 cities finds a correlation of $r = 0.85$ between average income and average life expectancy. A study of 10,000 individuals within those cities finds $r = 0.25$. Explain the discrepancy.
+
+??? success "Solution to Exercise 1"
+    The discrepancy is due to **aggregation bias**. When data are aggregated to the city level, individual-level variability within each city is averaged out, leaving only between-city variation. Since cities with higher average incomes also tend to have higher average life expectancy (due to better infrastructure, healthcare, etc.), the city-level correlation is inflated.
+
+    At the individual level, the income-life expectancy relationship is weaker because within any given city, rich and poor individuals have more similar life expectancies than the city-level averages suggest. The within-city variation (which dilutes the correlation) is invisible in the aggregated data.
+
+    Mathematically, the ecological correlation can be decomposed: $r_{\text{eco}} \approx r_{\text{between}} \cdot w$, where $w > 1$ reflects the variance ratio between groups versus within groups.
+
+---
+
+**Exercise 2.**
+Explain why aggregation always tends to inflate the absolute value of correlations (in most practical settings).
+
+??? success "Solution to Exercise 2"
+    Aggregation (averaging within groups) removes within-group variation and retains only between-group variation. Since:
+
+    $$
+    \text{Var}(X) = \text{Var}_{\text{between}}(\bar{X}_g) + E[\text{Var}_{\text{within}}(X \mid g)]
+    $$
+
+    the total variance is the sum of between-group and within-group components. After aggregation, only the between-group variance remains, which is smaller.
+
+    If the between-group relationship is stronger than the within-group relationship (which is typical -- group-level averages follow the trend more closely because idiosyncratic noise cancels out), then the correlation among group means exceeds the individual-level correlation.
+
+    Exception: if the between-group and within-group relationships have opposite signs (Simpson's paradox), aggregation can actually reduce or reverse the correlation.
+
+---
+
+**Exercise 3.**
+A marketing analyst aggregates customer data by region and finds a strong positive correlation between advertising spend and sales. Why might this overstate the individual-level effectiveness of advertising?
+
+??? success "Solution to Exercise 3"
+    Several sources of aggregation bias are at play:
+
+    1. **Confounding at the region level:** Regions with higher sales potential (larger population, higher income) naturally receive more advertising budget. The correlation reflects this resource allocation decision, not the causal effect of advertising.
+
+    2. **Loss of within-region variation:** Within each region, individual customers' exposure to advertising varies, but this variation is lost after averaging. The region-level correlation captures only the fact that high-ad regions have high sales, missing the individual-level noise.
+
+    3. **Reverse causality:** Companies may allocate more advertising to regions that already have strong sales (reward good performance), inflating the aggregated correlation.
+
+    To estimate the true individual-level effectiveness, the analyst should use individual-level data or, better yet, run a randomized experiment (A/B test) at the individual or small-group level.
+
+---
+
+**Exercise 4.**
+Propose a method to estimate individual-level correlations from group-level data, or explain why this is generally impossible without additional assumptions.
+
+??? success "Solution to Exercise 4"
+    In general, individual-level correlations **cannot** be uniquely recovered from group-level data without additional assumptions. This is because different individual-level data structures can produce the same group-level summaries (the mapping from individual data to aggregate statistics is many-to-one).
+
+    Approaches that attempt partial recovery include:
+
+    1. **Ecological inference models** (King, 1997): Impose distributional assumptions on the within-group variation to bound or estimate individual-level quantities.
+    2. **Multilevel models:** If both group-level and some individual-level data are available, hierarchical models can separate between-group and within-group effects.
+    3. **External validation:** Use individual-level data from a subset of groups to calibrate the aggregation bias.
+
+    The safest approach is to collect individual-level data whenever the research question is about individual-level associations. No statistical method can fully overcome the information loss from aggregation.

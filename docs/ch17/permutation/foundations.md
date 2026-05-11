@@ -1,9 +1,6 @@
 # Permutation Tests: Foundations
 
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Overview
 
 Permutation tests are a resampling-based approach to hypothesis testing that does not rely on parametric assumptions. Rather than assuming a particular probability distribution (like the normal distribution), permutation tests use the observed data to generate a distribution of the test statistic under the null hypothesis by randomly shuffling or rearranging the data.
@@ -22,6 +19,7 @@ Permutation tests are valuable because they:
 ### The Core Logic
 
 Under the null hypothesis of no difference between groups:
+
 - The group labels (e.g., "Page A" vs "Page B") are arbitrary
 - Randomly rearranging these labels should produce test statistics as extreme as (or more extreme than) the observed value with probability related to the p-value
 - This random rearrangement creates an empirical null distribution
@@ -177,3 +175,14 @@ For exact p-values with small samples, consider enumeration of all possible perm
 ## Summary
 
 Permutation tests provide a powerful, assumption-free approach to hypothesis testing. They are especially valuable in A/B testing, where the data generation process is controlled and the null hypothesis (no difference between groups) is natural to assume. By repeatedly shuffling group labels, we can determine whether the observed difference is likely due to chance alone.
+
+## Exercises
+
+**Exercise 1.**
+Consider a permutation test for $H_0: \mu_X = \mu_Y$ when the two populations have the same mean but different variances ($\sigma_X^2 \neq \sigma_Y^2$).
+
+(a) Is the exchangeability assumption satisfied under $H_0$?
+
+(b) Can this lead to inflated Type I error? Explain.
+
+(c) How would you modify the test to handle this case?

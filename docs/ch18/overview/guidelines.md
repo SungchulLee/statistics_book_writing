@@ -100,3 +100,14 @@ A systematic approach to regularized regression:
 ## Summary
 
 The choice among ridge, lasso, and elastic net depends on the expected sparsity of the true model, the correlation structure of predictors, the dimensionality of the problem, and the goal of the analysis. Ridge suits dense models with correlated predictors. Lasso suits sparse models with uncorrelated predictors. The elastic net provides a robust default when the data structure is uncertain, combining sparsity with grouping of correlated features. A systematic workflow of standardization, correlation analysis, candidate method selection, cross-validated tuning, and final validation provides a principled approach to regularized regression.
+
+## Exercises
+
+**Exercise 1.**
+Using the Boston Housing or California Housing dataset:
+
+(a) Fit all three regularized models and OLS. Compare test MSE.
+
+(b) Plot the regularization paths. At what $\lambda$ values do coefficients become zero for Lasso?
+
+(c) Use the one-standard-error rule for model selection. How does the selected model compare to the minimum-CV-error model?

@@ -73,3 +73,83 @@ $$
 $$
 
 Since $\text{Var}(\bar{X}) = \text{Var}(X_1)/n = \lambda/n$, the MLE achieves this bound exactly. No unbiased estimator of $\lambda$ can have smaller variance, making $\bar{X}$ the uniformly minimum variance unbiased estimator (UMVUE) for the Poisson rate.
+
+## Exercises
+
+**Exercise 1.**
+Derive the MLE of $\lambda$ for a random sample $X_1, \dots, X_n \overset{\text{iid}}{\sim} \text{Poisson}(\lambda)$.
+
+??? success "Solution to Exercise 1"
+    The log-likelihood is:
+
+    $$
+    \ell(\lambda) = \sum_{i=1}^n \bigl(x_i \log\lambda - \lambda - \log(x_i!)\bigr) = \left(\sum x_i\right)\log\lambda - n\lambda - \sum\log(x_i!)
+    $$
+
+    Setting the derivative to zero:
+
+    $$
+    \frac{d\ell}{d\lambda} = \frac{\sum x_i}{\lambda} - n = 0 \implies \hat{\lambda} = \frac{\sum x_i}{n} = \bar{X}
+    $$
+
+    The second derivative is $-\sum x_i / \lambda^2 < 0$ (for $\sum x_i > 0$), confirming the maximum.
+
+---
+
+**Exercise 2.**
+A hospital emergency department records the number of arrivals per hour over 24 hours: the total count is 168. Find the MLE of the hourly arrival rate $\lambda$ and construct an approximate 95% confidence interval.
+
+??? success "Solution to Exercise 2"
+    With $n = 24$ hours and $\sum x_i = 168$:
+
+    $$
+    \hat{\lambda} = \frac{168}{24} = 7.0 \text{ arrivals per hour}
+    $$
+
+    The Fisher information for one Poisson observation is $I(\lambda) = 1/\lambda$, so the asymptotic variance is:
+
+    $$
+    \text{Var}(\hat{\lambda}) \approx \frac{1}{nI(\lambda)} = \frac{\lambda}{n} \approx \frac{7.0}{24} = 0.2917
+    $$
+
+    The standard error is $\text{SE} = \sqrt{0.2917} \approx 0.5401$.
+
+    The 95% confidence interval is:
+
+    $$
+    7.0 \pm 1.96 \times 0.5401 = 7.0 \pm 1.059 = (5.94, 8.06)
+    $$
+
+---
+
+**Exercise 3.**
+Show that the MLE $\hat{\lambda} = \bar{X}$ is unbiased and compute its exact variance.
+
+??? success "Solution to Exercise 3"
+    Since each $X_i$ has $E[X_i] = \lambda$:
+
+    $$
+    E[\hat{\lambda}] = E[\bar{X}] = \frac{1}{n}\sum_{i=1}^n E[X_i] = \lambda
+    $$
+
+    So $\hat{\lambda}$ is unbiased.
+
+    Since $\text{Var}(X_i) = \lambda$ for the Poisson and the $X_i$ are independent:
+
+    $$
+    \text{Var}(\hat{\lambda}) = \text{Var}(\bar{X}) = \frac{\lambda}{n}
+    $$
+
+    This is exactly the Cramer-Rao lower bound $1/(nI(\lambda)) = \lambda/n$, so $\hat{\lambda} = \bar{X}$ is the UMVUE (uniformly minimum variance unbiased estimator) for $\lambda$. $\square$
+
+---
+
+**Exercise 4.**
+The Poisson MLE $\hat{\lambda} = \bar{X}$ is also the sufficient statistic (up to a scale). Using the Rao-Blackwell theorem, explain why no other unbiased estimator can have smaller variance.
+
+??? success "Solution to Exercise 4"
+    The sufficient statistic for $\lambda$ is $T = \sum X_i$ (by the factorization theorem). The MLE $\hat{\lambda} = T/n$ is already a function of $T$.
+
+    By the Rao-Blackwell theorem, any unbiased estimator conditioned on $T$ has variance no larger than the original. Since $\hat{\lambda}$ is already a function of $T$, conditioning any other unbiased estimator on $T$ cannot improve upon $\hat{\lambda}$.
+
+    Moreover, the Poisson family is a complete exponential family, so the Lehmann-Scheffe theorem guarantees that $\hat{\lambda} = T/n$ is the unique UMVUE. Its variance $\lambda/n$ equals the Cramer-Rao lower bound, confirming that no unbiased estimator (not just linear ones) can do better.

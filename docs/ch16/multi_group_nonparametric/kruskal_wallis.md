@@ -133,3 +133,81 @@ A significant Kruskal-Wallis result tells us that at least one group differs, bu
 ## Summary
 
 The Kruskal-Wallis test extends the rank-sum approach to $k \ge 2$ independent groups by comparing the between-group variance of mean ranks. Under the null hypothesis of identical distributions, the $H$ statistic follows an approximate $\chi^2_{k-1}$ distribution. The test achieves an ARE of $3/\pi \approx 0.955$ relative to one-way ANOVA under normality and can be substantially more powerful under non-normal conditions. When $H$ is significant, post-hoc procedures such as [Dunn's test](dunn.md) identify which pairs of groups differ.
+
+## Exercises
+
+**Exercise 1.**
+Three fertilizers are tested on plant growth (height in cm after 4 weeks):
+
+- **Fertilizer A**: 15, 18, 20, 17
+- **Fertilizer B**: 22, 25, 19, 23
+- **Fertilizer C**: 12, 14, 16, 13
+
+**(a)** Combine all observations and assign ranks.
+
+**(b)** Compute the mean rank for each group.
+
+**(c)** The Kruskal-Wallis test statistic is:
+
+$$
+H = \frac{12}{N(N+1)} \sum_{i=1}^{k} n_i (\bar{R}_i - \bar{R})^2
+$$
+
+where $N$ is the total sample size, $n_i$ is the size of group $i$, $\bar{R}_i$ is the mean rank for group $i$, and $\bar{R} = (N+1)/2$. Compute $H$.
+
+**(d)** Under $H_0$, $H$ approximately follows a $\chi^2$ distribution with $k - 1$ degrees of freedom. Find the p-value and state your conclusion at $\alpha = 0.05$.
+
+??? success "Solution to Exercise 1"
+
+    **(a)** Combined and sorted with ranks:
+
+    | Value | Group | Rank |
+    |:---:|:---:|:---:|
+    | 12 | C | 1 |
+    | 13 | C | 2 |
+    | 14 | C | 3 |
+    | 15 | A | 4 |
+    | 16 | C | 5 |
+    | 17 | A | 6 |
+    | 18 | A | 7 |
+    | 19 | B | 8 |
+    | 20 | A | 9 |
+    | 22 | B | 10 |
+    | 23 | B | 11 |
+    | 25 | B | 12 |
+
+    **(b)** Mean ranks:
+
+    $$
+    \bar{R}_A = \frac{4 + 6 + 7 + 9}{4} = \frac{26}{4} = 6.5
+    $$
+
+    $$
+    \bar{R}_B = \frac{8 + 10 + 11 + 12}{4} = \frac{41}{4} = 10.25
+    $$
+
+    $$
+    \bar{R}_C = \frac{1 + 2 + 3 + 5}{4} = \frac{11}{4} = 2.75
+    $$
+
+    The overall mean rank is $\bar{R} = (N+1)/2 = 13/2 = 6.5$.
+
+    **(c)**
+
+    $$
+    H = \frac{12}{12 \times 13} \sum_{i=1}^{3} 4(\bar{R}_i - 6.5)^2
+    $$
+
+    $$
+    = \frac{12}{156}\left[4(6.5 - 6.5)^2 + 4(10.25 - 6.5)^2 + 4(2.75 - 6.5)^2\right]
+    $$
+
+    $$
+    = \frac{1}{13}\left[4(0) + 4(14.0625) + 4(14.0625)\right] = \frac{1}{13}(0 + 56.25 + 56.25) = \frac{112.5}{13} \approx 8.654
+    $$
+
+    **(d)** Under $H_0$, $H \sim \chi^2(k-1) = \chi^2(2)$. The critical value for $\chi^2(2)$ at $\alpha = 0.05$ is 5.991.
+
+    Since $H = 8.654 > 5.991$, we reject $H_0$. The p-value is $P(\chi^2(2) > 8.654) \approx 0.013$.
+
+    There is significant evidence that the three fertilizers produce different growth distributions. Post-hoc analysis (e.g., Dunn's test) would be needed to determine which pairs differ.

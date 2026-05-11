@@ -193,3 +193,26 @@ for the multiple comparisons across all time points.
     about the entire survival curve (e.g., "the true curve lies within this
     band at all time points").  For reporting survival at a specific landmark
     time (e.g., 5-year survival), pointwise intervals suffice.
+
+## Exercises
+
+**Exercise 1.**
+Greenwood's Formula
+
+Using the Kaplan--Meier estimates from Exercise 2, compute the standard error
+of $\hat{S}(8)$ using Greenwood's formula and construct a 95% pointwise
+confidence interval using the linear method.
+
+??? success "Solution to Exercise 1"
+
+    $\hat{S}(8) = 0.675$. Greenwood's sum through $t = 8$:
+
+    $$
+    \frac{1}{10 \times 9} + \frac{1}{8 \times 7} + \frac{1}{7 \times 6} = 0.0111 + 0.0179 + 0.0238 = 0.0528
+    $$
+
+    $$
+    \text{se}(\hat{S}(8)) = 0.675 \times \sqrt{0.0528} = 0.675 \times 0.2298 = 0.155
+    $$
+
+    95% CI (linear): $0.675 \pm 1.96 \times 0.155 = (0.371, 0.979)$.

@@ -1,9 +1,5 @@
 # Mean, Median, Mode
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Overview
 
 Central tendency measures identify the center of a data distribution, summarizing a dataset with a single representative value. The three most commonly used measures are the **mean**, **median**, and **mode**. Each has distinct properties, strengths, and weaknesses that make it appropriate for different situations.
@@ -368,3 +364,111 @@ print(f"{modes = }")  # Returns all modes: [2, 3]
 ## Summary
 
 Each measure of central tendency serves a distinct purpose. The mean provides a mathematical average but is vulnerable to outliers, the median offers a robust center that resists extreme values, and the mode identifies the most frequent observation. Choosing the appropriate measure depends on the data's distribution shape and the analytical question at hand.
+
+## Exercises
+
+**Exercise 1.**
+A small company has five employees with annual salaries (in thousands of dollars): $35, 40, 42, 45, 250$.
+
+**(a)** Compute the sample mean and the sample median.
+**(b)** Replace the CEO's $\$250\text{k}$ salary with $\$500\text{k}$. Recompute the mean and median. Which changed more?
+**(c)** Explain why the median is a *robust* measure of central tendency while the mean is not.
+
+??? success "Solution to Exercise 1"
+    (a) $\bar{x} = 412/5 = 82.4$, median $= 42$.
+
+    (b) After the change: $\bar{x} = 662/5 = 132.4$, median still $= 42$. The mean rose by 50 (a 60.7% jump); the median is unchanged.
+
+    (c) The median depends only on the *rank* of observations; changing the magnitude of any one observation (while preserving its rank) leaves it unchanged. The median has a breakdown point near 50% — about half the data must be corrupted before it can be moved arbitrarily. The mean's breakdown point is 0: a single extreme observation can move it arbitrarily far. This robustness/efficiency trade-off is fundamental.
+
+---
+
+**Exercise 2.**
+Estimate the mean and variance from this grouped frequency table:
+
+| Score range | Midpoint $m_i$ | Frequency $f_i$ |
+|:---:|:---:|:---:|
+| 50–59 | 54.5 | 3 |
+| 60–69 | 64.5 | 5 |
+| 70–79 | 74.5 | 10 |
+| 80–89 | 84.5 | 8 |
+| 90–99 | 94.5 | 4 |
+
+Use $\bar{x} = \sum f_i m_i / \sum f_i$ and $s^2 = \sum f_i (m_i - \bar{x})^2 / (n - 1)$. Why are these *estimates* rather than exact values?
+
+??? success "Solution to Exercise 2"
+    $\sum f_i m_i = 163.5 + 322.5 + 745 + 676 + 378 = 2285$, so $\bar{x} = 2285/30 \approx 76.17$.
+
+    Weighted squared deviations (showing the totals): $\sum f_i (m_i - \bar{x})^2 \approx 4016.7$, so $s^2 \approx 4016.7/29 \approx 138.5$, $s \approx 11.77$.
+
+    **Estimates because** we substitute the midpoint $m_i$ for every observation in that bin — the true scores within "70–79" could lie anywhere in $[70, 79)$, not all at 74.5. The approximation is exact when the data are uniformly distributed within each bin and improves as bins narrow.
+
+---
+
+**Exercise 3.**
+Prove that the sample mean $\bar{x} = (1/n)\sum x_i$ is the unique minimizer of $\sum (x_i - c)^2$ over $c \in \mathbb{R}$. What does the median minimize?
+
+??? success "Solution to Exercise 3"
+    **Mean:** differentiate $f(c) = \sum (x_i - c)^2$ with respect to $c$:
+
+    $$
+    f'(c) = -2 \sum (x_i - c) = 0 \implies c = \frac{1}{n}\sum x_i = \bar{x}
+    $$
+
+    Since $f''(c) = 2n > 0$, this is the unique minimum. The mean minimizes squared error.
+
+    **Median:** the *median* minimizes the absolute-error loss $g(c) = \sum |x_i - c|$. The proof goes through subgradients: the derivative of $|x - c|$ with respect to $c$ is $-\mathrm{sign}(x - c)$, so $g'(c) = -(\#\{x_i > c\} - \#\{x_i < c\})$. Setting this to zero requires the number of $x_i$ above $c$ to equal the number below — which is the definition of the median.
+
+    The two measures are the $L^2$ and $L^1$ projections of the data onto the constants, respectively. This characterization extends to quantile regression: the $\tau$-th quantile minimizes the asymmetric absolute loss $\sum \rho_\tau(x_i - c)$ where $\rho_\tau(u) = u(\tau - \mathbf{1}\{u < 0\})$.
+
+---
+
+**Exercise 4.**
+A dataset has $n = 100$ observations with sample mean 50 and sample standard deviation 10. A single observation is corrupted from 60 to 1060. How does the sample mean change? How does the sample standard deviation change? Compare with what would happen to a 10%-trimmed mean.
+
+??? success "Solution to Exercise 4"
+    **Mean:** the new mean is $\bar{x}_{\text{new}} = 50 + (1060 - 60)/100 = 50 + 10 = 60$. The mean jumped by 10 — the entire population SD.
+
+    **SD:** the contribution of the new observation to the sum of squared deviations becomes large: $\sum (x_i - \bar{x})^2$ increases roughly by $(1060 - 60)^2 \approx 10^6$. Recomputing precisely, $s^2_{\text{new}} \approx 10^4 + O(10^4 / n)$, so $s_{\text{new}} \approx 100$ — a tenfold inflation.
+
+    **10%-trimmed mean:** the corrupted observation is in the top 10% of the data (likely the maximum), so it is trimmed. The trimmed mean is computed only from the middle 80% of the sorted data and is hardly affected: it might change by less than 0.1 units.
+
+    Lesson: a single corrupted observation can severely distort both the mean and especially the standard deviation, while trimmed estimators are immune. This is why robust statistics matter in real data.
+
+---
+
+**Exercise 5.**
+The mean, median, and mode are equal in a symmetric unimodal distribution; in a right-skewed distribution they are ordered Mode < Median < Mean. Prove the **mean is greater than the median** for any continuous distribution with finite mean whose density is positive on a half-line and decreasing on the upper tail (a typical right-skewed distribution like Exponential or Lognormal).
+
+??? success "Solution to Exercise 5"
+    Let $m$ denote the median (so $P(X \le m) = P(X \ge m) = 1/2$) and $\mu = \mathbb{E}[X]$.
+
+    $$
+    \mu - m = \mathbb{E}[X - m] = \int_{-\infty}^m (x - m) f(x)\,dx + \int_m^{\infty} (x - m) f(x)\,dx
+    $$
+
+    Substituting $u = m - x$ in the first integral and $v = x - m$ in the second:
+
+    $$
+    \mu - m = -\int_0^{\infty} u\, f(m - u)\,du + \int_0^{\infty} v\, f(m + v)\,dv = \int_0^{\infty} v\,[f(m + v) - f(m - v)]\,dv
+    $$
+
+    For a right-skewed distribution, the right tail $f(m + v)$ stays positive longer than the left tail $f(m - v)$ decays. Specifically, if $f$ decreases more slowly to the right of $m$ than to the left, $f(m + v) > f(m - v)$ for $v$ in the relevant tail range, making the integrand positive on average, so $\mu - m > 0$.
+
+    A clean special case: Exponential$(\lambda)$ has $m = \ln(2)/\lambda \approx 0.693/\lambda$ while $\mu = 1/\lambda > 0.693/\lambda$. $\square$
+
+---
+
+**Exercise 6.**
+The **mode** is the value of $x$ maximizing the density (or PMF). For a continuous unimodal symmetric distribution, the mean, median, and mode all coincide. But for a *mixture* of two Gaussians, even a "symmetric" mixture, the mode can disagree with the mean. Construct a bimodal symmetric mixture, identify all modes, and explain when the data analyst should report each.
+
+??? success "Solution to Exercise 6"
+    Consider $f(x) = 0.5 \cdot \phi(x; -3, 1) + 0.5 \cdot \phi(x; 3, 1)$ where $\phi(\cdot; \mu, \sigma)$ is the normal density. The mixture is symmetric about $x = 0$:
+
+    - **Mean** $= \mu = 0$ (symmetry).
+    - **Median** $= 0$ (symmetry).
+    - **Modes** $= -3$ and $+3$ (local maxima of $f$).
+
+    The mean and median land in a *valley* of the density — a point where the mixture is *least* probable. They are technically correct measures of center, but they convey misleading intuition for a bimodal distribution.
+
+    **What to report:** when a histogram or density estimate reveals bimodality, the analyst should describe the modes and their relative weights, not just a single measure of center. Saying "the average household income is \$60,000" is technically correct but actively misleading if the underlying distribution is bimodal (working class vs. professional class). Visualization first; central-tendency summary second. Modern reporting practice often includes a **kernel density plot** alongside summary statistics for exactly this reason.

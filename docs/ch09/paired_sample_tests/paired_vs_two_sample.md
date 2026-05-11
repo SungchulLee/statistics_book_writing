@@ -1,9 +1,5 @@
 # When to Use Paired vs Two-Sample Tests
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Overview
 
 Choosing between a paired-sample test and a two-sample test is a fundamental decision in hypothesis testing. The choice depends on the study design and how the data were collected, not on the data values themselves.
@@ -72,3 +68,55 @@ If the samples are drawn independently and there is no meaningful way to pair sp
 ## Common Mistake
 
 A common mistake is to use a two-sample test when a paired test is appropriate. This ignores the correlation between paired observations, leading to a larger standard error and reduced statistical power. Always examine the study design carefully before selecting the test.
+
+## Exercises
+
+**Exercise 1.**
+For each scenario, determine whether a paired or two-sample test is appropriate: (a) comparing reaction times of participants under caffeine vs. placebo in a crossover design, (b) comparing test scores of students in two different schools.
+
+??? success "Solution to Exercise 1"
+    **(a) Paired test.** In a crossover design, each participant is tested under both conditions (caffeine and placebo). The same person provides both measurements, creating natural pairs. A paired $t$-test on the within-subject differences is appropriate.
+
+    **(b) Two-sample test.** Students in School A and School B are different individuals with no natural pairing. A two-sample $t$-test (or Welch's $t$-test if variances are unequal) is appropriate.
+
+---
+
+**Exercise 2.**
+A study measures anxiety scores of 20 patients before and after therapy. The mean difference is $\bar{d} = -5.2$ with $s_d = 8.1$. Conduct a paired $t$-test of $H_0: \mu_d = 0$ at $\alpha = 0.05$.
+
+??? success "Solution to Exercise 2"
+    The test statistic is:
+
+    $$
+    t = \frac{\bar{d} - 0}{s_d / \sqrt{n}} = \frac{-5.2}{8.1/\sqrt{20}} = \frac{-5.2}{1.812} \approx -2.87
+    $$
+
+    With $df = 19$, the critical values for a two-sided test are $\pm t_{19, 0.025} = \pm 2.093$. Since $|t| = 2.87 > 2.093$, we **reject** $H_0$. The therapy produced a statistically significant reduction in anxiety scores.
+
+---
+
+**Exercise 3.**
+Explain why the paired test is generally more powerful than the two-sample test when there is positive within-pair correlation.
+
+??? success "Solution to Exercise 3"
+    The paired test works with the differences $d_i = x_{1i} - x_{2i}$, whose variance is:
+
+    $$
+    \text{Var}(D) = \sigma_1^2 + \sigma_2^2 - 2\rho\sigma_1\sigma_2
+    $$
+
+    When $\rho > 0$, the term $-2\rho\sigma_1\sigma_2$ reduces $\text{Var}(D)$ below the independent-sample variance $\sigma_1^2 + \sigma_2^2$. A smaller variance of differences produces a smaller standard error, a larger test statistic for the same true effect, and therefore higher power. The higher the within-pair correlation, the greater the power advantage of the paired test.
+
+---
+
+**Exercise 4.**
+A researcher has matched pairs of twins assigned to two different treatments. However, 3 of the 15 pairs have one twin drop out, leaving unmatched data. Discuss the options for analyzing this data.
+
+??? success "Solution to Exercise 4"
+    The researcher has three options:
+
+    1. **Analyze only complete pairs** ($n = 12$): Use a paired $t$-test on the 12 complete pairs. This is simple but discards data from the 3 incomplete pairs, reducing power.
+
+    2. **Use a mixed approach**: Analyze the 12 complete pairs with a paired test and the 6 remaining individuals (3 from each group, if both groups lose a twin) with a two-sample test, then combine the results. This is complex and rarely done in practice.
+
+    3. **Use a linear mixed model**: Fit a model that accounts for the twin-pair structure as a random effect. This approach can handle both complete and incomplete pairs, using all available data. This is the recommended modern approach as it maximizes power while correctly accounting for the paired structure.

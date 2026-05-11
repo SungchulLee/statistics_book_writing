@@ -1,9 +1,6 @@
 # Independence Assumption
 
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Definition
 
 The independence assumption states that the residuals (errors) of the regression model are independent of each other. In other words, the error for one observation should not be related to the error for another observation.
@@ -47,3 +44,28 @@ Independence is particularly critical in **time-series data**, where errors may 
 - **Newey-West Standard Errors:** Heteroscedasticity and autocorrelation consistent (HAC) standard errors provide valid inference even when independence is violated.
 
 For detailed diagnostic methods, see [Checking Independence](checking_independence.md).
+## Exercises
+
+**Exercise 1.**
+State the mathematical definition of the independence assumption for regression residuals. Give one example of a dataset where this assumption is likely violated.
+
+??? success "Solution to Exercise 1"
+    The independence assumption requires:
+
+    $$
+    \text{Cov}(\varepsilon_i, \varepsilon_j) = 0 \quad \text{for all } i \neq j
+    $$
+
+    **Example:** Monthly stock returns regressed on market factors. Returns in adjacent months are likely autocorrelated because economic conditions persist over time, causing $\text{Cov}(\varepsilon_t, \varepsilon_{t+1}) \neq 0$.
+
+---
+
+**Exercise 2.**
+Explain why violating the independence assumption is considered more serious than violating normality or homoscedasticity. What makes it harder to fix?
+
+??? success "Solution to Exercise 2"
+    Independence violations are more serious because they affect the **core structure** of the statistical inference:
+
+    - Standard errors become biased (not just inefficient), making all $t$-tests and $F$-tests invalid.
+    - The effective sample size is smaller than the nominal $n$, so confidence intervals are misleadingly narrow.
+    - Unlike heteroscedasticity (fixable with robust SEs) or non-normality (mitigated by CLT), independence violations require fundamentally different models (mixed-effects, time-series models, GEE) that account for the correlation structure.

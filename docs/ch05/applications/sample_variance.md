@@ -1,8 +1,5 @@
 # Sampling Distribution of S-squared
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Overview
 
 The **sampling distribution of the sample variance** $S^2$ describes how the variance computed from a random sample behaves across repeated samples drawn from a population. This concept is critical for understanding how precisely we can estimate the true population variance $\sigma^2$.
@@ -227,3 +224,117 @@ plt.show()
 | Distribution | $\frac{(n-1)S^2}{\sigma^2} \sim \chi^2_{n-1}$ (under normality only) |
 | Robustness | ❌ No CLT-like guarantee — sensitive to non-normality |
 | CI for $\sigma^2$ | Asymmetric, based on chi-square quantiles |
+
+## Exercises
+
+**Exercise 1.**
+**Mean and variance of $S^2$.** Sample of $n = 10$ from $N(\mu, 25)$. Compute (a) $\mathbb{E}[S^2]$, (b) $\mathrm{Var}(S^2)$.
+
+??? success "Solution to Exercise 1"
+    (a) $\mathbb{E}[S^2] = \sigma^2 = 25$ (Bessel's correction makes $S^2$ unbiased).
+
+    (b) Under normality, $(n-1) S^2/\sigma^2 \sim \chi^2_{n-1}$. Variance of $\chi^2_{n-1}$ is $2(n-1)$. Therefore:
+
+    $$
+    \mathrm{Var}(S^2) = \frac{\sigma^4}{(n-1)^2} \cdot 2(n-1) = \frac{2\sigma^4}{n-1} = \frac{2 \cdot 625}{9} \approx 138.9
+    $$
+
+    SD of $S^2 \approx 11.8$ — substantial variability. With $n = 10$, the variance estimate is very noisy.
+
+---
+
+**Exercise 2.**
+**$P(S^2 > 30)$.** Same setup: $n = 10$, $\sigma^2 = 25$, normal population.
+
+??? success "Solution to Exercise 2"
+    $\chi^2 = (n-1)s^2/\sigma^2 = 9 \cdot 30/25 = 10.8$.
+
+    $P(S^2 > 30) = P(\chi^2_9 > 10.8) \approx 0.290$. About 29%.
+
+    Even though the true variance is 25, the sample variance can easily exceed 30 due to sampling variability — a routine occurrence with small samples.
+
+---
+
+**Exercise 3.**
+**Without normality.** What can be said about $P(S^2 > 30)$ if the population is not assumed normal?
+
+??? success "Solution to Exercise 3"
+    Without normality, $(n-1)S^2/\sigma^2$ does *not* follow $\chi^2_{n-1}$. The chi-squared result is normal-specific.
+
+    $\mathbb{E}[S^2] = \sigma^2$ remains valid (no normality needed for unbiasedness), but the distribution of $S^2$ can be quite different.
+
+    **Chebyshev's bound** can be used if $\mathrm{Var}(S^2)$ is known, but in general $\mathrm{Var}(S^2)$ depends on the fourth moment of the population (the kurtosis), which is sensitive to the distribution shape.
+
+    **Practical:** for skewed or heavy-tailed data, $S^2$ has *more* variance than the chi-squared formula suggests. Bootstrap is the recommended tool for inference about $\sigma^2$ in non-normal settings.
+
+---
+
+**Exercise 4.**
+**Prove the chi-square distribution of $S^2$** under normality. Specifically: if $X_1, \ldots, X_n$ are i.i.d. $N(\mu, \sigma^2)$, then $(n-1)S^2/\sigma^2 \sim \chi^2_{n-1}$.
+
+??? success "Solution to Exercise 4"
+    Decompose:
+
+    $$
+    \frac{1}{\sigma^2}\sum_{i=1}^n (X_i - \mu)^2 = \frac{1}{\sigma^2}\sum_{i=1}^n (X_i - \bar X)^2 + \frac{n(\bar X - \mu)^2}{\sigma^2}
+    $$
+
+    The left side $\sim \chi^2_n$ (sum of $n$ squared standard normals). The second term on the right $\sim \chi^2_1$ (square of $\sqrt n(\bar X - \mu)/\sigma \sim N(0, 1)$).
+
+    By **Cochran's theorem** (applied to orthogonal projection of $X$ onto $\mathrm{span}\{\mathbf 1\}$ and its orthogonal complement), the two terms on the right are independent. So:
+
+    $$
+    \chi^2_n = \frac{(n-1) S^2}{\sigma^2} + \chi^2_1
+    $$
+
+    with two independent chi-squareds on the right. By moment-generating function properties, $(n-1) S^2/\sigma^2 \sim \chi^2_{n-1}$.
+
+    $\square$
+
+    This derivation underpins all of normal-theory inference about $\sigma^2$ and is the reason $t$ and $F$ distributions arise naturally.
+
+---
+
+**Exercise 5.**
+**Confidence interval for $\sigma^2$.** Given $n = 10$, $s^2 = 16$ from a normal population, construct a 95% CI for $\sigma^2$.
+
+??? success "Solution to Exercise 5"
+    Pivot: $(n-1)s^2/\sigma^2 \sim \chi^2_9$.
+
+    95% CI uses $\chi^2_{0.025, 9} = 2.700$ and $\chi^2_{0.975, 9} = 19.023$:
+
+    $$
+    P(2.700 \le 9 s^2/\sigma^2 \le 19.023) = 0.95
+    $$
+
+    Inverting:
+
+    $$
+    \frac{9 s^2}{19.023} \le \sigma^2 \le \frac{9 s^2}{2.700}
+    $$
+
+    With $s^2 = 16$: CI $= (9 \cdot 16/19.023, 9 \cdot 16/2.700) = (7.57, 53.33)$.
+
+    Wide and asymmetric — chi-squared is skewed for small df. With $n = 10$, the variance is barely constrained. The CI shrinks as $n$ grows.
+
+---
+
+**Exercise 6.**
+**$S^2$ vs. $\sigma^2_{\text{MLE}}$.** The MLE of $\sigma^2$ uses denominator $n$, not $n - 1$. Compare bias, variance, and MSE.
+
+??? success "Solution to Exercise 6"
+    $S^2 = \frac{1}{n-1}\sum(X_i - \bar X)^2$ (unbiased): $\mathbb{E}[S^2] = \sigma^2$, $\mathrm{Var}(S^2) = 2\sigma^4/(n-1)$.
+
+    $\hat\sigma^2_{\text{MLE}} = \frac{1}{n}\sum(X_i - \bar X)^2 = \frac{n-1}{n} S^2$ (biased): $\mathbb{E}[\hat\sigma^2_{\text{MLE}}] = (n-1)\sigma^2/n$.
+
+    $\mathrm{Var}(\hat\sigma^2_{\text{MLE}}) = ((n-1)/n)^2 \cdot 2\sigma^4/(n-1) = 2(n-1)\sigma^4/n^2$.
+
+    $\mathrm{MSE}(\hat\sigma^2_{\text{MLE}}) = \mathrm{Var} + \mathrm{bias}^2 = 2(n-1)\sigma^4/n^2 + \sigma^4/n^2 = (2n-1)\sigma^4/n^2$.
+
+    $\mathrm{MSE}(S^2) = \mathrm{Var}(S^2) = 2\sigma^4/(n-1)$.
+
+    Compare ratios: $\mathrm{MSE}(\hat\sigma^2_{\text{MLE}})/\mathrm{MSE}(S^2) = (2n-1)(n-1)/(2n^2)$, less than 1 for all $n \ge 2$.
+
+    **MLE has smaller MSE** despite being biased — the lower variance more than compensates for the bias. This is a classic example of **bias-variance trade-off**: accepting some bias to reduce overall error.
+
+    Most software still uses $S^2$ (Bessel-corrected) because unbiasedness is a clean property and the MSE difference vanishes as $n \to \infty$.

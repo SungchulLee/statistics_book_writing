@@ -1,9 +1,5 @@
 # Heavy-Tailed Distributions
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Overview
 
 When the underlying distribution has heavy tails, the sample mean can have poor performance due to extreme observations. This is particularly relevant in finance, where asset returns exhibit substantially heavier tails than the normal distribution.
@@ -11,6 +7,7 @@ When the underlying distribution has heavy tails, the sample mean can have poor 
 ## Characteristics
 
 Heavy-tailed distributions have tails that decay slower than exponential. Examples include:
+
 - **Student's $t$ distribution** (with low degrees of freedom)
 - **Cauchy distribution** (undefined mean and variance)
 - **Pareto distribution** (power-law tails)
@@ -24,6 +21,7 @@ Tail weight is often quantified by **kurtosis**. The normal distribution has kur
 $$\text{Excess Kurtosis} = E\left[\left(\frac{X - \mu}{\sigma}\right)^4\right] - 3$$
 
 **Examples**:
+
 - Normal distribution: excess kurtosis = 0
 - Student's $t$ with df=5: excess kurtosis ≈ 6 (much heavier tails)
 - Real stock returns: excess kurtosis typically 3-10 (depend on frequency and asset)
@@ -56,6 +54,7 @@ Empirical evidence consistently shows that financial returns exhibit heavy tails
 ### Consequences for Risk Management
 
 If you assume normality when returns are heavy-tailed:
+
 - **Value at Risk (VaR)** at the 99th percentile is severely underestimated
 - **Expected Shortfall (CVaR)** is underestimated
 - **Hedging ratios** are too small, leaving positions under-protected
@@ -204,8 +203,65 @@ print(f"  Huber's estimator:   {huber(0.1, data).estimate:7.4f}")
 ## Summary
 
 Heavy-tailed distributions present significant challenges for statistical inference:
+
 - The sample mean is inefficient and unstable
 - Normal-theory confidence intervals are too narrow
 - Risk measures based on normality are dangerously optimistic
 
 For financial data especially, robust alternatives like the median, trimmed means, or M-estimators provide more reliable inference. Bootstrap methods (which require no distributional assumptions) are ideal for constructing confidence intervals around any of these estimators.
+
+## Exercises
+
+**Exercise 1.**
+The Cauchy distribution has PDF $f(x) = \frac{1}{\pi(1+x^2)}$. Show that its mean does not exist by demonstrating that $\int_{-\infty}^{\infty} |x| f(x)\,dx$ diverges.
+
+??? success "Solution to Exercise 1"
+    $$
+    \int_{-\infty}^{\infty} |x| f(x)\,dx = \frac{2}{\pi}\int_0^{\infty} \frac{x}{1+x^2}\,dx
+    $$
+
+    Using the substitution $u = 1 + x^2$, $du = 2x\,dx$:
+
+    $$
+    = \frac{2}{\pi} \cdot \frac{1}{2}\int_1^{\infty} \frac{du}{u} = \frac{1}{\pi}\left[\log u\right]_1^{\infty} = \frac{1}{\pi}(\infty - 0) = \infty
+    $$
+
+    Since $E[|X|] = \infty$, the mean $E[X]$ does not exist. The integral diverges logarithmically, which means even averaging over very large samples does not stabilize.
+
+---
+
+**Exercise 2.**
+A Student-$t$ distribution with $\nu$ degrees of freedom has finite variance only when $\nu > 2$. For $\nu = 3$, the variance is $\sigma^2 = \nu/(\nu-2) = 3$. Compare the sample mean's behavior for $n = 100$ observations from $t_3$ versus $N(0,3)$ in terms of the standard error of $\bar{X}$.
+
+??? success "Solution to Exercise 2"
+    For $N(0,3)$: the standard error is $\text{SE} = \sqrt{3/100} = \sqrt{0.03} \approx 0.173$. The CLT applies perfectly since the population is normal.
+
+    For $t_3$: the population variance is also 3, so the theoretical standard error is the same: $\text{SE} = \sqrt{3/100} \approx 0.173$. However, the $t_3$ distribution has excess kurtosis $\kappa = 6(\nu-2)^{-1} = 6$ (when $\nu > 4$ kurtosis is $6/(\nu-4)$; for $\nu = 3$, kurtosis is technically infinite since the fourth moment does not exist).
+
+    In practice, the sample mean from $t_3$ will show much more variability than predicted by the standard error formula because occasional extreme observations inflate $\bar{X}$ dramatically. The CLT convergence is very slow for $t_3$, and the normal approximation for $\bar{X}$ at $n = 100$ will be poor — confidence intervals based on normality will have coverage well below the nominal level.
+
+---
+
+**Exercise 3.**
+Explain why the median is a better estimator of the center of a Cauchy distribution than the sample mean, despite the sample mean being the standard choice for normal data.
+
+??? success "Solution to Exercise 3"
+    The **sample mean** of Cauchy data does not converge: by a remarkable property, the sample mean of $n$ i.i.d. Cauchy observations has the same Cauchy distribution regardless of $n$. Averaging does not reduce variability at all because the LLN does not apply (the mean does not exist).
+
+    The **sample median**, in contrast, is consistent for the location parameter of the Cauchy distribution and has asymptotic variance $\pi^2/(4n)$, which decreases at the standard $1/n$ rate. The median is unaffected by extreme observations in the tails, making it robust to the heavy tails that render the mean useless. For the Cauchy distribution specifically, the median is the MLE of the location parameter.
+
+---
+
+**Exercise 4.**
+A risk manager estimates the 99th percentile of daily portfolio losses using a normal model and obtains \$2.33 million. If the true distribution of losses follows a $t_5$ distribution with the same scale, how much larger is the true 99th percentile?
+
+??? success "Solution to Exercise 4"
+    For a standard normal, the 99th percentile is $z_{0.99} = 2.326$. For a $t_5$ distribution, the 99th percentile is $t_{5, 0.99} \approx 3.365$.
+
+    The ratio is:
+
+    $$
+    \frac{t_{5,0.99}}{z_{0.99}} = \frac{3.365}{2.326} \approx 1.447
+    $$
+
+    The true 99th percentile under the $t_5$ model is approximately 44.7% larger: $\$2.33\text{M} \times 1.447 \approx \$3.37\text{M}$. This underestimation of tail risk by the normal model is a well-known danger in financial risk management and was a contributing factor in the 2008 financial crisis.

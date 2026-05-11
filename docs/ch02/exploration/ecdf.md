@@ -1,9 +1,5 @@
 # ECDF and Quantiles
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Overview
 
 The **empirical cumulative distribution function (ECDF)** and **quantiles** provide complementary views of a distribution that avoid the bin-width sensitivity of histograms. The ECDF maps every data value to the proportion of observations at or below that value, producing a step function that converges to the true CDF as the sample size grows. Quantiles invert this relationship, answering: "At what value does a given fraction of the data fall below?"
@@ -232,3 +228,92 @@ plot_qq(sample_data, dist="norm")  # Systematic departure from the line
 ## Summary
 
 The ECDF and quantiles provide bin-free, exact representations of empirical distributions. The ECDF is ideal for comparing distributions or assessing goodness of fit, while quantiles and the five-number summary offer concise numerical summaries. Q-Q plots extend these ideas into a powerful visual diagnostic for checking distributional assumptions.
+
+## Exercises
+
+**Exercise 1.**
+For the dataset $\{2, 5, 5, 7, 10\}$: (a) write the ECDF $\hat F(x)$ as a piecewise function; (b) compute $\hat F(5)$ and $\hat F(6)$; (c) determine the 50th percentile (median).
+
+??? success "Solution to Exercise 1"
+    (a) With $n = 5$:
+
+    $$
+    \hat F(x) = \begin{cases} 0 & x < 2 \\ 1/5 & 2 \le x < 5 \\ 3/5 & 5 \le x < 7 \\ 4/5 & 7 \le x < 10 \\ 1 & x \ge 10 \end{cases}
+    $$
+
+    Jumps of $1/n$ at each unique value; the jump at 5 is $2/5$ because 5 occurs twice.
+
+    (b) $\hat F(5) = 3/5 = 0.6$ (three values $\le 5$); $\hat F(6) = 3/5 = 0.6$ (no value strictly between 5 and 7).
+
+    (c) The 50th percentile is the smallest $x$ with $\hat F(x) \ge 0.5$: that's $x = 5$.
+
+---
+
+**Exercise 2.**
+State the **Glivenko–Cantelli theorem** and interpret what it tells us about using the ECDF as an estimator of the true CDF.
+
+??? success "Solution to Exercise 2"
+    Let $X_1, X_2, \ldots$ be i.i.d. with CDF $F$, and let $\hat F_n$ be the empirical CDF. The Glivenko–Cantelli theorem states
+
+    $$
+    \sup_x |\hat F_n(x) - F(x)| \xrightarrow{\text{a.s.}} 0 \quad \text{as } n \to \infty
+    $$
+
+    The convergence is *uniform* over all $x$ — not just pointwise. This is what allows the ECDF to serve as a general-purpose distribution estimator: any continuity statistic of $F$ (median, IQR, skewness, etc.) can be consistently estimated by the corresponding plug-in statistic of $\hat F_n$.
+
+    The **Dvoretzky–Kiefer–Wolfowitz (DKW) inequality** quantifies the rate: $P(\sup_x |\hat F_n - F| > \varepsilon) \le 2 e^{-2n\varepsilon^2}$. With $n = 100$, the worst-case discrepancy is $\le 0.1$ with probability $\ge 0.96$ — fast for a non-parametric estimator.
+
+---
+
+**Exercise 3.**
+Compare the **ECDF** and the **histogram** as distributional summaries. List two advantages of each.
+
+??? success "Solution to Exercise 3"
+    **ECDF advantages:** (1) bin-free — no arbitrary bin-width choice; (2) uses every observation exactly; (3) converges uniformly at parametric rate $O(1/\sqrt{n})$; (4) easy to compare two distributions (overlay two ECDFs or compute K-S distance).
+
+    **Histogram advantages:** (1) more intuitive visual for typical readers — "where does most of the data live?"; (2) emphasizes density (peaks, modes, gaps) that the ECDF flattens out across the y-axis range $[0, 1]$; (3) reveals multimodality immediately; (4) standard in publications and dashboards.
+
+    In practice: use the **ECDF** for goodness-of-fit and distribution comparison; use the **histogram** (or kernel density estimate) for visual communication of shape.
+
+---
+
+**Exercise 4.**
+**Quantile interpretation.** A standardized test reports that a student is at the 85th percentile. State precisely what this means. Discuss the difference between this and "scoring 85% on the test."
+
+??? success "Solution to Exercise 4"
+    Being at the 85th percentile means **85% of test takers scored at or below this student's score** (with 15% scoring higher). The percentile is a *rank-based* measure relative to the reference population.
+
+    "Scoring 85% on the test" is an *absolute* performance measure — the fraction of questions answered correctly. The two are unrelated:
+
+    - A student scoring 85% on a very hard test might be at the 99th percentile (most others scored worse).
+    - A student scoring 85% on a very easy test might be at the 30th percentile (most others scored even better).
+
+    Percentile ranks are commonly used in standardized testing because they are invariant to the difficulty of the specific test version. Comparisons across years or test forms use percentiles, not raw scores, after re-norming.
+
+---
+
+**Exercise 5.**
+The **Kolmogorov–Smirnov statistic** $D_n = \sup_x |\hat F_n(x) - F_0(x)|$ tests whether data came from a specified distribution $F_0$. Why is this a natural test statistic, and how does its null distribution depend on $F_0$?
+
+??? success "Solution to Exercise 5"
+    **Natural choice:** Glivenko–Cantelli guarantees $D_n \to 0$ under the null ($F = F_0$). Under the alternative ($F \ne F_0$), $D_n$ converges to $\sup_x |F(x) - F_0(x)| > 0$. So $D_n$ separates the null from the alternative for any continuous alternative.
+
+    **Null distribution:** for a fully specified $F_0$, $D_n$ has a distribution that depends only on $n$, not on $F_0$ itself. This is the **distribution-free** property of K-S: $F_0(X)$ is uniformly distributed on $[0, 1]$ under the null, so $D_n$ effectively measures discrepancy from the uniform distribution, regardless of the original $F_0$. This makes critical values usable for any continuous reference distribution.
+
+    **Caveat:** if $F_0$ has unknown parameters estimated from the same data (e.g., testing normality with $\hat\mu, \hat\sigma$ estimated from the sample), the test is no longer distribution-free. The **Lilliefors test** or **Shapiro-Wilk** is appropriate in that setting.
+
+---
+
+**Exercise 6.**
+A **Q-Q plot** compares quantiles of the data against quantiles of a reference distribution. Interpret the following patterns: (a) points fall on a straight line; (b) S-shaped curve; (c) systematic curvature that's concave-up; (d) heavy departures in the tails only.
+
+??? success "Solution to Exercise 6"
+    (a) **Straight line** (matching the reference): the data are well-approximated by the reference distribution (typically the standard normal, possibly after centering and scaling). Slope = SD of the data, intercept = mean.
+
+    (b) **S-shape** (rising slowly, then quickly, then slowly): the data has **lighter tails** than the reference — fewer extreme values. The middle is steeper than the reference's middle. Indicates a light-tailed distribution (e.g., uniform or truncated).
+
+    (c) **Concave-up curvature** (steeper at the top right): the data has **right skew** — the upper tail is longer than the reference. Common for income, count data, lognormal, or exponential samples plotted against a normal reference.
+
+    (d) **Tail departures only**: the bulk of the data is well-modeled, but extreme observations don't match. Could indicate either heavy tails (more extremes than the reference, e.g., $t$ distribution) or outliers from a contaminating process. Distinguish by looking at multiple samples or running a robust analysis on the bulk only.
+
+    The Q-Q plot is more informative than a single goodness-of-fit $p$-value because it shows *where* the model fails, not just *whether* it fails.

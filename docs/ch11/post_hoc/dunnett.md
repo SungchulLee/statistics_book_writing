@@ -1,9 +1,6 @@
 # Dunnett's Test (vs Control)
 
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Overview
 
 Many experiments include a **control group** alongside several treatment groups -- for example, a placebo group and three drug dosages, or a baseline process and four proposed improvements. In these designs, the relevant comparisons are not all pairwise differences but specifically the $k - 1$ comparisons of each treatment group against the control. Testing only these $k - 1$ comparisons rather than all $\binom{k}{2}$ pairwise differences reduces the multiple-testing burden, and Dunnett's test exploits this structure to achieve higher statistical power than methods like Tukey's HSD or Bonferroni.
@@ -121,3 +118,44 @@ Dunnett's test is more powerful than Bonferroni for the same set of $k - 1$ cont
 !!! warning "Do not use Dunnett's test for all pairwise comparisons"
 
     Dunnett's test is designed exclusively for many-to-one comparisons against a control. If you need to compare treatments to each other (e.g., Drug A vs Drug B), use Tukey's HSD or another all-pairwise method. Applying Dunnett's test to pairwise comparisons that do not involve the control group is incorrect because the critical values do not account for those additional comparisons.
+## Exercises
+
+**Exercise 1.**
+A pharmaceutical trial has a placebo group (control) and four drug dosage groups. After a significant one-way ANOVA, the researcher wants to determine which dosages differ from the placebo. Explain why Dunnett's test is more appropriate than Tukey's HSD for this comparison.
+
+??? success "Solution to Exercise 1"
+    Dunnett's test is specifically designed for **many-to-one comparisons** against a single control group. With $k = 5$ groups, Dunnett's test performs only $k - 1 = 4$ comparisons (each dosage vs. placebo), while Tukey's HSD performs $\binom{5}{2} = 10$ pairwise comparisons.
+
+    By restricting attention to the 4 relevant comparisons, Dunnett's test uses a smaller critical value (from the multivariate $t$-distribution that accounts for the positive correlation among the 4 test statistics). This yields **higher statistical power** for detecting differences between treatment and control, compared to Tukey's HSD which must control the family-wise error rate across all 10 comparisons.
+
+---
+
+**Exercise 2.**
+In a Dunnett's test with $k = 4$ groups (1 control + 3 treatments), $n = 10$ per group, $\text{MSW} = 5.2$, and the group means are $\bar{Y}_0 = 12.0$ (control), $\bar{Y}_1 = 14.8$, $\bar{Y}_2 = 11.5$, $\bar{Y}_3 = 16.1$. Compute the test statistic for the comparison of group 3 versus the control.
+
+??? success "Solution to Exercise 2"
+    The Dunnett test statistic for comparing treatment $i$ against the control is:
+
+    $$
+    t_i = \frac{\bar{Y}_i - \bar{Y}_0}{\sqrt{\text{MSW}(1/n_i + 1/n_0)}}
+    $$
+
+    For group 3 versus control:
+
+    $$
+    t_3 = \frac{16.1 - 12.0}{\sqrt{5.2(1/10 + 1/10)}} = \frac{4.1}{\sqrt{5.2 \times 0.2}} = \frac{4.1}{\sqrt{1.04}} = \frac{4.1}{1.020} = 4.02
+    $$
+
+    This test statistic would be compared against the Dunnett critical value $d_{\alpha, k-1, \nu}$ with $k - 1 = 3$ treatment groups and $\nu = N - k = 36$ degrees of freedom.
+
+---
+
+**Exercise 3.**
+Explain why Dunnett's test accounts for the correlation between the test statistics $t_1, t_2, \ldots, t_{k-1}$, and why ignoring this correlation (as Bonferroni does) results in a more conservative test.
+
+??? success "Solution to Exercise 3"
+    All $k - 1$ test statistics share the same control group mean $\bar{Y}_0$ in their denominators and numerators, which induces positive correlation among them. Specifically, $\text{Corr}(t_i, t_j) = n_0 / (n_0 + n_i)$ when sample sizes are equal.
+
+    Dunnett's test uses the **multivariate $t$-distribution** that accounts for this correlation structure to derive exact critical values. Because the statistics are positively correlated, observing one large value makes it more likely that others are also large, so the joint probability of at least one exceeding the threshold is lower than under independence.
+
+    Bonferroni ignores this correlation and treats the tests as if they were independent, using $\alpha/(k-1)$ for each comparison. This overestimates the probability of false positives, leading to a larger critical value and reduced power.

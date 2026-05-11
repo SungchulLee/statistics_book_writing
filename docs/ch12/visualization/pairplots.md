@@ -153,3 +153,72 @@ The pair plot and correlation heatmap are complementary tools. The heatmap summa
 ## Summary
 
 Pair plots provide a comprehensive visual summary of all pairwise relationships in a multivariate dataset. They reveal the direction, strength, and shape of associations, as well as outliers and clusters. The `seaborn.pairplot` function makes them easy to create, with options for coloring by groups, customizing diagonal plots, and annotating with correlation coefficients. Pair plots are most effective for datasets with a moderate number of variables and should be paired with correlation heatmaps and formal statistical tests for a complete analysis.
+
+## Exercises
+
+**Exercise 1.**
+Describe what a pair plot (scatter matrix) shows and explain what to look for when interpreting one with 4 variables.
+
+??? success "Solution to Exercise 1"
+    A pair plot is a grid of scatter plots showing every pairwise combination of variables. For $p = 4$ variables, it is a $4 \times 4$ grid with $\binom{4}{2} = 6$ unique scatter plots (the matrix is symmetric). The diagonal panels typically show univariate distributions (histograms or KDE plots) for each variable.
+
+    When interpreting a pair plot with 4 variables, look for:
+
+    1. **Linear vs. nonlinear relationships:** Are scatter plots approximately linear, or do they show curvature?
+    2. **Strength and direction of association:** Tight clouds indicate strong correlation; dispersed clouds indicate weak correlation.
+    3. **Outliers:** Points far from the main cloud in any panel.
+    4. **Clusters:** Groups of points that may indicate subpopulations.
+    5. **Heteroscedasticity:** Fan-shaped scatter (variance changing with the level of one variable).
+    6. **Marginal distributions:** Skewness, multimodality, or heavy tails visible in diagonal panels.
+
+---
+
+**Exercise 2.**
+Write Python code to create a pair plot for the Iris dataset using seaborn, colored by species.
+
+??? success "Solution to Exercise 2"
+    ```python
+    import seaborn as sns
+    import matplotlib.pyplot as plt
+
+    iris = sns.load_dataset("iris")
+    g = sns.pairplot(iris, hue="species", diag_kind="kde")
+    g.fig.suptitle("Iris Dataset Pair Plot", y=1.02)
+    plt.show()
+    ```
+
+    The `hue="species"` parameter colors points by species, revealing whether the pairwise relationships differ across groups. The KDE on the diagonal shows each species' distribution for each measurement. Separation between colors in the scatter panels indicates which variable pairs best discriminate between species.
+
+---
+
+**Exercise 3.**
+Why can a pair plot be misleading when the number of variables $p$ is large (e.g., $p > 10$)? Suggest an alternative approach.
+
+??? success "Solution to Exercise 3"
+    With $p > 10$, a pair plot has $p^2 > 100$ panels, making it:
+
+    1. **Visually overwhelming:** Too many panels to inspect individually. Important patterns are lost in the grid.
+    2. **Computationally expensive:** Rendering hundreds of scatter plots with thousands of points is slow.
+    3. **Statistically limited:** Pairwise scatter plots miss higher-dimensional structure (e.g., three variables may be jointly correlated in ways invisible in any pair).
+
+    **Alternatives for high-dimensional data:**
+
+    - **Correlation heatmap:** Summarizes all pairwise correlations in a single colored matrix.
+    - **PCA or t-SNE:** Reduce to 2-3 dimensions and visualize the reduced representation.
+    - **Focused pair plots:** Select the 5-6 most important variables (based on domain knowledge or correlation screening) and create a pair plot of those.
+
+---
+
+**Exercise 4.**
+How can you use a pair plot to visually detect multicollinearity in a regression context?
+
+??? success "Solution to Exercise 4"
+    Multicollinearity appears in a pair plot as strong linear relationships between predictor variables:
+
+    1. **Tightly clustered scatter plots:** If two predictors show a nearly perfect linear trend (points falling along a line), they are highly collinear. Including both in a regression model will inflate standard errors.
+
+    2. **Identical patterns:** If predictor $X_2$ looks like a shifted/scaled version of $X_1$ in every panel (both have similar scatter patterns with the response and with other predictors), they carry redundant information.
+
+    3. **Correlation values:** Overlaying Pearson's $r$ on each panel (or using a combined pair plot with correlation coefficients in the upper triangle) immediately flags pairs with $|r| > 0.8$ or $0.9$.
+
+    To address detected multicollinearity: drop one of the correlated predictors, combine them (e.g., average or PCA), or use regularization (ridge/LASSO).

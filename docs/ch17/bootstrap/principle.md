@@ -97,3 +97,8 @@ On average, about 63.2% of the unique original observations appear in each boots
 ## Summary
 
 The bootstrap principle converts an intractable analytical problem (finding the sampling distribution of $\hat{\theta}$) into a computational one (resampling from the observed data). By substituting $\hat{F}_n$ for $F$, any quantity that depends on the unknown population distribution can be approximated through simulation. The following sections develop specific bootstrap procedures: the nonparametric bootstrap, the parametric bootstrap, and their applications to confidence intervals and hypothesis testing.
+
+## Exercises
+
+**Exercise 1.**
+Explain why bootstrap samples are drawn **with replacement** rather than without replacement. What would happen if we drew samples of size $n$ without replacement from the original data?

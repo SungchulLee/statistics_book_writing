@@ -137,3 +137,63 @@ GMM occupies a central position in the estimation landscape:
 
 !!! warning "When to Use GMM"
     GMM is most valuable when: (1) the full likelihood is unknown or intractable, but moment conditions are available from theory; (2) the model is overidentified, providing a testable restriction via the J-test; (3) robustness to distributional misspecification is desired. If the full likelihood is known and tractable, MLE is generally preferred for its higher efficiency.
+
+## Exercises
+
+**Exercise 1.**
+In the Generalized Method of Moments, why must the number of moment conditions $q$ be at least as large as the number of parameters $p$? What happens when $q > p$?
+
+??? success "Solution to Exercise 1"
+    Each moment condition provides one equation relating the parameters to population quantities. With $p$ unknowns and $q$ equations:
+
+    - If $q < p$: the system is under-identified (fewer equations than unknowns), and the parameters cannot be uniquely determined.
+    - If $q = p$: the system is exactly identified, and the GMM estimator solves the moment conditions exactly (setting all sample moments equal to their theoretical counterparts).
+    - If $q > p$: the system is over-identified (more equations than unknowns), and the moment conditions generally cannot all be satisfied simultaneously. GMM minimizes a weighted quadratic form of the moment conditions: $\hat{\theta} = \arg\min_\theta \mathbf{g}_n(\theta)^T \mathbf{W} \mathbf{g}_n(\theta)$, where $\mathbf{W}$ is a positive definite weighting matrix and $\mathbf{g}_n(\theta)$ is the vector of sample moment conditions.
+
+---
+
+**Exercise 2.**
+For an i.i.d. sample from a distribution with mean $\mu$ and variance $\sigma^2$, the moment conditions $E[X_i - \mu] = 0$ and $E[(X_i - \mu)^2 - \sigma^2] = 0$ define a GMM estimator. Show that the GMM estimator with these two conditions is the same as the Method of Moments estimator.
+
+??? success "Solution to Exercise 2"
+    The sample moment conditions are:
+
+    $$
+    g_1(\mu, \sigma^2) = \frac{1}{n}\sum_{i=1}^n (X_i - \mu) = \bar{X} - \mu
+    $$
+
+    $$
+    g_2(\mu, \sigma^2) = \frac{1}{n}\sum_{i=1}^n (X_i - \mu)^2 - \sigma^2
+    $$
+
+    With $q = p = 2$ (exactly identified), GMM sets both conditions to zero:
+
+    $g_1 = 0 \implies \hat{\mu} = \bar{X}$
+
+    $g_2 = 0 \implies \hat{\sigma}^2 = \frac{1}{n}\sum_{i=1}^n (X_i - \bar{X})^2$
+
+    These are exactly the Method of Moments estimators. When exactly identified, GMM and MOM coincide regardless of the weighting matrix $\mathbf{W}$. $\square$
+
+---
+
+**Exercise 3.**
+Explain the role of the weighting matrix $\mathbf{W}$ in over-identified GMM. What is the optimal weighting matrix, and why is it optimal?
+
+??? success "Solution to Exercise 3"
+    The weighting matrix $\mathbf{W}$ determines how different moment conditions are weighted in the objective function. Different choices of $\mathbf{W}$ yield consistent but differently efficient estimators.
+
+    The **optimal weighting matrix** is $\mathbf{W}^* = \mathbf{S}^{-1}$, where $\mathbf{S} = \text{Var}[\sqrt{n}\,\mathbf{g}_n(\theta_0)]$ is the asymptotic variance of the moment conditions. This is optimal because it gives less weight to moment conditions that are noisily estimated (high variance) and more weight to precisely estimated ones.
+
+    With $\mathbf{W}^*$, the GMM estimator achieves the smallest asymptotic variance among all GMM estimators based on the same moment conditions. In practice, $\mathbf{S}$ is unknown and estimated in a two-step procedure: first estimate $\theta$ with $\mathbf{W} = \mathbf{I}$, then estimate $\mathbf{S}$ using residuals, and re-estimate $\theta$ with $\hat{\mathbf{W}} = \hat{\mathbf{S}}^{-1}$.
+
+---
+
+**Exercise 4.**
+The Hansen J-test (over-identification test) has test statistic $J = n\,\mathbf{g}_n(\hat{\theta})^T \hat{\mathbf{S}}^{-1} \mathbf{g}_n(\hat{\theta}) \sim \chi^2_{q-p}$ under the null that all moment conditions are valid. Explain the intuition behind this test.
+
+??? success "Solution to Exercise 4"
+    Under the null hypothesis that the model is correctly specified (all $q$ moment conditions hold in the population), the sample moments $\mathbf{g}_n(\hat{\theta})$ should be close to zero at the estimated parameter values. The J-statistic is a quadratic form measuring the squared "distance" of these residual moment conditions from zero, weighted by their precision.
+
+    With $p$ parameters and $q$ moment conditions, there are $q - p$ "excess" conditions that cannot be exactly satisfied. Under the null, these excess conditions are approximately zero with known asymptotic distribution, yielding $J \sim \chi^2_{q-p}$.
+
+    A large J-value (small p-value) suggests that the moment conditions are mutually inconsistent -- the model is misspecified. A failure to reject means the over-identifying restrictions are compatible with the data. Note: the test has no power against misspecification that affects all moment conditions equally.

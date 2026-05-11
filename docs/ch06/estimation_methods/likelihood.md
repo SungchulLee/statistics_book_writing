@@ -1,9 +1,5 @@
 # Likelihood Function
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Introduction
 
 The **likelihood function** is the cornerstone of parametric statistical inference. Given observed data, the likelihood function measures how "likely" each candidate parameter value is to have generated that data. Unlike a probability distribution, which assigns probabilities to outcomes given fixed parameters, the likelihood function fixes the data and treats the parameter as the variable.
@@ -21,6 +17,7 @@ $$L(\theta) = L(\theta; x_1, \ldots, x_n) = \prod_{i=1}^n f(x_i; \theta)$$
 **Key distinction:** $f(x; \theta)$ viewed as a function of $x$ (with $\theta$ fixed) is a density. The same expression viewed as a function of $\theta$ (with $x$ fixed at the observed data) is the likelihood.
 
 **Important properties:**
+
 - The likelihood is **not** a probability density over $\theta$ — it does not integrate to 1 over $\Theta$
 - Only **ratios** of likelihoods are meaningful; the absolute scale is arbitrary
 - The likelihood function summarizes all the information in the data about $\theta$ (by the sufficiency principle)
@@ -32,6 +29,7 @@ Because the likelihood is a product of many terms, it is almost always more conv
 $$\ell(\theta) = \log L(\theta) = \sum_{i=1}^n \log f(x_i; \theta)$$
 
 **Advantages of the log-likelihood:**
+
 - Converts products to sums (computationally stable, analytically simpler)
 - Preserves the location of the maximum (log is monotonically increasing)
 - Connects directly to information-theoretic quantities (KL divergence, entropy)
@@ -246,6 +244,7 @@ Fisher scoring is more stable when the observed Hessian is poorly conditioned.
 ### EM Algorithm
 
 For models with latent variables (e.g., mixture models, hidden Markov models), the **Expectation-Maximization (EM) algorithm** iterates between:
+
 - **E-step**: Compute the expected log-likelihood given current parameters and observed data
 - **M-step**: Maximize this expected log-likelihood to update parameters
 
@@ -287,3 +286,83 @@ The likelihood function transforms observed data into a measure of support for p
 | Asymptotic variance of MLE | $1 / [nI(\theta)]$ |
 | Likelihood ratio test | $-2\log\Lambda \sim \chi^2_k$ |
 | Invariance | $\widehat{g(\theta)} = g(\hat{\theta}_{\text{MLE}})$ |
+
+## Exercises
+
+**Exercise 1.**
+Given a random sample $x_1, \ldots, x_n$ from an Exponential$(\lambda)$ distribution with PDF $f(x;\lambda) = \lambda e^{-\lambda x}$, write the log-likelihood function and find the MLE $\hat{\lambda}$.
+
+??? success "Solution to Exercise 1"
+    The likelihood is:
+
+    $$
+    L(\lambda) = \prod_{i=1}^n \lambda e^{-\lambda x_i} = \lambda^n e^{-\lambda \sum x_i}
+    $$
+
+    The log-likelihood is:
+
+    $$
+    \ell(\lambda) = n \log \lambda - \lambda \sum_{i=1}^n x_i
+    $$
+
+    Setting the score to zero:
+
+    $$
+    \frac{d\ell}{d\lambda} = \frac{n}{\lambda} - \sum_{i=1}^n x_i = 0 \implies \hat{\lambda} = \frac{n}{\sum_{i=1}^n x_i} = \frac{1}{\bar{x}}
+    $$
+
+    The second derivative is $-n/\lambda^2 < 0$, confirming this is a maximum.
+
+---
+
+**Exercise 2.**
+Using the invariance property of MLE, if $\hat{\lambda} = 1/\bar{x}$ is the MLE for an Exponential$(\lambda)$ distribution, what is the MLE of the mean $\mu = 1/\lambda$?
+
+??? success "Solution to Exercise 2"
+    By the invariance property, the MLE of any function $g(\theta)$ is $g(\hat{\theta})$. Since $\mu = 1/\lambda = g(\lambda)$:
+
+    $$
+    \hat{\mu} = g(\hat{\lambda}) = \frac{1}{\hat{\lambda}} = \frac{1}{1/\bar{x}} = \bar{x}
+    $$
+
+    The MLE of the population mean is simply the sample mean, which is intuitive.
+
+---
+
+**Exercise 3.**
+Compute the Fisher information $I(\lambda)$ for a single observation from an Exponential$(\lambda)$ distribution. What is the asymptotic variance of the MLE $\hat{\lambda}$?
+
+??? success "Solution to Exercise 3"
+    The log-likelihood for a single observation is $\ell(\lambda) = \log \lambda - \lambda x$. The second derivative is:
+
+    $$
+    \frac{d^2 \ell}{d\lambda^2} = -\frac{1}{\lambda^2}
+    $$
+
+    The Fisher information is:
+
+    $$
+    I(\lambda) = -E\!\left[\frac{d^2 \ell}{d\lambda^2}\right] = \frac{1}{\lambda^2}
+    $$
+
+    For $n$ observations, the asymptotic variance of $\hat{\lambda}$ is:
+
+    $$
+    \text{Var}(\hat{\lambda}) \approx \frac{1}{n I(\lambda)} = \frac{\lambda^2}{n}
+    $$
+
+---
+
+**Exercise 4.**
+Explain why the MLE can be biased in finite samples, using the normal distribution variance estimator as an example.
+
+??? success "Solution to Exercise 4"
+    For a random sample from $N(\mu, \sigma^2)$, the MLE of $\sigma^2$ is:
+
+    $$
+    \hat{\sigma}^2_{\text{MLE}} = \frac{1}{n}\sum_{i=1}^n (X_i - \bar{X})^2
+    $$
+
+    However, $E[\hat{\sigma}^2_{\text{MLE}}] = \frac{n-1}{n}\sigma^2 \neq \sigma^2$. The MLE divides by $n$ instead of $n-1$, creating a downward bias of $\sigma^2/n$. This happens because the MLE maximizes the likelihood without any correction for the estimation of nuisance parameters (here, $\mu$ is estimated by $\bar{X}$, which "uses up" one degree of freedom).
+
+    The bias vanishes as $n \to \infty$ (the MLE is **consistent**), but in finite samples, the unbiased estimator $S^2 = \frac{1}{n-1}\sum(X_i - \bar{X})^2$ is preferred for variance estimation.

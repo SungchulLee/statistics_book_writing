@@ -77,10 +77,12 @@ $$
 $$
 
 $$
+
 + \frac{\sum_t t_x(t_x-1)(t_x-2) \cdot \sum_u t_y(t_y-1)(t_y-2)}{9n(n-1)(n-2)}
 $$
 
 $$
+
 + \frac{\sum_t t_x(t_x-1) \cdot \sum_u t_y(t_y-1)}{2n(n-1)}
 $$
 
@@ -169,3 +171,59 @@ The `scipy.stats.kendalltau` function computes tau-b and handles ties in the var
 ## Summary
 
 The hypothesis test for Kendall's $\tau$ determines whether the observed number of concordant minus discordant pairs is significantly different from zero. For small samples, the exact permutation distribution is used; for larger samples, a normal approximation based on $\text{Var}(S) = n(n-1)(2n+5)/18$ is employed. The test is distribution-free and has power comparable to Spearman's test. Kendall's test is preferred in small samples or when the probabilistic interpretation of $\tau$ is important.
+
+## Exercises
+
+**Exercise 1.**
+For $n = 8$ observations with Kendall's $\tau = 0.43$, test $H_0: \tau = 0$ at $\alpha = 0.05$ using the normal approximation.
+
+??? success "Solution to Exercise 1"
+    The standard error under $H_0$ is:
+
+    $$
+    \text{SE}(\tau) = \sqrt{\frac{2(2n+5)}{9n(n-1)}} = \sqrt{\frac{2(21)}{9 \times 8 \times 7}} = \sqrt{\frac{42}{504}} = \sqrt{0.08333} = 0.2887
+    $$
+
+    The test statistic is:
+
+    $$
+    Z = \frac{\tau}{\text{SE}(\tau)} = \frac{0.43}{0.2887} = 1.489
+    $$
+
+    For a two-sided test at $\alpha = 0.05$, the critical value is 1.96. Since $|Z| = 1.49 < 1.96$, we fail to reject $H_0$. There is insufficient evidence of monotonic association.
+
+    Note: with $n = 8$, the normal approximation may be rough. An exact permutation test would be more reliable.
+
+---
+
+**Exercise 2.**
+Explain why the exact distribution of Kendall's $\tau$ under $H_0$ is distribution-free and describe how it can be computed.
+
+??? success "Solution to Exercise 2"
+    Under $H_0: \tau = 0$ (independence of $X$ and $Y$), the $Y$-ranks are equally likely to be any permutation of $(1, 2, \dots, n)$, regardless of the distribution of $X$ or $Y$. This means the distribution of the number of concordant pairs $C$ (and hence $\tau$) depends only on $n$, not on the underlying distributions.
+
+    The exact distribution can be computed by enumerating all $n!$ permutations of the $Y$-ranks and computing $\tau$ for each. For small $n$, this is feasible (and implemented in statistical software). For large $n$, the normal approximation $Z = \tau/\text{SE}(\tau)$ is used, where the variance formula under $H_0$ involves $n$ alone.
+
+---
+
+**Exercise 3.**
+Compare the power of Kendall's $\tau$ test versus Spearman's $\rho$ test for detecting monotonic association. Which is generally more powerful?
+
+??? success "Solution to Exercise 3"
+    In most settings, the Spearman test is slightly more powerful than the Kendall test for detecting monotonic associations, because Spearman's $\rho$ uses rank values (which carry more information than pairwise ordinal comparisons) and has a larger variance separation between $H_0$ and $H_a$.
+
+    However, the differences are typically small (asymptotic relative efficiency of Kendall vs. Spearman is close to 1). Kendall's $\tau$ has advantages in other respects: simpler variance formula, cleaner probabilistic interpretation, and better performance with ties.
+
+    The choice between them is often based on convention within a field or the specific properties desired rather than power considerations.
+
+---
+
+**Exercise 4.**
+A researcher computes Kendall's $\tau = -0.12$ with $n = 200$ and obtains $p = 0.03$. Interpret this result in terms of both statistical and practical significance.
+
+??? success "Solution to Exercise 4"
+    **Statistical significance:** With $p = 0.03 < 0.05$, we reject $H_0: \tau = 0$. There is statistically significant evidence of a negative monotonic association.
+
+    **Practical significance:** $\tau = -0.12$ is a weak association. The probability interpretation: for a randomly chosen pair of observations, the probability of concordance exceeds the probability of discordance by only $0.12$ (i.e., $P(\text{concordant}) - P(\text{discordant}) = -0.12$, meaning discordance is slightly more common). The effect is detectable only because $n = 200$ provides high power.
+
+    As with Pearson's $r$, large samples can detect trivially small associations. The researcher should report the effect size ($\tau = -0.12$) alongside the p-value and discuss whether this magnitude is meaningful in the applied context.

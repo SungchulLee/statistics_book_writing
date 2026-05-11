@@ -111,3 +111,77 @@ with equality if and only if $\tilde{\theta}$ is asymptotically equivalent to th
 | Asymptotic efficiency | $\text{Var}_{\text{asy}} = 1/(nI(\theta_0))$ | No regular estimator can do better |
 
 These three results, taken together, make the MLE the default choice in parametric estimation whenever the regularity conditions hold and the sample size is large enough for the asymptotic approximation to be reliable.
+
+## Exercises
+
+**Exercise 1.**
+State the three main asymptotic properties of the MLE under regularity conditions: consistency, asymptotic normality, and asymptotic efficiency.
+
+??? success "Solution to Exercise 1"
+    Under standard regularity conditions:
+
+    1. **Consistency:** $\hat{\theta}_{\text{MLE}} \xrightarrow{p} \theta_0$ as $n \to \infty$.
+
+    2. **Asymptotic normality:** $\sqrt{n}(\hat{\theta}_{\text{MLE}} - \theta_0) \xrightarrow{d} N(0, I(\theta_0)^{-1})$, where $I(\theta_0)$ is the Fisher information for a single observation.
+
+    3. **Asymptotic efficiency:** The MLE achieves the Cramer-Rao lower bound asymptotically. That is, no consistent estimator can have a smaller asymptotic variance than $1/(nI(\theta_0))$.
+
+    These properties make the MLE the default choice for parametric estimation in large samples, though in small samples the MLE may be biased or less efficient than other estimators.
+
+---
+
+**Exercise 2.**
+For the exponential distribution with rate parameter $\lambda$, the MLE is $\hat{\lambda} = 1/\bar{X}$. Compute the Fisher information $I(\lambda)$ and verify that the asymptotic variance of $\hat{\lambda}$ is $\lambda^2/n$.
+
+??? success "Solution to Exercise 2"
+    The log-likelihood for one observation is $\ell(\lambda) = \log\lambda - \lambda x$. The second derivative is:
+
+    $$
+    \frac{d^2\ell}{d\lambda^2} = -\frac{1}{\lambda^2}
+    $$
+
+    The Fisher information is:
+
+    $$
+    I(\lambda) = -E\!\left[\frac{d^2\ell}{d\lambda^2}\right] = \frac{1}{\lambda^2}
+    $$
+
+    The asymptotic variance of the MLE is:
+
+    $$
+    \text{Var}(\hat{\lambda}) \approx \frac{1}{nI(\lambda)} = \frac{\lambda^2}{n}
+    $$
+
+    This means $\hat{\lambda} \approx N(\lambda, \lambda^2/n)$ for large $n$, which gives the standard error $\text{SE}(\hat{\lambda}) \approx \lambda/\sqrt{n}$.
+
+---
+
+**Exercise 3.**
+The invariance property states that if $\hat{\theta}$ is the MLE of $\theta$, then $g(\hat{\theta})$ is the MLE of $g(\theta)$ for any function $g$. Use this to find the MLE of the mean $1/\lambda$ of an exponential distribution.
+
+??? success "Solution to Exercise 3"
+    The MLE of the rate parameter is $\hat{\lambda} = 1/\bar{X}$. By the invariance property, the MLE of $g(\lambda) = 1/\lambda$ (the population mean) is:
+
+    $$
+    \widehat{1/\lambda} = g(\hat{\lambda}) = \frac{1}{\hat{\lambda}} = \frac{1}{1/\bar{X}} = \bar{X}
+    $$
+
+    This confirms the intuitive result: the MLE of the exponential mean is the sample mean. The invariance property is powerful because it works for any transformation, including non-linear ones, without re-deriving the MLE from scratch.
+
+---
+
+**Exercise 4.**
+Explain why the MLE can be biased in finite samples despite being asymptotically unbiased. Give a specific example.
+
+??? success "Solution to Exercise 4"
+    Asymptotic unbiasedness means $E[\hat{\theta}_n] \to \theta_0$ as $n \to \infty$, but for any fixed $n$, the bias $E[\hat{\theta}_n] - \theta_0$ may be nonzero.
+
+    **Example:** For the normal variance, the MLE is $\hat{\sigma}^2_{\text{MLE}} = \frac{1}{n}\sum(X_i - \bar{X})^2$, which has:
+
+    $$
+    E[\hat{\sigma}^2_{\text{MLE}}] = \frac{n-1}{n}\sigma^2 \neq \sigma^2
+    $$
+
+    The bias is $-\sigma^2/n$, which vanishes as $n \to \infty$ but is nonzero for every finite $n$. This is why the unbiased estimator $S^2 = \frac{1}{n-1}\sum(X_i - \bar{X})^2$ uses the Bessel correction $n - 1$.
+
+    In general, if $\hat{\theta}$ is the MLE of $\theta$ and $g$ is nonlinear, then $g(\hat{\theta})$ is the MLE of $g(\theta)$ by invariance, but Jensen's inequality implies $E[g(\hat{\theta})] \neq g(\theta)$ in finite samples, introducing bias.

@@ -178,3 +178,26 @@ model provides a significantly better fit than the exponential.
     $\lambda = e^\mu$ and $k = 1/\sigma$.  This AFT representation allows
     covariates to act multiplicatively on survival time rather than on the
     hazard rate.
+
+## Exercises
+
+**Exercise 1.**
+Weibull Shape Parameter
+
+A Weibull model fitted to time-to-default data yields $\hat{k} = 0.75$ and
+$\hat{\lambda} = 36$ months.
+
+**(a)** Is the hazard increasing or decreasing over time?  Explain.
+
+**(b)** Compute the median time to default.
+
+**(c)** Compute $\hat{S}(24)$, the probability of surviving past 24 months.
+
+??? success "Solution to Exercise 1"
+
+    **(a)** Since $\hat{k} = 0.75 < 1$, the hazard is **decreasing** over time.
+    Default risk is highest early and declines among surviving borrowers.
+
+    **(b)** $t_{0.5} = \lambda(\ln 2)^{1/k} = 36 \times (0.693)^{1/0.75} = 36 \times 0.693^{1.333} = 36 \times 0.627 = 22.6$ months.
+
+    **(c)** $\hat{S}(24) = \exp(-(24/36)^{0.75}) = \exp(-0.667^{0.75}) = \exp(-0.740) = 0.477$.

@@ -1,9 +1,6 @@
 # ROC Curve and AUC
 
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Receiver Operating Characteristic (ROC) Curve
 
 The **ROC curve** (Receiver Operating Characteristic) is a powerful tool for evaluating binary classifiers across all possible classification thresholds. It plots:
@@ -109,3 +106,22 @@ The ROC curve helps select an optimal threshold for deployment. Common criteria 
 3. **Application-specific:** Choose based on business requirements (e.g., target a specific recall level).
 
 For the loan default model using Youden's J, the optimal threshold might differ significantly from the default 0.5, depending on the relative costs of false positives and false negatives.
+
+## Exercises
+
+**Exercise 1.**
+ROC and AUC
+
+**(a)** Explain why the ROC curve of any reasonable classifier lies above the diagonal.
+
+**(b)** A model has AUC = 0.85. Give the probabilistic interpretation.
+
+**(c)** Model A has AUC = 0.92 and Model B has AUC = 0.88. Can you always conclude Model A is better for deployment? Why or why not?
+
+??? success "Solution to Exercise 1"
+
+    **(a)** The diagonal represents random classification (TPR = FPR at every threshold). A reasonable classifier assigns higher probabilities to positives than negatives, so at any FPR, it achieves a higher TPR than random guessing.
+
+    **(b)** If we randomly pick one positive and one negative example, there is an 85% chance the model assigns a higher predicted probability to the positive example.
+
+    **(c)** Not necessarily. AUC summarizes performance across all thresholds. At the specific operating threshold relevant to the application, Model B might outperform Model A. Also, for imbalanced data, the PR-AUC might be more informative. AUC also doesn't account for different misclassification costs.

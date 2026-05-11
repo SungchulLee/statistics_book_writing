@@ -1,9 +1,6 @@
 # Games-Howell Test (Unequal Variances)
 
 
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 ## Overview
 
 Post-hoc methods such as Tukey's HSD and Bonferroni assume that the population variances are equal across all groups -- the same homoscedasticity assumption that underlies the standard ANOVA F-test. When this assumption is violated, these methods can produce misleading results: inflated Type I error rates when smaller groups have larger variances, or reduced power in the reverse case. The Games-Howell procedure (Games and Howell, 1976) addresses this problem by using separate variance estimates for each pairwise comparison and adjusting the degrees of freedom via the Welch-Satterthwaite approximation. It does not assume equal variances or equal sample sizes, making it the default post-hoc choice after Welch's ANOVA.
@@ -125,3 +122,22 @@ The Games-Howell test is the appropriate post-hoc procedure when:
 !!! warning "Games-Howell with small sample sizes"
 
     The Games-Howell test relies on the Welch-Satterthwaite approximation, which performs well when group sample sizes are moderate ($n_i \geq 6$). With very small groups ($n_i < 6$), the variance estimates are unstable and the $\nu_{ij}$ approximation becomes unreliable. In such cases, consider non-parametric alternatives like the Kruskal-Wallis test followed by Dunn's test.
+
+## Exercises
+
+**Exercise 1.**
+A marketing analyst compares click-through rates across four advertisement designs. The one-way ANOVA yields $F = 5.12$ with $p = 0.008$, indicating at least one design differs from the others.
+
+**(a)** The analyst wants to compare every design with every other design. Which post-hoc test is most appropriate? Justify your choice.
+
+**(b)** The analyst's manager only cares about how each new design (B, C, D) compares to the current design (A). Which post-hoc test is more appropriate in this case, and why is it preferred over the method in part (a)?
+
+**(c)** A colleague points out that the group variances are $s_A^2 = 2.1$, $s_B^2 = 8.7$, $s_C^2 = 3.0$, $s_D^2 = 9.2$, and the sample sizes are $n_A = 30$, $n_B = 12$, $n_C = 25$, $n_D = 10$. Does this change your recommendation? Which test should be used now?
+
+??? success "Solution to Exercise 1"
+
+    **(a)** Tukey's HSD is most appropriate for all pairwise comparisons. It controls the family-wise error rate (FWER) at $\alpha$ while being specifically designed for pairwise comparisons, making it more powerful than Bonferroni or Scheffe for this purpose.
+
+    **(b)** Dunnett's test is more appropriate when comparing each treatment to a single control. It controls the FWER while making only $k - 1 = 3$ comparisons instead of $\binom{4}{2} = 6$, giving it greater statistical power than Tukey's HSD for this specific comparison structure.
+
+    **(c)** Yes, this changes the recommendation. The group variances differ substantially (the largest is more than 4 times the smallest), and the sample sizes are unequal. Under these conditions, Games-Howell is the appropriate post-hoc test because it does not assume equal variances or equal sample sizes. It uses separate variance estimates and Welch-Satterthwaite degrees of freedom for each pairwise comparison.

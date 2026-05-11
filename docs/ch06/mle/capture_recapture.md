@@ -1,9 +1,5 @@
 # Capture-Recapture Method
 
-
-!!! warning "Incomplete page"
-    This page is missing the required five-section structure (Concept Definition, Explanation, Diagram / Example). Content needs to be reorganized and expanded.
-
 > **Reference:** [Wikipedia — Mark and Recapture](https://en.wikipedia.org/wiki/Mark_and_recapture)
 
 ## Overview
@@ -206,3 +202,75 @@ prob_list, mle_n = capture_recapture(c, r, t)
 # Plot the probability distribution and highlight the MLE
 draw(prob_list, mle_n, c, r, t)
 ```
+
+## Exercises
+
+**Exercise 1.**
+A wildlife biologist captures and tags $M = 20$ fish in a lake. Later, she recaptures $n = 15$ fish and finds $m = 5$ are tagged. Compute the Lincoln-Petersen MLE for the total population size $\hat{N}$ and the Chapman bias-corrected estimate.
+
+??? success "Solution to Exercise 1"
+    The Lincoln-Petersen MLE is:
+
+    $$
+    \hat{N} = \frac{M \cdot n}{m} = \frac{20 \times 15}{5} = 60
+    $$
+
+    The Chapman estimator is:
+
+    $$
+    \hat{N}_{\text{Chapman}} = \frac{(M+1)(n+1)}{m+1} - 1 = \frac{21 \times 16}{6} - 1 = 56 - 1 = 55
+    $$
+
+    The Chapman estimate (55) is slightly lower than the Lincoln-Petersen estimate (60), reflecting the bias correction for small samples.
+
+---
+
+**Exercise 2.**
+Explain the assumptions underlying the capture-recapture method and what happens if they are violated.
+
+??? success "Solution to Exercise 2"
+    The key assumptions are:
+
+    1. **Closed population**: No births, deaths, immigration, or emigration between capture and recapture. Violation inflates or deflates $\hat{N}$ depending on whether the population grows or shrinks.
+
+    2. **Equal capture probability**: Every individual has the same probability of being captured. If tagged individuals are "trap-shy" (less likely to be recaptured), $m$ will be too small, making $\hat{N}$ too large. If tagged individuals are "trap-happy," $\hat{N}$ will be too small.
+
+    3. **Marks are not lost**: Tags remain visible during recapture. If marks are lost, some recaptured tagged individuals are counted as untagged, reducing $m$ and inflating $\hat{N}$.
+
+    4. **Mixing**: Tagged individuals mix randomly with the population between capture events. If they remain clustered, the recapture sample is not representative.
+
+---
+
+**Exercise 3.**
+In a capture-recapture study, $M = 10$ animals are tagged. In the recapture sample of $n = 10$, zero tagged animals are found ($m = 0$). What does the MLE formula give? Is this estimate sensible? Suggest an alternative approach.
+
+??? success "Solution to Exercise 3"
+    The Lincoln-Petersen formula gives $\hat{N} = Mn/m = 10 \times 10 / 0$, which is **undefined** (division by zero). This indicates the population is estimated to be infinitely large, which is not sensible.
+
+    This situation arises when the population is very large relative to the number tagged, or when the assumptions are violated. The Chapman estimator handles this case: $\hat{N}_{\text{Chapman}} = (11 \times 11)/1 - 1 = 120$. Alternatively, increasing the number of tagged animals or the recapture sample size would provide more reliable estimates.
+
+---
+
+**Exercise 4.**
+Derive the approximate variance formula $\text{Var}(\hat{N}) \approx \frac{M^2 n(n-m)}{m^3}$ by applying the delta method to $\hat{N} = Mn/m$ where $m$ is the random variable.
+
+??? success "Solution to Exercise 4"
+    Given $\hat{N} = g(m) = Mn/m$, we apply the delta method. The expected value of $m$ (under the hypergeometric model) is $E[m] = nM/N$. The derivative is:
+
+    $$
+    g'(m) = -\frac{Mn}{m^2}
+    $$
+
+    The variance of $m$ (from the hypergeometric distribution) is approximately:
+
+    $$
+    \text{Var}(m) \approx n \cdot \frac{M}{N} \cdot \frac{N-M}{N} \cdot \frac{N-n}{N-1}
+    $$
+
+    By the delta method, $\text{Var}(\hat{N}) \approx [g'(m)]^2 \text{Var}(m)$. Substituting $N \approx \hat{N} = Mn/m$ and simplifying (ignoring the finite population correction for large $N$):
+
+    $$
+    \text{Var}(\hat{N}) \approx \frac{M^2 n^2}{m^4} \cdot \frac{n \cdot m \cdot (n-m)}{n^2} = \frac{M^2 n(n-m)}{m^3}
+    $$
+
+    $\square$
