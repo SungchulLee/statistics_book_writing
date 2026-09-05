@@ -1,26 +1,26 @@
-# Central Limit Theorem Multi-Distribution Visualization
+# 중심극한정리 다중 분포 시각화
 
-## Overview
+## 개요
 
-The Central Limit Theorem (CLT) states that the sampling distribution of the sample mean converges to a normal distribution as $n$ grows, regardless of the parent distribution, provided the population has finite mean and variance. This page demonstrates the CLT visually by drawing repeated samples from three non-normal distributions and plotting the resulting sampling distributions of $\bar{X}$.
+중심극한정리(CLT)는 모집단의 평균과 분산이 유한하기만 하면 모집단 분포가 무엇이든 $n$이 커질수록 표본평균의 표본분포가 정규분포로 수렴한다고 말한다. 이 절에서는 정규분포가 아닌 세 분포에서 표본을 반복해서 뽑고 그 결과로 얻은 $\bar{X}$의 표본분포를 그려 중심극한정리를 시각적으로 보인다.
 
 ---
 
-## Setup
+## 설정
 
-We use three parent distributions with distinctly non-normal shapes:
+뚜렷하게 비정규인 모양을 갖는 세 모집단 분포를 사용한다.
 
-| Distribution | Shape | Mean | Variance |
+| 분포 | 모양 | 평균 | 분산 |
 |---|---|---|---|
-| Uniform(2, 8) | Flat, symmetric | 5 | 3 |
-| Beta(6, 2) | Left-skewed, bounded on $[0, 1]$ | 0.75 | 0.0208 |
-| Gamma(6, 1) | Right-skewed, unbounded | 6 | 6 |
+| Uniform(2, 8) | 평평하고 대칭 | 5 | 3 |
+| Beta(6, 2) | 왼쪽으로 치우침, $[0, 1]$에서 유계 | 0.75 | 0.0208 |
+| Gamma(6, 1) | 오른쪽으로 치우침, 유계 아님 | 6 | 6 |
 
-For each distribution and each sample size $n \in \{2, 10, 100\}$, we draw 2000 independent samples, compute the sample mean of each, and plot the resulting histogram.
+각 분포와 각 표본 크기 $n \in \{2, 10, 100\}$에 대해 독립적인 표본을 2000개 뽑아 각각의 표본평균을 계산하고 그 히스토그램을 그린다.
 
 ---
 
-## The Sampling Procedure
+## 표집 절차
 
 ```python
 import numpy as np
@@ -39,11 +39,11 @@ def sample_means(dist_rvs, sample_sizes, n_reps=N_REPS):
     return results
 ```
 
-The key idea: each entry in `results[n]` is a single realization of $\bar{X}_n$. Plotting 2000 such realizations approximates the **sampling distribution** of $\bar{X}_n$.
+핵심 발상: `results[n]`의 각 항목이 $\bar{X}_n$의 한 실현값이다. 이런 실현값 2000개를 그리면 $\bar{X}_n$의 **표본분포**를 근사하게 된다.
 
 ---
 
-## Distributions and Visualization
+## 분포와 시각화
 
 ```python
 sample_sizes = [2, 10, 100]
@@ -100,87 +100,89 @@ plt.tight_layout()
 plt.show()
 ```
 
-The figure has a $4 \times 3$ grid: the top row shows the three parent distributions, and the remaining rows show the sampling distribution of $\bar{X}$ for $n = 2, 10, 100$.
+그림은 $4 \times 3$ 격자로 되어 있다. 맨 윗줄이 세 모집단 분포를 보여주고, 나머지 줄이 $n = 2, 10, 100$에 대한 $\bar{X}$의 표본분포를 보여준다.
 
 ---
 
-## Interpretation
+## 해석
 
-### What to observe
+### 눈여겨볼 점
 
-- **Top row:** The three parent distributions are visibly non-normal — flat, left-skewed, and right-skewed respectively.
-- **$n = 2$:** The sampling distributions still reflect the parent shape. For two observations, averaging does little to smooth the original distribution.
-- **$n = 10$:** The histograms are noticeably more bell-shaped, though some skewness may remain (especially for the Gamma).
-- **$n = 100$:** All three sampling distributions are approximately normal, regardless of the parent distribution. This is the CLT in action.
+- **맨 윗줄:** 세 모집단 분포가 눈에 띄게 비정규다. 각각 평평하고, 왼쪽으로 치우쳤고, 오른쪽으로 치우쳤다.
+- **$n = 2$:** 표본분포가 여전히 모집단의 모양을 반영한다. 관측값 두 개로 평균을 내는 것으로는 원래 분포가 거의 매끄러워지지 않는다.
+- **$n = 10$:** 히스토그램이 눈에 띄게 종 모양에 가까워지지만 (특히 감마분포에서) 왜도가 일부 남아 있을 수 있다.
+- **$n = 100$:** 모집단 분포와 무관하게 세 표본분포가 모두 근사적으로 정규다. 중심극한정리가 작동하는 모습이다.
 
-### Quantitative check
+### 정량적 확인
 
-The CLT predicts that as $n$ grows:
+중심극한정리는 $n$이 커질수록 다음을 예측한다.
 
 $$
 \text{std}(\bar{X}) \approx \frac{\sigma}{\sqrt{n}}
 $$
 
-For the Uniform(2, 8) with $\sigma^2 = 3$:
+$\sigma^2 = 3$인 Uniform(2, 8)의 경우:
 
-| $n$ | Predicted $\text{std}(\bar{X})$ | Simulated $\text{std}(\bar{X})$ |
+| $n$ | 예측된 $\text{std}(\bar{X})$ | 모의실험 $\text{std}(\bar{X})$ |
 |---|---|---|
 | 2 | $\sqrt{3/2} \approx 1.225$ | $\approx 1.22$ |
 | 10 | $\sqrt{3/10} \approx 0.548$ | $\approx 0.55$ |
 | 100 | $\sqrt{3/100} \approx 0.173$ | $\approx 0.17$ |
 
-The simulated standard deviations match the $1/\sqrt{n}$ prediction closely, confirming that the sampling distribution tightens at the expected rate.
+모의실험의 표준편차가 $1/\sqrt{n}$ 예측과 잘 맞아떨어져, 표본분포가 예상된 속도로 좁아짐을 확인해 준다.
 
 ---
 
-## Statistical Insight
+## 통계적 통찰
 
-The CLT requires two conditions:
+중심극한정리는 두 가지 조건을 요구한다.
 
-1. The observations are **independent and identically distributed**.
-2. The population has **finite mean and finite variance**.
+1. 관측값이 **독립이고 동일한 분포를 따른다**.
+2. 모집단의 **평균과 분산이 유한하다**.
 
-When either condition fails, the CLT does not apply:
+둘 중 하나라도 어긋나면 중심극한정리는 적용되지 않는다.
 
-- **Dependent data** (e.g., time series with strong autocorrelation) may converge more slowly or to a different limit.
-- **Infinite variance** (e.g., Cauchy distribution) means the sample mean does not stabilize at all.
+- **종속인 자료**(예: 자기상관이 강한 시계열)는 더 느리게 수렴하거나 다른 극한으로 수렴할 수 있다.
+- **무한한 분산**(예: 코시분포)이면 표본평균이 아예 안정되지 않는다.
 
-!!! tip "Rate of Convergence"
-    How quickly the sampling distribution becomes normal depends on the parent distribution's skewness. Symmetric distributions converge faster; heavily skewed distributions may need larger $n$. The Berry–Esseen theorem quantifies this: the approximation error is bounded by $O(1/\sqrt{n})$.
+!!! tip "수렴 속도"
+    표본분포가 얼마나 빨리 정규가 되는지는 모집단 분포의 왜도에 달려 있다. 대칭 분포는 더 빨리 수렴하고, 심하게 치우친 분포는 더 큰 $n$이 필요할 수 있다. 베리–에센 정리가 이를 정량화한다. 근사 오차는 $O(1/\sqrt{n})$으로 유계다.
 
 ---
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-If $X_1, \ldots, X_n$ are i.i.d. Uniform(0, 1), write down the exact mean and variance of $\bar{X}$. For $n = 12$, what is the standard deviation of $\bar{X}$?
+**연습문제 1.**
+$X_1, \ldots, X_n$이 i.i.d. Uniform(0, 1)이면 $\bar{X}$의 정확한 평균과 분산을 쓰라. $n = 12$일 때 $\bar{X}$의 표준편차는 얼마인가?
 
-??? success "Solution to Exercise 1"
-    For Uniform(0, 1): $\mu = 1/2$, $\sigma^2 = 1/12$.
+??? success "연습문제 1 풀이"
+    Uniform(0, 1)에서 $\mu = 1/2$, $\sigma^2 = 1/12$이다.
 
     $$
     E[\bar{X}] = \mu = \frac{1}{2}, \qquad \text{Var}(\bar{X}) = \frac{\sigma^2}{n} = \frac{1}{12n}
     $$
 
-    For $n = 12$:
+    $n = 12$이면
 
     $$
     \text{Var}(\bar{X}) = \frac{1}{144}, \qquad \text{std}(\bar{X}) = \frac{1}{12} \approx 0.0833
     $$
 
+    이다.
+
 ---
 
-**Exercise 2.**
-Suppose you draw samples of size $n$ from a Gamma(2, 3) distribution ($\mu = 6$, $\sigma^2 = 18$). How large must $n$ be so that $P(|\bar{X} - 6| < 0.5) \ge 0.95$ using the CLT approximation?
+**연습문제 2.**
+Gamma(2, 3) 분포($\mu = 6$, $\sigma^2 = 18$)에서 크기 $n$의 표본을 뽑는다고 하자. 중심극한정리 근사를 써서 $P(|\bar{X} - 6| < 0.5) \ge 0.95$가 되려면 $n$이 얼마나 커야 하는가?
 
-??? success "Solution to Exercise 2"
-    By the CLT, $\bar{X} \approx N(\mu, \sigma^2/n)$. We need:
+??? success "연습문제 2 풀이"
+    중심극한정리에 의해 $\bar{X} \approx N(\mu, \sigma^2/n)$이다. 다음이 필요하다.
 
     $$
     P\left(\left|\frac{\bar{X} - 6}{\sqrt{18/n}}\right| < \frac{0.5}{\sqrt{18/n}}\right) \ge 0.95
     $$
 
-    This requires $\frac{0.5}{\sqrt{18/n}} \ge 1.96$, so:
+    이를 위해서는 $\frac{0.5}{\sqrt{18/n}} \ge 1.96$이어야 하므로
 
     $$
     \sqrt{18/n} \le \frac{0.5}{1.96} \approx 0.2551
@@ -190,96 +192,96 @@ Suppose you draw samples of size $n$ from a Gamma(2, 3) distribution ($\mu = 6$,
     \frac{18}{n} \le 0.06506 \implies n \ge \frac{18}{0.06506} \approx 276.7
     $$
 
-    So $n \ge 277$.
+    이다. 따라서 $n \ge 277$이다.
 
 ---
 
-**Exercise 3.**
-Explain why the CLT does not apply to the Cauchy distribution. What happens to the sample mean of i.i.d. Cauchy random variables as $n$ increases?
+**연습문제 3.**
+중심극한정리가 코시분포에 적용되지 않는 이유를 설명하라. $n$이 커질 때 i.i.d. 코시 확률변수의 표본평균은 어떻게 되는가?
 
-??? success "Solution to Exercise 3"
-    The Cauchy distribution has density $f(x) = \frac{1}{\pi(1 + x^2)}$. Its mean does not exist (the integral $\int x f(x)\, dx$ diverges), and consequently neither does its variance.
+??? success "연습문제 3 풀이"
+    코시분포의 밀도는 $f(x) = \frac{1}{\pi(1 + x^2)}$이다. 그 평균이 존재하지 않고(적분 $\int x f(x)\, dx$가 발산한다) 따라서 분산도 존재하지 않는다.
 
-    Since the CLT requires finite mean and variance, it does not apply. In fact, for i.i.d. Cauchy $X_1, \ldots, X_n$, the sample mean $\bar{X}$ has the same Cauchy distribution as a single observation — averaging does not reduce the spread at all. This is because the Cauchy distribution is a stable distribution with index $\alpha = 1$.
+    중심극한정리는 유한한 평균과 분산을 요구하므로 적용되지 않는다. 실제로 i.i.d. 코시 $X_1, \ldots, X_n$에서 표본평균 $\bar{X}$는 관측값 하나와 같은 코시분포를 갖는다. 평균을 내도 퍼짐이 전혀 줄지 않는다. 코시분포가 지수 $\alpha = 1$인 안정분포이기 때문이다.
 
 ---
 
-**Exercise 4.**
-Using the CLT, derive an approximate 95% confidence interval for the population mean $\mu$ based on $\bar{X}$ and $s$ (the sample standard deviation).
+**연습문제 4.**
+중심극한정리를 이용해 $\bar{X}$와 $s$(표본표준편차)에 근거한 모평균 $\mu$의 근사적 95% 신뢰구간을 유도하라.
 
-??? success "Solution to Exercise 4"
-    By the CLT, for large $n$:
+??? success "연습문제 4 풀이"
+    중심극한정리에 의해 $n$이 크면
 
     $$
     \frac{\bar{X} - \mu}{s / \sqrt{n}} \approx N(0, 1)
     $$
 
-    A 95% interval requires $|Z| \le 1.96$:
+    이다. 95% 구간은 $|Z| \le 1.96$을 요구하므로
 
     $$
     P\left(-1.96 \le \frac{\bar{X} - \mu}{s/\sqrt{n}} \le 1.96\right) \approx 0.95
     $$
 
-    Rearranging:
+    이고, 정리하면
 
     $$
     \bar{X} - 1.96 \frac{s}{\sqrt{n}} \le \mu \le \bar{X} + 1.96 \frac{s}{\sqrt{n}}
     $$
 
-    The approximate 95% confidence interval is $\bar{X} \pm 1.96 \, s / \sqrt{n}$.
+    이다. 근사적 95% 신뢰구간은 $\bar{X} \pm 1.96 \, s / \sqrt{n}$이다.
 
 ---
 
-**Exercise 5.**
-Prove that the variance of $\bar{X}_n = \frac{1}{n}\sum_{i=1}^n X_i$ equals $\sigma^2 / n$ when the $X_i$ are i.i.d. with variance $\sigma^2$.
+**연습문제 5.**
+$X_i$가 분산 $\sigma^2$인 i.i.d.일 때 $\bar{X}_n = \frac{1}{n}\sum_{i=1}^n X_i$의 분산이 $\sigma^2 / n$임을 증명하라.
 
-??? success "Solution to Exercise 5"
-    By linearity of variance for independent random variables:
+??? success "연습문제 5 풀이"
+    독립인 확률변수에 대한 분산의 성질에 의해
 
     $$
     \text{Var}(\bar{X}_n) = \text{Var}\left(\frac{1}{n}\sum_{i=1}^n X_i\right) = \frac{1}{n^2} \sum_{i=1}^n \text{Var}(X_i) = \frac{1}{n^2} \cdot n\sigma^2 = \frac{\sigma^2}{n}
     $$
 
-    The second equality uses independence (so the variance of the sum equals the sum of variances) and the fact that each $X_i$ has the same variance $\sigma^2$. $\square$
+    이다. 두 번째 등호는 독립성(합의 분산이 분산의 합)과 각 $X_i$의 분산이 모두 $\sigma^2$이라는 사실을 쓴다. $\square$
 
 ---
 
-**Exercise 6.**
-**Continuity correction** for normal approximation to a discrete distribution: when approximating $P(X \le k)$ for integer $X$ by a normal, use $\Phi((k + 0.5 - \mu)/\sigma)$. Why?
+**연습문제 6.**
+이산분포에 대한 정규근사의 **연속성 수정**: 정숫값 $X$에 대해 $P(X \le k)$를 정규분포로 근사할 때 $\Phi((k + 0.5 - \mu)/\sigma)$를 쓴다. 왜 그런가?
 
-??? success "Solution to Exercise 6"
-    A discrete RV places mass at integers; a continuous approximation distributes mass smoothly. Without correction, $P(X \le k) \approx \Phi((k - \mu)/\sigma)$ effectively excludes the mass at $X = k$.
+??? success "연습문제 6 풀이"
+    이산확률변수는 정수에 질량을 놓지만 연속 근사는 질량을 매끄럽게 퍼뜨린다. 수정하지 않으면 $P(X \le k) \approx \Phi((k - \mu)/\sigma)$가 사실상 $X = k$의 질량을 제외해 버린다.
 
-    The continuity correction treats each integer as an interval of width 1 centered on the integer. For $P(X \le k)$, use the upper endpoint $k + 0.5$:
+    연속성 수정은 각 정수를 그 정수를 중심으로 하는 너비 1인 구간으로 취급한다. $P(X \le k)$에는 위쪽 끝점 $k + 0.5$를 쓴다.
 
     $$
     P(X \le k) \approx \Phi\!\left(\frac{k + 0.5 - \mu}{\sigma}\right)
     $$
 
-    **Improvement:** error rate improves from $O(1/\sqrt n)$ to $O(1/n)$.
+    **개선:** 오차율이 $O(1/\sqrt n)$에서 $O(1/n)$으로 좋아진다.
 
-    **Example:** Binomial(20, 0.5), $\mu = 10$, $\sigma \approx 2.236$. Exact $P(X \le 12) = 0.8684$. Without correction: $\Phi(0.894) = 0.814$ (error 0.054). With correction: $\Phi(1.118) = 0.868$ (error 0.000).
+    **예:** Binomial(20, 0.5)에서 $\mu = 10$, $\sigma \approx 2.236$이다. 정확한 값은 $P(X \le 12) = 0.8684$이다. 수정하지 않으면 $\Phi(0.894) = 0.814$(오차 0.054)이고, 수정하면 $\Phi(1.118) = 0.868$(오차 0.000)이다.
 
-    Always apply continuity correction for discrete-to-continuous approximations, especially with modest $n$.
+    특히 $n$이 크지 않을 때 이산에서 연속으로의 근사에는 언제나 연속성 수정을 적용하라.
 
 ---
 
-**Exercise 7.**
-**CLT does not apply to maxima.** Show that the maximum $M_n = \max_i X_i$ of i.i.d. samples does not have a Gaussian limit. What is its limiting distribution?
+**연습문제 7.**
+**중심극한정리는 최댓값에 적용되지 않는다.** i.i.d. 표본의 최댓값 $M_n = \max_i X_i$이 가우시안 극한을 갖지 않음을 보여라. 그 극한분포는 무엇인가?
 
-??? success "Solution to Exercise 7"
-    $F_{M_n}(x) = F(x)^n$. As $n \to \infty$, this degenerates to a step function — not a Gaussian.
+??? success "연습문제 7 풀이"
+    $F_{M_n}(x) = F(x)^n$이다. $n \to \infty$이면 이것이 계단함수로 퇴화하며 가우시안이 아니다.
 
-    Proper rescaling gives a non-degenerate limit: for sequences $a_n > 0$ and $b_n$,
+    적절히 척도를 다시 맞추면 퇴화하지 않는 극한을 얻는다. 수열 $a_n > 0$과 $b_n$에 대해
 
     $$
     P\!\left(\frac{M_n - b_n}{a_n} \le x\right) \to G(x)
     $$
 
-    By the **Fisher-Tippett-Gnedenko theorem**, $G$ must be one of three extreme-value distributions:
+    이다. **피셔–티펫–그네덴코 정리**에 의해 $G$는 세 가지 극단값 분포 중 하나여야 한다.
 
-    - **Gumbel** for light-tailed $F$ (normal, exponential).
-    - **Fréchet** for heavy-tailed $F$ (Pareto, $t$).
-    - **Weibull** for bounded-support $F$ (uniform).
+    - 꼬리가 얇은 $F$(정규, 지수)에 대해 **검벨**.
+    - 꼬리가 두꺼운 $F$(파레토, $t$)에 대해 **프레셰**.
+    - 받침이 유계인 $F$(균등)에 대해 **와이불**.
 
-    **Practical use:** extreme-value theory governs maximum river levels (hydrology), maximum financial losses (risk management), and minimum-life reliability problems. The Gaussian CLT covers sums; extreme-value theory covers maxima. They are distinct asymptotic frameworks for different statistics of the same data.
+    **실용적 쓰임:** 극단값 이론은 최대 하천 수위(수문학), 최대 금융 손실(위험관리), 최소 수명 신뢰도 문제를 지배한다. 가우시안 중심극한정리는 합을 다루고 극단값 이론은 최댓값을 다룬다. 같은 자료의 서로 다른 통계량에 대한 별개의 점근 틀이다.

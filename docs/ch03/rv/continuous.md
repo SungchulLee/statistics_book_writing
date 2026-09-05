@@ -1,68 +1,68 @@
-# Continuous Random Variables
+# 연속확률변수
 
-## Overview
+## 개요
 
-A **continuous random variable** can take on any value within a continuous range (an interval or union of intervals on the real line). Unlike discrete random variables, the probability of any single specific value is zero—instead, probabilities are defined over intervals.
-
----
-
-## Definition
-
-A **continuous random variable** $X$ can take on infinitely many possible values within a given range. Examples include heights, weights, temperatures, and waiting times.
-
-For continuous random variables, the weight (probability) is **spread continuously** along the real line rather than concentrated at specific points.
+**연속확률변수**는 연속적인 범위(실직선 위의 구간 또는 구간들의 합집합) 안의 어떤 값이든 취할 수 있다. 이산확률변수와 달리 어떤 특정한 한 값의 확률은 0이며, 대신 확률이 구간 위에서 정의된다.
 
 ---
 
-## Probability Density Function (PDF)
+## 정의
 
-For a continuous random variable $X$, the **PDF** $f(x)$ describes the density of probability at each point:
+**연속확률변수** $X$는 주어진 범위 안에서 무한히 많은 값을 취할 수 있다. 키, 몸무게, 온도, 대기시간 등이 그 예다.
+
+연속확률변수에서는 무게(확률)가 특정한 점들에 몰려 있지 않고 실직선을 따라 **연속적으로 퍼져** 있다.
+
+---
+
+## 확률밀도함수 (PDF)
+
+연속확률변수 $X$에 대해 **확률밀도함수** $f(x)$는 각 점에서 확률의 밀도를 기술한다.
 
 $$
 f(x)\,dx = \text{Weight of the bricks within the interval } [x, x + dx]
 $$
 
-Key properties of the PDF:
+확률밀도함수의 핵심 성질은 다음과 같다.
 
-1. $f(x) \geq 0$ for all $x$
+1. 모든 $x$에 대해 $f(x) \geq 0$
 2. $\int_{-\infty}^{\infty} f(x)\,dx = 1$
 3. $P(a \leq X \leq b) = \int_a^b f(x)\,dx$
 
-Note that $f(x)$ itself is **not** a probability—it can exceed 1. Only the **area** under the curve gives probabilities.
+$f(x)$ 자체는 확률이 **아니며** 1을 넘을 수도 있다는 점에 유의하라. 확률을 주는 것은 곡선 아래의 **넓이**뿐이다.
 
 ---
 
-## Key Difference from Discrete Variables
+## 이산변수와의 핵심 차이
 
-For a **discrete** random variable, we can ask $P(X = a)$ and get a positive answer. For a **continuous** random variable:
+**이산** 확률변수에서는 $P(X = a)$를 물어 양의 답을 얻을 수 있다. **연속** 확률변수에서는
 
 $$
 P(X = a) = 0 \quad \text{for any specific value } a
 $$
 
-This is because there are infinitely many possible values, and the "weight" at any single point is zero. We can only meaningfully ask about the probability that $X$ falls within a range.
+이다. 가능한 값이 무한히 많아 어느 한 점의 "무게"가 0이기 때문이다. 의미 있게 물을 수 있는 것은 $X$가 어떤 범위에 들어갈 확률뿐이다.
 
 ---
 
-## Example: Normal PDF
+## 예: 정규분포의 확률밀도함수
 
-The most important continuous distribution is the **normal distribution** with mean $\mu$ and variance $\sigma^2$. Its PDF is:
+가장 중요한 연속분포는 평균 $\mu$, 분산 $\sigma^2$인 **정규분포**다. 그 확률밀도함수는 다음과 같다.
 
 $$
 f(x) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{(x - \mu)^2}{2\sigma^2}\right)
 $$
 
-The area under this curve between any two values gives the probability that $X$ falls within that range.
+두 값 사이의 곡선 아래 넓이가 $X$가 그 범위에 들어갈 확률을 준다.
 
 ---
 
-## Example: Amelia's Maximum Average Wait Time
+## 예: 어밀리아의 최대 평균 대기시간
 
-The distribution of average wait times at drive-through restaurants is approximately normal with mean $\mu = 185$ seconds and standard deviation $\sigma = 11$ seconds. Amelia only uses restaurants in the bottom 10% of wait times. What is her maximum acceptable wait time?
+드라이브스루 식당의 평균 대기시간 분포가 평균 $\mu = 185$초, 표준편차 $\sigma = 11$초인 근사적 정규분포를 따른다. 어밀리아는 대기시간 하위 10%에 드는 식당만 이용한다. 그가 받아들이는 최대 대기시간은 얼마인가?
 
-**Solution:**
+**풀이:**
 
-We need the 10th percentile (PPF at 0.1):
+10번째 백분위수(0.1에서의 분위수함수)가 필요하다.
 
 ```python
 import numpy as np
@@ -92,34 +92,34 @@ plt.show()
 
 ---
 
-## Comparing Discrete and Continuous Distributions
+## 이산분포와 연속분포의 비교
 
-| Feature | Discrete | Continuous |
+| 특징 | 이산 | 연속 |
 |:---|:---|:---|
-| **Values** | Countable set | Uncountable (interval) |
-| **Probability at a point** | $P(X = a) > 0$ possible | $P(X = a) = 0$ always |
-| **Probability function** | PMF: $p_{x_i}$ | PDF: $f(x)$ |
-| **Probability of a range** | $\sum_{x_i \in [a,b]} p_{x_i}$ | $\int_a^b f(x)\,dx$ |
-| **Total probability** | $\sum_i p_{x_i} = 1$ | $\int_{-\infty}^{\infty} f(x)\,dx = 1$ |
+| **값** | 가산집합 | 비가산(구간) |
+| **한 점의 확률** | $P(X = a) > 0$ 가능 | 언제나 $P(X = a) = 0$ |
+| **확률함수** | 확률질량함수: $p_{x_i}$ | 확률밀도함수: $f(x)$ |
+| **범위의 확률** | $\sum_{x_i \in [a,b]} p_{x_i}$ | $\int_a^b f(x)\,dx$ |
+| **전체 확률** | $\sum_i p_{x_i} = 1$ | $\int_{-\infty}^{\infty} f(x)\,dx = 1$ |
 
 ---
 
-## Key Takeaways
+## 핵심 요약
 
-- Continuous random variables take values in an interval; the probability of any single point is zero.
-- The PDF describes the "density" of probability—areas under the PDF curve give probabilities.
-- The PDF can exceed 1 at specific points, but the total area under the curve is always 1.
-- The normal distribution is the most widely used continuous distribution.
+- 연속확률변수는 구간 안의 값을 취하며 어떤 한 점의 확률도 0이다.
+- 확률밀도함수는 확률의 "밀도"를 기술한다. 확률밀도함수 곡선 아래의 넓이가 확률을 준다.
+- 확률밀도함수는 특정 점에서 1을 넘을 수 있지만 곡선 아래 전체 넓이는 언제나 1이다.
+- 정규분포는 가장 널리 쓰이는 연속분포다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-$f(x) = c x^2$ for $0 \le x \le 2$, 0 else. (a) Find $c$; (b) compute $F(x)$; (c) $P(1 \le X \le 2)$; (d) the median.
+**연습문제 1.**
+$0 \le x \le 2$에서 $f(x) = c x^2$이고 그 밖에서는 0이다. (a) $c$를 구하라. (b) $F(x)$를 계산하라. (c) $P(1 \le X \le 2)$를 구하라. (d) 중앙값을 구하라.
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
     (a) $\int_0^2 c x^2 dx = 8c/3 = 1 \Rightarrow c = 3/8$.
 
-    (b) $F(x) = \int_0^x (3/8) t^2 dt = x^3/8$ for $x \in [0, 2]$; 0 below, 1 above.
+    (b) $x \in [0, 2]$에서 $F(x) = \int_0^x (3/8) t^2 dt = x^3/8$이고, 그 아래에서는 0, 위에서는 1이다.
 
     (c) $P(1 \le X \le 2) = F(2) - F(1) = 1 - 1/8 = 7/8$.
 
@@ -127,110 +127,110 @@ $f(x) = c x^2$ for $0 \le x \le 2$, 0 else. (a) Find $c$; (b) compute $F(x)$; (c
 
 ---
 
-**Exercise 2.**
-**Why $P(X = a) = 0$ for continuous $X$.** Rigorously argue this from the CDF.
+**연습문제 2.**
+**연속인 $X$에 대해 $P(X = a) = 0$인 이유.** 누적분포함수로부터 엄밀하게 논증하라.
 
-??? success "Solution to Exercise 2"
-    For continuous $X$ with continuous CDF $F$:
+??? success "연습문제 2 풀이"
+    누적분포함수 $F$가 연속인 연속확률변수 $X$에 대해, $a$에서 $F$의 연속성을 이용하면
 
     $$
     P(X = a) = \lim_{\varepsilon \to 0^+} P(a - \varepsilon < X \le a) = \lim_{\varepsilon \to 0^+} [F(a) - F(a - \varepsilon)] = F(a) - F(a^-) = 0
     $$
 
-    using continuity of $F$ at $a$.
+    이다.
 
-    **Note:** $P(X = a) = 0$ does *not* mean $X = a$ is impossible. It means the event has probability zero in the Lebesgue sense. Any specific outcome of a continuous random variable is "infinitely unlikely" but the sample space is still uncountable and produces a definite outcome with each draw.
+    **참고:** $P(X = a) = 0$이라고 해서 $X = a$가 불가능하다는 뜻은 *아니다*. 르베그의 의미에서 그 사건의 확률이 0이라는 뜻이다. 연속확률변수의 특정 결과는 하나하나가 "무한히 일어나기 어렵지만" 표본공간은 여전히 비가산이고 뽑을 때마다 확정된 결과가 나온다.
 
-    This is the source of the "$P(0)$ doesn't mean impossible" confusion in elementary probability. The fix is to think in terms of densities, not point probabilities — a continuous random variable concentrates probability in intervals, not at points.
+    이것이 초급 확률에서 "$P(0)$이 불가능을 뜻하지 않는다"는 혼란의 근원이다. 해결책은 점의 확률이 아니라 밀도로 생각하는 것이다. 연속확률변수는 확률을 점이 아니라 구간에 몰아 놓는다.
 
 ---
 
-**Exercise 3.**
-**Transformation rule for continuous PDFs.** If $X$ has density $f_X$ and $Y = g(X)$ with $g$ strictly increasing and differentiable, derive the density of $Y$.
+**연습문제 3.**
+**연속 확률밀도함수의 변환 규칙.** $X$의 밀도가 $f_X$이고 $Y = g(X)$이며 $g$가 순증가하고 미분가능할 때 $Y$의 밀도를 유도하라.
 
-??? success "Solution to Exercise 3"
-    Start from the CDF: $F_Y(y) = P(Y \le y) = P(g(X) \le y) = P(X \le g^{-1}(y)) = F_X(g^{-1}(y))$.
+??? success "연습문제 3 풀이"
+    누적분포함수에서 출발한다: $F_Y(y) = P(Y \le y) = P(g(X) \le y) = P(X \le g^{-1}(y)) = F_X(g^{-1}(y))$.
 
-    Differentiate with chain rule:
+    연쇄법칙으로 미분하면
 
     $$
     f_Y(y) = F_Y'(y) = f_X(g^{-1}(y)) \cdot \frac{d}{dy} g^{-1}(y) = \frac{f_X(g^{-1}(y))}{g'(g^{-1}(y))}
     $$
 
-    Or more compactly: with $x = g^{-1}(y)$,
+    이다. 또는 더 간결하게, $x = g^{-1}(y)$로 두면
 
     $$
     f_Y(y) = \frac{f_X(x)}{|g'(x)|}
     $$
 
-    The absolute value handles decreasing $g$ as well.
+    이다. 절댓값을 쓰면 $g$가 감소하는 경우도 함께 다룰 수 있다.
 
-    **Example:** $X \sim N(0, 1)$, $Y = e^X$. Then $g(x) = e^x$, $g'(x) = e^x = y$, $x = \ln y$. So
+    **예:** $X \sim N(0, 1)$, $Y = e^X$라 하자. 그러면 $g(x) = e^x$, $g'(x) = e^x = y$, $x = \ln y$이므로
 
     $$
     f_Y(y) = \frac{1}{\sqrt{2\pi}} e^{-(\ln y)^2/2} \cdot \frac{1}{y}
     $$
 
-    which is the **lognormal distribution** density.
+    이며, 이것이 **로그정규분포**의 밀도다.
 
 ---
 
-**Exercise 4.**
-**Expected value for continuous RV.** For $X$ with PDF $f(x) = 2x$ on $[0, 1]$: compute $\mathbb{E}[X]$, $\mathbb{E}[X^2]$, and $\mathrm{Var}(X)$.
+**연습문제 4.**
+**연속확률변수의 기댓값.** $[0, 1]$에서 확률밀도함수가 $f(x) = 2x$인 $X$에 대해 $\mathbb{E}[X]$, $\mathbb{E}[X^2]$, $\mathrm{Var}(X)$를 계산하라.
 
-??? success "Solution to Exercise 4"
+??? success "연습문제 4 풀이"
     $\mathbb{E}[X] = \int_0^1 x \cdot 2x \, dx = \int_0^1 2x^2 \, dx = 2/3$.
 
     $\mathbb{E}[X^2] = \int_0^1 x^2 \cdot 2x \, dx = \int_0^1 2x^3 \, dx = 1/2$.
 
     $\mathrm{Var}(X) = \mathbb{E}[X^2] - (\mathbb{E}[X])^2 = 1/2 - 4/9 = 9/18 - 8/18 = 1/18 \approx 0.0556$.
 
-    SD $\approx 0.236$.
+    표준편차 $\approx 0.236$.
 
 ---
 
-**Exercise 5.**
-**Memoryless property of the exponential.** If $X \sim \mathrm{Exp}(\lambda)$, prove $P(X > s + t \mid X > s) = P(X > t)$ for all $s, t \ge 0$. What is its interpretation?
+**연습문제 5.**
+**지수분포의 무기억 성질.** $X \sim \mathrm{Exp}(\lambda)$이면 모든 $s, t \ge 0$에 대해 $P(X > s + t \mid X > s) = P(X > t)$임을 증명하라. 그 해석은 무엇인가?
 
-??? success "Solution to Exercise 5"
-    Survival function: $P(X > x) = e^{-\lambda x}$. Apply the definition of conditional probability:
+??? success "연습문제 5 풀이"
+    생존함수는 $P(X > x) = e^{-\lambda x}$이다. 조건부확률의 정의를 적용하면
 
     $$
     P(X > s + t \mid X > s) = \frac{P(X > s + t \cap X > s)}{P(X > s)} = \frac{P(X > s + t)}{P(X > s)} = \frac{e^{-\lambda(s+t)}}{e^{-\lambda s}} = e^{-\lambda t} = P(X > t)
     $$
 
-    $\square$
+    이다. $\square$
 
-    **Interpretation:** if you've already waited $s$ time units for an event, the remaining wait time has the same distribution as if you'd just started waiting. The process "forgets" how long it has been waiting.
+    **해석:** 어떤 사건을 이미 $s$만큼 기다렸다면 남은 대기시간의 분포는 방금 기다리기 시작한 것과 같다. 이 과정은 얼마나 오래 기다렸는지를 "잊어버린다".
 
-    **Real-world implications:**
+    **현실적 함의:**
 
-    - Radioactive decay: the half-life is well-defined because decay is memoryless.
-    - Phone-call durations: empirically not exponential because of memory effects (long calls usually continue).
-    - Customer arrivals to a counter: often well-modeled as Poisson with exponential inter-arrival times.
+    - 방사성 붕괴: 붕괴가 무기억적이기 때문에 반감기가 잘 정의된다.
+    - 통화 시간: 기억 효과 때문에 경험적으로 지수분포가 아니다(긴 통화는 대개 계속된다).
+    - 창구에 오는 고객: 지수 도착간격을 갖는 포아송 과정으로 잘 모형화되는 경우가 많다.
 
-    The exponential is the **unique** continuous distribution with the memoryless property — a striking characterization.
+    지수분포는 무기억 성질을 갖는 **유일한** 연속분포이며, 이는 인상적인 특성화다.
 
 ---
 
-**Exercise 6.**
-**Mixed distributions.** Give an example of a random variable $X$ that is neither purely discrete nor purely continuous. Show how its CDF has both jumps and continuous segments.
+**연습문제 6.**
+**혼합분포.** 순수하게 이산도 아니고 순수하게 연속도 아닌 확률변수 $X$의 예를 들어라. 그 누적분포함수에 도약과 연속 구간이 함께 있음을 보여라.
 
-??? success "Solution to Exercise 6"
-    Example: a measurement that has a chance of being "zero" (e.g., due to a sensor not triggering) plus a continuous component when it does trigger.
+??? success "연습문제 6 풀이"
+    예: (센서가 작동하지 않아서 등의 이유로) "0"이 될 가능성이 있고, 작동할 때는 연속 성분을 갖는 측정값.
 
-    Let $Y \sim \mathrm{Exp}(1)$ and let $A$ be Bernoulli(0.3) independent of $Y$. Define $X = A \cdot Y$:
+    $Y \sim \mathrm{Exp}(1)$이라 하고 $A$를 $Y$와 독립인 Bernoulli(0.3)이라 하자. $X = A \cdot Y$로 정의한다.
 
-    - With probability 0.7, $A = 0$, so $X = 0$.
-    - With probability 0.3, $A = 1$, so $X = Y \sim \mathrm{Exp}(1)$.
+    - 확률 0.7로 $A = 0$이므로 $X = 0$이다.
+    - 확률 0.3으로 $A = 1$이므로 $X = Y \sim \mathrm{Exp}(1)$이다.
 
-    CDF:
+    누적분포함수:
 
     $$
     F(x) = \begin{cases} 0 & x < 0 \\ 0.7 + 0.3(1 - e^{-x}) & x \ge 0 \end{cases}
     $$
 
-    At $x = 0$: $F(0) = 0.7$ — a **jump** of 0.7 corresponding to the discrete mass at 0.
-    For $x > 0$: continuous increase from 0.7 to 1.
+    $x = 0$에서 $F(0) = 0.7$로 0에 있는 이산 질량에 대응하는 **도약**이 있다.
+    $x > 0$에서는 0.7에서 1까지 연속적으로 증가한다.
 
-    Such mixed distributions appear frequently in practice (zero-inflated count models, insurance claim sizes, censored measurements). The framework of the Lebesgue–Stieltjes integral handles them rigorously; the practical handling decomposes them into discrete and continuous parts and integrates each appropriately.
+    이런 혼합분포는 실무에 자주 등장한다(영과잉 계수 모형, 보험 청구액, 절단된 측정값). 르베그–스틸체스 적분의 틀이 이들을 엄밀하게 다루며, 실용적으로는 이산 부분과 연속 부분으로 분해해 각각 적절히 적분한다.

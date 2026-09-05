@@ -1,77 +1,77 @@
-# Berry–Esseen Theorem
+# 베리–에센 정리
 
-## Overview
+## 개요
 
-The Central Limit Theorem guarantees that the standardized sample mean converges to a normal distribution, but it says nothing about **how fast** this convergence occurs. The **Berry–Esseen theorem** fills this gap by providing an explicit upper bound on the approximation error for any finite sample size $n$.
+중심극한정리는 표준화된 표본평균이 정규분포로 수렴함을 보장하지만 그 수렴이 **얼마나 빠른지**에 대해서는 아무 말도 하지 않는다. **베리–에센 정리**는 유한한 표본 크기 $n$에 대해 근사 오차의 명시적인 상한을 제공하여 이 빈틈을 메운다.
 
 ---
 
-## Statement
+## 진술
 
-Let $X_1, X_2, \ldots, X_n$ be i.i.d. random variables with:
+$X_1, X_2, \ldots, X_n$이 다음을 만족하는 i.i.d. 확률변수라 하자.
 
-- Mean $\mu = E[X_i]$
-- Variance $\sigma^2 = \text{Var}(X_i) > 0$
-- Finite third absolute moment $\rho = E\left[|X_i - \mu|^3\right] < \infty$
+- 평균 $\mu = E[X_i]$
+- 분산 $\sigma^2 = \text{Var}(X_i) > 0$
+- 유한한 3차 절대적률 $\rho = E\left[|X_i - \mu|^3\right] < \infty$
 
-Let $F_n(x) = P\left(\frac{\bar{X} - \mu}{\sigma / \sqrt{n}} \leq x\right)$ be the CDF of the standardized sample mean, and let $\mathcal{N}(x)$ be the CDF of the standard normal. Then:
+$F_n(x) = P\left(\frac{\bar{X} - \mu}{\sigma / \sqrt{n}} \leq x\right)$을 표준화된 표본평균의 누적분포함수라 하고 $\mathcal{N}(x)$를 표준정규분포의 누적분포함수라 하자. 그러면
 
 $$
 \sup_{x \in \mathbb{R}} \left|F_n(x) - \mathcal{N}(x)\right| \leq \frac{C \cdot \rho}{\sigma^3 \sqrt{n}}
 $$
 
-where $C$ is a universal constant. The best known value is $C \leq 0.4748$ (Shevtsova, 2011).
+이며, 여기서 $C$는 보편 상수다. 알려진 최선의 값은 $C \leq 0.4748$이다(Shevtsova, 2011).
 
 ---
 
-## Interpretation
+## 해석
 
-The theorem provides a **non-asymptotic** guarantee: for any finite $n$, the maximum error of the normal approximation is bounded by $O(1/\sqrt{n})$. Key implications:
+이 정리는 **비점근적** 보장을 제공한다. 임의의 유한한 $n$에 대해 정규근사의 최대 오차가 $O(1/\sqrt{n})$으로 유계다. 핵심 함의는 다음과 같다.
 
-- The approximation error decreases at rate $1/\sqrt{n}$.
-- Distributions with larger third moments (more skewness or heavy tails) converge more slowly.
-- The ratio $\rho / \sigma^3$ captures the "non-normality" of the original distribution.
+- 근사 오차가 $1/\sqrt{n}$의 속도로 줄어든다.
+- 3차 적률이 큰 분포(왜도가 크거나 꼬리가 두꺼운 분포)는 더 느리게 수렴한다.
+- 비 $\rho / \sigma^3$이 원래 분포의 "비정규성"을 포착한다.
 
 ---
 
-## Connection to the CLT
+## 중심극한정리와의 관계
 
-| Aspect | CLT | Berry–Esseen |
+| 측면 | 중심극한정리 | 베리–에센 |
 |:---|:---|:---|
-| **Statement** | $F_n(x) \to \mathcal{N}(x)$ as $n \to \infty$ | $\|F_n - \mathcal{N}\|_\infty \leq C\rho / (\sigma^3\sqrt{n})$ |
-| **Type of result** | Asymptotic | Non-asymptotic (finite $n$) |
-| **Rate of convergence** | Not specified | $O(1/\sqrt{n})$ |
-| **Assumptions** | Finite $\mu, \sigma^2$ | Finite $\mu, \sigma^2, \rho$ |
+| **진술** | $n \to \infty$일 때 $F_n(x) \to \mathcal{N}(x)$ | $\|F_n - \mathcal{N}\|_\infty \leq C\rho / (\sigma^3\sqrt{n})$ |
+| **결과의 유형** | 점근적 | 비점근적(유한한 $n$) |
+| **수렴 속도** | 명시하지 않음 | $O(1/\sqrt{n})$ |
+| **가정** | 유한한 $\mu, \sigma^2$ | 유한한 $\mu, \sigma^2, \rho$ |
 
-The Berry–Esseen theorem **quantifies** what the CLT merely asserts qualitatively.
+베리–에센 정리는 중심극한정리가 질적으로만 주장하는 바를 **정량화**한다.
 
 ---
 
-## Examples
+## 예제
 
-### Example: Fair Coin Flips
+### 예: 공정한 동전 던지기
 
-For $X_i \sim \text{Bernoulli}(0.5)$: $\mu = 0.5$, $\sigma^2 = 0.25$, $\rho = E[|X_i - 0.5|^3] = 0.125$.
+$X_i \sim \text{Bernoulli}(0.5)$에 대해 $\mu = 0.5$, $\sigma^2 = 0.25$, $\rho = E[|X_i - 0.5|^3] = 0.125$이다.
 
 $$
 \text{Bound} = \frac{0.4748 \times 0.125}{0.25^{3/2} \sqrt{n}} = \frac{0.4748}{n^{1/2}}
 $$
 
-For $n = 100$: bound $\approx 0.0475$, meaning the CDF is within 4.75% of the normal CDF at every point.
+$n = 100$이면 한계 $\approx 0.0475$이며, 이는 누적분포함수가 모든 점에서 정규 누적분포함수와 4.75% 이내라는 뜻이다.
 
-### Example: Exponential Distribution
+### 예: 지수분포
 
-For $X_i \sim \text{Exponential}(1)$: $\mu = 1$, $\sigma^2 = 1$, $\rho = E[|X_i - 1|^3] = 2 + e^{-1} \approx 2.368$.
+$X_i \sim \text{Exponential}(1)$에 대해 $\mu = 1$, $\sigma^2 = 1$, $\rho = E[|X_i - 1|^3] = 2 + e^{-1} \approx 2.368$이다.
 
 $$
 \text{Bound} = \frac{0.4748 \times 2.368}{\sqrt{n}} \approx \frac{1.124}{\sqrt{n}}
 $$
 
-For $n = 100$: bound $\approx 0.112$. The larger bound reflects the exponential distribution's skewness—it converges to normality more slowly than the symmetric Bernoulli.
+$n = 100$이면 한계 $\approx 0.112$이다. 한계가 더 큰 것은 지수분포의 왜도를 반영한다. 대칭인 베르누이보다 정규성으로 더 느리게 수렴한다.
 
 ---
 
-## Python Exploration
+## 파이썬으로 살펴보기
 
 ```python
 import numpy as np
@@ -184,26 +184,26 @@ convergence_rate_comparison()
 
 ---
 
-## Key Takeaways
+## 핵심 요약
 
-- The Berry–Esseen theorem gives a **finite-sample** bound on the normal approximation error: $O(1/\sqrt{n})$.
-- The bound depends on $\rho / \sigma^3$—distributions with more skewness or heavier tails converge more slowly.
-- It complements the CLT by answering "how large must $n$ be?" for a desired approximation accuracy.
-- Symmetric distributions (e.g., Bernoulli(0.5)) converge faster than skewed ones (e.g., Exponential).
+- 베리–에센 정리는 정규근사 오차에 대한 **유한표본** 한계 $O(1/\sqrt{n})$을 준다.
+- 이 한계는 $\rho / \sigma^3$에 의존한다. 왜도가 크거나 꼬리가 두꺼운 분포일수록 더 느리게 수렴한다.
+- 원하는 근사 정확도를 위해 "$n$이 얼마나 커야 하는가?"에 답함으로써 중심극한정리를 보완한다.
+- 대칭 분포(예: Bernoulli(0.5))가 치우친 분포(예: 지수분포)보다 빠르게 수렴한다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-The Berry-Esseen theorem states that $\sup_x |F_n(x) - \mathcal{N}(x)| \leq \frac{C \rho}{\sigma^3 \sqrt{n}}$ where $C \leq 0.4748$. For the Bernoulli(0.5) distribution, $\sigma^2 = 0.25$ and $\rho = E[|X - \mu|^3] = 0.125$. How large must $n$ be for the Berry-Esseen bound to guarantee an approximation error of at most 0.01?
+**연습문제 1.**
+베리–에센 정리는 $C \leq 0.4748$일 때 $\sup_x |F_n(x) - \mathcal{N}(x)| \leq \frac{C \rho}{\sigma^3 \sqrt{n}}$이라고 말한다. Bernoulli(0.5) 분포에서는 $\sigma^2 = 0.25$이고 $\rho = E[|X - \mu|^3] = 0.125$이다. 베리–에센 한계가 근사 오차 0.01 이하를 보장하려면 $n$이 얼마나 커야 하는가?
 
-??? success "Solution to Exercise 1"
-    We need:
+??? success "연습문제 1 풀이"
+    다음이 필요하다.
 
     $$
     \frac{C \rho}{\sigma^3 \sqrt{n}} \leq 0.01
     $$
 
-    With $C = 0.4748$, $\rho = 0.125$, and $\sigma = 0.5$:
+    $C = 0.4748$, $\rho = 0.125$, $\sigma = 0.5$를 넣으면
 
     $$
     \frac{0.4748 \times 0.125}{0.5^3 \sqrt{n}} \leq 0.01
@@ -221,45 +221,45 @@ The Berry-Esseen theorem states that $\sup_x |F_n(x) - \mathcal{N}(x)| \leq \fra
     \sqrt{n} \geq 47.48 \implies n \geq 2254.3
     $$
 
-    Therefore $n \geq 2255$ is sufficient to guarantee the normal approximation error is at most 0.01 for the Bernoulli(0.5) case.
+    이다. 따라서 Bernoulli(0.5)의 경우 정규근사 오차가 0.01 이하임을 보장하려면 $n \geq 2255$이면 충분하다.
 
 ---
 
-**Exercise 2.**
-Consider the Exponential(1) distribution with $\mu = 1$, $\sigma = 1$, and $\rho = E[|X-1|^3] \approx 2.368$. Compare the Berry-Esseen bound for $n = 30$ to the bound for Bernoulli(0.5) at the same sample size. Which distribution converges faster to normal and why?
+**연습문제 2.**
+$\mu = 1$, $\sigma = 1$, $\rho = E[|X-1|^3] \approx 2.368$인 Exponential(1) 분포를 생각하자. $n = 30$에서의 베리–에센 한계를 같은 표본 크기의 Bernoulli(0.5)와 비교하라. 어느 분포가 정규분포로 더 빨리 수렴하며 그 이유는 무엇인가?
 
-??? success "Solution to Exercise 2"
-    **Bernoulli(0.5):** With $\rho = 0.125$ and $\sigma = 0.5$:
+??? success "연습문제 2 풀이"
+    **Bernoulli(0.5):** $\rho = 0.125$, $\sigma = 0.5$이므로
 
     $$
     \text{Bound} = \frac{0.4748 \times 0.125}{0.5^3 \sqrt{30}} = \frac{0.05935}{0.125 \times 5.477} = \frac{0.05935}{0.6847} \approx 0.0867
     $$
 
-    **Exponential(1):** With $\rho = 2.368$ and $\sigma = 1$:
+    **Exponential(1):** $\rho = 2.368$, $\sigma = 1$이므로
 
     $$
     \text{Bound} = \frac{0.4748 \times 2.368}{1^3 \sqrt{30}} = \frac{1.1243}{5.477} \approx 0.2053
     $$
 
-    The Bernoulli(0.5) bound (0.087) is much smaller than the Exponential(1) bound (0.205). The Bernoulli(0.5) distribution converges faster because it is symmetric ($\rho/\sigma^3$ is small), while the Exponential(1) is right-skewed with a large third absolute moment relative to $\sigma^3$.
+    Bernoulli(0.5)의 한계(0.087)가 Exponential(1)의 한계(0.205)보다 훨씬 작다. Bernoulli(0.5)는 대칭이라($\rho/\sigma^3$이 작아서) 더 빨리 수렴하는 반면, Exponential(1)은 오른쪽으로 치우쳐 있고 $\sigma^3$에 비해 3차 절대적률이 크다.
 
 ---
 
-**Exercise 3.**
-Explain why the Berry-Esseen theorem is necessary given that the Central Limit Theorem already guarantees convergence to the normal distribution.
+**연습문제 3.**
+중심극한정리가 이미 정규분포로의 수렴을 보장하는데도 베리–에센 정리가 필요한 이유를 설명하라.
 
-??? success "Solution to Exercise 3"
-    The CLT is an **asymptotic** result: it states that $\bar{X}_n$ converges in distribution to a normal as $n \to \infty$, but it says nothing about how good the approximation is for any finite sample size $n$. In practice, we always work with finite samples, so we need to know whether $n = 30$ or $n = 100$ or $n = 10{,}000$ is "large enough."
+??? success "연습문제 3 풀이"
+    중심극한정리는 **점근적** 결과다. $n \to \infty$일 때 $\bar{X}_n$이 정규분포로 분포수렴한다고 말할 뿐, 유한한 표본 크기 $n$에서 근사가 얼마나 좋은지에 대해서는 아무 말도 하지 않는다. 실무에서는 언제나 유한한 표본을 다루므로 $n = 30$이나 $n = 100$이나 $n = 10{,}000$이 "충분히 큰지"를 알아야 한다.
 
-    The Berry-Esseen theorem fills this gap by providing an explicit, finite-sample **bound** on the maximum error of the normal approximation. It answers the practical question: "For my specific distribution and sample size, how accurate is the CLT approximation?" This is particularly important for skewed or heavy-tailed distributions, where the normal approximation may require much larger sample sizes than one might naively assume.
+    베리–에센 정리는 정규근사의 최대 오차에 대한 명시적인 유한표본 **한계**를 제공하여 이 빈틈을 메운다. "내 특정 분포와 표본 크기에서 중심극한정리 근사는 얼마나 정확한가?"라는 실용적 질문에 답한다. 정규근사가 순진하게 짐작하는 것보다 훨씬 큰 표본을 요구할 수 있는, 치우쳤거나 꼬리가 두꺼운 분포에서 특히 중요하다.
 
 ---
 
-**Exercise 4.**
-The Berry-Esseen bound decreases as $O(1/\sqrt{n})$. If you need to reduce the approximation error by a factor of 10 (e.g., from 0.1 to 0.01), by what factor must you increase the sample size?
+**연습문제 4.**
+베리–에센 한계는 $O(1/\sqrt{n})$으로 줄어든다. 근사 오차를 10분의 1로 줄이려면(예: 0.1에서 0.01로) 표본 크기를 몇 배로 늘려야 하는가?
 
-??? success "Solution to Exercise 4"
-    Since the bound is proportional to $1/\sqrt{n}$, reducing the bound by a factor of 10 requires:
+??? success "연습문제 4 풀이"
+    한계가 $1/\sqrt{n}$에 비례하므로 한계를 10분의 1로 줄이려면
 
     $$
     \frac{1}{\sqrt{n_{\text{new}}}} = \frac{1}{10} \cdot \frac{1}{\sqrt{n_{\text{old}}}}
@@ -273,46 +273,46 @@ The Berry-Esseen bound decreases as $O(1/\sqrt{n})$. If you need to reduce the a
     n_{\text{new}} = 100 \cdot n_{\text{old}}
     $$
 
-    You must increase the sample size by a factor of **100** to reduce the approximation error by a factor of 10. This $O(1/\sqrt{n})$ rate of convergence is relatively slow, which explains why very large samples are sometimes needed for accurate normal approximations, especially for skewed distributions.
+    이어야 한다. 근사 오차를 10분의 1로 줄이려면 표본 크기를 **100배**로 늘려야 한다. 이 $O(1/\sqrt{n})$의 수렴 속도는 비교적 느리며, 특히 치우친 분포에서 정확한 정규근사에 때때로 아주 큰 표본이 필요한 이유를 설명해 준다.
 
 ---
 
-**Exercise 5.**
-Show the **Edgeworth expansion** refines the CLT to second order: the CDF of $\sqrt n (\bar X_n - \mu)/\sigma$ can be approximated by $\Phi(x) + (\gamma_1/(6\sqrt n)) \phi(x) (1 - x^2) + O(1/n)$, where $\gamma_1$ is the skewness. Explain how this provides a more accurate approximation than the plain CLT.
+**연습문제 5.**
+**에지워스 전개**가 중심극한정리를 2차까지 정밀화함을 보여라. $\gamma_1$이 왜도일 때 $\sqrt n (\bar X_n - \mu)/\sigma$의 누적분포함수를 $\Phi(x) + (\gamma_1/(6\sqrt n)) \phi(x) (1 - x^2) + O(1/n)$으로 근사할 수 있다. 이것이 순수한 중심극한정리보다 왜 더 정확한 근사인지 설명하라.
 
-??? success "Solution to Exercise 5"
-    The plain CLT approximates the CDF by $\Phi(x)$, with error $O(1/\sqrt n)$ — the Berry-Esseen rate.
+??? success "연습문제 5 풀이"
+    순수한 중심극한정리는 누적분포함수를 $\Phi(x)$로 근사하며 오차가 $O(1/\sqrt n)$, 즉 베리–에센의 속도다.
 
-    The **Edgeworth expansion** adds a correction term proportional to the skewness $\gamma_1$ of the parent distribution:
+    **에지워스 전개**는 모집단 분포의 왜도 $\gamma_1$에 비례하는 보정항을 더한다.
 
     $$
     P\!\left(\frac{\sqrt n (\bar X_n - \mu)}{\sigma} \le x\right) = \Phi(x) - \frac{\gamma_1}{6\sqrt n}(x^2 - 1)\phi(x) + O(1/n)
     $$
 
-    This reduces the residual error from $O(1/\sqrt n)$ to $O(1/n)$ — an order of magnitude tighter. Further terms involve kurtosis ($\gamma_2$) and higher cumulants.
+    이렇게 하면 잔여 오차가 $O(1/\sqrt n)$에서 $O(1/n)$으로 줄어들어 한 자릿수만큼 더 촘촘해진다. 그다음 항들은 첨도($\gamma_2$)와 더 높은 누율을 포함한다.
 
-    **Practical use:** for moderate $n$ with heavily-skewed data, the Edgeworth correction can be substantially more accurate than plain Gaussian. Many high-precision approximations in statistical software use Edgeworth or related saddlepoint corrections.
+    **실용적 쓰임:** 심하게 치우친 자료에서 $n$이 중간 정도일 때 에지워스 보정이 순수한 가우시안 근사보다 상당히 정확할 수 있다. 통계 소프트웨어의 여러 고정밀 근사가 에지워스나 관련된 안장점 보정을 사용한다.
 
-    **Caveat:** Edgeworth expansions can produce negative "probability density" in the tails, so they should not be used outside their region of validity (typically $|x| \le 2$ or so).
+    **단서:** 에지워스 전개는 꼬리에서 음의 "확률밀도"를 낼 수 있으므로 타당한 영역(대개 $|x| \le 2$ 정도) 밖에서 쓰면 안 된다.
 
 ---
 
-**Exercise 6.**
-**Berry-Esseen with non-i.i.d.** sums. State a generalization for independent (but not identically distributed) random variables. Why is this important for regression and time-series analysis?
+**연습문제 6.**
+**i.i.d.가 아닌** 합에 대한 베리–에센. 독립이지만 동일분포는 아닌 확률변수에 대한 일반화를 진술하라. 이것이 회귀와 시계열 분석에 왜 중요한가?
 
-??? success "Solution to Exercise 6"
-    **Generalized Berry-Esseen:** for independent (not necessarily identical) $X_i$ with $\mathbb{E}[X_i] = 0$, $\mathrm{Var}(X_i) = \sigma_i^2$, $\mathbb{E}[|X_i|^3] = \rho_i$, $B_n^2 = \sum_i \sigma_i^2$:
+??? success "연습문제 6 풀이"
+    **일반화된 베리–에센:** $\mathbb{E}[X_i] = 0$, $\mathrm{Var}(X_i) = \sigma_i^2$, $\mathbb{E}[|X_i|^3] = \rho_i$, $B_n^2 = \sum_i \sigma_i^2$인 독립(동일분포일 필요는 없음) $X_i$에 대해
 
     $$
     \sup_x \left| P\!\left(\frac{S_n}{B_n} \le x\right) - \Phi(x) \right| \le \frac{C \sum_i \rho_i}{B_n^3}
     $$
 
-    The bound depends on the *sum* of third moments relative to the cube of the sum's standard deviation. When one $X_i$ has disproportionately large $\rho_i$, the bound is loose — reflecting that one large term can prevent Gaussian convergence.
+    이다. 이 한계는 합의 표준편차의 세제곱 대비 3차 적률의 *합*에 의존한다. 어느 한 $X_i$의 $\rho_i$가 불균형하게 크면 한계가 느슨해지는데, 이는 큰 항 하나가 가우시안 수렴을 막을 수 있음을 반영한다.
 
-    **Importance for applied statistics:**
+    **응용통계에서의 중요성:**
 
-    - **Regression**: errors $\varepsilon_i$ may have different variances (heteroscedasticity), so a non-i.i.d. CLT is needed to justify normal-based confidence intervals for $\hat\beta$.
-    - **Time series**: weakly dependent (mixing) sequences satisfy CLTs with appropriate corrections.
-    - **Survey sampling**: stratified samples mix independent contributions from different strata with different variances.
+    - **회귀**: 오차 $\varepsilon_i$의 분산이 서로 다를 수 있으므로(이분산성) $\hat\beta$에 대한 정규분포 기반 신뢰구간을 정당화하려면 i.i.d.가 아닌 중심극한정리가 필요하다.
+    - **시계열**: 약한 종속(혼합) 열은 적절한 보정을 거쳐 중심극한정리를 만족한다.
+    - **표본조사**: 층화표본은 분산이 서로 다른 층들의 독립적인 기여를 섞는다.
 
-    Modern asymptotic statistics relies on these generalizations to legitimize the Gaussian CLT in real-data settings where the i.i.d. assumption rarely holds exactly.
+    현대 점근통계학은 i.i.d. 가정이 정확히 성립하는 일이 드문 실제 자료 상황에서 가우시안 중심극한정리를 정당화하기 위해 이런 일반화에 의존한다.

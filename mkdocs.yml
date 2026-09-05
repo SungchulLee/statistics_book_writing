@@ -105,31 +105,31 @@ nav:
             - 기술통계 (대마 가격): ch02/code/descriptive_stats_weed_prices.md
             - 고급 측도 (기하평균, 체비쇼프): ch02/code/descriptive_measures_advanced.md
 
-    - 3 Foundations of Probability:
-        - Chapter Overview: ch03/index.md
-        - 3.1 Probability Theory:
-            - Sample Spaces and Events: ch03/probability/sample_space.md
-            - Axioms of Probability: ch03/probability/axioms.md
-            - Conditional Probability: ch03/probability/conditional.md
-            - Bayes' Theorem: ch03/probability/bayes.md
-        - 3.2 Independence:
-            - Independence of Events: ch03/probability/independence.md
-            - Conditional Independence: ch03/probability/conditional_independence.md
-        - 3.3 Random Variables:
-            - Discrete Random Variables: ch03/rv/discrete.md
-            - Continuous Random Variables: ch03/rv/continuous.md
-            - 'Mass, Density, and Cumulative Distribution Functions': ch03/rv/pmf_pdf_cdf.md
-        - 3.4 Expectation and Moments:
-            - Expectation and Linearity: ch03/rv/expectation.md
-            - Variance and Covariance: ch03/rv/variance_covariance.md
-            - Moment Generating Functions: ch03/rv/mgf.md
-        - 3.5 Limit Theorems:
-            - Law of Large Numbers: ch03/limits/lln.md
-            - Central Limit Theorem: ch03/limits/clt.md
-            - Berry–Esseen Theorem: ch03/limits/berry_esseen.md
-        - 3.6 Code:
-            - Central Limit Theorem Multi-Distribution Visualization: ch03/code/clt_visualization.md
-            - Gambler's Paradox (Law of Large Numbers Failure): ch03/code/gambler_paradox_lln.md
+    - 3 확률의 기초:
+        - 장 개요: ch03/index.md
+        - 3.1 확률론:
+            - 표본공간과 사건: ch03/probability/sample_space.md
+            - 확률의 공리: ch03/probability/axioms.md
+            - 조건부확률: ch03/probability/conditional.md
+            - 베이즈 정리: ch03/probability/bayes.md
+        - 3.2 독립:
+            - 사건의 독립: ch03/probability/independence.md
+            - 조건부 독립: ch03/probability/conditional_independence.md
+        - 3.3 확률변수:
+            - 이산확률변수: ch03/rv/discrete.md
+            - 연속확률변수: ch03/rv/continuous.md
+            - '확률질량함수, 확률밀도함수, 누적분포함수': ch03/rv/pmf_pdf_cdf.md
+        - 3.4 기댓값과 적률:
+            - 기댓값과 선형성: ch03/rv/expectation.md
+            - 분산과 공분산: ch03/rv/variance_covariance.md
+            - 적률생성함수: ch03/rv/mgf.md
+        - 3.5 극한정리:
+            - 큰수의 법칙: ch03/limits/lln.md
+            - 중심극한정리: ch03/limits/clt.md
+            - 베리–에센 정리: ch03/limits/berry_esseen.md
+        - 3.6 코드:
+            - 중심극한정리 다중 분포 시각화: ch03/code/clt_visualization.md
+            - 도박사의 역설 (큰수의 법칙의 실패): ch03/code/gambler_paradox_lln.md
 
     - 4 Distributions:
         - Chapter Overview: ch04/index.md

@@ -1,14 +1,14 @@
-# Moment Generating Functions
+# 적률생성함수
 
-## Overview
+## 개요
 
-The **moment generating function (MGF)** is a powerful tool that encodes all the moments of a random variable into a single function. It provides an elegant way to compute expectations, prove limit theorems, and characterize distributions. If two random variables have the same MGF, they have the same distribution.
+**적률생성함수(MGF)** 는 확률변수의 모든 적률을 하나의 함수에 담아내는 강력한 도구다. 기댓값을 계산하고, 극한정리를 증명하며, 분포를 특성화하는 우아한 방법을 제공한다. 두 확률변수의 적률생성함수가 같으면 분포도 같다.
 
 ---
 
-## Definition
+## 정의
 
-The **moment generating function** of a random variable $X$ is defined as:
+확률변수 $X$의 **적률생성함수**는 다음과 같이 정의된다.
 
 $$
 M_X(t) = E\left[e^{tX}\right] =
@@ -18,25 +18,25 @@ M_X(t) = E\left[e^{tX}\right] =
 \end{cases}
 $$
 
-The MGF exists if $M_X(t)$ is finite for all $t$ in some open interval containing 0.
+0을 포함하는 어떤 열린구간의 모든 $t$에서 $M_X(t)$가 유한하면 적률생성함수가 존재한다고 한다.
 
 ---
 
-## Why "Moment Generating"?
+## 왜 "적률생성"인가
 
-The Taylor expansion of $e^{tX}$ reveals the connection to moments:
+$e^{tX}$의 테일러 전개가 적률과의 연결을 드러낸다.
 
 $$
 M_X(t) = E\left[e^{tX}\right] = E\left[\sum_{k=0}^{\infty} \frac{(tX)^k}{k!}\right] = \sum_{k=0}^{\infty} \frac{t^k}{k!} E[X^k]
 $$
 
-Taking derivatives and evaluating at $t = 0$ extracts individual moments:
+미분한 뒤 $t = 0$에서 값을 구하면 개별 적률이 뽑혀 나온다.
 
 $$
 M_X^{(n)}(0) = \frac{d^n}{dt^n} M_X(t) \bigg|_{t=0} = E[X^n]
 $$
 
-Specifically:
+구체적으로
 
 $$
 \begin{aligned}
@@ -46,43 +46,47 @@ M_X''(0) &= E[X^2] \\
 \end{aligned}
 $$
 
+이다.
+
 ---
 
-## Key Properties
+## 핵심 성질
 
-### Uniqueness
+### 유일성
 
-If two random variables $X$ and $Y$ have MGFs that exist and are equal in an open interval around 0:
+두 확률변수 $X$와 $Y$의 적률생성함수가 존재하고 0 주위의 열린구간에서 같으면
 
 $$
 M_X(t) = M_Y(t) \quad \Longrightarrow \quad X \stackrel{d}{=} Y
 $$
 
-This makes the MGF a tool for **identifying distributions**.
+이다. 그래서 적률생성함수가 **분포를 식별하는** 도구가 된다.
 
-### Linear Transformation
+### 선형변환
 
-For $Y = aX + b$:
+$Y = aX + b$에 대해
 
 $$
 M_Y(t) = e^{bt} M_X(at)
 $$
 
-### Sum of Independent Variables
+이다.
 
-If $X \perp\!\!\!\perp Y$:
+### 독립인 변수들의 합
+
+$X \perp\!\!\!\perp Y$이면
 
 $$
 M_{X+Y}(t) = M_X(t) \cdot M_Y(t)
 $$
 
-This extends to $n$ independent variables: $M_{S_n}(t) = \prod_{i=1}^n M_{X_i}(t)$.
+이다. 이는 독립인 $n$개 변수로 확장된다: $M_{S_n}(t) = \prod_{i=1}^n M_{X_i}(t)$.
 
 ---
 
-## Common MGFs
+## 흔한 적률생성함수
 
-| Distribution | $M_X(t)$ | Parameters |
+| 분포 | $M_X(t)$ | 모수 |
 |:---|:---|:---|
 | Bernoulli$(p)$ | $1 - p + pe^t$ | $p \in (0,1)$ |
 | Binomial$(n, p)$ | $(1 - p + pe^t)^n$ | $n \in \mathbb{N},\ p \in (0,1)$ |
@@ -93,17 +97,17 @@ This extends to $n$ independent variables: $M_{S_n}(t) = \prod_{i=1}^n M_{X_i}(t
 
 ---
 
-## Examples
+## 예제
 
-### Example: MGF of the Normal Distribution
+### 예: 정규분포의 적률생성함수
 
-For $X \sim N(\mu, \sigma^2)$, the MGF is:
+$X \sim N(\mu, \sigma^2)$에 대해 적률생성함수는
 
 $$
 M_X(t) = \exp\left(\mu t + \frac{\sigma^2 t^2}{2}\right)
 $$
 
-Extracting moments:
+이다. 적률을 뽑아내면
 
 $$
 \begin{aligned}
@@ -115,29 +119,31 @@ M_X''(0) &= \sigma^2 + \mu^2 = E[X^2] \\[6pt]
 \end{aligned}
 $$
 
-### Example: Sum of Independent Normals
+이다.
 
-If $X_1 \sim N(\mu_1, \sigma_1^2)$ and $X_2 \sim N(\mu_2, \sigma_2^2)$ are independent:
+### 예: 독립인 정규분포의 합
+
+$X_1 \sim N(\mu_1, \sigma_1^2)$과 $X_2 \sim N(\mu_2, \sigma_2^2)$이 독립이면
 
 $$
 M_{X_1 + X_2}(t) = \exp\left((\mu_1 + \mu_2)t + \frac{(\sigma_1^2 + \sigma_2^2)t^2}{2}\right)
 $$
 
-By uniqueness, $X_1 + X_2 \sim N(\mu_1 + \mu_2, \sigma_1^2 + \sigma_2^2)$.
+이다. 유일성에 의해 $X_1 + X_2 \sim N(\mu_1 + \mu_2, \sigma_1^2 + \sigma_2^2)$이다.
 
-### Example: Proving the CLT (Sketch)
+### 예: 중심극한정리 증명 (개요)
 
-For i.i.d. $X_i$ with mean $\mu$, variance $\sigma^2$, let $Z_n = \frac{\bar{X} - \mu}{\sigma/\sqrt{n}}$. The MGF of $Z_n$ satisfies:
+평균 $\mu$, 분산 $\sigma^2$인 i.i.d. $X_i$에 대해 $Z_n = \frac{\bar{X} - \mu}{\sigma/\sqrt{n}}$이라 하자. $Z_n$의 적률생성함수는
 
 $$
 M_{Z_n}(t) = \left[M_{\frac{X_i - \mu}{\sigma}}\left(\frac{t}{\sqrt{n}}\right)\right]^n \to e^{t^2/2} \quad \text{as } n \to \infty
 $$
 
-The limit $e^{t^2/2}$ is the MGF of $N(0,1)$, proving convergence in distribution.
+를 만족한다. 극한 $e^{t^2/2}$이 $N(0,1)$의 적률생성함수이므로 분포수렴이 증명된다.
 
 ---
 
-## Python Exploration
+## 파이썬으로 살펴보기
 
 ```python
 import numpy as np
@@ -217,118 +223,120 @@ verify_sum_of_normals()
 
 ---
 
-## Key Takeaways
+## 핵심 요약
 
-- The MGF $M_X(t) = E[e^{tX}]$ encodes all moments: the $n$-th derivative at 0 gives $E[X^n]$.
-- If two distributions have the same MGF (in a neighborhood of 0), they are identical.
-- For independent variables, the MGF of the sum is the product of individual MGFs.
-- MGFs provide elegant proofs for results like the distribution of sums of normals and the Central Limit Theorem.
+- 적률생성함수 $M_X(t) = E[e^{tX}]$는 모든 적률을 담는다. 0에서의 $n$계 도함수가 $E[X^n]$을 준다.
+- 두 분포의 적률생성함수가 (0의 근방에서) 같으면 두 분포는 동일하다.
+- 독립인 변수에서는 합의 적률생성함수가 개별 적률생성함수의 곱이다.
+- 적률생성함수는 정규분포 합의 분포나 중심극한정리 같은 결과에 우아한 증명을 제공한다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-$X \sim \mathrm{Exp}(\lambda)$. (a) Derive $M_X(t)$ and its domain. (b) Compute $\mathbb{E}[X], \mathbb{E}[X^2]$. (c) Verify $\mathrm{Var}(X) = 1/\lambda^2$.
+**연습문제 1.**
+$X \sim \mathrm{Exp}(\lambda)$이다. (a) $M_X(t)$와 그 정의역을 유도하라. (b) $\mathbb{E}[X], \mathbb{E}[X^2]$를 계산하라. (c) $\mathrm{Var}(X) = 1/\lambda^2$임을 확인하라.
 
-??? success "Solution to Exercise 1"
-    (a) $M_X(t) = \int_0^\infty e^{tx} \lambda e^{-\lambda x} dx = \lambda \int_0^\infty e^{-(\lambda - t) x} dx = \lambda/(\lambda - t)$ for $t < \lambda$.
+??? success "연습문제 1 풀이"
+    (a) $t < \lambda$에 대해 $M_X(t) = \int_0^\infty e^{tx} \lambda e^{-\lambda x} dx = \lambda \int_0^\infty e^{-(\lambda - t) x} dx = \lambda/(\lambda - t)$이다.
 
-    (b) $M_X'(t) = \lambda/(\lambda - t)^2$. $M_X'(0) = 1/\lambda = \mathbb{E}[X]$. $M_X''(t) = 2\lambda/(\lambda - t)^3$. $M_X''(0) = 2/\lambda^2 = \mathbb{E}[X^2]$.
+    (b) $M_X'(t) = \lambda/(\lambda - t)^2$이므로 $M_X'(0) = 1/\lambda = \mathbb{E}[X]$이다. $M_X''(t) = 2\lambda/(\lambda - t)^3$이므로 $M_X''(0) = 2/\lambda^2 = \mathbb{E}[X^2]$이다.
 
-    (c) $\mathrm{Var}(X) = 2/\lambda^2 - (1/\lambda)^2 = 1/\lambda^2$. Mean and SD both equal $1/\lambda$.
+    (c) $\mathrm{Var}(X) = 2/\lambda^2 - (1/\lambda)^2 = 1/\lambda^2$이다. 평균과 표준편차가 모두 $1/\lambda$로 같다.
 
 ---
 
-**Exercise 2.**
-Prove $M_{aX + b}(t) = e^{bt} M_X(at)$ and $M_{X + Y}(t) = M_X(t) M_Y(t)$ when $X$ and $Y$ are independent.
+**연습문제 2.**
+$M_{aX + b}(t) = e^{bt} M_X(at)$를 증명하고, $X$와 $Y$가 독립일 때 $M_{X + Y}(t) = M_X(t) M_Y(t)$임을 증명하라.
 
-??? success "Solution to Exercise 2"
-    **Linear transformation:**
+??? success "연습문제 2 풀이"
+    **선형변환:**
 
     $$
     M_{aX + b}(t) = \mathbb{E}[e^{t(aX + b)}] = e^{bt} \mathbb{E}[e^{(at)X}] = e^{bt} M_X(at)
     $$
 
-    **Sum of independent:** for independent $X$ and $Y$, $e^{tX}$ and $e^{tY}$ are independent (functions of independent variables), so
+    **독립인 변수의 합:** $X$와 $Y$가 독립이면 $e^{tX}$와 $e^{tY}$도 독립이므로(독립인 변수의 함수이므로)
 
     $$
     M_{X + Y}(t) = \mathbb{E}[e^{t(X + Y)}] = \mathbb{E}[e^{tX} \cdot e^{tY}] = \mathbb{E}[e^{tX}] \mathbb{E}[e^{tY}] = M_X(t) M_Y(t)
     $$
 
-    The second formula generalizes: $M_{S_n}(t) = \prod_i M_{X_i}(t)$ for $S_n = X_1 + \cdots + X_n$ with mutual independence.
+    이다.
 
-    These two properties are why MGFs are so useful for analyzing transformations and sums of random variables.
+    두 번째 공식은 일반화된다. 상호독립인 $S_n = X_1 + \cdots + X_n$에 대해 $M_{S_n}(t) = \prod_i M_{X_i}(t)$이다.
 
----
-
-**Exercise 3.**
-Use the MGF approach to derive the **distribution of a sum of independent Poisson random variables**: if $X_i \sim \mathrm{Poisson}(\lambda_i)$ independently, what is the distribution of $\sum_i X_i$?
-
-??? success "Solution to Exercise 3"
-    Poisson MGF: $M_X(t) = e^{\lambda (e^t - 1)}$.
-
-    Sum: $M_{\sum X_i}(t) = \prod_i M_{X_i}(t) = \prod_i e^{\lambda_i (e^t - 1)} = e^{(\sum \lambda_i)(e^t - 1)}$.
-
-    This is the MGF of $\mathrm{Poisson}(\sum \lambda_i)$. By uniqueness, $\sum X_i \sim \mathrm{Poisson}(\sum \lambda_i)$.
-
-    **Implication:** Poisson is "closed under addition" — sums of independent Poissons are Poisson with sum of rates. This is the foundation of count-data models: total event counts from independent sources are Poisson with combined rate, allowing modular analysis.
+    이 두 성질 덕분에 적률생성함수가 확률변수의 변환과 합을 분석하는 데 그토록 유용하다.
 
 ---
 
-**Exercise 4.**
-**Skewness and kurtosis from MGF.** Show that the third and fourth standardized cumulants (skewness and excess kurtosis) come from derivatives of $\ln M_X(t)$, not $M_X(t)$ itself.
+**연습문제 3.**
+적률생성함수 방법으로 **독립인 포아송 확률변수 합의 분포**를 유도하라. $X_i \sim \mathrm{Poisson}(\lambda_i)$이 서로 독립일 때 $\sum_i X_i$의 분포는 무엇인가?
 
-??? success "Solution to Exercise 4"
-    The **cumulant generating function** is $K_X(t) = \ln M_X(t)$. Its Taylor expansion is
+??? success "연습문제 3 풀이"
+    포아송의 적률생성함수는 $M_X(t) = e^{\lambda (e^t - 1)}$이다.
+
+    합: $M_{\sum X_i}(t) = \prod_i M_{X_i}(t) = \prod_i e^{\lambda_i (e^t - 1)} = e^{(\sum \lambda_i)(e^t - 1)}$.
+
+    이것이 $\mathrm{Poisson}(\sum \lambda_i)$의 적률생성함수다. 유일성에 의해 $\sum X_i \sim \mathrm{Poisson}(\sum \lambda_i)$이다.
+
+    **함의:** 포아송은 덧셈에 대해 "닫혀" 있다. 독립인 포아송들의 합은 비율을 합한 포아송이다. 이것이 계수 자료 모형의 토대다. 독립인 여러 원천에서 나온 총 사건 수가 결합된 비율의 포아송을 따르므로 모듈식 분석이 가능하다.
+
+---
+
+**연습문제 4.**
+**적률생성함수로 구하는 왜도와 첨도.** 3차 및 4차 표준화 누율(왜도와 초과첨도)이 $M_X(t)$ 자체가 아니라 $\ln M_X(t)$의 도함수에서 나옴을 보여라.
+
+??? success "연습문제 4 풀이"
+    **누율생성함수**는 $K_X(t) = \ln M_X(t)$이며 그 테일러 전개는
 
     $$
     K_X(t) = \kappa_1 t + \kappa_2 \frac{t^2}{2} + \kappa_3 \frac{t^3}{6} + \kappa_4 \frac{t^4}{24} + \cdots
     $$
 
-    where $\kappa_n$ is the $n$-th cumulant. The first few:
+    이고 $\kappa_n$이 $n$차 누율이다. 처음 몇 개는 다음과 같다.
 
-    - $\kappa_1 = \mathbb{E}[X] = \mu$ (mean)
+    - $\kappa_1 = \mathbb{E}[X] = \mu$ (평균)
     - $\kappa_2 = \mathrm{Var}(X) = \sigma^2$
-    - $\kappa_3 = \mathbb{E}[(X - \mu)^3]$ (third central moment)
-    - $\kappa_4 = \mathbb{E}[(X - \mu)^4] - 3\sigma^4$ (fourth central moment minus $3\sigma^4$)
+    - $\kappa_3 = \mathbb{E}[(X - \mu)^3]$ (3차 중심적률)
+    - $\kappa_4 = \mathbb{E}[(X - \mu)^4] - 3\sigma^4$ (4차 중심적률에서 $3\sigma^4$을 뺀 값)
 
-    Then **skewness** $= \kappa_3/\kappa_2^{3/2}$ and **excess kurtosis** $= \kappa_4/\kappa_2^2$. Both come from cumulants, which are derivatives of $K_X(t)$, not $M_X(t)$.
+    그러면 **왜도** $= \kappa_3/\kappa_2^{3/2}$이고 **초과첨도** $= \kappa_4/\kappa_2^2$이다. 둘 다 누율에서 나오며, 누율은 $M_X(t)$가 아니라 $K_X(t)$의 도함수다.
 
-    **Why cumulants are nicer than moments:** cumulants of independent sums add: $\kappa_n(X + Y) = \kappa_n(X) + \kappa_n(Y)$ for independent $X, Y$. Moments do not. For example, $\mathrm{Var}(X + Y) = \mathrm{Var}(X) + \mathrm{Var}(Y)$ (which is $\kappa_2$ addition), and similarly for higher cumulants. This makes cumulants the natural language for the CLT and Edgeworth expansions.
-
----
-
-**Exercise 5.**
-**MGF non-existence.** Show that the Cauchy distribution does not have an MGF. What is the **characteristic function** alternative, and why does it always exist?
-
-??? success "Solution to Exercise 5"
-    Cauchy density: $f(x) = 1/(\pi(1 + x^2))$.
-
-    $M(t) = \int_{-\infty}^\infty e^{tx} / (\pi (1 + x^2)) dx$. For any $t \ne 0$, $e^{tx}$ grows exponentially in one direction and the integrand is not integrable. The MGF is undefined except at $t = 0$ (where it trivially equals 1).
-
-    **Characteristic function (CF):** $\phi_X(t) = \mathbb{E}[e^{itX}]$. Always exists because $|e^{itX}| = 1$, so $\mathbb{E}[|e^{itX}|] = 1 < \infty$.
-
-    For the Cauchy: $\phi(t) = e^{-|t|}$ — a clean closed form despite the MGF not existing.
-
-    **Practical implication:** when working with heavy-tailed distributions, switch from MGFs to characteristic functions. Most theoretical results (Lévy continuity theorem, inversion formulas) are stated in terms of characteristic functions because they cover the broader class. MGFs remain useful for distributions with all moments — the "nice" majority of applied statistics.
+    **누율이 적률보다 나은 이유:** 독립인 합의 누율은 더해진다. 독립인 $X, Y$에 대해 $\kappa_n(X + Y) = \kappa_n(X) + \kappa_n(Y)$이지만 적률은 그렇지 않다. 예를 들어 $\mathrm{Var}(X + Y) = \mathrm{Var}(X) + \mathrm{Var}(Y)$가 $\kappa_2$의 덧셈이고, 더 높은 누율에서도 마찬가지다. 그래서 누율이 중심극한정리와 에지워스 전개의 자연스러운 언어가 된다.
 
 ---
 
-**Exercise 6.**
-**The MGF determines the distribution** (uniqueness theorem) — but only when it exists in a neighborhood of zero. Construct two distinct distributions whose moments coincide for all orders. (This is the **moment problem** failure.)
+**연습문제 5.**
+**적률생성함수의 비존재.** 코시분포가 적률생성함수를 갖지 않음을 보여라. 대안인 **특성함수**는 무엇이며 왜 언제나 존재하는가?
 
-??? success "Solution to Exercise 6"
-    Consider the **lognormal** distribution with PDF $f_1(x) = \frac{1}{x\sqrt{2\pi}} e^{-(\ln x)^2/2}$ for $x > 0$, and a perturbed version
+??? success "연습문제 5 풀이"
+    코시 밀도는 $f(x) = 1/(\pi(1 + x^2))$이다.
+
+    $M(t) = \int_{-\infty}^\infty e^{tx} / (\pi (1 + x^2)) dx$인데, $t \ne 0$이면 $e^{tx}$가 한쪽 방향으로 지수적으로 커져 피적분함수가 적분 가능하지 않다. 적률생성함수는 $t = 0$(자명하게 1)을 제외하면 정의되지 않는다.
+
+    **특성함수(CF):** $\phi_X(t) = \mathbb{E}[e^{itX}]$. $|e^{itX}| = 1$이므로 $\mathbb{E}[|e^{itX}|] = 1 < \infty$가 되어 언제나 존재한다.
+
+    코시분포의 경우 적률생성함수가 없는데도 $\phi(t) = e^{-|t|}$라는 깔끔한 닫힌 형태를 갖는다.
+
+    **실무적 함의:** 꼬리가 두꺼운 분포를 다룰 때는 적률생성함수에서 특성함수로 갈아탄다. 대부분의 이론적 결과(레비 연속성 정리, 역변환 공식)는 더 넓은 부류를 포괄하는 특성함수로 진술된다. 적률생성함수는 모든 적률이 존재하는 분포, 즉 응용통계의 "얌전한" 다수에는 여전히 유용하다.
+
+---
+
+**연습문제 6.**
+**적률생성함수가 분포를 결정한다**(유일성 정리) — 다만 0의 근방에서 존재할 때만 그렇다. 모든 차수의 적률이 일치하는 서로 다른 두 분포를 구성하라. (이것이 **적률 문제**의 실패다.)
+
+??? success "연습문제 6 풀이"
+    $x > 0$에서 확률밀도함수가 $f_1(x) = \frac{1}{x\sqrt{2\pi}} e^{-(\ln x)^2/2}$인 **로그정규분포**와 그것을 변형한
 
     $$
     f_2(x) = f_1(x) \cdot (1 + \sin(2\pi \ln x))
     $$
 
-    Both are valid PDFs (with $f_2$ chosen to remain non-negative for the perturbation amplitude).
+    을 생각하자. 둘 다 타당한 확률밀도함수다(변형의 진폭을 음이 아니도록 잡았다).
 
-    Moments: $\mathbb{E}_2[X^k] = \int_0^\infty x^k f_1(x)(1 + \sin(2\pi \ln x)) dx = \mathbb{E}_1[X^k] + \int x^k f_1(x) \sin(2\pi \ln x) dx$.
+    적률: $\mathbb{E}_2[X^k] = \int_0^\infty x^k f_1(x)(1 + \sin(2\pi \ln x)) dx = \mathbb{E}_1[X^k] + \int x^k f_1(x) \sin(2\pi \ln x) dx$.
 
-    Substitute $u = \ln x$: the second integral becomes $\int e^{(k+1)u - u^2/2}\sin(2\pi u)/\sqrt{2\pi}\, du$. This integral equals zero for *every* integer $k$ — the integrand combines a Gaussian factor with a sinusoidal modulator that integrates to zero. So all moments agree, but $f_1 \ne f_2$.
+    $u = \ln x$로 치환하면 두 번째 적분이 $\int e^{(k+1)u - u^2/2}\sin(2\pi u)/\sqrt{2\pi}\, du$가 된다. 이 적분은 *모든* 정수 $k$에 대해 0이다. 피적분함수가 가우시안 인자와 적분값이 0이 되는 사인 변조를 결합하기 때문이다. 따라서 모든 적률이 일치하지만 $f_1 \ne f_2$이다.
 
-    **Why this works:** the lognormal's MGF does *not* converge in any neighborhood of 0 (the integral $\int e^{tx} f_1(x) dx$ diverges for $t > 0$). So the MGF doesn't exist, and the moment sequence does not determine the distribution.
+    **왜 이렇게 되는가:** 로그정규분포의 적률생성함수는 0의 어떤 근방에서도 수렴하지 *않는다*($t > 0$이면 적분 $\int e^{tx} f_1(x) dx$가 발산한다). 그래서 적률생성함수가 존재하지 않고 적률의 열이 분포를 결정하지 못한다.
 
-    **Lesson:** when the MGF exists in an open interval, moments uniquely determine the distribution. When the MGF doesn't exist (heavy tails, lognormal), moments may not suffice — multiple distributions can share all moments. This is the **Stieltjes moment problem**: the moments uniquely determine the distribution iff a Carleman-type condition holds.
+    **교훈:** 적률생성함수가 열린구간에서 존재하면 적률이 분포를 유일하게 결정한다. 적률생성함수가 존재하지 않으면(두꺼운 꼬리, 로그정규) 적률만으로는 부족할 수 있으며 여러 분포가 모든 적률을 공유할 수 있다. 이것이 **스틸체스 적률 문제**다. 카를레만형 조건이 성립할 때에 한해 적률이 분포를 유일하게 결정한다.

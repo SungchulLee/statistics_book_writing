@@ -1,50 +1,54 @@
-# Law of Large Numbers
+# 큰수의 법칙
 
-## Overview
+## 개요
 
-The **Law of Large Numbers (LLN)** is a fundamental theorem in probability theory describing how the average of a large number of independent and identically distributed (i.i.d.) random variables converges to the expected value as the sample size increases. It provides the theoretical basis for why sample averages are reliable estimators of population means.
+**큰수의 법칙(LLN)** 은 표본 크기가 커질수록 독립 동일분포(i.i.d.) 확률변수 다수의 평균이 어떻게 기댓값으로 수렴하는지를 기술하는 확률론의 근본 정리다. 표본평균이 모평균의 믿을 만한 추정량인 이유에 이론적 근거를 제공한다.
 
 ---
 
-## The Weak Law of Large Numbers (WLLN)
+## 약한 큰수의 법칙 (WLLN)
 
-For a sequence of i.i.d. random variables $X_1, X_2, \ldots, X_n$ with finite mean $\mu$, the sample mean converges to the population mean **in probability**:
+평균 $\mu$가 유한한 i.i.d. 확률변수 열 $X_1, X_2, \ldots, X_n$에 대해 표본평균은 모평균으로 **확률수렴**한다.
 
 $$
 \bar{X} = \frac{S_n}{n} \xrightarrow{P} \mu \quad \text{as } n \to \infty
 $$
 
-where $S_n = X_1 + X_2 + \cdots + X_n$.
+여기서 $S_n = X_1 + X_2 + \cdots + X_n$이다.
 
-More precisely, for any fixed $\varepsilon > 0$:
+더 정확히는, 고정된 임의의 $\varepsilon > 0$에 대해
 
 $$
 P\left(\left|\frac{S_n}{n} - \mu\right| > \varepsilon\right) \to 0 \quad \text{as } n \to \infty
 $$
 
-**Interpretation:** As we collect more data, the probability that the sample mean deviates from $\mu$ by more than any fixed amount $\varepsilon$ goes to zero. For example, flipping a fair coin many times will result in the proportion of heads converging to 0.5.
+이다.
+
+**해석:** 자료를 더 모을수록 표본평균이 $\mu$에서 고정된 양 $\varepsilon$보다 크게 벗어날 확률이 0으로 간다. 예를 들어 공정한 동전을 여러 번 던지면 앞면의 비율이 0.5로 수렴한다.
 
 ---
 
-## The Strong Law of Large Numbers (SLLN)
+## 강한 큰수의 법칙 (SLLN)
 
-The SLLN provides a stronger form of convergence known as **almost sure convergence**:
+강한 큰수의 법칙은 **거의 확실한 수렴**이라는 더 강한 형태의 수렴을 제공한다.
 
 $$
 \bar{X} = \frac{S_n}{n} \xrightarrow{\text{a.s.}} \mu \quad \text{as } n \to \infty
 $$
 
-Equivalently, for any fixed $\varepsilon > 0$:
+동등하게, 고정된 임의의 $\varepsilon > 0$에 대해
 
 $$
 P\left(\omega \in \Omega : \frac{S_n(\omega)}{n} \to \mu\right) = 1
 $$
 
-**Difference from WLLN:** The WLLN says the probability of a large deviation goes to zero for each $n$, but individual sample paths might still occasionally deviate. The SLLN guarantees that **every sample path** (except a set of probability zero) converges to $\mu$.
+이다.
+
+**WLLN과의 차이:** 약한 법칙은 각 $n$에 대해 큰 편차의 확률이 0으로 간다고 말하지만, 개별 표본 경로는 여전히 이따금 벗어날 수 있다. 강한 법칙은 (확률 0인 집합을 제외한) **모든 표본 경로**가 $\mu$로 수렴함을 보장한다.
 
 ---
 
-## Python Demonstration
+## 파이썬 시연
 
 ```python
 import numpy as np
@@ -70,98 +74,98 @@ plt.show()
 
 ---
 
-## Key Takeaways
+## 핵심 요약
 
-- The **WLLN** says the sample mean converges to $\mu$ in probability.
-- The **SLLN** says the sample mean converges to $\mu$ almost surely (a stronger guarantee).
-- Both require i.i.d. samples with finite mean.
-- The LLN is the theoretical justification for using sample averages to estimate population parameters.
+- **약한 법칙**은 표본평균이 $\mu$로 확률수렴한다고 말한다.
+- **강한 법칙**은 표본평균이 $\mu$로 거의 확실하게 수렴한다고 말한다(더 강한 보장).
+- 둘 다 평균이 유한한 i.i.d. 표본을 요구한다.
+- 큰수의 법칙은 모수를 추정하는 데 표본평균을 쓰는 것에 대한 이론적 정당화다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-$X_i \sim \mathrm{Uniform}(0,1)$ i.i.d. (a) $\mathbb{E}[X]$, $\mathrm{Var}(X)$? (b) State WLLN for $\bar X_n$. (c) Chebyshev bound on $P(|\bar X_{100} - 1/2| \ge 0.05)$. (d) Bound for $n = 10\,000$.
+**연습문제 1.**
+$X_i \sim \mathrm{Uniform}(0,1)$이 i.i.d.다. (a) $\mathbb{E}[X]$, $\mathrm{Var}(X)$는? (b) $\bar X_n$에 대한 약한 큰수의 법칙을 진술하라. (c) $P(|\bar X_{100} - 1/2| \ge 0.05)$에 대한 체비쇼프 한계를 구하라. (d) $n = 10\,000$일 때의 한계를 구하라.
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
     (a) $\mathbb{E}[X] = 1/2$, $\mathrm{Var}(X) = 1/12$.
 
-    (b) For all $\varepsilon > 0$, $P(|\bar X_n - 1/2| \ge \varepsilon) \to 0$ as $n \to \infty$.
+    (b) 모든 $\varepsilon > 0$에 대해 $n \to \infty$일 때 $P(|\bar X_n - 1/2| \ge \varepsilon) \to 0$이다.
 
-    (c) $\mathrm{Var}(\bar X_n) = 1/(12n)$. Chebyshev: $P(|\bar X_{100} - 1/2| \ge 0.05) \le (1/1200)/(0.05)^2 = (1/1200)/0.0025 = 1/3 \approx 0.333$.
+    (c) $\mathrm{Var}(\bar X_n) = 1/(12n)$이다. 체비쇼프: $P(|\bar X_{100} - 1/2| \ge 0.05) \le (1/1200)/(0.05)^2 = (1/1200)/0.0025 = 1/3 \approx 0.333$.
 
-    (d) For $n = 10\,000$: bound $= (1/120000)/0.0025 = 1/300 \approx 0.00333$. The bound shrinks 100× as $n$ scales 100× — confirming $O(1/n)$ convergence. The actual probability is much smaller (Chebyshev uses only mean and variance; the uniform is far from worst case). A CLT-based normal approximation gives a tighter estimate.
-
----
-
-**Exercise 2.**
-**Prove the WLLN** from Chebyshev's inequality for i.i.d. $X_i$ with $\mathbb{E}[X] = \mu$ and finite $\mathrm{Var}(X) = \sigma^2$.
-
-??? success "Solution to Exercise 2"
-    Chebyshev: $P(|\bar X_n - \mu| \ge \varepsilon) \le \mathrm{Var}(\bar X_n)/\varepsilon^2 = \sigma^2/(n\varepsilon^2)$.
-
-    For any fixed $\varepsilon > 0$, the right side $\to 0$ as $n \to \infty$, so $\bar X_n \to \mu$ in probability. $\square$
-
-    Note this proof requires only finite variance, not the full Kolmogorov SLLN conditions. The WLLN can be sharpened to hold under just finite first moment (a more delicate proof using characteristic functions); the Khinchin WLLN does so.
+    (d) $n = 10\,000$이면 한계 $= (1/120000)/0.0025 = 1/300 \approx 0.00333$이다. $n$이 100배가 되면 한계가 100분의 1로 줄어 $O(1/n)$ 수렴을 확인해 준다. 실제 확률은 훨씬 작다(체비쇼프는 평균과 분산만 쓰며 균등분포는 최악의 경우와 거리가 멀다). 중심극한정리에 근거한 정규근사가 더 촘촘한 추정을 준다.
 
 ---
 
-**Exercise 3.**
-**Distinguish convergence in probability and almost surely.** Construct a sequence $X_n \to 0$ in probability but **not** almost surely.
+**연습문제 2.**
+$\mathbb{E}[X] = \mu$이고 $\mathrm{Var}(X) = \sigma^2$이 유한한 i.i.d. $X_i$에 대해 체비쇼프 부등식으로부터 **약한 큰수의 법칙을 증명하라**.
 
-??? success "Solution to Exercise 3"
-    The classic "moving block" example. On $\Omega = [0, 1]$ with uniform measure, define:
+??? success "연습문제 2 풀이"
+    체비쇼프: $P(|\bar X_n - \mu| \ge \varepsilon) \le \mathrm{Var}(\bar X_n)/\varepsilon^2 = \sigma^2/(n\varepsilon^2)$.
+
+    고정된 임의의 $\varepsilon > 0$에 대해 $n \to \infty$이면 우변이 $\to 0$이므로 $\bar X_n \to \mu$가 확률수렴한다. $\square$
+
+    이 증명은 콜모고로프의 강한 법칙 조건 전부가 아니라 유한 분산만 요구한다는 점에 유의하라. 약한 법칙은 (특성함수를 쓰는 더 섬세한 증명으로) 1차 적률만 유한해도 성립하도록 강화할 수 있으며, 힌친의 약한 큰수의 법칙이 그렇게 한다.
+
+---
+
+**연습문제 3.**
+**확률수렴과 거의 확실한 수렴을 구별하라.** $X_n \to 0$이 확률수렴하지만 거의 확실하게는 수렴하지 **않는** 열을 구성하라.
+
+??? success "연습문제 3 풀이"
+    고전적인 "움직이는 블록" 예다. 균등측도를 갖는 $\Omega = [0, 1]$ 위에서 다음과 같이 정의한다.
 
     - $X_1 = \mathbf 1_{[0, 1]}$
     - $X_2 = \mathbf 1_{[0, 1/2]}$, $X_3 = \mathbf 1_{[1/2, 1]}$
     - $X_4 = \mathbf 1_{[0, 1/4]}$, $X_5 = \mathbf 1_{[1/4, 1/2]}$, $X_6 = \mathbf 1_{[1/2, 3/4]}$, $X_7 = \mathbf 1_{[3/4, 1]}$
-    - ... (continue with intervals of length $1/2^k$ tiling $[0,1]$)
+    - ... (길이 $1/2^k$인 구간들이 $[0,1]$을 덮도록 계속한다)
 
-    Then $P(X_n \ne 0) = $ length of the indicator interval $\to 0$, so $X_n \to 0$ in probability.
+    그러면 $P(X_n \ne 0) = $ 지시구간의 길이 $\to 0$이므로 $X_n \to 0$이 확률수렴한다.
 
-    But for **every** $\omega \in [0, 1]$, $X_n(\omega) = 1$ infinitely often (every $\omega$ is hit by every length scale). So $X_n(\omega) \not\to 0$ for any $\omega$ — convergence almost surely fails at every point.
+    그러나 **모든** $\omega \in [0, 1]$에 대해 $X_n(\omega) = 1$이 무한히 자주 일어난다(모든 길이 척도가 모든 $\omega$를 지나간다). 따라서 어떤 $\omega$에서도 $X_n(\omega) \not\to 0$이며 거의 확실한 수렴이 모든 점에서 실패한다.
 
-    The WLLN gives in-probability convergence; the SLLN gives the stronger almost-sure convergence. Sequence behavior at individual sample paths can differ between the two regimes.
-
----
-
-**Exercise 4.**
-**Convergence rate.** For i.i.d. $X_i$ with mean $\mu$ and variance $\sigma^2$, show that $\sqrt n (\bar X_n - \mu) = O_P(1)$. Why is this *not* fast enough for almost-sure convergence?
-
-??? success "Solution to Exercise 4"
-    By CLT, $\sqrt n (\bar X_n - \mu) \xrightarrow{d} N(0, \sigma^2)$, so the sequence is tight (bounded in probability) — that is, $O_P(1)$.
-
-    Implication for $\bar X_n - \mu$: it is $O_P(n^{-1/2})$ — shrinks at rate $1/\sqrt n$.
-
-    **Why $1/\sqrt n$ is not fast enough for a.s. convergence:** the random fluctuations of $\bar X_n - \mu$ are roughly Gaussian with SD $\sigma/\sqrt n$. The maximum over $n_0 \le n \le 2 n_0$ scales like $\sqrt{\log n_0}/\sqrt{n_0}$ — so $\sqrt n (\bar X_n - \mu)$ visits arbitrarily large values infinitely often (the **law of the iterated logarithm**: $\limsup \sqrt n (\bar X_n - \mu) / \sqrt{2\sigma^2 \log\log n} = 1$ a.s.).
-
-    A.s. convergence requires the deviations to eventually stay small for all subsequent $n$, not just become small in probability. Stronger conditions (e.g., bounded fourth moment, or just bounded first moment by Etemadi's proof) are required.
+    약한 법칙은 확률수렴을, 강한 법칙은 더 강한 거의 확실한 수렴을 준다. 개별 표본 경로에서의 행동이 두 체제에서 다를 수 있다.
 
 ---
 
-**Exercise 5.**
-**LLN fails for the Cauchy distribution.** The standard Cauchy has density $f(x) = 1/(\pi(1+x^2))$. Why is $\mathbb{E}[X]$ undefined, and what happens to $\bar X_n$ as $n \to \infty$?
+**연습문제 4.**
+**수렴 속도.** 평균 $\mu$, 분산 $\sigma^2$인 i.i.d. $X_i$에 대해 $\sqrt n (\bar X_n - \mu) = O_P(1)$임을 보여라. 이것이 왜 거의 확실한 수렴에는 *충분히 빠르지 않은가*?
 
-??? success "Solution to Exercise 5"
-    $\mathbb{E}[X] = \int x \, f(x) \, dx$ requires the integral to converge. For the Cauchy, $\int_0^\infty x/(1+x^2) \, dx = (1/2) \ln(1 + x^2) |_0^\infty = \infty$. The positive and negative parts both diverge, so $\mathbb{E}[X]$ is undefined (not just infinite, but not even formally well-defined).
+??? success "연습문제 4 풀이"
+    중심극한정리에 의해 $\sqrt n (\bar X_n - \mu) \xrightarrow{d} N(0, \sigma^2)$이므로 이 열은 조밀(확률적으로 유계)하며, 즉 $O_P(1)$이다.
 
-    **Behavior of $\bar X_n$:** for the Cauchy, the sample mean $\bar X_n$ has the *same distribution* as a single $X_i$ — a consequence of the Cauchy's stability under averaging (sum of $n$ Cauchys is $n$ times a Cauchy, divided by $n$ gives a Cauchy). So $\bar X_n$ does *not* concentrate as $n$ grows; it has heavy tails for every $n$.
+    $\bar X_n - \mu$에 대한 함의: 이는 $O_P(n^{-1/2})$로 $1/\sqrt n$의 속도로 줄어든다.
 
-    Lesson: the LLN requires finite mean. Heavy-tailed distributions can have unstable sample averages — the average of many observations is no better than a single observation. In practice this affects estimators in fields where extreme values are common (finance, network traffic) and motivates robust alternatives (median, trimmed mean) that have well-defined population analogs even when the mean does not.
+    **$1/\sqrt n$이 거의 확실한 수렴에 충분히 빠르지 않은 이유:** $\bar X_n - \mu$의 무작위 변동은 표준편차가 $\sigma/\sqrt n$인 대략 가우시안이다. $n_0 \le n \le 2 n_0$에 대한 최댓값은 $\sqrt{\log n_0}/\sqrt{n_0}$처럼 커지므로, $\sqrt n (\bar X_n - \mu)$이 임의로 큰 값을 무한히 자주 방문한다(**반복로그의 법칙**: 거의 확실하게 $\limsup \sqrt n (\bar X_n - \mu) / \sqrt{2\sigma^2 \log\log n} = 1$).
+
+    거의 확실한 수렴은 편차가 확률적으로 작아지는 데 그치지 않고 이후의 모든 $n$에 대해 결국 작게 유지되기를 요구한다. 더 강한 조건(예: 4차 적률의 유계성, 또는 에테마디의 증명에 따르면 1차 적률의 유계성만으로도)이 필요하다.
 
 ---
 
-**Exercise 6.**
-The **WLLN justifies frequentist probability**: $P(A) = \lim_{n \to \infty} (1/n) \sum_{i=1}^n \mathbf 1(\omega_i \in A)$. State the limit precisely and explain why this *defines* probability rather than just computing it.
+**연습문제 5.**
+**코시분포에서는 큰수의 법칙이 실패한다.** 표준 코시분포의 밀도는 $f(x) = 1/(\pi(1+x^2))$이다. $\mathbb{E}[X]$가 정의되지 않는 이유는 무엇이며, $n \to \infty$일 때 $\bar X_n$은 어떻게 되는가?
 
-??? success "Solution to Exercise 6"
-    Let $X_i = \mathbf 1(\omega_i \in A)$ for i.i.d. samples from $\Omega$. Then $\mathbb{E}[X_i] = P(A)$ and $\mathrm{Var}(X_i) = P(A)(1 - P(A)) < \infty$. By WLLN,
+??? success "연습문제 5 풀이"
+    $\mathbb{E}[X] = \int x \, f(x) \, dx$가 정의되려면 적분이 수렴해야 한다. 코시분포에서는 $\int_0^\infty x/(1+x^2) \, dx = (1/2) \ln(1 + x^2) |_0^\infty = \infty$이다. 양의 부분과 음의 부분이 모두 발산하므로 $\mathbb{E}[X]$가 정의되지 않는다(단지 무한한 것이 아니라 형식적으로도 잘 정의되지 않는다).
+
+    **$\bar X_n$의 행동:** 코시분포에서 표본평균 $\bar X_n$은 개별 $X_i$ 하나와 *같은 분포*를 갖는다. 평균에 대한 코시의 안정성 때문이다(코시 $n$개의 합은 코시의 $n$배이고 이를 $n$으로 나누면 다시 코시가 된다). 따라서 $n$이 커져도 $\bar X_n$은 집중되지 *않으며* 모든 $n$에 대해 두꺼운 꼬리를 갖는다.
+
+    교훈: 큰수의 법칙은 유한한 평균을 요구한다. 꼬리가 두꺼운 분포는 표본평균이 불안정할 수 있으며, 관측값을 아무리 많이 평균 내도 하나를 보는 것보다 나을 게 없다. 실무에서 이는 극단값이 흔한 분야(금융, 네트워크 트래픽)의 추정량에 영향을 주며, 평균이 정의되지 않을 때에도 잘 정의된 모집단 대응물을 갖는 강건한 대안(중앙값, 절단평균)을 쓸 동기가 된다.
+
+---
+
+**연습문제 6.**
+**약한 큰수의 법칙은 빈도주의 확률을 정당화한다**: $P(A) = \lim_{n \to \infty} (1/n) \sum_{i=1}^n \mathbf 1(\omega_i \in A)$. 이 극한을 정확히 진술하고, 이것이 왜 확률을 단지 계산하는 것이 아니라 *정의하는* 것인지 설명하라.
+
+??? success "연습문제 6 풀이"
+    $\Omega$에서 뽑은 i.i.d. 표본에 대해 $X_i = \mathbf 1(\omega_i \in A)$라 하자. 그러면 $\mathbb{E}[X_i] = P(A)$이고 $\mathrm{Var}(X_i) = P(A)(1 - P(A)) < \infty$이다. 약한 큰수의 법칙에 의해
 
     $$
     \frac{1}{n}\sum_{i=1}^n X_i \xrightarrow{P} P(A)
     $$
 
-    So the long-run frequency converges to the probability.
+    이므로 장기 빈도가 확률로 수렴한다.
 
-    **Why this *defines* probability rather than just computing it:** in the **frequentist interpretation**, probability is defined as the long-run frequency. The WLLN is then a tautology — the limit exists because we set $P$ to be that limit. In axiomatic measure theory (Kolmogorov), probability is a set function satisfying axioms, and the WLLN becomes a theorem connecting frequentist intuition to axioms.
+    **왜 계산이 아니라 *정의*인가:** **빈도주의 해석**에서 확률은 장기 빈도로 정의된다. 그러면 약한 큰수의 법칙은 동어반복이 된다. $P$를 그 극한으로 두었으므로 극한이 존재하는 것이다. 반면 공리적 측도론(콜모고로프)에서 확률은 공리를 만족하는 집합함수이고, 약한 큰수의 법칙은 빈도주의적 직관을 공리와 잇는 정리가 된다.
 
-    Practical use: this is why we can estimate $P(A)$ from data by computing sample proportions. The WLLN ensures the estimate is consistent — it converges to the truth as $n$ grows. Without the LLN, frequentist statistics would have no formal justification.
+    실용적 쓰임: 그래서 자료에서 표본비율을 계산해 $P(A)$를 추정할 수 있다. 약한 큰수의 법칙이 그 추정이 일치성을 가짐을, 즉 $n$이 커지면 참값으로 수렴함을 보장한다. 큰수의 법칙이 없으면 빈도주의 통계학에는 형식적 정당화가 없다.

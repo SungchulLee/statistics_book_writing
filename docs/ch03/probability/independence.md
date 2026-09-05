@@ -1,40 +1,42 @@
-# Independence of Events
+# 사건의 독립
 
-## Overview
+## 개요
 
-Two events are **independent** if knowing that one has occurred provides no information about whether the other has occurred. Independence is a fundamental concept that simplifies probability calculations and underpins key results like the Law of Large Numbers and the Central Limit Theorem.
+한 사건이 일어났음을 알아도 다른 사건이 일어났는지에 대한 정보가 전혀 생기지 않으면 두 사건이 **독립**이라고 한다. 독립은 확률 계산을 단순하게 만드는 근본 개념이며 큰수의 법칙과 중심극한정리 같은 핵심 결과를 떠받친다.
 
 ---
 
-## Definition
+## 정의
 
-Events $A$ and $B$ are **independent** if and only if:
+사건 $A$와 $B$가 **독립**일 필요충분조건은 다음이다.
 
 $$
 P(A \cap B) = P(A) \cdot P(B)
 $$
 
-Equivalently, if $P(B) > 0$:
+동등하게, $P(B) > 0$이면
 
 $$
 P(A \mid B) = P(A)
 $$
 
-**Interpretation:** Conditioning on $B$ does not change the probability of $A$—learning that $B$ occurred gives no new information about $A$.
+이다.
+
+**해석:** $B$로 조건을 걸어도 $A$의 확률이 바뀌지 않는다. $B$가 일어났음을 알아도 $A$에 대한 새로운 정보가 생기지 않는다.
 
 ---
 
-## Independence vs. Mutual Exclusivity
+## 독립 대 배반
 
-These two concepts are frequently confused but are fundamentally different:
+이 두 개념은 자주 혼동되지만 근본적으로 다르다.
 
-| Property | Independent | Mutually Exclusive |
+| 성질 | 독립 | 배반 |
 |:---|:---|:---|
-| **Condition** | $P(A \cap B) = P(A) \cdot P(B)$ | $P(A \cap B) = 0$ |
-| **Can both occur?** | Yes | No |
-| **Knowing one affects the other?** | No | Yes (the other cannot occur) |
+| **조건** | $P(A \cap B) = P(A) \cdot P(B)$ | $P(A \cap B) = 0$ |
+| **둘 다 일어날 수 있는가?** | 예 | 아니오 |
+| **한쪽을 알면 다른 쪽에 영향?** | 없음 | 있음(다른 쪽은 일어날 수 없다) |
 
-If $A$ and $B$ are mutually exclusive with $P(A) > 0$ and $P(B) > 0$, then they are **not** independent:
+$P(A) > 0$이고 $P(B) > 0$인 $A$와 $B$가 배반이면 이들은 독립이 **아니다**.
 
 $$
 P(A \cap B) = 0 \neq P(A) \cdot P(B) > 0
@@ -42,59 +44,61 @@ $$
 
 ---
 
-## Independence of Multiple Events
+## 여러 사건의 독립
 
-Events $A_1, A_2, \ldots, A_n$ are **mutually independent** if for every subset $S \subseteq \{1, 2, \ldots, n\}$:
+사건 $A_1, A_2, \ldots, A_n$이 **상호독립**이라는 것은 모든 부분집합 $S \subseteq \{1, 2, \ldots, n\}$에 대해
 
 $$
 P\left(\bigcap_{i \in S} A_i\right) = \prod_{i \in S} P(A_i)
 $$
 
-**Pairwise independence** alone is not sufficient for mutual independence. Pairwise independence requires only that every pair satisfies the product rule, but mutual independence requires the product rule for all subsets of any size.
+가 성립한다는 뜻이다.
+
+**쌍별 독립**만으로는 상호독립이 되지 않는다. 쌍별 독립은 모든 쌍이 곱 규칙을 만족하기만 하면 되지만, 상호독립은 크기와 무관하게 모든 부분집합에 대해 곱 규칙을 요구한다.
 
 ---
 
-## Examples
+## 예제
 
-### Example: Coin Flips
+### 예: 동전 던지기
 
-Flip a fair coin twice. Let $A$ = "first flip is heads" and $B$ = "second flip is heads."
+공정한 동전을 두 번 던진다. $A$ = "첫 번째가 앞면", $B$ = "두 번째가 앞면"이라 하자.
 
 $$
 P(A) = \frac{1}{2}, \quad P(B) = \frac{1}{2}, \quad P(A \cap B) = \frac{1}{4} = P(A) \cdot P(B)
 $$
 
-The flips are independent—the outcome of the first flip has no effect on the second.
+두 던지기는 독립이다. 첫 번째 결과가 두 번째에 아무 영향도 주지 않는다.
 
-### Example: Rolling a Die
+### 예: 주사위 굴리기
 
-Roll a fair die. Let $A$ = "result is even" = $\{2, 4, 6\}$ and $B$ = "result is $\leq 3$" = $\{1, 2, 3\}$.
+공정한 주사위를 굴린다. $A$ = "결과가 짝수" = $\{2, 4, 6\}$, $B$ = "결과가 $\leq 3$" = $\{1, 2, 3\}$이라 하자.
 
 $$
 P(A) = \frac{1}{2}, \quad P(B) = \frac{1}{2}, \quad P(A \cap B) = P(\{2\}) = \frac{1}{6}
 $$
 
-Since $\frac{1}{6} \neq \frac{1}{2} \cdot \frac{1}{2} = \frac{1}{4}$, events $A$ and $B$ are **not** independent.
+$\frac{1}{6} \neq \frac{1}{2} \cdot \frac{1}{2} = \frac{1}{4}$이므로 사건 $A$와 $B$는 독립이 **아니다**.
 
-### Example: Pairwise but Not Mutually Independent
+### 예: 쌍별 독립이지만 상호독립은 아닌 경우
 
-Flip two fair coins. Define:
+공정한 동전 두 개를 던진다. 다음과 같이 정의하자.
 
-- $A$ = "first coin is heads"
-- $B$ = "second coin is heads"
-- $C$ = "both coins show the same face"
+- $A$ = "첫 번째 동전이 앞면"
+- $B$ = "두 번째 동전이 앞면"
+- $C$ = "두 동전이 같은 면"
 
-Every pair is independent: $P(A \cap B) = P(A)P(B)$, $P(A \cap C) = P(A)P(C)$, $P(B \cap C) = P(B)P(C)$, each equaling $\frac{1}{4}$. However:
+모든 쌍이 독립이다. $P(A \cap B) = P(A)P(B)$, $P(A \cap C) = P(A)P(C)$, $P(B \cap C) = P(B)P(C)$가 각각 $\frac{1}{4}$로 성립한다. 그러나
 
 $$
 P(A \cap B \cap C) = P(\{HH\}) = \frac{1}{4} \neq P(A) \cdot P(B) \cdot P(C) = \frac{1}{8}
 $$
 
-The events are pairwise independent but not mutually independent.
+이다. 이 사건들은 쌍별 독립이지만 상호독립은 아니다.
 
 ---
 
-## Python Exploration
+## 파이썬으로 살펴보기
 
 ```python
 import numpy as np
@@ -150,127 +154,108 @@ simulate_independence()
 
 ---
 
-## Key Takeaways
+## 핵심 요약
 
-- Independence means $P(A \cap B) = P(A) \cdot P(B)$: knowing one event tells you nothing about the other.
-- Independence and mutual exclusivity are **opposite** in spirit—mutually exclusive events are maximally dependent.
-- Pairwise independence does not imply mutual independence; the product rule must hold for **all** subsets.
-- Independence of random variables (discussed later) extends this concept: $X$ and $Y$ are independent if their joint distribution factors into the product of marginals.
+- 독립은 $P(A \cap B) = P(A) \cdot P(B)$를 뜻한다. 한 사건을 알아도 다른 사건에 대해 아무것도 알 수 없다.
+- 독립과 배반은 정신적으로 **정반대**다. 배반인 사건은 최대로 종속이다.
+- 쌍별 독립은 상호독립을 함의하지 않는다. 곱 규칙이 **모든** 부분집합에 대해 성립해야 한다.
+- (뒤에서 다룰) 확률변수의 독립은 이 개념을 확장한다. $X$와 $Y$가 독립이라는 것은 결합분포가 주변분포의 곱으로 분해된다는 뜻이다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-A fair die is rolled twice. Let $A$ = "sum is 7" and $B$ = "first roll is 3". (a) Sample space size? (b) List $A$, $B$, $A \cap B$. (c) Compute $P(A), P(B), P(A \cap B)$. (d) Are $A$ and $B$ independent?
+**연습문제 1.**
+공정한 주사위를 두 번 굴린다. $A$ = "합이 7", $B$ = "첫 굴림이 3"이라 하자. (a) 표본공간의 크기는? (b) $A$, $B$, $A \cap B$를 나열하라. (c) $P(A), P(B), P(A \cap B)$를 계산하라. (d) $A$와 $B$는 독립인가?
 
-??? success "Solution to Exercise 1"
-    (a) $\Omega = \{(i, j) : i, j \in \{1,\ldots,6\}\}$, $|\Omega| = 36$.
+??? success "연습문제 1 풀이"
+    (a) $\Omega = \{(i, j) : i, j \in \{1,\ldots,6\}\}$이고 $|\Omega| = 36$이다.
 
     (b) $A = \{(1,6), (2,5), (3,4), (4,3), (5,2), (6,1)\}$. $B = \{(3,1),(3,2),(3,3),(3,4),(3,5),(3,6)\}$. $A \cap B = \{(3,4)\}$.
 
     (c) $P(A) = 6/36 = 1/6$, $P(B) = 1/6$, $P(A \cap B) = 1/36$.
 
-    (d) $P(A) \cdot P(B) = 1/36 = P(A \cap B)$, so independent. Intuition: knowing first roll = 3 doesn't change the probability that the sum is 7, because exactly one of six second-roll values (namely 4) produces sum 7.
+    (d) $P(A) \cdot P(B) = 1/36 = P(A \cap B)$이므로 독립이다. 직관: 첫 굴림이 3임을 알아도 합이 7일 확률은 변하지 않는다. 두 번째 굴림의 여섯 값 중 정확히 하나(즉 4)만이 합 7을 만들기 때문이다.
 
 ---
 
-**Exercise 2.**
-Prove: if $A$ and $B$ are independent, then $A^c$ and $B$ are also independent. Likewise $A$ and $B^c$, and $A^c$ and $B^c$.
+**연습문제 2.**
+증명하라: $A$와 $B$가 독립이면 $A^c$와 $B$도 독립이다. 마찬가지로 $A$와 $B^c$, 그리고 $A^c$와 $B^c$도 독립이다.
 
-??? success "Solution to Exercise 2"
-    By independence: $P(A \cap B) = P(A) P(B)$.
+??? success "연습문제 2 풀이"
+    독립성에 의해 $P(A \cap B) = P(A) P(B)$이다.
 
     $P(A^c \cap B) = P(B) - P(A \cap B) = P(B) - P(A) P(B) = P(B)[1 - P(A)] = P(B) P(A^c)$.
 
-    So $A^c$ and $B$ are independent. By symmetric reasoning, $A$ and $B^c$ are independent. Applying the same argument to $A^c$ and $B^c$ — start from $A$ and $B^c$ independent, deduce $A^c$ and $B^c$ independent.
+    따라서 $A^c$와 $B$는 독립이다. 대칭적인 논증으로 $A$와 $B^c$도 독립이다. 같은 논증을 $A$와 $B^c$의 독립에서 출발해 적용하면 $A^c$와 $B^c$의 독립을 얻는다.
 
-    Lesson: independence is preserved under complementation. Sometimes it is easier to verify independence using complements (e.g., $P(\text{no failures}) = \prod P(\text{component } i \text{ works})$ in reliability).
+    교훈: 독립성은 여집합을 취해도 보존된다. 때로는 여집합으로 독립성을 확인하는 편이 더 쉽다(예: 신뢰도 분석에서 $P(\text{고장 없음}) = \prod P(\text{부품 } i \text{ 작동})$).
 
 ---
 
-**Exercise 3.**
-**Pairwise independence does not imply mutual independence.** Flip two fair coins. Let $A$ = "1st is H", $B$ = "2nd is H", $C$ = "both coins match". Show that $\{A, B, C\}$ are pairwise independent but **not** mutually independent.
+**연습문제 3.**
+**쌍별 독립은 상호독립을 함의하지 않는다.** 공정한 동전 두 개를 던진다. $A$ = "첫 번째가 앞면", $B$ = "두 번째가 앞면", $C$ = "두 동전이 일치"라 하자. $\{A, B, C\}$가 쌍별 독립이지만 상호독립은 **아님**을 보여라.
 
-??? success "Solution to Exercise 3"
-    Sample space $\{HH, HT, TH, TT\}$, each with probability 1/4.
+??? success "연습문제 3 풀이"
+    표본공간은 $\{HH, HT, TH, TT\}$이고 각각의 확률은 1/4이다.
 
-    $P(A) = P(B) = P(C) = 1/2$ (two outcomes each).
+    $P(A) = P(B) = P(C) = 1/2$이다(각각 결과가 두 개).
 
-    Pairwise checks:
+    쌍별 확인:
     - $A \cap B = \{HH\}$, $P = 1/4 = P(A) P(B)$. ✓
     - $A \cap C = \{HH\}$, $P = 1/4 = P(A) P(C)$. ✓
     - $B \cap C = \{HH\}$, $P = 1/4 = P(B) P(C)$. ✓
 
-    Mutual check: $A \cap B \cap C = \{HH\}$, $P = 1/4 \ne P(A) P(B) P(C) = 1/8$.
+    상호 확인: $A \cap B \cap C = \{HH\}$, $P = 1/4 \ne P(A) P(B) P(C) = 1/8$.
 
-    So the three events are pairwise but not mutually independent. Intuitively, $A$ and $B$ together determine $C$ — knowing both eliminates the randomness in the third. This is why mutual independence requires the product rule for *every* subset, not just pairs.
+    따라서 세 사건은 쌍별 독립이지만 상호독립은 아니다. 직관적으로 $A$와 $B$가 함께 $C$를 결정한다. 둘 다 알면 세 번째의 무작위성이 사라진다. 상호독립이 쌍만이 아니라 *모든* 부분집합에 대해 곱 규칙을 요구하는 이유가 이것이다.
 
 ---
 
-**Exercise 4.**
-**Independence is not transitive.** Construct three events $A$, $B$, $C$ such that $A$ is independent of $B$ and $B$ is independent of $C$, but $A$ is **not** independent of $C$.
+**연습문제 4.**
+**독립성은 추이적이지 않다.** $A$가 $B$와 독립이고 $B$가 $C$와 독립이지만 $A$와 $C$는 독립이 **아닌** 세 사건 $A$, $B$, $C$를 구성하라.
 
-??? success "Solution to Exercise 4"
-    Roll a fair die. Let:
+??? success "연습문제 4 풀이"
+    공정한 주사위를 한 번 굴리고 다음과 같이 정의하자.
 
-    - $A$ = "result is even" = $\{2, 4, 6\}$
-    - $B$ = "result is $\le 3$" = $\{1, 2, 3\}$
-    - $C$ = "result is even" = $\{2, 4, 6\}$ (same as $A$ — we'll fix this)
-
-    Better: take $A = \{1, 2, 3, 4\}$, $B = \{2, 3, 5, 6\}$, $C = \{1, 2, 3, 4\}$. Then $C = A$, so trivially not independent. Let's redo.
-
-    Construction: roll two dice, consider results $X_1, X_2$.
-
-    - $A$ = "$X_1$ is even" — $P(A) = 1/2$.
-    - $B$ = "$X_1 + X_2$ is even" — $P(B) = 1/2$.
-    - $C$ = "$X_2$ is even" — $P(C) = 1/2$.
-
-    Check $A$ ⊥ $B$: $P(A \cap B)$ = "first die even AND sum even" = "first even AND second even" = $1/4$. $P(A) P(B) = 1/4$. ✓
-
-    Check $B$ ⊥ $C$: by symmetry, same value, ✓.
-
-    Check $A$ ⊥ $C$: $P(A \cap C)$ = "both dice even" = $1/4$. $P(A) P(C) = 1/4$. ✓
-
-    Oops — this example has all three pairwise independent. Let me try another.
-
-    Better: roll one die.
     - $A = \{1, 2, 3\}$, $P(A) = 1/2$.
     - $B = \{1, 4\}$, $P(B) = 1/3$.
     - $C = \{4, 5, 6\}$, $P(C) = 1/2$.
 
-    $A \cap B = \{1\}$, $P = 1/6 = P(A) P(B)$ ✓.
-    $B \cap C = \{4\}$, $P = 1/6 = P(B) P(C)$ ✓.
-    $A \cap C = \emptyset$, $P = 0 \ne P(A) P(C) = 1/4$. ✗
+    확인:
 
-    So $A$ ⊥ $B$, $B$ ⊥ $C$, but $A$ and $C$ are not independent. Independence is not transitive.
+    - $A \cap B = \{1\}$이므로 $P = 1/6 = P(A) P(B)$. ✓ 독립
+    - $B \cap C = \{4\}$이므로 $P = 1/6 = P(B) P(C)$. ✓ 독립
+    - $A \cap C = \emptyset$이므로 $P = 0 \ne P(A) P(C) = 1/4$. ✗ 독립 아님
 
----
-
-**Exercise 5.**
-**Independence of complementary information.** If $X$ is uniform on $\{1, 2, 3, 4\}$, consider $A$ = "$X$ is even" and $B$ = "$X \le 2$". Show these are independent. Generalize: under what symmetry condition on a uniform distribution can two events partition into independent pieces?
-
-??? success "Solution to Exercise 5"
-    $A = \{2, 4\}$, $P(A) = 1/2$. $B = \{1, 2\}$, $P(B) = 1/2$. $A \cap B = \{2\}$, $P = 1/4 = P(A) P(B)$. Independent. ✓
-
-    **Generalization:** independence here arises because the four outcomes $\{1, 2, 3, 4\}$ can be encoded as bits $(b_1, b_2)$ where $b_1$ = "even" indicator and $b_2$ = "$\le 2$" indicator. The four outcomes are $(\bar b_1, \bar b_2), (b_1, \bar b_2), (\bar b_1, b_2), (b_1, b_2)$ in some order, each with probability 1/4 — making the two bits uniform i.i.d. and hence independent.
-
-    More generally: events $A$ and $B$ are independent under a uniform distribution on a finite sample space $|\Omega| = n$ if and only if the four cell counts $|A \cap B|, |A \cap B^c|, |A^c \cap B|, |A^c \cap B^c|$ form a $2 \times 2$ matrix with rank 1 — proportional rows and columns. This is the discrete analog of the rank-1 factorization property of independent joint distributions.
+    따라서 $A$와 $B$가 독립이고 $B$와 $C$가 독립이지만 $A$와 $C$는 독립이 아니다. 독립성은 추이적이지 않다.
 
 ---
 
-**Exercise 6.**
-**Independence is a structural property, not a frequency property.** A sample of size $n$ can show $P(\hat A \cap \hat B) = \hat P(\hat A) \hat P(\hat B)$ by chance even when $A$ and $B$ are dependent in the population. Derive the expected value of $|\hat P(A \cap B) - \hat P(A) \hat P(B)|$ under the null of independence with sample size $n$.
+**연습문제 5.**
+**여집합 정보의 독립.** $X$가 $\{1, 2, 3, 4\}$ 위에서 균등할 때 $A$ = "$X$가 짝수", $B$ = "$X \le 2$"를 생각하자. 이들이 독립임을 보여라. 일반화하라. 균등분포에서 어떤 대칭 조건이 있을 때 두 사건이 독립인 조각으로 분할되는가?
 
-??? success "Solution to Exercise 6"
-    Define $T = \hat P(A \cap B) - \hat P(A) \hat P(B)$. Under independence, the population value of $T$ is $0$. The sample $T$ has approximate distribution
+??? success "연습문제 5 풀이"
+    $A = \{2, 4\}$이므로 $P(A) = 1/2$이다. $B = \{1, 2\}$이므로 $P(B) = 1/2$이다. $A \cap B = \{2\}$이므로 $P = 1/4 = P(A) P(B)$로 독립이다. ✓
+
+    **일반화:** 여기서 독립이 나오는 이유는 네 결과 $\{1, 2, 3, 4\}$를 비트 $(b_1, b_2)$로 부호화할 수 있기 때문이다. 여기서 $b_1$은 "짝수" 지시자, $b_2$는 "$\le 2$" 지시자다. 네 결과가 어떤 순서로든 $(\bar b_1, \bar b_2), (b_1, \bar b_2), (\bar b_1, b_2), (b_1, b_2)$이고 각각의 확률이 1/4이므로, 두 비트가 균등하고 i.i.d.가 되어 독립이다.
+
+    더 일반적으로, 크기 $|\Omega| = n$인 유한 표본공간 위의 균등분포에서 사건 $A$와 $B$가 독립일 필요충분조건은 네 칸의 도수 $|A \cap B|, |A \cap B^c|, |A^c \cap B|, |A^c \cap B^c|$가 계수 1인 $2 \times 2$ 행렬을 이루는 것, 즉 행과 열이 서로 비례하는 것이다. 이는 독립인 결합분포의 계수 1 분해 성질에 대응하는 이산판이다.
+
+---
+
+**연습문제 6.**
+**독립성은 구조적 성질이지 빈도 성질이 아니다.** 모집단에서 $A$와 $B$가 종속이더라도 크기 $n$인 표본에서 우연히 $\hat P(\hat A \cap \hat B) = \hat P(\hat A) \hat P(\hat B)$가 나올 수 있다. 표본 크기 $n$에서 독립이라는 귀무가설 아래 $|\hat P(A \cap B) - \hat P(A) \hat P(B)|$의 기댓값을 유도하라.
+
+??? success "연습문제 6 풀이"
+    $T = \hat P(A \cap B) - \hat P(A) \hat P(B)$로 정의하자. 독립성 아래에서 $T$의 모집단 값은 $0$이다. 표본의 $T$는 근사적으로 다음 분포를 갖는다.
 
     $$
     T \approx \frac{1}{n} \sum_i \mathbf{1}(X_i \in A) \mathbf{1}(X_i \in B) - \bar A_n \bar B_n
     $$
 
-    Asymptotically, $\sqrt n \cdot T \xrightarrow{d} N(0, \sigma^2)$ where $\sigma^2 = P(A) P(B)(1 - P(A))(1 - P(B))$ (a Cramér–Wold / delta-method calculation).
+    점근적으로 $\sqrt n \cdot T \xrightarrow{d} N(0, \sigma^2)$이며, 여기서 $\sigma^2 = P(A) P(B)(1 - P(A))(1 - P(B))$이다(크라메르–월드 / 델타 방법 계산).
 
-    Therefore $\mathbb{E}|T| \approx \sqrt{2/\pi} \cdot \sigma/\sqrt{n} = O(n^{-1/2})$.
+    따라서 $\mathbb{E}|T| \approx \sqrt{2/\pi} \cdot \sigma/\sqrt{n} = O(n^{-1/2})$이다.
 
-    **Consequence:** a non-zero $T$ in a finite sample does *not* prove dependence; it has standard error of order $n^{-1/2}$. The **chi-squared test of independence** formalizes this: under $H_0$ the test statistic has a chi-squared distribution, and only large values are evidence of dependence.
+    **귀결:** 유한 표본에서 $T$가 0이 아니라고 해서 종속성이 *증명되지는* 않는다. $T$의 표준오차가 $n^{-1/2}$ 차수이기 때문이다. **독립성에 대한 카이제곱 검정**이 이를 형식화한다. $H_0$ 아래에서 검정통계량이 카이제곱분포를 따르며, 값이 클 때에만 종속성의 증거가 된다.
 
-    This is the same lesson as elsewhere: structural population properties (independence, no causation) cannot be conclusively *demonstrated* from sample data — only the *failure* of independence (significant departure from $T = 0$) provides evidence against the null.
+    이는 다른 곳에서와 같은 교훈이다. 구조적인 모집단 성질(독립성, 인과관계 없음)은 표본 자료로 결정적으로 *입증할* 수 없다. 오직 독립성의 *실패*($T = 0$에서 유의하게 벗어남)만이 귀무가설에 반하는 증거가 된다.

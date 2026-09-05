@@ -1,36 +1,38 @@
-# Expectation and Linearity
+# 기댓값과 선형성
 
-## Overview
+## 개요
 
-The **expected value** (or **expectation**) of a random variable is its long-run average value over many repetitions of an experiment. It provides a single number summarizing the "center" of a distribution. The **linearity of expectation** is one of the most powerful and widely used properties in all of probability.
+확률변수의 **기댓값**은 실험을 여러 번 반복했을 때의 장기적 평균값이다. 분포의 "중심"을 하나의 수로 요약해 준다. **기댓값의 선형성**은 확률론 전체에서 가장 강력하고 널리 쓰이는 성질 중 하나다.
 
 ---
 
-## Definition
+## 정의
 
-### Discrete Random Variables
+### 이산확률변수
 
-For a discrete random variable $X$ with PMF $p_{x_i}$:
+확률질량함수가 $p_{x_i}$인 이산확률변수 $X$에 대해
 
 $$
 E[X] = \sum_i x_i \cdot P(X = x_i) = \sum_i x_i \cdot p_{x_i}
 $$
 
-In the brick metaphor: $E[X]$ is the **center of mass** of the bricks placed along the real line.
+이다. 벽돌 비유로 말하면 $E[X]$는 실직선을 따라 놓인 벽돌들의 **무게중심**이다.
 
-### Continuous Random Variables
+### 연속확률변수
 
-For a continuous random variable $X$ with PDF $f(x)$:
+확률밀도함수가 $f(x)$인 연속확률변수 $X$에 대해
 
 $$
 E[X] = \int_{-\infty}^{\infty} x \cdot f(x) \, dx
 $$
 
+이다.
+
 ---
 
-## The Law of the Unconscious Statistician (LOTUS)
+## 무의식적 통계학자의 법칙 (LOTUS)
 
-To compute the expected value of a function $g(X)$ without first finding the distribution of $g(X)$:
+$g(X)$의 분포를 먼저 구하지 않고 $g(X)$의 기댓값을 계산하려면
 
 $$
 E[g(X)] =
@@ -40,82 +42,85 @@ E[g(X)] =
 \end{cases}
 $$
 
-This avoids the often tedious step of deriving the distribution of $g(X)$.
+를 쓴다. 이렇게 하면 $g(X)$의 분포를 유도하는 흔히 번거로운 단계를 피할 수 있다.
 
 ---
 
-## Linearity of Expectation
+## 기댓값의 선형성
 
-For any random variables $X$ and $Y$ (not necessarily independent) and constants $a, b, c$:
+임의의 확률변수 $X$와 $Y$(독립일 필요가 없다)와 상수 $a, b, c$에 대해
 
 $$
 E[aX + bY + c] = aE[X] + bE[Y] + c
 $$
 
-This extends to any finite sum:
+이다. 이는 임의의 유한합으로 확장된다.
 
 $$
 E\left[\sum_{i=1}^{n} X_i\right] = \sum_{i=1}^{n} E[X_i]
 $$
 
-**Key insight:** Linearity holds **regardless of whether the random variables are independent or dependent**. This makes it an exceptionally powerful tool.
+**핵심 통찰:** 선형성은 **확률변수들이 독립이든 종속이든 관계없이** 성립한다. 그래서 유난히 강력한 도구가 된다.
 
 ---
 
-## Properties of Expectation
+## 기댓값의 성질
 
-1. **Constant:** $E[c] = c$
-2. **Scaling:** $E[aX] = aE[X]$
-3. **Additivity:** $E[X + Y] = E[X] + E[Y]$
-4. **Monotonicity:** If $X \leq Y$ always, then $E[X] \leq E[Y]$
-5. **Product (independent only):** If $X \perp\!\!\!\perp Y$, then $E[XY] = E[X] \cdot E[Y]$
+1. **상수:** $E[c] = c$
+2. **척도:** $E[aX] = aE[X]$
+3. **가법성:** $E[X + Y] = E[X] + E[Y]$
+4. **단조성:** 항상 $X \leq Y$이면 $E[X] \leq E[Y]$
+5. **곱(독립일 때만):** $X \perp\!\!\!\perp Y$이면 $E[XY] = E[X] \cdot E[Y]$
 
-Note that property 5 requires independence; properties 1–4 do not.
+성질 5는 독립성을 요구하지만 성질 1–4는 그렇지 않다.
 
 ---
 
-## Examples
+## 예제
 
-### Example: Expected Value of a Fair Die
+### 예: 공정한 주사위의 기댓값
 
 $$
 E[X] = \sum_{x=1}^{6} x \cdot \frac{1}{6} = \frac{1+2+3+4+5+6}{6} = 3.5
 $$
 
-### Example: Expected Number of Heads in n Coin Flips
-Let $X_i = 1$ if flip $i$ is heads, 0 otherwise. Then $X = \sum_{i=1}^n X_i$ counts the total heads. By linearity:
+### 예: 동전 n번 던지기에서 앞면의 기대 개수
+
+$i$번째 던지기가 앞면이면 $X_i = 1$, 아니면 0이라 하자. 그러면 $X = \sum_{i=1}^n X_i$가 전체 앞면 수를 센다. 선형성에 의해
 
 $$
 E[X] = \sum_{i=1}^n E[X_i] = \sum_{i=1}^n p = np
 $$
 
-For a fair coin with $n = 100$: $E[X] = 50$.
+이다. 공정한 동전을 $n = 100$번 던지면 $E[X] = 50$이다.
 
-### Example: Coupon Collector Problem
+### 예: 쿠폰 수집가 문제
 
-There are $n$ distinct coupons. Each purchase gives a uniformly random coupon. Let $T$ be the total purchases needed to collect all $n$ coupons.
+서로 다른 쿠폰이 $n$종류 있다. 구매할 때마다 균등하게 무작위한 쿠폰 하나를 받는다. $T$를 $n$종류를 모두 모으는 데 필요한 총 구매 횟수라 하자.
 
-Divide the process into phases: phase $i$ begins when you have $i-1$ distinct coupons and ends when you get the $i$-th new one. In phase $i$, each purchase has probability $\frac{n - i + 1}{n}$ of being new, so the number of purchases in phase $i$ is geometric with mean $\frac{n}{n - i + 1}$.
+과정을 단계로 나눈다. $i$번째 단계는 서로 다른 쿠폰 $i-1$종류를 가진 상태에서 시작해 $i$번째 새 쿠폰을 얻을 때 끝난다. $i$번째 단계에서 한 번 구매가 새 쿠폰일 확률은 $\frac{n - i + 1}{n}$이므로, 그 단계의 구매 횟수는 평균이 $\frac{n}{n - i + 1}$인 기하분포를 따른다.
 
-By linearity:
+선형성에 의해
 
 $$
 E[T] = \sum_{i=1}^{n} \frac{n}{n - i + 1} = n \sum_{k=1}^{n} \frac{1}{k} = nH_n \approx n \ln n
 $$
 
-For $n = 50$ types: $E[T] \approx 50 \times \ln(50) \approx 225$ purchases.
+이다. $n = 50$종류면 $E[T] \approx 50 \times \ln(50) \approx 225$번 구매해야 한다.
 
-### Example: Continuous — Exponential Distribution
+### 예: 연속 — 지수분포
 
-For $X \sim \text{Exponential}(\lambda)$ with PDF $f(x) = \lambda e^{-\lambda x}$ for $x \geq 0$:
+$x \geq 0$에서 확률밀도함수가 $f(x) = \lambda e^{-\lambda x}$인 $X \sim \text{Exponential}(\lambda)$에 대해
 
 $$
 E[X] = \int_0^{\infty} x \cdot \lambda e^{-\lambda x} \, dx = \frac{1}{\lambda}
 $$
 
+이다.
+
 ---
 
-## Python Exploration
+## 파이썬으로 살펴보기
 
 ```python
 import numpy as np
@@ -182,56 +187,58 @@ linearity_demonstration()
 
 ---
 
-## Key Takeaways
+## 핵심 요약
 
-- The expected value $E[X]$ is the probability-weighted average of all possible values.
-- **LOTUS** lets us compute $E[g(X)]$ directly from the distribution of $X$.
-- **Linearity of expectation** always holds, even for dependent variables—it is one of the most useful tools in probability.
-- The product rule $E[XY] = E[X]E[Y]$ requires independence; linearity does not.
+- 기댓값 $E[X]$는 가능한 모든 값의 확률가중 평균이다.
+- **LOTUS** 덕분에 $X$의 분포에서 곧바로 $E[g(X)]$를 계산할 수 있다.
+- **기댓값의 선형성**은 종속인 변수에 대해서도 언제나 성립하며, 확률론에서 가장 유용한 도구 중 하나다.
+- 곱 규칙 $E[XY] = E[X]E[Y]$는 독립성을 요구하지만 선형성은 그렇지 않다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-A discrete random variable $X$ has the distribution: $P(X=-1) = 0.3$, $P(X=0) = 0.4$, $P(X=2) = 0.3$. Compute $E[X]$ and $E[X^2]$.
+**연습문제 1.**
+이산확률변수 $X$의 분포가 $P(X=-1) = 0.3$, $P(X=0) = 0.4$, $P(X=2) = 0.3$이다. $E[X]$와 $E[X^2]$를 계산하라.
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
     $$
     E[X] = (-1)(0.3) + (0)(0.4) + (2)(0.3) = -0.3 + 0 + 0.6 = 0.3
     $$
 
-    Using LOTUS for $g(X) = X^2$:
+    $g(X) = X^2$에 대해 LOTUS를 쓰면
 
     $$
     E[X^2] = (-1)^2(0.3) + (0)^2(0.4) + (2)^2(0.3) = 0.3 + 0 + 1.2 = 1.5
     $$
 
+    이다.
+
 ---
 
-**Exercise 2.**
-Let $X_1, X_2, \ldots, X_{100}$ be the indicator variables for 100 independent coin flips, where $X_i = 1$ if the $i$-th flip is heads (probability 0.5) and $X_i = 0$ otherwise. Using linearity of expectation, find $E\!\left[\sum_{i=1}^{100} X_i\right]$.
+**연습문제 2.**
+$X_1, X_2, \ldots, X_{100}$을 독립인 동전 던지기 100번의 지시변수라 하자. $i$번째 던지기가 앞면(확률 0.5)이면 $X_i = 1$, 아니면 $X_i = 0$이다. 기댓값의 선형성을 이용해 $E\!\left[\sum_{i=1}^{100} X_i\right]$를 구하라.
 
-??? success "Solution to Exercise 2"
-    By linearity of expectation:
+??? success "연습문제 2 풀이"
+    기댓값의 선형성에 의해
 
     $$
     E\!\left[\sum_{i=1}^{100} X_i\right] = \sum_{i=1}^{100} E[X_i]
     $$
 
-    Each $X_i$ is a Bernoulli random variable with $E[X_i] = P(X_i = 1) = 0.5$. Therefore:
+    이다. 각 $X_i$는 $E[X_i] = P(X_i = 1) = 0.5$인 베르누이 확률변수이므로
 
     $$
     E\!\left[\sum_{i=1}^{100} X_i\right] = 100 \times 0.5 = 50
     $$
 
-    We expect 50 heads in 100 flips. Importantly, linearity holds regardless of whether the flips are independent — the same answer would apply even if the flips were dependent.
+    이다. 100번 던지면 앞면이 50번 나올 것으로 기대한다. 중요한 점은 선형성이 던지기의 독립 여부와 무관하게 성립한다는 것이다. 던지기가 종속이더라도 같은 답이 나온다.
 
 ---
 
-**Exercise 3.**
-A fair six-sided die is rolled. Let $Y = (X - 3.5)^2$ where $X$ is the number showing. Compute $E[Y]$ using LOTUS.
+**연습문제 3.**
+공정한 육면체 주사위를 굴린다. $X$를 나온 수라 하고 $Y = (X - 3.5)^2$이라 하자. LOTUS를 써서 $E[Y]$를 계산하라.
 
-??? success "Solution to Exercise 3"
-    By LOTUS, $E[Y] = E[(X-3.5)^2] = \sum_{x=1}^{6} (x - 3.5)^2 \cdot P(X=x)$. Since $P(X=x) = 1/6$ for each value:
+??? success "연습문제 3 풀이"
+    LOTUS에 의해 $E[Y] = E[(X-3.5)^2] = \sum_{x=1}^{6} (x - 3.5)^2 \cdot P(X=x)$이다. 각 값에 대해 $P(X=x) = 1/6$이므로
 
     $$
     E[Y] = \frac{1}{6}\left[(1-3.5)^2 + (2-3.5)^2 + (3-3.5)^2 + (4-3.5)^2 + (5-3.5)^2 + (6-3.5)^2\right]
@@ -241,21 +248,21 @@ A fair six-sided die is rolled. Let $Y = (X - 3.5)^2$ where $X$ is the number sh
     = \frac{1}{6}\left[6.25 + 2.25 + 0.25 + 0.25 + 2.25 + 6.25\right] = \frac{17.5}{6} \approx 2.917
     $$
 
-    Note: this is precisely $\text{Var}(X)$ for a fair die, since $E[X] = 3.5$.
+    이다. 참고로 $E[X] = 3.5$이므로 이는 정확히 공정한 주사위의 $\text{Var}(X)$다.
 
 ---
 
-**Exercise 4.**
-Let $X$ and $Y$ be independent random variables with $E[X] = 2$, $E[Y] = 3$, $E[X^2] = 5$, and $E[Y^2] = 11$. Compute $E[XY]$ and $E[(X+Y)^2]$.
+**연습문제 4.**
+$X$와 $Y$가 독립이고 $E[X] = 2$, $E[Y] = 3$, $E[X^2] = 5$, $E[Y^2] = 11$이다. $E[XY]$와 $E[(X+Y)^2]$를 계산하라.
 
-??? success "Solution to Exercise 4"
-    Since $X$ and $Y$ are independent:
+??? success "연습문제 4 풀이"
+    $X$와 $Y$가 독립이므로
 
     $$
     E[XY] = E[X] \cdot E[Y] = 2 \times 3 = 6
     $$
 
-    For $E[(X+Y)^2]$, expand the square:
+    이다. $E[(X+Y)^2]$의 경우 제곱을 전개하면
 
     $$
     E[(X+Y)^2] = E[X^2 + 2XY + Y^2] = E[X^2] + 2E[XY] + E[Y^2]
@@ -265,43 +272,45 @@ Let $X$ and $Y$ be independent random variables with $E[X] = 2$, $E[Y] = 3$, $E[
     = 5 + 2(6) + 11 = 5 + 12 + 11 = 28
     $$
 
+    이다.
+
 ---
 
-**Exercise 5.**
-**Tail-sum formula for expectation.** Prove that for a non-negative random variable $X$, $\mathbb{E}[X] = \int_0^\infty P(X > t) dt$ (continuous) or $\sum_{n=0}^\infty P(X > n)$ (integer-valued).
+**연습문제 5.**
+**기댓값의 꼬리합 공식.** 음이 아닌 확률변수 $X$에 대해 $\mathbb{E}[X] = \int_0^\infty P(X > t) dt$(연속) 또는 $\sum_{n=0}^\infty P(X > n)$(정숫값)임을 증명하라.
 
-??? success "Solution to Exercise 5"
-    **Continuous case:** by Fubini's theorem:
+??? success "연습문제 5 풀이"
+    **연속인 경우:** 푸비니 정리에 의해
 
     $$
     \int_0^\infty P(X > t) dt = \int_0^\infty \int_t^\infty f(x) dx \, dt = \int_0^\infty f(x) \int_0^x dt \, dx = \int_0^\infty x f(x) dx = \mathbb{E}[X]
     $$
 
-    where the interchange is justified by non-negativity.
+    이며, 순서 교환은 비음성에 의해 정당화된다.
 
-    **Integer-valued case:**
+    **정숫값인 경우:**
 
     $$
     \sum_{n=0}^\infty P(X > n) = \sum_{n=0}^\infty \sum_{k=n+1}^\infty P(X = k) = \sum_{k=1}^\infty P(X = k) \sum_{n=0}^{k-1} 1 = \sum_{k=1}^\infty k P(X = k) = \mathbb{E}[X]
     $$
 
-    **Use:** the tail-sum formula lets you compute expectations from survival probabilities (sometimes easier than the standard PDF integral). Example: for a geometric random variable counting trials until first success, $P(X > n) = (1 - p)^n$, so $\mathbb{E}[X] = \sum_{n=0}^\infty (1 - p)^n = 1/p$.
+    **용도:** 꼬리합 공식을 쓰면 생존확률로부터 기댓값을 계산할 수 있다(표준적인 확률밀도함수 적분보다 쉬울 때가 있다). 예: 첫 성공까지의 시행 횟수를 세는 기하확률변수에서 $P(X > n) = (1 - p)^n$이므로 $\mathbb{E}[X] = \sum_{n=0}^\infty (1 - p)^n = 1/p$이다.
 
 ---
 
-**Exercise 6.**
-**Conditional expectation as a random variable.** Let $X, Y$ be jointly distributed. Define $g(y) = \mathbb{E}[X \mid Y = y]$ and the random variable $\mathbb{E}[X \mid Y] = g(Y)$. Prove the **law of total expectation**: $\mathbb{E}[X] = \mathbb{E}[\mathbb{E}[X \mid Y]]$.
+**연습문제 6.**
+**확률변수로서의 조건부 기댓값.** $X, Y$가 결합분포를 갖는다고 하자. $g(y) = \mathbb{E}[X \mid Y = y]$와 확률변수 $\mathbb{E}[X \mid Y] = g(Y)$를 정의한다. **전기댓값의 법칙** $\mathbb{E}[X] = \mathbb{E}[\mathbb{E}[X \mid Y]]$를 증명하라.
 
-??? success "Solution to Exercise 6"
-    By definition, $g(y) = \mathbb{E}[X \mid Y = y] = \int x f_{X \mid Y}(x \mid y) dx$.
+??? success "연습문제 6 풀이"
+    정의에 의해 $g(y) = \mathbb{E}[X \mid Y = y] = \int x f_{X \mid Y}(x \mid y) dx$이다.
 
     $\mathbb{E}[g(Y)] = \int g(y) f_Y(y) dy = \int \int x f_{X \mid Y}(x \mid y) f_Y(y) dx \, dy = \int \int x f_{X, Y}(x, y) dx \, dy = \int x f_X(x) dx = \mathbb{E}[X]$.
 
     $\square$
 
-    Used everywhere in probability, statistics, and dynamic-programming approaches to expectation:
+    확률, 통계, 그리고 기댓값에 대한 동적계획법 접근 전반에서 쓰인다.
 
-    - **Conditional expectation as optimal predictor:** $\mathbb{E}[X \mid Y]$ minimizes $\mathbb{E}[(X - g(Y))^2]$ over all functions $g$.
-    - **Towering** (iterated expectation): $\mathbb{E}[X] = \mathbb{E}[\mathbb{E}[X \mid Y]] = \mathbb{E}[\mathbb{E}[\mathbb{E}[X \mid Y, Z] \mid Y]]$, etc.
-    - **MCMC / variance reduction**: replacing $X$ with $\mathbb{E}[X \mid Y]$ (when possible) reduces estimator variance via the Rao-Blackwell theorem.
-    - **Reinforcement learning**: Bellman equation $V(s) = \mathbb{E}[R + \gamma V(s') \mid s]$ is iterated conditional expectation.
+    - **최적 예측자로서의 조건부 기댓값:** $\mathbb{E}[X \mid Y]$는 모든 함수 $g$에 대해 $\mathbb{E}[(X - g(Y))^2]$을 최소화한다.
+    - **탑 성질**(반복 기댓값): $\mathbb{E}[X] = \mathbb{E}[\mathbb{E}[X \mid Y]] = \mathbb{E}[\mathbb{E}[\mathbb{E}[X \mid Y, Z] \mid Y]]$ 등.
+    - **MCMC / 분산 감소**: (가능할 때) $X$를 $\mathbb{E}[X \mid Y]$로 대체하면 라오–블랙웰 정리를 통해 추정량의 분산이 줄어든다.
+    - **강화학습**: 벨만 방정식 $V(s) = \mathbb{E}[R + \gamma V(s') \mid s]$이 반복된 조건부 기댓값이다.

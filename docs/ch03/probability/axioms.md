@@ -1,28 +1,28 @@
-# Axioms of Probability
+# 확률의 공리
 
-## Overview
+## 개요
 
-The axioms of probability formalize the intuitive idea of assigning "weights" (probabilities) to outcomes and events. We present three equivalent formulations—from the most intuitive to the most rigorous.
+확률의 공리는 결과와 사건에 "무게"(확률)를 부여한다는 직관적 발상을 형식화한다. 여기서는 가장 직관적인 것에서 가장 엄밀한 것까지 서로 동등한 세 가지 정식화를 제시한다.
 
 ---
 
-## Naive Axioms of Probability
+## 소박한 확률 공리
 
-These axioms capture the essential rules in an accessible form:
+이 공리들은 핵심 규칙을 이해하기 쉬운 형태로 담아낸다.
 
-1. **Non-negativity:** For any event $A$,
+1. **비음성:** 임의의 사건 $A$에 대해
 
 $$
 P(A) \geq 0
 $$
 
-2. **Normalization:** The probability of the entire sample space is 1:
+2. **정규화:** 표본공간 전체의 확률은 1이다.
 
 $$
 P(\Omega) = 1
 $$
 
-3. **Additivity:** For any two mutually exclusive events $A$ and $B$ (i.e., $A \cap B = \emptyset$),
+3. **가법성:** 서로 배반인 두 사건 $A$와 $B$(즉 $A \cap B = \emptyset$)에 대해
 
 $$
 P(A \cup B) = P(A) + P(B)
@@ -30,9 +30,9 @@ $$
 
 ---
 
-## Kolmogorov's Axioms of Probability
+## 콜모고로프의 확률 공리
 
-A **probability measure** $P$ is a real-valued function defined on events that satisfies:
+**확률측도** $P$는 사건 위에 정의된 실숫값 함수로 다음을 만족한다.
 
 $$
 \begin{aligned}
@@ -42,41 +42,41 @@ $$
 \end{aligned}
 $$
 
-The key difference from the naive axioms is axiom (3): **countable additivity** extends the finite additivity rule to an infinite (countable) collection of disjoint events.
+소박한 공리와의 핵심 차이는 공리 (3)이다. **가산가법성**은 유한 가법 규칙을 서로소인 사건들의 무한(가산) 모임으로 확장한다.
 
 ---
 
-## Examples
+## 예제
 
-### Example: Rolling an Even or Odd Number
+### 예: 짝수 또는 홀수가 나오기
 
-Let $A = \{2, 4, 6\}$ (even) and $B = \{1, 3, 5\}$ (odd) when rolling a fair six-sided die. Since $A \cap B = \emptyset$:
+공정한 육면체 주사위를 굴릴 때 $A = \{2, 4, 6\}$(짝수), $B = \{1, 3, 5\}$(홀수)라 하자. $A \cap B = \emptyset$이므로
 
 $$
 P(A \cup B) = P(A) + P(B) = \frac{3}{6} + \frac{3}{6} = 1
 $$
 
-This satisfies the normalization axiom since $A \cup B = \Omega$.
+이다. $A \cup B = \Omega$이므로 정규화 공리를 만족한다.
 
 ---
 
-## Interpretation of Probability
+## 확률의 해석
 
-### Probability of 0.7
+### 확률 0.7
 
-A 0.7 probability of rain tomorrow means there is a 70% chance of rain. Out of 10 similar days with the same weather conditions, we would expect rain on about 7 of those days.
+내일 비가 올 확률이 0.7이라는 것은 비가 올 가능성이 70%라는 뜻이다. 같은 기상 조건의 비슷한 날 10일 중 약 7일에 비가 올 것으로 기대한다.
 
-### Probability of 0.05
+### 확률 0.05
 
-A 0.05 probability of drawing two aces in a row from a shuffled deck (without replacement) means a 5% chance—out of 100 repeated attempts, we would expect success about 5 times.
+잘 섞은 카드 한 벌에서 (비복원으로) 에이스를 연달아 두 장 뽑을 확률이 0.05라는 것은 가능성이 5%라는 뜻이다. 100번 반복하면 약 5번 성공할 것으로 기대한다.
 
-### Probability of 0
+### 확률 0
 
-A probability of 0 means the event is impossible. For example, rolling a 7 on a standard six-sided die has probability 0 because that outcome is not in the sample space.
+확률이 0이라는 것은 그 사건이 불가능하다는 뜻이다. 예를 들어 보통의 육면체 주사위에서 7이 나올 확률은 0인데, 그 결과가 표본공간에 없기 때문이다.
 
 ---
 
-## Python Exploration
+## 파이썬으로 살펴보기
 
 ```python
 import numpy as np
@@ -107,142 +107,142 @@ verify_axioms(loaded_die)
 
 ---
 
-## Key Takeaways
+## 핵심 요약
 
-- Kolmogorov's axioms provide the rigorous mathematical foundation for all of probability theory.
-- The three axioms (normalization, non-negativity, countable additivity) are sufficient to derive all probability rules.
-- Probability can be interpreted as long-run frequency (frequentist) or as a degree of belief (Bayesian).
+- 콜모고로프의 공리는 확률론 전체에 엄밀한 수학적 토대를 제공한다.
+- 세 공리(정규화, 비음성, 가산가법성)만으로 모든 확률 규칙을 유도할 수 있다.
+- 확률은 장기적 빈도(빈도주의)로 해석할 수도 있고 믿음의 정도(베이즈)로 해석할 수도 있다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Using only the three axioms of probability, prove that $P(A^c) = 1 - P(A)$ for any event $A$.
+**연습문제 1.**
+확률의 세 공리만을 사용해 임의의 사건 $A$에 대해 $P(A^c) = 1 - P(A)$임을 증명하라.
 
-??? success "Solution to Exercise 1"
-    Since $A$ and $A^c$ are disjoint (mutually exclusive) and $A \cup A^c = \Omega$, the additivity axiom gives:
+??? success "연습문제 1 풀이"
+    $A$와 $A^c$는 서로 배반이고 $A \cup A^c = \Omega$이므로 가법성 공리에 의해
 
     $$
     P(A \cup A^c) = P(A) + P(A^c)
     $$
 
-    By the normalization axiom, $P(\Omega) = 1$, so:
+    이다. 정규화 공리에 의해 $P(\Omega) = 1$이므로
 
     $$
     1 = P(A) + P(A^c)
     $$
 
-    Rearranging:
+    이고, 정리하면
 
     $$
     P(A^c) = 1 - P(A)
     $$
 
-    $\square$
+    이다. $\square$
 
 ---
 
-**Exercise 2.**
-Prove from the axioms that for any two events $A$ and $B$:
+**연습문제 2.**
+공리로부터 임의의 두 사건 $A$와 $B$에 대해 다음이 성립함을 증명하라.
 
 $$
 P(A \cup B) = P(A) + P(B) - P(A \cap B)
 $$
 
-??? success "Solution to Exercise 2"
-    Write $A \cup B$ as a disjoint union. Note that $A \cup B = A \cup (B \cap A^c)$, where $A$ and $B \cap A^c$ are disjoint. By the additivity axiom:
+??? success "연습문제 2 풀이"
+    $A \cup B$를 서로소인 합집합으로 쓴다. $A \cup B = A \cup (B \cap A^c)$이고 $A$와 $B \cap A^c$는 서로소임에 유의하라. 가법성 공리에 의해
 
     $$
     P(A \cup B) = P(A) + P(B \cap A^c)
     $$
 
-    Similarly, $B = (B \cap A) \cup (B \cap A^c)$ is a disjoint union, so:
+    이다. 마찬가지로 $B = (B \cap A) \cup (B \cap A^c)$도 서로소인 합집합이므로
 
     $$
     P(B) = P(B \cap A) + P(B \cap A^c)
     $$
 
-    Solving for $P(B \cap A^c)$:
+    이고, $P(B \cap A^c)$에 대해 풀면
 
     $$
     P(B \cap A^c) = P(B) - P(A \cap B)
     $$
 
-    Substituting back:
+    이다. 이를 대입하면
 
     $$
     P(A \cup B) = P(A) + P(B) - P(A \cap B)
     $$
 
-    $\square$
+    를 얻는다. $\square$
 
 ---
 
-**Exercise 3.**
-A student claims that $P(A) = 0.4$, $P(B) = 0.5$, and $P(A \cup B) = 0.8$. Another student claims that $P(A) = 0.7$, $P(B) = 0.6$, and $P(A \cap B) = 0.1$. Determine whether each assignment is consistent with the axioms.
+**연습문제 3.**
+어떤 학생이 $P(A) = 0.4$, $P(B) = 0.5$, $P(A \cup B) = 0.8$이라고 주장한다. 다른 학생은 $P(A) = 0.7$, $P(B) = 0.6$, $P(A \cap B) = 0.1$이라고 주장한다. 각 배정이 공리와 모순되지 않는지 판정하라.
 
-??? success "Solution to Exercise 3"
-    **First student:** Using inclusion-exclusion, $P(A \cap B) = P(A) + P(B) - P(A \cup B) = 0.4 + 0.5 - 0.8 = 0.1$. Since $0 \leq 0.1 \leq \min(0.4, 0.5)$ and all probabilities are in $[0,1]$, this assignment is **consistent** with the axioms.
+??? success "연습문제 3 풀이"
+    **첫 번째 학생:** 포함배제를 쓰면 $P(A \cap B) = P(A) + P(B) - P(A \cup B) = 0.4 + 0.5 - 0.8 = 0.1$이다. $0 \leq 0.1 \leq \min(0.4, 0.5)$이고 모든 확률이 $[0,1]$에 있으므로 이 배정은 공리와 **모순되지 않는다**.
 
-    **Second student:** We need $P(A \cup B) = P(A) + P(B) - P(A \cap B) = 0.7 + 0.6 - 0.1 = 1.2$. But the normalization axiom requires $P(A \cup B) \leq P(\Omega) = 1$. Since $1.2 > 1$, this assignment **violates** the axioms and is therefore impossible.
+    **두 번째 학생:** $P(A \cup B) = P(A) + P(B) - P(A \cap B) = 0.7 + 0.6 - 0.1 = 1.2$여야 한다. 그러나 정규화 공리는 $P(A \cup B) \leq P(\Omega) = 1$을 요구한다. $1.2 > 1$이므로 이 배정은 공리를 **위반하며** 따라서 불가능하다.
 
 ---
 
-**Exercise 4.**
-Using the axioms, prove that if $A \subseteq B$, then $P(A) \leq P(B)$ (monotonicity of probability).
+**연습문제 4.**
+공리를 사용해 $A \subseteq B$이면 $P(A) \leq P(B)$임을(확률의 단조성) 증명하라.
 
-??? success "Solution to Exercise 4"
-    Since $A \subseteq B$, we can write $B = A \cup (B \cap A^c)$, where $A$ and $B \cap A^c$ are disjoint. By the additivity axiom:
+??? success "연습문제 4 풀이"
+    $A \subseteq B$이므로 $B = A \cup (B \cap A^c)$로 쓸 수 있고, $A$와 $B \cap A^c$는 서로소다. 가법성 공리에 의해
 
     $$
     P(B) = P(A) + P(B \cap A^c)
     $$
 
-    By the non-negativity axiom, $P(B \cap A^c) \geq 0$. Therefore:
+    이다. 비음성 공리에 의해 $P(B \cap A^c) \geq 0$이므로
 
     $$
     P(B) = P(A) + P(B \cap A^c) \geq P(A)
     $$
 
-    $\square$
+    이다. $\square$
 
 ---
 
-**Exercise 5.**
-**Bonferroni's inequality.** Prove that for any events $A_1, \ldots, A_n$, $P(\bigcup_i A_i) \le \sum_i P(A_i)$. When is this useful?
+**연습문제 5.**
+**본페로니 부등식.** 임의의 사건 $A_1, \ldots, A_n$에 대해 $P(\bigcup_i A_i) \le \sum_i P(A_i)$임을 증명하라. 이것은 언제 유용한가?
 
-??? success "Solution to Exercise 5"
-    By induction on $n$. Base case $n = 1$: trivially $P(A_1) \le P(A_1)$.
+??? success "연습문제 5 풀이"
+    $n$에 대한 귀납법으로 증명한다. 기저 단계 $n = 1$: 자명하게 $P(A_1) \le P(A_1)$이다.
 
-    Inductive step: assume $P(\bigcup_{i=1}^k A_i) \le \sum_{i=1}^k P(A_i)$. By inclusion-exclusion,
+    귀납 단계: $P(\bigcup_{i=1}^k A_i) \le \sum_{i=1}^k P(A_i)$라고 가정하자. 포함배제에 의해
 
     $$
     P(A_1 \cup \cdots \cup A_{k+1}) = P(\bigcup_{i=1}^k A_i) + P(A_{k+1}) - P((\bigcup_{i=1}^k A_i) \cap A_{k+1})
     $$
 
-    The last term is non-negative, so
+    이고 마지막 항이 음이 아니므로
 
     $$
     P(\bigcup_{i=1}^{k+1} A_i) \le P(\bigcup_{i=1}^k A_i) + P(A_{k+1}) \le \sum_{i=1}^k P(A_i) + P(A_{k+1}) = \sum_{i=1}^{k+1} P(A_i)
     $$
 
-    $\square$
+    이다. $\square$
 
-    **Use:** in **multiple comparisons**, suppose we conduct $n$ hypothesis tests each at level $\alpha$. The probability of at least one false rejection is $P(\bigcup_i \text{Reject}_i \mid H_0) \le n\alpha$ by Bonferroni. So testing at level $\alpha/n$ ensures family-wise error rate $\le \alpha$. The Bonferroni correction is conservative but uniformly valid regardless of dependence structure.
+    **용도:** **다중비교**에서 각각 수준 $\alpha$로 $n$번의 가설검정을 수행한다고 하자. 적어도 한 번 잘못 기각할 확률은 본페로니에 의해 $P(\bigcup_i \text{Reject}_i \mid H_0) \le n\alpha$다. 따라서 수준 $\alpha/n$으로 검정하면 가족단위 오류율이 $\le \alpha$가 된다. 본페로니 보정은 보수적이지만 의존 구조와 무관하게 언제나 타당하다.
 
 ---
 
-**Exercise 6.**
-**$\sigma$-additivity vs. finite additivity.** State the difference and explain why measure-theoretic probability requires the stronger property.
+**연습문제 6.**
+**$\sigma$-가법성 대 유한 가법성.** 차이를 진술하고 측도론적 확률이 왜 더 강한 성질을 요구하는지 설명하라.
 
-??? success "Solution to Exercise 6"
-    **Finite additivity:** for disjoint $A_1, \ldots, A_n$ (finite collection), $P(\bigcup_{i=1}^n A_i) = \sum_{i=1}^n P(A_i)$.
+??? success "연습문제 6 풀이"
+    **유한 가법성:** 서로소인 (유한 모임) $A_1, \ldots, A_n$에 대해 $P(\bigcup_{i=1}^n A_i) = \sum_{i=1}^n P(A_i)$.
 
-    **$\sigma$-additivity** (countable additivity, Kolmogorov's axiom 3): for *countably infinite* sequences of disjoint events $A_1, A_2, \ldots$, $P(\bigcup_{i=1}^\infty A_i) = \sum_{i=1}^\infty P(A_i)$.
+    **$\sigma$-가법성**(가산가법성, 콜모고로프의 공리 3): 서로소인 사건의 *가산무한* 열 $A_1, A_2, \ldots$에 대해 $P(\bigcup_{i=1}^\infty A_i) = \sum_{i=1}^\infty P(A_i)$.
 
-    **Why $\sigma$-additivity?** Many useful results require it:
+    **왜 $\sigma$-가법성인가?** 유용한 여러 결과가 이를 필요로 한다.
 
-    - **Continuity of measure**: if $A_1 \subseteq A_2 \subseteq \ldots$ and $A = \bigcup A_n$, then $P(A) = \lim P(A_n)$. Crucial for limit theorems.
-    - **Existence of probability density**: defining a continuous distribution requires assigning probabilities to arbitrarily fine subdivisions, which is a countable operation.
-    - **Strong law of large numbers**: requires almost-sure convergence, defined via countable unions.
+    - **측도의 연속성**: $A_1 \subseteq A_2 \subseteq \ldots$이고 $A = \bigcup A_n$이면 $P(A) = \lim P(A_n)$이다. 극한정리에 결정적이다.
+    - **확률밀도의 존재**: 연속분포를 정의하려면 임의로 잘게 나눈 부분들에 확률을 부여해야 하는데, 이는 가산 연산이다.
+    - **강한 큰수의 법칙**: 가산 합집합으로 정의되는 거의 확실한 수렴을 필요로 한다.
 
-    Finite additivity is consistent with paradoxical assignments (e.g., the "uniform" distribution on the integers that's intuitive but not $\sigma$-additive). Kolmogorov adopted $\sigma$-additivity to rule these out and connect probability to measure theory.
+    유한 가법성만으로는 역설적인 배정이 허용된다(예: 직관적이지만 $\sigma$-가법적이지 않은 정수 위의 "균등" 분포). 콜모고로프는 이런 것들을 배제하고 확률을 측도론과 연결하기 위해 $\sigma$-가법성을 택했다.

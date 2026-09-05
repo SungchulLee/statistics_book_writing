@@ -1,109 +1,111 @@
-# Conditional Independence
+# 조건부 독립
 
-## Overview
+## 개요
 
-**Conditional independence** extends the notion of independence by introducing a conditioning event. Two events may be dependent overall but become independent once we condition on additional information—or vice versa. This concept is central to graphical models, Bayesian networks, and causal reasoning.
+**조건부 독립**은 조건이 되는 사건을 도입하여 독립 개념을 확장한다. 두 사건이 전체적으로는 종속이면서 추가 정보로 조건을 걸면 독립이 될 수도 있고, 그 반대일 수도 있다. 이 개념은 그래프 모형, 베이즈 망, 인과적 추론의 핵심이다.
 
 ---
 
-## Definition
+## 정의
 
-Events $A$ and $B$ are **conditionally independent** given event $C$ (with $P(C) > 0$) if:
+사건 $A$와 $B$가 사건 $C$($P(C) > 0$)가 주어졌을 때 **조건부 독립**이라는 것은
 
 $$
 P(A \cap B \mid C) = P(A \mid C) \cdot P(B \mid C)
 $$
 
-Equivalently, if $P(B \cap C) > 0$:
+를 뜻한다. 동등하게, $P(B \cap C) > 0$이면
 
 $$
 P(A \mid B \cap C) = P(A \mid C)
 $$
 
-**Interpretation:** Once we know $C$ has occurred, learning that $B$ has occurred provides no additional information about $A$.
+이다.
 
-We write $A \perp\!\!\!\perp B \mid C$ to denote conditional independence.
+**해석:** $C$가 일어났음을 알고 나면, $B$가 일어났다는 사실을 추가로 알아도 $A$에 대해 더 알게 되는 것이 없다.
+
+조건부 독립을 $A \perp\!\!\!\perp B \mid C$로 표기한다.
 
 ---
 
-## Independence Does Not Imply Conditional Independence
+## 독립은 조건부 독립을 함의하지 않는다
 
-Two events can be (unconditionally) independent but become dependent after conditioning. This is known as **Berkson's paradox** or the **explaining away** effect.
+두 사건이 (조건 없이) 독립이면서 조건을 건 뒤에는 종속이 될 수 있다. 이를 **버크슨의 역설** 또는 **해명 효과(explaining away)** 라 한다.
 
-### Example: Two Causes of a Shared Effect
+### 예: 하나의 결과를 낳는 두 원인
 
-Suppose a fire alarm ($C$) can be triggered by either a fire ($A$) or burnt toast ($B$). The two causes are independent:
+화재경보기($C$)가 화재($A$)나 탄 토스트($B$) 중 하나로 울릴 수 있다고 하자. 두 원인은 독립이다.
 
 $$
 P(A \cap B) = P(A) \cdot P(B)
 $$
 
-But given the alarm went off ($C$), learning there is no fire makes burnt toast more likely:
+그러나 경보가 울렸다는 조건($C$)에서 화재가 없음을 알게 되면 탄 토스트일 가능성이 높아진다.
 
 $$
 P(B \mid A^c \cap C) > P(B \mid C)
 $$
 
-So $A \perp\!\!\!\perp B$ but $A \not\perp\!\!\!\perp B \mid C$.
+따라서 $A \perp\!\!\!\perp B$이지만 $A \not\perp\!\!\!\perp B \mid C$이다.
 
 ---
 
-## Conditional Independence Does Not Imply Independence
+## 조건부 독립은 독립을 함의하지 않는다
 
-Conversely, events can be conditionally independent given $C$ but not unconditionally independent.
+역으로, $C$가 주어졌을 때 조건부 독립이면서 조건 없이는 독립이 아닐 수 있다.
 
-### Example: Drawing from a Mixture
+### 예: 혼합에서 뽑기
 
-A coin is chosen at random: coin 1 has $P(\text{H}) = 0.3$ and coin 2 has $P(\text{H}) = 0.7$. Let $C$ indicate which coin is chosen, and let $A$ and $B$ be the outcomes of two flips.
+동전을 무작위로 고른다. 1번 동전은 $P(\text{H}) = 0.3$, 2번 동전은 $P(\text{H}) = 0.7$이다. $C$가 어느 동전을 골랐는지를 나타내고 $A$와 $B$가 두 번 던진 결과라 하자.
 
-Given the coin ($C$), the flips are independent:
+동전($C$)이 주어지면 두 던지기는 독립이다.
 
 $$
 P(A \cap B \mid C) = P(A \mid C) \cdot P(B \mid C)
 $$
 
-But without knowing the coin, the flips are dependent—if the first flip is heads, it is more likely that the biased-toward-heads coin was chosen, which increases the probability of the second flip being heads.
+그러나 동전을 모르면 두 던지기는 종속이다. 첫 던지기가 앞면이면 앞면 쪽으로 치우친 동전이 선택되었을 가능성이 높아지고, 그러면 두 번째 던지기가 앞면일 확률도 높아진다.
 
 ---
 
-## Examples
+## 예제
 
-### Example: Students and a Shared Exam
+### 예: 같은 시험을 치르는 학생들
 
-Two students, $A$ and $B$, take the same exam. Let event $A_{\text{pass}}$ and $B_{\text{pass}}$ denote each passing. Let $C$ = "the exam was easy."
+두 학생 $A$와 $B$가 같은 시험을 친다. $A_{\text{pass}}$와 $B_{\text{pass}}$를 각자 합격하는 사건이라 하고, $C$ = "시험이 쉬웠다"라 하자.
 
-Given $C$, whether student $A$ passes provides little information about student $B$ (their abilities are separate). But unconditionally, learning $A$ passed makes it more likely the exam was easy, which in turn makes $B$ passing more likely.
+$C$가 주어지면 학생 $A$의 합격 여부는 학생 $B$에 대해 정보를 거의 주지 않는다(둘의 능력은 별개다). 그러나 조건 없이는, $A$가 합격했음을 알면 시험이 쉬웠을 가능성이 높아지고, 그러면 $B$의 합격 가능성도 높아진다.
 
 $$
 A_{\text{pass}} \perp\!\!\!\perp B_{\text{pass}} \mid C \quad \text{but} \quad A_{\text{pass}} \not\perp\!\!\!\perp B_{\text{pass}}
 $$
 
-### Example: Dice with Known Sum
+### 예: 합이 알려진 주사위
 
-Roll two fair dice. Let $A$ = "die 1 shows 4" and $B$ = "die 2 shows 3." These are independent. But condition on $C$ = "the sum is 7":
+공정한 주사위 두 개를 굴린다. $A$ = "1번 주사위가 4", $B$ = "2번 주사위가 3"이라 하자. 이들은 독립이다. 그러나 $C$ = "합이 7"로 조건을 걸면
 
 $$
 P(A \mid C) = \frac{1}{6}, \quad P(B \mid C) = \frac{1}{6}, \quad P(A \cap B \mid C) = \frac{1}{6}
 $$
 
-Here $P(A \cap B \mid C) = 1/6 \neq (1/6)(1/6)$, so $A$ and $B$ are **not** conditionally independent given $C$. In fact, knowing die 1 is 4 and the sum is 7 determines die 2 is 3 with certainty.
+이다. 여기서 $P(A \cap B \mid C) = 1/6 \neq (1/6)(1/6)$이므로 $A$와 $B$는 $C$가 주어졌을 때 조건부 독립이 **아니다**. 사실 1번 주사위가 4이고 합이 7이면 2번 주사위가 3임이 확실히 결정된다.
 
 ---
 
-## Summary of Relationships
+## 관계 요약
 
-| Scenario | $A \perp\!\!\!\perp B$ | $A \perp\!\!\!\perp B \mid C$ |
+| 상황 | $A \perp\!\!\!\perp B$ | $A \perp\!\!\!\perp B \mid C$ |
 |:---|:---:|:---:|
-| Independent, and remains so after conditioning | ✓ | ✓ |
-| Independent, but dependent after conditioning (Berkson's) | ✓ | ✗ |
-| Dependent, but independent after conditioning | ✗ | ✓ |
-| Dependent, and remains so after conditioning | ✗ | ✗ |
+| 독립이고 조건을 걸어도 독립 | ✓ | ✓ |
+| 독립이지만 조건을 걸면 종속 (버크슨) | ✓ | ✗ |
+| 종속이지만 조건을 걸면 독립 | ✗ | ✓ |
+| 종속이고 조건을 걸어도 종속 | ✗ | ✗ |
 
-All four scenarios are possible. There is **no logical implication** in either direction between independence and conditional independence.
+네 가지 상황이 모두 가능하다. 독립과 조건부 독립 사이에는 어느 방향으로도 **논리적 함의가 없다**.
 
 ---
 
-## Python Exploration
+## 파이썬으로 살펴보기
 
 ```python
 import numpy as np
@@ -174,110 +176,110 @@ berkson_paradox_simulation()
 
 ---
 
-## Key Takeaways
+## 핵심 요약
 
-- Conditional independence means that once $C$ is known, $A$ and $B$ carry no information about each other.
-- Independence does **not** imply conditional independence, and vice versa.
-- Berkson's paradox shows how conditioning on a common effect induces dependence between its independent causes.
-- Conditional independence is the structural assumption behind Bayesian networks and Markov models.
+- 조건부 독립은 $C$를 알고 나면 $A$와 $B$가 서로에 대해 아무 정보도 담지 않는다는 뜻이다.
+- 독립은 조건부 독립을 함의하지 **않으며** 그 역도 마찬가지다.
+- 버크슨의 역설은 공통 결과로 조건을 걸면 그 독립적인 원인들 사이에 종속성이 생김을 보여준다.
+- 조건부 독립은 베이즈 망과 마르코프 모형 뒤에 놓인 구조적 가정이다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Clouds $C$, rain $R$, umbrella $U$: $P(C) = 0.4$, $P(R \mid C) = 0.6$, $P(R \mid C^c) = 0.1$, $P(U \mid R) = 0.9$, $P(U \mid R^c) = 0.2$, with $U \perp\!\!\!\perp C \mid R$ assumed. (a) Are $C$ and $U$ independent? (b) Verify $C \perp\!\!\!\perp U \mid R$.
+**연습문제 1.**
+구름 $C$, 비 $R$, 우산 $U$에 대해 $P(C) = 0.4$, $P(R \mid C) = 0.6$, $P(R \mid C^c) = 0.1$, $P(U \mid R) = 0.9$, $P(U \mid R^c) = 0.2$이고 $U \perp\!\!\!\perp C \mid R$을 가정한다. (a) $C$와 $U$는 독립인가? (b) $C \perp\!\!\!\perp U \mid R$을 확인하라.
 
-??? success "Solution to Exercise 1"
-    (a) $P(R) = 0.6 \cdot 0.4 + 0.1 \cdot 0.6 = 0.30$. $P(U) = 0.9 \cdot 0.3 + 0.2 \cdot 0.7 = 0.41$.
+??? success "연습문제 1 풀이"
+    (a) $P(R) = 0.6 \cdot 0.4 + 0.1 \cdot 0.6 = 0.30$이고 $P(U) = 0.9 \cdot 0.3 + 0.2 \cdot 0.7 = 0.41$이다.
 
-    Using $P(U \mid C) = P(U \mid R) P(R \mid C) + P(U \mid R^c) P(R^c \mid C) = 0.9 \cdot 0.6 + 0.2 \cdot 0.4 = 0.62$.
+    $P(U \mid C) = P(U \mid R) P(R \mid C) + P(U \mid R^c) P(R^c \mid C) = 0.9 \cdot 0.6 + 0.2 \cdot 0.4 = 0.62$이다.
 
-    Since $0.62 \ne 0.41$, $C$ and $U$ are **not** unconditionally independent.
+    $0.62 \ne 0.41$이므로 $C$와 $U$는 조건 없이는 독립이 **아니다**.
 
-    (b) By assumption, $P(U \mid R, C) = P(U \mid R)$. So
+    (b) 가정에 의해 $P(U \mid R, C) = P(U \mid R)$이다. 따라서
 
     $$
     P(C \cap U \mid R) = P(U \mid R, C) P(C \mid R) = P(U \mid R) P(C \mid R)
     $$
 
-    Hence $C \perp\!\!\!\perp U \mid R$. Rain "screens off" the association between clouds and umbrellas: once you know whether it rains, clouds add no further information about umbrellas.
+    이므로 $C \perp\!\!\!\perp U \mid R$이다. 비가 구름과 우산 사이의 연관을 "가려낸다". 비가 오는지 알고 나면 구름은 우산에 대해 더 이상의 정보를 주지 않는다.
 
 ---
 
-**Exercise 2.**
-**Berkson's paradox.** Let $A, B$ be two independent risk factors for hospitalization $C$. Show that conditional on $C$, $A$ and $B$ become negatively correlated, even though they are independent overall.
+**연습문제 2.**
+**버크슨의 역설.** $A, B$가 입원 $C$에 대한 서로 독립인 두 위험요인이라 하자. 전체적으로는 독립인데도 $C$를 조건으로 하면 $A$와 $B$가 음의 상관을 갖게 됨을 보여라.
 
-??? success "Solution to Exercise 2"
-    Suppose $A, B \in \{0, 1\}$ are independent Bernoulli($p$) and hospitalization happens if $A = 1$ or $B = 1$ (so $C = A \cup B$).
+??? success "연습문제 2 풀이"
+    $A, B \in \{0, 1\}$이 독립인 Bernoulli($p$)이고 $A = 1$ 또는 $B = 1$이면 입원한다고 하자(즉 $C = A \cup B$).
 
-    $P(A = 1 \mid C) = P(A = 1, C)/P(C) = P(A = 1)/P(C) = p/(2p - p^2)$, which for $p = 0.5$ gives $0.5/0.75 = 2/3$.
+    $P(A = 1 \mid C) = P(A = 1, C)/P(C) = P(A = 1)/P(C) = p/(2p - p^2)$이며, $p = 0.5$이면 $0.5/0.75 = 2/3$이다.
 
-    $P(A = 1 \mid B = 1, C) = P(A = 1 \mid B = 1) = p = 0.5$ (since $B = 1$ implies $C$).
+    $P(A = 1 \mid B = 1, C) = P(A = 1 \mid B = 1) = p = 0.5$이다($B = 1$이면 $C$가 따라오므로).
 
-    $P(A = 1 \mid B = 0, C) = P(A = 1 \mid B = 0, A = 1) = 1$ (because among hospitalized people with $B = 0$, $A$ must be 1).
+    $P(A = 1 \mid B = 0, C) = 1$이다($B = 0$인 입원자 중에서는 $A$가 반드시 1이어야 하므로).
 
-    So given $C$, knowing $B = 1$ *decreases* $P(A = 1)$ from 2/3 to 1/2 (and knowing $B = 0$ raises it to 1). The two are negatively associated conditional on $C$, despite being unconditionally independent. **Conditioning on a common effect (collider) creates a spurious association.**
+    따라서 $C$가 주어졌을 때 $B = 1$임을 알면 $P(A = 1)$이 2/3에서 1/2로 *줄어들고*, $B = 0$임을 알면 1로 올라간다. 조건 없이는 독립인데도 $C$를 조건으로 하면 둘이 음으로 연관된다. **공통 결과(충돌변수)로 조건을 걸면 허위 연관이 생긴다.**
 
-    Real-world impact: medical studies confined to hospitalized patients often find negative associations between independent risk factors — Berkson's hospital-bias.
+    현실적 영향: 입원 환자로 국한된 의학 연구는 독립적인 위험요인들 사이에서 음의 연관을 흔히 발견한다. 버크슨의 병원 편향이다.
 
 ---
 
-**Exercise 3.**
-**Mixture distribution.** A coin is randomly chosen: coin 1 has $P(H) = 0.3$, coin 2 has $P(H) = 0.7$. Two flips $X_1, X_2$ are made of the chosen coin. Show $X_1 \perp\!\!\!\perp X_2$ fails but $X_1 \perp\!\!\!\perp X_2 \mid \text{coin}$ holds.
+**연습문제 3.**
+**혼합분포.** 동전을 무작위로 고르는데 1번 동전은 $P(H) = 0.3$, 2번 동전은 $P(H) = 0.7$이다. 고른 동전을 두 번 던져 $X_1, X_2$를 얻는다. $X_1 \perp\!\!\!\perp X_2$는 성립하지 않지만 $X_1 \perp\!\!\!\perp X_2 \mid \text{동전}$은 성립함을 보여라.
 
-??? success "Solution to Exercise 3"
-    Given the coin choice, the flips are conditionally independent (the coin is the same and flips are independent given which coin).
+??? success "연습문제 3 풀이"
+    동전 선택이 주어지면 두 던지기는 조건부 독립이다(같은 동전이고, 어느 동전인지 주어지면 던지기끼리 독립이다).
 
-    Unconditionally:
+    조건 없이는 다음과 같다.
 
-    $P(X_1 = H) = 0.5 \cdot 0.3 + 0.5 \cdot 0.7 = 0.5$. Same for $X_2$.
+    $P(X_1 = H) = 0.5 \cdot 0.3 + 0.5 \cdot 0.7 = 0.5$이고 $X_2$도 같다.
 
     $P(X_1 = H, X_2 = H) = 0.5 \cdot 0.3^2 + 0.5 \cdot 0.7^2 = 0.045 + 0.245 = 0.29 \ne 0.25 = 0.5 \cdot 0.5$.
 
-    So unconditionally, $X_1$ and $X_2$ are *positively correlated* — if the first flip is heads, the biased-toward-heads coin was more likely chosen, making the second flip more likely heads.
+    따라서 조건 없이는 $X_1$과 $X_2$가 *양의 상관*을 갖는다. 첫 던지기가 앞면이면 앞면 쪽으로 치우친 동전이 선택되었을 가능성이 높아 두 번째도 앞면일 가능성이 커진다.
 
-    The positive correlation $\rho(X_1, X_2) > 0$ reflects information about the latent coin choice. Once the coin choice is known (i.e., conditioning on it), the correlation disappears. This is the basis of **latent variable models** in statistics: an observed correlation can be explained by an unobserved common cause.
+    양의 상관 $\rho(X_1, X_2) > 0$은 잠재적인 동전 선택에 관한 정보를 반영한다. 동전 선택을 알고 나면(즉 그것으로 조건을 걸면) 상관이 사라진다. 이것이 통계학에서 **잠재변수 모형**의 근거다. 관측된 상관이 관측되지 않은 공통 원인으로 설명될 수 있다.
 
 ---
 
-**Exercise 4.**
-**Markov chains.** A Markov chain $X_0, X_1, X_2, \ldots$ satisfies $X_n \perp\!\!\!\perp \{X_0, \ldots, X_{n-2}\} \mid X_{n-1}$. Verbalize this property and explain how it enables tractable inference.
+**연습문제 4.**
+**마르코프 연쇄.** 마르코프 연쇄 $X_0, X_1, X_2, \ldots$는 $X_n \perp\!\!\!\perp \{X_0, \ldots, X_{n-2}\} \mid X_{n-1}$을 만족한다. 이 성질을 말로 표현하고 그것이 어떻게 다루기 쉬운 추론을 가능하게 하는지 설명하라.
 
-??? success "Solution to Exercise 4"
-    **Markov property** (verbal): given the present ($X_{n-1}$), the future ($X_n$) is conditionally independent of the past ($X_0, \ldots, X_{n-2}$). The present "screens off" the past from the future.
+??? success "연습문제 4 풀이"
+    **마르코프 성질**(말로): 현재($X_{n-1}$)가 주어지면 미래($X_n$)는 과거($X_0, \ldots, X_{n-2}$)와 조건부 독립이다. 현재가 과거로부터 미래를 "가려낸다".
 
-    **Tractable inference:** the joint distribution of $(X_0, \ldots, X_T)$ factors as
+    **다루기 쉬운 추론:** $(X_0, \ldots, X_T)$의 결합분포가 다음과 같이 분해된다.
 
     $$
     P(X_0, X_1, \ldots, X_T) = P(X_0) \prod_{t=1}^T P(X_t \mid X_{t-1})
     $$
 
-    Each conditional only depends on the previous state, not the entire history. With a finite state space of size $k$, this requires only $k$ initial-state probabilities and $k^2$ transition probabilities, rather than the exponentially many parameters of a fully general joint over $T + 1$ variables.
+    각 조건부확률이 전체 이력이 아니라 바로 앞 상태에만 의존한다. 상태공간의 크기가 $k$로 유한하면 초기 상태 확률 $k$개와 전이 확률 $k^2$개만 필요하고, $T + 1$개 변수에 대한 완전히 일반적인 결합분포가 요구하는 지수적으로 많은 모수가 필요 없다.
 
-    Markov chains underlie language models, hidden Markov models, MCMC sampling, queuing theory, and PageRank. The conditional independence structure is what makes these tractable.
-
----
-
-**Exercise 5.**
-**Common-cause structure.** Three variables $X, Y, Z$ form a "chain" $X \to Z \to Y$. Verify $X \perp\!\!\!\perp Y \mid Z$ from the factorization $P(X, Y, Z) = P(X) P(Z \mid X) P(Y \mid Z)$.
-
-??? success "Solution to Exercise 5"
-    $P(Y \mid X, Z) = P(X, Y, Z)/P(X, Z) = P(X) P(Z \mid X) P(Y \mid Z)/(P(X) P(Z \mid X)) = P(Y \mid Z)$.
-
-    Since $P(Y \mid X, Z) = P(Y \mid Z)$ doesn't depend on $X$, $Y$ is conditionally independent of $X$ given $Z$.
-
-    Equivalent way: $P(X \cap Y \mid Z) = P(X \mid Z) P(Y \mid Z, X) = P(X \mid Z) P(Y \mid Z)$.
-
-    **Causal interpretation:** if $X$ affects $Y$ only *through* $Z$ (no direct $X \to Y$ arrow), then once $Z$ is known, $X$ provides no further information about $Y$. This is the "chain" pattern in d-separation rules for causal graphs.
-
-    By contrast, in a **collider** $X \to Z \leftarrow Y$, conditioning on $Z$ creates a spurious dependence between $X$ and $Y$ — opposite of the chain pattern. Distinguishing chains, forks, and colliders is the core of graphical causal modeling.
+    마르코프 연쇄는 언어 모형, 은닉 마르코프 모형, MCMC 표집, 대기행렬 이론, 페이지랭크의 바탕이 된다. 이들을 다루기 쉽게 만드는 것이 바로 이 조건부 독립 구조다.
 
 ---
 
-**Exercise 6.**
-**The "explaining away" effect.** In a Bayesian network with two causes $A, B$ for effect $E$, suppose $A$ and $B$ are independent priors. After observing $E$, learning $A$ occurred *decreases* the posterior probability that $B$ also occurred. Demonstrate with $P(A) = P(B) = 0.1$, $P(E \mid A, B) = 1$, $P(E \mid A, B^c) = 0.8$, $P(E \mid A^c, B) = 0.8$, $P(E \mid A^c, B^c) = 0$.
+**연습문제 5.**
+**공통 원인 구조.** 세 변수 $X, Y, Z$가 "사슬" $X \to Z \to Y$을 이룬다. 분해 $P(X, Y, Z) = P(X) P(Z \mid X) P(Y \mid Z)$로부터 $X \perp\!\!\!\perp Y \mid Z$를 확인하라.
 
-??? success "Solution to Exercise 6"
-    Compute joint probabilities:
+??? success "연습문제 5 풀이"
+    $P(Y \mid X, Z) = P(X, Y, Z)/P(X, Z) = P(X) P(Z \mid X) P(Y \mid Z)/(P(X) P(Z \mid X)) = P(Y \mid Z)$이다.
+
+    $P(Y \mid X, Z) = P(Y \mid Z)$가 $X$에 의존하지 않으므로 $Y$는 $Z$가 주어졌을 때 $X$와 조건부 독립이다.
+
+    동등한 방식: $P(X \cap Y \mid Z) = P(X \mid Z) P(Y \mid Z, X) = P(X \mid Z) P(Y \mid Z)$.
+
+    **인과적 해석:** $X$가 오직 $Z$를 *통해서만* $Y$에 영향을 준다면($X \to Y$의 직접 화살표가 없다면) $Z$를 알고 난 뒤에는 $X$가 $Y$에 대해 더 이상의 정보를 주지 않는다. 이것이 인과 그래프의 d-분리 규칙에서 말하는 "사슬" 패턴이다.
+
+    이와 대조적으로 **충돌변수** $X \to Z \leftarrow Y$에서는 $Z$로 조건을 걸면 $X$와 $Y$ 사이에 허위 종속성이 생긴다. 사슬 패턴과 정반대다. 사슬, 갈래, 충돌변수를 구별하는 것이 그래프 인과모형의 핵심이다.
+
+---
+
+**연습문제 6.**
+**"해명" 효과.** 결과 $E$에 대해 두 원인 $A, B$가 있는 베이즈 망에서 $A$와 $B$의 사전확률이 독립이라 하자. $E$를 관측한 뒤 $A$가 일어났음을 알게 되면 $B$도 일어났을 사후확률이 *줄어든다*. $P(A) = P(B) = 0.1$, $P(E \mid A, B) = 1$, $P(E \mid A, B^c) = 0.8$, $P(E \mid A^c, B) = 0.8$, $P(E \mid A^c, B^c) = 0$으로 보여라.
+
+??? success "연습문제 6 풀이"
+    결합확률을 계산한다.
 
     $P(A, B, E) = 0.1 \cdot 0.1 \cdot 1 = 0.01$.
     $P(A, B^c, E) = 0.1 \cdot 0.9 \cdot 0.8 = 0.072$.
@@ -286,12 +288,12 @@ Clouds $C$, rain $R$, umbrella $U$: $P(C) = 0.4$, $P(R \mid C) = 0.6$, $P(R \mid
 
     $P(E) = 0.01 + 0.072 + 0.072 + 0 = 0.154$.
 
-    Posteriors:
+    사후확률:
 
     $P(B \mid E) = (0.01 + 0.072)/0.154 = 0.082/0.154 \approx 0.532$.
 
     $P(B \mid A, E) = P(A, B, E)/P(A, E) = 0.01/(0.01 + 0.072) = 0.01/0.082 \approx 0.122$.
 
-    So after observing the effect, knowing that $A$ also occurred *drops* the probability of $B$ from 53% to 12%. The observed effect was "explained away" by $A$ — once we know $A$ caused $E$, the alternative cause $B$ becomes less likely.
+    따라서 결과를 관측한 뒤 $A$도 일어났음을 알게 되면 $B$의 확률이 53%에서 12%로 *떨어진다*. 관측된 결과가 $A$에 의해 "해명된" 것이다. $A$가 $E$를 일으켰음을 알고 나면 대안 원인 $B$의 가능성이 낮아진다.
 
-    **Real-world example:** an alarm goes off; you initially suspect either a burglar or an earthquake. Hearing on the radio that an earthquake just occurred explains the alarm and makes the burglar hypothesis less likely. This is the formal mechanism of "competing explanations" in Bayesian reasoning.
+    **현실 사례:** 경보가 울렸을 때 처음에는 도둑이나 지진을 의심한다. 라디오에서 방금 지진이 났다는 소식을 들으면 경보가 설명되고 도둑 가설의 가능성이 낮아진다. 이것이 베이즈적 추론에서 "경쟁하는 설명"의 형식적 기제다.

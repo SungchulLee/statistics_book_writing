@@ -1,44 +1,44 @@
-# Conditional Probability
+# 조건부확률
 
-## Overview
+## 개요
 
-**Conditional probability** quantifies how the probability of an event changes when we learn that another event has occurred. It is one of the most important concepts in probability theory, forming the basis for Bayesian reasoning, statistical inference, and decision-making under uncertainty.
+**조건부확률**은 다른 사건이 일어났음을 알게 되었을 때 어떤 사건의 확률이 어떻게 달라지는지를 정량화한다. 확률론에서 가장 중요한 개념 중 하나로, 베이즈적 추론, 통계적 추론, 불확실성 아래의 의사결정의 토대를 이룬다.
 
 ---
 
-## Definition
+## 정의
 
-The **conditional probability** of event $A$ given event $B$ (where $P(B) > 0$) is:
+사건 $B$가 주어졌을 때 사건 $A$의 **조건부확률**은($P(B) > 0$일 때) 다음과 같다.
 
 $$
 P(A \mid B) = \frac{P(A \cap B)}{P(B)}
 $$
 
-**Interpretation:** Out of the total weight (probability) allocated to outcomes in $B$, $P(A \mid B)$ is the fraction of that weight which also belongs to $A$. Conditioning on $B$ effectively **restricts the sample space** from $\Omega$ to $B$ and renormalizes the probabilities.
+**해석:** $B$에 속한 결과들에 배정된 전체 무게(확률) 가운데 $A$에도 속하는 무게의 비율이 $P(A \mid B)$다. $B$로 조건을 거는 것은 사실상 **표본공간을 $\Omega$에서 $B$로 제한**하고 확률을 다시 정규화하는 일이다.
 
 ---
 
-## Intuition: Updating the Sample Space
+## 직관: 표본공간 갱신하기
 
-When we condition on $B$, we discard all outcomes outside $B$ and rescale the remaining probabilities so they sum to 1:
+$B$로 조건을 걸면 $B$ 바깥의 모든 결과를 버리고 남은 확률의 합이 1이 되도록 다시 척도를 맞춘다.
 
 $$
 P(A \mid B) = \frac{\text{Weight of bricks in } A \cap B}{\text{Weight of bricks in } B}
 $$
 
-This is equivalent to saying: "If we know $B$ happened, what fraction of $B$'s probability belongs to $A$?"
+이는 "$B$가 일어났음을 안다면 $B$의 확률 중 얼마가 $A$에 속하는가?"라고 묻는 것과 같다.
 
 ---
 
-## The Multiplication Rule
+## 곱셈 규칙
 
-Rearranging the definition gives the **multiplication rule**:
+정의를 정리하면 **곱셈 규칙**을 얻는다.
 
 $$
 P(A \cap B) = P(A \mid B) \cdot P(B) = P(B \mid A) \cdot P(A)
 $$
 
-This extends to chains of events:
+이는 사건들의 사슬로 확장된다.
 
 $$
 P(A \cap B \cap C) = P(A) \cdot P(B \mid A) \cdot P(C \mid A \cap B)
@@ -46,46 +46,46 @@ $$
 
 ---
 
-## The Law of Total Probability
+## 전확률의 법칙
 
-If $B_1, B_2, \ldots, B_n$ form a **partition** of $\Omega$ (i.e., they are mutually exclusive and their union is $\Omega$), then for any event $A$:
+$B_1, B_2, \ldots, B_n$이 $\Omega$의 **분할**을 이루면(즉 서로 배반이고 그 합집합이 $\Omega$이면) 임의의 사건 $A$에 대해
 
 $$
 P(A) = \sum_{i=1}^{n} P(A \mid B_i) \cdot P(B_i)
 $$
 
-This decomposes the probability of $A$ by considering each scenario $B_i$ separately.
+이다. 이는 각 시나리오 $B_i$를 따로 고려하여 $A$의 확률을 분해한다.
 
 ---
 
-## Examples
+## 예제
 
-### Example: Drawing Cards
+### 예: 카드 뽑기
 
-A card is drawn from a standard 52-card deck. Let $A$ = "the card is a king" and $B$ = "the card is a face card (J, Q, K)."
+표준 52장 카드 한 벌에서 카드 한 장을 뽑는다. $A$ = "카드가 킹", $B$ = "카드가 그림 카드(J, Q, K)"라 하자.
 
 $$
 P(A \mid B) = \frac{P(A \cap B)}{P(B)} = \frac{4/52}{12/52} = \frac{4}{12} = \frac{1}{3}
 $$
 
-Since all kings are face cards, $A \cap B = A$, so knowing the card is a face card narrows the possibilities to 12, of which 4 are kings.
+모든 킹이 그림 카드이므로 $A \cap B = A$이고, 카드가 그림 카드임을 알면 가능성이 12장으로 좁혀지는데 그중 4장이 킹이다.
 
-### Example: Two Dice
+### 예: 주사위 두 개
 
-Roll two fair dice. Let $A$ = "the sum is 8" and $B$ = "the first die shows 3."
+공정한 주사위 두 개를 굴린다. $A$ = "합이 8", $B$ = "첫 주사위가 3"이라 하자.
 
 - $P(B) = 1/6$
-- $A \cap B = \{(3, 5)\}$, so $P(A \cap B) = 1/36$
+- $A \cap B = \{(3, 5)\}$이므로 $P(A \cap B) = 1/36$
 
 $$
 P(A \mid B) = \frac{1/36}{1/6} = \frac{1}{6}
 $$
 
-### Example: Medical Testing (Total Probability)
+### 예: 의학 검사 (전확률)
 
-A disease affects 1% of a population. A test has 95% sensitivity ($P(\text{positive} \mid \text{disease}) = 0.95$) and 90% specificity ($P(\text{negative} \mid \text{no disease}) = 0.90$).
+어떤 질병이 인구의 1%에 발생한다. 검사의 민감도는 95%($P(\text{양성} \mid \text{질병}) = 0.95$)이고 특이도는 90%($P(\text{음성} \mid \text{질병 없음}) = 0.90$)다.
 
-The probability of testing positive:
+검사가 양성일 확률은 다음과 같다.
 
 $$
 \begin{aligned}
@@ -95,11 +95,11 @@ P(\text{positive}) &= P(\text{positive} \mid \text{disease}) \cdot P(\text{disea
 \end{aligned}
 $$
 
-About 10.85% of the population would test positive, even though only 1% actually has the disease.
+실제로 질병이 있는 사람은 1%뿐인데도 인구의 약 10.85%가 양성 판정을 받게 된다.
 
 ---
 
-## Python Exploration
+## 파이썬으로 살펴보기
 
 ```python
 import numpy as np
@@ -150,34 +150,36 @@ medical_test_simulation()
 
 ---
 
-## Key Takeaways
+## 핵심 요약
 
-- Conditional probability $P(A \mid B)$ updates our belief about $A$ after observing $B$.
-- Conditioning restricts the sample space to $B$ and renormalizes probabilities.
-- The multiplication rule connects joint and conditional probabilities.
-- The law of total probability decomposes $P(A)$ across a partition of the sample space.
+- 조건부확률 $P(A \mid B)$는 $B$를 관측한 뒤 $A$에 대한 우리의 믿음을 갱신한다.
+- 조건을 거는 것은 표본공간을 $B$로 제한하고 확률을 다시 정규화하는 일이다.
+- 곱셈 규칙은 결합확률과 조건부확률을 잇는다.
+- 전확률의 법칙은 표본공간의 분할에 걸쳐 $P(A)$를 분해한다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-A jar contains 4 red and 6 blue marbles. Two marbles are drawn without replacement. What is the probability that the second marble is red given that the first marble is blue?
+**연습문제 1.**
+항아리에 빨간 구슬 4개와 파란 구슬 6개가 있다. 구슬 두 개를 비복원으로 뽑는다. 첫 구슬이 파란색이라는 조건에서 두 번째 구슬이 빨간색일 확률은 얼마인가?
 
-??? success "Solution to Exercise 1"
-    Let $B_1$ = "first marble is blue" and $R_2$ = "second marble is red."
+??? success "연습문제 1 풀이"
+    $B_1$ = "첫 구슬이 파란색", $R_2$ = "두 번째 구슬이 빨간색"이라 하자.
 
-    After drawing one blue marble, the jar contains 4 red and 5 blue marbles (9 total). Therefore:
+    파란 구슬 하나를 뽑고 나면 항아리에는 빨간 구슬 4개와 파란 구슬 5개(총 9개)가 남는다. 따라서
 
     $$
     P(R_2 \mid B_1) = \frac{4}{9}
     $$
 
+    이다.
+
 ---
 
-**Exercise 2.**
-In a factory, Machine A produces 60% of the items and Machine B produces 40%. Machine A has a defect rate of 2%, while Machine B has a defect rate of 5%. An item is selected at random and found to be defective. Using the law of total probability, compute the probability that the item is defective.
+**연습문제 2.**
+어떤 공장에서 기계 A가 제품의 60%를, 기계 B가 40%를 생산한다. 기계 A의 불량률은 2%이고 기계 B의 불량률은 5%다. 제품 하나를 무작위로 골랐다. 전확률의 법칙을 사용해 그 제품이 불량일 확률을 계산하라.
 
-??? success "Solution to Exercise 2"
-    Let $A$ = "produced by Machine A", $B$ = "produced by Machine B", and $D$ = "defective." We have:
+??? success "연습문제 2 풀이"
+    $A$ = "기계 A가 생산", $B$ = "기계 B가 생산", $D$ = "불량"이라 하자. 다음이 주어져 있다.
 
     $$
     P(A) = 0.60, \quad P(B) = 0.40
@@ -187,100 +189,100 @@ In a factory, Machine A produces 60% of the items and Machine B produces 40%. Ma
     P(D \mid A) = 0.02, \quad P(D \mid B) = 0.05
     $$
 
-    By the law of total probability:
+    전확률의 법칙에 의해
 
     $$
     P(D) = P(D \mid A) P(A) + P(D \mid B) P(B) = 0.02 \times 0.60 + 0.05 \times 0.40 = 0.012 + 0.020 = 0.032
     $$
 
-    The overall defect rate is 3.2%.
+    이다. 전체 불량률은 3.2%다.
 
 ---
 
-**Exercise 3.**
-Prove that if $P(B) > 0$, then $P(\cdot \mid B)$ satisfies the three axioms of probability. That is, show that conditional probability is itself a valid probability measure on the restricted sample space.
+**연습문제 3.**
+$P(B) > 0$이면 $P(\cdot \mid B)$가 확률의 세 공리를 만족함을 증명하라. 즉 조건부확률 자체가 제한된 표본공간 위의 타당한 확률측도임을 보여라.
 
-??? success "Solution to Exercise 3"
-    We verify the three axioms for $P(\cdot \mid B)$:
+??? success "연습문제 3 풀이"
+    $P(\cdot \mid B)$에 대해 세 공리를 확인한다.
 
-    **Non-negativity:** For any event $A$, $P(A \cap B) \geq 0$ and $P(B) > 0$, so:
+    **비음성:** 임의의 사건 $A$에 대해 $P(A \cap B) \geq 0$이고 $P(B) > 0$이므로
 
     $$
     P(A \mid B) = \frac{P(A \cap B)}{P(B)} \geq 0
     $$
 
-    **Normalization:**
+    **정규화:**
 
     $$
     P(\Omega \mid B) = \frac{P(\Omega \cap B)}{P(B)} = \frac{P(B)}{P(B)} = 1
     $$
 
-    **Countable additivity:** If $A_1, A_2, \ldots$ are mutually disjoint events, then $A_1 \cap B, A_2 \cap B, \ldots$ are also mutually disjoint, so:
+    **가산가법성:** $A_1, A_2, \ldots$가 서로 배반이면 $A_1 \cap B, A_2 \cap B, \ldots$도 서로 배반이므로
 
     $$
     P\!\left(\bigcup_i A_i \mid B\right) = \frac{P\!\left(\bigcup_i (A_i \cap B)\right)}{P(B)} = \frac{\sum_i P(A_i \cap B)}{P(B)} = \sum_i P(A_i \mid B)
     $$
 
-    All three axioms hold, so $P(\cdot \mid B)$ is a valid probability measure. $\square$
+    세 공리가 모두 성립하므로 $P(\cdot \mid B)$는 타당한 확률측도다. $\square$
 
 ---
 
-**Exercise 4.**
-Two fair dice are rolled. Let $A$ = "the sum is at least 10" and $B$ = "both dice show 5 or higher." Compute $P(A \mid B)$.
+**연습문제 4.**
+공정한 주사위 두 개를 굴린다. $A$ = "합이 10 이상", $B$ = "두 주사위 모두 5 이상"이라 하자. $P(A \mid B)$를 계산하라.
 
-??? success "Solution to Exercise 4"
-    First, identify the event $B$ = "both dice show 5 or higher." Each die can be 5 or 6, so $B = \{(5,5),(5,6),(6,5),(6,6)\}$ with $|B| = 4$ and $P(B) = 4/36$.
+??? success "연습문제 4 풀이"
+    먼저 사건 $B$ = "두 주사위 모두 5 이상"을 파악한다. 각 주사위가 5 또는 6일 수 있으므로 $B = \{(5,5),(5,6),(6,5),(6,6)\}$이고 $|B| = 4$, $P(B) = 4/36$이다.
 
-    Next, $A \cap B$ = outcomes in $B$ where the sum is at least 10:
+    다음으로 $A \cap B$는 $B$의 결과 중 합이 10 이상인 것이다.
 
-    - $(5,5)$: sum $= 10$ (yes)
-    - $(5,6)$: sum $= 11$ (yes)
-    - $(6,5)$: sum $= 11$ (yes)
-    - $(6,6)$: sum $= 12$ (yes)
+    - $(5,5)$: 합 $= 10$ (해당)
+    - $(5,6)$: 합 $= 11$ (해당)
+    - $(6,5)$: 합 $= 11$ (해당)
+    - $(6,6)$: 합 $= 12$ (해당)
 
-    All four outcomes in $B$ have sum $\geq 10$, so $A \cap B = B$ and $P(A \cap B) = 4/36$.
+    $B$의 네 결과가 모두 합이 $\geq 10$이므로 $A \cap B = B$이고 $P(A \cap B) = 4/36$이다.
 
     $$
     P(A \mid B) = \frac{P(A \cap B)}{P(B)} = \frac{4/36}{4/36} = 1
     $$
 
-    Given that both dice show 5 or higher, the sum is guaranteed to be at least 10.
+    두 주사위가 모두 5 이상이면 합은 반드시 10 이상이다.
 
 ---
 
-**Exercise 5.**
-**The chain rule** for joint probabilities: $P(A_1, A_2, A_3) = P(A_1) P(A_2 \mid A_1) P(A_3 \mid A_1, A_2)$. Use this to compute $P(\text{3 hearts in a row})$ when drawing 3 cards from a standard 52-card deck without replacement.
+**연습문제 5.**
+결합확률에 대한 **연쇄 법칙**은 $P(A_1, A_2, A_3) = P(A_1) P(A_2 \mid A_1) P(A_3 \mid A_1, A_2)$이다. 이를 사용해 표준 52장 카드 한 벌에서 비복원으로 카드 3장을 뽑을 때 $P(\text{하트 3연속})$을 계산하라.
 
-??? success "Solution to Exercise 5"
-    Let $H_i$ be "the $i$-th card is a heart." There are 13 hearts in a 52-card deck.
+??? success "연습문제 5 풀이"
+    $H_i$를 "$i$번째 카드가 하트"라 하자. 52장 한 벌에 하트는 13장이다.
 
     $$
     P(H_1, H_2, H_3) = P(H_1) P(H_2 \mid H_1) P(H_3 \mid H_1, H_2)
     $$
 
-    $P(H_1) = 13/52 = 1/4$.
+    $P(H_1) = 13/52 = 1/4$이다.
 
-    After drawing one heart, the deck has 51 cards including 12 hearts: $P(H_2 \mid H_1) = 12/51$.
+    하트 한 장을 뽑고 나면 51장 중 하트가 12장이므로 $P(H_2 \mid H_1) = 12/51$이다.
 
-    After drawing two hearts, the deck has 50 cards including 11 hearts: $P(H_3 \mid H_1, H_2) = 11/50$.
+    하트 두 장을 뽑고 나면 50장 중 하트가 11장이므로 $P(H_3 \mid H_1, H_2) = 11/50$이다.
 
-    Joint: $P(H_1, H_2, H_3) = (1/4)(12/51)(11/50) = 132/10200 = 11/850 \approx 0.0129$.
+    결합확률: $P(H_1, H_2, H_3) = (1/4)(12/51)(11/50) = 132/10200 = 11/850 \approx 0.0129$.
 
-    About 1.3% probability of drawing 3 hearts in a row.
+    하트를 연속 3장 뽑을 확률은 약 1.3%다.
 
-    **General chain rule:** $P(A_1, \ldots, A_n) = \prod_{i=1}^n P(A_i \mid A_1, \ldots, A_{i-1})$. This is the foundation of sequential probability models — Markov chains, hidden Markov models, sequential Bayesian updating.
+    **일반적인 연쇄 법칙:** $P(A_1, \ldots, A_n) = \prod_{i=1}^n P(A_i \mid A_1, \ldots, A_{i-1})$. 이것이 순차적 확률 모형 — 마르코프 연쇄, 은닉 마르코프 모형, 순차적 베이즈 갱신 — 의 토대다.
 
 ---
 
-**Exercise 6.**
-**The Monty Hall problem.** Three doors; one hides a car, two hide goats. You pick door 1. The host (who knows what's behind each door) opens door 3, revealing a goat, and offers you a chance to switch. What is the probability of winning if you switch vs. stay?
+**연습문제 6.**
+**몬티 홀 문제.** 문이 셋인데 하나 뒤에는 자동차가, 둘 뒤에는 염소가 있다. 당신은 1번 문을 골랐다. (각 문 뒤에 무엇이 있는지 아는) 진행자가 3번 문을 열어 염소를 보여주고 바꿀 기회를 준다. 바꿀 때와 그대로 둘 때 이길 확률은 각각 얼마인가?
 
-??? success "Solution to Exercise 6"
-    Let $C_i$ be "car is behind door $i$" (uniform prior $P(C_i) = 1/3$ for $i = 1, 2, 3$). Let $H_3$ be "host opens door 3."
+??? success "연습문제 6 풀이"
+    $C_i$를 "자동차가 $i$번 문 뒤에 있다"라 하자($i = 1, 2, 3$에 대해 균등한 사전확률 $P(C_i) = 1/3$). $H_3$을 "진행자가 3번 문을 연다"라 하자.
 
-    The host's behavior: if you picked the car (door 1, $C_1$), the host picks randomly between doors 2 and 3, so $P(H_3 \mid C_1) = 1/2$. If the car is behind door 2 ($C_2$), the host must open door 3, so $P(H_3 \mid C_2) = 1$. If the car is behind door 3, the host cannot open it, so $P(H_3 \mid C_3) = 0$.
+    진행자의 행동: 당신이 자동차를 골랐다면(1번 문, $C_1$) 진행자는 2번과 3번 중 무작위로 고르므로 $P(H_3 \mid C_1) = 1/2$이다. 자동차가 2번 문 뒤에 있으면($C_2$) 진행자는 3번을 열 수밖에 없으므로 $P(H_3 \mid C_2) = 1$이다. 자동차가 3번 문 뒤에 있으면 진행자가 그 문을 열 수 없으므로 $P(H_3 \mid C_3) = 0$이다.
 
-    By Bayes:
+    베이즈에 의해
 
     $P(C_1 \mid H_3) = (1/2)(1/3) / P(H_3) = (1/6)/P(H_3)$.
 
@@ -288,9 +290,9 @@ Two fair dice are rolled. Let $A$ = "the sum is at least 10" and $B$ = "both dic
 
     $P(C_3 \mid H_3) = (0)(1/3) / P(H_3) = 0$.
 
-    Normalizing: $P(H_3) = 1/6 + 1/3 + 0 = 1/2$. So $P(C_1 \mid H_3) = 1/3$, $P(C_2 \mid H_3) = 2/3$, $P(C_3 \mid H_3) = 0$.
+    정규화하면 $P(H_3) = 1/6 + 1/3 + 0 = 1/2$이므로 $P(C_1 \mid H_3) = 1/3$, $P(C_2 \mid H_3) = 2/3$, $P(C_3 \mid H_3) = 0$이다.
 
-    **Stay**: win with probability $P(C_1 \mid H_3) = 1/3$.
-    **Switch**: win with probability $P(C_2 \mid H_3) = 2/3$.
+    **그대로 두기**: 확률 $P(C_1 \mid H_3) = 1/3$로 이긴다.
+    **바꾸기**: 확률 $P(C_2 \mid H_3) = 2/3$로 이긴다.
 
-    Switching doubles your winning probability. The intuition: your initial pick had probability 1/3 of being correct; the door the host doesn't open carries the remaining 2/3 probability because the host's choice gives information. This problem famously confused even mathematicians when it was popularized — the answer feels wrong until you formalize it with Bayes' theorem.
+    바꾸면 이길 확률이 두 배가 된다. 직관은 이렇다. 처음 고른 문이 맞을 확률은 1/3이었고, 진행자의 선택이 정보를 주기 때문에 진행자가 열지 않은 문이 나머지 2/3의 확률을 떠안는다. 이 문제는 널리 알려졌을 때 수학자들조차 헷갈리게 한 것으로 유명하다. 베이즈 정리로 형식화하기 전까지는 답이 틀린 것처럼 느껴진다.

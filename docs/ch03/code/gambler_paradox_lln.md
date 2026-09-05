@@ -1,34 +1,34 @@
-# Gambler's Paradox: When the Law of Large Numbers Fails
+# 도박사의 역설: 큰수의 법칙이 실패할 때
 
-## Overview
+## 개요
 
-The Law of Large Numbers (LLN) guarantees that the sample mean converges to the population mean — but only when the population mean is **finite**. The **St. Petersburg paradox** provides a classic counterexample: a game with infinite expected value where the sample mean diverges rather than stabilizes. This page simulates the paradox and contrasts it with a bounded variant where the LLN holds.
+큰수의 법칙(LLN)은 표본평균이 모평균으로 수렴함을 보장하지만, 모평균이 **유한할** 때에만 그렇다. **상트페테르부르크 역설**이 고전적인 반례를 제공한다. 기댓값이 무한한 게임에서는 표본평균이 안정되는 대신 발산한다. 이 절에서는 이 역설을 모의실험하고, 큰수의 법칙이 성립하는 유계 변형과 대비한다.
 
 ---
 
-## 1. The St. Petersburg Game
+## 1. 상트페테르부르크 게임
 
-### Rules
+### 규칙
 
-A fair coin is flipped repeatedly until the first heads appears. If heads first appears on flip $k$, the payout is $2^k$ dollars.
+공정한 동전을 첫 앞면이 나올 때까지 반복해서 던진다. $k$번째 던지기에서 처음 앞면이 나오면 $2^k$달러를 받는다.
 
-The expected payout is:
+기대 상금은 다음과 같다.
 
 $$
 E[X] = \sum_{k=1}^{\infty} 2^k \cdot \left(\frac{1}{2}\right)^k = \sum_{k=1}^{\infty} 1 = \infty
 $$
 
-Since $E[X] = \infty$, the LLN does not apply: there is no finite value for the sample mean to converge to.
+$E[X] = \infty$이므로 큰수의 법칙이 적용되지 않는다. 표본평균이 수렴할 유한한 값이 없다.
 
-### The Paradox
+### 역설
 
-Despite the infinite expected value, most individual rounds pay very little (50% pay \$2, 75% pay \$4 or less). But the rare event of a long run of tails produces an enormous payout that dominates the average. No matter how many rounds are played, a single extreme outcome can shift the sample mean dramatically.
+기댓값이 무한한데도 개별 라운드는 대부분 아주 적게 지급한다(50%는 \$2, 75%는 \$4 이하). 그러나 뒷면이 길게 이어지는 드문 사건이 어마어마한 상금을 낳아 평균을 지배한다. 아무리 여러 라운드를 해도 극단적인 결과 하나가 표본평균을 극적으로 바꿀 수 있다.
 
 ---
 
-## 2. Simulation: Infinite Mean
+## 2. 모의실험: 무한한 평균
 
-We simulate 100 independent sequences, each playing up to 10,000 rounds, and track the running sample mean:
+독립적인 수열 100개를 각각 최대 10,000라운드까지 진행하며 진행 중인 표본평균을 추적한다.
 
 ```python
 import numpy as np
@@ -52,9 +52,9 @@ infinite_results = st_petersburg_sample_means()
 
 ---
 
-## 3. The Bounded Variant: Finite Mean
+## 3. 유계 변형: 유한한 평균
 
-Now cap the payout at $2^{10} = 1024$ dollars. This truncation makes $E[X]$ finite, so the LLN applies:
+이제 상금을 $2^{10} = 1024$달러로 제한하자. 이렇게 절단하면 $E[X]$가 유한해져 큰수의 법칙이 적용된다.
 
 $$
 E[X_{\text{bounded}}] = \sum_{k=1}^{10} 2^k \cdot \left(\frac{1}{2}\right)^k + 1024 \cdot \sum_{k=11}^{\infty} \left(\frac{1}{2}\right)^k = 10 + 1024 \cdot \frac{1}{1024} = 11
@@ -77,7 +77,7 @@ bounded_results = bounded_game_sample_means()
 
 ---
 
-## 4. Visualization
+## 4. 시각화
 
 ```python
 fig, axes = plt.subplots(1, 2, figsize=(14, 5))
@@ -108,156 +108,156 @@ plt.show()
 
 ---
 
-## 5. Interpretation
+## 5. 해석
 
-### Left panel (infinite mean)
+### 왼쪽 패널 (무한한 평균)
 
-The cloud of sample means does **not** tighten as $n$ increases — it continues to spread on the log-log scale. Different simulation runs give wildly different averages even at $n = 10{,}000$. This is the hallmark of LLN failure: the sample mean is not a consistent estimator when the population mean is infinite.
+표본평균의 구름이 $n$이 커져도 좁아지지 **않고** 로그–로그 척도에서 계속 퍼진다. $n = 10{,}000$에서도 모의실험 실행마다 평균이 크게 다르다. 이것이 큰수의 법칙 실패의 특징이다. 모평균이 무한하면 표본평균은 일치성 있는 추정량이 아니다.
 
-### Right panel (finite mean)
+### 오른쪽 패널 (유한한 평균)
 
-The cloud of sample means **contracts** around the red line ($E[X] = 11$) as $n$ grows. By $n = 10{,}000$, essentially all 100 simulation runs agree on a value near 11. This is the LLN working as expected.
+표본평균의 구름이 $n$이 커질수록 빨간 선($E[X] = 11$) 주위로 **수축한다**. $n = 10{,}000$쯤이면 100번의 모의실험이 사실상 모두 11 근처의 값에 일치한다. 큰수의 법칙이 기대대로 작동하는 모습이다.
 
-### The critical condition
+### 결정적인 조건
 
-The difference between the two panels is a single mathematical condition: **finite expected value**. The St. Petersburg game and its bounded variant differ only in tail behavior, yet this produces qualitatively opposite statistical behavior.
+두 패널의 차이는 단 하나의 수학적 조건, 즉 **유한한 기댓값**이다. 상트페테르부르크 게임과 그 유계 변형은 꼬리의 행동만 다른데도 질적으로 정반대인 통계적 행동을 낳는다.
 
-!!! warning "Finite Mean Is Not Optional"
-    The LLN is often stated informally as "averages converge." This is misleading. Averages converge only when the population mean exists and is finite. Heavy-tailed distributions in finance, insurance, and network traffic can violate this condition.
-
----
-
-## 6. Connection to Theory
-
-The LLN comes in two forms:
-
-- **Weak LLN (WLLN):** Requires finite variance (or weaker: finite mean via truncation arguments). Gives convergence in probability.
-- **Strong LLN (SLLN):** Requires only finite mean ($E[|X|] < \infty$). Gives almost sure convergence.
-
-The St. Petersburg game has $E[X] = \infty$, so neither form applies. The bounded variant has finite mean and finite variance, so both forms hold.
-
-!!! note "Heavy Tails vs Infinite Mean"
-    A distribution can have heavy tails (e.g., Pareto with $\alpha > 1$) yet still have a finite mean, in which case the LLN applies. The distinction is between heavy tails (slow decay) and non-integrable tails (infinite mean). Only the latter breaks the LLN.
+!!! warning "유한한 평균은 선택 사항이 아니다"
+    큰수의 법칙은 흔히 "평균은 수렴한다"고 느슨하게 진술된다. 이는 오도한다. 평균은 모평균이 존재하고 유한할 때에만 수렴한다. 금융, 보험, 네트워크 트래픽의 꼬리가 두꺼운 분포는 이 조건을 위반할 수 있다.
 
 ---
 
-## Exercises
+## 6. 이론과의 연결
 
-**Exercise 1.**
-Compute the expected value of the St. Petersburg game payout from the definition. At what step does the standard convergence test for series fail?
+큰수의 법칙에는 두 형태가 있다.
 
-??? success "Solution to Exercise 1"
-    The payout is $X = 2^K$ where $K \sim \text{Geometric}(1/2)$. The expected value is:
+- **약한 큰수의 법칙(WLLN):** 유한한 분산을 요구한다(또는 더 약하게, 절단 논증을 통해 유한한 평균). 확률수렴을 준다.
+- **강한 큰수의 법칙(SLLN):** 유한한 평균($E[|X|] < \infty$)만 요구한다. 거의 확실한 수렴을 준다.
+
+상트페테르부르크 게임은 $E[X] = \infty$이므로 어느 형태도 적용되지 않는다. 유계 변형은 평균과 분산이 모두 유한하므로 두 형태가 다 성립한다.
+
+!!! note "두꺼운 꼬리와 무한한 평균"
+    어떤 분포는 꼬리가 두꺼워도(예: $\alpha > 1$인 파레토) 평균이 유한할 수 있으며, 그런 경우 큰수의 법칙이 적용된다. 구분해야 할 것은 두꺼운 꼬리(느린 감쇠)와 적분 불가능한 꼬리(무한한 평균)다. 큰수의 법칙을 깨뜨리는 것은 후자뿐이다.
+
+---
+
+## 연습문제
+
+**연습문제 1.**
+정의로부터 상트페테르부르크 게임 상금의 기댓값을 계산하라. 급수의 표준 수렴 판정법은 어느 단계에서 실패하는가?
+
+??? success "연습문제 1 풀이"
+    상금은 $K \sim \text{Geometric}(1/2)$일 때 $X = 2^K$이다. 기댓값은
 
     $$
     E[X] = \sum_{k=1}^{\infty} 2^k \cdot P(K = k) = \sum_{k=1}^{\infty} 2^k \cdot \frac{1}{2^k} = \sum_{k=1}^{\infty} 1
     $$
 
-    This is the harmonic-type series $1 + 1 + 1 + \cdots$, which diverges. The terms do not approach zero, so even the basic divergence test (if $a_k \not\to 0$ then $\sum a_k$ diverges) confirms infinite expected value.
+    이다. 이것은 $1 + 1 + 1 + \cdots$ 형태의 급수로 발산한다. 항이 0으로 가지 않으므로 기본적인 발산 판정법($a_k \not\to 0$이면 $\sum a_k$가 발산)만으로도 기댓값이 무한함이 확인된다.
 
 ---
 
-**Exercise 2.**
-Suppose the payout is capped at $2^M$ for some integer $M \ge 1$. Derive a formula for $E[X_{\text{bounded}}]$ as a function of $M$.
+**연습문제 2.**
+어떤 정수 $M \ge 1$에 대해 상금을 $2^M$으로 제한한다고 하자. $E[X_{\text{bounded}}]$를 $M$의 함수로 나타내는 공식을 유도하라.
 
-??? success "Solution to Exercise 2"
-    For $k \le M$, the payout is $2^k$ with probability $(1/2)^k$. For $k > M$, the payout is $2^M$ with probability $(1/2)^k$. So:
+??? success "연습문제 2 풀이"
+    $k \le M$이면 상금이 $2^k$이고 확률이 $(1/2)^k$다. $k > M$이면 상금이 $2^M$이고 확률이 $(1/2)^k$다. 따라서
 
     $$
     E[X_{\text{bounded}}] = \sum_{k=1}^{M} 2^k \cdot \frac{1}{2^k} + 2^M \sum_{k=M+1}^{\infty} \frac{1}{2^k}
     $$
 
-    The first sum is $M$. The second sum is a geometric series:
+    이다. 첫 합은 $M$이다. 둘째 합은 기하급수로
 
     $$
     2^M \cdot \frac{1/2^{M+1}}{1 - 1/2} = 2^M \cdot \frac{1}{2^M} = 1
     $$
 
-    Therefore $E[X_{\text{bounded}}] = M + 1$.
+    이다. 따라서 $E[X_{\text{bounded}}] = M + 1$이다.
 
-    For $M = 10$: $E[X] = 11$, matching the simulation.
+    $M = 10$이면 $E[X] = 11$로 모의실험과 일치한다.
 
 ---
 
-**Exercise 3.**
-The Pareto distribution with parameter $\alpha$ has density $f(x) = \alpha / x^{\alpha+1}$ for $x \ge 1$. For what values of $\alpha$ does $E[X]$ exist? For what values does $\text{Var}(X)$ exist? Which forms of the LLN apply in each case?
+**연습문제 3.**
+모수가 $\alpha$인 파레토분포는 $x \ge 1$에서 밀도가 $f(x) = \alpha / x^{\alpha+1}$이다. $\alpha$가 어떤 값일 때 $E[X]$가 존재하는가? $\text{Var}(X)$는 어떤 값일 때 존재하는가? 각 경우에 큰수의 법칙의 어떤 형태가 적용되는가?
 
-??? success "Solution to Exercise 3"
-    The $r$-th moment is:
+??? success "연습문제 3 풀이"
+    $r$차 적률은
 
     $$
     E[X^r] = \int_1^{\infty} \frac{\alpha \, x^r}{x^{\alpha+1}} \, dx = \alpha \int_1^{\infty} x^{r - \alpha - 1} \, dx
     $$
 
-    This converges if and only if $r - \alpha - 1 < -1$, i.e., $r < \alpha$.
+    이며, $r - \alpha - 1 < -1$, 즉 $r < \alpha$일 때에 한해 수렴한다.
 
-    - $E[X]$ exists $\iff \alpha > 1$. The SLLN applies.
-    - $\text{Var}(X)$ exists $\iff E[X^2] < \infty \iff \alpha > 2$. The WLLN (with finite variance) applies, and the CLT also applies.
-    - For $1 < \alpha \le 2$: the mean is finite but the variance is infinite. The SLLN still holds, but the CLT does not apply in its standard form (generalized CLT with stable distributions is needed).
-    - For $\alpha \le 1$: the mean is infinite and neither LLN applies.
+    - $E[X]$가 존재할 필요충분조건은 $\alpha > 1$이다. 강한 큰수의 법칙이 적용된다.
+    - $\text{Var}(X)$가 존재할 필요충분조건은 $E[X^2] < \infty$, 즉 $\alpha > 2$이다. (유한 분산의) 약한 큰수의 법칙이 적용되고 중심극한정리도 적용된다.
+    - $1 < \alpha \le 2$이면 평균은 유한하지만 분산이 무한하다. 강한 큰수의 법칙은 여전히 성립하지만 중심극한정리는 표준 형태로는 적용되지 않는다(안정분포를 쓰는 일반화된 중심극한정리가 필요하다).
+    - $\alpha \le 1$이면 평균이 무한하고 어느 큰수의 법칙도 적용되지 않는다.
 
 ---
 
-**Exercise 4.**
-Prove the Weak Law of Large Numbers using Chebyshev's inequality, assuming finite variance $\sigma^2$.
+**연습문제 4.**
+분산 $\sigma^2$이 유한하다고 가정하고 체비쇼프 부등식을 이용해 약한 큰수의 법칙을 증명하라.
 
-??? success "Solution to Exercise 4"
-    Let $X_1, \ldots, X_n$ be i.i.d. with mean $\mu$ and variance $\sigma^2$. Then $E[\bar{X}] = \mu$ and $\text{Var}(\bar{X}) = \sigma^2 / n$.
+??? success "연습문제 4 풀이"
+    $X_1, \ldots, X_n$이 평균 $\mu$, 분산 $\sigma^2$인 i.i.d.라 하자. 그러면 $E[\bar{X}] = \mu$이고 $\text{Var}(\bar{X}) = \sigma^2 / n$이다.
 
-    By Chebyshev's inequality:
+    체비쇼프 부등식에 의해
 
     $$
     P(|\bar{X} - \mu| \ge \varepsilon) \le \frac{\text{Var}(\bar{X})}{\varepsilon^2} = \frac{\sigma^2}{n\varepsilon^2}
     $$
 
-    As $n \to \infty$, the right side goes to 0 for any fixed $\varepsilon > 0$:
+    이다. $n \to \infty$이면 고정된 임의의 $\varepsilon > 0$에 대해 우변이 0으로 가므로
 
     $$
     P(|\bar{X} - \mu| \ge \varepsilon) \to 0
     $$
 
-    This is exactly convergence in probability: $\bar{X} \xrightarrow{P} \mu$. $\square$
+    이다. 이것이 바로 확률수렴 $\bar{X} \xrightarrow{P} \mu$이다. $\square$
 
 ---
 
-**Exercise 5.**
-In the simulation, the bounded game uses sampling with replacement (`np.random.geometric`). If instead you played a fixed sequence of $n$ rounds and computed the running average, would the plot look different? Explain the distinction between the simulation design and a single gambler's experience.
+**연습문제 5.**
+모의실험에서 유계 게임은 복원 표집(`np.random.geometric`)을 쓴다. 대신 $n$라운드의 고정된 수열을 진행하며 진행 중인 평균을 계산한다면 그림이 달라지겠는가? 모의실험 설계와 한 도박사의 경험 사이의 차이를 설명하라.
 
-??? success "Solution to Exercise 5"
-    The simulation draws 100 **independent** sequences of length $n$ for each grid point and plots the sample mean of each. This shows the **sampling distribution** of $\bar{X}_n$ — i.e., the variability across many hypothetical gamblers.
+??? success "연습문제 5 풀이"
+    모의실험은 각 격자점마다 길이 $n$인 **독립적인** 수열 100개를 뽑아 각각의 표본평균을 그린다. 이는 $\bar{X}_n$의 **표본분포**, 즉 가상의 여러 도박사에 걸친 변동성을 보여준다.
 
-    A single gambler playing $n$ rounds would produce one running average path. This path would show the **almost sure** convergence guaranteed by the SLLN: a single trajectory that eventually stabilizes near $E[X]$.
+    한 도박사가 $n$라운드를 진행하면 진행 중인 평균의 경로 하나가 나온다. 이 경로는 강한 큰수의 법칙이 보장하는 **거의 확실한** 수렴을 보여줄 것이다. 하나의 궤적이 결국 $E[X]$ 근처에서 안정된다.
 
-    The plot would look different: instead of a cloud of dots at each $n$, you would see 100 individual trajectories (lines), each converging toward the true mean. The cloud representation emphasizes the **distribution** of the estimator; the trajectory representation emphasizes the **path-wise** behavior. Both illustrate the LLN, but from complementary perspectives.
-
----
-
-**Exercise 6.**
-The **gambler's fallacy** is the mistaken belief that, after a run of bad outcomes, "good ones are due." Show formally why the LLN does *not* justify this. State the correct interpretation of "averages converge to the expected value."
-
-??? success "Solution to Exercise 6"
-    Let $X_1, X_2, \ldots$ be i.i.d. fair coin flips. Each $X_i$ is independent, so $P(X_{n+1} = \text{H} \mid X_1, \ldots, X_n) = P(X_{n+1} = \text{H}) = 1/2$ regardless of history. After 10 tails in a row, flip 11 is still 50/50. The coin has no memory.
-
-    **What LLN actually says:** $\bar X_n \to \mu$ almost surely. The *average* approaches $\mu$. But the *sum* $\sum X_i - n\mu$ does not return to zero — by the **law of the iterated logarithm**, $\limsup |\sum X_i - n\mu|/\sqrt{2n\log\log n} = \sigma$ a.s. The sum's fluctuations grow like $\sqrt n$, unbounded.
-
-    So after 10 tails, the average $\bar X_{10} = -1$ will drift toward $\mu$ over many more flips, but *not because future flips compensate*. The earlier 10 tails get diluted, not corrected. Every flip stands alone.
-
-    **The gambler's fallacy** misunderstands this as "tails owe me heads now." Casinos exploit this in roulette, slot machines, and lottery strategies. The correct statement: the *long-run frequency* equals the *probability* — but no particular short run is "due" for anything.
+    그림은 달라진다. 각 $n$에서의 점 구름 대신 100개의 개별 궤적(선)이 각각 참 평균으로 수렴하는 모습이 보일 것이다. 구름 표현은 추정량의 **분포**를 강조하고, 궤적 표현은 **경로별** 행동을 강조한다. 둘 다 큰수의 법칙을 보여주지만 서로 보완적인 관점에서 그렇게 한다.
 
 ---
 
-**Exercise 7.**
-For **bounded** random variables ($|X_i| \le M$), show the SLLN follows from the **Borel-Cantelli lemma** applied to $\{|\bar X_n - \mu| > \varepsilon\}$.
+**연습문제 6.**
+**도박사의 오류**는 나쁜 결과가 이어진 뒤에는 "좋은 결과가 나올 차례"라고 믿는 잘못된 생각이다. 큰수의 법칙이 이를 정당화하지 *않음*을 형식적으로 보여라. "평균은 기댓값으로 수렴한다"의 올바른 해석을 진술하라.
 
-??? success "Solution to Exercise 7"
-    By Hoeffding's inequality (for bounded $X_i$ with range $\le 2M$):
+??? success "연습문제 6 풀이"
+    $X_1, X_2, \ldots$를 공정한 동전 던지기 i.i.d.라 하자. 각 $X_i$가 독립이므로 이력과 무관하게 $P(X_{n+1} = \text{H} \mid X_1, \ldots, X_n) = P(X_{n+1} = \text{H}) = 1/2$이다. 뒷면이 열 번 연속 나왔어도 열한 번째는 여전히 50 대 50이다. 동전에는 기억이 없다.
+
+    **큰수의 법칙이 실제로 말하는 것:** $\bar X_n \to \mu$가 거의 확실하게 성립한다. *평균*이 $\mu$에 가까워진다. 그러나 *합* $\sum X_i - n\mu$는 0으로 돌아오지 않는다. **반복로그의 법칙**에 의해 거의 확실하게 $\limsup |\sum X_i - n\mu|/\sqrt{2n\log\log n} = \sigma$이다. 합의 변동은 $\sqrt n$처럼 커지며 유계가 아니다.
+
+    따라서 뒷면 열 번 뒤에 평균 $\bar X_{10} = -1$은 더 많이 던지면서 $\mu$ 쪽으로 이동하지만, 그것은 *미래의 던지기가 보상해서가 아니다*. 앞선 뒷면 열 번이 교정되는 것이 아니라 희석될 뿐이다. 모든 던지기는 홀로 선다.
+
+    **도박사의 오류**는 이를 "이제 뒷면이 나에게 앞면을 빚졌다"로 오해한다. 카지노는 룰렛, 슬롯머신, 복권 전략에서 이를 이용한다. 올바른 진술은 이렇다. *장기 빈도*는 *확률*과 같지만, 특정한 짧은 구간이 무언가를 "빚지고" 있는 것은 아니다.
+
+---
+
+**연습문제 7.**
+**유계** 확률변수($|X_i| \le M$)에 대해 $\{|\bar X_n - \mu| > \varepsilon\}$에 **보렐–칸텔리 보조정리**를 적용하여 강한 큰수의 법칙이 따라옴을 보여라.
+
+??? success "연습문제 7 풀이"
+    (범위가 $\le 2M$인 유계 $X_i$에 대한) 회프딩 부등식에 의해
 
     $$
     P(|\bar X_n - \mu| > \varepsilon) \le 2 e^{-n\varepsilon^2/(2M^2)}
     $$
 
-    Sum over $n$: $\sum_n P(|\bar X_n - \mu| > \varepsilon) < \infty$ for any $\varepsilon > 0$ (geometric-tail summable).
+    이다. $n$에 대해 합하면 임의의 $\varepsilon > 0$에 대해 $\sum_n P(|\bar X_n - \mu| > \varepsilon) < \infty$이다(기하 꼬리라 합할 수 있다).
 
-    By **Borel-Cantelli lemma I**, $P(|\bar X_n - \mu| > \varepsilon \text{ infinitely often}) = 0$. So with probability 1, only finitely many of these events occur — equivalently, $\bar X_n \to \mu$ almost surely. $\square$
+    **보렐–칸텔리 보조정리 I**에 의해 $P(|\bar X_n - \mu| > \varepsilon \text{ 가 무한히 자주}) = 0$이다. 따라서 확률 1로 이런 사건이 유한 번만 일어나며, 이는 $\bar X_n \to \mu$가 거의 확실하게 성립함과 동등하다. $\square$
 
-    Kolmogorov's general SLLN requires only finite first moment, but the proof is more delicate (truncation arguments). The Hoeffding-Borel-Cantelli proof is the cleanest path under the boundedness assumption.
+    콜모고로프의 일반적인 강한 큰수의 법칙은 1차 적률의 유한성만 요구하지만 증명이 더 섬세하다(절단 논증). 유계성 가정 아래에서는 회프딩–보렐–칸텔리 증명이 가장 깔끔한 길이다.

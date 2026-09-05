@@ -1,76 +1,76 @@
-# Chapter 3: Foundations of Probability
+# 제3장: 확률의 기초
 
-## Overview
+## 개요
 
-This chapter builds the probability foundation that underpins all of statistical inference. Starting from sample spaces and the axioms of probability, it develops conditional probability, Bayes' theorem, and independence. It then formalizes random variables (discrete and continuous), their distributions (PMF, PDF, CDF), and summary measures (expectation, variance, covariance, moment generating functions). The chapter culminates with the powerful limit theorems -- the Law of Large Numbers and the Central Limit Theorem -- that connect probability theory to practical statistics.
-
----
-
-## Chapter Structure
-
-### 3.1 Probability Theory
-
-The axiomatic foundation of probability:
-
-- **Sample Spaces and Events** -- Defines the sample space as the set of all possible outcomes, events as subsets of the sample space, and the basic set operations (union, intersection, complement) used to combine events.
-- **Axioms of Probability** -- Presents three equivalent formulations of the probability axioms (naive, intermediate, and Kolmogorov's measure-theoretic), establishing the formal rules for assigning probabilities to events.
-- **Conditional Probability** -- Defines how the probability of an event changes when we learn that another event has occurred, introducing the formula P(A|B) = P(A and B)/P(B) and the intuition of restricting the sample space.
-- **Bayes' Theorem** -- Derives the formula for reversing the direction of conditioning (computing P(A|B) from P(B|A)), identifying the prior, likelihood, posterior, and evidence, with applications to medical diagnosis, spam filtering, and finance.
-
-### 3.2 Independence
-
-The concept of probabilistic independence and its extensions:
-
-- **Independence of Events** -- Defines independence as P(A and B) = P(A)P(B), contrasts it with mutual exclusivity, and extends the definition to mutual independence of multiple events.
-- **Conditional Independence** -- Extends independence by introducing a conditioning event, showing that two events can be marginally dependent but conditionally independent (and vice versa), with applications to graphical models and Bayesian networks.
-
-### 3.3 Random Variables
-
-Formalizing the mapping from outcomes to numbers:
-
-- **Discrete Random Variables** -- Defines random variables as functions from the sample space to the real line, introduces discrete random variables with countable support, and develops the brick-on-a-number-line metaphor for understanding distributions.
-- **Continuous Random Variables** -- Extends the framework to variables that take values over continuous intervals, introducing the probability density function and the key property that P(X = x) = 0 for any single point.
-- **PMF, PDF, and CDF** -- Provides a unified treatment of the three fundamental distribution functions: the probability mass function for discrete variables, the probability density function for continuous variables, and the cumulative distribution function that applies to both.
-
-### 3.4 Expectation and Moments
-
-Summary measures derived from a distribution:
-
-- **Expectation and Linearity** -- Defines the expected value as the long-run average (center of mass of the distribution) and establishes the linearity of expectation, one of the most powerful and widely used properties in probability.
-- **Variance and Covariance** -- Defines variance as the expected squared deviation from the mean, introduces covariance and correlation for measuring how two random variables move together, with applications to risk measurement and portfolio theory.
-- **Moment Generating Functions** -- Introduces the MGF as a tool that encodes all moments of a distribution into a single function, enabling elegant computation of expectations, proofs of limit theorems, and distribution characterization.
-
-### 3.5 Limit Theorems
-
-The fundamental convergence results connecting probability to statistics:
-
-- **Law of Large Numbers** -- States and proves both the weak and strong forms of the LLN, showing that the sample mean converges to the population mean as the sample size grows, providing the theoretical foundation for estimation.
-- **Central Limit Theorem** -- Establishes that the standardized sample mean converges in distribution to a standard normal regardless of the original distribution, justifying the widespread use of normal-based inference methods.
-- **Berry-Esseen Theorem** -- Provides an explicit upper bound on the rate of convergence in the CLT, quantifying how quickly the normal approximation becomes accurate as a function of sample size and the third absolute moment.
-
-### 3.6 Exercises
-
-Practice problems covering sample spaces, probability axioms, conditional probability, Bayes' theorem, independence, random variables, expectation, variance, and the limit theorems.
+이 장은 통계적 추론 전체를 떠받치는 확률의 토대를 세운다. 표본공간과 확률의 공리에서 출발해 조건부확률, 베이즈 정리, 독립을 전개한다. 이어서 확률변수(이산형과 연속형), 그 분포(확률질량함수, 확률밀도함수, 누적분포함수), 요약 측도(기댓값, 분산, 공분산, 적률생성함수)를 형식화한다. 마지막으로 확률론과 실제 통계를 잇는 강력한 극한정리 — 큰수의 법칙과 중심극한정리 — 로 마무리한다.
 
 ---
 
-## Prerequisites
+## 장의 구성
 
-This chapter builds on:
+### 3.1 확률론
 
-- **Chapter 0** (Prerequisites) -- Set theory notation, sequences and limits, and summation/integration for defining probabilities and expectations.
-- **Chapter 1** (Data Collection) -- The concept of populations and samples, which motivates the need for a formal probability framework.
-- **Chapter 2** (Descriptive Statistics) -- Empirical measures of center (mean, median) and spread (variance, IQR) that find their theoretical counterparts in expectation and variance of random variables.
+확률의 공리적 토대:
+
+- **표본공간과 사건** — 가능한 모든 결과의 집합으로서 표본공간을, 표본공간의 부분집합으로서 사건을 정의하고, 사건을 결합하는 데 쓰는 기본 집합 연산(합집합, 교집합, 여집합)을 다룬다.
+- **확률의 공리** — 확률 공리의 서로 동등한 세 가지 정식화(소박한 정식화, 중간 정식화, 콜모고로프의 측도론적 정식화)를 제시하여 사건에 확률을 부여하는 형식적 규칙을 세운다.
+- **조건부확률** — 다른 사건이 일어났음을 알게 되었을 때 사건의 확률이 어떻게 달라지는지 정의하고, 공식 P(A|B) = P(A와 B)/P(B)와 표본공간을 제한한다는 직관을 소개한다.
+- **베이즈 정리** — 조건의 방향을 뒤집는 공식(P(B|A)에서 P(A|B)를 계산)을 유도하고 사전확률, 가능도, 사후확률, 증거를 밝히며, 의학 진단·스팸 필터링·금융에 적용한다.
+
+### 3.2 독립
+
+확률적 독립의 개념과 그 확장:
+
+- **사건의 독립** — 독립을 P(A와 B) = P(A)P(B)로 정의하고 배반과 대비시키며, 여러 사건의 상호독립으로 정의를 확장한다.
+- **조건부 독립** — 조건이 되는 사건을 도입해 독립을 확장하고, 두 사건이 주변적으로는 종속이면서 조건부로는 독립일 수 있음을(그리고 그 반대도) 보이며, 그래프 모형과 베이즈 망에 적용한다.
+
+### 3.3 확률변수
+
+결과에서 수로 가는 사상의 형식화:
+
+- **이산확률변수** — 확률변수를 표본공간에서 실직선으로 가는 함수로 정의하고, 받침이 가산인 이산확률변수를 소개하며, 분포를 이해하기 위한 "수직선 위의 벽돌" 비유를 전개한다.
+- **연속확률변수** — 연속 구간의 값을 취하는 변수로 틀을 확장하고, 확률밀도함수와 임의의 한 점에 대해 P(X = x) = 0이라는 핵심 성질을 소개한다.
+- **확률질량함수, 확률밀도함수, 누적분포함수** — 세 가지 기본 분포함수를 통합적으로 다룬다. 이산변수의 확률질량함수, 연속변수의 확률밀도함수, 그리고 둘 다에 적용되는 누적분포함수다.
+
+### 3.4 기댓값과 적률
+
+분포에서 유도되는 요약 측도:
+
+- **기댓값과 선형성** — 기댓값을 장기적인 평균(분포의 무게중심)으로 정의하고, 확률에서 가장 강력하고 널리 쓰이는 성질 중 하나인 기댓값의 선형성을 확립한다.
+- **분산과 공분산** — 분산을 평균으로부터의 기대 제곱편차로 정의하고, 두 확률변수가 함께 움직이는 정도를 재는 공분산과 상관을 소개하며, 위험 측정과 포트폴리오 이론에 적용한다.
+- **적률생성함수** — 분포의 모든 적률을 하나의 함수에 담아내는 도구로 적률생성함수를 소개하여, 기댓값의 우아한 계산, 극한정리의 증명, 분포의 특성화를 가능하게 한다.
+
+### 3.5 극한정리
+
+확률과 통계를 잇는 근본적인 수렴 결과:
+
+- **큰수의 법칙** — 큰수의 법칙의 약한 형태와 강한 형태를 모두 진술하고 증명하여, 표본 크기가 커지면 표본평균이 모평균으로 수렴함을 보이고 추정의 이론적 토대를 제공한다.
+- **중심극한정리** — 원래 분포가 무엇이든 표준화된 표본평균이 표준정규분포로 분포수렴함을 확립하여, 정규분포에 근거한 추론 방법이 널리 쓰이는 것을 정당화한다.
+- **베리–에센 정리** — 중심극한정리의 수렴 속도에 대한 명시적인 상한을 제공하여, 표본 크기와 3차 절대적률의 함수로 정규근사가 얼마나 빨리 정확해지는지를 정량화한다.
+
+### 3.6 연습문제
+
+표본공간, 확률 공리, 조건부확률, 베이즈 정리, 독립, 확률변수, 기댓값, 분산, 극한정리를 다루는 연습문제.
 
 ---
 
-## Key Takeaways
+## 선수 지식
 
-1. Probability theory rests on three axioms (non-negativity, normalization, additivity) that provide a rigorous foundation for reasoning about uncertainty.
-2. Conditional probability and Bayes' theorem provide the machinery for updating beliefs in light of new evidence.
-3. Independence simplifies probability calculations and is a fundamental assumption behind most statistical methods.
-4. Random variables formalize the bridge between abstract outcomes and numerical analysis, with PMF, PDF, and CDF providing complete distributional descriptions.
-5. Expectation gives the center of a distribution, variance measures its spread, and covariance captures how two variables co-move.
-6. Moment generating functions provide a compact encoding of all distributional information and are a powerful tool for proving theoretical results.
-7. The Law of Large Numbers guarantees that sample averages converge to population means, justifying the use of data for estimation.
-8. The Central Limit Theorem explains why the normal distribution appears so frequently in practice and underpins the construction of confidence intervals and hypothesis tests.
+이 장은 다음을 바탕으로 한다:
+
+- **제0장**(선수 지식) — 확률과 기댓값을 정의하는 데 필요한 집합론 표기, 수열과 극한, 합과 적분.
+- **제1장**(자료 수집) — 형식적인 확률 틀의 필요성을 동기 지어 주는 모집단과 표본의 개념.
+- **제2장**(기술통계) — 확률변수의 기댓값과 분산에서 이론적 대응물을 찾게 되는, 중심(평균, 중앙값)과 퍼짐(분산, IQR)의 경험적 측도.
+
+---
+
+## 핵심 요약
+
+1. 확률론은 세 가지 공리(비음성, 정규화, 가법성) 위에 서 있으며, 이들이 불확실성을 다루는 엄밀한 토대를 제공한다.
+2. 조건부확률과 베이즈 정리는 새로운 증거에 비추어 믿음을 갱신하는 기계장치를 제공한다.
+3. 독립은 확률 계산을 단순하게 만들며 대부분의 통계 방법 뒤에 놓인 근본 가정이다.
+4. 확률변수는 추상적인 결과와 수치적 분석을 잇는 다리를 형식화하며, 확률질량함수·확률밀도함수·누적분포함수가 분포에 대한 완전한 기술을 제공한다.
+5. 기댓값은 분포의 중심을, 분산은 퍼짐을 주고, 공분산은 두 변수가 함께 움직이는 방식을 포착한다.
+6. 적률생성함수는 분포의 모든 정보를 압축적으로 담아내며 이론적 결과를 증명하는 강력한 도구다.
+7. 큰수의 법칙은 표본평균이 모평균으로 수렴함을 보장하여, 추정에 자료를 쓰는 것을 정당화한다.
+8. 중심극한정리는 정규분포가 실무에서 그토록 자주 나타나는 이유를 설명하며 신뢰구간과 가설검정의 구성을 떠받친다.

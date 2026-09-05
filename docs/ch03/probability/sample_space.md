@@ -1,28 +1,28 @@
-# Sample Spaces and Events
+# 표본공간과 사건
 
-## Overview
+## 개요
 
-Probability theory is built upon a set of fundamental rules known as **Kolmogorov's Axioms**, named after the Russian mathematician Andrey Kolmogorov. These axioms provide a formal foundation for reasoning about probability and ensure consistency when calculating the likelihood of events.
+확률론은 러시아 수학자 안드레이 콜모고로프의 이름을 딴 **콜모고로프 공리**라는 기본 규칙 위에 세워져 있다. 이 공리들은 확률을 다루는 형식적 토대를 제공하고 사건의 가능성을 계산할 때 일관성을 보장한다.
 
 ---
 
-## Basic Definitions
+## 기본 정의
 
-### Sample
+### 표본
 
-A possible outcome $\omega$ of an experiment is called a **sample**.
+어떤 실험에서 가능한 결과 $\omega$ 하나를 **표본**이라 한다.
 
-### Sample Space
+### 표본공간
 
-The **sample space** $\Omega$ is the set of all possible outcomes (samples) of an experiment:
+**표본공간** $\Omega$는 어떤 실험에서 가능한 모든 결과(표본)의 집합이다.
 
 $$
 \Omega = \{\omega_1, \omega_2, \omega_3, \ldots\}
 $$
 
-### Event
+### 사건
 
-An **event** $A$ is any subset of $\Omega$. It represents a collection of outcomes of interest.
+**사건** $A$는 $\Omega$의 임의의 부분집합이다. 관심 있는 결과들의 모임을 나타낸다.
 
 $$
 A \subseteq \Omega
@@ -30,9 +30,9 @@ $$
 
 ---
 
-## Intuitive Picture: Bricks and Weights
+## 직관적 그림: 벽돌과 무게
 
-For each outcome $\omega \in \Omega$, we attach a "brick" with a certain weight representing its probability. Different bricks may have different weights, but the total weight of all bricks across the sample space is 1. This weight distribution over $\Omega$ defines a **probability measure**:
+각 결과 $\omega \in \Omega$에 대해 그 확률을 나타내는 무게를 가진 "벽돌"을 하나씩 붙인다고 하자. 벽돌마다 무게는 다를 수 있지만 표본공간 전체에 놓인 벽돌의 총 무게는 1이다. $\Omega$ 위의 이러한 무게 분포가 **확률측도**를 정의한다.
 
 $$
 \begin{aligned}
@@ -43,29 +43,29 @@ $$
 
 ---
 
-## Examples
+## 예제
 
-### Example: Rolling a Six-Sided Die
+### 예: 육면체 주사위 굴리기
 
-When rolling a fair six-sided die:
+공정한 육면체 주사위를 굴릴 때:
 
-- **Sample space:** $\Omega = \{1, 2, 3, 4, 5, 6\}$
-- **Event $A$ (rolling an even number):** $A = \{2, 4, 6\}$
-- **Event $B$ (rolling an odd number):** $B = \{1, 3, 5\}$
+- **표본공간:** $\Omega = \{1, 2, 3, 4, 5, 6\}$
+- **사건 $A$(짝수가 나옴):** $A = \{2, 4, 6\}$
+- **사건 $B$(홀수가 나옴):** $B = \{1, 3, 5\}$
 
-Since the die is fair, each outcome has equal probability $P(\omega) = \frac{1}{6}$.
+주사위가 공정하므로 각 결과의 확률은 $P(\omega) = \frac{1}{6}$로 같다.
 
-### Example: Flipping Three Coins
+### 예: 동전 세 개 던지기
 
-When flipping three coins:
+동전 세 개를 던질 때:
 
-- **Sample space:** $\Omega = \{HHH, HHT, HTH, HTT, THH, THT, TTH, TTT\}$
-- **Event (exactly 2 heads):** $A = \{HHT, HTH, THH\}$
+- **표본공간:** $\Omega = \{HHH, HHT, HTH, HTT, THH, THT, TTH, TTT\}$
+- **사건(앞면이 정확히 2개):** $A = \{HHT, HTH, THH\}$
 - $P(A) = \frac{3}{8}$
 
 ---
 
-## Python Exploration
+## 파이썬으로 살펴보기
 
 ```python
 from itertools import product
@@ -83,20 +83,20 @@ print(f"P(2 heads) = {len(event_2_heads)}/{len(sample_space)} = {len(event_2_hea
 
 ---
 
-## Key Takeaways
+## 핵심 요약
 
-- The **sample space** $\Omega$ captures every possible outcome of an experiment.
-- An **event** is any subset of $\Omega$.
-- Probability assigns a non-negative "weight" to each outcome such that the total weight is 1.
-- The probability of an event is the sum of weights of all outcomes in that event.
+- **표본공간** $\Omega$는 실험에서 가능한 모든 결과를 담는다.
+- **사건**은 $\Omega$의 임의의 부분집합이다.
+- 확률은 각 결과에 음이 아닌 "무게"를 부여하며 그 총합이 1이 되게 한다.
+- 사건의 확률은 그 사건에 속한 모든 결과의 무게의 합이다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-A bag contains 3 red balls and 2 blue balls. Two balls are drawn without replacement. Write out the sample space $\Omega$ using ordered pairs (e.g., $(R_1, B_1)$) and compute the probability of drawing two red balls.
+**연습문제 1.**
+주머니에 빨간 공 3개와 파란 공 2개가 있다. 공 두 개를 비복원으로 뽑는다. 순서쌍(예: $(R_1, B_1)$)을 써서 표본공간 $\Omega$를 모두 나열하고 빨간 공 두 개를 뽑을 확률을 계산하라.
 
-??? success "Solution to Exercise 1"
-    Label the balls $R_1, R_2, R_3, B_1, B_2$. The sample space of ordered draws is:
+??? success "연습문제 1 풀이"
+    공에 $R_1, R_2, R_3, B_1, B_2$라는 이름을 붙이자. 순서를 고려한 뽑기의 표본공간은 다음과 같다.
 
     $$
     \Omega = \{(R_1,R_2),(R_1,R_3),(R_1,B_1),(R_1,B_2),(R_2,R_1),(R_2,R_3),(R_2,B_1),(R_2,B_2),
@@ -110,27 +110,29 @@ A bag contains 3 red balls and 2 blue balls. Two balls are drawn without replace
     (B_2,R_1),(B_2,R_2),(B_2,R_3),(B_2,B_1)\}
     $$
 
-    There are $5 \times 4 = 20$ equally likely ordered outcomes. The event "two red balls" is $A = \{(R_1,R_2),(R_1,R_3),(R_2,R_1),(R_2,R_3),(R_3,R_1),(R_3,R_2)\}$, which has 6 outcomes. Therefore:
+    똑같이 일어날 법한 순서 있는 결과가 $5 \times 4 = 20$개다. 사건 "빨간 공 두 개"는 $A = \{(R_1,R_2),(R_1,R_3),(R_2,R_1),(R_2,R_3),(R_3,R_1),(R_3,R_2)\}$로 결과가 6개다. 따라서
 
     $$
     P(A) = \frac{6}{20} = \frac{3}{10}
     $$
 
+    이다.
+
 ---
 
-**Exercise 2.**
-An experiment consists of rolling a fair die and flipping a fair coin. Write out the sample space. Define the event $A$ = "the die shows an even number and the coin shows heads." Compute $P(A)$.
+**연습문제 2.**
+공정한 주사위를 굴리고 공정한 동전을 던지는 실험이 있다. 표본공간을 모두 나열하라. 사건 $A$ = "주사위가 짝수이고 동전이 앞면"을 정의하고 $P(A)$를 계산하라.
 
-??? success "Solution to Exercise 2"
-    The sample space is the Cartesian product of die outcomes and coin outcomes:
+??? success "연습문제 2 풀이"
+    표본공간은 주사위 결과와 동전 결과의 곱집합이다.
 
     $$
     \Omega = \{(1,H),(1,T),(2,H),(2,T),(3,H),(3,T),(4,H),(4,T),(5,H),(5,T),(6,H),(6,T)\}
     $$
 
-    There are $6 \times 2 = 12$ equally likely outcomes.
+    똑같이 일어날 법한 결과가 $6 \times 2 = 12$개다.
 
-    The event $A$ = {even die and heads} = $\{(2,H),(4,H),(6,H)\}$, which has 3 outcomes.
+    사건 $A$ = {주사위 짝수 그리고 앞면} = $\{(2,H),(4,H),(6,H)\}$로 결과가 3개다.
 
     $$
     P(A) = \frac{3}{12} = \frac{1}{4}
@@ -138,13 +140,13 @@ An experiment consists of rolling a fair die and flipping a fair coin. Write out
 
 ---
 
-**Exercise 3.**
-Let $\Omega = \{a, b, c\}$ with $P(a) = 0.5$, $P(b) = 0.3$, $P(c) = 0.2$. List all possible events (subsets of $\Omega$) and compute the probability of each.
+**연습문제 3.**
+$\Omega = \{a, b, c\}$이고 $P(a) = 0.5$, $P(b) = 0.3$, $P(c) = 0.2$라 하자. 가능한 모든 사건($\Omega$의 부분집합)을 나열하고 각각의 확률을 계산하라.
 
-??? success "Solution to Exercise 3"
-    A set with 3 elements has $2^3 = 8$ subsets:
+??? success "연습문제 3 풀이"
+    원소가 3개인 집합은 $2^3 = 8$개의 부분집합을 갖는다.
 
-    | Event | Probability |
+    | 사건 | 확률 |
     |:---|:---|
     | $\emptyset$ | $0$ |
     | $\{a\}$ | $0.5$ |
@@ -157,43 +159,43 @@ Let $\Omega = \{a, b, c\}$ with $P(a) = 0.5$, $P(b) = 0.3$, $P(c) = 0.2$. List a
 
 ---
 
-**Exercise 4.**
-Explain the difference between a sample space that is finite, countably infinite, and uncountable. Give one example of an experiment for each type.
+**연습문제 4.**
+유한 표본공간, 가산무한 표본공간, 비가산 표본공간의 차이를 설명하라. 각 유형에 해당하는 실험의 예를 하나씩 들어라.
 
-??? success "Solution to Exercise 4"
-    **Finite sample space:** The set of outcomes is finite. Example: rolling a die gives $\Omega = \{1,2,3,4,5,6\}$ with $|\Omega| = 6$.
+??? success "연습문제 4 풀이"
+    **유한 표본공간:** 결과의 집합이 유한하다. 예: 주사위를 굴리면 $\Omega = \{1,2,3,4,5,6\}$이고 $|\Omega| = 6$이다.
 
-    **Countably infinite sample space:** The set of outcomes can be put in one-to-one correspondence with the natural numbers. Example: flipping a coin until the first heads appears gives $\Omega = \{H, TH, TTH, TTTH, \ldots\}$. There are infinitely many outcomes (one for each possible number of tails before the first heads), but they can be enumerated.
+    **가산무한 표본공간:** 결과의 집합을 자연수와 일대일 대응시킬 수 있다. 예: 첫 앞면이 나올 때까지 동전을 던지면 $\Omega = \{H, TH, TTH, TTTH, \ldots\}$이다. 결과가 무한히 많지만(첫 앞면 전에 나오는 뒷면의 개수마다 하나씩) 차례로 열거할 수 있다.
 
-    **Uncountable sample space:** The set of outcomes has the cardinality of the real numbers and cannot be enumerated. Example: spinning a perfectly balanced spinner and recording the angle gives $\Omega = [0, 360)$, which is an uncountable set. Any single angle has probability zero, and probabilities are assigned to intervals.
-
----
-
-**Exercise 5.**
-For a sample space $\Omega$ with $n$ elements, the **power set** $2^\Omega$ has $2^n$ elements. Prove this by induction. Why is the power set the natural "event space" for discrete probability?
-
-??? success "Solution to Exercise 5"
-    **Base case:** $n = 0$, $\Omega = \emptyset$ has only the empty set as subset, so $|2^\Omega| = 1 = 2^0$. ✓
-
-    **Inductive step:** assume $|2^A| = 2^k$ for any set $A$ with $k$ elements. Let $\Omega$ have $k + 1$ elements, picking one element $x$. Every subset of $\Omega$ either contains $x$ (there are as many such subsets as subsets of $\Omega \setminus \{x\}$, namely $2^k$) or does not contain $x$ (also $2^k$). Total: $2 \cdot 2^k = 2^{k+1}$. $\square$
-
-    **Why power set:** for discrete $\Omega$, we want every subset to be a measurable event — assigning probability to any combination of outcomes should be allowed. The power set is the unique $\sigma$-algebra containing all singletons in a discrete setting.
-
-    For continuous $\Omega$ (uncountable), the power set is too large to admit a $\sigma$-additive measure. We use the **Borel $\sigma$-algebra** instead — generated by open intervals — which excludes pathological non-measurable sets (Vitali sets, Banach-Tarski) while including all reasonable events.
+    **비가산 표본공간:** 결과의 집합이 실수의 농도를 가지며 열거할 수 없다. 예: 완벽하게 균형 잡힌 회전판을 돌려 각도를 기록하면 $\Omega = [0, 360)$이며 이는 비가산집합이다. 개별 각도의 확률은 0이고 확률은 구간에 부여된다.
 
 ---
 
-**Exercise 6.**
-**Continuous sample space and "probability zero" events.** For $\Omega = [0, 1]$ with uniform probability, give two examples of events with probability zero. Are they impossible?
+**연습문제 5.**
+원소가 $n$개인 표본공간 $\Omega$에 대해 **멱집합** $2^\Omega$의 원소는 $2^n$개다. 이를 귀납법으로 증명하라. 멱집합이 이산 확률에서 자연스러운 "사건 공간"인 이유는 무엇인가?
 
-??? success "Solution to Exercise 6"
-    Two examples:
+??? success "연습문제 5 풀이"
+    **기저 단계:** $n = 0$이면 $\Omega = \emptyset$의 부분집합은 공집합뿐이므로 $|2^\Omega| = 1 = 2^0$이다. ✓
 
-    1. **Singleton:** $\{0.5\}$ has probability 0 — the uniform distribution assigns zero mass to any single point.
-    2. **Rational numbers:** $\mathbb{Q} \cap [0, 1]$ has probability 0 — the rationals are countable, and any countable union of singletons has probability $\sum 0 = 0$.
+    **귀납 단계:** 원소가 $k$개인 임의의 집합 $A$에 대해 $|2^A| = 2^k$라고 가정하자. $\Omega$의 원소가 $k + 1$개라 하고 원소 하나 $x$를 고른다. $\Omega$의 모든 부분집합은 $x$를 포함하거나($\Omega \setminus \{x\}$의 부분집합 개수만큼 있으므로 $2^k$개) 포함하지 않는다(역시 $2^k$개). 합치면 $2 \cdot 2^k = 2^{k+1}$이다. $\square$
 
-    **Are they impossible?** No. "Impossible" means $A = \emptyset$ — the event cannot occur. "Probability zero" means $P(A) = 0$, but $A$ may still be non-empty.
+    **멱집합인 이유:** 이산 $\Omega$에서는 모든 부분집합이 가측 사건이기를 원한다. 결과들의 어떤 조합에도 확률을 부여할 수 있어야 하기 때문이다. 멱집합은 이산 상황에서 모든 한 점 집합을 포함하는 유일한 $\sigma$-대수다.
 
-    The distinction matters in continuous probability: when you "draw a uniform random number in $[0, 1]$", the outcome *is* some specific real number. That number has probability zero of being any particular value (including itself!), yet it occurred. The countable-additivity axiom ensures only that countable unions of probability-zero events still have probability zero — uncountable unions can have positive probability (e.g., the uncountable union of all singletons in $[0, 1]$ is $[0, 1]$ with probability 1).
+    연속(비가산) $\Omega$에서는 멱집합이 너무 커서 $\sigma$-가법 측도를 허용하지 못한다. 대신 열린구간이 생성하는 **보렐 $\sigma$-대수**를 쓰는데, 이는 병적인 비가측 집합(비탈리 집합, 바나흐–타르스키)을 배제하면서 합리적인 모든 사건을 포함한다.
 
-    This is why mathematicians distinguish "almost sure" ($P = 1$, the complement has $P = 0$, but the complement need not be empty) from "certain" ($A = \Omega$, the complement is empty). The two coincide for finite $\Omega$ but diverge for continuous $\Omega$.
+---
+
+**연습문제 6.**
+**연속 표본공간과 "확률 0" 사건.** 균등확률을 갖는 $\Omega = [0, 1]$에 대해 확률이 0인 사건의 예를 두 개 들어라. 이들은 불가능한 사건인가?
+
+??? success "연습문제 6 풀이"
+    두 가지 예:
+
+    1. **한 점 집합:** $\{0.5\}$의 확률은 0이다. 균등분포는 어떤 한 점에도 질량을 부여하지 않는다.
+    2. **유리수:** $\mathbb{Q} \cap [0, 1]$의 확률은 0이다. 유리수는 가산이며, 한 점 집합들의 가산 합집합의 확률은 $\sum 0 = 0$이다.
+
+    **불가능한 사건인가?** 아니다. "불가능"은 $A = \emptyset$, 즉 그 사건이 일어날 수 없다는 뜻이다. "확률 0"은 $P(A) = 0$이라는 뜻이며 $A$가 공집합이 아닐 수도 있다.
+
+    이 구분은 연속 확률에서 중요하다. "$[0, 1]$에서 균등하게 무작위한 수를 뽑는다"고 하면 그 결과는 *어떤* 구체적인 실수다. 그 수가 어떤 특정 값(자기 자신을 포함해!)이 될 확률은 0인데도 실제로 일어났다. 가산가법성 공리는 확률 0인 사건들의 가산 합집합의 확률이 여전히 0임을 보장할 뿐이며, 비가산 합집합은 양의 확률을 가질 수 있다(예: $[0, 1]$ 안 모든 한 점 집합의 비가산 합집합은 확률이 1인 $[0, 1]$이다).
+
+    수학자들이 "거의 확실하게"($P = 1$이고 여집합의 $P = 0$이지만 여집합이 공집합일 필요는 없음)와 "확실하게"($A = \Omega$이고 여집합이 공집합)를 구분하는 이유가 이것이다. 유한한 $\Omega$에서는 둘이 일치하지만 연속인 $\Omega$에서는 갈린다.

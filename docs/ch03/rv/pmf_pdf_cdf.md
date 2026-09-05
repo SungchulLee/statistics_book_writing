@@ -1,12 +1,12 @@
-# PMF, PDF, and CDF
+# 확률질량함수, 확률밀도함수, 누적분포함수
 
-## Overview
+## 개요
 
-The three fundamental functions that characterize the distribution of a random variable are the Probability Mass Function (PMF) for discrete variables, the Probability Density Function (PDF) for continuous variables, and the Cumulative Distribution Function (CDF) for both.
+확률변수의 분포를 특징짓는 세 가지 기본 함수는 이산변수에 대한 확률질량함수(PMF), 연속변수에 대한 확률밀도함수(PDF), 그리고 둘 다에 적용되는 누적분포함수(CDF)다.
 
 ---
 
-## PMF and PDF
+## 확률질량함수와 확률밀도함수
 
 $$
 \begin{aligned}
@@ -17,9 +17,9 @@ $$
 
 ---
 
-## Cumulative Distribution Function (CDF)
+## 누적분포함수 (CDF)
 
-The CDF $F(x)$ gives the cumulative probability that the random variable $X$ takes a value less than or equal to $x$:
+누적분포함수 $F(x)$는 확률변수 $X$가 $x$ 이하의 값을 취할 누적 확률을 준다.
 
 $$
 F(x) = \mathbb{P}(X \leq x) =
@@ -29,20 +29,20 @@ F(x) = \mathbb{P}(X \leq x) =
 \end{cases}
 $$
 
-In the brick metaphor: $F(x)$ is the **total weight of all bricks stacked from $-\infty$ up to $x$**.
+벽돌 비유로 말하면 $F(x)$는 **$-\infty$부터 $x$까지 쌓인 모든 벽돌의 총 무게**다.
 
-### Properties of the CDF
+### 누적분포함수의 성질
 
-- $F(x)$ is non-decreasing
+- $F(x)$는 비감소함수다
 - $\lim_{x \to -\infty} F(x) = 0$
 - $\lim_{x \to +\infty} F(x) = 1$
-- For continuous $X$: $F'(x) = f(x)$ (the PDF is the derivative of the CDF)
+- 연속인 $X$에 대해 $F'(x) = f(x)$ (확률밀도함수는 누적분포함수의 도함수다)
 
 ---
 
-## Relationship Between PDF and CDF
+## 확률밀도함수와 누적분포함수의 관계
 
-The PDF and CDF are related by integration and differentiation:
+확률밀도함수와 누적분포함수는 적분과 미분으로 이어져 있다.
 
 $$
 \text{CDF} = \int \text{PDF} \qquad \text{and} \qquad \text{PDF} = \frac{d}{dx} \text{CDF}
@@ -83,17 +83,17 @@ plt.show()
 
 ---
 
-## Percent Point Function (PPF)
+## 분위수함수 (PPF)
 
-The **PPF** is the inverse of the CDF. Given a cumulative probability $p$, the PPF returns the value $x$ such that $P(X \leq x) = p$:
+**분위수함수**는 누적분포함수의 역함수다. 누적확률 $p$가 주어지면 $P(X \leq x) = p$가 되는 값 $x$를 돌려준다.
 
 $$
 \text{PPF}(p) = F^{-1}(p) = \inf\{x : F(x) \geq p\}
 $$
 
-### Example: 95th Percentile of Standard Normal
+### 예: 표준정규분포의 95번째 백분위수
 
-For $Z \sim N(0, 1)$, the value $z$ such that $P(Z \leq z) = 0.95$ is approximately 1.645:
+$Z \sim N(0, 1)$에 대해 $P(Z \leq z) = 0.95$가 되는 값 $z$는 약 1.645다.
 
 ```python
 import scipy.stats as stats
@@ -102,9 +102,9 @@ z_95 = stats.norm(0, 1).ppf(0.95)
 print(f"95th percentile of N(0,1): {z_95:.4f}")
 ```
 
-### Example: 97.5th Percentile
+### 예: 97.5번째 백분위수
 
-The value $z$ such that $P(Z \leq z) = 0.975$ is approximately 1.96, widely used in confidence intervals:
+$P(Z \leq z) = 0.975$가 되는 값 $z$는 약 1.96이며 신뢰구간에 널리 쓰인다.
 
 ```python
 z_975 = stats.norm(0, 1).ppf(0.975)
@@ -113,7 +113,7 @@ print(f"97.5th percentile of N(0,1): {z_975:.4f}")
 
 ---
 
-## CDF and PPF Visualization
+## 누적분포함수와 분위수함수의 시각화
 
 ```python
 import matplotlib.pyplot as plt
@@ -148,9 +148,9 @@ plt.show()
 
 ---
 
-## Generating Random Samples via PPF (Inverse Transform Sampling)
+## 분위수함수로 난수 표본 생성하기 (역변환 표집)
 
-A powerful application of the PPF: if $U \sim \text{Uniform}(0,1)$, then $X = F^{-1}(U)$ has the distribution with CDF $F$:
+분위수함수의 강력한 응용이 있다. $U \sim \text{Uniform}(0,1)$이면 $X = F^{-1}(U)$는 누적분포함수가 $F$인 분포를 따른다.
 
 ```python
 import scipy.stats as stats
@@ -169,7 +169,7 @@ plt.show()
 
 ---
 
-## Example: Normal CDF Computation
+## 예: 정규분포 누적분포함수 계산
 
 ```python
 from scipy import stats
@@ -187,9 +187,9 @@ print(f"P(X ≤ 55) = {prob_55 * 100:.2f}%")
 
 ---
 
-## Empirical PMF/PDF and CDF
+## 경험적 확률질량함수/확률밀도함수와 누적분포함수
 
-In practice, we estimate the PDF and CDF from data using histograms and empirical CDFs:
+실무에서는 히스토그램과 경험적 누적분포함수로 확률밀도함수와 누적분포함수를 자료에서 추정한다.
 
 ```python
 import matplotlib.pyplot as plt
@@ -218,31 +218,31 @@ plt.show()
 
 ---
 
-## Summary: scipy.stats Methods
+## 요약: scipy.stats 메서드
 
-| Method | Description |
+| 메서드 | 설명 |
 |:---|:---|
-| `rvs` | Generate random samples |
-| `pdf` | Compute the PDF |
-| `cdf` | Compute the CDF: $P(X \leq x)$ |
-| `sf` | Survival function: $1 - \text{cdf}(x) = P(X > x)$ |
-| `ppf` | Percent point function (inverse CDF) |
+| `rvs` | 난수 표본 생성 |
+| `pdf` | 확률밀도함수 계산 |
+| `cdf` | 누적분포함수 계산: $P(X \leq x)$ |
+| `sf` | 생존함수: $1 - \text{cdf}(x) = P(X > x)$ |
+| `ppf` | 분위수함수(역 누적분포함수) |
 
 ---
 
-## Key Takeaways
+## 핵심 요약
 
-- The **PMF** gives point probabilities for discrete variables; the **PDF** gives probability density for continuous variables.
-- The **CDF** accumulates probability from $-\infty$ to $x$ and applies to both types.
-- The **PPF** inverts the CDF: given a probability, it returns the corresponding quantile.
-- Integration connects PDF → CDF; differentiation connects CDF → PDF.
+- **확률질량함수**는 이산변수의 점 확률을, **확률밀도함수**는 연속변수의 확률밀도를 준다.
+- **누적분포함수**는 $-\infty$부터 $x$까지 확률을 누적하며 두 유형 모두에 적용된다.
+- **분위수함수**는 누적분포함수를 뒤집는다. 확률이 주어지면 대응하는 분위수를 돌려준다.
+- 적분이 확률밀도함수 → 누적분포함수를, 미분이 누적분포함수 → 확률밀도함수를 잇는다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-$X$ = number of heads in 3 fair coin flips. (a) Write PMF; (b) write CDF; (c) compute $P(1 \le X \le 2)$ two ways.
+**연습문제 1.**
+$X$ = 공정한 동전을 3번 던졌을 때 앞면의 개수. (a) 확률질량함수를 쓰라. (b) 누적분포함수를 쓰라. (c) $P(1 \le X \le 2)$를 두 가지 방법으로 계산하라.
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
     (a) $X \sim \mathrm{Binomial}(3, 1/2)$:
 
     | $x$ | $p(x)$ |
@@ -252,85 +252,89 @@ $X$ = number of heads in 3 fair coin flips. (a) Write PMF; (b) write CDF; (c) co
     | 2 | $3/8$ |
     | 3 | $1/8$ |
 
-    (b) $F(x) = 0, 1/8, 4/8, 7/8, 1$ on intervals $(-\infty, 0), [0, 1), [1, 2), [2, 3), [3, \infty)$.
+    (b) 구간 $(-\infty, 0), [0, 1), [1, 2), [2, 3), [3, \infty)$에서 $F(x) = 0, 1/8, 4/8, 7/8, 1$이다.
 
-    (c) PMF: $p(1) + p(2) = 3/8 + 3/8 = 3/4$. CDF: $F(2) - F(0^-) = 7/8 - 0 = 7/8$. Wait — to use CDF for $P(1 \le X \le 2)$ with integer-valued $X$: $P(1 \le X \le 2) = F(2) - F(1^-) = F(2) - F(0) = 7/8 - 1/8 = 6/8 = 3/4$. Both methods agree.
+    (c) 확률질량함수로: $p(1) + p(2) = 3/8 + 3/8 = 3/4$.
+
+    누적분포함수로: $X$가 정숫값을 가지므로 $P(1 \le X \le 2) = F(2) - F(1^-) = F(2) - F(0) = 7/8 - 1/8 = 6/8 = 3/4$.
+
+    두 방법이 일치한다.
 
 ---
 
-**Exercise 2.**
-For a continuous RV $X$ with PDF $f(x) = c \cdot x^2$ on $[0, 1]$ and 0 elsewhere: (a) find $c$; (b) compute $F(x)$; (c) find $P(0.3 < X < 0.7)$.
+**연습문제 2.**
+$[0, 1]$에서 확률밀도함수가 $f(x) = c \cdot x^2$이고 그 밖에서는 0인 연속확률변수 $X$에 대해 (a) $c$를 구하라. (b) $F(x)$를 계산하라. (c) $P(0.3 < X < 0.7)$을 구하라.
 
-??? success "Solution to Exercise 2"
-    (a) $\int_0^1 c x^2 \, dx = c/3 = 1$, so $c = 3$.
+??? success "연습문제 2 풀이"
+    (a) $\int_0^1 c x^2 \, dx = c/3 = 1$이므로 $c = 3$이다.
 
-    (b) $F(x) = \int_0^x 3 t^2 \, dt = x^3$ for $x \in [0, 1]$; $F(x) = 0$ for $x < 0$; $F(x) = 1$ for $x > 1$.
+    (b) $x \in [0, 1]$에서 $F(x) = \int_0^x 3 t^2 \, dt = x^3$이고, $x < 0$이면 $F(x) = 0$, $x > 1$이면 $F(x) = 1$이다.
 
     (c) $P(0.3 < X < 0.7) = F(0.7) - F(0.3) = 0.343 - 0.027 = 0.316$.
 
 ---
 
-**Exercise 3.**
-**Differentiate CDF to PDF.** For a continuous $X$ with $F(x) = 1 - e^{-\lambda x}$ for $x \ge 0$, compute the PDF $f(x)$. What distribution is this?
+**연습문제 3.**
+**누적분포함수를 미분해 확률밀도함수 구하기.** $x \ge 0$에서 $F(x) = 1 - e^{-\lambda x}$인 연속확률변수 $X$에 대해 확률밀도함수 $f(x)$를 계산하라. 이것은 어떤 분포인가?
 
-??? success "Solution to Exercise 3"
-    $f(x) = F'(x) = \lambda e^{-\lambda x}$ for $x \ge 0$.
+??? success "연습문제 3 풀이"
+    $x \ge 0$에서 $f(x) = F'(x) = \lambda e^{-\lambda x}$이다.
 
-    This is the **Exponential distribution** with rate $\lambda$. Properties:
-    - Mean $1/\lambda$, variance $1/\lambda^2$.
-    - Memoryless: $P(X > s + t \mid X > s) = P(X > t)$.
-    - Waiting time between events in a Poisson process with rate $\lambda$.
+    이는 비율 $\lambda$인 **지수분포**다. 성질은 다음과 같다.
+    - 평균 $1/\lambda$, 분산 $1/\lambda^2$.
+    - 무기억성: $P(X > s + t \mid X > s) = P(X > t)$.
+    - 비율이 $\lambda$인 포아송 과정에서 사건 사이의 대기시간.
 
 ---
 
-**Exercise 4.**
-**Inverse transform sampling.** Show that if $U \sim \mathrm{Uniform}(0, 1)$ and $F$ is a continuous strictly-increasing CDF, then $X = F^{-1}(U)$ has CDF $F$.
+**연습문제 4.**
+**역변환 표집.** $U \sim \mathrm{Uniform}(0, 1)$이고 $F$가 연속인 순증가 누적분포함수이면 $X = F^{-1}(U)$의 누적분포함수가 $F$임을 보여라.
 
-??? success "Solution to Exercise 4"
-    Compute $P(X \le x) = P(F^{-1}(U) \le x)$. Apply $F$ to both sides (which is monotone increasing, preserving inequalities):
+??? success "연습문제 4 풀이"
+    $P(X \le x) = P(F^{-1}(U) \le x)$를 계산한다. 양변에 (증가함수라 부등호를 보존하는) $F$를 적용하면
 
     $$
     P(F^{-1}(U) \le x) = P(F(F^{-1}(U)) \le F(x)) = P(U \le F(x)) = F(x)
     $$
 
-    using $F \circ F^{-1} = \mathrm{id}$ for invertible $F$ and the uniform's CDF being $P(U \le u) = u$ for $u \in [0, 1]$.
+    이다. 여기서 가역인 $F$에 대해 $F \circ F^{-1} = \mathrm{id}$이고, 균등분포의 누적분포함수가 $u \in [0, 1]$에 대해 $P(U \le u) = u$라는 사실을 썼다.
 
-    So $X$ has CDF $F$. $\square$
+    따라서 $X$의 누적분포함수는 $F$다. $\square$
 
-    **Use:** to generate samples from any distribution with known $F^{-1}$, draw $U$ uniformly and apply $F^{-1}$. This is how many random-number-generation routines work internally for non-trivial distributions.
-
----
-
-**Exercise 5.**
-**Quantile vs. percentile vs. PPF.** Clarify these three terms with examples. State the relationship between the PPF and the survival function.
-
-??? success "Solution to Exercise 5"
-    **Quantile:** for $p \in [0, 1]$, the $p$-th quantile $q_p = F^{-1}(p)$ is the value such that $P(X \le q_p) = p$. Quantile = PPF evaluation.
-
-    **Percentile:** the $p$-percentile for $p \in [0, 100]$ is $q_{p/100}$. Just a unit convention — "95th percentile" means $q_{0.95}$.
-
-    **PPF (Percent Point Function):** the inverse CDF function itself, $\mathrm{PPF}(p) = F^{-1}(p)$.
-
-    **Survival function:** $S(x) = 1 - F(x) = P(X > x)$. The inverse survival function (ISF) gives "the value above which a given probability mass lies": $\mathrm{ISF}(p) = S^{-1}(p) = F^{-1}(1 - p) = \mathrm{PPF}(1 - p)$.
-
-    In scipy.stats: `dist.ppf(0.95)` gives the 95th percentile; `dist.isf(0.05)` gives the value with 5% upper tail probability, which equals the 95th percentile. The ISF avoids numerical loss-of-precision when computing tail quantiles ($1 - F$ near 0 has poor precision; using $S$ directly is better).
+    **용도:** $F^{-1}$을 아는 어떤 분포에서든 표본을 생성하려면 $U$를 균등하게 뽑아 $F^{-1}$을 적용하면 된다. 자명하지 않은 분포에 대해 여러 난수 생성 루틴이 내부적으로 이렇게 작동한다.
 
 ---
 
-**Exercise 6.**
-**Improper integrals.** A proposed PDF is $f(x) = 1/(x \ln^2 x)$ for $x \ge 2$. Does this define a valid distribution? Compute $\mathbb{E}[X]$.
+**연습문제 5.**
+**분위수, 백분위수, 분위수함수.** 이 세 용어를 예를 들어 명확히 구분하라. 분위수함수와 생존함수의 관계를 진술하라.
 
-??? success "Solution to Exercise 6"
-    **Normalization:** $\int_2^\infty \frac{1}{x \ln^2 x} dx$. Let $u = \ln x$, $du = dx/x$:
+??? success "연습문제 5 풀이"
+    **분위수(quantile):** $p \in [0, 1]$에 대해 $p$-분위수 $q_p = F^{-1}(p)$는 $P(X \le q_p) = p$가 되는 값이다. 분위수 = 분위수함수의 값.
+
+    **백분위수(percentile):** $p \in [0, 100]$에 대한 $p$-백분위수는 $q_{p/100}$이다. 단위 관례일 뿐이다. "95번째 백분위수"는 $q_{0.95}$를 뜻한다.
+
+    **분위수함수(PPF):** 역 누적분포함수 그 자체, 즉 $\mathrm{PPF}(p) = F^{-1}(p)$.
+
+    **생존함수:** $S(x) = 1 - F(x) = P(X > x)$. 역생존함수(ISF)는 "주어진 확률 질량이 그 위에 놓이는 값"을 준다: $\mathrm{ISF}(p) = S^{-1}(p) = F^{-1}(1 - p) = \mathrm{PPF}(1 - p)$.
+
+    scipy.stats에서 `dist.ppf(0.95)`는 95번째 백분위수를 주고, `dist.isf(0.05)`는 위쪽 꼬리 확률이 5%인 값을 주는데 이는 95번째 백분위수와 같다. 꼬리 분위수를 계산할 때 ISF가 수치적 정밀도 손실을 피해 준다($1 - F$가 0에 가까우면 정밀도가 나쁘므로 $S$를 직접 쓰는 편이 낫다).
+
+---
+
+**연습문제 6.**
+**이상적분.** $x \ge 2$에서 $f(x) = 1/(x \ln^2 x)$을 확률밀도함수로 제안한다. 이것이 타당한 분포를 정의하는가? $\mathbb{E}[X]$를 계산하라.
+
+??? success "연습문제 6 풀이"
+    **정규화:** $\int_2^\infty \frac{1}{x \ln^2 x} dx$를 계산한다. $u = \ln x$, $du = dx/x$로 치환하면
 
     $$
     \int_{\ln 2}^\infty \frac{1}{u^2} du = \left[-\frac{1}{u}\right]_{\ln 2}^\infty = \frac{1}{\ln 2} \approx 1.443
     $$
 
-    So $f(x)$ is **not** normalized. Define $c = \ln 2$, redefine $f(x) = c/(x \ln^2 x)$, then $\int f = 1$ and we have a valid PDF.
+    이다. 따라서 $f(x)$는 정규화되어 있지 **않다**. $c = \ln 2$로 두고 $f(x) = c/(x \ln^2 x)$로 다시 정의하면 $\int f = 1$이 되어 타당한 확률밀도함수를 얻는다.
 
-    **Expectation:** $\mathbb{E}[X] = \int_2^\infty x \cdot \frac{c}{x \ln^2 x} dx = c \int_2^\infty \frac{1}{\ln^2 x} dx$.
+    **기댓값:** $\mathbb{E}[X] = \int_2^\infty x \cdot \frac{c}{x \ln^2 x} dx = c \int_2^\infty \frac{1}{\ln^2 x} dx$이다.
 
-    The integrand decays like $1/\ln^2 x$, which is *not* integrable at infinity (the integral diverges). So $\mathbb{E}[X] = \infty$ — the distribution has a finite normalization but infinite mean.
+    피적분함수가 $1/\ln^2 x$처럼 감쇠하는데 이는 무한대에서 적분 가능하지 *않다*(적분이 발산한다). 따라서 $\mathbb{E}[X] = \infty$로, 이 분포는 정규화는 유한하지만 평균은 무한하다.
 
-    **Lesson:** "valid distribution" (CDF properties hold) is a weaker requirement than "finite expectation". Heavy-tailed distributions like this one need quantile-based summaries instead of mean-based ones. This was the topic of Exercise 5 in the LLN page: distributions with infinite mean break the LLN.
+    **교훈:** "타당한 분포"(누적분포함수의 성질이 성립함)는 "유한한 기댓값"보다 약한 요건이다. 이런 꼬리가 두꺼운 분포에는 평균 기반 요약 대신 분위수 기반 요약이 필요하다. 이것이 큰수의 법칙 절 연습문제 5의 주제였다. 평균이 무한한 분포는 큰수의 법칙을 깨뜨린다.

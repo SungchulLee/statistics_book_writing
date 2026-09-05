@@ -1,20 +1,20 @@
-# Bayes' Theorem
+# 베이즈 정리
 
-## Overview
+## 개요
 
-**Bayes' theorem** provides a systematic way to update probabilities when new evidence is observed. It reverses the direction of conditioning: given $P(B \mid A)$, it computes $P(A \mid B)$. This theorem is the foundation of Bayesian statistics and has widespread applications in medical diagnosis, spam filtering, machine learning, and finance.
+**베이즈 정리**는 새로운 증거를 관측했을 때 확률을 갱신하는 체계적인 방법을 제공한다. 조건의 방향을 뒤집어, $P(B \mid A)$가 주어졌을 때 $P(A \mid B)$를 계산한다. 이 정리는 베이즈 통계의 토대이며 의학 진단, 스팸 필터링, 기계학습, 금융에 널리 응용된다.
 
 ---
 
-## Statement
+## 진술
 
-For events $A$ and $B$ with $P(B) > 0$:
+$P(B) > 0$인 사건 $A$와 $B$에 대해
 
 $$
 P(A \mid B) = \frac{P(B \mid A) \cdot P(A)}{P(B)}
 $$
 
-Each term has a specific name:
+이다. 각 항에는 고유한 이름이 있다.
 
 $$
 \underbrace{P(A \mid B)}_{\text{Posterior}} = \frac{\overbrace{P(B \mid A)}^{\text{Likelihood}} \cdot \overbrace{P(A)}^{\text{Prior}}}{\underbrace{P(B)}_{\text{Evidence}}}
@@ -22,21 +22,21 @@ $$
 
 ---
 
-## Derivation
+## 유도
 
-Starting from the definition of conditional probability:
+조건부확률의 정의에서 출발하면
 
 $$
 P(A \mid B) = \frac{P(A \cap B)}{P(B)} = \frac{P(B \mid A) \cdot P(A)}{P(B)}
 $$
 
-The denominator is often expanded using the law of total probability:
+이다. 분모는 흔히 전확률의 법칙으로 전개한다.
 
 $$
 P(B) = P(B \mid A) \cdot P(A) + P(B \mid A^c) \cdot P(A^c)
 $$
 
-This gives the expanded form:
+그러면 전개된 형태를 얻는다.
 
 $$
 P(A \mid B) = \frac{P(B \mid A) \cdot P(A)}{P(B \mid A) \cdot P(A) + P(B \mid A^c) \cdot P(A^c)}
@@ -44,21 +44,23 @@ $$
 
 ---
 
-## General Form (Multiple Hypotheses)
+## 일반형 (여러 가설)
 
-If $A_1, A_2, \ldots, A_n$ partition the sample space $\Omega$:
+$A_1, A_2, \ldots, A_n$이 표본공간 $\Omega$를 분할하면
 
 $$
 P(A_i \mid B) = \frac{P(B \mid A_i) \cdot P(A_i)}{\sum_{j=1}^{n} P(B \mid A_j) \cdot P(A_j)}
 $$
 
+이다.
+
 ---
 
-## Examples
+## 예제
 
-### Example: Medical Diagnosis
+### 예: 의학 진단
 
-A disease affects 1% of a population. A test has 95% sensitivity and 90% specificity. If a person tests positive, what is the probability they have the disease?
+어떤 질병이 인구의 1%에 발생한다. 검사의 민감도는 95%, 특이도는 90%다. 어떤 사람이 양성 판정을 받았다면 실제로 그 질병이 있을 확률은 얼마인가?
 
 $$
 \begin{aligned}
@@ -68,11 +70,11 @@ P(\text{disease} \mid \text{positive}) &= \frac{P(\text{positive} \mid \text{dis
 \end{aligned}
 $$
 
-Despite the seemingly accurate test, a positive result only yields an 8.76% probability of actually having the disease. This counterintuitive result arises because the disease is rare—most positives are false positives.
+꽤 정확해 보이는 검사인데도 양성 결과가 실제로 질병이 있을 확률은 8.76%에 불과하다. 이 반직관적인 결과는 질병이 드물어서 양성 대부분이 거짓양성이기 때문에 생긴다.
 
-### Example: Drawing Balls from Urns
+### 예: 항아리에서 공 뽑기
 
-Two urns: Urn A has 3 red and 7 blue balls; Urn B has 8 red and 2 blue balls. An urn is chosen at random (50/50), and a red ball is drawn. What is the probability it came from Urn B?
+항아리 두 개가 있다. A 항아리에는 빨간 공 3개와 파란 공 7개가, B 항아리에는 빨간 공 8개와 파란 공 2개가 있다. 항아리를 무작위로(50/50) 골라 빨간 공을 뽑았다. 그것이 B 항아리에서 나왔을 확률은 얼마인가?
 
 $$
 \begin{aligned}
@@ -81,9 +83,9 @@ P(B \mid \text{red}) &= \frac{P(\text{red} \mid B) \cdot P(B)}{P(\text{red} \mid
 \end{aligned}
 $$
 
-### Example: Spam Filtering
+### 예: 스팸 필터링
 
-Suppose 40% of emails are spam. The word "free" appears in 80% of spam emails and 10% of non-spam emails. Given an email contains "free," what is the probability it is spam?
+이메일의 40%가 스팸이라고 하자. "free"라는 단어는 스팸 이메일의 80%, 비스팸 이메일의 10%에 나타난다. 어떤 이메일에 "free"가 들어 있다면 그것이 스팸일 확률은 얼마인가?
 
 $$
 P(\text{spam} \mid \text{"free"}) = \frac{0.80 \times 0.40}{0.80 \times 0.40 + 0.10 \times 0.60} = \frac{0.32}{0.38} \approx 0.842
@@ -91,7 +93,7 @@ $$
 
 ---
 
-## Python Exploration
+## 파이썬으로 살펴보기
 
 ```python
 import numpy as np
@@ -146,115 +148,119 @@ bayes_update_visualization()
 
 ---
 
-## Key Takeaways
+## 핵심 요약
 
-- Bayes' theorem **reverses conditioning**: it computes $P(A \mid B)$ from $P(B \mid A)$.
-- The **prior** reflects initial beliefs; the **posterior** reflects updated beliefs after observing evidence.
-- Low base rates (rare events) can dominate: even with a good test, most positives may be false positives.
-- Bayes' theorem is the foundation of Bayesian inference, where parameters are treated as random variables with prior distributions updated by data.
+- 베이즈 정리는 **조건의 방향을 뒤집는다**. $P(B \mid A)$로부터 $P(A \mid B)$를 계산한다.
+- **사전확률**은 초기 믿음을, **사후확률**은 증거를 관측한 뒤 갱신된 믿음을 반영한다.
+- 낮은 기저율(드문 사건)이 지배할 수 있다. 좋은 검사를 쓰더라도 양성 대부분이 거짓양성일 수 있다.
+- 베이즈 정리는 모수를 사전분포를 갖는 확률변수로 다루고 자료로 갱신하는 베이즈 추론의 토대다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-A test for a rare disease has prevalence $P(D) = 0.001$, sensitivity $P(+ \mid D) = 0.99$, specificity $P(- \mid D^c) = 0.95$. (a) Compute $P(D \mid +)$. (b) Explain why it is so low. (c) Repeat with prevalence 0.05.
+**연습문제 1.**
+어떤 희귀질환 검사의 유병률이 $P(D) = 0.001$, 민감도가 $P(+ \mid D) = 0.99$, 특이도가 $P(- \mid D^c) = 0.95$다. (a) $P(D \mid +)$를 계산하라. (b) 왜 그렇게 낮은지 설명하라. (c) 유병률이 0.05일 때 다시 계산하라.
 
-??? success "Solution to Exercise 1"
-    (a) $P(+) = 0.99 \cdot 0.001 + 0.05 \cdot 0.999 = 0.00099 + 0.04995 = 0.05094$. So $P(D \mid +) = 0.00099/0.05094 \approx 0.019$ (about 1.9%).
+??? success "연습문제 1 풀이"
+    (a) $P(+) = 0.99 \cdot 0.001 + 0.05 \cdot 0.999 = 0.00099 + 0.04995 = 0.05094$이므로 $P(D \mid +) = 0.00099/0.05094 \approx 0.019$(약 1.9%)이다.
 
-    (b) The disease is rare; the false-positive *rate* (5%) applied to the 999 healthy per 1000 produces $\approx 50$ false positives — vastly more than the $\approx 1$ true positive. The pool of positives is dominated by false positives.
+    (b) 질병이 드물다. 1000명 중 건강한 999명에게 5%의 거짓양성 *비율*이 적용되면 거짓양성이 $\approx 50$명 생기는데, 이는 참양성 $\approx 1$명보다 훨씬 많다. 양성 집단이 거짓양성으로 뒤덮인다.
 
-    (c) With prevalence 0.05: $P(+) = 0.99 \cdot 0.05 + 0.05 \cdot 0.95 = 0.097$. $P(D \mid +) = 0.0495/0.097 \approx 0.510$. The posterior jumps from 2% to 51% — a stark demonstration of how strongly the prior governs the posterior, even when the likelihood ratio is identical.
-
----
-
-**Exercise 2.**
-A factory has 3 machines producing 50%, 30%, 20% of output with defect rates 2%, 3%, 5%. (a) Compute the overall defect rate. (b) Given a defective item, what's the probability it came from Machine 3?
-
-??? success "Solution to Exercise 2"
-    (a) $P(D) = 0.02 \cdot 0.50 + 0.03 \cdot 0.30 + 0.05 \cdot 0.20 = 0.010 + 0.009 + 0.010 = 0.029$. The overall defect rate is 2.9%.
-
-    (b) $P(M_3 \mid D) = (0.05 \cdot 0.20)/0.029 = 0.010/0.029 \approx 0.345$. Machine 3 produces only 20% of output but contributes 34.5% of defects, because its defect rate is 2.5× the average.
+    (c) 유병률이 0.05이면 $P(+) = 0.99 \cdot 0.05 + 0.05 \cdot 0.95 = 0.097$이고 $P(D \mid +) = 0.0495/0.097 \approx 0.510$이다. 사후확률이 2%에서 51%로 뛴다. 가능도비가 같아도 사전확률이 사후확률을 얼마나 강하게 좌우하는지 극명하게 보여준다.
 
 ---
 
-**Exercise 3.**
-**Prove Bayes' theorem** from the definition of conditional probability. Then state the **odds form**: $P(H \mid E)/P(H^c \mid E) = [P(E \mid H)/P(E \mid H^c)] \cdot [P(H)/P(H^c)]$.
+**연습문제 2.**
+어떤 공장에 기계 세 대가 있어 생산량의 50%, 30%, 20%를 만들고 불량률은 각각 2%, 3%, 5%다. (a) 전체 불량률을 계산하라. (b) 불량품 하나가 주어졌을 때 그것이 3번 기계에서 나왔을 확률은 얼마인가?
 
-??? success "Solution to Exercise 3"
-    From conditional probability, $P(A \mid B) = P(A \cap B)/P(B)$ and $P(B \mid A) = P(A \cap B)/P(A)$. Therefore $P(A \cap B) = P(A \mid B) P(B) = P(B \mid A) P(A)$, giving
+??? success "연습문제 2 풀이"
+    (a) $P(D) = 0.02 \cdot 0.50 + 0.03 \cdot 0.30 + 0.05 \cdot 0.20 = 0.010 + 0.009 + 0.010 = 0.029$이다. 전체 불량률은 2.9%다.
+
+    (b) $P(M_3 \mid D) = (0.05 \cdot 0.20)/0.029 = 0.010/0.029 \approx 0.345$이다. 3번 기계는 생산량의 20%만 만들지만 불량의 34.5%를 낸다. 불량률이 평균의 2.5배이기 때문이다.
+
+---
+
+**연습문제 3.**
+조건부확률의 정의에서 **베이즈 정리를 증명하라**. 그런 다음 **승산 형태**를 진술하라: $P(H \mid E)/P(H^c \mid E) = [P(E \mid H)/P(E \mid H^c)] \cdot [P(H)/P(H^c)]$.
+
+??? success "연습문제 3 풀이"
+    조건부확률로부터 $P(A \mid B) = P(A \cap B)/P(B)$이고 $P(B \mid A) = P(A \cap B)/P(A)$이다. 따라서 $P(A \cap B) = P(A \mid B) P(B) = P(B \mid A) P(A)$이고
 
     $$
     P(A \mid B) = \frac{P(B \mid A) P(A)}{P(B)}
     $$
 
-    **Odds form:** divide Bayes for $H$ by Bayes for $H^c$ at the same $E$:
+    를 얻는다.
+
+    **승산 형태:** 같은 $E$에 대해 $H$의 베이즈 식을 $H^c$의 베이즈 식으로 나누면
 
     $$
     \frac{P(H \mid E)}{P(H^c \mid E)} = \frac{P(E \mid H) P(H) / P(E)}{P(E \mid H^c) P(H^c) / P(E)} = \underbrace{\frac{P(E \mid H)}{P(E \mid H^c)}}_{\text{likelihood ratio}} \cdot \underbrace{\frac{P(H)}{P(H^c)}}_{\text{prior odds}}
     $$
 
-    **Posterior odds = likelihood ratio × prior odds.** This form avoids computing $P(E)$ and is the workhorse of Bayesian inference, evidence assessment in courts, and medical decision-making.
+    이다.
+
+    **사후승산 = 가능도비 × 사전승산.** 이 형태는 $P(E)$를 계산할 필요가 없어 베이즈 추론, 법정에서의 증거 평가, 의학적 의사결정의 일꾼이 된다.
 
 ---
 
-**Exercise 4.**
-A coin is **either** fair ($P = 0.5$) **or** biased ($P = 0.7$ for heads). Equal prior. You observe 8 heads in 10 flips. Compute the posterior probability the coin is biased.
+**연습문제 4.**
+어떤 동전은 공정하거나($P = 0.5$) **아니면** 앞면 확률이 $P = 0.7$로 치우쳐 있다. 사전확률은 같다. 10번 던져 앞면이 8번 나오는 것을 관측했다. 이 동전이 치우쳐 있을 사후확률을 계산하라.
 
-??? success "Solution to Exercise 4"
-    Let $B$ = biased, $F$ = fair, $E$ = observe 8 heads in 10 flips.
+??? success "연습문제 4 풀이"
+    $B$ = 치우침, $F$ = 공정, $E$ = 10번 중 앞면 8번 관측이라 하자.
 
-    Likelihoods: $P(E \mid F) = \binom{10}{8} 0.5^8 \cdot 0.5^2 = 45 \cdot (0.5)^{10} \approx 0.0439$.
+    가능도: $P(E \mid F) = \binom{10}{8} 0.5^8 \cdot 0.5^2 = 45 \cdot (0.5)^{10} \approx 0.0439$.
 
     $P(E \mid B) = \binom{10}{8} 0.7^8 \cdot 0.3^2 = 45 \cdot 0.0576 \cdot 0.09 \approx 0.2335$.
 
-    By Bayes (or odds form):
+    베이즈(또는 승산 형태)에 의해
 
     $$
     P(B \mid E) = \frac{P(E \mid B) P(B)}{P(E \mid B) P(B) + P(E \mid F) P(F)} = \frac{0.2335 \cdot 0.5}{0.2335 \cdot 0.5 + 0.0439 \cdot 0.5} = \frac{0.2335}{0.2774} \approx 0.842
     $$
 
-    Roughly 84% posterior probability the coin is biased.
+    이다. 동전이 치우쳐 있을 사후확률이 약 84%다.
 
-    Note the odds form gives the same result directly: prior odds 1:1, likelihood ratio $0.2335/0.0439 \approx 5.32$, posterior odds 5.32:1, posterior probability $5.32/(5.32 + 1) \approx 0.842$.
+    승산 형태로도 같은 결과를 바로 얻는다. 사전승산 1:1, 가능도비 $0.2335/0.0439 \approx 5.32$, 사후승산 5.32:1, 사후확률 $5.32/(5.32 + 1) \approx 0.842$.
 
 ---
 
-**Exercise 5.**
-**Sequential updating.** A new piece of evidence $E_2$ arrives after $E_1$. Show that the Bayesian update after observing $E_1$ and then $E_2$ (when treated as conditionally independent given the hypothesis) is mathematically equivalent to updating once with their joint likelihood.
+**연습문제 5.**
+**순차적 갱신.** $E_1$ 다음에 새로운 증거 $E_2$가 도착한다. $E_1$을 관측한 뒤 $E_2$를 관측하는 베이즈 갱신이 (가설이 주어졌을 때 조건부 독립으로 다룰 때) 결합 가능도로 한 번에 갱신하는 것과 수학적으로 동등함을 보여라.
 
-??? success "Solution to Exercise 5"
-    Let posterior after $E_1$: $P(H \mid E_1) \propto P(E_1 \mid H) P(H)$.
+??? success "연습문제 5 풀이"
+    $E_1$ 이후의 사후확률: $P(H \mid E_1) \propto P(E_1 \mid H) P(H)$.
 
-    After observing $E_2$, treat the post-$E_1$ posterior as the new prior:
+    $E_2$를 관측한 뒤에는 $E_1$ 이후의 사후확률을 새로운 사전확률로 삼는다.
 
     $$
     P(H \mid E_1, E_2) \propto P(E_2 \mid H, E_1) P(H \mid E_1)
     $$
 
-    Assuming conditional independence $P(E_2 \mid H, E_1) = P(E_2 \mid H)$:
+    조건부 독립 $P(E_2 \mid H, E_1) = P(E_2 \mid H)$를 가정하면
 
     $$
     P(H \mid E_1, E_2) \propto P(E_2 \mid H) P(E_1 \mid H) P(H) = P(E_1, E_2 \mid H) P(H)
     $$
 
-    which is exactly Bayes applied to the joint likelihood. So sequential and batch updating give the same posterior — the Bayesian framework is internally consistent under conditional independence.
+    인데, 이것이 바로 결합 가능도에 베이즈를 적용한 것이다. 따라서 순차적 갱신과 일괄 갱신이 같은 사후확률을 준다. 조건부 독립 아래에서 베이즈 틀은 내적으로 일관적이다.
 
-    This justifies online updating: process data one observation at a time, no need to recompute from scratch. The post-update posterior is sufficient information.
+    이것이 온라인 갱신을 정당화한다. 관측값을 하나씩 처리하면 되고 처음부터 다시 계산할 필요가 없다. 갱신 후의 사후확률이 충분한 정보다.
 
 ---
 
-**Exercise 6.**
-**Base rate neglect.** The **defendant's fallacy** states: "The prosecutor's DNA matched the defendant's; the chance of a random match is 1 in a million. So the defendant is guilty beyond reasonable doubt." Why is this argument flawed, and how does Bayes' theorem expose the error?
+**연습문제 6.**
+**기저율 무시.** **피고인의 오류**는 이렇게 주장한다. "검찰의 DNA가 피고인의 것과 일치했다. 무작위로 일치할 확률은 100만분의 1이다. 따라서 피고인은 합리적 의심을 넘어 유죄다." 이 논증이 왜 잘못되었으며 베이즈 정리는 그 오류를 어떻게 드러내는가?
 
-??? success "Solution to Exercise 6"
-    The argument confuses $P(\text{match} \mid \text{innocent})$ (1 in 1 million) with $P(\text{innocent} \mid \text{match})$ — the inverse conditional that actually matters.
+??? success "연습문제 6 풀이"
+    이 논증은 $P(\text{일치} \mid \text{무죄})$(100만분의 1)를 정작 중요한 역방향 조건인 $P(\text{무죄} \mid \text{일치})$와 혼동한다.
 
-    **Bayes' theorem reveals the gap.** Let $G$ = guilty, $M$ = DNA match. Suppose the suspect was identified from a database of $10^6$ people (or, equivalently, the prior is that the defendant is one of $10^6$ candidates with prior $P(G) = 10^{-6}$). Then $P(M \mid G^c) = 10^{-6}$, $P(M \mid G) \approx 1$. By Bayes,
+    **베이즈 정리가 그 간극을 드러낸다.** $G$ = 유죄, $M$ = DNA 일치라 하자. 용의자가 $10^6$명 규모의 데이터베이스에서 특정되었다고 하자(동등하게, 피고인이 $10^6$명의 후보 중 하나라는 사전확률 $P(G) = 10^{-6}$). 그러면 $P(M \mid G^c) = 10^{-6}$, $P(M \mid G) \approx 1$이다. 베이즈에 의해
 
     $$
     P(G \mid M) = \frac{P(M \mid G) P(G)}{P(M \mid G) P(G) + P(M \mid G^c) P(G^c)} = \frac{1 \cdot 10^{-6}}{1 \cdot 10^{-6} + 10^{-6} \cdot (1 - 10^{-6})} \approx 0.5
     $$
 
-    Only about 50% probability of guilt — far from "beyond reasonable doubt." The 1-in-a-million figure ignores the prior odds; once the prior odds are incorporated, the posterior is much weaker. Additional evidence beyond the DNA match is needed to push the posterior to a confident verdict.
+    이다. 유죄일 확률이 약 50%에 불과하여 "합리적 의심을 넘어"와는 거리가 멀다. 100만분의 1이라는 수치는 사전승산을 무시한다. 사전승산을 반영하고 나면 사후확률은 훨씬 약해진다. 확신에 찬 평결에 이르려면 DNA 일치 외의 추가 증거가 필요하다.
 
-    This is the same error pattern as the rare-disease example: forgetting the base rate. Real-world juries and policy-makers commit this error routinely. The Bayesian framework provides the correction.
+    이는 희귀질환 예제와 같은 오류 유형이다. 기저율을 잊는 것이다. 현실의 배심원과 정책결정자가 이 오류를 일상적으로 범한다. 베이즈 틀이 그 교정을 제공한다.
