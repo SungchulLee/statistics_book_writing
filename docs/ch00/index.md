@@ -1,39 +1,39 @@
-# Prerequisites
+# 선수 지식
 
-This chapter establishes the mathematical and computational foundations needed for the rest of the book, covering core math, Python tools, and the linear algebra of square matrices connected to statistical theory.
+이 장은 책의 나머지 부분에 필요한 수학적·계산적 토대를 세운다. 핵심 수학, 파이썬 도구, 그리고 통계 이론과 연결되는 정사각행렬의 선형대수를 다룬다.
 
-## Chapter Structure
+## 장의 구성
 
-### 0.1 Mathematical Background
+### 0.1 수학적 배경
 
-- **Sets, Functions, and Logic** -- Propositional logic, set operations, functions, and quantifiers.
-- **Sequences, Limits, and Asymptotics** -- Convergence, series, and asymptotic notation for the LLN and CLT.
-- **Linear Algebra Notation** -- Vector/matrix notation, design matrices, rank, inverse, and determinant.
+- **집합, 함수, 논리** — 명제논리, 집합 연산, 함수, 한정기호.
+- **수열, 극한, 점근** — 큰수의 법칙과 중심극한정리를 위한 수렴, 급수, 점근 표기.
+- **선형대수 표기** — 벡터/행렬 표기, 계획행렬, 계수, 역행렬, 행렬식.
 
-### 0.2 Computational Tools
+### 0.2 계산 도구
 
-- **Python and Jupyter Basics** -- Distribution setup, package management, and core language features.
-- **NumPy Arrays** -- Array creation, vectorized arithmetic, broadcasting, and indexing.
-- **Data Handling with pandas** -- Series, DataFrame, loading, cleaning, grouping, and summarization.
-- **Visualization with Matplotlib** -- Figure-Axes model, common plot types, and customization.
+- **파이썬과 주피터 기초** — 배포판 설치, 패키지 관리, 언어의 핵심 기능.
+- **NumPy 배열** — 배열 생성, 벡터화 연산, 브로드캐스팅, 인덱싱.
+- **pandas로 자료 다루기** — Series, DataFrame, 불러오기, 정제, 그룹화, 요약.
+- **Matplotlib으로 시각화하기** — Figure-Axes 모형, 자주 쓰는 그림 유형, 사용자화.
 
-### 0.3 Square Matrices
+### 0.3 정사각행렬
 
-- **Similar Matrices** -- Similarity and its invariants (eigenvalues, trace, determinant).
-- **Diagonalizable Matrices** -- Eigendecomposition and conditions for diagonalizability.
-- **Jordan Canonical Form** -- Extension to non-diagonalizable matrices via Jordan blocks.
-- **Trace and Eigenvalues** -- The trace equals the sum of eigenvalues.
-- **Idempotent Matrices** -- Matrices with eigenvalues 0 or 1, foundation for projections.
-- **Symmetric Matrices** -- Spectral theorem: real eigenvalues, orthogonal eigenvectors.
-- **Positive Definite Matrices** -- Quadratic form and eigenvalue characterizations.
-- **Gram Matrices** -- Properties of X'X and its role in least squares.
-- **Projection and Orthogonal Projection Matrices** -- Hat matrix and regression geometry.
+- **닮은 행렬** — 닮음과 그 불변량(고윳값, 대각합, 행렬식).
+- **대각화 가능 행렬** — 고유분해와 대각화 가능성의 조건.
+- **조르당 표준형** — 조르당 블록을 통한 대각화 불가능 행렬로의 확장.
+- **대각합과 고윳값** — 대각합은 고윳값의 합과 같다.
+- **멱등행렬** — 고윳값이 0 또는 1인 행렬, 사영의 토대.
+- **대칭행렬** — 스펙트럼 정리: 실수 고윳값과 직교 고유벡터.
+- **양정치행렬** — 이차형식에 의한 특성화와 고윳값에 의한 특성화.
+- **그람 행렬** — X'X의 성질과 최소제곱에서의 역할.
+- **사영행렬과 직교사영행렬** — 모자 행렬과 회귀의 기하학.
 
-### 0.4 Linear Algebra and Statistics
+### 0.4 선형대수와 통계
 
-- **Chi-Squared and Quadratic Forms** -- Quadratic forms of normal vectors yield chi-squared distributions.
-- **Sampling Distributions (Simple and General OLS)** -- Exact distributions of OLS estimators.
+- **카이제곱분포와 이차형식** — 정규벡터의 이차형식은 카이제곱분포를 낳는다.
+- **표본분포(단순 및 일반 최소제곱)** — 최소제곱추정량의 정확한 분포.
 
-### 0.5 Exercises
+### 0.5 연습문제
 
-Practice problems covering mathematical foundations, matrix algebra, and their statistical connections.
+수학적 토대, 행렬대수, 그리고 이들의 통계적 연결을 다루는 연습문제.

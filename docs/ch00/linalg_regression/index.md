@@ -1,22 +1,22 @@
-# Appendix A: Linear Algebra for Regression
+# 부록 A: 회귀를 위한 선형대수
 
-This appendix provides the linear algebra foundations needed for understanding regression analysis. We cover special matrix types---diagonal, idempotent, symmetric, positive definite, and projection matrices---and connect matrix theory to statistical results through quadratic forms and sampling distributions.
+이 부록은 회귀분석을 이해하는 데 필요한 선형대수의 토대를 제공한다. 대각행렬, 멱등행렬, 대칭행렬, 양정치행렬, 사영행렬 같은 특수한 행렬 유형을 다루고, 이차형식과 표본분포를 통해 행렬 이론을 통계적 결과와 연결한다.
 
-## Learning Objectives
+## 학습 목표
 
-After completing this appendix, you should be able to:
+이 부록을 마치면 다음을 할 수 있어야 한다.
 
-- Identify and work with special matrix types that arise in regression
-- Compute and interpret projection matrices and their role in least squares
-- Connect quadratic forms to chi-squared and $F$ distributions
-- Apply these tools to derive properties of regression estimators
+- 회귀에서 등장하는 특수한 행렬 유형을 알아보고 다룰 수 있다
+- 사영행렬을 계산하고 해석하며, 최소제곱에서의 역할을 이해한다
+- 이차형식을 카이제곱분포 및 $F$ 분포와 연결한다
+- 이 도구들을 적용해 회귀 추정량의 성질을 유도한다
 
-## Sections
+## 절 구성
 
-| Section | Topic | Key Concepts |
+| 절 | 주제 | 핵심 개념 |
 |---------|-------|--------------|
-| A.1 | Square Matrices | Diagonal, symmetric, idempotent, and positive definite matrices; eigendecomposition; trace and determinant properties |
-| A.2 | Linear Algebra and Statistics | Quadratic forms, distribution of quadratic forms in normal vectors, projection matrices in OLS, hat matrix, Cochran's theorem |
+| A.1 | 정사각행렬 | 대각행렬, 대칭행렬, 멱등행렬, 양정치행렬, 고유분해, 대각합과 행렬식의 성질 |
+| A.2 | 선형대수와 통계 | 이차형식, 정규벡터 이차형식의 분포, 최소제곱에서의 사영행렬, 모자 행렬, 코크런 정리 |
 
-!!! note "Role in the Book"
-    This appendix is referenced throughout the regression chapters. Readers comfortable with matrix algebra can skim this material and return to specific sections as needed.
+!!! note "이 책에서의 역할"
+    이 부록은 회귀를 다루는 여러 장에서 계속 참조된다. 행렬대수에 익숙한 독자는 이 내용을 훑어보고 필요할 때 해당 절로 돌아오면 된다.

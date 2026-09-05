@@ -31,33 +31,33 @@ extra_css:
 nav:
     - Home: index.md
 
-    - 0 Prerequisites:
-        - Chapter Overview: ch00/index.md
-        - 0.1 Mathematical Background (Review):
-            - Sets, Functions, and Logic: ch00/math/logic_sets.md
-            - Sequences, Limits, and Asymptotics: ch00/math/limits.md
-            - Linear Algebra Notation and Conventions: ch00/math/linear_algebra.md
-        - 0.2 Computational Tools:
-            - Python and Jupyter Basics: ch00/tools/python_basics.md
-            - NumPy Arrays: ch00/tools/numpy_basics.md
-            - Data Handling with pandas: ch00/tools/pandas_basics.md
-            - Basic Visualization with Matplotlib: ch00/tools/matplotlib_basics.md
-        - 0.3 Square Matrices:
-            - Chapter Overview: ch00/linalg_regression/index.md
-            - Similar Matrices: ch00/linalg_regression/square_matrices/similar_matrices.md
-            - Diagonal Form of Diagonalizable Matrices: ch00/linalg_regression/square_matrices/diagonalizable.md
-            - Jordan Canonical Form: ch00/linalg_regression/square_matrices/jordan_form.md
-            - Trace and Eigenvalues: ch00/linalg_regression/square_matrices/trace_eigenvalues.md
-            - Idempotent Matrices: ch00/linalg_regression/square_matrices/idempotent.md
-            - Symmetric Matrices: ch00/linalg_regression/square_matrices/symmetric.md
-            - Positive Definite Matrices: ch00/linalg_regression/square_matrices/positive_definite.md
-            - Gram Matrices: ch00/linalg_regression/square_matrices/gram_matrices.md
-            - Projection Matrices: ch00/linalg_regression/square_matrices/projection.md
-            - Orthogonal Projection Matrices: ch00/linalg_regression/square_matrices/orthogonal_projection.md
-        - 0.4 Linear Algebra and Statistics:
-            - Chi-Squared Distribution and Quadratic Forms: ch00/linalg_regression/linalg_statistics/chi_squared_quadratic.md
-            - Sampling Distributions (Simple Ordinary Least Squares): ch00/linalg_regression/linalg_statistics/sampling_dist_simple_ols.md
-            - Sampling Distributions (General Ordinary Least Squares): ch00/linalg_regression/linalg_statistics/sampling_dist_general_ols.md
+    - 0 선수 지식:
+        - 장 개요: ch00/index.md
+        - 0.1 수학적 배경 (복습):
+            - 집합, 함수, 논리: ch00/math/logic_sets.md
+            - 수열, 극한, 점근: ch00/math/limits.md
+            - 선형대수 표기와 관례: ch00/math/linear_algebra.md
+        - 0.2 계산 도구:
+            - 파이썬과 주피터 기초: ch00/tools/python_basics.md
+            - NumPy 배열: ch00/tools/numpy_basics.md
+            - pandas로 자료 다루기: ch00/tools/pandas_basics.md
+            - Matplotlib으로 기본 시각화하기: ch00/tools/matplotlib_basics.md
+        - 0.3 정사각행렬:
+            - 장 개요: ch00/linalg_regression/index.md
+            - 닮은 행렬: ch00/linalg_regression/square_matrices/similar_matrices.md
+            - 대각화 가능 행렬의 대각형: ch00/linalg_regression/square_matrices/diagonalizable.md
+            - 조르당 표준형: ch00/linalg_regression/square_matrices/jordan_form.md
+            - 대각합과 고윳값: ch00/linalg_regression/square_matrices/trace_eigenvalues.md
+            - 멱등행렬: ch00/linalg_regression/square_matrices/idempotent.md
+            - 대칭행렬: ch00/linalg_regression/square_matrices/symmetric.md
+            - 양정치행렬: ch00/linalg_regression/square_matrices/positive_definite.md
+            - 그람 행렬: ch00/linalg_regression/square_matrices/gram_matrices.md
+            - 사영행렬: ch00/linalg_regression/square_matrices/projection.md
+            - 직교사영행렬: ch00/linalg_regression/square_matrices/orthogonal_projection.md
+        - 0.4 선형대수와 통계:
+            - 카이제곱분포와 이차형식: ch00/linalg_regression/linalg_statistics/chi_squared_quadratic.md
+            - 표본분포 (단순 최소제곱): ch00/linalg_regression/linalg_statistics/sampling_dist_simple_ols.md
+            - 표본분포 (일반 최소제곱): ch00/linalg_regression/linalg_statistics/sampling_dist_general_ols.md
 
     - 1 자료 수집:
         - 장 개요: ch01/index.md

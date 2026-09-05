@@ -1,22 +1,22 @@
-# Python and Jupyter Basics
+# 파이썬과 주피터 기초
 
-Python is the primary computational language used throughout this book. We chose it for three reasons: a low-friction syntax that keeps statistical ideas in the foreground, a mature ecosystem of numerical libraries (NumPy, SciPy, pandas, statsmodels, scikit-learn, PyMC), and a literate-programming workflow via Jupyter notebooks where code, output, equations, and prose live in one document. This page covers environment setup, package management, the language features used most often in statistical scripts, and the conventions adopted in every code example in this book.
+파이썬은 이 책 전체에서 사용하는 주된 계산 언어다. 세 가지 이유로 파이썬을 골랐다. 통계적 아이디어를 전면에 남겨 두는 마찰 없는 문법, 수치 라이브러리의 성숙한 생태계(NumPy, SciPy, pandas, statsmodels, scikit-learn, PyMC), 그리고 코드·출력·수식·서술이 한 문서에 함께 사는 주피터 노트북의 문예적 프로그래밍 작업 흐름이다. 이 절에서는 환경 설정, 패키지 관리, 통계 스크립트에서 가장 자주 쓰는 언어 기능, 그리고 이 책의 모든 코드 예제가 따르는 관례를 다룬다.
 
-## Definition
+## 정의
 
-### What "Python" means in this book
+### 이 책에서 "파이썬"이 뜻하는 것
 
-**Python** is a dynamically typed, garbage-collected, interpreted language with first-class functions and a "batteries included" standard library. Statistical workflows rely on:
+**파이썬**은 동적 타입이고 가비지 컬렉션을 하며 인터프리터로 실행되는 언어로, 일급 함수와 "건전지 포함" 표준 라이브러리를 갖추고 있다. 통계 작업 흐름은 다음에 의존한다.
 
-- The CPython interpreter (version 3.11+ recommended).
-- A scientific stack: NumPy (arrays), SciPy (algorithms, distributions, optimization), pandas (data frames), Matplotlib (plotting), statsmodels (regression, time series), scikit-learn (machine learning).
-- A package/environment manager: `conda` (Anaconda/Miniconda) or `pip` + `venv` / `uv`.
+- CPython 인터프리터(3.11 이상 권장).
+- 과학 스택: NumPy(배열), SciPy(알고리즘, 분포, 최적화), pandas(데이터프레임), Matplotlib(그림), statsmodels(회귀, 시계열), scikit-learn(기계학습).
+- 패키지/환경 관리자: `conda`(Anaconda/Miniconda) 또는 `pip` + `venv` / `uv`.
 
-The **Anaconda** distribution bundles Python with 1,500+ scientific packages and the `conda` package/environment manager — the path of least resistance for new users. **Jupyter Notebook** (and its successor JupyterLab) provides an interactive, cell-based interface where Markdown narrative, Python code, plots, and LaTeX equations coexist.
+**Anaconda** 배포판은 파이썬과 1,500개 이상의 과학 패키지, 그리고 `conda` 패키지/환경 관리자를 함께 묶어 제공하므로 처음 시작하는 사용자에게 저항이 가장 적은 길이다. **주피터 노트북**(과 그 후속인 JupyterLab)은 마크다운 서술, 파이썬 코드, 그림, LaTeX 수식이 공존하는 셀 기반 대화형 인터페이스를 제공한다.
 
-### Reproducible environments
+### 재현 가능한 환경
 
-Each project should pin its dependencies to a specific Python version and package versions. With conda:
+프로젝트마다 특정 파이썬 버전과 패키지 버전을 고정해야 한다. conda를 쓴다면 다음과 같다.
 
 ```bash
 conda create --name stats_env python=3.11
@@ -25,32 +25,32 @@ conda install numpy scipy pandas matplotlib statsmodels
 conda env export > environment.yml
 ```
 
-The `environment.yml` file commits to source control and makes the analysis reproducible on another machine.
+`environment.yml` 파일을 형상관리에 커밋해 두면 다른 컴퓨터에서도 분석을 재현할 수 있다.
 
-## Explanation
+## 설명
 
-### Built-in containers and when to use each
+### 내장 컨테이너와 각각의 쓰임새
 
-| Container | Mutable | Ordered | Use case |
+| 컨테이너 | 변경 가능 | 순서 있음 | 쓰임새 |
 |---|---|---|---|
-| `list`  | ✓ | ✓ | General-purpose sequence (e.g., a column of values before vectorizing) |
-| `tuple` | ✗ | ✓ | Fixed-size record (e.g., return multiple values from a function) |
-| `dict`  | ✓ | ✓ (insertion order) | Lookup by key — parameter bundles, JSON-shaped data |
-| `set`   | ✓ | ✗ | Membership tests, deduplication |
+| `list`  | ✓ | ✓ | 범용 열(예: 벡터화하기 전의 값들의 열) |
+| `tuple` | ✗ | ✓ | 고정 크기 레코드(예: 함수에서 여러 값 반환) |
+| `dict`  | ✓ | ✓ (삽입 순서) | 키로 조회 — 매개변수 묶음, JSON 형태의 자료 |
+| `set`   | ✓ | ✗ | 포함 여부 검사, 중복 제거 |
 
-Lists are the default. Reach for dictionaries when keys are meaningful labels rather than integer indices. Tuples shine as lightweight return values: `mean, std = summarize(data)` unpacks the result.
+기본은 리스트다. 키가 정수 인덱스가 아니라 의미 있는 이름일 때는 사전을 쓴다. 튜플은 가벼운 반환값으로 빛을 발한다. `mean, std = summarize(data)`처럼 결과를 풀어낼 수 있다.
 
-### Comprehensions
+### 컴프리헨션
 
-List comprehensions express the pattern "compute $f(x)$ for each $x$ in a collection, optionally filtered by a predicate" in one line:
+리스트 컴프리헨션은 "어떤 모임의 각 $x$에 대해 $f(x)$를 계산하되 필요하면 조건으로 걸러낸다"는 패턴을 한 줄로 표현한다.
 
 ```python
 squares = [x**2 for x in data if x > 0]
 ```
 
-Equivalents exist for dictionaries (`{k: f(k) for k in keys}`), sets (`{f(x) for x in xs}`), and generators (`(f(x) for x in xs)`). Generators yield lazily — important when the sequence is large or infinite.
+사전(`{k: f(k) for k in keys}`), 집합(`{f(x) for x in xs}`), 제너레이터(`(f(x) for x in xs)`)에도 같은 형태가 있다. 제너레이터는 게으르게 값을 내놓으므로 열이 크거나 무한할 때 중요하다.
 
-### Functions and docstrings
+### 함수와 독스트링
 
 ```python
 def sample_mean(data):
@@ -58,13 +58,13 @@ def sample_mean(data):
     return sum(data) / len(data)
 ```
 
-A docstring is the function's contract: what it computes, what it expects, what it returns. The triple-quoted string immediately after the `def` line is accessible via `help(fn)` and is the basis of automated documentation.
+독스트링은 함수의 계약이다. 무엇을 계산하고, 무엇을 기대하며, 무엇을 반환하는지 밝힌다. `def` 줄 바로 뒤의 삼중 따옴표 문자열은 `help(fn)`으로 볼 수 있고 자동 문서화의 근거가 된다.
 
-Lambdas (`lambda x: x**2`) are unnamed single-expression functions, handy as arguments to `map`, `filter`, or `sorted(..., key=...)`. Prefer named `def`s for anything longer than a single expression.
+람다(`lambda x: x**2`)는 이름 없는 단일 표현식 함수로, `map`, `filter`, `sorted(..., key=...)`의 인수로 쓰기 편하다. 표현식 하나보다 길어지는 것은 이름 있는 `def`로 쓰는 편이 낫다.
 
-### Module structure and the `__main__` guard
+### 모듈 구조와 `__main__` 가드
 
-Every Python file is a module. To make a file safely both **importable** (its functions reused elsewhere) and **runnable** (executes a demonstration when invoked directly), use:
+모든 파이썬 파일은 모듈이다. 어떤 파일을 안전하게 **임포트 가능**(다른 곳에서 함수를 재사용)하면서 동시에 **실행 가능**(직접 호출하면 시연을 수행)하게 만들려면 다음 형태를 쓴다.
 
 ```python
 """Module docstring describing what this script does."""
@@ -81,11 +81,11 @@ if __name__ == "__main__":
     print(my_function(3))
 ```
 
-The `if __name__ == "__main__":` guard ensures the demonstration block runs only on direct invocation (`python my_script.py`), not when another module does `import my_script`. This is the educational style used in every `.py` file in this book.
+`if __name__ == "__main__":` 가드는 시연 블록이 직접 호출(`python my_script.py`)할 때만 실행되고, 다른 모듈이 `import my_script`할 때는 실행되지 않도록 보장한다. 이 책의 모든 `.py` 파일이 따르는 교육용 방식이다.
 
-### Standard import aliases
+### 표준 임포트 별칭
 
-The first cell of nearly every notebook is:
+거의 모든 노트북의 첫 셀은 다음과 같다.
 
 ```python
 import numpy as np
@@ -94,20 +94,20 @@ import matplotlib.pyplot as plt
 from scipy import stats
 ```
 
-These aliases (`np`, `pd`, `plt`, `stats`) are de facto standard and aid readability.
+이 별칭들(`np`, `pd`, `plt`, `stats`)은 사실상의 표준이며 가독성을 높인다.
 
-### Jupyter essentials
+### 주피터 필수 사항
 
-Launch with `jupyter notebook` or `jupyter lab`. Key shortcuts in command mode (press `Esc` to enter):
+`jupyter notebook`이나 `jupyter lab`으로 실행한다. 명령 모드(`Esc`를 눌러 진입)의 주요 단축키는 다음과 같다.
 
-- `Shift+Enter` — run the current cell.
-- `A` / `B` — insert a cell above / below.
-- `M` / `Y` — convert the cell to Markdown / Code.
-- `D D` — delete the current cell.
+- `Shift+Enter` — 현재 셀 실행.
+- `A` / `B` — 위 / 아래에 셀 삽입.
+- `M` / `Y` — 셀을 마크다운 / 코드로 변환.
+- `D D` — 현재 셀 삭제.
 
-Markdown cells support LaTeX between `$...$` (inline) and `$$...$$` (display), making notebooks a natural place to develop statistical arguments.
+마크다운 셀은 `$...$`(인라인)과 `$$...$$`(디스플레이) 사이의 LaTeX를 지원하므로, 노트북은 통계적 논증을 전개하기에 자연스러운 자리가 된다.
 
-## Examples
+## 예제
 
 ```python
 """Demonstrate core Python idioms used in statistics."""
@@ -139,12 +139,12 @@ print(f"NumPy mean:       {data.mean():.3f}")
 print(f"NumPy var (n-1):  {data.var(ddof=1):.3f}")
 ```
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Write a function `summary_stats(data)` that takes a list of numbers and returns a dictionary with keys `"mean"`, `"variance"`, `"n"`, and `"se_mean"` (the standard error of the mean, $s / \sqrt{n}$), computed without using NumPy.
+**연습문제 1.**
+수의 리스트를 받아 `"mean"`, `"variance"`, `"n"`, `"se_mean"`(평균의 표준오차 $s / \sqrt{n}$)을 키로 갖는 사전을 반환하는 함수 `summary_stats(data)`를 NumPy를 쓰지 않고 작성하라.
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
     ```python
     from math import sqrt
 
@@ -159,14 +159,14 @@ Write a function `summary_stats(data)` that takes a list of numbers and returns 
     # {'mean': 5.0, 'variance': 4.0, 'n': 8, 'se_mean': 0.7071...}
     ```
 
-    The variance uses $n - 1$ (Bessel's correction) for an unbiased estimate. The standard error of the mean is $s/\sqrt{n}$ where $s = \sqrt{s^2}$.
+    분산은 불편추정을 위해 $n - 1$을 쓴다(베셀 보정). 평균의 표준오차는 $s = \sqrt{s^2}$일 때 $s/\sqrt{n}$이다.
 
 ---
 
-**Exercise 2.**
-Explain the difference between a Python `list` and a NumPy `ndarray` for element-wise arithmetic. Show what `[1, 2, 3] * 2` and `np.array([1, 2, 3]) * 2` produce, and why.
+**연습문제 2.**
+원소별 산술 연산에서 파이썬 `list`와 NumPy `ndarray`의 차이를 설명하라. `[1, 2, 3] * 2`와 `np.array([1, 2, 3]) * 2`가 각각 무엇을 만들어내는지, 그리고 그 이유를 보여라.
 
-??? success "Solution to Exercise 2"
+??? success "연습문제 2 풀이"
     ```python
     import numpy as np
 
@@ -174,14 +174,14 @@ Explain the difference between a Python `list` and a NumPy `ndarray` for element
     print(np.array([1, 2, 3]) * 2)   # [2 4 6]
     ```
 
-    Python's `list` defines `*` as repeated concatenation, not elementwise arithmetic. NumPy's `ndarray` overloads `*` to broadcast the scalar to every element. Vectorized arithmetic (`arr + 1`, `arr ** 2`, `np.sqrt(arr)`) is both faster (delegated to compiled C/BLAS routines) and shorter (no explicit loops). Reaching into Python `for` loops for numerical work is almost always a sign that the work belongs in NumPy.
+    파이썬 `list`는 `*`를 원소별 산술이 아니라 반복 이어붙이기로 정의한다. NumPy `ndarray`는 `*`를 재정의해 스칼라를 모든 원소에 브로드캐스트한다. 벡터화 연산(`arr + 1`, `arr ** 2`, `np.sqrt(arr)`)은 더 빠르고(컴파일된 C/BLAS 루틴에 위임된다) 더 짧다(명시적 반복문이 없다). 수치 작업에서 파이썬 `for` 반복문에 손을 뻗는다면 거의 언제나 그 일이 NumPy에 속한다는 신호다.
 
 ---
 
-**Exercise 3.**
-Write a list comprehension that generates all pairs $(i, j)$ with $1 \le i < j \le 5$ in a single expression. Verify that the count equals $\binom{5}{2}$.
+**연습문제 3.**
+$1 \le i < j \le 5$인 모든 쌍 $(i, j)$를 하나의 표현식으로 생성하는 리스트 컴프리헨션을 작성하라. 그 개수가 $\binom{5}{2}$와 같음을 확인하라.
 
-??? success "Solution to Exercise 3"
+??? success "연습문제 3 풀이"
     ```python
     pairs = [(i, j) for i in range(1, 6) for j in range(i + 1, 6)]
     print(pairs)
@@ -190,43 +190,43 @@ Write a list comprehension that generates all pairs $(i, j)$ with $1 \le i < j \
     # Count: 10, C(5,2) = 10
     ```
 
-    The double-`for` comprehension iterates `i` in the outer loop and `j` in the inner loop, mirroring nested `for` statements but in expression form.
+    이중 `for` 컴프리헨션은 바깥 반복에서 `i`를, 안쪽 반복에서 `j`를 훑으며, 중첩된 `for` 문과 같은 일을 표현식 형태로 한다.
 
 ---
 
-**Exercise 4.**
-Explain what `if __name__ == "__main__":` does. Give one example where omitting it causes unwanted behavior on import.
+**연습문제 4.**
+`if __name__ == "__main__":`이 무엇을 하는지 설명하라. 이를 빠뜨렸을 때 임포트 시 원치 않는 동작이 생기는 예를 하나 들어라.
 
-??? success "Solution to Exercise 4"
-    `__name__` is a special module attribute. It equals `"__main__"` when the file is executed as a script (`python myscript.py`) and equals the module's import name otherwise (`mypackage.myscript`).
+??? success "연습문제 4 풀이"
+    `__name__`은 모듈의 특수 속성이다. 파일이 스크립트로 실행될 때(`python myscript.py`)는 `"__main__"`과 같고, 그 밖의 경우에는 모듈의 임포트 이름(`mypackage.myscript`)과 같다.
 
-    Code inside `if __name__ == "__main__":` runs only on direct invocation; on import the block is skipped. Three reasons this matters:
+    `if __name__ == "__main__":` 안의 코드는 직접 호출할 때만 실행되고 임포트 시에는 건너뛴다. 이것이 중요한 이유는 세 가지다.
 
-    1. **No side effects on import**: top-level `print` statements or expensive computations would run every time the module is loaded.
-    2. **Reusability**: functions and classes are available for import; demonstration code is hidden.
-    3. **Convention**: every script in this book follows the pattern.
+    1. **임포트 시 부작용 없음**: 최상위의 `print` 문이나 비용이 큰 계산이 모듈을 불러올 때마다 실행되어 버린다.
+    2. **재사용성**: 함수와 클래스는 임포트할 수 있게 두고 시연 코드는 감춘다.
+    3. **관례**: 이 책의 모든 스크립트가 이 패턴을 따른다.
 
-    **Example of failure without the guard:**
+    **가드가 없을 때의 실패 예:**
     ```python
     # bad_module.py
     def util(x): return x + 1
     print("Loading...")            # runs every time someone imports bad_module
     print(util(10))
     ```
-    Any other module that does `import bad_module` triggers the prints — clutter at best, side-effect-driven errors at worst.
+    `import bad_module`을 하는 다른 모듈은 모두 이 출력을 유발한다. 잘해야 지저분함이고, 나쁘면 부작용에서 비롯된 오류다.
 
 ---
 
-**Exercise 5.**
-The arithmetic mean can overflow when summing many large floats. Write a one-pass online mean using the update rule
+**연습문제 5.**
+큰 부동소수를 많이 더하면 산술평균이 넘칠 수 있다. 다음 갱신 규칙을 이용해 한 번의 순회로 계산하는 온라인 평균을 작성하라.
 
 $$
 \bar{x}_n = \bar{x}_{n-1} + \frac{x_n - \bar{x}_{n-1}}{n}
 $$
 
-Compare it numerically against `sum(data)/len(data)` on a list of $10^6$ values drawn from a Gaussian, and explain when the online form is preferable.
+가우스분포에서 뽑은 $10^6$개 값의 리스트에서 `sum(data)/len(data)`와 수치적으로 비교하고, 온라인 형태가 언제 더 나은지 설명하라.
 
-??? success "Solution to Exercise 5"
+??? success "연습문제 5 풀이"
     ```python
     import numpy as np
 
@@ -245,21 +245,21 @@ Compare it numerically against `sum(data)/len(data)` on a list of $10^6$ values 
     print(f"online = {online:.6f}")
     ```
 
-    Both agree to many digits here, but the online formulation has two real advantages: (1) it processes a stream — useful when the data does not fit in memory — and (2) it avoids accumulating a sum near $10^{12}$ for `n = 10^6, mean = 10^6`, which can lose precision in 64-bit floats. The streaming algorithm extends to variance (Welford), regression, and quantile estimation.
+    여기서는 둘이 여러 자리까지 일치하지만, 온라인 형태에는 실질적인 장점이 두 가지 있다. (1) 스트림을 처리하므로 자료가 메모리에 다 들어가지 않을 때 유용하고, (2) `n = 10^6, mean = 10^6`인 경우 $10^{12}$에 가까운 합을 누적하지 않아도 되는데, 그런 합은 64비트 부동소수에서 정밀도를 잃을 수 있다. 이 스트리밍 알고리즘은 분산(웰퍼드), 회귀, 분위수 추정으로 확장된다.
 
 ---
 
-**Exercise 6.**
-Why is a Python `dict` (since 3.7) a better choice than a `list` of `(key, value)` tuples for storing distribution parameters that get accessed by name? Discuss in terms of asymptotic complexity and code clarity.
+**연습문제 6.**
+이름으로 접근하는 분포 매개변수를 저장할 때 (3.7 이후의) 파이썬 `dict`가 `(키, 값)` 튜플의 `list`보다 나은 이유는 무엇인가? 점근적 복잡도와 코드의 명료성 측면에서 논하라.
 
-??? success "Solution to Exercise 6"
-    **Complexity**: dictionaries are hash tables. Lookup, insertion, and deletion by key are $O(1)$ expected time. A list of $(k, v)$ tuples requires a linear scan: $O(n)$ per lookup. For parameter bundles with a handful of entries, the constant matters more than the asymptotic, but the principle stays the same once datasets grow.
+??? success "연습문제 6 풀이"
+    **복잡도**: 사전은 해시 테이블이다. 키에 의한 조회, 삽입, 삭제가 기대 시간 $O(1)$이다. $(k, v)$ 튜플의 리스트는 선형 탐색이 필요해 조회마다 $O(n)$이다. 항목이 몇 개뿐인 매개변수 묶음에서는 점근 복잡도보다 상수가 더 중요하지만, 자료가 커지면 원리는 그대로 적용된다.
 
-    **Clarity**: `params["mu"]` says exactly what is being read. `next(v for k, v in params if k == "mu")` says the same thing but obscures intent and is more brittle. Named access also pairs cleanly with `**kwargs` unpacking when passing the bundle to a function:
+    **명료성**: `params["mu"]`는 무엇을 읽는지 정확히 말해준다. `next(v for k, v in params if k == "mu")`도 같은 일을 하지만 의도를 흐리고 더 깨지기 쉽다. 이름 기반 접근은 묶음을 함수에 넘길 때 `**kwargs` 언패킹과도 깔끔하게 어울린다.
 
     ```python
     params = {"loc": 0.0, "scale": 1.0}
     samples = rng.normal(size=100, **params)  # equivalent to loc=0.0, scale=1.0
     ```
 
-    The list-of-tuples form is appropriate only when keys can repeat or insertion order is the only semantic.
+    튜플 리스트 형태는 키가 중복될 수 있거나 삽입 순서만이 의미를 갖는 경우에만 적절하다.
