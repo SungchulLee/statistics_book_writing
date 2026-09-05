@@ -1,8 +1,8 @@
-# Repeated Sampling Concept
+# 반복추출 개념
 
-## Overview
+## 개요
 
-A **sampling distribution** is the probability distribution of a given statistic based on a random sample. When we draw multiple random samples from the same population and calculate a statistic (such as the sample mean or sample proportion) for each sample, the resulting values form a distribution. This distribution is known as the **sampling distribution** of that statistic.
+**표본분포**는 확률표본에 기반한 어떤 통계량의 확률분포이다. 같은 모집단에서 여러 개의 확률표본을 뽑아 각 표본마다 통계량(표본평균이나 표본비율 등)을 계산하면, 그 값들이 하나의 분포를 이룬다. 이 분포를 그 통계량의 **표본분포**라 한다.
 
 $$
 \left.
@@ -23,24 +23,24 @@ $$
 \end{array}
 $$
 
-## Why Are Sampling Distributions Important?
+## 표본분포는 왜 중요한가?
 
-Sampling distributions are fundamental to inferential statistics, which involves making conclusions about a population based on a sample. By understanding the behavior of a statistic across multiple samples, we can:
+표본분포는 표본을 바탕으로 모집단에 관한 결론을 내리는 추론통계학의 근본이다. 여러 표본에 걸친 통계량의 거동을 이해하면 다음을 할 수 있다:
 
-- **Estimate population parameters** (e.g., mean, variance) using statistics from the sample.
-- **Calculate the standard error** to understand the variability of an estimator.
-- **Formulate confidence intervals** to quantify the uncertainty of our estimates.
-- **Perform hypothesis testing** to make informed decisions about population parameters.
+- 표본에서 얻은 통계량으로 **모수를 추정**한다 (예: 평균, 분산).
+- 추정량의 변동성을 파악하기 위해 **표준오차를 계산**한다.
+- 추정의 불확실성을 정량화하기 위해 **신뢰구간을 구성**한다.
+- 모수에 관해 근거 있는 판단을 내리기 위해 **가설검정을 수행**한다.
 
-## Three Distributions to Distinguish
+## 구별해야 할 세 가지 분포
 
-### Population Distribution, Sample Distribution, and Sampling Distribution
+### 모집단 분포, 표본 분포, 표본분포
 
-The **Population Distribution** represents the distribution of all possible values of a variable in the entire population. This is the underlying distribution that characterizes the population from which we draw samples.
+**모집단 분포**는 모집단 전체에서 어떤 변수가 가질 수 있는 모든 값의 분포를 나타낸다. 표본을 뽑아 오는 모집단을 특징짓는 밑바탕의 분포이다.
 
-The **Sample Distribution** refers to the distribution of values within a specific sample drawn from the population. A sample is a subset of the population, and we use it to make inferences about the entire population.
+**표본 분포**는 모집단에서 뽑은 특정한 하나의 표본 안에 있는 값들의 분포를 가리킨다. 표본은 모집단의 부분집합이며, 이를 사용해 모집단 전체에 관한 추론을 한다.
 
-The **Sampling Distribution** describes the distribution of a statistic or estimator (such as the sample mean or sample proportion) computed from multiple samples of the same size drawn from the population. It helps us understand the variability of a statistic and is central to statistical inference.
+**표본분포**는 모집단에서 뽑은 같은 크기의 여러 표본으로부터 계산한 통계량(표본평균이나 표본비율 등)의 분포를 기술한다. 통계량의 변동성을 이해하게 해 주며 통계적 추론의 중심이 된다.
 
 $$
 \begin{array}{ccccccc}
@@ -56,7 +56,7 @@ $$
 \end{array}
 $$
 
-## Simulation 1: Uniform Population
+## 모의실험 1: 균등 모집단
 
 ```python
 import matplotlib.pyplot as plt
@@ -117,9 +117,9 @@ if __name__ == "__main__":
     plot_distributions()
 ```
 
-**Observation.** Even though the population is uniform (flat), the sampling distribution of $\bar{X}$ is bell-shaped and much more concentrated — a preview of the Central Limit Theorem.
+**관찰.** 모집단이 균등분포(평평한 모양)임에도 $\bar{X}$의 표본분포는 종 모양이고 훨씬 좁게 모여 있다. 중심극한정리를 미리 엿보는 셈이다.
 
-## Simulation 2: Exponential Population
+## 모의실험 2: 지수 모집단
 
 ```python
 import matplotlib.pyplot as plt
@@ -181,9 +181,9 @@ if __name__ == "__main__":
     plot_distributions()
 ```
 
-**Observation.** Although the exponential population is heavily right-skewed, the sampling distribution of $\bar{X}$ with $n = 30$ is approximately normal — the Central Limit Theorem at work.
+**관찰.** 지수 모집단은 오른쪽으로 심하게 치우쳐 있지만, $n = 30$일 때 $\bar{X}$의 표본분포는 근사적으로 정규분포이다. 중심극한정리가 작동하는 모습이다.
 
-## Simulation 3: Bernoulli Population
+## 모의실험 3: Bernoulli 모집단
 
 ```python
 import matplotlib.pyplot as plt
@@ -245,13 +245,13 @@ if __name__ == "__main__":
     plot_distributions()
 ```
 
-## Example: Sampling Distribution of Two Balls Drawn from Three Balls
+## 예: 공 세 개에서 두 개를 뽑을 때의 표본분포
 
-> **Reference:** [Khan Academy — Introduction to Sampling Distributions](https://www.khanacademy.org/math/ap-statistics/sampling-distribution-ap/what-is-sampling-distribution/v/introduction-to-sampling-distributions)
+> **출처:** [Khan Academy — Introduction to Sampling Distributions](https://www.khanacademy.org/math/ap-statistics/sampling-distribution-ap/what-is-sampling-distribution/v/introduction-to-sampling-distributions)
 
-**Problem.** There are three balls in an urn, numbered one, two, and three. The population mean is $\mu = 2$. We choose two balls with replacement and compute their mean. Compute the distribution of this sample mean — that is, the sampling distribution of $\bar{X}$.
+**문제.** 항아리에 1, 2, 3번이 매겨진 공 세 개가 있다. 모평균은 $\mu = 2$이다. 복원추출로 공 두 개를 뽑아 평균을 구한다. 이 표본평균의 분포, 즉 $\bar{X}$의 표본분포를 구하라.
 
-**Solution.** There are $3^2 = 9$ equally likely outcomes:
+**풀이.** 동일한 확률을 갖는 $3^2 = 9$가지 결과가 있다:
 
 ```python
 import itertools as it
@@ -281,96 +281,96 @@ if __name__ == "__main__":
     main()
 ```
 
-The sampling distribution has possible values $\{1.0, 1.5, 2.0, 2.5, 3.0\}$ with probabilities $\{1/9, 2/9, 3/9, 2/9, 1/9\}$. Its mean is $E[\bar{X}] = 2 = \mu$, confirming that $\bar{X}$ is unbiased.
+표본분포가 가질 수 있는 값은 $\{1.0, 1.5, 2.0, 2.5, 3.0\}$이고 확률은 $\{1/9, 2/9, 3/9, 2/9, 1/9\}$이다. 평균은 $E[\bar{X}] = 2 = \mu$이며, $\bar{X}$가 불편임을 확인해 준다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-A population has mean 100 and SD 20. As sample size $n$ increases, what happens to (a) the mean of the sampling distribution of $\bar X$, (b) the SE, (c) a single sample mean $\bar x$?
+**연습문제 1.**
+어떤 모집단의 평균이 100이고 표준편차가 20이다. 표본크기 $n$이 커질 때 (a) $\bar X$의 표본분포의 평균, (b) 표준오차, (c) 하나의 표본평균 $\bar x$는 각각 어떻게 되는가?
 
-??? success "Solution to Exercise 1"
-    (a) **Mean of sampling distribution** = population mean = 100, for every $n$. The sampling distribution is centered on $\mu$ regardless of sample size — $\bar X$ is *unbiased*.
+??? success "연습문제 1 풀이"
+    (a) **표본분포의 평균**은 모든 $n$에 대해 모평균 100이다. 표본크기와 무관하게 표본분포는 $\mu$를 중심으로 하며, $\bar X$는 *불편*이다.
 
-    (b) **Standard error** $= \sigma/\sqrt n = 20/\sqrt n$. Shrinks as $n$ grows: $n = 4 \to \mathrm{SE} = 10$; $n = 100 \to \mathrm{SE} = 2$; $n = 10000 \to \mathrm{SE} = 0.2$.
+    (b) **표준오차**는 $\sigma/\sqrt n = 20/\sqrt n$이다. $n$이 커질수록 줄어든다: $n = 4 \to \mathrm{SE} = 10$; $n = 100 \to \mathrm{SE} = 2$; $n = 10000 \to \mathrm{SE} = 0.2$.
 
-    (c) **A single sample mean** $\bar x$ converges in probability to 100 by the WLLN, and almost surely by the SLLN. The narrowing sampling distribution means that an individual $\bar x$ is increasingly likely to be close to 100.
-
----
-
-**Exercise 2.**
-**Standard error vs. standard deviation.** Explain the distinction with examples. Why is the standard error always $\sigma / \sqrt n$, not $\sigma$?
-
-??? success "Solution to Exercise 2"
-    **Standard deviation $\sigma$:** measures spread of the *population* (or a single sample). Describes how much individual observations vary.
-
-    **Standard error $\sigma/\sqrt n$:** measures spread of a *statistic's sampling distribution* (typically the sample mean). Describes how much $\bar X$ varies from sample to sample.
-
-    Two distinct quantities. Reporting "SD = 5" describes the data. Reporting "SE = 0.5" describes uncertainty about an estimate.
-
-    **Why $\sigma/\sqrt n$ for the mean?** Recall $\mathrm{Var}(\bar X) = \mathrm{Var}((1/n)\sum X_i) = (1/n^2) \cdot n\sigma^2 = \sigma^2/n$ for i.i.d. data. The square root gives SE $= \sigma/\sqrt n$. The $\sqrt n$ rate is the "law of square-root improvement": quadrupling the sample halves the SE.
+    (c) **하나의 표본평균** $\bar x$는 약한 큰수의 법칙에 의해 100으로 확률수렴하고, 강한 큰수의 법칙에 의해 거의 확실하게 수렴한다. 표본분포가 좁아진다는 것은 개별 $\bar x$가 100에 가까울 가능성이 점점 커진다는 뜻이다.
 
 ---
 
-**Exercise 3.**
-**Sampling without replacement.** For a finite population of size $N$ with mean $\mu$ and variance $\sigma^2$, derive the variance of $\bar X$ when sampling $n$ items *without replacement*.
+**연습문제 2.**
+**표준오차와 표준편차.** 예를 들어 그 구별을 설명하라. 표준오차는 왜 $\sigma$가 아니라 항상 $\sigma / \sqrt n$인가?
 
-??? success "Solution to Exercise 3"
-    $\mathrm{Var}(\bar X) = \frac{\sigma^2}{n} \cdot \frac{N - n}{N - 1}$ — the **finite-population correction (FPC)** factor.
+??? success "연습문제 2 풀이"
+    **표준편차 $\sigma$:** *모집단*(또는 하나의 표본)의 퍼짐을 잰다. 개별 관측값이 얼마나 흩어져 있는지를 기술한다.
 
-    Derivation: the $X_i$'s are no longer independent (the second draw depends on the first), but they are exchangeable. Compute the variance of the sum:
+    **표준오차 $\sigma/\sqrt n$:** *통계량의 표본분포*(보통 표본평균)의 퍼짐을 잰다. $\bar X$가 표본마다 얼마나 달라지는지를 기술한다.
 
-    $\mathrm{Var}(\sum X_i) = n\sigma^2 + n(n-1) \mathrm{Cov}(X_1, X_2)$. By symmetry, $\sum_{i \ne j} \mathrm{Cov}(X_i, X_j) = -\mathrm{Var}(\sum X_i^{\text{total}})/(N-1)$, giving $\mathrm{Cov}(X_1, X_2) = -\sigma^2/(N-1)$.
+    서로 다른 두 양이다. "SD = 5"라고 보고하는 것은 자료를 기술하는 것이고, "SE = 0.5"라고 보고하는 것은 추정값에 대한 불확실성을 기술하는 것이다.
 
-    Therefore $\mathrm{Var}(\sum X_i) = n\sigma^2(N-n)/(N-1)$, and dividing by $n^2$ gives the FPC formula.
-
-    **Practical:** when $n/N \le 0.05$, the FPC is close to 1 and can be ignored. When $n/N$ is substantial (auditing, recounting), FPC matters and standard-error formulas must include it.
+    **평균에서 왜 $\sigma/\sqrt n$인가?** i.i.d. 자료에 대해 $\mathrm{Var}(\bar X) = \mathrm{Var}((1/n)\sum X_i) = (1/n^2) \cdot n\sigma^2 = \sigma^2/n$임을 떠올리자. 제곱근을 취하면 SE $= \sigma/\sqrt n$이다. $\sqrt n$ 비율은 "제곱근 개선의 법칙"이다. 표본을 네 배로 늘리면 표준오차가 절반이 된다.
 
 ---
 
-**Exercise 4.**
-**Asymptotic vs. exact distribution.** For a sample of size $n = 5$ from $\mathrm{Uniform}(0, 1)$, the exact distribution of $\bar X$ is known (Irwin-Hall scaled). Sketch the shape and compare with the CLT-predicted normal approximation.
+**연습문제 3.**
+**비복원추출.** 평균이 $\mu$, 분산이 $\sigma^2$인 크기 $N$의 유한모집단에서 $n$개를 *비복원*으로 뽑을 때 $\bar X$의 분산을 유도하라.
 
-??? success "Solution to Exercise 4"
-    **Exact:** sum of 5 i.i.d. Uniform(0, 1) is the Irwin-Hall distribution on $[0, 5]$ — piecewise polynomial of degree 4, bell-shaped, symmetric around 2.5. Scaling by $1/5$ gives $\bar X$ on $[0, 1]$, peaked at $1/2$.
+??? success "연습문제 3 풀이"
+    $\mathrm{Var}(\bar X) = \frac{\sigma^2}{n} \cdot \frac{N - n}{N - 1}$이며, 뒤의 인수를 **유한모집단 수정(FPC)** 계수라 한다.
 
-    **CLT approximation:** $\bar X \approx N(1/2, 1/(12 \cdot 5)) = N(0.5, 0.0167)$, SD $\approx 0.129$.
+    유도: $X_i$들은 더 이상 독립이 아니지만(두 번째 추출이 첫 번째에 의존한다) 교환 가능하다. 합의 분산을 계산하면:
 
-    **Comparison:** the exact distribution is bounded on $[0, 1]$; the normal extends to $\pm \infty$. At the center the two are nearly identical; in the tails the exact has zero probability outside $[0, 1]$ while the normal has small positive probability there (about 0.001 below 0 or above 1).
+    $\mathrm{Var}(\sum X_i) = n\sigma^2 + n(n-1) \mathrm{Cov}(X_1, X_2)$이다. 대칭성에 의해 $\sum_{i \ne j} \mathrm{Cov}(X_i, X_j) = -\mathrm{Var}(\sum X_i^{\text{total}})/(N-1)$이므로 $\mathrm{Cov}(X_1, X_2) = -\sigma^2/(N-1)$이다.
 
-    For $n = 5$, the approximation is already quite good — the uniform's symmetry and bounded support give very fast CLT convergence. By contrast, an Exponential(1) sample of size 5 would have visibly skewed $\bar X$ distribution, far from normal.
+    따라서 $\mathrm{Var}(\sum X_i) = n\sigma^2(N-n)/(N-1)$이고, $n^2$으로 나누면 FPC 공식을 얻는다.
 
----
-
-**Exercise 5.**
-**Convergence in the CLT** is **in distribution**, not pointwise. Define convergence in distribution and explain why this is the right notion for the CLT.
-
-??? success "Solution to Exercise 5"
-    **Convergence in distribution:** $X_n \xrightarrow{d} X$ iff $F_{X_n}(x) \to F_X(x)$ at every continuity point $x$ of $F_X$.
-
-    This is a statement about *distributions*, not about random variables themselves. The $X_n$ and $X$ need not be defined on the same probability space — they just need to have CDFs converging.
-
-    **Why the right notion for CLT:** the CLT compares the distribution of $\sqrt n (\bar X_n - \mu)/\sigma$ to a fixed normal. We are not claiming the realized values of $\bar X_n$ converge to a particular normal random variable — only that their *distribution* approaches normal. Different realizations have different limit behavior; the distribution is what stabilizes.
-
-    Distinction from almost-sure convergence: $\bar X_n \to \mu$ a.s. (each path converges), but $\sqrt n (\bar X_n - \mu)$ does *not* converge a.s. anywhere — it keeps fluctuating, while its *distribution* approaches normal. This is convergence in distribution without any stronger form.
+    **실무:** $n/N \le 0.05$이면 FPC가 1에 가까워 무시할 수 있다. $n/N$이 상당히 크면(감사, 재검표 등) FPC가 중요하며 표준오차 공식에 반드시 포함해야 한다.
 
 ---
 
-**Exercise 6.**
-**Simulation experiment.** Describe how to *visualize* the sampling distribution of $\bar X$ from any population. What three plots would you make for $n = 5, 30, 100$?
+**연습문제 4.**
+**점근분포와 정확한 분포.** $\mathrm{Uniform}(0, 1)$에서 크기 $n = 5$인 표본을 뽑을 때 $\bar X$의 정확한 분포는 알려져 있다(척도조정된 Irwin-Hall 분포). 그 모양을 그려 보고 중심극한정리가 예측하는 정규근사와 비교하라.
 
-??? success "Solution to Exercise 6"
-    **Procedure:** Draw a sample of size $n$ from the population. Compute $\bar X$. Repeat $B$ times (e.g., $B = 10000$). The resulting $B$ values approximate the sampling distribution.
+??? success "연습문제 4 풀이"
+    **정확한 분포:** i.i.d. Uniform(0, 1) 다섯 개의 합은 $[0, 5]$ 위의 Irwin-Hall 분포이다. 4차 조각별 다항식이고 종 모양이며 2.5를 중심으로 대칭이다. $1/5$로 척도조정하면 $[0, 1]$ 위의 $\bar X$가 되고 $1/2$에서 정점을 이룬다.
 
-    **Three plots** for $n = 5, 30, 100$:
+    **중심극한정리 근사:** $\bar X \approx N(1/2, 1/(12 \cdot 5)) = N(0.5, 0.0167)$이고 표준편차는 $\approx 0.129$이다.
 
-    1. **Histogram** of the $B$ values of $\bar X$, with theoretical normal $N(\mu, \sigma^2/n)$ overlaid. Visualizes the CLT approximation quality.
-    2. **Q-Q plot** against the theoretical normal: if CLT is well-approximated, points fall on a line.
-    3. **Triple comparison** of the three histograms side-by-side (or in a stacked layout): visual confirmation of (a) center stays at $\mu$, (b) spread shrinks as $\sigma/\sqrt n$, (c) shape becomes increasingly normal.
+    **비교:** 정확한 분포는 $[0, 1]$에서 유계이지만 정규분포는 $\pm \infty$까지 뻗는다. 중앙에서는 둘이 거의 같고, 꼬리에서는 정확한 분포가 $[0, 1]$ 밖에서 확률 0인 반면 정규분포는 그곳에 작은 양의 확률(0 아래 또는 1 위로 약 0.001)을 준다.
 
-    **Key observations from such simulations:**
+    $n = 5$에서 이미 근사가 꽤 좋다. 균등분포의 대칭성과 유계 지지집합 덕분에 중심극한정리 수렴이 매우 빠르다. 반면 Exponential(1)에서 크기 5인 표본이라면 $\bar X$의 분포가 눈에 띄게 치우쳐 정규분포와 거리가 멀 것이다.
 
-    - For symmetric populations (uniform, normal), $n = 5$ may suffice for approximate normality.
-    - For skewed populations (exponential, lognormal), $n = 30$ is the conventional threshold but may still show visible skew.
-    - For heavy-tailed populations (Cauchy, $t_1$), no $n$ produces normality — the CLT requires finite variance.
+---
 
-    This simulation-based diagnostic is more reliable than blindly applying "$n \ge 30$" rules of thumb.
+**연습문제 5.**
+중심극한정리에서의 **수렴은 각 점에서의 수렴이 아니라 분포수렴이다.** 분포수렴을 정의하고 왜 이것이 중심극한정리에 알맞은 개념인지 설명하라.
+
+??? success "연습문제 5 풀이"
+    **분포수렴:** $X_n \xrightarrow{d} X$일 필요충분조건은 $F_X$의 모든 연속점 $x$에서 $F_{X_n}(x) \to F_X(x)$인 것이다.
+
+    이는 확률변수 자체가 아니라 *분포*에 관한 서술이다. $X_n$과 $X$가 같은 확률공간 위에 정의될 필요도 없다. CDF가 수렴하기만 하면 된다.
+
+    **왜 중심극한정리에 알맞은가:** 중심극한정리는 $\sqrt n (\bar X_n - \mu)/\sigma$의 분포를 고정된 정규분포와 비교한다. $\bar X_n$의 실현값이 어떤 특정한 정규확률변수로 수렴한다고 주장하는 것이 아니라, 오직 그 *분포*가 정규분포에 가까워진다고 말하는 것이다. 실현되는 경로마다 극한 거동이 다르지만 안정되는 것은 분포이다.
+
+    거의 확실한 수렴과의 구별: $\bar X_n \to \mu$는 거의 확실하게 성립하지만(각 경로가 수렴한다), $\sqrt n (\bar X_n - \mu)$는 어디에서도 거의 확실하게 수렴하지 *않는다*. 계속 요동치는 가운데 그 *분포*만 정규분포에 가까워진다. 더 강한 형태 없이 오직 분포수렴만 성립하는 것이다.
+
+---
+
+**연습문제 6.**
+**모의실험.** 임의의 모집단에서 $\bar X$의 표본분포를 *시각화*하는 방법을 서술하라. $n = 5, 30, 100$에 대해 어떤 그림 세 개를 그리겠는가?
+
+??? success "연습문제 6 풀이"
+    **절차:** 모집단에서 크기 $n$인 표본을 뽑아 $\bar X$를 계산한다. 이를 $B$번 반복한다(예: $B = 10000$). 그 결과 얻은 $B$개의 값이 표본분포를 근사한다.
+
+    $n = 5, 30, 100$에 대한 **그림 세 개**:
+
+    1. $\bar X$의 $B$개 값에 대한 **히스토그램**에 이론적 정규분포 $N(\mu, \sigma^2/n)$을 겹쳐 그린다. 중심극한정리 근사의 품질을 눈으로 확인한다.
+    2. 이론적 정규분포에 대한 **Q-Q 그림**: 중심극한정리 근사가 잘 맞으면 점들이 직선 위에 놓인다.
+    3. 세 히스토그램을 나란히(또는 위아래로) 놓는 **삼중 비교**: (a) 중심이 $\mu$에 머물고, (b) 퍼짐이 $\sigma/\sqrt n$로 줄어들며, (c) 모양이 점점 정규분포에 가까워짐을 시각적으로 확인한다.
+
+    **이런 모의실험에서 얻는 주요 관찰:**
+
+    - 대칭인 모집단(균등, 정규)에서는 $n = 5$만으로도 근사적 정규성이 충분할 수 있다.
+    - 치우친 모집단(지수, 로그정규)에서는 관례적으로 $n = 30$을 기준으로 삼지만 여전히 치우침이 눈에 띌 수 있다.
+    - 꼬리가 두꺼운 모집단(Cauchy, $t_1$)에서는 어떤 $n$으로도 정규성이 나타나지 않는다. 중심극한정리는 유한한 분산을 요구한다.
+
+    이런 모의실험 기반 진단이 "$n \ge 30$" 같은 경험 법칙을 무턱대고 적용하는 것보다 훨씬 믿을 만하다.

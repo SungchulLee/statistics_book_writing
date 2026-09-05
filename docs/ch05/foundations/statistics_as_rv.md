@@ -1,8 +1,8 @@
-# Statistics as Random Variables
+# 확률변수로서의 통계량
 
-## Overview
+## 개요
 
-A **statistic** is any function of the observed data. Because the data arise from random sampling, the statistic itself is a **random variable** — its value changes from sample to sample. Recognizing this is the conceptual foundation of all sampling-distribution theory.
+**통계량**은 관측 자료의 임의의 함수이다. 자료가 확률추출에서 나오므로 통계량 자체도 **확률변수**이며, 그 값은 표본마다 달라진다. 이 점을 인식하는 것이 모든 표본분포 이론의 개념적 토대이다.
 
 $$
 \text{Population}
@@ -12,25 +12,25 @@ $$
 T(\mathbf{x})
 $$
 
-Before the sample is drawn, $T(\mathbf{X})$ is a random variable; after the sample is observed, $T(\mathbf{x})$ is a realized number.
+표본을 뽑기 전에 $T(\mathbf{X})$는 확률변수이고, 표본을 관측한 뒤 $T(\mathbf{x})$는 실현된 하나의 수이다.
 
-## From Population to Statistic
+## 모집단에서 통계량까지
 
-### Population, Sample, and Statistic
+### 모집단, 표본, 통계량
 
-| Concept | Symbol | Description |
+| 개념 | 기호 | 설명 |
 |---------|--------|-------------|
-| Population | — | The entire collection of units of interest |
-| Parameter | $\theta$ | A fixed but unknown numerical summary of the population (e.g., $\mu$, $\sigma^2$, $p$) |
-| Sample | $\mathbf{X} = (X_1, \dots, X_n)$ | A random subset drawn from the population |
-| Statistic | $T(\mathbf{X})$ | Any function of the sample (no unknown parameters) |
-| Estimate | $T(\mathbf{x})$ | The numerical value of the statistic for one particular sample |
+| 모집단 | — | 관심 대상이 되는 단위 전체의 모임 |
+| 모수 | $\theta$ | 고정되어 있지만 미지인 모집단의 수치 요약 (예: $\mu$, $\sigma^2$, $p$) |
+| 표본 | $\mathbf{X} = (X_1, \dots, X_n)$ | 모집단에서 뽑은 확률적 부분집합 |
+| 통계량 | $T(\mathbf{X})$ | 표본의 임의의 함수 (미지 모수를 포함하지 않음) |
+| 추정값 | $T(\mathbf{x})$ | 특정한 하나의 표본에 대한 통계량의 수치 |
 
-### Key Distinction
+### 핵심 구별
 
-- **Parameter** $\theta$: fixed, unknown, describes the population.
-- **Statistic** $T(\mathbf{X})$: random, observable, computed from sample data.
-- **Estimator** $\hat{\theta}(\mathbf{X})$: a statistic used specifically to estimate $\theta$.
+- **모수** $\theta$: 고정되어 있고 미지이며 모집단을 기술한다.
+- **통계량** $T(\mathbf{X})$: 확률적이고 관측 가능하며 표본 자료로부터 계산된다.
+- **추정량** $\hat{\theta}(\mathbf{X})$: $\theta$를 추정하기 위해 특별히 사용하는 통계량이다.
 
 $$
 \begin{array}{ccccc}
@@ -47,36 +47,36 @@ $$
 \end{array}
 $$
 
-## Common Statistics and Their Targets
+## 흔히 쓰는 통계량과 그 대상 모수
 
-| Statistic | Formula | Target Parameter |
+| 통계량 | 공식 | 대상 모수 |
 |-----------|---------|-----------------|
-| Sample mean | $\bar{X} = \frac{1}{n}\sum_{i=1}^n X_i$ | Population mean $\mu$ |
-| Sample variance | $S^2 = \frac{1}{n-1}\sum_{i=1}^n (X_i - \bar{X})^2$ | Population variance $\sigma^2$ |
-| Sample proportion | $\hat{p} = \frac{1}{n}\sum_{i=1}^n X_i$ (binary data) | Population proportion $p$ |
-| Sample median | $\text{Med}(\mathbf{X})$ | Population median |
+| 표본평균 | $\bar{X} = \frac{1}{n}\sum_{i=1}^n X_i$ | 모평균 $\mu$ |
+| 표본분산 | $S^2 = \frac{1}{n-1}\sum_{i=1}^n (X_i - \bar{X})^2$ | 모분산 $\sigma^2$ |
+| 표본비율 | $\hat{p} = \frac{1}{n}\sum_{i=1}^n X_i$ (이항 자료) | 모비율 $p$ |
+| 표본중앙값 | $\text{Med}(\mathbf{X})$ | 모집단 중앙값 |
 
-Each of these is a random variable whose distribution depends on the population distribution and the sample size $n$.
+이들 각각은 모집단 분포와 표본크기 $n$에 따라 분포가 결정되는 확률변수이다.
 
-## Estimators and Their Properties
+## 추정량과 그 성질
 
-### Unbiased Estimator
+### 불편추정량
 
-An estimator $\hat{\theta}$ is **unbiased** if its expected value equals the true parameter:
+추정량 $\hat{\theta}$의 기댓값이 참 모수와 같으면 **불편**이라 한다:
 
 $$
 E[\hat{\theta}(\mathbf{X})] = \theta
 $$
 
-Unbiasedness means that across infinitely many repeated samples, the estimator is correct *on average* — it neither systematically overestimates nor underestimates $\theta$.
+불편성은 무한히 반복추출할 때 추정량이 *평균적으로* 옳다는 뜻이다. $\theta$를 체계적으로 과대추정하지도 과소추정하지도 않는다.
 
-### Example: Ping Pong Balls — Assessing Unbiasedness
+### 예: 탁구공 — 불편성 평가하기
 
-**Setup.** Ping pong balls numbered 0 to 32 are placed in an urn. The population median is 16. In each trial, 5 balls are drawn without replacement and the sample median is recorded. This is repeated 50 times.
+**설정.** 0부터 32까지 번호가 매겨진 탁구공을 항아리에 넣는다. 모집단 중앙값은 16이다. 각 시행에서 5개를 비복원으로 뽑아 표본중앙값을 기록한다. 이를 50번 반복한다.
 
-**Question.** Is the sample median an unbiased estimator of the population median?
+**질문.** 표본중앙값은 모집단 중앙값의 불편추정량인가?
 
-**Simulation.**
+**모의실험.**
 
 ```python
 import matplotlib.pyplot as plt
@@ -118,46 +118,46 @@ if __name__ == "__main__":
     main()
 ```
 
-**Conclusion.** The sampling distribution of the sample median is approximately symmetric and centered around the true median of 16, suggesting the sample median is an unbiased estimator of the population median.
+**결론.** 표본중앙값의 표본분포는 근사적으로 대칭이고 참 중앙값 16을 중심으로 하며, 이는 표본중앙값이 모집단 중앙값의 불편추정량임을 시사한다.
 
-## Maximum Likelihood Estimation (MLE)
+## 최대가능도추정 (MLE)
 
-### Introduction
+### 소개
 
-Maximum Likelihood Estimation (MLE) is a method for estimating parameters by finding the values that make the observed data most probable. It is often preferred for its desirable asymptotic properties, including consistency and efficiency.
+최대가능도추정(MLE)은 관측된 자료를 가장 그럴듯하게 만드는 값을 찾아 모수를 추정하는 방법이다. 일치성과 효율성을 비롯한 좋은 점근적 성질 때문에 자주 선호된다.
 
-### Mathematical Formulation
+### 수학적 정식화
 
-Given i.i.d. observations $\mathbf{x} = (x_1, \dots, x_n)$ from a distribution $f(x \mid \theta)$, the MLE is:
+분포 $f(x \mid \theta)$에서 얻은 i.i.d. 관측값 $\mathbf{x} = (x_1, \dots, x_n)$이 주어졌을 때 MLE는:
 
 $$
 \hat{\theta}_{\text{MLE}} = \arg\max_{\theta} \; L(\theta \mid \mathbf{x})
 = \arg\max_{\theta} \prod_{i=1}^n f(x_i \mid \theta)
 $$
 
-For computational convenience, we maximize the **log-likelihood**:
+계산의 편의를 위해 **로그가능도**를 최대화한다:
 
 $$
 \ell(\theta \mid \mathbf{x}) = \sum_{i=1}^n \log f(x_i \mid \theta)
 $$
 
-### MLE for Normal Distribution Parameters
+### 정규분포 모수의 MLE
 
-Let $x^{(1)}, \dots, x^{(m)}$ be i.i.d. draws from $N(\mu, \sigma^2)$.
+$x^{(1)}, \dots, x^{(m)}$을 $N(\mu, \sigma^2)$에서 뽑은 i.i.d. 관측값이라 하자.
 
-**Likelihood:**
+**가능도:**
 
 $$
 L(\mu, \sigma^2) = \prod_{i=1}^m \frac{1}{\sqrt{2\pi\sigma^2}} \exp\!\left(-\frac{(x^{(i)} - \mu)^2}{2\sigma^2}\right)
 $$
 
-**Log-likelihood:**
+**로그가능도:**
 
 $$
 \ell(\mu, \sigma^2) = -\frac{1}{2\sigma^2}\sum_{i=1}^m (x^{(i)} - \mu)^2 - \frac{m}{2}\log\sigma^2 + \text{const.}
 $$
 
-**MLE solutions:**
+**MLE 해:**
 
 $$
 \hat{\mu} = \frac{1}{m}\sum_{i=1}^m x^{(i)}, \qquad
@@ -165,25 +165,25 @@ $$
 $$
 
 !!! note
-    The MLE for $\sigma^2$ divides by $m$ (not $m-1$), so it is biased. The unbiased estimator $S^2$ divides by $m-1$ (Bessel's correction).
+    $\sigma^2$의 MLE는 $m-1$이 아니라 $m$으로 나누므로 편향되어 있다. 불편추정량 $S^2$은 $m-1$로 나눈다(Bessel 수정).
 
-### MLE for Bernoulli Parameter
+### Bernoulli 모수의 MLE
 
-Let $x^{(1)}, \dots, x^{(m)}$ be i.i.d. draws from $\text{Bernoulli}(p)$.
+$x^{(1)}, \dots, x^{(m)}$을 $\text{Bernoulli}(p)$에서 뽑은 i.i.d. 관측값이라 하자.
 
-**Likelihood:**
+**가능도:**
 
 $$
 L(p) = \prod_{i=1}^m p^{x^{(i)}}(1-p)^{1-x^{(i)}}
 $$
 
-**Log-likelihood:**
+**로그가능도:**
 
 $$
 \ell(p) = \sum_{i=1}^m \left[ x^{(i)} \log p + (1-x^{(i)})\log(1-p) \right]
 $$
 
-**MLE solution:**
+**MLE 해:**
 
 $$
 \hat{p} = \frac{1}{m}\sum_{i=1}^m x^{(i)}
@@ -222,28 +222,28 @@ ax.spines['right'].set_visible(False)
 plt.show()
 ```
 
-### MLE for Capture–Recapture
+### 포획–재포획의 MLE
 
-The **capture–recapture method** estimates population size $N$ using two sampling stages:
+**포획–재포획법**은 두 단계의 표본추출로 모집단 크기 $N$을 추정한다:
 
-1. Capture $M$ individuals, mark them, and release.
-2. Recapture $n$ individuals; $m$ of them are marked.
+1. $M$마리를 포획하여 표시한 뒤 놓아 준다.
+2. $n$마리를 다시 포획하는데 그중 $m$마리가 표시되어 있다.
 
-The number of marked individuals in the recapture follows a **hypergeometric distribution**:
+재포획에서 표시된 개체의 수는 **초기하분포**를 따른다:
 
 $$
 P(m \mid N) = \frac{\binom{M}{m}\binom{N-M}{n-m}}{\binom{N}{n}}
 $$
 
-The MLE of $N$ is:
+$N$의 MLE는:
 
 $$
 \hat{N} = \frac{M \cdot n}{m}
 $$
 
-This follows from the proportionality argument $m/n \approx M/N$.
+이는 비례 관계 $m/n \approx M/N$에서 따라 나온다.
 
-**Example.** If $M = 50$ fish are marked, and a second sample of $n = 40$ yields $m = 10$ marked fish:
+**예.** $M = 50$마리의 물고기에 표시하고, 두 번째 표본 $n = 40$에서 $m = 10$마리가 표시되어 있었다면:
 
 $$
 \hat{N} = \frac{50 \times 40}{10} = 200
@@ -279,108 +279,108 @@ ax.legend()
 plt.show()
 ```
 
-## Summary
+## 요약
 
-| Concept | Meaning |
+| 개념 | 의미 |
 |---------|---------|
-| Statistic | Any function of the sample; a random variable before data are observed |
-| Estimator | A statistic used to estimate a population parameter |
-| Unbiased | $E[\hat{\theta}] = \theta$ — correct on average |
-| MLE | The parameter value maximizing the likelihood of the observed data |
+| 통계량 | 표본의 임의의 함수. 자료를 관측하기 전에는 확률변수 |
+| 추정량 | 모수를 추정하는 데 쓰이는 통계량 |
+| 불편 | $E[\hat{\theta}] = \theta$ — 평균적으로 옳다 |
+| MLE | 관측된 자료의 가능도를 최대화하는 모수값 |
 
-Understanding that statistics are random variables is the gateway to all of inferential statistics: confidence intervals, hypothesis tests, and prediction intervals all rely on knowing — or approximating — the distribution of the relevant statistic.
+통계량이 확률변수임을 이해하는 것이 추론통계학 전체로 들어가는 문이다. 신뢰구간, 가설검정, 예측구간은 모두 해당 통계량의 분포를 알거나 근사하는 데 의존한다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-**Capture-recapture.** Mark $M = 50$ fish, release; later catch $n = 40$ and find $m = 10$ marked. (a) Derive the hypergeometric likelihood $P(m \mid N)$. (b) Find the MLE $\hat N$.
+**연습문제 1.**
+**포획–재포획.** $M = 50$마리의 물고기에 표시하여 놓아 주고, 나중에 $n = 40$마리를 잡았더니 $m = 10$마리가 표시되어 있었다. (a) 초기하 가능도 $P(m \mid N)$을 유도하라. (b) MLE $\hat N$을 구하라.
 
-??? success "Solution to Exercise 1"
-    (a) $P(m \mid N) = \binom{M}{m} \binom{N - M}{n - m} / \binom{N}{n}$ — hypergeometric. With given values: $P(N) = \binom{50}{10}\binom{N-50}{30}/\binom{N}{40}$.
+??? success "연습문제 1 풀이"
+    (a) $P(m \mid N) = \binom{M}{m} \binom{N - M}{n - m} / \binom{N}{n}$이며 초기하분포이다. 주어진 값을 넣으면 $P(N) = \binom{50}{10}\binom{N-50}{30}/\binom{N}{40}$.
 
-    (b) Differentiating log-likelihood and solving: $\hat N = Mn/m = 50 \cdot 40 / 10 = 200$. The MLE has the intuitive form "(marked in pop) × (caught total) / (marked caught)" — a proportional reasoning argument.
+    (b) 로그가능도를 미분하여 풀면 $\hat N = Mn/m = 50 \cdot 40 / 10 = 200$. 이 MLE는 "(모집단에서 표시된 수) × (잡은 총 수) / (잡힌 표시된 수)"라는 직관적인 형태이며, 비례 추론에 해당한다.
 
-    Capture-recapture is the foundational method in wildlife population estimation; modifications (closed/open populations, multiple recaptures, mark loss) give a rich family of estimators.
-
----
-
-**Exercise 2.**
-**MLE for Bernoulli.** Coin tossed 100 times, 40 heads. (a) Write the likelihood $L(p)$. (b) Find $\hat p_{\text{MLE}}$.
-
-??? success "Solution to Exercise 2"
-    (a) $L(p) = \binom{100}{40} p^{40}(1-p)^{60} \propto p^{40}(1-p)^{60}$ (constant prefactor doesn't affect maximization).
-
-    (b) Log-likelihood: $\ell(p) = 40\ln p + 60\ln(1-p)$. Derivative: $40/p - 60/(1-p) = 0 \Rightarrow p = 0.4$.
-
-    $\hat p_{\text{MLE}} = 0.4 = $ sample proportion. In general for $X \sim \mathrm{Binomial}(n, p)$, the MLE is $\hat p = X/n$.
+    포획–재포획은 야생동물 개체수 추정의 기본 방법이다. 변형(폐쇄/개방 모집단, 여러 번의 재포획, 표지 손실)을 통해 풍부한 추정량 계열이 만들어진다.
 
 ---
 
-**Exercise 3.**
-**MLE of normal parameters.** Given i.i.d. $X_1, \ldots, X_n \sim N(\mu, \sigma^2)$, find both MLEs.
+**연습문제 2.**
+**Bernoulli의 MLE.** 동전을 100번 던져 앞면이 40번 나왔다. (a) 가능도 $L(p)$를 쓰라. (b) $\hat p_{\text{MLE}}$를 구하라.
 
-??? success "Solution to Exercise 3"
-    Log-likelihood: $\ell(\mu, \sigma^2) = -(n/2)\ln(2\pi\sigma^2) - (1/(2\sigma^2))\sum(X_i - \mu)^2$.
+??? success "연습문제 2 풀이"
+    (a) $L(p) = \binom{100}{40} p^{40}(1-p)^{60} \propto p^{40}(1-p)^{60}$ (상수 배수는 최대화에 영향을 주지 않는다).
+
+    (b) 로그가능도: $\ell(p) = 40\ln p + 60\ln(1-p)$. 미분하면 $40/p - 60/(1-p) = 0 \Rightarrow p = 0.4$.
+
+    $\hat p_{\text{MLE}} = 0.4$로 표본비율과 같다. 일반적으로 $X \sim \mathrm{Binomial}(n, p)$에 대해 MLE는 $\hat p = X/n$이다.
+
+---
+
+**연습문제 3.**
+**정규분포 모수의 MLE.** i.i.d. $X_1, \ldots, X_n \sim N(\mu, \sigma^2)$이 주어졌을 때 두 MLE를 모두 구하라.
+
+??? success "연습문제 3 풀이"
+    로그가능도: $\ell(\mu, \sigma^2) = -(n/2)\ln(2\pi\sigma^2) - (1/(2\sigma^2))\sum(X_i - \mu)^2$.
 
     $\partial \ell/\partial \mu = (1/\sigma^2)\sum(X_i - \mu) = 0 \Rightarrow \hat\mu = \bar X$.
 
     $\partial \ell/\partial \sigma^2 = -n/(2\sigma^2) + (1/(2\sigma^4))\sum(X_i - \hat\mu)^2 = 0 \Rightarrow \hat\sigma^2 = (1/n)\sum(X_i - \bar X)^2$.
 
-    **Note:** MLE divides by $n$, not $n - 1$. So $\hat\sigma^2_{\text{MLE}}$ is biased: $\mathbb{E}[\hat\sigma^2] = ((n-1)/n)\sigma^2$. For unbiased estimation use $s^2 = \sum(X_i - \bar X)^2/(n - 1)$ (Bessel's correction).
+    **참고:** MLE는 $n - 1$이 아니라 $n$으로 나눈다. 따라서 $\hat\sigma^2_{\text{MLE}}$는 편향되어 있다: $\mathbb{E}[\hat\sigma^2] = ((n-1)/n)\sigma^2$. 불편추정을 하려면 $s^2 = \sum(X_i - \bar X)^2/(n - 1)$을 사용한다(Bessel 수정).
 
-    The MLE/unbiased distinction is a recurring theme: MLE is asymptotically optimal but may be finite-sample biased.
+    MLE와 불편추정량의 구별은 반복해서 나타나는 주제이다. MLE는 점근적으로 최적이지만 유한표본에서는 편향될 수 있다.
 
 ---
 
-**Exercise 4.**
-**Sufficient statistics.** A statistic $T(X)$ is **sufficient** for $\theta$ if the conditional distribution $X \mid T$ doesn't depend on $\theta$. State the **Fisher-Neyman factorization theorem** and use it to verify $\sum X_i$ is sufficient for $\lambda$ when $X_i \sim \mathrm{Poisson}(\lambda)$.
+**연습문제 4.**
+**충분통계량.** 조건부분포 $X \mid T$가 $\theta$에 의존하지 않으면 통계량 $T(X)$가 $\theta$에 대해 **충분**하다고 한다. **Fisher-Neyman 인수분해 정리**를 서술하고, 이를 사용하여 $X_i \sim \mathrm{Poisson}(\lambda)$일 때 $\sum X_i$가 $\lambda$에 대해 충분함을 확인하라.
 
-??? success "Solution to Exercise 4"
-    **Fisher-Neyman factorization theorem:** $T(X)$ is sufficient for $\theta$ iff the joint density factors as
+??? success "연습문제 4 풀이"
+    **Fisher-Neyman 인수분해 정리:** $T(X)$가 $\theta$에 대해 충분일 필요충분조건은 결합밀도가 다음과 같이 인수분해되는 것이다.
 
     $$
     f(x \mid \theta) = g(T(x), \theta) \cdot h(x)
     $$
 
-    where $g$ depends on $\theta$ only through $T(x)$, and $h$ doesn't depend on $\theta$.
+    여기서 $g$는 $T(x)$를 통해서만 $\theta$에 의존하고 $h$는 $\theta$에 의존하지 않는다.
 
-    **For Poisson:** $f(x_1, \ldots, x_n \mid \lambda) = \prod_i \frac{e^{-\lambda} \lambda^{x_i}}{x_i!} = e^{-n\lambda} \lambda^{\sum x_i} / \prod_i x_i!$.
+    **Poisson의 경우:** $f(x_1, \ldots, x_n \mid \lambda) = \prod_i \frac{e^{-\lambda} \lambda^{x_i}}{x_i!} = e^{-n\lambda} \lambda^{\sum x_i} / \prod_i x_i!$.
 
-    The likelihood factors as $g(\sum x_i, \lambda) \cdot h(x) = (e^{-n\lambda} \lambda^{\sum x_i}) \cdot (1/\prod x_i!)$. Hence $T(X) = \sum X_i$ is sufficient.
+    가능도가 $g(\sum x_i, \lambda) \cdot h(x) = (e^{-n\lambda} \lambda^{\sum x_i}) \cdot (1/\prod x_i!)$로 인수분해된다. 따라서 $T(X) = \sum X_i$는 충분통계량이다.
 
-    **Significance:** all the information in $X_1, \ldots, X_n$ about $\lambda$ is concentrated in $\sum X_i$. The MLE depends on the data only through $T$; the full data is unnecessary for inference. This is the foundation of efficient estimation via the Rao-Blackwell theorem.
-
----
-
-**Exercise 5.**
-**Fisher information.** For $X \sim N(\mu, \sigma^2)$ with $\sigma^2$ known, compute the Fisher information about $\mu$. Why does this quantity matter?
-
-??? success "Solution to Exercise 5"
-    Score function: $\partial \log f/\partial \mu = (x - \mu)/\sigma^2$.
-
-    Fisher information: $I(\mu) = \mathbb{E}\!\left[(\partial \log f / \partial \mu)^2\right] = \mathbb{E}[(X - \mu)^2/\sigma^4] = \sigma^2/\sigma^4 = 1/\sigma^2$.
-
-    For an i.i.d. sample of size $n$: $I_n(\mu) = n/\sigma^2$.
-
-    **Why it matters: Cramér-Rao bound.** The variance of any unbiased estimator of $\mu$ is at least $1/I_n(\mu) = \sigma^2/n$. Since $\mathrm{Var}(\bar X) = \sigma^2/n$ exactly, $\bar X$ achieves the Cramér-Rao lower bound — **efficient**. No unbiased estimator can be better.
-
-    Fisher information quantifies the "information content" of the sample about the parameter and provides a lower bound on estimator variance. Used in MLE asymptotics, experimental design, and information geometry.
+    **의의:** $\lambda$에 관해 $X_1, \ldots, X_n$이 담고 있는 정보가 모두 $\sum X_i$에 집약되어 있다. MLE는 자료에 오직 $T$를 통해서만 의존하며, 추론에 자료 전체가 필요하지 않다. 이것이 Rao-Blackwell 정리를 통한 효율적 추정의 토대이다.
 
 ---
 
-**Exercise 6.**
-**Asymptotic normality of the MLE.** State the general result: $\sqrt n (\hat\theta_{\text{MLE}} - \theta) \xrightarrow{d} N(0, 1/I(\theta))$ where $I(\theta)$ is the Fisher information per observation. Verify for Poisson.
+**연습문제 5.**
+**Fisher 정보량.** $\sigma^2$이 알려진 $X \sim N(\mu, \sigma^2)$에 대해 $\mu$에 관한 Fisher 정보량을 계산하라. 이 양이 왜 중요한가?
 
-??? success "Solution to Exercise 6"
-    For Poisson($\lambda$): $\hat\lambda_{\text{MLE}} = \bar X$. Fisher info per observation: $I(\lambda) = 1/\lambda$ (since $\partial \log f/\partial \lambda = X/\lambda - 1$, and $\mathbb{E}[(X/\lambda - 1)^2] = \mathrm{Var}(X)/\lambda^2 = 1/\lambda$).
+??? success "연습문제 5 풀이"
+    점수함수: $\partial \log f/\partial \mu = (x - \mu)/\sigma^2$.
 
-    Asymptotic distribution: $\sqrt n(\bar X - \lambda) \xrightarrow{d} N(0, \lambda)$, which matches $1/I(\lambda) = \lambda$.
+    Fisher 정보량: $I(\mu) = \mathbb{E}\!\left[(\partial \log f / \partial \mu)^2\right] = \mathbb{E}[(X - \mu)^2/\sigma^4] = \sigma^2/\sigma^4 = 1/\sigma^2$.
 
-    Direct check via CLT: $\bar X = (1/n)\sum X_i$ with $\mathrm{Var}(X_i) = \lambda$, so $\sqrt n(\bar X - \lambda) \to N(0, \lambda)$ by CLT. ✓
+    크기 $n$인 i.i.d. 표본에 대해서는 $I_n(\mu) = n/\sigma^2$이다.
 
-    **General significance:** MLEs are asymptotically normal with variance equal to the inverse Fisher information per observation. This gives:
+    **왜 중요한가: Cramér-Rao 하한.** $\mu$의 임의의 불편추정량의 분산은 적어도 $1/I_n(\mu) = \sigma^2/n$이다. $\mathrm{Var}(\bar X) = \sigma^2/n$이 정확히 성립하므로 $\bar X$는 Cramér-Rao 하한을 달성하며 **효율적**이다. 어떤 불편추정량도 이보다 나을 수 없다.
 
-    - **Asymptotic CIs:** $\hat\theta \pm 1.96/\sqrt{n I(\hat\theta)}$ (using $I(\hat\theta)$ as a plug-in estimate of $I(\theta)$).
-    - **Asymptotic efficiency:** MLEs achieve the Cramér-Rao bound asymptotically.
+    Fisher 정보량은 모수에 관해 표본이 담은 "정보량"을 정량화하고 추정량 분산의 하한을 준다. MLE의 점근이론, 실험설계, 정보기하학에서 쓰인다.
 
-    These results justify the central role of likelihood-based inference in modern statistics.
+---
+
+**연습문제 6.**
+**MLE의 점근정규성.** 일반적인 결과를 서술하라: $\sqrt n (\hat\theta_{\text{MLE}} - \theta) \xrightarrow{d} N(0, 1/I(\theta))$이며 $I(\theta)$는 관측값 하나당 Fisher 정보량이다. Poisson에 대해 확인하라.
+
+??? success "연습문제 6 풀이"
+    Poisson($\lambda$)에서 $\hat\lambda_{\text{MLE}} = \bar X$이다. 관측값 하나당 Fisher 정보량은 $I(\lambda) = 1/\lambda$이다($\partial \log f/\partial \lambda = X/\lambda - 1$이고 $\mathbb{E}[(X/\lambda - 1)^2] = \mathrm{Var}(X)/\lambda^2 = 1/\lambda$이므로).
+
+    점근분포: $\sqrt n(\bar X - \lambda) \xrightarrow{d} N(0, \lambda)$이며, 이는 $1/I(\lambda) = \lambda$와 일치한다.
+
+    중심극한정리로 직접 확인: $\mathrm{Var}(X_i) = \lambda$인 $\bar X = (1/n)\sum X_i$이므로 중심극한정리에 의해 $\sqrt n(\bar X - \lambda) \to N(0, \lambda)$. ✓
+
+    **일반적 의의:** MLE는 점근적으로 정규분포를 따르며 그 분산은 관측값 하나당 Fisher 정보량의 역수이다. 이로부터 다음을 얻는다:
+
+    - **점근 신뢰구간:** $\hat\theta \pm 1.96/\sqrt{n I(\hat\theta)}$ ($I(\theta)$의 대입추정값으로 $I(\hat\theta)$를 사용).
+    - **점근 효율성:** MLE는 점근적으로 Cramér-Rao 하한을 달성한다.
+
+    이 결과들이 현대 통계학에서 가능도 기반 추론이 중심적 위치를 차지하는 이유이다.

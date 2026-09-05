@@ -1,107 +1,107 @@
-# Normal Distribution (Z)
+# Normal 분포 (Z)
 
-## Overview
+## 개요
 
-The **standard normal distribution** $Z \sim N(0, 1)$ is the most fundamental sampling distribution. It arises naturally whenever we standardize a normally distributed statistic, and — via the Central Limit Theorem — it serves as the large-sample approximation for a wide variety of estimators.
+**표준정규분포** $Z \sim N(0, 1)$은 가장 근본적인 표본분포이다. 정규분포를 따르는 통계량을 표준화할 때마다 자연스럽게 나타나며, 중심극한정리를 통해 매우 다양한 추정량의 대표본 근사로 쓰인다.
 
-## Definition and Properties
+## 정의와 성질
 
-A random variable $Z$ has the **standard normal distribution** if its PDF is:
+확률변수 $Z$의 PDF가 다음과 같으면 **표준정규분포**를 따른다:
 
 $$
 \varphi(z) = \frac{1}{\sqrt{2\pi}} \exp\!\left(-\frac{z^2}{2}\right), \quad z \in \mathbb{R}
 $$
 
-Key properties:
+주요 성질:
 
-| Property | Value |
+| 성질 | 값 |
 |----------|-------|
-| Mean | $E[Z] = 0$ |
-| Variance | $\text{Var}(Z) = 1$ |
-| Symmetry | $\varphi(z) = \varphi(-z)$ |
+| 평균 | $E[Z] = 0$ |
+| 분산 | $\text{Var}(Z) = 1$ |
+| 대칭성 | $\varphi(z) = \varphi(-z)$ |
 | MGF | $M_Z(t) = \exp(t^2/2)$ |
 
-## Role in Sampling Theory
+## 표본이론에서의 역할
 
-### Standardization
+### 표준화
 
-If $X \sim N(\mu, \sigma^2)$, then:
+$X \sim N(\mu, \sigma^2)$이면:
 
 $$
 Z = \frac{X - \mu}{\sigma} \sim N(0, 1)
 $$
 
-More importantly, if $X_1, \dots, X_n$ are i.i.d. $N(\mu, \sigma^2)$, then the sample mean $\bar{X} \sim N(\mu, \sigma^2/n)$, and:
+더 중요하게, $X_1, \dots, X_n$이 i.i.d. $N(\mu, \sigma^2)$이면 표본평균은 $\bar{X} \sim N(\mu, \sigma^2/n)$이고:
 
 $$
 Z = \frac{\bar{X} - \mu}{\sigma / \sqrt{n}} \sim N(0, 1)
 $$
 
-This is an **exact** result when the population is normal and $\sigma$ is known.
+모집단이 정규이고 $\sigma$를 알 때 이는 **정확한** 결과이다.
 
-### Central Limit Theorem (CLT)
+### 중심극한정리 (CLT)
 
-For **any** population with finite variance $\sigma^2 < \infty$, the CLT guarantees:
+분산이 유한한($\sigma^2 < \infty$) **임의의** 모집단에 대해 중심극한정리는 다음을 보장한다:
 
 $$
 \frac{\bar{X} - \mu}{\sigma / \sqrt{n}} \xrightarrow{d} N(0, 1) \quad \text{as } n \to \infty
 $$
 
-This makes $Z$ the default reference distribution for large-sample inference, even when the underlying population is non-normal.
+이 때문에 밑바탕 모집단이 정규가 아니더라도 $Z$가 대표본 추론의 기본 기준분포가 된다.
 
-## When to Use the Z Distribution
+## Z 분포를 언제 쓰는가
 
-The standard normal is appropriate when:
+표준정규분포는 다음 경우에 적절하다:
 
-1. **Population is normal and $\sigma$ is known**: exact $Z$-statistic.
-2. **Large sample size** ($n \geq 30$ as a rough guideline): CLT-based approximation, regardless of population shape.
-3. **Proportions with large $n$**: The sample proportion $\hat{p}$ is approximately normal when $np \geq 5$ and $n(1-p) \geq 5$.
+1. **모집단이 정규이고 $\sigma$를 아는 경우**: 정확한 $Z$ 통계량.
+2. **표본크기가 큰 경우** (대략적인 기준으로 $n \geq 30$): 모집단 모양과 무관하게 중심극한정리에 기반한 근사.
+3. **$n$이 큰 비율 문제**: $np \geq 5$이고 $n(1-p) \geq 5$이면 표본비율 $\hat{p}$가 근사적으로 정규분포이다.
 
-When $\sigma$ is unknown and $n$ is small, the **Student's $t$ distribution** replaces $Z$.
+$\sigma$를 모르고 $n$이 작으면 $Z$ 대신 **Student $t$ 분포**를 쓴다.
 
-## Common Z-Based Pivotal Quantities
+## Z에 기반한 흔한 추축량
 
-### Sample Mean (Known sigma)
+### 표본평균 (sigma를 아는 경우)
 
 $$
 Z = \frac{\bar{X} - \mu}{\sigma / \sqrt{n}} \sim N(0, 1)
 $$
 
-**Confidence interval:**
+**신뢰구간:**
 
 $$
 \bar{X} \pm z_{\alpha/2} \cdot \frac{\sigma}{\sqrt{n}}
 $$
 
-### Sample Proportion (Large n)
+### 표본비율 (n이 큰 경우)
 
 $$
 Z = \frac{\hat{p} - p}{\sqrt{p(1-p)/n}} \approx N(0, 1)
 $$
 
-**Confidence interval:**
+**신뢰구간:**
 
 $$
 \hat{p} \pm z_{\alpha/2} \cdot \sqrt{\frac{\hat{p}(1-\hat{p})}{n}}
 $$
 
-### Difference of Two Means (Known sigma_1, sigma_2)
+### 두 평균의 차 (sigma_1, sigma_2를 아는 경우)
 
 $$
 Z = \frac{(\bar{X}_1 - \bar{X}_2) - (\mu_1 - \mu_2)}{\sqrt{\sigma_1^2/n_1 + \sigma_2^2/n_2}} \sim N(0, 1)
 $$
 
-### Difference of Two Proportions (Large n_1, n_2)
+### 두 비율의 차 (n_1, n_2가 큰 경우)
 
 $$
 Z = \frac{(\hat{p}_1 - \hat{p}_2) - (p_1 - p_2)}{\sqrt{\frac{p_1(1-p_1)}{n_1} + \frac{p_2(1-p_2)}{n_2}}} \approx N(0, 1)
 $$
 
-## Critical Values
+## 임계값
 
-Common critical values $z_{\alpha/2}$ for two-sided intervals:
+양측 구간에서 흔히 쓰는 임계값 $z_{\alpha/2}$:
 
-| Confidence Level | $\alpha$ | $z_{\alpha/2}$ |
+| 신뢰수준 | $\alpha$ | $z_{\alpha/2}$ |
 |-----------------|----------|----------------|
 | 90% | 0.10 | 1.645 |
 | 95% | 0.05 | 1.960 |
@@ -115,45 +115,45 @@ for alpha in [0.10, 0.05, 0.01]:
     print(f"Confidence {1-alpha:.0%}: z* = {z:.3f}")
 ```
 
-## Relationship to Other Distributions
+## 다른 분포와의 관계
 
-The standard normal is the building block for other sampling distributions:
+표준정규분포는 다른 표본분포들의 기본 구성요소이다:
 
-- **Chi-square**: If $Z_1, \dots, Z_k$ are i.i.d. $N(0,1)$, then $\sum Z_i^2 \sim \chi^2_k$.
-- **Student's $t$**: $T = Z / \sqrt{V/k}$ where $V \sim \chi^2_k$ independent of $Z$.
-- **$F$-distribution**: $F = (U/m) / (V/n)$ where $U \sim \chi^2_m$ and $V \sim \chi^2_n$ are independent.
+- **카이제곱**: $Z_1, \dots, Z_k$가 i.i.d. $N(0,1)$이면 $\sum Z_i^2 \sim \chi^2_k$이다.
+- **Student $t$**: $Z$와 독립인 $V \sim \chi^2_k$에 대해 $T = Z / \sqrt{V/k}$이다.
+- **$F$ 분포**: 독립인 $U \sim \chi^2_m$과 $V \sim \chi^2_n$에 대해 $F = (U/m) / (V/n)$이다.
 
-## Summary
+## 요약
 
-The standard normal distribution is the cornerstone of sampling theory. It provides exact results for normal populations with known variance, and approximate results for large samples from any finite-variance population via the CLT. Its simplicity and universality make it the first distribution to consider in any inferential problem.
+표준정규분포는 표본이론의 초석이다. 분산이 알려진 정규모집단에는 정확한 결과를, 분산이 유한한 임의의 모집단에서 뽑은 대표본에는 중심극한정리를 통한 근사 결과를 준다. 단순하면서도 보편적이어서 어떤 추론 문제에서든 가장 먼저 고려하게 되는 분포이다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Let $X_1, \ldots, X_n$ be i.i.d. $N(\mu, \sigma^2)$ with $\sigma$ known. Derive the distribution of $\bar{X}$ and the standardized statistic $Z = \frac{\bar{X} - \mu}{\sigma/\sqrt{n}}$.
+**연습문제 1.**
+$X_1, \ldots, X_n$을 i.i.d. $N(\mu, \sigma^2)$이라 하고 $\sigma$를 안다고 하자. $\bar{X}$의 분포와 표준화된 통계량 $Z = \frac{\bar{X} - \mu}{\sigma/\sqrt{n}}$의 분포를 유도하라.
 
-??? success "Solution to Exercise 1"
-    Since each $X_i \sim N(\mu, \sigma^2)$ and the $X_i$ are independent, the sample mean $\bar{X} = \frac{1}{n}\sum_{i=1}^n X_i$ is a linear combination of independent normals. Therefore:
+??? success "연습문제 1 풀이"
+    각 $X_i \sim N(\mu, \sigma^2)$이고 $X_i$들이 독립이므로 표본평균 $\bar{X} = \frac{1}{n}\sum_{i=1}^n X_i$는 독립인 정규확률변수들의 선형결합이다. 따라서:
 
     $$
     \bar{X} \sim N\!\left(\mu, \frac{\sigma^2}{n}\right)
     $$
 
-    Standardizing:
+    표준화하면:
 
     $$
     Z = \frac{\bar{X} - \mu}{\sigma/\sqrt{n}} \sim N(0, 1)
     $$
 
-    This follows because subtracting the mean and dividing by the standard deviation of a normal random variable always produces a standard normal.
+    정규확률변수에서 평균을 빼고 표준편차로 나누면 언제나 표준정규확률변수가 되기 때문이다.
 
 ---
 
-**Exercise 2.**
-A machine fills bottles with a mean of 500 mL and a known standard deviation of 5 mL (normally distributed). A sample of $n = 25$ bottles has a sample mean of 498 mL. Find the probability that the sample mean is 498 mL or less.
+**연습문제 2.**
+어떤 기계가 병에 평균 500 mL, 알려진 표준편차 5 mL로 내용물을 채운다(정규분포). $n = 25$개 표본의 표본평균이 498 mL이었다. 표본평균이 498 mL 이하일 확률을 구하라.
 
-??? success "Solution to Exercise 2"
-    Under the assumption $\mu = 500$ and $\sigma = 5$:
+??? success "연습문제 2 풀이"
+    $\mu = 500$, $\sigma = 5$라는 가정 아래:
 
     $$
     Z = \frac{498 - 500}{5/\sqrt{25}} = \frac{-2}{1} = -2
@@ -163,21 +163,21 @@ A machine fills bottles with a mean of 500 mL and a known standard deviation of 
     P(\bar{X} \leq 498) = P(Z \leq -2) = \mathcal{N}(-2) \approx 0.0228
     $$
 
-    There is approximately a 2.28% chance of observing a sample mean of 498 mL or less if the true mean is 500 mL.
+    참 평균이 500 mL라면 표본평균이 498 mL 이하로 관측될 확률은 약 2.28%이다.
 
 ---
 
-**Exercise 3.**
-If $Z_1, Z_2, Z_3$ are independent standard normal variables, what is the distribution of $Z_1^2 + Z_2^2 + Z_3^2$? What are the mean and variance of this distribution?
+**연습문제 3.**
+$Z_1, Z_2, Z_3$이 독립인 표준정규확률변수일 때 $Z_1^2 + Z_2^2 + Z_3^2$의 분포는 무엇인가? 이 분포의 평균과 분산은?
 
-??? success "Solution to Exercise 3"
-    By definition, the sum of squares of $k$ independent standard normal variables follows a chi-square distribution with $k$ degrees of freedom:
+??? success "연습문제 3 풀이"
+    정의에 의해 독립인 표준정규확률변수 $k$개의 제곱합은 자유도 $k$인 카이제곱 분포를 따른다:
 
     $$
     Z_1^2 + Z_2^2 + Z_3^2 \sim \chi^2_3
     $$
 
-    The mean and variance of a $\chi^2_k$ distribution are $E[\chi^2_k] = k$ and $\text{Var}(\chi^2_k) = 2k$. Therefore:
+    $\chi^2_k$ 분포의 평균과 분산은 $E[\chi^2_k] = k$, $\text{Var}(\chi^2_k) = 2k$이다. 따라서:
 
     $$
     E[Z_1^2 + Z_2^2 + Z_3^2] = 3, \quad \text{Var}(Z_1^2 + Z_2^2 + Z_3^2) = 6
@@ -185,15 +185,15 @@ If $Z_1, Z_2, Z_3$ are independent standard normal variables, what is the distri
 
 ---
 
-**Exercise 4.**
-Explain why the normal distribution plays a central role in sampling theory even when the population is not normal. What theorem justifies this, and what are its limitations?
+**연습문제 4.**
+모집단이 정규가 아닐 때조차 정규분포가 표본이론에서 중심적인 역할을 하는 이유를 설명하라. 어떤 정리가 이를 정당화하며 그 한계는 무엇인가?
 
-??? success "Solution to Exercise 4"
-    The **Central Limit Theorem (CLT)** justifies the central role of the normal distribution. It states that for any population with finite mean $\mu$ and finite variance $\sigma^2$, the standardized sample mean $Z_n = \frac{\bar{X}_n - \mu}{\sigma/\sqrt{n}}$ converges in distribution to $N(0,1)$ as $n \to \infty$, regardless of the shape of the original population.
+??? success "연습문제 4 풀이"
+    **중심극한정리(CLT)**가 정규분포의 중심적 역할을 정당화한다. 평균 $\mu$와 분산 $\sigma^2$이 유한한 임의의 모집단에 대해, 원래 모집단의 모양과 무관하게 표준화된 표본평균 $Z_n = \frac{\bar{X}_n - \mu}{\sigma/\sqrt{n}}$이 $n \to \infty$일 때 $N(0,1)$로 분포수렴한다는 것이다.
 
-    **Limitations:**
+    **한계:**
 
-    - The CLT is an asymptotic result; for small $n$, the approximation may be poor, especially for highly skewed or heavy-tailed distributions.
-    - The population must have a finite variance; for distributions with infinite variance (e.g., Cauchy), the CLT does not apply.
-    - The Berry-Esseen theorem quantifies the rate of convergence: the approximation error is $O(1/\sqrt{n})$, and skewed distributions converge more slowly.
-    - For inference about variance (not the mean), normality of the population is required for exact chi-square results; the CLT does not rescue variance-based inference in the same way.
+    - 중심극한정리는 점근적 결과이다. $n$이 작으면, 특히 심하게 치우쳤거나 꼬리가 두꺼운 분포에서는 근사가 나쁠 수 있다.
+    - 모집단의 분산이 유한해야 한다. 분산이 무한한 분포(예: Cauchy)에는 중심극한정리가 적용되지 않는다.
+    - Berry–Esseen 정리가 수렴 속도를 정량화한다. 근사 오차는 $O(1/\sqrt{n})$이며, 치우친 분포일수록 더 느리게 수렴한다.
+    - (평균이 아니라) 분산에 관한 추론에서 정확한 카이제곱 결과를 얻으려면 모집단의 정규성이 필요하다. 중심극한정리는 분산 기반 추론을 같은 방식으로 구제해 주지 않는다.

@@ -166,36 +166,36 @@ nav:
             - 2차원 Gaussian 고유분해: ch04/code/gaussian_2d_eigendecomposition.md
             - 역변환 표본추출: ch04/code/inverse_transform_sampling.md
 
-    - 5 Sampling Distributions:
-        - Chapter Overview: ch05/index.md
-        - 5.1 Foundations:
-            - Statistics as Random Variables: ch05/foundations/statistics_as_rv.md
-            - Repeated Sampling Concept: ch05/foundations/repeated_sampling.md
-        - 5.2 The Four Fundamental Sampling Distributions:
-            - Normal Distribution (Z): ch05/distributions/normal.md
-            - Student's t Distribution: ch05/distributions/student_t.md
-            - Chi-Square Distribution (χ²): ch05/distributions/chi_square.md
-            - F Distribution: ch05/distributions/f_distribution.md
-        - 5.3 Applications to Common Statistics:
-            - Sampling Distribution of the Mean: ch05/applications/sample_mean.md
-            - Standard Error: ch05/applications/standard_error.md
-            - Sampling Distribution of Proportions: ch05/applications/sample_proportion.md
-            - Sampling Distribution of the Variance: ch05/applications/sample_variance.md
-            - Difference of Two Sample Means: ch05/applications/diff_means.md
-            - Difference of Two Sample Proportions: ch05/applications/diff_proportions.md
-        - 5.4 Visualization:
-            - Sampling Distribution Visualization: ch05/applications/sampling_dist_visualization.md
-        - 5.5 Code:
-            - Sampling Distribution of X̄ (Uniform): ch05/code/xbar_uniform.md
-            - Sampling Distribution of X̄ (Exponential): ch05/code/xbar_exponential.md
-            - Sampling Distribution of X̄ (Normal): ch05/code/xbar_normal.md
-            - Sampling Distribution of X̄ (Bernoulli): ch05/code/xbar_bernoulli.md
-            - Sampling Distribution of S² (Normal): ch05/code/s2_normal.md
-            - Standard Error of X̄: ch05/code/se_xbar.md
-            - Standard Error of S²: ch05/code/se_s2.md
-            - Sampling Distribution Income Visualization: ch05/code/sampling_dist_income_visualization.md
-            - Bootstrap Standard Error: ch05/code/bootstrap_standard_error.md
-            - Financial Crisis Central Limit Theorem Failure: ch05/code/financial_crisis_clt.md
+    - 5 표본분포:
+        - 장 개요: ch05/index.md
+        - 5.1 기초:
+            - 확률변수로서의 통계량: ch05/foundations/statistics_as_rv.md
+            - 반복추출 개념: ch05/foundations/repeated_sampling.md
+        - 5.2 네 가지 기본 표본분포:
+            - Normal 분포 (Z): ch05/distributions/normal.md
+            - Student t 분포: ch05/distributions/student_t.md
+            - 카이제곱 분포 (χ²): ch05/distributions/chi_square.md
+            - F 분포: ch05/distributions/f_distribution.md
+        - 5.3 흔히 쓰는 통계량에의 응용:
+            - 평균의 표본분포: ch05/applications/sample_mean.md
+            - 표준오차: ch05/applications/standard_error.md
+            - 비율의 표본분포: ch05/applications/sample_proportion.md
+            - 분산의 표본분포: ch05/applications/sample_variance.md
+            - 두 표본평균의 차: ch05/applications/diff_means.md
+            - 두 표본비율의 차: ch05/applications/diff_proportions.md
+        - 5.4 시각화:
+            - 표본분포 시각화: ch05/applications/sampling_dist_visualization.md
+        - 5.5 코드:
+            - X̄의 표본분포 (Uniform): ch05/code/xbar_uniform.md
+            - X̄의 표본분포 (Exponential): ch05/code/xbar_exponential.md
+            - X̄의 표본분포 (Normal): ch05/code/xbar_normal.md
+            - X̄의 표본분포 (Bernoulli): ch05/code/xbar_bernoulli.md
+            - S²의 표본분포 (Normal): ch05/code/s2_normal.md
+            - X̄의 표준오차: ch05/code/se_xbar.md
+            - S²의 표준오차: ch05/code/se_s2.md
+            - 소득 자료 표본분포 시각화: ch05/code/sampling_dist_income_visualization.md
+            - 붓스트랩 표준오차: ch05/code/bootstrap_standard_error.md
+            - 금융위기와 중심극한정리의 실패: ch05/code/financial_crisis_clt.md
 
     - 6 Statistical Estimation:
         - Chapter Overview: ch06/index.md

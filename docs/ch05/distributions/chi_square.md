@@ -1,35 +1,35 @@
-# Chi-Square Distribution (chi-squared)
+# 카이제곱 분포 (chi-squared)
 
-## Overview
+## 개요
 
-The **chi-square distribution** arises naturally as the distribution of a sum of squared standard normal random variables. It plays a central role in inference about population variance, goodness-of-fit tests, and tests of independence.
+**카이제곱 분포**는 표준정규확률변수들의 제곱합의 분포로 자연스럽게 나타난다. 모분산에 관한 추론, 적합도 검정, 독립성 검정에서 중심적인 역할을 한다.
 
 ---
 
-## Definition
+## 정의
 
-If $Z_1, Z_2, \ldots, Z_d$ are independent standard normal random variables, then:
+$Z_1, Z_2, \ldots, Z_d$가 독립인 표준정규확률변수이면:
 
 $$
 \sum_{i=1}^d Z_i^2 \sim \chi^2_d
 $$
 
-The parameter $d$ is called the **degrees of freedom**.
+모수 $d$를 **자유도**라 한다.
 
 ---
 
-## Degrees of Freedom and Shape
+## 자유도와 모양
 
-The shape of the $\chi^2$ distribution depends critically on $d$:
+$\chi^2$ 분포의 모양은 $d$에 결정적으로 의존한다:
 
-- **Low $d$ (e.g., 1–2):** Highly right-skewed with a mode near zero.
-- **High $d$:** Becomes more symmetric and approaches a normal distribution (by the CLT, since it is a sum of i.i.d. variables).
+- **$d$가 작을 때 (예: 1–2):** 오른쪽으로 심하게 치우치고 최빈값이 0 근처이다.
+- **$d$가 클 때:** 더 대칭적이 되고 정규분포에 가까워진다(i.i.d. 확률변수의 합이므로 중심극한정리에 의해).
 
 ---
 
-## Properties
+## 성질
 
-### Basic Properties
+### 기본 성질
 
 $$
 \begin{aligned}
@@ -38,17 +38,17 @@ $$
 \end{aligned}
 $$
 
-For $d = 1$, the distribution is highly skewed. For larger $d$, it becomes more symmetric.
+$d = 1$이면 분포가 심하게 치우친다. $d$가 커질수록 더 대칭적이 된다.
 
-### Additivity
+### 가법성
 
-If $X_1 \sim \chi^2_{d_1}$ and $X_2 \sim \chi^2_{d_2}$ are **independent**, then:
+$X_1 \sim \chi^2_{d_1}$과 $X_2 \sim \chi^2_{d_2}$가 **독립**이면:
 
 $$
 X_1 + X_2 \sim \chi^2_{d_1 + d_2}
 $$
 
-This is useful when analyzing total variability across independent components.
+독립인 성분들에 걸친 전체 변동성을 분석할 때 유용하다.
 
 ---
 
@@ -102,7 +102,7 @@ plt.show()
 
 ---
 
-## PPF (Inverse CDF)
+## PPF (역 CDF)
 
 ```python
 from scipy import stats
@@ -117,9 +117,9 @@ print(f"99th percentile of χ²(10): {chi2_99:.4f}")
 
 ---
 
-## Random Samples
+## 확률표본
 
-### Direct Sampling
+### 직접 표본추출
 
 ```python
 import numpy as np
@@ -137,7 +137,7 @@ ax.legend()
 plt.show()
 ```
 
-### Sampling from Definition (Sum of Squared Normals)
+### 정의로부터의 표본추출 (정규확률변수의 제곱합)
 
 ```python
 import numpy as np
@@ -157,24 +157,24 @@ plt.show()
 
 ---
 
-## Why Chi-Square?
+## 왜 카이제곱인가?
 
-The chi-square distribution arises in the study of **sample variance**. For i.i.d. $X_i \sim N(\mu, \sigma^2)$:
+카이제곱 분포는 **표본분산**을 다룰 때 나타난다. i.i.d. $X_i \sim N(\mu, \sigma^2)$에 대해:
 
 $$
 \frac{(n-1)S^2}{\sigma^2} = \sum_{i=1}^n \left(\frac{X_i - \bar{X}}{\sigma}\right)^2 \sim \chi^2_{n-1}
 $$
 
-This result allows us to construct confidence intervals and hypothesis tests for $\sigma^2$.
+이 결과 덕분에 $\sigma^2$에 대한 신뢰구간과 가설검정을 구성할 수 있다.
 
-### Dependence on Normality
+### 정규성에 대한 의존
 
-This exact chi-square result **depends critically on the normality assumption**:
+이 정확한 카이제곱 결과는 **정규성 가정에 결정적으로 의존한다**:
 
-- For **normal populations**: $\bar{X}$ and $S^2$ are independent, and $(n-1)S^2/\sigma^2$ is exactly chi-square.
-- For **non-normal populations**: the chi-square approximation is unreliable, especially for small $n$. The distribution of $S^2$ may differ dramatically.
+- **정규모집단에서는**: $\bar{X}$와 $S^2$이 독립이고 $(n-1)S^2/\sigma^2$이 정확히 카이제곱을 따른다.
+- **정규가 아닌 모집단에서는**: 특히 $n$이 작을 때 카이제곱 근사를 믿을 수 없다. $S^2$의 분포가 극적으로 달라질 수 있다.
 
-### Simulation: Normal Population
+### 모의실험: 정규모집단
 
 ```python
 import matplotlib.pyplot as plt
@@ -195,7 +195,7 @@ ax.spines[['top', 'right']].set_visible(False)
 plt.show()
 ```
 
-### Simulation: Non-Normal Population
+### 모의실험: 정규가 아닌 모집단
 
 ```python
 import matplotlib.pyplot as plt
@@ -218,31 +218,31 @@ plt.show()
 
 ---
 
-## Practical Implications
+## 실무적 함의
 
-| Scenario | Chi-Square Validity |
+| 상황 | 카이제곱의 타당성 |
 |:---|:---|
-| Normal population | Exact |
-| Large $n$, non-normal | May be approximately valid via CLT |
-| Small $n$, skewed/binary population | Unreliable; use exact or resampling methods |
-| Binary data | Use $np \geq 5$ and $n(1-p) \geq 5$ rule |
+| 정규모집단 | 정확함 |
+| $n$이 크고 정규가 아님 | 중심극한정리를 통해 근사적으로 타당할 수 있음 |
+| $n$이 작고 치우쳤거나 이항인 모집단 | 신뢰할 수 없음. 정확검정이나 재표본추출 방법을 사용 |
+| 이항 자료 | $np \geq 5$, $n(1-p) \geq 5$ 규칙을 사용 |
 
 ---
 
-## Key Takeaways
+## 핵심 요약
 
-- The chi-square distribution is the sum of squared standard normal variables.
-- It governs inference about population variance when the population is normal.
-- The additivity property makes it useful for combining independent variance components.
-- The exactness of the chi-square result for $S^2$ depends critically on normality.
+- 카이제곱 분포는 표준정규확률변수들의 제곱합이다.
+- 모집단이 정규일 때 모분산에 관한 추론을 지배한다.
+- 가법성 덕분에 독립인 분산 성분들을 결합할 때 유용하다.
+- $S^2$에 대한 카이제곱 결과의 정확성은 정규성에 결정적으로 의존한다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-If $X \sim \chi^2_5$ and $Y \sim \chi^2_8$ are independent, what is the distribution of $X + Y$? Compute $E[X+Y]$ and $\text{Var}(X+Y)$.
+**연습문제 1.**
+$X \sim \chi^2_5$와 $Y \sim \chi^2_8$이 독립일 때 $X + Y$의 분포는 무엇인가? $E[X+Y]$와 $\text{Var}(X+Y)$를 계산하라.
 
-??? success "Solution to Exercise 1"
-    By the additivity property of the chi-square distribution, the sum of independent chi-square random variables is chi-square with degrees of freedom equal to the sum:
+??? success "연습문제 1 풀이"
+    카이제곱 분포의 가법성에 의해 독립인 카이제곱 확률변수의 합은 자유도가 더해진 카이제곱이다:
 
     $$
     X + Y \sim \chi^2_{5+8} = \chi^2_{13}
@@ -254,36 +254,36 @@ If $X \sim \chi^2_5$ and $Y \sim \chi^2_8$ are independent, what is the distribu
 
 ---
 
-**Exercise 2.**
-A random sample of $n = 20$ observations is drawn from a $N(\mu, 9)$ population. What is the exact distribution of $\frac{(n-1)S^2}{\sigma^2}$? Find the probability that $S^2 > 15$ (where $\sigma^2 = 9$).
+**연습문제 2.**
+$N(\mu, 9)$ 모집단에서 크기 $n = 20$인 확률표본을 뽑는다. $\frac{(n-1)S^2}{\sigma^2}$의 정확한 분포는 무엇인가? ($\sigma^2 = 9$일 때) $S^2 > 15$일 확률을 구하라.
 
-??? success "Solution to Exercise 2"
-    Since the population is normal, the sampling distribution is exact:
+??? success "연습문제 2 풀이"
+    모집단이 정규이므로 표본분포는 정확하다:
 
     $$
     \frac{(n-1)S^2}{\sigma^2} = \frac{19 S^2}{9} \sim \chi^2_{19}
     $$
 
-    We need $P(S^2 > 15) = P\!\left(\frac{19 S^2}{9} > \frac{19 \times 15}{9}\right) = P(\chi^2_{19} > 31.67)$.
+    구해야 할 것은 $P(S^2 > 15) = P\!\left(\frac{19 S^2}{9} > \frac{19 \times 15}{9}\right) = P(\chi^2_{19} > 31.67)$이다.
 
-    From chi-square tables or software, $P(\chi^2_{19} > 31.67) \approx 0.034$. There is approximately a 3.4% chance that the sample variance exceeds 15 when $\sigma^2 = 9$.
-
----
-
-**Exercise 3.**
-Explain why the chi-square distribution is right-skewed for small degrees of freedom but becomes approximately symmetric for large degrees of freedom.
-
-??? success "Solution to Exercise 3"
-    The chi-square distribution with $k$ degrees of freedom is a sum of $k$ independent $\chi^2_1$ variables, each of which is the square of a standard normal. The $\chi^2_1$ distribution is heavily right-skewed (it can only be non-negative, with most mass near 0 and a long right tail).
-
-    For small $k$, the sum of a few such skewed variables remains skewed. As $k$ increases, the CLT applies: the sum of many independent random variables converges to a normal distribution. Specifically, the skewness of $\chi^2_k$ is $\sqrt{8/k}$, which decreases to 0 as $k \to \infty$. For $k = 2$, skewness is 2 (highly skewed); for $k = 50$, skewness is 0.4 (nearly symmetric).
+    카이제곱 분포표나 소프트웨어에서 $P(\chi^2_{19} > 31.67) \approx 0.034$이다. $\sigma^2 = 9$일 때 표본분산이 15를 넘을 확률은 약 3.4%이다.
 
 ---
 
-**Exercise 4.**
-A researcher draws a sample of $n = 10$ from an exponential population and computes $\frac{(n-1)S^2}{\sigma^2}$. She assumes it follows a $\chi^2_9$ distribution. Is this valid? Explain what goes wrong.
+**연습문제 3.**
+카이제곱 분포가 자유도가 작을 때는 오른쪽으로 치우치지만 자유도가 크면 근사적으로 대칭이 되는 이유를 설명하라.
 
-??? success "Solution to Exercise 4"
-    This is **not valid**. The result $\frac{(n-1)S^2}{\sigma^2} \sim \chi^2_{n-1}$ holds **only when the population is normal**. The exponential distribution is right-skewed with excess kurtosis $\kappa = 6$, which causes the distribution of $S^2$ to have much heavier tails than a $\chi^2_9$ distribution.
+??? success "연습문제 3 풀이"
+    자유도 $k$인 카이제곱 분포는 독립인 $\chi^2_1$ 확률변수 $k$개의 합이며, 각각은 표준정규확률변수의 제곱이다. $\chi^2_1$ 분포는 오른쪽으로 심하게 치우쳐 있다(음이 아닌 값만 가지며 대부분의 질량이 0 근처에 있고 오른쪽 꼬리가 길다).
 
-    Specifically, the variance of $S^2$ for a non-normal population depends on the kurtosis: $\text{Var}(S^2) \approx \frac{2\sigma^4}{n-1}(1 + \kappa/2)$. For the exponential distribution, this is $\frac{2\sigma^4}{9}(1 + 3) = \frac{8\sigma^4}{9}$, which is 4 times larger than the chi-square theory predicts ($\frac{2\sigma^4}{9}$). Confidence intervals and hypothesis tests based on the chi-square assumption would have incorrect coverage and inflated Type I error rates.
+    $k$가 작으면 이런 치우친 확률변수 몇 개의 합도 여전히 치우쳐 있다. $k$가 커지면 중심극한정리가 적용된다. 많은 독립 확률변수의 합은 정규분포로 수렴한다. 구체적으로 $\chi^2_k$의 왜도는 $\sqrt{8/k}$이며 $k \to \infty$일 때 0으로 감소한다. $k = 2$이면 왜도가 2로 심하게 치우쳐 있고, $k = 50$이면 0.4로 거의 대칭이다.
+
+---
+
+**연습문제 4.**
+어떤 연구자가 지수 모집단에서 $n = 10$인 표본을 뽑아 $\frac{(n-1)S^2}{\sigma^2}$을 계산하고 이것이 $\chi^2_9$ 분포를 따른다고 가정한다. 타당한가? 무엇이 잘못되는지 설명하라.
+
+??? success "연습문제 4 풀이"
+    **타당하지 않다.** $\frac{(n-1)S^2}{\sigma^2} \sim \chi^2_{n-1}$이라는 결과는 **모집단이 정규일 때만** 성립한다. 지수분포는 오른쪽으로 치우쳐 있고 초과첨도가 $\kappa = 6$이어서 $S^2$의 분포가 $\chi^2_9$ 분포보다 훨씬 두꺼운 꼬리를 갖게 된다.
+
+    구체적으로 정규가 아닌 모집단에서 $S^2$의 분산은 첨도에 의존한다: $\text{Var}(S^2) \approx \frac{2\sigma^4}{n-1}(1 + \kappa/2)$. 지수분포에서는 $\frac{2\sigma^4}{9}(1 + 3) = \frac{8\sigma^4}{9}$가 되어 카이제곱 이론이 예측하는 값($\frac{2\sigma^4}{9}$)보다 4배 크다. 카이제곱 가정에 기반한 신뢰구간과 가설검정은 포함확률이 틀리고 제1종 오류율이 부풀려진다.

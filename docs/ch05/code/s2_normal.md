@@ -1,62 +1,62 @@
-# Sampling Distribution of S-squared (Normal)
+# S-squared의 표본분포 (Normal)
 
-## Overview
+## 개요
 
-While the sampling distribution of $\bar{X}$ is central to estimation of the mean, the sampling distribution of the sample variance $S^2$ is essential for inference about variability. When the population is normal, the distribution of $S^2$ is exactly linked to the chi-squared distribution. For non-normal populations, the chi-squared relationship is only approximate, but improves with larger sample sizes. This page explores both the exact theory and simulation evidence.
+$\bar{X}$의 표본분포가 평균의 추정에서 중심이 된다면, 표본분산 $S^2$의 표본분포는 변동성에 관한 추론에 필수적이다. 모집단이 정규이면 $S^2$의 분포가 카이제곱 분포와 정확히 연결된다. 정규가 아닌 모집단에서는 카이제곱 관계가 근사에 그치지만 표본크기가 커질수록 좋아진다. 이 페이지에서는 정확한 이론과 모의실험 증거를 모두 살펴본다.
 
-## Definitions
+## 정의
 
-Given a random sample $X_1, \ldots, X_n$ from a population with mean $\mu$ and variance $\sigma^2$, the **sample variance** is:
+평균이 $\mu$, 분산이 $\sigma^2$인 모집단에서 뽑은 확률표본 $X_1, \ldots, X_n$에 대해 **표본분산**은:
 
 $$
 S^2 = \frac{1}{n-1}\sum_{i=1}^n (X_i - \bar{X})^2
 $$
 
-The factor $n - 1$ (rather than $n$) makes $S^2$ an unbiased estimator of $\sigma^2$:
+($n$이 아닌) $n - 1$이라는 인수가 $S^2$을 $\sigma^2$의 불편추정량으로 만든다:
 
 $$
 E[S^2] = \sigma^2
 $$
 
-## Exact Result for Normal Populations
+## 정규모집단에 대한 정확한 결과
 
-!!! abstract "Theorem"
-    If $X_1, \ldots, X_n \overset{\text{iid}}{\sim} N(\mu, \sigma^2)$, then:
+!!! abstract "정리"
+    $X_1, \ldots, X_n \overset{\text{iid}}{\sim} N(\mu, \sigma^2)$이면:
 
     $$
     \frac{(n-1)S^2}{\sigma^2} \sim \chi^2(n-1)
     $$
 
-    Moreover, $\bar{X}$ and $S^2$ are independent.
+    또한 $\bar{X}$와 $S^2$은 독립이다.
 
-From this result, the distribution of $S^2$ itself can be written as:
+이 결과로부터 $S^2$ 자체의 분포는 다음과 같이 쓸 수 있다:
 
 $$
 S^2 \sim \frac{\sigma^2}{n-1} \cdot \chi^2(n-1)
 $$
 
-The mean and variance of $S^2$ (for the normal case) are:
+(정규인 경우) $S^2$의 평균과 분산은:
 
 $$
 E[S^2] = \sigma^2, \qquad \text{Var}(S^2) = \frac{2\sigma^4}{n-1}
 $$
 
-## Non-Normal Populations
+## 정규가 아닌 모집단
 
-For non-normal populations, the chi-squared relationship does not hold exactly. However:
+정규가 아닌 모집단에서는 카이제곱 관계가 정확히 성립하지 않는다. 다만:
 
-- $S^2$ remains unbiased: $E[S^2] = \sigma^2$.
-- The variance of $S^2$ depends on the population kurtosis $\kappa$:
+- $S^2$은 여전히 불편이다: $E[S^2] = \sigma^2$.
+- $S^2$의 분산은 모집단 첨도 $\kappa$에 의존한다:
 
 $$
 \text{Var}(S^2) = \frac{1}{n}\left(\kappa - \frac{n-3}{n-1}\right)\sigma^4
 $$
 
-where $\kappa = E[(X - \mu)^4] / \sigma^4$ is the kurtosis. For normal distributions, $\kappa = 3$, and this simplifies to $2\sigma^4/(n-1)$.
+여기서 $\kappa = E[(X - \mu)^4] / \sigma^4$는 첨도이다. 정규분포에서는 $\kappa = 3$이므로 이 식은 $2\sigma^4/(n-1)$로 간단해진다.
 
-## Simulation
+## 모의실험
 
-The code below simulates the sampling distribution of $S^2$ from four different populations (Normal, Exponential, Chi-squared, Uniform), each with $n = 100$, and overlays the theoretical chi-squared density.
+아래 코드는 네 가지 서로 다른 모집단(Normal, Exponential, Chi-squared, Uniform)에서 각각 $n = 100$으로 $S^2$의 표본분포를 모의실험하고 이론적 카이제곱 밀도를 겹쳐 그린다.
 
 ```python
 import matplotlib.pyplot as plt
@@ -109,29 +109,29 @@ plt.tight_layout()
 plt.show()
 ```
 
-## Interpretation
+## 해석
 
-!!! note "Key Observations"
+!!! note "주요 관찰"
 
-    1. **Normal population**: The simulated distribution of $S^2$ matches the chi-squared-based density almost perfectly. This confirms the exact theoretical result.
-    2. **Exponential and Chi-squared populations**: These are right-skewed, so the sampling distribution of $S^2$ is more spread out and the chi-squared overlay is only an approximation. The fit improves as $n$ increases.
-    3. **Uniform population**: The Uniform distribution has light tails (kurtosis $< 3$), so $S^2$ has **less** variability than the chi-squared model predicts. The fit is reasonable but not exact.
-    4. With $n = 100$, the chi-squared approximation is serviceable for all four populations, illustrating the CLT-like convergence for $S^2$.
+    1. **정규모집단**: 모의실험한 $S^2$의 분포가 카이제곱 기반 밀도와 거의 완벽하게 일치한다. 정확한 이론적 결과를 확인해 준다.
+    2. **Exponential과 Chi-squared 모집단**: 오른쪽으로 치우쳐 있어 $S^2$의 표본분포가 더 넓게 퍼지고 카이제곱 곡선은 근사에 그친다. $n$이 커지면 적합이 좋아진다.
+    3. **Uniform 모집단**: 균등분포는 꼬리가 가벼워(첨도 $< 3$) $S^2$의 변동성이 카이제곱 모형이 예측하는 것보다 **작다**. 적합은 그럭저럭 괜찮지만 정확하지는 않다.
+    4. $n = 100$에서는 네 모집단 모두에서 카이제곱 근사를 쓸 만하며, $S^2$에 대해서도 중심극한정리와 비슷한 수렴이 나타남을 보여 준다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.** If $X_1, \ldots, X_{10} \overset{\text{iid}}{\sim} N(0, 4)$, find $P(S^2 > 6)$.
+**연습문제 1.** $X_1, \ldots, X_{10} \overset{\text{iid}}{\sim} N(0, 4)$일 때 $P(S^2 > 6)$을 구하라.
 
-??? success "Solution to Exercise 1"
-    Here $\sigma^2 = 4$, $n = 10$, so $\frac{(n-1)S^2}{\sigma^2} = \frac{9S^2}{4} \sim \chi^2(9)$.
+??? success "연습문제 1 풀이"
+    여기서 $\sigma^2 = 4$, $n = 10$이므로 $\frac{(n-1)S^2}{\sigma^2} = \frac{9S^2}{4} \sim \chi^2(9)$이다.
 
-    We need:
+    구해야 할 것은:
 
     $$
     P(S^2 > 6) = P\!\left(\frac{9S^2}{4} > \frac{9 \cdot 6}{4}\right) = P(\chi^2(9) > 13.5)
     $$
 
-    Using Python:
+    Python으로:
 
     ```python
     from scipy import stats
@@ -139,26 +139,26 @@ plt.show()
     print(f"P(S^2 > 6) = {p:.4f}")
     ```
 
-    This gives $P(\chi^2(9) > 13.5) \approx 0.1415$. $\square$
+    결과는 $P(\chi^2(9) > 13.5) \approx 0.1415$이다. $\square$
 
 ---
 
-**Exercise 2.** Prove that $E[S^2] = \sigma^2$ for any population (not just normal).
+**연습문제 2.** (정규분포뿐 아니라) 임의의 모집단에 대해 $E[S^2] = \sigma^2$임을 증명하라.
 
-??? success "Solution to Exercise 2"
-    Starting from the definition:
+??? success "연습문제 2 풀이"
+    정의에서 출발한다:
 
     $$
     S^2 = \frac{1}{n-1}\sum_{i=1}^n (X_i - \bar{X})^2
     $$
 
-    Expand the sum:
+    합을 전개하면:
 
     $$
     \sum_{i=1}^n (X_i - \bar{X})^2 = \sum_{i=1}^n X_i^2 - n\bar{X}^2
     $$
 
-    Taking expectations:
+    기댓값을 취하면:
 
     $$
     E\!\left[\sum_{i=1}^n X_i^2\right] = n E[X_i^2] = n(\sigma^2 + \mu^2)
@@ -168,13 +168,13 @@ plt.show()
     E[n\bar{X}^2] = n\!\left(\text{Var}(\bar{X}) + (E[\bar{X}])^2\right) = n\!\left(\frac{\sigma^2}{n} + \mu^2\right) = \sigma^2 + n\mu^2
     $$
 
-    Therefore:
+    따라서:
 
     $$
     E\!\left[\sum_{i=1}^n (X_i - \bar{X})^2\right] = n(\sigma^2 + \mu^2) - \sigma^2 - n\mu^2 = (n-1)\sigma^2
     $$
 
-    Dividing by $n - 1$:
+    $n - 1$로 나누면:
 
     $$
     E[S^2] = \sigma^2
@@ -184,12 +184,12 @@ plt.show()
 
 ---
 
-**Exercise 3.** Show that $\text{Var}(S^2) = 2\sigma^4/(n-1)$ when the population is normal, using the fact that $\text{Var}(\chi^2(k)) = 2k$.
+**연습문제 3.** $\text{Var}(\chi^2(k)) = 2k$라는 사실을 사용하여 모집단이 정규일 때 $\text{Var}(S^2) = 2\sigma^4/(n-1)$임을 보여라.
 
-??? success "Solution to Exercise 3"
-    From the theorem, $\frac{(n-1)S^2}{\sigma^2} \sim \chi^2(n-1)$.
+??? success "연습문제 3 풀이"
+    정리에 의해 $\frac{(n-1)S^2}{\sigma^2} \sim \chi^2(n-1)$이다.
 
-    Let $Q = \frac{(n-1)S^2}{\sigma^2}$. Then $S^2 = \frac{\sigma^2 Q}{n-1}$ and:
+    $Q = \frac{(n-1)S^2}{\sigma^2}$라 하면 $S^2 = \frac{\sigma^2 Q}{n-1}$이므로:
 
     $$
     \text{Var}(S^2) = \frac{\sigma^4}{(n-1)^2} \cdot \text{Var}(Q) = \frac{\sigma^4}{(n-1)^2} \cdot 2(n-1) = \frac{2\sigma^4}{n-1}
@@ -199,49 +199,49 @@ plt.show()
 
 ---
 
-**Exercise 4.** For an Exponential population with $\lambda = 1$, the kurtosis is $\kappa = 9$. Compute the theoretical $\text{Var}(S^2)$ for $n = 100$ and compare it with $2\sigma^4/(n-1)$ (the normal-theory value).
+**연습문제 4.** $\lambda = 1$인 Exponential 모집단의 첨도는 $\kappa = 9$이다. $n = 100$에서 이론적 $\text{Var}(S^2)$을 계산하고 (정규이론 값인) $2\sigma^4/(n-1)$과 비교하라.
 
-??? success "Solution to Exercise 4"
-    For $\text{Exp}(1)$: $\sigma^2 = 1$, $\kappa = 9$.
+??? success "연습문제 4 풀이"
+    $\text{Exp}(1)$에서 $\sigma^2 = 1$, $\kappa = 9$이다.
 
-    The general formula for the variance of $S^2$ is:
+    $S^2$의 분산에 대한 일반 공식은:
 
     $$
     \text{Var}(S^2) = \frac{1}{n}\left(\kappa - \frac{n-3}{n-1}\right)\sigma^4
     $$
 
-    With $n = 100$:
+    $n = 100$이면:
 
     $$
     \text{Var}(S^2) = \frac{1}{100}\left(9 - \frac{97}{99}\right) \cdot 1 = \frac{1}{100}\left(9 - 0.9798\right) = \frac{8.0202}{100} = 0.08020
     $$
 
-    The normal-theory value would be:
+    정규이론 값은:
 
     $$
     \frac{2\sigma^4}{n-1} = \frac{2}{99} \approx 0.02020
     $$
 
-    The Exponential population gives a variance of $S^2$ about 4 times larger than the normal-theory value. This is because the Exponential's heavier tails (excess kurtosis $= 6$) cause $S^2$ to be more variable. $\square$
+    Exponential 모집단에서 $S^2$의 분산이 정규이론 값보다 약 4배 크다. Exponential 분포의 두꺼운 꼬리(초과첨도 $= 6$) 때문에 $S^2$의 변동성이 커지기 때문이다. $\square$
 
 ---
 
-**Exercise 5.** Construct a 95% confidence interval for $\sigma^2$ using the chi-squared distribution. Suppose $n = 25$ observations from a normal population yield $S^2 = 12$.
+**연습문제 5.** 카이제곱 분포를 사용하여 $\sigma^2$에 대한 95% 신뢰구간을 구성하라. 정규모집단에서 $n = 25$개의 관측값으로 $S^2 = 12$를 얻었다고 하자.
 
-??? success "Solution to Exercise 5"
-    Since $(n-1)S^2/\sigma^2 \sim \chi^2(n-1)$, we have:
+??? success "연습문제 5 풀이"
+    $(n-1)S^2/\sigma^2 \sim \chi^2(n-1)$이므로:
 
     $$
     P\!\left(\chi^2_{0.025}(24) \le \frac{24 S^2}{\sigma^2} \le \chi^2_{0.975}(24)\right) = 0.95
     $$
 
-    Rearranging for $\sigma^2$:
+    $\sigma^2$에 대해 정리하면:
 
     $$
     \frac{24 S^2}{\chi^2_{0.975}(24)} \le \sigma^2 \le \frac{24 S^2}{\chi^2_{0.025}(24)}
     $$
 
-    From chi-squared tables (or Python):
+    카이제곱 분포표(또는 Python)에서:
 
     ```python
     from scipy import stats
@@ -257,4 +257,4 @@ plt.show()
     7.32 \le \sigma^2 \le 23.23
     $$
 
-    The 95% confidence interval for $\sigma^2$ is approximately $(7.32, 23.23)$. Note that this interval is not symmetric around $S^2 = 12$ because the chi-squared distribution is skewed. $\square$
+    $\sigma^2$에 대한 95% 신뢰구간은 약 $(7.32, 23.23)$이다. 카이제곱 분포가 치우쳐 있으므로 이 구간이 $S^2 = 12$를 중심으로 대칭이 아님에 유의하라. $\square$

@@ -1,55 +1,55 @@
-# Standard Error
+# 표준오차
 
-## Overview
+## 개요
 
-> **References:** [YouTube — Standard Error](https://www.youtube.com/watch?v=A82brFpdr9g) | [Blog — SD vs SE](https://statisticsbyjim.com/basics/difference-standard-deviation-vs-standard-error/)
+> **참고 자료:** [YouTube — Standard Error](https://www.youtube.com/watch?v=A82brFpdr9g) | [Blog — SD vs SE](https://statisticsbyjim.com/basics/difference-standard-deviation-vs-standard-error/)
 
-The **standard error** (SE) quantifies how much a sample statistic varies from sample to sample. It is the standard deviation of the **sampling distribution** of that statistic.
+**표준오차**(SE)는 표본통계량이 표본마다 얼마나 달라지는지를 정량화한다. 그 통계량의 **표본분포**의 표준편차이다.
 
-## Standard Deviation vs Standard Error
+## 표준편차와 표준오차
 
-### Standard Deviation (SD)
+### 표준편차 (SD)
 
-The SD measures how spread out **individual observations** are around the population mean:
-
-$$
-\text{SD} = \sqrt{\text{Var}(X)}
-$$
-
-### Standard Error (SE)
-
-The SE measures how spread out a **sample statistic** is around the true parameter:
-
-$$
-\text{SE} = \sqrt{\text{Var}(\hat{\theta}(X_1, \dots, X_n))}
-$$
-
-### Key Distinction
-
-- **Standard deviation** measures the spread of individual data points around the mean.
+표준편차는 **개별 관측값**이 모평균 주위로 얼마나 흩어져 있는지를 잰다:
 
 $$
 \text{SD} = \sqrt{\text{Var}(X)}
 $$
 
-- **Standard error** measures the spread of sample statistics (e.g., means) around the population parameter.
+### 표준오차 (SE)
+
+표준오차는 **표본통계량**이 참 모수 주위로 얼마나 흩어져 있는지를 잰다:
 
 $$
 \text{SE} = \sqrt{\text{Var}(\hat{\theta}(X_1, \dots, X_n))}
 $$
 
-| | Standard Deviation | Standard Error |
+### 핵심 구별
+
+- **표준편차**는 개별 자료점이 평균 주위로 퍼진 정도를 잰다.
+
+$$
+\text{SD} = \sqrt{\text{Var}(X)}
+$$
+
+- **표준오차**는 표본통계량(예: 평균)이 모수 주위로 퍼진 정도를 잰다.
+
+$$
+\text{SE} = \sqrt{\text{Var}(\hat{\theta}(X_1, \dots, X_n))}
+$$
+
+| | 표준편차 | 표준오차 |
 |---|---|---|
-| **Measures** | Spread of individual data | Spread of a sample statistic |
-| **Depends on** | Population variability | Population variability **and** sample size |
-| **Formula (for $\bar{X}$)** | $\sigma$ | $\sigma / \sqrt{n}$ |
-| **Decreases with $n$?** | No | Yes |
+| **재는 대상** | 개별 자료의 퍼짐 | 표본통계량의 퍼짐 |
+| **의존하는 것** | 모집단의 변동성 | 모집단의 변동성**과** 표본크기 |
+| **공식 ($\bar{X}$의 경우)** | $\sigma$ | $\sigma / \sqrt{n}$ |
+| **$n$에 따라 줄어드는가?** | 아니오 | 예 |
 
-## The Standardization Pattern
+## 표준화의 공통 형태
 
-> **Reference:** [Khan Academy — Standard Error of the Mean](https://www.khanacademy.org/math/ap-statistics/sampling-distribution-ap/sampling-distribution-mean/v/standard-error-of-the-mean)
+> **참고 자료:** [Khan Academy — Standard Error of the Mean](https://www.khanacademy.org/math/ap-statistics/sampling-distribution-ap/sampling-distribution-mean/v/standard-error-of-the-mean)
 
-A unifying pattern in inferential statistics:
+추론통계학을 관통하는 공통 형태가 있다:
 
 $$
 \begin{array}{lllllll}
@@ -76,13 +76,13 @@ z
 \end{array}
 $$
 
-## Example: Running Out of Water
+## 예: 물 부족
 
-> **Reference:** [Khan Academy — Sampling Distribution Example Problem](https://www.khanacademy.org/math/ap-statistics/sampling-distribution-ap/sampling-distribution-mean/v/sampling-distribution-example-problem)
+> **참고 자료:** [Khan Academy — Sampling Distribution Example Problem](https://www.khanacademy.org/math/ap-statistics/sampling-distribution-ap/sampling-distribution-mean/v/sampling-distribution-example-problem)
 
-**Problem.** On average, a male drinks 2 liters of water when active outdoors, with a standard deviation of 0.7 liters. For a full-day nature trip of 50 men, we will bring 110 liters of water along. Determine the probability of running out of water during the trip.
+**문제.** 남성이 야외 활동을 할 때 평균 2리터의 물을 마시고 표준편차는 0.7리터이다. 남성 50명이 하루 종일 자연 탐방을 가는데 물 110리터를 가져간다. 여행 중 물이 떨어질 확률을 구하라.
 
-**Solution.** Let $X_i$ be the water consumption of the $i$-th person. Assuming independence, by the CLT the sample mean $\bar{X}$ is approximately normally distributed with mean 2 and standard deviation $0.7/\sqrt{50} \approx 0.0990$.
+**풀이.** $X_i$를 $i$번째 사람의 물 소비량이라 하자. 독립을 가정하면 중심극한정리에 의해 표본평균 $\bar{X}$는 근사적으로 평균 2, 표준편차 $0.7/\sqrt{50} \approx 0.0990$인 정규분포를 따른다.
 
 $$
 \begin{array}{lll}
@@ -99,8 +99,9 @@ P(Z > 2.020) \\[8pt]
 \end{array}
 $$
 
-## Python: Standard Error of X-bar
-### Standalone Version
+## Python: X-bar의 표준오차
+
+### 단일 파일 버전
 
 ```python
 import matplotlib.pyplot as plt
@@ -152,7 +153,7 @@ if __name__ == "__main__":
     main()
 ```
 
-### Modular Version: `global_name_space.py`
+### 모듈 버전: `global_name_space.py`
 
 ```python
 import argparse
@@ -166,7 +167,7 @@ ARGS = parser.parse_args()
 np.random.seed(ARGS.seed)
 ```
 
-### Modular Version: `standard_error_of_x_bar.py`
+### 모듈 버전: `standard_error_of_x_bar.py`
 
 ```python
 import matplotlib.pyplot as plt
@@ -218,7 +219,8 @@ if __name__ == "__main__":
     main()
 ```
 
-## Python: Standard Error of S-squared
+## Python: S-squared의 표준오차
+
 ### `standard_error_of_s_square.py`
 
 ```python
@@ -271,108 +273,108 @@ if __name__ == "__main__":
     main()
 ```
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-$\sigma = 50$. (a) Compute $\mathrm{SE}$ for $n = 25, 100$. (b) For $\mathrm{SE} = 5, n = 16$, infer $\sigma$ and compute $\mathrm{SE}$ at $n = 64$.
+**연습문제 1.**
+$\sigma = 50$이다. (a) $n = 25, 100$일 때 $\mathrm{SE}$를 계산하라. (b) $n = 16$에서 $\mathrm{SE} = 5$일 때 $\sigma$를 구하고 $n = 64$에서의 $\mathrm{SE}$를 계산하라.
 
-??? success "Solution to Exercise 1"
-    (a) $\mathrm{SE}_{25} = 50/\sqrt{25} = 10$. $\mathrm{SE}_{100} = 50/\sqrt{100} = 5$. SE halved when $n$ quadruples.
+??? success "연습문제 1 풀이"
+    (a) $\mathrm{SE}_{25} = 50/\sqrt{25} = 10$. $\mathrm{SE}_{100} = 50/\sqrt{100} = 5$. $n$이 네 배가 되면 표준오차가 절반이 된다.
 
-    (b) From $\sigma/\sqrt{16} = 5$: $\sigma = 20$. At $n = 64$: $\mathrm{SE} = 20/\sqrt{64} = 2.5$. Quadrupling $n$ halves SE.
-
----
-
-**Exercise 2.**
-**SE vs. SD.** A researcher reports "sample mean $= 50$, SD $= 8$" for $n = 100$. (a) What is the SE of the sample mean? (b) Explain to a non-technical reader the difference between the two.
-
-??? success "Solution to Exercise 2"
-    (a) Estimated SE (using $s$ instead of $\sigma$): $\mathrm{SE} = 8/\sqrt{100} = 0.8$.
-
-    (b) **SD = 8:** describes how much individual observations vary in the data set. A typical individual is about 8 units from the mean.
-
-    **SE = 0.8:** describes how much the sample mean varies across different samples. The true population mean is likely within about 1.6 units (≈ 2 SEs) of 50.
-
-    The SD doesn't change as you collect more data; the SE shrinks at rate $1/\sqrt n$. Reporting an SD when an SE is meant — or vice versa — is a common error in scientific writing.
+    (b) $\sigma/\sqrt{16} = 5$에서 $\sigma = 20$이다. $n = 64$에서 $\mathrm{SE} = 20/\sqrt{64} = 2.5$이다. $n$을 네 배로 하면 표준오차가 절반이 된다.
 
 ---
 
-**Exercise 3.**
-**Bootstrap SE.** When the population is not normal and $\sigma$ is unknown, the **bootstrap** provides an SE estimate. Describe the procedure for computing SE($\bar X$) via bootstrap.
+**연습문제 2.**
+**표준오차와 표준편차.** 어떤 연구자가 $n = 100$에 대해 "표본평균 $= 50$, 표준편차 $= 8$"이라고 보고했다. (a) 표본평균의 표준오차는? (b) 비전문가에게 둘의 차이를 설명하라.
 
-??? success "Solution to Exercise 3"
-    Given an i.i.d. sample $X_1, \ldots, X_n$:
+??? success "연습문제 2 풀이"
+    (a) ($\sigma$ 대신 $s$를 사용한) 추정 표준오차: $\mathrm{SE} = 8/\sqrt{100} = 0.8$.
 
-    1. Draw a bootstrap sample $X_1^*, \ldots, X_n^*$ by sampling with replacement from the original sample.
-    2. Compute $\bar X^*$ from the bootstrap sample.
-    3. Repeat steps 1-2 $B$ times (typically $B = 1000$ to 10000), yielding $\bar X^*_1, \ldots, \bar X^*_B$.
-    4. Estimate SE as the sample SD of the bootstrap replicates: $\hat{\mathrm{SE}}_{\text{boot}} = \sqrt{(1/(B-1))\sum(\bar X^*_b - \bar X^*_\cdot)^2}$.
+    (b) **SD = 8:** 자료 집합에서 개별 관측값이 얼마나 달라지는지를 기술한다. 전형적인 개체는 평균에서 약 8단위 떨어져 있다.
 
-    **Why it works:** the bootstrap distribution approximates the sampling distribution under repeated sampling. Asymptotically, $\hat{\mathrm{SE}}_{\text{boot}} \to \sigma/\sqrt n$, but the bootstrap captures distributional shape (skew, heavy tails) better than the normal approximation.
+    **SE = 0.8:** 표본이 달라질 때 표본평균이 얼마나 달라지는지를 기술한다. 참 모평균은 50에서 약 1.6단위(≈ 표준오차 2개) 이내에 있을 가능성이 높다.
 
-    Especially valuable when no closed-form SE exists (medians, ratios, regression coefficients in complex models).
+    자료를 더 모아도 표준편차는 달라지지 않지만 표준오차는 $1/\sqrt n$의 비율로 줄어든다. 표준오차를 말해야 할 자리에 표준편차를 보고하거나 그 반대로 하는 것은 과학 논문에서 흔한 오류이다.
 
 ---
 
-**Exercise 4.**
-**SE of a function.** Use the **delta method** to compute $\mathrm{SE}(g(\hat\theta))$ when $\hat\theta$ has $\mathrm{SE}(\hat\theta)$ and $g$ is differentiable.
+**연습문제 3.**
+**붓스트랩 표준오차.** 모집단이 정규가 아니고 $\sigma$를 모를 때 **붓스트랩**이 표준오차 추정값을 준다. 붓스트랩으로 SE($\bar X$)를 계산하는 절차를 서술하라.
 
-??? success "Solution to Exercise 4"
-    **Delta method:** if $\sqrt n(\hat\theta - \theta) \xrightarrow{d} N(0, \sigma^2)$, then for differentiable $g$ with $g'(\theta) \ne 0$:
+??? success "연습문제 3 풀이"
+    i.i.d. 표본 $X_1, \ldots, X_n$이 주어졌을 때:
+
+    1. 원래 표본에서 복원추출하여 붓스트랩 표본 $X_1^*, \ldots, X_n^*$을 뽑는다.
+    2. 붓스트랩 표본에서 $\bar X^*$를 계산한다.
+    3. 1–2단계를 $B$번 반복하여(보통 $B = 1000$에서 10000) $\bar X^*_1, \ldots, \bar X^*_B$을 얻는다.
+    4. 붓스트랩 복제값들의 표본표준편차로 표준오차를 추정한다: $\hat{\mathrm{SE}}_{\text{boot}} = \sqrt{(1/(B-1))\sum(\bar X^*_b - \bar X^*_\cdot)^2}$.
+
+    **왜 작동하는가:** 붓스트랩 분포가 반복추출에서의 표본분포를 근사한다. 점근적으로 $\hat{\mathrm{SE}}_{\text{boot}} \to \sigma/\sqrt n$이지만, 붓스트랩은 정규근사보다 분포의 모양(치우침, 두꺼운 꼬리)을 더 잘 포착한다.
+
+    닫힌 형태의 표준오차가 없는 경우(중앙값, 비, 복잡한 모형의 회귀계수)에 특히 유용하다.
+
+---
+
+**연습문제 4.**
+**함수의 표준오차.** $\hat\theta$의 $\mathrm{SE}(\hat\theta)$를 알고 $g$가 미분가능할 때 **델타 방법**으로 $\mathrm{SE}(g(\hat\theta))$를 계산하라.
+
+??? success "연습문제 4 풀이"
+    **델타 방법:** $\sqrt n(\hat\theta - \theta) \xrightarrow{d} N(0, \sigma^2)$이면, $g'(\theta) \ne 0$인 미분가능한 $g$에 대해:
 
     $$
     \sqrt n(g(\hat\theta) - g(\theta)) \xrightarrow{d} N(0, [g'(\theta)]^2 \sigma^2)
     $$
 
-    In SE form: $\mathrm{SE}(g(\hat\theta)) \approx |g'(\hat\theta)| \cdot \mathrm{SE}(\hat\theta)$.
+    표준오차 형태로는 $\mathrm{SE}(g(\hat\theta)) \approx |g'(\hat\theta)| \cdot \mathrm{SE}(\hat\theta)$이다.
 
-    **Example:** $g(\hat p) = \log(\hat p/(1 - \hat p))$ (logit). $g'(\hat p) = 1/(\hat p(1 - \hat p))$. So $\mathrm{SE}(\hat\eta) = \mathrm{SE}(\hat p)/(\hat p(1 - \hat p))$.
+    **예:** $g(\hat p) = \log(\hat p/(1 - \hat p))$(로짓)에 대해 $g'(\hat p) = 1/(\hat p(1 - \hat p))$이므로 $\mathrm{SE}(\hat\eta) = \mathrm{SE}(\hat p)/(\hat p(1 - \hat p))$이다.
 
-    The delta method is the workhorse for SE computation when the estimator is a transformation of a simpler estimator with known SE.
+    추정량이 표준오차를 아는 더 단순한 추정량의 변환일 때, 델타 방법은 표준오차 계산의 주된 도구가 된다.
 
 ---
 
-**Exercise 5.**
-**Pooled SE for two samples.** Independent samples from two populations with means $\mu_1, \mu_2$ and (unknown) variances. Derive SE of $\bar X_1 - \bar X_2$ under (a) equal variance assumption (pooled), (b) unequal variances (Welch).
+**연습문제 5.**
+**두 표본의 합동 표준오차.** 평균이 $\mu_1, \mu_2$이고 분산은 미지인 두 모집단에서 독립인 표본을 뽑는다. (a) 등분산 가정(합동), (b) 이분산(Welch) 아래에서 $\bar X_1 - \bar X_2$의 표준오차를 유도하라.
 
-??? success "Solution to Exercise 5"
-    By independence: $\mathrm{Var}(\bar X_1 - \bar X_2) = \sigma_1^2/n_1 + \sigma_2^2/n_2$.
+??? success "연습문제 5 풀이"
+    독립성에 의해 $\mathrm{Var}(\bar X_1 - \bar X_2) = \sigma_1^2/n_1 + \sigma_2^2/n_2$이다.
 
-    **(a) Pooled (assume $\sigma_1 = \sigma_2 = \sigma$):**
+    **(a) 합동 ($\sigma_1 = \sigma_2 = \sigma$ 가정):**
 
-    Pool: $s_p^2 = ((n_1 - 1)s_1^2 + (n_2 - 1)s_2^2)/(n_1 + n_2 - 2)$.
+    합동 분산: $s_p^2 = ((n_1 - 1)s_1^2 + (n_2 - 1)s_2^2)/(n_1 + n_2 - 2)$.
 
     $\mathrm{SE}_{\text{pool}} = s_p \sqrt{1/n_1 + 1/n_2}$.
 
-    Used in the standard two-sample $t$-test when variances are believed equal. Slightly more efficient when this assumption holds.
+    분산이 같다고 볼 만할 때 표준적인 두 표본 $t$ 검정에서 사용한다. 이 가정이 성립하면 약간 더 효율적이다.
 
-    **(b) Welch (unequal variances):**
+    **(b) Welch (이분산):**
 
     $\mathrm{SE}_{\text{Welch}} = \sqrt{s_1^2/n_1 + s_2^2/n_2}$.
 
-    No pooling, each sample contributes its own variance. Welch's degrees of freedom (non-integer) used for the $t$ critical value.
+    합동하지 않고 각 표본이 자신의 분산을 기여한다. $t$ 임계값에는 (정수가 아닌) Welch 자유도를 사용한다.
 
-    Modern recommendation: prefer Welch by default — it doesn't require the strong equal-variance assumption and works nearly as well even when variances are equal.
+    현대적 권고: 기본적으로 Welch를 선호하라. 강한 등분산 가정을 요구하지 않으면서 분산이 같을 때에도 거의 같은 성능을 낸다.
 
 ---
 
-**Exercise 6.**
-**SE under sampling without replacement.** A population of size $N$, sample of size $n$ drawn without replacement. Compute SE($\bar X$) and identify the **finite-population correction**.
+**연습문제 6.**
+**비복원추출에서의 표준오차.** 크기 $N$인 모집단에서 크기 $n$인 표본을 비복원으로 뽑는다. SE($\bar X$)를 계산하고 **유한모집단 수정**을 찾아라.
 
-??? success "Solution to Exercise 6"
-    For sampling without replacement from a finite population:
+??? success "연습문제 6 풀이"
+    유한모집단에서 비복원추출을 하면:
 
     $$
     \mathrm{Var}(\bar X) = \frac{\sigma^2}{n}\!\left(1 - \frac{n}{N}\right)
     $$
 
-    So $\mathrm{SE}(\bar X) = (\sigma/\sqrt n) \sqrt{1 - n/N}$. The factor $\sqrt{1 - n/N}$ is the **finite-population correction (FPC)**.
+    따라서 $\mathrm{SE}(\bar X) = (\sigma/\sqrt n) \sqrt{1 - n/N}$이다. 인수 $\sqrt{1 - n/N}$이 **유한모집단 수정(FPC)**이다.
 
-    **Limits:**
+    **극한:**
 
-    - $n/N \to 0$ (sampling fraction tiny): FPC $\to 1$, recovers standard $\sigma/\sqrt n$. Use for national surveys ($n = 1000, N \approx 10^8$).
-    - $n/N \to 1$ (census): FPC $\to 0$, no sampling variability. Census produces deterministic estimates.
+    - $n/N \to 0$ (추출 비율이 매우 작을 때): FPC $\to 1$로 표준적인 $\sigma/\sqrt n$이 복원된다. 전국 조사($n = 1000, N \approx 10^8$)에 해당한다.
+    - $n/N \to 1$ (전수조사): FPC $\to 0$으로 표본추출 변동성이 없다. 전수조사는 결정론적 추정값을 준다.
 
-    **When FPC matters:** auditing (sampling 100 of 500 invoices, $n/N = 0.2$, FPC $\approx 0.89$). The FPC narrows confidence intervals by about 11% — non-trivial.
+    **FPC가 중요한 경우:** 감사(송장 500건 중 100건 추출, $n/N = 0.2$, FPC $\approx 0.89$). FPC가 신뢰구간을 약 11% 좁히므로 무시할 수 없다.
 
-    Most introductory statistics formulas ignore FPC because typical scientific samples have small $n/N$.
+    입문 통계학의 공식 대부분이 FPC를 무시하는 이유는 일반적인 과학 표본에서 $n/N$이 작기 때문이다.

@@ -1,46 +1,46 @@
-# Sampling Distribution of X-bar (Uniform)
+# X-bar의 표본분포 (Uniform)
 
-## Overview
+## 개요
 
-When we repeatedly draw random samples of size $n$ from a population and compute the sample mean $\bar{X}$ each time, the resulting distribution of those means is called the **sampling distribution of $\bar{X}$**. This page explores this concept using a Uniform population. Even though the population distribution is flat, the sampling distribution of $\bar{X}$ concentrates around the population mean and, by the Central Limit Theorem, becomes approximately normal as $n$ grows.
+모집단에서 크기 $n$인 확률표본을 반복해서 뽑고 매번 표본평균 $\bar{X}$를 계산하면, 그 평균들이 이루는 분포를 **$\bar{X}$의 표본분포**라 한다. 이 페이지에서는 Uniform 모집단을 사용하여 이 개념을 살펴본다. 모집단 분포가 평평한데도 $\bar{X}$의 표본분포는 모평균 주위로 모이고, 중심극한정리에 의해 $n$이 커질수록 근사적으로 정규분포가 된다.
 
-## Population Model
+## 모집단 모형
 
-Suppose the population follows a continuous Uniform distribution on the interval $[0, 1]$:
+모집단이 구간 $[0, 1]$ 위의 연속 균등분포를 따른다고 하자:
 
 $$
 X \sim \text{Uniform}(0, 1)
 $$
 
-The population mean and variance are:
+모평균과 모분산은:
 
 $$
 \mu = E[X] = \frac{1}{2}, \qquad \sigma^2 = \text{Var}(X) = \frac{1}{12}
 $$
 
-## Sampling Distribution of the Sample Mean
+## 표본평균의 표본분포
 
-For a random sample $X_1, X_2, \ldots, X_n$ drawn independently from this population, the sample mean is:
+이 모집단에서 독립적으로 뽑은 확률표본 $X_1, X_2, \ldots, X_n$에 대해 표본평균은:
 
 $$
 \bar{X} = \frac{1}{n} \sum_{i=1}^{n} X_i
 $$
 
-By the properties of expectation and variance for independent random variables:
+독립 확률변수의 기댓값과 분산의 성질에 의해:
 
 $$
 E[\bar{X}] = \mu = \frac{1}{2}, \qquad \text{Var}(\bar{X}) = \frac{\sigma^2}{n} = \frac{1}{12n}
 $$
 
-By the **Central Limit Theorem**, for large $n$:
+**중심극한정리**에 의해 $n$이 크면:
 
 $$
 \bar{X} \;\dot{\sim}\; N\!\left(\frac{1}{2},\; \frac{1}{12n}\right)
 $$
 
-## Simulation
+## 모의실험
 
-The following code draws 10,000 samples of size $n = 5$ from a Uniform(0, 1) population and plots three distributions side by side: the population, a single sample, and the sampling distribution of $\bar{X}$.
+다음 코드는 Uniform(0, 1) 모집단에서 크기 $n = 5$인 표본을 10,000개 뽑아 모집단, 하나의 표본, $\bar{X}$의 표본분포라는 세 분포를 나란히 그린다.
 
 ```python
 import matplotlib.pyplot as plt
@@ -80,29 +80,29 @@ plt.tight_layout()
 plt.show()
 ```
 
-## Interpretation
+## 해석
 
-!!! note "Key Observations"
+!!! note "주요 관찰"
 
-    1. The **population distribution** is flat (uniform) across $[0, 1]$.
-    2. A **single sample** of size 5 is just a handful of scattered points -- it cannot reveal the shape of the population on its own.
-    3. The **sampling distribution** of $\bar{X}$ is bell-shaped and centred at $\mu = 0.5$, even though the population is not bell-shaped. This is the Central Limit Theorem in action.
-    4. The spread of the sampling distribution is narrower than the population distribution by a factor of $1/\sqrt{n}$.
+    1. **모집단 분포**는 $[0, 1]$에서 평평하다(균등분포).
+    2. 크기 5인 **하나의 표본**은 흩어진 점 몇 개일 뿐이며, 그것만으로는 모집단의 모양을 알 수 없다.
+    3. $\bar{X}$의 **표본분포**는 모집단이 종 모양이 아닌데도 종 모양이고 $\mu = 0.5$를 중심으로 한다. 중심극한정리가 작동하는 모습이다.
+    4. 표본분포의 퍼짐은 모집단 분포보다 $1/\sqrt{n}$배 좁다.
 
-The standard error of $\bar{X}$ for $n = 5$ is:
+$n = 5$일 때 $\bar{X}$의 표준오차는:
 
 $$
 \text{SE}(\bar{X}) = \frac{\sigma}{\sqrt{n}} = \frac{1/\sqrt{12}}{\sqrt{5}} \approx 0.129
 $$
 
-As $n$ increases, this standard error shrinks, and the sampling distribution concentrates more tightly around $\mu$.
+$n$이 커질수록 이 표준오차가 줄어들고 표본분포는 $\mu$ 주위로 더 촘촘하게 모인다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.** For $X \sim \text{Uniform}(0, 1)$, derive $E[X]$ and $\text{Var}(X)$ from first principles using integration.
+**연습문제 1.** $X \sim \text{Uniform}(0, 1)$에 대해 적분을 사용하여 정의로부터 $E[X]$와 $\text{Var}(X)$를 유도하라.
 
-??? success "Solution to Exercise 1"
-    The pdf of $X \sim \text{Uniform}(0, 1)$ is $f(x) = 1$ for $x \in [0, 1]$.
+??? success "연습문제 1 풀이"
+    $X \sim \text{Uniform}(0, 1)$의 pdf는 $x \in [0, 1]$에서 $f(x) = 1$이다.
 
     $$
     E[X] = \int_0^1 x \cdot 1 \, dx = \left[\frac{x^2}{2}\right]_0^1 = \frac{1}{2}
@@ -120,16 +120,16 @@ As $n$ increases, this standard error shrinks, and the sampling distribution con
 
 ---
 
-**Exercise 2.** Prove that $E[\bar{X}] = \mu$ and $\text{Var}(\bar{X}) = \sigma^2 / n$ for any population with mean $\mu$ and variance $\sigma^2$, assuming the observations are independent.
+**연습문제 2.** 관측값이 독립이라는 가정 아래, 평균이 $\mu$이고 분산이 $\sigma^2$인 임의의 모집단에 대해 $E[\bar{X}] = \mu$이고 $\text{Var}(\bar{X}) = \sigma^2 / n$임을 증명하라.
 
-??? success "Solution to Exercise 2"
-    Let $X_1, \ldots, X_n$ be i.i.d. with $E[X_i] = \mu$ and $\text{Var}(X_i) = \sigma^2$.
+??? success "연습문제 2 풀이"
+    $X_1, \ldots, X_n$을 $E[X_i] = \mu$, $\text{Var}(X_i) = \sigma^2$인 i.i.d. 확률변수라 하자.
 
     $$
     E[\bar{X}] = E\!\left[\frac{1}{n}\sum_{i=1}^n X_i\right] = \frac{1}{n}\sum_{i=1}^n E[X_i] = \frac{1}{n} \cdot n\mu = \mu
     $$
 
-    By independence:
+    독립성에 의해:
 
     $$
     \text{Var}(\bar{X}) = \text{Var}\!\left(\frac{1}{n}\sum_{i=1}^n X_i\right) = \frac{1}{n^2}\sum_{i=1}^n \text{Var}(X_i) = \frac{1}{n^2} \cdot n\sigma^2 = \frac{\sigma^2}{n}
@@ -139,20 +139,20 @@ As $n$ increases, this standard error shrinks, and the sampling distribution con
 
 ---
 
-**Exercise 3.** If you increase the sample size from $n = 5$ to $n = 20$, by what factor does the standard error of $\bar{X}$ decrease? What sample size would you need to cut the standard error in half relative to $n = 5$?
+**연습문제 3.** 표본크기를 $n = 5$에서 $n = 20$으로 늘리면 $\bar{X}$의 표준오차는 몇 배로 줄어드는가? $n = 5$일 때에 비해 표준오차를 절반으로 줄이려면 표본크기가 얼마여야 하는가?
 
-??? success "Solution to Exercise 3"
-    The standard error is $\text{SE} = \sigma / \sqrt{n}$.
+??? success "연습문제 3 풀이"
+    표준오차는 $\text{SE} = \sigma / \sqrt{n}$이다.
 
-    The ratio of standard errors is:
+    표준오차의 비는:
 
     $$
     \frac{\text{SE}(n=5)}{\text{SE}(n=20)} = \frac{\sigma/\sqrt{5}}{\sigma/\sqrt{20}} = \sqrt{\frac{20}{5}} = \sqrt{4} = 2
     $$
 
-    So the standard error decreases by a factor of 2 when going from $n = 5$ to $n = 20$.
+    따라서 $n = 5$에서 $n = 20$으로 갈 때 표준오차가 2배로 줄어든다.
 
-    To cut the standard error in half relative to $n = 5$, we need:
+    $n = 5$ 대비 표준오차를 절반으로 줄이려면:
 
     $$
     \frac{\sigma}{\sqrt{n}} = \frac{1}{2} \cdot \frac{\sigma}{\sqrt{5}} \implies \sqrt{n} = 2\sqrt{5} \implies n = 20
@@ -162,16 +162,16 @@ As $n$ increases, this standard error shrinks, and the sampling distribution con
 
 ---
 
-**Exercise 4.** Modify the simulation to use $n = 50$ instead of $n = 5$. Compute the theoretical standard error and compare it to the empirical standard deviation of the 10,000 simulated means.
+**연습문제 4.** 모의실험을 $n = 5$ 대신 $n = 50$으로 수정하라. 이론적 표준오차를 계산하고 모의실험으로 얻은 10,000개 평균의 표본표준편차와 비교하라.
 
-??? success "Solution to Exercise 4"
-    The theoretical standard error for $n = 50$ is:
+??? success "연습문제 4 풀이"
+    $n = 50$에서의 이론적 표준오차는:
 
     $$
     \text{SE} = \frac{1/\sqrt{12}}{\sqrt{50}} = \frac{1}{\sqrt{600}} \approx 0.0408
     $$
 
-    In code:
+    코드로는:
 
     ```python
     import numpy as np
@@ -187,23 +187,23 @@ As $n$ increases, this standard error shrinks, and the sampling distribution con
     print(f"Empirical SE:   {empirical_se:.4f}")
     ```
 
-    The empirical standard error should be close to 0.0408, confirming the theoretical formula. $\square$
+    경험적 표준오차가 0.0408에 가깝게 나와 이론적 공식을 확인해 준다. $\square$
 
 ---
 
-**Exercise 5.** The Irwin--Hall distribution is the distribution of the sum $S_n = X_1 + X_2 + \cdots + X_n$ where $X_i \sim \text{Uniform}(0,1)$ independently. Show that $\bar{X} = S_n / n$ and use the Irwin--Hall pdf for $n = 2$ to find the exact pdf of $\bar{X}$ when $n = 2$.
+**연습문제 5.** Irwin–Hall 분포는 $X_i \sim \text{Uniform}(0,1)$이 독립일 때 합 $S_n = X_1 + X_2 + \cdots + X_n$의 분포이다. $\bar{X} = S_n / n$임을 보이고, $n = 2$에 대한 Irwin–Hall pdf를 사용하여 $n = 2$일 때 $\bar{X}$의 정확한 pdf를 구하라.
 
-??? success "Solution to Exercise 5"
-    By definition, $\bar{X} = S_n / n$. For $n = 2$, the Irwin--Hall pdf of $S_2 = X_1 + X_2$ is the triangular distribution:
+??? success "연습문제 5 풀이"
+    정의에 의해 $\bar{X} = S_n / n$이다. $n = 2$일 때 $S_2 = X_1 + X_2$의 Irwin–Hall pdf는 삼각분포이다:
 
     $$
     f_{S_2}(s) = \begin{cases} s & 0 \le s \le 1 \\ 2 - s & 1 < s \le 2 \\ 0 & \text{otherwise} \end{cases}
     $$
 
-    Since $\bar{X} = S_2 / 2$, we apply the change-of-variables formula. Let $y = s/2$, so $s = 2y$ and $ds = 2\,dy$:
+    $\bar{X} = S_2 / 2$이므로 변수변환 공식을 적용한다. $y = s/2$로 두면 $s = 2y$이고 $ds = 2\,dy$이므로:
 
     $$
     f_{\bar{X}}(y) = f_{S_2}(2y) \cdot 2 = \begin{cases} 4y & 0 \le y \le \tfrac{1}{2} \\ 4(1 - y) & \tfrac{1}{2} < y \le 1 \\ 0 & \text{otherwise} \end{cases}
     $$
 
-    This is a symmetric triangular distribution on $[0, 1]$ with peak at $y = 1/2$, confirming that even for $n = 2$ the sampling distribution of $\bar{X}$ is already unimodal and symmetric (though not yet normal). $\square$
+    이는 $y = 1/2$에서 정점을 이루는 $[0, 1]$ 위의 대칭 삼각분포이다. $n = 2$에서도 이미 $\bar{X}$의 표본분포가 (아직 정규는 아니지만) 단봉이고 대칭임을 확인해 준다. $\square$

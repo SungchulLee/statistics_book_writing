@@ -1,22 +1,22 @@
-# F Distribution
+# F 분포
 
-## Overview
+## 개요
 
-The **F distribution** arises as the ratio of two independent chi-square random variables, each divided by their degrees of freedom. It is fundamental for comparing variances between two populations and for Analysis of Variance (ANOVA).
+**F 분포**는 독립인 두 카이제곱 확률변수를 각각의 자유도로 나눈 뒤 그 비로 나타난다. 두 모집단의 분산을 비교하는 데 그리고 분산분석(ANOVA)에 근본이 된다.
 
 ---
 
-## Definition
+## 정의
 
-Let $X_1^2 \sim \chi^2_{d_1}$ and $X_2^2 \sim \chi^2_{d_2}$ be independent. Then:
+$X_1^2 \sim \chi^2_{d_1}$과 $X_2^2 \sim \chi^2_{d_2}$가 독립이라 하자. 그러면:
 
 $$
 F = \frac{X_1^2 / d_1}{X_2^2 / d_2} \sim F_{d_1, d_2}
 $$
 
-where $d_1$ is the numerator degrees of freedom and $d_2$ is the denominator degrees of freedom.
+여기서 $d_1$은 분자 자유도, $d_2$는 분모 자유도이다.
 
-Since each $\chi^2$ is a sum of squared standard normals:
+각 $\chi^2$은 표준정규확률변수의 제곱합이므로:
 
 $$
 X_1^2 = \sum_{i=1}^{d_1} Z_i^2, \qquad X_2^2 = \sum_{i=1}^{d_2} Z_i'^2
@@ -24,27 +24,28 @@ $$
 
 ---
 
-## Degrees of Freedom
+## 자유도
 
-The F distribution depends on **two** sets of degrees of freedom, which distinguishes it from the chi-square distribution:
+F 분포는 **두 개**의 자유도에 의존하며, 이 점이 카이제곱 분포와 구별된다:
 
-### Numerator (d_1) and Denominator (d_2)
-- **Low $d_1$ and $d_2$:** Highly right-skewed.
-- **Increasing $d_1$ and $d_2$:** Distribution becomes more symmetric.
-- **Special case:** $F(1, d_2) = \frac{\chi^2(1)/1}{\chi^2(d_2)/d_2}$ relates directly to a squared $t$ variable.
+### 분자 (d_1)와 분모 (d_2)
 
-### Comparison with Chi-Square
+- **$d_1$, $d_2$가 작을 때:** 오른쪽으로 심하게 치우친다.
+- **$d_1$, $d_2$가 커질 때:** 분포가 더 대칭적이 된다.
+- **특수한 경우:** $F(1, d_2) = \frac{\chi^2(1)/1}{\chi^2(d_2)/d_2}$는 $t$ 확률변수의 제곱과 직접 연결된다.
 
-The chi-square distribution has a single degrees-of-freedom parameter controlling its shape. The F distribution's dual dependency creates a richer family of shapes due to the **ratio** of two independent variance-like quantities.
+### 카이제곱과의 비교
+
+카이제곱 분포는 모양을 결정하는 자유도 모수가 하나뿐이다. F 분포는 분산과 같은 성격의 독립인 두 양의 **비**이기에 두 자유도에 의존하며, 그만큼 더 풍부한 모양의 계열을 이룬다.
 
 ---
 
-## Properties
+## 성질
 
-- **Non-negativity:** $F \geq 0$ (ratio of non-negative quantities).
-- **Asymmetry:** Positively skewed, especially for small degrees of freedom.
-- **Mean:** $\frac{d_2}{d_2 - 2}$ for $d_2 > 2$.
-- **Mode:** For $d_1 > 2$:
+- **비음성:** $F \geq 0$ (음이 아닌 양들의 비).
+- **비대칭성:** 양의 방향으로 치우쳐 있으며, 자유도가 작을수록 심하다.
+- **평균:** $d_2 > 2$일 때 $\frac{d_2}{d_2 - 2}$.
+- **최빈값:** $d_1 > 2$일 때:
 
 $$
 \text{Mode} = \frac{d_2(d_1 - 2)}{d_1(d_2 + 2)}
@@ -52,9 +53,9 @@ $$
 
 ---
 
-## Random Samples
+## 확률표본
 
-### Direct Sampling
+### 직접 표본추출
 
 ```python
 import numpy as np
@@ -73,7 +74,7 @@ ax.legend()
 plt.show()
 ```
 
-### Sampling from Definition (Ratio of Chi-Squares)
+### 정의로부터의 표본추출 (카이제곱의 비)
 
 ```python
 import numpy as np
@@ -95,61 +96,61 @@ plt.show()
 
 ---
 
-## Why F?
+## 왜 F인가?
 
-The F distribution arises naturally when comparing the variances of two independent normal populations.
+F 분포는 독립인 두 정규모집단의 분산을 비교할 때 자연스럽게 나타난다.
 
-### Step 1: Distribution of Scaled Variances
+### 1단계: 척도조정된 분산의 분포
 
-For samples from normal populations:
+정규모집단에서 뽑은 표본에 대해:
 
 $$
 \frac{(n_1-1)S_1^2}{\sigma_1^2} \sim \chi^2_{n_1-1}, \qquad \frac{(n_2-1)S_2^2}{\sigma_2^2} \sim \chi^2_{n_2-1}
 $$
 
-These are independent because the two samples are independent.
+두 표본이 독립이므로 이들도 독립이다.
 
-### Step 2: Ratio of Chi-Squares
+### 2단계: 카이제곱의 비
 
-Dividing each by its degrees of freedom and taking the ratio:
+각각을 자유도로 나눈 뒤 비를 취하면:
 
 $$
 \frac{S_1^2 / \sigma_1^2}{S_2^2 / \sigma_2^2} \sim F_{n_1-1, \, n_2-1}
 $$
 
-### Step 3: Under the Null Hypothesis
+### 3단계: 귀무가설 아래에서
 
-If we test $H_0: \sigma_1^2 = \sigma_2^2$, the population variances cancel:
+$H_0: \sigma_1^2 = \sigma_2^2$을 검정하면 모분산이 약분된다:
 
 $$
 \frac{S_1^2}{S_2^2} \sim F_{n_1-1, \, n_2-1}
 $$
 
-This is the **F-test for equality of two variances**.
+이것이 **두 분산의 동일성에 대한 F 검정**이다.
 
-### Why Not Something Else?
+### 왜 다른 것이 아닌가?
 
-The F distribution is the unique distribution that arises from the ratio of independent chi-square variables divided by their degrees of freedom. This same logic extends to ANOVA, where F ratios measure whether between-group variability is significantly larger than within-group variability.
+F 분포는 독립인 카이제곱 확률변수를 각각의 자유도로 나눈 비로부터 나오는 유일한 분포이다. 이 논리는 그대로 분산분석으로 확장되며, 거기서 F 비는 집단 간 변동성이 집단 내 변동성보다 유의하게 큰지를 잰다.
 
 ---
 
-## Limitations
+## 한계
 
-The F distribution result is **exact only under normality**:
+F 분포 결과는 **정규성 아래에서만 정확하다**:
 
-- **Normality required:** The chi-square results for each $S^2$ depend on the population being normal. Without normality, the distribution of $S_1^2/S_2^2$ deviates from $F$.
-- **Small samples, non-normal:** The F-test is unreliable. For skewed or heavy-tailed populations, the true Type I error rate can be much higher than the nominal level.
-- **Robust alternatives:** Levene's test, Brown–Forsythe test, and Fligner–Killeen test maintain validity under broader distributional conditions and are widely preferred in practice.
+- **정규성이 필요하다:** 각 $S^2$에 대한 카이제곱 결과가 모집단의 정규성에 의존한다. 정규성이 없으면 $S_1^2/S_2^2$의 분포가 $F$에서 벗어난다.
+- **소표본이면서 정규가 아닐 때:** F 검정을 신뢰할 수 없다. 치우쳤거나 꼬리가 두꺼운 모집단에서는 실제 제1종 오류율이 명목 수준보다 훨씬 클 수 있다.
+- **로버스트 대안:** Levene 검정, Brown–Forsythe 검정, Fligner–Killeen 검정은 더 넓은 분포 조건에서도 타당성을 유지하며 실무에서 널리 선호된다.
 
-| Scenario | F-Test Validity |
+| 상황 | F 검정의 타당성 |
 |:---|:---|
-| Normal populations | Exact |
-| Large samples, mild non-normality | Approximately valid |
-| Small samples, skewed/heavy-tailed | Unreliable; use robust alternatives |
+| 정규모집단 | 정확함 |
+| 대표본이고 정규성에서 약간 벗어남 | 근사적으로 타당함 |
+| 소표본이고 치우쳤거나 꼬리가 두꺼움 | 신뢰할 수 없음. 로버스트 대안을 사용 |
 
 ---
 
-## PPF Example
+## PPF 예제
 
 ```python
 from scipy import stats
@@ -161,116 +162,122 @@ print(f"F_0.95(5, 20) = {f_95:.4f}")
 
 ---
 
-## Key Takeaways
+## 핵심 요약
 
-- The F distribution is the ratio of two independent chi-square variables, each divided by their degrees of freedom.
-- It governs comparisons of variances and is the foundation of ANOVA.
-- Both numerator and denominator degrees of freedom affect the shape of the distribution.
-- The exactness of the F-test depends critically on normality; robust alternatives are often preferred in practice.
+- F 분포는 독립인 두 카이제곱 확률변수를 각각의 자유도로 나눈 비이다.
+- 분산의 비교를 지배하며 분산분석의 토대가 된다.
+- 분자와 분모의 자유도가 모두 분포의 모양에 영향을 준다.
+- F 검정의 정확성은 정규성에 결정적으로 의존하며, 실무에서는 로버스트 대안이 선호되는 경우가 많다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Two independent normal samples with common $\sigma^2$, $n_1 = 15$, $n_2 = 10$. Compute $P(S_1^2/S_2^2 > 1.5)$.
+**연습문제 1.**
+공통 $\sigma^2$을 갖는 독립인 두 정규 표본에서 $n_1 = 15$, $n_2 = 10$이다. $P(S_1^2/S_2^2 > 1.5)$를 계산하라.
 
-??? success "Solution to Exercise 1"
-    Under equal variances, $F = S_1^2/S_2^2 \sim F_{14, 9}$ (numerator df = $n_1 - 1 = 14$, denominator df = $n_2 - 1 = 9$).
+??? success "연습문제 1 풀이"
+    분산이 같으면 $F = S_1^2/S_2^2 \sim F_{14, 9}$이다(분자 자유도 = $n_1 - 1 = 14$, 분모 자유도 = $n_2 - 1 = 9$).
 
-    Derivation: $S_i^2 \sim \sigma^2 \chi^2_{n_i - 1}/(n_i - 1)$. Ratio of independent scaled chi-squares each divided by df is exactly $F$.
+    유도: $S_i^2 \sim \sigma^2 \chi^2_{n_i - 1}/(n_i - 1)$이다. 독립인 척도조정된 카이제곱을 각각 자유도로 나눈 비는 정확히 $F$이다.
 
-    Numerical: $P(F_{14, 9} > 1.5) \approx 0.274$ — about 27%.
+    수치: $P(F_{14, 9} > 1.5) \approx 0.274$로 약 27%이다.
 
-    The $F$ distribution is highly skewed for small df; non-trivial probability in the tails even for modest values of the ratio.
-
----
-
-**Exercise 2.**
-**Construction.** Derive $F = (U/d_1)/(V/d_2)$ where $U \sim \chi^2_{d_1}$ and $V \sim \chi^2_{d_2}$ independent. State the mean and what it tells you.
-
-??? success "Solution to Exercise 2"
-    Definition: if $U \sim \chi^2_{d_1}$ and $V \sim \chi^2_{d_2}$ are independent, then $F = (U/d_1)/(V/d_2) \sim F_{d_1, d_2}$.
-
-    Mean: $\mathbb{E}[F] = \mathbb{E}[U/d_1] / \mathbb{E}[V/d_2]$ — wait, this is wrong; for ratios we cannot split the expectation. Actually $\mathbb{E}[U/d_1] = 1$, and $\mathbb{E}[1/(V/d_2)] = d_2 \cdot \mathbb{E}[1/V] = d_2 / (d_2 - 2)$ for $d_2 > 2$ (using moment of inverse chi-square).
-
-    So $\mathbb{E}[F_{d_1, d_2}] = d_2/(d_2 - 2)$ for $d_2 > 2$, slightly greater than 1.
-
-    **Asymmetry:** $F > 1$ on average, even under the null of equal variances. This is because $1/V$ has positive bias relative to $1/\mathbb{E}[V]$ — Jensen's inequality applied to the convex function $1/v$.
-
-    For inference, one-tailed tests at the $\alpha$ level use $F$ critical values from tables; two-tailed tests are uncommon because of $F$'s asymmetry.
+    $F$ 분포는 자유도가 작을 때 심하게 치우쳐 있어, 비가 그리 크지 않아도 꼬리에 무시할 수 없는 확률이 있다.
 
 ---
 
-**Exercise 3.**
-**ANOVA $F$-test.** State the F-statistic for testing equality of $k$ group means under one-way ANOVA. What are the degrees of freedom?
+**연습문제 2.**
+**구성.** 독립인 $U \sim \chi^2_{d_1}$과 $V \sim \chi^2_{d_2}$에 대해 $F = (U/d_1)/(V/d_2)$를 유도하라. 평균을 구하고 그것이 무엇을 말해 주는지 설명하라.
 
-??? success "Solution to Exercise 3"
-    One-way ANOVA: groups $i = 1, \ldots, k$ with $n_i$ observations each, total $n = \sum n_i$. Total/between/within sum of squares:
+??? success "연습문제 2 풀이"
+    정의: $U \sim \chi^2_{d_1}$과 $V \sim \chi^2_{d_2}$가 독립이면 $F = (U/d_1)/(V/d_2) \sim F_{d_1, d_2}$이다.
+
+    평균: $U$와 $V$가 독립이므로 기댓값을 인수분해할 수 있다:
+
+    $$
+    \mathbb{E}[F] = \mathbb{E}\!\left[\frac{U}{d_1}\right] \cdot \mathbb{E}\!\left[\frac{d_2}{V}\right]
+    $$
+
+    $\mathbb{E}[U/d_1] = 1$이고, 역카이제곱의 적률을 사용하면 $d_2 > 2$일 때 $\mathbb{E}[d_2/V] = d_2 \cdot \mathbb{E}[1/V] = d_2/(d_2 - 2)$이다.
+
+    따라서 $d_2 > 2$일 때 $\mathbb{E}[F_{d_1, d_2}] = d_2/(d_2 - 2)$이며, 1보다 약간 크다.
+
+    **비대칭성:** 분산이 같다는 귀무가설 아래에서도 $F$는 평균적으로 1보다 크다. 볼록함수 $1/v$에 Jensen 부등식을 적용하면 $1/V$가 $1/\mathbb{E}[V]$에 비해 양의 편향을 갖기 때문이다.
+
+    추론에서는 유의수준 $\alpha$의 단측검정에 분포표의 $F$ 임계값을 사용한다. $F$의 비대칭성 때문에 양측검정은 흔하지 않다.
+
+---
+
+**연습문제 3.**
+**분산분석의 $F$ 검정.** 일원배치 분산분석에서 $k$개 집단 평균의 동일성을 검정하는 F 통계량을 쓰라. 자유도는 무엇인가?
+
+??? success "연습문제 3 풀이"
+    일원배치 분산분석: 집단 $i = 1, \ldots, k$에 각각 $n_i$개의 관측값이 있고 전체는 $n = \sum n_i$이다. 총/집단 간/집단 내 제곱합은:
 
     - $\mathrm{SST} = \sum_{ij}(Y_{ij} - \bar Y_{..})^2$
     - $\mathrm{SSB} = \sum_i n_i (\bar Y_{i\cdot} - \bar Y_{..})^2$
     - $\mathrm{SSW} = \sum_{ij}(Y_{ij} - \bar Y_{i\cdot})^2$
 
-    F-statistic:
+    F 통계량:
 
     $$
     F = \frac{\mathrm{SSB}/(k-1)}{\mathrm{SSW}/(n-k)} \sim F_{k-1, n-k}
     $$
 
-    Under $H_0$: equal means, both numerator and denominator estimate $\sigma^2$; under $H_1$: numerator is inflated by between-group variance, denominator unchanged. Large $F$ → reject.
+    평균이 같다는 $H_0$ 아래에서는 분자와 분모가 모두 $\sigma^2$을 추정한다. $H_1$ 아래에서는 분자가 집단 간 분산으로 부풀려지고 분모는 그대로이다. $F$가 크면 기각한다.
 
-    Degrees of freedom: $k - 1$ for between (one less than the number of group means), $n - k$ for within (each group contributes $n_i - 1$, summing to $n - k$).
+    자유도: 집단 간은 $k - 1$(집단 평균의 개수보다 하나 적다), 집단 내는 $n - k$(각 집단이 $n_i - 1$씩 기여하여 합이 $n - k$가 된다).
 
 ---
 
-**Exercise 4.**
-**$F$ vs. $t$.** For $k = 2$ groups, show that $F_{1, n-2}$ has the same distribution as the square of $t_{n-2}$.
+**연습문제 4.**
+**$F$와 $t$.** $k = 2$개 집단일 때 $F_{1, n-2}$가 $t_{n-2}$의 제곱과 같은 분포를 가짐을 보여라.
 
-??? success "Solution to Exercise 4"
-    From the definitions: $t = Z/\sqrt{V/(n-2)}$ where $Z \sim N(0,1)$ and $V \sim \chi^2_{n-2}$ independent.
+??? success "연습문제 4 풀이"
+    정의에서 출발한다: $Z \sim N(0,1)$과 $V \sim \chi^2_{n-2}$가 독립일 때 $t = Z/\sqrt{V/(n-2)}$이다.
 
-    So $t^2 = Z^2/(V/(n-2))$. Now $Z^2 \sim \chi^2_1$ (square of standard normal).
+    따라서 $t^2 = Z^2/(V/(n-2))$이다. 그런데 $Z^2 \sim \chi^2_1$이다(표준정규확률변수의 제곱).
 
     $$
     t^2 = \frac{Z^2/1}{V/(n-2)} \sim F_{1, n-2}
     $$
 
-    by the definition of $F$. $\square$
+    이는 $F$의 정의에 의한 것이다. $\square$
 
-    **Practical implication:** for $k = 2$ groups, the ANOVA $F$-test and the two-sample $t$-test are equivalent: $F_{\text{obs}} = t_{\text{obs}}^2$. Reject $H_0$ at level $\alpha$ in ANOVA iff $F > F_{1, n-2, 1-\alpha} = t_{n-2, 1-\alpha/2}^2$. Same decision; the two tests are different formulations of the same procedure.
+    **실무적 함의:** $k = 2$개 집단일 때 분산분석의 $F$ 검정과 두 표본 $t$ 검정은 동등하다: $F_{\text{obs}} = t_{\text{obs}}^2$. 분산분석에서 유의수준 $\alpha$로 $H_0$을 기각할 필요충분조건은 $F > F_{1, n-2, 1-\alpha} = t_{n-2, 1-\alpha/2}^2$이다. 같은 결론에 이르며, 두 검정은 같은 절차를 다르게 표현한 것이다.
 
 ---
 
-**Exercise 5.**
-**Reciprocal relationship.** Show that $F_{d_1, d_2}$ and $1/F_{d_2, d_1}$ have the same distribution.
+**연습문제 5.**
+**역수 관계.** $F_{d_1, d_2}$와 $1/F_{d_2, d_1}$이 같은 분포를 가짐을 보여라.
 
-??? success "Solution to Exercise 5"
-    Let $F = (U/d_1)/(V/d_2)$ with $U \sim \chi^2_{d_1}$, $V \sim \chi^2_{d_2}$ independent. Then
+??? success "연습문제 5 풀이"
+    독립인 $U \sim \chi^2_{d_1}$, $V \sim \chi^2_{d_2}$에 대해 $F = (U/d_1)/(V/d_2)$라 하자. 그러면
 
     $$
     \frac{1}{F} = \frac{V/d_2}{U/d_1} \sim F_{d_2, d_1}
     $$
 
-    by definition (with degrees of freedom swapped).
+    이며, 정의에 의해 자유도가 뒤바뀐 것이다.
 
-    **Practical:** to compute $P(F_{d_1, d_2} < c)$, use $P(1/F_{d_1, d_2} > 1/c) = P(F_{d_2, d_1} > 1/c)$ — convenient when tables only list upper-tail critical values. Lower-tail of $F_{d_1, d_2}$ at $\alpha$ equals reciprocal of upper-tail of $F_{d_2, d_1}$ at $\alpha$.
+    **실무:** $P(F_{d_1, d_2} < c)$를 계산하려면 $P(1/F_{d_1, d_2} > 1/c) = P(F_{d_2, d_1} > 1/c)$를 사용한다. 분포표에 상단꼬리 임계값만 실려 있을 때 편리하다. $\alpha$에서 $F_{d_1, d_2}$의 하단꼬리는 $\alpha$에서 $F_{d_2, d_1}$의 상단꼬리의 역수와 같다.
 
 ---
 
-**Exercise 6.**
-**Robustness to non-normality.** The $F$-test assumes normality of the underlying populations. Discuss the impact of violations and propose alternatives.
+**연습문제 6.**
+**정규성 위반에 대한 로버스트성.** $F$ 검정은 밑바탕 모집단의 정규성을 가정한다. 가정 위반의 영향을 논하고 대안을 제시하라.
 
-??? success "Solution to Exercise 6"
-    **Non-normality effects:**
+??? success "연습문제 6 풀이"
+    **정규성 위반의 영향:**
 
-    - **Light tails or symmetric distributions:** $F$ remains approximately valid for moderate $n$.
-    - **Heavy tails:** $F$-test is non-robust — the sample variances $s_i^2$ have inflated variability, distorting the null distribution.
-    - **Strong skew:** $F$ distribution under $H_0$ no longer matches the data's behavior.
+    - **가벼운 꼬리나 대칭 분포:** 표본크기가 중간 정도면 $F$가 근사적으로 타당하다.
+    - **두꺼운 꼬리:** $F$ 검정은 로버스트하지 않다. 표본분산 $s_i^2$의 변동성이 부풀려져 귀무분포가 왜곡된다.
+    - **심한 치우침:** $H_0$ 아래의 $F$ 분포가 자료의 거동과 더 이상 맞지 않는다.
 
-    **Alternatives:**
+    **대안:**
 
-    - **Levene's test** for equal variances: uses $|X_{ij} - \tilde X_i|$ (absolute deviations from group median) rather than squared deviations. More robust to non-normality.
-    - **Bartlett's test:** more powerful for normal data but sensitive to non-normality.
-    - **Brown-Forsythe test:** variant of Levene using median rather than mean — most robust against heavy tails.
-    - **Permutation test:** non-parametric alternative; relabel observations and recompute $F$ to build null distribution.
+    - **분산 동일성에 대한 Levene 검정:** 제곱편차 대신 $|X_{ij} - \tilde X_i|$(집단 중앙값으로부터의 절대편차)를 사용한다. 정규성 위반에 더 로버스트하다.
+    - **Bartlett 검정:** 정규 자료에서는 검정력이 더 높지만 정규성 위반에 민감하다.
+    - **Brown-Forsythe 검정:** 평균 대신 중앙값을 쓰는 Levene의 변형으로, 두꺼운 꼬리에 가장 로버스트하다.
+    - **순열검정:** 비모수적 대안이다. 관측값의 표지를 다시 섞어 $F$를 반복 계산하여 귀무분포를 만든다.
 
-    Practical recommendation: in industrial quality control or biological experiments with moderate $n$ and approximate normality, $F$-test is fine. For heavy-tailed data (financial returns, biological counts), use Levene/Brown-Forsythe.
+    실무적 권고: 표본크기가 중간 정도이고 근사적으로 정규인 산업 품질관리나 생물학 실험에서는 $F$ 검정으로 충분하다. 꼬리가 두꺼운 자료(금융 수익률, 생물학적 계수 자료)에는 Levene이나 Brown-Forsythe를 사용하라.

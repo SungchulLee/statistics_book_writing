@@ -1,39 +1,39 @@
-# Sampling Distribution of X-bar (Normal)
+# X-bar의 표본분포 (Normal)
 
-## Overview
+## 개요
 
-When the population itself is normally distributed, the sampling distribution of the sample mean $\bar{X}$ is **exactly** normal for every sample size $n$ -- no Central Limit Theorem approximation is needed. This page demonstrates this exact result through theory and simulation. The normal-population case serves as the foundation for many classical inference procedures, including $t$-tests and confidence intervals.
+모집단 자체가 정규분포를 따르면 표본평균 $\bar{X}$의 표본분포는 모든 표본크기 $n$에 대해 **정확히** 정규분포이다. 중심극한정리 근사가 필요 없다. 이 페이지에서는 이론과 모의실험으로 이 정확한 결과를 보인다. 정규모집단의 경우는 $t$ 검정과 신뢰구간을 비롯한 많은 고전적 추론 절차의 토대가 된다.
 
-## Population Model
+## 모집단 모형
 
-Suppose the population follows a standard Normal distribution:
+모집단이 표준정규분포를 따른다고 하자:
 
 $$
 X \sim N(\mu, \sigma^2) = N(0, 1)
 $$
 
-with $\mu = 0$ and $\sigma^2 = 1$.
+여기서 $\mu = 0$, $\sigma^2 = 1$이다.
 
-## Exact Sampling Distribution
+## 정확한 표본분포
 
-For a random sample $X_1, X_2, \ldots, X_n \overset{\text{iid}}{\sim} N(\mu, \sigma^2)$, the sample mean has the exact distribution:
+확률표본 $X_1, X_2, \ldots, X_n \overset{\text{iid}}{\sim} N(\mu, \sigma^2)$에 대해 표본평균은 다음의 정확한 분포를 갖는다:
 
 $$
 \bar{X} \sim N\!\left(\mu, \frac{\sigma^2}{n}\right)
 $$
 
-!!! info "Why This is Exact"
-    A linear combination of independent normal random variables is itself normal. Since $\bar{X} = \frac{1}{n}\sum_{i=1}^n X_i$ is a linear combination of i.i.d. normal random variables, $\bar{X}$ is exactly normal. No asymptotic argument is required.
+!!! info "왜 정확한가"
+    독립인 정규확률변수의 선형결합은 그 자체가 정규분포이다. $\bar{X} = \frac{1}{n}\sum_{i=1}^n X_i$는 i.i.d. 정규확률변수의 선형결합이므로 $\bar{X}$는 정확히 정규분포이다. 점근적 논증이 전혀 필요 없다.
 
-The standardized version is:
+표준화하면:
 
 $$
 Z = \frac{\bar{X} - \mu}{\sigma / \sqrt{n}} \sim N(0, 1)
 $$
 
-## Simulation
+## 모의실험
 
-The following code draws 10,000 samples of size $n = 5$ from a $N(0, 1)$ population and compares the population, a single sample, and the sampling distribution of $\bar{X}$.
+다음 코드는 $N(0, 1)$ 모집단에서 크기 $n = 5$인 표본을 10,000개 뽑아 모집단, 하나의 표본, $\bar{X}$의 표본분포를 비교한다.
 
 ```python
 import matplotlib.pyplot as plt
@@ -73,61 +73,61 @@ plt.tight_layout()
 plt.show()
 ```
 
-## Interpretation
+## 해석
 
-!!! note "Key Observations"
+!!! note "주요 관찰"
 
-    1. The **population distribution** is bell-shaped (normal).
-    2. The **sampling distribution** of $\bar{X}$ is also bell-shaped, centred at the same mean $\mu = 0$.
-    3. The sampling distribution is **narrower** than the population by a factor of $\sqrt{n}$. For $n = 5$, the standard error is $\sigma/\sqrt{5} \approx 0.447$ compared to $\sigma = 1$.
-    4. Unlike the Uniform or Exponential cases, the normality of the sampling distribution here is **exact**, not approximate.
+    1. **모집단 분포**는 종 모양(정규)이다.
+    2. $\bar{X}$의 **표본분포**도 종 모양이며 같은 평균 $\mu = 0$을 중심으로 한다.
+    3. 표본분포는 모집단보다 $\sqrt{n}$배 **좁다**. $n = 5$이면 $\sigma = 1$인 데 비해 표준오차가 $\sigma/\sqrt{5} \approx 0.447$이다.
+    4. Uniform이나 Exponential의 경우와 달리 여기서 표본분포의 정규성은 근사가 아니라 **정확**하다.
 
-### Comparison of Spreads
+### 퍼짐의 비교
 
-| Distribution | Standard deviation |
+| 분포 | 표준편차 |
 |---|---|
-| Population $X$ | $\sigma = 1$ |
-| $\bar{X}$ with $n = 5$ | $\sigma / \sqrt{5} \approx 0.447$ |
-| $\bar{X}$ with $n = 25$ | $\sigma / \sqrt{25} = 0.200$ |
-| $\bar{X}$ with $n = 100$ | $\sigma / \sqrt{100} = 0.100$ |
+| 모집단 $X$ | $\sigma = 1$ |
+| $n = 5$일 때 $\bar{X}$ | $\sigma / \sqrt{5} \approx 0.447$ |
+| $n = 25$일 때 $\bar{X}$ | $\sigma / \sqrt{25} = 0.200$ |
+| $n = 100$일 때 $\bar{X}$ | $\sigma / \sqrt{100} = 0.100$ |
 
-## Proof of Exact Normality
+## 정확한 정규성의 증명
 
-!!! abstract "Theorem"
-    If $X_1, \ldots, X_n \overset{\text{iid}}{\sim} N(\mu, \sigma^2)$, then $\bar{X} \sim N(\mu, \sigma^2/n)$.
+!!! abstract "정리"
+    $X_1, \ldots, X_n \overset{\text{iid}}{\sim} N(\mu, \sigma^2)$이면 $\bar{X} \sim N(\mu, \sigma^2/n)$이다.
 
-**Proof.** The moment generating function (MGF) of $X_i$ is:
+**증명.** $X_i$의 적률생성함수(MGF)는:
 
 $$
 M_{X_i}(t) = \exp\!\left(\mu t + \frac{\sigma^2 t^2}{2}\right)
 $$
 
-Since the $X_i$ are independent:
+$X_i$들이 독립이므로:
 
 $$
 M_{S_n}(t) = \prod_{i=1}^n M_{X_i}(t) = \exp\!\left(n\mu t + \frac{n\sigma^2 t^2}{2}\right)
 $$
 
-The MGF of $\bar{X} = S_n / n$ is:
+$\bar{X} = S_n / n$의 MGF는:
 
 $$
 M_{\bar{X}}(t) = M_{S_n}(t/n) = \exp\!\left(\mu t + \frac{\sigma^2 t^2}{2n}\right)
 $$
 
-This is the MGF of $N(\mu, \sigma^2/n)$. Since the MGF uniquely determines the distribution, $\bar{X} \sim N(\mu, \sigma^2/n)$. $\square$
+이는 $N(\mu, \sigma^2/n)$의 MGF이다. MGF가 분포를 유일하게 결정하므로 $\bar{X} \sim N(\mu, \sigma^2/n)$이다. $\square$
 
-## Exercises
+## 연습문제
 
-**Exercise 1.** If $X_1, \ldots, X_{25} \overset{\text{iid}}{\sim} N(100, 16)$, find $P(\bar{X} > 102)$.
+**연습문제 1.** $X_1, \ldots, X_{25} \overset{\text{iid}}{\sim} N(100, 16)$일 때 $P(\bar{X} > 102)$를 구하라.
 
-??? success "Solution to Exercise 1"
-    Here $\mu = 100$, $\sigma^2 = 16$, $n = 25$.
+??? success "연습문제 1 풀이"
+    여기서 $\mu = 100$, $\sigma^2 = 16$, $n = 25$이다.
 
     $$
     \bar{X} \sim N\!\left(100, \frac{16}{25}\right) = N(100,\; 0.64)
     $$
 
-    Standardize:
+    표준화하면:
 
     $$
     Z = \frac{102 - 100}{\sqrt{0.64}} = \frac{2}{0.8} = 2.5
@@ -141,16 +141,16 @@ This is the MGF of $N(\mu, \sigma^2/n)$. Since the MGF uniquely determines the d
 
 ---
 
-**Exercise 2.** Prove that if $X \sim N(\mu_X, \sigma_X^2)$ and $Y \sim N(\mu_Y, \sigma_Y^2)$ are independent, then $aX + bY \sim N(a\mu_X + b\mu_Y,\; a^2\sigma_X^2 + b^2\sigma_Y^2)$.
+**연습문제 2.** $X \sim N(\mu_X, \sigma_X^2)$와 $Y \sim N(\mu_Y, \sigma_Y^2)$가 독립이면 $aX + bY \sim N(a\mu_X + b\mu_Y,\; a^2\sigma_X^2 + b^2\sigma_Y^2)$임을 증명하라.
 
-??? success "Solution to Exercise 2"
-    Let $W = aX + bY$. The MGF of $W$ is:
+??? success "연습문제 2 풀이"
+    $W = aX + bY$라 하자. $W$의 MGF는:
 
     $$
     M_W(t) = E[e^{t(aX + bY)}] = E[e^{taX}] \cdot E[e^{tbY}]
     $$
 
-    where the factorisation uses independence. Substituting the normal MGFs:
+    이며 인수분해에는 독립성을 사용했다. 정규분포의 MGF를 대입하면:
 
     $$
     M_W(t) = \exp\!\left(a\mu_X t + \frac{a^2\sigma_X^2 t^2}{2}\right) \cdot \exp\!\left(b\mu_Y t + \frac{b^2\sigma_Y^2 t^2}{2}\right)
@@ -160,49 +160,49 @@ This is the MGF of $N(\mu, \sigma^2/n)$. Since the MGF uniquely determines the d
     = \exp\!\left((a\mu_X + b\mu_Y)t + \frac{(a^2\sigma_X^2 + b^2\sigma_Y^2)t^2}{2}\right)
     $$
 
-    This is the MGF of $N(a\mu_X + b\mu_Y,\; a^2\sigma_X^2 + b^2\sigma_Y^2)$. $\square$
+    이는 $N(a\mu_X + b\mu_Y,\; a^2\sigma_X^2 + b^2\sigma_Y^2)$의 MGF이다. $\square$
 
 ---
 
-**Exercise 3.** A machine fills bottles to a mean of 500 ml with a standard deviation of 4 ml, and the fill amounts are normally distributed. Quality control samples 16 bottles. What is the probability that the sample mean is within 2 ml of the target?
+**연습문제 3.** 어떤 기계가 병에 평균 500 ml, 표준편차 4 ml로 내용물을 채우며 충전량은 정규분포를 따른다. 품질관리에서 병 16개를 표본으로 뽑는다. 표본평균이 목표치에서 2 ml 이내일 확률은?
 
-??? success "Solution to Exercise 3"
-    Let $X_i \sim N(500, 16)$ with $n = 16$.
+??? success "연습문제 3 풀이"
+    $n = 16$이고 $X_i \sim N(500, 16)$이라 하자.
 
     $$
     \bar{X} \sim N\!\left(500, \frac{16}{16}\right) = N(500, 1)
     $$
 
-    We need $P(498 < \bar{X} < 502) = P(-2 < Z < 2)$ where $Z = (\bar{X} - 500)/1$.
+    $Z = (\bar{X} - 500)/1$일 때 $P(498 < \bar{X} < 502) = P(-2 < Z < 2)$를 구하면 된다.
 
     $$
     P(-2 < Z < 2) = \mathcal{N}(2) - \mathcal{N}(-2) = 2\mathcal{N}(2) - 1 \approx 2(0.9772) - 1 = 0.9544
     $$
 
-    There is approximately a 95.44% probability that the sample mean is within 2 ml of the target. $\square$
+    표본평균이 목표치에서 2 ml 이내일 확률은 약 95.44%이다. $\square$
 
 ---
 
-**Exercise 4.** Explain why the Central Limit Theorem is not needed when the population is normal, but is essential when the population is Exponential or Uniform. What changes about the sampling distribution in the non-normal case as $n$ increases?
+**연습문제 4.** 모집단이 정규일 때는 중심극한정리가 필요 없지만 모집단이 Exponential이나 Uniform일 때는 필수적인 이유를 설명하라. 정규가 아닌 경우 $n$이 커지면 표본분포에서 무엇이 달라지는가?
 
-??? success "Solution to Exercise 4"
-    When the population is normal, $\bar{X}$ is exactly normal for every $n$ because a linear combination of independent normal random variables is normal. This is a direct property of the normal distribution's MGF (or equivalently, its closure under convolution).
+??? success "연습문제 4 풀이"
+    모집단이 정규이면 독립인 정규확률변수의 선형결합이 정규이므로 모든 $n$에서 $\bar{X}$가 정확히 정규분포이다. 이는 정규분포 MGF의 직접적인 성질(동등하게, 합성곱에 대해 닫혀 있다는 성질)이다.
 
-    For non-normal populations (e.g., Exponential, Uniform), $\bar{X}$ is **not** exactly normal for finite $n$. Its distribution depends on $n$ and the specific population shape. However, as $n \to \infty$, the CLT guarantees that the standardized $\bar{X}$ converges in distribution to $N(0,1)$.
+    정규가 아닌 모집단(예: Exponential, Uniform)에서는 유한한 $n$에 대해 $\bar{X}$가 정확히 정규분포가 **아니다**. 그 분포는 $n$과 구체적인 모집단 모양에 의존한다. 다만 $n \to \infty$일 때 중심극한정리가 표준화된 $\bar{X}$의 $N(0,1)$로의 분포수렴을 보장한다.
 
-    As $n$ increases for a non-normal population:
+    정규가 아닌 모집단에서 $n$이 커지면:
 
-    - The sampling distribution becomes more symmetric (skewness decreases as $\gamma_1/\sqrt{n}$).
-    - The excess kurtosis shrinks toward 0 (at rate $1/n$).
-    - The distribution becomes progressively closer to normal in shape.
+    - 표본분포가 더 대칭이 된다(왜도가 $\gamma_1/\sqrt{n}$로 감소한다).
+    - 초과첨도가 ($1/n$의 비율로) 0을 향해 줄어든다.
+    - 모양이 점점 정규분포에 가까워진다.
 
-    The rate of convergence depends on how "non-normal" the population is; heavily skewed or heavy-tailed populations require larger $n$. $\square$
+    수렴 속도는 모집단이 얼마나 "정규가 아닌지"에 달려 있다. 심하게 치우쳤거나 꼬리가 두꺼운 모집단은 더 큰 $n$을 요구한다. $\square$
 
 ---
 
-**Exercise 5.** Using the simulation code above, increase $n$ from 5 to 100. Overlay the theoretical density $N(0, 1/100)$ on the histogram. Verify that the empirical standard deviation of the 10,000 sample means is close to $1/\sqrt{100} = 0.1$.
+**연습문제 5.** 위의 모의실험 코드에서 $n$을 5에서 100으로 늘려라. 히스토그램 위에 이론적 밀도 $N(0, 1/100)$을 겹쳐 그리고, 10,000개 표본평균의 경험적 표준편차가 $1/\sqrt{100} = 0.1$에 가까운지 확인하라.
 
-??? success "Solution to Exercise 5"
+??? success "연습문제 5 풀이"
     ```python
     import numpy as np
     import matplotlib.pyplot as plt
@@ -232,4 +232,4 @@ This is the MGF of $N(\mu, \sigma^2/n)$. Since the MGF uniquely determines the d
     plt.show()
     ```
 
-    The empirical standard error will be close to 0.1, and the histogram will match the $N(0, 0.01)$ density essentially perfectly, confirming the exact normality result. $\square$
+    경험적 표준오차가 0.1에 가깝게 나오고 히스토그램이 $N(0, 0.01)$ 밀도와 사실상 완벽하게 일치하여 정확한 정규성 결과를 확인해 준다. $\square$

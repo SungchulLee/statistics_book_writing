@@ -1,22 +1,22 @@
-# Sampling Distribution Visualization: Effect of Sample Size
+# 표본분포 시각화: 표본크기의 효과
 
-## Overview
+## 개요
 
-This section demonstrates how the **sampling distribution** of the sample mean becomes more concentrated as sample size increases. Using realistic income data, we visualize the three-way distinction between the population distribution, a sample distribution, and the sampling distribution.
+이 절에서는 표본크기가 커질수록 표본평균의 **표본분포**가 어떻게 더 좁아지는지 보인다. 현실적인 소득 자료를 사용하여 모집단 분포, 표본 분포, 표본분포라는 세 가지 구별을 시각화한다.
 
-## The Three Distributions
+## 세 가지 분포
 
-When we repeatedly draw samples and compute statistics, we encounter three distinct distributions:
+표본을 반복해서 뽑고 통계량을 계산할 때 서로 다른 세 분포를 만나게 된다:
 
-1. **Population Distribution**: The distribution of all values in the entire population
-2. **Sample Distribution**: The distribution of values in a single, specific sample
-3. **Sampling Distribution**: The distribution of a statistic (e.g., sample mean) computed from many different samples
+1. **모집단 분포**: 모집단 전체에 있는 모든 값의 분포
+2. **표본 분포**: 특정한 하나의 표본 안에 있는 값들의 분포
+3. **표본분포**: 여러 표본으로부터 계산한 통계량(예: 표본평균)의 분포
 
-This is central to the **Central Limit Theorem**: as sample size increases, the sampling distribution of the mean approaches a normal distribution, regardless of the shape of the population distribution.
+이는 **중심극한정리**의 핵심이다. 표본크기가 커지면 모집단 분포의 모양과 무관하게 평균의 표본분포가 정규분포에 가까워진다.
 
-## Empirical Demonstration with Loan Income Data
+## 대출 소득 자료를 이용한 실증
 
-The following code uses real income data to show how the sampling distribution concentrates with larger sample sizes:
+다음 코드는 실제 소득 자료를 사용하여 표본크기가 커질 때 표본분포가 어떻게 좁아지는지 보인다:
 
 ```python
 import numpy as np
@@ -77,41 +77,44 @@ plt.tight_layout()
 plt.show()
 ```
 
-## Interpreting the Visualization
+## 시각화 해석
 
-### Population Sample (Top Panel)
-Shows the actual distribution of income values from the population. This distribution is **right-skewed** with a long tail of high earners—typical of real income data.
+### 모집단 표본 (위 패널)
 
-### Sampling Distribution with n=5 (Middle Panel)
-When we draw samples of just 5 people and compute their mean income, the distribution of these 1000 sample means is:
+모집단에서 나온 실제 소득 값의 분포를 보여 준다. 고소득자의 긴 꼬리를 갖는 **오른쪽으로 치우친** 분포로, 실제 소득 자료에서 전형적이다.
 
-- More **concentrated** (narrower) than the population
-- More **symmetric** (approaching normal shape)
-- Still retains some of the right skew of the population
+### n=5인 표본분포 (가운데 패널)
 
-This is because with small sample sizes, individual extreme values heavily influence the mean.
+5명만 뽑아 평균 소득을 계산할 때, 이 1000개 표본평균의 분포는:
 
-### Sampling Distribution with n=20 (Bottom Panel)
-With larger samples of 20 people:
+- 모집단보다 더 **좁게 모여** 있다
+- 더 **대칭적이다**(정규분포 모양에 가까워진다)
+- 여전히 모집단의 오른쪽 치우침이 조금 남아 있다
 
-- Even more **concentrated** around the true population mean
-- Much more **bell-shaped** (approaching normal)
-- The relationship is quantified by the standard error: $SE = \frac{\sigma}{\sqrt{n}}$
+표본이 작으면 개별 극단값이 평균에 크게 영향을 미치기 때문이다.
 
-## Key Observations
+### n=20인 표본분포 (아래 패널)
 
-### Standard Error Decreases with Sample Size
+20명이라는 더 큰 표본에서는:
 
-The **standard error** (standard deviation of the sampling distribution) is inversely proportional to $\sqrt{n}$:
+- 참 모평균 주위로 **더욱 좁게 모인다**
+- 훨씬 더 **종 모양**이 된다(정규분포에 가까워진다)
+- 이 관계는 표준오차 $SE = \frac{\sigma}{\sqrt{n}}$로 정량화된다
+
+## 주요 관찰
+
+### 표본크기가 커지면 표준오차가 줄어든다
+
+**표준오차**(표본분포의 표준편차)는 $\sqrt{n}$에 반비례한다:
 
 $$SE(\bar{X}) = \frac{\sigma}{\sqrt{n}}$$
 
-Comparing our simulations:
+우리 모의실험을 비교하면:
 
-- For $n = 5$: $SE \approx \frac{\sigma}{\sqrt{5}} \approx 0.447\sigma$
-- For $n = 20$: $SE \approx \frac{\sigma}{\sqrt{20}} \approx 0.224\sigma$
+- $n = 5$일 때: $SE \approx \frac{\sigma}{\sqrt{5}} \approx 0.447\sigma$
+- $n = 20$일 때: $SE \approx \frac{\sigma}{\sqrt{20}} \approx 0.224\sigma$
 
-The standard error for $n=20$ is roughly half that of $n=5$, making estimates more precise.
+$n=20$의 표준오차는 $n=5$의 대략 절반이며, 그만큼 추정이 정밀해진다.
 
 ```python
 # Verify standard error relationship
@@ -125,17 +128,17 @@ print(f"SE for n=20: ${se_20:,.0f}")
 print(f"Ratio SE(5)/SE(20): {se_5/se_20:.2f}")
 ```
 
-### Convergence to Normality
+### 정규성으로의 수렴
 
-The Central Limit Theorem states that regardless of the shape of the population distribution, the sampling distribution of the mean approaches normality as $n$ increases. Even though income is right-skewed, the sampling distributions become increasingly normal.
+중심극한정리에 따르면 모집단 분포의 모양과 무관하게 $n$이 커질수록 평균의 표본분포가 정규분포에 가까워진다. 소득이 오른쪽으로 치우쳐 있어도 표본분포는 점점 정규분포에 가까워진다.
 
-### Practical Implications
+### 실무적 함의
 
-1. **Sample Size Planning**: To reduce uncertainty by half, we need to increase sample size by a factor of 4 (since $\sqrt{4} = 2$)
-2. **Confidence Intervals**: Narrower sampling distributions lead to narrower confidence intervals
-3. **Hypothesis Testing**: Larger samples provide more statistical power to detect true effects
+1. **표본크기 설계**: 불확실성을 절반으로 줄이려면 표본크기를 네 배로 늘려야 한다($\sqrt{4} = 2$이므로).
+2. **신뢰구간**: 표본분포가 좁아지면 신뢰구간도 좁아진다.
+3. **가설검정**: 표본이 클수록 참 효과를 탐지하는 통계적 검정력이 커진다.
 
-## Quantitative Comparison
+## 정량적 비교
 
 ```python
 import numpy as np
@@ -158,118 +161,118 @@ print(f"{'75th percentile':<20} ${np.percentile(sample_means_5, 75):>18,.0f} ${n
 print(f"{'IQR':<20} ${np.percentile(sample_means_5, 75) - np.percentile(sample_means_5, 25):>18,.0f} ${np.percentile(sample_means_20, 75) - np.percentile(sample_means_20, 25):>18,.0f}")
 ```
 
-## Summary
+## 요약
 
-The sampling distribution demonstrates:
+표본분포는 다음을 보여 준다:
 
-- **Statistical precision** improves as $1/\sqrt{n}$
-- **Concentration** around the true population parameter increases with sample size
-- **Normality** emerges even when the population is non-normal (CLT)
-- **Practical trade-offs** between sample size and estimation accuracy
+- **통계적 정밀도**가 $1/\sqrt{n}$로 좋아진다
+- 표본크기가 커질수록 참 모수 주위로의 **집중**이 강해진다
+- 모집단이 정규가 아니어도 **정규성**이 나타난다(중심극한정리)
+- 표본크기와 추정 정확도 사이의 **실무적 맞바꿈**이 있다
 
-This fundamental concept underlies confidence intervals, hypothesis testing, and all statistical inference based on sample means.
+이 근본 개념이 신뢰구간, 가설검정, 그리고 표본평균에 기반한 모든 통계적 추론의 바탕이 된다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Population is skewed with $\mu = 50$, $\sigma = 10$. Sample $n = 100$. (a) What is the approximate shape of the sampling distribution of $\bar X$? (b) Its mean and SE?
+**연습문제 1.**
+모집단이 치우쳐 있고 $\mu = 50$, $\sigma = 10$이다. 표본 $n = 100$일 때 (a) $\bar X$의 표본분포의 대략적인 모양은? (b) 그 평균과 표준오차는?
 
-??? success "Solution to Exercise 1"
-    (a) By CLT (large $n$), $\bar X$ is approximately **normal** despite population skew.
+??? success "연습문제 1 풀이"
+    (a) ($n$이 크므로) 중심극한정리에 의해 모집단이 치우쳐 있어도 $\bar X$는 근사적으로 **정규**이다.
 
-    (b) Mean: $\mu = 50$. SE: $\sigma/\sqrt n = 10/10 = 1$.
+    (b) 평균: $\mu = 50$. 표준오차: $\sigma/\sqrt n = 10/10 = 1$.
 
-    So $\bar X \approx N(50, 1)$. The skew of the underlying population transfers to a residual (small) skew in the sampling distribution but is dominated by CLT-induced normality at $n = 100$.
-
----
-
-**Exercise 2.**
-**Sample size and convergence rate.** For an exponential population (skewness 2), at what $n$ does the sampling distribution of $\bar X$ become "approximately normal"? Justify using Berry-Esseen.
-
-??? success "Solution to Exercise 2"
-    Berry-Esseen bound: $\sup_x |F_{\bar X_n}(x) - \Phi((x - \mu)/(\sigma/\sqrt n))| \le C \cdot \rho/(\sigma^3 \sqrt n)$, where $\rho = \mathbb{E}|X - \mu|^3$.
-
-    For $\mathrm{Exp}(1)$: $\rho \approx 2.0$, $\sigma = 1$. Bound: $0.5 \cdot 2 / \sqrt n = 1/\sqrt n$.
-
-    For "approximately normal" with max KS distance $\le 0.05$: $\sqrt n \ge 1/0.05 = 20$, so $n \ge 400$.
-
-    For $\le 0.10$: $n \ge 100$.
-
-    **In practice:** $n = 30$ is sufficient for mild skew; $n = 100$ for moderate skew (e.g., exponential); $n = 1000+$ for heavy skew or heavy tails. Always plot to verify.
+    따라서 $\bar X \approx N(50, 1)$이다. 밑바탕 모집단의 치우침이 표본분포에 (작은) 잔여 치우침으로 옮겨 오지만, $n = 100$에서는 중심극한정리가 만들어 내는 정규성이 압도한다.
 
 ---
 
-**Exercise 3.**
-**Bootstrap as alternative.** When the population shape is unknown and $n$ is moderate, the bootstrap gives a non-parametric estimate of the sampling distribution. Outline the procedure.
+**연습문제 2.**
+**표본크기와 수렴 속도.** 지수 모집단(왜도 2)에서 $\bar X$의 표본분포는 어느 $n$에서 "근사적으로 정규"가 되는가? Berry-Esseen을 사용하여 정당화하라.
 
-??? success "Solution to Exercise 3"
-    1. Given sample $X_1, \ldots, X_n$ from unknown population.
-    2. Draw $B$ bootstrap samples, each of size $n$ with replacement.
-    3. Compute $\bar X^*_b$ for each bootstrap sample.
-    4. The collection $\{\bar X^*_1, \ldots, \bar X^*_B\}$ approximates the sampling distribution of $\bar X$.
+??? success "연습문제 2 풀이"
+    Berry-Esseen 한계: $\rho = \mathbb{E}|X - \mu|^3$일 때 $\sup_x |F_{\bar X_n}(x) - \Phi((x - \mu)/(\sigma/\sqrt n))| \le C \cdot \rho/(\sigma^3 \sqrt n)$이다.
 
-    Use this distribution to:
+    $\mathrm{Exp}(1)$에서 $\rho \approx 2.0$, $\sigma = 1$이므로 한계는 $0.5 \cdot 2 / \sqrt n = 1/\sqrt n$이다.
 
-    - Estimate SE: sample SD of $\{\bar X^*_b\}$.
-    - Construct CI: 2.5th and 97.5th percentiles of $\{\bar X^*_b\}$ for a 95% **percentile interval**.
+    최대 KS 거리 $\le 0.05$로 "근사적으로 정규"라 하려면 $\sqrt n \ge 1/0.05 = 20$이므로 $n \ge 400$이다.
 
-    Bootstrap captures skewness, heavy tails, and other features that the CLT-based normal approximation misses. Especially valuable when $n$ is too small for CLT but too large for exact small-sample inference.
+    $\le 0.10$이라면 $n \ge 100$이다.
+
+    **실무에서는:** 치우침이 약하면 $n = 30$으로 충분하고, 중간 정도(예: 지수분포)면 $n = 100$, 치우침이나 꼬리가 심하면 $n = 1000$ 이상이 필요하다. 언제나 그림으로 확인하라.
 
 ---
 
-**Exercise 4.**
-**Visualizing the CLT.** Describe a sequence of plots demonstrating the CLT for exponential samples at $n = 1, 5, 30, 100$.
+**연습문제 3.**
+**대안으로서의 붓스트랩.** 모집단 모양을 모르고 $n$이 중간 정도일 때 붓스트랩은 표본분포를 비모수적으로 추정해 준다. 그 절차를 서술하라.
 
-??? success "Solution to Exercise 4"
-    For each $n$, generate many (say $B = 10000$) samples of size $n$ from $\mathrm{Exp}(1)$, compute $\bar X_n$ for each, plot a histogram.
+??? success "연습문제 3 풀이"
+    1. 미지의 모집단에서 뽑은 표본 $X_1, \ldots, X_n$이 주어진다.
+    2. 각각 크기 $n$인 붓스트랩 표본을 복원추출로 $B$개 뽑는다.
+    3. 각 붓스트랩 표본에 대해 $\bar X^*_b$를 계산한다.
+    4. 모음 $\{\bar X^*_1, \ldots, \bar X^*_B\}$이 $\bar X$의 표본분포를 근사한다.
 
-    Expected pattern:
+    이 분포를 사용하여:
 
-    - $n = 1$: histogram looks exponential (right-skewed, peaked at 0).
-    - $n = 5$: still visibly skewed but less so; appears unimodal with longer right tail.
-    - $n = 30$: approximately normal with mean 1 and SD $1/\sqrt{30} \approx 0.18$. Slight residual right skew.
-    - $n = 100$: clearly normal-shaped, SD $\approx 0.1$.
+    - 표준오차 추정: $\{\bar X^*_b\}$의 표본표준편차.
+    - 신뢰구간 구성: 95% **백분위수 구간**을 위해 $\{\bar X^*_b\}$의 2.5 백분위수와 97.5 백분위수를 사용한다.
 
-    Overlaying $N(1, 1/n)$ density on each histogram makes the CLT convergence visible. The narrowing of the bell and the disappearance of skew tell the story.
-
-    A second useful plot: Q-Q plot of $\bar X_n$ vs. normal at each $n$. Points fall increasingly on the diagonal line.
-
----
-
-**Exercise 5.**
-**Effect of population variance.** For a population with $\mu = 50$, compare the sampling distributions of $\bar X$ at $n = 100$ for $\sigma = 5, 10, 50$.
-
-??? success "Solution to Exercise 5"
-    All three sampling distributions are approximately $N(\mu, \sigma^2/n) = N(50, \sigma^2/100)$:
-
-    - $\sigma = 5$: $\bar X \approx N(50, 0.25)$, SD = 0.5.
-    - $\sigma = 10$: $\bar X \approx N(50, 1.0)$, SD = 1.
-    - $\sigma = 50$: $\bar X \approx N(50, 25)$, SD = 5.
-
-    All centered at 50; the SE scales linearly with $\sigma$. Higher population variability spreads the sampling distribution proportionally.
-
-    **Implication for sample-size planning:** to achieve a target precision $\mathrm{SE} = \sigma_{\text{target}}$, need $n = (\sigma/\sigma_{\text{target}})^2$. High-variability populations require much larger samples to achieve the same precision.
+    붓스트랩은 중심극한정리에 기반한 정규근사가 놓치는 치우침, 두꺼운 꼬리 등의 특징을 포착한다. $n$이 중심극한정리를 쓰기에는 작고 정확한 소표본 추론을 하기에는 클 때 특히 유용하다.
 
 ---
 
-**Exercise 6.**
-**Sampling distribution of the median.** Briefly contrast with the sampling distribution of the mean: shape, SE formula, robustness.
+**연습문제 4.**
+**중심극한정리 시각화.** $n = 1, 5, 30, 100$인 지수 표본에 대해 중심극한정리를 보여 주는 일련의 그림을 서술하라.
 
-??? success "Solution to Exercise 6"
-    For a sample of size $n$ from population with density $f$ and median $m$:
+??? success "연습문제 4 풀이"
+    각 $n$마다 $\mathrm{Exp}(1)$에서 크기 $n$인 표본을 많이(가령 $B = 10000$개) 생성하고 각각에 대해 $\bar X_n$을 계산한 뒤 히스토그램을 그린다.
 
-    - **Shape:** asymptotically normal (median has its own CLT under regularity conditions).
-    - **SE formula:** $\mathrm{SE}(\tilde X) \approx 1/(2 f(m) \sqrt n)$. Depends on the density at the median — large $f(m)$ gives small SE.
+    예상되는 양상:
 
-    **Comparison:**
+    - $n = 1$: 히스토그램이 지수분포처럼 보인다(오른쪽으로 치우치고 0에서 정점).
+    - $n = 5$: 여전히 눈에 띄게 치우쳐 있지만 덜하다. 단봉이면서 오른쪽 꼬리가 길다.
+    - $n = 30$: 평균 1, 표준편차 $1/\sqrt{30} \approx 0.18$인 근사적 정규분포. 오른쪽 치우침이 약간 남는다.
+    - $n = 100$: 뚜렷한 정규분포 모양이고 표준편차 $\approx 0.1$.
 
-    | Statistic | Bias | Variance | Robustness |
+    각 히스토그램에 $N(1, 1/n)$ 밀도를 겹쳐 그리면 중심극한정리의 수렴이 눈에 보인다. 종 모양이 좁아지고 치우침이 사라지는 것이 그 이야기를 들려준다.
+
+    유용한 두 번째 그림: 각 $n$에서 $\bar X_n$에 대한 정규 Q-Q 그림. 점들이 점점 대각선 위에 놓인다.
+
+---
+
+**연습문제 5.**
+**모분산의 효과.** $\mu = 50$인 모집단에 대해 $\sigma = 5, 10, 50$일 때 $n = 100$에서 $\bar X$의 표본분포를 비교하라.
+
+??? success "연습문제 5 풀이"
+    세 표본분포 모두 근사적으로 $N(\mu, \sigma^2/n) = N(50, \sigma^2/100)$이다:
+
+    - $\sigma = 5$: $\bar X \approx N(50, 0.25)$, 표준편차 = 0.5.
+    - $\sigma = 10$: $\bar X \approx N(50, 1.0)$, 표준편차 = 1.
+    - $\sigma = 50$: $\bar X \approx N(50, 25)$, 표준편차 = 5.
+
+    모두 50을 중심으로 하며 표준오차는 $\sigma$에 비례해 커진다. 모집단의 변동성이 클수록 표본분포도 그에 비례해 넓어진다.
+
+    **표본크기 설계에 대한 함의:** 목표 정밀도 $\mathrm{SE} = \sigma_{\text{target}}$을 달성하려면 $n = (\sigma/\sigma_{\text{target}})^2$이 필요하다. 변동성이 큰 모집단에서 같은 정밀도를 얻으려면 훨씬 큰 표본이 필요하다.
+
+---
+
+**연습문제 6.**
+**중앙값의 표본분포.** 평균의 표본분포와 모양, 표준오차 공식, 로버스트성을 간단히 대비하라.
+
+??? success "연습문제 6 풀이"
+    밀도가 $f$이고 중앙값이 $m$인 모집단에서 크기 $n$인 표본을 뽑을 때:
+
+    - **모양:** 점근적으로 정규이다(정칙 조건 아래에서 중앙값도 자신의 중심극한정리를 갖는다).
+    - **표준오차 공식:** $\mathrm{SE}(\tilde X) \approx 1/(2 f(m) \sqrt n)$. 중앙값에서의 밀도에 의존하며, $f(m)$이 크면 표준오차가 작다.
+
+    **비교:**
+
+    | 통계량 | 편향 | 분산 | 로버스트성 |
     |---|---|---|---|
-    | Mean | 0 | $\sigma^2/n$ | Sensitive to outliers |
-    | Median | 0 | $1/(4 n f(m)^2)$ | Robust |
+    | 평균 | 0 | $\sigma^2/n$ | 이상점에 민감 |
+    | 중앙값 | 0 | $1/(4 n f(m)^2)$ | 로버스트 |
 
-    For normal data: $\mathrm{Var}(\tilde X)/\mathrm{Var}(\bar X) = \pi/2 \approx 1.57$ — the median is less efficient (about 64% efficiency).
+    정규 자료에서는 $\mathrm{Var}(\tilde X)/\mathrm{Var}(\bar X) = \pi/2 \approx 1.57$로 중앙값이 덜 효율적이다(효율이 약 64%).
 
-    For heavy-tailed data (e.g., $t_3$ or Laplace): the median is *more* efficient than the mean. The mean's variance balloons because of outliers.
+    꼬리가 두꺼운 자료(예: $t_3$이나 Laplace)에서는 중앙값이 평균보다 *더* 효율적이다. 이상점 때문에 평균의 분산이 부풀어 오르기 때문이다.
 
-    The choice between mean and median should match the data: mean for clean symmetric data, median for outlier-prone or heavy-tailed data.
+    평균과 중앙값의 선택은 자료에 맞춰야 한다. 깨끗하고 대칭인 자료에는 평균을, 이상점이 잦거나 꼬리가 두꺼운 자료에는 중앙값을 쓴다.

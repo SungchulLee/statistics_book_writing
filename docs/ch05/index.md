@@ -1,78 +1,78 @@
-# Chapter 5: Sampling Distributions
+# 5장: 표본분포
 
-## Overview
+## 개요
 
-This chapter bridges probability theory and statistical inference by showing that statistics computed from random samples are themselves random variables with their own distributions. It introduces the four fundamental sampling distributions (Normal, Student's $t$, chi-square, and $F$), derives the sampling distributions of the most commonly used statistics, and demonstrates how sample size governs the precision of estimation through the standard error.
-
----
-
-## Chapter Structure
-
-### 5.1 Foundations
-
-The conceptual groundwork for understanding why and how statistics vary from sample to sample:
-
-- **Statistics as Random Variables** --- Establishes that any function of observed data is a random variable whose value changes from sample to sample, forming the conceptual foundation of all sampling-distribution theory.
-- **Repeated Sampling Concept** --- Explains how drawing multiple random samples and computing a statistic for each one produces a sampling distribution, which is fundamental to estimating population parameters, constructing confidence intervals, and performing hypothesis tests.
-
-### 5.2 The Four Fundamental Sampling Distributions
-
-The four probability distributions that serve as reference distributions for most classical inference procedures:
-
-- **Normal Distribution (Z)** --- The standard normal distribution arises from standardizing normally distributed statistics and serves as the large-sample approximation for a wide variety of estimators via the Central Limit Theorem.
-- **Student's t Distribution** --- Arises when estimating the mean of a normal population using the sample standard deviation instead of the known population standard deviation, accounting for the additional uncertainty with heavier tails that converge to the normal as degrees of freedom increase.
-- **Chi-Square Distribution** --- The distribution of a sum of squared standard normal random variables, playing a central role in inference about population variance, goodness-of-fit tests, and tests of independence.
-- **F Distribution** --- Defined as the ratio of two independent chi-square random variables divided by their degrees of freedom, fundamental for comparing variances between populations and for Analysis of Variance (ANOVA).
-
-### 5.3 Applications to Common Statistics
-
-How the fundamental distributions connect to the sampling behavior of statistics used in everyday practice:
-
-- **Sampling Distribution of the Mean** --- Derives the distribution of $\bar{X}$ across repeated samples, showing it is unbiased for $\mu$ with variance $\sigma^2/n$, and is normally distributed when the population is normal (or approximately so by the CLT for large $n$).
-- **Standard Error** --- Clarifies the distinction between standard deviation (spread of individual observations) and standard error (spread of a sample statistic), showing that SE quantifies how much a statistic varies from sample to sample.
-- **Sampling Distribution of Proportions** --- Derives the distribution of the sample proportion $\hat{p}$ for binary data, establishing its mean $p$, variance $p(1-p)/n$, and normal approximation for large samples.
-- **Sampling Distribution of the Variance** --- Shows how $S^2$ behaves across repeated samples, connecting the scaled sample variance to the chi-square distribution under normality and explaining Bessel's correction for unbiasedness.
-- **Difference of Two Sample Means** --- Derives the sampling distribution of $\bar{X}_1 - \bar{X}_2$ under various scenarios (known variances, unknown equal variances, unknown unequal variances via Welch's approximation).
-- **Difference of Two Sample Proportions** --- Establishes the sampling distribution of $\hat{p}_1 - \hat{p}_2$ for comparing proportions from two independent populations, with the normal approximation and pooled standard error for hypothesis testing.
-
-### 5.4 Visualization
-
-Graphical demonstrations that build intuition for sampling distributions:
-
-- **Sampling Distribution Visualization** --- Demonstrates how the sampling distribution of the sample mean becomes more concentrated as sample size increases, using realistic income data to distinguish between the population distribution, a single sample distribution, and the sampling distribution.
-
-### 5.5 Code
-
-Complete Python implementations for simulating and visualizing sampling distributions:
-
-- **Sampling Distribution of X-bar (Uniform)** --- Simulates the sampling distribution of the mean from a uniform population.
-- **Sampling Distribution of X-bar (Exponential)** --- Simulates the sampling distribution of the mean from an exponential population.
-- **Sampling Distribution of X-bar (Normal)** --- Simulates the sampling distribution of the mean from a normal population.
-- **Sampling Distribution of X-bar (Bernoulli)** --- Simulates the sampling distribution of the mean from a Bernoulli population.
-- **Sampling Distribution of S-squared (Normal)** --- Simulates the sampling distribution of the sample variance from a normal population.
-- **Standard Error of X-bar** --- Demonstrates how the standard error of the sample mean decreases with sample size.
-- **Standard Error of S-squared** --- Illustrates the variability of the sample variance estimator.
-- **Sampling Distribution Income Visualization** --- Uses real loan income data to visualize the three-way distinction between population, sample, and sampling distributions.
-
-### 5.6 Exercises
-
-Practice problems covering the capture-recapture method, properties of sampling distributions, standard error calculations, and applications of the fundamental sampling distributions.
+이 장은 확률론과 통계적 추론을 잇는다. 확률표본으로부터 계산된 통계량이 그 자체로 고유한 분포를 갖는 확률변수임을 보이는 것이 출발점이다. 네 가지 기본 표본분포(Normal, Student $t$, 카이제곱, $F$)를 소개하고, 가장 흔히 쓰이는 통계량들의 표본분포를 유도하며, 표본크기가 표준오차를 통해 추정의 정밀도를 어떻게 좌우하는지 보인다.
 
 ---
 
-## Prerequisites
+## 장의 구성
 
-This chapter builds on:
+### 5.1 기초
 
-- **Chapter 3** (Foundations of Probability) --- Random variables, expectation, variance, the Law of Large Numbers, and the Central Limit Theorem.
-- **Chapter 4** (Distributions) --- Properties of the normal, binomial, Poisson, and exponential distributions, as well as joint distributions and independence.
+통계량이 표본마다 왜, 어떻게 달라지는지를 이해하기 위한 개념적 토대:
+
+- **확률변수로서의 통계량** --- 관측 자료의 임의의 함수가 표본마다 값이 달라지는 확률변수임을 확립하며, 이것이 모든 표본분포 이론의 개념적 토대가 된다.
+- **반복추출 개념** --- 여러 개의 확률표본을 뽑아 각각에 대해 통계량을 계산하면 표본분포가 만들어짐을 설명한다. 이는 모수 추정, 신뢰구간 구성, 가설검정의 근본이 된다.
+
+### 5.2 네 가지 기본 표본분포
+
+고전적 추론 절차 대부분에서 기준분포로 쓰이는 네 가지 확률분포:
+
+- **Normal 분포 (Z)** --- 정규분포를 따르는 통계량을 표준화할 때 나타나는 표준정규분포이며, 중심극한정리를 통해 매우 다양한 추정량의 대표본 근사로 쓰인다.
+- **Student t 분포** --- 알려진 모표준편차 대신 표본표준편차를 사용하여 정규모집단의 평균을 추정할 때 나타난다. 추가된 불확실성을 더 두꺼운 꼬리로 반영하며, 자유도가 커지면 정규분포로 수렴한다.
+- **카이제곱 분포** --- 표준정규확률변수들의 제곱합의 분포로, 모분산에 관한 추론, 적합도 검정, 독립성 검정에서 중심적인 역할을 한다.
+- **F 분포** --- 독립인 두 카이제곱 확률변수를 각각의 자유도로 나눈 비로 정의되며, 모집단 간 분산 비교와 분산분석(ANOVA)의 근본이 된다.
+
+### 5.3 흔히 쓰는 통계량에의 응용
+
+기본 분포들이 실무에서 매일 쓰는 통계량의 표본 거동과 어떻게 연결되는지 살펴본다:
+
+- **평균의 표본분포** --- 반복추출에서 $\bar{X}$의 분포를 유도하여, $\mu$에 대해 불편이고 분산이 $\sigma^2/n$이며, 모집단이 정규이면 (또는 $n$이 커서 중심극한정리가 적용되면 근사적으로) 정규분포임을 보인다.
+- **표준오차** --- 표준편차(개별 관측값의 퍼짐)와 표준오차(표본통계량의 퍼짐)의 구별을 분명히 하고, 표준오차가 통계량이 표본마다 얼마나 달라지는지를 재는 양임을 보인다.
+- **비율의 표본분포** --- 이항 자료에 대해 표본비율 $\hat{p}$의 분포를 유도하여 평균 $p$, 분산 $p(1-p)/n$, 그리고 대표본에서의 정규근사를 확립한다.
+- **분산의 표본분포** --- 반복추출에서 $S^2$이 어떻게 거동하는지 보이고, 정규성 아래에서 척도조정된 표본분산이 카이제곱 분포와 어떻게 연결되는지, 그리고 불편성을 위한 Bessel 수정을 설명한다.
+- **두 표본평균의 차** --- 여러 상황(분산을 아는 경우, 분산이 같지만 모르는 경우, Welch 근사를 쓰는 이분산 경우)에서 $\bar{X}_1 - \bar{X}_2$의 표본분포를 유도한다.
+- **두 표본비율의 차** --- 독립인 두 모집단의 비율을 비교하기 위해 $\hat{p}_1 - \hat{p}_2$의 표본분포를 확립하고, 정규근사와 가설검정을 위한 합동 표준오차를 다룬다.
+
+### 5.4 시각화
+
+표본분포에 대한 직관을 길러 주는 그래프 예시:
+
+- **표본분포 시각화** --- 현실적인 소득 자료를 사용하여 모집단 분포, 하나의 표본 분포, 표본분포를 구별하고, 표본크기가 커질수록 표본평균의 표본분포가 어떻게 더 좁아지는지 보인다.
+
+### 5.5 코드
+
+표본분포를 모의실험하고 시각화하는 완전한 Python 구현:
+
+- **X-bar의 표본분포 (Uniform)** --- 균등 모집단에서 평균의 표본분포를 모의실험한다.
+- **X-bar의 표본분포 (Exponential)** --- 지수 모집단에서 평균의 표본분포를 모의실험한다.
+- **X-bar의 표본분포 (Normal)** --- 정규 모집단에서 평균의 표본분포를 모의실험한다.
+- **X-bar의 표본분포 (Bernoulli)** --- Bernoulli 모집단에서 평균의 표본분포를 모의실험한다.
+- **S-squared의 표본분포 (Normal)** --- 정규 모집단에서 표본분산의 표본분포를 모의실험한다.
+- **X-bar의 표준오차** --- 표본평균의 표준오차가 표본크기에 따라 어떻게 줄어드는지 보인다.
+- **S-squared의 표준오차** --- 표본분산 추정량의 변동성을 보인다.
+- **소득 자료 표본분포 시각화** --- 실제 대출 소득 자료를 사용하여 모집단, 표본, 표본분포의 세 가지 구별을 시각화한다.
+
+### 5.6 연습문제
+
+포획–재포획법, 표본분포의 성질, 표준오차 계산, 기본 표본분포의 응용을 다루는 연습문제들.
 
 ---
 
-## Key Takeaways
+## 선수 지식
 
-1. A statistic is a random variable; its probability distribution across repeated samples is its sampling distribution, which is the basis for all inferential procedures.
-2. The four fundamental sampling distributions (Normal, $t$, $\chi^2$, $F$) arise naturally from normal random samples and serve as the reference distributions for confidence intervals, hypothesis tests, and ANOVA.
-3. The sampling distribution of $\bar{X}$ is centered at $\mu$ with standard error $\sigma/\sqrt{n}$, and is approximately normal for large $n$ regardless of the population shape (by the CLT).
-4. The standard error measures precision of estimation: it decreases at rate $1/\sqrt{n}$, meaning quadrupling the sample size halves the standard error.
-5. The sampling distributions of differences ($\bar{X}_1 - \bar{X}_2$ and $\hat{p}_1 - \hat{p}_2$) extend these ideas to two-sample comparisons, forming the foundation for two-sample inference in later chapters.
+이 장은 다음 내용을 바탕으로 한다:
+
+- **3장** (확률의 기초) --- 확률변수, 기댓값, 분산, 큰수의 법칙, 중심극한정리.
+- **4장** (분포) --- Normal, Binomial, Poisson, Exponential 분포의 성질과 결합분포 및 독립성.
+
+---
+
+## 핵심 요약
+
+1. 통계량은 확률변수이다. 반복추출에 걸친 그 확률분포가 표본분포이며, 이것이 모든 추론 절차의 바탕이다.
+2. 네 가지 기본 표본분포(Normal, $t$, $\chi^2$, $F$)는 정규 확률표본에서 자연스럽게 나오며, 신뢰구간, 가설검정, 분산분석의 기준분포가 된다.
+3. $\bar{X}$의 표본분포는 $\mu$를 중심으로 하고 표준오차가 $\sigma/\sqrt{n}$이며, 중심극한정리에 의해 모집단 모양과 무관하게 $n$이 크면 근사적으로 정규분포이다.
+4. 표준오차는 추정의 정밀도를 잰다. $1/\sqrt{n}$의 비율로 줄어들므로 표본크기를 네 배로 늘리면 표준오차가 절반이 된다.
+5. 차의 표본분포($\bar{X}_1 - \bar{X}_2$와 $\hat{p}_1 - \hat{p}_2$)는 이 개념들을 두 표본 비교로 확장하며, 이후 장에서 다룰 두 표본 추론의 토대를 이룬다.

@@ -1,66 +1,68 @@
-# Sampling Distribution of the Difference of Two Sample Proportions
+# 두 표본비율 차의 표본분포
 
-## Overview
+## 개요
 
-When comparing proportions from two independent populations (e.g., treatment vs control, brand A vs brand B), the relevant statistic is $\hat{p}_1 - \hat{p}_2$. Its sampling distribution enables confidence intervals and hypothesis tests for the difference $p_1 - p_2$.
+독립인 두 모집단의 비율을 비교할 때(예: 처리군 대 대조군, 브랜드 A 대 브랜드 B) 관심 통계량은 $\hat{p}_1 - \hat{p}_2$이다. 그 표본분포가 차 $p_1 - p_2$에 대한 신뢰구간과 가설검정을 가능하게 한다.
 
-## Mathematical Formulation
+## 수학적 정식화
 
-Let $\hat{p}_1$ and $\hat{p}_2$ be sample proportions from two independent samples of sizes $n_1$ and $n_2$, from populations with true proportions $p_1$ and $p_2$.
+$\hat{p}_1$과 $\hat{p}_2$를 참 비율이 $p_1$과 $p_2$인 모집단에서 뽑은 크기 $n_1$, $n_2$의 독립 표본으로부터 얻은 표본비율이라 하자.
 
-### Properties
+### 성질
 
-**Expected value:**
+**기댓값:**
 
 $$
 E[\hat{p}_1 - \hat{p}_2] = p_1 - p_2
 $$
 
-**Variance:**
+**분산:**
 
 $$
 \text{Var}(\hat{p}_1 - \hat{p}_2) = \frac{p_1(1-p_1)}{n_1} + \frac{p_2(1-p_2)}{n_2}
 $$
 
-**Standard error:**
+**표준오차:**
 
 $$
 \text{SE}(\hat{p}_1 - \hat{p}_2) = \sqrt{\frac{p_1(1-p_1)}{n_1} + \frac{p_2(1-p_2)}{n_2}}
 $$
 
-### Normal Approximation
+### 정규근사
 
-For sufficiently large $n_1$ and $n_2$ (with $n_i p_i \geq 5$ and $n_i(1-p_i) \geq 5$ for both $i$):
+$n_1$과 $n_2$가 충분히 크면(두 $i$ 모두에 대해 $n_i p_i \geq 5$이고 $n_i(1-p_i) \geq 5$):
 
 $$
 Z = \frac{(\hat{p}_1 - \hat{p}_2) - (p_1 - p_2)}{\sqrt{\frac{p_1(1-p_1)}{n_1} + \frac{p_2(1-p_2)}{n_2}}} \approx N(0, 1)
 $$
 
-In practice, since $p_1$ and $p_2$ are unknown, we substitute the sample proportions:
+실무에서는 $p_1$과 $p_2$를 모르므로 표본비율로 대체한다:
 
 $$
 Z \approx \frac{(\hat{p}_1 - \hat{p}_2) - (p_1 - p_2)}{\sqrt{\frac{\hat{p}_1(1-\hat{p}_1)}{n_1} + \frac{\hat{p}_2(1-\hat{p}_2)}{n_2}}}
 $$
 
-## Confidence Interval
+## 신뢰구간
 
-A $(1 - \alpha)$ confidence interval for $p_1 - p_2$:
+$p_1 - p_2$에 대한 $(1 - \alpha)$ 신뢰구간:
 
 $$
 (\hat{p}_1 - \hat{p}_2) \pm z_{\alpha/2} \sqrt{\frac{\hat{p}_1(1-\hat{p}_1)}{n_1} + \frac{\hat{p}_2(1-\hat{p}_2)}{n_2}}
 $$
 
-## Hypothesis Testing
+## 가설검정
 
-### For General H_0: p_1 - p_2 = d_0
-Use the estimated standard error:
+### 일반적인 H_0: p_1 - p_2 = d_0
+
+추정된 표준오차를 사용한다:
 
 $$
 Z = \frac{(\hat{p}_1 - \hat{p}_2) - d_0}{\sqrt{\frac{\hat{p}_1(1-\hat{p}_1)}{n_1} + \frac{\hat{p}_2(1-\hat{p}_2)}{n_2}}}
 $$
 
-### For H_0: p_1 = p_2 (Special Case)
-Under the null, $p_1 = p_2 = p$. Use the **pooled proportion**:
+### H_0: p_1 = p_2 (특수한 경우)
+
+귀무가설 아래에서 $p_1 = p_2 = p$이다. **합동비율**을 사용한다:
 
 $$
 \hat{p}_{\text{pool}} = \frac{X_1 + X_2}{n_1 + n_2}
@@ -70,21 +72,21 @@ $$
 Z = \frac{\hat{p}_1 - \hat{p}_2}{\sqrt{\hat{p}_{\text{pool}}(1-\hat{p}_{\text{pool}})\left(\frac{1}{n_1} + \frac{1}{n_2}\right)}}
 $$
 
-## Conditions for Validity
+## 타당성 조건
 
-The normal approximation requires all four of the following:
+정규근사에는 다음 네 가지가 모두 필요하다:
 
 $$
 n_1 \hat{p}_1 \geq 5, \quad n_1(1 - \hat{p}_1) \geq 5, \quad n_2 \hat{p}_2 \geq 5, \quad n_2(1 - \hat{p}_2) \geq 5
 $$
 
-When these conditions are not met, exact methods (Fisher's exact test) or simulation-based approaches should be used.
+이 조건이 충족되지 않으면 정확검정(Fisher 정확검정)이나 모의실험 기반 접근을 사용해야 한다.
 
-## Example
+## 예제
 
-**Problem.** In a study, 120 out of 200 patients in group 1 responded to treatment ($\hat{p}_1 = 0.60$), while 90 out of 200 patients in group 2 responded ($\hat{p}_2 = 0.45$). Find a 95% confidence interval for $p_1 - p_2$.
+**문제.** 어떤 연구에서 1군 환자 200명 중 120명이 치료에 반응했고($\hat{p}_1 = 0.60$), 2군 환자 200명 중 90명이 반응했다($\hat{p}_2 = 0.45$). $p_1 - p_2$에 대한 95% 신뢰구간을 구하라.
 
-**Solution.**
+**풀이.**
 
 $$
 \hat{p}_1 - \hat{p}_2 = 0.60 - 0.45 = 0.15
@@ -119,37 +121,37 @@ print(f"SE: {se:.4f}")
 print(f"95% CI: ({ci_lower:.3f}, {ci_upper:.3f})")
 ```
 
-Since the confidence interval does not contain 0, there is statistically significant evidence that the treatment response rates differ between the two groups.
+신뢰구간이 0을 포함하지 않으므로 두 군의 치료 반응률이 다르다는 통계적으로 유의한 증거가 있다.
 
-## Summary
+## 요약
 
-| Property | Result |
+| 성질 | 결과 |
 |----------|--------|
 | $E[\hat{p}_1 - \hat{p}_2]$ | $p_1 - p_2$ |
 | $\text{SE}(\hat{p}_1 - \hat{p}_2)$ | $\sqrt{\frac{p_1(1-p_1)}{n_1} + \frac{p_2(1-p_2)}{n_2}}$ |
-| Distribution (large $n$) | Approximately $N(0, 1)$ after standardization |
-| CI formula | $(\hat{p}_1 - \hat{p}_2) \pm z^* \cdot \widehat{\text{SE}}$ |
-| Validity condition | $n_i p_i \geq 5$ and $n_i(1-p_i) \geq 5$ for both groups |
+| 분포 ($n$이 클 때) | 표준화하면 근사적으로 $N(0, 1)$ |
+| 신뢰구간 공식 | $(\hat{p}_1 - \hat{p}_2) \pm z^* \cdot \widehat{\text{SE}}$ |
+| 타당성 조건 | 두 군 모두에서 $n_i p_i \geq 5$이고 $n_i(1-p_i) \geq 5$ |
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-In a clinical trial, 120 of 200 patients in the treatment group recovered, and 90 of 200 patients in the control group recovered. Compute the difference in sample proportions and its standard error.
+**연습문제 1.**
+어떤 임상시험에서 처리군 200명 중 120명이, 대조군 200명 중 90명이 회복했다. 표본비율의 차와 그 표준오차를 계산하라.
 
-??? success "Solution to Exercise 1"
-    The sample proportions are:
+??? success "연습문제 1 풀이"
+    표본비율은:
 
     $$
     \hat{p}_1 = \frac{120}{200} = 0.60, \quad \hat{p}_2 = \frac{90}{200} = 0.45
     $$
 
-    The difference is:
+    차는:
 
     $$
     \hat{p}_1 - \hat{p}_2 = 0.60 - 0.45 = 0.15
     $$
 
-    The standard error is:
+    표준오차는:
 
     $$
     \text{SE} = \sqrt{\frac{\hat{p}_1(1-\hat{p}_1)}{n_1} + \frac{\hat{p}_2(1-\hat{p}_2)}{n_2}} = \sqrt{\frac{0.60 \times 0.40}{200} + \frac{0.45 \times 0.55}{200}}
@@ -161,11 +163,11 @@ In a clinical trial, 120 of 200 patients in the treatment group recovered, and 9
 
 ---
 
-**Exercise 2.**
-Using the data from Exercise 1, construct a 95% confidence interval for the true difference in recovery rates $p_1 - p_2$. Does the interval suggest a statistically significant difference?
+**연습문제 2.**
+연습문제 1의 자료를 사용하여 참 회복률 차 $p_1 - p_2$에 대한 95% 신뢰구간을 구성하라. 이 구간은 통계적으로 유의한 차이를 시사하는가?
 
-??? success "Solution to Exercise 2"
-    The 95% CI uses $z^* = 1.96$:
+??? success "연습문제 2 풀이"
+    95% 신뢰구간에는 $z^* = 1.96$을 사용한다:
 
     $$
     (\hat{p}_1 - \hat{p}_2) \pm z^* \cdot \text{SE} = 0.15 \pm 1.96 \times 0.0494
@@ -175,37 +177,37 @@ Using the data from Exercise 1, construct a 95% confidence interval for the true
     = 0.15 \pm 0.0968 = (0.053, 0.247)
     $$
 
-    Since the confidence interval does not contain 0, we conclude that the difference is statistically significant at the 5% level. The treatment group has a recovery rate estimated to be between 5.3 and 24.7 percentage points higher than the control group.
+    신뢰구간이 0을 포함하지 않으므로 5% 수준에서 차이가 통계적으로 유의하다고 결론짓는다. 처리군의 회복률은 대조군보다 5.3에서 24.7퍼센트포인트 높은 것으로 추정된다.
 
 ---
 
-**Exercise 3.**
-Verify that the validity conditions for the normal approximation are met for the data in Exercise 1.
+**연습문제 3.**
+연습문제 1의 자료에 대해 정규근사의 타당성 조건이 충족되는지 확인하라.
 
-??? success "Solution to Exercise 3"
-    The conditions require $n_i \hat{p}_i \geq 5$ and $n_i(1-\hat{p}_i) \geq 5$ for both groups:
+??? success "연습문제 3 풀이"
+    조건은 두 군 모두에서 $n_i \hat{p}_i \geq 5$이고 $n_i(1-\hat{p}_i) \geq 5$인 것이다:
 
-    - Group 1: $n_1 \hat{p}_1 = 200 \times 0.60 = 120 \geq 5$ and $n_1(1-\hat{p}_1) = 200 \times 0.40 = 80 \geq 5$. Both satisfied.
-    - Group 2: $n_2 \hat{p}_2 = 200 \times 0.45 = 90 \geq 5$ and $n_2(1-\hat{p}_2) = 200 \times 0.55 = 110 \geq 5$. Both satisfied.
+    - 1군: $n_1 \hat{p}_1 = 200 \times 0.60 = 120 \geq 5$이고 $n_1(1-\hat{p}_1) = 200 \times 0.40 = 80 \geq 5$. 둘 다 충족된다.
+    - 2군: $n_2 \hat{p}_2 = 200 \times 0.45 = 90 \geq 5$이고 $n_2(1-\hat{p}_2) = 200 \times 0.55 = 110 \geq 5$. 둘 다 충족된다.
 
-    All four conditions are met, so the normal approximation for the sampling distribution of $\hat{p}_1 - \hat{p}_2$ is appropriate.
+    네 조건이 모두 충족되므로 $\hat{p}_1 - \hat{p}_2$의 표본분포에 대한 정규근사가 적절하다.
 
 ---
 
-**Exercise 4.**
-Explain why the standard error for the difference in proportions involves adding the variances of the two sample proportions rather than subtracting them, even though we are computing a difference.
+**연습문제 4.**
+차를 계산하는데도 비율 차의 표준오차에서 두 표본비율의 분산을 빼지 않고 더하는 이유를 설명하라.
 
-??? success "Solution to Exercise 4"
-    The variance of a difference of independent random variables is:
+??? success "연습문제 4 풀이"
+    독립인 확률변수의 차의 분산은:
 
     $$
     \text{Var}(\hat{p}_1 - \hat{p}_2) = \text{Var}(\hat{p}_1) + \text{Var}(\hat{p}_2)
     $$
 
-    The variances **add** (not subtract) because variance measures spread, which is always non-negative. Taking a difference $\hat{p}_1 - \hat{p}_2 = \hat{p}_1 + (-1)\hat{p}_2$ applies the formula $\text{Var}(aX + bY) = a^2\text{Var}(X) + b^2\text{Var}(Y)$ with $a=1$ and $b=-1$:
+    분산은 언제나 음이 아닌 퍼짐을 재는 양이므로 빼는 것이 아니라 **더한다**. 차 $\hat{p}_1 - \hat{p}_2 = \hat{p}_1 + (-1)\hat{p}_2$에 $a=1$, $b=-1$로 공식 $\text{Var}(aX + bY) = a^2\text{Var}(X) + b^2\text{Var}(Y)$를 적용하면:
 
     $$
     \text{Var}(\hat{p}_1 - \hat{p}_2) = 1^2 \text{Var}(\hat{p}_1) + (-1)^2 \text{Var}(\hat{p}_2) = \text{Var}(\hat{p}_1) + \text{Var}(\hat{p}_2)
     $$
 
-    The squaring of the coefficients eliminates the sign. Intuitively, uncertainty in both estimates contributes to uncertainty in their difference, so the total uncertainty increases regardless of the direction of the combination.
+    계수를 제곱하면서 부호가 사라진다. 직관적으로는 두 추정값 각각의 불확실성이 그 차의 불확실성에 기여하므로, 결합 방향과 무관하게 전체 불확실성이 커지는 것이다.

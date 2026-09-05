@@ -1,47 +1,47 @@
-# Sampling Distribution Income Visualization
+# 소득 자료 표본분포 시각화
 
-## Overview
+## 개요
 
-This page demonstrates the Central Limit Theorem in action using simulated income data. Income distributions are typically right-skewed, making them an excellent real-world example for showing how the sampling distribution of $\bar{X}$ becomes more concentrated and more normal as the sample size increases. By comparing individual incomes, means of 5, and means of 20, we can visually see the CLT at work and verify the standard error formula.
+이 페이지에서는 모의로 만든 소득 자료를 사용하여 중심극한정리가 작동하는 모습을 보인다. 소득 분포는 대체로 오른쪽으로 치우쳐 있어, 표본크기가 커질수록 $\bar{X}$의 표본분포가 어떻게 더 좁아지고 더 정규에 가까워지는지 보이기에 아주 좋은 실제 사례이다. 개별 소득, 5명의 평균, 20명의 평균을 비교하면 중심극한정리를 눈으로 확인하고 표준오차 공식을 검증할 수 있다.
 
-## Setup: Simulated Income Data
+## 설정: 모의 소득 자료
 
-Real income data tends to be right-skewed with a long upper tail. We simulate this using a shifted Exponential distribution:
+실제 소득 자료는 위쪽 꼬리가 긴 오른쪽으로 치우친 모양이다. 이를 이동된 Exponential 분포로 모사한다:
 
 $$
 \text{Income} = 20{,}000 + Y, \qquad Y \sim \text{Exp}(\text{scale} = 50{,}000)
 $$
 
-This produces a population with:
+이 모집단은 다음과 같다:
 
-- **Mean**: approximately \$70,000
-- **Standard deviation**: approximately \$50,000
-- **Right skew**: the long tail captures the fact that a few individuals earn much more than the average
+- **평균**: 약 \$70,000
+- **표준편차**: 약 \$50,000
+- **오른쪽 치우침**: 긴 꼬리는 소수의 사람이 평균보다 훨씬 많이 번다는 사실을 담아낸다
 
-## Theoretical Background
+## 이론적 배경
 
-For any population with mean $\mu$ and standard deviation $\sigma$, the sampling distribution of the sample mean $\bar{X}$ based on $n$ observations has:
+평균이 $\mu$, 표준편차가 $\sigma$인 임의의 모집단에서 $n$개의 관측값에 기반한 표본평균 $\bar{X}$의 표본분포는:
 
 $$
 E[\bar{X}] = \mu, \qquad \text{SE}(\bar{X}) = \frac{\sigma}{\sqrt{n}}
 $$
 
-The standard error decreases with sample size. Crucially, the ratio of standard errors for two different sample sizes is:
+표준오차는 표본크기와 함께 줄어든다. 특히 서로 다른 두 표본크기에서 표준오차의 비는:
 
 $$
 \frac{\text{SE}(n_1)}{\text{SE}(n_2)} = \sqrt{\frac{n_2}{n_1}}
 $$
 
-For $n_1 = 5$ and $n_2 = 20$:
+$n_1 = 5$, $n_2 = 20$이면:
 
 $$
 \frac{\text{SE}(5)}{\text{SE}(20)} = \sqrt{\frac{20}{5}} = 2
 $$
 
-!!! tip "Key Insight"
-    To halve the standard error, you must quadruple the sample size. This is the "square root law" of sampling.
+!!! tip "핵심 통찰"
+    표준오차를 절반으로 줄이려면 표본크기를 네 배로 늘려야 한다. 이것이 표본추출의 "제곱근 법칙"이다.
 
-## Simulation Code
+## 모의실험 코드
 
 ```python
 import numpy as np
@@ -87,9 +87,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-## Standard Error Verification
+## 표준오차 검증
 
-We can verify the theoretical formula $\text{SE} = \sigma / \sqrt{n}$ against the empirical standard deviations of the simulated sampling distributions.
+이론적 공식 $\text{SE} = \sigma / \sqrt{n}$을 모의실험한 표본분포의 경험적 표준편차와 비교하여 확인할 수 있다.
 
 ```python
 pop_std = loans_income.std()
@@ -102,51 +102,51 @@ print(f"Theoretical SE (n=20):   ${se_20_theory:,.0f}")
 print(f"Ratio SE(5)/SE(20):      {se_5_theory / se_20_theory:.2f}")
 ```
 
-The ratio should be close to 2.0, confirming the square root law.
+비가 2.0에 가깝게 나와 제곱근 법칙을 확인해 준다.
 
-## Interpretation
+## 해석
 
-!!! note "Key Observations"
+!!! note "주요 관찰"
 
-    1. **Population sample** (top panel): The distribution of individual incomes is strongly right-skewed, with most incomes clustered near the lower end and a long tail extending past \$200,000.
-    2. **Mean of 5** (middle panel): The sampling distribution is already much more concentrated than the population and slightly less skewed, but still visibly non-normal.
-    3. **Mean of 20** (bottom panel): The sampling distribution is even more concentrated and closely approximates a normal distribution. The standard error is half that of the $n = 5$ case.
+    1. **모집단 표본** (위 패널): 개별 소득의 분포가 오른쪽으로 심하게 치우쳐 있다. 대부분의 소득이 아래쪽에 몰려 있고 \$200,000를 넘어가는 긴 꼬리가 뻗어 있다.
+    2. **5명의 평균** (가운데 패널): 표본분포가 이미 모집단보다 훨씬 좁게 모여 있고 치우침도 덜하지만 여전히 눈에 띄게 정규가 아니다.
+    3. **20명의 평균** (아래 패널): 표본분포가 더욱 좁아지고 정규분포에 가깝게 근사한다. 표준오차는 $n = 5$일 때의 절반이다.
 
-### Summary Statistics
+### 요약 통계
 
-| Distribution | Mean | Std Dev |
+| 분포 | 평균 | 표준편차 |
 |---|---|---|
-| Population sample | $\approx \$70{,}000$ | $\approx \$50{,}000$ |
-| Sampling dist. ($n = 5$) | $\approx \$70{,}000$ | $\approx \$22{,}000$ |
-| Sampling dist. ($n = 20$) | $\approx \$70{,}000$ | $\approx \$11{,}000$ |
+| 모집단 표본 | $\approx \$70{,}000$ | $\approx \$50{,}000$ |
+| 표본분포 ($n = 5$) | $\approx \$70{,}000$ | $\approx \$22{,}000$ |
+| 표본분포 ($n = 20$) | $\approx \$70{,}000$ | $\approx \$11{,}000$ |
 
-All three distributions have the same mean (the population mean), but the spread decreases as $1/\sqrt{n}$.
+세 분포 모두 평균은 (모평균으로) 같지만 퍼짐은 $1/\sqrt{n}$로 줄어든다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.** Explain why the mean of the sampling distribution equals the population mean regardless of sample size. Does this property depend on the population being normally distributed?
+**연습문제 1.** 표본크기와 무관하게 표본분포의 평균이 모평균과 같은 이유를 설명하라. 이 성질은 모집단이 정규분포를 따르는지에 의존하는가?
 
-??? success "Solution to Exercise 1"
-    By linearity of expectation:
+??? success "연습문제 1 풀이"
+    기댓값의 선형성에 의해:
 
     $$
     E[\bar{X}] = E\!\left[\frac{1}{n}\sum_{i=1}^n X_i\right] = \frac{1}{n}\sum_{i=1}^n E[X_i] = \frac{1}{n} \cdot n\mu = \mu
     $$
 
-    This holds for **any** population with a finite mean, not just normal populations. The only requirements are that the observations are identically distributed with mean $\mu$ and that the expectation exists. The result does not depend on independence either (though independence is needed for the variance formula). $\square$
+    이는 정규모집단뿐 아니라 평균이 유한한 **임의의** 모집단에서 성립한다. 필요한 것은 관측값이 평균 $\mu$를 갖는 동일한 분포를 따르고 기댓값이 존재한다는 것뿐이다. 독립성에도 의존하지 않는다(다만 분산 공식에는 독립성이 필요하다). $\square$
 
 ---
 
-**Exercise 2.** The simulation uses \$50,000 as the Exponential scale parameter and adds \$20,000. Derive the exact population mean and standard deviation of this shifted Exponential distribution.
+**연습문제 2.** 모의실험은 Exponential 척도 모수로 \$50,000을 사용하고 \$20,000을 더한다. 이 이동된 Exponential 분포의 정확한 모평균과 모표준편차를 유도하라.
 
-??? success "Solution to Exercise 2"
-    If $Y \sim \text{Exp}(\text{scale} = \beta)$ where $\beta = 50{,}000$, then:
+??? success "연습문제 2 풀이"
+    $\beta = 50{,}000$일 때 $Y \sim \text{Exp}(\text{scale} = \beta)$이면:
 
     $$
     E[Y] = \beta = 50{,}000, \qquad \text{Var}(Y) = \beta^2 = 2.5 \times 10^9
     $$
 
-    For the shifted variable $X = 20{,}000 + Y$:
+    이동된 변수 $X = 20{,}000 + Y$에 대해:
 
     $$
     E[X] = 20{,}000 + 50{,}000 = 70{,}000
@@ -160,56 +160,56 @@ All three distributions have the same mean (the population mean), but the spread
     \sigma_X = \sqrt{2.5 \times 10^9} = 50{,}000
     $$
 
-    So the population has mean \$70,000 and standard deviation \$50,000. $\square$
+    따라서 모집단의 평균은 \$70,000, 표준편차는 \$50,000이다. $\square$
 
 ---
 
-**Exercise 3.** How large must $n$ be so that the standard error of $\bar{X}$ is at most \$5,000, given $\sigma = 50{,}000$?
+**연습문제 3.** $\sigma = 50{,}000$일 때 $\bar{X}$의 표준오차가 최대 \$5,000이 되려면 $n$이 얼마나 커야 하는가?
 
-??? success "Solution to Exercise 3"
-    We need:
+??? success "연습문제 3 풀이"
+    다음이 필요하다:
 
     $$
     \frac{50{,}000}{\sqrt{n}} \le 5{,}000 \implies \sqrt{n} \ge 10 \implies n \ge 100
     $$
 
-    A sample size of at least $n = 100$ is needed. $\square$
+    표본크기가 최소 $n = 100$이어야 한다. $\square$
 
 ---
 
-**Exercise 4.** The code computes empirical standard errors from 1,000 simulated means. Explain why the empirical SE might differ slightly from the theoretical value. How would increasing the number of simulations from 1,000 to 100,000 affect this discrepancy?
+**연습문제 4.** 코드는 1,000번 모의실험한 평균으로 경험적 표준오차를 계산한다. 경험적 표준오차가 이론값과 약간 다를 수 있는 이유를 설명하라. 모의실험 횟수를 1,000에서 100,000으로 늘리면 이 차이는 어떻게 되는가?
 
-??? success "Solution to Exercise 4"
-    The empirical SE is itself a statistic computed from a finite number of simulations. It has its own sampling variability. Specifically, if $\hat{\text{SE}}$ is the standard deviation of $B$ simulated means, then the approximate standard error of $\hat{\text{SE}}$ itself is:
+??? success "연습문제 4 풀이"
+    경험적 표준오차 자체가 유한한 횟수의 모의실험으로 계산한 통계량이므로 고유의 표본추출 변동성을 갖는다. 구체적으로 $\hat{\text{SE}}$가 모의실험한 평균 $B$개의 표준편차라면, $\hat{\text{SE}}$ 자체의 근사적 표준오차는:
 
     $$
     \text{SE}(\hat{\text{SE}}) \approx \frac{\hat{\text{SE}}}{\sqrt{2B}}
     $$
 
-    With $B = 1{,}000$: the precision of the estimated SE is about $\hat{\text{SE}} / \sqrt{2000} \approx \hat{\text{SE}} / 44.7$.
+    $B = 1{,}000$이면 추정된 표준오차의 정밀도는 약 $\hat{\text{SE}} / \sqrt{2000} \approx \hat{\text{SE}} / 44.7$이다.
 
-    With $B = 100{,}000$: the precision improves to $\hat{\text{SE}} / \sqrt{200{,}000} \approx \hat{\text{SE}} / 447$.
+    $B = 100{,}000$이면 정밀도가 $\hat{\text{SE}} / \sqrt{200{,}000} \approx \hat{\text{SE}} / 447$로 좋아진다.
 
-    Increasing simulations by a factor of 100 improves the precision of the SE estimate by a factor of 10. With 100,000 simulations, the empirical SE will be very close to the theoretical value. $\square$
+    모의실험 횟수를 100배로 늘리면 표준오차 추정값의 정밀도가 10배 좋아진다. 100,000번 모의실험하면 경험적 표준오차가 이론값에 매우 가까워진다. $\square$
 
 ---
 
-**Exercise 5.** Suppose you are designing a survey to estimate mean household income in a city. Budget constraints limit you to $n = 50$ respondents. Using $\sigma \approx \$50{,}000$, compute the standard error and the approximate 95% margin of error for $\bar{X}$. If the budget doubles (allowing $n = 100$), how does the margin of error change?
+**연습문제 5.** 어떤 도시의 평균 가구소득을 추정하는 조사를 설계한다고 하자. 예산 제약 때문에 응답자를 $n = 50$명으로 제한해야 한다. $\sigma \approx \$50{,}000$을 사용하여 표준오차와 $\bar{X}$의 근사적 95% 오차한계를 계산하라. 예산이 두 배가 되어 $n = 100$이 가능해지면 오차한계는 어떻게 달라지는가?
 
-??? success "Solution to Exercise 5"
-    For $n = 50$:
+??? success "연습문제 5 풀이"
+    $n = 50$일 때:
 
     $$
     \text{SE} = \frac{50{,}000}{\sqrt{50}} = \frac{50{,}000}{7.071} \approx \$7{,}071
     $$
 
-    The 95% margin of error is:
+    95% 오차한계는:
 
     $$
     \text{MOE} = 1.96 \times 7{,}071 \approx \$13{,}859
     $$
 
-    For $n = 100$:
+    $n = 100$일 때:
 
     $$
     \text{SE} = \frac{50{,}000}{\sqrt{100}} = \$5{,}000
@@ -219,4 +219,4 @@ All three distributions have the same mean (the population mean), but the spread
     \text{MOE} = 1.96 \times 5{,}000 = \$9{,}800
     $$
 
-    Doubling the sample size reduces the margin of error by a factor of $\sqrt{2} \approx 1.41$, from about \$13,859 to about \$9,800. This is a 29% reduction in margin of error for a 100% increase in cost, illustrating the diminishing returns of increasing sample size. $\square$
+    표본크기를 두 배로 늘리면 오차한계가 $\sqrt{2} \approx 1.41$배 줄어 약 \$13,859에서 약 \$9,800이 된다. 비용을 100% 늘려 오차한계는 29% 줄어드는 것으로, 표본크기를 늘릴 때의 수확 체감을 보여 준다. $\square$

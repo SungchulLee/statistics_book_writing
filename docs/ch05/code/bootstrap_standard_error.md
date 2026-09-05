@@ -1,50 +1,50 @@
-# Bootstrap Standard Error
+# 붓스트랩 표준오차
 
-## Overview
+## 개요
 
-When the theoretical standard error formula is unavailable or the statistic of interest is complex (e.g., a median, ratio, or regression coefficient), the **bootstrap** provides a powerful computational method for estimating the standard error. The idea is simple: resample with replacement from the observed data many times, compute the statistic each time, and use the standard deviation of these bootstrap replicates as the estimated standard error. This page compares the bootstrap SE with the classical formula for the sample mean.
+이론적 표준오차 공식이 없거나 관심 통계량이 복잡할 때(예: 중앙값, 비, 회귀계수) **붓스트랩**은 표준오차를 추정하는 강력한 계산 방법을 제공한다. 착상은 단순하다. 관측된 자료에서 복원추출로 재표본을 여러 번 뽑아 매번 통계량을 계산하고, 이 붓스트랩 복제값들의 표준편차를 추정 표준오차로 삼는다. 이 페이지에서는 표본평균에 대해 붓스트랩 표준오차와 고전적 공식을 비교한다.
 
-## The Bootstrap Principle
+## 붓스트랩 원리
 
-Given an observed sample $x_1, x_2, \ldots, x_n$, the bootstrap algorithm for estimating $\text{SE}(\hat{\theta})$ is:
+관측된 표본 $x_1, x_2, \ldots, x_n$이 주어졌을 때 $\text{SE}(\hat{\theta})$를 추정하는 붓스트랩 알고리즘은 다음과 같다:
 
-1. Draw a bootstrap sample $x_1^*, x_2^*, \ldots, x_n^*$ by sampling **with replacement** from the original data.
-2. Compute the statistic of interest: $\hat{\theta}^* = T(x_1^*, \ldots, x_n^*)$.
-3. Repeat steps 1--2 a total of $B$ times, producing $\hat{\theta}_1^*, \hat{\theta}_2^*, \ldots, \hat{\theta}_B^*$.
-4. The bootstrap standard error is:
+1. 원래 자료에서 **복원추출**로 붓스트랩 표본 $x_1^*, x_2^*, \ldots, x_n^*$을 뽑는다.
+2. 관심 통계량을 계산한다: $\hat{\theta}^* = T(x_1^*, \ldots, x_n^*)$.
+3. 1–2단계를 총 $B$번 반복하여 $\hat{\theta}_1^*, \hat{\theta}_2^*, \ldots, \hat{\theta}_B^*$을 얻는다.
+4. 붓스트랩 표준오차는:
 
 $$
 \widehat{\text{SE}}_{\text{boot}} = \sqrt{\frac{1}{B-1}\sum_{b=1}^B \left(\hat{\theta}_b^* - \bar{\hat{\theta}}^*\right)^2}
 $$
 
-where $\bar{\hat{\theta}}^* = \frac{1}{B}\sum_{b=1}^B \hat{\theta}_b^*$.
+여기서 $\bar{\hat{\theta}}^* = \frac{1}{B}\sum_{b=1}^B \hat{\theta}_b^*$이다.
 
-!!! info "Why Resample with Replacement?"
-    Sampling with replacement from the data mimics the process of drawing new samples from the (unknown) population. The empirical distribution of the data serves as a nonparametric estimate of the population distribution.
+!!! info "왜 복원추출인가?"
+    자료에서 복원추출을 하면 (미지의) 모집단에서 새로운 표본을 뽑는 과정을 모방하게 된다. 자료의 경험분포가 모집단 분포에 대한 비모수적 추정값 역할을 한다.
 
-## Classical Comparison
+## 고전적 방법과의 비교
 
-For the sample mean $\bar{x}$, the classical standard error formula is:
+표본평균 $\bar{x}$에 대한 고전적 표준오차 공식은:
 
 $$
 \text{SE}(\bar{x}) = \frac{s}{\sqrt{n}}
 $$
 
-where $s$ is the sample standard deviation. The bootstrap SE should approximate this value when applied to the mean.
+여기서 $s$는 표본표준편차이다. 평균에 적용하면 붓스트랩 표준오차가 이 값을 근사해야 한다.
 
-## Alternative: Squared-Error Approach
+## 대안: 제곱오차 방식
 
-An equivalent formulation computes:
+동등한 다른 정식화는 다음을 계산한다:
 
 $$
 \widehat{\text{SE}} = \sqrt{\frac{1}{B}\sum_{b=1}^B \left(\bar{x}_b^* - \bar{x}\right)^2}
 $$
 
-This replaces the bootstrap grand mean $\bar{\hat{\theta}}^*$ with the original sample mean $\bar{x}$. For large $B$, both approaches give nearly identical results.
+붓스트랩 전체 평균 $\bar{\hat{\theta}}^*$ 대신 원래 표본평균 $\bar{x}$를 쓰는 것이다. $B$가 크면 두 방식이 거의 같은 결과를 준다.
 
-## Simulation
+## 모의실험
 
-The following code applies both the classical and bootstrap approaches to a sample of 31 price observations.
+다음 코드는 31개의 가격 관측값 표본에 고전적 방법과 붓스트랩 방법을 모두 적용한다.
 
 ```python
 import numpy as np
@@ -86,7 +86,7 @@ print(f"Bootstrap SE:       {se_bootstrap:.4f}")
 print(f"Squared-error SE:   {se_squared_error:.4f}")
 ```
 
-## Visualization
+## 시각화
 
 ```python
 fig, axes = plt.subplots(1, 2, figsize=(12, 4.5))
@@ -114,93 +114,93 @@ plt.tight_layout()
 plt.show()
 ```
 
-## Interpretation
+## 해석
 
-!!! note "Key Observations"
+!!! note "주요 관찰"
 
-    1. The classical SE, bootstrap SE, and squared-error SE all produce very similar values, confirming the consistency of the bootstrap method for the sample mean.
-    2. The bootstrap distribution of $\bar{x}^*$ is approximately normal, centred at the original sample mean.
-    3. As the sample size increases (right panel), the standard error decreases following the familiar $1/\sqrt{n}$ curve.
+    1. 고전적 표준오차, 붓스트랩 표준오차, 제곱오차 표준오차가 모두 매우 비슷한 값을 주어 표본평균에 대한 붓스트랩 방법의 일관성을 확인해 준다.
+    2. $\bar{x}^*$의 붓스트랩 분포는 근사적으로 정규이며 원래 표본평균을 중심으로 한다.
+    3. 표본크기가 커지면(오른쪽 패널) 표준오차가 익숙한 $1/\sqrt{n}$ 곡선을 따라 줄어든다.
 
-!!! tip "When to Use Bootstrap"
-    The bootstrap is most valuable when:
+!!! tip "붓스트랩을 언제 쓰는가"
+    붓스트랩은 다음과 같을 때 가장 유용하다:
 
-    - The statistic has no simple formula for its standard error (e.g., median, correlation, percentiles).
-    - The theoretical SE depends on unknown quantities that are hard to estimate (e.g., the population's fourth moment for $\text{SE}(S^2)$).
-    - The data distribution is complex or the sample size is small and you want to avoid distributional assumptions.
+    - 통계량의 표준오차에 간단한 공식이 없을 때(예: 중앙값, 상관계수, 백분위수).
+    - 이론적 표준오차가 추정하기 어려운 미지의 양에 의존할 때(예: $\text{SE}(S^2)$에 필요한 모집단의 4차 적률).
+    - 자료의 분포가 복잡하거나 표본이 작아 분포 가정을 피하고 싶을 때.
 
-### Bootstrap SE vs. Sample Size
+### 붓스트랩 표준오차와 표본크기
 
-The code also demonstrates how SE decreases as we use more of the data:
+코드는 자료를 더 많이 쓸수록 표준오차가 줄어드는 모습도 보여 준다:
 
-| $n$ | Classical SE | Bootstrap SE |
+| $n$ | 고전적 표준오차 | 붓스트랩 표준오차 |
 |---|---|---|
-| 5 | larger | similar |
-| 15 | moderate | similar |
-| 31 (full) | smallest | similar |
+| 5 | 더 큼 | 비슷함 |
+| 15 | 중간 | 비슷함 |
+| 31 (전체) | 가장 작음 | 비슷함 |
 
-The bootstrap and classical methods converge to very similar values at each sample size.
+각 표본크기에서 붓스트랩과 고전적 방법이 매우 비슷한 값으로 수렴한다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.** Explain why bootstrap samples are drawn **with replacement** rather than without replacement from the original data of size $n$.
+**연습문제 1.** 크기 $n$인 원래 자료에서 붓스트랩 표본을 비복원이 아니라 **복원**으로 뽑는 이유를 설명하라.
 
-??? success "Solution to Exercise 1"
-    If we sampled without replacement from $n$ data points and took all $n$ values, we would always get the exact same dataset, and every bootstrap replicate of any statistic would be identical to the original. There would be no variability to measure.
+??? success "연습문제 1 풀이"
+    $n$개의 자료점에서 비복원으로 $n$개를 모두 뽑는다면 언제나 똑같은 자료 집합이 나오고, 어떤 통계량이든 붓스트랩 복제값이 원래 값과 동일해진다. 잴 변동성 자체가 없어진다.
 
-    Sampling with replacement introduces variability: some original observations appear multiple times in a bootstrap sample while others are omitted entirely. On average, about $1 - (1 - 1/n)^n \approx 1 - e^{-1} \approx 63.2\%$ of the original observations appear in each bootstrap sample. This variability mimics the variability that would arise from drawing new samples from the true population.
+    복원추출은 변동성을 만들어 낸다. 어떤 관측값은 한 붓스트랩 표본에 여러 번 나타나고 어떤 것은 아예 빠진다. 평균적으로 원래 관측값의 약 $1 - (1 - 1/n)^n \approx 1 - e^{-1} \approx 63.2\%$가 각 붓스트랩 표본에 나타난다. 이 변동성이 참 모집단에서 새 표본을 뽑을 때 생기는 변동성을 모방한다.
 
-    Formally, the bootstrap treats the empirical distribution $\hat{F}_n$ (which places mass $1/n$ on each observed value) as a stand-in for the true population distribution $F$. Sampling with replacement from the data is equivalent to sampling from $\hat{F}_n$. $\square$
+    형식적으로 붓스트랩은 (관측된 각 값에 질량 $1/n$을 주는) 경험분포 $\hat{F}_n$을 참 모집단 분포 $F$의 대역으로 삼는다. 자료에서 복원추출하는 것은 $\hat{F}_n$에서 표본을 뽑는 것과 같다. $\square$
 
 ---
 
-**Exercise 2.** For the price data above ($n = 31$, $s \approx 1.01$), compute the classical standard error by hand and verify it matches the simulation output.
+**연습문제 2.** 위의 가격 자료($n = 31$, $s \approx 1.01$)에 대해 고전적 표준오차를 손으로 계산하고 모의실험 출력과 일치하는지 확인하라.
 
-??? success "Solution to Exercise 2"
-    The sample standard deviation is:
+??? success "연습문제 2 풀이"
+    표본표준편차는:
 
     $$
     s = \sqrt{\frac{1}{30}\sum_{i=1}^{31}(x_i - \bar{x})^2}
     $$
 
-    The data ranges from 241.59 to 245.02 with roughly equal spacing. The sample mean is approximately $\bar{x} \approx 243.31$. Computing $s$ (or noting it from the code output):
+    자료는 241.59에서 245.02까지 거의 균등한 간격으로 분포한다. 표본평균은 약 $\bar{x} \approx 243.31$이다. $s$를 계산하면(또는 코드 출력에서 확인하면):
 
     $$
     s \approx 1.013
     $$
 
-    The classical SE is:
+    고전적 표준오차는:
 
     $$
     \text{SE} = \frac{s}{\sqrt{n}} = \frac{1.013}{\sqrt{31}} = \frac{1.013}{5.568} \approx 0.182
     $$
 
-    This should match the simulation output closely. $\square$
+    이 값이 모의실험 출력과 잘 맞아야 한다. $\square$
 
 ---
 
-**Exercise 3.** How many bootstrap replicates $B$ are recommended in practice? Discuss the trade-off between computation time and accuracy of the bootstrap SE estimate.
+**연습문제 3.** 실무에서 붓스트랩 복제 횟수 $B$는 얼마나 권장되는가? 계산 시간과 붓스트랩 표준오차 추정값의 정확도 사이의 맞바꿈을 논하라.
 
-??? success "Solution to Exercise 3"
-    The standard error of the bootstrap SE estimate is approximately:
+??? success "연습문제 3 풀이"
+    붓스트랩 표준오차 추정값의 표준오차는 근사적으로:
 
     $$
     \text{SE}(\widehat{\text{SE}}_{\text{boot}}) \approx \frac{\widehat{\text{SE}}_{\text{boot}}}{\sqrt{2B}}
     $$
 
-    Common recommendations:
+    흔한 권장값:
 
-    - **$B = 1{,}000$**: Sufficient for a rough estimate. The SE of the SE is about $\widehat{\text{SE}} / 44.7$, giving about 2.2% relative precision.
-    - **$B = 10{,}000$**: Good for most applications. Relative precision is about 0.7%.
-    - **$B = 50{,}000$ or more**: Used for bootstrap confidence intervals (which require accurate tail estimates).
+    - **$B = 1{,}000$**: 대략적인 추정에 충분하다. 표준오차의 표준오차가 약 $\widehat{\text{SE}} / 44.7$로 상대 정밀도가 약 2.2%이다.
+    - **$B = 10{,}000$**: 대부분의 응용에 적합하다. 상대 정밀도가 약 0.7%이다.
+    - **$B = 50{,}000$ 이상**: 붓스트랩 신뢰구간에 사용한다(꼬리를 정확히 추정해야 하기 때문이다).
 
-    The trade-off: doubling $B$ improves precision by a factor of $\sqrt{2} \approx 1.41$ but doubles computation time. For standard error estimation, $B = 1{,}000$ to $10{,}000$ is typically sufficient. For bootstrap confidence intervals or hypothesis tests, larger $B$ is needed because tail probabilities are estimated less precisely. $\square$
+    맞바꿈: $B$를 두 배로 하면 정밀도가 $\sqrt{2} \approx 1.41$배 좋아지지만 계산 시간도 두 배가 된다. 표준오차 추정에는 $B = 1{,}000$에서 $10{,}000$이면 대개 충분하다. 붓스트랩 신뢰구간이나 가설검정에는 꼬리 확률이 덜 정밀하게 추정되므로 더 큰 $B$가 필요하다. $\square$
 
 ---
 
-**Exercise 4.** Apply the bootstrap to estimate the standard error of the **sample median** for the price data. Why is the bootstrap particularly useful for the median?
+**연습문제 4.** 가격 자료에 붓스트랩을 적용하여 **표본중앙값**의 표준오차를 추정하라. 중앙값에 붓스트랩이 특히 유용한 이유는 무엇인가?
 
-??? success "Solution to Exercise 4"
+??? success "연습문제 4 풀이"
     ```python
     import numpy as np
     np.random.seed(42)
@@ -220,22 +220,22 @@ The bootstrap and classical methods converge to very similar values at each samp
     print(f"Bootstrap SE of the median: {se_median:.4f}")
     ```
 
-    The bootstrap is particularly useful for the median because:
+    중앙값에 붓스트랩이 특히 유용한 이유는:
 
-    1. There is no simple, widely-known closed-form formula for the standard error of the median that works for arbitrary distributions.
-    2. The asymptotic formula $\text{SE}(\text{median}) \approx 1 / (2f(m)\sqrt{n})$ requires knowing the population density $f$ at the median $m$, which is itself difficult to estimate.
-    3. The bootstrap automatically accounts for the distribution shape and provides a nonparametric estimate without requiring density estimation.
+    1. 임의의 분포에서 통하는, 널리 알려진 간단한 닫힌 형태의 중앙값 표준오차 공식이 없다.
+    2. 점근 공식 $\text{SE}(\text{median}) \approx 1 / (2f(m)\sqrt{n})$은 중앙값 $m$에서의 모집단 밀도 $f$를 알아야 하는데, 이것 자체가 추정하기 어렵다.
+    3. 붓스트랩은 분포 모양을 자동으로 반영하며 밀도추정 없이 비모수적 추정값을 준다.
 
     $\square$
 
 ---
 
-**Exercise 5.** Prove that for the sample mean, the bootstrap SE converges to $s/\sqrt{n}$ as $B \to \infty$, where $s$ is the sample standard deviation.
+**연습문제 5.** 표본평균에 대해 $B \to \infty$일 때 붓스트랩 표준오차가 $s/\sqrt{n}$으로 수렴함을 증명하라. 여기서 $s$는 표본표준편차이다.
 
-??? success "Solution to Exercise 5"
-    In a bootstrap sample, each $x_i^*$ is drawn independently and uniformly from $\{x_1, \ldots, x_n\}$. The bootstrap sample mean is $\bar{x}^* = \frac{1}{n}\sum_{j=1}^n x_j^*$.
+??? success "연습문제 5 풀이"
+    붓스트랩 표본에서 각 $x_i^*$는 $\{x_1, \ldots, x_n\}$에서 독립적이고 균등하게 뽑힌다. 붓스트랩 표본평균은 $\bar{x}^* = \frac{1}{n}\sum_{j=1}^n x_j^*$이다.
 
-    Under the bootstrap distribution (conditional on the data):
+    (자료로 조건화한) 붓스트랩 분포 아래에서:
 
     $$
     E^*[x_j^*] = \frac{1}{n}\sum_{i=1}^n x_i = \bar{x}
@@ -245,16 +245,16 @@ The bootstrap and classical methods converge to very similar values at each samp
     \text{Var}^*(x_j^*) = \frac{1}{n}\sum_{i=1}^n (x_i - \bar{x})^2 = \frac{n-1}{n} s^2
     $$
 
-    Since the $x_j^*$ are i.i.d. under the bootstrap:
+    붓스트랩 아래에서 $x_j^*$들이 i.i.d.이므로:
 
     $$
     \text{Var}^*(\bar{x}^*) = \frac{1}{n} \cdot \frac{n-1}{n} s^2 = \frac{(n-1)s^2}{n^2}
     $$
 
-    As $B \to \infty$, the bootstrap SE converges to:
+    $B \to \infty$일 때 붓스트랩 표준오차는 다음으로 수렴한다:
 
     $$
     \widehat{\text{SE}}_{\text{boot}} \to \sqrt{\frac{(n-1)s^2}{n^2}} = \frac{s\sqrt{n-1}}{n}
     $$
 
-    This is very close to $s/\sqrt{n}$ for large $n$ (differing by a factor of $\sqrt{(n-1)/n}$). Using $\text{ddof}=1$ in the standard deviation of the bootstrap means gives exactly $s/\sqrt{n}$ in the limit. The minor discrepancy arises from the distinction between dividing by $n$ vs. $n-1$ in the variance, and vanishes as $n \to \infty$. $\square$
+    이는 $n$이 크면 $s/\sqrt{n}$에 매우 가깝다($\sqrt{(n-1)/n}$배만큼 다르다). 붓스트랩 평균들의 표준편차에 $\text{ddof}=1$을 사용하면 극한에서 정확히 $s/\sqrt{n}$이 된다. 이 작은 차이는 분산을 $n$으로 나누느냐 $n-1$로 나누느냐의 구별에서 오며 $n \to \infty$일 때 사라진다. $\square$

@@ -1,57 +1,57 @@
-# Sampling Distribution of X-bar (Bernoulli)
+# X-bar의 표본분포 (Bernoulli)
 
-## Overview
+## 개요
 
-When the population consists of binary outcomes (success/failure), the sample mean $\bar{X}$ equals the sample proportion $\hat{p}$, the fraction of successes in the sample. This page explores the sampling distribution of $\hat{p}$ drawn from Bernoulli populations with different success probabilities. By the Central Limit Theorem, $\hat{p}$ is approximately normal for large $n$, and we verify this with simulation.
+모집단이 이항 결과(성공/실패)로 이루어져 있으면 표본평균 $\bar{X}$는 표본에서 성공이 차지하는 비율, 즉 표본비율 $\hat{p}$과 같다. 이 페이지에서는 성공확률이 서로 다른 Bernoulli 모집단에서 뽑은 $\hat{p}$의 표본분포를 살펴본다. 중심극한정리에 의해 $n$이 크면 $\hat{p}$이 근사적으로 정규분포이며, 이를 모의실험으로 확인한다.
 
-## Population Model
+## 모집단 모형
 
-Each observation is a Bernoulli trial with success probability $p$:
+각 관측값은 성공확률이 $p$인 Bernoulli 시행이다:
 
 $$
 X_i \sim \text{Bernoulli}(p), \qquad P(X_i = 1) = p, \quad P(X_i = 0) = 1 - p
 $$
 
-The population mean and variance are:
+모평균과 모분산은:
 
 $$
 \mu = E[X_i] = p, \qquad \sigma^2 = \text{Var}(X_i) = p(1 - p)
 $$
 
-## The Sample Proportion
+## 표본비율
 
-For a sample of size $n$, the sample proportion is:
+크기 $n$인 표본에 대해 표본비율은:
 
 $$
 \hat{p} = \bar{X} = \frac{1}{n}\sum_{i=1}^n X_i
 $$
 
-Its sampling distribution has:
+그 표본분포는 다음을 만족한다:
 
 $$
 E[\hat{p}] = p, \qquad \text{Var}(\hat{p}) = \frac{p(1 - p)}{n}
 $$
 
-The standard error of $\hat{p}$ is:
+$\hat{p}$의 표준오차는:
 
 $$
 \text{SE}(\hat{p}) = \sqrt{\frac{p(1 - p)}{n}}
 $$
 
-## Normal Approximation
+## 정규근사
 
-By the Central Limit Theorem, for sufficiently large $n$:
+중심극한정리에 의해 $n$이 충분히 크면:
 
 $$
 \hat{p} \;\dot{\sim}\; N\!\left(p,\; \frac{p(1 - p)}{n}\right)
 $$
 
-!!! tip "Rule of Thumb"
-    The normal approximation to $\hat{p}$ is generally considered reliable when both $np \ge 10$ and $n(1-p) \ge 10$. This ensures the distribution is not too skewed.
+!!! tip "경험 법칙"
+    $\hat{p}$에 대한 정규근사는 대체로 $np \ge 10$이고 $n(1-p) \ge 10$일 때 믿을 만하다고 본다. 이 조건이 분포가 지나치게 치우치지 않도록 보장한다.
 
-## Simulation
+## 모의실험
 
-The following code simulates the sampling distribution of $\hat{p}$ for several values of $p$, drawing samples of size $n = 100$ from Bernoulli populations and overlaying the theoretical normal approximation.
+다음 코드는 여러 $p$ 값에 대해 Bernoulli 모집단에서 크기 $n = 100$인 표본을 뽑아 $\hat{p}$의 표본분포를 모의실험하고 이론적 정규근사를 겹쳐 그린다.
 
 ```python
 import matplotlib.pyplot as plt
@@ -96,16 +96,16 @@ plt.tight_layout()
 plt.show()
 ```
 
-## Interpretation
+## 해석
 
-!!! note "Key Observations"
+!!! note "주요 관찰"
 
-    1. For all four values of $p$ ($0.4, 0.5, 0.6, 0.7$), the simulated sampling distribution of $\hat{p}$ closely matches the normal approximation when $n = 100$.
-    2. The distribution is most symmetric when $p = 0.5$ (maximum variance) and becomes slightly more skewed as $p$ moves toward 0 or 1.
-    3. The spread varies with $p$: the standard error $\sqrt{p(1-p)/n}$ is maximized at $p = 0.5$ and decreases as $p$ moves away from $0.5$.
-    4. With $n = 100$, the rule of thumb $np \ge 10$ and $n(1-p) \ge 10$ is satisfied for all four values, so the normal approximation is expected to work well.
+    1. 네 가지 $p$ 값($0.4, 0.5, 0.6, 0.7$) 모두에서 $n = 100$일 때 모의실험한 $\hat{p}$의 표본분포가 정규근사와 잘 맞는다.
+    2. 분포는 $p = 0.5$에서 가장 대칭이며(분산이 최대), $p$가 0이나 1로 갈수록 약간 더 치우친다.
+    3. 퍼짐은 $p$에 따라 달라진다. 표준오차 $\sqrt{p(1-p)/n}$은 $p = 0.5$에서 최대이고 $p$가 $0.5$에서 멀어질수록 작아진다.
+    4. $n = 100$이면 네 값 모두에서 $np \ge 10$이고 $n(1-p) \ge 10$이라는 경험 법칙이 충족되므로 정규근사가 잘 작동할 것으로 기대된다.
 
-### Standard Errors by Population Proportion
+### 모비율에 따른 표준오차
 
 | $p$ | $\text{SE}(\hat{p})$ |
 |---|---|
@@ -114,12 +114,12 @@ plt.show()
 | 0.6 | $\sqrt{0.24 / 100} = 0.0490$ |
 | 0.7 | $\sqrt{0.21 / 100} = 0.0458$ |
 
-## Exercises
+## 연습문제
 
-**Exercise 1.** Derive the variance of $\hat{p}$ from first principles, starting from $\text{Var}(X_i) = p(1-p)$.
+**연습문제 1.** $\text{Var}(X_i) = p(1-p)$에서 출발하여 정의로부터 $\hat{p}$의 분산을 유도하라.
 
-??? success "Solution to Exercise 1"
-    Since $\hat{p} = \frac{1}{n}\sum_{i=1}^n X_i$ and the $X_i$ are independent:
+??? success "연습문제 1 풀이"
+    $\hat{p} = \frac{1}{n}\sum_{i=1}^n X_i$이고 $X_i$들이 독립이므로:
 
     $$
     \text{Var}(\hat{p}) = \text{Var}\!\left(\frac{1}{n}\sum_{i=1}^n X_i\right) = \frac{1}{n^2} \sum_{i=1}^n \text{Var}(X_i) = \frac{1}{n^2} \cdot n \cdot p(1-p) = \frac{p(1-p)}{n}
@@ -129,92 +129,92 @@ plt.show()
 
 ---
 
-**Exercise 2.** A poll surveys $n = 400$ voters. The sample proportion favouring a candidate is $\hat{p} = 0.53$. Construct a 95% confidence interval for the true proportion $p$.
+**연습문제 2.** 어떤 여론조사가 유권자 $n = 400$명을 조사했다. 특정 후보를 지지하는 표본비율이 $\hat{p} = 0.53$이다. 참 비율 $p$에 대한 95% 신뢰구간을 구성하라.
 
-??? success "Solution to Exercise 2"
-    Using the normal approximation, the 95% confidence interval is:
+??? success "연습문제 2 풀이"
+    정규근사를 사용하면 95% 신뢰구간은:
 
     $$
     \hat{p} \pm z_{0.025} \cdot \text{SE}(\hat{p})
     $$
 
-    The estimated standard error is:
+    추정된 표준오차는:
 
     $$
     \widehat{\text{SE}} = \sqrt{\frac{\hat{p}(1-\hat{p})}{n}} = \sqrt{\frac{0.53 \times 0.47}{400}} = \sqrt{\frac{0.2491}{400}} \approx 0.02495
     $$
 
-    With $z_{0.025} = 1.96$:
+    $z_{0.025} = 1.96$이므로:
 
     $$
     0.53 \pm 1.96 \times 0.02495 = 0.53 \pm 0.0489
     $$
 
-    The 95% confidence interval is approximately $(0.481, 0.579)$. Since this interval contains 0.5, we cannot conclude that the candidate has majority support at the 95% level. $\square$
+    95% 신뢰구간은 약 $(0.481, 0.579)$이다. 이 구간이 0.5를 포함하므로 95% 수준에서 이 후보가 과반의 지지를 받는다고 결론지을 수 없다. $\square$
 
 ---
 
-**Exercise 3.** Show that $p(1-p)$ is maximized at $p = 0.5$ and equals $1/4$. Explain why this means the "worst-case" standard error for $\hat{p}$ is $1/(2\sqrt{n})$.
+**연습문제 3.** $p(1-p)$가 $p = 0.5$에서 최대이고 그 값이 $1/4$임을 보여라. 이것이 $\hat{p}$의 "최악의 경우" 표준오차가 $1/(2\sqrt{n})$임을 뜻하는 이유를 설명하라.
 
-??? success "Solution to Exercise 3"
-    Let $g(p) = p(1-p) = p - p^2$ for $p \in [0, 1]$.
+??? success "연습문제 3 풀이"
+    $p \in [0, 1]$에서 $g(p) = p(1-p) = p - p^2$이라 하자.
 
     $$
     g'(p) = 1 - 2p = 0 \implies p = \frac{1}{2}
     $$
 
-    Since $g''(p) = -2 < 0$, this is a maximum. The maximum value is:
+    $g''(p) = -2 < 0$이므로 최대점이다. 최댓값은:
 
     $$
     g\!\left(\frac{1}{2}\right) = \frac{1}{2} \cdot \frac{1}{2} = \frac{1}{4}
     $$
 
-    Therefore, the standard error satisfies:
+    따라서 표준오차는 다음을 만족한다:
 
     $$
     \text{SE}(\hat{p}) = \sqrt{\frac{p(1-p)}{n}} \le \sqrt{\frac{1/4}{n}} = \frac{1}{2\sqrt{n}}
     $$
 
-    This upper bound is useful when planning sample sizes: regardless of the unknown $p$, the standard error never exceeds $1/(2\sqrt{n})$. For example, to guarantee $\text{SE} \le 0.03$, we need $n \ge 1/(4 \times 0.03^2) \approx 278$. $\square$
+    이 상한은 표본크기를 계획할 때 유용하다. 미지의 $p$가 무엇이든 표준오차는 결코 $1/(2\sqrt{n})$을 넘지 않는다. 예를 들어 $\text{SE} \le 0.03$을 보장하려면 $n \ge 1/(4 \times 0.03^2) \approx 278$이 필요하다. $\square$
 
 ---
 
-**Exercise 4.** How large must $n$ be so that the 95% margin of error for $\hat{p}$ is at most 0.02, regardless of the true $p$?
+**연습문제 4.** 참 $p$가 무엇이든 $\hat{p}$의 95% 오차한계가 최대 0.02가 되려면 $n$이 얼마나 커야 하는가?
 
-??? success "Solution to Exercise 4"
-    The margin of error is $E = z_{0.025} \cdot \text{SE}(\hat{p}) = 1.96 \sqrt{p(1-p)/n}$.
+??? success "연습문제 4 풀이"
+    오차한계는 $E = z_{0.025} \cdot \text{SE}(\hat{p}) = 1.96 \sqrt{p(1-p)/n}$이다.
 
-    Using the worst case $p(1-p) \le 1/4$:
+    최악의 경우 $p(1-p) \le 1/4$를 사용하면:
 
     $$
     E \le 1.96 \cdot \frac{1}{2\sqrt{n}}
     $$
 
-    Setting $E \le 0.02$:
+    $E \le 0.02$로 두면:
 
     $$
     1.96 \cdot \frac{1}{2\sqrt{n}} \le 0.02 \implies \sqrt{n} \ge \frac{1.96}{0.04} = 49 \implies n \ge 2401
     $$
 
-    A sample size of at least $n = 2401$ guarantees a margin of error of 0.02 or less. $\square$
+    표본크기가 최소 $n = 2401$이면 오차한계 0.02 이하가 보장된다. $\square$
 
 ---
 
-**Exercise 5.** When $p = 0.01$ and $n = 100$, compute $np$ and $n(1-p)$. Does the normal approximation satisfy the rule of thumb? Suggest an alternative approach for this setting.
+**연습문제 5.** $p = 0.01$이고 $n = 100$일 때 $np$와 $n(1-p)$를 계산하라. 정규근사가 경험 법칙을 충족하는가? 이런 상황에 대한 대안을 제시하라.
 
-??? success "Solution to Exercise 5"
-    We compute:
+??? success "연습문제 5 풀이"
+    계산하면:
 
     $$
     np = 100 \times 0.01 = 1, \qquad n(1-p) = 100 \times 0.99 = 99
     $$
 
-    Since $np = 1 < 10$, the rule of thumb is **not** satisfied, and the normal approximation is unreliable. The distribution of $n\hat{p} = \sum X_i$ is $\text{Binomial}(100, 0.01)$, which is heavily right-skewed and concentrated near 0.
+    $np = 1 < 10$이므로 경험 법칙이 충족되지 **않으며** 정규근사를 신뢰할 수 없다. $n\hat{p} = \sum X_i$의 분포는 $\text{Binomial}(100, 0.01)$로 오른쪽으로 심하게 치우쳐 있고 0 근처에 몰려 있다.
 
-    Alternative approaches include:
+    대안으로는 다음이 있다:
 
-    - **Exact binomial methods**: Use the exact binomial distribution for confidence intervals and tests (e.g., the Clopper--Pearson interval).
-    - **Poisson approximation**: Since $n$ is large and $p$ is small, $\sum X_i \approx \text{Poisson}(\lambda = np = 1)$, which is often simpler to work with.
-    - **Wilson interval**: A modified confidence interval that performs better than the Wald (normal-based) interval when $p$ is near 0 or 1.
+    - **정확한 binomial 방법**: 신뢰구간과 검정에 정확한 binomial 분포를 사용한다(예: Clopper–Pearson 구간).
+    - **Poisson 근사**: $n$이 크고 $p$가 작으므로 $\sum X_i \approx \text{Poisson}(\lambda = np = 1)$이며 다루기가 더 간단한 경우가 많다.
+    - **Wilson 구간**: $p$가 0이나 1에 가까울 때 Wald(정규 기반) 구간보다 잘 작동하도록 수정된 신뢰구간이다.
 
-    In general, when the event of interest is rare, one should either increase $n$ substantially or use methods that do not rely on the normal approximation. $\square$
+    일반적으로 관심 사건이 드물면 $n$을 크게 늘리거나 정규근사에 의존하지 않는 방법을 써야 한다. $\square$

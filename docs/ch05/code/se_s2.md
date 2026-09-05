@@ -1,40 +1,40 @@
-# Standard Error of S-squared
+# S-squared의 표준오차
 
-## Overview
+## 개요
 
-Just as the sample mean $\bar{X}$ has a standard error that measures its variability across samples, the sample variance $S^2$ also has a standard error. Understanding the precision of $S^2$ is important when we need to estimate or make inferences about the population variance $\sigma^2$. This page derives the standard error of $S^2$, estimates it via simulation from a Uniform population, and illustrates it graphically.
+표본평균 $\bar{X}$가 표본 간 변동성을 재는 표준오차를 갖듯이 표본분산 $S^2$도 표준오차를 갖는다. 모분산 $\sigma^2$을 추정하거나 그에 관해 추론할 때 $S^2$의 정밀도를 이해하는 것이 중요하다. 이 페이지에서는 $S^2$의 표준오차를 유도하고, Uniform 모집단에서 모의실험으로 추정하며, 그림으로 나타낸다.
 
-## Definition
+## 정의
 
-The **standard error of $S^2$** is the standard deviation of its sampling distribution:
+**$S^2$의 표준오차**는 그 표본분포의 표준편차이다:
 
 $$
 \text{SE}(S^2) = \sqrt{\text{Var}(S^2)}
 $$
 
-For a normal population, this has the closed-form expression:
+정규모집단에서는 닫힌 형태로 주어진다:
 
 $$
 \text{SE}(S^2) = \sigma^2 \sqrt{\frac{2}{n-1}}
 $$
 
-More generally, for any population with finite fourth moment:
+더 일반적으로, 4차 적률이 유한한 임의의 모집단에 대해:
 
 $$
 \text{Var}(S^2) = \frac{1}{n}\left(\mu_4 - \frac{n-3}{n-1}\sigma^4\right)
 $$
 
-where $\mu_4 = E[(X - \mu)^4]$ is the fourth central moment.
+여기서 $\mu_4 = E[(X - \mu)^4]$는 4차 중심적률이다.
 
-## Example: Uniform(0, 1) Population
+## 예: Uniform(0, 1) 모집단
 
-For $X \sim \text{Uniform}(0, 1)$:
+$X \sim \text{Uniform}(0, 1)$에 대해:
 
 $$
 \sigma^2 = \frac{1}{12}, \qquad \mu_4 = \frac{1}{80}
 $$
 
-With $n = 5$:
+$n = 5$이면:
 
 $$
 \text{Var}(S^2) = \frac{1}{5}\left(\frac{1}{80} - \frac{2}{4} \cdot \frac{1}{144}\right) = \frac{1}{5}\left(\frac{1}{80} - \frac{1}{288}\right)
@@ -48,9 +48,9 @@ $$
 \text{SE}(S^2) \approx \sqrt{0.001806} \approx 0.0425
 $$
 
-## Simulation
+## 모의실험
 
-The following code simulates 10,000 values of $S^2$ from a Uniform(0, 1) population with $n = 5$ and visualizes the result with the estimated mean and standard error.
+다음 코드는 Uniform(0, 1) 모집단에서 $n = 5$로 $S^2$ 값을 10,000개 모의실험하고 추정된 평균과 표준오차를 함께 시각화한다.
 
 ```python
 import matplotlib.pyplot as plt
@@ -83,32 +83,32 @@ ax.legend()
 plt.show()
 ```
 
-### Expected Output
+### 예상 출력
 
-For Uniform(0, 1) with $n = 5$:
+$n = 5$인 Uniform(0, 1)에 대해:
 
-- **Theoretical mean**: $E[S^2] = \sigma^2 = 1/12 \approx 0.0833$
-- **Theoretical SE**: approximately $0.0425$
-- The histogram is right-skewed (since $S^2 \ge 0$), which is typical for the sampling distribution of a variance.
+- **이론적 평균**: $E[S^2] = \sigma^2 = 1/12 \approx 0.0833$
+- **이론적 표준오차**: 약 $0.0425$
+- 히스토그램은 오른쪽으로 치우쳐 있다($S^2 \ge 0$이므로). 분산의 표본분포에서 전형적인 모습이다.
 
-## Interpretation
+## 해석
 
-!!! note "Key Observations"
+!!! note "주요 관찰"
 
-    1. The sampling distribution of $S^2$ is **right-skewed**, unlike the approximately symmetric distribution of $\bar{X}$.
-    2. The mean of the simulated $S^2$ values is close to $\sigma^2 = 1/12$, confirming that $S^2$ is unbiased.
-    3. The standard error of $S^2$ is much smaller than its mean, indicating reasonable precision even with $n = 5$.
-    4. The dashed lines at mean $\pm$ SE show the typical range of $S^2$ values. Because the distribution is skewed, values above mean $+$ SE are more common than values below mean $-$ SE.
+    1. $S^2$의 표본분포는 근사적으로 대칭인 $\bar{X}$의 분포와 달리 **오른쪽으로 치우쳐** 있다.
+    2. 모의실험한 $S^2$ 값들의 평균이 $\sigma^2 = 1/12$에 가까워 $S^2$이 불편임을 확인해 준다.
+    3. $S^2$의 표준오차가 평균보다 훨씬 작아 $n = 5$에서도 그럭저럭 정밀함을 보여 준다.
+    4. 평균 $\pm$ 표준오차의 점선은 $S^2$ 값의 전형적인 범위를 나타낸다. 분포가 치우쳐 있으므로 평균 $+$ 표준오차보다 큰 값이 평균 $-$ 표준오차보다 작은 값보다 더 흔하다.
 
-!!! warning "Standard Error of S-squared Depends on Population Shape"
-    Unlike $\text{SE}(\bar{X}) = \sigma/\sqrt{n}$, which depends only on $\sigma$ and $n$, the standard error of $S^2$ depends on the population's fourth moment (kurtosis). Heavy-tailed populations produce more variable $S^2$ values.
+!!! warning "S-squared의 표준오차는 모집단 모양에 의존한다"
+    $\sigma$와 $n$에만 의존하는 $\text{SE}(\bar{X}) = \sigma/\sqrt{n}$과 달리, $S^2$의 표준오차는 모집단의 4차 적률(첨도)에 의존한다. 꼬리가 두꺼운 모집단일수록 $S^2$ 값의 변동이 커진다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.** For a $N(0, 1)$ population with $n = 10$, compute the theoretical $E[S^2]$ and $\text{SE}(S^2)$.
+**연습문제 1.** $n = 10$인 $N(0, 1)$ 모집단에 대해 이론적 $E[S^2]$과 $\text{SE}(S^2)$을 계산하라.
 
-??? success "Solution to Exercise 1"
-    For $N(0, 1)$: $\sigma^2 = 1$.
+??? success "연습문제 1 풀이"
+    $N(0, 1)$에서 $\sigma^2 = 1$이다.
 
     $$
     E[S^2] = \sigma^2 = 1
@@ -122,18 +122,18 @@ For Uniform(0, 1) with $n = 5$:
 
 ---
 
-**Exercise 2.** Derive $\text{Var}(S^2) = 2\sigma^4 / (n-1)$ for a normal population by using the chi-squared distribution result $(n-1)S^2/\sigma^2 \sim \chi^2(n-1)$.
+**연습문제 2.** 카이제곱 결과 $(n-1)S^2/\sigma^2 \sim \chi^2(n-1)$을 사용하여 정규모집단에서 $\text{Var}(S^2) = 2\sigma^4 / (n-1)$을 유도하라.
 
-??? success "Solution to Exercise 2"
-    Let $Q = (n-1)S^2/\sigma^2$. Then $Q \sim \chi^2(n-1)$ and $\text{Var}(Q) = 2(n-1)$.
+??? success "연습문제 2 풀이"
+    $Q = (n-1)S^2/\sigma^2$이라 하자. 그러면 $Q \sim \chi^2(n-1)$이고 $\text{Var}(Q) = 2(n-1)$이다.
 
-    Since $S^2 = \sigma^2 Q / (n-1)$:
+    $S^2 = \sigma^2 Q / (n-1)$이므로:
 
     $$
     \text{Var}(S^2) = \left(\frac{\sigma^2}{n-1}\right)^2 \text{Var}(Q) = \frac{\sigma^4}{(n-1)^2} \cdot 2(n-1) = \frac{2\sigma^4}{n-1}
     $$
 
-    Therefore:
+    따라서:
 
     $$
     \text{SE}(S^2) = \sqrt{\frac{2\sigma^4}{n-1}} = \sigma^2 \sqrt{\frac{2}{n-1}}
@@ -143,16 +143,16 @@ For Uniform(0, 1) with $n = 5$:
 
 ---
 
-**Exercise 3.** Show that for Uniform(0, 1), the fourth central moment is $\mu_4 = 1/80$.
+**연습문제 3.** Uniform(0, 1)의 4차 중심적률이 $\mu_4 = 1/80$임을 보여라.
 
-??? success "Solution to Exercise 3"
-    For $X \sim \text{Uniform}(0, 1)$ with $\mu = 1/2$:
+??? success "연습문제 3 풀이"
+    $\mu = 1/2$인 $X \sim \text{Uniform}(0, 1)$에 대해:
 
     $$
     \mu_4 = E[(X - \mu)^4] = \int_0^1 \left(x - \frac{1}{2}\right)^4 dx
     $$
 
-    Substituting $u = x - 1/2$, so $du = dx$ and the limits become $-1/2$ to $1/2$:
+    $u = x - 1/2$로 치환하면 $du = dx$이고 적분 범위는 $-1/2$에서 $1/2$이 된다:
 
     $$
     \mu_4 = \int_{-1/2}^{1/2} u^4 \, du = \left[\frac{u^5}{5}\right]_{-1/2}^{1/2} = \frac{(1/2)^5}{5} - \frac{(-1/2)^5}{5} = \frac{2 \cdot (1/32)}{5} = \frac{1}{80}
@@ -162,23 +162,23 @@ For Uniform(0, 1) with $n = 5$:
 
 ---
 
-**Exercise 4.** Explain why the sampling distribution of $S^2$ is right-skewed when $n$ is small, and why it becomes more symmetric as $n$ increases.
+**연습문제 4.** $n$이 작을 때 $S^2$의 표본분포가 오른쪽으로 치우치는 이유와 $n$이 커질수록 더 대칭이 되는 이유를 설명하라.
 
-??? success "Solution to Exercise 4"
-    The sample variance $S^2$ is bounded below by 0 but has no finite upper bound (in principle). For small $n$, the constraint $S^2 \ge 0$ creates a "floor" that truncates the left tail, while occasional extreme observations can push $S^2$ to large values, creating a long right tail.
+??? success "연습문제 4 풀이"
+    표본분산 $S^2$은 아래로 0에서 유계이지만 (원리상) 위로는 유한한 한계가 없다. $n$이 작으면 제약 $S^2 \ge 0$이 왼쪽 꼬리를 잘라 내는 "바닥"을 만드는 반면, 이따금 나타나는 극단적인 관측값이 $S^2$을 큰 값으로 밀어 올려 긴 오른쪽 꼬리를 만든다.
 
-    As $n$ increases, two effects symmetrise the distribution:
+    $n$이 커지면 두 가지 효과가 분포를 대칭화한다:
 
-    1. **Central Limit Theorem for $S^2$**: For large $n$, $S^2$ is approximately a sum of many weakly dependent terms (the squared deviations), so its distribution converges to normal by a CLT-type argument.
-    2. **Chi-squared convergence**: For normal populations, $(n-1)S^2/\sigma^2 \sim \chi^2(n-1)$. The skewness of $\chi^2(k)$ is $2\sqrt{2/k}$, which goes to 0 as $k = n - 1$ grows.
+    1. **$S^2$에 대한 중심극한정리**: $n$이 크면 $S^2$은 약하게 의존하는 많은 항(제곱편차)의 합에 가까우므로, 중심극한정리 유형의 논증에 의해 그 분포가 정규분포로 수렴한다.
+    2. **카이제곱의 수렴**: 정규모집단에서 $(n-1)S^2/\sigma^2 \sim \chi^2(n-1)$이다. $\chi^2(k)$의 왜도는 $2\sqrt{2/k}$이며 $k = n - 1$이 커지면 0으로 간다.
 
-    Both effects mean that for large $n$, the distribution of $S^2$ becomes approximately symmetric (normal), and the standard error provides a good summary of the spread. $\square$
+    두 효과 모두 $n$이 클 때 $S^2$의 분포가 근사적으로 대칭(정규)이 되고 표준오차가 퍼짐을 잘 요약해 줌을 뜻한다. $\square$
 
 ---
 
-**Exercise 5.** Repeat the simulation using an Exponential(1) population. Compare the empirical SE of $S^2$ with the theoretical value, noting that for $\text{Exp}(1)$, $\sigma^2 = 1$ and $\mu_4 = 9$.
+**연습문제 5.** Exponential(1) 모집단으로 모의실험을 반복하라. $\text{Exp}(1)$에서 $\sigma^2 = 1$, $\mu_4 = 9$임에 유의하여 $S^2$의 경험적 표준오차를 이론값과 비교하라.
 
-??? success "Solution to Exercise 5"
+??? success "연습문제 5 풀이"
     ```python
     import numpy as np
     np.random.seed(0)
@@ -187,7 +187,7 @@ For Uniform(0, 1) with $n = 5$:
     empirical_se = np.std(S_square)
     ```
 
-    Theoretical calculation with $\sigma^2 = 1$, $\mu_4 = 9$, $n = 5$:
+    $\sigma^2 = 1$, $\mu_4 = 9$, $n = 5$로 이론값을 계산하면:
 
     $$
     \text{Var}(S^2) = \frac{1}{n}\left(\mu_4 - \frac{n-3}{n-1}\sigma^4\right) = \frac{1}{5}\left(9 - \frac{2}{4}\right) = \frac{1}{5} \cdot 8.5 = 1.7
@@ -197,6 +197,6 @@ For Uniform(0, 1) with $n = 5$:
     \text{SE}(S^2) = \sqrt{1.7} \approx 1.304
     $$
 
-    For comparison, the normal-theory SE would be $\sigma^2 \sqrt{2/(n-1)} = \sqrt{2/4} = \sqrt{0.5} \approx 0.707$.
+    비교하자면 정규이론 표준오차는 $\sigma^2 \sqrt{2/(n-1)} = \sqrt{2/4} = \sqrt{0.5} \approx 0.707$이다.
 
-    The Exponential population's SE is about 1.84 times larger than the normal-theory value, reflecting the heavier tails (excess kurtosis $= 6$) of the Exponential distribution. The empirical SE from simulation should be close to 1.304. $\square$
+    Exponential 모집단의 표준오차가 정규이론 값보다 약 1.84배 큰데, 이는 Exponential 분포의 두꺼운 꼬리(초과첨도 $= 6$)를 반영한다. 모의실험의 경험적 표준오차는 1.304에 가깝게 나온다. $\square$

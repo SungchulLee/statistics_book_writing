@@ -1,41 +1,41 @@
-# Sampling Distribution of X-bar (Exponential)
+# X-bar의 표본분포 (Exponential)
 
-## Overview
+## 개요
 
-This page examines the sampling distribution of the sample mean $\bar{X}$ when the underlying population follows an Exponential distribution. The Exponential distribution is strongly right-skewed, making it an excellent test case for the Central Limit Theorem: despite the skewness of the population, the distribution of $\bar{X}$ becomes approximately normal as the sample size grows. With small $n$, the skewness is still visible in the sampling distribution.
+이 페이지에서는 밑바탕 모집단이 Exponential 분포를 따를 때 표본평균 $\bar{X}$의 표본분포를 살펴본다. Exponential 분포는 오른쪽으로 심하게 치우쳐 있어 중심극한정리를 시험하기에 아주 좋은 사례이다. 모집단이 치우쳐 있어도 표본크기가 커지면 $\bar{X}$의 분포가 근사적으로 정규분포가 된다. $n$이 작으면 표본분포에 치우침이 여전히 눈에 띈다.
 
-## Population Model
+## 모집단 모형
 
-Suppose each observation is drawn from an Exponential distribution with rate parameter $\lambda = 1$:
+각 관측값이 비율 모수 $\lambda = 1$인 Exponential 분포에서 나온다고 하자:
 
 $$
 X \sim \text{Exp}(1), \qquad f(x) = e^{-x}, \quad x \ge 0
 $$
 
-The population mean and variance are:
+모평균과 모분산은:
 
 $$
 \mu = E[X] = \frac{1}{\lambda} = 1, \qquad \sigma^2 = \text{Var}(X) = \frac{1}{\lambda^2} = 1
 $$
 
-## Sampling Distribution Theory
+## 표본분포 이론
 
-For a random sample $X_1, \ldots, X_n$ drawn independently from $\text{Exp}(\lambda)$:
+$\text{Exp}(\lambda)$에서 독립적으로 뽑은 확률표본 $X_1, \ldots, X_n$에 대해:
 
 $$
 E[\bar{X}] = \mu = \frac{1}{\lambda}, \qquad \text{Var}(\bar{X}) = \frac{\sigma^2}{n} = \frac{1}{n\lambda^2}
 $$
 
-!!! info "Exact Distribution"
-    The sum $S_n = \sum_{i=1}^n X_i$ follows a Gamma distribution: $S_n \sim \text{Gamma}(n, \lambda)$. Therefore $\bar{X} = S_n/n \sim \text{Gamma}(n, n\lambda)$, which has shape $n$ and rate $n\lambda$. As $n \to \infty$, the CLT guarantees:
+!!! info "정확한 분포"
+    합 $S_n = \sum_{i=1}^n X_i$는 감마분포를 따른다: $S_n \sim \text{Gamma}(n, \lambda)$. 따라서 $\bar{X} = S_n/n \sim \text{Gamma}(n, n\lambda)$이며 형상이 $n$, 비율이 $n\lambda$이다. $n \to \infty$일 때 중심극한정리는 다음을 보장한다:
 
     $$
     \bar{X} \;\dot{\sim}\; N\!\left(\frac{1}{\lambda},\; \frac{1}{n\lambda^2}\right)
     $$
 
-## Simulation
+## 모의실험
 
-The code below draws 10,000 samples of size $n = 5$ from an $\text{Exp}(1)$ population and visualizes the population, a single sample, and the sampling distribution of $\bar{X}$.
+아래 코드는 $\text{Exp}(1)$ 모집단에서 크기 $n = 5$인 표본을 10,000개 뽑아 모집단, 하나의 표본, $\bar{X}$의 표본분포를 시각화한다.
 
 ```python
 import matplotlib.pyplot as plt
@@ -75,38 +75,38 @@ plt.tight_layout()
 plt.show()
 ```
 
-## Interpretation
+## 해석
 
-!!! note "Key Observations"
+!!! note "주요 관찰"
 
-    1. The **population distribution** is strongly right-skewed with a long tail extending to large values.
-    2. The **sampling distribution** of $\bar{X}$ is already much more concentrated than the population, even with $n = 5$.
-    3. With $n = 5$, the sampling distribution retains some right skew. Increasing $n$ would make it progressively more symmetric and more closely approximate a normal distribution.
-    4. The standard error is $\text{SE}(\bar{X}) = 1/\sqrt{5} \approx 0.447$, compared to the population standard deviation of $\sigma = 1$.
+    1. **모집단 분포**는 오른쪽으로 심하게 치우쳐 있고 큰 값까지 뻗는 긴 꼬리를 갖는다.
+    2. $\bar{X}$의 **표본분포**는 $n = 5$에서도 이미 모집단보다 훨씬 좁게 모여 있다.
+    3. $n = 5$에서는 표본분포에 오른쪽 치우침이 남아 있다. $n$을 키우면 점점 더 대칭이 되고 정규분포에 더 가까워진다.
+    4. 모집단 표준편차가 $\sigma = 1$인 데 비해 표준오차는 $\text{SE}(\bar{X}) = 1/\sqrt{5} \approx 0.447$이다.
 
-!!! warning "Small Samples from Skewed Populations"
-    The CLT convergence rate depends on how skewed the population is. For the Exponential distribution (skewness $= 2$), you may need $n \ge 30$ or more before the normal approximation becomes reliable for inference.
+!!! warning "치우친 모집단에서의 소표본"
+    중심극한정리의 수렴 속도는 모집단이 얼마나 치우쳤는지에 달려 있다. Exponential 분포(왜도 $= 2$)에서는 정규근사가 추론에 믿을 만해지려면 $n \ge 30$ 이상이 필요할 수 있다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.** Derive the mean and variance of $X \sim \text{Exp}(\lambda)$ using the moment generating function $M_X(t) = \lambda / (\lambda - t)$ for $t < \lambda$.
+**연습문제 1.** $t < \lambda$에서 적률생성함수가 $M_X(t) = \lambda / (\lambda - t)$임을 사용하여 $X \sim \text{Exp}(\lambda)$의 평균과 분산을 유도하라.
 
-??? success "Solution to Exercise 1"
-    The moment generating function is $M_X(t) = \frac{\lambda}{\lambda - t}$ for $t < \lambda$.
+??? success "연습문제 1 풀이"
+    적률생성함수는 $t < \lambda$에서 $M_X(t) = \frac{\lambda}{\lambda - t}$이다.
 
-    First moment:
+    1차 적률:
 
     $$
     M_X'(t) = \frac{\lambda}{(\lambda - t)^2}, \qquad E[X] = M_X'(0) = \frac{\lambda}{\lambda^2} = \frac{1}{\lambda}
     $$
 
-    Second moment:
+    2차 적률:
 
     $$
     M_X''(t) = \frac{2\lambda}{(\lambda - t)^3}, \qquad E[X^2] = M_X''(0) = \frac{2\lambda}{\lambda^3} = \frac{2}{\lambda^2}
     $$
 
-    Variance:
+    분산:
 
     $$
     \text{Var}(X) = E[X^2] - (E[X])^2 = \frac{2}{\lambda^2} - \frac{1}{\lambda^2} = \frac{1}{\lambda^2}
@@ -116,27 +116,27 @@ plt.show()
 
 ---
 
-**Exercise 2.** Show that if $X_1, \ldots, X_n \overset{\text{iid}}{\sim} \text{Exp}(\lambda)$, then $S_n = \sum_{i=1}^n X_i \sim \text{Gamma}(n, \lambda)$.
+**연습문제 2.** $X_1, \ldots, X_n \overset{\text{iid}}{\sim} \text{Exp}(\lambda)$이면 $S_n = \sum_{i=1}^n X_i \sim \text{Gamma}(n, \lambda)$임을 보여라.
 
-??? success "Solution to Exercise 2"
-    The MGF of $X_i \sim \text{Exp}(\lambda)$ is $M_{X_i}(t) = \frac{\lambda}{\lambda - t}$.
+??? success "연습문제 2 풀이"
+    $X_i \sim \text{Exp}(\lambda)$의 MGF는 $M_{X_i}(t) = \frac{\lambda}{\lambda - t}$이다.
 
-    By independence, the MGF of the sum is:
+    독립성에 의해 합의 MGF는:
 
     $$
     M_{S_n}(t) = \prod_{i=1}^n M_{X_i}(t) = \left(\frac{\lambda}{\lambda - t}\right)^n
     $$
 
-    This is the MGF of a $\text{Gamma}(n, \lambda)$ distribution (shape $n$, rate $\lambda$). Since the MGF uniquely determines the distribution, we conclude $S_n \sim \text{Gamma}(n, \lambda)$. $\square$
+    이는 $\text{Gamma}(n, \lambda)$ 분포(형상 $n$, 비율 $\lambda$)의 MGF이다. MGF가 분포를 유일하게 결정하므로 $S_n \sim \text{Gamma}(n, \lambda)$이다. $\square$
 
 ---
 
-**Exercise 3.** For $n = 5$ and $\lambda = 1$, compute the exact probability $P(\bar{X} > 2)$ using the Gamma distribution, and compare it with the normal approximation.
+**연습문제 3.** $n = 5$, $\lambda = 1$일 때 감마분포를 사용하여 정확한 확률 $P(\bar{X} > 2)$를 계산하고 정규근사와 비교하라.
 
-??? success "Solution to Exercise 3"
-    Since $\bar{X} = S_5 / 5$ where $S_5 \sim \text{Gamma}(5, 1)$, we have $P(\bar{X} > 2) = P(S_5 > 10)$.
+??? success "연습문제 3 풀이"
+    $S_5 \sim \text{Gamma}(5, 1)$일 때 $\bar{X} = S_5 / 5$이므로 $P(\bar{X} > 2) = P(S_5 > 10)$이다.
 
-    Using Python:
+    Python으로:
 
     ```python
     from scipy import stats
@@ -148,40 +148,40 @@ plt.show()
     print(f"Normal approximation: {p_normal:.6f}")
     ```
 
-    The exact value is approximately 0.0293, while the normal approximation gives approximately 0.0127. The normal approximation significantly underestimates the right-tail probability because $n = 5$ is too small for the CLT to fully correct for the Exponential's skewness. $\square$
+    정확한 값은 약 0.0293이고 정규근사는 약 0.0127이다. $n = 5$는 중심극한정리가 Exponential 분포의 치우침을 온전히 보정하기에 너무 작아, 정규근사가 오른쪽 꼬리 확률을 크게 과소추정한다. $\square$
 
 ---
 
-**Exercise 4.** The skewness of the Exponential distribution is $\gamma_1 = 2$. Show that the skewness of $\bar{X}$ is $\gamma_1(\bar{X}) = 2/\sqrt{n}$. At what sample size does the skewness of $\bar{X}$ drop below 0.5?
+**연습문제 4.** Exponential 분포의 왜도는 $\gamma_1 = 2$이다. $\bar{X}$의 왜도가 $\gamma_1(\bar{X}) = 2/\sqrt{n}$임을 보여라. 표본크기가 얼마일 때 $\bar{X}$의 왜도가 0.5 아래로 떨어지는가?
 
-??? success "Solution to Exercise 4"
-    For i.i.d. random variables with skewness $\gamma_1$, the skewness of $\bar{X} = \frac{1}{n}\sum X_i$ is:
+??? success "연습문제 4 풀이"
+    왜도가 $\gamma_1$인 i.i.d. 확률변수에 대해 $\bar{X} = \frac{1}{n}\sum X_i$의 왜도는:
 
     $$
     \gamma_1(\bar{X}) = \frac{\gamma_1}{\sqrt{n}}
     $$
 
-    This follows because the third central moment of $\bar{X}$ is $\mu_3 / n^2$ (from summing $n$ independent copies and dividing by $n$), and $(\text{Var}(\bar{X}))^{3/2} = (\sigma^2/n)^{3/2}$, so:
+    $\bar{X}$의 3차 중심적률이 (독립인 복사본 $n$개를 더하고 $n$으로 나누므로) $\mu_3 / n^2$이고 $(\text{Var}(\bar{X}))^{3/2} = (\sigma^2/n)^{3/2}$이므로:
 
     $$
     \gamma_1(\bar{X}) = \frac{n \cdot \mu_3 / n^3}{(\sigma^2 / n)^{3/2}} = \frac{\mu_3}{n^2} \cdot \frac{n^{3/2}}{\sigma^3} = \frac{\mu_3}{\sigma^3 \sqrt{n}} = \frac{\gamma_1}{\sqrt{n}}
     $$
 
-    For $\text{Exp}(1)$, $\gamma_1 = 2$, so $\gamma_1(\bar{X}) = 2/\sqrt{n}$.
+    $\text{Exp}(1)$에서 $\gamma_1 = 2$이므로 $\gamma_1(\bar{X}) = 2/\sqrt{n}$이다.
 
-    Setting $2/\sqrt{n} < 0.5$:
+    $2/\sqrt{n} < 0.5$로 두면:
 
     $$
     \sqrt{n} > 4 \implies n > 16
     $$
 
-    So $n \ge 17$ is needed for the skewness to drop below 0.5. $\square$
+    따라서 왜도가 0.5 아래로 떨어지려면 $n \ge 17$이 필요하다. $\square$
 
 ---
 
-**Exercise 5.** Repeat the simulation with $n = 50$ instead of $n = 5$. Overlay a normal density $N(1, 1/50)$ on the histogram of sample means. Qualitatively describe the fit.
+**연습문제 5.** 모의실험을 $n = 5$ 대신 $n = 50$으로 반복하라. 표본평균의 히스토그램 위에 정규 밀도 $N(1, 1/50)$을 겹쳐 그리고 적합 정도를 정성적으로 서술하라.
 
-??? success "Solution to Exercise 5"
+??? success "연습문제 5 풀이"
     ```python
     import numpy as np
     import matplotlib.pyplot as plt
@@ -206,4 +206,4 @@ plt.show()
     plt.show()
     ```
 
-    With $n = 50$, the histogram of sample means is nearly symmetric and closely follows the $N(1, 1/50)$ density. The skewness of $\bar{X}$ is $2/\sqrt{50} \approx 0.28$, which is small enough that the normal approximation provides an excellent fit. $\square$
+    $n = 50$에서는 표본평균의 히스토그램이 거의 대칭이고 $N(1, 1/50)$ 밀도를 바짝 따라간다. $\bar{X}$의 왜도가 $2/\sqrt{50} \approx 0.28$로 충분히 작아 정규근사가 아주 잘 맞는다. $\square$

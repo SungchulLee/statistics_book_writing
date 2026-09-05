@@ -1,33 +1,33 @@
-# Student's t Distribution
+# Student t 분포
 
-## Overview
+## 개요
 
-The Student's $t$ distribution arises when estimating the mean of a normally distributed population using the **sample standard deviation** $S$ instead of the known population standard deviation $\sigma$. It accounts for the additional uncertainty introduced by estimating $\sigma$.
+Student $t$ 분포는 알려진 모표준편차 $\sigma$ 대신 **표본표준편차** $S$를 사용하여 정규모집단의 평균을 추정할 때 나타난다. $\sigma$를 추정하면서 생기는 추가적인 불확실성을 반영한다.
 
 ---
 
-## Definition
+## 정의
 
-Let $Z \sim N(0,1)$ and $V \sim \chi^2_d$ be independent. Then the ratio:
+$Z \sim N(0,1)$과 $V \sim \chi^2_d$가 독립이라 하자. 그러면 다음 비:
 
 $$
 T = \frac{Z}{\sqrt{V/d}} \sim t_d
 $$
 
-follows the Student's $t$ distribution with $d$ degrees of freedom.
+는 자유도 $d$인 Student $t$ 분포를 따른다.
 
 ---
 
-## Degrees of Freedom
+## 자유도
 
-The degrees of freedom $d = n - 1$ reflects the number of independent pieces of information used to estimate the sample variance.
+자유도 $d = n - 1$은 표본분산을 추정하는 데 사용된 독립적인 정보의 개수를 반영한다.
 
-- **Small $d$**: Heavier tails than the normal, reflecting greater uncertainty.
-- **Large $d$ ($> 30$)**: Virtually indistinguishable from $N(0, 1)$.
+- **$d$가 작을 때**: 정규분포보다 꼬리가 두꺼워 더 큰 불확실성을 나타낸다.
+- **$d$가 클 때 ($> 30$)**: $N(0, 1)$과 사실상 구별되지 않는다.
 
 ---
 
-## Properties
+## 성질
 
 $$
 \begin{aligned}
@@ -36,7 +36,7 @@ $$
 \end{aligned}
 $$
 
-As $d \to \infty$, the variance approaches 1 and $t_d \to N(0, 1)$.
+$d \to \infty$일 때 분산은 1에 가까워지고 $t_d \to N(0, 1)$이다.
 
 ---
 
@@ -46,17 +46,17 @@ $$
 f_T(x) = \frac{1}{\sqrt{d}\,B\!\left(\tfrac{1}{2}, \tfrac{d}{2}\right)} \left(1 + \frac{x^2}{d}\right)^{-\frac{d+1}{2}}
 $$
 
-where $B(\cdot, \cdot)$ is the Beta function.
+여기서 $B(\cdot, \cdot)$는 베타함수이다.
 
-### Proof Sketch
+### 증명 개요
 
-With $T = Z / \sqrt{V/d}$, use the change-of-variables technique on the joint density of $(Z, V)$. The Jacobian factor is $\sqrt{v/d}$, and after integrating out the $\chi^2$ variable, the marginal density of $T$ takes the form above. The conditional distribution $V | T = t$ turns out to be Gamma.
+$T = Z / \sqrt{V/d}$에 대해 $(Z, V)$의 결합밀도에 변수변환을 적용한다. Jacobian 인수는 $\sqrt{v/d}$이고, $\chi^2$ 변수를 적분해 없애면 $T$의 주변밀도가 위 형태가 된다. 조건부분포 $V | T = t$는 감마분포로 나타난다.
 
 ---
 
-## Fat Tails
+## 두꺼운 꼬리
 
-The $t$ distribution has **heavier tails** than the normal distribution, meaning extreme values are more likely:
+$t$ 분포는 정규분포보다 **꼬리가 두꺼워** 극단값이 나타날 가능성이 더 크다:
 
 ```python
 import matplotlib.pyplot as plt
@@ -80,7 +80,7 @@ plt.tight_layout()
 plt.show()
 ```
 
-### Convergence to Normal
+### 정규분포로의 수렴
 
 ```python
 import matplotlib.pyplot as plt
@@ -100,19 +100,20 @@ plt.show()
 
 ---
 
-## Why t?
-When the population is normal and $\sigma$ is unknown, replacing $\sigma$ with $S$ yields:
+## 왜 t인가?
+
+모집단이 정규이고 $\sigma$를 모를 때 $\sigma$를 $S$로 대체하면:
 
 $$
 \frac{\bar{X} - \mu}{S / \sqrt{n}} \sim t_{n-1}
 $$
 
-This arises because:
+이렇게 되는 이유는 다음과 같다:
 
-1. $\bar{X} \sim N(\mu, \sigma^2/n)$, so $\frac{\bar{X} - \mu}{\sigma/\sqrt{n}} \sim N(0,1)$.
-2. $\frac{(n-1)S^2}{\sigma^2} \sim \chi^2_{n-1}$.
-3. $\bar{X}$ and $S^2$ are **independent** (a special property of the normal distribution).
-4. The ratio $\frac{N(0,1)}{\sqrt{\chi^2_{n-1}/(n-1)}}$ is by definition $t_{n-1}$.
+1. $\bar{X} \sim N(\mu, \sigma^2/n)$이므로 $\frac{\bar{X} - \mu}{\sigma/\sqrt{n}} \sim N(0,1)$이다.
+2. $\frac{(n-1)S^2}{\sigma^2} \sim \chi^2_{n-1}$이다.
+3. $\bar{X}$와 $S^2$이 **독립**이다(정규분포만의 특별한 성질).
+4. 비 $\frac{N(0,1)}{\sqrt{\chi^2_{n-1}/(n-1)}}$은 정의에 의해 $t_{n-1}$이다.
 
 ```python
 import numpy as np
@@ -139,28 +140,31 @@ plt.show()
 
 ---
 
-## Interpreting the Role of t
-### Large n: CLT Justifies z
-When $n$ is large, $S \approx \sigma$, and the difference between $t_{n-1}$ and $N(0,1)$ is negligible. In practice, $z$ is just as good.
+## t의 역할 이해하기
 
-### Small n: Where t Shines — But Only Under Normality
-The $t$ distribution matters most for small $n$. Its heavier tails properly account for the extra variability from using $S$ instead of $\sigma$. However, this result is **exact only if the population is normal**.
+### n이 클 때: 중심극한정리가 z를 정당화한다
 
-### Non-Normal Populations
+$n$이 크면 $S \approx \sigma$가 되어 $t_{n-1}$과 $N(0,1)$의 차이가 무시할 만하다. 실무에서는 $z$를 써도 똑같이 좋다.
 
-If the population is skewed or heavy-tailed, the $t$ approximation is **poor** for small $n$. Neither $t$ nor $z$ is trustworthy; robust or nonparametric methods are preferable.
+### n이 작을 때: t가 빛나지만 정규성 아래에서만
 
-### Summary
+$t$ 분포는 $n$이 작을 때 가장 중요하다. 두꺼운 꼬리가 $\sigma$ 대신 $S$를 쓰면서 생긴 추가 변동성을 제대로 반영한다. 다만 이 결과는 **모집단이 정규일 때만 정확하다**.
 
-| Scenario | Recommendation |
+### 정규가 아닌 모집단
+
+모집단이 치우쳐 있거나 꼬리가 두꺼우면 $n$이 작을 때 $t$ 근사는 **나쁘다**. $t$도 $z$도 믿을 수 없으며, 로버스트 방법이나 비모수 방법이 낫다.
+
+### 요약
+
+| 상황 | 권장 방법 |
 |:---|:---|
-| Large $n$ | Use $z$; the $t$ adjustment is negligible |
-| Small $n$, normal population | $t$ is exact and appropriate |
-| Small $n$, non-normal population | Use robust/nonparametric methods |
+| $n$이 큼 | $z$를 사용한다. $t$ 보정은 무시할 만하다 |
+| $n$이 작고 모집단이 정규 | $t$가 정확하며 적절하다 |
+| $n$이 작고 모집단이 정규가 아님 | 로버스트/비모수 방법을 사용한다 |
 
 ---
 
-## Random Samples
+## 확률표본
 
 ```python
 import numpy as np
@@ -183,113 +187,113 @@ plt.show()
 
 ---
 
-## Key Takeaways
+## 핵심 요약
 
-- The $t$ distribution accounts for the uncertainty of estimating $\sigma$ with $S$.
-- It has heavier tails than the normal, especially for small degrees of freedom.
-- As $d \to \infty$, the $t$ distribution converges to $N(0,1)$.
-- The exactness of the $t$ result depends critically on the normality of the population.
+- $t$ 분포는 $\sigma$를 $S$로 추정하면서 생기는 불확실성을 반영한다.
+- 정규분포보다 꼬리가 두꺼우며, 특히 자유도가 작을 때 그렇다.
+- $d \to \infty$일 때 $t$ 분포는 $N(0,1)$로 수렴한다.
+- $t$ 결과의 정확성은 모집단의 정규성에 결정적으로 의존한다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Salaries are normal with $\mu = \$40{,}000$. Sample $n = 9$, $s = \$8{,}000$. Compute $P(\bar X \ge \$45{,}000)$.
+**연습문제 1.**
+급여가 $\mu = \$40{,}000$인 정규분포를 따른다. 표본 $n = 9$, $s = \$8{,}000$일 때 $P(\bar X \ge \$45{,}000)$을 계산하라.
 
-??? success "Solution to Exercise 1"
-    $\mathrm{SE} = s/\sqrt n = 8000/3 \approx 2667$. Test statistic: $t = (45000 - 40000)/2667 \approx 1.875$.
+??? success "연습문제 1 풀이"
+    $\mathrm{SE} = s/\sqrt n = 8000/3 \approx 2667$. 검정통계량: $t = (45000 - 40000)/2667 \approx 1.875$.
 
-    Under $t_8$: $P(T \ge 1.875) \approx 0.048$ — about 4.8%.
+    $t_8$ 아래에서 $P(T \ge 1.875) \approx 0.048$로 약 4.8%이다.
 
-    Note: we use $t$ instead of $z$ because $\sigma$ is unknown and $s$ is estimated from the sample, introducing additional uncertainty.
+    참고: $\sigma$를 모르고 표본에서 $s$를 추정하여 추가적인 불확실성이 들어오므로 $z$ 대신 $t$를 사용한다.
 
 ---
 
-**Exercise 2.**
-**Derive the $t$-distribution.** Show that if $Z \sim N(0, 1)$ and $V \sim \chi^2_\nu$ independent, then $T = Z/\sqrt{V/\nu} \sim t_\nu$.
+**연습문제 2.**
+**$t$ 분포 유도.** $Z \sim N(0, 1)$과 $V \sim \chi^2_\nu$가 독립이면 $T = Z/\sqrt{V/\nu} \sim t_\nu$임을 보여라.
 
-??? success "Solution to Exercise 2"
-    By definition, $t_\nu$ is the distribution of $Z/\sqrt{V/\nu}$ where $Z \sim N(0, 1)$ and $V \sim \chi^2_\nu$ are independent.
+??? success "연습문제 2 풀이"
+    정의에 의해 $t_\nu$는 독립인 $Z \sim N(0, 1)$과 $V \sim \chi^2_\nu$에 대한 $Z/\sqrt{V/\nu}$의 분포이다.
 
-    Derivation of PDF: condition on $V = v$. Given $V = v$, $T = Z/\sqrt{v/\nu}$, so $T \mid V \sim N(0, \nu/v)$. Density:
+    PDF의 유도: $V = v$로 조건화한다. $V = v$가 주어지면 $T = Z/\sqrt{v/\nu}$이므로 $T \mid V \sim N(0, \nu/v)$이다. 밀도는:
 
     $$
     f_{T \mid V}(t \mid v) = \frac{1}{\sqrt{2\pi \nu/v}} e^{-vt^2/(2\nu)}
     $$
 
-    Marginal of $T$: integrate over $v$ using $V \sim \chi^2_\nu$ density. Result:
+    $T$의 주변분포: $V \sim \chi^2_\nu$의 밀도를 사용하여 $v$에 대해 적분한다. 결과는:
 
     $$
     f_T(t) = \frac{\Gamma((\nu+1)/2)}{\sqrt{\nu\pi}\,\Gamma(\nu/2)} \left(1 + \frac{t^2}{\nu}\right)^{-(\nu+1)/2}
     $$
 
-    The $t$ density has polynomial tails $\sim t^{-(\nu+1)}$, heavier than normal's $e^{-t^2/2}$.
+    $t$ 밀도는 $\sim t^{-(\nu+1)}$의 다항식 꼬리를 가지며, 정규분포의 $e^{-t^2/2}$보다 두껍다.
 
 ---
 
-**Exercise 3.**
-**$t$ approaches normal.** Show $t_\nu \to N(0, 1)$ as $\nu \to \infty$.
+**연습문제 3.**
+**$t$는 정규분포에 가까워진다.** $\nu \to \infty$일 때 $t_\nu \to N(0, 1)$임을 보여라.
 
-??? success "Solution to Exercise 3"
-    From the $t$ definition $T = Z/\sqrt{V/\nu}$ with $V \sim \chi^2_\nu$. Note $V/\nu = (1/\nu)\sum_{i=1}^\nu Z_i^2 \to 1$ in probability by LLN. So $\sqrt{V/\nu} \to 1$, and $T \to Z \sim N(0, 1)$.
+??? success "연습문제 3 풀이"
+    $V \sim \chi^2_\nu$인 $t$의 정의 $T = Z/\sqrt{V/\nu}$에서 출발한다. 큰수의 법칙에 의해 $V/\nu = (1/\nu)\sum_{i=1}^\nu Z_i^2 \to 1$이 확률수렴한다. 따라서 $\sqrt{V/\nu} \to 1$이고 $T \to Z \sim N(0, 1)$이다.
 
-    More precisely: by Slutsky's theorem, $T = Z/\sqrt{V/\nu} \xrightarrow{d} Z/1 = Z$.
+    더 정확히는 Slutsky 정리에 의해 $T = Z/\sqrt{V/\nu} \xrightarrow{d} Z/1 = Z$이다.
 
-    **Practical:** for $\nu \ge 30$, the $t$ distribution is nearly indistinguishable from normal; $t_{30}$ critical values are within 2% of $z$ critical values. This is why $n \ge 30$ is the rule of thumb for using $z$ instead of $t$.
+    **실무:** $\nu \ge 30$이면 $t$ 분포는 정규분포와 거의 구별되지 않는다. $t_{30}$의 임계값은 $z$의 임계값과 2% 이내로 일치한다. 이것이 $t$ 대신 $z$를 쓰는 $n \ge 30$ 경험 법칙의 근거이다.
 
 ---
 
-**Exercise 4.**
-**Why use $t$ instead of $z$.** A statistician computes $z = (\bar X - \mu_0)/(\sigma/\sqrt n)$ but realizes $\sigma$ is unknown. They substitute $s$. Show that the resulting $t = (\bar X - \mu_0)/(s/\sqrt n) \sim t_{n-1}$.
+**연습문제 4.**
+**$z$ 대신 $t$를 쓰는 이유.** 어떤 통계학자가 $z = (\bar X - \mu_0)/(\sigma/\sqrt n)$을 계산하려다 $\sigma$를 모른다는 것을 깨닫고 $s$로 대체했다. 그 결과 $t = (\bar X - \mu_0)/(s/\sqrt n) \sim t_{n-1}$임을 보여라.
 
-??? success "Solution to Exercise 4"
-    Under the null $\mu = \mu_0$, $\bar X \sim N(\mu_0, \sigma^2/n)$, so $Z = (\bar X - \mu_0)/(\sigma/\sqrt n) \sim N(0, 1)$.
+??? success "연습문제 4 풀이"
+    귀무가설 $\mu = \mu_0$ 아래에서 $\bar X \sim N(\mu_0, \sigma^2/n)$이므로 $Z = (\bar X - \mu_0)/(\sigma/\sqrt n) \sim N(0, 1)$이다.
 
-    The sample variance $s^2$ scaled by $\sigma^2$ has chi-squared distribution: $(n-1)s^2/\sigma^2 \sim \chi^2_{n-1}$ (for normal data).
+    표본분산 $s^2$을 $\sigma^2$으로 척도조정하면 카이제곱 분포를 따른다: (정규 자료에 대해) $(n-1)s^2/\sigma^2 \sim \chi^2_{n-1}$.
 
-    $\bar X$ and $s^2$ are independent for normal data (a non-trivial fact specific to normality).
+    정규 자료에서 $\bar X$와 $s^2$은 독립이다(정규성에만 특유한 자명하지 않은 사실이다).
 
-    Therefore:
+    따라서:
 
     $$
     t = \frac{\bar X - \mu_0}{s/\sqrt n} = \frac{(\bar X - \mu_0)/(\sigma/\sqrt n)}{\sqrt{((n-1) s^2/\sigma^2)/(n-1)}} = \frac{Z}{\sqrt{V/(n-1)}}
     $$
 
-    with $V \sim \chi^2_{n-1}$ independent of $Z$. By the definition of the $t$, this is $t_{n-1}$.
+    이며 $V \sim \chi^2_{n-1}$은 $Z$와 독립이다. $t$의 정의에 의해 이는 $t_{n-1}$이다.
 
-    Using $s$ instead of $\sigma$ adds a chi-squared denominator — the $t$ distribution accounts for this extra uncertainty by having heavier tails than normal.
+    $\sigma$ 대신 $s$를 쓰면 분모에 카이제곱이 들어온다. $t$ 분포는 정규분포보다 두꺼운 꼬리로 이 추가 불확실성을 반영한다.
 
 ---
 
-**Exercise 5.**
-**Heavy tails of the $t$.** For $t_3$, compute $P(|T| > 2)$ and $P(|T| > 4)$. Compare with the normal.
+**연습문제 5.**
+**$t$의 두꺼운 꼬리.** $t_3$에 대해 $P(|T| > 2)$와 $P(|T| > 4)$를 계산하고 정규분포와 비교하라.
 
-??? success "Solution to Exercise 5"
-    $t_3$: $P(|T| > 2) = 2 \cdot P(T > 2)$. From $t_3$ table: $P(T > 2) \approx 0.07$, so $P(|T| > 2) \approx 0.14$.
+??? success "연습문제 5 풀이"
+    $t_3$: $P(|T| > 2) = 2 \cdot P(T > 2)$. $t_3$ 분포표에서 $P(T > 2) \approx 0.07$이므로 $P(|T| > 2) \approx 0.14$이다.
 
     $P(|T| > 4) \approx 2 \cdot 0.014 = 0.028$.
 
-    Normal: $P(|Z| > 2) \approx 0.046$, $P(|Z| > 4) \approx 6 \times 10^{-5}$.
+    정규분포: $P(|Z| > 2) \approx 0.046$, $P(|Z| > 4) \approx 6 \times 10^{-5}$.
 
-    Comparison at $|x| = 4$: normal probability is $6 \times 10^{-5}$ (essentially zero); $t_3$ probability is $0.028$ — over 400 times larger. The $t_3$ assigns vastly more probability to extreme outcomes than the normal.
+    $|x| = 4$에서 비교하면 정규분포의 확률은 $6 \times 10^{-5}$로 사실상 0인데 $t_3$의 확률은 $0.028$로 400배가 넘는다. $t_3$은 정규분포보다 극단적인 결과에 훨씬 많은 확률을 부여한다.
 
-    **Practical consequence:** small-sample $t$-tests have lower power than $z$-tests at the same significance level because critical values are larger to compensate for heavier tails. The trade-off is between assumptions (known $\sigma$) and tail conservativeness.
+    **실무적 귀결:** 같은 유의수준에서 소표본 $t$ 검정은 $z$ 검정보다 검정력이 낮다. 두꺼운 꼬리를 상쇄하기 위해 임계값이 더 크기 때문이다. 이는 가정($\sigma$를 안다는 것)과 꼬리에 대한 보수성 사이의 맞바꿈이다.
 
 ---
 
-**Exercise 6.**
-**Welch's $t$-test.** For two independent samples with unequal variances, Welch's test uses $t = (\bar X_1 - \bar X_2)/\sqrt{s_1^2/n_1 + s_2^2/n_2}$ with degrees of freedom approximated by the Welch–Satterthwaite formula. State this formula and explain why it is not an integer.
+**연습문제 6.**
+**Welch의 $t$ 검정.** 분산이 다른 독립인 두 표본에 대해 Welch 검정은 $t = (\bar X_1 - \bar X_2)/\sqrt{s_1^2/n_1 + s_2^2/n_2}$를 사용하고 자유도는 Welch–Satterthwaite 공식으로 근사한다. 이 공식을 쓰고 왜 정수가 아닌지 설명하라.
 
-??? success "Solution to Exercise 6"
-    **Welch–Satterthwaite degrees of freedom:**
+??? success "연습문제 6 풀이"
+    **Welch–Satterthwaite 자유도:**
 
     $$
     \nu_{WS} = \frac{(s_1^2/n_1 + s_2^2/n_2)^2}{(s_1^2/n_1)^2/(n_1 - 1) + (s_2^2/n_2)^2/(n_2 - 1)}
     $$
 
-    This formula approximates the distribution of the linear combination $s_1^2/n_1 + s_2^2/n_2$ as a scaled chi-squared with $\nu_{WS}$ degrees of freedom. The approximation is moment-matching: equate the first two moments of the $\chi^2$ approximation to the exact distribution.
+    이 공식은 선형결합 $s_1^2/n_1 + s_2^2/n_2$의 분포를 자유도 $\nu_{WS}$인 척도조정된 카이제곱으로 근사한다. 근사는 적률맞춤 방식이다. $\chi^2$ 근사의 처음 두 적률을 정확한 분포의 것과 일치시킨다.
 
-    **Why non-integer:** $\nu_{WS}$ depends on the *sample* variances $s_1^2, s_2^2$ — quantities that can take any positive real value. The formula doesn't produce integer outputs except by accident.
+    **왜 정수가 아닌가:** $\nu_{WS}$는 *표본* 분산 $s_1^2, s_2^2$에 의존하는데, 이들은 임의의 양의 실수를 취할 수 있다. 우연이 아니고서는 정수가 나오지 않는다.
 
-    Implementation: use $t_{\nu_{WS}}$ critical values with $\nu_{WS}$ rounded down (conservative) or use it directly in software that accepts non-integer df.
+    구현: $\nu_{WS}$를 내림한(보수적인) 값으로 $t_{\nu_{WS}}$ 임계값을 쓰거나, 정수가 아닌 자유도를 받아들이는 소프트웨어에서는 그대로 사용한다.
 
-    Welch's test is the **default two-sample $t$-test** in R (`t.test`) and SciPy (`scipy.stats.ttest_ind(equal_var=False)`) precisely because it doesn't require the equal-variance assumption that the original Student's $t$-test makes.
+    Welch 검정은 R(`t.test`)과 SciPy(`scipy.stats.ttest_ind(equal_var=False)`)에서 **기본 두 표본 $t$ 검정**이다. 원래의 Student $t$ 검정이 요구하는 등분산 가정을 필요로 하지 않기 때문이다.

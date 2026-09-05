@@ -1,81 +1,81 @@
-# Sampling Distribution of the Mean
+# 평균의 표본분포
 
-## Overview
+## 개요
 
-The **sampling distribution of the sample mean** $\bar{X}$ describes how $\bar{X}$ varies across repeated samples of size $n$ from a population. This is the single most important sampling distribution in statistics — it underpins confidence intervals for $\mu$, $t$-tests, and much of applied statistics.
+**표본평균 $\bar{X}$의 표본분포**는 모집단에서 크기 $n$인 표본을 반복해서 뽑을 때 $\bar{X}$가 어떻게 달라지는지를 기술한다. 통계학에서 가장 중요한 표본분포 하나이며, $\mu$에 대한 신뢰구간, $t$ 검정, 응용통계학의 상당 부분을 떠받친다.
 
-## Mathematical Definition
+## 수학적 정의
 
-Let $X_1, X_2, \dots, X_n$ be i.i.d. from a population with mean $\mu$ and variance $\sigma^2 < \infty$. The sample mean is:
+$X_1, X_2, \dots, X_n$을 평균 $\mu$, 분산 $\sigma^2 < \infty$인 모집단에서 뽑은 i.i.d. 표본이라 하자. 표본평균은:
 
 $$
 \bar{X} = \frac{1}{n}\sum_{i=1}^n X_i
 $$
 
-## Properties
+## 성질
 
-### Expected Value (Unbiasedness)
+### 기댓값 (불편성)
 
 $$
 E[\bar{X}] = \mu
 $$
 
-The sample mean is an **unbiased estimator** of the population mean: on average, it neither overestimates nor underestimates $\mu$.
+표본평균은 모평균의 **불편추정량**이다. 평균적으로 $\mu$를 과대추정하지도 과소추정하지도 않는다.
 
-### Variance and Standard Error
+### 분산과 표준오차
 
 $$
 \text{Var}(\bar{X}) = \frac{\sigma^2}{n}, \qquad
 \text{SE}(\bar{X}) = \frac{\sigma}{\sqrt{n}}
 $$
 
-As $n$ increases, the standard error decreases — larger samples yield more precise estimates of $\mu$.
+$n$이 커질수록 표준오차가 작아진다. 표본이 클수록 $\mu$를 더 정밀하게 추정한다.
 
-### Shape (Central Limit Theorem)
+### 모양 (중심극한정리)
 
-By the CLT, for sufficiently large $n$:
+중심극한정리에 의해 $n$이 충분히 크면:
 
 $$
 \frac{\bar{X} - \mu}{\sigma/\sqrt{n}} \xrightarrow{d} N(0, 1)
 $$
 
-so that approximately:
+이므로 근사적으로:
 
 $$
 \bar{X} \sim N\!\left(\mu, \frac{\sigma^2}{n}\right)
 $$
 
-This holds regardless of the population's shape, as long as $\sigma^2 < \infty$.
+$\sigma^2 < \infty$이기만 하면 모집단의 모양과 무관하게 성립한다.
 
-- For **normal** populations, this is exact for **all** $n$.
-- For **skewed or heavy-tailed** populations, larger $n$ is needed.
+- **정규** 모집단에서는 **모든** $n$에 대해 정확하다.
+- **치우쳤거나 꼬리가 두꺼운** 모집단에서는 더 큰 $n$이 필요하다.
 
-## Standardized Forms
+## 표준화된 형태
 
-| Scenario | Standardized Statistic | Distribution |
+| 상황 | 표준화된 통계량 | 분포 |
 |----------|----------------------|--------------|
-| Normal pop., $\sigma$ known | $\frac{\bar{X} - \mu}{\sigma/\sqrt{n}}$ | $N(0, 1)$ exactly |
-| Normal pop., $\sigma$ unknown | $\frac{\bar{X} - \mu}{S/\sqrt{n}}$ | $t_{n-1}$ exactly |
-| Any pop., large $n$, $\sigma$ known | $\frac{\bar{X} - \mu}{\sigma/\sqrt{n}}$ | $N(0, 1)$ approximately |
-| Any pop., large $n$, $\sigma$ unknown | $\frac{\bar{X} - \mu}{S/\sqrt{n}}$ | $N(0, 1)$ or $t_{n-1}$ approximately |
+| 정규모집단, $\sigma$를 앎 | $\frac{\bar{X} - \mu}{\sigma/\sqrt{n}}$ | 정확히 $N(0, 1)$ |
+| 정규모집단, $\sigma$를 모름 | $\frac{\bar{X} - \mu}{S/\sqrt{n}}$ | 정확히 $t_{n-1}$ |
+| 임의의 모집단, 큰 $n$, $\sigma$를 앎 | $\frac{\bar{X} - \mu}{\sigma/\sqrt{n}}$ | 근사적으로 $N(0, 1)$ |
+| 임의의 모집단, 큰 $n$, $\sigma$를 모름 | $\frac{\bar{X} - \mu}{S/\sqrt{n}}$ | 근사적으로 $N(0, 1)$ 또는 $t_{n-1}$ |
 
-## Example: Standard Error Computation
+## 예: 표준오차 계산
 
-**Problem.** Population has $\mu = 100$, $\sigma = 4$. For $n = 25$:
+**문제.** 모집단이 $\mu = 100$, $\sigma = 4$이다. $n = 25$일 때:
 
 $$
 \text{SE}(\bar{X}) = \frac{4}{\sqrt{25}} = 0.8
 $$
 
-If we repeatedly draw samples of size 25, the sample means will cluster around 100 with a typical deviation of 0.8.
+크기 25인 표본을 반복해서 뽑으면 표본평균들이 100 주위에 모이며 전형적인 편차는 0.8이다.
 
-## Worked Examples
+## 예제
 
-### Example 1: Apple Weights
+### 예제 1: 사과 무게
 
-**Problem.** Apple weights are $N(150, 20^2)$. For $n = 25$, find $P(\bar{X} > 155)$.
+**문제.** 사과 무게가 $N(150, 20^2)$이다. $n = 25$일 때 $P(\bar{X} > 155)$를 구하라.
 
-**Solution.**
+**풀이.**
 
 $$
 \text{SE} = \frac{20}{\sqrt{25}} = 4, \qquad
@@ -91,11 +91,11 @@ from scipy import stats
 print(f"P(X_bar > 155) = {stats.norm.sf(1.25):.4f}")
 ```
 
-### Example 2: Sleep Duration
+### 예제 2: 수면 시간
 
-**Problem.** Average sleep is 7 hours, $\sigma = 1.5$. For $n = 49$, find $P(6.8 < \bar{X} < 7.2)$.
+**문제.** 평균 수면 시간이 7시간이고 $\sigma = 1.5$이다. $n = 49$일 때 $P(6.8 < \bar{X} < 7.2)$를 구하라.
 
-**Solution.**
+**풀이.**
 
 $$
 \text{SE} = \frac{1.5}{\sqrt{49}} = 0.2143
@@ -115,11 +115,11 @@ from scipy import stats
 print(f"P(6.8 < X_bar < 7.2) = {stats.norm.cdf(0.93) - stats.norm.cdf(-0.93):.4f}")
 ```
 
-### Example 3: Body Weight (Small Sample, Normal Population)
+### 예제 3: 체중 (소표본, 정규모집단)
 
-**Problem.** Weights are $N(70, 10^2)$. For $n = 5$, find $P(\bar{X} > 72)$.
+**문제.** 체중이 $N(70, 10^2)$이다. $n = 5$일 때 $P(\bar{X} > 72)$를 구하라.
 
-**Solution.** Because the population is normal, the result is exact even for $n = 5$:
+**풀이.** 모집단이 정규이므로 $n = 5$에서도 결과가 정확하다:
 
 $$
 \text{SE} = \frac{10}{\sqrt{5}} \approx 4.47, \qquad
@@ -135,11 +135,11 @@ from scipy import stats
 print(f"P(X_bar > 72) = {stats.norm.sf(0.447):.4f}")
 ```
 
-### Example 4: Running Out of Water
+### 예제 4: 물 부족
 
-**Problem.** Average water consumption is 2 L ($\sigma = 0.7$ L). For 50 men on a trip with 110 L total, find $P(\text{run out})$.
+**문제.** 평균 물 소비량이 2 L이고 $\sigma = 0.7$ L이다. 50명이 물 110 L를 가지고 여행할 때 물이 떨어질 확률을 구하라.
 
-**Solution.** Running out means $\bar{X} > 110/50 = 2.2$:
+**풀이.** 물이 떨어진다는 것은 $\bar{X} > 110/50 = 2.2$를 뜻한다:
 
 $$
 \text{SE} = \frac{0.7}{\sqrt{50}} \approx 0.0990, \qquad
@@ -150,17 +150,17 @@ $$
 P(\bar{X} > 2.2) = P(Z > 2.020) \approx 0.0217
 $$
 
-### Example 5: Lightbulbs (No Normality Assumption)
+### 예제 5: 전구 (정규성 가정 없이)
 
-**Problem.** Lightbulb lifespan has $\mu = 800$, $\sigma = 100$. For $n = 5$, find $P(\bar{X} > 810)$ without assuming normality.
+**문제.** 전구 수명이 $\mu = 800$, $\sigma = 100$이다. $n = 5$일 때 정규성을 가정하지 않고 $P(\bar{X} > 810)$을 구하라.
 
-**Solution.** With $n = 5$ and no normality assumption, the CLT does not reliably apply. We **cannot** determine this probability without additional information about the population's shape.
+**풀이.** $n = 5$이고 정규성 가정이 없으면 중심극한정리를 믿고 적용할 수 없다. 모집단 모양에 관한 추가 정보 없이는 이 확률을 **구할 수 없다**.
 
-### Example 6: Skewed Sales (Large Sample)
+### 예제 6: 치우친 매출 (대표본)
 
-**Problem.** Daily sales are right-skewed with $\mu = 2000$, $\sigma = 500$. For $n = 100$, find $P(\bar{X} > 2100)$.
+**문제.** 일간 매출이 오른쪽으로 치우쳐 있고 $\mu = 2000$, $\sigma = 500$이다. $n = 100$일 때 $P(\bar{X} > 2100)$을 구하라.
 
-**Solution.** Even though the population is skewed, $n = 100$ is large enough for the CLT:
+**풀이.** 모집단이 치우쳐 있지만 $n = 100$이면 중심극한정리를 쓰기에 충분히 크다:
 
 $$
 \text{SE} = \frac{500}{\sqrt{100}} = 50, \qquad
@@ -176,19 +176,19 @@ from scipy import stats
 print(f"P(X_bar > 2100) = {stats.norm.sf(2):.4f}")
 ```
 
-## Sampling Distribution of Two Means
+## 두 평균의 표본분포
 
-### Known Variances or Large Samples
+### 분산을 알거나 표본이 큰 경우
 
 $$
 Z = \frac{(\bar{X}_1 - \bar{X}_2) - (\mu_1 - \mu_2)}{\sqrt{\sigma_1^2/n_1 + \sigma_2^2/n_2}} \sim N(0, 1)
 $$
 
-### Example: Two Cupcake Shifts
+### 예: 두 교대조의 컵케이크
 
-**Problem.** Shift A: $\mu_A = 130$g, $\sigma_A = 4$g. Shift B: $\mu_B = 125$g, $\sigma_B = 3$g. With $n_A = n_B = 40$, find $P(|\bar{X}_A - \bar{X}_B| > 6)$.
+**문제.** A 교대조: $\mu_A = 130$g, $\sigma_A = 4$g. B 교대조: $\mu_B = 125$g, $\sigma_B = 3$g. $n_A = n_B = 40$일 때 $P(|\bar{X}_A - \bar{X}_B| > 6)$을 구하라.
 
-**Solution.**
+**풀이.**
 
 $$
 \text{SE} = \sqrt{\frac{16}{40} + \frac{9}{40}} = \sqrt{0.625} \approx 0.7906
@@ -217,17 +217,18 @@ prob = stats.norm.sf(z_upper) + stats.norm.cdf(z_lower)
 print(f"P(|X_bar_A - X_bar_B| > 6) = {prob:.4f}")
 ```
 
-## Effect of Sample Size on Standard Error
+## 표본크기가 표준오차에 미치는 영향
 
-| $n$ | SE (with $\sigma = 50$) |
+| $n$ | SE ($\sigma = 50$일 때) |
 |-----|------------------------|
 | 25 | 10 |
 | 100 | 5 |
 | 400 | 2.5 |
 
-Quadrupling $n$ halves the standard error, since $\text{SE} \propto 1/\sqrt{n}$.
+$\text{SE} \propto 1/\sqrt{n}$이므로 $n$을 네 배로 늘리면 표준오차가 절반이 된다.
 
-## Simulation: Sampling Distribution of X-bar
+## 모의실험: X-bar의 표본분포
+
 ```python
 import matplotlib.pyplot as plt
 import numpy as np
@@ -260,96 +261,96 @@ plt.tight_layout()
 plt.show()
 ```
 
-## Graduate-Level Notes
+## 대학원 수준의 보충
 
-- The efficiency of $\bar{X}$ is linked to the rate $\text{Var}(\bar{X}) = \sigma^2/n$ — it achieves the Cramér–Rao lower bound under normality.
-- For populations with **infinite variance** (e.g., Cauchy), the CLT does not apply and $\bar{X}$ may not converge.
-- The **Berry–Esseen theorem** quantifies the rate of CLT convergence: $\sup_z |P(Z_n \leq z) - \mathcal{N}(z)| \leq C \cdot \rho / (\sigma^3 \sqrt{n})$, where $\rho = E[|X - \mu|^3]$.
+- $\bar{X}$의 효율성은 $\text{Var}(\bar{X}) = \sigma^2/n$이라는 비율과 연결된다. 정규성 아래에서 Cramér–Rao 하한을 달성한다.
+- **분산이 무한한** 모집단(예: Cauchy)에서는 중심극한정리가 적용되지 않으며 $\bar{X}$가 수렴하지 않을 수 있다.
+- **Berry–Esseen 정리**는 중심극한정리의 수렴 속도를 정량화한다: $\rho = E[|X - \mu|^3]$일 때 $\sup_z |P(Z_n \leq z) - \mathcal{N}(z)| \leq C \cdot \rho / (\sigma^3 \sqrt{n})$.
 
-## Summary
+## 요약
 
-| Property | Result |
+| 성질 | 결과 |
 |----------|--------|
-| $E[\bar{X}]$ | $\mu$ (unbiased) |
+| $E[\bar{X}]$ | $\mu$ (불편) |
 | $\text{Var}(\bar{X})$ | $\sigma^2/n$ |
 | $\text{SE}(\bar{X})$ | $\sigma/\sqrt{n}$ |
-| Shape | Normal (exact if pop. is normal; approximate via CLT for large $n$) |
-| Key insight | Larger $n$ → smaller SE → more precise estimate |
+| 모양 | 정규 (모집단이 정규이면 정확, $n$이 크면 중심극한정리로 근사) |
+| 핵심 통찰 | $n$이 클수록 → 표준오차가 작고 → 추정이 더 정밀하다 |
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-**Mean and SE of the sample mean.** Sample of $n = 9$ from a population with $\mu = 75$, $\sigma = 18$. Compute (a) $\mathbb{E}[\bar X]$, (b) $\mathrm{SE}(\bar X)$.
+**연습문제 1.**
+**표본평균의 평균과 표준오차.** $\mu = 75$, $\sigma = 18$인 모집단에서 $n = 9$인 표본을 뽑는다. (a) $\mathbb{E}[\bar X]$, (b) $\mathrm{SE}(\bar X)$를 계산하라.
 
-??? success "Solution to Exercise 1"
-    (a) $\mathbb{E}[\bar X] = \mu = 75$. The sample mean is unbiased regardless of $n$.
+??? success "연습문제 1 풀이"
+    (a) $\mathbb{E}[\bar X] = \mu = 75$. 표본평균은 $n$과 무관하게 불편이다.
 
-    (b) $\mathrm{SE}(\bar X) = \sigma/\sqrt n = 18/3 = 6$. Quadrupling $n$ to 36 would halve the SE to 3.
+    (b) $\mathrm{SE}(\bar X) = \sigma/\sqrt n = 18/3 = 6$. $n$을 네 배인 36으로 늘리면 표준오차가 절반인 3이 된다.
 
 ---
 
-**Exercise 2.**
-Apple weights are normally distributed with $\mu = 150$ g, $\sigma = 20$ g. Sample of $n = 25$. Compute $P(\bar X > 155)$.
+**연습문제 2.**
+사과 무게가 $\mu = 150$ g, $\sigma = 20$ g인 정규분포를 따른다. $n = 25$인 표본에 대해 $P(\bar X > 155)$를 계산하라.
 
-??? success "Solution to Exercise 2"
+??? success "연습문제 2 풀이"
     $\mathrm{SE} = 20/\sqrt{25} = 4$. $Z = (155 - 150)/4 = 1.25$.
 
-    $P(\bar X > 155) = 1 - \Phi(1.25) = 0.1056$. About 10.6%.
+    $P(\bar X > 155) = 1 - \Phi(1.25) = 0.1056$으로 약 10.6%이다.
 
-    Note: normality of the population is given, so $\bar X$ is exactly normal for any $n$ — no CLT needed.
+    참고: 모집단의 정규성이 주어졌으므로 $\bar X$는 어떤 $n$에 대해서도 정확히 정규분포이다. 중심극한정리가 필요 없다.
 
 ---
 
-**Exercise 3.**
-Students' sleep: $\mu = 7$ h, $\sigma = 1.5$ h. Sample $n = 49$. Compute $P(6.8 < \bar X < 7.2)$.
+**연습문제 3.**
+학생들의 수면 시간이 $\mu = 7$시간, $\sigma = 1.5$시간이다. $n = 49$인 표본에 대해 $P(6.8 < \bar X < 7.2)$를 계산하라.
 
-??? success "Solution to Exercise 3"
+??? success "연습문제 3 풀이"
     $\mathrm{SE} = 1.5/7 \approx 0.214$.
 
     $Z_1 = (6.8 - 7)/0.214 \approx -0.93$. $Z_2 = (7.2 - 7)/0.214 \approx 0.93$.
 
-    $P(6.8 < \bar X < 7.2) = \Phi(0.93) - \Phi(-0.93) = 0.6476$. About 64.8%.
+    $P(6.8 < \bar X < 7.2) = \Phi(0.93) - \Phi(-0.93) = 0.6476$으로 약 64.8%이다.
 
-    Under the CLT (justified by $n = 49 \ge 30$), $\bar X$ is approximately normal even if individual sleep durations are not.
+    ($n = 49 \ge 30$으로 정당화되는) 중심극한정리에 의해, 개별 수면 시간이 정규가 아니더라도 $\bar X$는 근사적으로 정규분포이다.
 
 ---
 
-**Exercise 4.**
-**Small sample, normal population.** Weights $X \sim N(70, 100)$ kg. Sample $n = 5$. Compute $P(\bar X > 72)$. Why is this valid despite small $n$?
+**연습문제 4.**
+**소표본, 정규모집단.** 체중이 $X \sim N(70, 100)$ kg이다. $n = 5$인 표본에 대해 $P(\bar X > 72)$를 계산하라. $n$이 작은데도 왜 타당한가?
 
-??? success "Solution to Exercise 4"
+??? success "연습문제 4 풀이"
     $\mathrm{SE} = 10/\sqrt 5 \approx 4.47$. $Z = (72 - 70)/4.47 \approx 0.447$.
 
-    $P(\bar X > 72) = 1 - \Phi(0.447) \approx 0.327$. About 32.7%.
+    $P(\bar X > 72) = 1 - \Phi(0.447) \approx 0.327$로 약 32.7%이다.
 
-    **Validity:** the *population* is normal, so $\bar X = (1/n)\sum X_i$ is *exactly* normal for any $n$ (sums of independent normals are normal). The CLT is not needed; the result is exact.
+    **타당성:** *모집단*이 정규이므로 $\bar X = (1/n)\sum X_i$는 어떤 $n$에 대해서도 *정확히* 정규분포이다(독립인 정규확률변수의 합은 정규분포이다). 중심극한정리가 필요 없으며 결과가 정확하다.
 
-    Contrast with **Exercise 5** below for the case when normality is not given.
-
----
-
-**Exercise 5.**
-**Lightbulbs without normality.** Lifespan: $\mu = 800$ h, $\sigma = 100$ h, distribution unspecified. Sample $n = 5$. What can you say about $P(\bar X > 810)$?
-
-??? success "Solution to Exercise 5"
-    $\mathrm{SE} = 100/\sqrt 5 \approx 44.7$. Naively: $Z = 10/44.7 \approx 0.224$, giving $P \approx 0.41$.
-
-    **But:** $n = 5$ is too small for the CLT, and the population shape is unspecified. The sampling distribution of $\bar X$ may be heavily skewed (e.g., if lifetimes are exponential) or have heavy tails. The normal approximation could be far off.
-
-    **Conservative bound** via **Chebyshev's inequality:** $P(|\bar X - 800| \ge 10) \le \sigma^2/(n \cdot 10^2) = 10000/(5 \cdot 100) = 20$ — vacuous.
-
-    Practical conclusion: without distributional assumption or larger $n$, give up on a point answer and report only the conservative bound. Real lightbulb lifetimes often follow Weibull distributions, which would allow exact computation if assumed.
+    정규성이 주어지지 않은 경우인 아래 **연습문제 5**와 대비된다.
 
 ---
 
-**Exercise 6.**
-**Skewed population + large $n$.** Daily sales right-skewed with $\mu = \$2000$, $\sigma = \$500$. Sample $n = 100$. Compute $P(\bar X > \$2100)$.
+**연습문제 5.**
+**정규성 없는 전구.** 수명이 $\mu = 800$시간, $\sigma = 100$시간이고 분포는 알려져 있지 않다. $n = 5$인 표본에 대해 $P(\bar X > 810)$에 관해 무엇을 말할 수 있는가?
 
-??? success "Solution to Exercise 6"
+??? success "연습문제 5 풀이"
+    $\mathrm{SE} = 100/\sqrt 5 \approx 44.7$. 그대로 계산하면 $Z = 10/44.7 \approx 0.224$이므로 $P \approx 0.41$이다.
+
+    **그러나:** $n = 5$는 중심극한정리를 쓰기에 너무 작고 모집단의 모양도 알려져 있지 않다. $\bar X$의 표본분포는 심하게 치우쳤거나(예: 수명이 지수분포일 때) 꼬리가 두꺼울 수 있다. 정규근사가 크게 빗나갈 수 있다.
+
+    **Chebyshev 부등식을 이용한 보수적 한계:** $P(|\bar X - 800| \ge 10) \le \sigma^2/(n \cdot 10^2) = 10000/(5 \cdot 100) = 20$으로 아무 정보도 주지 못한다.
+
+    실용적 결론: 분포 가정이 없거나 $n$이 더 크지 않으면 점 추정값을 포기하고 보수적 한계만 보고해야 한다. 실제 전구 수명은 흔히 Weibull 분포를 따르며, 이를 가정하면 정확한 계산이 가능하다.
+
+---
+
+**연습문제 6.**
+**치우친 모집단 + 큰 $n$.** 일간 매출이 오른쪽으로 치우쳐 있고 $\mu = \$2000$, $\sigma = \$500$이다. $n = 100$인 표본에 대해 $P(\bar X > \$2100)$을 계산하라.
+
+??? success "연습문제 6 풀이"
     $\mathrm{SE} = 500/10 = 50$. $Z = (2100 - 2000)/50 = 2$.
 
-    $P(\bar X > 2100) = 1 - \Phi(2) = 0.0228$. About 2.3%.
+    $P(\bar X > 2100) = 1 - \Phi(2) = 0.0228$로 약 2.3%이다.
 
-    **Why valid:** $n = 100$ is large, so by CLT $\bar X$ is approximately normal regardless of population shape. Skewness of the population is irrelevant for $\bar X$'s distribution at this $n$.
+    **왜 타당한가:** $n = 100$은 크므로 중심극한정리에 의해 모집단 모양과 무관하게 $\bar X$가 근사적으로 정규분포이다. 이 $n$에서는 모집단의 치우침이 $\bar X$의 분포와 무관하다.
 
-    **Caveat:** if the population skewness is severe (e.g., lognormal with $\sigma_{\log} > 1$), even $n = 100$ may show residual skew in $\bar X$. Berry-Esseen bound: error in normal approximation $\sim \mathbb{E}|X|^3/(\sigma^3 \sqrt n)$. For mildly skewed sales data, $n = 100$ is usually plenty; for heavily right-skewed data, larger $n$ or bootstrap is safer.
+    **주의:** 모집단의 치우침이 심하면(예: $\sigma_{\log} > 1$인 로그정규) $n = 100$에서도 $\bar X$에 치우침이 남을 수 있다. Berry-Esseen 한계에 따르면 정규근사의 오차는 $\sim \mathbb{E}|X|^3/(\sigma^3 \sqrt n)$이다. 약간 치우친 매출 자료라면 $n = 100$으로 충분하지만, 오른쪽으로 심하게 치우친 자료에서는 더 큰 $n$이나 붓스트랩이 안전하다.
