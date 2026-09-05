@@ -1,26 +1,26 @@
-# Controlled Experiments
+# 통제실험
 
-A controlled experiment is the gold standard for establishing causal relationships, using random assignment and manipulation of variables to isolate treatment effects from confounders.
+통제실험은 인과관계를 확립하는 표준적인 방법으로, 무작위 배정과 변수 조작을 통해 처리효과를 교란요인으로부터 분리해 낸다.
 
-## Definition
+## 정의
 
-A **controlled experiment** is a research design in which the investigator manipulates one or more independent variables (treatments), randomly assigns subjects to treatment and control groups, and measures the effect on a dependent variable. The **control group** receives a placebo or standard treatment; the **treatment group** receives the intervention. Random assignment ensures confounders are distributed evenly across groups.
+**통제실험(controlled experiment)** 은 연구자가 하나 이상의 독립변수(처리)를 조작하고, 대상을 처리군과 대조군에 무작위로 배정하며, 종속변수에 미치는 효과를 측정하는 연구 설계다. **대조군**은 위약이나 표준 처치를 받고, **처리군**은 개입을 받는다. 무작위 배정은 교란요인이 집단 사이에 고르게 분포되도록 보장한다.
 
-## Explanation
+## 설명
 
-The key advantage of controlled experiments over observational studies is the ability to establish **causation**, not merely association. Randomization ensures that any systematic differences between groups (age, health, socioeconomic status) balance out on average, so observed differences in outcomes can be attributed to the treatment.
+관찰연구에 대한 통제실험의 핵심 장점은 단순한 연관성이 아니라 **인과관계**를 확립할 수 있다는 점이다. 무작위화는 집단 사이의 어떤 체계적 차이(나이, 건강, 사회경제적 지위)든 평균적으로 상쇄되도록 보장하므로, 관측된 결과의 차이를 처리 덕분으로 돌릴 수 있다.
 
-The **placebo effect** -- genuine improvement from believing one is treated -- is controlled by giving the control group an inert treatment identical in appearance. Without a placebo control, treatment effects and psychological effects are confounded.
+**위약효과(placebo effect)** — 처치를 받고 있다는 믿음에서 비롯되는 실제 호전 — 는 대조군에 겉모습이 똑같은 비활성 처치를 줌으로써 통제한다. 위약 대조가 없으면 처리효과와 심리적 효과가 뒤섞인다.
 
-| | Controlled Experiment | Observational Study |
+| | 통제실험 | 관찰연구 |
 |---|---|---|
-| Group assignment | Investigator (random) | Subject (self-selected) |
-| Confounding | Minimized by randomization | Many potential confounders |
-| Causal claims | Yes | Association only |
+| 집단 배정 | 연구자(무작위) | 대상자(자기선택) |
+| 교란 | 무작위화로 최소화 | 잠재적 교란요인이 많음 |
+| 인과적 주장 | 가능 | 연관성만 가능 |
 
-Limitations: ethical constraints (cannot assign harmful treatments), artificiality of lab settings, high cost and time, and limited generalizability from tightly controlled conditions.
+한계로는 윤리적 제약(해로운 처치를 배정할 수 없음), 실험실 환경의 인위성, 높은 비용과 시간, 그리고 엄격히 통제된 조건에서 나온 결과의 제한된 일반화 가능성이 있다.
 
-## Examples
+## 예제
 
 ```python
 import numpy as np
@@ -43,76 +43,76 @@ print(f"t-statistic:    {t_stat:.3f}")
 print(f"p-value:        {p_value:.4f}")
 ```
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-A pharmaceutical company tests a new drug by giving it to 100 volunteers who signed up. A separate group of 100 people who did not sign up serves as the control. Identify the key flaw in this experimental design.
+**연습문제 1.**
+어떤 제약회사가 신약을 시험하기 위해 신청한 자원자 100명에게 약을 투여한다. 신청하지 않은 별도의 100명이 대조군 역할을 한다. 이 실험 설계의 핵심 결함을 지적하라.
 
-??? success "Solution to Exercise 1"
-    The key flaw is **self-selection bias** (lack of random assignment). Volunteers who sign up may differ systematically from those who do not -- they may be more health-conscious, have more severe symptoms, or have stronger beliefs that the drug works. Any observed difference between the groups could be due to these pre-existing differences rather than the drug itself. A proper randomized controlled trial would randomly assign all 200 participants to treatment or control, ensuring the groups are comparable on both observed and unobserved characteristics.
-
----
-
-**Exercise 2.**
-Explain the difference between a randomized controlled trial (RCT) and a natural experiment. Give one example of each.
-
-??? success "Solution to Exercise 2"
-    In a **randomized controlled trial**, the researcher actively assigns subjects to treatment and control groups using a random mechanism (e.g., coin flip, random number generator). Example: randomly assigning patients to receive a new drug versus a placebo.
-
-    In a **natural experiment**, an external event or policy creates treatment and control groups "as if" by random assignment, but without the researcher's intervention. Example: a state lottery for school vouchers, where winners (treatment) and losers (control) are determined by chance rather than by the researcher.
-
-    The key distinction is control: in an RCT the researcher controls assignment; in a natural experiment, nature or policy provides the variation. Natural experiments are valuable when RCTs are unethical or impractical, but their validity depends on the plausibility of the "as-if random" assumption.
+??? success "연습문제 1 풀이"
+    핵심 결함은 **자기선택 편향**(무작위 배정의 부재)이다. 신청한 자원자는 신청하지 않은 사람과 체계적으로 다를 수 있다 — 건강에 더 신경 쓰거나, 증상이 더 심하거나, 약이 효과가 있으리라는 믿음이 더 강할 수 있다. 두 집단 사이에서 관측된 어떤 차이든 약 자체보다는 이런 기존 차이 때문일 수 있다. 제대로 된 무작위 대조시험이라면 200명 전원을 처리군 또는 대조군에 무작위 배정하여, 관측된 특성과 관측되지 않은 특성 모두에서 두 집단이 비교 가능하도록 만든다.
 
 ---
 
-**Exercise 3.**
-A study finds that students who attend tutoring sessions score 15 points higher on exams than students who do not. The school concludes that tutoring causes a 15-point improvement. What confounders might explain this result without a causal effect of tutoring?
+**연습문제 2.**
+무작위 대조시험(RCT)과 자연실험의 차이를 설명하라. 각각의 예를 하나씩 들어라.
 
-??? success "Solution to Exercise 3"
-    Several confounders could explain the association without a causal effect:
+??? success "연습문제 2 풀이"
+    **무작위 대조시험**에서는 연구자가 무작위 기제(동전 던지기, 난수 발생기 등)를 사용해 대상을 처리군과 대조군에 능동적으로 배정한다. 예: 환자를 신약군과 위약군에 무작위로 배정하는 것.
 
-    - **Motivation:** Students who attend tutoring may be more motivated to succeed and would have scored higher regardless.
-    - **Prior ability:** Tutoring may attract students who already have stronger foundations.
-    - **Study time:** Students who attend tutoring may also spend more time studying on their own.
-    - **Parental involvement:** Students from families that arrange tutoring may have other academic support at home.
-    - **Teacher recommendation:** Teachers may recommend tutoring to students who are already improving.
+    **자연실험**에서는 외부 사건이나 정책이 연구자의 개입 없이 "마치 무작위 배정인 것처럼" 처리군과 대조군을 만들어낸다. 예: 학교 바우처 추첨제에서 당첨자(처리군)와 탈락자(대조군)가 연구자가 아니라 우연에 의해 결정되는 경우.
 
-    Without random assignment to tutoring (or a convincing instrument/natural experiment), the 15-point difference reflects both the causal effect of tutoring and the selection effect.
+    핵심 차이는 통제권이다. RCT에서는 연구자가 배정을 통제하고, 자연실험에서는 자연이나 정책이 변동을 제공한다. RCT가 비윤리적이거나 비현실적일 때 자연실험은 가치가 있지만, 그 타당성은 "무작위나 다름없다"는 가정이 얼마나 그럴듯한지에 달려 있다.
 
 ---
 
-**Exercise 4.**
-Define the terms **internal validity** and **external validity** in the context of controlled experiments. Can an experiment have high internal validity but low external validity?
+**연습문제 3.**
+어떤 연구에서 개인지도 수업에 참석한 학생이 그렇지 않은 학생보다 시험에서 15점 높은 점수를 받았다. 학교는 개인지도가 15점의 향상을 유발한다고 결론지었다. 개인지도의 인과효과가 없더라도 이 결과를 설명할 수 있는 교란요인으로 무엇이 있을까?
 
-??? success "Solution to Exercise 4"
-    **Internal validity** is the degree to which an experiment establishes a causal relationship between treatment and outcome within the study population. It depends on proper randomization, absence of confounders, and absence of systematic bias.
+??? success "연습문제 3 풀이"
+    인과효과 없이도 이 연관성을 설명할 수 있는 교란요인이 여럿 있다.
 
-    **External validity** (generalizability) is the degree to which the results apply to populations, settings, or conditions beyond the study.
+    - **동기:** 개인지도에 참석하는 학생은 성공하려는 동기가 더 강해서, 참석하지 않았더라도 더 높은 점수를 받았을 수 있다.
+    - **기존 능력:** 개인지도는 이미 기초가 탄탄한 학생을 끌어들일 수 있다.
+    - **공부 시간:** 개인지도에 참석하는 학생은 혼자서도 더 오래 공부할 수 있다.
+    - **부모의 관여:** 개인지도를 마련해 주는 가정의 학생은 집에서도 다른 학업 지원을 받을 수 있다.
+    - **교사의 추천:** 교사가 이미 성적이 오르고 있는 학생에게 개인지도를 권할 수 있다.
 
-    Yes, an experiment can have high internal validity but low external validity. For example, a carefully randomized lab experiment on college students demonstrates a causal effect (high internal validity), but the effect may not generalize to the broader population because college students are not representative in age, education, or socioeconomic status (low external validity). This tension is fundamental in experimental design: tightly controlled settings improve internal validity but may limit generalizability.
-
----
-
-**Exercise 5.**
-A factorial experiment varies two binary factors (A: low / high; B: low / high) for a total of 4 treatment combinations, with 25 subjects per combination. State two quantities estimable in this design that would not be available with two separate one-factor experiments.
-
-??? success "Solution to Exercise 5"
-    A factorial design lets you estimate:
-
-    - **Main effects** of A and B (averaging across levels of the other factor) — also obtainable from one-factor designs.
-    - **Interaction effect** A × B: whether the effect of A *depends on* the level of B. For example, a drug + diet study might find that the drug works only on the high-protein diet — an interaction undetectable from separate single-factor experiments.
-    - **Improved precision for main effects** at the same total $n$: each main-effect contrast uses all 100 subjects (50 vs. 50), not just 50 (25 vs. 25 in a single-factor design).
-
-    Fisher's argument for factorial designs (the foundational *Design of Experiments*, 1935) is that interactions are common in nature and often the most scientifically interesting finding — yet they are invisible to "one factor at a time" experimentation.
+    개인지도에 대한 무작위 배정(또는 설득력 있는 도구변수나 자연실험)이 없다면, 15점 차이는 개인지도의 인과효과와 선택효과를 함께 반영한다.
 
 ---
 
-**Exercise 6.**
-**Intention-to-treat (ITT)** analysis is the convention in clinical-trial reporting: analyze each subject in the group they were randomly assigned to, regardless of whether they actually received the treatment. Explain why ITT is preferred over **per-protocol** analysis (which excludes non-compliers) despite seemingly diluting the estimated treatment effect.
+**연습문제 4.**
+통제실험의 맥락에서 **내적 타당도**와 **외적 타당도**를 정의하라. 내적 타당도는 높지만 외적 타당도는 낮은 실험이 있을 수 있는가?
 
-??? success "Solution to Exercise 6"
-    Randomization guarantees comparability between assigned groups, not between groups that actually received the treatment. Compliance is itself a behavior that may correlate with prognosis: sicker patients may stop taking a drug because of side effects, healthier patients may forget doses, motivated patients may comply more. **Per-protocol** analysis discards exactly the patients whose non-compliance carries information, breaking randomization and reintroducing confounding.
+??? success "연습문제 4 풀이"
+    **내적 타당도**는 연구 모집단 안에서 처리와 결과 사이의 인과관계를 실험이 얼마나 잘 확립하는지를 나타낸다. 적절한 무작위화, 교란요인의 부재, 체계적 편향의 부재에 달려 있다.
 
-    **ITT** preserves the original random groups and estimates the effect of *being assigned to* the treatment — the **causal effect of policy** rather than the effect of the molecule. This is what regulators and policy-makers actually need: when a drug is approved, real-world patients will exhibit similar compliance patterns. ITT estimates are typically more conservative (closer to the null) but unbiased and externally valid.
+    **외적 타당도**(일반화 가능성)는 그 결과가 연구 범위를 넘어선 모집단·상황·조건에 얼마나 적용되는지를 나타낸다.
 
-    A common companion is the **complier-average causal effect (CACE)** estimated by instrumental-variable methods, using random assignment as an instrument for actual treatment receipt. CACE gives the effect among compliers without violating randomization.
+    그렇다. 내적 타당도는 높지만 외적 타당도는 낮은 실험이 있을 수 있다. 예를 들어 대학생을 대상으로 세심하게 무작위화한 실험실 실험은 인과효과를 입증하지만(높은 내적 타당도), 대학생이 나이·교육·사회경제적 지위에서 대표성이 없기 때문에 그 효과가 더 넓은 모집단으로 일반화되지 않을 수 있다(낮은 외적 타당도). 이 긴장은 실험 설계의 근본적인 문제다. 엄격히 통제된 환경은 내적 타당도를 높이지만 일반화 가능성을 제한할 수 있다.
+
+---
+
+**연습문제 5.**
+어떤 요인실험이 두 개의 이항 요인(A: 낮음 / 높음, B: 낮음 / 높음)을 변화시켜 총 4개의 처리 조합을 만들고, 조합마다 25명씩 배정한다. 이 설계에서 추정할 수 있으나 두 개의 별도 단일요인 실험으로는 얻을 수 없는 양 두 가지를 제시하라.
+
+??? success "연습문제 5 풀이"
+    요인설계로는 다음을 추정할 수 있다.
+
+    - A와 B의 **주효과**(다른 요인의 수준에 걸쳐 평균) — 이것은 단일요인 설계로도 얻을 수 있다.
+    - **상호작용 효과** A × B: A의 효과가 B의 수준에 *의존하는지* 여부. 예를 들어 약물 + 식단 연구에서 그 약이 고단백 식단에서만 효과가 있음을 발견할 수 있는데, 이런 상호작용은 별도의 단일요인 실험으로는 탐지할 수 없다.
+    - 같은 총 $n$에서 **주효과의 정밀도 향상**: 각 주효과 대비는 단일요인 설계의 50명(25 대 25)이 아니라 100명 전원(50 대 50)을 사용한다.
+
+    요인설계에 대한 피셔의 논거(그의 기초 저작 *Design of Experiments*, 1935)는, 상호작용이 자연에서 흔하고 종종 과학적으로 가장 흥미로운 발견인데도 "한 번에 한 요인씩" 실험해서는 보이지 않는다는 것이다.
+
+---
+
+**연습문제 6.**
+**배정대로 분석(ITT, intention-to-treat)** 은 임상시험 보고의 관례다. 실제로 처치를 받았는지와 무관하게 각 대상자를 무작위 배정된 집단으로 분석하는 것이다. 추정되는 처리효과를 희석하는 것처럼 보이는데도 ITT가 (비순응자를 제외하는) **프로토콜 준수 분석**보다 선호되는 이유를 설명하라.
+
+??? success "연습문제 6 풀이"
+    무작위화가 보장하는 것은 배정된 집단 사이의 비교 가능성이지, 실제로 처치를 받은 집단 사이의 비교 가능성이 아니다. 순응 자체가 예후와 상관될 수 있는 하나의 행동이다. 더 아픈 환자는 부작용 때문에 약을 끊을 수 있고, 더 건강한 환자는 복용을 잊을 수 있으며, 동기가 강한 환자는 더 잘 따를 수 있다. **프로토콜 준수 분석**은 비순응이 정보를 담고 있는 바로 그 환자들을 버림으로써 무작위화를 깨뜨리고 교란을 다시 불러들인다.
+
+    **ITT**는 원래의 무작위 집단을 보존하며, 처치에 *배정되는 것*의 효과, 즉 분자의 효과가 아니라 **정책의 인과효과**를 추정한다. 이것이 규제당국과 정책결정자가 실제로 필요로 하는 바다. 약이 승인되면 현실의 환자들도 비슷한 순응 양상을 보일 것이기 때문이다. ITT 추정값은 보통 더 보수적이지만(귀무가설에 더 가깝지만) 불편이고 외적 타당도를 갖는다.
+
+    흔히 함께 쓰이는 것이 도구변수 방법으로 추정하는 **순응자 평균 인과효과(CACE)** 다. 무작위 배정을 실제 처치 수령에 대한 도구변수로 사용한다. CACE는 무작위화를 위반하지 않으면서 순응자들 사이에서의 효과를 제공한다.

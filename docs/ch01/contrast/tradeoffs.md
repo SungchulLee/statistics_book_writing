@@ -1,49 +1,49 @@
-# Strengths and Limitations of Each Approach
+# 두 접근의 강점과 한계
 
-The classical (designed-collection) and modern (algorithmic-learning) approaches are complementary, not competing. Understanding their trade-offs guides the choice of methodology for any given problem. The most experienced data scientists know which paradigm a question belongs to, recognize the rare hybrid cases that need both, and avoid the common error of using algorithms for causal questions or rigid hypothesis tests for prediction problems.
+고전적 접근(설계된 수집)과 현대적 접근(알고리즘 학습)은 경쟁 관계가 아니라 상호 보완적이다. 둘의 절충 관계를 이해하면 어떤 문제에 어떤 방법론을 택할지 판단할 수 있다. 경험 많은 데이터 과학자는 주어진 질문이 어느 패러다임에 속하는지 알고, 둘 다 필요한 드문 혼합 사례를 알아보며, 인과적 질문에 알고리즘을 쓰거나 예측 문제에 경직된 가설검정을 쓰는 흔한 오류를 피한다.
 
-## Definition
+## 정의
 
-| Dimension | Classical (Designed Collection) | Modern (Algorithmic Learning) |
+| 차원 | 고전적(설계된 수집) | 현대적(알고리즘 학습) |
 |---|---|---|
-| Starting point | Research question → design → data | Existing data → algorithm → insight |
-| Primary goal | Inference, causal understanding | Prediction, pattern discovery |
-| Causality | Strong, via randomization or quasi-experiments | Weak; association only without further assumptions |
-| Scalability | Limited by data-collection cost | Routinely scales to billions of observations |
-| Interpretability | High — parameters have substantive meaning | Often low — many models are black-box |
-| Uncertainty quantification | Built in (CIs, p-values, decision rules) | Often retrofitted via bootstrap, calibration, conformal prediction |
-| Sample size needs | Small to moderate | Large preferred; works best with $n \gg p$ |
+| 출발점 | 연구 질문 → 설계 → 자료 | 기존 자료 → 알고리즘 → 통찰 |
+| 주된 목표 | 추론, 인과적 이해 | 예측, 패턴 발견 |
+| 인과성 | 무작위화나 준실험을 통해 강함 | 약함, 추가 가정 없이는 연관성만 |
+| 확장성 | 자료 수집 비용에 제약됨 | 수십억 관측값까지 일상적으로 확장 |
+| 해석가능성 | 높음 — 모수가 실질적 의미를 가짐 | 흔히 낮음 — 다수 모형이 블랙박스 |
+| 불확실성 정량화 | 내장됨(신뢰구간, p-값, 결정규칙) | 흔히 부트스트랩·보정·컨포멀 예측으로 사후 부착 |
+| 필요 표본 크기 | 소~중 규모 | 클수록 좋음, $n \gg p$일 때 가장 잘 작동 |
 
-## Explanation
+## 설명
 
-### When the classical approach wins
+### 고전적 접근이 유리할 때
 
-- **Causal questions**: clinical trials, A/B tests, policy evaluation. Randomization is the only routine way to identify causal effects without invoking strong assumptions.
-- **Regulatory contexts**: FDA, EMA, and many regulators require formal experimental designs with pre-registered protocols.
-- **Precise uncertainty matters**: confidence intervals with valid coverage, $p$-values with known error rates.
-- **Generalizable to the target population**: probability sampling produces estimators with quantifiable bias and variance for population parameters.
+- **인과적 질문**: 임상시험, A/B 테스트, 정책 평가. 강한 가정을 끌어들이지 않고 인과효과를 식별하는 일상적인 방법은 무작위화뿐이다.
+- **규제 맥락**: FDA, EMA를 비롯한 많은 규제기관이 사전등록된 프로토콜을 갖춘 형식적 실험 설계를 요구한다.
+- **정밀한 불확실성이 중요할 때**: 포함확률이 타당한 신뢰구간, 오류율이 알려진 $p$-값.
+- **목표 모집단으로 일반화해야 할 때**: 확률표집은 모집단 모수에 대해 편향과 분산을 정량화할 수 있는 추정량을 제공한다.
 
-### When the modern approach wins
+### 현대적 접근이 유리할 때
 
-- **Pure prediction**: forecasting churn, demand, defaults, click-through rates. The algorithm with the lowest out-of-sample loss wins; the structure of the model is irrelevant.
-- **High-dimensional or unstructured data**: text, images, audio, graphs — domains where flexible function approximators outperform any parametric model.
-- **Already-collected data at scale**: web logs, transactional records, sensor streams. Designing a new study would be impossible; the modern approach extracts what value can be extracted.
-- **Iterative engineering**: model-deployment cycles where the goal is to push a metric, not to test a theory.
+- **순수한 예측**: 이탈, 수요, 부도, 클릭률 예측. 표본 밖 손실이 가장 작은 알고리즘이 이기며, 모형의 구조는 중요하지 않다.
+- **고차원 또는 비정형 자료**: 텍스트, 이미지, 음성, 그래프 — 유연한 함수 근사기가 어떤 모수적 모형보다 뛰어난 영역.
+- **이미 대규모로 수집된 자료**: 웹 로그, 거래 기록, 센서 스트림. 새 연구를 설계하는 것이 불가능하며, 현대적 접근은 뽑아낼 수 있는 가치를 뽑아낸다.
+- **반복적 엔지니어링**: 이론을 검정하는 것이 아니라 지표를 밀어 올리는 것이 목표인 모형 배포 주기.
 
-### Hybrids that combine both
+### 둘을 결합하는 혼합 접근
 
-- **Double / debiased machine learning** (Chernozhukov et al., 2018): use flexible ML estimators for nuisance functions, then apply orthogonalized score equations to recover unbiased causal effect estimates.
-- **Causal forests** (Wager & Athey, 2018): tree-based methods for heterogeneous treatment effects from experimental or observational data.
-- **Designed data, modern analysis**: a randomized clinical trial that uses a neural network for the primary endpoint analysis still inherits causal validity from randomization.
-- **Post-hoc interpretability**: SHAP, LIME, integrated gradients — make black-box predictions partially interpretable without sacrificing predictive accuracy.
+- **이중 / 편향제거 기계학습**(Chernozhukov 외, 2018): 방해모수 함수에는 유연한 기계학습 추정량을 쓰고, 직교화된 점수방정식을 적용해 불편인 인과효과 추정값을 복원한다.
+- **인과 포레스트**(Wager & Athey, 2018): 실험 자료나 관찰 자료에서 이질적 처리효과를 구하는 트리 기반 방법.
+- **설계된 자료, 현대적 분석**: 주요 평가변수 분석에 신경망을 쓰는 무작위 임상시험이라도 무작위화에서 오는 인과적 타당성을 그대로 물려받는다.
+- **사후 해석가능성**: SHAP, LIME, 통합 그래디언트 — 예측 정확도를 희생하지 않으면서 블랙박스 예측을 부분적으로 해석 가능하게 만든다.
 
-### Failure modes to recognize
+### 알아두어야 할 실패 유형
 
-- **Classical hammer, modern nail**: insisting on a linear model with a hand-picked set of predictors when the relationships are clearly nonlinear and the sample is huge. The model is interpretable but poorly predictive.
-- **Modern hammer, classical nail**: training a deep learning model on observational data and interpreting its feature importances as causal effects. The model may predict well in-distribution but its "explanations" reflect spurious correlations.
-- **Pretending one is the other**: reporting $p$-values from a model selected via cross-validation, or claiming "validation accuracy" is the same as "external validity."
+- **고전적 망치로 현대적 못 치기**: 관계가 명백히 비선형이고 표본이 거대한데도 손으로 고른 몇 개 예측변수만으로 선형모형을 고집하는 것. 모형은 해석 가능하지만 예측력은 형편없다.
+- **현대적 망치로 고전적 못 치기**: 관찰자료로 딥러닝 모형을 학습시킨 뒤 그 변수 중요도를 인과효과로 해석하는 것. 모형은 같은 분포 안에서는 잘 예측할지 몰라도 그 "설명"은 허위 상관을 반영한다.
+- **한쪽을 다른 쪽인 척하기**: 교차검증으로 선택한 모형에서 나온 $p$-값을 보고하거나, "검증 정확도"가 "외적 타당도"와 같다고 주장하는 것.
 
-## Examples
+## 예제
 
 ```python
 """Classical A/B test (inference) vs. modern prediction on the same setup."""
@@ -74,86 +74,86 @@ print("\n=== Modern prediction ===")
 print(f"Test MSE = {mse_test:.3f}")
 ```
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-For each scenario, state whether the **classical** or **modern** approach is more appropriate, and justify your answer.
+**연습문제 1.**
+다음 각 상황에서 **고전적** 접근과 **현대적** 접근 중 어느 쪽이 더 적절한지 밝히고 근거를 대라.
 
-**(a)** A pharmaceutical company wants to determine whether a new vaccine reduces infection rates.
-**(b)** An e-commerce company wants to predict which products a customer is likely to purchase next.
-**(c)** A government agency wants to estimate the unemployment rate with a known margin of error.
-**(d)** A bank wants to flag potentially fraudulent credit-card transactions in real time.
-**(e)** A health system needs to identify the causal effect of a new triage protocol on patient mortality.
+**(a)** 어떤 제약회사가 새 백신이 감염률을 낮추는지 판단하고자 한다.
+**(b)** 어떤 전자상거래 회사가 고객이 다음에 구매할 만한 상품을 예측하고자 한다.
+**(c)** 어떤 정부 기관이 알려진 오차한계로 실업률을 추정하고자 한다.
+**(d)** 어떤 은행이 실시간으로 사기 의심 신용카드 거래를 표시하고자 한다.
+**(e)** 어떤 보건 시스템이 새 분류 프로토콜이 환자 사망률에 미치는 인과효과를 밝혀야 한다.
 
-??? success "Solution to Exercise 1"
-    (a) **Classical** — establishing a causal effect requires a randomized controlled trial with prespecified protocol.
-    (b) **Modern** — recommendation is a prediction problem on existing transactional and browsing data.
-    (c) **Classical** — known margin of error requires a probability sample with planned size.
-    (d) **Modern** — fraud detection at scale demands flexible algorithms (gradient boosting, neural nets) on millions of transactions.
-    (e) **Classical** if random assignment is feasible (cluster RCT); otherwise a hybrid causal-inference approach (instrumental variables, difference-in-differences, or stepped-wedge design) drawing on classical identification with modern estimation.
-
----
-
-**Exercise 2.**
-A team has 10 years of customer data and wants to (a) predict which customers will churn next month, and (b) understand *why* customers churn so they can change product policy. Which approach fits each goal, and how would using the wrong one fail?
-
-??? success "Solution to Exercise 2"
-    **(a) Prediction → modern.** Train a gradient-boosted model on historical features; the goal is to rank customers by churn risk for retention outreach. Trying to use a hand-built parametric model with only a handful of predictors would likely leave predictive accuracy on the table.
-
-    **(b) Understanding why → classical (or hybrid causal).** Even if the prediction model has accurate features, its feature importances are not causal. Customers who call customer support frequently might predict churn, but reducing customer-support frequency would not reduce churn — both are caused by an underlying dissatisfaction. Establishing causes requires either A/B testing potential interventions or careful causal-inference analysis on observational data with explicit identifying assumptions.
-
-    Using the modern approach for goal (b) leads to "fix the symptom, not the cause" policy mistakes. Using the classical approach for goal (a) leaves predictive accuracy unrealized.
+??? success "연습문제 1 풀이"
+    (a) **고전적** — 인과효과를 확립하려면 사전 지정된 프로토콜을 갖춘 무작위 대조시험이 필요하다.
+    (b) **현대적** — 추천은 기존 거래·탐색 자료를 이용한 예측 문제다.
+    (c) **고전적** — 알려진 오차한계를 얻으려면 크기를 계획한 확률표본이 필요하다.
+    (d) **현대적** — 대규모 사기 탐지에는 수백만 건의 거래에 유연한 알고리즘(그래디언트 부스팅, 신경망)이 필요하다.
+    (e) 무작위 배정이 가능하다면 **고전적**(집락 RCT), 그렇지 않다면 고전적 식별과 현대적 추정을 결합한 혼합 인과추론 접근(도구변수, 이중차분법, 단계적 도입 설계).
 
 ---
 
-**Exercise 3.**
-Explain the role of **out-of-sample evaluation** in the modern paradigm. Why is in-sample $R^2$ unreliable for assessing predictive accuracy of a flexible model?
+**연습문제 2.**
+어떤 팀이 10년치 고객 자료를 가지고 (a) 다음 달에 이탈할 고객을 예측하고, (b) 제품 정책을 바꿀 수 있도록 고객이 *왜* 이탈하는지 이해하려 한다. 각 목표에 어느 접근이 맞으며, 잘못된 쪽을 쓰면 어떻게 실패하는가?
 
-??? success "Solution to Exercise 3"
-    A sufficiently flexible model (deep trees, neural nets, kernel methods) can fit *any* training set arbitrarily well — pushing in-sample $R^2$ toward 1 even when there is no real signal. The in-sample fit measures memorization, not generalization.
+??? success "연습문제 2 풀이"
+    **(a) 예측 → 현대적.** 과거 특성으로 그래디언트 부스팅 모형을 학습시킨다. 목표는 유지 활동을 위해 고객을 이탈 위험순으로 정렬하는 것이다. 예측변수 몇 개만 손으로 고른 모수적 모형을 쓰면 예측 정확도를 상당 부분 놓치게 된다.
 
-    **Out-of-sample evaluation** breaks the dependence: a held-out test set (or $k$-fold cross-validation) measures how well the model performs on data not used in training, which is what matters for deployment. This is the modern analog of the classical insistence on unbiased estimators — both are ways to prevent the model-selection process from inflating reported performance.
+    **(b) 이유의 이해 → 고전적(또는 혼합 인과추론).** 예측 모형의 변수가 정확하더라도 그 변수 중요도는 인과적이지 않다. 고객센터에 자주 전화하는 고객이 이탈을 예측할 수는 있지만, 고객센터 통화 빈도를 줄인다고 이탈이 줄지는 않는다. 둘 다 밑바탕의 불만족에서 비롯되기 때문이다. 원인을 확립하려면 가능한 개입을 A/B 테스트하거나, 명시적 식별 가정 아래 관찰자료를 신중히 인과분석해야 한다.
 
-    The relationship between in-sample and out-of-sample error is governed by **generalization bounds** in statistical learning theory (VC dimension, Rademacher complexity, PAC-Bayes). The practical upshot: never trust an $R^2$ that wasn't measured on data the model didn't see.
-
----
-
-**Exercise 4.**
-Causal inference from observational data with modern flexible methods (double ML, causal forests) requires the **conditional ignorability** assumption. State the assumption and explain why it is the "modern" analog of randomization in classical experiments.
-
-??? success "Solution to Exercise 4"
-    **Conditional ignorability:** $(Y(0), Y(1)) \perp T \mid X$. Conditional on observed covariates $X$, treatment assignment $T$ is independent of the potential outcomes.
-
-    **Why it parallels randomization:** randomization in a classical RCT guarantees $(Y(0), Y(1)) \perp T$ *unconditionally* — assignment carries no information about potential outcomes. Observational analysis weakens this to *conditional* independence: assignment is "as-if random" once we condition on $X$.
-
-    The classical version is mechanical (the investigator ensures it by design); the observational version is an *assumption* about the data-generating process that cannot be verified from the data alone. Modern ML methods relax the parametric form of the model but cannot relax this fundamental identifying assumption. They make the analysis *more flexible*, not the assumptions *weaker*.
+    목표 (b)에 현대적 접근을 쓰면 "원인이 아니라 증상을 고치는" 정책적 실수로 이어진다. 목표 (a)에 고전적 접근을 쓰면 얻을 수 있는 예측 정확도를 놓친다.
 
 ---
 
-**Exercise 5.**
-Give an example of a setting where a classical-paradigm analysis would produce **valid inference but poor prediction**, and another where a modern-paradigm analysis would produce **excellent prediction but invalid inference**.
+**연습문제 3.**
+현대 패러다임에서 **표본 밖 평가**의 역할을 설명하라. 유연한 모형의 예측 정확도를 판단할 때 표본 내 $R^2$이 왜 믿을 수 없는가?
 
-??? success "Solution to Exercise 5"
-    **Valid inference, poor prediction:** an RCT of a new drug with $n = 200$ patients. The treatment-effect estimate is unbiased with a 95% CI, and the $p$-value has correct coverage. But if a clinician wants to *predict* a new patient's outcome under treatment, the model is just a sample mean plus or minus noise — it ignores patient covariates and individual characteristics that a flexible ML model would exploit for more personalized prediction.
+??? success "연습문제 3 풀이"
+    충분히 유연한 모형(깊은 트리, 신경망, 커널 방법)은 *어떤* 훈련 집합이든 원하는 만큼 잘 적합시킬 수 있으며, 실제 신호가 없어도 표본 내 $R^2$을 1에 가깝게 밀어 올린다. 표본 내 적합도는 일반화가 아니라 암기를 측정한다.
 
-    **Excellent prediction, invalid inference:** a gradient-boosted tree predicting loan defaults from 200 features on a million-row dataset. Out-of-sample AUC is 0.92 — excellent. But if the bank asks "is income predictive of default *causally*, or only through correlated variables?", the model cannot answer: among the 200 features, some are confounders, some are mediators, some are colliders, and the SHAP importances confuse all three.
+    **표본 밖 평가**는 이 의존을 끊는다. 별도로 떼어놓은 시험 집합(또는 $k$-겹 교차검증)은 훈련에 쓰이지 않은 자료에서 모형이 얼마나 잘 작동하는지를 측정하며, 이것이 실제 배포에서 중요한 값이다. 이는 불편추정량을 고집하는 고전적 태도의 현대적 대응물이다. 둘 다 모형 선택 과정이 보고된 성능을 부풀리는 것을 막는 방법이다.
 
-    The two paradigms answer different questions; using either model to answer the *other* question is the most common pitfall in practice.
+    표본 내 오차와 표본 밖 오차의 관계는 통계적 학습이론의 **일반화 한계**(VC 차원, 라데마허 복잡도, PAC-Bayes)가 지배한다. 실무적 요점은 이것이다. 모형이 보지 못한 자료에서 측정하지 않은 $R^2$은 절대 믿지 마라.
 
 ---
 
-**Exercise 6.**
-A startup A/B tests 1,000 small interface changes per year. Each test runs for 7 days at $\alpha = 0.05$. Without multiple-testing correction, how many false positives will they accumulate per year on average, and what does this tell you about uncritically scaling classical inference to industrial volume?
+**연습문제 4.**
+현대적 유연 방법(이중 기계학습, 인과 포레스트)으로 관찰자료에서 인과추론을 하려면 **조건부 무시가능성** 가정이 필요하다. 이 가정을 진술하고, 그것이 왜 고전적 실험에서 무작위화의 "현대적" 대응물인지 설명하라.
 
-??? success "Solution to Exercise 6"
-    Under the null hypothesis of no effect, each test yields a false positive with probability $\alpha = 0.05$. Across 1,000 tests, the expected number of false positives is
+??? success "연습문제 4 풀이"
+    **조건부 무시가능성:** $(Y(0), Y(1)) \perp T \mid X$. 관측된 공변량 $X$를 조건부로 하면 처리 배정 $T$가 잠재적 결과와 독립이다.
+
+    **왜 무작위화와 대응되는가:** 고전적 RCT의 무작위화는 $(Y(0), Y(1)) \perp T$를 *무조건적으로* 보장한다. 배정이 잠재적 결과에 대해 아무 정보도 담지 않는다는 뜻이다. 관찰자료 분석은 이를 *조건부* 독립으로 약화한다. $X$를 조건부로 하면 배정이 "무작위나 다름없다"는 것이다.
+
+    고전적 형태는 기계적이다(연구자가 설계로 보장한다). 관찰적 형태는 자료생성 과정에 대한 *가정*이며 자료만으로는 검증할 수 없다. 현대적 기계학습 방법은 모형의 모수적 형태를 완화하지만 이 근본적인 식별 가정은 완화하지 못한다. 이 방법들은 분석을 *더 유연하게* 만들 뿐 가정을 *더 약하게* 만들지 않는다.
+
+---
+
+**연습문제 5.**
+고전 패러다임의 분석이 **타당한 추론을 주지만 예측은 형편없는** 상황의 예와, 현대 패러다임의 분석이 **예측은 탁월하지만 추론은 타당하지 않은** 상황의 예를 각각 들어라.
+
+??? success "연습문제 5 풀이"
+    **타당한 추론, 형편없는 예측:** 환자 $n = 200$명을 대상으로 한 신약 RCT. 처리효과 추정값은 95% 신뢰구간과 함께 불편이고 $p$-값의 포함확률도 옳다. 그러나 임상의가 새 환자의 처치 후 결과를 *예측*하려 하면, 이 모형은 표본평균에 잡음을 더하고 뺀 것에 지나지 않는다. 유연한 기계학습 모형이라면 더 개인화된 예측에 활용했을 환자 공변량과 개별 특성을 무시한다.
+
+    **탁월한 예측, 타당하지 않은 추론:** 100만 행 자료에서 200개 특성으로 대출 부도를 예측하는 그래디언트 부스팅 트리. 표본 밖 AUC가 0.92로 탁월하다. 그러나 은행이 "소득이 *인과적으로* 부도를 예측하는가, 아니면 상관된 변수를 통해서만 그런가?"라고 물으면 이 모형은 답할 수 없다. 200개 특성 중 어떤 것은 교란변수, 어떤 것은 매개변수, 어떤 것은 충돌변수인데 SHAP 중요도는 이 셋을 모두 뒤섞는다.
+
+    두 패러다임은 서로 다른 질문에 답한다. 어느 한 모형으로 *다른 쪽* 질문에 답하려는 것이 실무에서 가장 흔한 함정이다.
+
+---
+
+**연습문제 6.**
+어떤 스타트업이 연간 1,000건의 작은 인터페이스 변경을 A/B 테스트한다. 각 테스트는 $\alpha = 0.05$로 7일간 진행된다. 다중검정 보정을 하지 않으면 연평균 몇 건의 거짓양성이 쌓이며, 이는 고전적 추론을 무비판적으로 산업 규모로 확장하는 것에 대해 무엇을 말해주는가?
+
+??? success "연습문제 6 풀이"
+    효과가 없다는 귀무가설 아래에서 각 검정은 확률 $\alpha = 0.05$로 거짓양성을 낸다. 1,000건의 검정에 걸쳐 기대되는 거짓양성 수는
 
     $$
     \mathbb{E}[\text{false positives}] = 1{,}000 \times 0.05 = 50
     $$
 
-    Roughly 50 of 1,000 "winning" tests will have been won by chance. If the startup ships every "significant" change, dozens of useless features land in production each year, occasionally on top of each other — leading to drift, regression, and inscrutable behavior.
+    이다. "이긴" 1,000건의 테스트 중 대략 50건은 우연히 이긴 것이다. 스타트업이 "유의한" 변경을 모두 배포한다면 해마다 수십 개의 쓸모없는 기능이 프로덕션에 들어가고, 때로는 서로 위에 겹쳐 쌓여 드리프트, 성능 퇴행, 알 수 없는 동작으로 이어진다.
 
-    Remedies include **family-wise error control** (Bonferroni: divide $\alpha$ by the number of tests), **false-discovery-rate control** (Benjamini–Hochberg: control the fraction of declared positives that are false), **stricter thresholds** as standard practice (e.g., $\alpha = 0.005$ for confirmatory tests), and **prior judgment**: low-prior changes (small effects, low business value) should require higher evidence than high-prior changes.
+    대응책으로는 **가족단위 오류율 통제**(본페로니: $\alpha$를 검정 수로 나눔), **거짓발견율 통제**(벤자미니–호크버그: 양성으로 선언된 것 중 거짓의 비율을 통제), 표준 관행으로서의 **더 엄격한 기준**(예: 확증 검정에 $\alpha = 0.005$), 그리고 **사전 판단**이 있다. 사전확률이 낮은 변경(효과가 작고 사업적 가치가 낮은 것)은 사전확률이 높은 변경보다 더 강한 증거를 요구해야 한다.
 
-    The deeper lesson: classical methods were designed for a small number of pre-specified questions, not for industrial-scale interrogation of the same data set. Naive application at scale silently inflates error rates.
+    더 깊은 교훈은 이것이다. 고전적 방법은 사전에 지정된 소수의 질문을 위해 설계되었지, 같은 자료를 산업 규모로 심문하기 위해 설계되지 않았다. 대규모에서 순진하게 적용하면 오류율이 소리 없이 부풀어 오른다.

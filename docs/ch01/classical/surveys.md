@@ -1,69 +1,69 @@
-# Sample Surveys and Sampling Methods
+# 표본조사와 표집 방법
 
-A sample survey collects data from a representative subset of a population to support inference about the whole. The choice of sampling design — how the subset is selected — has at least as much impact on accuracy as the sample size: a small probability sample reliably outperforms a large convenience sample. This page covers the four standard probability-sampling designs, their precision properties, and the considerations that drive design choice in practice.
+표본조사는 전체에 대한 추론을 뒷받침하기 위해 모집단의 대표성 있는 부분집합에서 자료를 수집한다. 표집 설계 — 부분집합을 어떻게 고르는가 — 의 선택은 적어도 표본 크기만큼이나 정확도에 큰 영향을 미친다. 작은 확률표본이 큰 편의표본을 안정적으로 능가한다. 이 절에서는 네 가지 표준 확률표집 설계와 그 정밀도 성질, 그리고 실무에서 설계 선택을 좌우하는 고려사항을 다룬다.
 
-## Definition
+## 정의
 
-A **sample survey** selects units from a population according to a defined sampling design and measures variables of interest on each selected unit. A **probability sample** is one where every unit has a known, nonzero selection probability — the property that makes valid inference possible. The four canonical designs:
+**표본조사(sample survey)** 는 정해진 표집 설계에 따라 모집단에서 단위를 선택하고, 선택된 각 단위에 대해 관심 변수를 측정한다. **확률표본(probability sample)** 은 모든 단위가 알려진 0이 아닌 선택 확률을 갖는 표본이며, 바로 이 성질이 타당한 추론을 가능하게 한다. 네 가지 표준 설계는 다음과 같다.
 
-| Method | Procedure | Advantage | Risk |
+| 방법 | 절차 | 장점 | 위험 |
 |---|---|---|---|
-| Simple random | Each unit equally likely | Simplest theory, unbiased | May under-represent small subgroups |
-| Stratified | Divide into strata, sample within each | Guaranteed subgroup coverage; can improve precision | Requires stratum knowledge in the frame |
-| Cluster | Randomly select intact groups | Cost-effective for dispersed populations | Higher variance if clusters are internally homogeneous |
-| Systematic | Every $k$-th unit from a list | Easy to implement; spreads sample across the frame | Bias if list has hidden periodicity |
+| 단순무작위 | 모든 단위가 동일한 확률 | 이론이 가장 단순하고 불편 | 작은 하위집단이 과소대표될 수 있음 |
+| 층화 | 층으로 나눈 뒤 각 층에서 표집 | 하위집단 포괄 보장, 정밀도 향상 가능 | 표집틀에 층 정보가 있어야 함 |
+| 집락 | 온전한 집단을 무작위로 선택 | 흩어진 모집단에 비용 효율적 | 집락 내부가 동질적이면 분산이 커짐 |
+| 계통 | 목록에서 $k$번째마다 선택 | 실행이 쉽고 표본이 표집틀 전체에 퍼짐 | 목록에 숨은 주기성이 있으면 편향 |
 
-## Explanation
+## 설명
 
-### Sampling frame
+### 표집틀
 
-Every probability design starts with a **frame** — an enumerable list of population units. Frame defects propagate directly into sampling bias:
+모든 확률 설계는 **표집틀(frame)** — 모집단 단위를 열거한 목록 — 에서 출발한다. 표집틀의 결함은 곧바로 표집편향으로 이어진다.
 
-- **Undercoverage**: units exist but are absent from the frame (homeless population in a telephone frame).
-- **Overcoverage**: ineligible units appear in the frame (deceased voters in registration lists).
-- **Duplicates**: a unit appears more than once with different selection probabilities.
+- **과소포괄**: 단위가 존재하는데 표집틀에 없다(전화 표집틀에서의 노숙 인구).
+- **과대포괄**: 자격 없는 단위가 표집틀에 들어 있다(선거인명부의 사망자).
+- **중복**: 한 단위가 서로 다른 선택 확률로 두 번 이상 나타난다.
 
-Frame quality, not sample size, is the binding constraint on survey accuracy. The 1936 *Literary Digest* poll, with 2.4 million respondents, predicted the wrong U.S. presidential winner because its frame (telephone directories, automobile registrations) excluded the Depression-era poor.
+조사 정확도의 결정적 제약은 표본 크기가 아니라 표집틀의 품질이다. 응답자 240만 명을 모은 1936년 《Literary Digest》 여론조사가 미국 대통령 당선자를 틀리게 예측한 것은, 그 표집틀(전화번호부, 자동차 등록부)이 대공황기의 빈곤층을 배제했기 때문이다.
 
-### Simple random sampling (SRS)
+### 단순무작위표집(SRS)
 
-Every subset of size $n$ is equally likely. Estimators are unbiased, and the variance of the sample mean is
+크기 $n$인 모든 부분집합이 동일한 확률을 갖는다. 추정량은 불편이고, 표본평균의 분산은
 
 $$
 \mathrm{Var}(\bar y) = \frac{\sigma^2}{n}\left(1 - \frac{n}{N}\right)
 $$
 
-where the finite-population correction $(1 - n/N)$ becomes negligible whenever $n/N$ is small. SRS is theoretically clean but operationally awkward for large dispersed populations.
+이다. 여기서 유한모집단 수정 $(1 - n/N)$은 $n/N$이 작을 때 무시할 수 있게 된다. SRS는 이론적으로 깔끔하지만 크고 흩어진 모집단에서는 운영상 다루기 불편하다.
 
-### Stratified sampling
+### 층화표집
 
-Partition the population into strata (e.g., age groups, regions) and sample within each. With **proportional allocation** $n_h = n \cdot N_h / N$,
+모집단을 층(예: 연령대, 지역)으로 분할하고 각 층 안에서 표집한다. **비례 배분** $n_h = n \cdot N_h / N$을 쓰면
 
 $$
 \mathrm{Var}(\bar y_{\text{strat}}) = \sum_h \left(\frac{N_h}{N}\right)^{\!2} \frac{\sigma_h^2}{n_h} \le \mathrm{Var}(\bar y_{\text{SRS}})
 $$
 
-Strict equality when strata are identical; the gain is largest when within-stratum variances $\sigma_h^2$ are small and between-stratum means differ a lot. **Neyman allocation** $n_h \propto N_h \sigma_h$ minimizes variance further when stratum variances differ markedly.
+이며, 층들이 동일할 때만 등호가 성립한다. 층 내부 분산 $\sigma_h^2$이 작고 층 간 평균이 크게 다를수록 이득이 커진다. 층별 분산이 뚜렷하게 다를 때는 **네이만 배분** $n_h \propto N_h \sigma_h$이 분산을 더 줄인다.
 
-### Cluster sampling
+### 집락표집
 
-Randomly select intact clusters (city blocks, schools) and survey all units within selected clusters. Drastically cheaper to administer (only a few sites to visit), but units within a cluster tend to be similar — the **intracluster correlation** $\rho$ inflates variance by the **design effect**
+온전한 집락(도시 구역, 학교)을 무작위로 선택하고 선택된 집락 안의 모든 단위를 조사한다. 방문할 곳이 몇 군데뿐이므로 운영 비용이 훨씬 싸지만, 한 집락 안의 단위들은 서로 비슷한 경향이 있다. 이 **집락 내 상관** $\rho$가 **설계효과**만큼 분산을 부풀린다.
 
 $$
 \mathrm{DEFF} \approx 1 + (m - 1)\rho
 $$
 
-where $m$ is cluster size. Cluster sampling pays for cost savings with reduced statistical efficiency; in practice it is almost always combined with stratification.
+여기서 $m$은 집락 크기다. 집락표집은 통계적 효율을 내주고 비용 절감을 얻는 셈이며, 실무에서는 거의 언제나 층화와 결합해 쓴다.
 
-### Systematic sampling
+### 계통표집
 
-Choose a random start in $\{1, \ldots, k\}$ and sample every $k$-th unit. Equivalent to SRS when the list order is random; biased when the list has periodicity matching $k$ (the textbook example: visiting every 7th house misses one day of the week of trash collection).
+$\{1, \ldots, k\}$에서 무작위 시작점을 고르고 $k$번째마다 표집한다. 목록 순서가 무작위이면 SRS와 동등하고, 목록에 $k$와 맞아떨어지는 주기성이 있으면 편향된다(교과서적 예: 7번째 집마다 방문하면 쓰레기 수거 요일 하루를 통째로 놓친다).
 
-### Diminishing returns of sample size
+### 표본 크기의 수확체감
 
-For SRS, $\mathrm{SE}(\bar y) = \sigma/\sqrt{n}$. Quadrupling $n$ halves the SE. To halve the margin of error you need *four times* the data — a basic economics that shapes survey budgets.
+SRS에서 $\mathrm{SE}(\bar y) = \sigma/\sqrt{n}$이다. $n$을 네 배로 하면 표준오차는 절반이 된다. 오차한계를 절반으로 줄이려면 자료가 *네 배* 필요하며, 이 기본적인 경제학이 조사 예산을 좌우한다.
 
-## Examples
+## 예제
 
 ```python
 """Compare simple random and stratified sampling on a synthetic population."""
@@ -97,119 +97,119 @@ print(f"SRS estimate:     ${srs['income'].mean():,.0f}")
 print(f"Stratified est.:  ${strat['income'].mean():,.0f}")
 ```
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-A university wants to survey student satisfaction. Identify the sampling method in each scenario.
+**연습문제 1.**
+어느 대학이 학생 만족도를 조사하려 한다. 각 상황에서 표집 방법을 식별하라.
 
-**(a)** The registrar generates a list of all 20,000 students and uses a random-number generator to select 500.
-**(b)** The university divides students into freshmen, sophomores, juniors, and seniors, then randomly selects 125 from each class.
-**(c)** The university randomly selects 10 dormitories and surveys every resident in those dormitories.
-**(d)** A researcher stands outside the library and surveys the first 200 students who walk by.
-**(e)** Starting from a randomly chosen position in the alphabetized roster, the university picks every 40th student.
+**(a)** 학적과가 전체 학생 20,000명의 명단을 만들고 난수 발생기로 500명을 선택한다.
+**(b)** 대학이 학생을 1·2·3·4학년으로 나눈 뒤 각 학년에서 125명씩 무작위로 선택한다.
+**(c)** 대학이 기숙사 10곳을 무작위로 선택하고 그 기숙사의 모든 사생을 조사한다.
+**(d)** 한 연구자가 도서관 앞에 서서 지나가는 학생 200명을 순서대로 조사한다.
+**(e)** 가나다순 명부에서 무작위로 고른 위치에서 시작해 40번째마다 학생을 뽑는다.
 
-??? success "Solution to Exercise 1"
-    (a) Simple random sampling.
-    (b) Stratified random sampling, strata = class year.
-    (c) Cluster sampling, clusters = dormitories.
-    (d) Convenience sampling — not a probability sample; the resulting estimates have no valid measure of uncertainty.
-    (e) Systematic sampling. Equivalent to SRS *if* the roster order is uncorrelated with satisfaction; biased if (say) alphabetical order proxies for ethnic background and satisfaction varies by ethnicity.
+??? success "연습문제 1 풀이"
+    (a) 단순무작위표집.
+    (b) 층화무작위표집, 층 = 학년.
+    (c) 집락표집, 집락 = 기숙사.
+    (d) 편의표집 — 확률표본이 아니며, 그 결과 얻은 추정값에는 타당한 불확실성 측도가 없다.
+    (e) 계통표집. 명부 순서가 만족도와 상관이 없다*면* SRS와 동등하지만, 예컨대 가나다순이 출신 배경을 대리하고 만족도가 배경에 따라 다르다면 편향된다.
 
 ---
 
-**Exercise 2.**
-Derive the variance of the **stratified mean** under proportional allocation and show that it is at most the SRS variance. Use the law of total variance to identify when the gain is largest.
+**연습문제 2.**
+비례 배분 아래에서 **층화 평균**의 분산을 유도하고, 그것이 SRS 분산 이하임을 보여라. 총분산의 법칙을 이용해 이득이 언제 가장 큰지 밝혀라.
 
-??? success "Solution to Exercise 2"
-    Let $w_h = N_h/N$. Under proportional allocation $n_h = w_h n$, the stratified estimator is $\bar y_{\text{strat}} = \sum_h w_h \bar y_h$ with
+??? success "연습문제 2 풀이"
+    $w_h = N_h/N$이라 하자. 비례 배분 $n_h = w_h n$ 아래에서 층화추정량은 $\bar y_{\text{strat}} = \sum_h w_h \bar y_h$이고
 
     $$
     \mathrm{Var}(\bar y_{\text{strat}}) = \sum_h w_h^2 \cdot \frac{\sigma_h^2}{w_h n} = \frac{1}{n}\sum_h w_h \sigma_h^2
     $$
 
-    The SRS variance is $\mathrm{Var}(\bar y_{\text{SRS}}) = \sigma^2 / n$. By the law of total variance,
+    이다. SRS 분산은 $\mathrm{Var}(\bar y_{\text{SRS}}) = \sigma^2 / n$이다. 총분산의 법칙에 의해
 
     $$
     \sigma^2 = \underbrace{\sum_h w_h \sigma_h^2}_{\text{within}} + \underbrace{\sum_h w_h (\mu_h - \mu)^2}_{\text{between}}
     $$
 
-    Therefore
+    따라서
 
     $$
     \mathrm{Var}(\bar y_{\text{strat}}) = \frac{\sigma^2 - \sum_h w_h (\mu_h - \mu)^2}{n} \le \frac{\sigma^2}{n} = \mathrm{Var}(\bar y_{\text{SRS}})
     $$
 
-    The gain — the second term in the numerator — equals the **between-stratum variance**. Stratification helps most when stratum means $\mu_h$ differ markedly and within-stratum variance is small. $\square$
+    이득 — 분자의 두 번째 항 — 은 **층 간 분산**과 같다. 층 평균 $\mu_h$가 뚜렷이 다르고 층 내 분산이 작을 때 층화의 효과가 가장 크다. $\square$
 
 ---
 
-**Exercise 3.**
-A health survey uses cluster sampling of schools (clusters), with $m = 30$ students per school and intracluster correlation $\rho = 0.10$ on the outcome. Compute the design effect and the effective sample size if 50 schools are sampled.
+**연습문제 3.**
+어떤 건강조사가 학교를 집락으로 하는 집락표집을 사용하며, 학교당 학생은 $m = 30$명이고 결과 변수의 집락 내 상관은 $\rho = 0.10$이다. 학교 50곳을 표집할 때 설계효과와 유효 표본 크기를 계산하라.
 
-??? success "Solution to Exercise 3"
+??? success "연습문제 3 풀이"
     $$
     \mathrm{DEFF} = 1 + (m - 1)\rho = 1 + 29 \times 0.10 = 3.9
     $$
 
-    Nominal sample size: $n = 50 \times 30 = 1500$.
+    명목 표본 크기: $n = 50 \times 30 = 1500$.
 
-    Effective sample size: $n_{\text{eff}} = n / \mathrm{DEFF} = 1500 / 3.9 \approx 385$.
+    유효 표본 크기: $n_{\text{eff}} = n / \mathrm{DEFF} = 1500 / 3.9 \approx 385$.
 
-    Despite collecting data on 1,500 students, the precision is equivalent to an SRS of only $\sim 385$. To match the precision of an SRS of 1,500, the cluster design would need to sample roughly $1500 \times 3.9 \approx 5,850$ students — illustrating why cluster designs are chosen only when per-unit costs are dramatically lower.
-
----
-
-**Exercise 4.**
-Explain why a sample size of 2,400,000 from telephone directories (the 1936 *Literary Digest* poll) gave a worse estimate of voting intention than a probability sample of 50,000 (Gallup's poll the same year).
-
-??? success "Solution to Exercise 4"
-    The *Literary Digest* frame consisted of telephone subscribers and automobile owners. In 1936, both were luxury items concentrated among the wealthy — a group disproportionately Republican. The bias was not in the size of the sample but in the frame: respondents were systematically *unlike* the broader voting population.
-
-    Sampling theory gives standard error $\sigma/\sqrt{n}$ around the *frame mean*, not the *population mean*. With $n = 2.4$ million, the SE is essentially zero, but the estimator is consistent for the wrong target. Gallup's smaller probability sample drew from a frame matching the voting population and was therefore unbiased; the modest sampling variability around an unbiased target beat near-zero variability around a biased one.
-
-    **Big data does not fix bad data**: this is the modern restatement of the *Literary Digest* lesson, increasingly relevant as analysts work with massive but non-representative web and administrative datasets.
+    학생 1,500명의 자료를 모았는데도 정밀도는 SRS로 약 385명을 뽑은 것과 같다. SRS 1,500명의 정밀도에 맞추려면 이 집락 설계는 대략 $1500 \times 3.9 \approx 5{,}850$명을 표집해야 한다. 단위당 비용이 극적으로 낮을 때만 집락 설계를 택하는 이유가 여기 있다.
 
 ---
 
-**Exercise 5.**
-**Nonresponse** afflicts every real survey. A telephone poll achieves a 25% response rate; respondents are slightly older and more educated than the population. State two distinct strategies — one design-side and one analysis-side — for addressing the resulting bias.
+**연습문제 4.**
+전화번호부에서 뽑은 240만 명의 표본(1936년 《Literary Digest》 여론조사)이 5만 명의 확률표본(같은 해 갤럽 조사)보다 투표 의향을 더 나쁘게 추정한 이유를 설명하라.
 
-??? success "Solution to Exercise 5"
-    **Design-side (improve the response):**
+??? success "연습문제 4 풀이"
+    《Literary Digest》의 표집틀은 전화 가입자와 자동차 소유자였다. 1936년에 이 둘은 모두 부유층에 집중된 사치품이었고, 이 집단은 공화당 지지가 불균형하게 많았다. 편향은 표본의 크기가 아니라 표집틀에 있었다. 응답자가 더 넓은 투표 인구와 체계적으로 *달랐던* 것이다.
 
-    - Multiple callback attempts at different times of day.
-    - Mixed-mode follow-up (mail, then phone, then in-person).
-    - Modest incentives for completion (e.g., $5 gift cards).
-    - Shorter questionnaires.
+    표집 이론이 주는 표준오차 $\sigma/\sqrt{n}$은 *모집단 평균*이 아니라 *표집틀 평균* 주위의 오차다. $n = 240$만이면 표준오차는 사실상 0이지만, 그 추정량은 엉뚱한 목표에 대해 일치한다. 갤럽의 더 작은 확률표본은 투표 인구와 맞는 표집틀에서 뽑았으므로 불편이었다. 불편인 목표 주위의 적당한 표집 변동성이, 편향된 목표 주위의 거의 0에 가까운 변동성을 이긴 것이다.
 
-    Higher response rates reduce nonresponse bias even when respondents and non-respondents differ.
-
-    **Analysis-side (post-survey adjustment):**
-
-    - **Post-stratification weighting**: weight respondents to match known population marginals (age, education, region) drawn from the census. A 30-year-old female respondent in an oversampled cell receives less weight than one in an undersampled cell.
-    - **Inverse-probability weighting (IPW)** when response propensities can be modeled from auxiliary data.
-    - **Multiple imputation** of missing outcomes under explicit missingness assumptions.
-
-    All analysis-side methods rest on assumptions (the response model, conditional ignorability of the outcome given the weighting variables). They reduce but do not eliminate bias; the only fully reliable defense is high response rate by design.
+    **빅데이터가 나쁜 데이터를 고쳐주지는 않는다.** 이것이 《Literary Digest》 교훈의 현대적 재진술이며, 분석가들이 방대하지만 대표성 없는 웹·행정 자료를 다루면서 점점 더 중요해지고 있다.
 
 ---
 
-**Exercise 6.**
-For a survey of a binary outcome with proportion $p$, you want a margin of error (95% CI half-width) of at most $0.03$. What is the minimum sample size under SRS without using any prior knowledge of $p$? Where does the formula come from?
+**연습문제 5.**
+**무응답**은 모든 실제 조사를 괴롭힌다. 어떤 전화 조사의 응답률이 25%인데, 응답자는 모집단보다 나이가 조금 더 많고 교육 수준이 더 높다. 그 결과 생기는 편향에 대응하는 서로 다른 두 전략 — 하나는 설계 측면, 하나는 분석 측면 — 을 제시하라.
 
-??? success "Solution to Exercise 6"
-    The 95% margin of error is approximately
+??? success "연습문제 5 풀이"
+    **설계 측면(응답 자체를 개선):**
+
+    - 하루 중 여러 시간대에 반복 재통화.
+    - 혼합 방식 후속 접촉(우편, 그다음 전화, 그다음 대면).
+    - 완료에 대한 소액 사례(예: 5달러 상품권).
+    - 더 짧은 설문지.
+
+    응답률이 높아지면 응답자와 무응답자가 다르더라도 무응답 편향이 줄어든다.
+
+    **분석 측면(조사 후 보정):**
+
+    - **사후층화 가중**: 인구총조사에서 얻은 알려진 모집단 주변분포(연령, 교육, 지역)에 맞도록 응답자에게 가중치를 준다. 과대표집된 칸에 속한 30세 여성 응답자는 과소표집된 칸의 응답자보다 낮은 가중치를 받는다.
+    - 보조 자료로 응답 성향을 모형화할 수 있을 때의 **역확률가중(IPW)**.
+    - 명시적인 결측 가정 아래 결측 결과에 대한 **다중대체**.
+
+    분석 측면 방법은 모두 가정(응답 모형, 가중 변수를 조건부로 한 결과의 무시가능성) 위에 서 있다. 편향을 줄이지만 없애지는 못하며, 완전히 믿을 수 있는 유일한 방어는 설계로 높은 응답률을 확보하는 것이다.
+
+---
+
+**연습문제 6.**
+비율이 $p$인 이항 결과를 조사할 때 오차한계(95% 신뢰구간의 반폭)를 $0.03$ 이하로 하고자 한다. $p$에 대한 사전 지식을 전혀 쓰지 않을 때 SRS에서 필요한 최소 표본 크기는 얼마인가? 이 공식은 어디서 나오는가?
+
+??? success "연습문제 6 풀이"
+    95% 오차한계는 근사적으로
 
     $$
     \mathrm{ME} = 1.96 \sqrt{\frac{p(1-p)}{n}}
     $$
 
-    Worst case is at $p = 1/2$, where $p(1-p) = 0.25$. Setting $\mathrm{ME} \le 0.03$:
+    이다. 최악의 경우는 $p = 1/2$이며 이때 $p(1-p) = 0.25$이다. $\mathrm{ME} \le 0.03$으로 두면
 
     $$
     n \ge \frac{(1.96)^2 \cdot 0.25}{(0.03)^2} \approx \frac{0.9604}{0.0009} \approx 1067
     $$
 
-    So a sample of about **1,068** suffices regardless of the true $p$. This is the origin of the "$n \approx 1{,}000$" rule of thumb for national opinion polls.
+    이다. 따라서 참값 $p$와 무관하게 약 **1,068**명의 표본이면 충분하다. 전국 여론조사의 "$n \approx 1{,}000$" 어림법칙이 여기서 나왔다.
 
-    Note that this is *sampling* error only. Total error in real surveys also includes nonresponse bias, coverage bias, and measurement error — all of which can dwarf the $\pm 3$ pp sampling margin reported in the press.
+    이것은 *표집* 오차만이라는 점에 유의하라. 실제 조사의 총오차에는 무응답 편향, 포괄 편향, 측정오차도 포함되며, 언론이 보도하는 ±3%포인트의 표집 오차한계를 압도할 수 있다.

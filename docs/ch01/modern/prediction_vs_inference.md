@@ -1,64 +1,64 @@
-# Prediction vs Inference
+# 예측 대 추론
 
-Data analysis serves two fundamentally different goals: **predicting outcomes** as accurately as possible, and **understanding relationships** between variables. The distinction drives every methodological decision — what model to use, how to evaluate it, what assumptions matter, and how to interpret the result. Conflating the two is the single most common source of methodological confusion in applied work.
+자료 분석은 근본적으로 다른 두 목표에 봉사한다. 하나는 **결과를 최대한 정확히 예측하는 것**이고, 다른 하나는 **변수 사이의 관계를 이해하는 것**이다. 이 구분이 모든 방법론적 결정을 좌우한다. 어떤 모형을 쓸지, 어떻게 평가할지, 어떤 가정이 중요한지, 결과를 어떻게 해석할지가 모두 여기서 갈린다. 둘을 뒤섞는 것이 응용 실무에서 방법론적 혼란의 가장 흔한 원천이다.
 
-## Definition
+## 정의
 
-**Prediction** aims to estimate $\hat Y = \hat f(X)$ with minimum error on unseen data; the internal structure of $\hat f$ is secondary to its out-of-sample loss.
+**예측**은 보지 못한 자료에서 오차가 최소가 되도록 $\hat Y = \hat f(X)$를 추정하는 것을 목표로 한다. $\hat f$의 내부 구조는 표본 밖 손실에 비해 부차적이다.
 
-**Inference** aims to understand how $X$ relates to $Y$: which variables matter, the direction and magnitude of effects, whether relationships are causal, and how confident we are in our conclusions.
+**추론**은 $X$가 $Y$와 어떻게 관련되는지 이해하는 것을 목표로 한다. 어떤 변수가 중요한지, 효과의 방향과 크기는 어떤지, 그 관계가 인과적인지, 결론을 얼마나 확신할 수 있는지를 다룬다.
 
-| Aspect | Prediction | Inference |
+| 측면 | 예측 | 추론 |
 |---|---|---|
-| Goal | Minimize forecast loss | Understand relationships |
-| Model choice | Whichever predicts best | Interpretable model preferred |
-| Evaluation | Out-of-sample MSE / AUC | $p$-values, CIs, effect sizes |
-| Complexity | High complexity welcome | Simpler models preferred |
-| Validity threat | Overfitting | Model misspecification, confounding |
+| 목표 | 예측 손실 최소화 | 관계의 이해 |
+| 모형 선택 | 가장 잘 예측하는 것 | 해석 가능한 모형 선호 |
+| 평가 | 표본 밖 MSE / AUC | $p$-값, 신뢰구간, 효과 크기 |
+| 복잡도 | 높은 복잡도도 환영 | 더 단순한 모형 선호 |
+| 타당성 위협 | 과적합 | 모형 오지정, 교란 |
 
-## Explanation
+## 설명
 
-### Two error decompositions
+### 두 가지 오차 분해
 
-For **prediction** at a fixed input $x_0$,
+고정된 입력 $x_0$에서의 **예측**에 대해,
 
 $$
 \mathbb{E}[(Y - \hat f(x_0))^2] = \underbrace{\sigma^2}_{\text{noise}} + \underbrace{(\mathbb{E}[\hat f(x_0)] - f^*(x_0))^2}_{\text{bias}^2} + \underbrace{\mathrm{Var}(\hat f(x_0))}_{\text{variance}}
 $$
 
-Total prediction error is what the analyst minimizes — a more complex model trades bias for variance until the sum is minimized.
+분석가가 최소화하는 것은 총예측오차다. 더 복잡한 모형은 이 합이 최소가 될 때까지 편향을 분산과 맞바꾼다.
 
-For **inference** on a parameter $\theta$,
+모수 $\theta$에 대한 **추론**에서는
 
 $$
 \mathrm{MSE}(\hat \theta) = \mathrm{bias}(\hat \theta)^2 + \mathrm{Var}(\hat \theta)
 $$
 
-but the *interpretation* of $\hat\theta$ as estimating a specific population quantity also matters. A regression coefficient is a meaningful estimator of $\beta_j$ only if the model is correctly specified; a complex flexible estimator can have low MSE but no interpretable target parameter at all.
+이지만, $\hat\theta$가 특정한 모집단 양을 추정한다는 *해석* 또한 중요하다. 회귀계수가 $\beta_j$의 의미 있는 추정량이 되는 것은 모형이 옳게 지정되었을 때뿐이며, 복잡하고 유연한 추정량은 MSE는 작아도 해석 가능한 목표 모수가 아예 없을 수 있다.
 
-### Different evaluation criteria
+### 서로 다른 평가 기준
 
-- **Prediction**: evaluate on data the model has not seen. A simple held-out test set, $k$-fold cross-validation, or time-based splits for temporal data.
-- **Inference**: evaluate the validity of confidence intervals and $p$-values via coverage and Type I/II error rates, under explicit assumptions about the data-generating process. There is no equivalent of cross-validation for a $p$-value.
+- **예측**: 모형이 보지 못한 자료에서 평가한다. 단순히 떼어놓은 시험 집합, $k$-겹 교차검증, 시계열 자료의 경우 시간 기준 분할을 쓴다.
+- **추론**: 자료생성 과정에 대한 명시적 가정 아래에서 포함확률과 제1/2종 오류율을 통해 신뢰구간과 $p$-값의 타당성을 평가한다. $p$-값에 대해서는 교차검증에 해당하는 것이 없다.
 
-### Different complexity sweet spots
+### 서로 다른 복잡도의 최적점
 
-For prediction, the bias-variance trade-off allows complexity up to the point where adding parameters increases test MSE. Modern deep models work because at sufficient scale (data and parameters), they can be very complex without overfitting.
+예측에서는 편향–분산 절충에 따라, 모수를 더하면 시험 MSE가 늘어나기 시작하는 지점까지 복잡도를 허용한다. 현대의 심층 모형이 작동하는 이유는 (자료와 모수의) 규모가 충분할 때 과적합 없이도 아주 복잡해질 수 있기 때문이다.
 
-For inference, model complexity directly inflates variance of each individual parameter (multicollinearity, weak instruments) and threatens the interpretability of the resulting coefficients. Simpler models are usually preferred — even at the cost of some predictive accuracy — because their parameters can be defended as estimands of specific population quantities.
+추론에서는 모형 복잡도가 개별 모수의 분산을 직접 부풀리고(다중공선성, 약한 도구변수) 그 결과 계수의 해석가능성을 위협한다. 대체로 더 단순한 모형이 선호되는데, 예측 정확도를 다소 잃더라도 그 모수를 특정 모집단 양의 추정대상으로 옹호할 수 있기 때문이다.
 
-### Bridging methods
+### 다리를 놓는 방법들
 
-The boundary is not sharp:
+경계는 뚜렷하지 않다.
 
-- **LASSO** selects variables (inference-like sparsity) while optimizing prediction.
-- **SHAP / LIME** provide post-hoc interpretability for black-box predictions.
-- **Causal ML** (double/debiased ML, causal forests) targets unbiased causal estimands using flexible nuisance estimators.
-- **Conformal prediction** gives valid prediction intervals around arbitrary predictors without distributional assumptions.
+- **LASSO**는 예측을 최적화하면서 변수를 선택한다(추론적 성격의 희소성).
+- **SHAP / LIME**은 블랙박스 예측에 사후 해석가능성을 부여한다.
+- **인과 기계학습**(이중/편향제거 기계학습, 인과 포레스트)은 유연한 방해모수 추정량을 쓰면서 불편인 인과 추정대상을 겨냥한다.
+- **컨포멀 예측**은 분포 가정 없이 임의의 예측기 주위에 타당한 예측구간을 준다.
 
-These tools attempt to keep prediction's flexibility while restoring some of inference's interpretability or uncertainty quantification.
+이 도구들은 예측의 유연함을 지키면서 추론의 해석가능성이나 불확실성 정량화를 어느 정도 되찾으려는 시도다.
 
-## Examples
+## 예제
 
 ```python
 """Same data, two different analytical goals."""
@@ -91,86 +91,86 @@ mse_test = ((y[test_idx] - X[test_idx] @ b_train) ** 2).mean()
 print(f"\nPrediction: test MSE = {mse_test:.3f}")
 ```
 
-Notice: $x_3$ is correlated with $x_1$ but has no causal effect on $y$. The inference table will show $x_3$'s coefficient near zero with a wide standard error (correctly identifying it as not adding signal beyond $x_1$). The prediction model would be hurt by removing $x_3$ slightly (it carries some redundant information), but the *causal* conclusion is unchanged.
+여기서 $x_3$은 $x_1$과 상관되어 있지만 $y$에 인과효과가 없다는 점에 주목하라. 추론 표에서 $x_3$의 계수는 0에 가깝고 표준오차는 넓게 나타난다($x_1$ 너머의 신호를 더하지 않음을 올바르게 짚어낸다). 예측 모형은 $x_3$을 빼면 약간 나빠지겠지만(중복된 정보를 조금 담고 있으므로), *인과적* 결론은 달라지지 않는다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-For each research question, state whether the primary goal is **prediction** or **inference**, and explain the implications for method choice.
+**연습문제 1.**
+다음 각 연구 질문에서 주된 목표가 **예측**인지 **추론**인지 밝히고, 방법 선택에 어떤 함의가 있는지 설명하라.
 
-**(a)** Does a college degree cause higher lifetime earnings, controlling for ability and family background?
-**(b)** Which customers are most likely to churn in the next 30 days?
-**(c)** What is the effect of class size on student test scores?
-**(d)** How accurately can we forecast next month's regional electricity demand?
-**(e)** Does a particular gene variant increase Alzheimer's disease risk?
+**(a)** 능력과 가정 배경을 통제할 때 대학 학위가 평생 소득을 높이는 원인이 되는가?
+**(b)** 앞으로 30일 안에 이탈할 가능성이 가장 높은 고객은 누구인가?
+**(c)** 학급 규모가 학생의 시험 점수에 미치는 효과는 무엇인가?
+**(d)** 다음 달 지역 전력 수요를 얼마나 정확히 예측할 수 있는가?
+**(e)** 특정 유전 변이가 알츠하이머병 위험을 높이는가?
 
-??? success "Solution to Exercise 1"
-    (a) **Inference** — estimate and test a causal effect. Methods: regression with controls, instrumental variables, or natural experiments. Interpretability is essential.
-    (b) **Prediction** — identify at-risk customers accurately. Flexible algorithms (gradient-boosted trees, neural nets) are appropriate.
-    (c) **Inference** — causal estimand. Quasi-experimental methods (regression discontinuity, randomized class-size experiments) are needed.
-    (d) **Prediction** — minimize forecast error. ARIMA, gradient boosting on engineered time-series features, or neural forecasting models.
-    (e) **Inference** — estimate the effect size and its significance, controlling for population structure and other confounders. GWAS methodology with Bonferroni or FDR control.
-
----
-
-**Exercise 2.**
-A team trains an XGBoost model on observational health data and reports that its "feature importance" identifies blood pressure as the strongest predictor of stroke. Explain why this does *not* imply that lowering blood pressure causally reduces stroke risk.
-
-??? success "Solution to Exercise 2"
-    Feature importance in tree ensembles is a *predictive* notion — it measures how much a feature contributes to reducing in-sample loss across the trees. A feature can be highly predictive without being causal:
-
-    - **Confounding**: blood pressure and stroke share many common causes (age, obesity, diabetes); the model uses BP as a *proxy* for these underlying risks, not as a causal driver.
-    - **Reverse causation**: ongoing cardiovascular damage can raise BP, so BP is correlated with stroke partly through being a downstream marker.
-    - **Mediator**: even if there is a true causal pathway, BP may be partly mediating the effect of (say) sodium intake — interventions on BP may not reproduce the natural-history correlation.
-
-    The causal effect of BP-lowering interventions is established through *randomized trials* (e.g., SPRINT trial), not through observational feature importance. The trials confirm a real effect, but smaller than the observational association.
+??? success "연습문제 1 풀이"
+    (a) **추론** — 인과효과를 추정하고 검정한다. 방법: 통제변수를 포함한 회귀, 도구변수, 자연실험. 해석가능성이 필수적이다.
+    (b) **예측** — 위험 고객을 정확히 식별한다. 유연한 알고리즘(그래디언트 부스팅 트리, 신경망)이 적절하다.
+    (c) **추론** — 인과 추정대상. 준실험적 방법(회귀 불연속, 학급 규모 무작위 실험)이 필요하다.
+    (d) **예측** — 예측오차를 최소화한다. ARIMA, 가공된 시계열 특성에 대한 그래디언트 부스팅, 신경망 예측 모형 등.
+    (e) **추론** — 집단 구조와 다른 교란요인을 통제하면서 효과 크기와 유의성을 추정한다. 본페로니나 FDR 통제를 적용한 GWAS 방법론.
 
 ---
 
-**Exercise 3.**
-You build two models on the same training data: a linear regression with $R^2_{\text{train}} = 0.45$ and a random forest with $R^2_{\text{train}} = 0.95$. Why is it inappropriate to compare them on $R^2_{\text{train}}$? What is the appropriate comparison?
+**연습문제 2.**
+어떤 팀이 관찰적 건강 자료로 XGBoost 모형을 학습시킨 뒤, "변수 중요도"에서 혈압이 뇌졸중의 가장 강한 예측변수로 나타났다고 보고한다. 이것이 왜 혈압을 낮추면 인과적으로 뇌졸중 위험이 줄어든다는 뜻이 *아닌지* 설명하라.
 
-??? success "Solution to Exercise 3"
-    $R^2_{\text{train}}$ is a measure of *in-sample* fit. A sufficiently flexible model (random forest, deep tree) can fit the training data arbitrarily well by memorizing it — pushing $R^2_{\text{train}}$ toward 1 without any genuine signal. Linear regression cannot do this because of its strict parametric form, so its $R^2_{\text{train}}$ is bounded by the true signal.
+??? success "연습문제 2 풀이"
+    트리 앙상블의 변수 중요도는 *예측적* 개념이다. 어떤 특성이 여러 트리에 걸쳐 표본 내 손실을 줄이는 데 얼마나 기여했는지를 측정한다. 어떤 특성은 인과적이지 않으면서도 예측력이 아주 높을 수 있다.
 
-    The appropriate comparison is **$R^2$ on a held-out test set** (or equivalently, $k$-fold cross-validation $R^2$). If the random forest's test $R^2$ is also 0.95, it has genuinely captured real signal; if its test $R^2$ falls to 0.30 while training is still 0.95, it has overfit and is actually *worse* than the linear model out of sample.
+    - **교란**: 혈압과 뇌졸중은 많은 공통 원인(나이, 비만, 당뇨)을 공유한다. 모형은 혈압을 인과적 동인이 아니라 그 밑바탕 위험들의 *대리변수*로 쓴다.
+    - **역인과**: 진행 중인 심혈관 손상이 혈압을 높일 수 있으므로, 혈압은 부분적으로 하류 지표로서 뇌졸중과 상관된다.
+    - **매개**: 참된 인과 경로가 있더라도 혈압이 (예컨대) 나트륨 섭취의 효과를 일부 매개하고 있을 수 있으며, 혈압에 대한 개입이 자연 상태의 상관을 그대로 재현하지 않을 수 있다.
 
-    This is the same lesson as Exercise 6 of Chapter 1's `supervised.md`: the held-out test set is non-negotiable for honest evaluation.
-
----
-
-**Exercise 4.**
-Explain why a 95% confidence interval for a regression coefficient is meaningful only under explicit assumptions (correct functional form, no omitted confounders, correct error structure), while a 95% conformal prediction interval requires almost no assumptions. What is the price for this difference in assumptions?
-
-??? success "Solution to Exercise 4"
-    A regression coefficient's CI estimates the uncertainty of a specific population parameter (the slope, holding other variables fixed). If the linear model is wrong (omitted confounder, nonlinearity, heteroscedasticity), the CI may have wrong coverage — not because of sample variability but because of misspecification. Validity rests on the model.
-
-    A conformal prediction interval estimates "given $X = x$, where will $Y$ likely lie?" using only the assumption that training and test data are exchangeable. It is valid for *any* underlying model — even a black-box predictor.
-
-    **The price:** conformal intervals refer to the *distribution of $Y$ given $X$*, not to any structural parameter. They are wider than parametric CIs at any given coverage level because they make weaker assumptions. They cannot tell you the *effect* of an intervention — only the range of likely outcomes if the world continues to behave like the training data.
-
-    Use parametric CIs when you trust the model and want interpretation of structural parameters. Use conformal intervals when you only want valid prediction intervals from a flexible predictor.
+    혈압 강하 개입의 인과효과는 관찰적 변수 중요도가 아니라 *무작위 시험*(예: SPRINT 시험)으로 확립된다. 그 시험들은 실제 효과가 있음을 확인해 주지만, 그 크기는 관찰적 연관성보다 작다.
 
 ---
 
-**Exercise 5.**
-A retailer A/B-tests a recommendation algorithm and finds a 2% lift in revenue per user. They want to know (a) how much extra revenue to expect when they roll out, and (b) why the new algorithm works better. Discuss which question is prediction, which is inference, and the analyses each requires.
+**연습문제 3.**
+같은 훈련 자료로 두 모형을 만들었다. 하나는 $R^2_{\text{train}} = 0.45$인 선형회귀이고, 다른 하나는 $R^2_{\text{train}} = 0.95$인 랜덤 포레스트다. 왜 $R^2_{\text{train}}$으로 둘을 비교하는 것이 부적절한가? 적절한 비교는 무엇인가?
 
-??? success "Solution to Exercise 5"
-    **(a) Prediction:** what revenue uplift will result from rollout? This is a forecasting question. The A/B test gives an unbiased point estimate (+2%) and a confidence interval that already addresses sampling uncertainty. Additional considerations include **scale effects** (the test population may not be the same as the rollout population), **novelty effects** (a short test may overstate steady-state lift), and **compositional shifts** (the test was during a specific season). Bringing in time-series forecasting models that incorporate these dynamics is appropriate; the goal is accurate next-quarter revenue.
+??? success "연습문제 3 풀이"
+    $R^2_{\text{train}}$은 *표본 내* 적합도의 척도다. 충분히 유연한 모형(랜덤 포레스트, 깊은 트리)은 훈련 자료를 외움으로써 원하는 만큼 잘 적합할 수 있고, 진짜 신호가 없어도 $R^2_{\text{train}}$을 1에 가깝게 밀어 올린다. 선형회귀는 엄격한 모수적 형태 때문에 그럴 수 없으므로 그 $R^2_{\text{train}}$은 참된 신호에 의해 제한된다.
 
-    **(b) Inference (specifically, causal mechanism):** why does the new algorithm work better? The A/B test confirms the *effect* but not the *mechanism*. Possible explanations: better personalization, surfacing more long-tail products, exposing users to higher-margin items, reducing decision fatigue. To distinguish among these, ablation studies (turn off one component at a time, re-A/B test) and analysis of behavioral pathways (e.g., did the recommended-then-purchased rate increase or did unrelated browsing increase) are needed. This is closer to scientific inference about mechanism than to forecasting.
+    적절한 비교는 **떼어놓은 시험 집합에서의 $R^2$**(또는 동등하게 $k$-겹 교차검증 $R^2$)이다. 랜덤 포레스트의 시험 $R^2$도 0.95라면 진짜 신호를 포착한 것이고, 훈련은 0.95인데 시험이 0.30으로 떨어진다면 과적합한 것이며 표본 밖에서는 사실 선형모형보다 *못한* 것이다.
+
+    이는 제1장 `supervised.md`의 연습문제 6과 같은 교훈이다. 정직한 평가를 위해 떼어놓은 시험 집합은 타협할 수 없는 요소다.
 
 ---
 
-**Exercise 6.**
-Why are **assumptions about the data-generating process** central to inference but secondary to prediction? Use this to explain the practical paradox: complex flexible models often *fail* in inference settings even when they succeed in prediction.
+**연습문제 4.**
+회귀계수에 대한 95% 신뢰구간이 명시적 가정(옳은 함수 형태, 누락된 교란요인 없음, 옳은 오차 구조) 아래에서만 의미를 갖는 반면, 95% 컨포멀 예측구간은 사실상 아무 가정도 요구하지 않는 이유를 설명하라. 이 가정 차이의 대가는 무엇인가?
 
-??? success "Solution to Exercise 6"
-    Inference targets a quantity (a parameter $\theta$, a treatment effect, a marginal effect) that is defined *only with reference to a data-generating process*. To say "the effect of $X$ on $Y$ controlling for $Z$" presupposes a model in which such an effect exists. The estimator's validity rests on the model being approximately correct.
+??? success "연습문제 4 풀이"
+    회귀계수의 신뢰구간은 특정한 모집단 모수(다른 변수를 고정했을 때의 기울기)의 불확실성을 추정한다. 선형모형이 틀렸다면(교란요인 누락, 비선형성, 이분산성) 신뢰구간의 포함확률이 어긋날 수 있다. 표본 변동성 때문이 아니라 모형 오지정 때문이다. 타당성이 모형에 달려 있는 것이다.
 
-    Prediction targets future $Y$ values directly, without defining a structural parameter. A model that produces accurate forecasts is useful even if it has no interpretable structure.
+    컨포멀 예측구간은 훈련 자료와 시험 자료가 교환 가능하다는 가정만으로 "$X = x$일 때 $Y$가 어디쯤 있을까?"를 추정한다. 블랙박스 예측기를 포함해 *어떤* 밑바탕 모형에 대해서도 타당하다.
 
-    **The paradox:** complex flexible models can predict well because they capture rich patterns in $(X, Y)$, regardless of whether those patterns are causal. But "rich pattern" includes everything — confounded associations, reverse causality, sample-selection artifacts — that *invalidates* inference. A neural network might predict heart disease perfectly from a thousand observational features and yet provide zero guidance on which feature, when intervened upon, would reduce disease. The model has high prediction accuracy and zero causal validity.
+    **대가:** 컨포멀 구간은 어떤 구조 모수가 아니라 *$X$가 주어졌을 때 $Y$의 분포*를 가리킨다. 가정이 약한 만큼 같은 포함확률에서 모수적 신뢰구간보다 넓다. 개입의 *효과*는 알려주지 못하며, 세상이 훈련 자료처럼 계속 움직인다면 나올 법한 결과의 범위만 알려준다.
 
-    The lesson: choose method based on the *question*, not on what's currently fashionable. Prediction tools and inference tools answer different questions.
+    모형을 신뢰하고 구조 모수의 해석을 원할 때는 모수적 신뢰구간을 쓰고, 유연한 예측기로부터 타당한 예측구간만 원할 때는 컨포멀 구간을 쓴다.
+
+---
+
+**연습문제 5.**
+어떤 소매업체가 추천 알고리즘을 A/B 테스트해 사용자당 매출이 2% 상승함을 확인했다. 이제 (a) 전면 도입 시 추가 매출이 얼마나 될지, (b) 새 알고리즘이 왜 더 잘 작동하는지 알고 싶어 한다. 어느 질문이 예측이고 어느 것이 추론인지, 각각 어떤 분석이 필요한지 논하라.
+
+??? success "연습문제 5 풀이"
+    **(a) 예측:** 전면 도입하면 매출이 얼마나 오를까? 이것은 예측 문제다. A/B 테스트가 불편인 점추정값(+2%)과 표집 불확실성을 이미 반영한 신뢰구간을 준다. 추가로 고려할 것은 **규모 효과**(테스트 모집단이 도입 대상 모집단과 다를 수 있음), **신기성 효과**(짧은 테스트가 정상 상태의 상승분을 과장할 수 있음), **구성 변화**(테스트가 특정 시즌에 이루어졌음)다. 이런 동학을 반영한 시계열 예측 모형을 도입하는 것이 적절하며, 목표는 다음 분기 매출을 정확히 맞히는 것이다.
+
+    **(b) 추론(구체적으로는 인과 기제):** 새 알고리즘은 왜 더 잘 작동할까? A/B 테스트는 *효과*를 확인해 주지만 *기제*는 알려주지 않는다. 가능한 설명으로는 더 나은 개인화, 롱테일 상품의 노출 증가, 마진이 높은 상품에의 노출, 결정 피로 감소 등이 있다. 이들을 구분하려면 제거 실험(구성요소를 하나씩 꺼가며 다시 A/B 테스트)과 행동 경로 분석(추천 후 구매 비율이 올랐는지, 아니면 무관한 탐색이 늘었는지)이 필요하다. 이것은 예측이라기보다 기제에 대한 과학적 추론에 가깝다.
+
+---
+
+**연습문제 6.**
+**자료생성 과정에 대한 가정**이 추론에서는 핵심이지만 예측에서는 부차적인 이유는 무엇인가? 이를 이용해, 복잡하고 유연한 모형이 예측에서는 성공하면서도 추론 상황에서는 흔히 *실패하는* 실무적 역설을 설명하라.
+
+??? success "연습문제 6 풀이"
+    추론은 *자료생성 과정을 전제로 해서만* 정의되는 양(모수 $\theta$, 처리효과, 한계효과)을 겨냥한다. "$Z$를 통제했을 때 $X$가 $Y$에 미치는 효과"라고 말하려면 그런 효과가 존재하는 모형을 전제해야 한다. 추정량의 타당성은 그 모형이 대체로 옳다는 데 달려 있다.
+
+    예측은 구조 모수를 정의하지 않고 미래의 $Y$ 값을 직접 겨냥한다. 정확한 예측을 내놓는 모형은 해석 가능한 구조가 전혀 없어도 유용하다.
+
+    **역설:** 복잡하고 유연한 모형은 그 패턴이 인과적이든 아니든 $(X, Y)$의 풍부한 패턴을 포착하기 때문에 잘 예측한다. 그런데 "풍부한 패턴"에는 교란된 연관성, 역인과, 표본 선택 인공물 등 추론을 *무효로 만드는* 것들이 모두 포함된다. 어떤 신경망이 천 개의 관찰적 특성으로 심장질환을 완벽히 예측하면서도, 어느 특성에 개입해야 질병이 줄어드는지에 대해서는 아무 지침도 주지 못할 수 있다. 그 모형은 예측 정확도는 높고 인과적 타당성은 0이다.
+
+    교훈은 이렇다. 지금 유행하는 것이 아니라 *질문*에 따라 방법을 골라라. 예측 도구와 추론 도구는 서로 다른 질문에 답한다.

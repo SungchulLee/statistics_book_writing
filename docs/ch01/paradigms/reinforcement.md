@@ -1,68 +1,68 @@
-# Reinforcement Learning (Sequential Decisions)
+# 강화학습 (순차적 의사결정)
 
-## Overview
+## 개요
 
-In **reinforcement learning (RL)**, an **agent** learns to make decisions by interacting with an **environment**. The agent receives **rewards** or **penalties** based on its actions and adjusts its behavior over time to maximize cumulative rewards. Unlike supervised learning, there are no labeled input–output pairs; the agent must discover which actions lead to the best outcomes through trial and error.
+**강화학습(RL)** 에서는 **에이전트**가 **환경**과 상호작용하며 의사결정을 배운다. 에이전트는 자신의 행동에 따라 **보상**이나 **벌점**을 받고, 누적 보상을 최대화하도록 시간에 걸쳐 행동을 조정한다. 지도학습과 달리 레이블이 붙은 입력–출력 쌍이 없으며, 에이전트는 시행착오를 통해 어떤 행동이 가장 좋은 결과로 이어지는지 스스로 발견해야 한다.
 
-## Key Characteristics
+## 주요 특징
 
-- **Agent–environment interaction**: The agent takes actions, the environment responds with a new state and a reward signal.
-- **Sequential decision-making**: Actions affect not only immediate rewards but also future states and future rewards.
-- **Exploration vs. exploitation**: The agent must balance trying new actions (exploration) with leveraging what it already knows works (exploitation).
-- **Delayed rewards**: The consequences of an action may not be immediately apparent; the agent must learn to associate current actions with future outcomes.
+- **에이전트–환경 상호작용**: 에이전트가 행동을 취하면 환경이 새로운 상태와 보상 신호로 응답한다.
+- **순차적 의사결정**: 행동은 즉각적인 보상뿐 아니라 미래의 상태와 미래의 보상에도 영향을 준다.
+- **탐색 대 활용**: 에이전트는 새로운 행동을 시도하는 것(탐색)과 이미 좋다고 아는 것을 활용하는 것(활용) 사이에서 균형을 잡아야 한다.
+- **지연된 보상**: 어떤 행동의 결과가 즉시 드러나지 않을 수 있으므로, 에이전트는 현재의 행동을 미래의 결과와 연결짓는 법을 배워야 한다.
 
-## The RL Framework
+## 강화학습의 틀
 
-At each time step $t$, the agent:
+각 시점 $t$에서 에이전트는:
 
-1. Observes the current **state** $s_t$.
-2. Chooses an **action** $a_t$ according to its **policy** $\pi$.
-3. Receives a **reward** $r_t$ and transitions to a new state $s_{t+1}$.
+1. 현재 **상태** $s_t$를 관측한다.
+2. 자신의 **정책** $\pi$에 따라 **행동** $a_t$를 선택한다.
+3. **보상** $r_t$를 받고 새로운 상태 $s_{t+1}$로 전이한다.
 
-The agent's goal is to learn a policy $\pi^*$ that maximizes the expected cumulative (discounted) reward:
+에이전트의 목표는 기대 누적(할인) 보상을 최대화하는 정책 $\pi^*$를 학습하는 것이다.
 
 $$
 \pi^* = \arg\max_\pi \; E\left[\sum_{t=0}^{\infty} \gamma^t \, r_t \right]
 $$
 
-where $\gamma \in [0, 1)$ is the **discount factor** that controls how much the agent values future rewards relative to immediate ones.
+여기서 $\gamma \in [0, 1)$는 미래 보상을 즉각적인 보상에 비해 얼마나 중요하게 여길지 조절하는 **할인율**이다.
 
 ```
     ┌─────────┐
-    │  Agent  │
-    │  (π)    │
+    │  에이전트  │
+    │   (π)    │
     └──┬───▲──┘
- action│   │ state, reward
+   행동 │   │ 상태, 보상
        │   │
     ┌──▼───┴──┐
-    │Environment│
+    │   환경   │
     └─────────┘
 ```
 
-## Comparison with Other Paradigms
+## 다른 패러다임과의 비교
 
-| Aspect | Supervised Learning | Unsupervised Learning | Reinforcement Learning |
+| 측면 | 지도학습 | 비지도학습 | 강화학습 |
 |---|---|---|---|
-| **Feedback** | Correct label for each input | No labels | Reward signal (delayed, scalar) |
-| **Goal** | Learn input→output mapping | Discover structure | Maximize cumulative reward |
-| **Data** | Fixed dataset | Fixed dataset | Generated through interaction |
-| **Temporal aspect** | Usually i.i.d. samples | Usually i.i.d. samples | Sequential, non-i.i.d. |
+| **피드백** | 입력마다 정답 레이블 | 레이블 없음 | 보상 신호(지연된 스칼라) |
+| **목표** | 입력→출력 사상 학습 | 구조 발견 | 누적 보상 최대화 |
+| **자료** | 고정된 자료 | 고정된 자료 | 상호작용으로 생성됨 |
+| **시간적 측면** | 대개 i.i.d. 표본 | 대개 i.i.d. 표본 | 순차적, 비 i.i.d. |
 
-## Examples
+## 예
 
-**Game playing:** Teaching an agent to play chess, Go, or Atari games. AlphaGo famously learned to defeat the world champion in Go through self-play reinforcement learning.
+**게임 플레이:** 체스, 바둑, 아타리 게임을 하도록 에이전트를 가르치기. 알파고는 자가 대국 강화학습으로 바둑 세계 챔피언을 이긴 것으로 유명하다.
 
-**Robotics:** Training a robot to navigate a maze by rewarding it for getting closer to the exit and penalizing it for hitting walls.
+**로보틱스:** 출구에 가까워지면 보상하고 벽에 부딪히면 벌점을 주어 로봇에게 미로 탐색을 훈련시키기.
 
-**Autonomous driving:** An RL agent learns to control a vehicle by receiving rewards for safe driving and penalties for collisions or traffic violations.
+**자율주행:** 안전 운전에는 보상을, 충돌이나 교통법규 위반에는 벌점을 받으며 강화학습 에이전트가 차량 제어를 배운다.
 
-**Finance applications:**
+**금융 응용:**
 
-- **Portfolio management:** An agent allocates capital across assets, receiving rewards proportional to risk-adjusted returns.
-- **Order execution:** An agent learns to split a large order into smaller trades to minimize market impact.
-- **Market making:** An agent sets bid and ask prices to maximize profit while managing inventory risk.
+- **포트폴리오 운용:** 에이전트가 자산에 자본을 배분하고 위험조정 수익률에 비례하는 보상을 받는다.
+- **주문 집행:** 시장 충격을 최소화하도록 큰 주문을 작은 거래로 쪼개는 법을 에이전트가 배운다.
+- **시장 조성:** 재고 위험을 관리하면서 이익을 최대화하도록 에이전트가 매수·매도 호가를 설정한다.
 
-## Simple Example: Multi-Armed Bandit
+## 간단한 예: 다중 슬롯머신
 
 ```python
 import numpy as np
@@ -97,28 +97,28 @@ print(f"Average reward:   {np.mean(rewards):.2f}")
 print(f"Best arm chosen:  {np.argmax(N)} (pulled {int(N[np.argmax(N)])} times)")
 ```
 
-## Key Takeaways
+## 핵심 요약
 
-- Reinforcement learning is designed for **sequential decision-making** problems where an agent learns from interaction with an environment.
-- The agent balances **exploration** (trying new actions) and **exploitation** (using known good actions).
-- RL has achieved remarkable results in games, robotics, and is increasingly applied in quantitative finance for portfolio optimization, execution, and trading.
-- Unlike supervised and unsupervised learning, RL generates its own training data through interaction, making it suitable for dynamic, evolving environments.
+- 강화학습은 에이전트가 환경과의 상호작용에서 배우는 **순차적 의사결정** 문제를 위해 만들어졌다.
+- 에이전트는 **탐색**(새 행동 시도)과 **활용**(좋다고 아는 행동 사용) 사이에서 균형을 잡는다.
+- 강화학습은 게임과 로보틱스에서 놀라운 성과를 거두었고, 계량금융에서도 포트폴리오 최적화, 주문 집행, 트레이딩에 점점 더 많이 적용되고 있다.
+- 지도학습·비지도학습과 달리 강화학습은 상호작용을 통해 자신의 훈련 자료를 스스로 만들어내므로, 동적이고 변화하는 환경에 적합하다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-An agent uses an epsilon-greedy strategy with $\epsilon = 0.1$ and has estimated action values $Q = [2.0, 3.5, 1.0, 4.0]$ for a 4-armed bandit. On the next step, what is the probability that the agent selects arm 4 (the greedy choice)? What is the probability of selecting arm 2?
+**연습문제 1.**
+어떤 에이전트가 $\epsilon = 0.1$인 엡실론-탐욕 전략을 쓰며, 4개짜리 슬롯머신에 대해 추정된 행동가치가 $Q = [2.0, 3.5, 1.0, 4.0]$이다. 다음 단계에서 에이전트가 4번 팔(탐욕적 선택)을 고를 확률은 얼마인가? 2번 팔을 고를 확률은?
 
-??? success "Solution to Exercise 1"
-    With probability $1 - \epsilon = 0.9$ the agent selects the greedy arm (the one with the highest $Q$-value, which is arm 4 with $Q = 4.0$). With probability $\epsilon = 0.1$ the agent explores uniformly at random among all 4 arms.
+??? success "연습문제 1 풀이"
+    확률 $1 - \epsilon = 0.9$로 에이전트는 탐욕적 팔($Q$ 값이 가장 높은 팔, 즉 $Q = 4.0$인 4번)을 선택한다. 확률 $\epsilon = 0.1$로는 4개 팔 중에서 균등하게 무작위로 탐색한다.
 
-    The probability of selecting arm 4 is:
+    4번 팔을 선택할 확률은
 
     $$
     P(\text{arm 4}) = (1 - \epsilon) + \frac{\epsilon}{4} = 0.9 + 0.025 = 0.925
     $$
 
-    The probability of selecting arm 2 (which is not the greedy choice) is:
+    탐욕적 선택이 아닌 2번 팔을 선택할 확률은
 
     $$
     P(\text{arm 2}) = \frac{\epsilon}{4} = \frac{0.1}{4} = 0.025
@@ -126,75 +126,75 @@ An agent uses an epsilon-greedy strategy with $\epsilon = 0.1$ and has estimated
 
 ---
 
-**Exercise 2.**
-Explain the exploration-exploitation tradeoff in the context of a restaurant recommendation system. Give one concrete scenario where pure exploitation fails and one where pure exploration is wasteful.
+**연습문제 2.**
+음식점 추천 시스템의 맥락에서 탐색–활용 절충을 설명하라. 순수한 활용이 실패하는 구체적 상황 하나와 순수한 탐색이 낭비인 상황 하나를 제시하라.
 
-??? success "Solution to Exercise 2"
-    In a restaurant recommendation system, **exploitation** means always recommending the restaurant the user has rated highest so far, while **exploration** means recommending a restaurant the user has not tried or has limited experience with.
+??? success "연습문제 2 풀이"
+    음식점 추천 시스템에서 **활용**은 지금까지 사용자가 가장 높게 평가한 음식점을 계속 추천하는 것이고, **탐색**은 사용자가 가보지 않았거나 경험이 적은 음식점을 추천하는 것이다.
 
-    **Pure exploitation fails** when the user has only tried a few restaurants early on and rated a mediocre one highest by chance. The system would keep recommending that mediocre restaurant forever, never discovering a much better option nearby.
+    **순수한 활용이 실패하는 경우:** 사용자가 초기에 몇 곳만 가봤는데 우연히 그저 그런 음식점을 가장 높게 평가한 상황이다. 시스템은 그 평범한 음식점을 영원히 계속 추천하며, 근처의 훨씬 좋은 선택지를 결코 발견하지 못한다.
 
-    **Pure exploration is wasteful** because the system would keep recommending random untried restaurants even after the user has clearly established preferences. If the user loves Italian food and has given high ratings to several Italian restaurants, pure exploration would still send them to random cuisines, leading to many unsatisfying recommendations.
+    **순수한 탐색이 낭비인 경우:** 사용자의 선호가 이미 분명해진 뒤에도 시스템이 가보지 않은 음식점을 계속 무작위로 추천하는 상황이다. 사용자가 이탈리아 음식을 좋아해서 여러 이탈리아 음식점에 높은 평점을 주었는데도 순수한 탐색은 계속 무작위 요리를 권해, 만족스럽지 않은 추천이 잔뜩 쌓인다.
 
-    An effective system must balance the two: mostly recommending known good options while occasionally suggesting something new to refine its understanding of the user's preferences.
+    효과적인 시스템은 둘의 균형을 잡아야 한다. 대개는 좋다고 알려진 선택지를 추천하되, 이따금 새로운 것을 제안해 사용자 선호에 대한 이해를 다듬는다.
 
 ---
 
-**Exercise 3.**
-In the discounted reward formulation, the agent maximizes $\sum_{t=0}^{\infty} \gamma^t r_t$. If the discount factor is $\gamma = 0.9$ and the agent receives a constant reward of $r = 1$ at every time step, what is the total discounted return? What happens as $\gamma \to 1$?
+**연습문제 3.**
+할인 보상 정식화에서 에이전트는 $\sum_{t=0}^{\infty} \gamma^t r_t$를 최대화한다. 할인율이 $\gamma = 0.9$이고 에이전트가 매 시점 일정한 보상 $r = 1$을 받는다면 총 할인 수익은 얼마인가? $\gamma \to 1$이면 어떻게 되는가?
 
-??? success "Solution to Exercise 3"
-    The total discounted return is a geometric series:
+??? success "연습문제 3 풀이"
+    총 할인 수익은 기하급수다.
 
     $$
     \sum_{t=0}^{\infty} \gamma^t \cdot 1 = \frac{1}{1 - \gamma} = \frac{1}{1 - 0.9} = 10
     $$
 
-    As $\gamma \to 1$, the sum $\frac{1}{1-\gamma} \to \infty$. This means the agent values future rewards almost as much as immediate rewards, and the total return diverges. In practice, $\gamma < 1$ is required for the infinite-horizon formulation to be well-defined (finite total return). A higher $\gamma$ makes the agent more "far-sighted," while a lower $\gamma$ makes it prioritize short-term rewards.
+    $\gamma \to 1$이면 합 $\frac{1}{1-\gamma} \to \infty$가 된다. 이는 에이전트가 미래 보상을 즉각적인 보상과 거의 같게 여긴다는 뜻이며, 총 수익이 발산한다. 실무에서는 무한 지평 정식화가 잘 정의되려면(총 수익이 유한하려면) $\gamma < 1$이 필요하다. $\gamma$가 클수록 에이전트가 더 "멀리 보고", 작을수록 단기 보상을 우선한다.
 
 ---
 
-**Exercise 4.**
-Compare reinforcement learning, supervised learning, and unsupervised learning across the following dimensions: (a) the type of feedback available, (b) the role of temporal ordering in the data, and (c) the goal of the learning algorithm.
+**연습문제 4.**
+강화학습, 지도학습, 비지도학습을 다음 차원에서 비교하라. (a) 사용할 수 있는 피드백의 유형, (b) 자료에서 시간 순서의 역할, (c) 학습 알고리즘의 목표.
 
-??? success "Solution to Exercise 4"
-    **(a) Type of feedback:**
+??? success "연습문제 4 풀이"
+    **(a) 피드백의 유형:**
 
-    - **Supervised learning** receives explicit correct labels for each input (e.g., "this image is a cat").
-    - **Unsupervised learning** receives no feedback at all — only the raw data.
-    - **Reinforcement learning** receives a scalar reward signal that is often delayed and does not directly indicate the correct action.
+    - **지도학습**은 각 입력에 대해 명시적인 정답 레이블을 받는다(예: "이 이미지는 고양이다").
+    - **비지도학습**은 아무 피드백도 받지 않고 원자료만 받는다.
+    - **강화학습**은 흔히 지연되고 올바른 행동을 직접 알려주지도 않는 스칼라 보상 신호를 받는다.
 
-    **(b) Role of temporal ordering:**
+    **(b) 시간 순서의 역할:**
 
-    - **Supervised and unsupervised learning** typically assume data points are independent and identically distributed (i.i.d.) — the order does not matter.
-    - **Reinforcement learning** is inherently sequential: the agent's current action affects future states and rewards, creating temporal dependencies.
+    - **지도학습과 비지도학습**은 보통 자료점이 독립이고 동일한 분포를 따른다고(i.i.d.) 가정하며, 순서는 중요하지 않다.
+    - **강화학습**은 본질적으로 순차적이다. 에이전트의 현재 행동이 미래의 상태와 보상에 영향을 주어 시간적 의존이 생긴다.
 
-    **(c) Goal:**
+    **(c) 목표:**
 
-    - **Supervised learning** aims to learn a mapping from inputs to outputs that generalizes to unseen data.
-    - **Unsupervised learning** aims to discover hidden structure (clusters, latent factors, density) in the data.
-    - **Reinforcement learning** aims to learn a policy that maximizes cumulative reward over time through interaction with the environment.
-
----
-
-**Exercise 5.**
-The **multi-armed bandit** is a special case of RL where the state never changes. State the regret of an algorithm that always picks the empirically best arm after one initial pull of each (no further exploration). When does this fail?
-
-??? success "Solution to Exercise 5"
-    "Pick the empirically best arm after one pull each" almost surely fails. After one trial each, the empirical mean of each arm has variance comparable to the reward noise itself; with positive probability, a suboptimal arm has the highest sample mean. The algorithm then commits to that arm forever, accumulating linear regret $T \cdot (\mu^* - \mu_{\text{chosen}})$ where $T$ is the horizon.
-
-    A correct algorithm explores enough that the empirical mean concentrates around the true mean. The $\varepsilon$-greedy algorithm achieves $O(T)$ regret with constant $\varepsilon$ (still linear, but better), and the optimal **UCB1** (upper confidence bound) algorithm achieves $O(\log T)$ regret — exponentially better. The asymptotic lower bound is also $\Omega(\log T)$ (Lai & Robbins, 1985), so UCB is optimal up to constants.
+    - **지도학습**은 보지 못한 자료로 일반화되는 입력–출력 사상을 학습하는 것을 목표로 한다.
+    - **비지도학습**은 자료에 숨은 구조(군집, 잠재 요인, 밀도)를 발견하는 것을 목표로 한다.
+    - **강화학습**은 환경과의 상호작용을 통해 시간에 걸친 누적 보상을 최대화하는 정책을 학습하는 것을 목표로 한다.
 
 ---
 
-**Exercise 6.**
-A trading agent is trained on historical market data using reinforcement learning. List three distinct ways this can fail when the agent is deployed, even if it performs well in backtest.
+**연습문제 5.**
+**다중 슬롯머신**은 상태가 결코 변하지 않는 강화학습의 특수한 경우다. 각 팔을 한 번씩만 당겨 본 뒤 경험적으로 가장 좋은 팔을 계속 고르는(더 이상 탐색하지 않는) 알고리즘의 후회를 진술하라. 이 방법은 언제 실패하는가?
 
-??? success "Solution to Exercise 6"
-    **Distribution shift / non-stationarity:** market regimes change. The patterns the agent learned (volatility, momentum, mean reversion) may not hold in the deployed period. RL agents trained on a single regime are particularly brittle when conditions shift.
+??? success "연습문제 5 풀이"
+    "각 팔을 한 번씩 당긴 뒤 경험적으로 가장 좋은 팔을 고른다"는 방법은 거의 확실히 실패한다. 각 팔을 한 번씩 시도한 뒤 각 팔의 경험적 평균은 보상 잡음 자체와 비슷한 분산을 가지므로, 양의 확률로 최적이 아닌 팔이 가장 높은 표본평균을 갖게 된다. 그러면 알고리즘은 그 팔에 영원히 매이고, 지평을 $T$라 할 때 $T \cdot (\mu^* - \mu_{\text{chosen}})$의 선형 후회를 누적한다.
 
-    **Market impact:** in backtest the agent's trades are infinitesimal — historical prices are taken as given. Deployed at scale, the agent's own orders move the price against itself (slippage). The estimated reward function ignored this and the policy chooses sizes that no longer make sense.
+    올바른 알고리즘은 경험적 평균이 참 평균 주위로 집중될 만큼 충분히 탐색한다. $\varepsilon$-탐욕 알고리즘은 $\varepsilon$이 상수일 때 $O(T)$의 후회를 달성하고(여전히 선형이지만 낫다), 최적인 **UCB1**(상한 신뢰경계) 알고리즘은 $O(\log T)$의 후회를 달성해 지수적으로 더 낫다. 점근적 하한도 $\Omega(\log T)$이므로(Lai & Robbins, 1985) UCB는 상수 차이를 빼면 최적이다.
 
-    **Overfitting to the backtest path:** RL on a single historical path is essentially overfitting one realization of a stochastic process. The policy may exploit specific sequences ("on day 17 of the test set, momentum kicked in") that will not recur. Defenses include training on multiple bootstrap-resampled paths, walk-forward validation, and conservative ensembling.
+---
 
-    Additional valid answers: **action constraints** that were ignored in simulation but matter in production (margin limits, regulatory holding periods); **adversarial agents** (other algorithmic traders adapt to the agent's behavior); **operational issues** (latency, data quality, order failure rates).
+**연습문제 6.**
+어떤 트레이딩 에이전트가 강화학습으로 과거 시장 자료에서 훈련되었다. 백테스트에서 성과가 좋았더라도 실제 배포 시 실패할 수 있는 서로 다른 경로 세 가지를 제시하라.
+
+??? success "연습문제 6 풀이"
+    **분포 이동 / 비정상성:** 시장 국면은 바뀐다. 에이전트가 학습한 패턴(변동성, 모멘텀, 평균회귀)이 배포 기간에는 성립하지 않을 수 있다. 단일 국면에서 훈련된 강화학습 에이전트는 조건이 바뀔 때 특히 취약하다.
+
+    **시장 충격:** 백테스트에서 에이전트의 거래는 무한소로 취급되어 과거 가격이 주어진 것으로 여겨진다. 실제로 규모 있게 배포되면 에이전트 자신의 주문이 가격을 불리하게 움직인다(슬리피지). 추정된 보상함수가 이를 무시했으므로 정책이 더 이상 타당하지 않은 주문 크기를 고른다.
+
+    **백테스트 경로에 대한 과적합:** 단일한 과거 경로에서 강화학습을 하는 것은 본질적으로 확률과정의 한 실현에 과적합하는 것이다. 정책이 다시 나타나지 않을 특정 순서("시험 집합의 17일째에 모멘텀이 발동했다")를 이용할 수 있다. 대응책으로는 부트스트랩으로 재표집한 여러 경로에서 훈련하기, 워크포워드 검증, 보수적인 앙상블이 있다.
+
+    그 밖에 타당한 답: 시뮬레이션에서는 무시되었지만 실제에서는 중요한 **행동 제약**(증거금 한도, 규제상 보유 기간), **적대적 에이전트**(다른 알고리즘 트레이더가 이 에이전트의 행동에 적응함), **운영 문제**(지연, 자료 품질, 주문 실패율).

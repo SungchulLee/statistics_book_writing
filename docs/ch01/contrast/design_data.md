@@ -1,136 +1,136 @@
-# Design Your Data Collection (Classical Approach)
+# 자료 수집을 설계하라 (고전적 접근)
 
-## Overview
+## 개요
 
-The **classical approach** to data analysis begins with a clear research question and then designs a data collection strategy tailored to answer it. The data does not yet exist when the study is planned—the researcher controls *how* it is gathered, *from whom*, and *under what conditions*. This deliberate design is the hallmark of traditional statistical practice.
+자료 분석의 **고전적 접근**은 명확한 연구 질문에서 출발한 다음, 그 질문에 답하도록 맞춘 자료 수집 전략을 설계한다. 연구를 계획하는 시점에 자료는 아직 존재하지 않는다. 연구자가 자료를 *어떻게*, *누구에게서*, *어떤 조건에서* 모을지를 통제한다. 이 의도적인 설계가 전통적 통계 실무의 특징이다.
 
-## Core Principle
+## 핵심 원칙
 
-> **Design first, collect second, analyze third.**
+> **먼저 설계하고, 다음에 수집하고, 마지막에 분석한다.**
 
-The classical approach treats data collection as a **designed experiment** or a **carefully structured survey**. By controlling the data-generation process, the researcher can make strong claims about causality, quantify uncertainty precisely, and minimize bias.
+고전적 접근은 자료 수집을 **설계된 실험** 또는 **세심하게 구조화된 조사**로 다룬다. 자료생성 과정을 통제함으로써 연구자는 인과성에 대해 강한 주장을 하고, 불확실성을 정밀하게 정량화하며, 편향을 최소화할 수 있다.
 
-## Three Classical Study Types
+## 세 가지 고전적 연구 유형
 
-### 1. Observational Studies
+### 1. 관찰연구
 
-The researcher observes and records data **without intervention**. Useful when manipulation is impractical or unethical, but limited to identifying associations rather than causal relationships.
+연구자가 **개입 없이** 자료를 관찰하고 기록한다. 조작이 비현실적이거나 비윤리적일 때 유용하지만, 인과관계가 아니라 연관성을 밝히는 데 그친다.
 
-### 2. Controlled Experiments
+### 2. 통제실험
 
-The researcher **manipulates** one or more variables and **randomly assigns** subjects to groups. The gold standard for establishing causality because randomization balances known and unknown confounders.
+연구자가 하나 이상의 변수를 **조작**하고 대상을 집단에 **무작위 배정**한다. 무작위화가 알려진 교란요인과 알려지지 않은 교란요인을 함께 균형 잡기 때문에 인과성을 확립하는 표준이다.
 
-### 3. Sample Surveys
+### 3. 표본조사
 
-The researcher selects a **representative sample** from a population and collects data through structured questionnaires or interviews. Enables inference about the population when studying every member is infeasible.
+연구자가 모집단에서 **대표성 있는 표본**을 선택하고 구조화된 설문이나 면접으로 자료를 수집한다. 모든 구성원을 조사하는 것이 불가능할 때 모집단에 대한 추론을 가능하게 한다.
 
-## Strengths of the Classical Approach
+## 고전적 접근의 강점
 
-- **Causal inference**: Randomized experiments can establish cause-and-effect relationships.
-- **Known uncertainty**: Because the sampling mechanism is designed, standard errors, confidence intervals, and p-values have clear probabilistic interpretations.
-- **Bias control**: Random sampling and random assignment directly address selection bias and confounding.
-- **Reproducibility**: A well-documented design can be replicated by other researchers.
+- **인과추론**: 무작위 실험은 원인–결과 관계를 확립할 수 있다.
+- **알려진 불확실성**: 표집 기제가 설계되었기 때문에 표준오차, 신뢰구간, p-값이 명확한 확률적 해석을 갖는다.
+- **편향 통제**: 무작위 표집과 무작위 배정이 선택편향과 교란을 직접 다룬다.
+- **재현가능성**: 잘 문서화된 설계는 다른 연구자가 반복할 수 있다.
 
-## When This Approach Works Best
+## 이 접근이 가장 잘 맞을 때
 
-- The research question is specific and well-defined.
-- It is feasible to design and execute a study (time, budget, ethics).
-- The population of interest is accessible for sampling or experimentation.
-- Causal claims are needed (e.g., clinical trials, A/B tests, policy evaluations).
+- 연구 질문이 구체적이고 잘 정의되어 있다.
+- 연구를 설계하고 실행하는 것이 (시간, 예산, 윤리 면에서) 가능하다.
+- 관심 모집단에 표집이나 실험으로 접근할 수 있다.
+- 인과적 주장이 필요하다(예: 임상시험, A/B 테스트, 정책 평가).
 
-## Limitations
+## 한계
 
-- **Cost and time**: Designing and running experiments or large-scale surveys is expensive and slow.
-- **Ethical constraints**: Many important questions cannot be studied experimentally (e.g., the effect of poverty on health).
-- **Scope**: The classical approach works best for structured, well-defined problems; it is less suited to open-ended exploration of massive, unstructured datasets.
-- **Generalizability**: Laboratory experiments may not reflect real-world conditions.
+- **비용과 시간**: 실험이나 대규모 조사를 설계하고 수행하는 것은 비싸고 느리다.
+- **윤리적 제약**: 중요한 질문 중 다수는 실험으로 연구할 수 없다(예: 빈곤이 건강에 미치는 효과).
+- **범위**: 고전적 접근은 구조화되고 잘 정의된 문제에 가장 잘 맞으며, 방대한 비정형 자료를 열린 마음으로 탐색하는 데는 덜 적합하다.
+- **일반화 가능성**: 실험실 실험이 현실 조건을 반영하지 못할 수 있다.
 
-## Key Takeaways
+## 핵심 요약
 
-- The classical approach prioritizes **design** to ensure that the data can answer the research question with known precision.
-- Its greatest strength is the ability to make **causal** and **inferential** claims with well-quantified uncertainty.
-- It remains indispensable in medicine, social science, and policy evaluation, where the stakes of incorrect conclusions are high.
+- 고전적 접근은 자료가 알려진 정밀도로 연구 질문에 답할 수 있도록 **설계**를 우선한다.
+- 가장 큰 강점은 잘 정량화된 불확실성과 함께 **인과적** 주장과 **추론적** 주장을 할 수 있다는 점이다.
+- 잘못된 결론의 대가가 큰 의학, 사회과학, 정책 평가에서 여전히 없어서는 안 될 접근이다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-A researcher wants to study whether a new teaching method improves test scores. Describe how to design a randomized experiment for this question, specifying the treatment, control, randomization unit, and primary outcome.
+**연습문제 1.**
+어떤 연구자가 새 교수법이 시험 점수를 향상시키는지 연구하려 한다. 이 질문에 대한 무작위 실험을 어떻게 설계할지 처리, 대조, 무작위화 단위, 주요 결과변수를 지정하여 설명하라.
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
 
-    - **Treatment:** The new teaching method (e.g., flipped classroom) applied for one semester.
-    - **Control:** The standard teaching method (business as usual) for the same course and semester.
-    - **Randomization unit:** Students (or classroom sections, if individual randomization is impractical). Random assignment ensures that treatment and control groups are comparable in ability, motivation, and background.
-    - **Primary outcome:** Final exam score (pre-specified before the experiment begins).
-    - **Sample size:** Determined by a power analysis based on the minimum detectable effect size.
-    - **Blinding:** The grader should be blinded to which group each student belongs.
-
----
-
-**Exercise 2.**
-Explain why stratified random sampling can be more efficient than simple random sampling. Give an example where stratification substantially reduces sampling variability.
-
-??? success "Solution to Exercise 2"
-    Stratified random sampling divides the population into homogeneous strata and samples independently within each stratum. It is more efficient because within-stratum variability is smaller than overall variability, so each stratum's mean is estimated more precisely.
-
-    **Example:** Estimating average household income in a city with two neighborhoods: one wealthy (mean \$200K, small variance) and one modest (mean \$40K, small variance). A simple random sample might over- or under-represent one neighborhood by chance, producing high variability. Stratifying by neighborhood and sampling proportionally from each guarantees both are represented, reducing the variance of the overall mean estimate. The gain is largest when the strata means are very different but within-stratum variability is small.
+    - **처리:** 새 교수법(예: 거꾸로 교실)을 한 학기 동안 적용.
+    - **대조:** 같은 과목, 같은 학기의 표준 교수법(평소대로).
+    - **무작위화 단위:** 학생(개인 단위 무작위화가 비현실적이면 분반). 무작위 배정은 처리군과 대조군이 능력, 동기, 배경에서 비교 가능하도록 보장한다.
+    - **주요 결과변수:** 기말시험 점수(실험 시작 전에 사전 지정).
+    - **표본 크기:** 탐지하고자 하는 최소 효과 크기에 근거한 검정력 분석으로 결정.
+    - **눈가림:** 채점자는 각 학생이 어느 집단인지 모르도록 눈가림해야 한다.
 
 ---
 
-**Exercise 3.**
-A company plans to survey customer satisfaction. They have a budget for 500 surveys. Compare the trade-offs between a census of 500 randomly chosen customers, a convenience sample of 500 customers at one store, and a quota sample of 500 customers balanced by age group.
+**연습문제 2.**
+층화무작위표집이 단순무작위표집보다 효율적일 수 있는 이유를 설명하라. 층화가 표집 변동성을 크게 줄이는 예를 들어라.
 
-??? success "Solution to Exercise 3"
-    | Method | Representativeness | Cost | Bias risk |
+??? success "연습문제 2 풀이"
+    층화무작위표집은 모집단을 동질적인 층으로 나누고 각 층 안에서 독립적으로 표집한다. 층 내 변동성이 전체 변동성보다 작으므로 각 층의 평균이 더 정밀하게 추정되어 더 효율적이다.
+
+    **예:** 두 동네로 이루어진 도시의 평균 가구 소득 추정. 한쪽은 부유하고(평균 20만 달러, 분산 작음) 다른 쪽은 소박하다(평균 4만 달러, 분산 작음). 단순무작위표본은 우연히 한쪽 동네를 과대 또는 과소 대표할 수 있어 변동성이 커진다. 동네로 층화하여 각각에서 비례 표집하면 양쪽이 모두 대표되도록 보장되어 전체 평균 추정값의 분산이 줄어든다. 층 평균이 크게 다르고 층 내 변동성이 작을수록 이득이 크다.
+
+---
+
+**연습문제 3.**
+어떤 회사가 고객 만족도를 조사하려 한다. 예산은 설문 500건이다. 무작위로 고른 고객 500명을 조사하는 방안, 한 매장에서 고객 500명을 조사하는 편의표본 방안, 연령대별로 균형을 맞춘 고객 500명의 할당표본 방안의 절충 관계를 비교하라.
+
+??? success "연습문제 3 풀이"
+    | 방법 | 대표성 | 비용 | 편향 위험 |
     |---|---|---|---|
-    | **Random sample** (500 from full customer list) | High -- every customer has a known selection probability | Medium (requires full customer list, may need follow-up for non-response) | Low if response rate is high |
-    | **Convenience sample** (500 at one store) | Low -- only captures customers at that location and time | Low (easy to administer) | High -- excludes online customers, other locations, and different shopping times |
-    | **Quota sample** (500, balanced by age) | Medium -- ensures age representation but not other factors | Medium | Medium -- balances on age but may still be biased on income, geography, or other uncontrolled factors |
+    | **무작위표본**(전체 고객 명단에서 500명) | 높음 — 모든 고객이 알려진 선택 확률을 가짐 | 중간(전체 고객 명단 필요, 무응답 시 후속 접촉 필요) | 응답률이 높으면 낮음 |
+    | **편의표본**(한 매장에서 500명) | 낮음 — 그 장소, 그 시간대의 고객만 포착 | 낮음(실행이 쉬움) | 높음 — 온라인 고객, 다른 매장, 다른 쇼핑 시간대를 배제 |
+    | **할당표본**(500명, 연령 균형) | 중간 — 연령 대표성은 확보하나 다른 요인은 아님 | 중간 | 중간 — 연령은 맞추지만 소득, 지역 등 통제되지 않은 요인에서는 여전히 편향될 수 있음 |
 
-    The random sample is preferred for valid inference; the convenience sample is cheapest but most biased; the quota sample is a compromise that controls one source of imbalance.
-
----
-
-**Exercise 4.**
-Define **power** in the context of experiment design. If a study has 80% power to detect a 5-point difference, what does this mean in practical terms?
-
-??? success "Solution to Exercise 4"
-    **Power** is the probability of correctly rejecting the null hypothesis when the alternative is true, i.e., $\text{Power} = 1 - \beta$ where $\beta$ is the Type II error rate (probability of a false negative).
-
-    If a study has 80% power to detect a 5-point difference, this means: *if the true treatment effect is exactly 5 points, the study has an 80% probability of producing a statistically significant result* (rejecting $H_0$ at the chosen significance level). Equivalently, there is a 20% chance of failing to detect a real 5-point effect.
-
-    The 80% threshold is conventional. Power depends on three factors: the significance level $\alpha$, the effect size, and the sample size $n$. Increasing $n$ or $\alpha$ increases power; detecting smaller effects requires larger samples.
+    타당한 추론에는 무작위표본이 선호된다. 편의표본은 가장 싸지만 가장 편향되어 있고, 할당표본은 불균형의 한 원천만 통제하는 절충안이다.
 
 ---
 
-**Exercise 5.**
-A researcher proposes a study with $n = 50$ per arm but has not performed a power analysis. The minimum effect size considered meaningful is 0.3 standard deviations. Compute the power at $\alpha = 0.05$ (two-sided $t$-test) and decide whether the study is adequately powered.
+**연습문제 4.**
+실험 설계의 맥락에서 **검정력**을 정의하라. 어떤 연구가 5점 차이를 탐지할 검정력이 80%라면 실질적으로 무슨 뜻인가?
 
-??? success "Solution to Exercise 5"
-    For a two-sample $t$-test with equal $n$ per arm, effect size $d$ (in standard deviations), and significance $\alpha$, the power is approximately
+??? success "연습문제 4 풀이"
+    **검정력**은 대립가설이 참일 때 귀무가설을 올바르게 기각할 확률이다. 즉 $\text{Power} = 1 - \beta$이며, 여기서 $\beta$는 제2종 오류율(거짓음성 확률)이다.
+
+    어떤 연구가 5점 차이를 탐지할 검정력이 80%라는 것은 이런 뜻이다. *참된 처리효과가 정확히 5점이라면, 그 연구가 통계적으로 유의한 결과를 낼(선택한 유의수준에서 $H_0$을 기각할) 확률이 80%다.* 달리 말하면 실제로 존재하는 5점 효과를 탐지하지 못할 확률이 20%다.
+
+    80%라는 기준은 관례적인 것이다. 검정력은 유의수준 $\alpha$, 효과 크기, 표본 크기 $n$의 세 요인에 달려 있다. $n$이나 $\alpha$를 키우면 검정력이 커지고, 더 작은 효과를 탐지하려면 더 큰 표본이 필요하다.
+
+---
+
+**연습문제 5.**
+어떤 연구자가 군당 $n = 50$인 연구를 제안했는데 검정력 분석은 하지 않았다. 의미 있다고 보는 최소 효과 크기는 표준편차 0.3배다. $\alpha = 0.05$(양측 $t$-검정)에서 검정력을 계산하고, 이 연구의 검정력이 충분한지 판단하라.
+
+??? success "연습문제 5 풀이"
+    군당 $n$이 같은 이표본 $t$-검정에서 (표준편차 단위의) 효과 크기 $d$와 유의수준 $\alpha$에 대해 검정력은 근사적으로
 
     $$
     \mathrm{Power} = P\!\left(|Z| > z_{1 - \alpha/2} - d\sqrt{n/2}\right)
     $$
 
-    With $d = 0.3$, $n = 50$, $\alpha = 0.05$, $z_{0.975} = 1.96$:
+    이다. $d = 0.3$, $n = 50$, $\alpha = 0.05$, $z_{0.975} = 1.96$을 넣으면
 
     $$
     d\sqrt{n/2} = 0.3 \times 5 = 1.5
     $$
 
-    so the non-centrality parameter is 1.5. Power $\approx P(Z > 1.96 - 1.5) + P(Z < -1.96 - 1.5) = P(Z > 0.46) + P(Z < -3.46) \approx 0.323 + 0.0003 \approx 0.32$.
+    이므로 비중심 모수는 1.5다. 검정력 $\approx P(Z > 1.96 - 1.5) + P(Z < -1.96 - 1.5) = P(Z > 0.46) + P(Z < -3.46) \approx 0.323 + 0.0003 \approx 0.32$.
 
-    Only 32% power — the study is severely underpowered. It would need roughly $n \approx 175$ per arm to reach 80% power at $d = 0.3$. Running an underpowered study risks both Type II errors (missing a real effect) and the **winner's curse** (the few significant findings will systematically overestimate effect sizes).
+    검정력이 32%에 불과하므로 이 연구는 검정력이 심각하게 부족하다. $d = 0.3$에서 80% 검정력에 이르려면 군당 대략 $n \approx 175$가 필요하다. 검정력이 부족한 연구를 수행하면 제2종 오류(실제 효과를 놓침)와 **승자의 저주**(유의하게 나온 소수의 결과가 효과 크기를 체계적으로 과대평가함)를 모두 감수하게 된다.
 
 ---
 
-**Exercise 6.**
-**Preregistration** asks researchers to commit to their hypothesis and analysis plan before collecting data. Explain how preregistration addresses the *garden of forking paths* problem, and one practical concern about strict preregistration.
+**연습문제 6.**
+**사전등록**은 연구자가 자료를 수집하기 전에 가설과 분석 계획을 확정하도록 요구한다. 사전등록이 *갈래길의 정원* 문제를 어떻게 다루는지 설명하고, 엄격한 사전등록에 대한 현실적 우려 한 가지를 제시하라.
 
-??? success "Solution to Exercise 6"
-    The **garden of forking paths** (Gelman & Loken, 2013) refers to researchers' many discretionary choices — variable definitions, exclusion criteria, transformation, subgroup analyses — that, made after seeing the data, can produce one "significant" result among the many implicit comparisons. Even with no deliberate p-hacking, this inflates Type I error rates.
+??? success "연습문제 6 풀이"
+    **갈래길의 정원**(Gelman & Loken, 2013)은 연구자가 내리는 수많은 재량적 선택 — 변수 정의, 제외 기준, 변환, 하위집단 분석 — 을 가리킨다. 자료를 본 뒤에 이런 선택을 하면, 암묵적으로 이루어진 수많은 비교 중에서 하나의 "유의한" 결과를 만들어낼 수 있다. 의도적인 p-해킹이 없더라도 제1종 오류율이 부풀어 오른다.
 
-    **Preregistration** locks in the choices before data is seen. The analysis plan specifies the primary hypothesis, the exact statistical test, the population, exclusions, and how multiple comparisons (if any) will be handled. Any departures must be reported as exploratory rather than confirmatory.
+    **사전등록**은 자료를 보기 전에 이 선택들을 못 박는다. 분석 계획은 주요 가설, 정확한 통계 검정, 모집단, 제외 기준, 그리고 (있다면) 다중비교를 어떻게 처리할지를 지정한다. 그 계획에서 벗어난 것은 무엇이든 확증적이 아니라 탐색적인 것으로 보고해야 한다.
 
-    **Practical concern:** strict preregistration discourages legitimate post-hoc discoveries. If the data show a clear and unexpected pattern not anticipated by the registered plan, the researcher must report this as exploratory — which often means the publication system treats it less favorably. The solution is a hybrid: preregister the confirmatory hypothesis with a strict significance threshold, then report exploratory analyses transparently as exploratory. Journals adopting **registered reports** (peer-review accepts the design *before* data collection) are removing the publication incentive against null results, further reducing publication bias.
+    **현실적 우려:** 엄격한 사전등록은 정당한 사후 발견을 위축시킨다. 등록된 계획이 예상하지 못한 뚜렷한 패턴이 자료에서 나타나면 연구자는 이를 탐색적 결과로 보고해야 하는데, 출판 시스템은 흔히 그런 결과를 덜 우호적으로 다룬다. 해법은 혼합이다. 확증적 가설은 엄격한 유의수준으로 사전등록하고, 탐색적 분석은 탐색적임을 투명하게 밝혀 보고한다. **등록 보고서**(자료 수집 *전에* 동료심사가 설계를 승인하는 방식)를 도입한 학술지는 귀무 결과에 불리한 출판 유인을 없애 출판 편향을 더욱 줄이고 있다.

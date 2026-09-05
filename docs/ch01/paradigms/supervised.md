@@ -1,60 +1,60 @@
-# Supervised Learning
+# 지도학습
 
-Supervised learning trains a model on labeled input-output pairs so that it can predict the output for new, unlabeled inputs. It is the dominant paradigm in modern data analysis because the goal — *predict $y$ from $\mathbf{x}$* — is precise, the loss is observable, and the success criterion is unambiguous. Credit scoring, demand forecasting, fraud detection, medical diagnosis, machine translation, and most image-recognition systems are supervised learners under the hood.
+지도학습은 레이블이 붙은 입력–출력 쌍으로 모형을 훈련시켜, 레이블이 없는 새 입력에 대해 출력을 예측하게 한다. 목표 — *$\mathbf{x}$로부터 $y$를 예측한다* — 가 명확하고, 손실을 관측할 수 있으며, 성공 기준이 모호하지 않기 때문에 현대 자료 분석에서 지배적인 패러다임이다. 신용평가, 수요예측, 부정 탐지, 의료 진단, 기계 번역, 그리고 대부분의 이미지 인식 시스템이 내부적으로는 지도학습기다.
 
-## Definition
+## 정의
 
-Let $(\mathbf{X}, Y)$ be jointly distributed random variables with $\mathbf{X} \in \mathcal{X} \subseteq \mathbb{R}^p$ and $Y \in \mathcal{Y}$. We observe a training sample $\mathcal{D}_n = \{(\mathbf{x}_i, y_i)\}_{i=1}^n$ drawn i.i.d. from this joint distribution and seek a function $\hat{f} : \mathcal{X} \to \mathcal{Y}$ that minimizes the **expected loss** (or **risk**)
+$(\mathbf{X}, Y)$가 $\mathbf{X} \in \mathcal{X} \subseteq \mathbb{R}^p$, $Y \in \mathcal{Y}$인 결합분포를 갖는 확률변수라고 하자. 이 결합분포에서 i.i.d.로 뽑은 훈련 표본 $\mathcal{D}_n = \{(\mathbf{x}_i, y_i)\}_{i=1}^n$을 관측하고, **기대손실**(또는 **위험**)
 
 $$
 R(f) = \mathbb{E}_{(\mathbf{X}, Y)}\!\left[L(Y, f(\mathbf{X}))\right]
 $$
 
-where $L : \mathcal{Y} \times \mathcal{Y} \to \mathbb{R}_{\ge 0}$ is a problem-specific loss function. The two canonical tasks differ in the type of $Y$:
+을 최소화하는 함수 $\hat{f} : \mathcal{X} \to \mathcal{Y}$를 찾는다. 여기서 $L : \mathcal{Y} \times \mathcal{Y} \to \mathbb{R}_{\ge 0}$은 문제에 따라 정해지는 손실함수다. 두 가지 표준 과제는 $Y$의 유형에 따라 갈린다.
 
-- **Regression**: $\mathcal{Y} = \mathbb{R}$. Standard loss is squared error $L(y, \hat{y}) = (y - \hat{y})^2$, whose risk minimizer is the conditional mean $f^*(\mathbf{x}) = \mathbb{E}[Y \mid \mathbf{X} = \mathbf{x}]$.
-- **Classification**: $\mathcal{Y} = \{1, \ldots, K\}$. Standard loss is 0–1 loss $L(y, \hat{y}) = \mathbf{1}\{y \ne \hat{y}\}$, whose risk minimizer is the **Bayes classifier** $f^*(\mathbf{x}) = \arg\max_k P(Y = k \mid \mathbf{X} = \mathbf{x})$.
+- **회귀**: $\mathcal{Y} = \mathbb{R}$. 표준 손실은 제곱오차 $L(y, \hat{y}) = (y - \hat{y})^2$이며, 그 위험 최소화 함수는 조건부 평균 $f^*(\mathbf{x}) = \mathbb{E}[Y \mid \mathbf{X} = \mathbf{x}]$이다.
+- **분류**: $\mathcal{Y} = \{1, \ldots, K\}$. 표준 손실은 0–1 손실 $L(y, \hat{y}) = \mathbf{1}\{y \ne \hat{y}\}$이며, 그 위험 최소화 함수는 **베이즈 분류기** $f^*(\mathbf{x}) = \arg\max_k P(Y = k \mid \mathbf{X} = \mathbf{x})$이다.
 
-Because $R(f)$ depends on the unknown joint distribution, we replace it with the **empirical risk**
+$R(f)$는 알려지지 않은 결합분포에 의존하므로, 이를 **경험위험**
 
 $$
 \hat{R}_n(f) = \frac{1}{n} \sum_{i=1}^n L(y_i, f(\mathbf{x}_i))
 $$
 
-and minimize over a chosen hypothesis class $\mathcal{F}$ — a procedure called **empirical risk minimization** (ERM).
+으로 대체하고 선택한 가설 공간 $\mathcal{F}$ 위에서 최소화한다. 이 절차를 **경험위험 최소화**(ERM)라 한다.
 
-## Explanation
+## 설명
 
-### The bias–variance decomposition
+### 편향–분산 분해
 
-The fundamental tension in supervised learning is captured by the bias–variance decomposition. For squared-error regression at a fixed point $\mathbf{x}_0$,
+지도학습의 근본적인 긴장은 편향–분산 분해로 포착된다. 고정된 점 $\mathbf{x}_0$에서 제곱오차 회귀에 대해,
 
 $$
 \mathbb{E}\!\left[(Y - \hat{f}(\mathbf{x}_0))^2\right] = \underbrace{\sigma^2}_{\text{irreducible}} + \underbrace{\left(\mathbb{E}[\hat{f}(\mathbf{x}_0)] - f^*(\mathbf{x}_0)\right)^2}_{\text{bias}^2} + \underbrace{\mathrm{Var}(\hat{f}(\mathbf{x}_0))}_{\text{variance}}
 $$
 
-Simple models (linear regression, shallow trees) have high bias but low variance; flexible models (deep neural nets, large ensembles) have low bias but high variance. The art of supervised learning is choosing model complexity so that bias and variance trade off favorably for the available sample size.
+단순한 모형(선형회귀, 얕은 트리)은 편향이 크고 분산이 작다. 유연한 모형(심층 신경망, 큰 앙상블)은 편향이 작고 분산이 크다. 지도학습의 기예는 주어진 표본 크기에서 편향과 분산이 유리하게 맞바뀌도록 모형 복잡도를 고르는 데 있다.
 
-### The workflow
+### 작업 흐름
 
-1. **Split the data**: train / validation / test (e.g., 60/20/20), or use $k$-fold cross-validation on the train+validation portion.
-2. **Choose a model family** $\mathcal{F}$: linear, tree-based, kernel-based, neural, ensemble.
-3. **Fit by ERM**: minimize empirical risk, often with a regularization penalty $\lambda \cdot \Omega(f)$ to control complexity.
-4. **Tune hyperparameters** (penalty strength, tree depth, learning rate) on the validation set.
-5. **Evaluate on the test set** — used exactly once, after all model decisions are locked.
-6. **Deploy and monitor** for distribution drift.
+1. **자료 분할**: 훈련 / 검증 / 시험(예: 60/20/20), 또는 훈련+검증 부분에 $k$-겹 교차검증 적용.
+2. **모형 족 $\mathcal{F}$ 선택**: 선형, 트리 기반, 커널 기반, 신경망, 앙상블.
+3. **ERM으로 적합**: 경험위험을 최소화하되, 복잡도를 제어하기 위해 흔히 정칙화 벌점 $\lambda \cdot \Omega(f)$를 더한다.
+4. **초매개변수 조정**(벌점 강도, 트리 깊이, 학습률): 검증 집합에서 수행.
+5. **시험 집합에서 평가** — 모든 모형 결정을 확정한 뒤 정확히 한 번만 사용한다.
+6. **배포 후 모니터링**: 분포 표류를 감시한다.
 
-### Why supervised learning is easier than its cousins
+### 지도학습이 사촌들보다 쉬운 이유
 
-Compared to unsupervised and reinforcement learning, the supervised problem enjoys three structural advantages:
+비지도학습과 강화학습에 비해 지도학습 문제는 세 가지 구조적 이점을 누린다.
 
-- **Observable loss**: every prediction has a ground-truth label to compare against, so $\hat{R}_n(f)$ is computable.
-- **Independent supervision**: each $(\mathbf{x}_i, y_i)$ provides its own learning signal; there are no temporal credit-assignment problems as in reinforcement learning.
-- **Honest evaluation**: a held-out test set yields an unbiased estimate of generalization error, provided no information leaks during training.
+- **관측 가능한 손실**: 모든 예측에 비교할 참값 레이블이 있으므로 $\hat{R}_n(f)$를 계산할 수 있다.
+- **독립적인 지도 신호**: 각 $(\mathbf{x}_i, y_i)$가 자체적인 학습 신호를 제공하며, 강화학습에서와 같은 시간적 공로 배분 문제가 없다.
+- **정직한 평가**: 훈련 중 정보가 새지 않는 한, 떼어놓은 시험 집합이 일반화 오차의 불편추정값을 준다.
 
-These same advantages mean supervised learning fails silently when the test distribution differs from training (covariate shift, label shift) or when labels are themselves systematically biased.
+바로 이 이점들 때문에, 시험 분포가 훈련 분포와 다르거나(공변량 이동, 레이블 이동) 레이블 자체가 체계적으로 편향된 경우에는 지도학습이 소리 없이 실패한다.
 
-## Examples
+## 예제
 
 ```python
 import numpy as np
@@ -91,94 +91,94 @@ print(f"Default rate (test):  {default[test].mean():.3f}")
 print(f"Coefficients:         {beta_hat.round(4)}")
 ```
 
-The accuracy alone is misleading when classes are imbalanced — a model that always predicts "no default" can be 90% accurate when only 10% of loans default. Real evaluations require precision, recall, ROC-AUC, or a cost-weighted loss reflecting the asymmetric cost of false positives versus false negatives.
+클래스가 불균형할 때 정확도만 보면 오도된다. 대출의 10%만 부도가 난다면 "부도 없음"이라고만 답하는 모형도 정확도가 90%가 될 수 있다. 실제 평가에는 정밀도, 재현율, ROC-AUC, 또는 거짓양성과 거짓음성의 비대칭적 비용을 반영한 비용가중 손실이 필요하다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Classify each task into supervised, unsupervised, or reinforcement learning, and (for supervised tasks) say whether it is regression or classification.
+**연습문제 1.**
+다음 각 과제를 지도학습, 비지도학습, 강화학습으로 분류하고, 지도학습이라면 회귀인지 분류인지 밝혀라.
 
-**(a)** Predicting tomorrow's stock closing price given historical price and volume data.
-**(b)** Grouping customers into segments based on purchasing behavior, without predefined categories.
-**(c)** Teaching a robot to navigate a maze by rewarding it for reaching the exit and penalizing collisions.
-**(d)** Training a model to flag emails as spam or not spam using a labeled inbox.
-**(e)** Detecting anomalous credit-card transactions when no labeled fraud examples are available.
-**(f)** Estimating the number of hospital readmissions a patient will have in the next year.
+**(a)** 과거 가격과 거래량 자료로 내일의 주식 종가를 예측하기.
+**(b)** 미리 정해진 범주 없이 구매 행동에 따라 고객을 세그먼트로 묶기.
+**(c)** 출구에 도달하면 보상하고 충돌하면 벌점을 주어 로봇에게 미로 탐색을 가르치기.
+**(d)** 레이블이 붙은 받은편지함으로 이메일을 스팸인지 아닌지 분류하는 모형 훈련하기.
+**(e)** 레이블이 붙은 부정 사례가 전혀 없을 때 이상 신용카드 거래 탐지하기.
+**(f)** 어떤 환자가 앞으로 1년간 재입원할 횟수 추정하기.
 
-??? success "Solution to Exercise 1"
-    (a) Supervised — regression (continuous target).
-    (b) Unsupervised — clustering, no labels.
-    (c) Reinforcement learning — reward-driven sequential decisions.
-    (d) Supervised — binary classification.
-    (e) Unsupervised — anomaly detection without labeled examples (could be semi-supervised if some labels exist).
-    (f) Supervised — count regression (Poisson regression is a natural choice).
+??? success "연습문제 1 풀이"
+    (a) 지도학습 — 회귀(연속형 목표).
+    (b) 비지도학습 — 군집화, 레이블 없음.
+    (c) 강화학습 — 보상에 이끌리는 순차적 의사결정.
+    (d) 지도학습 — 이진 분류.
+    (e) 비지도학습 — 레이블 없는 이상치 탐지(레이블이 일부 있다면 준지도학습일 수 있다).
+    (f) 지도학습 — 계수형 회귀(포아송 회귀가 자연스러운 선택이다).
 
 ---
 
-**Exercise 2.**
-Let $L(y, \hat{y}) = (y - \hat{y})^2$ be squared-error loss. Show that the function $f^*$ minimizing the risk $R(f) = \mathbb{E}[L(Y, f(\mathbf{X}))]$ over all measurable $f$ is $f^*(\mathbf{x}) = \mathbb{E}[Y \mid \mathbf{X} = \mathbf{x}]$.
+**연습문제 2.**
+$L(y, \hat{y}) = (y - \hat{y})^2$을 제곱오차 손실이라 하자. 모든 가측 함수 $f$ 위에서 위험 $R(f) = \mathbb{E}[L(Y, f(\mathbf{X}))]$을 최소화하는 함수 $f^*$가 $f^*(\mathbf{x}) = \mathbb{E}[Y \mid \mathbf{X} = \mathbf{x}]$임을 보여라.
 
-??? success "Solution to Exercise 2"
-    Condition on $\mathbf{X} = \mathbf{x}$ and minimize pointwise. For fixed $\mathbf{x}$ we seek $c \in \mathbb{R}$ minimizing $\mathbb{E}[(Y - c)^2 \mid \mathbf{X} = \mathbf{x}]$. Expanding,
+??? success "연습문제 2 풀이"
+    $\mathbf{X} = \mathbf{x}$로 조건을 걸고 점별로 최소화한다. 고정된 $\mathbf{x}$에 대해 $\mathbb{E}[(Y - c)^2 \mid \mathbf{X} = \mathbf{x}]$을 최소화하는 $c \in \mathbb{R}$을 찾는다. 전개하면
 
     $$
     \mathbb{E}[(Y - c)^2 \mid \mathbf{X} = \mathbf{x}] = \mathrm{Var}(Y \mid \mathbf{X} = \mathbf{x}) + (\mathbb{E}[Y \mid \mathbf{X} = \mathbf{x}] - c)^2
     $$
 
-    The first term does not depend on $c$, and the second is minimized at $c = \mathbb{E}[Y \mid \mathbf{X} = \mathbf{x}]$. Since this holds for every $\mathbf{x}$, the global minimizer is $f^*(\mathbf{x}) = \mathbb{E}[Y \mid \mathbf{X} = \mathbf{x}]$. $\square$
+    첫 항은 $c$에 의존하지 않고, 둘째 항은 $c = \mathbb{E}[Y \mid \mathbf{X} = \mathbf{x}]$에서 최소가 된다. 이것이 모든 $\mathbf{x}$에 대해 성립하므로 전역 최소화 함수는 $f^*(\mathbf{x}) = \mathbb{E}[Y \mid \mathbf{X} = \mathbf{x}]$이다. $\square$
 
 ---
 
-**Exercise 3.**
-For 0–1 loss in $K$-class classification, show that the Bayes classifier $f^*(\mathbf{x}) = \arg\max_k P(Y = k \mid \mathbf{X} = \mathbf{x})$ minimizes the expected misclassification rate.
+**연습문제 3.**
+$K$-클래스 분류에서 0–1 손실에 대해, 베이즈 분류기 $f^*(\mathbf{x}) = \arg\max_k P(Y = k \mid \mathbf{X} = \mathbf{x})$가 기대 오분류율을 최소화함을 보여라.
 
-??? success "Solution to Exercise 3"
-    For any classifier $f$,
+??? success "연습문제 3 풀이"
+    임의의 분류기 $f$에 대해
 
     $$
     \mathbb{E}[\mathbf{1}\{Y \ne f(\mathbf{X})\} \mid \mathbf{X} = \mathbf{x}] = 1 - P(Y = f(\mathbf{x}) \mid \mathbf{X} = \mathbf{x})
     $$
 
-    To minimize this pointwise we maximize $P(Y = f(\mathbf{x}) \mid \mathbf{X} = \mathbf{x})$ over $f(\mathbf{x}) \in \{1, \ldots, K\}$, which selects $f^*(\mathbf{x}) = \arg\max_k P(Y = k \mid \mathbf{X} = \mathbf{x})$. Integrating over $\mathbf{X}$ gives the global minimum. $\square$
+    이다. 이를 점별로 최소화하려면 $f(\mathbf{x}) \in \{1, \ldots, K\}$ 위에서 $P(Y = f(\mathbf{x}) \mid \mathbf{X} = \mathbf{x})$를 최대화해야 하며, 그 결과 $f^*(\mathbf{x}) = \arg\max_k P(Y = k \mid \mathbf{X} = \mathbf{x})$가 선택된다. $\mathbf{X}$에 대해 적분하면 전역 최솟값을 얻는다. $\square$
 
 ---
 
-**Exercise 4.**
-A bank trains a credit-scoring model on applicants from 2015–2019 and observes 92% test accuracy on a held-out 2019 sample. Deployed in 2024, it achieves only 71% accuracy. List three distinct mechanisms that could explain the drop, and a diagnostic for each.
+**연습문제 4.**
+어떤 은행이 2015–2019년 신청자 자료로 신용평가 모형을 학습시켜 떼어놓은 2019년 표본에서 92%의 시험 정확도를 얻었다. 2024년에 배포하자 정확도가 71%에 그쳤다. 이 하락을 설명할 수 있는 서로 다른 기제 세 가지와 각각에 대한 진단 방법을 제시하라.
 
-??? success "Solution to Exercise 4"
-    - **Covariate shift**: the distribution of $\mathbf{X}$ has changed (e.g., post-pandemic income distributions). Diagnostic: compare marginal distributions of features between training and 2024 data using KS tests or PSI (population stability index).
-    - **Label shift / concept drift**: the conditional $P(Y \mid \mathbf{X})$ has changed (default behavior responds to new economic conditions). Diagnostic: refit the model on recent labeled data and compare coefficients or feature importances.
-    - **Data leakage in training**: a feature unavailable at deployment time was used during training (e.g., a "current balance" that was actually post-default). Diagnostic: audit the feature pipeline and re-train with strictly pre-decision features.
+??? success "연습문제 4 풀이"
+    - **공변량 이동**: $\mathbf{X}$의 분포가 변했다(예: 팬데믹 이후 소득 분포). 진단: KS 검정이나 PSI(모집단 안정성 지수)로 훈련 자료와 2024년 자료의 특성 주변분포를 비교한다.
+    - **레이블 이동 / 개념 표류**: 조건부 $P(Y \mid \mathbf{X})$가 변했다(부도 행동이 새로운 경제 여건에 반응한다). 진단: 최근 레이블 자료로 모형을 다시 적합해 계수나 변수 중요도를 비교한다.
+    - **훈련 중 자료 누출**: 배포 시점에는 쓸 수 없는 특성이 훈련에 사용되었다(예: 실제로는 부도 이후에 기록된 "현재 잔액"). 진단: 특성 파이프라인을 감사하고 결정 시점 이전의 특성만으로 재학습한다.
 
-    Other valid mechanisms: feedback loops (the model's own decisions changed the applicant pool), sampling bias in the original training set, or label-quality changes (definition of "default" was revised).
-
----
-
-**Exercise 5.**
-You fit two regression models to the same data:
-- Model A: linear regression, training MSE $= 12$, test MSE $= 15$.
-- Model B: deep neural network, training MSE $= 2$, test MSE $= 25$.
-
-Using the bias–variance decomposition, characterize each model. Which would you deploy, and what would you try next?
-
-??? success "Solution to Exercise 5"
-    Model A has high training error and only slightly higher test error: it is **underfit** (high bias, low variance). The hypothesis class is too restrictive.
-
-    Model B fits the training set far better than the test set: it is **overfit** (low bias, high variance). It has memorized noise.
-
-    Deploy Model A — its 15 MSE generalizes, while Model B's training MSE of 2 is illusory. Next steps: try a model of intermediate flexibility (gradient-boosted trees, regularized neural net, kernel ridge regression), or apply regularization / early stopping / data augmentation to Model B to reduce its variance.
+    그 밖에 타당한 기제로는 피드백 루프(모형 자신의 결정이 신청자 구성을 바꿈), 원래 훈련 집합의 표집편향, 레이블 품질 변화("부도"의 정의가 개정됨) 등이 있다.
 
 ---
 
-**Exercise 6.**
-Why does evaluating a model on its own training data give an overly optimistic estimate of risk? Formalize the answer by relating $\hat{R}_n(\hat{f})$ to $R(\hat{f})$ when $\hat{f}$ was chosen to minimize $\hat{R}_n$.
+**연습문제 5.**
+같은 자료에 두 회귀 모형을 적합했다.
+- 모형 A: 선형회귀, 훈련 MSE $= 12$, 시험 MSE $= 15$.
+- 모형 B: 심층 신경망, 훈련 MSE $= 2$, 시험 MSE $= 25$.
 
-??? success "Solution to Exercise 6"
-    The training data plays two roles: it determines the estimator $\hat{f}$ (which is selected to minimize $\hat{R}_n$ over $\mathcal{F}$), and it is then re-used to compute $\hat{R}_n(\hat{f})$. Because $\hat{f}$ was chosen to make $\hat{R}_n$ as small as possible, the empirical risk underestimates the true risk:
+편향–분산 분해를 사용해 각 모형의 특징을 규정하라. 어느 것을 배포하겠으며, 다음으로 무엇을 시도하겠는가?
+
+??? success "연습문제 5 풀이"
+    모형 A는 훈련 오차가 크고 시험 오차는 그보다 조금 클 뿐이다. **과소적합**(높은 편향, 낮은 분산) 상태다. 가설 공간이 지나치게 제한적이다.
+
+    모형 B는 시험 집합보다 훈련 집합을 훨씬 잘 적합한다. **과적합**(낮은 편향, 높은 분산) 상태이며 잡음을 외운 것이다.
+
+    모형 A를 배포한다. MSE 15는 일반화되는 값인 반면, 모형 B의 훈련 MSE 2는 허상이다. 다음 단계로는 중간 정도 유연성의 모형(그래디언트 부스팅 트리, 정칙화된 신경망, 커널 능형회귀)을 시도하거나, 모형 B에 정칙화·조기 종료·자료 증강을 적용해 분산을 줄인다.
+
+---
+
+**연습문제 6.**
+모형을 자신의 훈련 자료로 평가하면 왜 위험을 지나치게 낙관적으로 추정하게 되는가? $\hat{f}$가 $\hat{R}_n$을 최소화하도록 선택되었을 때 $\hat{R}_n(\hat{f})$와 $R(\hat{f})$의 관계로 답을 형식화하라.
+
+??? success "연습문제 6 풀이"
+    훈련 자료는 두 역할을 한다. 추정량 $\hat{f}$를 결정하고($\mathcal{F}$ 위에서 $\hat{R}_n$을 최소화하도록 선택된다), 그다음 $\hat{R}_n(\hat{f})$를 계산하는 데 다시 쓰인다. $\hat{f}$가 $\hat{R}_n$을 가능한 한 작게 만들도록 선택되었으므로 경험위험은 참된 위험을 과소평가한다.
 
     $$
     \mathbb{E}\!\left[\hat{R}_n(\hat{f})\right] \le \mathbb{E}\!\left[R(\hat{f})\right]
     $$
 
-    with equality only when $\mathcal{F}$ contains a single function. The gap is the **optimism** of the training error, and it grows with the effective complexity of $\mathcal{F}$. A held-out test set breaks the dependence: the test data was not used to choose $\hat{f}$, so $\hat{R}_{\text{test}}(\hat{f})$ is an unbiased estimate of $R(\hat{f})$. This is why train/test splitting (or cross-validation) is non-negotiable for honest evaluation. $\square$
+    등호는 $\mathcal{F}$가 함수 하나만 포함할 때만 성립한다. 이 격차가 훈련오차의 **낙관성**이며, $\mathcal{F}$의 실효 복잡도가 커질수록 커진다. 떼어놓은 시험 집합은 이 의존을 끊는다. 시험 자료는 $\hat{f}$를 고르는 데 쓰이지 않았으므로 $\hat{R}_{\text{test}}(\hat{f})$는 $R(\hat{f})$의 불편추정값이다. 정직한 평가를 위해 훈련/시험 분할(또는 교차검증)이 타협할 수 없는 이유가 이것이다. $\square$

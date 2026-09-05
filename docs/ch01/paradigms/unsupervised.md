@@ -1,22 +1,22 @@
-# Unsupervised Learning
+# 비지도학습
 
-Unsupervised learning discovers hidden structure in data without labels. Common tasks include clustering, dimensionality reduction, and anomaly detection.
+비지도학습은 레이블 없이 자료에 숨은 구조를 발견한다. 대표적인 과제로 군집화, 차원축소, 이상치 탐지가 있다.
 
-## Definition
+## 정의
 
-Given only input features $\{\mathbf{x}_i\}_{i=1}^n$ (no target $y$), unsupervised learning finds patterns, groupings, or compressed representations. There is no loss function with ground-truth labels; evaluation relies on domain expertise and downstream utility.
+목표변수 $y$ 없이 입력 특성 $\{\mathbf{x}_i\}_{i=1}^n$만 주어졌을 때, 비지도학습은 패턴, 집단, 또는 압축된 표현을 찾는다. 참값 레이블에 기반한 손실함수가 없으므로 평가는 도메인 전문성과 후속 활용도에 의존한다.
 
-## Explanation
+## 설명
 
-**Clustering** groups similar observations: K-Means minimizes within-cluster variance, hierarchical clustering builds a dendrogram, and DBSCAN finds density-based clusters of arbitrary shape.
+**군집화**는 비슷한 관측값을 묶는다. K-평균은 군집 내 분산을 최소화하고, 계층적 군집화는 덴드로그램을 만들며, DBSCAN은 임의의 모양을 갖는 밀도 기반 군집을 찾는다.
 
-**Dimensionality reduction** projects data onto fewer dimensions while preserving structure: PCA finds orthogonal directions of maximum variance; t-SNE/UMAP provide nonlinear embeddings for visualization.
+**차원축소**는 구조를 보존하면서 자료를 더 낮은 차원으로 사영한다. PCA는 분산이 최대가 되는 직교 방향을 찾고, t-SNE/UMAP은 시각화를 위한 비선형 임베딩을 제공한다.
 
-**Anomaly detection** identifies points that deviate from the expected pattern: Isolation Forest isolates anomalies by random partitioning.
+**이상치 탐지**는 기대되는 패턴에서 벗어난 점을 찾아낸다. 아이솔레이션 포레스트는 무작위 분할로 이상치를 고립시킨다.
 
-Applications in finance: grouping stocks by return patterns for diversification, extracting principal component factors from correlated risk measures, and detecting fraudulent transactions.
+금융에서의 응용: 분산투자를 위해 수익률 패턴으로 종목을 묶기, 상관된 위험 지표에서 주성분 요인 추출하기, 부정 거래 탐지하기.
 
-## Examples
+## 예제
 
 ```python
 import numpy as np
@@ -48,15 +48,15 @@ for j in range(k):
 print(f"Converged in {iteration + 1} iterations")
 ```
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Given 2D data points $\{(1,2), (1.5, 1.8), (5, 8), (8, 8), (1, 0.6), (9, 11)\}$, apply one iteration of the k-means algorithm with $k=2$ and initial centroids $\boldsymbol{\mu}_1 = (1, 2)$ and $\boldsymbol{\mu}_2 = (5, 8)$. Report the cluster assignments and new centroids.
+**연습문제 1.**
+2차원 자료점 $\{(1,2), (1.5, 1.8), (5, 8), (8, 8), (1, 0.6), (9, 11)\}$이 주어졌을 때, $k=2$이고 초기 중심이 $\boldsymbol{\mu}_1 = (1, 2)$, $\boldsymbol{\mu}_2 = (5, 8)$인 k-평균 알고리즘을 한 번 반복하라. 군집 배정과 새 중심을 제시하라.
 
-??? success "Solution to Exercise 1"
-    **Assignment step** (assign each point to the nearest centroid using Euclidean distance):
+??? success "연습문제 1 풀이"
+    **배정 단계**(유클리드 거리로 각 점을 가장 가까운 중심에 배정):
 
-    | Point | Distance to $\boldsymbol{\mu}_1$ | Distance to $\boldsymbol{\mu}_2$ | Cluster |
+    | 점 | $\boldsymbol{\mu}_1$까지 거리 | $\boldsymbol{\mu}_2$까지 거리 | 군집 |
     |---|---|---|---|
     | $(1, 2)$ | 0 | 7.21 | 1 |
     | $(1.5, 1.8)$ | 0.54 | 7.12 | 1 |
@@ -65,7 +65,7 @@ Given 2D data points $\{(1,2), (1.5, 1.8), (5, 8), (8, 8), (1, 0.6), (9, 11)\}$,
     | $(1, 0.6)$ | 1.4 | 8.46 | 1 |
     | $(9, 11)$ | 12.04 | 5.0 | 2 |
 
-    **Update step** (compute new centroids):
+    **갱신 단계**(새 중심 계산):
 
     $$
     \boldsymbol{\mu}_1' = \frac{1}{3}\bigl((1,2) + (1.5, 1.8) + (1, 0.6)\bigr) = (1.167, 1.467)
@@ -77,68 +77,68 @@ Given 2D data points $\{(1,2), (1.5, 1.8), (5, 8), (8, 8), (1, 0.6), (9, 11)\}$,
 
 ---
 
-**Exercise 2.**
-Explain why PCA (Principal Component Analysis) finds the directions of maximum variance. What is the relationship between PCA and the eigendecomposition of the covariance matrix?
+**연습문제 2.**
+PCA(주성분분석)가 왜 분산이 최대가 되는 방향을 찾는지 설명하라. PCA와 공분산행렬의 고유분해는 어떤 관계인가?
 
-??? success "Solution to Exercise 2"
-    PCA seeks the direction $\mathbf{w}$ (unit vector) that maximizes the variance of the projected data: $\max_{\lVert\mathbf{w}\rVert=1} \mathbf{w}^T\mathbf{S}\mathbf{w}$, where $\mathbf{S}$ is the sample covariance matrix. By the Rayleigh quotient theory, the maximum is achieved when $\mathbf{w}$ is the eigenvector corresponding to the largest eigenvalue of $\mathbf{S}$.
+??? success "연습문제 2 풀이"
+    PCA는 사영된 자료의 분산을 최대화하는 방향 $\mathbf{w}$(단위벡터)를 찾는다: $\max_{\lVert\mathbf{w}\rVert=1} \mathbf{w}^T\mathbf{S}\mathbf{w}$, 여기서 $\mathbf{S}$는 표본 공분산행렬이다. 레일리 몫 이론에 따르면 이 최댓값은 $\mathbf{w}$가 $\mathbf{S}$의 최대 고윳값에 대응하는 고유벡터일 때 달성된다.
 
-    The eigendecomposition $\mathbf{S} = \mathbf{Q}\boldsymbol{\Lambda}\mathbf{Q}^T$ directly provides all principal components: the columns of $\mathbf{Q}$ are the principal component directions, and the diagonal entries of $\boldsymbol{\Lambda}$ are the variances explained by each component. The first PC captures the most variance, the second PC captures the most remaining variance orthogonal to the first, and so on.
-
----
-
-**Exercise 3.**
-What is the key difference between clustering and dimensionality reduction as unsupervised learning tasks? Can they be used together?
-
-??? success "Solution to Exercise 3"
-    **Clustering** assigns each data point to a discrete group (cluster label), partitioning the data into subsets of similar observations. The output is a categorical assignment.
-
-    **Dimensionality reduction** maps high-dimensional data to a lower-dimensional representation that preserves important structure (variance, distances, or neighborhood relationships). The output is a continuous embedding.
-
-    They can be used together in several ways: (1) apply PCA first to reduce dimensions, then cluster in the reduced space (often more effective because the curse of dimensionality is mitigated); (2) use t-SNE or UMAP for visualization, then visually identify clusters; (3) cluster first, then use the cluster labels to color a dimensionality-reduction plot for interpretation.
+    고유분해 $\mathbf{S} = \mathbf{Q}\boldsymbol{\Lambda}\mathbf{Q}^T$는 모든 주성분을 직접 제공한다. $\mathbf{Q}$의 열은 주성분 방향이고 $\boldsymbol{\Lambda}$의 대각 성분은 각 성분이 설명하는 분산이다. 첫 번째 주성분이 가장 많은 분산을 포착하고, 두 번째 주성분은 첫 번째와 직교하면서 남은 분산을 가장 많이 포착하며, 이런 식으로 이어진다.
 
 ---
 
-**Exercise 4.**
-A dataset has 1000 observations and 500 features. Explain why directly applying k-means might perform poorly, and describe how dimensionality reduction can help.
+**연습문제 3.**
+비지도학습 과제로서 군집화와 차원축소의 핵심 차이는 무엇인가? 둘을 함께 쓸 수 있는가?
 
-??? success "Solution to Exercise 4"
-    In 500 dimensions, k-means suffers from the **curse of dimensionality**: Euclidean distances between points become nearly equal (all points are roughly equidistant), making it difficult to distinguish clusters. Many features may be noise, diluting the signal from the truly informative features.
+??? success "연습문제 3 풀이"
+    **군집화**는 각 자료점을 이산적인 집단(군집 레이블)에 배정하여 자료를 비슷한 관측값의 부분집합으로 분할한다. 출력은 범주형 배정이다.
 
-    Dimensionality reduction helps by:
+    **차원축소**는 중요한 구조(분산, 거리, 이웃 관계)를 보존하면서 고차원 자료를 저차원 표현으로 사상한다. 출력은 연속적인 임베딩이다.
 
-    1. **Removing noise:** PCA retains only the top components that capture the most variance, discarding noisy dimensions that obscure cluster structure.
-    2. **Improving distance metrics:** In lower dimensions, Euclidean distance is more meaningful and clusters are more separable.
-    3. **Computational efficiency:** k-means on 10-50 PCA components is much faster than on 500 raw features.
-
-    A typical workflow: apply PCA to retain 90-95% of the variance (often reducing to 20-50 components), then run k-means on the reduced data.
+    둘은 여러 방식으로 함께 쓸 수 있다. (1) 먼저 PCA로 차원을 줄인 뒤 축소된 공간에서 군집화한다(차원의 저주가 완화되어 흔히 더 효과적이다). (2) t-SNE나 UMAP으로 시각화한 뒤 눈으로 군집을 확인한다. (3) 먼저 군집화한 뒤 그 레이블로 차원축소 그림에 색을 입혀 해석한다.
 
 ---
 
-**Exercise 5.**
-The **elbow method** picks the number of clusters $k$ for k-means by plotting within-cluster sum of squares (WCSS) against $k$ and looking for a "kink." Why is the elbow always at some $k$, and what is a more principled alternative?
+**연습문제 4.**
+어떤 자료가 관측값 1000개와 특성 500개로 이루어져 있다. k-평균을 바로 적용하면 왜 잘 작동하지 않을 수 있는지 설명하고, 차원축소가 어떻게 도움이 되는지 서술하라.
 
-??? success "Solution to Exercise 5"
-    WCSS is monotonically non-increasing in $k$: adding clusters can only reduce within-cluster variation. The plot looks like a decay curve, and any inflection point is a candidate "elbow." The choice is subjective — different analysts often pick different elbows on the same plot.
+??? success "연습문제 4 풀이"
+    500차원에서 k-평균은 **차원의 저주**를 겪는다. 점들 사이의 유클리드 거리가 거의 같아져(모든 점이 대략 등거리가 되어) 군집을 구분하기 어려워진다. 또한 많은 특성이 잡음일 수 있어 정말 정보를 담은 특성의 신호를 희석한다.
 
-    Principled alternatives:
+    차원축소는 다음과 같이 도움이 된다.
 
-    - **Gap statistic** (Tibshirani, Walther, Hastie 2001): compare the WCSS of the observed data to the expected WCSS under a null reference distribution (uniform over the data's bounding box). Choose the smallest $k$ where the gap is approximately maximal.
-    - **Silhouette coefficient**: for each point, compare its cohesion (mean distance to its own cluster) to its separation (mean distance to the nearest other cluster). The average silhouette across $k$ gives a clearer optimum.
-    - **Information criteria** for model-based clustering (BIC for Gaussian mixture models): penalize $k$ explicitly.
+    1. **잡음 제거:** PCA는 분산을 가장 많이 포착하는 상위 성분만 남기고, 군집 구조를 가리는 잡음 차원을 버린다.
+    2. **거리 척도 개선:** 저차원에서 유클리드 거리가 더 의미 있어지고 군집이 더 잘 분리된다.
+    3. **계산 효율:** 원 특성 500개보다 PCA 성분 10–50개에서 k-평균을 돌리는 것이 훨씬 빠르다.
 
-    All these methods reduce — but do not eliminate — the inherent ambiguity in unsupervised tasks: "the correct number of clusters" is not a well-defined population parameter the way "the mean" is.
+    전형적인 작업 흐름: 분산의 90–95%를 남기도록 PCA를 적용하고(흔히 20–50개 성분으로 축소된다) 축소된 자료에서 k-평균을 실행한다.
 
 ---
 
-**Exercise 6.**
-**Anomaly detection** can be framed as a one-class classification problem. Describe how the **isolation forest** algorithm differs in approach from a k-means-based anomaly detector, and one situation where each is preferred.
+**연습문제 5.**
+**팔꿈치 방법**은 군집 내 제곱합(WCSS)을 $k$에 대해 그린 뒤 "꺾이는 지점"을 찾아 k-평균의 군집 수 $k$를 고르는 방법이다. 팔꿈치가 왜 항상 어떤 $k$에서 나타나며, 더 원칙적인 대안은 무엇인가?
 
-??? success "Solution to Exercise 6"
-    **k-means-based anomaly detection:** fit k-means on the data; declare a point anomalous if its distance to its assigned cluster centroid exceeds some threshold. The model represents normal data as a small number of dense regions; anomalies are points far from any region.
+??? success "연습문제 5 풀이"
+    WCSS는 $k$에 대해 단조 비증가다. 군집을 늘리면 군집 내 변동이 줄어들기만 한다. 그래프는 감쇠 곡선처럼 보이고, 어떤 변곡점이든 "팔꿈치" 후보가 된다. 선택이 주관적이어서 같은 그래프를 보고도 분석가마다 다른 팔꿈치를 고르는 일이 흔하다.
 
-    **Isolation forest** (Liu, Ting, Zhou 2008): build many random binary trees by repeatedly splitting on a random feature at a random threshold. Anomalies tend to be **isolated quickly** — they require few splits to be alone in a leaf. The anomaly score is the average path length to isolation; short paths signal anomalies. No notion of "normal cluster" is required.
+    원칙적인 대안:
 
-    **k-means preferred:** when normal data forms a small number of clearly defined clusters (e.g., manufacturing yields concentrated around standard products). Anomalies are deviations from these clusters.
+    - **갭 통계량**(Tibshirani, Walther, Hastie 2001): 관측 자료의 WCSS를 귀무 참조 분포(자료의 경계 상자 위 균등분포) 아래에서 기대되는 WCSS와 비교한다. 갭이 거의 최대가 되는 가장 작은 $k$를 고른다.
+    - **실루엣 계수**: 각 점에 대해 응집도(자기 군집까지의 평균 거리)와 분리도(가장 가까운 다른 군집까지의 평균 거리)를 비교한다. $k$에 걸친 평균 실루엣이 더 뚜렷한 최적점을 준다.
+    - 모형 기반 군집화의 **정보 기준**(가우시안 혼합 모형의 BIC): $k$에 명시적으로 벌점을 부과한다.
 
-    **Isolation forest preferred:** when normal data has complex, possibly multi-modal structure that does not partition into a few centroids (e.g., financial transactions). Isolation forest scales well to high dimensions and does not require choosing $k$ — it discovers anomalies by the sparseness of their neighborhood rather than by distance to centroids.
+    이 방법들은 비지도 과제에 내재한 모호함을 줄여줄 뿐 없애지는 못한다. "올바른 군집 수"는 "평균"처럼 잘 정의된 모집단 모수가 아니다.
+
+---
+
+**연습문제 6.**
+**이상치 탐지**는 일종의 단일 클래스 분류 문제로 볼 수 있다. **아이솔레이션 포레스트** 알고리즘이 k-평균 기반 이상치 탐지기와 접근 방식에서 어떻게 다른지 서술하고, 각각이 선호되는 상황을 하나씩 제시하라.
+
+??? success "연습문제 6 풀이"
+    **k-평균 기반 이상치 탐지:** 자료에 k-평균을 적합한 뒤, 어떤 점이 배정된 군집 중심까지의 거리가 임계값을 넘으면 이상치로 선언한다. 이 모형은 정상 자료를 소수의 밀집 영역으로 표현하며, 이상치는 어떤 영역에서도 멀리 떨어진 점이다.
+
+    **아이솔레이션 포레스트**(Liu, Ting, Zhou 2008): 무작위 특성을 무작위 임계값에서 반복적으로 분할하여 많은 무작위 이진 트리를 만든다. 이상치는 **빨리 고립되는** 경향이 있어, 잎에 홀로 남기까지 필요한 분할 수가 적다. 이상치 점수는 고립까지의 평균 경로 길이이며, 경로가 짧으면 이상치 신호다. "정상 군집"이라는 개념이 필요하지 않다.
+
+    **k-평균이 선호될 때:** 정상 자료가 소수의 뚜렷한 군집을 이룰 때(예: 표준 제품 주위에 몰려 있는 제조 수율). 이상치는 이 군집들에서 벗어난 것이다.
+
+    **아이솔레이션 포레스트가 선호될 때:** 정상 자료가 소수의 중심으로 분할되지 않는 복잡하고 다봉형일 수 있는 구조를 가질 때(예: 금융 거래). 아이솔레이션 포레스트는 고차원으로 잘 확장되고 $k$를 고를 필요가 없다. 중심까지의 거리가 아니라 이웃의 희소함으로 이상치를 찾아내기 때문이다.

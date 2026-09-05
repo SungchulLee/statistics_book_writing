@@ -1,53 +1,53 @@
-# Randomization and Blinding
+# 무작위화와 눈가림
 
-Randomization and blinding are the two pillars of experimental design. Randomization guards against confounding by ensuring that observed and unobserved variables are balanced between treatment groups on average. Blinding guards against human expectation effects — the placebo effect on subjects, observer bias in measurement, and analyst bias in choices made during data processing. The combination of the two produces the **double-blind randomized controlled trial (RCT)**, which is the regulatory gold standard for causal evidence in medicine and a touchstone benchmark in psychology, education, and policy research.
+무작위화와 눈가림은 실험 설계의 두 기둥이다. 무작위화는 관측된 변수와 관측되지 않은 변수가 처리군 사이에서 평균적으로 균형을 이루도록 함으로써 교란을 막는다. 눈가림은 인간의 기대가 만드는 효과 — 대상자에게 나타나는 위약효과, 측정에서의 관찰자 편향, 자료 처리 과정의 선택에서 나타나는 분석자 편향 — 를 막는다. 이 둘을 결합한 것이 **이중눈가림 무작위 대조시험(RCT)** 이며, 의학에서 인과적 증거의 규제상 표준이자 심리학·교육학·정책 연구의 기준점이다.
 
-## Definition
+## 정의
 
-**Randomization** assigns subjects to treatment or control groups by a chance mechanism (random number generator, sealed envelopes, computer-generated allocation). Every subject has a known, nonzero probability of being assigned to each group, and the assignment is independent of their characteristics.
+**무작위화(randomization)** 는 우연 기제(난수 발생기, 밀봉 봉투, 컴퓨터 생성 배정)에 따라 대상을 처리군 또는 대조군에 배정하는 것이다. 모든 대상은 각 집단에 배정될 알려진 0이 아닌 확률을 가지며, 배정은 그들의 특성과 독립이다.
 
-**Blinding** (also called **masking**) conceals the group assignment from parties whose knowledge could distort the trial. The standard levels:
+**눈가림(blinding, 맹검)** 은 알고 있으면 시험을 왜곡할 수 있는 당사자들로부터 집단 배정을 감춘다. 표준적인 수준은 다음과 같다.
 
-| Level | Subject knows? | Treating clinician knows? | Outcome assessor / analyst knows? |
+| 수준 | 대상자가 아는가? | 치료 임상의가 아는가? | 결과 평가자 / 분석자가 아는가? |
 |---|---|---|---|
-| Open-label | Yes | Yes | Yes |
-| Single-blind | No | Yes | Yes |
-| Double-blind | No | No | Yes |
-| Triple-blind | No | No | No |
+| 공개(open-label) | 예 | 예 | 예 |
+| 단일눈가림 | 아니오 | 예 | 예 |
+| 이중눈가림 | 아니오 | 아니오 | 예 |
+| 삼중눈가림 | 아니오 | 아니오 | 아니오 |
 
-A trial may also be **outcome-assessor-blinded**, where clinicians know assignments but the people scoring outcomes do not — a useful compromise when full double-blinding is impractical (e.g., surgical interventions).
+임상의는 배정을 알지만 결과를 채점하는 사람은 모르는 **결과평가자 눈가림** 시험도 있다. 완전한 이중눈가림이 비현실적일 때(예: 수술적 개입) 유용한 절충안이다.
 
-## Explanation
+## 설명
 
-### What randomization achieves
+### 무작위화가 달성하는 것
 
-Under random assignment, the treatment indicator $T$ is statistically independent of the potential outcomes $(Y(0), Y(1))$:
+무작위 배정 아래에서 처리 지시변수 $T$는 잠재적 결과 $(Y(0), Y(1))$과 통계적으로 독립이다.
 
 $$
 T \perp (Y(0), Y(1))
 $$
 
-This independence is what makes the difference in observed group means an unbiased estimator of the average causal effect $\mathbb{E}[Y(1)] - \mathbb{E}[Y(0)]$. Equally importantly, randomization gives a **probabilistic basis** for $p$-values: under the null hypothesis of no treatment effect, the distribution of the test statistic is determined by the randomization scheme alone, without reference to any model of the data.
+이 독립성 덕분에 관측된 집단 평균의 차이가 평균 인과효과 $\mathbb{E}[Y(1)] - \mathbb{E}[Y(0)]$의 불편추정량이 된다. 그에 못지않게 중요한 점은 무작위화가 $p$-값에 **확률론적 근거**를 준다는 것이다. 처리효과가 없다는 귀무가설 아래에서 검정통계량의 분포는 자료에 대한 어떤 모형도 참조하지 않고 오직 무작위화 방식만으로 결정된다.
 
-### What randomization does not achieve
+### 무작위화가 달성하지 못하는 것
 
-Randomization balances groups *in expectation*. Any particular randomization may produce imbalanced covariates — small studies are vulnerable to "unlucky" assignments where, say, all sicker patients land in one arm. Defenses:
+무작위화는 집단을 *기댓값 차원에서* 균형 잡는다. 특정한 한 번의 무작위화는 공변량이 불균형한 결과를 낳을 수 있으며, 특히 소규모 연구는 더 아픈 환자가 모두 한쪽 군에 몰리는 "운 나쁜" 배정에 취약하다. 대응책은 다음과 같다.
 
-- **Stratified (block) randomization**: randomize within strata defined by prognostic covariates, guaranteeing balance.
-- **Larger sample size**: imbalance probability shrinks as $1/\sqrt{n}$.
-- **Pre-specified covariate adjustment**: include important covariates in the analysis model regardless of randomization.
+- **층화(블록) 무작위화**: 예후 관련 공변량으로 정의된 층 안에서 무작위화하여 균형을 보장한다.
+- **표본 크기 확대**: 불균형 확률은 $1/\sqrt{n}$로 줄어든다.
+- **사전 지정된 공변량 보정**: 무작위화 여부와 무관하게 중요한 공변량을 분석 모형에 포함한다.
 
-### What blinding achieves
+### 눈가림이 달성하는 것
 
-- **Subject blinding** controls the placebo effect — genuine improvement caused by belief in treatment. Without it, the placebo effect is confounded with the pharmacological effect.
-- **Clinician blinding** prevents differential care (e.g., more attentive follow-up for treatment arm) and differential measurement (e.g., recording slightly more favorable assessments for the treated).
-- **Analyst blinding** prevents data-dependent choices in cleaning, exclusion criteria, and analysis specification — the formal counter to the "garden of forking paths."
+- **대상자 눈가림**은 위약효과 — 처치를 받는다는 믿음이 실제로 일으키는 호전 — 를 통제한다. 이것이 없으면 위약효과가 약리학적 효과와 뒤섞인다.
+- **임상의 눈가림**은 차별적 진료(예: 처리군에 더 세심한 추적관찰)와 차별적 측정(예: 처리군에 다소 유리하게 평가를 기록하는 것)을 막는다.
+- **분석자 눈가림**은 자료 정제, 제외 기준, 분석 명세에서 자료에 의존한 선택을 막는다. "갈래길의 정원"에 대한 공식적인 대응책이다.
 
-### Historical landmark
+### 역사적 이정표
 
-The 1954 Salk polio vaccine trial randomly assigned about 400,000 children to vaccine or placebo in a double-blind design. The vaccine group experienced 28 cases per 100,000 versus 71 in controls, conclusively establishing efficacy. The parallel non-randomized **NFIP design** that used grade-level controls found a similar effect but with weaker internal validity, since second-graders (offered vaccine) differed systematically from first- and third-graders (the implicit control). The randomized arm became the basis for licensing; the non-randomized arm has been a teaching example ever since.
+1954년 소크 소아마비 백신 시험은 약 40만 명의 아동을 이중눈가림 설계로 백신군 또는 위약군에 무작위 배정했다. 백신군은 10만 명당 28건, 대조군은 71건의 발병을 보여 효능을 결정적으로 입증했다. 학년별 대조군을 사용한 병행 비무작위 **NFIP 설계**도 비슷한 효과를 찾아냈지만 내적 타당도가 약했다. (백신을 제안받은) 2학년생이 (암묵적 대조군인) 1학년생 및 3학년생과 체계적으로 달랐기 때문이다. 무작위화된 쪽이 허가의 근거가 되었고, 비무작위 쪽은 그 이후로 줄곧 교육용 사례가 되었다.
 
-## Examples
+## 예제
 
 ```python
 """Randomized vs. confounded assignment under the same true effect."""
@@ -75,89 +75,89 @@ est = outcome[assigned].mean() - outcome[~assigned].mean()
 print(f"[Confounded] estimated effect = {est:+.2f}  (severity confounds)")
 ```
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-A clinical trial tests whether a new pain reliever works better than an existing one.
+**연습문제 1.**
+어떤 임상시험이 새 진통제가 기존 진통제보다 나은지를 검증한다.
 
-**(a)** Explain the purpose of random assignment in this trial.
-**(b)** Define single-blind, double-blind, and triple-blind designs. Which would you recommend and why?
-**(c)** If the new drug is a pill and the existing drug is an injection, what problem arises for blinding? How might researchers address it?
+**(a)** 이 시험에서 무작위 배정의 목적을 설명하라.
+**(b)** 단일눈가림, 이중눈가림, 삼중눈가림 설계를 정의하라. 어느 것을 추천하며 그 이유는 무엇인가?
+**(c)** 새 약은 알약이고 기존 약은 주사제라면 눈가림에 어떤 문제가 생기는가? 연구자는 이를 어떻게 해결할 수 있는가?
 
-??? success "Solution to Exercise 1"
-    (a) Random assignment distributes both known (age, weight, baseline pain) and unknown confounders evenly across treatment groups in expectation. The resulting difference in mean outcomes is an unbiased estimator of the causal treatment effect, with valid $p$-values whose distribution under the null is determined by the randomization itself.
+??? success "연습문제 1 풀이"
+    (a) 무작위 배정은 알려진 교란요인(나이, 체중, 기저 통증)과 알려지지 않은 교란요인을 기댓값 차원에서 처리군 사이에 고르게 분산시킨다. 그 결과 평균 결과의 차이는 인과적 처리효과의 불편추정량이 되며, 귀무가설 아래 분포가 무작위화 자체로 결정되는 타당한 $p$-값을 갖는다.
 
-    (b) Single-blind: subject unaware. Double-blind: subject and treating clinician both unaware. Triple-blind: subject, clinician, and analyst all unaware. Recommend at least **double-blind** to control both the placebo effect (subject expectation) and observer bias (clinicians might unconsciously favor the new drug in pain assessments).
+    (b) 단일눈가림: 대상자가 모른다. 이중눈가림: 대상자와 치료 임상의가 모두 모른다. 삼중눈가림: 대상자, 임상의, 분석자가 모두 모른다. 위약효과(대상자의 기대)와 관찰자 편향(임상의가 통증 평가에서 무의식적으로 새 약을 유리하게 볼 가능성)을 모두 통제하려면 최소한 **이중눈가림**을 추천한다.
 
-    (c) Different routes of administration break blinding. Subjects know whether they swallowed a pill or received an injection. Standard fix: **double-dummy** — every subject receives one of each, with one being a placebo. The new-drug arm gets a real pill and a saline injection; the existing-drug arm gets a placebo pill and the real injection.
-
----
-
-**Exercise 2.**
-A trial randomizes 200 patients, 100 to treatment and 100 to control. By chance, the treatment group has mean age 65 and the control group has mean age 55. Is the trial invalid? What is the correct response?
-
-??? success "Solution to Exercise 2"
-    The trial is not invalid — randomization was performed correctly, and the difference is the kind of imbalance that can arise by chance, especially in modest samples.
-
-    Correct responses (in order of preference):
-
-    - **Pre-specified covariate adjustment**: include age as a covariate in the analysis (ANCOVA or regression). This often improves precision and corrects for the chance imbalance.
-    - **Report the result both unadjusted and adjusted**: if conclusions agree, the imbalance is unlikely to be driving the finding.
-    - **Stratified randomization** (a future-design fix): in the next trial, stratify on age so imbalance cannot arise by chance.
-
-    What you should *not* do: re-randomize after seeing the imbalance, or compare $p$-values for the baseline imbalance and use them to decide whether to adjust. Both invalidate the design.
+    (c) 투여 경로가 다르면 눈가림이 깨진다. 대상자는 자신이 알약을 삼켰는지 주사를 맞았는지 안다. 표준적인 해법은 **이중위약(double-dummy)** 이다. 모든 대상자가 두 가지를 각각 하나씩 받되 그중 하나는 위약이다. 신약군은 진짜 알약과 생리식염수 주사를 받고, 기존약군은 위약 알약과 진짜 주사를 받는다.
 
 ---
 
-**Exercise 3.**
-Explain why **block (stratified) randomization** is preferred to **simple randomization** in a multi-center trial where the centers differ in patient case-mix.
+**연습문제 2.**
+어떤 시험이 환자 200명을 무작위화하여 100명을 처리군에, 100명을 대조군에 배정했다. 우연히 처리군의 평균 나이는 65세, 대조군은 55세가 되었다. 이 시험은 무효인가? 올바른 대응은 무엇인가?
 
-??? success "Solution to Exercise 3"
-    Simple randomization can produce imbalanced treatment counts within centers — by chance, one center might enroll mostly treatment patients and another mostly controls. If centers also differ in patient case-mix or follow-up quality, the imbalance confounds the center effect with the treatment effect.
+??? success "연습문제 2 풀이"
+    이 시험은 무효가 아니다. 무작위화는 올바르게 수행되었고, 이런 차이는 특히 중간 규모 표본에서 우연히 생길 수 있는 종류의 불균형이다.
 
-    Stratified randomization randomizes *within* each center (typically in fixed blocks of size 4 or 6: TTCC, TCTC, CTCT, etc.). Each center then has a guaranteed near-1:1 ratio, removing center as a potential confounder. The cost is slightly more complex randomization procedure; the benefit is more efficient estimation and a more interpretable analysis.
+    올바른 대응(선호 순):
 
----
+    - **사전 지정된 공변량 보정**: 나이를 분석의 공변량으로 포함한다(공분산분석 또는 회귀). 이는 흔히 정밀도를 높이고 우연한 불균형을 보정한다.
+    - **보정 전과 보정 후 결과를 모두 보고**: 결론이 일치한다면 그 불균형이 결과를 좌우하고 있을 가능성은 낮다.
+    - **층화 무작위화**(향후 설계를 위한 개선): 다음 시험에서는 나이로 층화하여 우연한 불균형이 생기지 않도록 한다.
 
-**Exercise 4.**
-A surgical trial cannot blind the surgeon. Discuss the threats to validity this introduces and the best partial mitigations.
-
-??? success "Solution to Exercise 4"
-    Surgeons may, consciously or not, vary their skill, attention, or post-operative care between the trial arms. Subjects may also infer their assignment from incidental cues, undermining subject blinding.
-
-    Partial mitigations:
-
-    - **Outcome-assessor blinding** is critical: have independent assessors who do not know assignment score the outcomes (pain, range of motion, blinded radiographs).
-    - **Active-comparator design**: instead of "surgery vs. no surgery," compare two surgical procedures so both arms have a procedure with similar appearance. Sham surgery trials (with full anesthesia and incisions but no procedure) have been used for some interventions when ethically permissible.
-    - **Pre-specified surgical protocols**: minimize discretion that could vary by arm.
-    - **Audit trails**: video-record procedures or have independent observers in theater.
-
-    Even with these in place, residual bias in surgical trials is generally larger than in pharmacological trials. Strong effects are required to compensate.
+    해서는 *안 되는* 일: 불균형을 확인한 뒤 다시 무작위화하거나, 기저 불균형에 대한 $p$-값을 비교해 보정 여부를 결정하는 것. 둘 다 설계를 무효로 만든다.
 
 ---
 
-**Exercise 5.**
-A drug trial blinds patients but not clinicians. Patients in the treatment arm experience common side effects (dry mouth, mild nausea) that placebo patients do not. Why does this threaten the integrity of the blind, and what is the consequence?
+**연습문제 3.**
+기관마다 환자 구성이 다른 다기관 시험에서 **블록(층화) 무작위화**가 **단순 무작위화**보다 선호되는 이유를 설명하라.
 
-??? success "Solution to Exercise 5"
-    Side effects "unblind" patients indirectly: a patient who notices dry mouth and nausea correctly guesses they are on the active drug, and the placebo group's lack of side effects similarly reveals their status. This is called **functional unblinding**.
+??? success "연습문제 3 풀이"
+    단순 무작위화는 기관 내에서 처리군 인원이 불균형해질 수 있다. 우연히 어떤 기관은 대부분 처리군 환자를 등록하고 다른 기관은 대부분 대조군을 등록할 수 있다. 기관마다 환자 구성이나 추적관찰의 질도 다르다면, 이 불균형은 기관 효과와 처리효과를 뒤섞는다.
 
-    Consequences:
-
-    - The placebo effect is no longer balanced: only one group expects benefit.
-    - Subjects may report outcomes (especially subjective ones like fatigue or mood) differently based on inferred assignment.
-    - Adherence may diverge: subjects who believe they are on placebo may drop out or seek other treatments.
-
-    Mitigations: use an **active placebo** that mimics the side-effect profile without therapeutic effect (e.g., low-dose atropine for studies of anticholinergic drugs), and use objective outcome measures that are less sensitive to expectation effects.
+    층화 무작위화는 각 기관 *안에서* 무작위화한다(보통 크기 4나 6의 고정 블록: TTCC, TCTC, CTCT 등). 그러면 각 기관은 거의 1:1 비율을 보장받아 기관이 잠재적 교란요인이 되지 않는다. 대가는 무작위화 절차가 다소 복잡해지는 것이고, 이득은 더 효율적인 추정과 해석하기 쉬운 분석이다.
 
 ---
 
-**Exercise 6.**
-Distinguish between **randomization** (which is a feature of the *design*) and **bootstrap resampling** (which is a feature of the *analysis*). Why is the former necessary for causal inference while the latter is not?
+**연습문제 4.**
+어떤 수술 시험에서는 집도의를 눈가림할 수 없다. 이로 인해 생기는 타당도 위협과 최선의 부분적 완화책을 논하라.
 
-??? success "Solution to Exercise 6"
-    **Randomization** is performed *before* outcomes are measured. It is the act of physically assigning subjects to treatment by a chance mechanism, which creates statistical independence between assignment and pre-existing characteristics. Causal inference rests on this independence.
+??? success "연습문제 4 풀이"
+    집도의는 의식적이든 아니든 시험군에 따라 기술, 주의, 수술 후 관리를 달리할 수 있다. 대상자 또한 부수적인 단서로 자신의 배정을 짐작하게 되어 대상자 눈가림이 훼손될 수 있다.
 
-    **Bootstrap resampling** is performed *after* outcomes are measured. It is an analysis technique that repeatedly resamples the observed data to estimate the sampling variability of a statistic. It does not change the data-generating process and provides no information about whether observed associations are causal.
+    부분적 완화책:
 
-    The bootstrap can quantify uncertainty in a regression coefficient estimated from observational data, but if the coefficient is biased by unmeasured confounding, the bootstrap CIs simply reflect uncertainty around the biased value. No amount of resampling fixes a non-random sample. Causation requires intervention (in design) or strong identifying assumptions (in analysis) — not just precise estimation.
+    - **결과평가자 눈가림**이 핵심이다. 배정을 모르는 독립 평가자가 결과(통증, 관절 가동범위, 눈가림된 영상)를 채점하게 한다.
+    - **활성 비교군 설계**: "수술 대 수술 없음" 대신 두 수술 절차를 비교하여 두 군 모두 겉보기에 비슷한 시술을 받게 한다. 윤리적으로 허용되는 경우 일부 개입에 대해서는 가짜 수술 시험(마취와 절개는 하되 실제 시술은 하지 않음)이 쓰이기도 했다.
+    - **사전 지정된 수술 프로토콜**: 군에 따라 달라질 수 있는 재량을 최소화한다.
+    - **감사 기록**: 시술을 영상으로 기록하거나 수술실에 독립 관찰자를 둔다.
+
+    이런 장치를 갖추더라도 수술 시험의 잔여 편향은 일반적으로 약물 시험보다 크다. 이를 상쇄하려면 효과가 강해야 한다.
+
+---
+
+**연습문제 5.**
+어떤 약물 시험이 환자는 눈가림했지만 임상의는 눈가림하지 않았다. 처리군 환자는 위약군에는 없는 흔한 부작용(구강건조, 가벼운 메스꺼움)을 겪는다. 이것이 왜 눈가림의 무결성을 위협하며, 그 결과는 무엇인가?
+
+??? success "연습문제 5 풀이"
+    부작용은 환자의 눈가림을 간접적으로 "푼다". 구강건조와 메스꺼움을 느낀 환자는 자신이 활성약을 복용 중임을 정확히 짐작하고, 위약군은 부작용이 없다는 사실로 마찬가지로 자신의 상태를 알게 된다. 이를 **기능적 눈가림 해제**라 한다.
+
+    결과:
+
+    - 위약효과가 더 이상 균형을 이루지 않는다. 한쪽 집단만 이익을 기대한다.
+    - 대상자가 짐작한 배정에 따라 결과(특히 피로나 기분 같은 주관적 결과)를 다르게 보고할 수 있다.
+    - 순응도가 갈릴 수 있다. 자신이 위약군이라고 믿는 대상자는 중도 탈락하거나 다른 치료를 찾을 수 있다.
+
+    완화책: 치료 효과 없이 부작용 양상만 흉내 내는 **활성 위약**(예: 항콜린성 약물 연구에서 저용량 아트로핀)을 쓰고, 기대 효과에 덜 민감한 객관적 결과 지표를 사용한다.
+
+---
+
+**연습문제 6.**
+(*설계*의 특징인) **무작위화**와 (*분석*의 특징인) **부트스트랩 재표집**을 구분하라. 인과추론에 전자는 필요하지만 후자는 그렇지 않은 이유는 무엇인가?
+
+??? success "연습문제 6 풀이"
+    **무작위화**는 결과를 측정하기 *전에* 수행된다. 우연 기제로 대상을 처리군에 실제로 배정하는 행위이며, 이를 통해 배정과 기존 특성 사이에 통계적 독립성이 만들어진다. 인과추론은 이 독립성 위에 서 있다.
+
+    **부트스트랩 재표집**은 결과를 측정한 *후에* 수행된다. 관측된 자료를 반복 재표집하여 통계량의 표집 변동성을 추정하는 분석 기법이다. 자료생성 과정을 바꾸지 않으며, 관측된 연관성이 인과적인지에 대해 아무 정보도 주지 않는다.
+
+    부트스트랩은 관찰자료로 추정한 회귀계수의 불확실성을 정량화할 수 있지만, 그 계수가 미측정 교란으로 편향되어 있다면 부트스트랩 신뢰구간은 편향된 값 주변의 불확실성을 보여줄 뿐이다. 아무리 재표집해도 비무작위 표본은 고쳐지지 않는다. 인과성에는 (설계에서의) 개입이나 (분석에서의) 강한 식별 가정이 필요하며, 정밀한 추정만으로는 얻어지지 않는다.

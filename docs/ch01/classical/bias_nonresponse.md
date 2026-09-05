@@ -1,57 +1,57 @@
-# Bias and Nonresponse
+# 편향과 무응답
 
-Even with careful survey design, systematic errors called **biases** can distort results no matter how large the sample. Understanding these errors is essential for designing surveys, interpreting their findings, and challenging headline numbers in the press. This page covers the four most important types of bias in survey work and the strategies that partially mitigate each.
+조사를 아무리 신중하게 설계해도, **편향**이라 불리는 체계적 오차는 표본이 아무리 크든 결과를 왜곡할 수 있다. 이런 오차를 이해하는 것은 조사를 설계하고, 그 결과를 해석하며, 언론의 헤드라인 숫자에 이의를 제기하는 데 필수적이다. 이 절에서는 조사 실무에서 가장 중요한 네 가지 편향 유형과 각각을 부분적으로 완화하는 전략을 다룬다.
 
-## Definition
+## 정의
 
-**Bias** is a systematic tendency for a sample statistic to over- or under-estimate the corresponding population parameter. Formally, $\mathrm{bias}(\hat\theta) = \mathbb{E}[\hat\theta] - \theta$, with the expectation taken over the *repeated sampling process*, not over the data. Bias persists no matter how many additional samples are drawn.
+**편향(bias)** 은 표본 통계량이 대응되는 모집단 모수를 체계적으로 과대 또는 과소 추정하는 경향이다. 형식적으로 $\mathrm{bias}(\hat\theta) = \mathbb{E}[\hat\theta] - \theta$이며, 기댓값은 자료가 아니라 *반복적인 표집 과정*에 대해 취한다. 표본을 아무리 더 뽑아도 편향은 남는다.
 
-The four canonical types in survey research:
+조사 연구의 네 가지 표준 유형은 다음과 같다.
 
-| Type | Mechanism | Direction |
+| 유형 | 기제 | 방향 |
 |---|---|---|
-| **Sampling (coverage) bias** | The sampling frame does not match the target population | Unpredictable |
-| **Nonresponse bias** | Non-respondents differ systematically from respondents | Depends on who skips |
-| **Response (measurement) bias** | Respondents answer inaccurately | Often toward socially desirable answers |
-| **Selection bias** | Inclusion in the data is correlated with the outcome | Surveys "successes" |
+| **표집(포괄) 편향** | 표집틀이 목표 모집단과 일치하지 않음 | 예측 불가 |
+| **무응답 편향** | 무응답자가 응답자와 체계적으로 다름 | 누가 빠지느냐에 따라 다름 |
+| **응답(측정) 편향** | 응답자가 부정확하게 답함 | 흔히 사회적으로 바람직한 답 쪽으로 |
+| **선택 편향** | 자료에 포함되는 것이 결과와 상관됨 | "성공한 것"만 조사함 |
 
-## Explanation
+## 설명
 
-### Sampling (coverage) bias
+### 표집(포괄) 편향
 
-The **sampling frame** is the enumerable list from which a sample is drawn. Anyone missing from the frame has zero probability of selection — invisible to the analysis. The classic example: the 1936 *Literary Digest* poll surveyed 2.4 million people drawn from telephone directories and automobile registrations. In Depression-era America these lists skewed wealthy, who tended Republican. The result confidently predicted Landon. Gallup's much smaller probability sample correctly predicted Roosevelt. **Sample quality matters more than sample size.**
+**표집틀**은 표본을 뽑는 열거된 목록이다. 표집틀에 없는 사람은 선택 확률이 0이며 분석에서 보이지 않는다. 고전적인 예로, 1936년 《Literary Digest》 여론조사는 전화번호부와 자동차 등록부에서 뽑은 240만 명을 조사했다. 대공황기 미국에서 이 목록들은 부유층 쪽으로 치우쳤고 이들은 공화당 지지 경향이 있었다. 그 결과 조사는 랜던의 승리를 자신 있게 예측했다. 훨씬 작았던 갤럽의 확률표본은 루스벨트의 승리를 정확히 예측했다. **표본의 크기보다 표본의 품질이 더 중요하다.**
 
-### Nonresponse bias
+### 무응답 편향
 
-Even with a perfect frame, some selected individuals don't respond. Bias arises when respondents differ from non-respondents on the variable of interest. If a customer-satisfaction survey is completed mainly by very happy or very angry customers, the sample mean misses everyone in between. The direction of bias depends on which subgroup over-responds.
+표집틀이 완벽하더라도 선택된 사람 중 일부는 응답하지 않는다. 응답자와 무응답자가 관심 변수에서 다를 때 편향이 생긴다. 고객 만족도 조사를 주로 아주 만족한 고객이나 아주 화난 고객만 작성한다면, 표본 평균은 그 사이의 모든 사람을 놓친다. 편향의 방향은 어느 하위집단이 과다 응답하느냐에 달려 있다.
 
-Response rates have collapsed in modern surveys — once 70–80%, now often below 10% for phone surveys. Inference relies on the assumption that, after weighting on observed covariates, response is "missing at random." This is unverifiable from the data alone.
+현대 조사에서 응답률은 무너져 내렸다. 한때 70–80%였던 것이 이제 전화 조사에서는 흔히 10% 아래다. 추론은 관측된 공변량으로 가중한 뒤에는 응답이 "무작위 결측"이라는 가정에 의존하는데, 이는 자료만으로 검증할 수 없다.
 
-### Response (measurement) bias
+### 응답(측정) 편향
 
-Respondents may answer inaccurately due to:
+응답자는 다음과 같은 이유로 부정확하게 답할 수 있다.
 
-- **Social desirability**: under-reporting alcohol use, drug use, or unethical behavior; over-reporting voting, charity, exercise.
-- **Question wording**: "Should the government waste money on X?" vs. "Should the government invest in X?" — produce different answers about the same X.
-- **Mode effects**: face-to-face interviews elicit different answers than anonymous online surveys, especially on sensitive topics.
-- **Anchoring and recall bias**: questions that prompt specific examples bias subsequent answers.
+- **사회적 바람직성**: 음주, 약물 사용, 비윤리적 행동은 축소 보고하고 투표, 기부, 운동은 과장 보고한다.
+- **질문 표현**: "정부가 X에 돈을 낭비해야 하는가?"와 "정부가 X에 투자해야 하는가?"는 같은 X에 대해 다른 답을 낳는다.
+- **조사 방식 효과**: 대면 면접은 익명 온라인 조사와 다른 답을 이끌어내며, 특히 민감한 주제에서 그렇다.
+- **정박 효과와 회상 편향**: 특정 사례를 떠올리게 하는 질문은 뒤따르는 답을 편향시킨다.
 
-### Selection (survivorship) bias
+### 선택(생존자) 편향
 
-The sample consists of entities that passed through some filter, while those that failed are invisible. Mutual-fund returns, startup-success traits, surgical-outcome studies, and many others suffer this — covered in detail in the survivorship-bias section.
+표본이 어떤 필터를 통과한 개체들로만 이루어지고, 걸러진 것들은 보이지 않는다. 뮤추얼펀드 수익률, 스타트업 성공 요인, 수술 결과 연구 등 많은 사례가 이에 해당하며, 생존자 편향 절에서 자세히 다룬다.
 
-### Mitigation strategies
+### 완화 전략
 
-| Bias | Mitigation |
+| 편향 | 완화책 |
 |---|---|
-| Coverage | Improve the frame; auxiliary data to detect undercoverage |
-| Nonresponse | Multiple callbacks; mixed-mode follow-up; post-stratification weighting; IPW |
-| Response | Anonymity; piloting question wording; objective measurements when feasible |
-| Selection | Track exits; include all originally enrolled subjects (intention-to-treat) |
+| 포괄 | 표집틀 개선, 보조 자료로 과소포괄 탐지 |
+| 무응답 | 반복 재통화, 혼합 방식 후속 접촉, 사후층화 가중, IPW |
+| 응답 | 익명성 보장, 질문 표현 사전시험, 가능하면 객관적 측정 |
+| 선택 | 이탈 추적, 최초 등록된 모든 대상 포함(배정대로 분석) |
 
-All mitigation is partial. Bias is the asymptotic floor that more data cannot lower.
+모든 완화책은 부분적이다. 편향은 자료를 더 모아도 낮출 수 없는 점근적 바닥이다.
 
-## Examples
+## 예제
 
 ```python
 """Nonresponse correlated with the outcome distorts the estimate."""
@@ -76,86 +76,86 @@ print(f"Bias (overestimate):     {biased_mean - true_mean:+.2f}")
 print(f"Response rate:           {responded.mean():.1%}")
 ```
 
-The reported mean overstates true satisfaction because happier customers respond more. This is irreducible without modeling the response mechanism.
+더 만족한 고객이 더 많이 응답하기 때문에 보고된 평균이 참된 만족도를 과대평가한다. 응답 기제를 모형화하지 않고서는 줄일 수 없는 편향이다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-For each scenario, identify the **type of bias** (sampling, nonresponse, response, or selection/survivorship).
+**연습문제 1.**
+다음 각 상황에서 **편향의 유형**(표집, 무응답, 응답, 선택/생존자)을 식별하라.
 
-**(a)** A magazine mails a political opinion survey to its subscribers. Only 15% respond, and respondents hold stronger opinions than non-respondents.
-**(b)** A mutual-fund company advertises strong performance of its current funds, not mentioning funds that were closed for poor performance.
-**(c)** A telephone survey conducted during weekday business hours misses working adults.
-**(d)** In a face-to-face interview, respondents under-report their alcohol consumption.
-**(e)** A LinkedIn poll about job satisfaction is shared widely on Twitter, where unhappy professionals are more vocal.
+**(a)** 어떤 잡지가 구독자에게 정치 여론조사를 우편으로 보낸다. 15%만 응답했고, 응답자는 무응답자보다 의견이 더 강하다.
+**(b)** 한 뮤추얼펀드 회사가 현재 운용 중인 펀드의 우수한 성과를 광고하면서, 성과가 나빠 청산된 펀드는 언급하지 않는다.
+**(c)** 평일 업무시간에 실시한 전화 조사가 일하는 성인을 놓친다.
+**(d)** 대면 면접에서 응답자가 자신의 음주량을 축소 보고한다.
+**(e)** 직무 만족도에 관한 링크드인 설문이 트위터에서 널리 공유되는데, 트위터에서는 불만족한 직장인이 더 목소리를 낸다.
 
-??? success "Solution to Exercise 1"
-    (a) Nonresponse bias — 85% non-respondents differ systematically.
-    (b) Survivorship (selection) bias — failed funds excluded from the average.
-    (c) Sampling (coverage) bias — the frame excludes workday-occupied people during the call window.
-    (d) Response bias — social desirability lowers reported drinking.
-    (e) Multiple: a selection bias for who sees the poll (Twitter-active LinkedIn users), and a nonresponse bias for who chooses to vote (the loudest voices over-vote).
-
----
-
-**Exercise 2.**
-A clinic surveys patients about pain. The questionnaire asks: "How bad is your pain today, on a scale of 0–10?" Forty percent of patients do not respond. The clinic computes a mean pain score of 4.3 over the responders and reports it as the patient population's average pain. What can you say about the direction of bias *without* additional information?
-
-??? success "Solution to Exercise 2"
-    Nothing definite about the direction. Either tail of the distribution might over- or under-respond:
-
-    - Very high-pain patients may be too uncomfortable to fill out forms → biased downward.
-    - Very high-pain patients may be most motivated to communicate to clinicians → biased upward.
-    - Low-pain patients may skip the survey because they don't think it matters → biased upward.
-
-    Without auxiliary information (chart-recorded pain medications, observed grimacing, follow-up contact) the direction is unidentifiable. The point estimate is *biased* in some direction but the analyst cannot say which without an extra-statistical model.
-
-    Practical fix: improve response rate to above 80%, or use the chart data to estimate response propensities and weight accordingly.
+??? success "연습문제 1 풀이"
+    (a) 무응답 편향 — 85%의 무응답자가 체계적으로 다르다.
+    (b) 생존자(선택) 편향 — 실패한 펀드가 평균에서 제외되었다.
+    (c) 표집(포괄) 편향 — 통화 시간대에 표집틀이 근무 중인 사람을 배제한다.
+    (d) 응답 편향 — 사회적 바람직성이 보고된 음주량을 낮춘다.
+    (e) 복합적이다. 누가 설문을 보게 되는지에 대한 선택 편향(트위터에서 활발한 링크드인 사용자)과, 누가 응답하기로 선택하는지에 대한 무응답 편향(가장 목소리 큰 사람이 과다 응답)이 함께 있다.
 
 ---
 
-**Exercise 3.**
-Distinguish **bias** from **variance**. A poll of 50 voters and a poll of 50,000 voters from the same biased frame produce estimates with very different precisions. Which is "more accurate"?
+**연습문제 2.**
+어떤 진료소가 환자에게 통증을 조사한다. 설문은 "오늘 통증이 0–10점 척도에서 얼마나 심한가요?"라고 묻는다. 환자의 40%가 응답하지 않는다. 진료소는 응답자들의 평균 통증 점수 4.3을 계산해 이를 환자 모집단의 평균 통증으로 보고한다. 추가 정보 *없이* 편향의 방향에 대해 무엇을 말할 수 있는가?
 
-??? success "Solution to Exercise 3"
-    Define **accuracy** as small total error from the truth: $\mathrm{MSE} = \mathrm{bias}^2 + \mathrm{variance}$. A large biased poll has tiny variance (sharp confidence interval) but the *bias* term dominates total error. A small unbiased poll has high variance and zero bias.
+??? success "연습문제 2 풀이"
+    방향에 대해 확정적으로 말할 수 있는 것은 없다. 분포의 양쪽 꼬리 어느 쪽이든 과다 또는 과소 응답할 수 있다.
 
-    Without measuring the bias, neither poll is unambiguously more "accurate" — but the large biased poll gives a *more confident wrong answer*. The 50,000-voter poll will routinely produce estimates outside its own reported confidence intervals over many repeated polls of the same biased process — proof that the CI is misleading.
+    - 통증이 아주 심한 환자는 너무 힘들어서 설문지를 작성하지 못할 수 있다 → 아래쪽으로 편향.
+    - 통증이 아주 심한 환자가 임상의에게 알리려는 동기가 가장 클 수도 있다 → 위쪽으로 편향.
+    - 통증이 약한 환자는 중요하지 않다고 여겨 설문을 건너뛸 수 있다 → 위쪽으로 편향.
 
-    A meta-analysis of biased polls is even worse: averaging biased polls converges to the bias asymptote, not to the truth. The fix is not more polling — it is fixing the frame.
+    보조 정보(차트에 기록된 진통제, 관찰된 찡그림, 후속 접촉)가 없으면 방향을 식별할 수 없다. 점추정값은 어느 방향으로든 *편향되어* 있지만, 통계 밖의 모형 없이는 어느 쪽인지 말할 수 없다.
 
----
-
-**Exercise 4.**
-**Post-stratification** is the practice of re-weighting respondents so that the weighted demographic composition matches known population marginals (e.g., from the census). Explain when post-stratification reduces bias and when it does not.
-
-??? success "Solution to Exercise 4"
-    **Reduces bias** when the variables determining response are also the variables being post-stratified on. If young people respond less and you have age data, post-stratification by age corrects the bias *under the assumption* that respondents of a given age are representative of all people of that age.
-
-    **Does not reduce bias** when there is residual non-response within strata. A 30-year-old male respondent in an urban area may still differ on the outcome from a 30-year-old male non-respondent in an urban area — they are not interchangeable just because they share demographics. Some unobserved characteristic (income, lifestyle, opinion intensity) may be both correlated with response and the outcome.
-
-    The assumption underlying post-stratification is "missing at random conditional on the post-stratification variables." This is *unverifiable* from the data. Stronger weighting variables (more covariates, finer cells) generally reduce bias but increase variance — the bias-variance trade-off resurfaces in survey weighting.
+    현실적인 해법: 응답률을 80% 이상으로 끌어올리거나, 차트 자료로 응답 성향을 추정해 그에 따라 가중한다.
 
 ---
 
-**Exercise 5.**
-The **2016 U.S. presidential polls** systematically underestimated Trump support, especially in rust-belt swing states. Identify two distinct mechanisms that contributed and explain why they were not caught before the election.
+**연습문제 3.**
+**편향**과 **분산**을 구분하라. 같은 편향된 표집틀에서 유권자 50명을 조사한 것과 50,000명을 조사한 것은 정밀도가 크게 다른 추정값을 준다. 어느 쪽이 "더 정확한가"?
 
-??? success "Solution to Exercise 5"
-    **Mechanism 1 — differential nonresponse (the "shy Trump voter"):** Trump supporters may have been less willing to answer polls or to admit their preference, especially in regions where Trump support was socially stigmatized. Without an objective indicator, polls treated their lower expressed preference as the truth.
+??? success "연습문제 3 풀이"
+    **정확도**를 참값으로부터의 총오차가 작은 것으로 정의하자: $\mathrm{MSE} = \mathrm{bias}^2 + \mathrm{variance}$. 크지만 편향된 조사는 분산이 아주 작지만(신뢰구간이 좁지만) 총오차를 *편향* 항이 지배한다. 작지만 불편인 조사는 분산이 크고 편향이 0이다.
 
-    **Mechanism 2 — education-level weighting:** rust-belt polls under-weighted non-college-educated voters (who responded to phone polls at lower rates and were under-represented after standard demographic weighting). Trump's support among non-college voters was historically high; under-weighting them produced an underestimate.
+    편향을 측정하지 않는 한 어느 쪽이 명확히 더 "정확하다"고 할 수 없지만, 크고 편향된 조사는 *더 자신 있게 틀린 답*을 준다. 같은 편향된 과정을 여러 번 반복하면 50,000명 조사는 자신이 보고한 신뢰구간 밖의 추정값을 일상적으로 내놓게 되는데, 이는 그 신뢰구간이 오도한다는 증거다.
 
-    **Why not caught:** the 2016 election was the first time these specific dynamics manifested at scale. Polls were calibrated on 2012 patterns where Democratic-Republican response rates and demographic correlations were different. Post-2016, most major pollsters added education-level weighting and adjusted for response biases. The 2020 polls were better — but still overstated Biden's margin in many states, suggesting residual issues remain.
+    편향된 조사들의 메타분석은 더 나쁘다. 편향된 조사를 평균 내면 참값이 아니라 편향의 점근값으로 수렴한다. 해법은 조사를 더 하는 것이 아니라 표집틀을 고치는 것이다.
 
 ---
 
-**Exercise 6.**
-A pharmaceutical study reports a 30% improvement in symptoms for patients who completed the 12-week regimen. About 40% of enrolled patients dropped out before week 12. Why is this conclusion potentially misleading, and how does **intention-to-treat (ITT)** analysis address it?
+**연습문제 4.**
+**사후층화**는 가중된 인구학적 구성이 (인구총조사 등에서 얻은) 알려진 모집단 주변분포와 일치하도록 응답자에게 다시 가중치를 주는 방법이다. 사후층화가 편향을 줄이는 경우와 줄이지 못하는 경우를 설명하라.
 
-??? success "Solution to Exercise 6"
-    Patients who dropped out are excluded from the "completers" sample. Dropout is non-random: side effects (drug intolerance), lack of perceived benefit, or worsening health are all common reasons. The completers are a *selected* subset — generally those for whom the drug works or who can tolerate it. Reporting only completers' improvement overestimates the drug's effect on the general population that would be prescribed it.
+??? success "연습문제 4 풀이"
+    응답을 결정하는 변수가 사후층화에 쓰는 변수와 같을 때 **편향을 줄인다**. 젊은 사람이 응답을 덜 하는데 연령 자료가 있다면, 주어진 연령의 응답자가 그 연령의 모든 사람을 대표한다는 *가정 아래* 연령별 사후층화가 편향을 보정한다.
 
-    **Intention-to-treat (ITT) analysis** includes every patient in the group they were originally assigned to, regardless of compliance or completion. Patients who dropped out are kept in the analysis with their last available outcome (or imputed under a specified missing-data model). The estimate is conservative — it dilutes the effect by including patients who didn't fully receive the treatment — but it answers the policy question "what is the expected benefit of prescribing this drug to the patient population?" rather than "how well does this drug work in those who tolerate it for 12 weeks?".
+    층 내부에 잔여 무응답이 있으면 **편향을 줄이지 못한다**. 도시에 사는 30세 남성 응답자는 도시에 사는 30세 남성 무응답자와 결과 변수에서 여전히 다를 수 있다. 인구학적 특성이 같다고 해서 서로 대체 가능한 것은 아니다. 관측되지 않은 어떤 특성(소득, 생활양식, 의견의 강도)이 응답과 결과 모두와 상관되어 있을 수 있다.
 
-    ITT is the standard for regulatory submissions exactly because it prevents selection bias from inflating reported effects.
+    사후층화의 밑바탕에 있는 가정은 "사후층화 변수를 조건부로 한 무작위 결측"이다. 이것은 자료로부터 *검증할 수 없다*. 가중 변수를 강화하면(공변량을 늘리고 칸을 잘게 쪼개면) 일반적으로 편향은 줄지만 분산은 커진다 — 편향–분산 절충이 조사 가중에서 다시 나타나는 것이다.
+
+---
+
+**연습문제 5.**
+**2016년 미국 대통령 선거 여론조사**는 트럼프 지지를 체계적으로 과소평가했으며, 특히 러스트벨트 경합주에서 그랬다. 여기에 기여한 서로 다른 두 기제를 밝히고, 선거 전에 왜 포착되지 않았는지 설명하라.
+
+??? success "연습문제 5 풀이"
+    **기제 1 — 차별적 무응답("수줍은 트럼프 지지자"):** 트럼프 지지자는 여론조사에 응하거나 선호를 밝히기를 꺼렸을 수 있으며, 특히 트럼프 지지가 사회적으로 낙인찍힌 지역에서 그랬다. 객관적 지표가 없으니 여론조사는 낮게 표현된 선호를 그대로 참값으로 다루었다.
+
+    **기제 2 — 교육수준 가중:** 러스트벨트 여론조사는 대학 미진학 유권자에게 낮은 가중치를 주었다(이들은 전화 조사 응답률이 낮았고 표준적인 인구학적 가중 후에도 과소대표되었다). 대학 미진학 유권자 사이의 트럼프 지지는 역사적으로 높은 수준이었으므로, 이들에게 낮은 가중치를 주면 과소추정이 생긴다.
+
+    **왜 포착되지 않았는가:** 2016년 선거는 이 특정한 역학이 대규모로 나타난 첫 사례였다. 여론조사는 민주–공화 응답률과 인구학적 상관이 달랐던 2012년 양상에 맞춰 보정되어 있었다. 2016년 이후 대부분의 주요 여론조사 기관이 교육수준 가중을 추가하고 응답 편향을 보정했다. 2020년 조사는 나아졌지만 여전히 여러 주에서 바이든의 격차를 과대평가했으며, 잔여 문제가 남아 있음을 시사한다.
+
+---
+
+**연습문제 6.**
+어떤 제약 연구가 12주 요법을 완료한 환자에게서 증상이 30% 호전되었다고 보고한다. 등록된 환자의 약 40%가 12주 전에 중도 탈락했다. 이 결론이 왜 오도할 수 있으며, **배정대로 분석(ITT)** 은 이를 어떻게 다루는가?
+
+??? success "연습문제 6 풀이"
+    중도 탈락한 환자는 "완료자" 표본에서 제외된다. 탈락은 무작위가 아니다. 부작용(약물 불내성), 효과가 없다고 느낌, 건강 악화가 모두 흔한 이유다. 완료자는 *선택된* 부분집합이며, 대체로 약이 듣거나 약을 견딜 수 있는 사람들이다. 완료자의 호전만 보고하면 그 약이 처방될 일반 모집단에 대한 효과를 과대평가하게 된다.
+
+    **배정대로 분석(ITT)** 은 순응이나 완료 여부와 무관하게 모든 환자를 원래 배정된 집단에 넣어 분석한다. 중도 탈락한 환자는 마지막으로 관측된 결과(또는 지정된 결측 자료 모형 아래에서 대체한 값)와 함께 분석에 남는다. 이 추정값은 처치를 온전히 받지 않은 환자를 포함하므로 효과가 희석되어 보수적이지만, "이 약을 견디며 12주를 채운 사람에게 약이 얼마나 잘 듣는가?"가 아니라 "이 약을 환자 모집단에 처방했을 때 기대되는 이익은 무엇인가?"라는 정책 질문에 답한다.
+
+    선택 편향이 보고된 효과를 부풀리는 것을 막아주기 때문에 ITT가 규제 제출의 표준인 것이다.

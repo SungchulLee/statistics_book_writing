@@ -1,10 +1,10 @@
-# Confounding and Association vs Causation
+# 교란과 연관성 대 인과관계
 
-Two variables can move together without one causing the other. **Confounding** is the formal name for the mechanism that produces such non-causal associations, and the slogan "correlation does not imply causation" is its everyday summary. Understanding confounding is essential for interpreting any statistical association in observational data — and recognizing it is the difference between a useful empirical finding and an actionable misdirection.
+두 변수는 어느 한쪽이 다른 쪽을 유발하지 않고도 함께 움직일 수 있다. **교란(confounding)** 은 그러한 비인과적 연관성을 만들어내는 기제를 가리키는 공식 명칭이며, "상관관계는 인과관계를 뜻하지 않는다"는 표어가 그 일상적 요약이다. 교란을 이해하는 것은 관찰자료에서 나타나는 어떤 통계적 연관성이든 해석하는 데 필수적이며, 이를 알아보느냐 못 보느냐가 유용한 경험적 발견과 행동을 오도하는 결론을 가른다.
 
-## Definition
+## 정의
 
-A **confounding variable** $Z$ is a variable associated with both the exposure $X$ and the outcome $Y$, but not on the causal pathway from $X$ to $Y$. Graphically:
+**교란변수** $Z$는 노출 $X$와 결과 $Y$ 모두와 연관되어 있으면서 $X$에서 $Y$로 가는 인과 경로 위에 있지는 않은 변수다. 도식으로 나타내면 다음과 같다.
 
 $$
 \begin{aligned}
@@ -13,49 +13,49 @@ Z &\to Y
 \end{aligned}
 $$
 
-When $Z$ is present but unaccounted for, the observed association between $X$ and $Y$ mixes the (possibly zero) causal effect of $X$ on $Y$ with the spurious association induced through $Z$.
+$Z$가 존재하는데 고려되지 않으면, 관측된 $X$와 $Y$의 연관성은 $X$가 $Y$에 미치는 (0일 수도 있는) 인과효과와 $Z$를 통해 유도된 허위 연관성을 뒤섞게 된다.
 
-The directional language matters: a variable on the *causal pathway* ($X \to Z \to Y$) is a **mediator**, not a confounder. A variable caused by both $X$ and $Y$ is a **collider**, and conditioning on it can *create* spurious associations rather than remove them.
+방향에 관한 표현이 중요하다. *인과 경로* 위에 있는 변수($X \to Z \to Y$)는 교란요인이 아니라 **매개변수(mediator)** 다. $X$와 $Y$ 모두에 의해 유발되는 변수는 **충돌변수(collider)** 이며, 여기에 조건을 걸면 허위 연관성을 제거하기는커녕 오히려 *만들어낼* 수 있다.
 
-## Explanation
+## 설명
 
-### Classic examples
+### 고전적 예
 
-- **Ice cream sales and drowning** both rise in summer. Confounder: temperature.
-- **Coffee drinkers and lung cancer** appear correlated. Historical confounder: smoking (coffee drinkers tended to smoke).
-- **Shoe size and reading ability** in schoolchildren are positively correlated. Confounder: age.
-- **Hospital admission and mortality**: hospitalized patients die more often. Confounder: severity of illness.
+- **아이스크림 판매와 익사**는 둘 다 여름에 증가한다. 교란요인: 기온.
+- **커피 애호가와 폐암**은 상관이 있어 보인다. 역사적 교란요인: 흡연(커피를 마시는 사람이 담배도 피우는 경향이 있었다).
+- 학령기 아동의 **신발 크기와 읽기 능력**은 양의 상관을 보인다. 교란요인: 나이.
+- **입원과 사망률**: 입원한 환자가 더 자주 사망한다. 교란요인: 질병의 중증도.
 
-In each case, the observed association is real but the proposed causal interpretation is wrong.
+각 경우에 관측된 연관성 자체는 실재하지만, 제시된 인과적 해석은 틀렸다.
 
-### Simpson's paradox
+### 심슨의 역설
 
-A particularly dramatic form of confounding: an association seen within every subgroup can *reverse* when subgroups are pooled. The 1973 Berkeley graduate-admissions study famously showed that women appeared to be admitted at a lower rate than men overall — but within each individual department, women were admitted at the same or higher rate. The confounder: women applied disproportionately to competitive (low-admit-rate) departments.
+특히 극적인 형태의 교란으로, 모든 하위집단에서 나타나는 연관성이 하위집단을 합치면 *뒤집힐* 수 있다. 1973년 버클리 대학원 입학 연구가 유명한데, 전체적으로는 여성의 합격률이 남성보다 낮아 보였지만 개별 학과 안에서는 여성의 합격률이 같거나 오히려 높았다. 교란요인은 여성이 경쟁이 치열한(합격률이 낮은) 학과에 불균형하게 많이 지원했다는 사실이었다.
 
-### From association to causation
+### 연관성에서 인과관계로
 
-The two routes to identifying causal effects:
+인과효과를 식별하는 두 갈래 길:
 
-1. **Intervention**: randomly assign $X$. Under randomization, $X$ becomes independent of all $Z$ (observed and unobserved), so the observed association reflects only the causal pathway. This is the gold standard.
+1. **개입**: $X$를 무작위로 배정한다. 무작위화 아래에서 $X$는 (관측되든 아니든) 모든 $Z$와 독립이 되므로 관측된 연관성은 인과 경로만을 반영한다. 이것이 표준이다.
 
-2. **Identifying assumptions** (when randomization is impossible):
-   - **Stratification / matching / regression adjustment** under the assumption that all confounders have been measured.
-   - **Instrumental variables** when an exogenous source of variation affects $X$ but not $Y$ directly.
-   - **Difference-in-differences** under a parallel-trends assumption.
-   - **Regression discontinuity** when a sharp threshold determines $X$.
+2. **식별 가정**(무작위화가 불가능할 때):
+   - 모든 교란요인이 측정되었다는 가정 아래의 **층화 / 짝짓기 / 회귀 보정**.
+   - 외생적인 변동 원천이 $X$에는 영향을 주지만 $Y$에는 직접 영향을 주지 않을 때의 **도구변수**.
+   - 평행추세 가정 아래의 **이중차분법**.
+   - 뚜렷한 기준선이 $X$를 결정할 때의 **회귀 불연속**.
 
-Each replaces randomization with an assumption that cannot be tested from the data alone.
+각각은 무작위화를 자료만으로는 검정할 수 없는 가정으로 대체한다.
 
-### Adjusting for the wrong thing
+### 엉뚱한 것을 보정하기
 
-A reflexive instinct is to "adjust for everything." This is wrong:
+"모든 것을 다 보정하자"는 반사적 충동이 있는데, 이는 잘못이다.
 
-- **Mediators**: adjusting for a mediator blocks the very pathway you want to estimate. If the question is "does education increase earnings?", adjusting for occupation (a mediator) shrinks the estimated effect because you've already eliminated the indirect pathway.
-- **Colliders**: adjusting for a variable caused by both $X$ and $Y$ opens a spurious path between them. Restricting an analysis to hospitalized patients (a collider of disease severity and treatment) can produce associations between treatment and outcome that do not exist in the population.
+- **매개변수**: 매개변수를 보정하면 정작 추정하고 싶은 그 경로를 차단하게 된다. 질문이 "교육이 소득을 높이는가?"라면, (매개변수인) 직업을 보정할 경우 간접 경로를 이미 제거해 버렸으므로 추정된 효과가 줄어든다.
+- **충돌변수**: $X$와 $Y$ 모두에 의해 유발되는 변수를 보정하면 둘 사이에 허위 경로가 열린다. 분석을 입원 환자(질병 중증도와 처리의 충돌변수)로 제한하면, 모집단에는 존재하지 않는 처리와 결과의 연관성이 만들어질 수 있다.
 
-Causal diagrams (DAGs, Pearl 2000) formalize which adjustments are valid.
+인과 그래프(DAG, Pearl 2000)는 어떤 보정이 타당한지를 형식화한다.
 
-## Examples
+## 예제
 
 ```python
 """Simpson's paradox: confounding by department in admissions."""
@@ -84,99 +84,99 @@ for d in ["A", "B"]:
           f"mean grade = {sub['grade'].mean():.1f}")
 ```
 
-The within-department correlation is positive (more study → higher grades), as causation suggests. The overall correlation is dampened (or could be reversed in a more extreme setup) because the harder-grading department has both more studying *and* lower grades — the same departmental confounder that drives Simpson's paradox.
+학과 내부의 상관은 인과관계가 시사하는 대로 양수다(더 공부하면 → 성적이 높다). 반면 전체 상관은 약해진다(더 극단적인 설정에서는 뒤집힐 수도 있다). 성적을 짜게 주는 학과가 공부량은 더 많으면서 *동시에* 성적은 더 낮기 때문인데, 이것이 바로 심슨의 역설을 만드는 학과라는 교란요인이다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-A newspaper reports that cities with more ice-cream trucks have higher crime rates, concluding that ice-cream trucks cause crime.
+**연습문제 1.**
+어떤 신문이 아이스크림 트럭이 많은 도시일수록 범죄율이 높다고 보도하며, 아이스크림 트럭이 범죄를 유발한다고 결론지었다.
 
-**(a)** Identify a plausible **confounding variable** explaining the association.
-**(b)** Explain why the observational design cannot establish a causal relationship.
-**(c)** Sketch a study that could better isolate the relationship, and explain why it is impractical.
+**(a)** 이 연관성을 설명할 수 있는 그럴듯한 **교란변수**를 제시하라.
+**(b)** 이 관찰적 설계로는 왜 인과관계를 확립할 수 없는지 설명하라.
+**(c)** 이 관계를 더 잘 분리해 낼 수 있는 연구를 구상하고, 그것이 왜 비현실적인지 설명하라.
 
-??? success "Solution to Exercise 1"
-    (a) **Temperature** (or **population density**). Hot weather increases both ice-cream demand (more trucks) and outdoor activity (more opportunities for crime). Population density does the same: denser cities have more of everything per square mile, including both trucks and crime.
+??? success "연습문제 1 풀이"
+    (a) **기온**(또는 **인구밀도**). 더운 날씨는 아이스크림 수요(트럭 증가)와 야외 활동(범죄 기회 증가)을 함께 늘린다. 인구밀도도 마찬가지다. 밀도가 높은 도시는 단위 면적당 모든 것이 많으며, 여기에는 트럭과 범죄가 모두 포함된다.
 
-    (b) The data are observational. Without controlling for the confounder, the observed correlation conflates a possible causal effect of ice-cream trucks with the lurking effect of temperature/density. Without controlling for *all* relevant confounders (which is impossible in general), no causal claim is justified.
+    (b) 자료가 관찰적이다. 교란요인을 통제하지 않으면, 관측된 상관은 아이스크림 트럭의 인과효과 가능성과 기온/밀도의 숨은 효과를 뒤섞는다. *모든* 관련 교란요인을 통제하지 않는 한(일반적으로 이는 불가능하다) 어떤 인과적 주장도 정당화되지 않는다.
 
-    (c) A randomized experiment would randomly assign cities to different numbers of ice-cream trucks and measure crime rates. Impractical because (i) cities cannot be controlled like experimental units, (ii) ice-cream-truck counts are not centrally manipulable, (iii) ethical considerations of changing public-safety conditions for an experiment.
+    (c) 무작위 실험이라면 도시들을 서로 다른 수의 아이스크림 트럭에 무작위 배정하고 범죄율을 측정할 것이다. 비현실적인 이유는 (i) 도시를 실험 단위처럼 통제할 수 없고, (ii) 아이스크림 트럭 수를 중앙에서 조작할 수 없으며, (iii) 실험을 위해 공공 안전 조건을 바꾸는 데 따르는 윤리적 문제 때문이다.
 
-    A more realistic approach: a natural experiment using a sudden policy change in licensing in one city, with a similar city as a control (difference-in-differences). Even this is shaky — the parallel-trends assumption is hard to defend at the city level.
-
----
-
-**Exercise 2.**
-Distinguish **confounder**, **mediator**, and **collider**. For each, state the consequence of "adjusting for" it in a regression analysis of the effect of $X$ on $Y$.
-
-??? success "Solution to Exercise 2"
-    **Confounder** $Z$: causes both $X$ and $Y$. **Adjusting for it** removes the spurious component of the $X$-$Y$ association, *reducing* bias.
-
-    **Mediator** $M$: caused by $X$ and itself causes $Y$ (so $X \to M \to Y$). **Adjusting for it** blocks the indirect pathway, *increasing* bias — the adjusted coefficient now estimates only the direct effect $X \to Y$, not the total effect.
-
-    **Collider** $C$: caused by both $X$ and $Y$ (so $X \to C \leftarrow Y$). **Adjusting for it** opens a non-causal pathway between $X$ and $Y$ — creating a spurious association where none existed. This is **selection bias** in regression form.
-
-    The rule: adjust for confounders; do *not* adjust for mediators (unless you want the direct effect explicitly) or colliders. Knowing which is which requires substantive knowledge of the data-generating process, often best expressed as a causal DAG.
+    보다 현실적인 접근으로는 한 도시의 갑작스러운 허가 정책 변화를 이용하고 비슷한 도시를 대조군으로 삼는 자연실험(이중차분법)이 있다. 이조차도 불안정한데, 평행추세 가정을 도시 수준에서 옹호하기가 어렵기 때문이다.
 
 ---
 
-**Exercise 3.**
-**Simpson's paradox** with a concrete table. A drug is tested in two hospitals with the following outcomes:
+**연습문제 2.**
+**교란변수**, **매개변수**, **충돌변수**를 구분하라. $X$가 $Y$에 미치는 효과를 회귀분석할 때 각각을 "보정"하면 어떤 결과가 생기는지 진술하라.
 
-| | Hospital A — recovered | A — total | Hospital B — recovered | B — total |
+??? success "연습문제 2 풀이"
+    **교란변수** $Z$: $X$와 $Y$를 모두 유발한다. **보정하면** $X$–$Y$ 연관성의 허위 성분이 제거되어 편향이 *줄어든다*.
+
+    **매개변수** $M$: $X$에 의해 유발되고 그 자신이 $Y$를 유발한다(즉 $X \to M \to Y$). **보정하면** 간접 경로가 차단되어 편향이 *커진다* — 보정된 계수는 이제 총효과가 아니라 직접효과 $X \to Y$만을 추정한다.
+
+    **충돌변수** $C$: $X$와 $Y$ 모두에 의해 유발된다(즉 $X \to C \leftarrow Y$). **보정하면** $X$와 $Y$ 사이에 비인과적 경로가 열려 원래 없던 허위 연관성이 생긴다. 이는 회귀의 형태로 나타난 **선택편향**이다.
+
+    규칙은 이렇다. 교란변수는 보정하고, 매개변수(직접효과를 명시적으로 원하는 경우가 아니라면)나 충돌변수는 보정하지 *않는다*. 무엇이 무엇인지 아는 데는 자료생성 과정에 대한 실질적 지식이 필요하며, 이는 흔히 인과 DAG로 표현하는 것이 가장 좋다.
+
+---
+
+**연습문제 3.**
+구체적인 표로 보는 **심슨의 역설**. 어떤 약을 두 병원에서 시험하여 다음과 같은 결과를 얻었다.
+
+| | 병원 A — 회복 | A — 전체 | 병원 B — 회복 | B — 전체 |
 |---|---|---|---|---|
-| Drug | 80 | 100 | 200 | 300 |
-| No drug | 240 | 300 | 50 | 100 |
+| 투약 | 80 | 100 | 200 | 300 |
+| 미투약 | 240 | 300 | 50 | 100 |
 
-Compute the recovery rate for drug vs. no-drug overall and within each hospital. Comment on the apparent reversal.
+전체 및 각 병원 내에서 투약군과 미투약군의 회복률을 계산하라. 겉보기 역전에 대해 논평하라.
 
-??? success "Solution to Exercise 3"
-    **Within Hospital A:** drug recovery rate $= 80/100 = 80\%$; no-drug rate $= 240/300 = 80\%$. Identical.
+??? success "연습문제 3 풀이"
+    **병원 A 내부:** 투약 회복률 $= 80/100 = 80\%$, 미투약 회복률 $= 240/300 = 80\%$. 동일하다.
 
-    **Within Hospital B:** drug recovery rate $= 200/300 = 66.7\%$; no-drug rate $= 50/100 = 50\%$. Drug helps.
+    **병원 B 내부:** 투약 회복률 $= 200/300 = 66.7\%$, 미투약 회복률 $= 50/100 = 50\%$. 약이 도움이 된다.
 
-    **Pooled:** drug $= (80+200)/(100+300) = 280/400 = 70\%$; no-drug $= (240+50)/(300+100) = 290/400 = 72.5\%$.
+    **합쳤을 때:** 투약 $= (80+200)/(100+300) = 280/400 = 70\%$, 미투약 $= (240+50)/(300+100) = 290/400 = 72.5\%$.
 
-    Pooled, no-drug looks better. Within each hospital, drug is at least as good as no-drug — never worse. The reversal occurs because **drug use is correlated with hospital** (75% of drug patients are in Hospital B, vs. only 25% of no-drug patients), and **recovery rate also differs by hospital** (A has higher rates than B). Hospital is the confounder. The correct conclusion is the within-hospital one: the drug is at least as effective. Pooling without controlling for hospital is misleading.
-
----
-
-**Exercise 4.**
-The **back-door criterion** (Pearl 1995) gives a graphical rule for identifying which variables suffice as adjustment controls. State the criterion informally and give a small DAG example where adjusting for *the wrong set* opens a back-door rather than closing one.
-
-??? success "Solution to Exercise 4"
-    **Back-door criterion (informal):** to identify the causal effect of $X$ on $Y$, choose a set $S$ of variables such that (1) no variable in $S$ is a descendant of $X$, and (2) $S$ blocks every "back-door" path from $X$ to $Y$ — i.e., every path between $X$ and $Y$ that starts with an arrow into $X$.
-
-    **DAG example:** suppose $X \to Y$, $Z \to X$, $Z \to W$, $Y \to W$. Here $W$ is a collider on the path $X \to Y \to W \leftarrow Z \to X$. Adjusting for $\{Z\}$ closes the back-door path $X \leftarrow Z \to W \leftarrow Y$ (which was already blocked at the collider $W$). Adjusting for $\{Z, W\}$ **opens** the back-door path through $W$ — conditioning on the collider creates an association between $Z$ and $Y$ within strata of $W$, which then leaks into the $X$-$Y$ analysis.
-
-    The lesson: more controls are not always better. Selecting controls requires knowing the causal structure, and "adjust for everything" can hurt as easily as help.
+    합치면 미투약이 더 나아 보인다. 그런데 각 병원 안에서는 투약이 미투약보다 최소한 같거나 낫지 결코 나쁘지 않다. 역전이 일어나는 이유는 **투약 여부가 병원과 상관되어 있고**(투약 환자의 75%가 병원 B에 있는 반면 미투약 환자는 25%만 그렇다), **회복률 또한 병원마다 다르기**(A가 B보다 높다) 때문이다. 병원이 교란요인이다. 옳은 결론은 병원 내부의 결론, 즉 약이 최소한 같거나 더 효과적이라는 것이다. 병원을 통제하지 않고 합치는 것은 오도한다.
 
 ---
 
-**Exercise 5.**
-A medical researcher claims a 30% reduction in heart-attack risk among coffee drinkers. The press releases summarize this as "coffee prevents heart attacks." List two confounders, then describe what kind of study would be needed to upgrade the claim to a causal conclusion.
+**연습문제 4.**
+**뒷문 기준**(Pearl 1995)은 어떤 변수들이 보정 통제변수로 충분한지를 판별하는 그래프적 규칙을 준다. 이 기준을 비형식적으로 진술하고, *잘못된 집합*을 보정하면 뒷문을 닫기는커녕 여는 작은 DAG 예를 제시하라.
 
-??? success "Solution to Exercise 5"
-    **Two confounders:**
+??? success "연습문제 4 풀이"
+    **뒷문 기준(비형식적):** $X$가 $Y$에 미치는 인과효과를 식별하려면, (1) $S$의 어떤 변수도 $X$의 후손이 아니고 (2) $S$가 $X$에서 $Y$로 가는 모든 "뒷문" 경로 — 즉 $X$로 들어오는 화살표로 시작하는 $X$–$Y$ 경로 — 를 차단하는 변수 집합 $S$를 고른다.
 
-    - **Lifestyle**: coffee drinkers tend to be employed, urban, and more health-aware overall (especially in modern Western samples — historical samples have the opposite pattern). These factors also reduce heart-attack risk.
-    - **Selection (reverse causation)**: people with early signs of heart trouble have often been told by their doctor to reduce coffee intake. So sicker people stop drinking coffee. The remaining coffee drinkers are *healthier on average* — making coffee look protective when in fact coffee did nothing and the causal arrow points the other way.
+    **DAG 예:** $X \to Y$, $Z \to X$, $Z \to W$, $Y \to W$라고 하자. 여기서 $W$는 경로 $X \to Y \to W \leftarrow Z \to X$ 위의 충돌변수다. $\{Z\}$를 보정하면 뒷문 경로 $X \leftarrow Z \to W \leftarrow Y$가 닫힌다(이 경로는 충돌변수 $W$에서 이미 차단되어 있었다). 반면 $\{Z, W\}$를 보정하면 $W$를 지나는 뒷문 경로가 **열린다** — 충돌변수에 조건을 걸면 $W$의 층 안에서 $Z$와 $Y$ 사이에 연관이 생기고, 이것이 $X$–$Y$ 분석으로 새어 들어간다.
 
-    **Causal upgrade:** a randomized controlled trial. Assign healthy volunteers to drink 2–3 cups of coffee daily versus 0 cups for a decade. Measure heart-attack incidence. Ethical and practical issues: long follow-up, compliance, blinding (subjects know whether they drink coffee). Realistic compromise: instrumental-variable analysis using genetic variants that affect caffeine metabolism (Mendelian randomization) — exploits the fact that genetic variants are randomly assigned at conception and predict coffee consumption without being affected by lifestyle.
+    교훈: 통제변수는 많을수록 좋은 것이 아니다. 통제변수를 고르려면 인과 구조를 알아야 하며, "모든 것을 보정하라"는 도움이 되는 만큼이나 쉽게 해가 될 수 있다.
 
 ---
 
-**Exercise 6.**
-Distinguish the **average treatment effect (ATE)** from the **average treatment effect on the treated (ATT)**. When can observational data identify ATE, when only ATT, and why does this matter for policy?
+**연습문제 5.**
+어느 의학 연구자가 커피를 마시는 사람의 심근경색 위험이 30% 낮아진다고 주장한다. 보도자료는 이를 "커피가 심근경색을 예방한다"로 요약한다. 교란요인 두 가지를 제시한 뒤, 이 주장을 인과적 결론으로 격상하려면 어떤 종류의 연구가 필요한지 설명하라.
 
-??? success "Solution to Exercise 6"
-    **ATE:** $\mathbb{E}[Y(1) - Y(0)]$ averaged over the entire population. What you'd see if you treated everyone vs. no one.
+??? success "연습문제 5 풀이"
+    **교란요인 두 가지:**
 
-    **ATT:** $\mathbb{E}[Y(1) - Y(0) \mid T = 1]$ averaged over the treated subpopulation. What you'd see if you treated those who were actually treated, vs. not treating them.
+    - **생활양식**: 커피를 마시는 사람은 대체로 취업 상태이고 도시에 살며 전반적으로 건강에 더 신경 쓰는 경향이 있다(특히 현대 서구 표본에서 그렇고, 과거 표본은 반대 패턴을 보인다). 이 요인들 자체가 심근경색 위험을 낮춘다.
+    - **선택(역인과)**: 심장 문제의 초기 징후가 있는 사람은 의사에게 커피를 줄이라는 말을 들었을 가능성이 높다. 그래서 더 아픈 사람이 커피를 끊는다. 남아 있는 커피 애호가는 *평균적으로 더 건강하며*, 그 결과 실제로는 커피가 아무 일도 하지 않았고 인과의 화살표가 반대 방향인데도 커피가 보호 효과를 지닌 것처럼 보인다.
 
-    **From observational data:**
+    **인과적 격상:** 무작위 대조시험이 필요하다. 건강한 자원자를 10년간 하루 2–3잔의 커피를 마시는 군과 0잔인 군에 배정하고 심근경색 발생률을 측정한다. 윤리적·현실적 문제로는 긴 추적기간, 순응도, 눈가림(대상자가 자신이 커피를 마시는지 안다는 점) 등이 있다. 현실적인 절충안은 카페인 대사에 영향을 주는 유전 변이를 이용한 도구변수 분석(멘델 무작위화)이다. 유전 변이가 수정 시점에 무작위로 배정되고 생활양식의 영향을 받지 않으면서 커피 소비를 예측한다는 사실을 활용한다.
 
-    - Under unconfoundedness $(Y(0), Y(1)) \perp T \mid X$ and overlap, **ATE** is identified — we can estimate counterfactual outcomes for both treated and untreated under their respective conditional distributions.
-    - Under weaker conditions (e.g., $Y(0) \perp T \mid X$ alone), **ATT** is identified but not ATE — we can estimate counterfactual untreated outcomes for the treated, but not counterfactual treated outcomes for the untreated.
+---
 
-    **Policy implication:** if a policy will be applied to *the same population that volunteered for the program*, ATT is what matters. If the policy will be mandated for *everyone*, ATE is what matters — and the answer can be different. A drug that benefits the treated (who selected in because they expected benefit) may have little or even negative effect on the average person who would not have chosen it. This distinction haunts policy debates about voluntary versus mandatory programs and is rarely articulated explicitly in headline numbers.
+**연습문제 6.**
+**평균처리효과(ATE)** 와 **처리군에 대한 평균처리효과(ATT)** 를 구분하라. 관찰자료로 ATE를 식별할 수 있는 것은 언제이고 ATT만 식별되는 것은 언제이며, 이것이 정책에서 왜 중요한가?
+
+??? success "연습문제 6 풀이"
+    **ATE:** 모집단 전체에 걸쳐 평균한 $\mathbb{E}[Y(1) - Y(0)]$. 모두를 처리했을 때와 아무도 처리하지 않았을 때의 차이다.
+
+    **ATT:** 처리받은 부분모집단에 걸쳐 평균한 $\mathbb{E}[Y(1) - Y(0) \mid T = 1]$. 실제로 처리받은 사람들을 처리했을 때와 그들을 처리하지 않았을 때의 차이다.
+
+    **관찰자료에서:**
+
+    - 비교란성 $(Y(0), Y(1)) \perp T \mid X$ 와 중첩(overlap)이 성립하면 **ATE**가 식별된다. 처리군과 비처리군 모두에 대해 각자의 조건부 분포 아래에서 반사실적 결과를 추정할 수 있다.
+    - 더 약한 조건(예: $Y(0) \perp T \mid X$ 만) 아래에서는 **ATT**는 식별되지만 ATE는 그렇지 않다. 처리군의 반사실적 미처리 결과는 추정할 수 있어도, 비처리군의 반사실적 처리 결과는 추정할 수 없다.
+
+    **정책적 함의:** 어떤 정책이 *그 프로그램에 자원했던 바로 그 모집단*에 적용될 것이라면 중요한 것은 ATT다. 정책이 *모두에게* 의무화될 것이라면 중요한 것은 ATE이며, 그 답은 다를 수 있다. (이익을 기대해서 선택해 들어온) 처리군에게 이로운 약이, 스스로는 선택하지 않았을 평균적인 사람에게는 거의 효과가 없거나 심지어 해로울 수 있다. 이 구분은 자발적 프로그램 대 의무적 프로그램을 둘러싼 정책 논쟁에 늘 따라다니지만, 헤드라인 숫자에서는 명시적으로 언급되는 일이 드물다.

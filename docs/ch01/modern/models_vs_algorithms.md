@@ -1,26 +1,26 @@
-# Statistical Models vs Learning Algorithms
+# 통계 모형 대 학습 알고리즘
 
-The shift from parametric statistical models to flexible learning algorithms is one of the most important transitions in data analysis, reflecting different goals: understanding versus prediction.
+모수적 통계 모형에서 유연한 학습 알고리즘으로의 전환은 자료 분석에서 가장 중요한 변화 중 하나이며, 이해냐 예측이냐라는 서로 다른 목표를 반영한다.
 
-## Definition
+## 정의
 
-A **statistical model** specifies a family of probability distributions indexed by interpretable parameters (e.g., $Y = \beta_0 + \beta_1 X + \varepsilon$). A **learning algorithm** is a computational procedure that identifies patterns in data without necessarily specifying a full probabilistic model (e.g., random forests, neural networks).
+**통계 모형**은 해석 가능한 모수로 지표화된 확률분포의 족을 지정한다(예: $Y = \beta_0 + \beta_1 X + \varepsilon$). **학습 알고리즘**은 완전한 확률 모형을 반드시 지정하지 않은 채 자료에서 패턴을 찾아내는 계산 절차다(예: 랜덤 포레스트, 신경망).
 
-## Explanation
+## 설명
 
-| Aspect | Statistical Model | Learning Algorithm |
+| 측면 | 통계 모형 | 학습 알고리즘 |
 |---|---|---|
-| Primary goal | Inference and understanding | Prediction and pattern discovery |
-| Assumptions | Explicit (distributional, structural) | Minimal or implicit |
-| Interpretability | High (parameters have meaning) | Often low (black box) |
-| Data requirements | Works with small, structured data | Thrives on large, complex data |
-| Overfitting risk | Lower (fewer parameters) | Higher (managed via cross-validation) |
+| 주된 목표 | 추론과 이해 | 예측과 패턴 발견 |
+| 가정 | 명시적(분포적, 구조적) | 최소한이거나 암묵적 |
+| 해석가능성 | 높음(모수에 의미가 있음) | 흔히 낮음(블랙박스) |
+| 자료 요구 | 작고 정형화된 자료로도 작동 | 크고 복잡한 자료에서 진가를 발휘 |
+| 과적합 위험 | 낮음(모수가 적음) | 높음(교차검증으로 관리) |
 
-The boundary is blurred in practice: regularized regression (LASSO, Ridge) is a model enhanced with algorithmic regularization; Bayesian neural networks combine deep learning with probabilistic uncertainty; gradient boosting can be viewed as iterative model fitting.
+실무에서 경계는 흐릿하다. 정칙화 회귀(LASSO, 능형회귀)는 알고리즘적 정칙화로 보강한 모형이고, 베이즈 신경망은 딥러닝과 확률적 불확실성을 결합하며, 그래디언트 부스팅은 반복적 모형 적합으로 볼 수 있다.
 
-The choice depends on the goal: if you need to **understand why**, favor interpretable models; if you need to **predict what**, algorithms often excel.
+선택은 목표에 달려 있다. **왜 그런지 이해해야** 한다면 해석 가능한 모형을 택하고, **무엇이 될지 예측해야** 한다면 알고리즘이 흔히 앞선다.
 
-## Examples
+## 예제
 
 ```python
 import numpy as np
@@ -47,83 +47,83 @@ print(f"Polynomial model MSE: {mse_poly:.3f}  (coeffs: {beta_poly.round(3)})")
 print(f"True: y = 3 + 2x - 0.1x^2 + noise")
 ```
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-A linear regression model assumes $Y = \beta_0 + \beta_1 X + \varepsilon$ with $\varepsilon \sim N(0, \sigma^2)$. A random forest makes no such distributional assumption. Describe one advantage of each approach.
+**연습문제 1.**
+선형회귀 모형은 $\varepsilon \sim N(0, \sigma^2)$인 $Y = \beta_0 + \beta_1 X + \varepsilon$을 가정한다. 랜덤 포레스트는 그런 분포 가정을 두지 않는다. 각 접근의 장점을 하나씩 설명하라.
 
-??? success "Solution to Exercise 1"
-    **Linear regression advantage: interpretability and inference.** The coefficient $\beta_1$ has a clear interpretation (expected change in $Y$ per unit change in $X$), and we can construct confidence intervals and hypothesis tests for $\beta_1$. The model provides uncertainty quantification built into the framework.
+??? success "연습문제 1 풀이"
+    **선형회귀의 장점: 해석가능성과 추론.** 계수 $\beta_1$은 명확한 해석을 갖고($X$가 한 단위 변할 때 $Y$의 기대 변화량), $\beta_1$에 대한 신뢰구간과 가설검정을 구성할 수 있다. 이 모형은 불확실성 정량화를 틀 안에 내장하고 있다.
 
-    **Random forest advantage: flexibility.** A random forest can capture nonlinear relationships, interactions, and complex patterns without the analyst specifying them in advance. If the true relationship between $X$ and $Y$ is highly nonlinear, the random forest will typically produce better predictions than a misspecified linear model.
-
----
-
-**Exercise 2.**
-Explain the bias-variance trade-off in the context of choosing between a simple parametric model and a complex algorithmic model. When would you prefer a simpler model despite higher bias?
-
-??? success "Solution to Exercise 2"
-    The **bias-variance trade-off** states that prediction error = bias$^2$ + variance + irreducible noise. Simple models (e.g., linear regression) have high bias (they may miss true patterns) but low variance (they are stable across samples). Complex models (e.g., deep neural networks) have low bias but high variance (they can overfit to noise).
-
-    You would prefer a simpler model when:
-
-    - **Small sample size:** With limited data, the variance reduction from a simpler model outweighs the bias cost.
-    - **Interpretability is required:** Regulatory or scientific contexts may require explainable models.
-    - **The true relationship is approximately linear:** If the data-generating process is well-approximated by the simple model, the bias is small and the variance advantage dominates.
-    - **Generalization matters more than in-sample fit:** Simpler models tend to generalize better to new data when the signal-to-noise ratio is low.
+    **랜덤 포레스트의 장점: 유연성.** 랜덤 포레스트는 분석가가 미리 지정하지 않아도 비선형 관계, 상호작용, 복잡한 패턴을 포착할 수 있다. $X$와 $Y$의 참된 관계가 강하게 비선형이라면, 랜덤 포레스트는 잘못 지정된 선형모형보다 대체로 더 나은 예측을 낸다.
 
 ---
 
-**Exercise 3.**
-A data scientist builds a neural network that achieves 98% accuracy on training data but only 72% on test data. Explain this phenomenon and suggest two remedies.
+**연습문제 2.**
+단순한 모수적 모형과 복잡한 알고리즘적 모형 중에서 고르는 맥락에서 편향–분산 절충을 설명하라. 편향이 더 큰데도 단순한 모형을 선호하게 되는 경우는 언제인가?
 
-??? success "Solution to Exercise 3"
-    The large gap between training accuracy (98%) and test accuracy (72%) indicates **overfitting**: the model has memorized the training data (including noise) rather than learning the underlying pattern. It performs well on data it has seen but poorly on new data.
+??? success "연습문제 2 풀이"
+    **편향–분산 절충**은 예측오차 = 편향$^2$ + 분산 + 줄일 수 없는 잡음이라는 것이다. 단순한 모형(예: 선형회귀)은 편향이 크지만(참된 패턴을 놓칠 수 있지만) 분산이 작다(표본이 바뀌어도 안정적이다). 복잡한 모형(예: 심층 신경망)은 편향이 작지만 분산이 크다(잡음에 과적합할 수 있다).
 
-    Two remedies:
+    다음과 같을 때 단순한 모형을 선호한다.
 
-    1. **Regularization:** Add a penalty on model complexity (e.g., L2 weight decay, dropout layers) to discourage the model from fitting noise. This increases training error slightly but improves test performance.
-    2. **More training data:** With more data, the model has less opportunity to memorize individual examples and must learn general patterns. Data augmentation can serve as a partial substitute when additional data is unavailable.
-
-    Other options include reducing model complexity (fewer layers/parameters), early stopping, or using cross-validation to tune hyperparameters.
-
----
-
-**Exercise 4.**
-Compare the goals of a statistical model and a machine learning algorithm using the distinction between *inference* and *prediction*. Give a concrete scenario where each goal is primary.
-
-??? success "Solution to Exercise 4"
-    **Inference** aims to understand the relationship between variables: estimating parameters, testing hypotheses, and quantifying uncertainty. **Prediction** aims to accurately forecast outcomes for new observations, regardless of whether the model is interpretable.
-
-    **Inference-primary scenario:** An economist studies the effect of minimum wage increases on employment. The goal is to estimate the causal parameter (e.g., elasticity of employment with respect to minimum wage) and test whether it is statistically significant. A structural model with clear assumptions is essential.
-
-    **Prediction-primary scenario:** A streaming service wants to predict which movie a user will watch next. The goal is recommendation accuracy, not understanding why users choose movies. A complex collaborative filtering algorithm or deep learning model is appropriate even if its parameters have no interpretable meaning.
-
-    Many real problems involve both goals; the relative emphasis determines the appropriate tool.
+    - **표본 크기가 작을 때:** 자료가 제한적이면 단순한 모형이 주는 분산 감소가 편향의 대가를 능가한다.
+    - **해석가능성이 요구될 때:** 규제 맥락이나 과학적 맥락에서는 설명 가능한 모형이 필요할 수 있다.
+    - **참된 관계가 대체로 선형일 때:** 자료생성 과정이 단순한 모형으로 잘 근사된다면 편향이 작고 분산 이득이 지배한다.
+    - **표본 내 적합보다 일반화가 중요할 때:** 신호 대 잡음 비가 낮을 때는 단순한 모형이 새 자료로 더 잘 일반화되는 경향이 있다.
 
 ---
 
-**Exercise 5.**
-**Breiman's "Two Cultures"** (2001) argued that statisticians and machine-learning researchers approach the same data with different mental models. Summarize the two cultures and discuss whether the boundary has narrowed since the paper appeared.
+**연습문제 3.**
+어떤 데이터 과학자가 만든 신경망이 훈련 자료에서 98%의 정확도를 내지만 시험 자료에서는 72%에 그친다. 이 현상을 설명하고 두 가지 해결책을 제안하라.
 
-??? success "Solution to Exercise 5"
-    Breiman described:
+??? success "연습문제 3 풀이"
+    훈련 정확도(98%)와 시험 정확도(72%) 사이의 큰 격차는 **과적합**을 나타낸다. 모형이 밑바탕의 패턴을 학습한 것이 아니라 훈련 자료를(잡음까지 포함해) 외운 것이다. 본 적 있는 자료에서는 잘하지만 새 자료에서는 못한다.
 
-    - **The data-modeling culture** (most statisticians): assume the data come from a stochastic model (e.g., linear regression with normal errors), estimate its parameters, and use the fitted model for inference. Validity depends on whether the model is approximately correct.
-    - **The algorithmic-modeling culture** (machine learning): treat the data-generating mechanism as a black box. Fit a flexible algorithm and evaluate it on held-out data. Success is measured by predictive accuracy, not by faithfulness to a generative model.
+    두 가지 해결책:
 
-    Breiman argued the algorithmic culture would prove more useful for many real-world problems, especially those with complex, high-dimensional data.
+    1. **정칙화:** 모형 복잡도에 벌점을 부과해(예: L2 가중치 감쇠, 드롭아웃 층) 잡음을 적합하지 않도록 억제한다. 훈련 오차는 약간 늘지만 시험 성능은 좋아진다.
+    2. **훈련 자료 확대:** 자료가 많아지면 모형이 개별 예제를 외울 여지가 줄고 일반적인 패턴을 배워야 한다. 추가 자료를 구할 수 없을 때는 자료 증강이 부분적인 대안이 된다.
 
-    **Has the boundary narrowed?** Substantially yes. Modern statistics has adopted cross-validation, regularization, and ensemble methods from ML. ML has adopted formal probabilistic frameworks (Bayesian neural networks, conformal prediction, calibration). Causal ML methods explicitly bridge the two cultures. But the underlying *epistemological* difference — whether validity rests on a model or on out-of-sample performance — persists, and the most common pitfalls in practice still come from mixing the two without realizing it.
+    그 밖에 모형 복잡도 축소(층/모수 수 감소), 조기 종료, 교차검증을 통한 초매개변수 조정도 있다.
 
 ---
 
-**Exercise 6.**
-A team builds a random forest to predict customer credit risk. The model has 95% out-of-sample accuracy but the bank's regulator requires that the model be **explainable** — adverse credit decisions must come with a specific reason. Discuss two practical strategies to satisfy this requirement without abandoning the random forest.
+**연습문제 4.**
+*추론*과 *예측*의 구분을 이용해 통계 모형과 기계학습 알고리즘의 목표를 비교하라. 각 목표가 우선인 구체적 상황을 제시하라.
 
-??? success "Solution to Exercise 6"
-    **Strategy 1 — SHAP / feature-attribution methods:** SHAP values compute, for each individual prediction, the contribution of each feature to that prediction relative to the population baseline. For a denied applicant, the explanation might be "credit score contributed $-0.15$, debt-to-income ratio contributed $-0.10$, recent inquiries contributed $-0.05$." These give per-decision reason codes derived from the model itself, preserving the predictive accuracy of the random forest. SHAP values have a coherent game-theoretic foundation (Shapley values), satisfying many regulators' notion of "specific reason."
+??? success "연습문제 4 풀이"
+    **추론**은 변수 사이의 관계를 이해하는 것을 목표로 한다. 모수를 추정하고, 가설을 검정하고, 불확실성을 정량화한다. **예측**은 모형이 해석 가능한지와 무관하게 새 관측값의 결과를 정확히 예측하는 것을 목표로 한다.
 
-    **Strategy 2 — surrogate model:** train a simpler interpretable model (e.g., logistic regression or shallow decision tree) to mimic the random forest's predictions on the training data. The surrogate's coefficients or rules become the "explanation" — a trade-off: the surrogate is interpretable but may not perfectly match the random forest. Hybrid approaches use the random forest for the actual decision and the surrogate for the explanation, with diagnostics on agreement.
+    **추론이 우선인 상황:** 어떤 경제학자가 최저임금 인상이 고용에 미치는 효과를 연구한다. 목표는 인과 모수(예: 최저임금에 대한 고용의 탄력성)를 추정하고 그것이 통계적으로 유의한지 검정하는 것이다. 가정이 명확한 구조 모형이 필수적이다.
 
-    Other options: train an inherently interpretable but flexible model like EBM (explainable boosting machine) that gets close to random-forest accuracy with intrinsic interpretability; or fit a deep model with monotonicity constraints in known directions, which both regularizes and aids interpretation.
+    **예측이 우선인 상황:** 어떤 스트리밍 서비스가 사용자가 다음에 볼 영화를 예측하려 한다. 목표는 추천 정확도이지 사용자가 왜 그 영화를 고르는지 이해하는 것이 아니다. 모수에 해석 가능한 의미가 없더라도 복잡한 협업 필터링 알고리즘이나 딥러닝 모형이 적절하다.
+
+    현실의 많은 문제는 두 목표를 모두 포함하며, 어느 쪽에 무게를 두느냐가 적절한 도구를 결정한다.
+
+---
+
+**연습문제 5.**
+**브레이먼의 "두 문화"**(2001)는 통계학자와 기계학습 연구자가 같은 자료를 서로 다른 심적 모형으로 대한다고 주장했다. 두 문화를 요약하고, 그 논문이 나온 이후 경계가 좁아졌는지 논하라.
+
+??? success "연습문제 5 풀이"
+    브레이먼이 서술한 두 문화는 다음과 같다.
+
+    - **자료 모형 문화**(대부분의 통계학자): 자료가 확률 모형(예: 정규 오차를 갖는 선형회귀)에서 나왔다고 가정하고, 그 모수를 추정하며, 적합된 모형으로 추론한다. 타당성은 그 모형이 대체로 옳은지에 달려 있다.
+    - **알고리즘 모형 문화**(기계학습): 자료생성 기제를 블랙박스로 취급한다. 유연한 알고리즘을 적합시키고 떼어놓은 자료로 평가한다. 성공은 생성 모형에 대한 충실성이 아니라 예측 정확도로 측정된다.
+
+    브레이먼은 특히 복잡하고 고차원인 자료를 다루는 현실 문제 다수에서 알고리즘 문화가 더 유용할 것이라고 주장했다.
+
+    **경계가 좁아졌는가?** 상당히 그렇다. 현대 통계학은 기계학습에서 교차검증, 정칙화, 앙상블 방법을 받아들였다. 기계학습은 형식적 확률 틀(베이즈 신경망, 컨포멀 예측, 보정)을 받아들였다. 인과 기계학습 방법은 두 문화를 명시적으로 잇는다. 그러나 밑바탕의 *인식론적* 차이 — 타당성이 모형에 있느냐 표본 밖 성능에 있느냐 — 는 남아 있으며, 실무에서 가장 흔한 함정은 여전히 자신도 모르게 둘을 뒤섞는 데서 나온다.
+
+---
+
+**연습문제 6.**
+어떤 팀이 고객 신용위험을 예측하는 랜덤 포레스트를 만들었다. 표본 밖 정확도가 95%지만, 은행 감독기관은 모형이 **설명 가능**해야 한다고 요구한다. 불리한 신용 결정에는 구체적인 사유가 따라야 한다는 것이다. 랜덤 포레스트를 포기하지 않고 이 요건을 충족할 현실적 전략 두 가지를 논하라.
+
+??? success "연습문제 6 풀이"
+    **전략 1 — SHAP / 특성 기여도 방법:** SHAP 값은 개별 예측마다 각 특성이 모집단 기준선 대비 그 예측에 얼마나 기여했는지를 계산한다. 거절된 신청자에 대해서는 "신용점수가 $-0.15$, 부채상환비율이 $-0.10$, 최근 조회 이력이 $-0.05$만큼 기여했다"와 같은 설명이 가능하다. 이는 모형 자체에서 유도한 결정별 사유 코드를 제공하면서 랜덤 포레스트의 예측 정확도를 그대로 보존한다. SHAP 값은 일관된 게임이론적 토대(섀플리 값)를 가지며, 많은 감독기관이 말하는 "구체적 사유"의 요건을 충족한다.
+
+    **전략 2 — 대리 모형:** 훈련 자료에서 랜덤 포레스트의 예측을 흉내 내도록 더 단순한 해석 가능 모형(예: 로지스틱 회귀나 얕은 결정트리)을 학습시킨다. 그 대리 모형의 계수나 규칙이 "설명"이 된다. 대가는 대리 모형이 해석 가능하지만 랜덤 포레스트와 완벽히 일치하지는 않는다는 점이다. 혼합 접근은 실제 결정에는 랜덤 포레스트를, 설명에는 대리 모형을 쓰면서 둘의 일치도를 진단한다.
+
+    다른 선택지도 있다. 본래 해석 가능하면서도 유연한 모형(EBM, 설명 가능 부스팅 기계)을 학습시켜 랜덤 포레스트에 가까운 정확도를 얻거나, 알려진 방향으로 단조성 제약을 둔 심층 모형을 적합시키는 것이다. 후자는 정칙화 효과와 해석 보조를 동시에 준다.

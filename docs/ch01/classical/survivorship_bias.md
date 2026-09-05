@@ -1,24 +1,24 @@
-# Survivorship Bias
+# 생존자 편향
 
-Survivorship bias occurs when analysis focuses only on subjects that "survived" a selection process, ignoring those that did not. This systematically distorts conclusions by making success appear more common or more predictable than it actually is.
+생존자 편향은 선택 과정에서 "살아남은" 대상만 분석하고 그렇지 못한 대상을 무시할 때 생긴다. 이는 성공이 실제보다 더 흔하거나 더 예측 가능한 것처럼 보이게 만들어 결론을 체계적으로 왜곡한다.
 
-## Definition
+## 정의
 
-**Survivorship bias** is a form of selection bias where the sample consists only of entities that passed through some filter (survived, succeeded, returned), while those that were filtered out (failed, died, were lost) are invisible to the analyst. Conclusions drawn from the surviving sample do not generalize to the full population.
+**생존자 편향(survivorship bias)** 은 선택편향의 한 형태로, 표본이 어떤 필터를 통과한(살아남은, 성공한, 돌아온) 개체들로만 이루어지고 걸러진(실패한, 죽은, 사라진) 개체들은 분석가에게 보이지 않는 상황이다. 살아남은 표본에서 끌어낸 결론은 전체 모집단으로 일반화되지 않는다.
 
-## Explanation
+## 설명
 
-The canonical example is Abraham Wald's analysis of WWII bomber damage. The military proposed adding armor where returning planes had the most bullet holes (wings and fuselage). Wald recognized that planes hit in the cockpit or engine never returned -- the surviving sample was missing exactly the fatal damage. The correct strategy was to armor the areas with few holes on survivors.
+대표적인 예는 아브라함 발드의 제2차 세계대전 폭격기 손상 분석이다. 군은 귀환한 비행기에 총알 구멍이 가장 많은 곳(날개와 동체)에 장갑을 덧대자고 제안했다. 발드는 조종석이나 엔진에 피격당한 비행기는 결코 돌아오지 못했다는 점을 알아차렸다. 살아남은 표본에는 바로 그 치명적 손상이 빠져 있었던 것이다. 옳은 전략은 생존기에 구멍이 적은 부위에 장갑을 덧대는 것이었다.
 
-The same logic applies broadly:
+같은 논리가 널리 적용된다.
 
-- **Financial markets**: Studying only stocks in today's index ignores delisted failures, overstating average returns.
-- **Startups**: Analyzing traits of successful companies (charismatic leaders, high R&D) while ignoring failed companies with the same traits leads to overconfidence in those factors.
-- **Clinical research**: Reporting outcomes only for patients who completed a trial ignores dropouts who may have fared worse.
+- **금융시장**: 오늘의 지수에 포함된 종목만 연구하면 상장폐지된 실패 사례를 무시하게 되어 평균 수익률을 과대평가한다.
+- **스타트업**: 성공한 기업의 특성(카리스마 있는 리더, 높은 연구개발비)을 분석하면서 같은 특성을 지녔던 실패 기업을 무시하면 그 요인들에 대한 과신으로 이어진다.
+- **임상 연구**: 시험을 완료한 환자의 결과만 보고하면 더 나빴을 수 있는 중도 탈락자를 무시하게 된다.
 
-To avoid survivorship bias: include all cases (both successes and failures), consider base rates (if 90% of startups fail, shared traits among survivors may be coincidental), and examine the selection mechanism explicitly.
+생존자 편향을 피하려면 모든 사례(성공과 실패 모두)를 포함하고, 기저율을 고려하며(스타트업의 90%가 실패한다면 생존자들의 공통 특성은 우연일 수 있다), 선택 기제를 명시적으로 살펴야 한다.
 
-## Examples
+## 예제
 
 ```python
 import numpy as np
@@ -44,76 +44,76 @@ print(f"Mean final value (survivors only): {survivor_final.mean():.3f}")
 print(f"Survivorship bias: {survivor_final.mean() - all_final.mean():+.3f}")
 ```
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-A financial advisor shows that their recommended mutual funds have averaged 12% annual returns over the past 10 years. Explain how survivorship bias could inflate this figure.
+**연습문제 1.**
+어떤 재무 상담사가 자신이 추천하는 뮤추얼펀드들이 지난 10년간 연평균 12%의 수익률을 냈다고 보여준다. 생존자 편향이 이 수치를 어떻게 부풀릴 수 있는지 설명하라.
 
-??? success "Solution to Exercise 1"
-    Mutual funds that performed poorly over the past 10 years were likely closed, merged, or delisted. The advisor's current list of recommended funds only includes those that survived -- precisely because they performed well. Funds that lost money and were shut down are excluded from the average.
+??? success "연습문제 1 풀이"
+    지난 10년간 성과가 나빴던 뮤추얼펀드는 청산되거나 합병되거나 상장폐지되었을 가능성이 높다. 상담사가 현재 추천하는 펀드 목록에는 살아남은 펀드만 들어 있는데, 바로 성과가 좋았기 때문에 살아남은 것이다. 손실을 내고 문을 닫은 펀드는 평균에서 빠져 있다.
 
-    If the closed funds averaged, say, 2% before being shut down, the true average across all funds (surviving and closed) would be substantially lower than 12%. This is survivorship bias: by conditioning on survival (continued existence), we overestimate the typical performance.
-
----
-
-**Exercise 2.**
-During World War II, Abraham Wald studied bullet holes on returning aircraft to decide where to add armor. Explain why reinforcing the areas with the most bullet holes would be a mistake due to survivorship bias.
-
-??? success "Solution to Exercise 2"
-    The aircraft examined were those that **returned safely** despite being hit. Areas with many bullet holes on returning planes are areas where damage is survivable -- the plane can fly home even when hit there.
-
-    The planes that were shot in other areas (engines, fuel tanks, cockpit) did not return -- they were shot down. Those critical areas show **few** bullet holes on surviving planes precisely because hits there are fatal.
-
-    Wald correctly reasoned that armor should be added to the areas with **few** bullet holes on returning planes, because those are the areas where hits cause the plane to be lost. Reinforcing the heavily-hit areas would protect parts of the plane that can already tolerate damage.
+    문을 닫은 펀드들이 청산 전까지 예컨대 2%의 평균 수익률을 냈다면, 살아남은 펀드와 청산된 펀드를 모두 포함한 참된 평균은 12%보다 훨씬 낮을 것이다. 이것이 생존자 편향이다. 생존(계속 존재함)을 조건으로 삼으면 전형적인 성과를 과대평가하게 된다.
 
 ---
 
-**Exercise 3.**
-A study of successful entrepreneurs finds that 70% dropped out of college. Should we conclude that dropping out increases the probability of entrepreneurial success? Why or why not?
+**연습문제 2.**
+제2차 세계대전 중 아브라함 발드는 어디에 장갑을 덧댈지 결정하기 위해 귀환한 항공기의 총알 구멍을 연구했다. 총알 구멍이 가장 많은 부위를 보강하는 것이 왜 생존자 편향 때문에 잘못된 판단인지 설명하라.
 
-??? success "Solution to Exercise 3"
-    No. This study examines only successful entrepreneurs (survivors), ignoring the vastly larger number of college dropouts who did not become successful entrepreneurs. The relevant comparison requires the success rate among all dropouts versus all graduates:
+??? success "연습문제 2 풀이"
+    조사된 항공기는 피격당했음에도 **무사히 귀환한** 기체들이다. 귀환한 비행기에서 총알 구멍이 많은 부위는 손상을 입고도 살아남을 수 있는 부위다. 거기에 맞아도 비행기는 기지로 돌아올 수 있다는 뜻이다.
+
+    다른 부위(엔진, 연료탱크, 조종석)에 피격당한 비행기는 돌아오지 못했다. 격추되었기 때문이다. 그 치명적인 부위들은 정확히 거기에 맞으면 치명적이기 때문에 생존기에서 총알 구멍이 **적게** 나타난다.
+
+    발드는 귀환한 비행기에서 총알 구멍이 **적은** 부위에 장갑을 덧대야 한다고 올바르게 추론했다. 그 부위에 맞으면 비행기를 잃게 되기 때문이다. 구멍이 많은 부위를 보강하는 것은 이미 손상을 견딜 수 있는 부분을 보호하는 셈이다.
+
+---
+
+**연습문제 3.**
+성공한 창업가를 연구한 결과 70%가 대학을 중퇴했다고 한다. 중퇴가 창업 성공 확률을 높인다고 결론지어야 하는가? 그 이유는?
+
+??? success "연습문제 3 풀이"
+    아니다. 이 연구는 성공한 창업가(생존자)만 조사했으며, 성공한 창업가가 되지 못한 훨씬 더 많은 대학 중퇴자를 무시한다. 적절한 비교는 전체 중퇴자 대비 전체 졸업자의 성공률이어야 한다.
 
     $$
     P(\text{success} \mid \text{dropout}) \quad \text{vs.} \quad P(\text{success} \mid \text{graduate})
     $$
 
-    The study instead computed $P(\text{dropout} \mid \text{success})$, which is the inverse conditional probability. By Bayes' theorem, these are different quantities. If dropouts far outnumber graduates in the general population, a high $P(\text{dropout} \mid \text{success})$ is consistent with $P(\text{success} \mid \text{dropout})$ being very low.
+    그런데 이 연구가 계산한 것은 $P(\text{dropout} \mid \text{success})$, 즉 역방향 조건부확률이다. 베이즈 정리에 따르면 이 둘은 다른 양이다. 일반 인구에서 중퇴자가 졸업자보다 훨씬 많다면, $P(\text{dropout} \mid \text{success})$가 높은 것은 $P(\text{success} \mid \text{dropout})$이 아주 낮은 것과 얼마든지 양립한다.
 
 ---
 
-**Exercise 4.**
-Propose a concrete strategy to mitigate survivorship bias in a longitudinal study tracking startup companies over 5 years.
+**연습문제 4.**
+스타트업을 5년간 추적하는 종단연구에서 생존자 편향을 완화할 구체적인 전략을 제안하라.
 
-??? success "Solution to Exercise 4"
-    Key strategies include:
+??? success "연습문제 4 풀이"
+    핵심 전략은 다음과 같다.
 
-    1. **Intent-to-treat enrollment:** Register all startups at the beginning and track them regardless of whether they survive. Record the outcome (success, failure, pivot, acquisition) for every enrolled company.
-    2. **Track exits:** When a startup fails or is acquired, record its final status and the date of exit rather than simply removing it from the dataset.
-    3. **Include all data:** In the analysis, include the partial trajectories of companies that failed. For example, compute average revenue using all company-years, not just surviving companies.
-    4. **Report attrition:** Explicitly report the number of startups that exited the study at each time point and compare the characteristics of survivors to non-survivors.
-    5. **Sensitivity analysis:** Compute results both with and without failed startups to quantify the magnitude of survivorship bias.
-
----
-
-**Exercise 5.**
-A textbook on long-term investing reports that "stocks return 10% per year on average" based on the U.S. S&P 500 over 1928–2023. Discuss two distinct ways this figure may be inflated by survivorship bias at the *index* level and the *country* level.
-
-??? success "Solution to Exercise 5"
-    **Index-level survivorship:** The S&P 500 is reconstituted regularly. Companies that decline are removed from the index, and growing companies are added. The index's reported return reflects the survivors at each rebalance — not a buy-and-hold portfolio of the original constituents. Studies comparing the live index to a frozen 1928 constituent list find the gap is on the order of 0.5–1% per year.
-
-    **Country-level survivorship:** The U.S. is one of the only major markets without a 20th-century catastrophic break (no expropriation, no war on home soil destroying the market). Russian (1917), Chinese (1949), and German (1923, 1945) investors lost most or all of their equity wealth. The 10% U.S. figure averages over a survivor; the global equity premium is closer to 5–7%. Dimson, Marsh, and Staunton's *Triumph of the Optimists* is the canonical reference on this point.
-
-    Both biases pull historical estimates upward and have direct implications for retirement and pension-fund planning.
+    1. **배정대로 등록:** 시작 시점에 모든 스타트업을 등록하고 생존 여부와 무관하게 추적한다. 등록된 모든 기업에 대해 결과(성공, 실패, 피벗, 인수)를 기록한다.
+    2. **이탈 추적:** 스타트업이 실패하거나 인수되면 자료에서 그냥 지우는 대신 최종 상태와 이탈 시점을 기록한다.
+    3. **모든 자료 포함:** 분석에 실패한 기업의 부분적 궤적도 포함한다. 예를 들어 평균 매출을 계산할 때 생존 기업만이 아니라 모든 기업-연도를 사용한다.
+    4. **이탈률 보고:** 각 시점에서 연구를 이탈한 스타트업 수를 명시적으로 보고하고 생존자와 비생존자의 특성을 비교한다.
+    5. **민감도 분석:** 실패한 스타트업을 포함한 결과와 제외한 결과를 모두 계산해 생존자 편향의 크기를 정량화한다.
 
 ---
 
-**Exercise 6.**
-A medical journal publishes only studies with $p < 0.05$. Explain how this **publication bias** is a form of survivorship bias at the *study* level. What is one consequence for meta-analyses, and one common adjustment?
+**연습문제 5.**
+장기 투자에 관한 어떤 교과서가 1928–2023년 미국 S&P 500을 근거로 "주식은 연평균 10%의 수익을 낸다"고 보고한다. 이 수치가 *지수* 수준과 *국가* 수준에서 생존자 편향으로 부풀려질 수 있는 서로 다른 두 경로를 논하라.
 
-??? success "Solution to Exercise 6"
-    Each completed study is a "case." Studies that find significant results are more likely to "survive" through to publication; studies with $p > 0.05$ are often filed away unpublished (the **file-drawer problem**). The published literature is therefore a non-random sample of all studies conducted, biased toward larger effects.
+??? success "연습문제 5 풀이"
+    **지수 수준의 생존:** S&P 500은 정기적으로 구성 종목이 재편된다. 쇠퇴하는 기업은 지수에서 빠지고 성장하는 기업이 들어온다. 지수가 보고하는 수익률은 각 재편 시점의 생존자를 반영할 뿐, 원래 구성 종목을 사서 계속 보유한 포트폴리오가 아니다. 실제 지수와 1928년 구성 종목을 고정한 목록을 비교한 연구들은 그 격차가 연 0.5–1% 수준이라고 본다.
 
-    **Consequence for meta-analyses:** pooled effect estimates that combine published studies overstate the true effect, because the smaller, null, and contradictory studies are missing. The meta-analytic effect estimate is biased upward, and the confidence interval understates uncertainty.
+    **국가 수준의 생존:** 미국은 20세기에 파국적 단절을 겪지 않은 몇 안 되는 주요 시장 중 하나다(몰수도 없었고 본토에서 시장을 파괴한 전쟁도 없었다). 러시아(1917), 중국(1949), 독일(1923, 1945) 투자자들은 주식 자산의 대부분 또는 전부를 잃었다. 10%라는 미국 수치는 하나의 생존자에 대한 평균이며, 전 세계 주식 프리미엄은 5–7%에 가깝다. 이 점에 관한 표준 참고문헌은 딤슨, 마시, 스톤턴의 *Triumph of the Optimists*다.
 
-    **Common adjustment:** the **funnel plot** displays each study's effect size against its standard error. Under no publication bias, the plot is a symmetric funnel widening for smaller studies; asymmetry (small studies with small effects missing from the lower-left) is diagnostic of publication bias. Quantitative corrections include Egger's regression test, trim-and-fill (which imputes missing studies), and selection models that explicitly parameterize the probability of publication as a function of $p$-value. The most reliable remedy, however, is **preregistration**: committing to a study and an analysis plan before data are collected.
+    두 편향 모두 역사적 추정값을 위로 끌어올리며, 은퇴 계획과 연기금 운용에 직접적인 함의를 갖는다.
+
+---
+
+**연습문제 6.**
+어떤 의학 학술지가 $p < 0.05$인 연구만 게재한다. 이 **출판 편향**이 *연구* 수준의 생존자 편향인 이유를 설명하라. 메타분석에 미치는 결과 하나와 흔히 쓰는 보정책 하나를 제시하라.
+
+??? success "연습문제 6 풀이"
+    완료된 각 연구가 하나의 "사례"다. 유의한 결과를 얻은 연구는 출판까지 "생존"할 가능성이 높고, $p > 0.05$인 연구는 출판되지 않은 채 서랍에 처박히는 일이 많다(**서랍 문제**). 따라서 출판된 문헌은 수행된 모든 연구의 비무작위 표본이며 더 큰 효과 쪽으로 편향되어 있다.
+
+    **메타분석에 미치는 결과:** 출판된 연구를 결합한 통합 효과 추정값은 참된 효과를 과대평가한다. 규모가 작거나 귀무 결과이거나 상반된 연구들이 빠져 있기 때문이다. 메타분석의 효과 추정값은 위로 편향되고, 신뢰구간은 불확실성을 과소평가한다.
+
+    **흔히 쓰는 보정책:** **깔때기 그림(funnel plot)** 은 각 연구의 효과 크기를 표준오차에 대해 표시한다. 출판 편향이 없으면 그림은 작은 연구일수록 넓어지는 대칭적인 깔때기 모양이 되고, 비대칭(왼쪽 아래에 효과가 작은 소규모 연구가 비어 있음)은 출판 편향의 진단 신호다. 정량적 보정으로는 에거 회귀검정, 누락된 연구를 대체해 넣는 trim-and-fill, 출판 확률을 $p$-값의 함수로 명시적으로 모수화하는 선택 모형 등이 있다. 다만 가장 믿을 만한 해법은 **사전등록**이다. 자료를 수집하기 전에 연구와 분석 계획을 확정해 두는 것이다.

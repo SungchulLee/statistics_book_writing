@@ -1,131 +1,131 @@
-# Analyze the Data You Have (Modern Approach)
+# 가진 자료를 분석하라 (현대적 접근)
 
-## Overview
+## 개요
 
-The **modern approach** to data analysis starts with data that **already exists**—transaction logs, sensor readings, social media posts, financial market data—and asks: *"What can I learn from this?"* Rather than designing a collection process, the analyst applies algorithms to discover patterns, make predictions, and extract insights from available data.
+자료 분석의 **현대적 접근**은 **이미 존재하는** 자료 — 거래 로그, 센서 측정값, 소셜미디어 게시물, 금융시장 자료 — 에서 출발하여 *"이것으로 무엇을 배울 수 있는가?"* 라고 묻는다. 수집 과정을 설계하는 대신, 분석가는 알고리즘을 적용해 가용한 자료에서 패턴을 발견하고 예측하며 통찰을 끌어낸다.
 
-## Core Principle
+## 핵심 원칙
 
-> **Data first, algorithm second, insight third.**
+> **먼저 자료, 다음에 알고리즘, 마지막에 통찰.**
 
-The modern approach leverages the explosion of digital data and computational power. Data is often collected as a byproduct of operations (e.g., web clicks, trades, medical records) rather than through a deliberate research design.
+현대적 접근은 디지털 자료와 계산 능력의 폭발적 증가를 활용한다. 자료는 의도적인 연구 설계가 아니라 업무의 부산물로 수집되는 경우가 많다(예: 웹 클릭, 거래, 진료기록).
 
-## Three Learning Paradigms
+## 세 가지 학습 패러다임
 
-### 1. Supervised Learning
+### 1. 지도학습
 
-Learn a mapping from inputs to labeled outputs. The algorithm is trained on historical data where the "answer" is known and then applied to new data.
+입력에서 레이블이 붙은 출력으로 가는 사상을 학습한다. "정답"이 알려진 과거 자료로 알고리즘을 훈련시킨 뒤 새 자료에 적용한다.
 
-### 2. Unsupervised Learning
+### 2. 비지도학습
 
-Discover hidden structure in data without labels. Clustering, dimensionality reduction, and anomaly detection fall into this category.
+레이블 없이 자료에 숨은 구조를 발견한다. 군집화, 차원축소, 이상치 탐지가 여기에 속한다.
 
-### 3. Reinforcement Learning
+### 3. 강화학습
 
-Learn optimal sequential decisions through interaction with an environment, guided by reward signals rather than labeled examples.
+레이블이 붙은 예제가 아니라 보상 신호를 길잡이 삼아, 환경과의 상호작용을 통해 최적의 순차적 의사결정을 학습한다.
 
-## Strengths of the Modern Approach
+## 현대적 접근의 강점
 
-- **Scalability**: Algorithms can process millions or billions of data points that would be impossible to collect through designed studies.
-- **Flexibility**: Machine learning and deep learning models can capture highly complex, non-linear relationships without requiring the analyst to specify them in advance.
-- **Speed**: Existing data can be analyzed immediately without waiting months or years for data collection.
-- **Discovery**: Patterns and relationships that no researcher anticipated can emerge from exploratory analysis.
-- **Unstructured data**: Images, text, audio, and video can be analyzed at scale.
+- **확장성**: 설계된 연구로는 수집이 불가능한 수백만~수십억 개의 자료점을 알고리즘이 처리할 수 있다.
+- **유연성**: 기계학습과 딥러닝 모형은 분석가가 미리 지정하지 않아도 매우 복잡한 비선형 관계를 포착할 수 있다.
+- **속도**: 기존 자료는 몇 달, 몇 년을 기다릴 필요 없이 즉시 분석할 수 있다.
+- **발견**: 어떤 연구자도 예상하지 못한 패턴과 관계가 탐색적 분석에서 드러날 수 있다.
+- **비정형 자료**: 이미지, 텍스트, 음성, 영상을 대규모로 분석할 수 있다.
 
-## When This Approach Works Best
+## 이 접근이 가장 잘 맞을 때
 
-- Large volumes of data already exist.
-- The goal is **prediction** rather than **causal explanation**.
-- The data is high-dimensional or unstructured.
-- Speed of analysis is important (e.g., real-time trading, recommendation systems).
-- The problem is too complex for a simple statistical model.
+- 대량의 자료가 이미 존재한다.
+- 목표가 **인과적 설명**이 아니라 **예측**이다.
+- 자료가 고차원이거나 비정형이다.
+- 분석 속도가 중요하다(예: 실시간 트레이딩, 추천 시스템).
+- 문제가 단순한 통계 모형으로 다루기에는 너무 복잡하다.
 
-## Limitations
+## 한계
 
-- **Causality**: Without a designed experiment, it is difficult to distinguish correlation from causation. Associations discovered in observational data may be driven by confounders.
-- **Data quality**: The analyst has no control over how the data was collected, leading to potential biases, missing values, and measurement errors.
-- **Interpretability**: Complex models (deep networks, ensembles) may provide accurate predictions without explaining *why*.
-- **Overfitting**: With flexible models and large feature spaces, there is a risk of fitting noise rather than signal—mitigated by cross-validation and regularization.
-- **Ethical and privacy concerns**: Using existing data (especially personal data) raises questions about consent, fairness, and privacy.
+- **인과성**: 설계된 실험이 없으면 상관과 인과를 구분하기 어렵다. 관찰자료에서 발견된 연관성은 교란요인 때문일 수 있다.
+- **자료 품질**: 자료가 어떻게 수집되었는지 분석가가 통제할 수 없어 편향, 결측값, 측정오차가 생길 수 있다.
+- **해석가능성**: 복잡한 모형(심층 신경망, 앙상블)은 정확한 예측을 주면서도 *왜* 그런지는 설명하지 못할 수 있다.
+- **과적합**: 유연한 모형과 넓은 특성 공간에서는 신호가 아니라 잡음을 적합할 위험이 있으며, 교차검증과 정칙화로 완화한다.
+- **윤리와 프라이버시 문제**: 기존 자료(특히 개인정보)를 사용하는 것은 동의, 공정성, 프라이버시에 관한 물음을 낳는다.
 
-## Key Takeaways
+## 핵심 요약
 
-- The modern approach takes advantage of abundant existing data and powerful algorithms to extract predictions and insights.
-- Its greatest strength is **scalability and flexibility**—handling problems and data types that classical methods were not designed for.
-- Its greatest weakness is the difficulty of making **causal claims** without a designed study.
-- In practice, the most effective data scientists combine both approaches: using modern algorithms for prediction and classical principles for causal reasoning and uncertainty quantification.
+- 현대적 접근은 풍부한 기존 자료와 강력한 알고리즘을 활용해 예측과 통찰을 끌어낸다.
+- 가장 큰 강점은 **확장성과 유연성**이며, 고전적 방법이 다루도록 설계되지 않은 문제와 자료 유형을 처리한다.
+- 가장 큰 약점은 설계된 연구 없이 **인과적 주장**을 하기 어렵다는 점이다.
+- 실무에서 가장 유능한 데이터 과학자는 두 접근을 결합한다. 예측에는 현대적 알고리즘을, 인과적 추론과 불확실성 정량화에는 고전적 원칙을 쓴다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-A data scientist at a tech company has access to clickstream data from 1 million users. They discover that users who view the help page spend 30% more time on the site. Should they recommend making the help page more prominent? Discuss the inferential challenges.
+**연습문제 1.**
+어떤 기술 회사의 데이터 과학자가 사용자 100만 명의 클릭스트림 자료에 접근할 수 있다. 도움말 페이지를 본 사용자가 사이트에 30% 더 오래 머문다는 사실을 발견했다. 도움말 페이지를 더 눈에 띄게 만들자고 제안해야 하는가? 추론상의 어려움을 논하라.
 
-??? success "Solution to Exercise 1"
-    The recommendation is premature. The data are observational (not from a randomized experiment), so the association between viewing the help page and engagement could be driven by confounders:
+??? success "연습문제 1 풀이"
+    그런 제안은 성급하다. 자료가 (무작위 실험이 아니라) 관찰적이므로, 도움말 페이지 열람과 체류시간의 연관성은 교란요인 때문일 수 있다.
 
-    - **Reverse causation:** Users who are already more engaged (spend more time) are more likely to explore the help page.
-    - **User type:** Power users who explore help pages may naturally be heavier users regardless.
-    - **Difficulty:** Users who find the product confusing visit help pages *and* spend more time struggling, not because help makes them more engaged.
+    - **역인과:** 이미 더 몰입해 있는(더 오래 머무는) 사용자가 도움말 페이지를 살펴볼 가능성이 높다.
+    - **사용자 유형:** 도움말 페이지를 탐색하는 헤비 유저는 애초에 이용량이 많은 사람일 수 있다.
+    - **난이도:** 제품이 헷갈린다고 느끼는 사용자가 도움말 페이지를 찾고 *동시에* 씨름하느라 오래 머무는 것이지, 도움말이 몰입을 높인 것이 아니다.
 
-    To establish a causal effect, the company should run an A/B test: randomly assign users to a version with a prominent help page versus the status quo and compare engagement metrics.
-
----
-
-**Exercise 2.**
-Explain the difference between *exploratory data analysis* (EDA) and *confirmatory data analysis* (CDA). Why is it problematic to use the same dataset for both?
-
-??? success "Solution to Exercise 2"
-    **Exploratory data analysis** searches for patterns, generates hypotheses, and builds intuition. It involves visualizations, summary statistics, and flexible model fitting without pre-specified hypotheses.
-
-    **Confirmatory data analysis** tests pre-specified hypotheses with formal statistical procedures (p-values, confidence intervals) whose validity depends on the hypothesis being formulated before seeing the data.
-
-    Using the same dataset for both is problematic because patterns discovered during EDA are, by definition, patterns that happen to appear in this particular sample. Testing those same patterns on the same data inflates the probability of finding "significant" results (data snooping / double dipping). The p-values are no longer valid because they assume the hypothesis was specified independently of the data. The remedy is data splitting (train/test) or pre-registration of hypotheses.
+    인과효과를 확립하려면 회사는 A/B 테스트를 수행해야 한다. 사용자를 도움말 페이지가 눈에 띄는 버전과 현행 버전에 무작위 배정하고 몰입 지표를 비교하는 것이다.
 
 ---
 
-**Exercise 3.**
-A researcher scrapes social media posts and finds that users who post about exercise have higher self-reported happiness. List three sources of bias specific to this observational web-scraped dataset.
+**연습문제 2.**
+*탐색적 자료분석*(EDA)과 *확증적 자료분석*(CDA)의 차이를 설명하라. 같은 자료로 둘 다 하는 것이 왜 문제인가?
 
-??? success "Solution to Exercise 3"
+??? success "연습문제 2 풀이"
+    **탐색적 자료분석**은 패턴을 찾고 가설을 만들며 직관을 쌓는다. 사전 지정된 가설 없이 시각화, 요약통계, 유연한 모형 적합을 사용한다.
 
-    1. **Selection bias (non-representative sample):** Social media users are not representative of the general population. They skew younger, more urban, and more tech-savvy.
-    2. **Self-presentation bias:** People selectively post positive content (exercise accomplishments, happy moments) while omitting negative experiences. The data reflect curated self-images, not true behavior or mood.
-    3. **Measurement bias:** "Self-reported happiness" extracted from text (sentiment analysis) is a noisy proxy for actual well-being. Sarcasm, cultural norms, and language ambiguity introduce systematic errors.
+    **확증적 자료분석**은 사전 지정된 가설을 형식적 통계 절차(p-값, 신뢰구간)로 검정하며, 그 타당성은 자료를 보기 전에 가설이 세워졌다는 데 달려 있다.
 
-    Additional biases include confounding (socioeconomic status affects both exercise habits and happiness) and missing data (users who are unhappy or sedentary may post less frequently, creating survivorship bias).
-
----
-
-**Exercise 4.**
-Describe the "garden of forking paths" problem when analyzing available data. How does it differ from classical p-hacking?
-
-??? success "Solution to Exercise 4"
-    The "garden of forking paths" (Gelman and Loken, 2013) refers to the many researcher degrees of freedom in data analysis: choices about variable definitions, outlier removal, subgroup selection, model specification, and transformation -- each of which could have gone differently. Even without deliberate p-hacking, the researcher makes these choices after seeing the data, guided (consciously or not) by what produces interesting results.
-
-    Classical **p-hacking** involves explicitly trying multiple analyses and reporting only the significant ones. The garden of forking paths is more subtle: the researcher runs a single analysis but the specific analysis was implicitly selected from a large space of possibilities based on the data. The result is the same -- inflated false-positive rates -- but the researcher may honestly believe they did not try multiple analyses because they only reported one. The remedy is pre-registration, where the analysis plan is committed to before data collection.
+    같은 자료로 둘 다 하는 것이 문제인 이유는, EDA에서 발견한 패턴이 정의상 바로 그 표본에서 우연히 나타난 패턴이기 때문이다. 같은 자료에서 그 패턴을 다시 검정하면 "유의한" 결과를 얻을 확률이 부풀어 오른다(자료 엿보기 / 이중 사용). 가설이 자료와 독립적으로 지정되었다고 가정하는 p-값은 더 이상 타당하지 않다. 해법은 자료 분할(훈련/시험) 또는 가설의 사전등록이다.
 
 ---
 
-**Exercise 5.**
-A modern data team works with administrative records covering an entire population (e.g., all credit-card transactions over a year). Some claim that *with N → ∞, statistical inference becomes unnecessary*. Identify two reasons inferential reasoning still matters even with apparent population data.
+**연습문제 3.**
+어떤 연구자가 소셜미디어 게시물을 수집해, 운동에 대해 게시하는 사용자가 자기보고 행복도가 더 높다는 사실을 발견했다. 이 관찰적 웹 수집 자료에 특유한 편향의 원천 세 가지를 들어라.
 
-??? success "Solution to Exercise 5"
-    **(1) The data are still a sample — just from a different superpopulation.** "All transactions in 2024" is a sample from the implicit population "all transactions that could have occurred under similar conditions, including future years." Inference is about generalizing from the observed history to the future or to other plausible scenarios, not about generalizing from a finite sample to a fixed population. The data-generating process produces all the variability of interest.
+??? success "연습문제 3 풀이"
 
-    **(2) Even with a true census, *causal* and *counterfactual* questions are not answered by descriptive statistics.** Knowing the exact average revenue of every customer says nothing about what would happen if the prices changed. Counterfactuals require either explicit randomized experiments or strong identifying assumptions — the data's size is irrelevant.
+    1. **선택편향(비대표 표본):** 소셜미디어 사용자는 일반 인구를 대표하지 않는다. 더 젊고, 더 도시에 살며, 기술에 더 익숙한 쪽으로 치우친다.
+    2. **자기표현 편향:** 사람들은 긍정적인 내용(운동 성취, 행복한 순간)을 골라 올리고 부정적인 경험은 뺀다. 자료는 실제 행동이나 기분이 아니라 다듬어진 자기 이미지를 반영한다.
+    3. **측정편향:** 텍스트에서 추출한 "자기보고 행복도"(감성 분석)는 실제 안녕에 대한 잡음 섞인 대리변수다. 반어법, 문화적 규범, 언어의 중의성이 체계적 오차를 만든다.
 
-    A third reason often cited: even large $N$ does not protect against **selection bias** in who appears in the data. Administrative records reflect what was recorded and survived to be recorded; non-customers and dropped transactions are invisible.
+    추가로 교란(사회경제적 지위가 운동 습관과 행복도 모두에 영향)과 결측 자료(불행하거나 활동이 적은 사용자가 게시를 덜 해서 생기는 생존자 편향)도 있다.
 
 ---
 
-**Exercise 6.**
-**External validity** is the question of whether findings on one dataset generalize to other contexts. A retailer's recommendation model was trained on US data and now must launch in the EU. List three distinct mechanisms by which the model could fail in the EU, and one practical mitigation strategy for each.
+**연습문제 4.**
+가용한 자료를 분석할 때 나타나는 "갈래길의 정원" 문제를 설명하라. 이것은 고전적인 p-해킹과 어떻게 다른가?
 
-??? success "Solution to Exercise 6"
-    **Covariate shift:** the joint distribution of user features differs (age distribution, income, browsing patterns). *Mitigation:* importance weighting, where training examples are reweighted to match the EU covariate distribution; or domain adaptation methods.
+??? success "연습문제 4 풀이"
+    "갈래길의 정원"(Gelman & Loken, 2013)은 자료 분석에서 연구자에게 주어진 수많은 자유도를 가리킨다. 변수 정의, 이상치 제거, 하위집단 선택, 모형 명세, 변환 등 각각이 달리 결정될 수도 있었던 선택들이다. 의도적인 p-해킹이 없더라도 연구자는 자료를 본 뒤에 이런 선택을 하며, 의식하든 아니든 흥미로운 결과가 나오는 쪽으로 이끌린다.
 
-    **Concept drift / different mapping $P(Y \mid X)$:** the same features predict different outcomes — EU users with US-equivalent profiles may shop differently due to cultural or regulatory differences. *Mitigation:* deploy with monitoring and quickly re-train on local data once enough EU samples accumulate. Avoid hand-tuned thresholds that assume US-specific feature distributions.
+    고전적인 **p-해킹**은 여러 분석을 명시적으로 시도한 뒤 유의한 것만 보고하는 행위다. 갈래길의 정원은 더 미묘하다. 연구자는 분석을 한 번만 수행하지만, 그 특정한 분석 자체가 자료에 근거해 방대한 가능성 공간에서 암묵적으로 선택된 것이다. 결과는 마찬가지로 거짓양성률의 상승이지만, 연구자는 하나만 보고했으므로 여러 분석을 시도하지 않았다고 정직하게 믿을 수 있다. 해법은 자료 수집 전에 분석 계획을 확정하는 사전등록이다.
 
-    **Regulatory / structural shift:** GDPR limits what data can be collected; consent UIs change which features are available at inference time; cross-border data restrictions prevent fine-tuning on EU data within US infrastructure. *Mitigation:* model designs that gracefully degrade when features are missing (e.g., feature-dropout training, hierarchical models that can use sparser EU features), and a deployment plan that includes legal and engineering review for regional differences.
+---
 
-    The underlying principle: any model deployed outside the distribution it was trained on requires monitoring, calibration, and often retraining. Treating the US-trained model as ground truth for the EU is exactly the kind of error this paradigm encourages.
+**연습문제 5.**
+어떤 현대 데이터 팀이 모집단 전체를 포괄하는 행정 기록(예: 1년치 모든 신용카드 거래)을 다룬다. 어떤 이들은 *N → ∞이면 통계적 추론이 불필요해진다*고 주장한다. 겉보기에 모집단 자료가 있더라도 추론적 사고가 여전히 중요한 이유 두 가지를 제시하라.
+
+??? success "연습문제 5 풀이"
+    **(1) 그 자료도 여전히 표본이다 — 다만 다른 초모집단에서 뽑은 표본일 뿐이다.** "2024년의 모든 거래"는 "비슷한 조건에서 일어날 수 있었던 모든 거래(미래의 해를 포함해)"라는 암묵적 모집단에서 뽑은 표본이다. 추론은 유한한 표본에서 고정된 모집단으로 일반화하는 것이 아니라, 관측된 과거에서 미래나 다른 그럴듯한 시나리오로 일반화하는 문제다. 관심 있는 변동성은 모두 자료생성 과정에서 나온다.
+
+    **(2) 진짜 전수조사라 하더라도 *인과적* 질문과 *반사실적* 질문은 기술통계로 답할 수 없다.** 모든 고객의 정확한 평균 매출을 안다고 해서 가격이 바뀌면 어떻게 될지는 알 수 없다. 반사실에는 명시적인 무작위 실험이나 강한 식별 가정이 필요하며, 자료의 크기는 무관하다.
+
+    흔히 언급되는 세 번째 이유: $N$이 아무리 커도 누가 자료에 나타나는가에 대한 **선택편향**은 막아주지 못한다. 행정 기록은 기록되었고 기록으로 남아남은 것을 반영하며, 비고객과 누락된 거래는 보이지 않는다.
+
+---
+
+**연습문제 6.**
+**외적 타당도**는 한 자료에서 얻은 발견이 다른 맥락으로 일반화되는지의 문제다. 어떤 소매업체의 추천 모형이 미국 자료로 학습되었고 이제 EU에 출시되어야 한다. 이 모형이 EU에서 실패할 수 있는 서로 다른 기제 세 가지와 각각에 대한 실용적 완화 전략을 하나씩 제시하라.
+
+??? success "연습문제 6 풀이"
+    **공변량 이동:** 사용자 특성의 결합분포가 다르다(연령 분포, 소득, 탐색 패턴). *완화책:* 훈련 표본에 가중치를 다시 주어 EU 공변량 분포에 맞추는 중요도 가중, 또는 도메인 적응 방법.
+
+    **개념 표류 / 다른 사상 $P(Y \mid X)$:** 같은 특성이 다른 결과를 예측한다. 미국과 동등한 프로필의 EU 사용자가 문화적·규제적 차이 때문에 다르게 구매할 수 있다. *완화책:* 모니터링과 함께 배포하고, EU 표본이 충분히 쌓이면 현지 자료로 신속히 재학습한다. 미국 특유의 특성 분포를 전제한 수작업 임계값은 피한다.
+
+    **규제 / 구조적 이동:** GDPR이 수집 가능한 자료를 제한하고, 동의 UI가 추론 시점에 사용 가능한 특성을 바꾸며, 국경 간 자료 이동 제한 때문에 미국 인프라에서 EU 자료로 미세조정할 수 없다. *완화책:* 특성이 없을 때 우아하게 성능이 저하되는 모형 설계(예: 특성 드롭아웃 훈련, 더 희소한 EU 특성도 쓸 수 있는 계층 모형)와, 지역별 차이에 대한 법무·엔지니어링 검토를 포함한 배포 계획.
+
+    밑바탕의 원칙은 이렇다. 학습된 분포 밖에 배포되는 모형은 모니터링, 보정, 그리고 흔히 재학습이 필요하다. 미국에서 학습한 모형을 EU에 대한 정답인 양 다루는 것이야말로 이 패러다임이 부추기는 종류의 오류다.

@@ -1,65 +1,65 @@
-# Chapter 1: Data Collection
+# 제1장: 자료 수집
 
-## Overview
+## 개요
 
-This chapter explores how data is collected and how we learn from it. It contrasts two fundamental philosophies: the classical approach, where the researcher designs the data collection process before gathering data, and the modern approach, where the analyst works with data that already exists. The chapter concludes by introducing the three major machine learning paradigms -- supervised, unsupervised, and reinforcement learning -- that define how algorithms extract knowledge from data.
-
----
-
-## Chapter Structure
-
-### 1.1 Classical Approach
-
-The classical statistical approach to designing data collection from the ground up:
-
-- **Populations and Samples** -- Defines the distinction between the entire population of interest and the sample drawn from it, and explains why sampling is necessary for practical and economic reasons.
-- **Parameters vs Statistics** -- Distinguishes fixed but unknown population parameters (e.g., mu, sigma) from computable sample statistics (e.g., x-bar, s) and explains why this distinction is the foundation of all inferential procedures.
-- **Observational Studies** -- Describes research designs where the investigator observes without intervening, covering cross-sectional, cohort, case-control, and ecological study types.
-- **Confounding and Association vs Causation** -- Explains how confounding variables can create spurious associations between variables, using classic examples (ice cream and drowning, coffee and lung cancer) to illustrate why correlation does not imply causation.
-- **Controlled Experiments** -- Covers the structure of experiments with treatment and control groups, random assignment, and how controlled designs establish causal relationships.
-- **Randomization and Blinding** -- Details how randomization distributes confounders across groups and how blinding (single, double, triple) prevents human expectation and bias from distorting results, including the gold-standard randomized controlled trial.
-- **Sample Surveys and Sampling Methods** -- Covers simple random, stratified, cluster, and systematic sampling methods for selecting representative samples from populations.
-- **Bias and Nonresponse** -- Examines sampling bias, nonresponse bias, response bias, and selection bias, illustrated by historical examples such as the 1936 Literary Digest disaster.
-- **Survivorship Bias** -- Explores the danger of analyzing only "survivors" while ignoring failures, with examples from WWII bomber armor placement and the 2008 financial crisis.
-- **Strengths and Limitations** -- Provides a systematic comparison of classical and modern approaches across dimensions such as causality, scalability, interpretability, and cost.
-- **Design Your Data Collection** -- Summarizes the classical philosophy of "design first, collect second, analyze third" and its three main study types: observational studies, controlled experiments, and sample surveys.
-- **Analyze Available Data** -- Introduces the modern philosophy of "data first, algorithm second, insight third" and its reliance on existing data sources such as transaction logs, sensor readings, and financial market data.
-
-### 1.2 Modern Approach
-
-The modern data-driven approach to learning from existing data:
-
-- **Statistical Models vs Learning Algorithms** -- Contrasts parametric statistical models (explicit assumptions, interpretable parameters, uncertainty quantification) with machine learning algorithms (flexible, data-driven, prediction-focused), marking the key philosophical shift in modern data analysis.
-- **Prediction vs Inference** -- Distinguishes between the goal of forecasting outcomes as accurately as possible (prediction) and the goal of understanding variable relationships and testing hypotheses (inference), and explains how each goal leads to different methodological choices.
-
-### 1.3 Three Learning Paradigms
-
-An overview of the three major paradigms in machine learning:
-
-- **Unsupervised Learning (Pattern Discovery)** -- Covers learning without labels, including clustering (K-Means, hierarchical, DBSCAN), dimensionality reduction (PCA, t-SNE), and anomaly detection, with applications to portfolio diversification and market regime detection.
-- **Supervised Learning (Prediction with Labels)** -- Covers learning from labeled input-output pairs for regression (continuous targets) and classification (discrete targets), including common methods such as linear regression, random forests, and neural networks.
-- **Reinforcement Learning (Sequential Decisions)** -- Introduces agent-environment interaction, reward-based learning, the exploration-exploitation tradeoff, and applications to portfolio management and algorithmic trading.
-
-### 1.4 Exercises
-
-Practice problems covering populations and samples, study design, bias identification, the classical-modern contrast, and the three learning paradigms.
+이 장에서는 자료가 어떻게 수집되며 우리가 그로부터 어떻게 배우는지를 다룬다. 두 가지 근본적인 철학을 대비시킨다. 하나는 자료를 모으기 전에 연구자가 수집 과정을 설계하는 고전적 접근이고, 다른 하나는 이미 존재하는 자료를 분석가가 활용하는 현대적 접근이다. 마지막으로 알고리즘이 자료에서 지식을 추출하는 방식을 규정하는 세 가지 주요 기계학습 패러다임 — 지도학습, 비지도학습, 강화학습 — 을 소개한다.
 
 ---
 
-## Prerequisites
+## 장의 구성
 
-This chapter builds on:
+### 1.1 고전적 접근
 
-- **Chapter 0** (Prerequisites) -- Basic mathematical notation and familiarity with Python for running code examples.
+자료 수집을 처음부터 설계하는 고전 통계학의 접근:
+
+- **모집단과 표본** — 관심 대상이 되는 전체 모집단과 거기서 뽑은 표본의 차이를 정의하고, 실용적·경제적 이유로 표집이 왜 필요한지 설명한다.
+- **모수 대 통계량** — 고정되어 있지만 알려지지 않은 모집단 모수(예: mu, sigma)와 계산 가능한 표본 통계량(예: x-bar, s)을 구분하고, 이 구분이 왜 모든 추론 절차의 토대인지 설명한다.
+- **관찰연구** — 연구자가 개입하지 않고 관찰만 하는 연구 설계를 설명하며, 횡단연구·코호트연구·환자대조연구·생태학적 연구를 다룬다.
+- **교란과 연관성 대 인과관계** — 교란변수가 어떻게 변수 사이에 허위 연관성을 만들어내는지를 고전적 예(아이스크림과 익사, 커피와 폐암)로 설명하며, 상관관계가 인과관계를 뜻하지 않는 이유를 밝힌다.
+- **통제실험** — 처리군과 대조군, 무작위 배정으로 이루어진 실험의 구조와, 통제된 설계가 어떻게 인과관계를 확립하는지를 다룬다.
+- **무작위화와 눈가림** — 무작위화가 교란요인을 집단 간에 어떻게 분산시키는지, 그리고 눈가림(단일·이중·삼중)이 인간의 기대와 편향이 결과를 왜곡하는 것을 어떻게 막는지를, 표준으로 여겨지는 무작위 대조시험까지 포함해 상세히 설명한다.
+- **표본조사와 표집 방법** — 모집단에서 대표성 있는 표본을 뽑기 위한 단순무작위·층화·집락·계통 표집법을 다룬다.
+- **편향과 무응답** — 표집편향, 무응답편향, 응답편향, 선택편향을 1936년 《Literary Digest》 참사 같은 역사적 사례와 함께 살펴본다.
+- **생존자 편향** — 실패를 무시하고 "생존자"만 분석할 때의 위험을, 제2차 세계대전 폭격기 장갑 배치와 2008년 금융위기 사례로 탐구한다.
+- **강점과 한계** — 인과성, 확장성, 해석가능성, 비용 등의 차원에서 고전적 접근과 현대적 접근을 체계적으로 비교한다.
+- **자료 수집을 설계하라** — "먼저 설계하고, 다음에 수집하고, 마지막에 분석한다"는 고전적 철학과 그 세 가지 주요 연구 유형(관찰연구, 통제실험, 표본조사)을 요약한다.
+- **가용한 자료를 분석하라** — "먼저 자료, 다음에 알고리즘, 마지막에 통찰"이라는 현대적 철학과, 거래 로그·센서 측정값·금융시장 자료 같은 기존 자료원에 대한 의존을 소개한다.
+
+### 1.2 현대적 접근
+
+기존 자료로부터 배우는 현대의 자료 주도적 접근:
+
+- **통계 모형 대 학습 알고리즘** — 모수적 통계 모형(명시적 가정, 해석 가능한 모수, 불확실성 정량화)과 기계학습 알고리즘(유연성, 자료 주도, 예측 중심)을 대비시키며, 현대 자료 분석의 핵심적인 철학적 전환을 짚는다.
+- **예측 대 추론** — 결과를 최대한 정확히 예측하는 목표(예측)와 변수 사이의 관계를 이해하고 가설을 검정하는 목표(추론)를 구분하고, 각 목표가 어떻게 서로 다른 방법론적 선택으로 이어지는지 설명한다.
+
+### 1.3 세 가지 학습 패러다임
+
+기계학습의 세 가지 주요 패러다임 개관:
+
+- **비지도학습(패턴 발견)** — 레이블 없이 배우는 방법으로, 군집화(K-평균, 계층적, DBSCAN), 차원축소(PCA, t-SNE), 이상치 탐지를 다루고 포트폴리오 분산투자와 시장 국면 탐지에 적용한다.
+- **지도학습(레이블을 이용한 예측)** — 레이블이 붙은 입력–출력 쌍으로부터 배우는 회귀(연속형 목표)와 분류(이산형 목표)를 다루며, 선형회귀·랜덤 포레스트·신경망 같은 대표적 방법을 포함한다.
+- **강화학습(순차적 의사결정)** — 에이전트–환경 상호작용, 보상 기반 학습, 탐색–활용 절충을 소개하고 포트폴리오 운용과 알고리즘 트레이딩에 적용한다.
+
+### 1.4 연습문제
+
+모집단과 표본, 연구 설계, 편향 식별, 고전–현대 대비, 세 가지 학습 패러다임을 다루는 연습문제.
 
 ---
 
-## Key Takeaways
+## 선수 지식
 
-1. The population is the complete group of interest; the sample is the subset we actually observe, and all of inferential statistics rests on this distinction.
-2. Controlled experiments with randomization are the gold standard for establishing causation, while observational studies can only identify associations.
-3. Confounding variables can create misleading associations; recognizing and controlling for confounders is essential for valid conclusions.
-4. Bias (sampling, nonresponse, survivorship) can systematically distort results even with large sample sizes.
-5. The modern approach leverages existing data and algorithms to discover patterns and make predictions at scale, complementing rather than replacing classical methods.
-6. Understanding the difference between prediction and inference guides the choice of methods and the interpretation of results.
-7. The three learning paradigms -- supervised, unsupervised, and reinforcement learning -- define the major ways algorithms extract knowledge from data.
+이 장은 다음을 바탕으로 한다:
+
+- **제0장**(선수 지식) — 기본적인 수학 기호와, 코드 예제를 실행하기 위한 파이썬에 대한 친숙함.
+
+---
+
+## 핵심 요약
+
+1. 모집단은 관심 대상이 되는 전체 집단이고, 표본은 우리가 실제로 관측하는 부분집합이다. 추론통계 전체가 이 구분 위에 서 있다.
+2. 무작위화를 갖춘 통제실험은 인과관계를 확립하는 표준이며, 관찰연구는 연관성만을 밝힐 수 있다.
+3. 교란변수는 오해를 부르는 연관성을 만들어낼 수 있으므로, 교란요인을 인식하고 통제하는 일이 타당한 결론을 위해 필수적이다.
+4. 편향(표집, 무응답, 생존자)은 표본 크기가 크더라도 결과를 체계적으로 왜곡할 수 있다.
+5. 현대적 접근은 기존 자료와 알고리즘을 활용해 대규모로 패턴을 발견하고 예측하며, 고전적 방법을 대체하기보다 보완한다.
+6. 예측과 추론의 차이를 이해하는 것이 방법의 선택과 결과의 해석을 이끈다.
+7. 세 가지 학습 패러다임 — 지도학습, 비지도학습, 강화학습 — 은 알고리즘이 자료에서 지식을 끌어내는 주요 방식을 규정한다.

@@ -1,53 +1,53 @@
-# Observational Studies
+# 관찰연구
 
-An **observational study** records data without the investigator intervening or assigning treatments. It is the dominant mode of research wherever experiments are impractical, unethical, or impossibly slow — epidemiology, economics, sociology, ecology, finance — and produces most of the empirical evidence in the social and health sciences. The price of this flexibility is a structural limitation: observational studies measure associations, not causal effects, unless additional identifying assumptions are imposed.
+**관찰연구(observational study)** 는 연구자가 개입하거나 처리를 배정하지 않은 채 자료를 기록하는 연구다. 실험이 비현실적이거나 비윤리적이거나 너무 오래 걸리는 모든 분야 — 역학, 경제학, 사회학, 생태학, 금융 — 에서 지배적인 연구 방식이며, 사회과학과 보건과학의 경험적 증거 대부분을 만들어낸다. 이 유연함의 대가는 구조적 한계다. 추가적인 식별 가정을 두지 않는 한, 관찰연구는 인과효과가 아니라 연관성을 측정한다.
 
-## Definition
+## 정의
 
-An **observational study** is a research design in which the investigator observes subjects and measures variables without manipulating any conditions and without random assignment to groups. The four main archetypes are:
+**관찰연구**는 연구자가 어떤 조건도 조작하지 않고 집단에 무작위 배정도 하지 않은 채 대상을 관찰하고 변수를 측정하는 연구 설계다. 주요 유형 네 가지는 다음과 같다.
 
-- **Cross-sectional**: snapshot of a population at a single point in time (e.g., a national health survey).
-- **Cohort (longitudinal)**: a group followed over time, prospective (forward in time) or retrospective (looking backward from records).
-- **Case–control**: subjects with a condition (cases) compared to those without (controls), with exposure history examined retrospectively.
-- **Ecological**: data analyzed at the population or group level rather than individual level — vulnerable to the *ecological fallacy*.
+- **횡단연구(cross-sectional)**: 한 시점에서 모집단을 찍은 스냅숏(예: 전국 건강조사).
+- **코호트연구(종단연구)**: 한 집단을 시간에 따라 추적하며, 전향적(시간 순방향)일 수도 후향적(기록을 통해 과거를 되짚음)일 수도 있다.
+- **환자대조연구(case–control)**: 어떤 상태를 가진 대상(사례군)과 갖지 않은 대상(대조군)을 비교하며, 노출 이력을 후향적으로 조사한다.
+- **생태학적 연구(ecological)**: 개인 수준이 아니라 인구나 집단 수준에서 자료를 분석한다 — *생태학적 오류*에 취약하다.
 
-## Explanation
+## 설명
 
-### Why observational data cannot, by itself, establish causation
+### 관찰자료만으로는 왜 인과관계를 확립할 수 없는가
 
-In an observational study, subjects self-select into groups. Differences in outcomes between groups confound the **treatment effect** with selection differences. The canonical example: smokers have worse health outcomes than non-smokers, but smokers also differ in income, diet, exercise, stress, and dozens of unmeasured variables. The observed association is the sum of the true causal effect (whatever it is) and the confounding selection effect.
+관찰연구에서 대상은 스스로 집단을 선택한다. 집단 간 결과의 차이는 **처리효과**와 선택의 차이를 뒤섞는다. 대표적인 예로, 흡연자는 비흡연자보다 건강 결과가 나쁘지만 흡연자는 소득, 식단, 운동, 스트레스, 그리고 측정되지 않은 수십 가지 변수에서도 다르다. 관측된 연관성은 참된 인과효과(그것이 무엇이든)와 교란된 선택효과의 합이다.
 
-Formally, denote the observed effect of treatment $T$ on outcome $Y$ by $\mathbb{E}[Y \mid T = 1] - \mathbb{E}[Y \mid T = 0]$. This equals the **causal** effect $\mathbb{E}[Y(1) - Y(0)]$ only when treatment assignment is independent of the potential outcomes — exactly what randomization guarantees and observational data does not.
+형식적으로, 처리 $T$가 결과 $Y$에 미치는 관측된 효과를 $\mathbb{E}[Y \mid T = 1] - \mathbb{E}[Y \mid T = 0]$이라 하자. 이것이 **인과** 효과 $\mathbb{E}[Y(1) - Y(0)]$과 같아지는 것은 처리 배정이 잠재적 결과와 독립일 때뿐이다 — 이는 정확히 무작위화가 보장하고 관찰자료는 보장하지 못하는 조건이다.
 
-### Common identification strategies
+### 흔히 쓰는 식별 전략
 
-Although observational data alone cannot identify causal effects, several additional assumptions can:
+관찰자료만으로는 인과효과를 식별할 수 없지만, 다음과 같은 추가 가정을 두면 가능해진다.
 
-| Strategy | Key assumption |
+| 전략 | 핵심 가정 |
 |---|---|
-| Stratification / matching | Conditional on observed covariates, treatment is as-if random |
-| Multivariable regression | Same, plus correct functional form |
-| Propensity-score methods | Same, plus correct propensity-score model |
-| Instrumental variables | An exogenous source of variation affects $T$ but not $Y$ directly |
-| Difference-in-differences | Parallel trends in the absence of treatment |
-| Regression discontinuity | Outcome and confounders are smooth at a sharp eligibility threshold |
+| 층화 / 짝짓기 | 관측된 공변량을 조건부로 하면 처리가 무작위나 다름없다 |
+| 다변량 회귀 | 위와 같고, 더불어 함수 형태가 옳다 |
+| 성향점수 방법 | 위와 같고, 더불어 성향점수 모형이 옳다 |
+| 도구변수 | 외생적인 변동 원천이 $T$에는 영향을 주지만 $Y$에는 직접 영향을 주지 않는다 |
+| 이중차분법 | 처리가 없었다면 추세가 평행했을 것이다 |
+| 회귀 불연속 | 뚜렷한 자격 기준선에서 결과와 교란요인이 매끄럽다 |
 
-Each replaces "randomization" with a different identifying assumption. None is verifiable from the data alone — choosing among them is part design, part craftsmanship.
+각 전략은 "무작위화"를 서로 다른 식별 가정으로 대체한다. 어느 것도 자료만으로는 검증할 수 없으며, 그중 무엇을 고를지는 설계이자 기예의 문제다.
 
-### Strengths
+### 강점
 
-- **Real-world relevance.** Effects observed in natural settings generalize more easily than results from controlled labs.
-- **Feasibility.** Many exposures of interest (smoking, occupational hazards, education) cannot be randomly assigned.
-- **Scale.** Modern administrative datasets routinely include millions of subjects, providing precision impossible in experiments.
+- **현실 적합성.** 자연 상태에서 관측된 효과는 통제된 실험실 결과보다 더 쉽게 일반화된다.
+- **실행 가능성.** 관심 있는 노출 중 상당수(흡연, 직업적 위험, 교육)는 무작위 배정이 불가능하다.
+- **규모.** 현대의 행정 자료는 흔히 수백만 명을 포함하며, 실험으로는 불가능한 정밀도를 제공한다.
 
-### Weaknesses
+### 약점
 
-- **Confounding** — the headline problem above.
-- **Selection bias** in who enters the sample or whose data is recorded.
-- **Reverse causation** — the "outcome" may actually drive the "exposure" (sick people exercise less, not the reverse).
-- **Measurement error** in self-reported variables.
+- **교란** — 앞서 말한 대표적 문제.
+- 누가 표본에 들어오는지, 누구의 자료가 기록되는지에서 생기는 **선택편향**.
+- **역인과** — "결과"가 실제로는 "노출"을 유발할 수 있다(아파서 운동을 덜 하는 것이지 그 반대가 아니다).
+- 자기보고 변수의 **측정오차**.
 
-## Examples
+## 예제
 
 ```python
 """Demonstrate confounding by age in an observational dataset."""
@@ -81,74 +81,74 @@ print(f"Partial correlation (controlling age): r = {r_partial:+.3f}")
 print("  (correct negative sign emerges)")
 ```
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Classify each study as **observational** (cross-sectional, cohort, or case–control) or **experimental**.
+**연습문제 1.**
+다음 각 연구를 **관찰연구**(횡단, 코호트, 환자대조)인지 **실험연구**인지 분류하라.
 
-**(a)** Researchers track 5,000 smokers and 5,000 non-smokers over 20 years to compare lung-cancer rates.
-**(b)** A pharmaceutical company randomly assigns 300 patients to receive either a new drug or a placebo and measures symptom improvement after 8 weeks.
-**(c)** A public-health team surveys 1,000 adults about their diet and exercise habits at a single point in time.
-**(d)** Researchers identify 200 patients with heart disease and 200 without, then look back at their cholesterol history.
-**(e)** A school is randomly assigned to receive a new curriculum; a neighboring school continues with the existing curriculum.
+**(a)** 연구자들이 흡연자 5,000명과 비흡연자 5,000명을 20년간 추적하여 폐암 발생률을 비교한다.
+**(b)** 한 제약회사가 환자 300명을 신약 또는 위약을 받도록 무작위 배정하고 8주 후 증상 호전을 측정한다.
+**(c)** 한 공중보건팀이 성인 1,000명을 대상으로 한 시점에서 식단과 운동 습관을 조사한다.
+**(d)** 연구자들이 심장질환이 있는 환자 200명과 없는 사람 200명을 찾아낸 뒤 이들의 콜레스테롤 이력을 거슬러 살펴본다.
+**(e)** 한 학교가 새 교육과정을 받도록 무작위로 배정되고, 이웃 학교는 기존 교육과정을 유지한다.
 
-??? success "Solution to Exercise 1"
-    (a) Observational — cohort (groups defined by exposure, followed forward in time).
-    (b) Experimental — randomized controlled trial.
-    (c) Observational — cross-sectional (data at one time point).
-    (d) Observational — case–control (groups defined by outcome, exposure history examined retrospectively).
-    (e) Experimental — randomized at the *school* (cluster) level, sometimes called a cluster-randomized trial.
-
----
-
-**Exercise 2.**
-A study finds that people who drink red wine moderately have lower rates of heart disease. List three plausible confounders that could produce this association even if red wine has no causal effect, and propose one identification strategy that could partially address them.
-
-??? success "Solution to Exercise 2"
-    Plausible confounders:
-
-    - **Income / socioeconomic status**: regular red-wine drinkers tend to be wealthier; income drives access to healthcare and healthy food.
-    - **Diet**: red-wine drinkers may also eat more vegetables and less processed food (a "Mediterranean" diet pattern).
-    - **Exercise / overall health behaviors**: people who maintain moderate drinking may also exercise more.
-
-    **Identification strategy:** an instrumental-variable approach using regional or temporal variation in alcohol taxation could provide quasi-experimental variation in consumption that is independent of personal income or diet (assuming taxes do not directly affect heart disease through other channels). Alternatively, a randomized controlled trial of moderate red-wine consumption (with appropriate ethical safeguards) would settle the question more directly.
+??? success "연습문제 1 풀이"
+    (a) 관찰연구 — 코호트(노출로 집단을 정의하고 시간 순방향으로 추적).
+    (b) 실험연구 — 무작위 대조시험.
+    (c) 관찰연구 — 횡단(한 시점의 자료).
+    (d) 관찰연구 — 환자대조(결과로 집단을 정의하고 노출 이력을 후향적으로 조사).
+    (e) 실험연구 — *학교*(집락) 수준에서 무작위화했으며, 집락 무작위 시험이라 부르기도 한다.
 
 ---
 
-**Exercise 3.**
-Explain the difference between a **cohort study** and a **case–control study**. Why is case–control typically used for rare diseases?
+**연습문제 2.**
+어떤 연구에서 적포도주를 적당히 마시는 사람의 심장질환 발생률이 더 낮다는 결과가 나왔다. 적포도주에 인과효과가 없더라도 이런 연관성을 만들어낼 수 있는 그럴듯한 교란요인 세 가지를 들고, 이를 부분적으로나마 다룰 수 있는 식별 전략 하나를 제안하라.
 
-??? success "Solution to Exercise 3"
-    A **cohort study** identifies subjects by their *exposure* (smokers vs non-smokers) and follows them forward in time to observe outcomes. A **case–control study** identifies subjects by their *outcome* (cases with heart attack, controls without) and looks backward at their exposure history.
+??? success "연습문제 2 풀이"
+    그럴듯한 교란요인:
 
-    Case–control is preferred for rare diseases because the alternative — a prospective cohort — would need an enormous sample to accrue enough cases. If a disease affects 1 in 10,000 people, a cohort of 1,000 people will yield about 0.1 expected cases, useless for analysis. A case–control study starts by *over-sampling* on the disease, recruiting (say) 200 cases and 200 controls and comparing exposure rates. The trade-off: cases and controls may be sampled from different populations, and recall of past exposure may be biased.
+    - **소득 / 사회경제적 지위**: 적포도주를 정기적으로 마시는 사람은 대체로 더 부유하며, 소득은 의료 접근성과 건강한 음식 접근성을 좌우한다.
+    - **식단**: 적포도주를 마시는 사람은 채소를 더 많이, 가공식품을 더 적게 먹을 수 있다("지중해식" 식단 패턴).
+    - **운동 / 전반적 건강 행동**: 적당한 음주를 유지하는 사람은 운동도 더 많이 할 수 있다.
 
----
-
-**Exercise 4.**
-Consider an observational study reporting that students attending tutoring sessions score 15 points higher than students who do not. The school concludes tutoring causes a 15-point improvement. Identify three confounders, two of which you regard as **measurable** and one as **unmeasurable**, and explain why the latter is a fundamental limitation.
-
-??? success "Solution to Exercise 4"
-    **Measurable confounders:**
-
-    - Prior academic ability (proxied by previous grades or standardized test scores).
-    - Parental education / socioeconomic status (recorded on enrollment forms).
-
-    **Unmeasurable confounder:**
-
-    - Motivation / conscientiousness. Students who choose to attend optional tutoring tend to be more motivated, and motivation also drives study time outside tutoring and exam performance directly. There is no reliable way to measure motivation independently of the behaviors it causes.
-
-    Why this is fundamental: measurable confounders can be addressed by stratification, matching, or regression. Unmeasurable confounders cannot. Even an analysis adjusting for every measured variable is biased to the extent that an unmeasured confounder explains both the exposure and the outcome. This is why randomization remains the gold standard — it balances *all* confounders, observed or not.
+    **식별 전략:** 지역별 또는 시기별 주류세 변동을 이용하는 도구변수 접근은 개인 소득이나 식단과 독립적인 준실험적 소비 변동을 제공할 수 있다(주류세가 다른 경로로 심장질환에 직접 영향을 주지 않는다는 가정하에). 대안으로, 적절한 윤리적 안전장치를 갖춘 적당량 적포도주 섭취의 무작위 대조시험이라면 이 문제를 더 직접적으로 해결할 것이다.
 
 ---
 
-**Exercise 5.**
-The **ecological fallacy** is the error of inferring individual-level associations from group-level data. Construct a small artificial example where the group-level correlation has the opposite sign of the individual-level correlation.
+**연습문제 3.**
+**코호트연구**와 **환자대조연구**의 차이를 설명하라. 희귀질환에는 왜 보통 환자대조연구를 쓰는가?
 
-??? success "Solution to Exercise 5"
-    Suppose two regions A and B have these citizens:
+??? success "연습문제 3 풀이"
+    **코호트연구**는 대상을 *노출*로 식별하고(흡연자 대 비흡연자) 시간 순방향으로 추적하여 결과를 관찰한다. **환자대조연구**는 대상을 *결과*로 식별하고(심근경색이 있는 사례군, 없는 대조군) 노출 이력을 거슬러 살펴본다.
 
-    | Region | Person | Income | Happiness |
+    희귀질환에 환자대조연구가 선호되는 이유는, 대안인 전향적 코호트로는 충분한 사례 수를 모으는 데 엄청난 표본이 필요하기 때문이다. 어떤 질병이 1만 명 중 1명에게 발생한다면, 1,000명 코호트에서는 기대 사례가 약 0.1건이라 분석에 쓸 수 없다. 환자대조연구는 질병 쪽을 *과대표집*하는 데서 출발하여 (예컨대) 사례군 200명과 대조군 200명을 모집한 뒤 노출률을 비교한다. 그 대가는 사례군과 대조군이 서로 다른 모집단에서 표집될 수 있다는 점과, 과거 노출에 대한 회상이 편향될 수 있다는 점이다.
+
+---
+
+**연습문제 4.**
+개인지도 수업에 참석한 학생이 그렇지 않은 학생보다 15점 높은 점수를 받았다고 보고한 관찰연구를 생각하자. 학교는 개인지도가 15점의 향상을 유발한다고 결론지었다. 교란요인 세 가지를 찾되 두 개는 **측정 가능**하고 하나는 **측정 불가능**한 것으로 제시하고, 후자가 왜 근본적인 한계인지 설명하라.
+
+??? success "연습문제 4 풀이"
+    **측정 가능한 교란요인:**
+
+    - 이전의 학업 능력(이전 성적이나 표준화 시험 점수로 대리).
+    - 부모의 교육 수준 / 사회경제적 지위(입학 서류에 기록됨).
+
+    **측정 불가능한 교란요인:**
+
+    - 동기 / 성실성. 선택적인 개인지도에 참석하기로 한 학생은 동기가 더 높은 경향이 있고, 동기는 개인지도 밖의 공부 시간과 시험 성적에도 직접 영향을 준다. 동기가 유발하는 행동과 독립적으로 동기를 측정할 믿을 만한 방법은 없다.
+
+    이것이 왜 근본적인가: 측정 가능한 교란요인은 층화, 짝짓기, 회귀로 다룰 수 있다. 측정 불가능한 교란요인은 그럴 수 없다. 측정된 모든 변수를 보정한 분석이라도, 측정되지 않은 교란요인이 노출과 결과를 함께 설명하는 만큼 편향된다. 무작위화가 여전히 표준으로 남아 있는 이유가 이것이다 — 무작위화는 관측되든 아니든 *모든* 교란요인을 균형 잡는다.
+
+---
+
+**연습문제 5.**
+**생태학적 오류**는 집단 수준 자료에서 개인 수준의 연관성을 추론하는 오류다. 집단 수준 상관과 개인 수준 상관의 부호가 반대가 되는 작은 인공 예를 만들어라.
+
+??? success "연습문제 5 풀이"
+    두 지역 A와 B에 다음과 같은 주민이 있다고 하자.
+
+    | 지역 | 사람 | 소득 | 행복도 |
     |---|---|---|---|
     | A | 1 | 10 | 1 |
     | A | 2 | 30 | 3 |
@@ -157,23 +157,23 @@ The **ecological fallacy** is the error of inferring individual-level associatio
     | B | 5 | 40 | 6 |
     | B | 6 | 60 | 8 |
 
-    **Individual level:** within each region, income and happiness are positively correlated (correlation = 1 in both regions).
+    **개인 수준:** 각 지역 안에서 소득과 행복도는 양의 상관을 갖는다(두 지역 모두 상관 = 1).
 
-    **Group level:** region A has mean income 30 and mean happiness 3; region B has mean income 40 and mean happiness 6. Group means show positive association.
+    **집단 수준:** 지역 A는 평균 소득 30, 평균 행복도 3이고, 지역 B는 평균 소득 40, 평균 행복도 6이다. 집단 평균은 양의 연관을 보인다.
 
-    Now reorganize so that region B has uniformly *lower* citizens despite higher mean income — for example, B = (20→0, 40→2, 60→4), giving group means (40, 2) compared to A's (30, 3). Individual correlations within each group are still positive, but the group-level correlation between mean income and mean happiness is now *negative*. The same data tells two different stories at different aggregation levels; using one to make claims at the other level is the ecological fallacy. Simpson's paradox is the same phenomenon in a categorical setting.
+    이제 지역 B가 평균 소득은 더 높으면서도 주민들의 행복도는 일률적으로 *더 낮도록* 재구성해 보자. 예를 들어 B = (20→0, 40→2, 60→4)로 하면 집단 평균은 (40, 2)가 되어 A의 (30, 3)과 비교된다. 각 집단 내 개인 상관은 여전히 양수지만, 평균 소득과 평균 행복도 사이의 집단 수준 상관은 이제 *음수*다. 같은 자료가 집계 수준에 따라 서로 다른 두 이야기를 하는 것이며, 한쪽으로 다른 쪽 수준의 주장을 펴는 것이 생태학적 오류다. 심슨의 역설은 범주형 상황에서 나타나는 같은 현상이다.
 
 ---
 
-**Exercise 6.**
-A researcher claims their **multivariable regression** of $Y$ on $T$ controlling for ten covariates establishes the causal effect of $T$. State the additional identifying assumption this claim requires and explain one diagnostic that can probe (but not verify) it.
+**연습문제 6.**
+어떤 연구자가 공변량 열 개를 통제한 $Y$의 $T$에 대한 **다변량 회귀**로 $T$의 인과효과를 확립했다고 주장한다. 이 주장에 필요한 추가 식별 가정을 진술하고, 그것을 검증하지는 못해도 탐색해 볼 수 있는 진단 방법 하나를 설명하라.
 
-??? success "Solution to Exercise 6"
-    The required assumption is **no unmeasured confounding** (also called *conditional independence* or *ignorability*): conditional on the ten measured covariates, treatment $T$ is independent of the potential outcomes $(Y(0), Y(1))$. Equivalently, all backdoor paths from $T$ to $Y$ are blocked by the covariates that have been controlled for.
+??? success "연습문제 6 풀이"
+    필요한 가정은 **측정되지 않은 교란요인이 없음**(*조건부 독립* 또는 *무시가능성*이라고도 한다)이다. 즉 측정된 열 개 공변량을 조건부로 하면 처리 $T$가 잠재적 결과 $(Y(0), Y(1))$과 독립이라는 것이다. 동등하게, $T$에서 $Y$로 가는 모든 뒷문 경로가 통제된 공변량들에 의해 차단되어야 한다.
 
-    This assumption is **untestable** from the data alone — it is an assumption about variables you did *not* measure. Two probes that can flag (but not certify) the assumption:
+    이 가정은 자료만으로는 **검정 불가능**하다 — 이는 측정하지 *않은* 변수에 대한 가정이기 때문이다. 이 가정을 (증명은 못 해도) 경고 신호로 짚어 볼 수 있는 두 가지 진단은 다음과 같다.
 
-    - **Sensitivity analysis** (e.g., Rosenbaum bounds, E-values): how strong would an unmeasured confounder have to be — in association with both $T$ and $Y$ — to overturn the conclusion? If the answer is "much stronger than any of your measured confounders," the result is robust; otherwise it is fragile.
-    - **Negative-outcome controls**: pick an outcome that *should not* be affected by $T$ but would plausibly be affected by the same unmeasured confounder (e.g., for a smoking study, a negative outcome might be vehicle-accident mortality). If $T$ "predicts" the negative outcome after adjustment, unmeasured confounding remains.
+    - **민감도 분석**(예: 로젠바움 한계, E-value): 결론을 뒤집으려면 측정되지 않은 교란요인이 $T$ 및 $Y$와 얼마나 강하게 연관되어야 하는가? 답이 "측정된 어떤 교란요인보다도 훨씬 강해야 한다"라면 결과는 견고하고, 그렇지 않다면 취약하다.
+    - **음성 결과 대조**: $T$의 영향을 받지 *않아야* 하지만 같은 미측정 교란요인의 영향은 받을 법한 결과를 고른다(예: 흡연 연구라면 교통사고 사망률이 음성 결과가 될 수 있다). 보정 후에도 $T$가 그 음성 결과를 "예측"한다면 미측정 교란이 남아 있는 것이다.
 
-    These diagnostics give evidence, not proof. The fundamental epistemic gap — that observational data cannot tell you what randomization would tell you — never fully closes.
+    이 진단들은 증거를 줄 뿐 증명을 주지는 않는다. 관찰자료는 무작위화가 알려주는 것을 알려줄 수 없다는 근본적인 인식론적 간극은 결코 완전히 메워지지 않는다.

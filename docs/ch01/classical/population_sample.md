@@ -1,10 +1,10 @@
-# Populations and Samples
+# 모집단과 표본
 
-The distinction between population and sample is the foundation of all inferential statistics. Every confidence interval, hypothesis test, and regression model in this book is a statement about *the population* based on what we observe in *the sample*. Mastering this distinction — and the related ideas of representativeness, randomness, and sampling error — is the first step to interpreting any statistical analysis honestly.
+모집단과 표본의 구분은 모든 추론통계의 토대다. 이 책에 나오는 모든 신뢰구간, 가설검정, 회귀모형은 *표본*에서 관측한 것을 근거로 *모집단*에 대해 말하는 진술이다. 이 구분 — 그리고 그와 관련된 대표성, 무작위성, 표본오차의 개념 — 을 익히는 것이 어떤 통계 분석이든 정직하게 해석하기 위한 첫걸음이다.
 
-## Definition
+## 정의
 
-The **population** is the complete set of individuals or observations of interest. A **sample** is a subset of the population selected for measurement. Population quantities are **parameters** (denoted $\mu$, $\sigma^2$, $p$, $\beta$); sample quantities are **statistics** (denoted $\bar{x}$, $s^2$, $\hat{p}$, $\hat\beta$).
+**모집단(population)** 은 관심 대상이 되는 개체 또는 관측값의 전체 집합이다. **표본(sample)** 은 측정을 위해 선택된 모집단의 부분집합이다. 모집단에 대한 양은 **모수(parameter)** 이고($\mu$, $\sigma^2$, $p$, $\beta$로 표기), 표본에 대한 양은 **통계량(statistic)** 이다($\bar{x}$, $s^2$, $\hat{p}$, $\hat\beta$로 표기).
 
 $$
 \mu = \frac{1}{N}\sum_{i=1}^{N} x_i \qquad \bar{x} = \frac{1}{n}\sum_{i=1}^{n} x_i
@@ -14,42 +14,42 @@ $$
 \sigma^2 = \frac{1}{N}\sum_{i=1}^{N}(x_i - \mu)^2 \qquad s^2 = \frac{1}{n-1}\sum_{i=1}^{n}(x_i - \bar{x})^2
 $$
 
-A **target population** is what the analyst wants to learn about; the **study population** is what the sampling frame actually covers; the **sample** is what gets measured. Any gap between the target and study populations is a source of bias that no sample size can eliminate.
+**목표 모집단(target population)** 은 분석가가 알고자 하는 대상이고, **연구 모집단(study population)** 은 표집틀이 실제로 포괄하는 대상이며, **표본**은 실제로 측정되는 대상이다. 목표 모집단과 연구 모집단 사이의 어떤 간극이든 표본 크기로는 결코 없앨 수 없는 편향의 원천이다.
 
-## Explanation
+## 설명
 
-### Why we sample
+### 왜 표본을 뽑는가
 
-A complete census of a population is rarely feasible. Reasons include:
+모집단 전체를 조사하는 전수조사는 실행 가능한 경우가 드물다. 그 이유는 다음과 같다.
 
-- **Cost**: measuring every U.S. household for a survey would consume billions of dollars.
-- **Time**: by the time a census is complete, the population has changed.
-- **Practicality**: testing every light bulb's lifetime would destroy the product.
-- **Definition**: the "population" may be implicit (all possible measurements of a physical constant, all future patients of a hospital). Only a sample is ever observable.
+- **비용**: 어떤 조사를 위해 미국의 모든 가구를 측정하려면 수십억 달러가 든다.
+- **시간**: 전수조사가 끝날 무렵이면 모집단은 이미 변해 있다.
+- **실현 가능성**: 모든 전구의 수명을 시험하면 제품이 다 망가진다.
+- **정의상의 문제**: "모집단"이 암묵적일 수 있다(어떤 물리 상수의 가능한 모든 측정값, 어떤 병원의 미래 환자 전체). 이런 경우 관측 가능한 것은 오직 표본뿐이다.
 
-### What makes a sample useful
+### 무엇이 좋은 표본을 만드는가
 
-A useful sample lets the analyst quantify (a) what's true on average and (b) how uncertain that estimate is. The minimum requirement is **probability sampling**: every unit in the population has a known, nonzero probability of selection. This requirement supports:
+좋은 표본은 분석가가 (a) 평균적으로 무엇이 참인지, (b) 그 추정이 얼마나 불확실한지를 정량화할 수 있게 해준다. 최소 요건은 **확률표집(probability sampling)** 이다. 즉 모집단의 모든 단위가 알려진 0이 아닌 선택 확률을 가져야 한다. 이 요건이 다음을 뒷받침한다.
 
-- **Unbiasedness** in expectation: $\mathbb{E}[\bar x] = \mu$ under simple random sampling.
-- **Quantifiable uncertainty**: standard errors and confidence intervals have valid coverage.
-- **No invisible omissions**: probability sampling guarantees every part of the population is reachable.
+- 기댓값 차원의 **불편성(unbiasedness)**: 단순무작위표집에서 $\mathbb{E}[\bar x] = \mu$.
+- **정량화 가능한 불확실성**: 표준오차와 신뢰구간이 타당한 포함확률을 갖는다.
+- **보이지 않는 누락 없음**: 확률표집은 모집단의 모든 부분에 도달할 수 있음을 보장한다.
 
-Convenience samples (people who walked by, friends of the analyst, online volunteers) violate this and produce statistics with no valid measure of uncertainty.
+편의표본(지나가던 사람, 분석가의 친구, 온라인 자원자)은 이 요건을 위반하며, 불확실성을 타당하게 측정할 수 없는 통계량을 만들어낸다.
 
-### Sampling error vs. bias
+### 표본오차 대 편향
 
-**Sampling error** is the random variation in a statistic across different samples of the same size. It shrinks with $\sqrt{n}$ and is captured by the standard error.
+**표본오차(sampling error)** 는 같은 크기의 서로 다른 표본들 사이에서 통계량이 무작위로 변동하는 정도다. $\sqrt{n}$에 따라 줄어들며 표준오차로 포착된다.
 
-**Bias** is systematic error — the difference between $\mathbb{E}[\hat\theta]$ and $\theta$. It does not shrink with $n$. A million-sample biased survey is more confidently wrong than a thousand-sample biased survey.
+**편향(bias)** 은 체계적 오차, 즉 $\mathbb{E}[\hat\theta]$와 $\theta$의 차이다. 이것은 $n$이 커져도 줄지 않는다. 표본 100만 개의 편향된 조사는 표본 1000개의 편향된 조사보다 더 자신 있게 틀린다.
 
-The two are independent quantities; a survey can be precise (low SE) and biased, or unbiased and imprecise.
+이 둘은 서로 독립적인 양이다. 어떤 조사는 정밀하면서(표준오차가 작으면서) 편향될 수 있고, 불편이면서 정밀하지 않을 수도 있다.
 
-### Bessel's correction
+### 베셀 보정
 
-The sample variance uses $n - 1$ in the denominator, not $n$. The reason: $\bar x$ minimizes $\sum (x_i - c)^2$ over $c$, which means $\sum (x_i - \bar x)^2 \le \sum (x_i - \mu)^2$ in any sample. Dividing by $n$ would give $\mathbb{E}[\tilde s^2] = \frac{n-1}{n}\sigma^2$ — a systematic downward bias. Dividing by $n - 1$ exactly compensates, producing the unique scalar multiple of the centered sum of squares that is unbiased for $\sigma^2$.
+표본분산의 분모는 $n$이 아니라 $n - 1$이다. 이유는 이렇다. $\bar x$는 $c$에 대해 $\sum (x_i - c)^2$을 최소화하므로, 어떤 표본에서든 $\sum (x_i - \bar x)^2 \le \sum (x_i - \mu)^2$이다. 따라서 $n$으로 나누면 $\mathbb{E}[\tilde s^2] = \frac{n-1}{n}\sigma^2$가 되어 체계적으로 과소추정하는 편향이 생긴다. $n - 1$로 나누면 이를 정확히 보정하여, 중심화된 제곱합의 스칼라 배수 중 $\sigma^2$에 대해 불편인 유일한 것을 얻는다.
 
-## Examples
+## 예제
 
 ```python
 """Sampling error decreases with sqrt(n)."""
@@ -68,93 +68,93 @@ for n in [10, 100, 1_000, 10_000]:
           f"theoretical = {sigma_true/np.sqrt(n):.3f}")
 ```
 
-The standard error drops by roughly a factor of 10 each time $n$ multiplies by 100 — the $\sqrt{n}$ law in action.
+$n$이 100배가 될 때마다 표준오차는 대략 10분의 1로 떨어진다 — $\sqrt{n}$ 법칙이 작동하는 모습이다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-For each scenario, identify the **population** and the **sample**.
+**연습문제 1.**
+다음 각 상황에서 **모집단**과 **표본**을 찾아라.
 
-**(a)** A polling firm calls 1,200 randomly selected registered voters in a state to estimate the proportion who support a ballot measure.
-**(b)** A hospital reviews the medical records of 500 patients admitted in 2024 to study post-surgical complications.
-**(c)** An online retailer analyzes click data from 10,000 randomly selected user sessions to estimate the overall conversion rate.
-**(d)** A physicist measures the gravitational constant 50 times in a lab to estimate its value.
+**(a)** 한 여론조사 기관이 어떤 주에서 무작위로 선정한 등록 유권자 1,200명에게 전화를 걸어 주민발의안 지지 비율을 추정한다.
+**(b)** 한 병원이 수술 후 합병증을 연구하기 위해 2024년에 입원한 환자 500명의 진료기록을 검토한다.
+**(c)** 한 온라인 소매업체가 전체 전환율을 추정하기 위해 무작위로 선택한 사용자 세션 10,000건의 클릭 자료를 분석한다.
+**(d)** 한 물리학자가 중력상수 값을 추정하기 위해 실험실에서 50번 측정한다.
 
-??? success "Solution to Exercise 1"
-    (a) Population: all registered voters in the state. Sample: the 1,200 voters called.
-    (b) Population: all patients who could have been admitted to the hospital under similar conditions. Sample: the 500 reviewed.
-    (c) Population: all sessions on the retailer's website. Sample: the 10,000 selected sessions.
-    (d) Population: the conceptual ensemble of all possible measurements under the same experimental setup. Sample: the 50 measurements. (When the "population" is conceptual, every observation is in some sense a sample from an implicit superpopulation.)
+??? success "연습문제 1 풀이"
+    (a) 모집단: 해당 주의 모든 등록 유권자. 표본: 전화를 받은 1,200명.
+    (b) 모집단: 비슷한 조건에서 그 병원에 입원할 수 있었던 모든 환자. 표본: 검토된 500명.
+    (c) 모집단: 그 소매업체 웹사이트의 모든 세션. 표본: 선택된 10,000건의 세션.
+    (d) 모집단: 동일한 실험 설정에서 가능한 모든 측정값의 개념적 모임. 표본: 50번의 측정. (모집단이 개념적일 때, 모든 관측값은 어떤 의미에서 암묵적인 초모집단에서 뽑은 표본이다.)
 
 ---
 
-**Exercise 2.**
-Prove that the sample variance $s^2 = \frac{1}{n-1}\sum (X_i - \bar X)^2$ is unbiased for the population variance $\sigma^2$ when $X_1, \ldots, X_n$ are i.i.d. with mean $\mu$ and variance $\sigma^2$.
+**연습문제 2.**
+$X_1, \ldots, X_n$이 평균 $\mu$, 분산 $\sigma^2$을 갖는 i.i.d. 확률변수일 때, 표본분산 $s^2 = \frac{1}{n-1}\sum (X_i - \bar X)^2$이 모분산 $\sigma^2$에 대해 불편임을 증명하라.
 
-??? success "Solution to Exercise 2"
-    Use $\sum (X_i - \bar X)^2 = \sum X_i^2 - n \bar X^2$. Taking expectations:
+??? success "연습문제 2 풀이"
+    $\sum (X_i - \bar X)^2 = \sum X_i^2 - n \bar X^2$을 이용한다. 기댓값을 취하면
 
     $$
     \mathbb{E}\!\sum X_i^2 = n(\sigma^2 + \mu^2), \qquad \mathbb{E}[n \bar X^2] = n\!\left(\frac{\sigma^2}{n} + \mu^2\right) = \sigma^2 + n\mu^2
     $$
 
-    Subtracting:
+    빼면
 
     $$
     \mathbb{E}\!\sum (X_i - \bar X)^2 = n\sigma^2 + n\mu^2 - \sigma^2 - n\mu^2 = (n-1)\sigma^2
     $$
 
-    Hence $\mathbb{E}[s^2] = \sigma^2$. $\square$
+    따라서 $\mathbb{E}[s^2] = \sigma^2$이다. $\square$
 
 ---
 
-**Exercise 3.**
-A polling firm reports that "75% of Americans approve of policy X, based on 800 phone interviews conducted between 5 pm and 7 pm on weekdays." Critique the sampling design and list two distinct sources of bias.
+**연습문제 3.**
+한 여론조사 기관이 "평일 오후 5시에서 7시 사이에 실시한 전화 면접 800건에 근거할 때, 미국인의 75%가 정책 X를 지지한다"고 발표했다. 이 표집 설계를 비판하고 서로 다른 두 가지 편향의 원천을 제시하라.
 
-??? success "Solution to Exercise 3"
-    Two sources of bias:
+??? success "연습문제 3 풀이"
+    두 가지 편향의 원천:
 
-    - **Coverage / frame bias**: the frame is phone subscribers. Non-subscribers and individuals without phones are excluded. Even within phone owners, those who answer unknown numbers (i.e., respond to a polling call) skew older and more retired.
-    - **Time-of-day bias**: 5–7 pm weekday calls miss working adults, shift workers, and people with evening commitments. Respondents skew toward retirees, the unemployed, and people working from home — groups that may differ systematically on policy preferences.
+    - **포괄 / 표집틀 편향**: 표집틀이 전화 가입자다. 비가입자와 전화가 없는 사람은 배제된다. 전화 소유자 중에서도 모르는 번호를 받는 사람(즉 여론조사 전화에 응하는 사람)은 더 나이가 많고 은퇴자 쪽으로 치우친다.
+    - **시간대 편향**: 평일 오후 5–7시 통화는 일하는 성인, 교대 근무자, 저녁 일정이 있는 사람을 놓친다. 응답자는 은퇴자, 실업자, 재택근무자 쪽으로 치우치는데, 이들은 정책 선호에서 체계적으로 다를 수 있다.
 
-    The combination produces a sample that is unrepresentative regardless of how large $n$ is. The reported 75% has a sharp confidence interval *around the wrong target population*.
-
----
-
-**Exercise 4.**
-Distinguish between **sampling error** and **bias**. For each of the following, identify which is at play (or both): (a) a 95% CI for $\mu$ is wider than the analyst wants; (b) an exit poll consistently overstates Democratic support across many elections; (c) a thermometer reads 2 degrees high regardless of how many readings are averaged.
-
-??? success "Solution to Exercise 4"
-    (a) **Sampling error.** Wide CIs are a precision problem; they shrink with larger $n$.
-    (b) **Bias.** Repeated systematic error in the same direction across many independent samples is bias, not random sampling error. The likely mechanism is differential response (Democrats more willing to participate in exit polls). Increasing $n$ does not reduce it.
-    (c) **Bias** (measurement bias). The thermometer is unbiased in the **statistical** sense — it always reads 2 degrees high. No averaging fixes it; only recalibration does.
+    이 둘이 결합하면 $n$이 아무리 커도 대표성 없는 표본이 만들어진다. 발표된 75%는 *잘못된 목표 모집단*에 대해 좁은 신뢰구간을 갖고 있는 셈이다.
 
 ---
 
-**Exercise 5.**
-A new manufacturing line produces 10 million widgets per year. Quality control samples 1,000 widgets monthly and tests them. Why is this a *sample* of the production population? What changes when the test is destructive?
+**연습문제 4.**
+**표본오차**와 **편향**을 구분하라. 다음 각각에 대해 어느 쪽이 작용하는지(또는 둘 다인지) 밝혀라. (a) $\mu$에 대한 95% 신뢰구간이 분석가가 원하는 것보다 넓다. (b) 출구조사가 여러 선거에 걸쳐 일관되게 민주당 지지를 과대평가한다. (c) 온도계가 몇 번을 측정해 평균을 내든 2도 높게 나온다.
 
-??? success "Solution to Exercise 5"
-    The 10 million widgets per year are the population of interest. The 1,000 tested per month form a sample — typically 12,000 per year — selected to estimate population defect rate, dimension distributions, etc.
-
-    Sample inference applies: defect rate estimated as $\hat p = (\text{defects in sample})/1000$ with SE $\sqrt{\hat p(1 - \hat p)/1000}$, and 95% CI roughly $\hat p \pm 2\sqrt{\hat p(1 - \hat p)/1000}$.
-
-    **Destructive testing:** the test breaks the widget (crash test, breaking strength, lifetime test). A census is now impossible by definition — testing every widget would leave nothing to sell. The sample-based inference is the only option. This is a common reason to choose between *non-destructive* approximations (X-ray, optical inspection — every unit; less informative) and *destructive* tests (a sample; more informative but unrepeatable on that unit).
+??? success "연습문제 4 풀이"
+    (a) **표본오차.** 넓은 신뢰구간은 정밀도 문제이며, $n$을 키우면 줄어든다.
+    (b) **편향.** 여러 독립적인 표본에 걸쳐 같은 방향으로 반복되는 체계적 오차는 무작위 표본오차가 아니라 편향이다. 유력한 기제는 차별적 응답(민주당 지지자가 출구조사에 더 기꺼이 참여함)이다. $n$을 늘려도 줄지 않는다.
+    (c) **편향**(측정 편향). 이 온도계는 항상 2도 높게 읽는다. 평균을 아무리 내도 고쳐지지 않고, 오직 재보정만이 해결한다.
 
 ---
 
-**Exercise 6.**
-The **finite-population correction (FPC)** factor $\sqrt{1 - n/N}$ multiplies the standard error of the sample mean for sampling without replacement from a finite population. When does it matter, and when is it ignored?
+**연습문제 5.**
+새 생산라인이 연간 1,000만 개의 부품을 생산한다. 품질관리팀은 매달 1,000개를 뽑아 시험한다. 이것이 왜 생산 모집단의 *표본*인가? 시험이 파괴적일 때는 무엇이 달라지는가?
 
-??? success "Solution to Exercise 6"
-    The variance of $\bar X$ for an SRS without replacement from a population of size $N$ is
+??? success "연습문제 5 풀이"
+    연간 1,000만 개의 부품이 관심 모집단이다. 매달 시험하는 1,000개 — 보통 연간 12,000개 — 가 표본을 이루며, 모집단의 불량률과 치수 분포 등을 추정하기 위해 선택된다.
+
+    표본 추론이 적용된다. 불량률은 $\hat p = (\text{표본 내 불량 수})/1000$으로 추정되고 표준오차는 $\sqrt{\hat p(1 - \hat p)/1000}$이며, 95% 신뢰구간은 대략 $\hat p \pm 2\sqrt{\hat p(1 - \hat p)/1000}$이다.
+
+    **파괴적 시험:** 시험이 부품을 망가뜨린다(충돌시험, 파단강도, 수명시험). 이제 전수조사는 정의상 불가능하다. 모든 부품을 시험하면 팔 것이 남지 않는다. 표본에 근거한 추론이 유일한 선택지다. 이것이 *비파괴* 근사(X선, 광학 검사 — 모든 단위를 검사하지만 정보량이 적음)와 *파괴적* 시험(표본만 검사하지만 정보량이 많고 그 단위에 대해 반복 불가) 중에서 선택해야 하는 흔한 이유다.
+
+---
+
+**연습문제 6.**
+**유한모집단 수정(FPC)** 계수 $\sqrt{1 - n/N}$은 유한 모집단에서 비복원으로 표집할 때 표본평균의 표준오차에 곱해진다. 이 계수는 언제 중요하고 언제 무시되는가?
+
+??? success "연습문제 6 풀이"
+    크기 $N$인 모집단에서 비복원 단순무작위표집을 할 때 $\bar X$의 분산은
 
     $$
     \mathrm{Var}(\bar X) = \frac{\sigma^2}{n}\left(1 - \frac{n}{N}\right)
     $$
 
-    The factor $(1 - n/N)$ goes to 1 when $n \ll N$ (the FPC is negligible) and to 0 as $n \to N$ (when you've sampled the whole population, there is no sampling uncertainty).
+    계수 $(1 - n/N)$은 $n \ll N$일 때 1로 가고(FPC를 무시할 수 있음), $n \to N$일 때 0으로 간다(모집단 전체를 표집했다면 표집에 따른 불확실성이 없다).
 
-    **Matters** in finite populations with non-trivial sampling fractions: a small audit sampling 50 invoices from a population of 200, where $n/N = 0.25$. Ignoring the FPC overestimates the SE by a factor of $\sqrt{1/(1-0.25)} = 1.15$ — a 15% inflation.
+    표집비율이 무시할 수 없는 유한 모집단에서는 **중요하다**. 예를 들어 200장의 송장 중 50장을 뽑는 소규모 감사에서는 $n/N = 0.25$다. FPC를 무시하면 표준오차를 $\sqrt{1/(1-0.25)} = 1.15$배, 즉 15% 부풀리게 된다.
 
-    **Ignored** in surveys of very large populations ($n/N \ll 0.05$) — the FPC ≈ 1 and standard formulas suffice. National polls of 1,000 from a population of 200 million use $n/N = 5 \times 10^{-6}$; the FPC is indistinguishable from 1. This is why infinite-population formulas dominate textbooks but the FPC reappears in audit, quality-control, and election-recount contexts.
+    아주 큰 모집단을 대상으로 하는 조사($n/N \ll 0.05$)에서는 **무시된다**. FPC ≈ 1이므로 표준 공식으로 충분하다. 2억 명의 모집단에서 1,000명을 뽑는 전국 여론조사는 $n/N = 5 \times 10^{-6}$이며, FPC는 1과 구별되지 않는다. 교과서에서 무한모집단 공식이 주를 이루면서도 감사, 품질관리, 선거 재검표 맥락에서 FPC가 다시 등장하는 이유가 이것이다.

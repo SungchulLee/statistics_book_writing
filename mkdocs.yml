@@ -59,28 +59,28 @@ nav:
             - Sampling Distributions (Simple Ordinary Least Squares): ch00/linalg_regression/linalg_statistics/sampling_dist_simple_ols.md
             - Sampling Distributions (General Ordinary Least Squares): ch00/linalg_regression/linalg_statistics/sampling_dist_general_ols.md
 
-    - 1 Data Collection:
-        - Chapter Overview: ch01/index.md
-        - 1.1 Classical Approach—Design Your Data Collection:
-            - Populations and Samples: ch01/classical/population_sample.md
-            - Parameters vs Statistics: ch01/classical/parameters_statistics.md
-            - Observational Studies: ch01/classical/observational.md
-            - Confounding and Association vs Causation: ch01/classical/confounding_causation.md
-            - Controlled Experiments: ch01/classical/experiments.md
-            - Randomization and Blinding: ch01/classical/randomization_blinding.md
-            - Sample Surveys and Sampling Methods: ch01/classical/surveys.md
-            - Bias and Nonresponse: ch01/classical/bias_nonresponse.md
-            - Survivorship Bias: ch01/classical/survivorship_bias.md
-            - Strengths and Limitations: ch01/contrast/tradeoffs.md
-            - Design Your Data Collection: ch01/contrast/design_data.md
-            - Analyze Available Data: ch01/contrast/analyze_available.md
-        - 1.2 Modern Approach—Analyze the Data You Have:
-            - Statistical Models vs Learning Algorithms: ch01/modern/models_vs_algorithms.md
-            - Prediction vs Inference: ch01/modern/prediction_vs_inference.md
-        - 1.3 Three Learning Paradigms:
-            - Unsupervised Learning (Pattern Discovery): ch01/paradigms/unsupervised.md
-            - Supervised Learning (Prediction with Labels): ch01/paradigms/supervised.md
-            - Reinforcement Learning (Sequential Decisions): ch01/paradigms/reinforcement.md
+    - 1 자료 수집:
+        - 장 개요: ch01/index.md
+        - 1.1 고전적 접근—자료 수집을 설계하라:
+            - 모집단과 표본: ch01/classical/population_sample.md
+            - 모수 대 통계량: ch01/classical/parameters_statistics.md
+            - 관찰연구: ch01/classical/observational.md
+            - 교란과 연관성 대 인과관계: ch01/classical/confounding_causation.md
+            - 통제실험: ch01/classical/experiments.md
+            - 무작위화와 눈가림: ch01/classical/randomization_blinding.md
+            - 표본조사와 표집 방법: ch01/classical/surveys.md
+            - 편향과 무응답: ch01/classical/bias_nonresponse.md
+            - 생존자 편향: ch01/classical/survivorship_bias.md
+            - 강점과 한계: ch01/contrast/tradeoffs.md
+            - 자료 수집을 설계하라: ch01/contrast/design_data.md
+            - 가용한 자료를 분석하라: ch01/contrast/analyze_available.md
+        - 1.2 현대적 접근—가진 자료를 분석하라:
+            - 통계 모형 대 학습 알고리즘: ch01/modern/models_vs_algorithms.md
+            - 예측 대 추론: ch01/modern/prediction_vs_inference.md
+        - 1.3 세 가지 학습 패러다임:
+            - 비지도학습 (패턴 발견): ch01/paradigms/unsupervised.md
+            - 지도학습 (레이블을 이용한 예측): ch01/paradigms/supervised.md
+            - 강화학습 (순차적 의사결정): ch01/paradigms/reinforcement.md
 
     - 2 Descriptive Statistics:
         - Chapter Overview: ch02/index.md
@@ -239,7 +239,6 @@ nav:
             - Geometric and Poisson Maximum Likelihood: ch06/code/geometric_poisson_mle.md
 
     - 7 Estimation of μ and σ²: 
-
         - Chapter Overview: ch07/index.md
         - 7.1 Estimation of the Mean:
             - Sample Mean as Estimator: ch07/mean/sample_mean.md
