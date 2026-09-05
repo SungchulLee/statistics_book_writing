@@ -1,31 +1,31 @@
-# Gaussian 2D Conditional Distributions
+# 2차원 Gaussian 조건부분포
 
-## Overview
+## 개요
 
-A powerful property of the bivariate normal is that **conditional distributions are also normal**. If $(a, b)^\top$ follows a standard bivariate normal with correlation $\rho$, then:
+이변량 정규분포의 강력한 성질 하나는 **조건부분포도 정규분포**라는 것이다. $(a, b)^\top$가 상관계수 $\rho$인 표준 이변량 정규분포를 따르면:
 
 $$
 b \mid a = a_0 \;\sim\; N\!\left(\rho\, a_0,\; 1 - \rho^2\right)
 $$
 
-The conditional mean is a linear function of $a_0$, and the conditional variance $1 - \rho^2$ does not depend on $a_0$—it depends only on $\rho$.
+조건부 평균은 $a_0$의 선형함수이고, 조건부 분산 $1 - \rho^2$은 $a_0$에 의존하지 않고 오직 $\rho$에만 의존한다.
 
 ---
 
-## General Case
+## 일반적인 경우
 
-For a bivariate normal with means $\mu_a, \mu_b$, variances $\sigma_a^2, \sigma_b^2$, and correlation $\rho$:
+평균이 $\mu_a, \mu_b$, 분산이 $\sigma_a^2, \sigma_b^2$, 상관계수가 $\rho$인 이변량 정규분포에 대해:
 
 $$
 b \mid a = a_0 \;\sim\; N\!\left(\mu_b + \rho\frac{\sigma_b}{\sigma_a}(a_0 - \mu_a),\; \sigma_b^2(1 - \rho^2)\right)
 $$
 
-!!! tip "Key Insight"
-    The conditional mean is exactly the **regression line** of $b$ on $a$. The conditional variance is the residual variance after accounting for the linear relationship.
+!!! tip "핵심 통찰"
+    조건부 평균은 정확히 $a$에 대한 $b$의 **회귀직선**이다. 조건부 분산은 선형 관계를 반영하고 남은 잔차분산이다.
 
 ---
 
-## Code
+## 코드
 
 ```python
 import numpy as np
@@ -83,24 +83,24 @@ plt.show()
 
 ---
 
-## Interpretation
+## 해석
 
-| $\rho$ | $E[b \mid a=1]$ | $\text{Var}(b \mid a=1)$ | Effect |
+| $\rho$ | $E[b \mid a=1]$ | $\text{Var}(b \mid a=1)$ | 효과 |
 |---|---|---|---|
-| 0 | 0 | 1 | Conditioning on $a$ provides no information about $b$ |
-| 0.5 | 0.5 | 0.75 | Moderate reduction in uncertainty |
-| 0.9 | 0.9 | 0.19 | Knowing $a$ nearly determines $b$ |
+| 0 | 0 | 1 | $a$로 조건화해도 $b$에 대한 정보가 없다 |
+| 0.5 | 0.5 | 0.75 | 불확실성이 중간 정도로 줄어든다 |
+| 0.9 | 0.9 | 0.19 | $a$를 알면 $b$가 거의 결정된다 |
 
-As $|\rho| \to 1$, the conditional distribution concentrates around the regression line, and the conditional variance approaches zero.
+$|\rho| \to 1$일 때 조건부분포는 회귀직선 주위로 모이고 조건부 분산은 0에 가까워진다.
 
 ---
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-For the standard bivariate normal with $\rho = 0.8$, compute the conditional mean and variance of $b$ given $a = 2$.
+**연습문제 1.**
+$\rho = 0.8$인 표준 이변량 정규분포에서 $a = 2$가 주어졌을 때 $b$의 조건부 평균과 분산을 계산하라.
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
     $$
     E[b \mid a = 2] = \rho \cdot 2 = 0.8 \times 2 = 1.6
     $$
@@ -109,42 +109,42 @@ For the standard bivariate normal with $\rho = 0.8$, compute the conditional mea
     \text{Var}(b \mid a = 2) = 1 - \rho^2 = 1 - 0.64 = 0.36
     $$
 
-    So $b \mid a = 2 \sim N(1.6, 0.36)$, with conditional standard deviation $0.6$.
+    따라서 $b \mid a = 2 \sim N(1.6, 0.36)$이고 조건부 표준편차는 $0.6$이다.
 
 ---
 
-**Exercise 2.**
-Prove the conditional distribution formula for the standard bivariate normal: $b \mid a = a_0 \sim N(\rho a_0, 1 - \rho^2)$.
+**연습문제 2.**
+표준 이변량 정규분포의 조건부분포 공식 $b \mid a = a_0 \sim N(\rho a_0, 1 - \rho^2)$을 증명하라.
 
-??? success "Solution to Exercise 2"
-    The joint density is:
+??? success "연습문제 2 풀이"
+    결합밀도는:
 
     $$
     f(a, b) = \frac{1}{2\pi\sqrt{1-\rho^2}}\exp\!\left(-\frac{a^2 - 2\rho ab + b^2}{2(1-\rho^2)}\right)
     $$
 
-    The marginal of $a$ is $f_a(a) = \frac{1}{\sqrt{2\pi}}e^{-a^2/2}$. So:
+    $a$의 주변분포는 $f_a(a) = \frac{1}{\sqrt{2\pi}}e^{-a^2/2}$이다. 따라서 $b$에 대해 완전제곱식을 만들면:
 
     $$
     f(b \mid a = a_0) = \frac{f(a_0, b)}{f_a(a_0)} \propto \exp\!\left(-\frac{(b - \rho a_0)^2}{2(1-\rho^2)}\right)
     $$
 
-    after completing the square in $b$. This is the kernel of $N(\rho a_0, 1-\rho^2)$. $\square$
+    이는 $N(\rho a_0, 1-\rho^2)$의 핵이다. $\square$
 
 ---
 
-**Exercise 3.**
-Explain the connection between the conditional mean $E[b \mid a] = \rho \cdot a$ and simple linear regression of $b$ on $a$.
+**연습문제 3.**
+조건부 평균 $E[b \mid a] = \rho \cdot a$와 $a$에 대한 $b$의 단순선형회귀 사이의 연결을 설명하라.
 
-??? success "Solution to Exercise 3"
-    In simple linear regression of $b$ on $a$ with standardized variables (zero mean, unit variance), the regression line is $\hat{b} = \rho \cdot a$, where $\rho$ is the correlation. For the bivariate normal, this regression line is not just the best linear predictor — it is the **conditional expectation** $E[b \mid a]$. In general, $E[Y \mid X]$ can be nonlinear, but for the bivariate normal it is exactly linear.
+??? success "연습문제 3 풀이"
+    표준화된 변수(평균 0, 분산 1)에 대해 $a$에 대한 $b$의 단순선형회귀에서 회귀직선은 $\hat{b} = \rho \cdot a$이며 $\rho$는 상관계수이다. 이변량 정규분포에서는 이 회귀직선이 단지 최선의 선형 예측자인 데 그치지 않고 **조건부 기댓값** $E[b \mid a]$ 그 자체이다. 일반적으로 $E[Y \mid X]$는 비선형일 수 있지만, 이변량 정규분포에서는 정확히 선형이다.
 
 ---
 
-**Exercise 4.**
-If $\rho = 0$, what does the conditional distribution become? Relate this to the concept of independence.
+**연습문제 4.**
+$\rho = 0$이면 조건부분포는 무엇이 되는가? 이를 독립성 개념과 연결하라.
 
-??? success "Solution to Exercise 4"
-    When $\rho = 0$: $E[b \mid a = a_0] = 0$ and $\text{Var}(b \mid a = a_0) = 1$. The conditional distribution $b \mid a \sim N(0, 1)$ does not depend on $a_0$ at all — it equals the marginal distribution of $b$.
+??? success "연습문제 4 풀이"
+    $\rho = 0$이면 $E[b \mid a = a_0] = 0$이고 $\text{Var}(b \mid a = a_0) = 1$이다. 조건부분포 $b \mid a \sim N(0, 1)$은 $a_0$에 전혀 의존하지 않으며, $b$의 주변분포와 같다.
 
-    This is the definition of independence: $f(b \mid a) = f(b)$ for all $a$. For the bivariate normal, $\rho = 0$ is both necessary and sufficient for independence.
+    이것이 독립성의 정의이다. 모든 $a$에 대해 $f(b \mid a) = f(b)$인 것이다. 이변량 정규분포에서 $\rho = 0$은 독립성의 필요충분조건이다.

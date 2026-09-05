@@ -1,14 +1,14 @@
-# Chi-Square Density Function
+# 카이제곱 밀도함수
 
-## Overview
+## 개요
 
-The **chi-square distribution** with $k$ degrees of freedom arises as the distribution of a sum of $k$ independent squared standard normals:
+자유도가 $k$인 **카이제곱 분포**는 독립인 표준정규확률변수 $k$개의 제곱합의 분포로 나타난다:
 
 $$
 Q = Z_1^2 + Z_2^2 + \cdots + Z_k^2, \qquad Z_i \overset{\text{iid}}{\sim} N(0,1)
 $$
 
-It is fundamental in hypothesis testing (goodness-of-fit, independence tests) and in the construction of confidence intervals for the variance.
+가설검정(적합도 검정, 독립성 검정)과 분산의 신뢰구간 구성에서 근본적인 역할을 한다.
 
 ---
 
@@ -18,16 +18,16 @@ $$
 f(x; k) = \frac{1}{2^{k/2}\,\Gamma(k/2)}\, x^{k/2 - 1}\, e^{-x/2}, \qquad x \ge 0
 $$
 
-| Property | Value |
+| 성질 | 값 |
 |---|---|
-| Support | $[0, \infty)$ |
-| Mean | $k$ |
-| Variance | $2k$ |
-| Mode | $\max(k - 2,\, 0)$ |
+| 지지집합 | $[0, \infty)$ |
+| 평균 | $k$ |
+| 분산 | $2k$ |
+| 최빈값 | $\max(k - 2,\, 0)$ |
 
 ---
 
-## Code
+## 코드
 
 ```python
 import numpy as np
@@ -56,26 +56,26 @@ plt.show()
 
 ---
 
-## Shape vs Degrees of Freedom
+## 자유도에 따른 모양
 
-- **$k = 1, 2$:** Highly right-skewed, density peaks at or near 0.
-- **$k \approx 10$:** Moderate skew, bell-like but asymmetric.
-- **Large $k$:** By the CLT, $\chi^2_k \approx N(k, 2k)$.
+- **$k = 1, 2$:** 오른쪽으로 심하게 치우치며 밀도가 0 또는 그 근처에서 정점을 이룬다.
+- **$k \approx 10$:** 치우침이 중간 정도이고 종 모양에 가깝지만 비대칭이다.
+- **큰 $k$:** 중심극한정리에 의해 $\chi^2_k \approx N(k, 2k)$이다.
 
-!!! note "Connection to Normal"
-    Since $\chi^2_k$ is a sum of $k$ i.i.d. random variables (each $Z_i^2$), the CLT guarantees approximate normality for large $k$.
+!!! note "정규분포와의 연결"
+    $\chi^2_k$는 i.i.d. 확률변수 $k$개(각각 $Z_i^2$)의 합이므로, 중심극한정리가 큰 $k$에서 근사적 정규성을 보장한다.
 
 ---
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Compute $E[Q]$ and $\text{Var}(Q)$ for $Q \sim \chi^2_k$ from the definition $Q = \sum_{i=1}^k Z_i^2$.
+**연습문제 1.**
+$Q \sim \chi^2_k$에 대해 정의 $Q = \sum_{i=1}^k Z_i^2$로부터 $E[Q]$와 $\text{Var}(Q)$를 계산하라.
 
-??? success "Solution to Exercise 1"
-    For each $Z_i^2$: $E[Z_i^2] = 1$ and $\text{Var}(Z_i^2) = E[Z_i^4] - (E[Z_i^2])^2 = 3 - 1 = 2$.
+??? success "연습문제 1 풀이"
+    각 $Z_i^2$에 대해 $E[Z_i^2] = 1$이고 $\text{Var}(Z_i^2) = E[Z_i^4] - (E[Z_i^2])^2 = 3 - 1 = 2$이다.
 
-    By independence:
+    독립성에 의해:
 
     $$
     E[Q] = \sum_{i=1}^k E[Z_i^2] = k, \qquad \text{Var}(Q) = \sum_{i=1}^k \text{Var}(Z_i^2) = 2k
@@ -83,45 +83,45 @@ Compute $E[Q]$ and $\text{Var}(Q)$ for $Q \sim \chi^2_k$ from the definition $Q 
 
 ---
 
-**Exercise 2.**
-If $X \sim \chi^2_m$ and $Y \sim \chi^2_n$ are independent, show that $X + Y \sim \chi^2_{m+n}$.
+**연습문제 2.**
+$X \sim \chi^2_m$과 $Y \sim \chi^2_n$이 독립이면 $X + Y \sim \chi^2_{m+n}$임을 보여라.
 
-??? success "Solution to Exercise 2"
-    Write $X = \sum_{i=1}^m Z_i^2$ and $Y = \sum_{j=1}^n W_j^2$ where all $Z_i, W_j$ are independent $N(0,1)$. Then:
+??? success "연습문제 2 풀이"
+    모든 $Z_i, W_j$가 독립인 $N(0,1)$일 때 $X = \sum_{i=1}^m Z_i^2$, $Y = \sum_{j=1}^n W_j^2$로 쓰자. 그러면:
 
     $$
     X + Y = \sum_{i=1}^m Z_i^2 + \sum_{j=1}^n W_j^2
     $$
 
-    This is a sum of $m + n$ independent squared standard normals, so $X + Y \sim \chi^2_{m+n}$ by definition. $\square$
+    이는 독립인 표준정규확률변수 $m + n$개의 제곱합이므로 정의에 의해 $X + Y \sim \chi^2_{m+n}$이다. $\square$
 
 ---
 
-**Exercise 3.**
-Show that the mode of $\chi^2_k$ is $k - 2$ for $k \ge 2$ by differentiating the PDF and setting the result to zero.
+**연습문제 3.**
+PDF를 미분하여 0으로 두고, $k \ge 2$일 때 $\chi^2_k$의 최빈값이 $k - 2$임을 보여라.
 
-??? success "Solution to Exercise 3"
-    Taking the log of the PDF: $\ln f(x) = \text{const} + (k/2 - 1)\ln x - x/2$. Differentiating:
+??? success "연습문제 3 풀이"
+    PDF에 로그를 취하면 $\ln f(x) = \text{const} + (k/2 - 1)\ln x - x/2$이다. 미분하면:
 
     $$
     \frac{d}{dx}\ln f(x) = \frac{k/2 - 1}{x} - \frac{1}{2} = 0
     $$
 
-    Solving: $x = k - 2$. For $k \ge 2$, this is nonneg and lies in the support $[0, \infty)$, so the mode is $k - 2$. For $k < 2$, the derivative is always negative for $x > 0$, so the mode is at $x = 0$.
+    풀면 $x = k - 2$이다. $k \ge 2$이면 이 값은 음이 아니고 지지집합 $[0, \infty)$에 속하므로 최빈값은 $k - 2$이다. $k < 2$이면 $x > 0$에서 도함수가 항상 음수이므로 최빈값은 $x = 0$이다.
 
 ---
 
-**Exercise 4.**
-A random sample of size $n = 25$ from $N(\mu, \sigma^2)$ yields $s^2 = 12$. Construct a 95% confidence interval for $\sigma^2$ using the chi-square distribution.
+**연습문제 4.**
+$N(\mu, \sigma^2)$에서 크기 $n = 25$인 확률표본을 뽑아 $s^2 = 12$를 얻었다. 카이제곱 분포를 사용하여 $\sigma^2$에 대한 95% 신뢰구간을 구성하라.
 
-??? success "Solution to Exercise 4"
-    The pivotal quantity is $(n-1)s^2/\sigma^2 \sim \chi^2_{n-1}$. With $n-1 = 24$:
+??? success "연습문제 4 풀이"
+    추축량은 $(n-1)s^2/\sigma^2 \sim \chi^2_{n-1}$이다. $n-1 = 24$이므로:
 
     $$
     P\!\left(\chi^2_{0.025} \le \frac{24 \cdot 12}{\sigma^2} \le \chi^2_{0.975}\right) = 0.95
     $$
 
-    Using SciPy: $\chi^2_{0.025, 24} = 12.40$ and $\chi^2_{0.975, 24} = 39.36$.
+    SciPy를 사용하면 $\chi^2_{0.025, 24} = 12.40$, $\chi^2_{0.975, 24} = 39.36$이다.
 
     $$
     \frac{24 \times 12}{39.36} \le \sigma^2 \le \frac{24 \times 12}{12.40}

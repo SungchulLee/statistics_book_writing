@@ -1,20 +1,20 @@
-# Normal Cumulative Distribution and Quantiles
+# 정규 누적분포함수와 분위수
 
-## Overview
+## 개요
 
-The **cumulative distribution function** (CDF) of a random variable $X$ gives the probability that $X$ takes a value less than or equal to $x$:
+확률변수 $X$의 **누적분포함수**(CDF)는 $X$가 $x$ 이하의 값을 취할 확률을 준다:
 
 $$
 F(x) = P(X \le x) = \int_{-\infty}^{x} f(t)\,dt
 $$
 
-For the normal distribution, this integral has no closed-form expression and must be evaluated numerically. SciPy provides `stats.norm.cdf()` for this purpose.
+정규분포에서는 이 적분에 닫힌 형태의 표현이 없어 수치적으로 계산해야 한다. SciPy는 이를 위해 `stats.norm.cdf()`를 제공한다.
 
 ---
 
-## CDF and PDF Together
+## CDF와 PDF를 함께 보기
 
-Plotting the CDF and PDF on the same figure (using dual y-axes) makes their relationship explicit: the CDF at any point equals the area under the PDF to the left of that point.
+(이중 y축을 써서) CDF와 PDF를 같은 그림에 그리면 둘의 관계가 분명해진다. 임의의 점에서의 CDF 값은 그 점 왼쪽의 PDF 아래 넓이와 같다.
 
 ```python
 import matplotlib.pyplot as plt
@@ -55,7 +55,7 @@ plt.show()
 
 ---
 
-## Key CDF Values for the Standard Normal
+## 표준정규분포의 주요 CDF 값
 
 | $x$ | $\mathcal{N}(x) = P(Z \le x)$ |
 |---|---|
@@ -65,35 +65,35 @@ plt.show()
 | $1$ | $0.841$ |
 | $1.96$ | $0.975$ |
 
-The symmetry property $\mathcal{N}(-x) = 1 - \mathcal{N}(x)$ means only one half of the table is needed.
+대칭성 $\mathcal{N}(-x) = 1 - \mathcal{N}(x)$ 덕분에 표의 절반만 있으면 된다.
 
 ---
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-For $X \sim N(0, 1)$, compute $P(-1.96 \le X \le 1.96)$ using the CDF.
+**연습문제 1.**
+$X \sim N(0, 1)$에 대해 CDF를 사용하여 $P(-1.96 \le X \le 1.96)$을 계산하라.
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
     $$
     P(-1.96 \le X \le 1.96) = \mathcal{N}(1.96) - \mathcal{N}(-1.96) = 0.975 - 0.025 = 0.950
     $$
 
-    This is the basis for the 95% confidence interval: the central 95% of the standard normal lies between $\pm 1.96$.
+    이것이 95% 신뢰구간의 근거이다. 표준정규분포의 가운데 95%가 $\pm 1.96$ 사이에 놓인다.
 
 ---
 
-**Exercise 2.**
-Prove the symmetry property $\mathcal{N}(-x) = 1 - \mathcal{N}(x)$ for the standard normal CDF.
+**연습문제 2.**
+표준정규 CDF의 대칭성 $\mathcal{N}(-x) = 1 - \mathcal{N}(x)$를 증명하라.
 
-??? success "Solution to Exercise 2"
-    The standard normal PDF satisfies $\varphi(-t) = \varphi(t)$ (symmetry about 0). Then:
+??? success "연습문제 2 풀이"
+    표준정규 PDF는 $\varphi(-t) = \varphi(t)$를 만족한다(0을 중심으로 대칭). 그러면:
 
     $$
     \mathcal{N}(-x) = \int_{-\infty}^{-x} \varphi(t)\,dt
     $$
 
-    Substituting $u = -t$ (so $du = -dt$):
+    $u = -t$로 치환하면($du = -dt$):
 
     $$
     \mathcal{N}(-x) = \int_{\infty}^{x} \varphi(-u)(-du) = \int_x^{\infty} \varphi(u)\,du = 1 - \mathcal{N}(x)
@@ -103,11 +103,11 @@ Prove the symmetry property $\mathcal{N}(-x) = 1 - \mathcal{N}(x)$ for the stand
 
 ---
 
-**Exercise 3.**
-If $X \sim N(5, 9)$, find $P(X > 8)$ by standardizing.
+**연습문제 3.**
+$X \sim N(5, 9)$일 때 표준화하여 $P(X > 8)$을 구하라.
 
-??? success "Solution to Exercise 3"
-    Standardize: $Z = (X - 5)/3$. Then:
+??? success "연습문제 3 풀이"
+    표준화하면 $Z = (X - 5)/3$이다. 그러면:
 
     $$
     P(X > 8) = P\!\left(Z > \frac{8-5}{3}\right) = P(Z > 1) = 1 - \mathcal{N}(1) \approx 1 - 0.8413 = 0.1587
@@ -115,14 +115,14 @@ If $X \sim N(5, 9)$, find $P(X > 8)$ by standardizing.
 
 ---
 
-**Exercise 4.**
-Show that $F'(x) = f(x)$ (the derivative of the CDF is the PDF) using the Fundamental Theorem of Calculus. Explain what this means graphically.
+**연습문제 4.**
+미적분학의 기본정리를 사용하여 $F'(x) = f(x)$(CDF의 도함수가 PDF임)를 보여라. 이것이 그래프에서 무엇을 뜻하는지 설명하라.
 
-??? success "Solution to Exercise 4"
-    By definition, $F(x) = \int_{-\infty}^x f(t)\,dt$. By the Fundamental Theorem of Calculus:
+??? success "연습문제 4 풀이"
+    정의에 의해 $F(x) = \int_{-\infty}^x f(t)\,dt$이다. 미적분학의 기본정리에 의해:
 
     $$
     F'(x) = \frac{d}{dx}\int_{-\infty}^x f(t)\,dt = f(x)
     $$
 
-    Graphically: the slope of the CDF at any point $x$ equals the height of the PDF at that point. Where the PDF is highest (at the mode), the CDF is steepest. Where the PDF is near zero (in the tails), the CDF is nearly flat.
+    그래프로 보면, 임의의 점 $x$에서 CDF의 기울기가 그 점에서의 PDF 높이와 같다. PDF가 가장 높은 곳(최빈값)에서 CDF가 가장 가파르고, PDF가 0에 가까운 곳(꼬리)에서 CDF는 거의 평평하다.

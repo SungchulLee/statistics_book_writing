@@ -1,18 +1,18 @@
-# Normal Percent Point Function (Quantile Function)
+# 정규분포의 백분위점 함수 (분위수 함수)
 
-## Overview
+## 개요
 
-The **percent point function** (PPF), also called the **quantile function** or **inverse CDF**, answers the question: given a cumulative probability $q$, what value $x$ satisfies $P(X \le x) = q$?
+**백분위점 함수**(PPF)는 **분위수 함수** 또는 **역 CDF**라고도 하며, 다음 물음에 답한다. 누적확률 $q$가 주어졌을 때 $P(X \le x) = q$를 만족하는 값 $x$는 무엇인가?
 
 $$
 \text{ppf}(q) = F^{-1}(q) = \inf\{x : F(x) \ge q\}
 $$
 
-For the standard normal, the most important quantile is $\mathcal{N}^{-1}(0.975) \approx 1.96$, the critical value for two-sided 95% confidence intervals.
+표준정규분포에서 가장 중요한 분위수는 $\mathcal{N}^{-1}(0.975) \approx 1.96$이며, 양측 95% 신뢰구간의 임계값이다.
 
 ---
 
-## Code
+## 코드
 
 ```python
 import matplotlib.pyplot as plt
@@ -43,39 +43,39 @@ plt.show()
 
 ---
 
-## Common Quantiles of the Standard Normal
+## 표준정규분포의 흔한 분위수
 
-| $q$ | $\mathcal{N}^{-1}(q)$ | Usage |
+| $q$ | $\mathcal{N}^{-1}(q)$ | 용도 |
 |---|---|---|
-| 0.500 | 0 | Median |
-| 0.900 | 1.282 | 90% CI one-sided |
-| 0.950 | 1.645 | 95% CI one-sided |
-| 0.975 | 1.960 | 95% CI two-sided |
-| 0.995 | 2.576 | 99% CI two-sided |
+| 0.500 | 0 | 중앙값 |
+| 0.900 | 1.282 | 단측 90% 신뢰구간 |
+| 0.950 | 1.645 | 단측 95% 신뢰구간 |
+| 0.975 | 1.960 | 양측 95% 신뢰구간 |
+| 0.995 | 2.576 | 양측 99% 신뢰구간 |
 
 ---
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Using the PPF, find the value $z$ such that $P(-z \le Z \le z) = 0.99$ for $Z \sim N(0,1)$.
+**연습문제 1.**
+PPF를 사용하여 $Z \sim N(0,1)$에 대해 $P(-z \le Z \le z) = 0.99$를 만족하는 $z$를 구하라.
 
-??? success "Solution to Exercise 1"
-    We need $P(Z \le z) = 0.995$ (leaving 0.5% in each tail):
+??? success "연습문제 1 풀이"
+    양쪽 꼬리에 각각 0.5%를 남기므로 $P(Z \le z) = 0.995$가 필요하다:
 
     $$
     z = \mathcal{N}^{-1}(0.995) \approx 2.576
     $$
 
-    So 99% of the standard normal distribution lies between $\pm 2.576$.
+    따라서 표준정규분포의 99%가 $\pm 2.576$ 사이에 놓인다.
 
 ---
 
-**Exercise 2.**
-If $X \sim N(100, 225)$, find the 90th percentile of $X$.
+**연습문제 2.**
+$X \sim N(100, 225)$일 때 $X$의 90 백분위수를 구하라.
 
-??? success "Solution to Exercise 2"
-    Here $\mu = 100$, $\sigma = 15$. The 90th percentile is:
+??? success "연습문제 2 풀이"
+    여기서 $\mu = 100$, $\sigma = 15$이다. 90 백분위수는:
 
     $$
     x_{0.90} = \mu + \sigma \cdot \mathcal{N}^{-1}(0.90) = 100 + 15 \times 1.282 \approx 119.2
@@ -83,18 +83,18 @@ If $X \sim N(100, 225)$, find the 90th percentile of $X$.
 
 ---
 
-**Exercise 3.**
-Prove that for a continuous distribution, $F(F^{-1}(q)) = q$ for all $q \in (0, 1)$.
+**연습문제 3.**
+연속분포에 대해 모든 $q \in (0, 1)$에서 $F(F^{-1}(q)) = q$임을 증명하라.
 
-??? success "Solution to Exercise 3"
-    Let $x_q = F^{-1}(q) = \inf\{x : F(x) \ge q\}$. Since $F$ is continuous and nondecreasing with range $(0,1)$, the set $\{x : F(x) \ge q\}$ is a closed half-line $[x_q, \infty)$. Continuity of $F$ ensures $F(x_q) = q$ (the infimum is achieved). Therefore $F(F^{-1}(q)) = F(x_q) = q$. $\square$
+??? success "연습문제 3 풀이"
+    $x_q = F^{-1}(q) = \inf\{x : F(x) \ge q\}$라 하자. $F$가 연속이고 비감소이며 치역이 $(0,1)$이므로 집합 $\{x : F(x) \ge q\}$는 닫힌 반직선 $[x_q, \infty)$이다. $F$의 연속성에 의해 $F(x_q) = q$이다(하한이 달성된다). 따라서 $F(F^{-1}(q)) = F(x_q) = q$이다. $\square$
 
 ---
 
-**Exercise 4.**
-Explain the relationship between the PPF and the survival function. How would you compute the value $z$ such that $P(X > z) = 0.05$?
+**연습문제 4.**
+PPF와 생존함수의 관계를 설명하라. $P(X > z) = 0.05$를 만족하는 $z$는 어떻게 계산하겠는가?
 
-??? success "Solution to Exercise 4"
-    The survival function is $S(x) = 1 - F(x)$. If $P(X > z) = 0.05$, then $P(X \le z) = 0.95$, so $z = F^{-1}(0.95)$.
+??? success "연습문제 4 풀이"
+    생존함수는 $S(x) = 1 - F(x)$이다. $P(X > z) = 0.05$이면 $P(X \le z) = 0.95$이므로 $z = F^{-1}(0.95)$이다.
 
-    In SciPy: `z = stats.norm.ppf(0.95)` or equivalently `z = stats.norm.isf(0.05)`, where `isf` is the inverse survival function.
+    SciPy에서는 `z = stats.norm.ppf(0.95)`이며, 동등하게 `z = stats.norm.isf(0.05)`로도 구할 수 있다. 여기서 `isf`는 역생존함수이다.

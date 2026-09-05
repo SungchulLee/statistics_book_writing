@@ -1,58 +1,58 @@
-# Marginal and Conditional Distributions
+# 주변분포와 조건부분포
 
-## Overview
+## 개요
 
-Given a joint distribution of two random variables, the **marginal distribution** recovers the distribution of each variable individually, while the **conditional distribution** describes one variable given a specific value of the other. These concepts are essential for Bayesian reasoning, regression, and understanding dependence.
+두 확률변수의 결합분포가 주어졌을 때, **주변분포**는 각 변수의 개별 분포를 되찾아 주고 **조건부분포**는 다른 변수의 값이 정해졌을 때 한 변수를 기술한다. 이 개념들은 베이즈 추론, 회귀분석, 의존성 이해에 필수적이다.
 
 ---
 
-## Marginal Distributions
+## 주변분포
 
-### Discrete Case
+### 이산형
 
-From the joint PMF $p_{X,Y}(x,y)$, the marginal PMFs are obtained by summing over the other variable:
+결합 PMF $p_{X,Y}(x,y)$로부터 다른 변수에 대해 합하여 주변 PMF를 얻는다:
 
 $$
 p_X(x) = \sum_y p_{X,Y}(x, y), \qquad p_Y(y) = \sum_x p_{X,Y}(x, y)
 $$
 
-### Continuous Case
+### 연속형
 
-From the joint PDF $f_{X,Y}(x,y)$, the marginal PDFs are:
+결합 PDF $f_{X,Y}(x,y)$로부터 주변 PDF는 다음과 같다:
 
 $$
 f_X(x) = \int_{-\infty}^{\infty} f_{X,Y}(x, y)\,dy, \qquad f_Y(y) = \int_{-\infty}^{\infty} f_{X,Y}(x, y)\,dx
 $$
 
-**Intuition:** Marginalizing "integrates out" the other variable, projecting the joint distribution onto a single axis.
+**직관:** 주변화는 다른 변수를 "적분해 없애는" 것으로, 결합분포를 하나의 축으로 사영하는 셈이다.
 
 ---
 
-## Conditional Distributions
+## 조건부분포
 
-### Discrete Case
+### 이산형
 
-The conditional PMF of $Y$ given $X = x$ is:
+$X = x$가 주어졌을 때 $Y$의 조건부 PMF는 다음과 같다:
 
 $$
 p_{Y|X}(y \mid x) = \frac{p_{X,Y}(x, y)}{p_X(x)}, \qquad p_X(x) > 0
 $$
 
-### Continuous Case
+### 연속형
 
-The conditional PDF of $Y$ given $X = x$ is:
+$X = x$가 주어졌을 때 $Y$의 조건부 PDF는 다음과 같다:
 
 $$
 f_{Y|X}(y \mid x) = \frac{f_{X,Y}(x, y)}{f_X(x)}, \qquad f_X(x) > 0
 $$
 
-### Conditional Expectation
+### 조건부 기댓값
 
 $$
 E[Y \mid X = x] = \begin{cases} \sum_y y \cdot p_{Y|X}(y \mid x) & \text{(discrete)} \\ \int_{-\infty}^{\infty} y \cdot f_{Y|X}(y \mid x)\,dy & \text{(continuous)} \end{cases}
 $$
 
-### Conditional Variance
+### 조건부 분산
 
 $$
 \text{Var}(Y \mid X = x) = E[Y^2 \mid X = x] - (E[Y \mid X = x])^2
@@ -60,47 +60,47 @@ $$
 
 ---
 
-## Fundamental Relationships
+## 기본 관계식
 
-### Multiplication Rule
+### 곱셈 법칙
 
-The joint distribution can always be factored as:
+결합분포는 언제나 다음과 같이 인수분해할 수 있다:
 
 $$
 f_{X,Y}(x, y) = f_{Y|X}(y \mid x) \cdot f_X(x) = f_{X|Y}(x \mid y) \cdot f_Y(y)
 $$
 
-### Law of Total Expectation
+### 전체 기댓값의 법칙
 
 $$
 E[Y] = E[E[Y \mid X]] = \begin{cases} \sum_x E[Y \mid X = x] \cdot p_X(x) & \text{(discrete)} \\ \int E[Y \mid X = x] \cdot f_X(x)\,dx & \text{(continuous)} \end{cases}
 $$
 
-### Law of Total Variance (Eve's Law)
+### 전체 분산의 법칙 (Eve의 법칙)
 
 $$
 \text{Var}(Y) = E[\text{Var}(Y \mid X)] + \text{Var}(E[Y \mid X])
 $$
 
-The total variance decomposes into the mean of conditional variances (unexplained variance) plus the variance of conditional means (explained variance).
+전체 분산은 조건부 분산들의 평균(설명되지 않은 분산)과 조건부 평균들의 분산(설명된 분산)으로 분해된다.
 
 ---
 
-## Bayes' Theorem for Distributions
+## 분포에 대한 베이즈 정리
 
-Combining the multiplication rule and marginal distributions yields Bayes' theorem:
+곱셈 법칙과 주변분포를 결합하면 베이즈 정리를 얻는다:
 
 $$
 f_{X|Y}(x \mid y) = \frac{f_{Y|X}(y \mid x) \cdot f_X(x)}{f_Y(y)} = \frac{f_{Y|X}(y \mid x) \cdot f_X(x)}{\int f_{Y|X}(y \mid x) \cdot f_X(x)\,dx}
 $$
 
-This is the foundation of Bayesian inference: update the prior $f_X(x)$ with the likelihood $f_{Y|X}(y \mid x)$ to obtain the posterior $f_{X|Y}(x \mid y)$.
+이것이 베이즈 추론의 토대이다. 사전분포 $f_X(x)$를 가능도 $f_{Y|X}(y \mid x)$로 갱신하여 사후분포 $f_{X|Y}(x \mid y)$를 얻는다.
 
 ---
 
-## Worked Example: Discrete
+## 예제: 이산형
 
-**Problem:** Using the joint PMF:
+**문제:** 다음 결합 PMF를 사용한다:
 
 | | $Y=0$ | $Y=1$ | $Y=2$ | $p_X(x)$ |
 |:---|:---:|:---:|:---:|:---:|
@@ -109,9 +109,9 @@ This is the foundation of Bayesian inference: update the prior $f_X(x)$ with the
 | $X=2$ | 0.05 | 0.10 | 0.10 | 0.25 |
 | $p_Y(y)$ | 0.25 | 0.50 | 0.25 | 1.00 |
 
-Find $P(Y = 1 \mid X = 1)$ and $E[Y \mid X = 1]$.
+$P(Y = 1 \mid X = 1)$과 $E[Y \mid X = 1]$을 구하라.
 
-**Solution:**
+**풀이:**
 
 $$
 P(Y = 1 \mid X = 1) = \frac{p_{X,Y}(1,1)}{p_X(1)} = \frac{0.25}{0.45} = \frac{5}{9} \approx 0.556
@@ -123,33 +123,33 @@ $$
 
 ---
 
-## Worked Example: Continuous
+## 예제: 연속형
 
-**Problem:** Let $f_{X,Y}(x,y) = 2$ for $0 \leq x \leq y \leq 1$. Find $f_X(x)$, $f_{Y|X}(y \mid x)$, and $E[Y \mid X = x]$.
+**문제:** $0 \leq x \leq y \leq 1$에서 $f_{X,Y}(x,y) = 2$라 하자. $f_X(x)$, $f_{Y|X}(y \mid x)$, $E[Y \mid X = x]$를 구하라.
 
-**Solution:**
+**풀이:**
 
-**Marginal of $X$:**
+**$X$의 주변분포:**
 
 $$
 f_X(x) = \int_x^1 2\,dy = 2(1 - x), \quad 0 \leq x \leq 1
 $$
 
-**Conditional PDF of $Y$ given $X = x$:**
+**$X = x$가 주어졌을 때 $Y$의 조건부 PDF:**
 
 $$
 f_{Y|X}(y \mid x) = \frac{f_{X,Y}(x,y)}{f_X(x)} = \frac{2}{2(1-x)} = \frac{1}{1-x}, \quad x \leq y \leq 1
 $$
 
-This is $\text{Uniform}(x, 1)$.
+이는 $\text{Uniform}(x, 1)$이다.
 
-**Conditional expectation:**
+**조건부 기댓값:**
 
 $$
 E[Y \mid X = x] = \frac{x + 1}{2}
 $$
 
-**Verification via Law of Total Expectation:**
+**전체 기댓값의 법칙으로 확인:**
 
 $$
 E[Y] = \int_0^1 \frac{x+1}{2} \cdot 2(1-x)\,dx = \int_0^1 (x+1)(1-x)\,dx = \int_0^1 (1 - x^2)\,dx = \frac{2}{3}
@@ -157,9 +157,9 @@ $$
 
 ---
 
-## Python: Marginal and Conditional Distributions
+## Python: 주변분포와 조건부분포
 
-### Discrete Marginals and Conditionals
+### 이산형 주변분포와 조건부분포
 
 ```python
 import numpy as np
@@ -188,7 +188,7 @@ E_Y_given_X1 = np.sum(y_vals * cond_Y_given_X1)
 print(f"E[Y|X={x_val}] = {E_Y_given_X1:.4f}")
 ```
 
-### Continuous Marginals via Integration
+### 적분을 통한 연속형 주변분포
 
 ```python
 import numpy as np
@@ -216,7 +216,7 @@ E_Y, _ = integrate.quad(lambda x: E_Y_given_X(x) * marginal_X(x), 0, 1)
 print(f"E[Y] via Law of Total Expectation: {E_Y:.4f}")  # Should be 2/3
 ```
 
-### Visualizing Conditional Distributions
+### 조건부분포 시각화
 
 ```python
 import numpy as np
@@ -244,59 +244,59 @@ plt.show()
 
 ---
 
-## Key Takeaways
+## 핵심 요약
 
-- Marginal distributions are obtained by summing or integrating the joint distribution over the other variable.
-- Conditional distributions describe one variable given a known value of another, computed as the joint divided by the marginal.
-- The Law of Total Expectation and Law of Total Variance connect marginal and conditional moments.
-- The multiplication rule $f_{X,Y} = f_{Y|X} \cdot f_X$ provides the foundation for Bayes' theorem and Bayesian inference.
-- Conditional expectation $E[Y \mid X]$ is itself a random variable (a function of $X$) and represents the best prediction of $Y$ given $X$.
+- 주변분포는 결합분포를 다른 변수에 대해 합하거나 적분하여 얻는다.
+- 조건부분포는 다른 변수의 값이 알려졌을 때 한 변수를 기술하며, 결합분포를 주변분포로 나누어 계산한다.
+- 전체 기댓값의 법칙과 전체 분산의 법칙은 주변 적률과 조건부 적률을 이어 준다.
+- 곱셈 법칙 $f_{X,Y} = f_{Y|X} \cdot f_X$는 베이즈 정리와 베이즈 추론의 토대가 된다.
+- 조건부 기댓값 $E[Y \mid X]$는 그 자체가 ($X$의 함수인) 확률변수이며, $X$가 주어졌을 때 $Y$에 대한 최선의 예측을 나타낸다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Joint PDF $f(x, y) = 6(1 - y)$ for $0 \le x \le y \le 1$. (a) Verify $\int f = 1$. (b) Find $f_Y$. (c) Find $f_{X \mid Y}$. (d) Compute $\mathbb{E}[X \mid Y = y]$.
+**연습문제 1.**
+$0 \le x \le y \le 1$에서 결합 PDF가 $f(x, y) = 6(1 - y)$이다. (a) $\int f = 1$임을 확인하라. (b) $f_Y$를 구하라. (c) $f_{X \mid Y}$를 구하라. (d) $\mathbb{E}[X \mid Y = y]$를 계산하라.
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
     (a) $\int_0^1 \int_0^y 6(1-y) dx \, dy = \int_0^1 6y(1-y) dy = 1$. ✓
 
-    (b) $f_Y(y) = \int_0^y 6(1-y) dx = 6y(1-y)$ on $[0, 1]$. (This is $\mathrm{Beta}(2, 2)$.)
+    (b) $[0, 1]$ 위에서 $f_Y(y) = \int_0^y 6(1-y) dx = 6y(1-y)$. (이는 $\mathrm{Beta}(2, 2)$이다.)
 
-    (c) $f_{X \mid Y}(x \mid y) = 6(1-y)/[6y(1-y)] = 1/y$ on $[0, y]$. So $X \mid Y = y \sim \mathrm{Uniform}(0, y)$.
+    (c) $[0, y]$ 위에서 $f_{X \mid Y}(x \mid y) = 6(1-y)/[6y(1-y)] = 1/y$. 따라서 $X \mid Y = y \sim \mathrm{Uniform}(0, y)$.
 
     (d) $\mathbb{E}[X \mid Y = y] = y/2$.
 
 ---
 
-**Exercise 2.**
-**Law of total expectation.** Use Exercise 1's distribution to compute $\mathbb{E}[X]$ via $\mathbb{E}[X] = \mathbb{E}[\mathbb{E}[X \mid Y]]$ and verify directly.
+**연습문제 2.**
+**전체 기댓값의 법칙.** 연습문제 1의 분포를 사용하여 $\mathbb{E}[X] = \mathbb{E}[\mathbb{E}[X \mid Y]]$로 $\mathbb{E}[X]$를 계산하고, 직접 계산으로 확인하라.
 
-??? success "Solution to Exercise 2"
-    By iteration: $\mathbb{E}[X] = \mathbb{E}[\mathbb{E}[X \mid Y]] = \mathbb{E}[Y/2] = \mathbb{E}[Y]/2$.
+??? success "연습문제 2 풀이"
+    반복 기댓값으로 $\mathbb{E}[X] = \mathbb{E}[\mathbb{E}[X \mid Y]] = \mathbb{E}[Y/2] = \mathbb{E}[Y]/2$.
 
     $\mathbb{E}[Y] = \int_0^1 y \cdot 6y(1-y) dy = 6\int_0^1(y^2 - y^3) dy = 6(1/3 - 1/4) = 1/2$.
 
-    So $\mathbb{E}[X] = 1/4$.
+    따라서 $\mathbb{E}[X] = 1/4$.
 
-    **Direct verification:** $\mathbb{E}[X] = \int_0^1 \int_0^y x \cdot 6(1-y) dx \, dy = \int_0^1 3 y^2 (1-y) dy = 3(1/3 - 1/4) = 1/4$. ✓
+    **직접 확인:** $\mathbb{E}[X] = \int_0^1 \int_0^y x \cdot 6(1-y) dx \, dy = \int_0^1 3 y^2 (1-y) dy = 3(1/3 - 1/4) = 1/4$. ✓
 
-    The two methods agree, confirming the law of total expectation. The iterated approach is often computationally easier.
+    두 방법이 일치하여 전체 기댓값의 법칙을 확인해 준다. 반복 기댓값 방식이 계산상 더 쉬운 경우가 많다.
 
 ---
 
-**Exercise 3.**
-**Law of total variance.** Derive the formula $\mathrm{Var}(X) = \mathbb{E}[\mathrm{Var}(X \mid Y)] + \mathrm{Var}(\mathbb{E}[X \mid Y])$. Apply to Exercise 1.
+**연습문제 3.**
+**전체 분산의 법칙.** $\mathrm{Var}(X) = \mathbb{E}[\mathrm{Var}(X \mid Y)] + \mathrm{Var}(\mathbb{E}[X \mid Y])$를 유도하고 연습문제 1에 적용하라.
 
-??? success "Solution to Exercise 3"
-    **Derivation:**
+??? success "연습문제 3 풀이"
+    **유도:**
 
     $\mathrm{Var}(X) = \mathbb{E}[X^2] - (\mathbb{E}[X])^2$.
 
     $\mathbb{E}[X^2] = \mathbb{E}[\mathbb{E}[X^2 \mid Y]] = \mathbb{E}[\mathrm{Var}(X \mid Y) + (\mathbb{E}[X \mid Y])^2]$.
 
-    So $\mathrm{Var}(X) = \mathbb{E}[\mathrm{Var}(X \mid Y)] + \mathbb{E}[(\mathbb{E}[X \mid Y])^2] - (\mathbb{E}[X])^2 = \mathbb{E}[\mathrm{Var}(X \mid Y)] + \mathrm{Var}(\mathbb{E}[X \mid Y])$. $\square$
+    따라서 $\mathrm{Var}(X) = \mathbb{E}[\mathrm{Var}(X \mid Y)] + \mathbb{E}[(\mathbb{E}[X \mid Y])^2] - (\mathbb{E}[X])^2 = \mathbb{E}[\mathrm{Var}(X \mid Y)] + \mathrm{Var}(\mathbb{E}[X \mid Y])$. $\square$
 
-    **Application:** $\mathrm{Var}(X \mid Y = y) = y^2/12$ (variance of Uniform(0, y)). So $\mathbb{E}[\mathrm{Var}(X \mid Y)] = \mathbb{E}[Y^2]/12$.
+    **적용:** $\mathrm{Var}(X \mid Y = y) = y^2/12$이다(Uniform(0, y)의 분산). 따라서 $\mathbb{E}[\mathrm{Var}(X \mid Y)] = \mathbb{E}[Y^2]/12$.
 
     $\mathbb{E}[Y^2] = \int_0^1 y^2 \cdot 6y(1-y) dy = 6\int_0^1(y^3 - y^4) dy = 6(1/4 - 1/5) = 3/10$.
 
@@ -304,63 +304,63 @@ Joint PDF $f(x, y) = 6(1 - y)$ for $0 \le x \le y \le 1$. (a) Verify $\int f = 1
 
     $\mathrm{Var}(X) = (3/10)/12 + 1/80 = 1/40 + 1/80 = 3/80$.
 
-    The decomposition splits total variance into the "within-group" component $\mathbb{E}[\mathrm{Var}(X \mid Y)]$ and the "between-group" component $\mathrm{Var}(\mathbb{E}[X \mid Y])$ — the basis of ANOVA.
+    이 분해는 전체 분산을 "집단 내" 성분 $\mathbb{E}[\mathrm{Var}(X \mid Y)]$와 "집단 간" 성분 $\mathrm{Var}(\mathbb{E}[X \mid Y])$로 나누며, 이것이 분산분석(ANOVA)의 바탕이다.
 
 ---
 
-**Exercise 4.**
-**Marginal can be misleading.** Construct an example where the marginal distribution of $X$ is symmetric, but the conditional $X \mid Y = y$ is asymmetric for every $y$.
+**연습문제 4.**
+**주변분포는 오해를 부를 수 있다.** $X$의 주변분포는 대칭이지만 모든 $y$에 대해 조건부분포 $X \mid Y = y$는 비대칭인 예를 구성하라.
 
-??? success "Solution to Exercise 4"
-    Take $Y \sim \mathrm{Bernoulli}(0.5)$ and:
+??? success "연습문제 4 풀이"
+    $Y \sim \mathrm{Bernoulli}(0.5)$로 두고:
 
-    - $X \mid Y = 0 \sim \mathrm{Exp}(1)$ (right-skewed, support $[0, \infty)$).
-    - $X \mid Y = 1 \sim -\mathrm{Exp}(1)$ (left-skewed, support $(-\infty, 0]$).
+    - $X \mid Y = 0 \sim \mathrm{Exp}(1)$ (오른쪽으로 치우침, 지지집합 $[0, \infty)$).
+    - $X \mid Y = 1 \sim -\mathrm{Exp}(1)$ (왼쪽으로 치우침, 지지집합 $(-\infty, 0]$).
 
-    Marginal of $X$: $f_X(x) = 0.5 \cdot \mathbf 1\{x \ge 0\} e^{-x} + 0.5 \cdot \mathbf 1\{x \le 0\} e^x$, which is the **Laplace distribution** — symmetric around 0.
+    $X$의 주변분포는 $f_X(x) = 0.5 \cdot \mathbf 1\{x \ge 0\} e^{-x} + 0.5 \cdot \mathbf 1\{x \le 0\} e^x$이며, 이는 0을 중심으로 대칭인 **Laplace 분포**이다.
 
-    Yet conditional on either value of $Y$, $X$ is highly asymmetric. Mixture of two asymmetric distributions can produce symmetric marginal.
+    그러나 $Y$의 어느 값으로 조건화하든 $X$는 심하게 비대칭이다. 비대칭인 두 분포의 혼합이 대칭인 주변분포를 만들어 낼 수 있다.
 
-    **Lesson:** marginal distributions hide structure. In particular, modeling only the marginal of $X$ without considering the conditioning variable can give a misleading picture of the underlying mechanism. Always think about which variables to condition on.
+    **교훈:** 주변분포는 구조를 감춘다. 특히 조건화 변수를 고려하지 않고 $X$의 주변분포만 모형화하면 밑바탕의 메커니즘에 대해 오해를 부르는 그림을 얻을 수 있다. 어떤 변수로 조건화할지 항상 생각해야 한다.
 
 ---
 
-**Exercise 5.**
-**Bivariate normal marginals and conditionals.** $(X, Y)$ bivariate normal with means $(\mu_X, \mu_Y)$, variances $(\sigma_X^2, \sigma_Y^2)$, correlation $\rho$. State the marginal of $X$ and conditional $Y \mid X = x$.
+**연습문제 5.**
+**이변량 정규분포의 주변분포와 조건부분포.** 평균이 $(\mu_X, \mu_Y)$, 분산이 $(\sigma_X^2, \sigma_Y^2)$, 상관계수가 $\rho$인 이변량 정규 $(X, Y)$에 대해 $X$의 주변분포와 조건부분포 $Y \mid X = x$를 쓰라.
 
-??? success "Solution to Exercise 5"
-    **Marginal:** $X \sim N(\mu_X, \sigma_X^2)$. Marginals of jointly normal are normal (a property of the multivariate normal).
+??? success "연습문제 5 풀이"
+    **주변분포:** $X \sim N(\mu_X, \sigma_X^2)$. 결합정규분포의 주변분포는 정규분포이다(다변량 정규분포의 성질).
 
-    **Conditional:**
+    **조건부분포:**
 
     $$
     Y \mid X = x \sim N\!\left(\mu_Y + \rho\frac{\sigma_Y}{\sigma_X}(x - \mu_X), \, \sigma_Y^2(1 - \rho^2)\right)
     $$
 
-    Key observations:
+    핵심 관찰:
 
-    - Conditional mean is **linear** in $x$. This is the regression line $\mathbb{E}[Y \mid X = x] = \alpha + \beta x$ with $\beta = \rho \sigma_Y/\sigma_X$.
-    - Conditional variance does *not* depend on $x$: **homoscedasticity**. A distinguishing feature of bivariate normal.
-    - Conditional variance is reduced by factor $(1 - \rho^2)$: knowing $X$ explains fraction $\rho^2$ of the variance. This is exactly $R^2$.
+    - 조건부 평균이 $x$에 대해 **선형**이다. 이것이 회귀직선 $\mathbb{E}[Y \mid X = x] = \alpha + \beta x$이며 $\beta = \rho \sigma_Y/\sigma_X$이다.
+    - 조건부 분산이 $x$에 의존하지 *않는다*. **등분산성**이며, 이변량 정규분포를 구별짓는 특징이다.
+    - 조건부 분산은 $(1 - \rho^2)$배로 줄어든다. $X$를 알면 분산의 $\rho^2$만큼이 설명된다는 뜻이며, 이것이 정확히 $R^2$이다.
 
-    Linear regression theory in introductory statistics is essentially derived from these formulas under the bivariate-normal assumption.
+    입문 통계학의 선형회귀 이론은 본질적으로 이변량 정규 가정 아래에서 이 공식들로부터 유도된다.
 
 ---
 
-**Exercise 6.**
-**Bayes' theorem in continuous form.** State the version of Bayes for densities and derive the posterior $\pi(\theta \mid x)$ from prior $\pi(\theta)$ and likelihood $f(x \mid \theta)$.
+**연습문제 6.**
+**연속형 베이즈 정리.** 밀도함수에 대한 베이즈 정리를 쓰고, 사전분포 $\pi(\theta)$와 가능도 $f(x \mid \theta)$로부터 사후분포 $\pi(\theta \mid x)$를 유도하라.
 
-??? success "Solution to Exercise 6"
-    **Bayes for densities:**
+??? success "연습문제 6 풀이"
+    **밀도함수에 대한 베이즈 정리:**
 
     $$
     \pi(\theta \mid x) = \frac{f(x \mid \theta) \pi(\theta)}{\int f(x \mid \theta) \pi(\theta) d\theta} = \frac{f(x \mid \theta) \pi(\theta)}{f(x)}
     $$
 
-    The denominator $f(x) = \int f(x \mid \theta) \pi(\theta) d\theta$ is the **marginal likelihood** or **evidence**, often denoted $Z$ in machine learning contexts.
+    분모 $f(x) = \int f(x \mid \theta) \pi(\theta) d\theta$는 **주변가능도** 또는 **증거**이며, 기계학습 문헌에서는 흔히 $Z$로 표기한다.
 
-    **In words:** posterior is proportional to likelihood times prior. The proportionality constant ensures normalization.
+    **말로 하면:** 사후분포는 가능도 곱하기 사전분포에 비례한다. 비례상수는 정규화를 보장한다.
 
-    **Common shorthand:** $\pi(\theta \mid x) \propto f(x \mid \theta) \pi(\theta)$. Computing $Z$ is often the hard part (typically requires numerical integration); proportionality is sometimes all that's needed (e.g., for MCMC sampling which doesn't require $Z$).
+    **흔히 쓰는 축약형:** $\pi(\theta \mid x) \propto f(x \mid \theta) \pi(\theta)$. $Z$를 계산하는 것이 대개 어려운 부분이며(보통 수치적분이 필요하다), 비례 관계만으로 충분한 경우도 있다(예: $Z$를 필요로 하지 않는 MCMC 표본추출).
 
-    Bayesian inference uses this formula iteratively as data arrives: prior → posterior (after data 1) → posterior (after data 1, 2) → ..., each time treating the previous posterior as the new prior.
+    베이즈 추론은 자료가 들어올 때마다 이 공식을 반복 적용한다. 사전분포 → (자료 1 이후의) 사후분포 → (자료 1, 2 이후의) 사후분포 → ⋯ 로 이어지며, 매번 직전의 사후분포를 새로운 사전분포로 삼는다.

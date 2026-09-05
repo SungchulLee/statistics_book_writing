@@ -1,10 +1,10 @@
-# Student-t Density Function
+# Student-t 밀도함수
 
-## Overview
+## 개요
 
-The **Student's $t$-distribution** arises naturally when estimating the mean of a normally distributed population with unknown variance. It has heavier tails than the normal, making it more robust to outliers and more appropriate for small-sample inference.
+**Student $t$ 분포**는 분산을 모르는 정규모집단의 평균을 추정할 때 자연스럽게 나타난다. 정규분포보다 꼬리가 두꺼워 이상점에 더 로버스트하며 작은 표본의 추론에 더 적합하다.
 
-The PDF with $\nu$ degrees of freedom, location $\mu$, and scale $\sigma$ is:
+자유도 $\nu$, 위치 $\mu$, 척도 $\sigma$인 PDF는 다음과 같다:
 
 $$
 f(x) = \frac{\Gamma\!\left(\frac{\nu+1}{2}\right)}{\sigma\sqrt{\nu\pi}\;\Gamma\!\left(\frac{\nu}{2}\right)} \left(1 + \frac{1}{\nu}\left(\frac{x-\mu}{\sigma}\right)^2\right)^{-(\nu+1)/2}
@@ -12,20 +12,20 @@ $$
 
 ---
 
-## Moments
+## 적률
 
-| Property | Condition | Value |
+| 성질 | 조건 | 값 |
 |---|---|---|
-| Mean | $\nu > 1$ | $\mu$ |
-| Variance | $\nu > 2$ | $\dfrac{\nu}{\nu - 2}\,\sigma^2$ |
-| Variance | $1 < \nu \le 2$ | $\infty$ |
-| Mean | $\nu \le 1$ | undefined |
+| 평균 | $\nu > 1$ | $\mu$ |
+| 분산 | $\nu > 2$ | $\dfrac{\nu}{\nu - 2}\,\sigma^2$ |
+| 분산 | $1 < \nu \le 2$ | $\infty$ |
+| 평균 | $\nu \le 1$ | 정의되지 않음 |
 
-As $\nu \to \infty$, the $t$-distribution converges to $N(\mu, \sigma^2)$.
+$\nu \to \infty$일 때 $t$ 분포는 $N(\mu, \sigma^2)$로 수렴한다.
 
 ---
 
-## Code: Comparing t and Normal
+## 코드: t 분포와 정규분포 비교
 
 ```python
 import numpy as np
@@ -54,58 +54,58 @@ plt.tight_layout()
 plt.show()
 ```
 
-The plot reveals that the $t$-distribution has more probability in the tails and less at the center than the normal, with the difference becoming more pronounced as $\nu$ decreases.
+그림을 보면 $t$ 분포는 정규분포보다 꼬리에 확률이 더 많고 중앙에 더 적으며, $\nu$가 작아질수록 차이가 뚜렷해진다.
 
 ---
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-For the $t_5$ distribution, compute the variance using the formula $\nu/(\nu-2)$. How much larger is it than the standard normal variance?
+**연습문제 1.**
+$t_5$ 분포에 대해 공식 $\nu/(\nu-2)$로 분산을 계산하라. 표준정규분포의 분산보다 얼마나 큰가?
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
     $$
     \text{Var}(T) = \frac{5}{5 - 2} = \frac{5}{3} \approx 1.667
     $$
 
-    This is 67% larger than the standard normal variance of 1. The extra variance comes entirely from the heavier tails.
+    표준정규분포의 분산 1보다 67% 크다. 이 여분의 분산은 전적으로 두꺼운 꼬리에서 온다.
 
 ---
 
-**Exercise 2.**
-Explain why the $t$-distribution is used instead of the normal when constructing confidence intervals for the mean with unknown $\sigma$. What changes as $n$ grows?
+**연습문제 2.**
+$\sigma$를 모르는 상태에서 평균의 신뢰구간을 구성할 때 정규분포 대신 $t$ 분포를 쓰는 이유를 설명하라. $n$이 커지면 무엇이 달라지는가?
 
-??? success "Solution to Exercise 2"
-    When $\sigma$ is unknown, we replace it with the sample standard deviation $s$. The resulting pivotal quantity $(\bar{X} - \mu)/(s/\sqrt{n})$ follows a $t_{n-1}$ distribution, not a standard normal, because $s$ introduces additional randomness. Using the $t$-distribution accounts for this extra uncertainty by producing wider confidence intervals.
+??? success "연습문제 2 풀이"
+    $\sigma$를 모를 때는 이를 표본표준편차 $s$로 대체한다. 그 결과 얻는 추축량 $(\bar{X} - \mu)/(s/\sqrt{n})$은 표준정규분포가 아니라 $t_{n-1}$ 분포를 따르는데, $s$가 추가적인 무작위성을 들여오기 때문이다. $t$ 분포를 사용하면 이 여분의 불확실성이 반영되어 신뢰구간이 더 넓어진다.
 
-    As $n$ grows, $s \to \sigma$ and $t_{n-1} \to N(0,1)$, so the $t$-based and $z$-based intervals converge. For $n > 30$, the practical difference is small.
+    $n$이 커지면 $s \to \sigma$이고 $t_{n-1} \to N(0,1)$이므로 $t$ 기반 구간과 $z$ 기반 구간이 서로 수렴한다. $n > 30$이면 실질적인 차이는 작다.
 
 ---
 
-**Exercise 3.**
-Prove that the $t_1$ distribution is the standard Cauchy distribution by showing their PDFs are identical.
+**연습문제 3.**
+$t_1$ 분포가 표준 Cauchy 분포임을 두 PDF가 같음을 보여 증명하라.
 
-??? success "Solution to Exercise 3"
-    The $t_\nu$ PDF with $\nu = 1$, $\mu = 0$, $\sigma = 1$ is:
+??? success "연습문제 3 풀이"
+    $\nu = 1$, $\mu = 0$, $\sigma = 1$인 $t_\nu$ PDF는:
 
     $$
     f(x) = \frac{\Gamma(1)}{\sqrt{\pi}\;\Gamma(1/2)} \left(1 + x^2\right)^{-1}
     $$
 
-    Using $\Gamma(1) = 1$ and $\Gamma(1/2) = \sqrt{\pi}$:
+    $\Gamma(1) = 1$과 $\Gamma(1/2) = \sqrt{\pi}$를 사용하면:
 
     $$
     f(x) = \frac{1}{\pi(1 + x^2)}
     $$
 
-    This is exactly the standard Cauchy PDF. The Cauchy distribution therefore has no finite mean or variance, consistent with the $t$-distribution moment conditions ($\nu \le 1$). $\square$
+    이는 정확히 표준 Cauchy PDF이다. 따라서 Cauchy 분포는 유한한 평균이나 분산을 갖지 않으며, 이는 $t$ 분포의 적률 조건($\nu \le 1$)과 일치한다. $\square$
 
 ---
 
-**Exercise 4.**
-Using SciPy, plot the $t$-distribution PDF for $\nu = 1, 5, 30, \infty$ (using `stats.norm` for $\infty$) on the same axes. Describe the convergence.
+**연습문제 4.**
+SciPy를 사용하여 $\nu = 1, 5, 30, \infty$인 $t$ 분포 PDF를 같은 축에 그려라($\infty$는 `stats.norm`을 사용). 수렴 양상을 서술하라.
 
-??? success "Solution to Exercise 4"
+??? success "연습문제 4 풀이"
     ```python
     fig, ax = plt.subplots(figsize=(10, 4))
     x = np.linspace(-5, 5, 500)
@@ -115,4 +115,4 @@ Using SciPy, plot the $t$-distribution PDF for $\nu = 1, 5, 30, \infty$ (using `
     ax.legend()
     ```
 
-    At $\nu = 1$ (Cauchy), the tails are extremely heavy. At $\nu = 5$, the shape is noticeably bell-curved but still wider. At $\nu = 30$, the $t$ and normal curves are nearly indistinguishable. The convergence $t_\nu \to N(0,1)$ is monotonic: each increase in $\nu$ brings the tails closer to the normal.
+    $\nu = 1$(Cauchy)에서는 꼬리가 극도로 두껍다. $\nu = 5$에서는 종 모양이 눈에 띄게 나타나지만 여전히 더 퍼져 있다. $\nu = 30$에서는 $t$ 곡선과 정규 곡선을 거의 구별할 수 없다. 수렴 $t_\nu \to N(0,1)$은 단조적이다. $\nu$가 커질 때마다 꼬리가 정규분포에 더 가까워진다.

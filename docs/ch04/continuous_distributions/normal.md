@@ -1,24 +1,24 @@
-# Normal Distribution
+# Normal 분포
 
-## Overview
+## 개요
 
-The **normal distribution** (also called the Gaussian distribution) is one of the most fundamental probability distributions in statistics. It describes continuous data that cluster around a central value, tapering off symmetrically on both sides in a characteristic "bell curve."
+**Normal 분포**(Gaussian 분포라고도 한다)는 통계학에서 가장 근본적인 확률분포 중 하나이다. 중심값 주위에 모여 양쪽으로 대칭적으로 잦아드는 특유의 "종 모양 곡선"을 이루는 연속 자료를 기술한다.
 
 ---
 
-## Definition
+## 정의
 
-A normal distribution is characterized by its mean $\mu$ (center) and variance $\sigma^2$ (spread). The PDF is:
+정규분포는 평균 $\mu$(중심)와 분산 $\sigma^2$(퍼짐)로 규정된다. PDF는 다음과 같다:
 
 $$
 f(x; \mu, \sigma^2) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{(x - \mu)^2}{2\sigma^2}\right)
 $$
 
-We write $X \sim N(\mu, \sigma^2)$.
+이를 $X \sim N(\mu, \sigma^2)$로 쓴다.
 
-### Standard Normal Distribution
+### 표준정규분포
 
-The special case with $\mu = 0$ and $\sigma = 1$ is the **standard normal distribution**:
+$\mu = 0$, $\sigma = 1$인 특수한 경우를 **표준정규분포**라 한다:
 
 $$
 Z \sim N(0, 1), \qquad f(z) = \frac{1}{\sqrt{2\pi}} \exp\left(-\frac{z^2}{2}\right)
@@ -26,9 +26,9 @@ $$
 
 ---
 
-## Standardization
+## 표준화
 
-Any normal variable can be converted to a standard normal via the **Z-score transformation**:
+모든 정규확률변수는 **Z-점수 변환**을 통해 표준정규확률변수로 바꿀 수 있다:
 
 $$
 \begin{aligned}
@@ -39,9 +39,9 @@ $$
 
 ---
 
-## Properties of the Normal Distribution
+## 정규분포의 성질
 
-### Closure Properties
+### 닫힘 성질
 
 $$
 \begin{aligned}
@@ -51,31 +51,31 @@ $$
 \end{aligned}
 $$
 
-**Warning:** $X \sim \text{Normal}$ and $Y \sim \text{Normal}$ does **not** imply $X + Y \sim \text{Normal}$ unless independence or joint normality holds.
+**주의:** $X \sim \text{Normal}$이고 $Y \sim \text{Normal}$이라고 해서 $X + Y \sim \text{Normal}$인 것은 **아니다**. 독립성이나 결합정규성이 있어야 한다.
 
-### Proof of Property (1)
+### 성질 (1)의 증명
 
-For $a > 0$ and $X \sim N(\mu, \sigma^2)$:
+$a > 0$이고 $X \sim N(\mu, \sigma^2)$일 때:
 
 $$
 P(aX + b \leq x) = P\left(X \leq \frac{x - b}{a}\right) = \int_{-\infty}^{(x-b)/a} \frac{1}{\sqrt{2\pi\sigma^2}} e^{-\frac{(s-\mu)^2}{2\sigma^2}} ds
 $$
 
-Differentiating with respect to $x$:
+$x$에 대해 미분하면:
 
 $$
 f_{aX+b}(x) = \frac{1}{\sqrt{2\pi(a\sigma)^2}} \exp\left(-\frac{(x - (a\mu + b))^2}{2a^2\sigma^2}\right)
 $$
 
-Therefore $aX + b \sim N(a\mu + b, \, a^2\sigma^2)$.
+따라서 $aX + b \sim N(a\mu + b, \, a^2\sigma^2)$이다.
 
-### Key Geometric Properties
+### 주요 기하적 성질
 
-- **Symmetry:** Perfectly symmetric about $\mu$; mean = median = mode = $\mu$.
-- **Bell-shaped:** Most data is concentrated near the mean.
-- **Infinite tails:** The tails extend to $\pm\infty$ but with rapidly decreasing probability.
+- **대칭성:** $\mu$를 중심으로 완전히 대칭이며, 평균 = 중앙값 = 최빈값 = $\mu$이다.
+- **종 모양:** 대부분의 자료가 평균 근처에 몰려 있다.
+- **무한한 꼬리:** 꼬리는 $\pm\infty$까지 뻗지만 확률은 빠르게 감소한다.
 
-### 68–95–99.7 Rule
+### 68–95–99.7 규칙
 
 $$
 \begin{aligned}
@@ -87,27 +87,27 @@ $$
 
 ---
 
-## PDF of the Standard Normal: Verifying Key Properties
+## 표준정규분포의 PDF: 주요 성질 확인
 
-The PDF of $N(0, 1)$ is $f(x) = \frac{1}{\sqrt{2\pi}} e^{-x^2/2}$. We verify:
+$N(0, 1)$의 PDF는 $f(x) = \frac{1}{\sqrt{2\pi}} e^{-x^2/2}$이다. 다음을 확인한다:
 
-### (1) Total mass is 1
+### (1) 전체 질량이 1이다
 
-Let $I = \int_{-\infty}^{\infty} e^{-x^2/2}\,dx$. Then:
+$I = \int_{-\infty}^{\infty} e^{-x^2/2}\,dx$라 하자. 그러면:
 
 $$
 I^2 = \int\!\!\int e^{-(x^2+y^2)/2}\,dx\,dy = \int_0^{2\pi}\!\int_0^{\infty} e^{-r^2/2}\,r\,dr\,d\theta = 2\pi
 $$
 
-So $I = \sqrt{2\pi}$, confirming $\int f(x)\,dx = 1$.
+따라서 $I = \sqrt{2\pi}$이고 $\int f(x)\,dx = 1$임이 확인된다.
 
-### (2) Mean is 0
+### (2) 평균이 0이다
 
-The integrand $x \cdot e^{-x^2/2}$ is an **odd function**, so the integral over $(-\infty, \infty)$ is 0.
+피적분함수 $x \cdot e^{-x^2/2}$는 **기함수**이므로 $(-\infty, \infty)$ 위의 적분은 0이다.
 
-### (3) Variance is 1
+### (3) 분산이 1이다
 
-By integration by parts:
+부분적분에 의해:
 
 $$
 \frac{1}{\sqrt{2\pi}} \int_{-\infty}^{\infty} x^2 e^{-x^2/2}\,dx = \frac{1}{\sqrt{2\pi}} \int_{-\infty}^{\infty} e^{-x^2/2}\,dx = 1
@@ -115,15 +115,15 @@ $$
 
 ---
 
-## CDF of the Standard Normal
+## 표준정규분포의 CDF
 
-The CDF has no closed form and is computed numerically:
+CDF는 닫힌 형태가 없어 수치적으로 계산한다:
 
 $$
 \mathcal{N}(x) = N(x) = \int_{-\infty}^x \frac{1}{\sqrt{2\pi}} e^{-s^2/2}\,ds
 $$
 
-### Properties of Phi
+### Phi의 성질
 
 $$
 \begin{aligned}
@@ -136,11 +136,11 @@ $$
 
 ---
 
-## Integration Trick Related to Normal PDF
+## 정규 PDF와 관련된 적분 요령
 
-**Problem:** Compute $\int_{-\infty}^{\infty} e^{-x^2 - 2x}\,dx$.
+**문제:** $\int_{-\infty}^{\infty} e^{-x^2 - 2x}\,dx$를 계산하라.
 
-**Solution:** Complete the square: $-x^2 - 2x = -(x+1)^2 + 1$. Then:
+**풀이:** 완전제곱식으로 만든다: $-x^2 - 2x = -(x+1)^2 + 1$. 그러면:
 
 $$
 \int_{-\infty}^{\infty} e^{-x^2-2x}\,dx = e \int_{-\infty}^{\infty} e^{-(x+1)^2}\,dx = e\sqrt{2\pi \cdot \tfrac{1}{2}} \cdot \underbrace{\int \frac{1}{\sqrt{\pi}} e^{-(x+1)^2}\,dx}_{=1 \text{ (PDF of } N(-1, 1/2))} = e\sqrt{\pi}
@@ -148,9 +148,9 @@ $$
 
 ---
 
-## Python: Plotting PDF, CDF, and Sampling
+## Python: PDF, CDF 그리기와 표본추출
 
-### PDF and CDF
+### PDF와 CDF
 
 ```python
 import matplotlib.pyplot as plt
@@ -168,7 +168,7 @@ ax.legend()
 plt.show()
 ```
 
-### Sampling with Estimated PDF
+### 표본추출과 추정된 PDF
 
 ```python
 import numpy as np
@@ -186,7 +186,7 @@ ax.legend()
 plt.show()
 ```
 
-### 68–95–99.7 Rule Verification
+### 68–95–99.7 규칙 확인
 
 ```python
 import pandas as pd
@@ -206,19 +206,19 @@ print(f"Within 3σ: {n3/n*100:.2f}%")   # ≈ 99.7%
 
 ---
 
-## Area Under the Standard Normal Curve
+## 표준정규곡선 아래의 넓이
 
-### scipy.stats Methods
+### scipy.stats 메서드
 
-| Method | Description |
+| 메서드 | 설명 |
 |:---|:---|
-| `rvs` | Generate random samples |
-| `pdf` | Compute the PDF |
-| `cdf` | Compute $P(X \leq x)$ |
-| `sf` | Survival function: $1 - \text{cdf}(x)$ |
-| `ppf` | Percent point function (inverse of CDF) |
+| `rvs` | 확률표본 생성 |
+| `pdf` | PDF 계산 |
+| `cdf` | $P(X \leq x)$ 계산 |
+| `sf` | 생존함수: $1 - \text{cdf}(x)$ |
+| `ppf` | 백분위점 함수(CDF의 역함수) |
 
-### Left-Tail, Right-Tail, and Center Areas
+### 왼쪽 꼬리, 오른쪽 꼬리, 가운데 넓이
 
 ```python
 import matplotlib.pyplot as plt
@@ -257,21 +257,21 @@ print(f"P({z1} ≤ Z ≤ {z2}) = {stats.norm().cdf(z2) - stats.norm().cdf(z1):.4
 
 ---
 
-## Why Normal?
+## 왜 정규분포인가?
 
-The Central Limit Theorem explains the ubiquity of the normal distribution: the distribution of sample means is approximately normal for large $n$, regardless of the original population distribution:
+중심극한정리는 정규분포가 어디에나 나타나는 이유를 설명한다. 원래 모집단의 분포가 무엇이든, $n$이 크면 표본평균의 분포는 근사적으로 정규분포이다:
 
 $$
 \bar{X} \sim N\left(\mu, \frac{\sigma^2}{n}\right) \quad \text{as } n \to \infty
 $$
 
-This makes the normal distribution the foundation for confidence intervals, hypothesis testing, and quality control.
+이 때문에 정규분포는 신뢰구간, 가설검정, 품질관리의 기초가 된다.
 
 ---
 
-## Fixing the Random Seed
+## 난수 시드 고정하기
 
-`scipy.stats` uses NumPy's random number generator, so setting `np.random.seed()` ensures reproducibility:
+`scipy.stats`는 NumPy의 난수 생성기를 사용하므로 `np.random.seed()`를 설정하면 재현성이 보장된다:
 
 ```python
 import numpy as np
@@ -284,114 +284,114 @@ print(samples)  # Same output every time with seed 42
 
 ---
 
-## Key Takeaways
+## 핵심 요약
 
-- The normal distribution $N(\mu, \sigma^2)$ is characterized by its bell shape, symmetry, and the 68–95–99.7 rule.
-- The standard normal $N(0,1)$ serves as a universal reference via Z-score standardization.
-- Linear transformations and sums of independent normals remain normal.
-- The CDF has no closed form but is efficiently computed numerically.
-- The CLT explains why the normal distribution appears so frequently in nature and statistics.
+- 정규분포 $N(\mu, \sigma^2)$는 종 모양, 대칭성, 68–95–99.7 규칙으로 특징지어진다.
+- 표준정규분포 $N(0,1)$은 Z-점수 표준화를 통해 보편적인 기준 역할을 한다.
+- 독립인 정규확률변수의 선형변환과 합은 여전히 정규분포이다.
+- CDF는 닫힌 형태가 없지만 수치적으로 효율적으로 계산된다.
+- 중심극한정리는 정규분포가 자연과 통계학에서 그토록 자주 나타나는 이유를 설명한다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-$X \sim N(70, 100)$ (scores). (a) $P(60 < X < 80)$. (b) 90th percentile. (c) Expected count $> 85$ from $n = 200$. (d) Distribution of $(X - 70)/10$.
+**연습문제 1.**
+점수가 $X \sim N(70, 100)$이다. (a) $P(60 < X < 80)$. (b) 90 백분위수. (c) $n = 200$명 중 85점을 넘는 학생 수의 기댓값. (d) $(X - 70)/10$의 분포.
 
-??? success "Solution to Exercise 1"
-    (a) Standardize: $P(-1 < Z < 1) = 0.8413 - 0.1587 = 0.6827$.
+??? success "연습문제 1 풀이"
+    (a) 표준화하면 $P(-1 < Z < 1) = 0.8413 - 0.1587 = 0.6827$.
 
     (b) $x_{0.90} = 70 + 1.2816 \cdot 10 = 82.82$.
 
-    (c) $P(X > 85) = P(Z > 1.5) = 0.0668$. Expected: $200 \cdot 0.0668 \approx 13.4 \approx 13$ students.
+    (c) $P(X > 85) = P(Z > 1.5) = 0.0668$. 기댓값은 $200 \cdot 0.0668 \approx 13.4 \approx 13$명.
 
-    (d) $Y = (X - 70)/10 \sim N(0, 1)$ (standardization). $P(X > 85) = P(Y > 1.5)$.
+    (d) 표준화에 의해 $Y = (X - 70)/10 \sim N(0, 1)$. 따라서 $P(X > 85) = P(Y > 1.5)$.
 
 ---
 
-**Exercise 2.**
-**Empirical (68-95-99.7) rule.** Prove $P(|Z| \le k) \approx 0.683, 0.954, 0.997$ for $k = 1, 2, 3$ where $Z \sim N(0, 1)$.
+**연습문제 2.**
+**경험적 (68-95-99.7) 규칙.** $Z \sim N(0, 1)$일 때 $k = 1, 2, 3$에 대해 $P(|Z| \le k) \approx 0.683, 0.954, 0.997$임을 보여라.
 
-??? success "Solution to Exercise 2"
-    From standard normal tables: $P(Z \le 1) = 0.8413$, so $P(|Z| \le 1) = 2 \cdot 0.8413 - 1 = 0.6827$.
+??? success "연습문제 2 풀이"
+    표준정규분포표에서 $P(Z \le 1) = 0.8413$이므로 $P(|Z| \le 1) = 2 \cdot 0.8413 - 1 = 0.6827$.
 
-    Similarly: $P(|Z| \le 2) = 2 \cdot 0.9772 - 1 = 0.9545$.
+    같은 방식으로 $P(|Z| \le 2) = 2 \cdot 0.9772 - 1 = 0.9545$.
 
     $P(|Z| \le 3) = 2 \cdot 0.9987 - 1 = 0.9973$.
 
-    **Implications:**
+    **함의:**
 
-    - "Two-sigma event" has probability $\approx 5\%$ — significance.
-    - "Three-sigma event" has probability $\approx 0.3\%$ — strong evidence.
-    - "Five-sigma" (physics standard): $P(|Z| > 5) \approx 5.7 \times 10^{-7}$.
+    - "2시그마 사건"의 확률은 $\approx 5\%$ — 유의성의 기준.
+    - "3시그마 사건"의 확률은 $\approx 0.3\%$ — 강한 증거.
+    - "5시그마"(물리학의 기준): $P(|Z| > 5) \approx 5.7 \times 10^{-7}$.
 
-    These thresholds form the qualitative basis for "how rare is this observation under the null."
+    이 문턱값들은 "귀무가설 아래에서 이 관측이 얼마나 드문가"에 대한 질적 기준을 이룬다.
 
 ---
 
-**Exercise 3.**
-**Linear combination of independent normals.** $X_1 \sim N(\mu_1, \sigma_1^2)$, $X_2 \sim N(\mu_2, \sigma_2^2)$ independent. Find the distribution of $aX_1 + bX_2 + c$.
+**연습문제 3.**
+**독립인 정규확률변수의 선형결합.** $X_1 \sim N(\mu_1, \sigma_1^2)$, $X_2 \sim N(\mu_2, \sigma_2^2)$이 독립이다. $aX_1 + bX_2 + c$의 분포를 구하라.
 
-??? success "Solution to Exercise 3"
-    By the MGF approach: $M_{aX_1 + bX_2 + c}(t) = e^{ct} M_{X_1}(at) M_{X_2}(bt) = e^{ct} \exp(a\mu_1 t + a^2\sigma_1^2 t^2/2) \exp(b\mu_2 t + b^2\sigma_2^2 t^2/2)$.
+??? success "연습문제 3 풀이"
+    MGF를 이용하면 $M_{aX_1 + bX_2 + c}(t) = e^{ct} M_{X_1}(at) M_{X_2}(bt) = e^{ct} \exp(a\mu_1 t + a^2\sigma_1^2 t^2/2) \exp(b\mu_2 t + b^2\sigma_2^2 t^2/2)$.
 
     $= \exp\!\left((c + a\mu_1 + b\mu_2)t + (a^2\sigma_1^2 + b^2\sigma_2^2) t^2/2\right)$.
 
-    This is the MGF of $N(a\mu_1 + b\mu_2 + c, a^2\sigma_1^2 + b^2\sigma_2^2)$.
+    이는 $N(a\mu_1 + b\mu_2 + c, a^2\sigma_1^2 + b^2\sigma_2^2)$의 MGF이다.
 
-    So $aX_1 + bX_2 + c \sim N(a\mu_1 + b\mu_2 + c, a^2\sigma_1^2 + b^2\sigma_2^2)$. The normal family is **closed** under linear combinations — a defining property.
+    따라서 $aX_1 + bX_2 + c \sim N(a\mu_1 + b\mu_2 + c, a^2\sigma_1^2 + b^2\sigma_2^2)$이다. 정규분포족은 선형결합에 대해 **닫혀 있으며**, 이는 정규분포를 규정하는 성질이다.
 
 ---
 
-**Exercise 4.**
-**Standardization** turns any normal random variable into standard normal. Prove that $\Phi^{-1}(F_X(x)) = (x - \mu)/\sigma$ for $X \sim N(\mu, \sigma^2)$.
+**연습문제 4.**
+**표준화**는 임의의 정규확률변수를 표준정규확률변수로 바꾼다. $X \sim N(\mu, \sigma^2)$에 대해 $\Phi^{-1}(F_X(x)) = (x - \mu)/\sigma$임을 증명하라.
 
-??? success "Solution to Exercise 4"
-    For $X \sim N(\mu, \sigma^2)$:
+??? success "연습문제 4 풀이"
+    $X \sim N(\mu, \sigma^2)$에 대해:
 
     $F_X(x) = P(X \le x) = P((X - \mu)/\sigma \le (x - \mu)/\sigma) = \Phi((x - \mu)/\sigma)$.
 
-    Applying $\Phi^{-1}$ to both sides: $\Phi^{-1}(F_X(x)) = (x - \mu)/\sigma$. $\square$
+    양변에 $\Phi^{-1}$을 적용하면 $\Phi^{-1}(F_X(x)) = (x - \mu)/\sigma$. $\square$
 
-    **Use:** the **quantile-quantile (Q-Q) plot** plots sample quantiles against the corresponding standard-normal quantiles. If the data is normal with any mean/variance, the points fall on a line with slope $\sigma$ and intercept $\mu$ — providing a visual check for normality with extraction of parameters.
+    **활용:** **분위수-분위수(Q-Q) 그림**은 표본분위수를 대응하는 표준정규분위수에 대해 그린다. 자료가 어떤 평균과 분산을 갖든 정규분포를 따른다면 점들은 기울기 $\sigma$, 절편 $\mu$인 직선 위에 놓인다. 정규성을 시각적으로 점검하면서 모수까지 읽어 낼 수 있다.
 
 ---
 
-**Exercise 5.**
-**Maximum-likelihood estimation for normal.** Given an i.i.d. sample $X_1, \ldots, X_n \sim N(\mu, \sigma^2)$ with both parameters unknown, derive the MLEs.
+**연습문제 5.**
+**정규분포의 최대가능도추정.** 두 모수가 모두 미지인 i.i.d. 표본 $X_1, \ldots, X_n \sim N(\mu, \sigma^2)$이 주어졌을 때 MLE를 유도하라.
 
-??? success "Solution to Exercise 5"
-    Log-likelihood:
+??? success "연습문제 5 풀이"
+    로그가능도:
 
     $$
     \ell(\mu, \sigma^2) = -\frac{n}{2}\ln(2\pi\sigma^2) - \frac{1}{2\sigma^2}\sum (X_i - \mu)^2
     $$
 
-    Partial w.r.t. $\mu$: $\partial \ell/\partial \mu = \sum(X_i - \mu)/\sigma^2 = 0 \Rightarrow \hat\mu = \bar X$.
+    $\mu$에 대한 편미분: $\partial \ell/\partial \mu = \sum(X_i - \mu)/\sigma^2 = 0 \Rightarrow \hat\mu = \bar X$.
 
-    Partial w.r.t. $\sigma^2$: $\partial \ell/\partial \sigma^2 = -n/(2\sigma^2) + \sum(X_i - \mu)^2/(2\sigma^4) = 0 \Rightarrow \hat\sigma^2 = (1/n)\sum(X_i - \hat\mu)^2$.
+    $\sigma^2$에 대한 편미분: $\partial \ell/\partial \sigma^2 = -n/(2\sigma^2) + \sum(X_i - \mu)^2/(2\sigma^4) = 0 \Rightarrow \hat\sigma^2 = (1/n)\sum(X_i - \hat\mu)^2$.
 
-    Both MLEs in closed form. The MLE for variance divides by $n$, not $n - 1$ — so it is biased ($\mathbb{E}[\hat\sigma^2_{\text{MLE}}] = \frac{n-1}{n}\sigma^2$). For unbiased estimation use Bessel's correction with denominator $n - 1$.
+    두 MLE 모두 닫힌 형태로 주어진다. 분산의 MLE는 $n - 1$이 아니라 $n$으로 나누므로 편향되어 있다($\mathbb{E}[\hat\sigma^2_{\text{MLE}}] = \frac{n-1}{n}\sigma^2$). 불편추정을 하려면 분모를 $n - 1$로 하는 Bessel 수정을 사용한다.
 
 ---
 
-**Exercise 6.**
-**Q-Q plot interpretation.** A Q-Q plot of a sample vs. the standard normal shows points falling below the reference line in the right tail. Interpret this pattern.
+**연습문제 6.**
+**Q-Q 그림의 해석.** 어떤 표본을 표준정규분포에 대해 그린 Q-Q 그림에서 오른쪽 꼬리의 점들이 기준선 아래에 놓인다. 이 양상을 해석하라.
 
-??? success "Solution to Exercise 6"
-    The Q-Q plot's $y$-axis is the sample quantile and $x$-axis is the standard-normal quantile. The reference line $y = \mu + \sigma x$ shows where points fall if the data is normal.
+??? success "연습문제 6 풀이"
+    Q-Q 그림의 $y$축은 표본분위수이고 $x$축은 표준정규분위수이다. 기준선 $y = \mu + \sigma x$는 자료가 정규분포를 따를 때 점들이 놓일 위치를 나타낸다.
 
-    **"Below the line in the right tail"** means: at large positive $x$ (large standard-normal quantile), the sample's quantile is *smaller* than the line predicts. In other words, the sample's upper extreme values are less extreme than expected from a normal — the **right tail is thinner** than normal.
+    **"오른쪽 꼬리에서 선 아래"**라는 것은 $x$가 큰 양수일 때(표준정규분위수가 클 때) 표본의 분위수가 선이 예측하는 값보다 *작다*는 뜻이다. 다시 말해 표본의 상단 극단값들이 정규분포에서 기대되는 것만큼 극단적이지 않으며, **오른쪽 꼬리가 정규분포보다 얇다**.
 
-    This indicates a **light-tailed** distribution (e.g., uniform, beta on bounded support, truncated normal). The opposite pattern — points above the line in the right tail — indicates **heavy tails** (e.g., $t$, lognormal).
+    이는 **가벼운 꼬리** 분포(예: 균등분포, 유계 지지집합 위의 베타분포, 절단정규분포)를 시사한다. 반대 양상, 즉 오른쪽 꼬리에서 점들이 선 위에 놓이면 **두꺼운 꼬리**(예: $t$ 분포, 로그정규분포)를 뜻한다.
 
-    Diagnostic patterns:
+    진단 양상:
 
-    | Pattern | Distribution |
+    | 양상 | 분포 |
     |---|---|
-    | Straight line | Normal |
-    | S-curve | Light tails (both sides) |
-    | Inverse S | Heavy tails (both sides) |
-    | Concave-up | Right-skewed |
-    | Concave-down | Left-skewed |
+    | 직선 | 정규분포 |
+    | S자 곡선 | 양쪽 꼬리가 가벼움 |
+    | 역 S자 | 양쪽 꼬리가 두꺼움 |
+    | 아래로 볼록 | 오른쪽으로 치우침 |
+    | 위로 볼록 | 왼쪽으로 치우침 |
 
-    The Q-Q plot is far more informative than a single goodness-of-fit $p$-value because it shows *where* the model fits well and where it fails.
+    Q-Q 그림은 모형이 *어디서* 잘 맞고 어디서 어긋나는지를 보여 주므로 적합도 검정의 $p$ 값 하나보다 훨씬 많은 정보를 준다.

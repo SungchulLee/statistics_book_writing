@@ -1,74 +1,74 @@
-# Chapter 4: Distributions
+# 4장: 분포
 
-## Overview
+## 개요
 
-This chapter catalogs the most important probability distributions used in statistics and data science, covering both discrete and continuous families. It then develops the multivariate framework needed to analyze the joint behavior of multiple random variables, including joint, marginal, and conditional distributions, as well as covariance and correlation. Together, these tools form the distributional foundation for all subsequent chapters on sampling, estimation, and inference.
-
----
-
-## Chapter Structure
-
-### 4.1 Discrete Distributions
-
-The core discrete probability models built from independent Bernoulli trials and event-counting processes:
-
-- **Bernoulli and Binomial** --- The Bernoulli distribution models a single success/failure trial, while the binomial distribution counts the number of successes in $n$ independent trials, forming the foundation of discrete probability modeling.
-- **Geometric and Negative Binomial** --- The geometric distribution models the number of trials until the first success, and the negative binomial generalizes this to the number of trials until the $r$-th success in sequential Bernoulli experiments.
-- **Poisson Distribution** --- Models the number of events occurring in a fixed interval of time or space given a known average rate, with applications in finance (trade arrivals, default counts), insurance (claim frequency), and queueing theory.
-
-### 4.2 Continuous Distributions
-
-The fundamental continuous probability models that appear throughout statistics and applied sciences:
-
-- **Uniform Distribution** --- Assigns equal probability to all values in an interval $[a, b]$, serving as the foundation for random number generation, simulation, and probability integral transforms.
-- **Exponential Distribution** --- Models the time between events in a Poisson process, possessing the unique memoryless property among continuous distributions, with applications to inter-arrival times, waiting times, and component lifetimes.
-- **Normal Distribution** --- The most fundamental probability distribution in statistics, describing continuous data that cluster symmetrically around a central value in a characteristic bell curve, and serving as the basis for the Central Limit Theorem.
-
-### 4.3 Multivariate Structure
-
-The mathematical framework for describing the joint behavior of two or more random variables:
-
-- **Joint Distributions** --- Defines joint PMFs and PDFs that describe the probabilistic behavior of multiple random variables simultaneously, capturing how variables relate to and depend on each other.
-- **Marginal and Conditional Distributions** --- Shows how to recover individual distributions by marginalizing over other variables, and how to describe one variable given a specific value of another, with applications to Bayesian reasoning and regression.
-- **Covariance and Correlation** --- Quantifies the linear relationship between two random variables, with covariance measuring direction and magnitude of co-movement and correlation normalizing this to a dimensionless quantity between $-1$ and $+1$.
-- **Independence vs Zero Correlation** --- Clarifies the important distinction that while independence implies zero correlation, the converse is false in general, with proofs, counterexamples, and the special Gaussian case where the two notions coincide.
-
-### 4.4 Code
-
-Complete Python implementations using `scipy.stats` and `matplotlib`:
-
-- **Normal PDF with scipy.stats** --- Visualizes the normal probability density function for various parameter settings.
-- **Normal Random Variates** --- Generates random samples from the normal distribution.
-- **Normal CDF and Quantiles** --- Computes cumulative probabilities and quantile values for the normal distribution.
-- **Student-t PDF** --- Plots the Student's $t$ density for different degrees of freedom.
-- **Chi-Square PDF** --- Visualizes the chi-square density for different degrees of freedom.
-- **F-Distribution PDF** --- Plots the F-distribution density for various numerator and denominator degrees of freedom.
-- **Normal PPF (Quantile Function)** --- Demonstrates the percent-point (inverse CDF) function for the normal distribution.
-- **Normal Survival Function** --- Computes upper-tail probabilities using the survival function.
-- **Exponential PDF** --- Visualizes the exponential density for different rate parameters.
-- **Uniform PDF** --- Plots the uniform density over various intervals.
-- **Logistic PDF (vs Normal)** --- Compares the logistic and normal densities to highlight their similar shapes and differing tail behavior.
-- **Log-Normal PDF** --- Visualizes the log-normal distribution and its right-skewed shape.
-- **Weibull PDF and Hazard** --- Plots the Weibull density and hazard function for various shape parameters.
-
-### 4.5 Exercises
-
-Practice problems covering discrete and continuous distribution calculations, multivariate probability, and dependence concepts.
+이 장에서는 통계학과 데이터 과학에서 사용되는 가장 중요한 확률분포들을 이산형과 연속형 모두에 걸쳐 정리한다. 이어서 여러 확률변수의 결합 거동을 분석하는 데 필요한 다변량 틀을 결합분포, 주변분포, 조건부분포, 공분산과 상관계수를 중심으로 전개한다. 이 도구들은 표본추출, 추정, 추론을 다루는 이후의 모든 장을 떠받치는 분포론적 기초를 이룬다.
 
 ---
 
-## Prerequisites
+## 장의 구성
 
-This chapter builds on:
+### 4.1 이산분포
 
-- **Chapter 3** (Foundations of Probability) --- Random variables (discrete and continuous), PMFs, PDFs, CDFs, expectation, variance, covariance, and moment generating functions.
+독립적인 Bernoulli 시행과 사건 계수 과정으로부터 만들어지는 핵심 이산확률모형들:
+
+- **Bernoulli 분포와 Binomial 분포** --- Bernoulli 분포는 성공/실패 두 결과를 갖는 단일 시행을 모형화하고, Binomial 분포는 $n$번의 독립 시행에서 성공 횟수를 세어 이산확률모형의 기초를 이룬다.
+- **Geometric 분포와 Negative Binomial 분포** --- Geometric 분포는 첫 성공까지의 시행 횟수를 모형화하며, Negative Binomial 분포는 이를 일반화하여 연속적인 Bernoulli 실험에서 $r$번째 성공까지의 시행 횟수를 다룬다.
+- **Poisson 분포** --- 평균 발생률이 알려져 있을 때 고정된 시간 또는 공간 구간에서 발생하는 사건의 수를 모형화하며, 금융(체결 도착, 부도 건수), 보험(청구 빈도), 대기행렬 이론에 응용된다.
+
+### 4.2 연속분포
+
+통계학과 응용과학 전반에 걸쳐 등장하는 기본적인 연속확률모형들:
+
+- **Uniform 분포** --- 구간 $[a, b]$의 모든 값에 동일한 확률을 부여하며, 난수 생성, 시뮬레이션, 확률적분변환의 토대가 된다.
+- **Exponential 분포** --- Poisson 과정에서 사건 사이의 시간을 모형화하며, 연속분포 중 유일하게 무기억성을 가지고, 도착 간 시간, 대기 시간, 부품 수명에 응용된다.
+- **Normal 분포** --- 통계학에서 가장 근본적인 확률분포로, 중심값 주위에 대칭적으로 모여 특유의 종 모양 곡선을 이루는 연속 자료를 기술하며 중심극한정리의 바탕이 된다.
+
+### 4.3 다변량 구조
+
+둘 이상의 확률변수의 결합 거동을 기술하는 수학적 틀:
+
+- **결합분포** --- 여러 확률변수의 확률적 거동을 동시에 기술하는 결합 PMF와 PDF를 정의하여, 변수들이 서로 어떻게 관련되고 의존하는지 포착한다.
+- **주변분포와 조건부분포** --- 다른 변수에 대해 주변화하여 개별 분포를 되찾는 방법과, 한 변수의 특정 값이 주어졌을 때 다른 변수를 기술하는 방법을 보이고, 베이즈 추론과 회귀분석에 응용한다.
+- **공분산과 상관계수** --- 두 확률변수 사이의 선형 관계를 정량화한다. 공분산은 동조 움직임의 방향과 크기를 재고, 상관계수는 이를 $-1$과 $+1$ 사이의 무차원 양으로 표준화한다.
+- **독립성과 무상관성의 차이** --- 독립이면 상관계수가 0이지만 그 역은 일반적으로 성립하지 않는다는 중요한 구별을 증명, 반례, 그리고 두 개념이 일치하는 Gaussian 특수 사례를 통해 명확히 한다.
+
+### 4.4 코드
+
+`scipy.stats`와 `matplotlib`를 사용한 완전한 Python 구현:
+
+- **scipy.stats로 그리는 Normal PDF** --- 여러 모수 설정에 대한 정규 확률밀도함수를 시각화한다.
+- **Normal 난수 생성** --- 정규분포에서 확률표본을 생성한다.
+- **Normal CDF와 분위수** --- 정규분포의 누적확률과 분위수 값을 계산한다.
+- **Student-t PDF** --- 여러 자유도에 대한 Student $t$ 밀도를 그린다.
+- **Chi-Square PDF** --- 여러 자유도에 대한 카이제곱 밀도를 시각화한다.
+- **F 분포 PDF** --- 여러 분자·분모 자유도에 대한 F 분포 밀도를 그린다.
+- **Normal PPF (분위수 함수)** --- 정규분포의 백분위점(역 CDF) 함수를 보인다.
+- **Normal 생존함수** --- 생존함수를 사용해 상단꼬리 확률을 계산한다.
+- **Exponential PDF** --- 여러 비율 모수에 대한 지수 밀도를 시각화한다.
+- **Uniform PDF** --- 여러 구간에 대한 균등 밀도를 그린다.
+- **Logistic PDF (Normal과 비교)** --- 로지스틱 밀도와 정규 밀도를 비교하여 비슷한 모양과 서로 다른 꼬리 거동을 부각한다.
+- **Log-Normal PDF** --- 로그정규분포와 그 오른쪽으로 치우친 모양을 시각화한다.
+- **Weibull PDF와 위험함수** --- 여러 형상 모수에 대한 Weibull 밀도와 위험함수를 그린다.
+
+### 4.5 연습문제
+
+이산분포와 연속분포 계산, 다변량 확률, 의존성 개념을 다루는 연습문제들.
 
 ---
 
-## Key Takeaways
+## 선수 지식
 
-1. The Bernoulli, binomial, geometric, negative binomial, and Poisson distributions form a complete toolkit for modeling count and trial-based phenomena.
-2. The uniform, exponential, and normal distributions are the foundational continuous models, each with distinct properties (equal likelihood, memorylessness, and the bell curve, respectively).
-3. Joint distributions capture the simultaneous behavior of multiple random variables, while marginal and conditional distributions allow us to extract information about individual variables and their dependence structure.
-4. Covariance and correlation quantify linear association, but zero correlation does not imply independence except in special cases such as the multivariate normal.
-5. Each distribution's properties (mean, variance, MGF) and relationships to other distributions (e.g., Poisson as a limit of binomial, exponential as continuous analogue of geometric) form a coherent network that recurs throughout statistical inference.
+이 장은 다음 내용을 바탕으로 한다:
+
+- **3장** (확률의 기초) --- 확률변수(이산형과 연속형), PMF, PDF, CDF, 기댓값, 분산, 공분산, 적률생성함수.
+
+---
+
+## 핵심 요약
+
+1. Bernoulli, Binomial, Geometric, Negative Binomial, Poisson 분포는 계수 현상과 시행 기반 현상을 모형화하는 완결된 도구 모음을 이룬다.
+2. Uniform, Exponential, Normal 분포는 기본이 되는 연속모형이며, 각각 동일한 발생 가능성, 무기억성, 종 모양 곡선이라는 뚜렷한 성질을 갖는다.
+3. 결합분포는 여러 확률변수의 동시적 거동을 포착하고, 주변분포와 조건부분포는 개별 변수와 그 의존 구조에 관한 정보를 뽑아낼 수 있게 해 준다.
+4. 공분산과 상관계수는 선형 연관성을 정량화하지만, 다변량 정규분포 같은 특수한 경우를 제외하면 무상관성이 독립성을 함의하지는 않는다.
+5. 각 분포의 성질(평균, 분산, MGF)과 다른 분포와의 관계(예: Binomial의 극한으로서의 Poisson, Geometric의 연속형 대응으로서의 Exponential)는 통계적 추론 전반에 반복해서 등장하는 하나의 일관된 연결망을 이룬다.

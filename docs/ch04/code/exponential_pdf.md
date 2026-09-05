@@ -1,27 +1,27 @@
-# Exponential Density Function
+# 지수 밀도함수
 
-## Overview
+## 개요
 
-The **exponential distribution** models the waiting time until the first event in a Poisson process. It is the continuous analogue of the geometric distribution and the only continuous distribution with the **memoryless property**.
+**Exponential 분포**는 Poisson 과정에서 첫 사건이 일어날 때까지의 대기 시간을 모형화한다. Geometric 분포의 연속형 대응물이며, **무기억성**을 갖는 유일한 연속분포이다.
 
-The PDF with rate parameter $\lambda > 0$ is:
+비율 모수 $\lambda > 0$인 PDF는 다음과 같다:
 
 $$
 f(x) = \lambda\, e^{-\lambda x}, \qquad x \ge 0
 $$
 
-| Property | Value |
+| 성질 | 값 |
 |---|---|
-| Mean | $1/\lambda$ |
-| Variance | $1/\lambda^2$ |
-| Median | $\ln(2)/\lambda$ |
-| Mode | 0 |
+| 평균 | $1/\lambda$ |
+| 분산 | $1/\lambda^2$ |
+| 중앙값 | $\ln(2)/\lambda$ |
+| 최빈값 | 0 |
 
 ---
 
-## SciPy Parameterization
+## SciPy 모수화
 
-SciPy uses the **scale** parameterization: `stats.expon(scale=1/lambda)`.
+SciPy는 **척도** 모수화를 사용한다: `stats.expon(scale=1/lambda)`.
 
 ```python
 import matplotlib.pyplot as plt
@@ -43,29 +43,29 @@ plt.tight_layout()
 plt.show()
 ```
 
-Higher $\lambda$ means events occur more frequently, so the distribution is more concentrated near zero.
+$\lambda$가 클수록 사건이 더 자주 일어나므로 분포가 0 근처에 더 몰린다.
 
 ---
 
-## The Memoryless Property
+## 무기억성
 
-The exponential distribution satisfies:
+Exponential 분포는 다음을 만족한다:
 
 $$
 P(X > s + t \mid X > s) = P(X > t) \qquad \text{for all } s, t \ge 0
 $$
 
-This means the remaining waiting time is independent of how long you have already waited—the process has no memory.
+남은 대기 시간이 이미 얼마나 기다렸는지와 무관하다는 뜻이다. 이 과정에는 기억이 없다.
 
 ---
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Prove the memoryless property of the exponential distribution.
+**연습문제 1.**
+Exponential 분포의 무기억성을 증명하라.
 
-??? success "Solution to Exercise 1"
-    The survival function is $S(x) = e^{-\lambda x}$. Then:
+??? success "연습문제 1 풀이"
+    생존함수는 $S(x) = e^{-\lambda x}$이다. 그러면:
 
     $$
     P(X > s + t \mid X > s) = \frac{P(X > s + t)}{P(X > s)} = \frac{e^{-\lambda(s+t)}}{e^{-\lambda s}} = e^{-\lambda t} = P(X > t)
@@ -75,11 +75,11 @@ Prove the memoryless property of the exponential distribution.
 
 ---
 
-**Exercise 2.**
-If customer arrivals follow a Poisson process with rate $\lambda = 3$ per hour, what is the probability of waiting more than 30 minutes for the next customer?
+**연습문제 2.**
+고객 도착이 시간당 $\lambda = 3$인 Poisson 과정을 따를 때, 다음 고객을 30분 넘게 기다릴 확률은 얼마인가?
 
-??? success "Solution to Exercise 2"
-    The inter-arrival time is $X \sim \text{Exp}(\lambda = 3)$ (in hours). Thirty minutes is $t = 0.5$ hours.
+??? success "연습문제 2 풀이"
+    도착 간 시간은 (시간 단위로) $X \sim \text{Exp}(\lambda = 3)$이다. 30분은 $t = 0.5$시간이다.
 
     $$
     P(X > 0.5) = e^{-3 \times 0.5} = e^{-1.5} \approx 0.2231
@@ -87,36 +87,36 @@ If customer arrivals follow a Poisson process with rate $\lambda = 3$ per hour, 
 
 ---
 
-**Exercise 3.**
-Show that the exponential distribution is the only continuous memoryless distribution.
+**연습문제 3.**
+Exponential 분포가 무기억성을 갖는 유일한 연속분포임을 보여라.
 
-??? success "Solution to Exercise 3"
-    Suppose $P(X > s + t) = P(X > s) \cdot P(X > t)$ for all $s, t \ge 0$. Let $g(t) = P(X > t)$. Then $g(s+t) = g(s)g(t)$ with $g(0) = 1$ and $g$ decreasing.
+??? success "연습문제 3 풀이"
+    모든 $s, t \ge 0$에 대해 $P(X > s + t) = P(X > s) \cdot P(X > t)$라 하자. $g(t) = P(X > t)$로 두면 $g(0) = 1$이고 $g$는 감소하며 $g(s+t) = g(s)g(t)$이다.
 
-    The only continuous solution to the functional equation $g(s+t) = g(s)g(t)$ with $g(0) = 1$ is $g(t) = e^{-\lambda t}$ for some $\lambda > 0$. This is the survival function of the exponential distribution. $\square$
+    $g(0) = 1$인 함수방정식 $g(s+t) = g(s)g(t)$의 연속인 해는 어떤 $\lambda > 0$에 대한 $g(t) = e^{-\lambda t}$뿐이다. 이는 Exponential 분포의 생존함수이다. $\square$
 
 ---
 
-**Exercise 4.**
-Derive the CDF, median, and mean of the exponential distribution from the PDF.
+**연습문제 4.**
+PDF로부터 Exponential 분포의 CDF, 중앙값, 평균을 유도하라.
 
-??? success "Solution to Exercise 4"
+??? success "연습문제 4 풀이"
     **CDF:**
 
     $$
     F(x) = \int_0^x \lambda e^{-\lambda t}\,dt = 1 - e^{-\lambda x}
     $$
 
-    **Median:** Solve $F(m) = 0.5$:
+    **중앙값:** $F(m) = 0.5$를 풀면:
 
     $$
     1 - e^{-\lambda m} = 0.5 \implies m = \frac{\ln 2}{\lambda}
     $$
 
-    **Mean:**
+    **평균:**
 
     $$
     E[X] = \int_0^{\infty} x\lambda e^{-\lambda x}\,dx = \frac{1}{\lambda}
     $$
 
-    (via integration by parts).
+    (부분적분으로 구한다.)

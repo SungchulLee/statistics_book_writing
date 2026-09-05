@@ -1,34 +1,34 @@
-# Inverse Transform Sampling
+# 역변환 표본추출
 
-## Overview
+## 개요
 
-**Inverse transform sampling** is a method for generating random samples from any distribution whose inverse CDF (quantile function) is available. The key result is:
+**역변환 표본추출**은 역 CDF(분위수 함수)를 구할 수 있는 임의의 분포에서 확률표본을 생성하는 방법이다. 핵심 결과는 다음과 같다.
 
-If $U \sim \text{Uniform}(0, 1)$ and $F$ is a CDF with inverse $F^{-1}$, then:
+$U \sim \text{Uniform}(0, 1)$이고 $F$가 역함수 $F^{-1}$을 갖는 CDF이면:
 
 $$
 X = F^{-1}(U) \sim F
 $$
 
-This single idea underlies much of computational statistics and Monte Carlo simulation.
+이 하나의 착상이 계산통계학과 Monte Carlo 모의실험의 상당 부분을 떠받친다.
 
 ---
 
-## Proof
+## 증명
 
-For any $x$:
+임의의 $x$에 대해:
 
 $$
 P(X \le x) = P(F^{-1}(U) \le x) = P(U \le F(x)) = F(x)
 $$
 
-The last equality uses the fact that $U \sim \text{Uniform}(0,1)$, so $P(U \le p) = p$. $\square$
+마지막 등식은 $U \sim \text{Uniform}(0,1)$이므로 $P(U \le p) = p$라는 사실을 사용한다. $\square$
 
 ---
 
-## Example 1: Exponential Distribution
+## 예 1: Exponential 분포
 
-The exponential CDF is $F(x) = 1 - e^{-\lambda x}$. Inverting:
+Exponential 분포의 CDF는 $F(x) = 1 - e^{-\lambda x}$이다. 역함수를 구하면:
 
 $$
 F^{-1}(u) = -\frac{\ln(1 - u)}{\lambda}
@@ -70,9 +70,9 @@ plt.show()
 
 ---
 
-## Example 2: Cauchy Distribution
+## 예 2: Cauchy 분포
 
-The standard Cauchy CDF is $F(x) = \frac{1}{2} + \frac{1}{\pi}\arctan(x)$. Inverting:
+표준 Cauchy 분포의 CDF는 $F(x) = \frac{1}{2} + \frac{1}{\pi}\arctan(x)$이다. 역함수를 구하면:
 
 $$
 F^{-1}(u) = \tan\!\left(\pi\!\left(u - \frac{1}{2}\right)\right)
@@ -95,78 +95,78 @@ plt.tight_layout()
 plt.show()
 ```
 
-The Cauchy example illustrates that inverse transform sampling works even for heavy-tailed distributions with no finite mean.
+Cauchy 예는 역변환 표본추출이 유한한 평균조차 없는 두꺼운 꼬리 분포에서도 작동함을 보여 준다.
 
 ---
 
-## When to Use
+## 언제 사용하는가
 
-| Situation | Recommendation |
+| 상황 | 권장 방법 |
 |---|---|
-| Closed-form $F^{-1}$ available | Inverse transform (fast, exact) |
-| $F^{-1}$ expensive to compute | Consider rejection sampling or MCMC |
-| Discrete distribution | Use cumulative PMF thresholds |
-| Multivariate distribution | Use conditional decomposition or specialized algorithms |
+| $F^{-1}$이 닫힌 형태로 주어짐 | 역변환 (빠르고 정확) |
+| $F^{-1}$ 계산 비용이 큼 | 기각표본추출이나 MCMC 고려 |
+| 이산분포 | 누적 PMF 문턱값 사용 |
+| 다변량 분포 | 조건부 분해나 전용 알고리즘 사용 |
 
 ---
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Derive the inverse CDF for the $\text{Uniform}(a, b)$ distribution and write the inverse transform formula.
+**연습문제 1.**
+$\text{Uniform}(a, b)$ 분포의 역 CDF를 유도하고 역변환 공식을 쓰라.
 
-??? success "Solution to Exercise 1"
-    The CDF is $F(x) = (x - a)/(b - a)$. Setting $u = F(x)$ and solving:
+??? success "연습문제 1 풀이"
+    CDF는 $F(x) = (x - a)/(b - a)$이다. $u = F(x)$로 두고 풀면:
 
     $$
     x = a + (b - a)u = F^{-1}(u)
     $$
 
-    So if $U \sim \text{Uniform}(0,1)$, then $X = a + (b-a)U \sim \text{Uniform}(a, b)$.
+    따라서 $U \sim \text{Uniform}(0,1)$이면 $X = a + (b-a)U \sim \text{Uniform}(a, b)$이다.
 
 ---
 
-**Exercise 2.**
-Use inverse transform sampling to generate samples from a $\text{Bernoulli}(p)$ distribution. Explain how the same idea extends to any discrete distribution.
+**연습문제 2.**
+역변환 표본추출로 $\text{Bernoulli}(p)$ 분포에서 표본을 생성하라. 같은 착상이 임의의 이산분포로 어떻게 확장되는지 설명하라.
 
-??? success "Solution to Exercise 2"
-    Generate $U \sim \text{Uniform}(0,1)$. Set $X = 1$ if $U \le p$, else $X = 0$.
+??? success "연습문제 2 풀이"
+    $U \sim \text{Uniform}(0,1)$을 생성한다. $U \le p$이면 $X = 1$로, 그렇지 않으면 $X = 0$으로 둔다.
 
-    For a general discrete distribution with values $x_1, x_2, \ldots$ and probabilities $p_1, p_2, \ldots$: compute the cumulative probabilities $c_k = \sum_{i=1}^k p_i$. Set $X = x_k$ where $k$ is the smallest index such that $U \le c_k$. This partitions $[0,1]$ into intervals of length $p_k$, each mapped to $x_k$.
+    값이 $x_1, x_2, \ldots$이고 확률이 $p_1, p_2, \ldots$인 일반적인 이산분포에서는 누적확률 $c_k = \sum_{i=1}^k p_i$를 계산한다. $U \le c_k$를 만족하는 가장 작은 첨자 $k$에 대해 $X = x_k$로 둔다. 이는 $[0,1]$을 길이 $p_k$인 구간들로 나누고 각 구간을 $x_k$에 대응시키는 것이다.
 
 ---
 
-**Exercise 3.**
-Prove the inverse transform result: if $U \sim \text{Uniform}(0,1)$ and $F$ is a continuous, strictly increasing CDF, then $F^{-1}(U) \sim F$.
+**연습문제 3.**
+역변환 결과를 증명하라. $U \sim \text{Uniform}(0,1)$이고 $F$가 연속이고 순증가하는 CDF이면 $F^{-1}(U) \sim F$이다.
 
-??? success "Solution to Exercise 3"
-    For any $x \in \mathbb{R}$:
+??? success "연습문제 3 풀이"
+    임의의 $x \in \mathbb{R}$에 대해:
 
     $$
     P(F^{-1}(U) \le x) = P(U \le F(x))
     $$
 
-    The second equality uses the fact that $F$ is strictly increasing, so $F^{-1}(u) \le x \iff u \le F(x)$. Since $U \sim \text{Uniform}(0,1)$:
+    이 등식은 $F$가 순증가하므로 $F^{-1}(u) \le x \iff u \le F(x)$라는 사실을 사용한다. $U \sim \text{Uniform}(0,1)$이므로:
 
     $$
     P(U \le F(x)) = F(x)
     $$
 
-    Therefore $P(F^{-1}(U) \le x) = F(x)$, which means $F^{-1}(U)$ has CDF $F$. $\square$
+    따라서 $P(F^{-1}(U) \le x) = F(x)$이고, 이는 $F^{-1}(U)$의 CDF가 $F$임을 뜻한다. $\square$
 
 ---
 
-**Exercise 4.**
-The Rayleigh distribution has CDF $F(x) = 1 - e^{-x^2/(2\sigma^2)}$ for $x \ge 0$. Derive the inverse CDF and write code to generate Rayleigh samples via inverse transform sampling.
+**연습문제 4.**
+Rayleigh 분포는 $x \ge 0$에 대해 CDF가 $F(x) = 1 - e^{-x^2/(2\sigma^2)}$이다. 역 CDF를 유도하고 역변환 표본추출로 Rayleigh 표본을 생성하는 코드를 작성하라.
 
-??? success "Solution to Exercise 4"
-    Invert $u = 1 - e^{-x^2/(2\sigma^2)}$:
+??? success "연습문제 4 풀이"
+    $u = 1 - e^{-x^2/(2\sigma^2)}$의 역함수를 구하면:
 
     $$
     e^{-x^2/(2\sigma^2)} = 1 - u \implies x = \sigma\sqrt{-2\ln(1-u)}
     $$
 
-    Code:
+    코드:
 
     ```python
     sigma = 1.0
@@ -174,14 +174,14 @@ The Rayleigh distribution has CDF $F(x) = 1 - e^{-x^2/(2\sigma^2)}$ for $x \ge 0
     x = sigma * np.sqrt(-2 * np.log(1 - u))
     ```
 
-    This is closely related to one component of the Box-Muller transform: $R = \sqrt{-2\ln U}$ has a Rayleigh distribution.
+    이는 Box-Muller 변환의 한 성분과 밀접하게 관련된다. $R = \sqrt{-2\ln U}$가 Rayleigh 분포를 따른다.
 
 ---
 
-**Exercise 5.**
-Explain why $1 - U$ can replace $U$ in all inverse transform formulas without changing the distribution of the output. Why is this useful in practice?
+**연습문제 5.**
+모든 역변환 공식에서 $U$를 $1 - U$로 바꾸어도 출력의 분포가 달라지지 않는 이유를 설명하라. 실무에서 이것이 왜 유용한가?
 
-??? success "Solution to Exercise 5"
-    If $U \sim \text{Uniform}(0,1)$, then $1 - U \sim \text{Uniform}(0,1)$ as well (the uniform is symmetric about 0.5). Therefore replacing $U$ with $1 - U$ in $F^{-1}(U)$ produces the same distribution.
+??? success "연습문제 5 풀이"
+    $U \sim \text{Uniform}(0,1)$이면 $1 - U$도 $\text{Uniform}(0,1)$이다(균등분포는 0.5를 중심으로 대칭이다). 따라서 $F^{-1}(U)$에서 $U$를 $1 - U$로 바꾸어도 같은 분포가 나온다.
 
-    This is useful because it simplifies formulas. For the exponential, $-\ln(1-U)/\lambda$ can be replaced by $-\ln(U)/\lambda$, avoiding one subtraction. In practice, this also avoids the edge case $U = 0$ (which gives $\ln(0) = -\infty$) since $1 - U = 0$ has probability zero.
+    이는 공식을 간단하게 만들어 주므로 유용하다. Exponential 분포에서는 $-\ln(1-U)/\lambda$를 $-\ln(U)/\lambda$로 바꿀 수 있어 뺄셈 한 번을 아낀다. 실무에서는 $\ln(0) = -\infty$를 주는 $U = 0$이라는 경계 사례도 피하게 되는데, $1 - U = 0$이 될 확률은 0이기 때문이다.

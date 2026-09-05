@@ -1,31 +1,31 @@
-# Bivariate Normal Distribution
+# 이변량 정규분포
 
-## Overview
+## 개요
 
-The **bivariate normal distribution** extends the univariate normal to two dimensions. A random vector $(X_1, X_2)^\top$ is bivariate normal with mean $\boldsymbol{\mu}$ and covariance matrix $\boldsymbol{\Sigma}$ if its PDF is:
+**이변량 정규분포**는 일변량 정규분포를 2차원으로 확장한 것이다. 확률벡터 $(X_1, X_2)^\top$의 PDF가 다음과 같으면 평균 $\boldsymbol{\mu}$, 공분산행렬 $\boldsymbol{\Sigma}$인 이변량 정규분포를 따른다:
 
 $$
 f(\mathbf{x}) = \frac{1}{2\pi|\boldsymbol{\Sigma}|^{1/2}} \exp\!\left(-\frac{1}{2}(\mathbf{x} - \boldsymbol{\mu})^\top \boldsymbol{\Sigma}^{-1}(\mathbf{x} - \boldsymbol{\mu})\right)
 $$
 
-The shape of the density contours (ellipses) is entirely determined by $\boldsymbol{\Sigma}$.
+밀도 등고선(타원)의 모양은 전적으로 $\boldsymbol{\Sigma}$가 결정한다.
 
 ---
 
-## Effect of Covariance Structure
+## 공분산 구조의 효과
 
-We visualize four configurations as 3D surfaces and contour plots:
+네 가지 설정을 3차원 곡면과 등고선 그림으로 시각화한다:
 
-| Configuration | $\boldsymbol{\Sigma}$ | Correlation $\rho$ |
+| 설정 | $\boldsymbol{\Sigma}$ | 상관계수 $\rho$ |
 |---|---|---|
-| Independent | $\begin{pmatrix}4&0\\0&4\end{pmatrix}$ | 0 |
-| Positive correlation | $\begin{pmatrix}4&2.8\\2.8&4\end{pmatrix}$ | 0.7 |
-| Negative correlation | $\begin{pmatrix}4&-2.8\\-2.8&4\end{pmatrix}$ | $-0.7$ |
-| Unequal variances | $\begin{pmatrix}7&0\\0&15\end{pmatrix}$ | 0 |
+| 독립 | $\begin{pmatrix}4&0\\0&4\end{pmatrix}$ | 0 |
+| 양의 상관 | $\begin{pmatrix}4&2.8\\2.8&4\end{pmatrix}$ | 0.7 |
+| 음의 상관 | $\begin{pmatrix}4&-2.8\\-2.8&4\end{pmatrix}$ | $-0.7$ |
+| 분산이 다름 | $\begin{pmatrix}7&0\\0&15\end{pmatrix}$ | 0 |
 
 ---
 
-## Code
+## 코드
 
 ```python
 import numpy as np
@@ -67,53 +67,53 @@ plt.show()
 
 ---
 
-## Interpretation
+## 해석
 
-- **$\rho = 0$, equal variances:** Circular contours — $X_1$ and $X_2$ are independent with identical spread.
-- **$\rho > 0$:** Ellipses tilted along the $X_1 = X_2$ diagonal — positive association.
-- **$\rho < 0$:** Ellipses tilted along $X_1 = -X_2$ — negative association.
-- **Unequal variances:** Ellipses elongated along the axis with larger variance.
+- **$\rho = 0$이고 분산이 같을 때:** 등고선이 원이다. $X_1$과 $X_2$가 독립이며 퍼짐이 동일하다.
+- **$\rho > 0$:** 타원이 $X_1 = X_2$ 대각선 방향으로 기운다. 양의 연관성이다.
+- **$\rho < 0$:** 타원이 $X_1 = -X_2$ 방향으로 기운다. 음의 연관성이다.
+- **분산이 다를 때:** 분산이 큰 축 방향으로 타원이 길쭉해진다.
 
-The contour ellipses satisfy $(\mathbf{x} - \boldsymbol{\mu})^\top\boldsymbol{\Sigma}^{-1}(\mathbf{x} - \boldsymbol{\mu}) = c$ for constant $c$. Their axes align with the eigenvectors of $\boldsymbol{\Sigma}$, and the axis lengths are proportional to $\sqrt{\lambda_i}$ (the square roots of the eigenvalues).
+등고선 타원은 상수 $c$에 대해 $(\mathbf{x} - \boldsymbol{\mu})^\top\boldsymbol{\Sigma}^{-1}(\mathbf{x} - \boldsymbol{\mu}) = c$를 만족한다. 축은 $\boldsymbol{\Sigma}$의 고유벡터 방향과 일치하고, 축의 길이는 $\sqrt{\lambda_i}$(고윳값의 제곱근)에 비례한다.
 
 ---
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-For the bivariate normal with $\boldsymbol{\Sigma} = \begin{pmatrix}4&2.8\\2.8&4\end{pmatrix}$, compute the correlation $\rho$.
+**연습문제 1.**
+$\boldsymbol{\Sigma} = \begin{pmatrix}4&2.8\\2.8&4\end{pmatrix}$인 이변량 정규분포의 상관계수 $\rho$를 계산하라.
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
     $$
     \rho = \frac{\text{Cov}(X_1, X_2)}{\sigma_1 \sigma_2} = \frac{2.8}{\sqrt{4}\sqrt{4}} = \frac{2.8}{4} = 0.7
     $$
 
 ---
 
-**Exercise 2.**
-Show that for the bivariate normal, zero correlation implies independence.
+**연습문제 2.**
+이변량 정규분포에서 무상관성이 독립성을 함의함을 보여라.
 
-??? success "Solution to Exercise 2"
-    When $\rho = 0$, the covariance matrix is diagonal: $\boldsymbol{\Sigma} = \text{diag}(\sigma_1^2, \sigma_2^2)$. Then:
+??? success "연습문제 2 풀이"
+    $\rho = 0$이면 공분산행렬이 대각행렬 $\boldsymbol{\Sigma} = \text{diag}(\sigma_1^2, \sigma_2^2)$이다. 그러면:
 
     $$
     f(x_1, x_2) = \frac{1}{2\pi\sigma_1\sigma_2}\exp\!\left(-\frac{x_1^2}{2\sigma_1^2} - \frac{x_2^2}{2\sigma_2^2}\right) = f_1(x_1)\cdot f_2(x_2)
     $$
 
-    The joint density factors into the product of the marginal densities, so $X_1$ and $X_2$ are independent.
+    결합밀도가 주변밀도의 곱으로 인수분해되므로 $X_1$과 $X_2$는 독립이다.
 
-    !!! warning "Bivariate Normal Only"
-        Zero correlation implies independence **only** for the bivariate normal. In general, uncorrelated random variables can be dependent.
+    !!! warning "이변량 정규분포에서만"
+        무상관성이 독립성을 함의하는 것은 이변량 정규분포에서**만** 성립한다. 일반적으로 무상관인 확률변수도 의존적일 수 있다.
 
     $\square$
 
 ---
 
-**Exercise 3.**
-Compute the eigenvalues and eigenvectors of $\boldsymbol{\Sigma} = \begin{pmatrix}4&2.8\\2.8&4\end{pmatrix}$ and describe the orientation of the contour ellipses.
+**연습문제 3.**
+$\boldsymbol{\Sigma} = \begin{pmatrix}4&2.8\\2.8&4\end{pmatrix}$의 고윳값과 고유벡터를 계산하고 등고선 타원의 방향을 서술하라.
 
-??? success "Solution to Exercise 3"
-    The characteristic equation is $(4-\lambda)^2 - 2.8^2 = 0$:
+??? success "연습문제 3 풀이"
+    특성방정식은 $(4-\lambda)^2 - 2.8^2 = 0$이다:
 
     $$
     \lambda^2 - 8\lambda + 16 - 7.84 = 0 \implies \lambda^2 - 8\lambda + 8.16 = 0
@@ -123,23 +123,23 @@ Compute the eigenvalues and eigenvectors of $\boldsymbol{\Sigma} = \begin{pmatri
     \lambda = \frac{8 \pm \sqrt{64 - 32.64}}{2} = \frac{8 \pm 5.6}{2}
     $$
 
-    So $\lambda_1 = 6.8$ and $\lambda_2 = 1.2$.
+    따라서 $\lambda_1 = 6.8$, $\lambda_2 = 1.2$이다.
 
-    For $\lambda_1 = 6.8$: eigenvector is $(1, 1)^\top/\sqrt{2}$ (the $X_1 = X_2$ direction).
-    For $\lambda_2 = 1.2$: eigenvector is $(1, -1)^\top/\sqrt{2}$ (the $X_1 = -X_2$ direction).
+    $\lambda_1 = 6.8$에 대한 고유벡터는 $(1, 1)^\top/\sqrt{2}$이다($X_1 = X_2$ 방향).
+    $\lambda_2 = 1.2$에 대한 고유벡터는 $(1, -1)^\top/\sqrt{2}$이다($X_1 = -X_2$ 방향).
 
-    The major axis of the ellipse points along $(1,1)$ with half-length $\sqrt{6.8} \approx 2.61$, and the minor axis along $(1,-1)$ with half-length $\sqrt{1.2} \approx 1.10$.
+    타원의 장축은 $(1,1)$ 방향이고 반길이가 $\sqrt{6.8} \approx 2.61$이며, 단축은 $(1,-1)$ 방향이고 반길이가 $\sqrt{1.2} \approx 1.10$이다.
 
 ---
 
-**Exercise 4.**
-Prove that the marginal distribution of $X_1$ from a bivariate normal $(\boldsymbol{\mu}, \boldsymbol{\Sigma})$ is $N(\mu_1, \sigma_1^2)$.
+**연습문제 4.**
+이변량 정규 $(\boldsymbol{\mu}, \boldsymbol{\Sigma})$에서 $X_1$의 주변분포가 $N(\mu_1, \sigma_1^2)$임을 증명하라.
 
-??? success "Solution to Exercise 4"
-    Integrate out $X_2$ from the joint density. Write the exponent as a quadratic form in $(x_1, x_2)$ and complete the square in $x_2$. The $x_2$ integral is a Gaussian integral that evaluates to a constant, leaving:
+??? success "연습문제 4 풀이"
+    결합밀도에서 $X_2$를 적분해 없앤다. 지수부를 $(x_1, x_2)$의 이차형식으로 쓰고 $x_2$에 대해 완전제곱식을 만든다. $x_2$에 대한 적분은 Gaussian 적분이므로 상수가 되어 다음이 남는다:
 
     $$
     f_{X_1}(x_1) = \frac{1}{\sigma_1\sqrt{2\pi}}\exp\!\left(-\frac{(x_1 - \mu_1)^2}{2\sigma_1^2}\right)
     $$
 
-    Alternatively, note that $X_1 = (1, 0)\mathbf{X}$, and any linear transformation of a multivariate normal is normal with mean $(1,0)\boldsymbol{\mu} = \mu_1$ and variance $(1,0)\boldsymbol{\Sigma}(1,0)^\top = \sigma_1^2$. $\square$
+    다른 방법으로, $X_1 = (1, 0)\mathbf{X}$임에 주목하자. 다변량 정규분포의 임의의 선형변환은 정규분포이며 평균이 $(1,0)\boldsymbol{\mu} = \mu_1$, 분산이 $(1,0)\boldsymbol{\Sigma}(1,0)^\top = \sigma_1^2$이다. $\square$

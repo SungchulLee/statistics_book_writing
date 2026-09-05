@@ -131,40 +131,40 @@ nav:
             - 중심극한정리 다중 분포 시각화: ch03/code/clt_visualization.md
             - 도박사의 역설 (큰수의 법칙의 실패): ch03/code/gambler_paradox_lln.md
 
-    - 4 Distributions:
-        - Chapter Overview: ch04/index.md
-        - 4.1 Discrete Distributions:
-            - Bernoulli and Binomial: ch04/discrete_distributions/binomial.md
-            - Geometric and Negative Binomial: ch04/discrete_distributions/geometric.md
-            - Poisson Distribution: ch04/discrete_distributions/poisson.md
-        - 4.2 Continuous Distributions:
-            - Uniform Distribution: ch04/continuous_distributions/uniform.md
-            - Exponential Distribution: ch04/continuous_distributions/exponential.md
-            - Normal Distribution: ch04/continuous_distributions/normal.md
-        - 4.3 Multivariate Structure:
-            - Joint Distributions: ch04/joint/joint.md
-            - Marginal and Conditional Distributions: ch04/joint/marginal_conditional.md
-            - Covariance and Correlation: ch04/joint/covariance_correlation.md
-            - Independence vs Zero Correlation: ch04/joint/independence_vs_zero_corr.md
-        - 4.4 Code:
-            - Normal Density Function with scipy.stats: ch04/code/normal_pdf.md
-            - Normal Random Variates: ch04/code/normal_rvs.md
-            - Normal Cumulative Distribution and Quantiles: ch04/code/normal_cdf.md
-            - Student-t Density Function: ch04/code/t_pdf.md
-            - Chi-Square Density Function: ch04/code/chi_square_pdf.md
-            - F-Distribution Density Function: ch04/code/f_pdf.md
-            - Normal Percent Point Function (Quantile Function): ch04/code/normal_ppf.md
-            - Normal Survival Function: ch04/code/normal_sf.md
-            - Exponential Density Function: ch04/code/exponential_pdf.md
-            - Uniform Density Function: ch04/code/uniform_pdf.md
-            - Logistic Density Function (vs Normal): ch04/code/logistic_pdf.md
-            - Log-Normal Density Function: ch04/code/lognormal_pdf.md
-            - Weibull Density Function and Hazard: ch04/code/weibull_pdf.md
-            - Discrete Distributions Suite: ch04/code/discrete_distributions_suite.md
-            - Bivariate Normal Distribution: ch04/code/bivariate_normal.md
-            - Gaussian 2D Conditional Distributions: ch04/code/gaussian_2d_conditionals.md
-            - Gaussian 2D Eigendecomposition: ch04/code/gaussian_2d_eigendecomposition.md
-            - Inverse Transform Sampling: ch04/code/inverse_transform_sampling.md
+    - 4 분포:
+        - 장 개요: ch04/index.md
+        - 4.1 이산분포:
+            - Bernoulli 분포와 Binomial 분포: ch04/discrete_distributions/binomial.md
+            - Geometric 분포와 Negative Binomial 분포: ch04/discrete_distributions/geometric.md
+            - Poisson 분포: ch04/discrete_distributions/poisson.md
+        - 4.2 연속분포:
+            - Uniform 분포: ch04/continuous_distributions/uniform.md
+            - Exponential 분포: ch04/continuous_distributions/exponential.md
+            - Normal 분포: ch04/continuous_distributions/normal.md
+        - 4.3 다변량 구조:
+            - 결합분포: ch04/joint/joint.md
+            - 주변분포와 조건부분포: ch04/joint/marginal_conditional.md
+            - 공분산과 상관계수: ch04/joint/covariance_correlation.md
+            - 독립성과 무상관성의 차이: ch04/joint/independence_vs_zero_corr.md
+        - 4.4 코드:
+            - scipy.stats로 그리는 정규 밀도함수: ch04/code/normal_pdf.md
+            - 정규 난수 생성: ch04/code/normal_rvs.md
+            - 정규 누적분포함수와 분위수: ch04/code/normal_cdf.md
+            - Student-t 밀도함수: ch04/code/t_pdf.md
+            - 카이제곱 밀도함수: ch04/code/chi_square_pdf.md
+            - F 분포 밀도함수: ch04/code/f_pdf.md
+            - 정규분포의 백분위점 함수 (분위수 함수): ch04/code/normal_ppf.md
+            - 정규분포의 생존함수: ch04/code/normal_sf.md
+            - 지수 밀도함수: ch04/code/exponential_pdf.md
+            - 균등 밀도함수: ch04/code/uniform_pdf.md
+            - 로지스틱 밀도함수 (Normal과 비교): ch04/code/logistic_pdf.md
+            - 로그정규 밀도함수: ch04/code/lognormal_pdf.md
+            - Weibull 밀도함수와 위험함수: ch04/code/weibull_pdf.md
+            - 이산분포 모음: ch04/code/discrete_distributions_suite.md
+            - 이변량 정규분포: ch04/code/bivariate_normal.md
+            - 2차원 Gaussian 조건부분포: ch04/code/gaussian_2d_conditionals.md
+            - 2차원 Gaussian 고유분해: ch04/code/gaussian_2d_eigendecomposition.md
+            - 역변환 표본추출: ch04/code/inverse_transform_sampling.md
 
     - 5 Sampling Distributions:
         - Chapter Overview: ch05/index.md

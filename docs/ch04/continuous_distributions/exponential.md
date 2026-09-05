@@ -1,20 +1,20 @@
-# Exponential Distribution
+# Exponential 분포
 
-## Overview
+## 개요
 
-The **exponential distribution** models the time between events in a Poisson process. It is the continuous analogue of the geometric distribution and the only continuous distribution with the memoryless property. Common applications include modeling inter-arrival times, waiting times, and component lifetimes.
+**Exponential 분포**는 Poisson 과정에서 사건 사이의 시간을 모형화한다. Geometric 분포의 연속형 대응물이며, 무기억성을 갖는 유일한 연속분포이다. 도착 간 시간, 대기 시간, 부품 수명 모형화에 흔히 쓰인다.
 
 ---
 
-## Definition
+## 정의
 
-A random variable $X$ follows an exponential distribution with rate parameter $\lambda > 0$:
+확률변수 $X$가 비율 모수 $\lambda > 0$인 Exponential 분포를 따른다는 것은 다음을 뜻한다:
 
 $$
 X \sim \text{Exponential}(\lambda), \qquad f(x) = \lambda e^{-\lambda x}, \quad x \geq 0
 $$
 
-**Alternative parameterization:** Some texts use the scale parameter $\beta = 1/\lambda$, writing $f(x) = \frac{1}{\beta}e^{-x/\beta}$. SciPy uses the scale parameterization.
+**다른 모수화:** 어떤 교재에서는 척도 모수 $\beta = 1/\lambda$를 사용하여 $f(x) = \frac{1}{\beta}e^{-x/\beta}$로 쓴다. SciPy는 척도 모수화를 사용한다.
 
 ### CDF
 
@@ -22,7 +22,7 @@ $$
 F(x) = 1 - e^{-\lambda x}, \quad x \geq 0
 $$
 
-### Survival Function
+### 생존함수
 
 $$
 S(x) = P(X > x) = e^{-\lambda x}
@@ -30,7 +30,7 @@ $$
 
 ---
 
-## Properties
+## 성질
 
 $$
 \begin{aligned}
@@ -41,15 +41,15 @@ E[X] &= \frac{1}{\lambda} \\[4pt]
 \end{aligned}
 $$
 
-Note that $\text{Mean} = \text{SD} = 1/\lambda$, a distinctive feature of the exponential distribution.
+$\text{평균} = \text{표준편차} = 1/\lambda$라는 점에 주목하라. Exponential 분포의 두드러진 특징이다.
 
-### Derivation of Mean
+### 평균의 유도
 
 $$
 E[X] = \int_0^{\infty} x \lambda e^{-\lambda x}\,dx = \left[-x e^{-\lambda x}\right]_0^{\infty} + \int_0^{\infty} e^{-\lambda x}\,dx = \frac{1}{\lambda}
 $$
 
-### Derivation of Variance
+### 분산의 유도
 
 $$
 E[X^2] = \int_0^{\infty} x^2 \lambda e^{-\lambda x}\,dx = \frac{2}{\lambda^2}
@@ -61,27 +61,27 @@ $$
 
 ---
 
-## Memoryless Property
+## 무기억성
 
-The exponential distribution is the **only** continuous distribution with the memoryless property:
+Exponential 분포는 무기억성을 갖는 **유일한** 연속분포이다:
 
 $$
 P(X > s + t \mid X > s) = P(X > t) \quad \text{for all } s, t \geq 0
 $$
 
-### Proof
+### 증명
 
 $$
 P(X > s + t \mid X > s) = \frac{P(X > s + t)}{P(X > s)} = \frac{e^{-\lambda(s+t)}}{e^{-\lambda s}} = e^{-\lambda t} = P(X > t)
 $$
 
-**Interpretation:** If you have already waited $s$ units of time, the remaining wait time has the same distribution as if you had just started. The process "forgets" its history.
+**해석:** 이미 $s$만큼의 시간을 기다렸더라도 남은 대기 시간의 분포는 방금 시작했을 때와 같다. 이 과정은 자신의 이력을 "잊어버린다".
 
 ---
 
-## Connection to the Poisson Process
+## Poisson 과정과의 연결
 
-If events arrive according to a Poisson process with rate $\lambda$, then:
+사건이 비율 $\lambda$인 Poisson 과정에 따라 도착하면:
 
 $$
 \begin{aligned}
@@ -93,41 +93,41 @@ $$
 
 ---
 
-## Minimum of Exponentials
+## Exponential 확률변수의 최솟값
 
-If $X_1 \sim \text{Exp}(\lambda_1)$ and $X_2 \sim \text{Exp}(\lambda_2)$ are independent, then:
+$X_1 \sim \text{Exp}(\lambda_1)$과 $X_2 \sim \text{Exp}(\lambda_2)$가 독립이면:
 
 $$
 \min(X_1, X_2) \sim \text{Exp}(\lambda_1 + \lambda_2)
 $$
 
-### Proof
+### 증명
 
 $$
 P(\min(X_1, X_2) > t) = P(X_1 > t) \cdot P(X_2 > t) = e^{-\lambda_1 t} \cdot e^{-\lambda_2 t} = e^{-(\lambda_1 + \lambda_2)t}
 $$
 
-This generalizes to $n$ independent exponentials: $\min(X_1, \ldots, X_n) \sim \text{Exp}\left(\sum_{i=1}^n \lambda_i\right)$.
+이는 $n$개의 독립인 Exponential 확률변수로 일반화된다: $\min(X_1, \ldots, X_n) \sim \text{Exp}\left(\sum_{i=1}^n \lambda_i\right)$.
 
 ---
 
-## Worked Example
+## 예제
 
-**Problem:** Orders arrive at a trading desk at an average rate of 12 per hour. What is the probability that the time between consecutive orders exceeds 10 minutes?
+**문제:** 어떤 트레이딩 데스크에 주문이 시간당 평균 12건 도착한다. 연속한 주문 사이의 시간이 10분을 넘을 확률은?
 
-**Solution:** The rate is $\lambda = 12$ per hour $= 0.2$ per minute.
+**풀이:** 비율은 시간당 $\lambda = 12$, 즉 분당 $0.2$이다.
 
 $$
 P(X > 10) = e^{-0.2 \times 10} = e^{-2} \approx 0.1353
 $$
 
-Expected time between orders: $E[X] = 1/0.2 = 5$ minutes.
+주문 사이의 기대 시간: $E[X] = 1/0.2 = 5$분.
 
 ---
 
-## Python: PDF, CDF, and Sampling
+## Python: PDF, CDF, 표본추출
 
-### PDF and CDF
+### PDF와 CDF
 
 ```python
 import matplotlib.pyplot as plt
@@ -145,7 +145,7 @@ ax.legend()
 plt.show()
 ```
 
-### Comparing Different Rates
+### 비율에 따른 비교
 
 ```python
 import matplotlib.pyplot as plt
@@ -162,7 +162,7 @@ ax.legend()
 plt.show()
 ```
 
-### Sampling and Verification
+### 표본추출과 검증
 
 ```python
 import numpy as np
@@ -177,7 +177,7 @@ print(f"Theoretical var:  {1/lam**2:.4f},  Sample var:  {samples.var():.4f}")
 print(f"Mean ≈ SD: {np.isclose(samples.mean(), samples.std(), atol=0.01)}")
 ```
 
-### Verifying the Memoryless Property
+### 무기억성 확인하기
 
 ```python
 import numpy as np
@@ -194,7 +194,7 @@ for t in [0.25, 0.5, 1.0]:
     print(f"P(X>{s}+{t}|X>{s}) = {conditional:.4f},  P(X>{t}) = {unconditional:.4f}")
 ```
 
-### Poisson Process Simulation
+### Poisson 과정 모의실험
 
 ```python
 import numpy as np
@@ -219,33 +219,33 @@ plt.show()
 
 ---
 
-## Key Takeaways
+## 핵심 요약
 
-- The exponential distribution models waiting times between events and is parameterized by rate $\lambda$ (or scale $1/\lambda$).
-- It is the only continuous memoryless distribution: the remaining wait time is independent of how long you have already waited.
-- It connects directly to the Poisson process: Poisson counts and exponential inter-arrival times are two views of the same phenomenon.
-- The minimum of independent exponentials is again exponential, with rates summing.
-- In SciPy, use `stats.expon(scale=1/lambda)` to work with rate parameterization.
+- Exponential 분포는 사건 사이의 대기 시간을 모형화하며, 비율 $\lambda$(또는 척도 $1/\lambda$)로 모수화된다.
+- 무기억성을 갖는 유일한 연속분포이다. 남은 대기 시간은 이미 얼마나 기다렸는지와 무관하다.
+- Poisson 과정과 직접 연결된다. Poisson 계수와 Exponential 도착 간 시간은 같은 현상을 보는 두 관점이다.
+- 독립인 Exponential 확률변수들의 최솟값은 다시 Exponential 분포이며, 비율은 합해진다.
+- SciPy에서는 비율 모수화를 다루려면 `stats.expon(scale=1/lambda)`를 사용한다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Component lifetime $T \sim \mathrm{Exp}(0.5)$ years. (a) $P(T > 3)$. (b) $P(T > 3 \mid T > 2)$. (c) For two independent components, distribution and $\mathbb{E}$ of $\min(T_1, T_2)$.
+**연습문제 1.**
+부품 수명이 $T \sim \mathrm{Exp}(0.5)$(단위: 년)이다. (a) $P(T > 3)$. (b) $P(T > 3 \mid T > 2)$. (c) 독립인 부품 두 개에 대해 $\min(T_1, T_2)$의 분포와 기댓값.
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
     (a) $P(T > 3) = e^{-1.5} \approx 0.223$.
 
-    (b) By memoryless: $P(T > 3 \mid T > 2) = P(T > 1) = e^{-0.5} \approx 0.607$. Direct: $P(T > 3)/P(T > 2) = e^{-1.5}/e^{-1} = e^{-0.5}$.
+    (b) 무기억성에 의해 $P(T > 3 \mid T > 2) = P(T > 1) = e^{-0.5} \approx 0.607$. 직접 계산하면 $P(T > 3)/P(T > 2) = e^{-1.5}/e^{-1} = e^{-0.5}$.
 
-    (c) $\min(T_1, T_2) \sim \mathrm{Exp}(\lambda_1 + \lambda_2) = \mathrm{Exp}(1.0)$. $\mathbb{E}[\min] = 1$ year (half of single component).
+    (c) $\min(T_1, T_2) \sim \mathrm{Exp}(\lambda_1 + \lambda_2) = \mathrm{Exp}(1.0)$. $\mathbb{E}[\min] = 1$년(부품 하나일 때의 절반).
 
 ---
 
-**Exercise 2.**
-**Prove the memoryless property** of the exponential and show it is the *only* continuous distribution with this property.
+**연습문제 2.**
+Exponential 분포의 **무기억성을 증명**하고, 이 성질을 갖는 연속분포가 *유일*함을 보여라.
 
-??? success "Solution to Exercise 2"
-    Survival function: $\bar F(t) = e^{-\lambda t}$. Then
+??? success "연습문제 2 풀이"
+    생존함수는 $\bar F(t) = e^{-\lambda t}$이다. 그러면
 
     $$
     P(T > s + t \mid T > s) = \bar F(s + t)/\bar F(s) = e^{-\lambda(s+t)}/e^{-\lambda s} = e^{-\lambda t} = P(T > t)
@@ -253,82 +253,82 @@ Component lifetime $T \sim \mathrm{Exp}(0.5)$ years. (a) $P(T > 3)$. (b) $P(T > 
 
     $\square$
 
-    **Uniqueness:** suppose $\bar F$ is continuous, decreasing, $\bar F(0) = 1$, and memoryless: $\bar F(s + t) = \bar F(s) \bar F(t)$. By Cauchy's functional equation (solved under continuity), the only such function is $\bar F(t) = e^{-\lambda t}$ for some $\lambda > 0$.
+    **유일성:** $\bar F$가 연속이고 감소하며 $\bar F(0) = 1$이고 무기억성 $\bar F(s + t) = \bar F(s) \bar F(t)$를 만족한다고 하자. (연속성 아래에서 풀린) Cauchy 함수방정식에 의해 이런 함수는 어떤 $\lambda > 0$에 대한 $\bar F(t) = e^{-\lambda t}$뿐이다.
 
-    So the exponential is the unique memoryless continuous distribution — corresponding precisely to the geometric being the unique discrete memoryless.
-
----
-
-**Exercise 3.**
-**Derive the PDF, mean, and variance** of $\mathrm{Exp}(\lambda)$.
-
-??? success "Solution to Exercise 3"
-    PDF: differentiate CDF $F(t) = 1 - e^{-\lambda t}$: $f(t) = \lambda e^{-\lambda t}$ for $t \ge 0$.
-
-    Mean: $\mathbb{E}[T] = \int_0^\infty t \lambda e^{-\lambda t} dt$. Integration by parts (or use tail formula): $\mathbb{E}[T] = \int_0^\infty e^{-\lambda t} dt = 1/\lambda$.
-
-    Second moment: $\mathbb{E}[T^2] = \int_0^\infty t^2 \lambda e^{-\lambda t} dt = 2/\lambda^2$ (via integration by parts twice).
-
-    Variance: $\mathrm{Var}(T) = 2/\lambda^2 - 1/\lambda^2 = 1/\lambda^2$.
-
-    Note: mean and SD both equal $1/\lambda$ — a distinctive feature of the exponential. CV = 1.
+    따라서 Exponential 분포는 무기억성을 갖는 유일한 연속분포이며, 이는 Geometric 분포가 유일한 이산 무기억 분포인 것과 정확히 대응된다.
 
 ---
 
-**Exercise 4.**
-**Connection to Poisson process.** If events occur in a Poisson process with rate $\lambda$, derive the distribution of the $k$-th arrival time $T_k$.
+**연습문제 3.**
+$\mathrm{Exp}(\lambda)$의 **PDF, 평균, 분산을 유도하라.**
 
-??? success "Solution to Exercise 4"
-    $T_k = \sum_{i=1}^k X_i$ where $X_i$ are i.i.d. $\mathrm{Exp}(\lambda)$ (inter-arrival times).
+??? success "연습문제 3 풀이"
+    PDF: CDF $F(t) = 1 - e^{-\lambda t}$를 미분하면 $t \ge 0$에 대해 $f(t) = \lambda e^{-\lambda t}$.
 
-    Sum of $k$ i.i.d. exponentials is the **gamma (Erlang) distribution**:
+    평균: $\mathbb{E}[T] = \int_0^\infty t \lambda e^{-\lambda t} dt$. 부분적분하거나 꼬리 공식을 쓰면 $\mathbb{E}[T] = \int_0^\infty e^{-\lambda t} dt = 1/\lambda$.
+
+    2차 적률: $\mathbb{E}[T^2] = \int_0^\infty t^2 \lambda e^{-\lambda t} dt = 2/\lambda^2$(부분적분을 두 번 사용).
+
+    분산: $\mathrm{Var}(T) = 2/\lambda^2 - 1/\lambda^2 = 1/\lambda^2$.
+
+    참고: 평균과 표준편차가 모두 $1/\lambda$인 것이 Exponential 분포의 두드러진 특징이다. 변동계수 CV = 1이다.
+
+---
+
+**연습문제 4.**
+**Poisson 과정과의 연결.** 사건이 비율 $\lambda$인 Poisson 과정에서 발생할 때 $k$번째 도착 시각 $T_k$의 분포를 유도하라.
+
+??? success "연습문제 4 풀이"
+    $T_k = \sum_{i=1}^k X_i$이며, 여기서 $X_i$는 i.i.d. $\mathrm{Exp}(\lambda)$(도착 간 시간)이다.
+
+    $k$개의 i.i.d. Exponential 확률변수의 합은 **감마(Erlang) 분포**이다:
 
     $$
     T_k \sim \mathrm{Gamma}(\text{shape} = k, \text{rate} = \lambda)
     $$
 
-    PDF: $f_{T_k}(t) = \lambda^k t^{k-1} e^{-\lambda t} / (k-1)!$ for $t \ge 0$.
+    PDF: $t \ge 0$에 대해 $f_{T_k}(t) = \lambda^k t^{k-1} e^{-\lambda t} / (k-1)!$.
 
     $\mathbb{E}[T_k] = k/\lambda$, $\mathrm{Var}(T_k) = k/\lambda^2$.
 
-    This is the fundamental link between exponential inter-arrival times and Poisson counts, and the foundation of renewal theory in queuing and reliability analysis.
+    이는 Exponential 도착 간 시간과 Poisson 계수를 잇는 근본적인 연결이며, 대기행렬과 신뢰성 분석에서 재생이론의 토대가 된다.
 
 ---
 
-**Exercise 5.**
-**Maximum-likelihood estimation.** Given i.i.d. $T_1, \ldots, T_n \sim \mathrm{Exp}(\lambda)$, derive the MLE $\hat\lambda$.
+**연습문제 5.**
+**최대가능도추정.** i.i.d. $T_1, \ldots, T_n \sim \mathrm{Exp}(\lambda)$가 주어졌을 때 MLE $\hat\lambda$를 유도하라.
 
-??? success "Solution to Exercise 5"
-    Likelihood: $L(\lambda) = \prod_i \lambda e^{-\lambda T_i} = \lambda^n e^{-\lambda \sum T_i}$.
+??? success "연습문제 5 풀이"
+    가능도: $L(\lambda) = \prod_i \lambda e^{-\lambda T_i} = \lambda^n e^{-\lambda \sum T_i}$.
 
-    Log-likelihood: $\ell(\lambda) = n \ln \lambda - \lambda \sum T_i$.
+    로그가능도: $\ell(\lambda) = n \ln \lambda - \lambda \sum T_i$.
 
-    Derivative: $\ell'(\lambda) = n/\lambda - \sum T_i = 0 \Rightarrow \hat\lambda = n/\sum T_i = 1/\bar T$.
+    도함수: $\ell'(\lambda) = n/\lambda - \sum T_i = 0 \Rightarrow \hat\lambda = n/\sum T_i = 1/\bar T$.
 
-    **Properties:**
+    **성질:**
 
-    - $\hat\lambda$ is the reciprocal of the sample mean — natural since $\mathbb{E}[T] = 1/\lambda$.
-    - Asymptotically unbiased but slightly biased in finite samples: $\mathbb{E}[\hat\lambda] = n\lambda/(n - 1)$ (for $n \ge 2$).
-    - Asymptotically normal with $\sqrt n (\hat\lambda - \lambda) \xrightarrow{d} N(0, \lambda^2)$.
+    - $\hat\lambda$는 표본평균의 역수이다. $\mathbb{E}[T] = 1/\lambda$이므로 자연스러운 결과이다.
+    - 점근적으로 불편이지만 유한표본에서는 약간 편향되어 있다: $n \ge 2$에 대해 $\mathbb{E}[\hat\lambda] = n\lambda/(n - 1)$.
+    - 점근적으로 정규이며 $\sqrt n (\hat\lambda - \lambda) \xrightarrow{d} N(0, \lambda^2)$이다.
 
-    The reciprocal of the sample mean is the standard estimator for rate parameters across many distributions.
+    표본평균의 역수는 여러 분포에서 비율 모수를 추정하는 표준적인 추정량이다.
 
 ---
 
-**Exercise 6.**
-**Hazard function.** The hazard rate is $h(t) = f(t)/\bar F(t)$. Show that the exponential has *constant* hazard, and discuss what this means physically.
+**연습문제 6.**
+**위험함수.** 위험률은 $h(t) = f(t)/\bar F(t)$로 정의된다. Exponential 분포의 위험률이 *상수*임을 보이고, 이것이 물리적으로 무엇을 뜻하는지 논하라.
 
-??? success "Solution to Exercise 6"
+??? success "연습문제 6 풀이"
     $h(t) = \lambda e^{-\lambda t} / e^{-\lambda t} = \lambda$.
 
-    **Constant hazard:** the instantaneous failure rate $h(t) = \lambda$ does not depend on $t$. Interpretation: an item that has not yet failed has the same probability of failing in the next small interval, regardless of its age.
+    **상수 위험률:** 순간 고장률 $h(t) = \lambda$가 $t$에 의존하지 않는다. 해석하자면, 아직 고장 나지 않은 부품이 다음 짧은 구간에서 고장 날 확률은 나이와 무관하게 언제나 같다.
 
-    This is **direct expression of memorylessness**: future risk doesn't depend on past survival.
+    이는 **무기억성의 직접적인 표현**이다. 미래의 위험은 과거의 생존에 의존하지 않는다.
 
-    **Comparison with non-constant hazards:**
+    **상수가 아닌 위험률과의 비교:**
 
-    - **Increasing hazard** (e.g., Weibull with $k > 1$): items wear out. Older items more likely to fail. Mechanical components.
-    - **Decreasing hazard** ($k < 1$): items burn in. Older items less likely to fail. Electronic components after initial defects.
-    - **Bathtub curve**: high initial (burn-in) + flat middle + increasing (wearout). Combination of the above.
+    - **증가하는 위험률** (예: $k > 1$인 Weibull): 부품이 마모된다. 오래된 부품일수록 고장 나기 쉽다. 기계 부품이 그렇다.
+    - **감소하는 위험률** ($k < 1$): 부품이 길들여진다. 오래된 부품일수록 고장이 덜 난다. 초기 결함을 넘긴 전자 부품이 그렇다.
+    - **욕조 곡선**: 초기에 높고(길들이기) 중간이 평평하며 이후 증가한다(마모). 위의 두 경우가 결합된 형태이다.
 
-    Real-world reliability is rarely exactly exponential, but the exponential is a useful baseline because (a) its parameter has a direct meaning (mean lifetime), (b) it's mathematically tractable, and (c) memorylessness corresponds to "completely random" failure, the natural null hypothesis for failure modeling.
+    현실의 신뢰성이 정확히 Exponential 분포를 따르는 경우는 드물지만, Exponential 분포는 유용한 기준선이다. (a) 모수가 평균 수명이라는 직접적인 의미를 갖고, (b) 수학적으로 다루기 쉬우며, (c) 무기억성이 "완전히 무작위한" 고장에 대응하여 고장 모형화의 자연스러운 귀무가설이 되기 때문이다.

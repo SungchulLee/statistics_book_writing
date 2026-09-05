@@ -1,18 +1,18 @@
-# Normal Survival Function
+# 정규분포의 생존함수
 
-## Overview
+## 개요
 
-The **survival function** (SF) is the complement of the CDF:
+**생존함수**(SF)는 CDF의 여집합에 해당한다:
 
 $$
 S(x) = P(X > x) = 1 - F(x)
 $$
 
-It gives the probability that $X$ exceeds a given threshold. The survival function is used extensively in reliability engineering, actuarial science, and clinical trials where the quantity of interest is time-to-event or exceedance probability.
+$X$가 주어진 문턱값을 넘을 확률을 준다. 생존함수는 신뢰성 공학, 보험계리학, 임상시험처럼 사건 발생까지의 시간이나 초과 확률이 관심 대상인 분야에서 널리 쓰인다.
 
 ---
 
-## Code
+## 코드
 
 ```python
 import matplotlib.pyplot as plt
@@ -45,9 +45,9 @@ plt.show()
 
 ---
 
-## Why Use the Survival Function
+## 생존함수를 쓰는 이유
 
-For extreme upper-tail probabilities, computing $1 - F(x)$ directly can suffer from floating-point cancellation when $F(x)$ is very close to 1. The dedicated `sf()` method avoids this by computing the tail probability directly.
+상단꼬리 확률이 극단적으로 작을 때 $1 - F(x)$를 직접 계산하면 $F(x)$가 1에 매우 가까워 부동소수점 상쇄가 일어날 수 있다. 전용 메서드 `sf()`는 꼬리 확률을 직접 계산하여 이 문제를 피한다.
 
 ```python
 # Poor: floating-point cancellation
@@ -59,56 +59,56 @@ p_good = stats.norm.sf(8)         # gives ~6.22e-16
 
 ---
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-For $Z \sim N(0,1)$, compute $P(Z > 2)$ using both the CDF and the SF. Verify they agree.
+**연습문제 1.**
+$Z \sim N(0,1)$에 대해 CDF와 SF를 각각 사용하여 $P(Z > 2)$를 계산하고 두 결과가 일치함을 확인하라.
 
-??? success "Solution to Exercise 1"
-    Via CDF: $P(Z > 2) = 1 - \mathcal{N}(2) = 1 - 0.9772 = 0.0228$.
+??? success "연습문제 1 풀이"
+    CDF로: $P(Z > 2) = 1 - \mathcal{N}(2) = 1 - 0.9772 = 0.0228$.
 
-    Via SF: `stats.norm.sf(2) = 0.0228`.
+    SF로: `stats.norm.sf(2) = 0.0228`.
 
-    Both give the same result. For extreme values like $P(Z > 8)$, the SF method is numerically preferable.
+    둘 다 같은 결과를 준다. $P(Z > 8)$처럼 극단적인 값에서는 SF 방식이 수치적으로 더 낫다.
 
 ---
 
-**Exercise 2.**
-Show that $S(x) + F(x) = 1$ for all $x$ and any continuous random variable.
+**연습문제 2.**
+임의의 연속확률변수에 대해 모든 $x$에서 $S(x) + F(x) = 1$임을 보여라.
 
-??? success "Solution to Exercise 2"
-    By definition:
+??? success "연습문제 2 풀이"
+    정의에 의해:
 
     $$
     F(x) + S(x) = P(X \le x) + P(X > x) = P(X \in (-\infty, x]) + P(X \in (x, \infty))
     $$
 
-    Since $(-\infty, x]$ and $(x, \infty)$ are a partition of $\mathbb{R}$, their probabilities sum to 1. $\square$
+    $(-\infty, x]$와 $(x, \infty)$는 $\mathbb{R}$의 분할이므로 두 확률의 합은 1이다. $\square$
 
 ---
 
-**Exercise 3.**
-A component fails when stress $X \sim N(500, 2500)$ exceeds a threshold of 600. What is the probability of failure?
+**연습문제 3.**
+어떤 부품은 응력 $X \sim N(500, 2500)$이 문턱값 600을 넘으면 고장 난다. 고장 확률은 얼마인가?
 
-??? success "Solution to Exercise 3"
-    Standardize: $Z = (600 - 500)/50 = 2$.
+??? success "연습문제 3 풀이"
+    표준화하면 $Z = (600 - 500)/50 = 2$이다.
 
     $$
     P(X > 600) = P(Z > 2) = S(2) \approx 0.0228
     $$
 
-    About 2.3% of components will fail.
+    부품의 약 2.3%가 고장 난다.
 
 ---
 
-**Exercise 4.**
-The **hazard function** is defined as $h(x) = f(x)/S(x)$. For the standard normal, compute $h(0)$ and explain why $h(x)$ is increasing for $x > 0$.
+**연습문제 4.**
+**위험함수**는 $h(x) = f(x)/S(x)$로 정의된다. 표준정규분포에 대해 $h(0)$을 계산하고 $x > 0$에서 $h(x)$가 증가하는 이유를 설명하라.
 
-??? success "Solution to Exercise 4"
-    At $x = 0$: $f(0) = 1/\sqrt{2\pi} \approx 0.3989$ and $S(0) = 0.5$.
+??? success "연습문제 4 풀이"
+    $x = 0$에서 $f(0) = 1/\sqrt{2\pi} \approx 0.3989$이고 $S(0) = 0.5$이다.
 
     $$
     h(0) = \frac{0.3989}{0.5} \approx 0.7979
     $$
 
-    For $x > 0$, $S(x)$ decreases faster than $f(x)$ because the denominator shrinks (fewer values remain above $x$) while the numerator (the density) also decreases but more slowly in relative terms. This makes $h(x)$ increasing — the conditional probability of "failure" at $x$ given survival past $x$ grows with $x$. The normal distribution has an **increasing failure rate**.
+    $x > 0$에서는 $S(x)$가 $f(x)$보다 빠르게 감소한다. 분모는 ($x$ 위에 남은 값이 줄어들어) 작아지는 반면, 분자인 밀도도 감소하지만 상대적으로는 더 천천히 줄어들기 때문이다. 그래서 $h(x)$가 증가한다. $x$까지 생존했다는 조건 아래 $x$에서 "고장"이 날 조건부 확률이 $x$와 함께 커지는 것이다. 정규분포는 **증가하는 고장률**을 갖는다.

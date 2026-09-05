@@ -1,32 +1,32 @@
-# Poisson Distribution
+# Poisson 분포
 
-## Overview
+## 개요
 
-The **Poisson distribution** models the number of events occurring in a fixed interval of time or space, given a known average rate. It is widely used in finance (trade arrivals, default counts), insurance (claim frequency), and queueing theory.
+**Poisson 분포**는 평균 발생률이 알려져 있을 때 고정된 시간 또는 공간 구간에서 발생하는 사건의 수를 모형화한다. 금융(체결 도착, 부도 건수), 보험(청구 빈도), 대기행렬 이론에서 널리 쓰인다.
 
 ---
 
-## Definition
+## 정의
 
-A random variable $X$ follows a Poisson distribution with rate parameter $\lambda > 0$:
+확률변수 $X$가 비율 모수 $\lambda > 0$인 Poisson 분포를 따른다는 것은 다음을 뜻한다:
 
 $$
 X \sim \text{Poisson}(\lambda), \qquad P(X = k) = \frac{e^{-\lambda} \lambda^k}{k!}, \quad k = 0, 1, 2, \ldots
 $$
 
-The parameter $\lambda$ represents both the mean and the variance of the distribution.
+모수 $\lambda$는 이 분포의 평균이자 분산이다.
 
-### Verifying the PMF Sums to 1
+### PMF의 합이 1임을 확인하기
 
 $$
 \sum_{k=0}^{\infty} \frac{e^{-\lambda} \lambda^k}{k!} = e^{-\lambda} \sum_{k=0}^{\infty} \frac{\lambda^k}{k!} = e^{-\lambda} \cdot e^{\lambda} = 1
 $$
 
-using the Taylor expansion of $e^{\lambda}$.
+$e^{\lambda}$의 Taylor 전개를 사용했다.
 
 ---
 
-## Properties
+## 성질
 
 $$
 \begin{aligned}
@@ -36,23 +36,23 @@ E[X] &= \lambda \\
 \end{aligned}
 $$
 
-The equality of mean and variance is a defining characteristic of the Poisson distribution and is often used as a diagnostic check.
+평균과 분산이 같다는 것은 Poisson 분포를 규정하는 특징이며, 진단 점검에 자주 쓰인다.
 
-### Derivation of Mean
+### 평균의 유도
 
 $$
 E[X] = \sum_{k=0}^{\infty} k \cdot \frac{e^{-\lambda}\lambda^k}{k!} = \lambda e^{-\lambda} \sum_{k=1}^{\infty} \frac{\lambda^{k-1}}{(k-1)!} = \lambda e^{-\lambda} \cdot e^{\lambda} = \lambda
 $$
 
-### Derivation of Variance
+### 분산의 유도
 
-First compute $E[X(X-1)]$:
+먼저 $E[X(X-1)]$을 계산한다:
 
 $$
 E[X(X-1)] = \sum_{k=2}^{\infty} k(k-1) \frac{e^{-\lambda}\lambda^k}{k!} = \lambda^2 e^{-\lambda} \sum_{k=2}^{\infty} \frac{\lambda^{k-2}}{(k-2)!} = \lambda^2
 $$
 
-Then:
+그러면:
 
 $$
 \text{Var}(X) = E[X^2] - (E[X])^2 = E[X(X-1)] + E[X] - (E[X])^2 = \lambda^2 + \lambda - \lambda^2 = \lambda
@@ -60,52 +60,52 @@ $$
 
 ---
 
-## Poisson as a Limit of the Binomial
+## Binomial 분포의 극한으로서의 Poisson 분포
 
-The Poisson distribution arises as a limit of the binomial when $n$ is large, $p$ is small, and $\lambda = np$ remains constant:
+Poisson 분포는 $n$이 크고 $p$가 작으며 $\lambda = np$가 일정하게 유지될 때 Binomial 분포의 극한으로 나타난다:
 
 $$
 \lim_{n \to \infty} \binom{n}{k} p^k (1-p)^{n-k} = \frac{e^{-\lambda}\lambda^k}{k!} \qquad \text{where } p = \frac{\lambda}{n}
 $$
 
-### Proof Sketch
+### 증명 개요
 
-With $p = \lambda/n$:
+$p = \lambda/n$으로 두면:
 
 $$
 \binom{n}{k}\left(\frac{\lambda}{n}\right)^k\left(1 - \frac{\lambda}{n}\right)^{n-k}
 = \frac{n!}{k!(n-k)!} \cdot \frac{\lambda^k}{n^k} \cdot \left(1 - \frac{\lambda}{n}\right)^n \cdot \left(1 - \frac{\lambda}{n}\right)^{-k}
 $$
 
-As $n \to \infty$: $\frac{n!}{(n-k)! \, n^k} \to 1$, $\left(1 - \frac{\lambda}{n}\right)^n \to e^{-\lambda}$, and $\left(1 - \frac{\lambda}{n}\right)^{-k} \to 1$.
+$n \to \infty$일 때 $\frac{n!}{(n-k)! \, n^k} \to 1$, $\left(1 - \frac{\lambda}{n}\right)^n \to e^{-\lambda}$, $\left(1 - \frac{\lambda}{n}\right)^{-k} \to 1$이다.
 
-**Rule of thumb:** Use Poisson when $n \geq 20$ and $p \leq 0.05$ (or more conservatively, $n \geq 100$ and $np \leq 10$).
+**경험 법칙:** $n \geq 20$이고 $p \leq 0.05$일 때(더 보수적으로는 $n \geq 100$이고 $np \leq 10$일 때) Poisson 근사를 사용한다.
 
 ---
 
-## Additive Property
+## 가법성
 
-If $X_1 \sim \text{Poisson}(\lambda_1)$ and $X_2 \sim \text{Poisson}(\lambda_2)$ are independent, then:
+$X_1 \sim \text{Poisson}(\lambda_1)$과 $X_2 \sim \text{Poisson}(\lambda_2)$가 독립이면:
 
 $$
 X_1 + X_2 \sim \text{Poisson}(\lambda_1 + \lambda_2)
 $$
 
-This extends to any finite sum of independent Poisson random variables.
+이는 독립인 Poisson 확률변수의 임의의 유한 합으로 확장된다.
 
 ---
 
-## Poisson Process Connection
+## Poisson 과정과의 연결
 
-The Poisson distribution is intimately connected to the **Poisson process**. If events arrive at a constant rate $\lambda$ per unit time, and arrivals are independent, then the number of events in an interval of length $t$ follows $\text{Poisson}(\lambda t)$, and the time between consecutive events follows $\text{Exponential}(\lambda)$.
+Poisson 분포는 **Poisson 과정**과 밀접하게 연결되어 있다. 사건이 단위시간당 일정한 비율 $\lambda$로 도착하고 도착들이 서로 독립이면, 길이 $t$인 구간에서의 사건 수는 $\text{Poisson}(\lambda t)$를 따르고, 연속한 사건 사이의 시간은 $\text{Exponential}(\lambda)$를 따른다.
 
 ---
 
-## Worked Example
+## 예제
 
-**Problem:** A stock exchange processes an average of 3 large block trades per hour. What is the probability of observing exactly 5 block trades in a given hour? What is the probability of observing at most 2?
+**문제:** 어떤 증권거래소는 시간당 평균 3건의 대량 블록 거래를 처리한다. 특정 한 시간 동안 정확히 5건의 블록 거래가 관측될 확률은? 2건 이하가 관측될 확률은?
 
-**Solution:**
+**풀이:**
 
 $$
 P(X = 5) = \frac{e^{-3} \cdot 3^5}{5!} = \frac{0.0498 \cdot 243}{120} = 0.1008
@@ -117,9 +117,9 @@ $$
 
 ---
 
-## Python: PMF, CDF, and Sampling
+## Python: PMF, CDF, 표본추출
 
-### PMF and CDF
+### PMF와 CDF
 
 ```python
 import matplotlib.pyplot as plt
@@ -139,7 +139,7 @@ ax.legend()
 plt.show()
 ```
 
-### Comparing Different Rates
+### 비율에 따른 비교
 
 ```python
 import matplotlib.pyplot as plt
@@ -156,7 +156,7 @@ ax.legend()
 plt.show()
 ```
 
-### Poisson as Binomial Limit
+### Binomial 극한으로서의 Poisson 분포
 
 ```python
 import matplotlib.pyplot as plt
@@ -175,7 +175,7 @@ ax.legend()
 plt.show()
 ```
 
-### Sampling and Mean-Variance Check
+### 표본추출과 평균–분산 점검
 
 ```python
 import numpy as np
@@ -192,107 +192,107 @@ print(f"Mean ≈ Var: {np.isclose(samples.mean(), samples.var(), atol=0.1)}")
 
 ---
 
-## Key Takeaways
+## 핵심 요약
 
-- The Poisson distribution models rare event counts with rate parameter $\lambda$ that equals both the mean and variance.
-- It arises as the limit of the binomial distribution when $n$ is large and $p$ is small.
-- The additive property makes it natural for aggregating independent event counts.
-- The connection to the Poisson process links discrete event counts to continuous inter-arrival times (exponential distribution).
-- The mean-equals-variance property is a useful diagnostic: if sample variance greatly exceeds the mean, the data may be **overdispersed** relative to the Poisson model.
+- Poisson 분포는 희귀 사건의 발생 횟수를 모형화하며, 비율 모수 $\lambda$가 평균이자 분산이다.
+- $n$이 크고 $p$가 작을 때 Binomial 분포의 극한으로 나타난다.
+- 가법성 덕분에 독립인 사건 계수들을 합칠 때 자연스럽게 쓰인다.
+- Poisson 과정과의 연결은 이산적인 사건 계수와 연속적인 도착 간 시간(Exponential 분포)을 이어 준다.
+- 평균과 분산이 같다는 성질은 유용한 진단 도구이다. 표본분산이 평균을 크게 넘어서면 그 자료는 Poisson 모형에 비해 **과대산포**되어 있을 수 있다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Call center receives 4 calls/min. (a) Distribution of $N$? (b) $P(N = 0)$, $P(N \ge 6)$. (c) $P(>10 \text{ calls in 2 min})$. (d) Normal approximation to $P(N \ge 8)$.
+**연습문제 1.**
+콜센터에 분당 4건의 전화가 걸려 온다. (a) $N$의 분포는? (b) $P(N = 0)$, $P(N \ge 6)$. (c) $P(2\text{분 동안 10건 초과})$. (d) $P(N \ge 8)$의 정규근사.
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
     (a) $N \sim \mathrm{Poisson}(4)$.
 
-    (b) $P(N = 0) = e^{-4} \approx 0.018$. Computing partial sum $P(N \le 5) \approx 0.785$, so $P(N \ge 6) \approx 0.215$.
+    (b) $P(N = 0) = e^{-4} \approx 0.018$. 부분합 $P(N \le 5) \approx 0.785$를 계산하면 $P(N \ge 6) \approx 0.215$.
 
-    (c) In 2 min, $N_2 \sim \mathrm{Poisson}(8)$ (additivity). $P(N_2 > 10) = 1 - P(N_2 \le 10) \approx 0.184$.
+    (c) 2분 동안에는 가법성에 의해 $N_2 \sim \mathrm{Poisson}(8)$. $P(N_2 > 10) = 1 - P(N_2 \le 10) \approx 0.184$.
 
-    (d) Normal approximation: $\mu = 4$, $\sigma = 2$. With continuity correction: $P(N \ge 8) \approx P(Z \ge (7.5 - 4)/2) = P(Z \ge 1.75) = 0.040$. Exact: $0.051$. The approximation is rough at $\lambda = 4$ (still right-skewed); accuracy improves substantially for $\lambda \ge 30$.
+    (d) 정규근사: $\mu = 4$, $\sigma = 2$. 연속성 수정을 적용하면 $P(N \ge 8) \approx P(Z \ge (7.5 - 4)/2) = P(Z \ge 1.75) = 0.040$. 정확한 값은 $0.051$이다. $\lambda = 4$에서는 분포가 아직 오른쪽으로 치우쳐 있어 근사가 거칠다. $\lambda \ge 30$이면 정확도가 크게 좋아진다.
 
 ---
 
-**Exercise 2.**
-Poisson approximation: 500 pages, each independently has misprint with $p = 0.004$. (a) Exact distribution? (b) Poisson approximation parameter? (c) $P(X = 0)$, $P(X = 1)$, $P(X \ge 4)$ via Poisson.
+**연습문제 2.**
+Poisson 근사: 500쪽의 책에서 각 쪽이 독립적으로 확률 $p = 0.004$로 오탈자를 포함한다. (a) 정확한 분포는? (b) Poisson 근사의 모수는? (c) Poisson 근사로 $P(X = 0)$, $P(X = 1)$, $P(X \ge 4)$를 구하라.
 
-??? success "Solution to Exercise 2"
+??? success "연습문제 2 풀이"
     (a) $X \sim \mathrm{Binomial}(500, 0.004)$.
 
-    (b) $\lambda = np = 2$. Poisson approximation valid since $n$ large, $p$ small.
+    (b) $\lambda = np = 2$. $n$이 크고 $p$가 작으므로 Poisson 근사가 타당하다.
 
     (c) $P(X = 0) \approx e^{-2} = 0.135$. $P(X = 1) \approx 2 e^{-2} = 0.271$. $P(X \ge 4) = 1 - e^{-2}(1 + 2 + 2 + 4/3) \approx 0.143$.
 
-    Exact binomial gives $P(X = 2) \approx 0.272$ vs Poisson $0.271$ — agreement to 3 decimal places, demonstrating Poisson approximation works very well in this regime.
+    정확한 Binomial 계산은 $P(X = 2) \approx 0.272$를 주는데 Poisson 근사는 $0.271$이다. 소수점 셋째 자리까지 일치하며, 이 영역에서 Poisson 근사가 매우 잘 작동함을 보여 준다.
 
 ---
 
-**Exercise 3.**
-**Memoryless property of inter-arrival times.** If events occur according to a Poisson process with rate $\lambda$, prove inter-arrival times are exponential with rate $\lambda$.
+**연습문제 3.**
+**도착 간 시간의 무기억성.** 사건이 비율 $\lambda$인 Poisson 과정에 따라 발생하면 도착 간 시간이 비율 $\lambda$인 Exponential 분포를 따름을 증명하라.
 
-??? success "Solution to Exercise 3"
-    Let $T_1$ be the time of the first event. The event $\{T_1 > t\}$ is equivalent to "no events in $[0, t]$" — which has probability $P(N(t) = 0) = e^{-\lambda t}$.
+??? success "연습문제 3 풀이"
+    첫 사건이 일어나는 시각을 $T_1$이라 하자. 사건 $\{T_1 > t\}$는 "$[0, t]$에서 사건이 없다"와 동치이며, 그 확률은 $P(N(t) = 0) = e^{-\lambda t}$이다.
 
-    So $P(T_1 > t) = e^{-\lambda t}$, the survival function of $\mathrm{Exp}(\lambda)$. Hence $T_1 \sim \mathrm{Exp}(\lambda)$.
+    따라서 $P(T_1 > t) = e^{-\lambda t}$이고, 이는 $\mathrm{Exp}(\lambda)$의 생존함수이다. 그러므로 $T_1 \sim \mathrm{Exp}(\lambda)$이다.
 
-    By the Poisson process's stationary increments property, the time between event $k$ and event $k+1$ has the same distribution, independent of past. All inter-arrival times are i.i.d. $\mathrm{Exp}(\lambda)$. $\square$
+    Poisson 과정의 정상증분 성질에 의해 $k$번째 사건과 $k+1$번째 사건 사이의 시간도 과거와 독립적으로 같은 분포를 따른다. 모든 도착 간 시간은 i.i.d. $\mathrm{Exp}(\lambda)$이다. $\square$
 
-    This connection makes Poisson processes the canonical model for "completely random" event occurrence — events that arrive at a constant rate without memory of history.
-
----
-
-**Exercise 4.**
-**Sum and superposition.** Independent Poisson processes with rates $\lambda_1, \lambda_2$ are superposed. Show the combined process is Poisson with rate $\lambda_1 + \lambda_2$.
-
-??? success "Solution to Exercise 4"
-    Let $N_1(t), N_2(t)$ be independent Poisson processes. The combined count is $N(t) = N_1(t) + N_2(t)$.
-
-    Marginal: $N(t) = N_1(t) + N_2(t) \sim \mathrm{Poisson}(\lambda_1 t) + \mathrm{Poisson}(\lambda_2 t) \sim \mathrm{Poisson}((\lambda_1 + \lambda_2) t)$ by the Poisson sum property.
-
-    The combined inter-arrival times are exponential with rate $\lambda_1 + \lambda_2$ (the minimum of two independent exponentials is exponential at the sum of rates), and they remain independent across arrivals.
-
-    Together, these properties confirm $N$ is a Poisson process with rate $\lambda_1 + \lambda_2$. $\square$
-
-    **Application:** if customer arrivals at a store split into two types (online vs. in-person) and each is Poisson, total arrivals form a Poisson process with combined rate. This justifies aggregating Poisson sources into a single model.
+    이 연결 덕분에 Poisson 과정은 "완전히 무작위한" 사건 발생, 즉 과거의 기억 없이 일정한 비율로 도착하는 사건에 대한 표준 모형이 된다.
 
 ---
 
-**Exercise 5.**
-**Variance equals mean** for Poisson. Compute $\mathbb{E}[X], \mathbb{E}[X^2]$ for $X \sim \mathrm{Poisson}(\lambda)$ directly from the PMF.
+**연습문제 4.**
+**합과 중첩.** 비율이 $\lambda_1, \lambda_2$인 독립 Poisson 과정을 중첩한다. 합쳐진 과정이 비율 $\lambda_1 + \lambda_2$인 Poisson 과정임을 보여라.
 
-??? success "Solution to Exercise 5"
-    **Mean:**
+??? success "연습문제 4 풀이"
+    $N_1(t), N_2(t)$를 독립인 Poisson 과정이라 하자. 합쳐진 계수는 $N(t) = N_1(t) + N_2(t)$이다.
+
+    주변분포: Poisson 합 성질에 의해 $N(t) = N_1(t) + N_2(t) \sim \mathrm{Poisson}(\lambda_1 t) + \mathrm{Poisson}(\lambda_2 t) \sim \mathrm{Poisson}((\lambda_1 + \lambda_2) t)$이다.
+
+    합쳐진 도착 간 시간은 비율 $\lambda_1 + \lambda_2$인 Exponential 분포를 따르며(독립인 두 Exponential 확률변수의 최솟값은 비율의 합을 갖는 Exponential 분포이다), 도착들 사이에서 독립성이 유지된다.
+
+    이 성질들을 종합하면 $N$은 비율 $\lambda_1 + \lambda_2$인 Poisson 과정이다. $\square$
+
+    **응용:** 어떤 상점의 고객 도착이 두 유형(온라인과 방문)으로 나뉘고 각각이 Poisson이면, 전체 도착은 두 비율을 합한 Poisson 과정을 이룬다. 이는 여러 Poisson 원천을 하나의 모형으로 합치는 것을 정당화한다.
+
+---
+
+**연습문제 5.**
+Poisson 분포에서 **분산이 평균과 같음**을 보여라. $X \sim \mathrm{Poisson}(\lambda)$에 대해 PMF로부터 직접 $\mathbb{E}[X], \mathbb{E}[X^2]$를 계산하라.
+
+??? success "연습문제 5 풀이"
+    **평균:**
 
     $$
     \mathbb{E}[X] = \sum_{k=0}^\infty k \frac{e^{-\lambda} \lambda^k}{k!} = e^{-\lambda} \lambda \sum_{k=1}^\infty \frac{\lambda^{k-1}}{(k-1)!} = \lambda
     $$
 
-    using $\sum_{j=0}^\infty \lambda^j/j! = e^\lambda$.
+    여기서 $\sum_{j=0}^\infty \lambda^j/j! = e^\lambda$를 사용했다.
 
-    **Second factorial moment** $\mathbb{E}[X(X-1)] = \sum k(k-1) P(X=k) = e^{-\lambda} \lambda^2 \sum_{k=2}^\infty \lambda^{k-2}/(k-2)! = \lambda^2$.
+    **2차 계승적률** $\mathbb{E}[X(X-1)] = \sum k(k-1) P(X=k) = e^{-\lambda} \lambda^2 \sum_{k=2}^\infty \lambda^{k-2}/(k-2)! = \lambda^2$.
 
-    So $\mathbb{E}[X^2] = \mathbb{E}[X(X-1)] + \mathbb{E}[X] = \lambda^2 + \lambda$.
+    따라서 $\mathbb{E}[X^2] = \mathbb{E}[X(X-1)] + \mathbb{E}[X] = \lambda^2 + \lambda$이다.
 
-    **Variance:** $\mathrm{Var}(X) = \mathbb{E}[X^2] - (\mathbb{E}[X])^2 = \lambda^2 + \lambda - \lambda^2 = \lambda$. $\square$
+    **분산:** $\mathrm{Var}(X) = \mathbb{E}[X^2] - (\mathbb{E}[X])^2 = \lambda^2 + \lambda - \lambda^2 = \lambda$. $\square$
 
-    **Distinguishing characteristic:** mean = variance is a Poisson signature. When real count data shows variance > mean (**overdispersion**), the Poisson model is inadequate and a negative binomial model is typically used instead.
+    **구별되는 특징:** 평균 = 분산은 Poisson 분포의 표식이다. 실제 계수 자료에서 분산이 평균보다 크게 나타나면(**과대산포**) Poisson 모형은 부적절하며, 보통 Negative Binomial 모형을 대신 사용한다.
 
 ---
 
-**Exercise 6.**
-**Test for Poisson assumption.** Given a sample of counts $X_1, \ldots, X_n$, propose a simple **dispersion test** for the Poisson assumption based on the ratio of sample variance to sample mean.
+**연습문제 6.**
+**Poisson 가정에 대한 검정.** 계수 표본 $X_1, \ldots, X_n$이 주어졌을 때, 표본분산과 표본평균의 비를 이용한 간단한 **산포 검정**을 제안하라.
 
-??? success "Solution to Exercise 6"
-    Under $H_0$: $X_i$ are i.i.d. $\mathrm{Poisson}(\lambda)$, $\mathrm{Var}(X) = \lambda = \mathbb{E}[X]$, so the **dispersion ratio** $D = s^2/\bar X$ should be near 1.
+??? success "연습문제 6 풀이"
+    $H_0$ 아래에서 $X_i$는 i.i.d. $\mathrm{Poisson}(\lambda)$이고 $\mathrm{Var}(X) = \lambda = \mathbb{E}[X]$이므로, **산포비** $D = s^2/\bar X$는 1에 가까워야 한다.
 
-    Test statistic: $(n - 1) D = (n - 1) s^2 / \bar X$. Under $H_0$, this is approximately $\chi^2_{n-1}$ (the **Poisson dispersion test**, derived under the assumption that the sample mean is approximately the rate).
+    검정통계량: $(n - 1) D = (n - 1) s^2 / \bar X$. $H_0$ 아래에서 이는 근사적으로 $\chi^2_{n-1}$을 따른다(**Poisson 산포 검정**이며, 표본평균이 비율에 근사한다는 가정 아래 유도된다).
 
-    **Decision rule:** reject Poisson if $(n - 1)D$ falls outside the $\alpha/2$ and $1 - \alpha/2$ quantiles of $\chi^2_{n-1}$. Specifically:
+    **판정 규칙:** $(n - 1)D$가 $\chi^2_{n-1}$의 $\alpha/2$ 분위수와 $1 - \alpha/2$ 분위수 밖에 있으면 Poisson 가정을 기각한다. 구체적으로:
 
-    - $D \gg 1$ (overdispersion): variance exceeds mean. Suggests negative binomial or quasi-Poisson alternative.
-    - $D \ll 1$ (underdispersion): variance below mean. Suggests Conway-Maxwell-Poisson or truncated distributions.
+    - $D \gg 1$ (과대산포): 분산이 평균을 넘어선다. Negative Binomial이나 준-Poisson 모형을 대안으로 고려한다.
+    - $D \ll 1$ (과소산포): 분산이 평균보다 작다. Conway-Maxwell-Poisson이나 절단분포를 고려한다.
 
-    Modern count-data analysis often skips Poisson entirely in favor of more flexible models (negative binomial, zero-inflated Poisson, hurdle models). The Poisson is more useful as a *building block* (in Poisson processes) than as a flexible fitting tool.
+    현대의 계수 자료 분석에서는 Poisson 모형을 아예 건너뛰고 더 유연한 모형(Negative Binomial, 영과잉 Poisson, 허들 모형)을 쓰는 경우가 많다. Poisson 분포는 유연한 적합 도구라기보다 (Poisson 과정에서의) *기본 구성요소*로서 더 유용하다.

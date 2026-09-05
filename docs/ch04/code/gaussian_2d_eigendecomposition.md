@@ -1,35 +1,35 @@
-# Gaussian 2D Eigendecomposition
+# 2차원 Gaussian 고유분해
 
-## Overview
+## 개요
 
-The covariance matrix $\boldsymbol{\Sigma}$ of a bivariate Gaussian can be decomposed as:
+이변량 Gaussian의 공분산행렬 $\boldsymbol{\Sigma}$는 다음과 같이 분해할 수 있다:
 
 $$
 \boldsymbol{\Sigma} = \mathbf{U}\mathbf{D}\mathbf{U}^\top
 $$
 
-where $\mathbf{U}$ is the matrix of eigenvectors (principal directions) and $\mathbf{D} = \text{diag}(\lambda_1, \lambda_2)$ is the diagonal matrix of eigenvalues. The eigenvectors point along the axes of the probability ellipses, and $\sqrt{\lambda_i}$ gives the standard deviation in each principal direction.
+여기서 $\mathbf{U}$는 고유벡터(주방향)로 이루어진 행렬이고 $\mathbf{D} = \text{diag}(\lambda_1, \lambda_2)$는 고윳값의 대각행렬이다. 고유벡터는 확률타원의 축 방향을 가리키며, $\sqrt{\lambda_i}$는 각 주방향의 표준편차를 준다.
 
 ---
 
-## Geometric Interpretation
+## 기하적 해석
 
-The constant-density contours of the bivariate normal satisfy:
+이변량 정규분포의 등밀도 등고선은 다음을 만족한다:
 
 $$
 (\mathbf{x} - \boldsymbol{\mu})^\top \boldsymbol{\Sigma}^{-1} (\mathbf{x} - \boldsymbol{\mu}) = c
 $$
 
-These are ellipses whose:
+이 타원들은:
 
-- **axes directions** align with the eigenvectors of $\boldsymbol{\Sigma}$
-- **axis half-lengths** are proportional to $\sqrt{\lambda_i}$
+- **축 방향**이 $\boldsymbol{\Sigma}$의 고유벡터와 일치하고
+- **축의 반길이**가 $\sqrt{\lambda_i}$에 비례한다
 
-This is a direct consequence of the eigendecomposition: in the rotated coordinate system defined by $\mathbf{U}$, the covariance matrix becomes diagonal, and the ellipses become axis-aligned.
+이는 고유분해의 직접적인 결과이다. $\mathbf{U}$가 정의하는 회전된 좌표계에서 공분산행렬은 대각행렬이 되고 타원은 좌표축에 정렬된다.
 
 ---
 
-## Code
+## 코드
 
 ```python
 import numpy as np
@@ -92,47 +92,47 @@ plt.show()
 
 ---
 
-## Interpretation
+## 해석
 
-For $\boldsymbol{\Sigma} = \begin{pmatrix}0.5 & 0.3 \\ 0.3 & 0.5\end{pmatrix}$:
+$\boldsymbol{\Sigma} = \begin{pmatrix}0.5 & 0.3 \\ 0.3 & 0.5\end{pmatrix}$에 대해:
 
-- Eigenvalues: $\lambda_1 = 0.8$, $\lambda_2 = 0.2$
-- The major eigenvector points along $(1, 1)/\sqrt{2}$ (the positive correlation direction)
-- The ratio $\sqrt{\lambda_1/\lambda_2} = 2$ gives the eccentricity of the ellipse
+- 고윳값: $\lambda_1 = 0.8$, $\lambda_2 = 0.2$
+- 주된 고유벡터는 $(1, 1)/\sqrt{2}$ 방향(양의 상관 방향)을 가리킨다
+- 비 $\sqrt{\lambda_1/\lambda_2} = 2$가 타원의 이심 정도를 준다
 
-When $\boldsymbol{\Sigma}$ is diagonal (no correlation), the eigenvectors align with the coordinate axes, and the contours are axis-aligned ellipses (or circles if the variances are equal).
-
----
-
-## Exercises
-
-**Exercise 1.**
-Compute the eigenvalues and eigenvectors of $\boldsymbol{\Sigma} = \begin{pmatrix}1 & 0 \\ 0 & 0.3\end{pmatrix}$ and describe the contour shapes.
-
-??? success "Solution to Exercise 1"
-    Since $\boldsymbol{\Sigma}$ is diagonal, the eigenvalues are $\lambda_1 = 1$ and $\lambda_2 = 0.3$, with eigenvectors $\mathbf{e}_1 = (1, 0)^\top$ and $\mathbf{e}_2 = (0, 1)^\top$. The contours are axis-aligned ellipses, elongated along the $x_1$ axis (since $\lambda_1 > \lambda_2$). The ratio of axis lengths is $\sqrt{1/0.3} \approx 1.83$.
+$\boldsymbol{\Sigma}$가 대각행렬이면(상관이 없으면) 고유벡터가 좌표축과 일치하고 등고선은 좌표축에 정렬된 타원(분산이 같으면 원)이 된다.
 
 ---
 
-**Exercise 2.**
-Prove that the eigenvalues of a covariance matrix are always nonneg.
+## 연습문제
 
-??? success "Solution to Exercise 2"
-    A covariance matrix $\boldsymbol{\Sigma}$ is positive semidefinite: $\mathbf{v}^\top\boldsymbol{\Sigma}\mathbf{v} \ge 0$ for all $\mathbf{v}$. If $\lambda$ is an eigenvalue with eigenvector $\mathbf{u}$ ($\|\mathbf{u}\| = 1$), then:
+**연습문제 1.**
+$\boldsymbol{\Sigma} = \begin{pmatrix}1 & 0 \\ 0 & 0.3\end{pmatrix}$의 고윳값과 고유벡터를 계산하고 등고선 모양을 서술하라.
+
+??? success "연습문제 1 풀이"
+    $\boldsymbol{\Sigma}$가 대각행렬이므로 고윳값은 $\lambda_1 = 1$, $\lambda_2 = 0.3$이고 고유벡터는 $\mathbf{e}_1 = (1, 0)^\top$, $\mathbf{e}_2 = (0, 1)^\top$이다. 등고선은 좌표축에 정렬된 타원이며 ($\lambda_1 > \lambda_2$이므로) $x_1$ 축 방향으로 길쭉하다. 축 길이의 비는 $\sqrt{1/0.3} \approx 1.83$이다.
+
+---
+
+**연습문제 2.**
+공분산행렬의 고윳값이 항상 음이 아님을 증명하라.
+
+??? success "연습문제 2 풀이"
+    공분산행렬 $\boldsymbol{\Sigma}$는 양의 준정부호이다. 즉 모든 $\mathbf{v}$에 대해 $\mathbf{v}^\top\boldsymbol{\Sigma}\mathbf{v} \ge 0$이다. $\lambda$가 고유벡터 $\mathbf{u}$($\|\mathbf{u}\| = 1$)에 대응하는 고윳값이면:
 
     $$
     0 \le \mathbf{u}^\top\boldsymbol{\Sigma}\mathbf{u} = \mathbf{u}^\top(\lambda\mathbf{u}) = \lambda
     $$
 
-    So $\lambda \ge 0$. $\square$
+    따라서 $\lambda \ge 0$이다. $\square$
 
 ---
 
-**Exercise 3.**
-Show that $\text{tr}(\boldsymbol{\Sigma}) = \lambda_1 + \lambda_2$ and $|\boldsymbol{\Sigma}| = \lambda_1\lambda_2$. Verify both for $\boldsymbol{\Sigma} = \begin{pmatrix}0.5 & 0.3 \\ 0.3 & 0.5\end{pmatrix}$.
+**연습문제 3.**
+$\text{tr}(\boldsymbol{\Sigma}) = \lambda_1 + \lambda_2$이고 $|\boldsymbol{\Sigma}| = \lambda_1\lambda_2$임을 보여라. $\boldsymbol{\Sigma} = \begin{pmatrix}0.5 & 0.3 \\ 0.3 & 0.5\end{pmatrix}$에 대해 둘 다 확인하라.
 
-??? success "Solution to Exercise 3"
-    Since $\boldsymbol{\Sigma} = \mathbf{U}\mathbf{D}\mathbf{U}^\top$:
+??? success "연습문제 3 풀이"
+    $\boldsymbol{\Sigma} = \mathbf{U}\mathbf{D}\mathbf{U}^\top$이므로:
 
     $$
     \text{tr}(\boldsymbol{\Sigma}) = \text{tr}(\mathbf{U}\mathbf{D}\mathbf{U}^\top) = \text{tr}(\mathbf{D}) = \lambda_1 + \lambda_2
@@ -142,18 +142,18 @@ Show that $\text{tr}(\boldsymbol{\Sigma}) = \lambda_1 + \lambda_2$ and $|\boldsy
     |\boldsymbol{\Sigma}| = |\mathbf{U}||\mathbf{D}||\mathbf{U}^\top| = \lambda_1\lambda_2
     $$
 
-    For the given matrix: $\text{tr} = 0.5 + 0.5 = 1.0$ and $\lambda_1 + \lambda_2 = 0.8 + 0.2 = 1.0$. Also $|\boldsymbol{\Sigma}| = 0.25 - 0.09 = 0.16$ and $\lambda_1\lambda_2 = 0.8 \times 0.2 = 0.16$. Both identities hold.
+    주어진 행렬에 대해 $\text{tr} = 0.5 + 0.5 = 1.0$이고 $\lambda_1 + \lambda_2 = 0.8 + 0.2 = 1.0$이다. 또한 $|\boldsymbol{\Sigma}| = 0.25 - 0.09 = 0.16$이고 $\lambda_1\lambda_2 = 0.8 \times 0.2 = 0.16$이다. 두 항등식 모두 성립한다.
 
 ---
 
-**Exercise 4.**
-The **Mahalanobis distance** from a point $\mathbf{x}$ to the mean $\boldsymbol{\mu}$ is $d_M = \sqrt{(\mathbf{x}-\boldsymbol{\mu})^\top\boldsymbol{\Sigma}^{-1}(\mathbf{x}-\boldsymbol{\mu})}$. Show that in the principal component coordinate system (eigenvector basis), this reduces to the Euclidean distance with each axis scaled by $1/\sqrt{\lambda_i}$.
+**연습문제 4.**
+점 $\mathbf{x}$에서 평균 $\boldsymbol{\mu}$까지의 **Mahalanobis 거리**는 $d_M = \sqrt{(\mathbf{x}-\boldsymbol{\mu})^\top\boldsymbol{\Sigma}^{-1}(\mathbf{x}-\boldsymbol{\mu})}$이다. 주성분 좌표계(고유벡터 기저)에서 이것이 각 축을 $1/\sqrt{\lambda_i}$로 척도조정한 유클리드 거리로 환원됨을 보여라.
 
-??? success "Solution to Exercise 4"
-    In the rotated coordinates $\mathbf{z} = \mathbf{U}^\top(\mathbf{x} - \boldsymbol{\mu})$:
+??? success "연습문제 4 풀이"
+    회전된 좌표 $\mathbf{z} = \mathbf{U}^\top(\mathbf{x} - \boldsymbol{\mu})$에서:
 
     $$
     d_M^2 = \mathbf{z}^\top \mathbf{D}^{-1} \mathbf{z} = \frac{z_1^2}{\lambda_1} + \frac{z_2^2}{\lambda_2}
     $$
 
-    This is the squared Euclidean distance with each component divided by $\sqrt{\lambda_i}$. The Mahalanobis distance "standardizes" each principal direction by its standard deviation, making it scale- and correlation-invariant. $\square$
+    이는 각 성분을 $\sqrt{\lambda_i}$로 나눈 유클리드 거리의 제곱이다. Mahalanobis 거리는 각 주방향을 그 표준편차로 "표준화"하므로 척도와 상관에 불변이 된다. $\square$
