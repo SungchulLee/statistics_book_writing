@@ -1,18 +1,18 @@
-# Violin Plots
+# 바이올린 그림
 
-## Overview
+## 개요
 
-A **violin plot** combines a box plot with a kernel density estimate (KDE) on each side, showing the full distribution shape alongside summary statistics. Where a box plot reduces the distribution to five numbers plus outliers, a violin plot reveals multimodality, skewness, and density variations that box plots hide.
+**바이올린 그림**은 상자그림과 양쪽에 그린 커널밀도추정(KDE)을 결합하여 요약통계량과 함께 분포의 전체 모양을 보여준다. 상자그림이 분포를 다섯 개의 수와 이상치로 줄이는 반면, 바이올린 그림은 상자그림이 감추는 다봉성, 왜도, 밀도의 변화를 드러낸다.
 
-## Violin Plot vs. Box Plot
+## 바이올린 그림 대 상자그림
 
-The key advantage of violin plots over box plots is the ability to show the **probability density** of the data at different values. This makes them particularly useful for:
+상자그림에 대한 바이올린 그림의 핵심 장점은 값에 따른 자료의 **확률밀도**를 보여줄 수 있다는 점이다. 덕분에 다음과 같은 경우에 특히 유용하다.
 
-- Detecting bimodal or multimodal distributions that a box plot would miss.
-- Comparing distribution shapes across groups when the differences are subtle.
-- Communicating the full distributional story to an audience.
+- 상자그림이 놓칠 이봉 또는 다봉 분포를 탐지할 때.
+- 차이가 미묘한 집단 간 분포 모양을 비교할 때.
+- 분포에 관한 이야기를 청중에게 온전히 전달할 때.
 
-## Basic Violin Plot
+## 기본 바이올린 그림
 
 ```python
 import matplotlib.pyplot as plt
@@ -41,9 +41,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-## Violin Plot with Seaborn
+## Seaborn으로 그리는 바이올린 그림
 
-Seaborn provides a more polished violin plot with built-in grouping:
+Seaborn은 집단화 기능이 내장된 더 다듬어진 바이올린 그림을 제공한다.
 
 ```python
 import seaborn as sns
@@ -60,123 +60,123 @@ ax.set_title("Age Distribution by Class and Sex (Titanic)")
 plt.show()
 ```
 
-The `split=True` option places the two hue categories on opposite sides of each violin, enabling direct visual comparison within each class.
+`split=True` 옵션은 두 색상 범주를 각 바이올린의 반대편에 배치하여 등급마다 직접적인 시각적 비교를 가능하게 한다.
 
-## When to Use Violin Plots
+## 바이올린 그림을 쓸 때
 
-Violin plots are most valuable when comparing the shapes of distributions across groups, especially when the distributions may be non-normal or multimodal. For simple comparisons where only the median and IQR matter, box plots remain more concise and easier to read.
+바이올린 그림은 집단 간 분포의 모양을 비교할 때, 특히 분포가 비정규이거나 다봉일 수 있을 때 가장 가치가 크다. 중앙값과 IQR만이 중요한 단순한 비교라면 상자그림이 더 간결하고 읽기 쉽다.
 
-## Summary
+## 요약
 
-Violin plots extend box plots by adding density information, making them ideal for revealing distributional details such as multimodality and asymmetry. They are particularly effective in group comparisons where distribution shape—not just summary statistics—drives the analysis.
+바이올린 그림은 상자그림에 밀도 정보를 더해 확장한 것으로, 다봉성이나 비대칭 같은 분포의 세부를 드러내는 데 이상적이다. 요약통계량만이 아니라 분포의 모양이 분석을 좌우하는 집단 비교에서 특히 효과적이다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Two plant-growth experiments give: **Treatment 1**: $\{5, 6, 6, 7, 7, 7, 8, 8, 9\}$; **Treatment 2**: $\{3, 5, 7, 7, 7, 7, 7, 9, 11\}$. (a) Five-number summaries. (b) Would boxplots look similar? (c) How do violin plots differ?
+**연습문제 1.**
+두 식물 생장 실험의 결과가 다음과 같다. **처리 1**: $\{5, 6, 6, 7, 7, 7, 8, 8, 9\}$, **처리 2**: $\{3, 5, 7, 7, 7, 7, 7, 9, 11\}$. (a) 다섯 수치 요약을 구하라. (b) 상자그림이 비슷해 보이겠는가? (c) 바이올린 그림은 어떻게 다른가?
 
-??? success "Solution to Exercise 1"
-    (a) Both datasets:
+??? success "연습문제 1 풀이"
+    (a) 두 자료 모두:
 
     | | T1 | T2 |
     |---|---|---|
-    | Min | 5 | 3 |
+    | 최솟값 | 5 | 3 |
     | $Q_1$ | 6 | 6 |
-    | Median | 7 | 7 |
+    | 중앙값 | 7 | 7 |
     | $Q_3$ | 8 | 8 |
-    | Max | 9 | 11 |
+    | 최댓값 | 9 | 11 |
 
-    (b) Boxes are identical; only the whisker lengths differ. The two boxplots look very similar.
+    (b) 상자가 동일하고 수염 길이만 다르다. 두 상자그림은 매우 비슷해 보인다.
 
-    (c) Violin plots reveal Treatment 2's sharp spike at 7 (five of nine values equal 7), while Treatment 1 has roughly uniform density across $[5, 9]$. The two distributions have nearly identical centers and spread but very different shapes. The boxplot is blind to this; the violin plot makes it immediately visible.
+    (c) 바이올린 그림은 처리 2가 7에서 날카롭게 솟아 있음을(아홉 값 중 다섯이 7) 드러내는 반면, 처리 1은 $[5, 9]$에 걸쳐 대체로 균일한 밀도를 갖는다. 두 분포는 중심과 퍼짐이 거의 같지만 모양이 매우 다르다. 상자그림은 이를 보지 못하지만 바이올린 그림은 즉시 눈에 띄게 만든다.
 
 ---
 
-**Exercise 2.**
-The violin plot's density is computed by **kernel density estimation**. Write the KDE formula and discuss how the bandwidth $h$ affects the violin plot's appearance.
+**연습문제 2.**
+바이올린 그림의 밀도는 **커널밀도추정**으로 계산된다. KDE 공식을 쓰고, 대역폭 $h$가 바이올린 그림의 모습에 어떤 영향을 주는지 논하라.
 
-??? success "Solution to Exercise 2"
-    KDE formula:
+??? success "연습문제 2 풀이"
+    KDE 공식:
 
     $$
     \hat f(x) = \frac{1}{n h}\sum_{i=1}^n K\!\left(\frac{x - x_i}{h}\right)
     $$
 
-    where $K$ is a kernel (typically Gaussian) and $h > 0$ is the bandwidth.
+    여기서 $K$는 (보통 가우시안인) 커널이고 $h > 0$은 대역폭이다.
 
-    **Bandwidth effect on the violin:**
+    **대역폭이 바이올린에 미치는 영향:**
 
-    - **Small $h$**: density estimate becomes spiky. Each data point creates a narrow bump. The violin shows individual observations rather than the underlying density. Can over-fit sampling noise.
-    - **Large $h$**: density oversmoothed. Modes blur together; bimodal distributions look unimodal. Distortion that hides exactly the features the violin is supposed to show.
-    - **Optimal $h$ (e.g., Silverman, Scott, plug-in selectors):** balances bias and variance.
+    - **$h$가 작을 때**: 밀도추정이 뾰족뾰족해진다. 각 자료점이 좁은 봉우리를 만든다. 바이올린이 밑바탕 밀도가 아니라 개별 관측값을 보여주게 된다. 표집 잡음에 과적합할 수 있다.
+    - **$h$가 클 때**: 밀도가 지나치게 매끄러워진다. 최빈값들이 뭉개져 이봉 분포가 단봉으로 보인다. 바이올린이 보여주어야 할 바로 그 특징을 감추는 왜곡이다.
+    - **최적의 $h$**(예: 실버만, 스콧, 플러그인 선택자): 편향과 분산의 균형을 잡는다.
 
-    Most plotting libraries (matplotlib, seaborn) apply Scott's rule by default. Tweak `bw_method` if violins look too jagged (decrease) or over-smoothed (increase).
-
----
-
-**Exercise 3.**
-**Half-violin (split-violin) plots** show two groups on opposite sides of a single vertical axis. When is this presentation preferred to side-by-side full violins?
-
-??? success "Solution to Exercise 3"
-    Split-violin plots are preferred when:
-
-    - **Direct paired comparison** is the primary message — e.g., comparing male and female age distributions within each passenger class.
-    - The two distributions are expected to differ subtly. Placing them on opposite sides of a shared axis makes small differences in shape, location, or spread visually obvious.
-    - **Space is limited**: a single split-violin takes half the horizontal space of two side-by-side full violins.
-
-    Avoid split-violins when:
-
-    - There are more than two groups.
-    - The two groups have very different sample sizes (the densities are normalized, hiding the imbalance).
-    - The shapes are very different — the "opposite halves" might be misleading because the eye reads them as symmetric.
+    대부분의 그림 라이브러리(matplotlib, seaborn)는 기본으로 스콧 규칙을 적용한다. 바이올린이 너무 들쭉날쭉하면 `bw_method`를 줄이고, 너무 매끄러우면 늘린다.
 
 ---
 
-**Exercise 4.**
-A violin plot of medical-trial outcome data is **truncated** at a hard physical lower bound (e.g., zero for non-negative quantities). What artifact does the KDE introduce, and how can it be corrected?
+**연습문제 3.**
+**반쪽 바이올린(분할 바이올린) 그림**은 하나의 수직축 양쪽에 두 집단을 보여준다. 이 표현이 나란히 놓은 전체 바이올린보다 선호되는 때는 언제인가?
 
-??? success "Solution to Exercise 4"
-    A standard KDE places kernel mass *symmetrically* around each observation. Near a hard boundary, this places probability mass *below the boundary* — for data bounded at zero, the KDE assigns nonzero density to negative values that are physically impossible.
+??? success "연습문제 3 풀이"
+    분할 바이올린 그림은 다음과 같을 때 선호된다.
 
-    **Visual artifact:** the violin appears to extend below zero, suggesting the data could be negative. The density just above zero is also under-estimated because the boundary blocks the kernel mass that would normally come from the symmetric extension.
+    - **직접적인 짝 비교**가 핵심 메시지일 때 — 예를 들어 각 승객 등급 안에서 남성과 여성의 나이 분포를 비교하는 경우.
+    - 두 분포가 미묘하게 다를 것으로 예상될 때. 공유하는 축의 양쪽에 놓으면 모양, 위치, 퍼짐의 작은 차이가 시각적으로 분명해진다.
+    - **공간이 제한될 때**: 분할 바이올린 하나는 나란히 놓은 전체 바이올린 둘의 절반 폭만 차지한다.
 
-    **Corrections:**
+    다음과 같을 때는 분할 바이올린을 피한다.
 
-    - **Reflection method**: reflect the data across the boundary, fit KDE on the doubled dataset, then truncate at the boundary and double the density above it.
-    - **Beta KDE** for $[0, 1]$ bounded data, or **gamma / log-normal KDE** for $[0, \infty)$ data — kernels with appropriate support.
-    - **Transformation**: take $\log(x + 1)$ for non-negative data, fit KDE on the transformed scale, plot on the original scale via change-of-variables.
-
-    Most plotting libraries let you clip the violin at a stated boundary, but the underlying density estimate may still be biased near the boundary. Always interpret near-boundary parts of a violin with caution.
-
----
-
-**Exercise 5.**
-Why is the *width* of a violin sometimes *normalized* across groups (each violin has the same maximum width) and sometimes *not normalized* (width reflects sample size)? When is each appropriate?
-
-??? success "Solution to Exercise 5"
-    **Normalized (each violin max width = 1):** emphasizes shape comparison. Each group's distribution shape is shown at full visual size regardless of how many observations the group contains. Suitable when sample sizes differ but you want to compare shapes directly.
-
-    **Not normalized (width $\propto n$):** preserves the relative importance of each group. A group with 1000 observations appears much wider than one with 10 observations, signaling that the small group's density estimate is less reliable.
-
-    **When each is appropriate:**
-
-    - Use **normalized** when sample sizes are comparable, or when the message is purely about shape (e.g., comparing income distributions across countries with different population sizes — the country with 30M people shouldn't visually dominate one with 3M).
-    - Use **un-normalized** when sample size differences are themselves part of the story (e.g., comparing the 1000-respondent treatment arm with the 50-respondent control arm — the difference in certainty matters).
-
-    Many libraries default to **scale="area"** (un-normalized) but offer **scale="width"** (normalized). Always be aware of which mode you're using and label appropriately.
+    - 집단이 둘보다 많을 때.
+    - 두 집단의 표본 크기가 크게 다를 때(밀도가 정규화되어 불균형이 감춰진다).
+    - 모양이 매우 다를 때 — 눈이 "반대쪽 반쪽"을 대칭으로 읽어 오도할 수 있다.
 
 ---
 
-**Exercise 6.**
-The violin plot's strength is showing distribution shape; its weakness is being unfamiliar to most audiences. What is a reasonable communication strategy when presenting violin plots to a general (non-statistician) audience?
+**연습문제 4.**
+어떤 의학 시험 결과 자료의 바이올린 그림이 물리적인 하한(예: 음이 아닌 양에 대한 0)에서 **잘려** 있다. KDE가 어떤 인공물을 만들어내며 어떻게 바로잡을 수 있는가?
 
-??? success "Solution to Exercise 6"
-    Several strategies that compound:
+??? success "연습문제 4 풀이"
+    표준 KDE는 각 관측값 주위에 커널 질량을 *대칭적으로* 배치한다. 딱딱한 경계 근처에서는 이 때문에 확률 질량이 *경계 아래*에 놓인다. 0에서 아래로 막힌 자료라면 KDE가 물리적으로 불가능한 음수 값에 0이 아닌 밀도를 부여한다.
 
-    - **Annotate the median** with a horizontal line and label "median". Most viewers immediately understand the median.
-    - **Annotate $Q_1$ and $Q_3$** with lines or shading at the same locations as a boxplot's box. This grounds the violin in the more-familiar boxplot semantics.
-    - **Overlay the actual data points** (using `inner='points'` or `'sticks'`) for small samples. Direct visibility of the data points reassures the audience that you haven't smoothed away anything.
-    - **Show the violin alongside a boxplot for the same data** the first time you use it. Explain: "the box plot tells you the median and IQR; the violin tells you where the density is concentrated."
-    - **Use only when shape information matters.** A box plot suffices when only the median and IQR are interesting; reserve violins for cases where the audience needs to see multimodality, skew, or shape differences.
+    **시각적 인공물:** 바이올린이 0 아래로 뻗은 것처럼 보여 자료가 음수일 수 있다는 인상을 준다. 또한 대칭적 확장에서 왔어야 할 커널 질량을 경계가 막기 때문에 0 바로 위의 밀도도 과소추정된다.
 
-    The goal: violins should *add* information without adding cognitive load. If your audience would benefit more from a labeled bar chart, use that instead.
+    **바로잡는 방법:**
+
+    - **반사법**: 자료를 경계에 대해 반사시켜 두 배가 된 자료에 KDE를 적합한 뒤, 경계에서 잘라내고 그 위의 밀도를 두 배로 한다.
+    - $[0, 1]$로 막힌 자료에는 **베타 KDE**, $[0, \infty)$ 자료에는 **감마 / 로그정규 KDE** 등 적절한 받침을 갖는 커널을 쓴다.
+    - **변환**: 음이 아닌 자료에 $\log(x + 1)$을 취해 변환된 척도에서 KDE를 적합한 뒤 변수변환을 통해 원래 척도로 그린다.
+
+    대부분의 그림 라이브러리가 지정한 경계에서 바이올린을 잘라내게 해주지만, 밑바탕의 밀도추정은 여전히 경계 근처에서 편향되어 있을 수 있다. 바이올린의 경계 근처 부분은 언제나 조심해서 해석하라.
+
+---
+
+**연습문제 5.**
+바이올린의 *폭*을 집단에 걸쳐 *정규화*하기도 하고(각 바이올린의 최대 폭이 같음) *정규화하지 않기도*(폭이 표본 크기를 반영) 하는 이유는 무엇인가? 각각은 언제 적절한가?
+
+??? success "연습문제 5 풀이"
+    **정규화(각 바이올린의 최대 폭 = 1):** 모양 비교를 강조한다. 집단에 관측값이 몇 개든 각 집단의 분포 모양이 온전한 시각적 크기로 표시된다. 표본 크기가 다르지만 모양을 직접 비교하고 싶을 때 적합하다.
+
+    **비정규화(폭 $\propto n$):** 각 집단의 상대적 중요도를 보존한다. 관측값이 1000개인 집단이 10개인 집단보다 훨씬 넓게 나타나, 작은 집단의 밀도추정이 덜 믿을 만하다는 신호를 준다.
+
+    **각각이 적절한 때:**
+
+    - 표본 크기가 비슷하거나 메시지가 순전히 모양에 관한 것일 때 **정규화**를 쓴다(예: 인구 규모가 다른 나라들의 소득 분포를 비교할 때, 인구 3000만인 나라가 300만인 나라를 시각적으로 압도해서는 안 된다).
+    - 표본 크기의 차이 자체가 이야기의 일부일 때 **비정규화**를 쓴다(예: 응답자 1000명의 처리군과 50명의 대조군을 비교할 때, 확신의 차이가 중요하다).
+
+    많은 라이브러리가 **scale="area"**(비정규화)를 기본으로 하되 **scale="width"**(정규화)도 제공한다. 어느 방식을 쓰고 있는지 늘 인지하고 그에 맞게 이름표를 달아라.
+
+---
+
+**연습문제 6.**
+바이올린 그림의 강점은 분포의 모양을 보여준다는 것이고, 약점은 대부분의 청중에게 낯설다는 것이다. 통계 전문가가 아닌 일반 청중에게 바이올린 그림을 제시할 때 합리적인 소통 전략은 무엇인가?
+
+??? success "연습문제 6 풀이"
+    서로 보완하는 몇 가지 전략이 있다.
+
+    - **중앙값을 표시하라**: 수평선을 긋고 "중앙값"이라고 이름을 단다. 대부분의 시청자는 중앙값을 즉시 이해한다.
+    - **$Q_1$과 $Q_3$을 표시하라**: 상자그림의 상자와 같은 위치에 선이나 음영을 넣는다. 더 익숙한 상자그림의 의미론에 바이올린을 붙들어 매는 효과가 있다.
+    - **실제 자료점을 겹쳐 그려라**: 표본이 작으면 `inner='points'`나 `'sticks'`를 쓴다. 자료점이 직접 보이면 아무것도 매끄럽게 지워버리지 않았다는 확신을 준다.
+    - **처음 쓸 때는 같은 자료의 상자그림과 나란히 보여줘라.** 이렇게 설명한다. "상자그림은 중앙값과 IQR을 알려주고, 바이올린은 밀도가 어디에 몰려 있는지 알려줍니다."
+    - **모양 정보가 중요할 때만 쓰라.** 중앙값과 IQR만 흥미롭다면 상자그림으로 충분하다. 청중이 다봉성, 왜도, 모양의 차이를 봐야 하는 경우를 위해 바이올린을 아껴 두라.
+
+    목표는 이것이다. 바이올린은 인지 부담을 늘리지 않으면서 정보를 *더해야* 한다. 청중에게 이름표가 달린 막대그래프가 더 도움이 된다면 그쪽을 쓰라.

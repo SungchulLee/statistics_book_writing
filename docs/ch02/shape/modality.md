@@ -1,20 +1,20 @@
-# Modality
+# 봉우리 수
 
-## Overview
+## 개요
 
-The **modality** of a distribution describes the number of distinct peaks (modes) in its shape. Identifying modality is a critical first step in exploratory data analysis because it reveals whether the data comes from a single population or is a mixture of distinct subgroups.
+분포의 **봉우리 수(modality)** 는 그 모양에 나타나는 뚜렷한 봉우리(최빈값)의 개수를 말한다. 봉우리 수를 파악하는 것은 탐색적 자료분석의 결정적인 첫 단계다. 자료가 하나의 모집단에서 왔는지, 아니면 서로 구별되는 하위집단의 혼합인지를 드러내기 때문이다.
 
-## Unimodal Distributions
+## 단봉 분포
 
-A **unimodal** distribution has a single peak. The most familiar example is the normal (bell curve) distribution, where data clusters around one central value.
+**단봉(unimodal)** 분포는 봉우리가 하나다. 가장 익숙한 예는 정규분포(종 모양 곡선)로, 자료가 하나의 중심값 주위에 몰려 있다.
 
-**Example:** Heights of adult women in a single country typically form a unimodal distribution centered near the population mean.
+**예:** 한 나라 성인 여성의 키는 보통 모집단 평균 근처를 중심으로 하는 단봉 분포를 이룬다.
 
-## Bimodal Distributions
+## 이봉 분포
 
-A **bimodal** distribution has two distinct peaks, indicating that the data likely contains two separate groups or processes.
+**이봉(bimodal)** 분포는 뚜렷한 봉우리가 둘이며, 자료에 서로 다른 두 집단이나 과정이 섞여 있을 가능성이 높음을 나타낸다.
 
-**Example:** Test scores in a class might be bimodal if one group of students studied extensively and another did not, producing peaks at high and low scores with a valley in between.
+**예:** 한 학급의 시험 점수는 한 무리의 학생은 열심히 공부하고 다른 무리는 그렇지 않았다면 이봉이 될 수 있다. 높은 점수와 낮은 점수에 봉우리가 생기고 그 사이에 골이 생긴다.
 
 ```python
 import numpy as np
@@ -36,91 +36,91 @@ ax.spines['right'].set_visible(False)
 plt.show()
 ```
 
-The two peaks are clearly visible, each corresponding to one of the component normal distributions.
+두 봉우리가 뚜렷이 보이며, 각각이 구성 정규분포 하나씩에 대응한다.
 
-## Multimodal Distributions
+## 다봉 분포
 
-A **multimodal** distribution has more than two peaks. This often arises from mixing three or more subpopulations.
+**다봉(multimodal)** 분포는 봉우리가 둘보다 많다. 흔히 셋 이상의 하위 모집단이 섞일 때 생긴다.
 
-**Example:** The distribution of commute times in a large metropolitan area might show peaks at walking distance, short drive, and long commute durations.
+**예:** 대도시권의 통근시간 분포는 도보 거리, 짧은 운전, 긴 통근에 각각 봉우리가 나타날 수 있다.
 
-## Why Modality Matters
+## 봉우리 수가 중요한 이유
 
-Detecting modality has practical consequences for analysis:
+봉우리 수를 탐지하는 것은 분석에 실질적인 결과를 낳는다.
 
-- A bimodal or multimodal distribution signals that **summary statistics like the mean may be misleading**, as the mean could fall in a valley between peaks where few observations actually lie.
-- It suggests that the data should be **disaggregated** into subgroups before further analysis.
-- Standard parametric methods assuming unimodality (e.g., t-tests, normal-based confidence intervals) may be inappropriate for multimodal data.
+- 이봉이나 다봉 분포는 **평균 같은 요약통계량이 오도할 수 있음**을 알리는 신호다. 평균이 봉우리 사이의 골에 떨어져 실제로는 관측값이 거의 없는 지점을 가리킬 수 있기 때문이다.
+- 더 분석하기 전에 자료를 하위집단으로 **분해**해야 함을 시사한다.
+- 단봉성을 가정하는 표준적인 모수적 방법(예: t-검정, 정규분포 기반 신뢰구간)이 다봉 자료에는 부적절할 수 있다.
 
-## Detecting Modality
+## 봉우리 수의 탐지
 
-Common approaches include visual inspection of histograms and density plots, kernel density estimation (KDE) with varying bandwidths, and formal tests such as the dip test of unimodality. In practice, the histogram with a reasonable number of bins is the simplest and most effective first check.
+흔한 접근법으로는 히스토그램과 밀도 그림의 시각적 검토, 대역폭을 달리한 커널밀도추정(KDE), 그리고 단봉성에 대한 딥 검정 같은 형식적 검정이 있다. 실무에서는 구간 수를 적절히 정한 히스토그램이 가장 간단하고 효과적인 첫 점검이다.
 
-## Summary
+## 요약
 
-Modality provides essential information about the structure of a dataset. Unimodal distributions suggest a single homogeneous population, while bimodal or multimodal shapes point to underlying subgroups that deserve separate investigation.
+봉우리 수는 자료의 구조에 관한 핵심 정보를 준다. 단봉 분포는 하나의 동질적인 모집단을 시사하고, 이봉이나 다봉 모양은 따로 살펴볼 가치가 있는 하위집단이 밑바탕에 있음을 가리킨다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-A dataset of adult heights from a mixed-gender population shows two peaks: one near 163 cm and another near 176 cm. Is this distribution unimodal, bimodal, or multimodal? What underlying subgroups likely explain the shape?
+**연습문제 1.**
+남녀가 섞인 모집단에서 얻은 성인 키 자료가 163cm 근처와 176cm 근처에 두 개의 봉우리를 보인다. 이 분포는 단봉인가, 이봉인가, 다봉인가? 어떤 하위집단이 이 모양을 설명할 가능성이 높은가?
 
-??? success "Solution to Exercise 1"
-    The distribution is **bimodal** because it has two distinct peaks. The two subgroups are almost certainly **males and females**, whose height distributions overlap but have different means (approximately 176 cm for males and 163 cm for females in many populations). When the two groups are combined, the histogram shows two modes corresponding to the typical heights of each sex.
-
----
-
-**Exercise 2.**
-A researcher computes the mean of a dataset and finds it is 50. The histogram shows two peaks at approximately 30 and 70 with a valley near 50. Explain why the mean is a misleading summary in this case.
-
-??? success "Solution to Exercise 2"
-    The mean of 50 falls in the valley between the two peaks, a region where very few observations actually lie. This means the "average" value is not representative of any typical observation in the dataset. In a bimodal distribution, reporting only the mean hides the fact that the data contains two distinct clusters. A more informative summary would report the location and spread of each mode separately, or at minimum note that the distribution is bimodal with peaks near 30 and 70.
+??? success "연습문제 1 풀이"
+    뚜렷한 봉우리가 두 개이므로 이 분포는 **이봉**이다. 두 하위집단은 거의 확실히 **남성과 여성**이며, 이들의 키 분포는 겹치지만 평균이 다르다(많은 모집단에서 남성은 약 176cm, 여성은 약 163cm). 두 집단을 합치면 히스토그램에 각 성별의 전형적인 키에 대응하는 두 개의 최빈값이 나타난다.
 
 ---
 
-**Exercise 3.**
-Give an example of a real-world dataset that you would expect to be: (a) unimodal, (b) bimodal, (c) multimodal with three or more modes. Justify each choice.
+**연습문제 2.**
+어떤 연구자가 자료의 평균을 계산해 50을 얻었다. 히스토그램은 대략 30과 70에 봉우리가 있고 50 근처에 골이 있음을 보여준다. 이 경우 평균이 왜 오도하는 요약인지 설명하라.
 
-??? success "Solution to Exercise 3"
-    **(a) Unimodal:** The distribution of exam scores in a well-designed test given to a homogeneous group of students. Most students score near the class average, with fewer scoring very high or very low, producing a single peak.
-
-    **(b) Bimodal:** The distribution of commute times in a city where most people either walk to work (peak around 10 minutes) or drive on a highway (peak around 40 minutes), with few people in between.
-
-    **(c) Multimodal (three or more modes):** The distribution of eruption durations at Old Faithful geyser, which has been observed to have multiple clusters of short, medium, and long eruptions. Another example: the distribution of prices at a grocery store, where items cluster around common price points like \$1, \$3, and \$5.
+??? success "연습문제 2 풀이"
+    평균 50은 두 봉우리 사이의 골에 떨어지는데, 이 구간에는 실제 관측값이 거의 없다. 즉 "평균"값이 자료의 어떤 전형적인 관측값도 대표하지 못한다는 뜻이다. 이봉 분포에서 평균만 보고하면 자료가 서로 구별되는 두 무리를 담고 있다는 사실이 가려진다. 더 유익한 요약은 각 봉우리의 위치와 퍼짐을 따로 보고하거나, 최소한 30과 70 근처에 봉우리가 있는 이봉 분포임을 밝히는 것이다.
 
 ---
 
-**Exercise 4.**
-Suppose you observe a histogram that appears bimodal. Describe two different strategies for further analysis, and explain what each would reveal.
+**연습문제 3.**
+다음 각각에 해당하리라 예상되는 실제 자료의 예를 들어라. (a) 단봉, (b) 이봉, (c) 봉우리가 셋 이상인 다봉. 각 선택을 정당화하라.
 
-??? success "Solution to Exercise 4"
-    **Strategy 1: Disaggregate by a grouping variable.** If a plausible categorical variable is available (e.g., sex, treatment group, geographic region), plot separate histograms for each group. If the bimodality disappears within each group and each subgroup shows a unimodal distribution, this confirms that the overall bimodality arises from mixing distinct subpopulations.
+??? success "연습문제 3 풀이"
+    **(a) 단봉:** 동질적인 학생 집단에게 잘 설계된 시험을 치렀을 때의 점수 분포. 대부분의 학생이 학급 평균 근처에서 점수를 받고 아주 높거나 아주 낮은 점수는 드물어 봉우리가 하나 생긴다.
 
-    **Strategy 2: Fit a mixture model.** Use a Gaussian mixture model (GMM) with two components to estimate the means, variances, and mixing proportions of the two underlying distributions. This reveals the center, spread, and relative size of each cluster without requiring an explicit grouping variable. The Bayesian Information Criterion (BIC) can be used to compare the two-component model against a one-component model to assess whether the bimodality is statistically justified.
+    **(b) 이봉:** 대부분의 사람이 걸어서 출근하거나(약 10분 근처의 봉우리) 고속도로로 운전해 출근하는(약 40분 근처의 봉우리) 도시의 통근시간 분포. 그 사이에 해당하는 사람은 적다.
 
----
-
-**Exercise 5.**
-The **dip test** of Hartigan and Hartigan (1985) formally tests the null hypothesis that a distribution is unimodal. Briefly describe how it works and one alternative non-parametric test for multimodality.
-
-??? success "Solution to Exercise 5"
-    **Dip test:** computes the maximum vertical distance between the empirical CDF and the closest *unimodal* CDF (one with a single inflection in its derivative). Under the null of unimodality this dip statistic is small; under the alternative of bimodality or multimodality it grows because no unimodal CDF can closely approximate the empirical one. A reference distribution (computed by simulation from a uniform null) provides $p$-values.
-
-    **Alternative — Silverman's bandwidth test:** searches for the smallest bandwidth $h$ such that a Gaussian KDE with that bandwidth yields at most $k$ modes. The null hypothesis of "at most $k$ modes" is rejected when the critical bandwidth is significantly larger than expected under unimodality. Bootstrap calibration provides the $p$-value.
-
-    Both tests have low power for sample sizes below 100 and can be sensitive to the smoothness assumption. Visual inspection of KDE plots at multiple bandwidths is often more informative in practice.
+    **(c) 다봉(봉우리 셋 이상):** 올드페이스풀 간헐천의 분출 지속시간 분포. 짧은 분출, 중간 분출, 긴 분출의 여러 무리가 관측되어 왔다. 또 다른 예로는 식료품점의 가격 분포가 있는데, 상품 가격이 \$1, \$3, \$5 같은 흔한 가격대에 몰린다.
 
 ---
 
-**Exercise 6.**
-**Mixture models** can produce distributions that are bimodal *or* unimodal depending on how separated the components are. Describe the relationship between component separation and observed modality for a two-component normal mixture with equal mixing weights and equal variances.
+**연습문제 4.**
+어떤 히스토그램이 이봉으로 보인다고 하자. 더 분석하기 위한 서로 다른 두 전략을 서술하고, 각각이 무엇을 드러낼지 설명하라.
 
-??? success "Solution to Exercise 6"
-    Consider $f(x) = 0.5 \cdot \phi(x; -\mu, \sigma) + 0.5 \cdot \phi(x; +\mu, \sigma)$ for some $\mu > 0$. The mixture is symmetric around 0; the question is whether 0 is a local maximum (unimodal) or a local minimum (bimodal).
+??? success "연습문제 4 풀이"
+    **전략 1: 집단 변수로 분해하기.** 그럴듯한 범주형 변수(예: 성별, 처리군, 지역)를 쓸 수 있다면 집단별로 히스토그램을 따로 그린다. 각 집단 안에서 이봉성이 사라지고 하위집단마다 단봉 분포가 나타난다면, 전체의 이봉성이 서로 다른 하위 모집단이 섞여서 생겼음이 확인된다.
 
-    The result (Behboodian 1970): the mixture is **bimodal iff $\mu/\sigma > 1$**. In words:
+    **전략 2: 혼합모형 적합하기.** 두 성분을 갖는 가우시안 혼합모형(GMM)으로 밑바탕 두 분포의 평균, 분산, 혼합 비율을 추정한다. 명시적인 집단 변수 없이도 각 무리의 중심, 퍼짐, 상대적 크기를 드러낸다. 베이즈 정보기준(BIC)으로 두 성분 모형과 한 성분 모형을 비교하여 이봉성이 통계적으로 정당한지 평가할 수 있다.
 
-    - If component means are less than one $\sigma$ apart, the mixture is **unimodal** — the components overlap so heavily that no valley appears.
-    - If component means are more than one $\sigma$ apart, the mixture is **bimodal** — a valley appears at the midpoint.
+---
 
-    This has a practical consequence: even when data genuinely comes from two distinct populations, a histogram may look unimodal if the populations are close together. Modality is therefore a *lower bound* on the number of subpopulations, not an exact count. Fitting a mixture model with model selection (BIC, AIC) is more reliable than counting peaks for inferring the number of components.
+**연습문제 5.**
+하티건과 하티건(1985)의 **딥 검정**은 분포가 단봉이라는 귀무가설을 형식적으로 검정한다. 어떻게 작동하는지 간략히 설명하고 다봉성에 대한 다른 비모수 검정 하나를 제시하라.
+
+??? success "연습문제 5 풀이"
+    **딥 검정:** 경험적 누적분포함수와 가장 가까운 *단봉* 누적분포함수(도함수의 변곡이 하나뿐인 것) 사이의 최대 수직 거리를 계산한다. 단봉이라는 귀무가설 아래에서 이 딥 통계량은 작고, 이봉이나 다봉이라는 대립가설 아래에서는 어떤 단봉 누적분포함수도 경험적인 것을 가깝게 근사할 수 없으므로 커진다. (균등분포 귀무가설에서 모의실험으로 계산한) 기준 분포가 $p$-값을 제공한다.
+
+    **대안 — 실버만의 대역폭 검정:** 가우시안 KDE가 많아야 $k$개의 최빈값을 갖게 하는 가장 작은 대역폭 $h$를 찾는다. 이 임계 대역폭이 단봉성 아래에서 기대되는 것보다 유의하게 크면 "최빈값이 많아야 $k$개"라는 귀무가설을 기각한다. 부트스트랩 보정으로 $p$-값을 구한다.
+
+    두 검정 모두 표본 크기가 100 미만이면 검정력이 낮고 매끄러움 가정에 민감할 수 있다. 실무에서는 여러 대역폭에서 KDE 그림을 시각적으로 살펴보는 편이 더 유익한 경우가 많다.
+
+---
+
+**연습문제 6.**
+**혼합모형**은 성분들이 얼마나 떨어져 있느냐에 따라 이봉 분포를 낼 수도 있고 단봉 분포를 낼 수도 있다. 혼합 가중치가 같고 분산도 같은 두 성분 정규혼합에서 성분 간 분리 정도와 관측되는 봉우리 수의 관계를 서술하라.
+
+??? success "연습문제 6 풀이"
+    어떤 $\mu > 0$에 대해 $f(x) = 0.5 \cdot \phi(x; -\mu, \sigma) + 0.5 \cdot \phi(x; +\mu, \sigma)$을 생각하자. 이 혼합은 0에 대해 대칭이며, 문제는 0이 극대점(단봉)인지 극소점(이봉)인지다.
+
+    결과(Behboodian 1970): 이 혼합이 **이봉일 필요충분조건은 $\mu/\sigma > 1$** 이다. 말로 하면 다음과 같다.
+
+    - 성분 평균이 $\sigma$ 하나보다 가깝게 떨어져 있으면 혼합은 **단봉**이다. 성분들이 너무 심하게 겹쳐 골이 생기지 않는다.
+    - 성분 평균이 $\sigma$ 하나보다 멀리 떨어져 있으면 혼합은 **이봉**이다. 중점에 골이 나타난다.
+
+    여기에는 실용적인 귀결이 있다. 자료가 정말로 서로 다른 두 모집단에서 왔더라도 그 모집단들이 가까이 있으면 히스토그램이 단봉으로 보일 수 있다. 따라서 봉우리 수는 하위 모집단 개수의 정확한 값이 아니라 *하한*이다. 성분의 개수를 추론할 때는 봉우리를 세는 것보다 모형선택(BIC, AIC)과 함께 혼합모형을 적합하는 편이 더 믿을 만하다.

@@ -1,38 +1,38 @@
-# Median Absolute Deviation (MAD)
+# 중앙값 절대편차 (MAD)
 
-## Overview
+## 개요
 
-The **Median Absolute Deviation (MAD)** is a robust measure of statistical dispersion that measures the spread of data around the median. Unlike variance and standard deviation, MAD is resistant to outliers, making it an ideal complement to the median for describing skewed or contaminated datasets.
+**중앙값 절대편차(MAD)** 는 자료가 중앙값 주위로 얼마나 퍼져 있는지를 재는 강건한 흩어짐 측도다. 분산이나 표준편차와 달리 MAD는 이상치에 저항하므로, 치우쳤거나 오염된 자료를 기술할 때 중앙값과 짝을 이루는 이상적인 측도다.
 
 ---
 
-## Definition
+## 정의
 
-The MAD is computed in three steps:
+MAD는 세 단계로 계산한다.
 
-1. Find the median $M = \text{median}(x_1, x_2, \ldots, x_n)$
-2. Compute the absolute deviations: $d_i = |x_i - M|$ for each observation
-3. Find the median of these deviations: $\text{MAD} = \text{median}(d_1, d_2, \ldots, d_n)$
+1. 중앙값 $M = \text{median}(x_1, x_2, \ldots, x_n)$을 구한다.
+2. 각 관측값에 대해 절대편차 $d_i = |x_i - M|$을 계산한다.
+3. 이 편차들의 중앙값을 구한다: $\text{MAD} = \text{median}(d_1, d_2, \ldots, d_n)$.
 
 $$
 \text{MAD} = \text{median}(|x_i - \text{median}(x)|)
 $$
 
-### Standardization Constant
+### 표준화 상수
 
-To make MAD directly comparable to standard deviation (particularly for normally distributed data), multiply by a standardization constant:
+MAD를 (특히 정규분포 자료에서) 표준편차와 직접 비교할 수 있게 하려면 표준화 상수를 곱한다.
 
 $$
 \text{Standardized MAD} = 0.6745 \times \text{MAD}
 $$
 
-The constant 0.6745 is the 75th percentile of the standard normal distribution, chosen so that for normally distributed data, standardized MAD ≈ standard deviation.
+상수 0.6745는 표준정규분포의 75번째 백분위수로, 정규분포 자료에서 표준화된 MAD ≈ 표준편차가 되도록 선택된 값이다.
 
 ---
 
-## Example: U.S. State Population
+## 예: 미국 주별 인구
 
-Using state population data, compute MAD and compare to standard deviation:
+주별 인구 자료로 MAD를 계산하고 표준편차와 비교한다.
 
 ```python
 import pandas as pd
@@ -57,20 +57,20 @@ mad_standardized = mad_manual / 0.6744897501960817
 print(f"MAD (manual calc): {mad_standardized:,.0f}")
 ```
 
-**Output:**
+**출력:**
 ```
 Standard Deviation: 6,848,235
 MAD (standardized): 3,849,876
 MAD (manual calc): 3,849,876
 ```
 
-California's extreme population (37M vs. a median of 4.4M) heavily influences the standard deviation, pulling it upward. The MAD, based on deviations from the median, is less affected by this outlier.
+캘리포니아의 극단적인 인구(중앙값 440만 명에 비해 3700만 명)가 표준편차에 큰 영향을 주어 값을 끌어올린다. 중앙값으로부터의 편차에 근거하는 MAD는 이 이상치의 영향을 덜 받는다.
 
 ---
 
-## Why MAD is Robust
+## MAD가 강건한 이유
 
-Consider the effect of outliers on these two measures:
+이 두 측도에 이상치가 미치는 영향을 살펴보자.
 
 ```python
 import pandas as pd
@@ -96,45 +96,45 @@ print(f"  Std Dev: {original_std:,.0f} → {outlier_std:,.0f} ({100 * (outlier_s
 print(f"  MAD:     {original_mad:,.0f} → {outlier_mad:,.0f} ({100 * (outlier_mad - original_mad) / original_mad:.1f}% increase)")
 ```
 
-Adding two extreme outliers dramatically increases standard deviation but barely affects MAD. This demonstrates MAD's robustness.
+극단적인 이상치 두 개를 추가하면 표준편차는 극적으로 커지지만 MAD는 거의 변하지 않는다. 이것이 MAD의 강건성을 보여준다.
 
 ---
 
-## Robustness Properties
+## 강건성의 성질
 
-MAD is a **robust** statistic with:
+MAD는 다음과 같은 성질을 갖는 **강건한** 통계량이다.
 
-- **Breakdown point:** Up to 50% of data can be arbitrarily contaminated before MAD becomes unreliable, compared to 0% for standard deviation.
-- **Influence function:** Bounded—one extreme outlier has limited effect.
-- **Efficiency:** For normally distributed data, MAD is about 64% as efficient as standard deviation. This efficiency loss is small, given MAD's massive robustness gain.
+- **붕괴점:** 표준편차가 0%인 데 비해, MAD는 자료의 최대 50%가 임의로 오염되어도 신뢰성을 잃지 않는다.
+- **영향함수:** 유계다. 극단적인 이상치 하나가 미치는 영향이 제한된다.
+- **효율:** 정규분포 자료에서 MAD는 표준편차의 약 64% 효율을 갖는다. MAD가 얻는 막대한 강건성을 생각하면 이 효율 손실은 작다.
 
 ---
 
-## Comparison: Standard Deviation vs. MAD
+## 비교: 표준편차 대 MAD
 
-| Characteristic | Standard Deviation | MAD |
+| 특성 | 표준편차 | MAD |
 |---|---|---|
-| Sensitivity to outliers | High | Low |
-| Uses all data points | Yes | Yes |
-| Breakdown point | 0% | 50% |
-| Computational complexity | $O(n)$ | $O(n \log n)$ (due to sorting) |
-| Interpretability | Familiar to most analysts | Less familiar |
-| Efficiency (normal data) | 100% | 64% |
+| 이상치에 대한 민감성 | 높음 | 낮음 |
+| 모든 자료점 사용 | 예 | 예 |
+| 붕괴점 | 0% | 50% |
+| 계산 복잡도 | $O(n)$ | $O(n \log n)$ (정렬 때문) |
+| 해석 용이성 | 대부분의 분석가에게 익숙 | 덜 익숙 |
+| 효율(정규 자료) | 100% | 64% |
 
 ---
 
-## When to Use MAD
+## MAD를 쓸 때
 
-**Skewed distributions:** Income, wealth, or other right-skewed financial data
-**Outlier-prone datasets:** Sensor measurements, astronomical observations
-**Robust estimation:** When you cannot trust all data points equally
-**Non-normal data:** Heavy-tailed or multimodal distributions
+**치우친 분포:** 소득, 자산, 그 밖에 오른쪽으로 치우친 금융 자료
+**이상치가 많은 자료:** 센서 측정값, 천문 관측
+**강건 추정:** 모든 자료점을 똑같이 신뢰할 수 없을 때
+**비정규 자료:** 꼬리가 두껍거나 다봉인 분포
 
 ---
 
-## Practical Example: Financial Returns
+## 실용적 예: 금융 수익률
 
-For stock market analysis, MAD can be more representative than standard deviation:
+주식시장 분석에서 MAD가 표준편차보다 대표성이 클 수 있다.
 
 ```python
 import pandas as pd
@@ -150,13 +150,13 @@ print(f"MAD (standardized): {robust.scale.mad(returns):.4f}")
 # The crash day (-0.50) inflates std dev much more than MAD
 ```
 
-The single crash day (-0.50) vastly increases standard deviation, which might overstate typical daily volatility. MAD provides a clearer picture of routine variation.
+폭락한 하루(-0.50)가 표준편차를 크게 키워 전형적인 일간 변동성을 과장할 수 있다. MAD는 일상적인 변동에 대해 더 선명한 그림을 준다.
 
 ---
 
-## Computing MAD in Python
+## 파이썬에서 MAD 계산하기
 
-### Using statsmodels (recommended)
+### statsmodels 사용 (권장)
 
 ```python
 from statsmodels import robust
@@ -167,7 +167,7 @@ mad = robust.scale.mad(data)
 print(f"MAD: {mad:.2f}")
 ```
 
-### Manual Calculation
+### 직접 계산
 
 ```python
 import pandas as pd
@@ -183,93 +183,93 @@ print(f"MAD (standardized): {mad_standardized:.2f}")
 
 ---
 
-## Summary
+## 요약
 
-The Median Absolute Deviation is a powerful tool for measuring data spread in the presence of outliers. By basing dispersion on deviations from the median (itself robust), MAD achieves a level of stability that variance and standard deviation cannot match. For any analysis involving skewed data, outliers, or non-normal distributions, pairing the median with MAD provides a more trustworthy summary than the mean with standard deviation.
+중앙값 절대편차는 이상치가 있는 상황에서 자료의 퍼짐을 재는 강력한 도구다. 흩어짐을 (그 자체가 강건한) 중앙값으로부터의 편차에 근거해 계산함으로써, MAD는 분산과 표준편차가 따라올 수 없는 수준의 안정성을 얻는다. 치우친 자료, 이상치, 비정규 분포가 관여하는 분석이라면 중앙값과 MAD를 짝짓는 것이 평균과 표준편차보다 더 믿을 만한 요약을 준다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-A quality-control process records 10 diameter measurements (mm): $10.1, 10.0, 9.9, 10.2, 10.0, 9.8, 10.1, 10.0, 15.3, 10.0$. (a) Compute $s$. (b) Compute MAD. (c) Compute scaled MAD ($1.4826 \cdot \text{MAD}$). Compare and explain.
+**연습문제 1.**
+어떤 품질관리 공정이 지름 측정값 10개(mm)를 기록했다: $10.1, 10.0, 9.9, 10.2, 10.0, 9.8, 10.1, 10.0, 15.3, 10.0$. (a) $s$를 계산하라. (b) MAD를 계산하라. (c) 척도를 맞춘 MAD($1.4826 \cdot \text{MAD}$)를 계산하라. 비교하고 설명하라.
 
-??? success "Solution to Exercise 1"
-    (a) $\bar x = 10.54$. Sum of squared deviations $= 25.284$ (with the $(15.3 - 10.54)^2 = 22.66$ term contributing about 90%). $s^2 = 25.284/9 = 2.809$, $s \approx 1.676$.
+??? success "연습문제 1 풀이"
+    (a) $\bar x = 10.54$. 제곱편차의 합 $= 25.284$이며, 이 중 $(15.3 - 10.54)^2 = 22.66$ 항이 약 90%를 차지한다. $s^2 = 25.284/9 = 2.809$, $s \approx 1.676$.
 
-    (b) Sorted: $9.8, 9.9, 10.0, 10.0, 10.0, 10.0, 10.1, 10.1, 10.2, 15.3$. Median $= 10.0$. Sorted absolute deviations: $0.0, 0.0, 0.0, 0.0, 0.1, 0.1, 0.1, 0.2, 0.2, 5.3$. MAD $= (0.1 + 0.1)/2 = 0.1$.
+    (b) 정렬하면 $9.8, 9.9, 10.0, 10.0, 10.0, 10.0, 10.1, 10.1, 10.2, 15.3$이고 중앙값 $= 10.0$이다. 절대편차를 정렬하면 $0.0, 0.0, 0.0, 0.0, 0.1, 0.1, 0.1, 0.2, 0.2, 5.3$이므로 MAD $= (0.1 + 0.1)/2 = 0.1$이다.
 
-    (c) Scaled MAD $= 1.4826 \times 0.1 \approx 0.148$.
+    (c) 척도를 맞춘 MAD $= 1.4826 \times 0.1 \approx 0.148$.
 
-    The SD ($1.68$) is more than 11× the scaled MAD ($0.15$). The single outlier 15.3 inflates the SD enormously while leaving the MAD essentially untouched. The MAD is a far more honest measure of typical spread for this data.
+    표준편차($1.68$)가 척도를 맞춘 MAD($0.15$)의 11배가 넘는다. 이상치 15.3 하나가 표준편차를 엄청나게 부풀리는 반면 MAD는 사실상 건드리지 못한다. 이 자료에서는 MAD가 전형적인 퍼짐을 훨씬 정직하게 재는 측도다.
 
 ---
 
-**Exercise 2.**
-Derive the consistency constant $1/\Phi^{-1}(0.75) \approx 1.4826$ that scales MAD to equal $\sigma$ under a normal distribution.
+**연습문제 2.**
+정규분포 아래에서 MAD를 $\sigma$와 같게 만드는 일치성 상수 $1/\Phi^{-1}(0.75) \approx 1.4826$을 유도하라.
 
-??? success "Solution to Exercise 2"
-    For $X \sim N(\mu, \sigma^2)$, the median is $\mu$, so $|X - \mu|/\sigma$ has the **half-normal** distribution. We want to find $c$ such that the median of $|X - \mu|$ equals $\sigma$ when MAD is multiplied by $c$ — i.e., $c \cdot \text{MAD} = \sigma$.
+??? success "연습문제 2 풀이"
+    $X \sim N(\mu, \sigma^2)$에서 중앙값은 $\mu$이므로 $|X - \mu|/\sigma$는 **반정규(half-normal)** 분포를 따른다. MAD에 $c$를 곱했을 때 $c \cdot \text{MAD} = \sigma$가 되는 $c$를 찾고자 한다.
 
-    By symmetry, $P(|X - \mu| \le m) = P(-m \le X - \mu \le m) = 2\Phi(m/\sigma) - 1$. Setting this to 0.5 (the definition of the median):
+    대칭성에 의해 $P(|X - \mu| \le m) = P(-m \le X - \mu \le m) = 2\Phi(m/\sigma) - 1$이다. 중앙값의 정의에 따라 이를 0.5로 두면
 
     $$
     2\Phi(m/\sigma) - 1 = 0.5 \implies \Phi(m/\sigma) = 0.75 \implies m/\sigma = \Phi^{-1}(0.75) \approx 0.6745
     $$
 
-    So the population MAD is $0.6745 \sigma$. The scaling constant $c = 1/0.6745 \approx 1.4826$ converts MAD back to $\sigma$. This is why most software libraries (R's `mad()`, statsmodels' `robust.scale.mad`) automatically apply this constant.
+    이다. 따라서 모집단 MAD는 $0.6745 \sigma$이다. 척도 상수 $c = 1/0.6745 \approx 1.4826$이 MAD를 $\sigma$로 되돌린다. 대부분의 소프트웨어 라이브러리(R의 `mad()`, statsmodels의 `robust.scale.mad`)가 이 상수를 자동으로 적용하는 이유가 이것이다.
 
 ---
 
-**Exercise 3.**
-The **breakdown point** of an estimator is the fraction of data that must be replaced by arbitrary values before the estimator can be made arbitrarily far from the true value. Show that the breakdown point of MAD is 50% while that of the SD is 0%.
+**연습문제 3.**
+추정량의 **붕괴점**은 그 추정량을 참값에서 임의로 멀리 보낼 수 있게 되기까지 임의의 값으로 바꿔야 하는 자료의 비율이다. MAD의 붕괴점이 50%이고 표준편차의 붕괴점이 0%임을 보여라.
 
-??? success "Solution to Exercise 3"
-    **SD breakdown 0%:** consider a sample of size $n$ with finite values. Replace any single observation $x_i$ with a value $M$. The new mean grows like $M/n$ but the new SD grows like $M/\sqrt{n}$. As $M \to \infty$, both grow without bound. So replacing $1/n$ of the data (the smallest non-zero fraction) is enough to push the SD arbitrarily high. Since $1/n \to 0$, the breakdown point is 0.
+??? success "연습문제 3 풀이"
+    **표준편차의 붕괴점 0%:** 유한한 값들로 이루어진 크기 $n$의 표본을 생각하자. 관측값 하나 $x_i$를 값 $M$으로 바꾼다. 새 평균은 $M/n$처럼 커지지만 새 표준편차는 $M/\sqrt{n}$처럼 커진다. $M \to \infty$이면 둘 다 한없이 커진다. 따라서 자료의 $1/n$(0이 아닌 가장 작은 비율)만 바꿔도 표준편차를 임의로 크게 만들 수 있다. $1/n \to 0$이므로 붕괴점은 0이다.
 
-    **MAD breakdown 50%:** the median of any sample changes by at most one rank position per replacement; after replacing fewer than half the values, the median is still pinned to the original "middle" data. Similarly, the median of the absolute deviations $|x_i - \text{median}|$ depends on the bulk of the data. Only when we replace at least $\lceil n/2 \rceil$ values can we shift the median (and thus the MAD) to arbitrary positions. So the breakdown is $\lfloor n/2 \rfloor / n \approx 0.5$ for large $n$.
+    **MAD의 붕괴점 50%:** 표본의 중앙값은 값 하나를 바꿀 때마다 순위 위치가 많아야 하나씩 움직인다. 값의 절반보다 적게 바꾸면 중앙값은 여전히 원래의 "가운데" 자료에 묶여 있다. 마찬가지로 절대편차 $|x_i - \text{median}|$의 중앙값도 자료의 본체에 의존한다. 적어도 $\lceil n/2 \rceil$개를 바꿔야만 중앙값(따라서 MAD)을 임의의 위치로 옮길 수 있다. 따라서 큰 $n$에 대해 붕괴점은 $\lfloor n/2 \rfloor / n \approx 0.5$다.
 
-    This is the highest possible breakdown point for any reasonable location/scale estimator — the 50% theoretical ceiling, matched only by the median and MAD (and a few other M-estimators).
-
----
-
-**Exercise 4.**
-The MAD has lower **efficiency** than the SD under normality: about 37% Gaussian efficiency. Define statistical efficiency and explain the bias-variance trade-off that justifies preferring MAD anyway in many applied contexts.
-
-??? success "Solution to Exercise 4"
-    **Efficiency** of an estimator $\hat\theta$ relative to a benchmark estimator $\hat\theta^*$ is the ratio of their asymptotic variances. Under normality, $\sigma_{\text{eff(MAD)}} \approx 0.37 \cdot \sigma_{\text{eff(SD)}}$, meaning MAD has roughly $1/0.37 \approx 2.7$ times higher variance than the SD when the data is truly normal.
-
-    **Trade-off:**
-
-    - If the data is *exactly* normal, the SD wastes no information and has 100% efficiency; MAD wastes data and is less precise.
-    - If the data is *contaminated* — even a tiny fraction of outliers — the SD's variance balloons because outliers contribute squared terms. MAD's variance stays roughly the same.
-
-    For real data which is almost never exactly normal, the cost of MAD's lower Gaussian efficiency is more than compensated by its insensitivity to contamination. The general design principle is: **never optimize for the worst case (heavy contamination) at the cost of catastrophic failure under modest violations of assumed normality.** This is the heart of "robust statistics."
+    이것은 합리적인 위치/척도 추정량이 가질 수 있는 최대 붕괴점이다. 이론적 상한인 50%이며, 중앙값과 MAD(그리고 몇몇 M-추정량)만이 여기에 도달한다.
 
 ---
 
-**Exercise 5.**
-The **modified Z-score** for outlier detection is $M_i = 0.6745 \cdot (x_i - \tilde x) / \text{MAD}$. Why is this preferred over the classical Z-score $Z_i = (x_i - \bar x) / s$ for outlier detection?
+**연습문제 4.**
+정규성 아래에서 MAD는 표준편차보다 **효율**이 낮아 가우시안 효율이 약 37%다. 통계적 효율을 정의하고, 그럼에도 많은 응용 맥락에서 MAD를 선호하는 것을 정당화하는 편향–분산 절충을 설명하라.
 
-??? success "Solution to Exercise 5"
-    The classical Z-score uses $\bar x$ (sensitive to outliers) and $s$ (highly sensitive). Outliers inflate both, **masking** themselves: the very point that should be flagged has reduced $|Z|$ because it pulled the mean and SD toward itself.
+??? success "연습문제 4 풀이"
+    추정량 $\hat\theta$의 기준 추정량 $\hat\theta^*$에 대한 **효율**은 두 추정량의 점근분산의 비다. 정규성 아래에서 $\sigma_{\text{eff(MAD)}} \approx 0.37 \cdot \sigma_{\text{eff(SD)}}$이며, 자료가 정말로 정규일 때 MAD의 분산이 표준편차의 약 $1/0.37 \approx 2.7$배라는 뜻이다.
 
-    The modified Z-score uses the median (breakdown 50%) and MAD (breakdown 50%). Outliers have negligible effect on either, so the Z-like statistic stays large for genuine outliers. The factor $0.6745$ makes the modified Z-score comparable in scale to a classical Z under normality — i.e., $|M_i| > 3.5$ corresponds to roughly the same tail rarity as $|Z_i| > 3$ in clean data.
+    **절충 관계:**
 
-    Iglewicz and Hoaglin (1993) recommended the threshold $|M_i| > 3.5$ for outlier flagging, providing a robust alternative to the classical $|Z| > 3$ rule.
+    - 자료가 *정확히* 정규라면 표준편차는 정보를 낭비하지 않아 효율이 100%이고, MAD는 자료를 낭비해 정밀도가 떨어진다.
+    - 자료가 *오염되어* 있다면 — 이상치가 아주 조금만 있어도 — 이상치가 제곱항으로 기여하므로 표준편차의 분산이 폭증한다. MAD의 분산은 거의 그대로다.
+
+    거의 결코 정확히 정규가 아닌 실제 자료에서는, MAD의 낮은 가우시안 효율이라는 비용을 오염에 대한 둔감함이 충분히 상쇄하고도 남는다. 일반적인 설계 원칙은 이렇다. **가정된 정규성이 조금만 어긋나도 파국적으로 실패하는 대가를 치르면서까지 최선의 경우에 최적화하지 마라.** 이것이 "강건통계"의 핵심이다.
 
 ---
 
-**Exercise 6.**
-The MAD is one of several robust scale estimators. Compare it briefly with the **interquartile range** (IQR) and **Qn estimator** (Rousseeuw–Croux). When would you choose each?
+**연습문제 5.**
+이상치 탐지를 위한 **수정 Z-점수**는 $M_i = 0.6745 \cdot (x_i - \tilde x) / \text{MAD}$이다. 이상치 탐지에서 이것이 고전적인 Z-점수 $Z_i = (x_i - \bar x) / s$보다 선호되는 이유는 무엇인가?
 
-??? success "Solution to Exercise 6"
-    **MAD:** median of $|x_i - \tilde x|$. Breakdown 50%, Gaussian efficiency 37%. Simple, widely implemented, the default robust scale.
+??? success "연습문제 5 풀이"
+    고전적인 Z-점수는 (이상치에 민감한) $\bar x$와 (매우 민감한) $s$를 쓴다. 이상치가 둘 다 부풀려 스스로를 **가린다**. 표시되어야 할 바로 그 점이 평균과 표준편차를 자기 쪽으로 끌어당겼기 때문에 $|Z|$가 작아진다.
 
-    **IQR:** $Q_3 - Q_1$. Breakdown 25% (need only corrupt one quartile). Simpler conceptually but lower breakdown. Scale-consistent with $\sigma$ via $1.349 \sigma$ for normal data. The de-facto standard for box plots.
+    수정 Z-점수는 중앙값(붕괴점 50%)과 MAD(붕괴점 50%)를 쓴다. 이상치는 둘 중 어느 쪽에도 무시할 만한 영향만 주므로, 진짜 이상치에 대해서는 Z와 비슷한 이 통계량이 크게 유지된다. 계수 $0.6745$는 수정 Z-점수를 정규성 아래의 고전적 Z와 비슷한 척도로 맞춘다. 즉 깨끗한 자료에서 $|M_i| > 3.5$가 $|Z_i| > 3$과 대략 같은 꼬리 희귀도에 대응한다.
 
-    **Qn estimator** (Rousseeuw and Croux 1993): a robust scale based on differences $|x_i - x_j|$, computed as the first quartile of all such pairwise differences with a normalizing constant. Breakdown 50%, Gaussian efficiency 82% — about 2× better than MAD. The cost is $O(n \log n)$ computation versus $O(n)$ for MAD.
+    Iglewicz and Hoaglin(1993)은 이상치 표시 기준으로 $|M_i| > 3.5$를 권장하여, 고전적인 $|Z| > 3$ 규칙의 강건한 대안을 제공했다.
 
-    **When to use:**
+---
 
-    - **MAD**: default robust scale; simple, fast, well-known.
-    - **IQR**: box plots and quick descriptive summaries; not when high breakdown is essential.
-    - **Qn**: large samples where the higher Gaussian efficiency matters and computation cost is acceptable. State-of-the-art for serious robust estimation.
+**연습문제 6.**
+MAD는 여러 강건 척도 추정량 중 하나다. 이를 **사분위범위**(IQR) 및 **Qn 추정량**(Rousseeuw–Croux)과 간략히 비교하라. 각각은 언제 고르겠는가?
+
+??? success "연습문제 6 풀이"
+    **MAD:** $|x_i - \tilde x|$의 중앙값. 붕괴점 50%, 가우시안 효율 37%. 간단하고 널리 구현되어 있으며 기본적인 강건 척도다.
+
+    **IQR:** $Q_3 - Q_1$. 붕괴점 25%(사분위수 하나만 오염시키면 된다). 개념적으로 더 간단하지만 붕괴점이 낮다. 정규 자료에서 $1.349 \sigma$를 통해 $\sigma$와 척도가 맞는다. 상자그림의 사실상 표준이다.
+
+    **Qn 추정량**(Rousseeuw and Croux 1993): 차이 $|x_i - x_j|$에 근거한 강건 척도로, 모든 쌍의 차이의 제1사분위수에 정규화 상수를 곱해 계산한다. 붕괴점 50%, 가우시안 효율 82%로 MAD보다 약 2배 낫다. 대가는 MAD의 $O(n)$에 비해 $O(n \log n)$의 계산량이다.
+
+    **선택 기준:**
+
+    - **MAD**: 기본적인 강건 척도. 간단하고 빠르며 잘 알려져 있다.
+    - **IQR**: 상자그림과 빠른 기술적 요약. 높은 붕괴점이 필수인 경우에는 부적합하다.
+    - **Qn**: 높은 가우시안 효율이 중요하고 계산 비용을 감당할 수 있는 큰 표본. 본격적인 강건 추정의 최신 표준이다.

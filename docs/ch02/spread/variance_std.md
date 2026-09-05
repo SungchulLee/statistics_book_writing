@@ -1,42 +1,42 @@
-# Variance and Standard Deviation
+# 분산과 표준편차
 
-## Overview
+## 개요
 
-Variance and standard deviation are the most widely used measures of statistical dispersion. They quantify how much individual data points deviate from the mean, providing essential information about the spread and consistency of a dataset.
+분산과 표준편차는 통계적 흩어짐을 재는 가장 널리 쓰이는 측도다. 개별 자료점이 평균에서 얼마나 벗어나는지를 정량화하여 자료의 퍼짐과 일관성에 관한 핵심 정보를 제공한다.
 
 ---
 
-## 1. Variance
+## 1. 분산
 
-### Definition
+### 정의
 
-Variance measures the average of the squared deviations from the mean. By squaring, it ensures all deviations contribute positively and penalizes larger deviations more heavily.
+분산은 평균으로부터의 편차를 제곱한 값의 평균을 잰다. 제곱함으로써 모든 편차가 양수로 기여하게 하고 큰 편차에 더 큰 벌점을 준다.
 
-### Formulas
+### 공식
 
-**Population variance:**
+**모분산:**
 
 $$
 \sigma^2 = \frac{\sum_{i=1}^{N} (x_i - \mu)^2}{N}
 $$
 
-**Sample variance (with Bessel's correction):**
+**표본분산(베셀 보정 적용):**
 
 $$
 s^2 = \frac{\sum_{i=1}^{n} (x_i - \bar{x})^2}{n - 1}
 $$
 
-The denominator $n - 1$ corrects for the downward bias that arises from using the sample mean $\bar{x}$ instead of the true population mean $\mu$.
+분모 $n - 1$은 참된 모평균 $\mu$ 대신 표본평균 $\bar{x}$를 씀으로써 생기는 아래쪽 편향을 보정한다.
 
-### Example
+### 예
 
-For the dataset 70, 85, 90, 95, 100 with mean $\bar{x} = 88$:
+평균이 $\bar{x} = 88$인 자료 70, 85, 90, 95, 100에 대해:
 
-1. Squared deviations: $(70-88)^2 = 324$, $(85-88)^2 = 9$, $(90-88)^2 = 4$, $(95-88)^2 = 49$, $(100-88)^2 = 144$
-2. Sum: $324 + 9 + 4 + 49 + 144 = 530$
-3. Sample variance: $s^2 = 530 / 4 = 132.5$
+1. 제곱편차: $(70-88)^2 = 324$, $(85-88)^2 = 9$, $(90-88)^2 = 4$, $(95-88)^2 = 49$, $(100-88)^2 = 144$
+2. 합: $324 + 9 + 4 + 49 + 144 = 530$
+3. 표본분산: $s^2 = 530 / 4 = 132.5$
 
-### Computing Variance in Python
+### 파이썬에서 분산 계산하기
 
 ```python
 import numpy as np
@@ -52,39 +52,39 @@ sample_variance = sample_data.var(ddof=1)
 print(f"Sample Variance (ddof=1): {sample_variance}")
 ```
 
-### Interpretation
+### 해석
 
-A variance of 132.5 means the exam scores vary, on average, by a squared distance of 132.5 units from the mean. Because variance is expressed in squared units, it can be difficult to interpret directly—which is why the standard deviation is often preferred.
+분산이 132.5라는 것은 시험 점수가 평균으로부터 평균적으로 132.5 단위의 제곱거리만큼 흩어져 있다는 뜻이다. 분산은 제곱된 단위로 표현되므로 직접 해석하기 어려울 수 있으며, 그래서 표준편차가 흔히 선호된다.
 
 ---
 
-## 2. Standard Deviation
+## 2. 표준편차
 
-### Definition
+### 정의
 
-The standard deviation is the square root of the variance. It returns the measure of spread to the original units of the data, making it directly interpretable.
+표준편차는 분산의 제곱근이다. 퍼짐의 측도를 자료의 원래 단위로 되돌려 직접 해석할 수 있게 만든다.
 
-### Formulas
+### 공식
 
-**Population standard deviation:**
+**모표준편차:**
 
 $$
 \sigma = \sqrt{\frac{\sum_{i=1}^{N} (x_i - \mu)^2}{N}}
 $$
 
-**Sample standard deviation:**
+**표본표준편차:**
 
 $$
 s = \sqrt{\frac{\sum_{i=1}^{n} (x_i - \bar{x})^2}{n - 1}}
 $$
 
-### Example
+### 예
 
-Using the variance from above: $s = \sqrt{132.5} \approx 11.51$.
+위의 분산을 쓰면 $s = \sqrt{132.5} \approx 11.51$이다.
 
-This means the exam scores deviate from the mean by about 11.51 points on average.
+즉 시험 점수가 평균에서 평균적으로 약 11.51점만큼 벗어난다는 뜻이다.
 
-### Computing Standard Deviation in Python
+### 파이썬에서 표준편차 계산하기
 
 ```python
 import numpy as np
@@ -100,144 +100,144 @@ sample_std = sample_data.std(ddof=1)
 print(f"Sample Standard Deviation (ddof=1): {sample_std}")
 ```
 
-### Applications
+### 응용
 
-Standard deviation is used across many domains: assessing the volatility of financial returns, measuring the spread of scientific measurements, evaluating manufacturing consistency, and more. In a normal distribution, approximately 68% of data falls within one standard deviation of the mean, 95% within two, and 99.7% within three (the empirical rule).
+표준편차는 여러 분야에서 쓰인다. 금융 수익률의 변동성 평가, 과학적 측정의 퍼짐 측정, 제조 일관성 평가 등이다. 정규분포에서는 자료의 약 68%가 평균에서 표준편차 1배 안에, 95%가 2배 안에, 99.7%가 3배 안에 들어간다(경험 규칙).
 
 ---
 
-## 3. Population vs. Sample: The `ddof` Parameter
+## 3. 모집단 대 표본: `ddof` 매개변수
 
-When computing variance and standard deviation in NumPy and pandas, the `ddof` (delta degrees of freedom) parameter controls the denominator:
+NumPy와 pandas에서 분산과 표준편차를 계산할 때 `ddof`(delta degrees of freedom) 매개변수가 분모를 결정한다.
 
-| Context | Denominator | `ddof` | Use When |
+| 상황 | 분모 | `ddof` | 사용할 때 |
 |---|---|---|---|
-| Population | $N$ | 0 | You have the entire population |
-| Sample | $n - 1$ | 1 | You have a sample from a larger population |
+| 모집단 | $N$ | 0 | 모집단 전체를 가지고 있을 때 |
+| 표본 | $n - 1$ | 1 | 더 큰 모집단에서 뽑은 표본을 가지고 있을 때 |
 
-NumPy defaults to `ddof=0` (population), while pandas defaults to `ddof=1` (sample). Always be explicit about which you are computing.
+NumPy의 기본값은 `ddof=0`(모집단)이고 pandas의 기본값은 `ddof=1`(표본)이다. 어느 쪽을 계산하는지 언제나 명시하라.
 
 ---
 
-## 4. Practical Considerations
+## 4. 실무적 고려사항
 
-**Data Distribution:** In a normal distribution, standard deviation has a clean interpretation via the empirical rule. In skewed distributions, it may not accurately reflect the typical spread.
+**자료의 분포:** 정규분포에서 표준편차는 경험 규칙을 통해 깔끔한 해석을 갖는다. 치우친 분포에서는 전형적인 퍼짐을 정확히 반영하지 못할 수 있다.
 
-**Sensitivity to Outliers:** Both variance and standard deviation are sensitive to extreme values because squaring amplifies large deviations. For skewed data or data with outliers, the IQR is a more robust alternative.
+**이상치에 대한 민감성:** 제곱이 큰 편차를 증폭하므로 분산과 표준편차 모두 극단값에 민감하다. 치우친 자료나 이상치가 있는 자료에는 IQR이 더 강건한 대안이다.
 
-**Real-Life Examples:**
+**실제 사례:**
 
-- **Stock Market Volatility:** Standard deviation of returns measures risk. Higher standard deviation means greater price fluctuation and higher investment risk.
-- **Student Test Scores:** Low standard deviation indicates most students scored similarly; high standard deviation reveals wide performance variation.
-- **Manufacturing Quality:** Standard deviation of product measurements indicates process consistency. Lower values mean tighter quality control.
+- **주식시장 변동성:** 수익률의 표준편차가 위험을 잰다. 표준편차가 클수록 가격 변동이 크고 투자 위험이 높다.
+- **학생 시험 점수:** 표준편차가 낮으면 대부분의 학생이 비슷한 점수를 받았다는 뜻이고, 높으면 성취도의 편차가 크다는 뜻이다.
+- **제조 품질:** 제품 측정값의 표준편차가 공정의 일관성을 나타낸다. 값이 낮을수록 품질관리가 촘촘하다.
 
-## Summary
+## 요약
 
-Variance and standard deviation provide a complete picture of data variability by considering every observation's distance from the mean. The standard deviation, being in the original units, is more interpretable and widely used. Understanding the distinction between population and sample formulas—and setting `ddof` correctly—is essential for accurate statistical analysis.
+분산과 표준편차는 모든 관측값의 평균으로부터의 거리를 고려하여 자료 변동성의 완전한 그림을 제공한다. 표준편차는 원래 단위를 쓰므로 해석하기 쉽고 널리 쓰인다. 모집단 공식과 표본 공식의 구분을 이해하고 `ddof`를 올바르게 설정하는 것이 정확한 통계 분석에 필수적이다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-For the dataset $\{3, 7, 7, 9, 14\}$: (a) compute $\bar{x}$; (b) compute $s^2$ using Bessel's correction; (c) compute $s$; (d) what happens to the mean, variance, and SD if every observation is increased by $c = 10$?
+**연습문제 1.**
+자료 $\{3, 7, 7, 9, 14\}$에 대해 (a) $\bar{x}$를 계산하라. (b) 베셀 보정을 적용해 $s^2$을 계산하라. (c) $s$를 계산하라. (d) 모든 관측값을 $c = 10$만큼 늘리면 평균, 분산, 표준편차는 어떻게 되는가?
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
     (a) $\bar{x} = 40/5 = 8$.
 
-    (b) Squared deviations: $25, 1, 1, 1, 36$; sum $= 64$; $s^2 = 64/4 = 16$.
+    (b) 제곱편차: $25, 1, 1, 1, 36$, 합 $= 64$, $s^2 = 64/4 = 16$.
 
     (c) $s = \sqrt{16} = 4$.
 
-    (d) Adding a constant $c$ shifts the mean by $c$ but leaves variance and SD unchanged: $(x_i + c) - (\bar{x} + c) = x_i - \bar{x}$, so all squared deviations are identical. The new mean is 18; $s^2 = 16$, $s = 4$ still.
+    (d) 상수 $c$를 더하면 평균은 $c$만큼 이동하지만 분산과 표준편차는 변하지 않는다. $(x_i + c) - (\bar{x} + c) = x_i - \bar{x}$이므로 모든 제곱편차가 동일하다. 새 평균은 18이고 $s^2 = 16$, $s = 4$ 그대로다.
 
 ---
 
-**Exercise 2.**
-Prove that the sample variance with Bessel's correction is unbiased: $\mathbb{E}[s^2] = \sigma^2$ for i.i.d. data with mean $\mu$ and variance $\sigma^2$.
+**연습문제 2.**
+평균 $\mu$, 분산 $\sigma^2$인 i.i.d. 자료에 대해 베셀 보정을 적용한 표본분산이 불편임을 증명하라: $\mathbb{E}[s^2] = \sigma^2$.
 
-??? success "Solution to Exercise 2"
-    Use the identity $\sum_i (X_i - \bar{X})^2 = \sum_i X_i^2 - n\bar{X}^2$. Take expectations:
+??? success "연습문제 2 풀이"
+    항등식 $\sum_i (X_i - \bar{X})^2 = \sum_i X_i^2 - n\bar{X}^2$을 이용한다. 기댓값을 취하면
 
     $$
     \mathbb{E}\!\sum_i X_i^2 = n(\sigma^2 + \mu^2), \qquad \mathbb{E}[n\bar{X}^2] = n\!\left(\frac{\sigma^2}{n} + \mu^2\right) = \sigma^2 + n\mu^2
     $$
 
-    Subtracting,
+    이고, 빼면
 
     $$
     \mathbb{E}\!\sum_i (X_i - \bar{X})^2 = (n-1)\sigma^2
     $$
 
-    Hence $\mathbb{E}[s^2] = (n-1)\sigma^2/(n-1) = \sigma^2$. $\square$
+    이다. 따라서 $\mathbb{E}[s^2] = (n-1)\sigma^2/(n-1) = \sigma^2$이다. $\square$
 
-    The ML estimator (dividing by $n$) instead yields $\mathbb{E}[\tilde s^2] = \frac{n-1}{n}\sigma^2$ — biased downward by a factor that vanishes only as $n \to \infty$.
+    반면 최대가능도추정량($n$으로 나누는 것)은 $\mathbb{E}[\tilde s^2] = \frac{n-1}{n}\sigma^2$을 주어 아래쪽으로 편향되며, 이 편향은 $n \to \infty$일 때만 사라진다.
 
 ---
 
-**Exercise 3.**
-**Scale and shift.** If $X$ has variance $\sigma^2$ and $Y = aX + b$, derive $\mathrm{Var}(Y)$. What does this mean for the units of $\sigma$?
+**연습문제 3.**
+**척도 변환과 평행이동.** $X$의 분산이 $\sigma^2$이고 $Y = aX + b$일 때 $\mathrm{Var}(Y)$를 유도하라. 이것이 $\sigma$의 단위에 대해 무엇을 뜻하는가?
 
-??? success "Solution to Exercise 3"
-    $\mathbb{E}[Y] = a\mu + b$. Then
+??? success "연습문제 3 풀이"
+    $\mathbb{E}[Y] = a\mu + b$이므로
 
     $$
     \mathrm{Var}(Y) = \mathbb{E}\!\left[(aX + b - a\mu - b)^2\right] = a^2 \mathbb{E}[(X - \mu)^2] = a^2 \sigma^2
     $$
 
-    So $\mathrm{Var}(Y) = a^2 \sigma^2$ — the variance scales by the *square* of the multiplicative constant. The additive shift $b$ has no effect.
+    이다. 따라서 $\mathrm{Var}(Y) = a^2 \sigma^2$이며 분산은 곱하는 상수의 *제곱*만큼 변한다. 더하는 상수 $b$는 아무 영향이 없다.
 
-    **Units:** if $X$ is in dollars, $\sigma^2$ is in dollars-squared (not interpretable as a "typical deviation") and $\sigma$ is in dollars. The SD restores the original units, which is why SD is preferred for reporting "typical spread" while variance is preferred for algebraic manipulation (e.g., adding variances of independent variables).
+    **단위:** $X$가 달러 단위라면 $\sigma^2$은 달러 제곱 단위여서 "전형적인 편차"로 해석할 수 없고, $\sigma$는 달러 단위다. 표준편차가 원래 단위를 회복시키므로 "전형적인 퍼짐"을 보고할 때는 표준편차가 선호되고, 대수적 조작(예: 독립 변수들의 분산을 더하기)에는 분산이 선호된다.
 
 ---
 
-**Exercise 4.**
-**Variance of a sum.** For independent random variables $X_1, \ldots, X_n$, show that $\mathrm{Var}(\sum_i X_i) = \sum_i \mathrm{Var}(X_i)$. Where does independence enter, and what is the formula when the variables are *correlated*?
+**연습문제 4.**
+**합의 분산.** 독립인 확률변수 $X_1, \ldots, X_n$에 대해 $\mathrm{Var}(\sum_i X_i) = \sum_i \mathrm{Var}(X_i)$임을 보여라. 독립성은 어디에서 쓰이며, 변수들이 *상관*되어 있을 때의 공식은 무엇인가?
 
-??? success "Solution to Exercise 4"
-    Let $\mu_i = \mathbb{E}[X_i]$. Then
+??? success "연습문제 4 풀이"
+    $\mu_i = \mathbb{E}[X_i]$라 하자. 그러면
 
     $$
     \mathrm{Var}\!\left(\sum_i X_i\right) = \mathbb{E}\!\left[\left(\sum_i (X_i - \mu_i)\right)^2\right] = \sum_i \mathbb{E}[(X_i - \mu_i)^2] + \sum_{i \ne j} \mathbb{E}[(X_i - \mu_i)(X_j - \mu_j)]
     $$
 
-    The first term is $\sum_i \sigma_i^2$. The second term, $\sum_{i \ne j} \mathrm{Cov}(X_i, X_j)$, is **zero** under independence (since the cross terms factor as $\mathbb{E}[X_i - \mu_i] \mathbb{E}[X_j - \mu_j] = 0$).
+    이다. 첫 항은 $\sum_i \sigma_i^2$이다. 둘째 항 $\sum_{i \ne j} \mathrm{Cov}(X_i, X_j)$는 독립성 아래에서 **0**이다(교차항이 $\mathbb{E}[X_i - \mu_i] \mathbb{E}[X_j - \mu_j] = 0$으로 분해되므로).
 
-    **For correlated variables:**
+    **상관된 변수의 경우:**
 
     $$
     \mathrm{Var}\!\left(\sum_i X_i\right) = \sum_i \sigma_i^2 + 2 \sum_{i < j} \mathrm{Cov}(X_i, X_j)
     $$
 
-    Positive correlations *inflate* the sum's variance; negative correlations reduce it. Portfolio diversification exploits this: combining assets with low or negative correlations reduces total variance for the same expected return.
+    양의 상관은 합의 분산을 *부풀리고* 음의 상관은 줄인다. 포트폴리오 분산투자가 이를 활용한다. 상관이 낮거나 음인 자산을 결합하면 같은 기대수익에 대해 총분산을 줄일 수 있다.
 
 ---
 
-**Exercise 5.**
-The **standard error** of the sample mean is $\mathrm{SE}(\bar{X}) = \sigma/\sqrt{n}$. Why is this $\sqrt{n}$ and not $n$ in the denominator? Use this to explain why quadrupling sample size only halves the SE.
+**연습문제 5.**
+표본평균의 **표준오차**는 $\mathrm{SE}(\bar{X}) = \sigma/\sqrt{n}$이다. 분모가 왜 $n$이 아니라 $\sqrt{n}$인가? 이를 이용해 표본 크기를 네 배로 늘려야 표준오차가 절반이 되는 이유를 설명하라.
 
-??? success "Solution to Exercise 5"
-    The variance of the sample mean for i.i.d. data is
+??? success "연습문제 5 풀이"
+    i.i.d. 자료에서 표본평균의 분산은
 
     $$
     \mathrm{Var}(\bar{X}) = \mathrm{Var}\!\left(\frac{1}{n}\sum_i X_i\right) = \frac{1}{n^2} \cdot n \sigma^2 = \frac{\sigma^2}{n}
     $$
 
-    The standard error is the square root: $\mathrm{SE}(\bar{X}) = \sigma/\sqrt{n}$. The $\sqrt{n}$ appears because we're square-rooting a variance that scales as $1/n$.
+    이다. 표준오차는 그 제곱근인 $\mathrm{SE}(\bar{X}) = \sigma/\sqrt{n}$이다. $1/n$로 줄어드는 분산의 제곱근을 취하기 때문에 $\sqrt{n}$이 나타난다.
 
-    **Quadrupling rule:** if $n$ goes from $n$ to $4n$, then $\sqrt{n} \to 2\sqrt{n}$, and SE is halved. To halve the SE again you need another 4× in sample size — i.e., $16n$. Precision improves with $\sqrt{n}$, an unforgiving rate that drives the cost of high-precision surveys.
+    **네 배 규칙:** $n$이 $n$에서 $4n$이 되면 $\sqrt{n} \to 2\sqrt{n}$이므로 표준오차가 절반이 된다. 표준오차를 다시 절반으로 줄이려면 표본 크기를 또 4배, 즉 $16n$으로 만들어야 한다. 정밀도는 $\sqrt{n}$으로만 좋아지며, 이 가차 없는 속도가 고정밀 조사의 비용을 좌우한다.
 
 ---
 
-**Exercise 6.**
-The **coefficient of variation** $\mathrm{CV} = \sigma/\mu$ is a unitless measure of relative spread. When is CV more useful than $\sigma$ alone? Give an example where two distributions have the same $\sigma$ but very different CVs.
+**연습문제 6.**
+**변동계수** $\mathrm{CV} = \sigma/\mu$는 상대적 퍼짐을 재는 단위 없는 측도다. CV가 $\sigma$만 보는 것보다 유용한 때는 언제인가? $\sigma$는 같지만 CV는 크게 다른 두 분포의 예를 들어라.
 
-??? success "Solution to Exercise 6"
-    The CV is invariant under multiplicative rescaling: doubling all data values doubles both $\sigma$ and $\mu$, leaving CV unchanged. This makes it a "scale-free" spread measure useful for **comparing variability across distributions with different units or magnitudes**.
+??? success "연습문제 6 풀이"
+    CV는 곱셈적 척도 변환에 불변이다. 모든 자료값을 두 배로 하면 $\sigma$와 $\mu$가 모두 두 배가 되어 CV는 그대로다. 따라서 CV는 "척도에서 자유로운" 퍼짐 측도로서 **단위나 크기가 다른 분포들 사이에서 변동성을 비교**하는 데 유용하다.
 
-    **Example:**
+    **예:**
 
-    - Annual returns of stock A: $\mu = 5\%$, $\sigma = 5\%$, so CV $= 1.0$.
-    - Annual returns of stock B: $\mu = 50\%$, $\sigma = 5\%$, so CV $= 0.1$.
+    - 주식 A의 연간 수익률: $\mu = 5\%$, $\sigma = 5\%$이므로 CV $= 1.0$.
+    - 주식 B의 연간 수익률: $\mu = 50\%$, $\sigma = 5\%$이므로 CV $= 0.1$.
 
-    Both have the same absolute SD (5 percentage points). But A's returns are far more *variable relative to their typical value* — a one-SD downward move could wipe out a year's return entirely. B's returns are tightly clustered around a high level. CV captures this difference.
+    둘의 절대 표준편차는 같다(5%포인트). 그러나 A의 수익률은 *전형적인 값에 비해* 훨씬 변동이 크다. 표준편차 1배만큼 하락하면 한 해 수익이 통째로 사라질 수 있다. B의 수익률은 높은 수준 주위에 촘촘히 몰려 있다. CV가 이 차이를 포착한다.
 
-    **Caveats:** CV is undefined or unstable when $\mu$ is near zero or can change sign (e.g., investment returns that include losses). For such data, alternative measures like the **Sharpe ratio** ($\mu/\sigma$ for positive-$\mu$ comparisons) or **interquartile range / median** (robust analog) are preferred.
+    **단서:** $\mu$가 0에 가깝거나 부호가 바뀔 수 있으면(예: 손실을 포함하는 투자 수익률) CV는 정의되지 않거나 불안정해진다. 그런 자료에는 **샤프 지수**($\mu$가 양수인 비교에서의 $\mu/\sigma$)나 **사분위범위 / 중앙값**(강건한 대응물) 같은 대안 측도가 선호된다.

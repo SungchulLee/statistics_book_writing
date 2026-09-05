@@ -1,22 +1,22 @@
-# Skewness and Kurtosis
+# 왜도와 첨도
 
-## Overview
+## 개요
 
-**Skewness** and **kurtosis** are numerical measures that quantify the shape of a distribution beyond what the mean and variance capture. Skewness measures asymmetry, while kurtosis measures the heaviness of the tails relative to a normal distribution.
+**왜도**와 **첨도**는 평균과 분산이 담아내지 못하는 분포의 모양을 정량화하는 수치 측도다. 왜도는 비대칭성을 재고, 첨도는 정규분포에 비해 꼬리가 얼마나 두꺼운지를 잰다.
 
 ---
 
-## 1. Symmetric and Skewed Distributions
+## 1. 대칭 분포와 치우친 분포
 
-### Symmetric Distribution
+### 대칭 분포
 
-A distribution is **symmetric** if its left and right sides mirror each other. The most common example is the normal distribution (bell curve), where mean, median, and mode are equal and located at the center.
+분포의 좌우가 서로 거울상이면 그 분포는 **대칭**이다. 가장 흔한 예는 정규분포(종 모양 곡선)로, 평균·중앙값·최빈값이 같고 중앙에 위치한다.
 
-**Example:** Heights of people often follow a symmetric distribution.
+**예:** 사람의 키는 흔히 대칭 분포를 따른다.
 
-#### Symmetric Distribution: Mixture of Gaussians
+#### 대칭 분포: 가우시안 혼합
 
-A symmetric shape can also arise from a mixture of distributions, provided the components are centered at the same location.
+성분들이 같은 위치를 중심으로 한다면 분포의 혼합에서도 대칭인 모양이 나올 수 있다.
 
 ```python
 import matplotlib.pyplot as plt
@@ -38,11 +38,11 @@ if __name__ == "__main__":
     generate_and_plot_mixed_distribution()
 ```
 
-### Skewed Distributions
+### 치우친 분포
 
-A **skewed** distribution has data that stretches more on one side than the other.
+**치우친(skewed)** 분포는 자료가 한쪽으로 더 길게 뻗는다.
 
-**Right-Skewed (Positively Skewed):** The tail extends to the right. Mean > Median > Mode. Example: income distribution.
+**오른쪽 치우침(양의 왜도):** 꼬리가 오른쪽으로 뻗는다. 평균 > 중앙값 > 최빈값. 예: 소득 분포.
 
 ```python
 import numpy as np
@@ -64,7 +64,7 @@ if __name__ == "__main__":
     generate_and_plot_right_skewed_distribution()
 ```
 
-**Left-Skewed (Negatively Skewed):** The tail extends to the left. Mean < Median < Mode. Example: age at retirement.
+**왼쪽 치우침(음의 왜도):** 꼬리가 왼쪽으로 뻗는다. 평균 < 중앙값 < 최빈값. 예: 은퇴 연령.
 
 ```python
 import numpy as np
@@ -88,9 +88,9 @@ if __name__ == "__main__":
 
 ---
 
-## 2. Detecting Skewness via Box Plots
+## 2. 상자그림으로 왜도 알아보기
 
-Box plots provide a quick visual diagnostic for skewness:
+상자그림은 왜도를 빠르게 시각적으로 진단하게 해준다.
 
 $$
 \begin{array}{lll}
@@ -102,7 +102,7 @@ $$
 \end{array}
 $$
 
-### Box Plot: Symmetric Distribution
+### 상자그림: 대칭 분포
 
 ```python
 import matplotlib.pyplot as plt
@@ -128,7 +128,7 @@ if __name__ == "__main__":
     generate_and_plot_histogram_and_box_plot_mixed_distribution()
 ```
 
-### Box Plot: Right-Skewed Distribution
+### 상자그림: 오른쪽으로 치우친 분포
 
 ```python
 import numpy as np
@@ -154,7 +154,7 @@ if __name__ == "__main__":
     generate_and_plot_histogram_and_box_plot_right_skewed()
 ```
 
-### Box Plot: Left-Skewed Distribution
+### 상자그림: 왼쪽으로 치우친 분포
 
 ```python
 import numpy as np
@@ -182,19 +182,19 @@ if __name__ == "__main__":
 
 ---
 
-## 3. Skewness: Definition and Computation
+## 3. 왜도: 정의와 계산
 
-### Definition
+### 정의
 
 $$
 \text{Skewness}(X) = E\left(\frac{X - \mu}{\sigma}\right)^3 \approx \frac{1}{n}\sum_{i=1}^{n}\left(\frac{x_i - \bar{x}}{s}\right)^3
 $$
 
-- **Skewness = 0:** Symmetric distribution.
-- **Skewness > 0:** Right-skewed (positive skew).
-- **Skewness < 0:** Left-skewed (negative skew).
+- **왜도 = 0:** 대칭 분포.
+- **왜도 > 0:** 오른쪽으로 치우침(양의 왜도).
+- **왜도 < 0:** 왼쪽으로 치우침(음의 왜도).
 
-### Skewness Simulation
+### 왜도 모의실험
 
 ```python
 import numpy as np
@@ -250,27 +250,27 @@ if __name__ == "__main__":
 
 ---
 
-## 4. Kurtosis
+## 4. 첨도
 
-### Definition
+### 정의
 
-Kurtosis measures the "tailedness" of a distribution—how much probability mass is in the tails relative to the center.
+첨도는 분포의 "꼬리성", 즉 중심에 비해 꼬리에 확률 질량이 얼마나 있는지를 잰다.
 
 $$
 \text{Kurtosis}(X) = E\left(\frac{X - \mu}{\sigma}\right)^4 \approx \frac{1}{n}\sum_{i=1}^{n}\left(\frac{x_i - \bar{x}}{s}\right)^4
 $$
 
-**Excess Kurtosis** subtracts the kurtosis of the normal distribution (which equals 3):
+**초과첨도**는 정규분포의 첨도(3)를 뺀 값이다.
 
 $$
 \text{Excess Kurtosis}(X) = \text{Kurtosis}(X) - 3
 $$
 
-- **Excess Kurtosis = 0 (Mesokurtic):** Normal-like tails.
-- **Excess Kurtosis > 0 (Leptokurtic):** Heavier tails than normal; more extreme outliers.
-- **Excess Kurtosis < 0 (Platykurtic):** Lighter tails than normal; fewer extreme values.
+- **초과첨도 = 0(중첨):** 정규분포와 비슷한 꼬리.
+- **초과첨도 > 0(급첨):** 정규보다 두꺼운 꼬리, 극단적 이상치가 더 많다.
+- **초과첨도 < 0(평첨):** 정규보다 얇은 꼬리, 극단값이 더 적다.
 
-### Kurtosis Simulation
+### 첨도 모의실험
 
 ```python
 import numpy as np
@@ -323,9 +323,9 @@ if __name__ == "__main__":
     main()
 ```
 
-### Computing Kurtosis in Python
+### 파이썬에서 첨도 계산하기
 
-SciPy provides convenient functions that compute excess kurtosis directly:
+SciPy는 초과첨도를 직접 계산해 주는 편리한 함수를 제공한다.
 
 ```python
 from scipy import stats
@@ -340,122 +340,122 @@ print(stats.describe(data).kurtosis)
 
 ---
 
-## Summary
+## 요약
 
-Skewness and kurtosis extend the description of a distribution beyond its center and spread. Skewness reveals directional asymmetry, guiding the choice between mean and median as a representative center. Kurtosis quantifies tail behavior, which is critical in risk management and finance where extreme events (heavy tails) have outsized consequences.
+왜도와 첨도는 분포에 대한 기술을 중심과 퍼짐 너머로 확장한다. 왜도는 방향성 있는 비대칭을 드러내어 대표적인 중심으로 평균과 중앙값 중 무엇을 고를지 이끌어 준다. 첨도는 꼬리의 행동을 정량화하는데, 극단적 사건(두꺼운 꼬리)이 큰 결과를 낳는 위험관리와 금융에서 매우 중요하다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-For $\{1, 2, 3, 4, 10\}$: compute (a) sample mean and SD; (b) population skewness; (c) interpret the sign.
+**연습문제 1.**
+$\{1, 2, 3, 4, 10\}$에 대해 (a) 표본평균과 표준편차, (b) 모집단 왜도를 계산하고, (c) 그 부호를 해석하라.
 
-??? success "Solution to Exercise 1"
-    (a) $\bar x = 4$. Squared deviations $9, 4, 1, 0, 36$; sum $= 50$; $m_2 = 50/5 = 10$, $s_{\text{pop}} = \sqrt{10} \approx 3.162$.
+??? success "연습문제 1 풀이"
+    (a) $\bar x = 4$. 제곱편차는 $9, 4, 1, 0, 36$이고 합 $= 50$이므로 $m_2 = 50/5 = 10$, $s_{\text{pop}} = \sqrt{10} \approx 3.162$.
 
-    (b) Cubed deviations $-27, -8, -1, 0, 216$; sum $= 180$; $m_3 = 180/5 = 36$. Then
+    (b) 세제곱편차는 $-27, -8, -1, 0, 216$이고 합 $= 180$이므로 $m_3 = 180/5 = 36$. 따라서
 
     $$
     g_1 = \frac{m_3}{m_2^{3/2}} = \frac{36}{10^{3/2}} \approx 1.138
     $$
 
-    (c) $g_1 > 0$ → right-skewed. The single value 10 produces a cubed deviation $+216$ that dominates the numerator. The four smaller values contribute only $-36$ collectively. One long right tail produces positive skewness.
+    (c) $g_1 > 0$이므로 오른쪽으로 치우쳐 있다. 값 10 하나가 세제곱편차 $+216$을 만들어 분자를 지배한다. 나머지 네 개의 작은 값은 합해서 $-36$만 기여한다. 긴 오른쪽 꼬리 하나가 양의 왜도를 만든다.
 
 ---
 
-**Exercise 2.**
-Two datasets: A = $\{4,5,5,6,6,6,7,7,8\}$, B = $\{1,2,5,6,6,6,7,10,11\}$. Verify equal means, then compute the population excess kurtosis of each. Both turn out equal — explain why.
+**연습문제 2.**
+두 자료 A = $\{4,5,5,6,6,6,7,7,8\}$, B = $\{1,2,5,6,6,6,7,10,11\}$이 있다. 평균이 같음을 확인한 뒤 각각의 모집단 초과첨도를 계산하라. 둘이 같게 나오는데, 그 이유를 설명하라.
 
-??? success "Solution to Exercise 2"
-    Both means: $54/9 = 6$.
+??? success "연습문제 2 풀이"
+    두 평균 모두 $54/9 = 6$이다.
 
-    **Dataset A:** $m_2 = 12/9 = 4/3$, $m_4 = 36/9 = 4$. Excess kurtosis $= 4/(4/3)^2 - 3 = 4 \cdot 9/16 - 3 = 2.25 - 3 = -0.75$.
+    **자료 A:** $m_2 = 12/9 = 4/3$, $m_4 = 36/9 = 4$. 초과첨도 $= 4/(4/3)^2 - 3 = 4 \cdot 9/16 - 3 = 2.25 - 3 = -0.75$.
 
-    **Dataset B:** $m_2 = 84/9 = 28/3$, $m_4 = 1764/9 = 196$. Excess kurtosis $= 196 / (28/3)^2 - 3 = 196 \cdot 9 / 784 - 3 = 2.25 - 3 = -0.75$.
+    **자료 B:** $m_2 = 84/9 = 28/3$, $m_4 = 1764/9 = 196$. 초과첨도 $= 196 / (28/3)^2 - 3 = 196 \cdot 9 / 784 - 3 = 2.25 - 3 = -0.75$.
 
-    **Why equal:** kurtosis is the ratio $m_4 / m_2^2$ — a *standardized* fourth moment. Dataset B has values farther from the mean (range 1 to 11 vs. 4 to 8), but its $m_2$ is also proportionally larger. Kurtosis measures tail heaviness *relative to the distribution's own variance*, so multiplying every observation by a constant leaves kurtosis unchanged. The two datasets have the same *shape* up to rescaling.
+    **같은 이유:** 첨도는 비 $m_4 / m_2^2$, 즉 *표준화된* 4차 적률이다. 자료 B는 값이 평균에서 더 멀리 있지만(범위 1–11 대 4–8) $m_2$도 그에 비례해 크다. 첨도는 *그 분포 자신의 분산에 상대적인* 꼬리의 두께를 재므로, 모든 관측값에 상수를 곱해도 첨도는 변하지 않는다. 두 자료는 척도를 제외하면 같은 *모양*이다.
 
 ---
 
-**Exercise 3.**
-Define the **third standardized central moment** as $\mu_3 / \sigma^3$. Show that this is **scale-invariant** (rescaling all observations leaves it unchanged) and **shift-invariant** (adding a constant leaves it unchanged). What does this say about the population skewness coefficient?
+**연습문제 3.**
+**3차 표준화 중심적률**을 $\mu_3 / \sigma^3$으로 정의한다. 이것이 **척도 불변**(모든 관측값의 척도를 바꿔도 변하지 않음)이고 **평행이동 불변**(상수를 더해도 변하지 않음)임을 보여라. 이것이 모집단 왜도 계수에 대해 무엇을 말해주는가?
 
-??? success "Solution to Exercise 3"
-    Let $Y = a X + b$ with $a > 0$. Then $\mu_Y = a\mu_X + b$, $\sigma_Y = a \sigma_X$, and
+??? success "연습문제 3 풀이"
+    $a > 0$에 대해 $Y = a X + b$라 하자. 그러면 $\mu_Y = a\mu_X + b$, $\sigma_Y = a \sigma_X$이고
 
     $$
     \mu_3(Y) = \mathbb{E}[(Y - \mu_Y)^3] = \mathbb{E}[(a(X - \mu_X))^3] = a^3 \mu_3(X)
     $$
 
-    Therefore
+    이다. 따라서
 
     $$
     \frac{\mu_3(Y)}{\sigma_Y^3} = \frac{a^3 \mu_3(X)}{a^3 \sigma_X^3} = \frac{\mu_3(X)}{\sigma_X^3}
     $$
 
-    The skewness is **affine-invariant**: it depends only on the shape of the distribution, not its location or scale. Two distributions with the same shape (e.g., all normal distributions) have the same skewness regardless of their parameters $(\mu, \sigma)$. This invariance is what allows skewness to compare across data sets with different units.
+    이다. 왜도는 **아핀 불변**이다. 분포의 위치나 척도가 아니라 모양에만 의존한다. 모양이 같은 두 분포(예: 모든 정규분포)는 모수 $(\mu, \sigma)$와 무관하게 같은 왜도를 갖는다. 이 불변성 덕분에 왜도로 단위가 다른 자료들을 비교할 수 있다.
 
-    Similarly, the **fourth standardized moment** (kurtosis) is also affine-invariant, which is why both A and B in Exercise 2 produce identical excess kurtosis despite the different spreads.
+    마찬가지로 **4차 표준화 적률**(첨도)도 아핀 불변이며, 연습문제 2의 A와 B가 퍼짐이 다른데도 초과첨도가 같게 나오는 이유가 이것이다.
 
 ---
 
-**Exercise 4.**
-The **Pearson median skewness** is $\gamma = (\mu - \tilde\mu) / \sigma$ where $\tilde\mu$ is the median. Why is this measure more robust than the classical skewness, and what is the typical relationship between $\mu$, $\tilde\mu$, and the mode in a unimodal right-skewed distribution?
+**연습문제 4.**
+**피어슨 중앙값 왜도**는 $\tilde\mu$를 중앙값이라 할 때 $\gamma = (\mu - \tilde\mu) / \sigma$이다. 이 측도가 고전적 왜도보다 강건한 이유는 무엇이며, 단봉이고 오른쪽으로 치우친 분포에서 $\mu$, $\tilde\mu$, 최빈값의 전형적인 관계는 무엇인가?
 
-??? success "Solution to Exercise 4"
-    **More robust:** the classical skewness involves cubed deviations, so a single outlier far from the mean contributes $|x - \bar x|^3$, which can be enormous. Pearson's median skewness uses the median (breakdown 50%) and is less sensitive to outliers. The standard deviation in the denominator is still sensitive — for a fully robust skewness measure, replace $\sigma$ with a robust scale like MAD.
+??? success "연습문제 4 풀이"
+    **더 강건한 이유:** 고전적 왜도는 세제곱편차를 쓰므로 평균에서 멀리 떨어진 이상치 하나가 $|x - \bar x|^3$만큼 기여하는데 이 값이 엄청날 수 있다. 피어슨의 중앙값 왜도는 중앙값(붕괴점 50%)을 써서 이상치에 덜 민감하다. 다만 분모의 표준편차는 여전히 민감하므로, 완전히 강건한 왜도 측도를 원한다면 $\sigma$를 MAD 같은 강건 척도로 바꾼다.
 
-    **Typical ordering in a unimodal right-skewed distribution:**
+    **단봉이고 오른쪽으로 치우친 분포에서의 전형적인 순서:**
 
     $$
     \text{Mode} < \text{Median} < \text{Mean}
     $$
 
-    Intuition: the mode is at the peak of the density; the median is at the half-mass cutoff; the mean is pulled toward the long right tail. For a left-skewed distribution the ordering reverses: $\text{Mean} < \text{Median} < \text{Mode}$. For a perfectly symmetric unimodal distribution, all three coincide.
+    직관: 최빈값은 밀도의 봉우리에 있고, 중앙값은 질량이 절반이 되는 지점에 있으며, 평균은 긴 오른쪽 꼬리에 끌려간다. 왼쪽으로 치우친 분포에서는 순서가 뒤집힌다: $\text{Mean} < \text{Median} < \text{Mode}$. 완벽하게 대칭인 단봉 분포에서는 셋이 모두 일치한다.
 
-    This ordering is widely used as a heuristic skewness diagnostic but it can fail in multimodal or pathologically skewed distributions.
+    이 순서는 왜도를 진단하는 어림법으로 널리 쓰이지만, 다봉이거나 병적으로 치우친 분포에서는 성립하지 않을 수 있다.
 
 ---
 
-**Exercise 5.**
-The kurtosis of a standard normal is 3 (excess kurtosis 0). Heavy-tailed distributions like the $t$-distribution with $\nu$ degrees of freedom have excess kurtosis $6/(\nu - 4)$ (for $\nu > 4$). Compute and interpret this for $\nu = 5, 10, 30, 100$.
+**연습문제 5.**
+표준정규분포의 첨도는 3(초과첨도 0)이다. 자유도 $\nu$인 $t$-분포처럼 꼬리가 두꺼운 분포는 ($\nu > 4$일 때) 초과첨도가 $6/(\nu - 4)$이다. $\nu = 5, 10, 30, 100$에 대해 계산하고 해석하라.
 
-??? success "Solution to Exercise 5"
-    Excess kurtosis $= 6/(\nu - 4)$:
+??? success "연습문제 5 풀이"
+    초과첨도 $= 6/(\nu - 4)$:
 
-    | $\nu$ | excess kurtosis |
+    | $\nu$ | 초과첨도 |
     |---|---|
     | 5 | 6 |
     | 10 | 1 |
     | 30 | 0.231 |
     | 100 | 0.0625 |
 
-    **Interpretation:** as $\nu$ grows, the $t$-distribution approaches the normal, so its excess kurtosis $\to 0$. At $\nu = 5$, the tails are far heavier than normal (excess kurtosis 6 is enormous). At $\nu = 30$, the tails are nearly normal (excess $\approx 0.23$). At $\nu = 100$, the $t$ is practically indistinguishable from normal in kurtosis.
+    **해석:** $\nu$가 커질수록 $t$-분포가 정규분포에 가까워지므로 초과첨도가 $\to 0$이다. $\nu = 5$에서는 꼬리가 정규보다 훨씬 두껍다(초과첨도 6은 엄청난 값이다). $\nu = 30$에서는 꼬리가 거의 정규에 가깝다(초과 $\approx 0.23$). $\nu = 100$에서는 첨도 면에서 $t$가 사실상 정규와 구별되지 않는다.
 
-    **Practical implications:**
+    **실무적 함의:**
 
-    - Stock returns are often modeled with $t$-distribution at $\nu \approx 4$–$8$ (heavy tails matching observed crashes).
-    - Hypothesis tests using $t$ critical values converge to $z$ critical values for $\nu \gtrsim 30$ — this is the rule of thumb for using the normal approximation.
-    - When sample kurtosis is large (e.g., $g_2 > 2$), suspect that the data has heavier tails than normal and standard CIs based on normality may have under-coverage.
+    - 주식 수익률은 흔히 $\nu \approx 4$–$8$인 $t$-분포로 모형화한다(관측되는 폭락에 맞는 두꺼운 꼬리).
+    - $t$ 임계값을 쓰는 가설검정은 $\nu \gtrsim 30$이면 $z$ 임계값으로 수렴한다. 정규근사를 쓰는 어림법의 근거가 이것이다.
+    - 표본 첨도가 크면(예: $g_2 > 2$) 자료의 꼬리가 정규보다 두껍고 정규성에 근거한 표준 신뢰구간의 포함확률이 부족할 수 있음을 의심하라.
 
 ---
 
-**Exercise 6.**
-**Sample skewness and kurtosis are themselves random**, and their sampling variability is large for small samples. What is approximately the standard error of the sample skewness for an i.i.d. sample of size $n$ from a normal distribution? Use this to discuss when a "nonzero" sample skewness is statistically meaningful.
+**연습문제 6.**
+**표본 왜도와 첨도 자체가 확률변수**이며, 표본이 작으면 그 표집 변동성이 크다. 정규분포에서 뽑은 크기 $n$인 i.i.d. 표본에 대해 표본 왜도의 표준오차는 대략 얼마인가? 이를 이용해 "0이 아닌" 표본 왜도가 언제 통계적으로 의미 있는지 논하라.
 
-??? success "Solution to Exercise 6"
-    For an i.i.d. normal sample, the asymptotic standard error of the sample skewness is
+??? success "연습문제 6 풀이"
+    정규 i.i.d. 표본에서 표본 왜도의 점근 표준오차는
 
     $$
     \mathrm{SE}(g_1) \approx \sqrt{\frac{6 n (n-1)}{(n-2)(n+1)(n+3)}} \approx \sqrt{\frac{6}{n}}
     $$
 
-    A sample skewness $|g_1| > 2 \cdot \mathrm{SE}$ is needed for evidence of departure from normal skewness. Values:
+    이다. 정규분포의 왜도에서 벗어났다는 증거가 되려면 표본 왜도가 $|g_1| > 2 \cdot \mathrm{SE}$여야 한다. 값은 다음과 같다.
 
-    | $n$ | approximate SE | "significant" threshold |
+    | $n$ | 근사 표준오차 | "유의" 기준 |
     |---|---|---|
     | 20 | 0.55 | $\pm 1.10$ |
     | 50 | 0.35 | $\pm 0.69$ |
     | 100 | 0.24 | $\pm 0.49$ |
     | 1000 | 0.077 | $\pm 0.15$ |
 
-    **Implication:** with $n = 50$, a sample skewness of 0.4 is *not* statistically distinguishable from zero — it could easily arise from normal data by chance. Practitioners who report "skewness = 0.4, so the data is right-skewed" without considering sampling variability are over-interpreting. Always (a) plot the data, (b) report SE alongside the point estimate, (c) prefer goodness-of-fit tests (Shapiro–Wilk, Anderson–Darling) for formal normality assessment. Similar caution applies to sample kurtosis, whose SE is even larger.
+    **함의:** $n = 50$일 때 표본 왜도 0.4는 0과 통계적으로 구별되지 *않는다*. 정규 자료에서도 우연히 충분히 나올 수 있는 값이다. 표집 변동성을 고려하지 않고 "왜도 = 0.4이므로 자료가 오른쪽으로 치우쳤다"고 보고하는 것은 과잉 해석이다. 언제나 (a) 자료를 그리고, (b) 점추정값과 함께 표준오차를 보고하며, (c) 형식적인 정규성 평가에는 적합도 검정(샤피로–윌크, 앤더슨–달링)을 택하라. 표준오차가 더 큰 표본 첨도에도 같은 주의가 적용된다.

@@ -82,28 +82,28 @@ nav:
             - 지도학습 (레이블을 이용한 예측): ch01/paradigms/supervised.md
             - 강화학습 (순차적 의사결정): ch01/paradigms/reinforcement.md
 
-    - 2 Descriptive Statistics:
-        - Chapter Overview: ch02/index.md
-        - 2.1 Exploratory Data Analysis:
-            - Histograms and Density Plots: ch02/exploration/histograms.md
-            - Empirical Distribution and Quantile-Quantile Plots: ch02/exploration/ecdf.md
-        - 2.2 Shape of Distributions:
-            - Modality: ch02/shape/modality.md
-            - Skewness and Kurtosis: ch02/shape/skewness_kurtosis.md
-            - Outliers and Leverage: ch02/shape/outliers.md
-        - 2.3 Numerical Summaries:
-            - Mean, Median, Mode: ch02/center/mean_median_mode.md
-            - Variance and Standard Deviation: ch02/spread/variance_std.md
-            - Interquartile Range and Robust Measures: ch02/spread/robust.md
-            - Median Absolute Deviation: ch02/spread/median_absolute_deviation.md
-        - 2.4 Visualization:
-            - Boxplots: ch02/visualization/boxplots.md
-            - Violin Plots: ch02/visualization/violin.md
-            - Group Comparisons: ch02/visualization/group_comparison.md
-        - 2.5 Code:
-            - Group Comparison Examples: ch02/code/group_comparison_examples.md
-            - Descriptive Statistics (Weed Prices): ch02/code/descriptive_stats_weed_prices.md
-            - Advanced Measures (Geometric Mean, Chebyshev): ch02/code/descriptive_measures_advanced.md
+    - 2 기술통계:
+        - 장 개요: ch02/index.md
+        - 2.1 탐색적 자료분석:
+            - 히스토그램과 밀도 그림: ch02/exploration/histograms.md
+            - 경험적 분포와 분위수-분위수 그림: ch02/exploration/ecdf.md
+        - 2.2 분포의 모양:
+            - 봉우리 수: ch02/shape/modality.md
+            - 왜도와 첨도: ch02/shape/skewness_kurtosis.md
+            - 이상치와 지렛대점: ch02/shape/outliers.md
+        - 2.3 수치 요약:
+            - 평균, 중앙값, 최빈값: ch02/center/mean_median_mode.md
+            - 분산과 표준편차: ch02/spread/variance_std.md
+            - 사분위범위와 강건 측도: ch02/spread/robust.md
+            - 중앙값 절대편차: ch02/spread/median_absolute_deviation.md
+        - 2.4 시각화:
+            - 상자그림: ch02/visualization/boxplots.md
+            - 바이올린 그림: ch02/visualization/violin.md
+            - 집단 비교: ch02/visualization/group_comparison.md
+        - 2.5 코드:
+            - 집단 비교 예제: ch02/code/group_comparison_examples.md
+            - 기술통계 (대마 가격): ch02/code/descriptive_stats_weed_prices.md
+            - 고급 측도 (기하평균, 체비쇼프): ch02/code/descriptive_measures_advanced.md
 
     - 3 Foundations of Probability:
         - Chapter Overview: ch03/index.md

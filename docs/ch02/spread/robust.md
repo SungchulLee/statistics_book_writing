@@ -1,26 +1,26 @@
-# IQR and Robust Measures
+# IQR과 강건 측도
 
-## Overview
+## 개요
 
-The **range**, **interquartile range (IQR)**, and **percentiles** are measures of spread that complement variance and standard deviation. The IQR is particularly valued as a **robust** measure—one that is resistant to the influence of outliers.
+**범위**, **사분위범위(IQR)**, **백분위수**는 분산과 표준편차를 보완하는 퍼짐의 측도다. 그중 IQR은 이상치의 영향에 저항하는 **강건한** 측도로 특히 높이 평가된다.
 
 ---
 
-## 1. Range
+## 1. 범위
 
-### Definition
+### 정의
 
-The range is the simplest measure of dispersion: the difference between the maximum and minimum values.
+범위는 가장 단순한 흩어짐의 측도로, 최댓값과 최솟값의 차이다.
 
 $$
 \text{Range} = \text{Max} - \text{Min}
 $$
 
-### Example
+### 예
 
-For the dataset 70, 85, 90, 95, 100: Range = $100 - 70 = 30$.
+자료 70, 85, 90, 95, 100에 대해 범위 $= 100 - 70 = 30$이다.
 
-### Computing Range
+### 범위 계산하기
 
 ```python
 import pandas as pd
@@ -32,27 +32,27 @@ data_range = loans_data['x'].max() - loans_data['x'].min()
 print(f"{data_range = }")
 ```
 
-### Limitations
+### 한계
 
-The range is highly sensitive to outliers because it depends entirely on the two most extreme values. It provides no information about how data is distributed between these extremes.
+범위는 전적으로 가장 극단적인 두 값에만 의존하므로 이상치에 매우 민감하다. 그 두 극단 사이에서 자료가 어떻게 분포하는지에 대해서는 아무 정보도 주지 않는다.
 
 ---
 
-## 2. Interquartile Range (IQR)
+## 2. 사분위범위 (IQR)
 
-### Definition
+### 정의
 
-The IQR measures the spread of the middle 50% of the data, effectively reducing the impact of outliers. It is the difference between the third quartile ($Q_3$, the 75th percentile) and the first quartile ($Q_1$, the 25th percentile).
+IQR은 자료 가운데 50%의 퍼짐을 재어 이상치의 영향을 효과적으로 줄인다. 제3사분위수($Q_3$, 75번째 백분위수)와 제1사분위수($Q_1$, 25번째 백분위수)의 차이다.
 
 $$
 \text{IQR} = Q_3 - Q_1
 $$
 
-### Example
+### 예
 
-For the dataset 1, 3, 4, 6, 7, 9, 11: $Q_1 = 3$, $Q_3 = 9$, so $\text{IQR} = 9 - 3 = 6$.
+자료 1, 3, 4, 6, 7, 9, 11에 대해 $Q_1 = 3$, $Q_3 = 9$이므로 $\text{IQR} = 9 - 3 = 6$이다.
 
-### IQR and Standard Deviation: Income Data
+### IQR과 표준편차: 소득 자료
 
 ```python
 import pandas as pd
@@ -96,7 +96,7 @@ plt.tight_layout()
 plt.show()
 ```
 
-### Computing Quartiles
+### 사분위수 계산하기
 
 ```python
 import pandas as pd
@@ -115,11 +115,11 @@ print(f"{q3 = }")
 
 ---
 
-## 3. Percentiles
+## 3. 백분위수
 
-The $p$-th percentile is the value below which $p\%$ of the data falls.
+$p$번째 백분위수는 자료의 $p\%$가 그 아래에 떨어지는 값이다.
 
-### Percentiles and Deciles
+### 백분위수와 십분위수
 
 $$
 \begin{array}{llll}
@@ -127,13 +127,13 @@ D_1 = P_{10}, & D_2 = P_{20}, & \ldots, & D_9 = P_{90}
 \end{array}
 $$
 
-### Percentiles and Quartiles
+### 백분위수와 사분위수
 
 $$
 Q_1 = P_{25}, \quad Q_2 = P_{50}, \quad Q_3 = P_{75}
 $$
 
-### Percentiles and Median
+### 백분위수와 중앙값
 
 $$
 \text{Median} = Q_2 = D_5 = P_{50}
@@ -141,126 +141,126 @@ $$
 
 ---
 
-## 4. Comparing Measures of Spread
+## 4. 퍼짐 측도의 비교
 
-| Measure | Robustness | Information | Best For |
+| 측도 | 강건성 | 담는 정보 | 적합한 상황 |
 |---|---|---|---|
-| Range | Not robust (extreme sensitivity) | Only two values | Quick overview |
-| IQR | Robust (ignores outer 50%) | Middle 50% spread | Skewed data, outlier-prone data |
-| Std Dev | Not robust (sensitive to outliers) | All data points | Symmetric, normal-like data |
+| 범위 | 강건하지 않음(극단적으로 민감) | 두 값만 | 빠른 개관 |
+| IQR | 강건함(바깥 50%를 무시) | 가운데 50%의 퍼짐 | 치우친 자료, 이상치가 많은 자료 |
+| 표준편차 | 강건하지 않음(이상치에 민감) | 모든 자료점 | 대칭이고 정규에 가까운 자료 |
 
-### Real-Life Examples
+### 실제 사례
 
-**Income Variability:** The range shows the gap between richest and poorest. The IQR reveals how middle-income earners differ. The standard deviation quantifies overall income inequality.
+**소득 변동성:** 범위는 최상위와 최하위의 격차를 보여준다. IQR은 중간 소득층이 서로 얼마나 다른지를 드러낸다. 표준편차는 전반적인 소득 불평등을 정량화한다.
 
-**Student Test Scores:** Low standard deviation means most students scored similarly. A large IQR might indicate a wide spread in the middle tier of performers.
+**학생 시험 점수:** 표준편차가 낮으면 대부분의 학생이 비슷한 점수를 받았다는 뜻이다. IQR이 크면 중간 성취층 안에서 편차가 크다는 뜻일 수 있다.
 
-**Stock Market Volatility:** Variance and standard deviation are standard risk measures in finance. High standard deviation indicates greater price fluctuation and higher investment risk.
-
----
-
-## 5. Practical Considerations
-
-**Sample vs. Population:** When computing variance and standard deviation, use $n-1$ (Bessel's correction) for samples to obtain unbiased estimates.
-
-**Data Distribution:** For normal distributions, standard deviation has a clean interpretation (empirical rule). For skewed distributions, the IQR paired with the median provides a more meaningful summary.
-
-**Complementary Use:** In practice, reporting both mean ± standard deviation and median with IQR gives readers a complete picture, especially when the distribution shape is unknown or potentially skewed.
-
-## Summary
-
-The IQR and related percentile-based measures provide robust alternatives to variance and standard deviation for describing data spread. By focusing on the middle 50% of the data, the IQR is insensitive to outliers, making it the preferred measure of spread for skewed distributions and datasets with extreme values.
-
-## Exercises
-
-**Exercise 1.**
-Consider the dataset $\{2, 4, 5, 7, 8, 9, 11, 13, 15, 80\}$. Compute the range, the IQR, and the sample standard deviation. Which measure is most affected by the outlier at 80?
-
-??? success "Solution to Exercise 1"
-    **Range:** $80 - 2 = 78$.
-
-    **IQR:** With $n = 10$ sorted values, the lower half is $\{2, 4, 5, 7, 8\}$ and the upper half is $\{9, 11, 13, 15, 80\}$. Thus $Q_1 = 5$ and $Q_3 = 13$, giving $\text{IQR} = 13 - 5 = 8$.
-
-    **Standard deviation:** The mean is $\bar{x} = (2+4+5+7+8+9+11+13+15+80)/10 = 154/10 = 15.4$. The sum of squared deviations is $(2-15.4)^2 + \cdots + (80-15.4)^2 = 179.56 + 129.96 + 108.16 + 70.56 + 54.76 + 40.96 + 19.36 + 5.76 + 0.16 + 4177.16 = 4786.4$. Then $s = \sqrt{4786.4/9} \approx \sqrt{531.8} \approx 23.06$.
-
-    The **range** is most dramatically affected (78 vs. what would be 13 without the outlier). The **standard deviation** is also heavily inflated (23.06 vs. roughly 4.2 without the outlier). The **IQR** is unaffected by the outlier since it depends only on the middle 50% of the data.
+**주식시장 변동성:** 분산과 표준편차는 금융에서 표준적인 위험 측도다. 표준편차가 크면 가격 변동이 크고 투자 위험이 높다.
 
 ---
 
-**Exercise 2.**
-Explain why the IQR has a breakdown point of 25%, while the range has a breakdown point of 0%.
+## 5. 실무적 고려사항
 
-??? success "Solution to Exercise 2"
-    The **breakdown point** of a statistic is the proportion of data that can be made arbitrarily extreme before the statistic becomes unbounded or meaningless.
+**표본 대 모집단:** 분산과 표준편차를 계산할 때 표본에 대해서는 불편추정값을 얻기 위해 $n-1$(베셀 보정)을 쓴다.
 
-    The **range** depends on exactly two values: the minimum and the maximum. Changing just one observation (the minimum or the maximum) to an extreme value will change the range arbitrarily. Therefore, a single corrupted observation (proportion $1/n \to 0\%$ as $n \to \infty$) can make the range arbitrarily large. The breakdown point is 0%.
+**자료의 분포:** 정규분포에서는 표준편차가 경험 규칙을 통해 깔끔한 해석을 갖는다. 치우친 분포에서는 중앙값과 짝지은 IQR이 더 의미 있는 요약을 제공한다.
 
-    The **IQR** depends on $Q_1$ and $Q_3$, which are determined by the middle portion of the data. To shift $Q_1$ or $Q_3$ arbitrarily, you would need to corrupt more than 25% of the observations (either the bottom 25% or the top 25%). Therefore, the IQR can tolerate up to 25% contamination before it breaks down.
+**보완적 사용:** 실무에서는 평균 ± 표준편차와 함께 중앙값과 IQR을 모두 보고하면 독자에게 완전한 그림을 준다. 분포의 모양을 모르거나 치우쳤을 가능성이 있을 때 특히 그렇다.
+
+## 요약
+
+IQR과 이와 관련된 백분위수 기반 측도는 자료의 퍼짐을 기술하는 데 있어 분산과 표준편차의 강건한 대안을 제공한다. 자료 가운데 50%에 초점을 맞추므로 IQR은 이상치에 둔감하며, 치우친 분포와 극단값이 있는 자료에서 선호되는 퍼짐 측도가 된다.
+
+## 연습문제
+
+**연습문제 1.**
+자료 $\{2, 4, 5, 7, 8, 9, 11, 13, 15, 80\}$을 생각하자. 범위, IQR, 표본표준편차를 계산하라. 80이라는 이상치에 가장 크게 영향받는 측도는 무엇인가?
+
+??? success "연습문제 1 풀이"
+    **범위:** $80 - 2 = 78$.
+
+    **IQR:** 정렬된 값이 $n = 10$개이므로 아래쪽 절반은 $\{2, 4, 5, 7, 8\}$, 위쪽 절반은 $\{9, 11, 13, 15, 80\}$이다. 따라서 $Q_1 = 5$, $Q_3 = 13$이고 $\text{IQR} = 13 - 5 = 8$이다.
+
+    **표준편차:** 평균은 $\bar{x} = (2+4+5+7+8+9+11+13+15+80)/10 = 154/10 = 15.4$이다. 제곱편차의 합은 $(2-15.4)^2 + \cdots + (80-15.4)^2 = 179.56 + 129.96 + 108.16 + 70.56 + 54.76 + 40.96 + 19.36 + 5.76 + 0.16 + 4177.16 = 4786.4$이다. 따라서 $s = \sqrt{4786.4/9} \approx \sqrt{531.8} \approx 23.06$이다.
+
+    **범위**가 가장 극적으로 영향받는다(이상치가 없었다면 13이었을 것이 78이 되었다). **표준편차**도 크게 부풀려진다(이상치가 없으면 대략 4.2인데 23.06이 되었다). **IQR**은 자료 가운데 50%에만 의존하므로 이상치의 영향을 받지 않는다.
 
 ---
 
-**Exercise 3.**
-A dataset has $Q_1 = 20$, median $= 30$, and $Q_3 = 55$. Without seeing the raw data, what can you infer about the shape of the distribution from these three numbers alone?
+**연습문제 2.**
+IQR의 붕괴점이 25%인 반면 범위의 붕괴점이 0%인 이유를 설명하라.
 
-??? success "Solution to Exercise 3"
-    The distance from $Q_1$ to the median is $30 - 20 = 10$, while the distance from the median to $Q_3$ is $55 - 30 = 25$. Since the upper half of the IQR is much wider than the lower half, the distribution is **right-skewed** (positively skewed). The data is more spread out above the median than below it, indicating a longer right tail.
+??? success "연습문제 2 풀이"
+    통계량의 **붕괴점(breakdown point)** 은 그 통계량이 무한대가 되거나 무의미해지기 전까지 임의로 극단적인 값으로 바꿀 수 있는 자료의 비율이다.
+
+    **범위**는 최솟값과 최댓값이라는 정확히 두 값에만 의존한다. 관측값 하나(최솟값 또는 최댓값)만 극단값으로 바꿔도 범위가 임의로 달라진다. 따라서 오염된 관측값 하나($n \to \infty$일 때 비율 $1/n \to 0\%$)만으로 범위를 임의로 크게 만들 수 있다. 붕괴점은 0%다.
+
+    **IQR**은 $Q_1$과 $Q_3$에 의존하며, 이들은 자료의 가운데 부분이 결정한다. $Q_1$이나 $Q_3$을 임의로 이동시키려면 관측값의 25%보다 많이(아래쪽 25% 또는 위쪽 25%) 오염시켜야 한다. 따라서 IQR은 붕괴하기 전까지 최대 25%의 오염을 견딜 수 있다.
 
 ---
 
-**Exercise 4.**
-For a standard normal distribution $N(0,1)$, the theoretical quartiles are $Q_1 \approx -0.6745$ and $Q_3 \approx 0.6745$. Compute the theoretical IQR and compare it to the standard deviation $\sigma = 1$. What is the ratio $\text{IQR}/\sigma$?
+**연습문제 3.**
+어떤 자료의 $Q_1 = 20$, 중앙값 $= 30$, $Q_3 = 55$이다. 원자료를 보지 않고 이 세 수만으로 분포의 모양에 대해 무엇을 추론할 수 있는가?
 
-??? success "Solution to Exercise 4"
-    The theoretical IQR is:
+??? success "연습문제 3 풀이"
+    $Q_1$에서 중앙값까지의 거리는 $30 - 20 = 10$이고, 중앙값에서 $Q_3$까지의 거리는 $55 - 30 = 25$다. IQR의 위쪽 절반이 아래쪽 절반보다 훨씬 넓으므로 이 분포는 **오른쪽으로 치우쳐** 있다(양의 왜도). 자료가 중앙값 아래보다 위쪽으로 더 넓게 퍼져 있으며, 이는 오른쪽 꼬리가 더 길다는 뜻이다.
+
+---
+
+**연습문제 4.**
+표준정규분포 $N(0,1)$에서 이론적 사분위수는 $Q_1 \approx -0.6745$, $Q_3 \approx 0.6745$이다. 이론적 IQR을 계산하고 표준편차 $\sigma = 1$과 비교하라. 비 $\text{IQR}/\sigma$는 얼마인가?
+
+??? success "연습문제 4 풀이"
+    이론적 IQR은
 
     $$
     \text{IQR} = Q_3 - Q_1 = 0.6745 - (-0.6745) = 1.349
     $$
 
-    The ratio is:
+    이고, 그 비는
 
     $$
     \frac{\text{IQR}}{\sigma} = \frac{1.349}{1} = 1.349
     $$
 
-    This means that for any normal distribution, $\text{IQR} \approx 1.349\sigma$. This relationship can be used to estimate the standard deviation from the IQR when the data is approximately normal: $\hat{\sigma} \approx \text{IQR}/1.349$.
+    이다. 즉 어떤 정규분포에서든 $\text{IQR} \approx 1.349\sigma$이다. 자료가 대략 정규일 때 IQR로 표준편차를 추정하는 데 이 관계를 쓸 수 있다: $\hat{\sigma} \approx \text{IQR}/1.349$.
 
 ---
 
-**Exercise 5.**
-Compare the **trimmed standard deviation** (computed after removing the top and bottom $p\%$) with the IQR as robust scale estimators. What are the trade-offs?
+**연습문제 5.**
+강건한 척도 추정량으로서 **절단 표준편차**(위아래 $p\%$를 제거한 뒤 계산)와 IQR을 비교하라. 절충 관계는 무엇인가?
 
-??? success "Solution to Exercise 5"
-    **Trimmed SD:** sort the data, remove the top $p\%$ and bottom $p\%$, compute SD on the remaining $1 - 2p$ fraction. Trade-offs:
+??? success "연습문제 5 풀이"
+    **절단 표준편차:** 자료를 정렬해 위쪽 $p\%$와 아래쪽 $p\%$를 제거하고 남은 $1 - 2p$ 비율에 대해 표준편차를 계산한다. 절충 관계는 다음과 같다.
 
-    - Breakdown point $= \min(p, 0.5)$. With $p = 0.25$, matches IQR.
-    - Uses information from many observations (the middle $1 - 2p$), so generally more efficient than IQR which uses only two quantile estimates.
-    - Smooth — small perturbations in data produce small changes (unlike the IQR, which is a function of only two order statistics).
-    - Requires choosing $p$ and re-scaling for consistency under a reference distribution.
+    - 붕괴점 $= \min(p, 0.5)$. $p = 0.25$이면 IQR과 같다.
+    - 많은 관측값(가운데 $1 - 2p$)의 정보를 쓰므로 분위수 추정값 두 개만 쓰는 IQR보다 일반적으로 더 효율적이다.
+    - 매끄럽다. 자료가 조금 흔들려도 값이 조금만 변한다(순서통계량 두 개만의 함수인 IQR과 대조된다).
+    - $p$를 골라야 하고 기준 분포에서 일치성을 갖도록 척도를 다시 맞춰야 한다.
 
     **IQR:** $Q_3 - Q_1$.
 
-    - Breakdown point $= 0.25$ (corrupt only one quartile required).
-    - Simpler computation; familiar to most analysts via box plots.
-    - Lower statistical efficiency under normality (about 37%) than trimmed SD.
+    - 붕괴점 $= 0.25$(사분위수 하나만 오염시키면 된다).
+    - 계산이 더 간단하고 상자그림을 통해 대부분의 분석가에게 익숙하다.
+    - 정규성 아래에서 통계적 효율이 절단 표준편차보다 낮다(약 37%).
 
-    **Practical recommendation:** for descriptive summaries, IQR is sufficient and standard. For estimators feeding into downstream statistical procedures (where lower variance matters), the trimmed SD or even better M-estimators are preferred.
+    **실무적 권고:** 기술적 요약에는 IQR로 충분하고 표준적이다. 이후의 통계 절차에 들어가는 추정량으로 쓸 때는(분산이 작은 것이 중요할 때는) 절단 표준편차나, 더 나아가 M-추정량이 선호된다.
 
 ---
 
-**Exercise 6.**
-For a **lognormal distribution** with parameters $(\mu, \sigma^2)$ on the log scale, the variance and IQR can disagree dramatically. Discuss why and what this means for reporting spread in skewed data.
+**연습문제 6.**
+로그 척도에서 모수가 $(\mu, \sigma^2)$인 **로그정규분포**에서는 분산과 IQR이 극적으로 어긋날 수 있다. 그 이유와, 치우친 자료에서 퍼짐을 보고하는 데 이것이 뜻하는 바를 논하라.
 
-??? success "Solution to Exercise 6"
-    If $X = \exp(Y)$ with $Y \sim N(\mu, \sigma^2)$, then $X$ is lognormal with mean $e^{\mu + \sigma^2/2}$ and variance $(e^{\sigma^2} - 1) e^{2\mu + \sigma^2}$.
+??? success "연습문제 6 풀이"
+    $Y \sim N(\mu, \sigma^2)$에 대해 $X = \exp(Y)$이면 $X$는 평균이 $e^{\mu + \sigma^2/2}$이고 분산이 $(e^{\sigma^2} - 1) e^{2\mu + \sigma^2}$인 로그정규분포를 따른다.
 
-    The variance grows roughly as $e^{\sigma^2}$, which can be very large for moderate $\sigma$ (e.g., $\sigma = 2$ gives variance multiplier $\sim 54$). The IQR depends only on the 25th and 75th percentiles of the lognormal, which are $\exp(\mu \pm 0.6745\sigma)$. So IQR grows linearly in $\exp$ of $\sigma$, much slower than variance.
+    분산은 대략 $e^{\sigma^2}$처럼 커지는데, $\sigma$가 중간 정도만 되어도 아주 커질 수 있다(예: $\sigma = 2$이면 분산 배율이 $\sim 54$). IQR은 로그정규분포의 25번째와 75번째 백분위수에만 의존하며 이는 $\exp(\mu \pm 0.6745\sigma)$이다. 따라서 IQR은 $\sigma$의 지수에 선형으로 커져 분산보다 훨씬 느리게 증가한다.
 
-    **Concrete example:** for $\mu = 0$, $\sigma = 2$:
+    **구체적인 예:** $\mu = 0$, $\sigma = 2$일 때
 
-    - Mean of $X \approx 7.39$, variance $\approx 401$, SD $\approx 20$.
+    - $X$의 평균 $\approx 7.39$, 분산 $\approx 401$, 표준편차 $\approx 20$.
     - $Q_1 \approx 0.259$, $Q_3 \approx 3.86$, IQR $\approx 3.6$.
 
-    SD is about $5.5\times$ the IQR. Reporting "mean $\pm$ SD" of $7.4 \pm 20$ is misleading — the interval includes negative values, impossible for a positive random variable, and the SD is dominated by the long right tail rather than the typical scale.
+    표준편차가 IQR의 약 $5.5$배다. "평균 $\pm$ 표준편차"를 $7.4 \pm 20$으로 보고하는 것은 오도한다. 그 구간이 양의 확률변수에는 불가능한 음수를 포함하고, 표준편차가 전형적인 척도가 아니라 긴 오른쪽 꼬리에 지배되기 때문이다.
 
-    **Reporting recommendation for skewed data:** always report the **median + IQR**, or even better the **median + the 10th and 90th percentiles**, instead of mean ± SD. Many fields (income reporting, drug pharmacokinetics, earthquake magnitudes) work on log scales for exactly this reason.
+    **치우친 자료의 보고 권고:** 평균 ± 표준편차 대신 언제나 **중앙값 + IQR**을, 더 나아가 **중앙값 + 10번째 및 90번째 백분위수**를 보고하라. 여러 분야(소득 보고, 약물동태학, 지진 규모)가 정확히 이 이유로 로그 척도에서 작업한다.

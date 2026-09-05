@@ -1,16 +1,16 @@
-# Descriptive Statistics from Scratch: Weed Prices
+# 기술통계를 처음부터 구현하기: 대마 가격
 
-## Overview
+## 개요
 
-This case study implements the core descriptive statistics—mean, median, mode, variance, standard deviation, covariance, and correlation—from first principles, then verifies each result against pandas built-in methods. The dataset consists of synthetic monthly high-quality weed prices for California and New York, inspired by real market data.
+이 사례 연구는 핵심 기술통계량 — 평균, 중앙값, 최빈값, 분산, 표준편차, 공분산, 상관 — 을 기본 원리에서부터 구현한 뒤 각 결과를 pandas 내장 메서드와 대조해 확인한다. 자료는 실제 시장 자료에서 착안한, 캘리포니아와 뉴욕의 고품질 대마 월별 가격을 합성한 것이다.
 
-Computing statistics from scratch reinforces the definitions and exposes the mechanics that library functions hide.
+통계량을 처음부터 계산해 보면 정의가 몸에 익고 라이브러리 함수가 감추는 작동 원리가 드러난다.
 
 ---
 
-## 1. The Data
+## 1. 자료
 
-We work with 48 monthly price observations for California (CA) and New York (NY) high-quality weed:
+캘리포니아(CA)와 뉴욕(NY)의 고품질 대마에 대한 48개월치 월별 가격 관측값을 다룬다.
 
 ```python
 import numpy as np
@@ -38,13 +38,13 @@ NY_PRICES = np.array([
 ])
 ```
 
-Both series show a steady downward trend over the 48-month period, with NY prices consistently higher than CA prices.
+두 계열 모두 48개월에 걸쳐 꾸준한 하락 추세를 보이며, 뉴욕 가격이 캘리포니아 가격보다 일관되게 높다.
 
 ---
 
-## 2. Mean
+## 2. 평균
 
-The sample mean is the sum of all observations divided by the count:
+표본평균은 모든 관측값의 합을 개수로 나눈 것이다.
 
 $$
 \bar{x} = \frac{1}{n} \sum_{i=1}^{n} x_i
@@ -57,9 +57,9 @@ def mean_from_scratch(data):
 
 ---
 
-## 3. Median
+## 3. 중앙값
 
-The median is the middle value of the sorted data. For even $n$, it is the average of the two central values:
+중앙값은 정렬된 자료의 가운데 값이다. $n$이 짝수이면 가운데 두 값의 평균이다.
 
 $$
 \text{median} =
@@ -81,9 +81,9 @@ def median_from_scratch(data):
 
 ---
 
-## 4. Mode
+## 4. 최빈값
 
-The mode is the most frequently occurring value. For continuous data, values are first rounded to a chosen precision:
+최빈값은 가장 자주 나타나는 값이다. 연속 자료에서는 먼저 값을 정해진 정밀도로 반올림한다.
 
 ```python
 def mode_from_scratch(data, decimals=1):
@@ -92,20 +92,20 @@ def mode_from_scratch(data, decimals=1):
     return values[np.argmax(counts)]
 ```
 
-!!! note "Mode for Continuous Data"
-    Continuous data rarely has repeated exact values. Rounding or binning is required before computing the mode, and the result depends on the rounding precision chosen.
+!!! note "연속 자료의 최빈값"
+    연속 자료에는 정확히 같은 값이 반복되는 일이 드물다. 최빈값을 계산하기 전에 반올림이나 구간화가 필요하며, 그 결과는 선택한 반올림 정밀도에 따라 달라진다.
 
 ---
 
-## 5. Variance and Standard Deviation
+## 5. 분산과 표준편차
 
-The sample variance uses Bessel's correction (dividing by $n - 1$) to produce an unbiased estimate of the population variance:
+표본분산은 모분산의 불편추정값을 얻기 위해 베셀 보정($n - 1$로 나누기)을 사용한다.
 
 $$
 s^2 = \frac{1}{n-1} \sum_{i=1}^{n} (x_i - \bar{x})^2
 $$
 
-The sample standard deviation is:
+표본표준편차는 다음과 같다.
 
 $$
 s = \sqrt{s^2}
@@ -122,15 +122,15 @@ def std_from_scratch(data):
 
 ---
 
-## 6. Covariance and Correlation
+## 6. 공분산과 상관
 
-The sample covariance measures the linear co-movement of two variables:
+표본공분산은 두 변수가 선형적으로 함께 움직이는 정도를 잰다.
 
 $$
 \text{Cov}(X, Y) = \frac{1}{n-1} \sum_{i=1}^{n} (x_i - \bar{x})(y_i - \bar{y})
 $$
 
-The Pearson correlation standardizes covariance to the range $[-1, 1]$:
+피어슨 상관은 공분산을 $[-1, 1]$ 범위로 표준화한다.
 
 $$
 r = \frac{\text{Cov}(X, Y)}{s_X \, s_Y}
@@ -148,9 +148,9 @@ def correlation_from_scratch(x, y):
 
 ---
 
-## 7. Results and Verification
+## 7. 결과와 확인
 
-Running the from-scratch functions on the California data and verifying with pandas:
+직접 구현한 함수를 캘리포니아 자료에 실행하고 pandas로 확인한다.
 
 ```python
 data = CA_PRICES
@@ -164,18 +164,18 @@ s = pd.Series(data)
 # s.mean(), s.median(), s.var(), s.std() match the above
 ```
 
-For CA vs NY:
+CA 대 NY의 경우:
 
 ```python
 cov  = covariance_from_scratch(CA_PRICES, NY_PRICES)   # 11.7610
 corr = correlation_from_scratch(CA_PRICES, NY_PRICES)   #  0.9998
 ```
 
-The near-perfect correlation ($r \approx 1$) reflects that both series follow a similar steady downward trend over the same period.
+거의 완벽한 상관($r \approx 1$)은 두 계열이 같은 기간에 비슷하게 꾸준한 하락 추세를 따랐음을 반영한다.
 
 ---
 
-## 8. Visualization
+## 8. 시각화
 
 ```python
 fig, axes = plt.subplots(1, 3, figsize=(15, 4))
@@ -203,54 +203,54 @@ plt.tight_layout()
 plt.show()
 ```
 
-The left panel shows a roughly uniform distribution (prices decrease steadily, so each price level is visited approximately once). The right panel's tight linear scatter confirms the near-perfect correlation.
+왼쪽 패널은 대체로 균등한 분포를 보여준다(가격이 꾸준히 하락하므로 각 가격 수준을 대략 한 번씩 지난다). 오른쪽 패널의 촘촘한 선형 산점이 거의 완벽한 상관을 확인해 준다.
 
 ---
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Given the five values 3, 7, 7, 10, 13, compute the mean, median, and mode by hand.
+**연습문제 1.**
+다섯 값 3, 7, 7, 10, 13에 대해 평균, 중앙값, 최빈값을 손으로 계산하라.
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
 
-    - Mean: $\bar{x} = (3 + 7 + 7 + 10 + 13) / 5 = 40 / 5 = 8$
-    - Median: sorted data is 3, 7, 7, 10, 13; the middle value is $7$
-    - Mode: 7 appears twice; all others appear once. Mode $= 7$
+    - 평균: $\bar{x} = (3 + 7 + 7 + 10 + 13) / 5 = 40 / 5 = 8$
+    - 중앙값: 정렬하면 3, 7, 7, 10, 13이고 가운데 값은 $7$
+    - 최빈값: 7이 두 번 나오고 나머지는 한 번씩 나온다. 최빈값 $= 7$
 
 ---
 
-**Exercise 2.**
-Derive the formula for the sample variance $s^2$ starting from the requirement that $E[s^2] = \sigma^2$ (unbiasedness). Explain why the denominator is $n - 1$ rather than $n$.
+**연습문제 2.**
+$E[s^2] = \sigma^2$(불편성)이라는 요구조건에서 출발해 표본분산 $s^2$의 공식을 유도하라. 분모가 왜 $n$이 아니라 $n - 1$인지 설명하라.
 
-??? success "Solution to Exercise 2"
-    Start with the naive estimator $\hat{\sigma}^2 = \frac{1}{n}\sum_{i=1}^n (X_i - \bar{X})^2$. Expanding:
+??? success "연습문제 2 풀이"
+    소박한 추정량 $\hat{\sigma}^2 = \frac{1}{n}\sum_{i=1}^n (X_i - \bar{X})^2$에서 시작한다. 전개하면
 
     $$
     \sum_{i=1}^n (X_i - \bar{X})^2 = \sum_{i=1}^n (X_i - \mu)^2 - n(\bar{X} - \mu)^2
     $$
 
-    Taking expectations:
+    이고, 기댓값을 취하면
 
     $$
     E\left[\sum_{i=1}^n (X_i - \bar{X})^2\right] = n\sigma^2 - n \cdot \frac{\sigma^2}{n} = (n-1)\sigma^2
     $$
 
-    So $E[\hat{\sigma}^2] = \frac{(n-1)\sigma^2}{n} \neq \sigma^2$. Dividing by $n-1$ instead of $n$ corrects this:
+    이다. 따라서 $E[\hat{\sigma}^2] = \frac{(n-1)\sigma^2}{n} \neq \sigma^2$이다. $n$ 대신 $n-1$로 나누면 이것이 보정된다.
 
     $$
     E\left[\frac{1}{n-1}\sum_{i=1}^n (X_i - \bar{X})^2\right] = \sigma^2
     $$
 
-    The factor $n - 1$ accounts for the one degree of freedom consumed by estimating $\mu$ with $\bar{X}$. $\square$
+    인자 $n - 1$은 $\mu$를 $\bar{X}$로 추정하면서 소모한 자유도 하나를 반영한다. $\square$
 
 ---
 
-**Exercise 3.**
-Two stocks have annual returns $X = (0.10, -0.05, 0.08)$ and $Y = (-0.02, 0.12, -0.03)$. Compute $\text{Cov}(X, Y)$ and the Pearson correlation $r$ by hand.
+**연습문제 3.**
+두 주식의 연간 수익률이 $X = (0.10, -0.05, 0.08)$과 $Y = (-0.02, 0.12, -0.03)$이다. $\text{Cov}(X, Y)$와 피어슨 상관 $r$을 손으로 계산하라.
 
-??? success "Solution to Exercise 3"
-    First compute the means:
+??? success "연습문제 3 풀이"
+    먼저 평균을 계산한다.
 
     $$
     \bar{x} = \frac{0.10 + (-0.05) + 0.08}{3} = \frac{0.13}{3} \approx 0.04333
@@ -260,9 +260,9 @@ Two stocks have annual returns $X = (0.10, -0.05, 0.08)$ and $Y = (-0.02, 0.12, 
     \bar{y} = \frac{-0.02 + 0.12 + (-0.03)}{3} = \frac{0.07}{3} \approx 0.02333
     $$
 
-    Deviations and products:
+    편차와 곱은 다음과 같다.
 
-    | $i$ | $x_i - \bar{x}$ | $y_i - \bar{y}$ | Product |
+    | $i$ | $x_i - \bar{x}$ | $y_i - \bar{y}$ | 곱 |
     |---|---|---|---|
     | 1 | $0.05667$ | $-0.04333$ | $-0.002456$ |
     | 2 | $-0.09333$ | $0.09667$ | $-0.009022$ |
@@ -272,95 +272,95 @@ Two stocks have annual returns $X = (0.10, -0.05, 0.08)$ and $Y = (-0.02, 0.12, 
     \text{Cov}(X, Y) = \frac{-0.002456 - 0.009022 - 0.001956}{2} = \frac{-0.013434}{2} \approx -0.006717
     $$
 
-    Standard deviations: $s_X \approx 0.07937$, $s_Y \approx 0.08386$.
+    표준편차는 $s_X \approx 0.07937$, $s_Y \approx 0.08386$이다.
 
     $$
     r = \frac{-0.006717}{0.07937 \times 0.08386} \approx -1.009
     $$
 
-    Rounding errors give $|r|$ slightly above 1; with exact arithmetic, $r = -1.0$ because the three points are exactly collinear (by construction of this small dataset). This illustrates that perfect negative correlation means the returns move in exactly opposite directions.
+    반올림 오차 때문에 $|r|$이 1을 살짝 넘는다. 정확한 산술로 계산하면 (이 작은 자료를 구성한 방식상) 세 점이 정확히 한 직선 위에 있으므로 $r = -1.0$이다. 완벽한 음의 상관은 두 수익률이 정확히 반대 방향으로 움직임을 뜻한다.
 
 ---
 
-**Exercise 4.**
-Show that the Pearson correlation coefficient satisfies $-1 \le r \le 1$. Under what conditions does equality hold?
+**연습문제 4.**
+피어슨 상관계수가 $-1 \le r \le 1$을 만족함을 보여라. 등호는 어떤 조건에서 성립하는가?
 
-??? success "Solution to Exercise 4"
-    By the Cauchy–Schwarz inequality, for any random variables $U$ and $V$ with finite second moments:
+??? success "연습문제 4 풀이"
+    코시–슈바르츠 부등식에 의해, 2차 적률이 유한한 임의의 확률변수 $U$와 $V$에 대해
 
     $$
     |\text{Cov}(U, V)|^2 \le \text{Var}(U) \cdot \text{Var}(V)
     $$
 
-    Setting $U = X - \bar{X}$ and $V = Y - \bar{Y}$:
+    이다. $U = X - \bar{X}$, $V = Y - \bar{Y}$로 두면
 
     $$
     |r| = \frac{|\text{Cov}(X, Y)|}{s_X s_Y} \le 1
     $$
 
-    Equality $r = 1$ holds if and only if $Y = a + bX$ for some $b > 0$ (perfect positive linear relationship). Equality $r = -1$ holds if and only if $Y = a + bX$ for some $b < 0$ (perfect negative linear relationship). $\square$
+    이다. 등호 $r = 1$은 어떤 $b > 0$에 대해 $Y = a + bX$일 때에 한해 성립한다(완벽한 양의 선형관계). 등호 $r = -1$은 어떤 $b < 0$에 대해 $Y = a + bX$일 때에 한해 성립한다(완벽한 음의 선형관계). $\square$
 
 ---
 
-**Exercise 5.**
-The CA prices above decrease nearly linearly. If prices were exactly linear ($x_i = a - bi$ for constants $a, b > 0$ and $i = 1, \ldots, n$), show that the sample mean equals $a - b \cdot \frac{n+1}{2}$ and find a closed-form expression for the sample variance.
+**연습문제 5.**
+위의 CA 가격은 거의 선형으로 감소한다. 가격이 정확히 선형이라면(상수 $a, b > 0$과 $i = 1, \ldots, n$에 대해 $x_i = a - bi$) 표본평균이 $a - b \cdot \frac{n+1}{2}$과 같음을 보이고 표본분산의 닫힌 형태 표현을 구하라.
 
-??? success "Solution to Exercise 5"
-    With $x_i = a - bi$:
+??? success "연습문제 5 풀이"
+    $x_i = a - bi$이면
 
     $$
     \bar{x} = \frac{1}{n}\sum_{i=1}^n (a - bi) = a - b \cdot \frac{1}{n}\sum_{i=1}^n i = a - b \cdot \frac{n+1}{2}
     $$
 
-    The deviations are:
+    이다. 편차는
 
     $$
     x_i - \bar{x} = -bi + b \cdot \frac{n+1}{2} = b\left(\frac{n+1}{2} - i\right)
     $$
 
-    So the sample variance is:
+    이므로 표본분산은
 
     $$
     s^2 = \frac{b^2}{n-1}\sum_{i=1}^n \left(\frac{n+1}{2} - i\right)^2 = \frac{b^2}{n-1} \cdot \frac{n(n+1)}{12} \cdot (n-1) \cdot \frac{1}{n-1}
     $$
 
-    Simplifying using $\sum_{i=1}^n \left(\frac{n+1}{2} - i\right)^2 = \frac{n(n^2 - 1)}{12}$:
+    이다. $\sum_{i=1}^n \left(\frac{n+1}{2} - i\right)^2 = \frac{n(n^2 - 1)}{12}$을 이용해 정리하면
 
     $$
     s^2 = \frac{b^2 \cdot n(n^2 - 1)}{12(n - 1)} = \frac{b^2 \, n(n+1)}{12}
     $$
 
-    $\square$
+    이다. $\square$
 
 ---
 
-**Exercise 6.**
-The **coefficient of variation** $\mathrm{CV} = s/\bar x$ provides a unitless measure of relative spread. For the CA prices above, $\bar x \approx 244$ and $s \approx 9$; for OR prices $\bar x \approx 209$ and $s \approx 5$. Compute the CV for each and explain which state has *relatively* more price variability.
+**연습문제 6.**
+**변동계수** $\mathrm{CV} = s/\bar x$는 상대적 퍼짐을 재는 단위 없는 측도다. 위의 CA 가격은 $\bar x \approx 244$, $s \approx 9$이고 오리건(OR) 가격은 $\bar x \approx 209$, $s \approx 5$다. 각각의 CV를 계산하고 어느 주의 가격 변동성이 *상대적으로* 더 큰지 설명하라.
 
-??? success "Solution to Exercise 6"
-    California: $\mathrm{CV}_{\mathrm{CA}} = 9/244 \approx 0.037 = 3.7\%$.
-    Oregon: $\mathrm{CV}_{\mathrm{OR}} = 5/209 \approx 0.024 = 2.4\%$.
+??? success "연습문제 6 풀이"
+    캘리포니아: $\mathrm{CV}_{\mathrm{CA}} = 9/244 \approx 0.037 = 3.7\%$.
+    오리건: $\mathrm{CV}_{\mathrm{OR}} = 5/209 \approx 0.024 = 2.4\%$.
 
-    California has higher relative variability (3.7% vs. 2.4%). This means that as a fraction of the typical price, California prices fluctuate more than Oregon's.
+    캘리포니아의 상대적 변동성이 더 크다(3.7% 대 2.4%). 전형적인 가격에 대한 비율로 보면 캘리포니아 가격이 오리건보다 더 많이 오르내린다는 뜻이다.
 
-    **Why CV matters here:** comparing absolute SDs ($9 vs. 5$) might suggest CA prices are "more volatile" — but that's partly because CA prices are higher to begin with. Dividing by the mean normalizes for price level and reveals the relative volatility. CV is particularly useful for comparing variability across markets, countries, or eras with different price scales.
+    **여기서 CV가 중요한 이유:** 절대 표준편차($9 vs. 5$)를 비교하면 CA 가격이 "더 변동성이 크다"고 볼 수 있지만, 이는 부분적으로 CA 가격이 애초에 더 높기 때문이다. 평균으로 나누면 가격 수준이 정규화되어 상대적 변동성이 드러난다. CV는 가격 척도가 다른 시장, 나라, 시대에 걸쳐 변동성을 비교할 때 특히 유용하다.
 
-    **Caveat:** CV is well-defined only for strictly-positive data with $\bar x > 0$. For data that can be negative (returns, deltas), use SD or other unbounded scale measures instead.
+    **단서:** CV는 $\bar x > 0$인 엄격히 양의 자료에 대해서만 잘 정의된다. 음수가 될 수 있는 자료(수익률, 변화량)에는 표준편차나 다른 유계가 아닌 척도 측도를 쓴다.
 
 ---
 
-**Exercise 7.**
-**Why does Pearson correlation measure *linear* association only?** Construct a small dataset where $X$ and $Y$ are perfectly related deterministically ($Y$ is a function of $X$) but Pearson's $r \approx 0$.
+**연습문제 7.**
+**피어슨 상관은 왜 *선형* 연관만을 재는가?** $X$와 $Y$가 결정론적으로 완벽하게 관련되어 있지만($Y$가 $X$의 함수) 피어슨의 $r \approx 0$인 작은 자료를 만들어라.
 
-??? success "Solution to Exercise 7"
-    Construction: let $X = (-2, -1, 0, 1, 2)$ and $Y = X^2 = (4, 1, 0, 1, 4)$. Then $Y$ is exactly determined by $X$. Compute the means and correlation:
+??? success "연습문제 7 풀이"
+    구성: $X = (-2, -1, 0, 1, 2)$, $Y = X^2 = (4, 1, 0, 1, 4)$라 하자. 그러면 $Y$는 $X$로 정확히 결정된다. 평균과 상관을 계산해 보자.
 
     $\bar x = 0$, $\bar y = 2$.
 
-    Deviations: $x - \bar x = (-2, -1, 0, 1, 2)$, $y - \bar y = (2, -1, -2, -1, 2)$.
+    편차: $x - \bar x = (-2, -1, 0, 1, 2)$, $y - \bar y = (2, -1, -2, -1, 2)$.
 
-    Cross-product sum: $(-2)(2) + (-1)(-1) + 0 \cdot (-2) + 1 \cdot (-1) + 2 \cdot 2 = -4 + 1 + 0 - 1 + 4 = 0$.
+    교차곱의 합: $(-2)(2) + (-1)(-1) + 0 \cdot (-2) + 1 \cdot (-1) + 2 \cdot 2 = -4 + 1 + 0 - 1 + 4 = 0$.
 
-    Pearson's $r = 0$. Yet $Y$ is a deterministic function of $X$. Pearson's correlation captures only the *linear* trend, which is zero for a symmetric parabola: the positive trend on the right half exactly cancels the negative trend on the left.
+    피어슨의 $r = 0$이다. 그런데도 $Y$는 $X$의 결정론적 함수다. 피어슨 상관은 오직 *선형* 추세만 포착하는데, 대칭인 포물선에서는 그것이 0이다. 오른쪽 절반의 양의 추세가 왼쪽 절반의 음의 추세를 정확히 상쇄하기 때문이다.
 
-    **Implication:** correlation $\approx 0$ does *not* mean independence. **Always** plot the data before relying on correlation. Alternatives like **Spearman's rank correlation** (monotonic), **distance correlation** (any dependence, including nonlinear), or **mutual information** capture broader notions of dependence.
+    **함의:** 상관 $\approx 0$은 독립을 뜻하지 *않는다*. 상관에 의존하기 전에 **언제나** 자료를 그려라. **스피어만 순위상관**(단조 관계), **거리상관**(비선형을 포함한 임의의 의존), **상호정보량** 같은 대안이 더 넓은 의미의 의존을 포착한다.

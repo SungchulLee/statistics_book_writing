@@ -1,68 +1,68 @@
-# Outliers and Leverage
+# 이상치와 지렛대점
 
-## Overview
+## 개요
 
-**Outliers** are data points that significantly differ from other observations in a dataset. They may be unusually high or low and can arise due to variability in the data, errors in data collection, or they may indicate special cases that deserve further investigation. Detecting and understanding outliers is crucial because they can distort statistical analyses such as the mean, variance, and regression models.
-
----
-
-## 1. Types of Outliers
-
-**Univariate Outliers:** Unusual with respect to a single variable. For example, in a dataset of student heights, an individual who is extremely short or tall compared to the others.
-
-**Multivariate Outliers:** Appear normal when each variable is considered separately, but unusual patterns emerge when the relationship between multiple variables is examined.
-
-## 2. Causes of Outliers
-
-- **Measurement Error:** Mistakes in data entry, instrument errors, or inaccuracies during measurement.
-- **Experimental Error:** Anomalous conditions during data collection.
-- **Natural Variation:** Inherent variability in the system being studied.
-- **Sampling Error:** Rare cases included in the dataset or insufficient sample size.
-
-## 3. Effects of Outliers
-
-**Impact on Central Tendency:** Outliers pull the mean toward extreme values, making it an inaccurate representation. For example, a CEO's salary in a small sample of salaries can skew the mean upward significantly.
-
-**Impact on Variability:** Outliers inflate variance and standard deviation, as these measures are sensitive to extreme values.
-
-**Impact on Statistical Models:** Outliers can have a disproportionate influence on regression models, potentially leading to misleading or biased coefficients that reduce generalizability.
+**이상치(outlier)** 는 자료의 다른 관측값과 크게 다른 자료점이다. 유난히 크거나 작을 수 있으며, 자료의 변동성이나 자료 수집 과정의 오류에서 생길 수도 있고 더 살펴볼 가치가 있는 특별한 사례를 가리킬 수도 있다. 이상치를 탐지하고 이해하는 일은 평균, 분산, 회귀모형 같은 통계 분석을 왜곡할 수 있기 때문에 매우 중요하다.
 
 ---
 
-## 4. Identifying Outliers
+## 1. 이상치의 유형
 
-### Box Plot Method
+**일변량 이상치:** 하나의 변수에 대해 특이한 경우. 예를 들어 학생 키 자료에서 다른 사람들에 비해 극단적으로 작거나 큰 사람.
 
-Data points beyond $1.5 \times \text{IQR}$ from $Q_1$ or $Q_3$ are flagged as outliers:
+**다변량 이상치:** 각 변수를 따로 보면 정상으로 보이지만, 여러 변수 사이의 관계를 살펴보면 특이한 양상이 드러나는 경우.
 
-- Lower fence: $Q_1 - 1.5 \times \text{IQR}$
-- Upper fence: $Q_3 + 1.5 \times \text{IQR}$
+## 2. 이상치의 원인
 
-### Z-Score Method
+- **측정오차:** 자료 입력 실수, 기기 오류, 측정 과정의 부정확성.
+- **실험오차:** 자료 수집 중의 비정상적 조건.
+- **자연적 변동:** 연구 대상 체계에 내재한 변동성.
+- **표집오차:** 드문 사례가 자료에 포함되거나 표본 크기가 불충분한 경우.
 
-The Z-score measures how many standard deviations a data point is from the mean. Points with $|Z| > 3$ are typically considered outliers:
+## 3. 이상치의 영향
+
+**중심경향에 대한 영향:** 이상치는 평균을 극단값 쪽으로 끌어당겨 평균을 부정확한 대표값으로 만든다. 예를 들어 소규모 급여 표본에 최고경영자의 급여가 들어가면 평균이 크게 위로 치우칠 수 있다.
+
+**변동성에 대한 영향:** 분산과 표준편차는 극단값에 민감하므로 이상치가 이들을 부풀린다.
+
+**통계 모형에 대한 영향:** 이상치는 회귀모형에 불균형하게 큰 영향을 미쳐 일반화 가능성을 떨어뜨리는 오도된 계수나 편향된 계수를 낳을 수 있다.
+
+---
+
+## 4. 이상치 식별하기
+
+### 상자그림 방법
+
+$Q_1$이나 $Q_3$에서 $1.5 \times \text{IQR}$을 벗어난 자료점을 이상치로 표시한다.
+
+- 아래쪽 울타리: $Q_1 - 1.5 \times \text{IQR}$
+- 위쪽 울타리: $Q_3 + 1.5 \times \text{IQR}$
+
+### Z-점수 방법
+
+Z-점수는 자료점이 평균에서 표준편차 몇 배만큼 떨어져 있는지를 잰다. 보통 $|Z| > 3$인 점을 이상치로 본다.
 
 $$
 Z = \frac{x - \mu}{\sigma}
 $$
 
-### IQR Method
+### IQR 방법
 
-Values below $Q_1 - 1.5 \times \text{IQR}$ or above $Q_3 + 1.5 \times \text{IQR}$ are classified as outliers.
+$Q_1 - 1.5 \times \text{IQR}$보다 작거나 $Q_3 + 1.5 \times \text{IQR}$보다 큰 값을 이상치로 분류한다.
 
-### Scatterplot (Multivariate)
+### 산점도 (다변량)
 
-In multivariate data, scatterplots can reveal points that deviate significantly from the overall pattern or trend.
+다변량 자료에서는 산점도가 전체적인 패턴이나 추세에서 크게 벗어난 점들을 드러낼 수 있다.
 
-### Cook's Distance (Regression)
+### 쿡 거리 (회귀)
 
-Cook's Distance identifies influential data points that have a large impact on regression model predictions. High values indicate potential outliers with leverage.
+쿡 거리는 회귀모형의 예측에 큰 영향을 미치는 영향력 있는 자료점을 찾아낸다. 값이 크면 지렛대를 가진 잠재적 이상치임을 나타낸다.
 
 ---
 
-## 5. Five-Number Summary
+## 5. 다섯 수치 요약
 
-The five-number summary provides a concise description that naturally highlights potential outliers through the box plot:
+다섯 수치 요약은 간결한 기술을 제공하며 상자그림을 통해 잠재적 이상치를 자연스럽게 부각한다.
 
 $$
 \text{Min} \quad Q_1 \quad \text{Median} \quad Q_3 \quad \text{Max}
@@ -85,9 +85,9 @@ ax.set_title("Boxplot of Data")
 plt.show()
 ```
 
-### Comparative Box Plots
+### 비교 상자그림
 
-Box plots are particularly effective when comparing distributions across groups or conditions:
+상자그림은 집단이나 조건에 걸쳐 분포를 비교할 때 특히 효과적이다.
 
 ```python
 import numpy as np
@@ -111,127 +111,127 @@ plt.show()
 
 ---
 
-## 6. Handling Outliers
+## 6. 이상치 다루기
 
-**Investigate the Source:** Confirm whether outliers are erroneous before taking action. If confirmed as errors, correct or remove them.
+**출처를 조사하라:** 조치를 취하기 전에 이상치가 잘못된 값인지 확인한다. 오류로 확인되면 바로잡거나 제거한다.
 
-**Transform the Data:** Log or square-root transformations can reduce the influence of outliers by compressing the scale.
+**자료를 변환하라:** 로그나 제곱근 변환은 척도를 압축하여 이상치의 영향을 줄일 수 있다.
 
-**Use Robust Statistical Methods:** The median, IQR, and robust regression techniques (e.g., Lasso, Ridge) are less sensitive to outliers.
+**강건한 통계 방법을 쓰라:** 중앙값, IQR, 강건 회귀 기법(예: 라쏘, 능형회귀)은 이상치에 덜 민감하다.
 
-**Trimming or Winsorizing:** Trimming removes extreme data points. Winsorizing replaces outliers with the nearest non-outlier value.
+**절단 또는 윈저화:** 절단은 극단값을 제거한다. 윈저화는 이상치를 이상치가 아닌 가장 가까운 값으로 대체한다.
 
-**Keep the Outliers:** Sometimes outliers represent rare but important cases (e.g., extreme market events in finance) and should be retained for further investigation.
+**이상치를 그대로 두라:** 때로 이상치는 드물지만 중요한 사례(예: 금융의 극단적 시장 사건)를 나타내므로 더 조사하기 위해 남겨두어야 한다.
 
 ---
 
-## 7. Real-Life Examples
+## 7. 실제 사례
 
-**Income Distribution:** Extreme outliers such as tech billionaire incomes drastically increase the mean, making the median a more representative measure.
+**소득 분포:** 기술 억만장자의 소득 같은 극단적 이상치는 평균을 크게 끌어올려 중앙값이 더 대표성 있는 측도가 되게 한다.
 
-**Stock Market Analysis:** Large market movements during crises (e.g., 2008 financial crisis) appear as outliers in historical price data.
+**주식시장 분석:** 위기 시기의 큰 시장 변동(예: 2008년 금융위기)은 과거 가격 자료에서 이상치로 나타난다.
 
-**Medical Studies:** Patients with unique drug responses may be outliers that reveal important information about subgroup effects.
+**의학 연구:** 약물에 독특하게 반응하는 환자는 하위집단 효과에 관한 중요한 정보를 드러내는 이상치일 수 있다.
 
-## Summary
+## 요약
 
-Outliers deserve careful attention rather than automatic removal. Understanding their source—whether error, natural variation, or a genuinely rare event—determines the appropriate response. The combination of visual tools (box plots, scatter plots) and numerical methods (Z-scores, IQR fences, Cook's Distance) provides a robust framework for outlier detection and management.
+이상치는 자동으로 제거할 것이 아니라 세심하게 살펴야 한다. 그 출처가 오류인지, 자연적 변동인지, 진짜로 드문 사건인지를 이해하는 것이 적절한 대응을 결정한다. 시각적 도구(상자그림, 산점도)와 수치적 방법(Z-점수, IQR 울타리, 쿡 거리)을 결합하면 이상치 탐지와 관리를 위한 견고한 틀이 된다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-For the dataset $4, 7, 8, 12, 14, 15, 16, 18, 19, 22, 25, 55$: (a) find $Q_1, Q_2, Q_3$; (b) compute the IQR; (c) apply the $1.5 \times \mathrm{IQR}$ rule and identify outliers; (d) describe the boxplot.
+**연습문제 1.**
+자료 $4, 7, 8, 12, 14, 15, 16, 18, 19, 22, 25, 55$에 대해 (a) $Q_1, Q_2, Q_3$을 구하라. (b) IQR을 계산하라. (c) $1.5 \times \mathrm{IQR}$ 규칙을 적용해 이상치를 찾아라. (d) 상자그림을 서술하라.
 
-??? success "Solution to Exercise 1"
-    (a) Lower half $\{4, 7, 8, 12, 14, 15\}$ → $Q_1 = (8 + 12)/2 = 10$. Full median $(15 + 16)/2 = 15.5$. Upper half $\{16, 18, 19, 22, 25, 55\}$ → $Q_3 = (19 + 22)/2 = 20.5$.
+??? success "연습문제 1 풀이"
+    (a) 아래쪽 절반 $\{4, 7, 8, 12, 14, 15\}$ → $Q_1 = (8 + 12)/2 = 10$. 전체 중앙값 $(15 + 16)/2 = 15.5$. 위쪽 절반 $\{16, 18, 19, 22, 25, 55\}$ → $Q_3 = (19 + 22)/2 = 20.5$.
 
     (b) $\mathrm{IQR} = 20.5 - 10 = 10.5$.
 
-    (c) Lower fence $= 10 - 1.5 \times 10.5 = -5.75$; upper fence $= 20.5 + 15.75 = 36.25$. Only $55 > 36.25$, so it is flagged as an outlier.
+    (c) 아래쪽 울타리 $= 10 - 1.5 \times 10.5 = -5.75$, 위쪽 울타리 $= 20.5 + 15.75 = 36.25$. $55 > 36.25$인 55만 이상치로 표시된다.
 
-    (d) Box from 10 to 20.5 with a line at 15.5. Lower whisker reaches 4; upper whisker stops at 25 (the largest non-outlier). The point 55 appears as an isolated dot beyond the upper whisker. The right-side tail reveals positive skew.
+    (d) 상자는 10에서 20.5까지이고 15.5에 선이 있다. 아래쪽 수염은 4까지 닿고 위쪽 수염은 (이상치가 아닌 최댓값인) 25에서 멈춘다. 55는 위쪽 수염 너머에 홀로 떨어진 점으로 나타난다. 오른쪽 꼬리가 양의 왜도를 드러낸다.
 
 ---
 
-**Exercise 2.**
-**Why is $1.5$ the multiplier in the boxplot fence rule?** Derive what this number corresponds to under the normal distribution.
+**연습문제 2.**
+**상자그림 울타리 규칙에서 곱하는 수가 왜 $1.5$인가?** 정규분포 아래에서 이 수가 무엇에 대응하는지 유도하라.
 
-??? success "Solution to Exercise 2"
-    For a standard normal: $Q_1 \approx -0.6745$, $Q_3 \approx 0.6745$, $\mathrm{IQR} \approx 1.349$. The upper fence is
+??? success "연습문제 2 풀이"
+    표준정규분포에서 $Q_1 \approx -0.6745$, $Q_3 \approx 0.6745$, $\mathrm{IQR} \approx 1.349$이다. 위쪽 울타리는
 
     $$
     Q_3 + 1.5 \cdot \mathrm{IQR} \approx 0.6745 + 2.024 \approx 2.698
     $$
 
-    The tail probability beyond this point is $P(Z > 2.698) \approx 0.0035$. With both tails, about 0.7% of normal data lies outside the fences.
+    이다. 이 지점 너머의 꼬리 확률은 $P(Z > 2.698) \approx 0.0035$이다. 양쪽 꼬리를 합치면 정규 자료의 약 0.7%가 울타리 밖에 놓인다.
 
-    Tukey chose 1.5 (heuristically — there is no formal derivation) so that for normal data, **roughly 1 in 100 observations** is flagged. This produces a small but non-zero rate of "outliers" in clean normal data — useful for highlighting truly unusual values without overwhelming the analyst.
+    투키는 정규 자료에서 **관측값 100개 중 대략 1개**가 표시되도록 1.5를 골랐다(형식적인 유도 없이 경험적으로 정한 값이다). 이렇게 하면 깨끗한 정규 자료에서도 작지만 0은 아닌 비율의 "이상치"가 나오는데, 분석가를 압도하지 않으면서 정말로 특이한 값을 부각하는 데 유용하다.
 
-    Larger samples generate more flagged points in absolute terms even when the data is purely normal. For very large $n$, alternatives like $3 \times \mathrm{IQR}$ (Tukey's "far out") or distribution-aware tests (Grubbs', Dixon's) are sometimes preferred.
+    자료가 순전히 정규이더라도 표본이 커지면 절대적인 표시 개수는 늘어난다. $n$이 아주 클 때는 $3 \times \mathrm{IQR}$(투키의 "far out")이나 분포를 고려한 검정(그럽스, 딕슨) 같은 대안을 쓰기도 한다.
 
 ---
 
-**Exercise 3.**
-The **Z-score method** flags points with $|Z| > 3$. Under a normal distribution, what fraction of data is flagged? Why does this rule fail in the presence of multiple outliers?
+**연습문제 3.**
+**Z-점수 방법**은 $|Z| > 3$인 점을 표시한다. 정규분포 아래에서 자료의 몇 퍼센트가 표시되는가? 이상치가 여럿일 때 이 규칙은 왜 실패하는가?
 
-??? success "Solution to Exercise 3"
-    Under normality, $P(|Z| > 3) \approx 0.0027$ — about 0.27% of clean normal data is flagged.
+??? success "연습문제 3 풀이"
+    정규성 아래에서 $P(|Z| > 3) \approx 0.0027$이므로 깨끗한 정규 자료의 약 0.27%가 표시된다.
 
-    **Failure mechanism (masking):** if multiple outliers are present, they inflate the sample mean and SD. A point that would be 5 SDs from the *true* mean might be only 2 SDs from the *contaminated* sample mean — failing to be flagged. The outliers protect each other.
+    **실패 기제(가림 현상):** 이상치가 여럿 있으면 이들이 표본평균과 표준편차를 부풀린다. *참* 평균에서 5 표준편차만큼 떨어졌을 점이 *오염된* 표본평균에서는 2 표준편차밖에 안 되어 표시되지 않을 수 있다. 이상치들이 서로를 보호하는 셈이다.
 
-    **Fix:** use *robust* estimators of location and scale instead. The **modified Z-score** uses the median and MAD:
+    **해결책:** 위치와 척도에 대해 *강건한* 추정량을 쓴다. **수정 Z-점수**는 중앙값과 MAD를 사용한다.
 
     $$
     M_i = 0.6745 \cdot \frac{x_i - \mathrm{median}(x)}{\mathrm{MAD}}
     $$
 
-    Flag $|M_i| > 3.5$ (Iglewicz and Hoaglin 1993). Because MAD has breakdown 50%, masking is much harder to engineer.
+    $|M_i| > 3.5$이면 표시한다(Iglewicz and Hoaglin 1993). MAD의 붕괴점이 50%이므로 가림 현상을 만들어내기가 훨씬 어렵다.
 
 ---
 
-**Exercise 4.**
-Distinguish three categories of outliers: (a) **error outliers**, (b) **mixture outliers**, (c) **influential outliers in regression**. For each, give an example and a recommended action.
+**연습문제 4.**
+이상치를 세 범주로 구분하라. (a) **오류 이상치**, (b) **혼합 이상치**, (c) **회귀에서 영향력 있는 이상치**. 각각에 대해 예와 권장 조치를 제시하라.
 
-??? success "Solution to Exercise 4"
-    **(a) Error outliers** — data-entry mistakes, instrument failures, miscoded values. Example: a height recorded as 7.2 m instead of 72 in (1.83 m). *Action:* investigate and correct or remove. Document the decision.
+??? success "연습문제 4 풀이"
+    **(a) 오류 이상치** — 자료 입력 실수, 기기 고장, 잘못 코딩된 값. 예: 키가 72인치(1.83m) 대신 7.2m로 기록된 경우. *조치:* 조사하여 바로잡거나 제거한다. 그 결정을 문서화한다.
 
-    **(b) Mixture outliers** — genuine observations from a different population than most of the data. Example: a wholesale customer in a dataset of retail transactions. *Action:* either model the mixture explicitly (mixture models, robust regression with heavy-tailed errors) or exclude with a clear rule and reported sensitivity.
+    **(b) 혼합 이상치** — 자료의 대부분과 다른 모집단에서 온 진짜 관측값. 예: 소매 거래 자료에 섞인 도매 고객. *조치:* 혼합을 명시적으로 모형화하거나(혼합모형, 두꺼운 꼬리 오차를 갖는 강건 회귀) 명확한 규칙으로 제외하고 민감도를 함께 보고한다.
 
-    **(c) Influential outliers in regression** — points whose removal substantially changes fitted coefficients. Example: a single high-leverage point at extreme $x$. *Action:* compute **Cook's distance** and **DFBETAS** to quantify influence. If influential, refit without the point and report both estimates; if the conclusions disagree, the data is too sensitive to that point and additional samples are needed.
+    **(c) 회귀에서 영향력 있는 이상치** — 제거하면 적합된 계수가 크게 달라지는 점. 예: 극단적인 $x$에 있는 지렛대 높은 점 하나. *조치:* **쿡 거리**와 **DFBETAS**를 계산해 영향력을 정량화한다. 영향력이 크다면 그 점을 빼고 다시 적합해 두 추정값을 모두 보고한다. 결론이 서로 어긋난다면 자료가 그 점에 지나치게 민감한 것이므로 표본을 더 모아야 한다.
 
-    The danger of conflating these categories: removing "outliers" indiscriminately can delete genuinely informative observations (mixture or influential) while keeping error outliers if their values happen to be near the bulk. *Investigate before removing.*
+    이 범주들을 뒤섞을 때의 위험: "이상치"를 무차별적으로 제거하면 진짜로 정보를 담은 관측값(혼합 또는 영향력 있는 것)을 지우면서, 값이 우연히 본체 근처에 있는 오류 이상치는 남길 수 있다. *제거하기 전에 조사하라.*
 
 ---
 
-**Exercise 5.**
-**Cook's distance** for observation $i$ in a regression with $p$ parameters is
+**연습문제 5.**
+모수가 $p$개인 회귀에서 관측값 $i$의 **쿡 거리**는
 
 $$
 D_i = \frac{(\hat y - \hat y_{(i)})^T (\hat y - \hat y_{(i)})}{p \, s^2} = \frac{e_i^2}{p \, s^2} \cdot \frac{h_{ii}}{(1 - h_{ii})^2}
 $$
 
-where $h_{ii}$ is the leverage and $e_i$ the residual. Why is Cook's distance more informative than either residual or leverage alone?
+이며, 여기서 $h_{ii}$는 지렛대값이고 $e_i$는 잔차다. 쿡 거리가 잔차나 지렛대값 하나만 보는 것보다 왜 더 유익한가?
 
-??? success "Solution to Exercise 5"
-    Cook's distance combines two things that each must be true for an observation to be influential:
+??? success "연습문제 5 풀이"
+    쿡 거리는 어떤 관측값이 영향력을 가지려면 둘 다 성립해야 하는 두 가지를 결합한다.
 
-    - **Large residual** ($e_i^2$ large) — the point is poorly fit by the model.
-    - **Large leverage** ($h_{ii}/(1 - h_{ii})^2$ large) — the point's $x$-value is far from the mean of $x$'s, so the model has to "stretch" to fit it.
+    - **큰 잔차**($e_i^2$이 큼) — 모형이 그 점을 잘 적합하지 못한다.
+    - **큰 지렛대값**($h_{ii}/(1 - h_{ii})^2$이 큼) — 그 점의 $x$ 값이 $x$들의 평균에서 멀어 모형이 그 점을 맞추려고 "늘어나야" 한다.
 
-    A point with high residual but low leverage (extreme $y$ at typical $x$) is anomalous but does not drag the regression line — the abundance of other typical points anchors the slope. A point with high leverage but low residual (extreme $x$ that happens to be fit perfectly) is supported by the model — it's a powerful but consistent point.
+    잔차는 크지만 지렛대값이 작은 점(전형적인 $x$에서 극단적인 $y$)은 이례적이지만 회귀직선을 끌어당기지 못한다. 다른 전형적인 점이 많아 기울기를 붙잡아 주기 때문이다. 지렛대값은 크지만 잔차가 작은 점(우연히 완벽하게 적합된 극단적 $x$)은 모형이 뒷받침하는 점이다. 강력하지만 일관된 점이다.
 
-    Only points with **both** large residual AND large leverage actually change the fitted coefficients when removed. Cook's distance is constructed to detect exactly this combination. Conventional threshold: investigate $D_i > 4/n$ or $D_i > 1$.
+    제거했을 때 적합된 계수를 실제로 바꾸는 것은 잔차와 지렛대값이 **둘 다** 큰 점뿐이다. 쿡 거리는 바로 이 조합을 탐지하도록 구성되어 있다. 관례적인 기준: $D_i > 4/n$ 또는 $D_i > 1$이면 조사한다.
 
 ---
 
-**Exercise 6.**
-**Winsorization** at the 5%/95% level replaces values below the 5th percentile with the 5th-percentile value and values above the 95th with the 95th-percentile value. Compare this with **trimming** (deleting the extremes) and with **leaving outliers alone**. When is each appropriate?
+**연습문제 6.**
+5%/95% 수준의 **윈저화**는 5번째 백분위수보다 작은 값을 5번째 백분위수 값으로, 95번째보다 큰 값을 95번째 백분위수 값으로 대체한다. 이를 **절단**(극단값 삭제) 및 **이상치를 그대로 두기**와 비교하라. 각각은 언제 적절한가?
 
-??? success "Solution to Exercise 6"
-    **Trimming**: discard observations below the 5th and above the 95th percentile. Result: $n$ shrinks. Useful when extreme values are clearly errors or contamination. The standard error of the resulting estimator can be smaller (less noise) but the sample size shrinks.
+??? success "연습문제 6 풀이"
+    **절단**: 5번째 백분위수 아래와 95번째 위의 관측값을 버린다. 결과적으로 $n$이 줄어든다. 극단값이 분명히 오류이거나 오염인 경우에 유용하다. 그 결과 추정량의 표준오차가 작아질 수 있지만(잡음이 줄어) 표본 크기가 줄어든다.
 
-    **Winsorization**: replace extremes with the cut-off values. Result: $n$ unchanged but the data is squashed at the tails. Useful when extreme values are believed real but you want them to have bounded influence in a non-robust analysis (e.g., a sample mean computation). The squashed values retain partial influence on quantile-based statistics but not on tail-sensitive statistics like mean and variance.
+    **윈저화**: 극단값을 절단점 값으로 대체한다. 결과적으로 $n$은 그대로지만 꼬리에서 자료가 눌린다. 극단값이 실재한다고 보면서도 강건하지 않은 분석(예: 표본평균 계산)에서 그 영향력을 제한하고 싶을 때 유용하다. 눌린 값들은 분위수 기반 통계량에는 부분적인 영향을 유지하지만 평균과 분산처럼 꼬리에 민감한 통계량에는 그렇지 않다.
 
-    **Leave alone**: most appropriate when the analysis uses robust statistics (median, MAD, M-estimators) that are insensitive to extremes anyway, or when the extremes are the very phenomenon of interest (financial crisis returns, drug super-responders).
+    **그대로 두기**: 분석이 어차피 극단값에 둔감한 강건 통계량(중앙값, MAD, M-추정량)을 쓸 때, 또는 극단값 자체가 바로 관심 현상일 때(금융위기 수익률, 약물 초고반응자) 가장 적절하다.
 
-    **Recommendation:** never silently apply any of these. Always (1) plot the data to see whether the extremes look like errors or genuine signal; (2) report results both with and without the extremes; (3) when in doubt, prefer robust methods that don't require deciding upfront which points are "real."
+    **권고:** 이 중 무엇도 말없이 적용하지 마라. 언제나 (1) 자료를 그려 극단값이 오류처럼 보이는지 진짜 신호처럼 보이는지 살피고, (2) 극단값을 포함한 결과와 제외한 결과를 모두 보고하며, (3) 확신이 서지 않으면 어떤 점이 "진짜"인지 미리 결정할 필요가 없는 강건한 방법을 택하라.

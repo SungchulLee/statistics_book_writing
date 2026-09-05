@@ -1,16 +1,16 @@
-# Group Comparisons
+# 집단 비교
 
-## Overview
+## 개요
 
-Effective data visualization often requires comparing distributions, frequencies, or relationships across groups. This section covers the major visualization tools for group comparisons: scatter plots, line plots, bar plots, pie charts, pair plots, stem-and-leaf plots, dot plots, frequency tables, and mosaic plots.
+효과적인 자료 시각화에는 흔히 집단 간 분포, 도수, 관계를 비교하는 일이 필요하다. 이 절에서는 집단 비교를 위한 주요 시각화 도구인 산점도, 선그림, 막대그림, 원그래프, 쌍그림, 줄기잎그림, 점그림, 도수분포표, 모자이크 그림을 다룬다.
 
 ---
 
-## 1. Line Plots
+## 1. 선그림
 
-Line plots connect data points in sequence, making them ideal for time series and trends.
+선그림은 자료점을 순서대로 이어 그리므로 시계열과 추세를 보이는 데 이상적이다.
 
-### Stock Price Example
+### 주가 예제
 
 ```python
 import pandas as pd
@@ -43,11 +43,11 @@ display_stock_prices(data, ticker, "Shinpoong")
 
 ---
 
-## 2. Scatter Plots
+## 2. 산점도
 
-Scatter plots display the relationship between two continuous variables. Matplotlib offers two methods with different capabilities.
+산점도는 두 연속변수 사이의 관계를 보여준다. Matplotlib은 기능이 서로 다른 두 가지 방법을 제공한다.
 
-### `ax.plot` vs. `ax.scatter`
+### `ax.plot` 대 `ax.scatter`
 
 ```python
 import matplotlib.pyplot as plt
@@ -82,13 +82,13 @@ for ax in (ax_plot, ax_scatter):
 plt.show()
 ```
 
-**Key differences:** `ax.plot` uses uniform marker size and color—ideal for simple point displays. `ax.scatter` allows each point to have individual size and color, enabling visualization of additional data dimensions.
+**핵심 차이:** `ax.plot`은 마커의 크기와 색이 일정하여 단순한 점 표시에 이상적이다. `ax.scatter`는 각 점마다 크기와 색을 달리할 수 있어 자료의 차원을 추가로 시각화할 수 있다.
 
 ---
 
-## 3. Bar Plots
+## 3. 막대그림
 
-### Single Group Bar Plot
+### 단일 집단 막대그림
 
 ```python
 import matplotlib.pyplot as plt
@@ -111,7 +111,7 @@ ax.spines['top'].set_visible(False)
 plt.show()
 ```
 
-### Grouped Bar Plot
+### 묶음 막대그림
 
 ```python
 import matplotlib.pyplot as plt
@@ -142,9 +142,9 @@ ax.spines['top'].set_visible(False)
 plt.show()
 ```
 
-### Segmented (Stacked) Bar Plot
+### 분할(누적) 막대그림
 
-Segmented bar plots show the composition of each category.
+분할 막대그림은 각 범주의 구성을 보여준다.
 
 ```python
 import matplotlib.pyplot as plt
@@ -172,9 +172,9 @@ plt.show()
 
 ---
 
-## 4. Pie Charts
+## 4. 원그래프
 
-Pie charts show proportions of a whole. They work best with a small number of categories.
+원그래프는 전체에 대한 비율을 보여준다. 범주 수가 적을 때 가장 잘 작동한다.
 
 ```python
 import matplotlib.pyplot as plt
@@ -193,13 +193,13 @@ ax.set_title('Fruit Distribution in Basket')
 plt.show()
 ```
 
-The `autopct='%1.1f%%'` format string displays percentages to one decimal place on each slice.
+형식 문자열 `autopct='%1.1f%%'`는 각 조각에 백분율을 소수점 한 자리까지 표시한다.
 
 ---
 
-## 5. Pair Plots
+## 5. 쌍그림
 
-Pair plots create a matrix of scatter plots for every pair of variables, with histograms on the diagonal. They are invaluable for multivariate exploration.
+쌍그림은 모든 변수 쌍에 대한 산점도의 행렬을 만들고 대각선에는 히스토그램을 놓는다. 다변량 탐색에 매우 유용하다.
 
 ```python
 import seaborn as sns
@@ -214,9 +214,9 @@ sns.pairplot(df[["Survived", "Age", "Sex_int"]])
 
 ---
 
-## 6. Stem-and-Leaf Plots
+## 6. 줄기잎그림
 
-Stem-and-leaf plots preserve individual data values while showing the distribution shape.
+줄기잎그림은 분포의 모양을 보여주면서 개별 자료값을 그대로 보존한다.
 
 ```python
 import stemgraphic
@@ -228,9 +228,9 @@ fig, ax = stemgraphic.stem_graphic(data, scale=10,
 
 ---
 
-## 7. Dot Plots and Frequency Tables
+## 7. 점그림과 도수분포표
 
-### Dot Plot
+### 점그림
 
 ```python
 import matplotlib.pyplot as plt
@@ -257,9 +257,9 @@ plt.show()
 
 ---
 
-## 8. Two-Way Frequency Tables
+## 8. 이원 도수분포표
 
-### Frequency Table
+### 도수분포표
 
 ```python
 import pandas as pd
@@ -275,16 +275,16 @@ dg = dg.astype(int)
 print(dg)
 ```
 
-### Relative Frequency Table
+### 상대도수분포표
 
 ```python
 dh = dg / dg.loc['TOTAL', 'TOTAL']
 print(dh)
 ```
 
-### Connection to Probability
+### 확률과의 연결
 
-Two-way frequency tables directly relate to joint, marginal, and conditional distributions:
+이원 도수분포표는 결합분포, 주변분포, 조건부분포와 직접 연결된다.
 
 $$
 \begin{array}{ll}
@@ -296,7 +296,7 @@ $$
 
 ---
 
-## 9. Data Types and Appropriate Visualizations
+## 9. 자료 유형과 적절한 시각화
 
 $$
 \text{Data} \begin{cases}
@@ -305,113 +305,115 @@ $$
 \end{cases}
 $$
 
-## Summary
+## 요약
 
-Different group comparison tasks call for different visualization tools. Bar plots and pie charts work for categorical data; histograms, box plots, and violin plots reveal the shape of continuous distributions; scatter plots and pair plots expose bivariate relationships; and frequency tables bridge visualization with probability. Choosing the right tool depends on the data type, the number of groups, and the specific aspect of the comparison you want to emphasize.
+집단 비교의 과제가 다르면 필요한 시각화 도구도 다르다. 막대그림과 원그래프는 범주형 자료에 맞고, 히스토그램·상자그림·바이올린 그림은 연속분포의 모양을 드러내며, 산점도와 쌍그림은 두 변수의 관계를 노출하고, 도수분포표는 시각화와 확률을 잇는다. 알맞은 도구의 선택은 자료의 유형, 집단의 수, 그리고 강조하고 싶은 비교의 측면에 달려 있다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-A two-way frequency table shows the following counts for 200 patients:
+**연습문제 1.**
+어떤 이원 도수분포표가 환자 200명에 대해 다음과 같은 도수를 보여준다.
 
-|  | Treatment A | Treatment B | Total |
+|  | 처리 A | 처리 B | 합계 |
 |:---|:---:|:---:|:---:|
-| Improved | 60 | 40 | 100 |
-| Not improved | 40 | 60 | 100 |
-| Total | 100 | 100 | 200 |
+| 호전됨 | 60 | 40 | 100 |
+| 호전 안 됨 | 40 | 60 | 100 |
+| 합계 | 100 | 100 | 200 |
 
-Compute the joint relative frequency of (Treatment A, Improved) and the conditional probability of improvement given Treatment A.
+(처리 A, 호전됨)의 결합상대도수와 처리 A가 주어졌을 때 호전될 조건부확률을 계산하라.
 
-??? success "Solution to Exercise 1"
-    The **joint relative frequency** of (Treatment A, Improved) is:
+??? success "연습문제 1 풀이"
+    (처리 A, 호전됨)의 **결합상대도수**는
 
     $$
     \frac{60}{200} = 0.30
     $$
 
-    The **conditional probability** of improvement given Treatment A is:
+    이다. 처리 A가 주어졌을 때 호전될 **조건부확률**은
 
     $$
     P(\text{Improved} \mid \text{Treatment A}) = \frac{60}{100} = 0.60
     $$
 
-    For comparison, the conditional probability of improvement given Treatment B is $40/100 = 0.40$. Treatment A appears to have a higher improvement rate.
+    이다.
+
+    비교하자면 처리 B가 주어졌을 때 호전될 조건부확률은 $40/100 = 0.40$이다. 처리 A의 호전율이 더 높아 보인다.
 
 ---
 
-**Exercise 2.**
-For each of the following scenarios, identify the most appropriate plot type and justify your choice: (a) comparing the age distributions of three patient groups, (b) showing how stock prices change over 12 months, (c) displaying the market share of five competing brands.
+**연습문제 2.**
+다음 각 상황에서 가장 적절한 그림 유형을 밝히고 그 선택을 정당화하라. (a) 환자 세 집단의 나이 분포 비교, (b) 12개월에 걸친 주가 변화 표시, (c) 경쟁하는 다섯 브랜드의 시장 점유율 표시.
 
-??? success "Solution to Exercise 2"
-    **(a) Comparing age distributions of three patient groups:** **Side-by-side boxplots** or **violin plots**. Boxplots provide a compact comparison of center, spread, and outliers across groups. Violin plots are better if the distributions may be multimodal or if the full shape matters.
+??? success "연습문제 2 풀이"
+    **(a) 환자 세 집단의 나이 분포 비교:** **나란히 놓은 상자그림**이나 **바이올린 그림**. 상자그림은 집단 간 중심, 퍼짐, 이상치를 압축적으로 비교해 준다. 분포가 다봉일 수 있거나 전체 모양이 중요하다면 바이올린 그림이 낫다.
 
-    **(b) Stock prices over 12 months:** A **line plot** with time on the x-axis and price on the y-axis. Line plots are the standard choice for time series data because the connecting lines emphasize temporal continuity and trends.
+    **(b) 12개월에 걸친 주가:** x축에 시간, y축에 가격을 둔 **선그림**. 잇는 선이 시간적 연속성과 추세를 강조하므로 시계열 자료에는 선그림이 표준적인 선택이다.
 
-    **(c) Market share of five competing brands:** A **pie chart** or **bar chart**. A pie chart is appropriate when showing proportions of a whole with a small number of categories. A bar chart is often preferred because it is easier to compare magnitudes accurately (humans judge bar lengths more precisely than pie slice angles).
-
----
-
-**Exercise 3.**
-A segmented (stacked) bar chart shows the composition of responses ("Agree," "Neutral," "Disagree") for three different departments. In what situation would a stacked bar chart be more informative than a grouped bar chart, and vice versa?
-
-??? success "Solution to Exercise 3"
-    A **stacked bar chart** is more informative when the primary interest is comparing the **total** across groups and seeing how each category contributes to that total. It makes it easy to see the overall size of each bar and the proportion of each component.
-
-    A **grouped (side-by-side) bar chart** is more informative when the primary interest is comparing **individual categories** across groups. For example, if you want to know which department has the highest "Agree" count, a grouped bar chart makes this comparison straightforward because the bars for the same response category are placed next to each other.
-
-    In short: use stacked when composition is the focus; use grouped when direct category-level comparison is the focus.
+    **(c) 다섯 브랜드의 시장 점유율:** **원그래프**나 **막대그림**. 범주 수가 적고 전체에 대한 비율을 보일 때는 원그래프가 적절하다. 다만 사람이 원의 각도보다 막대의 길이를 더 정확히 판단하므로 크기를 정확히 비교하기 쉬운 막대그림이 흔히 선호된다.
 
 ---
 
-**Exercise 4.**
-A scatter plot of two variables shows a strong curved (quadratic) relationship but the Pearson correlation coefficient is close to zero. Explain why this can happen and what it implies about using correlation as a summary alongside a scatter plot.
+**연습문제 3.**
+분할(누적) 막대그림이 세 부서의 응답 구성("동의", "중립", "반대")을 보여준다. 어떤 상황에서 누적 막대그림이 묶음 막대그림보다 유익하며, 반대의 경우는 언제인가?
 
-??? success "Solution to Exercise 4"
-    The Pearson correlation measures only **linear** association. If the relationship between $X$ and $Y$ is a symmetric curve (e.g., $Y = X^2$ centered at zero), the positive and negative halves cancel out, producing a correlation near zero even though $X$ and $Y$ are strongly related.
+??? success "연습문제 3 풀이"
+    **누적 막대그림**은 집단 간 **합계**를 비교하고 각 범주가 그 합계에 얼마나 기여하는지 보는 것이 주된 관심일 때 더 유익하다. 각 막대의 전체 크기와 각 구성요소의 비율을 쉽게 볼 수 있다.
 
-    This illustrates why a scatter plot should always accompany correlation as a summary. The scatter plot reveals the shape of the relationship (linear, curved, clustered), while the correlation coefficient only captures the linear component. Relying on correlation alone could lead to the false conclusion that the two variables are unrelated.
+    **묶음(나란히 놓은) 막대그림**은 집단 간 **개별 범주**를 비교하는 것이 주된 관심일 때 더 유익하다. 예를 들어 어느 부서의 "동의" 수가 가장 많은지 알고 싶다면, 같은 응답 범주의 막대가 서로 옆에 놓이므로 묶음 막대그림이 비교를 쉽게 만든다.
 
----
-
-**Exercise 5.**
-Anscombe's quartet consists of four datasets with **identical** summary statistics (mean, variance, correlation, regression line) but dramatically different scatter plots. What lesson does this convey about exploratory data analysis?
-
-??? success "Solution to Exercise 5"
-    Anscombe (1973) constructed four datasets — each with 11 points — that share the following statistics to two decimal places:
-
-    - Mean of $x$ = 9, mean of $y$ = 7.5.
-    - Variance of $x$ = 11, variance of $y$ = 4.12.
-    - Correlation $r$ = 0.816.
-    - OLS regression: $y = 3 + 0.5x$.
-
-    Yet their scatter plots show:
-
-    - Dataset 1: a noisy but roughly linear relationship.
-    - Dataset 2: a clean quadratic curve.
-    - Dataset 3: a perfect linear trend with one outlier displacing the regression.
-    - Dataset 4: most points have $x = 8$, with one influential point at $x = 19$ driving the entire correlation.
-
-    **Lesson:** summary statistics, no matter how comprehensive, can hide qualitatively different data structures. The same warning applies to modern variants like the **Datasaurus Dozen** (Matejka & Fitzmaurice 2017), which shows 13 wildly different shapes — including a dinosaur silhouette — sharing identical summary statistics. **Always plot the data**, especially before reporting or interpreting summary statistics. Tukey's exhortation: "Far better an approximate answer to the right question, which is often vague, than an exact answer to the wrong question."
+    요컨대 구성이 초점이면 누적을, 범주 수준의 직접 비교가 초점이면 묶음을 쓴다.
 
 ---
 
-**Exercise 6.**
-**Multiple-comparison adjustment** becomes necessary when comparing many groups in a single figure. If a pairwise comparison of 5 groups is conducted at $\alpha = 0.05$, what is the family-wise probability of at least one false positive, and how would you correct for it?
+**연습문제 4.**
+두 변수의 산점도가 강한 곡선(이차) 관계를 보이는데 피어슨 상관계수는 0에 가깝다. 이런 일이 왜 생기는지, 그리고 산점도와 함께 상관계수를 요약으로 쓰는 것에 대해 무엇을 시사하는지 설명하라.
 
-??? success "Solution to Exercise 6"
-    With 5 groups, the number of pairwise comparisons is $\binom{5}{2} = 10$. Under independence (a rough approximation), the probability of *no* false positive in any of 10 tests is $(1 - 0.05)^{10} \approx 0.599$. The family-wise error rate is approximately
+??? success "연습문제 4 풀이"
+    피어슨 상관은 **선형** 연관만을 잰다. $X$와 $Y$의 관계가 대칭적인 곡선이면(예: 0을 중심으로 한 $Y = X^2$) 양의 절반과 음의 절반이 상쇄되어, $X$와 $Y$가 강하게 관련되어 있는데도 상관이 0 근처가 된다.
+
+    이는 요약으로서의 상관에 언제나 산점도가 따라야 하는 이유를 보여준다. 산점도는 관계의 모양(선형, 곡선, 뭉침)을 드러내는 반면 상관계수는 선형 성분만 포착한다. 상관계수만 믿으면 두 변수가 무관하다는 잘못된 결론에 이를 수 있다.
+
+---
+
+**연습문제 5.**
+앤스컴의 4중주는 요약통계량(평균, 분산, 상관, 회귀직선)이 **동일**하면서도 산점도는 극적으로 다른 네 자료로 이루어져 있다. 이것이 탐색적 자료분석에 대해 어떤 교훈을 주는가?
+
+??? success "연습문제 5 풀이"
+    앤스컴(1973)은 각각 11개 점으로 이루어진 네 자료를 만들었는데, 소수점 둘째 자리까지 다음 통계량이 같다.
+
+    - $x$의 평균 = 9, $y$의 평균 = 7.5.
+    - $x$의 분산 = 11, $y$의 분산 = 4.12.
+    - 상관 $r$ = 0.816.
+    - 최소제곱 회귀: $y = 3 + 0.5x$.
+
+    그런데 산점도는 다음과 같다.
+
+    - 자료 1: 잡음이 있지만 대체로 선형인 관계.
+    - 자료 2: 깔끔한 이차 곡선.
+    - 자료 3: 완벽한 선형 추세에 이상치 하나가 회귀선을 밀어낸 형태.
+    - 자료 4: 대부분의 점이 $x = 8$에 있고, $x = 19$의 영향력 있는 점 하나가 상관 전체를 좌우한다.
+
+    **교훈:** 요약통계량은 아무리 포괄적이어도 질적으로 다른 자료 구조를 감출 수 있다. 같은 경고가 현대의 변형인 **데이터사우루스 도즌**(Matejka & Fitzmaurice 2017)에도 적용된다. 공룡 실루엣을 포함해 13가지 전혀 다른 모양이 동일한 요약통계량을 공유한다. **언제나 자료를 그려라.** 특히 요약통계량을 보고하거나 해석하기 전에 그래야 한다. 투키의 권고: "잘못된 질문에 대한 정확한 답보다, 흔히 모호하더라도 올바른 질문에 대한 근사적인 답이 훨씬 낫다."
+
+---
+
+**연습문제 6.**
+하나의 그림에서 여러 집단을 비교할 때는 **다중비교 보정**이 필요해진다. 5개 집단의 쌍별 비교를 $\alpha = 0.05$로 수행한다면 적어도 하나의 거짓양성이 나올 가족단위 확률은 얼마이며, 어떻게 보정하겠는가?
+
+??? success "연습문제 6 풀이"
+    집단이 5개이면 쌍별 비교의 수는 $\binom{5}{2} = 10$이다. (대략적인 근사로) 독립을 가정하면 10번의 검정에서 거짓양성이 *하나도* 없을 확률은 $(1 - 0.05)^{10} \approx 0.599$이다. 따라서 가족단위 오류율은 대략
 
     $$
     P(\text{at least one false positive}) \approx 1 - 0.599 = 0.401
     $$
 
-    A 40% chance of a spurious significance — far higher than the nominal 5%.
+    이다. 허위 유의성이 나올 확률이 40%로, 명목상의 5%보다 훨씬 높다.
 
-    **Corrections:**
+    **보정 방법:**
 
-    - **Bonferroni:** test each pairwise comparison at $\alpha/10 = 0.005$. Simple, conservative.
-    - **Tukey's HSD** (honestly significant difference): controls family-wise error exactly for pairwise comparisons of means after ANOVA. More powerful than Bonferroni.
-    - **Holm–Bonferroni:** step-down procedure ordering $p$-values and rejecting sequentially with decreasing $\alpha$ thresholds. Uniformly more powerful than Bonferroni.
-    - **Benjamini–Hochberg (FDR control):** controls the *expected proportion* of false positives among declared significant tests rather than the probability of any false positive. Appropriate when many tests are conducted exploratorily.
+    - **본페로니:** 각 쌍별 비교를 $\alpha/10 = 0.005$로 검정한다. 간단하고 보수적이다.
+    - **투키의 HSD**(정직 유의차): 분산분석 이후 평균의 쌍별 비교에 대해 가족단위 오류를 정확히 통제한다. 본페로니보다 검정력이 높다.
+    - **홀름–본페로니:** $p$-값을 정렬해 $\alpha$ 기준을 낮춰 가며 차례로 기각하는 단계적 절차. 본페로니보다 일률적으로 검정력이 높다.
+    - **벤자미니–호크버그(FDR 통제):** 거짓양성이 하나라도 나올 확률이 아니라, 유의하다고 선언된 검정 가운데 거짓인 것의 *기대 비율*을 통제한다. 탐색적으로 검정을 많이 수행할 때 적절하다.
 
-    Visualization: when comparing many groups in a single figure, *do not* annotate every pairwise $p$-value. Either pre-specify a few of-interest comparisons, or use an omnibus test (ANOVA, Kruskal-Wallis) first, then make pairwise comparisons only if the omnibus is significant.
+    시각화 측면: 하나의 그림에서 여러 집단을 비교할 때 모든 쌍별 $p$-값을 표기하지 *마라*. 관심 있는 비교 몇 개를 미리 지정하거나, 먼저 총괄 검정(분산분석, 크러스컬–월리스)을 하고 그것이 유의할 때만 쌍별 비교를 하라.

@@ -1,16 +1,16 @@
-# Mean, Median, Mode
+# 평균, 중앙값, 최빈값
 
-## Overview
+## 개요
 
-Central tendency measures identify the center of a data distribution, summarizing a dataset with a single representative value. The three most commonly used measures are the **mean**, **median**, and **mode**. Each has distinct properties, strengths, and weaknesses that make it appropriate for different situations.
+중심경향 측도는 자료 분포의 중심을 찾아내어 자료를 하나의 대표값으로 요약한다. 가장 널리 쓰이는 세 가지 측도는 **평균**, **중앙값**, **최빈값**이다. 각각 고유한 성질과 장단점이 있어 서로 다른 상황에 적합하다.
 
 ---
 
-## 1. Mean
+## 1. 평균
 
-The mean is the arithmetic average of a set of numbers, calculated by summing all values and dividing by the count.
+평균은 수들의 산술 평균으로, 모든 값을 더해 개수로 나누어 계산한다.
 
-### Formulas
+### 공식
 
 $$
 \begin{array}{lllll}
@@ -21,25 +21,25 @@ $$
 \end{array}
 $$
 
-### Example
+### 예
 
-For the dataset 70, 85, 90, 95, 100:
+자료 70, 85, 90, 95, 100에 대해
 
 $$
 \bar{x} = \frac{70 + 85 + 90 + 95 + 100}{5} = \frac{440}{5} = 88
 $$
 
-### Mean as Balancing Point
+### 균형점으로서의 평균
 
-The mean is the value where the sum of deviations equals zero:
+평균은 편차의 합이 0이 되는 값이다.
 
 $$
 \mu = \frac{\sum_{i=1}^N x_i}{N} \quad \Rightarrow \quad \sum_{i=1}^N (x_i - \mu) = 0
 $$
 
-This means the mean is the "center of gravity" of the data.
+즉 평균은 자료의 "무게중심"이다.
 
-### Mean: Income Example
+### 평균: 소득 예제
 
 ```python
 import pandas as pd
@@ -66,23 +66,23 @@ plt.show()
 
 ---
 
-## 2. Median
+## 2. 중앙값
 
-The **median** is the middle value when data is arranged in order. It divides the dataset into two equal halves.
+**중앙값**은 자료를 순서대로 늘어놓았을 때 가운데 오는 값이다. 자료를 같은 크기의 두 절반으로 나눈다.
 
-### How to Calculate
+### 계산 방법
 
-1. Sort the data in ascending order.
-2. If $n$ is odd, the median is the middle value at position $(n+1)/2$.
-3. If $n$ is even, the median is the average of the two middle values.
+1. 자료를 오름차순으로 정렬한다.
+2. $n$이 홀수이면 중앙값은 $(n+1)/2$번째 위치의 값이다.
+3. $n$이 짝수이면 중앙값은 가운데 두 값의 평균이다.
 
-### Example
+### 예
 
-For the dataset 70, 85, 90, 95, 100 (odd count): Median = 90.
+자료 70, 85, 90, 95, 100(홀수 개)에 대해 중앙값 = 90이다.
 
-For the dataset 70, 85, 90, 95 (even count): Median = $(85 + 90)/2 = 87.5$.
+자료 70, 85, 90, 95(짝수 개)에 대해 중앙값 $= (85 + 90)/2 = 87.5$이다.
 
-### Median vs. Mean: Income Data
+### 중앙값 대 평균: 소득 자료
 
 ```python
 import pandas as pd
@@ -110,9 +110,9 @@ ax.spines['right'].set_visible(False)
 plt.show()
 ```
 
-### Median Is Robust Against Outliers
+### 중앙값은 이상치에 강건하다
 
-The median is far less affected by extreme values than the mean. This is demonstrated by adding outliers to income data:
+중앙값은 평균보다 극단값의 영향을 훨씬 덜 받는다. 소득 자료에 이상치를 추가해 보면 이를 확인할 수 있다.
 
 ```python
 import pandas as pd
@@ -172,35 +172,35 @@ for ax in (hist_ax, box_ax):
 plt.show()
 ```
 
-The mean shifts dramatically when outliers are introduced, while the median barely changes.
+이상치를 넣으면 평균은 극적으로 이동하지만 중앙값은 거의 변하지 않는다.
 
-### Real-Life Examples Where Median Is Preferred
+### 중앙값이 선호되는 실제 사례
 
-**Income Distribution:** A few extremely high earners skew the mean upward. Median household income provides a more accurate picture of what the "typical" person earns.
+**소득 분포:** 극도로 높은 소득자 몇 명이 평균을 위로 끌어올린다. 중앙값 가구소득이 "전형적인" 사람이 얼마를 버는지를 더 정확히 보여준다.
 
-**Real Estate:** Median home prices better represent the housing market than mean prices, which can be inflated by a few luxury sales.
+**부동산:** 중앙값 주택 가격이 몇 건의 고급 거래로 부풀려질 수 있는 평균 가격보다 주택시장을 더 잘 대표한다.
 
-**Michael Jordan Case (NBA Salary):** Jordan's salary was so much higher than typical NBA players that it significantly inflated the mean. The median salary better reflects what most players earned.
+**마이클 조던 사례(NBA 연봉):** 조던의 연봉이 전형적인 NBA 선수보다 워낙 높아 평균을 크게 부풀렸다. 중앙값 연봉이 대부분의 선수가 실제로 받은 액수를 더 잘 반영한다.
 
-**Public Policy:** Governments report median household income to assess financial well-being because it is not distorted by extreme wealth.
+**공공정책:** 정부는 재정적 안녕을 평가할 때 극단적 부에 왜곡되지 않는 중앙값 가구소득을 보고한다.
 
 ---
 
-## 3. Trimmed Mean
+## 3. 절단평균
 
-The **trimmed mean** (or truncated mean) is the arithmetic mean calculated after removing a specified percentage of observations from both tails of the sorted distribution. This hybrid approach offers robustness against outliers while still utilizing most of the data.
+**절단평균**(절사평균)은 정렬된 분포의 양쪽 꼬리에서 정해진 비율의 관측값을 제거한 뒤 계산하는 산술평균이다. 이 혼합적 접근은 대부분의 자료를 여전히 활용하면서 이상치에 대한 강건성을 제공한다.
 
-### Definition
+### 정의
 
-For a dataset with $n$ observations sorted as $x_{(1)} \le x_{(2)} \le \cdots \le x_{(n)}$, the $p$-trimmed mean removes $\lceil p \cdot n / 2 \rceil$ observations from each tail and averages the remaining values:
+$x_{(1)} \le x_{(2)} \le \cdots \le x_{(n)}$으로 정렬된 관측값 $n$개의 자료에서 $p$-절단평균은 각 꼬리에서 $\lceil p \cdot n / 2 \rceil$개의 관측값을 제거하고 남은 값들의 평균을 낸다.
 
 $$
 \bar{x}_{p\%} = \frac{1}{n - 2\lceil p \cdot n / 2 \rceil} \sum_{i=\lceil p \cdot n / 2 \rceil + 1}^{n - \lceil p \cdot n / 2 \rceil} x_{(i)}
 $$
 
-### Example: Population Data
+### 예: 인구 자료
 
-Using U.S. state population data, compare the mean, 10% trimmed mean, and median:
+미국 주별 인구 자료로 평균, 10% 절단평균, 중앙값을 비교한다.
 
 ```python
 import pandas as pd
@@ -222,40 +222,40 @@ median_pop = state['Population'].median()
 print(f"Median Population: {median_pop:,.0f}")
 ```
 
-**Output:**
+**출력:**
 ```
 Mean Population: 6,162,876
 10% Trimmed Mean: 4,783,697
 Median Population: 4,436,370
 ```
 
-The trimmed mean occupies a middle ground: it's less influenced by extreme values (California's 37M population) than the mean, yet uses more data than the median alone. This makes it valuable when a moderate level of robustness is desired without completely ignoring the tails.
+절단평균은 중간 지대를 차지한다. 극단값(캘리포니아의 3700만 인구)의 영향을 평균보다 덜 받으면서도 중앙값보다 많은 자료를 사용한다. 꼬리를 완전히 무시하지 않으면서 적당한 수준의 강건성을 원할 때 유용하다.
 
-### When to Use Trimmed Mean
+### 절단평균을 쓸 때
 
-- **Moderate robustness:** You want outlier resistance but don't want to discard data entirely.
-- **Academic traditions:** Some fields prefer trimmed means for hypothesis testing (e.g., psychology, education).
-- **Olympic scoring:** Judges' scores are often averaged after trimming the highest and lowest.
+- **적당한 강건성:** 이상치에 저항하고 싶지만 자료를 완전히 버리고 싶지는 않을 때.
+- **학문적 관행:** 어떤 분야는 가설검정에 절단평균을 선호한다(예: 심리학, 교육학).
+- **올림픽 채점:** 심판 점수는 최고점과 최저점을 잘라낸 뒤 평균 내는 경우가 많다.
 
 ---
 
-## 4. Weighted Mean and Weighted Median
+## 4. 가중평균과 가중중앙값
 
-When observations have differing importance or frequency, the **weighted mean** and **weighted median** assign each value a weight reflecting its significance.
+관측값마다 중요도나 빈도가 다를 때 **가중평균**과 **가중중앙값**은 각 값에 그 중요성을 반영하는 가중치를 부여한다.
 
-### Weighted Mean
+### 가중평균
 
-The weighted mean is the sum of weighted values divided by the sum of weights:
+가중평균은 가중된 값들의 합을 가중치의 합으로 나눈 것이다.
 
 $$
 \bar{x}_w = \frac{\sum_{i=1}^{n} w_i x_i}{\sum_{i=1}^{n} w_i}
 $$
 
-where $w_i$ are the weights.
+여기서 $w_i$가 가중치다.
 
-### Example: Murder Rate by State Population
+### 예: 주 인구로 가중한 살인율
 
-When computing the national murder rate, states with larger populations should influence the average more heavily. Use the state's population as a weight:
+전국 살인율을 계산할 때 인구가 많은 주가 평균에 더 크게 반영되어야 한다. 주의 인구를 가중치로 쓴다.
 
 ```python
 import pandas as pd
@@ -272,17 +272,17 @@ weighted_mean = np.average(state['Murder.Rate'], weights=state['Population'])
 print(f"Weighted Mean Murder Rate: {weighted_mean:.3f}")
 ```
 
-**Output:**
+**출력:**
 ```
 Unweighted Mean Murder Rate: 4.066
 Weighted Mean Murder Rate: 4.446
 ```
 
-The weighted mean is higher because highly populated states (CA, TX, FL, NY) tend to have higher murder rates than small states. The unweighted mean treats Montana (population 990K) and California (population 37M) as equal—a distortion that the weighted mean corrects.
+인구가 많은 주(캘리포니아, 텍사스, 플로리다, 뉴욕)의 살인율이 작은 주보다 높은 경향이 있어 가중평균이 더 크다. 가중하지 않은 평균은 몬태나(인구 99만)와 캘리포니아(인구 3700만)를 동등하게 취급하는데, 가중평균이 이 왜곡을 바로잡는다.
 
-### Weighted Median
+### 가중중앙값
 
-The **weighted median** is the value where the cumulative weight reaches 50% of the total weight. Unlike the weighted mean, it requires a specialized function:
+**가중중앙값**은 누적 가중치가 전체 가중치의 50%에 도달하는 값이다. 가중평균과 달리 전용 함수가 필요하다.
 
 ```python
 import pandas as pd
@@ -300,29 +300,29 @@ weighted_median = wquantiles.median(state['Murder.Rate'],
 print(f"Weighted Median: {weighted_median:.1f}")
 ```
 
-**Output:**
+**출력:**
 ```
 Unweighted Median: 4.0
 Weighted Median: 4.4
 ```
 
-### When to Use Weighted Statistics
+### 가중 통계량을 쓸 때
 
-**Financial Data:** Portfolio returns are weighted by asset values.
+**금융 자료:** 포트폴리오 수익률은 자산 가치로 가중한다.
 
-**Survey Data:** Responses are weighted to match population demographics.
+**조사 자료:** 응답을 모집단 인구 구성에 맞도록 가중한다.
 
-**Aggregated Data:** When data represents groups (e.g., state-level statistics), weight by group size.
+**집계 자료:** 자료가 집단을 대표할 때(예: 주 단위 통계) 집단 크기로 가중한다.
 
-**Importance Weighting:** Some observations are more reliable or relevant than others.
+**중요도 가중:** 어떤 관측값이 다른 것보다 더 믿을 만하거나 관련이 클 때.
 
 ---
 
-## 5. Mode
+## 5. 최빈값
 
-The **mode** is the value that occurs most frequently in a dataset. A dataset may be unimodal (one mode), bimodal (two modes), multimodal (more than two modes), or have no mode if all values appear equally often.
+**최빈값**은 자료에서 가장 자주 나타나는 값이다. 자료는 단봉(최빈값 하나), 이봉(둘), 다봉(둘보다 많음)일 수 있고, 모든 값이 똑같이 자주 나타나면 최빈값이 없을 수도 있다.
 
-### Computing Mode in Python
+### 파이썬에서 최빈값 계산하기
 
 ```python
 import statistics
@@ -332,7 +332,7 @@ mode = statistics.mode(data)
 print(f"{mode = }")  # mode = 2
 ```
 
-For datasets with multiple modes:
+최빈값이 여럿인 자료의 경우:
 
 ```python
 import statistics
@@ -347,46 +347,46 @@ print(f"{modes = }")  # Returns all modes: [2, 3]
 
 ---
 
-## 6. Comparing Mean, Median, Mode, and Other Measures
+## 6. 평균, 중앙값, 최빈값 및 그 밖의 측도 비교
 
-**Mean** is best for continuous, symmetrically distributed data without outliers. It uses all data points but is sensitive to extremes.
+**평균**은 이상치가 없고 대칭적으로 분포한 연속 자료에 가장 적합하다. 모든 자료점을 쓰지만 극단값에 민감하다.
 
-**Median** is preferred for skewed distributions or data with outliers. It represents the middle value and is robust to extreme observations.
+**중앙값**은 치우친 분포나 이상치가 있는 자료에 선호된다. 가운데 값을 나타내며 극단 관측값에 강건하다.
 
-**Mode** is most useful for categorical data or for identifying the most common value. It can be used with nominal data (e.g., most popular color).
+**최빈값**은 범주형 자료나 가장 흔한 값을 찾을 때 가장 유용하다. 명목 자료(예: 가장 인기 있는 색)에도 쓸 수 있다.
 
-### Relationship to Distribution Shape
+### 분포 모양과의 관계
 
-- **Symmetric distribution:** Mean ≈ Median ≈ Mode
-- **Right-skewed distribution:** Mode < Median < Mean
-- **Left-skewed distribution:** Mean < Median < Mode
+- **대칭 분포:** 평균 ≈ 중앙값 ≈ 최빈값
+- **오른쪽으로 치우친 분포:** 최빈값 < 중앙값 < 평균
+- **왼쪽으로 치우친 분포:** 평균 < 중앙값 < 최빈값
 
-## Summary
+## 요약
 
-Each measure of central tendency serves a distinct purpose. The mean provides a mathematical average but is vulnerable to outliers, the median offers a robust center that resists extreme values, and the mode identifies the most frequent observation. Choosing the appropriate measure depends on the data's distribution shape and the analytical question at hand.
+각 중심경향 측도는 서로 다른 목적에 쓰인다. 평균은 수학적 평균을 제공하지만 이상치에 취약하고, 중앙값은 극단값에 저항하는 강건한 중심을 제공하며, 최빈값은 가장 빈번한 관측값을 찾아낸다. 적절한 측도의 선택은 자료의 분포 모양과 당면한 분석 질문에 달려 있다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-A small company has five employees with annual salaries (in thousands of dollars): $35, 40, 42, 45, 250$.
+**연습문제 1.**
+어느 작은 회사에 직원 다섯 명이 있고 연봉(천 달러 단위)이 $35, 40, 42, 45, 250$이다.
 
-**(a)** Compute the sample mean and the sample median.
-**(b)** Replace the CEO's $\$250\text{k}$ salary with $\$500\text{k}$. Recompute the mean and median. Which changed more?
-**(c)** Explain why the median is a *robust* measure of central tendency while the mean is not.
+**(a)** 표본평균과 표본중앙값을 계산하라.
+**(b)** 최고경영자의 연봉 $\$250\text{k}$를 $\$500\text{k}$로 바꿔라. 평균과 중앙값을 다시 계산하라. 어느 쪽이 더 많이 변했는가?
+**(c)** 중앙값이 *강건한* 중심경향 측도이고 평균은 그렇지 않은 이유를 설명하라.
 
-??? success "Solution to Exercise 1"
-    (a) $\bar{x} = 412/5 = 82.4$, median $= 42$.
+??? success "연습문제 1 풀이"
+    (a) $\bar{x} = 412/5 = 82.4$, 중앙값 $= 42$.
 
-    (b) After the change: $\bar{x} = 662/5 = 132.4$, median still $= 42$. The mean rose by 50 (a 60.7% jump); the median is unchanged.
+    (b) 바꾼 뒤 $\bar{x} = 662/5 = 132.4$이고 중앙값은 여전히 $= 42$다. 평균은 50만큼(60.7%) 뛰었고 중앙값은 그대로다.
 
-    (c) The median depends only on the *rank* of observations; changing the magnitude of any one observation (while preserving its rank) leaves it unchanged. The median has a breakdown point near 50% — about half the data must be corrupted before it can be moved arbitrarily. The mean's breakdown point is 0: a single extreme observation can move it arbitrarily far. This robustness/efficiency trade-off is fundamental.
+    (c) 중앙값은 관측값의 *순위*에만 의존하므로, 순위를 유지한 채 어느 한 관측값의 크기를 바꿔도 변하지 않는다. 중앙값의 붕괴점은 50%에 가깝다. 임의로 옮기려면 자료의 절반 정도를 오염시켜야 한다. 평균의 붕괴점은 0이다. 극단 관측값 하나가 평균을 임의로 멀리 옮길 수 있다. 이 강건성/효율 절충은 근본적인 것이다.
 
 ---
 
-**Exercise 2.**
-Estimate the mean and variance from this grouped frequency table:
+**연습문제 2.**
+다음 묶음 도수분포표에서 평균과 분산을 추정하라.
 
-| Score range | Midpoint $m_i$ | Frequency $f_i$ |
+| 점수 구간 | 중간값 $m_i$ | 도수 $f_i$ |
 |:---:|:---:|:---:|
 | 50–59 | 54.5 | 3 |
 | 60–69 | 64.5 | 5 |
@@ -394,81 +394,81 @@ Estimate the mean and variance from this grouped frequency table:
 | 80–89 | 84.5 | 8 |
 | 90–99 | 94.5 | 4 |
 
-Use $\bar{x} = \sum f_i m_i / \sum f_i$ and $s^2 = \sum f_i (m_i - \bar{x})^2 / (n - 1)$. Why are these *estimates* rather than exact values?
+$\bar{x} = \sum f_i m_i / \sum f_i$와 $s^2 = \sum f_i (m_i - \bar{x})^2 / (n - 1)$을 쓰라. 이것이 왜 정확한 값이 아니라 *추정값*인가?
 
-??? success "Solution to Exercise 2"
-    $\sum f_i m_i = 163.5 + 322.5 + 745 + 676 + 378 = 2285$, so $\bar{x} = 2285/30 \approx 76.17$.
+??? success "연습문제 2 풀이"
+    $\sum f_i m_i = 163.5 + 322.5 + 745 + 676 + 378 = 2285$이므로 $\bar{x} = 2285/30 \approx 76.17$이다.
 
-    Weighted squared deviations (showing the totals): $\sum f_i (m_i - \bar{x})^2 \approx 4016.7$, so $s^2 \approx 4016.7/29 \approx 138.5$, $s \approx 11.77$.
+    가중 제곱편차의 총합은 $\sum f_i (m_i - \bar{x})^2 \approx 4016.7$이므로 $s^2 \approx 4016.7/29 \approx 138.5$, $s \approx 11.77$이다.
 
-    **Estimates because** we substitute the midpoint $m_i$ for every observation in that bin — the true scores within "70–79" could lie anywhere in $[70, 79)$, not all at 74.5. The approximation is exact when the data are uniformly distributed within each bin and improves as bins narrow.
+    **추정값인 이유는** 각 구간의 모든 관측값을 중간값 $m_i$로 대체하기 때문이다. "70–79"의 실제 점수는 모두 74.5인 것이 아니라 $[70, 79)$ 어디에나 있을 수 있다. 이 근사는 각 구간 안에서 자료가 균등하게 분포할 때 정확하며, 구간이 좁아질수록 좋아진다.
 
 ---
 
-**Exercise 3.**
-Prove that the sample mean $\bar{x} = (1/n)\sum x_i$ is the unique minimizer of $\sum (x_i - c)^2$ over $c \in \mathbb{R}$. What does the median minimize?
+**연습문제 3.**
+표본평균 $\bar{x} = (1/n)\sum x_i$이 $c \in \mathbb{R}$에 대해 $\sum (x_i - c)^2$을 최소화하는 유일한 값임을 증명하라. 중앙값은 무엇을 최소화하는가?
 
-??? success "Solution to Exercise 3"
-    **Mean:** differentiate $f(c) = \sum (x_i - c)^2$ with respect to $c$:
+??? success "연습문제 3 풀이"
+    **평균:** $f(c) = \sum (x_i - c)^2$을 $c$에 대해 미분한다.
 
     $$
     f'(c) = -2 \sum (x_i - c) = 0 \implies c = \frac{1}{n}\sum x_i = \bar{x}
     $$
 
-    Since $f''(c) = 2n > 0$, this is the unique minimum. The mean minimizes squared error.
+    $f''(c) = 2n > 0$이므로 이것이 유일한 최솟값이다. 평균은 제곱오차를 최소화한다.
 
-    **Median:** the *median* minimizes the absolute-error loss $g(c) = \sum |x_i - c|$. The proof goes through subgradients: the derivative of $|x - c|$ with respect to $c$ is $-\mathrm{sign}(x - c)$, so $g'(c) = -(\#\{x_i > c\} - \#\{x_i < c\})$. Setting this to zero requires the number of $x_i$ above $c$ to equal the number below — which is the definition of the median.
+    **중앙값:** *중앙값*은 절대오차 손실 $g(c) = \sum |x_i - c|$을 최소화한다. 증명은 열미분(subgradient)으로 진행된다. $|x - c|$의 $c$에 대한 도함수가 $-\mathrm{sign}(x - c)$이므로 $g'(c) = -(\#\{x_i > c\} - \#\{x_i < c\})$이다. 이를 0으로 두려면 $c$보다 큰 $x_i$의 개수가 작은 것의 개수와 같아야 하는데, 이것이 중앙값의 정의다.
 
-    The two measures are the $L^2$ and $L^1$ projections of the data onto the constants, respectively. This characterization extends to quantile regression: the $\tau$-th quantile minimizes the asymmetric absolute loss $\sum \rho_\tau(x_i - c)$ where $\rho_\tau(u) = u(\tau - \mathbf{1}\{u < 0\})$.
-
----
-
-**Exercise 4.**
-A dataset has $n = 100$ observations with sample mean 50 and sample standard deviation 10. A single observation is corrupted from 60 to 1060. How does the sample mean change? How does the sample standard deviation change? Compare with what would happen to a 10%-trimmed mean.
-
-??? success "Solution to Exercise 4"
-    **Mean:** the new mean is $\bar{x}_{\text{new}} = 50 + (1060 - 60)/100 = 50 + 10 = 60$. The mean jumped by 10 — the entire population SD.
-
-    **SD:** the contribution of the new observation to the sum of squared deviations becomes large: $\sum (x_i - \bar{x})^2$ increases roughly by $(1060 - 60)^2 \approx 10^6$. Recomputing precisely, $s^2_{\text{new}} \approx 10^4 + O(10^4 / n)$, so $s_{\text{new}} \approx 100$ — a tenfold inflation.
-
-    **10%-trimmed mean:** the corrupted observation is in the top 10% of the data (likely the maximum), so it is trimmed. The trimmed mean is computed only from the middle 80% of the sorted data and is hardly affected: it might change by less than 0.1 units.
-
-    Lesson: a single corrupted observation can severely distort both the mean and especially the standard deviation, while trimmed estimators are immune. This is why robust statistics matter in real data.
+    두 측도는 자료를 상수 위로 사영한 $L^2$ 사영과 $L^1$ 사영에 각각 해당한다. 이 특성화는 분위수 회귀로 확장된다. $\tau$번째 분위수는 $\rho_\tau(u) = u(\tau - \mathbf{1}\{u < 0\})$일 때 비대칭 절대손실 $\sum \rho_\tau(x_i - c)$를 최소화한다.
 
 ---
 
-**Exercise 5.**
-The mean, median, and mode are equal in a symmetric unimodal distribution; in a right-skewed distribution they are ordered Mode < Median < Mean. Prove the **mean is greater than the median** for any continuous distribution with finite mean whose density is positive on a half-line and decreasing on the upper tail (a typical right-skewed distribution like Exponential or Lognormal).
+**연습문제 4.**
+관측값이 $n = 100$개이고 표본평균이 50, 표본표준편차가 10인 자료가 있다. 관측값 하나가 60에서 1060으로 오염되었다. 표본평균은 어떻게 변하는가? 표본표준편차는 어떻게 변하는가? 10% 절단평균에서는 어떻게 될지와 비교하라.
 
-??? success "Solution to Exercise 5"
-    Let $m$ denote the median (so $P(X \le m) = P(X \ge m) = 1/2$) and $\mu = \mathbb{E}[X]$.
+??? success "연습문제 4 풀이"
+    **평균:** 새 평균은 $\bar{x}_{\text{new}} = 50 + (1060 - 60)/100 = 50 + 10 = 60$이다. 평균이 10만큼, 즉 모표준편차 전체만큼 뛰었다.
+
+    **표준편차:** 새 관측값이 제곱편차 합에 기여하는 몫이 커진다. $\sum (x_i - \bar{x})^2$이 대략 $(1060 - 60)^2 \approx 10^6$만큼 늘어난다. 정확히 다시 계산하면 $s^2_{\text{new}} \approx 10^4 + O(10^4 / n)$이므로 $s_{\text{new}} \approx 100$으로 열 배 부풀려진다.
+
+    **10% 절단평균:** 오염된 관측값은 자료의 상위 10%에 (아마 최댓값으로) 들어가므로 잘려 나간다. 절단평균은 정렬된 자료의 가운데 80%로만 계산되어 거의 영향을 받지 않는다. 변화가 0.1 단위 미만일 수 있다.
+
+    교훈: 오염된 관측값 하나가 평균을, 특히 표준편차를 심하게 왜곡할 수 있는 반면 절단 추정량은 면역이다. 실제 자료에서 강건통계가 중요한 이유가 이것이다.
+
+---
+
+**연습문제 5.**
+대칭인 단봉 분포에서는 평균, 중앙값, 최빈값이 같고, 오른쪽으로 치우친 분포에서는 최빈값 < 중앙값 < 평균의 순서다. 평균이 유한하고 밀도가 반직선 위에서 양이며 위쪽 꼬리에서 감소하는(지수분포나 로그정규분포 같은 전형적인 오른쪽 치우친 분포) 임의의 연속분포에 대해 **평균이 중앙값보다 큼**을 증명하라.
+
+??? success "연습문제 5 풀이"
+    $m$을 중앙값($P(X \le m) = P(X \ge m) = 1/2$)이라 하고 $\mu = \mathbb{E}[X]$라 하자.
 
     $$
     \mu - m = \mathbb{E}[X - m] = \int_{-\infty}^m (x - m) f(x)\,dx + \int_m^{\infty} (x - m) f(x)\,dx
     $$
 
-    Substituting $u = m - x$ in the first integral and $v = x - m$ in the second:
+    첫 적분에서 $u = m - x$로, 둘째 적분에서 $v = x - m$으로 치환하면
 
     $$
     \mu - m = -\int_0^{\infty} u\, f(m - u)\,du + \int_0^{\infty} v\, f(m + v)\,dv = \int_0^{\infty} v\,[f(m + v) - f(m - v)]\,dv
     $$
 
-    For a right-skewed distribution, the right tail $f(m + v)$ stays positive longer than the left tail $f(m - v)$ decays. Specifically, if $f$ decreases more slowly to the right of $m$ than to the left, $f(m + v) > f(m - v)$ for $v$ in the relevant tail range, making the integrand positive on average, so $\mu - m > 0$.
+    이다. 오른쪽으로 치우친 분포에서는 오른쪽 꼬리 $f(m + v)$가 왼쪽 꼬리 $f(m - v)$가 감쇠하는 것보다 오래 양수로 남는다. 구체적으로 $f$가 $m$의 오른쪽에서 왼쪽보다 천천히 감소하면 관련 꼬리 구간에서 $f(m + v) > f(m - v)$이므로 피적분함수가 평균적으로 양수가 되어 $\mu - m > 0$이다.
 
-    A clean special case: Exponential$(\lambda)$ has $m = \ln(2)/\lambda \approx 0.693/\lambda$ while $\mu = 1/\lambda > 0.693/\lambda$. $\square$
+    깔끔한 특수한 경우: 지수분포 Exponential$(\lambda)$은 $m = \ln(2)/\lambda \approx 0.693/\lambda$인 반면 $\mu = 1/\lambda > 0.693/\lambda$이다. $\square$
 
 ---
 
-**Exercise 6.**
-The **mode** is the value of $x$ maximizing the density (or PMF). For a continuous unimodal symmetric distribution, the mean, median, and mode all coincide. But for a *mixture* of two Gaussians, even a "symmetric" mixture, the mode can disagree with the mean. Construct a bimodal symmetric mixture, identify all modes, and explain when the data analyst should report each.
+**연습문제 6.**
+**최빈값**은 밀도(또는 확률질량함수)를 최대로 만드는 $x$의 값이다. 연속인 단봉 대칭분포에서는 평균, 중앙값, 최빈값이 모두 일치한다. 그러나 두 가우시안의 *혼합*에서는 "대칭인" 혼합이라도 최빈값이 평균과 어긋날 수 있다. 이봉 대칭 혼합을 하나 만들어 모든 최빈값을 찾고, 자료 분석가가 각각을 언제 보고해야 하는지 설명하라.
 
-??? success "Solution to Exercise 6"
-    Consider $f(x) = 0.5 \cdot \phi(x; -3, 1) + 0.5 \cdot \phi(x; 3, 1)$ where $\phi(\cdot; \mu, \sigma)$ is the normal density. The mixture is symmetric about $x = 0$:
+??? success "연습문제 6 풀이"
+    $\phi(\cdot; \mu, \sigma)$를 정규밀도라 할 때 $f(x) = 0.5 \cdot \phi(x; -3, 1) + 0.5 \cdot \phi(x; 3, 1)$을 생각하자. 이 혼합은 $x = 0$에 대해 대칭이다.
 
-    - **Mean** $= \mu = 0$ (symmetry).
-    - **Median** $= 0$ (symmetry).
-    - **Modes** $= -3$ and $+3$ (local maxima of $f$).
+    - **평균** $= \mu = 0$ (대칭성).
+    - **중앙값** $= 0$ (대칭성).
+    - **최빈값** $= -3$과 $+3$ ($f$의 극대점).
 
-    The mean and median land in a *valley* of the density — a point where the mixture is *least* probable. They are technically correct measures of center, but they convey misleading intuition for a bimodal distribution.
+    평균과 중앙값이 밀도의 *골*에, 즉 혼합이 *가장 덜* 일어날 법한 지점에 떨어진다. 기술적으로는 옳은 중심 측도지만 이봉 분포에 대해서는 오도하는 직관을 준다.
 
-    **What to report:** when a histogram or density estimate reveals bimodality, the analyst should describe the modes and their relative weights, not just a single measure of center. Saying "the average household income is \$60,000" is technically correct but actively misleading if the underlying distribution is bimodal (working class vs. professional class). Visualization first; central-tendency summary second. Modern reporting practice often includes a **kernel density plot** alongside summary statistics for exactly this reason.
+    **무엇을 보고할 것인가:** 히스토그램이나 밀도추정이 이봉성을 드러내면 분석가는 중심 측도 하나만이 아니라 최빈값들과 그 상대적 비중을 서술해야 한다. "평균 가구소득은 \$60,000입니다"는 기술적으로는 옳지만, 밑바탕 분포가 이봉(노동계층 대 전문직 계층)이라면 적극적으로 오도한다. 시각화가 먼저이고 중심경향 요약은 그다음이다. 현대의 보고 관행이 요약통계량과 함께 **커널밀도 그림**을 싣는 이유가 정확히 이것이다.

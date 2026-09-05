@@ -1,71 +1,71 @@
-# Chapter 2: Descriptive Statistics
+# 제2장: 기술통계
 
-## Overview
+## 개요
 
-This chapter develops the tools for exploring, summarizing, and visualizing data before any formal modeling or inference. It covers graphical methods for examining distributions (histograms, ECDFs, Q-Q plots), numerical measures of shape, center, and spread, and a range of visualization techniques for comparing distributions across groups. Together, these tools form the foundation of exploratory data analysis (EDA).
-
----
-
-## Chapter Structure
-
-### 2.1 Exploratory Data Analysis
-
-Graphical tools for understanding the shape and structure of a dataset:
-
-- **Histograms and Density Plots** -- Covers how histograms divide a continuous variable into bins to reveal distributional features (center, spread, skewness, modality, outliers) and how kernel density estimates provide a smooth approximation to the underlying PDF.
-- **ECDF, Quantiles, and Q-Q Plots** -- Introduces the empirical cumulative distribution function as a bin-free alternative to histograms, defines quantiles and percentiles, and explains how Q-Q plots compare an observed distribution to a theoretical reference distribution.
-
-### 2.2 Shape of Distributions
-
-Characterizing the geometry of a distribution:
-
-- **Modality** -- Explains unimodal, bimodal, and multimodal distributions, showing how the number of peaks reveals whether data comes from a single population or a mixture of distinct subgroups.
-- **Skewness and Kurtosis** -- Defines skewness (asymmetry of the distribution) and kurtosis (tail heaviness relative to a normal distribution), with formulas, visualizations, and practical interpretation for identifying departures from normality.
-- **Outliers and Leverage** -- Covers univariate and multivariate outliers, their causes (measurement error, natural variation, sampling), their effects on central tendency, variability, and regression models, and methods for detection (IQR rule, Z-scores).
-
-### 2.3 Numerical Summaries
-
-Quantitative measures of center and spread:
-
-- **Mean, Median, Mode** -- Defines and compares the three main measures of central tendency, including their formulas, sensitivity to outliers, and appropriate use cases for symmetric, skewed, and categorical data.
-- **Variance and Standard Deviation** -- Covers population and sample variance (with Bessel's correction), standard deviation, and their interpretation as measures of dispersion around the mean.
-- **IQR and Robust Measures** -- Introduces the range, interquartile range, and percentiles as measures of spread that are resistant to outlier influence, complementing variance-based measures.
-- **Median Absolute Deviation** -- Defines MAD as a robust alternative to standard deviation, covering its computation, the standardization constant for comparability with the standard deviation under normality, and its use for outlier-resistant dispersion measurement.
-
-### 2.4 Visualization
-
-Advanced plotting techniques for comparing distributions and groups:
-
-- **Boxplots** -- Explains the anatomy of box-and-whisker plots (five-number summary, whiskers, outlier markers) and their use for compact visual summaries of center, spread, skewness, and outliers.
-- **Violin Plots** -- Combines box plots with kernel density estimates to reveal the full distributional shape, including multimodality and density variations that box plots cannot show.
-- **Group Comparisons** -- Covers scatter plots, line plots, bar plots, pie charts, pair plots, stem-and-leaf plots, dot plots, frequency tables, and mosaic plots for comparing distributions, frequencies, and relationships across groups.
-
-### 2.5 Code
-
-Complete Python implementations:
-
-- **Group Comparison Examples** -- Python script demonstrating group comparison visualization techniques using real-world datasets.
-
-### 2.6 Exercises
-
-Practice problems covering histograms, ECDFs, measures of center and spread, skewness, kurtosis, outlier detection, and group comparison visualization.
+이 장은 형식적인 모형화나 추론에 들어가기 전에 자료를 탐색하고 요약하고 시각화하는 도구를 다룬다. 분포를 살펴보는 그래프 방법(히스토그램, 경험적 누적분포함수, Q-Q 그림), 모양·중심·퍼짐에 대한 수치 측도, 그리고 집단 간 분포를 비교하는 여러 시각화 기법을 포함한다. 이 도구들이 함께 탐색적 자료분석(EDA)의 토대를 이룬다.
 
 ---
 
-## Prerequisites
+## 장의 구성
 
-This chapter builds on:
+### 2.1 탐색적 자료분석
 
-- **Chapter 0** (Prerequisites) -- Python basics, NumPy arrays, pandas DataFrames, and Matplotlib plotting for running the code examples and generating visualizations.
-- **Chapter 1** (Data Collection) -- Understanding of populations, samples, and the distinction between designed and observational data.
+자료의 모양과 구조를 이해하기 위한 그래프 도구:
+
+- **히스토그램과 밀도 그림** — 히스토그램이 연속변수를 구간으로 나누어 분포의 특징(중심, 퍼짐, 왜도, 봉우리 수, 이상치)을 드러내는 방식과, 커널밀도추정이 밑바탕의 확률밀도함수를 매끄럽게 근사하는 방식을 다룬다.
+- **경험적 누적분포함수, 분위수, Q-Q 그림** — 구간을 나눌 필요가 없는 히스토그램의 대안으로 경험적 누적분포함수를 소개하고, 분위수와 백분위수를 정의하며, Q-Q 그림이 관측된 분포를 이론적 기준 분포와 어떻게 비교하는지 설명한다.
+
+### 2.2 분포의 모양
+
+분포의 기하를 특징짓기:
+
+- **봉우리 수** — 단봉, 이봉, 다봉 분포를 설명하고, 봉우리의 개수가 자료가 하나의 모집단에서 왔는지 서로 구별되는 하위집단의 혼합인지를 어떻게 드러내는지 보인다.
+- **왜도와 첨도** — 왜도(분포의 비대칭성)와 첨도(정규분포 대비 꼬리의 두께)를 정의하고, 공식과 시각화, 그리고 정규성에서 벗어나는 정도를 파악하는 실용적 해석을 제시한다.
+- **이상치와 지렛대점** — 일변량 및 다변량 이상치, 그 원인(측정오차, 자연적 변동, 표집), 중심경향·변동성·회귀모형에 미치는 영향, 그리고 탐지 방법(IQR 규칙, Z-점수)을 다룬다.
+
+### 2.3 수치 요약
+
+중심과 퍼짐의 정량적 측도:
+
+- **평균, 중앙값, 최빈값** — 중심경향의 세 가지 주요 측도를 정의하고 비교하며, 공식, 이상치에 대한 민감도, 대칭·치우친·범주형 자료에 적합한 사용 사례를 포함한다.
+- **분산과 표준편차** — 모분산과 (베셀 보정을 적용한) 표본분산, 표준편차, 그리고 평균 주위의 흩어짐 측도로서의 해석을 다룬다.
+- **IQR과 강건 측도** — 범위, 사분위범위, 백분위수를 이상치의 영향에 저항하는 퍼짐 측도로 소개하여 분산 기반 측도를 보완한다.
+- **중앙값 절대편차** — MAD를 표준편차의 강건한 대안으로 정의하고, 그 계산법, 정규성 아래 표준편차와 비교 가능하게 만드는 표준화 상수, 이상치에 강한 흩어짐 측정에서의 쓰임을 다룬다.
+
+### 2.4 시각화
+
+분포와 집단을 비교하는 고급 그림 기법:
+
+- **상자그림** — 상자수염그림의 구조(다섯 수치 요약, 수염, 이상치 표시)와, 중심·퍼짐·왜도·이상치를 압축적으로 요약하는 데서의 쓰임을 설명한다.
+- **바이올린 그림** — 상자그림과 커널밀도추정을 결합하여, 상자그림이 보여줄 수 없는 다봉성과 밀도의 변화를 포함한 분포의 전체 모양을 드러낸다.
+- **집단 비교** — 산점도, 선그림, 막대그림, 원그래프, 쌍그림, 줄기잎그림, 점그림, 도수분포표, 모자이크 그림으로 집단 간 분포·도수·관계를 비교하는 법을 다룬다.
+
+### 2.5 코드
+
+완전한 파이썬 구현:
+
+- **집단 비교 예제** — 실제 자료를 사용해 집단 비교 시각화 기법을 보여주는 파이썬 스크립트.
+
+### 2.6 연습문제
+
+히스토그램, 경험적 누적분포함수, 중심과 퍼짐의 측도, 왜도, 첨도, 이상치 탐지, 집단 비교 시각화를 다루는 연습문제.
 
 ---
 
-## Key Takeaways
+## 선수 지식
 
-1. Exploratory data analysis with histograms, density plots, and ECDFs should precede any formal modeling to reveal distributional features and potential issues in the data.
-2. The shape of a distribution (modality, skewness, kurtosis) determines which summary statistics and inferential methods are appropriate.
-3. The mean is sensitive to outliers while the median is robust; choosing the right measure of center depends on the distribution shape.
-4. Variance and standard deviation measure spread around the mean, while IQR and MAD provide robust alternatives that resist outlier influence.
-5. Boxplots provide compact distributional summaries, while violin plots reveal the full density shape including multimodality.
-6. Effective group comparisons require choosing the right visualization (scatter, bar, box, violin, mosaic) for the type of data and the comparison being made.
+이 장은 다음을 바탕으로 한다:
+
+- **제0장**(선수 지식) — 코드 예제를 실행하고 시각화를 생성하기 위한 파이썬 기초, NumPy 배열, pandas DataFrame, Matplotlib 그림.
+- **제1장**(자료 수집) — 모집단과 표본, 그리고 설계된 자료와 관찰 자료의 구분에 대한 이해.
+
+---
+
+## 핵심 요약
+
+1. 히스토그램, 밀도 그림, 경험적 누적분포함수를 이용한 탐색적 자료분석은 어떤 형식적 모형화보다 앞서 이루어져 자료의 분포적 특징과 잠재적 문제를 드러내야 한다.
+2. 분포의 모양(봉우리 수, 왜도, 첨도)이 어떤 요약통계량과 추론 방법이 적절한지를 결정한다.
+3. 평균은 이상치에 민감하고 중앙값은 강건하다. 올바른 중심 측도의 선택은 분포의 모양에 달려 있다.
+4. 분산과 표준편차는 평균 주위의 퍼짐을 재고, IQR과 MAD는 이상치의 영향에 저항하는 강건한 대안을 제공한다.
+5. 상자그림은 압축적인 분포 요약을 주고, 바이올린 그림은 다봉성을 포함한 밀도의 전체 모양을 드러낸다.
+6. 효과적인 집단 비교를 위해서는 자료의 유형과 비교의 목적에 맞는 시각화(산점도, 막대, 상자, 바이올린, 모자이크)를 골라야 한다.
