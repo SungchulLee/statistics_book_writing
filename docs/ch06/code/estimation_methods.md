@@ -1,47 +1,47 @@
-# Estimation Methods Comparison
+# 추정 방법 비교
 
-## Overview
+## 개요
 
-This page compares the major approaches to point estimation: the **Method of Moments (MoM)** and **Maximum Likelihood Estimation (MLE)**. Using both analytical derivations and Monte Carlo simulations, we examine the bias, variance, and MSE of each method for several distributions. Understanding when and why MLE outperforms MoM -- and the computational cost of that advantage -- is central to applied statistical practice.
+이 페이지에서는 점추정의 주요 접근인 **적률법(MoM)**과 **최대가능도추정(MLE)**을 비교한다. 해석적 유도와 Monte Carlo 모의실험을 함께 사용하여 여러 분포에 대해 각 방법의 편향, 분산, 평균제곱오차를 살펴본다. MLE가 언제 그리고 왜 적률법을 능가하는지, 그리고 그 이점의 계산 비용이 얼마인지 이해하는 것이 응용통계 실무의 중심이다.
 
-## Method of Moments
+## 적률법
 
-The Method of Moments equates population moments to their sample counterparts and solves for the unknown parameters. For a distribution with parameters $\theta_1, \ldots, \theta_k$:
+적률법은 모집단 적률을 표본 적률과 같다고 두고 미지 모수를 푼다. 모수가 $\theta_1, \ldots, \theta_k$인 분포에 대해:
 
 $$
 \mu_r'(\theta_1, \ldots, \theta_k) = \frac{1}{n}\sum_{i=1}^n X_i^r, \quad r = 1, \ldots, k
 $$
 
-!!! info "Advantages and Disadvantages"
-    **Advantages:** Simple closed-form expressions; no optimization required; always consistent under mild conditions.
+!!! info "장점과 단점"
+    **장점:** 닫힌 형태의 단순한 표현. 최적화가 필요 없음. 온건한 조건 아래에서 언제나 일치함.
 
-    **Disadvantages:** May produce estimates outside the parameter space; generally less efficient than MLE; does not use the full likelihood information.
+    **단점:** 모수공간 밖의 추정값을 낼 수 있음. 일반적으로 MLE보다 효율이 낮음. 가능도 정보 전체를 사용하지 않음.
 
-## Maximum Likelihood Estimation
+## 최대가능도추정
 
-MLE finds the parameter values that maximize the likelihood of the observed data:
+MLE는 관측된 자료의 가능도를 최대화하는 모수값을 찾는다:
 
 $$
 \hat{\theta}_{\text{MLE}} = \arg\max_\theta \prod_{i=1}^n f(x_i; \theta)
 $$
 
-In practice, we maximize the log-likelihood:
+실무에서는 로그가능도를 최대화한다:
 
 $$
 \hat{\theta}_{\text{MLE}} = \arg\max_\theta \sum_{i=1}^n \log f(x_i; \theta)
 $$
 
-## Comparing Variance Estimators
+## 분산추정량의 비교
 
-A foundational comparison involves three estimators of the population variance $\sigma^2$ from a normal sample of size $n$:
+기초적인 비교로 크기 $n$인 정규 표본에서 모분산 $\sigma^2$을 추정하는 세 가지 추정량을 살펴본다:
 
-| Estimator | Divisor | Bias | MSE |
+| 추정량 | 분모 | 편향 | MSE |
 |-----------|---------|------|-----|
 | MLE $\hat{\sigma}^2_n$ | $n$ | $-\sigma^2/n$ | $\frac{2n-1}{n^2}\sigma^4$ |
 | Bessel $S^2_{n-1}$ | $n-1$ | $0$ | $\frac{2}{n-1}\sigma^4$ |
-| MSE-optimal $\hat{\sigma}^2_{n+1}$ | $n+1$ | $-\frac{2\sigma^2}{n+1}$ | $\frac{2}{n+1}\sigma^4$ |
+| MSE 최적 $\hat{\sigma}^2_{n+1}$ | $n+1$ | $-\frac{2\sigma^2}{n+1}$ | $\frac{2}{n+1}\sigma^4$ |
 
-The following simulation verifies these results empirically.
+다음 모의실험이 이 결과들을 경험적으로 확인해 준다.
 
 ```python
 import numpy as np
@@ -72,18 +72,18 @@ def compare_variance_estimators(mu=5, sigma2=4, n=10, n_sim=50_000):
 compare_variance_estimators()
 ```
 
-!!! note "Key Observation"
-    The unbiased estimator $S^2_{n-1}$ has the **largest** MSE among the three. Dividing by $n+1$ introduces bias but achieves the minimum MSE, illustrating the bias--variance tradeoff.
+!!! note "핵심 관찰"
+    불편추정량 $S^2_{n-1}$의 평균제곱오차가 셋 중 **가장 크다**. $n+1$로 나누면 편향이 생기지만 평균제곱오차가 최소가 되며, 편향–분산 맞바꿈을 잘 보여 준다.
 
-## Shrinkage Estimator Demonstration
+## 축소추정량 시연
 
-A shrinkage estimator $\hat{\mu}_\lambda = \lambda \bar{X}$ trades bias for reduced variance. The MSE decomposes as:
+축소추정량 $\hat{\mu}_\lambda = \lambda \bar{X}$는 편향을 대가로 분산을 줄인다. 평균제곱오차는 다음과 같이 분해된다:
 
 $$
 \text{MSE}(\hat{\mu}_\lambda) = \lambda^2 \frac{\sigma^2}{n} + (1 - \lambda)^2 \mu^2
 $$
 
-The MSE-optimal shrinkage factor is:
+평균제곱오차가 최적인 축소계수는:
 
 $$
 \lambda^* = \frac{\mu^2}{\mu^2 + \sigma^2/n}
@@ -107,15 +107,15 @@ def shrinkage_mse(mu_true=3, sigma2=4, n=20):
 shrinkage_mse()
 ```
 
-## MLE for the Normal Distribution
+## Normal 분포의 MLE
 
-For $X_1, \ldots, X_n \overset{\text{iid}}{\sim} N(\mu, \sigma^2)$, the MLEs have closed-form solutions:
+$X_1, \ldots, X_n \overset{\text{iid}}{\sim} N(\mu, \sigma^2)$에 대해 MLE는 닫힌 형태의 해를 갖는다:
 
 $$
 \hat{\mu}_{\text{MLE}} = \bar{X}, \qquad \hat{\sigma}^2_{\text{MLE}} = \frac{1}{n}\sum_{i=1}^n (X_i - \bar{X})^2
 $$
 
-We can also verify these by numerical optimization of the negative log-likelihood:
+음의 로그가능도를 수치적으로 최적화하여 확인할 수도 있다:
 
 $$
 -\ell(\mu, \sigma^2) = \frac{n}{2}\log(2\pi\sigma^2) + \frac{1}{2\sigma^2}\sum_{i=1}^n (x_i - \mu)^2
@@ -151,15 +151,15 @@ def mle_normal_demo(n=100):
 mle_normal_demo()
 ```
 
-## MLE vs Method of Moments for the Gamma Distribution
+## Gamma 분포에서 MLE와 적률법
 
-For $X \sim \text{Gamma}(\alpha, \beta)$ with $E[X] = \alpha\beta$ and $\text{Var}(X) = \alpha\beta^2$, the MoM estimators are:
+$E[X] = \alpha\beta$이고 $\text{Var}(X) = \alpha\beta^2$인 $X \sim \text{Gamma}(\alpha, \beta)$에 대해 적률법 추정량은:
 
 $$
 \hat{\alpha}_{\text{MoM}} = \frac{\bar{X}^2}{S^2}, \qquad \hat{\beta}_{\text{MoM}} = \frac{S^2}{\bar{X}}
 $$
 
-The MLE has no closed form and requires numerical optimization.
+MLE는 닫힌 형태가 없어 수치 최적화가 필요하다.
 
 ```python
 import numpy as np
@@ -192,18 +192,18 @@ def mle_vs_mom_gamma(alpha_true=3, beta_true=2, n=200, n_sim=5000):
 mle_vs_mom_gamma()
 ```
 
-!!! success "MLE Wins on MSE"
-    For the Gamma distribution, MLE has smaller MSE than MoM for both $\alpha$ and $\beta$. This aligns with the asymptotic theory: MLE is efficient (achieves the Cramer--Rao bound), while MoM generally does not.
+!!! success "평균제곱오차에서 MLE의 승리"
+    Gamma 분포에서 $\alpha$와 $\beta$ 모두에 대해 MLE의 평균제곱오차가 적률법보다 작다. 점근이론과 일치하는 결과이다. MLE는 (Cramér–Rao 한계를 달성하여) 효율적인 반면 적률법은 일반적으로 그렇지 않다.
 
-## Cramer-Rao Lower Bound Verification
+## Cramér-Rao 하한 확인
 
-The Cramer-Rao inequality states that for any unbiased estimator $\hat{\theta}$:
+Cramér-Rao 부등식은 임의의 불편추정량 $\hat{\theta}$에 대해 다음을 말한다:
 
 $$
 \text{Var}(\hat{\theta}) \geq \frac{1}{I(\theta)}
 $$
 
-where $I(\theta)$ is the Fisher information. For estimating the mean of $N(\mu, \sigma^2)$, the CRLB is $\sigma^2/n$, and the sample mean achieves this bound exactly.
+여기서 $I(\theta)$는 Fisher 정보량이다. $N(\mu, \sigma^2)$의 평균을 추정할 때 CRLB는 $\sigma^2/n$이고 표본평균이 이 한계를 정확히 달성한다.
 
 ```python
 import numpy as np
@@ -223,52 +223,52 @@ def cramer_rao_demo(n=50, n_sim=20_000):
 cramer_rao_demo()
 ```
 
-## Interpretation
+## 해석
 
-The simulations confirm several theoretical results:
+모의실험은 여러 이론적 결과를 확인해 준다:
 
-1. **Bias--variance tradeoff is real**: The MSE-optimal variance estimator divides by $n+1$, not $n-1$, despite being biased.
-2. **MLE is asymptotically efficient**: For the Gamma distribution, MLE achieves lower MSE than MoM as theory predicts.
-3. **Shrinkage can help**: Pulling the sample mean toward zero reduces MSE when the signal-to-noise ratio $\mu/(\sigma/\sqrt{n})$ is moderate.
-4. **The sample mean is CRLB-efficient**: Its variance matches the Cramer-Rao lower bound exactly for the normal mean.
+1. **편향–분산 맞바꿈은 실재한다**: 평균제곱오차가 최적인 분산추정량은 편향되어 있음에도 $n-1$이 아니라 $n+1$로 나눈다.
+2. **MLE는 점근적으로 효율적이다**: Gamma 분포에서 이론이 예측한 대로 MLE가 적률법보다 낮은 평균제곱오차를 달성한다.
+3. **축소가 도움이 될 수 있다**: 신호 대 잡음비 $\mu/(\sigma/\sqrt{n})$이 중간 정도일 때 표본평균을 0 쪽으로 당기면 평균제곱오차가 줄어든다.
+4. **표본평균은 CRLB를 달성한다**: 정규분포 평균에 대해 그 분산이 Cramér-Rao 하한과 정확히 일치한다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.** For $X_1, \ldots, X_n \overset{\text{iid}}{\sim} \text{Exp}(\lambda)$, derive the Method of Moments and MLE estimators for $\lambda$. Are they the same?
+**연습문제 1.** $X_1, \ldots, X_n \overset{\text{iid}}{\sim} \text{Exp}(\lambda)$에 대해 $\lambda$의 적률법 추정량과 MLE를 유도하라. 둘은 같은가?
 
-??? success "Solution to Exercise 1"
-    The exponential distribution has $E[X] = 1/\lambda$, so the MoM estimator sets $\bar{X} = 1/\hat{\lambda}$, giving $\hat{\lambda}_{\text{MoM}} = 1/\bar{X}$.
+??? success "연습문제 1 풀이"
+    Exponential 분포는 $E[X] = 1/\lambda$이므로 적률법은 $\bar{X} = 1/\hat{\lambda}$로 두어 $\hat{\lambda}_{\text{MoM}} = 1/\bar{X}$를 준다.
 
-    The log-likelihood is $\ell(\lambda) = n\log\lambda - \lambda \sum x_i$. Setting $\ell'(\lambda) = n/\lambda - \sum x_i = 0$ gives $\hat{\lambda}_{\text{MLE}} = n/\sum x_i = 1/\bar{X}$.
+    로그가능도는 $\ell(\lambda) = n\log\lambda - \lambda \sum x_i$이다. $\ell'(\lambda) = n/\lambda - \sum x_i = 0$으로 두면 $\hat{\lambda}_{\text{MLE}} = n/\sum x_i = 1/\bar{X}$이다.
 
-    The two estimators are identical for the exponential distribution. This happens because the exponential has a single parameter determined by a single moment. $\square$
+    Exponential 분포에서 두 추정량은 동일하다. 모수가 하나이고 그것이 하나의 적률로 결정되기 때문이다. $\square$
 
 ---
 
-**Exercise 2.** Show that the MSE-optimal estimator of $\sigma^2$ in the family $\hat{\sigma}^2_c = \frac{1}{c}\sum_{i=1}^n(X_i - \bar{X})^2$ has $c^* = n+1$ for a normal population.
+**연습문제 2.** 정규모집단에서 $\hat{\sigma}^2_c = \frac{1}{c}\sum_{i=1}^n(X_i - \bar{X})^2$ 계열 중 평균제곱오차가 최적인 추정량이 $c^* = n+1$임을 보여라.
 
-??? success "Solution to Exercise 2"
-    Let $Q = \sum(X_i - \bar{X})^2$. For $X_i \sim N(\mu, \sigma^2)$, we have $Q/\sigma^2 \sim \chi^2_{n-1}$, so $E[Q] = (n-1)\sigma^2$ and $\text{Var}(Q) = 2(n-1)\sigma^4$.
+??? success "연습문제 2 풀이"
+    $Q = \sum(X_i - \bar{X})^2$이라 하자. $X_i \sim N(\mu, \sigma^2)$에서 $Q/\sigma^2 \sim \chi^2_{n-1}$이므로 $E[Q] = (n-1)\sigma^2$이고 $\text{Var}(Q) = 2(n-1)\sigma^4$이다.
 
-    The MSE of $Q/c$ is:
+    $Q/c$의 평균제곱오차는:
 
     $$
     \text{MSE}(Q/c) = \text{Var}(Q/c) + [\text{Bias}(Q/c)]^2 = \frac{2(n-1)\sigma^4}{c^2} + \left(\frac{n-1}{c} - 1\right)^2\sigma^4
     $$
 
-    Taking the derivative with respect to $c$ and setting it to zero:
+    $c$에 대해 미분하여 0으로 두면:
 
     $$
     \frac{d}{dc}\text{MSE} = -\frac{4(n-1)\sigma^4}{c^3} - \frac{2(n-1)\sigma^4}{c^2}\left(\frac{n-1}{c} - 1\right) = 0
     $$
 
-    Simplifying: $-4(n-1)/c^3 + 2(n-1)(c - n + 1)/c^3 = 0$, which gives $2(c - n + 1) = 4$, so $c = n + 1$. $\square$
+    정리하면 $-4(n-1)/c^3 + 2(n-1)(c - n + 1)/c^3 = 0$이므로 $2(c - n + 1) = 4$, 즉 $c = n + 1$이다. $\square$
 
 ---
 
-**Exercise 3.** Run a Monte Carlo simulation comparing MLE and MoM for the Beta distribution $\text{Beta}(\alpha, \beta)$ with $\alpha = 2, \beta = 5$ and sample size $n = 50$. Which method has lower MSE for estimating $\alpha$?
+**연습문제 3.** $\alpha = 2, \beta = 5$인 Beta 분포 $\text{Beta}(\alpha, \beta)$에서 표본크기 $n = 50$으로 MLE와 적률법을 비교하는 Monte Carlo 모의실험을 수행하라. $\alpha$를 추정할 때 어느 방법의 평균제곱오차가 더 작은가?
 
-??? success "Solution to Exercise 3"
+??? success "연습문제 3 풀이"
     ```python
     import numpy as np
     from scipy import stats
@@ -293,28 +293,28 @@ The simulations confirm several theoretical results:
     print(f"MoM: MSE = {np.mean((mom_a - a_true)**2):.6f}")
     ```
 
-    MLE will typically have lower MSE, consistent with its asymptotic efficiency. $\square$
+    대체로 MLE의 평균제곱오차가 더 작으며, 이는 점근 효율성과 일관된다. $\square$
 
 ---
 
-**Exercise 4.** Prove that the MLE is invariant under reparameterization: if $\hat{\theta}$ is the MLE of $\theta$, then $g(\hat{\theta})$ is the MLE of $g(\theta)$ for any function $g$.
+**연습문제 4.** MLE가 재모수화에 불변임을 증명하라. 즉 $\hat{\theta}$가 $\theta$의 MLE이면 임의의 함수 $g$에 대해 $g(\hat{\theta})$가 $g(\theta)$의 MLE임을 보여라.
 
-??? success "Solution to Exercise 4"
-    Let $\eta = g(\theta)$ where $g$ is a one-to-one function (the general case extends via the induced likelihood). The likelihood as a function of $\eta$ is:
+??? success "연습문제 4 풀이"
+    $g$가 일대일 함수일 때 $\eta = g(\theta)$라 하자(일반적인 경우는 유도가능도로 확장된다). $\eta$의 함수로 본 가능도는:
 
     $$
     L^*(\eta) = L(g^{-1}(\eta))
     $$
 
-    Since $L(\theta)$ is maximized at $\hat{\theta}$, $L^*(g(\hat{\theta})) = L(\hat{\theta}) \geq L(\theta)$ for all $\theta$. Hence $L^*(\eta) \leq L^*(g(\hat{\theta}))$ for all $\eta$ in the range of $g$, so $g(\hat{\theta})$ maximizes $L^*$.
+    $L(\theta)$가 $\hat{\theta}$에서 최대이므로 모든 $\theta$에 대해 $L^*(g(\hat{\theta})) = L(\hat{\theta}) \geq L(\theta)$이다. 따라서 $g$의 치역에 속하는 모든 $\eta$에 대해 $L^*(\eta) \leq L^*(g(\hat{\theta}))$이므로 $g(\hat{\theta})$가 $L^*$을 최대화한다.
 
-    For general (not necessarily one-to-one) $g$, define $\hat{\eta} = \sup_{\{\theta: g(\theta) = \eta\}} L(\theta)$ and take the maximizer, which equals $g(\hat{\theta})$ by construction. $\square$
+    일대일이 아닐 수도 있는 일반적인 $g$에 대해서는 $\hat{\eta} = \sup_{\{\theta: g(\theta) = \eta\}} L(\theta)$로 정의하고 그 최대점을 취하면, 구성상 그것이 $g(\hat{\theta})$와 같다. $\square$
 
 ---
 
-**Exercise 5.** The Fisher information for the Bernoulli parameter $p$ is $I(p) = 1/[p(1-p)]$. Verify numerically that the variance of the sample proportion $\hat{p} = \bar{X}$ achieves the Cramer-Rao bound $1/[nI(p)]$ for $p = 0.3$ and $n = 100$.
+**연습문제 5.** Bernoulli 모수 $p$의 Fisher 정보량은 $I(p) = 1/[p(1-p)]$이다. $p = 0.3$, $n = 100$일 때 표본비율 $\hat{p} = \bar{X}$의 분산이 Cramér-Rao 한계 $1/[nI(p)]$를 달성함을 수치적으로 확인하라.
 
-??? success "Solution to Exercise 5"
+??? success "연습문제 5 풀이"
     ```python
     import numpy as np
 
@@ -329,4 +329,4 @@ The simulations confirm several theoretical results:
     print(f"Ratio           = {empirical_var / crlb:.4f}")
     ```
 
-    The ratio should be very close to 1.0, confirming that $\hat{p}$ is an efficient estimator achieving the CRLB. $\square$
+    비가 1.0에 매우 가깝게 나와 $\hat{p}$가 CRLB를 달성하는 효율적 추정량임을 확인해 준다. $\square$

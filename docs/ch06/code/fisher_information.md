@@ -1,56 +1,56 @@
-# Fisher Information Computation
+# Fisher 정보량 계산
 
-## Overview
+## 개요
 
-The **Fisher information** quantifies how much information a random sample carries about an unknown parameter. It plays a central role in estimation theory: it determines the best achievable precision (the Cramer-Rao lower bound), governs the asymptotic variance of the MLE, and guides experimental design. This page demonstrates both analytical and numerical computation of Fisher information.
+**Fisher 정보량**은 확률표본이 미지 모수에 관해 얼마나 많은 정보를 담고 있는지를 정량화한다. 추정이론에서 중심적인 역할을 한다. 달성 가능한 최선의 정밀도(Cramér-Rao 하한)를 결정하고, MLE의 점근분산을 지배하며, 실험설계를 이끈다. 이 페이지에서는 Fisher 정보량의 해석적 계산과 수치적 계산을 모두 보인다.
 
-## Definition
+## 정의
 
-Let $X$ have density (or PMF) $f(x; \theta)$. The **score function** is:
+$X$의 밀도(또는 PMF)가 $f(x; \theta)$라 하자. **점수함수**는:
 
 $$
 S(\theta) = \frac{\partial}{\partial\theta}\log f(X; \theta)
 $$
 
-The **Fisher information** for a single observation is:
+관측값 하나에 대한 **Fisher 정보량**은:
 
 $$
 I(\theta) = E\left[S(\theta)^2\right] = \text{Var}\left[S(\theta)\right]
 $$
 
-Under regularity conditions, this equals the negative expected second derivative:
+정칙 조건 아래에서 이는 2계도함수의 기댓값에 음수를 취한 것과 같다:
 
 $$
 I(\theta) = -E\left[\frac{\partial^2}{\partial\theta^2}\log f(X; \theta)\right]
 $$
 
-For $n$ iid observations, the total Fisher information is $I_n(\theta) = nI(\theta)$.
+$n$개의 i.i.d. 관측값에서 전체 Fisher 정보량은 $I_n(\theta) = nI(\theta)$이다.
 
-## Key Theoretical Results
+## 주요 이론 결과
 
-!!! info "Cramer-Rao Lower Bound"
-    For any unbiased estimator $\hat{\theta}$:
+!!! info "Cramér-Rao 하한"
+    임의의 불편추정량 $\hat{\theta}$에 대해:
 
     $$
     \text{Var}(\hat{\theta}) \geq \frac{1}{nI(\theta)}
     $$
 
-    An estimator achieving this bound is called **efficient**.
+    이 한계를 달성하는 추정량을 **효율적**이라 한다.
 
-!!! info "Asymptotic Normality of the MLE"
-    Under regularity conditions:
+!!! info "MLE의 점근정규성"
+    정칙 조건 아래에서:
 
     $$
     \hat{\theta}_{\text{MLE}} \overset{d}{\to} N\!\left(\theta,\, \frac{1}{nI(\theta)}\right)
     $$
 
-    The MLE is asymptotically efficient -- its variance achieves the CRLB.
+    MLE는 점근적으로 효율적이며 그 분산이 CRLB를 달성한다.
 
-## Analytical Examples
+## 해석적 예제
 
-### Normal Mean
+### 정규분포의 평균
 
-For $X \sim N(\mu, \sigma^2)$ with $\sigma^2$ known:
+$\sigma^2$이 알려진 $X \sim N(\mu, \sigma^2)$에 대해:
 
 $$
 \log f(x; \mu) = -\frac{1}{2}\log(2\pi\sigma^2) - \frac{(x - \mu)^2}{2\sigma^2}
@@ -66,7 +66,7 @@ $$
 
 ### Bernoulli
 
-For $X \sim \text{Bernoulli}(p)$:
+$X \sim \text{Bernoulli}(p)$에 대해:
 
 $$
 \log f(x; p) = x\log p + (1-x)\log(1-p)
@@ -78,7 +78,7 @@ $$
 
 ### Poisson
 
-For $X \sim \text{Poisson}(\lambda)$:
+$X \sim \text{Poisson}(\lambda)$에 대해:
 
 $$
 \log f(x; \lambda) = x\log\lambda - \lambda - \log(x!)
@@ -90,18 +90,18 @@ $$
 
 ### Exponential
 
-For $X \sim \text{Exp}(\lambda)$ (rate parameterization):
+(비율 모수화를 쓴) $X \sim \text{Exp}(\lambda)$에 대해:
 
 $$
 I(\lambda) = \frac{1}{\lambda^2}
 $$
 
-## Numerical Computation of Fisher Information
+## Fisher 정보량의 수치적 계산
 
-When the Fisher information cannot be computed in closed form, we can estimate it numerically by:
+Fisher 정보량을 닫힌 형태로 계산할 수 없을 때는 다음 방법으로 수치적으로 추정할 수 있다:
 
-1. **Score variance method**: Sample $X_1, \ldots, X_N$ from $f(x; \theta)$, compute the score at each point, and estimate $I(\theta) \approx \text{Var}(\{S_i\})$.
-2. **Finite difference method**: Approximate the score by $S(\theta) \approx [\log f(X; \theta + \delta) - \log f(X; \theta - \delta)]/(2\delta)$.
+1. **점수 분산법**: $f(x; \theta)$에서 $X_1, \ldots, X_N$을 표본추출하고 각 점에서 점수를 계산한 뒤 $I(\theta) \approx \text{Var}(\{S_i\})$로 추정한다.
+2. **유한차분법**: 점수를 $S(\theta) \approx [\log f(X; \theta + \delta) - \log f(X; \theta - \delta)]/(2\delta)$로 근사한다.
 
 ```python
 import numpy as np
@@ -138,9 +138,9 @@ print(f"  Numerical:   I(mu) = {I_num:.6f}")
 print(f"  Theoretical: I(mu) = {I_theory:.6f}")
 ```
 
-## Verifying the Cramer-Rao Bound
+## Cramér-Rao 한계 확인
 
-We can check that the sample mean achieves the CRLB for the normal mean.
+정규분포의 평균에 대해 표본평균이 CRLB를 달성하는지 확인할 수 있다.
 
 ```python
 import numpy as np
@@ -165,81 +165,81 @@ def verify_crlb(mu_true=5.0, sigma=2.0, n=50, n_sim=20_000):
 verify_crlb()
 ```
 
-!!! note "Efficiency of the Median"
-    For the normal distribution, the asymptotic relative efficiency of the median versus the mean is $2/\pi \approx 0.637$. The median uses only about 64% of the information in the data.
+!!! note "중앙값의 효율"
+    정규분포에서 평균 대비 중앙값의 점근 상대효율은 $2/\pi \approx 0.637$이다. 중앙값은 자료가 담은 정보의 약 64%만 사용한다.
 
-## Multiparameter Fisher Information Matrix
+## 다모수 Fisher 정보행렬
 
-For a parameter vector $\boldsymbol{\theta} = (\theta_1, \ldots, \theta_k)$, the Fisher information is a $k \times k$ matrix:
+모수 벡터 $\boldsymbol{\theta} = (\theta_1, \ldots, \theta_k)$에 대해 Fisher 정보량은 $k \times k$ 행렬이다:
 
 $$
 [I(\boldsymbol{\theta})]_{ij} = -E\left[\frac{\partial^2}{\partial\theta_i\,\partial\theta_j}\log f(X; \boldsymbol{\theta})\right]
 $$
 
-For the normal distribution with both $\mu$ and $\sigma^2$ unknown:
+$\mu$와 $\sigma^2$이 모두 미지인 정규분포에서:
 
 $$
 I(\mu, \sigma^2) = \begin{pmatrix} 1/\sigma^2 & 0 \\ 0 & 1/(2\sigma^4) \end{pmatrix}
 $$
 
-The off-diagonal zeros show that $\mu$ and $\sigma^2$ are informationally orthogonal.
+비대각 성분이 0이라는 것은 $\mu$와 $\sigma^2$이 정보적으로 직교함을 보여 준다.
 
-## Interpretation
+## 해석
 
-- Fisher information measures the **curvature** of the log-likelihood at the true parameter: high curvature means the data are informative and the MLE is precise.
-- A larger $I(\theta)$ implies a tighter Cramer-Rao bound, so estimators can be more precise.
-- Fisher information depends on the true parameter value. For example, $I(p) = 1/[p(1-p)]$ for Bernoulli is largest when $p$ is near 0 or 1 (each observation is highly informative) and smallest at $p = 0.5$ (maximum uncertainty).
+- Fisher 정보량은 참 모수에서 로그가능도의 **곡률**을 잰다. 곡률이 크면 자료가 정보를 많이 담고 있고 MLE가 정밀하다.
+- $I(\theta)$가 클수록 Cramér-Rao 한계가 좁아지므로 추정량이 더 정밀할 수 있다.
+- Fisher 정보량은 참 모수값에 의존한다. 예를 들어 Bernoulli의 $I(p) = 1/[p(1-p)]$는 $p$가 0이나 1에 가까울 때 가장 크고(관측값 하나하나가 많은 정보를 준다) $p = 0.5$에서 가장 작다(불확실성이 최대이다).
 
-## Exercises
+## 연습문제
 
-**Exercise 1.** Derive the Fisher information for the Poisson distribution $P(\lambda)$ using both the score variance definition and the negative expected second derivative. Verify they agree.
+**연습문제 1.** Poisson 분포 $P(\lambda)$의 Fisher 정보량을 점수 분산의 정의와 2계도함수 기댓값의 음수, 두 가지 방식으로 유도하라. 둘이 일치함을 확인하라.
 
-??? success "Solution to Exercise 1"
-    The log-PMF is $\log f(x; \lambda) = x\log\lambda - \lambda - \log(x!)$.
+??? success "연습문제 1 풀이"
+    로그 PMF는 $\log f(x; \lambda) = x\log\lambda - \lambda - \log(x!)$이다.
 
-    **Score:** $S(\lambda) = X/\lambda - 1$.
+    **점수:** $S(\lambda) = X/\lambda - 1$.
 
-    **Score variance:** $\text{Var}(S) = \text{Var}(X/\lambda) = \text{Var}(X)/\lambda^2 = \lambda/\lambda^2 = 1/\lambda$.
+    **점수의 분산:** $\text{Var}(S) = \text{Var}(X/\lambda) = \text{Var}(X)/\lambda^2 = \lambda/\lambda^2 = 1/\lambda$.
 
-    **Negative second derivative:** $-\partial^2\log f/\partial\lambda^2 = X/\lambda^2$, so $E[-\partial^2\log f/\partial\lambda^2] = E[X]/\lambda^2 = \lambda/\lambda^2 = 1/\lambda$.
+    **2계도함수의 음수:** $-\partial^2\log f/\partial\lambda^2 = X/\lambda^2$이므로 $E[-\partial^2\log f/\partial\lambda^2] = E[X]/\lambda^2 = \lambda/\lambda^2 = 1/\lambda$.
 
-    Both give $I(\lambda) = 1/\lambda$. $\square$
+    둘 다 $I(\lambda) = 1/\lambda$를 준다. $\square$
 
 ---
 
-**Exercise 2.** For the exponential distribution with rate $\lambda$ (density $f(x; \lambda) = \lambda e^{-\lambda x}$ for $x > 0$), compute the Fisher information and the Cramer-Rao lower bound for estimating $\lambda$ from $n$ observations.
+**연습문제 2.** 비율이 $\lambda$인 Exponential 분포($x > 0$에서 밀도 $f(x; \lambda) = \lambda e^{-\lambda x}$)에 대해 Fisher 정보량과, $n$개의 관측값으로 $\lambda$를 추정할 때의 Cramér-Rao 하한을 계산하라.
 
-??? success "Solution to Exercise 2"
-    The log-density is $\log f(x; \lambda) = \log\lambda - \lambda x$.
+??? success "연습문제 2 풀이"
+    로그밀도는 $\log f(x; \lambda) = \log\lambda - \lambda x$이다.
 
-    Score: $S(\lambda) = 1/\lambda - X$. Second derivative: $\partial^2\log f/\partial\lambda^2 = -1/\lambda^2$.
+    점수: $S(\lambda) = 1/\lambda - X$. 2계도함수: $\partial^2\log f/\partial\lambda^2 = -1/\lambda^2$.
 
-    Fisher information: $I(\lambda) = 1/\lambda^2$.
+    Fisher 정보량: $I(\lambda) = 1/\lambda^2$.
 
-    The CRLB for $n$ observations is:
+    $n$개 관측값에 대한 CRLB는:
 
     $$
     \text{Var}(\hat{\lambda}) \geq \frac{1}{nI(\lambda)} = \frac{\lambda^2}{n}
     $$
 
-    The MLE is $\hat{\lambda} = 1/\bar{X}$. By the delta method, $\text{Var}(\hat{\lambda}) \approx \lambda^2/n$ for large $n$, so the MLE achieves the bound asymptotically. $\square$
+    MLE는 $\hat{\lambda} = 1/\bar{X}$이다. 델타 방법에 의해 $n$이 크면 $\text{Var}(\hat{\lambda}) \approx \lambda^2/n$이므로 MLE가 점근적으로 이 한계를 달성한다. $\square$
 
 ---
 
-**Exercise 3.** Show that for the Bernoulli distribution, the Fisher information $I(p) = 1/[p(1-p)]$ is minimized at $p = 1/2$. Interpret this result in terms of coin flipping.
+**연습문제 3.** Bernoulli 분포에서 Fisher 정보량 $I(p) = 1/[p(1-p)]$이 $p = 1/2$에서 최소가 됨을 보여라. 동전 던지기의 관점에서 이 결과를 해석하라.
 
-??? success "Solution to Exercise 3"
-    Taking the derivative: $\frac{d}{dp}I(p) = \frac{d}{dp}[p(1-p)]^{-1} = -\frac{1-2p}{[p(1-p)]^2}$.
+??? success "연습문제 3 풀이"
+    미분하면 $\frac{d}{dp}I(p) = \frac{d}{dp}[p(1-p)]^{-1} = -\frac{1-2p}{[p(1-p)]^2}$이다.
 
-    Setting this to zero gives $p = 1/2$. Since $I(p) \to \infty$ as $p \to 0$ or $p \to 1$, and $I(1/2) = 4$ is a finite minimum, $p = 1/2$ minimizes the Fisher information.
+    0으로 두면 $p = 1/2$이다. $p \to 0$이나 $p \to 1$일 때 $I(p) \to \infty$이고 $I(1/2) = 4$가 유한한 최솟값이므로 $p = 1/2$에서 Fisher 정보량이 최소가 된다.
 
-    **Interpretation:** A fair coin ($p = 1/2$) is the hardest to distinguish from nearby values. Each flip provides the least information about $p$ when outcomes are most uncertain. Conversely, when $p$ is near 0 or 1, each flip is very informative because outcomes are highly predictable, and any deviation from that pattern is strongly diagnostic. $\square$
+    **해석:** 공정한 동전($p = 1/2$)이 인접한 값들과 구별하기 가장 어렵다. 결과가 가장 불확실할 때 던지기 한 번이 $p$에 관해 가장 적은 정보를 준다. 반대로 $p$가 0이나 1에 가까우면 결과가 매우 예측 가능하므로 던지기 한 번이 큰 정보를 주며, 그 양상에서 벗어나는 결과는 강한 진단 신호가 된다. $\square$
 
 ---
 
-**Exercise 4.** The Fisher information for a Gamma distribution $\text{Gamma}(\alpha, \beta)$ with respect to $\alpha$ involves the trigamma function $\psi_1(\alpha)$: $I_{\alpha\alpha} = \psi_1(\alpha)$. Use `scipy.special.polygamma(1, alpha)` to numerically compute the CRLB for estimating $\alpha$ from $n = 100$ observations at $\alpha = 3$.
+**연습문제 4.** $\text{Gamma}(\alpha, \beta)$ 분포의 $\alpha$에 대한 Fisher 정보량은 trigamma 함수 $\psi_1(\alpha)$를 포함한다: $I_{\alpha\alpha} = \psi_1(\alpha)$. `scipy.special.polygamma(1, alpha)`를 사용하여 $\alpha = 3$에서 $n = 100$개의 관측값으로 $\alpha$를 추정할 때의 CRLB를 수치적으로 계산하라.
 
-??? success "Solution to Exercise 4"
+??? success "연습문제 4 풀이"
     ```python
     from scipy.special import polygamma
 
@@ -251,25 +251,25 @@ The off-diagonal zeros show that $\mu$ and $\sigma^2$ are informationally orthog
     print(f"CRLB for alpha:     {crlb:.6f}")
     ```
 
-    The trigamma function $\psi_1(3) \approx 0.3949$, giving a CRLB of approximately $1/(100 \times 0.3949) \approx 0.0253$. This means no unbiased estimator of $\alpha$ can have variance smaller than about 0.025 with 100 observations. $\square$
+    trigamma 함수 값이 $\psi_1(3) \approx 0.3949$이므로 CRLB는 약 $1/(100 \times 0.3949) \approx 0.0253$이다. 관측값 100개로는 $\alpha$의 어떤 불편추정량도 분산이 약 0.025보다 작을 수 없다는 뜻이다. $\square$
 
 ---
 
-**Exercise 5.** Prove that the Fisher information satisfies the additive property: for $n$ iid observations, $I_n(\theta) = nI_1(\theta)$. Why does this make intuitive sense?
+**연습문제 5.** Fisher 정보량이 가법성을 만족함을 증명하라. $n$개의 i.i.d. 관측값에서 $I_n(\theta) = nI_1(\theta)$이다. 이것이 직관적으로 타당한 이유는 무엇인가?
 
-??? success "Solution to Exercise 5"
-    Let $X_1, \ldots, X_n$ be iid with density $f(x; \theta)$. The joint log-likelihood is:
+??? success "연습문제 5 풀이"
+    $X_1, \ldots, X_n$을 밀도가 $f(x; \theta)$인 i.i.d. 확률변수라 하자. 결합 로그가능도는:
 
     $$
     \ell_n(\theta) = \sum_{i=1}^n \log f(X_i; \theta)
     $$
 
-    The total score is $S_n(\theta) = \sum_{i=1}^n S_i(\theta)$ where $S_i(\theta) = \partial\log f(X_i; \theta)/\partial\theta$.
+    $S_i(\theta) = \partial\log f(X_i; \theta)/\partial\theta$일 때 전체 점수는 $S_n(\theta) = \sum_{i=1}^n S_i(\theta)$이다.
 
-    Since the $X_i$ are independent, the $S_i$ are independent with $E[S_i] = 0$ and $\text{Var}(S_i) = I_1(\theta)$. Therefore:
+    $X_i$들이 독립이므로 $S_i$들도 독립이고 $E[S_i] = 0$, $\text{Var}(S_i) = I_1(\theta)$이다. 따라서:
 
     $$
     I_n(\theta) = \text{Var}(S_n) = \sum_{i=1}^n \text{Var}(S_i) = nI_1(\theta)
     $$
 
-    **Intuition:** Each independent observation contributes the same amount of information about $\theta$. Doubling the sample size doubles the total information, which halves the CRLB and thus halves the minimum achievable variance. $\square$
+    **직관:** 독립인 각 관측값이 $\theta$에 관해 같은 양의 정보를 기여한다. 표본크기를 두 배로 하면 전체 정보량이 두 배가 되고, 그러면 CRLB가 절반이 되어 달성 가능한 최소 분산도 절반이 된다. $\square$

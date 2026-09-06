@@ -1,49 +1,49 @@
-# MLE for Bernoulli Distribution
+# Bernoulli 분포의 MLE
 
-## Overview
+## 개요
 
-Let $x^{(i)}$ be $m$ i.i.d. samples from $B(p)$. Then, $p$ can be estimated by $\hat{p}$ where:
+$x^{(i)}$를 $B(p)$에서 얻은 $m$개의 i.i.d. 표본이라 하자. 그러면 $p$는 다음 $\hat{p}$로 추정할 수 있다:
 
 $$
 \hat{p} = \frac{\sum_{i=1}^m x^{(i)}}{m}
 $$
 
-## Derivation
+## 유도
 
-### Data
+### 자료
 
 $$
 \{x^{(i)} : i = 1, \ldots, m\}
 $$
 
-### Model
+### 모형
 
 $$
 x^{(i)} \sim B(p)
 $$
 
-### Likelihood Function
+### 가능도함수
 
 $$
 L(p) = \prod_{i=1}^m p^{x^{(i)}} (1 - p)^{1 - x^{(i)}}
 $$
 
-### Log-Likelihood Function
+### 로그가능도함수
 
 $$
 \ell(p) = \sum_{i=1}^m x^{(i)} \log(p) + (1 - x^{(i)}) \log(1 - p)
 $$
 
-### Cost Function
+### 비용함수
 
 $$
 J(p) = -\sum_{i=1}^m x^{(i)} \log(p) + (1 - x^{(i)}) \log(1 - p)
 $$
 
-!!! note "Connection to Cross-Entropy"
-    The cost function $J(p)$ is exactly the **binary cross-entropy loss** used in logistic regression and neural networks. MLE for the Bernoulli distribution is the theoretical foundation of cross-entropy-based training.
+!!! note "교차엔트로피와의 연결"
+    비용함수 $J(p)$는 로지스틱 회귀와 신경망에서 쓰는 **이진 교차엔트로피 손실**과 정확히 같다. Bernoulli 분포의 MLE가 교차엔트로피 기반 학습의 이론적 토대이다.
 
-### Maximum Likelihood Principle
+### 최대가능도 원리
 
 $$
 \text{argmax}_{p}\; L
@@ -53,7 +53,7 @@ $$
 \text{argmin}_{p}\; J
 $$
 
-### MLE Solution
+### MLE 해
 
 $$
 \begin{array}{llcll}
@@ -65,7 +65,7 @@ $$
 \end{array}
 $$
 
-## Python Implementation: Log-Likelihood and MLE
+## Python 구현: 로그가능도와 MLE
 
 ```python
 import numpy as np
@@ -180,19 +180,19 @@ ax.set_ylabel("Log-likelihood")
 plt.show()
 ```
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-A coin is flipped 20 times, producing 13 heads and 7 tails. Write the log-likelihood function and find the MLE $\hat{p}$ analytically.
+**연습문제 1.**
+동전을 20번 던져 앞면 13번, 뒷면 7번이 나왔다. 로그가능도함수를 쓰고 MLE $\hat{p}$를 해석적으로 구하라.
 
-??? success "Solution to Exercise 1"
-    Let $k = 13$ heads out of $n = 20$ flips. The log-likelihood is:
+??? success "연습문제 1 풀이"
+    $n = 20$번 중 $k = 13$번이 앞면이라 하자. 로그가능도는:
 
     $$
     \ell(p) = k \log p + (n-k) \log(1-p) = 13\log p + 7\log(1-p)
     $$
 
-    Setting the derivative to zero:
+    도함수를 0으로 두면:
 
     $$
     \frac{d\ell}{dp} = \frac{13}{p} - \frac{7}{1-p} = 0
@@ -202,21 +202,21 @@ A coin is flipped 20 times, producing 13 heads and 7 tails. Write the log-likeli
     13(1-p) = 7p \implies 13 - 13p = 7p \implies 13 = 20p \implies \hat{p} = \frac{13}{20} = 0.65
     $$
 
-    The second derivative is $-13/p^2 - 7/(1-p)^2 < 0$, confirming this is a maximum.
+    2계도함수가 $-13/p^2 - 7/(1-p)^2 < 0$이므로 최댓값임이 확인된다.
 
 ---
 
-**Exercise 2.**
-For the Bernoulli MLE, show that $\hat{p} = \bar{x}$ (the sample proportion) is always the MLE, regardless of the sample size or the observed data.
+**연습문제 2.**
+Bernoulli의 MLE에서 표본크기나 관측된 자료와 무관하게 언제나 $\hat{p} = \bar{x}$(표본비율)이 MLE임을 보여라.
 
-??? success "Solution to Exercise 2"
-    For $n$ independent Bernoulli trials with $k = \sum x_i$ successes, the log-likelihood is:
+??? success "연습문제 2 풀이"
+    $k = \sum x_i$번 성공한 $n$번의 독립 Bernoulli 시행에 대해 로그가능도는:
 
     $$
     \ell(p) = k \log p + (n-k)\log(1-p)
     $$
 
-    Taking the derivative and setting to zero:
+    미분하여 0으로 두면:
 
     $$
     \frac{d\ell}{dp} = \frac{k}{p} - \frac{n-k}{1-p} = 0 \implies k(1-p) = (n-k)p \implies k = np
@@ -226,40 +226,40 @@ For the Bernoulli MLE, show that $\hat{p} = \bar{x}$ (the sample proportion) is 
     \hat{p} = \frac{k}{n} = \frac{\sum x_i}{n} = \bar{x}
     $$
 
-    This holds for any values of $k$ and $n$ with $0 \leq k \leq n$. $\square$
+    이는 $0 \leq k \leq n$인 임의의 $k$와 $n$에 대해 성립한다. $\square$
 
 ---
 
-**Exercise 3.**
-Compute the Fisher information for a single Bernoulli observation and derive the asymptotic variance of $\hat{p}$.
+**연습문제 3.**
+Bernoulli 관측값 하나에 대한 Fisher 정보량을 계산하고 $\hat{p}$의 점근분산을 유도하라.
 
-??? success "Solution to Exercise 3"
-    For a single Bernoulli$(p)$ observation, the log-likelihood is $\ell(p) = x\log p + (1-x)\log(1-p)$. The second derivative is:
+??? success "연습문제 3 풀이"
+    Bernoulli$(p)$ 관측값 하나에 대해 로그가능도는 $\ell(p) = x\log p + (1-x)\log(1-p)$이다. 2계도함수는:
 
     $$
     \frac{d^2\ell}{dp^2} = -\frac{x}{p^2} - \frac{1-x}{(1-p)^2}
     $$
 
-    Taking the negative expectation (using $E[X] = p$):
+    ($E[X] = p$를 사용하여) 기댓값에 음수를 취하면:
 
     $$
     I(p) = -E\!\left[\frac{d^2\ell}{dp^2}\right] = \frac{p}{p^2} + \frac{1-p}{(1-p)^2} = \frac{1}{p} + \frac{1}{1-p} = \frac{1}{p(1-p)}
     $$
 
-    The asymptotic variance of $\hat{p}$ based on $n$ observations is:
+    $n$개의 관측값에 기반한 $\hat{p}$의 점근분산은:
 
     $$
     \text{Var}(\hat{p}) \approx \frac{1}{nI(p)} = \frac{p(1-p)}{n}
     $$
 
-    This is the familiar formula for the variance of a sample proportion.
+    표본비율의 분산에 대한 익숙한 공식이다.
 
 ---
 
-**Exercise 4.**
-If you observe 0 heads in 10 flips, the MLE gives $\hat{p} = 0$. Explain why this is problematic and describe one alternative approach.
+**연습문제 4.**
+10번 던져 앞면이 0번 나오면 MLE는 $\hat{p} = 0$을 준다. 이것이 왜 문제인지 설명하고 대안적인 접근을 하나 서술하라.
 
-??? success "Solution to Exercise 4"
-    The MLE $\hat{p} = 0$ implies the coin can never land heads, which is an extreme conclusion from only 10 observations. The problem is that MLE can produce boundary estimates that are unreasonable, especially in small samples.
+??? success "연습문제 4 풀이"
+    MLE $\hat{p} = 0$은 이 동전에서 앞면이 결코 나올 수 없다는 뜻인데, 관측값 10개만으로 내리기에는 극단적인 결론이다. 문제는 특히 소표본에서 MLE가 비합리적인 경계값 추정치를 낼 수 있다는 것이다.
 
-    One alternative is **Laplace smoothing** (or the Bayesian approach with a uniform prior): add one "pseudo-success" and one "pseudo-failure" to the data, giving $\hat{p}_{\text{Laplace}} = (0+1)/(10+2) = 1/12 \approx 0.083$. This avoids the zero estimate while remaining data-driven. More formally, this corresponds to the posterior mean under a Beta$(1,1)$ (uniform) prior, yielding $\hat{p}_{\text{Bayes}} = (k+1)/(n+2)$.
+    한 가지 대안은 **Laplace 평활**(또는 균등 사전분포를 쓴 베이즈 접근)이다. 자료에 "가상의 성공" 하나와 "가상의 실패" 하나를 더하여 $\hat{p}_{\text{Laplace}} = (0+1)/(10+2) = 1/12 \approx 0.083$을 얻는다. 자료에 근거하면서도 0이라는 추정값을 피한다. 더 형식적으로 이는 Beta$(1,1)$(균등) 사전분포 아래의 사후평균에 해당하며 $\hat{p}_{\text{Bayes}} = (k+1)/(n+2)$를 준다.

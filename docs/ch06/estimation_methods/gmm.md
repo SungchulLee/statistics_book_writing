@@ -1,162 +1,162 @@
-# Generalized Method of Moments
+# 일반화 적률법
 
-## From MoM to GMM
+## 적률법에서 GMM으로
 
-The Method of Moments works by equating $p$ population moments to their sample counterparts and solving for $p$ unknown parameters. In many applications, however, economic theory, financial models, or physical constraints provide **more moment conditions than parameters**. For example, a model with 2 parameters might generate 5 testable moment conditions. The standard MoM cannot use all 5 simultaneously — it would pick 2 and discard the rest, wasting potentially valuable information. The Generalized Method of Moments (GMM) solves this problem by combining all available moment conditions through a weighted quadratic objective, extracting maximum information from the data without requiring the full distributional specification that MLE demands.
+적률법은 $p$개의 모집단 적률을 대응하는 표본 적률과 같다고 두고 $p$개의 미지 모수를 푸는 방식이다. 그런데 많은 응용에서 경제 이론, 금융 모형, 물리적 제약이 **모수보다 많은 적률 조건**을 제공한다. 예를 들어 모수가 2개인 모형이 검정 가능한 적률 조건 5개를 만들어 낼 수 있다. 표준 적률법은 이 5개를 동시에 쓸 수 없어 2개만 고르고 나머지는 버리게 되며, 잠재적으로 가치 있는 정보를 낭비한다. 일반화 적률법(GMM)은 가능한 모든 적률 조건을 가중된 이차 목적함수로 결합하여 이 문제를 해결하며, MLE가 요구하는 완전한 분포 설정 없이도 자료에서 최대한의 정보를 뽑아낸다.
 
-## Moment Conditions and Overidentification
+## 적률 조건과 과대식별
 
-The starting point for GMM is a set of **moment conditions**. Let $\theta \in \mathbb{R}^p$ be the parameter vector of interest, and suppose that for the true parameter value $\theta_0$, we have:
+GMM의 출발점은 일련의 **적률 조건**이다. $\theta \in \mathbb{R}^p$를 관심 모수 벡터라 하고, 참 모수값 $\theta_0$에서 다음이 성립한다고 하자:
 
 $$
 E[g(X, \theta_0)] = \mathbf{0}
 $$
 
-where $g : \mathbb{R}^d \times \mathbb{R}^p \to \mathbb{R}^r$ maps each observation and parameter value to an $r$-dimensional vector. Each component of $g$ represents one moment condition.
+여기서 $g : \mathbb{R}^d \times \mathbb{R}^p \to \mathbb{R}^r$는 각 관측값과 모수값을 $r$차원 벡터로 보내는 함수이다. $g$의 각 성분이 하나의 적률 조건을 나타낸다.
 
-Three cases arise depending on the relationship between $r$ (number of moment conditions) and $p$ (number of parameters):
+(적률 조건의 개수인) $r$과 (모수의 개수인) $p$의 관계에 따라 세 가지 경우가 생긴다:
 
-- **Exactly identified** ($r = p$): The system has the same number of equations as unknowns. The sample analogue $\bar{g}_n(\theta) = \mathbf{0}$ can typically be solved exactly, recovering standard MoM.
-- **Overidentified** ($r > p$): More equations than unknowns. No $\theta$ can set all sample moment conditions to exactly zero, so we minimize a weighted sum of squared violations.
-- **Underidentified** ($r < p$): Fewer equations than unknowns. The parameters are not point-identified — additional information is needed.
+- **정확식별** ($r = p$): 방정식 수와 미지수 수가 같다. 표본 대응물 $\bar{g}_n(\theta) = \mathbf{0}$을 대개 정확히 풀 수 있으며, 표준 적률법이 복원된다.
+- **과대식별** ($r > p$): 미지수보다 방정식이 많다. 모든 표본 적률 조건을 정확히 0으로 만드는 $\theta$가 없으므로 위반의 제곱합에 가중을 두어 최소화한다.
+- **과소식별** ($r < p$): 미지수보다 방정식이 적다. 모수가 점으로 식별되지 않으므로 추가 정보가 필요하다.
 
-GMM is designed for the overidentified case, though it reduces to MoM when $r = p$.
+GMM은 과대식별 경우를 위해 설계되었지만 $r = p$일 때는 적률법으로 환원된다.
 
-## The GMM Objective
+## GMM 목적함수
 
-Define the sample moment vector:
+표본 적률 벡터를 다음과 같이 정의한다:
 
 $$
 \bar{g}_n(\theta) = \frac{1}{n} \sum_{i=1}^{n} g(X_i, \theta)
 $$
 
-The GMM estimator minimizes the quadratic form:
+GMM 추정량은 다음 이차형식을 최소화한다:
 
 $$
 \hat{\theta}_{\text{GMM}} = \arg\min_{\theta} \; \bar{g}_n(\theta)^\top \mathbf{W} \, \bar{g}_n(\theta)
 $$
 
-where $\mathbf{W} \in \mathbb{R}^{r \times r}$ is a positive-definite **weighting matrix** that determines how the different moment conditions are weighted in the objective. Different choices of $\mathbf{W}$ yield consistent estimators, but the choice affects efficiency.
+여기서 $\mathbf{W} \in \mathbb{R}^{r \times r}$는 목적함수에서 서로 다른 적률 조건에 어떤 가중을 줄지 결정하는 양의 정부호 **가중행렬**이다. $\mathbf{W}$를 어떻게 고르든 일치추정량을 얻지만 그 선택이 효율성에 영향을 준다.
 
-!!! note "Intuition for the GMM Objective"
-    Think of $\bar{g}_n(\theta)$ as a vector of "residuals" — each component measures how badly a particular moment condition is violated at parameter value $\theta$. The GMM estimator finds the $\theta$ that makes these residuals as small as possible in a weighted least-squares sense. The weighting matrix $\mathbf{W}$ determines the relative importance of each residual.
+!!! note "GMM 목적함수에 대한 직관"
+    $\bar{g}_n(\theta)$를 "잔차" 벡터로 생각하자. 각 성분은 모수값 $\theta$에서 특정 적률 조건이 얼마나 심하게 위반되는지를 잰다. GMM 추정량은 가중최소제곱의 의미에서 이 잔차들을 가능한 한 작게 만드는 $\theta$를 찾는다. 가중행렬 $\mathbf{W}$가 각 잔차의 상대적 중요도를 정한다.
 
-## Optimal Weighting Matrix
+## 최적 가중행렬
 
-Any positive-definite $\mathbf{W}$ produces a consistent GMM estimator, but efficiency depends on the choice of $\mathbf{W}$. The optimal weighting matrix is the inverse of the asymptotic covariance of the moment conditions:
+양의 정부호인 어떤 $\mathbf{W}$를 써도 일치하는 GMM 추정량이 나오지만 효율성은 $\mathbf{W}$의 선택에 달려 있다. 최적 가중행렬은 적률 조건의 점근 공분산의 역행렬이다:
 
 $$
 \mathbf{W}_{\text{opt}} = \mathbf{S}^{-1}
 $$
 
-where:
+여기서:
 
 $$
 \mathbf{S} = \text{Var}\!\left(\sqrt{n}\,\bar{g}_n(\theta_0)\right) = E\!\left[g(X, \theta_0)\,g(X, \theta_0)^\top\right]
 $$
 
-The second equality holds when the observations are i.i.d. This choice minimizes the asymptotic variance of the GMM estimator in the matrix (Loewner) ordering.
+두 번째 등호는 관측값이 i.i.d.일 때 성립한다. 이 선택이 행렬 (Loewner) 순서의 의미에서 GMM 추정량의 점근분산을 최소화한다.
 
-!!! tip "Why the Inverse Covariance?"
-    Moment conditions with high variance are less informative — they fluctuate more from sample to sample. By weighting by $\mathbf{S}^{-1}$, the optimal GMM estimator downweights noisy moment conditions and upweights precise ones, analogous to weighted least squares in regression.
+!!! tip "왜 공분산의 역행렬인가?"
+    분산이 큰 적률 조건은 표본마다 더 많이 요동치므로 정보가 적다. $\mathbf{S}^{-1}$으로 가중하면 최적 GMM 추정량이 잡음이 많은 적률 조건의 비중을 낮추고 정밀한 조건의 비중을 높인다. 회귀분석의 가중최소제곱과 같은 원리이다.
 
-## Two-Step GMM
+## 2단계 GMM
 
-In practice, $\mathbf{S}$ depends on the unknown $\theta_0$, so the optimal weighting matrix cannot be computed directly. The standard solution is **two-step GMM**:
+실무에서 $\mathbf{S}$는 미지의 $\theta_0$에 의존하므로 최적 가중행렬을 곧바로 계산할 수 없다. 표준적인 해결책이 **2단계 GMM**이다:
 
-1. **Step 1**: Choose an initial weighting matrix (typically $\mathbf{W}_1 = \mathbf{I}_r$, the identity matrix). Minimize the GMM objective to obtain a preliminary consistent estimate $\hat{\theta}_1$.
+1. **1단계**: 초기 가중행렬(보통 단위행렬 $\mathbf{W}_1 = \mathbf{I}_r$)을 고른다. GMM 목적함수를 최소화하여 예비 일치추정값 $\hat{\theta}_1$을 얻는다.
 
-2. **Step 2**: Using $\hat{\theta}_1$, estimate the optimal weighting matrix:
+2. **2단계**: $\hat{\theta}_1$을 사용하여 최적 가중행렬을 추정한다:
 
 $$
 \hat{\mathbf{S}} = \frac{1}{n} \sum_{i=1}^{n} g(X_i, \hat{\theta}_1)\,g(X_i, \hat{\theta}_1)^\top
 $$
 
-Set $\mathbf{W}_2 = \hat{\mathbf{S}}^{-1}$ and re-minimize the GMM objective to obtain the efficient estimate $\hat{\theta}_2$.
+$\mathbf{W}_2 = \hat{\mathbf{S}}^{-1}$로 두고 GMM 목적함수를 다시 최소화하여 효율적인 추정값 $\hat{\theta}_2$를 얻는다.
 
-The two-step estimator $\hat{\theta}_2$ achieves the same asymptotic efficiency as the infeasible estimator that uses the true $\mathbf{S}^{-1}$.
+2단계 추정량 $\hat{\theta}_2$는 참 $\mathbf{S}^{-1}$을 쓰는 (실현 불가능한) 추정량과 같은 점근 효율성을 달성한다.
 
-## Asymptotic Properties
+## 점근적 성질
 
-Under regularity conditions, the efficient (optimal-weight) GMM estimator satisfies:
+정칙 조건 아래에서 (최적 가중을 쓴) 효율적 GMM 추정량은 다음을 만족한다:
 
 $$
 \sqrt{n}\left(\hat{\theta}_{\text{GMM}} - \theta_0\right) \xrightarrow{d} N\!\left(\mathbf{0}, \left(\mathbf{G}^\top \mathbf{S}^{-1} \mathbf{G}\right)^{-1}\right)
 $$
 
-where:
+여기서:
 
 $$
 \mathbf{G} = E\!\left[\frac{\partial g(X, \theta_0)}{\partial \theta^\top}\right] \in \mathbb{R}^{r \times p}
 $$
 
-is the Jacobian of the moment conditions. The asymptotic covariance matrix $(\mathbf{G}^\top \mathbf{S}^{-1} \mathbf{G})^{-1}$ is estimated by replacing $\mathbf{G}$ and $\mathbf{S}$ with their sample analogues evaluated at $\hat{\theta}_{\text{GMM}}$.
+는 적률 조건의 Jacobian이다. 점근 공분산행렬 $(\mathbf{G}^\top \mathbf{S}^{-1} \mathbf{G})^{-1}$은 $\mathbf{G}$와 $\mathbf{S}$를 $\hat{\theta}_{\text{GMM}}$에서 평가한 표본 대응물로 대체하여 추정한다.
 
-## Hansen's J-Test for Overidentifying Restrictions
+## 과대식별 제약에 대한 Hansen J 검정
 
-When the model is overidentified ($r > p$), not all moment conditions can be satisfied simultaneously even at the GMM estimate. This provides a natural specification test: if the model is correctly specified, the minimized objective should be small. Hansen's J-statistic is:
+모형이 과대식별되어 있으면($r > p$) GMM 추정값에서도 모든 적률 조건을 동시에 만족시킬 수 없다. 이는 자연스러운 모형설정 검정을 제공한다. 모형이 올바르게 설정되었다면 최소화된 목적함수 값이 작아야 한다. Hansen의 J 통계량은:
 
 $$
 J = n \, \bar{g}_n(\hat{\theta}_{\text{GMM}})^\top \hat{\mathbf{S}}^{-1} \bar{g}_n(\hat{\theta}_{\text{GMM}})
 $$
 
-Under $H_0$ (model correctly specified):
+$H_0$(모형이 올바르게 설정됨) 아래에서:
 
 $$
 J \xrightarrow{d} \chi^2(r - p)
 $$
 
-A large $J$ (relative to $\chi^2(r-p)$ critical values) suggests that the moment conditions are mutually inconsistent, indicating model misspecification.
+($\chi^2(r-p)$의 임계값에 비해) $J$가 크면 적률 조건들이 서로 모순됨을, 즉 모형이 잘못 설정되었음을 시사한다.
 
-## Worked Example: Normal Distribution with Three Moments
+## 예제: 적률 세 개를 쓴 정규분포
 
-Suppose $X_1, \ldots, X_n \stackrel{\text{i.i.d.}}{\sim} N(\mu, \sigma^2)$ and we estimate $\theta = (\mu, \sigma^2)^\top$ using three moment conditions ($r = 3 > p = 2$):
+$X_1, \ldots, X_n \stackrel{\text{i.i.d.}}{\sim} N(\mu, \sigma^2)$이고 적률 조건 세 개($r = 3 > p = 2$)로 $\theta = (\mu, \sigma^2)^\top$을 추정한다고 하자:
 
 $$
 g(X, \theta) = \begin{pmatrix} X - \mu \\ X^2 - (\mu^2 + \sigma^2) \\ X^3 - \mu^3 - 3\mu\sigma^2 \end{pmatrix}
 $$
 
-These correspond to equating the first three population moments to their sample counterparts. With $p = 2$ parameters and $r = 3$ conditions, the model is overidentified by 1.
+이는 처음 세 개의 모집단 적률을 대응하는 표본 적률과 같다고 두는 것에 해당한다. 모수가 $p = 2$개이고 조건이 $r = 3$개이므로 모형은 1만큼 과대식별되어 있다.
 
-**Step 1** (with $\mathbf{W} = \mathbf{I}_3$): Minimize $\bar{g}_n(\theta)^\top \bar{g}_n(\theta)$ to get $\hat{\theta}_1 = (\hat{\mu}_1, \hat{\sigma}^2_1)^\top$.
+**1단계** ($\mathbf{W} = \mathbf{I}_3$): $\bar{g}_n(\theta)^\top \bar{g}_n(\theta)$를 최소화하여 $\hat{\theta}_1 = (\hat{\mu}_1, \hat{\sigma}^2_1)^\top$을 얻는다.
 
-**Step 2**: Estimate $\hat{\mathbf{S}}$ from the residuals at $\hat{\theta}_1$, set $\mathbf{W}_2 = \hat{\mathbf{S}}^{-1}$, and re-minimize.
+**2단계**: $\hat{\theta}_1$에서의 잔차로 $\hat{\mathbf{S}}$를 추정하고 $\mathbf{W}_2 = \hat{\mathbf{S}}^{-1}$로 두어 다시 최소화한다.
 
-The third moment condition provides an additional equation that constrains the estimator. For symmetric distributions like the normal, the third central moment is zero, so the third condition is essentially $E[X^3] = \mu^3 + 3\mu\sigma^2$. The J-test checks whether this symmetry constraint is consistent with the data — a significant J-statistic would suggest the data are not normally distributed.
+세 번째 적률 조건은 추정량을 제약하는 추가 방정식을 제공한다. 정규분포처럼 대칭인 분포에서는 3차 중심적률이 0이므로 세 번째 조건은 본질적으로 $E[X^3] = \mu^3 + 3\mu\sigma^2$이다. J 검정은 이 대칭성 제약이 자료와 일관되는지를 확인하며, J 통계량이 유의하면 자료가 정규분포를 따르지 않음을 시사한다.
 
-??? example "GMM Reduces to MoM When Exactly Identified"
-    When $r = p$, the moment conditions $\bar{g}_n(\theta) = \mathbf{0}$ can typically be solved exactly, and the weighting matrix $\mathbf{W}$ becomes irrelevant (any positive-definite $\mathbf{W}$ yields the same solution). In this case, GMM reduces to standard MoM. For instance, estimating $(\mu, \sigma^2)$ with the two conditions $E[X - \mu] = 0$ and $E[(X - \mu)^2 - \sigma^2] = 0$ gives $\hat{\mu} = \bar{X}$ and $\hat{\sigma}^2 = \frac{1}{n}\sum(X_i - \bar{X})^2$, regardless of $\mathbf{W}$.
+??? example "정확식별일 때 GMM은 적률법으로 환원된다"
+    $r = p$이면 적률 조건 $\bar{g}_n(\theta) = \mathbf{0}$을 대개 정확히 풀 수 있고 가중행렬 $\mathbf{W}$는 무의미해진다(양의 정부호인 어떤 $\mathbf{W}$도 같은 해를 준다). 이 경우 GMM은 표준 적률법으로 환원된다. 예를 들어 두 조건 $E[X - \mu] = 0$과 $E[(X - \mu)^2 - \sigma^2] = 0$으로 $(\mu, \sigma^2)$을 추정하면 $\mathbf{W}$와 무관하게 $\hat{\mu} = \bar{X}$, $\hat{\sigma}^2 = \frac{1}{n}\sum(X_i - \bar{X})^2$을 얻는다.
 
-## Connection to Other Estimation Methods
+## 다른 추정 방법과의 연결
 
-GMM occupies a central position in the estimation landscape:
+GMM은 추정의 지형에서 중심적인 위치를 차지한다:
 
-- **MoM** is GMM with $r = p$ (exactly identified).
-- **MLE** can be viewed as a special case of GMM where the moment conditions are the score equations $g(X, \theta) = \frac{\partial}{\partial \theta}\log f(X \mid \theta)$. When the model is correctly specified, MLE is efficient among all GMM estimators that use moment conditions derived from the likelihood.
-- **Instrumental Variables (IV)** regression is a special case of GMM where the moment conditions take the form $E[Z_i(Y_i - X_i^\top \beta)] = \mathbf{0}$, with instruments $Z_i$.
+- **적률법**은 $r = p$인(정확식별된) GMM이다.
+- **MLE**는 적률 조건이 점수방정식 $g(X, \theta) = \frac{\partial}{\partial \theta}\log f(X \mid \theta)$인 GMM의 특수한 경우로 볼 수 있다. 모형이 올바르게 설정되면 MLE는 가능도에서 유도한 적률 조건을 쓰는 모든 GMM 추정량 중에서 효율적이다.
+- **도구변수(IV)** 회귀는 도구 $Z_i$에 대해 적률 조건이 $E[Z_i(Y_i - X_i^\top \beta)] = \mathbf{0}$ 형태인 GMM의 특수한 경우이다.
 
-!!! warning "When to Use GMM"
-    GMM is most valuable when: (1) the full likelihood is unknown or intractable, but moment conditions are available from theory; (2) the model is overidentified, providing a testable restriction via the J-test; (3) robustness to distributional misspecification is desired. If the full likelihood is known and tractable, MLE is generally preferred for its higher efficiency.
+!!! warning "언제 GMM을 쓰는가"
+    GMM은 다음 경우에 가장 유용하다. (1) 완전한 가능도를 모르거나 다루기 어렵지만 이론에서 적률 조건을 얻을 수 있을 때, (2) 모형이 과대식별되어 J 검정으로 검정 가능한 제약을 제공할 때, (3) 분포 설정 오류에 대한 로버스트성이 필요할 때. 완전한 가능도를 알고 다룰 수 있다면 효율이 더 높은 MLE가 대체로 낫다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-In the Generalized Method of Moments, why must the number of moment conditions $q$ be at least as large as the number of parameters $p$? What happens when $q > p$?
+**연습문제 1.**
+일반화 적률법에서 적률 조건의 개수 $q$가 모수의 개수 $p$ 이상이어야 하는 이유는 무엇인가? $q > p$이면 어떻게 되는가?
 
-??? success "Solution to Exercise 1"
-    Each moment condition provides one equation relating the parameters to population quantities. With $p$ unknowns and $q$ equations:
+??? success "연습문제 1 풀이"
+    각 적률 조건은 모수를 모집단의 양과 연결하는 방정식 하나를 제공한다. 미지수가 $p$개이고 방정식이 $q$개일 때:
 
-    - If $q < p$: the system is under-identified (fewer equations than unknowns), and the parameters cannot be uniquely determined.
-    - If $q = p$: the system is exactly identified, and the GMM estimator solves the moment conditions exactly (setting all sample moments equal to their theoretical counterparts).
-    - If $q > p$: the system is over-identified (more equations than unknowns), and the moment conditions generally cannot all be satisfied simultaneously. GMM minimizes a weighted quadratic form of the moment conditions: $\hat{\theta} = \arg\min_\theta \mathbf{g}_n(\theta)^T \mathbf{W} \mathbf{g}_n(\theta)$, where $\mathbf{W}$ is a positive definite weighting matrix and $\mathbf{g}_n(\theta)$ is the vector of sample moment conditions.
+    - $q < p$이면 과소식별(미지수보다 방정식이 적음)이어서 모수를 유일하게 결정할 수 없다.
+    - $q = p$이면 정확식별이며, GMM 추정량이 적률 조건을 정확히 푼다(모든 표본 적률을 이론적 대응물과 같다고 둔다).
+    - $q > p$이면 과대식별(미지수보다 방정식이 많음)이어서 일반적으로 모든 적률 조건을 동시에 만족시킬 수 없다. GMM은 적률 조건의 가중 이차형식 $\hat{\theta} = \arg\min_\theta \mathbf{g}_n(\theta)^T \mathbf{W} \mathbf{g}_n(\theta)$를 최소화하며, 여기서 $\mathbf{W}$는 양의 정부호 가중행렬이고 $\mathbf{g}_n(\theta)$는 표본 적률 조건 벡터이다.
 
 ---
 
-**Exercise 2.**
-For an i.i.d. sample from a distribution with mean $\mu$ and variance $\sigma^2$, the moment conditions $E[X_i - \mu] = 0$ and $E[(X_i - \mu)^2 - \sigma^2] = 0$ define a GMM estimator. Show that the GMM estimator with these two conditions is the same as the Method of Moments estimator.
+**연습문제 2.**
+평균이 $\mu$이고 분산이 $\sigma^2$인 분포에서 얻은 i.i.d. 표본에 대해 적률 조건 $E[X_i - \mu] = 0$과 $E[(X_i - \mu)^2 - \sigma^2] = 0$이 GMM 추정량을 정의한다. 이 두 조건을 쓴 GMM 추정량이 적률법 추정량과 같음을 보여라.
 
-??? success "Solution to Exercise 2"
-    The sample moment conditions are:
+??? success "연습문제 2 풀이"
+    표본 적률 조건은:
 
     $$
     g_1(\mu, \sigma^2) = \frac{1}{n}\sum_{i=1}^n (X_i - \mu) = \bar{X} - \mu
@@ -166,34 +166,34 @@ For an i.i.d. sample from a distribution with mean $\mu$ and variance $\sigma^2$
     g_2(\mu, \sigma^2) = \frac{1}{n}\sum_{i=1}^n (X_i - \mu)^2 - \sigma^2
     $$
 
-    With $q = p = 2$ (exactly identified), GMM sets both conditions to zero:
+    $q = p = 2$(정확식별)이므로 GMM은 두 조건을 모두 0으로 둔다:
 
     $g_1 = 0 \implies \hat{\mu} = \bar{X}$
 
     $g_2 = 0 \implies \hat{\sigma}^2 = \frac{1}{n}\sum_{i=1}^n (X_i - \bar{X})^2$
 
-    These are exactly the Method of Moments estimators. When exactly identified, GMM and MOM coincide regardless of the weighting matrix $\mathbf{W}$. $\square$
+    이는 정확히 적률법 추정량이다. 정확식별일 때 GMM과 적률법은 가중행렬 $\mathbf{W}$와 무관하게 일치한다. $\square$
 
 ---
 
-**Exercise 3.**
-Explain the role of the weighting matrix $\mathbf{W}$ in over-identified GMM. What is the optimal weighting matrix, and why is it optimal?
+**연습문제 3.**
+과대식별된 GMM에서 가중행렬 $\mathbf{W}$의 역할을 설명하라. 최적 가중행렬은 무엇이며 왜 최적인가?
 
-??? success "Solution to Exercise 3"
-    The weighting matrix $\mathbf{W}$ determines how different moment conditions are weighted in the objective function. Different choices of $\mathbf{W}$ yield consistent but differently efficient estimators.
+??? success "연습문제 3 풀이"
+    가중행렬 $\mathbf{W}$는 목적함수에서 서로 다른 적률 조건에 어떤 가중을 줄지 결정한다. $\mathbf{W}$의 선택에 따라 일치하지만 효율이 다른 추정량이 나온다.
 
-    The **optimal weighting matrix** is $\mathbf{W}^* = \mathbf{S}^{-1}$, where $\mathbf{S} = \text{Var}[\sqrt{n}\,\mathbf{g}_n(\theta_0)]$ is the asymptotic variance of the moment conditions. This is optimal because it gives less weight to moment conditions that are noisily estimated (high variance) and more weight to precisely estimated ones.
+    **최적 가중행렬**은 $\mathbf{W}^* = \mathbf{S}^{-1}$이며, $\mathbf{S} = \text{Var}[\sqrt{n}\,\mathbf{g}_n(\theta_0)]$는 적률 조건의 점근분산이다. 잡음이 많이 섞여(분산이 커서) 부정확하게 추정되는 적률 조건에 낮은 가중을, 정밀하게 추정되는 조건에 높은 가중을 주기 때문에 최적이다.
 
-    With $\mathbf{W}^*$, the GMM estimator achieves the smallest asymptotic variance among all GMM estimators based on the same moment conditions. In practice, $\mathbf{S}$ is unknown and estimated in a two-step procedure: first estimate $\theta$ with $\mathbf{W} = \mathbf{I}$, then estimate $\mathbf{S}$ using residuals, and re-estimate $\theta$ with $\hat{\mathbf{W}} = \hat{\mathbf{S}}^{-1}$.
+    $\mathbf{W}^*$를 쓰면 GMM 추정량이 같은 적률 조건에 기반한 모든 GMM 추정량 중에서 가장 작은 점근분산을 달성한다. 실무에서는 $\mathbf{S}$를 모르므로 2단계 절차로 추정한다. 먼저 $\mathbf{W} = \mathbf{I}$로 $\theta$를 추정하고, 잔차로 $\mathbf{S}$를 추정한 뒤, $\hat{\mathbf{W}} = \hat{\mathbf{S}}^{-1}$로 $\theta$를 다시 추정한다.
 
 ---
 
-**Exercise 4.**
-The Hansen J-test (over-identification test) has test statistic $J = n\,\mathbf{g}_n(\hat{\theta})^T \hat{\mathbf{S}}^{-1} \mathbf{g}_n(\hat{\theta}) \sim \chi^2_{q-p}$ under the null that all moment conditions are valid. Explain the intuition behind this test.
+**연습문제 4.**
+Hansen J 검정(과대식별 검정)의 검정통계량은 모든 적률 조건이 타당하다는 귀무가설 아래에서 $J = n\,\mathbf{g}_n(\hat{\theta})^T \hat{\mathbf{S}}^{-1} \mathbf{g}_n(\hat{\theta}) \sim \chi^2_{q-p}$이다. 이 검정의 직관을 설명하라.
 
-??? success "Solution to Exercise 4"
-    Under the null hypothesis that the model is correctly specified (all $q$ moment conditions hold in the population), the sample moments $\mathbf{g}_n(\hat{\theta})$ should be close to zero at the estimated parameter values. The J-statistic is a quadratic form measuring the squared "distance" of these residual moment conditions from zero, weighted by their precision.
+??? success "연습문제 4 풀이"
+    모형이 올바르게 설정되었다는(모집단에서 $q$개의 적률 조건이 모두 성립한다는) 귀무가설 아래에서, 추정된 모수값에서 표본 적률 $\mathbf{g}_n(\hat{\theta})$이 0에 가까워야 한다. J 통계량은 남은 이 적률 조건들이 0에서 얼마나 떨어져 있는지를 정밀도로 가중하여 제곱 "거리"로 잰 이차형식이다.
 
-    With $p$ parameters and $q$ moment conditions, there are $q - p$ "excess" conditions that cannot be exactly satisfied. Under the null, these excess conditions are approximately zero with known asymptotic distribution, yielding $J \sim \chi^2_{q-p}$.
+    모수가 $p$개이고 적률 조건이 $q$개이면 정확히 만족시킬 수 없는 "남는" 조건이 $q - p$개 있다. 귀무가설 아래에서 이 남는 조건들은 근사적으로 0이고 점근분포가 알려져 있어 $J \sim \chi^2_{q-p}$가 된다.
 
-    A large J-value (small p-value) suggests that the moment conditions are mutually inconsistent -- the model is misspecified. A failure to reject means the over-identifying restrictions are compatible with the data. Note: the test has no power against misspecification that affects all moment conditions equally.
+    J 값이 크면($p$ 값이 작으면) 적률 조건들이 서로 모순됨을, 즉 모형이 잘못 설정되었음을 시사한다. 기각하지 못하면 과대식별 제약이 자료와 양립함을 뜻한다. 참고: 이 검정은 모든 적률 조건에 똑같이 영향을 주는 설정 오류에 대해서는 검정력이 없다.

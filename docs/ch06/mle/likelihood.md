@@ -1,106 +1,106 @@
-# Likelihood Function
+# 가능도함수
 
-## From Probability to Likelihood
+## 확률에서 가능도로
 
-In probability, we fix a parameter $\theta$ and ask: what data are likely to arise? The likelihood function reverses this perspective. Given data that have already been observed, we ask: which values of $\theta$ make these observations most plausible? This shift from "parameters generate data" to "data inform us about parameters" is the foundation of likelihood-based inference and underpins maximum likelihood estimation, likelihood ratio tests, and information criteria.
+확률에서는 모수 $\theta$를 고정해 두고 "어떤 자료가 나올 법한가?"를 묻는다. 가능도함수는 이 관점을 뒤집는다. 이미 관측된 자료를 두고 "어떤 $\theta$ 값이 이 관측을 가장 그럴듯하게 만드는가?"를 묻는다. "모수가 자료를 만든다"에서 "자료가 모수에 관해 알려 준다"로의 이 전환이 가능도 기반 추론의 토대이며, 최대가능도추정, 가능도비 검정, 정보기준을 떠받친다.
 
-## Intuition
+## 직관
 
-Consider a simple experiment: we flip a coin 10 times and observe 7 heads. If the coin has probability $p = 0.5$ of landing heads, we can compute the probability of this outcome. But we can also compute the probability of this outcome for $p = 0.6$, $p = 0.7$, or any other value of $p$. Plotting these probabilities as a function of $p$ — with the data held fixed — gives the likelihood function. The value of $p$ that produces the tallest peak is the "most likely" parameter value, and finding it is the essence of maximum likelihood estimation.
+간단한 실험을 생각해 보자. 동전을 10번 던져 앞면 7번을 관측했다. 앞면이 나올 확률이 $p = 0.5$라면 이 결과의 확률을 계산할 수 있다. 그런데 $p = 0.6$, $p = 0.7$, 또는 다른 어떤 $p$에 대해서도 같은 결과의 확률을 계산할 수 있다. 자료를 고정한 채 이 확률들을 $p$의 함수로 그린 것이 가능도함수이다. 가장 높은 봉우리를 만드는 $p$ 값이 "가장 그럴듯한" 모수값이며, 그것을 찾는 것이 최대가능도추정의 핵심이다.
 
-## General Definition
+## 일반적인 정의
 
-The likelihood function for a parameter $\theta$ given observed data $\mathbf{x}$ is defined as the joint density (or joint mass function) evaluated at the observed data, viewed as a function of $\theta$:
+관측된 자료 $\mathbf{x}$가 주어졌을 때 모수 $\theta$에 대한 가능도함수는, 관측된 자료에서 평가한 결합밀도(또는 결합 질량함수)를 $\theta$의 함수로 본 것으로 정의된다:
 
 $$
 L(\theta; \mathbf{x}) = f(\mathbf{x}; \theta)
 $$
 
-Here $f(\mathbf{x}; \theta)$ is the probability density function (for continuous data) or probability mass function (for discrete data). The semicolon notation emphasizes that $\theta$ is a fixed parameter, not a random variable — we are not conditioning on $\theta$ in the probabilistic sense.
+여기서 $f(\mathbf{x}; \theta)$는 (연속 자료에서는) 확률밀도함수이거나 (이산 자료에서는) 확률질량함수이다. 쌍반점 표기는 $\theta$가 확률변수가 아니라 고정된 모수임을 강조한다. 확률적인 의미에서 $\theta$로 조건화하는 것이 아니다.
 
-### The iid Case
+### i.i.d.인 경우
 
-When the data consist of $n$ independent and identically distributed observations $x_1, \ldots, x_n$, the joint density factors into a product, and the likelihood takes the form
+자료가 독립이고 동일한 분포를 따르는 $n$개의 관측값 $x_1, \ldots, x_n$으로 이루어져 있으면 결합밀도가 곱으로 인수분해되고 가능도는 다음 형태가 된다:
 
 $$
 L(\theta; \mathbf{x}) = \prod_{i=1}^n f(x_i; \theta)
 $$
 
-This product structure is specific to the iid setting. For dependent data (e.g., time series), the likelihood takes a different form but the underlying idea remains the same.
+이 곱의 구조는 i.i.d. 상황에 특유한 것이다. 의존하는 자료(예: 시계열)에서는 가능도가 다른 형태를 취하지만 밑바탕의 착상은 같다.
 
-!!! example "Bernoulli Likelihood"
+!!! example "Bernoulli 가능도"
 
-    Suppose $X_1, \ldots, X_n \overset{\text{iid}}{\sim} \text{Bernoulli}(p)$ and we observe $k$ successes in $n$ trials. The likelihood function is
+    $X_1, \ldots, X_n \overset{\text{iid}}{\sim} \text{Bernoulli}(p)$이고 $n$번의 시행에서 성공 $k$번을 관측했다고 하자. 가능도함수는
 
     $$
     L(p; \mathbf{x}) = \prod_{i=1}^n p^{x_i}(1-p)^{1-x_i} = p^k (1-p)^{n-k}
     $$
 
-    For $n = 10$ and $k = 7$, we can evaluate $L(0.5) = 0.5^{10} \approx 0.001$ and $L(0.7) = 0.7^7 \cdot 0.3^3 \approx 0.0022$. The value $p = 0.7$ makes the observed data about twice as plausible as $p = 0.5$.
+    $n = 10$, $k = 7$일 때 $L(0.5) = 0.5^{10} \approx 0.001$이고 $L(0.7) = 0.7^7 \cdot 0.3^3 \approx 0.0022$이다. $p = 0.7$이 $p = 0.5$보다 관측된 자료를 약 두 배 더 그럴듯하게 만든다.
 
-## Log-Likelihood
+## 로그가능도
 
-Working with the likelihood directly is inconvenient because products of many small numbers cause numerical underflow. The **log-likelihood** transforms the product into a sum:
+가능도를 직접 다루는 것은 불편하다. 작은 수를 많이 곱하면 수치적 언더플로가 생기기 때문이다. **로그가능도**는 곱을 합으로 바꾼다:
 
 $$
 \ell(\theta; \mathbf{x}) = \log L(\theta; \mathbf{x}) = \sum_{i=1}^n \log f(x_i; \theta)
 $$
 
-Since the logarithm is a strictly increasing function, maximizing $\ell$ is equivalent to maximizing $L$. The log-likelihood is the standard working tool in practice.
+로그가 순증가함수이므로 $\ell$을 최대화하는 것은 $L$을 최대화하는 것과 동등하다. 실무에서는 로그가능도가 표준적인 작업 도구이다.
 
-!!! example "Bernoulli Log-Likelihood"
+!!! example "Bernoulli 로그가능도"
 
-    Continuing the Bernoulli example:
+    Bernoulli 예를 이어가면:
 
     $$
     \ell(p; \mathbf{x}) = k \log p + (n - k) \log(1-p)
     $$
 
-    For $n = 10$ and $k = 7$: $\ell(0.5) = 10 \log(0.5) \approx -6.93$ and $\ell(0.7) = 7\log(0.7) + 3\log(0.3) \approx -6.12$. The higher log-likelihood at $p = 0.7$ confirms it is a more plausible parameter value.
+    $n = 10$, $k = 7$일 때 $\ell(0.5) = 10 \log(0.5) \approx -6.93$이고 $\ell(0.7) = 7\log(0.7) + 3\log(0.3) \approx -6.12$이다. $p = 0.7$에서 로그가능도가 더 높아 그 값이 더 그럴듯한 모수값임을 확인해 준다.
 
-## Key Properties
+## 주요 성질
 
-### Likelihood Is Not a Probability
+### 가능도는 확률이 아니다
 
-The most important conceptual point about the likelihood function is that **it is not a probability distribution over $\theta$**. Specifically, there is no guarantee that
+가능도함수에 관해 가장 중요한 개념적 요점은 **그것이 $\theta$에 대한 확률분포가 아니라는** 것이다. 구체적으로 다음이 보장되지 않는다:
 
 $$
 \int L(\theta; \mathbf{x}) \, d\theta = 1
 $$
 
-In general, this integral may converge to any positive number, or even diverge. The likelihood tells us the relative plausibility of different parameter values, but it does not assign probabilities to parameters. Assigning probabilities to parameters requires Bayesian methods with a prior distribution.
+일반적으로 이 적분은 임의의 양수로 수렴할 수도 있고 발산할 수도 있다. 가능도는 서로 다른 모수값의 상대적인 그럴듯함을 알려 줄 뿐 모수에 확률을 부여하지 않는다. 모수에 확률을 부여하려면 사전분포를 갖춘 베이즈 방법이 필요하다.
 
-### Relative Plausibility
+### 상대적 그럴듯함
 
-The absolute value of $L(\theta; \mathbf{x})$ at any single point is not directly interpretable. What matters is the **likelihood ratio** between two parameter values:
+한 점에서의 $L(\theta; \mathbf{x})$의 절댓값은 그 자체로 해석되지 않는다. 중요한 것은 두 모수값 사이의 **가능도비**이다:
 
 $$
 \frac{L(\theta_1; \mathbf{x})}{L(\theta_2; \mathbf{x})}
 $$
 
-A ratio of 10 means $\theta_1$ makes the data 10 times more plausible than $\theta_2$. This ratio is invariant to multiplicative constants, which is why the likelihood is often defined "up to a constant."
+비가 10이면 $\theta_1$이 $\theta_2$보다 자료를 10배 더 그럴듯하게 만든다는 뜻이다. 이 비는 곱해지는 상수에 불변이며, 그래서 가능도를 흔히 "상수배까지" 정의한다고 말한다.
 
-### Computational Convenience of Log-Likelihood
+### 로그가능도의 계산상 편의
 
-The log-likelihood converts products to sums, which offers three practical advantages:
+로그가능도는 곱을 합으로 바꾸며 실용적인 장점을 셋 준다:
 
-- **Numerical stability**: products of many small probabilities cause underflow; sums of log-probabilities do not.
-- **Differentiation**: sums are easier to differentiate than products, simplifying the search for the maximum.
-- **Additivity**: for independent observations, the total log-likelihood is the sum of individual contributions, making it easy to add or remove data points.
+- **수치적 안정성**: 작은 확률을 많이 곱하면 언더플로가 생기지만 로그확률의 합에서는 그렇지 않다.
+- **미분**: 합은 곱보다 미분하기 쉬워 최댓값을 찾기가 간단해진다.
+- **가법성**: 독립인 관측값에서 전체 로그가능도는 개별 기여의 합이므로 자료점을 더하거나 빼기 쉽다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Write the likelihood function and log-likelihood function for $n$ independent observations $x_1, \dots, x_n$ from a $N(\mu, \sigma^2)$ distribution, treating both $\mu$ and $\sigma^2$ as unknown.
+**연습문제 1.**
+$\mu$와 $\sigma^2$이 모두 미지일 때 $N(\mu, \sigma^2)$ 분포에서 얻은 독립인 관측값 $x_1, \dots, x_n$에 대한 가능도함수와 로그가능도함수를 쓰라.
 
-??? success "Solution to Exercise 1"
-    The likelihood is:
+??? success "연습문제 1 풀이"
+    가능도는:
 
     $$
     L(\mu, \sigma^2) = \prod_{i=1}^n \frac{1}{\sqrt{2\pi\sigma^2}} \exp\!\left(-\frac{(x_i - \mu)^2}{2\sigma^2}\right) = (2\pi\sigma^2)^{-n/2} \exp\!\left(-\frac{1}{2\sigma^2}\sum_{i=1}^n(x_i - \mu)^2\right)
     $$
 
-    The log-likelihood is:
+    로그가능도는:
 
     $$
     \ell(\mu, \sigma^2) = -\frac{n}{2}\log(2\pi) - \frac{n}{2}\log(\sigma^2) - \frac{1}{2\sigma^2}\sum_{i=1}^n(x_i - \mu)^2
@@ -108,48 +108,48 @@ Write the likelihood function and log-likelihood function for $n$ independent ob
 
 ---
 
-**Exercise 2.**
-Explain the difference between the likelihood function $L(\theta; \mathbf{x})$ and the probability function $P(\mathbf{x}; \theta)$. Why is the likelihood not a probability distribution over $\theta$?
+**연습문제 2.**
+가능도함수 $L(\theta; \mathbf{x})$와 확률함수 $P(\mathbf{x}; \theta)$의 차이를 설명하라. 가능도가 $\theta$에 대한 확률분포가 아닌 이유는 무엇인가?
 
-??? success "Solution to Exercise 2"
-    The **probability function** $P(\mathbf{x}; \theta)$ treats $\theta$ as fixed and $\mathbf{x}$ as the variable. For fixed $\theta$, it sums (or integrates) to 1 over all possible data outcomes.
+??? success "연습문제 2 풀이"
+    **확률함수** $P(\mathbf{x}; \theta)$는 $\theta$를 고정하고 $\mathbf{x}$를 변수로 다룬다. $\theta$가 고정되면 가능한 모든 자료 결과에 대해 합(또는 적분)이 1이 된다.
 
-    The **likelihood function** $L(\theta; \mathbf{x})$ treats $\mathbf{x}$ as fixed (the observed data) and $\theta$ as the variable. It uses the same formula as the probability function but reverses the roles.
+    **가능도함수** $L(\theta; \mathbf{x})$는 $\mathbf{x}$를 (관측된 자료로) 고정하고 $\theta$를 변수로 다룬다. 확률함수와 같은 식을 쓰되 역할을 뒤바꾼 것이다.
 
-    The likelihood is not a probability distribution over $\theta$ because it does not integrate to 1 over the parameter space. In fact, $\int L(\theta; \mathbf{x})\,d\theta$ can be any positive number (or even infinite). To obtain a proper distribution over $\theta$, one must multiply by a prior and normalize (Bayesian approach), yielding the posterior distribution.
+    가능도가 $\theta$에 대한 확률분포가 아닌 이유는 모수공간에서 적분해도 1이 되지 않기 때문이다. 실제로 $\int L(\theta; \mathbf{x})\,d\theta$는 임의의 양수일 수도(심지어 무한일 수도) 있다. $\theta$에 대한 제대로 된 분포를 얻으려면 사전분포를 곱하고 정규화해야 하며(베이즈 접근), 그 결과가 사후분포이다.
 
 ---
 
-**Exercise 3.**
-For a sample of size $n = 3$ with observations $x_1 = 2, x_2 = 5, x_3 = 3$ from a $\text{Poisson}(\lambda)$ distribution, compute the likelihood and log-likelihood at $\lambda = 3$ and $\lambda = 4$. Which value is more likely?
+**연습문제 3.**
+$\text{Poisson}(\lambda)$ 분포에서 얻은 크기 $n = 3$인 표본에서 관측값이 $x_1 = 2, x_2 = 5, x_3 = 3$이다. $\lambda = 3$과 $\lambda = 4$에서 가능도와 로그가능도를 계산하라. 어느 값이 더 그럴듯한가?
 
-??? success "Solution to Exercise 3"
-    The Poisson likelihood is $L(\lambda) = \prod_{i=1}^n \frac{\lambda^{x_i} e^{-\lambda}}{x_i!}$.
+??? success "연습문제 3 풀이"
+    Poisson 가능도는 $L(\lambda) = \prod_{i=1}^n \frac{\lambda^{x_i} e^{-\lambda}}{x_i!}$이다.
 
-    At $\lambda = 3$: $L(3) = \frac{3^2 e^{-3}}{2!} \cdot \frac{3^5 e^{-3}}{5!} \cdot \frac{3^3 e^{-3}}{3!} = \frac{3^{10} e^{-9}}{2! \cdot 5! \cdot 3!}$
+    $\lambda = 3$일 때: $L(3) = \frac{3^2 e^{-3}}{2!} \cdot \frac{3^5 e^{-3}}{5!} \cdot \frac{3^3 e^{-3}}{3!} = \frac{3^{10} e^{-9}}{2! \cdot 5! \cdot 3!}$
 
     $$
     = \frac{59049 \times 0.0001234}{2 \times 120 \times 6} = \frac{7.2876}{1440} \approx 0.005061
     $$
 
-    At $\lambda = 4$: $L(4) = \frac{4^{10} e^{-12}}{1440} = \frac{1048576 \times 6.144 \times 10^{-6}}{1440} \approx 0.004473$
+    $\lambda = 4$일 때: $L(4) = \frac{4^{10} e^{-12}}{1440} = \frac{1048576 \times 6.144 \times 10^{-6}}{1440} \approx 0.004473$
 
-    The log-likelihoods: $\ell(3) = 10\ln 3 - 9 - \ln 1440 \approx -5.287$ and $\ell(4) = 10\ln 4 - 12 - \ln 1440 \approx -5.411$.
+    로그가능도는 $\ell(3) = 10\ln 3 - 9 - \ln 1440 \approx -5.287$이고 $\ell(4) = 10\ln 4 - 12 - \ln 1440 \approx -5.411$이다.
 
-    Since $\ell(3) > \ell(4)$, $\lambda = 3$ is more likely. Note: the MLE is $\hat{\lambda} = \bar{x} = 10/3 \approx 3.33$.
+    $\ell(3) > \ell(4)$이므로 $\lambda = 3$이 더 그럴듯하다. 참고로 MLE는 $\hat{\lambda} = \bar{x} = 10/3 \approx 3.33$이다.
 
 ---
 
-**Exercise 4.**
-Explain why maximizing the log-likelihood is equivalent to maximizing the likelihood. State one practical advantage of working with the log-likelihood.
+**연습문제 4.**
+로그가능도를 최대화하는 것이 가능도를 최대화하는 것과 동등한 이유를 설명하라. 로그가능도로 작업할 때의 실용적 장점을 하나 서술하라.
 
-??? success "Solution to Exercise 4"
-    Since the logarithm is a strictly increasing function, $L(\theta_1) > L(\theta_2)$ if and only if $\ell(\theta_1) > \ell(\theta_2)$. Therefore the value of $\theta$ that maximizes $L$ also maximizes $\ell$, and vice versa.
+??? success "연습문제 4 풀이"
+    로그가 순증가함수이므로 $L(\theta_1) > L(\theta_2)$일 필요충분조건은 $\ell(\theta_1) > \ell(\theta_2)$이다. 따라서 $L$을 최대화하는 $\theta$가 $\ell$도 최대화하며 그 역도 성립한다.
 
-    **Practical advantage:** The log-likelihood converts products into sums:
+    **실용적 장점:** 로그가능도는 곱을 합으로 바꾼다:
 
     $$
     \ell(\theta) = \sum_{i=1}^n \log f(x_i; \theta)
     $$
 
-    This is easier to differentiate (sum rule vs. product rule) and avoids numerical underflow. For large $n$, the likelihood $L(\theta) = \prod f(x_i; \theta)$ can be astronomically small (a product of $n$ numbers less than 1), causing floating-point underflow. The log-likelihood, being a sum, remains in a numerically tractable range.
+    (곱의 미분법 대신 합의 미분법을 쓰므로) 미분하기 쉽고 수치적 언더플로를 피할 수 있다. $n$이 크면 가능도 $L(\theta) = \prod f(x_i; \theta)$가 (1보다 작은 수 $n$개의 곱이므로) 천문학적으로 작아져 부동소수점 언더플로를 일으킨다. 합인 로그가능도는 수치적으로 다룰 수 있는 범위에 머문다.

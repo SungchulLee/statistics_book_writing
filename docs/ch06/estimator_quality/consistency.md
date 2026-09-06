@@ -1,121 +1,121 @@
-# Consistency and Asymptotic Normality
+# 일치성과 점근정규성
 
-## Overview
+## 개요
 
-As we collect more data, we expect our estimates to improve. But does a given estimation procedure actually converge to the true parameter value as the sample size grows? Consistency formalizes this guarantee: an estimator that is consistent will eventually concentrate around the truth, no matter how it behaves for small samples.
+자료를 더 모을수록 추정값이 좋아지기를 기대한다. 그런데 어떤 추정 절차가 표본크기가 커질 때 실제로 참 모수값으로 수렴하는가? 일치성은 이 보장을 형식화한다. 일치추정량은 소표본에서 어떻게 거동하든 결국 참값 주위로 모여든다.
 
-An estimator $\hat{\theta}_n$ is **consistent** for $\theta$ if it converges in probability to $\theta$:
+추정량 $\hat{\theta}_n$이 $\theta$로 확률수렴하면 $\theta$에 대해 **일치**한다고 한다:
 
 $$
 \hat{\theta}_n \xrightarrow{P} \theta \quad \text{as } n \to \infty
 $$
 
-This means that for every $\varepsilon > 0$, $P(|\hat{\theta}_n - \theta| > \varepsilon) \to 0$ as $n \to \infty$.
+이는 모든 $\varepsilon > 0$에 대해 $n \to \infty$일 때 $P(|\hat{\theta}_n - \theta| > \varepsilon) \to 0$임을 뜻한다.
 
-!!! note "Weak versus strong consistency"
+!!! note "약한 일치성과 강한 일치성"
 
-    The definition above is sometimes called **weak consistency**. A stronger notion, **strong consistency**, requires almost sure convergence: $P(\hat{\theta}_n \to \theta) = 1$. Strong consistency implies weak consistency but not vice versa. In practice, many common estimators satisfy both.
+    위의 정의를 **약한 일치성**이라 부르기도 한다. 더 강한 개념인 **강한 일치성**은 거의 확실한 수렴 $P(\hat{\theta}_n \to \theta) = 1$을 요구한다. 강한 일치성은 약한 일치성을 함의하지만 그 역은 성립하지 않는다. 실무에서 흔히 쓰는 많은 추정량은 둘 다 만족한다.
 
-## Sufficient Conditions for Consistency
+## 일치성의 충분조건
 
-Verifying consistency directly from the definition can be difficult because it requires analyzing the full distribution of $\hat{\theta}_n$ for every $n$. A simpler approach uses the mean squared error. Recall that $\operatorname{Bias}(\hat{\theta}_n) = E[\hat{\theta}_n] - \theta$ and $\operatorname{Var}(\hat{\theta}_n) = E\bigl[(\hat{\theta}_n - E[\hat{\theta}_n])^2\bigr]$.
+정의에서 곧바로 일치성을 확인하려면 모든 $n$에 대해 $\hat{\theta}_n$의 분포 전체를 분석해야 해서 어려울 수 있다. 더 간단한 방법은 평균제곱오차를 쓰는 것이다. $\operatorname{Bias}(\hat{\theta}_n) = E[\hat{\theta}_n] - \theta$이고 $\operatorname{Var}(\hat{\theta}_n) = E\bigl[(\hat{\theta}_n - E[\hat{\theta}_n])^2\bigr]$임을 떠올리자.
 
-A **sufficient** (but not necessary) condition for consistency is that both the bias and the variance vanish as $n \to \infty$:
+일치성의 **충분조건**(필요조건은 아니다)은 $n \to \infty$일 때 편향과 분산이 모두 사라지는 것이다:
 
 $$
 \operatorname{Bias}(\hat{\theta}_n) \to 0 \quad \text{and} \quad \operatorname{Var}(\hat{\theta}_n) \to 0 \quad \text{as } n \to \infty
 $$
 
-This works because $\operatorname{MSE}(\hat{\theta}_n) = \operatorname{Bias}^2(\hat{\theta}_n) + \operatorname{Var}(\hat{\theta}_n)$, so both conditions together imply $\operatorname{MSE} \to 0$, which in turn implies convergence in probability.
+$\operatorname{MSE}(\hat{\theta}_n) = \operatorname{Bias}^2(\hat{\theta}_n) + \operatorname{Var}(\hat{\theta}_n)$이므로 두 조건이 함께 성립하면 $\operatorname{MSE} \to 0$이 되고, 이는 다시 확률수렴을 함의하기 때문이다.
 
-!!! example "Sample mean is consistent for the population mean"
+!!! example "표본평균은 모평균에 대해 일치한다"
 
-    Let $X_1, \ldots, X_n$ be i.i.d. with mean $\mu$ and finite variance $\sigma^2$. The sample mean $\bar{X}_n = \frac{1}{n}\sum_{i=1}^n X_i$ satisfies $\operatorname{Bias}(\bar{X}_n) = 0$ and $\operatorname{Var}(\bar{X}_n) = \sigma^2 / n \to 0$. Both conditions hold, so $\bar{X}_n$ is consistent for $\mu$.
+    $X_1, \ldots, X_n$을 평균이 $\mu$이고 분산이 유한한 $\sigma^2$인 i.i.d. 확률변수라 하자. 표본평균 $\bar{X}_n = \frac{1}{n}\sum_{i=1}^n X_i$는 $\operatorname{Bias}(\bar{X}_n) = 0$이고 $\operatorname{Var}(\bar{X}_n) = \sigma^2 / n \to 0$을 만족한다. 두 조건이 모두 성립하므로 $\bar{X}_n$은 $\mu$에 대해 일치한다.
 
-## Asymptotic Normality
+## 점근정규성
 
-Consistency tells us that $\hat{\theta}_n$ converges to $\theta$, but it does not describe how fast the estimator concentrates or what distribution it follows for large $n$. Asymptotic normality answers both questions and provides the foundation for large-sample inference.
+일치성은 $\hat{\theta}_n$이 $\theta$로 수렴한다고 알려 주지만, 얼마나 빨리 집중되는지 또는 $n$이 클 때 어떤 분포를 따르는지는 말해 주지 않는다. 점근정규성은 이 두 물음에 답하며 대표본 추론의 토대를 제공한다.
 
-An estimator $\hat{\theta}_n$ is **asymptotically normal** if
+추정량 $\hat{\theta}_n$이 다음을 만족하면 **점근적으로 정규**라고 한다:
 
 $$
 \sqrt{n}\,(\hat{\theta}_n - \theta) \xrightarrow{d} N(0,\, \sigma^2)
 $$
 
-for some $\sigma^2 > 0$ that depends on the estimator and the underlying distribution. The quantity $\sigma^2$ is called the **asymptotic variance**. For many standard estimators, $\sigma^2 = 1/I(\theta)$ where $I(\theta)$ is the Fisher information for a single observation.
+여기서 $\sigma^2 > 0$은 추정량과 밑바탕 분포에 의존한다. 이 $\sigma^2$을 **점근분산**이라 한다. 표준적인 추정량 다수에서 $\sigma^2 = 1/I(\theta)$이며, $I(\theta)$는 관측값 하나당 Fisher 정보량이다.
 
-This result justifies using normal-based confidence intervals for large samples. Specifically, an approximate $(1 - \alpha)$-level confidence interval takes the form
+이 결과가 대표본에서 정규분포에 기반한 신뢰구간을 사용하는 것을 정당화한다. 구체적으로 근사적인 $(1 - \alpha)$ 수준 신뢰구간은 다음 형태를 취한다:
 
 $$
 \hat{\theta}_n \pm z_{\alpha/2} \cdot \frac{\sigma}{\sqrt{n}}
 $$
 
-where $z_{\alpha/2}$ is the standard normal critical value and $\sigma / \sqrt{n}$ is the asymptotic standard error.
+여기서 $z_{\alpha/2}$는 표준정규 임계값이고 $\sigma / \sqrt{n}$은 점근 표준오차이다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Prove that the sample mean $\bar{X}_n$ is a consistent estimator of $\mu = E[X]$ using Chebyshev's inequality, assuming $\text{Var}(X) = \sigma^2 < \infty$.
+**연습문제 1.**
+$\text{Var}(X) = \sigma^2 < \infty$를 가정하고 Chebyshev 부등식을 사용하여 표본평균 $\bar{X}_n$이 $\mu = E[X]$의 일치추정량임을 증명하라.
 
-??? success "Solution to Exercise 1"
-    By Chebyshev's inequality, for any $\varepsilon > 0$:
+??? success "연습문제 1 풀이"
+    Chebyshev 부등식에 의해 임의의 $\varepsilon > 0$에 대해:
 
     $$
     P(|\bar{X}_n - \mu| \geq \varepsilon) \leq \frac{\text{Var}(\bar{X}_n)}{\varepsilon^2} = \frac{\sigma^2}{n\varepsilon^2}
     $$
 
-    As $n \to \infty$:
+    $n \to \infty$일 때:
 
     $$
     P(|\bar{X}_n - \mu| \geq \varepsilon) \leq \frac{\sigma^2}{n\varepsilon^2} \to 0
     $$
 
-    Therefore $\bar{X}_n \xrightarrow{p} \mu$, which is the definition of consistency. $\square$
+    따라서 $\bar{X}_n \xrightarrow{p} \mu$이며, 이것이 일치성의 정의이다. $\square$
 
 ---
 
-**Exercise 2.**
-The sample median is also a consistent estimator of the population mean for symmetric distributions. Explain intuitively why it converges to $\mu$, and state one advantage of the sample median over the sample mean.
+**연습문제 2.**
+대칭분포에서는 표본중앙값도 모평균의 일치추정량이다. 왜 $\mu$로 수렴하는지 직관적으로 설명하고, 표본평균에 비해 표본중앙값이 갖는 장점을 하나 서술하라.
 
-??? success "Solution to Exercise 2"
-    For a symmetric distribution, the population mean and median coincide. The sample median converges to the population median by the Glivenko-Cantelli theorem (the empirical CDF converges uniformly to the true CDF, so quantiles converge). Since the population median equals $\mu$ for symmetric distributions, the sample median is consistent for $\mu$.
+??? success "연습문제 2 풀이"
+    대칭분포에서는 모평균과 모집단 중앙값이 일치한다. 표본중앙값은 Glivenko-Cantelli 정리에 의해 모집단 중앙값으로 수렴한다(경험 CDF가 참 CDF로 균등수렴하므로 분위수도 수렴한다). 대칭분포에서는 모집단 중앙값이 $\mu$와 같으므로 표본중앙값은 $\mu$에 대해 일치한다.
 
-    **Advantage of the median:** It is robust to outliers. For heavy-tailed distributions (e.g., Cauchy), the sample mean can be highly variable and may not even be consistent (the Cauchy has no finite mean), while the sample median remains consistent and stable. Even for distributions with finite variance, the median has bounded influence function, meaning a single extreme observation cannot drastically change the estimate.
+    **중앙값의 장점:** 이상점에 로버스트하다. 꼬리가 두꺼운 분포(예: Cauchy)에서는 표본평균의 변동이 매우 커지고 일치하지조차 않을 수 있지만(Cauchy 분포에는 유한한 평균이 없다) 표본중앙값은 여전히 일치하고 안정적이다. 분산이 유한한 분포에서도 중앙값은 영향함수가 유계여서 극단 관측값 하나가 추정값을 크게 바꾸지 못한다.
 
 ---
 
-**Exercise 3.**
-Show that if $\hat{\theta}_n$ is a consistent estimator of $\theta$ and $g$ is a continuous function, then $g(\hat{\theta}_n)$ is a consistent estimator of $g(\theta)$. State the theorem you are using.
+**연습문제 3.**
+$\hat{\theta}_n$이 $\theta$의 일치추정량이고 $g$가 연속함수이면 $g(\hat{\theta}_n)$이 $g(\theta)$의 일치추정량임을 보여라. 어떤 정리를 사용하는지 밝혀라.
 
-??? success "Solution to Exercise 3"
-    This is the **Continuous Mapping Theorem**: if $\hat{\theta}_n \xrightarrow{p} \theta$ and $g$ is continuous at $\theta$, then $g(\hat{\theta}_n) \xrightarrow{p} g(\theta)$.
+??? success "연습문제 3 풀이"
+    이는 **연속사상정리**이다. $\hat{\theta}_n \xrightarrow{p} \theta$이고 $g$가 $\theta$에서 연속이면 $g(\hat{\theta}_n) \xrightarrow{p} g(\theta)$이다.
 
-    **Application:** Since $S^2 = \frac{1}{n-1}\sum(X_i - \bar{X})^2 \xrightarrow{p} \sigma^2$ (the sample variance is consistent for the population variance), the continuous function $g(x) = \sqrt{x}$ gives:
+    **응용:** $S^2 = \frac{1}{n-1}\sum(X_i - \bar{X})^2 \xrightarrow{p} \sigma^2$이므로(표본분산은 모분산에 대해 일치한다) 연속함수 $g(x) = \sqrt{x}$를 적용하면:
 
     $$
     S = \sqrt{S^2} \xrightarrow{p} \sqrt{\sigma^2} = \sigma
     $$
 
-    So the sample standard deviation is a consistent estimator of $\sigma$. $\square$
+    따라서 표본표준편차는 $\sigma$의 일치추정량이다. $\square$
 
 ---
 
-**Exercise 4.**
-Define asymptotic normality of an estimator $\hat{\theta}_n$. If $\hat{\theta}_n$ is the MLE and regularity conditions hold, state the asymptotic distribution of $\sqrt{n}(\hat{\theta}_n - \theta_0)$.
+**연습문제 4.**
+추정량 $\hat{\theta}_n$의 점근정규성을 정의하라. $\hat{\theta}_n$이 MLE이고 정칙 조건이 성립할 때 $\sqrt{n}(\hat{\theta}_n - \theta_0)$의 점근분포를 서술하라.
 
-??? success "Solution to Exercise 4"
-    An estimator $\hat{\theta}_n$ is **asymptotically normal** if:
+??? success "연습문제 4 풀이"
+    추정량 $\hat{\theta}_n$이 다음을 만족하면 **점근적으로 정규**이다:
 
     $$
     \sqrt{n}(\hat{\theta}_n - \theta_0) \xrightarrow{d} N(0, v^2)
     $$
 
-    for some variance $v^2$, where $\xrightarrow{d}$ denotes convergence in distribution.
+    여기서 $v^2$은 어떤 분산이고 $\xrightarrow{d}$는 분포수렴을 나타낸다.
 
-    For the MLE under standard regularity conditions (the parameter space is open, the model is identifiable, the log-likelihood is twice differentiable, etc.):
+    표준적인 정칙 조건(모수공간이 열려 있고, 모형이 식별 가능하며, 로그가능도가 두 번 미분가능한 등) 아래에서 MLE는:
 
     $$
     \sqrt{n}(\hat{\theta}_{\text{MLE}} - \theta_0) \xrightarrow{d} N\!\left(0, \frac{1}{I(\theta_0)}\right)
     $$
 
-    where $I(\theta_0) = -E\!\left[\frac{\partial^2}{\partial\theta^2}\log f(X;\theta_0)\right]$ is the Fisher information for a single observation. Equivalently, $\hat{\theta}_{\text{MLE}} \approx N(\theta_0, 1/(nI(\theta_0)))$ for large $n$. This result implies the MLE achieves the Cramer-Rao lower bound asymptotically, making it asymptotically efficient.
+    이며 $I(\theta_0) = -E\!\left[\frac{\partial^2}{\partial\theta^2}\log f(X;\theta_0)\right]$는 관측값 하나당 Fisher 정보량이다. 동등하게, $n$이 크면 $\hat{\theta}_{\text{MLE}} \approx N(\theta_0, 1/(nI(\theta_0)))$이다. 이 결과는 MLE가 점근적으로 Cramér-Rao 하한을 달성함을, 즉 점근적으로 효율적임을 함의한다.

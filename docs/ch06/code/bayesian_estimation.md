@@ -1,60 +1,60 @@
-# Bayesian Estimation Demonstrations
+# 베이즈 추정 시연
 
-## Overview
+## 개요
 
-Bayesian estimation treats the unknown parameter $\theta$ as a random variable with a **prior distribution** that encodes beliefs before observing data. After observing data, we update to a **posterior distribution** via Bayes' theorem. This page demonstrates two fundamental conjugate models -- Beta-Binomial and Normal-Normal -- showing how the posterior concentrates as data accumulate and how prior choice affects inference.
+베이즈 추정은 미지 모수 $\theta$를 확률변수로 다루며, 자료를 관측하기 전의 믿음을 **사전분포**에 담는다. 자료를 관측한 뒤에는 베이즈 정리를 통해 **사후분포**로 갱신한다. 이 페이지에서는 두 가지 기본적인 켤레 모형인 Beta-Binomial과 Normal-Normal을 시연하며, 자료가 쌓일수록 사후분포가 어떻게 좁아지는지와 사전분포의 선택이 추론에 어떤 영향을 주는지 보인다.
 
-## Bayes' Theorem for Estimation
+## 추정을 위한 베이즈 정리
 
-Given data $\mathbf{x} = (x_1, \ldots, x_n)$ and parameter $\theta$:
+자료 $\mathbf{x} = (x_1, \ldots, x_n)$과 모수 $\theta$가 주어졌을 때:
 
 $$
 p(\theta \mid \mathbf{x}) = \frac{f(\mathbf{x} \mid \theta)\, \pi(\theta)}{\int f(\mathbf{x} \mid \theta)\, \pi(\theta)\, d\theta}
 $$
 
-where:
+여기서:
 
-- $\pi(\theta)$ is the **prior** distribution
-- $f(\mathbf{x} \mid \theta)$ is the **likelihood**
-- $p(\theta \mid \mathbf{x})$ is the **posterior** distribution
+- $\pi(\theta)$는 **사전분포**이다
+- $f(\mathbf{x} \mid \theta)$는 **가능도**이다
+- $p(\theta \mid \mathbf{x})$는 **사후분포**이다
 
-!!! info "Point Estimates from the Posterior"
+!!! info "사후분포로부터의 점추정"
 
-    - **Posterior mean:** $E[\theta \mid \mathbf{x}]$ -- minimizes the Bayes risk under squared error loss.
-    - **MAP (Maximum a Posteriori):** $\arg\max_\theta p(\theta \mid \mathbf{x})$ -- the mode of the posterior.
-    - **Posterior median:** minimizes the Bayes risk under absolute error loss.
+    - **사후평균:** $E[\theta \mid \mathbf{x}]$ — 제곱오차 손실 아래에서 베이즈 위험을 최소화한다.
+    - **MAP (최대사후확률):** $\arg\max_\theta p(\theta \mid \mathbf{x})$ — 사후분포의 최빈값이다.
+    - **사후중앙값:** 절대오차 손실 아래에서 베이즈 위험을 최소화한다.
 
-## Conjugate Priors
+## 켤레 사전분포
 
-A prior $\pi(\theta)$ is **conjugate** to a likelihood if the posterior belongs to the same distributional family as the prior. Conjugate priors yield closed-form posteriors, making Bayesian updating analytically tractable.
+사후분포가 사전분포와 같은 분포족에 속하면 사전분포 $\pi(\theta)$가 그 가능도에 **켤레**라고 한다. 켤레 사전분포는 닫힌 형태의 사후분포를 주므로 베이즈 갱신을 해석적으로 다룰 수 있게 한다.
 
-| Likelihood | Conjugate Prior | Posterior |
+| 가능도 | 켤레 사전분포 | 사후분포 |
 |------------|----------------|-----------|
 | Binomial | Beta | Beta |
 | Poisson | Gamma | Gamma |
-| Normal (known $\sigma^2$) | Normal | Normal |
-| Normal (known $\mu$) | Inverse-Gamma | Inverse-Gamma |
+| Normal ($\sigma^2$ 알려짐) | Normal | Normal |
+| Normal ($\mu$ 알려짐) | Inverse-Gamma | Inverse-Gamma |
 | Exponential | Gamma | Gamma |
 
-## Beta-Binomial Conjugate Model
+## Beta-Binomial 켤레 모형
 
-### Setup
+### 설정
 
-For estimating a proportion $p$ from binomial data:
+이항 자료에서 비율 $p$를 추정할 때:
 
-- **Prior:** $p \sim \text{Beta}(\alpha_0, \beta_0)$
-- **Data:** $k$ successes out of $n$ trials
-- **Posterior:** $p \mid k \sim \text{Beta}(\alpha_0 + k, \beta_0 + n - k)$
+- **사전분포:** $p \sim \text{Beta}(\alpha_0, \beta_0)$
+- **자료:** $n$번의 시행에서 $k$번 성공
+- **사후분포:** $p \mid k \sim \text{Beta}(\alpha_0 + k, \beta_0 + n - k)$
 
-The posterior mean is:
+사후평균은:
 
 $$
 E[p \mid k] = \frac{\alpha_0 + k}{\alpha_0 + \beta_0 + n}
 $$
 
-This is a weighted average of the prior mean $\alpha_0/(\alpha_0 + \beta_0)$ and the MLE $k/n$, with weights proportional to the prior's "effective sample size" $\alpha_0 + \beta_0$ and the actual sample size $n$.
+이는 사전평균 $\alpha_0/(\alpha_0 + \beta_0)$과 MLE $k/n$의 가중평균이며, 가중은 사전분포의 "유효 표본크기" $\alpha_0 + \beta_0$과 실제 표본크기 $n$에 비례한다.
 
-### Demonstration
+### 시연
 
 ```python
 import numpy as np
@@ -90,20 +90,20 @@ def demo_beta_binomial():
 demo_beta_binomial()
 ```
 
-!!! note "Prior as Pseudo-Data"
-    The Beta$(\alpha_0, \beta_0)$ prior acts as if we had already observed $\alpha_0 - 1$ successes and $\beta_0 - 1$ failures before seeing the actual data. With $\alpha_0 = \beta_0 = 2$, the prior contributes the equivalent of 2 total "pseudo-observations."
+!!! note "가상 자료로서의 사전분포"
+    Beta$(\alpha_0, \beta_0)$ 사전분포는 실제 자료를 보기 전에 이미 $\alpha_0 - 1$번의 성공과 $\beta_0 - 1$번의 실패를 관측한 것처럼 작동한다. $\alpha_0 = \beta_0 = 2$이면 사전분포가 총 2개의 "가상 관측값"에 해당하는 기여를 한다.
 
-## Normal-Normal Conjugate Model
+## Normal-Normal 켤레 모형
 
-### Setup
+### 설정
 
-For estimating a mean $\mu$ with known variance $\sigma^2$:
+분산 $\sigma^2$이 알려진 상태에서 평균 $\mu$를 추정할 때:
 
-- **Prior:** $\mu \sim N(\mu_0, \tau_0^2)$
-- **Data:** $X_1, \ldots, X_n \sim N(\mu, \sigma^2)$
-- **Posterior:** $\mu \mid \mathbf{x} \sim N(\mu_n, \tau_n^2)$
+- **사전분포:** $\mu \sim N(\mu_0, \tau_0^2)$
+- **자료:** $X_1, \ldots, X_n \sim N(\mu, \sigma^2)$
+- **사후분포:** $\mu \mid \mathbf{x} \sim N(\mu_n, \tau_n^2)$
 
-where:
+여기서:
 
 $$
 \frac{1}{\tau_n^2} = \frac{1}{\tau_0^2} + \frac{n}{\sigma^2}
@@ -113,13 +113,13 @@ $$
 \mu_n = \tau_n^2 \left(\frac{\mu_0}{\tau_0^2} + \frac{n\bar{x}}{\sigma^2}\right)
 $$
 
-The posterior mean is a **precision-weighted average** of the prior mean and the sample mean:
+사후평균은 사전평균과 표본평균의 **정밀도 가중평균**이다:
 
 $$
 \mu_n = \frac{\tau_0^{-2}\,\mu_0 + n\sigma^{-2}\,\bar{x}}{\tau_0^{-2} + n\sigma^{-2}}
 $$
 
-### Demonstration
+### 시연
 
 ```python
 import numpy as np
@@ -149,35 +149,35 @@ def demo_normal_normal():
 demo_normal_normal()
 ```
 
-## How the Posterior Evolves with Data
+## 자료에 따른 사후분포의 변화
 
-As $n$ increases, the posterior mean converges to the MLE and the posterior variance shrinks to zero. The prior becomes irrelevant:
+$n$이 커질수록 사후평균은 MLE로 수렴하고 사후분산은 0으로 줄어든다. 사전분포는 무의미해진다:
 
 $$
 \mu_n \to \bar{x} \quad \text{and} \quad \tau_n^2 \to \frac{\sigma^2}{n} \quad \text{as } n \to \infty
 $$
 
-This demonstrates the key asymptotic property: for large samples, the posterior is dominated by the likelihood, and Bayesian and frequentist estimates agree.
+이는 핵심적인 점근적 성질을 보여 준다. 대표본에서는 가능도가 사후분포를 지배하며 베이즈 추정값과 빈도주의 추정값이 일치한다.
 
-## Interpretation
+## 해석
 
-- **Conjugate priors** provide analytical convenience. The posterior has a known distributional form, enabling exact computation of credible intervals and posterior probabilities.
-- **The posterior mean** is a compromise between the prior belief and the data evidence, weighted by their respective precisions.
-- **Prior sensitivity** is important for small samples. As $n$ grows, the influence of the prior vanishes.
-- **Credible intervals** have a direct probability interpretation: a 95% credible interval contains the true parameter with posterior probability 0.95. This differs from a frequentist confidence interval.
+- **켤레 사전분포**는 해석적 편의를 제공한다. 사후분포가 알려진 분포 형태를 가지므로 신용구간과 사후확률을 정확히 계산할 수 있다.
+- **사후평균**은 사전 믿음과 자료의 증거를 각각의 정밀도로 가중한 절충이다.
+- **사전분포 민감도**는 소표본에서 중요하다. $n$이 커질수록 사전분포의 영향이 사라진다.
+- **신용구간**은 직접적인 확률 해석을 갖는다. 95% 신용구간은 사후확률 0.95로 참 모수를 포함한다. 이는 빈도주의 신뢰구간과 다르다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.** Suppose you observe $k = 7$ successes in $n = 10$ Bernoulli trials with a $\text{Beta}(1, 1)$ (uniform) prior. Compute the posterior distribution, the posterior mean, the MAP estimate, and a 95% credible interval.
+**연습문제 1.** $\text{Beta}(1, 1)$(균등) 사전분포로 $n = 10$번의 Bernoulli 시행에서 $k = 7$번 성공을 관측했다고 하자. 사후분포, 사후평균, MAP 추정값, 95% 신용구간을 계산하라.
 
-??? success "Solution to Exercise 1"
-    The posterior is $\text{Beta}(1 + 7, 1 + 3) = \text{Beta}(8, 4)$.
+??? success "연습문제 1 풀이"
+    사후분포는 $\text{Beta}(1 + 7, 1 + 3) = \text{Beta}(8, 4)$이다.
 
-    Posterior mean: $\frac{8}{8 + 4} = \frac{2}{3} \approx 0.6667$.
+    사후평균: $\frac{8}{8 + 4} = \frac{2}{3} \approx 0.6667$.
 
-    MAP: $\frac{8 - 1}{8 + 4 - 2} = \frac{7}{10} = 0.7$ (which equals the MLE).
+    MAP: $\frac{8 - 1}{8 + 4 - 2} = \frac{7}{10} = 0.7$ (MLE와 같다).
 
-    95% credible interval using `scipy.stats.beta.ppf`:
+    `scipy.stats.beta.ppf`를 쓴 95% 신용구간:
 
     ```python
     from scipy.stats import beta
@@ -185,47 +185,47 @@ This demonstrates the key asymptotic property: for large samples, the posterior 
     print(f"95% CI: [{ci[0]:.4f}, {ci[1]:.4f}]")
     ```
 
-    This gives approximately $[0.3834, 0.9029]$. $\square$
+    결과는 약 $[0.3834, 0.9029]$이다. $\square$
 
 ---
 
-**Exercise 2.** For the Normal-Normal model, show that as $\tau_0 \to \infty$ (vague prior), the posterior mean converges to the sample mean and the posterior variance converges to $\sigma^2/n$.
+**연습문제 2.** Normal-Normal 모형에서 $\tau_0 \to \infty$(막연한 사전분포)일 때 사후평균이 표본평균으로, 사후분산이 $\sigma^2/n$으로 수렴함을 보여라.
 
-??? success "Solution to Exercise 2"
-    As $\tau_0 \to \infty$, $1/\tau_0^2 \to 0$. Then:
+??? success "연습문제 2 풀이"
+    $\tau_0 \to \infty$이면 $1/\tau_0^2 \to 0$이다. 그러면:
 
     $$
     \frac{1}{\tau_n^2} = \frac{1}{\tau_0^2} + \frac{n}{\sigma^2} \to \frac{n}{\sigma^2}
     $$
 
-    So $\tau_n^2 \to \sigma^2/n$.
+    따라서 $\tau_n^2 \to \sigma^2/n$이다.
 
-    For the posterior mean:
+    사후평균에 대해서는:
 
     $$
     \mu_n = \tau_n^2\left(\frac{\mu_0}{\tau_0^2} + \frac{n\bar{x}}{\sigma^2}\right)
     $$
 
-    As $\tau_0 \to \infty$, the first term $\mu_0/\tau_0^2 \to 0$, so:
+    $\tau_0 \to \infty$일 때 첫 항 $\mu_0/\tau_0^2 \to 0$이므로:
 
     $$
     \mu_n \to \frac{\sigma^2}{n} \cdot \frac{n\bar{x}}{\sigma^2} = \bar{x}
     $$
 
-    With a vague (non-informative) prior, the Bayesian posterior reduces to the frequentist result. $\square$
+    막연한(무정보) 사전분포에서는 베이즈 사후분포가 빈도주의 결과로 환원된다. $\square$
 
 ---
 
-**Exercise 3.** Prove that the posterior mean of the Beta-Binomial model can be written as a convex combination of the prior mean and the MLE. Identify the weights and interpret them.
+**연습문제 3.** Beta-Binomial 모형의 사후평균을 사전평균과 MLE의 볼록결합으로 쓸 수 있음을 증명하라. 가중을 찾아 해석하라.
 
-??? success "Solution to Exercise 3"
-    Let $\pi_0 = \alpha_0/(\alpha_0 + \beta_0)$ be the prior mean and $\hat{p} = k/n$ be the MLE. The posterior mean is:
+??? success "연습문제 3 풀이"
+    $\pi_0 = \alpha_0/(\alpha_0 + \beta_0)$을 사전평균, $\hat{p} = k/n$을 MLE라 하자. 사후평균은:
 
     $$
     E[p \mid k] = \frac{\alpha_0 + k}{\alpha_0 + \beta_0 + n}
     $$
 
-    Rewrite:
+    다시 쓰면:
 
     $$
     = \frac{\alpha_0 + \beta_0}{\alpha_0 + \beta_0 + n}\cdot\frac{\alpha_0}{\alpha_0 + \beta_0} + \frac{n}{\alpha_0 + \beta_0 + n}\cdot\frac{k}{n}
@@ -235,54 +235,54 @@ This demonstrates the key asymptotic property: for large samples, the posterior 
     = w\,\pi_0 + (1 - w)\,\hat{p}
     $$
 
-    where $w = (\alpha_0 + \beta_0)/(\alpha_0 + \beta_0 + n)$.
+    여기서 $w = (\alpha_0 + \beta_0)/(\alpha_0 + \beta_0 + n)$이다.
 
-    The weight $w$ on the prior decreases as $n$ grows. The "effective sample size" of the prior is $\alpha_0 + \beta_0$, and the posterior mean allocates weight between prior and data in proportion to their respective sample sizes. $\square$
+    사전분포에 대한 가중 $w$는 $n$이 커질수록 줄어든다. 사전분포의 "유효 표본크기"가 $\alpha_0 + \beta_0$이며, 사후평균은 사전분포와 자료에 각각의 표본크기에 비례하여 가중을 배분한다. $\square$
 
 ---
 
-**Exercise 4.** You are estimating the probability of a rare disease with prevalence around 1%. A colleague suggests using a $\text{Beta}(1, 99)$ prior. After testing $n = 500$ people and finding $k = 8$ positives, compare the posterior mean to the MLE. Is the prior choice appropriate?
+**연습문제 4.** 유병률이 약 1%인 희귀질환의 확률을 추정한다고 하자. 동료가 $\text{Beta}(1, 99)$ 사전분포를 제안한다. $n = 500$명을 검사하여 $k = 8$명이 양성이었을 때 사후평균과 MLE를 비교하라. 사전분포의 선택이 적절한가?
 
-??? success "Solution to Exercise 4"
-    Prior: $\text{Beta}(1, 99)$ with mean $1/100 = 0.01$.
+??? success "연습문제 4 풀이"
+    사전분포: 평균이 $1/100 = 0.01$인 $\text{Beta}(1, 99)$.
 
-    Posterior: $\text{Beta}(1 + 8, 99 + 492) = \text{Beta}(9, 591)$.
+    사후분포: $\text{Beta}(1 + 8, 99 + 492) = \text{Beta}(9, 591)$.
 
-    Posterior mean: $9/600 = 0.015$.
+    사후평균: $9/600 = 0.015$.
 
     MLE: $8/500 = 0.016$.
 
-    The prior has an effective sample size of $1 + 99 = 100$, which is modest compared to $n = 500$. The posterior mean (0.015) is pulled slightly toward the prior mean (0.01) from the MLE (0.016). The prior is reasonable because: (1) it encodes genuine domain knowledge about the disease being rare, (2) its effective sample size is much smaller than the actual sample size so it does not overwhelm the data, and (3) it keeps the posterior well-defined even with sparse data. $\square$
+    사전분포의 유효 표본크기는 $1 + 99 = 100$으로 $n = 500$에 비해 크지 않다. 사후평균(0.015)은 MLE(0.016)에서 사전평균(0.01) 쪽으로 약간 당겨져 있다. 이 사전분포는 합리적이다. (1) 질환이 드물다는 실제 분야 지식을 담고 있고, (2) 유효 표본크기가 실제 표본크기보다 훨씬 작아 자료를 압도하지 않으며, (3) 자료가 희소해도 사후분포를 잘 정의된 상태로 유지해 주기 때문이다. $\square$
 
 ---
 
-**Exercise 5.** Derive the posterior distribution for $\lambda$ in the Poisson-Gamma conjugate model: $X_1, \ldots, X_n \overset{\text{iid}}{\sim} \text{Poisson}(\lambda)$ with prior $\lambda \sim \text{Gamma}(\alpha_0, \beta_0)$ (shape-rate parameterization). What is the posterior mean?
+**연습문제 5.** Poisson-Gamma 켤레 모형에서 $\lambda$의 사후분포를 유도하라. $X_1, \ldots, X_n \overset{\text{iid}}{\sim} \text{Poisson}(\lambda)$이고 사전분포는 (형상–비율 모수화의) $\lambda \sim \text{Gamma}(\alpha_0, \beta_0)$이다. 사후평균은 무엇인가?
 
-??? success "Solution to Exercise 5"
-    The likelihood is:
+??? success "연습문제 5 풀이"
+    가능도는:
 
     $$
     L(\lambda) \propto \lambda^{\sum x_i} e^{-n\lambda}
     $$
 
-    The prior is:
+    사전분포는:
 
     $$
     \pi(\lambda) \propto \lambda^{\alpha_0 - 1} e^{-\beta_0 \lambda}
     $$
 
-    Multiplying:
+    곱하면:
 
     $$
     p(\lambda \mid \mathbf{x}) \propto \lambda^{\alpha_0 + \sum x_i - 1} e^{-(\beta_0 + n)\lambda}
     $$
 
-    This is the kernel of $\text{Gamma}(\alpha_0 + \sum x_i, \beta_0 + n)$.
+    이는 $\text{Gamma}(\alpha_0 + \sum x_i, \beta_0 + n)$의 핵이다.
 
-    The posterior mean is:
+    사후평균은:
 
     $$
     E[\lambda \mid \mathbf{x}] = \frac{\alpha_0 + \sum x_i}{\beta_0 + n} = \frac{\beta_0}{\beta_0 + n}\cdot\frac{\alpha_0}{\beta_0} + \frac{n}{\beta_0 + n}\cdot\bar{x}
     $$
 
-    Again, this is a weighted average of the prior mean $\alpha_0/\beta_0$ and the MLE $\bar{x}$, with weights proportional to the prior rate $\beta_0$ and sample size $n$. $\square$
+    이번에도 사전평균 $\alpha_0/\beta_0$과 MLE $\bar{x}$의 가중평균이며, 가중은 사전분포의 비율 모수 $\beta_0$과 표본크기 $n$에 비례한다. $\square$

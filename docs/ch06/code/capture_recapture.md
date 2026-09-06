@@ -1,58 +1,58 @@
-# Capture-Recapture Maximum Likelihood
+# 포획–재포획 최대가능도
 
-## Overview
+## 개요
 
-The **capture-recapture method** is a classic technique for estimating the size of a population that cannot be directly counted. By capturing, tagging, and releasing a subset of individuals, then recapturing another subset and counting how many are tagged, we can derive a maximum likelihood estimate of the total population size. This page develops the hypergeometric likelihood and the MLE for the capture-recapture model.
+**포획–재포획법**은 직접 셀 수 없는 개체군의 크기를 추정하는 고전적인 기법이다. 일부 개체를 포획해 표지를 붙여 놓아 준 뒤 다시 일부를 포획하여 표지된 개체가 몇 마리인지 세면, 전체 개체군 크기의 최대가능도추정값을 유도할 수 있다. 이 페이지에서는 포획–재포획 모형의 초기하 가능도와 MLE를 전개한다.
 
-## The Capture-Recapture Setup
+## 포획–재포획의 설정
 
-The method proceeds in two stages:
+이 방법은 두 단계로 진행된다:
 
-1. **Capture phase:** Capture $c$ individuals from a population of unknown size $N$, tag them, and release them.
-2. **Recapture phase:** Capture $r$ individuals. Of these, $t$ are found to be tagged.
+1. **포획 단계:** 크기가 미지인 $N$의 개체군에서 $c$마리를 포획해 표지를 붙이고 놓아 준다.
+2. **재포획 단계:** $r$마리를 포획한다. 그중 $t$마리가 표지되어 있다.
 
-The key question: what is $N$?
+핵심 물음은 $N$이 얼마인가이다.
 
-!!! info "Assumptions"
+!!! info "가정"
 
-    - The population is closed (no births, deaths, immigration, or emigration between phases).
-    - Every individual has an equal probability of being captured.
-    - Tags are not lost and are correctly identified.
-    - Capture in the second phase is independent of capture in the first phase.
+    - 개체군이 폐쇄되어 있다(두 단계 사이에 출생, 사망, 유입, 유출이 없다).
+    - 모든 개체가 포획될 확률이 같다.
+    - 표지가 사라지지 않고 올바르게 식별된다.
+    - 두 번째 단계의 포획이 첫 단계의 포획과 독립이다.
 
-## The Hypergeometric Model
+## 초기하 모형
 
-Given $N$ total individuals with $c$ tagged, the number of tagged individuals $T$ in a recapture sample of size $r$ follows a **hypergeometric distribution**:
+전체 $N$마리 중 $c$마리가 표지되어 있을 때, 크기 $r$인 재포획 표본에서 표지된 개체 수 $T$는 **초기하분포**를 따른다:
 
 $$
 P(T = t \mid N) = \frac{\binom{c}{t}\binom{N - c}{r - t}}{\binom{N}{r}}
 $$
 
-for $\max(0, r + c - N) \leq t \leq \min(r, c)$.
+이는 $\max(0, r + c - N) \leq t \leq \min(r, c)$에서 성립한다.
 
-The parameter of interest is $N$, and the likelihood function is $L(N) = P(T = t \mid N)$ viewed as a function of $N$ for fixed data $(c, r, t)$.
+관심 모수는 $N$이고, 가능도함수는 자료 $(c, r, t)$를 고정한 채 $L(N) = P(T = t \mid N)$을 $N$의 함수로 본 것이다.
 
-## The Maximum Likelihood Estimator
+## 최대가능도추정량
 
-The MLE of $N$ is the value that maximizes $L(N)$. Since $N$ is a discrete parameter (a positive integer), we search over integers $N \geq c + r - t$.
+$N$의 MLE는 $L(N)$을 최대화하는 값이다. $N$이 (양의 정수인) 이산 모수이므로 $N \geq c + r - t$인 정수에서 탐색한다.
 
-The MLE has a well-known closed form:
+MLE는 잘 알려진 닫힌 형태를 갖는다:
 
 $$
 \hat{N}_{\text{MLE}} = \left\lfloor \frac{cr}{t} \right\rfloor
 $$
 
-This is the **Lincoln-Petersen estimate** (rounded down to the nearest integer).
+이것이 (가장 가까운 정수로 내림한) **Lincoln-Petersen 추정값**이다.
 
-### Intuition
+### 직관
 
-The MLE arises from the proportionality argument: if the recapture is representative, then the proportion of tagged individuals in the recapture should approximate the proportion in the population:
+MLE는 비례 논증에서 나온다. 재포획이 대표성을 가지면 재포획 표본에서 표지된 개체의 비율이 개체군에서의 비율을 근사해야 한다:
 
 $$
 \frac{t}{r} \approx \frac{c}{N} \quad \Rightarrow \quad N \approx \frac{cr}{t}
 $$
 
-## Implementation
+## 구현
 
 ```python
 from scipy import special
@@ -93,9 +93,9 @@ print(f"MLE of N: {mle_n}")
 print(f"Lincoln-Petersen estimate: {c * r // t}")
 ```
 
-## A Worked Example
+## 예제
 
-Suppose a wildlife biologist captures and tags $c = 5$ birds, releases them, and later recaptures $r = 6$ birds, of which $t = 2$ are tagged.
+어떤 야생동물 생물학자가 새 $c = 5$마리를 잡아 표지하고 놓아 준 뒤, 나중에 $r = 6$마리를 재포획했더니 그중 $t = 2$마리가 표지되어 있었다고 하자.
 
 ```python
 c, r, t = 5, 6, 2
@@ -104,28 +104,28 @@ print(f"MLE of N: {mle_n}")
 print(f"Lincoln-Petersen: {c * r // t}")
 ```
 
-The Lincoln-Petersen estimate gives $\hat{N} = \lfloor 5 \times 6 / 2 \rfloor = 15$.
+Lincoln-Petersen 추정값은 $\hat{N} = \lfloor 5 \times 6 / 2 \rfloor = 15$이다.
 
-The likelihood function shows a clear peak at $N = 15$, with the probability declining for both smaller and larger values of $N$.
+가능도함수는 $N = 15$에서 뚜렷한 봉우리를 보이며, $N$이 그보다 작거나 크면 확률이 줄어든다.
 
-## Properties of the Estimator
+## 추정량의 성질
 
-!!! note "Bias of the Lincoln-Petersen Estimator"
-    The basic Lincoln-Petersen estimator $cr/t$ is biased, tending to overestimate $N$ especially when $t$ is small. Chapman's corrected estimator reduces this bias:
+!!! note "Lincoln-Petersen 추정량의 편향"
+    기본 Lincoln-Petersen 추정량 $cr/t$는 편향되어 있으며, 특히 $t$가 작을 때 $N$을 과대추정하는 경향이 있다. Chapman의 보정 추정량이 이 편향을 줄여 준다:
 
     $$
     \hat{N}_{\text{Chapman}} = \frac{(c+1)(r+1)}{t+1} - 1
     $$
 
-The likelihood function $L(N)$ for this problem is **unimodal** (has a single peak), which ensures the MLE is unique and grid search is reliable.
+이 문제의 가능도함수 $L(N)$은 **단봉**이므로(봉우리가 하나이므로) MLE가 유일하고 격자탐색을 믿을 수 있다.
 
-## Sensitivity Analysis
+## 민감도 분석
 
-The quality of the estimate depends heavily on the number of recaptured tagged individuals $t$:
+추정의 품질은 재포획된 표지 개체 수 $t$에 크게 의존한다:
 
-- When $t$ is large (relative to $r$ and $c$), the estimate is precise.
-- When $t$ is small (e.g., $t = 1$), the estimate is unreliable and the likelihood function is flat.
-- When $t = 0$, the MLE is undefined (the population could be arbitrarily large).
+- ($r$과 $c$에 비해) $t$가 크면 추정이 정밀하다.
+- $t$가 작으면(예: $t = 1$) 추정을 신뢰할 수 없고 가능도함수가 평평하다.
+- $t = 0$이면 MLE가 정의되지 않는다(개체군이 얼마든지 클 수 있다).
 
 ```python
 from scipy import special
@@ -148,21 +148,21 @@ def sensitivity_analysis():
 sensitivity_analysis()
 ```
 
-## Interpretation
+## 해석
 
-- The capture-recapture MLE provides a principled way to estimate population size from mark-and-recapture data.
-- The method relies on the hypergeometric distribution, which models sampling without replacement from a finite population.
-- The Lincoln-Petersen formula $\hat{N} = cr/t$ has an elegant proportionality interpretation but can be biased for small $t$.
-- Real ecological applications must account for violations of the closed-population and equal-catchability assumptions.
+- 포획–재포획 MLE는 표지–재포획 자료로부터 개체군 크기를 추정하는 원리 있는 방법을 제공한다.
+- 이 방법은 유한모집단에서의 비복원추출을 모형화하는 초기하분포에 의존한다.
+- Lincoln-Petersen 공식 $\hat{N} = cr/t$는 우아한 비례 해석을 갖지만 $t$가 작으면 편향될 수 있다.
+- 실제 생태학 응용에서는 폐쇄 개체군 가정과 동일 포획확률 가정이 깨지는 경우를 고려해야 한다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.** A marine biologist tags $c = 20$ fish and releases them. In a later sample of $r = 25$ fish, $t = 5$ are tagged. Compute the MLE of the total population size using both the grid search method and the Lincoln-Petersen formula.
+**연습문제 1.** 어떤 해양생물학자가 물고기 $c = 20$마리에 표지를 붙여 놓아 주었다. 나중에 $r = 25$마리를 표본으로 잡았더니 $t = 5$마리가 표지되어 있었다. 격자탐색과 Lincoln-Petersen 공식 두 가지로 전체 개체수의 MLE를 계산하라.
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
     Lincoln-Petersen: $\hat{N} = \lfloor cr/t \rfloor = \lfloor 20 \times 25/5 \rfloor = 100$.
 
-    Grid search:
+    격자탐색:
     ```python
     from scipy import special
     c, r, t = 20, 25, 5
@@ -173,77 +173,77 @@ sensitivity_analysis()
     print(f"MLE: N = {mle_idx + n_min}")
     ```
 
-    Both methods give $\hat{N} = 100$. $\square$
+    두 방법 모두 $\hat{N} = 100$을 준다. $\square$
 
 ---
 
-**Exercise 2.** Show that the Lincoln-Petersen estimator $\hat{N} = cr/t$ is the value that maximizes the hypergeometric likelihood when we treat $N$ as continuous. (Hint: show that $L(N)/L(N-1) > 1$ if and only if $N < cr/t$.)
+**연습문제 2.** $N$을 연속으로 다룰 때 Lincoln-Petersen 추정량 $\hat{N} = cr/t$가 초기하 가능도를 최대화하는 값임을 보여라. (힌트: $L(N)/L(N-1) > 1$일 필요충분조건이 $N < cr/t$임을 보여라.)
 
-??? success "Solution to Exercise 2"
-    The likelihood ratio is:
+??? success "연습문제 2 풀이"
+    가능도비는:
 
     $$
     \frac{L(N)}{L(N-1)} = \frac{\binom{N-c}{r-t}}{\binom{N-1-c}{r-t}} \cdot \frac{\binom{N-1}{r}}{\binom{N}{r}}
     $$
 
-    Using $\binom{n}{k}/\binom{n-1}{k} = n/(n-k)$:
+    $\binom{n}{k}/\binom{n-1}{k} = n/(n-k)$를 사용하면:
 
     $$
     \frac{L(N)}{L(N-1)} = \frac{N - c}{N - c - (r-t)} \cdot \frac{N - r}{N} = \frac{(N-c)(N-r)}{N(N-c-r+t)}
     $$
 
-    This ratio exceeds 1 when $(N-c)(N-r) > N(N-c-r+t)$, i.e., $N^2 - (c+r)N + cr > N^2 - (c+r-t)N$, which simplifies to $cr > tN$, or $N < cr/t$.
+    이 비가 1을 넘을 조건은 $(N-c)(N-r) > N(N-c-r+t)$, 즉 $N^2 - (c+r)N + cr > N^2 - (c+r-t)N$이며, 정리하면 $cr > tN$, 즉 $N < cr/t$이다.
 
-    So $L(N)$ is increasing for $N < cr/t$ and decreasing for $N > cr/t$, confirming the maximum is at $N = \lfloor cr/t \rfloor$ (since $N$ must be an integer). $\square$
-
----
-
-**Exercise 3.** Chapman's corrected estimator is $\hat{N}_C = (c+1)(r+1)/(t+1) - 1$. Compute $\hat{N}_C$ for $c = 10, r = 10, t = 3$ and compare to the MLE. Why is the correction useful?
-
-??? success "Solution to Exercise 3"
-    Chapman's estimate: $\hat{N}_C = (11)(11)/4 - 1 = 121/4 - 1 = 30.25 - 1 = 29.25$.
-
-    The MLE (Lincoln-Petersen) gives $\hat{N} = \lfloor 100/3 \rfloor = 33$.
-
-    Chapman's estimator is lower because it corrects for the positive bias of the Lincoln-Petersen estimator. The bias arises because $E[cr/T] > cr/E[T]$ by Jensen's inequality (since $1/T$ is convex). Chapman's correction approximately removes this bias, making it especially useful when $t$ is small relative to $r$ and $c$. $\square$
+    따라서 $L(N)$은 $N < cr/t$에서 증가하고 $N > cr/t$에서 감소하므로, ($N$이 정수여야 하므로) 최댓값이 $N = \lfloor cr/t \rfloor$에 있음이 확인된다. $\square$
 
 ---
 
-**Exercise 4.** If no tagged individuals are found in the recapture ($t = 0$), explain why the MLE does not exist. What does this imply for the design of capture-recapture studies?
+**연습문제 3.** Chapman의 보정 추정량은 $\hat{N}_C = (c+1)(r+1)/(t+1) - 1$이다. $c = 10, r = 10, t = 3$에 대해 $\hat{N}_C$를 계산하고 MLE와 비교하라. 이 보정이 유용한 이유는 무엇인가?
 
-??? success "Solution to Exercise 4"
-    When $t = 0$, the likelihood function is:
+??? success "연습문제 3 풀이"
+    Chapman 추정값: $\hat{N}_C = (11)(11)/4 - 1 = 121/4 - 1 = 30.25 - 1 = 29.25$.
+
+    MLE(Lincoln-Petersen)는 $\hat{N} = \lfloor 100/3 \rfloor = 33$을 준다.
+
+    Chapman 추정량이 더 작은 이유는 Lincoln-Petersen 추정량의 양의 편향을 보정하기 때문이다. 이 편향은 $1/T$가 볼록하므로 Jensen 부등식에 의해 $E[cr/T] > cr/E[T]$이기 때문에 생긴다. Chapman의 보정은 이 편향을 대략 제거하며, $r$과 $c$에 비해 $t$가 작을 때 특히 유용하다. $\square$
+
+---
+
+**연습문제 4.** 재포획에서 표지된 개체가 하나도 없으면($t = 0$) MLE가 존재하지 않는 이유를 설명하라. 이는 포획–재포획 연구의 설계에 무엇을 함의하는가?
+
+??? success "연습문제 4 풀이"
+    $t = 0$일 때 가능도함수는:
 
     $$
     L(N) = \frac{\binom{N-c}{r}}{\binom{N}{r}}
     $$
 
-    This is a decreasing function of... actually, for $t = 0$, $L(N)$ is increasing in $N$: larger populations make it more likely that none of the recaptured individuals are tagged. As $N \to \infty$, $L(N) \to 1$. There is no finite maximizer, so the MLE does not exist.
+    $t = 0$이면 $L(N)$은 $N$에 대해 증가한다. 개체군이 클수록 재포획된 개체 중에 표지된 것이 하나도 없을 가능성이 커지기 때문이다. $N \to \infty$일 때 $L(N) \to 1$이다. 유한한 최대점이 없으므로 MLE가 존재하지 않는다.
 
-    **Design implication:** The study must be designed so that $t > 0$ is likely. This requires:
+    **설계에 대한 함의:** $t > 0$이 될 가능성이 높도록 연구를 설계해야 한다. 이를 위해서는:
 
-    - Tagging a sufficiently large number $c$.
-    - Recapturing a sufficiently large number $r$.
-    - The product $cr/N$ should be large enough that $P(T > 0)$ is high. As a rule of thumb, $cr \gg N$ or at least $cr/N > 5$ to ensure a reasonable probability of recapturing tagged individuals. $\square$
+    - 충분히 많은 수 $c$에 표지를 붙인다.
+    - 충분히 많은 수 $r$을 재포획한다.
+    - $P(T > 0)$이 높아지도록 곱 $cr/N$이 충분히 커야 한다. 경험 법칙으로 $cr \gg N$이거나 적어도 $cr/N > 5$여야 표지된 개체를 재포획할 확률이 웬만큼 확보된다. $\square$
 
 ---
 
-**Exercise 5.** Derive the variance of the Lincoln-Petersen estimator $\hat{N} = cr/T$ using the delta method. The variance of the hypergeometric is $\text{Var}(T) = r \cdot \frac{c}{N} \cdot \frac{N-c}{N} \cdot \frac{N-r}{N-1}$.
+**연습문제 5.** 델타 방법으로 Lincoln-Petersen 추정량 $\hat{N} = cr/T$의 분산을 유도하라. 초기하분포의 분산은 $\text{Var}(T) = r \cdot \frac{c}{N} \cdot \frac{N-c}{N} \cdot \frac{N-r}{N-1}$이다.
 
-??? success "Solution to Exercise 5"
-    Let $g(T) = cr/T$ so $\hat{N} = g(T)$. By the delta method:
+??? success "연습문제 5 풀이"
+    $g(T) = cr/T$로 두어 $\hat{N} = g(T)$라 하자. 델타 방법에 의해:
 
     $$
     \text{Var}(\hat{N}) \approx [g'(E[T])]^2 \, \text{Var}(T)
     $$
 
-    We have $g'(T) = -cr/T^2$ and $E[T] = rc/N$. So:
+    $g'(T) = -cr/T^2$이고 $E[T] = rc/N$이므로:
 
     $$
     g'(E[T]) = \frac{-cr}{(rc/N)^2} = \frac{-N^2}{cr}
     $$
 
-    Substituting:
+    대입하면:
 
     $$
     \text{Var}(\hat{N}) \approx \frac{N^4}{c^2 r^2} \cdot r \cdot \frac{c}{N} \cdot \frac{N-c}{N} \cdot \frac{N-r}{N-1}
@@ -253,4 +253,4 @@ sensitivity_analysis()
     = \frac{N^2(N-c)(N-r)}{cr(N-1)}
     $$
 
-    This shows the variance decreases as $c$ and $r$ increase, and increases with $N$. For large populations with small capture fractions, the variance can be very large, underscoring the need for substantial capture effort. $\square$
+    이 식은 $c$와 $r$이 커질수록 분산이 줄고 $N$이 커질수록 분산이 늘어남을 보여 준다. 포획 비율이 작은 큰 개체군에서는 분산이 매우 커질 수 있어 상당한 포획 노력이 필요함을 말해 준다. $\square$

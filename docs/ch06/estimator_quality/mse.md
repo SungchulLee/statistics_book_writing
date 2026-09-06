@@ -1,22 +1,22 @@
-# Mean Squared Error
+# 평균제곱오차
 
-## Introduction
+## 소개
 
-The **Mean Squared Error (MSE)** is the most widely used criterion for evaluating the quality of a statistical estimator. It measures the average squared deviation of an estimator from the true parameter value, capturing both systematic error (bias) and random fluctuation (variance) in a single quantity.
+**평균제곱오차(MSE)**는 통계적 추정량의 품질을 평가하는 데 가장 널리 쓰이는 기준이다. 추정량이 참 모수값에서 벗어난 제곱편차의 평균을 재며, 체계적 오차(편향)와 무작위 요동(분산)을 하나의 양에 함께 담는다.
 
-MSE serves as the default loss function in estimation theory, regression analysis, and many optimization problems throughout statistics and quantitative finance.
+평균제곱오차는 추정이론, 회귀분석, 그리고 통계학과 계량금융 전반의 많은 최적화 문제에서 기본 손실함수 역할을 한다.
 
-## Definition
+## 정의
 
-Let $\hat{\theta}$ be an estimator of parameter $\theta$. The **Mean Squared Error** is:
+$\hat{\theta}$를 모수 $\theta$의 추정량이라 하자. **평균제곱오차**는:
 
 $$\text{MSE}(\hat{\theta}) = E\left[(\hat{\theta} - \theta)^2\right]$$
 
-This is the expected value of the squared difference between the estimator and the true parameter, averaged over all possible samples.
+이는 추정량과 참 모수의 차를 제곱한 값을 가능한 모든 표본에 걸쳐 평균한 것이다.
 
-### Equivalent Expressions
+### 동등한 표현
 
-The MSE can be computed in several equivalent ways:
+평균제곱오차는 여러 동등한 방식으로 계산할 수 있다:
 
 $$\text{MSE}(\hat{\theta}) = E[\hat{\theta}^2] - 2\theta E[\hat{\theta}] + \theta^2$$
 
@@ -26,272 +26,272 @@ $$= \text{Var}(\hat{\theta}) + (E[\hat{\theta}] - \theta)^2$$
 
 $$= \text{Var}(\hat{\theta}) + [\text{Bias}(\hat{\theta})]^2$$
 
-This last form is the **bias–variance decomposition**.
+마지막 형태가 **편향–분산 분해**이다.
 
-## Properties of MSE
+## 평균제곱오차의 성질
 
-### Non-negativity
+### 비음성
 
-MSE is always non-negative: $\text{MSE}(\hat{\theta}) \geq 0$, with equality only if $\hat{\theta} = \theta$ with probability 1 (the estimator is perfect).
+평균제곱오차는 언제나 음이 아니다: $\text{MSE}(\hat{\theta}) \geq 0$이며, 등호는 확률 1로 $\hat{\theta} = \theta$인 경우(추정량이 완벽한 경우)에만 성립한다.
 
-### MSE of Unbiased Estimators
+### 불편추정량의 평균제곱오차
 
-If $\hat{\theta}$ is unbiased ($\text{Bias}(\hat{\theta}) = 0$), then:
+$\hat{\theta}$가 불편이면($\text{Bias}(\hat{\theta}) = 0$):
 
 $$\text{MSE}(\hat{\theta}) = \text{Var}(\hat{\theta})$$
 
-For unbiased estimators, MSE and variance are identical. Comparing unbiased estimators by MSE is equivalent to comparing them by variance.
+불편추정량에서는 평균제곱오차와 분산이 같다. 불편추정량을 평균제곱오차로 비교하는 것은 분산으로 비교하는 것과 동등하다.
 
-### Consistency and MSE
+### 일치성과 평균제곱오차
 
-An estimator is **MSE-consistent** if $\text{MSE}(\hat{\theta}_n) \to 0$ as $n \to \infty$. By the decomposition, this requires both:
+$n \to \infty$일 때 $\text{MSE}(\hat{\theta}_n) \to 0$이면 추정량이 **평균제곱오차 일치**라고 한다. 분해에 의해 다음 둘이 모두 필요하다:
 
 - $\text{Bias}(\hat{\theta}_n) \to 0$
 - $\text{Var}(\hat{\theta}_n) \to 0$
 
-MSE-consistency implies consistency in probability (convergence in probability to $\theta$), by Chebyshev's inequality.
+Chebyshev 부등식에 의해 평균제곱오차 일치성은 확률적 일치성($\theta$로의 확률수렴)을 함의한다.
 
-## MSE Comparisons Between Estimators
+## 추정량 사이의 평균제곱오차 비교
 
-### Relative Efficiency
+### 상대효율
 
-The **relative efficiency** of estimator $\hat{\theta}_1$ compared to $\hat{\theta}_2$ is:
+추정량 $\hat{\theta}_1$의 $\hat{\theta}_2$에 대한 **상대효율**은:
 
 $$\text{RE}(\hat{\theta}_1, \hat{\theta}_2) = \frac{\text{MSE}(\hat{\theta}_2)}{\text{MSE}(\hat{\theta}_1)}$$
 
-If $\text{RE} > 1$, then $\hat{\theta}_1$ is more efficient (lower MSE).
+$\text{RE} > 1$이면 $\hat{\theta}_1$이 더 효율적이다(평균제곱오차가 더 작다).
 
-For unbiased estimators, this simplifies to:
+불편추정량에서는 다음과 같이 간단해진다:
 
 $$\text{RE}(\hat{\theta}_1, \hat{\theta}_2) = \frac{\text{Var}(\hat{\theta}_2)}{\text{Var}(\hat{\theta}_1)}$$
 
-### Admissibility
+### 허용성
 
-An estimator $\hat{\theta}$ is **inadmissible** under MSE if there exists another estimator $\hat{\theta}'$ such that:
+다음을 만족하는 다른 추정량 $\hat{\theta}'$이 존재하면 추정량 $\hat{\theta}$는 평균제곱오차 아래에서 **비허용**이라 한다:
 
 $$\text{MSE}(\hat{\theta}') \leq \text{MSE}(\hat{\theta}) \quad \text{for all } \theta$$
 
-with strict inequality for at least one $\theta$. An estimator that is not inadmissible is **admissible**.
+이때 적어도 하나의 $\theta$에서는 부등호가 엄격해야 한다. 비허용이 아닌 추정량을 **허용** 추정량이라 한다.
 
-**James-Stein result:** When estimating a multivariate normal mean $\mu \in \mathbb{R}^p$ with $p \geq 3$, the sample mean $\bar{X}$ is inadmissible — the James-Stein estimator dominates it uniformly in MSE.
+**James-Stein 결과:** $p \geq 3$인 다변량 정규분포의 평균 $\mu \in \mathbb{R}^p$를 추정할 때 표본평균 $\bar{X}$는 비허용이다. James-Stein 추정량이 평균제곱오차에서 일률적으로 그것을 지배한다.
 
-## Worked Examples
+## 예제
 
-### Example 1: MSE of the Sample Mean
+### 예제 1: 표본평균의 평균제곱오차
 
-Let $X_1, \ldots, X_n \sim \text{iid}$ with mean $\mu$ and variance $\sigma^2$. The sample mean is $\bar{X} = \frac{1}{n}\sum X_i$.
+$X_1, \ldots, X_n$을 평균 $\mu$, 분산 $\sigma^2$인 i.i.d. 확률변수라 하자. 표본평균은 $\bar{X} = \frac{1}{n}\sum X_i$이다.
 
-**Bias:** $E[\bar{X}] = \mu$, so $\text{Bias}(\bar{X}) = 0$ (unbiased).
+**편향:** $E[\bar{X}] = \mu$이므로 $\text{Bias}(\bar{X}) = 0$ (불편).
 
-**Variance:** $\text{Var}(\bar{X}) = \sigma^2/n$.
+**분산:** $\text{Var}(\bar{X}) = \sigma^2/n$.
 
 **MSE:** $\text{MSE}(\bar{X}) = 0 + \sigma^2/n = \sigma^2/n$.
 
-### Example 2: MSE of the Naive Variance Estimator
+### 예제 2: 소박한 분산추정량의 평균제곱오차
 
-The naive variance estimator is $\tilde{S}^2 = \frac{1}{n}\sum_{i=1}^n (X_i - \bar{X})^2$.
+소박한 분산추정량은 $\tilde{S}^2 = \frac{1}{n}\sum_{i=1}^n (X_i - \bar{X})^2$이다.
 
-For a normal population:
+정규모집단에 대해:
 
-**Bias:** $E[\tilde{S}^2] = \frac{n-1}{n}\sigma^2$, so $\text{Bias}(\tilde{S}^2) = -\sigma^2/n$.
+**편향:** $E[\tilde{S}^2] = \frac{n-1}{n}\sigma^2$이므로 $\text{Bias}(\tilde{S}^2) = -\sigma^2/n$.
 
-**Variance:** $\text{Var}(\tilde{S}^2) = \frac{2(n-1)}{n^2}\sigma^4$.
+**분산:** $\text{Var}(\tilde{S}^2) = \frac{2(n-1)}{n^2}\sigma^4$.
 
 **MSE:**
 
 $$\text{MSE}(\tilde{S}^2) = \frac{2(n-1)}{n^2}\sigma^4 + \frac{\sigma^4}{n^2} = \frac{2n-1}{n^2}\sigma^4$$
 
-### Example 3: Comparing Biased vs Unbiased Variance Estimators
+### 예제 3: 편향 분산추정량과 불편 분산추정량의 비교
 
-The Bessel-corrected estimator is $S^2 = \frac{1}{n-1}\sum (X_i - \bar{X})^2$.
+Bessel 수정된 추정량은 $S^2 = \frac{1}{n-1}\sum (X_i - \bar{X})^2$이다.
 
-For a normal population:
+정규모집단에 대해:
 
-**MSE of unbiased $S^2$:** $\text{MSE}(S^2) = \text{Var}(S^2) = \frac{2\sigma^4}{n-1}$
+**불편 $S^2$의 MSE:** $\text{MSE}(S^2) = \text{Var}(S^2) = \frac{2\sigma^4}{n-1}$
 
-**MSE of biased $\tilde{S}^2$:** $\text{MSE}(\tilde{S}^2) = \frac{(2n-1)\sigma^4}{n^2}$
+**편향 $\tilde{S}^2$의 MSE:** $\text{MSE}(\tilde{S}^2) = \frac{(2n-1)\sigma^4}{n^2}$
 
-Compare: $\frac{2n-1}{n^2}$ vs $\frac{2}{n-1}$
+비교하면 $\frac{2n-1}{n^2}$ 대 $\frac{2}{n-1}$이다.
 
-Cross-multiplying: $(2n-1)(n-1)$ vs $2n^2$, i.e., $2n^2 - 3n + 1$ vs $2n^2$.
+교차곱하면 $(2n-1)(n-1)$ 대 $2n^2$, 즉 $2n^2 - 3n + 1$ 대 $2n^2$이다.
 
-Since $-3n + 1 < 0$ for $n > 0$, we have $\text{MSE}(\tilde{S}^2) < \text{MSE}(S^2)$.
+$n > 0$에서 $-3n + 1 < 0$이므로 $\text{MSE}(\tilde{S}^2) < \text{MSE}(S^2)$이다.
 
-**The biased estimator has lower MSE than the unbiased one!** This is a concrete illustration of the bias–variance tradeoff. The optimal estimator (minimizing MSE among estimators of the form $c \cdot \sum(X_i - \bar{X})^2$) divides by $n+1$, not $n$ or $n-1$.
+**편향추정량이 불편추정량보다 평균제곱오차가 작다!** 편향–분산 맞바꿈을 구체적으로 보여 주는 예이다. ($c \cdot \sum(X_i - \bar{X})^2$ 형태의 추정량 중에서) 평균제곱오차를 최소화하는 최적 추정량은 $n$이나 $n-1$이 아니라 $n+1$로 나눈다.
 
-### Example 4: MSE-Optimal Variance Estimator
+### 예제 4: 평균제곱오차 최적 분산추정량
 
-Consider $\hat{\sigma}^2_c = \frac{1}{c}\sum_{i=1}^n(X_i - \bar{X})^2$ for constant $c > 0$.
+상수 $c > 0$에 대해 $\hat{\sigma}^2_c = \frac{1}{c}\sum_{i=1}^n(X_i - \bar{X})^2$을 생각하자.
 
-For normal populations:
+정규모집단에 대해:
 
 $$\text{MSE}(\hat{\sigma}^2_c) = \left(\frac{n-1}{c} - 1\right)^2 \sigma^4 + \frac{2(n-1)}{c^2}\sigma^4$$
 
-Differentiating with respect to $c$ and setting to zero:
+$c$에 대해 미분하여 0으로 두면:
 
 $$c^* = n + 1$$
 
-So the MSE-optimal estimator divides by $n+1$:
+따라서 평균제곱오차가 최적인 추정량은 $n+1$로 나눈다:
 
 $$\hat{\sigma}^2_{n+1} = \frac{1}{n+1}\sum_{i=1}^n (X_i - \bar{X})^2$$
 
-This is biased (underestimates $\sigma^2$) but has lower MSE than both $\tilde{S}^2$ (divide by $n$) and $S^2$ (divide by $n-1$).
+이는 편향되어 있지만($\sigma^2$을 과소추정한다) $\tilde{S}^2$($n$으로 나눔)과 $S^2$($n-1$로 나눔) 둘 다보다 평균제곱오차가 작다.
 
-## Connections to Other Loss Functions
+## 다른 손실함수와의 연결
 
-### Mean Absolute Error (MAE)
+### 평균절대오차 (MAE)
 
 $$\text{MAE}(\hat{\theta}) = E\left[|\hat{\theta} - \theta|\right]$$
 
-MAE is less sensitive to outliers than MSE. However, MSE is mathematically more tractable and directly connects to the bias-variance decomposition.
+평균절대오차는 평균제곱오차보다 이상점에 덜 민감하다. 다만 평균제곱오차가 수학적으로 다루기 쉽고 편향–분산 분해와 직접 연결된다.
 
-### Risk Function
+### 위험함수
 
-In decision theory, $\text{MSE}(\hat{\theta})$ is the **risk** of $\hat{\theta}$ under squared error loss $L(\hat{\theta}, \theta) = (\hat{\theta} - \theta)^2$:
+의사결정이론에서 $\text{MSE}(\hat{\theta})$는 제곱오차 손실 $L(\hat{\theta}, \theta) = (\hat{\theta} - \theta)^2$ 아래에서 $\hat{\theta}$의 **위험**이다:
 
 $$R(\hat{\theta}, \theta) = E[L(\hat{\theta}, \theta)] = \text{MSE}(\hat{\theta})$$
 
-### Cramér-Rao Lower Bound
+### Cramér-Rao 하한
 
-For unbiased estimators, the MSE (= variance) is bounded below by the **Cramér-Rao bound**:
+불편추정량에서 평균제곱오차(= 분산)는 아래로 **Cramér-Rao 한계**에 의해 유계이다:
 
 $$\text{Var}(\hat{\theta}) \geq \frac{1}{I(\theta)}$$
 
-where $I(\theta) = -E\left[\frac{\partial^2}{\partial\theta^2}\log f(X;\theta)\right]$ is the Fisher information. An unbiased estimator achieving this bound is called **efficient**.
+여기서 $I(\theta) = -E\left[\frac{\partial^2}{\partial\theta^2}\log f(X;\theta)\right]$는 Fisher 정보량이다. 이 한계를 달성하는 불편추정량을 **효율적**이라 한다.
 
-## MSE in Finance
+## 금융에서의 평균제곱오차
 
-MSE appears throughout quantitative finance:
+평균제곱오차는 계량금융 전반에 나타난다:
 
-- **Forecast evaluation**: MSE is the standard metric for comparing return, volatility, or risk forecasts. RMSE = $\sqrt{\text{MSE}}$ puts the error in the same units as the target.
-- **Tracking error**: The MSE between a portfolio's returns and its benchmark captures both systematic deviation (bias) and random deviation (variance).
-- **Model calibration**: MSE between model-implied and market-observed option prices is the objective function in calibrating volatility models.
-- **Regression**: OLS minimizes $\sum(y_i - \hat{y}_i)^2/n$, the in-sample MSE.
+- **예측 평가**: 수익률, 변동성, 위험 예측을 비교하는 표준 지표이다. RMSE = $\sqrt{\text{MSE}}$는 오차를 대상과 같은 단위로 나타낸다.
+- **추적오차**: 포트폴리오 수익률과 벤치마크 사이의 평균제곱오차는 체계적 이탈(편향)과 무작위 이탈(분산)을 함께 담아낸다.
+- **모형 보정**: 모형이 함의하는 옵션 가격과 시장에서 관측된 가격 사이의 평균제곱오차가 변동성 모형 보정의 목적함수가 된다.
+- **회귀분석**: OLS는 표본 내 평균제곱오차인 $\sum(y_i - \hat{y}_i)^2/n$을 최소화한다.
 
-## Summary
+## 요약
 
-MSE is the fundamental criterion for evaluating estimator quality. Its decomposition into variance and squared bias reveals the inherent tradeoff in estimation and provides a principled framework for choosing between competing estimators. While unbiasedness is desirable, MSE reminds us that the best estimator minimizes total error — and a little bias can be worth a lot of variance reduction.
+평균제곱오차는 추정량의 품질을 평가하는 근본 기준이다. 분산과 편향의 제곱으로 분해되면서 추정에 내재한 맞바꿈을 드러내고, 경쟁하는 추정량들 사이에서 고르는 원리적인 틀을 제공한다. 불편성은 바람직하지만, 평균제곱오차는 최선의 추정량이 전체 오차를 최소화하는 것임을 일깨워 준다. 약간의 편향이 큰 분산 감소를 얻어 낼 만한 값어치를 할 수 있다.
 
-## Key Formulas
+## 주요 공식
 
-| Quantity | Formula |
+| 양 | 공식 |
 |----------|---------|
 | MSE | $E[(\hat{\theta} - \theta)^2]$ |
-| Decomposition | $\text{Var}(\hat{\theta}) + [\text{Bias}(\hat{\theta})]^2$ |
-| MSE of $\bar{X}$ | $\sigma^2 / n$ |
-| Relative Efficiency | $\text{MSE}(\hat{\theta}_2) / \text{MSE}(\hat{\theta}_1)$ |
-| Cramér-Rao Bound | $\text{Var}(\hat{\theta}) \geq 1/I(\theta)$ |
+| 분해 | $\text{Var}(\hat{\theta}) + [\text{Bias}(\hat{\theta})]^2$ |
+| $\bar{X}$의 MSE | $\sigma^2 / n$ |
+| 상대효율 | $\text{MSE}(\hat{\theta}_2) / \text{MSE}(\hat{\theta}_1)$ |
+| Cramér-Rao 한계 | $\text{Var}(\hat{\theta}) \geq 1/I(\theta)$ |
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-$X_i \sim \mathrm{Uniform}(0, \theta)$ i.i.d. Two estimators: $\hat\theta_1 = 2\bar X$ and $\hat\theta_2 = ((n+1)/n) X_{(n)}$. (a) Both unbiased? (b) Variances? (c) Which has smaller MSE?
+**연습문제 1.**
+$X_i \sim \mathrm{Uniform}(0, \theta)$가 i.i.d.이다. 두 추정량 $\hat\theta_1 = 2\bar X$와 $\hat\theta_2 = ((n+1)/n) X_{(n)}$을 생각하자. (a) 둘 다 불편인가? (b) 분산은? (c) 어느 쪽이 평균제곱오차가 더 작은가?
 
-??? success "Solution to Exercise 1"
-    (a) $\mathbb{E}[X] = \theta/2$, so $\mathbb{E}[\hat\theta_1] = \theta$.
+??? success "연습문제 1 풀이"
+    (a) $\mathbb{E}[X] = \theta/2$이므로 $\mathbb{E}[\hat\theta_1] = \theta$이다.
 
-    $\mathbb{E}[X_{(n)}] = n\theta/(n+1)$, so $\mathbb{E}[\hat\theta_2] = ((n+1)/n) \cdot n\theta/(n+1) = \theta$.
+    $\mathbb{E}[X_{(n)}] = n\theta/(n+1)$이므로 $\mathbb{E}[\hat\theta_2] = ((n+1)/n) \cdot n\theta/(n+1) = \theta$이다.
 
-    Both unbiased. ✓
+    둘 다 불편이다. ✓
 
     (b) $\mathrm{Var}(\hat\theta_1) = 4 \mathrm{Var}(\bar X) = 4 \theta^2/(12n) = \theta^2/(3n)$.
 
-    $\mathrm{Var}(X_{(n)}) = n\theta^2/[(n+1)^2(n+2)]$. So $\mathrm{Var}(\hat\theta_2) = \theta^2/[n(n+2)]$.
+    $\mathrm{Var}(X_{(n)}) = n\theta^2/[(n+1)^2(n+2)]$이므로 $\mathrm{Var}(\hat\theta_2) = \theta^2/[n(n+2)]$.
 
-    (c) Both unbiased: MSE = Var. $\hat\theta_2$ has variance $\theta^2/[n(n+2)] = O(1/n^2)$, vs $\hat\theta_1$ at $\theta^2/(3n) = O(1/n)$.
+    (c) 둘 다 불편이므로 MSE = 분산이다. $\hat\theta_2$의 분산은 $\theta^2/[n(n+2)] = O(1/n^2)$이고 $\hat\theta_1$은 $\theta^2/(3n) = O(1/n)$이다.
 
-    **$\hat\theta_2$ has lower MSE for every $n \ge 2$, with a faster (super-)linear convergence rate**. This is a notable example: the MLE-based estimator (max-based) is $n$-consistent rather than $\sqrt n$-consistent. For uniform endpoints, sample extremes are far more informative than sample means.
+    **모든 $n \ge 2$에서 $\hat\theta_2$의 평균제곱오차가 더 작으며, 수렴 속도도 (초)선형으로 더 빠르다.** 주목할 만한 예이다. (최댓값에 기반한) MLE 계열 추정량이 $\sqrt n$ 일치가 아니라 $n$ 일치이다. 균등분포의 끝점을 다룰 때는 표본 극단값이 표본평균보다 훨씬 많은 정보를 담는다.
 
 ---
 
-**Exercise 2.**
-**MSE-optimal scaling of $S^2$.** Among estimators of $\sigma^2$ of the form $c \sum(X_i - \bar X)^2$ for $X_i \sim N(\mu, \sigma^2)$, find the $c$ that minimizes MSE.
+**연습문제 2.**
+**$S^2$의 평균제곱오차 최적 척도.** $X_i \sim N(\mu, \sigma^2)$에서 $c \sum(X_i - \bar X)^2$ 형태의 $\sigma^2$ 추정량 중 평균제곱오차를 최소화하는 $c$를 구하라.
 
-??? success "Solution to Exercise 2"
-    Let $T = \sum(X_i - \bar X)^2$. Then $T \sim \sigma^2 \chi^2_{n-1}$, so $\mathbb{E}[T] = (n-1)\sigma^2$, $\mathrm{Var}(T) = 2(n-1)\sigma^4$.
+??? success "연습문제 2 풀이"
+    $T = \sum(X_i - \bar X)^2$이라 하자. 그러면 $T \sim \sigma^2 \chi^2_{n-1}$이므로 $\mathbb{E}[T] = (n-1)\sigma^2$, $\mathrm{Var}(T) = 2(n-1)\sigma^4$이다.
 
-    For $\hat\sigma^2_c = c T$:
+    $\hat\sigma^2_c = c T$에 대해:
 
     $\mathbb{E}[\hat\sigma^2_c] = c(n-1)\sigma^2$, $\mathrm{Bias} = (c(n-1) - 1)\sigma^2$, $\mathrm{Var} = 2 c^2 (n-1) \sigma^4$.
 
     $\mathrm{MSE}(c) = 2 c^2(n-1) \sigma^4 + (c(n-1) - 1)^2 \sigma^4$.
 
-    Minimize: $d \mathrm{MSE}/dc = 4c(n-1)\sigma^4 + 2(c(n-1) - 1)(n-1)\sigma^4 = 0$.
+    최소화하면: $d \mathrm{MSE}/dc = 4c(n-1)\sigma^4 + 2(c(n-1) - 1)(n-1)\sigma^4 = 0$.
 
     $4c + 2(c(n-1) - 1) = 0 \Rightarrow 2c + c(n-1) = 1 \Rightarrow c(n+1) = 1 \Rightarrow c^* = 1/(n+1)$.
 
-    So **$\hat\sigma^2_{\text{MSE}} = (1/(n+1))\sum(X_i - \bar X)^2$** minimizes MSE — between MLE ($c = 1/n$) and unbiased ($c = 1/(n-1)$), tilted toward smaller denominator for more shrinkage.
+    따라서 **$\hat\sigma^2_{\text{MSE}} = (1/(n+1))\sum(X_i - \bar X)^2$**이 평균제곱오차를 최소화한다. MLE($c = 1/n$)와 불편추정량($c = 1/(n-1)$) 사이에 있으면서 더 큰 분모, 즉 더 강한 축소 쪽으로 기울어 있다.
 
-    Rarely used in practice because the "unbiased" $s^2$ has the cleaner interpretation. But it demonstrates that the optimal-MSE estimator may differ from both MLE and unbiased estimators.
+    "불편"인 $s^2$의 해석이 더 깔끔하기 때문에 실무에서 잘 쓰이지는 않는다. 다만 평균제곱오차가 최적인 추정량이 MLE와도 불편추정량과도 다를 수 있음을 보여 준다.
 
 ---
 
-**Exercise 3.**
-**MSE for biased estimator.** $\hat\theta$ is biased with $\mathbb{E}[\hat\theta] = \theta + b/n$ and $\mathrm{Var}(\hat\theta) = v/n$. Compute MSE and the asymptotic behavior.
+**연습문제 3.**
+**편향추정량의 평균제곱오차.** $\hat\theta$가 편향되어 있고 $\mathbb{E}[\hat\theta] = \theta + b/n$, $\mathrm{Var}(\hat\theta) = v/n$이다. 평균제곱오차와 그 점근 거동을 구하라.
 
-??? success "Solution to Exercise 3"
+??? success "연습문제 3 풀이"
     $\mathrm{MSE} = \mathrm{Var} + \mathrm{Bias}^2 = v/n + b^2/n^2$.
 
-    For large $n$: $\mathrm{MSE} \approx v/n + O(1/n^2)$. The variance dominates; bias contributes only the lower-order term.
+    $n$이 크면 $\mathrm{MSE} \approx v/n + O(1/n^2)$이다. 분산이 지배하고 편향은 저차항으로만 기여한다.
 
-    Asymptotic consistency: $\mathrm{MSE} \to 0 \Rightarrow \hat\theta \to \theta$ in $L^2$ and hence in probability. The estimator is consistent despite finite-sample bias.
+    점근적 일치성: $\mathrm{MSE} \to 0 \Rightarrow \hat\theta \to \theta$가 $L^2$에서, 따라서 확률적으로도 성립한다. 유한표본에서 편향이 있어도 추정량은 일치한다.
 
-    **Insight:** $O(1/n)$ bias is "invisible" asymptotically — it disappears faster than the noise. This is why MLEs (typically with $O(1/n)$ bias) are asymptotically efficient.
+    **통찰:** $O(1/n)$ 편향은 점근적으로 "보이지 않는다". 잡음보다 빨리 사라지기 때문이다. 이것이 (보통 $O(1/n)$ 편향을 갖는) MLE가 점근적으로 효율적인 이유이다.
 
-    Estimators with $O(1)$ bias (constant, like $\hat\theta = c$) are inconsistent — the bias term in MSE doesn't shrink.
+    $O(1)$ 편향(상수 추정량 $\hat\theta = c$처럼)을 갖는 추정량은 일치하지 않는다. 평균제곱오차의 편향 항이 줄지 않기 때문이다.
 
 ---
 
-**Exercise 4.**
-**Cramér-Rao + MSE.** For an unbiased estimator, MSE = Var. CRLB gives Var $\ge 1/(n I(\theta))$. State the analog for biased estimators.
+**연습문제 4.**
+**Cramér-Rao와 평균제곱오차.** 불편추정량에서는 MSE = 분산이고 CRLB가 분산 $\ge 1/(n I(\theta))$를 준다. 편향추정량에 대응하는 결과를 서술하라.
 
-??? success "Solution to Exercise 4"
-    **Biased CRLB:** for any estimator $\hat\theta$ (biased or not):
+??? success "연습문제 4 풀이"
+    **편향추정량의 CRLB:** 편향 여부와 무관하게 임의의 추정량 $\hat\theta$에 대해:
 
     $$
     \mathrm{Var}(\hat\theta) \ge \frac{(1 + b'(\theta))^2}{n I(\theta)}
     $$
 
-    where $b(\theta) = \mathbb{E}[\hat\theta] - \theta$ is the bias function.
+    여기서 $b(\theta) = \mathbb{E}[\hat\theta] - \theta$는 편향함수이다.
 
-    For unbiased estimators, $b' = 0$, recovering the standard CRLB.
+    불편추정량에서는 $b' = 0$이므로 표준 CRLB가 복원된다.
 
-    For biased estimators: if $b'(\theta) = -1$ (e.g., a constant estimator $\hat\theta = c$), the bound is 0 — trivially achieved by zero-variance constant estimators.
+    편향추정량에서 $b'(\theta) = -1$이면(예: 상수 추정량 $\hat\theta = c$) 한계가 0이 되며, 분산이 0인 상수 추정량이 자명하게 이를 달성한다.
 
-    More generally, biased CRLB gives: MSE = Var + bias$^2 \ge (1 + b')^2/(nI) + b^2$.
+    더 일반적으로 편향 CRLB는 MSE = 분산 + 편향$^2 \ge (1 + b')^2/(nI) + b^2$을 준다.
 
-    Practical use: shrinkage estimators (ridge, James-Stein) deliberately introduce bias to reduce variance, lowering MSE below the unbiased CRLB. This is provably impossible for unbiased estimators but routine for biased ones.
+    실용적 의미: 축소추정량(ridge, James-Stein)은 분산을 줄이려고 일부러 편향을 들여와 평균제곱오차를 불편추정량의 CRLB 아래로 낮춘다. 불편추정량에서는 증명 가능하게 불가능한 일이지만 편향추정량에서는 흔한 일이다.
 
 ---
 
-**Exercise 5.**
-**Practical shrinkage example.** A poll of $n$ people gives $\hat p = X/n$. Consider the shrunk estimator $\hat p_{\text{shr}} = w \hat p + (1 - w) p_0$ for some target $p_0$ (e.g., 0.5). Find the optimal $w$ (assume the true $p$ equals $p_0$).
+**연습문제 5.**
+**실용적인 축소 예제.** $n$명을 조사한 여론조사에서 $\hat p = X/n$을 얻었다. 어떤 목표값 $p_0$(예: 0.5)에 대해 축소추정량 $\hat p_{\text{shr}} = w \hat p + (1 - w) p_0$을 생각하자. (참 $p$가 $p_0$과 같다고 가정하고) 최적의 $w$를 구하라.
 
-??? success "Solution to Exercise 5"
-    If true $p = p_0$: bias of $\hat p_{\text{shr}} = w p_0 + (1 - w) p_0 - p_0 = 0$. Variance: $w^2 \mathrm{Var}(\hat p) = w^2 p_0(1 - p_0)/n$.
+??? success "연습문제 5 풀이"
+    참 $p = p_0$이면 $\hat p_{\text{shr}}$의 편향은 $w p_0 + (1 - w) p_0 - p_0 = 0$이다. 분산은 $w^2 \mathrm{Var}(\hat p) = w^2 p_0(1 - p_0)/n$이다.
 
-    MSE $= w^2 p_0(1-p_0)/n$. Minimized at $w = 0$ (i.e., always estimate $p_0$).
+    MSE $= w^2 p_0(1-p_0)/n$이며 $w = 0$에서 최소가 된다(즉 언제나 $p_0$으로 추정한다).
 
-    **More realistic case:** true $p$ is uncertain (random with $\mathbb{E}[p] = p_0$, $\mathrm{Var}(p) = \tau^2$). Bias squared = $(1 - w)^2(p - p_0)^2$. Expected MSE over $p$:
+    **더 현실적인 경우:** 참 $p$가 불확실하다($\mathbb{E}[p] = p_0$, $\mathrm{Var}(p) = \tau^2$인 확률변수). 편향의 제곱은 $(1 - w)^2(p - p_0)^2$이고, $p$에 대한 기대 평균제곱오차는:
 
     $w^2 p_0(1-p_0)/n + (1-w)^2 \tau^2$.
 
-    Minimize: $w^* = \tau^2/(\tau^2 + p_0(1-p_0)/n)$. Closer to 1 (less shrinkage) when $\tau^2$ is large (prior uncertain); closer to 0 (more shrinkage) when $\tau^2$ is small (prior confident).
+    최소화하면 $w^* = \tau^2/(\tau^2 + p_0(1-p_0)/n)$이다. $\tau^2$이 크면(사전 정보가 불확실하면) 1에 가까워 축소가 약해지고, $\tau^2$이 작으면(사전 정보가 확실하면) 0에 가까워 축소가 강해진다.
 
-    This is the **empirical Bayes** shrinkage estimator. Used in election polling aggregation, A/B testing with many small experiments, and James-Stein-style multivariate shrinkage.
+    이것이 **경험적 베이즈** 축소추정량이다. 선거 여론조사 통합, 작은 실험이 많은 A/B 테스트, James-Stein 계열의 다변량 축소에 쓰인다.
 
 ---
 
-**Exercise 6.**
-**MSE for $\bar X$ under different population distributions.** Compute MSE of $\bar X$ as estimator of $\mu$ for: (a) $N(\mu, \sigma^2)$; (b) $\mathrm{Exp}(1/\mu)$; (c) population with infinite second moment.
+**연습문제 6.**
+**모집단 분포에 따른 $\bar X$의 평균제곱오차.** 다음 각 경우에 $\mu$의 추정량으로서 $\bar X$의 평균제곱오차를 계산하라: (a) $N(\mu, \sigma^2)$; (b) $\mathrm{Exp}(1/\mu)$; (c) 2차 적률이 무한한 모집단.
 
-??? success "Solution to Exercise 6"
-    (a) Normal: $\mathrm{MSE}(\bar X) = \mathrm{Var}(\bar X) = \sigma^2/n$ (unbiased). Achieves CRLB; UMVUE.
+??? success "연습문제 6 풀이"
+    (a) 정규분포: $\mathrm{MSE}(\bar X) = \mathrm{Var}(\bar X) = \sigma^2/n$ (불편). CRLB를 달성하며 UMVUE이다.
 
-    (b) Exponential with mean $\mu$, variance $\mu^2$: $\bar X$ unbiased; $\mathrm{Var}(\bar X) = \mu^2/n$. So $\mathrm{MSE} = \mu^2/n$. Compare to CRLB: $I(\mu) = 1/\mu^2$, CRLB $= \mu^2/n$. $\bar X$ is efficient for exponential mean.
+    (b) 평균이 $\mu$, 분산이 $\mu^2$인 지수분포: $\bar X$는 불편이고 $\mathrm{Var}(\bar X) = \mu^2/n$이므로 $\mathrm{MSE} = \mu^2/n$이다. CRLB와 비교하면 $I(\mu) = 1/\mu^2$이므로 CRLB $= \mu^2/n$이다. $\bar X$는 지수분포의 평균에 대해 효율적이다.
 
-    (c) Infinite variance (e.g., Pareto with shape $\le 2$): $\mathrm{Var}(\bar X) = \infty$, $\mathrm{MSE} = \infty$.
+    (c) 분산이 무한한 경우(예: 형상모수가 $\le 2$인 Pareto): $\mathrm{Var}(\bar X) = \infty$이므로 $\mathrm{MSE} = \infty$이다.
 
-    For Cauchy (no finite mean), $\bar X$ is not even a meaningful estimator of "center" — better to use the sample median, which is consistent for the Cauchy median.
+    (유한한 평균이 없는) Cauchy 분포에서는 $\bar X$가 "중심"의 추정량으로서 의미조차 갖지 않는다. Cauchy 분포의 중앙값에 대해 일치하는 표본중앙값을 쓰는 편이 낫다.
 
-    **General lesson:** $\bar X$ is the canonical estimator, optimal for normal/exponential, but breaks down for heavy-tailed populations. Always verify finiteness of moments before using mean-based estimators.
+    **일반적인 교훈:** $\bar X$는 표준적인 추정량이며 정규분포와 지수분포에서 최적이지만 꼬리가 두꺼운 모집단에서는 무너진다. 평균 기반 추정량을 쓰기 전에 언제나 적률이 유한한지 확인해야 한다.

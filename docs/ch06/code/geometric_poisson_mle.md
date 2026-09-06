@@ -1,42 +1,42 @@
-# Geometric and Poisson Maximum Likelihood
+# Geometric과 Poisson의 최대가능도
 
-## Overview
+## 개요
 
-Maximum likelihood estimation (MLE) provides a principled way to fit parametric models to observed data. This page derives and demonstrates the MLE for two fundamental discrete distributions -- the Geometric and the Poisson -- and compares the parametric MLE fit against a nonparametric empirical PMF on held-out test data. The analysis highlights why parametric models generalize better when the model is correctly specified.
+최대가능도추정(MLE)은 관측된 자료에 모수적 모형을 맞추는 원리 있는 방법을 제공한다. 이 페이지에서는 두 가지 기본적인 이산분포인 Geometric과 Poisson의 MLE를 유도하고 시연하며, 모수적 MLE 적합을 남겨 둔 검정 자료에서 비모수적 경험 PMF와 비교한다. 이 분석은 모형이 올바르게 설정되었을 때 모수적 모형이 왜 더 잘 일반화되는지를 부각한다.
 
-## Geometric Distribution MLE
+## Geometric 분포의 MLE
 
-### The Model
+### 모형
 
-The Geometric distribution models the number of consecutive successes before the first failure. With parameter $p$ (probability of success on each trial):
+Geometric 분포는 첫 실패 이전의 연속 성공 횟수를 모형화한다. 모수 $p$(각 시행의 성공확률)에 대해:
 
 $$
 P(X = k) = (1 - p)\, p^k, \quad k = 0, 1, 2, \ldots
 $$
 
-The mean is $E[X] = p / (1 - p)$.
+평균은 $E[X] = p / (1 - p)$이다.
 
-### Deriving the MLE
+### MLE 유도
 
-Given observations $x_1, \ldots, x_n$, the log-likelihood is:
+관측값 $x_1, \ldots, x_n$이 주어졌을 때 로그가능도는:
 
 $$
 \ell(p) = \sum_{i=1}^n \left[ x_i \log p + \log(1 - p) \right] = n_s \log p + n \log(1 - p)
 $$
 
-where $n_s = \sum_{i=1}^n x_i$ is the total number of successes. Taking the derivative and setting it to zero:
+여기서 $n_s = \sum_{i=1}^n x_i$는 전체 성공 횟수이다. 미분하여 0으로 두면:
 
 $$
 \frac{d\ell}{dp} = \frac{n_s}{p} - \frac{n}{1 - p} = 0
 $$
 
-Solving gives:
+풀면:
 
 $$
 \hat{p}_{\text{MLE}} = \frac{n_s}{n_s + n} = \frac{\bar{x}}{1 + \bar{x}}
 $$
 
-### Demonstration
+### 시연
 
 ```python
 import numpy as np
@@ -73,9 +73,9 @@ def geometric_mle_demo(n_train=1000, n_test=1000, p_true=0.12):
 geometric_mle_demo()
 ```
 
-### Log-Likelihood Surface
+### 로그가능도 곡면
 
-The log-likelihood is a concave function of $p$, confirming a unique global maximum:
+로그가능도는 $p$에 대해 오목한 함수이며 유일한 전역 최댓값이 있음을 확인해 준다:
 
 ```python
 import matplotlib.pyplot as plt
@@ -99,41 +99,41 @@ plt.legend()
 plt.show()
 ```
 
-## Poisson Distribution MLE
+## Poisson 분포의 MLE
 
-### The Model
+### 모형
 
-The Poisson distribution models the number of events in a fixed interval:
+Poisson 분포는 고정된 구간에서 일어나는 사건의 수를 모형화한다:
 
 $$
 P(X = k) = \frac{e^{-\lambda}\, \lambda^k}{k!}, \quad k = 0, 1, 2, \ldots
 $$
 
-The mean and variance are both equal to $\lambda$.
+평균과 분산이 모두 $\lambda$이다.
 
-### Deriving the MLE
+### MLE 유도
 
-Given observations $x_1, \ldots, x_n$, the log-likelihood (up to constants not depending on $\lambda$) is:
+관측값 $x_1, \ldots, x_n$이 주어졌을 때 ($\lambda$에 의존하지 않는 상수를 제외한) 로그가능도는:
 
 $$
 \ell(\lambda) = \left(\sum_{i=1}^n x_i\right) \log \lambda - n\lambda
 $$
 
-Taking the derivative:
+미분하면:
 
 $$
 \frac{d\ell}{d\lambda} = \frac{\sum x_i}{\lambda} - n = 0
 $$
 
-Solving gives the well-known result:
+풀면 잘 알려진 결과를 얻는다:
 
 $$
 \hat{\lambda}_{\text{MLE}} = \bar{x}
 $$
 
-The MLE for the Poisson rate parameter is simply the sample mean.
+Poisson 비율 모수의 MLE는 단순히 표본평균이다.
 
-### Demonstration
+### 시연
 
 ```python
 from scipy import stats
@@ -167,7 +167,7 @@ def poisson_mle_demo(n_train=200, n_test=200, lam_true=4.5):
 poisson_mle_demo()
 ```
 
-### Comparing Parametric and Nonparametric Fits
+### 모수적 적합과 비모수적 적합의 비교
 
 ```python
 poi = poisson_mle_demo.__code__  # (see full script for plotting code)
@@ -192,28 +192,28 @@ plt.tight_layout()
 plt.show()
 ```
 
-## Interpretation
+## 해석
 
-- **Parametric models generalize better.** When the assumed model family is correct (data truly come from a Geometric or Poisson distribution), the MLE-based parametric PMF typically achieves lower test-set RMSE than the nonparametric empirical PMF. The parametric model "borrows strength" across all values of $k$ through the functional form.
-- **Nonparametric models are more flexible but noisier.** The empirical PMF assigns zero probability to values not observed in training. With smaller training samples ($n = 200$ for Poisson), this discreteness effect is pronounced in the tails.
-- **The log-likelihood surface is concave** for both distributions, guaranteeing that gradient-based optimization converges to the unique global MLE.
-- **Model misspecification risk.** If the true data-generating process is not Geometric or Poisson, the parametric model can systematically misfit the data, and the nonparametric approach may then outperform it.
+- **모수적 모형이 더 잘 일반화된다.** 가정한 모형족이 옳으면(자료가 실제로 Geometric이나 Poisson 분포에서 나왔으면) MLE에 기반한 모수적 PMF가 비모수적 경험 PMF보다 검정 자료의 RMSE가 대체로 작다. 모수적 모형은 함수 형태를 통해 모든 $k$ 값에 걸쳐 "힘을 빌려" 온다.
+- **비모수적 모형은 더 유연하지만 잡음이 많다.** 경험 PMF는 훈련 자료에서 관측되지 않은 값에 확률 0을 부여한다. 훈련 표본이 작으면(Poisson에서 $n = 200$) 이 이산성 효과가 꼬리에서 두드러진다.
+- **두 분포 모두 로그가능도 곡면이 오목**하므로 기울기 기반 최적화가 유일한 전역 MLE로 수렴함이 보장된다.
+- **모형 설정 오류의 위험.** 참 자료생성과정이 Geometric이나 Poisson이 아니면 모수적 모형이 자료를 체계적으로 잘못 적합할 수 있고, 그때는 비모수적 접근이 더 나을 수 있다.
 
-!!! warning "Parametric Assumptions Matter"
-    The superior test-set performance of the parametric fit depends on the model being correctly specified. Always check goodness-of-fit (e.g., chi-squared test, QQ-plot) before trusting a parametric model over the empirical distribution.
+!!! warning "모수적 가정이 중요하다"
+    모수적 적합이 검정 자료에서 더 나은 성능을 보이는 것은 모형이 올바르게 설정되었을 때의 이야기이다. 경험분포보다 모수적 모형을 믿기 전에 언제나 적합도를 확인하라(예: 카이제곱 검정, QQ 그림).
 
-## Exercises
+## 연습문제
 
-**Exercise 1.** Derive the MLE for the Geometric distribution directly from the method-of-moments perspective. Show that the MLE and method-of-moments estimator coincide for this distribution.
+**연습문제 1.** 적률법의 관점에서 Geometric 분포의 MLE를 직접 유도하라. 이 분포에서 MLE와 적률법 추정량이 일치함을 보여라.
 
-??? success "Solution to Exercise 1"
-    The mean of $\text{Geometric}(p)$ (with $P(X = k) = (1-p)p^k$) is:
+??? success "연습문제 1 풀이"
+    ($P(X = k) = (1-p)p^k$인) $\text{Geometric}(p)$의 평균은:
 
     $$
     E[X] = \frac{p}{1 - p}
     $$
 
-    Setting $E[X] = \bar{x}$ and solving for $p$:
+    $E[X] = \bar{x}$로 두고 $p$에 대해 풀면:
 
     $$
     \bar{x} = \frac{p}{1 - p} \implies \bar{x}(1 - p) = p \implies \bar{x} = p(1 + \bar{x})
@@ -223,59 +223,59 @@ plt.show()
     \hat{p}_{\text{MoM}} = \frac{\bar{x}}{1 + \bar{x}}
     $$
 
-    This is identical to $\hat{p}_{\text{MLE}} = \bar{x}/(1 + \bar{x})$ derived by maximizing the log-likelihood. For single-parameter exponential family distributions, the MLE is always a function of the sufficient statistic, and when the moment equation involves only that statistic, MLE and MoM coincide. $\square$
+    이는 로그가능도를 최대화하여 얻은 $\hat{p}_{\text{MLE}} = \bar{x}/(1 + \bar{x})$와 동일하다. 단일모수 지수족 분포에서 MLE는 언제나 충분통계량의 함수이며, 적률방정식이 그 통계량만 포함하면 MLE와 적률법이 일치한다. $\square$
 
 ---
 
-**Exercise 2.** For the Poisson MLE, show that $\hat{\lambda} = \bar{x}$ is not only a critical point but a global maximum by verifying the second derivative condition.
+**연습문제 2.** Poisson의 MLE에서 $\hat{\lambda} = \bar{x}$가 임계점일 뿐 아니라 전역 최댓값임을 2계도함수 조건으로 확인하라.
 
-??? success "Solution to Exercise 2"
-    The log-likelihood is:
+??? success "연습문제 2 풀이"
+    로그가능도는:
 
     $$
     \ell(\lambda) = \left(\sum x_i\right) \log \lambda - n\lambda + C
     $$
 
-    where $C$ does not depend on $\lambda$. The first derivative is:
+    여기서 $C$는 $\lambda$에 의존하지 않는다. 1계도함수는:
 
     $$
     \frac{d\ell}{d\lambda} = \frac{\sum x_i}{\lambda} - n
     $$
 
-    Setting this to zero gives $\hat{\lambda} = \bar{x}$.
+    0으로 두면 $\hat{\lambda} = \bar{x}$이다.
 
-    The second derivative is:
+    2계도함수는:
 
     $$
     \frac{d^2\ell}{d\lambda^2} = -\frac{\sum x_i}{\lambda^2}
     $$
 
-    Since $\sum x_i \geq 0$ and $\lambda > 0$, we have $d^2\ell/d\lambda^2 \leq 0$ for all $\lambda > 0$. When $\sum x_i > 0$, the inequality is strict, confirming that $\hat{\lambda} = \bar{x}$ is a global maximum. (If all observations are zero, then $\hat{\lambda} = 0$, which is a boundary maximum.) $\square$
+    $\sum x_i \geq 0$이고 $\lambda > 0$이므로 모든 $\lambda > 0$에서 $d^2\ell/d\lambda^2 \leq 0$이다. $\sum x_i > 0$이면 부등호가 엄격하므로 $\hat{\lambda} = \bar{x}$가 전역 최댓값임이 확인된다. (모든 관측값이 0이면 $\hat{\lambda} = 0$이며 이는 경계에서의 최댓값이다.) $\square$
 
 ---
 
-**Exercise 3.** You observe $n = 500$ i.i.d. draws from a Poisson distribution with sample mean $\bar{x} = 3.2$. Construct an approximate 95% confidence interval for $\lambda$ using the Fisher information.
+**연습문제 3.** Poisson 분포에서 i.i.d.로 $n = 500$개를 관측했고 표본평균이 $\bar{x} = 3.2$이다. Fisher 정보량을 사용하여 $\lambda$에 대한 근사적인 95% 신뢰구간을 구성하라.
 
-??? success "Solution to Exercise 3"
-    The Fisher information for a single Poisson observation is:
+??? success "연습문제 3 풀이"
+    Poisson 관측값 하나에 대한 Fisher 정보량은:
 
     $$
     I(\lambda) = \frac{1}{\lambda}
     $$
 
-    For $n$ observations, the total Fisher information is $nI(\lambda) = n/\lambda$. By the asymptotic normality of the MLE:
+    $n$개 관측값에서 전체 Fisher 정보량은 $nI(\lambda) = n/\lambda$이다. MLE의 점근정규성에 의해:
 
     $$
     \hat{\lambda} \dot{\sim} N\!\left(\lambda, \frac{1}{nI(\lambda)}\right) = N\!\left(\lambda, \frac{\lambda}{n}\right)
     $$
 
-    Plugging in $\hat{\lambda} = 3.2$ and $n = 500$:
+    $\hat{\lambda} = 3.2$, $n = 500$을 대입하면:
 
     $$
     \text{SE} = \sqrt{\frac{\hat{\lambda}}{n}} = \sqrt{\frac{3.2}{500}} = \sqrt{0.0064} = 0.08
     $$
 
-    The 95% confidence interval is:
+    95% 신뢰구간은:
 
     $$
     \hat{\lambda} \pm 1.96 \cdot \text{SE} = 3.2 \pm 1.96(0.08) = 3.2 \pm 0.157 = [3.043, 3.357]
@@ -285,58 +285,58 @@ plt.show()
 
 ---
 
-**Exercise 4.** Explain why the nonparametric (empirical PMF) estimator tends to have higher test-set RMSE than the parametric MLE when the model is correctly specified, despite the nonparametric estimator being unbiased. What role does the bias-variance trade-off play?
+**연습문제 4.** 모형이 올바르게 설정되었을 때 비모수적 (경험 PMF) 추정량이 불편인데도 모수적 MLE보다 검정 자료의 RMSE가 큰 이유를 설명하라. 편향–분산 맞바꿈은 어떤 역할을 하는가?
 
-??? success "Solution to Exercise 4"
-    The empirical PMF estimates each probability $P(X = k)$ independently using the proportion $\hat{p}_k = n_k / n$. Each $\hat{p}_k$ is unbiased with variance:
+??? success "연습문제 4 풀이"
+    경험 PMF는 각 확률 $P(X = k)$를 비율 $\hat{p}_k = n_k / n$으로 따로따로 추정한다. 각 $\hat{p}_k$는 불편이고 분산은:
 
     $$
     \text{Var}(\hat{p}_k) = \frac{P(X = k)(1 - P(X = k))}{n}
     $$
 
-    The parametric MLE estimates a single parameter ($p$ or $\lambda$), from which the entire PMF is derived. The parametric estimator of $P(X = k)$ is biased in finite samples (due to the nonlinear plug-in), but its variance is much lower because it estimates only one degree of freedom rather than one for each value of $k$.
+    모수적 MLE는 모수 하나($p$나 $\lambda$)를 추정하고 그로부터 PMF 전체를 유도한다. $P(X = k)$의 모수적 추정량은 (비선형 대입 때문에) 유한표본에서 편향되지만, 각 $k$마다 하나씩이 아니라 자유도 하나만 추정하므로 분산이 훨씬 작다.
 
-    The total MSE decomposes as:
+    전체 평균제곱오차는 다음과 같이 분해된다:
 
     $$
     \text{MSE} = \text{Bias}^2 + \text{Variance}
     $$
 
-    For the nonparametric estimator: bias is zero, but variance is high (especially in the tails where $n_k$ is small). For the parametric MLE: bias is negligible under correct specification, and variance is low because the functional form constrains the PMF shape. The parametric model achieves a favorable bias-variance trade-off, resulting in lower RMSE on test data.
+    비모수적 추정량은 편향이 0이지만 (특히 $n_k$가 작은 꼬리에서) 분산이 크다. 모수적 MLE는 설정이 올바르면 편향이 무시할 만하고, 함수 형태가 PMF의 모양을 제약하므로 분산이 작다. 모수적 모형이 유리한 편향–분산 맞바꿈을 달성하여 검정 자료에서 RMSE가 더 작아진다.
 
-    When the model is misspecified, the parametric estimator carries non-vanishing bias, and the nonparametric estimator can win. $\square$
+    모형이 잘못 설정되면 모수적 추정량에 사라지지 않는 편향이 생기고, 그때는 비모수적 추정량이 이길 수 있다. $\square$
 
 ---
 
-**Exercise 5.** Suppose you observe the following data that you believe came from a Geometric distribution: $x = (0, 2, 1, 0, 3, 1, 0, 0, 1, 2)$. Compute the MLE $\hat{p}$. Then compute the log-likelihood at $\hat{p}$ and at $p = 0.3$ and $p = 0.7$, and verify that the MLE yields the highest log-likelihood.
+**연습문제 5.** Geometric 분포에서 나왔다고 믿는 다음 자료를 관측했다고 하자: $x = (0, 2, 1, 0, 3, 1, 0, 0, 1, 2)$. MLE $\hat{p}$를 계산하라. 그다음 $\hat{p}$, $p = 0.3$, $p = 0.7$에서 로그가능도를 계산하여 MLE가 가장 높은 로그가능도를 주는지 확인하라.
 
-??? success "Solution to Exercise 5"
-    The data are $x = (0, 2, 1, 0, 3, 1, 0, 0, 1, 2)$ with $n = 10$ and $\sum x_i = 10$.
+??? success "연습문제 5 풀이"
+    자료는 $x = (0, 2, 1, 0, 3, 1, 0, 0, 1, 2)$이고 $n = 10$, $\sum x_i = 10$이다.
 
-    The MLE is:
+    MLE는:
 
     $$
     \hat{p} = \frac{\bar{x}}{1 + \bar{x}} = \frac{1}{1 + 1} = 0.5
     $$
 
-    The log-likelihood is $\ell(p) = n_s \log p + n \log(1 - p)$ where $n_s = 10$ and $n = 10$:
+    로그가능도는 $n_s = 10$, $n = 10$일 때 $\ell(p) = n_s \log p + n \log(1 - p)$이다:
 
-    **At** $\hat{p} = 0.5$:
+    $\hat{p} = 0.5$**에서**:
 
     $$
     \ell(0.5) = 10 \log(0.5) + 10 \log(0.5) = 20 \log(0.5) = -20 \times 0.6931 = -13.863
     $$
 
-    **At** $p = 0.3$:
+    $p = 0.3$**에서**:
 
     $$
     \ell(0.3) = 10\log(0.3) + 10\log(0.7) = 10(-1.2040) + 10(-0.3567) = -15.607
     $$
 
-    **At** $p = 0.7$:
+    $p = 0.7$**에서**:
 
     $$
     \ell(0.7) = 10\log(0.7) + 10\log(0.3) = 10(-0.3567) + 10(-1.2040) = -15.607
     $$
 
-    Indeed $\ell(0.5) > \ell(0.3) = \ell(0.7)$, confirming the MLE maximizes the log-likelihood. The symmetry $\ell(0.3) = \ell(0.7)$ follows from the log-likelihood being symmetric around $\hat{p} = 0.5$ when $n_s = n$. $\square$
+    실제로 $\ell(0.5) > \ell(0.3) = \ell(0.7)$이므로 MLE가 로그가능도를 최대화함이 확인된다. $n_s = n$일 때 로그가능도가 $\hat{p} = 0.5$를 중심으로 대칭이므로 $\ell(0.3) = \ell(0.7)$이라는 대칭성이 나타난다. $\square$

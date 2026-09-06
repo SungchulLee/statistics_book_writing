@@ -1,88 +1,88 @@
-# Chapter 6: Statistical Estimation
+# 6장: 통계적 추정
 
-## Overview
+## 개요
 
-This chapter formalizes the central question of statistical inference: given observed data, how do we construct good estimators, and how do we measure what "good" means? It develops the theoretical framework for evaluating estimator quality --- bias, variance, mean squared error, consistency, efficiency, and sufficiency --- and then presents three systematic methods for constructing estimators: Maximum Likelihood Estimation, the Method of Moments, and Bayesian estimation.
-
----
-
-## Chapter Structure
-
-### 6.1 Estimator Quality
-
-The theoretical criteria for evaluating and comparing statistical estimators:
-
-- **Bias--Variance Tradeoff** --- Formalizes the fundamental tension between systematic error (bias) and sensitivity to sampling variability (variance), showing that minimizing total estimation error requires balancing these two competing sources of error.
-- **Mean Squared Error** --- Defines MSE as the expected squared deviation of an estimator from the true parameter value and establishes the decomposition $\text{MSE} = \text{Variance} + \text{Bias}^2$, providing a single criterion that captures both bias and variance.
-- **Consistency and Asymptotic Normality** --- Establishes that a consistent estimator converges in probability to the true parameter as $n \to \infty$, and that asymptotically normal estimators permit approximate confidence intervals and tests for large samples.
-- **Efficiency and Cramer--Rao Lower Bound** --- Introduces Fisher information and the CRLB, which provides an absolute lower bound on the variance of any unbiased estimator, defining efficiency as the attainment of this bound.
-- **Sufficiency and Minimal Sufficiency** --- Defines sufficient statistics via the Fisher--Neyman factorization theorem and introduces the Rao--Blackwell theorem, showing how sufficiency enables data reduction without loss of information about the parameter.
-
-### 6.2 Maximum Likelihood Estimation
-
-The most widely used method for parameter estimation, based on maximizing the probability of the observed data:
-
-- **Likelihood Function** --- Defines the likelihood as the joint density of the observed data viewed as a function of the parameters, establishes the log-likelihood for computational convenience, and explains that likelihood ratios (not absolute values) are meaningful.
-- **Introduction to MLE** --- Presents the MLE principle of finding parameter values that make the observed data most probable, with the formal definition and the log-likelihood maximization procedure.
-- **MLE for Bernoulli Distribution** --- Derives the closed-form MLE $\hat{p} = \bar{X}$ for the success probability of Bernoulli trials.
-- **MLE for Normal Distribution** --- Derives the joint MLEs $\hat{\mu} = \bar{X}$ and $\hat{\sigma}^2 = \frac{1}{n}\sum(X_i - \bar{X})^2$ for the normal distribution parameters.
-- **MLE for Poisson Distribution** --- Derives $\hat{\lambda} = \bar{X}$ as the MLE for the Poisson rate parameter and shows it is unbiased and efficient.
-- **MLE for Exponential Distribution** --- Derives $\hat{\lambda} = 1/\bar{X}$ as the MLE for the exponential rate parameter and notes it is biased but consistent.
-- **Capture-Recapture Method** --- Applies the MLE framework to the ecological problem of estimating population size from mark-recapture data using the hypergeometric likelihood.
-- **Asymptotic Properties of MLE** --- States the three key large-sample properties of MLE: consistency, asymptotic normality, and asymptotic efficiency (achieving the CRLB), under regularity conditions.
-- **Fisher Information and Standard Errors** --- Shows how Fisher information quantifies the amount of information data carry about a parameter and how it yields asymptotic standard errors for MLEs.
-
-### 6.3 Method of Moments
-
-A classical and intuitive approach to estimation that equates population moments to sample moments:
-
-- **Method of Moments Foundations** --- Defines the MoM procedure of equating the first $p$ population moments to their sample counterparts and solving for $p$ parameters, noting its consistency, simplicity, and potential drawbacks.
-- **MoM for Common Distributions** --- Derives closed-form MoM estimators for the normal, gamma, and beta distributions by matching first and second moments.
-- **Generalized Method of Moments (GMM)** --- Extends MoM to overidentified models with more moment conditions than parameters, using a weighting matrix to obtain efficient estimators --- the dominant estimation framework in empirical finance and econometrics.
-- **MoM vs MLE Comparison** --- Systematically compares MoM and MLE across computation, efficiency, consistency, invariance, and robustness, with guidance on when to use each method.
-- **Likelihood and Estimation Overview** --- Provides a comprehensive treatment of the likelihood function as the cornerstone of parametric inference, connecting it to MLE, sufficiency, and model comparison.
-- **Method of Moments Overview** --- Offers an extended treatment of MoM from definitions through population and sample moments to practical examples, positioning MoM within the broader estimation landscape.
-
-### 6.4 Bayesian Estimation
-
-A framework that combines prior beliefs with observed data to produce posterior distributions over parameters:
-
-- **Prior, Likelihood, and Posterior** --- Presents Bayes' theorem as the foundation of Bayesian inference, defining the prior, likelihood, posterior, and marginal likelihood, along with posterior point estimates (mean, median, MAP).
-- **Conjugate Priors** --- Defines conjugate prior families whose posterior belongs to the same distributional family as the prior, with a table of common conjugate pairs (Beta-Binomial, Gamma-Poisson, Normal-Normal, Gamma-Exponential).
-- **MAP Estimation** --- Defines Maximum A Posteriori estimation as the mode of the posterior distribution, connects it to MLE with a log-prior regularization term, and links Gaussian and Laplace priors to Ridge and Lasso regularization respectively.
-
-### 6.5 Code
-
-Complete Python implementations demonstrating estimation methods in practice:
-
-- **Estimation Methods Comparison** --- Side-by-side comparison of MLE, MoM, and Bayesian estimators on the same data.
-- **MLE Optimization Examples** --- Numerical optimization of log-likelihood functions using `scipy.optimize`.
-- **Fisher Information Computation** --- Computes observed and expected Fisher information for standard distributions.
-- **Bayesian Estimation Demonstrations** --- Implements Bayesian updating with conjugate priors and visualizes prior-to-posterior evolution.
-- **Capture-Recapture MLE** --- Applies MLE to the capture-recapture population estimation problem.
-- **Log-Likelihood Visualization** --- Plots log-likelihood surfaces to build intuition for the MLE optimization landscape.
-
-### 6.6 Exercises
-
-Practice problems covering estimator comparison (bias, variance, MSE), MLE derivations for uniform and normal distributions, MoM vs MLE tradeoffs, Bayesian shrinkage estimators, Fisher information calculations, and sufficiency.
+이 장은 통계적 추론의 핵심 물음을 형식화한다. 자료가 관측되었을 때 좋은 추정량을 어떻게 만들고, "좋다"는 것을 어떻게 재는가? 먼저 추정량의 품질을 평가하는 이론적 틀(편향, 분산, 평균제곱오차, 일치성, 효율성, 충분성)을 세우고, 이어서 추정량을 만드는 세 가지 체계적인 방법인 최대가능도추정, 적률법, 베이즈 추정을 소개한다.
 
 ---
 
-## Prerequisites
+## 장의 구성
 
-This chapter builds on:
+### 6.1 추정량의 품질
 
-- **Chapter 3** (Foundations of Probability) --- Random variables, expectation, variance, and moment generating functions.
-- **Chapter 4** (Distributions) --- Properties of the normal, Bernoulli, Poisson, and exponential distributions.
-- **Chapter 5** (Sampling Distributions) --- The concept of a statistic as a random variable and the behavior of sample means and variances across repeated samples.
+통계적 추정량을 평가하고 비교하는 이론적 기준:
+
+- **편향–분산 맞바꿈** --- 체계적 오차(편향)와 표본추출 변동성에 대한 민감도(분산) 사이의 근본적 긴장을 형식화하며, 전체 추정오차를 최소화하려면 이 두 오차원을 균형 있게 다루어야 함을 보인다.
+- **평균제곱오차** --- 평균제곱오차를 추정량과 참 모수값의 제곱편차의 기댓값으로 정의하고 분해 $\text{MSE} = \text{분산} + \text{편향}^2$을 확립하여, 편향과 분산을 함께 담아내는 하나의 기준을 제시한다.
+- **일치성과 점근정규성** --- 일치추정량이 $n \to \infty$일 때 참 모수로 확률수렴함을 확립하고, 점근적으로 정규인 추정량이 대표본에서 근사적인 신뢰구간과 검정을 가능하게 함을 보인다.
+- **효율성과 Cramér–Rao 하한** --- Fisher 정보량과 CRLB를 소개한다. CRLB는 임의의 불편추정량의 분산에 대한 절대적 하한을 주며, 이 한계의 달성을 효율성으로 정의한다.
+- **충분성과 최소충분성** --- Fisher–Neyman 인수분해 정리로 충분통계량을 정의하고 Rao–Blackwell 정리를 소개하여, 충분성이 모수에 관한 정보를 잃지 않고 자료를 축약하게 해 줌을 보인다.
+
+### 6.2 최대가능도추정
+
+관측된 자료의 확률을 최대화하는, 모수 추정에서 가장 널리 쓰이는 방법:
+
+- **가능도함수** --- 가능도를 관측된 자료의 결합밀도를 모수의 함수로 본 것으로 정의하고, 계산의 편의를 위해 로그가능도를 세우며, 절댓값이 아니라 가능도비가 의미를 갖는다는 점을 설명한다.
+- **최대가능도추정 소개** --- 관측된 자료를 가장 그럴듯하게 만드는 모수값을 찾는다는 MLE의 원리를 형식적 정의와 로그가능도 최대화 절차와 함께 제시한다.
+- **Bernoulli 분포의 MLE** --- Bernoulli 시행의 성공확률에 대해 닫힌 형태의 MLE $\hat{p} = \bar{X}$를 유도한다.
+- **Normal 분포의 MLE** --- 정규분포 모수에 대한 결합 MLE $\hat{\mu} = \bar{X}$와 $\hat{\sigma}^2 = \frac{1}{n}\sum(X_i - \bar{X})^2$을 유도한다.
+- **Poisson 분포의 MLE** --- Poisson 비율 모수의 MLE로 $\hat{\lambda} = \bar{X}$를 유도하고 이것이 불편이며 효율적임을 보인다.
+- **Exponential 분포의 MLE** --- Exponential 비율 모수의 MLE로 $\hat{\lambda} = 1/\bar{X}$를 유도하고, 편향되어 있지만 일치함을 짚는다.
+- **포획–재포획법** --- 초기하 가능도를 사용하여 표지–재포획 자료로부터 개체수를 추정하는 생태학 문제에 MLE 틀을 적용한다.
+- **MLE의 점근적 성질** --- 정칙 조건 아래에서 MLE가 갖는 세 가지 핵심 대표본 성질인 일치성, 점근정규성, 점근 효율성(CRLB 달성)을 서술한다.
+- **Fisher 정보량과 표준오차** --- Fisher 정보량이 자료가 모수에 관해 담고 있는 정보의 양을 어떻게 정량화하며 MLE의 점근 표준오차를 어떻게 주는지 보인다.
+
+### 6.3 적률법
+
+모집단 적률을 표본 적률과 일치시키는 고전적이고 직관적인 추정 방법:
+
+- **적률법의 기초** --- 처음 $p$개의 모집단 적률을 그에 대응하는 표본 적률과 일치시켜 $p$개의 모수를 푸는 적률법 절차를 정의하고, 그 일치성, 단순함, 그리고 있을 수 있는 단점을 짚는다.
+- **흔한 분포에 대한 적률법** --- 1차와 2차 적률을 맞추어 정규분포, 감마분포, 베타분포에 대한 닫힌 형태의 적률추정량을 유도한다.
+- **일반화 적률법 (GMM)** --- 모수보다 적률 조건이 많은 과대식별 모형으로 적률법을 확장하고, 가중행렬을 사용해 효율적인 추정량을 얻는다. 실증금융과 계량경제학에서 지배적인 추정 틀이다.
+- **적률법과 MLE의 비교** --- 계산, 효율성, 일치성, 불변성, 로버스트성에 걸쳐 적률법과 MLE를 체계적으로 비교하고 어느 쪽을 언제 쓸지 안내한다.
+- **가능도와 추정 개관** --- 모수적 추론의 초석인 가능도함수를 폭넓게 다루며 MLE, 충분성, 모형 비교와 연결한다.
+- **적률법 개관** --- 정의에서 모집단 적률과 표본 적률을 거쳐 실용적인 예까지 적률법을 확장해서 다루며, 더 넓은 추정의 지형 속에 자리매김한다.
+
+### 6.4 베이즈 추정
+
+사전 믿음과 관측 자료를 결합하여 모수에 대한 사후분포를 만들어 내는 틀:
+
+- **사전분포, 가능도, 사후분포** --- 베이즈 정리를 베이즈 추론의 토대로 제시하고, 사전분포, 가능도, 사후분포, 주변가능도를 정의하며, 사후 점추정값(평균, 중앙값, MAP)을 함께 다룬다.
+- **켤레 사전분포** --- 사후분포가 사전분포와 같은 분포족에 속하는 켤레 사전분포족을 정의하고, 흔한 켤레 쌍(Beta-Binomial, Gamma-Poisson, Normal-Normal, Gamma-Exponential)을 표로 정리한다.
+- **MAP 추정** --- 최대사후확률 추정을 사후분포의 최빈값으로 정의하고, 로그 사전분포라는 벌점항이 붙은 MLE와 연결하며, Gaussian 사전분포와 Laplace 사전분포를 각각 Ridge 및 Lasso 정칙화와 잇는다.
+
+### 6.5 코드
+
+추정 방법을 실제로 보여 주는 완전한 Python 구현:
+
+- **추정 방법 비교** --- 같은 자료에 대해 MLE, 적률법, 베이즈 추정량을 나란히 비교한다.
+- **최대가능도 최적화 예제** --- `scipy.optimize`를 사용하여 로그가능도함수를 수치적으로 최적화한다.
+- **Fisher 정보량 계산** --- 표준적인 분포들에 대해 관측 Fisher 정보량과 기대 Fisher 정보량을 계산한다.
+- **베이즈 추정 시연** --- 켤레 사전분포로 베이즈 갱신을 구현하고 사전분포에서 사후분포로의 변화를 시각화한다.
+- **포획–재포획 MLE** --- 포획–재포획 개체수 추정 문제에 MLE를 적용한다.
+- **로그가능도 시각화** --- 로그가능도 곡면을 그려 MLE 최적화 지형에 대한 직관을 기른다.
+
+### 6.6 연습문제
+
+추정량 비교(편향, 분산, 평균제곱오차), 균등분포와 정규분포의 MLE 유도, 적률법과 MLE의 맞바꿈, 베이즈 축소추정량, Fisher 정보량 계산, 충분성을 다루는 연습문제들.
 
 ---
 
-## Key Takeaways
+## 선수 지식
 
-1. The bias--variance tradeoff is fundamental: minimizing MSE (= Variance + Bias$^2$) often requires accepting some bias in exchange for reduced variance.
-2. Maximum Likelihood Estimation is the workhorse of parametric inference --- under regularity conditions it is consistent, asymptotically normal, and asymptotically efficient (achieves the CRLB).
-3. The Method of Moments provides a simpler alternative that yields closed-form estimators by matching population and sample moments, though it is generally less efficient than MLE.
-4. Bayesian estimation incorporates prior knowledge through Bayes' theorem; conjugate priors yield tractable posteriors, and MAP estimation bridges Bayesian and frequentist approaches.
-5. Fisher information quantifies how much data tell us about a parameter, setting a fundamental lower bound (CRLB) on the precision of any unbiased estimator.
-6. Sufficiency identifies the minimal data summaries that capture all information about the parameter, enabling optimal estimation via the Rao--Blackwell and Lehmann--Scheffe theorems.
+이 장은 다음 내용을 바탕으로 한다:
+
+- **3장** (확률의 기초) --- 확률변수, 기댓값, 분산, 적률생성함수.
+- **4장** (분포) --- Normal, Bernoulli, Poisson, Exponential 분포의 성질.
+- **5장** (표본분포) --- 확률변수로서의 통계량 개념과 반복추출에 걸친 표본평균 및 표본분산의 거동.
+
+---
+
+## 핵심 요약
+
+1. 편향–분산 맞바꿈은 근본적이다. 평균제곱오차(= 분산 + 편향$^2$)를 최소화하려면 분산을 줄이는 대가로 어느 정도의 편향을 받아들여야 하는 경우가 많다.
+2. 최대가능도추정은 모수적 추론의 주력 도구이다. 정칙 조건 아래에서 일치성, 점근정규성, 점근 효율성(CRLB 달성)을 갖는다.
+3. 적률법은 모집단 적률과 표본 적률을 맞추어 닫힌 형태의 추정량을 주는 더 간단한 대안이지만, 일반적으로 MLE보다 효율이 낮다.
+4. 베이즈 추정은 베이즈 정리를 통해 사전 지식을 반영한다. 켤레 사전분포는 다루기 쉬운 사후분포를 주며, MAP 추정은 베이즈 접근과 빈도주의 접근을 잇는다.
+5. Fisher 정보량은 자료가 모수에 관해 얼마나 많이 알려 주는지를 정량화하며, 임의의 불편추정량의 정밀도에 근본적인 하한(CRLB)을 설정한다.
+6. 충분성은 모수에 관한 모든 정보를 담은 최소한의 자료 요약을 찾아내며, Rao–Blackwell 정리와 Lehmann–Scheffé 정리를 통해 최적 추정을 가능하게 한다.

@@ -1,32 +1,32 @@
-# Maximum Likelihood Optimization Examples
+# 최대가능도 최적화 예제
 
-## Overview
+## 개요
 
-Maximum Likelihood Estimation often requires numerical optimization when closed-form solutions are unavailable. This page demonstrates the key optimization techniques used in practice -- grid search, gradient-based methods, and the Expectation-Maximization algorithm -- along with diagnostics for verifying convergence and the effect of starting values.
+닫힌 형태의 해가 없으면 최대가능도추정에는 수치 최적화가 필요한 경우가 많다. 이 페이지에서는 실무에서 쓰는 주요 최적화 기법인 격자탐색, 기울기 기반 방법, 기댓값–최대화 알고리즘과 함께 수렴을 확인하는 진단과 출발값의 효과를 살펴본다.
 
-## The Optimization Problem
+## 최적화 문제
 
-Given observed data $x_1, \ldots, x_n$ from a parametric family $f(x; \theta)$, the MLE solves:
+모수족 $f(x; \theta)$에서 얻은 관측 자료 $x_1, \ldots, x_n$이 주어졌을 때 MLE는 다음을 푼다:
 
 $$
 \hat{\theta}_{\text{MLE}} = \arg\max_\theta \ell(\theta) = \arg\max_\theta \sum_{i=1}^n \log f(x_i; \theta)
 $$
 
-Equivalently, we minimize the negative log-likelihood:
+동등하게 음의 로그가능도를 최소화한다:
 
 $$
 \hat{\theta}_{\text{MLE}} = \arg\min_\theta \left[-\ell(\theta)\right]
 $$
 
-!!! warning "Practical Considerations"
+!!! warning "실무적 고려사항"
 
-    - The log-likelihood may have multiple local maxima (e.g., mixture models).
-    - Constraints on the parameter space (e.g., $\sigma^2 > 0$) require reparameterization or constrained optimization.
-    - Poor starting values can cause convergence to a local optimum or numerical failure.
+    - 로그가능도에 국소 최댓값이 여럿 있을 수 있다(예: 혼합모형).
+    - 모수공간에 제약이 있으면(예: $\sigma^2 > 0$) 재모수화하거나 제약 최적화를 써야 한다.
+    - 출발값이 나쁘면 국소 최적점으로 수렴하거나 수치적으로 실패할 수 있다.
 
-## Grid Search
+## 격자탐색
 
-The simplest optimization strategy evaluates $\ell(\theta)$ over a grid of candidate values. This is feasible for one or two parameters and provides a useful visualization of the likelihood surface.
+가장 단순한 최적화 전략은 후보값 격자에서 $\ell(\theta)$를 평가하는 것이다. 모수가 하나나 둘일 때 실행 가능하며 가능도 곡면을 시각화하는 데 유용하다.
 
 ```python
 import numpy as np
@@ -51,25 +51,25 @@ print(f"Grid search MLE: mu_hat = {mu_hat:.4f}")
 print(f"Closed-form MLE: mu_hat = {data.mean():.4f}")
 ```
 
-## Gradient-Based Optimization
+## 기울기 기반 최적화
 
-For multi-parameter problems, gradient-based methods are essential. The **score function** (gradient of the log-likelihood) is:
+모수가 여럿인 문제에서는 기울기 기반 방법이 필수적이다. (로그가능도의 기울기인) **점수함수**는:
 
 $$
 S(\theta) = \frac{\partial}{\partial\theta}\ell(\theta)
 $$
 
-At the MLE, the score equals zero: $S(\hat{\theta}) = 0$.
+MLE에서 점수는 0이다: $S(\hat{\theta}) = 0$.
 
-### Reparameterization for Unconstrained Optimization
+### 제약 없는 최적화를 위한 재모수화
 
-When parameters are constrained (e.g., $\sigma^2 > 0$), a common trick is to optimize over a transformed parameter:
+모수에 제약이 있으면(예: $\sigma^2 > 0$) 변환된 모수에 대해 최적화하는 것이 흔한 요령이다:
 
 $$
 \phi = \log(\sigma^2) \quad \Rightarrow \quad \sigma^2 = e^\phi
 $$
 
-This transforms the constrained problem into an unconstrained one.
+이렇게 하면 제약 문제가 제약 없는 문제로 바뀐다.
 
 ```python
 import numpy as np
@@ -102,28 +102,28 @@ print(f"Numerical MLE: mu = {mu_hat:.4f}, sigma^2 = {sigma2_hat:.4f}")
 print(f"Closed-form:   mu = {data.mean():.4f}, sigma^2 = {np.mean((data - data.mean())**2):.4f}")
 ```
 
-## Newton-Raphson Method
+## Newton-Raphson 방법
 
-The Newton-Raphson method uses second-order information (the Hessian) for faster convergence:
+Newton-Raphson 방법은 (Hessian이라는) 2계 정보를 사용하여 더 빠르게 수렴한다:
 
 $$
 \theta^{(t+1)} = \theta^{(t)} - \left[\ell''(\theta^{(t)})\right]^{-1} \ell'(\theta^{(t)})
 $$
 
-In the multivariate case, this becomes:
+다변량인 경우에는 다음과 같다:
 
 $$
 \boldsymbol{\theta}^{(t+1)} = \boldsymbol{\theta}^{(t)} - \mathbf{H}^{-1}(\boldsymbol{\theta}^{(t)})\, \nabla\ell(\boldsymbol{\theta}^{(t)})
 $$
 
-where $\mathbf{H}$ is the Hessian matrix of the log-likelihood.
+여기서 $\mathbf{H}$는 로그가능도의 Hessian 행렬이다.
 
-!!! info "Fisher Scoring"
-    Replacing the observed Hessian with its expectation $-I(\theta)$ (the negative Fisher information matrix) gives the **Fisher scoring** algorithm. Near the MLE, Fisher scoring and Newton-Raphson behave similarly.
+!!! info "Fisher 점수법"
+    관측 Hessian을 그 기댓값 $-I(\theta)$(음의 Fisher 정보행렬)로 바꾸면 **Fisher 점수법** 알고리즘이 된다. MLE 근처에서는 Fisher 점수법과 Newton-Raphson이 비슷하게 거동한다.
 
-## Sensitivity to Starting Values
+## 출발값에 대한 민감도
 
-For non-convex likelihoods (e.g., mixture models), the optimization result can depend on the starting point.
+볼록하지 않은 가능도(예: 혼합모형)에서는 최적화 결과가 출발점에 의존할 수 있다.
 
 ```python
 import numpy as np
@@ -154,25 +154,25 @@ for i, x0 in enumerate(starts):
           f"mu2={result.x[2]:.3f}, nll={result.fun:.2f}")
 ```
 
-## Interpretation
+## 해석
 
-- **Grid search** is reliable for low-dimensional problems and provides direct visualization of the likelihood surface.
-- **Gradient-based methods** (Nelder-Mead, BFGS, Newton-Raphson) scale to high dimensions but may converge to local optima.
-- **Reparameterization** converts constrained optimization into unconstrained optimization, improving numerical stability.
-- **Multiple restarts** with different starting values help diagnose multimodality.
+- **격자탐색**은 저차원 문제에서 믿을 만하며 가능도 곡면을 직접 시각화해 준다.
+- **기울기 기반 방법**(Nelder-Mead, BFGS, Newton-Raphson)은 고차원으로 확장되지만 국소 최적점으로 수렴할 수 있다.
+- **재모수화**는 제약 최적화를 제약 없는 최적화로 바꾸어 수치적 안정성을 높인다.
+- **여러 출발값으로 재시작**하면 봉우리가 여럿인지 진단하는 데 도움이 된다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.** For $X_1, \ldots, X_n \overset{\text{iid}}{\sim} \text{Exp}(\lambda)$, write the negative log-likelihood and find the MLE analytically. Verify your answer by implementing a grid search over $\lambda \in [0.1, 5]$.
+**연습문제 1.** $X_1, \ldots, X_n \overset{\text{iid}}{\sim} \text{Exp}(\lambda)$에 대해 음의 로그가능도를 쓰고 MLE를 해석적으로 구하라. $\lambda \in [0.1, 5]$에서 격자탐색을 구현하여 답을 확인하라.
 
-??? success "Solution to Exercise 1"
-    The log-likelihood is:
+??? success "연습문제 1 풀이"
+    로그가능도는:
 
     $$
     \ell(\lambda) = n\log\lambda - \lambda\sum_{i=1}^n x_i
     $$
 
-    Setting $\ell'(\lambda) = n/\lambda - \sum x_i = 0$ gives $\hat{\lambda}_{\text{MLE}} = n/\sum x_i = 1/\bar{X}$.
+    $\ell'(\lambda) = n/\lambda - \sum x_i = 0$으로 두면 $\hat{\lambda}_{\text{MLE}} = n/\sum x_i = 1/\bar{X}$이다.
 
     ```python
     import numpy as np
@@ -187,63 +187,63 @@ for i, x0 in enumerate(starts):
     print(f"Analytic MLE: {lam_hat_exact:.4f}")
     ```
 
-    Both values should agree closely. $\square$
+    두 값이 거의 일치해야 한다. $\square$
 
 ---
 
-**Exercise 2.** Explain why optimizing $\phi = \log(\sigma^2)$ instead of $\sigma^2$ directly is preferable in numerical MLE. What property of the transformation ensures the optimizer never evaluates at $\sigma^2 \leq 0$?
+**연습문제 2.** 수치적 MLE에서 $\sigma^2$을 직접 최적화하는 대신 $\phi = \log(\sigma^2)$을 최적화하는 편이 나은 이유를 설명하라. 이 변환의 어떤 성질이 최적화기가 $\sigma^2 \leq 0$에서 평가하지 않도록 보장하는가?
 
-??? success "Solution to Exercise 2"
-    The exponential function $\sigma^2 = e^\phi$ maps $\phi \in \mathbb{R}$ to $\sigma^2 \in (0, \infty)$. Since $e^\phi > 0$ for all real $\phi$, the optimizer is free to search over all of $\mathbb{R}$ without ever producing an invalid (non-positive) variance. Without this reparameterization, gradient steps could push $\sigma^2$ below zero, causing the log-likelihood to be undefined (since $\log(\sigma^2)$ appears in the normal log-likelihood). The transformation also improves the optimization landscape by making the curvature more uniform. $\square$
+??? success "연습문제 2 풀이"
+    지수함수 $\sigma^2 = e^\phi$는 $\phi \in \mathbb{R}$를 $\sigma^2 \in (0, \infty)$로 보낸다. 모든 실수 $\phi$에 대해 $e^\phi > 0$이므로 최적화기는 유효하지 않은(양수가 아닌) 분산을 만들 걱정 없이 $\mathbb{R}$ 전체를 탐색할 수 있다. 이 재모수화가 없으면 기울기 단계가 $\sigma^2$을 0 아래로 밀어낼 수 있고, (정규 로그가능도에 $\log(\sigma^2)$이 나오므로) 로그가능도가 정의되지 않게 된다. 이 변환은 곡률을 더 고르게 만들어 최적화 지형도 개선한다. $\square$
 
 ---
 
-**Exercise 3.** Derive the Newton-Raphson update for estimating $p$ in $\text{Binomial}(n, p)$ given a single observation $x$. Start from $p^{(0)} = 0.5$ and compute the first two iterates for $n = 20, x = 14$.
+**연습문제 3.** 관측값 $x$ 하나가 주어졌을 때 $\text{Binomial}(n, p)$의 $p$를 추정하는 Newton-Raphson 갱신식을 유도하라. $p^{(0)} = 0.5$에서 시작하여 $n = 20, x = 14$일 때 처음 두 번의 반복값을 계산하라.
 
-??? success "Solution to Exercise 3"
-    The log-likelihood (ignoring the constant) is:
+??? success "연습문제 3 풀이"
+    (상수를 무시한) 로그가능도는:
 
     $$
     \ell(p) = x\log p + (n - x)\log(1 - p)
     $$
 
-    Score: $\ell'(p) = x/p - (n-x)/(1-p)$.
+    점수: $\ell'(p) = x/p - (n-x)/(1-p)$.
 
     Hessian: $\ell''(p) = -x/p^2 - (n-x)/(1-p)^2$.
 
-    Newton-Raphson update: $p^{(t+1)} = p^{(t)} - \ell'(p^{(t)})/\ell''(p^{(t)})$.
+    Newton-Raphson 갱신: $p^{(t+1)} = p^{(t)} - \ell'(p^{(t)})/\ell''(p^{(t)})$.
 
-    With $n = 20, x = 14, p^{(0)} = 0.5$:
+    $n = 20, x = 14, p^{(0)} = 0.5$일 때:
 
     - $\ell'(0.5) = 14/0.5 - 6/0.5 = 28 - 12 = 16$
     - $\ell''(0.5) = -14/0.25 - 6/0.25 = -56 - 24 = -80$
     - $p^{(1)} = 0.5 - 16/(-80) = 0.5 + 0.2 = 0.7$
 
-    At $p^{(1)} = 0.7$:
+    $p^{(1)} = 0.7$에서:
 
     - $\ell'(0.7) = 14/0.7 - 6/0.3 = 20 - 20 = 0$
 
-    So $p^{(2)} = 0.7$, which is already the MLE $\hat{p} = x/n = 14/20 = 0.7$. Newton-Raphson converged in one step. $\square$
+    따라서 $p^{(2)} = 0.7$이며, 이는 이미 MLE $\hat{p} = x/n = 14/20 = 0.7$이다. Newton-Raphson이 한 단계 만에 수렴했다. $\square$
 
 ---
 
-**Exercise 4.** For a Gaussian mixture with two components, show that the log-likelihood is unbounded above (hint: let one component's variance shrink to zero around a data point). Why does this not invalidate MLE in practice?
+**연습문제 4.** 성분이 둘인 Gaussian 혼합에서 로그가능도가 위로 유계가 아님을 보여라(힌트: 한 성분의 분산을 어떤 자료점 주위에서 0으로 보내라). 실무에서 이것이 MLE를 무효화하지 않는 이유는 무엇인가?
 
-??? success "Solution to Exercise 4"
-    Consider the mixture density $\pi \cdot N(x_1, \sigma_1^2) + (1-\pi) \cdot N(\mu_2, \sigma_2^2)$. If we set $\mu_1 = x_1$ (a data point) and let $\sigma_1 \to 0$, the first component's density at $x_1$ diverges as $1/\sigma_1 \to \infty$, making the log-likelihood unbounded.
+??? success "연습문제 4 풀이"
+    혼합밀도 $\pi \cdot N(x_1, \sigma_1^2) + (1-\pi) \cdot N(\mu_2, \sigma_2^2)$을 생각하자. $\mu_1 = x_1$(어떤 자료점)로 두고 $\sigma_1 \to 0$으로 보내면 $x_1$에서 첫 성분의 밀도가 $1/\sigma_1 \to \infty$로 발산하여 로그가능도가 유계가 아니게 된다.
 
-    In practice, this is not a problem because:
+    실무에서 이것이 문제가 되지 않는 이유는:
 
-    1. These degenerate solutions correspond to overfitting a single point and are statistically meaningless.
-    2. The EM algorithm, the standard method for mixture models, cannot reach such degenerate solutions from reasonable starting values.
-    3. Practitioners impose minimum variance constraints or use penalized likelihood.
-    4. The *useful* MLE is a local maximum of the likelihood, not the global supremum. $\square$
+    1. 이런 퇴화된 해는 자료점 하나에 과대적합한 것이어서 통계적으로 무의미하다.
+    2. 혼합모형의 표준 방법인 EM 알고리즘은 합리적인 출발값에서 그런 퇴화된 해에 도달하지 못한다.
+    3. 실무자는 최소 분산 제약을 두거나 벌점 가능도를 쓴다.
+    4. *유용한* MLE는 전역 상한이 아니라 가능도의 국소 최댓값이다. $\square$
 
 ---
 
-**Exercise 5.** Implement the Fisher scoring algorithm to estimate the parameter $p$ of a Bernoulli distribution. The Fisher information is $I(p) = 1/[p(1-p)]$. Compare the convergence speed to Newton-Raphson for $n = 50$ observations with true $p = 0.3$.
+**연습문제 5.** Bernoulli 분포의 모수 $p$를 추정하는 Fisher 점수법 알고리즘을 구현하라. Fisher 정보량은 $I(p) = 1/[p(1-p)]$이다. 참 $p = 0.3$인 $n = 50$개의 관측값에서 Newton-Raphson과 수렴 속도를 비교하라.
 
-??? success "Solution to Exercise 5"
+??? success "연습문제 5 풀이"
     ```python
     import numpy as np
 
@@ -269,4 +269,4 @@ for i, x0 in enumerate(starts):
         print(f"FS  iter {i+1}: p = {p_fs:.8f}")
     ```
 
-    Both converge to $\hat{p} = x_{\text{sum}}/n$. For the Bernoulli, the observed and expected information are closely related, so convergence speeds are nearly identical. In general, Fisher scoring can be more stable when the observed Hessian is poorly conditioned. $\square$
+    둘 다 $\hat{p} = x_{\text{sum}}/n$으로 수렴한다. Bernoulli에서는 관측 정보량과 기대 정보량이 밀접하게 연결되어 있어 수렴 속도가 거의 같다. 일반적으로는 관측 Hessian의 조건수가 나쁠 때 Fisher 점수법이 더 안정적일 수 있다. $\square$

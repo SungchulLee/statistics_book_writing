@@ -1,57 +1,57 @@
-# Log-Likelihood Visualization
+# 로그가능도 시각화
 
-## Overview
+## 개요
 
-The **log-likelihood function** is the logarithm of the likelihood, and it serves as the primary tool for maximum likelihood estimation. Working with the log-likelihood rather than the likelihood itself avoids numerical underflow when multiplying many small probabilities and converts products into sums, simplifying both computation and differentiation. This page demonstrates log-likelihood construction, visualization, and MLE extraction using a Bernoulli coin-flipping example.
+**로그가능도함수**는 가능도에 로그를 취한 것으로 최대가능도추정의 주된 도구이다. 가능도 자체 대신 로그가능도로 작업하면 작은 확률을 많이 곱할 때 생기는 수치적 언더플로를 피할 수 있고 곱이 합으로 바뀌어 계산과 미분이 모두 간단해진다. 이 페이지에서는 Bernoulli 동전 던지기 예제로 로그가능도의 구성, 시각화, MLE 추출을 보인다.
 
-## From Likelihood to Log-Likelihood
+## 가능도에서 로그가능도로
 
-Given iid observations $x_1, \ldots, x_n$ from a distribution $f(x; \theta)$, the **likelihood** is:
+분포 $f(x; \theta)$에서 얻은 i.i.d. 관측값 $x_1, \ldots, x_n$이 주어졌을 때 **가능도**는:
 
 $$
 L(\theta) = \prod_{i=1}^n f(x_i; \theta)
 $$
 
-The **log-likelihood** is:
+**로그가능도**는:
 
 $$
 \ell(\theta) = \log L(\theta) = \sum_{i=1}^n \log f(x_i; \theta)
 $$
 
-Since $\log$ is a strictly increasing function, the MLE is the same for both:
+$\log$가 순증가함수이므로 MLE는 둘에 대해 같다:
 
 $$
 \hat{\theta}_{\text{MLE}} = \arg\max_\theta L(\theta) = \arg\max_\theta \ell(\theta)
 $$
 
-!!! warning "Why Not Use the Likelihood Directly?"
-    For $n = 100$ Bernoulli observations with $p = 0.7$, the likelihood involves a product of 100 numbers between 0 and 1. This product is of order $10^{-30}$ -- far below the threshold for floating-point underflow. The log-likelihood avoids this by working with sums of log-probabilities.
+!!! warning "왜 가능도를 직접 쓰지 않는가?"
+    $p = 0.7$인 $n = 100$개의 Bernoulli 관측값에서 가능도는 0과 1 사이 수 100개의 곱이다. 이 곱은 $10^{-30}$ 규모로 부동소수점 언더플로 문턱보다 훨씬 작다. 로그가능도는 로그확률의 합으로 작업하여 이를 피한다.
 
-## Bernoulli Log-Likelihood
+## Bernoulli 로그가능도
 
-For $X_i \sim \text{Bernoulli}(p)$, the PMF is:
+$X_i \sim \text{Bernoulli}(p)$에서 PMF는:
 
 $$
 f(x; p) = p^x(1-p)^{1-x}, \quad x \in \{0, 1\}
 $$
 
-The log-probability of a single observation is:
+관측값 하나의 로그확률은:
 
 $$
 \log f(x; p) = x\log p + (1-x)\log(1-p)
 $$
 
-The log-likelihood for $n$ observations is:
+$n$개 관측값에 대한 로그가능도는:
 
 $$
 \ell(p) = \sum_{i=1}^n [x_i \log p + (1 - x_i)\log(1-p)] = k\log p + (n-k)\log(1-p)
 $$
 
-where $k = \sum_{i=1}^n x_i$ is the number of successes.
+여기서 $k = \sum_{i=1}^n x_i$는 성공 횟수이다.
 
-## Deriving the MLE
+## MLE의 유도
 
-Setting the score (derivative of the log-likelihood) to zero:
+(로그가능도의 도함수인) 점수를 0으로 두면:
 
 $$
 \ell'(p) = \frac{k}{p} - \frac{n-k}{1-p} = 0
@@ -61,13 +61,13 @@ $$
 k(1-p) = (n-k)p \quad \Rightarrow \quad k = np \quad \Rightarrow \quad \hat{p}_{\text{MLE}} = \frac{k}{n}
 $$
 
-The second derivative confirms this is a maximum:
+2계도함수가 최댓값임을 확인해 준다:
 
 $$
 \ell''(p) = -\frac{k}{p^2} - \frac{n-k}{(1-p)^2} < 0
 $$
 
-## Implementation and Visualization
+## 구현과 시각화
 
 ```python
 import numpy as np
@@ -103,12 +103,12 @@ print(f"Grid-search MLE: p_hat = {mle_p:.4f}")
 print(f"Max log-likelihood: {log_liks[idx]:.4f}")
 ```
 
-!!! note "Log-Likelihood Shape"
-    The Bernoulli log-likelihood is a concave function of $p$ on $(0, 1)$, guaranteeing a unique global maximum. This concavity follows from $\ell''(p) < 0$ for all $p \in (0, 1)$.
+!!! note "로그가능도의 모양"
+    Bernoulli 로그가능도는 $(0, 1)$에서 $p$에 대해 오목한 함수이므로 유일한 전역 최댓값이 보장된다. 이 오목성은 모든 $p \in (0, 1)$에서 $\ell''(p) < 0$이라는 사실에서 따라 나온다.
 
-## Vectorized Computation
+## 벡터화된 계산
 
-The log-likelihood can also be computed efficiently without a loop:
+로그가능도는 반복문 없이도 효율적으로 계산할 수 있다:
 
 ```python
 import numpy as np
@@ -129,9 +129,9 @@ idx = np.argmax(ll_vec)
 print(f"Vectorized MLE: p = {ps[idx]:.4f}")
 ```
 
-## Likelihood vs Log-Likelihood Comparison
+## 가능도와 로그가능도의 비교
 
-To illustrate why the log-transform is essential, consider the raw likelihood values:
+로그변환이 왜 필수적인지 보이기 위해 원래 가능도 값을 살펴보자:
 
 ```python
 import numpy as np
@@ -149,106 +149,98 @@ print(f"Raw likelihood at p=0.7: {raw_likelihood:.2e}")
 print(f"Log-likelihood at p=0.7: {log_likelihood:.4f}")
 ```
 
-The raw likelihood is an astronomically small number, while the log-likelihood is a manageable negative number.
+원래 가능도는 천문학적으로 작은 수인 반면 로그가능도는 다루기 좋은 음수이다.
 
-## Interpretation
+## 해석
 
-- The **log-likelihood function** transforms a product of probabilities into a sum, providing numerical stability and analytical convenience.
-- The **MLE** is the parameter value at the peak of the log-likelihood curve.
-- For Bernoulli data, the MLE $\hat{p} = k/n$ (sample proportion) can be found analytically, but the log-likelihood visualization reveals the full shape of the inference landscape.
-- The **curvature** of the log-likelihood at the MLE is related to the Fisher information and determines the precision of the estimate.
+- **로그가능도함수**는 확률의 곱을 합으로 바꾸어 수치적 안정성과 해석적 편의를 제공한다.
+- **MLE**는 로그가능도 곡선의 봉우리에 있는 모수값이다.
+- Bernoulli 자료에서 MLE $\hat{p} = k/n$(표본비율)은 해석적으로 구할 수 있지만, 로그가능도를 시각화하면 추론 지형의 전체 모양이 드러난다.
+- MLE에서 로그가능도의 **곡률**은 Fisher 정보량과 관련되며 추정의 정밀도를 결정한다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.** For $n = 20$ Bernoulli trials with $k = 14$ successes, compute the log-likelihood at $p = 0.5, 0.6, 0.7, 0.8$. Which value has the highest log-likelihood? How does this compare to the MLE?
+**연습문제 1.** $k = 14$번 성공한 $n = 20$번의 Bernoulli 시행에 대해 $p = 0.5, 0.6, 0.7, 0.8$에서 로그가능도를 계산하라. 어느 값의 로그가능도가 가장 높은가? MLE와 어떻게 비교되는가?
 
-??? success "Solution to Exercise 1"
-    Using $\ell(p) = 14\log p + 6\log(1-p)$:
-
-    | $p$ | $\ell(p)$ |
-    |-----|-----------|
-    | 0.5 | $14\log 0.5 + 6\log 0.5 = 20\log 0.5 = -13.863$ |
-    | 0.6 | $14\log 0.6 + 6\log 0.6 = 14(-0.511) + 6(-0.511) = -7.148 + (-3.065) = -10.213$ |
-    | 0.7 | $14\log 0.7 + 6\log 0.7 = 14(-0.357) + 6(-1.204) = -4.993 + (-7.225) = ... $ |
-
-    Computing precisely:
+??? success "연습문제 1 풀이"
+    $\ell(p) = 14\log p + 6\log(1-p)$를 사용하여 계산하면:
 
     - $\ell(0.5) = 20 \ln 0.5 = -13.863$
     - $\ell(0.6) = 14 \ln 0.6 + 6 \ln 0.4 = -7.148 - 5.498 = -12.646$
     - $\ell(0.7) = 14 \ln 0.7 + 6 \ln 0.3 = -4.993 - 7.225 = -12.218$
     - $\ell(0.8) = 14 \ln 0.8 + 6 \ln 0.2 = -3.124 - 9.657 = -12.781$
 
-    The highest log-likelihood is at $p = 0.7$, which is the MLE: $\hat{p} = 14/20 = 0.7$. $\square$
+    로그가능도가 가장 높은 것은 $p = 0.7$이며, 이것이 MLE $\hat{p} = 14/20 = 0.7$이다. $\square$
 
 ---
 
-**Exercise 2.** Show that the log-likelihood of the Bernoulli model is concave in $p$. Why does concavity guarantee that any critical point is a global maximum?
+**연습문제 2.** Bernoulli 모형의 로그가능도가 $p$에 대해 오목함을 보여라. 오목성이 임의의 임계점이 전역 최댓값임을 보장하는 이유는 무엇인가?
 
-??? success "Solution to Exercise 2"
-    The second derivative of the log-likelihood is:
+??? success "연습문제 2 풀이"
+    로그가능도의 2계도함수는:
 
     $$
     \ell''(p) = -\frac{k}{p^2} - \frac{n-k}{(1-p)^2}
     $$
 
-    Since $k \geq 0$, $n - k \geq 0$, $p^2 > 0$, and $(1-p)^2 > 0$, both terms are non-positive. For $0 < k < n$ (at least one success and one failure), both terms are strictly negative, so $\ell''(p) < 0$ for all $p \in (0, 1)$.
+    $k \geq 0$, $n - k \geq 0$, $p^2 > 0$, $(1-p)^2 > 0$이므로 두 항 모두 양수가 아니다. $0 < k < n$이면(성공과 실패가 적어도 하나씩 있으면) 두 항이 모두 엄격하게 음수이므로 모든 $p \in (0, 1)$에서 $\ell''(p) < 0$이다.
 
-    A function with strictly negative second derivative is strictly concave. For a strictly concave function on an interval, any critical point (where $\ell'(p) = 0$) must be a global maximum, because concavity means the function curves downward everywhere. There cannot be any other local maxima or saddle points. $\square$
+    2계도함수가 엄격하게 음수인 함수는 순오목이다. 구간에서 순오목인 함수에서는 임의의 임계점($\ell'(p) = 0$인 점)이 반드시 전역 최댓값이다. 오목성은 함수가 어디서나 아래로 휜다는 뜻이기 때문이다. 다른 국소 최댓값이나 안장점은 존재할 수 없다. $\square$
 
 ---
 
-**Exercise 3.** Explain why using $\log L(\theta)$ instead of $L(\theta)$ is essential for numerical computation. Give a specific example where $L(\theta)$ would underflow to zero on a computer.
+**연습문제 3.** 수치 계산에서 $L(\theta)$ 대신 $\log L(\theta)$를 쓰는 것이 왜 필수적인지 설명하라. 컴퓨터에서 $L(\theta)$가 0으로 언더플로되는 구체적인 예를 들라.
 
-??? success "Solution to Exercise 3"
-    IEEE 754 double-precision floating point has a minimum positive value of approximately $5 \times 10^{-324}$. Consider $n = 1000$ iid Bernoulli$(0.5)$ observations. The likelihood at $p = 0.5$ is:
+??? success "연습문제 3 풀이"
+    IEEE 754 배정밀도 부동소수점의 최소 양수는 약 $5 \times 10^{-324}$이다. i.i.d. Bernoulli$(0.5)$ 관측값 $n = 1000$개를 생각하자. $p = 0.5$에서 가능도는:
 
     $$
     L(0.5) = 0.5^{1000} = 2^{-1000} \approx 9.3 \times 10^{-302}
     $$
 
-    This is representable, but for $n = 1100$ we get $2^{-1100} \approx 10^{-331}$, which is below the minimum and would underflow to exactly 0.0 in floating point.
+    이는 표현 가능하지만, $n = 1100$이면 $2^{-1100} \approx 10^{-331}$로 최소값보다 작아 부동소수점에서 정확히 0.0으로 언더플로된다.
 
-    The log-likelihood avoids this: $\ell(0.5) = -1100 \ln 2 \approx -762.5$, which is a perfectly representable number. Even for $n = 10^6$, the log-likelihood remains numerically stable. $\square$
+    로그가능도는 이를 피한다: $\ell(0.5) = -1100 \ln 2 \approx -762.5$로 완벽하게 표현 가능한 수이다. $n = 10^6$에서도 로그가능도는 수치적으로 안정하다. $\square$
 
 ---
 
-**Exercise 4.** For the Poisson distribution with $n$ observations, write the log-likelihood $\ell(\lambda)$ and derive the MLE. Verify that $\ell''(\hat{\lambda}) < 0$.
+**연습문제 4.** $n$개의 관측값을 갖는 Poisson 분포에 대해 로그가능도 $\ell(\lambda)$를 쓰고 MLE를 유도하라. $\ell''(\hat{\lambda}) < 0$임을 확인하라.
 
-??? success "Solution to Exercise 4"
-    The Poisson PMF is $f(x; \lambda) = e^{-\lambda}\lambda^x/x!$, so:
+??? success "연습문제 4 풀이"
+    Poisson PMF는 $f(x; \lambda) = e^{-\lambda}\lambda^x/x!$이므로:
 
     $$
     \ell(\lambda) = \sum_{i=1}^n [-\lambda + x_i \log\lambda - \log(x_i!)] = -n\lambda + \left(\sum x_i\right)\log\lambda - \sum\log(x_i!)
     $$
 
-    Score: $\ell'(\lambda) = -n + \frac{\sum x_i}{\lambda} = 0$, giving $\hat{\lambda} = \bar{X}$.
+    점수: $\ell'(\lambda) = -n + \frac{\sum x_i}{\lambda} = 0$이므로 $\hat{\lambda} = \bar{X}$이다.
 
-    Second derivative: $\ell''(\lambda) = -\frac{\sum x_i}{\lambda^2}$.
+    2계도함수: $\ell''(\lambda) = -\frac{\sum x_i}{\lambda^2}$.
 
-    At $\hat{\lambda} = \bar{X}$: $\ell''(\bar{X}) = -\frac{n\bar{X}}{\bar{X}^2} = -\frac{n}{\bar{X}} < 0$ (assuming $\bar{X} > 0$).
+    $\hat{\lambda} = \bar{X}$에서 ($\bar{X} > 0$을 가정하면) $\ell''(\bar{X}) = -\frac{n\bar{X}}{\bar{X}^2} = -\frac{n}{\bar{X}} < 0$이다.
 
-    This confirms the log-likelihood is concave and the MLE is a maximum. $\square$
+    로그가능도가 오목하고 MLE가 최댓값임이 확인된다. $\square$
 
 ---
 
-**Exercise 5.** The observed Fisher information is $\hat{I}(\theta) = -\ell''(\hat{\theta})$. For the Bernoulli model, show that the observed information at the MLE equals $n/[\hat{p}(1-\hat{p})]$. Use this to construct an approximate 95% confidence interval for $p$ when $n = 100$ and $k = 72$.
+**연습문제 5.** 관측 Fisher 정보량은 $\hat{I}(\theta) = -\ell''(\hat{\theta})$이다. Bernoulli 모형에서 MLE에서의 관측 정보량이 $n/[\hat{p}(1-\hat{p})]$과 같음을 보여라. 이를 사용하여 $n = 100$, $k = 72$일 때 $p$에 대한 근사적인 95% 신뢰구간을 구성하라.
 
-??? success "Solution to Exercise 5"
-    From Exercise 2, $\ell''(p) = -k/p^2 - (n-k)/(1-p)^2$.
+??? success "연습문제 5 풀이"
+    연습문제 2에서 $\ell''(p) = -k/p^2 - (n-k)/(1-p)^2$이다.
 
-    At $\hat{p} = k/n$:
+    $\hat{p} = k/n$에서:
 
     $$
     -\ell''(\hat{p}) = \frac{k}{\hat{p}^2} + \frac{n-k}{(1-\hat{p})^2} = \frac{n\hat{p}}{\hat{p}^2} + \frac{n(1-\hat{p})}{(1-\hat{p})^2} = \frac{n}{\hat{p}} + \frac{n}{1-\hat{p}} = \frac{n}{\hat{p}(1-\hat{p})}
     $$
 
-    For $n = 100, k = 72$: $\hat{p} = 0.72$ and $\hat{I} = 100/(0.72 \times 0.28) = 495.87$.
+    $n = 100, k = 72$이면 $\hat{p} = 0.72$이고 $\hat{I} = 100/(0.72 \times 0.28) = 495.87$이다.
 
-    The approximate variance of the MLE is $1/\hat{I} = 0.72 \times 0.28/100 = 0.002016$.
+    MLE의 근사 분산은 $1/\hat{I} = 0.72 \times 0.28/100 = 0.002016$이다.
 
-    The standard error is $\sqrt{0.002016} = 0.04490$.
+    표준오차는 $\sqrt{0.002016} = 0.04490$이다.
 
-    The 95% confidence interval is:
+    95% 신뢰구간은:
 
     $$
     0.72 \pm 1.96 \times 0.04490 = [0.632, 0.808]

@@ -1,114 +1,114 @@
-# MoM vs MLE Comparison
+# 적률법과 MLE의 비교
 
-## Why Compare These Two Methods?
+## 왜 두 방법을 비교하는가?
 
-Having developed the Method of Moments (MoM) and Maximum Likelihood Estimation (MLE) as separate frameworks, a natural question arises: when should we prefer one method over the other? Both approaches produce consistent estimators under suitable conditions, yet they differ in computational complexity, statistical efficiency, and sensitivity to model assumptions. Understanding these trade-offs is essential for making principled choices in practice.
+적률법(MoM)과 최대가능도추정(MLE)을 각각의 틀로 살펴보았으니 자연스러운 물음이 떠오른다. 언제 어느 쪽을 선호해야 하는가? 두 접근 모두 적절한 조건에서 일치추정량을 주지만 계산 복잡도, 통계적 효율성, 모형 가정에 대한 민감도가 다르다. 이 맞바꿈을 이해하는 것이 실무에서 원리 있는 선택을 하는 데 필수적이다.
 
-## Side-by-Side Overview
+## 나란히 놓고 보기
 
-The following table summarizes the key differences between MoM and MLE. Each criterion is discussed in detail in the sections that follow.
+다음 표는 적률법과 MLE의 주요 차이를 요약한다. 각 기준은 이어지는 절에서 자세히 다룬다.
 
-| Criterion | MoM | MLE |
+| 기준 | 적률법 | MLE |
 |---|---|---|
-| Computation | Often closed-form | May require numerical optimization |
-| Efficiency | Generally less efficient | Asymptotically efficient (achieves CRLB) |
-| Consistency | Yes (identifiability + finite moments) | Yes (under regularity conditions) |
-| Invariance | Not in general | Yes (functional invariance) |
-| Robustness | Less sensitive to distributional misspecification | Sensitive to model misspecification |
+| 계산 | 흔히 닫힌 형태 | 수치 최적화가 필요할 수 있음 |
+| 효율성 | 일반적으로 덜 효율적 | 점근적으로 효율적 (CRLB 달성) |
+| 일치성 | 예 (식별 가능성 + 유한한 적률) | 예 (정칙 조건 아래) |
+| 불변성 | 일반적으로 아니오 | 예 (함수적 불변성) |
+| 로버스트성 | 분포 설정 오류에 덜 민감 | 모형 설정 오류에 민감 |
 
-## Detailed Comparison
+## 상세 비교
 
-### Computation
+### 계산
 
-MoM estimators are obtained by solving a system of equations that match sample moments to population moments. For many standard distributions, this yields closed-form expressions. MLE, by contrast, requires maximizing the log-likelihood function, which often demands iterative numerical methods such as Newton-Raphson or the EM algorithm.
+적률법 추정량은 표본 적률을 모집단 적률과 맞추는 연립방정식을 풀어 얻는다. 표준적인 분포 다수에서 닫힌 형태의 표현이 나온다. 반면 MLE는 로그가능도함수를 최대화해야 하므로 Newton-Raphson이나 EM 알고리즘 같은 반복적 수치 방법이 필요한 경우가 많다.
 
-In practice, MoM estimates frequently serve as starting values for iterative MLE algorithms, combining the computational ease of MoM with the statistical optimality of MLE.
+실무에서는 적률법 추정값이 반복적인 MLE 알고리즘의 출발값으로 자주 쓰이며, 적률법의 계산 편의와 MLE의 통계적 최적성을 결합한다.
 
-### Efficiency
+### 효율성
 
-The most important theoretical distinction is **asymptotic efficiency**. Under standard regularity conditions, the MLE achieves the Cramer-Rao lower bound (CRLB) as $n \to \infty$, meaning no other consistent estimator has smaller asymptotic variance. In contrast, the MoM estimator generally does not achieve this bound.
+이론적으로 가장 중요한 차이는 **점근 효율성**이다. 표준적인 정칙 조건 아래에서 MLE는 $n \to \infty$일 때 Cramér-Rao 하한(CRLB)을 달성하며, 이는 다른 어떤 일치추정량도 더 작은 점근분산을 가질 수 없음을 뜻한다. 반면 적률법 추정량은 일반적으로 이 한계를 달성하지 못한다.
 
-The **asymptotic relative efficiency (ARE)** quantifies this gap. For estimators $\hat{\theta}_{\text{MoM}}$ and $\hat{\theta}_{\text{MLE}}$, the ARE is defined as
+**점근 상대효율(ARE)**이 이 격차를 정량화한다. 추정량 $\hat{\theta}_{\text{MoM}}$과 $\hat{\theta}_{\text{MLE}}$에 대해 ARE는 다음과 같이 정의된다:
 
 $$
 \text{ARE}(\hat{\theta}_{\text{MoM}}, \hat{\theta}_{\text{MLE}}) = \frac{\text{Var}_{\text{asy}}(\hat{\theta}_{\text{MLE}})}{\text{Var}_{\text{asy}}(\hat{\theta}_{\text{MoM}})}
 $$
 
-An ARE less than 1 indicates that MLE is more efficient.
+ARE가 1보다 작으면 MLE가 더 효율적이라는 뜻이다.
 
-!!! example "Exponential Distribution: ARE Comparison"
+!!! example "Exponential 분포: ARE 비교"
 
-    Let $X_1, \ldots, X_n \overset{\text{iid}}{\sim} \text{Exp}(\lambda)$. Both MoM and MLE yield the same estimator $\hat{\lambda} = 1/\bar{X}$, so the ARE equals 1. This is one case where MoM is fully efficient.
+    $X_1, \ldots, X_n \overset{\text{iid}}{\sim} \text{Exp}(\lambda)$라 하자. 적률법과 MLE 모두 같은 추정량 $\hat{\lambda} = 1/\bar{X}$를 주므로 ARE는 1이다. 적률법이 완전히 효율적인 사례이다.
 
-!!! example "Gamma Distribution: ARE Comparison"
+!!! example "Gamma 분포: ARE 비교"
 
-    Let $X_1, \ldots, X_n \overset{\text{iid}}{\sim} \text{Gamma}(\alpha, \beta)$. The MoM estimators are
+    $X_1, \ldots, X_n \overset{\text{iid}}{\sim} \text{Gamma}(\alpha, \beta)$라 하자. 적률법 추정량은
 
     $$
     \hat{\alpha}_{\text{MoM}} = \frac{\bar{X}^2}{S^2}, \qquad \hat{\beta}_{\text{MoM}} = \frac{S^2}{\bar{X}}
     $$
 
-    where $S^2$ is the sample variance. The MLE requires solving a system involving the digamma function and has no closed form. For the shape parameter $\alpha$, the ARE of MoM relative to MLE can be substantially less than 1, especially when $\alpha$ is small. For instance, when $\alpha = 1$, the ARE for the shape parameter is approximately 0.64, meaning MoM requires roughly 56% more observations than MLE to achieve the same precision.
+    이며 $S^2$은 표본분산이다. MLE는 digamma 함수를 포함하는 연립방정식을 풀어야 하고 닫힌 형태가 없다. 형상모수 $\alpha$에 대해 MLE 대비 적률법의 ARE는 특히 $\alpha$가 작을 때 1보다 상당히 작을 수 있다. 예를 들어 $\alpha = 1$이면 형상모수의 ARE가 약 0.64이며, 이는 같은 정밀도를 얻으려면 적률법이 MLE보다 관측값을 대략 56% 더 필요로 함을 뜻한다.
 
-### Consistency
+### 일치성
 
-Both methods produce consistent estimators, but under different conditions:
+두 방법 모두 일치추정량을 주지만 조건이 다르다:
 
-- **MoM** requires that the moment equations uniquely identify the parameters (identifiability) and that the relevant population moments are finite.
-- **MLE** requires a different set of regularity conditions, including that the parameter space is identifiable, the log-likelihood is sufficiently smooth, and the true parameter lies in the interior of the parameter space.
+- **적률법**은 적률방정식이 모수를 유일하게 식별하고(식별 가능성) 관련된 모집단 적률이 유한할 것을 요구한다.
+- **MLE**는 다른 정칙 조건을 요구한다. 모수공간이 식별 가능하고, 로그가능도가 충분히 매끄러우며, 참 모수가 모수공간의 내부에 있어야 한다.
 
-### Invariance
+### 불변성
 
-MLE has a powerful **functional invariance** property: if $\hat{\theta}$ is the MLE of $\theta$, then $g(\hat{\theta})$ is the MLE of $g(\theta)$ for any function $g$. This means we can freely reparametrize without re-deriving the estimator.
+MLE는 강력한 **함수적 불변성**을 갖는다. $\hat{\theta}$가 $\theta$의 MLE이면 임의의 함수 $g$에 대해 $g(\hat{\theta})$가 $g(\theta)$의 MLE이다. 덕분에 추정량을 다시 유도하지 않고 자유롭게 재모수화할 수 있다.
 
-MoM does not enjoy this property in general. If $\hat{\theta}_{\text{MoM}}$ is the MoM estimator of $\theta$, applying a nonlinear transformation $g(\hat{\theta}_{\text{MoM}})$ does not necessarily produce the MoM estimator of $g(\theta)$.
+적률법은 일반적으로 이 성질을 갖지 않는다. $\hat{\theta}_{\text{MoM}}$이 $\theta$의 적률법 추정량이더라도 비선형 변환 $g(\hat{\theta}_{\text{MoM}})$이 반드시 $g(\theta)$의 적률법 추정량이 되지는 않는다.
 
-### Robustness to Model Misspecification
+### 모형 설정 오류에 대한 로버스트성
 
-MoM uses only a finite number of population moments and does not require specifying the entire distribution. If the assumed model is wrong but the first few moments are still correctly modeled, MoM can still yield reasonable estimates.
+적률법은 유한한 개수의 모집단 적률만 사용하며 분포 전체를 설정할 필요가 없다. 가정한 모형이 틀렸더라도 처음 몇 개의 적률이 여전히 올바르게 모형화되어 있다면 적률법은 합리적인 추정값을 줄 수 있다.
 
-MLE, on the other hand, uses the full likelihood function and is therefore more sensitive to misspecification. When the assumed model is incorrect, the MLE converges to the parameter value that minimizes the Kullback-Leibler divergence from the true distribution to the assumed model family — which may not correspond to a meaningful quantity.
+반면 MLE는 완전한 가능도함수를 사용하므로 설정 오류에 더 민감하다. 가정한 모형이 틀리면 MLE는 참 분포에서 가정한 모형족까지의 Kullback-Leibler 발산을 최소화하는 모수값으로 수렴하는데, 이것이 의미 있는 양에 대응하지 않을 수 있다.
 
-## When to Use Each Method
+## 어느 쪽을 언제 쓰는가
 
-### Prefer MoM When
+### 적률법을 선호할 때
 
-- **The likelihood is intractable.** Some models (e.g., certain mixture models or models defined via moment conditions) do not have a closed-form likelihood. MoM provides a viable alternative.
-- **A quick initial estimate is needed.** MoM estimators serve as excellent starting values for iterative MLE algorithms.
-- **Robustness to misspecification is important.** When confidence in the parametric model is limited, MoM estimates based on low-order moments may be more reliable.
+- **가능도를 다루기 어려울 때.** 어떤 모형(예: 특정 혼합모형이나 적률 조건으로 정의된 모형)은 닫힌 형태의 가능도가 없다. 적률법이 실행 가능한 대안이 된다.
+- **빠른 초기 추정값이 필요할 때.** 적률법 추정량은 반복적인 MLE 알고리즘의 훌륭한 출발값이 된다.
+- **설정 오류에 대한 로버스트성이 중요할 때.** 모수적 모형에 대한 확신이 제한적일 때 저차 적률에 기반한 적률법 추정값이 더 믿을 만할 수 있다.
 
-### Prefer MLE When
+### MLE를 선호할 때
 
-- **Statistical efficiency is the priority.** For correctly specified models with large samples, MLE provides the most precise estimates.
-- **Asymptotic inference is needed.** The well-developed asymptotic theory of MLE (Wald tests, likelihood ratio tests, score tests) makes it the natural choice when formal hypothesis testing or confidence intervals are required.
-- **The invariance property is useful.** When interest lies in a transformed parameter $g(\theta)$, MLE avoids the need to re-derive the estimator.
+- **통계적 효율성이 우선일 때.** 올바르게 설정된 모형과 큰 표본에서 MLE가 가장 정밀한 추정값을 준다.
+- **점근적 추론이 필요할 때.** MLE의 잘 발달된 점근이론(Wald 검정, 가능도비 검정, 점수 검정) 덕분에 형식적인 가설검정이나 신뢰구간이 필요할 때 자연스러운 선택이 된다.
+- **불변성이 유용할 때.** 변환된 모수 $g(\theta)$에 관심이 있을 때 MLE는 추정량을 다시 유도할 필요를 없애 준다.
 
-!!! tip "Practical Strategy"
+!!! tip "실용적인 전략"
 
-    A common workflow combines both methods: use MoM for a fast initial estimate, then refine with MLE for optimal efficiency. This hybrid approach leverages the strengths of each method while avoiding their individual weaknesses.
+    두 방법을 결합하는 작업 흐름이 흔하다. 적률법으로 빠르게 초기 추정값을 얻은 뒤 MLE로 다듬어 최적의 효율을 얻는 것이다. 이 혼합 접근은 각 방법의 강점을 살리면서 개별적인 약점을 피한다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Geometric: $P(X = k) = (1-p)^{k-1} p$. (a) Log-likelihood for $x_1, \ldots, x_n$. (b) $\hat p_{\text{MLE}}$. (c) MoM. (d) Same?
+**연습문제 1.**
+Geometric 분포: $P(X = k) = (1-p)^{k-1} p$. (a) $x_1, \ldots, x_n$에 대한 로그가능도. (b) $\hat p_{\text{MLE}}$. (c) 적률법. (d) 둘이 같은가?
 
-??? success "Solution to Exercise 1"
-    (a) $\ell(p) = \sum_i [(x_i - 1)\ln(1-p) + \ln p] = (T - n)\ln(1-p) + n\ln p$ where $T = \sum x_i$.
+??? success "연습문제 1 풀이"
+    (a) $T = \sum x_i$일 때 $\ell(p) = \sum_i [(x_i - 1)\ln(1-p) + \ln p] = (T - n)\ln(1-p) + n\ln p$.
 
     (b) $\ell'(p) = -(T-n)/(1-p) + n/p = 0 \Rightarrow \hat p_{\text{MLE}} = n/T = 1/\bar x$.
 
     (c) $\bar x = 1/p \Rightarrow \hat p_{\text{MoM}} = 1/\bar x$.
 
-    (d) **Same.** MLE and MoM coincide for the Geometric — both are reciprocals of the sample mean.
+    (d) **같다.** Geometric 분포에서 MLE와 적률법이 일치하며, 둘 다 표본평균의 역수이다.
 
-    This happens whenever the parameter $\theta$ is in 1-to-1 correspondence with the first moment and there are no higher-moment constraints. Most "single-parameter mean-determined" distributions (Bernoulli, Poisson, Exponential, Geometric) have MLE = MoM.
+    이런 일은 모수 $\theta$가 1차 적률과 일대일로 대응하고 고차 적률 제약이 없을 때마다 일어난다. "단일모수이면서 평균으로 결정되는" 분포 대부분(Bernoulli, Poisson, Exponential, Geometric)에서 MLE = 적률법이다.
 
 ---
 
-**Exercise 2.**
-**Gamma simulation: MLE vs MoM.** Simulate from Gamma$(2, 3)$ at $n = 5, 10, 30, 100, 500$; compare MSE.
+**연습문제 2.**
+**Gamma 모의실험: MLE와 적률법.** $n = 5, 10, 30, 100, 500$에서 Gamma$(2, 3)$을 모의실험하여 평균제곱오차를 비교하라.
 
-??? success "Solution to Exercise 2"
+??? success "연습문제 2 풀이"
     ```python
     import numpy as np
     from scipy import stats
@@ -124,87 +124,85 @@ Geometric: $P(X = k) = (1-p)^{k-1} p$. (a) Log-likelihood for $x_1, \ldots, x_n$
         print(f"n={n}: MSE(α) MoM={np.mean((np.array(a_mom)-2)**2):.3f}, MLE={np.mean((np.array(a_mle)-2)**2):.3f}")
     ```
 
-    Expected finding: MLE has smaller MSE at every $n$, with the gap widest for small $n$. Both decrease at rate $1/n$. MLE is asymptotically efficient; MoM is consistent but not efficient.
+    예상되는 결과: 모든 $n$에서 MLE의 평균제곱오차가 더 작고, $n$이 작을수록 격차가 크다. 둘 다 $1/n$의 비율로 줄어든다. MLE는 점근적으로 효율적이고 적률법은 일치하지만 효율적이지는 않다.
 
 ---
 
-**Exercise 3.**
-**Why MLE generally beats MoM.** State the asymptotic relative efficiency (ARE) result and the intuition.
+**연습문제 3.**
+**MLE가 일반적으로 적률법보다 나은 이유.** 점근 상대효율(ARE) 결과와 그 직관을 서술하라.
 
-??? success "Solution to Exercise 3"
-    **ARE:** $\mathrm{ARE}(\hat\theta_{\text{MoM}}, \hat\theta_{\text{MLE}}) = $ asymptotic variance ratio $\le 1$.
+??? success "연습문제 3 풀이"
+    **ARE:** $\mathrm{ARE}(\hat\theta_{\text{MoM}}, \hat\theta_{\text{MLE}}) = $ 점근분산의 비 $\le 1$이다.
 
-    Equality (ARE = 1) iff MoM accidentally equals MLE (e.g., Bernoulli, Poisson, Exponential, where MLE and MoM coincide).
+    등호(ARE = 1)는 적률법이 우연히 MLE와 같아질 때에만 성립한다(예: Bernoulli, Poisson, Exponential에서 MLE와 적률법이 일치한다).
 
-    Inequality (ARE < 1) is generic: MoM uses only low-order moments, MLE uses the full likelihood.
+    부등호(ARE < 1)가 일반적인 경우이다. 적률법은 저차 적률만 사용하고 MLE는 완전한 가능도를 사용하기 때문이다.
 
-    **Intuition:** the Fisher information is the maximum possible information in the data about $\theta$, and MLE achieves it asymptotically. MoM throws away information by reducing the data to a few moments. The "thrown-away" information shows up as larger variance.
+    **직관:** Fisher 정보량은 자료가 $\theta$에 관해 담을 수 있는 최대 정보량이며 MLE가 점근적으로 이를 달성한다. 적률법은 자료를 적률 몇 개로 축약하면서 정보를 버린다. 그 "버려진" 정보가 더 큰 분산으로 나타난다.
 
-    **Practical implication:** prefer MLE when computationally feasible. MoM is useful for:
+    **실무적 함의:** 계산이 가능하다면 MLE를 선호하라. 적률법은 다음에 유용하다:
 
-    - Quick initial estimates (start MLE optimization from MoM).
-    - Distributions where MLE is intractable.
-    - Robustness considerations (MoM may be less sensitive to model misspecification).
-
----
-
-**Exercise 4.**
-**When MoM is preferred.** Give two concrete cases where MoM might be chosen over MLE.
-
-??? success "Solution to Exercise 4"
-    **Case 1: MLE intractable.** For some distributions (e.g., Cauchy, generalized hyperbolic, certain copulas), the likelihood has no closed-form maximizer or is computationally expensive. MoM gives a quick closed-form estimate.
-
-    **Case 2: Robustness to misspecification.** If the true distribution is a slight perturbation of the assumed model, MoM may degrade more gracefully than MLE. MLE is "locked into" the assumed likelihood; MoM only uses the assumption that population and sample moments match. A misspecified MLE can have arbitrarily large bias if the wrong likelihood is used; misspecified MoM at least matches the true population moments.
-
-    **Case 3: Aggregating partial data.** When only sample moments are available (no individual data points), MoM works while MLE doesn't. Insurance claim reserves are sometimes computed from aggregate moments.
-
-    These cases drive the continued use of MoM despite its asymptotic inefficiency.
+    - 빠른 초기 추정값(적률법에서 시작해 MLE 최적화를 진행).
+    - MLE를 다루기 어려운 분포.
+    - 로버스트성 고려(적률법이 모형 설정 오류에 덜 민감할 수 있다).
 
 ---
 
-**Exercise 5.**
-**Pareto MoM vs MLE.** For $X \sim \mathrm{Pareto}(\alpha)$ on $x \ge 1$: derive both and compute the asymptotic relative efficiency.
+**연습문제 4.**
+**적률법을 선호하는 경우.** MLE 대신 적률법을 고를 만한 구체적인 사례를 두 가지 들라.
 
-??? success "Solution to Exercise 5"
-    Pareto$(\alpha)$ on $[1, \infty)$: $f(x; \alpha) = \alpha x^{-(\alpha+1)}$, $\mathbb{E}[X] = \alpha/(\alpha - 1)$ for $\alpha > 1$.
+??? success "연습문제 4 풀이"
+    **사례 1: MLE를 다루기 어려울 때.** 어떤 분포(예: Cauchy, 일반화 쌍곡선, 특정 코퓰러)에서는 가능도의 최대점이 닫힌 형태로 없거나 계산 비용이 크다. 적률법은 닫힌 형태의 추정값을 빠르게 준다.
 
-    **MoM:** $\bar X = \alpha/(\alpha - 1) \Rightarrow \hat\alpha_{\text{MoM}} = \bar X/(\bar X - 1)$.
+    **사례 2: 설정 오류에 대한 로버스트성.** 참 분포가 가정한 모형에서 약간 벗어나 있다면 적률법이 MLE보다 완만하게 나빠질 수 있다. MLE는 가정한 가능도에 "묶여" 있지만, 적률법은 모집단 적률과 표본 적률이 일치한다는 가정만 사용한다. 잘못된 가능도를 쓴 MLE는 편향이 얼마든지 커질 수 있지만, 잘못 설정된 적률법이라도 적어도 참 모집단 적률과는 맞아떨어진다.
+
+    **사례 3: 부분적인 자료를 종합할 때.** 개별 자료점 없이 표본 적률만 있을 때 적률법은 작동하지만 MLE는 그렇지 않다. 보험 지급준비금을 집계된 적률로 계산하는 경우가 있다.
+
+    이런 사례들 때문에 점근적 비효율성에도 불구하고 적률법이 계속 쓰인다.
+
+---
+
+**연습문제 5.**
+**Pareto의 적률법과 MLE.** $x \ge 1$에서 $X \sim \mathrm{Pareto}(\alpha)$일 때 둘을 유도하고 점근 상대효율을 논하라.
+
+??? success "연습문제 5 풀이"
+    $[1, \infty)$ 위의 Pareto$(\alpha)$: $f(x; \alpha) = \alpha x^{-(\alpha+1)}$이고 $\alpha > 1$에서 $\mathbb{E}[X] = \alpha/(\alpha - 1)$이다.
+
+    **적률법:** $\bar X = \alpha/(\alpha - 1) \Rightarrow \hat\alpha_{\text{MoM}} = \bar X/(\bar X - 1)$.
 
     **MLE:** $\hat\alpha_{\text{MLE}} = n/\sum \ln X_i$.
 
-    Asymptotic variances (large $n$):
+    **적률법의 존재 조건:** 적률법의 점근분산을 델타 방법으로 구하려면 $\mathbb{E}[X^2] < \infty$가 필요하며, 이는 $\alpha > 2$일 때만 성립한다. $\alpha \le 2$이면 표본분산이 발산하여 적률법의 점근이론이 아예 성립하지 않는다.
 
-    $\mathrm{Var}(\hat\alpha_{\text{MoM}}) \approx \alpha^2(\alpha-1)^2(\alpha-2)/[n(\alpha-2)]$... actually this gets messy. The MoM only exists when $\mathbb{E}[X^2] < \infty$, i.e., $\alpha > 2$.
+    **MLE의 점근분산:** $\mathrm{Var}(\hat\alpha_{\text{MLE}}) \to \alpha^2/n$이며 이것이 CRLB이다.
 
-    $\mathrm{Var}(\hat\alpha_{\text{MLE}}) \to \alpha^2/n$ (CRLB).
+    **ARE:** 적률법이 정의되는 전형적인 경우인 $\alpha = 3$에서도 적률법의 분산이 MLE보다 훨씬 크다. $\alpha \le 2$이면 적률법은 정의조차 되지 않는다.
 
-    **ARE:** for $\alpha = 3$ (a typical case where MoM is defined), MoM variance is much larger than MLE. For $\alpha \le 2$, MoM doesn't even exist (sample variance is infinite).
-
-    **Implication:** for heavy-tailed distributions, MLE is essential — MoM may not even be defined.
+    **함의:** 꼬리가 두꺼운 분포에서는 MLE가 필수적이다. 적률법은 정의되지 않을 수도 있다.
 
 ---
 
-**Exercise 6.**
-**MoM as starting value for MLE.** Why is using $\hat\theta_{\text{MoM}}$ as an initial value for iterative MLE optimization a good idea?
+**연습문제 6.**
+**MLE의 출발값으로서의 적률법.** 반복적인 MLE 최적화의 초기값으로 $\hat\theta_{\text{MoM}}$을 쓰는 것이 왜 좋은 생각인가?
 
-??? success "Solution to Exercise 6"
-    Iterative MLE (Newton-Raphson, BFGS, EM) requires a starting value. Good starting values:
+??? success "연습문제 6 풀이"
+    반복적인 MLE(Newton-Raphson, BFGS, EM)에는 출발값이 필요하다. 좋은 출발값은:
 
-    1. **Converge faster** (fewer iterations to reach optimum).
-    2. **Avoid local optima** (multimodal likelihoods can trap iterations at a non-global maximum).
-    3. **Avoid numerical issues** (extreme parameter values can cause overflow/underflow).
+    1. **더 빨리 수렴한다** (최적점에 이르는 반복 횟수가 적다).
+    2. **국소 최적점을 피한다** (여러 봉우리를 갖는 가능도에서는 반복이 전역 최댓값이 아닌 곳에 갇힐 수 있다).
+    3. **수치적 문제를 피한다** (극단적인 모수값은 오버플로/언더플로를 일으킬 수 있다).
 
-    **MoM as starting point** is appealing because:
+    **출발점으로서 적률법**이 매력적인 이유는:
 
-    - **Closed-form** (no iteration needed for the initial estimate).
-    - **Often consistent** (close to the true $\theta$ in large samples).
-    - **Generally near the MLE** (both estimators target the same $\theta$).
+    - **닫힌 형태**이다(초기 추정값에 반복이 필요 없다).
+    - **대체로 일치한다**(대표본에서 참 $\theta$에 가깝다).
+    - **대개 MLE 근처에 있다**(두 추정량이 같은 $\theta$를 겨냥한다).
 
-    Hybrid procedure:
+    혼합 절차:
 
     ```python
     theta_init = mom_estimate(data)
     theta_mle = scipy.optimize.minimize(neg_loglik, theta_init, ...).x
     ```
 
-    This is the standard recipe in `scipy.stats.fit` and similar libraries.
+    `scipy.stats.fit`을 비롯한 라이브러리들이 사용하는 표준적인 방식이다.

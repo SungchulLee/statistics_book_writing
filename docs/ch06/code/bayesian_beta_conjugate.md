@@ -1,40 +1,40 @@
-# Bayesian Beta Conjugate Prior
+# 베이즈 Beta 켤레 사전분포
 
-## Overview
+## 개요
 
-When modelling binary outcomes (success/failure), the Beta distribution serves as the conjugate prior for the Bernoulli and Binomial likelihoods. This means the posterior distribution is also Beta, making Bayesian updating a simple matter of adding counts to prior parameters. This page demonstrates how different prior choices lead to different posteriors, conducts a sensitivity analysis across informative and vague priors, and shows how to compute posterior probabilities for decision-making.
+이항 결과(성공/실패)를 모형화할 때 Beta 분포는 Bernoulli 및 Binomial 가능도의 켤레 사전분포가 된다. 사후분포도 Beta가 되므로 베이즈 갱신이 사전분포의 모수에 계수를 더하는 간단한 일이 된다. 이 페이지에서는 사전분포의 선택이 사후분포를 어떻게 바꾸는지 보이고, 정보가 있는 사전분포와 막연한 사전분포에 걸쳐 민감도 분석을 수행하며, 의사결정을 위한 사후확률을 계산하는 방법을 보인다.
 
-## The Beta-Binomial Conjugate Update
+## Beta-Binomial 켤레 갱신
 
-Suppose we observe $k$ successes out of $n$ independent Bernoulli trials with unknown success probability $\theta$. If the prior on $\theta$ is:
+성공확률 $\theta$가 미지인 독립 Bernoulli 시행 $n$번에서 $k$번 성공을 관측했다고 하자. $\theta$의 사전분포가
 
 $$
 \theta \sim \text{Beta}(a, b)
 $$
 
-then the posterior, after observing the data, is:
+이면 자료를 관측한 뒤의 사후분포는:
 
 $$
 \theta \mid k, n \sim \text{Beta}(a + k, \; b + n - k)
 $$
 
-The posterior mean is:
+사후평균은:
 
 $$
 E[\theta \mid k, n] = \frac{a + k}{a + b + n}
 $$
 
-This is a weighted average of the prior mean $a/(a+b)$ and the MLE $\hat{\theta} = k/n$:
+이는 사전평균 $a/(a+b)$와 MLE $\hat{\theta} = k/n$의 가중평균이다:
 
 $$
 E[\theta \mid k, n] = \frac{a + b}{a + b + n} \cdot \frac{a}{a + b} + \frac{n}{a + b + n} \cdot \frac{k}{n}
 $$
 
-The quantity $a + b$ acts as a **prior effective sample size** -- the larger it is, the more influence the prior exerts relative to the data.
+$a + b$는 **사전 유효 표본크기**로 작동한다. 이 값이 클수록 자료에 비해 사전분포의 영향이 커진다.
 
-## The Bayesian Update Function
+## 베이즈 갱신 함수
 
-The core computation is remarkably simple: add the observed counts to the prior parameters.
+핵심 계산은 놀랄 만큼 단순하다. 관측된 계수를 사전분포의 모수에 더하기만 하면 된다.
 
 ```python
 import numpy as np
@@ -47,9 +47,9 @@ def bayesian_update(a_prior, b_prior, k, n):
     return a_post, b_post
 ```
 
-## Sensitivity Analysis Across Priors
+## 사전분포에 따른 민감도 분석
 
-Consider a polling scenario: $k = 281$ respondents support a candidate out of $n = 581$ total, giving an MLE of $\hat{\theta} = 281/581 \approx 0.4836$. We examine how six different priors affect the posterior.
+여론조사 상황을 생각해 보자. 전체 $n = 581$명 중 $k = 281$명이 어떤 후보를 지지하여 MLE는 $\hat{\theta} = 281/581 \approx 0.4836$이다. 여섯 가지 사전분포가 사후분포에 어떤 영향을 주는지 살펴본다.
 
 ```python
 n = 581
@@ -72,9 +72,9 @@ for a, b, label in priors:
           f"mean={post_mean:.4f}  P(p<0.5)={p_less_half:.4f}")
 ```
 
-## Visualising Prior-to-Posterior Updates
+## 사전분포에서 사후분포로의 갱신 시각화
 
-For each prior, we plot the prior density (dashed blue), the posterior density (solid red), the shaded region $P(\theta < 0.5)$, and the MLE as a vertical dotted line.
+각 사전분포에 대해 사전밀도(파란 점선), 사후밀도(빨간 실선), 음영으로 표시한 영역 $P(\theta < 0.5)$, 그리고 세로 점선으로 표시한 MLE를 그린다.
 
 ```python
 import matplotlib.pyplot as plt
@@ -108,120 +108,122 @@ plt.tight_layout()
 plt.show()
 ```
 
-## Interpretation
+## 해석
 
-- **Uniform prior** $\text{Beta}(1,1)$: the posterior is driven entirely by the data. The posterior mean nearly equals the MLE, and $P(\theta < 0.5)$ reflects only the sampling evidence.
-- **Weakly informative priors** (small $a + b$): the effective sample size of the prior is negligible compared to $n = 581$, so the posterior is barely distinguishable from the uniform-prior case.
-- **Strong prior at 0.5** $\text{Beta}(100, 100)$: the prior effective sample size is 200, which is substantial relative to $n = 581$. The posterior mean is pulled noticeably toward 0.5, and the posterior is wider around the MLE.
-- **Skewed priors**: the prior $\text{Beta}(2, 8)$ (mean 0.2) and $\text{Beta}(8, 2)$ (mean 0.8) have small effective sample sizes ($a + b = 10$) and are easily overwhelmed by the data.
-- **Posterior probability** $P(\theta < 0.5)$ is a direct, interpretable quantity useful for decision-making -- for instance, determining whether a candidate likely holds less than majority support.
+- **균등 사전분포** $\text{Beta}(1,1)$: 사후분포가 전적으로 자료로 결정된다. 사후평균이 MLE와 거의 같고 $P(\theta < 0.5)$는 표본추출 증거만 반영한다.
+- **약한 정보의 사전분포** (작은 $a + b$): 사전분포의 유효 표본크기가 $n = 581$에 비해 무시할 만하므로 사후분포가 균등 사전분포일 때와 거의 구별되지 않는다.
+- **0.5에 집중된 강한 사전분포** $\text{Beta}(100, 100)$: 사전 유효 표본크기가 200으로 $n = 581$에 비해 상당하다. 사후평균이 0.5 쪽으로 눈에 띄게 당겨지고 사후분포가 MLE 주변으로 더 넓어진다.
+- **치우친 사전분포**: 사전분포 $\text{Beta}(2, 8)$(평균 0.2)과 $\text{Beta}(8, 2)$(평균 0.8)는 유효 표본크기가 작아($a + b = 10$) 자료에 쉽게 압도된다.
+- **사후확률** $P(\theta < 0.5)$는 직접적이고 해석 가능한 양으로 의사결정에 유용하다. 예를 들어 어떤 후보가 과반에 못 미치는 지지를 받을 가능성이 큰지 판단할 수 있다.
 
-!!! info "Data Overwhelms the Prior"
-    With $n = 581$ observations, even the strong $\text{Beta}(100, 100)$ prior is substantially updated by the data. This illustrates the Bayesian consistency property: as $n \to \infty$, the posterior concentrates at the true parameter value regardless of the prior.
+!!! info "자료가 사전분포를 압도한다"
+    관측값이 $n = 581$개이면 강한 $\text{Beta}(100, 100)$ 사전분포조차 자료에 의해 상당히 갱신된다. 베이즈 일치성을 보여 준다. $n \to \infty$이면 사전분포와 무관하게 사후분포가 참 모수값에 집중된다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.** Starting from the Beta-Binomial conjugate model, show that the posterior mode (MAP estimate) is:
+**연습문제 1.** Beta-Binomial 켤레 모형에서 출발하여 $a > 1$, $b > 1$일 때 사후최빈값(MAP 추정값)이 다음과 같음을 보여라:
 
 $$
 \hat{\theta}_{\text{MAP}} = \frac{a + k - 1}{a + b + n - 2}
 $$
 
-for $a > 1$ and $b > 1$. What happens when $a = b = 1$ (uniform prior)?
+$a = b = 1$(균등 사전분포)이면 어떻게 되는가?
 
-??? success "Solution to Exercise 1"
-    The posterior is $\text{Beta}(a + k, b + n - k)$. The mode of $\text{Beta}(\alpha, \beta)$ is:
+??? success "연습문제 1 풀이"
+    사후분포는 $\text{Beta}(a + k, b + n - k)$이다. $\text{Beta}(\alpha, \beta)$의 최빈값은:
 
     $$
     \frac{\alpha - 1}{\alpha + \beta - 2} \quad \text{for } \alpha > 1, \; \beta > 1
     $$
 
-    Substituting $\alpha = a + k$ and $\beta = b + n - k$:
+    $\alpha = a + k$, $\beta = b + n - k$를 대입하면:
 
     $$
     \hat{\theta}_{\text{MAP}} = \frac{a + k - 1}{a + b + n - 2}
     $$
 
-    When $a = b = 1$ (uniform prior), this becomes $(k)/(n) = k/n$, which is exactly the MLE. The uniform prior contributes no information, so the MAP and MLE coincide. $\square$
+    $a = b = 1$(균등 사전분포)이면 이는 $k/n$이 되어 정확히 MLE와 같다. 균등 사전분포는 아무 정보도 기여하지 않으므로 MAP와 MLE가 일치한다. $\square$
 
 ---
 
-**Exercise 2.** A coin is flipped $n = 20$ times, yielding $k = 14$ heads. Compare the posterior mean, MAP, and MLE under three priors: $\text{Beta}(1,1)$, $\text{Beta}(10,10)$, and $\text{Beta}(2,5)$. Which prior pulls the posterior mean farthest from the MLE?
+**연습문제 2.** 동전을 $n = 20$번 던져 $k = 14$번 앞면이 나왔다. 세 가지 사전분포 $\text{Beta}(1,1)$, $\text{Beta}(10,10)$, $\text{Beta}(2,5)$ 아래에서 사후평균, MAP, MLE를 비교하라. 어느 사전분포가 사후평균을 MLE에서 가장 멀리 끌어당기는가?
 
-??? success "Solution to Exercise 2"
-    The MLE is $\hat{p} = 14/20 = 0.70$.
+??? success "연습문제 2 풀이"
+    MLE는 $\hat{p} = 14/20 = 0.70$이다.
 
-    **Beta(1, 1):** Posterior $\text{Beta}(15, 7)$. Mean $= 15/22 \approx 0.6818$. MAP $= 14/20 = 0.70$.
+    **Beta(1, 1):** 사후분포 $\text{Beta}(15, 7)$. 평균 $= 15/22 \approx 0.6818$. MAP $= 14/20 = 0.70$.
 
-    **Beta(10, 10):** Posterior $\text{Beta}(24, 16)$. Mean $= 24/40 = 0.60$. MAP $= 23/38 \approx 0.6053$.
+    **Beta(10, 10):** 사후분포 $\text{Beta}(24, 16)$. 평균 $= 24/40 = 0.60$. MAP $= 23/38 \approx 0.6053$.
 
-    **Beta(2, 5):** Posterior $\text{Beta}(16, 11)$. Mean $= 16/27 \approx 0.5926$. MAP $= 15/25 = 0.60$.
+    **Beta(2, 5):** 사후분포 $\text{Beta}(16, 11)$. 평균 $= 16/27 \approx 0.5926$. MAP $= 15/25 = 0.60$.
 
-    The $\text{Beta}(10, 10)$ prior pulls the posterior mean to 0.60 (a shift of 0.10 from the MLE), while $\text{Beta}(2, 5)$ pulls it to 0.5926 (a shift of 0.1074). The $\text{Beta}(2, 5)$ prior pulls the posterior mean farthest from the MLE because it concentrates mass near small values of $p$, and its effective sample size of 7 is comparable to the data size. $\square$
+    $\text{Beta}(10, 10)$ 사전분포는 사후평균을 0.60으로(MLE에서 0.10만큼) 끌어당기고, $\text{Beta}(2, 5)$는 0.5926으로(0.1074만큼) 끌어당긴다. $\text{Beta}(2, 5)$ 사전분포가 사후평균을 MLE에서 가장 멀리 끌어당기는데, 이는 작은 $p$ 값 근처에 질량을 몰아 두고 유효 표본크기 7이 자료 크기와 견줄 만하기 때문이다. $\square$
 
 ---
 
-**Exercise 3.** A pollster wants to determine whether a candidate has majority support ($\theta > 0.5$). They observe $k = 281$ successes in $n = 581$ trials with a $\text{Beta}(1,1)$ prior. Compute $P(\theta > 0.5 \mid \text{data})$. Would you conclude majority support? What if the prior were $\text{Beta}(100, 100)$?
+**연습문제 3.** 어떤 여론조사원이 후보가 과반의 지지를 받는지($\theta > 0.5$) 판단하려 한다. $\text{Beta}(1,1)$ 사전분포로 $n = 581$번의 시행에서 $k = 281$번 성공을 관측했다. $P(\theta > 0.5 \mid \text{자료})$를 계산하라. 과반 지지라고 결론짓겠는가? 사전분포가 $\text{Beta}(100, 100)$이라면 어떠한가?
 
-??? success "Solution to Exercise 3"
-    **Uniform prior** $\text{Beta}(1,1)$: Posterior is $\text{Beta}(282, 301)$.
+??? success "연습문제 3 풀이"
+    **균등 사전분포** $\text{Beta}(1,1)$: 사후분포는 $\text{Beta}(282, 301)$이다.
 
     $$
     P(\theta > 0.5 \mid \text{data}) = 1 - P(\theta \leq 0.5 \mid \text{data})
     $$
 
-    Using `1 - beta.cdf(0.5, 282, 301)` gives approximately $0.2107$. Since this is well below 0.5, we would **not** conclude majority support -- in fact, the data suggest the candidate likely has less than 50% support.
+    `1 - beta.cdf(0.5, 282, 301)`을 계산하면 약 $0.21$이다. 0.5보다 훨씬 작으므로 과반 지지라고 결론짓지 **않는다**. 오히려 자료는 이 후보의 지지가 50%에 못 미칠 가능성이 높다고 시사한다.
 
-    **Strong prior** $\text{Beta}(100, 100)$: Posterior is $\text{Beta}(381, 400)$.
+    **강한 사전분포** $\text{Beta}(100, 100)$: 사후분포는 $\text{Beta}(381, 400)$이다.
 
     $$
     P(\theta > 0.5 \mid \text{data}) = 1 - \text{Beta-CDF}(0.5; 381, 400)
     $$
 
-    This gives approximately $0.1802$. The strong prior centered at 0.5 slightly decreases the posterior probability of majority support because it adds weight at $\theta = 0.5$.
+    이는 약 $0.25$이다. 0.5에 집중된 강한 사전분포가 사후분포를 0.5 쪽으로 끌어당기므로(사후평균이 0.4837에서 0.4879로 올라간다) 과반 지지의 사후확률이 오히려 조금 **커진다**.
 
-    In both cases, the evidence does not support the claim of majority support. $\square$
+    두 경우 모두에서 증거는 과반 지지라는 주장을 뒷받침하지 않는다. $\square$
 
 ---
 
-**Exercise 4.** Derive the posterior variance of $\theta$ in the Beta-Binomial model. Show that it decreases as $n$ increases and interpret the rate of decrease.
+**연습문제 4.** Beta-Binomial 모형에서 $\theta$의 사후분산을 유도하라. $n$이 커질수록 줄어듦을 보이고 그 감소 속도를 해석하라.
 
-??? success "Solution to Exercise 4"
-    The posterior is $\text{Beta}(a + k, b + n - k)$. Let $\alpha = a + k$ and $\beta = b + n - k$. The variance of a $\text{Beta}(\alpha, \beta)$ distribution is:
+??? success "연습문제 4 풀이"
+    사후분포는 $\text{Beta}(a + k, b + n - k)$이다. $\alpha = a + k$, $\beta = b + n - k$라 하자. $\text{Beta}(\alpha, \beta)$ 분포의 분산은:
 
     $$
     \text{Var}(\theta \mid \text{data}) = \frac{\alpha \beta}{(\alpha + \beta)^2 (\alpha + \beta + 1)}
     $$
 
-    Since $\alpha + \beta = a + b + n$, the denominator includes the factor $(a + b + n)^2(a + b + n + 1)$. As $n \to \infty$:
+    $\alpha + \beta = a + b + n$이므로 분모에 $(a + b + n)^2(a + b + n + 1)$이라는 인수가 들어간다. $n \to \infty$일 때:
 
     $$
     \text{Var}(\theta \mid \text{data}) \approx \frac{(a + k)(b + n - k)}{(a + b + n)^3} \approx \frac{\theta(1 - \theta)}{n}
     $$
 
-    where $\theta$ is the true parameter. The posterior variance decreases at rate $O(1/n)$, matching the rate of the sampling variance of the MLE. This means the posterior concentrates around the true value at the same rate as the frequentist standard error shrinks. $\square$
+    여기서 $\theta$는 참 모수이다. 사후분산은 $O(1/n)$의 속도로 줄어들며, 이는 MLE의 표본추출 분산의 감소 속도와 같다. 사후분포가 빈도주의 표준오차가 줄어드는 것과 같은 속도로 참값 주위에 집중된다는 뜻이다. $\square$
 
 ---
 
-**Exercise 5.** Suppose two analysts use different priors -- $\text{Beta}(1, 1)$ and $\text{Beta}(50, 50)$ -- for the same dataset with $n = 100$ and $k = 60$. Compute the posterior mean for each analyst. How large must $n$ be (with $k/n$ held at 0.6) for the difference between the two posterior means to be less than 0.005?
+**연습문제 5.** 두 분석자가 같은 자료($n = 100$, $k = 60$)에 서로 다른 사전분포 $\text{Beta}(1, 1)$과 $\text{Beta}(50, 50)$을 사용한다고 하자. 각각의 사후평균을 계산하라. ($k/n$을 0.6으로 유지할 때) 두 사후평균의 차가 0.005보다 작아지려면 $n$이 얼마나 커야 하는가?
 
-??? success "Solution to Exercise 5"
-    **Analyst 1** (uniform prior): Posterior $\text{Beta}(61, 41)$. Mean $= 61/102 \approx 0.5980$.
+??? success "연습문제 5 풀이"
+    **분석자 1** (균등 사전분포): 사후분포 $\text{Beta}(61, 41)$. 평균 $= 61/102 \approx 0.5980$.
 
-    **Analyst 2** (informative prior): Posterior $\text{Beta}(110, 90)$. Mean $= 110/200 = 0.55$.
+    **분석자 2** (정보가 있는 사전분포): 사후분포 $\text{Beta}(110, 90)$. 평균 $= 110/200 = 0.55$.
 
-    Difference: $0.5980 - 0.55 = 0.048$.
+    차이: $0.5980 - 0.55 = 0.048$.
 
-    In general, with $k = 0.6n$, the means are:
+    일반적으로 $k = 0.6n$일 때 두 평균은:
 
     $$
     m_1 = \frac{1 + 0.6n}{2 + n}, \quad m_2 = \frac{50 + 0.6n}{100 + n}
     $$
 
-    Setting $|m_1 - m_2| < 0.005$ and solving:
+    통분하면 분자의 $0.6n^2$ 항이 상쇄되어 차이가 깔끔하게 정리된다:
 
     $$
-    m_1 - m_2 = \frac{1 + 0.6n}{2 + n} - \frac{50 + 0.6n}{100 + n}
+    m_1 - m_2 = \frac{(1 + 0.6n)(100 + n) - (50 + 0.6n)(2 + n)}{(2 + n)(100 + n)} = \frac{9.8\,n}{n^2 + 102n + 200}
     $$
 
-    Cross-multiplying and simplifying (using a computer algebra system or numerical search), one finds $n \approx 1940$ is needed for the difference to fall below 0.005. This illustrates that even moderately informative priors require substantial data to become negligible. $\square$
+    $|m_1 - m_2| < 0.005$로 두면 $0.005n^2 - 9.29n + 1 > 0$, 즉 $n^2 - 1858n + 200 > 0$이므로 $n \gtrsim 1858$이다.
+
+    관측값이 약 1900개는 되어야 두 사후평균의 차가 0.005 아래로 떨어진다. 어느 정도 정보가 있는 사전분포조차 무시할 만해지려면 상당한 양의 자료가 필요함을 보여 준다. $\square$

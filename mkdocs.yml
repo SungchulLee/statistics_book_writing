@@ -197,46 +197,44 @@ nav:
             - 붓스트랩 표준오차: ch05/code/bootstrap_standard_error.md
             - 금융위기와 중심극한정리의 실패: ch05/code/financial_crisis_clt.md
 
-    - 6 Statistical Estimation:
-        - Chapter Overview: ch06/index.md
-        - 6.1 Estimator Quality:
-            - Bias–Variance Tradeoff: ch06/estimator_quality/bias_variance.md
-            - Mean Squared Error: ch06/estimator_quality/mse.md
-            - Consistency and Asymptotic Normality: ch06/estimator_quality/consistency.md
-            - Efficiency and Cramér–Rao Lower Bound: ch06/estimator_quality/efficiency_crlb.md
-            - Sufficiency and Minimal Sufficiency: ch06/estimator_quality/sufficiency.md
-            - Bias Variance: ch06/estimator_quality/bias_variance.md
-            - Mse: ch06/estimator_quality/mse.md
-        - 6.2 Maximum Likelihood Estimation:
-            - Likelihood Function: ch06/mle/likelihood.md
-            - Introduction to Maximum Likelihood Estimation: ch06/mle/intro_mle.md
-            - Maximum Likelihood for Bernoulli Distribution: ch06/mle/mle_bernoulli.md
-            - Maximum Likelihood for Normal Distribution: ch06/mle/mle_normal.md
-            - Maximum Likelihood for Poisson Distribution: ch06/mle/mle_poisson.md
-            - Maximum Likelihood for Exponential Distribution: ch06/mle/mle_exponential.md
-            - Capture-Recapture Method: ch06/mle/capture_recapture.md
-            - Asymptotic Properties of Maximum Likelihood: ch06/mle/mle_asymptotics.md
-            - Fisher Information and Standard Errors: ch06/mle/fisher_information.md
-        - 6.3 Method of Moments:
-            - Method of Moments Foundations: ch06/estimation_methods/moments_foundations.md
-            - Method of Moments for Common Distributions: ch06/estimation_methods/moments_examples.md
-            - Generalized Method of Moments: ch06/estimation_methods/gmm.md
-            - Method of Moments vs Maximum Likelihood Comparison: ch06/estimation_methods/moments_vs_mle.md
-            - Likelihood and Estimation Overview: ch06/estimation_methods/likelihood.md
-            - Method of Moments Overview: ch06/estimation_methods/moments.md
-        - 6.4 Bayesian Estimation:
-            - Prior, Likelihood, and Posterior: ch06/bayesian/prior_posterior.md
-            - Conjugate Priors: ch06/bayesian/conjugate_priors.md
-            - Maximum a Posteriori Estimation: ch06/bayesian/map_estimation.md
-        - 6.5 Code:
-            - Estimation Methods Comparison: ch06/code/estimation_methods.md
-            - Maximum Likelihood Optimization Examples: ch06/code/mle_optimization.md
-            - Fisher Information Computation: ch06/code/fisher_information.md
-            - Bayesian Estimation Demonstrations: ch06/code/bayesian_estimation.md
-            - Capture-Recapture Maximum Likelihood: ch06/code/capture_recapture.md
-            - Log-Likelihood Visualization: ch06/code/log_likelihood.md
-            - Bayesian Beta Conjugate Prior: ch06/code/bayesian_beta_conjugate.md
-            - Geometric and Poisson Maximum Likelihood: ch06/code/geometric_poisson_mle.md
+    - 6 통계적 추정:
+        - 장 개요: ch06/index.md
+        - 6.1 추정량의 품질:
+            - 편향–분산 맞바꿈: ch06/estimator_quality/bias_variance.md
+            - 평균제곱오차: ch06/estimator_quality/mse.md
+            - 일치성과 점근정규성: ch06/estimator_quality/consistency.md
+            - 효율성과 Cramér–Rao 하한: ch06/estimator_quality/efficiency_crlb.md
+            - 충분성과 최소충분성: ch06/estimator_quality/sufficiency.md
+        - 6.2 최대가능도추정:
+            - 가능도함수: ch06/mle/likelihood.md
+            - 최대가능도추정 소개: ch06/mle/intro_mle.md
+            - Bernoulli 분포의 최대가능도: ch06/mle/mle_bernoulli.md
+            - Normal 분포의 최대가능도: ch06/mle/mle_normal.md
+            - Poisson 분포의 최대가능도: ch06/mle/mle_poisson.md
+            - Exponential 분포의 최대가능도: ch06/mle/mle_exponential.md
+            - 포획–재포획법: ch06/mle/capture_recapture.md
+            - 최대가능도의 점근적 성질: ch06/mle/mle_asymptotics.md
+            - Fisher 정보량과 표준오차: ch06/mle/fisher_information.md
+        - 6.3 적률법:
+            - 적률법의 기초: ch06/estimation_methods/moments_foundations.md
+            - 흔한 분포에 대한 적률법: ch06/estimation_methods/moments_examples.md
+            - 일반화 적률법: ch06/estimation_methods/gmm.md
+            - 적률법과 최대가능도의 비교: ch06/estimation_methods/moments_vs_mle.md
+            - 가능도와 추정 개관: ch06/estimation_methods/likelihood.md
+            - 적률법 개관: ch06/estimation_methods/moments.md
+        - 6.4 베이즈 추정:
+            - 사전분포, 가능도, 사후분포: ch06/bayesian/prior_posterior.md
+            - 켤레 사전분포: ch06/bayesian/conjugate_priors.md
+            - 최대사후확률 추정: ch06/bayesian/map_estimation.md
+        - 6.5 코드:
+            - 추정 방법 비교: ch06/code/estimation_methods.md
+            - 최대가능도 최적화 예제: ch06/code/mle_optimization.md
+            - Fisher 정보량 계산: ch06/code/fisher_information.md
+            - 베이즈 추정 시연: ch06/code/bayesian_estimation.md
+            - 포획–재포획 최대가능도: ch06/code/capture_recapture.md
+            - 로그가능도 시각화: ch06/code/log_likelihood.md
+            - 베이즈 Beta 켤레 사전분포: ch06/code/bayesian_beta_conjugate.md
+            - Geometric과 Poisson의 최대가능도: ch06/code/geometric_poisson_mle.md
 
     - 7 Estimation of μ and σ²: 
         - Chapter Overview: ch07/index.md

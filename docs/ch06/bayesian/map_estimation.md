@@ -1,197 +1,197 @@
-# MAP Estimation
+# MAP 추정
 
-After computing the posterior distribution $\pi(\theta \mid \mathbf{x})$, we often want a single point estimate that summarizes our updated beliefs. While the posterior mean and median are common choices, the posterior mode --- known as the **Maximum A Posteriori (MAP)** estimate --- has a special appeal: it connects Bayesian inference directly to penalized optimization, bridging the gap between Bayesian and frequentist thinking.
+사후분포 $\pi(\theta \mid \mathbf{x})$를 계산한 뒤에는 갱신된 믿음을 요약하는 하나의 점추정값이 필요한 경우가 많다. 사후평균과 사후중앙값도 흔히 쓰이지만, 사후최빈값인 **최대사후확률(MAP)** 추정값에는 특별한 매력이 있다. 베이즈 추론을 벌점 최적화와 직접 연결하여 베이즈적 사고와 빈도주의적 사고 사이의 다리를 놓기 때문이다.
 
-## Definition
+## 정의
 
-The MAP estimator selects the parameter value that maximizes the posterior density:
+MAP 추정량은 사후밀도를 최대화하는 모수값을 고른다:
 
 $$
 \hat{\theta}_{\text{MAP}} = \arg\max_{\theta}\; \pi(\theta \mid \mathbf{x})
 $$
 
-Since Bayes' theorem gives $\pi(\theta \mid \mathbf{x}) = f(\mathbf{x} \mid \theta)\,\pi(\theta) / f(\mathbf{x})$, and the marginal likelihood $f(\mathbf{x})$ does not depend on $\theta$, maximizing the posterior is equivalent to maximizing the numerator:
+베이즈 정리가 $\pi(\theta \mid \mathbf{x}) = f(\mathbf{x} \mid \theta)\,\pi(\theta) / f(\mathbf{x})$를 주고 주변가능도 $f(\mathbf{x})$가 $\theta$에 의존하지 않으므로, 사후분포를 최대화하는 것은 분자를 최대화하는 것과 동등하다:
 
 $$
 \hat{\theta}_{\text{MAP}} = \arg\max_{\theta}\; f(\mathbf{x} \mid \theta)\,\pi(\theta)
 $$
 
-Taking logarithms (a monotone transformation that preserves the maximizer), this becomes:
+(최대점을 보존하는 단조변환인) 로그를 취하면 다음이 된다:
 
 $$
 \hat{\theta}_{\text{MAP}} = \arg\max_{\theta}\; \bigl[\log f(\mathbf{x} \mid \theta) + \log \pi(\theta)\bigr]
 $$
 
-The MAP estimate therefore maximizes the log-likelihood plus a log-prior term. This additive structure is the key to understanding MAP's connection to both MLE and regularization.
+따라서 MAP 추정값은 로그가능도에 로그 사전분포 항을 더한 것을 최대화한다. 이 덧셈 구조가 MAP와 MLE, 그리고 정칙화의 연결을 이해하는 열쇠이다.
 
-## Relationship to MLE
+## MLE와의 관계
 
-The MAP objective differs from MLE only by the addition of $\log \pi(\theta)$. When the sample size $n$ is large, the log-likelihood $\log f(\mathbf{x} \mid \theta) = \sum_{i=1}^n \log f(x_i \mid \theta)$ grows proportionally to $n$, while the log-prior remains a fixed function of $\theta$. As a result, under standard regularity conditions and provided the prior is positive in a neighborhood of the true parameter value, the prior's influence vanishes and the MAP estimate converges to the MLE:
+MAP 목적함수는 MLE와 $\log \pi(\theta)$가 더해진 것만 다르다. 표본크기 $n$이 크면 로그가능도 $\log f(\mathbf{x} \mid \theta) = \sum_{i=1}^n \log f(x_i \mid \theta)$는 $n$에 비례해 커지는 반면 로그 사전분포는 $\theta$의 고정된 함수로 남는다. 그 결과, 표준적인 정칙 조건 아래에서 사전분포가 참 모수값 근방에서 양수이기만 하면 사전분포의 영향이 사라지고 MAP 추정값이 MLE로 수렴한다:
 
 $$
 \hat{\theta}_{\text{MAP}} \to \hat{\theta}_{\text{MLE}} \quad \text{as } n \to \infty
 $$
 
-!!! example "MAP vs MLE for a Normal Mean"
-    Suppose $X_1, \ldots, X_n \overset{iid}{\sim} N(\mu, 1)$ with prior $\mu \sim N(0, \sigma_0^2)$. The MAP estimate is
+!!! example "정규분포 평균에서의 MAP와 MLE"
+    사전분포가 $\mu \sim N(0, \sigma_0^2)$인 $X_1, \ldots, X_n \overset{iid}{\sim} N(\mu, 1)$이라 하자. MAP 추정값은
 
     $$
     \hat{\mu}_{\text{MAP}} = \frac{n\sigma_0^2}{n\sigma_0^2 + 1}\,\bar{X}
     $$
 
-    When $n = 1$ and $\sigma_0^2 = 1$, the MAP estimate is $\bar{X}/2$, a compromise between the prior mean $0$ and the data. When $n = 100$, the MAP estimate is approximately $0.99\,\bar{X}$, nearly identical to the MLE $\hat{\mu}_{\text{MLE}} = \bar{X}$.
+    $n = 1$이고 $\sigma_0^2 = 1$이면 MAP 추정값은 $\bar{X}/2$로 사전평균 $0$과 자료 사이의 절충이다. $n = 100$이면 MAP 추정값이 약 $0.99\,\bar{X}$로 MLE $\hat{\mu}_{\text{MLE}} = \bar{X}$와 거의 같다.
 
-## Relationship to Regularization
+## 정칙화와의 관계
 
-The log-prior term $\log \pi(\theta)$ acts as a penalty that discourages certain parameter values. Different prior families produce different penalty structures.
+로그 사전분포 항 $\log \pi(\theta)$는 특정 모수값을 억제하는 벌점 역할을 한다. 사전분포족이 다르면 벌점의 구조도 달라진다.
 
-**Gaussian prior and L2 regularization.** If $\theta_j \overset{iid}{\sim} N(0, \sigma_0^2)$, the log-prior is
+**Gaussian 사전분포와 L2 정칙화.** $\theta_j \overset{iid}{\sim} N(0, \sigma_0^2)$이면 로그 사전분포는
 
 $$
 \log \pi(\theta) = \text{const} - \frac{1}{2\sigma_0^2}\sum_j \theta_j^2
 $$
 
-Maximizing $\log f(\mathbf{x} \mid \theta) + \log \pi(\theta)$ is therefore equivalent to minimizing the negative log-likelihood plus an L2 penalty $\lambda \|\theta\|_2^2$ with $\lambda = 1/(2\sigma_0^2)$. This is exactly Ridge regression.
+따라서 $\log f(\mathbf{x} \mid \theta) + \log \pi(\theta)$를 최대화하는 것은 음의 로그가능도에 $\lambda = 1/(2\sigma_0^2)$인 L2 벌점 $\lambda \|\theta\|_2^2$을 더해 최소화하는 것과 동등하다. 이것이 정확히 능형회귀이다.
 
-**Laplace prior and L1 regularization.** If $\theta_j \overset{iid}{\sim} \text{Laplace}(0, b)$, the log-prior is
+**Laplace 사전분포와 L1 정칙화.** $\theta_j \overset{iid}{\sim} \text{Laplace}(0, b)$이면 로그 사전분포는
 
 $$
 \log \pi(\theta) = \text{const} - \frac{1}{b}\sum_j |\theta_j|
 $$
 
-Maximizing this is equivalent to minimizing the negative log-likelihood plus an L1 penalty $\lambda \|\theta\|_1$ with $\lambda = 1/b$. This is exactly Lasso regression, which promotes sparsity because the L1 penalty drives some coefficients to exactly zero.
+이를 최대화하는 것은 음의 로그가능도에 $\lambda = 1/b$인 L1 벌점 $\lambda \|\theta\|_1$을 더해 최소화하는 것과 동등하다. 이것이 정확히 Lasso 회귀이며, L1 벌점이 일부 계수를 정확히 0으로 만들기 때문에 희소성을 촉진한다.
 
-| Prior | Log-Prior Penalty | Regularization |
+| 사전분포 | 로그 사전분포 벌점 | 정칙화 |
 |---|---|---|
 | $N(0, \sigma_0^2)$ | $-\frac{1}{2\sigma_0^2}\|\theta\|_2^2$ | Ridge (L2) |
 | Laplace$(0, b)$ | $-\frac{1}{b}\|\theta\|_1$ | Lasso (L1) |
 
-This correspondence reveals that regularized estimation, often motivated by purely frequentist arguments about overfitting, has a natural Bayesian interpretation: the penalty encodes prior beliefs about the parameter magnitudes.
+이 대응은 흔히 과대적합에 관한 순수 빈도주의 논증으로 동기가 부여되는 정칙화 추정에 자연스러운 베이즈적 해석이 있음을 드러낸다. 벌점은 모수의 크기에 대한 사전 믿음을 담고 있는 것이다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Bayesian-inspired estimator for Bernoulli: $\hat\theta_B = (\sum X_i + a)/(n + a + b)$. (a) Bias and variance. (b) For $a = b = \sqrt n/2$, show biased but consistent. (c) Compare MSE with MLE at $\theta = 0.5, n = 10$.
+**연습문제 1.**
+Bernoulli에 대한 베이즈적 추정량 $\hat\theta_B = (\sum X_i + a)/(n + a + b)$를 생각하자. (a) 편향과 분산. (b) $a = b = \sqrt n/2$일 때 편향되어 있지만 일치함을 보여라. (c) $\theta = 0.5, n = 10$에서 MLE와 평균제곱오차를 비교하라.
 
-??? success "Solution to Exercise 1"
-    (a) Let $S = \sum X_i$, $\mathbb{E}[S] = n\theta$, $\mathrm{Var}(S) = n\theta(1-\theta)$.
+??? success "연습문제 1 풀이"
+    (a) $S = \sum X_i$라 하면 $\mathbb{E}[S] = n\theta$, $\mathrm{Var}(S) = n\theta(1-\theta)$이다.
 
     $\mathbb{E}[\hat\theta_B] = (n\theta + a)/(n + a + b)$. $\mathrm{Bias}(\hat\theta_B) = (a - (a+b)\theta)/(n + a + b)$.
 
     $\mathrm{Var}(\hat\theta_B) = n\theta(1-\theta)/(n + a + b)^2$.
 
-    (b) With $a = b = \sqrt n/2$: $\mathrm{Bias} = \sqrt n(0.5 - \theta)/(n + \sqrt n) \to 0$. Variance $\to 0$. Consistent.
+    (b) $a = b = \sqrt n/2$이면 $\mathrm{Bias} = \sqrt n(0.5 - \theta)/(n + \sqrt n) \to 0$이고 분산도 $\to 0$이므로 일치한다.
 
-    (c) At $\theta = 0.5, n = 10$: bias = 0 (the prior centers at $0.5$, where $\theta$ actually is). $\mathrm{Var}(\hat\theta_B) \approx 0.0144$. MLE: $\mathrm{Var}(\hat p) = 0.025$. The Bayesian estimator has lower MSE at $\theta = 0.5$ — shrinkage toward the prior reduces variance at the cost of bias elsewhere.
+    (c) $\theta = 0.5, n = 10$에서 편향은 0이다(사전분포의 중심이 $0.5$이고 실제 $\theta$도 그 값이다). $\mathrm{Var}(\hat\theta_B) \approx 0.0144$이고 MLE는 $\mathrm{Var}(\hat p) = 0.025$이다. $\theta = 0.5$에서 베이즈 추정량의 평균제곱오차가 더 작다. 사전분포 쪽으로의 축소가 다른 곳에서의 편향을 대가로 분산을 줄인다.
 
 ---
 
-**Exercise 2.**
-**Derive MAP estimator** for $X \sim \mathrm{Binomial}(n, p)$ with $\mathrm{Beta}(\alpha, \beta)$ prior.
+**연습문제 2.**
+$\mathrm{Beta}(\alpha, \beta)$ 사전분포를 쓴 $X \sim \mathrm{Binomial}(n, p)$에 대해 **MAP 추정량을 유도하라.**
 
-??? success "Solution to Exercise 2"
-    Posterior: $\pi(p \mid x) \propto p^x(1-p)^{n-x} \cdot p^{\alpha-1}(1-p)^{\beta-1} = p^{x+\alpha-1}(1-p)^{n-x+\beta-1}$.
+??? success "연습문제 2 풀이"
+    사후분포: $\pi(p \mid x) \propto p^x(1-p)^{n-x} \cdot p^{\alpha-1}(1-p)^{\beta-1} = p^{x+\alpha-1}(1-p)^{n-x+\beta-1}$.
 
-    This is $\mathrm{Beta}(x + \alpha, n - x + \beta)$ (conjugacy).
+    이는 (켤레성에 의해) $\mathrm{Beta}(x + \alpha, n - x + \beta)$이다.
 
-    Mode of Beta$(\alpha', \beta')$: $(\alpha' - 1)/(\alpha' + \beta' - 2)$ when both $> 1$.
+    Beta$(\alpha', \beta')$의 최빈값은 둘 다 $> 1$일 때 $(\alpha' - 1)/(\alpha' + \beta' - 2)$이다.
 
     $\hat p_{\mathrm{MAP}} = (x + \alpha - 1)/(n + \alpha + \beta - 2)$.
 
-    **Special cases:**
+    **특수한 경우:**
 
-    - $\alpha = \beta = 1$ (uniform prior): $\hat p_{\mathrm{MAP}} = x/n = \hat p_{\mathrm{MLE}}$. Flat prior recovers MLE.
-    - $\alpha = \beta = 0.5$ (Jeffreys prior): mild shrinkage toward 0.5.
-    - $\alpha = \beta = $ large: heavy shrinkage toward $\alpha/(\alpha + \beta) = 0.5$.
+    - $\alpha = \beta = 1$ (균등 사전분포): $\hat p_{\mathrm{MAP}} = x/n = \hat p_{\mathrm{MLE}}$. 평평한 사전분포는 MLE를 복원한다.
+    - $\alpha = \beta = 0.5$ (Jeffreys 사전분포): 0.5 쪽으로 약한 축소.
+    - $\alpha = \beta$가 클 때: $\alpha/(\alpha + \beta) = 0.5$ 쪽으로 강한 축소.
 
-    The MAP point estimator differs from the posterior mean: $\hat p_{\mathrm{Bayes,mean}} = (x + \alpha)/(n + \alpha + \beta)$. Mean is preferred when symmetric loss (squared error); mode is preferred when 0-1 loss.
-
----
-
-**Exercise 3.**
-**MAP vs. MLE.** When does MAP equal MLE? When does it not?
-
-??? success "Solution to Exercise 3"
-    MAP maximizes $\pi(\theta \mid x) \propto L(\theta) \pi(\theta)$. MLE maximizes $L(\theta)$ alone.
-
-    **MAP = MLE** iff $\pi(\theta)$ is constant over the support — i.e., a flat (improper) prior. Equivalently, the prior is uninformative.
-
-    **MAP $\ne$ MLE** when the prior has shape — e.g., a Beta(2, 2) puts more mass near 0.5 than at the boundaries, pulling MAP toward 0.5 relative to MLE.
-
-    With informative priors, MAP introduces **shrinkage toward the prior mean/mode**. The strength of shrinkage scales with $1/n$ — informative priors dominate for small samples; the data dominates for large samples.
-
-    **Practical use:** for very small $n$ (or extreme observed counts), MAP with weakly informative priors is more stable than MLE. For example, MLE of $p$ from $X = 0$ heads in $n$ flips is $\hat p = 0$ (impossible to be exactly 0); MAP with Beta(1.5, 1.5) gives $\hat p = 0.5/(n + 1)$ — small but nonzero.
+    MAP 점추정량은 사후평균과 다르다: $\hat p_{\mathrm{Bayes,mean}} = (x + \alpha)/(n + \alpha + \beta)$. 대칭 손실(제곱오차)에는 평균이, 0-1 손실에는 최빈값이 선호된다.
 
 ---
 
-**Exercise 4.**
-**Conjugate priors.** Why are conjugate priors convenient computationally? Give one example beyond Beta-Bernoulli.
+**연습문제 3.**
+**MAP와 MLE.** MAP가 MLE와 같아지는 때는 언제인가? 같지 않은 때는?
 
-??? success "Solution to Exercise 4"
-    **Conjugate prior** for likelihood family $L(\theta; X)$: prior $\pi(\theta)$ such that the posterior $\pi(\theta \mid X)$ is in the same family.
+??? success "연습문제 3 풀이"
+    MAP는 $\pi(\theta \mid x) \propto L(\theta) \pi(\theta)$를 최대화하고 MLE는 $L(\theta)$만 최대화한다.
 
-    **Convenience:**
+    **MAP = MLE**일 필요충분조건은 $\pi(\theta)$가 지지집합에서 상수인 것, 즉 평평한(비정상) 사전분포인 것이다. 달리 말하면 사전분포가 무정보인 경우이다.
 
-    - Posterior is computed analytically — no numerical integration.
-    - Updating with new data simply updates hyperparameters (e.g., Beta $\to$ Beta with shifted parameters).
-    - Sequential / online updating is trivial.
+    **MAP $\ne$ MLE**인 것은 사전분포에 모양이 있을 때이다. 예를 들어 Beta(2, 2)는 경계보다 0.5 근처에 더 많은 질량을 두므로 MLE에 비해 MAP를 0.5 쪽으로 끌어당긴다.
 
-    **Examples:**
+    정보가 있는 사전분포에서 MAP는 **사전평균/최빈값 쪽으로의 축소**를 들여온다. 축소의 강도는 $1/n$에 비례한다. 소표본에서는 정보가 있는 사전분포가 지배하고 대표본에서는 자료가 지배한다.
 
-    | Likelihood | Conjugate prior | Posterior |
+    **실용적 활용:** $n$이 매우 작거나 관측된 계수가 극단적일 때 약한 정보의 사전분포를 쓴 MAP가 MLE보다 안정적이다. 예를 들어 $n$번 던져 앞면이 $X = 0$번 나왔을 때 $p$의 MLE는 $\hat p = 0$인데(정확히 0일 수는 없다), Beta(1.5, 1.5)를 쓴 MAP는 $\hat p = 0.5/(n + 1)$로 작지만 0이 아니다.
+
+---
+
+**연습문제 4.**
+**켤레 사전분포.** 켤레 사전분포가 계산상 편리한 이유는 무엇인가? Beta-Bernoulli 외의 예를 하나 들라.
+
+??? success "연습문제 4 풀이"
+    가능도족 $L(\theta; X)$에 대한 **켤레 사전분포**란 사후분포 $\pi(\theta \mid X)$가 같은 족에 속하게 하는 사전분포 $\pi(\theta)$이다.
+
+    **편리함:**
+
+    - 사후분포를 해석적으로 계산할 수 있어 수치적분이 필요 없다.
+    - 새 자료로 갱신하는 것이 초모수를 갱신하는 것으로 끝난다(예: Beta $\to$ 모수가 이동한 Beta).
+    - 순차적/온라인 갱신이 아주 쉽다.
+
+    **예:**
+
+    | 가능도 | 켤레 사전분포 | 사후분포 |
     |---|---|---|
     | Bernoulli$(p)$ | Beta$(\alpha, \beta)$ | Beta$(\alpha + x, \beta + n - x)$ |
     | Poisson$(\lambda)$ | Gamma$(\alpha, \beta)$ | Gamma$(\alpha + \sum X_i, \beta + n)$ |
-    | Normal$(\mu, \sigma^2)$, $\sigma$ known | Normal$(\mu_0, \tau_0^2)$ | Normal (updated) |
+    | Normal$(\mu, \sigma^2)$, $\sigma$ 알려짐 | Normal$(\mu_0, \tau_0^2)$ | Normal (갱신됨) |
     | Exponential$(\lambda)$ | Gamma$(\alpha, \beta)$ | Gamma$(\alpha + n, \beta + \sum X_i)$ |
 
-    **Modern caveat:** with MCMC and HMC available, conjugacy is no longer essential. Models can use arbitrary priors and likelihoods, sampling the posterior numerically. Conjugacy remains valuable for educational tractability and as a baseline.
+    **현대적 단서:** MCMC와 HMC를 쓸 수 있게 되면서 켤레성은 더 이상 필수가 아니다. 임의의 사전분포와 가능도를 쓰고 사후분포를 수치적으로 표본추출할 수 있다. 켤레성은 교육적으로 다루기 쉽다는 점과 기준선 역할로서 여전히 가치가 있다.
 
 ---
 
-**Exercise 5.**
-**Posterior mean vs. MAP.** For $\pi(\theta \mid x) = \mathrm{Beta}(20, 5)$, compute both. Why might they differ?
+**연습문제 5.**
+**사후평균과 MAP.** $\pi(\theta \mid x) = \mathrm{Beta}(20, 5)$에 대해 둘을 모두 계산하라. 왜 서로 다를 수 있는가?
 
-??? success "Solution to Exercise 5"
-    $\mathrm{Beta}(\alpha, \beta)$:
+??? success "연습문제 5 풀이"
+    $\mathrm{Beta}(\alpha, \beta)$에서:
 
-    - Mean: $\alpha/(\alpha + \beta) = 20/25 = 0.80$.
-    - Mode: $(\alpha - 1)/(\alpha + \beta - 2) = 19/23 \approx 0.826$.
+    - 평균: $\alpha/(\alpha + \beta) = 20/25 = 0.80$.
+    - 최빈값: $(\alpha - 1)/(\alpha + \beta - 2) = 19/23 \approx 0.826$.
 
-    They differ because $\mathrm{Beta}(20, 5)$ is asymmetric (right-skewed toward 1). For symmetric posteriors (e.g., normal), mean = mode = median. For skewed posteriors, the mode lies on the "heavier" side, between median and mean.
+    $\mathrm{Beta}(20, 5)$가 비대칭이기 때문에 둘이 다르다. 질량이 1 쪽에 몰려 있고 왜도는 음수이다(왼쪽으로 치우쳐 있다). 대칭인 사후분포(예: 정규분포)에서는 평균 = 최빈값 = 중앙값이다. 치우친 사후분포에서는 세 값이 갈라지며, 이 경우처럼 왜도가 음수이면 평균 < 중앙값 < 최빈값의 순서가 된다.
 
-    **Which to use?**
+    **어느 것을 쓸 것인가?**
 
-    - **Squared error loss:** posterior mean is optimal (minimizes expected squared error).
-    - **0-1 loss:** posterior mode (MAP) is optimal.
-    - **Absolute error loss:** posterior median.
+    - **제곱오차 손실:** 사후평균이 최적이다(기대 제곱오차를 최소화한다).
+    - **0-1 손실:** 사후최빈값(MAP)이 최적이다.
+    - **절대오차 손실:** 사후중앙값이 최적이다.
 
-    Choose the point estimator based on the loss function. In practice, the posterior **distribution** is more informative than any point summary; full posterior should be reported when possible.
+    손실함수에 맞추어 점추정량을 고르면 된다. 실무에서는 어떤 점 요약보다 사후 **분포** 자체가 더 많은 정보를 담으므로, 가능하면 사후분포 전체를 보고해야 한다.
 
 ---
 
-**Exercise 6.**
-**Improper priors.** A prior with $\int \pi(\theta) d\theta = \infty$ (e.g., $\pi(\mu) = 1$ on $\mathbb{R}$) is **improper**. Can we still compute a valid posterior? When?
+**연습문제 6.**
+**비정상 사전분포.** $\int \pi(\theta) d\theta = \infty$인 사전분포(예: $\mathbb{R}$ 위의 $\pi(\mu) = 1$)를 **비정상(improper)**이라 한다. 그래도 타당한 사후분포를 계산할 수 있는가? 언제 그러한가?
 
-??? success "Solution to Exercise 6"
-    Yes — if the *posterior* is proper. The condition is that the numerator $L(\theta) \pi(\theta)$ has finite integral over $\theta$:
+??? success "연습문제 6 풀이"
+    그렇다. *사후분포*가 정상(proper)이기만 하면 된다. 조건은 분자 $L(\theta) \pi(\theta)$가 $\theta$에 대해 유한한 적분을 갖는 것이다:
 
     $$
     \int L(\theta) \pi(\theta) d\theta < \infty
     $$
 
-    Then $\pi(\theta \mid x) \propto L(\theta) \pi(\theta)$ can be normalized.
+    그러면 $\pi(\theta \mid x) \propto L(\theta) \pi(\theta)$를 정규화할 수 있다.
 
-    **Common improper priors:**
+    **흔한 비정상 사전분포:**
 
-    - $\pi(\mu) = 1$ (Lebesgue measure on $\mathbb{R}$) for location parameters.
-    - $\pi(\sigma) = 1/\sigma$ (Jeffreys for scale) for variance/scale parameters.
-    - $\pi(p) \propto 1/\sqrt{p(1-p)}$ (Jeffreys for Bernoulli).
+    - 위치모수에 대한 $\pi(\mu) = 1$ ($\mathbb{R}$ 위의 Lebesgue 측도).
+    - 분산/척도 모수에 대한 $\pi(\sigma) = 1/\sigma$ (척도에 대한 Jeffreys).
+    - Bernoulli에 대한 $\pi(p) \propto 1/\sqrt{p(1-p)}$ (Bernoulli에 대한 Jeffreys).
 
-    **Concerns with improper priors:**
+    **비정상 사전분포의 문제:**
 
-    - Posterior may be improper if data is uninformative.
-    - Bayes factors and model comparison can break (the marginal likelihood is undefined).
-    - Counterintuitive paradoxes can arise (Lindley's paradox).
+    - 자료가 정보를 주지 못하면 사후분포도 비정상이 될 수 있다.
+    - 베이즈 인자와 모형 비교가 깨질 수 있다(주변가능도가 정의되지 않는다).
+    - 직관에 반하는 역설이 생길 수 있다(Lindley 역설).
 
-    **Modern practice:** use weakly informative *proper* priors (e.g., $N(0, 10^4)$ for a location parameter) that approximate improper priors but stay proper. Avoids the pitfalls while retaining the "minimal prior information" intent.
+    **현대적 관행:** 비정상 사전분포를 근사하면서도 정상성을 유지하는 약한 정보의 *정상* 사전분포(예: 위치모수에 대한 $N(0, 10^4)$)를 쓴다. "사전 정보를 최소화한다"는 의도를 유지하면서 함정을 피한다.

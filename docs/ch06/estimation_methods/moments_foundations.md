@@ -1,30 +1,30 @@
-# Method of Moments Foundations
+# 적률법의 기초
 
-## Motivation
+## 동기
 
-Before Ronald Fisher formalized Maximum Likelihood Estimation in the 1920s, statisticians needed a systematic method for fitting parametric models to data. Karl Pearson introduced the **Method of Moments (MoM)** in 1894, establishing one of the oldest and most intuitive approaches to parameter estimation. The core idea is strikingly simple: since sample moments converge to population moments by the Law of Large Numbers, we can estimate parameters by equating theoretical moments (which depend on the unknown parameters) to their observed sample counterparts and solving the resulting equations. While MLE has largely supplanted MoM as the default estimation method, MoM remains valuable as a quick, closed-form starting point and serves as the foundation for the Generalized Method of Moments (GMM), which is the dominant estimation framework in econometrics and empirical finance.
+Ronald Fisher가 1920년대에 최대가능도추정을 형식화하기 전에도 통계학자들은 자료에 모수적 모형을 맞추는 체계적인 방법이 필요했다. Karl Pearson이 1894년에 **적률법(MoM)**을 도입하면서 모수 추정에 대한 가장 오래되고 직관적인 접근 중 하나가 자리 잡았다. 핵심 착상은 놀랄 만큼 단순하다. 큰수의 법칙에 의해 표본 적률이 모집단 적률로 수렴하므로, (미지 모수에 의존하는) 이론적 적률을 관측된 표본 적률과 일치시키고 그 방정식을 풀어 모수를 추정할 수 있다는 것이다. MLE가 기본 추정 방법의 자리를 대체로 차지했지만, 적률법은 빠르고 닫힌 형태의 출발점으로서 여전히 가치가 있으며, 계량경제학과 실증금융에서 지배적인 추정 틀인 일반화 적률법(GMM)의 토대가 된다.
 
-## Population and Sample Moments
+## 모집단 적률과 표본 적률
 
-Moments are numerical summaries that characterize the shape of a probability distribution. There are two types relevant to MoM:
+적률은 확률분포의 모양을 특징짓는 수치 요약이다. 적률법과 관련해서는 두 종류가 있다.
 
-**Raw moments** (moments about zero). The $k$-th raw moment of a random variable $X$ is:
+**원적률**(0을 중심으로 한 적률). 확률변수 $X$의 $k$차 원적률은:
 
 $$
 \mu_k' = E[X^k]
 $$
 
-The first raw moment is the mean: $\mu_1' = E[X] = \mu$.
+1차 원적률은 평균이다: $\mu_1' = E[X] = \mu$.
 
-**Central moments** (moments about the mean). The $k$-th central moment is:
+**중심적률**(평균을 중심으로 한 적률). $k$차 중심적률은:
 
 $$
 \mu_k = E[(X - \mu)^k]
 $$
 
-The second central moment is the variance: $\mu_2 = \text{Var}(X) = \sigma^2$. The third and fourth central moments relate to skewness and kurtosis.
+2차 중심적률은 분산이다: $\mu_2 = \text{Var}(X) = \sigma^2$. 3차와 4차 중심적률은 왜도 및 첨도와 관련된다.
 
-The corresponding **sample moments** replace the expectation with the sample average:
+이에 대응하는 **표본 적률**은 기댓값을 표본평균으로 바꾼 것이다:
 
 $$
 M_k' = \frac{1}{n}\sum_{i=1}^n X_i^k \quad \text{(sample raw moment)}
@@ -34,151 +34,151 @@ $$
 M_k = \frac{1}{n}\sum_{i=1}^n (X_i - \bar{X})^k \quad \text{(sample central moment)}
 $$
 
-By the Law of Large Numbers, $M_k' \xrightarrow{p} \mu_k'$ and $M_k \xrightarrow{p} \mu_k$ as $n \to \infty$, ensuring that sample moments consistently estimate their population counterparts.
+큰수의 법칙에 의해 $n \to \infty$일 때 $M_k' \xrightarrow{p} \mu_k'$이고 $M_k \xrightarrow{p} \mu_k$이므로, 표본 적률이 대응하는 모집단 적률을 일치추정한다.
 
-## The MoM Procedure
+## 적률법 절차
 
-Suppose a distribution has $p$ unknown parameters $\theta = (\theta_1, \ldots, \theta_p)^\top$, and the first $p$ raw population moments can be written as functions of these parameters:
+어떤 분포에 $p$개의 미지 모수 $\theta = (\theta_1, \ldots, \theta_p)^\top$가 있고 처음 $p$개의 모집단 원적률을 이 모수의 함수로 쓸 수 있다고 하자:
 
 $$
 \mu_k'(\theta) = E_\theta[X^k], \quad k = 1, \ldots, p
 $$
 
-The Method of Moments estimator $\hat{\theta}_{\text{MoM}}$ is obtained by solving the system:
+적률법 추정량 $\hat{\theta}_{\text{MoM}}$은 다음 연립방정식을 풀어 얻는다:
 
 $$
 \mu_k'(\hat{\theta}) = M_k', \quad k = 1, \ldots, p
 $$
 
-That is, we set each population moment equal to its sample counterpart and solve for the $p$ unknown parameters.
+즉 각 모집단 적률을 대응하는 표본 적률과 같다고 두고 $p$개의 미지 모수에 대해 푼다.
 
-!!! note "The MoM Algorithm"
-    **Step 1.** Express the first $p$ population moments as functions of the parameters: $\mu_1'(\theta), \mu_2'(\theta), \ldots, \mu_p'(\theta)$.
+!!! note "적률법 알고리즘"
+    **1단계.** 처음 $p$개의 모집단 적률을 모수의 함수로 나타낸다: $\mu_1'(\theta), \mu_2'(\theta), \ldots, \mu_p'(\theta)$.
 
-    **Step 2.** Compute the first $p$ sample moments: $M_1' = \bar{X}$, $M_2' = \frac{1}{n}\sum X_i^2$, etc.
+    **2단계.** 처음 $p$개의 표본 적률을 계산한다: $M_1' = \bar{X}$, $M_2' = \frac{1}{n}\sum X_i^2$ 등.
 
-    **Step 3.** Equate: $\mu_k'(\theta) = M_k'$ for $k = 1, \ldots, p$.
+    **3단계.** $k = 1, \ldots, p$에 대해 $\mu_k'(\theta) = M_k'$로 둔다.
 
-    **Step 4.** Solve this system of $p$ equations in $p$ unknowns for $\hat{\theta}_{\text{MoM}}$.
+    **4단계.** 미지수가 $p$개인 이 $p$개의 방정식을 풀어 $\hat{\theta}_{\text{MoM}}$을 얻는다.
 
-??? example "MoM for the Exponential Distribution"
-    For $X \sim \text{Exp}(\lambda)$, there is $p = 1$ parameter. The first population moment is:
+??? example "Exponential 분포의 적률법"
+    $X \sim \text{Exp}(\lambda)$에서는 모수가 $p = 1$개이다. 1차 모집단 적률은:
 
     $$
     \mu_1' = E[X] = \frac{1}{\lambda}
     $$
 
-    Setting $\mu_1' = M_1'$:
+    $\mu_1' = M_1'$으로 두면:
 
     $$
     \frac{1}{\lambda} = \bar{X} \implies \hat{\lambda}_{\text{MoM}} = \frac{1}{\bar{X}}
     $$
 
-    For data $\{2.1, 0.8, 1.5, 3.2, 0.4\}$: $\bar{X} = 1.6$, so $\hat{\lambda}_{\text{MoM}} = 1/1.6 = 0.625$.
+    자료가 $\{2.1, 0.8, 1.5, 3.2, 0.4\}$이면 $\bar{X} = 1.6$이므로 $\hat{\lambda}_{\text{MoM}} = 1/1.6 = 0.625$이다.
 
-## Raw Moments versus Central Moments
+## 원적률과 중심적률
 
-The procedure above uses raw moments, but one can equivalently use central moments. For a two-parameter location-scale family, a common approach is:
+위의 절차는 원적률을 사용하지만 중심적률을 써도 동등하다. 두 모수를 갖는 위치–척도 족에서는 흔히 다음 방식을 쓴다:
 
-- First equation: $E[X] = M_1'$ (raw first moment)
-- Second equation: $\text{Var}(X) = M_2$ (central second moment)
+- 첫 번째 방정식: $E[X] = M_1'$ (1차 원적률)
+- 두 번째 방정식: $\text{Var}(X) = M_2$ (2차 중심적률)
 
-This mixed approach is convenient because the variance formula is often simpler than the second raw moment formula (recall $\text{Var}(X) = E[X^2] - (E[X])^2$). For location-scale families like the normal, both approaches yield identical estimators. For other parameterizations, the choice can matter, and the raw-moment approach is the canonical one.
+분산 공식이 2차 원적률 공식보다 간단한 경우가 많으므로($\text{Var}(X) = E[X^2] - (E[X])^2$임을 떠올리자) 이 혼합 방식이 편리하다. 정규분포 같은 위치–척도 족에서는 두 방식이 같은 추정량을 준다. 다른 모수화에서는 선택이 결과를 바꿀 수 있으며, 원적률 방식이 표준적인 것이다.
 
-## Properties of MoM Estimators
+## 적률법 추정량의 성질
 
-### Consistency
+### 일치성
 
-The MoM estimator is consistent under mild regularity conditions. The argument proceeds in two steps:
+적률법 추정량은 온건한 정칙 조건 아래에서 일치한다. 논증은 두 단계로 진행된다:
 
-1. By the Law of Large Numbers, each sample moment converges in probability to the corresponding population moment: $M_k' \xrightarrow{p} \mu_k'(\theta_0)$.
+1. 큰수의 법칙에 의해 각 표본 적률이 대응하는 모집단 적률로 확률수렴한다: $M_k' \xrightarrow{p} \mu_k'(\theta_0)$.
 
-2. If the mapping from moments to parameters $h: (\mu_1', \ldots, \mu_p') \mapsto (\theta_1, \ldots, \theta_p)$ is continuous at the true moment values, then by the **continuous mapping theorem**:
+2. 적률에서 모수로 가는 사상 $h: (\mu_1', \ldots, \mu_p') \mapsto (\theta_1, \ldots, \theta_p)$가 참 적률값에서 연속이면 **연속사상정리**에 의해:
 
 $$
 \hat{\theta}_{\text{MoM}} = h(M_1', \ldots, M_p') \xrightarrow{p} h(\mu_1'(\theta_0), \ldots, \mu_p'(\theta_0)) = \theta_0
 $$
 
-The continuity condition is satisfied whenever the system of moment equations has a unique solution that varies smoothly with the moments — a condition met by most standard distributions.
+적률방정식의 해가 유일하고 적률에 따라 매끄럽게 변하기만 하면 연속성 조건이 만족되며, 표준적인 분포 대부분이 이를 충족한다.
 
-### Asymptotic Normality
+### 점근정규성
 
-Under additional smoothness conditions, the MoM estimator is asymptotically normal. By the multivariate Central Limit Theorem:
+추가적인 매끄러움 조건 아래에서 적률법 추정량은 점근적으로 정규이다. 다변량 중심극한정리에 의해:
 
 $$
 \sqrt{n}\begin{pmatrix} M_1' - \mu_1' \\ \vdots \\ M_p' - \mu_p' \end{pmatrix} \xrightarrow{d} N(\mathbf{0}, \boldsymbol{\Sigma})
 $$
 
-where $\boldsymbol{\Sigma}$ is the covariance matrix of $(X, X^2, \ldots, X^p)$. Applying the delta method through the mapping $h$:
+여기서 $\boldsymbol{\Sigma}$는 $(X, X^2, \ldots, X^p)$의 공분산행렬이다. 사상 $h$를 통해 델타 방법을 적용하면:
 
 $$
 \sqrt{n}(\hat{\theta}_{\text{MoM}} - \theta_0) \xrightarrow{d} N\!\left(\mathbf{0}, \nabla h \cdot \boldsymbol{\Sigma} \cdot \nabla h^\top\right)
 $$
 
-This result enables the construction of confidence intervals and hypothesis tests based on MoM estimators.
+이 결과 덕분에 적률법 추정량에 기반한 신뢰구간과 가설검정을 구성할 수 있다.
 
-### Simplicity
+### 단순함
 
-MoM often yields closed-form estimators that require only basic algebra. For the exponential distribution, $\hat{\lambda} = 1/\bar{X}$. For the normal, $\hat{\mu} = \bar{X}$ and $\hat{\sigma}^2 = M_2$. No numerical optimization is needed, making MoM especially attractive as a starting point for iterative procedures like MLE when closed-form MLEs are unavailable.
+적률법은 기초적인 대수만으로 닫힌 형태의 추정량을 주는 경우가 많다. Exponential 분포에서는 $\hat{\lambda} = 1/\bar{X}$이고, 정규분포에서는 $\hat{\mu} = \bar{X}$, $\hat{\sigma}^2 = M_2$이다. 수치 최적화가 필요 없으므로, 닫힌 형태의 MLE를 구할 수 없을 때 MLE 같은 반복 절차의 출발점으로 특히 매력적이다.
 
-### Potential Drawbacks
+### 있을 수 있는 단점
 
-Despite its simplicity, MoM has several limitations that the practitioner should be aware of:
+단순함에도 불구하고 적률법에는 실무자가 알아 두어야 할 한계가 몇 가지 있다:
 
-- **Not necessarily efficient.** MoM estimators generally do not achieve the Cramer-Rao lower bound. They can have substantially larger variance than MLE, especially when the distribution's shape is primarily determined by higher moments rather than the first few.
+- **반드시 효율적이지는 않다.** 적률법 추정량은 일반적으로 Cramér-Rao 하한을 달성하지 못한다. 특히 분포의 모양이 처음 몇 개의 적률보다 고차 적률로 결정될 때 MLE보다 분산이 상당히 클 수 있다.
 
-- **May produce inadmissible estimates.** Because MoM solves algebraic equations without enforcing parameter constraints, it can yield estimates outside the parameter space. For example, MoM can produce a negative variance estimate for certain distributions when the sample is small or unusual.
+- **허용되지 않는 추정값을 낼 수 있다.** 적률법은 모수 제약을 강제하지 않고 대수방정식을 풀기 때문에 모수공간 밖의 추정값을 낼 수 있다. 예를 들어 표본이 작거나 이례적일 때 어떤 분포에서는 음의 분산 추정값이 나올 수 있다.
 
-- **Sensitive to higher moments.** When $p$ is large, MoM requires matching higher sample moments ($M_3', M_4', \ldots$), which have high sampling variability. The estimation error in $M_k'$ grows rapidly with $k$, degrading the precision of the corresponding parameter estimates.
+- **고차 적률에 민감하다.** $p$가 크면 적률법은 고차 표본 적률($M_3', M_4', \ldots$)을 맞추어야 하는데, 이들은 표본추출 변동성이 크다. $M_k'$의 추정오차가 $k$와 함께 빠르게 커져 대응하는 모수 추정값의 정밀도를 떨어뜨린다.
 
-!!! warning "When MoM Fails"
-    MoM requires that the first $p$ population moments exist and that the mapping from moments to parameters is invertible. For heavy-tailed distributions like the Cauchy (whose mean does not exist), MoM cannot be applied. In such cases, MLE or other methods must be used.
+!!! warning "적률법이 실패할 때"
+    적률법은 처음 $p$개의 모집단 적률이 존재하고 적률에서 모수로 가는 사상이 역함수를 가질 것을 요구한다. (평균이 존재하지 않는) Cauchy 분포처럼 꼬리가 두꺼운 분포에는 적률법을 적용할 수 없다. 그런 경우에는 MLE나 다른 방법을 써야 한다.
 
-## Existence and Uniqueness
+## 존재성과 유일성
 
-The MoM estimator exists and is unique when:
+적률법 추정량은 다음 조건에서 존재하고 유일하다:
 
-1. The first $p$ population moments exist (i.e., $E[|X|^p] < \infty$).
-2. The mapping $\theta \mapsto (\mu_1'(\theta), \ldots, \mu_p'(\theta))$ is one-to-one (injective) on the parameter space.
-3. The sample moments $(M_1', \ldots, M_p')$ fall within the range of this mapping.
+1. 처음 $p$개의 모집단 적률이 존재한다(즉 $E[|X|^p] < \infty$).
+2. 사상 $\theta \mapsto (\mu_1'(\theta), \ldots, \mu_p'(\theta))$가 모수공간에서 일대일(단사)이다.
+3. 표본 적률 $(M_1', \ldots, M_p')$이 이 사상의 치역 안에 들어간다.
 
-Condition 2 is crucial: if two different parameter values produce the same first $p$ moments, the system is not identifiable through moments alone. For most standard distributions (normal, gamma, beta, Poisson, exponential), conditions 1 and 2 are satisfied, guaranteeing a well-defined MoM estimator.
+조건 2가 결정적이다. 서로 다른 두 모수값이 같은 처음 $p$개의 적률을 만든다면 적률만으로는 식별할 수 없다. 표준적인 분포 대부분(정규, 감마, 베타, Poisson, Exponential)에서 조건 1과 2가 만족되어 적률법 추정량이 잘 정의된다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-For a sample from $\text{Uniform}(0, \theta)$, derive the Method of Moments estimator for $\theta$.
+**연습문제 1.**
+$\text{Uniform}(0, \theta)$에서 얻은 표본에 대해 $\theta$의 적률법 추정량을 유도하라.
 
-??? success "Solution to Exercise 1"
-    The first population moment is:
+??? success "연습문제 1 풀이"
+    1차 모집단 적률은:
 
     $$
     E[X] = \frac{\theta}{2}
     $$
 
-    Setting the first sample moment equal to the population moment:
+    1차 표본 적률을 모집단 적률과 같다고 두면:
 
     $$
     \bar{X} = \frac{\hat{\theta}}{2} \implies \hat{\theta}_{\text{MOM}} = 2\bar{X}
     $$
 
-    For example, if $\bar{X} = 3.5$ from a sample, then $\hat{\theta}_{\text{MOM}} = 7.0$.
+    예를 들어 표본에서 $\bar{X} = 3.5$이면 $\hat{\theta}_{\text{MOM}} = 7.0$이다.
 
 ---
 
-**Exercise 2.**
-For a sample from $\text{Gamma}(\alpha, \beta)$ with $E[X] = \alpha/\beta$ and $\text{Var}(X) = \alpha/\beta^2$, derive the Method of Moments estimators for $\alpha$ and $\beta$ using the first two moments.
+**연습문제 2.**
+$E[X] = \alpha/\beta$이고 $\text{Var}(X) = \alpha/\beta^2$인 $\text{Gamma}(\alpha, \beta)$에서 얻은 표본에 대해 처음 두 적률을 사용하여 $\alpha$와 $\beta$의 적률법 추정량을 유도하라.
 
-??? success "Solution to Exercise 2"
-    The first two population moments give:
+??? success "연습문제 2 풀이"
+    처음 두 모집단 적률은:
 
     $$
     E[X] = \frac{\alpha}{\beta}, \quad E[X^2] = \text{Var}(X) + (E[X])^2 = \frac{\alpha}{\beta^2} + \frac{\alpha^2}{\beta^2} = \frac{\alpha(\alpha + 1)}{\beta^2}
     $$
 
-    Setting sample moments equal to population moments: $\bar{X} = \alpha/\beta$ and $\overline{X^2} = \alpha(\alpha+1)/\beta^2$.
+    표본 적률을 모집단 적률과 같다고 두면 $\bar{X} = \alpha/\beta$이고 $\overline{X^2} = \alpha(\alpha+1)/\beta^2$이다.
 
-    From the first equation: $\beta = \alpha/\bar{X}$. The sample variance is $S^2 = \overline{X^2} - \bar{X}^2 = \alpha/\beta^2$. Substituting $\beta = \alpha/\bar{X}$:
+    첫 방정식에서 $\beta = \alpha/\bar{X}$이다. 표본분산은 $S^2 = \overline{X^2} - \bar{X}^2 = \alpha/\beta^2$이다. $\beta = \alpha/\bar{X}$를 대입하면:
 
     $$
     S^2 = \frac{\alpha}{\alpha^2/\bar{X}^2} = \frac{\bar{X}^2}{\alpha} \implies \hat{\alpha}_{\text{MOM}} = \frac{\bar{X}^2}{S^2}
@@ -190,26 +190,26 @@ For a sample from $\text{Gamma}(\alpha, \beta)$ with $E[X] = \alpha/\beta$ and $
 
 ---
 
-**Exercise 3.**
-Compare the Method of Moments estimator and the MLE for the parameter $p$ of a Bernoulli distribution. Are they the same? Explain why or why not.
+**연습문제 3.**
+Bernoulli 분포의 모수 $p$에 대해 적률법 추정량과 MLE를 비교하라. 둘은 같은가? 그 이유를 설명하라.
 
-??? success "Solution to Exercise 3"
-    Both estimators give $\hat{p} = \bar{X}$ (the sample proportion), so they are identical for the Bernoulli distribution.
+??? success "연습문제 3 풀이"
+    두 추정량 모두 $\hat{p} = \bar{X}$(표본비율)을 주므로 Bernoulli 분포에서는 동일하다.
 
-    **MOM:** $E[X] = p$, so setting $\bar{X} = \hat{p}$ gives $\hat{p}_{\text{MOM}} = \bar{X}$.
+    **적률법:** $E[X] = p$이므로 $\bar{X} = \hat{p}$로 두면 $\hat{p}_{\text{MOM}} = \bar{X}$이다.
 
-    **MLE:** The log-likelihood is $\ell(p) = k\log p + (n-k)\log(1-p)$ where $k = \sum X_i$. Setting $\ell'(p) = 0$ gives $\hat{p}_{\text{MLE}} = k/n = \bar{X}$.
+    **MLE:** $k = \sum X_i$일 때 로그가능도는 $\ell(p) = k\log p + (n-k)\log(1-p)$이다. $\ell'(p) = 0$으로 두면 $\hat{p}_{\text{MLE}} = k/n = \bar{X}$이다.
 
-    This is not a coincidence. For one-parameter exponential families, the MLE is always a function of the sufficient statistic $\sum X_i$, and the MOM estimator based on the first moment is also a function of $\sum X_i$. When the moment equation and the score equation have the same solution, the two estimators coincide.
+    이는 우연이 아니다. 단일모수 지수족에서 MLE는 언제나 충분통계량 $\sum X_i$의 함수이고, 1차 적률에 기반한 적률법 추정량도 $\sum X_i$의 함수이다. 적률방정식과 점수방정식의 해가 같으면 두 추정량이 일치한다.
 
 ---
 
-**Exercise 4.**
-Give an example where the Method of Moments estimator is not consistent. What condition on the moment equations ensures consistency?
+**연습문제 4.**
+적률법 추정량이 일치하지 않는 예를 들라. 적률방정식에 어떤 조건이 있어야 일치성이 보장되는가?
 
-??? success "Solution to Exercise 4"
-    The Method of Moments estimator is consistent when the function mapping population moments to parameters is continuous and the moment equations have a unique solution. Consistency follows from the law of large numbers ($\bar{X}^k \xrightarrow{p} E[X^k]$) combined with the continuous mapping theorem.
+??? success "연습문제 4 풀이"
+    적률법 추정량은 모집단 적률에서 모수로 가는 함수가 연속이고 적률방정식의 해가 유일할 때 일치한다. 일치성은 큰수의 법칙($\bar{X}^k \xrightarrow{p} E[X^k]$)과 연속사상정리를 결합하면 따라 나온다.
 
-    An example of potential failure: if the distribution is heavy-tailed and the required population moments do not exist (e.g., trying to use $E[X^2]$ for a Cauchy distribution, which has no finite variance), the sample moments do not converge, and the MOM estimator is not consistent.
+    실패할 수 있는 예: 분포의 꼬리가 두꺼워 필요한 모집단 적률이 존재하지 않으면(예: 유한한 분산이 없는 Cauchy 분포에 $E[X^2]$를 쓰려 하면) 표본 적률이 수렴하지 않아 적률법 추정량이 일치하지 않는다.
 
-    Another failure mode: if the moment equations have multiple solutions, the MOM estimator may converge to the wrong root. The condition for consistency is: (1) the required population moments exist, (2) the mapping from moments to parameters is continuous, and (3) the solution is unique.
+    또 다른 실패 양상: 적률방정식의 해가 여럿이면 적률법 추정량이 잘못된 근으로 수렴할 수 있다. 일치성의 조건은 (1) 필요한 모집단 적률이 존재하고, (2) 적률에서 모수로 가는 사상이 연속이며, (3) 해가 유일한 것이다.
