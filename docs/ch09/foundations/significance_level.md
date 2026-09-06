@@ -1,104 +1,104 @@
-# Significance Level and Decision Rules
+# 유의수준과 판정 규칙
 
-## Overview
+## 개요
 
-After formulating null and alternative hypotheses, the next step is to decide how much Type I error risk to tolerate. The **significance level** $\alpha$ is the maximum probability of rejecting $H_0$ when it is actually true. This threshold is chosen *before* any data is collected, and it controls the long-run false positive rate. Choosing $\alpha$ involves balancing the cost of a false rejection against the cost of failing to detect a real effect.
+귀무가설과 대립가설을 세운 다음 단계는 제1종 오류의 위험을 얼마나 감수할지 정하는 것이다. **유의수준** $\alpha$는 $H_0$이 실제로 참일 때 이를 기각할 확률의 상한이다. 이 문턱은 자료를 모으기 *전에* 고르며 장기적인 거짓 양성 비율을 통제한다. $\alpha$를 고르는 일은 잘못된 기각의 비용과 실제 효과를 탐지하지 못하는 비용을 저울질하는 일이다.
 
-## Decision Rules
+## 판정 규칙
 
-Once $\alpha$ is fixed, there are two equivalent ways to reach a reject-or-fail-to-reject decision. Both approaches always produce the same conclusion.
+$\alpha$를 정하고 나면 기각/기각 못함의 판정에 이르는 동등한 방법이 두 가지 있다. 두 방법은 언제나 같은 결론을 준다.
 
-- **P-value approach.** Compute the p-value from the data and reject $H_0$ if $p \leq \alpha$. The p-value measures how extreme the observed data are under $H_0$, so comparing it to $\alpha$ directly answers whether the evidence exceeds the pre-set threshold.
+- **p-값 접근.** 자료에서 p-값을 계산하고 $p \leq \alpha$이면 $H_0$을 기각한다. p-값은 $H_0$ 아래에서 관측된 자료가 얼마나 극단적인지를 재므로, 이를 $\alpha$와 비교하면 증거가 미리 정한 문턱을 넘는지 바로 답이 나온다.
 
-- **Critical value approach.** Determine the critical value(s) that mark the boundary of the rejection region at level $\alpha$, then reject $H_0$ if the test statistic falls in that region. Rejecting via the critical value is equivalent to finding $p \leq \alpha$.
+- **임계값 접근.** 수준 $\alpha$에서 기각역의 경계를 이루는 임계값을 구하고, 검정통계량이 그 영역에 들어가면 $H_0$을 기각한다. 임계값으로 기각하는 것은 $p \leq \alpha$를 확인하는 것과 동등하다.
 
-??? example "Worked Example: Two Approaches, Same Decision"
+??? example "풀이 예제: 두 접근, 같은 판정"
 
-    Suppose we test $H_0: \mu = 50$ versus $H_1: \mu \neq 50$ at $\alpha = 0.05$ with known $\sigma = 10$ and a sample of $n = 25$ yielding $\bar{x} = 53.5$.
+    $\sigma = 10$을 알고 $n = 25$인 표본에서 $\bar{x} = 53.5$를 얻었을 때 $\alpha = 0.05$에서 $H_0: \mu = 50$ 대 $H_1: \mu \neq 50$을 검정한다고 하자.
 
-    **Critical value approach.** The rejection region is $|Z| > z_{0.025} = 1.96$. The test statistic is
+    **임계값 접근.** 기각역은 $|Z| > z_{0.025} = 1.96$이다. 검정통계량은
 
     $$
     Z = \frac{53.5 - 50}{10/\sqrt{25}} = \frac{3.5}{2} = 1.75
     $$
 
-    Since $|1.75| < 1.96$, we fail to reject $H_0$.
+    $|1.75| < 1.96$이므로 $H_0$을 기각하지 못한다.
 
-    **P-value approach.** The two-sided p-value is $2\,P(Z > 1.75) \approx 2(0.0401) = 0.0802$. Since $0.0802 > 0.05$, we again fail to reject $H_0$. Both approaches agree.
+    **p-값 접근.** 양측 p-값은 $2\,P(Z > 1.75) \approx 2(0.0401) = 0.0802$이다. $0.0802 > 0.05$이므로 역시 $H_0$을 기각하지 못한다. 두 접근이 일치한다.
 
-## Common Significance Levels
+## 흔히 쓰는 유의수준
 
-The choice of $\alpha$ depends on the practical consequences of a Type I error. More serious consequences call for a smaller $\alpha$, which makes the test more stringent but harder to reject $H_0$.
+$\alpha$의 선택은 제1종 오류가 초래하는 실질적 결과에 달려 있다. 결과가 심각할수록 $\alpha$를 작게 잡는데, 그러면 검정이 엄격해지지만 $H_0$을 기각하기는 어려워진다.
 
-| $\alpha$ | Stringency | Typical use |
+| $\alpha$ | 엄격함 | 전형적인 용도 |
 |---|---|---|
-| 0.10 | More lenient | Exploratory studies, screening |
-| 0.05 | Moderate | Most scientific research (conventional default) |
-| 0.01 | Stringent | Studies where false positives are costly |
-| 0.001 | Very stringent | Genomics, particle physics |
+| 0.10 | 관대함 | 탐색적 연구, 선별 |
+| 0.05 | 보통 | 대부분의 과학 연구(관례적 기본값) |
+| 0.01 | 엄격함 | 거짓 양성의 대가가 큰 연구 |
+| 0.001 | 매우 엄격함 | 유전체학, 입자물리학 |
 
-!!! warning "Alpha is not evidence"
+!!! warning "alpha는 증거가 아니다"
 
-    The significance level $\alpha$ is a pre-specified error-rate control, not a measure of evidence. It is the p-value, computed from the data, that quantifies how incompatible the observed results are with $H_0$. A common mistake is to describe $\alpha = 0.01$ as requiring "stronger evidence," when in fact it simply sets a more demanding threshold that the p-value must clear.
+    유의수준 $\alpha$는 미리 정한 오류율 통제 장치이지 증거의 척도가 아니다. 관측된 결과가 $H_0$과 얼마나 어긋나는지를 정량화하는 것은 자료에서 계산한 p-값이다. $\alpha = 0.01$이 "더 강한 증거"를 요구한다고 말하는 것은 흔한 오해이며, 실제로는 p-값이 넘어야 할 더 까다로운 문턱을 정할 뿐이다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-A researcher sets $\alpha = 0.05$ and obtains a p-value of 0.03. Another researcher tests the same hypothesis at $\alpha = 0.01$. What does each conclude, and why can the same data lead to different conclusions?
+**연습문제 1.**
+어떤 연구자가 $\alpha = 0.05$로 두고 p-값 0.03을 얻었다. 다른 연구자는 같은 가설을 $\alpha = 0.01$에서 검정한다. 각자 어떤 결론을 내리며, 같은 자료가 왜 다른 결론으로 이어지는가?
 
-??? success "Solution to Exercise 1"
-    At $\alpha = 0.05$: since $p = 0.03 < 0.05$, the researcher rejects $H_0$. The result is statistically significant at the 5% level.
+??? success "연습문제 1 풀이"
+    $\alpha = 0.05$에서: $p = 0.03 < 0.05$이므로 $H_0$을 기각한다. 5% 수준에서 통계적으로 유의하다.
 
-    At $\alpha = 0.01$: since $p = 0.03 > 0.01$, the researcher fails to reject $H_0$. The result is not significant at the 1% level.
+    $\alpha = 0.01$에서: $p = 0.03 > 0.01$이므로 $H_0$을 기각하지 못한다. 1% 수준에서는 유의하지 않다.
 
-    The same data lead to different conclusions because the significance level is a threshold chosen by the researcher before collecting data, reflecting how much Type I error risk they are willing to tolerate. A more conservative researcher (smaller $\alpha$) requires stronger evidence to reject $H_0$. The data themselves do not change -- only the decision rule changes.
-
----
-
-**Exercise 2.**
-Explain the difference between a Type I error and a Type II error. Which one is controlled by the significance level $\alpha$?
-
-??? success "Solution to Exercise 2"
-
-    - **Type I error (false positive):** Rejecting $H_0$ when $H_0$ is actually true. Probability = $\alpha$.
-    - **Type II error (false negative):** Failing to reject $H_0$ when $H_0$ is actually false. Probability = $\beta$.
-
-    The significance level $\alpha$ directly controls the Type I error rate: by setting $\alpha = 0.05$, we guarantee that if $H_0$ is true, we will falsely reject it at most 5% of the time (across repeated experiments).
-
-    The Type II error rate $\beta$ depends on the true parameter value (effect size), the sample size, and $\alpha$. It is not directly set by the researcher but can be reduced by increasing $n$ or increasing $\alpha$. Power = $1 - \beta$ is the probability of correctly detecting a true effect.
+    같은 자료가 다른 결론으로 이어지는 것은 유의수준이 자료를 모으기 전에 연구자가 고른 문턱이며 제1종 오류의 위험을 얼마나 감수할지를 반영하기 때문이다. 더 보수적인 연구자(작은 $\alpha$)는 $H_0$을 기각하는 데 더 강한 증거를 요구한다. 자료 자체는 변하지 않고 판정 규칙만 바뀐다.
 
 ---
 
-**Exercise 3.**
-A pharmaceutical company tests 20 independent drugs, each with a true null hypothesis ($H_0$ is true for all 20). If each test uses $\alpha = 0.05$, what is the expected number of false positives?
+**연습문제 2.**
+제1종 오류와 제2종 오류의 차이를 설명하라. 유의수준 $\alpha$가 통제하는 것은 어느 쪽인가?
 
-??? success "Solution to Exercise 3"
-    Each test independently has a $\alpha = 0.05$ probability of a false positive. With 20 tests:
+??? success "연습문제 2 풀이"
+
+    - **제1종 오류(거짓 양성):** $H_0$이 실제로 참인데 기각한다. 확률 = $\alpha$.
+    - **제2종 오류(거짓 음성):** $H_0$이 실제로 거짓인데 기각하지 못한다. 확률 = $\beta$.
+
+    유의수준 $\alpha$는 제1종 오류율을 직접 통제한다: $\alpha = 0.05$로 두면 $H_0$이 참일 때 (반복 실험에서) 이를 잘못 기각하는 비율이 최대 5%임이 보장된다.
+
+    제2종 오류율 $\beta$는 참 모수값(효과크기), 표본크기, $\alpha$에 달려 있다. 연구자가 직접 정하지는 않지만 $n$을 늘리거나 $\alpha$를 키우면 줄일 수 있다. 검정력 = $1 - \beta$는 참인 효과를 올바르게 탐지할 확률이다.
+
+---
+
+**연습문제 3.**
+어떤 제약회사가 독립인 약 20개를 검정하는데 모두 귀무가설이 참이다($H_0$이 20개 모두에 대해 참). 각 검정이 $\alpha = 0.05$를 쓴다면 거짓 양성의 기댓값은 얼마인가?
+
+??? success "연습문제 3 풀이"
+    각 검정은 독립적으로 $\alpha = 0.05$의 확률로 거짓 양성을 낸다. 검정이 20개이면:
 
     $$
     E[\text{false positives}] = 20 \times 0.05 = 1.0
     $$
 
-    The probability of at least one false positive is:
+    거짓 양성이 적어도 하나 나올 확률은:
 
     $$
     P(\text{at least one FP}) = 1 - (1 - 0.05)^{20} = 1 - 0.95^{20} \approx 1 - 0.358 = 0.642
     $$
 
-    So there is a 64.2% chance of at least one false discovery, even though every null hypothesis is true. This illustrates the multiple testing problem: the per-test error rate of 5% does not protect against the accumulation of errors across many tests.
+    모든 귀무가설이 참인데도 거짓 발견이 적어도 하나 나올 확률이 64.2%이다. 다중검정 문제를 보여준다: 검정 하나당 5%의 오류율은 여러 검정에 걸쳐 오류가 쌓이는 것을 막아 주지 않는다.
 
 ---
 
-**Exercise 4.**
-A journal requires $\alpha = 0.05$ for publication. Explain the "file drawer problem" and how it can inflate the observed rate of false positives in the published literature beyond 5%.
+**연습문제 4.**
+어떤 학술지가 게재 조건으로 $\alpha = 0.05$를 요구한다. "서랍 속 문제"를 설명하고, 그것이 어떻게 출판된 문헌의 거짓 양성 비율을 5% 너머로 부풀리는지 설명하라.
 
-??? success "Solution to Exercise 4"
-    The **file drawer problem** (publication bias) refers to the tendency for studies with significant results ($p < 0.05$) to be published while studies with non-significant results ($p \geq 0.05$) remain unpublished ("filed away").
+??? success "연습문제 4 풀이"
+    **서랍 속 문제**(출판 편향)란 유의한 결과($p < 0.05$)를 얻은 연구는 출판되고 유의하지 않은 결과($p \geq 0.05$)를 얻은 연구는 출판되지 않은 채 ("서랍에") 남는 경향을 말한다.
 
-    This inflates the false positive rate in published literature because:
+    이것이 출판된 문헌의 거짓 양성 비율을 부풀리는 이유는:
 
-    1. If 20 labs independently study a null effect, on average 1 will get $p < 0.05$ by chance.
-    2. That 1 lab publishes; the other 19 do not.
-    3. Readers see a 100% hit rate (1 published study, 1 significant) instead of the true 5% rate (1 out of 20).
+    1. 20개 연구실이 효과가 없는 현상을 독립적으로 연구하면 평균적으로 1곳이 우연히 $p < 0.05$를 얻는다.
+    2. 그 1곳은 출판하고 나머지 19곳은 출판하지 않는다.
+    3. 독자는 참인 비율 5%(20개 중 1개)가 아니라 100%의 적중률(출판된 연구 1개, 유의한 결과 1개)을 보게 된다.
 
-    The result is that the published literature over-represents false positives. Pre-registration (committing to publish regardless of results) and registered reports (peer review before data collection) are designed to mitigate this problem.
+    그 결과 출판된 문헌에는 거짓 양성이 과대 대표된다. 사전등록(결과와 무관하게 출판하기로 약속)과 등록 보고서(자료 수집 전에 동료심사)가 이 문제를 완화하려고 고안된 장치이다.

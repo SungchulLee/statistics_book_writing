@@ -1,61 +1,61 @@
-# Paired t-Test for mu_D
+# mu_D에 대한 대응 t-검정
 
-## Paired-Sample t Test
+## 대응표본 t 검정
 
-The paired sample t-test, also known as the dependent sample t-test or the matched pairs t-test, is a statistical procedure used to compare two population means where you have two samples in which observations in one sample can be paired with observations in the other sample. Common scenarios include case-control studies, repeated measures, and experiments where individuals are measured before and after a treatment.
+대응표본 t-검정은 종속표본 t-검정 또는 짝지은 쌍 t-검정이라고도 하며, 한 표본의 관측값을 다른 표본의 관측값과 짝지을 수 있는 두 표본에서 두 모평균을 비교하는 절차이다. 환자-대조군 연구, 반복측정, 처리 전후로 같은 개체를 측정하는 실험 등이 흔한 상황이다.
 
-### A. Hypothesis
+### A. 가설
 
-The hypotheses focus on the differences between the paired observations, rather than on the individual values:
+가설은 개별 값이 아니라 짝지은 관측값들의 차이에 초점을 맞춘다:
 
-- **Null Hypothesis ($H_0$)**: The mean difference between the paired observations is zero.
+- **귀무가설 ($H_0$)**: 짝지은 관측값의 평균 차이가 0이다.
 
   $$ H_0: \mu_d = 0 $$
 
-- **Alternative Hypothesis ($H_a$)**: The mean difference between the paired observations is not zero:
-    - Two-tailed: $H_a: \mu_d \neq 0$
-    - One-tailed (greater): $H_a: \mu_d > 0$
-    - One-tailed (less): $H_a: \mu_d < 0$
+- **대립가설 ($H_a$)**: 짝지은 관측값의 평균 차이가 0이 아니다:
+    - 양측: $H_a: \mu_d \neq 0$
+    - 단측(큼): $H_a: \mu_d > 0$
+    - 단측(작음): $H_a: \mu_d < 0$
 
-### B. Test Statistic
+### B. 검정통계량
 
-The test statistic for the paired sample t-test is computed as:
+대응표본 t-검정의 검정통계량은 다음과 같이 계산한다:
 
 $$ t = \frac{\bar{d}}{s_d / \sqrt{n}} $$
 
-where $\bar{d}$ is the mean of the differences of the paired samples, $s_d$ is the standard deviation of these differences, and $n$ is the number of pairs. This t-statistic follows a t-distribution with $n - 1$ degrees of freedom.
+여기서 $\bar{d}$는 대응표본 차이의 평균, $s_d$는 그 차이의 표준편차, $n$은 쌍의 개수이다. 이 t-통계량은 자유도 $n - 1$인 t-분포를 따른다.
 
-### C. Decision Rule
+### C. 판정 규칙
 
-- **Two-tailed test**: Reject $H_0$ if $|t| > t_{\alpha/2, n-1}$.
-- **One-tailed test (greater)**: Reject $H_0$ if $t > t_{\alpha, n-1}$.
-- **One-tailed test (less)**: Reject $H_0$ if $t < -t_{\alpha, n-1}$.
+- **양측검정**: $|t| > t_{\alpha/2, n-1}$이면 $H_0$을 기각한다.
+- **단측검정(큼)**: $t > t_{\alpha, n-1}$이면 $H_0$을 기각한다.
+- **단측검정(작음)**: $t < -t_{\alpha, n-1}$이면 $H_0$을 기각한다.
 
-### D. P-value
+### D. p-값
 
-- For a two-tailed test: $p\text{-value} = 2P(T \geq |t|)$
-- For a one-tailed test: $p\text{-value} = P(T \geq t)$ or $p\text{-value} = P(T \leq t)$, depending on the direction.
+- 양측검정: $p\text{-값} = 2P(T \geq |t|)$
+- 단측검정: 방향에 따라 $p\text{-값} = P(T \geq t)$ 또는 $p\text{-값} = P(T \leq t)$.
 
-### E. Interpretation
+### E. 해석
 
-- If the p-value $\leq \alpha$, there is statistically significant evidence to reject the null hypothesis, indicating a significant difference in the mean of the paired differences.
-- If the p-value $> \alpha$, there is insufficient evidence to reject the null hypothesis.
+- p-값 $\leq \alpha$이면 귀무가설을 기각할 통계적으로 유의한 증거가 있으며, 대응 차이의 평균에 유의한 차이가 있음을 뜻한다.
+- p-값 $> \alpha$이면 귀무가설을 기각할 증거가 부족하다.
 
 ---
 
-## Examples
+## 예제
 
-### Example: Running Shoes
+### 예제: 러닝화
 
-The manager of the Olympic running team suspects that Harpo's shoes may lead to lower running times than Zeppo's shoes. Each of six runners runs two laps (one with each shoe), with coin flip determining order.
+올림픽 육상팀 감독은 Harpo 신발이 Zeppo 신발보다 기록을 낮출 수 있다고 의심한다. 러너 여섯 명이 각각 두 바퀴(신발마다 한 바퀴)를 달리며, 순서는 동전 던지기로 정한다.
 
-**Test**: Paired Sample t Test
+**검정**: 대응표본 t 검정
 
 $$H_0 : \mu_{\text{Harpo}-\text{Zeppo}} = 0 \quad\text{vs}\quad H_1: \mu_{\text{Harpo}-\text{Zeppo}} < 0$$
 
-### Example: Pre/Post Test Scores
+### 예제: 사전/사후 시험 점수
 
-| Student | Post | Pre | Difference |
+| 학생 | 사후 | 사전 | 차이 |
 |:---:|:---:|:---:|:---:|
 | 1 | 93 | 76 | 17 |
 | 2 | 70 | 72 | -2 |
@@ -68,12 +68,12 @@ $$H_0 : \mu_{\text{Harpo}-\text{Zeppo}} = 0 \quad\text{vs}\quad H_1: \mu_{\text{
 | 9 | 77 | 65 | 12 |
 | 10 | 65 | 57 | 8 |
 | 11 | 95 | 86 | 9 |
-| 12 | 89 | 87 | 12 |
+| 12 | 89 | 87 | 2 |
 | 13 | 78 | 78 | 0 |
-| 14 | 80 | 77 | 17 |
+| 14 | 80 | 77 | 3 |
 | 15 | 76 | 76 | 0 |
 
-**Hypotheses:**
+**가설:**
 
 $$H_0 : \mu_{\text{Post}-\text{Pre}} = 0 \quad\text{vs}\quad H_1: \mu_{\text{Post}-\text{Pre}} \neq 0$$
 
@@ -104,34 +104,34 @@ print(f"\nscipy: t = {t2:.4f}, p = {p2:.4f}")
 
 ---
 
-## Paired-Sample Wilcoxon Signed-Rank Test
+## 대응표본 Wilcoxon 부호순위 검정
 
-The Paired-Sample Wilcoxon Signed-Rank Test is a non-parametric test used to determine whether the median difference between paired observations is significantly different from zero. It serves as a non-parametric alternative to the paired t-test when the data do not meet the normality assumption.
+대응표본 Wilcoxon 부호순위 검정은 짝지은 관측값의 중앙값 차이가 0과 유의하게 다른지 판단하는 비모수 검정이다. 자료가 정규성 가정을 만족하지 못할 때 대응 t-검정의 비모수적 대안으로 쓰인다.
 
-### Key Features
+### 핵심 특징
 
-- **Null Hypothesis ($H_0$)**: The median of the differences between the paired samples is zero.
-- **Data Requirements**: Data must be paired and continuous or ordinal. The differences between pairs should be symmetrically distributed.
+- **귀무가설 ($H_0$)**: 대응표본 차이의 중앙값이 0이다.
+- **자료 요건**: 자료가 짝지어져 있고 연속형이거나 순서형이어야 한다. 쌍 사이의 차이가 대칭으로 분포해야 한다.
 
-### Test Procedure
+### 검정 절차
 
-1. Calculate differences: $d_i = X_i - Y_i$. Ignore $d_i = 0$.
-2. Rank the absolute differences $|d_i|$ in ascending order.
-3. Assign the sign of each difference to its corresponding rank.
-4. Compute $W^+ = \sum(\text{positive ranks})$ and $W^- = \sum(\text{negative ranks})$.
-5. Test statistic: $W = \min(W^+, W^-)$.
-6. For larger samples ($n > 20$), use the normal approximation:
+1. 차이를 계산한다: $d_i = X_i - Y_i$. $d_i = 0$인 것은 버린다.
+2. 절대차이 $|d_i|$를 오름차순으로 순위를 매긴다.
+3. 각 차이의 부호를 해당 순위에 부여한다.
+4. $W^+ = \sum(\text{양의 순위})$와 $W^- = \sum(\text{음의 순위})$를 계산한다.
+5. 검정통계량: $W = \min(W^+, W^-)$.
+6. 표본이 크면($n > 20$) 정규근사를 쓴다:
 
 $$Z = \frac{W - \frac{n(n+1)}{4}}{\sqrt{\frac{n(n+1)(2n+1)}{24}}}$$
 
-### Example: Teaching Method Improvement
+### 예제: 교수법의 개선 효과
 
-A researcher tests whether a new teaching method improves test scores for 10 students.
+어떤 연구자가 학생 10명에 대해 새 교수법이 시험 점수를 높이는지 검정한다.
 
-- Before: $[70, 68, 75, 80, 72, 74, 69, 77, 73, 76]$
-- After: $[72, 69, 78, 85, 75, 76, 70, 79, 74, 80]$
+- 사전: $[70, 68, 75, 80, 72, 74, 69, 77, 73, 76]$
+- 사후: $[72, 69, 78, 85, 75, 76, 70, 79, 74, 80]$
 
-All differences are positive ($d = [2, 1, 3, 5, 3, 2, 1, 2, 1, 4]$), so $W^+ = 50.5$ and $W^- = 0$, giving $W = 0$. Since $W = 0 < 8$ (critical value for $n=10$, $\alpha=0.05$), we reject $H_0$.
+차이가 모두 양수이므로($d = [2, 1, 3, 5, 3, 2, 1, 2, 1, 4]$) $W^+ = 55$, $W^- = 0$이 되어 $W = 0$이다. $W = 0 < 8$($n=10$, $\alpha=0.05$의 임계값)이므로 $H_0$을 기각한다.
 
 ```python
 import numpy as np
@@ -152,103 +152,103 @@ else:
     print("Fail to reject H0: No significant improvement.")
 ```
 
-### Advantages and Limitations
+### 장점과 한계
 
-**Advantages:** Does not assume normality; robust to outliers.
+**장점:** 정규성을 가정하지 않으며 이상점에 로버스트하다.
 
-**Limitations:** Assumes symmetry of the distribution of differences; less powerful than parametric tests when normality holds.
+**한계:** 차이 분포의 대칭성을 가정하며, 정규성이 성립할 때는 모수적 검정보다 검정력이 낮다.
 
 ---
 
-## Conclusion
+## 맺음말
 
-The paired sample t-test is an essential tool for analyzing data where pairs of related or dependent samples are compared. It is particularly useful in before-and-after studies, or when the same subjects are exposed to two different conditions. This test helps to control for variability between subjects, thereby focusing more accurately on the effects of the treatments or conditions being tested. By accounting for the dependency in the paired samples, this test provides a more powerful and sensitive analysis than two independent sample tests when the paired design is appropriate.
+대응표본 t-검정은 관련되거나 종속인 표본 쌍을 비교하는 자료를 분석하는 필수 도구이다. 전후 연구나 같은 피험자가 두 조건에 노출되는 상황에서 특히 유용하다. 이 검정은 피험자 간 변동을 통제하여 검정하려는 처리나 조건의 효과에 더 정확히 초점을 맞추게 해 준다. 대응표본의 종속성을 반영하므로, 대응 설계가 적절한 상황에서는 독립 이표본 검정보다 강력하고 민감한 분석을 제공한다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Workout program: 10 participants measured before/after. Differences yield $\bar d = 1.7$, $s_d \approx 0.483$. Test at $\alpha = 0.05$.
+**연습문제 1.**
+운동 프로그램: 참가자 10명을 전후로 측정했다. 차이에서 $\bar d = 1.7$, $s_d \approx 0.483$을 얻었다. $\alpha = 0.05$에서 검정하라.
 
-??? success "Solution to Exercise 1"
-    Paired sample → $t_9$.
+??? success "연습문제 1 풀이"
+    대응표본이므로 $t_9$를 쓴다.
 
     $t = 1.7/(0.483/\sqrt{10}) = 1.7/0.153 \approx 11.13$.
 
-    Critical: $t_{0.05, 9} = 1.833$ (one-sided). $11.13 \gg 1.833$. **Reject overwhelmingly.** Workout reduces body fat significantly.
+    임계값: $t_{0.05, 9} = 1.833$ (단측). $11.13 \gg 1.833$. **압도적으로 기각한다.** 운동이 체지방을 유의하게 줄인다.
 
 ---
 
-**Exercise 2.**
-Diet plan: 12 participants, $\bar d = 7.5$ mg/dL reduction, $s_d \approx 2.61$. Test at $\alpha = 0.05$.
+**연습문제 2.**
+식이요법: 참가자 12명, $\bar d = 7.5$ mg/dL 감소, $s_d \approx 2.61$. $\alpha = 0.05$에서 검정하라.
 
-??? success "Solution to Exercise 2"
+??? success "연습문제 2 풀이"
     $t = 7.5/(2.61/\sqrt{12}) = 7.5/0.754 \approx 9.95$.
 
-    Critical: $t_{0.05, 11} = 1.796$. $9.95 \gg 1.796$. **Reject.** Diet reduces cholesterol.
+    임계값: $t_{0.05, 11} = 1.796$. $9.95 \gg 1.796$. **기각한다.** 이 식이요법이 콜레스테롤을 낮춘다.
 
 ---
 
-**Exercise 3.**
-**Why paired beats independent.** For Exercise 1, suppose ignoring pairing: treat 10 before-values and 10 after-values as independent samples. What changes?
+**연습문제 3.**
+**대응이 독립보다 나은 이유.** 연습문제 1에서 짝짓기를 무시하고 사전 값 10개와 사후 값 10개를 독립표본으로 취급한다고 하자. 무엇이 달라지는가?
 
-??? success "Solution to Exercise 3"
-    Before: mean 28.2, SD 2.66. After: mean 26.5, SD 2.42. Pooled SD ≈ 2.55.
+??? success "연습문제 3 풀이"
+    사전: 평균 28.2, 표준편차 2.66. 사후: 평균 26.5, 표준편차 2.42. 합동 표준편차 ≈ 2.55.
 
-    Independent $t$ = $(28.2 - 26.5)/\sqrt{2.55^2(1/10 + 1/10)} = 1.7/1.14 \approx 1.49$. Critical (one-sided df = 18): 1.734. **Fail to reject.**
+    독립 $t$ = $(28.2 - 26.5)/\sqrt{2.55^2(1/10 + 1/10)} = 1.7/1.14 \approx 1.49$. 임계값(단측, 자유도 18): 1.734. **기각하지 못한다.**
 
-    Paired analysis ($t \approx 11.1$) gives overwhelming significance; independent ($t \approx 1.5$) fails to detect.
+    대응 분석($t \approx 11.1$)은 압도적인 유의성을 주지만 독립 분석($t \approx 1.5$)은 탐지하지 못한다.
 
-    **Why:** the within-subject correlation is high (each subject has similar before/after percentages). Paired analysis exploits this; independent analysis treats it as noise.
+    **이유:** 피험자 내 상관이 높다(각 피험자의 전후 값이 서로 비슷하다). 대응 분석은 이를 활용하지만 독립 분석은 잡음으로 취급한다.
 
-    **Lesson:** always match analysis to design. Ignoring pairing wastes information.
-
----
-
-**Exercise 4.**
-**Conditions** for paired $t$-test.
-
-??? success "Solution to Exercise 4"
-    1. **Random pairs / matched subjects:** appropriate pairing (same subject, twins, matched controls).
-    2. **Independence between pairs:** subjects do not influence each other.
-    3. **Approximate normality of differences $D_i$:** check Q-Q plot of differences.
-
-    Note: the differences must be normal, *not* the pre or post values individually. If differences are not normal: use Wilcoxon signed-rank test.
+    **교훈:** 분석은 항상 설계에 맞추라. 짝짓기를 무시하면 정보를 낭비한다.
 
 ---
 
-**Exercise 5.**
-**Wilcoxon signed-rank** as nonparametric alternative. Briefly describe.
+**연습문제 4.**
+대응 $t$-검정의 **조건.**
 
-??? success "Solution to Exercise 5"
-    For paired data:
+??? success "연습문제 4 풀이"
+    1. **확률적으로 짝지은 쌍 / 짝지은 피험자:** 적절한 짝짓기(같은 피험자, 쌍둥이, 짝지은 대조군).
+    2. **쌍 사이의 독립성:** 피험자들이 서로 영향을 주지 않는다.
+    3. **차이 $D_i$의 근사적 정규성:** 차이의 Q-Q 그림으로 확인한다.
 
-    1. Compute differences $D_i$.
-    2. Rank $|D_i|$ (ignore signs).
-    3. Sum ranks of positive and negative differences separately.
-    4. Test statistic: smaller of the two sums (or both compared to critical values).
-
-    Under $H_0: \mathrm{median}(D) = 0$, the test has a known null distribution (tabulated for small $n$, normal approximation for large $n$).
-
-    **Advantages:** doesn't assume normality. Robust to outliers.
-
-    **Disadvantages:** less powerful than paired $t$-test when normality holds. Lower interpretability.
-
-    Modern practice: paired $t$ for clean normal differences; Wilcoxon for skewed or outlier-prone.
+    유의: 사전이나 사후 값 각각이 아니라 *차이*가 정규여야 한다. 차이가 정규가 아니면 Wilcoxon 부호순위 검정을 쓴다.
 
 ---
 
-**Exercise 6.**
-**Power for paired** vs unpaired. If subjects are paired with correlation $\rho$, how much smaller is $n$ for paired analysis?
+**연습문제 5.**
+비모수적 대안으로서의 **Wilcoxon 부호순위 검정.** 간단히 기술하라.
 
-??? success "Solution to Exercise 6"
-    Variance of paired difference: $\sigma_D^2 = 2\sigma^2(1 - \rho)$. Unpaired: $2\sigma^2$.
+??? success "연습문제 5 풀이"
+    대응 자료에서:
 
-    Ratio: $\sigma_D^2/\sigma_{\text{unp}}^2 = 1 - \rho$.
+    1. 차이 $D_i$를 계산한다.
+    2. $|D_i|$의 순위를 매긴다(부호는 무시).
+    3. 양의 차이와 음의 차이의 순위를 각각 더한다.
+    4. 검정통계량: 두 합 중 작은 것(또는 둘 다 임계값과 비교).
 
-    Required $n$ for same power scales linearly with variance:
+    $H_0: \mathrm{median}(D) = 0$ 아래에서 이 검정은 알려진 귀무분포를 갖는다(작은 $n$에서는 표로, 큰 $n$에서는 정규근사로).
+
+    **장점:** 정규성을 가정하지 않는다. 이상점에 로버스트하다.
+
+    **단점:** 정규성이 성립할 때 대응 $t$-검정보다 검정력이 낮다. 해석이 덜 직관적이다.
+
+    현대의 실무: 차이가 깨끗하게 정규이면 대응 $t$, 치우쳤거나 이상점이 잦으면 Wilcoxon.
+
+---
+
+**연습문제 6.**
+**대응과 비대응의 검정력.** 피험자들이 상관 $\rho$로 짝지어져 있다면 대응 분석에서 $n$은 얼마나 작아도 되는가?
+
+??? success "연습문제 6 풀이"
+    대응 차이의 분산: $\sigma_D^2 = 2\sigma^2(1 - \rho)$. 비대응: $2\sigma^2$.
+
+    비: $\sigma_D^2/\sigma_{\text{unp}}^2 = 1 - \rho$.
+
+    같은 검정력에 필요한 $n$은 분산에 비례하므로:
 
     $n_{\text{paired}}/n_{\text{unp}} = 1 - \rho$.
 
-    For $\rho = 0.5$: half the data needed for paired. For $\rho = 0.9$: 1/10 as much.
+    $\rho = 0.5$이면 대응 분석에 자료가 절반만 필요하다. $\rho = 0.9$이면 10분의 1이면 된다.
 
-    **Practical implication:** when feasible, pairing saves substantial sample-size budget. Especially valuable for expensive studies (clinical trials).
+    **실무적 함의:** 가능하다면 짝짓기가 표본크기 예산을 크게 아껴 준다. 비용이 큰 연구(임상시험)에서 특히 가치가 있다.

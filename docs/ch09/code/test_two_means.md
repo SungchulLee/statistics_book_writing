@@ -1,37 +1,37 @@
-# Two-Sample Mean Test
+# 이표본 평균 검정
 
-## Overview
+## 개요
 
-The two-sample t-test compares the means of two independent populations. The **pooled t-test** assumes equal variances and combines the two sample variances into a single estimate, while **Welch's t-test** allows unequal variances by adjusting the degrees of freedom. Welch's test is generally recommended as the default because it performs well even when variances are equal.
+이표본 t-검정은 독립인 두 모집단의 평균을 비교한다. **합동 t-검정**은 등분산을 가정하고 두 표본분산을 하나의 추정값으로 합치며, **Welch t-검정**은 자유도를 조정하여 분산이 다른 경우를 허용한다. Welch 검정은 분산이 같을 때에도 잘 작동하므로 일반적으로 기본으로 권장된다.
 
-## Test Formulation
+## 검정의 구성
 
-**Hypotheses:**
+**가설:**
 
-- Two-sided: $H_0\colon \mu_1 - \mu_2 = \delta_0$ vs $H_1\colon \mu_1 - \mu_2 \neq \delta_0$
-- One-sided: $H_0\colon \mu_1 - \mu_2 = \delta_0$ vs $H_1\colon \mu_1 - \mu_2 > \delta_0$
+- 양측: $H_0\colon \mu_1 - \mu_2 = \delta_0$ 대 $H_1\colon \mu_1 - \mu_2 \neq \delta_0$
+- 단측: $H_0\colon \mu_1 - \mu_2 = \delta_0$ 대 $H_1\colon \mu_1 - \mu_2 > \delta_0$
 
-### Welch's t-Test
+### Welch t-검정
 
 $$
 T = \frac{(\bar{X}_1 - \bar{X}_2) - \delta_0}{\sqrt{S_1^2/n_1 + S_2^2/n_2}}
 $$
 
-with Welch--Satterthwaite degrees of freedom:
+Welch–Satterthwaite 자유도:
 
 $$
 \nu = \frac{\left(\frac{S_1^2}{n_1} + \frac{S_2^2}{n_2}\right)^2}{\frac{(S_1^2/n_1)^2}{n_1-1} + \frac{(S_2^2/n_2)^2}{n_2-1}}.
 $$
 
-### Pooled t-Test
+### 합동 t-검정
 
-When $\sigma_1^2 = \sigma_2^2 = \sigma^2$, pool the variances:
+$\sigma_1^2 = \sigma_2^2 = \sigma^2$일 때 분산을 합친다:
 
 $$
 S_p^2 = \frac{(n_1-1)S_1^2 + (n_2-1)S_2^2}{n_1+n_2-2}, \qquad T = \frac{(\bar{X}_1 - \bar{X}_2) - \delta_0}{S_p\sqrt{1/n_1 + 1/n_2}} \sim t_{n_1+n_2-2}.
 $$
 
-## Code
+## 코드
 
 ```python
 import math
@@ -65,7 +65,7 @@ def test_diff_two_means(n1, m1, s1, n2, m2, s2, method="welch",
     return t, df, p, (p < alpha)
 ```
 
-### Example
+### 예제
 
 ```python
 t, df, p, reject = test_diff_two_means(
@@ -75,107 +75,107 @@ t, df, p, reject = test_diff_two_means(
 print("t:", t, "df:", df, "p:", p, "reject:", reject)
 ```
 
-### Interpretation
+### 해석
 
-We test $H_0\colon \mu_1 - \mu_2 = 0$ vs $H_1\colon \mu_1 - \mu_2 > 0$ with $\bar{x}_1 = 0.0$, $s_1 = 1.0$, $n_1 = 12$ and $\bar{x}_2 = 0.5$, $s_2 = 1.5$, $n_2 = 10$. Since $\bar{x}_1 - \bar{x}_2 = -0.5 < 0$, the test statistic is negative. For a right-tailed test, the p-value will be close to 1, and we will fail to reject $H_0$.
+$\bar{x}_1 = 0.0$, $s_1 = 1.0$, $n_1 = 12$와 $\bar{x}_2 = 0.5$, $s_2 = 1.5$, $n_2 = 10$으로 $H_0\colon \mu_1 - \mu_2 = 0$ 대 $H_1\colon \mu_1 - \mu_2 > 0$을 검정한다. $\bar{x}_1 - \bar{x}_2 = -0.5 < 0$이므로 검정통계량이 음수이다. 우측검정에서는 p-값이 1에 가까워지므로 $H_0$을 기각하지 못한다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.** Group A ($n_1=15$, $\bar{x}_1=82$, $s_1=6$) and Group B ($n_2=12$, $\bar{x}_2=76$, $s_2=8$). Conduct Welch's t-test for $H_0\colon \mu_1 = \mu_2$ at $\alpha=0.05$.
+**연습문제 1.** 집단 A ($n_1=15$, $\bar{x}_1=82$, $s_1=6$)와 집단 B ($n_2=12$, $\bar{x}_2=76$, $s_2=8$). $\alpha=0.05$에서 $H_0\colon \mu_1 = \mu_2$의 Welch t-검정을 수행하라.
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
 
-    The standard error is
+    표준오차는
 
     $$
     SE = \sqrt{\frac{6^2}{15} + \frac{8^2}{12}} = \sqrt{2.4 + 5.333} = \sqrt{7.733} \approx 2.781.
     $$
 
-    The test statistic is
+    검정통계량은
 
     $$
     T = \frac{82 - 76}{2.781} = \frac{6}{2.781} \approx 2.157.
     $$
 
-    The Welch--Satterthwaite degrees of freedom:
+    Welch–Satterthwaite 자유도:
 
     $$
     \nu = \frac{7.733^2}{\frac{2.4^2}{14} + \frac{5.333^2}{11}} = \frac{59.80}{0.411 + 2.587} = \frac{59.80}{2.998} \approx 19.95.
     $$
 
-    With $\nu \approx 20$, the two-sided p-value is approximately 0.044. Since $0.044 < 0.05$, we reject $H_0$. The means differ significantly. $\square$
+    $\nu \approx 20$에서 양측 p-값은 약 0.044이다. $0.044 < 0.05$이므로 $H_0$을 기각한다. 두 평균이 유의하게 다르다. $\square$
 
 ---
 
-**Exercise 2.** Show that when $n_1 = n_2 = n$ and $s_1 = s_2 = s$, the pooled and Welch t-tests give identical test statistics and degrees of freedom.
+**연습문제 2.** $n_1 = n_2 = n$이고 $s_1 = s_2 = s$이면 합동 t-검정과 Welch t-검정의 검정통계량과 자유도가 같음을 보여라.
 
-??? success "Solution to Exercise 2"
+??? success "연습문제 2 풀이"
 
-    **Pooled:** $S_p^2 = \frac{(n-1)s^2 + (n-1)s^2}{2n-2} = s^2$. The SE is $s\sqrt{2/n}$ and $\text{df} = 2n-2$.
+    **합동:** $S_p^2 = \frac{(n-1)s^2 + (n-1)s^2}{2n-2} = s^2$. 표준오차는 $s\sqrt{2/n}$이고 $\text{df} = 2n-2$이다.
 
-    **Welch:** $SE = \sqrt{s^2/n + s^2/n} = s\sqrt{2/n}$. The test statistics are identical. For the degrees of freedom:
+    **Welch:** $SE = \sqrt{s^2/n + s^2/n} = s\sqrt{2/n}$. 검정통계량이 같다. 자유도는:
 
     $$
     \nu = \frac{(s^2/n + s^2/n)^2}{\frac{(s^2/n)^2}{n-1} + \frac{(s^2/n)^2}{n-1}} = \frac{(2s^2/n)^2}{2(s^2/n)^2/(n-1)} = \frac{4s^4/n^2}{2s^4/(n^2(n-1))} = 2(n-1).
     $$
 
-    This equals $2n-2$, the pooled degrees of freedom. $\square$
+    이는 합동 자유도 $2n-2$와 같다. $\square$
 
 ---
 
-**Exercise 3.** Under what conditions is the pooled t-test preferred over Welch's test? When can it lead to incorrect conclusions?
+**연습문제 3.** 어떤 조건에서 Welch 검정보다 합동 t-검정을 선호하는가? 언제 잘못된 결론으로 이어질 수 있는가?
 
-??? success "Solution to Exercise 3"
+??? success "연습문제 3 풀이"
 
-    The pooled t-test is preferred when there is strong prior evidence that $\sigma_1^2 = \sigma_2^2$ (e.g., from an F-test or domain knowledge). Under equal variances, the pooled test has slightly more degrees of freedom ($n_1+n_2-2$ vs. $\nu_{\text{Welch}}$), giving it marginally more power.
+    (F-검정이나 분야 지식 등으로) $\sigma_1^2 = \sigma_2^2$이라는 강한 사전 근거가 있을 때 합동 t-검정을 선호한다. 등분산 아래에서 합동 검정은 자유도가 조금 더 많아($n_1+n_2-2$ 대 $\nu_{\text{Welch}}$) 검정력이 미세하게 높다.
 
-    However, when variances are unequal, the pooled test can have an inflated Type I error rate (liberal test) or a deflated rate (conservative), depending on the relationship between sample sizes and variances. Specifically, if the group with the smaller sample has the larger variance, the pooled test rejects too often. Welch's test is robust to unequal variances with only minimal power loss under equality, making it the safer default. $\square$
+    그러나 분산이 다르면 표본크기와 분산의 관계에 따라 합동 검정의 제1종 오류율이 부풀거나(관대해지거나) 줄어들 수 있다(보수적이 될 수 있다). 구체적으로 표본이 작은 집단의 분산이 크면 합동 검정이 너무 자주 기각한다. Welch 검정은 분산이 달라도 로버스트하고 등분산일 때 검정력 손실도 미미하므로 더 안전한 기본값이다. $\square$
 
 ---
 
-**Exercise 4.** Two machines produce bolts. Machine 1: $n_1=20$, $\bar{x}_1=10.02$ mm, $s_1=0.05$. Machine 2: $n_2=25$, $\bar{x}_2=10.00$ mm, $s_2=0.04$. Test $H_0\colon \mu_1 - \mu_2 = 0$ vs $H_1\colon \mu_1 - \mu_2 \neq 0$ using the pooled t-test at $\alpha = 0.01$.
+**연습문제 4.** 두 기계가 볼트를 생산한다. 기계 1: $n_1=20$, $\bar{x}_1=10.02$ mm, $s_1=0.05$. 기계 2: $n_2=25$, $\bar{x}_2=10.00$ mm, $s_2=0.04$. $\alpha = 0.01$에서 합동 t-검정으로 $H_0\colon \mu_1 - \mu_2 = 0$ 대 $H_1\colon \mu_1 - \mu_2 \neq 0$을 검정하라.
 
-??? success "Solution to Exercise 4"
+??? success "연습문제 4 풀이"
 
-    The pooled variance is
+    합동분산은
 
     $$
     S_p^2 = \frac{19(0.05)^2 + 24(0.04)^2}{43} = \frac{19(0.0025) + 24(0.0016)}{43} = \frac{0.0475 + 0.0384}{43} = \frac{0.0859}{43} \approx 0.001998.
     $$
 
-    The SE is
+    표준오차는
 
     $$
     SE = \sqrt{0.001998 \times (1/20 + 1/25)} = \sqrt{0.001998 \times 0.09} = \sqrt{0.0001798} \approx 0.01341.
     $$
 
-    The test statistic is
+    검정통계량은
 
     $$
     T = \frac{10.02 - 10.00}{0.01341} = \frac{0.02}{0.01341} \approx 1.491.
     $$
 
-    With $\text{df} = 43$, the two-sided p-value is approximately 0.143. Since $0.143 > 0.01$, we fail to reject $H_0$. $\square$
+    $\text{df} = 43$에서 양측 p-값은 약 0.143이다. $0.143 > 0.01$이므로 $H_0$을 기각하지 못한다. $\square$
 
 ---
 
-**Exercise 5.** Derive the pooled variance estimator $S_p^2$ as the maximum likelihood estimator of $\sigma^2$ under the assumption $\sigma_1^2 = \sigma_2^2 = \sigma^2$ (up to a bias correction).
+**연습문제 5.** $\sigma_1^2 = \sigma_2^2 = \sigma^2$이라는 가정 아래에서 합동 분산추정량 $S_p^2$을 (편향 보정을 제외하면) $\sigma^2$의 최대가능도추정량으로 유도하라.
 
-??? success "Solution to Exercise 5"
+??? success "연습문제 5 풀이"
 
-    Under the equal-variance model, $X_{1j} \overset{\text{iid}}{\sim} N(\mu_1, \sigma^2)$ for $j=1,\dots,n_1$ and $X_{2j} \overset{\text{iid}}{\sim} N(\mu_2, \sigma^2)$ for $j=1,\dots,n_2$, independently. The log-likelihood is
+    등분산 모형에서 $j=1,\dots,n_1$에 대해 $X_{1j} \overset{\text{iid}}{\sim} N(\mu_1, \sigma^2)$, $j=1,\dots,n_2$에 대해 $X_{2j} \overset{\text{iid}}{\sim} N(\mu_2, \sigma^2)$이고 두 집단은 독립이다. 로그가능도는
 
     $$
     \ell(\mu_1, \mu_2, \sigma^2) = -\frac{n_1+n_2}{2}\ln(2\pi\sigma^2) - \frac{1}{2\sigma^2}\left[\sum_{j=1}^{n_1}(X_{1j}-\mu_1)^2 + \sum_{j=1}^{n_2}(X_{2j}-\mu_2)^2\right].
     $$
 
-    Maximizing over $\mu_1, \mu_2$ gives $\hat{\mu}_i = \bar{X}_i$. Substituting and maximizing over $\sigma^2$:
+    $\mu_1, \mu_2$에 대해 최대화하면 $\hat{\mu}_i = \bar{X}_i$이다. 이를 대입하고 $\sigma^2$에 대해 최대화하면:
 
     $$
     \hat{\sigma}^2_{\text{MLE}} = \frac{\sum(X_{1j}-\bar{X}_1)^2 + \sum(X_{2j}-\bar{X}_2)^2}{n_1+n_2}.
     $$
 
-    Applying the bias correction (replacing $n_1+n_2$ with $n_1+n_2-2$) gives the unbiased estimator:
+    편향 보정을 적용하면($n_1+n_2$를 $n_1+n_2-2$로 바꾸면) 불편추정량을 얻는다:
 
     $$
     S_p^2 = \frac{(n_1-1)S_1^2 + (n_2-1)S_2^2}{n_1+n_2-2}. \quad \square

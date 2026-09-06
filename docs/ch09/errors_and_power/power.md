@@ -1,40 +1,40 @@
-# Power Analysis
+# 검정력 분석
 
-## Definition of Power
+## 검정력의 정의
 
-The **power** of a hypothesis test is the probability that the test correctly rejects a false null hypothesis. It is the complement of the Type II error rate:
+가설검정의 **검정력**은 거짓인 귀무가설을 올바르게 기각할 확률이다. 제2종 오류율의 여집합이다:
 
 $$\text{Power} = 1 - \beta = P(\text{Reject } H_0 \mid H_a \text{ is true})$$
 
-A test with high power is more likely to detect a true effect when one exists. Researchers typically aim for a power of at least 0.80 (80%), meaning there is an 80% chance of detecting a true effect.
+검정력이 높은 검정은 참 효과가 있을 때 그것을 탐지할 가능성이 크다. 연구자들은 보통 검정력 0.80(80%) 이상을 목표로 하며, 이는 참 효과를 탐지할 확률이 80%라는 뜻이다.
 
-## Factors Affecting Power
+## 검정력에 영향을 주는 요인
 
-Four key factors determine the power of a test:
+검정력을 결정하는 핵심 요인은 넷이다.
 
-### 1. Significance Level (alpha)
-Increasing $\alpha$ (e.g., from 0.01 to 0.05) makes it easier to reject $H_0$, thus increasing power. However, this also increases the risk of a Type I error.
+### 1. 유의수준 (alpha)
+$\alpha$를 키우면(예: 0.01에서 0.05로) $H_0$을 기각하기 쉬워져 검정력이 커진다. 그러나 제1종 오류의 위험도 함께 커진다.
 
-### 2. Sample Size (n)
-Larger sample sizes increase power because they reduce the standard error of the test statistic, making it easier to detect true differences. This is often the most practical lever for increasing power.
+### 2. 표본크기 (n)
+표본이 클수록 검정통계량의 표준오차가 줄어 참 차이를 탐지하기 쉬워지므로 검정력이 커진다. 실무에서 검정력을 높이는 가장 현실적인 지렛대이다.
 
-### 3. Effect Size
+### 3. 효과크기
 
-The effect size measures the magnitude of the true difference or effect. Larger effect sizes are easier to detect, leading to higher power. Common measures include:
+효과크기는 참 차이 또는 효과의 크기를 잰다. 효과가 클수록 탐지하기 쉬워 검정력이 커진다. 흔한 측도는:
 
-- **Cohen's $d$** for comparing means: $d = \frac{\mu_1 - \mu_0}{\sigma}$
-- **Proportion difference** for comparing proportions
+- 평균 비교의 **Cohen의 $d$**: $d = \frac{\mu_1 - \mu_0}{\sigma}$
+- 비율 비교의 **비율 차이**
 
-### 4. Population Variability (sigma)
-Lower variability in the population makes it easier to detect true effects, increasing power. While researchers cannot usually control population variability, they can reduce measurement error through better study design.
+### 4. 모집단의 변동성 (sigma)
+모집단의 변동성이 작을수록 참 효과를 탐지하기 쉬워 검정력이 커진다. 연구자가 모집단 변동성을 통제하기는 대개 어렵지만, 더 나은 연구 설계로 측정오차는 줄일 수 있다.
 
-## Power Analysis in Practice
+## 실무에서의 검정력 분석
 
-Power analysis is used in two main ways:
+검정력 분석은 주로 두 가지 방식으로 쓰인다.
 
-### A Priori Power Analysis (Sample Size Determination)
+### 사전 검정력 분석 (표본크기의 결정)
 
-Before conducting a study, researchers use power analysis to determine the minimum sample size needed to detect an expected effect size with desired power and significance level.
+연구를 수행하기 전에, 예상되는 효과크기를 원하는 검정력과 유의수준으로 탐지하는 데 필요한 최소 표본크기를 검정력 분석으로 정한다.
 
 ```python
 from scipy import stats
@@ -55,13 +55,13 @@ n = sample_size_z_test(effect_size=0.5)
 print(f"Required sample size: {n}")
 ```
 
-### Post Hoc Power Analysis
+### 사후 검정력 분석
 
-After conducting a study, researchers can compute the achieved power given the observed effect size, sample size, and significance level. However, post hoc power analysis on non-significant results is generally discouraged as it provides little additional information beyond the p-value.
+연구를 마친 뒤 관측된 효과크기, 표본크기, 유의수준으로 달성된 검정력을 계산할 수 있다. 그러나 유의하지 않은 결과에 대한 사후 검정력 분석은 p-값을 넘는 정보를 거의 주지 않으므로 일반적으로 권장되지 않는다.
 
-## Visualizing Power
+## 검정력의 시각화
 
-Power can be understood by visualizing the distributions under both $H_0$ and $H_a$:
+$H_0$과 $H_a$ 아래의 분포를 함께 그리면 검정력을 이해할 수 있다.
 
 ```python
 import numpy as np
@@ -102,21 +102,21 @@ def plot_power(mu_0, mu_a, sigma, n, alpha=0.05):
 plot_power(mu_0=50, mu_a=52, sigma=10, n=25)
 ```
 
-## Relationship Between Power, Sample Size, and Effect Size
+## 검정력, 표본크기, 효과크기의 관계
 
-| Effect Size | Required $n$ (Power = 0.80, $\alpha$ = 0.05) |
+| 효과크기 | 필요한 $n$ (이표본, 집단당, 검정력 = 0.80, $\alpha$ = 0.05) |
 |---|---|
-| Small ($d = 0.2$) | ~393 |
-| Medium ($d = 0.5$) | ~64 |
-| Large ($d = 0.8$) | ~26 |
+| 작음 ($d = 0.2$) | ~393 |
+| 중간 ($d = 0.5$) | ~64 |
+| 큼 ($d = 0.8$) | ~26 |
 
-These values illustrate why detecting small effects requires substantially larger sample sizes.
+이 값들은 작은 효과를 탐지하려면 왜 훨씬 큰 표본이 필요한지 보여준다.
 
-## Power Analysis Using statsmodels
+## statsmodels를 이용한 검정력 분석
 
-Statsmodels provides comprehensive power analysis functions for various test types:
+Statsmodels는 여러 검정 유형에 대한 검정력 분석 함수를 폭넓게 제공한다.
 
-### One-Sample t-Test
+### 일표본 t-검정
 
 ```python
 from statsmodels.stats.power import TTestPower
@@ -141,7 +141,7 @@ power = analysis.power(effect_size=effect_size, nobs=50, alpha=0.05,
 print(f"  Power with n=50: {power:.3f}")
 ```
 
-### Two-Sample t-Test (Independent Samples)
+### 이표본 t-검정 (독립표본)
 
 ```python
 from statsmodels.stats.power import TTestIndPower
@@ -171,30 +171,26 @@ print(f"  Treatment n: {int(np.ceil(n_treatment))}")
 print(f"  Control n: {int(np.ceil(n_control))}")
 ```
 
-### Test for Proportions (A/B Testing)
+### 비율에 대한 검정 (A/B 검정)
 
 ```python
-from statsmodels.stats.power import proportions_ztest
+import numpy as np
 import statsmodels.stats.api as sms
+from statsmodels.stats.power import NormalIndPower
 
 # Example: A/B test for conversion rates
 # Control: 1.1% conversion rate
 # Treatment: 1.65% conversion rate
-p0 = 0.011  # Control baseline
+p0 = 0.011   # Control baseline
 p1 = 0.0165  # Treatment goal
 
 # Calculate effect size (h = 2 * arcsin(√p1) - 2 * arcsin(√p0))
 effect_size = sms.proportion_effectsize(p1, p0)
 
-# Required sample size
-analysis = sms.FTestAnovaPower()  # or use proportions_ztest
-n_needed = sms.tt_solve_power(effect_size=effect_size, alpha=0.05,
-                              power=0.80, alternative='larger')
-
-# Alternative: Use proportion_effectsize with proportions_ztest
-from statsmodels.stats.proportion import proportions_ztest
-n_ab = proportions_ztest(effect_size=effect_size, alpha=0.05,
-                         power=0.80, alternative='larger')
+# Required sample size per group
+analysis = NormalIndPower()
+n_ab = analysis.solve_power(effect_size=effect_size, alpha=0.05,
+                            power=0.80, ratio=1.0, alternative='larger')
 
 print(f"\nA/B Test (Proportions):")
 print(f"  Control rate: {p0:.2%}")
@@ -203,7 +199,7 @@ print(f"  Effect size: {effect_size:.4f}")
 print(f"  Sample size per group for 80% power: {int(np.ceil(n_ab))}")
 ```
 
-### One-Way ANOVA
+### 일원분산분석
 
 ```python
 from statsmodels.stats.power import FTestAnovaPower
@@ -223,7 +219,7 @@ print(f"  Sample size per group for 80% power: {int(np.ceil(n_per_group))}")
 print(f"  Total sample size: {k_groups * int(np.ceil(n_per_group))}")
 ```
 
-### Power Curves: Visualizing Sample Size vs. Power
+### 검정력 곡선: 표본크기와 검정력의 관계
 
 ```python
 import matplotlib.pyplot as plt
@@ -254,7 +250,7 @@ plt.tight_layout()
 plt.show()
 ```
 
-### Power Analysis Workflow
+### 검정력 분석의 작업 흐름
 
 ```python
 def design_study(test_type, effect_size, alpha=0.05, power=0.80,
@@ -314,59 +310,59 @@ for key, value in design.items():
     print(f"{key:.<30} {value}")
 ```
 
-## Key Takeaways
+## 핵심 요약
 
-- Power is the probability of correctly detecting a true effect.
-- Always conduct a power analysis before a study to ensure adequate sample size.
-- Increasing sample size is the most practical way to increase power.
-- There is a direct tradeoff between $\alpha$, $\beta$, sample size, and effect size.
-- Statsmodels provides convenient functions for power analysis across many test types.
-- Use power curves to visualize the relationship between sample size and power.
+- 검정력은 참 효과를 올바르게 탐지할 확률이다.
+- 표본크기가 충분한지 확인하기 위해 연구 전에 항상 검정력 분석을 하라.
+- 표본크기를 늘리는 것이 검정력을 높이는 가장 현실적인 방법이다.
+- $\alpha$, $\beta$, 표본크기, 효과크기 사이에는 직접적인 맞바꿈이 있다.
+- Statsmodels는 여러 검정 유형에 대한 편리한 검정력 분석 함수를 제공한다.
+- 검정력 곡선으로 표본크기와 검정력의 관계를 시각화하라.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-A test has $\alpha = 0.05$ and power $= 0.80$. What are the probabilities of Type I error, Type II error, correct rejection, and correct non-rejection?
+**연습문제 1.**
+어떤 검정의 $\alpha = 0.05$이고 검정력 $= 0.80$이다. 제1종 오류, 제2종 오류, 올바른 기각, 올바른 비기각의 확률은 각각 얼마인가?
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
 
-    - **Type I error** ($\alpha$): $P(\text{reject } H_0 \mid H_0 \text{ true}) = 0.05$
-    - **Type II error** ($\beta$): $P(\text{fail to reject } H_0 \mid H_0 \text{ false}) = 1 - \text{power} = 1 - 0.80 = 0.20$
-    - **Correct rejection (power)**: $P(\text{reject } H_0 \mid H_0 \text{ false}) = 0.80$
-    - **Correct non-rejection**: $P(\text{fail to reject } H_0 \mid H_0 \text{ true}) = 1 - \alpha = 0.95$
+    - **제1종 오류** ($\alpha$): $P(\text{reject } H_0 \mid H_0 \text{ true}) = 0.05$
+    - **제2종 오류** ($\beta$): $P(\text{fail to reject } H_0 \mid H_0 \text{ false}) = 1 - \text{power} = 1 - 0.80 = 0.20$
+    - **올바른 기각(검정력)**: $P(\text{reject } H_0 \mid H_0 \text{ false}) = 0.80$
+    - **올바른 비기각**: $P(\text{fail to reject } H_0 \mid H_0 \text{ true}) = 1 - \alpha = 0.95$
 
 ---
 
-**Exercise 2.**
-A researcher wants 90% power to detect an effect size of $d = 0.3$ at $\alpha = 0.05$ (two-sided, two-sample $t$-test). Using the formula $n = 2(z_{\alpha/2} + z_\beta)^2/d^2$, estimate the required sample size per group.
+**연습문제 2.**
+어떤 연구자가 $\alpha = 0.05$(양측, 이표본 $t$-검정)에서 효과크기 $d = 0.3$을 검정력 90%로 탐지하려 한다. 공식 $n = 2(z_{\alpha/2} + z_\beta)^2/d^2$으로 집단당 필요한 표본크기를 추정하라.
 
-??? success "Solution to Exercise 2"
-    With $\alpha = 0.05$: $z_{0.025} = 1.96$. With power $= 0.90$: $\beta = 0.10$, so $z_{0.10} = 1.282$.
+??? success "연습문제 2 풀이"
+    $\alpha = 0.05$이면 $z_{0.025} = 1.96$이다. 검정력 $= 0.90$이면 $\beta = 0.10$이므로 $z_{0.10} = 1.282$이다.
 
     $$
     n = \frac{2(1.96 + 1.282)^2}{0.3^2} = \frac{2(3.242)^2}{0.09} = \frac{2 \times 10.511}{0.09} = \frac{21.022}{0.09} \approx 233.6
     $$
 
-    Rounding up, $n = 234$ per group (468 total). Detecting a small effect with high power requires a substantial sample size.
+    올림하면 집단당 $n = 234$(총 468)이다. 작은 효과를 높은 검정력으로 탐지하려면 상당한 표본이 필요하다.
 
 ---
 
-**Exercise 3.**
-List four ways to increase the power of a test. Which is typically the most practical?
+**연습문제 3.**
+검정의 검정력을 높이는 방법 네 가지를 들라. 보통 어느 것이 가장 현실적인가?
 
-??? success "Solution to Exercise 3"
+??? success "연습문제 3 풀이"
 
-    1. **Increase sample size $n$**: More data reduces the standard error, making it easier to detect a true effect. This is typically the most practical approach.
-    2. **Increase $\alpha$**: A less stringent significance level (e.g., $\alpha = 0.10$ instead of $0.05$) increases power but also increases the Type I error rate.
-    3. **Increase the effect size**: A larger true difference is easier to detect. This is usually not under the researcher's control but can sometimes be achieved through better experimental design (e.g., more extreme treatments).
-    4. **Reduce variability ($\sigma$)**: More precise measurements or more homogeneous samples reduce $\sigma$, increasing the signal-to-noise ratio. This can be achieved through better measurement instruments, controlling for confounders, or using paired designs.
+    1. **표본크기 $n$을 늘린다**: 자료가 많아지면 표준오차가 줄어 참 효과를 탐지하기 쉬워진다. 보통 가장 현실적인 방법이다.
+    2. **$\alpha$를 키운다**: 유의수준을 덜 엄격하게 하면(예: 0.05 대신 0.10) 검정력이 커지지만 제1종 오류율도 커진다.
+    3. **효과크기를 키운다**: 참 차이가 클수록 탐지하기 쉽다. 보통 연구자가 통제할 수 없지만, 더 나은 실험 설계(예: 더 극단적인 처리)로 어느 정도 가능할 때도 있다.
+    4. **변동성 $\sigma$를 줄인다**: 더 정밀한 측정이나 더 동질적인 표본은 $\sigma$를 줄여 신호 대 잡음 비를 높인다. 더 나은 측정기기, 교란요인의 통제, 대응 설계 등으로 달성할 수 있다.
 
 ---
 
-**Exercise 4.**
-Explain the tradeoff between Type I error ($\alpha$) and Type II error ($\beta$) when the sample size is fixed. Why can't both be made arbitrarily small simultaneously?
+**연습문제 4.**
+표본크기가 고정되어 있을 때 제1종 오류($\alpha$)와 제2종 오류($\beta$) 사이의 맞바꿈을 설명하라. 둘을 동시에 얼마든지 작게 만들 수 없는 이유는?
 
-??? success "Solution to Exercise 4"
-    With a fixed sample size and effect size, there is a direct tradeoff: reducing $\alpha$ (making it harder to reject $H_0$) increases $\beta$ (making it harder to detect a true effect), and vice versa. This is because both error rates depend on the position of the rejection threshold relative to the distributions under $H_0$ and $H_1$.
+??? success "연습문제 4 풀이"
+    표본크기와 효과크기가 고정되어 있으면 직접적인 맞바꿈이 있다: $\alpha$를 줄이면($H_0$을 기각하기 어렵게 하면) $\beta$가 커지고(참 효과를 탐지하기 어려워지고), 그 반대도 마찬가지이다. 두 오류율 모두 $H_0$과 $H_1$ 아래 분포에 대한 기각 문턱의 위치에 달려 있기 때문이다.
 
-    Moving the threshold to make rejections rarer (smaller $\alpha$) simultaneously makes it harder to detect the alternative (larger $\beta$). The only way to reduce both simultaneously is to increase the sample size (which shrinks both distributions' standard errors) or increase the effect size (which separates the two distributions further). With infinite data, both $\alpha$ and $\beta$ can approach zero; with finite data, a tradeoff is unavoidable.
+    문턱을 옮겨 기각을 드물게 만들면(작은 $\alpha$) 동시에 대립가설을 탐지하기 어려워진다(큰 $\beta$). 둘을 동시에 줄이는 유일한 방법은 표본크기를 늘리거나(두 분포의 표준오차를 함께 줄인다) 효과크기를 키우는 것(두 분포를 더 멀리 떼어 놓는다)이다. 자료가 무한하면 $\alpha$와 $\beta$가 모두 0에 다가갈 수 있지만, 유한한 자료에서는 맞바꿈을 피할 수 없다.

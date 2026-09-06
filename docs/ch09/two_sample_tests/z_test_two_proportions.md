@@ -1,138 +1,138 @@
-# Two-Sample Z-Test for the Difference of Proportions
+# 비율 차이에 대한 이표본 Z-검정
 
-## Comparing Success Rates Across Groups
+## 집단 간 성공률의 비교
 
-Many practical questions involve comparing the proportion of "successes" in two populations. Does a new website design lead to a higher conversion rate than the current design? Is the infection rate lower in the vaccinated group than in the placebo group? Does the approval rating differ between two demographic groups? The two-sample z-test for proportions provides a formal framework for answering these questions by testing whether two population proportions $p_1$ and $p_2$ are equal.
+실무의 많은 질문이 두 모집단의 "성공" 비율을 비교하는 것이다. 새 웹사이트 디자인이 기존보다 높은 전환율로 이어지는가? 백신 접종군의 감염률이 위약군보다 낮은가? 두 인구집단의 지지율이 다른가? 비율에 대한 이표본 z-검정은 두 모비율 $p_1$과 $p_2$가 같은지 검정하여 이런 질문에 답하는 형식적 틀을 제공한다.
 
-## Setup and Notation
+## 설정과 기호
 
-We observe two independent random samples of binary (success/failure) outcomes:
+이진(성공/실패) 결과의 독립인 두 확률표본을 관측한다:
 
-- Sample 1: $n_1$ independent trials with $X_1$ successes, giving sample proportion $\hat{p}_1 = X_1 / n_1$
-- Sample 2: $n_2$ independent trials with $X_2$ successes, giving sample proportion $\hat{p}_2 = X_2 / n_2$
+- 표본 1: 독립 시행 $n_1$번에서 성공 $X_1$번, 표본비율 $\hat{p}_1 = X_1 / n_1$
+- 표본 2: 독립 시행 $n_2$번에서 성공 $X_2$번, 표본비율 $\hat{p}_2 = X_2 / n_2$
 
-Here $X_1 \sim \text{Binomial}(n_1, p_1)$ and $X_2 \sim \text{Binomial}(n_2, p_2)$, and the two samples are independent of each other.
+여기서 $X_1 \sim \text{Binomial}(n_1, p_1)$, $X_2 \sim \text{Binomial}(n_2, p_2)$이고 두 표본은 서로 독립이다.
 
-## Hypotheses
+## 가설
 
-The null hypothesis states that the two population proportions are equal:
+귀무가설은 두 모비율이 같다는 것이다:
 
 $$
 H_0 : p_1 = p_2
 $$
 
-The alternative hypothesis takes one of three forms:
+대립가설은 다음 세 형태 중 하나이다:
 
-| Name | Alternative $H_a$ | Rejects when |
+| 이름 | 대립가설 $H_a$ | 기각하는 경우 |
 |---|---|---|
-| Two-sided | $p_1 \neq p_2$ | $\lvert Z \rvert$ is large |
-| Left-tailed | $p_1 < p_2$ | $Z$ is very negative |
-| Right-tailed | $p_1 > p_2$ | $Z$ is very positive |
+| 양측 | $p_1 \neq p_2$ | $\lvert Z \rvert$가 클 때 |
+| 좌측 | $p_1 < p_2$ | $Z$가 매우 작을 때(음수) |
+| 우측 | $p_1 > p_2$ | $Z$가 매우 클 때 |
 
-??? note "Testing a nonzero difference"
-    The test as presented here applies specifically to $H_0: p_1 - p_2 = 0$. Testing $H_0: p_1 - p_2 = \delta_0$ for $\delta_0 \neq 0$ requires a different standard error formula (without pooling), because the pooled proportion is only meaningful when $p_1 = p_2$ is assumed under the null.
+??? note "0이 아닌 차이를 검정할 때"
+    여기서 제시한 검정은 $H_0: p_1 - p_2 = 0$에만 적용된다. $\delta_0 \neq 0$인 $H_0: p_1 - p_2 = \delta_0$을 검정하려면 (합동하지 않는) 다른 표준오차 공식이 필요하다. 합동 비율은 귀무가설 아래에서 $p_1 = p_2$를 가정할 때에만 의미가 있기 때문이다.
 
-## The Pooled Proportion
+## 합동 비율
 
-Under $H_0: p_1 = p_2$, both samples come from populations with the same success probability. The best estimate of this common proportion pools the data from both samples:
+$H_0: p_1 = p_2$ 아래에서 두 표본은 성공확률이 같은 모집단에서 나온다. 이 공통 비율의 최선의 추정값은 두 표본의 자료를 합친 것이다:
 
 $$
 \hat{p} = \frac{X_1 + X_2}{n_1 + n_2}
 $$
 
-This pooled proportion $\hat{p}$ combines all the success counts and all the trials into a single estimate. It is used in the denominator of the test statistic to estimate the common standard error under the null hypothesis.
+이 합동 비율 $\hat{p}$는 성공 횟수와 시행 횟수를 모두 합쳐 하나의 추정값을 만든다. 귀무가설 아래에서 공통 표준오차를 추정하기 위해 검정통계량의 분모에 쓰인다.
 
-## Derivation of the Test Statistic
+## 검정통계량의 유도
 
-Under $H_0$, the difference $\hat{p}_1 - \hat{p}_2$ has expected value 0. Because the two samples are independent, the variance of the difference is:
+$H_0$ 아래에서 차이 $\hat{p}_1 - \hat{p}_2$의 기댓값은 0이다. 두 표본이 독립이므로 차이의 분산은:
 
 $$
 \text{Var}(\hat{p}_1 - \hat{p}_2) = p(1 - p)\left(\frac{1}{n_1} + \frac{1}{n_2}\right)
 $$
 
-where $p = p_1 = p_2$ is the common population proportion under $H_0$. Replacing the unknown $p$ with its pooled estimate $\hat{p}$ and standardizing gives the test statistic:
+여기서 $p = p_1 = p_2$는 $H_0$ 아래의 공통 모비율이다. 미지의 $p$를 합동 추정값 $\hat{p}$로 바꾸고 표준화하면 검정통계량을 얻는다:
 
 $$
 Z = \frac{\hat{p}_1 - \hat{p}_2}{\sqrt{\hat{p}(1 - \hat{p})\left(\dfrac{1}{n_1} + \dfrac{1}{n_2}\right)}}
 $$
 
-Under $H_0$ and for sufficiently large samples, $Z$ is approximately standard normal: $Z \dot{\sim} N(0, 1)$.
+$H_0$ 아래에서 표본이 충분히 크면 $Z$는 근사적으로 표준정규이다: $Z \dot{\sim} N(0, 1)$.
 
-## Rejection Regions and P-values
+## 기각역과 p-값
 
-Let $z_{\alpha}$ denote the upper $\alpha$-quantile of the standard normal distribution and $z_{\text{obs}}$ the observed value of the test statistic.
+$z_{\alpha}$를 표준정규분포의 상위 $\alpha$ 분위수, $z_{\text{obs}}$를 검정통계량의 관측값이라 하자.
 
-### Two-sided test (Hₐ: p₁ ≠ p₂)
+### 양측검정 (Hₐ: p₁ ≠ p₂)
 
-**Rejection region**: reject $H_0$ if $|z_{\text{obs}}| > z_{\alpha/2}$.
+**기각역**: $|z_{\text{obs}}| > z_{\alpha/2}$이면 $H_0$을 기각한다.
 
-**P-value**:
+**p-값**:
 
 $$
 p\text{-value} = 2\bigl[1 - \mathcal{N}(|z_{\text{obs}}|)\bigr]
 $$
 
-### Left-tailed test (Hₐ: p₁ < p₂)
+### 좌측검정 (Hₐ: p₁ < p₂)
 
-**Rejection region**: reject $H_0$ if $z_{\text{obs}} < -z_{\alpha}$.
+**기각역**: $z_{\text{obs}} < -z_{\alpha}$이면 $H_0$을 기각한다.
 
-**P-value**:
+**p-값**:
 
 $$
 p\text{-value} = \mathcal{N}(z_{\text{obs}})
 $$
 
-### Right-tailed test (Hₐ: p₁ > p₂)
+### 우측검정 (Hₐ: p₁ > p₂)
 
-**Rejection region**: reject $H_0$ if $z_{\text{obs}} > z_{\alpha}$.
+**기각역**: $z_{\text{obs}} > z_{\alpha}$이면 $H_0$을 기각한다.
 
-**P-value**:
+**p-값**:
 
 $$
 p\text{-value} = 1 - \mathcal{N}(z_{\text{obs}})
 $$
 
-## Assumptions
+## 가정
 
-The two-sample z-test for proportions requires the following conditions:
+비율에 대한 이표본 z-검정에는 다음 조건이 필요하다:
 
-1. **Independent samples**: The two samples are drawn independently from their respective populations.
-2. **Independent observations**: Within each sample, the binary outcomes are independent.
-3. **Large sample sizes**: The normal approximation to the binomial is adequate. A standard rule of thumb requires all four of the following:
+1. **독립인 표본**: 두 표본이 각 모집단에서 독립적으로 뽑혔다.
+2. **독립인 관측값**: 각 표본 안에서 이진 결과가 독립이다.
+3. **충분히 큰 표본크기**: 이항분포에 대한 정규근사가 적절해야 한다. 표준적인 경험칙은 다음 네 가지를 모두 요구한다:
 
 $$
 n_1 \hat{p} \geq 5, \quad n_1(1 - \hat{p}) \geq 5, \quad n_2 \hat{p} \geq 5, \quad n_2(1 - \hat{p}) \geq 5
 $$
 
-Some textbooks state this condition using the individual sample proportions ($n_1\hat{p}_1 \geq 5$, etc.), but checking with the pooled proportion $\hat{p}$ is more appropriate since $\hat{p}$ is the estimate used under $H_0$.
+어떤 교재는 이 조건을 각 표본비율($n_1\hat{p}_1 \geq 5$ 등)로 진술하지만, $\hat{p}$가 $H_0$ 아래에서 쓰는 추정값이므로 합동 비율 $\hat{p}$로 확인하는 것이 더 적절하다.
 
-!!! warning "Small samples or extreme proportions"
-    When sample sizes are small or proportions are close to 0 or 1, the normal approximation is poor. In such cases, Fisher's exact test or a permutation test provides a more reliable alternative.
+!!! warning "작은 표본이나 극단적인 비율"
+    표본이 작거나 비율이 0 또는 1에 가까우면 정규근사가 나쁘다. 이런 경우에는 Fisher의 정확검정이나 순열검정이 더 믿을 만한 대안이다.
 
-## Example: A/B Test for Conversion Rates
+## 예제: 전환율에 대한 A/B 검정
 
-An e-commerce company runs an A/B test to compare conversion rates between the current checkout page (A) and a redesigned version (B). Over one week:
+어떤 전자상거래 회사가 기존 결제 페이지(A)와 새로 디자인한 버전(B)의 전환율을 비교하는 A/B 검정을 한 주 동안 진행했다:
 
-- Page A: $n_1 = 500$ visitors, $X_1 = 45$ conversions, $\hat{p}_1 = 45/500 = 0.090$
-- Page B: $n_2 = 480$ visitors, $X_2 = 58$ conversions, $\hat{p}_2 = 58/480 = 0.121$
+- 페이지 A: 방문자 $n_1 = 500$명, 전환 $X_1 = 45$건, $\hat{p}_1 = 45/500 = 0.090$
+- 페이지 B: 방문자 $n_2 = 480$명, 전환 $X_2 = 58$건, $\hat{p}_2 = 58/480 = 0.121$
 
-Test at $\alpha = 0.05$ whether the conversion rates differ.
+$\alpha = 0.05$에서 전환율이 다른지 검정하라.
 
-**Step 1: State the hypotheses.**
+**1단계: 가설을 세운다.**
 
 $$
 H_0: p_1 = p_2 \quad \text{vs} \quad H_a: p_1 \neq p_2
 $$
 
-**Step 2: Compute the pooled proportion.**
+**2단계: 합동 비율을 계산한다.**
 
 $$
 \hat{p} = \frac{45 + 58}{500 + 480} = \frac{103}{980} \approx 0.1051
 $$
 
-**Step 3: Check the sample size condition.** The smallest expected count is $n_2(1 - \hat{p}) = 480 \times 0.8949 \approx 430 \geq 5$. All four conditions are satisfied.
+**3단계: 표본크기 조건을 확인한다.** 가장 작은 기대도수는 $n_2(1 - \hat{p}) = 480 \times 0.8949 \approx 430 \geq 5$이다. 네 조건이 모두 만족된다.
 
-**Step 4: Compute the standard error and test statistic.**
+**4단계: 표준오차와 검정통계량을 계산한다.**
 
 $$
 \text{SE} = \sqrt{0.1051 \times 0.8949 \times \left(\frac{1}{500} + \frac{1}{480}\right)} = \sqrt{0.09406 \times 0.004083} \approx \sqrt{0.000384} \approx 0.01960
@@ -142,15 +142,15 @@ $$
 z_{\text{obs}} = \frac{0.090 - 0.121}{0.01960} = \frac{-0.031}{0.01960} \approx -1.582
 $$
 
-**Step 5: Compute the p-value.**
+**5단계: p-값을 계산한다.**
 
 $$
 p\text{-value} = 2\bigl[1 - \mathcal{N}(1.582)\bigr] = 2(1 - 0.9431) = 2(0.0569) \approx 0.114
 $$
 
-**Step 6: Make the decision.** Since $p \approx 0.114 > 0.05 = \alpha$, we fail to reject $H_0$. At the 5% significance level, there is insufficient evidence to conclude that the conversion rates differ between the two page designs.
+**6단계: 판정한다.** $p \approx 0.114 > 0.05 = \alpha$이므로 $H_0$을 기각하지 못한다. 5% 유의수준에서 두 페이지 디자인의 전환율이 다르다고 결론지을 증거가 부족하다.
 
-## Python Implementation
+## Python 구현
 
 ```python
 import numpy as np
@@ -199,94 +199,94 @@ z, p = two_proportion_z_test(45, 500, 58, 480, alternative="two-sided")
 print(f"z = {z:.3f}, p-value = {p:.3f}")
 ```
 
-## Connection to Confidence Intervals
+## 신뢰구간과의 관계
 
-By the [duality between hypothesis tests and confidence intervals](../errors_and_power/duality.md), failing to reject $H_0: p_1 = p_2$ at level $\alpha$ is equivalent to 0 being contained in the $(1 - \alpha)$ confidence interval for $p_1 - p_2$. However, the confidence interval typically uses an **unpooled** standard error:
+[가설검정과 신뢰구간의 쌍대성](../errors_and_power/duality.md)에 의해, 수준 $\alpha$에서 $H_0: p_1 = p_2$를 기각하지 못하는 것은 $p_1 - p_2$의 $(1 - \alpha)$ 신뢰구간이 0을 포함하는 것과 동등하다. 다만 신뢰구간은 보통 **합동하지 않은** 표준오차를 쓴다:
 
 $$
 \text{SE}_{\text{CI}} = \sqrt{\frac{\hat{p}_1(1 - \hat{p}_1)}{n_1} + \frac{\hat{p}_2(1 - \hat{p}_2)}{n_2}}
 $$
 
-because the confidence interval does not assume $p_1 = p_2$. The pooled standard error is specific to the hypothesis test under $H_0$.
+신뢰구간은 $p_1 = p_2$를 가정하지 않기 때문이다. 합동 표준오차는 $H_0$ 아래의 가설검정에만 해당한다.
 
-## Related Topics
+## 관련 주제
 
-- [Two-Sample Z-Test for Means](z_test_two_means.md): comparing means when variances are known
-- [Two-Sample t-Test](t_test_two_means.md): comparing means when variances are unknown
-- [F-Test for Two Variances](f_test_two_variances.md): testing equality of population variances
+- [평균에 대한 이표본 Z-검정](z_test_two_means.md): 분산을 알 때의 평균 비교
+- [이표본 t-검정](t_test_two_means.md): 분산을 모를 때의 평균 비교
+- [두 분산에 대한 F-검정](f_test_two_variances.md): 모분산의 동일성 검정
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Treatment A: 60/200 quit. B: 54/180 quit. Test at $\alpha = 0.05$.
+**연습문제 1.**
+치료 A: 200명 중 60명 금연. B: 180명 중 54명 금연. $\alpha = 0.05$에서 검정하라.
 
-??? success "Solution to Exercise 1"
-    $\hat p_1 = 0.30$, $\hat p_2 = 0.30$. Pooled: $\hat p = (60+54)/(200+180) = 114/380 = 0.30$.
+??? success "연습문제 1 풀이"
+    $\hat p_1 = 0.30$, $\hat p_2 = 0.30$. 합동: $\hat p = (60+54)/(200+180) = 114/380 = 0.30$.
 
-    $z = (0.30 - 0.30)/\mathrm{SE} = 0$. Fail to reject. No difference detected.
+    $z = (0.30 - 0.30)/\mathrm{SE} = 0$. 기각하지 못한다. 차이가 탐지되지 않았다.
 
 ---
 
-**Exercise 2.**
-A/B test: A converts 240/2000, B converts 270/2000. Test $H_0: p_A = p_B$ at $\alpha = 0.05$.
+**연습문제 2.**
+A/B 검정: A는 2000명 중 240명, B는 2000명 중 270명이 전환했다. $\alpha = 0.05$에서 $H_0: p_A = p_B$를 검정하라.
 
-??? success "Solution to Exercise 2"
-    $\hat p_A = 0.120$, $\hat p_B = 0.135$. Pooled: $\hat p = 510/4000 = 0.1275$.
+??? success "연습문제 2 풀이"
+    $\hat p_A = 0.120$, $\hat p_B = 0.135$. 합동: $\hat p = 510/4000 = 0.1275$.
 
     $\mathrm{SE} = \sqrt{0.1275 \cdot 0.8725 \cdot (1/2000 + 1/2000)} = \sqrt{0.0001113} \approx 0.01055$.
 
-    $z = (0.135 - 0.120)/0.01055 \approx 1.42$. P-value (two-sided) $\approx 0.156$. Fail to reject.
+    $z = (0.135 - 0.120)/0.01055 \approx 1.42$. 양측 p-값 $\approx 0.156$. 기각하지 못한다.
 
-    Despite a 12.5% relative lift, not statistically significant at this $n$. Would need larger sample.
-
----
-
-**Exercise 3.**
-**Sample size for A/B test.** What $n$ per arm detects a lift from 12% to 13.5% with 80% power at $\alpha = 0.05$?
-
-??? success "Solution to Exercise 3"
-    Effect size: $|p_1 - p_2| = 0.015$. Avg variance: $\approx 0.1275 \cdot 0.8725 \approx 0.1112$.
-
-    Formula: $n \approx 2 \cdot ((z_{\alpha/2} + z_\beta)^2 \cdot p(1-p))/(\Delta)^2 = 2 \cdot ((1.96 + 0.84)^2 \cdot 0.1112)/0.000225 \approx 7741$.
-
-    Roughly 8000 per arm. A/B tests of small effects need large samples — common in tech.
+    상대적으로 12.5%의 상승인데도 이 표본크기에서는 통계적으로 유의하지 않다. 표본이 더 커야 한다.
 
 ---
 
-**Exercise 4.**
-**Pooled vs unpooled SE.** Why use pooled SE for hypothesis test but unpooled for CI?
+**연습문제 3.**
+**A/B 검정을 위한 표본크기.** $\alpha = 0.05$에서 12%에서 13.5%로의 상승을 검정력 80%로 탐지하려면 집단당 $n$이 얼마여야 하는가?
 
-??? success "Solution to Exercise 4"
-    Under $H_0: p_1 = p_2 = p$, the pooled estimator $\hat p_{\text{pool}}$ is the best estimate of common $p$. Use it in the SE for the test.
+??? success "연습문제 3 풀이"
+    효과크기: $|p_1 - p_2| = 0.015$. 평균 분산: $\approx 0.1275 \cdot 0.8725 \approx 0.1112$.
 
-    For the CI on $p_1 - p_2$ (not assuming equality), use $\hat p_1, \hat p_2$ separately.
+    공식: $n \approx 2 \cdot ((z_{\alpha/2} + z_\beta)^2 \cdot p(1-p))/(\Delta)^2 = 2 \cdot ((1.96 + 0.84)^2 \cdot 0.1112)/0.000225 \approx 7750$.
 
-    Modern A/B testing platforms sometimes use unpooled SE for tests too — the conservative choice; tests slightly less powerful but valid under unequal proportions.
-
----
-
-**Exercise 5.**
-**Conditions** for two-proportion $z$-test.
-
-??? success "Solution to Exercise 5"
-    - Random independent samples from each population.
-    - Large enough sample sizes: $n_1 \hat p_1 \ge 10$, $n_1(1 - \hat p_1) \ge 10$, and similarly for sample 2.
-    - For pooled version: $n \hat p_{\text{pool}}, n (1 - \hat p_{\text{pool}})$ both $\ge 10$.
-
-    When conditions fail: Fisher's exact test.
+    집단당 대략 8000명이다. 작은 효과에 대한 A/B 검정에는 큰 표본이 필요하며, 기술 업계에서 흔한 일이다.
 
 ---
 
-**Exercise 6.**
-**Effect size for two proportions.** Define relative risk and odds ratio.
+**연습문제 4.**
+**합동 표준오차와 비합동 표준오차.** 가설검정에는 합동, 신뢰구간에는 비합동 표준오차를 쓰는 이유는?
 
-??? success "Solution to Exercise 6"
-    **Risk difference:** $p_1 - p_2$. Absolute.
+??? success "연습문제 4 풀이"
+    $H_0: p_1 = p_2 = p$ 아래에서는 합동 추정량 $\hat p_{\text{pool}}$이 공통 $p$의 최선의 추정값이다. 검정의 표준오차에는 이것을 쓴다.
 
-    **Relative risk (RR):** $p_1/p_2$. Ratio.
+    (동일성을 가정하지 않는) $p_1 - p_2$의 신뢰구간에는 $\hat p_1$과 $\hat p_2$를 따로 쓴다.
 
-    **Odds ratio (OR):** $[p_1/(1-p_1)]/[p_2/(1-p_2)]$. Used in case-control studies and logistic regression.
+    현대의 A/B 검정 플랫폼은 검정에도 비합동 표준오차를 쓰기도 한다 — 보수적인 선택으로, 검정력이 약간 낮지만 비율이 다를 때에도 타당하다.
 
-    For rare events ($p$ small), $\mathrm{OR} \approx \mathrm{RR}$. For common events, they differ.
+---
 
-    Reporting: include risk difference (clinically interpretable), relative risk (effect magnitude), and OR (statistical convention). Each has its place.
+**연습문제 5.**
+두 비율 $z$-검정의 **조건.**
+
+??? success "연습문제 5 풀이"
+    - 각 모집단에서 독립적으로 뽑은 확률표본.
+    - 충분히 큰 표본크기: $n_1 \hat p_1 \ge 10$, $n_1(1 - \hat p_1) \ge 10$, 표본 2도 마찬가지.
+    - 합동 버전에서는 $n \hat p_{\text{pool}}$과 $n (1 - \hat p_{\text{pool}})$이 모두 $\ge 10$.
+
+    조건이 깨지면 Fisher의 정확검정을 쓴다.
+
+---
+
+**연습문제 6.**
+**두 비율의 효과크기.** 상대위험도와 오즈비를 정의하라.
+
+??? success "연습문제 6 풀이"
+    **위험 차이:** $p_1 - p_2$. 절대적인 값이다.
+
+    **상대위험도(RR):** $p_1/p_2$. 비율이다.
+
+    **오즈비(OR):** $[p_1/(1-p_1)]/[p_2/(1-p_2)]$. 환자-대조군 연구와 로지스틱 회귀에서 쓴다.
+
+    드문 사건($p$가 작을 때)에서는 $\mathrm{OR} \approx \mathrm{RR}$이다. 흔한 사건에서는 다르다.
+
+    보고 방식: 위험 차이(임상적으로 해석 가능), 상대위험도(효과의 크기), 오즈비(통계적 관례)를 함께 제시하라. 각각 쓰임새가 있다.

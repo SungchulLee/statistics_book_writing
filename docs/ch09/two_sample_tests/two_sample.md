@@ -1,38 +1,38 @@
-# Two-Sample Tests
+# 이표본 검정
 
-## 1. Two Sample z Test
+## 1. 이표본 z 검정
 
-The two sample z-test determines whether the means of two independent samples differ significantly, given that the population variances are known. It applies when comparing two groups under different conditions and assumes normally distributed, independent samples.
+이표본 z-검정은 모분산을 알고 있을 때 독립인 두 표본의 평균이 유의하게 다른지 판단한다. 서로 다른 조건의 두 집단을 비교할 때 쓰며, 표본이 정규분포를 따르고 독립이라고 가정한다.
 
-### A. Hypothesis
+### A. 가설
 
-- **Null**: $H_0: \mu_1 = \mu_2$
-- **Alternative**:
-    - Two-tailed: $H_a: \mu_1 \neq \mu_2$
-    - One-tailed (greater): $H_a: \mu_1 > \mu_2$
-    - One-tailed (less): $H_a: \mu_1 < \mu_2$
+- **귀무가설**: $H_0: \mu_1 = \mu_2$
+- **대립가설**:
+    - 양측: $H_a: \mu_1 \neq \mu_2$
+    - 단측(큼): $H_a: \mu_1 > \mu_2$
+    - 단측(작음): $H_a: \mu_1 < \mu_2$
 
-### B. Test Statistic
+### B. 검정통계량
 
 $$ z = \frac{(\bar{x}_1 - \bar{x}_2) - (\mu_1 - \mu_2)}{\sqrt{\frac{\sigma_1^2}{n_1} + \frac{\sigma_2^2}{n_2}}} $$
 
-Under $H_0$ (where $\mu_1 - \mu_2 = 0$), and when using sample standard deviations for large samples:
+$H_0$ 아래에서($\mu_1 - \mu_2 = 0$) 표본이 크면 표본표준편차를 써서:
 
 $$ z = \frac{\bar{x}_1 - \bar{x}_2}{\sqrt{\frac{s_1^2}{n_1} + \frac{s_2^2}{n_2}}} $$
 
-### C. Decision Rule
+### C. 판정 규칙
 
-- **Two-tailed**: Reject $H_0$ if $|z| > z_{\alpha/2}$.
-- **One-tailed (greater)**: Reject $H_0$ if $z > z_{\alpha}$.
-- **One-tailed (less)**: Reject $H_0$ if $z < -z_{\alpha}$.
+- **양측**: $|z| > z_{\alpha/2}$이면 $H_0$을 기각한다.
+- **단측(큼)**: $z > z_{\alpha}$이면 $H_0$을 기각한다.
+- **단측(작음)**: $z < -z_{\alpha}$이면 $H_0$을 기각한다.
 
-### D. P-value
+### D. p-값
 
-- Two-tailed: $p\text{-value} = 2P(Z \geq |z|)$
-- One-tailed (greater): $p\text{-value} = P(Z \geq z)$
-- One-tailed (less): $p\text{-value} = P(Z \leq z)$
+- 양측: $p\text{-값} = 2P(Z \geq |z|)$
+- 단측(큼): $p\text{-값} = P(Z \geq z)$
+- 단측(작음): $p\text{-값} = P(Z \leq z)$
 
-### E. Example
+### E. 예제
 
 ```python
 import numpy as np
@@ -51,48 +51,48 @@ print(f"p value   : {p_value:.4f}")
 
 ---
 
-## 2. Two Sample t Test
+## 2. 이표본 t 검정
 
-The two sample t-test (independent samples t-test) determines whether the means of two independent groups differ significantly. It is used when the population variances are unknown and assumed to be equal.
+이표본 t-검정(독립표본 t-검정)은 독립인 두 집단의 평균이 유의하게 다른지 판단한다. 모분산을 모르고 서로 같다고 가정할 때 쓴다.
 
-### A. Hypothesis
+### A. 가설
 
-- **Null**: $H_0: \mu_1 = \mu_2$
-- **Alternative**:
-    - Two-tailed: $H_a: \mu_1 \neq \mu_2$
-    - One-tailed (greater): $H_a: \mu_1 > \mu_2$
-    - One-tailed (less): $H_a: \mu_1 < \mu_2$
+- **귀무가설**: $H_0: \mu_1 = \mu_2$
+- **대립가설**:
+    - 양측: $H_a: \mu_1 \neq \mu_2$
+    - 단측(큼): $H_a: \mu_1 > \mu_2$
+    - 단측(작음): $H_a: \mu_1 < \mu_2$
 
-### B. Test Statistic (Pooled Variance)
+### B. 검정통계량 (합동분산)
 
 $$ t = \frac{\bar{x}_1 - \bar{x}_2}{s_p \cdot \sqrt{\frac{1}{n_1} + \frac{1}{n_2}}} $$
 
-where the pooled standard deviation is:
+여기서 합동 표준편차는:
 
 $$ s_p = \sqrt{\frac{(n_1 - 1) s_1^2 + (n_2 - 1) s_2^2}{n_1 + n_2 - 2}} $$
 
-This statistic follows a t-distribution with $n_1 + n_2 - 2$ degrees of freedom.
+이 통계량은 자유도 $n_1 + n_2 - 2$인 t-분포를 따른다.
 
-### C. Decision Rule
+### C. 판정 규칙
 
-- **Two-tailed**: Reject $H_0$ if $|t| > t_{\alpha/2, n_1+n_2-2}$.
-- **One-tailed (greater)**: Reject $H_0$ if $t > t_{\alpha, n_1+n_2-2}$.
-- **One-tailed (less)**: Reject $H_0$ if $t < -t_{\alpha, n_1+n_2-2}$.
+- **양측**: $|t| > t_{\alpha/2, n_1+n_2-2}$이면 $H_0$을 기각한다.
+- **단측(큼)**: $t > t_{\alpha, n_1+n_2-2}$이면 $H_0$을 기각한다.
+- **단측(작음)**: $t < -t_{\alpha, n_1+n_2-2}$이면 $H_0$을 기각한다.
 
-### D. Examples
+### D. 예제
 
-#### Example: Gender Bias in Salary
+#### 예제: 급여의 성별 격차
 
-Market researchers compare average salaries for male vs female managers.
+시장조사자들이 남성 관리자와 여성 관리자의 평균 급여를 비교한다.
 
 $$H_0 : \mu_{\text{men}} = \mu_{\text{women}} \quad\text{vs}\quad H_1: \mu_{\text{men}} > \mu_{\text{women}}$$
 
-#### Example: Tomatoes from Two Different Fields
+#### 예제: 서로 다른 두 밭의 토마토
 
-| | Field A | Field B |
+| | 밭 A | 밭 B |
 |:---:|:---:|:---:|
-| Mean | 1.3m | 1.6m |
-| Std Dev | 0.5m | 0.3m |
+| 평균 | 1.3 m | 1.6 m |
+| 표준편차 | 0.5 m | 0.3 m |
 | n | 22 | 24 |
 
 $$H_0 : \mu_A = \mu_B \quad\text{vs}\quad H_1: \mu_A \neq \mu_B$$
@@ -126,20 +126,20 @@ else:
     print("Fail to reject H_0")
 ```
 
-#### Example: Number of Babies (France vs Switzerland)
+#### 예제: 출생아 수 (France 대 Switzerland)
 
 | | France | Switzerland |
 |:---:|:---:|:---:|
-| Mean | 1.85 | 1.65 |
-| Std Dev | 1.3 | 1.2 |
+| 평균 | 1.85 | 1.65 |
+| 표준편차 | 1.3 | 1.2 |
 | n | 100 | 100 |
 
-Using pooled variance:
+합동분산을 쓰면:
 
 ```python
-X_1_bar, X_2_bar = 1.3, 1.6
-s_1, s_2 = 0.5, 0.3
-n_1, n_2 = 22, 24
+X_1_bar, X_2_bar = 1.85, 1.65
+s_1, s_2 = 1.3, 1.2
+n_1, n_2 = 100, 100
 
 s_p_square = ((n_1 - 1) * s_1**2 + (n_2 - 1) * s_2**2) / (n_1 + n_2 - 2)
 statistic = (X_1_bar - X_2_bar) / np.sqrt(s_p_square / n_1 + s_p_square / n_2)
@@ -151,37 +151,37 @@ print(f"{statistic = :.4f}")
 print(f"{p_value   = :.4f}")
 ```
 
-#### Example: Two Varieties of Pears (Bosc and Anjou)
+#### 예제: 두 품종의 배 (Bosc와 Anjou)
 
 | | Bosc | Anjou |
 |:---:|:---:|:---:|
-| Mean | 120 | 116 |
-| Std Dev | 15 | 13 |
+| 평균 | 120 | 116 |
+| 표준편차 | 15 | 13 |
 | n | 65 | 65 |
 
-The 99% confidence interval for $\mu_{\text{Bosc}} - \mu_{\text{Anjou}}$ is $4 \pm 6.44$, i.e., $(-2.44, 10.44)$. Since the confidence interval contains 0, we fail to reject $H_0$ at $\alpha = 0.01$.
+$\mu_{\text{Bosc}} - \mu_{\text{Anjou}}$의 99% 신뢰구간은 $4 \pm 6.44$, 즉 $(-2.44, 10.44)$이다. 신뢰구간이 0을 포함하므로 $\alpha = 0.01$에서 $H_0$을 기각하지 못한다.
 
 ---
 
-## 3. Welch's t Test
+## 3. Welch의 t 검정
 
-**Welch's t-test** is a robust adaptation of the standard two-sample t-test that accounts for unequal variances and potentially unequal sample sizes.
+**Welch의 t-검정**은 분산이 다르고 표본크기도 다를 수 있는 상황을 감안한, 표준 이표본 t-검정의 로버스트한 변형이다.
 
-### Formula
+### 공식
 
 $$t = \frac{\bar{X}_1 - \bar{X}_2}{\sqrt{\frac{s_1^2}{n_1} + \frac{s_2^2}{n_2}}}$$
 
-The degrees of freedom are approximated using the **Welch-Satterthwaite equation**:
+자유도는 **Welch-Satterthwaite 식**으로 근사한다:
 
 $$df = \frac{\left( \frac{s_1^2}{n_1} + \frac{s_2^2}{n_2} \right)^2}{\frac{\left( \frac{s_1^2}{n_1} \right)^2}{n_1 - 1} + \frac{\left( \frac{s_2^2}{n_2} \right)^2}{n_2 - 1}}$$
 
-### When to Use
+### 언제 쓰는가
 
-- When the two groups have noticeably different variances.
-- When the sample sizes between the two groups differ significantly.
-- When population variances are unknown.
+- 두 집단의 분산이 눈에 띄게 다를 때.
+- 두 집단의 표본크기가 크게 다를 때.
+- 모분산을 모를 때.
 
-### Python Implementation
+### Python 구현
 
 ```python
 import numpy as np
@@ -202,46 +202,46 @@ else:
     print("Fail to reject H0.")
 ```
 
-### Comparison to Standard Two-Sample t-Test
+### 표준 이표본 t-검정과의 비교
 
-| Feature | Standard t-Test | Welch's t-Test |
+| 항목 | 표준 t-검정 | Welch t-검정 |
 |---|---|---|
-| Variance assumption | Equal variances | No equal variance assumption |
-| Sample sizes | Similar sizes assumed | Handles unequal sizes |
-| Degrees of freedom | Fixed: $n_1 + n_2 - 2$ | Approximated via Welch-Satterthwaite |
+| 분산 가정 | 등분산 | 등분산 가정 없음 |
+| 표본크기 | 비슷한 크기를 전제 | 크기가 달라도 된다 |
+| 자유도 | 고정: $n_1 + n_2 - 2$ | Welch-Satterthwaite로 근사 |
 
 ---
 
-## 4. Two Sample Proportion Test
+## 4. 이표본 비율 검정
 
-The two sample proportion test determines if there is a significant difference between the proportions of two independent groups based on a binary outcome.
+이표본 비율 검정은 이진 결과에 대해 독립인 두 집단의 비율에 유의한 차이가 있는지 판단한다.
 
-### A. Hypothesis
+### A. 가설
 
-- **Null**: $H_0: p_1 = p_2$
-- **Alternative**:
-    - Two-tailed: $H_a: p_1 \neq p_2$
-    - One-tailed (greater): $H_a: p_1 > p_2$
-    - One-tailed (less): $H_a: p_1 < p_2$
+- **귀무가설**: $H_0: p_1 = p_2$
+- **대립가설**:
+    - 양측: $H_a: p_1 \neq p_2$
+    - 단측(큼): $H_a: p_1 > p_2$
+    - 단측(작음): $H_a: p_1 < p_2$
 
-### B. Test Statistic
+### B. 검정통계량
 
-The pooled proportion:
+합동 비율:
 
 $$\hat{p}_{\text{pool}} = \frac{x_1 + x_2}{n_1 + n_2}$$
 
-The test statistic:
+검정통계량:
 
 $$z = \frac{\hat{p}_1 - \hat{p}_2}{\sqrt{\hat{p}_{\text{pool}} (1 - \hat{p}_{\text{pool}}) \left(\frac{1}{n_1} + \frac{1}{n_2}\right)}}$$
 
-### C. Examples
+### C. 예제
 
-#### Example: Support for New Law
+#### 예제: 새 법률에 대한 지지
 
-| | District A | District B | Total |
+| | A 지구 | B 지구 | 합계 |
 |:---:|:---:|:---:|:---:|
-| Yes | 58 | 52 | 110 |
-| No | 42 | 48 | 90 |
+| 예 | 58 | 52 | 110 |
+| 아니오 | 42 | 48 | 90 |
 
 $$H_0 : p_A = p_B \quad\text{vs}\quad H_1: p_A \neq p_B$$
 
@@ -267,21 +267,21 @@ else:
     print("Fail to reject H_0")
 ```
 
-#### Example: Derrick's Approval Rate
+#### 예제: Derrick의 지지율
 
-Derrick tests whether the prime minister's approval is lower in December vs November.
+Derrick은 총리 지지율이 11월보다 12월에 낮은지 검정한다.
 
 $$H_0 : p_{\text{Nov}} = p_{\text{Dec}} \quad\text{vs}\quad H_1: p_{\text{Nov}} > p_{\text{Dec}}$$
 
-#### Example: Dime and Nickel
+#### 예제: 10센트와 5센트 동전
 
-Kiley tests if a dime and nickel have the same likelihood of showing heads.
+Kiley는 10센트 동전과 5센트 동전이 앞면을 보일 가능성이 같은지 검정한다.
 
 $$H_0 : p_{\text{Dime}} = p_{\text{Nickel}} \quad\text{vs}\quad H_1: p_{\text{Dime}} \neq p_{\text{Nickel}}$$
 
-#### Example: Myopia
+#### 예제: 근시
 
-Researchers test whether myopia prevalence increased from 2000 to 2015. In 2000: 132/400 positive. In 2015: 228/600 positive.
+연구자들이 2000년에서 2015년 사이에 근시 유병률이 높아졌는지 검정한다. 2000년: 400명 중 132명. 2015년: 600명 중 228명.
 
 $$H_0 : p_{2000} = p_{2015} \quad\text{vs}\quad H_1: p_{2000} < p_{2015}$$
 
@@ -304,9 +304,9 @@ else:
     print("Fail to reject H_0")
 ```
 
-#### Example: Cat Disease
+#### 예제: 고양이 질병
 
-Veterinarians test $H_0: p_{\text{male}} = p_{\text{female}}$ vs $H_1: p_{\text{male}} > p_{\text{female}}$ with 24/259 male cats and 14/241 female cats affected.
+수의사들이 수컷 고양이 259마리 중 24마리, 암컷 241마리 중 14마리가 이환된 자료로 $H_0: p_{\text{male}} = p_{\text{female}}$ 대 $H_1: p_{\text{male}} > p_{\text{female}}$을 검정한다.
 
 ```python
 positive_male, positive_female = 24, 14
@@ -321,103 +321,103 @@ print(f"{statistic = :.4f}")
 print(f"{p_value = :.4f}")
 ```
 
-#### Example: In-person vs Online Classes
+#### 예제: 대면 수업과 온라인 수업
 
-A 95% confidence interval for $p_{\text{in\_person}} - p_{\text{online}}$ is $(-0.04, 0.14)$. Since the interval contains 0, we fail to reject $H_0: p_{\text{in\_person}} = p_{\text{online}}$.
+$p_{\text{in\_person}} - p_{\text{online}}$의 95% 신뢰구간이 $(-0.04, 0.14)$이다. 구간이 0을 포함하므로 $H_0: p_{\text{in\_person}} = p_{\text{online}}$을 기각하지 못한다.
 
 ---
 
-## 5. Mann-Whitney U Test (Wilcoxon Rank-Sum Test)
+## 5. Mann-Whitney U 검정 (Wilcoxon 순위합 검정)
 
-The Mann-Whitney U test is a non-parametric test used to compare the distributions of two independent groups. It is useful when the assumptions of a parametric test are not met (e.g., non-normality or ordinal data).
+Mann-Whitney U 검정은 독립인 두 집단의 분포를 비교하는 비모수 검정이다. 모수적 검정의 가정이 충족되지 않을 때(예: 비정규성이나 순서형 자료) 유용하다.
 
-### Key Features
+### 핵심 특징
 
-- Tests whether the distributions of two independent groups are the same.
-- Assumptions: independent groups, ordinal/interval/ratio data, random samples.
-- **Null**: The two groups have the same distribution.
-- **Alternative**: The distributions differ, or one group tends to have higher values.
+- 독립인 두 집단의 분포가 같은지 검정한다.
+- 가정: 독립인 집단, 순서형/구간/비율 척도 자료, 확률표본.
+- **귀무가설**: 두 집단의 분포가 같다.
+- **대립가설**: 분포가 다르거나, 한 집단이 더 큰 값을 갖는 경향이 있다.
 
-### How the Test Works
+### 검정 방법
 
-1. Combine all data and assign **ranks** (average tied ranks).
-2. Calculate rank sums $R_1$ and $R_2$.
-3. Compute U-statistics:
+1. 모든 자료를 합쳐 **순위**를 매긴다(동점은 평균 순위를 준다).
+2. 순위합 $R_1$과 $R_2$를 계산한다.
+3. U-통계량을 계산한다:
     - $U_1 = n_1 n_2 + \frac{n_1(n_1+1)}{2} - R_1$
     - $U_2 = n_1 n_2 + \frac{n_2(n_2+1)}{2} - R_2$
-4. Test statistic: $U = \min(U_1, U_2)$.
-5. For large samples ($n_1, n_2 > 20$), use normal approximation with Z-score.
+4. 검정통계량: $U = \min(U_1, U_2)$.
+5. 표본이 크면($n_1, n_2 > 20$) Z-점수를 쓰는 정규근사를 적용한다.
 
-### Interpretation
+### 해석
 
-- If $p < 0.05$: Reject $H_0$; the two groups have significantly different distributions.
-- If $p$ is large: Fail to reject $H_0$.
+- $p < 0.05$이면 $H_0$을 기각한다. 두 집단의 분포가 유의하게 다르다.
+- $p$가 크면 $H_0$을 기각하지 못한다.
 
-### Which Group is Larger?
+### 어느 집단이 더 큰가?
 
-If $H_0$ is rejected, compare **mean ranks** of the two groups. A higher mean rank indicates that group tends to have larger values.
+$H_0$을 기각했다면 두 집단의 **평균 순위**를 비교한다. 평균 순위가 높은 집단이 더 큰 값을 갖는 경향이 있다.
 
-### Note
+### 참고
 
-The Mann-Whitney U test and Wilcoxon rank-sum test are statistically equivalent. The terminology varies by software (e.g., "Mann-Whitney U" in SPSS, "Wilcoxon rank-sum" in R).
+Mann-Whitney U 검정과 Wilcoxon 순위합 검정은 통계적으로 동등하다. 용어는 소프트웨어마다 다르다(예: SPSS에서는 "Mann-Whitney U", R에서는 "Wilcoxon rank-sum").
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Two independent samples have: Group 1 ($n_1 = 25$, $\bar{x}_1 = 78$, $s_1 = 10$) and Group 2 ($n_2 = 30$, $\bar{x}_2 = 72$, $s_2 = 12$). Conduct a two-sample $t$-test of $H_0: \mu_1 = \mu_2$ at $\alpha = 0.05$ using the pooled standard error (assume equal variances).
+**연습문제 1.**
+독립인 두 표본: 집단 1 ($n_1 = 25$, $\bar{x}_1 = 78$, $s_1 = 10$), 집단 2 ($n_2 = 30$, $\bar{x}_2 = 72$, $s_2 = 12$). 합동 표준오차(등분산 가정)를 써서 $\alpha = 0.05$에서 $H_0: \mu_1 = \mu_2$의 이표본 $t$-검정을 하라.
 
-??? success "Solution to Exercise 1"
-    The pooled variance is:
+??? success "연습문제 1 풀이"
+    합동분산은:
 
     $$
     s_p^2 = \frac{(n_1 - 1)s_1^2 + (n_2 - 1)s_2^2}{n_1 + n_2 - 2} = \frac{24 \times 100 + 29 \times 144}{53} = \frac{2400 + 4176}{53} = \frac{6576}{53} \approx 124.08
     $$
 
-    The pooled standard error is:
+    합동 표준오차는:
 
     $$
     \text{SE} = \sqrt{s_p^2\left(\frac{1}{n_1} + \frac{1}{n_2}\right)} = \sqrt{124.08 \times (0.04 + 0.0333)} = \sqrt{124.08 \times 0.0733} = \sqrt{9.095} \approx 3.016
     $$
 
-    The test statistic is:
+    검정통계량은:
 
     $$
     t = \frac{78 - 72}{3.016} = \frac{6}{3.016} \approx 1.989
     $$
 
-    With $df = 53$, $t_{53, 0.025} \approx 2.006$. Since $|t| = 1.989 < 2.006$, we just barely **fail to reject** $H_0$ at $\alpha = 0.05$.
+    $df = 53$에서 $t_{53, 0.025} \approx 2.006$이다. $|t| = 1.989 < 2.006$이므로 $\alpha = 0.05$에서 아슬아슬하게 $H_0$을 **기각하지 못한다**.
 
 ---
 
-**Exercise 2.**
-Explain when Welch's $t$-test should be preferred over the pooled $t$-test, and what happens if the pooled test is used when variances are unequal.
+**연습문제 2.**
+합동 $t$-검정보다 Welch의 $t$-검정을 언제 선호해야 하는지, 그리고 분산이 다른데 합동 검정을 쓰면 무슨 일이 생기는지 설명하라.
 
-??? success "Solution to Exercise 2"
-    Welch's $t$-test should be preferred when the two groups have **unequal variances** ($\sigma_1^2 \neq \sigma_2^2$). It does not assume equal variances and uses the Welch-Satterthwaite approximation for degrees of freedom.
+??? success "연습문제 2 풀이"
+    두 집단의 **분산이 다를 때**($\sigma_1^2 \neq \sigma_2^2$) Welch의 $t$-검정을 선호해야 한다. 등분산을 가정하지 않고 자유도에 Welch-Satterthwaite 근사를 쓴다.
 
-    If the pooled $t$-test is used when variances are unequal, the pooled variance estimate is incorrect: it averages two different variances, which can be misleading especially when sample sizes also differ. If the group with the larger variance has the smaller sample size, the Type I error rate inflates above $\alpha$. If the larger-variance group has the larger sample size, the test becomes conservative (Type I error below $\alpha$). Welch's test avoids both problems and is widely recommended as the default.
-
----
-
-**Exercise 3.**
-A study finds a statistically significant difference between two groups with $p = 0.001$ and a mean difference of 0.5 units. The standard deviation in both groups is 50. Comment on the practical significance of this result.
-
-??? success "Solution to Exercise 3"
-    The standardized effect size is $d = 0.5/50 = 0.01$, which is extremely small. Despite the tiny $p$-value (high statistical significance), the actual difference of 0.5 units relative to a standard deviation of 50 is negligible in practical terms.
-
-    This illustrates the distinction between **statistical significance** and **practical significance**. With a large enough sample size, even trivially small differences can achieve statistical significance. The $p$-value only tells us the difference is unlikely to be exactly zero, not that the difference is meaningful. Researchers should always report effect sizes and consider whether the magnitude of the difference is large enough to matter in the applied context.
+    분산이 다른데 합동 $t$-검정을 쓰면 합동 분산추정값이 부정확해진다: 서로 다른 두 분산을 평균하므로, 특히 표본크기까지 다르면 오해를 부를 수 있다. 분산이 큰 집단의 표본이 더 작으면 제1종 오류율이 $\alpha$ 위로 부푼다. 분산이 큰 집단의 표본이 더 크면 검정이 보수적이 된다(제1종 오류가 $\alpha$ 아래). Welch 검정은 두 문제를 모두 피하므로 기본으로 널리 권장된다.
 
 ---
 
-**Exercise 4.**
-When should the Mann-Whitney U test be preferred over the two-sample $t$-test?
+**연습문제 3.**
+어떤 연구에서 두 집단 사이에 $p = 0.001$로 통계적으로 유의한 차이를 찾았고 평균 차이는 0.5 단위였다. 두 집단의 표준편차는 모두 50이다. 이 결과의 실질적 유의성을 논하라.
 
-??? success "Solution to Exercise 4"
-    The Mann-Whitney U test (Wilcoxon rank-sum test) should be preferred when:
+??? success "연습문제 3 풀이"
+    표준화 효과크기는 $d = 0.5/50 = 0.01$로 극도로 작다. $p$-값이 아주 작지만(통계적 유의성이 높지만) 표준편차 50에 비해 0.5 단위의 차이는 실질적으로 무시할 만하다.
 
-    1. **The data are not normally distributed**, especially for small samples where the CLT does not provide adequate protection for the $t$-test.
-    2. **The data are ordinal** rather than interval/ratio (e.g., Likert scale ratings), where means are not meaningful but ranks are.
-    3. **Outliers are present** that could unduly influence the $t$-test. The Mann-Whitney test is based on ranks, which are robust to outliers.
-    4. **The distributions are skewed** and the interest is in comparing central tendencies or stochastic ordering rather than means specifically.
+    이는 **통계적 유의성**과 **실질적 유의성**의 구분을 보여준다. 표본이 충분히 크면 사소한 차이도 통계적 유의성을 얻을 수 있다. $p$-값은 차이가 정확히 0일 가능성이 낮다고 말할 뿐, 그 차이가 의미 있다고 말하지 않는다. 연구자는 항상 효과크기를 보고하고 그 크기가 응용 맥락에서 중요할 만한지 따져야 한다.
 
-    The Mann-Whitney test is less powerful than the $t$-test when the normality assumption holds (asymptotic relative efficiency is $3/\pi \approx 0.955$), so for clearly normal data, the $t$-test is preferred.
+---
+
+**연습문제 4.**
+이표본 $t$-검정보다 Mann-Whitney U 검정을 선호해야 하는 때는 언제인가?
+
+??? success "연습문제 4 풀이"
+    다음의 경우 Mann-Whitney U 검정(Wilcoxon 순위합 검정)을 선호해야 한다:
+
+    1. **자료가 정규분포를 따르지 않을 때.** 특히 중심극한정리가 $t$-검정을 충분히 보호하지 못하는 작은 표본에서 그렇다.
+    2. **자료가 구간/비율 척도가 아니라 순서형일 때**(예: Likert 척도 평가). 평균은 의미가 없지만 순위는 의미가 있다.
+    3. **이상점이 있어** $t$-검정에 과도한 영향을 줄 때. Mann-Whitney 검정은 순위에 기반하므로 이상점에 로버스트하다.
+    4. **분포가 치우쳐 있고** 관심이 평균 자체보다 중심경향이나 확률적 순서의 비교에 있을 때.
+
+    정규성 가정이 성립할 때는 Mann-Whitney 검정이 $t$-검정보다 검정력이 낮으므로(점근 상대효율이 $3/\pi \approx 0.955$), 자료가 분명히 정규이면 $t$-검정을 택한다.

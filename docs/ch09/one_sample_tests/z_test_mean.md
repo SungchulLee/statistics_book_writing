@@ -1,218 +1,218 @@
-# One-Sample Z-Test for the Mean
+# 평균에 대한 일표본 Z-검정
 
-## Overview
+## 개요
 
-The one-sample $z$-test is the simplest hypothesis test for a population mean. It applies when the population standard deviation $\sigma$ is known --- a situation that arises in quality control when historical process data provides a reliable estimate, or in standardized testing where the test's standard deviation is established from prior administrations. Although the known-$\sigma$ scenario is uncommon in practice, the $z$-test serves as the conceptual foundation for the $t$-test, which handles the more common case of unknown $\sigma$. Understanding the $z$-test first makes the transition to the $t$-test straightforward: the only change is replacing $\sigma$ with $S$ and the normal distribution with the $t$-distribution.
+일표본 $z$-검정은 모평균에 대한 가장 단순한 가설검정이다. 모표준편차 $\sigma$를 알 때 쓸 수 있는데, 오랜 공정 자료가 믿을 만한 추정값을 주는 품질관리나 이전 시행에서 표준편차가 확립된 표준화 시험 같은 상황이 그렇다. $\sigma$를 아는 상황이 실무에서 흔하지는 않지만, $z$-검정은 $\sigma$를 모르는 더 일반적인 경우를 다루는 $t$-검정의 개념적 토대가 된다. $z$-검정을 먼저 이해하면 $t$-검정으로의 이행이 쉬워진다: 바뀌는 것은 $\sigma$를 $S$로, 정규분포를 $t$-분포로 바꾸는 것뿐이다.
 
-## Hypotheses
+## 가설
 
-Let $X_1, X_2, \ldots, X_n$ be a random sample from a population with mean $\mu$ and known variance $\sigma^2$. The null hypothesis specifies a particular value for the mean:
+$X_1, X_2, \ldots, X_n$을 평균이 $\mu$이고 분산 $\sigma^2$이 알려진 모집단에서 뽑은 확률표본이라 하자. 귀무가설은 평균의 특정 값을 지정한다:
 
 $$
 H_0\colon \mu = \mu_0
 $$
 
-The alternative hypothesis takes one of three forms:
+대립가설은 다음 세 형태 중 하나이다:
 
-| Alternative | Interpretation |
+| 대립가설 | 해석 |
 |---|---|
-| $H_1\colon \mu \neq \mu_0$ | Two-sided: the mean differs from $\mu_0$ |
-| $H_1\colon \mu > \mu_0$ | Right-sided: the mean exceeds $\mu_0$ |
-| $H_1\colon \mu < \mu_0$ | Left-sided: the mean is below $\mu_0$ |
+| $H_1\colon \mu \neq \mu_0$ | 양측: 평균이 $\mu_0$과 다르다 |
+| $H_1\colon \mu > \mu_0$ | 우측: 평균이 $\mu_0$보다 크다 |
+| $H_1\colon \mu < \mu_0$ | 좌측: 평균이 $\mu_0$보다 작다 |
 
-## Test Statistic
+## 검정통계량
 
-The test statistic measures how many standard errors the sample mean $\bar{X}$ falls from the hypothesized value $\mu_0$. A large absolute value indicates that the observed sample mean is far from what we would expect under $H_0$, providing evidence against the null.
+검정통계량은 표본평균 $\bar{X}$가 가설의 값 $\mu_0$에서 표준오차 몇 개만큼 떨어져 있는지를 잰다. 절댓값이 크면 관측된 표본평균이 $H_0$ 아래에서 기대되는 것과 멀다는 뜻이므로 귀무가설에 반하는 증거가 된다.
 
 $$
 Z = \frac{\bar{X} - \mu_0}{\sigma / \sqrt{n}}
 $$
 
-The denominator $\sigma / \sqrt{n}$ is the standard error of $\bar{X}$, so $Z$ expresses the discrepancy between $\bar{X}$ and $\mu_0$ in units of the sampling variability.
+분모 $\sigma / \sqrt{n}$은 $\bar{X}$의 표준오차이므로, $Z$는 $\bar{X}$와 $\mu_0$의 차이를 표본변동의 단위로 나타낸다.
 
-Under $H_0$ and either of the following conditions, $Z$ follows a standard normal distribution:
+$H_0$ 아래에서 다음 조건 중 하나가 성립하면 $Z$는 표준정규분포를 따른다:
 
-- **Exact**: The population is normally distributed, or
-- **Approximate**: The sample size $n$ is large enough for the Central Limit Theorem to apply.
+- **정확히**: 모집단이 정규분포를 따르거나,
+- **근사적으로**: 표본크기 $n$이 중심극한정리가 적용될 만큼 크다.
 
 $$
 Z \sim N(0, 1) \quad \text{under } H_0
 $$
 
-## Rejection Regions
+## 기각역
 
-At significance level $\alpha$, the rejection region depends on the alternative:
+유의수준 $\alpha$에서 기각역은 대립가설에 따라 달라진다.
 
-**Two-sided** ($H_1\colon \mu \neq \mu_0$): Reject $H_0$ if
+**양측** ($H_1\colon \mu \neq \mu_0$): 다음이면 $H_0$을 기각한다.
 
 $$
 |Z| > z_{\alpha/2}
 $$
 
-**Right-sided** ($H_1\colon \mu > \mu_0$): Reject $H_0$ if
+**우측** ($H_1\colon \mu > \mu_0$): 다음이면 $H_0$을 기각한다.
 
 $$
 Z > z_\alpha
 $$
 
-**Left-sided** ($H_1\colon \mu < \mu_0$): Reject $H_0$ if
+**좌측** ($H_1\colon \mu < \mu_0$): 다음이면 $H_0$을 기각한다.
 
 $$
 Z < -z_\alpha
 $$
 
-Here $z_\alpha$ denotes the upper $\alpha$ critical value of the standard normal, satisfying $P(Z > z_\alpha) = \alpha$.
+여기서 $z_\alpha$는 $P(Z > z_\alpha) = \alpha$를 만족하는 표준정규의 상위 $\alpha$ 임계값이다.
 
-## P-Values
+## p-값
 
-The $p$-value measures the strength of evidence against $H_0$ by computing the probability of observing a test statistic as extreme as (or more extreme than) the observed value $z_{\text{obs}}$, assuming $H_0$ is true.
+$p$-값은 $H_0$이 참이라는 가정 아래 관측값 $z_{\text{obs}}$만큼 또는 그보다 극단적인 검정통계량을 볼 확률을 계산하여 $H_0$에 반하는 증거의 강도를 잰다.
 
-| Alternative | P-value formula |
+| 대립가설 | p-값 공식 |
 |---|---|
 | $H_1\colon \mu \neq \mu_0$ | $p = 2\,P(Z > \|z_{\text{obs}}\|) = 2\bigl[1 - \mathcal{N}(\|z_{\text{obs}}\|)\bigr]$ |
 | $H_1\colon \mu > \mu_0$ | $p = P(Z > z_{\text{obs}}) = 1 - \mathcal{N}(z_{\text{obs}})$ |
 | $H_1\colon \mu < \mu_0$ | $p = P(Z < z_{\text{obs}}) = \mathcal{N}(z_{\text{obs}})$ |
 
-Reject $H_0$ whenever $p < \alpha$.
+$p < \alpha$이면 $H_0$을 기각한다.
 
-## Worked Example
+## 풀이 예제
 
-A battery manufacturer uses a production line whose fill weights have a known standard deviation of $\sigma = 3$ grams (established from years of quality control data). The target mean weight is $\mu_0 = 50$ grams. An inspector takes a random sample of $n = 36$ batteries and finds $\bar{x} = 49.1$ grams. Test whether the mean weight differs from 50 grams at $\alpha = 0.05$.
+한 배터리 제조사의 생산라인은 (수년간의 품질관리 자료에서 확립된) 충전 중량의 표준편차가 $\sigma = 3$ 그램으로 알려져 있다. 목표 평균 중량은 $\mu_0 = 50$ 그램이다. 검사자가 배터리 $n = 36$개를 무작위로 뽑아 $\bar{x} = 49.1$ 그램을 얻었다. $\alpha = 0.05$에서 평균 중량이 50 그램과 다른지 검정하라.
 
-**Step 1.** State the hypotheses:
+**1단계.** 가설을 세운다:
 
 $$
 H_0\colon \mu = 50 \qquad H_1\colon \mu \neq 50
 $$
 
-**Step 2.** Compute the test statistic:
+**2단계.** 검정통계량을 계산한다:
 
 $$
 Z = \frac{49.1 - 50}{3 / \sqrt{36}} = \frac{-0.9}{0.5} = -1.80
 $$
 
-**Step 3.** Find the critical values. For a two-sided test at $\alpha = 0.05$:
+**3단계.** 임계값을 구한다. $\alpha = 0.05$의 양측검정에서:
 
 $$
 z_{\alpha/2} = z_{0.025} = 1.96
 $$
 
-**Step 4.** Make the decision. Since $|Z| = 1.80 < 1.96$, we fail to reject $H_0$. The data do not provide sufficient evidence at the 5% level to conclude that the mean weight differs from 50 grams.
+**4단계.** 판정한다. $|Z| = 1.80 < 1.96$이므로 $H_0$을 기각하지 못한다. 자료는 5% 수준에서 평균 중량이 50 그램과 다르다고 결론지을 충분한 증거를 주지 않는다.
 
-**Step 5.** Compute the $p$-value:
+**5단계.** $p$-값을 계산한다:
 
 $$
 p = 2[1 - \mathcal{N}(1.80)] = 2(0.0359) = 0.0718
 $$
 
-Since $p = 0.072 > 0.05$, this confirms the failure to reject $H_0$.
+$p = 0.072 > 0.05$이므로 기각하지 못한다는 판정이 확인된다.
 
-!!! tip "Interpreting Marginal Results"
-    With $p = 0.072$, the result is not statistically significant at $\alpha = 0.05$ but would be significant at $\alpha = 0.10$. In practice, the inspector might recommend increasing the sample size to obtain a more definitive conclusion, since the observed departure ($\bar{x} = 49.1$ vs $\mu_0 = 50$) could represent a real but small shift.
+!!! tip "경계에 있는 결과의 해석"
+    $p = 0.072$는 $\alpha = 0.05$에서는 통계적으로 유의하지 않지만 $\alpha = 0.10$에서는 유의할 것이다. 실무에서는 관측된 이탈($\bar{x} = 49.1$ 대 $\mu_0 = 50$)이 실재하지만 작은 변화를 나타낼 수도 있으므로, 검사자가 더 확실한 결론을 위해 표본크기를 늘리자고 권할 만하다.
 
-## Assumptions
+## 가정
 
-The one-sample $z$-test requires:
+일표본 $z$-검정에는 다음이 필요하다:
 
-- **Known $\sigma$**: The population standard deviation is a known constant, not estimated from the current sample.
-- **Independence**: The observations $X_1, \ldots, X_n$ are independent.
-- **Normality or large $n$**: Either the population is normally distributed (for exact inference) or $n$ is large enough (typically $n \geq 30$) for the CLT to provide a good approximation.
+- **$\sigma$를 안다**: 모표준편차가 현재 표본에서 추정한 값이 아니라 알려진 상수이다.
+- **독립성**: 관측값 $X_1, \ldots, X_n$이 독립이다.
+- **정규성 또는 큰 $n$**: 모집단이 정규분포를 따르거나(정확한 추론), $n$이 중심극한정리가 좋은 근사를 주기에 충분히 크다(보통 $n \geq 30$).
 
-!!! warning "Known sigma Is Rare"
-    The assumption that $\sigma$ is known is strong and seldom met outside of controlled industrial settings with extensive historical data. When $\sigma$ must be estimated from the sample, use the one-sample $t$-test instead, which accounts for the additional uncertainty in estimating $\sigma$.
+!!! warning "sigma를 아는 경우는 드물다"
+    $\sigma$를 안다는 가정은 강하며, 방대한 과거 자료를 갖춘 통제된 산업 환경 밖에서는 좀처럼 충족되지 않는다. $\sigma$를 표본에서 추정해야 한다면 $\sigma$ 추정의 추가 불확실성을 반영하는 일표본 $t$-검정을 쓰라.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Manufacturer claims mean lifetime 1200 hrs. Sample: $n = 36$, $\bar X = 1150$, $s = 200$. Test at $\alpha = 0.05$.
+**연습문제 1.**
+제조사가 평균 수명이 1200시간이라고 주장한다. 표본: $n = 36$, $\bar X = 1150$, $s = 200$. $\alpha = 0.05$에서 검정하라.
 
-??? success "Solution to Exercise 1"
-    $H_0: \mu = 1200$ vs $H_1: \mu \ne 1200$.
+??? success "연습문제 1 풀이"
+    $H_0: \mu = 1200$ 대 $H_1: \mu \ne 1200$.
 
     $z = (1150 - 1200)/(200/\sqrt{36}) = -50/33.3 \approx -1.5$.
 
-    Critical: $\pm 1.96$. $|z| = 1.5 < 1.96$. **Fail to reject.**
+    임계값: $\pm 1.96$. $|z| = 1.5 < 1.96$. **기각하지 못한다.**
 
-    Not enough evidence to dispute the claim. P-value: $2 \cdot \Phi(-1.5) = 2 \cdot 0.067 = 0.134$.
-
----
-
-**Exercise 2.**
-**Power calculation.** For Exercise 1, what is the power if the true mean is 1100?
-
-??? success "Solution to Exercise 2"
-    Under $H_0$: rejection regions $\bar X < 1200 - 1.96 \cdot 33.3 = 1134.7$ or $> 1265.3$.
-
-    Under $H_1: \mu = 1100$, $\bar X \sim N(1100, 33.3^2)$.
-
-    Power = $P(\bar X < 1134.7 \mid \mu = 1100) + P(\bar X > 1265.3 \mid \mu = 1100)$.
-
-    First: $P(Z < (1134.7 - 1100)/33.3) = P(Z < 1.04) \approx 0.85$.
-
-    Second: negligible (huge $Z$).
-
-    Power $\approx 85\%$. Reasonable — if the true mean is 100 hrs below claim, we have 85% chance of detecting.
+    주장을 반박할 증거가 부족하다. p-값: $2 \cdot \Phi(-1.5) = 2 \cdot 0.067 = 0.134$.
 
 ---
 
-**Exercise 3.**
-**One-sided alternative.** Modify Exercise 1 to test $H_1: \mu < 1200$ (suspect mean is lower). Recompute decision.
+**연습문제 2.**
+**검정력 계산.** 연습문제 1에서 참 평균이 1100이라면 검정력은 얼마인가?
 
-??? success "Solution to Exercise 3"
-    $H_0: \mu \ge 1200$ vs $H_1: \mu < 1200$.
+??? success "연습문제 2 풀이"
+    $H_0$ 아래 기각역: $\bar X < 1200 - 1.96 \cdot 33.3 = 1134.7$ 또는 $\bar X > 1265.3$.
 
-    Critical region: $z < -z_{0.05} = -1.645$.
+    $H_1: \mu = 1100$ 아래에서 $\bar X \sim N(1100, 33.3^2)$.
 
-    $z = -1.5 > -1.645$. **Fail to reject** but just barely.
+    검정력 = $P(\bar X < 1134.7 \mid \mu = 1100) + P(\bar X > 1265.3 \mid \mu = 1100)$.
 
-    P-value: $\Phi(-1.5) = 0.067$ — close to 0.05.
+    첫째 항: $P(Z < (1134.7 - 1100)/33.3) = P(Z < 1.04) \approx 0.85$.
 
-    One-sided test gives different decision at the margin. If pre-specified directional hypothesis is justified, one-sided is more powerful.
+    둘째 항: 무시할 만하다($Z$가 아주 크다).
+
+    검정력 $\approx 85\%$. 참 평균이 주장보다 100시간 낮다면 이를 탐지할 확률이 85%로 괜찮다.
 
 ---
 
-**Exercise 4.**
-**Required sample size.** What $n$ provides 80% power to detect $\mu = 1100$ at $\alpha = 0.05$ (two-sided)?
+**연습문제 3.**
+**단측 대립가설.** 연습문제 1을 $H_1: \mu < 1200$(평균이 더 낮다고 의심)으로 바꾸어 판정을 다시 하라.
 
-??? success "Solution to Exercise 4"
-    $n = ((z_{\alpha/2} + z_\beta) \sigma / \Delta)^2$ where $\Delta = |\mu_1 - \mu_0|$.
+??? success "연습문제 3 풀이"
+    $H_0: \mu \ge 1200$ 대 $H_1: \mu < 1200$.
+
+    기각역: $z < -z_{0.05} = -1.645$.
+
+    $z = -1.5 > -1.645$. 아슬아슬하게 **기각하지 못한다.**
+
+    p-값: $\Phi(-1.5) = 0.067$ — 0.05에 가깝다.
+
+    경계에서는 단측검정이 다른 판정을 줄 수 있다. 방향을 미리 지정한 가설이 정당화된다면 단측검정이 더 강력하다.
+
+---
+
+**연습문제 4.**
+**필요한 표본크기.** $\alpha = 0.05$(양측)에서 $\mu = 1100$을 탐지할 검정력 80%를 얻으려면 $n$이 얼마여야 하는가?
+
+??? success "연습문제 4 풀이"
+    $\Delta = |\mu_1 - \mu_0|$일 때 $n = ((z_{\alpha/2} + z_\beta) \sigma / \Delta)^2$이다.
 
     $\sigma = 200$, $\Delta = 100$. $z_{0.025} = 1.96$, $z_{0.20} = 0.84$.
 
-    $n = ((1.96 + 0.84) \cdot 200/100)^2 = (5.60)^2 \approx 31.4$. Round up: $n = 32$.
+    $n = ((1.96 + 0.84) \cdot 200/100)^2 = (5.60)^2 \approx 31.4$. 올림하면 $n = 32$.
 
-    With $n = 36$ from Exercise 1, we exceed this — that's why the power is 85% rather than 80%.
-
----
-
-**Exercise 5.**
-**z-test vs t-test.** When is each appropriate?
-
-??? success "Solution to Exercise 5"
-    **z-test:** $\sigma$ known OR sample large enough that $s$ is essentially exact. Rare in practice.
-
-    **t-test:** $\sigma$ unknown, estimated by $s$. Default for one-sample tests with continuous data.
-
-    Practical guide:
-
-    - If $n \ge 30$: $t$-test critical values $\approx z$ values. Difference negligible.
-    - If $n < 30$: $t$ values are larger than $z$ — test is less likely to reject for the same data. Reflects extra uncertainty from estimating $\sigma$.
-
-    Most software automatically uses $t$ even when "z-test" is requested by intuition. SciPy's `ttest_1samp` is the standard.
+    연습문제 1의 $n = 36$은 이보다 크다 — 그래서 검정력이 80%가 아니라 85%였다.
 
 ---
 
-**Exercise 6.**
-**Multiple comparisons.** A quality engineer tests 20 production lines for $\mu = $ target. At least how many would she expect to falsely reject at $\alpha = 0.05$?
+**연습문제 5.**
+**z-검정과 t-검정.** 각각 언제 적절한가?
 
-??? success "Solution to Exercise 6"
-    Under all-true $H_0$: expected false rejections = $20 \cdot 0.05 = 1$. Family-wise probability of $\ge 1$ false rejection: $1 - (0.95)^{20} \approx 0.642$.
+??? success "연습문제 5 풀이"
+    **z-검정:** $\sigma$를 알거나, 표본이 충분히 커서 $s$가 사실상 정확할 때. 실무에서는 드물다.
 
-    Even with all lines truly on target, ~64% chance of finding "evidence" of a problem somewhere. This is the multiple-testing problem.
+    **t-검정:** $\sigma$를 모르고 $s$로 추정할 때. 연속형 자료의 일표본 검정에서 기본이다.
 
-    Corrections:
+    실용적인 지침:
 
-    - **Bonferroni:** test at $\alpha/20 = 0.0025$. Family-wise error $\le 0.05$.
-    - **FDR control:** Benjamini-Hochberg, controls expected proportion of false rejections among declared positives.
+    - $n \ge 30$이면 $t$-검정 임계값이 $z$ 값과 거의 같다. 차이가 무시할 만하다.
+    - $n < 30$이면 $t$ 값이 $z$보다 크다 — 같은 자료로도 기각할 가능성이 낮아진다. $\sigma$ 추정에서 오는 추가 불확실성을 반영한 것이다.
 
-    Without correction: 20 tests at $\alpha = 0.05$ give substantial false-discovery risk. Document the number of tests performed; preregister hypotheses.
+    직관적으로 "z-검정"을 요청해도 대부분의 소프트웨어는 자동으로 $t$를 쓴다. SciPy의 `ttest_1samp`가 표준이다.
+
+---
+
+**연습문제 6.**
+**다중비교.** 어떤 품질 엔지니어가 생산라인 20곳에 대해 $\mu = $ 목표값을 검정한다. $\alpha = 0.05$에서 잘못 기각할 라인 수의 기댓값은?
+
+??? success "연습문제 6 풀이"
+    모든 $H_0$이 참일 때 잘못된 기각의 기댓값 = $20 \cdot 0.05 = 1$. 적어도 한 번 잘못 기각할 가족단위 확률: $1 - (0.95)^{20} \approx 0.642$.
+
+    모든 라인이 실제로 목표에 맞더라도 어딘가에서 문제의 "증거"를 발견할 확률이 약 64%이다. 이것이 다중검정 문제이다.
+
+    보정:
+
+    - **Bonferroni:** $\alpha/20 = 0.0025$에서 검정한다. 가족단위 오류가 $\le 0.05$.
+    - **FDR 통제:** Benjamini-Hochberg. 양성으로 선언한 것 중 잘못된 기각의 기대 비율을 통제한다.
+
+    보정하지 않은 $\alpha = 0.05$의 검정 20개는 거짓 발견 위험이 상당하다. 수행한 검정의 수를 문서로 남기고 가설을 사전등록하라.

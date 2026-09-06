@@ -1,145 +1,145 @@
-# Null and Alternative Hypotheses
+# 귀무가설과 대립가설
 
-## Introduction to Hypothesis Testing
+## 가설검정 소개
 
-Hypothesis testing is a cornerstone of statistical analysis, providing a systematic, data-grounded approach to decision-making. It involves making an assumption about a population parameter and then determining whether the data provide sufficient evidence to reject this assumption. This process is used across various fields to test theories and hypotheses, enabling researchers and analysts to make informed decisions based on empirical data.
+가설검정은 통계분석의 초석으로, 자료에 근거한 체계적인 의사결정 방법을 제공한다. 모수에 대해 어떤 가정을 세운 뒤 자료가 그 가정을 기각할 만큼 충분한 증거를 주는지 판단하는 과정이다. 여러 분야에서 이론과 가설을 검정하는 데 쓰이며, 연구자와 분석가가 경험적 자료에 근거해 판단을 내리게 해 준다.
 
-### Definition and Purpose
+### 정의와 목적
 
-A statistical hypothesis is a claim or assumption about a population parameter, such as the mean, proportion, or standard deviation. **Hypothesis testing** is the formal procedure statisticians use to accept or reject these hypotheses. It is a powerful tool for determining whether we can generalize the evidence from a sample to the broader population, similar to how evidence is used in a criminal trial to reach a verdict.
+통계적 가설은 평균, 비율, 표준편차 같은 모수에 관한 주장 또는 가정이다. **가설검정**은 통계학자가 이런 가설을 받아들이거나 기각하는 데 쓰는 형식적 절차이다. 형사재판에서 증거로 평결에 이르는 것과 비슷하게, 표본에서 얻은 증거를 더 넓은 모집단으로 일반화할 수 있는지 판단하는 강력한 도구이다.
 
-The primary purposes of hypothesis testing are:
+가설검정의 주된 목적은 다음과 같다:
 
-- **To infer about a population**: Hypothesis testing allows statisticians to use data from a sample to make conclusions about an entire population.
-- **To determine the statistical significance of evidence**: By evaluating hypotheses, statisticians can determine if observed results in a sample are meaningful in the context of the larger population or simply due to random chance.
+- **모집단에 대한 추론**: 가설검정은 표본자료로 모집단 전체에 대한 결론을 내리게 해 준다.
+- **증거의 통계적 유의성 판단**: 가설을 평가함으로써 표본에서 관측된 결과가 더 큰 모집단의 맥락에서 의미가 있는지, 아니면 단순히 우연 때문인지 판단할 수 있다.
 
-This process involves two opposing hypotheses, akin to the defense and prosecution in a courtroom:
+이 과정에는 법정의 변호인과 검사처럼 서로 맞서는 두 가설이 등장한다:
 
-1. **Null Hypothesis ($H_0$)**: The null hypothesis is like the presumption of innocence in a trial, assuming that nothing unusual is happening. Statistically, it claims there is no significant effect or difference. For example, in a drug trial, $H_0$ might state that the new drug has no effect compared to a placebo.
+1. **귀무가설 ($H_0$)**: 귀무가설은 재판에서의 무죄 추정과 같아서 특별한 일이 일어나고 있지 않다고 가정한다. 통계적으로는 유의한 효과나 차이가 없다고 주장한다. 예를 들어 약물시험에서 $H_0$은 새 약이 위약과 비교해 효과가 없다고 말할 수 있다.
 
-2. **Alternative Hypothesis ($H_a$)**: The alternative hypothesis represents the "prosecutor's case." It suggests that there is enough evidence to reject the null hypothesis and claim that there is an effect or difference. In the drug trial analogy, $H_a$ would argue that the new drug has an effect.
+2. **대립가설 ($H_a$)**: 대립가설은 "검사 측 주장"에 해당한다. 귀무가설을 기각하고 효과나 차이가 있다고 주장할 만한 증거가 충분하다고 본다. 약물시험 비유에서 $H_a$는 새 약에 효과가 있다고 주장한다.
 
-Like in a court case, the burden of proof lies with the sample data to provide strong enough evidence to reject $H_0$. Suppose the evidence (data) is not convincing enough. In that case, we accept $H_0$. In statistician's jargon, we fail to reject $H_0$. Much like a "not guilty" verdict does not necessarily prove innocence, but instead that there is insufficient evidence to convict. Conversely, rejecting $H_0$ is akin to a "guilty" verdict, suggesting that the evidence supports $H_a$.
-
----
-
-## Types of Hypotheses
-
-We classify hypotheses into two main categories:
-
-- **Simple Hypothesis**: A simple hypothesis specifies the population distribution completely, meaning that every population parameter is fully defined. For example, a simple hypothesis might state that the population mean $\mu$ is 5, and the population standard deviation $\sigma$ is 2. In this case, there is no ambiguity about the population parameters.
-
-- **Composite Hypothesis**: On the other hand, a composite hypothesis does not fully specify the population distribution. Instead, it suggests that the population parameter lies within a range of values. For instance, a composite hypothesis might claim $\mu > 5$ without specifying a precise value for $\mu$. This composite hypothesis introduces flexibility, as the hypothesis does not restrict the population to a single set of parameters.
-
-Additionally, depending on the research question and the nature of the hypothesis, tests can be either **directional** (one-tailed) or **non-directional** (two-tailed):
-
-- **One-tailed Test**: We use a one-tailed test when the research hypothesis claims the direction of the effect or relationship between variables. For example, if we hypothesize that a new teaching method leads to higher test scores than the traditional method, we would conduct a one-tailed test to determine whether the mean score of the new method is *greater than* that of the traditional method, i.e.,
-
-$$H_0: \mu \leq \mu_0 \quad \text{versus} \quad H_a: \mu > \mu_0$$
-
-- **Two-tailed Test**: A two-tailed test is appropriate when the research hypothesis does not specify a direction but only claims that the effect exists. This test checks for differences in either direction. For instance, if we are testing whether a new medication has a different effect compared to a placebo, without specifying whether it is better or worse, we would use a two-tailed test to examine whether the population mean differs from the control group's mean, i.e.,
-
-$$H_0: \mu = \mu_0 \quad \text{versus} \quad H_a: \mu \neq \mu_0$$
-
-In summary, the choice between a simple and composite hypothesis depends on whether we fully specify the population parameters or allow flexibility in our assumptions. The decision between one-tailed and two-tailed tests depends on whether we look for effects in a specific direction or test for any difference. Both concepts are crucial for designing valid hypothesis tests that answer specific research questions.
+재판에서처럼 입증 책임은 $H_0$을 기각할 만큼 강한 증거를 제시해야 하는 표본자료에 있다. 증거(자료)가 충분히 설득력 있지 않다면 $H_0$을 받아들인다. 통계학자의 표현으로는 $H_0$을 기각하지 못한다고 한다. "무죄" 평결이 반드시 결백을 증명하는 것이 아니라 유죄로 판단할 증거가 부족하다는 뜻인 것과 마찬가지이다. 반대로 $H_0$을 기각하는 것은 "유죄" 평결에 해당하며 증거가 $H_a$를 뒷받침한다는 뜻이다.
 
 ---
 
-## Importance in Statistical Inference
+## 가설의 종류
 
-Hypothesis testing plays a critical role in validating research findings. It helps determine whether conclusions from sample data are robust and applicable to a larger population. The hypothesis testing process helps to control the likelihood of incorrectly rejecting a true null hypothesis (Type I error) or failing to reject a false null hypothesis (Type II error). These errors are critical considerations that affect the credibility and replicability of research findings.
+가설은 크게 두 범주로 나뉜다:
 
-- **Type I Error**: This error occurs when the null hypothesis is true but is rejected. It represents a false positive result.
-- **Type II Error**: This error occurs when the null hypothesis is false but not rejected. It represents a false negative result.
+- **단순가설**: 단순가설은 모집단 분포를 완전히 지정한다. 즉 모든 모수가 완전히 정해진다. 예를 들어 모평균 $\mu$가 5이고 모표준편차 $\sigma$가 2라고 말하는 가설이 단순가설이다. 이 경우 모수에 관한 모호함이 없다.
 
-The choice of significance level ($\alpha$), the threshold for rejecting the null hypothesis, balances these errors. A typical value for $\alpha$ is 0.05, which indicates a 5% risk of committing a Type I error.
+- **복합가설**: 반면 복합가설은 모집단 분포를 완전히 지정하지 않는다. 대신 모수가 어떤 범위에 있다고 말한다. 예를 들어 $\mu$의 정확한 값을 지정하지 않고 $\mu > 5$라고 주장하는 것이 복합가설이다. 모집단을 하나의 모수 조합으로 제한하지 않으므로 유연성이 생긴다.
 
----
+또한 연구 질문과 가설의 성격에 따라 검정은 **방향성이 있거나**(단측) **없을**(양측) 수 있다:
 
-## Application and Scope
+- **단측검정**: 연구가설이 효과나 관계의 방향을 주장할 때 단측검정을 쓴다. 예를 들어 새 교수법이 기존 방법보다 높은 시험 점수로 이어진다고 가설을 세운다면, 새 방법의 평균 점수가 기존 방법보다 *큰지* 판단하기 위해 단측검정을 한다. 즉,
 
-Hypothesis testing is ubiquitous in scientific research, policy-making, medicine, economics, and business, among other fields. It provides a framework for decision-making where stakes are high, and we must make decisions under uncertainty. For instance, in clinical trials, hypothesis testing helps ascertain new drugs' effectiveness. In economics, it can evaluate the impact of policy changes or economic factors on certain variables of interest.
+$$H_0: \mu \leq \mu_0 \quad \text{대} \quad H_a: \mu > \mu_0$$
 
-Understanding hypothesis testing is, therefore, essential for students and professionals who engage in data-driven decision-making. It provides the tools needed to test assumptions and validate theories against real-world data.
+- **양측검정**: 연구가설이 방향을 지정하지 않고 효과가 존재한다고만 주장할 때는 양측검정이 적절하다. 이 검정은 양쪽 방향의 차이를 모두 살핀다. 예를 들어 새 약이 위약과 비교해 더 나은지 나쁜지를 지정하지 않고 다른 효과를 내는지만 검정한다면, 모평균이 대조군 평균과 다른지 살피기 위해 양측검정을 쓴다. 즉,
 
-## Exercises
+$$H_0: \mu = \mu_0 \quad \text{대} \quad H_a: \mu \neq \mu_0$$
 
-**Exercise 1.**
-Restaurant owner suspects drink machine dispenses too much (target 530 mL). Sample of 30. State hypotheses.
-
-??? success "Solution to Exercise 1"
-    $H_0: \mu = 530$ vs $H_1: \mu > 530$ (one-sided, suspect overflow).
-
-    Alternative direction comes from the research question. Null always contains equality. Statement is about the population parameter $\mu$, not the sample mean.
+정리하면, 단순가설과 복합가설의 선택은 모수를 완전히 지정하는지 아니면 가정에 여지를 두는지에 달려 있다. 단측검정과 양측검정의 선택은 특정 방향의 효과를 찾는지 아니면 어떤 차이든 검정하는지에 달려 있다. 두 개념 모두 구체적인 연구 질문에 답하는 타당한 가설검정을 설계하는 데 중요하다.
 
 ---
 
-**Exercise 2.**
-Write hypotheses for: (a) drug reduces blood pressure vs. placebo; (b) coin biased toward heads; (c) two processes have different variances.
+## 통계적 추론에서의 중요성
 
-??? success "Solution to Exercise 2"
-    (a) $H_0: \mu_{\text{drug}} = \mu_{\text{placebo}}$ vs $H_1: \mu_{\text{drug}} < \mu_{\text{placebo}}$ (one-sided reduction).
+가설검정은 연구 결과를 검증하는 데 결정적인 역할을 한다. 표본자료에서 얻은 결론이 튼튼하고 더 큰 모집단에 적용 가능한지 판단하도록 돕는다. 가설검정 과정은 참인 귀무가설을 잘못 기각할 가능성(제1종 오류)이나 거짓인 귀무가설을 기각하지 못할 가능성(제2종 오류)을 통제하는 데 도움을 준다. 이 오류들은 연구 결과의 신뢰성과 재현성에 영향을 주는 중요한 고려사항이다.
 
-    (b) $H_0: p = 0.5$ vs $H_1: p > 0.5$ (one-sided).
+- **제1종 오류**: 귀무가설이 참인데 기각할 때 생긴다. 거짓 양성 결과이다.
+- **제2종 오류**: 귀무가설이 거짓인데 기각하지 못할 때 생긴다. 거짓 음성 결과이다.
 
-    (c) $H_0: \sigma_1^2 = \sigma_2^2$ vs $H_1: \sigma_1^2 \ne \sigma_2^2$ (two-sided).
-
-    Directional claim → one-sided; "different/not equal" → two-sided.
+귀무가설을 기각하는 문턱인 유의수준($\alpha$)의 선택이 이 두 오류의 균형을 잡는다. $\alpha$의 전형적인 값은 0.05이며, 제1종 오류를 범할 위험이 5%임을 뜻한다.
 
 ---
 
-**Exercise 3.**
-**Type I and Type II errors** for the drink machine. Describe each.
+## 적용과 범위
 
-??? success "Solution to Exercise 3"
-    Type I: reject true $H_0$ — conclude machine overfills when it doesn't. Probability $\alpha$. Cost: unnecessary recalibration.
+가설검정은 과학 연구, 정책 결정, 의학, 경제학, 경영을 비롯한 여러 분야에서 어디에나 쓰인다. 이해관계가 크고 불확실성 아래에서 결정을 내려야 하는 상황에 판단의 틀을 제공한다. 예를 들어 임상시험에서 가설검정은 새 약의 효과를 확인하는 데 도움을 준다. 경제학에서는 정책 변화나 경제적 요인이 관심 변수에 미치는 영향을 평가할 수 있다.
 
-    Type II: fail to reject false $H_0$ — miss that machine overfills. Probability $\beta$. Cost: continued waste, customer overcharge.
+따라서 가설검정을 이해하는 것은 자료에 근거한 의사결정에 참여하는 학생과 실무자에게 필수적이다. 가정을 검정하고 이론을 실제 자료에 비추어 검증하는 데 필요한 도구를 준다.
 
-    Trade-off: smaller $\alpha$ → larger $\beta$ (less power). Setting $\alpha$ requires weighing costs.
+## 연습문제
 
----
+**연습문제 1.**
+어떤 식당 주인이 음료 기계가 너무 많이 따른다고 의심한다(목표 530 mL). 표본 30개. 가설을 세워라.
 
-**Exercise 4.**
-**One-sided vs two-sided.** When appropriate? Cost of one-sided?
+??? success "연습문제 1 풀이"
+    $H_0: \mu = 530$ 대 $H_1: \mu > 530$ (넘치는 것을 의심하므로 단측).
 
-??? success "Solution to Exercise 4"
-    One-sided: only one direction is of interest. More power in that direction (uses full $\alpha$ on one tail).
-
-    Two-sided: any departure matters. Critical value $z_{\alpha/2}$ — slightly harder to reject.
-
-    **Cost of one-sided:** if truth is in the unchosen direction, you'll never detect it. Critical in safety contexts.
-
-    Modern default: two-sided unless prior knowledge rules out one direction. Journals often require justification for one-sided.
+    대립가설의 방향은 연구 질문에서 나온다. 귀무가설에는 항상 등호가 들어간다. 진술의 대상은 표본평균이 아니라 모수 $\mu$이다.
 
 ---
 
-**Exercise 5.**
-**Why $\alpha = 0.05$?** When to depart?
+**연습문제 2.**
+다음에 대한 가설을 써라: (a) 약이 위약보다 혈압을 낮춘다. (b) 동전이 앞면 쪽으로 치우쳐 있다. (c) 두 공정의 분산이 다르다.
 
-??? success "Solution to Exercise 5"
-    Convention from Fisher (1925) — not a deep justification. "1 in 20" is psychologically manageable.
+??? success "연습문제 2 풀이"
+    (a) $H_0: \mu_{\text{drug}} = \mu_{\text{placebo}}$ 대 $H_1: \mu_{\text{drug}} < \mu_{\text{placebo}}$ (감소에 대한 단측).
 
-    Depart when:
+    (b) $H_0: p = 0.5$ 대 $H_1: p > 0.5$ (단측).
 
-    - High-stakes (drug approval): $\alpha = 0.01$ or smaller.
-    - Multiple testing: $\alpha/m$ (Bonferroni).
-    - Exploratory: $\alpha = 0.10$ to find weak signals.
-    - Physics "discovery": $5\sigma$ ($\alpha \approx 6 \times 10^{-7}$).
+    (c) $H_0: \sigma_1^2 = \sigma_2^2$ 대 $H_1: \sigma_1^2 \ne \sigma_2^2$ (양측).
 
-    2019 ASA statement: don't blindly use 0.05. Report exact p-values, effect sizes, CIs.
+    방향이 있는 주장 → 단측, "다르다/같지 않다" → 양측.
 
 ---
 
-**Exercise 6.**
-**Hypothesis test vs CI.** When to use each?
+**연습문제 3.**
+음료 기계에 대한 **제1종 오류와 제2종 오류**를 각각 기술하라.
 
-??? success "Solution to Exercise 6"
-    Test answers: does data contradict $H_0$?
-    CI answers: what's the plausible range of $\theta$?
+??? success "연습문제 3 풀이"
+    제1종: 참인 $H_0$을 기각 — 기계가 넘치지 않는데 넘친다고 결론짓는다. 확률 $\alpha$. 비용: 불필요한 재교정.
 
-    Mathematical equivalence: two-sided test at level $\alpha$ rejects $H_0: \theta = \theta_0$ iff $\theta_0 \notin$ $(1-\alpha)$ CI.
+    제2종: 거짓인 $H_0$을 기각하지 못함 — 기계가 넘치는 것을 놓친다. 확률 $\beta$. 비용: 계속되는 낭비와 고객 과금.
 
-    Use test for specific hypotheses (regulatory, science). Use CI for reporting uncertainty. **Modern preference: CIs primary, tests supplementary.**
+    맞바꿈: $\alpha$가 작을수록 $\beta$가 커진다(검정력이 낮아진다). $\alpha$를 정하려면 비용을 저울질해야 한다.
 
-    Effect size + CI is more informative than a binary "significant or not."
+---
+
+**연습문제 4.**
+**단측 대 양측.** 언제 적절한가? 단측의 대가는?
+
+??? success "연습문제 4 풀이"
+    단측: 한쪽 방향만 관심 대상일 때. 그 방향으로는 검정력이 크다($\alpha$ 전부를 한쪽 꼬리에 쓴다).
+
+    양측: 어느 쪽으로의 이탈이든 중요할 때. 임계값이 $z_{\alpha/2}$ — 기각하기가 조금 더 어렵다.
+
+    **단측의 대가:** 진실이 고르지 않은 방향에 있으면 결코 탐지하지 못한다. 안전이 걸린 맥락에서 결정적이다.
+
+    현대의 기본값: 사전 지식이 한쪽 방향을 배제하지 않는 한 양측. 학술지는 흔히 단측에 대한 정당화를 요구한다.
+
+---
+
+**연습문제 5.**
+**왜 $\alpha = 0.05$인가?** 언제 벗어나야 하는가?
+
+??? success "연습문제 5 풀이"
+    Fisher(1925)에서 온 관례이며 깊은 근거가 있는 것은 아니다. "20분의 1"이 심리적으로 다루기 쉬웠다.
+
+    벗어나야 할 때:
+
+    - 이해관계가 큰 경우(약물 승인): $\alpha = 0.01$ 이하.
+    - 다중검정: $\alpha/m$ (Bonferroni).
+    - 탐색적 연구: 약한 신호를 찾기 위해 $\alpha = 0.10$.
+    - 물리학의 "발견": $5\sigma$ ($\alpha \approx 6 \times 10^{-7}$).
+
+    2019년 ASA 성명: 0.05를 맹목적으로 쓰지 말라. 정확한 p-값, 효과크기, 신뢰구간을 보고하라.
+
+---
+
+**연습문제 6.**
+**가설검정과 신뢰구간.** 각각 언제 쓰는가?
+
+??? success "연습문제 6 풀이"
+    검정이 답하는 것: 자료가 $H_0$과 모순되는가?
+    신뢰구간이 답하는 것: $\theta$의 그럴듯한 범위는 무엇인가?
+
+    수학적 동등성: 수준 $\alpha$의 양측검정이 $H_0: \theta = \theta_0$을 기각할 필요충분조건은 $\theta_0$이 $(1-\alpha)$ 신뢰구간 밖에 있는 것이다.
+
+    구체적인 가설에는 검정을 쓰고(규제, 과학), 불확실성을 보고할 때는 신뢰구간을 쓴다. **현대의 선호: 신뢰구간이 주, 검정이 보조.**
+
+    효과크기 + 신뢰구간이 "유의하다/아니다"라는 이분법보다 정보가 풍부하다.

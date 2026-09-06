@@ -1,18 +1,18 @@
-# Hypothesis Testing Demonstrations
+# 가설검정 시연
 
-## Overview
+## 개요
 
-Hypothesis testing is a formal framework for making decisions about population parameters based on sample data. The procedure sets up a null hypothesis $H_0$ (a default claim) against an alternative hypothesis $H_1$, computes a test statistic, and uses its sampling distribution to obtain a p-value. This page demonstrates one-sample, two-sample, and paired tests for means and proportions, along with power analysis and the duality between confidence intervals and hypothesis tests.
+가설검정은 표본자료에 근거하여 모수에 관한 결정을 내리는 형식적인 틀이다. 이 절차는 귀무가설 $H_0$(기본 주장)을 대립가설 $H_1$에 맞세우고, 검정통계량을 계산한 뒤 그 표본분포로 p-값을 얻는다. 이 페이지에서는 평균과 비율에 대한 일표본·이표본·대응 검정을 검정력 분석 및 신뢰구간과 가설검정의 쌍대성과 함께 시연한다.
 
-## One-Sample Tests for the Mean
+## 평균에 대한 일표본 검정
 
-When the population standard deviation $\sigma$ is unknown, we use the **t-test**. Given a random sample $X_1, \dots, X_n$ with sample mean $\bar{X}$ and sample standard deviation $S$, the test statistic for $H_0\colon \mu = \mu_0$ is
+모표준편차 $\sigma$를 모를 때는 **t-검정**을 쓴다. 표본평균이 $\bar{X}$이고 표본표준편차가 $S$인 확률표본 $X_1, \dots, X_n$이 주어졌을 때 $H_0\colon \mu = \mu_0$의 검정통계량은
 
 $$
 T = \frac{\bar{X} - \mu_0}{S / \sqrt{n}} \sim t_{n-1}.
 $$
 
-### Code
+### 코드
 
 ```python
 import numpy as np
@@ -30,13 +30,13 @@ print(f"t = {t_stat:.4f}, p-value = {p_value:.4f}")
 print(f"Decision: {'Reject H0' if p_value < alpha else 'Fail to reject H0'}")
 ```
 
-For a **one-sided** test $H_1\colon \mu < \mu_0$, divide the two-sided p-value by 2 when the test statistic falls in the direction of the alternative:
+**단측** 검정 $H_1\colon \mu < \mu_0$에서는 검정통계량이 대립가설 방향에 있을 때 양측 p-값을 2로 나눈다:
 
 ```python
 p_one_sided = p_value / 2 if t_stat < 0 else 1 - p_value / 2
 ```
 
-### Manual Computation
+### 직접 계산
 
 ```python
 n = len(data)
@@ -46,9 +46,9 @@ t_manual = (xbar - mu_0) / (s / np.sqrt(n))
 p_manual = 2 * stats.t.cdf(-abs(t_manual), df=n - 1)
 ```
 
-## One-Sample Test for a Proportion
+## 비율에 대한 일표본 검정
 
-For testing $H_0\colon p = p_0$ with $\hat{p} = x/n$, the Wald test statistic is
+$\hat{p} = x/n$으로 $H_0\colon p = p_0$을 검정할 때 Wald 검정통계량은
 
 $$
 Z = \frac{\hat{p} - p_0}{\sqrt{p_0(1 - p_0)/n}} \;\dot\sim\; N(0,1).
@@ -68,15 +68,15 @@ p_value = 2 * stats.norm.sf(abs(z_stat))
 z_sm, p_sm = proportions_ztest(x, n, value=p_0)
 ```
 
-## Two-Sample t-Tests
+## 이표본 t-검정
 
-Given independent samples from two populations, the null hypothesis is $H_0\colon \mu_1 = \mu_2$. **Welch's t-test** (unequal variances) uses
+두 모집단에서 얻은 독립표본에 대해 귀무가설은 $H_0\colon \mu_1 = \mu_2$이다. **Welch의 t-검정**(분산이 다른 경우)은
 
 $$
 T = \frac{\bar{X}_1 - \bar{X}_2}{\sqrt{S_1^2/n_1 + S_2^2/n_2}}
 $$
 
-with degrees of freedom computed by the Welch--Satterthwaite approximation.
+를 쓰며 자유도는 Welch–Satterthwaite 근사로 계산한다.
 
 ```python
 drug_a = np.array([5.2, 4.8, 6.1, 5.5, 4.9, 5.7, 5.3, 6.0, 5.1, 5.4])
@@ -89,9 +89,9 @@ t_welch, p_welch = stats.ttest_ind(drug_a, drug_b, equal_var=False)
 t_pooled, p_pooled = stats.ttest_ind(drug_a, drug_b, equal_var=True)
 ```
 
-## Paired t-Test
+## 대응 t-검정
 
-When observations come in natural pairs (e.g., before/after measurements), we compute the differences $D_i = X_i^{(\text{after})} - X_i^{(\text{before})}$ and test $H_0\colon \mu_D = 0$:
+관측값이 자연스러운 쌍을 이룰 때(예: 전후 측정) 차이 $D_i = X_i^{(\text{after})} - X_i^{(\text{before})}$를 계산하고 $H_0\colon \mu_D = 0$을 검정한다:
 
 $$
 T = \frac{\bar{D}}{S_D / \sqrt{n}} \sim t_{n-1}.
@@ -108,9 +108,9 @@ diff = after - before
 t_stat2, p_value2 = stats.ttest_1samp(diff, 0)
 ```
 
-## Power Analysis
+## 검정력 분석
 
-The **power** of a test is the probability of correctly rejecting $H_0$ when $H_1$ is true:
+검정의 **검정력**은 $H_1$이 참일 때 $H_0$을 올바르게 기각할 확률이다:
 
 $$
 \text{Power} = 1 - \beta = P(\text{reject } H_0 \mid H_1 \text{ true}).
@@ -131,9 +131,9 @@ n_each = analysis2.solve_power(effect_size=0.5, alpha=0.05, power=0.80,
                                 ratio=1.0, alternative='two-sided')
 ```
 
-## CI--Test Duality
+## 신뢰구간과 검정의 쌍대성
 
-A value $\mu_0$ lies inside the $100(1-\alpha)\%$ confidence interval if and only if the two-sided test at level $\alpha$ fails to reject $H_0\colon \mu = \mu_0$.
+수준 $\alpha$의 양측검정이 $H_0\colon \mu = \mu_0$을 기각하지 못할 필요충분조건은 $\mu_0$이 $100(1-\alpha)\%$ 신뢰구간 안에 있는 것이다.
 
 ```python
 data = np.array([52, 48, 55, 50, 47, 53, 49, 51, 54, 46])
@@ -154,122 +154,124 @@ for mu0 in [48, 49, 50, 51, 52, 53]:
     # reject <=> mu0 NOT in CI
 ```
 
-### Interpretation
+### 해석
 
-The duality principle states:
+쌍대성 원리는 다음을 말한다:
 
 $$
 \mu_0 \notin \left(\bar{X} \pm t_{\alpha/2,\,n-1}\,\frac{S}{\sqrt{n}}\right) \iff \text{reject } H_0\colon \mu = \mu_0 \text{ at level } \alpha.
 $$
 
-This provides a unified view: constructing a confidence interval is equivalent to inverting a family of hypothesis tests.
+이는 통합된 관점을 준다: 신뢰구간을 구성하는 일은 가설검정의 가족을 뒤집는 일과 같다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.** A sample of $n=16$ light bulbs has $\bar{x}=1020$ hours and $s=80$ hours. Test $H_0\colon \mu=1000$ vs $H_1\colon \mu>1000$ at $\alpha=0.05$. State the test statistic, p-value, and decision.
+**연습문제 1.** 전구 $n=16$개의 표본에서 $\bar{x}=1020$시간, $s=80$시간을 얻었다. $\alpha=0.05$에서 $H_0\colon \mu=1000$ 대 $H_1\colon \mu>1000$을 검정하라. 검정통계량, p-값, 판정을 제시하라.
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
 
-    The test statistic is
+    검정통계량은
 
     $$
     T = \frac{1020 - 1000}{80/\sqrt{16}} = \frac{20}{20} = 1.0.
     $$
 
-    Under $H_0$, $T \sim t_{15}$. The one-sided p-value is
+    $H_0$ 아래에서 $T \sim t_{15}$이다. 단측 p-값은
 
     $$
     p = P(T_{15} \geq 1.0) \approx 0.1667.
     $$
 
-    Since $p = 0.1667 > 0.05$, we fail to reject $H_0$. There is insufficient evidence that the mean lifetime exceeds 1000 hours. $\square$
+    $p = 0.1667 > 0.05$이므로 $H_0$을 기각하지 못한다. 평균 수명이 1000시간을 넘는다는 증거가 부족하다. $\square$
 
 ---
 
-**Exercise 2.** In a poll of 400 voters, 228 support a ballot measure. Test whether the true proportion exceeds 0.50 at the 1% significance level.
+**연습문제 2.** 유권자 400명 조사에서 228명이 어떤 안건을 지지한다. 1% 유의수준에서 참 비율이 0.50을 넘는지 검정하라.
 
-??? success "Solution to Exercise 2"
+??? success "연습문제 2 풀이"
 
-    We have $\hat{p} = 228/400 = 0.57$ and test $H_0\colon p = 0.50$ vs $H_1\colon p > 0.50$. The test statistic is
+    $\hat{p} = 228/400 = 0.57$이고 $H_0\colon p = 0.50$ 대 $H_1\colon p > 0.50$을 검정한다. 검정통계량은
 
     $$
     Z = \frac{0.57 - 0.50}{\sqrt{0.50 \times 0.50 / 400}} = \frac{0.07}{0.025} = 2.80.
     $$
 
-    The one-sided p-value is $P(Z \geq 2.80) \approx 0.0026 < 0.01$, so we reject $H_0$. There is strong evidence that more than half the voters support the measure. $\square$
+    단측 p-값은 $P(Z \geq 2.80) \approx 0.0026 < 0.01$이므로 $H_0$을 기각한다. 유권자의 절반 넘는 비율이 이 안건을 지지한다는 강한 증거이다. $\square$
 
 ---
 
-**Exercise 3.** Two independent groups yield $\bar{x}_1=75$, $s_1=10$, $n_1=20$ and $\bar{x}_2=70$, $s_2=12$, $n_2=25$. Conduct Welch's t-test for $H_0\colon \mu_1 = \mu_2$ at $\alpha=0.05$. Write out the formula for the Welch--Satterthwaite degrees of freedom.
+**연습문제 3.** 독립인 두 집단에서 $\bar{x}_1=75$, $s_1=10$, $n_1=20$과 $\bar{x}_2=70$, $s_2=12$, $n_2=25$를 얻었다. $\alpha=0.05$에서 $H_0\colon \mu_1 = \mu_2$의 Welch t-검정을 수행하라. Welch–Satterthwaite 자유도의 공식을 함께 쓰라.
 
-??? success "Solution to Exercise 3"
+??? success "연습문제 3 풀이"
 
-    The test statistic is
+    검정통계량은
 
     $$
     T = \frac{75 - 70}{\sqrt{10^2/20 + 12^2/25}} = \frac{5}{\sqrt{5 + 5.76}} = \frac{5}{\sqrt{10.76}} \approx \frac{5}{3.280} \approx 1.524.
     $$
 
-    The Welch--Satterthwaite degrees of freedom are
+    Welch–Satterthwaite 자유도는
 
     $$
     \nu = \frac{\left(\frac{s_1^2}{n_1} + \frac{s_2^2}{n_2}\right)^2}{\frac{(s_1^2/n_1)^2}{n_1-1} + \frac{(s_2^2/n_2)^2}{n_2-1}} = \frac{(5 + 5.76)^2}{\frac{25}{19} + \frac{33.18}{24}} \approx \frac{115.78}{1.316 + 1.382} \approx 42.9.
     $$
 
-    Using $\nu \approx 42$, the two-sided p-value is approximately 0.135. Since $p > 0.05$, we fail to reject $H_0$. $\square$
+    $\nu \approx 42$를 쓰면 양측 p-값이 약 0.135이다. $p > 0.05$이므로 $H_0$을 기각하지 못한다. $\square$
 
 ---
 
-**Exercise 4.** Prove the CI--test duality: show that for a two-sided one-sample t-test at level $\alpha$, rejecting $H_0\colon \mu = \mu_0$ is equivalent to $\mu_0$ falling outside the $100(1-\alpha)\%$ confidence interval.
+**연습문제 4.** 신뢰구간과 검정의 쌍대성을 증명하라. 즉 수준 $\alpha$의 양측 일표본 t-검정에서 $H_0\colon \mu = \mu_0$을 기각하는 것이 $\mu_0$이 $100(1-\alpha)\%$ 신뢰구간 밖에 있는 것과 동등함을 보여라.
 
-??? success "Solution to Exercise 4"
+??? success "연습문제 4 풀이"
 
-    The test rejects $H_0$ when $|T| > t_{\alpha/2,\,n-1}$, i.e.,
+    이 검정은 $|T| > t_{\alpha/2,\,n-1}$일 때 $H_0$을 기각한다. 즉,
 
     $$
     \left|\frac{\bar{X} - \mu_0}{S/\sqrt{n}}\right| > t_{\alpha/2,\,n-1}.
     $$
 
-    This is equivalent to
+    이는 다음과 동등하다:
 
     $$
     |\bar{X} - \mu_0| > t_{\alpha/2,\,n-1}\,\frac{S}{\sqrt{n}},
     $$
 
-    which means $\mu_0 < \bar{X} - t_{\alpha/2,\,n-1}\,S/\sqrt{n}$ or $\mu_0 > \bar{X} + t_{\alpha/2,\,n-1}\,S/\sqrt{n}$. In other words,
+    즉 $\mu_0 < \bar{X} - t_{\alpha/2,\,n-1}\,S/\sqrt{n}$이거나 $\mu_0 > \bar{X} + t_{\alpha/2,\,n-1}\,S/\sqrt{n}$이다. 다시 말해,
 
     $$
     \mu_0 \notin \left(\bar{X} - t_{\alpha/2,\,n-1}\,\frac{S}{\sqrt{n}},\; \bar{X} + t_{\alpha/2,\,n-1}\,\frac{S}{\sqrt{n}}\right).
     $$
 
-    The interval on the right is exactly the $100(1-\alpha)\%$ confidence interval for $\mu$. Therefore, the test rejects $H_0\colon \mu=\mu_0$ at level $\alpha$ if and only if $\mu_0$ is not contained in the confidence interval. $\square$
+    오른쪽의 구간이 바로 $\mu$의 $100(1-\alpha)\%$ 신뢰구간이다. 따라서 수준 $\alpha$에서 이 검정이 $H_0\colon \mu=\mu_0$을 기각할 필요충분조건은 $\mu_0$이 신뢰구간에 들어 있지 않은 것이다. $\square$
 
 ---
 
-**Exercise 5.** Using the power formula for a one-sample z-test, show that the required sample size to achieve power $1-\beta$ at significance level $\alpha$ for detecting a shift of $\delta$ (with known $\sigma$) in a two-sided test is
+**연습문제 5.** 일표본 z-검정의 검정력 공식을 써서, ($\sigma$를 아는) 양측검정에서 이동 $\delta$를 유의수준 $\alpha$에서 검정력 $1-\beta$로 탐지하는 데 필요한 표본크기가
 
 $$
-n = \left(\frac{(z_{\alpha/2} + z_\beta)\,\sigma}{\delta}\right)^2.
+n = \left(\frac{(z_{\alpha/2} + z_\beta)\,\sigma}{\delta}\right)^2
 $$
 
-??? success "Solution to Exercise 5"
+임을 보여라.
 
-    Under $H_0$, $Z = (\bar{X}-\mu_0)/(\sigma/\sqrt{n}) \sim N(0,1)$. We reject when $|Z|>z_{\alpha/2}$. Under $H_1\colon \mu = \mu_0 + \delta$, the statistic has distribution $Z \sim N(\delta\sqrt{n}/\sigma,\,1)$. The power (considering the right tail, which dominates for $\delta>0$) is
+??? success "연습문제 5 풀이"
+
+    $H_0$ 아래에서 $Z = (\bar{X}-\mu_0)/(\sigma/\sqrt{n}) \sim N(0,1)$이고 $|Z|>z_{\alpha/2}$일 때 기각한다. $H_1\colon \mu = \mu_0 + \delta$ 아래에서 이 통계량은 $Z \sim N(\delta\sqrt{n}/\sigma,\,1)$을 따른다. ($\delta>0$일 때 지배적인 오른쪽 꼬리만 보면) 검정력은
 
     $$
     1 - \beta = P\!\left(Z > z_{\alpha/2}\right) = P\!\left(N(0,1) > z_{\alpha/2} - \frac{\delta\sqrt{n}}{\sigma}\right).
     $$
 
-    Setting this equal to $1-\beta$ gives
+    이를 $1-\beta$와 같다고 놓으면
 
     $$
     z_{\alpha/2} - \frac{\delta\sqrt{n}}{\sigma} = -z_\beta,
     $$
 
-    so
+    따라서
 
     $$
     \frac{\delta\sqrt{n}}{\sigma} = z_{\alpha/2} + z_\beta \implies \sqrt{n} = \frac{(z_{\alpha/2}+z_\beta)\,\sigma}{\delta}.
     $$
 
-    Squaring both sides yields the desired formula. $\square$
+    양변을 제곱하면 원하는 공식을 얻는다. $\square$

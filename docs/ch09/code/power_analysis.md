@@ -1,34 +1,34 @@
-# Power Analysis and Sample Size
+# 검정력 분석과 표본크기
 
-## Overview
+## 개요
 
-Power analysis determines the sample size needed to detect a meaningful effect with a specified probability. The **power** of a test is $1-\beta$, where $\beta$ is the probability of a Type II error (failing to reject a false null hypothesis). A well-designed study balances the significance level $\alpha$, the desired power, and the minimum effect size of interest to compute the required number of observations.
+검정력 분석은 의미 있는 효과를 지정된 확률로 탐지하는 데 필요한 표본크기를 정한다. 검정의 **검정력**은 $1-\beta$이며, 여기서 $\beta$는 제2종 오류(거짓인 귀무가설을 기각하지 못함)의 확률이다. 잘 설계된 연구는 유의수준 $\alpha$, 원하는 검정력, 관심 있는 최소 효과크기의 균형을 잡아 필요한 관측값 수를 계산한다.
 
-## Key Formulas
+## 핵심 공식
 
-For a **two-sample t-test** (equal group sizes, known $\sigma$), the approximate power at sample size $n$ per group is
+**이표본 t-검정**(집단 크기가 같고 $\sigma$를 아는 경우)에서 집단당 표본크기 $n$일 때 근사적인 검정력은
 
 $$
 \text{Power} = 1 - \mathcal{N}\!\left(z_{\alpha/2} - \frac{\delta}{\sigma\sqrt{2/n}}\right) + \mathcal{N}\!\left(-z_{\alpha/2} - \frac{\delta}{\sigma\sqrt{2/n}}\right),
 $$
 
-where $\delta = \mu_1 - \mu_2$ is the true difference and $\mathcal{N}$ is the standard normal CDF.
+여기서 $\delta = \mu_1 - \mu_2$는 참 차이이고 $\mathcal{N}$은 표준정규 누적분포함수이다.
 
-The required sample size per group to achieve power $1-\beta$ is
+검정력 $1-\beta$를 달성하는 데 필요한 집단당 표본크기는
 
 $$
 n = \frac{2\,(z_{\alpha/2} + z_\beta)^2\,\sigma^2}{\delta^2}.
 $$
 
-For a **two-proportion z-test** comparing $p_1$ and $p_2$ with $\bar{p} = (p_1+p_2)/2$:
+$\bar{p} = (p_1+p_2)/2$로 $p_1$과 $p_2$를 비교하는 **두 비율 z-검정**에서는:
 
 $$
 n = \frac{\left(z_{\alpha/2}\sqrt{2\bar{p}(1-\bar{p})} + z_\beta\sqrt{p_1(1-p_1)+p_2(1-p_2)}\right)^2}{(p_1 - p_2)^2}.
 $$
 
-## Code
+## 코드
 
-### Power of a Two-Sample t-Test
+### 이표본 t-검정의 검정력
 
 ```python
 import numpy as np
@@ -44,7 +44,7 @@ def power_ttest(n, delta, sigma=1.0, alpha=0.05):
     return power
 ```
 
-### Required Sample Size
+### 필요한 표본크기
 
 ```python
 def sample_size_ttest(delta, sigma=1.0, alpha=0.05, power=0.80):
@@ -65,7 +65,7 @@ def sample_size_proportion(p1, p2, alpha=0.05, power=0.80):
     return int(np.ceil(n))
 ```
 
-### Example Computations
+### 계산 예시
 
 ```python
 # Two-sample t-test: medium effect size (Cohen's d = 0.5)
@@ -79,7 +79,7 @@ n_prop = sample_size_proportion(p1, p2, alpha=0.05, power=0.80)
 print(f"Required n per group: {n_prop:,}")
 ```
 
-### Power Curves
+### 검정력 곡선
 
 ```python
 import matplotlib.pyplot as plt
@@ -99,50 +99,50 @@ plt.tight_layout()
 plt.show()
 ```
 
-### Interpretation
+### 해석
 
-- A **small effect** ($d=0.2$) requires hundreds of subjects per group to achieve 80% power.
-- A **medium effect** ($d=0.5$) needs roughly 64 per group.
-- A **large effect** ($d=0.8$) needs only about 26 per group.
-- For proportion tests, when the difference $|p_1-p_2|$ is very small, tens of thousands of observations may be required.
+- **작은 효과**($d=0.2$)는 검정력 80%를 달성하는 데 집단당 수백 명이 필요하다.
+- **중간 효과**($d=0.5$)는 집단당 약 64명이 필요하다.
+- **큰 효과**($d=0.8$)는 집단당 약 26명이면 된다.
+- 비율 검정에서는 차이 $|p_1-p_2|$가 아주 작으면 수만 개의 관측값이 필요할 수 있다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.** A researcher wants 90% power to detect a difference of $\delta=0.3$ standard deviations between two groups at $\alpha=0.01$. How many subjects per group are needed?
+**연습문제 1.** 어떤 연구자가 $\alpha=0.01$에서 두 집단 사이의 $\delta=0.3$ 표준편차만큼의 차이를 검정력 90%로 탐지하려 한다. 집단당 몇 명이 필요한가?
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
 
-    Using the sample size formula:
+    표본크기 공식을 쓴다:
 
     $$
     n = \frac{2(z_{\alpha/2} + z_\beta)^2}{\delta^2}.
     $$
 
-    Here $z_{0.005} = 2.576$, $z_{0.10} = 1.282$, and $\delta = 0.3$:
+    여기서 $z_{0.005} = 2.576$, $z_{0.10} = 1.282$, $\delta = 0.3$이므로:
 
     $$
     n = \frac{2(2.576 + 1.282)^2}{0.3^2} = \frac{2(3.858)^2}{0.09} = \frac{2 \times 14.884}{0.09} = \frac{29.768}{0.09} \approx 331.
     $$
 
-    The researcher needs at least 331 subjects per group. $\square$
+    연구자에게는 집단당 적어도 331명이 필요하다. $\square$
 
 ---
 
-**Exercise 2.** Show that the power of a one-sample z-test (two-sided, known $\sigma$) for detecting $\mu = \mu_0 + \delta$ can be written as
+**연습문제 2.** ($\sigma$를 아는) 양측 일표본 z-검정에서 $\mu = \mu_0 + \delta$를 탐지하는 검정력을 다음과 같이 쓸 수 있음을 보여라.
 
 $$
 1 - \beta = \mathcal{N}\!\left(\frac{\delta\sqrt{n}}{\sigma} - z_{\alpha/2}\right) + \mathcal{N}\!\left(-\frac{\delta\sqrt{n}}{\sigma} - z_{\alpha/2}\right).
 $$
 
-??? success "Solution to Exercise 2"
+??? success "연습문제 2 풀이"
 
-    Under $H_1\colon \mu = \mu_0 + \delta$, the test statistic $Z = (\bar{X}-\mu_0)/(\sigma/\sqrt{n})$ has distribution $N(\delta\sqrt{n}/\sigma,\,1)$. Let $\lambda = \delta\sqrt{n}/\sigma$. The test rejects when $|Z| > z_{\alpha/2}$, so
+    $H_1\colon \mu = \mu_0 + \delta$ 아래에서 검정통계량 $Z = (\bar{X}-\mu_0)/(\sigma/\sqrt{n})$은 $N(\delta\sqrt{n}/\sigma,\,1)$을 따른다. $\lambda = \delta\sqrt{n}/\sigma$라 하자. 이 검정은 $|Z| > z_{\alpha/2}$일 때 기각하므로
 
     $$
     1 - \beta = P(Z > z_{\alpha/2}) + P(Z < -z_{\alpha/2}).
     $$
 
-    Since $Z \sim N(\lambda, 1)$:
+    $Z \sim N(\lambda, 1)$이므로:
 
     $$
     P(Z > z_{\alpha/2}) = P(Z - \lambda > z_{\alpha/2} - \lambda) = \mathcal{N}(\lambda - z_{\alpha/2}),
@@ -152,33 +152,33 @@ $$
     P(Z < -z_{\alpha/2}) = P(Z - \lambda < -z_{\alpha/2} - \lambda) = \mathcal{N}(-z_{\alpha/2} - \lambda).
     $$
 
-    Summing gives the desired result. $\square$
+    둘을 더하면 원하는 결과를 얻는다. $\square$
 
 ---
 
-**Exercise 3.** An A/B test compares conversion rates $p_1 = 0.05$ and $p_2 = 0.04$. Compute the required sample size per group for 80% power at $\alpha = 0.05$.
+**연습문제 3.** 어떤 A/B 검정이 전환율 $p_1 = 0.05$와 $p_2 = 0.04$를 비교한다. $\alpha = 0.05$에서 검정력 80%를 위한 집단당 표본크기를 계산하라.
 
-??? success "Solution to Exercise 3"
+??? success "연습문제 3 풀이"
 
-    We have $\bar{p} = (0.05 + 0.04)/2 = 0.045$, $z_{0.025}=1.96$, $z_{0.20}=0.842$:
+    $\bar{p} = (0.05 + 0.04)/2 = 0.045$, $z_{0.025}=1.96$, $z_{0.20}=0.842$이므로:
 
     $$
     n = \frac{\left(1.96\sqrt{2(0.045)(0.955)} + 0.842\sqrt{0.05(0.95) + 0.04(0.96)}\right)^2}{(0.05 - 0.04)^2}.
     $$
 
-    Computing the pieces: $2(0.045)(0.955) = 0.08595$, so $\sqrt{0.08595} \approx 0.2932$. Also $0.0475 + 0.0384 = 0.0859$, so $\sqrt{0.0859}\approx 0.2931$.
+    각 부분을 계산하면 $2(0.045)(0.955) = 0.08595$이므로 $\sqrt{0.08595} \approx 0.2932$이다. 또 $0.0475 + 0.0384 = 0.0859$이므로 $\sqrt{0.0859}\approx 0.2931$이다.
 
     $$
-    n = \frac{(1.96 \times 0.2932 + 0.842 \times 0.2931)^2}{0.0001} = \frac{(0.5747 + 0.2468)^2}{0.0001} = \frac{0.6741}{0.0001} \approx 6741.
+    n = \frac{(1.96 \times 0.2932 + 0.842 \times 0.2931)^2}{0.0001} = \frac{(0.5747 + 0.2468)^2}{0.0001} = \frac{0.6749}{0.0001} \approx 6749.
     $$
 
-    Approximately 6741 subjects are needed per group. $\square$
+    집단당 약 6749명이 필요하다. $\square$
 
 ---
 
-**Exercise 4.** Using Python, plot the power of a one-sample t-test as a function of $n$ (from 5 to 200) for Cohen's $d \in \{0.2, 0.5, 0.8\}$ at $\alpha = 0.05$. Use `statsmodels.stats.power.TTestPower`.
+**연습문제 4.** Python으로 $\alpha = 0.05$에서 Cohen의 $d \in \{0.2, 0.5, 0.8\}$에 대해 일표본 t-검정의 검정력을 $n$(5부터 200까지)의 함수로 그려라. `statsmodels.stats.power.TTestPower`를 쓰라.
 
-??? success "Solution to Exercise 4"
+??? success "연습문제 4 풀이"
 
     ```python
     import numpy as np
@@ -202,23 +202,23 @@ $$
     plt.show()
     ```
 
-    The plot shows that larger effect sizes require fewer subjects, and the curves are S-shaped, increasing steeply near the sample size that achieves the target power. $\square$
+    그림을 보면 효과크기가 클수록 필요한 피험자가 적고, 곡선이 S자 모양으로 목표 검정력에 이르는 표본크기 근처에서 가파르게 올라간다. $\square$
 
 ---
 
-**Exercise 5.** Prove that for a fixed significance level $\alpha$ and effect size $\delta > 0$, the power of the two-sample z-test approaches 1 as $n \to \infty$.
+**연습문제 5.** 유의수준 $\alpha$와 효과크기 $\delta > 0$이 고정되어 있을 때 $n \to \infty$이면 이표본 z-검정의 검정력이 1에 다가감을 증명하라.
 
-??? success "Solution to Exercise 5"
+??? success "연습문제 5 풀이"
 
-    The power is
+    검정력은
 
     $$
     1 - \beta = \mathcal{N}\!\left(\frac{\delta}{\sigma\sqrt{2/n}} - z_{\alpha/2}\right) + \mathcal{N}\!\left(-\frac{\delta}{\sigma\sqrt{2/n}} - z_{\alpha/2}\right).
     $$
 
-    As $n \to \infty$, the term $\delta / (\sigma\sqrt{2/n}) = \delta\sqrt{n}/({\sigma\sqrt{2}}) \to \infty$. Therefore:
+    $n \to \infty$이면 항 $\delta / (\sigma\sqrt{2/n}) = \delta\sqrt{n}/({\sigma\sqrt{2}}) \to \infty$이다. 따라서:
 
-    - The first term: $\mathcal{N}(\infty - z_{\alpha/2}) = \mathcal{N}(\infty) = 1$.
-    - The second term: $\mathcal{N}(-\infty - z_{\alpha/2}) = \mathcal{N}(-\infty) = 0$.
+    - 첫째 항: $\mathcal{N}(\infty - z_{\alpha/2}) = \mathcal{N}(\infty) = 1$.
+    - 둘째 항: $\mathcal{N}(-\infty - z_{\alpha/2}) = \mathcal{N}(-\infty) = 0$.
 
-    Hence $1-\beta \to 1$. This confirms that with enough data, any fixed nonzero effect will eventually be detected. $\square$
+    그러므로 $1-\beta \to 1$이다. 자료가 충분하면 0이 아닌 어떤 고정된 효과도 결국 탐지됨을 확인해 준다. $\square$

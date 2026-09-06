@@ -1,24 +1,24 @@
-# Rejection Region Demo
+# 기각역 시연
 
-## Overview
+## 개요
 
-The rejection region is the set of values of the test statistic that lead us to reject $H_0$. Its shape depends on whether the test is two-tailed, left-tailed, or right-tailed. This page visualizes rejection regions on the $t$-distribution for all three cases, showing both the original measurement scale (cm) and the standardized $t$-statistic scale.
+기각역은 $H_0$을 기각하게 만드는 검정통계량 값들의 집합이다. 그 모양은 검정이 양측인지, 좌측인지, 우측인지에 따라 달라진다. 이 페이지에서는 세 경우 모두에 대해 $t$-분포 위의 기각역을 시각화하며, 원래 측정 단위(cm)와 표준화된 $t$-통계량 척도를 함께 보인다.
 
-## Two-Tailed Test
+## 양측검정
 
-For $H_0\colon \mu = \mu_0$ versus $H_1\colon \mu \neq \mu_0$ at significance level $\alpha$, we reject when the test statistic falls in either tail:
+유의수준 $\alpha$에서 $H_0\colon \mu = \mu_0$ 대 $H_1\colon \mu \neq \mu_0$을 검정할 때, 검정통계량이 어느 쪽 꼬리에든 들어가면 기각한다:
 
 $$
 |t| > t_{\alpha/2,\, n-1}.
 $$
 
-The critical values split $\alpha$ equally between the two tails. In original units, the rejection region translates to
+임계값이 $\alpha$를 두 꼬리에 반씩 나눈다. 원래 단위로 옮기면 기각역은
 
 $$
 \bar{x} < \mu_0 - t_{\alpha/2,\, n-1} \cdot \frac{s}{\sqrt{n}} \quad \text{or} \quad \bar{x} > \mu_0 + t_{\alpha/2,\, n-1} \cdot \frac{s}{\sqrt{n}}.
 $$
 
-### Code
+### 코드
 
 ```python
 import numpy as np
@@ -44,9 +44,9 @@ print(f"t-stat = {t_stat:.4f}, t-crit = +/-{t_crit:.4f}")
 print(f"Rejection boundaries: {mu0 - t_crit*se:.2f} and {mu0 + t_crit*se:.2f}")
 ```
 
-### Visualization
+### 시각화
 
-The top panel shows the sampling distribution of $\bar{X}$ under $H_0$ in centimeters, with the rejection regions shaded in the tails. The bottom panel shows the same test on the $t$-statistic scale, where the rejection region is simply $|t| > t_{\text{crit}}$.
+위쪽 그림은 $H_0$ 아래 $\bar{X}$의 표본분포를 센티미터 단위로 보여주며 꼬리의 기각역을 색칠한다. 아래쪽 그림은 같은 검정을 $t$-통계량 척도로 보여주며 기각역은 단순히 $|t| > t_{\text{crit}}$이다.
 
 ```python
 x_t = np.linspace(-5, 5, 300)
@@ -66,25 +66,25 @@ plt.tight_layout()
 plt.show()
 ```
 
-## One-Tailed Tests
+## 단측검정
 
-### Left-Tailed Test
+### 좌측검정
 
-For $H_0\colon \mu = \mu_0$ versus $H_1\colon \mu < \mu_0$, the entire rejection region is in the left tail:
+$H_0\colon \mu = \mu_0$ 대 $H_1\colon \mu < \mu_0$에서는 기각역 전체가 왼쪽 꼬리에 있다:
 
 $$
 t < -t_{\alpha,\, n-1}.
 $$
 
-### Right-Tailed Test
+### 우측검정
 
-For $H_0\colon \mu = \mu_0$ versus $H_1\colon \mu > \mu_0$, the rejection region is in the right tail:
+$H_0\colon \mu = \mu_0$ 대 $H_1\colon \mu > \mu_0$에서는 기각역이 오른쪽 꼬리에 있다:
 
 $$
 t > t_{\alpha,\, n-1}.
 $$
 
-### Code
+### 코드
 
 ```python
 df = 100
@@ -101,90 +101,90 @@ t_hi = stats.t.ppf(1 - alpha, df)
 print(f"Right-tailed critical value: {t_hi:.4f}")
 ```
 
-Note that $t_{\alpha,\,\text{df}} = -t_{1-\alpha,\,\text{df}}$ by symmetry of the $t$-distribution.
+$t$-분포의 대칭성에 의해 $t_{\alpha,\,\text{df}} = -t_{1-\alpha,\,\text{df}}$임에 유의하라.
 
-## Interpretation
+## 해석
 
-- In a **two-tailed test**, evidence against $H_0$ can come from either direction. The p-value is $2P(T \geq |t_{\text{obs}}|)$.
-- In a **one-tailed test**, we only look for departures in one direction, giving more power to detect effects in that direction but none in the opposite direction.
-- The **rejection region in original units** shows the actual measurement values (e.g., heights in cm) that would lead to rejection. This is often more intuitive for practitioners than the $t$-statistic scale.
-- Moving from $\alpha = 0.05$ to $\alpha = 0.01$ shrinks the rejection region (critical value moves outward), requiring stronger evidence to reject $H_0$.
+- **양측검정**에서는 어느 방향에서든 $H_0$에 반하는 증거가 나올 수 있다. p-값은 $2P(T \geq |t_{\text{obs}}|)$이다.
+- **단측검정**에서는 한쪽 방향의 이탈만 보므로 그 방향의 효과를 탐지할 검정력은 커지지만 반대 방향에는 전혀 없다.
+- **원래 단위의 기각역**은 기각으로 이어지는 실제 측정값(예: cm 단위의 키)을 보여준다. 실무자에게는 $t$-통계량 척도보다 직관적인 경우가 많다.
+- $\alpha$를 0.05에서 0.01로 낮추면 기각역이 줄어들고(임계값이 바깥으로 이동하고) $H_0$을 기각하는 데 더 강한 증거가 필요해진다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.** For a two-tailed test with $n = 25$, $\alpha = 0.05$, and $\mu_0 = 100$, compute the critical values in $t$-units and in original units if $s = 15$.
+**연습문제 1.** $n = 25$, $\alpha = 0.05$, $\mu_0 = 100$인 양측검정에서 $s = 15$일 때 임계값을 $t$ 단위와 원래 단위로 계산하라.
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
 
-    Degrees of freedom: $\text{df} = 24$. The critical $t$-value is
+    자유도: $\text{df} = 24$. 임계 $t$-값은
 
     $$
-    t_{0.025,\,24} = 2.0639 \quad (\text{from tables or } \texttt{stats.t.ppf(0.975, 24)}).
+    t_{0.025,\,24} = 2.0639 \quad (\text{표 또는 } \texttt{stats.t.ppf(0.975, 24)}).
     $$
 
-    The standard error is $SE = 15/\sqrt{25} = 3.0$. In original units, the rejection boundaries are
+    표준오차는 $SE = 15/\sqrt{25} = 3.0$이다. 원래 단위의 기각 경계는
 
     $$
     100 \pm 2.0639 \times 3.0 = 100 \pm 6.19,
     $$
 
-    so the rejection region is $\bar{x} < 93.81$ or $\bar{x} > 106.19$. $\square$
+    이므로 기각역은 $\bar{x} < 93.81$ 또는 $\bar{x} > 106.19$이다. $\square$
 
 ---
 
-**Exercise 2.** Explain why a one-tailed test is more powerful than a two-tailed test when the true effect is in the hypothesized direction. What is the cost?
+**연습문제 2.** 참 효과가 가설의 방향에 있을 때 단측검정이 양측검정보다 강력한 이유를 설명하라. 그 대가는 무엇인가?
 
-??? success "Solution to Exercise 2"
+??? success "연습문제 2 풀이"
 
-    For a one-tailed test at level $\alpha$, the entire rejection probability is concentrated in one tail, so the critical value is $t_\alpha$ rather than $t_{\alpha/2}$. Since $t_\alpha < t_{\alpha/2}$, it is easier to exceed the critical value, giving higher power.
+    수준 $\alpha$의 단측검정에서는 기각확률 전체가 한쪽 꼬리에 몰리므로 임계값이 $t_{\alpha/2}$가 아니라 $t_\alpha$이다. $t_\alpha < t_{\alpha/2}$이므로 임계값을 넘기가 쉬워져 검정력이 커진다.
 
-    Numerically, at $\alpha = 0.05$ with large $n$: the one-tailed critical value is $z_{0.05} = 1.645$ while the two-tailed value is $z_{0.025} = 1.960$. Any test statistic between 1.645 and 1.960 would reject with the one-tailed test but not the two-tailed test.
+    수치로 보면 $n$이 큰 $\alpha = 0.05$에서 단측 임계값은 $z_{0.05} = 1.645$이고 양측은 $z_{0.025} = 1.960$이다. 1.645와 1.960 사이의 검정통계량은 단측검정에서는 기각되지만 양측검정에서는 기각되지 않는다.
 
-    The cost is that the one-tailed test has **zero power** against effects in the opposite direction. If the true effect is negative when we test for a positive effect, we can never reject $H_0$, no matter how large the negative effect. $\square$
+    대가는 단측검정이 반대 방향의 효과에 대해 **검정력이 0**이라는 점이다. 양의 효과를 검정하는데 참 효과가 음수이면 그 효과가 아무리 커도 결코 $H_0$을 기각할 수 없다. $\square$
 
 ---
 
-**Exercise 3.** Show that the p-value for a two-tailed test equals twice the one-tailed p-value (for symmetric distributions). When might this relationship fail?
+**연습문제 3.** (대칭인 분포에서) 양측검정의 p-값이 단측 p-값의 두 배임을 보여라. 이 관계가 깨질 수 있는 경우는?
 
-??? success "Solution to Exercise 3"
+??? success "연습문제 3 풀이"
 
-    For a symmetric distribution (like the $t$-distribution), $P(T \leq -|t|) = P(T \geq |t|)$. The two-tailed p-value is
+    ($t$-분포처럼) 대칭인 분포에서는 $P(T \leq -|t|) = P(T \geq |t|)$이다. 양측 p-값은
 
     $$
     p_{\text{two}} = P(|T| \geq |t_{\text{obs}}|) = P(T \leq -|t_{\text{obs}}|) + P(T \geq |t_{\text{obs}}|) = 2P(T \geq |t_{\text{obs}}|) = 2p_{\text{one}}.
     $$
 
-    This relationship fails when:
+    이 관계는 다음의 경우 깨진다:
 
-    - The test statistic has an **asymmetric null distribution** (e.g., chi-square, $F$-distribution).
-    - The test is based on a **discrete distribution** where the two tails may not have equal probability mass at corresponding quantiles. $\square$
+    - 검정통계량의 **귀무분포가 비대칭**일 때(예: 카이제곱, $F$-분포).
+    - 대응하는 분위수에서 두 꼬리의 확률질량이 같지 않을 수 있는 **이산분포**에 기반한 검정일 때. $\square$
 
 ---
 
-**Exercise 4.** A researcher tests $H_0\colon \mu = 50$ against $H_1\colon \mu > 50$ and obtains $t = 1.80$ with $\text{df} = 29$. Find the p-value and state the decision at $\alpha = 0.05$.
+**연습문제 4.** 어떤 연구자가 $H_0\colon \mu = 50$을 $H_1\colon \mu > 50$에 대해 검정하여 $\text{df} = 29$에서 $t = 1.80$을 얻었다. p-값을 구하고 $\alpha = 0.05$에서 판정하라.
 
-??? success "Solution to Exercise 4"
+??? success "연습문제 4 풀이"
 
-    For a right-tailed test, the p-value is
+    우측검정의 p-값은
 
     $$
     p = P(T_{29} \geq 1.80) = 1 - F_{T_{29}}(1.80).
     $$
 
-    Using Python: `1 - stats.t.cdf(1.80, 29)` $\approx 0.0411$.
+    Python으로 `1 - stats.t.cdf(1.80, 29)`를 계산하면 $\approx 0.0411$이다.
 
-    Since $0.0411 < 0.05$, we reject $H_0$ and conclude there is significant evidence that $\mu > 50$ at the 5% level. $\square$
+    $0.0411 < 0.05$이므로 $H_0$을 기각하고 5% 수준에서 $\mu > 50$이라는 유의한 증거가 있다고 결론짓는다. $\square$
 
 ---
 
-**Exercise 5.** Sketch (or describe) how the two-tailed rejection region changes as $\alpha$ decreases from 0.10 to 0.01. What happens to the probability of a Type II error?
+**연습문제 5.** $\alpha$가 0.10에서 0.01로 줄어들 때 양측 기각역이 어떻게 변하는지 그리거나 기술하라. 제2종 오류의 확률은 어떻게 되는가?
 
-??? success "Solution to Exercise 5"
+??? success "연습문제 5 풀이"
 
-    As $\alpha$ decreases:
+    $\alpha$가 줄어들면:
 
-    - The critical values $\pm t_{\alpha/2}$ move further from zero (e.g., from $\pm 1.645$ at $\alpha=0.10$ to $\pm 2.576$ at $\alpha=0.01$ for large $n$).
-    - The shaded rejection region in each tail shrinks.
-    - It becomes harder to reject $H_0$, so the probability of a Type I error decreases.
+    - 임계값 $\pm t_{\alpha/2}$가 0에서 더 멀어진다(예: $n$이 클 때 $\alpha=0.10$의 $\pm 1.645$에서 $\alpha=0.01$의 $\pm 2.576$으로).
+    - 각 꼬리의 색칠된 기각역이 줄어든다.
+    - $H_0$을 기각하기 어려워지므로 제1종 오류의 확률이 줄어든다.
 
-    However, the probability of a **Type II error** ($\beta$) increases. With a stricter threshold, we are more likely to fail to reject $H_0$ even when $H_1$ is true. Power $= 1 - \beta$ decreases. This illustrates the fundamental trade-off: reducing one type of error increases the other, unless we also increase the sample size. $\square$
+    그러나 **제2종 오류**의 확률($\beta$)은 커진다. 문턱이 엄격해지면 $H_1$이 참이어도 $H_0$을 기각하지 못할 가능성이 커진다. 검정력 $= 1 - \beta$가 줄어든다. 근본적인 맞바꿈을 보여준다: 표본크기를 함께 늘리지 않는 한 한쪽 오류를 줄이면 다른 쪽이 커진다. $\square$

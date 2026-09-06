@@ -1,36 +1,36 @@
-# Family-Wise Error Rate
+# 가족단위 오류율
 
-## Why Multiple Tests Inflate False Positives
+## 다중검정이 거짓 양성을 부풀리는 이유
 
-When a researcher performs a single hypothesis test at significance level $\alpha = 0.05$, there is a 5% chance of incorrectly rejecting a true null hypothesis. This error rate is acceptable for one test in isolation. However, modern studies frequently test many hypotheses simultaneously -- a genome-wide association study may test hundreds of thousands of genetic variants, and a clinical trial may evaluate a treatment across multiple endpoints. As the number of tests grows, so does the probability that **at least one** true null hypothesis is incorrectly rejected, even when every individual test is conducted at the same $\alpha$. The family-wise error rate (FWER) formalizes this cumulative risk.
+연구자가 유의수준 $\alpha = 0.05$에서 가설검정을 한 번만 하면 참인 귀무가설을 잘못 기각할 확률이 5%이다. 검정 하나만 놓고 보면 받아들일 만한 오류율이다. 그러나 현대의 연구는 흔히 많은 가설을 동시에 검정한다 — 전장유전체 연관분석은 수십만 개의 유전 변이를 검정할 수 있고, 임상시험은 여러 평가변수에 걸쳐 치료를 평가할 수 있다. 검정 수가 늘어나면 각 검정을 같은 $\alpha$로 수행하더라도 참인 귀무가설을 **적어도 하나** 잘못 기각할 확률이 함께 커진다. 가족단위 오류율(FWER)이 이 누적 위험을 형식화한다.
 
-## Definition
+## 정의
 
-Consider a family of $m$ hypothesis tests $H_1, H_2, \ldots, H_m$, each tested at individual significance level $\alpha$. Let $V$ denote the number of true null hypotheses that are incorrectly rejected (false positives). The **family-wise error rate** is the probability of committing at least one Type I error across the entire family:
+가설검정 $H_1, H_2, \ldots, H_m$의 가족을 생각하고 각각을 개별 유의수준 $\alpha$에서 검정한다고 하자. $V$를 잘못 기각된 참인 귀무가설의 개수(거짓 양성)라 하자. **가족단위 오류율**은 가족 전체에서 제1종 오류를 적어도 한 번 범할 확률이다:
 
 $$
 \text{FWER} = P(V \geq 1)
 $$
 
-In words, FWER is the probability that at least one of the $m$ tests produces a false rejection. Strong control of FWER at level $\alpha$ means that $\text{FWER} \leq \alpha$ regardless of which hypotheses are true and which are false.
+말로 하면 FWER은 $m$개 검정 중 적어도 하나가 잘못된 기각을 낼 확률이다. 수준 $\alpha$에서의 강한 통제란 어느 가설이 참이고 어느 가설이 거짓이든 $\text{FWER} \leq \alpha$임을 뜻한다.
 
-## FWER Under Independence
+## 독립일 때의 FWER
 
-To see how rapidly the false positive risk grows, consider the special case where all $m$ tests are independent and all $m$ null hypotheses are true. Each test has probability $\alpha$ of a false rejection and probability $1 - \alpha$ of a correct non-rejection. Because the tests are independent, the probability that **none** of them produces a false rejection is:
+거짓 양성 위험이 얼마나 빨리 커지는지 보기 위해, $m$개 검정이 모두 독립이고 $m$개 귀무가설이 모두 참인 특수한 경우를 생각하자. 각 검정은 확률 $\alpha$로 잘못 기각하고 확률 $1 - \alpha$로 올바르게 기각하지 않는다. 검정이 독립이므로 **어느 것도** 잘못 기각하지 않을 확률은:
 
 $$
 P(V = 0) = (1 - \alpha)^m
 $$
 
-Therefore the FWER is:
+따라서 FWER은:
 
 $$
 \text{FWER} = 1 - (1 - \alpha)^m
 $$
 
-This expression grows quickly with $m$. The following table illustrates the FWER when each test uses $\alpha = 0.05$:
+이 식은 $m$이 커지면 빠르게 증가한다. 다음 표는 각 검정이 $\alpha = 0.05$를 쓸 때의 FWER이다:
 
-| Number of tests $m$ | FWER |
+| 검정의 수 $m$ | FWER |
 |---|---|
 | 1 | 0.050 |
 | 5 | 0.226 |
@@ -39,150 +39,150 @@ This expression grows quickly with $m$. The following table illustrates the FWER
 | 50 | 0.923 |
 | 100 | 0.994 |
 
-With just 20 independent tests, there is a 64% chance of at least one false positive. With 100 tests, the chance exceeds 99%.
+독립인 검정 20개만으로도 거짓 양성이 적어도 하나 나올 확률이 64%이다. 100개면 그 확률이 99%를 넘는다.
 
-## The Bonferroni (Union) Bound
+## Bonferroni (합집합) 한계
 
-The formula $1 - (1 - \alpha)^m$ requires the tests to be independent. In practice, test statistics are often correlated -- for example, when testing overlapping sets of variables or when the same data set is used for all tests. A more general result comes from Boole's inequality (the union bound).
+공식 $1 - (1 - \alpha)^m$은 검정이 독립일 것을 요구한다. 실제로는 검정통계량이 상관되어 있는 경우가 많다 — 예컨대 겹치는 변수 집합을 검정하거나 모든 검정에 같은 자료를 쓸 때 그렇다. 더 일반적인 결과는 Boole 부등식(합집합 한계)에서 나온다.
 
-For **any** dependency structure among the $m$ tests:
+$m$개 검정 사이의 **어떤** 종속 구조에서도:
 
 $$
 \text{FWER} = P\!\left(\bigcup_{i=1}^{m} A_i\right) \leq \sum_{i=1}^{m} P(A_i)
 $$
 
-where $A_i$ is the event that test $i$ falsely rejects a true null hypothesis. If each test is conducted at level $\alpha$, then $P(A_i) \leq \alpha$ for each $i$, giving:
+여기서 $A_i$는 검정 $i$가 참인 귀무가설을 잘못 기각하는 사건이다. 각 검정을 수준 $\alpha$에서 수행하면 각 $i$에 대해 $P(A_i) \leq \alpha$이므로:
 
 $$
 \text{FWER} \leq m\alpha
 $$
 
-This bound holds without any assumption about the dependence among tests. It is the mathematical foundation of the Bonferroni correction: to control FWER at level $\alpha$, test each hypothesis at the adjusted level $\alpha / m$.
+이 한계는 검정 간 종속성에 대한 어떤 가정도 없이 성립한다. Bonferroni 보정의 수학적 토대이다: FWER을 수준 $\alpha$로 통제하려면 각 가설을 보정된 수준 $\alpha / m$에서 검정한다.
 
-??? note "Relationship between the exact formula and the bound"
-    For small $\alpha$, the first-order Taylor expansion of $(1 - \alpha)^m$ gives $(1 - \alpha)^m \approx 1 - m\alpha$, so the exact independent-case FWER $1 - (1 - \alpha)^m \approx m\alpha$. The Bonferroni bound $m\alpha$ is therefore a good approximation when $m\alpha$ is small. However, when $m$ is large, $m\alpha$ can exceed 1, whereas the true FWER is always at most 1. The bound is loose precisely when the number of tests is large relative to $\alpha$.
+??? note "정확한 공식과 한계의 관계"
+    $\alpha$가 작으면 $(1 - \alpha)^m$의 1차 Taylor 전개가 $(1 - \alpha)^m \approx 1 - m\alpha$를 주므로, 독립일 때의 정확한 FWER $1 - (1 - \alpha)^m \approx m\alpha$이다. 따라서 $m\alpha$가 작을 때 Bonferroni 한계 $m\alpha$가 좋은 근사이다. 그러나 $m$이 크면 $m\alpha$가 1을 넘을 수 있는 반면 참 FWER은 언제나 1 이하이다. 검정 수가 $\alpha$에 비해 클 때 바로 이 한계가 느슨해진다.
 
-## Strong vs Weak Control
+## 강한 통제와 약한 통제
 
-There is an important distinction between two modes of FWER control:
+FWER 통제에는 중요한 두 가지 방식이 있다:
 
-- **Weak control**: FWER $\leq \alpha$ under the **global null hypothesis**, the configuration where every null hypothesis is true. Weak control guards against false positives only when there are no real effects.
-- **Strong control**: FWER $\leq \alpha$ under **every possible configuration** of true and false nulls. Strong control is the standard requirement because in practice we do not know which hypotheses are true.
+- **약한 통제**: 모든 귀무가설이 참인 **전역 귀무가설** 아래에서 FWER $\leq \alpha$. 실제 효과가 전혀 없을 때만 거짓 양성을 막아 준다.
+- **강한 통제**: 참·거짓 귀무가설의 **가능한 모든 배열** 아래에서 FWER $\leq \alpha$. 실무에서는 어느 가설이 참인지 모르므로 강한 통제가 표준 요건이다.
 
-Procedures such as the Bonferroni correction and [Holm's step-down method](bonferroni_holm.md) provide strong FWER control.
+Bonferroni 보정과 [Holm의 단계적 하강법](bonferroni_holm.md) 같은 절차는 강한 FWER 통제를 제공한다.
 
-## Example: Testing Five Fertilizers
+## 예제: 비료 다섯 가지의 검정
 
-A researcher tests whether each of five fertilizers increases crop yield relative to a control, using a separate t-test for each fertilizer at $\alpha = 0.05$. If none of the fertilizers actually works (all five null hypotheses are true), the FWER is:
+어떤 연구자가 비료 다섯 가지 각각이 대조군에 비해 수확량을 늘리는지 $\alpha = 0.05$에서 t-검정으로 따로 검정한다. 실제로는 어느 비료도 효과가 없다면(다섯 귀무가설이 모두 참이라면) FWER은:
 
 $$
 \text{FWER} = 1 - (1 - 0.05)^5 = 1 - 0.9510 \approx 0.226
 $$
 
-There is roughly a 23% chance that at least one fertilizer appears to work purely by chance. To control FWER at 0.05, the Bonferroni correction tests each hypothesis at $\alpha / 5 = 0.01$. The resulting FWER under independence becomes:
+순전한 우연으로 적어도 하나의 비료가 효과 있어 보일 확률이 약 23%이다. FWER을 0.05로 통제하려면 Bonferroni 보정으로 각 가설을 $\alpha / 5 = 0.01$에서 검정한다. 그러면 독립일 때 FWER은:
 
 $$
 \text{FWER}_{\text{Bonferroni}} = 1 - (1 - 0.01)^5 \approx 0.049
 $$
 
-which is below the target of 0.05.
+로 목표 0.05 아래가 된다.
 
-## Example: Genomics Screening
+## 예제: 유전체 선별
 
-In a genome-wide association study, a researcher tests $m = 500{,}000$ genetic variants for association with a disease. At the individual level $\alpha = 0.05$:
+전장유전체 연관분석에서 연구자가 유전 변이 $m = 500{,}000$개를 질병과의 연관에 대해 검정한다. 개별 수준 $\alpha = 0.05$에서:
 
 $$
 \text{FWER} \leq m\alpha = 500{,}000 \times 0.05 = 25{,}000
 $$
 
-The Bonferroni bound exceeds 1, so it is not informative here, but the exact FWER under independence is effectively 1.0. To control FWER at 0.05, the Bonferroni-adjusted threshold becomes:
+Bonferroni 한계가 1을 넘으므로 여기서는 정보가 되지 못하지만, 독립일 때의 정확한 FWER은 사실상 1.0이다. FWER을 0.05로 통제하려면 Bonferroni 보정 문턱이:
 
 $$
 \frac{0.05}{500{,}000} = 1 \times 10^{-7}
 $$
 
-This extremely stringent threshold is the reason genomics studies report "genome-wide significance" at $p < 5 \times 10^{-8}$ (which accounts for the roughly 1 million effective independent tests after adjusting for linkage disequilibrium). Such conservatism motivates the [false discovery rate](fdr.md) as a less stringent alternative.
+이 된다. 유전체 연구가 "전장유전체 유의성"을 $p < 5 \times 10^{-8}$로 보고하는 이유가 이 극도로 엄격한 문턱이다(연관 불평형을 감안한 유효 독립 검정 수 약 100만 개를 반영한다). 이런 보수성 때문에 덜 엄격한 대안인 [거짓발견율](fdr.md)이 등장한다.
 
-## When FWER Control Is Appropriate
+## FWER 통제가 적절한 때
 
-FWER control is most appropriate when:
+FWER 통제는 다음 경우에 가장 적절하다:
 
-- The cost of even a single false positive is high (e.g., approving an ineffective drug)
-- The number of tests is moderate (roughly $m \leq 100$)
-- The researcher needs to make definitive claims about individual hypotheses
+- 거짓 양성이 단 하나라도 대가가 클 때(예: 효과 없는 약의 승인)
+- 검정 수가 적당할 때(대략 $m \leq 100$)
+- 개별 가설에 대해 확정적인 주장을 해야 할 때
 
-When the number of tests is very large and some false positives are tolerable, the [false discovery rate (FDR)](fdr.md) provides a less conservative framework that retains more statistical power. For the specific procedures used to control FWER, see [Bonferroni and Holm Corrections](bonferroni_holm.md).
+검정 수가 아주 많고 거짓 양성을 어느 정도 감수할 수 있으면 [거짓발견율(FDR)](fdr.md)이 통계적 검정력을 더 남기는 덜 보수적인 틀을 제공한다. FWER을 통제하는 구체적인 절차는 [Bonferroni와 Holm 보정](bonferroni_holm.md)을 보라.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Define the Family-Wise Error Rate (FWER). If 10 independent tests are each conducted at $\alpha = 0.05$ with all nulls true, compute the exact FWER.
+**연습문제 1.**
+가족단위 오류율(FWER)을 정의하라. 모든 귀무가설이 참인 독립 검정 10개를 각각 $\alpha = 0.05$에서 수행하면 정확한 FWER은 얼마인가?
 
-??? success "Solution to Exercise 1"
-    The FWER is the probability of at least one Type I error among all $m$ tests:
+??? success "연습문제 1 풀이"
+    FWER은 $m$개 검정 전체에서 제1종 오류를 적어도 한 번 범할 확률이다:
 
     $$
     \text{FWER} = P(V \geq 1)
     $$
 
-    With $m = 10$ independent tests, each with $P(\text{reject} \mid H_0) = 0.05$:
+    독립인 검정이 $m = 10$개이고 각각 $P(\text{reject} \mid H_0) = 0.05$이면:
 
     $$
     \text{FWER} = 1 - P(\text{no rejections}) = 1 - (1 - 0.05)^{10} = 1 - 0.95^{10} \approx 1 - 0.5987 = 0.4013
     $$
 
-    There is a 40% chance of at least one false positive, far exceeding the nominal 5% per-test level.
+    거짓 양성이 적어도 하나 나올 확률이 40%로, 검정당 명목 수준 5%를 훨씬 넘는다.
 
 ---
 
-**Exercise 2.**
-Explain the difference between strong and weak control of the FWER.
+**연습문제 2.**
+FWER의 강한 통제와 약한 통제의 차이를 설명하라.
 
-??? success "Solution to Exercise 2"
-    **Weak control** guarantees FWER $\leq \alpha$ only under the complete null hypothesis (i.e., when all $m$ null hypotheses are simultaneously true). It does not protect against false positives when some nulls are false.
+??? success "연습문제 2 풀이"
+    **약한 통제**는 완전 귀무가설 아래에서만(즉 $m$개 귀무가설이 모두 동시에 참일 때만) FWER $\leq \alpha$를 보장한다. 일부 귀무가설이 거짓일 때의 거짓 양성은 막아 주지 않는다.
 
-    **Strong control** guarantees FWER $\leq \alpha$ regardless of which and how many null hypotheses are true -- under any configuration of true and false nulls. This is a much stronger guarantee and is the standard requirement for multiple testing procedures.
+    **강한 통제**는 어떤 귀무가설이 몇 개나 참이든, 참·거짓의 어떤 배열에서도 FWER $\leq \alpha$를 보장한다. 훨씬 강한 보장이며 다중검정 절차의 표준 요건이다.
 
-    For example, a procedure with only weak control might have FWER = 5% when all nulls are true, but FWER = 30% when 5 out of 10 nulls are false. A procedure with strong control maintains FWER $\leq 5\%$ in both scenarios. Bonferroni and Holm both provide strong control.
+    예를 들어 약한 통제만 갖춘 절차는 모든 귀무가설이 참일 때 FWER이 5%이지만 10개 중 5개가 거짓일 때 FWER이 30%일 수 있다. 강한 통제를 갖춘 절차는 두 경우 모두 FWER $\leq 5\%$를 유지한다. Bonferroni와 Holm은 둘 다 강한 통제를 제공한다.
 
 ---
 
-**Exercise 3.**
-Show that the FWER of unadjusted tests approaches 1 as the number of tests $m \to \infty$ (assuming all nulls are true and tests are independent).
+**연습문제 3.**
+(모든 귀무가설이 참이고 검정이 독립일 때) 검정 수 $m \to \infty$이면 보정하지 않은 검정의 FWER이 1에 다가감을 보여라.
 
-??? success "Solution to Exercise 3"
-    Under independence with all nulls true:
+??? success "연습문제 3 풀이"
+    독립이고 모든 귀무가설이 참일 때:
 
     $$
     \text{FWER} = 1 - (1 - \alpha)^m
     $$
 
-    As $m \to \infty$:
+    $m \to \infty$이면:
 
     $$
-    (1 - \alpha)^m \to 0 \quad \text{(since } 0 < 1 - \alpha < 1\text{)}
+    (1 - \alpha)^m \to 0 \quad (0 < 1 - \alpha < 1 \text{이므로})
     $$
 
-    Therefore $\text{FWER} \to 1$. For example, with $\alpha = 0.05$:
+    따라서 $\text{FWER} \to 1$이다. 예를 들어 $\alpha = 0.05$이면:
 
     - $m = 10$: FWER $\approx 0.40$
     - $m = 50$: FWER $\approx 0.92$
     - $m = 100$: FWER $\approx 0.994$
 
-    With just 100 independent tests, it is virtually certain that at least one false positive occurs. This makes FWER control essential in large-scale testing.
+    독립인 검정 100개만으로도 거짓 양성이 적어도 하나 생기는 것이 사실상 확실하다. 그래서 대규모 검정에서는 FWER 통제가 필수적이다.
 
 ---
 
-**Exercise 4.**
-A clinical trial tests a drug on 3 primary endpoints (blood pressure, cholesterol, weight). The company claims success if any one endpoint shows a significant improvement at $\alpha = 0.05$. Calculate the FWER under independence and explain why regulatory agencies require multiple testing adjustment.
+**연습문제 4.**
+어떤 임상시험이 세 가지 주요 평가변수(혈압, 콜레스테롤, 체중)에 대해 약을 검정한다. 회사는 $\alpha = 0.05$에서 어느 한 변수라도 유의한 개선을 보이면 성공이라고 주장한다. 독립일 때의 FWER을 계산하고 규제기관이 다중검정 보정을 요구하는 이유를 설명하라.
 
-??? success "Solution to Exercise 4"
-    If the drug has no effect on any endpoint (all three nulls are true) and the tests are independent:
+??? success "연습문제 4 풀이"
+    약이 어느 평가변수에도 효과가 없고(세 귀무가설이 모두 참이고) 검정이 독립이면:
 
     $$
     \text{FWER} = 1 - (1 - 0.05)^3 = 1 - 0.857 = 0.143
     $$
 
-    The company has a 14.3% chance of claiming success by chance -- nearly three times the intended 5% rate. With 5 endpoints, FWER $\approx 0.226$; with 10, FWER $\approx 0.401$.
+    회사가 우연히 성공을 주장할 확률이 14.3%로, 의도한 5%의 거의 세 배이다. 평가변수가 5개면 FWER $\approx 0.226$, 10개면 $\approx 0.401$이다.
 
-    Regulatory agencies (e.g., FDA, EMA) require multiple testing adjustment because a drug approval based on any one of several endpoints without correction inflates the false approval rate. Common approaches include Bonferroni correction, gatekeeping procedures (hierarchical testing of endpoints in a pre-specified order), or split-alpha strategies (allocating different $\alpha$ levels to different endpoints summing to 0.05).
+    규제기관(예: FDA, EMA)이 다중검정 보정을 요구하는 이유는, 보정 없이 여러 평가변수 중 하나에 근거해 약을 승인하면 잘못된 승인 비율이 부풀기 때문이다. 흔한 접근으로 Bonferroni 보정, 게이트키핑 절차(미리 정한 순서대로 평가변수를 계층적으로 검정), 분할-알파 전략(합이 0.05가 되도록 평가변수마다 다른 $\alpha$를 배분)이 있다.

@@ -1,150 +1,150 @@
-# Type I and Type II Errors
+# 제1종 오류와 제2종 오류
 
-## Overview
+## 개요
 
-When conducting a hypothesis test, two potential types of errors can occur. Understanding these errors is essential for correctly interpreting the results of statistical tests and for designing studies that minimize the risk of incorrect conclusions.
+가설검정을 수행할 때 생길 수 있는 오류는 두 종류이다. 이 오류들을 이해하는 것은 통계검정 결과를 올바르게 해석하고, 잘못된 결론의 위험을 최소화하는 연구를 설계하는 데 필수적이다.
 
-## Type I Error (False Positive)
+## 제1종 오류 (거짓 양성)
 
-A **Type I error** occurs when the null hypothesis $H_0$ is true, but we mistakenly reject it in favor of the alternative hypothesis $H_a$. This is analogous to convicting an innocent person in a trial.
+**제1종 오류**는 귀무가설 $H_0$이 참인데도 이를 잘못 기각하고 대립가설 $H_a$를 택할 때 생긴다. 재판에서 무고한 사람에게 유죄를 선고하는 것에 해당한다.
 
 $$\alpha = P(\text{Type I Error}) = P(\text{Reject } H_0 \mid H_0 \text{ is true})$$
 
-The **significance level** $\alpha$ represents the maximum tolerable probability of committing a Type I error. Common choices are $\alpha = 0.05$, $0.01$, and $0.10$.
+**유의수준** $\alpha$는 제1종 오류를 범할 확률의 허용 상한이다. 흔한 선택은 $\alpha = 0.05$, $0.01$, $0.10$이다.
 
-**Example**: A pharmaceutical company tests a new drug that has no real effect. If the study incorrectly concludes the drug is effective (rejects $H_0$), that is a Type I error.
+**예시**: 어떤 제약회사가 실제로는 효과가 없는 새 약을 시험한다. 연구가 그 약이 효과적이라고 잘못 결론지으면($H_0$을 기각하면) 제1종 오류이다.
 
-## Type II Error (False Negative)
+## 제2종 오류 (거짓 음성)
 
-A **Type II error** occurs when the null hypothesis $H_0$ is false, but we fail to reject it. This is analogous to acquitting a guilty person in a trial.
+**제2종 오류**는 귀무가설 $H_0$이 거짓인데도 기각하지 못할 때 생긴다. 재판에서 유죄인 사람을 무죄로 방면하는 것에 해당한다.
 
 $$\beta = P(\text{Type II Error}) = P(\text{Fail to reject } H_0 \mid H_a \text{ is true})$$
 
-A lower $\beta$ implies a lower risk of retaining a false null hypothesis.
+$\beta$가 작을수록 거짓인 귀무가설을 유지할 위험이 작다.
 
-**Example**: A drug truly works, but the study fails to detect the effect and concludes there is no significant difference from placebo. That is a Type II error.
+**예시**: 약이 실제로 듣는데 연구가 그 효과를 탐지하지 못하고 위약과 유의한 차이가 없다고 결론짓는다면 제2종 오류이다.
 
-## Summary Table
+## 요약표
 
-| | $H_0$ is true | $H_0$ is false |
+| | $H_0$이 참 | $H_0$이 거짓 |
 |---|---|---|
-| **Reject $H_0$** | Type I Error ($\alpha$) | Correct Decision (Power = $1 - \beta$) |
-| **Fail to reject $H_0$** | Correct Decision | Type II Error ($\beta$) |
+| **$H_0$ 기각** | 제1종 오류 ($\alpha$) | 올바른 판정 (검정력 = $1 - \beta$) |
+| **$H_0$ 기각 못함** | 올바른 판정 | 제2종 오류 ($\beta$) |
 
-## The Tradeoff Between alpha and beta
-There is an inherent tradeoff between the two error types:
+## alpha와 beta의 맞바꿈
+두 오류 사이에는 본래적인 맞바꿈이 있다:
 
-- **Decreasing $\alpha$** (making it harder to reject $H_0$) reduces the chance of a Type I error but increases the chance of a Type II error.
-- **Increasing $\alpha$** makes it easier to reject $H_0$, reducing $\beta$ but increasing the chance of a false positive.
+- **$\alpha$를 낮추면**($H_0$을 기각하기 어렵게 하면) 제1종 오류의 가능성은 줄지만 제2종 오류의 가능성은 커진다.
+- **$\alpha$를 높이면** $H_0$을 기각하기 쉬워져 $\beta$는 줄지만 거짓 양성의 가능성은 커진다.
 
-The appropriate balance depends on the context:
+적절한 균형은 맥락에 달려 있다:
 
-- In medical trials, a Type I error (approving an ineffective drug) may be very costly, so $\alpha$ is set low.
-- In screening tests, a Type II error (missing a disease) may be more costly, so higher $\alpha$ (greater sensitivity) is preferred.
+- 의학 시험에서는 제1종 오류(효과 없는 약의 승인)의 대가가 매우 클 수 있으므로 $\alpha$를 낮게 잡는다.
+- 선별검사에서는 제2종 오류(질병을 놓치는 것)의 대가가 더 클 수 있으므로 $\alpha$를 높여(민감도를 높여) 쓴다.
 
-## Factors Affecting Error Rates
+## 오류율에 영향을 주는 요인
 
-Several factors influence the probability of committing each type of error:
+각 오류의 확률에 영향을 주는 요인은 여럿이다:
 
-- **Sample size ($n$)**: Larger samples reduce both types of errors by providing more precise estimates.
-- **Effect size**: Larger true effects are easier to detect, reducing $\beta$.
-- **Significance level ($\alpha$)**: Directly controls Type I error rate.
-- **Variability in the data**: Higher variance makes it harder to detect true effects, increasing $\beta$.
+- **표본크기 ($n$)**: 표본이 클수록 추정이 정밀해져 두 오류가 모두 줄어든다.
+- **효과크기**: 참 효과가 클수록 탐지하기 쉬워 $\beta$가 줄어든다.
+- **유의수준 ($\alpha$)**: 제1종 오류율을 직접 통제한다.
+- **자료의 변동성**: 분산이 클수록 참 효과를 탐지하기 어려워 $\beta$가 커진다.
 
-## Example: Unemployment Rate
+## 예제: 실업률
 
-The mayor tests $H_0: p = 0.09$ vs $H_1: p \neq 0.09$.
+시장이 $H_0: p = 0.09$ 대 $H_1: p \neq 0.09$를 검정한다.
 
-- **Type I Error**: The town's unemployment rate truly is 9%, but the mayor incorrectly concludes it is different from 9%.
-- **Type II Error**: The town's unemployment rate truly differs from 9%, but the mayor fails to detect this difference.
+- **제1종 오류**: 이 도시의 실업률이 실제로 9%인데 시장이 9%와 다르다고 잘못 결론짓는다.
+- **제2종 오류**: 이 도시의 실업률이 실제로 9%와 다른데 시장이 그 차이를 탐지하지 못한다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-**Definitions.** State Type I, Type II errors. Provide a contingency table.
+**연습문제 1.**
+**정의.** 제1종 오류와 제2종 오류를 진술하라. 분할표를 제시하라.
 
-??? success "Solution to Exercise 1"
-    |  | $H_0$ true | $H_0$ false |
+??? success "연습문제 1 풀이"
+    |  | $H_0$ 참 | $H_0$ 거짓 |
     |---|---|---|
-    | Reject $H_0$ | **Type I error** ($\alpha$) | Correct ($1 - \beta$, power) |
-    | Fail to reject | Correct ($1 - \alpha$) | **Type II error** ($\beta$) |
+    | $H_0$ 기각 | **제1종 오류** ($\alpha$) | 올바름 ($1 - \beta$, 검정력) |
+    | 기각 못함 | 올바름 ($1 - \alpha$) | **제2종 오류** ($\beta$) |
 
-    Type I: false positive ($\alpha$ = significance level).
-    Type II: false negative ($\beta = 1 - $ power).
-
----
-
-**Exercise 2.**
-Mayor tests town's unemployment rate vs national 9%: $H_0: p = 0.09$. Describe Type I and Type II errors in this context.
-
-??? success "Solution to Exercise 2"
-    **Type I:** town's rate is actually 9% ($H_0$ true), but the mayor concludes it's different (rejects $H_0$). Costs: incorrect press release, unnecessary policy response.
-
-    **Type II:** town's rate differs from 9% ($H_0$ false), but mayor fails to detect (fails to reject). Costs: missed insight, mistaken belief that town matches national average.
+    제1종: 거짓 양성($\alpha$ = 유의수준).
+    제2종: 거짓 음성($\beta = 1 - $ 검정력).
 
 ---
 
-**Exercise 3.**
-**Type I/II trade-off.** Why can't we set both $\alpha$ and $\beta$ to zero?
+**연습문제 2.**
+시장이 도시의 실업률을 전국 수치 9%와 견주어 $H_0: p = 0.09$를 검정한다. 이 맥락에서 제1종 오류와 제2종 오류를 기술하라.
 
-??? success "Solution to Exercise 3"
-    With fixed sample size, decreasing $\alpha$ (making rejection harder) typically *increases* $\beta$ (more failures to reject true alternatives).
+??? success "연습문제 2 풀이"
+    **제1종:** 도시의 실업률이 실제로 9%인데($H_0$ 참) 시장이 다르다고 결론짓는다($H_0$ 기각). 대가: 잘못된 보도자료, 불필요한 정책 대응.
 
-    To decrease both simultaneously: increase sample size $n$. The trade-off is unavoidable for fixed $n$.
-
-    Extreme cases:
-
-    - Never reject: $\alpha = 0$, $\beta = 1$ (always miss true effects).
-    - Always reject: $\alpha = 1$, $\beta = 0$ (always detect; but always false alarm).
-
-    Practical balance: pick $\alpha = 0.05$ first, then design $n$ to achieve desired $\beta$ (typically 0.20 for 80% power).
+    **제2종:** 도시의 실업률이 9%와 다른데($H_0$ 거짓) 시장이 탐지하지 못한다(기각 못함). 대가: 놓친 통찰, 도시가 전국 평균과 같다는 잘못된 믿음.
 
 ---
 
-**Exercise 4.**
-**Power.** Define power. For drug trial $H_0: \mu = 0$ vs $H_1: \mu = 5$, $\sigma = 10$, $\alpha = 0.05$ (one-sided), $n = 30$: compute power.
+**연습문제 3.**
+**제1종·제2종의 맞바꿈.** $\alpha$와 $\beta$를 동시에 0으로 만들 수 없는 이유는?
 
-??? success "Solution to Exercise 4"
-    Power = $1 - \beta = P(\text{reject} \mid H_1$ true).
+??? success "연습문제 3 풀이"
+    표본크기가 고정되어 있으면 $\alpha$를 줄이는 것(기각을 어렵게 하는 것)이 대개 $\beta$를 *키운다*(참인 대립가설을 더 자주 놓친다).
 
-    Under $H_0$: $\bar X \sim N(0, 100/30)$, $\mathrm{SE} = \sqrt{100/30} \approx 1.83$. Reject if $\bar X > z_{0.05} \cdot 1.83 = 3.00$.
+    둘을 동시에 줄이려면 표본크기 $n$을 늘려야 한다. $n$이 고정되어 있으면 맞바꿈을 피할 수 없다.
 
-    Under $H_1$ ($\mu = 5$): $\bar X \sim N(5, 100/30)$. Power = $P(\bar X > 3 \mid \mu = 5) = P(Z > (3 - 5)/1.83) = P(Z > -1.09) = 0.862$.
+    극단적인 경우:
 
-    Power ≈ 86%. Reasonable but not great. Conventional target: 80%.
+    - 결코 기각하지 않음: $\alpha = 0$, $\beta = 1$ (참 효과를 항상 놓친다).
+    - 항상 기각함: $\alpha = 1$, $\beta = 0$ (항상 탐지하지만 항상 거짓 경보이다).
+
+    실무적 균형: 먼저 $\alpha = 0.05$를 고르고, 원하는 $\beta$(보통 검정력 80%에 해당하는 0.20)를 달성하도록 $n$을 설계한다.
 
 ---
 
-**Exercise 5.**
-**Sample-size for target power.** What $n$ achieves 90% power in Exercise 4's setup?
+**연습문제 4.**
+**검정력.** 검정력을 정의하라. 약물시험에서 $H_0: \mu = 0$ 대 $H_1: \mu = 5$, $\sigma = 10$, $\alpha = 0.05$(단측), $n = 30$일 때 검정력을 계산하라.
 
-??? success "Solution to Exercise 5"
-    For power $1 - \beta$ at one-sided test, sample size:
+??? success "연습문제 4 풀이"
+    검정력 = $1 - \beta = P(\text{기각} \mid H_1$ 참$)$.
+
+    $H_0$ 아래: $\bar X \sim N(0, 100/30)$, $\mathrm{SE} = \sqrt{100/30} \approx 1.83$. $\bar X > z_{0.05} \cdot 1.83 = 3.00$이면 기각한다.
+
+    $H_1$ ($\mu = 5$) 아래: $\bar X \sim N(5, 100/30)$. 검정력 = $P(\bar X > 3 \mid \mu = 5) = P(Z > (3 - 5)/1.83) = P(Z > -1.09) = 0.862$.
+
+    검정력 ≈ 86%. 괜찮지만 아주 높지는 않다. 관례적인 목표는 80%이다.
+
+---
+
+**연습문제 5.**
+**목표 검정력을 위한 표본크기.** 연습문제 4의 설정에서 검정력 90%를 얻으려면 $n$이 얼마여야 하는가?
+
+??? success "연습문제 5 풀이"
+    단측검정에서 검정력 $1 - \beta$를 위한 표본크기:
 
     $$
     n = \left(\frac{(z_\alpha + z_\beta)\sigma}{\mu - \mu_0}\right)^2
     $$
 
-    Here $z_{0.05} = 1.645$, $z_{0.10} = 1.282$, $\sigma = 10$, effect = 5:
+    여기서 $z_{0.05} = 1.645$, $z_{0.10} = 1.282$, $\sigma = 10$, 효과 = 5이므로:
 
-    $n = ((1.645 + 1.282) \cdot 10/5)^2 = (5.854)^2 \approx 34.3$. Round up: $n = 35$.
+    $n = ((1.645 + 1.282) \cdot 10/5)^2 = (5.854)^2 \approx 34.3$. 올림하면 $n = 35$.
 
-    Slightly larger than the $n = 30$ in Exercise 4 (which gave 86% power). The formula confirms the trade-off: more power requires more data.
+    (검정력 86%를 준) 연습문제 4의 $n = 30$보다 조금 크다. 공식이 맞바꿈을 확인해 준다: 검정력을 높이려면 자료가 더 필요하다.
 
 ---
 
-**Exercise 6.**
-**Multiple testing.** If you run 100 tests at $\alpha = 0.05$, what is the expected number of false rejections under all-true $H_0$?
+**연습문제 6.**
+**다중검정.** $\alpha = 0.05$에서 검정 100개를 돌리면 모든 $H_0$이 참일 때 잘못된 기각의 기댓값은?
 
-??? success "Solution to Exercise 6"
-    Under all-true $H_0$, each test rejects with probability $0.05$ independently. Expected number of rejections: $100 \cdot 0.05 = 5$.
+??? success "연습문제 6 풀이"
+    모든 $H_0$이 참이면 각 검정이 독립적으로 확률 $0.05$로 기각한다. 기각 수의 기댓값: $100 \cdot 0.05 = 5$.
 
-    Family-wise probability of at least one false rejection: $1 - (0.95)^{100} \approx 0.994$ — almost certain to see "significant" results from pure noise.
+    적어도 한 번 잘못 기각할 가족단위 확률: $1 - (0.95)^{100} \approx 0.994$ — 순전한 잡음에서 "유의한" 결과를 보게 될 것이 거의 확실하다.
 
-    **Corrections:**
+    **보정:**
 
-    - **Bonferroni:** test at $\alpha/m = 0.0005$. Conservative; family-wise error $\le 0.05$.
-    - **Holm-Bonferroni:** step-down, slightly more powerful.
-    - **Benjamini-Hochberg (FDR):** controls expected proportion of false rejections among declared positives. Less conservative.
+    - **Bonferroni:** $\alpha/m = 0.0005$에서 검정한다. 보수적이며 가족단위 오류 $\le 0.05$.
+    - **Holm-Bonferroni:** 단계적 하강 방식으로 약간 더 강력하다.
+    - **Benjamini-Hochberg (FDR):** 양성으로 선언한 것 중 잘못된 기각의 기대 비율을 통제한다. 덜 보수적이다.
 
-    Pre-registration and Bonferroni-like corrections are essential for valid inference in high-dimensional settings (genomics, A/B testing platforms).
+    고차원 상황(유전체학, A/B 검정 플랫폼)에서 타당한 추론을 하려면 사전등록과 Bonferroni류 보정이 필수적이다.

@@ -1,122 +1,122 @@
-# When to Use Paired vs Two-Sample Tests
+# 대응 검정과 이표본 검정 중 무엇을 쓸 것인가
 
-## Overview
+## 개요
 
-Choosing between a paired-sample test and a two-sample test is a fundamental decision in hypothesis testing. The choice depends on the study design and how the data were collected, not on the data values themselves.
+대응표본 검정과 이표본 검정 중 무엇을 고를지는 가설검정의 근본적인 결정이다. 이 선택은 자료의 값이 아니라 연구 설계와 자료를 어떻게 모았는지에 달려 있다.
 
-## Paired-Sample Tests
+## 대응표본 검정
 
-Use a **paired-sample test** when each observation in one group is naturally matched or linked to a specific observation in the other group. This pairing creates a dependency structure that must be accounted for in the analysis.
+한 집단의 각 관측값이 다른 집단의 특정 관측값과 자연스럽게 짝지어지거나 연결될 때 **대응표본 검정**을 쓴다. 이 짝짓기는 분석에서 반드시 반영해야 할 종속 구조를 만든다.
 
-### Common Paired Designs
+### 흔한 대응 설계
 
-- **Before-and-after measurements**: The same subjects measured at two time points (e.g., blood pressure before and after treatment).
-- **Matched subjects**: Participants paired on key characteristics (e.g., age, gender) with one receiving treatment and the other a placebo.
-- **Repeated measures**: The same subjects tested under two different conditions (e.g., running speed with two different shoe brands).
-- **Self-pairing**: Each subject serves as their own control (e.g., comparing left eye vs right eye measurements).
+- **전후 측정**: 같은 피험자를 두 시점에 측정한다(예: 치료 전후의 혈압).
+- **짝지은 피험자**: 핵심 특성(예: 나이, 성별)으로 참가자를 짝짓고 한 명은 처리를, 다른 한 명은 위약을 받는다.
+- **반복측정**: 같은 피험자를 서로 다른 두 조건에서 검사한다(예: 두 브랜드의 신발을 신고 달린 속도).
+- **자기 짝짓기**: 각 피험자가 자기 자신의 대조가 된다(예: 왼쪽 눈과 오른쪽 눈의 측정값 비교).
 
-### Advantages of Paired Designs
+### 대응 설계의 장점
 
-- **Controls for individual variability**: By comparing each subject to themselves, between-subject variability is removed.
-- **Greater statistical power**: Reducing variability makes it easier to detect true differences.
-- **Smaller sample sizes needed**: Because of the increased power, fewer subjects are required.
+- **개인차의 통제**: 각 피험자를 자기 자신과 비교하므로 피험자 간 변동성이 제거된다.
+- **높은 통계적 검정력**: 변동성을 줄이면 실제 차이를 탐지하기 쉬워진다.
+- **적은 표본크기**: 검정력이 커지므로 피험자가 적게 필요하다.
 
-### Key Indicator
+### 핵심 판별 기준
 
-If you can meaningfully compute a difference $d_i = X_i - Y_i$ for each pair, a paired test is appropriate.
-
----
-
-## Two-Sample Tests
-
-Use a **two-sample test** when the observations in the two groups are independent — there is no natural pairing between a specific observation in group 1 and a specific observation in group 2.
-
-### Common Two-Sample Designs
-
-- **Two independent groups**: Comparing means of men vs women, treatment group vs control group (different individuals).
-- **Different populations**: Comparing average income in two countries using separate random samples.
-- **Randomized experiments**: Subjects randomly assigned to one of two groups.
-
-### Key Indicator
-
-If the samples are drawn independently and there is no meaningful way to pair specific observations across groups, a two-sample test is appropriate.
+각 쌍에 대해 차이 $d_i = X_i - Y_i$를 의미 있게 계산할 수 있다면 대응 검정이 적절하다.
 
 ---
 
-## Decision Guide
+## 이표본 검정
 
-| Question | Paired | Two-Sample |
+두 집단의 관측값이 독립일 때, 즉 집단 1의 특정 관측값과 집단 2의 특정 관측값 사이에 자연스러운 짝짓기가 없을 때 **이표본 검정**을 쓴다.
+
+### 흔한 이표본 설계
+
+- **독립인 두 집단**: 남성과 여성, 처리군과 대조군(서로 다른 개인)의 평균 비교.
+- **서로 다른 모집단**: 별개의 확률표본으로 두 나라의 평균 소득 비교.
+- **무작위 실험**: 피험자를 두 집단 중 하나에 무작위로 배정한다.
+
+### 핵심 판별 기준
+
+표본이 독립적으로 뽑혔고 집단 사이에서 특정 관측값들을 짝지을 의미 있는 방법이 없다면 이표본 검정이 적절하다.
+
+---
+
+## 결정 지침
+
+| 질문 | 대응 | 이표본 |
 |---|---|---|
-| Same subjects measured twice? | ✓ | |
-| Subjects matched on characteristics? | ✓ | |
-| Independent groups with no pairing? | | ✓ |
-| Can you compute a meaningful difference per pair? | ✓ | |
-| Different sample sizes possible? | Rare | Common |
+| 같은 피험자를 두 번 측정했는가? | ✓ | |
+| 피험자를 특성으로 짝지었는가? | ✓ | |
+| 짝짓기가 없는 독립인 집단인가? | | ✓ |
+| 쌍마다 의미 있는 차이를 계산할 수 있는가? | ✓ | |
+| 표본크기가 달라도 되는가? | 드물다 | 흔하다 |
 
-## Example Comparisons
+## 비교 예시
 
-**Paired**: A fitness coach measures body fat percentage of 10 participants before and after an 8-week workout program.
+**대응**: 어떤 트레이너가 참가자 10명의 체지방률을 8주 운동 프로그램 전후로 측정한다.
 
-- Test: Paired t-test on $d_i = \text{Before}_i - \text{After}_i$
-- Reason: Same participants measured at two time points
+- 검정: $d_i = \text{전}_i - \text{후}_i$에 대한 대응 t-검정
+- 이유: 같은 참가자를 두 시점에 측정했다
 
-**Two-Sample**: Researchers compare average salaries of employees from Department A ($n=12$) vs Department B ($n=15$).
+**이표본**: 연구자들이 A 부서($n=12$)와 B 부서($n=15$) 직원의 평균 급여를 비교한다.
 
-- Test: Two-sample t-test (or Welch's t-test)
-- Reason: Different employees in each department, no natural pairing
+- 검정: 이표본 t-검정(또는 Welch t-검정)
+- 이유: 두 부서의 직원이 서로 다르고 자연스러운 짝짓기가 없다
 
-## Common Mistake
+## 흔한 실수
 
-A common mistake is to use a two-sample test when a paired test is appropriate. This ignores the correlation between paired observations, leading to a larger standard error and reduced statistical power. Always examine the study design carefully before selecting the test.
+대응 검정이 적절한데 이표본 검정을 쓰는 것이 흔한 실수이다. 이는 짝지은 관측값 사이의 상관을 무시하여 표준오차를 키우고 통계적 검정력을 떨어뜨린다. 검정을 고르기 전에 항상 연구 설계를 꼼꼼히 살펴보라.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-For each scenario, determine whether a paired or two-sample test is appropriate: (a) comparing reaction times of participants under caffeine vs. placebo in a crossover design, (b) comparing test scores of students in two different schools.
+**연습문제 1.**
+다음 각 상황에서 대응 검정과 이표본 검정 중 무엇이 적절한지 판단하라: (a) 교차 설계에서 카페인과 위약에 따른 참가자의 반응시간 비교, (b) 서로 다른 두 학교 학생들의 시험 점수 비교.
 
-??? success "Solution to Exercise 1"
-    **(a) Paired test.** In a crossover design, each participant is tested under both conditions (caffeine and placebo). The same person provides both measurements, creating natural pairs. A paired $t$-test on the within-subject differences is appropriate.
+??? success "연습문제 1 풀이"
+    **(a) 대응 검정.** 교차 설계에서는 각 참가자가 두 조건(카페인과 위약)에서 모두 검사를 받는다. 같은 사람이 두 측정값을 제공하므로 자연스러운 쌍이 만들어진다. 피험자 내 차이에 대한 대응 $t$-검정이 적절하다.
 
-    **(b) Two-sample test.** Students in School A and School B are different individuals with no natural pairing. A two-sample $t$-test (or Welch's $t$-test if variances are unequal) is appropriate.
+    **(b) 이표본 검정.** A 학교와 B 학교의 학생은 서로 다른 개인이며 자연스러운 짝짓기가 없다. 이표본 $t$-검정(분산이 다르면 Welch $t$-검정)이 적절하다.
 
 ---
 
-**Exercise 2.**
-A study measures anxiety scores of 20 patients before and after therapy. The mean difference is $\bar{d} = -5.2$ with $s_d = 8.1$. Conduct a paired $t$-test of $H_0: \mu_d = 0$ at $\alpha = 0.05$.
+**연습문제 2.**
+어떤 연구가 환자 20명의 불안 점수를 치료 전후로 측정했다. 평균 차이는 $\bar{d} = -5.2$이고 $s_d = 8.1$이다. $\alpha = 0.05$에서 $H_0: \mu_d = 0$의 대응 $t$-검정을 하라.
 
-??? success "Solution to Exercise 2"
-    The test statistic is:
+??? success "연습문제 2 풀이"
+    검정통계량은:
 
     $$
     t = \frac{\bar{d} - 0}{s_d / \sqrt{n}} = \frac{-5.2}{8.1/\sqrt{20}} = \frac{-5.2}{1.812} \approx -2.87
     $$
 
-    With $df = 19$, the critical values for a two-sided test are $\pm t_{19, 0.025} = \pm 2.093$. Since $|t| = 2.87 > 2.093$, we **reject** $H_0$. The therapy produced a statistically significant reduction in anxiety scores.
+    $df = 19$에서 양측검정의 임계값은 $\pm t_{19, 0.025} = \pm 2.093$이다. $|t| = 2.87 > 2.093$이므로 $H_0$을 **기각한다**. 이 치료가 불안 점수를 통계적으로 유의하게 낮추었다.
 
 ---
 
-**Exercise 3.**
-Explain why the paired test is generally more powerful than the two-sample test when there is positive within-pair correlation.
+**연습문제 3.**
+짝 내 상관이 양수일 때 대응 검정이 일반적으로 이표본 검정보다 검정력이 큰 이유를 설명하라.
 
-??? success "Solution to Exercise 3"
-    The paired test works with the differences $d_i = x_{1i} - x_{2i}$, whose variance is:
+??? success "연습문제 3 풀이"
+    대응 검정은 차이 $d_i = x_{1i} - x_{2i}$로 작업하며, 그 분산은:
 
     $$
     \text{Var}(D) = \sigma_1^2 + \sigma_2^2 - 2\rho\sigma_1\sigma_2
     $$
 
-    When $\rho > 0$, the term $-2\rho\sigma_1\sigma_2$ reduces $\text{Var}(D)$ below the independent-sample variance $\sigma_1^2 + \sigma_2^2$. A smaller variance of differences produces a smaller standard error, a larger test statistic for the same true effect, and therefore higher power. The higher the within-pair correlation, the greater the power advantage of the paired test.
+    $\rho > 0$이면 항 $-2\rho\sigma_1\sigma_2$가 $\text{Var}(D)$를 독립표본 분산 $\sigma_1^2 + \sigma_2^2$보다 작게 만든다. 차이의 분산이 작으면 표준오차가 작아지고, 같은 참 효과에 대해 검정통계량이 커지므로 검정력이 높아진다. 짝 내 상관이 클수록 대응 검정의 검정력 이점이 커진다.
 
 ---
 
-**Exercise 4.**
-A researcher has matched pairs of twins assigned to two different treatments. However, 3 of the 15 pairs have one twin drop out, leaving unmatched data. Discuss the options for analyzing this data.
+**연습문제 4.**
+어떤 연구자가 쌍둥이 쌍을 짝지어 서로 다른 두 처리에 배정했다. 그런데 15쌍 중 3쌍에서 한쪽 쌍둥이가 중도 탈락하여 짝이 맞지 않는 자료가 생겼다. 이 자료를 분석하는 선택지를 논하라.
 
-??? success "Solution to Exercise 4"
-    The researcher has three options:
+??? success "연습문제 4 풀이"
+    연구자에게는 세 가지 선택지가 있다:
 
-    1. **Analyze only complete pairs** ($n = 12$): Use a paired $t$-test on the 12 complete pairs. This is simple but discards data from the 3 incomplete pairs, reducing power.
+    1. **완전한 쌍만 분석한다**($n = 12$): 완전한 12쌍에 대해 대응 $t$-검정을 한다. 단순하지만 불완전한 3쌍의 자료를 버려 검정력이 떨어진다.
 
-    2. **Use a mixed approach**: Analyze the 12 complete pairs with a paired test and the 6 remaining individuals (3 from each group, if both groups lose a twin) with a two-sample test, then combine the results. This is complex and rarely done in practice.
+    2. **혼합 접근을 쓴다**: 완전한 12쌍은 대응 검정으로, 남은 개인 6명(두 집단에서 각각 쌍둥이 한 명씩 잃었다면 집단당 3명)은 이표본 검정으로 분석한 뒤 결과를 결합한다. 복잡해서 실무에서는 거의 쓰지 않는다.
 
-    3. **Use a linear mixed model**: Fit a model that accounts for the twin-pair structure as a random effect. This approach can handle both complete and incomplete pairs, using all available data. This is the recommended modern approach as it maximizes power while correctly accounting for the paired structure.
+    3. **선형혼합모형을 쓴다**: 쌍둥이 쌍 구조를 확률효과로 반영한 모형을 적합한다. 완전한 쌍과 불완전한 쌍을 모두 다룰 수 있어 가용한 자료를 전부 쓴다. 대응 구조를 올바르게 반영하면서 검정력을 최대화하므로 현대적으로 권장되는 접근이다.

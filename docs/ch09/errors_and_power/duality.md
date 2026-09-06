@@ -1,67 +1,67 @@
-# Confidence Interval ↔ Hypothesis Test Duality
+# 신뢰구간 ↔ 가설검정의 쌍대성
 
-## The Duality Principle
+## 쌍대성 원리
 
-There is a deep connection between confidence intervals and hypothesis tests. A $(1 - \alpha) \times 100\%$ confidence interval and a hypothesis test at significance level $\alpha$ are two sides of the same coin:
+신뢰구간과 가설검정 사이에는 깊은 연관이 있다. $(1 - \alpha) \times 100\%$ 신뢰구간과 유의수준 $\alpha$의 가설검정은 같은 동전의 양면이다:
 
-> **A two-sided hypothesis test at level $\alpha$ rejects $H_0: \theta = \theta_0$ if and only if $\theta_0$ falls outside the $(1-\alpha) \times 100\%$ confidence interval for $\theta$.**
+> **수준 $\alpha$의 양측 가설검정이 $H_0: \theta = \theta_0$을 기각할 필요충분조건은 $\theta_0$이 $\theta$의 $(1-\alpha) \times 100\%$ 신뢰구간 밖에 있는 것이다.**
 
-This duality means that you can perform a hypothesis test by examining a confidence interval, and vice versa.
+이 쌍대성 덕분에 신뢰구간을 살펴 가설검정을 수행할 수 있고, 그 반대도 가능하다.
 
-## How the Duality Works
+## 쌍대성이 작동하는 방식
 
-### From Confidence Interval to Hypothesis Test
+### 신뢰구간에서 가설검정으로
 
-Given a $(1 - \alpha) \times 100\%$ confidence interval $(L, U)$ for a parameter $\theta$:
+모수 $\theta$에 대한 $(1 - \alpha) \times 100\%$ 신뢰구간 $(L, U)$가 주어졌을 때:
 
-- If $\theta_0 \in (L, U)$: Fail to reject $H_0: \theta = \theta_0$ at significance level $\alpha$.
-- If $\theta_0 \notin (L, U)$: Reject $H_0: \theta = \theta_0$ at significance level $\alpha$.
+- $\theta_0 \in (L, U)$이면 유의수준 $\alpha$에서 $H_0: \theta = \theta_0$을 기각하지 못한다.
+- $\theta_0 \notin (L, U)$이면 유의수준 $\alpha$에서 $H_0: \theta = \theta_0$을 기각한다.
 
-### From Hypothesis Test to Confidence Interval
+### 가설검정에서 신뢰구간으로
 
-A $(1 - \alpha) \times 100\%$ confidence interval is the set of all values $\theta_0$ for which the hypothesis test $H_0: \theta = \theta_0$ would **not** be rejected at significance level $\alpha$.
+$(1 - \alpha) \times 100\%$ 신뢰구간은 유의수준 $\alpha$에서 가설검정 $H_0: \theta = \theta_0$이 기각되지 **않는** 모든 $\theta_0$의 집합이다.
 
 $$CI_{1-\alpha} = \{\theta_0 : \text{fail to reject } H_0: \theta = \theta_0 \text{ at level } \alpha\}$$
 
-## Examples
+## 예제
 
-### Example 1: One-Sample Mean
+### 예제 1: 일표본 평균
 
-For a one-sample z-test of $H_0: \mu = \mu_0$ vs $H_a: \mu \neq \mu_0$:
+$H_0: \mu = \mu_0$ 대 $H_a: \mu \neq \mu_0$의 일표본 z-검정에서:
 
-- **Test**: Reject $H_0$ if $|z| > z_{\alpha/2}$, where $z = \frac{\bar{x} - \mu_0}{\sigma / \sqrt{n}}$.
-- **CI**: $\bar{x} \pm z_{\alpha/2} \cdot \frac{\sigma}{\sqrt{n}}$
+- **검정**: $z = \frac{\bar{x} - \mu_0}{\sigma / \sqrt{n}}$일 때 $|z| > z_{\alpha/2}$이면 $H_0$을 기각한다.
+- **신뢰구간**: $\bar{x} \pm z_{\alpha/2} \cdot \frac{\sigma}{\sqrt{n}}$
 
-The test rejects $H_0$ if and only if $\mu_0$ lies outside the confidence interval.
+이 검정이 $H_0$을 기각할 필요충분조건은 $\mu_0$이 신뢰구간 밖에 있는 것이다.
 
-**Proof of equivalence:**
+**동등성의 증명:**
 
 $$|z| > z_{\alpha/2} \iff \left|\frac{\bar{x} - \mu_0}{\sigma/\sqrt{n}}\right| > z_{\alpha/2} \iff \mu_0 \notin \left(\bar{x} - z_{\alpha/2}\frac{\sigma}{\sqrt{n}},\ \bar{x} + z_{\alpha/2}\frac{\sigma}{\sqrt{n}}\right)$$
 
-### Example 2: Two Varieties of Pears
+### 예제 2: 두 품종의 배
 
-Yuna compares caloric content of Bosc and Anjou pears. The 99% confidence interval for $\mu_{\text{Bosc}} - \mu_{\text{Anjou}}$ is $4 \pm 6.44 = (-2.44, 10.44)$.
+Yuna가 Bosc 배와 Anjou 배의 열량을 비교한다. $\mu_{\text{Bosc}} - \mu_{\text{Anjou}}$의 99% 신뢰구간은 $4 \pm 6.44 = (-2.44, 10.44)$이다.
 
-Testing $H_0: \mu_{\text{Bosc}} = \mu_{\text{Anjou}}$ (i.e., $\mu_{\text{Bosc}} - \mu_{\text{Anjou}} = 0$) at $\alpha = 0.01$:
+$\alpha = 0.01$에서 $H_0: \mu_{\text{Bosc}} = \mu_{\text{Anjou}}$(즉 $\mu_{\text{Bosc}} - \mu_{\text{Anjou}} = 0$)를 검정하면:
 
-Since $0 \in (-2.44, 10.44)$, we **fail to reject** $H_0$. There is not enough evidence to conclude the caloric contents differ.
+$0 \in (-2.44, 10.44)$이므로 $H_0$을 **기각하지 못한다**. 열량이 다르다고 결론지을 증거가 부족하다.
 
-### Example 3: In-person vs Online Classes
+### 예제 3: 대면 수업과 온라인 수업
 
-A 95% confidence interval for $p_{\text{in\_person}} - p_{\text{online}}$ is $(-0.04, 0.14)$.
+$p_{\text{in\_person}} - p_{\text{online}}$의 95% 신뢰구간이 $(-0.04, 0.14)$이다.
 
-Testing $H_0: p_{\text{in\_person}} = p_{\text{online}}$ at $\alpha = 0.05$:
+$\alpha = 0.05$에서 $H_0: p_{\text{in\_person}} = p_{\text{online}}$을 검정하면:
 
-Since $0 \in (-0.04, 0.14)$, we **fail to reject** $H_0$. There is no significant difference in passing rates.
+$0 \in (-0.04, 0.14)$이므로 $H_0$을 **기각하지 못한다**. 합격률에 유의한 차이가 없다.
 
-## One-Sided Tests and Confidence Intervals
+## 단측검정과 신뢰구간
 
-The duality extends to one-sided tests using one-sided confidence intervals (confidence bounds):
+쌍대성은 단측 신뢰구간(신뢰한계)을 쓰면 단측검정으로도 확장된다:
 
-- **Upper confidence bound**: $\theta < U$ at confidence level $1 - \alpha$ corresponds to the test $H_0: \theta \geq \theta_0$ vs $H_a: \theta < \theta_0$.
-- **Lower confidence bound**: $\theta > L$ at confidence level $1 - \alpha$ corresponds to the test $H_0: \theta \leq \theta_0$ vs $H_a: \theta > \theta_0$.
+- **상한 신뢰한계**: 신뢰수준 $1 - \alpha$에서 $\theta < U$는 검정 $H_0: \theta \geq \theta_0$ 대 $H_a: \theta < \theta_0$에 대응한다.
+- **하한 신뢰한계**: 신뢰수준 $1 - \alpha$에서 $\theta > L$은 검정 $H_0: \theta \leq \theta_0$ 대 $H_a: \theta > \theta_0$에 대응한다.
 
-## Python Illustration
+## Python 예시
 
 ```python
 import numpy as np
@@ -90,53 +90,53 @@ print(f"CI: ({ci_lower:.4f}, {ci_upper:.4f}), mu_0 outside CI = {reject_ci}")
 print(f"Both methods agree: {reject_test == reject_ci}")
 ```
 
-## Key Takeaways
+## 핵심 요약
 
-- Confidence intervals and hypothesis tests provide equivalent information for two-sided tests.
-- Confidence intervals are often more informative because they show the range of plausible values, not just a binary reject/fail-to-reject decision.
-- When reporting results, it is good practice to report both the p-value and the confidence interval.
-- The duality holds exactly for two-sided tests; one-sided tests correspond to one-sided confidence bounds.
+- 양측검정에서 신뢰구간과 가설검정은 동등한 정보를 준다.
+- 신뢰구간은 기각/비기각의 이분법적 판정만이 아니라 그럴듯한 값의 범위를 보여주므로 흔히 더 유익하다.
+- 결과를 보고할 때는 p-값과 신뢰구간을 함께 제시하는 것이 좋다.
+- 쌍대성은 양측검정에서 정확히 성립하며, 단측검정은 단측 신뢰한계에 대응한다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-A 95% confidence interval for $\mu$ is $(12.3, 18.7)$. Without computing a test statistic, determine the result of a two-sided test of $H_0: \mu = 10$ at $\alpha = 0.05$.
+**연습문제 1.**
+$\mu$의 95% 신뢰구간이 $(12.3, 18.7)$이다. 검정통계량을 계산하지 않고 $\alpha = 0.05$에서 $H_0: \mu = 10$의 양측검정 결과를 판단하라.
 
-??? success "Solution to Exercise 1"
-    Since $\mu_0 = 10$ falls **outside** the 95% confidence interval $(12.3, 18.7)$, we **reject** $H_0: \mu = 10$ at $\alpha = 0.05$. By the duality between confidence intervals and hypothesis tests, any value outside the $(1-\alpha)$ CI would be rejected at significance level $\alpha$.
-
----
-
-**Exercise 2.**
-A researcher conducts a two-sided test of $H_0: \mu = 50$ and obtains a p-value of 0.03. What can you conclude about whether 50 is inside or outside the 95% and 99% confidence intervals?
-
-??? success "Solution to Exercise 2"
-    Since $p = 0.03 < 0.05$, the test rejects $H_0$ at $\alpha = 0.05$. By duality, $\mu_0 = 50$ is **outside** the 95% confidence interval.
-
-    Since $p = 0.03 > 0.01$, the test does not reject $H_0$ at $\alpha = 0.01$. By duality, $\mu_0 = 50$ is **inside** the 99% confidence interval.
+??? success "연습문제 1 풀이"
+    $\mu_0 = 10$이 95% 신뢰구간 $(12.3, 18.7)$ **밖에** 있으므로 $\alpha = 0.05$에서 $H_0: \mu = 10$을 **기각한다**. 신뢰구간과 가설검정의 쌍대성에 의해 $(1-\alpha)$ 신뢰구간 밖의 어떤 값도 유의수준 $\alpha$에서 기각된다.
 
 ---
 
-**Exercise 3.**
-Explain why a confidence interval provides more information than a hypothesis test, even though they are mathematically equivalent.
+**연습문제 2.**
+어떤 연구자가 $H_0: \mu = 50$의 양측검정을 수행하여 p-값 0.03을 얻었다. 50이 95%와 99% 신뢰구간의 안에 있는지 밖에 있는지 무엇을 결론지을 수 있는가?
 
-??? success "Solution to Exercise 3"
-    A hypothesis test produces a binary decision: reject or fail to reject $H_0$ for a single hypothesized value $\mu_0$. A confidence interval simultaneously shows which values of $\mu_0$ would be rejected and which would not. It provides:
+??? success "연습문제 2 풀이"
+    $p = 0.03 < 0.05$이므로 이 검정은 $\alpha = 0.05$에서 $H_0$을 기각한다. 쌍대성에 의해 $\mu_0 = 50$은 95% 신뢰구간 **밖에** 있다.
 
-    1. The **direction** of the effect (is the estimate above or below $\mu_0$?).
-    2. The **magnitude** of the effect (how far is the estimate from $\mu_0$?).
-    3. The **precision** of the estimate (how wide is the interval?).
-
-    For example, a CI of $(0.1, 15.2)$ and a CI of $(7.5, 7.8)$ both reject $\mu_0 = 0$ at the 5% level, but the first suggests a highly uncertain estimate, while the second indicates a precise estimate near 7.65.
+    $p = 0.03 > 0.01$이므로 $\alpha = 0.01$에서는 $H_0$을 기각하지 않는다. 쌍대성에 의해 $\mu_0 = 50$은 99% 신뢰구간 **안에** 있다.
 
 ---
 
-**Exercise 4.**
-Does the duality between confidence intervals and hypothesis tests hold for one-sided tests? If so, what is the corresponding confidence bound?
+**연습문제 3.**
+수학적으로 동등한데도 신뢰구간이 가설검정보다 많은 정보를 주는 이유를 설명하라.
 
-??? success "Solution to Exercise 4"
-    The duality extends to one-sided tests, but the corresponding confidence construct is a **one-sided confidence bound** rather than a two-sided interval.
+??? success "연습문제 3 풀이"
+    가설검정은 가설의 값 $\mu_0$ 하나에 대해 기각이냐 비기각이냐라는 이분법적 판정을 낸다. 신뢰구간은 어떤 $\mu_0$ 값들이 기각되고 어떤 값들이 기각되지 않는지를 한꺼번에 보여준다. 다음을 제공한다:
 
-    For a one-sided test $H_0: \mu \leq \mu_0$ vs $H_1: \mu > \mu_0$ at level $\alpha$, the corresponding construct is a lower confidence bound: $(\bar{x} - z_\alpha \cdot \text{SE},\; \infty)$. We reject $H_0$ if and only if $\mu_0$ falls below this lower bound.
+    1. 효과의 **방향**(추정값이 $\mu_0$보다 위인가 아래인가?).
+    2. 효과의 **크기**(추정값이 $\mu_0$에서 얼마나 먼가?).
+    3. 추정의 **정밀도**(구간이 얼마나 넓은가?).
 
-    Similarly, for $H_0: \mu \geq \mu_0$ vs $H_1: \mu < \mu_0$, the corresponding construct is an upper confidence bound: $(-\infty,\; \bar{x} + z_\alpha \cdot \text{SE})$. The one-sided bound uses $z_\alpha$ rather than $z_{\alpha/2}$, reflecting the one-tailed nature of the test.
+    예를 들어 신뢰구간 $(0.1, 15.2)$와 $(7.5, 7.8)$은 모두 5% 수준에서 $\mu_0 = 0$을 기각하지만, 앞의 것은 매우 불확실한 추정을, 뒤의 것은 7.65 근처의 정밀한 추정을 시사한다.
+
+---
+
+**연습문제 4.**
+신뢰구간과 가설검정의 쌍대성이 단측검정에서도 성립하는가? 그렇다면 대응하는 신뢰한계는 무엇인가?
+
+??? success "연습문제 4 풀이"
+    쌍대성은 단측검정으로도 확장되지만, 대응하는 것은 양측 구간이 아니라 **단측 신뢰한계**이다.
+
+    수준 $\alpha$에서 단측검정 $H_0: \mu \leq \mu_0$ 대 $H_1: \mu > \mu_0$에 대응하는 것은 하한 신뢰한계 $(\bar{x} - z_\alpha \cdot \text{SE},\; \infty)$이다. $\mu_0$이 이 하한 아래에 있을 때에만 $H_0$을 기각한다.
+
+    마찬가지로 $H_0: \mu \geq \mu_0$ 대 $H_1: \mu < \mu_0$에 대응하는 것은 상한 신뢰한계 $(-\infty,\; \bar{x} + z_\alpha \cdot \text{SE})$이다. 단측 한계는 검정의 단측 성격을 반영하여 $z_{\alpha/2}$가 아니라 $z_\alpha$를 쓴다.

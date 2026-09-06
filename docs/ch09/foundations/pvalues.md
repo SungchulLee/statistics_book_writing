@@ -1,199 +1,199 @@
-# Test Statistics and P-values
+# 검정통계량과 p-값
 
-## Test Statistic
+## 검정통계량
 
-A **test statistic** is a calculated value from the sample data that, when compared to a threshold from a theoretical distribution, helps decide whether to reject the null hypothesis, $H_0$. The choice of test statistic depends on the data type and the hypothesis we test. Standard test statistics include the z-statistic, t-statistic, and chi-square statistic.
+**검정통계량**은 표본자료로부터 계산한 값으로, 이론적 분포에서 나온 문턱과 비교하여 귀무가설 $H_0$을 기각할지 판단하는 데 쓰인다. 어떤 검정통계량을 쓸지는 자료의 종류와 검정하려는 가설에 달려 있다. 표준적인 검정통계량으로 z-통계량, t-통계량, 카이제곱 통계량이 있다.
 
-- **$z$-statistic**: This statistic can be used when the population variance is known, the sample size is large, or the data follow a normal distribution.
-- **$t$-statistic**: This statistic can be used when the population variance is unknown and the sample size is small. It assumes that the data come from a normally distributed population.
-- **$\chi^2$-statistic**: Typically used for categorical data to test the independence or goodness of fit.
-- **$f$-statistic**: Used primarily in the analysis of variance (ANOVA) and regression analysis to compare variances between groups and test if the group means are significantly different. We can compute this statistic by dividing the variance explained by the model by the unexplained variance.
+- **$z$-통계량**: 모분산을 알거나, 표본이 크거나, 자료가 정규분포를 따를 때 쓸 수 있다.
+- **$t$-통계량**: 모분산을 모르고 표본이 작을 때 쓸 수 있다. 자료가 정규모집단에서 나왔다고 가정한다.
+- **$\chi^2$-통계량**: 보통 범주형 자료에서 독립성이나 적합도를 검정하는 데 쓴다.
+- **$f$-통계량**: 주로 분산분석(ANOVA)과 회귀분석에서 집단 간 분산을 비교하고 집단 평균이 유의하게 다른지 검정하는 데 쓴다. 모형이 설명하는 분산을 설명되지 않은 분산으로 나누어 계산한다.
 
-The formula for calculating a test statistic varies based on the test. For example, a common formula for the z-statistic in testing population means is
+검정통계량을 계산하는 공식은 검정마다 다르다. 예를 들어 모평균을 검정할 때 흔히 쓰는 z-통계량의 공식은
 
 $$ z = \frac{\bar{x} - \mu_0}{\sigma/\sqrt{n}} $$
 
-where $\bar{x}$ is the sample mean, $\mu_0$ is the mean under the null hypothesis, $\sigma$ is the population standard deviation, and $n$ is the sample size.
+여기서 $\bar{x}$는 표본평균, $\mu_0$은 귀무가설 아래의 평균, $\sigma$는 모표준편차, $n$은 표본크기이다.
 
 ---
 
-## Significance Level (alpha) and Error Types
-Understanding errors in hypothesis testing is essential for correctly interpreting the results of statistical tests. When conducting a hypothesis test, two potential types of errors can occur:
+## 유의수준 (alpha)과 오류의 종류
+가설검정의 오류를 이해하는 것은 통계검정 결과를 올바르게 해석하는 데 필수적이다. 가설검정을 수행할 때 생길 수 있는 오류는 두 종류이다:
 
-- **Type I Error**: A Type I error, often called a "false positive," occurs when the null hypothesis $H_0$ is true, but we mistakenly reject it in favor of the alternative hypothesis $H_a$. This Type I error is analogous to convicting an innocent person in a trial. The **significance level** $\alpha$ represents the threshold we set for rejecting the null hypothesis but does not directly represent the probability of committing a Type I error. Instead, $\alpha$ is the probability of rejecting $H_0$ when true, which is the potential for a Type I error. For example, if we set $\alpha = 0.05$, there is a 5% risk of incorrectly rejecting $H_0$.
+- **제1종 오류**: 흔히 "거짓 양성"이라 불리는 제1종 오류는 귀무가설 $H_0$이 참인데도 이를 잘못 기각하고 대립가설 $H_a$를 택할 때 생긴다. 재판에서 무고한 사람에게 유죄를 선고하는 것에 해당한다. **유의수준** $\alpha$는 귀무가설을 기각하기 위해 우리가 정한 문턱이며, 제1종 오류를 범할 잠재적 위험, 즉 $H_0$이 참일 때 이를 기각할 확률을 나타낸다. 예를 들어 $\alpha = 0.05$로 두면 $H_0$을 잘못 기각할 위험이 5%이다.
 
 $$\alpha=P(\text{Type I Error})=P(\text{Reject } H_0 \mid H_0)$$
 
-- **Type II Error**: A Type II error, also known as a "false negative," occurs when the null hypothesis $H_0$ is false, but we fail to reject it, thereby incorrectly retaining it. This Type II error is akin to acquitting a guilty person in a trial. The probability of committing a Type II error is denoted by $\beta$. A lower $\beta$ value implies a lower risk of retaining $H_0$ when it is false. The complement of $\beta$ is the **power of the test**, which represents the probability of correctly rejecting $H_0$ when it is false. In other words, power is the test's ability to detect an effect when there is one.
+- **제2종 오류**: "거짓 음성"이라고도 하는 제2종 오류는 귀무가설 $H_0$이 거짓인데도 기각하지 못하고 잘못 유지할 때 생긴다. 재판에서 유죄인 사람을 무죄로 방면하는 것에 해당한다. 제2종 오류를 범할 확률은 $\beta$로 표기한다. $\beta$가 작을수록 거짓인 $H_0$을 유지할 위험이 작다. $\beta$의 여집합이 **검정의 검정력**이며, $H_0$이 거짓일 때 이를 올바르게 기각할 확률을 나타낸다. 다시 말해 검정력은 효과가 있을 때 그것을 탐지하는 능력이다.
 
 $$\beta=P(\text{Type II Error})=P(\text{Accept } H_0 \mid H_a)$$
 
-The balance between $\alpha$ and $\beta$ is crucial in hypothesis testing. Lowering $\alpha$ decreases the likelihood of a Type I error but increases the risk of a Type II error, and vice versa. Therefore, selecting an appropriate significance level depends on the context of the test and the consequences of making either type of error.
+$\alpha$와 $\beta$의 균형은 가설검정에서 결정적이다. $\alpha$를 낮추면 제1종 오류의 가능성은 줄지만 제2종 오류의 위험은 커지고, 그 반대도 마찬가지이다. 따라서 적절한 유의수준의 선택은 검정의 맥락과 두 오류가 각각 초래하는 결과에 달려 있다.
 
 ---
 
-## P-value and Its Interpretation
+## p-값과 그 해석
 
-The **p-value** is a fundamental concept in hypothesis testing that quantifies the evidence against the null hypothesis ($H_0$). Specifically, the p-value represents the probability of observing a test statistic at least as extreme as the one computed from the sample data, assuming that the null hypothesis is true. It helps statisticians determine whether the observed data are consistent with $H_0$ or whether the data provide enough evidence to reject it in favor of the alternative hypothesis ($H_a$).
+**p-값**은 귀무가설($H_0$)에 반하는 증거를 정량화하는 가설검정의 근본 개념이다. 구체적으로 p-값은 귀무가설이 참이라는 가정 아래, 표본자료에서 계산한 검정통계량만큼 또는 그보다 극단적인 값을 관측할 확률이다. 관측된 자료가 $H_0$과 부합하는지, 아니면 $H_0$을 기각하고 대립가설($H_a$)을 택할 만큼 충분한 증거를 주는지 판단하는 데 도움을 준다.
 
-The p-value measures how unusual the observed data are under the assumption that $H_0$ holds:
+p-값은 $H_0$이 성립한다는 가정 아래 관측된 자료가 얼마나 이례적인지를 잰다:
 
-- A **small p-value** ($p \leq \alpha$) indicates that the observed data are doubtful under the null hypothesis. This small p-value suggests strong evidence against $H_0$, prompting its **rejection**. In other words, the smaller the p-value, the less plausible the null hypothesis could explain the observed data. For instance, if we set the significance level $\alpha = 0.05$, and the p-value from the test is $p = 0.01$, there is only a 1% chance of observing data as extreme as this sample, assuming $H_0$ is true. As a result, we reject $H_0$.
+- **작은 p-값**($p \leq \alpha$)은 관측된 자료가 귀무가설 아래에서 의심스럽다는 뜻이다. $H_0$에 반하는 강한 증거를 시사하므로 **기각**하게 된다. 다시 말해 p-값이 작을수록 귀무가설로 관측된 자료를 설명하기 어려워진다. 예를 들어 유의수준을 $\alpha = 0.05$로 두었는데 검정의 p-값이 $p = 0.01$이면, $H_0$이 참이라는 가정 아래 이 표본만큼 극단적인 자료를 볼 확률이 1%뿐이라는 뜻이다. 따라서 $H_0$을 기각한다.
 
-- A **large p-value** ($p > \alpha$) suggests that the data are not sufficiently inconsistent with the null hypothesis. In this case, there is insufficient evidence to reject $H_0$; thus, we **fail to reject** it. This large p-value does not imply that $H_0$ is true; instead, the data does not provide strong enough evidence against it. For example, if the p-value is $p = 0.20$ and $\alpha = 0.05$, we conclude that the data are plausible under $H_0$, so we do not reject the null hypothesis.
+- **큰 p-값**($p > \alpha$)은 자료가 귀무가설과 충분히 어긋나지 않는다는 뜻이다. 이 경우 $H_0$을 기각할 증거가 부족하므로 **기각하지 못한다**. 이는 $H_0$이 참임을 뜻하지 않는다. 다만 자료가 그에 반하는 충분히 강한 증거를 주지 못했을 뿐이다. 예를 들어 p-값이 $p = 0.20$이고 $\alpha = 0.05$이면 자료가 $H_0$ 아래에서 그럴듯하다고 결론짓고 귀무가설을 기각하지 않는다.
 
-In summary, the p-value serves as a tool for assessing the compatibility of the observed data with the null hypothesis. A lower p-value indicates stronger evidence against $H_0$. A higher p-value indicates weaker evidence against it, guiding us toward either rejecting or retaining the null hypothesis based on the significance level $\alpha$.
+정리하면, p-값은 관측된 자료가 귀무가설과 양립 가능한지 평가하는 도구이다. p-값이 낮을수록 $H_0$에 반하는 증거가 강하고, 높을수록 증거가 약하며, 유의수준 $\alpha$에 비추어 귀무가설을 기각할지 유지할지 안내한다.
 
 ---
 
-## Test Names
+## 검정의 이름
 
-### Test Names — Hypothesis
-
-$$\begin{array}{lll}
-\text{Two-Sided}&&\displaystyle\text{$H_0$ : $\mu=\mu_0$ vs $H_1$ : $\mu\neq\mu_0$}\\
-\text{Less}&&\displaystyle\text{$H_0$ : $\mu=\mu_0$ vs $H_1$ : $\mu<\mu_0$}\\
-\text{Greater}&&\displaystyle\text{$H_0$ : $\mu=\mu_0$ vs $H_1$ : $\mu>\mu_0$}\\
-\end{array}$$
-
-### Test Names — Data
+### 검정의 이름 — 가설
 
 $$\begin{array}{lll}
-\text{One Sample}&&\displaystyle\{x_1,\cdots,x_n\}\\
-\text{Two Sample}&&\displaystyle\{x_1,\cdots,x_n\}\ \text{and}\ \{y_1,\cdots,y_m\}\\
-\text{Paired Sample}&&\displaystyle\{(x_1,y_1),\cdots,(x_n,y_n)\}\\
+\text{양측}&&\displaystyle\text{$H_0$ : $\mu=\mu_0$ vs $H_1$ : $\mu\neq\mu_0$}\\
+\text{좌측}&&\displaystyle\text{$H_0$ : $\mu=\mu_0$ vs $H_1$ : $\mu<\mu_0$}\\
+\text{우측}&&\displaystyle\text{$H_0$ : $\mu=\mu_0$ vs $H_1$ : $\mu>\mu_0$}\\
 \end{array}$$
 
-### Test Names — Sampling Distribution
+### 검정의 이름 — 자료
 
 $$\begin{array}{lll}
-\text{$z$ Test}&&\displaystyle\text{sampling distribution is expressed in terms of $z$}\\
-\text{$t$ Test}&&\displaystyle\text{sampling distribution is expressed in terms of $t$}\\
-\text{$f$ Test}&&\displaystyle\text{sampling distribution is expressed in terms of $f$}\\
-\text{$\chi^2$ Test}&&\displaystyle\text{sampling distribution is expressed in terms of $\chi^2$}\\
+\text{일표본}&&\displaystyle\{x_1,\cdots,x_n\}\\
+\text{이표본}&&\displaystyle\{x_1,\cdots,x_n\}\ \text{그리고}\ \{y_1,\cdots,y_m\}\\
+\text{대응표본}&&\displaystyle\{(x_1,y_1),\cdots,(x_n,y_n)\}\\
 \end{array}$$
 
-### Naming Convention
+### 검정의 이름 — 표본분포
+
+$$\begin{array}{lll}
+\text{$z$ 검정}&&\displaystyle\text{표본분포를 $z$로 나타낸다}\\
+\text{$t$ 검정}&&\displaystyle\text{표본분포를 $t$로 나타낸다}\\
+\text{$f$ 검정}&&\displaystyle\text{표본분포를 $f$로 나타낸다}\\
+\text{$\chi^2$ 검정}&&\displaystyle\text{표본분포를 $\chi^2$로 나타낸다}\\
+\end{array}$$
+
+### 이름 짓는 규칙
 
 $$\begin{array}{ccc}
-\text{Two-Sided}&\text{Two Sample}&\text{$z$ Test}\\
+\text{양측}&\text{이표본}&\text{$z$ 검정}\\
 \uparrow&\uparrow&\uparrow\\
-\text{Hypothesis}&\text{Data}&\text{Sampling Distribution}\\
+\text{가설}&\text{자료}&\text{표본분포}\\
 \end{array}$$
 
 ---
 
-## Steps in Hypothesis Testing
+## 가설검정의 단계
 
-Hypothesis testing is a systematic process used to evaluate assumptions about a population parameter based on sample data. The steps involved in hypothesis testing are critical to ensure the integrity and accuracy of the conclusions drawn.
+가설검정은 표본자료에 근거하여 모수에 관한 가정을 평가하는 체계적인 과정이다. 그 단계들은 결론의 무결성과 정확성을 보장하는 데 결정적이다.
 
-### Step 1: Formulating Hypotheses
+### 1단계: 가설 설정
 
-The first step in hypothesis testing is to formulate two opposing hypotheses:
+가설검정의 첫 단계는 서로 맞서는 두 가설을 세우는 것이다:
 
-- **Null Hypothesis ($H_0$)**: Assumes no effect or difference in the population. It serves as the baseline hypothesis that the test seeks to challenge.
-- **Alternative Hypothesis ($H_a$)**: Posits that there is an effect or a difference. This hypothesis is a choice if the evidence suggests we can reject the null hypothesis.
+- **귀무가설 ($H_0$)**: 모집단에 효과나 차이가 없다고 가정한다. 검정이 도전하고자 하는 기준 가설 역할을 한다.
+- **대립가설 ($H_a$)**: 효과나 차이가 있다고 상정한다. 증거가 귀무가설을 기각할 만하다면 택하게 되는 가설이다.
 
-For example, if investigating whether a new drug lowers blood pressure, the hypotheses might be:
+예를 들어 새 약이 혈압을 낮추는지 조사한다면 가설은 다음과 같을 수 있다:
 
-- $H_0$: The drug's mean decrease in blood pressure is zero.
-- $H_a$: The mean decrease in blood pressure by the drug is greater than zero.
+- $H_0$: 이 약에 의한 혈압의 평균 감소량은 0이다.
+- $H_a$: 이 약에 의한 혈압의 평균 감소량은 0보다 크다.
 
-### Step 2: Choosing the Appropriate Test
+### 2단계: 적절한 검정의 선택
 
-Selecting the correct statistical test is crucial and depends on the type of data and the hypothesis. The choice of the test affects how we compute the test statistic and how we evaluate the hypotheses. Factors include the data's measurement level, the sample size, and whether the data follows a normal distribution. Standard tests include the z-test, t-test, chi-square test, and ANOVA.
+올바른 통계검정을 고르는 일은 결정적이며 자료의 종류와 가설에 달려 있다. 어떤 검정을 고르느냐가 검정통계량을 계산하는 방식과 가설을 평가하는 방식을 좌우한다. 고려할 요인으로는 자료의 측정 수준, 표본크기, 자료가 정규분포를 따르는지 여부가 있다. 표준적인 검정으로는 z-검정, t-검정, 카이제곱 검정, 분산분석이 있다.
 
-### Step 3: Deciding on the Significance Level
+### 3단계: 유의수준의 결정
 
-The significance level ($\alpha$) is the threshold at which we reject the null hypothesis. It reflects the probability of committing a Type I error — rejecting the null hypothesis when it is true. Typical values for $\alpha$ are 0.05, 0.01, and 0.10. We must decide on this level before analyzing the data to avoid bias.
+유의수준($\alpha$)은 귀무가설을 기각하는 문턱이다. 참인 귀무가설을 기각하는 제1종 오류를 범할 확률을 나타낸다. $\alpha$의 전형적인 값은 0.05, 0.01, 0.10이다. 편향을 피하려면 자료를 분석하기 전에 이 값을 정해야 한다.
 
-### Step 4: Calculating the Test Statistic
+### 4단계: 검정통계량의 계산
 
-The test statistic is a value computed from the sample data that, assuming the null hypothesis is true, follows a specific probability distribution. The test statistic compares the observed data to the sampling distribution under the null hypothesis. For example, in a z-test for a mean, the test statistic is calculated as:
+검정통계량은 표본자료로부터 계산한 값으로, 귀무가설이 참이라는 가정 아래 특정 확률분포를 따른다. 검정통계량은 관측된 자료를 귀무가설 아래의 표본분포와 견준다. 예를 들어 평균에 대한 z-검정에서 검정통계량은 다음과 같이 계산한다:
 
 $$ z = \frac{\bar{x} - \mu_0}{\sigma/\sqrt{n}} $$
 
-where $\bar{x}$ is the sample mean, $\mu_0$ is the mean under the null hypothesis, $\sigma$ is the population standard deviation, and $n$ is the sample size.
+여기서 $\bar{x}$는 표본평균, $\mu_0$은 귀무가설 아래의 평균, $\sigma$는 모표준편차, $n$은 표본크기이다.
 
-### Step 5: Determining the P-value
+### 5단계: p-값의 결정
 
-The p-value is the probability of observing a test statistic as extreme as, or more extreme than, the observed statistic under the null hypothesis. It is a crucial measure in deciding whether to reject the null hypothesis. A p-value less than $\alpha$ suggests strong evidence against the null hypothesis.
+p-값은 귀무가설 아래에서 관측된 통계량만큼 또는 그보다 극단적인 검정통계량을 관측할 확률이다. 귀무가설을 기각할지 결정하는 데 결정적인 척도이다. p-값이 $\alpha$보다 작으면 귀무가설에 반하는 강한 증거를 시사한다.
 
-### Step 6: Making the Decision
+### 6단계: 판정
 
-Based on the p-value and the predetermined significance level, the decision is made as follows:
+p-값과 미리 정한 유의수준에 따라 다음과 같이 판정한다:
 
-- If the p-value $\leq \alpha$, reject the null hypothesis.
-- If the p-value $> \alpha$, do not reject the null hypothesis.
+- p-값 $\leq \alpha$이면 귀무가설을 기각한다.
+- p-값 $> \alpha$이면 귀무가설을 기각하지 않는다.
 
-### Step 7: Concluding the Hypothesis Test
+### 7단계: 가설검정의 마무리
 
-The final step involves interpreting the results in the context of the research question. This final step includes considering the implications of the decision, discussing potential errors, and suggesting further research if needed.
+마지막 단계는 연구 질문의 맥락에서 결과를 해석하는 것이다. 판정의 함의를 살피고, 있을 수 있는 오류를 논하며, 필요하다면 후속 연구를 제안하는 일이 여기에 포함된다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-**Define p-value formally** and explain its relationship to the test statistic distribution under $H_0$.
+**연습문제 1.**
+**p-값을 형식적으로 정의**하고 $H_0$ 아래 검정통계량 분포와의 관계를 설명하라.
 
-??? success "Solution to Exercise 1"
-    **P-value:** the probability, under $H_0$, of obtaining a test statistic at least as extreme as the observed value.
+??? success "연습문제 1 풀이"
+    **p-값:** $H_0$ 아래에서 관측된 값만큼 또는 그보다 극단적인 검정통계량을 얻을 확률.
 
-    Formally: $p = P_{H_0}(T \ge t_{\text{obs}})$ (one-sided) or $p = 2 \min[P_{H_0}(T \ge t_{\text{obs}}), P_{H_0}(T \le t_{\text{obs}})]$ (two-sided).
+    형식적으로: $p = P_{H_0}(T \ge t_{\text{obs}})$ (단측) 또는 $p = 2 \min[P_{H_0}(T \ge t_{\text{obs}}), P_{H_0}(T \le t_{\text{obs}})]$ (양측).
 
-    Computed as the tail area of the null distribution beyond the observed statistic.
+    관측된 통계량 너머 귀무분포의 꼬리 넓이로 계산한다.
 
-    Under $H_0$, the p-value itself is **uniformly distributed** on $[0, 1]$ (probability integral transform). This justifies the decision rule "reject if $p \le \alpha$" — it gives Type I error rate exactly $\alpha$.
-
----
-
-**Exercise 2.**
-**Vegetarian teens.** Evie samples 25 students, finds 20% vegetarian. Tests $H_0: p = 0.06$ vs $H_1: p > 0.06$. Compute the exact p-value.
-
-??? success "Solution to Exercise 2"
-    Observed: $X = 5$ vegetarians in $n = 25$. Under $H_0$: $X \sim \mathrm{Binomial}(25, 0.06)$.
-
-    P-value: $P(X \ge 5) = 1 - P(X \le 4) = 1 - \sum_{k=0}^4 \binom{25}{k}(0.06)^k (0.94)^{25-k}$.
-
-    Numerical: $P(X \le 4) \approx 0.9979$. So $p \approx 0.0021$.
-
-    Strong evidence at school's veggie rate exceeds 6%. Reject $H_0$ at $\alpha = 0.01$.
-
-    Normal approximation would give: $z = (0.20 - 0.06)/\sqrt{0.06 \cdot 0.94/25} \approx 2.95$, $p \approx 0.0016$ — close but slightly different (exact is preferred for small $n$ with small $p$).
+    $H_0$ 아래에서 p-값 자체는 $[0, 1]$ 위의 **균등분포**를 따른다(확률적분변환). 이것이 "$p \le \alpha$이면 기각한다"는 판정 규칙을 정당화한다 — 제1종 오류율이 정확히 $\alpha$가 된다.
 
 ---
 
-**Exercise 3.**
-**Multilingual Americans.** $\hat p = 40/120 \approx 0.333$, test $H_0: p = 0.26$ vs $H_1: p > 0.26$. Compute p-value via normal approximation.
+**연습문제 2.**
+**채식하는 청소년.** Evie가 학생 25명을 표본으로 뽑았더니 20%가 채식주의자였다. $H_0: p = 0.06$ 대 $H_1: p > 0.06$을 검정한다. 정확한 p-값을 계산하라.
 
-??? success "Solution to Exercise 3"
+??? success "연습문제 2 풀이"
+    관측값: $n = 25$ 중 채식주의자 $X = 5$명. $H_0$ 아래에서 $X \sim \mathrm{Binomial}(25, 0.06)$.
+
+    p-값: $P(X \ge 5) = 1 - P(X \le 4) = 1 - \sum_{k=0}^4 \binom{25}{k}(0.06)^k (0.94)^{25-k}$.
+
+    수치로: $P(X \le 4) \approx 0.9849$이므로 $p \approx 0.0151$.
+
+    이 학교의 채식 비율이 6%를 넘는다는 증거이다. $\alpha = 0.05$에서 $H_0$을 기각하지만 $\alpha = 0.01$에서는 기각하지 못한다.
+
+    정규근사를 쓰면 $z = (0.20 - 0.06)/\sqrt{0.06 \cdot 0.94/25} \approx 2.95$, $p \approx 0.0016$이 된다 — 정확한 값보다 거의 열 배 작다. $np_0 = 1.5 < 10$이므로 정규근사 조건이 깨져 있어, 이런 경우에는 정확한 이항검정을 써야 한다.
+
+---
+
+**연습문제 3.**
+**여러 언어를 쓰는 미국인.** $\hat p = 40/120 \approx 0.333$으로 $H_0: p = 0.26$ 대 $H_1: p > 0.26$을 검정한다. 정규근사로 p-값을 계산하라.
+
+??? success "연습문제 3 풀이"
     $\mathrm{SE} = \sqrt{0.26 \cdot 0.74/120} \approx 0.0400$. $z = (0.333 - 0.26)/0.0400 \approx 1.83$.
 
-    P-value: $P(Z > 1.83) = 1 - \Phi(1.83) \approx 0.034$. Reject $H_0$ at $\alpha = 0.05$.
+    p-값: $P(Z > 1.83) = 1 - \Phi(1.83) \approx 0.034$. $\alpha = 0.05$에서 $H_0$을 기각한다.
 
-    Conclusion: evidence that more than 26% of Americans speak multiple languages.
+    결론: 미국인의 26% 넘는 비율이 여러 언어를 쓴다는 증거이다.
 
-    Check: $np_0 = 31.2 \ge 10$, $n(1-p_0) = 88.8 \ge 10$. Normal approximation valid.
-
----
-
-**Exercise 4.**
-**Common p-value misinterpretations.** List three.
-
-??? success "Solution to Exercise 4"
-    1. **"$p$-value is the probability $H_0$ is true."** WRONG. P-value is a probability assuming $H_0$, not about $H_0$. To get $P(H_0 \mid \text{data})$, need Bayes' theorem with a prior.
-
-    2. **"$1 - p$ is the probability $H_1$ is true."** WRONG. Same confusion.
-
-    3. **"$p < 0.05$ means a large effect."** WRONG. P-value depends on both effect size and sample size. With $n = 10^6$, a tiny irrelevant effect can have $p < 10^{-10}$. Always report effect size and CI alongside p-value.
-
-    Other misconceptions: "p = 0.05 means 5% chance of error" (probability statement about hypothesis, not procedure); "if $p > 0.05$, $H_0$ is true" (failing to reject ≠ accepting).
+    확인: $np_0 = 31.2 \ge 10$, $n(1-p_0) = 88.8 \ge 10$. 정규근사가 타당하다.
 
 ---
 
-**Exercise 5.**
-**Simulation-based p-value.** Demonstrate for the vegetarian example.
+**연습문제 4.**
+**p-값에 대한 흔한 오해.** 세 가지를 들라.
 
-??? success "Solution to Exercise 5"
+??? success "연습문제 4 풀이"
+    1. **"$p$-값은 $H_0$이 참일 확률이다."** 틀렸다. p-값은 $H_0$을 가정한 확률이지 $H_0$에 관한 확률이 아니다. $P(H_0 \mid \text{자료})$를 얻으려면 사전분포와 Bayes 정리가 필요하다.
+
+    2. **"$1 - p$는 $H_1$이 참일 확률이다."** 틀렸다. 같은 혼동이다.
+
+    3. **"$p < 0.05$는 효과가 크다는 뜻이다."** 틀렸다. p-값은 효과크기와 표본크기 둘 다에 의존한다. $n = 10^6$이면 무의미할 만큼 작은 효과도 $p < 10^{-10}$일 수 있다. p-값과 함께 항상 효과크기와 신뢰구간을 보고하라.
+
+    다른 오해: "p = 0.05는 오류 확률이 5%라는 뜻이다"(절차가 아니라 가설에 관한 확률 진술로 오해), "$p > 0.05$이면 $H_0$이 참이다"(기각하지 못하는 것 ≠ 받아들이는 것).
+
+---
+
+**연습문제 5.**
+**모의실험 기반 p-값.** 채식주의자 예제로 보여라.
+
+??? success "연습문제 5 풀이"
     ```python
     import numpy as np
     rng = np.random.default_rng(42)
@@ -204,40 +204,41 @@ The final step involves interpreting the results in the context of the research 
     print(f"Simulated p-value: {p_value:.4f}")
     ```
 
-    Expected: $p \approx 0.002$, matching exact binomial.
+    예상: 정확한 이항 계산과 일치하는 $p \approx 0.015$.
 
-    **Advantages of simulation:**
+    **모의실험의 장점:**
 
-    - Works for any test statistic, not just standard ones.
-    - Automatically handles continuity correction.
-    - Reveals the *shape* of the null distribution (histogram).
+    - 표준적인 통계량만이 아니라 어떤 검정통계량에도 통한다.
+    - 연속성 보정을 자동으로 처리한다.
+    - 귀무분포의 *모양*을 드러낸다(히스토그램).
 
-    **Disadvantages:**
+    **단점:**
 
-    - Monte Carlo error: $\mathrm{SE} \approx \sqrt{p(1-p)/n_{\text{sim}}}$. For $p = 0.002$, need $n_{\text{sim}} \approx 10^6$ for 3-digit accuracy.
-    - Slower than analytic when both available.
+    - 몬테카를로 오차: $\mathrm{SE} \approx \sqrt{p(1-p)/n_{\text{sim}}}$. $p = 0.015$이고 $n_{\text{sim}} = 10^4$이면 $\mathrm{SE} \approx 0.0012$로 상대오차가 약 8%이다. 자릿수를 더 얻으려면 $n_{\text{sim}}$을 크게 늘려야 한다.
+    - 둘 다 가능할 때는 해석적 계산보다 느리다.
 
 ---
 
-**Exercise 6.**
-**P-value vs effect size.** Why is the p-value alone insufficient?
+**연습문제 6.**
+**p-값과 효과크기.** p-값만으로 충분하지 않은 이유는?
 
-??? success "Solution to Exercise 6"
-    P-value confounds **effect size** and **sample size**:
+??? success "연습문제 6 풀이"
+    p-값은 **효과크기**와 **표본크기**를 뒤섞는다:
 
-    - Tiny effect + huge $n$: $p$ small, but practical significance negligible.
-    - Large effect + small $n$: $p$ large (no significance), but effect may be important.
+    - 작은 효과 + 아주 큰 $n$: $p$는 작지만 실질적 유의성은 무시할 만하다.
+    - 큰 효과 + 작은 $n$: $p$는 크지만(유의하지 않지만) 효과는 중요할 수 있다.
 
-    Two A/B tests:
-    - Test 1: 10000 users, 51% vs 50% conversion. $p = 0.045$. Effect: 1pp.
-    - Test 2: 100 users, 70% vs 50% conversion. $p = 0.003$. Effect: 20pp.
+    두 개의 A/B 검정:
 
-    Test 1 is "more significant" by p-value but Test 2 has a far larger effect.
+    - 검정 1: 집단당 100,000명, 전환율 51% 대 50%. $p \approx 0.00001$. 효과: 1퍼센트포인트.
+    - 검정 2: 집단당 50명, 전환율 70% 대 50%. $p \approx 0.04$. 효과: 20퍼센트포인트.
 
-    **Always report:**
+    p-값으로는 검정 1이 훨씬 "유의하지만" 효과는 검정 2가 훨씬 크다.
 
-    - Effect size (raw or standardized like Cohen's $d$).
-    - Confidence interval (range of plausible effects).
-    - P-value (evidence against $H_0$).
+    **항상 보고할 것:**
 
-    Together these tell the full story. P-value alone is impoverished.
+    - 효과크기(원 단위 또는 Cohen의 $d$ 같은 표준화 값).
+    - 신뢰구간(그럴듯한 효과의 범위).
+    - p-값($H_0$에 반하는 증거).
+
+    이 셋이 함께 있어야 이야기가 온전해진다. p-값만으로는 빈약하다.

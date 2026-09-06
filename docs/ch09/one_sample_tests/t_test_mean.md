@@ -1,200 +1,200 @@
-# One-Sample t-Test for the Mean
+# 평균에 대한 일표본 t-검정
 
-## Overview
+## 개요
 
-In practice, the population standard deviation $\sigma$ is almost never known. The $z$-test for the mean requires $\sigma$, so it cannot be applied directly to most real-world problems. The one-sample $t$-test resolves this by replacing $\sigma$ with the sample standard deviation $S$. This substitution introduces additional uncertainty --- $S$ is itself a random variable --- and the $t$-distribution accounts for this extra variability through heavier tails than the standard normal. As the sample size grows, $S$ converges to $\sigma$, the $t$-distribution converges to the standard normal, and the $t$-test and $z$-test become equivalent.
+실무에서 모표준편차 $\sigma$를 아는 경우는 거의 없다. 평균에 대한 $z$-검정은 $\sigma$를 요구하므로 현실의 대부분 문제에 곧바로 쓸 수 없다. 일표본 $t$-검정은 $\sigma$를 표본표준편차 $S$로 바꾸어 이 문제를 해결한다. 이 대체는 추가적인 불확실성을 낳는데($S$ 자체가 확률변수이다), $t$-분포는 표준정규보다 두꺼운 꼬리로 이 추가 변동을 반영한다. 표본크기가 커지면 $S$가 $\sigma$로 수렴하고 $t$-분포가 표준정규로 수렴하여 $t$-검정과 $z$-검정이 같아진다.
 
-## Hypotheses
+## 가설
 
-Let $X_1, X_2, \ldots, X_n$ be a random sample from a population with mean $\mu$ and unknown variance $\sigma^2$. The null hypothesis specifies a particular value for the mean:
+$X_1, X_2, \ldots, X_n$을 평균이 $\mu$이고 분산 $\sigma^2$을 모르는 모집단에서 뽑은 확률표본이라 하자. 귀무가설은 평균의 특정 값을 지정한다:
 
 $$
 H_0\colon \mu = \mu_0
 $$
 
-The alternative takes one of three forms:
+대립가설은 다음 세 형태 중 하나이다:
 
-| Alternative | Interpretation |
+| 대립가설 | 해석 |
 |---|---|
-| $H_1\colon \mu \neq \mu_0$ | Two-sided: the mean differs from $\mu_0$ |
-| $H_1\colon \mu > \mu_0$ | Right-sided: the mean exceeds $\mu_0$ |
-| $H_1\colon \mu < \mu_0$ | Left-sided: the mean is below $\mu_0$ |
+| $H_1\colon \mu \neq \mu_0$ | 양측: 평균이 $\mu_0$과 다르다 |
+| $H_1\colon \mu > \mu_0$ | 우측: 평균이 $\mu_0$보다 크다 |
+| $H_1\colon \mu < \mu_0$ | 좌측: 평균이 $\mu_0$보다 작다 |
 
-## Test Statistic
+## 검정통계량
 
-The test statistic measures how many estimated standard errors the sample mean $\bar{X}$ falls from the hypothesized value $\mu_0$. Its structure mirrors the $z$-statistic, but with $S$ in place of $\sigma$:
+검정통계량은 표본평균 $\bar{X}$가 가설의 값 $\mu_0$에서 추정된 표준오차 몇 개만큼 떨어져 있는지를 잰다. 구조는 $z$-통계량과 같고 $\sigma$ 자리에 $S$가 들어간다:
 
 $$
 t = \frac{\bar{X} - \mu_0}{S / \sqrt{n}}
 $$
 
-where $S = \sqrt{\frac{1}{n-1}\sum_{i=1}^n (X_i - \bar{X})^2}$ is the sample standard deviation.
+여기서 $S = \sqrt{\frac{1}{n-1}\sum_{i=1}^n (X_i - \bar{X})^2}$은 표본표준편차이다.
 
-Under $H_0$ and normality of the population, this statistic follows Student's $t$-distribution with $n - 1$ degrees of freedom:
+$H_0$ 아래에서 모집단이 정규이면 이 통계량은 자유도 $n - 1$인 Student $t$-분포를 따른다:
 
 $$
 t = \frac{\bar{X} - \mu_0}{S / \sqrt{n}} \sim t_{n-1}
 $$
 
-The $t_{n-1}$ distribution has heavier tails than the standard normal $N(0,1)$, reflecting the additional uncertainty from estimating $\sigma$. As $n \to \infty$, $t_{n-1} \to N(0,1)$, and the $t$-test reduces to the $z$-test.
+$t_{n-1}$ 분포는 표준정규 $N(0,1)$보다 꼬리가 두꺼운데, 이는 $\sigma$를 추정하는 데서 오는 추가 불확실성을 반영한다. $n \to \infty$이면 $t_{n-1} \to N(0,1)$이고 $t$-검정은 $z$-검정으로 환원된다.
 
-!!! note "Why n - 1 Degrees of Freedom?"
-    The sample standard deviation $S$ uses $n - 1$ in the denominator because one degree of freedom is consumed by estimating $\bar{X}$. The $n$ deviations $X_i - \bar{X}$ satisfy the constraint $\sum(X_i - \bar{X}) = 0$, leaving only $n - 1$ free pieces of information about the spread.
+!!! note "왜 자유도가 n - 1인가?"
+    표본표준편차 $S$는 $\bar{X}$를 추정하는 데 자유도 하나가 소모되므로 분모에 $n - 1$을 쓴다. $n$개의 편차 $X_i - \bar{X}$는 제약 $\sum(X_i - \bar{X}) = 0$을 만족하므로, 산포에 관한 자유로운 정보는 $n - 1$개뿐이다.
 
-## Rejection Regions
+## 기각역
 
-At significance level $\alpha$, the rejection region depends on the alternative:
+유의수준 $\alpha$에서 기각역은 대립가설에 따라 달라진다.
 
-**Two-sided** ($H_1\colon \mu \neq \mu_0$): Reject $H_0$ if
+**양측** ($H_1\colon \mu \neq \mu_0$): 다음이면 $H_0$을 기각한다.
 
 $$
 |t| > t_{\alpha/2,\, n-1}
 $$
 
-**Right-sided** ($H_1\colon \mu > \mu_0$): Reject $H_0$ if
+**우측** ($H_1\colon \mu > \mu_0$): 다음이면 $H_0$을 기각한다.
 
 $$
 t > t_{\alpha,\, n-1}
 $$
 
-**Left-sided** ($H_1\colon \mu < \mu_0$): Reject $H_0$ if
+**좌측** ($H_1\colon \mu < \mu_0$): 다음이면 $H_0$을 기각한다.
 
 $$
 t < -t_{\alpha,\, n-1}
 $$
 
-Here $t_{\alpha,\, n-1}$ denotes the upper $\alpha$ critical value of the $t_{n-1}$ distribution, satisfying $P(t_{n-1} > t_{\alpha,\, n-1}) = \alpha$.
+여기서 $t_{\alpha,\, n-1}$은 $P(t_{n-1} > t_{\alpha,\, n-1}) = \alpha$를 만족하는 $t_{n-1}$ 분포의 상위 $\alpha$ 임계값이다.
 
-## Worked Example
+## 풀이 예제
 
-A food manufacturer claims that its cereal boxes contain an average of $\mu_0 = 500$ grams. A consumer group suspects the boxes are underfilled and collects a random sample of $n = 16$ boxes, finding $\bar{x} = 496.2$ grams and $s = 4.8$ grams. Test whether the mean fill weight is less than 500 grams at $\alpha = 0.05$.
+한 식품 제조사가 시리얼 상자에 평균 $\mu_0 = 500$ 그램이 들어 있다고 주장한다. 어떤 소비자 단체가 내용량이 부족하다고 의심하여 상자 $n = 16$개를 무작위로 모아 $\bar{x} = 496.2$ 그램, $s = 4.8$ 그램을 얻었다. $\alpha = 0.05$에서 평균 충전 중량이 500 그램보다 적은지 검정하라.
 
-**Step 1.** State the hypotheses:
+**1단계.** 가설을 세운다:
 
 $$
 H_0\colon \mu = 500 \qquad H_1\colon \mu < 500
 $$
 
-**Step 2.** Compute the test statistic:
+**2단계.** 검정통계량을 계산한다:
 
 $$
 t = \frac{496.2 - 500}{4.8 / \sqrt{16}} = \frac{-3.8}{1.2} = -3.167
 $$
 
-**Step 3.** Find the critical value. For a left-sided test at $\alpha = 0.05$ with $15$ degrees of freedom:
+**3단계.** 임계값을 구한다. 자유도 15, $\alpha = 0.05$의 좌측검정에서:
 
 $$
 -t_{0.05,\, 15} = -1.753
 $$
 
-**Step 4.** Make the decision. Since $t = -3.167 < -1.753$, we reject $H_0$. There is sufficient evidence at the 5% level to conclude that the mean fill weight is less than 500 grams.
+**4단계.** 판정한다. $t = -3.167 < -1.753$이므로 $H_0$을 기각한다. 5% 수준에서 평균 충전 중량이 500 그램보다 적다고 결론지을 충분한 증거가 있다.
 
-The $p$-value is $P(t_{15} < -3.167) \approx 0.003$, providing strong evidence against $H_0$.
+$p$-값은 $P(t_{15} < -3.167) \approx 0.003$으로 $H_0$에 반하는 강한 증거이다.
 
-## Assumptions
+## 가정
 
-The one-sample $t$-test requires:
+일표본 $t$-검정에는 다음이 필요하다:
 
-- **Random sampling**: The observations are independent and identically distributed.
-- **Normality**: The population is normally distributed, or $n$ is large enough for the Central Limit Theorem to apply.
+- **확률표본추출**: 관측값이 독립이고 동일한 분포를 따른다.
+- **정규성**: 모집단이 정규분포를 따르거나, $n$이 중심극한정리가 적용될 만큼 크다.
 
-## Robustness
+## 로버스트성
 
-The $t$-test is fairly robust to departures from normality, particularly for moderate to large sample sizes. Simulation studies show that for $n \geq 30$, the actual Type I error rate stays close to the nominal $\alpha$ even for moderately skewed or heavy-tailed distributions. For smaller samples ($n < 15$), the test can be unreliable if the population is strongly skewed or has heavy tails.
+$t$-검정은 정규성에서 벗어나도 꽤 로버스트하며, 특히 표본이 중간 이상으로 크면 그렇다. 모의실험 연구들은 $n \geq 30$이면 적당히 치우치거나 꼬리가 두꺼운 분포에서도 실제 제1종 오류율이 명목 $\alpha$에 가깝게 유지됨을 보여준다. 표본이 더 작으면($n < 15$) 모집단이 심하게 치우쳤거나 꼬리가 두꺼울 때 검정을 믿기 어렵다.
 
-Guidelines for when the normality assumption matters most:
+정규성 가정이 가장 중요한 때에 대한 지침:
 
-- **$n < 15$**: Normality is important. Check with a Q-Q plot or Shapiro-Wilk test. Consider nonparametric alternatives (e.g., the Wilcoxon signed-rank test) if normality is questionable.
-- **$15 \leq n < 30$**: Mild departures from normality are tolerable. The test is unreliable only for strongly skewed or heavy-tailed distributions.
-- **$n \geq 30$**: The CLT ensures the sampling distribution of $\bar{X}$ is approximately normal, making the $t$-test reliable for most practical distributions.
+- **$n < 15$**: 정규성이 중요하다. Q-Q 그림이나 Shapiro-Wilk 검정으로 확인하라. 정규성이 의심스러우면 비모수적 대안(예: Wilcoxon 부호순위 검정)을 고려하라.
+- **$15 \leq n < 30$**: 정규성에서 약간 벗어나는 것은 견딜 만하다. 심하게 치우치거나 꼬리가 두꺼운 분포에서만 검정을 믿기 어렵다.
+- **$n \geq 30$**: 중심극한정리가 $\bar{X}$의 표본분포를 근사적으로 정규로 만들어 주므로 대부분의 실제 분포에서 $t$-검정이 믿을 만하다.
 
-!!! warning "Outliers Remain Problematic"
-    Even with large $n$, individual outliers can inflate $S$ and shift $\bar{X}$, potentially masking a real effect or creating a spurious one. Always inspect the data for outliers before applying the $t$-test.
+!!! warning "이상점은 여전히 문제이다"
+    $n$이 커도 개별 이상점이 $S$를 부풀리고 $\bar{X}$를 옮겨 실제 효과를 가리거나 없는 효과를 만들어낼 수 있다. $t$-검정을 적용하기 전에 항상 자료에 이상점이 있는지 살펴보라.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Cereal: claimed mean 500g. Sample $n = 25$, $\bar X = 490$, $s = 15$. Test at $\alpha = 0.01$.
+**연습문제 1.**
+시리얼: 주장된 평균 500 g. 표본 $n = 25$, $\bar X = 490$, $s = 15$. $\alpha = 0.01$에서 검정하라.
 
-??? success "Solution to Exercise 1"
-    $H_0: \mu = 500$ vs $H_1: \mu \ne 500$.
+??? success "연습문제 1 풀이"
+    $H_0: \mu = 500$ 대 $H_1: \mu \ne 500$.
 
     $t = (490 - 500)/(15/\sqrt{25}) = -10/3 = -3.33$.
 
-    Critical: $t_{0.005, 24} = \pm 2.797$. $|t| = 3.33 > 2.797$. **Reject.**
+    임계값: $t_{0.005, 24} = \pm 2.797$. $|t| = 3.33 > 2.797$. **기각한다.**
 
-    Strong evidence the mean is below 500g.
-
----
-
-**Exercise 2.**
-**Conditions for $t$-test.** State and explain.
-
-??? success "Solution to Exercise 2"
-    1. **Random sample / independence:** $X_i$ are independent (or at least exchangeable). For sampling without replacement, the sampling fraction should be < 10%.
-
-    2. **Normality:** the underlying population is approximately normal, OR $n$ is large enough for the CLT to give $\bar X$ approximate normality.
-
-    For small $n$ (< 30) with non-normal data, $t$-test may have wrong size. Check normality via Q-Q plot.
-
-    For very heavy-tailed or skewed data: use Wilcoxon signed-rank (non-parametric) or bootstrap test.
+    평균이 500 g보다 작다는 강한 증거이다.
 
 ---
 
-**Exercise 3.**
-**One-sided test.** Same data as Exercise 1, but test $H_1: \mu < 500$ (suspect mean below claim).
+**연습문제 2.**
+**$t$-검정의 조건.** 진술하고 설명하라.
 
-??? success "Solution to Exercise 3"
-    Critical: $t_{0.01, 24} = -2.492$. $t = -3.33 < -2.492$. **Reject.**
+??? success "연습문제 2 풀이"
+    1. **확률표본 / 독립성:** $X_i$가 독립이다(적어도 교환 가능해야 한다). 비복원 추출이면 표본추출 비율이 10% 미만이어야 한다.
 
-    P-value: $P(T_{24} < -3.33) \approx 0.0014$.
+    2. **정규성:** 바탕 모집단이 근사적으로 정규이거나, $n$이 중심극한정리로 $\bar X$가 근사적으로 정규가 될 만큼 커야 한다.
 
-    Decision unchanged: still reject. But the p-value is half of the two-sided value, reflecting that we put all $\alpha$ on one tail.
+    $n$이 작고(30 미만) 자료가 정규가 아니면 $t$-검정의 크기가 틀릴 수 있다. Q-Q 그림으로 정규성을 확인하라.
 
----
-
-**Exercise 4.**
-**Effect size.** Compute Cohen's $d$ for the cereal exercise.
-
-??? success "Solution to Exercise 4"
-    Cohen's $d = (\bar X - \mu_0)/s = (490 - 500)/15 = -0.67$.
-
-    Interpretation:
-
-    - $|d| = 0.2$: small.
-    - $|d| = 0.5$: medium.
-    - $|d| = 0.8$: large.
-
-    $d = -0.67$ is "medium-large." Statistical significance + meaningful effect size — both signal a real problem with cereal weights.
-
-    Always report effect size alongside p-value. P-value alone (especially with large $n$) can flag trivial effects.
+    꼬리가 매우 두껍거나 심하게 치우친 자료: Wilcoxon 부호순위(비모수)나 붓스트랩 검정을 쓰라.
 
 ---
 
-**Exercise 5.**
-**Sample size for power.** What $n$ gives 90% power to detect a 5g decrease at $\alpha = 0.01$, assuming $\sigma \approx 15$?
+**연습문제 3.**
+**단측검정.** 연습문제 1과 같은 자료로 $H_1: \mu < 500$(평균이 주장보다 낮다고 의심)을 검정하라.
 
-??? success "Solution to Exercise 5"
-    $n = ((z_{\alpha/2} + z_\beta) \sigma/\Delta)^2$ (approximate using $z$ since $n$ will be moderate).
+??? success "연습문제 3 풀이"
+    임계값: $t_{0.01, 24} = -2.492$. $t = -3.33 < -2.492$. **기각한다.**
+
+    p-값: $P(T_{24} < -3.33) \approx 0.0014$.
+
+    판정은 그대로 기각이다. 다만 $\alpha$ 전부를 한쪽 꼬리에 두므로 p-값이 양측의 절반이다.
+
+---
+
+**연습문제 4.**
+**효과크기.** 시리얼 문제에서 Cohen의 $d$를 계산하라.
+
+??? success "연습문제 4 풀이"
+    Cohen의 $d = (\bar X - \mu_0)/s = (490 - 500)/15 = -0.67$.
+
+    해석:
+
+    - $|d| = 0.2$: 작음.
+    - $|d| = 0.5$: 중간.
+    - $|d| = 0.8$: 큼.
+
+    $d = -0.67$은 "중간에서 큰 쪽"이다. 통계적 유의성과 의미 있는 효과크기가 함께 있으므로 시리얼 중량에 실제 문제가 있다는 신호이다.
+
+    항상 p-값과 함께 효과크기를 보고하라. (특히 $n$이 클 때) p-값만으로는 사소한 효과에도 신호가 켜질 수 있다.
+
+---
+
+**연습문제 5.**
+**검정력을 위한 표본크기.** $\sigma \approx 15$라고 할 때 $\alpha = 0.01$에서 5 g 감소를 탐지할 검정력 90%를 얻으려면 $n$이 얼마여야 하는가?
+
+??? success "연습문제 5 풀이"
+    $n = ((z_{\alpha/2} + z_\beta) \sigma/\Delta)^2$ ($n$이 어느 정도 클 것이므로 $z$로 근사한다).
 
     $z_{0.005} = 2.576$, $z_{0.10} = 1.282$. $\Delta = 5$, $\sigma = 15$.
 
     $n = ((2.576 + 1.282) \cdot 15/5)^2 = (11.57)^2 \approx 134$.
 
-    Detecting smaller effects with high power requires larger samples. To detect 10g: $n \approx 34$. Quadratic in $1/\Delta$.
+    작은 효과를 높은 검정력으로 탐지하려면 표본이 커야 한다. 10 g을 탐지하려면 $n \approx 34$. $1/\Delta$에 대해 이차이다.
 
 ---
 
-**Exercise 6.**
-**Multiple testing.** A QA engineer runs $t$-tests on 20 production lines. At $\alpha = 0.05$, what's the family-wise false-positive rate under all-true nulls?
+**연습문제 6.**
+**다중검정.** 어떤 품질보증 엔지니어가 생산라인 20곳에 $t$-검정을 돌린다. $\alpha = 0.05$에서 모든 귀무가설이 참일 때 가족단위 거짓 양성 비율은?
 
-??? success "Solution to Exercise 6"
-    $P(\text{at least one false rejection}) = 1 - (1 - 0.05)^{20} \approx 0.642$.
+??? success "연습문제 6 풀이"
+    $P(\text{적어도 한 번 잘못 기각}) = 1 - (1 - 0.05)^{20} \approx 0.642$.
 
-    Expected number of false rejections: $20 \cdot 0.05 = 1$.
+    잘못된 기각 수의 기댓값: $20 \cdot 0.05 = 1$.
 
-    To control family-wise error at $\alpha = 0.05$: use Bonferroni — test each at $\alpha/20 = 0.0025$. Very conservative.
+    가족단위 오류를 $\alpha = 0.05$로 통제하려면 Bonferroni를 써서 각각을 $\alpha/20 = 0.0025$에서 검정한다. 매우 보수적이다.
 
-    Alternative — FDR (Benjamini-Hochberg): controls expected proportion of false positives among declared positives. Less conservative; standard in high-throughput testing.
+    대안 — FDR(Benjamini-Hochberg): 양성으로 선언한 것 중 거짓 양성의 기대 비율을 통제한다. 덜 보수적이며 고처리량 검정의 표준이다.
 
-    Without correction, false alarms are nearly guaranteed in multi-test scenarios.
+    보정하지 않으면 다중검정 상황에서 거짓 경보가 사실상 확실하다.

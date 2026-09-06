@@ -1,54 +1,54 @@
-# False Discovery Rate and Resampling Multiple Testing
+# 거짓발견율과 재표본추출 다중검정
 
-## Overview
+## 개요
 
-When testing many hypotheses simultaneously, the probability of at least one false positive grows rapidly. This page demonstrates three strategies for controlling errors across multiple tests: Bonferroni and Holm corrections for family-wise error rate (FWER) control, the Benjamini-Hochberg (BH) procedure for false discovery rate (FDR) control, and a resampling (permutation) approach that estimates FDR without distributional assumptions.
+여러 가설을 동시에 검정하면 거짓 양성이 적어도 하나 나올 확률이 빠르게 커진다. 이 페이지에서는 다중검정의 오류를 통제하는 세 가지 전략을 보인다: 가족단위 오류율(FWER) 통제를 위한 Bonferroni와 Holm 보정, 거짓발견율(FDR) 통제를 위한 Benjamini-Hochberg(BH) 절차, 그리고 분포 가정 없이 FDR을 추정하는 재표본추출(순열) 접근.
 
-## Family-Wise Error Rate Growth
+## 가족단위 오류율의 증가
 
-If we conduct $m$ independent tests, each at level $\alpha$, the probability of making at least one Type I error is
+독립인 검정 $m$개를 각각 수준 $\alpha$에서 수행하면 제1종 오류를 적어도 한 번 범할 확률은
 
 $$
 \text{FWER} = 1 - (1 - \alpha)^m.
 $$
 
-For $\alpha = 0.05$ and $m = 100$, this exceeds 0.99 -- virtually guaranteeing a false positive.
+$\alpha = 0.05$이고 $m = 100$이면 이 값이 0.99를 넘어 거짓 양성이 사실상 확실하다.
 
-## Correction Methods
+## 보정 방법
 
-### Bonferroni Correction
+### Bonferroni 보정
 
-Reject the $i$-th hypothesis only if $p_i < \alpha / m$. This controls FWER at level $\alpha$ but is conservative: power drops as $m$ grows.
+$p_i < \alpha / m$일 때에만 $i$번째 가설을 기각한다. FWER을 수준 $\alpha$로 통제하지만 보수적이어서 $m$이 커지면 검정력이 떨어진다.
 
-### Holm Step-Down Procedure
+### Holm 단계적 하강 절차
 
-Sort the $p$-values $p_{(1)} \leq p_{(2)} \leq \cdots \leq p_{(m)}$. Reject $H_{(k)}$ if
+$p$-값을 $p_{(1)} \leq p_{(2)} \leq \cdots \leq p_{(m)}$으로 정렬한다. 모든 $j = 1, \ldots, k$에 대해
 
 $$
-p_{(j)} < \frac{\alpha}{m - j + 1} \quad \text{for all } j = 1, \ldots, k.
+p_{(j)} < \frac{\alpha}{m - j + 1}
 $$
 
-Holm controls FWER like Bonferroni but is uniformly more powerful.
+이면 $H_{(k)}$를 기각한다. Holm은 Bonferroni처럼 FWER을 통제하면서 균일하게 더 강력하다.
 
-### Benjamini-Hochberg Procedure
+### Benjamini-Hochberg 절차
 
-FDR is defined as the expected proportion of false discoveries among all rejections:
+FDR은 전체 기각 중 거짓 발견의 기대 비율로 정의된다:
 
 $$
 \text{FDR} = E\!\left[\frac{V}{R \vee 1}\right],
 $$
 
-where $V$ is the number of false positives and $R$ is the total number of rejections. The BH procedure finds the largest $k$ such that
+여기서 $V$는 거짓 양성의 수, $R$은 전체 기각 수이다. BH 절차는 다음을 만족하는 가장 큰 $k$를 찾아
 
 $$
 p_{(k)} \leq \frac{k}{m} \cdot \alpha,
 $$
 
-then rejects all $H_{(1)}, \ldots, H_{(k)}$. Under independence, this controls FDR at level $\alpha$.
+$H_{(1)}, \ldots, H_{(k)}$를 모두 기각한다. 독립일 때 이 절차는 FDR을 수준 $\alpha$로 통제한다.
 
-## Code
+## 코드
 
-### FWER Growth Curve
+### FWER 증가 곡선
 
 ```python
 import numpy as np
@@ -60,7 +60,7 @@ for a in alphas:
     print(f"alpha={a}, m=100: FWER={1 - (1-a)**100:.4f}")
 ```
 
-### Simulated Multiple Tests with Corrections
+### 보정을 적용한 다중검정 모의실험
 
 ```python
 from scipy import stats
@@ -97,7 +97,7 @@ for name, adj_p in [("Bonferroni", p_bonf), ("Holm", p_holm), ("BH", p_bh)]:
     print(f"{name:12s}: TP={tp}, FP={fp}, FDR={fdr:.3f}, Power={power:.3f}")
 ```
 
-### Resampling-Based FDR Estimation
+### 재표본추출 기반 FDR 추정
 
 ```python
 def resampling_fdr(X_group1, X_group2, n_permutations=500):
@@ -131,81 +131,81 @@ def resampling_fdr(X_group1, X_group2, n_permutations=500):
     return np.array(Rs), np.array(FDRs)
 ```
 
-The algorithm counts how many permuted test statistics exceed each threshold and divides by the number of observed rejections, yielding an FDR estimate at every possible cutoff.
+이 알고리즘은 각 문턱을 넘는 순열 검정통계량의 개수를 세어 관측된 기각 수로 나누며, 가능한 모든 절단값에서 FDR 추정값을 준다.
 
-## Interpretation
+## 해석
 
-- **Uncorrected testing** at $\alpha = 0.05$ on 2,000 hypotheses produces many false positives because approximately $0.05 \times 1800 = 90$ null hypotheses are expected to be falsely rejected.
-- **Bonferroni** eliminates nearly all false positives but sacrifices power -- many true effects go undetected.
-- **Holm** matches Bonferroni's FWER control with slightly better power.
-- **BH (FDR)** accepts a small, controlled proportion of false discoveries in exchange for substantially higher power, making it the preferred method in high-dimensional settings such as genomics.
-- **Resampling FDR** avoids distributional assumptions altogether and produces a smooth curve of estimated FDR versus number of rejections. It is especially useful when the null distribution of the test statistic is unknown or non-standard.
+- 가설 2,000개에 대해 $\alpha = 0.05$에서 **보정 없이 검정**하면 귀무가설 1,800개 중 약 $0.05 \times 1800 = 90$개가 잘못 기각될 것으로 기대되어 거짓 양성이 많이 나온다.
+- **Bonferroni**는 거짓 양성을 거의 없애지만 검정력을 희생하여 참 효과를 많이 놓친다.
+- **Holm**은 Bonferroni와 같은 FWER 통제를 제공하면서 검정력이 조금 낫다.
+- **BH (FDR)**는 통제된 작은 비율의 거짓 발견을 감수하는 대신 검정력을 크게 높여, 유전체학 같은 고차원 상황에서 선호되는 방법이다.
+- **재표본추출 FDR**은 분포 가정을 아예 피하며 기각 수 대비 추정 FDR의 매끄러운 곡선을 준다. 검정통계량의 귀무분포를 모르거나 비표준적일 때 특히 유용하다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.** Prove that the family-wise error rate satisfies $\text{FWER} = 1 - (1 - \alpha)^m$ when the $m$ tests are independent. What happens when the tests are positively correlated?
+**연습문제 1.** $m$개 검정이 독립일 때 가족단위 오류율이 $\text{FWER} = 1 - (1 - \alpha)^m$을 만족함을 증명하라. 검정이 양의 상관을 가지면 어떻게 되는가?
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
 
-    Under independence, the probability that all $m$ tests correctly fail to reject is $(1-\alpha)^m$. By the complement rule,
+    독립일 때 $m$개 검정이 모두 올바르게 기각하지 않을 확률은 $(1-\alpha)^m$이다. 여집합 법칙에 의해,
 
     $$
     P(\text{at least one rejection}) = 1 - (1 - \alpha)^m.
     $$
 
-    When the tests are positively correlated, the joint probability of no rejections is larger than $(1-\alpha)^m$, so the actual FWER is smaller than the independence formula predicts. Independence gives an upper bound on FWER in this case. $\square$
+    검정이 양의 상관을 가지면 아무것도 기각하지 않을 결합확률이 $(1-\alpha)^m$보다 커지므로 실제 FWER은 독립 공식이 예측하는 것보다 작다. 이 경우 독립 가정이 FWER의 상한을 준다. $\square$
 
 ---
 
-**Exercise 2.** In the simulation with 2,000 tests and 200 true alternatives, compute the expected number of false positives under uncorrected testing and under Bonferroni. Verify your answers against the simulation output.
+**연습문제 2.** 검정 2,000개 중 참 대립가설이 200개인 모의실험에서 보정 없이 검정할 때와 Bonferroni를 적용할 때 거짓 양성 수의 기댓값을 계산하라. 모의실험 출력과 대조해 확인하라.
 
-??? success "Solution to Exercise 2"
+??? success "연습문제 2 풀이"
 
-    Under uncorrected testing at $\alpha = 0.05$, the expected number of false positives from the 1,800 null hypotheses is
+    $\alpha = 0.05$에서 보정 없이 검정하면 귀무가설 1,800개에서 나오는 거짓 양성의 기댓값은
 
     $$
     E[V] = 1800 \times 0.05 = 90.
     $$
 
-    Under Bonferroni, each test is compared against $\alpha/m = 0.05/2000 = 0.000025$. For a null hypothesis (mean 0, $n=50$), the probability of a one-sample $t$-statistic exceeding the Bonferroni threshold is extremely small, so $E[V] \approx 1800 \times 0.000025 = 0.045$, i.e., nearly zero false positives on average. The simulation results should closely match these expectations. $\square$
+    Bonferroni에서는 각 검정을 $\alpha/m = 0.05/2000 = 0.000025$와 비교한다. 귀무가설(평균 0, $n=50$)에서 일표본 $t$-통계량이 Bonferroni 문턱을 넘을 확률은 극도로 작으므로 $E[V] \approx 1800 \times 0.000025 = 0.045$, 즉 평균적으로 거짓 양성이 거의 없다. 모의실험 결과가 이 기댓값에 가깝게 나올 것이다. $\square$
 
 ---
 
-**Exercise 3.** Explain the BH procedure step by step. Why does sorting p-values and comparing $p_{(k)}$ to $k\alpha/m$ control FDR at level $\alpha$?
+**연습문제 3.** BH 절차를 단계별로 설명하라. p-값을 정렬해 $p_{(k)}$를 $k\alpha/m$과 비교하는 것이 왜 FDR을 수준 $\alpha$로 통제하는가?
 
-??? success "Solution to Exercise 3"
+??? success "연습문제 3 풀이"
 
-    1. Sort all $m$ p-values in ascending order: $p_{(1)} \leq \cdots \leq p_{(m)}$.
-    2. Find the largest index $k$ such that $p_{(k)} \leq k\alpha/m$.
-    3. Reject all hypotheses $H_{(1)}, \ldots, H_{(k)}$.
+    1. $m$개 p-값을 오름차순으로 정렬한다: $p_{(1)} \leq \cdots \leq p_{(m)}$.
+    2. $p_{(k)} \leq k\alpha/m$을 만족하는 가장 큰 지표 $k$를 찾는다.
+    3. 가설 $H_{(1)}, \ldots, H_{(k)}$를 모두 기각한다.
 
-    The intuition is that under the null, p-values are uniformly distributed, so the $k$-th smallest p-value has expected value $k/(m+1)$. The threshold $k\alpha/m$ is a fraction $\alpha$ of this expected spacing. Benjamini and Hochberg (1995) proved that under independence of the test statistics, this procedure guarantees
+    직관은 이렇다: 귀무가설 아래에서 p-값이 균등분포를 따르므로 $k$번째로 작은 p-값의 기댓값은 $k/(m+1)$이다. 문턱 $k\alpha/m$은 이 기대 간격의 $\alpha$배에 해당한다. Benjamini와 Hochberg(1995)는 검정통계량이 독립이면 이 절차가
 
     $$
-    \text{FDR} = E\!\left[\frac{V}{R \vee 1}\right] \leq \frac{m_0}{m}\alpha \leq \alpha,
+    \text{FDR} = E\!\left[\frac{V}{R \vee 1}\right] \leq \frac{m_0}{m}\alpha \leq \alpha
     $$
 
-    where $m_0$ is the number of true null hypotheses. $\square$
+    를 보장함을 증명했다. 여기서 $m_0$은 참인 귀무가설의 개수이다. $\square$
 
 ---
 
-**Exercise 4.** In the resampling FDR procedure, why do we divide the number of permutation-based rejections by the number of permutations? What would happen if we used too few permutations?
+**연습문제 4.** 재표본추출 FDR 절차에서 순열 기반 기각 수를 순열 횟수로 나누는 이유는 무엇인가? 순열이 너무 적으면 어떻게 되는가?
 
-??? success "Solution to Exercise 4"
+??? success "연습문제 4 풀이"
 
-    Each permutation provides one realization of the test statistics under $H_0$. The average number of permuted statistics exceeding the threshold estimates $E[V]$, the expected number of false discoveries. Dividing by `n_permutations` converts a count into this average:
+    각 순열은 $H_0$ 아래 검정통계량의 실현값 하나를 준다. 문턱을 넘는 순열 통계량의 평균 개수가 거짓 발견 수의 기댓값 $E[V]$를 추정한다. `n_permutations`로 나누는 것이 개수를 이 평균으로 바꾸는 일이다:
 
     $$
     \hat{V}(c) = \frac{1}{B}\sum_{b=1}^{B} \sum_{j=1}^{m} \mathbf{1}(|T_j^{(b)}| \geq c).
     $$
 
-    With too few permutations, $\hat{V}$ is noisy and the FDR estimate becomes unreliable. In particular, for strict thresholds where $V$ is small, a small $B$ can produce $\hat{V} = 0$ even when the true expected false discoveries are positive, leading to an underestimate of FDR. A practical minimum is $B \geq 200$. $\square$
+    순열이 너무 적으면 $\hat{V}$에 잡음이 많아 FDR 추정을 믿을 수 없다. 특히 $V$가 작은 엄격한 문턱에서는 $B$가 작으면 참 기대 거짓 발견이 양수인데도 $\hat{V} = 0$이 나와 FDR을 과소추정할 수 있다. 실무적인 최소값은 $B \geq 200$이다. $\square$
 
 ---
 
-**Exercise 5.** Modify the simulation to compare BH at $\alpha = 0.05$ and $\alpha = 0.10$. How do the number of rejections, FDR, and power change? Explain the trade-off.
+**연습문제 5.** $\alpha = 0.05$와 $\alpha = 0.10$에서 BH를 비교하도록 모의실험을 고쳐라. 기각 수, FDR, 검정력은 어떻게 달라지는가? 맞바꿈을 설명하라.
 
-??? success "Solution to Exercise 5"
+??? success "연습문제 5 풀이"
 
     ```python
     for alpha in [0.05, 0.10]:
@@ -219,4 +219,4 @@ The algorithm counts how many permuted test statistics exceed each threshold and
               f"FDR={fdr:.3f}, Power={power:.3f}")
     ```
 
-    Increasing $\alpha$ from 0.05 to 0.10 raises the BH threshold, so more hypotheses are rejected. Power increases (more true effects detected), but FDR also rises (a larger fraction of discoveries are false). The trade-off is between discovery rate and reliability: a higher $\alpha$ finds more effects but at the cost of more false leads. $\square$
+    $\alpha$를 0.05에서 0.10으로 올리면 BH 문턱이 높아져 더 많은 가설이 기각된다. 검정력이 커지지만(참 효과를 더 많이 탐지하지만) FDR도 함께 올라간다(발견 중 잘못된 것의 비율이 커진다). 맞바꿈은 발견율과 신뢰성 사이에 있다: $\alpha$가 높으면 더 많은 효과를 찾지만 잘못된 단서도 늘어난다. $\square$

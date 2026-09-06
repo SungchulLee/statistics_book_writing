@@ -1,164 +1,164 @@
-# Bonferroni and Holm Corrections
+# Bonferroni와 Holm 보정
 
-## Overview
+## 개요
 
-When a study tests multiple hypotheses simultaneously, the chance of at least one false rejection grows rapidly. For example, testing $m = 20$ independent hypotheses at level $\alpha = 0.05$ yields a probability of roughly $1 - (1 - 0.05)^{20} \approx 0.64$ that at least one true null hypothesis is incorrectly rejected. Multiple testing corrections address this inflation by adjusting either the significance thresholds or the p-values so that a global error rate remains controlled. This section introduces two widely used corrections — Bonferroni and Holm — that control the **family-wise error rate (FWER)**.
+한 연구가 여러 가설을 동시에 검정하면 적어도 하나를 잘못 기각할 확률이 빠르게 커진다. 예를 들어 독립인 가설 $m = 20$개를 수준 $\alpha = 0.05$에서 검정하면 참인 귀무가설을 적어도 하나 잘못 기각할 확률이 대략 $1 - (1 - 0.05)^{20} \approx 0.64$이다. 다중검정 보정은 유의수준이나 p-값을 조정하여 전체 오류율이 통제되도록 이 부풀림을 다룬다. 이 절에서는 **가족단위 오류율(FWER)**을 통제하는 널리 쓰이는 두 보정, Bonferroni와 Holm을 소개한다.
 
-!!! info "Family-Wise Error Rate (FWER)"
-    Suppose we test $m$ null hypotheses $H_1, H_2, \ldots, H_m$ simultaneously. Let $V$ denote the number of true null hypotheses that are incorrectly rejected (false positives). The FWER is defined as
+!!! info "가족단위 오류율 (FWER)"
+    귀무가설 $H_1, H_2, \ldots, H_m$을 동시에 검정한다고 하자. $V$를 잘못 기각된 참인 귀무가설의 개수(거짓 양성)라 하면 FWER은 다음으로 정의된다.
 
     $$
     \text{FWER} = P(V \geq 1)
     $$
 
-    A multiple testing procedure **controls the FWER at level** $\alpha$ if $\text{FWER} \leq \alpha$ regardless of which hypotheses are true and which are false.
+    어느 가설이 참이고 어느 가설이 거짓이든 $\text{FWER} \leq \alpha$이면 그 다중검정 절차가 **수준 $\alpha$에서 FWER을 통제한다**고 한다.
 
-## Bonferroni Correction
+## Bonferroni 보정
 
-The simplest approach to controlling the FWER is due to Bonferroni. The key idea is to divide the overall significance level $\alpha$ equally among all $m$ tests, so that each individual test uses a more stringent threshold. This ensures that even in the worst case, the total probability of any false rejection stays below $\alpha$.
+FWER을 통제하는 가장 단순한 접근은 Bonferroni의 것이다. 핵심 발상은 전체 유의수준 $\alpha$를 $m$개 검정에 균등하게 나누어 각 검정이 더 엄격한 문턱을 쓰게 하는 것이다. 그러면 최악의 경우에도 잘못된 기각이 하나라도 생길 전체 확률이 $\alpha$ 아래에 머문다.
 
-### Rejection Rule
+### 기각 규칙
 
-Let $p_1, p_2, \ldots, p_m$ denote the p-values from $m$ hypothesis tests, and let $\alpha$ be the desired FWER. The Bonferroni correction rejects $H_i$ whenever
+$p_1, p_2, \ldots, p_m$을 $m$개 가설검정의 p-값, $\alpha$를 원하는 FWER이라 하자. Bonferroni 보정은 다음일 때 $H_i$를 기각한다.
 
 $$
 p_i \leq \frac{\alpha}{m}
 $$
 
-### Why It Controls FWER
+### FWER을 통제하는 이유
 
-The justification follows immediately from Boole's inequality (the union bound). Let $\mathcal{M}_0 \subseteq \{1, \ldots, m\}$ denote the set of indices for which $H_i$ is true. Then
+정당화는 Boole 부등식(합집합 한계)에서 곧바로 나온다. $\mathcal{M}_0 \subseteq \{1, \ldots, m\}$을 $H_i$가 참인 지표의 집합이라 하자. 그러면
 
 $$
 \text{FWER} = P\!\Bigl(\bigcup_{i \in \mathcal{M}_0} \{p_i \leq \alpha/m\}\Bigr) \leq \sum_{i \in \mathcal{M}_0} P(p_i \leq \alpha/m) \leq |\mathcal{M}_0| \cdot \frac{\alpha}{m} \leq \alpha
 $$
 
-The last inequality uses $|\mathcal{M}_0| \leq m$. This bound holds without any assumption about the dependence structure among the tests, which is both the strength and the limitation of the Bonferroni correction.
+마지막 부등식은 $|\mathcal{M}_0| \leq m$을 쓴다. 이 한계는 검정 사이의 종속 구조에 대한 어떤 가정도 없이 성립하며, 이것이 Bonferroni 보정의 강점이자 한계이다.
 
-!!! warning "Conservativeness of Bonferroni"
-    The Bonferroni correction is **conservative**: the actual FWER is often well below $\alpha$, especially when $m$ is large or the test statistics are positively correlated. This conservativeness reduces statistical power — truly false null hypotheses may fail to be rejected because the per-test threshold $\alpha/m$ is too stringent.
+!!! warning "Bonferroni의 보수성"
+    Bonferroni 보정은 **보수적이다**: 특히 $m$이 크거나 검정통계량이 양의 상관을 가질 때 실제 FWER이 $\alpha$보다 훨씬 낮은 경우가 많다. 이 보수성이 통계적 검정력을 떨어뜨린다 — 검정당 문턱 $\alpha/m$이 너무 엄격해서 실제로 거짓인 귀무가설을 기각하지 못할 수 있다.
 
-## Holm's Step-Down Procedure
+## Holm의 단계적 하강 절차
 
-While Bonferroni applies the same stringent threshold $\alpha/m$ to every test, Holm (1979) observed that once the most significant hypotheses have been rejected, the remaining tests can use less stringent thresholds. This step-down approach is **uniformly more powerful** than Bonferroni — it rejects at least as many hypotheses in every possible configuration — while still controlling the FWER at level $\alpha$.
+Bonferroni는 모든 검정에 같은 엄격한 문턱 $\alpha/m$을 적용하지만, Holm(1979)은 가장 유의한 가설들을 기각하고 나면 남은 검정에는 덜 엄격한 문턱을 쓸 수 있음을 관찰했다. 이 단계적 하강 접근은 FWER을 여전히 수준 $\alpha$로 통제하면서 Bonferroni보다 **균일하게 더 강력하다** — 가능한 모든 배열에서 적어도 같은 수의 가설을 기각한다.
 
-### Algorithm
+### 알고리즘
 
-1. **Order the p-values** from smallest to largest: $p_{(1)} \leq p_{(2)} \leq \cdots \leq p_{(m)}$, with corresponding hypotheses $H_{(1)}, H_{(2)}, \ldots, H_{(m)}$.
-2. **Start with** $i = 1$. Compare $p_{(i)}$ to the adjusted threshold $\alpha / (m - i + 1)$.
-3. **If** $p_{(i)} \leq \alpha / (m - i + 1)$, reject $H_{(i)}$ and increment $i$ by one.
-4. **If** $p_{(i)} > \alpha / (m - i + 1)$, **stop**. Retain $H_{(i)}, H_{(i+1)}, \ldots, H_{(m)}$ (all remaining hypotheses).
+1. **p-값을 정렬한다**: $p_{(1)} \leq p_{(2)} \leq \cdots \leq p_{(m)}$, 대응하는 가설은 $H_{(1)}, H_{(2)}, \ldots, H_{(m)}$.
+2. **$i = 1$에서 시작한다.** $p_{(i)}$를 보정된 문턱 $\alpha / (m - i + 1)$과 비교한다.
+3. $p_{(i)} \leq \alpha / (m - i + 1)$**이면** $H_{(i)}$를 기각하고 $i$를 1 늘린다.
+4. $p_{(i)} > \alpha / (m - i + 1)$**이면 멈춘다.** $H_{(i)}, H_{(i+1)}, \ldots, H_{(m)}$(남은 가설 전부)을 유지한다.
 
-The adjusted thresholds form an increasing sequence:
+보정된 문턱은 증가하는 수열을 이룬다:
 
 $$
 \frac{\alpha}{m}, \quad \frac{\alpha}{m-1}, \quad \frac{\alpha}{m-2}, \quad \ldots, \quad \alpha
 $$
 
-Because later thresholds are less stringent than $\alpha/m$, Holm rejects at least as many hypotheses as Bonferroni. At the same time, the step-down structure ensures that the FWER remains controlled at level $\alpha$.
+뒤의 문턱이 $\alpha/m$보다 덜 엄격하므로 Holm은 Bonferroni만큼 또는 그보다 많이 기각한다. 동시에 단계적 하강 구조가 FWER을 수준 $\alpha$로 유지해 준다.
 
-### Why Holm Dominates Bonferroni
+### Holm이 Bonferroni를 지배하는 이유
 
-Under Bonferroni, every hypothesis faces the threshold $\alpha/m$. Under Holm, only the most significant p-value faces this threshold; the second most significant faces $\alpha/(m-1)$, and so on. Since $\alpha/(m-i+1) \geq \alpha/m$ for all $i \geq 1$, any hypothesis rejected by Bonferroni is also rejected by Holm, but the converse is not necessarily true. This makes Holm uniformly more powerful.
+Bonferroni에서는 모든 가설이 문턱 $\alpha/m$을 마주한다. Holm에서는 가장 유의한 p-값만 이 문턱을 마주하고, 두 번째로 유의한 것은 $\alpha/(m-1)$을, 이런 식으로 이어진다. 모든 $i \geq 1$에 대해 $\alpha/(m-i+1) \geq \alpha/m$이므로 Bonferroni가 기각하는 가설은 Holm도 기각하지만 그 역은 반드시 성립하지 않는다. 그래서 Holm이 균일하게 더 강력하다.
 
-!!! example "Numerical Example"
-    Suppose $m = 4$ hypotheses are tested at FWER $\alpha = 0.05$, yielding p-values:
+!!! example "수치 예제"
+    FWER $\alpha = 0.05$에서 가설 $m = 4$개를 검정하여 다음 p-값을 얻었다고 하자:
 
-    | Hypothesis | p-value |
+    | 가설 | p-값 |
     |:----------:|:-------:|
     | $H_A$ | 0.003 |
-    | $H_B$ | 0.012 |
+    | $H_B$ | 0.013 |
     | $H_C$ | 0.042 |
     | $H_D$ | 0.130 |
 
-    **Bonferroni:** The adjusted threshold is $0.05/4 = 0.0125$. Only $H_A$ ($p = 0.003$) is rejected. $H_B$ ($p = 0.012 < 0.0125$? No, $0.012 < 0.0125$ is false) is not rejected.
+    **Bonferroni:** 보정된 문턱은 $0.05/4 = 0.0125$이다. $H_A$($p = 0.003$)만 기각된다. $H_B$는 $p = 0.013 > 0.0125$이므로 기각되지 않는다.
 
-    **Holm:** Order the p-values and compare sequentially:
+    **Holm:** p-값을 정렬하여 차례로 비교한다:
 
-    | Step $i$ | $H_{(i)}$ | $p_{(i)}$ | Threshold $\alpha/(m-i+1)$ | Decision |
+    | 단계 $i$ | $H_{(i)}$ | $p_{(i)}$ | 문턱 $\alpha/(m-i+1)$ | 판정 |
     |:--------:|:---------:|:---------:|:--------------------------:|:--------:|
-    | 1 | $H_A$ | 0.003 | $0.05/4 = 0.0125$ | Reject |
-    | 2 | $H_B$ | 0.012 | $0.05/3 = 0.0167$ | Reject |
-    | 3 | $H_C$ | 0.042 | $0.05/2 = 0.025$ | Stop (retain) |
-    | 4 | $H_D$ | 0.130 | $0.05/1 = 0.05$ | Retain |
+    | 1 | $H_A$ | 0.003 | $0.05/4 = 0.0125$ | 기각 |
+    | 2 | $H_B$ | 0.013 | $0.05/3 = 0.0167$ | 기각 |
+    | 3 | $H_C$ | 0.042 | $0.05/2 = 0.025$ | 멈춤(유지) |
+    | 4 | $H_D$ | 0.130 | $0.05/1 = 0.05$ | 유지 |
 
-    Holm rejects both $H_A$ and $H_B$, while Bonferroni rejects only $H_A$. This illustrates how Holm recovers power without sacrificing FWER control.
+    Holm은 $H_A$와 $H_B$를 모두 기각하지만 Bonferroni는 $H_A$만 기각한다. Holm이 FWER 통제를 희생하지 않고 검정력을 되찾는 모습을 보여준다.
 
-## Comparison
+## 비교
 
-| Property | Bonferroni | Holm |
+| 성질 | Bonferroni | Holm |
 |:---------|:-----------|:-----|
-| FWER control | Yes (any dependence) | Yes (any dependence) |
-| Power | Conservative | Uniformly more powerful |
-| Simplicity | Very simple | Slightly more involved |
-| Assumption on dependence | None required | None required |
-| Best use case | Quick adjustment, few tests | Default choice over Bonferroni |
+| FWER 통제 | 예 (임의의 종속성) | 예 (임의의 종속성) |
+| 검정력 | 보수적 | 균일하게 더 강력 |
+| 단순함 | 매우 단순 | 조금 더 복잡 |
+| 종속성에 대한 가정 | 필요 없음 | 필요 없음 |
+| 알맞은 용도 | 빠른 조정, 적은 수의 검정 | Bonferroni보다 기본으로 삼을 선택 |
 
-In practice, there is rarely a reason to prefer Bonferroni over Holm, since Holm provides the same FWER guarantee with strictly greater (or equal) power.
+실무에서 Bonferroni를 Holm보다 선호할 이유는 거의 없다. Holm이 같은 FWER 보장을 주면서 검정력은 엄밀히 더 크거나 같기 때문이다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-A researcher performs 5 hypothesis tests with p-values 0.008, 0.025, 0.040, 0.060, 0.120. Apply the Bonferroni correction at $\alpha = 0.05$ and state which hypotheses are rejected.
+**연습문제 1.**
+어떤 연구자가 가설검정 5개를 수행하여 p-값 0.008, 0.025, 0.040, 0.060, 0.120을 얻었다. $\alpha = 0.05$에서 Bonferroni 보정을 적용하고 어느 가설이 기각되는지 말하라.
 
-??? success "Solution to Exercise 1"
-    The Bonferroni adjusted threshold is $\alpha/m = 0.05/5 = 0.01$.
+??? success "연습문제 1 풀이"
+    Bonferroni 보정 문턱은 $\alpha/m = 0.05/5 = 0.01$이다.
 
-    Compare each p-value to 0.01:
+    각 p-값을 0.01과 비교한다:
 
-    | Test | p-value | $< 0.01$? | Decision |
+    | 검정 | p-값 | $< 0.01$? | 판정 |
     |---|---|---|---|
-    | 1 | 0.008 | Yes | Reject |
-    | 2 | 0.025 | No | Fail to reject |
-    | 3 | 0.040 | No | Fail to reject |
-    | 4 | 0.060 | No | Fail to reject |
-    | 5 | 0.120 | No | Fail to reject |
+    | 1 | 0.008 | 예 | 기각 |
+    | 2 | 0.025 | 아니오 | 기각 못함 |
+    | 3 | 0.040 | 아니오 | 기각 못함 |
+    | 4 | 0.060 | 아니오 | 기각 못함 |
+    | 5 | 0.120 | 아니오 | 기각 못함 |
 
-    Only test 1 is rejected. Bonferroni is conservative: test 2 with $p = 0.025$ is not rejected despite being significant at the unadjusted level.
+    검정 1만 기각된다. Bonferroni는 보수적이다: 보정하지 않은 수준에서는 유의한 $p = 0.025$의 검정 2가 기각되지 않는다.
 
 ---
 
-**Exercise 2.**
-Apply the Holm (step-down) procedure to the same p-values from Exercise 1 at $\alpha = 0.05$. Compare the results with Bonferroni.
+**연습문제 2.**
+연습문제 1과 같은 p-값에 $\alpha = 0.05$에서 Holm(단계적 하강) 절차를 적용하라. 결과를 Bonferroni와 비교하라.
 
-??? success "Solution to Exercise 2"
-    Sort the p-values: $p_{(1)} = 0.008, p_{(2)} = 0.025, p_{(3)} = 0.040, p_{(4)} = 0.060, p_{(5)} = 0.120$.
+??? success "연습문제 2 풀이"
+    p-값을 정렬한다: $p_{(1)} = 0.008, p_{(2)} = 0.025, p_{(3)} = 0.040, p_{(4)} = 0.060, p_{(5)} = 0.120$.
 
-    Holm thresholds: $\alpha/(m - j + 1)$ for the $j$-th ordered test:
+    $j$번째 정렬된 검정의 Holm 문턱은 $\alpha/(m - j + 1)$이다:
 
-    | Step $j$ | $p_{(j)}$ | Threshold $\alpha/(m-j+1)$ | $p_{(j)} < $ threshold? | Decision |
+    | 단계 $j$ | $p_{(j)}$ | 문턱 $\alpha/(m-j+1)$ | $p_{(j)} < $ 문턱? | 판정 |
     |---|---|---|---|---|
-    | 1 | 0.008 | 0.05/5 = 0.010 | Yes | Reject |
-    | 2 | 0.025 | 0.05/4 = 0.0125 | No | Stop |
+    | 1 | 0.008 | 0.05/5 = 0.010 | 예 | 기각 |
+    | 2 | 0.025 | 0.05/4 = 0.0125 | 아니오 | 멈춤 |
 
-    Once we fail to reject at step 2, we stop and do not reject any remaining tests.
+    2단계에서 기각하지 못하면 거기서 멈추고 남은 검정은 기각하지 않는다.
 
-    Result: only test 1 is rejected -- the same as Bonferroni in this case. However, Holm is uniformly more powerful than Bonferroni (it can never reject fewer hypotheses), and with different p-value configurations, Holm would reject more.
+    결과: 이 경우에는 Bonferroni와 마찬가지로 검정 1만 기각된다. 그러나 Holm은 Bonferroni보다 균일하게 더 강력하며(결코 더 적게 기각하지 않으며), p-값 배열이 다르면 더 많이 기각할 수 있다.
 
 ---
 
-**Exercise 3.**
-Prove that the Bonferroni correction controls the family-wise error rate (FWER) at level $\alpha$. Use the union bound.
+**연습문제 3.**
+Bonferroni 보정이 가족단위 오류율(FWER)을 수준 $\alpha$로 통제함을 증명하라. 합집합 한계를 쓰라.
 
-??? success "Solution to Exercise 3"
-    Let $\mathcal{H}_0$ denote the set of true null hypotheses, with $|\mathcal{H}_0| = m_0 \leq m$. The FWER is:
+??? success "연습문제 3 풀이"
+    $\mathcal{H}_0$을 참인 귀무가설의 집합이라 하고 $|\mathcal{H}_0| = m_0 \leq m$이라 하자. FWER은:
 
     $$
     \text{FWER} = P\!\left(\bigcup_{i \in \mathcal{H}_0} \{p_i < \alpha/m\}\right) \leq \sum_{i \in \mathcal{H}_0} P(p_i < \alpha/m) = m_0 \cdot \frac{\alpha}{m} \leq m \cdot \frac{\alpha}{m} = \alpha
     $$
 
-    The first inequality is Boole's inequality (union bound). The second equality uses the fact that under the true null, p-values are uniformly distributed on $(0,1)$, so $P(p_i < \alpha/m) = \alpha/m$. The final inequality uses $m_0 \leq m$.
+    첫 부등식은 Boole 부등식(합집합 한계)이다. 두 번째 등식은 참인 귀무가설 아래에서 p-값이 $(0,1)$ 위의 균등분포를 따르므로 $P(p_i < \alpha/m) = \alpha/m$이라는 사실을 쓴다. 마지막 부등식은 $m_0 \leq m$을 쓴다.
 
-    This proof makes no assumptions about the dependence structure of the tests, which is why Bonferroni is valid under arbitrary dependence but potentially conservative. $\square$
+    이 증명은 검정의 종속 구조에 대해 아무 가정도 하지 않는다. 그래서 Bonferroni가 임의의 종속성에서 타당하지만 보수적일 수 있는 것이다. $\square$
 
 ---
 
-**Exercise 4.**
-Explain why Bonferroni is conservative (has FWER $\ll \alpha$) when the number of true nulls $m_0$ is much less than $m$, or when the tests are positively correlated.
+**연습문제 4.**
+참인 귀무가설의 수 $m_0$이 $m$보다 훨씬 작을 때, 또는 검정이 양의 상관을 가질 때 Bonferroni가 보수적인(FWER $\ll \alpha$인) 이유를 설명하라.
 
-??? success "Solution to Exercise 4"
-    **When $m_0 \ll m$:** The proof uses $m_0 \leq m$, so the actual FWER is at most $m_0 \alpha/m$. If only 10 out of 1000 nulls are true ($m_0 = 10$), the true FWER is at most $10 \times 0.05/1000 = 0.0005$, far below the nominal $\alpha = 0.05$. The Bonferroni threshold is calibrated for the worst case ($m_0 = m$).
+??? success "연습문제 4 풀이"
+    **$m_0 \ll m$일 때:** 증명에서 $m_0 \leq m$을 썼으므로 실제 FWER은 최대 $m_0 \alpha/m$이다. 1000개 귀무가설 중 10개만 참이면($m_0 = 10$) 참 FWER은 최대 $10 \times 0.05/1000 = 0.0005$로 명목 $\alpha = 0.05$보다 훨씬 낮다. Bonferroni 문턱은 최악의 경우($m_0 = m$)에 맞추어져 있다.
 
-    **Under positive correlation:** The union bound $P(\cup A_i) \leq \sum P(A_i)$ is tight only when events are mutually exclusive. When tests are positively correlated (which is common when test statistics share data), the events $\{p_i < \alpha/m\}$ tend to occur together, making the union much smaller than the sum. The actual FWER can be much less than $\alpha$.
+    **양의 상관이 있을 때:** 합집합 한계 $P(\cup A_i) \leq \sum P(A_i)$는 사건들이 서로 배반일 때만 등호에 가깝다. 검정이 양의 상관을 가지면(검정통계량이 자료를 공유할 때 흔하다) 사건 $\{p_i < \alpha/m\}$이 함께 일어나는 경향이 있어 합집합이 합보다 훨씬 작아진다. 실제 FWER이 $\alpha$보다 훨씬 작을 수 있다.
 
-    Both sources of conservatism reduce power: true effects are harder to detect. The Holm procedure partially addresses the first issue; resampling-based methods (e.g., permutation FWER) address the second.
+    두 보수성의 원천 모두 검정력을 떨어뜨려 참 효과를 탐지하기 어렵게 만든다. Holm 절차가 첫 번째 문제를 부분적으로 다루고, 재표본추출 기반 방법(예: 순열 FWER)이 두 번째를 다룬다.

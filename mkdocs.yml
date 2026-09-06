@@ -296,53 +296,53 @@ nav:
             - 일표본 평균 신뢰구간의 계산: ch08/code/ci_mean_calc.md
             - 일표본 비율 신뢰구간의 계산: ch08/code/ci_prop_calc.md
 
-    - 9 Hypothesis Testing:
-        - Chapter Overview: ch09/index.md
-        - 9.1 Foundations:
-            - Null and Alternative Hypotheses: ch09/foundations/hypotheses.md
-            - Test Statistics and p-values: ch09/foundations/pvalues.md
-            - Significance Level and Decision Rules: ch09/foundations/significance_level.md
-        - 9.2 One-Sample Tests:
-            - Z-Test for μ (Known σ): ch09/one_sample_tests/z_test_mean.md
-            - t-Test for μ (Unknown σ): ch09/one_sample_tests/t_test_mean.md
-            - Z-Test for p (Proportion): ch09/one_sample_tests/z_test_proportion.md
-            - Chi-Square Test for σ²: ch09/one_sample_tests/chi2_test_variance.md
-            - One-Sample Tests Overview: ch09/one_sample_tests/one_sample.md
-        - 9.3 Two-Sample Tests:
-            - Two-Sample Z-Test for μ₁−μ₂: ch09/two_sample_tests/z_test_two_means.md
-            - Two-Sample t-Test (Pooled and Welch): ch09/two_sample_tests/t_test_two_means.md
-            - Two-Sample Z-Test for p₁−p₂: ch09/two_sample_tests/z_test_two_proportions.md
-            - F-Test for σ₁²/σ₂²: ch09/two_sample_tests/f_test_two_variances.md
-            - Two-Sample Tests Overview: ch09/two_sample_tests/two_sample.md
-        - 9.4 Paired-Sample Tests:
-            - Paired t-test for μ_D: ch09/paired_sample_tests/paired_t_test.md
-            - When to Use Paired vs Two-Sample: ch09/paired_sample_tests/paired_vs_two_sample.md
-        - 9.5 Errors and Power:
-            - Type I and II Errors: ch09/errors_and_power/errors.md
-            - Power Analysis: ch09/errors_and_power/power.md
-            - Confidence Interval and Test Duality: ch09/errors_and_power/duality.md
-        - 9.6 Multiple Testing:
-            - Family-Wise Error Rate: ch09/multiple_testing/fwer.md
-            - Bonferroni and Holm Corrections: ch09/multiple_testing/bonferroni_holm.md
-            - False Discovery Rate (Benjamini–Hochberg): ch09/multiple_testing/fdr.md
-        - 9.7 Code:
-            - Hypothesis Testing Demonstrations: ch09/code/hypothesis_tests.md
-            - Power Analysis and Sample Size: ch09/code/power_analysis.md
-            - Multiple Testing Corrections: ch09/code/multiple_testing.md
-            - One-Sample Mean Test: ch09/code/test_mean.md
-            - One-Sample Proportion Test: ch09/code/test_proportion.md
-            - One-Sample Variance Test: ch09/code/test_variance.md
-            - F-Test for Two Variances: ch09/code/test_var_ratio.md
-            - Paired Mean Test: ch09/code/test_paired.md
-            - Two-Sample Mean Test: ch09/code/test_two_means.md
-            - Two-Sample Proportion Test: ch09/code/test_two_props.md
-            - Coin Toss Simulation: ch09/code/coin_toss_simulation.md
-            - Two-Sample t-Test (Weed Prices): ch09/code/ttest_weed_prices.md
-            - Type I/II Error Visualization: ch09/code/type12_error_visualization.md
-            - Rejection Region Demo: ch09/code/rejection_region_demo.md
-            - Height/Weight Hypothesis Tests: ch09/code/height_weight_hypothesis_test.md
-            - P-Hacking Demonstration: ch09/code/p_hacking_demo.md
-            - False Discovery Rate and Resampling Multiple Testing: ch09/code/fdr_resampling_demo.md
+    - 9 가설검정:
+        - 장 개요: ch09/index.md
+        - 9.1 기초:
+            - 귀무가설과 대립가설: ch09/foundations/hypotheses.md
+            - 검정통계량과 p-값: ch09/foundations/pvalues.md
+            - 유의수준과 판정 규칙: ch09/foundations/significance_level.md
+        - 9.2 일표본 검정:
+            - μ에 대한 Z-검정 (σ를 아는 경우): ch09/one_sample_tests/z_test_mean.md
+            - μ에 대한 t-검정 (σ를 모르는 경우): ch09/one_sample_tests/t_test_mean.md
+            - p에 대한 Z-검정 (비율): ch09/one_sample_tests/z_test_proportion.md
+            - σ²에 대한 카이제곱 검정: ch09/one_sample_tests/chi2_test_variance.md
+            - 일표본 검정 개관: ch09/one_sample_tests/one_sample.md
+        - 9.3 이표본 검정:
+            - μ₁−μ₂에 대한 이표본 Z-검정: ch09/two_sample_tests/z_test_two_means.md
+            - 이표본 t-검정 (합동과 Welch): ch09/two_sample_tests/t_test_two_means.md
+            - p₁−p₂에 대한 이표본 Z-검정: ch09/two_sample_tests/z_test_two_proportions.md
+            - σ₁²/σ₂²에 대한 F-검정: ch09/two_sample_tests/f_test_two_variances.md
+            - 이표본 검정 개관: ch09/two_sample_tests/two_sample.md
+        - 9.4 대응표본 검정:
+            - μ_D에 대한 대응 t-검정: ch09/paired_sample_tests/paired_t_test.md
+            - 대응표본과 이표본, 언제 무엇을 쓰는가: ch09/paired_sample_tests/paired_vs_two_sample.md
+        - 9.5 오류와 검정력:
+            - 제1종 오류와 제2종 오류: ch09/errors_and_power/errors.md
+            - 검정력 분석: ch09/errors_and_power/power.md
+            - 신뢰구간과 검정의 쌍대성: ch09/errors_and_power/duality.md
+        - 9.6 다중검정:
+            - 가족단위 오류율: ch09/multiple_testing/fwer.md
+            - Bonferroni와 Holm 보정: ch09/multiple_testing/bonferroni_holm.md
+            - 거짓발견율 (Benjamini–Hochberg): ch09/multiple_testing/fdr.md
+        - 9.7 코드:
+            - 가설검정 시연: ch09/code/hypothesis_tests.md
+            - 검정력 분석과 표본크기: ch09/code/power_analysis.md
+            - 다중검정 보정: ch09/code/multiple_testing.md
+            - 일표본 평균 검정: ch09/code/test_mean.md
+            - 일표본 비율 검정: ch09/code/test_proportion.md
+            - 일표본 분산 검정: ch09/code/test_variance.md
+            - 두 분산에 대한 F-검정: ch09/code/test_var_ratio.md
+            - 대응 평균 검정: ch09/code/test_paired.md
+            - 이표본 평균 검정: ch09/code/test_two_means.md
+            - 이표본 비율 검정: ch09/code/test_two_props.md
+            - 동전 던지기 모의실험: ch09/code/coin_toss_simulation.md
+            - 이표본 t-검정 (대마 가격): ch09/code/ttest_weed_prices.md
+            - 제1종/제2종 오류의 시각화: ch09/code/type12_error_visualization.md
+            - 기각역 시연: ch09/code/rejection_region_demo.md
+            - 키/몸무게 가설검정: ch09/code/height_weight_hypothesis_test.md
+            - p-해킹 시연: ch09/code/p_hacking_demo.md
+            - 거짓발견율과 재표본추출 다중검정: ch09/code/fdr_resampling_demo.md
 
     - 10 Chi-Square Tests:
         - Chapter Overview: ch10/index.md

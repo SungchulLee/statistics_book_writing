@@ -1,99 +1,99 @@
-# Chapter 9: Hypothesis Testing
+# 9장: 가설검정
 
-## Overview
+## 개요
 
-Hypothesis testing provides a formal framework for making decisions about population parameters based on sample data. This chapter covers the complete hypothesis testing pipeline: formulating null and alternative hypotheses, computing test statistics and p-values, performing one-sample, two-sample, and paired-sample tests for means, proportions, and variances, analyzing errors and power, and applying multiple testing corrections when many hypotheses are tested simultaneously.
-
----
-
-## Chapter Structure
-
-### 9.1 Foundations
-
-The conceptual and mathematical framework underlying all hypothesis tests:
-
-- **Null and Alternative Hypotheses** -- Introduces the hypothesis testing paradigm using a courtroom analogy, defines simple and composite hypotheses, and distinguishes one-tailed from two-tailed alternatives.
-- **Test Statistics and p-values** -- Defines test statistics (z, t, chi-square, F), explains how p-values quantify the strength of evidence against the null, and covers how to compute and interpret them.
-- **Significance Level and Decision Rules** -- Describes the significance level alpha as the Type I error threshold, and compares the p-value approach with the critical value approach for making rejection decisions.
-
-### 9.2 One-Sample Tests
-
-Tests for a single population parameter against a hypothesized value:
-
-- **Z-Test for the Mean (Known sigma)** -- Tests whether the population mean equals a specified value when the population standard deviation is known, using the standard normal distribution.
-- **t-Test for the Mean (Unknown sigma)** -- Tests the population mean when sigma is unknown, using the t-distribution with n minus 1 degrees of freedom and discussing robustness to non-normality.
-- **Z-Test for a Proportion** -- Tests whether a population proportion equals a hypothesized value using the normal approximation, with conditions on the minimum expected counts.
-- **Chi-Square Test for the Variance** -- Tests whether the population variance equals a hypothesized value using the chi-square distribution, with a warning about its sensitivity to non-normality.
-- **One-Sample Tests Overview** -- A comprehensive reference page consolidating all one-sample test procedures with detailed derivations and worked examples.
-
-### 9.3 Two-Sample Tests
-
-Tests for comparing parameters from two independent populations:
-
-- **Two-Sample Z-Test for the Difference of Means** -- Tests whether two population means differ when both population variances are known.
-- **Two-Sample t-Test (Pooled and Welch)** -- Compares means of two independent samples using either the pooled t-test (equal variances assumed) or Welch's t-test (unequal variances), with formulas for the pooled standard deviation and Welch-Satterthwaite degrees of freedom.
-- **Two-Sample Z-Test for the Difference of Proportions** -- Tests whether two population proportions differ using a pooled proportion under the null hypothesis.
-- **F-Test for the Ratio of Two Variances** -- Tests equality of two population variances using the F-distribution, with a caution about its high sensitivity to non-normality.
-- **Two-Sample Tests Overview** -- A comprehensive reference page consolidating all two-sample test procedures with detailed derivations, decision rules, and worked examples.
-
-### 9.4 Paired-Sample Tests
-
-Tests for data where observations are naturally paired:
-
-- **Paired t-Test for the Mean Difference (mu_D)** -- Applies the one-sample t-test to paired differences, testing whether the mean difference is zero, with formulas for the test statistic and degrees of freedom.
-- **When to Use Paired vs Two-Sample Tests** -- Provides guidance on selecting between paired and independent designs based on study design, the presence of natural pairing, and the goal of reducing within-subject variability.
-
-### 9.5 Errors and Power
-
-The consequences of incorrect decisions and how to design studies with adequate sensitivity:
-
-- **Type I and Type II Errors** -- Defines false positives (rejecting a true null) and false negatives (failing to reject a false null), with a summary decision table and practical examples.
-- **Power Analysis** -- Defines statistical power as 1 minus beta, identifies the four factors that determine power (alpha, sample size, effect size, and population variability), and explains how to conduct a priori power calculations.
-- **CI and Test Duality** -- Establishes the equivalence between a two-sided hypothesis test at level alpha and a (1 minus alpha) confidence interval, showing that each can be derived from the other.
-
-### 9.6 Multiple Testing
-
-Corrections for the inflation of false positives when many hypotheses are tested at once:
-
-- **Family-Wise Error Rate (FWER)** -- Defines FWER as the probability of at least one false rejection among m tests and shows how it grows rapidly with the number of tests.
-- **Bonferroni and Holm Corrections** -- Presents the Bonferroni correction (reject at alpha/m) and the uniformly more powerful Holm step-down procedure.
-- **False Discovery Rate (Benjamini-Hochberg)** -- Introduces FDR as the expected proportion of false discoveries and describes the Benjamini-Hochberg procedure for controlling it.
-
-### 9.7 Code
-
-Complete Python implementations:
-
-- **hypothesis_tests.py** -- Comprehensive demonstrations of hypothesis testing across multiple settings.
-- **power_analysis.py** -- Power analysis and sample size determination utilities.
-- **multiple_testing.py** -- Implementations of Bonferroni, Holm, and Benjamini-Hochberg corrections.
-- **test_mean.py** -- One-sample mean test (z-test and t-test).
-- **test_proportion.py** -- One-sample proportion z-test.
-- **test_variance.py** -- One-sample chi-square variance test.
-- **test_var_ratio.py** -- F-test for comparing two variances.
-- **test_paired.py** -- Paired-sample t-test.
-- **test_two_means.py** -- Two-sample t-test (pooled and Welch).
-- **test_two_props.py** -- Two-sample proportion z-test.
-
-### 9.8 Exercises
-
-Practice problems covering hypothesis formulation, Type I and Type II error identification, test statistic computation, p-value interpretation, power analysis, and multiple testing scenarios.
+가설검정은 표본자료에 근거하여 모수에 관한 결정을 내리는 형식적인 틀을 제공한다. 이 장은 가설검정의 전 과정을 다룬다: 귀무가설과 대립가설의 설정, 검정통계량과 p-값의 계산, 평균·비율·분산에 대한 일표본·이표본·대응표본 검정의 수행, 오류와 검정력의 분석, 그리고 많은 가설을 동시에 검정할 때의 다중검정 보정.
 
 ---
 
-## Prerequisites
+## 장의 구성
 
-This chapter builds on:
+### 9.1 기초
 
-- **Chapter 5** (Sampling Distributions) -- The normal, t, chi-square, and F distributions used as reference distributions for test statistics.
-- **Chapter 7** (Estimation of mu and sigma squared) -- Properties of the sample mean and sample variance as estimators.
-- **Chapter 8** (Confidence Intervals) -- The construction of confidence intervals, which are dual to hypothesis tests via the CI-test duality.
+모든 가설검정의 바탕이 되는 개념적·수학적 틀:
+
+- **귀무가설과 대립가설** -- 법정 비유로 가설검정의 틀을 소개하고, 단순가설과 복합가설을 정의하며, 단측 대립가설과 양측 대립가설을 구분한다.
+- **검정통계량과 p-값** -- 검정통계량(z, t, 카이제곱, F)을 정의하고, p-값이 귀무가설에 반하는 증거의 강도를 어떻게 정량화하는지 설명하며, 계산과 해석을 다룬다.
+- **유의수준과 판정 규칙** -- 유의수준 alpha를 제1종 오류의 문턱으로 기술하고, 기각 결정을 내리는 p-값 접근과 임계값 접근을 비교한다.
+
+### 9.2 일표본 검정
+
+단일 모수를 가설의 값과 견주는 검정:
+
+- **평균에 대한 Z-검정 (sigma를 아는 경우)** -- 모표준편차를 알 때 표준정규분포로 모평균이 특정 값과 같은지 검정한다.
+- **평균에 대한 t-검정 (sigma를 모르는 경우)** -- sigma를 모를 때 자유도 n-1인 t-분포로 모평균을 검정하며 비정규성에 대한 로버스트성을 논한다.
+- **비율에 대한 Z-검정** -- 정규근사로 모비율이 가설의 값과 같은지 검정하며, 최소 기대도수 조건을 다룬다.
+- **분산에 대한 카이제곱 검정** -- 카이제곱분포로 모분산이 가설의 값과 같은지 검정하며, 비정규성에 민감하다는 경고를 덧붙인다.
+- **일표본 검정 개관** -- 모든 일표본 검정 절차를 자세한 유도와 풀이 예제와 함께 한데 모은 종합 참고 페이지.
+
+### 9.3 이표본 검정
+
+독립인 두 모집단의 모수를 비교하는 검정:
+
+- **평균 차이에 대한 이표본 Z-검정** -- 두 모분산을 모두 알 때 두 모평균이 다른지 검정한다.
+- **이표본 t-검정 (합동과 Welch)** -- 합동 t-검정(등분산 가정) 또는 Welch t-검정(분산이 다른 경우)으로 독립인 두 표본의 평균을 비교하며, 합동 표준편차와 Welch-Satterthwaite 자유도의 공식을 제시한다.
+- **비율 차이에 대한 이표본 Z-검정** -- 귀무가설 아래의 합동 비율을 써서 두 모비율이 다른지 검정한다.
+- **두 분산비에 대한 F-검정** -- F-분포로 두 모분산의 동일성을 검정하며, 비정규성에 매우 민감하다는 주의를 덧붙인다.
+- **이표본 검정 개관** -- 모든 이표본 검정 절차를 자세한 유도, 판정 규칙, 풀이 예제와 함께 한데 모은 종합 참고 페이지.
+
+### 9.4 대응표본 검정
+
+관측값이 자연스럽게 짝을 이루는 자료의 검정:
+
+- **평균 차이(mu_D)에 대한 대응 t-검정** -- 대응된 차이에 일표본 t-검정을 적용하여 평균 차이가 0인지 검정하며, 검정통계량과 자유도의 공식을 제시한다.
+- **대응 검정과 이표본 검정 중 무엇을 쓸 것인가** -- 연구 설계, 자연스러운 짝짓기의 존재, 피험자 내 변동성 감소라는 목표에 따라 대응 설계와 독립 설계 중 무엇을 고를지 지침을 준다.
+
+### 9.5 오류와 검정력
+
+잘못된 결정의 결과와 충분한 민감도를 갖춘 연구를 설계하는 법:
+
+- **제1종 오류와 제2종 오류** -- 거짓 양성(참인 귀무가설을 기각)과 거짓 음성(거짓인 귀무가설을 기각하지 못함)을 정의하고, 판정 요약표와 실무 예시를 제시한다.
+- **검정력 분석** -- 통계적 검정력을 1 빼기 beta로 정의하고, 검정력을 결정하는 네 요인(alpha, 표본크기, 효과크기, 모집단 변동성)을 짚으며, 사전 검정력 계산을 설명한다.
+- **신뢰구간과 검정의 쌍대성** -- 수준 alpha의 양측 가설검정과 (1 빼기 alpha) 신뢰구간의 동등성을 확립하고, 서로에게서 유도할 수 있음을 보인다.
+
+### 9.6 다중검정
+
+여러 가설을 한꺼번에 검정할 때 부풀려지는 거짓 양성을 보정하는 방법:
+
+- **가족단위 오류율 (FWER)** -- FWER을 $m$개의 검정 중 적어도 하나를 잘못 기각할 확률로 정의하고, 검정 수가 늘면 얼마나 빨리 커지는지 보인다.
+- **Bonferroni와 Holm 보정** -- Bonferroni 보정(alpha/m에서 기각)과 균일하게 더 강력한 Holm의 단계적 하강 절차를 제시한다.
+- **거짓발견율 (Benjamini-Hochberg)** -- FDR을 거짓 발견의 기대 비율로 소개하고 이를 통제하는 Benjamini-Hochberg 절차를 기술한다.
+
+### 9.7 코드
+
+완전한 Python 구현:
+
+- **hypothesis_tests.py** -- 여러 상황에서의 가설검정을 두루 시연한다.
+- **power_analysis.py** -- 검정력 분석과 표본크기 결정 도구.
+- **multiple_testing.py** -- Bonferroni, Holm, Benjamini-Hochberg 보정의 구현.
+- **test_mean.py** -- 일표본 평균 검정(z-검정과 t-검정).
+- **test_proportion.py** -- 일표본 비율 z-검정.
+- **test_variance.py** -- 일표본 카이제곱 분산 검정.
+- **test_var_ratio.py** -- 두 분산 비교를 위한 F-검정.
+- **test_paired.py** -- 대응표본 t-검정.
+- **test_two_means.py** -- 이표본 t-검정(합동과 Welch).
+- **test_two_props.py** -- 이표본 비율 z-검정.
+
+### 9.8 연습문제
+
+가설 설정, 제1종·제2종 오류의 식별, 검정통계량의 계산, p-값의 해석, 검정력 분석, 다중검정 상황을 다루는 연습문제들.
 
 ---
 
-## Key Takeaways
+## 선수 지식
 
-1. Hypothesis testing is a systematic procedure for deciding whether sample data provide sufficient evidence to reject a claim about a population parameter, using the null hypothesis as the default assumption.
-2. The p-value measures the probability of observing data as extreme as or more extreme than what was observed, assuming the null hypothesis is true; it is not the probability that the null is true.
-3. One-sample, two-sample, and paired-sample tests share the same logical structure but differ in the test statistic and reference distribution used.
-4. Type I and Type II errors represent the two ways a test can go wrong; increasing sample size or effect size increases power (reduces Type II error) without inflating the Type I error rate.
-5. When testing multiple hypotheses simultaneously, corrections such as Bonferroni, Holm, or Benjamini-Hochberg are essential to control the overall error rate and avoid false discoveries.
+이 장은 다음 내용을 바탕으로 한다:
+
+- **5장** (표본분포) -- 검정통계량의 기준분포로 쓰이는 normal, t, 카이제곱, F 분포.
+- **7장** (mu와 sigma squared의 추정) -- 추정량으로서 표본평균과 표본분산의 성질.
+- **8장** (신뢰구간) -- 신뢰구간의 구성. 신뢰구간과 검정은 쌍대성으로 이어져 있다.
+
+---
+
+## 핵심 요약
+
+1. 가설검정은 귀무가설을 기본 가정으로 삼아, 표본자료가 모수에 관한 주장을 기각할 만큼 충분한 증거를 주는지 판단하는 체계적인 절차이다.
+2. p-값은 귀무가설이 참이라는 가정 아래 관측된 것만큼 또는 그보다 극단적인 자료를 볼 확률을 잰다. 귀무가설이 참일 확률이 아니다.
+3. 일표본, 이표본, 대응표본 검정은 논리 구조가 같고 다만 쓰는 검정통계량과 기준분포가 다르다.
+4. 제1종 오류와 제2종 오류는 검정이 틀릴 수 있는 두 가지 방식이다. 표본크기나 효과크기를 키우면 제1종 오류율을 부풀리지 않으면서 검정력이 커진다(제2종 오류가 줄어든다).
+5. 여러 가설을 동시에 검정할 때는 Bonferroni, Holm, Benjamini-Hochberg 같은 보정이 전체 오류율을 통제하고 거짓 발견을 피하는 데 필수적이다.

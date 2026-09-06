@@ -1,31 +1,31 @@
-# One-Sample Variance Test
+# 일표본 분산 검정
 
-## Overview
+## 개요
 
-The one-sample variance test (chi-squared test for variance) assesses whether the population variance $\sigma^2$ equals a hypothesized value $\sigma_0^2$. This test assumes the underlying population is normally distributed. It is commonly used in quality control to verify that a manufacturing process maintains acceptable variability.
+일표본 분산 검정(분산에 대한 카이제곱 검정)은 모분산 $\sigma^2$이 가설의 값 $\sigma_0^2$과 같은지 평가한다. 이 검정은 바탕 모집단이 정규분포를 따른다고 가정한다. 제조 공정이 허용 가능한 변동성을 유지하는지 확인하는 품질관리에서 흔히 쓰인다.
 
-## Test Formulation
+## 검정의 구성
 
-**Hypotheses:**
+**가설:**
 
-- Two-sided: $H_0\colon \sigma^2 = \sigma_0^2$ vs $H_1\colon \sigma^2 \neq \sigma_0^2$
-- One-sided: $H_0\colon \sigma^2 = \sigma_0^2$ vs $H_1\colon \sigma^2 > \sigma_0^2$ (or $< \sigma_0^2$)
+- 양측: $H_0\colon \sigma^2 = \sigma_0^2$ 대 $H_1\colon \sigma^2 \neq \sigma_0^2$
+- 단측: $H_0\colon \sigma^2 = \sigma_0^2$ 대 $H_1\colon \sigma^2 > \sigma_0^2$ (또는 $< \sigma_0^2$)
 
-**Test statistic:** Given the sample variance $S^2$ (with $\text{ddof}=1$) from a sample of size $n$,
+**검정통계량:** 크기 $n$인 표본의 표본분산 $S^2$($\text{ddof}=1$)이 주어졌을 때, $H_0$과 정규성 가정 아래에서
 
 $$
 \chi^2 = \frac{(n-1)\,S^2}{\sigma_0^2} \sim \chi^2_{n-1}
 $$
 
-under $H_0$ and the assumption of normality.
+이다.
 
-For a **two-sided** test at level $\alpha$, reject $H_0$ if
+수준 $\alpha$의 **양측**검정에서는 다음이면 $H_0$을 기각한다.
 
 $$
 \chi^2 < \chi^2_{\alpha/2,\,n-1} \quad \text{or} \quad \chi^2 > \chi^2_{1-\alpha/2,\,n-1}.
 $$
 
-## Code
+## 코드
 
 ```python
 from scipy.stats import chi2
@@ -47,7 +47,7 @@ def test_variance_one_sample(n, s2, sigma0, alt="two-sided", alpha=0.05):
     return chi2_stat, p, (p < alpha)
 ```
 
-### Example
+### 예제
 
 ```python
 stat, p, reject = test_variance_one_sample(
@@ -56,88 +56,88 @@ stat, p, reject = test_variance_one_sample(
 print("chi2:", stat, "p:", p, "reject:", reject)
 ```
 
-### Interpretation
+### 해석
 
-We test $H_0\colon \sigma^2 = 4.0$ vs $H_1\colon \sigma^2 > 4.0$ with $n=12$ and $s^2 = 4.41$. The test statistic is
+$n=12$, $s^2 = 4.41$로 $H_0\colon \sigma^2 = 4.0$ 대 $H_1\colon \sigma^2 > 4.0$을 검정한다. 검정통계량은
 
 $$
 \chi^2 = \frac{11 \times 4.41}{4.0} = 12.1275.
 $$
 
-Under $H_0$, $\chi^2 \sim \chi^2_{11}$. The one-sided p-value $P(\chi^2_{11} \geq 12.1275) \approx 0.353$, so we fail to reject $H_0$.
+$H_0$ 아래에서 $\chi^2 \sim \chi^2_{11}$이다. 단측 p-값 $P(\chi^2_{11} \geq 12.1275) \approx 0.353$이므로 $H_0$을 기각하지 못한다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.** A machine fills bottles with a target variance of $\sigma_0^2 = 0.01$ mL$^2$. A sample of $n = 25$ bottles has $s^2 = 0.015$. Test $H_0\colon \sigma^2 = 0.01$ vs $H_1\colon \sigma^2 > 0.01$ at $\alpha = 0.05$.
+**연습문제 1.** 어떤 기계가 목표 분산 $\sigma_0^2 = 0.01$ mL$^2$으로 병을 채운다. 병 $n = 25$개의 표본에서 $s^2 = 0.015$를 얻었다. $\alpha = 0.05$에서 $H_0\colon \sigma^2 = 0.01$ 대 $H_1\colon \sigma^2 > 0.01$을 검정하라.
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
 
-    The test statistic is
+    검정통계량은
 
     $$
     \chi^2 = \frac{24 \times 0.015}{0.01} = 36.0.
     $$
 
-    Under $H_0$, $\chi^2 \sim \chi^2_{24}$. The critical value is $\chi^2_{0.05,\,24} = 36.415$. Since $36.0 < 36.415$, we fail to reject $H_0$ (barely). The p-value is $P(\chi^2_{24} \geq 36.0) \approx 0.055$. $\square$
+    $H_0$ 아래에서 $\chi^2 \sim \chi^2_{24}$이다. 임계값은 $\chi^2_{0.05,\,24} = 36.415$이다. $36.0 < 36.415$이므로 아슬아슬하게 $H_0$을 기각하지 못한다. p-값은 $P(\chi^2_{24} \geq 36.0) \approx 0.055$이다. $\square$
 
 ---
 
-**Exercise 2.** Explain why the chi-squared test for variance is sensitive to the normality assumption. What happens if the population is heavy-tailed?
+**연습문제 2.** 분산에 대한 카이제곱 검정이 정규성 가정에 민감한 이유를 설명하라. 모집단의 꼬리가 두꺼우면 어떻게 되는가?
 
-??? success "Solution to Exercise 2"
+??? success "연습문제 2 풀이"
 
-    The test statistic $(n-1)S^2/\sigma_0^2 \sim \chi^2_{n-1}$ holds exactly only when the data come from a normal distribution. The chi-squared distribution of the sample variance depends on the fourth moment (kurtosis) of the population. For heavy-tailed distributions (e.g., $t$-distributions with small degrees of freedom), the sample variance $S^2$ has greater variability than predicted by the chi-squared distribution. This means the actual Type I error rate can be much larger than the nominal $\alpha$, and the test becomes unreliable. In such cases, robust alternatives (e.g., Levene's test or bootstrap methods) are preferred. $\square$
+    검정통계량 $(n-1)S^2/\sigma_0^2 \sim \chi^2_{n-1}$은 자료가 정규분포에서 나올 때에만 정확히 성립한다. 표본분산의 카이제곱분포는 모집단의 4차 적률(첨도)에 의존한다. 꼬리가 두꺼운 분포(예: 자유도가 작은 $t$-분포)에서는 표본분산 $S^2$의 변동이 카이제곱분포가 예측하는 것보다 크다. 그 결과 실제 제1종 오류율이 명목 $\alpha$보다 훨씬 커져 검정을 믿을 수 없게 된다. 이런 경우에는 로버스트한 대안(예: Levene 검정이나 붓스트랩 방법)을 택한다. $\square$
 
 ---
 
-**Exercise 3.** Derive the distribution of $(n-1)S^2/\sigma^2$ under normality.
+**연습문제 3.** 정규성 아래에서 $(n-1)S^2/\sigma^2$의 분포를 유도하라.
 
-??? success "Solution to Exercise 3"
+??? success "연습문제 3 풀이"
 
-    Let $X_1, \dots, X_n \overset{\text{iid}}{\sim} N(\mu, \sigma^2)$. Define $Z_i = (X_i - \mu)/\sigma \overset{\text{iid}}{\sim} N(0,1)$. Then $\sum Z_i^2 \sim \chi^2_n$. The sample variance is
+    $X_1, \dots, X_n \overset{\text{iid}}{\sim} N(\mu, \sigma^2)$이라 하자. $Z_i = (X_i - \mu)/\sigma \overset{\text{iid}}{\sim} N(0,1)$로 두면 $\sum Z_i^2 \sim \chi^2_n$이다. 표본분산은
 
     $$
     S^2 = \frac{1}{n-1}\sum_{i=1}^n (X_i - \bar{X})^2.
     $$
 
-    By Cochran's theorem, $\sum (X_i - \bar{X})^2 / \sigma^2 \sim \chi^2_{n-1}$ because projecting onto the orthogonal complement of the constant vector reduces the dimension by 1. Therefore
+    상수 벡터의 직교여공간으로 사영하면 차원이 1 줄어들므로, Cochran 정리에 의해 $\sum (X_i - \bar{X})^2 / \sigma^2 \sim \chi^2_{n-1}$이다. 따라서
 
     $$
     \frac{(n-1)S^2}{\sigma^2} = \frac{\sum(X_i - \bar{X})^2}{\sigma^2} \sim \chi^2_{n-1}.
     $$
 
-    Under $H_0\colon \sigma^2 = \sigma_0^2$, substituting $\sigma_0^2$ for $\sigma^2$ gives the test statistic. $\square$
+    $H_0\colon \sigma^2 = \sigma_0^2$ 아래에서 $\sigma^2$ 자리에 $\sigma_0^2$을 넣으면 검정통계량이 된다. $\square$
 
 ---
 
-**Exercise 4.** For a two-sided test with $n = 20$ and $\alpha = 0.05$, find the critical values $\chi^2_{L}$ and $\chi^2_{U}$ and the acceptance region for $\chi^2$.
+**연습문제 4.** $n = 20$, $\alpha = 0.05$의 양측검정에서 임계값 $\chi^2_{L}$과 $\chi^2_{U}$ 및 $\chi^2$의 채택역을 구하라.
 
-??? success "Solution to Exercise 4"
+??? success "연습문제 4 풀이"
 
-    With $\text{df} = 19$ and $\alpha/2 = 0.025$:
+    $\text{df} = 19$, $\alpha/2 = 0.025$일 때:
 
     $$
     \chi^2_L = \chi^2_{0.025,\,19} = 8.907, \qquad \chi^2_U = \chi^2_{0.975,\,19} = 32.852.
     $$
 
-    The acceptance region (fail to reject $H_0$) is $8.907 \leq \chi^2 \leq 32.852$. $\square$
+    채택역($H_0$을 기각하지 못하는 영역)은 $8.907 \leq \chi^2 \leq 32.852$이다. $\square$
 
 ---
 
-**Exercise 5.** A quality engineer collects $n = 15$ measurements with $s = 3.2$. Construct a 95% confidence interval for $\sigma^2$ and use it to test $H_0\colon \sigma^2 = 9$.
+**연습문제 5.** 어떤 품질 엔지니어가 측정값 $n = 15$개를 모아 $s = 3.2$를 얻었다. $\sigma^2$의 95% 신뢰구간을 구성하고 이를 써서 $H_0\colon \sigma^2 = 9$를 검정하라.
 
-??? success "Solution to Exercise 5"
+??? success "연습문제 5 풀이"
 
-    A $100(1-\alpha)\%$ CI for $\sigma^2$ is
+    $\sigma^2$의 $100(1-\alpha)\%$ 신뢰구간은
 
     $$
     \left(\frac{(n-1)S^2}{\chi^2_{1-\alpha/2,\,n-1}},\; \frac{(n-1)S^2}{\chi^2_{\alpha/2,\,n-1}}\right).
     $$
 
-    With $n=15$, $s^2 = 10.24$, $\text{df}=14$, $\chi^2_{0.975,14} = 26.119$, and $\chi^2_{0.025,14} = 5.629$:
+    $n=15$, $s^2 = 10.24$, $\text{df}=14$, $\chi^2_{0.975,14} = 26.119$, $\chi^2_{0.025,14} = 5.629$이므로:
 
     $$
     \left(\frac{14 \times 10.24}{26.119},\; \frac{14 \times 10.24}{5.629}\right) = \left(\frac{143.36}{26.119},\; \frac{143.36}{5.629}\right) = (5.49,\; 25.47).
     $$
 
-    Since $\sigma_0^2 = 9$ lies inside the interval $(5.49, 25.47)$, we fail to reject $H_0\colon \sigma^2 = 9$ at $\alpha = 0.05$. $\square$
+    $\sigma_0^2 = 9$가 구간 $(5.49, 25.47)$ 안에 있으므로 $\alpha = 0.05$에서 $H_0\colon \sigma^2 = 9$를 기각하지 못한다. $\square$

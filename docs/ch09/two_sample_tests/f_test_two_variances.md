@@ -1,155 +1,155 @@
-# F-Test for Two Variances
+# 두 분산에 대한 F-검정
 
-## Overview
+## 개요
 
-Many statistical procedures — including the pooled two-sample $t$-test — assume that two populations share the same variance. Before applying such methods, we need a formal way to test whether this assumption is reasonable. The F-test for two variances provides exactly this: a hypothesis test that compares the variability of two normally distributed populations. Beyond assumption checking, comparing variances arises naturally in quality control (is one manufacturing process more variable than another?) and in experimental design (does a treatment affect variability, not just the mean?).
+합동 이표본 $t$-검정을 비롯한 여러 통계 절차가 두 모집단의 분산이 같다고 가정한다. 그런 방법을 적용하기 전에 이 가정이 합당한지 형식적으로 검정할 방법이 필요하다. 두 분산에 대한 F-검정이 바로 그것으로, 정규분포를 따르는 두 모집단의 변동성을 비교하는 가설검정이다. 가정 확인 말고도 분산의 비교는 품질관리(한 제조 공정이 다른 공정보다 변동이 큰가?)와 실험 설계(처리가 평균만이 아니라 변동성에도 영향을 주는가?)에서 자연스럽게 등장한다.
 
-## Assumptions
+## 가정
 
-The F-test requires the following conditions:
+F-검정에는 다음 조건이 필요하다:
 
-1. **Normality:** Both populations follow normal distributions, $X_1 \sim N(\mu_1, \sigma_1^2)$ and $X_2 \sim N(\mu_2, \sigma_2^2)$.
-2. **Independence:** The two samples are independent of each other, and observations within each sample are independent.
-3. **Random sampling:** Both samples are obtained via simple random sampling from their respective populations.
+1. **정규성:** 두 모집단이 모두 정규분포를 따른다. $X_1 \sim N(\mu_1, \sigma_1^2)$, $X_2 \sim N(\mu_2, \sigma_2^2)$.
+2. **독립성:** 두 표본이 서로 독립이고, 각 표본 안의 관측값도 독립이다.
+3. **확률표본추출:** 두 표본 모두 각 모집단에서 단순확률표본추출로 얻었다.
 
-Let $X_{1,1}, \ldots, X_{1,n_1}$ be a random sample of size $n_1$ from the first population, and $X_{2,1}, \ldots, X_{2,n_2}$ a random sample of size $n_2$ from the second population. Define the sample variances as
+$X_{1,1}, \ldots, X_{1,n_1}$을 첫 모집단에서 뽑은 크기 $n_1$의 확률표본, $X_{2,1}, \ldots, X_{2,n_2}$를 둘째 모집단에서 뽑은 크기 $n_2$의 확률표본이라 하자. 표본분산을 다음과 같이 정의한다.
 
 $$
 S_1^2 = \frac{1}{n_1 - 1}\sum_{j=1}^{n_1}(X_{1,j} - \bar{X}_1)^2, \qquad S_2^2 = \frac{1}{n_2 - 1}\sum_{j=1}^{n_2}(X_{2,j} - \bar{X}_2)^2
 $$
 
-## Hypotheses
+## 가설
 
-The null hypothesis states that the two population variances are equal:
+귀무가설은 두 모분산이 같다는 것이다:
 
 $$
 H_0: \sigma_1^2 = \sigma_2^2
 $$
 
-The alternative hypothesis takes one of three forms:
+대립가설은 다음 세 형태 중 하나이다:
 
-- **Two-sided:** $H_1: \sigma_1^2 \neq \sigma_2^2$
-- **Right-tailed:** $H_1: \sigma_1^2 > \sigma_2^2$
-- **Left-tailed:** $H_1: \sigma_1^2 < \sigma_2^2$
+- **양측:** $H_1: \sigma_1^2 \neq \sigma_2^2$
+- **우측:** $H_1: \sigma_1^2 > \sigma_2^2$
+- **좌측:** $H_1: \sigma_1^2 < \sigma_2^2$
 
-## Test Statistic
+## 검정통계량
 
-The intuition behind the F-test is straightforward: if the two populations share the same variance, then the ratio of the sample variances should be close to one. Large deviations from one provide evidence against $H_0$.
+F-검정의 직관은 단순하다: 두 모집단의 분산이 같다면 표본분산의 비가 1에 가까워야 한다. 1에서 크게 벗어나면 $H_0$에 반하는 증거가 된다.
 
-Under $H_0: \sigma_1^2 = \sigma_2^2$ and the normality assumption, the test statistic
+$H_0: \sigma_1^2 = \sigma_2^2$과 정규성 가정 아래에서 검정통계량
 
 $$
 F = \frac{S_1^2}{S_2^2}
 $$
 
-follows an $F$-distribution with $n_1 - 1$ degrees of freedom in the numerator and $n_2 - 1$ degrees of freedom in the denominator:
+은 분자 자유도 $n_1 - 1$, 분모 자유도 $n_2 - 1$인 $F$-분포를 따른다:
 
 $$
 F \sim F_{n_1 - 1,\; n_2 - 1}
 $$
 
-This result follows from the fact that $(n_i - 1)S_i^2 / \sigma_i^2 \sim \chi^2_{n_i - 1}$ for normal populations, and the ratio of two independent chi-squared random variables (each divided by its degrees of freedom) defines the F-distribution.
+이 결과는 정규모집단에서 $(n_i - 1)S_i^2 / \sigma_i^2 \sim \chi^2_{n_i - 1}$이고, 각각을 자유도로 나눈 독립인 두 카이제곱 확률변수의 비가 F-분포를 정의한다는 사실에서 나온다.
 
-## Rejection Regions
+## 기각역
 
-Let $F_{\alpha, d_1, d_2}$ denote the upper $\alpha$ critical value of the $F_{d_1, d_2}$ distribution, where $d_1 = n_1 - 1$ and $d_2 = n_2 - 1$.
+$d_1 = n_1 - 1$, $d_2 = n_2 - 1$일 때 $F_{\alpha, d_1, d_2}$를 $F_{d_1, d_2}$ 분포의 상위 $\alpha$ 임계값이라 하자.
 
-- **Two-sided** ($H_1: \sigma_1^2 \neq \sigma_2^2$): Reject $H_0$ if $F > F_{\alpha/2, d_1, d_2}$ or $F < F_{1 - \alpha/2, d_1, d_2}$.
-- **Right-tailed** ($H_1: \sigma_1^2 > \sigma_2^2$): Reject $H_0$ if $F > F_{\alpha, d_1, d_2}$.
-- **Left-tailed** ($H_1: \sigma_1^2 < \sigma_2^2$): Reject $H_0$ if $F < F_{1 - \alpha, d_1, d_2}$.
+- **양측** ($H_1: \sigma_1^2 \neq \sigma_2^2$): $F > F_{\alpha/2, d_1, d_2}$ 또는 $F < F_{1 - \alpha/2, d_1, d_2}$이면 $H_0$을 기각한다.
+- **우측** ($H_1: \sigma_1^2 > \sigma_2^2$): $F > F_{\alpha, d_1, d_2}$이면 $H_0$을 기각한다.
+- **좌측** ($H_1: \sigma_1^2 < \sigma_2^2$): $F < F_{1 - \alpha, d_1, d_2}$이면 $H_0$을 기각한다.
 
-!!! tip "Convention for Two-Sided Tests"
-    A common simplification is to place the larger sample variance in the numerator, ensuring $F \geq 1$. In that case, only the right tail needs to be checked, and the test rejects $H_0$ if $F > F_{\alpha/2, d_1, d_2}$.
+!!! tip "양측검정의 관례"
+    흔한 단순화는 더 큰 표본분산을 분자에 두어 $F \geq 1$이 되게 하는 것이다. 그러면 오른쪽 꼬리만 확인하면 되고, $F > F_{\alpha/2, d_1, d_2}$이면 $H_0$을 기각한다.
 
-!!! example "Numerical Example"
-    A manufacturer compares the consistency of two machines. Machine A produces $n_1 = 10$ items with sample variance $S_1^2 = 4.2$, and Machine B produces $n_2 = 12$ items with sample variance $S_2^2 = 1.8$. Test $H_0: \sigma_1^2 = \sigma_2^2$ vs. $H_1: \sigma_1^2 \neq \sigma_2^2$ at $\alpha = 0.05$.
+!!! example "수치 예제"
+    한 제조사가 두 기계의 일관성을 비교한다. 기계 A는 $n_1 = 10$개를 생산했고 표본분산이 $S_1^2 = 4.2$, 기계 B는 $n_2 = 12$개를 생산했고 표본분산이 $S_2^2 = 1.8$이다. $\alpha = 0.05$에서 $H_0: \sigma_1^2 = \sigma_2^2$ 대 $H_1: \sigma_1^2 \neq \sigma_2^2$을 검정하라.
 
-    The test statistic is
+    검정통계량은
 
     $$
     F = \frac{S_1^2}{S_2^2} = \frac{4.2}{1.8} = 2.333
     $$
 
-    The degrees of freedom are $d_1 = 9$ and $d_2 = 11$. The critical value $F_{0.025, 9, 11} \approx 3.59$. Since $2.333 < 3.59$, we fail to reject $H_0$ at the 5% significance level. There is insufficient evidence to conclude that the two machines differ in variability.
+    자유도는 $d_1 = 9$, $d_2 = 11$이다. 임계값은 $F_{0.025, 9, 11} \approx 3.59$이다. $2.333 < 3.59$이므로 5% 유의수준에서 $H_0$을 기각하지 못한다. 두 기계의 변동성이 다르다고 결론지을 증거가 부족하다.
 
-## Caution: Sensitivity to Non-Normality
+## 주의: 비정규성에 대한 민감성
 
-The F-test is **extremely sensitive** to departures from normality. Even mild skewness or heavy tails in the underlying populations can cause the actual Type I error rate to far exceed the nominal level $\alpha$. Simulation studies have shown that for moderately skewed distributions, the true rejection rate under $H_0$ can be two to three times the nominal rate.
+F-검정은 정규성에서 벗어나는 데 **극도로 민감하다**. 바탕 모집단에 약한 치우침이나 두꺼운 꼬리만 있어도 실제 제1종 오류율이 명목 수준 $\alpha$를 훨씬 넘을 수 있다. 모의실험 연구들은 적당히 치우친 분포에서 $H_0$ 아래의 참 기각률이 명목값의 두세 배가 될 수 있음을 보였다.
 
-Because of this fragility, more robust alternatives are preferred in practice:
+이런 취약함 때문에 실무에서는 더 로버스트한 대안을 선호한다:
 
-- **Levene's test** replaces each observation with its absolute deviation from the group mean (or median) and then applies a standard ANOVA F-test to these deviations. This approach is robust to non-normality.
-- **Brown-Forsythe test** is a variant of Levene's test that uses deviations from the group median rather than the mean, providing even greater robustness for skewed distributions.
+- **Levene 검정**은 각 관측값을 집단 평균(또는 중앙값)으로부터의 절대편차로 바꾼 뒤 그 편차에 표준적인 분산분석 F-검정을 적용한다. 비정규성에 로버스트하다.
+- **Brown-Forsythe 검정**은 평균 대신 집단 중앙값으로부터의 편차를 쓰는 Levene 검정의 변형으로, 치우친 분포에서 한층 더 로버스트하다.
 
-!!! warning "When to Use the F-Test"
-    Use the classical F-test only when you have strong evidence that both populations are normally distributed (for example, from a Shapiro-Wilk test or Q-Q plots). Otherwise, prefer Levene's or Brown-Forsythe test.
+!!! warning "F-검정을 언제 쓸 것인가"
+    (Shapiro-Wilk 검정이나 Q-Q 그림 등으로) 두 모집단이 모두 정규라는 강한 증거가 있을 때만 고전적인 F-검정을 쓰라. 그렇지 않으면 Levene이나 Brown-Forsythe 검정을 택하라.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Two independent samples from normal populations yield $s_1^2 = 25$ ($n_1 = 16$) and $s_2^2 = 10$ ($n_2 = 21$). Test $H_0: \sigma_1^2 = \sigma_2^2$ versus $H_a: \sigma_1^2 \neq \sigma_2^2$ at $\alpha = 0.05$.
+**연습문제 1.**
+정규모집단에서 뽑은 독립인 두 표본에서 $s_1^2 = 25$ ($n_1 = 16$), $s_2^2 = 10$ ($n_2 = 21$)을 얻었다. $\alpha = 0.05$에서 $H_0: \sigma_1^2 = \sigma_2^2$ 대 $H_a: \sigma_1^2 \neq \sigma_2^2$을 검정하라.
 
-??? success "Solution to Exercise 1"
-    The F-statistic is:
+??? success "연습문제 1 풀이"
+    F-통계량은:
 
     $$
     F = \frac{s_1^2}{s_2^2} = \frac{25}{10} = 2.5
     $$
 
-    Under $H_0$, $F \sim F_{n_1 - 1, n_2 - 1} = F_{15, 20}$.
+    $H_0$ 아래에서 $F \sim F_{n_1 - 1, n_2 - 1} = F_{15, 20}$이다.
 
-    For a two-sided test at $\alpha = 0.05$, the critical values are $F_{0.025, 15, 20} \approx 2.57$ and $F_{0.975, 15, 20} \approx 1/F_{0.025, 20, 15} \approx 1/2.76 \approx 0.362$.
+    $\alpha = 0.05$의 양측검정에서 임계값은 $F_{0.025, 15, 20} \approx 2.57$과 $F_{0.975, 15, 20} \approx 1/F_{0.025, 20, 15} \approx 1/2.76 \approx 0.362$이다.
 
-    Since $0.362 < 2.5 < 2.57$, the test statistic falls within the acceptance region. We fail to reject $H_0$ at the 5% level. There is insufficient evidence to conclude the variances differ.
-
----
-
-**Exercise 2.**
-Explain why the F-test for comparing two variances is sensitive to departures from normality. What alternative test is more robust?
-
-??? success "Solution to Exercise 2"
-    The F-test relies on the ratio $s_1^2/s_2^2$ following an F-distribution under $H_0$, which requires both populations to be exactly normal. The sample variance is sensitive to heavy tails and outliers (since it involves squared deviations), and the F-distribution of the ratio is particularly fragile: even mild departures from normality can inflate the Type I error rate substantially.
-
-    Simulation studies show that for heavy-tailed distributions (e.g., $t$-distributions with small degrees of freedom), the actual rejection rate of the F-test at nominal $\alpha = 0.05$ can exceed 15-20%.
-
-    **Robust alternatives** include:
-
-    - **Levene's test:** Based on absolute deviations from group means.
-    - **Brown-Forsythe test:** Based on absolute deviations from group medians (even more robust).
-    - **Bartlett's test:** More powerful under normality but also sensitive to non-normality.
+    $0.362 < 2.5 < 2.57$이므로 검정통계량이 채택역 안에 있다. 5% 수준에서 $H_0$을 기각하지 못한다. 분산이 다르다고 결론지을 증거가 부족하다.
 
 ---
 
-**Exercise 3.**
-Derive the F-test statistic from the chi-squared distributions of the sample variances. That is, show that $(s_1^2/\sigma_1^2)/(s_2^2/\sigma_2^2) \sim F_{n_1-1, n_2-1}$ under normality.
+**연습문제 2.**
+두 분산을 비교하는 F-검정이 정규성에서 벗어나는 데 민감한 이유를 설명하라. 어떤 대안 검정이 더 로버스트한가?
 
-??? success "Solution to Exercise 3"
-    Under normality:
+??? success "연습문제 2 풀이"
+    F-검정은 $H_0$ 아래에서 비 $s_1^2/s_2^2$가 F-분포를 따른다는 데 기대며, 이는 두 모집단이 정확히 정규일 것을 요구한다. 표본분산은 (편차의 제곱을 쓰므로) 두꺼운 꼬리와 이상점에 민감하고, 그 비의 F-분포는 특히 취약하다: 정규성에서 조금만 벗어나도 제1종 오류율이 크게 부풀 수 있다.
+
+    모의실험 연구에 따르면 꼬리가 두꺼운 분포(예: 자유도가 작은 $t$-분포)에서는 명목 $\alpha = 0.05$인 F-검정의 실제 기각률이 15–20%를 넘을 수 있다.
+
+    **로버스트한 대안:**
+
+    - **Levene 검정:** 집단 평균으로부터의 절대편차에 기반한다.
+    - **Brown-Forsythe 검정:** 집단 중앙값으로부터의 절대편차에 기반한다(더 로버스트하다).
+    - **Bartlett 검정:** 정규성 아래에서 검정력이 더 크지만 비정규성에는 역시 민감하다.
+
+---
+
+**연습문제 3.**
+표본분산의 카이제곱분포에서 F-검정통계량을 유도하라. 즉 정규성 아래에서 $(s_1^2/\sigma_1^2)/(s_2^2/\sigma_2^2) \sim F_{n_1-1, n_2-1}$임을 보여라.
+
+??? success "연습문제 3 풀이"
+    정규성 아래에서:
 
     $$
     \frac{(n_1-1)s_1^2}{\sigma_1^2} \sim \chi^2_{n_1-1}, \quad \frac{(n_2-1)s_2^2}{\sigma_2^2} \sim \chi^2_{n_2-1}
     $$
 
-    and these are independent (since the samples are independent). By definition, the ratio of two independent chi-squared random variables, each divided by their degrees of freedom, follows an F-distribution:
+    이고 (표본이 독립이므로) 둘은 독립이다. 정의에 의해 각각을 자유도로 나눈 독립인 두 카이제곱 확률변수의 비는 F-분포를 따른다:
 
     $$
     F = \frac{\chi^2_{n_1-1}/(n_1-1)}{\chi^2_{n_2-1}/(n_2-1)} = \frac{s_1^2/\sigma_1^2}{s_2^2/\sigma_2^2}
     $$
 
-    Under $H_0: \sigma_1^2 = \sigma_2^2$, this simplifies to $F = s_1^2/s_2^2 \sim F_{n_1-1, n_2-1}$. $\square$
+    $H_0: \sigma_1^2 = \sigma_2^2$ 아래에서 이는 $F = s_1^2/s_2^2 \sim F_{n_1-1, n_2-1}$로 간단해진다. $\square$
 
 ---
 
-**Exercise 4.**
-If $F = s_1^2/s_2^2 \sim F_{d_1, d_2}$, show that $1/F = s_2^2/s_1^2 \sim F_{d_2, d_1}$. Why does this property matter for the two-sided test?
+**연습문제 4.**
+$F = s_1^2/s_2^2 \sim F_{d_1, d_2}$이면 $1/F = s_2^2/s_1^2 \sim F_{d_2, d_1}$임을 보여라. 이 성질이 양측검정에서 왜 중요한가?
 
-??? success "Solution to Exercise 4"
-    If $F = (U/d_1)/(V/d_2)$ where $U \sim \chi^2_{d_1}$ and $V \sim \chi^2_{d_2}$ are independent, then:
+??? success "연습문제 4 풀이"
+    독립인 $U \sim \chi^2_{d_1}$, $V \sim \chi^2_{d_2}$에 대해 $F = (U/d_1)/(V/d_2)$이면,
 
     $$
     \frac{1}{F} = \frac{V/d_2}{U/d_1} \sim F_{d_2, d_1}
     $$
 
-    by the definition of the F-distribution with the roles of numerator and denominator swapped.
+    이다. 분자와 분모의 역할을 바꾼 F-분포의 정의에서 곧바로 나온다.
 
-    This matters for the two-sided test because the F-distribution is not symmetric. The lower critical value $F_{\alpha/2, d_1, d_2}$ can be computed as $1/F_{1-\alpha/2, d_2, d_1}$, which is useful since many tables only provide upper-tail critical values. It also means that convention typically places the larger variance in the numerator ($F \geq 1$), converting the two-sided test to a one-sided test with doubled significance level.
+    F-분포가 대칭이 아니므로 이 성질이 양측검정에서 중요하다. 아래쪽 임계값 $F_{1-\alpha/2, d_1, d_2}$은 $1/F_{\alpha/2, d_2, d_1}$로 계산할 수 있는데, 많은 표가 위쪽 꼬리 임계값만 제공하므로 유용하다. 또한 이 때문에 관례적으로 더 큰 분산을 분자에 두어($F \geq 1$) 양측검정을 위쪽 꼬리만 보는 형태로 바꾼다.

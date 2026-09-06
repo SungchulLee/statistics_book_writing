@@ -1,18 +1,18 @@
-# P-Hacking Demonstration
+# p-해킹 시연
 
-## Overview
+## 개요
 
-P-hacking occurs when researchers exploit flexibility in data collection and analysis to obtain statistically significant results from data that contain no real effect. Common forms include testing many outcome variables and reporting only the significant ones, stopping data collection as soon as $p < 0.05$, and selectively choosing subgroups or analysis methods. This page simulates each of these practices to show how dramatically they inflate the false positive rate above the nominal $\alpha = 0.05$.
+p-해킹은 연구자가 자료 수집과 분석의 유연성을 이용해, 실제로는 아무 효과가 없는 자료에서 통계적으로 유의한 결과를 얻어내는 일이다. 흔한 형태로는 여러 결과변수를 검정하고 유의한 것만 보고하기, $p < 0.05$가 되는 즉시 자료 수집을 멈추기, 부분집단이나 분석 방법을 골라 쓰기가 있다. 이 페이지에서는 이런 관행을 각각 모의실험하여 거짓 양성 비율이 명목 $\alpha = 0.05$ 위로 얼마나 극적으로 부푸는지 보인다.
 
-## Honest Testing Under the Null
+## 정직한 검정, 귀무가설 아래에서
 
-When $H_0$ is true and we test at level $\alpha$, exactly a fraction $\alpha$ of tests will reject. The p-values follow a $\text{Uniform}(0,1)$ distribution:
+$H_0$이 참이고 수준 $\alpha$에서 검정하면 정확히 $\alpha$의 비율만 기각된다. p-값은 $\text{Uniform}(0,1)$ 분포를 따른다:
 
 $$
 P(p \leq t \mid H_0) = t \quad \text{for } t \in [0,1].
 $$
 
-### Code
+### 코드
 
 ```python
 import numpy as np
@@ -33,25 +33,25 @@ false_pos_rate = np.mean(pvals < 0.05)
 print(f"False positive rate: {false_pos_rate:.4f}  (expected: 0.05)")
 ```
 
-The histogram of p-values is essentially flat, confirming uniformity under $H_0$.
+p-값의 히스토그램은 사실상 평평하여 $H_0$ 아래의 균등성을 확인해 준다.
 
-## Cherry-Picking Multiple Outcomes
+## 여러 결과변수 중 골라 쓰기
 
-If a researcher tests $k$ independent outcomes and reports only the smallest p-value, the probability of finding at least one "significant" result under $H_0$ is
+연구자가 독립인 결과변수 $k$개를 검정하고 가장 작은 p-값만 보고하면, $H_0$ 아래에서 "유의한" 결과를 적어도 하나 찾을 확률은
 
 $$
 P(\min(p_1, \ldots, p_k) < \alpha) = 1 - (1 - \alpha)^k.
 $$
 
-For $k = 20$ and $\alpha = 0.05$:
+$k = 20$이고 $\alpha = 0.05$이면:
 
 $$
 1 - (1 - 0.05)^{20} = 1 - 0.95^{20} \approx 0.64.
 $$
 
-The false positive rate jumps from 5% to 64%.
+거짓 양성 비율이 5%에서 64%로 뛴다.
 
-### Code
+### 코드
 
 ```python
 n_outcomes = 20
@@ -70,11 +70,11 @@ phack_rate = np.mean(min_pvals < 0.05)
 print(f"Cherry-pick rate: {phack_rate:.4f}  (theoretical: 0.6415)")
 ```
 
-## Optional Stopping
+## 임의 중단
 
-Another form of p-hacking is to peek at the data repeatedly during collection and stop as soon as $p < 0.05$. Even though each individual peek uses a valid test, the sequential peeking inflates the overall false positive rate.
+또 다른 형태의 p-해킹은 자료를 모으는 동안 반복해서 들여다보다가 $p < 0.05$가 되는 즉시 멈추는 것이다. 각각의 들여다보기가 타당한 검정을 쓰더라도 순차적인 엿보기가 전체 거짓 양성 비율을 부풀린다.
 
-### Code
+### 코드
 
 ```python
 n_experiments = 1000
@@ -98,75 +98,75 @@ stop_rate = np.mean(np.array(stopped_pvals) < 0.05)
 print(f"Optional stopping rate: {stop_rate:.4f}")
 ```
 
-With up to 20 peeks (checking every 10 observations up to 200), the false positive rate can exceed 20%.
+(200개까지 10개마다 확인하여) 최대 20번 엿보면 거짓 양성 비율이 20%를 넘을 수 있다.
 
-## Interpretation
+## 해석
 
-| Method | Expected False Positive Rate |
+| 방법 | 기대 거짓 양성 비율 |
 |---|---|
-| Honest single test | $\alpha = 0.05$ |
-| Cherry-pick from 20 outcomes | $\approx 0.64$ |
-| Optional stopping (20 peeks) | $\approx 0.20$ |
+| 정직한 단일 검정 | $\alpha = 0.05$ |
+| 결과변수 20개 중 고르기 | $\approx 0.64$ |
+| 임의 중단 (20번 엿보기) | $\approx 0.20$ |
 
-The core lesson is that $\alpha = 0.05$ only controls the Type I error rate when the analysis plan is fixed before looking at the data. Any post-hoc flexibility -- choosing outcomes, stopping rules, or subgroups -- inflates the true error rate, sometimes dramatically.
+핵심 교훈은 $\alpha = 0.05$가 제1종 오류율을 통제하는 것은 자료를 보기 전에 분석 계획이 고정되어 있을 때뿐이라는 점이다. 결과변수, 중단 규칙, 부분집단을 사후에 고르는 어떤 유연성도 참 오류율을 부풀리며, 때로는 극적으로 그렇다.
 
-**Remedies** include pre-registration of analysis plans, correction for multiple comparisons (Bonferroni, BH), and sequential testing methods (alpha spending functions) that formally account for interim analyses.
+**해법**으로는 분석 계획의 사전등록, 다중비교 보정(Bonferroni, BH), 중간분석을 형식적으로 반영하는 순차검정 방법(알파 소비 함수)이 있다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.** Derive the formula $P(\min(p_1, \ldots, p_k) < \alpha) = 1 - (1 - \alpha)^k$ for independent p-values under $H_0$. What assumption is critical?
+**연습문제 1.** $H_0$ 아래 독립인 p-값에 대해 공식 $P(\min(p_1, \ldots, p_k) < \alpha) = 1 - (1 - \alpha)^k$을 유도하라. 어떤 가정이 결정적인가?
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
 
-    Under $H_0$, each $p_i \sim \text{Uniform}(0,1)$. The minimum exceeds $\alpha$ only if all p-values exceed $\alpha$:
+    $H_0$ 아래에서 각 $p_i \sim \text{Uniform}(0,1)$이다. 최솟값이 $\alpha$를 넘으려면 모든 p-값이 $\alpha$를 넘어야 한다:
 
     $$
     P(\min(p_1,\ldots,p_k) \geq \alpha) = \prod_{i=1}^k P(p_i \geq \alpha) = (1-\alpha)^k.
     $$
 
-    By the complement,
+    여집합을 취하면,
 
     $$
     P(\min < \alpha) = 1 - (1-\alpha)^k.
     $$
 
-    The critical assumption is **independence** of the p-values. If the outcomes are correlated (e.g., overlapping measurements), the actual probability may be lower than this formula predicts. $\square$
+    결정적인 가정은 p-값의 **독립성**이다. 결과변수들이 상관되어 있으면(예: 측정이 겹치면) 실제 확률이 이 공식이 예측하는 것보다 낮을 수 있다. $\square$
 
 ---
 
-**Exercise 2.** How many independent outcomes must a researcher cherry-pick from to have a greater than 90% chance of finding at least one "significant" result under $H_0$ at $\alpha = 0.05$?
+**연습문제 2.** $\alpha = 0.05$에서 $H_0$ 아래 "유의한" 결과를 적어도 하나 찾을 확률이 90%를 넘으려면 연구자가 독립인 결과변수를 몇 개나 두고 골라야 하는가?
 
-??? success "Solution to Exercise 2"
+??? success "연습문제 2 풀이"
 
-    We need $1 - 0.95^k > 0.90$, i.e., $0.95^k < 0.10$. Taking logarithms:
+    $1 - 0.95^k > 0.90$, 즉 $0.95^k < 0.10$이어야 한다. 로그를 취하면:
 
     $$
     k > \frac{\ln 0.10}{\ln 0.95} = \frac{-2.3026}{-0.05129} \approx 44.9.
     $$
 
-    So $k \geq 45$ outcomes suffice. Testing 45 independent variables under the null gives a 90%+ chance of at least one false positive at $\alpha = 0.05$. $\square$
+    따라서 $k \geq 45$개면 충분하다. 귀무가설 아래에서 독립인 변수 45개를 검정하면 $\alpha = 0.05$에서 거짓 양성이 적어도 하나 나올 확률이 90%를 넘는다. $\square$
 
 ---
 
-**Exercise 3.** Explain why the p-value distribution under $H_0$ is $\text{Uniform}(0,1)$ for a continuous test statistic. What happens if the test statistic is discrete?
+**연습문제 3.** 연속인 검정통계량에서 $H_0$ 아래 p-값 분포가 $\text{Uniform}(0,1)$인 이유를 설명하라. 검정통계량이 이산이면 어떻게 되는가?
 
-??? success "Solution to Exercise 3"
+??? success "연습문제 3 풀이"
 
-    For a continuous test statistic $T$ with CDF $F_0$ under $H_0$, the p-value is $p = 1 - F_0(T)$ (or $2\min(F_0(T), 1-F_0(T))$ for two-sided tests). By the probability integral transform, $F_0(T) \sim \text{Uniform}(0,1)$ when $F_0$ is the true CDF, so $p \sim \text{Uniform}(0,1)$.
+    $H_0$ 아래 누적분포함수가 $F_0$인 연속 검정통계량 $T$에서 p-값은 $p = 1 - F_0(T)$(양측검정이면 $2\min(F_0(T), 1-F_0(T))$)이다. $F_0$이 참 누적분포함수이면 확률적분변환에 의해 $F_0(T) \sim \text{Uniform}(0,1)$이므로 $p \sim \text{Uniform}(0,1)$이다.
 
-    For discrete test statistics, the CDF is a step function, so $F_0(T)$ takes only finitely many values. The p-value distribution is then **stochastically larger** than $\text{Uniform}(0,1)$:
+    이산 검정통계량에서는 누적분포함수가 계단함수이므로 $F_0(T)$가 유한개의 값만 취한다. 그러면 p-값 분포가 $\text{Uniform}(0,1)$보다 **확률적으로 크다**:
 
     $$
     P(p \leq \alpha) \leq \alpha \quad \text{for all } \alpha,
     $$
 
-    with strict inequality at most values. This makes discrete tests conservative. $\square$
+    대부분의 값에서 부등호가 엄격하다. 그래서 이산검정이 보수적이 된다. $\square$
 
 ---
 
-**Exercise 4.** Modify the optional stopping simulation so that the researcher checks after every single new observation (rather than every 10). How does this affect the false positive rate?
+**연습문제 4.** 연구자가 (10개마다가 아니라) 새 관측값이 하나 생길 때마다 확인하도록 임의 중단 모의실험을 고쳐라. 거짓 양성 비율에 어떤 영향을 주는가?
 
-??? success "Solution to Exercise 4"
+??? success "연습문제 4 풀이"
 
     ```python
     stopped = []
@@ -186,18 +186,18 @@ The core lesson is that $\alpha = 0.05$ only controls the Type I error rate when
     print(f"Rate with every-observation peeking: {rate:.4f}")
     ```
 
-    Checking after every observation gives the maximum number of peeks and therefore the highest false positive rate. The rate can exceed 30% or more, far above the nominal 5%. This is the worst-case scenario for optional stopping. $\square$
+    관측값마다 확인하면 엿보는 횟수가 최대가 되어 거짓 양성 비율도 가장 높아진다. 비율이 30% 이상까지 갈 수 있어 명목 5%를 크게 웃돈다. 임의 중단의 최악의 경우이다. $\square$
 
 ---
 
-**Exercise 5.** Propose a correction for optional stopping. If you plan to peek $K$ times during data collection, how should you adjust $\alpha$ at each interim analysis to maintain an overall Type I error rate of 0.05? (Hint: Bonferroni is one option; alpha spending is another.)
+**연습문제 5.** 임의 중단에 대한 보정을 제안하라. 자료 수집 중 $K$번 엿볼 계획이라면 전체 제1종 오류율 0.05를 유지하려면 각 중간분석에서 $\alpha$를 어떻게 조정해야 하는가? (힌트: Bonferroni가 한 가지 선택지이고 알파 소비가 또 다른 선택지이다.)
 
-??? success "Solution to Exercise 5"
+??? success "연습문제 5 풀이"
 
-    **Bonferroni approach:** Test at level $\alpha/K$ at each peek. If $K = 20$ peeks, each uses $\alpha = 0.05/20 = 0.0025$. This is simple but conservative.
+    **Bonferroni 접근:** 매번 엿볼 때 수준 $\alpha/K$에서 검정한다. $K = 20$번이면 각각 $\alpha = 0.05/20 = 0.0025$를 쓴다. 단순하지만 보수적이다.
 
-    **Pocock boundary:** Use the same adjusted threshold $\alpha^*$ at every peek, chosen so the overall Type I error is 0.05. For $K = 20$, $\alpha^* \approx 0.003$ (computed via simulation or sequential analysis tables).
+    **Pocock 경계:** 전체 제1종 오류가 0.05가 되도록 고른 같은 조정 문턱 $\alpha^*$을 매번 쓴다. $K = 20$이면 $\alpha^* \approx 0.003$이다(모의실험이나 순차분석 표로 계산한다).
 
-    **O'Brien-Fleming boundary:** Start with a very strict threshold at early peeks and relax it as data accumulate. At peek $k$ out of $K$, the critical $z$-value is approximately $z_{\alpha/2}/\sqrt{k/K}$. This spends almost no alpha early on, preserving power at the final analysis.
+    **O'Brien-Fleming 경계:** 초기 엿보기에는 아주 엄격한 문턱을 쓰고 자료가 쌓일수록 완화한다. $K$번 중 $k$번째 엿보기에서 임계 $z$-값은 대략 $z_{\alpha/2}/\sqrt{k/K}$이다. 초기에 알파를 거의 쓰지 않아 최종 분석의 검정력을 보존한다.
 
-    **Alpha spending function (Lan-DeMets):** A flexible framework where a function $\alpha^*(t)$ specifies how much of the total $\alpha = 0.05$ to "spend" by information fraction $t \in [0,1]$. This generalizes Pocock and O'Brien-Fleming and does not require pre-specifying the exact peek times. $\square$
+    **알파 소비 함수 (Lan-DeMets):** 정보 비율 $t \in [0,1]$까지 전체 $\alpha = 0.05$ 중 얼마를 "쓸지" 함수 $\alpha^*(t)$로 지정하는 유연한 틀이다. Pocock과 O'Brien-Fleming을 일반화하며 엿보는 시점을 정확히 미리 정할 필요가 없다. $\square$

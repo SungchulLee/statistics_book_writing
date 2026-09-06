@@ -1,30 +1,30 @@
-# Height/Weight Hypothesis Tests
+# 키/몸무게 가설검정
 
-## Overview
+## 개요
 
-This page walks through three foundational hypothesis-testing workflows using height and proportion data: a one-sample $t$-test for a population mean, a two-sample $z$-test (known variances) comparing two population means, and a two-proportion $z$-test for comparing rejection rates. Each test follows the same four-step framework: state the hypotheses, compute the test statistic, find the p-value, and make a decision.
+이 페이지에서는 키와 비율 자료로 기초적인 가설검정 흐름 세 가지를 훑는다: 모평균에 대한 일표본 $t$-검정, 두 모평균을 비교하는 (분산을 아는) 이표본 $z$-검정, 그리고 거절률을 비교하는 두 비율 $z$-검정. 각 검정은 같은 네 단계 틀을 따른다: 가설을 세우고, 검정통계량을 계산하고, p-값을 구하고, 판정한다.
 
-## One-Sample t-Test
+## 일표본 t-검정
 
-We test whether the average male height equals a claimed value $\mu_0$.
+남성의 평균 키가 주장된 값 $\mu_0$과 같은지 검정한다.
 
-**Hypotheses:**
+**가설:**
 
 $$
 H_0\colon \mu = \mu_0, \qquad H_1\colon \mu \neq \mu_0.
 $$
 
-**Test statistic:** Given a sample of size $n$ with mean $\bar{x}$ and standard deviation $s$,
+**검정통계량:** 크기 $n$인 표본의 평균이 $\bar{x}$, 표준편차가 $s$일 때
 
 $$
 t = \frac{\bar{x} - \mu_0}{s / \sqrt{n}},
 $$
 
-which follows a $t$-distribution with $n - 1$ degrees of freedom under $H_0$.
+이고 $H_0$ 아래에서 자유도 $n - 1$인 $t$-분포를 따른다.
 
-**Decision rule:** Reject $H_0$ if $|t| > t_{\alpha/2,\, n-1}$.
+**판정 규칙:** $|t| > t_{\alpha/2,\, n-1}$이면 $H_0$을 기각한다.
 
-### Code
+### 코드
 
 ```python
 import numpy as np
@@ -49,17 +49,17 @@ print(f"t = {t_stat:.4f}, p = {p_val:.4f}, t_crit = {t_crit:.4f}")
 print("Reject H0" if abs(t_stat) > t_crit else "Fail to reject H0")
 ```
 
-## Two-Sample z-Test (Known Variances)
+## 이표본 z-검정 (분산을 아는 경우)
 
-When the population standard deviations $\sigma_x$ and $\sigma_y$ are known, we compare two means with
+모표준편차 $\sigma_x$와 $\sigma_y$를 알 때 두 평균을 다음으로 비교한다.
 
 $$
 z = \frac{\bar{x} - \bar{y} - D_0}{\sqrt{\dfrac{\sigma_x^2}{n_1} + \dfrac{\sigma_y^2}{n_2}}},
 $$
 
-where $D_0$ is the hypothesized difference (typically 0). Under $H_0\colon \mu_x - \mu_y = D_0$, $z \sim N(0,1)$.
+여기서 $D_0$은 가설의 차이(보통 0)이다. $H_0\colon \mu_x - \mu_y = D_0$ 아래에서 $z \sim N(0,1)$이다.
 
-### Code
+### 코드
 
 ```python
 male = stats.norm.rvs(loc=170, scale=8, size=250)
@@ -74,22 +74,22 @@ p = 2 * stats.norm.cdf(-abs(z))
 print(f"z = {z:.4f}, p = {p:.6f}")
 ```
 
-When the population variances are unknown, the Welch $t$-test replaces the known $\sigma$ values with sample estimates and adjusts the degrees of freedom:
+모분산을 모르면 Welch $t$-검정이 알려진 $\sigma$ 대신 표본추정값을 쓰고 자유도를 조정한다:
 
 ```python
 t_w, p_w = stats.ttest_ind(male, female, equal_var=False)
 print(f"Welch t = {t_w:.4f}, p = {p_w:.6f}")
 ```
 
-## Two-Proportion z-Test
+## 두 비율 z-검정
 
-To test whether two population proportions differ, we use the pooled proportion under $H_0\colon p_1 = p_2$:
+두 모비율이 다른지 검정하기 위해 $H_0\colon p_1 = p_2$ 아래의 합동 비율을 쓴다:
 
 $$
 \hat{p} = \frac{k_1 + k_2}{n_1 + n_2}, \qquad z = \frac{\hat{p}_1 - \hat{p}_2}{\sqrt{\hat{p}(1-\hat{p})\left(\frac{1}{n_1} + \frac{1}{n_2}\right)}}.
 $$
 
-### Code
+### 코드
 
 ```python
 k1, n1 = 59, 649    # women: 59 rejected out of 649
@@ -105,94 +105,94 @@ print(f"p_women = {p1:.4f}, p_men = {p2:.4f}")
 print(f"z = {z:.4f}, p (one-sided) = {p:.4f}")
 ```
 
-## Interpretation
+## 해석
 
-- The **one-sample $t$-test** checks whether 250 male heights are consistent with a population mean of 172 cm. If the sample mean is noticeably lower (around 170), the $t$-statistic may fall in the rejection region.
-- The **two-sample $z$-test** detects a roughly 5 cm gap between male and female average heights. With $n = 250$ per group and known variances, even moderate differences produce large $z$ values and tiny p-values.
-- The **two-proportion test** examines whether women face a higher bank-loan rejection rate (9.1% vs. 5.1%). The one-sided test asks specifically if the female rate exceeds the male rate, which is appropriate given the research question about discrimination.
+- **일표본 $t$-검정**은 남성 250명의 키가 모평균 172 cm와 부합하는지 확인한다. 표본평균이 눈에 띄게 낮으면(170 근처이면) $t$-통계량이 기각역에 들어갈 수 있다.
+- **이표본 $z$-검정**은 남성과 여성의 평균 키 사이 약 5 cm 차이를 탐지한다. 집단당 $n = 250$이고 분산을 알면 적당한 차이만으로도 큰 $z$ 값과 아주 작은 p-값이 나온다.
+- **두 비율 검정**은 여성이 은행 대출에서 더 높은 거절률(9.1% 대 5.1%)을 겪는지 살핀다. 단측검정은 여성 비율이 남성 비율을 넘는지만 묻는데, 차별에 관한 연구 질문에 비추어 적절하다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.** Derive the standard error formula for the one-sample $t$-test. Why do we divide by $\sqrt{n}$ rather than $n$?
+**연습문제 1.** 일표본 $t$-검정의 표준오차 공식을 유도하라. 왜 $n$이 아니라 $\sqrt{n}$으로 나누는가?
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
 
-    The sample mean $\bar{X} = \frac{1}{n}\sum_{i=1}^n X_i$ has variance
+    표본평균 $\bar{X} = \frac{1}{n}\sum_{i=1}^n X_i$의 분산은
 
     $$
     \text{Var}(\bar{X}) = \text{Var}\!\left(\frac{1}{n}\sum X_i\right) = \frac{1}{n^2} \cdot n\sigma^2 = \frac{\sigma^2}{n}.
     $$
 
-    The standard error is $\text{SE} = \sigma/\sqrt{n}$, estimated by $s/\sqrt{n}$. We divide by $\sqrt{n}$ because the variance of the mean scales as $1/n$, and the standard deviation (square root of variance) scales as $1/\sqrt{n}$. $\square$
+    표준오차는 $\text{SE} = \sigma/\sqrt{n}$이며 $s/\sqrt{n}$으로 추정한다. 평균의 분산이 $1/n$로 축척되고 (분산의 제곱근인) 표준편차는 $1/\sqrt{n}$로 축척되므로 $\sqrt{n}$으로 나눈다. $\square$
 
 ---
 
-**Exercise 2.** In the two-sample $z$-test, suppose the population variances are unknown but believed equal. Write down the pooled $t$-test statistic and explain how it differs from Welch's $t$-test.
+**연습문제 2.** 이표본 $z$-검정에서 모분산을 모르지만 같다고 믿는다고 하자. 합동 $t$-검정통계량을 쓰고 Welch $t$-검정과 어떻게 다른지 설명하라.
 
-??? success "Solution to Exercise 2"
+??? success "연습문제 2 풀이"
 
-    The pooled two-sample $t$-statistic is
+    합동 이표본 $t$-통계량은
 
     $$
     t = \frac{\bar{x} - \bar{y}}{s_p \sqrt{\frac{1}{n_1} + \frac{1}{n_2}}}, \qquad s_p^2 = \frac{(n_1-1)s_x^2 + (n_2-1)s_y^2}{n_1 + n_2 - 2}.
     $$
 
-    This uses a single pooled variance estimate $s_p^2$ and has $n_1 + n_2 - 2$ degrees of freedom. Welch's test does not assume equal variances; instead it uses separate variance estimates $s_x^2/n_1 + s_y^2/n_2$ and approximates the degrees of freedom via the Welch-Satterthwaite equation:
+    하나의 합동 분산추정값 $s_p^2$을 쓰며 자유도는 $n_1 + n_2 - 2$이다. Welch 검정은 등분산을 가정하지 않고 각각의 분산추정값 $s_x^2/n_1 + s_y^2/n_2$을 쓰며 Welch-Satterthwaite 식으로 자유도를 근사한다:
 
     $$
     \text{df} = \frac{\left(\frac{s_x^2}{n_1} + \frac{s_y^2}{n_2}\right)^2}{\frac{(s_x^2/n_1)^2}{n_1-1} + \frac{(s_y^2/n_2)^2}{n_2-1}}.
     $$
 
-    Welch's test is more robust when the variances are unequal. $\square$
+    분산이 다를 때 Welch 검정이 더 로버스트하다. $\square$
 
 ---
 
-**Exercise 3.** For the two-proportion test, verify that the pooled proportion \$\hat{p} = (59 + 128)/(649 + 2490)\$ gives the correct value and compute the 95% confidence interval for $p_1 - p_2$.
+**연습문제 3.** 두 비율 검정에서 합동 비율 $\hat{p} = (59 + 128)/(649 + 2490)$이 올바른 값을 주는지 확인하고 $p_1 - p_2$의 95% 신뢰구간을 계산하라.
 
-??? success "Solution to Exercise 3"
+??? success "연습문제 3 풀이"
 
-    The pooled proportion is
+    합동 비율은
 
     $$
     \hat{p} = \frac{59 + 128}{649 + 2490} = \frac{187}{3139} \approx 0.0596.
     $$
 
-    For the confidence interval, use the unpooled standard error:
+    신뢰구간에는 합동하지 않은 표준오차를 쓴다:
 
     $$
     SE = \sqrt{\frac{\hat{p}_1(1-\hat{p}_1)}{n_1} + \frac{\hat{p}_2(1-\hat{p}_2)}{n_2}} = \sqrt{\frac{0.0909 \times 0.9091}{649} + \frac{0.0514 \times 0.9486}{2490}} \approx 0.0121.
     $$
 
-    The 95% CI for $p_1 - p_2$ is
+    $p_1 - p_2$의 95% 신뢰구간은
 
     $$
     (0.0909 - 0.0514) \pm 1.96 \times 0.0121 = 0.0395 \pm 0.0237 = [0.0158,\; 0.0632].
     $$
 
-    Since this interval does not contain 0, we conclude the difference is statistically significant. $\square$
+    이 구간이 0을 포함하지 않으므로 차이가 통계적으로 유의하다고 결론짓는다. $\square$
 
 ---
 
-**Exercise 4.** Explain the difference between a one-sided and two-sided test. Under what circumstances is a one-sided test appropriate in the bank discrimination example?
+**연습문제 4.** 단측검정과 양측검정의 차이를 설명하라. 은행 차별 예제에서 단측검정이 적절한 상황은 언제인가?
 
-??? success "Solution to Exercise 4"
+??? success "연습문제 4 풀이"
 
-    A **two-sided** test has $H_1\colon p_1 \neq p_2$ and rejects for large values of $|z|$. A **one-sided** test has $H_1\colon p_1 > p_2$ (or $p_1 < p_2$) and rejects for large values of $z$ in one direction only.
+    **양측**검정은 $H_1\colon p_1 \neq p_2$이고 $|z|$가 클 때 기각한다. **단측**검정은 $H_1\colon p_1 > p_2$(또는 $p_1 < p_2$)이고 한쪽 방향으로 $z$가 클 때만 기각한다.
 
-    In the bank discrimination example, the research question is specifically whether women face a *higher* rejection rate. If there is no prior reason to test the opposite direction, a one-sided test ($H_1\colon p_{\text{women}} > p_{\text{men}}$) is appropriate. The one-sided p-value is half the two-sided p-value, making it easier to reject $H_0$ -- but this is only legitimate if the direction was specified before seeing the data. $\square$
+    은행 차별 예제에서 연구 질문은 여성이 *더 높은* 거절률을 겪는지이다. 반대 방향을 검정할 사전 이유가 없다면 단측검정($H_1\colon p_{\text{women}} > p_{\text{men}}$)이 적절하다. 단측 p-값은 양측 p-값의 절반이어서 $H_0$을 기각하기 쉬워지지만, 이는 자료를 보기 전에 방향을 지정했을 때에만 정당하다. $\square$
 
 ---
 
-**Exercise 5.** If the one-sample $t$-test for male heights yields $p = 0.04$, what does this mean in plain language? What does it *not* mean?
+**연습문제 5.** 남성 키에 대한 일표본 $t$-검정이 $p = 0.04$를 준다면 이것이 평이한 말로 무슨 뜻인가? 무엇을 뜻하지 *않는가*?
 
-??? success "Solution to Exercise 5"
+??? success "연습문제 5 풀이"
 
-    A p-value of 0.04 means: if the true population mean were $\mu_0 = 172$ cm, there is a 4% probability of observing a sample mean at least as extreme as the one obtained. Since $0.04 < 0.05$, we reject $H_0$ at the 5% significance level.
+    p-값 0.04는 이런 뜻이다: 참 모평균이 $\mu_0 = 172$ cm라면 얻은 표본평균만큼 또는 그보다 극단적인 값을 관측할 확률이 4%이다. $0.04 < 0.05$이므로 5% 유의수준에서 $H_0$을 기각한다.
 
-    What it does **not** mean:
+    다음을 뜻하지 **않는다**:
 
-    - It does not mean there is a 4% probability that $H_0$ is true. The p-value is $P(\text{data} \mid H_0)$, not $P(H_0 \mid \text{data})$.
-    - It does not measure the size of the effect. A small p-value can arise from a trivially small difference with a large sample.
-    - It does not prove $H_1$ is true. Rejecting $H_0$ only says the data are unlikely under $H_0$, not that any specific alternative is correct.
+    - $H_0$이 참일 확률이 4%라는 뜻이 아니다. p-값은 $P(\text{자료} \mid H_0)$이지 $P(H_0 \mid \text{자료})$가 아니다.
+    - 효과의 크기를 재지 않는다. 표본이 크면 사소하게 작은 차이에서도 작은 p-값이 나올 수 있다.
+    - $H_1$이 참임을 증명하지 않는다. $H_0$을 기각한다는 것은 자료가 $H_0$ 아래에서 나오기 어렵다는 뜻일 뿐, 특정 대립가설이 옳다는 뜻이 아니다.
 
     $\square$

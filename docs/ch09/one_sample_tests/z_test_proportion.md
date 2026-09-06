@@ -1,126 +1,126 @@
-# Z-Test for a Proportion
+# 비율에 대한 Z-검정
 
-## Overview
+## 개요
 
-Many practical questions involve population proportions: Has a manufacturing defect rate changed? Does voter support exceed 50%? Is the response rate for a new drug different from the known rate? The one-sample Z-test for proportions provides a formal framework for answering such questions. It tests whether a population proportion $p$ equals a specific hypothesized value $p_0$, using the normal approximation to the binomial distribution.
+실무의 많은 질문이 모비율에 관한 것이다: 제조 불량률이 달라졌는가? 유권자 지지율이 50%를 넘는가? 새 약의 반응률이 알려진 비율과 다른가? 비율에 대한 일표본 Z-검정은 이런 질문에 답하는 형식적인 틀을 제공한다. 이항분포에 대한 정규근사를 써서 모비율 $p$가 가설의 특정 값 $p_0$과 같은지 검정한다.
 
-## Hypotheses
+## 가설
 
 $$
 H_0: p = p_0 \quad \text{vs} \quad H_1: p \neq p_0
 $$
 
-For one-sided tests, the alternative is either $H_1: p > p_0$ or $H_1: p < p_0$, depending on the research question.
+단측검정에서는 연구 질문에 따라 대립가설이 $H_1: p > p_0$ 또는 $H_1: p < p_0$이 된다.
 
-## Test Statistic
+## 검정통계량
 
-The test statistic measures how many standard errors the sample proportion $\hat{p}$ lies from the hypothesized value $p_0$. Under $H_0$, the standard error of $\hat{p}$ is $\sqrt{p_0(1-p_0)/n}$, so we standardize:
+검정통계량은 표본비율 $\hat{p}$가 가설의 값 $p_0$에서 표준오차 몇 개만큼 떨어져 있는지를 잰다. $H_0$ 아래에서 $\hat{p}$의 표준오차는 $\sqrt{p_0(1-p_0)/n}$이므로 이를 써서 표준화한다:
 
 $$
 Z = \frac{\hat{p} - p_0}{\sqrt{p_0(1-p_0)/n}}
 $$
 
-where $\hat{p} = X/n$ is the sample proportion and $X$ is the number of successes in $n$ independent trials. Under $H_0$, $Z$ is approximately standard normal when the sample size conditions below are met.
+여기서 $\hat{p} = X/n$은 표본비율이고 $X$는 독립인 $n$번의 시행에서의 성공 횟수이다. 아래의 표본크기 조건이 충족되면 $H_0$ 아래에서 $Z$는 근사적으로 표준정규를 따른다.
 
-## Decision Rule
+## 판정 규칙
 
-- **Two-sided** ($H_1: p \neq p_0$): Reject $H_0$ if $|Z| > z_{\alpha/2}$
-- **Right-sided** ($H_1: p > p_0$): Reject $H_0$ if $Z > z_{\alpha}$
-- **Left-sided** ($H_1: p < p_0$): Reject $H_0$ if $Z < -z_{\alpha}$
+- **양측** ($H_1: p \neq p_0$): $|Z| > z_{\alpha/2}$이면 $H_0$을 기각한다
+- **우측** ($H_1: p > p_0$): $Z > z_{\alpha}$이면 $H_0$을 기각한다
+- **좌측** ($H_1: p < p_0$): $Z < -z_{\alpha}$이면 $H_0$을 기각한다
 
-Equivalently, compute the p-value and reject $H_0$ if $p\text{-value} \leq \alpha$.
+동등하게, p-값을 계산하여 $p\text{-값} \leq \alpha$이면 $H_0$을 기각한다.
 
-## Conditions
+## 조건
 
-The normal approximation to the binomial is adequate when both
+이항분포에 대한 정규근사는 경험칙으로 다음 둘이 모두 성립할 때 적절하다.
 
 $$
 np_0 \geq 10 \quad \text{and} \quad n(1-p_0) \geq 10
 $$
 
-as a rule of thumb. These conditions ensure that the sampling distribution of $\hat{p}$ is approximately normal under $H_0$, so the Z-statistic has an approximate $N(0,1)$ distribution. Some references use a threshold of 5 instead of 10.
+이 조건은 $H_0$ 아래에서 $\hat{p}$의 표본분포가 근사적으로 정규가 되도록 보장하며, 그 결과 Z-통계량이 근사적으로 $N(0,1)$ 분포를 갖는다. 어떤 문헌은 10 대신 5를 문턱으로 쓴다.
 
-??? example "Worked Example: Testing a Defect Rate"
+??? example "풀이 예제: 불량률 검정"
 
-    A factory historically produces items with a 4% defect rate ($p_0 = 0.04$). After a process change, a random sample of $n = 500$ items contains 28 defectives, giving $\hat{p} = 28/500 = 0.056$. Test whether the defect rate has changed at the $\alpha = 0.05$ level.
+    어떤 공장은 과거에 4%의 불량률($p_0 = 0.04$)로 제품을 생산했다. 공정을 바꾼 뒤 $n = 500$개의 확률표본에서 불량품이 28개 나와 $\hat{p} = 28/500 = 0.056$이다. $\alpha = 0.05$ 수준에서 불량률이 달라졌는지 검정하라.
 
-    **Check conditions.** $np_0 = 500 \times 0.04 = 20 \geq 10$ and $n(1 - p_0) = 500 \times 0.96 = 480 \geq 10$. Both satisfied.
+    **조건 확인.** $np_0 = 500 \times 0.04 = 20 \geq 10$이고 $n(1 - p_0) = 500 \times 0.96 = 480 \geq 10$. 둘 다 만족한다.
 
-    **Compute the test statistic.**
+    **검정통계량 계산.**
 
     $$
     Z = \frac{0.056 - 0.04}{\sqrt{0.04 \times 0.96 / 500}} = \frac{0.016}{\sqrt{0.0000768}} = \frac{0.016}{0.00877} \approx 1.83
     $$
 
-    **Decision.** For a two-sided test, the critical value is $z_{0.025} = 1.96$. Since $|1.83| < 1.96$, we fail to reject $H_0$. The two-sided p-value is $2P(Z > 1.83) \approx 0.067 > 0.05$, confirming the decision. There is not sufficient evidence at the 5% level to conclude that the defect rate has changed.
+    **판정.** 양측검정의 임계값은 $z_{0.025} = 1.96$이다. $|1.83| < 1.96$이므로 $H_0$을 기각하지 못한다. 양측 p-값은 $2P(Z > 1.83) \approx 0.067 > 0.05$로 판정을 확인해 준다. 5% 수준에서 불량률이 달라졌다고 결론지을 충분한 증거가 없다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Pennies: 100 spins, 59 heads. Test $H_0: p = 0.5$ vs $H_1: p > 0.5$ at $\alpha = 0.05$.
+**연습문제 1.**
+동전 돌리기: 100번 돌려 앞면 59번. $\alpha = 0.05$에서 $H_0: p = 0.5$ 대 $H_1: p > 0.5$를 검정하라.
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
     $\hat p = 0.59$. $z = (0.59 - 0.5)/\sqrt{0.25/100} = 0.09/0.05 = 1.8$.
 
-    P-value (one-sided): $P(Z > 1.8) \approx 0.036$. Since $0.036 < 0.05$, **reject $H_0$**.
+    단측 p-값: $P(Z > 1.8) \approx 0.036$. $0.036 < 0.05$이므로 **$H_0$을 기각한다**.
 
-    Evidence that pennies show heads more than 50% — consistent with biased coin.
-
----
-
-**Exercise 2.**
-Vehicle inspection: 74/100 pass. Test claim of 80% at $\alpha = 0.05$.
-
-??? success "Solution to Exercise 2"
-    $H_0: p = 0.80$ vs $H_1: p \ne 0.80$.
-
-    $z = (0.74 - 0.80)/\sqrt{0.80 \cdot 0.20/100} = -0.06/0.04 = -1.5$. $|z| < 1.96$. **Fail to reject.**
-
-    Not enough evidence to contradict 80%.
+    동전이 앞면을 50% 넘게 보인다는 증거이며, 치우친 동전과 부합한다.
 
 ---
 
-**Exercise 3.**
-**Defect rate change.** 28/500 defective, historical 4%. Test for change.
+**연습문제 2.**
+차량 검사: 100대 중 74대 통과. $\alpha = 0.05$에서 80%라는 주장을 검정하라.
 
-??? success "Solution to Exercise 3"
+??? success "연습문제 2 풀이"
+    $H_0: p = 0.80$ 대 $H_1: p \ne 0.80$.
+
+    $z = (0.74 - 0.80)/\sqrt{0.80 \cdot 0.20/100} = -0.06/0.04 = -1.5$. $|z| < 1.96$. **기각하지 못한다.**
+
+    80%를 반박할 증거가 부족하다.
+
+---
+
+**연습문제 3.**
+**불량률의 변화.** 500개 중 28개 불량, 과거 불량률 4%. 변화가 있는지 검정하라.
+
+??? success "연습문제 3 풀이"
     $\hat p = 28/500 = 0.056$. $z = (0.056 - 0.04)/\sqrt{0.04 \cdot 0.96/500} = 0.016/0.00877 \approx 1.83$.
 
-    Two-sided p-value $= 2 \cdot P(Z > 1.83) \approx 0.067$. Fail to reject at $\alpha = 0.05$.
+    양측 p-값 $= 2 \cdot P(Z > 1.83) \approx 0.067$. $\alpha = 0.05$에서 기각하지 못한다.
 
-    Conditions check: $np_0 = 20 \ge 10$, $n(1-p_0) = 480 \ge 10$. Valid.
-
----
-
-**Exercise 4.**
-**One-sided vs two-sided.** Recompute Exercise 3 as $H_1: p > 0.04$ (suspect defect rate increased).
-
-??? success "Solution to Exercise 4"
-    $z = 1.83$, one-sided p-value $= P(Z > 1.83) \approx 0.034$. **Reject at $\alpha = 0.05$.**
-
-    Different decision: two-sided says no, one-sided says yes. If you had prior reason to suspect *increase only*, one-sided is appropriate.
-
-    Caution: choosing one-sided after seeing the data inflates Type I error. Pre-specify direction.
+    조건 확인: $np_0 = 20 \ge 10$, $n(1-p_0) = 480 \ge 10$. 타당하다.
 
 ---
 
-**Exercise 5.**
-**Conditions for $z$-test on proportion.** State and verify for Exercise 1.
+**연습문제 4.**
+**단측 대 양측.** 연습문제 3을 $H_1: p > 0.04$(불량률이 올랐다고 의심)로 다시 계산하라.
 
-??? success "Solution to Exercise 5"
-    Conditions: $np_0 \ge 10$ and $n(1 - p_0) \ge 10$ (some use 5).
+??? success "연습문제 4 풀이"
+    $z = 1.83$, 단측 p-값 $= P(Z > 1.83) \approx 0.034$. **$\alpha = 0.05$에서 기각한다.**
 
-    Exercise 1: $np_0 = 100 \cdot 0.5 = 50 \ge 10$, $n(1-p_0) = 50 \ge 10$. Valid.
+    판정이 달라진다: 양측은 아니라고 하고 단측은 그렇다고 한다. *증가만* 의심할 사전 근거가 있었다면 단측이 적절하다.
 
-    When conditions fail (small $n$ or extreme $p_0$): use exact binomial test instead. Available in scipy: `binomtest`.
+    주의: 자료를 본 뒤에 단측을 고르면 제1종 오류가 부풀려진다. 방향은 미리 지정하라.
 
 ---
 
-**Exercise 6.**
-**Sample size planning.** What $n$ detects a 2pp difference ($p = 0.42$ vs claimed 0.40) with 80% power at $\alpha = 0.05$ (two-sided)?
+**연습문제 5.**
+**비율에 대한 $z$-검정의 조건.** 진술하고 연습문제 1에서 확인하라.
 
-??? success "Solution to Exercise 6"
-    Formula: $n = (z_{\alpha/2}\sqrt{p_0(1-p_0)} + z_\beta\sqrt{p_1(1-p_1)})^2/(p_1 - p_0)^2$.
+??? success "연습문제 5 풀이"
+    조건: $np_0 \ge 10$이고 $n(1 - p_0) \ge 10$ (5를 쓰기도 한다).
+
+    연습문제 1: $np_0 = 100 \cdot 0.5 = 50 \ge 10$, $n(1-p_0) = 50 \ge 10$. 타당하다.
+
+    조건이 깨지면($n$이 작거나 $p_0$이 극단적이면) 정확한 이항검정을 쓴다. scipy의 `binomtest`를 쓸 수 있다.
+
+---
+
+**연습문제 6.**
+**표본크기 계획.** $\alpha = 0.05$(양측)에서 2퍼센트포인트 차이($p = 0.42$ 대 주장된 0.40)를 검정력 80%로 탐지하려면 $n$이 얼마여야 하는가?
+
+??? success "연습문제 6 풀이"
+    공식: $n = (z_{\alpha/2}\sqrt{p_0(1-p_0)} + z_\beta\sqrt{p_1(1-p_1)})^2/(p_1 - p_0)^2$.
 
     $= (1.96 \sqrt{0.24} + 0.84 \sqrt{0.2436})^2/(0.02)^2$
 
@@ -128,4 +128,4 @@ Vehicle inspection: 74/100 pass. Test claim of 80% at $\alpha = 0.05$.
 
     $= (0.960 + 0.415)^2/0.0004 = 1.89/0.0004 \approx 4730$.
 
-    Need ~4700 observations to detect a 2pp difference with 80% power. Small differences require large samples.
+    2퍼센트포인트 차이를 검정력 80%로 탐지하려면 관측값이 약 4700개 필요하다. 작은 차이에는 큰 표본이 든다.

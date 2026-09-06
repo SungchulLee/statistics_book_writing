@@ -1,151 +1,151 @@
-# Chi-Square Test for the Population Variance
+# 모분산에 대한 카이제곱 검정
 
-## Overview
+## 개요
 
-In manufacturing, controlling process variability is often as important as controlling the process average. A machine that produces bolts with mean diameter on target but excessive variance yields too many parts outside tolerance --- and too many rejects. Similarly, in finance, an investor may want to test whether a portfolio's return volatility exceeds a specified threshold. The chi-square test for variance provides a formal procedure for testing whether a population variance $\sigma^2$ equals, exceeds, or falls below a hypothesized value $\sigma_0^2$. Unlike tests for the mean, which are relatively robust to mild non-normality, this test is highly sensitive to departures from the normal distribution.
+제조 현장에서 공정의 변동성을 통제하는 일은 공정 평균을 통제하는 일만큼 중요할 때가 많다. 볼트의 평균 지름은 목표에 맞지만 분산이 지나치게 큰 기계는 공차를 벗어난 부품을, 따라서 불량품을 너무 많이 만든다. 마찬가지로 금융에서 투자자는 포트폴리오 수익률의 변동성이 특정 문턱을 넘는지 검정하고 싶을 수 있다. 분산에 대한 카이제곱 검정은 모분산 $\sigma^2$이 가설의 값 $\sigma_0^2$과 같은지, 크거나 작은지를 검정하는 형식적 절차이다. 약한 비정규성에 비교적 로버스트한 평균 검정과 달리 이 검정은 정규분포에서 벗어나는 데 매우 민감하다.
 
-## Hypotheses
+## 가설
 
-Let $X_1, X_2, \ldots, X_n$ be a random sample from a $N(\mu, \sigma^2)$ population. The null hypothesis specifies a particular value for the variance:
+$X_1, X_2, \ldots, X_n$을 $N(\mu, \sigma^2)$ 모집단에서 뽑은 확률표본이라 하자. 귀무가설은 분산의 특정 값을 지정한다:
 
 $$
 H_0\colon \sigma^2 = \sigma_0^2
 $$
 
-The alternative hypothesis takes one of three forms depending on the research question:
+대립가설은 연구 질문에 따라 다음 세 형태 중 하나이다:
 
-| Alternative | Interpretation |
+| 대립가설 | 해석 |
 |---|---|
-| $H_1\colon \sigma^2 \neq \sigma_0^2$ | Two-sided: variance differs from $\sigma_0^2$ |
-| $H_1\colon \sigma^2 > \sigma_0^2$ | Right-sided: variance exceeds $\sigma_0^2$ |
-| $H_1\colon \sigma^2 < \sigma_0^2$ | Left-sided: variance is below $\sigma_0^2$ |
+| $H_1\colon \sigma^2 \neq \sigma_0^2$ | 양측: 분산이 $\sigma_0^2$과 다르다 |
+| $H_1\colon \sigma^2 > \sigma_0^2$ | 우측: 분산이 $\sigma_0^2$보다 크다 |
+| $H_1\colon \sigma^2 < \sigma_0^2$ | 좌측: 분산이 $\sigma_0^2$보다 작다 |
 
-## Test Statistic
+## 검정통계량
 
-The test statistic measures how far the sample variance $S^2$ is from the hypothesized value $\sigma_0^2$, scaled by the degrees of freedom. Intuitively, if $\sigma^2 = \sigma_0^2$, then $S^2$ should be close to $\sigma_0^2$, and the ratio $(n-1)S^2 / \sigma_0^2$ should be close to $n-1$ (the mean of the $\chi^2_{n-1}$ distribution).
+검정통계량은 표본분산 $S^2$이 가설의 값 $\sigma_0^2$에서 얼마나 떨어져 있는지를 자유도로 축척하여 잰다. 직관적으로 $\sigma^2 = \sigma_0^2$이면 $S^2$이 $\sigma_0^2$에 가까워야 하고, 비 $(n-1)S^2 / \sigma_0^2$은 ($\chi^2_{n-1}$ 분포의 평균인) $n-1$에 가까워야 한다.
 
 $$
 \chi^2 = \frac{(n-1)S^2}{\sigma_0^2}
 $$
 
-Under $H_0$ and the normality assumption, this statistic follows a chi-square distribution with $n - 1$ degrees of freedom:
+$H_0$과 정규성 가정 아래에서 이 통계량은 자유도 $n - 1$인 카이제곱분포를 따른다:
 
 $$
 \chi^2 = \frac{(n-1)S^2}{\sigma_0^2} \sim \chi^2_{n-1}
 $$
 
-This result follows from the fact that $(n-1)S^2/\sigma^2 = \sum_{i=1}^n (X_i - \bar{X})^2/\sigma^2$ is a sum of squared standard normals with one linear constraint (the deviations sum to zero), yielding $n-1$ degrees of freedom.
+이 결과는 $(n-1)S^2/\sigma^2 = \sum_{i=1}^n (X_i - \bar{X})^2/\sigma^2$이 선형 제약 하나(편차의 합이 0)를 받는 표준정규 제곱들의 합이어서 자유도가 $n-1$이 된다는 사실에서 나온다.
 
-## Rejection Regions
+## 기각역
 
-At significance level $\alpha$, the rejection region depends on the alternative:
+유의수준 $\alpha$에서 기각역은 대립가설에 따라 달라진다.
 
-**Two-sided** ($H_1\colon \sigma^2 \neq \sigma_0^2$): Reject $H_0$ if
+**양측** ($H_1\colon \sigma^2 \neq \sigma_0^2$): 다음이면 $H_0$을 기각한다.
 
 $$
 \chi^2 < \chi^2_{1-\alpha/2,\, n-1} \quad \text{or} \quad \chi^2 > \chi^2_{\alpha/2,\, n-1}
 $$
 
-**Right-sided** ($H_1\colon \sigma^2 > \sigma_0^2$): Reject $H_0$ if
+**우측** ($H_1\colon \sigma^2 > \sigma_0^2$): 다음이면 $H_0$을 기각한다.
 
 $$
 \chi^2 > \chi^2_{\alpha,\, n-1}
 $$
 
-**Left-sided** ($H_1\colon \sigma^2 < \sigma_0^2$): Reject $H_0$ if
+**좌측** ($H_1\colon \sigma^2 < \sigma_0^2$): 다음이면 $H_0$을 기각한다.
 
 $$
 \chi^2 < \chi^2_{1-\alpha,\, n-1}
 $$
 
-Here $\chi^2_{p,\, n-1}$ denotes the value such that $P(\chi^2_{n-1} \leq \chi^2_{p,\, n-1}) = p$, i.e., the $p$-th quantile of the chi-square distribution.
+여기서 $\chi^2_{p,\, n-1}$은 $P(\chi^2_{n-1} \leq \chi^2_{p,\, n-1}) = p$를 만족하는 값, 즉 카이제곱분포의 $p$ 분위수이다.
 
-!!! note "Asymmetry of the Chi-Square Distribution"
-    Unlike the normal and $t$ distributions, the chi-square distribution is not symmetric. This means the two-sided rejection region uses different critical values for the lower and upper tails, and the two-sided test cannot be expressed as a simple absolute-value condition.
+!!! note "카이제곱분포의 비대칭성"
+    정규분포나 $t$-분포와 달리 카이제곱분포는 대칭이 아니다. 따라서 양측 기각역은 아래쪽 꼬리와 위쪽 꼬리에 서로 다른 임계값을 쓰며, 양측검정을 단순한 절댓값 조건으로 나타낼 수 없다.
 
-## Worked Example
+## 풀이 예제
 
-A manufacturer claims that the variance of fill weights for cereal boxes is $\sigma_0^2 = 4$ grams$^2$ (i.e., $\sigma_0 = 2$ grams). A quality inspector samples $n = 25$ boxes and finds a sample variance of $S^2 = 6.1$ grams$^2$. Test whether the variance exceeds the claimed value at $\alpha = 0.05$.
+한 제조사가 시리얼 상자 충전 중량의 분산이 $\sigma_0^2 = 4$ 그램$^2$(즉 $\sigma_0 = 2$ 그램)이라고 주장한다. 품질검사자가 상자 $n = 25$개를 표본으로 뽑아 표본분산 $S^2 = 6.1$ 그램$^2$을 얻었다. $\alpha = 0.05$에서 분산이 주장된 값을 넘는지 검정하라.
 
-**Step 1.** State the hypotheses:
+**1단계.** 가설을 세운다:
 
 $$
 H_0\colon \sigma^2 = 4 \qquad H_1\colon \sigma^2 > 4
 $$
 
-**Step 2.** Compute the test statistic:
+**2단계.** 검정통계량을 계산한다:
 
 $$
 \chi^2 = \frac{(25 - 1)(6.1)}{4} = \frac{24 \times 6.1}{4} = \frac{146.4}{4} = 36.6
 $$
 
-**Step 3.** Find the critical value. For a right-sided test at $\alpha = 0.05$ with $24$ degrees of freedom:
+**3단계.** 임계값을 구한다. 자유도 24, $\alpha = 0.05$의 우측검정에서:
 
 $$
 \chi^2_{0.05,\, 24} = 36.415
 $$
 
-**Step 4.** Make the decision. Since $\chi^2 = 36.6 > 36.415$, we reject $H_0$. There is sufficient evidence at the 5% level to conclude that the population variance exceeds 4 grams$^2$.
+**4단계.** 판정한다. $\chi^2 = 36.6 > 36.415$이므로 $H_0$을 기각한다. 5% 수준에서 모분산이 4 그램$^2$을 넘는다고 결론지을 충분한 증거가 있다.
 
-The $p$-value is $P(\chi^2_{24} > 36.6) \approx 0.048$.
+$p$-값은 $P(\chi^2_{24} > 36.6) \approx 0.048$이다.
 
-## Assumptions and Sensitivity
+## 가정과 민감성
 
-The chi-square variance test requires:
+카이제곱 분산 검정에는 다음이 필요하다:
 
-- **Normality**: The population must be normally distributed. This is the most critical assumption.
-- **Random sampling**: The observations must be independent and identically distributed.
-- **Known $\sigma_0^2$**: The hypothesized variance $\sigma_0^2$ is specified, not estimated from data.
+- **정규성**: 모집단이 정규분포를 따라야 한다. 가장 결정적인 가정이다.
+- **확률표본추출**: 관측값이 독립이고 동일한 분포를 따라야 한다.
+- **$\sigma_0^2$이 주어짐**: 가설의 분산 $\sigma_0^2$은 자료에서 추정한 값이 아니라 지정된 값이다.
 
-!!! warning "Extreme Sensitivity to Non-Normality"
-    The chi-square test for variance is **not robust** to departures from normality. Even mild skewness or heavy tails can cause the actual Type I error rate to differ substantially from the nominal $\alpha$. The kurtosis of the population directly affects the variance of $S^2$: for a distribution with excess kurtosis $\kappa$, $\text{Var}(S^2) \approx 2\sigma^4(1 + \kappa/2)/(n-1)$, which can be much larger than the chi-square theory predicts ($\kappa = 0$ for the normal). When normality is in doubt, consider alternatives such as Levene's test or bootstrap-based methods.
+!!! warning "비정규성에 대한 극도의 민감성"
+    분산에 대한 카이제곱 검정은 정규성에서 벗어나는 데 **로버스트하지 않다**. 약한 치우침이나 두꺼운 꼬리만으로도 실제 제1종 오류율이 명목 $\alpha$와 크게 달라질 수 있다. 모집단의 첨도가 $S^2$의 분산에 직접 영향을 준다: 초과첨도가 $\kappa$인 분포에서 $\text{Var}(S^2) \approx 2\sigma^4(1 + \kappa/2)/(n-1)$이며, 이는 (정규에서 $\kappa = 0$인) 카이제곱 이론이 예측하는 것보다 훨씬 클 수 있다. 정규성이 의심스러우면 Levene 검정이나 붓스트랩 기반 방법 같은 대안을 고려하라.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-A manufacturer claims that the variance of bolt diameters is at most $\sigma_0^2 = 0.04$ mm$^2$. A sample of $n = 20$ bolts gives $s^2 = 0.06$. Conduct a right-tailed chi-square test at $\alpha = 0.05$.
+**연습문제 1.**
+어떤 제조사가 볼트 지름의 분산이 최대 $\sigma_0^2 = 0.04$ mm$^2$이라고 주장한다. 볼트 $n = 20$개의 표본에서 $s^2 = 0.06$을 얻었다. $\alpha = 0.05$에서 우측 카이제곱 검정을 수행하라.
 
-??? success "Solution to Exercise 1"
-    $H_0: \sigma^2 \leq 0.04$ vs $H_1: \sigma^2 > 0.04$.
+??? success "연습문제 1 풀이"
+    $H_0: \sigma^2 \leq 0.04$ 대 $H_1: \sigma^2 > 0.04$.
 
-    The test statistic is:
+    검정통계량은:
 
     $$
     \chi^2 = \frac{(n-1)s^2}{\sigma_0^2} = \frac{19 \times 0.06}{0.04} = \frac{1.14}{0.04} = 28.5
     $$
 
-    The critical value is $\chi^2_{19, 0.05} = 30.14$. Since $28.5 < 30.14$, we **fail to reject** $H_0$. There is insufficient evidence at the 5% level to conclude that the variance exceeds 0.04 mm$^2$.
+    임계값은 $\chi^2_{19, 0.05} = 30.14$이다. $28.5 < 30.14$이므로 $H_0$을 **기각하지 못한다**. 5% 수준에서 분산이 0.04 mm$^2$을 넘는다고 결론지을 증거가 부족하다.
 
 ---
 
-**Exercise 2.**
-For the test in Exercise 1, compute the p-value and interpret it.
+**연습문제 2.**
+연습문제 1의 검정에 대해 p-값을 계산하고 해석하라.
 
-??? success "Solution to Exercise 2"
-    The p-value is $P(\chi^2_{19} > 28.5)$. From chi-square tables or software, $P(\chi^2_{19} > 28.5) \approx 0.075$.
+??? success "연습문제 2 풀이"
+    p-값은 $P(\chi^2_{19} > 28.5)$이다. 카이제곱 표나 소프트웨어로 구하면 $P(\chi^2_{19} > 28.5) \approx 0.075$이다.
 
-    The p-value of 0.075 is greater than $\alpha = 0.05$, confirming the fail-to-reject decision. There is some evidence that the variance may be elevated (p-value is not very large), but it is not strong enough to reject at the 5% level.
-
----
-
-**Exercise 3.**
-Explain why the chi-square test for variance requires the normality assumption much more strictly than the $t$-test for the mean.
-
-??? success "Solution to Exercise 3"
-    The $t$-test for the mean benefits from the CLT: regardless of the population distribution, $\bar{X}$ is approximately normal for moderate $n$. The $t$-test is therefore robust to non-normality for large samples.
-
-    The chi-square test for variance has no such protection. The distribution of $S^2$ depends not just on $\sigma^2$ but also on the **kurtosis** of the population. For non-normal populations, $(n-1)S^2/\sigma^2$ does not follow a chi-square distribution even approximately, and the CLT for $S^2$ converges much more slowly. The kurtosis inflates $\text{Var}(S^2)$, causing the chi-square critical values to be too liberal (rejecting too often) for heavy-tailed data.
+    p-값 0.075는 $\alpha = 0.05$보다 크므로 기각하지 못한다는 판정이 확인된다. 분산이 높아졌을 수 있다는 어느 정도의 증거는 있지만(p-값이 아주 크지는 않다) 5% 수준에서 기각할 만큼 강하지는 않다.
 
 ---
 
-**Exercise 4.**
-A quality control process monitors the variance of a filling machine. Historical data suggests the fill amounts are slightly right-skewed. Should the chi-square test be used to test whether the variance has changed? If not, suggest an alternative.
+**연습문제 3.**
+분산에 대한 카이제곱 검정이 평균에 대한 $t$-검정보다 정규성 가정을 훨씬 엄격하게 요구하는 이유를 설명하라.
 
-??? success "Solution to Exercise 4"
-    The chi-square test should **not** be used because the data are right-skewed, violating the normality assumption. Even mild skewness can cause the chi-square test to have a Type I error rate substantially different from the nominal $\alpha$.
+??? success "연습문제 3 풀이"
+    평균에 대한 $t$-검정은 중심극한정리의 혜택을 받는다: 모집단 분포와 무관하게 $n$이 적당하면 $\bar{X}$가 근사적으로 정규이다. 따라서 표본이 크면 $t$-검정은 비정규성에 로버스트하다.
 
-    Alternatives include:
-    
-    - **Bootstrap test**: Resample the data and construct a bootstrap confidence interval for $\sigma^2$. This requires no distributional assumptions.
-    - **Levene's test**: Test whether the variance has changed by comparing absolute deviations from the median across time periods.
-    - **Bartlett's test with transformation**: Apply a log or Box-Cox transformation to reduce skewness, then use the chi-square test on the transformed data.
+    분산에 대한 카이제곱 검정에는 그런 보호막이 없다. $S^2$의 분포는 $\sigma^2$뿐 아니라 모집단의 **첨도**에도 의존한다. 정규가 아닌 모집단에서는 $(n-1)S^2/\sigma^2$이 근사적으로도 카이제곱분포를 따르지 않으며, $S^2$에 대한 중심극한정리의 수렴은 훨씬 느리다. 첨도가 $\text{Var}(S^2)$을 부풀려, 꼬리가 두꺼운 자료에서 카이제곱 임계값이 지나치게 관대해진다(너무 자주 기각한다).
+
+---
+
+**연습문제 4.**
+어떤 품질관리 공정이 충전기의 분산을 감시한다. 과거 자료에 따르면 충전량이 약간 오른쪽으로 치우쳐 있다. 분산이 달라졌는지 검정하는 데 카이제곱 검정을 써야 하는가? 아니라면 대안을 제안하라.
+
+??? success "연습문제 4 풀이"
+    자료가 오른쪽으로 치우쳐 정규성 가정을 위반하므로 카이제곱 검정을 **쓰지 말아야** 한다. 약한 치우침만으로도 카이제곱 검정의 제1종 오류율이 명목 $\alpha$와 크게 달라질 수 있다.
+
+    대안은 다음과 같다:
+
+    - **붓스트랩 검정**: 자료를 재표본추출하여 $\sigma^2$의 붓스트랩 신뢰구간을 만든다. 분포 가정이 필요 없다.
+    - **Levene 검정**: 기간별로 중앙값으로부터의 절대편차를 비교하여 분산이 달라졌는지 검정한다.
+    - **변환 후 Bartlett 검정**: 로그나 Box-Cox 변환으로 치우침을 줄인 뒤 변환된 자료에 카이제곱 검정을 쓴다.

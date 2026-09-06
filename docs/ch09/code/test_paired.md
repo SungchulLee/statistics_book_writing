@@ -1,25 +1,25 @@
-# Paired Mean Test
+# 대응 평균 검정
 
-## Overview
+## 개요
 
-The paired t-test compares two related measurements taken on the same subjects (e.g., before vs. after a treatment). By computing the difference $D_i = X_i - Y_i$ for each pair, the problem reduces to a one-sample t-test on the differences. This approach eliminates subject-to-subject variability and increases statistical power compared to an independent two-sample test when pairing is meaningful.
+대응 t-검정은 같은 피험자에게서 얻은 관련된 두 측정값(예: 처리 전후)을 비교한다. 각 쌍에 대해 차이 $D_i = X_i - Y_i$를 계산하면 문제가 그 차이에 대한 일표본 t-검정으로 환원된다. 이 접근은 피험자 간 변동성을 제거하므로, 짝짓기가 의미 있을 때 독립 이표본 검정보다 통계적 검정력이 크다.
 
-## Test Formulation
+## 검정의 구성
 
-**Hypotheses:** Let $\mu_D = E[D_i]$ be the population mean of the paired differences.
+**가설:** $\mu_D = E[D_i]$를 대응 차이의 모평균이라 하자.
 
-- Two-sided: $H_0\colon \mu_D = \mu_{D_0}$ vs $H_1\colon \mu_D \neq \mu_{D_0}$
-- One-sided: $H_0\colon \mu_D = \mu_{D_0}$ vs $H_1\colon \mu_D > \mu_{D_0}$ (or $< \mu_{D_0}$)
+- 양측: $H_0\colon \mu_D = \mu_{D_0}$ 대 $H_1\colon \mu_D \neq \mu_{D_0}$
+- 단측: $H_0\colon \mu_D = \mu_{D_0}$ 대 $H_1\colon \mu_D > \mu_{D_0}$ (또는 $< \mu_{D_0}$)
 
-Typically $\mu_{D_0} = 0$ (no difference).
+보통 $\mu_{D_0} = 0$(차이 없음)이다.
 
-**Test statistic:** Given $n$ pairs with mean difference $\bar{D}$ and standard deviation of differences $S_D$,
+**검정통계량:** 쌍이 $n$개이고 평균 차이가 $\bar{D}$, 차이의 표준편차가 $S_D$일 때,
 
 $$
 T = \frac{\bar{D} - \mu_{D_0}}{S_D / \sqrt{n}} \sim t_{n-1}.
 $$
 
-## Code
+## 코드
 
 ```python
 import math
@@ -44,7 +44,7 @@ def test_paired_mean(n, dbar, sd_d, mu_d0=0.0,
     return t, p, (p < alpha)
 ```
 
-### Example
+### 예제
 
 ```python
 t_stat, p, reject = test_paired_mean(
@@ -53,85 +53,85 @@ t_stat, p, reject = test_paired_mean(
 print("t:", t_stat, "p:", p, "reject:", reject)
 ```
 
-### Interpretation
+### 해석
 
-With $n=12$ pairs, $\bar{D}=0.4$, and $S_D=1.1$, the test statistic for $H_1\colon \mu_D < 0$ is
+$n=12$쌍, $\bar{D}=0.4$, $S_D=1.1$일 때 $H_1\colon \mu_D < 0$에 대한 검정통계량은
 
 $$
 T = \frac{0.4 - 0}{1.1/\sqrt{12}} = \frac{0.4}{0.3175} \approx 1.260.
 $$
 
-Since $T > 0$ and we are testing the left tail ($H_1\colon \mu_D < 0$), the p-value will be large and we fail to reject $H_0$.
+$T > 0$인데 왼쪽 꼬리를 검정하므로($H_1\colon \mu_D < 0$) p-값이 크고 $H_0$을 기각하지 못한다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.** Ten patients have their blood pressure measured before and after a new drug. The differences (after $-$ before) are: $-7, -8, -8, -7, -7, -8, -4, -7, -6, -7$. Test whether the drug significantly lowers blood pressure at $\alpha = 0.05$.
+**연습문제 1.** 환자 10명의 혈압을 새 약 투여 전후로 측정했다. 차이(투여 후 $-$ 투여 전)는 $-7, -8, -8, -7, -7, -8, -4, -7, -6, -7$이다. $\alpha = 0.05$에서 이 약이 혈압을 유의하게 낮추는지 검정하라.
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
 
-    Compute: $\bar{D} = -6.9$, $S_D \approx 1.197$, $n = 10$.
+    계산하면 $\bar{D} = -6.9$, $S_D \approx 1.197$, $n = 10$이다.
 
-    Test $H_0\colon \mu_D = 0$ vs $H_1\colon \mu_D < 0$:
+    $H_0\colon \mu_D = 0$ 대 $H_1\colon \mu_D < 0$을 검정한다:
 
     $$
     T = \frac{-6.9 - 0}{1.197/\sqrt{10}} = \frac{-6.9}{0.3785} \approx -18.23.
     $$
 
-    With $\text{df} = 9$, $P(T_9 \leq -18.23) \approx 0$. We strongly reject $H_0$. The drug significantly lowers blood pressure. $\square$
+    $\text{df} = 9$에서 $P(T_9 \leq -18.23) \approx 0$이다. $H_0$을 강하게 기각한다. 이 약이 혈압을 유의하게 낮춘다. $\square$
 
 ---
 
-**Exercise 2.** Explain why the paired t-test is more powerful than the independent two-sample t-test when pairing is appropriate.
+**연습문제 2.** 짝짓기가 적절할 때 대응 t-검정이 독립 이표본 t-검정보다 강력한 이유를 설명하라.
 
-??? success "Solution to Exercise 2"
+??? success "연습문제 2 풀이"
 
-    In an independent two-sample t-test, the variance of the difference in means is
+    독립 이표본 t-검정에서 평균 차이의 분산은
 
     $$
     \text{Var}(\bar{X} - \bar{Y}) = \frac{\sigma_X^2}{n} + \frac{\sigma_Y^2}{n}.
     $$
 
-    In the paired test, the variance of $\bar{D}$ is
+    대응 검정에서 $\bar{D}$의 분산은
 
     $$
     \text{Var}(\bar{D}) = \frac{\sigma_D^2}{n} = \frac{\sigma_X^2 + \sigma_Y^2 - 2\rho\,\sigma_X\sigma_Y}{n},
     $$
 
-    where $\rho = \text{Corr}(X_i, Y_i)$. When the pairing induces positive correlation ($\rho > 0$), the variance of $\bar{D}$ is smaller, yielding a larger test statistic and more power. The reduction is proportional to $2\rho\sigma_X\sigma_Y/n$. $\square$
+    여기서 $\rho = \text{Corr}(X_i, Y_i)$이다. 짝짓기가 양의 상관을 만들면($\rho > 0$) $\bar{D}$의 분산이 작아져 검정통계량이 커지고 검정력이 높아진다. 감소량은 $2\rho\sigma_X\sigma_Y/n$에 비례한다. $\square$
 
 ---
 
-**Exercise 3.** Show that the paired t-test is algebraically equivalent to a one-sample t-test on the differences.
+**연습문제 3.** 대응 t-검정이 차이에 대한 일표본 t-검정과 대수적으로 동등함을 보여라.
 
-??? success "Solution to Exercise 3"
+??? success "연습문제 3 풀이"
 
-    Define $D_i = X_i - Y_i$ for $i = 1, \dots, n$. Then $\bar{D} = \bar{X} - \bar{Y}$ and
+    $i = 1, \dots, n$에 대해 $D_i = X_i - Y_i$로 정의한다. 그러면 $\bar{D} = \bar{X} - \bar{Y}$이고
 
     $$
     S_D^2 = \frac{1}{n-1}\sum_{i=1}^n (D_i - \bar{D})^2.
     $$
 
-    The paired t-statistic is
+    대응 t-통계량은
 
     $$
     T_{\text{paired}} = \frac{\bar{D} - 0}{S_D/\sqrt{n}}.
     $$
 
-    The one-sample t-test applied to the sample $D_1, \dots, D_n$ with null value $\mu_0 = 0$ gives
+    표본 $D_1, \dots, D_n$에 귀무값 $\mu_0 = 0$으로 일표본 t-검정을 적용하면
 
     $$
     T_{\text{one-sample}} = \frac{\bar{D} - 0}{S_D/\sqrt{n}} = T_{\text{paired}}.
     $$
 
-    Since both the test statistic and degrees of freedom ($n-1$) are identical, the two tests are the same. $\square$
+    검정통계량과 자유도($n-1$)가 모두 같으므로 두 검정은 동일하다. $\square$
 
 ---
 
-**Exercise 4.** A study measures reaction times (in ms) for 8 subjects under caffeine and placebo conditions. The paired differences (caffeine $-$ placebo) are: $-15, -22, -8, -30, -12, -18, -25, -10$. Compute a 99% confidence interval for the mean difference.
+**연습문제 4.** 어떤 연구가 피험자 8명의 반응시간(ms)을 카페인 조건과 위약 조건에서 측정했다. 대응 차이(카페인 $-$ 위약)는 $-15, -22, -8, -30, -12, -18, -25, -10$이다. 평균 차이의 99% 신뢰구간을 계산하라.
 
-??? success "Solution to Exercise 4"
+??? success "연습문제 4 풀이"
 
-    Compute: $\bar{D} = (-15-22-8-30-12-18-25-10)/8 = -140/8 = -17.5$.
+    계산하면 $\bar{D} = (-15-22-8-30-12-18-25-10)/8 = -140/8 = -17.5$이다.
 
     $$
     S_D = \sqrt{\frac{\sum(D_i - \bar{D})^2}{7}} = \sqrt{\frac{(2.5)^2+(-4.5)^2+(9.5)^2+(-12.5)^2+(5.5)^2+(-0.5)^2+(-7.5)^2+(7.5)^2}{7}}
@@ -141,28 +141,28 @@ Since $T > 0$ and we are testing the left tail ($H_1\colon \mu_D < 0$), the p-va
     = \sqrt{\frac{6.25+20.25+90.25+156.25+30.25+0.25+56.25+56.25}{7}} = \sqrt{\frac{416}{7}} \approx 7.71.
     $$
 
-    The 99% CI is $\bar{D} \pm t_{0.005,7} \cdot S_D/\sqrt{8}$. With $t_{0.005,7} = 3.499$:
+    99% 신뢰구간은 $\bar{D} \pm t_{0.005,7} \cdot S_D/\sqrt{8}$이다. $t_{0.005,7} = 3.499$이므로:
 
     $$
     -17.5 \pm 3.499 \times \frac{7.71}{\sqrt{8}} = -17.5 \pm 3.499 \times 2.727 = -17.5 \pm 9.54.
     $$
 
-    The 99% CI is $(-27.04, -7.96)$. Since 0 is not in this interval, we reject $H_0\colon \mu_D = 0$ at $\alpha = 0.01$. $\square$
+    99% 신뢰구간은 $(-27.04, -7.96)$이다. 0이 이 구간에 없으므로 $\alpha = 0.01$에서 $H_0\colon \mu_D = 0$을 기각한다. $\square$
 
 ---
 
-**Exercise 5.** Under what conditions is the paired t-test inappropriate? Suggest an alternative for non-normal paired differences.
+**연습문제 5.** 대응 t-검정이 부적절한 조건은 무엇인가? 차이가 정규가 아닐 때의 대안을 제안하라.
 
-??? success "Solution to Exercise 5"
+??? success "연습문제 5 풀이"
 
-    The paired t-test assumes:
+    대응 t-검정의 가정:
 
-    1. The differences $D_i$ are independent (different subjects).
-    2. The differences are approximately normally distributed (or $n$ is large enough for the CLT).
+    1. 차이 $D_i$가 독립이다(서로 다른 피험자).
+    2. 차이가 근사적으로 정규분포를 따른다(또는 $n$이 중심극한정리를 쓸 만큼 크다).
 
-    It is inappropriate when:
+    다음의 경우 부적절하다:
 
-    - The sample size is very small and the differences are clearly non-normal (heavy tails, strong skewness).
-    - The pairs are not naturally matched, making the correlation structure meaningless.
+    - 표본이 아주 작고 차이가 분명히 정규가 아닐 때(두꺼운 꼬리, 강한 치우침).
+    - 쌍이 자연스럽게 짝지어져 있지 않아 상관 구조가 무의미할 때.
 
-    A nonparametric alternative is the **Wilcoxon signed-rank test**, which tests whether the median of the differences is zero. It ranks the absolute differences, assigns signs, and uses the sum of signed ranks as the test statistic. It is valid under the weaker assumption that the difference distribution is symmetric about its median. $\square$
+    비모수적 대안은 차이의 중앙값이 0인지 검정하는 **Wilcoxon 부호순위 검정**이다. 절대차이의 순위를 매기고 부호를 부여한 뒤 부호 있는 순위의 합을 검정통계량으로 쓴다. 차이의 분포가 중앙값을 중심으로 대칭이라는 더 약한 가정 아래에서 타당하다. $\square$

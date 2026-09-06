@@ -1,20 +1,20 @@
-# Two-Sample t-Test (Weed Prices)
+# 이표본 t-검정 (대마초 가격)
 
-## Overview
+## 개요
 
-This page applies a complete hypothesis-testing workflow to California high-quality weed prices in January 2014 versus January 2015. The four steps are: check normality with the Shapiro-Wilk test, construct confidence intervals, run an independent two-sample $t$-test, and perform a chi-square goodness-of-fit test on quality-tier proportions. The example emphasizes the importance of verifying assumptions before applying parametric tests.
+이 페이지는 2014년 1월과 2015년 1월 California 고품질 대마초 가격에 완전한 가설검정 흐름을 적용한다. 네 단계는 다음과 같다: Shapiro-Wilk 검정으로 정규성 확인, 신뢰구간 구성, 독립 이표본 $t$-검정 수행, 품질 등급 비율에 대한 카이제곱 적합도 검정. 이 예제는 모수적 검정을 적용하기 전에 가정을 확인하는 일의 중요성을 강조한다.
 
-## Step 1 -- Normality Check (Shapiro-Wilk)
+## 1단계 — 정규성 확인 (Shapiro-Wilk)
 
-The two-sample $t$-test assumes each sample comes from a normal population. The Shapiro-Wilk test checks this:
+이표본 $t$-검정은 각 표본이 정규모집단에서 나왔다고 가정한다. Shapiro-Wilk 검정이 이를 확인한다:
 
 $$
 H_0\colon \text{the data are normally distributed}, \qquad H_1\colon \text{the data are not normally distributed}.
 $$
 
-A large p-value ($> 0.05$) means we have no evidence against normality.
+p-값이 크면($> 0.05$) 정규성에 반하는 증거가 없다는 뜻이다.
 
-### Code
+### 코드
 
 ```python
 import numpy as np
@@ -43,15 +43,15 @@ for label, data in [("Jan 2014", CA_JAN2014), ("Jan 2015", CA_JAN2015)]:
     print(f"Shapiro-Wilk ({label}): W={stat:.4f}, p={p:.4f}")
 ```
 
-## Step 2 -- Confidence Interval for the Mean
+## 2단계 — 평균의 신뢰구간
 
-A $100(1-\alpha)\%$ confidence interval for the mean, assuming normality, is
+정규성을 가정할 때 평균의 $100(1-\alpha)\%$ 신뢰구간은
 
 $$
 \bar{x} \pm t_{\alpha/2,\, n-1} \cdot \frac{s}{\sqrt{n}}.
 $$
 
-### Code
+### 코드
 
 ```python
 def confidence_interval(data, confidence=0.95):
@@ -67,23 +67,23 @@ print(f"Jan 2014 95% CI: [{ci14[0]:.2f}, {ci14[1]:.2f}]")
 print(f"Jan 2015 95% CI: [{ci15[0]:.2f}, {ci15[1]:.2f}]")
 ```
 
-If the two intervals do not overlap, this is informal evidence that the means differ (though non-overlapping CIs is a more conservative criterion than the $t$-test).
+두 구간이 겹치지 않으면 평균이 다르다는 비형식적 증거가 된다(다만 신뢰구간이 겹치지 않는다는 기준은 $t$-검정보다 보수적이다).
 
-## Step 3 -- Independent Two-Sample t-Test
+## 3단계 — 독립 이표본 t-검정
 
-We test whether the mean prices in the two years are equal:
+두 해의 평균 가격이 같은지 검정한다:
 
 $$
 H_0\colon \mu_{2014} = \mu_{2015}, \qquad H_1\colon \mu_{2014} \neq \mu_{2015}.
 $$
 
-The pooled two-sample $t$-statistic (assuming equal variances) is
+(등분산을 가정한) 합동 이표본 $t$-통계량은
 
 $$
 t = \frac{\bar{x} - \bar{y}}{s_p \sqrt{\frac{1}{n_1} + \frac{1}{n_2}}}, \qquad s_p^2 = \frac{(n_1 - 1)s_x^2 + (n_2 - 1)s_y^2}{n_1 + n_2 - 2}.
 $$
 
-### Code
+### 코드
 
 ```python
 t_stat, p_val = stats.ttest_ind(CA_JAN2014, CA_JAN2015, equal_var=True)
@@ -92,107 +92,110 @@ print(f"p-value:     {p_val:.6f}")
 print("Reject H0" if p_val < 0.05 else "Fail to reject H0")
 ```
 
-## Step 4 -- Chi-Square Goodness-of-Fit
+## 4단계 — 카이제곱 적합도 검정
 
-To check whether the quality-tier distribution (High, Medium, Low) changed between years, we use the chi-square goodness-of-fit test:
+품질 등급 분포(High, Medium, Low)가 두 해 사이에 달라졌는지 확인하기 위해 카이제곱 적합도 검정을 쓴다:
 
 $$
 \chi^2 = \sum_{i=1}^k \frac{(O_i - E_i)^2}{E_i},
 $$
 
-where $O_i$ are observed counts and $E_i$ are expected counts based on the 2014 distribution. Under $H_0$ (no change), $\chi^2 \sim \chi^2_{k-1}$.
+여기서 $O_i$는 관측도수이고 $E_i$는 2014년 분포에 기반한 기대도수이다. $H_0$(변화 없음) 아래에서 $\chi^2 \sim \chi^2_{k-1}$이다.
 
-### Code
+### 코드
 
 ```python
-expected_2014 = np.array([453020, 688699, 271937])
+counts_2014 = np.array([453020, 688699, 271937])
 observed_2015 = np.array([461900, 695432, 267120])
 
-chi2, p_chi = stats.chisquare(observed_2015, f_exp=expected_2014)
+# Rescale the 2014 counts to the 2015 total so that sum(E) == sum(O)
+expected_2015 = counts_2014 / counts_2014.sum() * observed_2015.sum()
+
+chi2, p_chi = stats.chisquare(observed_2015, f_exp=expected_2015)
 print(f"Chi-square stat: {chi2:.2f}, p-value: {p_chi:.6f}")
 ```
 
-## Interpretation
+## 해석
 
-- **Normality**: Both January 2014 and January 2015 price samples pass the Shapiro-Wilk test, confirming that the $t$-test assumptions are reasonable.
-- **Confidence intervals**: The 2014 mean is higher (around \$244) than the 2015 mean (around \$243), and if the intervals are separated, this suggests a real price decline.
-- **Two-sample $t$-test**: If the p-value is below 0.05, we conclude that high-quality weed prices in California decreased significantly from January 2014 to January 2015.
-- **Chi-square test**: The goodness-of-fit test checks whether the proportions of customers buying high, medium, and low quality changed between years. A significant result indicates a shift in purchasing patterns.
+- **정규성**: 2014년 1월과 2015년 1월 가격 표본 모두 Shapiro-Wilk 검정을 통과하여 $t$-검정의 가정이 합당함이 확인된다.
+- **신뢰구간**: 2014년 평균이 2015년 평균(약 \$243)보다 높다(약 \$244). 두 구간이 떨어져 있다면 실제 가격 하락을 시사한다.
+- **이표본 $t$-검정**: p-값이 0.05보다 작으면 California 고품질 대마초 가격이 2014년 1월에서 2015년 1월 사이에 유의하게 떨어졌다고 결론짓는다.
+- **카이제곱 검정**: 적합도 검정은 고·중·저 품질을 구매한 고객의 비율이 두 해 사이에 달라졌는지 확인한다. 유의한 결과는 구매 패턴의 변화를 뜻한다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.** The Shapiro-Wilk test has low power for small samples. If $n = 10$ and the data are slightly non-normal, what is likely to happen? How does this affect the reliability of a subsequent $t$-test?
+**연습문제 1.** Shapiro-Wilk 검정은 표본이 작을 때 검정력이 낮다. $n = 10$이고 자료가 약간 정규가 아니라면 어떤 일이 생기겠는가? 이것이 뒤이은 $t$-검정의 신뢰도에 어떤 영향을 주는가?
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
 
-    With $n = 10$, the Shapiro-Wilk test has low power: it is unlikely to reject normality even if the data come from a moderately non-normal distribution. This means the test may "pass" normality even when the assumption is violated.
+    $n = 10$이면 Shapiro-Wilk 검정의 검정력이 낮다: 자료가 어느 정도 정규가 아닌 분포에서 나와도 정규성을 기각하지 못할 가능성이 크다. 즉 가정이 깨져 있어도 정규성 검정을 "통과"할 수 있다.
 
-    However, the $t$-test is fairly robust to mild non-normality, especially for symmetric distributions. For small $n$, a better strategy is to combine the Shapiro-Wilk test with a Q-Q plot for visual assessment. If serious non-normality is suspected, a nonparametric alternative (e.g., the Mann-Whitney $U$ test) should be used instead. $\square$
+    다만 $t$-검정은 약한 비정규성, 특히 대칭인 분포에는 꽤 로버스트하다. $n$이 작을 때 더 나은 전략은 Shapiro-Wilk 검정과 Q-Q 그림을 함께 보는 것이다. 심각한 비정규성이 의심되면 비모수적 대안(예: Mann-Whitney $U$ 검정)을 대신 써야 한다. $\square$
 
 ---
 
-**Exercise 2.** Compute the 99% confidence interval for the mean of the January 2014 prices. How does it compare to the 95% interval?
+**연습문제 2.** 2014년 1월 가격 평균의 99% 신뢰구간을 계산하라. 95% 구간과 비교하면 어떤가?
 
-??? success "Solution to Exercise 2"
+??? success "연습문제 2 풀이"
 
     ```python
     ci99 = confidence_interval(CA_JAN2014, confidence=0.99)
     print(f"99% CI: [{ci99[0]:.2f}, {ci99[1]:.2f}]")
     ```
 
-    The 99% CI uses $t_{0.005,\,30}$ instead of $t_{0.025,\,30}$. Since $t_{0.005} > t_{0.025}$, the margin of error is larger and the interval is wider. The general formula is
+    99% 신뢰구간은 $t_{0.025,\,30}$ 대신 $t_{0.005,\,30}$을 쓴다. $t_{0.005} > t_{0.025}$이므로 오차한계가 커지고 구간이 넓어진다. 일반적인 공식은
 
     $$
     \text{width} = 2 \cdot t_{\alpha/2,\,n-1} \cdot \frac{s}{\sqrt{n}}.
     $$
 
-    Higher confidence requires a wider interval to maintain the stated coverage probability. $\square$
+    명시한 포함확률을 유지하려면 신뢰수준이 높을수록 구간이 넓어야 한다. $\square$
 
 ---
 
-**Exercise 3.** Suppose the equal-variance assumption is questionable. Run a Welch $t$-test and compare the result. When should you prefer Welch over the pooled test?
+**연습문제 3.** 등분산 가정이 의심스럽다고 하자. Welch $t$-검정을 수행하고 결과를 비교하라. 언제 합동 검정보다 Welch를 선호해야 하는가?
 
-??? success "Solution to Exercise 3"
+??? success "연습문제 3 풀이"
 
     ```python
     t_w, p_w = stats.ttest_ind(CA_JAN2014, CA_JAN2015, equal_var=False)
     print(f"Welch t = {t_w:.4f}, p = {p_w:.6f}")
     ```
 
-    The Welch test does not assume equal variances and uses the Welch-Satterthwaite degrees of freedom:
+    Welch 검정은 등분산을 가정하지 않고 Welch-Satterthwaite 자유도를 쓴다:
 
     $$
     \text{df} = \frac{\left(\frac{s_x^2}{n_1} + \frac{s_y^2}{n_2}\right)^2}{\frac{(s_x^2/n_1)^2}{n_1-1} + \frac{(s_y^2/n_2)^2}{n_2-1}}.
     $$
 
-    In practice, the Welch test is almost as powerful as the pooled test when variances are equal and much more reliable when they are not. Many statisticians recommend using Welch's test by default. $\square$
+    실무에서 Welch 검정은 분산이 같을 때 합동 검정에 거의 맞먹는 검정력을 내고 분산이 다를 때는 훨씬 믿을 만하다. 많은 통계학자가 Welch 검정을 기본으로 쓰기를 권한다. $\square$
 
 ---
 
-**Exercise 4.** In the chi-square goodness-of-fit test, why do we use the 2014 proportions as expected values? What would change if we rescaled the expected counts to match the 2015 total?
+**연습문제 4.** 카이제곱 적합도 검정에서 왜 2014년 비율을 기댓값으로 쓰는가? 기대도수를 2015년 합계에 맞추어 다시 축척하면 무엇이 달라지는가?
 
-??? success "Solution to Exercise 4"
+??? success "연습문제 4 풀이"
 
-    The null hypothesis is that the 2015 quality distribution is the same as 2014. The expected counts should therefore reflect 2014 proportions applied to the 2015 total sample size:
+    귀무가설은 2015년 품질 분포가 2014년과 같다는 것이다. 따라서 기대도수는 2014년의 비율을 2015년 전체 표본크기에 적용한 값이어야 한다:
 
     $$
     E_i = n_{2015} \cdot \frac{O_{i,2014}}{n_{2014}}.
     $$
 
-    If we use raw 2014 counts directly as expected values (as in the code), `scipy.stats.chisquare` internally rescales them so $\sum E_i = \sum O_i$. This rescaling is essential because the chi-square statistic requires $\sum O_i = \sum E_i$. Without rescaling, the test would conflate differences in sample size with differences in proportions. $\square$
+    카이제곱 통계량은 $\sum O_i = \sum E_i$를 요구하며, `scipy.stats.chisquare`는 두 합이 다르면 오류를 낸다. 그러므로 위 코드처럼 기대도수를 직접 다시 축척해야 한다. 축척하지 않으면 표본크기의 차이와 비율의 차이가 뒤섞여 버린다. $\square$
 
 ---
 
-**Exercise 5.** If the $t$-test yields $p = 0.03$ and the effect size (difference of means) is \$1.20, discuss whether this result is practically significant. What additional information would help?
+**연습문제 5.** $t$-검정이 $p = 0.03$을 주고 효과크기(평균 차이)가 \$1.20이라면 이 결과가 실질적으로 유의한지 논하라. 어떤 추가 정보가 도움이 되는가?
 
-??? success "Solution to Exercise 5"
+??? success "연습문제 5 풀이"
 
-    Statistical significance ($p = 0.03 < 0.05$) means the observed difference is unlikely under $H_0$, but it does not address whether the difference matters in practice. A price difference of \$1.20 on a base price of roughly \$244 is about 0.5%, which may be economically negligible depending on context.
+    통계적 유의성($p = 0.03 < 0.05$)은 관측된 차이가 $H_0$ 아래에서 나오기 어렵다는 뜻이지만, 그 차이가 실무에서 중요한지는 말해 주지 않는다. 기준 가격이 약 \$244인데 \$1.20의 차이는 약 0.5%로, 맥락에 따라 경제적으로 무시할 만할 수 있다.
 
-    Additional useful information includes:
+    유용한 추가 정보:
 
-    - **Cohen's $d$**: $d = (\bar{x} - \bar{y}) / s_p$ measures the effect in standard-deviation units. A $d$ below 0.2 is conventionally considered "small."
-    - **Confidence interval for the difference**: e.g., [\$0.15, \$2.25] tells us the range of plausible differences.
-    - **Domain context**: Is \$1.20 meaningful to buyers or sellers? Does it exceed transaction costs or measurement error?
+    - **Cohen의 $d$**: $d = (\bar{x} - \bar{y}) / s_p$가 효과를 표준편차 단위로 잰다. $d$가 0.2 미만이면 관례적으로 "작다"고 본다.
+    - **차이의 신뢰구간**: 예컨대 [\$0.15, \$2.25]는 그럴듯한 차이의 범위를 알려 준다.
+    - **분야의 맥락**: \$1.20이 구매자나 판매자에게 의미가 있는가? 거래비용이나 측정오차를 넘는가?
 
-    A statistically significant but practically negligible result is common with large samples, where even tiny effects produce small p-values. $\square$
+    표본이 크면 아주 작은 효과도 작은 p-값을 내므로, 통계적으로는 유의하지만 실질적으로는 무시할 만한 결과가 흔하다. $\square$
