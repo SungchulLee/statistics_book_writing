@@ -1,29 +1,37 @@
-# Introductory Statistics
+# 통계학 입문
 
-Welcome to this introductory statistics textbook. The material progresses from data collection and descriptive summaries through probability foundations, common distributions, estimation, hypothesis testing, and regression, building the core statistical reasoning needed for data analysis and scientific inquiry.
+이 책은 자료 수집과 기술통계에서 출발해 확률의 기초, 여러 분포, 추정, 가설검정, 회귀를 거쳐
+정칙화·분류·생존분석까지 이어진다. 자료 분석과 과학적 탐구에 필요한 통계적 사고의 뼈대를
+쌓는 것이 목표다.
 
-## What This Book Covers
+## 이 책이 다루는 내용
 
-The book is organized into chapters that follow a natural learning progression:
+장은 자연스러운 학습 순서를 따라 배열했다.
 
-- **Prerequisites (Chapter 0)**---Mathematical background, computational tools, and linear algebra review
-- **Data Collection (Chapter 1)**---Study design, sampling methods, and the distinction between observational and experimental data
-- **Descriptive Statistics (Chapter 2)**---Numerical summaries, visualizations, and exploratory data analysis
-- **Probability Foundations (Chapter 3)**---Sample spaces, axioms, conditional probability, Bayes' theorem, and random variables
-- **Common Distributions (Chapters 4--6)**---Discrete and continuous families used throughout statistics
-- **Sampling Distributions (Chapter 7)**---Distribution of sample statistics and the central limit theorem
-- **Estimation and Inference (Chapters 8--12)**---Point estimation, confidence intervals, and hypothesis testing
-- **Regression (Chapters 13--14)**---Linear models, diagnostics, and extensions
-- **Nonparametric Methods (Chapter 15)**---Sign, rank, and permutation-based tests
+- **선수 지식(0장)**---수학적 배경, 계산 도구, 선형대수 복습
+- **자료 수집(1장)**---연구 설계, 표집 방법, 관찰자료와 실험자료의 구분
+- **기술통계(2장)**---수치 요약, 시각화, 탐색적 자료 분석
+- **확률의 기초(3장)**---표본공간, 공리, 조건부확률, 베이즈 정리, 확률변수
+- **분포와 표본분포(4--5장)**---통계학 전반에서 쓰이는 이산·연속 분포족과 중심극한정리
+- **추정(6--8장)**---점추정, μ와 σ²의 추정, 신뢰구간
+- **가설검정(9--11장)**---검정의 논리, 카이제곱 검정, 분산분석
+- **상관과 회귀(12--13장)**---상관과 인과의 구분, 선형회귀와 진단
+- **가정의 점검(14--15장)**---정규성 검정과 분산 검정
+- **비모수·재표집(16--17장)**---부호·순위·순열 검정, 붓스트랩과 교차검증
+- **정칙화(18장)**---능형회귀, 라쏘, 엘라스틱넷, 주성분회귀와 부분최소제곱
+- **분류(19--20장)**---로지스틱 회귀와 소프트맥스 회귀
+- **생존 모형(21장)**---중도절단 자료, 카플란-마이어, 모수적 모형, 콕스 비례위험
 
-## Prerequisites
+## 선수 지식
 
-A working knowledge of algebra and basic calculus (derivatives and integrals) is assumed. Familiarity with Python is helpful for the computational examples but not strictly required---Chapter 0 provides a brief introduction to NumPy, pandas, and Matplotlib.
+대수와 기초 미적분(미분과 적분)을 알고 있다고 가정한다. 계산 예제에는 파이썬이 쓰이지만
+반드시 익숙할 필요는 없다---0장에서 NumPy, pandas, Matplotlib을 간단히 소개한다.
 
-## Conventions
+## 표기 규약
 
-Throughout this book:
+이 책 전체에서 다음 규약을 따른다.
 
-- Mathematical notation uses MathJax: inline math appears as $x$, and display equations are centered on their own line
-- Practical examples use Python with NumPy, SciPy, and statsmodels
-- Admonitions highlight definitions, theorems, warnings, and worked examples
+- 수식은 MathJax로 나타낸다. 본문 안의 수식은 $x$처럼 문장에 섞여 있고, 별도로 강조할
+  식은 줄을 바꿔 가운데 정렬한다
+- 실습 예제는 파이썬의 NumPy, SciPy, statsmodels를 사용한다
+- 정의, 정리, 주의, 예제는 색이 있는 상자로 구분해 표시한다
