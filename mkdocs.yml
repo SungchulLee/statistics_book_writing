@@ -816,40 +816,40 @@ nav:
             - 다범주 평가지표 구현 (코드): ch20/code/multiclass_metrics.md
             - MNIST 분류 (코드): ch20/code/mnist_classification.md
 
-    - 21 Survival Models:
-        - Chapter Overview: ch21/index.md
-        - 21.1 Introduction to Survival Analysis:
-            - Time-to-Event Data and Censoring: ch21/introduction/time_to_event.md
-            - Types of Censoring (Right, Left, Interval): ch21/introduction/censoring_types.md
-            - Survival and Hazard Functions: ch21/introduction/survival_hazard_functions.md
-            - Financial Applications (Default, Churn, Duration): ch21/introduction/financial_applications.md
-        - 21.2 Non-Parametric Methods:
-            - Kaplan-Meier Estimator: ch21/nonparametric/kaplan_meier.md
-            - Nelson-Aalen Cumulative Hazard: ch21/nonparametric/nelson_aalen.md
-            - Log-Rank Test: ch21/nonparametric/log_rank_test.md
-            - Confidence Intervals for Survival Curves: ch21/nonparametric/survival_ci.md
-        - 21.3 Parametric Survival Models:
-            - Exponential Model (Constant Hazard): ch21/parametric/exponential.md
-            - Weibull Model (Monotone Hazard): ch21/parametric/weibull.md
-            - Log-Normal and Log-Logistic Models: ch21/parametric/lognormal_loglogistic.md
-            - Maximum Likelihood for Censored Data: ch21/parametric/mle_censored.md
-        - 21.4 Cox Proportional Hazards Model:
-            - Partial Likelihood and the Cox Model: ch21/cox/partial_likelihood.md
-            - Interpreting Hazard Ratios: ch21/cox/hazard_ratios.md
-            - Proportional Hazards Assumption: ch21/cox/ph_assumption.md
-            - Model Diagnostics (Schoenfeld Residuals): ch21/cox/diagnostics.md
-        - 21.5 Model Comparison and Selection:
-            - Non-Parametric vs Parametric vs Semi-Parametric: ch21/comparison/model_comparison.md
-            - Akaike Information Criterion and Concordance Index: ch21/comparison/model_selection.md
-        - 21.6 Code:
-            - Kaplan-Meier Survival Curves and Log-Rank Test: ch21/code/kaplan_meier.md
-            - Parametric Survival Models: ch21/code/parametric_models.md
-            - Cox Proportional Hazards: ch21/code/cox_model.md
-            - Survival Model Comparison: ch21/code/model_comparison.md
+    - 21 생존 모형:
+        - 장 개요: ch21/index.md
+        - 21.1 생존분석 입문:
+            - 사건까지의 시간 자료와 중도절단: ch21/introduction/time_to_event.md
+            - 중도절단의 유형 (우측, 좌측, 구간): ch21/introduction/censoring_types.md
+            - 생존함수와 위험함수: ch21/introduction/survival_hazard_functions.md
+            - 금융에서의 응용 (부도, 이탈, 지속시간): ch21/introduction/financial_applications.md
+        - 21.2 비모수적 방법:
+            - 카플란-마이어 추정량: ch21/nonparametric/kaplan_meier.md
+            - 넬슨-알렌 누적위험: ch21/nonparametric/nelson_aalen.md
+            - 로그순위 검정: ch21/nonparametric/log_rank_test.md
+            - 생존곡선의 신뢰구간: ch21/nonparametric/survival_ci.md
+        - 21.3 모수적 생존 모형:
+            - 지수 모형 (상수 위험): ch21/parametric/exponential.md
+            - 와이불 모형 (단조 위험): ch21/parametric/weibull.md
+            - 로그정규 모형과 로그로지스틱 모형: ch21/parametric/lognormal_loglogistic.md
+            - 절단자료의 최대가능도: ch21/parametric/mle_censored.md
+        - 21.4 콕스 비례위험 모형:
+            - 부분가능도와 콕스 모형: ch21/cox/partial_likelihood.md
+            - 위험비 해석: ch21/cox/hazard_ratios.md
+            - 비례위험 가정: ch21/cox/ph_assumption.md
+            - 모형 진단 (쇤펠트 잔차): ch21/cox/diagnostics.md
+        - 21.5 모형 비교와 선택:
+            - 비모수 대 모수 대 준모수: ch21/comparison/model_comparison.md
+            - AIC와 일치도 지수: ch21/comparison/model_selection.md
+        - 21.6 코드:
+            - 카플란-마이어 생존곡선과 로그순위 검정 (코드): ch21/code/kaplan_meier.md
+            - 모수적 생존 모형 (코드): ch21/code/parametric_models.md
+            - 콕스 비례위험 (코드): ch21/code/cox_model.md
+            - 생존 모형 비교 (코드): ch21/code/model_comparison.md
 
-    - Bonus Chapter:
-        - Code:
-            - Kaplan Meier: ch_bonus/code/kaplan_meier.md
+    - 보너스 장:
+        - 코드:
+            - 카플란-마이어 구현 (코드): ch_bonus/code/kaplan_meier.md
 
 plugins:
     - search

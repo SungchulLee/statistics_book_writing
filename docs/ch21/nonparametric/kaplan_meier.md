@@ -1,88 +1,76 @@
-# Kaplan-Meier Estimator
+# 카플란-마이어 추정량
 
-Estimating the survival function $S(t)$ from observed data is the first task
-in any survival analysis.  When no distributional assumptions are made about
-the event times, the standard tool is the **Kaplan--Meier estimator**, also
-called the **product-limit estimator**.  Introduced by Kaplan and Meier (1958),
-it constructs a non-parametric estimate of $S(t)$ that correctly handles
-right-censored observations.
+관측 자료로부터 생존함수 $S(t)$를 추정하는 일은 모든 생존분석의 첫 과제다. 사건시간에 대해
+어떤 분포 가정도 하지 않을 때 쓰는 표준 도구가 **카플란-마이어 추정량**이며 **곱-극한
+추정량**이라고도 한다. Kaplan과 Meier(1958)가 도입했으며, 우측절단된 관측치를 올바르게
+처리하는 $S(t)$의 비모수 추정치를 만든다.
 
-This section derives the estimator, discusses its properties, and works through
-a numerical example.
+이 절에서는 추정량을 유도하고 그 성질을 논의하며 수치 예제를 따라간다.
 
-## Setup and Notation
+## 설정과 표기
 
-Suppose $n$ subjects are observed, producing ordered distinct event times
+대상 $n$명을 관측하여 서로 다른 사건시간을 크기순으로 나열했다고 하자.
 
 $$
 t_{(1)} < t_{(2)} < \cdots < t_{(K)}
 $$
 
-At each event time $t_{(j)}$, define:
+각 사건시간 $t_{(j)}$에서 다음을 정의한다.
 
-- $d_j$ = number of events (deaths, defaults, etc.) at time $t_{(j)}$.
-- $n_j$ = number of subjects **at risk** just before time $t_{(j)}$ --- that is,
-  subjects who have neither experienced the event nor been censored before
-  $t_{(j)}$.
+- $d_j$ = 시점 $t_{(j)}$에서의 사건 수(사망, 부도 등).
+- $n_j$ = 시점 $t_{(j)}$ 직전에 **위험에 있는** 대상 수. 즉 $t_{(j)}$ 이전에 사건을 겪지도
+  절단되지도 않은 대상의 수다.
 
-Subjects who are censored at exactly $t_{(j)}$ are conventionally included in
-the risk set $n_j$ (they were still at risk just before the event time).
+정확히 $t_{(j)}$에 절단된 대상은 관례상 위험집합 $n_j$에 포함시킨다(사건시간 직전까지는 여전히
+위험에 있었기 때문이다).
 
-## Derivation
+## 유도
 
-The key idea is to decompose the survival probability into a product of
-conditional probabilities.  The probability of surviving past time $t_{(j)}$,
-given survival to just before $t_{(j)}$, is estimated by
+핵심 착상은 생존확률을 조건부확률의 곱으로 분해하는 것이다. $t_{(j)}$ 직전까지 생존했다는
+조건에서 $t_{(j)}$를 넘겨 생존할 확률은 다음으로 추정된다.
 
 $$
 \hat{P}\bigl(T > t_{(j)} \mid T \geq t_{(j)}\bigr) = 1 - \frac{d_j}{n_j}
 $$
 
-The survival function at any time $t$ is the product of these conditional
-survival probabilities over all event times up to $t$:
+임의의 시점 $t$에서의 생존함수는 $t$까지의 모든 사건시간에 걸친 이 조건부 생존확률들의 곱이다.
 
 $$
 \hat{S}(t) = \prod_{j:\, t_{(j)} \leq t} \left(1 - \frac{d_j}{n_j}\right)
 $$
 
-This is the **Kaplan--Meier estimator**.  It produces a step function that
-decreases only at observed event times.
+이것이 **카플란-마이어 추정량**이다. 관측된 사건시간에서만 감소하는 계단함수를 만든다.
 
-!!! note "Role of Censored Observations"
+!!! note "절단된 관측치의 역할"
 
-    Censored subjects do not cause a drop in $\hat{S}(t)$, but they reduce the
-    risk set $n_j$ at subsequent event times.  This is how the Kaplan--Meier
-    estimator incorporates partial information from censored observations
-    without treating them as events.
+    절단된 대상은 $\hat{S}(t)$를 떨어뜨리지 않지만, 이후 사건시간의 위험집합 $n_j$를
+    줄인다. 카플란-마이어 추정량은 이런 방식으로 절단된 관측치를 사건으로 취급하지 않으면서도
+    그 부분적 정보를 반영한다.
 
-## Properties
+## 성질
 
-1. **Non-parametric.** No distributional assumption is required.
-2. **Maximum likelihood.** The Kaplan--Meier estimator is the non-parametric
-   maximum likelihood estimator of $S(t)$.
-3. **Consistency.** $\hat{S}(t) \xrightarrow{P} S(t)$ as $n \to \infty$ under
-   independent censoring.
-4. **Step function.** $\hat{S}(t)$ is constant between event times and drops
-   at each event time.
-5. **Right-continuous.** By convention, $\hat{S}(t)$ is a right-continuous
-   function with left limits (cadlag).
+1. **비모수적.** 어떤 분포 가정도 필요 없다.
+2. **최대가능도.** 카플란-마이어 추정량은 $S(t)$의 비모수 최대가능도 추정량이다.
+3. **일치성.** 독립 절단 아래에서 $n \to \infty$일 때
+   $\hat{S}(t) \xrightarrow{P} S(t)$이다.
+4. **계단함수.** $\hat{S}(t)$는 사건시간 사이에서 상수이고 각 사건시간에서 떨어진다.
+5. **우연속.** 관례상 $\hat{S}(t)$는 좌극한을 갖는 우연속 함수(cadlag)다.
 
-## Handling Ties
+## 동점 처리
 
-When multiple events and censorings occur at the same time, the convention is:
+같은 시점에 여러 사건과 절단이 함께 일어나면 다음 관례를 따른다.
 
-1. Events at time $t_{(j)}$ are processed first (they contribute to $d_j$).
-2. Censorings at time $t_{(j)}$ are processed after (they reduce the risk set
-   for subsequent times but are included in $n_j$).
+1. 시점 $t_{(j)}$의 사건을 먼저 처리한다($d_j$에 기여한다).
+2. 시점 $t_{(j)}$의 절단은 그다음에 처리한다(이후 시점의 위험집합을 줄이지만 $n_j$에는
+   포함된다).
 
-This convention ensures that censored subjects at time $t_{(j)}$ are counted
-as at risk at that time.
+이 관례에 따라 시점 $t_{(j)}$에 절단된 대상은 그 시점에 위험에 있는 것으로 센다.
 
-## Worked Example
+## 예제
 
-Consider 8 subjects with the following observed times and event indicators:
+다음과 같은 관측 시간과 사건 지시자를 갖는 대상 8명을 생각하자.
 
-| Subject | Time | $\delta$ |
+| 대상 | 시간 | $\delta$ |
 |:-------:|:----:|:--------:|
 | 1 | 1 | 1 |
 | 2 | 2 | 0 |
@@ -93,10 +81,9 @@ Consider 8 subjects with the following observed times and event indicators:
 | 7 | 7 | 0 |
 | 8 | 9 | 1 |
 
-The distinct event times are $t_{(1)} = 1$, $t_{(2)} = 3$, $t_{(3)} = 5$,
-$t_{(4)} = 9$.
+서로 다른 사건시간은 $t_{(1)} = 1$, $t_{(2)} = 3$, $t_{(3)} = 5$, $t_{(4)} = 9$이다.
 
-**Step-by-step computation:**
+**단계별 계산:**
 
 | $t_{(j)}$ | $n_j$ | $d_j$ | $1 - d_j/n_j$ | $\hat{S}(t_{(j)})$ |
 |:----------:|:-----:|:-----:|:--------------:|:-------------------:|
@@ -105,67 +92,61 @@ $t_{(4)} = 9$.
 | 5 | 4 | 2 | 2/4 = 0.500 | 0.729 $\times$ 0.500 = 0.365 |
 | 9 | 1 | 1 | 0/1 = 0.000 | 0.365 $\times$ 0.000 = 0.000 |
 
-At $t_{(2)} = 3$: the risk set is $n_2 = 6$ because subject 1 experienced the
-event at $t = 1$ and subject 2 was censored at $t = 2$, leaving 6 subjects.
+$t_{(2)} = 3$에서 위험집합이 $n_2 = 6$인 이유는 대상 1이 $t = 1$에 사건을 겪었고 대상 2가
+$t = 2$에 절단되어 6명이 남았기 때문이다.
 
-At $t_{(3)} = 5$: the risk set is $n_3 = 4$ because subjects 1, 2, 3, 4 have
-left (2 events and 2 censorings).
+$t_{(3)} = 5$에서 위험집합이 $n_3 = 4$인 이유는 대상 1, 2, 3, 4가 빠졌기 때문이다
+(사건 2건, 절단 2건).
 
-The Kaplan--Meier estimate is:
+카플란-마이어 추정치는 다음과 같다.
 
-- $\hat{S}(t) = 1.000$ for $t < 1$
-- $\hat{S}(t) = 0.875$ for $1 \leq t < 3$
-- $\hat{S}(t) = 0.729$ for $3 \leq t < 5$
-- $\hat{S}(t) = 0.365$ for $5 \leq t < 9$
-- $\hat{S}(t) = 0.000$ for $t \geq 9$
+- $t < 1$이면 $\hat{S}(t) = 1.000$
+- $1 \leq t < 3$이면 $\hat{S}(t) = 0.875$
+- $3 \leq t < 5$이면 $\hat{S}(t) = 0.729$
+- $5 \leq t < 9$이면 $\hat{S}(t) = 0.365$
+- $t \geq 9$이면 $\hat{S}(t) = 0.000$
 
-## Median Survival Time
+## 중앙 생존시간
 
-The **median survival time** is the time $\hat{t}_{0.5}$ at which the
-Kaplan--Meier curve first crosses (or reaches) 0.5:
+**중앙 생존시간**은 카플란-마이어 곡선이 처음으로 0.5에 도달하거나 그 아래로 내려가는 시점
+$\hat{t}_{0.5}$이다.
 
 $$
 \hat{t}_{0.5} = \inf\{t : \hat{S}(t) \leq 0.5\}
 $$
 
-In the worked example, $\hat{S}(5) = 0.365 < 0.5$ and $\hat{S}(3) = 0.729 > 0.5$,
-so $\hat{t}_{0.5} = 5$ months.
+위 예제에서 $\hat{S}(5) = 0.365 < 0.5$이고 $\hat{S}(3) = 0.729 > 0.5$이므로
+$\hat{t}_{0.5} = 5$개월이다.
 
-!!! warning "Median May Not Exist"
+!!! warning "중앙값이 존재하지 않을 수 있다"
 
-    If the Kaplan--Meier curve does not drop below 0.5 (e.g., heavy censoring
-    causes the curve to plateau above 0.5), the median survival time is
-    undefined.  The mean survival time can be estimated as the area under the
-    Kaplan--Meier curve, but it requires extrapolation if the curve does not
-    reach zero.
+    카플란-마이어 곡선이 0.5 아래로 내려가지 않으면(예: 절단이 심해 곡선이 0.5 위에서
+    평평해지면) 중앙 생존시간이 정의되지 않는다. 평균 생존시간은 카플란-마이어 곡선 아래
+    면적으로 추정할 수 있지만, 곡선이 0에 도달하지 않으면 외삽이 필요하다.
 
-## Limitations
+## 한계
 
-- The Kaplan--Meier estimator handles only right-censored data.  Interval
-  censoring and left truncation require other methods.
-- It is a univariate method: it estimates $S(t)$ without adjusting for
-  covariates.  Covariate-adjusted survival curves require the Cox model
-  (Section 21.4) or stratified Kaplan--Meier estimates.
-- At late time points where few subjects remain at risk, the estimate has
-  high variance.  Confidence intervals (Section 21.2) quantify this
-  uncertainty.
+- 카플란-마이어 추정량은 우측절단 자료만 다룬다. 구간절단과 좌측 절단에는 다른 방법이 필요하다.
+- 일변량 방법이다. 공변량을 보정하지 않고 $S(t)$를 추정한다. 공변량 보정 생존곡선에는
+  콕스 모형(21.4절)이나 층화 카플란-마이어 추정이 필요하다.
+- 위험에 있는 대상이 몇 명 남지 않은 후반부에서는 추정치의 분산이 크다. 신뢰구간(21.2절)이
+  이 불확실성을 정량화한다.
 
-??? tip "Connection to the Nelson--Aalen Estimator"
+??? tip "넬슨-알렌 추정량과의 연결"
 
-    The Nelson--Aalen estimator (next section) provides an alternative
-    non-parametric estimate via the cumulative hazard.  For large samples the
-    two estimators are nearly identical, since
-    $\hat{S}_{\text{KM}}(t) \approx \exp(-\hat{H}_{\text{NA}}(t))$.
+    다음 절의 넬슨-알렌 추정량은 누적위험을 통해 또 다른 비모수 추정치를 준다. 대표본에서는
+    $\hat{S}_{\text{KM}}(t) \approx \exp(-\hat{H}_{\text{NA}}(t))$이므로 두 추정량이
+    거의 같다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Kaplan-Meier Estimation
+**연습문제 1.**
+카플란-마이어 추정
 
-Ten patients are followed after diagnosis. Their observed times (in months) and
-event indicators ($\delta$: 1 = death, 0 = censored) are:
+환자 10명을 진단 후 추적했다. 관측된 시간(개월)과 사건 지시자($\delta$: 1 = 사망,
+0 = 절단)는 다음과 같다.
 
-| Subject | Time | $\delta$ |
+| 대상 | 시간 | $\delta$ |
 |:-------:|:----:|:--------:|
 | 1 | 3 | 1 |
 | 2 | 5 | 0 |
@@ -178,13 +159,13 @@ event indicators ($\delta$: 1 = death, 0 = censored) are:
 | 9 | 18 | 0 |
 | 10 | 20 | 1 |
 
-**(a)** Compute the Kaplan--Meier estimate $\hat{S}(t)$ at each event time.
+**(a)** 각 사건시간에서 카플란-마이어 추정치 $\hat{S}(t)$를 계산하라.
 
-**(b)** What is the estimated median survival time?
+**(b)** 추정된 중앙 생존시간은 얼마인가?
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
 
-    **(a)** Distinct event times: 3, 7, 8, 12, 15, 20.
+    **(a)** 서로 다른 사건시간은 3, 7, 8, 12, 15, 20이다.
 
     | $t_{(j)}$ | $n_j$ | $d_j$ | $1 - d_j/n_j$ | $\hat{S}(t_{(j)})$ |
     |:----------:|:-----:|:-----:|:--------------:|:-------------------:|
@@ -195,5 +176,132 @@ event indicators ($\delta$: 1 = death, 0 = censored) are:
     | 15 | 3 | 1 | 0.667 | 0.360 |
     | 20 | 1 | 1 | 0.000 | 0.000 |
 
-    **(b)** $\hat{S}(12) = 0.540 > 0.5$ and $\hat{S}(15) = 0.360 < 0.5$, so
-    the median survival time is $\hat{t}_{0.5} = 15$ months.
+    위험집합 계산에서 유의할 점 두 가지.
+
+    - $t = 7$에서 $n_j = 8$이다. 대상 1(사건)과 대상 2(절단)가 빠졌다. 절단된 대상 2도
+      위험집합에서 제외된다.
+    - $t = 12$에서 $d_j = 1$이다. 대상 6과 7이 모두 시점 12인데 대상 6만 사건이고 대상 7은
+      절단이다. 동점 관례에 따라 대상 7은 $n_j = 5$에 포함되지만 $d_j$에는 기여하지 않는다.
+
+    **(b)** $\hat{S}(12) = 0.540 > 0.5$이고 $\hat{S}(15) = 0.360 < 0.5$이므로 중앙
+    생존시간은 $\hat{t}_{0.5} = 15$개월이다.
+
+---
+
+**연습문제 2.**
+같은 자료에서 절단된 관측치를 모두 **버리고** 계산한 경험적 생존함수와, 절단시간을
+**사건으로 취급**해 계산한 경험적 생존함수를 카플란-마이어 추정치와 비교하라.
+
+??? success "연습문제 2 풀이"
+
+    **방법 1: 절단된 대상 버리기.** 사건이 관측된 6명(시간 3, 7, 8, 12, 15, 20)만 쓰면
+    경험적 생존함수는 각 시점에서 $1/6$씩 떨어진다.
+
+    | $t$ | 3 | 7 | 8 | 12 | 15 | 20 |
+    |---|---|---|---|---|---|---|
+    | 절단 버림 | $0.833$ | $0.667$ | $0.500$ | $0.333$ | $0.167$ | $0.000$ |
+    | 절단=사건 | $0.900$ | $0.700$ | $0.600$ | $0.400$ | $0.200$ | $0.000$ |
+    | **카플란-마이어** | $\mathbf{0.900}$ | $\mathbf{0.788}$ | $\mathbf{0.675}$ | $\mathbf{0.540}$ | $\mathbf{0.360}$ | $\mathbf{0.000}$ |
+
+    (두 번째 행은 10명 전부를 사건으로 보고 $\hat S(t) = \#\{t_i > t\}/10$을 계산한 것이다.
+    시점 5, 10, 12, 18의 절단도 하강을 만들지만 위 표에는 사건시간만 표시했다.)
+
+    **두 순진한 방법 모두 생존을 과소추정한다.** 예컨대 $t = 12$에서 카플란-마이어는
+    $0.540$인데 절단을 버리면 $0.333$, 사건으로 취급하면 $0.400$이다.
+
+    **왜 그런가.**
+
+    - **절단을 버리면** 남은 표본이 일찍 사건을 겪은 쪽으로 선택된다. 오래 관측된 대상일수록
+      절단될 가능성이 높으므로, 긴 생존시간이 표본에서 조직적으로 빠진다.
+    - **절단을 사건으로 취급하면** 실제로는 더 오래 살았을 대상을 절단 시점에 죽은 것으로
+      기록한다. 각 관측치의 생존시간을 아래로 밀어낸다.
+
+    카플란-마이어는 절단된 대상을 **하강 없이 위험집합에서만 빼서** 두 오류를 모두 피한다.
+    $\square$
+
+---
+
+**연습문제 3.**
+카플란-마이어 추정량이 $S(t)$의 비모수 최대가능도 추정량임을 이산 시점의 경우에 대해
+보여라.
+
+??? success "연습문제 3 풀이"
+
+    사건이 서로 다른 시점 $t_{(1)} < \cdots < t_{(K)}$에서만 일어날 수 있다고 하고,
+    $q_j = P(T = t_{(j)} \mid T \ge t_{(j)})$를 시점 $t_{(j)}$의 조건부 사건확률이라 하자.
+    그러면 $S(t) = \prod_{j: t_{(j)} \le t}(1 - q_j)$이다.
+
+    가능도를 $q_1, \ldots, q_K$의 함수로 쓴다. 시점 $t_{(j)}$에서,
+
+    - 사건을 겪은 $d_j$명은 각각 $q_j$를 기여한다.
+    - 그 시점을 넘겨 생존한 $n_j - d_j$명은 각각 $1 - q_j$를 기여한다.
+
+    (절단된 대상은 자신이 통과한 모든 시점에서 $1-q_j$를 기여하고, 절단 이후 시점에는 아무
+    기여도 하지 않는다.) 따라서
+
+    $$
+    L(q_1,\ldots,q_K) = \prod_{j=1}^{K} q_j^{\,d_j}\,(1-q_j)^{\,n_j - d_j}
+    $$
+
+    이다. 이는 **$q_j$들에 대해 분리되는** 이항 가능도의 곱이다. 각 인자를 따로 최대화하면
+    이항분포의 MLE로부터
+
+    $$
+    \hat q_j = \frac{d_j}{n_j}
+    $$
+
+    를 얻고, 대입하면
+
+    $$
+    \hat S(t) = \prod_{j: t_{(j)} \le t}\left(1 - \frac{d_j}{n_j}\right)
+    $$
+
+    로 정확히 카플란-마이어 추정량이 된다.
+
+    **왜 사건시간에서만 하강하는가.** 사건이 관측되지 않은 시점에서는 $d_j = 0$이므로
+    $\hat q_j = 0$이고 그 인자가 1이 되어 $\hat S$를 바꾸지 않는다. 즉 "사건시간에서만
+    떨어진다"는 성질은 관례가 아니라 **최대가능도의 결과**다. $\square$
+
+---
+
+**연습문제 4.**
+연습문제 1의 자료에서 대상 10(시점 20, 사건)이 절단이었다면 $\hat S(t)$가 어떻게 달라지는가?
+이때 평균 생존시간을 추정할 수 있는가?
+
+??? success "연습문제 4 풀이"
+
+    대상 10이 절단이면 $t = 20$에서 사건이 없으므로 마지막 하강이 사라진다.
+
+    | $t$ | 원래 $\hat S$ | 수정된 $\hat S$ |
+    |---|---|---|
+    | $15 \le t < 20$ | $0.360$ | $0.360$ |
+    | $t \ge 20$ | $0.000$ | $\mathbf{0.360}$ |
+
+    **곡선이 $0.360$에서 평평해지고 0에 도달하지 않는다.** 관측이 끝난 뒤의 생존에 대해
+    자료가 아무 말도 하지 않기 때문이다.
+
+    **중앙값은 여전히 추정 가능하다.** 곡선이 $0.5$ 아래로는 내려갔으므로
+    $\hat t_{0.5} = 15$로 변하지 않는다.
+
+    **평균은 추정할 수 없다.** 평균 생존시간은 $\int_0^\infty S(t)\,dt$인데, 곡선이 $0.360$에서
+    멈추면 이 적분이 발산한다. 카플란-마이어 곡선 아래 면적을 그대로 계산하면 마지막 절단
+    시점 이후를 0으로 취급하는 셈이라 **평균을 과소추정**한다.
+
+    **표준적인 대안 세 가지.**
+
+    1. **제한 평균 생존시간(RMST).** 미리 정한 $\tau$까지만 적분한다.
+       $\text{RMST}(\tau) = \int_0^{\tau} \hat S(t)\,dt$. 여기서 $\tau = 20$으로 두면
+       계단함수 아래 면적은
+
+       $$
+       3(1.000) + 4(0.900) + 1(0.7875) + 4(0.675) + 3(0.540) + 5(0.360) = 13.51
+       $$
+
+       개월이다. $\tau$를 자료에 근거해 고르지 말고 **미리** 정하는 것이 중요하다.
+       $\tau$를 관측된 최대 시점으로 잡으면 그 값 자체가 확률변수가 되어 추론이 꼬인다.
+    2. **꼬리 외삽.** 마지막 구간에 지수 꼬리 등을 가정한다. 가정에 크게 의존하므로 민감도
+       분석이 필요하다.
+    3. **중앙값 보고.** 곡선이 $0.5$까지만 내려가면 되므로 절단에 훨씬 강건하다. 생존분석에서
+       평균 대신 중앙값을 보고하는 관례의 실질적 근거다.
+
+    $\square$

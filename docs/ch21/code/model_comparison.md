@@ -1,72 +1,64 @@
-# Survival Model Comparison
+# 생존 모형 비교
 
-## Overview
+## 개요
 
-Survival analysis offers three modeling paradigms --- non-parametric (Kaplan-Meier),
-fully parametric (exponential, Weibull, log-normal), and semi-parametric (Cox) --- each
-with different assumptions, strengths, and outputs.  Choosing the right model for a
-given problem requires understanding the trade-offs.  This page provides a systematic
-comparison framework, covers formal model selection tools, and illustrates a practical
-workflow for survival model selection.
+생존분석은 세 가지 모형화 패러다임을 제공한다. 비모수(카플란-마이어), 완전 모수(지수, 와이불,
+로그정규), 준모수(콕스)이며 각각 가정, 강점, 출력이 다르다. 주어진 문제에 맞는 모형을 고르려면
+그 절충을 이해해야 한다. 이 절에서는 체계적인 비교 틀을 제시하고, 형식적인 모형 선택 도구를
+다루며, 실무적인 모형 선택 흐름을 보인다.
 
-## The Three Paradigms
+## 세 가지 패러다임
 
-### Non-Parametric Methods
+### 비모수적 방법
 
-Non-parametric methods make **no distributional assumptions**.  The Kaplan-Meier
-estimator produces a step-function estimate of $S(t)$, and the log-rank test compares
-groups.
+비모수적 방법은 **어떤 분포 가정도 하지 않는다.** 카플란-마이어 추정량은 $S(t)$의 계단함수
+추정치를 만들고 로그순위 검정은 집단을 비교한다.
 
-- **Strengths**: No risk of distributional misspecification; model-free visualization.
-- **Limitations**: Cannot adjust for continuous covariates; step-function estimates
-  only; lower statistical efficiency.
+- **강점**: 분포 오지정의 위험이 없고 모형에 의존하지 않는 시각화를 준다.
+- **한계**: 연속형 공변량을 보정할 수 없고, 계단함수 추정치만 주며, 통계적 효율이 낮다.
 
-### Fully Parametric Models
+### 완전 모수 모형
 
-Parametric models specify the complete distribution through a parameter vector (e.g.,
-$\lambda$ for exponential, $(k, \lambda)$ for Weibull):
+모수 모형은 모수벡터(예: 지수의 $\lambda$, 와이불의 $(k, \lambda)$)로 분포를 완전히 지정한다.
 
 $$
 f(t \mid \boldsymbol{\theta}), \quad S(t \mid \boldsymbol{\theta}), \quad h(t \mid \boldsymbol{\theta})
 $$
 
-- **Strengths**: Smooth hazard and survival estimates; higher efficiency when correctly
-  specified; extrapolation capability; AIC/BIC-based model comparison.
-- **Limitations**: Biased if the distributional assumption is wrong; limited hazard
-  shapes.
+- **강점**: 매끄러운 위험·생존 추정치, 옳게 지정되면 높은 효율, 외삽 가능, AIC/BIC 기반 모형
+  비교.
+- **한계**: 분포 가정이 틀리면 편향되고, 표현 가능한 위험 모양이 제한된다.
 
-### Semi-Parametric (Cox) Model
+### 준모수(콕스) 모형
 
-The Cox model specifies covariate effects on the hazard without assuming a form for the
-baseline:
+콕스 모형은 기저의 형태를 가정하지 않고 공변량이 위험에 미치는 효과를 지정한다.
 
 $$
 h(t \mid \mathbf{x}) = h_0(t)\exp(\boldsymbol{\beta}^\top \mathbf{x})
 $$
 
-- **Strengths**: Robust to baseline hazard misspecification; naturally handles multiple
-  covariates; interpretable hazard ratios.
-- **Limitations**: Cannot directly estimate $h_0(t)$; requires the proportional
-  hazards assumption; less efficient than a correctly specified parametric model.
+- **강점**: 기저위험의 오지정에 강건하고, 여러 공변량을 자연스럽게 다루며, 위험비가 해석 가능하다.
+- **한계**: $h_0(t)$를 직접 추정하지 못하고, 비례위험 가정이 필요하며, 옳게 지정된 모수 모형보다
+  효율이 낮다.
 
-## Comparison Table
+## 비교표
 
-| Feature | Non-Parametric | Parametric | Cox |
+| 특징 | 비모수 | 모수 | 콕스 |
 |:--------|:--------------:|:----------:|:---:|
-| Distributional assumption | None | Full | None for baseline |
-| Covariate adjustment | Groups only | Yes | Yes |
-| Smooth hazard/survival | No | Yes | Via Breslow only |
-| Statistical efficiency | Lowest | Highest (if correct) | Middle |
-| Robustness to misspecification | Highest | Lowest | High |
-| Extrapolation | No | Yes (with caution) | No |
-| PH assumption required | No | Depends | Yes |
-| AIC/BIC comparison | N/A | Yes | Not directly |
+| 분포 가정 | 없음 | 완전 | 기저에 대해서는 없음 |
+| 공변량 보정 | 집단만 | 가능 | 가능 |
+| 매끄러운 위험/생존 | 아니오 | 예 | 브레슬로를 통해서만 |
+| 통계적 효율 | 가장 낮음 | 가장 높음(옳을 때) | 중간 |
+| 오지정에 대한 강건성 | 가장 높음 | 가장 낮음 | 높음 |
+| 외삽 | 불가 | 가능(조심스럽게) | 불가 |
+| 비례위험 가정 필요 | 아니오 | 모형에 따라 | 예 |
+| AIC/BIC 비교 | 해당 없음 | 가능 | 직접적으로는 불가 |
 
-## Model Selection Tools
+## 모형 선택 도구
 
-### Information Criteria
+### 정보기준
 
-For comparing parametric models fitted to the same dataset:
+같은 자료에 적합한 모수 모형들을 비교할 때 쓴다.
 
 $$
 \text{AIC} = -2\hat{\ell} + 2p
@@ -76,35 +68,33 @@ $$
 \text{BIC} = -2\hat{\ell} + p \ln n
 $$
 
-Lower values indicate a better fit-complexity trade-off.
+값이 낮을수록 적합도와 복잡도의 절충이 낫다.
 
-!!! note "AIC vs BIC"
+!!! note "AIC 대 BIC"
 
-    AIC tends to favor more complex models and is suited for prediction.  BIC penalizes
-    complexity more heavily and is consistent for model selection (selects the true
-    model as $n \to \infty$ if it is among the candidates).
+    AIC는 더 복잡한 모형을 선호하는 경향이 있고 예측에 적합하다. BIC는 복잡도를 더 무겁게
+    벌하며 모형 선택에서 일치성을 갖는다(참 모형이 후보에 있으면 $n \to \infty$일 때 그것을
+    고른다).
 
-### Likelihood Ratio Test
+### 가능도비 검정
 
-For **nested** models (e.g., exponential vs Weibull, where exponential sets $k = 1$):
+**내포된** 모형(예: $k = 1$로 두는 지수 대 와이불)에 대해,
 
 $$
 \Lambda = 2[\hat{\ell}_{\text{full}} - \hat{\ell}_{\text{reduced}}] \;\xrightarrow{d}\; \chi^2_q
 $$
 
-where $q$ is the difference in the number of parameters.
+이며 $q$는 모수 개수의 차이다.
 
-### Graphical Diagnostics
+### 그림 진단
 
-Formal criteria should always be supplemented with visual checks:
+형식적 기준은 언제나 시각적 점검으로 보완해야 한다.
 
-1. **KM overlay**: Plot the Kaplan-Meier curve alongside each fitted parametric
-   survival curve.  Systematic deviations indicate misspecification.
-2. **Log-cumulative hazard plot**: $\ln \hat{H}(t)$ vs $\ln t$ should be linear for
-   the Weibull model.
-3. **Cox-Snell residuals**: If the model is correct, the Cox-Snell residuals should
-   follow an exponential(1) distribution.  A plot of the Nelson-Aalen estimate of the
-   residual hazard against the residuals should approximate a 45-degree line.
+1. **KM 겹쳐 그리기**: 카플란-마이어 곡선을 적합된 각 모수적 생존곡선과 함께 그린다. 체계적인
+   어긋남은 오지정을 가리킨다.
+2. **로그 누적위험 그림**: 와이불 모형이라면 $\ln \hat{H}(t)$ 대 $\ln t$가 직선이어야 한다.
+3. **콕스-스넬 잔차**: 모형이 옳으면 콕스-스넬 잔차가 지수(1) 분포를 따른다. 잔차의 위험에 대한
+   넬슨-알렌 추정치를 잔차 자체에 대해 그리면 45도 직선에 가까워야 한다.
 
 ```python
 import numpy as np
@@ -132,203 +122,211 @@ def cox_snell_diagnostic(residuals):
     plt.show()
 ```
 
-## Practical Workflow
+## 실무적 작업 흐름
 
-A systematic approach to survival model selection:
+생존 모형 선택의 체계적인 접근은 다음과 같다.
 
-1. **Explore**: Compute the Kaplan-Meier estimator and Nelson-Aalen cumulative hazard
-   for each group.  Visualize the data.
-2. **Assess hazard shape**: Inspect the Nelson-Aalen plot.  Is the hazard constant
-   (linear $\hat{H}(t)$)?  Monotone?  Non-monotone?
-3. **Fit candidates**: Based on the hazard shape, fit appropriate parametric models
-   (exponential, Weibull, log-normal, log-logistic) and the Cox model.
-4. **Compare**: Use AIC/BIC for non-nested parametric models, LRT for nested models,
-   and overlay plots against the Kaplan-Meier curve.
-5. **Diagnose**: Check the PH assumption for the Cox model (Schoenfeld residuals) and
-   goodness-of-fit for parametric models (Cox-Snell residuals).
-6. **Report**: Present the Kaplan-Meier curve as a non-parametric benchmark alongside
-   the final model results.
+1. **탐색**: 집단마다 카플란-마이어 추정량과 넬슨-알렌 누적위험을 계산하고 자료를 시각화한다.
+2. **위험 모양 평가**: 넬슨-알렌 그림을 살핀다. 위험이 일정한가($\hat{H}(t)$가 직선인가)?
+   단조인가? 비단조인가?
+3. **후보 적합**: 위험 모양에 근거해 적절한 모수 모형(지수, 와이불, 로그정규, 로그로지스틱)과
+   콕스 모형을 적합한다.
+4. **비교**: 비내포 모수 모형에는 AIC/BIC를, 내포 모형에는 가능도비 검정을 쓰고, 카플란-마이어
+   곡선과 겹쳐 그린다.
+5. **진단**: 콕스 모형은 비례위험 가정(쇤펠트 잔차)을, 모수 모형은 적합도(콕스-스넬 잔차)를
+   점검한다.
+6. **보고**: 최종 모형 결과와 함께 카플란-마이어 곡선을 비모수적 기준선으로 제시한다.
 
-!!! tip "Default Recommendation"
+!!! tip "기본 권장안"
 
-    When in doubt, the Cox model is a reasonable default.  It avoids distributional
-    assumptions while accommodating covariates.  However, it should always be
-    supplemented with a Kaplan-Meier analysis and, when feasible, a parametric analysis.
+    판단이 서지 않으면 콕스 모형이 합당한 기본 선택이다. 분포 가정을 피하면서 공변량을
+    수용한다. 다만 언제나 카플란-마이어 분석으로 보완해야 하고, 가능하면 모수 분석도 함께
+    해야 한다.
 
-## Interpretation
+## 해석
 
-- **No single best method** exists.  The choice depends on the research question, the
-  hazard shape, and the assumptions that can be defended.
-- **Non-parametric methods** are always appropriate for exploration and provide a
-  model-free benchmark.
-- **Parametric models** are preferred when smooth estimates or extrapolation are needed
-  and the distributional assumption is supported by the data.
-- **The Cox model** is preferred when covariate effects are the primary target and the
-  baseline hazard shape is unimportant.
-- The three paradigms are **complementary**: a thorough survival analysis typically
-  employs all three.
+- **단 하나의 최선의 방법은 없다.** 선택은 연구 질문, 위험의 모양, 그리고 옹호할 수 있는 가정에
+  달려 있다.
+- **비모수적 방법**은 탐색에 언제나 적절하며 모형에 의존하지 않는 기준선을 제공한다.
+- **모수 모형**은 매끄러운 추정치나 외삽이 필요하고 분포 가정이 자료로 뒷받침될 때 선호된다.
+- **콕스 모형**은 공변량 효과가 주된 관심사이고 기저위험의 모양이 중요하지 않을 때 선호된다.
+- 세 패러다임은 **상보적**이다. 철저한 생존분석은 대개 셋을 모두 쓴다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Paradigm Selection
+**연습문제 1.**
+패러다임 선택
 
-For each scenario, state which modeling paradigm (non-parametric, parametric, or
-semi-parametric) is most appropriate and explain why.
+각 상황에서 어느 모형화 패러다임(비모수, 모수, 준모수)이 가장 적절한지 밝히고 이유를 설명하라.
 
-**(a)** An exploratory study with 30 patients and no covariates.
+**(a)** 환자 30명, 공변량 없는 탐색적 연구.
 
-**(b)** A clinical trial where the primary goal is to estimate the effect of treatment
-on survival, adjusting for age and disease stage.
+**(b)** 나이와 병기를 보정하면서 처리가 생존에 미치는 효과를 추정하는 것이 주된 목표인
+임상시험.
 
-**(c)** A reliability study where the goal is to predict failure times beyond the
-observation period.
+**(c)** 관측 기간을 넘어선 고장시간을 예측하는 것이 목표인 신뢰성 연구.
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
 
-    **(a)** **Non-parametric** (Kaplan-Meier).  With a small sample and no covariates,
-    distributional assumptions are risky.  The Kaplan-Meier estimator provides a
-    model-free survival curve and the log-rank test can compare groups if needed.
+    **(a)** **비모수**(카플란-마이어). 표본이 작고 공변량이 없으므로 분포 가정이 위험하다.
+    카플란-마이어 추정량이 모형에 의존하지 않는 생존곡선을 주고, 필요하면 로그순위 검정으로
+    집단을 비교할 수 있다.
 
-    **(b)** **Semi-parametric** (Cox model).  The goal is to estimate covariate effects
-    (treatment, age, disease stage) on the hazard.  The Cox model handles multiple
-    covariates without specifying the baseline hazard distribution.
+    **(b)** **준모수**(콕스 모형). 목표가 공변량(처리, 나이, 병기)이 위험에 미치는 효과를
+    추정하는 것이다. 콕스 모형은 기저위험 분포를 지정하지 않고 여러 공변량을 다룬다.
 
-    **(c)** **Parametric** model (e.g., Weibull).  Extrapolation beyond the observed
-    time range requires a fully specified distribution.  Non-parametric and Cox models
-    cannot extrapolate.
+    **(c)** **모수** 모형(예: 와이불). 관측 시간 범위를 넘어선 외삽에는 완전히 지정된 분포가
+    필요하다. 비모수 모형과 콕스 모형은 외삽할 수 없다.
+
+    !!! warning "(c)에서 \"할 수 있다\"와 \"믿을 만하다\"는 다르다"
+        모수 모형만이 외삽할 수 있다는 것은 맞지만, 그렇게 얻은 예측이 신뢰할 만하다는 뜻은
+        아니다. 외삽값은 전적으로 분포 가정에 달려 있고, 그 가정은 관측 구간 밖에서 검증할
+        길이 없다. 21.3절에서 보았듯 로그정규와 로그로지스틱은 관측 구간에서 거의 같은 적합을
+        주면서 꼬리에서 크게 갈린다.
+
+        정직한 실무는 여러 분포족의 예측을 나란히 제시하여 가정 의존성의 크기를 드러내는
+        것이다. 예측 하나만 보고하면 실제로는 없는 확실성을 만들어 내는 셈이다.
 
 ---
 
-**Exercise 2.**
-AIC Comparison
+**연습문제 2.**
+AIC 비교
 
-Three parametric models are fitted to 150 observations:
+관측치 150개에 모수 모형 세 개를 적합했다.
 
-| Model | Parameters ($p$) | Max log-likelihood ($\hat{\ell}$) |
+| 모형 | 모수 ($p$) | 최대 로그가능도 ($\hat{\ell}$) |
 |:------|:----------------:|:---------------------------------:|
-| Exponential | 1 | $-420.3$ |
-| Weibull | 2 | $-405.8$ |
-| Log-logistic | 2 | $-407.2$ |
+| 지수 | 1 | $-420.3$ |
+| 와이불 | 2 | $-405.8$ |
+| 로그로지스틱 | 2 | $-407.2$ |
 
-**(a)** Compute the AIC and BIC for each model.
+**(a)** 각 모형의 AIC와 BIC를 계산하라.
 
-**(b)** Which model is preferred by AIC?  By BIC?
+**(b)** AIC는 어느 모형을 선호하는가? BIC는?
 
-**(c)** Perform a likelihood ratio test of exponential vs Weibull.
+**(c)** 지수 대 와이불의 가능도비 검정을 수행하라.
 
-??? success "Solution to Exercise 2"
+??? success "연습문제 2 풀이"
 
-    **(a)** AIC $= -2\hat{\ell} + 2p$; BIC $= -2\hat{\ell} + p\ln n$ ($\ln 150 = 5.011$):
+    **(a)** AIC $= -2\hat{\ell} + 2p$이고 BIC $= -2\hat{\ell} + p\ln n$이다
+    ($\ln 150 = 5.011$).
 
-    | Model | AIC | BIC |
+    | 모형 | AIC | BIC |
     |:------|:---:|:---:|
-    | Exponential | $2(420.3) + 2 = 842.6$ | $2(420.3) + 5.011 = 845.6$ |
-    | Weibull | $2(405.8) + 4 = 815.6$ | $2(405.8) + 10.022 = 821.6$ |
-    | Log-logistic | $2(407.2) + 4 = 818.4$ | $2(407.2) + 10.022 = 824.4$ |
+    | 지수 | $2(420.3) + 2 = 842.6$ | $2(420.3) + 5.011 = 845.6$ |
+    | 와이불 | $2(405.8) + 4 = 815.6$ | $2(405.8) + 10.022 = 821.6$ |
+    | 로그로지스틱 | $2(407.2) + 4 = 818.4$ | $2(407.2) + 10.022 = 824.4$ |
 
-    **(b)** The Weibull model is preferred by both AIC (815.6) and BIC (821.6).
+    **(b)** AIC(815.6)와 BIC(821.6) 모두 와이불 모형을 선호한다. 와이불과 로그로지스틱의
+    차이는 AIC와 BIC 모두에서 $2.8$로 같다. 두 모형의 모수 개수가 같아 벌점이 소거되기
+    때문이며, 이 경우 AIC와 BIC의 순위는 반드시 일치한다.
 
-    **(c)** Likelihood ratio test (exponential vs Weibull):
+    **(c)** 가능도비 검정(지수 대 와이불)은
 
     $$
     \Lambda = 2[-405.8 - (-420.3)] = 2 \times 14.5 = 29.0
     $$
 
-    Under $H_0: k = 1$, $\Lambda \sim \chi^2_1$.  Critical value at $\alpha = 0.05$:
-    3.84.  Since $29.0 \gg 3.84$, we reject the exponential model.  The constant
-    hazard assumption is not supported.
+    이다. $H_0: k = 1$ 아래에서 $\Lambda \sim \chi^2_1$이고 $\alpha = 0.05$의 임계값은
+    3.84다. $29.0 \gg 3.84$이므로 지수 모형을 기각한다. 상수 위험 가정은 지지되지 않는다.
 
 ---
 
-**Exercise 3.**
-Cox-Snell Residuals
+**연습문제 3.**
+콕스-스넬 잔차
 
-Explain how Cox-Snell residuals are defined and how they are used to assess overall
-model fit.
+콕스-스넬 잔차가 어떻게 정의되고 전체 모형 적합도를 평가하는 데 어떻게 쓰이는지 설명하라.
 
-??? success "Solution to Exercise 3"
+??? success "연습문제 3 풀이"
 
-    For a fitted parametric model with estimated survival function $\hat{S}(t_i)$, the
-    Cox-Snell residual for subject $i$ is
+    추정된 생존함수가 $\hat{S}(t_i)$인 적합된 모수 모형에서 대상 $i$의 콕스-스넬 잔차는
 
     $$
     r_i = -\ln \hat{S}(t_i) = \hat{H}(t_i)
     $$
 
-    the estimated cumulative hazard at the observed time.  For censored observations,
-    $r_i$ is also censored.
+    로, 관측 시점에서의 추정 누적위험이다. 절단된 관측치에서는 $r_i$도 절단된다.
 
-    **Key property**: If the model is correctly specified, the Cox-Snell residuals
-    follow an $\text{Exp}(1)$ distribution, regardless of the underlying survival
-    distribution.  This is because if $T \sim F$, then $-\ln S(T) \sim \text{Exp}(1)$.
+    **핵심 성질**: 모형이 옳게 지정되어 있으면 바탕 생존분포와 무관하게 콕스-스넬 잔차가
+    $\text{Exp}(1)$ 분포를 따른다. $T \sim F$이면 $-\ln S(T) \sim \text{Exp}(1)$이기
+    때문이다.
 
-    **Diagnostic**: Compute the Nelson-Aalen estimate of the cumulative hazard of the
-    residuals.  Plot it against the residuals themselves.  If the model fits well, the
-    points should follow the 45-degree line $H(r) = r$.  Deviations indicate
-    misspecification.
+    이는 확률적분변환의 한 형태다. $U = F(T) \sim \text{Uniform}(0,1)$이므로
+    $S(T) = 1 - U$ 역시 균등분포이고, $-\ln(\text{Uniform}(0,1)) \sim \text{Exp}(1)$이다.
 
----
+    **진단**: 잔차의 누적위험에 대한 넬슨-알렌 추정치를 계산하고 잔차 자체에 대해 그린다.
+    모형이 잘 맞으면 점들이 45도 직선 $H(r) = r$을 따라야 한다. 벗어나면 오지정을 가리킨다.
 
-**Exercise 4.**
-Efficiency Comparison
-
-**(a)** Explain what is meant by "statistical efficiency" in the context of survival
-model comparison.
-
-**(b)** Why is a correctly specified parametric model more efficient than the
-Kaplan-Meier estimator?
-
-**(c)** Under what condition does this efficiency advantage become a disadvantage?
-
-??? success "Solution to Exercise 4"
-
-    **(a)** Statistical efficiency refers to the precision of estimates --- a more
-    efficient estimator has smaller variance (narrower confidence intervals) for the
-    same sample size.
-
-    **(b)** A correctly specified parametric model uses the known distributional form
-    to "borrow strength" across all observations.  The Kaplan-Meier estimator treats
-    each event time independently without leveraging distributional structure.  The
-    parametric model's smaller variance comes from the correct structural assumption,
-    which reduces the effective number of quantities being estimated.
-
-    **(c)** The efficiency advantage becomes a disadvantage when the parametric
-    assumption is **wrong**.  A misspecified model is not only inefficient but also
-    **biased**: it converges to the wrong survival function.  The Kaplan-Meier
-    estimator is always consistent, regardless of the true distribution.  Thus,
-    efficiency gains from parametric models come at the cost of robustness.
+    다만 이 진단에는 알려진 한계가 있다. 모수를 자료에서 추정했으므로 잔차가 정확히
+    $\text{Exp}(1)$을 따르지 않으며, 특히 꼬리에서 어긋난다. 큰 잔차 몇 개가 45도 직선에서
+    벗어나는 것은 흔한 일이므로 그것만으로 모형을 기각하지 말라.
 
 ---
 
-**Exercise 5.**
-Combining Paradigms
+**연습문제 4.**
+효율 비교
 
-A clinical trial investigates the effect of a new drug on overall survival.  Describe
-a complete analysis strategy that uses all three paradigms and explain what each
-contributes.
+**(a)** 생존 모형 비교의 맥락에서 "통계적 효율"이 무엇을 뜻하는지 설명하라.
 
-??? success "Solution to Exercise 5"
+**(b)** 옳게 지정된 모수 모형이 카플란-마이어 추정량보다 효율적인 이유는?
 
-    **Step 1 --- Non-parametric exploration.**  Compute the Kaplan-Meier survival curves
-    for the treatment and control groups.  Visualize the curves with 95% confidence
-    bands.  Apply the log-rank test for a preliminary comparison.  Inspect the
-    Nelson-Aalen cumulative hazard plot to assess the hazard shape (constant, monotone,
-    or non-monotone).
+**(c)** 이 효율의 이점이 단점이 되는 조건은 무엇인가?
 
-    **Step 2 --- Cox model for covariate adjustment.**  Fit a Cox proportional hazards
-    model with treatment indicator, age, sex, and disease stage as covariates.  Estimate
-    hazard ratios with confidence intervals.  Check the PH assumption using Schoenfeld
-    residuals.
+??? success "연습문제 4 풀이"
 
-    **Step 3 --- Parametric model for prediction.**  Based on the hazard shape from
-    Step 1, fit candidate parametric models (e.g., Weibull if the hazard is monotone).
-    Compare via AIC.  Use the best parametric model to extrapolate median survival time
-    and produce smooth survival curve estimates.
+    **(a)** 통계적 효율은 추정의 정밀도를 뜻한다. 같은 표본 크기에서 분산이 작을수록(신뢰구간이
+    좁을수록) 효율적인 추정량이다.
 
-    **Step 4 --- Integration and reporting.**  Overlay the parametric survival curve and
-    the Cox-based Breslow survival estimate on the Kaplan-Meier curve.  Agreement among
-    all three methods strengthens confidence in the conclusions.  Discrepancies flag
-    potential misspecification.  Report the treatment hazard ratio from the Cox model as
-    the primary result, the Kaplan-Meier curve as the model-free benchmark, and the
-    parametric model for smooth estimates and predictions.
+    **(b)** 옳게 지정된 모수 모형은 알려진 분포 형태를 이용해 모든 관측치에 걸쳐 "힘을 빌린다."
+    카플란-마이어 추정량은 분포 구조를 활용하지 않고 각 사건시간을 독립적으로 다룬다. 모수
+    모형의 작은 분산은 옳은 구조 가정에서 나오며, 이 가정이 추정해야 할 양의 실질적인 개수를
+    줄인다.
+
+    구체적으로, 사건이 100건인 자료에서 카플란-마이어는 100개의 조건부확률을 추정하지만
+    지수 모형은 모수 하나만 추정한다. 100개의 정보가 하나로 모이므로 표준오차가
+    $1/\sqrt{100}$ 수준으로 작아진다.
+
+    **(c)** 모수 가정이 **틀리면** 효율의 이점이 단점이 된다. 잘못 지정된 모형은 비효율적일
+    뿐 아니라 **편향된다.** 틀린 생존함수로 수렴한다. 카플란-마이어 추정량은 참 분포와 무관하게
+    언제나 일치성을 갖는다. 즉 모수 모형의 효율 이득은 강건성을 대가로 얻는 것이다.
+
+    더 위험한 점은 **표준오차가 이 편향을 전혀 알려 주지 않는다**는 것이다. 잘못 지정된
+    모형도 좁은 신뢰구간을 보고하며, 그 구간이 참값을 포함하지 않을 뿐이다. 그림 진단이
+    필수적인 이유가 여기 있다.
+
+---
+
+**연습문제 5.**
+패러다임 결합하기
+
+어떤 임상시험이 신약이 전체 생존에 미치는 효과를 조사한다. 세 패러다임을 모두 쓰는 완전한 분석
+전략을 서술하고 각각이 무엇을 기여하는지 설명하라.
+
+??? success "연습문제 5 풀이"
+
+    **1단계 --- 비모수적 탐색.** 처리군과 대조군의 카플란-마이어 생존곡선을 계산하고 95%
+    신뢰띠와 함께 시각화한다. 로그순위 검정으로 예비 비교를 한다. 넬슨-알렌 누적위험 그림을
+    살펴 위험의 모양(일정, 단조, 비단조)을 평가한다.
+
+    **2단계 --- 공변량 보정을 위한 콕스 모형.** 처리 지시자, 나이, 성별, 병기를 공변량으로
+    갖는 콕스 비례위험 모형을 적합한다. 위험비와 신뢰구간을 추정한다. 쇤펠트 잔차로 비례위험
+    가정을 점검한다.
+
+    **3단계 --- 예측을 위한 모수 모형.** 1단계에서 파악한 위험 모양에 근거해 후보 모수 모형을
+    적합한다(예: 위험이 단조면 와이불). AIC로 비교한다. 가장 좋은 모수 모형으로 중앙 생존시간을
+    외삽하고 매끄러운 생존곡선 추정치를 만든다.
+
+    **4단계 --- 통합과 보고.** 모수적 생존곡선과 콕스 기반 브레슬로 생존 추정치를 카플란-마이어
+    곡선 위에 겹쳐 그린다. 세 방법이 일치하면 결론에 대한 신뢰가 커진다. 어긋나면 오지정
+    가능성을 알리는 신호다. 콕스 모형의 처리 위험비를 주된 결과로, 카플란-마이어 곡선을 모형에
+    의존하지 않는 기준선으로, 모수 모형을 매끄러운 추정과 예측용으로 보고한다.
+
+    !!! warning "분석 계획은 자료를 보기 전에 확정해야 한다"
+        위 흐름에는 함정이 하나 숨어 있다. 3단계에서 "1단계의 위험 모양에 근거해" 모형을
+        고른다고 했는데, 이는 같은 자료를 두 번 쓰는 것이다. 자료를 보고 모형을 고른 뒤
+        그 모형의 p-값과 신뢰구간을 보고하면 선택 과정의 불확실성이 반영되지 않는다.
+
+        임상시험처럼 확증적 분석이 필요한 상황에서는 **주된 분석(예: 로그순위 검정과 콕스
+        모형의 처리 위험비)을 자료를 보기 전에 프로토콜에 명시**해야 한다. 위험 모양에 따라
+        모형을 고르는 탐색적 단계는 부차적 분석으로 명확히 구분해 보고한다. 1장에서 다룬
+        설계와 분석의 구분이 여기에서도 그대로 적용된다.

@@ -1,17 +1,14 @@
-# Log-Rank Test
+# 로그순위 검정
 
-The Kaplan--Meier estimator provides a separate survival curve for each group.
-The natural next question is whether the observed difference between two (or
-more) survival curves reflects a genuine difference in the underlying survival
-distributions or is simply due to sampling variability.  The **log-rank test**
-is the standard non-parametric hypothesis test for this comparison.
+카플란-마이어 추정량은 집단마다 별도의 생존곡선을 준다. 자연스러운 다음 질문은, 두 개(또는 그
+이상) 생존곡선 사이에서 관측된 차이가 바탕 생존분포의 진짜 차이를 반영하는지 아니면 단순한
+표집 변동인지다. **로그순위 검정**이 이 비교를 위한 표준적인 비모수 가설검정이다.
 
-This section states the hypotheses, derives the test statistic, and works
-through a two-group example.
+이 절에서는 가설을 세우고 검정통계량을 유도하며 두 집단 예제를 따라간다.
 
-## Hypotheses
+## 가설
 
-For two groups (e.g., treatment vs control), the log-rank test evaluates
+두 집단(예: 처리군 대 대조군)에 대해 로그순위 검정은 다음을 평가한다.
 
 $$
 H_0 : S_1(t) = S_2(t) \quad \text{for all } t \geq 0
@@ -21,181 +18,302 @@ $$
 H_1 : S_1(t) \neq S_2(t) \quad \text{for some } t \geq 0
 $$
 
-Under $H_0$, the two groups share the same survival distribution, meaning
-any observed difference in their Kaplan--Meier curves is due to chance.
+$H_0$ 아래에서 두 집단은 같은 생존분포를 공유하며, 카플란-마이어 곡선에서 관측된 어떤 차이도
+우연에 의한 것이다.
 
-## Setup
+## 설정
 
-Pool the event times from both groups and order the $K$ distinct event times:
-$t_{(1)} < t_{(2)} < \cdots < t_{(K)}$.  At each event time $t_{(j)}$, record:
+두 집단의 사건시간을 합쳐 서로 다른 $K$개의 사건시간을 크기순으로 나열한다.
+$t_{(1)} < t_{(2)} < \cdots < t_{(K)}$. 각 사건시간 $t_{(j)}$에서 다음을 기록한다.
 
-| Quantity | Group 1 | Group 2 | Total |
+| 양 | 집단 1 | 집단 2 | 합계 |
 |:---------|:-------:|:-------:|:-----:|
-| Events | $d_{1j}$ | $d_{2j}$ | $d_j$ |
-| At risk | $n_{1j}$ | $n_{2j}$ | $n_j$ |
+| 사건 | $d_{1j}$ | $d_{2j}$ | $d_j$ |
+| 위험집합 | $n_{1j}$ | $n_{2j}$ | $n_j$ |
 
-## Expected Events Under the Null
+## 영가설 아래의 기대 사건 수
 
-Under $H_0$, events at each time $t_{(j)}$ are allocated to the two groups in
-proportion to their risk sets.  The expected number of events in group 1 at
-time $t_{(j)}$ is
+$H_0$ 아래에서 각 시점 $t_{(j)}$의 사건은 두 집단의 위험집합 크기에 비례하여 배분된다. 시점
+$t_{(j)}$에 집단 1에서 기대되는 사건 수는
 
 $$
 e_{1j} = d_j \cdot \frac{n_{1j}}{n_j}
 $$
 
-This is the expectation of a hypergeometric distribution: $d_j$ events are
-drawn without replacement from a risk set of $n_j$ subjects, of which $n_{1j}$
-belong to group 1.
+이다. 이는 초기하분포의 기댓값이다. 대상 $n_j$명의 위험집합에서 비복원으로 $d_j$개의 사건이
+뽑히며, 그중 $n_{1j}$명이 집단 1에 속한다.
 
-The total expected number of events in group 1 is
+집단 1의 총 기대 사건 수는
 
 $$
 E_1 = \sum_{j=1}^{K} e_{1j} = \sum_{j=1}^{K} d_j \cdot \frac{n_{1j}}{n_j}
 $$
 
-## Test Statistic
+이다.
 
-The log-rank test statistic compares the observed total events in group 1,
-$O_1 = \sum_{j=1}^{K} d_{1j}$, with the expected total $E_1$.  The
-variance under $H_0$ is
+## 검정통계량
+
+로그순위 검정통계량은 집단 1에서 관측된 총 사건 수 $O_1 = \sum_{j=1}^{K} d_{1j}$을 기대값
+$E_1$과 비교한다. $H_0$ 아래의 분산은
 
 $$
 V_1 = \sum_{j=1}^{K} \frac{n_{1j} \, n_{2j} \, d_j \, (n_j - d_j)}{n_j^2 \, (n_j - 1)}
 $$
 
-The test statistic is
+이고 검정통계량은
 
 $$
 \chi^2_{\text{LR}} = \frac{(O_1 - E_1)^2}{V_1}
 $$
 
-Under $H_0$, this statistic follows approximately a chi-squared distribution
-with 1 degree of freedom:
+이다. $H_0$ 아래에서 이 통계량은 근사적으로 자유도 1의 카이제곱분포를 따른다.
 
 $$
 \chi^2_{\text{LR}} \;\xrightarrow{d}\; \chi^2_1
 $$
 
-The p-value is $P(\chi^2_1 \geq \chi^2_{\text{LR}})$.
+p-값은 $P(\chi^2_1 \geq \chi^2_{\text{LR}})$이다.
 
-!!! note "Equivalent Formulation"
+!!! note "동등한 정식화"
 
-    Because $O_1 + O_2 = d$ and $E_1 + E_2 = d$ (the totals are fixed), the
-    test statistic based on group 2 gives the same result.  The two-group
-    log-rank test uses only 1 degree of freedom regardless of which group is
-    chosen.
+    $O_1 + O_2 = d$이고 $E_1 + E_2 = d$로 합계가 고정되어 있으므로, 집단 2를 기준으로 한
+    검정통계량도 같은 결과를 준다. 두 집단 로그순위 검정은 어느 집단을 고르든 자유도 1을 쓴다.
 
-## Worked Example
+## 예제
 
-Two groups of patients are followed after diagnosis.
+진단 후 두 집단의 환자를 추적했다.
 
-**Group A** (treatment): times 2, 4+, 6, 8+, 10 (+ denotes censored).
+**집단 A**(처리): 2, 4+, 6, 8+, 10 (+는 절단을 뜻한다).
 
-**Group B** (control): times 1, 3, 5+, 7, 9.
+**집단 B**(대조): 1, 3, 5+, 7, 9.
 
-Pooled event times (excluding censorings): 1, 2, 3, 6, 7, 9, 10.
+합친 사건시간(절단 제외)은 1, 2, 3, 6, 7, 9, 10이다.
 
-| $t_{(j)}$ | $n_{Aj}$ | $n_{Bj}$ | $n_j$ | $d_{Aj}$ | $d_{Bj}$ | $d_j$ | $e_{Aj}$ |
-|:----------:|:--------:|:--------:|:-----:|:--------:|:--------:|:-----:|:--------:|
-| 1 | 5 | 5 | 10 | 0 | 1 | 1 | 0.500 |
-| 2 | 5 | 4 | 9 | 1 | 0 | 1 | 0.556 |
-| 3 | 4 | 4 | 8 | 0 | 1 | 1 | 0.500 |
-| 6 | 3 | 2 | 5 | 1 | 0 | 1 | 0.600 |
-| 7 | 2 | 2 | 4 | 0 | 1 | 1 | 0.500 |
-| 9 | 1 | 1 | 2 | 0 | 1 | 1 | 0.500 |
-| 10 | 1 | 0 | 1 | 1 | 0 | 1 | 1.000 |
+| $t_{(j)}$ | $n_{Aj}$ | $n_{Bj}$ | $n_j$ | $d_{Aj}$ | $d_{Bj}$ | $d_j$ | $e_{Aj}$ | $v_{Aj}$ |
+|:----------:|:--------:|:--------:|:-----:|:--------:|:--------:|:-----:|:--------:|:--------:|
+| 1 | 5 | 5 | 10 | 0 | 1 | 1 | 0.500 | 0.250 |
+| 2 | 5 | 4 | 9 | 1 | 0 | 1 | 0.556 | 0.247 |
+| 3 | 4 | 4 | 8 | 0 | 1 | 1 | 0.500 | 0.250 |
+| 6 | 3 | 2 | 5 | 1 | 0 | 1 | 0.600 | 0.240 |
+| 7 | 2 | 2 | 4 | 0 | 1 | 1 | 0.500 | 0.250 |
+| 9 | 1 | 1 | 2 | 0 | 1 | 1 | 0.500 | 0.250 |
+| 10 | 1 | 0 | 1 | 1 | 0 | 1 | 1.000 | 0.000 |
 
-Totals: $O_A = 3$, $E_A = 4.156$.
+합계: $O_A = 3$, $E_A = 4.156$, $V_A = 1.487$.
 
-The observed count for group A (3 events) is fewer than expected (4.156),
-suggesting group A may have better survival.  Computing the variance $V_A$
-and the test statistic yields the p-value for formal inference.
+집단 A의 관측 사건 수(3건)가 기대값(4.156)보다 적어 집단 A의 생존이 더 나을 가능성을 시사한다.
+검정통계량은
 
-## Extension to More Than Two Groups
+$$
+\chi^2_{\text{LR}} = \frac{(3 - 4.156)^2}{1.487} = \frac{1.3353}{1.487} = 0.898
+$$
 
-For $G$ groups, the log-rank test generalizes to a multivariate chi-squared
-test with $G - 1$ degrees of freedom.  Define the vector of observed-minus-expected
-counts for groups $1, \ldots, G-1$:
+이고 p-값은 $P(\chi^2_1 \geq 0.898) = 0.343$이다.
+
+!!! warning "차이가 보인다고 유의한 것은 아니다"
+    $O_A = 3$과 $E_A = 4.156$의 차이는 눈에 띄지만 **전혀 유의하지 않다**($p = 0.343$).
+    각 집단이 5명뿐이고 전체 사건이 7건이라 검정력이 거의 없기 때문이다. 카플란-마이어
+    곡선을 그리면 두 곡선이 눈에 띄게 벌어져 보이겠지만, 그 정도 차이는 우연으로 충분히
+    설명된다.
+
+    마지막 행($t = 10$)에서 $v_{Aj} = 0$인 것도 눈여겨보라. 그 시점에는 집단 B에 아무도 남지
+    않아 $n_j = 1$이므로 분모의 $(n_j - 1)$이 0이 되고, 관례상 기여를 0으로 둔다. 비교할
+    대상이 없으면 정보도 없다는 뜻이다.
+
+## 세 집단 이상으로의 확장
+
+집단이 $G$개이면 로그순위 검정은 자유도 $G - 1$의 다변량 카이제곱 검정으로 일반화된다.
+집단 $1, \ldots, G-1$의 관측값 빼기 기댓값 벡터를
 
 $$
 \mathbf{U} = \begin{pmatrix} O_1 - E_1 \\ O_2 - E_2 \\ \vdots \\ O_{G-1} - E_{G-1} \end{pmatrix}
 $$
 
-and let $\mathbf{V}$ be the $(G-1) \times (G-1)$ variance-covariance matrix
-of $\mathbf{U}$.  The test statistic is
+로 정의하고 $\mathbf{V}$를 $\mathbf{U}$의 $(G-1) \times (G-1)$ 분산-공분산행렬이라 하면
+검정통계량은
 
 $$
 \chi^2_{\text{LR}} = \mathbf{U}^\top \mathbf{V}^{-1} \mathbf{U} \;\xrightarrow{d}\; \chi^2_{G-1}
 $$
 
-## Assumptions and Limitations
+이다.
 
-1. **Independent censoring.** The censoring mechanism must not depend on the
-   event time, conditional on covariates.
-2. **Non-informative censoring.** Censored subjects at any time are
-   representative of all subjects at risk.
-3. **Proportional hazards.** The log-rank test has optimal power when the
-   hazard ratio between groups is constant over time.  If hazards cross
-   (e.g., one treatment is better early but worse late), the log-rank test
-   may fail to detect the difference.
+## 가정과 한계
 
-!!! warning "Crossing Hazards"
+1. **독립 절단.** 공변량을 조건으로 할 때 절단 기제가 사건시간에 의존해서는 안 된다.
+2. **무정보 절단.** 임의의 시점에 절단된 대상이 그 시점에 위험에 있는 모든 대상을 대표해야
+   한다.
+3. **비례위험.** 로그순위 검정은 집단 간 위험비가 시간에 걸쳐 일정할 때 최적의 검정력을 갖는다.
+   위험이 교차하면(예: 어떤 처리가 초기에는 낫지만 후반에는 나쁘면) 로그순위 검정이 차이를
+   탐지하지 못할 수 있다.
 
-    When survival curves cross, the log-rank test can yield a non-significant
-    p-value even when the curves differ substantially.  In such cases, consider
-    the Wilcoxon (Gehan--Breslow) test, which gives more weight to early
-    event times, or a stratified analysis.
+!!! warning "위험의 교차"
 
-## Weighted Log-Rank Tests
+    생존곡선이 교차하면 곡선이 상당히 다른데도 로그순위 검정이 유의하지 않은 p-값을 낼 수
+    있다. 그런 경우에는 초기 사건시간에 더 큰 가중을 주는 윌콕슨(게한-브레슬로) 검정이나
+    층화 분석을 고려하라.
 
-The standard log-rank test weights all event times equally.  **Weighted
-variants** apply time-dependent weights $w_j$ at each event time:
+## 가중 로그순위 검정
+
+표준 로그순위 검정은 모든 사건시간에 같은 가중을 준다. **가중 변형**은 각 사건시간에
+시간 의존 가중치 $w_j$를 적용한다.
 
 $$
 \chi^2_w = \frac{\left(\sum_{j=1}^K w_j (d_{1j} - e_{1j})\right)^2}{\sum_{j=1}^K w_j^2 \, v_{1j}}
 $$
 
-Common choices include:
+흔히 쓰는 선택은 다음과 같다.
 
-| Test Name | Weight $w_j$ | Sensitivity |
+| 검정 이름 | 가중치 $w_j$ | 민감한 구간 |
 |:----------|:------------|:------------|
-| Log-rank (Mantel--Haenszel) | $1$ | Late differences |
-| Wilcoxon (Gehan--Breslow) | $n_j$ | Early differences |
-| Tarone--Ware | $\sqrt{n_j}$ | Moderate balance |
-| Peto--Peto | $\hat{S}(t_{(j)})$ | Early-to-mid differences |
+| 로그순위(맨텔-헨젤) | $1$ | 후반 차이 |
+| 윌콕슨(게한-브레슬로) | $n_j$ | 초반 차이 |
+| 태론-웨어 | $\sqrt{n_j}$ | 중간 정도의 균형 |
+| 페토-페토 | $\hat{S}(t_{(j)})$ | 초중반 차이 |
 
-The choice of weights should be guided by the scientific question, not by
-which test gives the smallest p-value.
+가중치의 선택은 p-값이 가장 작게 나오는 쪽이 아니라 **과학적 질문**이 이끌어야 한다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Log-Rank Test
+**연습문제 1.**
+로그순위 검정
 
-Two groups of patients (A: new treatment, B: standard care) have the following
-survival data:
+두 집단의 환자(A: 신약, B: 표준 치료)가 다음 생존자료를 보였다.
 
-**Group A:** 4, 7+, 10, 14+, 18 (+ denotes censored).
+**집단 A:** 4, 7+, 10, 14+, 18 (+는 절단).
 
-**Group B:** 2, 5, 9+, 11, 16.
+**집단 B:** 2, 5, 9+, 11, 16.
 
-**(a)** State the null and alternative hypotheses.
+**(a)** 귀무가설과 대립가설을 서술하라.
 
-**(b)** At event time $t = 2$, compute the expected events $e_{A1}$ for group A.
+**(b)** 사건시간 $t = 2$에서 집단 A의 기대 사건 수 $e_{A1}$을 계산하라.
 
-**(c)** Compute $O_A$ and $E_A$ across all event times and comment on the
-direction of the difference.
+**(c)** 모든 사건시간에 걸쳐 $O_A$와 $E_A$를 계산하고 검정통계량과 p-값을 구하라.
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
 
-    **(a)** $H_0: S_A(t) = S_B(t)$ for all $t$ vs $H_1: S_A(t) \neq S_B(t)$ for
-    some $t$.
+    **(a)** $H_0: S_A(t) = S_B(t)$(모든 $t$에 대해) 대
+    $H_1: S_A(t) \neq S_B(t)$(어떤 $t$에 대해).
 
-    **(b)** At $t = 2$: $n_A = 5$, $n_B = 5$, $n = 10$, $d = 1$.
-    $e_{A1} = 1 \times 5/10 = 0.5$.
+    **(b)** $t = 2$에서 $n_A = 5$, $n_B = 5$, $n = 10$, $d = 1$이므로
+    $e_{A1} = 1 \times 5/10 = 0.5$이다.
 
-    **(c)** $O_A = 3$ events observed in group A. Computing expected events at
-    each event time and summing yields $E_A \approx 3.5$. Since $O_A < E_A$,
-    group A has fewer events than expected, suggesting better survival with the
-    new treatment.
+    **(c)** 사건시간은 2, 4, 5, 10, 11, 16, 18이다.
+
+    | $t_{(j)}$ | $n_{Aj}$ | $n_{Bj}$ | $n_j$ | $d_{Aj}$ | $d_j$ | $e_{Aj}$ | $v_{Aj}$ |
+    |:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+    | 2 | 5 | 5 | 10 | 0 | 1 | 0.500 | 0.250 |
+    | 4 | 5 | 4 | 9 | 1 | 1 | 0.556 | 0.247 |
+    | 5 | 4 | 4 | 8 | 0 | 1 | 0.500 | 0.250 |
+    | 10 | 3 | 2 | 5 | 1 | 1 | 0.600 | 0.240 |
+    | 11 | 2 | 2 | 4 | 0 | 1 | 0.500 | 0.250 |
+    | 16 | 1 | 1 | 2 | 0 | 1 | 0.500 | 0.250 |
+    | 18 | 1 | 0 | 1 | 1 | 1 | 1.000 | 0.000 |
+
+    $O_A = 3$, $E_A = 4.156$, $V_A = 1.487$이므로
+
+    $$
+    \chi^2_{\text{LR}} = \frac{(3 - 4.156)^2}{1.487} = 0.898, \qquad p = 0.343
+    $$
+
+    이다. $O_A < E_A$이므로 신약 집단의 사건이 기대보다 적어 생존이 나은 방향을 시사하지만,
+    **$p = 0.343$으로 유의하지 않다.** 이 자료로는 신약이 낫다고 결론지을 수 없다.
+
+    !!! note "이 자료는 본문 예제와 위험집합 구조가 완전히 같다"
+        시간 값만 다를 뿐, 두 집단의 사건과 절단이 번갈아 나타나는 순서가 본문 예제와 동일하다.
+        로그순위 검정은 **시간의 실제 값을 전혀 쓰지 않고 순서만 쓰기 때문에** 두 자료가
+        정확히 같은 통계량을 낸다. 이것이 "로그순위"라는 이름의 유래이자, 이 검정이 시간
+        척도의 단조 변환에 불변인 이유다. 시간을 로그로 바꾸든 제곱근으로 바꾸든 결과가 같다.
+        $\square$
+
+---
+
+**연습문제 2.**
+로그순위 검정이 시간의 단조증가 변환에 불변임을 보여라. 이것이 장점인가 단점인가?
+
+??? success "연습문제 2 풀이"
+
+    $g$를 강증가 함수라 하고 모든 관측 시간을 $t_i \mapsto g(t_i)$로 바꾼다고 하자. 그러면
+
+    - 시간의 **순서**가 보존되므로 각 시점의 위험집합 $n_{1j}, n_{2j}$가 그대로다.
+    - 각 시점의 사건 수 $d_{1j}, d_j$도 그대로다.
+
+    검정통계량 $\chi^2_{\text{LR}}$은 $\{n_{1j}, n_{2j}, d_{1j}, d_j\}$로만 계산되므로 값이
+    변하지 않는다.
+
+    **장점.** 시간 척도를 어떻게 잡을지 고민할 필요가 없다. 개월로 재든 로그개월로 재든 같은
+    결론이 나온다. 지속시간 자료는 오른쪽으로 크게 치우친 경우가 많은데, 그런 자료에
+    $t$-검정 같은 방법을 쓰면 척도 선택이 결과를 좌우한다. 로그순위는 그 문제에서 자유롭다.
+
+    **단점이자 대가.** 시간의 실제 값에 담긴 정보를 **버린다.**
+
+    - 한 집단이 다른 집단보다 평균 2배 오래 산다는 것과 2% 오래 산다는 것을 구별하지 못한다.
+      순서만 같으면 같은 통계량이다.
+    - 따라서 **효과크기를 주지 않는다.** 로그순위 검정은 p-값만 내놓는다. 위험비 같은 효과
+      측도가 필요하면 콕스 모형(21.4절)을 써야 한다.
+    - 특정 분포를 가정할 수 있는 상황에서는 모수적 검정보다 검정력이 낮다.
+
+    실무 권장: 로그순위 검정으로 유의성을 판단하되, 카플란-마이어 곡선과 콕스 모형의 위험비를
+    **반드시 함께** 보고하라. p-값 하나로는 "얼마나 다른가"에 답할 수 없다. $\square$
+
+---
+
+**연습문제 3.**
+두 집단의 생존곡선이 교차할 때 로그순위 검정이 실패하는 이유를 설명하고, 구체적인 상황을
+구성하라.
+
+??? success "연습문제 3 풀이"
+
+    **실패의 기제.** 검정통계량의 분자는 $\left(\sum_j (d_{1j} - e_{1j})\right)^2$로
+    **부호가 있는 편차를 먼저 더한 뒤** 제곱한다. 곡선이 교차하면 초반에는
+    $d_{1j} - e_{1j} < 0$(집단 1이 유리)이고 후반에는 $> 0$(집단 1이 불리)이 되어 두 기여가
+    **서로 상쇄된다.** 극단적으로 완전히 상쇄되면 $O_1 - E_1 = 0$이 되어
+    $\chi^2_{\text{LR}} = 0$, $p = 1$이 나온다. 두 곡선이 극적으로 다른데도 말이다.
+
+    **구체적인 상황: 수술 대 약물치료.**
+
+    - 수술군은 수술 자체의 위험 때문에 처음 몇 달간 사망률이 높다.
+    - 그 시기를 넘긴 수술군 환자는 근본 원인이 제거되어 이후 사망률이 매우 낮다.
+    - 약물군은 초기 위험이 없지만 위험이 꾸준히 지속된다.
+
+    두 생존곡선은 어느 시점에서 교차한다. 초기 6개월에는 약물군이 위, 그 이후에는 수술군이
+    위에 놓인다. 로그순위 검정은 상쇄 때문에 유의하지 않은 p-값을 낼 수 있다.
+
+    **대응 방법.**
+
+    1. **가중 검정.** 초반 차이를 보려면 윌콕슨(가중치 $n_j$), 후반 차이를 보려면 표준
+       로그순위를 쓴다. 다만 어느 쪽을 쓸지는 자료를 보기 **전에** 정해야 한다.
+    2. **시점을 나눈 분석.** 미리 정한 시점(예: 6개월)에서 나누어 각 구간에서 따로 검정한다.
+    3. **제한 평균 생존시간(RMST) 비교.** $\int_0^\tau S(t)\,dt$의 차이를 검정한다. 상쇄
+       문제가 없고 효과크기가 "평균 생존기간의 차이(개월)"로 해석된다.
+    4. **곡선을 그려 본다.** 가장 중요한 단계다. 교차 여부는 눈으로 확인하는 것이 가장 빠르다.
+       p-값만 보고 결론을 내리지 말라. $\square$
+
+---
+
+**연습문제 4.**
+$V_1$의 공식에 등장하는 $n_j - 1$이 어디에서 오는지 설명하라. $n_j = 1$일 때 왜 기여가
+0인가?
+
+??? success "연습문제 4 풀이"
+
+    $H_0$ 아래에서 시점 $t_{(j)}$의 집단 1 사건 수 $d_{1j}$는 **초기하분포**를 따른다.
+    크기 $n_j$의 모집단에서 $n_{1j}$개가 "집단 1" 표지를 갖고, 여기에서 비복원으로 $d_j$개를
+    뽑을 때 집단 1 표지가 몇 개 뽑히는지의 분포다. 초기하분포의 분산은
+
+    $$
+    \operatorname{Var}(d_{1j}) = d_j\,\frac{n_{1j}}{n_j}\,\frac{n_{2j}}{n_j}\,\frac{n_j - d_j}{n_j - 1}
+    = \frac{n_{1j}n_{2j}d_j(n_j-d_j)}{n_j^2(n_j-1)}
+    $$
+
+    이다. 마지막 인자 $\frac{n_j-d_j}{n_j-1}$가 **유한모집단 수정항**이며, 비복원 추출이라
+    이항분포보다 분산이 작다는 사실을 반영한다. 여기서 $n_j - 1$이 나온다.
+
+    **$n_j = 1$인 경우.** 위험집합에 한 명만 남았다면 그 사람이 사건을 겪는다는 것이 확실하다.
+    즉 $d_{1j}$가 확률변수가 아니라 상수이므로 분산이 0이다. 공식에서도
+    $n_j - d_j = 1 - 1 = 0$이 되어 분자가 0이 된다(분모의 $n_j - 1 = 0$과 함께 $0/0$이 되지만,
+    극한과 확률적 논증 모두 0을 준다). 구현에서는 이 항을 명시적으로 건너뛴다.
+
+    본문 예제의 마지막 행($t = 10$)이 정확히 이 경우이며, 그래서 $v_{Aj} = 0$이다. 직관적으로,
+    비교할 상대 집단이 남아 있지 않은 시점의 사건은 두 집단을 구별하는 데 아무 정보도 주지
+    않는다. $\square$

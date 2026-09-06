@@ -1,147 +1,137 @@
-# Confidence Intervals for Survival Curves
+# 생존곡선의 신뢰구간
 
-The Kaplan--Meier estimator $\hat{S}(t)$ is a point estimate of the survival
-function.  Like any estimator, it is subject to sampling variability: a
-different sample would produce a different curve.  To quantify this uncertainty,
-we need confidence intervals at each time point.
+카플란-마이어 추정량 $\hat{S}(t)$는 생존함수의 점추정치다. 다른 추정량과 마찬가지로 표집
+변동을 겪는다. 표본이 다르면 곡선도 달라진다. 이 불확실성을 정량화하려면 각 시점에서
+신뢰구간이 필요하다.
 
-This section derives the variance of the Kaplan--Meier estimator using
-Greenwood's formula, constructs pointwise confidence intervals, and discusses
-transformations that improve coverage in small samples.
+이 절에서는 그린우드 공식으로 카플란-마이어 추정량의 분산을 유도하고, 점별 신뢰구간을
+구성하며, 소표본에서 포함확률을 개선하는 변환들을 논의한다.
 
-## Greenwood's Formula
+## 그린우드 공식
 
-The variance of $\hat{S}(t)$ is estimated by **Greenwood's formula** (1926):
+$\hat{S}(t)$의 분산은 **그린우드 공식**(1926)으로 추정한다.
 
 $$
 \widehat{\text{Var}}\bigl(\hat{S}(t)\bigr) = \hat{S}(t)^2 \sum_{j:\, t_{(j)} \leq t} \frac{d_j}{n_j(n_j - d_j)}
 $$
 
-where the sum runs over all event times $t_{(j)}$ up to $t$.
+합은 $t$까지의 모든 사건시간 $t_{(j)}$에 걸쳐 이루어진다.
 
-**Derivation sketch.**  The Kaplan--Meier estimator is a product of independent
-factors $(1 - d_j / n_j)$.  Applying the delta method to the logarithm of the
-product:
+**유도 개요.** 카플란-마이어 추정량은 독립인 인자 $(1 - d_j / n_j)$의 곱이다. 곱의 로그에
+델타법을 적용하면
 
 $$
 \ln \hat{S}(t) = \sum_{j:\, t_{(j)} \leq t} \ln\!\left(1 - \frac{d_j}{n_j}\right)
 $$
 
-Each term has approximate variance $d_j / [n_j(n_j - d_j)]$ (from the binomial
-variance of $d_j$ given $n_j$).  Summing and applying the delta method back to
-the original scale gives Greenwood's formula.
+이고, 각 항의 근사 분산은 $d_j / [n_j(n_j - d_j)]$다($n_j$가 주어졌을 때 $d_j$의 이항분산에서
+나온다). 이를 더하고 델타법으로 원래 척도로 되돌리면 그린우드 공식을 얻는다.
 
-The standard error of $\hat{S}(t)$ is
+$\hat{S}(t)$의 표준오차는
 
 $$
 \text{se}\bigl(\hat{S}(t)\bigr) = \hat{S}(t) \sqrt{\sum_{j:\, t_{(j)} \leq t} \frac{d_j}{n_j(n_j - d_j)}}
 $$
 
-## Pointwise Linear Confidence Interval
+이다.
 
-The simplest confidence interval uses a normal approximation on the original
-scale:
+## 점별 선형 신뢰구간
+
+가장 단순한 신뢰구간은 원래 척도에서 정규근사를 쓴다.
 
 $$
 \hat{S}(t) \pm z_{\alpha/2} \cdot \text{se}\bigl(\hat{S}(t)\bigr)
 $$
 
-where $z_{\alpha/2}$ is the upper $\alpha/2$ quantile of the standard normal
-distribution.
+여기서 $z_{\alpha/2}$는 표준정규분포의 상위 $\alpha/2$ 분위수다.
 
-!!! warning "Limitations of the Linear Interval"
+!!! warning "선형 구간의 한계"
 
-    This interval can produce values outside $[0, 1]$, especially when
-    $\hat{S}(t)$ is close to 0 or 1.  It also tends to have below-nominal
-    coverage in small samples because the normal approximation to the
-    distribution of $\hat{S}(t)$ is poor near the boundaries.
+    이 구간은 $[0, 1]$ 밖의 값을 낼 수 있으며, 특히 $\hat{S}(t)$가 0이나 1에 가까울 때
+    그렇다. 또 경계 근처에서 $\hat{S}(t)$의 분포에 대한 정규근사가 나빠 소표본에서 포함확률이
+    명목 수준에 못 미치는 경향이 있다.
 
-## Log Transformation
+## 로그 변환
 
-A better approach applies a log transformation before constructing the interval.
-Define $\theta(t) = \ln \hat{S}(t)$.  By the delta method,
+더 나은 접근은 구간을 만들기 전에 로그 변환을 적용하는 것이다.
+$\theta(t) = \ln \hat{S}(t)$라 하면 델타법에 의해
 
 $$
 \text{se}\bigl(\theta(t)\bigr) = \frac{\text{se}(\hat{S}(t))}{\hat{S}(t)} = \sqrt{\sum_{j:\, t_{(j)} \leq t} \frac{d_j}{n_j(n_j - d_j)}}
 $$
 
-The $100(1 - \alpha)\%$ confidence interval for $\ln S(t)$ is
+이다. $\ln S(t)$에 대한 $100(1 - \alpha)\%$ 신뢰구간은
 
 $$
 \ln \hat{S}(t) \pm z_{\alpha/2} \cdot \text{se}\bigl(\theta(t)\bigr)
 $$
 
-Exponentiating the endpoints gives the confidence interval for $S(t)$:
+이고, 양 끝점을 지수화하면 $S(t)$의 신뢰구간
 
 $$
-\left[\hat{S}(t)^{\exp(c)},\; \hat{S}(t)^{\exp(-c)}\right]
+\left[\exp\!\bigl(\ln \hat{S}(t) - z_{\alpha/2}\,\text{se}(\theta)\bigr),\; \exp\!\bigl(\ln \hat{S}(t) + z_{\alpha/2}\,\text{se}(\theta)\bigr)\right]
 $$
 
-where $c = z_{\alpha/2} \cdot \text{se}(\theta(t)) / \ln \hat{S}(t)$.
+를 얻는다. 이 구간은 항상 $(0, 1]$ 안에 있어 선형 구간보다 낫다.
 
-Wait---a cleaner way to express this is:
+!!! note "동등한 표현"
+    같은 구간을 $\bigl[\hat{S}(t)^{e^{c}},\; \hat{S}(t)^{e^{-c}}\bigr]$로 쓰기도 한다.
+    여기서 $c = z_{\alpha/2}\,\text{se}(\theta) / \ln \hat{S}(t)$다. 두 표현은 대수적으로
+    같으며 위의 지수 형태가 읽기 쉽다.
 
-$$
-\left[\exp\!\bigl(\ln \hat{S}(t) - z_{\alpha/2} \cdot \text{se}(\theta)\bigr),\; \exp\!\bigl(\ln \hat{S}(t) + z_{\alpha/2} \cdot \text{se}(\theta)\bigr)\right]
-$$
+## 로그-로그 변환
 
-This interval is always contained in $(0, 1]$, which is an improvement over the
-linear interval.
-
-## Log-Log Transformation
-
-The **log-log transformation** (also called the complementary log-log
-transformation) provides the best coverage in practice.  Define
+**로그-로그 변환**(여-로그-로그 변환이라고도 한다)이 실무에서 가장 좋은 포함확률을 준다.
 
 $$
 \phi(t) = \ln\!\bigl(-\ln \hat{S}(t)\bigr) = \ln \hat{H}(t)
 $$
 
-By the delta method,
+로 정의하면 델타법에 의해
 
 $$
-\text{se}\bigl(\phi(t)\bigr) = \frac{1}{\ln \hat{S}(t)} \sqrt{\sum_{j:\, t_{(j)} \leq t} \frac{d_j}{n_j(n_j - d_j)}}
+\text{se}\bigl(\phi(t)\bigr) = \frac{1}{\bigl|\ln \hat{S}(t)\bigr|} \sqrt{\sum_{j:\, t_{(j)} \leq t} \frac{d_j}{n_j(n_j - d_j)}}
 $$
 
-Construct the interval for $\phi(t)$:
+이다($\ln \hat S(t) < 0$이므로 절댓값을 취한다). $\phi(t)$에 대한 구간
 
 $$
 \phi(t) \pm z_{\alpha/2} \cdot \text{se}\bigl(\phi(t)\bigr)
 $$
 
-Then back-transform to the survival scale.  If $(\phi_L, \phi_U)$ is the
-interval for $\phi(t)$, the confidence interval for $S(t)$ is
+을 만든 뒤 생존 척도로 되돌린다. $(\phi_L, \phi_U)$가 $\phi(t)$의 구간이면 $S(t)$의
+신뢰구간은
 
 $$
 \left[\exp\!\bigl(-e^{\phi_U}\bigr),\; \exp\!\bigl(-e^{\phi_L}\bigr)\right]
 $$
 
-Note the reversal: the upper bound for $\phi$ gives the lower bound for $S$.
+이다. 순서가 뒤집힌다는 점에 유의하라. $\phi$의 상한이 $S$의 하한을 준다. $\phi$가 커지면
+누적위험이 커지고 따라서 생존이 낮아지기 때문이다.
 
-!!! tip "Default in Most Software"
+!!! tip "대부분의 소프트웨어 기본값"
 
-    The log-log transformation is the default method for Kaplan--Meier
-    confidence intervals in most statistical software (R's `survfit`,
-    Python's `lifelines`).  It consistently provides closer-to-nominal
-    coverage than the linear or log methods.
+    로그-로그 변환이 대부분의 통계 소프트웨어에서 카플란-마이어 신뢰구간의 기본 방법이다
+    (R의 `survfit`, 파이썬의 `lifelines`). 선형이나 로그 방법보다 일관되게 명목 수준에 가까운
+    포함확률을 준다.
 
-## Worked Example
+## 예제
 
-Continuing the example from the Kaplan--Meier section, at $t = 3$:
+카플란-마이어 절의 예제를 이어서 $t = 3$에서 계산한다.
 
 - $\hat{S}(3) = 0.729$
-- Greenwood's sum: $\frac{1}{8 \cdot 7} + \frac{1}{6 \cdot 5} = 0.01786 + 0.03333 = 0.05119$
+- 그린우드 합: $\frac{1}{8 \cdot 7} + \frac{1}{6 \cdot 5} = 0.01786 + 0.03333 = 0.05119$
 - $\text{se}(\hat{S}(3)) = 0.729 \sqrt{0.05119} = 0.729 \times 0.2263 = 0.165$
 
-**Linear 95% CI:**
+**선형 95% 신뢰구간:**
 
 $$
-0.729 \pm 1.96 \times 0.165 = (0.406,\; 1.052)
+0.729 \pm 1.96 \times 0.165 = (0.406,\; 1.053)
 $$
 
-The upper bound exceeds 1, illustrating the limitation of the linear method.
+상한이 1을 넘어 선형 방법의 한계를 보여준다.
 
-**Log-log 95% CI:**
+**로그-로그 95% 신뢰구간:**
 
 $$
 \phi(3) = \ln(-\ln 0.729) = \ln(0.3161) = -1.152
@@ -152,67 +142,158 @@ $$
 $$
 
 $$
-\phi(3) \pm 1.96 \times 0.716 = (-2.555,\; 0.251)
+\phi(3) \pm 1.96 \times 0.716 = (-2.556,\; 0.252)
 $$
 
-Back-transforming:
+역변환하면
 
 $$
-S_L = \exp(-e^{0.251}) = \exp(-1.285) = 0.277
+S_L = \exp(-e^{0.252}) = \exp(-1.286) = 0.276
 $$
 
 $$
-S_U = \exp(-e^{-2.555}) = \exp(-0.0778) = 0.925
+S_U = \exp(-e^{-2.556}) = \exp(-0.0777) = 0.925
 $$
 
-The log-log interval $(0.277, 0.925)$ stays within $[0, 1]$ and is the
-recommended interval.
+로그-로그 구간 $(0.276,\ 0.925)$는 $[0, 1]$ 안에 머물며 권장되는 구간이다. 폭이 $0.649$로
+매우 넓다는 점에도 주목하라. 대상이 8명뿐이므로 이 정도 불확실성은 불가피하다.
 
-## Comparison of Methods
+## 방법 비교
 
-| Method | Formula Basis | Stays in $[0,1]$ | Small-Sample Coverage |
+| 방법 | 공식의 근거 | $[0,1]$ 유지 | 소표본 포함확률 |
 |:-------|:-------------|:-----------------:|:---------------------:|
-| Linear | $\hat{S} \pm z \cdot \text{se}$ | No | Below nominal |
-| Log | $\exp(\ln \hat{S} \pm z \cdot \text{se}_\theta)$ | Yes (in $(0,1]$) | Moderate |
-| Log-log | Back-transform of $\ln(-\ln \hat{S}) \pm z \cdot \text{se}_\phi$ | Yes | Best |
+| 선형 | $\hat{S} \pm z \cdot \text{se}$ | 아니오 | 명목 이하 |
+| 로그 | $\exp(\ln \hat{S} \pm z \cdot \text{se}_\theta)$ | 예($(0,1]$) | 중간 |
+| 로그-로그 | $\ln(-\ln \hat{S}) \pm z \cdot \text{se}_\phi$의 역변환 | 예 | 가장 좋음 |
 
-## Simultaneous Confidence Bands
+## 동시 신뢰띠
 
-The intervals above are **pointwise**: each covers $S(t_0)$ at a single fixed
-$t_0$ with probability $1 - \alpha$.  A **simultaneous confidence band** covers
-the entire curve $S(t)$ for all $t$ in an interval $[t_L, t_U]$
-simultaneously.
+위의 구간들은 **점별**이다. 각 구간은 고정된 하나의 $t_0$에서 $S(t_0)$를 확률 $1 - \alpha$로
+포함한다. **동시 신뢰띠**는 구간 $[t_L, t_U]$의 모든 $t$에 대해 곡선 $S(t)$ 전체를 동시에
+포함한다.
 
-The Hall--Wellner band and the equal-precision (EP) band are two common
-approaches.  Both are wider than pointwise intervals because they must account
-for the multiple comparisons across all time points.
+홀-웰너 띠와 등정밀도(EP) 띠가 흔히 쓰이는 두 방법이다. 모든 시점에 걸친 다중비교를 반영해야
+하므로 둘 다 점별 구간보다 넓다.
 
-??? note "When to Use Simultaneous Bands"
+??? note "동시 신뢰띠를 언제 쓰는가"
 
-    Simultaneous bands are needed when the analyst wants to make statements
-    about the entire survival curve (e.g., "the true curve lies within this
-    band at all time points").  For reporting survival at a specific landmark
-    time (e.g., 5-year survival), pointwise intervals suffice.
+    생존곡선 전체에 대한 진술을 하고 싶을 때 동시 신뢰띠가 필요하다(예: "참 곡선이 모든
+    시점에서 이 띠 안에 있다"). 특정 시점의 생존율을 보고할 때는(예: 5년 생존율) 점별 구간으로
+    충분하다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Greenwood's Formula
+**연습문제 1.**
+그린우드 공식
 
-Using the Kaplan--Meier estimates from Exercise 2, compute the standard error
-of $\hat{S}(8)$ using Greenwood's formula and construct a 95% pointwise
-confidence interval using the linear method.
+[카플란-마이어 절](kaplan_meier.md)의 연습문제 1에 나온 환자 10명 자료를 이용해 그린우드
+공식으로 $\hat{S}(8)$의 표준오차를 계산하고 선형 방법으로 95% 점별 신뢰구간을 구성하라.
+로그-로그 구간과도 비교하라.
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
 
-    $\hat{S}(8) = 0.675$. Greenwood's sum through $t = 8$:
+    $\hat{S}(8) = 0.675$이고 $t = 8$까지의 그린우드 합은
 
     $$
     \frac{1}{10 \times 9} + \frac{1}{8 \times 7} + \frac{1}{7 \times 6} = 0.0111 + 0.0179 + 0.0238 = 0.0528
     $$
 
+    이다. 따라서
+
     $$
-    \text{se}(\hat{S}(8)) = 0.675 \times \sqrt{0.0528} = 0.675 \times 0.2298 = 0.155
+    \text{se}(\hat{S}(8)) = 0.675 \times \sqrt{0.0528} = 0.675 \times 0.2297 = 0.155
     $$
 
-    95% CI (linear): $0.675 \pm 1.96 \times 0.155 = (0.371, 0.979)$.
+    **선형 95% 신뢰구간:** $0.675 \pm 1.96 \times 0.155 = (0.371,\ 0.979)$.
+
+    **로그-로그 95% 신뢰구간:** $\phi(8) = \ln(-\ln 0.675) = \ln(0.3930) = -0.9340$,
+    $\text{se}(\phi) = 0.2297/0.3930 = 0.5845$이므로 $\phi$의 구간은
+    $(-2.0796,\ 0.2116)$이고 역변환하면 $(0.291,\ 0.883)$이다.
+
+    | 방법 | 신뢰구간 | 폭 |
+    |---|---|---|
+    | 선형 | $(0.371,\ 0.979)$ | $0.608$ |
+    | 로그-로그 | $(0.291,\ 0.883)$ | $0.592$ |
+
+    두 구간이 상당히 다르다. 선형 구간은 위쪽으로 치우쳐 상한이 $0.979$까지 올라가는데, 이는
+    사건이 이미 3건 관측된 자료로서는 낙관적이다. 로그-로그 구간은 아래쪽으로 더 내려가고
+    위쪽으로는 덜 올라가는 **비대칭** 구간이며, $\hat S$의 표집분포가 실제로 비대칭이라는
+    사실을 반영한다. $\square$
+
+---
+
+**연습문제 2.**
+그린우드 공식의 합 $\sum_j d_j/[n_j(n_j-d_j)]$을 델타법으로 유도하라. 넬슨-알렌의 분산 공식
+$\sum_j d_j/n_j^2$과 어떻게 다른가?
+
+??? success "연습문제 2 풀이"
+
+    $\hat p_j = d_j/n_j$라 하고 $\ln \hat S(t) = \sum_j \ln(1 - \hat p_j)$에서 출발한다.
+
+    **각 항의 분산.** $n_j$를 조건으로 $d_j \sim \text{Binomial}(n_j, p_j)$이므로
+    $\operatorname{Var}(\hat p_j) = p_j(1-p_j)/n_j$다. 델타법을 $g(p) = \ln(1-p)$에 적용하면
+    $g'(p) = -1/(1-p)$이므로
+
+    $$
+    \operatorname{Var}\bigl(\ln(1-\hat p_j)\bigr) \approx \frac{p_j(1-p_j)}{n_j}\cdot\frac{1}{(1-p_j)^2}
+    = \frac{p_j}{n_j(1-p_j)}
+    $$
+
+    이고 $\hat p_j = d_j/n_j$를 대입하면
+
+    $$
+    = \frac{d_j/n_j}{n_j(1 - d_j/n_j)} = \frac{d_j}{n_j(n_j - d_j)}
+    $$
+
+    를 얻는다. 항들을 (근사적으로 독립이라 보고) 더하면
+    $\operatorname{Var}(\ln \hat S) \approx \sum_j d_j/[n_j(n_j-d_j)]$이고, 다시 델타법으로
+    $S = e^{\ln S}$로 되돌리면 $\hat S^2$가 곱해져 그린우드 공식이 된다.
+
+    **넬슨-알렌과의 비교.**
+
+    | | 공식 | $d_j \ll n_j$일 때 |
+    |---|---|---|
+    | 그린우드 | $\sum_j \dfrac{d_j}{n_j(n_j-d_j)}$ | $\approx \sum_j d_j/n_j^2$ |
+    | 넬슨-알렌 | $\sum_j \dfrac{d_j}{n_j^2}$ | 같음 |
+
+    $d_j \ll n_j$이면 $n_j - d_j \approx n_j$이므로 두 공식이 일치한다. 그러나 위험집합이
+    작아지는 **꼬리에서 갈라진다.** 그린우드는 분모에 $(n_j - d_j)$가 있어 $d_j$가 $n_j$에
+    가까워지면 값이 폭발한다. 극단적으로 $d_j = n_j$(마지막 한 명이 사건을 겪는 경우)이면
+    그린우드 합이 무한대가 된다.
+
+    이는 결함이 아니라 정직함이다. $\hat S(t) = 0$인 시점에서 곡선의 불확실성은 실제로
+    통제되지 않으며, 그린우드가 그것을 반영한다. 다만 구현에서는 $\hat S = 0$ 이후를
+    보고하지 않거나 마지막 사건시간까지만 신뢰구간을 그리는 것이 관례다. $\square$
+
+---
+
+**연습문제 3.**
+왜 로그-로그 변환이 로그 변환보다 나은 포함확률을 주는지 설명하라.
+
+??? success "연습문제 3 풀이"
+
+    세 방법이 정규근사를 적용하는 척도가 서로 다르다.
+
+    | 변환 | 척도 | 치역 |
+    |---|---|---|
+    | 선형 | $S$ | $[0, 1]$ |
+    | 로그 | $\ln S$ | $(-\infty, 0]$ |
+    | 로그-로그 | $\ln(-\ln S) = \ln H$ | $(-\infty, \infty)$ |
+
+    정규근사가 잘 작동하려면 대상 통계량의 표집분포가 **경계에 부딪히지 않고** 대칭이어야
+    한다.
+
+    - **선형 척도**에서 $\hat S$는 양쪽에 경계가 있다. $\hat S$가 0이나 1 근처면 분포가
+      한쪽으로 몰려 정규근사가 나쁘고, 구간이 $[0,1]$ 밖으로 나간다.
+    - **로그 척도**에서는 위쪽 경계($\ln S \le 0$)만 남는다. $\hat S$가 1에 가까우면 여전히
+      문제가 있지만 0 근처에서는 개선된다.
+    - **로그-로그 척도**에서는 경계가 아예 없다. $\ln \hat H$는 실선 전체를 값으로 가질 수
+      있으며, 실제로 $\hat H$의 표집분포가 로그 척도에서 정규에 훨씬 가깝다.
+
+    이는 새로운 원리가 아니다. 19장에서 오즈비의 신뢰구간을 오즈비 척도가 아니라 **로그오즈비
+    척도**에서 만들고 지수화한 것과 같은 이유다. 경계가 없고 대칭에 가까운 척도로 옮겨
+    구간을 만든 뒤 되돌리는 것이 일반적인 처방이다.
+
+    **모의실험으로 확인하려면** 참 $S(t)$를 알고 있는 상황에서 표본을 반복 생성하여 각 방법의
+    구간이 참값을 포함하는 비율을 세면 된다. 문헌의 결과는 $n$이 작을 때 선형이 명목 95%보다
+    한참 낮은 포함확률을 주고, 로그-로그가 가장 명목에 가깝다는 것이다. $\square$

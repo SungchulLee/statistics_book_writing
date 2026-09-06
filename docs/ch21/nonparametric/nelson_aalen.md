@@ -1,86 +1,76 @@
-# Nelson-Aalen Cumulative Hazard
+# 넬슨-알렌 누적위험
 
-The Kaplan--Meier estimator targets the survival function $S(t)$ directly.  An
-alternative non-parametric approach estimates the **cumulative hazard function**
-$H(t)$ instead and then recovers the survival curve via the relationship
-$S(t) = \exp(-H(t))$.  This is the **Nelson--Aalen estimator**, developed
-independently by Nelson (1972) and Aalen (1978).
+카플란-마이어 추정량은 생존함수 $S(t)$를 직접 겨냥한다. 또 다른 비모수적 접근은 대신
+**누적위험함수** $H(t)$를 추정하고 관계식 $S(t) = \exp(-H(t))$로 생존곡선을 되찾는다. 이것이
+**넬슨-알렌 추정량**이며 Nelson(1972)과 Aalen(1978)이 독립적으로 개발했다.
 
-The Nelson--Aalen estimator is particularly useful when the cumulative hazard
-itself is the quantity of interest, for instance when assessing whether the
-hazard is constant (straight line on a cumulative hazard plot) or when
-constructing confidence intervals with better small-sample properties.
+넬슨-알렌 추정량은 누적위험 자체가 관심 대상일 때 특히 유용하다. 예컨대 위험이 일정한지
+평가하거나(누적위험 그림에서 직선인지 확인) 소표본 성질이 더 나은 신뢰구간을 만들 때 그렇다.
 
-## Definition
+## 정의
 
-Using the same notation as the Kaplan--Meier section, let
-$t_{(1)} < t_{(2)} < \cdots < t_{(K)}$ be the distinct ordered event times.
-At each event time $t_{(j)}$:
+카플란-마이어 절과 같은 표기를 쓴다. $t_{(1)} < t_{(2)} < \cdots < t_{(K)}$를 서로 다른
+사건시간을 크기순으로 나열한 것이라 하고, 각 사건시간 $t_{(j)}$에서
 
-- $d_j$ = number of events at $t_{(j)}$.
-- $n_j$ = number of subjects at risk just before $t_{(j)}$.
+- $d_j$ = $t_{(j)}$에서의 사건 수,
+- $n_j$ = $t_{(j)}$ 직전에 위험에 있는 대상 수
 
-The **Nelson--Aalen estimator** of the cumulative hazard is
+라 하자. 누적위험의 **넬슨-알렌 추정량**은
 
 $$
 \hat{H}(t) = \sum_{j:\, t_{(j)} \leq t} \frac{d_j}{n_j}
 $$
 
-Each term $d_j / n_j$ estimates the conditional probability of the event at
-time $t_{(j)}$ given survival to that point, which approximates
-$h(t_{(j)}) \cdot \Delta t$ for small intervals.
+이다. 각 항 $d_j / n_j$는 그 시점까지 생존했다는 조건에서 시점 $t_{(j)}$에 사건이 일어날
+조건부확률을 추정하며, 작은 구간에서 $h(t_{(j)}) \cdot \Delta t$를 근사한다.
 
-## Relationship to the Kaplan--Meier Estimator
+## 카플란-마이어 추정량과의 관계
 
-The Kaplan--Meier and Nelson--Aalen estimators target the same underlying
-survival function through different routes.  Using the identity
-$-\ln(1 - x) \approx x$ for small $x$:
+카플란-마이어와 넬슨-알렌은 같은 생존함수를 서로 다른 경로로 겨냥한다. 작은 $x$에 대한 항등식
+$-\ln(1 - x) \approx x$를 쓰면
 
 $$
 \hat{H}_{\text{NA}}(t) = \sum_{j:\, t_{(j)} \leq t} \frac{d_j}{n_j} \approx -\sum_{j:\, t_{(j)} \leq t} \ln\!\left(1 - \frac{d_j}{n_j}\right) = -\ln \hat{S}_{\text{KM}}(t)
 $$
 
-The approximation is accurate when $d_j / n_j$ is small at each event time,
-which is typical in large samples.  Therefore,
+이다. 이 근사는 각 사건시간에서 $d_j / n_j$가 작을 때 정확하며, 대표본에서 전형적으로 그렇다.
+따라서
 
 $$
 \hat{S}_{\text{NA}}(t) = \exp\!\bigl(-\hat{H}_{\text{NA}}(t)\bigr) \approx \hat{S}_{\text{KM}}(t)
 $$
 
-For finite samples the two can differ slightly.  The Nelson--Aalen-based
-survival estimate $\hat{S}_{\text{NA}}(t)$ is always at least as large as the
-Kaplan--Meier estimate $\hat{S}_{\text{KM}}(t)$, because
-$\exp(-x) \geq 1 - x$ for all $x \geq 0$.
+이다. 유한표본에서는 둘이 조금 다를 수 있다. 모든 $x \geq 0$에 대해 $\exp(-x) \geq 1 - x$이므로
+넬슨-알렌 기반 생존 추정치 $\hat{S}_{\text{NA}}(t)$는 언제나 카플란-마이어 추정치
+$\hat{S}_{\text{KM}}(t)$ 이상이다.
 
-## Variance Estimation
+## 분산 추정
 
-The variance of the Nelson--Aalen estimator is estimated by
+넬슨-알렌 추정량의 분산은 다음으로 추정한다.
 
 $$
 \widehat{\text{Var}}\bigl(\hat{H}(t)\bigr) = \sum_{j:\, t_{(j)} \leq t} \frac{d_j}{n_j^2}
 $$
 
-This follows from treating each increment $d_j / n_j$ as approximately
-independent with variance $d_j / n_j^2$ (derived from the binomial variance
-of $d_j$ given $n_j$).
+이는 각 증분 $d_j / n_j$를 근사적으로 독립이고 분산이 $d_j / n_j^2$인 양으로 취급한 결과다
+($n_j$가 주어졌을 때 $d_j$의 이항분산에서 유도된다).
 
-An approximate $100(1 - \alpha)\%$ confidence interval for $H(t)$ is
+$H(t)$에 대한 근사적인 $100(1 - \alpha)\%$ 신뢰구간은
 
 $$
 \hat{H}(t) \pm z_{\alpha/2} \sqrt{\sum_{j:\, t_{(j)} \leq t} \frac{d_j}{n_j^2}}
 $$
 
-where $z_{\alpha/2}$ is the standard normal quantile.
+이며 $z_{\alpha/2}$는 표준정규 분위수다.
 
-!!! tip "Log-Transformed Confidence Intervals"
+!!! tip "로그 변환 신뢰구간"
 
-    Because $H(t) \geq 0$, the linear confidence interval above may produce
-    negative lower bounds for small $H(t)$.  A log transformation avoids this:
-    construct an interval for $\ln \hat{H}(t)$ and exponentiate the endpoints.
+    $H(t) \geq 0$이므로 위의 선형 신뢰구간은 $H(t)$가 작을 때 음수 하한을 낼 수 있다. 로그
+    변환이 이를 피한다. $\ln \hat{H}(t)$에 대한 구간을 만들고 양 끝점을 지수화하면 된다.
 
-## Worked Example
+## 예제
 
-Using the same data from the Kaplan--Meier section:
+카플란-마이어 절과 같은 자료를 쓴다.
 
 | $t_{(j)}$ | $n_j$ | $d_j$ | $d_j / n_j$ | $\hat{H}(t_{(j)})$ |
 |:----------:|:-----:|:-----:|:------------:|:-------------------:|
@@ -89,74 +79,176 @@ Using the same data from the Kaplan--Meier section:
 | 5 | 4 | 2 | 0.500 | 0.792 |
 | 9 | 1 | 1 | 1.000 | 1.792 |
 
-The Nelson--Aalen survival estimate at $t = 5$ is
+$t = 5$에서 넬슨-알렌 생존 추정치는
 
 $$
 \hat{S}_{\text{NA}}(5) = \exp(-0.792) = 0.453
 $$
 
-Compare with the Kaplan--Meier estimate $\hat{S}_{\text{KM}}(5) = 0.365$.
-The difference is noticeable here because $d_3 / n_3 = 0.500$ is not small,
-so the approximation $\exp(-x) \approx 1 - x$ is poor at that step.
+이다. 카플란-마이어 추정치 $\hat{S}_{\text{KM}}(5) = 0.365$와 비교하면 차이가 눈에 띈다.
+$d_3 / n_3 = 0.500$이 작지 않아 그 단계에서 근사 $\exp(-x) \approx 1 - x$가 나쁘기 때문이다.
 
-The estimated variance of $\hat{H}(5)$ is
+$\hat{H}(5)$의 추정된 분산은
 
 $$
-\widehat{\text{Var}}\bigl(\hat{H}(5)\bigr) = \frac{1}{64} + \frac{1}{36} + \frac{2}{16} = 0.0156 + 0.0278 + 0.125 = 0.169
+\widehat{\text{Var}}\bigl(\hat{H}(5)\bigr) = \frac{1}{64} + \frac{1}{36} + \frac{2}{16} = 0.0156 + 0.0278 + 0.1250 = 0.1684
 $$
 
-A 95% confidence interval for $H(5)$ is $0.792 \pm 1.96 \sqrt{0.169} = (0.0, 1.60)$.
+이고, $H(5)$의 95% 신뢰구간은 $0.792 \pm 1.96\sqrt{0.1684} = (-0.013,\ 1.596)$이다. 하한이
+음수이므로 0에서 잘라 $(0.000,\ 1.596)$으로 보고한다. 위의 "로그 변환 신뢰구간" 상자가
+지적한 바로 그 상황이다.
 
-## When to Use the Nelson--Aalen Estimator
+## 넬슨-알렌 추정량을 언제 쓸 것인가
 
-The Nelson--Aalen estimator is preferred over the Kaplan--Meier estimator in
-several settings:
+다음 상황에서 카플란-마이어보다 넬슨-알렌이 선호된다.
 
-- **Cumulative hazard plots.** Plotting $\hat{H}(t)$ against $t$ reveals the
-  hazard structure.  A straight line suggests a constant hazard (exponential
-  model); upward curvature suggests increasing hazard (Weibull with $k > 1$).
-- **Small samples.** The Nelson--Aalen estimator has slightly less bias than
-  the Kaplan--Meier estimator in small samples.
-- **Building blocks.** The Nelson--Aalen estimator appears in the Breslow
-  estimator for the baseline cumulative hazard in the Cox model (Section 21.4).
+- **누적위험 그림.** $\hat{H}(t)$를 $t$에 대해 그리면 위험 구조가 드러난다. 직선이면 상수
+  위험(지수 모형)을, 위로 볼록하면 증가 위험(와이불 $k > 1$)을 시사한다.
+- **소표본.** 소표본에서 넬슨-알렌 추정량의 편향이 카플란-마이어보다 조금 작다.
+- **구성 요소.** 넬슨-알렌 추정량은 콕스 모형(21.4절)에서 기저 누적위험에 대한 브레슬로
+  추정량에 등장한다.
 
-!!! note "Graphical Model Checking"
+!!! note "그림을 이용한 모형 점검"
 
-    A plot of $\hat{H}(t)$ vs $t$ is a powerful informal diagnostic.  If the
-    plot is approximately linear through the origin, the exponential model is
-    reasonable.  If the plot of $\ln \hat{H}(t)$ vs $\ln t$ is approximately
-    linear, the Weibull model is appropriate.
+    $\hat{H}(t)$ 대 $t$ 그림은 강력한 비형식적 진단이다. 원점을 지나는 직선에 가까우면 지수
+    모형이 타당하다. $\ln \hat{H}(t)$ 대 $\ln t$ 그림이 직선에 가까우면 와이불 모형이
+    적절하다.
 
-## Summary
+## 요약
 
-| Property | Nelson--Aalen | Kaplan--Meier |
+| 성질 | 넬슨-알렌 | 카플란-마이어 |
 |:---------|:-------------|:--------------|
-| Estimand | $H(t)$ | $S(t)$ |
-| Formula | $\sum d_j / n_j$ | $\prod (1 - d_j / n_j)$ |
-| Range | $[0, \infty)$ | $[0, 1]$ |
-| Bias (small samples) | Slightly less | Slightly more |
-| Large-sample equivalence | $\hat{H} \approx -\ln \hat{S}_{\text{KM}}$ | $\hat{S}_{\text{KM}} \approx \exp(-\hat{H})$ |
+| 추정 대상 | $H(t)$ | $S(t)$ |
+| 공식 | $\sum d_j / n_j$ | $\prod (1 - d_j / n_j)$ |
+| 치역 | $[0, \infty)$ | $[0, 1]$ |
+| 편향(소표본) | 조금 작음 | 조금 큼 |
+| 대표본 동등성 | $\hat{H} \approx -\ln \hat{S}_{\text{KM}}$ | $\hat{S}_{\text{KM}} \approx \exp(-\hat{H})$ |
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Nelson-Aalen Estimator
+**연습문제 1.**
+넬슨-알렌 추정량
 
-Using the data from Exercise 2, compute the Nelson--Aalen estimate of the
-cumulative hazard $\hat{H}(t)$ at each event time and compare
-$\exp(-\hat{H}(12))$ with $\hat{S}_{\text{KM}}(12)$.
+[카플란-마이어 절](kaplan_meier.md)의 연습문제 1에 나온 환자 10명 자료를 이용해 각
+사건시간에서 누적위험의 넬슨-알렌 추정치 $\hat{H}(t)$를 계산하고, $\exp(-\hat{H}(12))$를
+$\hat{S}_{\text{KM}}(12)$와 비교하라.
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
 
-    | $t_{(j)}$ | $d_j/n_j$ | $\hat{H}(t_{(j)})$ |
-    |:----------:|:---------:|:-------------------:|
-    | 3 | 0.100 | 0.100 |
-    | 7 | 0.125 | 0.225 |
-    | 8 | 0.143 | 0.368 |
-    | 12 | 0.200 | 0.568 |
-    | 15 | 0.333 | 0.901 |
-    | 20 | 1.000 | 1.901 |
+    | $t_{(j)}$ | $n_j$ | $d_j$ | $d_j/n_j$ | $\hat{H}(t_{(j)})$ |
+    |:----------:|:-----:|:-----:|:---------:|:-------------------:|
+    | 3 | 10 | 1 | 0.100 | 0.100 |
+    | 7 | 8 | 1 | 0.125 | 0.225 |
+    | 8 | 7 | 1 | 0.143 | 0.368 |
+    | 12 | 5 | 1 | 0.200 | 0.568 |
+    | 15 | 3 | 1 | 0.333 | 0.901 |
+    | 20 | 1 | 1 | 1.000 | 1.901 |
 
-    $\exp(-\hat{H}(12)) = \exp(-0.568) = 0.567$ vs
-    $\hat{S}_{\text{KM}}(12) = 0.540$. The Nelson--Aalen-based estimate is
-    slightly higher, as expected.
+    $\exp(-\hat{H}(12)) = \exp(-0.568) = 0.567$이고
+    $\hat{S}_{\text{KM}}(12) = 0.540$이다. 넬슨-알렌 기반 추정치가 예상대로 조금 더 크다.
+
+    차이 $0.567 - 0.540 = 0.027$이 이 정도로 눈에 띄는 것은 표본이 $n = 10$으로 작아 각
+    $d_j/n_j$가 $0.1$에서 $0.333$까지로 작지 않기 때문이다. $n$이 수백이면 각 증분이
+    $0.01$ 이하가 되어 두 추정치가 소수점 셋째 자리까지 일치하는 것이 보통이다. $\square$
+
+---
+
+**연습문제 2.**
+모든 $x \geq 0$에 대해 $\exp(-x) \geq 1 - x$임을 이용하여
+$\hat{S}_{\text{NA}}(t) \geq \hat{S}_{\text{KM}}(t)$가 항상 성립함을 증명하라.
+
+??? success "연습문제 2 풀이"
+
+    $x_j = d_j/n_j \in [0, 1]$이라 하자. 부등식 $e^{-x} \ge 1 - x$는 $e^{-x}$의 볼록성에서
+    나온다. $g(x) = e^{-x} - (1-x)$라 하면 $g(0) = 0$이고
+    $g'(x) = -e^{-x} + 1 \ge 0$($x \ge 0$)이므로 $g$가 비감소이고 따라서 $g(x) \ge 0$이다.
+
+    이제 각 사건시간에 적용하면
+
+    $$
+    \hat{S}_{\text{NA}}(t) = \exp\!\left(-\sum_{j} x_j\right) = \prod_{j} e^{-x_j}
+    \ \ge\ \prod_{j} (1 - x_j) = \hat{S}_{\text{KM}}(t)
+    $$
+
+    이다. 곱의 각 인자가 음이 아니므로 항별 부등식을 곱해도 방향이 보존된다.
+
+    **등호 조건.** 모든 $j$에 대해 $x_j = 0$일 때만 등호가 성립한다. 즉 사건이 하나도 없을
+    때다. 사건이 하나라도 있으면 부등식은 엄밀하다.
+
+    **실무적 함의:** 넬슨-알렌 기반 생존곡선은 카플란-마이어 곡선보다 **항상 위에** 있다.
+    특히 위험집합이 작아지는 꼬리에서 차이가 커진다. 카플란-마이어는 $d_j = n_j$일 때 정확히
+    0에 도달하지만 넬슨-알렌 기반 곡선은 결코 0에 닿지 않는다. 위 예제에서 $t = 9$일 때
+    $\hat S_{\text{KM}} = 0$이지만 $\hat S_{\text{NA}} = e^{-1.792} = 0.167$이다. $\square$
+
+---
+
+**연습문제 3.**
+누적위험 그림으로 지수 모형과 와이불 모형을 구별하는 방법을 설명하라. 왜
+$\ln \hat H(t)$ 대 $\ln t$ 그림이 와이불 진단에 쓰이는가?
+
+??? success "연습문제 3 풀이"
+
+    **지수 모형.** $h(t) = \lambda$이면 $H(t) = \lambda t$이므로, $\hat H(t)$를 $t$에 대해
+    그리면 **원점을 지나는 기울기 $\lambda$의 직선**이 된다. 굽어 있으면 상수 위험 가정이
+    의심스럽다.
+
+    **와이불 모형.** $H(t) = (t/\lambda)^k$이므로 양변에 로그를 취하면
+
+    $$
+    \ln H(t) = k\,\ln t - k\,\ln\lambda
+    $$
+
+    이다. 즉 $\ln \hat H(t)$ 대 $\ln t$ 그림이 **기울기 $k$, 절편 $-k\ln\lambda$인
+    직선**이 된다. 이 그림에서 직선성이 와이불 적합도의 시각적 검정이 되고, 기울기가 형상모수
+    $k$의 대략적인 추정치를 준다.
+
+    | 그림 | 직선이면 | 기울기의 의미 |
+    |---|---|---|
+    | $\hat H(t)$ 대 $t$ | 지수 | $\lambda$ |
+    | $\ln \hat H(t)$ 대 $\ln t$ | 와이불 | 형상 $k$ |
+
+    지수는 $k = 1$인 와이불이므로, 두 번째 그림의 기울기가 1에 가까우면 지수 모형으로 충분하다.
+
+    !!! warning "$\hat H(t) = 0$인 구간을 조심하라"
+        첫 사건 이전에는 $\hat H(t) = 0$이므로 $\ln \hat H(t) = -\infty$가 되어 그릴 수 없다.
+        또 사건이 한두 건뿐인 초기 구간에서는 $\hat H$의 변동이 매우 커서 로그 척도에서
+        과장되어 보인다. 그림의 왼쪽 끝을 해석하지 말고, 사건이 충분히 누적된 구간에서만
+        직선성을 판단하라. $\square$
+
+---
+
+**연습문제 4.**
+넬슨-알렌 분산 공식 $\sum_j d_j/n_j^2$을 유도하라. 이 공식이 어떤 근사에 의존하는가?
+
+??? success "연습문제 4 풀이"
+
+    시점 $t_{(j)}$에서 위험집합 $n_j$를 조건으로 하면, 사건 수 $d_j$는 근사적으로
+    $\text{Binomial}(n_j, q_j)$를 따른다. 여기서 $q_j$는 그 시점의 조건부 사건확률이다.
+    따라서
+
+    $$
+    \operatorname{Var}\!\left(\frac{d_j}{n_j}\right) = \frac{n_j q_j(1-q_j)}{n_j^2} = \frac{q_j(1-q_j)}{n_j}
+    $$
+
+    이다. $q_j$를 그 추정치 $\hat q_j = d_j/n_j$로 대체하면
+
+    $$
+    \widehat{\operatorname{Var}}\!\left(\frac{d_j}{n_j}\right) = \frac{1}{n_j}\cdot\frac{d_j}{n_j}\left(1 - \frac{d_j}{n_j}\right) = \frac{d_j(n_j-d_j)}{n_j^3}
+    $$
+
+    이고, $d_j \ll n_j$이면 $(n_j - d_j)/n_j \approx 1$이므로 $\approx d_j/n_j^2$이다.
+    증분들이 근사적으로 독립이라 보고 더하면 본문의 공식을 얻는다.
+
+    **의존하는 근사 두 가지.**
+
+    1. **$d_j \ll n_j$.** 위 마지막 단계에서 쓴 근사다. 꼬리에서 $d_j$가 $n_j$에 가까워지면
+       실제 분산보다 과대추정한다. 극단적으로 $d_j = n_j$이면 참 분산 기여는
+       $d_j(n_j-d_j)/n_j^3 = 0$인데 공식은 $1/n_j$를 준다. 정확한 판본
+       $\sum_j d_j(n_j-d_j)/n_j^3$을 쓰는 구현도 있다.
+    2. **증분의 독립성.** 엄밀히는 서로 다른 시점의 증분이 독립이 아니다. 정확한 정당화는
+       계수과정과 마팅게일 이론에서 나오며, 그 결과 이 분산 추정치가 점근적으로 옳음이
+       증명된다.
+
+    카플란-마이어의 그린우드 공식이 $\sum_j d_j/[n_j(n_j-d_j)]$인 것과 대조하라. 두 공식은
+    $d_j \ll n_j$일 때 일치하지만 꼬리에서 갈라지며, 그린우드 쪽이 더 큰 값을 준다.
+    $\square$

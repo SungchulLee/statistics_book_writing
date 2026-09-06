@@ -1,62 +1,57 @@
-# Parametric Survival Models
+# 모수적 생존 모형
 
-## Overview
+## 개요
 
-Parametric survival models assume that event times follow a known probability
-distribution, fully specified by a finite set of parameters.  Unlike the non-parametric
-Kaplan-Meier estimator, parametric models produce smooth survival and hazard curves,
-enable extrapolation, and support formal model comparison via information criteria.
-This page covers the three most common parametric families --- exponential, Weibull,
-and log-normal --- and demonstrates maximum likelihood estimation with censored data.
+모수적 생존 모형은 사건시간이 유한개의 모수로 완전히 지정되는 알려진 확률분포를 따른다고
+가정한다. 비모수적인 카플란-마이어 추정량과 달리 모수 모형은 매끄러운 생존곡선과 위험곡선을
+만들고, 외삽을 가능하게 하며, 정보기준을 통한 형식적 모형 비교를 지원한다. 이 절에서는 가장
+흔한 세 모수족 --- 지수, 와이불, 로그정규 --- 을 다루고 절단자료의 최대가능도 추정을 보인다.
 
-## Exponential Model
+## 지수 모형
 
-### Specification
+### 설정
 
-The exponential distribution is the simplest parametric survival model, characterized
-by a single rate parameter $\lambda > 0$ and a **constant hazard**:
+지수분포는 가장 단순한 모수적 생존 모형으로, 비율모수 $\lambda > 0$ 하나와 **상수 위험**으로
+특징지어진다.
 
 $$
 h(t) = \lambda, \qquad S(t) = e^{-\lambda t}, \qquad f(t) = \lambda e^{-\lambda t}
 $$
 
-The mean survival time is $E[T] = 1/\lambda$.
+평균 생존시간은 $E[T] = 1/\lambda$이다.
 
-### Memoryless Property
+### 무기억성
 
-The exponential distribution is uniquely characterized by the memoryless property:
+지수분포는 무기억성으로 유일하게 특징지어진다.
 
 $$
 P(T > t + s \mid T > t) = P(T > s) \quad \text{for all } t, s \geq 0
 $$
 
-This means that the probability of surviving an additional $s$ units does not depend
-on how long the subject has already survived.
+추가로 $s$만큼 더 생존할 확률이 이미 얼마나 오래 생존했는지에 의존하지 않는다는 뜻이다.
 
-### Maximum Likelihood Estimation
+### 최대가능도 추정
 
-Given $n$ subjects with times $t_1, \ldots, t_n$ and event indicators
-$\delta_1, \ldots, \delta_n$ ($\delta_i = 1$ for events, $0$ for censored), the
-log-likelihood is
+시간 $t_1, \ldots, t_n$과 사건 지시자 $\delta_1, \ldots, \delta_n$(사건이면 $\delta_i = 1$,
+절단이면 $0$)을 갖는 대상 $n$명에 대해 로그가능도는
 
 $$
 \ell(\lambda) = d \ln \lambda - \lambda \sum_{i=1}^{n} t_i
 $$
 
-where $d = \sum \delta_i$.  Setting $\ell'(\lambda) = 0$ gives
+이며 $d = \sum \delta_i$다. $\ell'(\lambda) = 0$으로 놓으면
 
 $$
 \hat{\lambda} = \frac{d}{\sum_{i=1}^{n} t_i}
 $$
 
-The MLE is the number of events divided by the total person-time.
+를 얻는다. MLE는 사건 수를 총 인시로 나눈 값이다.
 
-## Weibull Model
+## 와이불 모형
 
-### Specification
+### 설정
 
-The Weibull distribution generalizes the exponential by adding a shape parameter
-$k > 0$ alongside a scale parameter $\lambda > 0$:
+와이불 분포는 척도모수 $\lambda > 0$에 형상모수 $k > 0$을 더해 지수분포를 일반화한다.
 
 $$
 h(t) = \frac{k}{\lambda}\left(\frac{t}{\lambda}\right)^{k-1}
@@ -70,48 +65,46 @@ $$
 f(t) = \frac{k}{\lambda}\left(\frac{t}{\lambda}\right)^{k-1}\exp\!\left(-\left(\frac{t}{\lambda}\right)^k\right)
 $$
 
-### Role of the Shape Parameter
+### 형상모수의 역할
 
-| $k$ | Hazard Behavior | Interpretation |
+| $k$ | 위험의 거동 | 해석 |
 |:---:|:----------------|:---------------|
-| $k < 1$ | Decreasing | Early failures dominate; survivors become robust |
-| $k = 1$ | Constant | Reduces to exponential($\lambda$) |
-| $k > 1$ | Increasing | Wear-out or aging; risk grows with time |
+| $k < 1$ | 감소 | 초기 고장이 지배적. 살아남은 것은 견고해짐 |
+| $k = 1$ | 일정 | 지수분포($\lambda$)로 환원 |
+| $k > 1$ | 증가 | 마모나 노화. 시간에 따라 위험이 커짐 |
 
-The median survival time is $t_{0.5} = \lambda (\ln 2)^{1/k}$.
+중앙 생존시간은 $t_{0.5} = \lambda (\ln 2)^{1/k}$이다.
 
-### Maximum Likelihood Estimation
+### 최대가능도 추정
 
-The log-likelihood for the Weibull model is
+와이불 모형의 로그가능도는
 
 $$
 \ell(k, \lambda) = d \ln k - dk \ln \lambda + (k-1)\sum_{i=1}^{n} \delta_i \ln t_i - \sum_{i=1}^{n}\left(\frac{t_i}{\lambda}\right)^k
 $$
 
-No closed-form solution exists.  Numerical optimization (e.g., Newton-Raphson or
-profile likelihood) is used.
+이다. 닫힌 형태의 해는 없다. 수치 최적화(예: 뉴턴-랩슨이나 프로파일 가능도)를 쓴다.
 
-### Checking the Weibull Assumption
+### 와이불 가정 점검하기
 
-The Weibull model implies linearity on a log-log scale:
+와이불 모형은 로그-로그 척도에서의 선형성을 함의한다.
 
 $$
 \ln H(t) = k \ln t - k \ln \lambda
 $$
 
-A plot of $\ln \hat{H}(t)$ versus $\ln t$ (using the Nelson-Aalen estimator) should
-be approximately linear if the Weibull model is appropriate.
+와이불 모형이 적절하다면 (넬슨-알렌 추정량으로 구한) $\ln \hat{H}(t)$ 대 $\ln t$ 그림이
+직선에 가까워야 한다.
 
-## Log-Normal Model
+## 로그정규 모형
 
-### Specification
+### 설정
 
-The log-normal model assumes $\ln T \sim N(\mu, \sigma^2)$.  The survival and hazard
-functions do not have simple closed forms but are expressed through the standard
-normal CDF $\mathcal{N}$:
+로그정규 모형은 $\ln T \sim N(\mu, \sigma^2)$을 가정한다. 생존함수와 위험함수는 단순한 닫힌
+형태가 없고 표준정규 누적분포함수 $\Phi$로 표현된다.
 
 $$
-S(t) = 1 - \mathcal{N}\!\left(\frac{\ln t - \mu}{\sigma}\right)
+S(t) = 1 - \Phi\!\left(\frac{\ln t - \mu}{\sigma}\right)
 $$
 
 $$
@@ -122,15 +115,14 @@ $$
 h(t) = \frac{f(t)}{S(t)}
 $$
 
-where $\phi$ is the standard normal PDF.
+여기서 $\phi$는 표준정규 확률밀도함수다.
 
-### Key Feature
+### 핵심 특징
 
-The log-normal hazard is **non-monotone**: it increases initially and then decreases.
-This makes it suitable for phenomena where the risk peaks at an intermediate time and
-then declines (e.g., recovery from surgery, certain disease relapse patterns).
+로그정규 위험은 **비단조**다. 처음에 증가했다가 감소한다. 그래서 위험이 중간 시점에 정점을
+이룬 뒤 내려가는 현상(예: 수술 후 회복, 특정 질병의 재발 양상)에 적합하다.
 
-## Implementation
+## 구현
 
 ```python
 import numpy as np
@@ -164,15 +156,23 @@ def neg_loglik_lognormal(params, times, events):
     return -ll
 ```
 
-Each function computes the negative log-likelihood so that standard minimization
-routines can be used.  The event indicator `events[i]` equals 1 for observed events
-and 0 for censored observations.  Censored subjects contribute through the survival
-function term $\ln S(t_i)$.
+각 함수는 표준 최소화 루틴을 쓸 수 있도록 음의 로그가능도를 계산한다. 사건 지시자
+`events[i]`는 관측된 사건이면 1, 절단이면 0이다. 절단된 대상은 생존함수 항 $\ln S(t_i)$을
+통해 기여한다.
 
-## Model Selection
+!!! note "$\varepsilon = 10^{-15}$ 보정에 대하여"
+    코드의 `times + 1e-15`는 $t_i = 0$일 때 $\log 0$을 피하기 위한 것이다. 생존시간이 엄밀히
+    양수라면 필요 없지만, 자료에 $t = 0$이 섞여 있으면 방어가 된다. 다만 $t = 0$인 관측치가
+    실제로 있다면 그것은 자료 오류일 가능성이 높으므로, 보정으로 덮기보다 원인을 확인하는 편이
+    낫다.
 
-Parametric models are compared using information criteria computed from the maximized
-log-likelihood $\hat{\ell}$ and the number of parameters $p$:
+    또한 최적화 시 $k, \lambda, \sigma$가 양수여야 하므로, 21.3절에서 권한 대로 로그 척도에서
+    최적화하거나 `minimize(..., bounds=...)`로 제약을 걸어야 한다. 위 함수들을 그대로
+    무제약 최적화에 넘기면 음수 모수에서 `nan`이 발생할 수 있다.
+
+## 모형 선택
+
+모수 모형은 최대화된 로그가능도 $\hat{\ell}$과 모수 개수 $p$로 계산한 정보기준으로 비교한다.
 
 $$
 \text{AIC} = -2\hat{\ell} + 2p
@@ -182,53 +182,51 @@ $$
 \text{BIC} = -2\hat{\ell} + p \ln n
 $$
 
-Lower values indicate a better trade-off between fit and complexity.  The exponential
-model has $p = 1$, the Weibull has $p = 2$, and the log-normal has $p = 2$.
+값이 낮을수록 적합도와 복잡도의 절충이 낫다. 지수 모형은 $p = 1$, 와이불과 로그정규는
+$p = 2$다.
 
-Since the exponential is nested within the Weibull ($k = 1$), a **likelihood ratio
-test** can formally test whether the additional shape parameter is needed:
+지수 모형은 와이불에 내포되어 있으므로($k = 1$), **가능도비 검정**으로 형상모수가 추가로
+필요한지를 형식적으로 검정할 수 있다.
 
 $$
 \Lambda = 2[\hat{\ell}_{\text{Weibull}} - \hat{\ell}_{\text{Exp}}] \;\xrightarrow{d}\; \chi^2_1
 $$
 
-!!! tip "Graphical Diagnostics"
+!!! tip "그림 진단"
 
-    Always compare the fitted parametric survival curve against the Kaplan-Meier
-    estimate.  Large discrepancies indicate model misspecification regardless of
-    what the AIC suggests.
+    적합된 모수적 생존곡선을 언제나 카플란-마이어 추정치와 비교하라. AIC가 무엇을 말하든
+    크게 어긋나면 모형이 잘못 지정된 것이다.
 
-## Interpretation
+## 해석
 
-- **Exponential model**: Appropriate when the hazard is approximately constant.
-  Useful as a baseline but rarely exact in practice.
-- **Weibull model**: Captures monotone hazards.  The shape parameter $k$ directly
-  indicates whether risk increases ($k > 1$) or decreases ($k < 1$) over time.
-- **Log-normal model**: Suitable for non-monotone hazards that rise and then fall.
-  Common in medical applications where initial risk is high but long-term survivors
-  have decreasing hazard.
-- **Model selection**: Use AIC/BIC for non-nested comparisons and likelihood ratio
-  tests for nested models.  Always supplement with graphical checks.
+- **지수 모형**: 위험이 대략 일정할 때 적절하다. 기준선으로 유용하지만 실제로 정확한 경우는
+  드물다.
+- **와이불 모형**: 단조 위험을 포착한다. 형상모수 $k$가 위험이 시간에 따라 증가하는지($k > 1$)
+  감소하는지($k < 1$)를 곧바로 알려 준다.
+- **로그정규 모형**: 올랐다가 내려가는 비단조 위험에 적합하다. 초기 위험이 높지만 장기 생존자의
+  위험은 감소하는 의학적 응용에서 흔하다.
+- **모형 선택**: 비내포 비교에는 AIC/BIC를, 내포 모형에는 가능도비 검정을 쓴다. 언제나 그림
+  점검으로 보완하라.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Exponential Model MLE
+**연습문제 1.**
+지수 모형의 MLE
 
-A study follows 25 subjects.  There are 16 observed events ($d = 16$) and the total
-person-time is $\sum t_i = 3{,}200$ hours.
+어떤 연구가 대상 25명을 추적한다. 관측된 사건이 16건($d = 16$)이고 총 인시는
+$\sum t_i = 3{,}200$시간이다.
 
-**(a)** Compute the MLE $\hat{\lambda}$.
+**(a)** MLE $\hat{\lambda}$를 계산하라.
 
-**(b)** Estimate the mean survival time and the survival probability at $t = 100$.
+**(b)** 평균 생존시간과 $t = 100$에서의 생존확률을 추정하라.
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
 
-    **(a)** $\hat{\lambda} = d / \sum t_i = 16 / 3200 = 0.005$ per hour.
+    **(a)** $\hat{\lambda} = d / \sum t_i = 16 / 3200 = 0.005$(시간당).
 
-    **(b)** Mean survival time: $1/\hat{\lambda} = 200$ hours.
+    **(b)** 평균 생존시간은 $1/\hat{\lambda} = 200$시간이다.
 
-    Survival at $t = 100$:
+    $t = 100$에서의 생존율은
 
     $$
     \hat{S}(100) = e^{-0.005 \times 100} = e^{-0.5} = 0.607
@@ -236,139 +234,148 @@ person-time is $\sum t_i = 3{,}200$ hours.
 
 ---
 
-**Exercise 2.**
-Weibull Shape Interpretation
+**연습문제 2.**
+와이불 형상모수의 해석
 
-A Weibull model fitted to equipment failure data yields $\hat{k} = 2.3$ and
-$\hat{\lambda} = 800$ hours.
+장비 고장 자료에 적합한 와이불 모형이 $\hat{k} = 2.3$, $\hat{\lambda} = 800$시간을 주었다.
 
-**(a)** Is the hazard increasing or decreasing?
+**(a)** 위험이 증가하는가 감소하는가?
 
-**(b)** Compute the median time to failure.
+**(b)** 고장까지의 중앙시간을 계산하라.
 
-**(c)** Compare the estimated hazard at $t = 400$ and $t = 600$.
+**(c)** $t = 400$과 $t = 600$에서의 추정 위험을 비교하라.
 
-??? success "Solution to Exercise 2"
+??? success "연습문제 2 풀이"
 
-    **(a)** Since $\hat{k} = 2.3 > 1$, the hazard is **increasing** over time.  The
-    equipment wears out.
+    **(a)** $\hat{k} = 2.3 > 1$이므로 위험이 시간에 따라 **증가**한다. 장비가 마모된다.
 
-    **(b)** $t_{0.5} = \lambda (\ln 2)^{1/k} = 800 \times (0.693)^{1/2.3} = 800 \times 0.693^{0.435} = 800 \times 0.856 = 685$ hours.
+    **(b)** $t_{0.5} = \lambda (\ln 2)^{1/k} = 800 \times (0.6931)^{1/2.3}
+    = 800 \times 0.6931^{0.4348} = 800 \times 0.8527 = 682.2$시간.
 
-    **(c)** At $t = 400$:
-
-    $$
-    \hat{h}(400) = \frac{2.3}{800}\left(\frac{400}{800}\right)^{1.3} = 0.002875 \times 0.5^{1.3} = 0.002875 \times 0.406 = 0.00117
-    $$
-
-    At $t = 600$:
+    **(c)** $t = 400$에서
 
     $$
-    \hat{h}(600) = \frac{2.3}{800}\left(\frac{600}{800}\right)^{1.3} = 0.002875 \times 0.75^{1.3} = 0.002875 \times 0.683 = 0.00196
+    \hat{h}(400) = \frac{2.3}{800}\left(\frac{400}{800}\right)^{1.3} = 0.002875 \times 0.5^{1.3} = 0.002875 \times 0.4061 = 0.001168
     $$
 
-    The hazard at $t = 600$ is about 1.68 times the hazard at $t = 400$, consistent
-    with an increasing hazard.
+    $t = 600$에서
+
+    $$
+    \hat{h}(600) = \frac{2.3}{800}\left(\frac{600}{800}\right)^{1.3} = 0.002875 \times 0.75^{1.3} = 0.002875 \times 0.6880 = 0.001978
+    $$
+
+    이다. $t = 600$의 위험이 $t = 400$의 약 $1.69$배로, 위험이 증가한다는 사실과 부합한다.
+
+    !!! note "위험비는 시간의 비만으로 결정된다"
+        와이불에서 $h(t) \propto t^{k-1}$이므로
+
+        $$
+        \frac{h(t_2)}{h(t_1)} = \left(\frac{t_2}{t_1}\right)^{k-1}
+        $$
+
+        이다. 여기서 $(600/400)^{1.3} = 1.5^{1.3} = 1.69$로 척도모수 $\lambda$가 소거된다.
+        즉 위험의 **상대적** 증가는 형상모수만으로 정해지고, $\lambda$는 절대 수준만
+        조절한다.
 
 ---
 
-**Exercise 3.**
-Log-Normal Hazard Shape
+**연습문제 3.**
+로그정규 위험의 모양
 
-**(a)** Explain why the log-normal hazard function is non-monotone.
+**(a)** 로그정규 위험함수가 왜 비단조인지 설명하라.
 
-**(b)** For a log-normal model with $\mu = 3$ and $\sigma = 0.8$, compute the median
-survival time.
+**(b)** $\mu = 3$, $\sigma = 0.8$인 로그정규 모형에서 중앙 생존시간을 계산하라.
 
-??? success "Solution to Exercise 3"
+??? success "연습문제 3 풀이"
 
-    **(a)** The log-normal hazard $h(t) = f(t)/S(t)$ is the ratio of the PDF to the
-    survival function.  For small $t$, the density $f(t)$ increases while $S(t)$
-    is close to 1, so the hazard increases.  For large $t$, both $f(t)$ and $S(t)$
-    decrease, but $f(t)$ decreases faster than $S(t)$, causing the hazard to
-    eventually decline.  This produces a hump-shaped hazard curve.
+    **(a)** 로그정규 위험 $h(t) = f(t)/S(t)$는 밀도와 생존함수의 비다. $t$가 작으면 밀도
+    $f(t)$가 증가하는 동안 $S(t)$는 1에 가까우므로 위험이 증가한다. $t$가 크면 $f(t)$와
+    $S(t)$가 모두 감소하지만 $f(t)$가 더 빨리 감소하여 위험이 결국 내려간다. 그 결과
+    봉우리형 위험곡선이 된다.
 
-    **(b)** For the log-normal distribution, the median of $T$ is $e^{\mu}$ (since
-    the median of $\ln T \sim N(\mu, \sigma^2)$ is $\mu$, and $e^\mu$ is the
-    median of $T$).  Therefore:
+    **(b)** 로그정규분포에서 $T$의 중앙값은 $e^{\mu}$다. $\ln T \sim N(\mu, \sigma^2)$의
+    중앙값이 $\mu$이고 지수함수가 단조증가이므로 $e^\mu$가 $T$의 중앙값이 된다. 따라서
 
     $$
     t_{0.5} = e^{3} = 20.09
     $$
 
-    The median survival time is approximately 20.1 time units.
+    중앙 생존시간은 약 20.1 시간단위다. 중앙값이 $\sigma$와 무관하다는 점에 주목하라.
+    $\sigma$는 분포의 퍼짐만 조절하며 평균 $e^{\mu + \sigma^2/2} = e^{3.32} = 27.7$에는
+    영향을 준다.
 
 ---
 
-**Exercise 4.**
-Model Comparison
+**연습문제 4.**
+모형 비교
 
-An analyst fits three models to the same dataset of 100 subjects.  The results are:
+어떤 분석자가 대상 100명의 같은 자료에 모형 세 개를 적합했다. 결과는 다음과 같다.
 
-| Model | Parameters | Max log-likelihood |
+| 모형 | 모수 | 최대 로그가능도 |
 |:------|:----------:|:------------------:|
-| Exponential | 1 | $-312.5$ |
-| Weibull | 2 | $-298.1$ |
-| Log-normal | 2 | $-300.3$ |
+| 지수 | 1 | $-312.5$ |
+| 와이불 | 2 | $-298.1$ |
+| 로그정규 | 2 | $-300.3$ |
 
-**(a)** Compute the AIC for each model.
+**(a)** 각 모형의 AIC를 계산하라.
 
-**(b)** Perform a likelihood ratio test of exponential vs Weibull at $\alpha = 0.05$.
+**(b)** $\alpha = 0.05$에서 지수 대 와이불의 가능도비 검정을 수행하라.
 
-**(c)** Which model would you select and why?
+**(c)** 어느 모형을 고르겠는가? 이유는?
 
-??? success "Solution to Exercise 4"
+??? success "연습문제 4 풀이"
 
-    **(a)** AIC $= -2\hat{\ell} + 2p$:
+    **(a)** AIC $= -2\hat{\ell} + 2p$이므로,
 
-    - Exponential: $-2(-312.5) + 2(1) = 627.0$
-    - Weibull: $-2(-298.1) + 2(2) = 600.2$
-    - Log-normal: $-2(-300.3) + 2(2) = 604.6$
+    - 지수: $-2(-312.5) + 2(1) = 627.0$
+    - 와이불: $-2(-298.1) + 2(2) = 600.2$
+    - 로그정규: $-2(-300.3) + 2(2) = 604.6$
 
-    **(b)** Likelihood ratio statistic:
+    **(b)** 가능도비 통계량은
 
     $$
     \Lambda = 2[-298.1 - (-312.5)] = 2 \times 14.4 = 28.8
     $$
 
-    Under $H_0: k = 1$, $\Lambda \sim \chi^2_1$.  The critical value at
-    $\alpha = 0.05$ is 3.84.  Since $28.8 \gg 3.84$, we reject the exponential
-    model in favor of the Weibull.  The hazard is not constant.
+    이다. $H_0: k = 1$ 아래에서 $\Lambda \sim \chi^2_1$이고 $\alpha = 0.05$의 임계값은
+    3.84다. $28.8 \gg 3.84$이므로 지수 모형을 기각하고 와이불을 택한다. 위험이 일정하지 않다.
 
-    **(c)** The Weibull model has the lowest AIC (600.2) and is significantly better
-    than the exponential by the LRT.  It is preferred over the log-normal model as
-    well (AIC 600.2 vs 604.6).  The Weibull model provides the best trade-off
-    between fit and parsimony for this dataset.
+    **(c)** 와이불 모형의 AIC가 600.2로 가장 낮고, 가능도비 검정에서 지수 모형보다 유의하게
+    낫다. 로그정규보다도 낫다(AIC 600.2 대 604.6). 이 자료에서 와이불이 적합도와 간결성의
+    절충이 가장 좋다.
+
+    다만 와이불과 로그정규의 AIC 차이 $4.4$는 결정적이라 하기에는 크지 않다. 두 모형은 위험의
+    **모양**에 대해 전혀 다른 이야기를 한다(단조 증가 대 봉우리형). 관측 구간 안에서 예측만
+    한다면 어느 쪽이든 비슷하지만, 위험의 모양 자체가 결론이거나 외삽이 필요하다면 AIC 차이
+    $4.4$에 의존해서는 안 된다. 넬슨-알렌 누적위험 그림을 보고 어느 쪽이 자료의 모양과 맞는지
+    직접 확인하라.
 
 ---
 
-**Exercise 5.**
-Likelihood with Censoring
+**연습문제 5.**
+절단이 있는 가능도
 
-Show that for a parametric survival model with density $f(t)$ and survival function
-$S(t)$, the likelihood contribution of a censored observation at time $t_i$ is $S(t_i)$,
-not $f(t_i)$.
+밀도가 $f(t)$이고 생존함수가 $S(t)$인 모수적 생존 모형에서, 시점 $t_i$에 절단된 관측치의
+가능도 기여가 $f(t_i)$가 아니라 $S(t_i)$임을 보여라.
 
-??? success "Solution to Exercise 5"
+??? success "연습문제 5 풀이"
 
-    For an observed event at time $t_i$, we know the event occurred in the
-    infinitesimal interval $[t_i, t_i + dt)$.  The probability of this is
-    $f(t_i)\,dt$, so the likelihood contribution (up to proportionality) is $f(t_i)$.
+    시점 $t_i$의 관측된 사건에 대해서는 사건이 무한소 구간 $[t_i, t_i + dt)$에서 일어났음을
+    안다. 그 확률이 $f(t_i)\,dt$이므로 (비례상수를 무시하면) 가능도 기여는 $f(t_i)$다.
 
-    For a censored observation at time $t_i$, we know only that the true event time
-    $T_i$ exceeds $t_i$.  The probability of this is
+    시점 $t_i$에 절단된 관측치에 대해서는 참 사건시간 $T_i$가 $t_i$를 넘는다는 것만 안다.
+    그 확률은
 
     $$
     P(T_i > t_i) = S(t_i)
     $$
 
-    Therefore the likelihood contribution is $S(t_i)$, not $f(t_i)$.  Combining
-    both cases, the full likelihood for subject $i$ is
+    이다. 따라서 가능도 기여는 $f(t_i)$가 아니라 $S(t_i)$다. 두 경우를 합치면 대상 $i$의
+    가능도는
 
     $$
     L_i = [f(t_i)]^{\delta_i} [S(t_i)]^{1-\delta_i}
     $$
 
-    where $\delta_i = 1$ for events and $\delta_i = 0$ for censored observations.
-    This is the foundation of all parametric survival model estimation with censored
-    data. $\square$
+    이며 사건이면 $\delta_i = 1$, 절단이면 $\delta_i = 0$이다. 이것이 절단자료를 다루는 모든
+    모수적 생존 모형 추정의 기초다. $\square$

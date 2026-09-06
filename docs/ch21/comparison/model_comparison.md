@@ -1,182 +1,224 @@
-# Non-Parametric vs Parametric vs Semi-Parametric
+# 비모수 대 모수 대 준모수
 
-This chapter has introduced three families of survival models: non-parametric
-methods (Kaplan--Meier, Nelson--Aalen, log-rank test), fully parametric models
-(exponential, Weibull, log-normal, log-logistic), and the semi-parametric Cox
-model.  Each family makes different assumptions, offers different outputs, and
-is suited to different analytical goals.
+이 장은 생존 모형의 세 갈래를 소개했다. 비모수적 방법(카플란-마이어, 넬슨-알렌, 로그순위 검정),
+완전 모수 모형(지수, 와이불, 로그정규, 로그로지스틱), 그리고 준모수적인 콕스 모형이다. 각
+갈래는 서로 다른 가정을 하고, 서로 다른 출력을 주며, 서로 다른 분석 목표에 적합하다.
 
-This section compares the three paradigms to help the analyst choose the
-appropriate approach for a given problem.
+이 절에서는 세 패러다임을 비교하여 주어진 문제에 적절한 접근을 고르도록 돕는다.
 
-## The Three Paradigms
+## 세 가지 패러다임
 
-### Non-Parametric Methods
+### 비모수적 방법
 
-Non-parametric methods make **no distributional assumptions** about the survival
-times.  The Kaplan--Meier estimator produces a step-function estimate of the
-survival curve, and the log-rank test compares curves between groups.
+비모수적 방법은 생존시간에 대해 **어떤 분포 가정도 하지 않는다.** 카플란-마이어 추정량은
+생존곡선의 계단함수 추정치를 만들고, 로그순위 검정은 집단 간 곡선을 비교한다.
 
-**Strengths:**
+**강점:**
 
-- No risk of distributional misspecification.
-- Easy to compute and interpret.
-- The Kaplan--Meier curve provides a model-free visualization of survival.
+- 분포 오지정의 위험이 없다.
+- 계산과 해석이 쉽다.
+- 카플란-마이어 곡선이 모형에 의존하지 않는 생존 시각화를 제공한다.
 
-**Limitations:**
+**한계:**
 
-- Cannot incorporate continuous covariates (only stratification by groups).
-- Estimates are step functions---no smooth survival or hazard curves.
-- Efficiency is lower than correctly specified parametric models.
+- 연속형 공변량을 넣을 수 없다(집단별 층화만 가능하다).
+- 추정치가 계단함수다. 매끄러운 생존곡선이나 위험곡선을 주지 않는다.
+- 옳게 지정된 모수 모형보다 효율이 낮다.
 
-### Fully Parametric Models
+### 완전 모수 모형
 
-Parametric models specify the complete distribution of event times through a
-finite-dimensional parameter vector (e.g., $\lambda$ for exponential,
-$(k, \lambda)$ for Weibull).
+모수 모형은 유한차원 모수벡터(예: 지수의 $\lambda$, 와이불의 $(k, \lambda)$)를 통해 사건시간의
+분포를 완전히 지정한다.
 
-**Strengths:**
+**강점:**
 
-- Smooth, interpretable survival and hazard functions.
-- More efficient (smaller standard errors) than non-parametric methods when
-  the distributional assumption is correct.
-- Extrapolation beyond the observed time range is possible (with caution).
-- The likelihood framework supports AIC, BIC, and likelihood ratio tests for
-  model comparison.
+- 매끄럽고 해석 가능한 생존함수와 위험함수를 준다.
+- 분포 가정이 옳으면 비모수 방법보다 효율이 높다(표준오차가 작다).
+- 관측된 시간 범위 밖으로의 외삽이 (조심스럽게) 가능하다.
+- 가능도 틀이 AIC, BIC, 가능도비 검정을 통한 모형 비교를 지원한다.
 
-**Limitations:**
+**한계:**
 
-- Biased estimates if the distributional assumption is wrong.
-- Limited to the hazard shapes that the chosen family can produce (e.g.,
-  Weibull cannot capture non-monotone hazards).
+- 분포 가정이 틀리면 추정이 편향된다.
+- 고른 분포족이 만들 수 있는 위험 모양으로 제한된다(예: 와이불은 비단조 위험을 포착하지
+  못한다).
 
-### Semi-Parametric (Cox) Model
+### 준모수(콕스) 모형
 
-The Cox model specifies the effect of covariates on the hazard without assuming
-a parametric form for the baseline hazard.
+콕스 모형은 기저위험의 모수적 형태를 가정하지 않고 공변량이 위험에 미치는 효과를 지정한다.
 
-**Strengths:**
+**강점:**
 
-- Robust to misspecification of the baseline hazard.
-- Naturally incorporates multiple covariates, including continuous variables.
-- Hazard ratios have a direct, interpretable meaning.
-- Partial likelihood estimation avoids the need to estimate $h_0(t)$.
+- 기저위험의 오지정에 강건하다.
+- 연속형 변수를 포함한 여러 공변량을 자연스럽게 수용한다.
+- 위험비가 직접적이고 해석 가능한 의미를 갖는다.
+- 부분가능도 추정이 $h_0(t)$를 추정할 필요를 없앤다.
 
-**Limitations:**
+**한계:**
 
-- Cannot directly estimate the baseline hazard (only via the Breslow estimator
-  after fitting).
-- The proportional hazards assumption must hold; violations invalidate the
-  standard interpretation.
-- Less efficient than a correctly specified parametric model.
+- 기저위험을 직접 추정하지 못한다(적합 후 브레슬로 추정량으로만 가능하다).
+- 비례위험 가정이 성립해야 한다. 위배되면 표준적 해석이 무효가 된다.
+- 옳게 지정된 모수 모형보다 효율이 낮다.
 
-## Comparison Table
+## 비교표
 
-| Feature | Non-Parametric | Parametric | Cox (Semi-Parametric) |
+| 특징 | 비모수 | 모수 | 콕스(준모수) |
 |:--------|:--------------:|:----------:|:---------------------:|
-| Distributional assumption | None | Full | None for baseline |
-| Covariate adjustment | No (groups only) | Yes | Yes |
-| Smooth hazard/survival | No | Yes | Only via Breslow |
-| Efficiency (correct spec.) | Lowest | Highest | Middle |
-| Robustness | Highest | Lowest | High |
-| Extrapolation | No | Yes (with caution) | No |
-| PH assumption | Not required | Depends on model | Required |
-| Model comparison (AIC) | Not applicable | Yes | Not directly |
+| 분포 가정 | 없음 | 완전 | 기저에 대해서는 없음 |
+| 공변량 보정 | 불가(집단만) | 가능 | 가능 |
+| 매끄러운 위험/생존 | 아니오 | 예 | 브레슬로를 통해서만 |
+| 효율(옳게 지정 시) | 가장 낮음 | 가장 높음 | 중간 |
+| 강건성 | 가장 높음 | 가장 낮음 | 높음 |
+| 외삽 | 불가 | 가능(조심스럽게) | 불가 |
+| 비례위험 가정 | 불필요 | 모형에 따라 다름 | 필요 |
+| AIC로 모형 비교 | 해당 없음 | 가능 | 직접적으로는 불가 |
 
-## Decision Guidelines
+## 선택 지침
 
-The choice among the three paradigms depends on the analytical goal and the
-available information.
+세 패러다임 중 무엇을 고를지는 분석 목표와 가용한 정보에 달려 있다.
 
-### Use Non-Parametric Methods When
+### 비모수적 방법을 쓸 때
 
-- The goal is **exploratory**: visualize the survival experience and compare
-  groups before committing to a model.
-- **No covariates** need to be adjusted for, or the analyst wants a
-  model-free benchmark.
-- The sample is small and distributional assumptions are suspect.
+- 목적이 **탐색적**일 때. 모형을 정하기 전에 생존 양상을 시각화하고 집단을 비교한다.
+- 보정할 **공변량이 없거나**, 모형에 의존하지 않는 기준선이 필요할 때.
+- 표본이 작고 분포 가정이 의심스러울 때.
 
-### Use Parametric Models When
+### 모수 모형을 쓸 때
 
-- A plausible distributional family is available (informed by subject-matter
-  knowledge or graphical checks).
-- **Smooth estimates** of the hazard or survival function are needed.
-- The goal is **prediction or extrapolation** beyond the observed time range.
-- Model comparison via AIC or likelihood ratio tests is desired.
+- (배경지식이나 그림 점검으로) 그럴듯한 분포족이 있을 때.
+- 위험함수나 생존함수의 **매끄러운 추정치**가 필요할 때.
+- 목적이 관측 시간 범위를 넘어선 **예측이나 외삽**일 때.
+- AIC나 가능도비 검정으로 모형을 비교하고 싶을 때.
 
-### Use the Cox Model When
+### 콕스 모형을 쓸 때
 
-- **Multiple covariates** affect the hazard and the analyst wants to estimate
-  their effects simultaneously.
-- The baseline hazard shape is unknown or unimportant.
-- The proportional hazards assumption is reasonable (verified by Schoenfeld
-  residuals).
-- Hazard ratios are the primary inferential target.
+- **여러 공변량**이 위험에 영향을 주고 그 효과를 동시에 추정하고 싶을 때.
+- 기저위험의 모양을 모르거나 중요하지 않을 때.
+- 비례위험 가정이 합당할 때(쇤펠트 잔차로 확인).
+- 위험비가 주된 추론 대상일 때.
 
-!!! tip "A Practical Workflow"
+!!! tip "실무적 작업 흐름"
 
-    1. Start with the Kaplan--Meier estimator to visualize the data and use
-       the log-rank test for preliminary group comparisons.
-    2. Examine the Nelson--Aalen cumulative hazard plot to assess the hazard
-       shape (constant, monotone, non-monotone).
-    3. If covariates are important, fit a Cox model and check the PH
-       assumption.
-    4. If a parametric form is suggested by the data, fit parametric models
-       and compare via AIC.
-    5. Report the Kaplan--Meier curve alongside the model-based results for
-       transparency.
+    1. 카플란-마이어 추정량으로 자료를 시각화하고 로그순위 검정으로 예비 집단 비교를 한다.
+    2. 넬슨-알렌 누적위험 그림으로 위험의 모양(일정, 단조, 비단조)을 평가한다.
+    3. 공변량이 중요하면 콕스 모형을 적합하고 비례위험 가정을 점검한다.
+    4. 자료가 모수적 형태를 시사하면 모수 모형들을 적합하고 AIC로 비교한다.
+    5. 투명성을 위해 카플란-마이어 곡선을 모형 기반 결과와 함께 보고한다.
 
-## Combining Approaches
+## 접근을 결합하기
 
-The three paradigms are not mutually exclusive.  A thorough survival analysis
-often uses all three:
+세 패러다임은 서로 배타적이지 않다. 철저한 생존분석은 셋을 모두 쓰는 경우가 많다.
 
-- The Kaplan--Meier curve provides a non-parametric benchmark.
-- Parametric models quantify the hazard shape and enable prediction.
-- The Cox model estimates covariate effects without distributional assumptions.
+- 카플란-마이어 곡선이 비모수적 기준선을 제공한다.
+- 모수 모형이 위험의 모양을 정량화하고 예측을 가능하게 한다.
+- 콕스 모형이 분포 가정 없이 공변량 효과를 추정한다.
 
-Comparing the Kaplan--Meier curve with the parametric and Cox-based survival
-curves serves as an informal goodness-of-fit check: large discrepancies
-between the non-parametric and model-based curves indicate potential
-misspecification.
+카플란-마이어 곡선을 모수 모형과 콕스 기반 생존곡선과 비교하는 것이 비형식적 적합도 점검이
+된다. 비모수 곡선과 모형 기반 곡선이 크게 어긋나면 모형 오지정 가능성을 가리킨다.
 
-!!! note "No Single Best Method"
+!!! note "단 하나의 최선의 방법은 없다"
 
-    The best approach depends on the data, the research question, and the
-    assumptions that can be defended.  When in doubt, the Cox model is a
-    reasonable default because it avoids distributional assumptions while
-    accommodating covariates.  However, it should always be supplemented with
-    a Kaplan--Meier analysis and, when feasible, a parametric analysis.
+    최선의 접근은 자료, 연구 질문, 그리고 옹호할 수 있는 가정에 달려 있다. 판단이 서지 않으면
+    콕스 모형이 합당한 기본 선택이다. 분포 가정을 피하면서 공변량을 수용하기 때문이다. 다만
+    언제나 카플란-마이어 분석으로 보완해야 하고, 가능하다면 모수 분석도 함께 해야 한다.
 
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Describe the main concept of Non-Parametric vs Parametric vs Semi-Parametric and explain why it matters for statistical practice.
+**연습문제 1.**
+다음 각 상황에서 비모수, 모수, 콕스 중 무엇을 고를지 정하고 이유를 밝혀라.
 
-??? success "Solution to Exercise 1"
-    Non-Parametric vs Parametric vs Semi-Parametric is a core topic in statistics that provides tools for drawing reliable inferences from data. It matters because proper application ensures valid conclusions, correctly quantified uncertainty, and appropriate handling of the assumptions that underpin the method. Practitioners who understand this concept can avoid common pitfalls and choose the right analytical approach for their data.
+**(a)** 임상시험에서 신약과 위약의 생존곡선이 다른지 검정하려 한다. 무작위 배정되었으므로
+보정할 공변량이 없다.
 
----
+**(b)** 대출 포트폴리오의 10년 누적 부도율을 예측하려 한다. 관측 자료는 3년치뿐이다.
 
-**Exercise 2.**
-State the key assumptions required by the method discussed here. How can each assumption be checked?
+**(c)** 환자 12명의 나이, 성별, 병기, 치료법이 생존에 미치는 효과를 각각 추정하려 한다.
 
-??? success "Solution to Exercise 2"
-    The main assumptions typically include: (1) independence of observations -- verified by understanding the data collection process and checking for serial correlation; (2) distributional requirements (e.g., normality) -- checked with Q-Q plots and formal tests like Shapiro-Wilk; (3) equal variances (if applicable) -- assessed with boxplots and Levene's test. When assumptions are violated, consider robust alternatives, transformations, or nonparametric methods.
+**(d)** 부품의 위험함수가 마모형(증가)인지 초기고장형(감소)인지 판정하려 한다.
 
----
+??? success "연습문제 1 풀이"
 
-**Exercise 3.**
-Work through a small numerical example illustrating the application of the technique from this section.
+    | 상황 | 선택 | 이유 |
+    |---|---|---|
+    | (a) | **비모수** | 무작위 배정으로 공변량 보정이 불필요하고, 카플란-마이어 곡선과 로그순위 검정이 가장 적은 가정으로 답한다 |
+    | (b) | **모수** | 3년 자료로 10년을 말하려면 외삽이 필요하고, 외삽은 모수 모형만 가능하다 |
+    | (c) | **주의: 어느 쪽도 어렵다** | 아래 참조 |
+    | (d) | **모수(와이불)** | 형상모수 $k$가 곧 답이다. 넬슨-알렌 그림으로 먼저 확인한다 |
 
-??? success "Solution to Exercise 3"
-    A structured approach to applying this technique involves: (1) clearly stating the hypotheses or estimation goal; (2) verifying that the data meet the required assumptions; (3) computing the relevant test statistic, estimate, or model fit; (4) obtaining the p-value, confidence interval, or posterior distribution; (5) interpreting the result in the context of the original question. Following these steps systematically ensures a rigorous and reproducible analysis.
+    **(b)의 단서.** 외삽은 "가능하다"는 것이지 "믿을 만하다"는 것이 아니다. 3년 자료로 10년을
+    예측하면 결과가 전적으로 분포 가정에 달려 있다. 21.3절에서 보았듯 로그정규와 로그로지스틱은
+    관측 구간에서 거의 같은 적합을 주면서도 꼬리에서 크게 갈린다. **여러 모수족의 예측을
+    나란히 보고하여 가정 의존성을 드러내는 것**이 정직한 대응이다.
+
+    **(c)의 문제.** 환자가 12명이면 사건은 그보다 적다. 공변량 4개를 콕스 모형에 넣으면
+    사건당 변수가 3개 미만이 되어 추정이 심하게 불안정하다. 흔히 쓰는 경험칙은 **변수당 사건
+    10건**이며, 12명으로는 변수 하나도 감당하기 어렵다.
+
+    현실적인 대안은 (i) 자료를 더 모으거나, (ii) 배경지식으로 가장 중요한 공변량 하나만
+    고르거나, (iii) 벌점 콕스 회귀(능형 또는 라쏘)를 쓰는 것이다. "표본이 작으니 비모수를
+    쓰자"는 답은 여기서 통하지 않는다. 비모수 방법은 애초에 공변량 효과를 추정하지 못하기
+    때문이다. $\square$
 
 ---
 
-**Exercise 4.**
-Compare the approach from this section with an alternative method. When would you choose each?
+**연습문제 2.**
+비교표에서 "효율: 모수가 가장 높고 비모수가 가장 낮다"고 했다. 이 서술에 붙은 단서
+"옳게 지정 시"가 왜 결정적인지 설명하라.
 
-??? success "Solution to Exercise 4"
-    The method discussed here is appropriate when its assumptions hold and the sample size is sufficient for the asymptotic approximations to be accurate. Alternative approaches include: (1) nonparametric methods -- preferred when distributional assumptions are suspect; (2) bootstrap methods -- useful when analytical reference distributions are unavailable; (3) Bayesian methods -- valuable when incorporating prior information or when direct probability statements about parameters are desired. Running multiple approaches and comparing results provides a useful robustness check.
+??? success "연습문제 2 풀이"
+
+    **옳게 지정되었을 때.** 모수 모형은 자료의 모든 관측치를 소수의 모수 추정에 동원한다.
+    지수 모형이라면 사건 수 $d$개 전부가 $\lambda$ 하나를 추정하는 데 쓰이므로 표준오차가
+    $\hat\lambda/\sqrt{d}$로 작다. 반면 카플란-마이어는 각 시점의 조건부확률을 그 시점의
+    위험집합만으로 추정하므로 정보가 흩어진다. 이것이 효율 차이의 원천이다.
+
+    **잘못 지정되었을 때.** 모수 모형의 추정치는 **일치성조차 잃는다.** 표본을 아무리 키워도
+    참값으로 수렴하지 않는다. 예컨대 위험이 증가하는 자료에 지수 모형을 적합하면
+    $\hat\lambda$가 어떤 "평균적인" 위험으로 수렴하는데, 그 값은 어느 시점의 참 위험과도
+    같지 않다. 표준오차는 작게 나오지만 **작은 표준오차가 틀린 값을 감싸고 있을 뿐**이다.
+
+    이것이 편향-분산 절충의 극단적인 형태다.
+
+    | | 편향 | 분산 |
+    |---|---|---|
+    | 비모수 | 0 | 큼 |
+    | 모수(옳음) | 0 | 작음 |
+    | 모수(틀림) | **줄지 않음** | 작음 |
+
+    표본이 커지면 비모수의 분산은 0으로 가지만 잘못 지정된 모수 모형의 편향은 그대로다.
+    따라서 **$n$이 크면 비모수가 이기고, $n$이 작고 가정이 옳으면 모수가 이긴다.**
+
+    콕스 모형이 좋은 절충인 이유가 여기 있다. 가장 틀리기 쉬운 부분(기저위험의 모양)에 대해
+    아무 가정도 하지 않으면서, 공변량 효과에 대해서는 모수적 구조를 써서 효율을 얻는다.
+    $\square$
+
+---
+
+**연습문제 3.**
+비교표에서 콕스 모형의 "AIC로 모형 비교: 직접적으로는 불가"라고 한 이유를 설명하라.
+그렇다면 콕스 모형들끼리는 어떻게 비교하는가?
+
+??? success "연습문제 3 풀이"
+
+    **직접 비교가 안 되는 이유.** 콕스 모형이 최대화하는 것은 완전한 로그가능도가 아니라
+    **부분** 로그가능도다. AIC $= -2\ell + 2p$의 정당화는 완전한 가능도와 쿨백-라이블러
+    발산 사이의 관계에서 나오는데, 부분가능도에는 그 논증이 그대로 적용되지 않는다. 특히
+    부분가능도의 값은 사건 수에만 의존하고 기저위험을 전혀 반영하지 않으므로, 서로 다른
+    **자료**에 적합한 콕스 모형들 사이에서는 값 자체를 비교할 수 없다.
+
+    **같은 자료의 콕스 모형끼리는 비교할 수 있다.** 실무에서는 다음을 쓴다.
+
+    1. **가능도비 검정(내포 모형).** 공변량을 추가한 모형과 뺀 모형의 부분 로그가능도 차이의
+       두 배가 근사적으로 $\chi^2_q$를 따른다. 이론적으로 잘 정립되어 있고 널리 쓰인다.
+    2. **부분가능도 기반 AIC.** $-2\ell_P + 2p$를 계산해 쓰는 관행이 있다. 엄밀한 정당화는
+       약하지만 **같은 자료, 같은 사건 집합**이라는 조건에서 실무적으로 유용하며 대부분의
+       소프트웨어가 보고한다.
+    3. **일치도 지수(C-지수).** 다음 절에서 다룬다. 가능도와 무관하게 예측의 순위 성능을
+       재므로 비모수·모수·콕스 모형을 **한 척도에서** 비교할 수 있다. 이것이 C-지수의 가장 큰
+       장점이다.
+    4. **교차검증.** 자료를 나누어 검정 부분의 부분 로그가능도나 C-지수를 평가한다. 가장
+       가정이 적지만 계산이 비싸다.
+
+    **핵심:** 모수 모형끼리는 AIC, 콕스 모형끼리는 가능도비 검정, 서로 다른 갈래를 가로질러
+    비교하려면 C-지수나 교차검증을 쓴다. $\square$

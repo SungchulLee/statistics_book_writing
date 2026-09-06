@@ -1,28 +1,25 @@
-# Kaplan Meier
+# 카플란-마이어 구현
 
-## Overview
+## 개요
 
-This page presents a self-contained Python implementation of the Kaplan-Meier survival
-curve estimator and the two-sample log-rank test, using only NumPy and SciPy.  The
-implementation mirrors the mathematical definitions step by step, making it suitable
-for learning the mechanics of survival analysis before turning to production libraries.
+이 절에서는 NumPy와 SciPy만으로 카플란-마이어 생존곡선 추정량과 두 표본 로그순위 검정을
+자족적으로 구현한다. 구현이 수학적 정의를 한 단계씩 그대로 따라가므로, 실무용 라이브러리로
+넘어가기 전에 생존분석의 작동 원리를 익히기에 적합하다.
 
-## Kaplan-Meier Estimator
+## 카플란-마이어 추정량
 
-### Mathematical Definition
+### 수학적 정의
 
-Given $n$ subjects with observed times and censoring indicators, the Kaplan-Meier
-estimator of the survival function is
+관측 시간과 절단 지시자를 갖는 대상 $n$명이 주어지면, 생존함수의 카플란-마이어 추정량은
 
 $$
 \hat{S}(t) = \prod_{j:\, t_{(j)} \leq t} \left(1 - \frac{d_j}{n_j}\right)
 $$
 
-where $t_{(1)} < t_{(2)} < \cdots < t_{(K)}$ are the distinct event times, $d_j$ is
-the number of events at $t_{(j)}$, and $n_j$ is the number of subjects at risk just
-before $t_{(j)}$.
+이다. 여기서 $t_{(1)} < t_{(2)} < \cdots < t_{(K)}$는 서로 다른 사건시간이고, $d_j$는
+$t_{(j)}$의 사건 수, $n_j$는 $t_{(j)}$ 직전에 위험에 있는 대상 수다.
 
-### Implementation
+### 구현
 
 ```python
 import numpy as np
@@ -66,28 +63,31 @@ def kaplan_meier(times, censored):
     return np.array(t_list), np.array(s_list)
 ```
 
-**Algorithm walkthrough:**
+!!! warning "이 코드의 `censored`는 사건이 0이다"
+    `censored == 1`이 절단, `censored == 0`이 사건을 뜻한다. `lifelines`의
+    `event_observed`나 R의 `Surv(event=)`처럼 **사건을 1로 두는 관례가 더 널리 쓰이므로**
+    코드를 옮겨 쓸 때 반드시 확인하라. 연습문제 3에서 두 관례를 비교한다.
 
-1. **Sort** observations by time.
-2. **Extract** distinct event times (times where `censored == 0`).
-3. **For each event time** $t_j$:
-     - Count subjects still at risk: $n_j = \sum \mathbf{1}(t_i \geq t_j)$.
-     - Count events: $d_j = \sum \mathbf{1}(t_i = t_j \text{ and event observed})$.
-     - Update: $\hat{S} \leftarrow \hat{S} \times (1 - d_j / n_j)$.
-4. **Extend** the curve to the maximum observed time for plotting.
+**알고리즘 따라가기:**
 
-!!! note "Censored Observations"
+1. 관측치를 시간순으로 **정렬**한다.
+2. 서로 다른 사건시간(`censored == 0`인 시점)을 **추출**한다.
+3. **각 사건시간** $t_j$에 대해,
+     - 아직 위험에 있는 대상을 센다: $n_j = \sum \mathbf{1}(t_i \geq t_j)$.
+     - 사건을 센다: $d_j = \sum \mathbf{1}(t_i = t_j \text{ 이고 사건 관측})$.
+     - 갱신한다: $\hat{S} \leftarrow \hat{S} \times (1 - d_j / n_j)$.
+4. 그림을 위해 곡선을 관측된 최대 시점까지 **연장**한다.
 
-    Censored subjects do not trigger a drop in $\hat{S}(t)$, but they reduce the
-    risk set $n_j$ at subsequent event times.  This is the mechanism by which
-    the Kaplan-Meier estimator incorporates partial information from incomplete
-    observations.
+!!! note "절단된 관측치"
 
-## Log-Rank Test
+    절단된 대상은 $\hat{S}(t)$의 하강을 일으키지 않지만 이후 사건시간의 위험집합 $n_j$를
+    줄인다. 카플란-마이어 추정량이 불완전한 관측의 부분적 정보를 반영하는 기제다.
 
-### Hypotheses
+## 로그순위 검정
 
-The two-sample log-rank test evaluates
+### 가설
+
+두 표본 로그순위 검정은 다음을 평가한다.
 
 $$
 H_0 : S_1(t) = S_2(t) \quad \text{for all } t \geq 0
@@ -97,26 +97,25 @@ $$
 H_1 : S_1(t) \neq S_2(t) \quad \text{for some } t \geq 0
 $$
 
-### Test Statistic
+### 검정통계량
 
-At each pooled event time $t_{(j)}$, define $r_{1j}$, $r_{2j}$ as the risk set sizes,
-$d_{1j}$, $d_{2j}$ as the event counts, $r_j = r_{1j} + r_{2j}$, and
-$d_j = d_{1j} + d_{2j}$.  The expected events in group 1 and the variance contribution
-are
+합쳐진 각 사건시간 $t_{(j)}$에서 $r_{1j}$, $r_{2j}$를 위험집합 크기, $d_{1j}$, $d_{2j}$를
+사건 수라 하고 $r_j = r_{1j} + r_{2j}$, $d_j = d_{1j} + d_{2j}$라 하자. 집단 1의 기대
+사건 수와 분산 기여는
 
 $$
 e_{1j} = d_j \cdot \frac{r_{1j}}{r_j}, \qquad v_j = \frac{r_{1j} \, r_{2j} \, d_j \, (r_j - d_j)}{r_j^2 \, (r_j - 1)}
 $$
 
-The test statistic is
+이다. 검정통계량은
 
 $$
 \chi^2_{\text{LR}} = \frac{(O_1 - E_1)^2}{V_1} \;\xrightarrow{d}\; \chi^2_1
 $$
 
-where $O_1 = \sum d_{1j}$, $E_1 = \sum e_{1j}$, $V_1 = \sum v_j$.
+이며 $O_1 = \sum d_{1j}$, $E_1 = \sum e_{1j}$, $V_1 = \sum v_j$이다.
 
-### Implementation
+### 구현
 
 ```python
 from scipy import stats
@@ -159,12 +158,12 @@ def logrank_test(times_1, censored_1, times_2, censored_2):
     return chi2, p_value
 ```
 
-The implementation pools event times from both groups, then loops through each event
-time to accumulate observed events, expected events, and variance for group 1.
+이 구현은 두 집단의 사건시간을 합친 뒤 각 사건시간을 순회하며 집단 1의 관측 사건 수, 기대
+사건 수, 분산을 누적한다.
 
-## Simulation and Visualization
+## 모의실험과 시각화
 
-The following code generates simulated data and plots the Kaplan-Meier curves.
+다음 코드는 모의자료를 생성하고 카플란-마이어 곡선을 그린다.
 
 ```python
 import matplotlib.pyplot as plt
@@ -202,38 +201,35 @@ def main():
     print(f"Log-Rank Test:  chi2 = {chi2:.4f},  p = {p:.4f}")
 ```
 
-Group 1 is drawn from $\text{Exp}(\lambda = 1/20)$ and group 2 from
-$\text{Exp}(\lambda = 1/12)$, with approximately 20% random censoring in each group.
-The visual separation of the curves and the log-rank p-value together indicate whether
-the survival difference is statistically significant.
+집단 1은 $\text{Exp}(\lambda = 1/20)$에서, 집단 2는 $\text{Exp}(\lambda = 1/12)$에서
+뽑았고 각 집단에 약 20%의 무작위 절단이 있다. 곡선의 시각적 분리와 로그순위 p-값을 함께 보면
+생존 차이가 통계적으로 유의한지 알 수 있다.
 
-## Interpretation
+## 해석
 
-- **Step-function output**: The Kaplan-Meier curve is a step function that drops only
-  at observed event times.  Flat segments correspond to intervals with no events.
-- **Censoring**: Censored subjects exit the risk set without causing a survival drop.
-  Heavy censoring at late times leads to wider confidence intervals.
-- **Log-rank test**: A significant p-value (e.g., $p < 0.05$) indicates that the
-  survival distributions differ.  The test is most powerful under proportional hazards.
-- **Limitations**: The Kaplan-Meier estimator is univariate --- it cannot adjust for
-  covariates.  For covariate-adjusted survival analysis, the Cox proportional hazards
-  model is needed.
+- **계단함수 출력**: 카플란-마이어 곡선은 관측된 사건시간에서만 떨어지는 계단함수다. 평평한
+  구간은 사건이 없는 구간에 해당한다.
+- **중도절단**: 절단된 대상은 생존의 하강 없이 위험집합에서 빠진다. 후반부에 절단이 많으면
+  신뢰구간이 넓어진다.
+- **로그순위 검정**: p-값이 유의하면(예: $p < 0.05$) 생존분포가 다르다는 뜻이다. 비례위험
+  아래에서 검정력이 가장 높다.
+- **한계**: 카플란-마이어 추정량은 일변량이다. 공변량을 보정할 수 없다. 공변량 보정 생존분석에는
+  콕스 비례위험 모형이 필요하다.
 
-!!! warning "Crossing Survival Curves"
+!!! warning "교차하는 생존곡선"
 
-    If the two Kaplan-Meier curves cross, the log-rank test may fail to detect a
-    significant difference even when the curves differ substantially.  In this
-    case, consider a weighted log-rank test (e.g., Wilcoxon) that gives more
-    weight to early event times.
+    두 카플란-마이어 곡선이 교차하면 곡선이 상당히 다른데도 로그순위 검정이 유의한 차이를
+    탐지하지 못할 수 있다. 이런 경우 초기 사건시간에 더 큰 가중을 주는 가중 로그순위 검정
+    (예: 윌콕슨)을 고려하라.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Manual Kaplan-Meier Computation
+**연습문제 1.**
+손으로 하는 카플란-마이어 계산
 
-Eight subjects have the following data:
+대상 8명의 자료가 다음과 같다.
 
-| Subject | Time | Censored (1 = yes) |
+| 대상 | 시간 | 절단 (1 = 예) |
 |:-------:|:----:|:------------------:|
 | 1 | 1 | 0 |
 | 2 | 3 | 1 |
@@ -244,11 +240,11 @@ Eight subjects have the following data:
 | 7 | 10 | 1 |
 | 8 | 12 | 0 |
 
-Compute $\hat{S}(t)$ at each event time.
+각 사건시간의 $\hat{S}(t)$를 계산하라.
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
 
-    Distinct event times: 1, 4, 5, 7, 12.
+    서로 다른 사건시간은 1, 4, 5, 7, 12다.
 
     | $t_{(j)}$ | $n_j$ | $d_j$ | $1 - d_j/n_j$ | $\hat{S}(t_{(j)})$ |
     |:----------:|:-----:|:-----:|:--------------:|:-------------------:|
@@ -258,29 +254,28 @@ Compute $\hat{S}(t)$ at each event time.
     | 7 | 3 | 1 | 2/3 = 0.667 | 0.583 $\times$ 0.667 = 0.389 |
     | 12 | 1 | 1 | 0/1 = 0.000 | 0.000 |
 
-    At $t_{(2)} = 4$: subject 1 had an event at $t = 1$ and subject 2 was censored at
-    $t = 3$, leaving 6 subjects at risk.
+    $t_{(2)} = 4$에서는 대상 1이 $t = 1$에 사건을 겪었고 대상 2가 $t = 3$에 절단되어 6명이
+    위험에 남는다.
 
-    At $t_{(3)} = 5$: subject 5 is censored at $t = 5$ but is included in the risk set
-    (convention: censorings at $t_j$ are processed after events).  So $n_3 = 5$ and
-    $d_3 = 1$ (only subject 4 has an event).
+    $t_{(3)} = 5$에서는 대상 5가 $t = 5$에 절단되지만 위험집합에 포함된다(관례: $t_j$의
+    절단은 사건 뒤에 처리한다). 따라서 $n_3 = 5$이고 $d_3 = 1$이다(대상 4만 사건을 겪었다).
 
 ---
 
-**Exercise 2.**
-Log-Rank Test Computation
+**연습문제 2.**
+로그순위 검정 계산
 
-Two groups:
+두 집단이 있다.
 
-**Group A:** 2, 5, 8+ (+ = censored)
+**집단 A:** 2, 5, 8+ (+ = 절단)
 
-**Group B:** 1, 4, 6
+**집단 B:** 1, 4, 6
 
-Compute the log-rank test statistic $\chi^2_{\text{LR}}$ and the p-value.
+로그순위 검정통계량 $\chi^2_{\text{LR}}$과 p-값을 계산하라.
 
-??? success "Solution to Exercise 2"
+??? success "연습문제 2 풀이"
 
-    Pooled distinct event times: 1, 2, 4, 5, 6.
+    합친 서로 다른 사건시간은 1, 2, 4, 5, 6이다.
 
     | $t_{(j)}$ | $r_{Aj}$ | $r_{Bj}$ | $r_j$ | $d_{Aj}$ | $d_{Bj}$ | $d_j$ | $e_{Aj}$ | $v_j$ |
     |:----------:|:--------:|:--------:|:-----:|:--------:|:--------:|:-----:|:--------:|:-----:|
@@ -298,25 +293,27 @@ Compute the log-rank test statistic $\chi^2_{\text{LR}}$ and the p-value.
     \chi^2_{\text{LR}} = \frac{(2 - 2.767)^2}{1.212} = \frac{0.589}{1.212} = 0.486
     $$
 
-    $p = P(\chi^2_1 \geq 0.486) = 0.486$.  The p-value is large, so we do not reject
-    $H_0$.  No significant difference is detected (the sample is very small).
+    $p = P(\chi^2_1 \geq 0.486) = 0.486$이다. p-값이 크므로 $H_0$을 기각하지 않는다.
+    유의한 차이가 탐지되지 않았다(표본이 매우 작다).
+
+    검정통계량과 p-값이 우연히 둘 다 $0.486$인 것은 순전히 우연이다. 서로 다른 양이므로
+    혼동하지 말라.
 
 ---
 
-**Exercise 3.**
-Censoring Coding Convention
+**연습문제 3.**
+절단 부호화 관례
 
-In the implementation above, `censored = 1` means censored and `censored = 0` means
-the event was observed.  Many survival analysis packages use the opposite convention
-(`event = 1`).
+위 구현에서 `censored = 1`은 절단, `censored = 0`은 사건 관측을 뜻한다. 많은 생존분석
+패키지는 반대 관례(`event = 1`)를 쓴다.
 
-**(a)** Rewrite the core Kaplan-Meier loop using the `event` coding convention.
+**(a)** `event` 부호화 관례로 카플란-마이어의 핵심 루프를 다시 쓰라.
 
-**(b)** Explain why the coding convention does not affect the mathematical result.
+**(b)** 부호화 관례가 수학적 결과에 영향을 주지 않는 이유를 설명하라.
 
-??? success "Solution to Exercise 3"
+??? success "연습문제 3 풀이"
 
-    **(a)** With `event` indicator (1 = event, 0 = censored):
+    **(a)** `event` 지시자(1 = 사건, 0 = 절단)를 쓰면 다음과 같다.
 
     ```python
     event_times = times[event == 1]
@@ -329,100 +326,106 @@ the event was observed.  Many survival analysis packages use the opposite conven
         s *= (n_at_risk - d_j) / n_at_risk
     ```
 
-    The only change is replacing `censored == 0` with `event == 1`.
+    바뀌는 것은 `censored == 0`을 `event == 1`로 대체하는 것뿐이다.
 
-    **(b)** The mathematical quantities $n_j$ and $d_j$ are defined in terms of which
-    observations are events and which are censored.  Whether we label events as 0 or 1
-    is purely a software convention.  As long as the code correctly identifies events
-    and censored observations, the computed $\hat{S}(t)$ is identical.
+    **(b)** 수학적 양 $n_j$와 $d_j$는 어느 관측치가 사건이고 어느 것이 절단인지로 정의된다.
+    사건에 0을 붙이든 1을 붙이든 순전히 소프트웨어 관례다. 코드가 사건과 절단을 옳게 식별하는
+    한 계산된 $\hat{S}(t)$는 동일하다.
+
+    !!! warning "그러나 실수는 조용히 일어난다"
+        관례가 결과를 바꾸지 않는다는 것은 **코드를 옳게 썼을 때**의 이야기다. 관례를 헷갈려
+        지시자를 반대로 넘기면 사건과 절단이 통째로 뒤바뀌어, 오류 없이 실행되면서 완전히
+        틀린 곡선이 나온다. 이런 실수는 예외를 던지지 않으므로 발견하기 어렵다.
+
+        간단한 방어법은 결과를 검산하는 것이다. 사건 수 $d = \sum \delta_i$를 출력해 자료에서
+        기대하는 값과 맞는지 확인하고, 절단율이 그럴듯한지 보라. 절단율이 90%로 나왔는데
+        연구 설계상 30%여야 한다면 지시자가 뒤집혔을 가능성이 크다.
 
 ---
 
-**Exercise 4.**
-Properties of the Kaplan-Meier Estimator
+**연습문제 4.**
+카플란-마이어 추정량의 성질
 
-**(a)** Why is $\hat{S}(t)$ called a "product-limit" estimator?
+**(a)** $\hat{S}(t)$를 왜 "곱-극한" 추정량이라 부르는가?
 
-**(b)** Show that if there is no censoring, the Kaplan-Meier estimator reduces to the
-empirical survival function $\hat{S}(t) = (\text{number of } t_i > t) / n$.
+**(b)** 절단이 없으면 카플란-마이어 추정량이 경험적 생존함수
+$\hat{S}(t) = (t_i > t \text{인 개수}) / n$으로 환원됨을 보여라.
 
-??? success "Solution to Exercise 4"
+??? success "연습문제 4 풀이"
 
-    **(a)** It is called a product-limit estimator because $\hat{S}(t)$ is defined as
-    a **product** of conditional survival probabilities $(1 - d_j/n_j)$ over all event
-    times up to $t$.  The "limit" refers to the connection to continuous-time survival:
-    as the time partition becomes finer, the discrete product approaches the
-    continuous survival function.
+    **(a)** $\hat{S}(t)$가 $t$까지의 모든 사건시간에 걸친 조건부 생존확률 $(1 - d_j/n_j)$의
+    **곱**으로 정의되기 때문에 곱-극한 추정량이라 부른다. "극한"은 연속시간 생존과의 연결을
+    가리킨다. 시간 분할이 촘촘해질수록 이산적인 곱이 연속 생존함수에 가까워진다.
 
-    **(b)** Without censoring, at each event time $t_{(j)}$ there are $n_j = n - j + 1$
-    subjects at risk and $d_j = 1$ event (assuming no ties for simplicity).  Then
+    **(b)** 절단이 없으면 각 사건시간 $t_{(j)}$에서 위험에 있는 대상이 $n_j = n - j + 1$명이고
+    사건은 $d_j = 1$건이다(단순함을 위해 동점이 없다고 가정한다). 그러면
 
     $$
     \hat{S}(t_{(j)}) = \prod_{k=1}^{j} \frac{n - k + 1 - 1}{n - k + 1} = \prod_{k=1}^{j} \frac{n - k}{n - k + 1}
     $$
 
-    This is a telescoping product:
+    이며, 이는 망원급수형 곱이다.
 
     $$
     \hat{S}(t_{(j)}) = \frac{n-1}{n} \cdot \frac{n-2}{n-1} \cdots \frac{n-j}{n-j+1} = \frac{n - j}{n}
     $$
 
-    Since $n - j$ is the number of subjects with $t_i > t_{(j)}$, we have
-    $\hat{S}(t_{(j)}) = (\text{number of } t_i > t_{(j)}) / n$, which is the
-    empirical survival function. $\square$
+    $n - j$가 $t_i > t_{(j)}$인 대상의 수이므로
+    $\hat{S}(t_{(j)}) = (t_i > t_{(j)} \text{인 개수}) / n$이고, 이는 경험적 생존함수다.
+    $\square$
 
 ---
 
-**Exercise 5.**
-Variance of the Kaplan-Meier Estimator
+**연습문제 5.**
+카플란-마이어 추정량의 분산
 
-Greenwood's formula gives the variance of $\hat{S}(t)$:
+그린우드 공식이 $\hat{S}(t)$의 분산을 준다.
 
 $$
 \widehat{\text{Var}}(\hat{S}(t)) = \hat{S}(t)^2 \sum_{j:\, t_{(j)} \leq t} \frac{d_j}{n_j(n_j - d_j)}
 $$
 
-**(a)** For the data in Exercise 1, compute $\widehat{\text{Var}}(\hat{S}(5))$.
+**(a)** 연습문제 1의 자료에서 $\widehat{\text{Var}}(\hat{S}(5))$를 계산하라.
 
-**(b)** Construct a 95% confidence interval for $S(5)$ using the log-transformation.
+**(b)** 로그-로그 변환으로 $S(5)$의 95% 신뢰구간을 구성하라.
 
-??? success "Solution to Exercise 5"
+??? success "연습문제 5 풀이"
 
-    **(a)** From Exercise 1, $\hat{S}(5) = 0.583$.  The sum of $d_j / [n_j(n_j - d_j)]$
-    over event times up to 5:
+    **(a)** 연습문제 1에서 $\hat{S}(5) = 0.583$이다. 5까지의 사건시간에 걸친
+    $d_j / [n_j(n_j - d_j)]$의 합은
 
     - $t = 1$: $1 / (8 \times 7) = 1/56 = 0.01786$
     - $t = 4$: $1 / (6 \times 5) = 1/30 = 0.03333$
     - $t = 5$: $1 / (5 \times 4) = 1/20 = 0.05000$
 
-    Sum $= 0.01786 + 0.03333 + 0.05000 = 0.10119$.
+    이므로 합은 $0.01786 + 0.03333 + 0.05000 = 0.10119$다.
 
     $$
     \widehat{\text{Var}}(\hat{S}(5)) = 0.583^2 \times 0.10119 = 0.3399 \times 0.10119 = 0.0344
     $$
 
-    **(b)** The log-transformation confidence interval uses
-    $\theta = \ln(-\ln \hat{S}(t))$ with approximate standard error
+    **(b)** 로그-로그 변환 신뢰구간은 $\theta = \ln(-\ln \hat{S}(t))$를 쓰며 근사 표준오차는
 
     $$
     \text{se}(\theta) = \frac{1}{|\ln \hat{S}(t)|} \cdot \frac{\sqrt{\widehat{\text{Var}}(\hat{S}(t))}}{\hat{S}(t)}
     $$
 
-    $\ln \hat{S}(5) = \ln 0.583 = -0.539$.  $|\ln \hat{S}(5)| = 0.539$.
+    이다. $\ln \hat{S}(5) = \ln 0.583 = -0.539$이므로 $|\ln \hat{S}(5)| = 0.539$다.
 
     $$
     \text{se}(\theta) = \frac{1}{0.539} \cdot \frac{\sqrt{0.0344}}{0.583} = \frac{1}{0.539} \cdot \frac{0.1855}{0.583} = 1.855 \times 0.318 = 0.590
     $$
 
-    $\theta = \ln(0.539) = -0.618$.
+    $\theta = \ln(0.539) = -0.618$이다.
 
-    CI for $\theta$: $-0.618 \pm 1.96 \times 0.590 = (-1.774, 0.538)$.
+    $\theta$의 신뢰구간은 $-0.618 \pm 1.96 \times 0.590 = (-1.774,\ 0.538)$이다.
 
-    Back-transforming: $S = \exp(-\exp(\theta))$.
+    역변환은 $S = \exp(-\exp(\theta))$이며, **$\theta$가 커지면 $S$는 작아지므로 상하가
+    뒤바뀐다.**
 
-    Lower: $\exp(-\exp(-1.774)) = \exp(-0.170) = 0.844$.
+    - $\theta$의 **상**한 $0.538$에서: $S$의 **하**한 $= \exp(-\exp(0.538)) = \exp(-1.713) = 0.180$.
+    - $\theta$의 **하**한 $-1.774$에서: $S$의 **상**한 $= \exp(-\exp(-1.774)) = \exp(-0.170) = 0.844$.
 
-    Upper: $\exp(-\exp(0.538)) = \exp(-1.713) = 0.180$.
-
-    The 95% CI for $S(5)$ is approximately $(0.180, 0.844)$.  The interval is wide
-    due to the small sample size.
+    따라서 $S(5)$의 95% 신뢰구간은 약 $(0.180,\ 0.844)$다. 표본이 8명뿐이라 구간의 폭이
+    $0.664$로 매우 넓다. 점추정치 $0.583$이 이 구간 안 어디에 있어도 자료와 모순되지 않는다는
+    뜻이며, 이런 표본 크기에서 생존율을 논하는 것이 얼마나 무의미한지 보여준다.

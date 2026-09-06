@@ -1,203 +1,328 @@
-# Weibull Model
+# 와이불 모형
 
-The exponential model assumes a constant hazard, which is too restrictive for
-many applications.  In practice, the risk of an event often increases with time
-(aging, wear-out) or decreases with time (burn-in, early failures).  The
-**Weibull model** generalizes the exponential by adding a **shape parameter**
-that allows the hazard to be monotonically increasing, decreasing, or constant.
+지수 모형은 위험이 일정하다고 가정하는데, 많은 응용에서 이는 지나치게 제약적이다. 실제로 사건의
+위험은 시간에 따라 커지거나(노화, 마모) 작아지는(번인, 초기 고장) 경우가 많다. **와이불 모형**은
+위험이 단조 증가, 단조 감소, 또는 일정할 수 있게 하는 **형상모수**를 더해 지수 모형을
+일반화한다.
 
-This section defines the Weibull survival model, discusses the role of the shape
-parameter, derives the maximum likelihood estimator, and shows how to check the
-Weibull assumption graphically.
+이 절에서는 와이불 생존 모형을 정의하고, 형상모수의 역할을 논의하며, 최대가능도 추정량을
+유도하고, 와이불 가정을 그림으로 점검하는 방법을 보인다.
 
-## Model Specification
+## 모형 설정
 
-The Weibull distribution has two parameters: a **scale parameter** $\lambda > 0$
-and a **shape parameter** $k > 0$.
+와이불 분포는 두 모수를 갖는다. **척도모수** $\lambda > 0$과 **형상모수** $k > 0$이다.
 
-**Hazard function:**
+**위험함수:**
 
 $$
 h(t) = \frac{k}{\lambda}\left(\frac{t}{\lambda}\right)^{k-1} \qquad t \geq 0
 $$
 
-**Cumulative hazard:**
+**누적위험:**
 
 $$
 H(t) = \left(\frac{t}{\lambda}\right)^k
 $$
 
-**Survival function:**
+**생존함수:**
 
 $$
 S(t) = \exp\!\left(-\left(\frac{t}{\lambda}\right)^k\right)
 $$
 
-**Density function:**
+**밀도함수:**
 
 $$
 f(t) = \frac{k}{\lambda}\left(\frac{t}{\lambda}\right)^{k-1} \exp\!\left(-\left(\frac{t}{\lambda}\right)^k\right)
 $$
 
-!!! note "Alternative Parameterization"
+!!! note "다른 모수화"
 
-    Some references use the parameterization $h(t) = k \alpha t^{k-1}$ with
-    $\alpha = 1/\lambda^k$.  The two forms are equivalent; this section uses
-    the $(\lambda, k)$ parameterization because it separates scale from shape
-    more clearly.
+    어떤 문헌은 $\alpha = 1/\lambda^k$로 두고 $h(t) = k \alpha t^{k-1}$로 모수화한다. 두
+    형태는 동등하다. 이 절에서는 척도와 형상을 더 분명히 분리하는 $(\lambda, k)$ 모수화를
+    쓴다.
 
-## Role of the Shape Parameter
+## 형상모수의 역할
 
-The shape parameter $k$ determines how the hazard changes over time:
+형상모수 $k$가 위험이 시간에 따라 어떻게 변하는지를 정한다.
 
-| $k$ | Hazard Behavior | Interpretation |
+| $k$ | 위험의 거동 | 해석 |
 |:---:|:----------------|:---------------|
-| $k < 1$ | Decreasing | Early failures dominate; survivors become more robust |
-| $k = 1$ | Constant | Reduces to exponential($\lambda$); memoryless |
-| $k > 1$ | Increasing | Risk grows with time; aging or wear-out |
+| $k < 1$ | 감소 | 초기 고장이 지배적. 살아남은 것은 더 견고해짐 |
+| $k = 1$ | 일정 | 지수분포($\lambda$)로 환원. 무기억성 |
+| $k > 1$ | 증가 | 시간에 따라 위험이 커짐. 노화 또는 마모 |
 
-When $k = 1$, the Weibull reduces to the exponential distribution with rate
-$1/\lambda$, so the exponential model is nested within the Weibull.
+$k = 1$이면 와이불은 비율 $1/\lambda$인 지수분포로 환원되므로, 지수 모형은 와이불 모형에
+내포되어 있다.
 
-!!! example "Hazard Shapes in Practice"
+!!! example "실제의 위험 모양"
 
-    - **Infant mortality** ($k < 1$): Electronic components that fail early
-      due to manufacturing defects.  Survivors are reliable.
-    - **Constant risk** ($k = 1$): Events driven by external random shocks
-      (e.g., accidental damage).
-    - **Wear-out** ($k > 1$): Mechanical parts that degrade over time
-      (bearings, brake pads).
+    - **초기 고장**($k < 1$): 제조 결함으로 일찍 고장 나는 전자 부품. 살아남은 것은 신뢰할
+      만하다.
+    - **일정한 위험**($k = 1$): 외부의 무작위 충격에 의한 사건(예: 우발적 손상).
+    - **마모**($k > 1$): 시간이 지나며 열화되는 기계 부품(베어링, 브레이크 패드).
 
-## Mean and Median Survival
+## 평균 생존시간과 중앙 생존시간
 
-The mean survival time is
+평균 생존시간은
 
 $$
 E[T] = \lambda \,\Gamma\!\left(1 + \frac{1}{k}\right)
 $$
 
-where $\Gamma(\cdot)$ is the gamma function.  When $k = 1$, this reduces to
-$E[T] = \lambda$.
+이며 $\Gamma(\cdot)$는 감마함수다. $k = 1$이면 $E[T] = \lambda$로 환원된다.
 
-The median survival time solves $S(t_{0.5}) = 0.5$:
+중앙 생존시간은 $S(t_{0.5}) = 0.5$를 풀어 얻는다.
 
 $$
 t_{0.5} = \lambda (\ln 2)^{1/k}
 $$
 
-## Maximum Likelihood Estimation
+## 최대가능도 추정
 
-Given $n$ subjects with observed times $t_i$ and event indicators $\delta_i$,
-the log-likelihood is
+관측 시간 $t_i$와 사건 지시자 $\delta_i$를 갖는 대상 $n$명에 대해 로그가능도는
 
 $$
 \ell(k, \lambda) = d \ln k - dk \ln \lambda + (k-1)\sum_{i=1}^{n} \delta_i \ln t_i - \sum_{i=1}^{n} \left(\frac{t_i}{\lambda}\right)^k
 $$
 
-where $d = \sum \delta_i$ is the number of events.
+이며 $d = \sum \delta_i$는 사건 수다.
 
-There is no closed-form solution.  The MLEs $(\hat{k}, \hat{\lambda})$ are
-obtained by numerical optimization (Newton--Raphson or profile likelihood).
+닫힌 형태의 해는 없다. MLE $(\hat{k}, \hat{\lambda})$는 수치 최적화(뉴턴-랩슨 또는 프로파일
+가능도)로 구한다.
 
-**Profile likelihood approach:**
+**프로파일 가능도 접근:**
 
-1. For a fixed $k$, the MLE of $\lambda$ has a closed form:
+1. $k$를 고정하면 $\lambda$의 MLE는 닫힌 형태를 갖는다.
 
 $$
 \hat{\lambda}(k) = \left(\frac{\sum_{i=1}^{n} t_i^k}{d}\right)^{1/k}
 $$
 
-2. Substitute into the log-likelihood and maximize the resulting one-dimensional
-   profile likelihood over $k$.
+2. 이를 로그가능도에 대입하고, 얻어진 일차원 프로파일 가능도를 $k$에 대해 최대화한다.
 
-## Checking the Weibull Assumption
+## 와이불 가정 점검하기
 
-The Weibull model implies a linear relationship between $\ln H(t)$ and $\ln t$:
+와이불 모형은 $\ln H(t)$와 $\ln t$ 사이의 선형관계를 함의한다.
 
 $$
 \ln H(t) = k \ln t - k \ln \lambda
 $$
 
-Therefore, if the plot of $\ln \hat{H}(t)$ (from the Nelson--Aalen estimator)
-versus $\ln t$ is approximately linear, the Weibull model is appropriate.
+따라서 (넬슨-알렌 추정량에서 얻은) $\ln \hat{H}(t)$를 $\ln t$에 대해 그린 그림이 직선에
+가까우면 와이불 모형이 적절하다.
 
-- The **slope** of the line estimates $k$.
-- The **intercept** is $-k \ln \lambda$, from which $\lambda$ can be recovered.
+- 직선의 **기울기**가 $k$를 추정한다.
+- **절편**은 $-k \ln \lambda$이며 여기에서 $\lambda$를 복원할 수 있다.
 
-!!! tip "Quick Visual Check"
+!!! tip "빠른 시각적 점검"
 
-    Plotting $\ln(-\ln \hat{S}_{\text{KM}}(t))$ versus $\ln t$ should yield
-    an approximately straight line under the Weibull model.  Curvature suggests
-    a non-Weibull hazard shape (e.g., a hump-shaped hazard better captured by
-    the log-normal or log-logistic models).
+    와이불 모형 아래에서는 $\ln(-\ln \hat{S}_{\text{KM}}(t))$를 $\ln t$에 대해 그리면
+    직선에 가까운 그림이 나와야 한다. 휘어 있으면 와이불이 아닌 위험 모양을 시사한다(예:
+    로그정규나 로그로지스틱 모형이 더 잘 포착하는 봉우리형 위험).
 
-## Worked Example
+## 예제
 
-A study observes 50 machine failures.  Fitting a Weibull model yields
-$\hat{k} = 1.8$ and $\hat{\lambda} = 500$ hours.
+어떤 연구가 기계 고장 50건을 관측했다. 와이불 모형을 적합하니 $\hat{k} = 1.8$,
+$\hat{\lambda} = 500$시간이 나왔다.
 
-**Interpretation:** Since $\hat{k} = 1.8 > 1$, the hazard is increasing---the
-machines are wearing out over time.
+**해석:** $\hat{k} = 1.8 > 1$이므로 위험이 증가한다. 기계가 시간이 지나며 마모되고 있다.
 
-**Estimated median lifetime:**
+**추정된 중앙 수명:**
 
 $$
-\hat{t}_{0.5} = 500 \times (\ln 2)^{1/1.8} = 500 \times 0.693^{0.556} = 500 \times 0.813 = 407 \text{ hours}
+\hat{t}_{0.5} = 500 \times (\ln 2)^{1/1.8} = 500 \times 0.6931^{0.5556} = 500 \times 0.8158 = 407.9 \text{ hours}
 $$
 
-**Survival at 300 hours:**
+**300시간에서의 생존율:**
 
 $$
 \hat{S}(300) = \exp\!\left(-\left(\frac{300}{500}\right)^{1.8}\right) = \exp\!\left(-0.6^{1.8}\right) = \exp(-0.398) = 0.672
 $$
 
-**Hazard at 300 hours:**
+**300시간에서의 위험:**
 
 $$
-\hat{h}(300) = \frac{1.8}{500}\left(\frac{300}{500}\right)^{0.8} = 0.0036 \times 0.663 = 0.0024 \text{ per hour}
+\hat{h}(300) = \frac{1.8}{500}\left(\frac{300}{500}\right)^{0.8} = 0.0036 \times 0.6645 = 0.00239 \text{ per hour}
 $$
 
-## Comparison with the Exponential Model
+## 지수 모형과의 비교
 
-Because the exponential model is nested within the Weibull (set $k = 1$), a
-formal test of $H_0: k = 1$ vs $H_1: k \neq 1$ can be conducted using the
-likelihood ratio test:
+지수 모형은 와이불 모형에 내포되어 있으므로($k = 1$로 두면 된다),
+$H_0: k = 1$ 대 $H_1: k \neq 1$의 형식적 검정을 가능도비 검정으로 수행할 수 있다.
 
 $$
 \Lambda = 2\bigl[\ell(\hat{k}, \hat{\lambda}) - \ell(1, \hat{\lambda}_{\text{exp}})\bigr] \;\xrightarrow{d}\; \chi^2_1
 $$
 
-Rejecting $H_0$ indicates that the hazard is not constant and the Weibull
-model provides a significantly better fit than the exponential.
+$H_0$을 기각하면 위험이 일정하지 않으며 와이불 모형이 지수 모형보다 유의하게 잘 맞는다는
+뜻이다.
 
-??? note "Weibull as an Accelerated Failure Time Model"
+??? note "가속실패시간 모형으로서의 와이불"
 
-    The Weibull model has a dual interpretation as an **accelerated failure
-    time (AFT) model**.  If $\ln T = \mu + \sigma W$ where $W$ follows a
-    standard extreme-value distribution, then $T$ follows a Weibull with
-    $\lambda = e^\mu$ and $k = 1/\sigma$.  This AFT representation allows
-    covariates to act multiplicatively on survival time rather than on the
-    hazard rate.
+    와이불 모형에는 **가속실패시간(AFT) 모형**이라는 이중적 해석이 있다. $W$가 표준
+    극단값분포를 따를 때 $\ln T = \mu + \sigma W$이면 $T$는 $\lambda = e^\mu$,
+    $k = 1/\sigma$인 와이불을 따른다. 이 AFT 표현에서는 공변량이 위험률이 아니라 생존시간에
+    곱셈적으로 작용한다.
 
-## Exercises
+    와이불은 **비례위험 모형이면서 동시에 AFT 모형인 유일한 분포**다. 그래서 두 틀을 잇는
+    다리 역할을 하며, 콕스 모형(비례위험)과 로그정규·로그로지스틱(AFT) 사이에 놓인다.
 
-**Exercise 1.**
-Weibull Shape Parameter
+## 연습문제
 
-A Weibull model fitted to time-to-default data yields $\hat{k} = 0.75$ and
-$\hat{\lambda} = 36$ months.
+**연습문제 1.**
+와이불 형상모수
 
-**(a)** Is the hazard increasing or decreasing over time?  Explain.
+부도까지의 시간 자료에 와이불 모형을 적합하여 $\hat{k} = 0.75$, $\hat{\lambda} = 36$개월을
+얻었다.
 
-**(b)** Compute the median time to default.
+**(a)** 위험이 시간에 따라 증가하는가 감소하는가? 설명하라.
 
-**(c)** Compute $\hat{S}(24)$, the probability of surviving past 24 months.
+**(b)** 부도까지의 중앙시간을 계산하라.
 
-??? success "Solution to Exercise 1"
+**(c)** 24개월을 넘겨 생존할 확률 $\hat{S}(24)$를 계산하라.
 
-    **(a)** Since $\hat{k} = 0.75 < 1$, the hazard is **decreasing** over time.
-    Default risk is highest early and declines among surviving borrowers.
+??? success "연습문제 1 풀이"
 
-    **(b)** $t_{0.5} = \lambda(\ln 2)^{1/k} = 36 \times (0.693)^{1/0.75} = 36 \times 0.693^{1.333} = 36 \times 0.627 = 22.6$ months.
+    **(a)** $\hat{k} = 0.75 < 1$이므로 위험이 시간에 따라 **감소**한다. 부도 위험이 초기에
+    가장 높고 살아남은 차입자 사이에서는 낮아진다.
 
-    **(c)** $\hat{S}(24) = \exp(-(24/36)^{0.75}) = \exp(-0.667^{0.75}) = \exp(-0.740) = 0.477$.
+    **(b)**
+
+    $$
+    t_{0.5} = \lambda(\ln 2)^{1/k} = 36 \times (0.6931)^{1/0.75} = 36 \times 0.6931^{1.3333}
+    = 36 \times 0.6134 = 22.1 \text{ 개월}
+    $$
+
+    **(c)**
+
+    $$
+    \hat{S}(24) = \exp\!\left(-(24/36)^{0.75}\right) = \exp(-0.6667^{0.75}) = \exp(-0.7378) = 0.478
+    $$
+
+    !!! note "$k < 1$이면 중앙값이 척도모수보다 작다"
+        $t_{0.5} = \lambda(\ln 2)^{1/k}$이고 $\ln 2 < 1$이므로, $k < 1$이면 지수 $1/k > 1$이
+        되어 $(\ln 2)^{1/k}$가 더 작아진다. 여기서는 $0.6134$로 $k = 1$일 때의 $0.6931$보다
+        작다. 즉 위험이 감소하는 분포는 초기에 사건이 몰려 중앙값이 앞당겨진다. 반대로
+        $k > 1$이면 $(\ln 2)^{1/k}$가 1에 가까워져 중앙값이 $\lambda$에 근접한다. $\square$
+
+---
+
+**연습문제 2.**
+와이불의 평균 $E[T] = \lambda\,\Gamma(1 + 1/k)$를 유도하라. $k = 0.75$, $\lambda = 36$인
+위 자료에서 평균과 중앙값을 비교하라.
+
+??? success "연습문제 2 풀이"
+
+    **유도.** $E[T] = \int_0^\infty S(t)\,dt = \int_0^\infty e^{-(t/\lambda)^k}\,dt$에서
+    출발한다. $u = (t/\lambda)^k$로 치환하면 $t = \lambda u^{1/k}$이고
+    $dt = \frac{\lambda}{k}u^{1/k - 1}du$이므로
+
+    $$
+    E[T] = \int_0^\infty e^{-u}\,\frac{\lambda}{k}u^{1/k-1}\,du
+    = \frac{\lambda}{k}\,\Gamma\!\left(\frac{1}{k}\right)
+    = \lambda\,\Gamma\!\left(1 + \frac{1}{k}\right)
+    $$
+
+    이다. 마지막 등호는 감마함수의 성질 $\Gamma(x+1) = x\Gamma(x)$를 쓴 것이다.
+
+    **수치 비교.** $k = 0.75$이면 $1 + 1/k = 2.3333$이고 $\Gamma(2.3333) = 1.1906$이므로
+
+    $$
+    E[T] = 36 \times 1.1906 = 42.9 \text{ 개월}
+    $$
+
+    | 요약값 | 값 |
+    |---|---|
+    | 중앙값 | $22.1$개월 |
+    | 평균 | $42.9$개월 |
+    | 척도 $\lambda$ | $36$개월 |
+
+    **평균이 중앙값의 거의 두 배다.** $k < 1$인 와이불은 꼬리가 매우 두꺼워 오른쪽으로 크게
+    치우친 분포이기 때문이다. 소수의 아주 오래 버티는 대출이 평균을 끌어올린다.
+
+    이것이 생존분석에서 평균보다 중앙값을 보고하는 또 하나의 이유다. 평균은 관측 범위를 훨씬
+    넘어선 꼬리에 의존하는데, 절단 때문에 그 부분에 자료가 거의 없다. 여기서 평균 $42.9$개월은
+    36개월 관측 기간을 넘어서므로 사실상 모형 가정의 산물이다. $\square$
+
+---
+
+**연습문제 3.**
+$\ln(-\ln \hat S_{\text{KM}}(t))$ 대 $\ln t$ 그림에서 회귀직선의 기울기와 절편으로
+$k$와 $\lambda$를 추정하는 절차를 구현하고, 참값이 알려진 모의자료에서 확인하라.
+
+??? success "연습문제 3 풀이"
+
+    ```python
+    import numpy as np
+
+    rng = np.random.default_rng(21)
+    n = 500
+    k_true, lam_true = 1.6, 40.0
+    T = lam_true * rng.weibull(k_true, n)
+    C = rng.exponential(60.0, n)
+    t = np.minimum(T, C); d = (T <= C).astype(int)
+
+    # Kaplan-Meier
+    times = np.unique(t[d == 1])
+    S, KM = 1.0, []
+    for u in times:
+        S *= 1 - ((t == u) & (d == 1)).sum() / (t >= u).sum()
+        KM.append(S)
+    KM = np.array(KM)
+
+    ok = (KM > 0) & (KM < 1)             # log(-log S) needs 0 < S < 1
+    x = np.log(times[ok])
+    y = np.log(-np.log(KM[ok]))
+    k_hat, c = np.polyfit(x, y, 1)       # slope = k, intercept = -k ln(lambda)
+    lam_hat = np.exp(-c / k_hat)
+    print(f"k_hat = {k_hat:.3f} (true {k_true}),  "
+          f"lambda_hat = {lam_hat:.2f} (true {lam_true})")
+    ```
+
+    실행하면 $\hat k = 1.360$(참값 $1.6$), $\hat\lambda = 40.41$(참값 $40.0$)이 나온다.
+    척도모수는 잘 맞지만 **형상모수는 15%나 낮게 나왔다.** 그림 기반 회귀가 진단으로는
+    쓸 만해도 추정으로는 믿을 수 없음을 보여준다.
+
+    !!! warning "이 방법을 최종 추정에 쓰지 말 것"
+        이 회귀는 **진단용**이지 추정용이 아니다. 두 가지 문제가 있다.
+
+        1. **점들이 등분산이 아니다.** $\ln(-\ln \hat S)$의 분산이 시점마다 크게 다르며
+           특히 양 끝에서 폭발한다. 보통최소제곱은 모든 점에 같은 무게를 주므로 비효율적이다.
+        2. **점들이 독립이 아니다.** $\hat S(t)$는 누적곱이라 인접한 점들이 강하게 상관된다.
+           회귀의 표준오차가 무의미해진다.
+
+        정확한 추정과 신뢰구간에는 절단을 반영한 최대가능도(본문의 프로파일 가능도)를 쓰라.
+        이 그림은 "와이불이 그럴듯한가"를 눈으로 확인하는 용도다. $\square$
+
+---
+
+**연습문제 4.**
+$H_0: k = 1$의 가능도비 검정을 수행하는 절차를 서술하라. 왈드 검정 대신 가능도비 검정을
+권하는 이유는?
+
+??? success "연습문제 4 풀이"
+
+    **절차.**
+
+    1. 와이불 모형을 적합해 $\ell(\hat k, \hat\lambda)$를 얻는다.
+    2. $k = 1$로 고정하고 지수 모형을 적합해 $\ell(1, \hat\lambda_{\text{exp}})$를 얻는다.
+       이때 $\hat\lambda_{\text{exp}} = \sum_i t_i / d$이다.
+    3. $\Lambda = 2[\ell(\hat k, \hat\lambda) - \ell(1, \hat\lambda_{\text{exp}})]$를
+       계산한다.
+    4. $\chi^2_1$과 비교한다. 자유도 1은 제약이 하나($k = 1$)이기 때문이다.
+
+    **가능도비 검정을 권하는 이유.**
+
+    - **모수화 불변.** 와이불의 형상모수는 $k$로도, $\log k$로도, $\sigma = 1/k$로도 쓸 수
+      있다. 왈드 통계량 $(\hat\theta - \theta_0)/\text{se}$는 어느 척도에서 계산하느냐에 따라
+      값이 달라지지만, 가능도비 통계량은 변하지 않는다. $k > 0$이라는 제약 때문에 $k$의
+      표집분포가 비대칭이라 이 차이가 실제로 문제가 된다.
+    - **19장에서 본 것과 같은 이유.** 왈드 검정은 로그가능도를 $\hat\theta$에서 이차식으로
+      근사한 뒤 $\theta_0$까지 외삽한다. 로그가능도가 비대칭이면 그 외삽이 나쁘다.
+      하우크-도너 현상처럼 왈드가 힘을 잃는 경우도 있다.
+    - **경계 문제가 없다.** $k$의 왈드 신뢰구간은 음수 하한을 낼 수 있는데 $k > 0$이라
+      말이 되지 않는다. 가능도비를 뒤집어 얻는 프로파일 구간은 언제나 $k > 0$ 안에 머문다.
+
+    실무에서는 $\log k$에 대해 왈드 구간을 만들고 지수화하는 절충안도 널리 쓰인다. 이는
+    경계 문제를 피하면서 계산이 싸다. 그래도 형식적 검정에는 가능도비가 표준이다. $\square$

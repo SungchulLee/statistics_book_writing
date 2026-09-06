@@ -1,149 +1,138 @@
-# Cox Proportional Hazards
+# 콕스 비례위험 실습
 
-## Overview
+## 개요
 
-The Cox proportional hazards model is the most widely used regression framework in
-survival analysis.  It relates covariate effects to the hazard function without
-specifying a parametric form for the baseline hazard, making it a semi-parametric
-approach.  This page presents the model formulation, derives the partial likelihood,
-discusses hazard ratio interpretation, and covers diagnostic checks for the
-proportional hazards assumption.
+콕스 비례위험 모형은 생존분석에서 가장 널리 쓰이는 회귀 틀이다. 기저위험의 모수적 형태를
+지정하지 않고 공변량 효과를 위험함수에 연결하므로 준모수적 접근이다. 이 절에서는 모형을
+정식화하고, 부분가능도를 유도하며, 위험비 해석을 논의하고, 비례위험 가정의 진단을 다룬다.
 
-## Model Formulation
+## 모형 정식화
 
-The Cox model specifies the hazard for subject $i$ with covariate vector
-$\mathbf{x}_i = (x_{i1}, \ldots, x_{ip})^\top$ as
+콕스 모형은 공변량 벡터 $\mathbf{x}_i = (x_{i1}, \ldots, x_{ip})^\top$를 갖는 대상 $i$의
+위험을 다음과 같이 설정한다.
 
 $$
 h(t \mid \mathbf{x}_i) = h_0(t) \exp(\boldsymbol{\beta}^\top \mathbf{x}_i)
 $$
 
-where:
+여기서,
 
-- $h_0(t)$ is the **baseline hazard** --- an arbitrary non-negative function left
-  completely unspecified.
-- $\boldsymbol{\beta} = (\beta_1, \ldots, \beta_p)^\top$ are the regression
-  coefficients to be estimated.
-- $\exp(\boldsymbol{\beta}^\top \mathbf{x}_i)$ is the relative risk multiplier for
-  subject $i$.
+- $h_0(t)$는 **기저위험**으로, 전혀 지정되지 않은 임의의 음이 아닌 함수다.
+- $\boldsymbol{\beta} = (\beta_1, \ldots, \beta_p)^\top$는 추정할 회귀계수다.
+- $\exp(\boldsymbol{\beta}^\top \mathbf{x}_i)$는 대상 $i$의 상대위험 배수다.
 
-The **proportional hazards property** follows immediately: the hazard ratio between
-any two subjects is constant over time:
+**비례위험 성질**이 곧바로 따라온다. 임의의 두 대상 사이의 위험비가 시간에 걸쳐 일정하다.
 
 $$
 \frac{h(t \mid \mathbf{x}_i)}{h(t \mid \mathbf{x}_j)} = \exp\!\bigl(\boldsymbol{\beta}^\top(\mathbf{x}_i - \mathbf{x}_j)\bigr)
 $$
 
-The baseline hazard $h_0(t)$ cancels in the ratio.
+비에서 기저위험 $h_0(t)$가 소거된다.
 
-## Partial Likelihood
+## 부분가능도
 
-Let $t_{(1)} < \cdots < t_{(K)}$ be the $K$ distinct ordered event times, and let
-$i_j$ denote the subject experiencing the event at $t_{(j)}$.  The **risk set** at
-$t_{(j)}$ is
+$t_{(1)} < \cdots < t_{(K)}$를 서로 다른 $K$개의 사건시간을 크기순으로 나열한 것이라 하고,
+$t_{(j)}$에서 사건을 겪는 대상을 $i_j$라 하자. $t_{(j)}$의 **위험집합**은
 
 $$
 \mathcal{R}_j = \{i : t_i \geq t_{(j)}\}
 $$
 
-The partial likelihood is
+이다. 부분가능도는
 
 $$
 PL(\boldsymbol{\beta}) = \prod_{j=1}^{K} \frac{\exp(\boldsymbol{\beta}^\top \mathbf{x}_{i_j})}{\sum_{l \in \mathcal{R}_j} \exp(\boldsymbol{\beta}^\top \mathbf{x}_l)}
 $$
 
-The baseline hazard $h_0(t_{(j)})$ appears in both numerator and denominator and
-cancels.  This is the key insight of Cox (1972): covariate effects can be estimated
-without knowing $h_0(t)$.
+이다. 기저위험 $h_0(t_{(j)})$이 분자와 분모에 모두 나타나 소거된다. 이것이 Cox(1972)의 핵심
+착상이다. $h_0(t)$를 몰라도 공변량 효과를 추정할 수 있다.
 
-The partial log-likelihood is
+부분 로그가능도는
 
 $$
 \ell_P(\boldsymbol{\beta}) = \sum_{j=1}^{K} \left[\boldsymbol{\beta}^\top \mathbf{x}_{i_j} - \ln\!\left(\sum_{l \in \mathcal{R}_j} \exp(\boldsymbol{\beta}^\top \mathbf{x}_l)\right)\right]
 $$
 
-### Estimation
+이다.
 
-The MLE $\hat{\boldsymbol{\beta}}$ is obtained by maximizing $\ell_P$ using
-Newton-Raphson iteration:
+### 추정
+
+MLE $\hat{\boldsymbol{\beta}}$는 뉴턴-랩슨 반복으로 $\ell_P$를 최대화하여 얻는다.
 
 $$
 \boldsymbol{\beta}^{(m+1)} = \boldsymbol{\beta}^{(m)} + \mathcal{I}(\boldsymbol{\beta}^{(m)})^{-1} U(\boldsymbol{\beta}^{(m)})
 $$
 
-where $U(\boldsymbol{\beta})$ is the score vector and $\mathcal{I}(\boldsymbol{\beta})$
-is the observed information matrix.
+여기서 $U(\boldsymbol{\beta})$는 점수벡터이고 $\mathcal{I}(\boldsymbol{\beta})$는 관측
+정보행렬이다.
 
-## Hazard Ratios
+## 위험비
 
-The exponentiated coefficient $\exp(\hat{\beta}_j)$ is the **hazard ratio** for a
-one-unit increase in covariate $x_j$, holding all other covariates fixed:
+지수화한 계수 $\exp(\hat{\beta}_j)$는 다른 공변량을 고정한 채 공변량 $x_j$가 한 단위 증가할
+때의 **위험비**다.
 
 $$
 \text{HR}_j = \exp(\hat{\beta}_j)
 $$
 
-| $\text{HR}$ | Interpretation |
+| $\text{HR}$ | 해석 |
 |:------------:|:---------------|
-| $> 1$ | Higher hazard (shorter survival) |
-| $= 1$ | No effect |
-| $< 1$ | Lower hazard (longer survival) |
+| $> 1$ | 위험이 높음(생존이 짧음) |
+| $= 1$ | 효과 없음 |
+| $< 1$ | 위험이 낮음(생존이 김) |
 
-For a $c$-unit increase in a continuous covariate, the hazard ratio is
-$\exp(c \cdot \hat{\beta}_j)$.
+연속형 공변량이 $c$ 단위 증가하면 위험비는 $\exp(c \cdot \hat{\beta}_j)$다.
 
-### Confidence Interval
+### 신뢰구간
 
-A $100(1 - \alpha)\%$ confidence interval for the hazard ratio is
+위험비의 $100(1 - \alpha)\%$ 신뢰구간은
 
 $$
 \text{CI}_{\text{HR}} = \bigl(\exp(\hat{\beta}_j - z_{\alpha/2} \cdot \text{se}(\hat{\beta}_j)),\; \exp(\hat{\beta}_j + z_{\alpha/2} \cdot \text{se}(\hat{\beta}_j))\bigr)
 $$
 
-If the interval excludes 1, the covariate effect is statistically significant.
+이다. 구간이 1을 포함하지 않으면 그 공변량 효과는 통계적으로 유의하다.
 
-## Breslow Estimator of the Baseline Hazard
+## 기저위험의 브레슬로 추정량
 
-After estimating $\hat{\boldsymbol{\beta}}$, the baseline cumulative hazard is
-estimated by
+$\hat{\boldsymbol{\beta}}$를 추정한 뒤 기저 누적위험을 다음으로 추정한다.
 
 $$
 \hat{H}_0(t) = \sum_{j:\, t_{(j)} \leq t} \frac{d_j}{\sum_{l \in \mathcal{R}_j} \exp(\hat{\boldsymbol{\beta}}^\top \mathbf{x}_l)}
 $$
 
-The subject-specific survival function is then
+대상별 생존함수는 그러면
 
 $$
 \hat{S}(t \mid \mathbf{x}) = \exp\!\bigl(-\hat{H}_0(t)\bigr)^{\exp(\hat{\boldsymbol{\beta}}^\top \mathbf{x})}
 $$
 
-## Checking the Proportional Hazards Assumption
+이다.
 
-The proportional hazards (PH) assumption is critical for the validity of the Cox model.
-If violated, the hazard ratio is not constant over time and the standard interpretation
-breaks down.
+## 비례위험 가정 점검하기
 
-### Graphical Methods
+비례위험(PH) 가정은 콕스 모형의 타당성에 결정적이다. 위배되면 위험비가 시간에 걸쳐 일정하지
+않고 표준적 해석이 무너진다.
 
-- **Log-log plot**: Plot $\ln(-\ln \hat{S}(t))$ versus $\ln t$ for each group.  Under
-  PH, the curves should be approximately parallel.
-- **Schoenfeld residuals**: Plot scaled Schoenfeld residuals against time for each
-  covariate.  A non-zero slope suggests time-varying effects.
+### 그림 방법
 
-### Formal Test
+- **로그-로그 그림**: 집단마다 $\ln(-\ln \hat{S}(t))$를 $\ln t$에 대해 그린다. 비례위험
+  아래에서는 곡선들이 대략 평행해야 한다.
+- **쇤펠트 잔차**: 공변량마다 척도화된 쇤펠트 잔차를 시간에 대해 그린다. 기울기가 0이 아니면
+  시간 의존 효과를 시사한다.
 
-The Grambsch-Therneau test regresses scaled Schoenfeld residuals on a function of
-time.  A significant slope for covariate $j$ indicates that $\beta_j$ changes over
-time.
+### 형식적 검정
 
-!!! warning "Consequences of PH Violation"
+그램브시-서노 검정은 척도화된 쇤펠트 잔차를 시간의 함수에 회귀시킨다. 공변량 $j$의 기울기가
+유의하면 $\beta_j$가 시간에 따라 변한다는 뜻이다.
 
-    When proportional hazards do not hold, the estimated hazard ratio is a
-    time-averaged summary that may not accurately represent the effect at any
-    particular time.  Remedies include stratification, time-varying coefficients,
-    or switching to a parametric accelerated failure time model.
+!!! warning "비례위험 위배의 결과"
 
-## Implementation Sketch
+    비례위험이 성립하지 않으면 추정된 위험비는 시간에 걸쳐 평균한 요약값이며 어느 특정 시점의
+    효과도 정확히 나타내지 못할 수 있다. 대응책으로는 층화, 시간 의존 계수, 또는 모수적
+    가속실패시간 모형으로의 전환이 있다.
+
+## 구현 스케치
 
 ```python
 import numpy as np
@@ -177,59 +166,61 @@ def partial_log_likelihood(beta, X, times, events):
     return ll
 ```
 
-This implementation sorts subjects by decreasing time so that a cumulative sum
-efficiently computes the denominator of the partial likelihood at each event time.
+이 구현은 대상을 시간 내림차순으로 정렬하여, 누적합으로 각 사건시간의 부분가능도 분모를
+효율적으로 계산한다.
 
-!!! note "Production Use"
+!!! warning "이 스케치는 동점을 처리하지 않는다"
+    누적합 방식은 시간이 모두 서로 다를 때만 정확하다. 같은 시점에 여러 사건이 있으면 브레슬로나
+    에프론 근사가 필요한데, 위 코드는 정렬 순서에 따라 임의로 하나를 먼저 처리한 셈이 되어
+    결과가 정렬 방식에 의존한다. 또 사건과 절단이 같은 시점에 있으면 절단을 위험집합에 포함시키는
+    관례가 지켜지지 않을 수 있다.
 
-    For real analyses, use established libraries such as `lifelines` or `scikit-survival`
-    that handle ties (Breslow/Efron methods), compute standard errors, and provide
-    diagnostic tools.
+!!! note "실제 사용"
 
-## Interpretation
+    실제 분석에는 동점을 처리하고(브레슬로/에프론), 표준오차를 계산하며, 진단 도구를 제공하는
+    `lifelines`나 `scikit-survival` 같은 확립된 라이브러리를 쓰라.
 
-- The Cox model estimates **relative effects** of covariates on the hazard, not absolute
-  risk levels.
-- Hazard ratios quantify multiplicative changes in the instantaneous event rate, not
-  in cumulative probabilities.
-- The baseline hazard is a nuisance parameter; the Breslow estimator recovers it when
-  absolute survival predictions are needed.
-- Always verify the PH assumption before interpreting hazard ratios as time-constant
-  effects.
+## 해석
 
-## Exercises
+- 콕스 모형은 공변량이 위험에 미치는 **상대적 효과**를 추정하며 절대 위험 수준은 추정하지
+  않는다.
+- 위험비는 순간 사건율의 곱셈적 변화를 정량화하며 누적확률의 변화가 아니다.
+- 기저위험은 성가신 모수다. 절대 생존 예측이 필요하면 브레슬로 추정량으로 복원한다.
+- 위험비를 시간에 걸쳐 일정한 효과로 해석하기 전에 언제나 비례위험 가정을 확인하라.
 
-**Exercise 1.**
-Partial Likelihood Construction
+## 연습문제
 
-Three subjects have the following data:
+**연습문제 1.**
+부분가능도 구성
 
-| Subject | Time | Event | $x$ |
+대상 세 명의 자료가 다음과 같다.
+
+| 대상 | 시간 | 사건 | $x$ |
 |:-------:|:----:|:-----:|:---:|
 | A | 2 | 1 | 0.5 |
 | B | 3 | 0 | 1.2 |
 | C | 5 | 1 | 0.8 |
 
-Write the partial likelihood $PL(\beta)$ for this dataset.
+이 자료의 부분가능도 $PL(\beta)$를 쓰라.
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
 
-    Event times: $t_{(1)} = 2$ (subject A) and $t_{(2)} = 5$ (subject C).
+    사건시간은 $t_{(1)} = 2$(대상 A)와 $t_{(2)} = 5$(대상 C)다.
 
-    At $t_{(1)} = 2$: risk set $\mathcal{R}_1 = \{A, B, C\}$.
+    $t_{(1)} = 2$에서 위험집합은 $\mathcal{R}_1 = \{A, B, C\}$이므로
 
     $$
     \frac{\exp(0.5\beta)}{\exp(0.5\beta) + \exp(1.2\beta) + \exp(0.8\beta)}
     $$
 
-    At $t_{(2)} = 5$: subject A had the event at $t = 2$ and subject B was censored at
-    $t = 3$, so $\mathcal{R}_2 = \{C\}$.
+    이다. $t_{(2)} = 5$에서는 대상 A가 $t = 2$에 사건을 겪었고 대상 B가 $t = 3$에 절단되어
+    $\mathcal{R}_2 = \{C\}$이므로
 
     $$
     \frac{\exp(0.8\beta)}{\exp(0.8\beta)} = 1
     $$
 
-    The partial likelihood is:
+    가 되어 이 항은 $\beta$에 대한 정보를 전혀 주지 않는다. 따라서 부분가능도는
 
     $$
     PL(\beta) = \frac{\exp(0.5\beta)}{\exp(0.5\beta) + \exp(1.2\beta) + \exp(0.8\beta)}
@@ -237,101 +228,115 @@ Write the partial likelihood $PL(\beta)$ for this dataset.
 
 ---
 
-**Exercise 2.**
-Hazard Ratio Interpretation
+**연습문제 2.**
+위험비의 해석
 
-A Cox model for time-to-default includes three covariates:
+부도까지의 시간에 대한 콕스 모형이 공변량 세 개를 포함한다.
 
-| Covariate | $\hat{\beta}$ | $\text{se}(\hat{\beta})$ |
+| 공변량 | $\hat{\beta}$ | $\text{se}(\hat{\beta})$ |
 |:----------|:-------------:|:------------------------:|
-| Debt-to-income ratio | 0.42 | 0.10 |
-| Credit score (per 100 pts) | $-0.55$ | 0.12 |
-| Secured loan (1 = yes) | $-0.30$ | 0.18 |
+| 소득 대비 부채 비율 | 0.42 | 0.10 |
+| 신용점수(100점 단위) | $-0.55$ | 0.12 |
+| 담보대출(1 = 예) | $-0.30$ | 0.18 |
 
-**(a)** Compute and interpret the hazard ratio for each covariate.
+**(a)** 각 공변량의 위험비를 계산하고 해석하라.
 
-**(b)** Which covariates are significant at the 5% level?
+**(b)** 5% 수준에서 유의한 공변량은 무엇인가?
 
-??? success "Solution to Exercise 2"
+??? success "연습문제 2 풀이"
 
-    **(a)** Hazard ratios:
+    **(a)** 위험비는 다음과 같다.
 
-    - Debt-to-income: $\text{HR} = e^{0.42} = 1.522$.  A one-unit increase in the
-      debt-to-income ratio is associated with a 52.2% increase in the default hazard.
-    - Credit score: $\text{HR} = e^{-0.55} = 0.577$.  A 100-point increase in credit
-      score is associated with a 42.3% reduction in the default hazard.
-    - Secured loan: $\text{HR} = e^{-0.30} = 0.741$.  Secured loans have a 25.9%
-      lower default hazard compared to unsecured loans.
+    - 소득 대비 부채 비율: $\text{HR} = e^{0.42} = 1.522$. 이 비율이 한 단위 오르면 부도
+      위험이 52.2% 증가하는 것과 연관된다.
+    - 신용점수: $\text{HR} = e^{-0.55} = 0.577$. 신용점수가 100점 오르면 부도 위험이 42.3%
+      감소하는 것과 연관된다.
+    - 담보대출: $\text{HR} = e^{-0.30} = 0.741$. 담보대출의 부도 위험이 무담보대출보다 25.9%
+      낮다.
 
-    **(b)** Wald test: $|z| = |\hat{\beta}| / \text{se}$:
+    **(b)** 왈드 검정에서 $|z| = |\hat{\beta}| / \text{se}$이므로,
 
-    - Debt-to-income: $|z| = 0.42/0.10 = 4.20 > 1.96$ --- significant.
-    - Credit score: $|z| = 0.55/0.12 = 4.58 > 1.96$ --- significant.
-    - Secured loan: $|z| = 0.30/0.18 = 1.67 < 1.96$ --- not significant.
+    - 소득 대비 부채 비율: $|z| = 0.42/0.10 = 4.20 > 1.96$ --- 유의하다.
+    - 신용점수: $|z| = 0.55/0.12 = 4.58 > 1.96$ --- 유의하다.
+    - 담보대출: $|z| = 0.30/0.18 = 1.67 < 1.96$ --- 유의하지 않다.
 
-    Debt-to-income ratio and credit score are significant at the 5% level.  The
-    secured loan indicator is not.
+    소득 대비 부채 비율과 신용점수가 5% 수준에서 유의하고 담보대출 지시자는 그렇지 않다.
 
----
-
-**Exercise 3.**
-Proportional Hazards Check
-
-An analyst fits a Cox model with a treatment indicator ($x = 1$ for treatment, $x = 0$
-for control).  The log-log survival plot shows the two curves crossing at $t = 12$
-months.
-
-**(a)** What does this crossing imply about the proportional hazards assumption?
-
-**(b)** Suggest two remedies.
-
-??? success "Solution to Exercise 3"
-
-    **(a)** Crossing of the $\ln(-\ln \hat{S}(t))$ curves indicates that the hazard
-    ratio between treatment and control is **not constant** over time.  The
-    proportional hazards assumption is violated.  Before $t = 12$, one group has a
-    higher hazard; after $t = 12$, the other group does.
-
-    **(b)** Two remedies:
-
-    1. **Stratification**: Fit a stratified Cox model that allows a separate
-       baseline hazard for each stratum (e.g., early vs late period) while
-       constraining covariate effects to be the same across strata.
-    2. **Time-varying coefficient**: Extend the Cox model to allow $\beta(t)$ by
-       including an interaction between the treatment indicator and a function of
-       time (e.g., $x \cdot \ln t$).
+    !!! warning "\"유의하지 않다\"가 \"효과가 없다\"는 뜻은 아니다"
+        담보대출의 추정 위험비 $0.741$은 25.9% 위험 감소로 실무적으로 결코 작지 않은 크기다.
+        유의하지 않은 것은 효과가 없어서가 아니라 **표준오차 $0.18$이 커서** 정밀하게
+        추정되지 않았기 때문이다. 95% 신뢰구간은
+        $(e^{-0.30-1.96(0.18)},\ e^{-0.30+1.96(0.18)}) = (0.521,\ 1.054)$로, 48% 감소부터
+        5.5% 증가까지를 포함한다. 자료가 이 효과의 방향조차 확정하지 못한다는 뜻이지
+        효과가 없다는 뜻이 아니다. 담보 대출의 표본이 적었을 가능성이 크며, 자료를 더 모으면
+        유의해질 수 있다.
 
 ---
 
-**Exercise 4.**
-Breslow Estimator
+**연습문제 3.**
+비례위험 점검
 
-Given the partial likelihood estimate $\hat{\beta} = 0.4$ and the following data:
+어떤 분석자가 처리 지시자($x = 1$이면 처리, $x = 0$이면 대조)를 갖는 콕스 모형을 적합했다.
+로그-로그 생존 그림에서 두 곡선이 $t = 12$개월에서 교차한다.
 
-| $t_{(j)}$ | $d_j$ | Subjects in $\mathcal{R}_j$ | Their $x$ values |
+**(a)** 이 교차는 비례위험 가정에 대해 무엇을 함의하는가?
+
+**(b)** 대응책 두 가지를 제시하라.
+
+??? success "연습문제 3 풀이"
+
+    **(a)** $\ln(-\ln \hat{S}(t))$ 곡선의 교차는 처리군과 대조군의 위험비가 시간에 걸쳐
+    **일정하지 않다**는 뜻이다. 비례위험 가정이 위배되었다. $t = 12$ 이전에는 한 집단의 위험이
+    높고 그 이후에는 다른 집단의 위험이 높다.
+
+    **(b)** 두 가지 대응책.
+
+    1. **시간 의존 계수**: 처리 지시자와 시간 함수의 교호작용(예: $x \cdot \ln t$)을 넣어
+       $\beta(t)$를 허용한다. 위험비가 시간에 따라 변하는 것을 모형에 명시적으로 담는다.
+    2. **구간을 나눈 분석**: $t = 12$를 경계로 두 구간에서 각각 위험비를 추정한다. 교차 지점이
+       실질적 의미를 갖는다면(예: 수술의 초기 위험이 사라지는 시점) 해석하기 쉽다.
+
+    !!! warning "여기서 층화는 답이 아니다"
+        비례위험이 깨진 공변량으로 **층화**하면 그 공변량의 위험비를 아예 추정할 수 없다.
+        처리 효과가 바로 관심사인 이 상황에서는 답해야 할 질문 자체를 포기하는 셈이다.
+        층화는 처리가 아니라 **성가신 공변량**(예: 연구 기관, 병기)에서 비례위험이 깨졌을 때
+        쓰는 방법이다.
+
+        "초기 대 후기 기간으로 층화한다"는 서술도 정확하지 않다. 층화는 **시간이 아니라
+        대상**을 나누는 것이다. 시간을 나누는 것은 층화가 아니라 위의 2번, 곧 구간을 나눈
+        분석이다.
+
+---
+
+**연습문제 4.**
+브레슬로 추정량
+
+부분가능도 추정치 $\hat{\beta} = 0.4$와 다음 자료가 주어졌다.
+
+| $t_{(j)}$ | $d_j$ | $\mathcal{R}_j$의 대상 | 그들의 $x$ 값 |
 |:----------:|:-----:|:---------------------------:|:-----------------:|
 | 3 | 1 | A, B, C | 1, 0, 0.5 |
 | 7 | 1 | B, C | 0, 0.5 |
 
-Compute the Breslow estimate $\hat{H}_0(7)$.
+브레슬로 추정치 $\hat{H}_0(7)$을 계산하라.
 
-??? success "Solution to Exercise 4"
+??? success "연습문제 4 풀이"
 
-    At $t_{(1)} = 3$: the denominator is
+    $t_{(1)} = 3$에서 분모는
 
     $$
     \sum_{l \in \mathcal{R}_1} e^{0.4 x_l} = e^{0.4} + e^{0} + e^{0.2} = 1.492 + 1.000 + 1.221 = 3.713
     $$
 
-    Increment: $d_1 / 3.713 = 1/3.713 = 0.269$.
+    이므로 증분은 $d_1 / 3.713 = 1/3.713 = 0.269$다.
 
-    At $t_{(2)} = 7$: the denominator is
+    $t_{(2)} = 7$에서 분모는
 
     $$
     \sum_{l \in \mathcal{R}_2} e^{0.4 x_l} = e^{0} + e^{0.2} = 1.000 + 1.221 = 2.221
     $$
 
-    Increment: $d_2 / 2.221 = 1/2.221 = 0.450$.
+    이므로 증분은 $d_2 / 2.221 = 1/2.221 = 0.450$이고, 따라서
 
     $$
     \hat{H}_0(7) = 0.269 + 0.450 = 0.719
@@ -339,38 +344,37 @@ Compute the Breslow estimate $\hat{H}_0(7)$.
 
 ---
 
-**Exercise 5.**
-Why the Baseline Hazard Cancels
+**연습문제 5.**
+기저위험이 소거되는 이유
 
-Prove that the baseline hazard $h_0(t)$ cancels in the conditional probability used to
-construct the partial likelihood.  Specifically, show that
+부분가능도를 구성하는 조건부확률에서 기저위험 $h_0(t)$가 소거됨을 증명하라. 구체적으로 다음을
+보여라.
 
 $$
 \frac{h(t \mid \mathbf{x}_{i_j})}{\sum_{l \in \mathcal{R}_j} h(t \mid \mathbf{x}_l)} = \frac{\exp(\boldsymbol{\beta}^\top \mathbf{x}_{i_j})}{\sum_{l \in \mathcal{R}_j} \exp(\boldsymbol{\beta}^\top \mathbf{x}_l)}
 $$
 
-??? success "Solution to Exercise 5"
+??? success "연습문제 5 풀이"
 
-    By the Cox model specification, the hazard for subject $i$ at time $t$ is
+    콕스 모형의 설정에 따라 시점 $t$에서 대상 $i$의 위험은
 
     $$
     h(t \mid \mathbf{x}_i) = h_0(t) \exp(\boldsymbol{\beta}^\top \mathbf{x}_i)
     $$
 
-    Substituting into the ratio:
+    이다. 이를 비에 대입하면
 
     $$
     \frac{h(t \mid \mathbf{x}_{i_j})}{\sum_{l \in \mathcal{R}_j} h(t \mid \mathbf{x}_l)} = \frac{h_0(t) \exp(\boldsymbol{\beta}^\top \mathbf{x}_{i_j})}{\sum_{l \in \mathcal{R}_j} h_0(t) \exp(\boldsymbol{\beta}^\top \mathbf{x}_l)}
     $$
 
-    Since all terms in the numerator and denominator are evaluated at the same time
-    $t$, the factor $h_0(t) > 0$ can be factored out of the sum in the denominator:
+    이고, 분자와 분모의 모든 항이 같은 시점 $t$에서 평가되므로 $h_0(t) > 0$을 분모의 합에서
+    묶어 낼 수 있다.
 
     $$
     = \frac{h_0(t) \exp(\boldsymbol{\beta}^\top \mathbf{x}_{i_j})}{h_0(t) \sum_{l \in \mathcal{R}_j} \exp(\boldsymbol{\beta}^\top \mathbf{x}_l)} = \frac{\exp(\boldsymbol{\beta}^\top \mathbf{x}_{i_j})}{\sum_{l \in \mathcal{R}_j} \exp(\boldsymbol{\beta}^\top \mathbf{x}_l)}
     $$
 
-    The cancellation holds because $h_0(t)$ is a common multiplicative factor at each
-    event time.  This is what makes the Cox model semi-parametric: the regression
-    coefficients $\boldsymbol{\beta}$ can be estimated without specifying $h_0(t)$.
-    $\square$
+    소거가 성립하는 것은 $h_0(t)$가 각 사건시간에서 공통의 곱셈 인자이기 때문이다. 이것이
+    콕스 모형을 준모수적으로 만든다. $h_0(t)$를 지정하지 않고도 회귀계수
+    $\boldsymbol{\beta}$를 추정할 수 있다. $\square$

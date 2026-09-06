@@ -1,191 +1,189 @@
-# Interpreting Hazard Ratios
+# 위험비 해석
 
-The Cox model estimates regression coefficients $\boldsymbol{\beta}$, but these
-coefficients are not directly interpretable on a natural scale.  The standard
-practice is to exponentiate each coefficient to obtain a **hazard ratio** (HR),
-which measures the multiplicative effect of a covariate on the instantaneous
-event rate.
+콕스 모형은 회귀계수 $\boldsymbol{\beta}$를 추정하지만, 이 계수들은 자연스러운 척도에서 곧바로
+해석되지 않는다. 표준적인 관행은 각 계수를 지수화하여 **위험비**(HR)를 얻는 것이다. 위험비는
+공변량이 순간 사건율에 미치는 곱셈적 효과를 잰다.
 
-This section explains how to interpret hazard ratios for different covariate
-types, construct confidence intervals, and avoid common misinterpretations.
+이 절에서는 공변량 유형별로 위험비를 해석하는 방법, 신뢰구간을 구성하는 방법, 흔한 오해를
+피하는 방법을 설명한다.
 
-## Definition of the Hazard Ratio
+## 위험비의 정의
 
-Recall the Cox model:
+콕스 모형을 떠올리자.
 
 $$
 h(t \mid \mathbf{x}) = h_0(t) \exp(\boldsymbol{\beta}^\top \mathbf{x})
 $$
 
-For a single covariate $x_j$, holding all other covariates fixed, the hazard
-ratio for a one-unit increase in $x_j$ is
+다른 공변량을 모두 고정한 채 공변량 $x_j$가 한 단위 증가할 때의 위험비는
 
 $$
 \text{HR}_j = \frac{h(t \mid x_j + 1, \mathbf{x}_{-j})}{h(t \mid x_j, \mathbf{x}_{-j})} = \exp(\beta_j)
 $$
 
-The baseline hazard $h_0(t)$ cancels, and the ratio does not depend on $t$
-(the proportional hazards property).
+이다. 기저위험 $h_0(t)$가 소거되고 비가 $t$에 의존하지 않는다(비례위험 성질).
 
-## Interpretation by Covariate Type
+## 공변량 유형별 해석
 
-### Binary Covariates
+### 이항 공변량
 
-For a binary covariate (e.g., $x = 1$ for treatment, $x = 0$ for control):
+이항 공변량(예: 처리면 $x = 1$, 대조면 $x = 0$)에 대해,
 
 $$
 \text{HR} = \exp(\hat{\beta})
 $$
 
-- $\text{HR} > 1$: the treatment group has a **higher** hazard (shorter
-  survival, more events).
-- $\text{HR} < 1$: the treatment group has a **lower** hazard (longer
-  survival, fewer events).
-- $\text{HR} = 1$: no difference between groups.
+- $\text{HR} > 1$: 처리군의 위험이 **더 높다**(생존이 짧고 사건이 많다).
+- $\text{HR} < 1$: 처리군의 위험이 **더 낮다**(생존이 길고 사건이 적다).
+- $\text{HR} = 1$: 두 집단에 차이가 없다.
 
-!!! example "Treatment Effect on Survival"
+!!! example "생존에 대한 처리 효과"
 
-    A Cox model for post-surgery survival yields $\hat{\beta} = -0.35$ for
-    a new drug (coded 1) vs standard care (coded 0).  The hazard ratio is
-    $\text{HR} = e^{-0.35} = 0.705$.  Patients receiving the new drug have
-    a 29.5% lower hazard of death at any time, holding other covariates
-    constant.
+    수술 후 생존에 대한 콕스 모형이 신약(1로 부호화) 대 표준 치료(0)에 대해
+    $\hat{\beta} = -0.35$를 주었다. 위험비는 $\text{HR} = e^{-0.35} = 0.705$다. 다른
+    공변량을 고정할 때 신약을 받은 환자의 사망 위험이 임의의 시점에서 29.5% 낮다.
 
-### Continuous Covariates
+### 연속형 공변량
 
-For a continuous covariate (e.g., age in years), $\exp(\hat{\beta})$ is the
-hazard ratio for a **one-unit** increase.  This may be too fine a scale for
-practical interpretation.
+연속형 공변량(예: 나이(년))에 대해 $\exp(\hat{\beta})$는 **한 단위** 증가에 대한 위험비다.
+실무적 해석에는 척도가 너무 미세할 수 있다.
 
-For a $c$-unit increase, the hazard ratio is
+$c$ 단위 증가에 대한 위험비는
 
 $$
 \text{HR}_c = \exp(c \cdot \hat{\beta})
 $$
 
-!!! example "Age Effect on Default"
+이다.
 
-    A Cox model for loan default yields $\hat{\beta}_{\text{age}} = 0.03$
-    per year.  The HR per year is $e^{0.03} = 1.030$ (a 3.0% increase in
-    hazard per year).  The HR per decade is $e^{10 \times 0.03} = e^{0.3} = 1.350$
-    (a 35.0% increase in hazard per 10-year increase in borrower age).
+!!! example "부도에 대한 나이 효과"
 
-### Categorical Covariates with More Than Two Levels
+    대출 부도에 대한 콕스 모형이 연 단위로 $\hat{\beta}_{\text{age}} = 0.03$을 주었다.
+    연 단위 HR은 $e^{0.03} = 1.030$이다(연간 위험 3.0% 증가). 10년 단위 HR은
+    $e^{10 \times 0.03} = e^{0.3} = 1.350$이다(차입자 나이 10년 증가당 위험 35.0% 증가).
 
-A categorical variable with $G$ levels is encoded as $G - 1$ dummy variables
-relative to a reference category.  Each hazard ratio compares one level to the
-reference.
+### 수준이 셋 이상인 범주형 공변량
 
-!!! example "Industry Effect"
+수준이 $G$개인 범주형 변수는 기준범주에 대해 $G - 1$개의 가변수로 부호화된다. 각 위험비는 한
+수준을 기준범주와 비교한다.
 
-    A Cox model for corporate default includes industry with three levels:
-    manufacturing (reference), retail ($\hat{\beta}_1 = 0.45$), and
-    technology ($\hat{\beta}_2 = -0.20$).
+!!! example "산업 효과"
 
-    - Retail vs manufacturing: $\text{HR} = e^{0.45} = 1.57$.  Retail firms
-      default at 1.57 times the rate of manufacturing firms.
-    - Technology vs manufacturing: $\text{HR} = e^{-0.20} = 0.82$.
-      Technology firms default at 0.82 times the rate of manufacturing firms.
+    기업 부도에 대한 콕스 모형이 세 수준의 산업을 포함한다. 제조(기준), 소매
+    ($\hat{\beta}_1 = 0.45$), 기술($\hat{\beta}_2 = -0.20$).
 
-## Confidence Intervals for Hazard Ratios
+    - 소매 대 제조: $\text{HR} = e^{0.45} = 1.57$. 소매 기업이 제조 기업의 1.57배 비율로
+      부도를 낸다.
+    - 기술 대 제조: $\text{HR} = e^{-0.20} = 0.82$. 기술 기업이 제조 기업의 0.82배 비율로
+      부도를 낸다.
 
-A $100(1 - \alpha)\%$ confidence interval for $\beta_j$ is
+## 위험비의 신뢰구간
+
+$\beta_j$의 $100(1 - \alpha)\%$ 신뢰구간은
 
 $$
 \hat{\beta}_j \pm z_{\alpha/2} \cdot \text{se}(\hat{\beta}_j)
 $$
 
-where $\text{se}(\hat{\beta}_j) = \sqrt{[\mathcal{I}^{-1}]_{jj}}$ is obtained
-from the inverse of the observed information matrix.
+이며 $\text{se}(\hat{\beta}_j) = \sqrt{[\mathcal{I}^{-1}]_{jj}}$는 관측 정보행렬의
+역행렬에서 얻는다.
 
-Exponentiating the endpoints gives the confidence interval for the hazard ratio:
+양 끝점을 지수화하면 위험비의 신뢰구간을 얻는다.
 
 $$
 \text{CI}_{\text{HR}} = \bigl(\exp(\hat{\beta}_j - z_{\alpha/2} \cdot \text{se}),\; \exp(\hat{\beta}_j + z_{\alpha/2} \cdot \text{se})\bigr)
 $$
 
-If the interval excludes 1, the covariate has a statistically significant
-effect at the $\alpha$ level.
+구간이 1을 포함하지 않으면 그 공변량은 유의수준 $\alpha$에서 통계적으로 유의한 효과를 갖는다.
 
-## Hypothesis Test for a Single Coefficient
+## 단일 계수의 가설검정
 
-The **Wald test** for $H_0: \beta_j = 0$ (equivalently, $\text{HR}_j = 1$) is
+$H_0: \beta_j = 0$(동등하게 $\text{HR}_j = 1$)에 대한 **왈드 검정**은
 
 $$
 z = \frac{\hat{\beta}_j}{\text{se}(\hat{\beta}_j)} \;\xrightarrow{d}\; N(0, 1)
 $$
 
-The p-value is $2[1 - \mathcal{N}(|z|)]$.  Alternatively, the likelihood ratio test
-compares the partial log-likelihood with and without the covariate.
+이다. p-값은 $2[1 - \Phi(|z|)]$이며, $\Phi$는 표준정규 누적분포함수다. 대안으로 가능도비
+검정이 그 공변량을 넣은 경우와 뺀 경우의 부분 로그가능도를 비교한다.
 
-## Common Misinterpretations
+19장에서 보았듯 왈드 검정은 효과가 매우 클 때 힘을 잃을 수 있으므로(하우크-도너 현상),
+형식적 검정에는 가능도비 검정이 더 안전하다.
 
-!!! warning "Hazard Ratio Is Not a Risk Ratio"
+## 흔한 오해
 
-    $\text{HR} = 2$ does **not** mean "twice as likely to experience the
-    event."  It means the **instantaneous rate** is twice as high at every
-    time point.  The cumulative probability of the event depends on the entire
-    hazard trajectory, not just its ratio.
+!!! warning "위험비는 상대위험도가 아니다"
 
-!!! warning "HR Does Not Imply Shorter Median Survival"
+    $\text{HR} = 2$는 "사건을 겪을 가능성이 두 배"라는 뜻이 **아니다.** 모든 시점에서
+    **순간율**이 두 배라는 뜻이다. 사건의 누적확률은 위험비만이 아니라 위험 궤적 전체에
+    달려 있다.
 
-    $\text{HR} = 2$ does not mean the median survival is halved.  The
-    relationship between the hazard ratio and median survival depends on the
-    shape of the baseline hazard.
+!!! warning "HR가 중앙 생존시간의 단축을 뜻하지 않는다"
 
-Additional pitfalls:
+    $\text{HR} = 2$는 중앙 생존시간이 절반이 된다는 뜻이 아니다. 위험비와 중앙 생존시간의
+    관계는 기저위험의 모양에 달려 있다. 예컨대 기저가 지수분포이면 중앙값이 정확히 절반이
+    되지만, 형상 $k$인 와이불이면 $2^{-1/k}$배가 된다. $k = 2$이면 $0.707$배로 절반보다
+    훨씬 덜 줄어든다.
 
-- **Conditioning.** The HR is conditional on all other covariates being held
-  fixed.  A marginal hazard ratio (not conditioning on other covariates) can
-  differ substantially due to confounding.
-- **Non-proportional hazards.** If the proportional hazards assumption is
-  violated, the estimated HR is a time-averaged summary that may not
-  represent the covariate effect at any particular time.
+그 밖의 함정:
 
-## Summary Table
+- **조건부성.** HR는 다른 모든 공변량을 고정한 조건부 값이다. 다른 공변량을 조건으로 하지
+  않은 주변 위험비는 교락 때문에 상당히 다를 수 있다.
+- **비례위험 위배.** 비례위험 가정이 위배되면 추정된 HR는 시간에 걸쳐 평균한 요약값이며,
+  어느 특정 시점의 공변량 효과도 대표하지 못할 수 있다.
 
-| Covariate Type | HR Formula | Interpretation |
+## 요약표
+
+| 공변량 유형 | HR 공식 | 해석 |
 |:---------------|:-----------|:---------------|
-| Binary (0/1) | $e^{\hat{\beta}}$ | Hazard in group 1 relative to group 0 |
-| Continuous (1-unit) | $e^{\hat{\beta}}$ | Hazard change per unit increase |
-| Continuous ($c$-unit) | $e^{c\hat{\beta}}$ | Hazard change per $c$-unit increase |
-| Categorical ($G$ levels) | $e^{\hat{\beta}_g}$ | Level $g$ vs reference level |
+| 이항(0/1) | $e^{\hat{\beta}}$ | 집단 0 대비 집단 1의 위험 |
+| 연속형(1단위) | $e^{\hat{\beta}}$ | 한 단위 증가당 위험 변화 |
+| 연속형($c$단위) | $e^{c\hat{\beta}}$ | $c$단위 증가당 위험 변화 |
+| 범주형($G$수준) | $e^{\hat{\beta}_g}$ | 수준 $g$ 대 기준수준 |
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Cox Model Interpretation
+**연습문제 1.**
+콕스 모형의 해석
 
-A Cox model for employee turnover includes three covariates. The estimated
-coefficients and standard errors are:
+직원 이직에 대한 콕스 모형이 공변량 세 개를 포함한다. 추정된 계수와 표준오차는 다음과 같다.
 
-| Covariate | $\hat{\beta}$ | $\text{se}(\hat{\beta})$ |
+| 공변량 | $\hat{\beta}$ | $\text{se}(\hat{\beta})$ |
 |:----------|:-------------:|:------------------------:|
-| Salary (per \$10k) | $-0.18$ | $0.06$ |
-| Remote work (1 = yes) | $-0.42$ | $0.15$ |
-| Manager (1 = yes) | $0.31$ | $0.12$ |
+| 급여(\$10k 단위) | $-0.18$ | $0.06$ |
+| 재택근무(1 = 예) | $-0.42$ | $0.15$ |
+| 관리자(1 = 예) | $0.31$ | $0.12$ |
 
-**(a)** Compute and interpret the hazard ratio for each covariate.
+**(a)** 각 공변량의 위험비를 계산하고 해석하라.
 
-**(b)** Compute a 95% confidence interval for the hazard ratio of remote work.
+**(b)** 재택근무 위험비의 95% 신뢰구간을 계산하라.
 
-**(c)** Which covariates are significant at the 5% level?
+**(c)** 5% 수준에서 유의한 공변량은 무엇인가?
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
 
     **(a)**
 
-    - Salary: $\text{HR} = e^{-0.18} = 0.835$. Each \$10k increase in salary is
-      associated with a 16.5% reduction in turnover hazard.
-    - Remote work: $\text{HR} = e^{-0.42} = 0.657$. Remote workers have a 34.3%
-      lower turnover hazard than on-site workers.
-    - Manager: $\text{HR} = e^{0.31} = 1.363$. Managers have a 36.3% higher
-      turnover hazard than non-managers.
+    - 급여: $\text{HR} = e^{-0.18} = 0.835$. 급여가 \$10k 오를 때마다 이직 위험이 16.5%
+      낮아지는 것과 연관된다.
+    - 재택근무: $\text{HR} = e^{-0.42} = 0.657$. 재택근무자의 이직 위험이 출근자보다 34.3%
+      낮다.
+    - 관리자: $\text{HR} = e^{0.31} = 1.363$. 관리자의 이직 위험이 비관리자보다 36.3% 높다.
 
-    **(b)** CI for $\beta$: $-0.42 \pm 1.96 \times 0.15 = (-0.714, -0.126)$.
-    CI for HR: $(e^{-0.714}, e^{-0.126}) = (0.490, 0.882)$. Since the interval
-    excludes 1, remote work significantly reduces turnover.
+    **(b)** $\beta$의 신뢰구간은 $-0.42 \pm 1.96 \times 0.15 = (-0.714,\ -0.126)$이고,
+    HR의 신뢰구간은 $(e^{-0.714},\ e^{-0.126}) = (0.490,\ 0.882)$다. 구간이 1을 포함하지
+    않으므로 재택근무가 이직을 유의하게 줄인다.
 
-    **(c)** Wald test: $|z| = |\hat{\beta}|/\text{se}$. Salary: $3.00$;
-    Remote: $2.80$; Manager: $2.58$. All three exceed $z_{0.025} = 1.96$, so
-    all three are significant at the 5% level.
+    **(c)** 왈드 검정에서 $|z| = |\hat{\beta}|/\text{se}$이므로 급여 $3.00$, 재택근무 $2.80$,
+    관리자 $2.58$이다. 셋 다 $z_{0.025} = 1.96$을 넘으므로 세 공변량 모두 5% 수준에서
+    유의하다.
+
+    !!! warning "\"연관\"이지 \"인과\"가 아니다"
+        (a)의 급여 해석에서 "연관된다"라고 쓴 것에 주의하라. 이 자료는 관찰자료이므로 급여를
+        올리면 이직이 줄어든다는 인과적 결론을 뒷받침하지 않는다. 성과가 좋은 직원이 급여도
+        높고 이직도 적을 수 있으며(교락), 그 경우 급여 인상 자체는 효과가 없을 수 있다.
+        1장에서 다룬 관찰연구의 한계가 그대로 적용된다.
+
+        마찬가지로 관리자의 HR가 높은 것도 "승진시키면 이직한다"는 뜻이 아니다. 이직 의사가
+        있는 사람이 관리자 직책을 협상 카드로 쓸 수도 있고, 관리자 직무가 외부 시장에서 더
+        가치 있게 평가될 수도 있다.

@@ -1,196 +1,309 @@
-# Log-Normal and Log-Logistic Models
+# 로그정규 모형과 로그로지스틱 모형
 
-The exponential and Weibull models assume that the hazard function is monotone
-(constant, increasing, or decreasing).  Many real-world processes, however,
-exhibit a **non-monotone hazard**: the risk peaks at some time and then
-declines.  Loan default rates often rise in the first year and then fall among
-surviving borrowers.  Disease recurrence risk may spike shortly after treatment
-and then diminish.
+지수 모형과 와이불 모형은 위험함수가 단조(일정, 증가, 또는 감소)라고 가정한다. 그러나 현실의
+많은 과정은 **비단조 위험**을 보인다. 위험이 어느 시점에 정점을 이룬 뒤 감소하는 것이다. 대출
+부도율은 첫해에 올랐다가 살아남은 차입자 사이에서 떨어지는 경우가 많다. 질병 재발 위험은 치료
+직후에 치솟았다가 잦아들 수 있다.
 
-The **log-normal** and **log-logistic** models accommodate this hump-shaped
-hazard pattern.  Both belong to the accelerated failure time (AFT) family and
-model $\ln T$ with a location-scale distribution.
+**로그정규**와 **로그로지스틱** 모형이 이 봉우리형 위험 양상을 수용한다. 둘 다
+가속실패시간(AFT) 족에 속하며 $\ln T$를 위치-척도 분포로 모형화한다.
 
-## Log-Normal Model
+## 로그정규 모형
 
-If $T$ is a survival time such that $\ln T \sim N(\mu, \sigma^2)$, then $T$
-follows a **log-normal distribution** with parameters $\mu$ (location) and
-$\sigma > 0$ (scale).
+생존시간 $T$가 $\ln T \sim N(\mu, \sigma^2)$을 만족하면 $T$는 위치모수 $\mu$와 척도모수
+$\sigma > 0$을 갖는 **로그정규분포**를 따른다.
 
-**Density:**
+**밀도:**
 
 $$
 f(t) = \frac{1}{t \sigma \sqrt{2\pi}} \exp\!\left(-\frac{(\ln t - \mu)^2}{2\sigma^2}\right) \qquad t > 0
 $$
 
-**Survival function:**
+**생존함수:**
 
 $$
-S(t) = 1 - \mathcal{N}\!\left(\frac{\ln t - \mu}{\sigma}\right)
+S(t) = 1 - \Phi\!\left(\frac{\ln t - \mu}{\sigma}\right)
 $$
 
-where $\mathcal{N}(\cdot)$ is the standard normal CDF.
+여기서 $\Phi(\cdot)$는 표준정규 누적분포함수다.
 
-**Hazard function:**
+**위험함수:**
 
 $$
-h(t) = \frac{f(t)}{S(t)} = \frac{\phi\!\left(\frac{\ln t - \mu}{\sigma}\right)}{t \sigma \left[1 - \mathcal{N}\!\left(\frac{\ln t - \mu}{\sigma}\right)\right]}
+h(t) = \frac{f(t)}{S(t)} = \frac{\phi\!\left(\frac{\ln t - \mu}{\sigma}\right)}{t \sigma \left[1 - \Phi\!\left(\frac{\ln t - \mu}{\sigma}\right)\right]}
 $$
 
-where $\phi(\cdot)$ is the standard normal PDF.
+여기서 $\phi(\cdot)$는 표준정규 확률밀도함수다.
 
-The log-normal hazard is **not monotone**: it increases from 0 to a peak and
-then decreases toward 0 as $t \to \infty$.
+로그정규 위험은 **단조가 아니다.** 0에서 시작해 정점까지 올라간 뒤 $t \to \infty$에서 0을
+향해 감소한다.
 
-**Mean and median:**
+**평균과 중앙값:**
 
 $$
 E[T] = \exp\!\left(\mu + \frac{\sigma^2}{2}\right), \qquad t_{0.5} = e^\mu
 $$
 
-The median has a particularly clean form: it equals $e^\mu$, independent of
-$\sigma$.
+중앙값의 형태가 특히 깔끔하다. $\sigma$와 무관하게 $e^\mu$다.
 
-!!! example "Log-Normal Default Hazard"
+!!! example "로그정규 부도 위험"
 
-    A bank fits a log-normal model to time-to-default data and estimates
-    $\hat{\mu} = 3.2$ and $\hat{\sigma} = 0.8$.  The median time to default
-    is $e^{3.2} = 24.5$ months.  The hazard peaks before the median and then
-    declines, consistent with the observation that default risk rises during
-    the loan's seasoning period and then falls.
+    어떤 은행이 부도까지의 시간 자료에 로그정규 모형을 적합하여 $\hat{\mu} = 3.2$,
+    $\hat{\sigma} = 0.8$을 얻었다. 부도까지의 중앙시간은 $e^{3.2} = 24.5$개월이다. 위험은
+    중앙값 이전에 정점을 이룬 뒤 감소하는데, 이는 대출의 숙성기에 부도 위험이 올랐다가
+    떨어진다는 관찰과 부합한다.
 
-## Log-Logistic Model
+## 로그로지스틱 모형
 
-If $\ln T$ follows a logistic distribution with location $\mu$ and scale
-$\sigma > 0$, then $T$ follows a **log-logistic distribution**.  The standard
-parameterization uses shape $k = 1/\sigma$ and scale $\lambda = e^\mu$.
+$\ln T$가 위치 $\mu$, 척도 $\sigma > 0$인 로지스틱 분포를 따르면 $T$는 **로그로지스틱
+분포**를 따른다. 표준적인 모수화는 형상 $k = 1/\sigma$와 척도 $\lambda = e^\mu$를 쓴다.
 
-**Survival function:**
+**생존함수:**
 
 $$
 S(t) = \frac{1}{1 + (t/\lambda)^k}
 $$
 
-**Hazard function:**
+**위험함수:**
 
 $$
 h(t) = \frac{(k/\lambda)(t/\lambda)^{k-1}}{1 + (t/\lambda)^k}
 $$
 
-**Density:**
+**밀도:**
 
 $$
 f(t) = \frac{(k/\lambda)(t/\lambda)^{k-1}}{\left[1 + (t/\lambda)^k\right]^2}
 $$
 
-The hazard shape depends on $k$:
+위험의 모양은 $k$에 달려 있다.
 
-| $k$ | Hazard Behavior |
+| $k$ | 위험의 거동 |
 |:---:|:----------------|
-| $k \leq 1$ | Monotonically decreasing from $\infty$ at $t = 0$ |
-| $k > 1$ | Hump-shaped: increases to a peak, then decreases |
+| $k \leq 1$ | $t = 0$의 $\infty$에서 단조 감소 |
+| $k > 1$ | 봉우리형. 정점까지 증가한 뒤 감소 |
 
-When $k > 1$, the log-logistic hazard has the same qualitative shape as the
-log-normal hazard (rises then falls), but its survival function has a simpler
-closed form.
+$k > 1$이면 로그로지스틱 위험은 로그정규 위험과 질적으로 같은 모양(올랐다가 내려감)을 갖지만,
+생존함수가 더 단순한 닫힌 형태를 갖는다.
 
-**Median survival time:**
+**중앙 생존시간:**
 
 $$
 t_{0.5} = \lambda
 $$
 
-This follows directly from $S(\lambda) = 1/(1 + 1) = 0.5$.
+이는 $S(\lambda) = 1/(1 + 1) = 0.5$에서 곧바로 나온다.
 
-## Comparison of Log-Normal and Log-Logistic
+## 로그정규와 로그로지스틱의 비교
 
-| Property | Log-Normal | Log-Logistic |
+| 성질 | 로그정규 | 로그로지스틱 |
 |:---------|:-----------|:-------------|
-| $\ln T$ distribution | Normal | Logistic |
-| Survival function | Involves $\mathcal{N}$ (no closed form) | Closed form: $1/[1 + (t/\lambda)^k]$ |
-| Hazard shape | Always hump-shaped | Hump-shaped ($k > 1$) or decreasing ($k \leq 1$) |
-| Tail behavior | Hazard $\to 0$ faster | Hazard $\to 0$ more slowly (heavier tails) |
-| Median | $e^\mu$ | $\lambda$ |
-| Closed-form $S(t)$ | No | Yes |
+| $\ln T$의 분포 | 정규 | 로지스틱 |
+| 생존함수 | $\Phi$를 포함(닫힌 형태 없음) | 닫힌 형태 $1/[1 + (t/\lambda)^k]$ |
+| 위험의 모양 | 항상 봉우리형 | 봉우리형($k > 1$) 또는 감소($k \leq 1$) |
+| 꼬리 거동 | 위험이 더 빨리 $\to 0$ | 위험이 더 느리게 $\to 0$(더 두꺼운 꼬리) |
+| 중앙값 | $e^\mu$ | $\lambda$ |
+| 닫힌 형태 $S(t)$ | 없음 | 있음 |
 
-The log-logistic model is often preferred for computational convenience because
-its survival function does not involve the normal CDF.
+로그로지스틱 모형은 생존함수에 정규 누적분포함수가 들어가지 않아 계산이 편리하므로 자주
+선호된다.
 
-## Accelerated Failure Time Interpretation
+## 가속실패시간 해석
 
-Both models belong to the **accelerated failure time (AFT)** family.  An AFT
-model with covariates $\mathbf{x}$ specifies
+두 모형 모두 **가속실패시간(AFT)** 족에 속한다. 공변량 $\mathbf{x}$를 갖는 AFT 모형은 다음을
+설정한다.
 
 $$
 \ln T = \mathbf{x}^\top \boldsymbol{\beta} + \sigma W
 $$
 
-where $W$ is a standardized error distribution:
+여기서 $W$는 표준화된 오차분포다.
 
-- $W \sim N(0, 1)$ gives the log-normal AFT model.
-- $W \sim \text{Logistic}(0, 1)$ gives the log-logistic AFT model.
+- $W \sim N(0, 1)$이면 로그정규 AFT 모형이 된다.
+- $W \sim \text{Logistic}(0, 1)$이면 로그로지스틱 AFT 모형이 된다.
 
-In the AFT interpretation, covariates **accelerate or decelerate** the time
-scale.  A covariate with coefficient $\beta_j > 0$ extends survival time by a
-factor of $e^{\beta_j}$; a coefficient $\beta_j < 0$ shortens it.
+AFT 해석에서 공변량은 시간 척도를 **가속하거나 감속한다.** 계수 $\beta_j > 0$인 공변량은
+생존시간을 $e^{\beta_j}$배 늘리고, $\beta_j < 0$이면 줄인다.
 
-!!! note "AFT vs Proportional Hazards"
+!!! note "AFT 대 비례위험"
 
-    The Cox model (Section 21.4) assumes covariates act multiplicatively on
-    the hazard.  AFT models assume covariates act multiplicatively on the
-    time scale.  The Weibull is the only model that satisfies both the
-    proportional hazards and AFT properties simultaneously.
+    콕스 모형(21.4절)은 공변량이 위험에 곱셈적으로 작용한다고 가정한다. AFT 모형은 공변량이
+    시간 척도에 곱셈적으로 작용한다고 가정한다. 비례위험 성질과 AFT 성질을 동시에 만족하는
+    모형은 와이불이 유일하다.
 
-## Checking Model Fit
+## 모형 적합도 점검
 
-**Log-normal check.** If $T$ is log-normal, then $\mathcal{N}^{-1}(1 - \hat{S}(t))$
-plotted against $\ln t$ should be approximately linear with slope $1/\sigma$
-and intercept $-\mu/\sigma$.
+**로그정규 점검.** $T$가 로그정규이면 $\Phi^{-1}(1 - \hat{S}(t))$를 $\ln t$에 대해 그린
+그림이 기울기 $1/\sigma$, 절편 $-\mu/\sigma$인 직선에 가까워야 한다.
 
-**Log-logistic check.** If $T$ is log-logistic, then
-$\ln[\hat{S}(t)^{-1} - 1]$ plotted against $\ln t$ should be approximately
-linear with slope $k$ and intercept $-k \ln \lambda$.
+**로그로지스틱 점검.** $T$가 로그로지스틱이면 $\ln[\hat{S}(t)^{-1} - 1]$을 $\ln t$에 대해
+그린 그림이 기울기 $k$, 절편 $-k \ln \lambda$인 직선에 가까워야 한다.
 
-These graphical checks complement formal goodness-of-fit tests and help
-distinguish between the log-normal and log-logistic when both fit reasonably
-well.
+이 그림 점검들은 형식적 적합도 검정을 보완하며, 두 모형이 모두 그럴듯하게 맞을 때 둘을
+구별하는 데 도움이 된다.
 
-!!! tip "When to Choose These Models"
+!!! tip "이 모형들을 언제 고를 것인가"
 
-    Use the log-normal or log-logistic model when the cumulative hazard plot
-    (Nelson--Aalen) shows curvature inconsistent with the Weibull, and when
-    substantive knowledge suggests the hazard peaks and then declines.  If the
-    hazard is monotone, the Weibull model is a better and simpler choice.
+    (넬슨-알렌) 누적위험 그림이 와이불과 맞지 않는 휘어짐을 보이고, 배경지식이 위험의 정점
+    이후 감소를 시사할 때 로그정규나 로그로지스틱을 쓴다. 위험이 단조라면 와이불이 더 낫고
+    더 단순한 선택이다.
 
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Describe the main concept of Log-Normal and Log-Logistic Models and explain why it matters for statistical practice.
+**연습문제 1.**
+로그로지스틱 위험이 $k > 1$일 때 봉우리형임을 보이고, 정점의 위치를 구하라. $k \le 1$일 때는
+왜 단조 감소인가?
 
-??? success "Solution to Exercise 1"
-    Log-Normal and Log-Logistic Models is a core topic in statistics that provides tools for drawing reliable inferences from data. It matters because proper application ensures valid conclusions, correctly quantified uncertainty, and appropriate handling of the assumptions that underpin the method. Practitioners who understand this concept can avoid common pitfalls and choose the right analytical approach for their data.
+??? success "연습문제 1 풀이"
+
+    $u = (t/\lambda)^k$로 두면 위험함수는
+
+    $$
+    h(t) = \frac{(k/\lambda)(t/\lambda)^{k-1}}{1 + (t/\lambda)^k}
+    $$
+
+    이다. $\ln h(t) = \ln(k/\lambda) + (k-1)\ln(t/\lambda) - \ln(1 + u)$를 $t$로 미분하면
+
+    $$
+    \frac{h'(t)}{h(t)} = \frac{k-1}{t} - \frac{1}{1+u}\cdot\frac{ku}{t}
+    = \frac{1}{t}\left[(k-1) - \frac{ku}{1+u}\right]
+    $$
+
+    이다. 대괄호를 정리하면
+
+    $$
+    (k-1) - \frac{ku}{1+u} = \frac{(k-1)(1+u) - ku}{1+u} = \frac{k - 1 - u}{1+u}
+    $$
+
+    이므로, $h'(t)$의 부호는 $k - 1 - u$의 부호와 같다.
+
+    **$k > 1$인 경우.** $u$가 0에서 $\infty$까지 증가하므로 $k-1-u$가 처음에는 양수였다가
+    $u = k-1$에서 0이 되고 그 뒤 음수가 된다. 즉 위험이 증가했다가 감소하는 **봉우리형**이다.
+    정점은 $(t/\lambda)^k = k-1$, 즉
+
+    $$
+    t^{\ast} = \lambda\,(k-1)^{1/k}
+    $$
+
+    에 있다.
+
+    **$k \le 1$인 경우.** $u > 0$이므로 $k - 1 - u < 0$이 항상 성립한다. 위험이 처음부터 끝까지
+    **단조 감소**한다. 특히 $t \to 0^+$에서 $h(t) \to \infty$다($k < 1$일 때).
+
+    **수치 예.** $k = 2$, $\lambda = 30$이면 정점은 $t^\ast = 30 \times 1^{1/2} = 30$으로
+    중앙값과 일치한다. $k = 3$, $\lambda = 30$이면
+    $t^\ast = 30 \times 2^{1/3} = 37.8$로 중앙값보다 뒤에 온다. $\square$
 
 ---
 
-**Exercise 2.**
-State the key assumptions required by the method discussed here. How can each assumption be checked?
+**연습문제 2.**
+로그정규 모형에서 $\hat\mu = 3.2$, $\hat\sigma = 0.8$일 때 다음을 계산하라.
 
-??? success "Solution to Exercise 2"
-    The main assumptions typically include: (1) independence of observations -- verified by understanding the data collection process and checking for serial correlation; (2) distributional requirements (e.g., normality) -- checked with Q-Q plots and formal tests like Shapiro-Wilk; (3) equal variances (if applicable) -- assessed with boxplots and Levene's test. When assumptions are violated, consider robust alternatives, transformations, or nonparametric methods.
+**(a)** 중앙 생존시간과 평균 생존시간.
+
+**(b)** $\hat S(12)$와 $\hat S(36)$.
+
+**(c)** 평균이 중앙값보다 훨씬 큰 이유.
+
+??? success "연습문제 2 풀이"
+
+    **(a)**
+
+    $$
+    t_{0.5} = e^{\mu} = e^{3.2} = 24.53 \text{ 개월}
+    $$
+
+    $$
+    E[T] = \exp\!\left(\mu + \frac{\sigma^2}{2}\right) = \exp(3.2 + 0.32) = e^{3.52} = 33.78 \text{ 개월}
+    $$
+
+    **(b)**
+
+    $$
+    \hat S(12) = 1 - \Phi\!\left(\frac{\ln 12 - 3.2}{0.8}\right) = 1 - \Phi(-0.8939) = 0.8143
+    $$
+
+    $$
+    \hat S(36) = 1 - \Phi\!\left(\frac{\ln 36 - 3.2}{0.8}\right) = 1 - \Phi(0.4794) = 0.3158
+    $$
+
+    **(c)** $E[T]/t_{0.5} = e^{\sigma^2/2} = e^{0.32} = 1.377$이다. 즉 평균이 중앙값의
+    $1.377$배다. 로그정규는 오른쪽으로 치우친 분포이고, 그 치우침의 크기가 오직 $\sigma$에만
+    의존한다. $\sigma$가 클수록 비율이 급격히 커진다($\sigma = 1.5$이면 $e^{1.125} = 3.08$배).
+
+    이 비율이 $\sigma$만의 함수라는 사실은 진단에도 쓸 수 있다. 자료에서 표본평균과 표본중앙값의
+    비가 $e^{\hat\sigma^2/2}$와 크게 다르면 로그정규 가정이 의심스럽다. $\square$
 
 ---
 
-**Exercise 3.**
-Work through a small numerical example illustrating the application of the technique from this section.
+**연습문제 3.**
+로그정규와 로그로지스틱은 위험 모양이 비슷한데도 꼬리 거동이 다르다. 이 차이가 실무적으로 어떤
+결과를 낳는지 설명하라.
 
-??? success "Solution to Exercise 3"
-    A structured approach to applying this technique involves: (1) clearly stating the hypotheses or estimation goal; (2) verifying that the data meet the required assumptions; (3) computing the relevant test statistic, estimate, or model fit; (4) obtaining the p-value, confidence interval, or posterior distribution; (5) interpreting the result in the context of the original question. Following these steps systematically ensures a rigorous and reproducible analysis.
+??? success "연습문제 3 풀이"
+
+    **꼬리 거동의 차이.** $t \to \infty$에서
+
+    - **로그정규:** $h(t) \sim \dfrac{\ln t - \mu}{\sigma^2 t}$로, $1/t$보다 조금 느리게
+      0으로 간다. 실제로는 $t\,h(t) \to \infty$다.
+    - **로그로지스틱:** $S(t) \approx (t/\lambda)^{-k}$이므로 $h(t) \approx k/t$이고,
+      $t\,h(t) \to k$로 수렴한다.
+
+    로그로지스틱의 생존함수가 **멱함수 꼬리**를 가져 로그정규보다 훨씬 두껍다. 실제로
+    로그로지스틱은 $k \le 1$이면 평균조차 존재하지 않는다.
+
+    **실무적 결과.**
+
+    1. **극단적 지속시간의 예측.** 두 모형이 관측 구간에서는 거의 같은 적합을 주더라도,
+       "10년 뒤에도 부도를 내지 않을 확률" 같은 외삽에서는 크게 갈린다. 로그로지스틱이 훨씬
+       큰 값을 준다.
+    2. **평균의 안정성.** 로그로지스틱에서 $k$가 1에 가까우면 평균 생존시간의 추정이 극도로
+       불안정하다. 표본을 조금만 바꿔도 평균이 크게 변한다. 이런 상황에서는 중앙값이나
+       제한 평균(RMST)만 보고해야 한다.
+    3. **모형 선택의 실질적 중요성.** AIC 차이가 작아 "둘 중 무엇이든 상관없다"고 보이더라도,
+       외삽이 필요한 응용에서는 선택이 결론을 바꾼다. 보험 준비금 산정처럼 꼬리가 중요한
+       문제에서는 AIC보다 배경지식과 꼬리 진단이 우선해야 한다. $\square$
 
 ---
 
-**Exercise 4.**
-Compare the approach from this section with an alternative method. When would you choose each?
+**연습문제 4.**
+본문의 두 그림 점검(로그정규는 $\Phi^{-1}(1-\hat S)$ 대 $\ln t$, 로그로지스틱은
+$\ln[\hat S^{-1}-1]$ 대 $\ln t$)이 왜 직선이 되는지 각각 유도하라.
 
-??? success "Solution to Exercise 4"
-    The method discussed here is appropriate when its assumptions hold and the sample size is sufficient for the asymptotic approximations to be accurate. Alternative approaches include: (1) nonparametric methods -- preferred when distributional assumptions are suspect; (2) bootstrap methods -- useful when analytical reference distributions are unavailable; (3) Bayesian methods -- valuable when incorporating prior information or when direct probability statements about parameters are desired. Running multiple approaches and comparing results provides a useful robustness check.
+??? success "연습문제 4 풀이"
+
+    **로그정규.** $S(t) = 1 - \Phi\!\left(\frac{\ln t - \mu}{\sigma}\right)$이므로
+    $1 - S(t) = \Phi\!\left(\frac{\ln t - \mu}{\sigma}\right)$이고, 양변에 $\Phi^{-1}$을
+    적용하면
+
+    $$
+    \Phi^{-1}\bigl(1 - S(t)\bigr) = \frac{\ln t - \mu}{\sigma} = \frac{1}{\sigma}\ln t - \frac{\mu}{\sigma}
+    $$
+
+    이 되어 $\ln t$에 대해 기울기 $1/\sigma$, 절편 $-\mu/\sigma$인 직선이다.
+
+    **로그로지스틱.** $S(t) = \dfrac{1}{1 + (t/\lambda)^k}$에서
+
+    $$
+    \frac{1}{S(t)} - 1 = (t/\lambda)^k
+    $$
+
+    이고 로그를 취하면
+
+    $$
+    \ln\!\left[\frac{1}{S(t)} - 1\right] = k\ln t - k\ln\lambda
+    $$
+
+    이 되어 기울기 $k$, 절편 $-k\ln\lambda$인 직선이다.
+
+    !!! note "이 두 변환은 익숙한 것이다"
+        로그로지스틱의 변환 $\ln[S^{-1} - 1] = \ln\frac{1-S}{S} = \operatorname{logit}(1-S)$는
+        정확히 19장의 **로짓**이다. 로그정규의 변환은 프로빗이다. 즉 "$\ln T$가 로지스틱이면
+        $F(t)$를 로짓 변환하라", "$\ln T$가 정규이면 프로빗 변환하라"는 일반 원리의 한
+        사례다.
+
+        와이불의 $\ln(-\ln \hat S)$ 변환도 같은 계열이며, 여-로그-로그 변환이라 불린다. 세
+        변환 모두 $\ln T$의 분포함수를 선형화하는 것이 목적이다. 그래서 세 그림을 나란히
+        그려 어느 것이 가장 직선에 가까운지 보는 것이 표준적인 모형 선택 절차가 된다.
+        $\square$

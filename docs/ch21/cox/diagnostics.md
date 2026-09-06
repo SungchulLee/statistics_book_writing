@@ -1,211 +1,295 @@
-# Model Diagnostics (Schoenfeld Residuals)
+# 모형 진단(쇤펠트 잔차)
 
-Fitting a Cox model is only the first step.  Before interpreting hazard ratios,
-the analyst must verify that the model captures the data structure adequately.
-Model diagnostics for the Cox model center on three types of residuals, each
-designed to detect a different kind of misspecification.
+콕스 모형을 적합하는 것은 첫걸음일 뿐이다. 위험비를 해석하기 전에 분석자는 모형이 자료 구조를
+제대로 포착했는지 확인해야 한다. 콕스 모형의 진단은 세 가지 잔차를 중심으로 이루어지며, 각각
+다른 종류의 모형 오지정을 탐지하도록 설계되었다.
 
-This section defines the main residual types---Schoenfeld, martingale, and
-deviance---and explains how to use them for checking the proportional hazards
-assumption, detecting non-linearity, and identifying influential observations.
+이 절에서는 주요 잔차 유형 --- 쇤펠트, 마팅게일, 이탈도 --- 를 정의하고, 이를 비례위험 가정
+점검, 비선형성 탐지, 영향점 식별에 쓰는 방법을 설명한다.
 
-## Schoenfeld Residuals
+## 쇤펠트 잔차
 
-Schoenfeld residuals were introduced in the previous section as the basis for
-the proportional hazards test.  Here we describe their construction and
-interpretation in more detail.
+쇤펠트 잔차는 앞 절에서 비례위험 검정의 기초로 소개했다. 여기서는 그 구성과 해석을 더 자세히
+서술한다.
 
-### Definition
+### 정의
 
-At each event time $t_{(j)}$, the Schoenfeld residual for covariate $k$ is
+각 사건시간 $t_{(j)}$에서 공변량 $k$의 쇤펠트 잔차는
 
 $$
 r_{jk} = x_{i_j, k} - \bar{x}_{jk}(\hat{\boldsymbol{\beta}})
 $$
 
-where $x_{i_j, k}$ is the covariate value for the subject who experienced the
-event, and $\bar{x}_{jk}$ is the weighted average of covariate $k$ in the risk
-set:
+이다. 여기서 $x_{i_j, k}$는 사건을 겪은 대상의 공변량 값이고, $\bar{x}_{jk}$는 위험집합에서
+공변량 $k$의 가중평균이다.
 
 $$
 \bar{x}_{jk}(\boldsymbol{\beta}) = \frac{\sum_{l \in \mathcal{R}_j} x_{lk} \exp(\boldsymbol{\beta}^\top \mathbf{x}_l)}{\sum_{l \in \mathcal{R}_j} \exp(\boldsymbol{\beta}^\top \mathbf{x}_l)}
 $$
 
-There is one Schoenfeld residual vector per event (not per subject).  Censored
-observations do not generate Schoenfeld residuals.
+쇤펠트 잔차 벡터는 대상마다가 아니라 **사건마다** 하나씩 생긴다. 절단된 관측치는 쇤펠트 잔차를
+만들지 않는다.
 
-### Scaled Schoenfeld Residuals
+### 척도화된 쇤펠트 잔차
 
-The **scaled Schoenfeld residuals** are defined as
+**척도화된 쇤펠트 잔차**는 다음과 같이 정의된다.
 
 $$
 r_{jk}^* = d \cdot [\mathcal{I}^{-1}]_{kk} \cdot r_{jk} + \hat{\beta}_k
 $$
 
-where $d$ is the total number of events and $\mathcal{I}$ is the observed
-information matrix.  Under the PH assumption, $E[r_{jk}^*] \approx \beta_k$
-at every event time.
+여기서 $d$는 총 사건 수이고 $\mathcal{I}$는 관측 정보행렬이다. 비례위험 가정 아래에서 모든
+사건시간에 대해 $E[r_{jk}^*] \approx \beta_k$이다. 즉 척도화 덕분에 잔차가 계수와 같은
+척도에 놓여, 그림의 세로축을 곧바로 "그 시점에서의 $\beta_k$"로 읽을 수 있다.
 
-### Diagnostic Use
+### 진단적 사용
 
-Plot the scaled Schoenfeld residuals $r_{jk}^*$ against time (or a function
-of time such as $\ln t$).  Under the PH assumption, the plot should show a
-**random scatter around a horizontal line** at $\hat{\beta}_k$.
+척도화된 쇤펠트 잔차 $r_{jk}^*$를 시간(또는 $\ln t$ 같은 시간 함수)에 대해 그린다. 비례위험
+가정 아래에서는 $\hat{\beta}_k$ 높이의 **수평선 주위에 무작위로 흩어진** 그림이 나와야 한다.
 
-- A positive trend indicates the covariate effect strengthens over time.
-- A negative trend indicates the effect weakens over time.
-- A U-shaped or inverted-U pattern suggests a non-monotone time-varying effect.
+- 양의 추세는 공변량 효과가 시간에 따라 강해짐을 가리킨다.
+- 음의 추세는 효과가 시간에 따라 약해짐을 가리킨다.
+- U자나 뒤집힌 U자 모양은 단조가 아닌 시간 의존 효과를 시사한다.
 
-Fit a LOESS smoother to the residual-vs-time plot to visualize the trend.
+잔차 대 시간 그림에 LOESS 평활을 적합하면 추세를 눈으로 볼 수 있다.
 
-## Martingale Residuals
+## 마팅게일 잔차
 
-Martingale residuals assess the **overall fit** of the model and are
-particularly useful for detecting non-linearity in the relationship between a
-continuous covariate and the log hazard.
+마팅게일 잔차는 모형의 **전체 적합도**를 평가하며, 연속형 공변량과 로그 위험 사이 관계의
+비선형성을 탐지하는 데 특히 유용하다.
 
-### Definition
+### 정의
 
-The martingale residual for subject $i$ is
+대상 $i$의 마팅게일 잔차는
 
 $$
 \hat{M}_i = \delta_i - \hat{H}_0(t_i) \exp(\hat{\boldsymbol{\beta}}^\top \mathbf{x}_i)
 $$
 
-where $\hat{H}_0(t_i)$ is the Breslow estimate of the baseline cumulative
-hazard at $t_i$.
+이다. 여기서 $\hat{H}_0(t_i)$는 $t_i$에서 기저 누적위험의 브레슬로 추정치다.
 
-**Interpretation:** $\hat{M}_i$ equals the observed number of events for
-subject $i$ (either 0 or 1) minus the expected number under the fitted model.
+**해석:** $\hat{M}_i$는 대상 $i$의 관측된 사건 수(0 또는 1)에서 적합된 모형 아래의 기대
+사건 수를 뺀 값이다.
 
-- $\hat{M}_i > 0$: the event occurred sooner than the model predicted.
-- $\hat{M}_i < 0$: the subject survived longer than expected (or was censored
-  before the predicted event time).
+- $\hat{M}_i > 0$: 사건이 모형의 예측보다 일찍 일어났다.
+- $\hat{M}_i < 0$: 대상이 예상보다 오래 생존했다(또는 예측된 사건시점 전에 절단되었다).
 
-### Properties
+### 성질
 
-- $\sum_{i=1}^{n} \hat{M}_i = 0$ (the residuals sum to zero).
-- $\hat{M}_i \in (-\infty, 1]$: bounded above by 1, unbounded below.
-- The distribution of martingale residuals is **skewed**, which limits their
-  usefulness for standard residual plots.
+- $\sum_{i=1}^{n} \hat{M}_i = 0$(잔차의 합이 0이다).
+- $\hat{M}_i \in (-\infty, 1]$: 위로는 1로 유계, 아래로는 무계다.
+- 마팅게일 잔차의 분포는 **치우쳐** 있어 표준적인 잔차 그림에서의 유용성이 제한된다.
 
-### Detecting Non-Linearity
+  위로만 유계인 이유는 명확하다. 사건 수가 최대 1이고 기대 사건 수가 음이 아니므로
+  $\hat M_i \le 1$이다. 반면 아주 오래 생존한 대상의 기대 사건 수는 얼마든지 커질 수 있어
+  아래로는 제한이 없다.
 
-To check whether a continuous covariate $x_k$ enters the model with the
-correct functional form:
+### 비선형성 탐지
 
-1. Fit the Cox model **without** $x_k$.
-2. Compute the martingale residuals from this reduced model.
-3. Plot the residuals against $x_k$.
-4. Fit a LOESS smoother.
+연속형 공변량 $x_k$가 올바른 함수 형태로 모형에 들어갔는지 점검하려면,
 
-If the smoother deviates systematically from a straight line, the linear
-specification of $x_k$ in the Cox model is inadequate.  The shape of the
-smoother suggests the correct transformation (e.g., $\ln x_k$, $x_k^2$).
+1. $x_k$를 **뺀** 콕스 모형을 적합한다.
+2. 이 축소모형의 마팅게일 잔차를 계산한다.
+3. 잔차를 $x_k$에 대해 그린다.
+4. LOESS 평활을 적합한다.
 
-## Deviance Residuals
+평활 곡선이 직선에서 체계적으로 벗어나면 콕스 모형에서 $x_k$의 선형 설정이 부적절하다는 뜻이다.
+평활 곡선의 모양이 올바른 변환(예: $\ln x_k$, $x_k^2$)을 시사한다.
 
-Deviance residuals are a **symmetrized transformation** of martingale
-residuals that produce a more symmetric distribution, making them easier to
-interpret in residual plots.
+## 이탈도 잔차
 
-### Definition
+이탈도 잔차는 마팅게일 잔차를 **대칭화한 변환**으로, 분포를 더 대칭적으로 만들어 잔차 그림에서
+해석하기 쉽게 한다.
+
+### 정의
 
 $$
 \hat{d}_i = \text{sign}(\hat{M}_i) \sqrt{-2\bigl[\hat{M}_i + \delta_i \ln(\delta_i - \hat{M}_i)\bigr]}
 $$
 
-where $\text{sign}(\hat{M}_i)$ is $+1$ if $\hat{M}_i > 0$ and $-1$ if
-$\hat{M}_i < 0$.
+여기서 $\text{sign}(\hat{M}_i)$는 $\hat{M}_i > 0$이면 $+1$, $\hat{M}_i < 0$이면 $-1$이다.
 
-### Diagnostic Use
+### 진단적 사용
 
-Plot deviance residuals against the linear predictor
-$\hat{\boldsymbol{\beta}}^\top \mathbf{x}_i$ or against individual covariates.
-Under a correctly specified model, the residuals should be randomly scattered
-around zero with no obvious patterns.
+이탈도 잔차를 선형예측자 $\hat{\boldsymbol{\beta}}^\top \mathbf{x}_i$나 개별 공변량에 대해
+그린다. 모형이 옳게 지정되었다면 잔차가 0 주위에 뚜렷한 양상 없이 무작위로 흩어져야 한다.
 
-Subjects with large absolute deviance residuals ($|\hat{d}_i| > 2$ or $3$) are
-**poorly fit** by the model and warrant investigation.
+이탈도 잔차의 절댓값이 큰 대상($|\hat{d}_i| > 2$ 또는 $3$)은 모형이 **잘 맞히지 못한**
+대상이므로 들여다볼 필요가 있다.
 
-## Influential Observations
+## 영향점
 
-An observation is **influential** if removing it substantially changes the
-estimated coefficients.  Influence in the Cox model is measured by:
+어떤 관측치를 제거했을 때 추정 계수가 크게 달라지면 그 관측치는 **영향점**이다. 콕스 모형에서
+영향력은 다음으로 측정한다.
 
-### Score Residuals
+### 점수 잔차
 
-The score residual for subject $i$ is a $p$-dimensional vector
+대상 $i$의 점수 잔차는 $p$차원 벡터
 
 $$
 \mathbf{L}_i = \frac{\partial \ell_i}{\partial \boldsymbol{\beta}}
 $$
 
-representing the contribution of subject $i$ to the score function.
+이며 점수함수에 대한 대상 $i$의 기여를 나타낸다.
 
-### dfbeta Residuals
+### dfbeta 잔차
 
-The **dfbeta** for subject $i$ approximates the change in $\hat{\boldsymbol{\beta}}$ when subject $i$ is removed:
+대상 $i$의 **dfbeta**는 대상 $i$를 제거했을 때 $\hat{\boldsymbol{\beta}}$의 변화를 근사한다.
 
 $$
 \text{dfbeta}_i \approx \mathcal{I}^{-1} \mathbf{L}_i
 $$
 
-Plot dfbeta values for each covariate against subject index or time.  Subjects
-with disproportionately large dfbeta values are influential and should be
-examined for data errors or genuine outlier behavior.
+각 공변량의 dfbeta 값을 대상 색인이나 시간에 대해 그린다. dfbeta가 유난히 큰 대상은 영향점이며,
+자료 오류인지 진짜 이상 행동인지 살펴보아야 한다.
 
-!!! warning "Do Not Automatically Remove Influential Observations"
+!!! warning "영향점을 기계적으로 제거하지 말 것"
 
-    An influential observation is not necessarily an error.  It may represent
-    a genuine extreme case that carries valuable information.  Investigate the
-    subject's characteristics before deciding whether to exclude it.  Conduct
-    a sensitivity analysis by comparing results with and without the
-    influential observation.
+    영향점이 반드시 오류인 것은 아니다. 귀중한 정보를 담은 진짜 극단 사례일 수 있다. 제외할지
+    결정하기 전에 그 대상의 특성을 조사하라. 영향점을 넣은 경우와 뺀 경우의 결과를 비교하는
+    민감도 분석을 수행하라.
 
-## Diagnostic Summary
+## 진단 요약
 
-| Residual Type | Checks For | One Per |
+| 잔차 유형 | 무엇을 점검하는가 | 개수 |
 |:-------------|:-----------|:--------|
-| Schoenfeld | PH assumption (time-varying effects) | Event |
-| Martingale | Functional form (non-linearity) | Subject |
-| Deviance | Overall goodness of fit | Subject |
-| Score / dfbeta | Influential observations | Subject |
+| 쇤펠트 | 비례위험 가정(시간 의존 효과) | 사건당 하나 |
+| 마팅게일 | 함수 형태(비선형성) | 대상당 하나 |
+| 이탈도 | 전체 적합도 | 대상당 하나 |
+| 점수 / dfbeta | 영향점 | 대상당 하나 |
 
-A thorough Cox model diagnostic analysis examines all four residual types.
-Begin with the Schoenfeld test for PH, then check functional form with
-martingale residuals, examine overall fit with deviance residuals, and conclude
-with an influence analysis.
+철저한 콕스 모형 진단은 네 가지 잔차를 모두 살핀다. 비례위험에 대한 쇤펠트 검정으로 시작해,
+마팅게일 잔차로 함수 형태를 점검하고, 이탈도 잔차로 전체 적합을 살핀 뒤, 영향력 분석으로
+마무리한다.
 
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Describe the main concept of Model Diagnostics (Schoenfeld Residuals) and explain why it matters for statistical practice.
+**연습문제 1.**
+쇤펠트 잔차가 사건마다 하나씩만 생기고 절단된 대상은 만들지 않는 이유를 부분가능도의
+점수함수로부터 설명하라.
 
-??? success "Solution to Exercise 1"
-    Model Diagnostics (Schoenfeld Residuals) is a core topic in statistics that provides tools for drawing reliable inferences from data. It matters because proper application ensures valid conclusions, correctly quantified uncertainty, and appropriate handling of the assumptions that underpin the method. Practitioners who understand this concept can avoid common pitfalls and choose the right analytical approach for their data.
+??? success "연습문제 1 풀이"
+
+    부분 로그가능도의 점수벡터는 앞 절에서
+
+    $$
+    U(\boldsymbol{\beta}) = \sum_{j=1}^{K}\bigl[\mathbf{x}_{i_j} - \bar{\mathbf{x}}_j(\boldsymbol{\beta})\bigr]
+    $$
+
+    였다. 합의 각 항이 정확히 쇤펠트 잔차 $\mathbf{r}_j$다. 즉 **쇤펠트 잔차는 점수함수를
+    사건별로 분해한 것**이다.
+
+    점수함수의 합이 사건시간 $j = 1, \ldots, K$에 대한 것이므로 잔차도 사건마다 하나씩만
+    생긴다. 절단된 대상은 부분가능도의 **분모**(위험집합)에만 나타나고 분자에는 나타나지
+    않으므로 $\mathbf{x}_{i_j}$ 자리에 오지 않는다. 따라서 자신의 잔차를 갖지 않는다.
+
+    **두 가지 귀결.**
+
+    1. **$\hat{\boldsymbol{\beta}}$에서 잔차의 합이 정확히 0이다.** MLE가
+       $U(\hat{\boldsymbol{\beta}}) = \mathbf{0}$을 풀기 때문이다. 선형회귀에서 잔차의 합이
+       0인 것과 같은 이유다.
+    2. **검정력이 사건 수에 좌우된다.** 쇤펠트 검정은 $K$개의 점으로 추세를 찾는 회귀이므로,
+       표본이 아무리 커도 사건이 적으면 비례위험 위배를 탐지하지 못한다. 21.3절에서 본
+       "사건 수가 정보량을 결정한다"는 원리가 여기서도 그대로다. $\square$
 
 ---
 
-**Exercise 2.**
-State the key assumptions required by the method discussed here. How can each assumption be checked?
+**연습문제 2.**
+마팅게일 잔차가 위로는 1로 유계이면서 아래로는 무계인 이유를 설명하고, 이 비대칭이 이탈도
+잔차로 어떻게 교정되는지 설명하라.
 
-??? success "Solution to Exercise 2"
-    The main assumptions typically include: (1) independence of observations -- verified by understanding the data collection process and checking for serial correlation; (2) distributional requirements (e.g., normality) -- checked with Q-Q plots and formal tests like Shapiro-Wilk; (3) equal variances (if applicable) -- assessed with boxplots and Levene's test. When assumptions are violated, consider robust alternatives, transformations, or nonparametric methods.
+??? success "연습문제 2 풀이"
+
+    **비대칭의 근원.** $\hat M_i = \delta_i - \hat H_0(t_i)e^{\hat{\boldsymbol\beta}^\top\mathbf{x}_i}$
+    에서 첫 항 $\delta_i$는 0 또는 1이고 둘째 항(기대 사건 수)은 음이 아니다. 따라서
+
+    - **위쪽:** $\hat M_i \le \delta_i \le 1$. 아주 일찍 사건을 겪은 대상이라도 잔차가 1을
+      넘을 수 없다. "예상보다 얼마나 일찍 죽었는가"에는 한계가 있다.
+    - **아래쪽:** 아주 오래 생존한 대상은 $\hat H_0(t_i)$가 커져 기대 사건 수가 얼마든지 클 수
+      있다. $\hat M_i$가 $-5$, $-10$도 될 수 있다.
+
+    그래서 분포가 왼쪽으로 긴 꼬리를 갖는다. 대부분의 잔차가 0 근처에 모여 있고 소수가 크게
+    음수인 모양이다. 표준적인 잔차 그림에서 "0 주위 대칭 산포"를 기대할 수 없다.
+
+    **이탈도 잔차의 교정.** 변환
+
+    $$
+    \hat d_i = \text{sign}(\hat M_i)\sqrt{-2\bigl[\hat M_i + \delta_i\ln(\delta_i - \hat M_i)\bigr]}
+    $$
+
+    은 제곱근이 큰 음수 값을 압축하고 로그 항이 작은 값을 늘려 분포를 대칭에 가깝게 만든다.
+    이름이 "이탈도"인 이유는 $\sum_i \hat d_i^2$이 모형의 이탈도와 같기 때문이며, 19장의
+    이탈도 잔차와 정확히 같은 착상이다.
+
+    **주의:** 이탈도 잔차가 더 대칭적이라고 해서 정규분포를 따르는 것은 아니다. 절단이 심하면
+    $\delta_i = 0$인 대상의 잔차가 한쪽에 몰려 여전히 이봉 모양이 될 수 있다. 정규성 검정을
+    적용하지 말고 **양상**을 보는 데 쓰라. $\square$
 
 ---
 
-**Exercise 3.**
-Work through a small numerical example illustrating the application of the technique from this section.
+**연습문제 3.**
+비선형성 점검에서 왜 문제의 공변량 $x_k$를 **뺀** 모형의 잔차를 쓰는가? $x_k$를 넣은 모형의
+잔차를 쓰면 무엇이 잘못되는가?
 
-??? success "Solution to Exercise 3"
-    A structured approach to applying this technique involves: (1) clearly stating the hypotheses or estimation goal; (2) verifying that the data meet the required assumptions; (3) computing the relevant test statistic, estimate, or model fit; (4) obtaining the p-value, confidence interval, or posterior distribution; (5) interpreting the result in the context of the original question. Following these steps systematically ensures a rigorous and reproducible analysis.
+??? success "연습문제 3 풀이"
+
+    **$x_k$를 뺀 모형을 쓰는 이유.** 마팅게일 잔차를 $x_k$에 대해 그리는 목적은 "$x_k$가 로그
+    위험에 어떤 함수 형태로 기여해야 하는가"를 보는 것이다. 축소모형의 잔차는 $x_k$가 설명해야
+    할 **남은 신호 전체**를 담고 있으므로, 그 신호를 $x_k$에 대해 그리면 필요한 함수 형태가
+    그대로 드러난다.
+
+    **$x_k$를 넣은 모형의 잔차를 쓰면.** 모형이 이미 $x_k$의 **선형** 효과를 흡수해 버렸다.
+    남은 잔차에는 선형 성분이 제거된 나머지만 남으므로, 실제 관계가 $\ln x_k$였다 하더라도
+    잔차 그림에서는 "선형 성분을 뺀 $\ln x_k$"의 미묘한 곡률만 보인다. 신호가 크게 약해져
+    비선형성을 놓치기 쉽다.
+
+    이는 선형회귀의 **부분잔차 그림**과 같은 논리다. 부분잔차 그림에서도 관심 변수의 적합된
+    효과를 잔차에 **다시 더해** 그린다. 콕스 모형에서 축소모형을 쓰는 것이 그에 해당한다.
+
+    **실무 절차.**
+
+    ```python
+    # lifelines
+    from lifelines import CoxPHFitter
+    cph = CoxPHFitter().fit(df.drop(columns=['age']), 't', 'event')
+    m_res = cph.compute_residuals(df.drop(columns=['age']), 'martingale')
+    # then plot m_res against df['age'] with a LOESS smoother
+    ```
+
+    평활 곡선이 대략 직선이면 $x_k$를 선형으로 넣어도 좋다. 로그 모양이면 $\ln x_k$를,
+    U자 모양이면 이차항을, 계단 모양이면 범주화를 고려한다. $\square$
 
 ---
 
-**Exercise 4.**
-Compare the approach from this section with an alternative method. When would you choose each?
+**연습문제 4.**
+어떤 대상의 dfbeta가 유난히 크게 나왔다. 이 대상을 제거할지 판단하는 절차를 서술하라.
 
-??? success "Solution to Exercise 4"
-    The method discussed here is appropriate when its assumptions hold and the sample size is sufficient for the asymptotic approximations to be accurate. Alternative approaches include: (1) nonparametric methods -- preferred when distributional assumptions are suspect; (2) bootstrap methods -- useful when analytical reference distributions are unavailable; (3) Bayesian methods -- valuable when incorporating prior information or when direct probability statements about parameters are desired. Running multiple approaches and comparing results provides a useful robustness check.
+??? success "연습문제 4 풀이"
+
+    **1단계: 자료 오류인지 확인한다.** 가장 흔한 원인이다. 생존시간이 음수이거나, 나이가
+    200세이거나, 단위가 뒤섞였을(개월 대 일) 수 있다. 오류로 확인되면 고치거나 제거한다.
+    이 단계에서 대부분의 영향점이 해소된다.
+
+    **2단계: 왜 영향력이 큰지 이해한다.** 영향력은 두 요인의 곱이다.
+
+    - **지렛대**: 공변량이 극단적인가? $\mathbf{x}_i$가 다른 대상들과 멀리 떨어져 있으면
+      그 방향의 기울기를 혼자 결정하게 된다.
+    - **잔차**: 모형의 예측에서 크게 벗어났는가?
+
+    둘 다 커야 dfbeta가 커진다. 어느 쪽인지에 따라 대응이 다르다. 지렛대가 원인이면 그 영역에
+    자료가 부족하다는 뜻이므로 외삽을 삼가야 하고, 잔차가 원인이면 모형이 그 사례를 설명하지
+    못한다는 뜻이므로 누락된 공변량을 의심해야 한다.
+
+    **3단계: 민감도 분석을 한다.** 그 대상을 넣은 결과와 뺀 결과를 **둘 다 보고한다.**
+    결론이 바뀌지 않으면 문제될 것이 없다. 결론이 바뀌면 그 사실 자체가 중요한 발견이며,
+    "우리 결론은 관측치 하나에 달려 있다"고 정직하게 밝혀야 한다.
+
+    **하지 말아야 할 것.** 결과를 유의하게 만들려고 영향점을 제거하는 것이다. 이는 자료
+    조작이며, 제거 기준을 결과를 본 뒤에 정하면 어떤 정당화도 성립하지 않는다. 제거 규칙은
+    분석 전에 정하고 문서화해야 한다.
+
+    !!! note "생존분석에서 영향점은 대개 이른 사건이다"
+        위험집합이 가장 큰 초기 사건들이 부분가능도의 여러 항에 걸쳐 영향을 미친다. 반대로
+        후반부의 사건은 위험집합이 작아 정보가 적다. 따라서 dfbeta 그림에서 초기 사건이
+        두드러지는 것은 자연스러운 현상이며, 그것만으로 이상치라고 볼 수 없다. $\square$

@@ -1,199 +1,214 @@
-# Proportional Hazards Assumption
+# 비례위험 가정
 
-The Cox model assumes that the hazard ratio between any two covariate profiles
-is **constant over time**.  This is the **proportional hazards (PH) assumption**.
-If the assumption fails---for example, a treatment that is protective early but
-harmful late---the estimated hazard ratios are time-averaged summaries that may
-not represent the covariate effect at any particular point in time.
+콕스 모형은 임의의 두 공변량 프로파일 사이의 위험비가 **시간에 걸쳐 일정하다**고 가정한다.
+이것이 **비례위험(PH) 가정**이다. 이 가정이 깨지면 --- 예컨대 초기에는 보호적이지만 후반에는
+해로운 처리라면 --- 추정된 위험비는 시간에 걸쳐 평균한 요약값이며 어느 특정 시점의 공변량
+효과도 대표하지 못할 수 있다.
 
-This section explains the PH assumption formally, presents graphical and
-statistical methods for checking it, and discusses remedies when it is violated.
+이 절에서는 비례위험 가정을 형식적으로 설명하고, 이를 점검하는 그림 방법과 통계적 방법을
+제시하며, 위배되었을 때의 대응책을 논의한다.
 
-## Formal Statement
+## 형식적 서술
 
-The Cox model specifies
+콕스 모형은 다음을 설정한다.
 
 $$
 h(t \mid \mathbf{x}) = h_0(t) \exp(\boldsymbol{\beta}^\top \mathbf{x})
 $$
 
-The PH assumption requires that for any two subjects with covariate vectors
-$\mathbf{x}_1$ and $\mathbf{x}_2$,
+비례위험 가정은 공변량 벡터가 $\mathbf{x}_1$과 $\mathbf{x}_2$인 임의의 두 대상에 대해
 
 $$
 \frac{h(t \mid \mathbf{x}_1)}{h(t \mid \mathbf{x}_2)} = \exp\!\bigl(\boldsymbol{\beta}^\top (\mathbf{x}_1 - \mathbf{x}_2)\bigr)
 $$
 
-for **all** $t \geq 0$.  The right-hand side does not depend on $t$; if it
-did, the proportional hazards assumption would be violated.
+가 **모든** $t \geq 0$에서 성립할 것을 요구한다. 우변은 $t$에 의존하지 않는다. 만약 의존한다면
+비례위험 가정이 위배된 것이다.
 
-## Graphical Methods
+## 그림 방법
 
-### Log-Log Survival Plot
+### 로그-로그 생존 그림
 
-Under the Cox model, the cumulative hazard for a subject with covariates
-$\mathbf{x}$ is
+콕스 모형 아래에서 공변량 $\mathbf{x}$를 갖는 대상의 누적위험은
 
 $$
 H(t \mid \mathbf{x}) = H_0(t) \exp(\boldsymbol{\beta}^\top \mathbf{x})
 $$
 
-Taking the log of the negative log survival:
+이다. 음의 로그 생존에 다시 로그를 취하면
 
 $$
 \ln\!\bigl(-\ln S(t \mid \mathbf{x})\bigr) = \ln H_0(t) + \boldsymbol{\beta}^\top \mathbf{x}
 $$
 
-For two groups (e.g., treatment vs control), the curves
-$\ln(-\ln \hat{S}_1(t))$ and $\ln(-\ln \hat{S}_2(t))$ should be **parallel**
-over time if PH holds.  The vertical distance between the curves equals
-$\boldsymbol{\beta}^\top (\mathbf{x}_1 - \mathbf{x}_2)$, which is constant.
+이다. 두 집단(예: 처리 대 대조)에서 비례위험이 성립하면 곡선
+$\ln(-\ln \hat{S}_1(t))$와 $\ln(-\ln \hat{S}_2(t))$가 시간에 걸쳐 **평행**해야 한다.
+두 곡선의 수직 거리가 상수인 $\boldsymbol{\beta}^\top (\mathbf{x}_1 - \mathbf{x}_2)$와
+같기 때문이다.
 
-!!! tip "How to Read the Log-Log Plot"
+!!! tip "로그-로그 그림 읽는 법"
 
-    Parallel curves support the PH assumption.  Curves that converge, diverge,
-    or cross indicate non-proportional hazards.  Crossing curves are the
-    strongest evidence of a PH violation.
+    평행한 곡선은 비례위험 가정을 뒷받침한다. 수렴하거나 발산하거나 교차하는 곡선은 비례위험이
+    아님을 가리킨다. 교차하는 곡선이 위배의 가장 강력한 증거다.
 
-### Observed vs Expected Survival Plots
+    다만 위험집합이 작아지는 곡선의 양 끝에서는 두 곡선 모두 변동이 커서 평행 여부를 판단하기
+    어렵다. 사건이 충분히 있는 중간 구간에서 판단하라.
 
-Compare the Kaplan--Meier curves for each group with the Cox model's predicted
-survival curves.  Systematic deviations suggest the model is misspecified.
+### 관측 대 기대 생존 그림
 
-## Schoenfeld Test
+각 집단의 카플란-마이어 곡선을 콕스 모형이 예측한 생존곡선과 비교한다. 체계적인 어긋남은
+모형이 잘못 지정되었음을 시사한다.
 
-The formal statistical test for the PH assumption is based on **Schoenfeld
-residuals** (Grambsch and Therneau, 1994).
+## 쇤펠트 검정
 
-For each event at time $t_{(j)}$ and each covariate $x_k$, the Schoenfeld
-residual is
+비례위험 가정에 대한 형식적 통계검정은 **쇤펠트 잔차**에 근거한다(Grambsch and Therneau, 1994).
+
+시점 $t_{(j)}$의 각 사건과 각 공변량 $x_k$에 대해 쇤펠트 잔차는
 
 $$
 r_{jk} = x_{i_j, k} - \bar{x}_{jk}(\hat{\boldsymbol{\beta}})
 $$
 
-where $x_{i_j, k}$ is the value of covariate $k$ for the subject who
-experienced the event, and $\bar{x}_{jk}$ is the risk-set-weighted mean of
-covariate $k$ at time $t_{(j)}$.
+이다. 여기서 $x_{i_j, k}$는 사건을 겪은 대상의 공변량 $k$의 값이고, $\bar{x}_{jk}$는 시점
+$t_{(j)}$의 위험집합 가중평균이다.
 
-Under the PH assumption, the Schoenfeld residuals have **no systematic trend
-over time**.  The test procedure is:
+비례위험 가정 아래에서 쇤펠트 잔차는 **시간에 걸쳐 체계적인 추세를 갖지 않는다.** 검정 절차는
+다음과 같다.
 
-1. Compute the scaled Schoenfeld residuals for each covariate.
-2. Regress the scaled residuals on a function of time (typically $t$, $\ln t$,
-   or the Kaplan--Meier transform of $t$).
-3. Test whether the slope is significantly different from zero.
+1. 각 공변량의 척도화된 쇤펠트 잔차를 계산한다.
+2. 척도화된 잔차를 시간의 함수(보통 $t$, $\ln t$, 또는 $t$의 카플란-마이어 변환)에 회귀시킨다.
+3. 기울기가 0과 유의하게 다른지 검정한다.
 
-The test statistic for covariate $k$ is
+공변량 $k$의 검정통계량은
 
 $$
 \chi^2_k = \frac{\left(\sum_{j} g(t_{(j)}) \, r_{jk}^*\right)^2}{\text{Var}\left(\sum_{j} g(t_{(j)}) \, r_{jk}^*\right)}
 $$
 
-where $r_{jk}^*$ are the scaled Schoenfeld residuals and $g(t)$ is the chosen
-time function.  Under $H_0$ (PH holds), $\chi^2_k \sim \chi^2_1$.
+이며 $r_{jk}^*$는 척도화된 쇤펠트 잔차이고 $g(t)$는 선택한 시간 함수다. $H_0$(비례위험 성립)
+아래에서 $\chi^2_k \sim \chi^2_1$이다.
 
-A **global test** that simultaneously tests PH for all covariates is also
-available, with $p$ degrees of freedom (one per covariate).
+모든 공변량의 비례위험을 동시에 검정하는 **전역 검정**도 있으며 자유도는 $p$(공변량당 1)다.
 
-!!! example "Schoenfeld Test Output"
+!!! example "쇤펠트 검정 출력"
 
-    A Cox model with two covariates (age and treatment) yields:
+    공변량 두 개(나이와 처리)를 갖는 콕스 모형의 결과다.
 
-    | Covariate | $\chi^2$ | p-value |
+    | 공변량 | $\chi^2$ | p-값 |
     |:----------|:--------:|:-------:|
-    | Age | 0.82 | 0.365 |
-    | Treatment | 7.45 | 0.006 |
-    | GLOBAL | 8.31 | 0.016 |
+    | 나이 | 0.82 | 0.365 |
+    | 처리 | 7.45 | 0.006 |
+    | 전역 | 8.31 | 0.016 |
 
-    The PH assumption holds for age but is violated for treatment.  The
-    treatment effect changes over time.
+    나이에 대해서는 비례위험 가정이 성립하지만 처리에 대해서는 위배된다. 처리 효과가 시간에
+    따라 변한다.
 
-## Remedies for PH Violations
+## 비례위험 위배에 대한 대응
 
-When the PH assumption fails for a covariate, several strategies are available:
+어떤 공변량에서 비례위험 가정이 깨지면 몇 가지 전략을 쓸 수 있다.
 
-### 1. Stratification
+### 1. 층화
 
-Split the baseline hazard by the offending covariate.  For a binary variable
-$z$ with two levels, the stratified Cox model is
+문제가 된 공변량으로 기저위험을 나눈다. 두 수준을 갖는 이항변수 $z$에 대해 층화 콕스 모형은
 
 $$
 h(t \mid \mathbf{x}, z=g) = h_{0g}(t) \exp(\boldsymbol{\beta}^\top \mathbf{x})
 $$
 
-Each stratum $g$ has its own baseline hazard, but the covariate effects
-$\boldsymbol{\beta}$ are shared.  Stratification allows the hazard shape to
-differ across groups without requiring a separate model.
+이다. 각 층 $g$가 자신의 기저위험을 갖지만 공변량 효과 $\boldsymbol{\beta}$는 공유한다.
+층화를 쓰면 별도의 모형을 세우지 않고도 집단마다 위험의 모양이 다를 수 있게 된다.
 
-### 2. Time-Varying Coefficients
+**대가:** 층화에 쓴 변수의 위험비는 **더 이상 추정할 수 없다.** 그 변수의 효과가 기저위험
+안으로 흡수되기 때문이다. 처리 효과 자체가 관심사라면 층화는 적절한 선택이 아니다.
 
-Replace the constant $\beta_k$ with a time-dependent coefficient $\beta_k(t)$:
+### 2. 시간에 따라 변하는 계수
+
+상수 $\beta_k$를 시간 의존 계수 $\beta_k(t)$로 바꾼다.
 
 $$
 h(t \mid \mathbf{x}) = h_0(t) \exp\!\left(\sum_{k} \beta_k(t) \, x_k\right)
 $$
 
-A simple approach is to include an interaction between the covariate and a
-function of time (e.g., $x_k \cdot \ln t$):
+간단한 접근은 공변량과 시간 함수의 교호작용(예: $x_k \cdot \ln t$)을 넣는 것이다.
 
 $$
 h(t \mid \mathbf{x}) = h_0(t) \exp(\beta_k x_k + \gamma_k x_k \ln t)
 $$
 
-If $\gamma_k = 0$, the standard Cox model is recovered.
+$\gamma_k = 0$이면 표준 콕스 모형으로 돌아간다. 따라서 $\gamma_k = 0$의 검정이 곧 비례위험
+가정의 검정이기도 하다.
 
-### 3. Piecewise Cox Model
+### 3. 조각별 콕스 모형
 
-Split the time axis into intervals and fit separate Cox models (or estimate
-separate coefficients) within each interval.  This allows the hazard ratio to
-change across predefined time windows.
+시간축을 구간으로 나누고 각 구간에서 별도의 콕스 모형을 적합하거나 별도의 계수를 추정한다.
+미리 정한 시간창에 걸쳐 위험비가 변할 수 있게 된다.
 
-!!! warning "Do Not Ignore PH Violations"
+구간의 경계는 반드시 자료를 보기 **전에** 정해야 한다. 자료를 보고 위험비가 바뀌는 지점을
+고르면 그 자체가 다중비교 문제가 되어 p-값이 무효가 된다.
 
-    When the PH assumption is violated, the reported hazard ratios are
-    misleading because they represent a time-averaged effect that may not
-    hold at any specific time.  Always check the assumption before
-    interpreting Cox model results.
+!!! warning "비례위험 위배를 무시하지 말 것"
 
-## Summary
+    비례위험 가정이 위배되면 보고된 위험비는 오도한다. 어느 특정 시점에서도 성립하지 않을 수
+    있는 시간 평균 효과를 나타내기 때문이다. 콕스 모형 결과를 해석하기 전에 반드시 가정을
+    점검하라.
 
-| Method | Type | What It Assesses |
+    다만 반대 극단도 경계하라. 표본이 아주 크면 실무적으로 무의미한 작은 위배도 쇤펠트 검정이
+    유의하게 잡아낸다. p-값과 함께 척도화 잔차의 **추세 그림**을 보고 효과 변화의 크기가
+    실제로 중요한지 판단해야 한다.
+
+## 요약
+
+| 방법 | 유형 | 무엇을 평가하는가 |
 |:-------|:-----|:-----------------|
-| Log-log plot | Graphical | Parallel curves imply PH |
-| Schoenfeld test | Statistical | Correlation of residuals with time |
-| Stratification | Remedy | Allows different baseline hazards |
-| Time-varying coefficients | Remedy | Allows $\beta(t)$ to change with time |
-| Piecewise model | Remedy | Different $\beta$ in each time interval |
+| 로그-로그 그림 | 그림 | 평행한 곡선이면 비례위험 |
+| 쇤펠트 검정 | 통계적 | 잔차와 시간의 상관 |
+| 층화 | 대응 | 기저위험이 다를 수 있게 함 |
+| 시간 의존 계수 | 대응 | $\beta(t)$가 시간에 따라 변할 수 있게 함 |
+| 조각별 모형 | 대응 | 시간 구간마다 다른 $\beta$ |
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Proportional Hazards Assumption
+**연습문제 1.**
+비례위험 가정
 
-A Schoenfeld test for a Cox model with two covariates (age and treatment)
-yields:
+공변량 두 개(나이와 처리)를 갖는 콕스 모형의 쇤펠트 검정 결과다.
 
-| Covariate | $\chi^2$ | p-value |
+| 공변량 | $\chi^2$ | p-값 |
 |:----------|:--------:|:-------:|
-| Age | 1.23 | 0.267 |
-| Treatment | 6.89 | 0.009 |
-| GLOBAL | 7.54 | 0.023 |
+| 나이 | 1.23 | 0.267 |
+| 처리 | 6.89 | 0.009 |
+| 전역 | 7.54 | 0.023 |
 
-**(a)** For which covariate(s) does the PH assumption appear to be violated?
+**(a)** 어느 공변량에서 비례위험 가정이 위배된 것으로 보이는가?
 
-**(b)** Suggest two remedies for the violation.
+**(b)** 위배에 대한 대응책 두 가지를 제시하라.
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
 
-    **(a)** The PH assumption is violated for treatment ($p = 0.009 < 0.05$) but
-    not for age ($p = 0.267$). The global test also rejects ($p = 0.023$),
-    confirming at least one violation.
+    **(a)** 처리에 대해 비례위험 가정이 위배된다($p = 0.009 < 0.05$). 나이는 그렇지 않다
+    ($p = 0.267$). 전역 검정도 기각하므로($p = 0.023$) 적어도 하나의 위배가 있음을 확인해 준다.
 
-    **(b)** Two remedies:
+    **(b)** 두 가지 대응책.
 
-    1. **Stratification:** Fit a stratified Cox model with separate baseline
-       hazards for each treatment group, estimating only the age effect as a
-       regression coefficient.
-    2. **Time-varying coefficient:** Include a treatment $\times \ln(t)$
-       interaction term to allow the treatment effect to change over time.
+    1. **층화:** 처리 집단마다 별도의 기저위험을 갖는 층화 콕스 모형을 적합하고, 나이 효과만
+       회귀계수로 추정한다.
+    2. **시간 의존 계수:** 처리 $\times \ln(t)$ 교호작용 항을 넣어 처리 효과가 시간에 따라
+       변할 수 있게 한다.
+
+    !!! note "무엇이 관심사인지에 따라 선택이 달라진다"
+        두 대응책은 얻는 것이 다르다.
+
+        - **층화**는 처리의 위험비를 **포기한다.** 처리 효과가 기저위험에 흡수되므로 더 이상
+          $\text{HR}_{\text{처리}}$를 보고할 수 없다. 처리가 성가신 변수이고 나이 효과가
+          관심사라면 이것으로 충분하고 계산도 간단하다.
+        - **시간 의존 계수**는 처리 효과를 유지하되 그것이 시간의 함수임을 인정한다.
+          $\beta(t) = \beta + \gamma\ln t$이므로, 예컨대 $\hat\beta = -0.8$,
+          $\hat\gamma = 0.3$이면 $t = 1$에서 $\text{HR} = e^{-0.8} = 0.45$(보호적)이지만
+          $t = 15$에서 $\text{HR} = e^{-0.8 + 0.3\ln 15} = e^{0.012} = 1.01$(효과 소멸)이 된다.
+
+        임상시험처럼 처리 효과 자체가 결론인 상황에서는 시간 의존 계수를 써야 한다. 층화하면
+        정작 답해야 할 질문에 답하지 못한다.
+
+        세 번째 선택지도 있다. 비례위험을 아예 요구하지 않는 **제한 평균 생존시간(RMST)의
+        차이**를 보고하는 것이다. 로그순위 절 연습문제 3에서 언급한 대로, 이 방법은 효과크기가
+        "평균 생존기간의 차이(개월)"로 해석되어 소통에도 유리하다.

@@ -1,215 +1,217 @@
-# AIC and Concordance Index
+# AIC와 일치도 지수
 
-When multiple survival models are fit to the same data, the analyst needs
-objective criteria to select the best one.  Two complementary tools serve
-this purpose: the **Akaike Information Criterion (AIC)**, which balances
-goodness of fit against model complexity for parametric models, and the
-**concordance index (C-index)**, which measures how well a model discriminates
-between subjects who experience the event sooner versus later.
+같은 자료에 여러 생존 모형을 적합했다면 최선의 모형을 고를 객관적 기준이 필요하다. 서로를
+보완하는 두 도구가 이 목적에 쓰인다. 모수 모형의 적합도와 복잡도를 저울질하는 **아카이케
+정보기준(AIC)**과, 사건을 일찍 겪는 대상과 늦게 겪는 대상을 모형이 얼마나 잘 구별하는지를 재는
+**일치도 지수(C-지수)**다.
 
-This section defines both criteria, discusses their scope and limitations, and
-introduces the integrated Brier score as an additional evaluation metric.
+이 절에서는 두 기준을 정의하고, 적용 범위와 한계를 논의하며, 추가 평가지표로 적분 브라이어
+점수를 소개한다.
 
-## Akaike Information Criterion
+## 아카이케 정보기준
 
-The AIC for a parametric survival model with log-likelihood $\ell(\hat{\boldsymbol{\theta}})$
-and $p$ estimated parameters is
+로그가능도가 $\ell(\hat{\boldsymbol{\theta}})$이고 추정 모수가 $p$개인 모수적 생존 모형의
+AIC는
 
 $$
 \text{AIC} = -2\ell(\hat{\boldsymbol{\theta}}) + 2p
 $$
 
-Lower AIC indicates a better trade-off between fit and complexity.  AIC
-penalizes each additional parameter by 2 units, discouraging overfitting.
+이다. AIC가 낮을수록 적합도와 복잡도의 절충이 낫다. AIC는 모수가 하나 늘 때마다 2만큼 벌점을
+주어 과적합을 억제한다.
 
-### Using AIC for Survival Models
+### 생존 모형에서 AIC 쓰기
 
-AIC is directly applicable to **parametric** survival models (exponential,
-Weibull, log-normal, log-logistic) because they share the same likelihood
-framework.
+AIC는 **모수적** 생존 모형(지수, 와이불, 로그정규, 로그로지스틱)에 곧바로 적용된다. 이들이 같은
+가능도 틀을 공유하기 때문이다.
 
-!!! example "Comparing Parametric Models"
+!!! example "모수 모형 비교"
 
-    | Model | Parameters ($p$) | Log-Likelihood | AIC |
+    | 모형 | 모수 ($p$) | 로그가능도 | AIC |
     |:------|:----------------:|:--------------:|:---:|
-    | Exponential | 1 | $-312.5$ | 627.0 |
-    | Weibull | 2 | $-305.8$ | 615.6 |
-    | Log-normal | 2 | $-307.1$ | 618.2 |
-    | Log-logistic | 2 | $-306.4$ | 616.8 |
+    | 지수 | 1 | $-312.5$ | 627.0 |
+    | 와이불 | 2 | $-305.8$ | 615.6 |
+    | 로그정규 | 2 | $-307.1$ | 618.2 |
+    | 로그로지스틱 | 2 | $-306.4$ | 616.8 |
 
-    The Weibull model has the lowest AIC (615.6) and is preferred among
-    these candidates.
+    와이불 모형의 AIC가 615.6으로 가장 낮아 이 후보들 중 선호된다.
 
-### BIC as an Alternative
+    다만 와이불, 로그로지스틱, 로그정규의 AIC 차이가 각각 $1.2$와 $2.6$으로 작다는 점에
+    유의하라. 흔히 쓰는 경험칙은 **AIC 차이가 2 미만이면 두 모형이 실질적으로 구별되지
+    않는다**는 것이다. 여기서 확실히 배제할 수 있는 것은 지수 모형뿐이다.
 
-The Bayesian Information Criterion replaces the fixed penalty $2p$ with a
-sample-size-dependent penalty:
+### 대안으로서의 BIC
+
+베이즈 정보기준은 고정 벌점 $2p$를 표본 크기에 의존하는 벌점으로 바꾼다.
 
 $$
 \text{BIC} = -2\ell(\hat{\boldsymbol{\theta}}) + p \ln n
 $$
 
-BIC penalizes complexity more heavily than AIC when $n > e^2 \approx 7.4$
-(which is almost always the case in practice).  BIC tends to select simpler
-models than AIC.
+$n > e^2 \approx 7.4$이면(실무에서는 거의 항상 그렇다) BIC가 AIC보다 복잡도를 무겁게 벌한다.
+따라서 BIC는 AIC보다 단순한 모형을 고르는 경향이 있다.
 
-### Limitations of AIC for the Cox Model
+### 콕스 모형에서 AIC의 한계
 
-The Cox model maximizes the **partial** likelihood, not a full likelihood.
-AIC computed from the partial log-likelihood is sometimes used in practice, but
-its theoretical justification is weaker than for parametric models.  Some
-software reports a partial-likelihood-based AIC for the Cox model, but
-comparisons should be limited to Cox models with the same baseline (e.g.,
-different covariate sets within the same Cox framework).
+콕스 모형은 완전한 가능도가 아니라 **부분** 가능도를 최대화한다. 부분 로그가능도로 계산한 AIC를
+실무에서 쓰기도 하지만 이론적 정당화가 모수 모형에 비해 약하다. 일부 소프트웨어가 콕스 모형에
+대해 부분가능도 기반 AIC를 보고하지만, 비교는 같은 기저를 갖는 콕스 모형끼리로 제한해야 한다
+(예: 같은 콕스 틀 안에서 공변량 집합만 다른 경우).
 
-!!! warning "Do Not Compare AIC Across Model Families"
+!!! warning "모형 갈래를 가로질러 AIC를 비교하지 말 것"
 
-    AIC values from a Weibull model and a Cox model are not directly
-    comparable because they are based on different likelihoods (full vs
-    partial).  Use the concordance index for cross-family comparisons.
+    와이불 모형의 AIC와 콕스 모형의 AIC는 서로 다른 가능도(완전 대 부분)에 근거하므로 직접
+    비교할 수 없다. 갈래를 가로지르는 비교에는 일치도 지수를 쓰라.
 
-## Concordance Index
+## 일치도 지수
 
-The **concordance index** (C-index or C-statistic), proposed by Harrell (1982),
-measures a model's ability to correctly rank subjects by their predicted risk.
-It is the survival-analysis analogue of the AUC in binary classification.
+Harrell(1982)이 제안한 **일치도 지수**(C-지수 또는 C-통계량)는 모형이 예측 위험으로 대상들의
+순위를 얼마나 옳게 매기는지를 잰다. 이항 분류의 AUC에 대응하는 생존분석의 지표다.
 
-### Definition
+### 정의
 
-Consider all **usable pairs** of subjects $(i, j)$ such that the subject with
-the shorter observed time experienced the event (so the ordering is known).
-For each usable pair, the model is **concordant** if the subject predicted to
-have higher risk (lower predicted survival time or higher linear predictor)
-indeed experienced the event first.
+관측 시간이 더 짧은 쪽이 사건을 겪은 대상 쌍 $(i, j)$를 **사용 가능한 쌍**이라 한다(그래야
+순서를 알 수 있다). 사용 가능한 각 쌍에서, 위험이 더 높다고 예측된 대상(예측 생존시간이 짧거나
+선형예측자가 큰 대상)이 실제로 먼저 사건을 겪었으면 모형이 그 쌍에 대해 **일치한다**고 한다.
 
 $$
 C = \frac{\text{Number of concordant pairs}}{\text{Number of usable pairs}}
 $$
 
-- $C = 1.0$: perfect discrimination---the model correctly ranks every pair.
-- $C = 0.5$: random guessing---the model has no discriminative ability.
-- $C < 0.5$: the model systematically reverses the ordering (unusual in
-  practice).
+- $C = 1.0$: 완벽한 판별. 모형이 모든 쌍의 순위를 옳게 매긴다.
+- $C = 0.5$: 무작위 추측. 판별력이 없다.
+- $C < 0.5$: 모형이 체계적으로 순서를 뒤집는다(실무에서는 드물다).
 
-### Computing the C-Index
+### C-지수 계산하기
 
-For a Cox model with linear predictor $\hat{\eta}_i = \hat{\boldsymbol{\beta}}^\top \mathbf{x}_i$:
+선형예측자가 $\hat{\eta}_i = \hat{\boldsymbol{\beta}}^\top \mathbf{x}_i$인 콕스 모형에서,
 
-1. Enumerate all pairs $(i, j)$ where $t_i < t_j$ and $\delta_i = 1$ (subject
-   $i$ experienced the event first and is not censored).
-2. The pair is concordant if $\hat{\eta}_i > \hat{\eta}_j$ (higher predicted
-   risk for the subject who failed earlier).
-3. If $\hat{\eta}_i = \hat{\eta}_j$, the pair is counted as 0.5 concordant.
+1. $t_i < t_j$이고 $\delta_i = 1$인 모든 쌍 $(i, j)$를 열거한다(대상 $i$가 먼저 사건을 겪었고
+   절단되지 않았다).
+2. $\hat{\eta}_i > \hat{\eta}_j$이면 그 쌍은 일치한다(먼저 사건을 겪은 대상의 예측 위험이 더
+   높다).
+3. $\hat{\eta}_i = \hat{\eta}_j$이면 그 쌍을 0.5로 센다.
 
-!!! note "Handling Censored Observations"
+!!! note "절단된 관측치 처리"
 
-    Pairs where the shorter-time subject is censored are excluded because the
-    ordering is ambiguous.  Pairs where the longer-time subject is censored
-    are included only if the censoring time exceeds the event time of the
-    other subject.
+    시간이 더 짧은 쪽이 절단된 쌍은 순서가 모호하므로 제외한다. 시간이 더 긴 쪽이 절단된 쌍은
+    절단시간이 다른 대상의 사건시간을 넘을 때만 포함한다.
 
-### Interpreting the C-Index
+    쌍을 버린다는 것은 곧 **절단이 심할수록 C-지수의 표준오차가 커진다**는 뜻이다. 사용 가능한
+    쌍의 수가 유효 표본크기 역할을 한다.
 
-| C-Index Range | Interpretation |
+### C-지수 해석
+
+| C-지수 범위 | 해석 |
 |:-------------|:---------------|
-| 0.50 -- 0.60 | Poor discrimination |
-| 0.60 -- 0.70 | Moderate |
-| 0.70 -- 0.80 | Good |
-| 0.80 -- 0.90 | Excellent |
-| 0.90 -- 1.00 | Outstanding (rare in practice) |
+| 0.50 -- 0.60 | 판별력이 나쁨 |
+| 0.60 -- 0.70 | 보통 |
+| 0.70 -- 0.80 | 좋음 |
+| 0.80 -- 0.90 | 뛰어남 |
+| 0.90 -- 1.00 | 매우 뛰어남(실무에서는 드묾) |
 
-### Advantages and Limitations
+19장의 AUC 등급표와 마찬가지로 이 구간들은 **관례일 뿐**이다. C-지수 0.72가 좋은지 나쁜지는
+표가 아니라 문제와 기존 모형의 성능이 정한다.
 
-**Advantages:**
+### 장점과 한계
 
-- Applicable to **any** survival model (non-parametric, parametric, Cox).
-- Does not require a distributional assumption.
-- Directly interpretable as the probability of correctly ranking a random pair.
+**장점:**
 
-**Limitations:**
+- **어떤** 생존 모형에도 적용된다(비모수, 모수, 콕스).
+- 분포 가정을 요구하지 않는다.
+- 무작위로 뽑은 한 쌍의 순위를 옳게 매길 확률로 곧바로 해석된다.
 
-- Measures **discrimination** only, not calibration (how well predicted
-  probabilities match observed frequencies).
-- Sensitive to the censoring distribution: heavy censoring reduces the number
-  of usable pairs.
-- Does not account for the time horizon; a model may discriminate well at
-  short horizons but poorly at long horizons.
+**한계:**
 
-## Integrated Brier Score
+- **판별력**만 재고 보정(예측확률이 관측 빈도와 얼마나 맞는지)은 재지 않는다.
+- 절단분포에 민감하다. 절단이 심하면 사용 가능한 쌍의 수가 줄어든다.
+- 시간 지평을 반영하지 않는다. 어떤 모형이 단기 지평에서는 잘 판별하고 장기에서는 못할 수 있다.
 
-The **Brier score** evaluates both discrimination and calibration at a specific
-time $t$:
+첫 번째 한계가 특히 중요하다. C-지수는 **순위통계량**이므로 예측 위험에 어떤 단조 변환을 가해도
+값이 변하지 않는다. 19장에서 AUC가 보정에 대해 아무것도 말해 주지 않던 것과 정확히 같다.
+예측 생존확률 자체를 쓸 계획이라면 C-지수만으로는 부족하고 브라이어 점수를 함께 보아야 한다.
+
+## 적분 브라이어 점수
+
+**브라이어 점수**는 특정 시점 $t$에서 판별력과 보정을 함께 평가한다.
 
 $$
 \text{BS}(t) = \frac{1}{n} \sum_{i=1}^{n} \left[\hat{S}(t \mid \mathbf{x}_i) - \mathbf{1}(T_i > t)\right]^2 \cdot w_i(t)
 $$
 
-where $w_i(t)$ are inverse-probability-of-censoring weights that correct for
-the fact that the true survival status $\mathbf{1}(T_i > t)$ is unknown for
-censored subjects with $t_i < t$.
+여기서 $w_i(t)$는 절단확률의 역수 가중치로, $t_i < t$인 절단된 대상의 참 생존 상태
+$\mathbf{1}(T_i > t)$를 알 수 없다는 점을 보정한다.
 
-The **integrated Brier score (IBS)** averages the Brier score over a range of
-time points:
+**적분 브라이어 점수(IBS)**는 브라이어 점수를 여러 시점에 걸쳐 평균한다.
 
 $$
 \text{IBS} = \frac{1}{t_{\max} - t_{\min}} \int_{t_{\min}}^{t_{\max}} \text{BS}(t)\, dt
 $$
 
-Lower IBS indicates better overall predictive performance.
+IBS가 낮을수록 전체 예측 성능이 좋다.
 
-!!! tip "When to Use Each Metric"
+!!! tip "각 지표를 언제 쓸 것인가"
 
-    - **AIC**: Comparing parametric models with the same likelihood type.
-    - **C-index**: Comparing any models on discrimination.
-    - **IBS**: Comparing any models on overall predictive accuracy
-      (discrimination + calibration).
+    - **AIC**: 같은 가능도 유형을 갖는 모수 모형끼리 비교할 때.
+    - **C-지수**: 어떤 모형이든 판별력을 비교할 때.
+    - **IBS**: 어떤 모형이든 전체 예측정확도(판별력 + 보정)를 비교할 때.
 
-## Summary
+## 요약
 
-| Criterion | Applicable Models | Measures | Strengths |
+| 기준 | 적용 가능한 모형 | 측정 대상 | 강점 |
 |:----------|:-----------------|:---------|:----------|
-| AIC | Parametric (full likelihood) | Fit vs complexity | Theoretically grounded |
-| BIC | Parametric (full likelihood) | Fit vs complexity (stronger penalty) | Consistent model selection |
-| C-index | All | Discrimination | Model-agnostic |
-| IBS | All | Discrimination + calibration | Comprehensive evaluation |
+| AIC | 모수(완전 가능도) | 적합도 대 복잡도 | 이론적 근거가 있음 |
+| BIC | 모수(완전 가능도) | 적합도 대 복잡도(더 강한 벌점) | 일치성 있는 모형 선택 |
+| C-지수 | 전부 | 판별력 | 모형에 무관 |
+| IBS | 전부 | 판별력 + 보정 | 종합적 평가 |
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Model Selection
+**연습문제 1.**
+모형 선택
 
-Three parametric models are fitted to the same dataset of 200 subjects with
-120 events:
+대상 200명, 사건 120건인 같은 자료에 모수 모형 세 개를 적합했다.
 
-| Model | Parameters ($p$) | Log-Likelihood |
+| 모형 | 모수 ($p$) | 로그가능도 |
 |:------|:----------------:|:--------------:|
-| Exponential | 1 | $-458.2$ |
-| Weibull | 2 | $-441.6$ |
-| Log-logistic | 2 | $-443.1$ |
+| 지수 | 1 | $-458.2$ |
+| 와이불 | 2 | $-441.6$ |
+| 로그로지스틱 | 2 | $-443.1$ |
 
-**(a)** Compute the AIC for each model.
+**(a)** 각 모형의 AIC를 계산하라.
 
-**(b)** Perform a likelihood ratio test of exponential vs Weibull at
-$\alpha = 0.05$.
+**(b)** $\alpha = 0.05$에서 지수 대 와이불의 가능도비 검정을 수행하라.
 
-**(c)** A Cox model fitted to the same data yields a concordance index of
-$C = 0.72$, while the Weibull model yields $C = 0.74$. Which model
-discriminates better?
+**(c)** 같은 자료에 적합한 콕스 모형의 일치도 지수가 $C = 0.72$이고 와이불 모형은 $C = 0.74$다.
+어느 모형이 더 잘 판별하는가?
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
 
-    **(a)** AIC = $-2\ell + 2p$:
+    **(a)** AIC = $-2\ell + 2p$이므로,
 
-    - Exponential: $-2(-458.2) + 2(1) = 918.4$
-    - Weibull: $-2(-441.6) + 2(2) = 887.2$
-    - Log-logistic: $-2(-443.1) + 2(2) = 890.2$
+    - 지수: $-2(-458.2) + 2(1) = 918.4$
+    - 와이불: $-2(-441.6) + 2(2) = 887.2$
+    - 로그로지스틱: $-2(-443.1) + 2(2) = 890.2$
 
-    The Weibull model has the lowest AIC (887.2).
+    와이불 모형의 AIC가 887.2로 가장 낮다. 와이불과 로그로지스틱의 차이는 $3.0$으로 경험칙의
+    기준선 2를 넘으므로, 이 경우에는 와이불을 선호할 근거가 있다.
 
-    **(b)** $\Lambda = 2(-441.6 - (-458.2)) = 2 \times 16.6 = 33.2$. Under $H_0$,
-    $\Lambda \sim \chi^2_1$. Since $33.2 \gg 3.84 = \chi^2_{1, 0.05}$, we reject
-    $H_0$. The Weibull model fits significantly better than the exponential.
+    **(b)** $\Lambda = 2(-441.6 - (-458.2)) = 2 \times 16.6 = 33.2$이다. $H_0$ 아래에서
+    $\Lambda \sim \chi^2_1$이고 $33.2 \gg 3.84 = \chi^2_{1, 0.05}$이므로 $H_0$을 기각한다.
+    와이불 모형이 지수 모형보다 유의하게 잘 맞는다. p-값은 $8.3 \times 10^{-9}$다.
 
-    **(c)** The Weibull model ($C = 0.74$) discriminates slightly better than the
-    Cox model ($C = 0.72$), suggesting that the Weibull distributional assumption
-    is appropriate for this dataset and provides a small gain in predictive accuracy.
+    **(c)** 액면 그대로는 와이불($C = 0.74$)이 콕스($C = 0.72$)보다 조금 낫다. **그러나 이
+    차이만으로 결론을 내려서는 안 된다.**
+
+    - **불확실성이 제시되지 않았다.** C-지수에도 표집 변동이 있다. 사건 120건, 사용 가능한 쌍이
+      수천 개인 자료에서 C-지수의 표준오차는 대략 $0.02$--$0.03$이다. $0.02$ 차이는 표준오차
+      하나에도 못 미친다.
+    - **같은 자료에서 계산했다.** 두 모형 모두 이 자료에 적합되었으므로 C-지수가 낙관적으로
+      편향되어 있다. 모형이 유연할수록 편향이 크다. 공정한 비교에는 교차검증이나 별도의
+      검정자료가 필요하다.
+    - **판별력만 잰다.** 두 모형의 보정이 크게 다를 수 있다. 예측 생존확률을 쓸 계획이라면
+      브라이어 점수나 보정 곡선을 함께 보아야 한다.
+
+    **정직한 답:** 이 자료에서 두 모형의 판별 성능은 **구별되지 않는다.** 모형 선택의 근거는
+    다른 곳에서 찾아야 한다. 위험비를 보고하려면 콕스가, 외삽이나 매끄러운 위험곡선이 필요하면
+    와이불이 낫다. $\square$
