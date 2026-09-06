@@ -1,82 +1,115 @@
-# Chapter 19: Logistic Regression
+# 19장: 로지스틱 회귀
 
 
-## Overview
+## 개요
 
-Logistic regression models the probability of a binary outcome as a function of predictor variables. Unlike linear regression, which predicts a continuous response, logistic regression maps the linear predictor through the sigmoid function to produce probabilities in the interval (0, 1). This chapter covers the logistic model formulation and interpretation, maximum likelihood estimation and inference procedures, a comprehensive treatment of classification evaluation metrics, and regularization techniques adapted for the logistic setting.
-
----
-
-## Chapter Structure
-
-### 19.1 Logistic Regression
-
-The model formulation, link function, and coefficient interpretation:
-
-- **Logit Link and Odds** --- Introduces the sigmoid (logistic) function as the mapping from the linear predictor to probabilities, defines the logit as the log-odds, and derives the sigmoid derivative used throughout gradient-based estimation.
-- **Odds Ratios and Interpretation** --- Shows that each coefficient represents the change in log-odds per unit increase in the corresponding feature, so that exponentiating the coefficient gives the multiplicative effect on the odds (the odds ratio).
-- **Likelihood for Logistic Regression** --- Derives the Bernoulli likelihood for binary outcomes, takes the negative log to obtain the cross-entropy (log-loss) objective function, and establishes the optimization problem for logistic regression.
-
-### 19.2 Estimation and Inference
-
-How coefficients are estimated and tested:
-
-- **Maximum Likelihood Estimation** --- Derives the gradient of the cross-entropy loss, showing it simplifies to a clean matrix expression involving the difference between predicted probabilities and observed labels, and explains why no closed-form solution exists.
-- **Newton-Raphson and IRLS Algorithms** --- Describes the iterative optimization algorithms used to find the MLE, including Newton-Raphson (using the Hessian) and Iteratively Reweighted Least Squares (IRLS), which reframes logistic regression as a sequence of weighted least squares problems.
-- **Wald and Likelihood Ratio Tests** --- Presents the two classical approaches for testing whether individual coefficients or groups of coefficients are significantly different from zero, using the asymptotic normality of the MLE and the Fisher information matrix.
-- **Deviance and Goodness-of-Fit** --- Defines the deviance as twice the difference between the saturated and fitted model log-likelihoods, and discusses its use for assessing overall model fit and comparing nested models.
-
-### 19.3 Model Evaluation
-
-Comprehensive treatment of classification performance assessment:
-
-- **Confusion Matrix** --- Defines the 2x2 contingency table (TP, FP, FN, TN) that summarizes all classification outcomes and from which all other metrics are derived.
-- **Precision, Recall, and F1-Score** --- Covers precision (positive predictive value), recall (sensitivity/true positive rate), their trade-off, and the F1-score as their harmonic mean, with guidance on when each metric matters most.
-- **ROC Curve and AUC** --- Explains the Receiver Operating Characteristic curve as a threshold-free evaluation of classifier performance, plots TPR vs. FPR across all thresholds, and interprets the Area Under the Curve as a measure of discriminative ability.
-- **Decision Threshold Tuning** --- Discusses why the default 0.5 threshold is often suboptimal, how to choose thresholds based on cost considerations, and methods for finding the optimal operating point on the ROC curve.
-- **Calibration and Brier Score** --- Addresses whether predicted probabilities are well-calibrated (i.e., a predicted 70% corresponds to a 70% empirical rate), and introduces the Brier score as a measure of probabilistic prediction quality.
-- **Handling Imbalanced Data** --- Covers strategies for class imbalance including inverse class frequency weighting, oversampling, undersampling, and threshold adjustment, with practical guidance on when each approach is appropriate.
-- **Evaluation Metrics Overview** --- A unified reference covering the confusion matrix, accuracy, precision, recall, F1-score, ROC/AUC, and their interrelationships, with emphasis on the limitations of accuracy for imbalanced classes.
-
-### 19.4 Regularized Logistic Regression
-
-Applying regularization to prevent overfitting in logistic models:
-
-- **L1 and L2 Regularization for Logistic Regression** --- Extends Ridge (L2) and Lasso (L1) penalties to the logistic regression objective, producing regularized log-likelihood optimization problems that reduce overfitting and handle multicollinearity.
-- **Feature Selection via Penalized Likelihood** --- Demonstrates how L1-penalized logistic regression drives irrelevant feature coefficients to exactly zero, enabling automatic feature selection in high-dimensional classification problems.
-
-### 19.5 Code
-
-Complete Python implementations:
-
-- **logistic_regression.py** --- End-to-end logistic regression fitting and interpretation using statsmodels and scikit-learn.
-- **evaluation_metrics.py** --- ROC curve, AUC, confusion matrix, precision, recall, F1-score, and calibration plot computations.
-- **regularized_logistic.py** --- L1 and L2 regularized logistic regression with cross-validated hyperparameter tuning.
-- **logistic_vs_linear_visualization.py** --- Visual comparison of logistic and linear regression on binary outcomes, illustrating why linear regression is inappropriate for classification.
-
-### 19.6 Exercises
-
-Practice problems covering logit and odds ratio interpretation, predicted probability computation, MLE derivation, confusion matrix analysis, ROC curve construction, threshold optimization for imbalanced data, and regularized logistic regression applications.
+로지스틱 회귀는 이항 결과의 확률을 설명변수의 함수로 모형화한다. 연속형 반응변수를 예측하는
+선형회귀와 달리, 로지스틱 회귀는 선형예측자를 시그모이드 함수에 통과시켜 구간 $(0, 1)$의 확률을
+만들어 낸다. 이 장에서는 로지스틱 모형의 정식화와 해석, 최대가능도 추정과 추론 절차, 분류
+평가지표에 대한 포괄적 논의, 그리고 로지스틱 상황에 맞춘 정칙화 기법을 다룬다.
 
 ---
 
-## Prerequisites
+## 장의 구성
 
-This chapter builds on:
+### 19.1 로지스틱 회귀
 
-- **Chapter 13** (Linear Regression) --- Ordinary least squares, coefficient interpretation, and the normal equations, which logistic regression extends to the classification setting.
-- **Chapter 6** (Statistical Estimation) --- Maximum likelihood estimation, Fisher information, and asymptotic properties of the MLE.
-- **Chapter 3** (Foundations of Probability) --- Bernoulli distribution, conditional probability, and likelihood functions.
-- **Chapter 9** (Hypothesis Testing) --- Hypothesis testing framework, test statistics, and p-value interpretation used in Wald and likelihood ratio tests.
-- **Chapter 18** (Regularization Techniques) --- Ridge and Lasso penalty concepts, which are extended to the logistic regression objective in the regularization section.
+모형의 정식화, 연결함수, 계수 해석을 다룬다.
+
+- **로짓 연결과 오즈** --- 선형예측자를 확률로 옮기는 사상으로서 시그모이드(로지스틱) 함수를
+  소개하고, 로짓을 로그오즈로 정의하며, 기울기 기반 추정 전반에서 쓰이는 시그모이드의 도함수를
+  유도한다.
+- **오즈비와 계수 해석** --- 각 계수가 해당 변수의 한 단위 증가에 따른 로그오즈의 변화량임을
+  보이고, 따라서 계수를 지수화하면 오즈에 대한 곱셈 효과(오즈비)가 됨을 설명한다.
+- **로지스틱 회귀의 가능도** --- 이항 결과에 대한 베르누이 가능도를 유도하고, 음의 로그를 취해
+  교차엔트로피(로그손실) 목적함수를 얻으며, 로지스틱 회귀의 최적화 문제를 세운다.
+
+### 19.2 추정과 추론
+
+계수를 어떻게 추정하고 검정하는지 다룬다.
+
+- **최대가능도 추정** --- 교차엔트로피 손실의 기울기를 유도하여, 그것이 예측확률과 관측된
+  이름표의 차이를 담은 깔끔한 행렬식으로 정리됨을 보이고, 닫힌 형태의 해가 존재하지 않는
+  이유를 설명한다.
+- **뉴턴-랩슨과 IRLS 알고리즘** --- MLE를 찾는 반복 최적화 알고리즘을 설명한다. 헤세행렬을
+  쓰는 뉴턴-랩슨과, 로지스틱 회귀를 가중최소제곱 문제의 연속으로 바꾸어 푸는
+  반복재가중최소제곱(IRLS)을 다룬다.
+- **왈드 검정과 가능도비 검정** --- MLE의 점근 정규성과 피셔 정보행렬을 이용하여, 개별 계수
+  또는 계수 집단이 0과 유의하게 다른지 검정하는 두 고전적 접근을 제시한다.
+- **이탈도와 적합도** --- 포화모형과 적합모형의 로그가능도 차이의 두 배로 이탈도를 정의하고,
+  전체 적합도 평가와 내포모형 비교에 어떻게 쓰이는지 논의한다.
+
+### 19.3 모형 평가
+
+분류 성능 평가를 포괄적으로 다룬다.
+
+- **혼동행렬** --- 모든 분류 결과를 요약하는 2×2 분할표(TP, FP, FN, TN)를 정의한다. 다른 모든
+  지표가 여기에서 파생된다.
+- **정밀도, 재현율, F1 점수** --- 정밀도(양성예측도), 재현율(민감도, 참양성률), 둘 사이의 절충,
+  그리고 이들의 조화평균인 F1 점수를 다루며, 어떤 상황에서 어느 지표가 가장 중요한지 안내한다.
+- **ROC 곡선과 AUC** --- ROC 곡선을 문턱값에 의존하지 않는 분류기 평가로 설명하고, 모든
+  문턱값에 걸쳐 TPR 대 FPR을 그리며, 곡선 아래 면적을 판별력의 척도로 해석한다.
+- **결정 문턱 조율** --- 기본값 0.5가 최적이 아닌 경우가 많은 이유, 비용을 고려한 문턱 선택
+  방법, ROC 곡선 위에서 최적 작동점을 찾는 방법을 논의한다.
+- **보정과 브라이어 점수** --- 예측확률이 잘 보정되어 있는지(즉 70%라고 예측한 사례들의 실제
+  발생률이 70%인지)를 다루고, 확률예측의 질을 재는 브라이어 점수를 소개한다.
+- **불균형 자료 다루기** --- 역빈도 가중, 과대표집, 과소표집, 문턱 조정 등 범주 불균형에 대한
+  전략을 다루고, 각 접근이 언제 적절한지 실무적으로 안내한다.
+- **평가지표 개관** --- 혼동행렬, 정확도, 정밀도, 재현율, F1 점수, ROC/AUC와 그들 사이의 관계를
+  하나로 정리한 참고 절이며, 불균형 범주에서 정확도가 갖는 한계를 강조한다.
+
+### 19.4 정칙화 로지스틱 회귀
+
+로지스틱 모형의 과적합을 막기 위한 정칙화를 다룬다.
+
+- **로지스틱 회귀의 L1·L2 정칙화** --- 능형(L2)과 라쏘(L1) 벌점을 로지스틱 회귀 목적함수로
+  확장하여, 과적합을 줄이고 다중공선성을 다루는 정칙화 로그가능도 최적화 문제를 만든다.
+- **벌점가능도를 통한 변수선택** --- L1 벌점 로지스틱 회귀가 무관한 변수의 계수를 정확히 0으로
+  만들어 고차원 분류 문제에서 자동 변수선택을 가능하게 함을 보인다.
+
+### 19.5 코드
+
+완전한 파이썬 구현을 제공한다.
+
+- **logistic_regression.py** --- statsmodels와 scikit-learn을 이용한 로지스틱 회귀 적합과 해석의
+  전 과정.
+- **evaluation_metrics.py** --- ROC 곡선, AUC, 혼동행렬, 정밀도, 재현율, F1 점수, 보정 그림 계산.
+- **regularized_logistic.py** --- 교차검증으로 초모수를 조율하는 L1·L2 정칙화 로지스틱 회귀.
+- **logistic_vs_linear_visualization.py** --- 이항 결과에 대한 로지스틱 회귀와 선형회귀의 시각적
+  비교. 분류에 선형회귀가 부적절한 이유를 보여준다.
+
+### 19.6 연습문제
+
+로짓과 오즈비 해석, 예측확률 계산, MLE 유도, 혼동행렬 분석, ROC 곡선 작성, 불균형 자료의 문턱
+최적화, 정칙화 로지스틱 회귀 응용을 다루는 연습문제들.
 
 ---
 
-## Key Takeaways
+## 선행 지식
 
-1. Logistic regression models the log-odds of a binary outcome as a linear function of predictors, and the sigmoid function maps this linear predictor to a probability between 0 and 1.
-2. Coefficients are interpreted through odds ratios: exponentiating a coefficient gives the multiplicative change in odds for a one-unit increase in the corresponding predictor.
-3. MLE for logistic regression has no closed-form solution and requires iterative algorithms (Newton-Raphson or IRLS), but the gradient has a clean form involving the residuals (predicted minus observed).
-4. Model evaluation requires metrics beyond accuracy --- precision, recall, F1-score, and AUC are essential for understanding classifier performance, especially with imbalanced classes.
-5. The decision threshold should be tuned based on the relative costs of false positives and false negatives rather than defaulting to 0.5.
-6. L1 and L2 regularization extend naturally to logistic regression, with L1 enabling feature selection and L2 stabilizing estimates when predictors are correlated or the model is overparameterized.
+이 장은 다음 내용 위에 세워진다.
+
+- **13장**(선형회귀) --- 최소제곱, 계수 해석, 정규방정식. 로지스틱 회귀는 이를 분류 상황으로
+  확장한 것이다.
+- **6장**(통계적 추정) --- 최대가능도 추정, 피셔 정보, MLE의 점근적 성질.
+- **3장**(확률의 기초) --- 베르누이 분포, 조건부확률, 가능도함수.
+- **9장**(가설검정) --- 왈드 검정과 가능도비 검정에서 쓰는 가설검정의 틀, 검정통계량, p-값 해석.
+- **18장**(정칙화 기법) --- 능형회귀와 라쏘 벌점의 개념. 정칙화 절에서 로지스틱 회귀 목적함수로
+  확장된다.
+
+---
+
+## 핵심 요약
+
+1. 로지스틱 회귀는 이항 결과의 로그오즈를 설명변수의 선형함수로 모형화하며, 시그모이드 함수가
+   이 선형예측자를 0과 1 사이의 확률로 옮긴다.
+2. 계수는 오즈비로 해석한다. 계수를 지수화하면 해당 설명변수가 한 단위 증가할 때 오즈에 곱해지는
+   배수가 된다.
+3. 로지스틱 회귀의 MLE에는 닫힌 형태의 해가 없어 반복 알고리즘(뉴턴-랩슨 또는 IRLS)이 필요하지만,
+   기울기는 잔차(예측값 빼기 관측값)를 포함하는 깔끔한 형태를 갖는다.
+4. 모형 평가에는 정확도를 넘어서는 지표가 필요하다. 특히 범주가 불균형할 때 정밀도, 재현율,
+   F1 점수, AUC가 분류기 성능을 이해하는 데 필수적이다.
+5. 결정 문턱은 기본값 0.5를 그대로 쓸 것이 아니라 위양성과 위음성의 상대적 비용에 근거해
+   조율해야 한다.
+6. L1과 L2 정칙화는 로지스틱 회귀로 자연스럽게 확장된다. L1은 변수선택을 가능하게 하고, L2는
+   설명변수가 상관되어 있거나 모형이 과모수화되었을 때 추정치를 안정화한다.

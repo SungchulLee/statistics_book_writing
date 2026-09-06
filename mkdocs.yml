@@ -763,34 +763,34 @@ nav:
             - 주성분회귀와 부분최소제곱 예제 (코드): ch18/code/pcr_pls_examples.md
         - 장 연습문제: ch18/exercises/exercises.md
 
-    - 19 Logistic Regression:
-        - Chapter Overview: ch19/index.md
-        - 19.1 Logistic Regression:
-            - Logit Link and Odds: ch19/logistic_regression/logit.md
-            - Odds Ratios and Interpretation: ch19/logistic_regression/odds_ratios.md
-            - Likelihood for Logistic Regression: ch19/logistic_regression/likelihood.md
-        - 19.2 Estimation and Inference:
-            - Maximum Likelihood Estimation: ch19/estimation_inference/mle.md
-            - Newton–Raphson and Iteratively Reweighted Least Squares: ch19/estimation_inference/algorithms.md
-            - Wald and Likelihood Ratio Tests: ch19/estimation_inference/tests.md
-            - Deviance and Goodness-of-Fit: ch19/estimation_inference/deviance.md
-        - 19.3 Model Evaluation:
-            - Confusion Matrix: ch19/evaluation/confusion_matrix.md
-            - Precision, Recall, and F1-Score: ch19/evaluation/precision_recall.md
-            - Receiver Operating Characteristic and Area Under Curve: ch19/evaluation/roc_auc.md
-            - Decision Threshold Tuning: ch19/evaluation/threshold_tuning.md
-            - Calibration and Brier Score: ch19/evaluation/calibration.md
-            - Handling Imbalanced Data: ch19/evaluation/imbalanced_data.md
-            - Evaluation Metrics Overview: ch19/evaluation/metrics.md
-        - 19.4 Regularized Logistic Regression:
-            - L1 and L2 Regularization for Logistic Regression: ch19/regularized/regularization.md
-            - Feature Selection via Penalized Likelihood: ch19/regularized/feature_selection.md
-        - 19.5 Code:
-            - Logistic Regression Demonstrations: ch19/code/logistic_regression.md
-            - Receiver Operating Characteristic and Evaluation Metrics: ch19/code/evaluation_metrics.md
-            - Regularized Logistic Regression: ch19/code/regularized_logistic.md
-            - Logistic vs Linear Visualization: ch19/code/logistic_vs_linear_visualization.md
-            - Linear and Quadratic Discriminant Analysis Classification: ch19/code/lda_qda_classification.md
+    - 19 로지스틱 회귀:
+        - 장 개요: ch19/index.md
+        - 19.1 로지스틱 회귀:
+            - 로짓 연결과 오즈: ch19/logistic_regression/logit.md
+            - 오즈비와 계수 해석: ch19/logistic_regression/odds_ratios.md
+            - 로지스틱 회귀의 가능도: ch19/logistic_regression/likelihood.md
+        - 19.2 추정과 추론:
+            - 최대가능도 추정: ch19/estimation_inference/mle.md
+            - 뉴턴-랩슨과 반복재가중최소제곱: ch19/estimation_inference/algorithms.md
+            - 왈드 검정과 가능도비 검정: ch19/estimation_inference/tests.md
+            - 이탈도와 적합도: ch19/estimation_inference/deviance.md
+        - 19.3 모형 평가:
+            - 혼동행렬: ch19/evaluation/confusion_matrix.md
+            - 정밀도, 재현율, F1 점수: ch19/evaluation/precision_recall.md
+            - ROC 곡선과 AUC: ch19/evaluation/roc_auc.md
+            - 결정 문턱 조율: ch19/evaluation/threshold_tuning.md
+            - 보정과 브라이어 점수: ch19/evaluation/calibration.md
+            - 불균형 자료 다루기: ch19/evaluation/imbalanced_data.md
+            - 분류 지표 개관: ch19/evaluation/metrics.md
+        - 19.4 정칙화 로지스틱 회귀:
+            - 로지스틱 회귀의 L1·L2 정칙화: ch19/regularized/regularization.md
+            - 벌점가능도를 통한 변수선택: ch19/regularized/feature_selection.md
+        - 19.5 코드:
+            - 로지스틱 회귀 실습 (코드): ch19/code/logistic_regression.md
+            - ROC 곡선과 평가지표 구현 (코드): ch19/code/evaluation_metrics.md
+            - 정칙화 로지스틱 회귀 실습 (코드): ch19/code/regularized_logistic.md
+            - 로지스틱 회귀와 선형회귀의 비교 (코드): ch19/code/logistic_vs_linear_visualization.md
+            - 선형판별분석과 이차판별분석 (코드): ch19/code/lda_qda_classification.md
         - 장 연습문제: ch19/exercises/exercises.md
 
     - 20 Softmax Regression:

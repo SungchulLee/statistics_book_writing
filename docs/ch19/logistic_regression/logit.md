@@ -1,60 +1,56 @@
-# Logit Link and Odds
+# 로짓 연결과 오즈
 
 
-## From Linear Models to Classification
+## 선형모형에서 분류로
 
-In linear regression the response variable $y$ is continuous. When the response
-is binary — taking values 0 or 1 — we need a model that maps $\mathbb{R}$
-into the interval $(0,1)$.  Logistic regression achieves this by passing the
-linear predictor through the **sigmoid (logistic) function**.
+선형회귀에서 반응변수 $y$는 연속형이다. 반응변수가 0 또는 1의 값을 갖는 이항변수일 때는
+$\mathbb{R}$을 구간 $(0,1)$로 옮기는 모형이 필요하다. 로지스틱 회귀는 선형예측자를
+**시그모이드(로지스틱) 함수**에 통과시켜 이를 달성한다.
 
-## The Sigmoid Function
+## 시그모이드 함수
 
 $$
 \sigma(z) = \frac{1}{1+e^{-z}}
 $$
 
-The sigmoid maps every real number to $(0,1)$ and is therefore a valid model
-for the conditional probability $P(Y=1 \mid \mathbf{x})$.
+시그모이드는 모든 실수를 $(0,1)$로 옮기므로 조건부확률 $P(Y=1 \mid \mathbf{x})$의 모형으로
+타당하다.
 
-### Derivative of the Sigmoid
+### 시그모이드의 도함수
 
-The derivative has a remarkably clean form that simplifies gradient
-computations throughout logistic regression:
+도함수는 놀랄 만큼 깔끔한 형태를 가지며, 로지스틱 회귀 전반의 기울기 계산을 단순하게 만든다.
 
 $$
 \sigma'(z) = \frac{e^{-z}}{(1+e^{-z})^2} = \sigma(z)\bigl(1-\sigma(z)\bigr)
 $$
 
-??? note "Derivation"
-    Write $\sigma = (1+e^{-z})^{-1}$ and apply the chain rule:
+??? note "유도"
+    $\sigma = (1+e^{-z})^{-1}$로 두고 연쇄법칙을 적용하면
 
     $$
     \sigma' = -\,(1+e^{-z})^{-2}\cdot(-e^{-z})
             = \frac{e^{-z}}{(1+e^{-z})^2}
     $$
 
-    Factor as $\frac{1}{1+e^{-z}} \cdot \frac{e^{-z}}{1+e^{-z}}
-    = \sigma(1-\sigma)$.
+    이고, $\frac{1}{1+e^{-z}} \cdot \frac{e^{-z}}{1+e^{-z}} = \sigma(1-\sigma)$로 인수분해된다.
 
-## The Logit (Log-Odds) Link
+## 로짓(로그오즈) 연결
 
-Define the **logit** of a probability $p$:
+확률 $p$의 **로짓**을 다음과 같이 정의한다.
 
 $$
 \operatorname{logit}(p) = \log\frac{p}{1-p}
 $$
 
-The ratio $p/(1-p)$ is the **odds** of the event, and the logit is the
-**log-odds**.  Logistic regression assumes a linear relationship in the
-log-odds:
+비 $p/(1-p)$는 사건의 **오즈**이고, 로짓은 **로그오즈**다. 로지스틱 회귀는 로그오즈에서
+선형관계를 가정한다.
 
 $$
 \operatorname{logit}\bigl(P(Y=1\mid\mathbf{x})\bigr) = \mathbf{x}^T\boldsymbol{\theta}
 $$
 
-Equivalently, for the $i$-th observation with feature vector
-$A[i,:]$ (the design-matrix row, including a leading 1 for the intercept):
+동등하게, 특성벡터가 $A[i,:]$(절편을 위한 선행 1을 포함한 계획행렬의 행)인 $i$번째 관측치에
+대해
 
 $$
 z^{(i)} = A[i,:]\,\boldsymbol{\theta},
@@ -62,107 +58,112 @@ z^{(i)} = A[i,:]\,\boldsymbol{\theta},
 \sigma^{(i)} = \sigma\!\bigl(z^{(i)}\bigr)
 $$
 
-## Interpretation via Odds
+이다.
 
-Because $\operatorname{logit}(p) = \mathbf{x}^T\boldsymbol{\theta}$, a
-unit increase in feature $x_j$ multiplies the odds by $e^{\theta_j}$,
-holding all other features constant.  This multiplicative interpretation
-is one of the key reasons logistic regression remains popular in applied
-statistics and finance.
+## 오즈를 통한 해석
 
-## Key Properties
+$\operatorname{logit}(p) = \mathbf{x}^T\boldsymbol{\theta}$이므로, 다른 변수를 고정한 채 특성
+$x_j$가 한 단위 증가하면 오즈에 $e^{\theta_j}$가 곱해진다. 이 곱셈적 해석은 로지스틱 회귀가
+응용통계와 금융에서 여전히 널리 쓰이는 핵심 이유 가운데 하나다.
 
-| Property | Value |
+## 주요 성질
+
+| 성질 | 값 |
 |---|---|
-| Domain | $z \in (-\infty, +\infty)$ |
-| Range | $\sigma(z) \in (0, 1)$ |
-| Symmetry | $\sigma(-z) = 1 - \sigma(z)$ |
-| Midpoint | $\sigma(0) = 0.5$ |
-| Maximum slope | $\sigma'(0) = 0.25$ |
+| 정의역 | $z \in (-\infty, +\infty)$ |
+| 치역 | $\sigma(z) \in (0, 1)$ |
+| 대칭성 | $\sigma(-z) = 1 - \sigma(z)$ |
+| 중점 | $\sigma(0) = 0.5$ |
+| 최대 기울기 | $\sigma'(0) = 0.25$ |
 
-## Confounding in Logistic Regression
+## 로지스틱 회귀에서의 교락
 
-As with linear regression, logistic regression can suffer from **confounding**: a third variable may be associated with both the predictor and the outcome, distorting the apparent relationship between them.
+선형회귀와 마찬가지로 로지스틱 회귀도 **교락**을 겪을 수 있다. 제3의 변수가 설명변수와 결과
+모두와 연관되어 있어 둘 사이의 겉보기 관계를 왜곡하는 것이다.
 
-### Example: Student Status Confounds Balance and Default
+### 예: 학생 신분이 잔액과 연체를 교락시키는 경우
 
-Consider predicting credit card default ($Y$) using account balance ($X_1$). A bivariate logistic regression shows a negative relationship:
+신용카드 연체($Y$)를 계좌 잔액($X_1$)으로 예측한다고 하자. 이변량 로지스틱 회귀는 음의 관계를
+보여준다.
 
 $$
 \log\frac{P(\text{Default}=1)}{P(\text{Default}=0)} = \beta_0 + \beta_1 \cdot \text{Balance}
 $$
 
-You might find $\beta_1 < 0$, suggesting that higher balance reduces default risk. However, this may be **misleading**.
+$\beta_1 < 0$이 나와 잔액이 클수록 연체 위험이 낮다고 읽힐 수 있다. 그러나 이는 **오도**일 수
+있다.
 
-The confounder is **student status** ($X_2$). In the data:
+교락변수는 **학생 신분**($X_2$)이다. 자료에서 다음과 같은 경향이 나타난다.
 
-- **Students** tend to have:
-  - Lower account balances (younger, less established financially)
-  - Higher default rates (lower income, less stable employment)
+- **학생**은 대체로,
+    - 계좌 잔액이 낮고(나이가 어리고 경제적 기반이 약함),
+    - 연체율이 높다(소득이 낮고 고용이 불안정함).
 
-- **Non-students** tend to have:
-  - Higher account balances (older, more established)
-  - Lower default rates (higher income, better job stability)
+- **비학생**은 대체로,
+    - 계좌 잔액이 높고(나이가 많고 기반이 안정적임),
+    - 연체율이 낮다(소득이 높고 직업이 안정적임).
 
-### The Paradox
+### 역설
 
-**Bivariate model** (ignoring student status):
+**이변량 모형**(학생 신분을 무시):
 
 $$
 \log\frac{P(\text{Default}=1)}{1-P(\text{Default}=1)} = \beta_0 + \beta_1 \cdot \text{Balance}
 $$
 
-This shows $\beta_1 < 0$: higher balance → lower default probability.
+여기서는 $\beta_1 < 0$, 즉 잔액이 클수록 연체 확률이 낮다.
 
-**But this is confounded!** Student status is driving both variables in opposite directions.
+**그러나 이는 교락된 결과다.** 학생 신분이 두 변수를 서로 반대 방향으로 움직이고 있다.
 
-**Multivariate model** (including student status):
+**다변량 모형**(학생 신분 포함):
 
 $$
 \log\frac{P(\text{Default}=1)}{1-P(\text{Default}=1)} = \beta_0 + \beta_1 \cdot \text{Balance} + \beta_2 \cdot \text{Student}
 $$
 
-Once we control for student status, the relationship between balance and default may reverse or change dramatically:
+학생 신분을 통제하고 나면 잔액과 연체의 관계가 뒤집히거나 크게 달라질 수 있다.
 
-- $\beta_1$ might become **positive** (higher balance → higher default for students AND non-students)
-- The coefficient magnitude may change substantially
+- $\beta_1$이 **양수**가 될 수 있다(학생이든 비학생이든 잔액이 클수록 연체 확률이 높다).
+- 계수의 크기도 상당히 달라질 수 있다.
 
-This reversal is an example of **Simpson's paradox** in classification: an association observed in the marginal (bivariate) model disappears or reverses when you control for a confounder.
+이 역전은 분류에서 나타나는 **심프슨의 역설**의 한 예다. 주변(이변량) 모형에서 관찰된 연관이
+교락변수를 통제하면 사라지거나 뒤집힌다.
 
-### Interpretation of Odds Ratios with Confounders
+### 교락이 있을 때의 오즈비 해석
 
-In the bivariate model:
+이변량 모형에서는
 
 $$
 \text{Odds Ratio}_{X_1} = e^{\beta_1} \approx 0.99
 $$
 
-("For every \$1 increase in balance, odds decrease by 1%")
+("잔액이 \$1 늘어날 때마다 오즈가 1% 감소한다")
 
-In the multivariate model:
+다변량 모형에서는
 
 $$
 \text{Odds Ratio}_{X_1 | X_2} = e^{\hat{\beta}_1} \approx 1.01
 $$
 
-("For every \$1 increase in balance, *controlling for student status*, odds increase by 1%")
+("*학생 신분을 통제할 때* 잔액이 \$1 늘어날 때마다 오즈가 1% 증가한다")
 
-The different interpretations reflect that:
+해석이 다른 것은 다음을 반영한다.
 
-- The first is a **marginal** (unconditional) effect
-- The second is a **conditional** (partial) effect
+- 첫 번째는 **주변**(무조건부) 효과다.
+- 두 번째는 **조건부**(부분) 효과다.
 
-### Checking for Confounding
+### 교락 확인하기
 
-To detect confounding in logistic regression:
+로지스틱 회귀에서 교락을 탐지하려면,
 
-1. **Fit a bivariate model:** $\log\frac{p}{1-p} = \beta_0 + \beta_1 X_1$
-2. **Fit a multivariate model:** $\log\frac{p}{1-p} = \beta_0 + \beta_1 X_1 + \beta_2 X_2$
-3. **Compare coefficients:**
-   - If $|\hat{\beta}_1^{\text{multivariate}} - \hat{\beta}_1^{\text{bivariate}}| / |\hat{\beta}_1^{\text{bivariate}}| > 0.10$, confounding is likely present
-   - A change in sign is strong evidence of confounding
+1. **이변량 모형을 적합한다:** $\log\frac{p}{1-p} = \beta_0 + \beta_1 X_1$
+2. **다변량 모형을 적합한다:** $\log\frac{p}{1-p} = \beta_0 + \beta_1 X_1 + \beta_2 X_2$
+3. **계수를 비교한다:**
+    - $|\hat{\beta}_1^{\text{다변량}} - \hat{\beta}_1^{\text{이변량}}| / |\hat{\beta}_1^{\text{이변량}}| > 0.10$
+      이면 교락이 있을 가능성이 크다.
+    - 부호가 바뀌었다면 교락의 강력한 증거다.
 
-### Example Output
+### 출력 예시
 
 ```
 Bivariate Model (Balance only):
@@ -175,37 +176,48 @@ Multivariate Model (Balance + Student):
   Student:     +0.71    (Odds Ratio: 2.03)
 ```
 
-The balance coefficient changes from negative to positive once student status is included—a clear sign of confounding.
+학생 신분을 포함시키자 잔액 계수가 음수에서 양수로 바뀌었다. 교락의 분명한 신호다.
 
-### Implications for Prediction and Inference
+### 예측과 추론에 대한 함의
 
-- **For prediction:** Including confounders improves predictive accuracy by capturing true relationships
-- **For inference:** Ignoring confounders leads to biased coefficient estimates and incorrect odds ratio interpretations
-- **Best practice:** Always consider domain knowledge and collect data on potential confounders
+- **예측 관점:** 교락변수를 포함하면 참된 관계를 포착하므로 예측정확도가 높아진다.
+- **추론 관점:** 교락변수를 무시하면 계수 추정이 편향되고 오즈비 해석이 틀리게 된다.
+- **모범 실무:** 항상 배경지식을 검토하고 잠재적 교락변수의 자료를 함께 수집하라.
 
-See also: [Confounding and Association vs. Causation](../../ch01/classical/confounding_causation.md) for a broader discussion of confounding across statistical methods.
+관련 내용: [교락과 연관 대 인과](../../ch01/classical/confounding_causation.md)에서 여러
+통계적 방법에 걸친 교락의 문제를 더 폭넓게 다룬다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-A logistic regression model for loan default ($Y = 1$) has: $\log\frac{p}{1-p} = -2.5 + 0.8\,\text{DTI} - 0.03\,\text{Credit Score}$
+**연습문제 1.**
+대출 연체($Y = 1$)에 대한 로지스틱 회귀 모형이 다음과 같다.
+$\log\frac{p}{1-p} = -2.5 + 0.8\,\text{DTI} - 0.03\,\text{Credit Score}$
 
-where DTI is debt-to-income ratio and Credit Score is FICO score.
+여기서 DTI는 소득 대비 부채 비율이고 Credit Score는 FICO 점수다.
 
-**(a)** For a borrower with DTI = 3.0 and Credit Score = 700, compute the predicted probability of default.
+**(a)** DTI = 3.0, Credit Score = 700인 차입자의 연체 예측확률을 계산하라.
 
-**(b)** Interpret the coefficient 0.8 for DTI in terms of odds ratios.
+**(b)** DTI의 계수 0.8을 오즈비로 해석하라.
 
-**(c)** What DTI ratio gives a 50% default probability for a borrower with Credit Score = 650?
+**(c)** Credit Score = 650인 차입자에게 연체 확률 50%를 주는 DTI는 얼마인가?
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
 
     **(a)** $\text{logit} = -2.5 + 0.8(3) - 0.03(700) = -2.5 + 2.4 - 21 = -21.1$
 
-    $\hat{p} = \frac{1}{1 + e^{21.1}} \approx 6.7 \times 10^{-10}$. Very low default probability.
+    $\hat{p} = \frac{1}{1 + e^{21.1}} \approx 6.9 \times 10^{-10}$. 연체 확률이 매우 낮다.
 
-    **(b)** $e^{0.8} \approx 2.23$. A one-unit increase in DTI multiplies the odds of default by 2.23 (a 123% increase), holding credit score constant.
+    **(b)** $e^{0.8} \approx 2.23$. 신용점수를 고정한 채 DTI가 한 단위 증가하면 연체 오즈가
+    2.23배가 된다(123% 증가).
 
-    **(c)** Set $p = 0.5 \Rightarrow \text{logit} = 0$: $0 = -2.5 + 0.8\,\text{DTI} - 0.03(650)$
+    **(c)** $p = 0.5$이면 $\text{logit} = 0$이므로
+    $0 = -2.5 + 0.8\,\text{DTI} - 0.03(650)$이고,
 
-    $0.8\,\text{DTI} = 2.5 + 19.5 = 22$, so $\text{DTI} = 27.5$.
+    $0.8\,\text{DTI} = 2.5 + 19.5 = 22$에서 $\text{DTI} = 27.5$이다.
+
+    !!! note "숫자를 곧이곧대로 받아들이지 말 것"
+        이 모형의 계수는 예시를 위해 크게 잡은 값이다. 실제 신용 모형에서 FICO 점수 1점당
+        계수는 $-0.005$ 수준이지 $-0.03$이 아니다. 또한 (c)의 답 $\text{DTI} = 27.5$는 현실의
+        어떤 자료 범위에도 없는 값이다. 이는 로짓이 선형이라는 가정을 자료가 존재하지 않는
+        영역까지 외삽할 때 무엇이 벌어지는지 보여주는 좋은 예다. 계산 자체는 옳지만 그 답을
+        실제 차입자에 대한 진술로 읽어서는 안 된다.

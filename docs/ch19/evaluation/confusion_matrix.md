@@ -1,9 +1,10 @@
-# Confusion Matrix
+# 혼동행렬
 
 
-## Definition and Setup
+## 정의와 설정
 
-The **confusion matrix** (also called a **contingency table**) summarizes the performance of a classification model by comparing predicted labels to actual labels. For binary classification, it is a 2×2 table:
+**혼동행렬**(**분할표**라고도 한다)은 예측된 이름표와 실제 이름표를 비교하여 분류모형의 성능을
+요약한다. 이항 분류에서는 2×2 표다.
 
 $$
 \begin{array}{c|cc}
@@ -14,18 +15,18 @@ $$
 \end{array}
 $$
 
-### The Four Outcomes
+### 네 가지 결과
 
-- **True Negative (TN):** Predicted negative, actually negative. Correct prediction.
-- **False Positive (FP):** Predicted positive, actually negative. Type I error.
-- **False Negative (FN):** Predicted negative, actually positive. Type II error.
-- **True Positive (TP):** Predicted positive, actually positive. Correct prediction.
+- **참음성(TN):** 음성으로 예측했고 실제로 음성이다. 옳은 예측.
+- **위양성(FP):** 양성으로 예측했으나 실제로는 음성이다. 제1종 오류.
+- **위음성(FN):** 음성으로 예측했으나 실제로는 양성이다. 제2종 오류.
+- **참양성(TP):** 양성으로 예측했고 실제로 양성이다. 옳은 예측.
 
-The total number of observations is $n = \text{TN} + \text{FP} + \text{FN} + \text{TP}$.
+전체 관측치 수는 $n = \text{TN} + \text{FP} + \text{FN} + \text{TP}$이다.
 
-## Example: Loan Default Prediction
+## 예: 대출 연체 예측
 
-For a logistic regression model trained on 45,342 loan observations with binary outcome (default vs. paid off):
+45,342건의 대출 관측치(연체 대 상환완료)로 학습한 로지스틱 회귀 모형의 결과는 다음과 같다.
 
 ```
                       Predicted
@@ -34,49 +35,51 @@ Actual Default       14,336   8,335
 Actual Paid Off       8,148  14,523
 ```
 
-Here:
+여기서,
 
-- **TN = 14,523:** Correctly predicted paid-off loans
-- **FP = 8,148:** Predicted default but actually paid off (false alarm)
-- **FN = 8,335:** Predicted paid-off but actually defaulted (missed default)
-- **TP = 14,336:** Correctly predicted defaults
+- **TN = 14,523:** 상환완료를 옳게 예측
+- **FP = 8,148:** 연체로 예측했으나 실제로는 상환완료(허위경보)
+- **FN = 8,335:** 상환완료로 예측했으나 실제로는 연체(놓친 연체)
+- **TP = 14,336:** 연체를 옳게 예측
 
-## Accuracy
+## 정확도
 
-The most basic performance metric is **accuracy**, the proportion of correct predictions:
+가장 기본적인 성능 지표는 **정확도**, 즉 옳은 예측의 비율이다.
 
 $$
 \text{Accuracy} = \frac{\text{TP} + \text{TN}}{n}
 $$
 
-For our example: $\text{Accuracy} = \frac{14,336 + 14,523}{45,342} \approx 0.6365$ (63.65%).
+위 예에서는 $\text{Accuracy} = \frac{14{,}336 + 14{,}523}{45{,}342} \approx 0.6365$(63.65%)이다.
 
-However, accuracy alone can be misleading, especially with **imbalanced datasets** where one class is much more common than the other. It is better to examine class-specific metrics (see next section).
+그러나 정확도만 보는 것은 오도할 수 있으며, 특히 한 범주가 다른 범주보다 훨씬 흔한 **불균형
+자료**에서 그렇다. 범주별 지표를 함께 살피는 편이 낫다(다음 절 참조).
 
-## Class-Specific Rates
+## 범주별 비율
 
-### Positive Class (e.g., "Default")
+### 양성 범주(예: "연체")
 
-- **Sensitivity (Recall):** What proportion of actual positives did we identify?
+- **민감도(재현율):** 실제 양성 중 얼마나 찾아냈는가?
 
   $$\text{Recall} = \frac{\text{TP}}{\text{TP} + \text{FN}}$$
 
-- **Specificity:** What proportion of actual negatives did we correctly identify?
+- **특이도:** 실제 음성 중 얼마나 옳게 가려냈는가?
 
   $$\text{Specificity} = \frac{\text{TN}}{\text{TN} + \text{FP}}$$
 
-For our example:
+위 예에서는,
 
-- Recall = $14,336 / (14,336 + 8,335) \approx 0.6323$ (63.23% of actual defaults detected)
-- Specificity = $14,523 / (14,523 + 8,148) \approx 0.6406$ (64.06% of actual paid-offs identified)
+- 재현율 $= 14{,}336 / (14{,}336 + 8{,}335) \approx 0.6323$ (실제 연체의 63.23%를 탐지)
+- 특이도 $= 14{,}523 / (14{,}523 + 8{,}148) \approx 0.6406$ (실제 상환완료의 64.06%를 식별)
 
-## Prevalence Adjustment
+## 유병률 조정
 
-When the prevalence of the positive class differs between training and test sets, the confusion matrix changes accordingly. This is important in medical and fraud detection applications where the rare event is of primary interest.
+양성 범주의 유병률이 훈련자료와 검정자료에서 다르면 혼동행렬도 그에 따라 달라진다. 드문 사건이
+주된 관심사인 의학이나 이상거래 탐지에서 특히 중요한 문제다.
 
-## Visualization
+## 시각화
 
-The confusion matrix is often visualized as a heatmap with cell values and color intensity:
+혼동행렬은 셀 값과 색의 진하기를 함께 쓰는 열지도로 자주 표현한다.
 
 ```
                  Predicted
@@ -85,40 +88,47 @@ Actual Neg  [14523]  [8148]
 Actual Pos  [ 8335] [14336]
 ```
 
-This visual form makes it easy to see where the model makes errors: larger off-diagonal values indicate higher misclassification rates.
+이 형태는 모형이 어디서 틀리는지 한눈에 보여준다. 비대각 원소가 클수록 오분류율이 높다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Model Evaluation
+**연습문제 1.**
+모형 평가
 
-A spam classifier produces the following confusion matrix on a test set of 1000 emails:
+어떤 스팸 분류기가 전자우편 1000건의 검정자료에서 다음 혼동행렬을 냈다.
 
-|  | Predicted Spam | Predicted Not Spam |
+|  | 스팸으로 예측 | 스팸 아님으로 예측 |
 |---|---|---|
-| **Actual Spam** | 85 | 15 |
-| **Actual Not Spam** | 30 | 870 |
+| **실제 스팸** | 85 | 15 |
+| **실제 스팸 아님** | 30 | 870 |
 
-**(a)** Compute accuracy, precision, recall, specificity, and F1 score.
+**(a)** 정확도, 정밀도, 재현율, 특이도, F1 점수를 계산하라.
 
-**(b)** If the cost of a missed spam is 3× the cost of a false alarm, should you lower or raise the classification threshold?
+**(b)** 놓친 스팸의 비용이 허위경보 비용의 3배라면 분류 문턱을 낮춰야 하는가 높여야 하는가?
 
-**(c)** What is the False Positive Rate?
+**(c)** 위양성률은 얼마인가?
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
 
     **(a)** TP=85, FN=15, FP=30, TN=870
 
-    Accuracy $= (85+870)/1000 = 0.955$
+    정확도 $= (85+870)/1000 = 0.955$
 
-    Precision $= 85/(85+30) = 0.739$
+    정밀도 $= 85/(85+30) = 0.739$
 
-    Recall $= 85/(85+15) = 0.850$
+    재현율 $= 85/(85+15) = 0.850$
 
-    Specificity $= 870/(870+30) = 0.967$
+    특이도 $= 870/(870+30) = 0.967$
 
     F1 $= 2 \times 0.739 \times 0.850/(0.739+0.850) = 0.791$
 
-    **(b)** Since missed spam (FN) is costlier, we should **lower** the threshold to increase recall (catch more spam), accepting more false positives.
+    **(b)** 놓친 스팸(FN)이 더 비싸므로 문턱을 **낮춰** 재현율을 높여야 한다(스팸을 더 많이
+    잡되 위양성을 더 감수한다).
 
     **(c)** FPR $= FP/(FP+TN) = 30/900 = 0.033$
+
+    !!! note "정확도만 보면 안 되는 이유"
+        이 분류기의 정확도는 95.5%로 훌륭해 보인다. 그러나 모든 메일을 "스팸 아님"으로
+        예측하는 무의미한 분류기의 정확도도 $900/1000 = 90\%$다. 즉 실제 분류기가 벌어들인
+        개선폭은 5.5%포인트뿐이며, 그마저도 대부분 흔한 범주에서 나온 것이다. 유병률이 낮을수록
+        이 착시가 심해진다. 스팸 비율이 1%였다면 아무것도 안 하는 분류기의 정확도가 99%다.

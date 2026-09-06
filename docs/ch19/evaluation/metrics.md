@@ -1,159 +1,286 @@
-# Confusion Matrix, ROC Curve, and Classification Metrics
+# 혼동행렬, ROC 곡선, 분류 지표
 
 
-## The Classification Decision
+## 분류 결정
 
-Logistic regression outputs a predicted probability $\hat{p} = P(Y = 1 \mid \mathbf{x})$. To make a binary classification decision, we apply a **threshold** $c$ (default $c = 0.5$):
+로지스틱 회귀는 예측확률 $\hat{p} = P(Y = 1 \mid \mathbf{x})$를 출력한다. 이항 분류 결정을
+내리려면 **문턱** $c$(기본값 $c = 0.5$)를 적용한다.
 
 $$\hat{Y} = \begin{cases} 1 & \text{if } \hat{p} \geq c \\ 0 & \text{if } \hat{p} < c \end{cases}$$
 
-The choice of threshold affects all classification metrics.
+문턱의 선택은 모든 분류 지표에 영향을 준다.
 
-## Confusion Matrix
+## 혼동행렬
 
-The **confusion matrix** tabulates predictions against true labels:
+**혼동행렬**은 예측과 실제 이름표를 교차표로 정리한다.
 
-|  | Predicted Positive ($\hat{Y} = 1$) | Predicted Negative ($\hat{Y} = 0$) |
+|  | 양성으로 예측 ($\hat{Y} = 1$) | 음성으로 예측 ($\hat{Y} = 0$) |
 |---|---|---|
-| **Actual Positive** ($Y = 1$) | True Positive (TP) | False Negative (FN) |
-| **Actual Negative** ($Y = 0$) | False Positive (FP) | True Negative (TN) |
+| **실제 양성** ($Y = 1$) | 참양성 (TP) | 위음성 (FN) |
+| **실제 음성** ($Y = 0$) | 위양성 (FP) | 참음성 (TN) |
 
-All classification metrics are derived from these four counts.
+모든 분류 지표는 이 네 개의 도수에서 유도된다.
 
-## Primary Metrics
+## 주요 지표
 
-### Accuracy
+### 정확도
 
 $$\text{Accuracy} = \frac{TP + TN}{TP + TN + FP + FN}$$
 
-The proportion of all predictions that are correct. **Limitation:** misleading with imbalanced classes. If 95% of transactions are legitimate, a model that always predicts "legitimate" achieves 95% accuracy but catches zero fraud.
+전체 예측 중 옳은 것의 비율이다. **한계:** 범주가 불균형하면 오도한다. 거래의 95%가 정상이라면
+언제나 "정상"이라고 예측하는 모형도 정확도 95%를 달성하지만 이상거래는 하나도 잡지 못한다.
 
-### Precision (Positive Predictive Value)
+### 정밀도(양성예측도)
 
 $$\text{Precision} = \frac{TP}{TP + FP}$$
 
-"Of all observations predicted positive, how many actually are?" High precision means few false alarms.
+"양성으로 예측한 것 중 실제로 양성인 비율은?" 정밀도가 높으면 허위경보가 적다.
 
-### Recall (Sensitivity, True Positive Rate)
+### 재현율(민감도, 참양성률)
 
 $$\text{Recall} = \frac{TP}{TP + FN}$$
 
-"Of all actual positives, how many did we catch?" High recall means few missed positives.
+"실제 양성 중 잡아낸 비율은?" 재현율이 높으면 놓치는 양성이 적다.
 
-### Specificity (True Negative Rate)
+### 특이도(참음성률)
 
 $$\text{Specificity} = \frac{TN}{TN + FP}$$
 
-"Of all actual negatives, how many did we correctly identify?"
+"실제 음성 중 옳게 가려낸 비율은?"
 
-### F1 Score
+### F1 점수
 
-The harmonic mean of precision and recall:
+정밀도와 재현율의 조화평균이다.
 
 $$F_1 = \frac{2 \cdot \text{Precision} \cdot \text{Recall}}{\text{Precision} + \text{Recall}} = \frac{2\,TP}{2\,TP + FP + FN}$$
 
-The F1 score balances precision and recall when both matter equally.
+F1 점수는 정밀도와 재현율이 동등하게 중요할 때 둘의 균형을 맞춘다.
 
-### Precision–Recall Tradeoff
+### 정밀도-재현율 절충
 
-Lowering the threshold $c$ increases recall (catch more positives) but decreases precision (more false positives). The optimal threshold depends on the application:
+문턱 $c$를 낮추면 재현율이 올라가지만(더 많은 양성을 잡음) 정밀도는 대체로 내려간다(위양성이
+늘어남). 최적 문턱은 응용에 따라 다르다.
 
-- **Medical screening:** prioritize recall (don't miss sick patients)
-- **Spam filtering:** prioritize precision (don't misclassify good emails)
-- **Fraud detection:** balance depends on cost of missed fraud vs false alerts
+- **의학적 선별검사:** 재현율 우선(환자를 놓치지 말 것)
+- **스팸 필터:** 정밀도 우선(정상 메일을 잘못 분류하지 말 것)
+- **이상거래 탐지:** 놓친 이상거래와 헛경보의 비용 비율에 따라 균형을 잡는다
 
-## ROC Curve
+## ROC 곡선
 
-### Definition
+### 정의
 
-The **Receiver Operating Characteristic (ROC) curve** plots the True Positive Rate (Recall) against the False Positive Rate ($\text{FPR} = FP/(FP + TN) = 1 - \text{Specificity}$) for all possible threshold values $c \in [0, 1]$.
+**ROC 곡선**은 가능한 모든 문턱값 $c \in [0, 1]$에 대해 위양성률
+($\text{FPR} = FP/(FP + TN) = 1 - \text{특이도}$)에 대한 참양성률(재현율)을 그린 것이다.
 
-### Interpretation
+### 해석
 
-- A perfect classifier hugs the top-left corner: TPR = 1, FPR = 0
-- The diagonal line represents a random classifier (no discrimination)
-- The ROC curve is **threshold-free** — it summarizes performance across all thresholds
+- 완벽한 분류기는 왼쪽 위 모서리에 붙는다(TPR = 1, FPR = 0).
+- 대각선은 무작위 분류기(판별력 없음)를 나타낸다.
+- ROC 곡선은 **문턱에 의존하지 않는다.** 모든 문턱에 걸친 성능을 요약한다.
 
-### AUC (Area Under the ROC Curve)
+### AUC(ROC 곡선 아래 면적)
 
 $$\text{AUC} = \int_0^1 \text{ROC}(t)\, dt$$
 
-| AUC | Interpretation |
+| AUC | 해석 |
 |---|---|
-| 1.0 | Perfect classifier |
-| 0.9–1.0 | Excellent |
-| 0.8–0.9 | Good |
-| 0.7–0.8 | Fair |
-| 0.5–0.7 | Poor |
-| 0.5 | Random (no discrimination) |
+| 1.0 | 완벽한 분류기 |
+| 0.9–1.0 | 뛰어남 |
+| 0.8–0.9 | 좋음 |
+| 0.7–0.8 | 보통 |
+| 0.5–0.7 | 나쁨 |
+| 0.5 | 무작위(판별력 없음) |
 
-**Probabilistic interpretation:** AUC equals the probability that the model ranks a randomly chosen positive instance higher than a randomly chosen negative instance:
+!!! note "구간 기준은 관례일 뿐이다"
+    이런 등급표는 출처마다 다르다. 예컨대
+    [ROC 곡선과 AUC](roc_auc.md)에 실린 호스머-레메쇼 계열의 기준은 0.8--0.9를 "뛰어남"으로
+    분류한다. AUC 0.85가 좋은지 나쁜지는 표가 아니라 **문제**가 정한다. 신용평가에서 0.85는
+    훌륭하지만, 이미 0.90짜리 모형이 배치되어 있는 자리에서는 후퇴다.
+
+**확률적 해석:** AUC는 무작위로 뽑은 양성 사례를 무작위로 뽑은 음성 사례보다 높게 순위 매길
+확률과 같다.
 
 $$\text{AUC} = P(\hat{p}_{\text{positive}} > \hat{p}_{\text{negative}})$$
 
-## Precision–Recall Curve
+## 정밀도-재현율 곡선
 
-For imbalanced datasets, the **PR curve** (Precision vs Recall) is more informative than the ROC curve. The **Average Precision (AP)** summarizes the PR curve:
+불균형 자료에서는 **PR 곡선**(정밀도 대 재현율)이 ROC 곡선보다 유용한 정보를 준다. PR 곡선을
+요약하는 값이 **평균정밀도(AP)**다.
 
 $$\text{AP} = \sum_k (R_k - R_{k-1}) \cdot P_k$$
 
-where $P_k$ and $R_k$ are precision and recall at the $k$-th threshold.
+여기서 $P_k$와 $R_k$는 $k$번째 문턱에서의 정밀도와 재현율이다.
 
-## Log-Loss (Cross-Entropy Loss)
+## 로그손실(교차엔트로피 손실)
 
-The **log-loss** directly measures the quality of predicted probabilities (not just classifications):
+**로그손실**은 분류 결과만이 아니라 예측확률 자체의 질을 직접 잰다.
 
 $$\text{Log-Loss} = -\frac{1}{n}\sum_{i=1}^n \left[y_i \log \hat{p}_i + (1 - y_i)\log(1 - \hat{p}_i)\right]$$
 
-Lower log-loss indicates better-calibrated probabilities. A perfect model has log-loss = 0.
+로그손실이 낮을수록 확률이 잘 보정되어 있다. 완벽한 모형의 로그손실은 0이다.
 
-## Choosing the Right Metric
+## 알맞은 지표 고르기
 
-| Scenario | Recommended Metric |
+| 상황 | 권장 지표 |
 |---|---|
-| Balanced classes, equal costs | Accuracy, F1 |
-| Imbalanced classes | AUC, F1, Average Precision |
-| Cost of FN >> cost of FP | Recall, then F1 |
-| Cost of FP >> cost of FN | Precision, then F1 |
-| Probability calibration matters | Log-loss, Brier score |
-| Comparing models overall | AUC |
+| 균형 잡힌 범주, 동일한 비용 | 정확도, F1 |
+| 불균형 범주 | AUC, F1, 평균정밀도 |
+| FN의 비용 ≫ FP의 비용 | 재현율, 그다음 F1 |
+| FP의 비용 ≫ FN의 비용 | 정밀도, 그다음 F1 |
+| 확률 보정이 중요한 경우 | 로그손실, 브라이어 점수 |
+| 모형 전반을 비교할 때 | AUC |
 
-## McFadden's Pseudo-R-squared
-Unlike linear regression, logistic regression has no natural $R^2$. **McFadden's pseudo-$R^2$** provides a rough analog:
+## 맥패든 유사 R 제곱
+
+선형회귀와 달리 로지스틱 회귀에는 자연스러운 $R^2$가 없다. **맥패든 유사 $R^2$**가 대략적인
+대응물을 제공한다.
 
 $$R^2_{\text{McFadden}} = 1 - \frac{\ell(\hat{\boldsymbol{\beta}})}{\ell(\hat{\beta}_0)}$$
 
-where $\ell(\hat{\boldsymbol{\beta}})$ is the log-likelihood of the full model and $\ell(\hat{\beta}_0)$ is the log-likelihood of the null model (intercept only). Values of 0.2–0.4 are considered good in practice.
+여기서 $\ell(\hat{\boldsymbol{\beta}})$는 전체 모형의 로그가능도, $\ell(\hat{\beta}_0)$은
+영모형(절편만)의 로그가능도다. 실무에서는 0.2--0.4면 좋다고 본다.
 
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Describe the main concept of Confusion Matrix, ROC Curve, and Classification Metrics and explain why it matters for statistical practice.
+**연습문제 1.**
+어떤 이상거래 탐지 모형이 검정자료 10,000건(이상거래 100건)에서 다음 결과를 냈다.
+TP $= 60$, FP $= 40$, FN $= 40$, TN $= 9{,}860$.
+정확도, 정밀도, 재현율, 특이도, F1을 계산하고, "아무것도 잡지 않는" 분류기와 비교하라.
 
-??? success "Solution to Exercise 1"
-    Confusion Matrix, ROC Curve, and Classification Metrics is a core topic in statistics that provides tools for drawing reliable inferences from data. It matters because proper application ensures valid conclusions, correctly quantified uncertainty, and appropriate handling of the assumptions that underpin the method. Practitioners who understand this concept can avoid common pitfalls and choose the right analytical approach for their data.
+??? success "연습문제 1 풀이"
+
+    | 지표 | 계산 | 값 |
+    |---|---|---|
+    | 정확도 | $(60+9860)/10000$ | $0.9920$ |
+    | 정밀도 | $60/(60+40)$ | $0.600$ |
+    | 재현율 | $60/(60+40)$ | $0.600$ |
+    | 특이도 | $9860/(9860+40)$ | $0.9960$ |
+    | F1 | $2(60)/(2 \cdot 60 + 40 + 40)$ | $0.600$ |
+
+    모두를 "정상"으로 예측하는 분류기와 비교하면,
+
+    | 지표 | 실제 모형 | 아무것도 안 하는 분류기 |
+    |---|---|---|
+    | 정확도 | $0.9920$ | $0.9900$ |
+    | 재현율 | $0.600$ | $0.000$ |
+    | F1 | $0.600$ | $0.000$ |
+
+    정확도는 99.00%에서 99.20%로 겨우 0.2%포인트 올랐다. 이 숫자만 보면 모형이 거의 아무것도
+    하지 않은 것처럼 보인다. 그러나 실제로는 이상거래 100건 중 60건을 잡아냈다. **정확도는
+    분모가 압도적으로 음성 범주라 신호를 희석시킨다.** 재현율과 F1은 0에서 0.6으로 올라 실제
+    개선을 제대로 반영한다.
+
+    특이도 $0.9960$이 "거의 완벽"해 보이는 것도 같은 착시다. FPR $= 0.004$지만 음성이 9,900건
+    이므로 위양성이 40건이나 되며, 이는 참양성 60건과 맞먹는 규모다. $\square$
 
 ---
 
-**Exercise 2.**
-State the key assumptions required by the method discussed here. How can each assumption be checked?
+**연습문제 2.**
+정확도가 문턱 $c$의 함수로서 최대가 되는 지점은 어디인가? 비용이 동일할 때 $c = 0.5$가
+최적임을 보이고, $c_{FP} \ne c_{FN}$일 때의 최적 문턱을 유도하라.
 
-??? success "Solution to Exercise 2"
-    The main assumptions typically include: (1) independence of observations -- verified by understanding the data collection process and checking for serial correlation; (2) distributional requirements (e.g., normality) -- checked with Q-Q plots and formal tests like Shapiro-Wilk; (3) equal variances (if applicable) -- assessed with boxplots and Levene's test. When assumptions are violated, consider robust alternatives, transformations, or nonparametric methods.
+??? success "연습문제 2 풀이"
+
+    예측확률 $\hat p$를 갖는 관측치 하나를 생각하자. 이를 양성으로 분류할 때의 기대비용은
+    실제로 음성일 확률 $(1-\hat p)$에 위양성 비용을 곱한 $c_{FP}(1-\hat p)$이고, 음성으로 분류할
+    때의 기대비용은 $c_{FN}\,\hat p$이다.
+
+    양성으로 분류하는 것이 유리할 조건은
+
+    $$
+    c_{FP}(1-\hat p) < c_{FN}\,\hat p
+    \quad\Longleftrightarrow\quad
+    \hat p > \frac{c_{FP}}{c_{FP}+c_{FN}}
+    $$
+
+    이다. 즉 최적 문턱은
+
+    $$
+    c^* = \frac{c_{FP}}{c_{FP}+c_{FN}}
+    $$
+
+    이다.
+
+    비용이 같으면($c_{FP} = c_{FN}$) $c^* = 1/2$이 된다. 정확도를 최대화하는 것은 두 오류에
+    같은 비용을 매기는 특수한 경우이고, 그때에만 $0.5$가 옳다.
+
+    위음성이 위양성보다 4배 비싸면 $c^* = 1/(1+4) = 0.2$다. 문턱을 낮춰 더 공격적으로 양성을
+    예측하게 된다.
+
+    !!! warning "보정이 전제다"
+        이 유도는 $\hat p$가 **잘 보정된 확률**이라는 전제 위에 서 있다. 모형이 확률을 체계적으로
+        과대·과소평가하면 $c^*$를 그대로 쓸 수 없다. 보정되지 않은 모형에서는 검증자료에서 직접
+        기대비용을 최소화하는 문턱을 찾는 편이 안전하다.
+
+    $\square$
 
 ---
 
-**Exercise 3.**
-Work through a small numerical example illustrating the application of the technique from this section.
+**연습문제 3.**
+AUC가 만-휘트니 U 통계량과 같음을 보여라. 즉 양성 $m$개와 음성 $n$개의 점수에 대해
 
-??? success "Solution to Exercise 3"
-    A structured approach to applying this technique involves: (1) clearly stating the hypotheses or estimation goal; (2) verifying that the data meet the required assumptions; (3) computing the relevant test statistic, estimate, or model fit; (4) obtaining the p-value, confidence interval, or posterior distribution; (5) interpreting the result in the context of the original question. Following these steps systematically ensures a rigorous and reproducible analysis.
+$$
+\text{AUC} = \frac{1}{mn}\sum_{i \in \text{pos}}\sum_{j \in \text{neg}} \left[\mathbf{1}(s_i > s_j) + \tfrac{1}{2}\mathbf{1}(s_i = s_j)\right]
+$$
+
+임을 확인하라.
+
+??? success "연습문제 3 풀이"
+
+    확률적 해석에서 출발한다. $S^+$와 $S^-$를 각각 무작위로 뽑은 양성과 음성의 점수라 하면
+
+    $$
+    \text{AUC} = P(S^+ > S^-) + \tfrac{1}{2}P(S^+ = S^-)
+    $$
+
+    이다(동점은 절반씩 나눈다). 양성과 음성을 각각 균등하게 뽑으면 이 확률의 경험적 추정치가
+    모든 $(i,j)$ 쌍 $mn$개에 대한 평균, 즉 위 식이다.
+
+    사다리꼴 면적과의 연결은 다음과 같다. 점수를 내림차순으로 훑으며 문턱을 낮추면, 양성 하나를
+    만날 때 TPR이 $1/m$ 오르고 음성 하나를 만날 때 FPR이 $1/n$ 오른다. 음성 $j$를 만나 폭
+    $1/n$의 사다리꼴 조각이 생길 때, 그 높이는 그 시점까지 이미 지나온 양성의 비율, 즉
+    $\frac{1}{m}\#\{i : s_i > s_j\}$다. 모든 음성에 대해 더하면
+
+    $$
+    \text{AUC} = \sum_{j \in \text{neg}} \frac{1}{n}\cdot\frac{1}{m}\#\{i : s_i > s_j\}
+    = \frac{1}{mn}\sum_{i}\sum_{j}\mathbf{1}(s_i > s_j)
+    $$
+
+    가 되어 동점이 없을 때 두 식이 일치한다. 동점이 있으면 그 구간에서 곡선이 대각선 방향으로
+    올라가고, 사다리꼴이 삼각형 절반을 더해 $\tfrac12$ 항을 만든다.
+
+    **함의:** AUC는 **순위통계량**이므로 점수에 단조증가 변환을 가해도 변하지 않는다.
+    $\hat p$를 쓰든 로짓 $z$를 쓰든 AUC는 같다. 이는 장점이자 한계다. AUC는 모형이 순위를
+    잘 매기는지만 볼 뿐, 확률이 잘 보정되어 있는지는 전혀 보지 않는다. 모든 $\hat p$를 절반으로
+    나눠도 AUC는 그대로지만 로그손실은 크게 나빠진다. $\square$
 
 ---
 
-**Exercise 4.**
-Compare the approach from this section with an alternative method. When would you choose each?
+**연습문제 4.**
+같은 모형을 두고 정확도, F1, AUC가 서로 다른 순위를 매기는 상황을 구성하라. 이것이 지표 선택에
+대해 무엇을 말해 주는가?
 
-??? success "Solution to Exercise 4"
-    The method discussed here is appropriate when its assumptions hold and the sample size is sufficient for the asymptotic approximations to be accurate. Alternative approaches include: (1) nonparametric methods -- preferred when distributional assumptions are suspect; (2) bootstrap methods -- useful when analytical reference distributions are unavailable; (3) Bayesian methods -- valuable when incorporating prior information or when direct probability statements about parameters are desired. Running multiple approaches and comparing results provides a useful robustness check.
+??? success "연습문제 4 풀이"
+
+    양성 유병률이 5%인 자료에 두 모형이 있다고 하자.
+
+    | | 모형 A | 모형 B |
+    |---|---|---|
+    | 정확도 | $0.95$ | $0.90$ |
+    | 재현율 | $0.00$ | $0.70$ |
+    | 정밀도 | 정의 불가 | $0.30$ |
+    | F1 | $0.00$ | $0.42$ |
+    | AUC | $0.50$ | $0.85$ |
+
+    모형 A는 모두를 음성으로 예측하는 퇴화된 분류기다. 정확도로는 A가 이기고, F1과 AUC로는
+    B가 압도적으로 이긴다.
+
+    반대 방향의 예도 만들 수 있다. 순위는 훌륭하지만 문턱이 나쁘게 잡힌 모형은 AUC가 높으면서
+    F1이 낮고, 순위는 평범하지만 문턱이 잘 맞은 모형은 그 반대가 된다. AUC는 문턱과 무관하고
+    F1은 특정 문턱에서만 정의되기 때문이다.
+
+    **결론:** 지표는 결정 문제에 대한 **가정을 담고 있다.** 정확도는 두 오류의 비용이 같다고
+    가정하고, F1은 특정 문턱을 고정하며 TN을 무시한다. AUC는 문턱을 아예 고르지 않고 순위만
+    본다. 무엇을 최적화할지 정하지 않은 채 지표부터 고르면, 지표가 대신 결정해 버린다. 순서는
+    반대여야 한다. 비용 구조를 먼저 적고, 그것을 반영하는 지표를 고르라. $\square$

@@ -1,15 +1,18 @@
-# Decision Threshold Tuning
+# 결정 문턱 조율
 
 
-## Overview
+## 개요
 
-In binary classification, logistic regression produces predicted probabilities in $[0,1]$. To make a hard prediction (positive or negative), we must choose a **decision threshold**. The default threshold of 0.5 is not always optimal—the right choice depends on the costs of false positives and false negatives.
+이항 분류에서 로지스틱 회귀는 $[0,1]$ 구간의 예측확률을 낸다. 확정적인 예측(양성 또는 음성)을
+하려면 **결정 문턱**을 골라야 한다. 기본값 0.5가 항상 최적인 것은 아니며, 올바른 선택은
+위양성과 위음성의 비용에 달려 있다.
 
-Adjusting the threshold directly affects the precision-recall tradeoff and confusion matrix, allowing you to align the classifier with the specific needs of your application.
+문턱 조정은 정밀도-재현율 절충과 혼동행렬에 직접 영향을 주므로, 분류기를 응용의 구체적인
+요구에 맞출 수 있게 해 준다.
 
-## Default Threshold: 0.5
+## 기본 문턱: 0.5
 
-By convention, most binary classifiers use a threshold of 0.5:
+관례적으로 대부분의 이항 분류기는 문턱 0.5를 쓴다.
 
 $$
 \hat{y} = \begin{cases}
@@ -18,68 +21,70 @@ $$
 \end{cases}
 $$
 
-Under this rule, an observation is classified as positive if the predicted probability exceeds 50%.
+이 규칙에서는 예측확률이 50%를 넘으면 양성으로 분류한다.
 
-### When is 0.5 Appropriate?
+### 0.5가 적절한 경우
 
-The 0.5 threshold is optimal when:
+문턱 0.5는 다음 조건에서 최적이다.
 
-- The cost of false positives equals the cost of false negatives
-- The classes are balanced (similar prevalence)
-- You have no prior reason to favor one error type over the other
+- 위양성의 비용과 위음성의 비용이 같다.
+- 범주가 균형 잡혀 있다(유병률이 비슷하다).
+- 어느 한쪽 오류를 더 꺼릴 사전적 이유가 없다.
 
-In many real applications, these conditions do not hold.
+실제 응용에서는 이 조건들이 성립하지 않는 경우가 많다.
 
-## Adjusting the Threshold
+## 문턱 조정하기
 
-### Lower Threshold (e.g., 0.2)
+### 문턱을 낮추면(예: 0.2)
 
-When you lower the threshold, the classifier becomes more **lenient**—it predicts "positive" more often.
+문턱을 낮추면 분류기가 더 **너그러워진다.** 즉 "양성"을 더 자주 예측한다.
 
-**Effect on confusion matrix:**
+**혼동행렬에 미치는 영향:**
 
-- Recall (sensitivity) increases: catches more true positives
-- Specificity decreases: more false positives
-- Precision decreases: fewer predicted positives are actually correct
+- 재현율(민감도)이 올라간다. 참양성을 더 많이 잡는다.
+- 특이도가 내려간다. 위양성이 늘어난다.
+- 정밀도가 대체로 내려간다. 양성 예측 중 맞는 비율이 줄어든다.
 
-**Use when:**
+**쓸 때:**
 
-- The cost of missing a positive (false negative) is high
-- Medical screening: minimize missed disease cases
-- Fraud detection: catch more fraudulent transactions
-- Loan default prediction: identify as many risky borrowers as possible
+- 양성을 놓치는 비용(위음성)이 클 때
+- 의학적 선별검사: 놓친 질병 사례를 최소화
+- 이상거래 탐지: 부정거래를 더 많이 포착
+- 대출 연체 예측: 위험한 차입자를 최대한 식별
 
-### Higher Threshold (e.g., 0.8)
+### 문턱을 높이면(예: 0.8)
 
-When you raise the threshold, the classifier becomes more **conservative**—it predicts "positive" only when very confident.
+문턱을 높이면 분류기가 더 **보수적이 된다.** 즉 아주 확신할 때만 양성으로 예측한다.
 
-**Effect on confusion matrix:**
+**혼동행렬에 미치는 영향:**
 
-- Specificity (true negative rate) increases: fewer false alarms
-- Recall decreases: more false negatives
-- Precision increases: most predicted positives are correct
+- 특이도(참음성률)가 올라간다. 허위경보가 줄어든다.
+- 재현율이 내려간다. 위음성이 늘어난다.
+- 정밀도가 대체로 올라간다. 양성 예측의 대부분이 맞는다.
 
-**Use when:**
+**쓸 때:**
 
-- The cost of a false positive is high
-- Email spam filtering: avoid filtering legitimate emails
-- Credit approval: approve only very safe borrowers
-- Recommender systems: only recommend when very confident
+- 위양성의 비용이 클 때
+- 전자우편 스팸 필터: 정상 메일을 걸러 내지 않도록
+- 신용 승인: 아주 안전한 차입자만 승인
+- 추천 시스템: 확신이 클 때만 추천
 
-## Example: Loan Default Prediction
+## 예: 대출 연체 예측
 
-### Model Predictions
+### 모형의 예측
 
-Consider a logistic regression model trained on 1,000 loan observations. The distribution of predicted probabilities is:
+대출 관측치 1,000건으로 학습한 로지스틱 회귀 모형을 생각하자. 예측확률의 분포는 다음과 같다.
 
-- 400 loans have predicted probability < 0.2 (very likely to repay)
-- 300 loans have predicted probability 0.2-0.5 (likely to repay)
-- 200 loans have predicted probability 0.5-0.8 (likely to default)
-- 100 loans have predicted probability > 0.8 (very likely to default)
+- 160건은 예측확률이 0.2 미만(상환 가능성이 매우 높음)
+- 190건은 예측확률이 0.2--0.5(상환 가능성이 높음)
+- 250건은 예측확률이 0.5--0.8(연체 가능성이 높음)
+- 400건은 예측확률이 0.8 이상(연체 가능성이 매우 높음)
 
-### Confusion Matrices at Different Thresholds
+실제로는 1,000건 중 600건이 연체하고 400건이 상환했다.
 
-**Threshold = 0.5 (balanced):**
+### 문턱별 혼동행렬
+
+**문턱 = 0.5(균형):**
 
 ```
                       Predicted
@@ -88,11 +93,11 @@ Actual No Default       280       120
 Actual Default           70       530
 ```
 
-- Sensitivity (recall): 530/(530+70) = 0.883
-- Specificity: 280/(280+120) = 0.700
-- Precision: 530/(530+120) = 0.815
+- 민감도(재현율): $530/(530+70) = 0.883$
+- 특이도: $280/(280+120) = 0.700$
+- 정밀도: $530/(530+120) = 0.815$
 
-**Threshold = 0.2 (lenient):**
+**문턱 = 0.2(너그러움):**
 
 ```
                       Predicted
@@ -101,11 +106,11 @@ Actual No Default        150       250
 Actual Default            10       590
 ```
 
-- Sensitivity: 590/(590+10) = 0.983 (catch almost all defaults)
-- Specificity: 150/(150+250) = 0.375 (many false alarms)
-- Precision: 590/(590+250) = 0.702 (less reliable)
+- 민감도: $590/(590+10) = 0.983$ (거의 모든 연체를 포착)
+- 특이도: $150/(150+250) = 0.375$ (허위경보가 많음)
+- 정밀도: $590/(590+250) = 0.702$ (덜 믿을 만함)
 
-**Threshold = 0.8 (conservative):**
+**문턱 = 0.8(보수적):**
 
 ```
                       Predicted
@@ -114,69 +119,80 @@ Actual No Default       350        50
 Actual Default         250       350
 ```
 
-- Sensitivity: 350/(350+250) = 0.583 (miss more defaults)
-- Specificity: 350/(350+50) = 0.875 (fewer false alarms)
-- Precision: 350/(350+50) = 0.875 (very reliable)
+- 민감도: $350/(350+250) = 0.583$ (연체를 더 많이 놓침)
+- 특이도: $350/(350+50) = 0.875$ (허위경보가 적음)
+- 정밀도: $350/(350+50) = 0.875$ (매우 믿을 만함)
 
-## The Precision-Recall Tradeoff
+## 정밀도-재현율 절충
 
-As you lower the threshold:
+문턱을 낮추면,
 
-- **Recall** (sensitivity) ↑: Identify more positives
-- **Precision** ↓: More false positives dilute the positive predictions
+- **재현율**(민감도) ↑: 더 많은 양성을 식별
+- **정밀도** ↓: 위양성이 늘어 양성 예측이 희석됨
 
-As you raise the threshold:
+문턱을 높이면,
 
-- **Precision** ↑: Fewer false positives
-- **Recall** ↓: Miss more true positives
+- **정밀도** ↑: 위양성이 줄어듦
+- **재현율** ↓: 참양성을 더 많이 놓침
 
-This fundamental tradeoff is visualized in the **precision-recall curve**, which plots precision (y-axis) against recall (x-axis) as the threshold varies from 1 to 0.
+이 근본적인 절충은 문턱을 1에서 0으로 변화시키며 재현율(x축)에 대한 정밀도(y축)를 그린
+**정밀도-재현율 곡선**으로 시각화된다.
 
-## Selecting the Optimal Threshold
+## 최적 문턱 고르기
 
-### Cost-Sensitive Approach
+### 비용 기반 접근
 
-If you know the cost of each error type, you can compute the optimal threshold analytically. Let:
+각 오류의 비용을 안다면 최적 문턱을 해석적으로 구할 수 있다. 다음과 같이 두자.
 
-- $C_{FP}$ = cost of a false positive
-- $C_{FN}$ = cost of a false negative
+- $C_{FP}$ = 위양성 하나의 비용
+- $C_{FN}$ = 위음성 하나의 비용
 
-The optimal threshold is approximately:
-
-$$
-t^* = \frac{C_{FN}}{C_{FP} + C_{FN}}
-$$
-
-For example, if a missed default costs \$1,000 and a false alarm costs \$50:
+예측확률이 $\hat p$인 관측치를 양성으로 분류할 때의 기대비용은 $C_{FP}(1-\hat p)$,
+음성으로 분류할 때의 기대비용은 $C_{FN}\,\hat p$이다. 양성 쪽이 더 싸려면
+$C_{FP}(1-\hat p) < C_{FN}\hat p$, 즉 $\hat p > C_{FP}/(C_{FP}+C_{FN})$이어야 한다. 따라서
+최적 문턱은
 
 $$
-t^* = \frac{1000}{1000 + 50} \approx 0.95
+t^* = \frac{C_{FP}}{C_{FP} + C_{FN}}
 $$
 
-This high threshold reflects the asymmetric costs.
+이다. 놓친 연체의 비용이 \$1,000이고 허위경보의 비용이 \$50이라면
 
-### Performance Metrics
+$$
+t^* = \frac{50}{50 + 1000} \approx 0.048
+$$
 
-Common methods to select a threshold:
+이다. 위음성이 훨씬 비싸므로 문턱이 **낮아진다.** 즉 연체를 훨씬 적극적으로 예측하게 되며,
+이는 앞서 "양성을 놓치는 비용이 클 때 문턱을 낮추라"고 한 원칙과 정확히 일치한다.
 
-| Metric | Optimal When |
-|--------|--------------|
-| **F1 Score** | $F_1 = 2 \cdot \frac{\text{Precision} \cdot \text{Recall}}{\text{Precision} + \text{Recall}}$ | Equal importance of precision and recall |
-| **Youden's J** | $J = \text{Sensitivity} + \text{Specificity} - 1$ | Balanced classes, no cost information |
-| **Precision-Recall Curve** | Look for "elbow" or domain-specific target | Trade off precision/recall visually |
-| **ROC Curve** | Youden's J maximizes TPR - FPR | Imbalanced classes |
+!!! warning "분자를 뒤집지 말 것"
+    $t^* = C_{FN}/(C_{FP}+C_{FN})$이라고 쓰면 부호가 반대가 된다. 위 예에서 이 잘못된 식은
+    $t^* = 1000/1050 \approx 0.95$를 주는데, 이는 "놓친 연체가 20배 비싸니 연체 예측을
+    극단적으로 아끼라"는 말이 되어 앞뒤가 맞지 않는다. 기억법은 간단하다. **위음성이 비쌀수록
+    문턱은 낮아진다.** 그러려면 비싼 쪽 비용이 분모에만 있어야 한다.
 
-### Domain-Specific Targets
+### 성능 지표를 이용한 선택
 
-In practice, domain knowledge often guides threshold selection:
+문턱을 고르는 흔한 방법들이다.
 
-- **Medical screening:** High recall (catch disease early), tolerate false alarms
-- **Fraud detection:** High precision (avoid hassling customers), moderate recall
-- **Loan approval:** High precision (avoid defaults), lower recall (accept some good borrowers)
+| 방법 | 정의 | 적합한 상황 |
+|---|---|---|
+| **F1 점수** | $F_1 = 2 \cdot \dfrac{\text{Precision} \cdot \text{Recall}}{\text{Precision} + \text{Recall}}$ | 정밀도와 재현율이 동등하게 중요할 때 |
+| **유든의 J** | $J = \text{Sensitivity} + \text{Specificity} - 1$ | 범주가 균형 잡혀 있고 비용 정보가 없을 때 |
+| **정밀도-재현율 곡선** | 팔꿈치 지점이나 분야별 목표치를 찾음 | 절충을 시각적으로 판단할 때 |
+| **기대비용** | $C_{FP}\cdot FP + C_{FN}\cdot FN$ 최소화 | 비용을 실제로 알 때(가장 바람직) |
 
-## Implementation
+### 분야별 목표
 
-### Python Example
+실무에서는 배경지식이 문턱 선택을 이끄는 경우가 많다.
+
+- **의학적 선별검사:** 높은 재현율(질병을 조기에 잡음), 허위경보는 감수
+- **이상거래 탐지:** 높은 정밀도(고객을 번거롭게 하지 않음), 중간 정도의 재현율
+- **대출 승인:** 높은 정밀도(연체를 피함), 낮은 재현율(우량 차입자 일부는 놓침)
+
+## 구현
+
+### 파이썬 예제
 
 ```python
 from sklearn.metrics import (confusion_matrix, precision_score,
@@ -197,7 +213,7 @@ for t in thresholds:
           f"Recall={recall:.3f}, F1={f1:.3f}")
 ```
 
-### ROC Curve and Youden's J
+### ROC 곡선과 유든의 J
 
 ```python
 from sklearn.metrics import roc_curve, roc_auc_score
@@ -213,63 +229,167 @@ optimal_threshold = thresholds[optimal_idx]
 print(f"Optimal threshold (Youden's J): {optimal_threshold:.3f}")
 ```
 
-## Key Properties of Threshold Tuning
+## 문턱 조율의 주요 성질
 
-| Aspect | Impact |
-|--------|--------|
-| **Computation** | Fast: just change classification rule, no retraining |
-| **Visualization** | ROC and PR curves show all threshold choices |
-| **Interpretability** | Directly controls false positive / false negative rate |
-| **Limitation** | Cannot improve AUC (overall ranking), only adjust for specific operating point |
+| 측면 | 영향 |
+|---|---|
+| **계산** | 빠르다. 분류 규칙만 바꾸면 되고 재학습이 필요 없다 |
+| **시각화** | ROC 곡선과 PR 곡선이 모든 문턱 선택지를 보여준다 |
+| **해석 가능성** | 위양성률과 위음성률을 직접 조절한다 |
+| **한계** | AUC(전체 순위)를 개선할 수는 없고, 특정 작동점만 조정한다 |
 
-## Application to Linear Discriminant Analysis (LDA)
+## 선형판별분석(LDA)에의 적용
 
-The threshold concept extends beyond logistic regression to any probabilistic classifier. For example, **Linear Discriminant Analysis (LDA)** also produces class probabilities $P(Y=1|\mathbf{x})$, and you can tune its threshold in the same way.
+문턱 개념은 로지스틱 회귀를 넘어 확률을 내는 어떤 분류기에도 적용된다. 예컨대
+**선형판별분석(LDA)**도 범주 확률 $P(Y=1|\mathbf{x})$를 내므로 같은 방식으로 문턱을 조율할 수
+있다.
 
-LDA classifier with threshold 0.5 (default):
+문턱 0.5를 쓰는 LDA 분류기는
 
 $$\hat{y} = \begin{cases} 1 & \text{if } P_{\text{LDA}}(Y=1|\mathbf{x}) \geq 0.5 \\ 0 & \text{otherwise} \end{cases}$$
 
-Changing to threshold 0.2 makes LDA more lenient, increasing recall at the cost of precision, just as with logistic regression.
+이며, 문턱을 0.2로 바꾸면 로지스틱 회귀와 마찬가지로 더 너그러워져 정밀도를 희생하고 재현율을
+높인다.
 
-## Summary
+## 요약
 
-- **Default threshold 0.5** is only optimal when error costs are equal and classes are balanced
-- **Lower thresholds** (0.2-0.3) increase recall but decrease precision: use when missing positives is costly
-- **Higher thresholds** (0.7-0.8) increase precision but decrease recall: use when false positives are costly
-- **ROC and PR curves** visualize the full tradeoff across thresholds
-- **Youden's J** and **F1 score** provide automatic selection methods
-- **Threshold tuning is fast and requires no retraining**, making it practical for operational adjustments
+- **기본 문턱 0.5**는 오류 비용이 같고 범주가 균형 잡혀 있을 때만 최적이다.
+- **낮은 문턱**(0.2--0.3)은 재현율을 높이고 정밀도를 낮춘다. 양성을 놓치는 비용이 클 때 쓴다.
+- **높은 문턱**(0.7--0.8)은 정밀도를 높이고 재현율을 낮춘다. 위양성의 비용이 클 때 쓴다.
+- **ROC 곡선과 PR 곡선**이 문턱에 따른 절충 전체를 보여준다.
+- **유든의 J**와 **F1 점수**는 자동 선택 방법을 제공한다.
+- **문턱 조율은 빠르고 재학습이 필요 없어** 운영 중 조정에 실용적이다.
 
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Describe the main concept of Decision Threshold Tuning and explain why it matters for statistical practice.
+**연습문제 1.**
+위 대출 예제에서 세 문턱 각각의 F1 점수와 유든의 J를 계산하라. 어느 문턱이 각 기준에서
+최적인가?
 
-??? success "Solution to Exercise 1"
-    Decision Threshold Tuning is a core topic in statistics that provides tools for drawing reliable inferences from data. It matters because proper application ensures valid conclusions, correctly quantified uncertainty, and appropriate handling of the assumptions that underpin the method. Practitioners who understand this concept can avoid common pitfalls and choose the right analytical approach for their data.
+??? success "연습문제 1 풀이"
 
----
+    | 문턱 | 정밀도 | 재현율 | 특이도 | $F_1$ | $J$ |
+    |---|---|---|---|---|---|
+    | 0.2 | $0.7024$ | $0.9833$ | $0.3750$ | $0.8194$ | $0.3583$ |
+    | 0.5 | $0.8154$ | $0.8833$ | $0.7000$ | $\mathbf{0.8480}$ | $\mathbf{0.5833}$ |
+    | 0.8 | $0.8750$ | $0.5833$ | $0.8750$ | $0.7000$ | $0.4583$ |
 
-**Exercise 2.**
-State the key assumptions required by the method discussed here. How can each assumption be checked?
+    두 기준 모두 **0.5**를 고른다.
 
-??? success "Solution to Exercise 2"
-    The main assumptions typically include: (1) independence of observations -- verified by understanding the data collection process and checking for serial correlation; (2) distributional requirements (e.g., normality) -- checked with Q-Q plots and formal tests like Shapiro-Wilk; (3) equal variances (if applicable) -- assessed with boxplots and Levene's test. When assumptions are violated, consider robust alternatives, transformations, or nonparametric methods.
-
----
-
-**Exercise 3.**
-Work through a small numerical example illustrating the application of the technique from this section.
-
-??? success "Solution to Exercise 3"
-    A structured approach to applying this technique involves: (1) clearly stating the hypotheses or estimation goal; (2) verifying that the data meet the required assumptions; (3) computing the relevant test statistic, estimate, or model fit; (4) obtaining the p-value, confidence interval, or posterior distribution; (5) interpreting the result in the context of the original question. Following these steps systematically ensures a rigorous and reproducible analysis.
+    이는 우연이 아니다. 이 자료는 양성 비율이 60%로 비교적 균형 잡혀 있고, $F_1$과 $J$는 모두
+    두 오류에 암묵적으로 비슷한 무게를 준다. 비용을 명시하지 않으면 결국 기본 문턱 근처가
+    선택된다. 연습문제 2에서 보듯 비용을 넣으면 답이 완전히 달라진다. $\square$
 
 ---
 
-**Exercise 4.**
-Compare the approach from this section with an alternative method. When would you choose each?
+**연습문제 2.**
+놓친 연체의 비용이 \$1,000, 허위경보의 비용이 \$50이라 하자. 세 문턱의 총비용을 계산하고
+최적 문턱 $t^*$와 비교하라.
 
-??? success "Solution to Exercise 4"
-    The method discussed here is appropriate when its assumptions hold and the sample size is sufficient for the asymptotic approximations to be accurate. Alternative approaches include: (1) nonparametric methods -- preferred when distributional assumptions are suspect; (2) bootstrap methods -- useful when analytical reference distributions are unavailable; (3) Bayesian methods -- valuable when incorporating prior information or when direct probability statements about parameters are desired. Running multiple approaches and comparing results provides a useful robustness check.
+??? success "연습문제 2 풀이"
+
+    총비용은 $50 \times FP + 1000 \times FN$이다.
+
+    | 문턱 | FP | FN | 총비용 |
+    |---|---|---|---|
+    | 0.2 | 250 | 10 | $250(50) + 10(1000) = \$22{,}500$ |
+    | 0.5 | 120 | 70 | $120(50) + 70(1000) = \$76{,}000$ |
+    | 0.8 | 50 | 250 | $50(50) + 250(1000) = \$252{,}500$ |
+
+    **0.2**가 압도적으로 낫다. 0.5보다 비용이 3분의 1 이하이고 0.8보다는 11분의 1 수준이다.
+
+    이는 $t^* = 50/1050 \approx 0.048$과 부합한다. 세 후보 중 $t^*$에 가장 가까운 값이 0.2이기
+    때문이다. 실제로 문턱을 $0.048$까지 더 낮추면 비용은 더 줄어들 것이다.
+
+    연습문제 1과 대비하면 요점이 분명해진다. $F_1$과 유든의 J는 0.5를 골랐지만 그 선택은
+    0.2보다 **세 배 이상 비싸다.** 비용을 알고 있다면 $F_1$이나 J 같은 대리지표를 쓸 이유가
+    전혀 없다. 기대비용을 직접 최소화하라. 대리지표는 비용을 모를 때 쓰는 임시방편이다.
+    $\square$
+
+---
+
+**연습문제 3.**
+문턱을 조율해도 AUC가 변하지 않는 이유를 설명하라. 그렇다면 문턱 조율은 무엇을 개선하는가?
+
+??? success "연습문제 3 풀이"
+
+    AUC는 **모든 문턱에 걸친** ROC 곡선 아래 면적이다. 문턱을 바꾸는 것은 그 곡선 위에서
+    **작동점 하나를 고르는** 일일 뿐, 곡선 자체를 바꾸지 않는다. 곡선은 오직 예측확률의
+    **순위**에만 의존하고, 순위는 문턱과 무관하다.
+
+    같은 이유로 다음도 변하지 않는다.
+
+    - 평균정밀도(AP), PR 곡선 전체
+    - 브라이어 점수와 로그손실(둘 다 $\hat p$만 쓰고 문턱을 쓰지 않는다)
+    - 보정 곡선
+
+    문턱 조율이 바꾸는 것은 **혼동행렬에서 유도되는 모든 것**이다. 정확도, 정밀도, 재현율,
+    특이도, $F_1$, 총비용이 그것이다.
+
+    실무적 함의는 명확하다. AUC가 낮으면(순위가 나쁘면) 문턱을 아무리 만져도 소용없다. 더 나은
+    특성이나 더 나은 모형이 필요하다. AUC는 높은데 배치 성능이 나쁘다면, 그것은 대개 문턱이
+    잘못 잡힌 문제이고 재학습 없이 즉시 고칠 수 있다. **먼저 AUC를 보고, 그다음 문턱을 보라.**
+    $\square$
+
+---
+
+**연습문제 4.**
+어떤 분석가가 검정자료에서 $F_1$을 최대화하는 문턱을 찾은 뒤, 같은 검정자료에서 그 $F_1$을
+모형 성능으로 보고했다. 무엇이 잘못되었는가?
+
+??? success "연습문제 4 풀이"
+
+    문턱은 **적합된 모수**다. 검정자료에서 고른 뒤 같은 자료로 성능을 보고하면, 모수를 추정한
+    자료에서 성능을 평가하는 셈이라 낙관적으로 편향된다.
+
+    편향의 크기는 문턱 격자가 조밀할수록, 검정자료가 작을수록 커진다. 문턱 후보를 $m$개 시도해
+    그중 최댓값을 보고하는 것은 $m$번의 시행 중 최댓값을 보고하는 것과 같다. 순전히 잡음만 있는
+    상황에서도 최댓값은 평균보다 크다.
+
+    **올바른 절차:** 자료를 세 부분으로 나눈다.
+
+    1. **훈련자료** --- 모형 계수 $\boldsymbol{\theta}$를 적합한다.
+    2. **검증자료** --- 문턱(그리고 정칙화 모수 등 다른 초모수)을 고른다.
+    3. **검정자료** --- 고정된 모형과 고정된 문턱으로 성능을 **한 번만** 평가한다.
+
+    자료가 적으면 중첩 교차검증을 쓴다. 바깥 루프가 성능을 추정하고, 안쪽 루프가 각 훈련 부분
+    안에서 문턱을 고른다. 문턱 선택이 반드시 **바깥 루프 안쪽**에서 일어나야 한다는 점이
+    핵심이다. 전체 자료로 문턱을 한 번 고른 뒤 교차검증하면 자료 누설이 된다. $\square$
+
+---
+
+**연습문제 5.**
+문턱을 낮추는 것과 학습 시 양성 범주에 가중치를 주는 것(`class_weight`)은 어떻게 다른가?
+
+??? success "연습문제 5 풀이"
+
+    **문턱 낮추기**는 학습이 끝난 뒤 결정 규칙만 바꾼다. 계수 $\boldsymbol{\theta}$와 예측확률
+    $\hat p_i$는 그대로이고, $\hat p \ge t$의 $t$만 달라진다.
+
+    **범주 가중**은 목적함수 자체를 바꾼다. 양성에 가중치 $w$를 주면
+
+    $$
+    \ell_w = -\sum_i \bigl[w\,y_i\log\hat p_i + (1-y_i)\log(1-\hat p_i)\bigr]
+    $$
+
+    를 최소화하므로 **계수가 달라진다.**
+
+    **두 방법이 같아지는 특수한 경우:** 모형이 참이고 절편이 자유롭다면, 양성에 가중치 $w$를
+    주는 것은 절편을 $\log w$만큼 옮기는 것과 점근적으로 같다. 이는 확률을 단조 변환하는 것에
+    지나지 않으므로 **순위가 보존되고 AUC도 같다.** 이 경우 두 방법은 사실상 같은 작동점에
+    도달하는 두 가지 길이다.
+
+    **달라지는 경우:**
+
+    - **모형이 잘못 지정되었을 때.** 가중은 손실함수를 바꾸므로 적합이 양성 범주 쪽 영역에
+      더 잘 맞도록 기울어진다. 기울기까지 달라지므로 순위 자체가 바뀌고 AUC도 달라진다.
+    - **정칙화가 있을 때.** 벌점이 가중치와 상호작용하여 선택되는 변수 집합이 달라질 수 있다.
+    - **확률의 의미.** 가중 모형이 내는 $\hat p$는 더 이상 실제 사건 확률의 추정치가 아니라
+      가중된 모집단의 확률이다. 보정이 깨지므로 브라이어 점수나 기대비용 계산에 그대로 쓸 수
+      없다.
+
+    **권장:** 확률 자체가 필요하다면 가중 없이 학습해 잘 보정된 $\hat p$를 얻은 뒤 문턱으로
+    작동점을 조절하라. 이 편이 단순하고, 되돌리기 쉬우며, 비용 구조가 바뀌어도 재학습이
+    필요 없다. 범주 불균형이 극단적이어서 최적화 자체가 소수 범주를 사실상 무시할 때에만
+    가중을 고려하라. $\square$

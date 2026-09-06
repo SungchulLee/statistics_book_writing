@@ -1,177 +1,301 @@
-# Deviance and Goodness-of-Fit
+# 이탈도와 적합도
 
-## Motivation
+## 동기
 
-In linear regression, the residual sum of squares measures how well a model
-fits the data.  For logistic regression (and generalized linear models more
-broadly) the analogous quantity is the **deviance**.  Deviance compares the
-log-likelihood of the fitted model to that of a perfect model, producing a
-single number that summarizes overall fit.  Differences in deviance between
-nested models follow an approximate chi-squared distribution, enabling formal
-hypothesis tests.
+선형회귀에서는 잔차제곱합이 모형의 적합 정도를 잰다. 로지스틱 회귀(더 넓게는 일반화선형모형)에서
+이에 대응하는 양이 **이탈도**다. 이탈도는 적합모형의 로그가능도를 완벽한 모형의 로그가능도와
+비교하여 전체 적합도를 하나의 수로 요약한다. 내포모형 사이의 이탈도 차이는 근사적으로 카이제곱
+분포를 따르므로 형식적 가설검정이 가능하다.
 
-## The Saturated Model
+## 포화모형
 
-The **saturated model** assigns one parameter per observation, so it reproduces
-the data exactly: $\hat{p}_i^{\text{sat}} = y_i$.  Its log-likelihood is the
-largest achievable value.  For binary responses ($y_i \in \{0,1\}$) each term
-in the log-likelihood equals $\log 1 = 0$, so
+**포화모형**은 관측치마다 모수를 하나씩 두어 자료를 그대로 재현한다.
+즉 $\hat{p}_i^{\text{sat}} = y_i$이며, 그 로그가능도는 도달 가능한 최댓값이다. 이항 반응변수
+($y_i \in \{0,1\}$)에서는 로그가능도의 각 항이 $\log 1 = 0$이므로
 
 $$
 \ell_{\text{sat}} = \sum_{i=1}^{n}\bigl[y_i \log y_i + (1-y_i)\log(1-y_i)\bigr] = 0
 $$
 
-where we adopt the convention $0 \log 0 = 0$.
+이다. 여기서 $0 \log 0 = 0$이라는 관례를 따른다.
 
-## Definition of Deviance
+## 이탈도의 정의
 
-The **deviance** of a fitted model with predicted probabilities $\hat{p}_i$ is
+예측확률이 $\hat{p}_i$인 적합모형의 **이탈도**는
 
 $$
 D = -2\bigl(\ell_{\text{fitted}} - \ell_{\text{sat}}\bigr)
   = -2\,\ell_{\text{fitted}}
 $$
 
-Because $\ell_{\text{sat}} = 0$ for binary data, the deviance simplifies to
-minus twice the log-likelihood of the fitted model.  Expanding:
+이다. 이항 자료에서는 $\ell_{\text{sat}} = 0$이므로 이탈도는 적합모형 로그가능도의 $-2$배로
+단순해진다. 전개하면
 
 $$
 D = -2\sum_{i=1}^{n}\bigl[y_i \log \hat{p}_i + (1-y_i)\log(1-\hat{p}_i)\bigr]
 $$
 
-A smaller deviance indicates a better fit.
+이다. 이탈도가 작을수록 적합이 좋다.
 
-## Null Deviance and Residual Deviance
+## 영이탈도와 잔차이탈도
 
-### Null deviance
+### 영이탈도
 
-The **null model** includes only an intercept: $\hat{p}_i = \bar{y}$ for all
-$i$.  Its deviance is
+**영모형**은 절편만 포함한다. 즉 모든 $i$에 대해 $\hat{p}_i = \bar{y}$이며, 그 이탈도는
 
 $$
 D_0 = -2\sum_{i=1}^{n}\bigl[y_i \log \bar{y} + (1-y_i)\log(1-\bar{y})\bigr]
 $$
 
-### Residual deviance
+이다.
 
-The **residual deviance** $D$ is the deviance of the full fitted model
-(intercept plus all $p-1$ predictors).  The difference $D_0 - D$ measures
-how much the predictors improve the fit beyond the intercept alone.
+### 잔차이탈도
 
-### Proportion of deviance explained
+**잔차이탈도** $D$는 전체 적합모형(절편과 $p-1$개 설명변수)의 이탈도다. 차이 $D_0 - D$는
+설명변수가 절편만 있는 경우보다 적합을 얼마나 개선했는지를 잰다.
 
-By analogy with $R^2$ in linear regression:
+### 설명된 이탈도의 비율
+
+선형회귀의 $R^2$에 빗대어
 
 $$
 R^2_{\text{dev}} = 1 - \frac{D}{D_0}
 $$
 
-This quantity, sometimes called **McFadden's pseudo-$R^2$**, ranges from 0 to 1.
-Values above 0.2 to 0.4 are often considered satisfactory for logistic models.
+를 정의한다. **맥패든 유사 $R^2$**라고도 하며 0과 1 사이의 값을 갖는다. 로지스틱 모형에서는
+0.2에서 0.4를 넘으면 만족스럽다고 보는 경우가 많다.
 
-## Deviance Residuals
+## 이탈도 잔차
 
-The overall deviance decomposes into observation-level contributions called
-**deviance residuals**:
+전체 이탈도는 관측치별 기여로 분해되며, 이를 **이탈도 잔차**라 한다.
 
 $$
 d_i = \operatorname{sign}(y_i - \hat{p}_i)\,
 \sqrt{-2\bigl[y_i \log \hat{p}_i + (1-y_i)\log(1-\hat{p}_i)\bigr]}
 $$
 
-so that $D = \sum_{i=1}^{n} d_i^2$.  Deviance residuals are preferred over raw
-residuals ($y_i - \hat{p}_i$) because their distribution is closer to standard
-normal when the model is correct, making diagnostic plots easier to interpret.
+그러면 $D = \sum_{i=1}^{n} d_i^2$이다. 이탈도 잔차는 원잔차($y_i - \hat{p}_i$)보다 선호되는데,
+모형이 옳을 때 그 분포가 표준정규에 더 가까워 진단 그림을 해석하기 쉽기 때문이다.
 
-## Goodness-of-Fit Test
+## 적합도 검정
 
-Under the null hypothesis that the fitted model is correct and the data contain
-no systematic lack of fit, the residual deviance follows approximately
+적합모형이 옳고 자료에 체계적인 부적합이 없다는 영가설 아래에서 잔차이탈도는 근사적으로
 
 $$
 D \;\dot\sim\; \chi^2_{n-p}
 $$
 
-where $p$ is the number of estimated parameters.  A large deviance relative
-to $n - p$ degrees of freedom signals that the model does not adequately
-describe the data.
+를 따른다. 여기서 $p$는 추정된 모수의 개수다. 자유도 $n - p$에 비해 이탈도가 크면 모형이 자료를
+적절히 기술하지 못한다는 신호다.
 
-!!! warning "When the Approximation Fails"
-    The chi-squared approximation for the residual deviance requires grouped
-    data (multiple observations at each covariate pattern).  For ungrouped
-    binary data with continuous predictors, each covariate pattern is unique
-    and the approximation breaks down.  In this setting, use the
-    Hosmer-Lemeshow test (see [Calibration and Brier Score](../evaluation/calibration.md))
-    instead.
+!!! warning "근사가 실패하는 경우"
+    잔차이탈도의 카이제곱 근사는 **묶인 자료**(각 공변량 패턴에 여러 관측치가 있는 자료)를
+    전제한다. 연속형 설명변수를 갖는 묶이지 않은 이항 자료에서는 공변량 패턴이 모두 유일하여
+    근사가 무너진다. 이 경우에는
+    [보정과 브라이어 점수](../evaluation/calibration.md)에서 다루는 호스머-레메쇼 검정을 쓴다.
+    연습문제 3에서 이 실패를 모의실험으로 확인한다.
 
-## Likelihood Ratio Test via Deviance
+## 이탈도를 이용한 가능도비 검정
 
-To test whether a subset of predictors improves the model, compare a reduced
-model (deviance $D_{\text{red}}$, with $p_0$ parameters) to the full model
-(deviance $D_{\text{full}}$, with $p_1$ parameters):
+설명변수의 부분집합이 모형을 개선하는지 검정하려면, 축소모형(이탈도 $D_{\text{red}}$, 모수
+$p_0$개)과 전체모형(이탈도 $D_{\text{full}}$, 모수 $p_1$개)을 비교한다.
 
 $$
 \Delta D = D_{\text{red}} - D_{\text{full}} \;\dot\sim\; \chi^2_{p_1 - p_0}
 $$
 
-under the null hypothesis that the additional predictors have zero coefficients.
-This is the **likelihood ratio test** and is the standard approach for
-comparing nested logistic regression models.
+이는 추가된 설명변수의 계수가 모두 0이라는 영가설 아래에서 성립한다. 이것이 **가능도비 검정**
+이며, 내포된 로지스틱 회귀 모형을 비교하는 표준적인 방법이다.
 
-??? example "Worked Example"
-    Suppose a null model with intercept only gives $D_0 = 120.5$ on 99 degrees
-    of freedom.  Adding two predictors ($p_1 = 3$) yields $D = 85.3$ on 97
-    degrees of freedom.
+??? example "예제"
+    절편만 있는 영모형의 이탈도가 자유도 99에서 $D_0 = 120.5$라고 하자. 설명변수 두 개를
+    추가하면($p_1 = 3$) 자유도 97에서 $D = 85.3$이 된다.
 
-    The test statistic is $\Delta D = 120.5 - 85.3 = 35.2$ with
-    $p_1 - p_0 = 2$ degrees of freedom.  Comparing to $\chi^2_2$:
+    검정통계량은 $\Delta D = 120.5 - 85.3 = 35.2$이고 자유도는 $p_1 - p_0 = 2$이다.
+    $\chi^2_2$와 비교하면,
 
-    - The critical value at $\alpha = 0.05$ is $5.99$.
-    - Since $35.2 \gg 5.99$, we reject the null and conclude the two predictors
-      significantly improve the model.
+    - $\alpha = 0.05$의 임계값은 $5.99$이다.
+    - $35.2 \gg 5.99$이므로 영가설을 기각하고, 두 설명변수가 모형을 유의하게 개선한다고
+      결론짓는다.
 
-    McFadden's pseudo-$R^2$ is $1 - 85.3/120.5 \approx 0.29$, indicating a
-    moderate improvement.
+    맥패든 유사 $R^2$는 $1 - 85.3/120.5 \approx 0.29$로 중간 정도의 개선을 나타낸다.
 
-## Summary Table
+## 요약표
 
-| Quantity | Formula | Interpretation |
+| 양 | 공식 | 해석 |
 |---|---|---|
-| Deviance | $D = -2\,\ell_{\text{fitted}}$ | Overall lack of fit |
-| Null deviance | $D_0 = -2\,\ell_{\text{null}}$ | Fit of intercept-only model |
-| $\Delta D$ | $D_{\text{red}} - D_{\text{full}}$ | Improvement from added predictors |
-| Deviance residual | $d_i = \operatorname{sign}(y_i - \hat{p}_i)\sqrt{-2[\cdots]}$ | Per-observation contribution |
-| McFadden $R^2$ | $1 - D/D_0$ | Proportion of deviance explained |
+| 이탈도 | $D = -2\,\ell_{\text{fitted}}$ | 전체적인 부적합 |
+| 영이탈도 | $D_0 = -2\,\ell_{\text{null}}$ | 절편만 있는 모형의 적합 |
+| $\Delta D$ | $D_{\text{red}} - D_{\text{full}}$ | 추가 설명변수에 의한 개선 |
+| 이탈도 잔차 | $d_i = \operatorname{sign}(y_i - \hat{p}_i)\sqrt{-2[\cdots]}$ | 관측치별 기여 |
+| 맥패든 $R^2$ | $1 - D/D_0$ | 설명된 이탈도의 비율 |
 
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Describe the main concept of Deviance and Goodness-of-Fit and explain why it matters for statistical practice.
+**연습문제 1.**
+$D = \sum_{i=1}^n d_i^2$임을 확인하라. 이탈도 잔차 앞의 부호함수가 왜 필요한지 설명하라.
 
-??? success "Solution to Exercise 1"
-    Deviance and Goodness-of-Fit is a core topic in statistics that provides tools for drawing reliable inferences from data. It matters because proper application ensures valid conclusions, correctly quantified uncertainty, and appropriate handling of the assumptions that underpin the method. Practitioners who understand this concept can avoid common pitfalls and choose the right analytical approach for their data.
+??? success "연습문제 1 풀이"
+
+    정의에 의해
+
+    $$
+    d_i^2 = \bigl[\operatorname{sign}(y_i - \hat p_i)\bigr]^2 \cdot
+    \Bigl(-2\bigl[y_i\log\hat p_i + (1-y_i)\log(1-\hat p_i)\bigr]\Bigr)
+    $$
+
+    이고 $[\operatorname{sign}(\cdot)]^2 = 1$이므로
+
+    $$
+    \sum_i d_i^2 = -2\sum_i \bigl[y_i\log\hat p_i + (1-y_i)\log(1-\hat p_i)\bigr] = D
+    $$
+
+    이다. 제곱근 안의 값이 음수가 아님도 확인해야 한다. $\hat p_i \in (0,1)$이므로 대괄호 안은
+    음수이고, $-2$를 곱하면 양수가 된다.
+
+    **부호함수가 필요한 이유:** 제곱근 자체는 언제나 음이 아니므로, 부호가 없으면 모든 잔차가
+    양수가 되어 **과대예측과 과소예측을 구분할 수 없다.** 잔차 그림의 요점은 체계적 편향을
+    찾는 것인데, 부호가 없으면 $\hat p_i$가 너무 큰 구간과 너무 작은 구간이 똑같아 보인다.
+    $\operatorname{sign}(y_i - \hat p_i)$를 붙이면 $y_i = 1$인데 $\hat p_i$가 작을 때 잔차가
+    양수, $y_i = 0$인데 $\hat p_i$가 클 때 음수가 되어 최소제곱의 원잔차와 같은 방식으로 읽힌다.
+    $\square$
 
 ---
 
-**Exercise 2.**
-State the key assumptions required by the method discussed here. How can each assumption be checked?
+**연습문제 2.**
+$n = 100$이고 그중 30건이 사건인 자료의 영이탈도 $D_0$을 계산하라. 이 값이
+[가능도 절 연습문제 3](../logistic_regression/likelihood.md)의 결과와 어떻게 연결되는가?
 
-??? success "Solution to Exercise 2"
-    The main assumptions typically include: (1) independence of observations -- verified by understanding the data collection process and checking for serial correlation; (2) distributional requirements (e.g., normality) -- checked with Q-Q plots and formal tests like Shapiro-Wilk; (3) equal variances (if applicable) -- assessed with boxplots and Levene's test. When assumptions are violated, consider robust alternatives, transformations, or nonparametric methods.
+??? success "연습문제 2 풀이"
+
+    영모형은 $\hat p_i = \bar y = 0.3$이므로
+
+    $$
+    D_0 = -2\bigl[30\log 0.3 + 70\log 0.7\bigr]
+    = -2\bigl[30(-1.20397) + 70(-0.356675)\bigr] = 122.173
+    $$
+
+    이다.
+
+    **연결:** 가능도 절 연습문제 3에서 절편만 있는 모형의 최소 교차엔트로피가
+    $\ell_{\min} = n\,H(\bar y)$임을 보았다. $D_0 = 2\,\ell_{\min} = 2n H(\bar y)$이므로
+
+    $$
+    D_0 = 2 \times 100 \times 0.610864 = 122.173
+    $$
+
+    으로 정확히 일치한다. 즉 **영이탈도는 결과 자체의 엔트로피를 $2n$배 한 것**이다. 모형이
+    쓸모 있으려면 이보다 이탈도를 낮춰야 하고, 낮출 수 있는 폭은 애초에 $y$가 얼마나 예측 불가능
+    했는지에 달려 있다. 사건이 아주 드물면($\bar y = 0.01$) $H(\bar y)$가 작아 $D_0$ 자체가
+    작고, 맥패든 $R^2$의 분모도 작아진다. $\square$
 
 ---
 
-**Exercise 3.**
-Work through a small numerical example illustrating the application of the technique from this section.
+**연습문제 3.**
+묶이지 않은 이항 자료에서 $D \dot\sim \chi^2_{n-p}$ 근사가 실패함을 모의실험으로 보여라.
+**옳은** 모형을 반복해서 적합하고 잔차이탈도의 분포를 $\chi^2_{n-p}$와 비교하라.
 
-??? success "Solution to Exercise 3"
-    A structured approach to applying this technique involves: (1) clearly stating the hypotheses or estimation goal; (2) verifying that the data meet the required assumptions; (3) computing the relevant test statistic, estimate, or model fit; (4) obtaining the p-value, confidence interval, or posterior distribution; (5) interpreting the result in the context of the original question. Following these steps systematically ensures a rigorous and reproducible analysis.
+??? success "연습문제 3 풀이"
+
+    ```python
+    import numpy as np
+    import statsmodels.api as sm
+    from scipy import stats
+
+    rng = np.random.default_rng(3)
+    n, reps = 200, 300
+    Ds = []
+    for _ in range(reps):
+        x = rng.normal(size=n)
+        p = 1 / (1 + np.exp(-(0.5 + 1.0 * x)))
+        y = (rng.random(n) < p).astype(float)
+        m = sm.Logit(y, sm.add_constant(x)).fit(disp=0)
+        Ds.append(-2 * m.llf)
+
+    Ds = np.array(Ds)
+    print(f"n - p          = {n - 2}")
+    print(f"mean D         = {Ds.mean():.1f}   sd = {Ds.std(ddof=1):.1f}")
+    print(f"chi2_198       : mean = 198   sd = {np.sqrt(2 * 198):.1f}")
+    print(f"reject rate at .05 = {np.mean(stats.chi2.sf(Ds, 198) < 0.05):.3f}")
+    ```
+
+    | 양 | 모의실험 | $\chi^2_{198}$이 예측하는 값 |
+    |---|---|---|
+    | 평균 $D$ | $231.3$ | $198$ |
+    | 표준편차 $D$ | $12.4$ | $19.9$ |
+    | $\alpha = 0.05$ 기각률 | $0.513$ | $0.05$ |
+
+    모형이 **완벽히 옳은데도** 적합도 검정이 51%의 경우에 기각한다. 평균은 너무 크고 분산은
+    너무 작다. 근사가 어느 방향으로든 틀린 것이다.
+
+    **이유:** 카이제곱 근사는 각 공변량 패턴의 관측치 수가 커질 때 성립하는 점근 결과다. $x$가
+    연속형이면 200개의 공변량 패턴이 모두 서로 다르고 각각 관측치가 하나뿐이므로, $n$을 아무리
+    키워도 이 점근에 도달하지 못한다. 실제로 이때 $D$는 모수뿐 아니라 자료의 개별 배치에도
+    의존하며 자유도 개념이 무의미해진다.
+
+    **실무적 함의:** 묶이지 않은 이항 자료에서 잔차이탈도를 $\chi^2_{n-p}$와 비교하지 말라.
+    호스머-레메쇼 검정처럼 예측확률을 구간으로 묶는 방법이나 보정 곡선을 쓰라. 반면 **이탈도의
+    차이** $\Delta D$는 여전히 유효하다. 두 모형이 같은 자료에 적합되어 있으면 포화모형 항이
+    소거되어 점근 이론이 성립하기 때문이다. 이것이 잔차이탈도 자체는 못 믿어도 LRT는 믿을 수
+    있는 이유다. $\square$
 
 ---
 
-**Exercise 4.**
-Compare the approach from this section with an alternative method. When would you choose each?
+**연습문제 4.**
+맥패든 유사 $R^2$가 잘 맞는 모형에서도 왜 선형회귀의 $R^2$보다 훨씬 작게 나오는지 설명하라.
+0.29라는 값을 어떻게 읽어야 하는가?
 
-??? success "Solution to Exercise 4"
-    The method discussed here is appropriate when its assumptions hold and the sample size is sufficient for the asymptotic approximations to be accurate. Alternative approaches include: (1) nonparametric methods -- preferred when distributional assumptions are suspect; (2) bootstrap methods -- useful when analytical reference distributions are unavailable; (3) Bayesian methods -- valuable when incorporating prior information or when direct probability statements about parameters are desired. Running multiple approaches and comparing results provides a useful robustness check.
+??? success "연습문제 4 풀이"
+
+    맥패든 $R^2 = 1 - D/D_0$은 **분산이 아니라 로그가능도의 비율**이다. 두 척도는 다른 것을
+    센다.
+
+    핵심은 $D$가 0에 가까워지려면 예측확률이 거의 0 또는 1이어야 한다는 데 있다. 모든
+    $\hat p_i$를 정확히 맞혀도, 참 확률이 $0.5$ 근처인 관측치가 있으면 $D$는 0으로 갈 수 없다.
+    참 모형 아래에서 기대되는 이탈도는
+
+    $$
+    \mathbb{E}[D] = 2n\,\mathbb{E}\bigl[H(p_i)\bigr]
+    $$
+
+    이며, 이는 **줄일 수 없는 하한**이다. 즉 완벽한 모형조차 맥패든 $R^2$가 1에 못 미치고,
+    결과가 본질적으로 잘 예측되지 않는 문제에서는 상한 자체가 낮다.
+
+    **0.29를 읽는 법:** 맥패든 자신은 0.2--0.4 구간이 "매우 좋은 적합"에 해당한다고 했다.
+    선형회귀의 $R^2 = 0.29$가 주는 인상보다 훨씬 강한 적합이라는 뜻이다. 그러나 절대적 기준으로
+    쓰기보다는 **같은 자료에 적합한 여러 모형을 비교하는 상대적 척도**로 쓰는 편이 안전하다.
+    분류 성능을 판단하려면 AUC, 보정 곡선, 브라이어 점수(19.3절) 같은 지표를 함께 보라.
+    $\square$
+
+---
+
+**연습문제 5.**
+이탈도가 최소제곱의 잔차제곱합에 대응한다고 했다. 정규 선형모형에서 이탈도를 정의하면 실제로
+RSS가 됨을 보여라.
+
+??? success "연습문제 5 풀이"
+
+    분산이 $\sigma^2$로 알려진 정규 선형모형에서 로그가능도는
+
+    $$
+    \ell(\boldsymbol{\beta}) = -\frac{n}{2}\log(2\pi\sigma^2) - \frac{1}{2\sigma^2}\sum_{i=1}^n (y_i - \mathbf{x}_i^T\boldsymbol{\beta})^2
+    $$
+
+    이다. 포화모형은 $\hat\mu_i = y_i$를 두므로 제곱합 항이 사라지고
+    $\ell_{\text{sat}} = -\frac{n}{2}\log(2\pi\sigma^2)$이다. 따라서
+
+    $$
+    D = -2(\ell_{\text{fitted}} - \ell_{\text{sat}})
+    = \frac{1}{\sigma^2}\sum_{i=1}^n (y_i - \hat y_i)^2
+    = \frac{\text{RSS}}{\sigma^2}
+    $$
+
+    가 된다. 즉 이탈도는 $\sigma^2$로 척도화한 잔차제곱합이며, 이 때문에 **척도화 이탈도**라고도
+    부른다. $\sigma^2$가 알려져 있으면 $D \sim \chi^2_{n-p}$가 근사가 아니라 **정확히** 성립하며,
+    이것이 로지스틱 회귀에서 우리가 흉내 내려 했던 결과다.
+
+    이 대비가 연습문제 3의 실패를 설명해 준다. 정규모형에서 카이제곱 분포가 정확히 성립하는 것은
+    잔차가 실제로 정규이기 때문이다. 이항 자료에서는 관측치 하나가 두 값밖에 못 가지므로 그
+    "잔차"가 정규와 거리가 멀고, 카이제곱 근사는 여러 관측치가 한 공변량 패턴에 모여 중심극한정리가
+    작동할 때에만 되살아난다. $\square$

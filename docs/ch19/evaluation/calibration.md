@@ -1,131 +1,120 @@
-# Calibration and Brier Score
+# 보정과 브라이어 점수
 
-## Why Calibration Matters
+## 보정이 중요한 이유
 
-A classifier may have high accuracy yet produce misleading probability
-estimates.  For example, a model that assigns $\hat{p} = 0.90$ to a group of
-applicants should see roughly 90% of them default if the model is well
-calibrated.  **Calibration** measures whether predicted probabilities match
-observed frequencies.  Good calibration is essential in applications such as
-credit scoring and medical diagnosis where the probabilities themselves — not
-just the binary decisions — drive downstream actions.
+정확도가 높으면서도 확률 추정치는 오도하는 분류기가 있을 수 있다. 예컨대 어떤 신청자 집단에
+$\hat{p} = 0.90$을 부여한 모형이 잘 보정되어 있다면 그중 대략 90%가 실제로 연체해야 한다.
+**보정**은 예측확률이 관측된 빈도와 일치하는지를 잰다. 이항 결정만이 아니라 확률 자체가 후속
+행동을 좌우하는 신용평가나 의학적 진단 같은 응용에서 좋은 보정은 필수적이다.
 
-## Definition of Calibration
+## 보정의 정의
 
-A model is **perfectly calibrated** if, for every predicted probability $q$,
+모든 예측확률 $q$에 대해
 
 $$
 P(Y = 1 \mid \hat{p} = q) = q
 $$
 
-In words: among all observations that receive a predicted probability of $q$,
-the observed proportion of positives equals $q$.
+가 성립하면 그 모형은 **완벽히 보정되었다**고 한다. 말로 하면, 예측확률로 $q$를 받은 관측치들
+가운데 실제 양성의 비율이 $q$와 같다는 뜻이다.
 
-## Reliability Diagrams (Calibration Curves)
+## 신뢰도 그림(보정 곡선)
 
-Because predicted probabilities are continuous, we cannot check the condition
-above for every $q$ individually.  Instead, we bin the predictions into $G$
-groups (typically $G = 10$ deciles) and compare the average predicted
-probability in each bin to the observed proportion of positives.
+예측확률은 연속형이므로 위 조건을 모든 $q$에 대해 개별적으로 확인할 수는 없다. 대신 예측을
+$G$개 집단(보통 $G = 10$, 십분위)으로 묶어, 각 구간의 평균 예측확률과 관측된 양성 비율을
+비교한다.
 
-### Construction
+### 작성 방법
 
-1. Sort the $n$ predictions $\hat{p}_1, \ldots, \hat{p}_n$.
-2. Divide into $G$ bins $B_1, \ldots, B_G$ of roughly equal size.
-3. For each bin $g$, compute:
-    - Mean predicted probability: $\bar{p}_g = \frac{1}{|B_g|}\sum_{i \in B_g}\hat{p}_i$
-    - Observed fraction of positives: $\bar{y}_g = \frac{1}{|B_g|}\sum_{i \in B_g}y_i$
-4. Plot $\bar{y}_g$ against $\bar{p}_g$.
+1. $n$개의 예측 $\hat{p}_1, \ldots, \hat{p}_n$을 정렬한다.
+2. 크기가 대략 같은 $G$개 구간 $B_1, \ldots, B_G$로 나눈다.
+3. 각 구간 $g$에 대해 계산한다.
+    - 평균 예측확률: $\bar{p}_g = \frac{1}{|B_g|}\sum_{i \in B_g}\hat{p}_i$
+    - 관측된 양성 비율: $\bar{y}_g = \frac{1}{|B_g|}\sum_{i \in B_g}y_i$
+4. $\bar{p}_g$에 대해 $\bar{y}_g$를 그린다.
 
-A perfectly calibrated model lies on the **diagonal** $\bar{y} = \bar{p}$.
-Points above the diagonal indicate under-prediction (the model is under-confident);
-points below indicate over-prediction (the model is over-confident).
+완벽히 보정된 모형은 **대각선** $\bar{y} = \bar{p}$ 위에 놓인다. 대각선 위쪽 점은 과소예측
+(모형이 지나치게 조심스러움)을, 아래쪽 점은 과대예측(모형이 지나치게 확신함)을 나타낸다.
 
-## Brier Score
+## 브라이어 점수
 
-The **Brier score** provides a single-number summary of calibration and
-predictive accuracy:
+**브라이어 점수**는 보정과 예측정확도를 하나의 수로 요약한다.
 
 $$
 \text{BS} = \frac{1}{n}\sum_{i=1}^{n}(\hat{p}_i - y_i)^2
 $$
 
-The Brier score ranges from 0 (perfect) to 1 (worst possible).  It equals the
-**mean squared error** of the predicted probabilities treated as point forecasts
-for the binary outcomes.
+브라이어 점수는 0(완벽)에서 1(최악)까지의 값을 가지며, 예측확률을 이항 결과에 대한 점예측으로
+보았을 때의 **평균제곱오차**와 같다.
 
-### Brier Score Decomposition
+### 브라이어 점수의 분해
 
-The Brier score can be decomposed into three components:
+브라이어 점수는 세 성분으로 분해된다(머피 분해).
 
 $$
-\text{BS} = \underbrace{\frac{1}{n}\sum_{g=1}^{G}|B_g|\,(\bar{p}_g - \bar{y}_g)^2}_{\text{calibration (reliability)}}
-
-- \underbrace{\frac{1}{n}\sum_{g=1}^{G}|B_g|\,\bar{y}_g(1-\bar{y}_g)}_{\text{resolution}}
-+ \underbrace{\bar{y}(1-\bar{y})}_{\text{uncertainty}}
+\text{BS} = \underbrace{\frac{1}{n}\sum_{g=1}^{G}|B_g|\,(\bar{p}_g - \bar{y}_g)^2}_{\text{reliability}} - \underbrace{\frac{1}{n}\sum_{g=1}^{G}|B_g|\,(\bar{y}_g - \bar{y})^2}_{\text{resolution}} + \underbrace{\bar{y}(1-\bar{y})}_{\text{uncertainty}}
 $$
 
-- **Calibration (reliability):** Measures how far the calibration curve deviates
-  from the diagonal.  Lower is better.
-- **Resolution:** Measures how much the model's predictions vary across bins.
-  Higher resolution is better (it is subtracted).
-- **Uncertainty:** Depends only on the base rate $\bar{y}$ and is the same for
-  all models on the same dataset.
+- **신뢰도(reliability):** 보정 곡선이 대각선에서 얼마나 벗어나는지를 잰다. 작을수록 좋다.
+- **분해능(resolution):** 구간별 관측 비율 $\bar{y}_g$가 전체 평균 $\bar{y}$에서 얼마나
+  퍼져 있는지를 잰다. 클수록 좋다(빼기 때문이다).
+- **불확실성(uncertainty):** 기저율 $\bar{y}$에만 의존하므로 같은 자료에 적합한 모든 모형에서
+  동일하다.
 
-## Hosmer-Lemeshow Test
+!!! warning "분해능의 정의에 주의"
+    분해능 항은 $\frac{1}{n}\sum_g |B_g|\,\bar{y}_g(1-\bar{y}_g)$가 **아니다.** 이 양은
+    구간 내부의 분산으로, 실제로는 불확실성에서 분해능을 뺀 값
+    $\bar{y}(1-\bar{y}) - \text{RES}$와 같다. 따라서 이것을 분해능 자리에 넣고 다시
+    불확실성을 더하면 항이 이중으로 계산되어 등식이 깨진다. 아래 연습문제 1에서 실제 수치로
+    확인한다.
 
-The **Hosmer-Lemeshow test** formalizes the visual check of the reliability
-diagram.  It tests the null hypothesis that the model is well calibrated.
+## 호스머-레메쇼 검정
 
-### Procedure
+**호스머-레메쇼 검정**은 신뢰도 그림의 시각적 판단을 형식화한 것으로, 모형이 잘 보정되어
+있다는 영가설을 검정한다.
 
-1. Sort observations by $\hat{p}_i$ and form $G$ groups (usually $G = 10$).
-2. For each group $g$, let $O_g = \sum_{i \in B_g} y_i$ be the observed count
-   of positives and $E_g = \sum_{i \in B_g} \hat{p}_i$ be the expected count.
-3. Compute the test statistic:
+### 절차
+
+1. 관측치를 $\hat{p}_i$로 정렬해 $G$개 집단(보통 $G = 10$)을 만든다.
+2. 각 집단 $g$에서 관측된 양성 수 $O_g = \sum_{i \in B_g} y_i$와 기대 양성 수
+   $E_g = \sum_{i \in B_g} \hat{p}_i$를 구한다.
+3. 검정통계량을 계산한다.
 
 $$
 \hat{C} = \sum_{g=1}^{G}\frac{(O_g - E_g)^2}{E_g(1 - E_g/|B_g|)}
 $$
 
-Under the null hypothesis of adequate fit, $\hat{C}$ follows approximately a
-$\chi^2_{G-2}$ distribution.  A large value of $\hat{C}$ (small $p$-value)
-indicates lack of fit.
+적합이 적절하다는 영가설 아래에서 $\hat{C}$는 근사적으로 $\chi^2_{G-2}$를 따른다. $\hat{C}$가
+크면(p-값이 작으면) 적합이 부족하다는 뜻이다.
 
-!!! warning "Sensitivity to Binning"
-    The Hosmer-Lemeshow test is sensitive to the number of groups $G$ and the
-    binning strategy.  Different choices of $G$ can lead to different
-    conclusions.  It is best used alongside the reliability diagram rather than
-    as a standalone verdict.
+!!! warning "구간 나누기에 민감하다"
+    호스머-레메쇼 검정은 집단 수 $G$와 구간을 나누는 방식에 민감하다. $G$를 달리 잡으면 결론이
+    달라질 수 있다. 단독 판정 근거로 쓰기보다 신뢰도 그림과 함께 쓰는 편이 좋다.
 
-## Calibration Techniques
+## 보정 기법
 
-When a model is poorly calibrated, post-hoc **recalibration** can improve the
-probability estimates without retraining the entire model.
+모형의 보정이 나쁠 때는 모형 전체를 다시 학습하지 않고도 **사후 재보정**으로 확률 추정치를
+개선할 수 있다.
 
-### Platt Scaling
+### 플랫 척도화
 
-Fit a logistic regression with the original model's log-odds as the single
-predictor:
+원래 모형의 로그오즈를 유일한 설명변수로 삼아 로지스틱 회귀를 적합한다.
 
 $$
 \hat{p}_{\text{cal}} = \sigma(a \cdot f(\mathbf{x}) + b)
 $$
 
-where $f(\mathbf{x})$ is the original model's output and $a, b$ are learned on
-a held-out calibration set.
+여기서 $f(\mathbf{x})$는 원래 모형의 출력이고 $a, b$는 따로 떼어 둔 보정용 자료에서 학습한다.
 
-### Isotonic Regression
+### 등위회귀
 
-A non-parametric alternative that fits a monotone non-decreasing function
-mapping raw predictions to calibrated probabilities.  Isotonic regression is
-more flexible than Platt scaling but requires more calibration data.
+원래 예측을 보정된 확률로 옮기는 단조 비감소 함수를 적합하는 비모수적 대안이다. 플랫 척도화보다
+유연하지만 더 많은 보정 자료를 필요로 한다.
 
-??? example "Worked Example"
-    A logistic model produces the following binned results on a test set of
-    $n = 1000$:
+??? example "예제"
+    어떤 로지스틱 모형이 $n = 1000$인 검정자료에서 다음과 같은 구간별 결과를 냈다.
 
-    | Bin | $\bar{p}_g$ | $\bar{y}_g$ | $|B_g|$ |
+    | 구간 | $\bar{p}_g$ | $\bar{y}_g$ | $|B_g|$ |
     |---|---|---|---|
     | 1 | 0.05 | 0.04 | 100 |
     | 2 | 0.15 | 0.12 | 100 |
@@ -138,45 +127,186 @@ more flexible than Platt scaling but requires more calibration data.
     | 9 | 0.85 | 0.88 | 100 |
     | 10 | 0.95 | 0.93 | 100 |
 
-    The predictions are close to the diagonal, indicating good calibration.
-    The Brier score is
+    예측이 대각선에 가까워 보정이 좋다. 각 구간 안의 예측이 모두 $\bar{p}_g$와 같다고 보면
+    브라이어 점수는
 
     $$
-    \text{BS} = \frac{1}{1000}\sum_{i=1}^{1000}(\hat{p}_i - y_i)^2 \approx 0.21
+    \text{BS} = \frac{1}{1000}\sum_{i=1}^{1000}(\hat{p}_i - y_i)^2 = 0.1657
     $$
 
-    The reliability component is small because $\bar{p}_g \approx \bar{y}_g$
-    in every bin.
+    이다. 모든 구간에서 $\bar{p}_g \approx \bar{y}_g$이므로 신뢰도 성분이
+    $0.00062$로 매우 작다.
 
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Describe the main concept of Calibration and Brier Score and explain why it matters for statistical practice.
+**연습문제 1.**
+위 예제의 표로 브라이어 점수 분해를 수치로 확인하라. 세 성분을 각각 계산하고
+$\text{BS} = \text{REL} - \text{RES} + \text{UNC}$가 성립함을 보여라.
 
-??? success "Solution to Exercise 1"
-    Calibration and Brier Score is a core topic in statistics that provides tools for drawing reliable inferences from data. It matters because proper application ensures valid conclusions, correctly quantified uncertainty, and appropriate handling of the assumptions that underpin the method. Practitioners who understand this concept can avoid common pitfalls and choose the right analytical approach for their data.
+??? success "연습문제 1 풀이"
+
+    ```python
+    import numpy as np
+
+    p_bar = np.array([.05, .15, .25, .35, .45, .55, .65, .75, .85, .95])
+    y_bar = np.array([.04, .12, .28, .33, .47, .52, .68, .73, .88, .93])
+    n_g = np.full(10, 100.0)
+    n = n_g.sum()
+
+    # Brier score, assuming every prediction in bin g equals p_bar[g]
+    BS = np.sum(n_g * (y_bar * (1 - p_bar)**2 + (1 - y_bar) * p_bar**2)) / n
+
+    y_all = np.sum(n_g * y_bar) / n
+    REL = np.sum(n_g * (p_bar - y_bar)**2) / n
+    RES = np.sum(n_g * (y_bar - y_all)**2) / n
+    UNC = y_all * (1 - y_all)
+
+    print(f"BS  = {BS:.5f}")
+    print(f"REL = {REL:.5f}  RES = {RES:.5f}  UNC = {UNC:.5f}")
+    print(f"REL - RES + UNC = {REL - RES + UNC:.5f}")
+    ```
+
+    | 양 | 값 |
+    |---|---|
+    | $\bar{y}$ | $0.4980$ |
+    | BS | $0.16570$ |
+    | REL(신뢰도) | $0.00062$ |
+    | RES(분해능) | $0.08492$ |
+    | UNC(불확실성) | $0.25000$ |
+    | REL $-$ RES $+$ UNC | $0.16570$ |
+
+    등식이 정확히 성립한다.
+
+    해석도 분명하다. 불확실성 $0.25$는 $\bar y \approx 0.5$인 이 자료에서 아무 모형도 피할 수
+    없는 바닥값이다. 모형은 분해능 $0.085$만큼을 벌어들여 브라이어 점수를 $0.25$에서
+    $0.166$으로 낮췄고, 보정이 나빠서 잃은 양은 $0.0006$뿐이다.
+
+    본문의 경고대로 분해능 자리에 구간 내부 분산
+    $\frac{1}{n}\sum_g|B_g|\bar y_g(1-\bar y_g) = 0.16508$을 넣으면
+    $0.00062 - 0.16508 + 0.25 = 0.08554$가 되어 참값 $0.16570$과 전혀 맞지 않는다. 실제로
+    이 양은 $\text{UNC} - \text{RES} = 0.25 - 0.08492 = 0.16508$이므로,
+    $\text{BS} = \text{REL} + 0.16508$이라고 써야 옳다. $\square$
 
 ---
 
-**Exercise 2.**
-State the key assumptions required by the method discussed here. How can each assumption be checked?
+**연습문제 2.**
+언제나 상수 $\hat p_i = \bar y$를 예측하는 모형의 브라이어 점수를 구하라. 분해의 관점에서
+이 결과를 설명하라.
 
-??? success "Solution to Exercise 2"
-    The main assumptions typically include: (1) independence of observations -- verified by understanding the data collection process and checking for serial correlation; (2) distributional requirements (e.g., normality) -- checked with Q-Q plots and formal tests like Shapiro-Wilk; (3) equal variances (if applicable) -- assessed with boxplots and Levene's test. When assumptions are violated, consider robust alternatives, transformations, or nonparametric methods.
+??? success "연습문제 2 풀이"
+
+    $\hat p_i = \bar y$이면
+
+    $$
+    \text{BS} = \frac{1}{n}\sum_i (\bar y - y_i)^2
+    = \frac{1}{n}\left[n_1(1-\bar y)^2 + n_0 \bar y^2\right]
+    $$
+
+    이고 $n_1 = n\bar y$, $n_0 = n(1-\bar y)$이므로
+
+    $$
+    = \bar y(1-\bar y)^2 + (1-\bar y)\bar y^2 = \bar y(1-\bar y)\left[(1-\bar y)+\bar y\right] = \bar y(1-\bar y)
+    $$
+
+    이다. 즉 **BS = UNC**다.
+
+    분해로 보면 당연하다. 모든 예측이 같으므로 구간이 하나뿐이고 $\bar y_1 = \bar y$이니
+    분해능 RES $= 0$이며, $\bar p_1 = \bar y_1$이니 신뢰도 REL $= 0$이다. 남는 것은 불확실성뿐이다.
+
+    이것이 브라이어 점수의 **기준선**이다. 연습문제 1의 자료에서는 $0.25$이며, 모형이 이 값을
+    넘어서지 못하면 아무 예측력도 없다는 뜻이다. 사건이 드물면($\bar y = 0.01$) 기준선이
+    $0.0099$로 매우 낮아지므로, "브라이어 점수 0.01"이 좋은 값인지 나쁜 값인지는 유병률을
+    알아야만 판단할 수 있다. AUC와 달리 브라이어 점수는 자료 사이에 직접 비교할 수 없다.
+    $\square$
 
 ---
 
-**Exercise 3.**
-Work through a small numerical example illustrating the application of the technique from this section.
+**연습문제 3.**
+어떤 모형의 모든 예측확률을 절반으로 줄였다고 하자($\hat p_i \to \hat p_i / 2$).
+AUC, 브라이어 점수, 신뢰도 성분은 각각 어떻게 변하는가?
 
-??? success "Solution to Exercise 3"
-    A structured approach to applying this technique involves: (1) clearly stating the hypotheses or estimation goal; (2) verifying that the data meet the required assumptions; (3) computing the relevant test statistic, estimate, or model fit; (4) obtaining the p-value, confidence interval, or posterior distribution; (5) interpreting the result in the context of the original question. Following these steps systematically ensures a rigorous and reproducible analysis.
+??? success "연습문제 3 풀이"
+
+    - **AUC는 변하지 않는다.** AUC는 순위통계량이고 $p \mapsto p/2$는 단조증가 변환이므로
+      모든 쌍의 대소관계가 그대로다.
+    - **브라이어 점수는 나빠진다**(원래 모형이 잘 보정되어 있었다면). 모든 예측이 체계적으로
+      아래로 치우쳤으므로 양성 관측치에서 오차가 크게 늘어난다.
+    - **신뢰도 성분이 커진다.** 보정 곡선 전체가 대각선 아래로 내려간다. 구간 $g$에서
+      $\bar p_g \to \bar p_g/2$인데 $\bar y_g$는 그대로이므로 기여가
+      $(\bar p_g - \bar y_g)^2$에서 $(\bar p_g/2 - \bar y_g)^2$로 바뀐다.
+    - **분해능은 변하지 않는다.** 분해능은 $\bar y_g$에만 의존하고, 순위가 보존되므로 구간
+      구성원도 그대로다.
+
+    이 예가 보여주는 것이 핵심이다. **AUC는 보정에 대해 아무것도 말해 주지 않는다.** AUC가
+    $0.95$인 모형이 확률을 형편없이 어긋나게 낼 수 있다. 반대로 잘 보정된 모형이 판별력은
+    없을 수도 있다(연습문제 2의 상수 예측 모형은 완벽히 보정되어 있지만 AUC가 $0.5$다).
+    두 성질은 독립적이며 둘 다 확인해야 한다.
+
+    이것이 사후 재보정이 통하는 이유이기도 하다. 플랫 척도화와 등위회귀는 모두 단조 변환이므로
+    **AUC를 건드리지 않고** 신뢰도만 고친다. 순위가 좋은데 확률이 어긋난 모형이라면 재보정으로
+    거의 공짜로 개선할 수 있다. 순위 자체가 나쁘면 재보정으로는 아무것도 얻지 못한다. $\square$
 
 ---
 
-**Exercise 4.**
-Compare the approach from this section with an alternative method. When would you choose each?
+**연습문제 4.**
+위 예제 표에 호스머-레메쇼 검정을 적용하라. 결론은 무엇인가?
 
-??? success "Solution to Exercise 4"
-    The method discussed here is appropriate when its assumptions hold and the sample size is sufficient for the asymptotic approximations to be accurate. Alternative approaches include: (1) nonparametric methods -- preferred when distributional assumptions are suspect; (2) bootstrap methods -- useful when analytical reference distributions are unavailable; (3) Bayesian methods -- valuable when incorporating prior information or when direct probability statements about parameters are desired. Running multiple approaches and comparing results provides a useful robustness check.
+??? success "연습문제 4 풀이"
+
+    각 구간에서 $|B_g| = 100$, $E_g = 100\,\bar p_g$, $O_g = 100\,\bar y_g$이다.
+
+    | 구간 | $O_g$ | $E_g$ | 기여 |
+    |---|---|---|---|
+    | 1 | 4 | 5 | $0.2105$ |
+    | 2 | 12 | 15 | $0.7059$ |
+    | 3 | 28 | 25 | $0.4800$ |
+    | 4 | 33 | 35 | $0.1758$ |
+    | 5 | 47 | 45 | $0.1616$ |
+    | 6 | 52 | 55 | $0.3636$ |
+    | 7 | 68 | 65 | $0.3956$ |
+    | 8 | 73 | 75 | $0.2133$ |
+    | 9 | 88 | 85 | $0.7059$ |
+    | 10 | 93 | 95 | $0.8421$ |
+    | **합** | | | $\hat C = 4.2544$ |
+
+    자유도는 $G - 2 = 8$이고 $P(\chi^2_8 > 4.2544) = 0.834$이다.
+
+    p-값이 크므로 영가설을 기각하지 않는다. 자료는 모형이 잘 보정되어 있다는 것과 부합한다.
+
+    !!! note "기각하지 못한 것은 증명이 아니다"
+        호스머-레메쇼 검정은 **부적합의 증거를 찾는** 검정이므로, 기각하지 못했다는 것이 보정이
+        좋다는 증명은 아니다. 특히 표본이 작으면 검정력이 낮아 상당한 부적합도 놓친다. 반대로
+        $n$이 아주 크면 실무적으로 무시할 만한 어긋남도 기각한다. p-값과 함께 신뢰도 성분
+        $0.00062$ 같은 **효과크기**를 반드시 함께 보고하라.
+
+    $\square$
+
+---
+
+**연습문제 5.**
+플랫 척도화와 등위회귀를 비교하라. 각각 언제 실패하는가?
+
+??? success "연습문제 5 풀이"
+
+    | | 플랫 척도화 | 등위회귀 |
+    |---|---|---|
+    | 형태 | $\sigma(a f + b)$, 모수 2개 | 임의의 단조 비감소 계단함수 |
+    | 필요한 자료 | 적다(수백 건이면 충분) | 많다(수천 건) |
+    | 과적합 위험 | 낮다 | 높다 |
+    | 표현력 | 로짓 척도에서 1차 변환만 | 어떤 단조 왜곡도 교정 |
+
+    **플랫 척도화가 실패하는 경우:** 보정 오차가 로짓 척도에서 단조 1차 변환으로 표현되지 않을
+    때다. 예컨대 모형이 중간 확률은 잘 맞히는데 양극단에서만 과신한다면, 이는 로짓 척도에서 S자
+    왜곡이고 $a, b$ 두 개로는 잡을 수 없다. 한쪽 끝을 고치면 다른 쪽이 나빠진다.
+
+    **등위회귀가 실패하는 경우:** 보정 자료가 적을 때다. 등위회귀는 자료를 구간별 상수로
+    적합하므로, 보정 표본이 작으면 잡음까지 따라가 계단이 지나치게 잘게 쪼개진다. 또 출력이
+    계단함수라 **동점이 대량으로 생긴다.** 원래 서로 다른 점수를 갖던 관측치들이 같은 보정 확률을
+    받게 되고, 이는 AUC를 떨어뜨릴 수 있다. 본문에서 등위회귀가 단조라 순위를 보존한다고 했지만,
+    엄밀히는 **비감소**일 뿐 강증가가 아니므로 순위를 뭉갤 수 있다는 점이 함정이다.
+
+    **실무 지침:** 보정 자료가 1,000건 미만이면 플랫 척도화를, 그 이상이고 보정 곡선이
+    비단조적으로 휘어 있으면 등위회귀를 쓴다. 어느 쪽이든 **모형 학습에 쓰지 않은 자료**에서
+    적합해야 한다. 훈련자료로 재보정하면 이미 그 자료에 과적합된 확률을 다시 그 자료에 맞추는
+    셈이라 아무것도 고쳐지지 않는다. $\square$

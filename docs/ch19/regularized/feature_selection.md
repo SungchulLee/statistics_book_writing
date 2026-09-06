@@ -1,168 +1,304 @@
-# Feature Selection via Penalized Likelihood
+# 벌점가능도를 통한 변수선택
 
-## Why Feature Selection Matters
+## 변수선택이 중요한 이유
 
-Including irrelevant predictors in a logistic regression model increases
-variance without reducing bias, degrades interpretability, and can harm
-predictive performance.  **Feature selection** identifies the subset of
-predictors that contribute meaningfully to the model.  The L1 (lasso) penalty
-provides an automated, principled approach: as the penalty strength increases,
-coefficient estimates are driven to exactly zero, effectively removing features
-from the model.
+로지스틱 회귀 모형에 무관한 설명변수를 넣으면 편향은 줄지 않으면서 분산만 커지고, 해석 가능성이
+떨어지며, 예측 성능까지 나빠질 수 있다. **변수선택**은 모형에 의미 있게 기여하는 설명변수의
+부분집합을 찾는 일이다. L1(라쏘) 벌점은 이를 자동으로, 원리적으로 수행한다. 벌점 강도를
+키우면 계수 추정치가 정확히 0으로 밀려나 사실상 변수가 모형에서 제거된다.
 
-## The L1 Regularization Path
+## L1 정칙화 경로
 
-Recall from the [regularization page](regularization.md) that the L1-penalized
-log-likelihood is
+[정칙화 절](regularization.md)에서 보았듯이 L1 벌점 로그가능도는
 
 $$
 \ell_{\text{lasso}}(\boldsymbol{\theta})
-= \ell(\boldsymbol{\theta})
-
-  - \lambda\sum_{j=1}^{p-1}|\theta_j|
+= \ell(\boldsymbol{\theta}) - \lambda\sum_{j=1}^{p-1}|\theta_j|
 $$
 
-As $\lambda$ varies from large to small, each coefficient traces a path from
-zero to its unpenalized MLE value.  This **regularization path** is piecewise
-linear for the lasso.
+이다. $\lambda$가 큰 값에서 작은 값으로 변하면 각 계수는 0에서 벌점 없는 MLE 값까지 이어지는
+경로를 그린다. 이것이 **정칙화 경로**다.
 
-### Key properties of the L1 path
+### L1 경로의 주요 성질
 
-1. **At large $\lambda$:** All coefficients are zero (null model).
-2. **As $\lambda$ decreases:** Coefficients enter the model one at a time
-   at specific threshold values $\lambda_j^*$.
-3. **At $\lambda = 0$:** All coefficients equal the unpenalized MLE
-   (assuming it exists).
+1. **$\lambda$가 클 때:** 모든 계수가 0이다(영모형).
+2. **$\lambda$가 줄어들면서:** 특정 문턱값 $\lambda_j^*$에서 계수가 하나씩 모형에 들어온다.
+3. **$\lambda = 0$일 때:** 모든 계수가 벌점 없는 MLE와 같다(그것이 존재한다면).
 
-The order in which features enter the path provides a natural **ranking** of
-predictor importance.  Features that enter early (at large $\lambda$) have the
-strongest marginal association with the response.
+특성이 경로에 들어오는 **순서**는 설명변수 중요도의 자연스러운 순위를 준다. 큰 $\lambda$에서
+일찍 들어오는 특성일수록 반응변수와의 주변 연관이 강하다.
 
-## Selecting the Penalty Strength
+!!! warning "경로는 곡선이다"
+    최소제곱 라쏘의 경로는 조각별 선형이지만 **로지스틱 라쏘의 경로는 그렇지 않다.** 활성집합이
+    바뀌는 곳에서 꺾이는 것은 같지만, 그 사이 구간에서도 계수는 직선이 아니라 곡선을 그린다.
+    자세한 내용과 수치 확인은 [정칙화 절](regularization.md)의 연습문제 5를 보라.
 
-The regularization path shows which features survive at each $\lambda$, but
-we still need to choose a specific $\lambda$.  Cross-validation is the standard
-approach.
+## 벌점 강도 고르기
 
-### Procedure
+정칙화 경로는 각 $\lambda$에서 어떤 특성이 살아남는지 보여주지만, 특정 $\lambda$를 골라야 한다.
+교차검증이 표준적인 방법이다.
 
-1. Define a grid $\lambda_1 > \lambda_2 > \cdots > \lambda_m$.
-2. For each $\lambda_k$, compute the $K$-fold cross-validated log-likelihood
-   (or equivalently, the cross-validated deviance):
+### 절차
+
+1. 격자 $\lambda_1 > \lambda_2 > \cdots > \lambda_m$을 정한다.
+2. 각 $\lambda_t$에 대해 $K$-겹 교차검증 로그가능도(동등하게 교차검증 이탈도)를 계산한다.
 
 $$
-\text{CV}(\lambda_k) = \frac{1}{K}\sum_{k=1}^{K}D^{(-k)}(\lambda_k)
+\text{CV}(\lambda_t) = \frac{1}{K}\sum_{k=1}^{K}D^{(-k)}(\lambda_t)
 $$
 
-where $D^{(-k)}$ is the deviance on fold $k$ using the model trained on the
-remaining $K-1$ folds.
+여기서 $D^{(-k)}$는 나머지 $K-1$개 겹으로 학습한 모형을 겹 $k$에서 평가한 이탈도다.
 
-3. Select $\hat{\lambda} = \arg\min_{\lambda_k}\text{CV}(\lambda_k)$.
+3. $\hat{\lambda} = \arg\min_{\lambda_t}\text{CV}(\lambda_t)$를 고른다.
 
-!!! tip "One-Standard-Error Rule"
-    A common conservative choice is $\hat{\lambda}_{\text{1se}}$: the largest
-    $\lambda$ whose CV score is within one standard error of the minimum.
-    This produces a sparser model with nearly the same predictive performance.
+!!! tip "1-표준오차 규칙"
+    흔히 쓰는 보수적 선택은 $\hat{\lambda}_{\text{1se}}$, 즉 CV 점수가 최솟값으로부터 1
+    표준오차 이내인 $\lambda$ 중 가장 큰 값이다. 예측 성능은 거의 같으면서 더 희소한 모형을
+    준다.
 
-## Stability Selection
+## 안정성 선택
 
-A single L1 path can be sensitive to the specific training sample: small
-perturbations may cause different features to be selected.  **Stability
-selection** (Meinshausen and Buhlmann, 2010) addresses this instability.
+하나의 L1 경로는 특정 훈련표본에 민감할 수 있다. 자료가 조금만 흔들려도 선택되는 특성이
+달라진다. **안정성 선택**(Meinshausen and Bühlmann, 2010)이 이 불안정성을 다룬다.
 
-### Algorithm
+### 알고리즘
 
-1. For $b = 1, \ldots, B$ (e.g., $B = 100$):
-    - Draw a random subsample of size $\lfloor n/2 \rfloor$ without
-      replacement.
-    - Fit the L1 logistic regression across a grid of $\lambda$ values.
-    - Record which features have non-zero coefficients at each $\lambda$.
-2. For each feature $j$, compute the **selection probability**:
+1. $b = 1, \ldots, B$(예: $B = 100$)에 대해,
+    - 크기 $\lfloor n/2 \rfloor$의 부분표본을 비복원으로 뽑는다.
+    - $\lambda$ 격자 위에서 L1 로지스틱 회귀를 적합한다.
+    - 각 $\lambda$에서 어떤 특성의 계수가 0이 아닌지 기록한다.
+2. 각 특성 $j$에 대해 **선택 확률**을 계산한다.
 
 $$
 \hat{\Pi}_j(\lambda) = \frac{1}{B}\sum_{b=1}^{B}\mathbf{1}\{\hat{\theta}_j^{(b)}(\lambda) \neq 0\}
 $$
 
-3. Select feature $j$ if $\max_\lambda \hat{\Pi}_j(\lambda) \ge \pi_{\text{thr}}$,
-   where a typical threshold is $\pi_{\text{thr}} = 0.6$ to $0.9$.
+3. $\max_\lambda \hat{\Pi}_j(\lambda) \ge \pi_{\text{thr}}$이면 특성 $j$를 선택한다. 문턱은
+   보통 $\pi_{\text{thr}} = 0.6$에서 $0.9$ 사이로 잡는다.
 
-### Advantages
+### 장점
 
-- Controls the expected number of **false selections** (variables incorrectly
-  included).
-- Robust to the choice of $\lambda$ — the selection probability is aggregated
-  over the entire path.
-- Works well in high-dimensional settings ($p \gg n$).
+- **위선택**(잘못 포함된 변수)의 기대 개수를 통제한다.
+- $\lambda$ 선택에 강건하다. 선택 확률이 경로 전체에 걸쳐 집계되기 때문이다.
+- 고차원 상황($p \gg n$)에서 잘 작동한다.
 
-## Comparison with Stepwise Methods
+## 단계적 방법과의 비교
 
-Traditional stepwise procedures (forward selection, backward elimination) have
-been widely used for feature selection but have important limitations compared
-to the L1 approach.
+전통적인 단계적 절차(전진선택, 후진소거)는 변수선택에 널리 쓰여 왔지만 L1 접근에 비해 중요한
+한계가 있다.
 
-| Criterion | L1 (Lasso) | Forward Stepwise | Backward Stepwise |
+| 기준 | L1(라쏘) | 전진 단계적 | 후진 단계적 |
 |---|---|---|---|
-| Objective | Penalized likelihood | Sequential testing (AIC, BIC, or $p$-values) | Sequential testing |
-| Search strategy | Continuous shrinkage path | Greedy, one-at-a-time addition | Greedy, one-at-a-time removal |
-| Handles $p > n$ | Yes | Stops at $n$ features | Cannot start (requires $n > p$) |
-| Coefficient shrinkage | Yes (toward zero) | No (unpenalized MLE) | No (unpenalized MLE) |
-| Selection stability | Moderate (improved by stability selection) | Low | Low |
-| Computational cost | Single path via coordinate descent | $O(p^2)$ model fits | $O(p^2)$ model fits |
+| 목적함수 | 벌점가능도 | 순차 검정(AIC, BIC, p-값) | 순차 검정 |
+| 탐색 전략 | 연속적인 축소 경로 | 탐욕적, 하나씩 추가 | 탐욕적, 하나씩 제거 |
+| $p > n$ 처리 | 가능 | $n$개 특성에서 멈춤 | 시작 불가($n > p$ 필요) |
+| 계수 축소 | 있음(0 쪽으로) | 없음(벌점 없는 MLE) | 없음(벌점 없는 MLE) |
+| 선택의 안정성 | 중간(안정성 선택으로 개선) | 낮음 | 낮음 |
+| 계산 비용 | 좌표하강으로 경로 한 번 | $O(p^2)$번의 모형 적합 | $O(p^2)$번의 모형 적합 |
 
-!!! warning "Pitfalls of Stepwise Selection"
-    Stepwise procedures inflate Type I error rates because they perform
-    multiple implicit hypothesis tests without proper correction.  The
-    $p$-values from a stepwise-selected model are generally too small, and
-    confidence intervals are too narrow.  Penalized methods avoid this by
-    treating selection and estimation as a single optimization problem.
+!!! warning "단계적 선택의 함정"
+    단계적 절차는 여러 번의 암묵적 가설검정을 보정 없이 수행하므로 제1종 오류율을 부풀린다.
+    단계적으로 선택된 모형의 p-값은 대체로 너무 작고 신뢰구간은 너무 좁다. 벌점 방법은 선택과
+    추정을 하나의 최적화 문제로 다루어 이 문제를 피한다.
 
-??? example "Worked Example: L1 Path for Feature Selection"
-    Consider a logistic regression with $n = 200$ observations and $p = 10$
-    predictors, of which only $x_1$, $x_3$, and $x_7$ are truly associated
-    with the response.
+??? example "예제: 변수선택을 위한 L1 경로"
+    관측치 $n = 200$, 설명변수 $p = 10$이고 그중 $x_1$, $x_3$, $x_7$만 실제로 반응변수와
+    연관된 로지스틱 회귀를 생각하자.
 
-    | $\log(\lambda)$ | Non-zero coefficients | CV deviance |
+    | $\log(\lambda)$ | 0이 아닌 계수 | CV 이탈도 |
     |---|---|---|
-    | 2.0 | none | 277 |
+    | 2.0 | 없음 | 277 |
     | 1.0 | $x_1$ | 245 |
     | 0.5 | $x_1, x_3$ | 218 |
     | 0.0 | $x_1, x_3, x_7$ | 195 |
     | -0.5 | $x_1, x_3, x_5, x_7$ | 194 |
     | -1.0 | $x_1, x_2, x_3, x_5, x_7, x_8$ | 198 |
 
-    The CV deviance is minimized near $\log(\lambda) = -0.5$, but the
-    one-standard-error rule selects $\log(\lambda) = 0.0$, recovering the
-    three true predictors without the noise variables.
+    CV 이탈도는 $\log(\lambda) = -0.5$ 근처에서 최소가 되지만, 1-표준오차 규칙은
+    $\log(\lambda) = 0.0$을 골라 잡음변수 없이 세 개의 참 설명변수를 되찾는다.
 
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Describe the main concept of Feature Selection via Penalized Likelihood and explain why it matters for statistical practice.
+**연습문제 1.**
+위 예제에서 CV 이탈도의 최소점($\log\lambda = -0.5$)이 아니라 1-표준오차 규칙의 선택
+($\log\lambda = 0.0$)이 더 나은 이유를 설명하라. 두 선택의 이탈도 차이는 얼마인가?
 
-??? success "Solution to Exercise 1"
-    Feature Selection via Penalized Likelihood is a core topic in statistics that provides tools for drawing reliable inferences from data. It matters because proper application ensures valid conclusions, correctly quantified uncertainty, and appropriate handling of the assumptions that underpin the method. Practitioners who understand this concept can avoid common pitfalls and choose the right analytical approach for their data.
+??? success "연습문제 1 풀이"
+
+    이탈도 차이는 $195 - 194 = 1$로, 이탈도 $194$ 대비 약 $0.5\%$에 불과하다. 이 정도 차이는
+    교차검증 자체의 표집오차 안에 충분히 들어간다. 실제로 $\Delta D = 1$은 자유도 1의
+    가능도비 검정에서 $p = 0.32$에 해당하여 전혀 유의하지 않다.
+
+    반면 모형의 구조는 크게 다르다. $\log\lambda = -0.5$는 잡음변수 $x_5$를 포함하고,
+    $\log\lambda = 0.0$은 참 설명변수 세 개만 포함한다.
+
+    **핵심:** 교차검증 곡선의 최소점은 **잡음이 있는 추정치**다. $\lambda$ 격자를 여러 번
+    훑으면서 그중 최솟값을 취하는 것은 최댓값 통계량을 보고하는 것과 같아, 필요 이상으로 작은
+    $\lambda$를 고르는 쪽으로 체계적으로 치우친다. 1-표준오차 규칙은 이 편향을 보정하는
+    간단한 방법이다. "예측 성능이 통계적으로 구별되지 않는다면 더 단순한 모형을 택하라"는
+    원칙을 형식화한 것이다.
+
+    이 현상은 18장의 라쏘 예제에서도 반복해서 나타났다. 교차검증은 **예측**을 최적화하며,
+    잡음변수를 하나 더 넣는 데 대한 벌칙이 거의 없다. 변수선택이 목표라면 CV 최소점을 그대로
+    믿어서는 안 된다. $\square$
 
 ---
 
-**Exercise 2.**
-State the key assumptions required by the method discussed here. How can each assumption be checked?
+**연습문제 2.**
+안정성 선택에서 부분표본 크기를 왜 하필 $\lfloor n/2 \rfloor$로 잡는가? 붓스트랩(복원추출,
+크기 $n$)을 쓰지 않는 이유는?
 
-??? success "Solution to Exercise 2"
-    The main assumptions typically include: (1) independence of observations -- verified by understanding the data collection process and checking for serial correlation; (2) distributional requirements (e.g., normality) -- checked with Q-Q plots and formal tests like Shapiro-Wilk; (3) equal variances (if applicable) -- assessed with boxplots and Levene's test. When assumptions are violated, consider robust alternatives, transformations, or nonparametric methods.
+??? success "연습문제 2 풀이"
+
+    Meinshausen과 Bühlmann이 $n/2$를 고른 이유는 이 크기에서만 **상보적 쌍**을 만들 수 있기
+    때문이다. 자료를 크기 $n/2$인 두 개의 겹치지 않는 절반으로 나누면 두 부분표본이 서로
+    독립이 되며, 이것이 위선택 개수에 대한 그들의 오류 경계
+
+    $$
+    \mathbb{E}[V] \le \frac{1}{2\pi_{\text{thr}} - 1}\cdot\frac{q^2}{p}
+    $$
+
+    를 증명하는 데 쓰인다($V$는 위선택 개수, $q$는 경로에서 선택된 변수의 평균 개수).
+
+    **붓스트랩을 쓰지 않는 이유:**
+
+    - 복원추출은 관측치를 중복시킨다. 라쏘는 중복된 관측치에 그 관측치를 두 배로 가중한 것처럼
+      반응하므로, 선택 확률이 원 자료의 유효 표본크기가 아니라 붓스트랩 표본의 성질을 반영하게
+      된다.
+    - 붓스트랩 표본의 서로 다른 관측치 개수는 평균적으로 $n(1 - e^{-1}) \approx 0.632n$이다.
+      즉 $n/2$ 부분표집과 정보량이 비슷하면서도 가중이 불균등해 이론적 분석이 어렵다.
+    - 무엇보다 상보적 쌍 논증이 성립하지 않아 오류 경계를 잃는다.
+
+    실무적으로는 $n/2$ 부분표집이 계산도 더 싸다(각 적합이 절반 크기의 자료를 쓴다). $\square$
 
 ---
 
-**Exercise 3.**
-Work through a small numerical example illustrating the application of the technique from this section.
+**연습문제 3.**
+안정성 선택을 구현하고, 참 신호 5개와 잡음 45개가 있는 자료에서 선택 확률을 계산하라.
+단일 라쏘 적합과 결과를 비교하라.
 
-??? success "Solution to Exercise 3"
-    A structured approach to applying this technique involves: (1) clearly stating the hypotheses or estimation goal; (2) verifying that the data meet the required assumptions; (3) computing the relevant test statistic, estimate, or model fit; (4) obtaining the p-value, confidence interval, or posterior distribution; (5) interpreting the result in the context of the original question. Following these steps systematically ensures a rigorous and reproducible analysis.
+??? success "연습문제 3 풀이"
+
+    ```python
+    import numpy as np
+    from sklearn.linear_model import LogisticRegression
+
+    rng = np.random.default_rng(2024)
+    n, p = 300, 50
+    X = rng.normal(size=(n, p))
+    beta = np.zeros(p)
+    beta[:5] = [1.5, -1.2, 1.0, -0.8, 0.7]
+    y = (rng.random(n) < 1 / (1 + np.exp(-(X @ beta)))).astype(int)
+
+    lambdas = np.logspace(-1.4, -0.5, 10)     # sparse region only -- see below
+    B, half = 100, n // 2
+    selected = np.zeros((len(lambdas), p))
+
+    for b in range(B):
+        idx = rng.choice(n, size=half, replace=False)
+        for t, lam in enumerate(lambdas):
+            m = LogisticRegression(penalty='l1', C=1 / (lam * half),
+                                   solver='liblinear', max_iter=5000
+                                   ).fit(X[idx], y[idx])
+            selected[t] += np.abs(m.coef_[0]) > 1e-8
+
+    pi_hat = (selected / B).max(axis=0)          # max over the path
+    for thr in (0.6, 0.8, 0.9):
+        print(thr, np.where(pi_hat >= thr)[0])
+    ```
+
+    **결과.** 참 신호 5개의 선택 확률은 모두 정확히 $1.00$이고, 잡음변수 45개 중 가장 높은
+    값은 $0.72$다(그다음이 $0.65$, $0.63$, $0.62$, $0.61$).
+
+    | $\pi_{\text{thr}}$ | 선택된 변수 | 참양성 | 위양성 |
+    |---|---|---|---|
+    | 0.6 | $x_1 \ldots x_5$ 및 잡음 5개 | 5 | 5 |
+    | 0.8 | $x_1 \ldots x_5$ | 5 | **0** |
+    | 0.9 | $x_1 \ldots x_5$ | 5 | **0** |
+
+    **단일 라쏘 적합과의 비교:** 같은 자료에 `LogisticRegressionCV`로 $\lambda$를 고르고 한 번
+    적합하면 18개 변수가 선택된다(참양성 5개, 위양성 13개). 안정성 선택은
+    $\pi_{\text{thr}} = 0.8$에서 위양성을 13개에서 0개로 줄이면서 참 신호는 모두 지킨다.
+
+    !!! danger "$\lambda$ 격자를 잘못 잡으면 완전히 망가진다"
+        위 코드는 격자를 $[10^{-1.4}, 10^{-0.5}]$로 **제한했다.** 이 구간에서 부분표본당 평균
+        선택 개수는 $13.7$개에서 $0$개까지 변한다.
+
+        격자를 $[10^{-2.0}, 10^{-0.5}]$로 넓히면 결과가 무너진다. 잡음변수의 최대 선택 확률이
+        $0.98$까지 오르고 $\pi_{\text{thr}} = 0.6$에서 **잡음변수 26개**가 선택된다. 이유는
+        간단하다. $\hat\Pi_j$는 경로 전체에 대한 **최댓값**이므로, 격자에 거의 모든 변수가
+        선택되는 작은 $\lambda$가 포함되면 모든 변수의 선택 확률이 1에 가까워진다.
+
+        Meinshausen과 Bühlmann의 오류 경계에 경로에서 선택된 변수의 평균 개수 $q$가 들어가는
+        것이 바로 이 때문이다. 격자는 $q$가 작게 유지되는 희소 영역으로 **반드시 제한해야
+        한다.** 격자 선택은 안정성 선택에서 부수적인 세부사항이 아니라 결과를 좌우하는 핵심
+        선택이다.
+
+    **대가:** 안정성 선택은 $B \times |\Lambda|$번의 적합을 요구한다(위 코드는 1,000번). 또
+    약한 신호는 놓칠 수 있다. 계수가 작은 참 변수는 부분표본에서 일관되게 선택되지 않아 문턱을
+    넘지 못한다. 즉 위양성을 줄이는 대신 검정력을 잃는다. $\square$
 
 ---
 
-**Exercise 4.**
-Compare the approach from this section with an alternative method. When would you choose each?
+**연습문제 4.**
+라쏘로 변수를 고른 뒤, 선택된 변수만으로 **벌점 없는** 로지스틱 회귀를 다시 적합하는 절차를
+사후 라쏘(post-lasso)라 한다. 이렇게 하는 이유와 주의점을 설명하라.
 
-??? success "Solution to Exercise 4"
-    The method discussed here is appropriate when its assumptions hold and the sample size is sufficient for the asymptotic approximations to be accurate. Alternative approaches include: (1) nonparametric methods -- preferred when distributional assumptions are suspect; (2) bootstrap methods -- useful when analytical reference distributions are unavailable; (3) Bayesian methods -- valuable when incorporating prior information or when direct probability statements about parameters are desired. Running multiple approaches and comparing results provides a useful robustness check.
+??? success "연습문제 4 풀이"
+
+    **하는 이유:** 라쏘 계수는 **축소되어 있다.** 벌점이 선택된 변수의 계수까지 0 쪽으로 끌어
+    당기므로 효과 크기가 체계적으로 과소추정된다. 예측에는 이 축소가 이롭지만(분산을 줄인다),
+    "이 변수의 오즈비는 얼마인가"라는 질문에 답하려면 편향된 값을 보고하는 셈이 된다.
+
+    사후 라쏘는 선택과 추정을 분리한다. 라쏘로 지지집합 $\hat S$를 고르고, $\hat S$의 변수만으로
+    벌점 없는 MLE를 구한다. 그러면 계수가 축소되지 않는다.
+
+    **주의점 1: 선택 후 추론은 여전히 무효다.** $\hat S$가 같은 자료에서 결정되었으므로, 두
+    번째 적합에서 나오는 표준오차와 p-값은 그 선택 과정을 반영하지 않는다. 신뢰구간은 너무
+    좁고 p-값은 너무 작다. 이는 단계적 선택의 문제와 본질적으로 같다. 유효한 추론이 필요하면
+    선택 후 추론(post-selection inference) 기법이나 자료 분할이 필요하다.
+
+    **주의점 2: 지지집합이 틀리면 축소 제거가 해가 된다.** $\hat S$에 잡음변수가 섞여 있을 때,
+    라쏘는 그 계수를 0 근처로 축소해 피해를 줄이지만 사후 라쏘는 벌점 없이 적합하므로 잡음변수의
+    계수가 온전한 크기로 들어온다. 지지집합 복원이 신뢰할 만할 때에만 이득이 있다.
+
+    **주의점 3: 분리 위험.** $|\hat S|$가 $n$에 비해 크면 벌점 없는 재적합에서 분리가 발생할 수
+    있다. 라쏘 벌점이 막아 주던 문제가 되살아난다.
+
+    **권장:** 예측이 목적이면 라쏘 적합을 그대로 쓰라. 선택된 변수의 효과 크기를 해석하는 것이
+    목적이면 사후 라쏘를 쓰되, 지지집합은 안정성 선택으로 정하고 추론은 별도의 자료에서
+    수행하라. $\square$
+
+---
+
+**연습문제 5.**
+설명변수 두 개 $x_1$과 $x_2$의 상관이 $0.98$이고 둘 다 실제로 반응변수와 연관되어 있다.
+L1 변수선택은 어떻게 행동하는가? 엘라스틱넷은 어떻게 다른가?
+
+??? success "연습문제 5 풀이"
+
+    **L1(라쏘):** 둘 중 **하나만** 고르고 다른 하나를 0으로 만드는 경향이 있다. $x_1$과 $x_2$가
+    거의 같은 정보를 담고 있으므로, 하나를 넣으면 다른 하나의 부분잔차와의 상관이 거의 사라져
+    연성 문턱에 걸린다. 어느 쪽이 선택될지는 자료의 미세한 잡음이 결정하므로, 표본을 조금만
+    바꿔도 선택이 뒤집힌다.
+
+    이는 예측 관점에서는 큰 문제가 아니다. 두 변수가 거의 같으니 어느 쪽을 써도 예측은 비슷하다.
+    그러나 **해석 관점에서는 위험하다.** "$x_1$이 중요하고 $x_2$는 중요하지 않다"는 결론은
+    자료가 뒷받침하지 않는 주장이다.
+
+    **엘라스틱넷:** $L_2$ 성분이 그룹 효과를 만들어 둘을 함께 선택하고, 각각에 대략 절반씩의
+    계수를 나눠 준다. 18장에서 인용한 Zou-Hastie 경계
+    $|\hat\beta_i - \hat\beta_j| \le \frac{\|y\|_1}{\lambda(1-\alpha)n}\sqrt{2(1-\rho)}$가
+    $\rho = 0.98$일 때 $\sqrt{2(1-\rho)} = 0.2$로 작아, 두 계수가 가까워질 수밖에 없음을
+    보장한다.
+
+    **어느 쪽을 쓸 것인가:**
+
+    - 최대한 희소한 모형이 목표이고 두 변수가 사실상 교체 가능하다면 라쏘로 충분하다.
+    - 두 변수가 모두 관련 있다는 배경지식이 있거나 선택의 재현성이 중요하다면 엘라스틱넷을
+      쓴다.
+    - 어느 쪽이든 **안정성 선택을 곁들이면 진단이 된다.** $x_1$과 $x_2$의 선택 확률이 각각
+      $0.5$ 근처로 나오고 둘 중 적어도 하나가 선택될 확률이 1에 가깝다면, 이는 "둘 중 하나는
+      중요한데 어느 쪽인지 자료로는 구별할 수 없다"는 사실을 정확히 드러낸다. 단일 적합에서는
+      결코 볼 수 없는 정보다. $\square$

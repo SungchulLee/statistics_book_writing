@@ -1,39 +1,41 @@
-# ROC Curve and AUC
+# ROC 곡선과 AUC
 
 
-## Receiver Operating Characteristic (ROC) Curve
+## ROC 곡선
 
-The **ROC curve** (Receiver Operating Characteristic) is a powerful tool for evaluating binary classifiers across all possible classification thresholds. It plots:
+**ROC 곡선**(Receiver Operating Characteristic)은 가능한 모든 분류 문턱에 걸쳐 이항 분류기를
+평가하는 강력한 도구다. 다음을 그린다.
 
-- **x-axis:** False Positive Rate (FPR) = $1 - \text{Specificity}$
-- **y-axis:** True Positive Rate (TPR) = Sensitivity / Recall
+- **x축:** 위양성률(FPR) $= 1 - \text{특이도}$
+- **y축:** 참양성률(TPR) = 민감도 = 재현율
 
-### Computing the ROC Curve
+### ROC 곡선 계산
 
-For a classifier that outputs probability scores, we vary the decision threshold $\tau$ from 0 to 1:
+확률 점수를 출력하는 분류기에 대해 결정 문턱 $\tau$를 0에서 1까지 변화시킨다.
 
-1. For each threshold $\tau$: classify as positive if $\hat{p} \geq \tau$.
-2. Compute FPR and TPR:
+1. 각 문턱 $\tau$에 대해 $\hat{p} \geq \tau$이면 양성으로 분류한다.
+2. FPR과 TPR을 계산한다.
 
    $$\text{TPR} = \frac{\text{TP}}{\text{TP} + \text{FN}}, \quad \text{FPR} = \frac{\text{FP}}{\text{FP} + \text{TN}}$$
 
-3. Plot the (FPR, TPR) pair.
-4. Repeat for all threshold values; connect the points to form the curve.
+3. (FPR, TPR) 쌍을 찍는다.
+4. 모든 문턱값에 대해 반복하고 점들을 이어 곡선을 만든다.
 
-### Interpretation
+### 해석
 
-The ROC curve visualizes the **tradeoff between sensitivity and specificity**:
+ROC 곡선은 **민감도와 특이도 사이의 절충**을 시각화한다.
 
-- **(0, 1):** Perfect classifier (TPR = 1, FPR = 0)
-- **(0, 0):** Threshold so high that we predict positive for nothing
-- **(1, 1):** Threshold so low that we predict positive for everything
-- **Main diagonal (y = x):** Random classifier with no discrimination ability
+- **(0, 1):** 완벽한 분류기(TPR = 1, FPR = 0)
+- **(0, 0):** 문턱이 너무 높아 아무것도 양성으로 예측하지 않음
+- **(1, 1):** 문턱이 너무 낮아 모두를 양성으로 예측함
+- **주대각선($y = x$):** 판별력이 전혀 없는 무작위 분류기
 
-A classifier above the diagonal is better than random; one below is worse than random (reverse predictions).
+대각선 위에 있는 분류기는 무작위보다 낫고, 아래에 있으면 무작위보다 못하다(예측을 뒤집으면
+된다).
 
-## Example: Loan Default ROC Curve
+## 예: 대출 연체의 ROC 곡선
 
-For the logistic regression model on loan data:
+대출 자료에 적합한 로지스틱 회귀 모형에서,
 
 ```
 At threshold = 0.5:
@@ -41,87 +43,105 @@ TPR = 14,336 / 22,671 ≈ 0.6323
 FPR = 8,148 / 22,671 ≈ 0.3594
 ```
 
-Varying the threshold from 0 to 1 produces a curve that typically starts near (0, 0) and ends near (1, 1), bulging upward for a good classifier.
+문턱을 0에서 1까지 변화시키면 대개 (0, 0) 근처에서 시작해 (1, 1) 근처에서 끝나는 곡선이 되며,
+좋은 분류기일수록 위쪽으로 부풀어 오른다.
 
-## Area Under the Curve (AUC)
+## 곡선 아래 면적(AUC)
 
-The **AUC** is the area under the ROC curve, ranging from 0 to 1:
+**AUC**는 ROC 곡선 아래의 면적으로 0과 1 사이의 값을 갖는다.
 
 $$
 \text{AUC} = \int_0^1 \text{TPR}(\text{FPR}) \, d(\text{FPR})
 $$
 
-In practice, AUC is computed numerically using the **trapezoidal rule**:
+실제로는 **사다리꼴 공식**으로 수치적으로 계산한다.
 
 $$
 \text{AUC} \approx \sum_{i=1}^{m} \frac{\text{TPR}_i + \text{TPR}_{i-1}}{2} \cdot (\text{FPR}_i - \text{FPR}_{i-1})
 $$
 
-### Interpretation of AUC
+### AUC의 해석
 
-| AUC Value | Interpretation |
+| AUC 값 | 해석 |
 |---|---|
-| 0.5 | Random classifier; no discrimination ability |
-| 0.6–0.7 | Poor to fair discrimination |
-| 0.7–0.8 | Acceptable discrimination |
-| 0.8–0.9 | Excellent discrimination |
-| 0.9–1.0 | Outstanding discrimination |
-| 1.0 | Perfect classifier |
+| 0.5 | 무작위 분류기, 판별력 없음 |
+| 0.6–0.7 | 나쁨 내지 보통 |
+| 0.7–0.8 | 받아들일 만함 |
+| 0.8–0.9 | 뛰어남 |
+| 0.9–1.0 | 매우 뛰어남 |
+| 1.0 | 완벽한 분류기 |
 
-For our loan default model: **AUC ≈ 0.6917**, indicating fair to acceptable discrimination.
+위 대출 연체 모형은 **AUC ≈ 0.6917**로, 보통에서 받아들일 만한 수준의 판별력을 갖는다.
 
-## Probabilistic Interpretation of AUC
+## AUC의 확률적 해석
 
-An elegant interpretation of AUC comes from **rank statistics**:
+AUC에는 **순위통계량**에서 나오는 우아한 해석이 있다.
 
-**AUC = Probability that the model ranks a random positive instance higher than a random negative instance.**
+**AUC = 무작위로 뽑은 양성 사례를 무작위로 뽑은 음성 사례보다 높게 순위 매길 확률.**
 
-In other words, if you randomly sample one default and one non-default loan, AUC is the probability that the model assigns a higher probability to the default. An AUC of 0.5 means the rankings are random; an AUC of 1.0 means the model always ranks positives higher than negatives.
+달리 말해 연체 대출 하나와 비연체 대출 하나를 무작위로 뽑았을 때, 모형이 연체 쪽에 더 높은
+확률을 부여할 확률이 AUC다. AUC가 0.5이면 순위가 무작위라는 뜻이고, 1.0이면 언제나 양성을
+음성보다 높게 매긴다는 뜻이다.
 
-## Advantages of AUC
+## AUC의 장점
 
-1. **Threshold-independent:** Summarizes performance across all thresholds in a single number.
-2. **Handles class imbalance well:** Unlike accuracy, AUC is not biased by imbalanced datasets.
-3. **Probabilistic interpretation:** Has a clear statistical meaning.
-4. **Useful for ranking tasks:** Directly applicable to scoring and ranking problems.
+1. **문턱에 의존하지 않는다:** 모든 문턱에 걸친 성능을 하나의 수로 요약한다.
+2. **범주 불균형을 잘 다룬다:** 정확도와 달리 불균형 자료에서 편향되지 않는다.
+3. **확률적 해석이 있다:** 명확한 통계적 의미를 갖는다.
+4. **순위 문제에 유용하다:** 점수화와 순위 매기기에 직접 적용된다.
 
-## Comparison: ROC vs. Precision-Recall
+## 비교: ROC 대 정밀도-재현율
 
-| Aspect | ROC Curve | PR Curve |
+| 측면 | ROC 곡선 | PR 곡선 |
 |---|---|---|
-| **Focus** | Sensitivity vs. Specificity | Precision vs. Recall |
-| **Threshold-independent** | Yes | Yes |
-| **Class imbalance** | Less sensitive to imbalance | More sensitive; better for rare events |
-| **Use case** | Balanced classes | Imbalanced classes (rare positives) |
-| **Metric** | AUC (0 to 1) | Average Precision (0 to 1) |
+| **초점** | 민감도 대 특이도 | 정밀도 대 재현율 |
+| **문턱 비의존** | 그렇다 | 그렇다 |
+| **범주 불균형** | 불균형에 덜 민감 | 더 민감하며 드문 사건에 적합 |
+| **적합한 상황** | 균형 잡힌 범주 | 불균형 범주(드문 양성) |
+| **지표** | AUC (0에서 1) | 평균정밀도 (0에서 1) |
 
-For datasets with severe class imbalance (e.g., fraud detection with 1% positives), the **precision-recall curve** often reveals model behavior more clearly than the ROC curve.
+범주 불균형이 심한 자료(예: 양성이 1%인 이상거래 탐지)에서는 **정밀도-재현율 곡선**이 ROC
+곡선보다 모형의 행동을 더 분명히 드러내는 경우가 많다.
 
-## Threshold Selection
+## 문턱 선택
 
-The ROC curve helps select an optimal threshold for deployment. Common criteria include:
+ROC 곡선은 배치할 최적 문턱을 고르는 데 도움이 된다. 흔한 기준은 다음과 같다.
 
-1. **Youden's J Statistic:** $J = \text{TPR} - \text{FPR}$; choose the threshold maximizing $J$.
-2. **Cost-based:** Incorporate misclassification costs: $\min_\tau [c_{FP} \cdot \text{FPR} + c_{FN} \cdot (1 - \text{TPR})]$
-3. **Application-specific:** Choose based on business requirements (e.g., target a specific recall level).
+1. **유든의 J 통계량:** $J = \text{TPR} - \text{FPR}$를 최대화하는 문턱을 고른다.
+2. **비용 기반:** 오분류 비용을 반영하여
+   $\min_\tau [c_{FP} \cdot \text{FPR} + c_{FN} \cdot (1 - \text{TPR})]$를 푼다.
+3. **응용 특화:** 업무 요구사항에 따라 고른다(예: 특정 재현율 수준을 목표로 삼기).
 
-For the loan default model using Youden's J, the optimal threshold might differ significantly from the default 0.5, depending on the relative costs of false positives and false negatives.
+대출 연체 모형에서 유든의 J를 쓰면, 위양성과 위음성의 상대적 비용에 따라 최적 문턱이 기본값
+0.5와 상당히 다를 수 있다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-ROC and AUC
+**연습문제 1.**
+ROC와 AUC
 
-**(a)** Explain why the ROC curve of any reasonable classifier lies above the diagonal.
+**(a)** 웬만한 분류기의 ROC 곡선이 왜 대각선 위에 놓이는지 설명하라.
 
-**(b)** A model has AUC = 0.85. Give the probabilistic interpretation.
+**(b)** 어떤 모형의 AUC가 0.85다. 확률적 해석을 제시하라.
 
-**(c)** Model A has AUC = 0.92 and Model B has AUC = 0.88. Can you always conclude Model A is better for deployment? Why or why not?
+**(c)** 모형 A의 AUC가 0.92, 모형 B의 AUC가 0.88이다. 항상 모형 A가 배치하기에 더 낫다고
+결론지을 수 있는가? 이유는?
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
 
-    **(a)** The diagonal represents random classification (TPR = FPR at every threshold). A reasonable classifier assigns higher probabilities to positives than negatives, so at any FPR, it achieves a higher TPR than random guessing.
+    **(a)** 대각선은 무작위 분류(모든 문턱에서 TPR = FPR)를 나타낸다. 웬만한 분류기는 양성에
+    음성보다 높은 확률을 부여하므로, 어떤 FPR에서든 무작위 추측보다 높은 TPR을 달성한다.
 
-    **(b)** If we randomly pick one positive and one negative example, there is an 85% chance the model assigns a higher predicted probability to the positive example.
+    **(b)** 양성 하나와 음성 하나를 무작위로 뽑았을 때, 모형이 양성 쪽에 더 높은 예측확률을
+    부여할 확률이 85%다.
 
-    **(c)** Not necessarily. AUC summarizes performance across all thresholds. At the specific operating threshold relevant to the application, Model B might outperform Model A. Also, for imbalanced data, the PR-AUC might be more informative. AUC also doesn't account for different misclassification costs.
+    **(c)** 반드시 그렇지는 않다. AUC는 모든 문턱에 걸친 성능을 요약한 값이다. 실제 응용에서
+    쓰는 특정 작동 문턱에서는 모형 B가 더 나을 수 있다. 또 불균형 자료에서는 PR-AUC가 더
+    유용한 정보를 줄 수 있다. AUC는 오분류 비용의 차이도 전혀 반영하지 못한다.
+
+    !!! note "ROC 곡선이 교차할 수 있다"
+        핵심은 AUC가 **면적**이라는 점이다. 두 곡선의 면적이 달라도 곡선 자체는 얼마든지
+        교차할 수 있다. 모형 A가 넓은 FPR 구간에서 우세해 전체 면적이 크더라도, 낮은 FPR
+        영역(허위경보를 거의 허용하지 않는 영역)에서는 모형 B가 더 나을 수 있다. 이상거래
+        탐지나 진단검사처럼 실제 작동점이 곡선의 왼쪽 끝에 있는 응용에서는 전체 AUC가 아니라
+        그 영역의 부분 AUC를 보아야 한다.

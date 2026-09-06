@@ -1,19 +1,17 @@
-# Logistic vs Linear Visualization
+# 로지스틱 회귀와 선형회귀의 시각적 비교
 
 
-## Overview
+## 개요
 
-When the response variable is binary, applying ordinary linear regression
-produces predicted values that can fall outside the interval $[0,1]$, making
-them invalid as probabilities.  Logistic regression solves this by passing the
-linear predictor through the sigmoid function.  This page contrasts the two
-approaches on a simulated credit-card default dataset and explains why logistic
-regression is the appropriate choice for binary classification.
+반응변수가 이항일 때 보통의 선형회귀를 적용하면 예측값이 $[0,1]$ 밖으로 나갈 수 있어 확률로
+쓸 수 없다. 로지스틱 회귀는 선형예측자를 시그모이드 함수에 통과시켜 이 문제를 해결한다. 이
+절에서는 모의로 만든 신용카드 연체 자료에서 두 접근을 대비하고, 왜 이항 분류에는 로지스틱
+회귀가 적절한지 설명한다.
 
-## Synthetic Data
+## 인공자료
 
-We simulate $n = 300$ credit-card holders.  The probability of default
-increases with account balance according to a logistic relationship:
+신용카드 보유자 $n = 300$명을 모의로 생성한다. 연체 확률은 계좌 잔액에 따라 로지스틱 관계로
+증가한다.
 
 $$
 P(\text{Default} = 1 \mid \text{Balance}) = \frac{1}{1 + \exp\!\bigl(-({\text{Balance}} - 1250)/300\bigr)}
@@ -35,17 +33,18 @@ y = default
 X_test = np.linspace(balance.min(), balance.max(), 300).reshape(-1, 1)
 ```
 
-## Linear Regression on Binary Data
+참 계수는 기울기 $1/300 = 0.003333$, 절편 $-1250/300 = -4.1667$이다.
 
-Linear regression treats the binary outcome as a continuous variable and fits
+## 이항 자료에 대한 선형회귀
+
+선형회귀는 이항 결과를 연속변수로 취급하여
 
 $$
 \hat{y} = \hat\beta_0 + \hat\beta_1 \cdot \text{Balance}
 $$
 
-by ordinary least squares.  Because a straight line extends indefinitely, the
-predicted values inevitably fall outside $[0,1]$ for sufficiently large or
-small values of Balance.
+를 최소제곱으로 적합한다. 직선은 무한히 뻗어 나가므로, Balance가 충분히 크거나 작으면 예측값이
+필연적으로 $[0,1]$ 밖으로 나간다.
 
 ```python
 linear_model = LinearRegression()
@@ -56,18 +55,19 @@ print(f"Linear predictions range: "
       f"[{y_pred_linear.min():.3f}, {y_pred_linear.max():.3f}]")
 ```
 
-These predictions are not valid probabilities whenever they are negative or
-exceed 1.
+적합 결과는 $\hat{y} = -0.1079 + 0.000491 \cdot \text{Balance}$이고, 예측 범위는
+$[-0.102,\ 1.107]$이다. 즉 관측된 잔액 범위 안에서도 예측값이 음수가 되거나 1을 넘는다.
+$X_{\text{test}}$ 격자점의 **17.7%**가 $[0,1]$ 밖에 놓인다.
 
-## Logistic Regression on Binary Data
+## 이항 자료에 대한 로지스틱 회귀
 
-Logistic regression models the probability through the sigmoid function:
+로지스틱 회귀는 시그모이드 함수를 통해 확률을 모형화한다.
 
 $$
 P(Y = 1 \mid x) = \frac{1}{1 + e^{-(\beta_0 + \beta_1 x)}}
 $$
 
-This guarantees that $\hat{p} \in (0,1)$ for any input.
+이렇게 하면 어떤 입력에 대해서도 $\hat{p} \in (0,1)$이 보장된다.
 
 ```python
 logistic_model = LogisticRegression(solver='lbfgs')
@@ -78,7 +78,17 @@ print(f"Logistic predictions range: "
       f"[{y_pred_logistic.min():.3f}, {y_pred_logistic.max():.3f}]")
 ```
 
-## Side-by-Side Visualization
+적합 결과는 $\hat\beta_0 = -3.9790$, $\hat\beta_1 = 0.003212$로 참값
+$(-4.1667,\ 0.003333)$에 가깝고, 예측 범위는 $[0.019,\ 0.981]$로 안전하게 $(0,1)$ 안에 있다.
+
+!!! note "여기서는 기본 L2 벌점이 사실상 아무 일도 하지 않는다"
+    scikit-learn의 기본값 `C=1.0`은 L2 벌점을 건다. 그런데 이 자료에서 벌점을 완전히 끄고
+    (`penalty=None`) 적합해도 계수는 소수점 넷째 자리까지 똑같은 $(-3.9790,\ 0.003212)$가
+    나온다. 기울기가 $0.003$ 수준으로 워낙 작아 벌점 $\frac{1}{2}\beta_1^2 \approx 5\times10^{-6}$
+    이 로그가능도에 비해 무시할 만하기 때문이다. 설명변수를 표준화했다면 계수가 커져 벌점의
+    영향도 뚜렷해진다.
+
+## 나란히 시각화하기
 
 ```python
 import matplotlib.pyplot as plt
@@ -117,10 +127,10 @@ plt.tight_layout()
 plt.show()
 ```
 
-## Odds Ratio Interpretation
+## 오즈비 해석
 
-The logistic model provides an interpretable summary via the odds ratio.
-A unit increase in Balance multiplies the odds of default by $e^{\hat\beta_1}$:
+로지스틱 모형은 오즈비를 통해 해석 가능한 요약을 준다. Balance가 한 단위 늘면 연체 오즈에
+$e^{\hat\beta_1}$이 곱해진다.
 
 $$
 \text{Odds Ratio} = e^{\hat\beta_1}
@@ -133,75 +143,88 @@ print(f"Percentage increase in odds per $100: "
       f"{(np.exp(100 * logistic_model.coef_[0][0]) - 1) * 100:.2f}%")
 ```
 
-Linear regression has no analogous probabilistic interpretation: its slope
-gives the change in $\hat{y}$ per unit increase in $x$, but $\hat{y}$ is not
-constrained to be a probability.
+\$1당 오즈비는 $1.0032$로 거의 1에 가까워 실감이 나지 않는다. \$100 단위로 보면 오즈가
+$37.88\%$ 증가한다. **오즈비는 설명변수의 단위에 의존하므로, 의미 있는 크기의 단위로 바꾸어
+보고해야 한다.**
 
-## Interpretation
+선형회귀에는 이에 대응하는 확률적 해석이 없다. 기울기는 $x$ 한 단위 증가당 $\hat{y}$의
+변화량을 주지만, $\hat{y}$가 확률이라는 보장이 없다.
 
-The key differences between the two approaches are:
+## 해석
 
-| Property | Linear Regression | Logistic Regression |
+두 접근의 핵심 차이는 다음과 같다.
+
+| 성질 | 선형회귀 | 로지스틱 회귀 |
 |---|---|---|
-| Predicted range | $(-\infty, +\infty)$ | $(0, 1)$ |
-| Link function | Identity | Sigmoid |
-| Loss function | Squared error | Cross-entropy |
-| Coefficient meaning | Change in $\hat{y}$ | Change in log-odds |
-| Valid for probabilities | No | Yes |
+| 예측 범위 | $(-\infty, +\infty)$ | $(0, 1)$ |
+| 연결함수 | 항등 | 시그모이드 |
+| 손실함수 | 제곱오차 | 교차엔트로피 |
+| 계수의 의미 | $\hat{y}$의 변화 | 로그오즈의 변화 |
+| 확률로 유효한가 | 아니다 | 그렇다 |
 
-Linear regression is inappropriate for binary outcomes because it violates the
-fundamental requirement that probabilities lie in $[0,1]$.  The sigmoid curve
-of logistic regression respects this constraint and provides a natural
-probabilistic interpretation through odds ratios.
+선형회귀는 확률이 $[0,1]$에 있어야 한다는 기본 요건을 위배하므로 이항 결과에 부적절하다.
+로지스틱 회귀의 시그모이드 곡선은 이 제약을 지키면서 오즈비를 통한 자연스러운 확률적 해석을
+제공한다.
 
-## Exercises
+!!! note "선형확률모형이 아주 무용한 것은 아니다"
+    공정하게 말하면, 계량경제학에서 널리 쓰이는 **선형확률모형(LPM)**이 바로 이항 자료에 대한
+    최소제곱이다. 예측이 목적이 아니라 **평균 한계효과**를 추정하는 것이 목적이고 $\hat p$가
+    대체로 $0.2$--$0.8$ 범위에 머문다면, LPM의 계수는 해석하기 쉽고 로지스틱 모형의 평균
+    한계효과와 비슷한 값을 준다. 문제는 (a) 확률이 범위를 벗어나는 것과 (b) 오차의 이분산성
+    이며, 후자는 로버스트 표준오차로 처리한다. 이 절의 자료처럼 $\hat p$가 0과 1 전체를 훑는
+    경우에는 로지스틱 회귀가 분명히 낫다.
 
-**Exercise 1.**
-For the logistic model $\log\frac{p}{1-p} = \beta_0 + \beta_1 x$, show that
-the predicted probability at $x = -\beta_0/\beta_1$ is exactly 0.5.
+## 연습문제
 
-??? success "Solution to Exercise 1"
+**연습문제 1.**
+로지스틱 모형 $\log\frac{p}{1-p} = \beta_0 + \beta_1 x$에서 $x = -\beta_0/\beta_1$일 때
+예측확률이 정확히 0.5임을 보여라.
 
-    At $x = -\beta_0/\beta_1$:
+??? success "연습문제 1 풀이"
+
+    $x = -\beta_0/\beta_1$에서
 
     $$
     \log\frac{p}{1-p} = \beta_0 + \beta_1\Bigl(-\frac{\beta_0}{\beta_1}\Bigr) = \beta_0 - \beta_0 = 0
     $$
 
-    Therefore $p/(1-p) = e^0 = 1$, which gives $p = 0.5$.  This is the
-    **decision boundary**: the value of $x$ where the model is equally likely
-    to predict either class. $\square$
+    이므로 $p/(1-p) = e^0 = 1$이고 따라서 $p = 0.5$다. 이 지점이 **결정경계**, 즉 모형이 두
+    범주를 같은 확률로 예측하는 $x$ 값이다.
+
+    위 자료에 대입하면 $-(-3.9790)/0.003212 = 1238.8$로, 참값 $1250$에 가깝다. 그림의 오른쪽
+    패널에서 시그모이드 곡선이 빨간 점선 $0.5$와 만나는 지점이 바로 여기다. $\square$
 
 ---
 
-**Exercise 2.**
-Suppose a linear regression fitted to binary data produces $\hat{y} = -0.1$
-for a certain observation.  Explain why this is problematic and describe two
-ways to fix it.
+**연습문제 2.**
+이항 자료에 적합한 선형회귀가 어떤 관측치에 대해 $\hat{y} = -0.1$을 내놓았다. 왜 문제인지
+설명하고 두 가지 해결책을 제시하라.
 
-??? success "Solution to Exercise 2"
+??? success "연습문제 2 풀이"
 
-    A predicted value of $\hat{y} = -0.1$ is a negative probability, which is
-    undefined.  This violates the axioms of probability.
+    예측값 $\hat{y} = -0.1$은 음수 확률이므로 정의되지 않는다. 확률의 공리를 위배한다.
 
-    Two ways to address this:
+    두 가지 대응이 있다.
 
-    1. **Use logistic regression.** The sigmoid function maps any real-valued
-       linear predictor to $(0,1)$, guaranteeing valid probabilities.
+    1. **로지스틱 회귀를 쓴다.** 시그모이드가 임의의 실수 선형예측자를 $(0,1)$로 옮기므로
+       확률이 항상 유효하다.
 
-    2. **Clip the predictions.** After fitting linear regression, truncate
-       predictions to $[0,1]$: $\hat{p} = \max(0, \min(1, \hat{y}))$.
-       However, this is an ad hoc fix and does not address the underlying
-       model misspecification.  Logistic regression is strongly preferred. $\square$
+    2. **예측값을 잘라 낸다.** 선형회귀를 적합한 뒤 $[0,1]$로 절단한다.
+       $\hat{p} = \max(0, \min(1, \hat{y}))$. 다만 이는 임시방편이며 근본적인 모형 오지정을
+       해결하지 못한다. 로지스틱 회귀가 훨씬 낫다.
+
+    절단이 왜 임시방편에 그치는지는 손실함수를 보면 분명하다. 최소제곱은 절단을 고려하지 않고
+    계수를 추정하므로, 범위를 벗어난 관측치들이 **적합 전체를 끌어당긴 뒤에** 절단된다. 즉
+    절단은 증상만 가릴 뿐 추정의 왜곡은 그대로 남는다. $\square$
 
 ---
 
-**Exercise 3.**
-Derive the sigmoid function by solving $\log\frac{p}{1-p} = z$ for $p$.
+**연습문제 3.**
+$\log\frac{p}{1-p} = z$를 $p$에 대해 풀어 시그모이드 함수를 유도하라.
 
-??? success "Solution to Exercise 3"
+??? success "연습문제 3 풀이"
 
-    Starting from $\log\frac{p}{1-p} = z$:
+    $\log\frac{p}{1-p} = z$에서 출발하면,
 
     $$
     \frac{p}{1-p} = e^z
@@ -223,66 +246,68 @@ Derive the sigmoid function by solving $\log\frac{p}{1-p} = z$ for $p$.
     p = \frac{e^z}{1 + e^z} = \frac{1}{1 + e^{-z}} = \sigma(z)
     $$
 
-    The last step uses the identity $\frac{e^z}{1+e^z} = \frac{1}{1+e^{-z}}$,
-    obtained by dividing numerator and denominator by $e^z$. $\square$
+    마지막 단계는 분자와 분모를 $e^z$로 나누어 얻는 항등식
+    $\frac{e^z}{1+e^z} = \frac{1}{1+e^{-z}}$을 쓴 것이다. $\square$
 
 ---
 
-**Exercise 4.**
-A linear regression on binary data yields $\hat{y} = 0.2 + 0.0003 \cdot \text{Balance}$.
-At what Balance does the prediction exceed 1?  At what Balance does it become
-negative?
+**연습문제 4.**
+이항 자료에 대한 선형회귀가 $\hat{y} = 0.2 + 0.0003 \cdot \text{Balance}$를 주었다.
+어느 Balance에서 예측값이 1을 넘는가? 어느 Balance에서 음수가 되는가?
 
-??? success "Solution to Exercise 4"
+??? success "연습문제 4 풀이"
 
-    Setting $\hat{y} = 1$:
+    $\hat{y} = 1$로 놓으면
 
     $$
     0.2 + 0.0003 \cdot \text{Balance} = 1
     \implies \text{Balance} = \frac{0.8}{0.0003} \approx 2667
     $$
 
-    Setting $\hat{y} = 0$:
+    $\hat{y} = 0$으로 놓으면
 
     $$
     0.2 + 0.0003 \cdot \text{Balance} = 0
     \implies \text{Balance} = \frac{-0.2}{0.0003} \approx -667
     $$
 
-    Since balance cannot be negative, the prediction becomes negative for
-    unrealistic inputs.  However, the prediction exceeds 1 at Balance
-    $\approx$ \$2667, which is a plausible value, demonstrating that linear
-    regression produces invalid probabilities even within realistic input
-    ranges. $\square$
+    잔액은 음수가 될 수 없으므로 음수 예측은 비현실적인 입력에서만 나온다. 그러나 예측값이 1을
+    넘는 지점은 Balance $\approx$ \$2667로 충분히 있을 법한 값이며, 선형회귀가 **현실적인 입력
+    범위 안에서도** 유효하지 않은 확률을 만들어 냄을 보여준다.
+
+    본문의 실제 적합에서는 상황이 더 나쁘다. $\hat{y} = -0.1079 + 0.000491 \cdot \text{Balance}$
+    이므로 Balance $< 220$에서 음수가 되고 Balance $> 2256$에서 1을 넘는다. 자료의 관측 범위가
+    $[0, 2500]$이므로 격자점의 $17.7\%$가 유효하지 않은 확률을 받는다. $\square$
 
 ---
 
-**Exercise 5.**
-Prove that the cross-entropy loss for logistic regression is convex in the
-parameters $\boldsymbol\beta$.
+**연습문제 5.**
+로지스틱 회귀의 교차엔트로피 손실이 모수 $\boldsymbol\beta$에 대해 볼록임을 증명하라.
 
-??? success "Solution to Exercise 5"
+??? success "연습문제 5 풀이"
 
-    The negative log-likelihood (cross-entropy) for one observation is
-
-    $$
-    L_i(\boldsymbol\beta) = -y_i \log \sigma(\mathbf{x}_i^T\boldsymbol\beta)
-
-      - (1-y_i)\log\bigl(1-\sigma(\mathbf{x}_i^T\boldsymbol\beta)\bigr)
-    $$
-
-    Using $\sigma(z) = 1/(1+e^{-z})$ and $1-\sigma(z) = \sigma(-z)$, this
-    simplifies to
+    관측치 하나에 대한 음의 로그가능도(교차엔트로피)는
 
     $$
-    L_i(\boldsymbol\beta) = -y_i\,\mathbf{x}_i^T\boldsymbol\beta
-
-      + \log\bigl(1 + e^{\mathbf{x}_i^T\boldsymbol\beta}\bigr)
+    L_i(\boldsymbol\beta) = -y_i \log \sigma(\mathbf{x}_i^T\boldsymbol\beta) - (1-y_i)\log\bigl(1-\sigma(\mathbf{x}_i^T\boldsymbol\beta)\bigr)
     $$
 
-    The first term is linear in $\boldsymbol\beta$ (hence convex).  The second
-    term is $\log(1+e^z)$ evaluated at $z = \mathbf{x}_i^T\boldsymbol\beta$.
-    Since $\frac{d^2}{dz^2}\log(1+e^z) = \sigma(z)(1-\sigma(z)) > 0$ for all
-    $z$, the function $\log(1+e^z)$ is convex.  A convex function composed
-    with a linear map is convex.  The sum $L(\boldsymbol\beta) = \sum_i L_i$
-    is a sum of convex functions and is therefore convex. $\square$
+    이다. $\sigma(z) = 1/(1+e^{-z})$와 $1-\sigma(z) = \sigma(-z)$를 쓰면
+
+    $$
+    L_i(\boldsymbol\beta) = -y_i\,\mathbf{x}_i^T\boldsymbol\beta + \log\bigl(1 + e^{\mathbf{x}_i^T\boldsymbol\beta}\bigr)
+    $$
+
+    로 정리된다. 첫 항은 $\boldsymbol\beta$에 대해 일차이므로 볼록이다. 둘째 항은
+    $z = \mathbf{x}_i^T\boldsymbol\beta$에서 평가한 $\log(1+e^z)$인데, 모든 $z$에 대해
+    $\frac{d^2}{dz^2}\log(1+e^z) = \sigma(z)(1-\sigma(z)) > 0$이므로 $\log(1+e^z)$는 볼록이다.
+    볼록함수와 일차사상의 합성은 볼록이다. 합
+    $L(\boldsymbol\beta) = \sum_i L_i$는 볼록함수들의 합이므로 볼록이다. $\square$
+
+    !!! note "볼록이지만 강볼록은 아니다"
+        $\sigma(z)(1-\sigma(z)) > 0$이 모든 $z$에서 성립하므로 일변량 함수 $\log(1+e^z)$는
+        강볼록이다. 그러나 $\boldsymbol\beta$의 함수로서 $L$의 헤세행렬은
+        $\sum_i \sigma_i(1-\sigma_i)\mathbf{x}_i\mathbf{x}_i^T$이므로, $\{\mathbf{x}_i\}$가
+        $\mathbb{R}^p$를 생성하지 못하면(예: $p > n$) 양반정치일 뿐이다. 게다가
+        $\|\boldsymbol\beta\| \to \infty$이면 $\sigma_i(1-\sigma_i) \to 0$이라 곡률이 사라진다.
+        이것이 완전 분리에서 MLE가 존재하지 않는 이유이자, 정칙화가 필요한 이유다.

@@ -1,62 +1,65 @@
-# Precision, Recall, and F1 Score
+# 정밀도, 재현율, F1 점수
 
 
-## Precision: Positive Predictive Value
+## 정밀도: 양성예측도
 
-**Precision** measures the reliability of positive predictions. Of all instances we predicted as positive, what fraction were actually positive?
+**정밀도**는 양성 예측의 신뢰성을 잰다. 양성으로 예측한 사례 가운데 실제로 양성인 비율은
+얼마인가?
 
 $$
 \text{Precision} = \frac{\text{TP}}{\text{TP} + \text{FP}}
 $$
 
-Precision is the **positive predictive value (PPV)**. It answers the question: "If the model says default, how confident can we be?"
+정밀도는 **양성예측도(PPV)**다. "모형이 연체라고 하면 얼마나 믿을 수 있는가?"라는 질문에
+답한다.
 
-### Interpretation
+### 해석
 
-- High precision means few false positives.
-- Low precision means many false alarms (predicting positive when the label is negative).
-- Precision = 1 means no false positives; Precision = 0 means all positive predictions were wrong.
+- 정밀도가 높으면 위양성이 적다.
+- 정밀도가 낮으면 허위경보가 많다(실제로는 음성인데 양성으로 예측).
+- 정밀도 = 1이면 위양성이 없고, 정밀도 = 0이면 양성 예측이 모두 틀렸다는 뜻이다.
 
-## Recall: Sensitivity and True Positive Rate
+## 재현율: 민감도와 참양성률
 
-**Recall** (also called **sensitivity** or **true positive rate**) measures how well the model identifies positive instances:
+**재현율**(**민감도** 또는 **참양성률**이라고도 한다)은 모형이 양성 사례를 얼마나 잘 찾아내는지
+잰다.
 
 $$
 \text{Recall} = \frac{\text{TP}}{\text{TP} + \text{FN}}
 $$
 
-Recall answers the question: "Of all true defaults, what fraction did we catch?"
+재현율은 "실제 연체 가운데 몇 퍼센트를 잡아냈는가?"라는 질문에 답한다.
 
-### Interpretation
+### 해석
 
-- High recall means few false negatives; we catch most positive cases.
-- Low recall means we miss many positive cases.
-- Recall = 1 means no false negatives; Recall = 0 means we missed all positive cases.
+- 재현율이 높으면 위음성이 적다. 양성 사례를 대부분 잡아낸다.
+- 재현율이 낮으면 양성 사례를 많이 놓친다.
+- 재현율 = 1이면 위음성이 없고, 재현율 = 0이면 양성 사례를 전부 놓쳤다는 뜻이다.
 
-## The Precision-Recall Tradeoff
+## 정밀도-재현율 절충
 
-There is an inherent **tradeoff** between precision and recall. By lowering the classification threshold $\tau$:
+정밀도와 재현율 사이에는 본질적인 **절충**이 있다. 분류 문턱 $\tau$를 낮추면,
 
-- More instances are predicted positive
-- Recall (TP) increases but FP also increases
-- Precision decreases
+- 더 많은 사례가 양성으로 예측된다.
+- 재현율(TP)이 올라가지만 FP도 함께 늘어난다.
+- 정밀도는 대체로 내려간다.
 
-Conversely, raising the threshold:
+반대로 문턱을 높이면,
 
-- Fewer instances are predicted positive
-- Recall decreases, precision increases
+- 더 적은 사례가 양성으로 예측된다.
+- 재현율은 내려가고 정밀도는 대체로 올라간다.
 
-The choice between precision and recall depends on the **application**:
+정밀도와 재현율 중 무엇을 우선할지는 **응용**에 달려 있다.
 
-| Domain | Priority | Rationale |
+| 분야 | 우선순위 | 이유 |
 |---|---|---|
-| Fraud detection | High Recall | Missing fraud (FN) is costly; some false alarms (FP) are acceptable |
-| Loan approval | High Precision | False alarms (rejecting good loans) lose customers; some FN are acceptable |
-| Medical diagnosis | High Recall | Missing disease (FN) endangers lives; false alarms (FP) trigger further testing |
+| 이상거래 탐지 | 높은 재현율 | 이상거래를 놓치면(FN) 손실이 크다. 허위경보(FP)는 어느 정도 감수 가능 |
+| 대출 승인 | 높은 정밀도 | 허위경보(우량 대출 거절)는 고객을 잃게 한다. FN은 어느 정도 감수 가능 |
+| 의학적 진단 | 높은 재현율 | 질병을 놓치면(FN) 생명이 위험하다. 허위경보(FP)는 추가 검사로 이어질 뿐 |
 
-## Example: Loan Default Data
+## 예: 대출 연체 자료
 
-From our logistic regression model:
+로지스틱 회귀 모형의 결과에서,
 
 ```
                       Predicted
@@ -65,78 +68,204 @@ Actual Default       14,336   8,335
 Actual Paid Off       8,148  14,523
 ```
 
-- **Precision** = $14,336 / (14,336 + 8,148) \approx 0.6376$
-  - About 63.76% of predicted defaults are correct; 36.24% are false alarms.
+- **정밀도** $= 14{,}336 / (14{,}336 + 8{,}148) \approx 0.6376$
+    - 연체로 예측한 것 중 약 63.76%가 맞고, 36.24%는 허위경보다.
 
-- **Recall** = $14,336 / (14,336 + 8,335) \approx 0.6323$
-  - We identify about 63.23% of actual defaults; miss 36.77%.
+- **재현율** $= 14{,}336 / (14{,}336 + 8{,}335) \approx 0.6323$
+    - 실제 연체의 약 63.23%를 잡아내고 36.77%를 놓친다.
 
-## F1 Score: Harmonic Mean
+## F1 점수: 조화평균
 
-When precision and recall are both important, the **F1 score** provides a single summary metric:
+정밀도와 재현율이 둘 다 중요할 때는 **F1 점수**가 하나의 요약 지표를 제공한다.
 
 $$
 F_1 = 2 \cdot \frac{\text{Precision} \cdot \text{Recall}}{\text{Precision} + \text{Recall}}
 $$
 
-The F1 score is the **harmonic mean** of precision and recall, ranging from 0 to 1. It is often preferred when:
+F1 점수는 정밀도와 재현율의 **조화평균**이며 0에서 1 사이의 값을 갖는다. 다음과 같은 경우에
+선호된다.
 
-- Classes are imbalanced
-- Both false positives and false negatives are costly
-- You want a single metric to balance both concerns
+- 범주가 불균형할 때
+- 위양성과 위음성이 모두 비용이 클 때
+- 두 관심사를 균형 있게 반영하는 단일 지표가 필요할 때
 
-For our example: $F_1 = 2 \cdot \frac{0.6376 \cdot 0.6323}{0.6376 + 0.6323} \approx 0.6349$
+위 예에서는
+$F_1 = 2 \cdot \frac{0.6376 \cdot 0.6323}{0.6376 + 0.6323} \approx 0.6349$이다.
 
-## Weighted Metrics for Multi-Class Problems
+## 다범주 문제의 가중 지표
 
-For multi-class classification, precision, recall, and F1 scores are computed per class and then averaged:
+다범주 분류에서는 정밀도, 재현율, F1을 범주별로 계산한 뒤 평균한다.
 
-- **Macro-average:** Simple arithmetic mean across classes (treats all classes equally)
-- **Weighted average:** Weighted by class support (accounts for class imbalance)
-- **Micro-average:** Computed from pooled TP, FP, FN across all classes
+- **거시평균:** 범주별 값을 단순 산술평균한다(모든 범주를 동등하게 취급).
+- **가중평균:** 범주별 관측치 수로 가중평균한다(범주 불균형을 반영).
+- **미시평균:** 모든 범주의 TP, FP, FN을 합산한 뒤 계산한다.
 
-## Precision-Recall Curve
+## 정밀도-재현율 곡선
 
-The **precision-recall curve** plots precision vs. recall as the classification threshold varies. It provides a more nuanced view of model performance than accuracy alone, especially for imbalanced datasets.
+**정밀도-재현율 곡선**은 분류 문턱을 변화시키며 재현율에 대한 정밀도를 그린다. 특히 불균형
+자료에서 정확도 하나보다 모형의 성능을 훨씬 세밀하게 보여준다.
 
-Key properties:
+주요 성질은 다음과 같다.
 
-1. Points further toward the top-right (high precision, high recall) indicate better performance.
-2. The curve starts at (0, 1) when the threshold is very high (predict positive for no instances).
-3. The curve ends at (1, 0) when the threshold is very low (predict positive for all instances).
-4. **Average Precision (AP):** The area under the precision-recall curve; ranges from 0 to 1.
+1. 오른쪽 위로 갈수록(정밀도와 재현율이 모두 높을수록) 성능이 좋다.
+2. 문턱이 아주 높으면 재현율이 0에 가까워진다. 이 왼쪽 끝에서 정밀도는 표본이 극히 적어 매우
+   불안정하며, 관례상 1로 그리는 구현이 많다.
+3. 문턱이 0이면 모두를 양성으로 예측하므로 재현율은 1이 되고, **정밀도는 양성의 유병률과
+   같아진다.** 즉 곡선의 오른쪽 끝은 $(1, 0)$이 아니라 $(1, \pi)$이며 $\pi$는 양성 비율이다.
+4. **평균정밀도(AP):** 정밀도-재현율 곡선 아래의 면적으로 0에서 1 사이의 값을 갖는다.
 
-When one class is rare, the precision-recall curve often provides more insight than the ROC curve, as it focuses on the behavior in the positive class region.
+한 범주가 드물 때는 정밀도-재현율 곡선이 ROC 곡선보다 더 많은 통찰을 주는 경우가 많다. 양성
+범주 영역에서의 행동에 집중하기 때문이다.
+
+!!! note "무작위 분류기의 기준선이 다르다"
+    ROC 곡선에서 무작위 분류기의 기준선은 언제나 대각선이고 AUC는 0.5다. 그러나 PR 곡선에서
+    무작위 분류기의 기준선은 높이 $\pi$인 수평선이고 AP는 $\pi$다. 따라서 양성이 1%인 자료에서
+    AP $= 0.10$은 무작위보다 10배 나은 성능이지만, 같은 자료의 AUC $= 0.10$은 무작위보다
+    훨씬 나쁘다는 뜻이다. **PR 지표는 유병률 없이는 해석할 수 없다.**
 
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Describe the main concept of Precision, Recall, and F1 Score and explain why it matters for statistical practice.
+**연습문제 1.**
+조화평균 정의로부터 $F_1 = \dfrac{2\,TP}{2\,TP + FP + FN}$를 유도하라.
 
-??? success "Solution to Exercise 1"
-    Precision, Recall, and F1 Score is a core topic in statistics that provides tools for drawing reliable inferences from data. It matters because proper application ensures valid conclusions, correctly quantified uncertainty, and appropriate handling of the assumptions that underpin the method. Practitioners who understand this concept can avoid common pitfalls and choose the right analytical approach for their data.
+??? success "연습문제 1 풀이"
+
+    $P = \dfrac{TP}{TP+FP}$, $R = \dfrac{TP}{TP+FN}$을 대입한다.
+
+    $$
+    F_1 = \frac{2PR}{P+R}
+    = \frac{2\cdot\frac{TP}{TP+FP}\cdot\frac{TP}{TP+FN}}{\frac{TP}{TP+FP}+\frac{TP}{TP+FN}}
+    $$
+
+    분자와 분모에 $(TP+FP)(TP+FN)$을 곱하면
+
+    $$
+    = \frac{2\,TP^2}{TP(TP+FN) + TP(TP+FP)}
+    = \frac{2\,TP}{(TP+FN)+(TP+FP)}
+    = \frac{2\,TP}{2\,TP+FP+FN}
+    $$
+
+    를 얻는다.
+
+    이 형태는 두 가지를 곧바로 보여준다. 첫째, $F_1$은 **TN을 전혀 쓰지 않는다.** 음성 범주를
+    아무리 잘 맞혀도 $F_1$은 달라지지 않으며, 이것이 불균형 자료에서 정확도보다 나은 이유이자
+    동시에 한계다. 둘째, 위양성과 위음성을 **동등한 무게로** 더한다. 두 오류의 비용이 다르면
+    $F_\beta$(연습문제 4)를 써야 한다. $\square$
 
 ---
 
-**Exercise 2.**
-State the key assumptions required by the method discussed here. How can each assumption be checked?
+**연습문제 2.**
+정밀도와 재현율의 요약에 산술평균이 아니라 조화평균을 쓰는 이유를 설명하라.
+$P = 0.99$, $R = 0.01$인 경우로 예를 들라.
 
-??? success "Solution to Exercise 2"
-    The main assumptions typically include: (1) independence of observations -- verified by understanding the data collection process and checking for serial correlation; (2) distributional requirements (e.g., normality) -- checked with Q-Q plots and formal tests like Shapiro-Wilk; (3) equal variances (if applicable) -- assessed with boxplots and Levene's test. When assumptions are violated, consider robust alternatives, transformations, or nonparametric methods.
+??? success "연습문제 2 풀이"
+
+    $P = 0.99$, $R = 0.01$일 때,
+
+    $$
+    \text{산술평균} = \frac{0.99 + 0.01}{2} = 0.500, \qquad
+    F_1 = \frac{2(0.99)(0.01)}{0.99+0.01} = 0.0198
+    $$
+
+    이다.
+
+    이 분류기는 사실상 쓸모가 없다. 양성 사례의 1%만 잡아내기 때문이다. 산술평균 0.5는 "그럭저럭
+    쓸 만하다"는 인상을 주지만, $F_1 = 0.02$는 실상을 정확히 말해 준다.
+
+    **일반 원리:** 조화평균은 **작은 쪽에 지배된다.** 실제로 $\min(P,R) \le F_1 \le
+    2\min(P,R)$이 항상 성립하므로, 한쪽이 0에 가까우면 $F_1$도 0에 가깝다. 산술평균은 반대로
+    큰 쪽이 작은 쪽을 가려 준다.
+
+    이런 성질이 바람직한 이유는, 정밀도나 재현율 어느 한쪽만 극단적으로 높이는 것이 **아주
+    쉽기** 때문이다. 모두를 양성으로 예측하면 재현율이 1이 되고, 가장 확신하는 한 건만 양성으로
+    예측하면 정밀도가 1이 되기 쉽다. 이런 퇴화된 전략에 벌칙을 주는 요약 지표가 필요하다.
+    $\square$
 
 ---
 
-**Exercise 3.**
-Work through a small numerical example illustrating the application of the technique from this section.
+**연습문제 3.**
+문턱을 낮추면 재현율은 결코 감소하지 않지만 정밀도는 **단조가 아니다.** 다음 자료로 이를
+확인하라.
 
-??? success "Solution to Exercise 3"
-    A structured approach to applying this technique involves: (1) clearly stating the hypotheses or estimation goal; (2) verifying that the data meet the required assumptions; (3) computing the relevant test statistic, estimate, or model fit; (4) obtaining the p-value, confidence interval, or posterior distribution; (5) interpreting the result in the context of the original question. Following these steps systematically ensures a rigorous and reproducible analysis.
+| $\hat p$ | 0.9 | 0.8 | 0.7 | 0.4 | 0.3 | 0.2 |
+|---|---|---|---|---|---|---|
+| $y$ | 1 | 0 | 1 | 1 | 0 | 1 |
+
+??? success "연습문제 3 풀이"
+
+    각 문턱에서 $\hat p \ge \tau$를 양성으로 예측한다.
+
+    | $\tau$ | TP | FP | 정밀도 | 재현율 |
+    |---|---|---|---|---|
+    | 0.9 | 1 | 0 | $1.000$ | $0.25$ |
+    | 0.8 | 1 | 1 | $0.500$ | $0.25$ |
+    | 0.7 | 2 | 1 | $0.667$ | $0.50$ |
+    | 0.4 | 3 | 1 | $0.750$ | $0.75$ |
+    | 0.3 | 3 | 2 | $0.600$ | $0.75$ |
+    | 0.2 | 4 | 2 | $0.667$ | $1.00$ |
+
+    재현율은 $0.25 \to 0.25 \to 0.50 \to 0.75 \to 0.75 \to 1.00$으로 결코 줄지 않는다. 문턱을
+    낮추면 TP는 늘기만 하고 $TP+FN$은 고정이기 때문이다.
+
+    정밀도는 $1.000 \to 0.500 \to 0.667 \to 0.750 \to 0.600 \to 0.667$로 **오르내린다.** 문턱을
+    낮출 때 새로 들어오는 사례가 양성이면 정밀도가 오르고 음성이면 내린다. 분자와 분모가 함께
+    변하므로 방향이 정해져 있지 않다.
+
+    그래서 PR 곡선은 ROC 곡선과 달리 **톱니 모양**이 된다. 마지막 값 $0.667 = 4/6$이 정확히
+    양성의 유병률과 같다는 점도 확인하라. 본문에서 말한 오른쪽 끝점이다. $\square$
 
 ---
 
-**Exercise 4.**
-Compare the approach from this section with an alternative method. When would you choose each?
+**연습문제 4.**
+$F_\beta$ 점수는
+$F_\beta = (1+\beta^2)\dfrac{P \cdot R}{\beta^2 P + R}$
+로 정의된다. $\beta$의 의미를 설명하고, 위음성이 위양성보다 3배 비쌀 때 어떤 $\beta$를 써야
+하는지 답하라.
 
-??? success "Solution to Exercise 4"
-    The method discussed here is appropriate when its assumptions hold and the sample size is sufficient for the asymptotic approximations to be accurate. Alternative approaches include: (1) nonparametric methods -- preferred when distributional assumptions are suspect; (2) bootstrap methods -- useful when analytical reference distributions are unavailable; (3) Bayesian methods -- valuable when incorporating prior information or when direct probability statements about parameters are desired. Running multiple approaches and comparing results provides a useful robustness check.
+??? success "연습문제 4 풀이"
+
+    $\beta$는 **정밀도 대비 재현율에 주는 가중치**다. $\beta = 1$이면 $F_1$로 돌아가고,
+    $\beta > 1$이면 재현율을, $\beta < 1$이면 정밀도를 더 중시한다.
+
+    $TP$, $FP$, $FN$으로 다시 쓰면 연습문제 1과 같은 방식으로
+
+    $$
+    F_\beta = \frac{(1+\beta^2)TP}{(1+\beta^2)TP + \beta^2 FN + FP}
+    $$
+
+    을 얻는다. 이 형태가 $\beta$의 뜻을 분명히 한다. **위음성 하나가 위양성 하나보다
+    $\beta^2$배 무겁게 계산된다.**
+
+    따라서 FN이 FP보다 3배 비싸면 $\beta^2 = 3$, 즉 $\beta = \sqrt{3} \approx 1.73$이다.
+
+    실무에서는 $\beta = 2$($F_2$, FN이 4배 무거움)와 $\beta = 0.5$($F_{0.5}$, FP가 4배 무거움)가
+    관례적으로 널리 쓰인다. 비용비를 실제로 알고 있다면 $\beta = \sqrt{c_{FN}/c_{FP}}$로 두는
+    편이 낫다. $\square$
+
+---
+
+**연습문제 5.**
+어떤 이상거래 탐지 모형의 AUC가 $0.95$인데 평균정밀도는 $0.12$다. 유병률은 1%다. 두 값이
+모순되는가?
+
+??? success "연습문제 5 풀이"
+
+    모순이 아니다. 두 지표는 서로 다른 기준선을 갖는다.
+
+    - AUC의 무작위 기준선은 $0.5$이므로 $0.95$는 매우 좋은 **순위** 성능이다.
+    - AP의 무작위 기준선은 유병률 $\pi = 0.01$이므로 $0.12$는 무작위보다 **12배** 나은 값이다.
+
+    두 값이 함께 나타나는 이유는 유병률이 극단적으로 낮기 때문이다. 양성이 1%, 음성이 99%이면
+    FPR이 아주 작아도 위양성의 **절대 수**가 참양성보다 훨씬 많을 수 있다. 예컨대 100만 건 중
+    양성이 1만 건인 자료에서 TPR $=0.9$, FPR $=0.05$인 작동점을 잡으면,
+
+    $$
+    TP = 9{,}000, \qquad FP = 0.05 \times 990{,}000 = 49{,}500
+    $$
+
+    이 되어 정밀도는 $9{,}000/58{,}500 = 0.154$에 불과하다. FPR $0.05$는 ROC 곡선에서는 아주
+    왼쪽이라 훌륭해 보이지만, 경보 6건 중 5건이 헛것이라는 뜻이다.
+
+    **실무적 결론:** 유병률이 낮을 때 AUC는 모형이 순위를 잘 매기는지를 말해 주고, AP와
+    정밀도는 배치했을 때 조사팀이 감당할 헛수고의 양을 말해 준다. 둘 다 보아야 한다. $\square$

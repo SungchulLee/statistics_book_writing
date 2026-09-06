@@ -1,134 +1,171 @@
-# Odds Ratios and Coefficient Interpretation
+# 오즈비와 계수 해석
 
 
-## The Odds and Odds Ratio
+## 오즈와 오즈비
 
-In logistic regression, the coefficient $\theta_j$ has a direct interpretation through the **odds ratio**. Recall that the logit model relates the log-odds linearly to the features:
+로지스틱 회귀에서 계수 $\theta_j$는 **오즈비**를 통해 직접 해석된다. 로짓 모형이 로그오즈를
+설명변수의 선형함수로 놓는다는 점을 떠올리자.
 
 $$
 \operatorname{logit}\bigl(P(Y=1\mid\mathbf{x})\bigr) = \mathbf{x}^T\boldsymbol{\theta}
 $$
 
-which is equivalent to
+이는
 
 $$
 \log\left(\frac{p}{1-p}\right) = \mathbf{x}^T\boldsymbol{\theta}
 $$
 
-where $p = P(Y=1\mid\mathbf{x})$.
+와 같으며, 여기서 $p = P(Y=1\mid\mathbf{x})$이다.
 
-## Multiplicative Effect of Coefficients
+## 계수의 곱셈 효과
 
-When we increase feature $x_j$ by one unit while holding all other features constant, the log-odds increases by $\theta_j$. Therefore, the **odds multiply by $e^{\theta_j}$**:
+다른 특성을 모두 고정한 채 특성 $x_j$를 한 단위 늘리면 로그오즈가 $\theta_j$만큼 증가한다.
+따라서 **오즈에는 $e^{\theta_j}$가 곱해진다.**
 
 $$
 \frac{\text{odds}_{\text{new}}}{\text{odds}_{\text{old}}} = e^{\theta_j}
 $$
 
-### Example
+### 예
 
-If $\theta_j = 0.5$ for a feature representing the borrower's credit score, then a one-unit increase in the score multiplies the odds of default by $e^{0.5} \approx 1.649$. This means the odds increase by about 64.9%.
+어떤 설명변수의 계수가 $\theta_j = 0.5$이면, 그 변수가 한 단위 증가할 때 연체 오즈에
+$e^{0.5} \approx 1.649$가 곱해진다. 즉 오즈가 약 64.9% 증가한다.
 
-Conversely, if $\theta_j = -0.5$, the odds multiply by $e^{-0.5} \approx 0.606$, indicating a 39.4% decrease in odds.
+반대로 $\theta_j = -0.5$이면 오즈에 $e^{-0.5} \approx 0.606$이 곱해지므로 오즈가 39.4%
+감소한다.
 
-## Interpreting Coefficients
+## 계수 해석하기
 
-The **odds ratio** $OR_j = e^{\theta_j}$ has an intuitive interpretation:
+**오즈비** $OR_j = e^{\theta_j}$는 직관적으로 다음과 같이 읽힌다.
 
-| $\theta_j$ | $OR_j = e^{\theta_j}$ | Interpretation |
+| $\theta_j$ | $OR_j = e^{\theta_j}$ | 해석 |
 |---|---|---|
-| $-1.0$ | $\approx 0.368$ | Odds decrease by 63.2% per unit increase |
-| $-0.5$ | $\approx 0.606$ | Odds decrease by 39.4% per unit increase |
-| $0.0$ | $1.0$ | No effect on odds |
-| $0.5$ | $\approx 1.649$ | Odds increase by 64.9% per unit increase |
-| $1.0$ | $\approx 2.718$ | Odds increase by 171.8% per unit increase |
+| $-1.0$ | $\approx 0.368$ | 한 단위 증가마다 오즈가 63.2% 감소 |
+| $-0.5$ | $\approx 0.606$ | 한 단위 증가마다 오즈가 39.4% 감소 |
+| $0.0$ | $1.0$ | 오즈에 영향 없음 |
+| $0.5$ | $\approx 1.649$ | 한 단위 증가마다 오즈가 64.9% 증가 |
+| $1.0$ | $\approx 2.718$ | 한 단위 증가마다 오즈가 171.8% 증가 |
 
-## Example: Loan Default Prediction
+## 예: 대출 연체 예측
 
-In a loan default study, the estimated coefficients might be:
+대출 연체 연구에서 추정된 계수가 다음과 같다고 하자.
 
-| Feature | Coefficient | Odds Ratio | Interpretation |
+| 특성 | 계수 | 오즈비 | 해석 |
 |---|---|---|---|
-| payment_inc_ratio | $0.0797$ | $e^{0.0797} \approx 1.083$ | 8.3% increase in odds per unit |
-| borrower_score | $-4.6126$ | $e^{-4.6126} \approx 0.0098$ | 99% decrease in odds per unit increase |
-| small_business | $1.2153$ | $e^{1.2153} \approx 3.373$ | 237% increase in odds (vs. baseline) |
+| payment_inc_ratio | $0.0797$ | $e^{0.0797} \approx 1.083$ | 한 단위 증가마다 오즈 8.3% 증가 |
+| borrower_score | $-4.6126$ | $e^{-4.6126} \approx 0.0098$ | 한 단위 증가마다 오즈 99% 감소 |
+| small_business | $1.2153$ | $e^{1.2153} \approx 3.373$ | 기준범주 대비 오즈 237% 증가 |
 
-Higher payment-to-income ratios increase default risk, while higher borrower scores dramatically reduce it. Loans for small business purposes carry much higher default risk compared to credit card purposes (the baseline).
+소득 대비 상환액 비율이 높을수록 연체 위험이 커지고, 차입자 점수가 높을수록 위험이 급격히
+줄어든다. 사업 자금 목적 대출은 기준범주인 신용카드 목적 대출보다 연체 위험이 훨씬 높다.
 
-## Confidence Intervals for Odds Ratios
+## 오즈비의 신뢰구간
 
-When conducting inference via Maximum Likelihood Estimation, we obtain standard errors and confidence intervals for the coefficients $\theta_j$. These can be transformed to confidence intervals for the odds ratios:
+최대가능도 추정으로 추론할 때 계수 $\theta_j$의 표준오차와 신뢰구간을 얻는다. 이를 오즈비의
+신뢰구간으로 변환할 수 있다.
 
-If a 95% CI for $\theta_j$ is $[\theta_j^L, \theta_j^U]$, then the 95% CI for $OR_j = e^{\theta_j}$ is:
+$\theta_j$의 95% 신뢰구간이 $[\theta_j^L, \theta_j^U]$이면 $OR_j = e^{\theta_j}$의 95%
+신뢰구간은
 
 $$
 [e^{\theta_j^L}, e^{\theta_j^U}]
 $$
 
-**Important:** A confidence interval for $OR_j$ that excludes 1.0 indicates that the coefficient $\theta_j$ is statistically significantly different from zero at the corresponding confidence level.
+이다.
 
-## Categorical Features and Baseline Coding
+**중요:** $OR_j$의 신뢰구간이 1.0을 포함하지 않으면, 해당 신뢰수준에서 계수 $\theta_j$가 0과
+통계적으로 유의하게 다르다는 뜻이다.
 
-When using one-hot or reference coding for categorical variables (e.g., home ownership type), the coefficient represents the **change relative to a baseline category**. The baseline category (omitted to avoid multicollinearity) has an implicit coefficient of 0 and odds ratio of 1.
+## 범주형 특성과 기준범주 부호화
 
-For example, if "MORTGAGE" is the baseline and the coefficient for "RENT" is $0.157$, then renting (vs. owning with a mortgage) increases the odds of default by $e^{0.157} - 1 \approx 17\%$.
+범주형 변수(예: 주택 소유 형태)에 원-핫 부호화나 기준범주 부호화를 쓰면, 계수는 **기준범주에
+대한 상대적 변화**를 나타낸다. 다중공선성을 피하기 위해 생략한 기준범주는 암묵적으로 계수가 0,
+오즈비가 1이다.
 
-## Statistical Significance
+예를 들어 "MORTGAGE"가 기준범주이고 "RENT"의 계수가 $0.157$이면, (담보대출로 소유하는 경우에
+비해) 임차는 연체 오즈를 $e^{0.157} - 1 \approx 17\%$ 높인다.
 
-To test whether a coefficient is significantly different from zero, we use:
+## 통계적 유의성
 
-- **Wald test:** $Z = \theta_j / \text{SE}(\theta_j) \sim N(0,1)$
-- **Likelihood ratio test:** Compares log-likelihoods of nested models
+계수가 0과 유의하게 다른지 검정하려면 다음을 쓴다.
 
-Both methods are implemented in statistical packages like `statsmodels` and provide p-values for hypothesis testing.
+- **왈드 검정:** $Z = \theta_j / \text{SE}(\theta_j) \sim N(0,1)$
+- **가능도비 검정:** 내포모형들의 로그가능도를 비교한다.
+
+두 방법 모두 `statsmodels` 같은 통계 패키지에 구현되어 있으며 가설검정을 위한 p-값을 제공한다.
 
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-In a logistic regression, $\hat{\beta}_1 = 0.693$ for a binary predictor. Compute and interpret the odds ratio.
+**연습문제 1.**
+어떤 로지스틱 회귀에서 이항 설명변수의 계수가 $\hat{\beta}_1 = 0.693$이다. 오즈비를 계산하고
+해석하라.
 
-??? success "Solution to Exercise 1"
-    The odds ratio is $\text{OR} = e^{\hat{\beta}_1} = e^{0.693} = 2.0$.
+??? success "연습문제 1 풀이"
+    오즈비는 $\text{OR} = e^{\hat{\beta}_1} = e^{0.693} = 2.0$이다.
 
-    Interpretation: the odds of the outcome (e.g., disease) are 2 times higher for the group with $X = 1$ compared to $X = 0$, holding other variables constant. Equivalently, the presence of the factor doubles the odds.
+    해석: 다른 변수를 고정할 때, $X = 1$인 집단의 결과(예: 발병) 오즈가 $X = 0$인 집단의 2배다.
+    달리 말해 그 요인이 있으면 오즈가 두 배가 된다.
 
-    Note: $\text{OR} = 2$ does not mean the probability doubles. If the baseline probability is 10% (odds = 0.111), the new odds are 0.222, giving a probability of $0.222/1.222 = 18.2\%$ -- less than double.
-
----
-
-**Exercise 2.**
-A logistic regression for heart disease includes age (continuous) with $\hat{\beta}_{\text{age}} = 0.05$. Interpret this coefficient in terms of odds ratios.
-
-??? success "Solution to Exercise 2"
-    The odds ratio per one-year increase in age is $e^{0.05} = 1.051$. Each additional year of age increases the odds of heart disease by about 5.1%.
-
-    For a 10-year increase: $\text{OR}_{10} = e^{10 \times 0.05} = e^{0.5} = 1.649$. A person 10 years older has about 65% higher odds of heart disease.
-
-    This multiplicative interpretation is key: each year multiplies the odds by 1.051, so effects compound over larger age differences.
+    주의: $\text{OR} = 2$는 확률이 두 배가 된다는 뜻이 **아니다.** 기준 확률이 10%(오즈 0.111)
+    라면 새 오즈는 0.222이고 확률은 $0.222/1.222 = 18.2\%$로, 두 배에 못 미친다.
 
 ---
 
-**Exercise 3.**
-Explain the difference between an odds ratio and a relative risk. When are they approximately equal?
+**연습문제 2.**
+심장질환에 대한 로지스틱 회귀에 연속형 변수인 나이가 들어 있고
+$\hat{\beta}_{\text{age}} = 0.05$이다. 이 계수를 오즈비로 해석하라.
 
-??? success "Solution to Exercise 3"
-    The **odds ratio** is $\text{OR} = \frac{p_1/(1-p_1)}{p_0/(1-p_0)}$. The **relative risk** is $\text{RR} = p_1/p_0$.
+??? success "연습문제 2 풀이"
+    나이 1년 증가당 오즈비는 $e^{0.05} = 1.051$이다. 즉 나이가 한 살 많아질 때마다 심장질환
+    오즈가 약 5.1% 증가한다.
 
-    They are approximately equal when the outcome is rare ($p_0$ and $p_1$ are both small). When $p \ll 1$, odds $\approx p$, so $\text{OR} \approx \text{RR}$.
+    10년 증가라면 $\text{OR}_{10} = e^{10 \times 0.05} = e^{0.5} = 1.649$이다. 열 살 많은
+    사람은 심장질환 오즈가 약 65% 높다.
 
-    For common outcomes ($p > 10\%$), OR exaggerates the association compared to RR. For example, if $p_0 = 0.3$ and $p_1 = 0.5$: $\text{RR} = 1.67$ but $\text{OR} = (0.5/0.5)/(0.3/0.7) = 2.33$. The OR overstates the relative increase.
-
-    Logistic regression directly estimates OR (not RR). For rare outcomes, this distinction is minor; for common outcomes, log-binomial regression or Poisson regression with robust standard errors can estimate RR directly.
+    이 곱셈적 해석이 핵심이다. 1년마다 오즈에 1.051이 곱해지므로 나이 차이가 커지면 효과가
+    복리처럼 누적된다.
 
 ---
 
-**Exercise 4.**
-A 95% confidence interval for an odds ratio is $(0.85, 1.42)$. What does this imply about the statistical significance of the predictor?
+**연습문제 3.**
+오즈비와 상대위험도의 차이를 설명하라. 둘은 언제 거의 같아지는가?
 
-??? success "Solution to Exercise 4"
-    Since the CI for the odds ratio includes 1.0, the effect is **not statistically significant** at $\alpha = 0.05$. An OR of 1.0 corresponds to no association ($\beta = 0$), and its inclusion in the CI means we cannot reject $H_0: \text{OR} = 1$.
+??? success "연습문제 3 풀이"
+    **오즈비**는 $\text{OR} = \frac{p_1/(1-p_1)}{p_0/(1-p_0)}$이고, **상대위험도**는
+    $\text{RR} = p_1/p_0$이다.
 
-    Equivalently, the CI for $\beta$ is $(\ln 0.85, \ln 1.42) = (-0.163, 0.351)$, which includes 0.
+    결과가 드물 때($p_0$과 $p_1$이 모두 작을 때) 둘은 거의 같다. $p \ll 1$이면 오즈 $\approx p$
+    이므로 $\text{OR} \approx \text{RR}$이다.
 
-    The result suggests the predictor has a small, non-significant effect. The point estimate OR $= \sqrt{0.85 \times 1.42} \approx 1.10$ suggests a modest positive association, but the data are consistent with no effect or even a slight negative effect.
+    결과가 흔하면($p > 10\%$) OR는 RR에 비해 연관을 과장한다. 예컨대 $p_0 = 0.3$, $p_1 = 0.5$
+    이면 $\text{RR} = 1.67$이지만 $\text{OR} = (0.5/0.5)/(0.3/0.7) = 2.33$이다. OR가 상대적
+    증가를 부풀려 보여준다.
+
+    로지스틱 회귀는 RR가 아니라 OR를 직접 추정한다. 드문 결과에서는 이 구분이 사소하지만, 흔한
+    결과에서는 로그이항 회귀나 로버스트 표준오차를 쓰는 푸아송 회귀로 RR를 직접 추정하는 편이
+    낫다.
+
+---
+
+**연습문제 4.**
+어떤 오즈비의 95% 신뢰구간이 $(0.85, 1.42)$이다. 이 설명변수의 통계적 유의성에 대해 무엇을
+알 수 있는가?
+
+??? success "연습문제 4 풀이"
+    오즈비의 신뢰구간이 1.0을 포함하므로 $\alpha = 0.05$에서 효과는 **통계적으로 유의하지
+    않다.** OR $= 1.0$은 연관이 없음($\beta = 0$)에 대응하며, 이것이 구간에 포함되어 있으므로
+    $H_0: \text{OR} = 1$을 기각할 수 없다.
+
+    동등하게 $\beta$의 신뢰구간은 $(\ln 0.85, \ln 1.42) = (-0.163, 0.351)$이고 0을 포함한다.
+
+    결과는 이 설명변수의 효과가 작고 유의하지 않음을 시사한다. 점추정치
+    OR $= \sqrt{0.85 \times 1.42} \approx 1.10$은 완만한 양의 연관을 가리키지만, 자료는 효과가
+    없거나 심지어 약한 음의 효과인 경우와도 양립한다.
+
+    !!! note "왜 기하평균인가"
+        점추정치를 산술평균 $(0.85+1.42)/2 = 1.135$가 아니라 기하평균으로 구한 이유는, 신뢰구간이
+        오즈비 척도가 아니라 **로그오즈비 척도에서 대칭**이기 때문이다.
+        $\hat\beta = (\ln 0.85 + \ln 1.42)/2$이고 이를 지수화하면 곧 기하평균
+        $\sqrt{0.85 \times 1.42}$가 된다.
