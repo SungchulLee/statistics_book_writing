@@ -1,129 +1,129 @@
-# Sample Size for Desired Margin of Error
+# 원하는 오차한계를 위한 표본크기
 
-## Overview
+## 개요
 
-In previous sections we constructed confidence intervals and saw that their width depends on the sample size $n$. A natural planning question arises: how large must $n$ be to guarantee a desired level of precision? This section derives the required sample size by inverting the margin-of-error formula for both means and proportions.
+앞 절들에서 신뢰구간을 구성하면서 그 너비가 표본크기 $n$에 달려 있음을 보았다. 그러면 자연스럽게 계획 단계의 질문이 생긴다: 원하는 정밀도를 보장하려면 $n$이 얼마나 커야 하는가? 이 절에서는 평균과 비율 각각에 대해 오차한계 공식을 뒤집어 필요한 표본크기를 유도한다.
 
-## Sample Size for a Mean
+## 평균을 위한 표본크기
 
-Recall that the margin of error for a confidence interval for the population mean is $E = z_{\alpha/2} \cdot \sigma / \sqrt{n}$, where
+모평균의 신뢰구간에서 오차한계는 $E = z_{\alpha/2} \cdot \sigma / \sqrt{n}$이었다. 여기서
 
-- $z_{\alpha/2}$ is the critical value from the standard normal distribution corresponding to confidence level $1 - \alpha$,
-- $\sigma$ is the population standard deviation (or a reliable estimate of it), and
-- $E$ is the desired margin of error (half-width of the confidence interval).
+- $z_{\alpha/2}$는 신뢰수준 $1 - \alpha$에 대응하는 표준정규분포의 임계값,
+- $\sigma$는 모표준편차(또는 그 믿을 만한 추정값),
+- $E$는 원하는 오차한계(신뢰구간의 반너비)이다.
 
-Solving $E = z_{\alpha/2} \cdot \sigma / \sqrt{n}$ for $n$ gives the minimum sample size formula:
+$E = z_{\alpha/2} \cdot \sigma / \sqrt{n}$을 $n$에 대해 풀면 최소 표본크기 공식을 얻는다:
 
 $$
 n = \left(\frac{z_{\alpha/2} \cdot \sigma}{E}\right)^2
 $$
 
-Since $n$ must be a positive integer, always round up the computed value to ensure the margin of error does not exceed $E$.
+$n$은 양의 정수여야 하므로, 오차한계가 $E$를 넘지 않도록 계산값을 항상 올림한다.
 
-??? example "Worked Example: Estimating Average Height"
+??? example "풀이 예제: 평균 키의 추정"
 
-    A researcher wants to estimate the mean height of adult males in a city with a 95% confidence interval whose margin of error is at most $E = 1$ cm. From prior studies, the population standard deviation is estimated as $\sigma = 7$ cm. At the 95% confidence level, $z_{0.025} = 1.96$. The required sample size is
+    한 연구자가 어느 도시 성인 남성의 평균 키를 오차한계가 최대 $E = 1$ cm인 95% 신뢰구간으로 추정하려 한다. 선행 연구에서 모표준편차는 $\sigma = 7$ cm로 추정된다. 95% 신뢰수준에서 $z_{0.025} = 1.96$이다. 필요한 표본크기는
 
     $$
     n = \left(\frac{1.96 \times 7}{1}\right)^2 = (13.72)^2 = 188.24
     $$
 
-    Rounding up, the researcher needs $n = 189$ participants.
+    올림하면 연구자는 참가자 $n = 189$명이 필요하다.
 
-## Sample Size for a Proportion
+## 비율을 위한 표본크기
 
-For a proportion, the margin of error of the confidence interval is $E = z_{\alpha/2} \sqrt{p^*(1 - p^*) / n}$, where $p^*$ is a planning value for the population proportion. Solving for $n$ yields:
+비율의 신뢰구간에서 오차한계는 $E = z_{\alpha/2} \sqrt{p^*(1 - p^*) / n}$이며, 여기서 $p^*$는 모비율에 대한 계획값이다. $n$에 대해 풀면:
 
 $$
 n = \frac{z_{\alpha/2}^2 \, p^*(1 - p^*)}{E^2}
 $$
 
-Here $p^*$ is a prior estimate or best guess for the true proportion $p$. When no prior estimate is available, setting $p^* = 0.5$ maximizes $p^*(1 - p^*)$ and therefore gives the most conservative (largest) required sample size. As with the mean case, always round up to the next integer.
+여기서 $p^*$는 참 비율 $p$에 대한 사전 추정값이나 최선의 추측이다. 사전 추정값이 없으면 $p^* = 0.5$로 두는 것이 $p^*(1 - p^*)$를 최대화하므로 가장 보수적인(가장 큰) 표본크기를 준다. 평균의 경우와 마찬가지로 항상 다음 정수로 올림한다.
 
-??? example "Worked Example: Estimating Voter Support"
+??? example "풀이 예제: 유권자 지지율의 추정"
 
-    A polling firm wants to estimate the proportion of voters who support a ballot measure with a 99% confidence interval and margin of error $E = 0.03$ (3 percentage points). No prior estimate of $p$ is available, so the firm uses $p^* = 0.5$. At the 99% level, $z_{0.005} = 2.576$. The required sample size is
+    한 여론조사 회사가 어떤 안건을 지지하는 유권자의 비율을 99% 신뢰구간, 오차한계 $E = 0.03$(3 퍼센트포인트)으로 추정하려 한다. $p$의 사전 추정값이 없으므로 $p^* = 0.5$를 쓴다. 99% 수준에서 $z_{0.005} = 2.576$이다. 필요한 표본크기는
 
     $$
     n = \frac{(2.576)^2 \times 0.5 \times 0.5}{(0.03)^2} = \frac{6.6358 \times 0.25}{0.0009} = \frac{1.6589}{0.0009} \approx 1843.3
     $$
 
-    Rounding up, the firm needs $n = 1844$ respondents.
+    올림하면 응답자 $n = 1844$명이 필요하다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-A pollster wants to estimate a population proportion with a margin of error of 3 percentage points at 95% confidence. Find the required sample size using the conservative estimate $p = 0.5$.
+**연습문제 1.**
+어떤 조사자가 95% 신뢰수준에서 오차한계 3 퍼센트포인트로 모비율을 추정하려 한다. 보수적인 추정값 $p = 0.5$를 써서 필요한 표본크기를 구하라.
 
-??? success "Solution to Exercise 1"
-    The margin of error for a proportion is $E = z_{\alpha/2}\sqrt{p(1-p)/n}$. Solving for $n$:
+??? success "연습문제 1 풀이"
+    비율의 오차한계는 $E = z_{\alpha/2}\sqrt{p(1-p)/n}$이다. $n$에 대해 풀면:
 
     $$
     n = \frac{z_{\alpha/2}^2 \cdot p(1-p)}{E^2}
     $$
 
-    With $z_{0.025} = 1.96$, $p = 0.5$ (maximizes $p(1-p) = 0.25$), and $E = 0.03$:
+    $z_{0.025} = 1.96$, $p = 0.5$($p(1-p) = 0.25$를 최대화), $E = 0.03$이면:
 
     $$
     n = \frac{1.96^2 \times 0.25}{0.03^2} = \frac{0.9604}{0.0009} = 1067.1
     $$
 
-    Rounding up: $n = 1068$ respondents are needed.
+    올림하면 응답자 $n = 1068$명이 필요하다.
 
 ---
 
-**Exercise 2.**
-A researcher wants to estimate a population mean with margin of error $E = 2$ units at 99% confidence. A pilot study suggests $\sigma \approx 10$. Find the required sample size.
+**연습문제 2.**
+어떤 연구자가 99% 신뢰수준에서 오차한계 $E = 2$ 단위로 모평균을 추정하려 한다. 예비조사에서 $\sigma \approx 10$으로 나타났다. 필요한 표본크기를 구하라.
 
-??? success "Solution to Exercise 2"
-    The margin of error for a mean is $E = z_{\alpha/2} \cdot \sigma/\sqrt{n}$. Solving:
+??? success "연습문제 2 풀이"
+    평균의 오차한계는 $E = z_{\alpha/2} \cdot \sigma/\sqrt{n}$이다. 풀면:
 
     $$
     n = \left(\frac{z_{\alpha/2} \cdot \sigma}{E}\right)^2
     $$
 
-    With $z_{0.005} = 2.576$, $\sigma = 10$, $E = 2$:
+    $z_{0.005} = 2.576$, $\sigma = 10$, $E = 2$이면:
 
     $$
     n = \left(\frac{2.576 \times 10}{2}\right)^2 = (12.88)^2 = 165.9
     $$
 
-    Rounding up: $n = 166$. If the pilot study estimate of $\sigma$ is uncertain, a conservative approach is to use a larger $\sigma$.
+    올림하면 $n = 166$이다. 예비조사의 $\sigma$ 추정값이 불확실하다면 더 큰 $\sigma$를 쓰는 것이 보수적인 접근이다.
 
 ---
 
-**Exercise 3.**
-Explain why halving the margin of error requires quadrupling the sample size. Derive this relationship from the margin of error formula.
+**연습문제 3.**
+오차한계를 절반으로 줄이려면 왜 표본크기가 네 배 필요한지 설명하라. 오차한계 공식에서 이 관계를 유도하라.
 
-??? success "Solution to Exercise 3"
-    The margin of error is $E = z_{\alpha/2}\sigma/\sqrt{n}$, which means $n = z_{\alpha/2}^2\sigma^2/E^2$.
+??? success "연습문제 3 풀이"
+    오차한계는 $E = z_{\alpha/2}\sigma/\sqrt{n}$이므로 $n = z_{\alpha/2}^2\sigma^2/E^2$이다.
 
-    Since $n \propto 1/E^2$, the relationship between sample size and margin of error is an inverse-square law. If we want $E' = E/2$ (half the margin):
+    $n \propto 1/E^2$이므로 표본크기와 오차한계의 관계는 역제곱 법칙이다. $E' = E/2$(오차한계 절반)를 원하면:
 
     $$
     n' = \frac{z_{\alpha/2}^2\sigma^2}{(E/2)^2} = \frac{4z_{\alpha/2}^2\sigma^2}{E^2} = 4n
     $$
 
-    This "diminishing returns" property means that precision improvements become increasingly expensive. Going from $E = 4$ to $E = 2$ quadruples $n$; going from $E = 2$ to $E = 1$ quadruples it again. This is a fundamental constraint in survey design and explains why extremely precise estimates require very large samples.
+    이 "수확 체감" 성질 때문에 정밀도를 높일수록 비용이 점점 더 커진다. $E = 4$에서 $E = 2$로 가면 $n$이 네 배가 되고, $E = 2$에서 $E = 1$로 가면 또 네 배가 된다. 이는 조사 설계의 근본적인 제약이며, 극도로 정밀한 추정에 아주 큰 표본이 필요한 이유이다.
 
 ---
 
-**Exercise 4.**
-A company has budget for $n = 400$ surveys. What is the best achievable margin of error for a population proportion at 95% confidence? How much does the margin shrink if the budget doubles to $n = 800$?
+**연습문제 4.**
+어떤 회사가 조사 $n = 400$건의 예산을 가지고 있다. 95% 신뢰수준에서 모비율에 대해 달성 가능한 최선의 오차한계는 얼마인가? 예산이 두 배가 되어 $n = 800$이 되면 오차한계는 얼마나 줄어드는가?
 
-??? success "Solution to Exercise 4"
-    Using the conservative $p = 0.5$:
+??? success "연습문제 4 풀이"
+    보수적인 $p = 0.5$를 쓰면:
 
-    For $n = 400$:
+    $n = 400$일 때:
 
     $$
     E = 1.96\sqrt{\frac{0.25}{400}} = 1.96 \times 0.025 = 0.049 = 4.9\%
     $$
 
-    For $n = 800$:
+    $n = 800$일 때:
 
     $$
     E = 1.96\sqrt{\frac{0.25}{800}} = 1.96 \times 0.01768 = 0.0346 = 3.5\%
     $$
 
-    Doubling the sample size reduced the margin from 4.9% to 3.5%, a reduction factor of $\sqrt{2} \approx 1.414$. The margin decreases proportionally to $1/\sqrt{n}$, so doubling $n$ only improves precision by about 29%, not 50%.
+    표본크기를 두 배로 하니 오차한계가 4.9%에서 3.5%로 줄었으며, 감소 인자는 $\sqrt{2} \approx 1.414$이다. 오차한계는 $1/\sqrt{n}$에 비례해 줄어들므로 $n$을 두 배로 해도 정밀도는 50%가 아니라 약 29%만 좋아진다.

@@ -1,58 +1,58 @@
-# CI for σ²
+# σ²의 신뢰구간
 
-## Confidence Interval for the Population Variance
+## 모분산의 신뢰구간
 
-When the goal is to estimate the variability in a population, we construct a confidence interval for the population variance $\sigma^2$ (or equivalently, the population standard deviation $\sigma$).
+모집단의 변동성을 추정하는 것이 목표일 때는 모분산 $\sigma^2$(동등하게 모표준편차 $\sigma$)의 신뢰구간을 구성한다.
 
-### Formula
+### 공식
 
 $$
 \left[\frac{(n-1)s^2}{\chi^2_{\alpha/2,\,n-1}},\;\frac{(n-1)s^2}{\chi^2_{1-\alpha/2,\,n-1}}\right]
 $$
 
-where
+여기서
 
-- $s^2$ is the sample variance (with Bessel's correction, $\text{ddof}=1$),
-- $n - 1$ is the degrees of freedom,
-- $\chi^2_{\alpha/2, n-1}$ and $\chi^2_{1-\alpha/2, n-1}$ are the lower and upper critical values from the chi-square distribution.
+- $s^2$은 표본분산(Bessel 수정, $\text{ddof}=1$),
+- $n - 1$은 자유도,
+- $\chi^2_{\alpha/2, n-1}$과 $\chi^2_{1-\alpha/2, n-1}$은 카이제곱분포의 아래쪽·위쪽 임계값이다.
 
-### Sampling Distribution
+### 표본분포
 
-The pivotal quantity is
+추축량은
 
 $$
 \frac{(n-1)s^2}{\sigma^2} \sim \chi^2_{n-1}
 $$
 
-This result holds **exactly** when the population is normally distributed.
+이 결과는 모집단이 정규분포를 따를 때 **정확히** 성립한다.
 
-### Conditions for Validity
+### 타당성 조건
 
 $$
-\text{Chi-square CI for } \sigma^2
+\sigma^2 \text{에 대한 카이제곱 신뢰구간}
 \quad\text{if}\quad
 \begin{cases}
-\text{population distribution is normal, so that sampling distribution is known exactly} \\
-n \le 0.1N \text{ (IID approximation)}
+\text{모집단 분포가 정규이다, 그래서 표본분포를 정확히 안다} \\
+n \le 0.1N \text{ (i.i.d. 근사)}
 \end{cases}
 $$
 
-!!! warning "Critical Normality Assumption"
-    This CI is **exact only for Normal data**. The pivotal result $(n-1)S^2/\sigma^2 \sim \chi^2_{n-1}$ holds **if and only if** the population is Normal. If the population is skewed or heavy-tailed, this relationship breaks and the chi-square CI can under- or over-cover, even for large $n$. The CLT that helps means does **not** rescue this variance CI.
+!!! warning "결정적인 정규성 가정"
+    이 신뢰구간은 **정규 자료에서만 정확하다**. 추축 결과 $(n-1)S^2/\sigma^2 \sim \chi^2_{n-1}$은 모집단이 정규일 **때에만** 성립한다. 모집단이 치우쳐 있거나 꼬리가 두꺼우면 이 관계가 깨지고, $n$이 커도 카이제곱 신뢰구간의 포함확률이 명목값보다 낮거나 높아질 수 있다. 평균에 도움을 주는 중심극한정리가 이 분산 신뢰구간을 구해 주지는 **못한다**.
 
-### When to Use
+### 언제 쓰는가
 
-- Data plausibly come from a **Normal population** (check with histogram or Q-Q plot; look for symmetry and light tails).
-- Measurement-error or process data that are well-modeled by Normal noise.
-- Teaching and demonstration of exact small-sample inference under Normality.
+- 자료가 **정규모집단**에서 나왔다고 볼 만할 때(히스토그램이나 Q-Q 그림으로 확인하라. 대칭성과 얇은 꼬리를 보라).
+- 정규 잡음으로 잘 모형화되는 측정오차나 공정 자료.
+- 정규성 아래에서 정확한 소표본 추론을 가르치거나 시연할 때.
 
-### When to Be Cautious
+### 언제 조심해야 하는가
 
-- **Skewed or heavy-tailed** data or notable outliers → chi-square CI can miscover. Consider a bootstrap CI for $\sigma$ or $\sigma^2$ (percentile or BCa), or use a robust scale estimator (e.g., MAD) with bootstrap.
-- **Transformations** (e.g., log) may normalize, but then the CI is for the variance on the transformed scale.
-- For comparing two variances, the F-interval has the same Normality requirement.
+- **치우치거나 꼬리가 두꺼운** 자료, 또는 눈에 띄는 이상점 → 카이제곱 신뢰구간의 포함확률이 어긋날 수 있다. $\sigma$나 $\sigma^2$에 대한 붓스트랩 신뢰구간(백분위수 또는 BCa)을 고려하거나, 로버스트 척도추정량(예: MAD)과 붓스트랩을 함께 쓰라.
+- **변환**(예: 로그)으로 정규화할 수 있지만, 그러면 신뢰구간은 변환된 척도에서의 분산에 대한 것이 된다.
+- 두 분산을 비교할 때 쓰는 F-구간에도 같은 정규성 요구가 있다.
 
-### Python Code
+### Python 코드
 
 ```python
 import numpy as np
@@ -85,9 +85,9 @@ print(f"95% CI for σ:  ({np.sqrt(ci_lower):.4f}, {np.sqrt(ci_upper):.4f})")
 
 ---
 
-## Simulation: Variance CI Coverage
+## 모의실험: 분산 신뢰구간의 포함확률
 
-The following script simulates many samples from a Normal population, constructs chi-square CIs for $\sigma^2$, and tracks how many intervals capture the true variance.
+다음 스크립트는 정규모집단에서 표본을 여러 번 뽑아 $\sigma^2$에 대한 카이제곱 신뢰구간을 만들고, 그중 몇 개가 참 분산을 잡아내는지 추적한다.
 
 ```python
 #!/usr/bin/env python3
@@ -162,100 +162,98 @@ if __name__ == "__main__":
     main()
 ```
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Ball-bearings, $n = 15$, $s^2 = 0.0025$ mm². (a) 95% CI for $\sigma^2$. (b) 95% CI for $\sigma$.
+**연습문제 1.**
+볼베어링에서 $n = 15$, $s^2 = 0.0025$ mm²이다. (a) $\sigma^2$의 95% 신뢰구간. (b) $\sigma$의 95% 신뢰구간.
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
     (a) $\chi^2_{14, 0.025} = 5.629$, $\chi^2_{14, 0.975} = 26.119$.
 
-    CI for $\sigma^2$: $(14 \cdot 0.0025/26.119, 14 \cdot 0.0025/5.629) = (0.00134, 0.00622)$.
+    $\sigma^2$의 신뢰구간: $(14 \cdot 0.0025/26.119, 14 \cdot 0.0025/5.629) = (0.00134, 0.00622)$.
 
-    (b) CI for $\sigma$ = $(\sqrt{0.00134}, \sqrt{0.00622}) = (0.0366, 0.0789)$ mm.
+    (b) $\sigma$의 신뢰구간 = $(\sqrt{0.00134}, \sqrt{0.00622}) = (0.0366, 0.0789)$ mm.
 
-    Note: monotonic transformation of CI for $\sigma^2$ gives valid CI for $\sigma$ — same coverage probability.
-
----
-
-**Exercise 2.**
-**Pivot quantity.** Show $(n-1)S^2/\sigma^2 \sim \chi^2_{n-1}$ is a pivot under normality.
-
-??? success "Solution to Exercise 2"
-    A **pivot** has a known distribution that doesn't depend on unknown parameters.
-
-    $(n-1)S^2/\sigma^2 \sim \chi^2_{n-1}$ — the chi-squared distribution depends only on $n$, not on $\sigma^2$ or $\mu$.
-
-    So we can write $P(\chi^2_{n-1, \alpha/2} \le (n-1)S^2/\sigma^2 \le \chi^2_{n-1, 1-\alpha/2}) = 1 - \alpha$.
-
-    Inverting for $\sigma^2$ gives the CI.
-
-    Other pivots: $(\bar X - \mu)/(s/\sqrt n) \sim t_{n-1}$ for the mean CI under normality.
+    유의: $\sigma^2$의 신뢰구간에 단조변환을 적용하면 $\sigma$에 대한 타당한 신뢰구간이 된다 — 포함확률이 같다.
 
 ---
 
-**Exercise 3.**
-**Asymmetric CI.** Why is the CI for $\sigma^2$ asymmetric about $S^2$?
+**연습문제 2.**
+**추축량.** 정규성 아래에서 $(n-1)S^2/\sigma^2 \sim \chi^2_{n-1}$이 추축량임을 보여라.
 
-??? success "Solution to Exercise 3"
-    Chi-squared is **right-skewed** — its quantiles are asymmetric about its mean.
+??? success "연습문제 2 풀이"
+    **추축량**은 미지의 모수에 의존하지 않는 알려진 분포를 갖는다.
 
-    For $\chi^2_{14}$ (Exercise 1): lower 2.5%-tile is 5.629; upper 97.5%-tile is 26.119. Mean is 14.
+    $(n-1)S^2/\sigma^2 \sim \chi^2_{n-1}$ — 이 카이제곱분포는 $\sigma^2$이나 $\mu$가 아니라 오직 $n$에만 의존한다.
 
-    Distance from mean to lower: $14 - 5.6 \approx 8.4$. Distance from mean to upper: $26 - 14 = 12$. Upper tail is further out.
+    따라서 $P(\chi^2_{n-1, \alpha/2} \le (n-1)S^2/\sigma^2 \le \chi^2_{n-1, 1-\alpha/2}) = 1 - \alpha$라고 쓸 수 있다.
 
-    When inverting to CI for $\sigma^2$: lower bound is closer to $S^2$ (uses larger denominator); upper bound is farther (uses smaller denominator).
+    $\sigma^2$에 대해 뒤집으면 신뢰구간을 얻는다.
 
-    For large $n$, chi-squared approaches normal and the asymmetry shrinks. By $n = 100$ the CI is nearly symmetric.
+    다른 추축량: 정규성 아래 평균의 신뢰구간에 쓰는 $(\bar X - \mu)/(s/\sqrt n) \sim t_{n-1}$.
 
 ---
 
-**Exercise 4.**
-**Sample size for variance CI.** What $n$ ensures CI for $\sigma$ has half-width $\le 10\%$ of $\sigma$?
+**연습문제 3.**
+**비대칭 신뢰구간.** $\sigma^2$의 신뢰구간이 $S^2$을 중심으로 비대칭인 이유는?
 
-??? success "Solution to Exercise 4"
-    For large $n$, $\sqrt{(n-1) S^2/\sigma^2} \sim \sqrt{\chi^2_{n-1}}$ which is approximately $N(\sqrt{n-1}, 1/2)$ — uses Wilson-Hilferty approximation.
+??? success "연습문제 3 풀이"
+    카이제곱분포는 **오른쪽으로 치우쳐** 있어 평균을 중심으로 분위수가 비대칭이다.
 
-    So $S/\sigma \approx N(1, 1/(2(n-1)))$, meaning $\mathrm{SE}(\log S) \approx 1/\sqrt{2(n-1)}$.
+    $\chi^2_{14}$(연습문제 1)에서 하위 2.5% 분위수는 5.629, 상위 97.5% 분위수는 26.119이다. 평균은 14이다.
 
-    95% CI for $\sigma$ has relative half-width $\approx 1.96/\sqrt{2(n-1)}$. Setting = 0.10:
+    평균에서 아래쪽까지의 거리: $14 - 5.6 \approx 8.4$. 평균에서 위쪽까지의 거리: $26 - 14 = 12$. 위쪽 꼬리가 더 멀리 뻗는다.
+
+    $\sigma^2$의 신뢰구간으로 뒤집으면 하한은 $S^2$에 더 가깝고(더 큰 분모를 쓴다) 상한은 더 멀다(더 작은 분모를 쓴다).
+
+    $n$이 크면 카이제곱이 정규에 가까워져 비대칭성이 줄어든다. $n = 100$쯤이면 신뢰구간이 거의 대칭이다.
+
+---
+
+**연습문제 4.**
+**분산 신뢰구간을 위한 표본크기.** $\sigma$의 신뢰구간의 반너비가 $\sigma$의 $10\%$ 이하가 되려면 $n$은 얼마여야 하는가?
+
+??? success "연습문제 4 풀이"
+    큰 $n$에서 델타 방법을 쓰면 $S/\sigma \approx N(1, 1/(2(n-1)))$이며, 따라서 $\mathrm{SE}(\log S) \approx 1/\sqrt{2(n-1)}$이다.
+
+    $\sigma$의 95% 신뢰구간의 상대 반너비는 $\approx 1.96/\sqrt{2(n-1)}$이다. 이를 0.10으로 놓으면:
 
     $\sqrt{2(n-1)} = 19.6 \Rightarrow n - 1 \approx 192 \Rightarrow n \approx 193$.
 
-    So roughly $n = 200$ for relative half-width 10%. Variance estimation needs surprisingly large samples — much larger than for mean estimation.
+    즉 상대 반너비 10%를 위해 대략 $n = 200$이 필요하다. 분산추정에는 놀랄 만큼 큰 표본이 필요하다 — 평균추정보다 훨씬 크다.
 
 ---
 
-**Exercise 5.**
-**Non-normal data and CI for $\sigma^2$.** Why is the chi-squared-based CI fragile under non-normality?
+**연습문제 5.**
+**정규가 아닌 자료와 $\sigma^2$의 신뢰구간.** 카이제곱 기반 신뢰구간이 비정규성에 취약한 이유는?
 
-??? success "Solution to Exercise 5"
-    The pivot $(n-1)S^2/\sigma^2 \sim \chi^2_{n-1}$ relies on **normality** of the underlying data. For non-normal data, this fails — even for large $n$.
+??? success "연습문제 5 풀이"
+    추축량 $(n-1)S^2/\sigma^2 \sim \chi^2_{n-1}$은 바탕 자료의 **정규성**에 의존한다. 정규가 아닌 자료에서는 $n$이 커도 이것이 성립하지 않는다.
 
-    Specifically: $S^2$'s sampling distribution depends on the **fourth moment** (kurtosis) of the population. Heavy-tailed populations make $S^2$ much more variable than the chi-squared formula suggests.
+    구체적으로 $S^2$의 표본분포는 모집단의 **4차 적률**(첨도)에 의존한다. 꼬리가 두꺼운 모집단에서는 $S^2$이 카이제곱 공식이 시사하는 것보다 훨씬 크게 변동한다.
 
-    **Consequence:** for non-normal data, the nominal 95% CI may have actual coverage 70-80%. Heavy-tailed data is particularly affected.
+    **결과:** 정규가 아닌 자료에서 명목 95% 신뢰구간의 실제 포함확률이 70–80%일 수 있다. 꼬리가 두꺼운 자료가 특히 영향을 받는다.
 
-    **Robust alternatives:**
+    **로버스트한 대안:**
 
-    - **Bootstrap CI for $\sigma^2$:** resamples capture the actual sampling distribution.
-    - **Median absolute deviation (MAD):** robust scale estimator; CI via bootstrap.
-    - **Trimmed standard deviation:** robust to extreme observations.
+    - **$\sigma^2$에 대한 붓스트랩 신뢰구간:** 재표본추출이 실제 표본분포를 포착한다.
+    - **중앙값 절대편차(MAD):** 로버스트한 척도추정량. 붓스트랩으로 신뢰구간을 얻는다.
+    - **절사 표준편차:** 극단 관측값에 로버스트하다.
 
-    Always check normality (Q-Q plot) before using chi-squared CI for variance. When in doubt, bootstrap.
+    분산에 카이제곱 신뢰구간을 쓰기 전에 항상 정규성을 확인하라(Q-Q 그림). 의심스러우면 붓스트랩을 쓰라.
 
 ---
 
-**Exercise 6.**
-**CI for $\sigma$ vs $\sigma^2$.** Why are they different intervals even though $\sigma = \sqrt{\sigma^2}$?
+**연습문제 6.**
+**$\sigma$의 신뢰구간과 $\sigma^2$의 신뢰구간.** $\sigma = \sqrt{\sigma^2}$인데도 두 구간이 다른 이유는?
 
-??? success "Solution to Exercise 6"
-    Two answers:
+??? success "연습문제 6 풀이"
+    두 가지로 답할 수 있다.
 
-    **(a) Monotonic transformation:** since $\sqrt{\cdot}$ is monotonic, applying it to endpoints of a CI for $\sigma^2$ gives a valid CI for $\sigma$ (with the same coverage). So they ARE the same in the sense that one is obtained from the other.
+    **(a) 단조변환:** $\sqrt{\cdot}$가 단조이므로 $\sigma^2$ 신뢰구간의 끝점에 적용하면 (포함확률이 같은) $\sigma$의 타당한 신뢰구간이 된다. 그런 의미에서 하나가 다른 하나에서 얻어지므로 사실상 같다.
 
-    **(b) Direct construction via $S$:** alternatively, you could base inference on $S$ directly. But $S$'s exact distribution is more complicated (Chi distribution); $S^2$ has the clean Chi-squared distribution. So the standard approach: build CI for $\sigma^2$, take square root for CI for $\sigma$.
+    **(b) $S$로 직접 구성:** 대안으로 $S$에 직접 기반해 추론할 수도 있다. 그러나 $S$의 정확한 분포는 더 복잡하고(Chi 분포), $S^2$은 깔끔한 카이제곱분포를 갖는다. 그래서 표준적인 방법은 $\sigma^2$의 신뢰구간을 만들고 제곱근을 취해 $\sigma$의 신뢰구간을 얻는 것이다.
 
-    **Symmetry:** CI for $\sigma$ is *more* symmetric than CI for $\sigma^2$ (square root reduces asymmetry). But it remains asymmetric.
+    **대칭성:** $\sigma$의 신뢰구간은 $\sigma^2$의 신뢰구간보다 *더* 대칭적이다(제곱근이 비대칭성을 줄인다). 그래도 여전히 비대칭이다.
 
-    **Bias:** $S$ is a biased estimator of $\sigma$ (Jensen). $S^2$ is unbiased for $\sigma^2$. Bias correction factors like $c_4$ exist for $\sigma$ but not commonly applied.
+    **편향:** $S$는 (Jensen 부등식에 의해) $\sigma$의 편향추정량이다. $S^2$은 $\sigma^2$에 대해 불편이다. $\sigma$에 대해서는 $c_4$ 같은 편향 보정인자가 있지만 흔히 쓰이지는 않는다.

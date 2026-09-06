@@ -1,72 +1,72 @@
-# When to Use Paired vs Independent Designs
+# 대응 설계와 독립 설계 중 무엇을 쓸 것인가
 
-## Overview
+## 개요
 
-The choice between a paired design and an independent design directly affects the width of confidence intervals and the power of hypothesis tests. A paired design can produce substantially narrower intervals when subjects exhibit natural variation that is large relative to the treatment effect. Conversely, misapplying an independent-sample method to paired data wastes information about within-subject correlation, while misapplying a paired method to independent data violates the dependence assumption. Understanding when each design is appropriate --- and why --- is essential for efficient statistical practice.
+대응 설계와 독립 설계 중 무엇을 고르느냐는 신뢰구간의 너비와 가설검정의 검정력에 직접 영향을 준다. 처리 효과에 비해 피험자의 자연적 변동이 클 때는 대응 설계가 훨씬 좁은 구간을 만들 수 있다. 반대로 대응 자료에 독립표본 방법을 잘못 적용하면 피험자 내 상관에 관한 정보를 낭비하게 되고, 독립 자료에 대응 방법을 잘못 적용하면 종속성 가정을 위반하게 된다. 각 설계가 언제 적절한지 — 그리고 왜 그런지 — 를 이해하는 것은 효율적인 통계 실무에 필수적이다.
 
-## Paired Designs
+## 대응 설계
 
-In a paired design, each observational unit provides measurements under both conditions, or two units are explicitly matched on key characteristics before being assigned to different conditions. The classic example is a before/after study: a physician records each patient's blood pressure before medication and again six weeks later. Because both measurements come from the same individual, much of the person-to-person variability cancels when we compute the within-subject difference $D_i = X_{i,\text{after}} - X_{i,\text{before}}$.
+대응 설계에서는 각 관측 단위가 두 조건 모두에서 측정값을 제공하거나, 두 단위를 핵심 특성으로 명시적으로 짝지은 뒤 서로 다른 조건에 배정한다. 고전적인 예는 전후 연구이다: 의사가 각 환자의 혈압을 투약 전에 재고 6주 뒤에 다시 잰다. 두 측정값이 같은 개인에게서 나오므로, 피험자 내 차이 $D_i = X_{i,\text{after}} - X_{i,\text{before}}$를 계산하면 사람마다 다른 변동의 상당 부분이 상쇄된다.
 
-Common paired designs include:
+흔한 대응 설계는 다음과 같다:
 
-- **Repeated measures**: The same subjects are measured twice (e.g., before and after treatment).
-- **Matched pairs**: Subjects are matched on confounding variables (age, sex, baseline severity) and one member of each pair is assigned to each group.
-- **Crossover trials**: Each subject receives both treatments in sequence, with a washout period between them.
+- **반복측정**: 같은 피험자를 두 번 측정한다(예: 처리 전후).
+- **짝지은 쌍**: 교란변수(나이, 성별, 기저 중증도)로 피험자를 짝지어 각 쌍의 한 명씩을 서로 다른 집단에 배정한다.
+- **교차 시험**: 각 피험자가 두 처리를 차례로 받으며 사이에 세척기간을 둔다.
 
-The central advantage is variance reduction. By focusing on within-subject differences, we eliminate inter-subject variability, which is often the dominant source of noise.
+핵심 장점은 분산 감소이다. 피험자 내 차이에 초점을 맞추면 흔히 잡음의 지배적인 원천인 피험자 간 변동성이 제거된다.
 
-## Independent Designs
+## 독립 설계
 
-In an independent design, different subjects appear in each group with no explicit pairing. A clinical trial that randomly assigns 50 patients to a drug group and 50 different patients to a placebo group is a typical example.
+독립 설계에서는 각 집단에 서로 다른 피험자가 들어가며 명시적인 짝짓기가 없다. 환자 50명을 약물군에, 다른 환자 50명을 위약군에 무작위로 배정하는 임상시험이 전형적인 예이다.
 
-Independent designs have practical advantages:
+독립 설계에는 실무적인 장점이 있다:
 
-- **Simpler logistics**: There is no need to match subjects or administer multiple treatments to the same individual.
-- **No carryover effects**: Each subject experiences only one condition, so there is no concern about the first treatment affecting the second.
-- **Flexibility**: Sample sizes need not be equal across groups.
+- **간단한 실행**: 피험자를 짝지을 필요도, 같은 사람에게 여러 처리를 할 필요도 없다.
+- **이월 효과 없음**: 각 피험자가 한 조건만 경험하므로 첫 처리가 두 번째에 영향을 줄 우려가 없다.
+- **유연성**: 집단별 표본크기가 같을 필요가 없다.
 
-The tradeoff is that all subject-to-subject variability enters the standard error, potentially producing wider confidence intervals when individual differences are large.
+대가는 피험자 간 변동성이 모두 표준오차에 들어간다는 것이며, 개인차가 크면 신뢰구간이 넓어질 수 있다.
 
-## The Variance Comparison
+## 분산의 비교
 
-The mathematical basis for choosing between designs rests on a variance comparison. Suppose each subject $i$ in a paired design yields a difference $D_i = X_{i1} - X_{i2}$, and we estimate $\mu_D = \mu_1 - \mu_2$ with $\bar{D}$.
+두 설계 중 무엇을 고를지는 수학적으로 분산 비교에 달려 있다. 대응 설계에서 피험자 $i$가 차이 $D_i = X_{i1} - X_{i2}$를 주고, $\bar{D}$로 $\mu_D = \mu_1 - \mu_2$를 추정한다고 하자.
 
-**Paired design variance:**
+**대응 설계의 분산:**
 
 $$
 \text{Var}(\bar{D}) = \frac{\sigma_1^2 + \sigma_2^2 - 2\rho\,\sigma_1 \sigma_2}{n}
 $$
 
-where $\rho$ is the within-pair correlation between $X_{i1}$ and $X_{i2}$, and $n$ is the number of pairs.
+여기서 $\rho$는 $X_{i1}$과 $X_{i2}$ 사이의 짝 내 상관이고 $n$은 쌍의 개수이다.
 
-**Independent design variance** (with equal group sizes $n$):
+**독립 설계의 분산** (집단 크기가 모두 $n$일 때):
 
 $$
 \text{Var}(\bar{X}_1 - \bar{X}_2) = \frac{\sigma_1^2 + \sigma_2^2}{n}
 $$
 
-The paired design has smaller variance whenever
+대응 설계의 분산이 더 작을 조건은
 
 $$
 \frac{\sigma_1^2 + \sigma_2^2 - 2\rho\,\sigma_1\sigma_2}{n} < \frac{\sigma_1^2 + \sigma_2^2}{n}
 $$
 
-which simplifies to $\rho > 0$. In words, **pairing helps whenever the within-pair correlation is positive**, which is the typical case in before/after studies, matched experiments, and crossover trials.
+이며, 이는 $\rho > 0$으로 정리된다. 말로 하면 **짝 내 상관이 양수이면 언제나 짝짓기가 도움이 된다**. 전후 연구, 짝지은 실험, 교차 시험에서 전형적인 경우이다.
 
-When $\sigma_1 = \sigma_2 = \sigma$, the paired variance becomes $2\sigma^2(1 - \rho)/n$, and the independent variance is $2\sigma^2/n$. The variance ratio is
+$\sigma_1 = \sigma_2 = \sigma$이면 대응 분산은 $2\sigma^2(1 - \rho)/n$이고 독립 분산은 $2\sigma^2/n$이다. 분산의 비는
 
 $$
 \frac{\text{Var}_{\text{paired}}}{\text{Var}_{\text{independent}}} = 1 - \rho
 $$
 
-So a within-pair correlation of $\rho = 0.5$ cuts the variance in half, and $\rho = 0.8$ reduces it by 80%.
+따라서 짝 내 상관 $\rho = 0.5$이면 분산이 절반이 되고, $\rho = 0.8$이면 80% 줄어든다.
 
-## Worked Example
+## 풀이 예제
 
-A researcher measures reaction time (in milliseconds) for $n = 5$ subjects under two conditions: with and without caffeine.
+한 연구자가 피험자 $n = 5$명의 반응시간(밀리초)을 카페인 섭취 여부라는 두 조건에서 측정했다.
 
-| Subject | Without ($X_{i1}$) | With ($X_{i2}$) | Difference ($D_i$) |
+| 피험자 | 미섭취 ($X_{i1}$) | 섭취 ($X_{i2}$) | 차이 ($D_i$) |
 |---|---|---|---|
 | 1 | 250 | 230 | 20 |
 | 2 | 310 | 290 | 20 |
@@ -74,78 +74,78 @@ A researcher measures reaction time (in milliseconds) for $n = 5$ subjects under
 | 4 | 340 | 325 | 15 |
 | 5 | 220 | 205 | 15 |
 
-**Paired analysis.** The differences are $\{20, 20, 20, 15, 15\}$ with $\bar{D} = 18$ and $s_D = 2.74$. The standard error is
+**대응 분석.** 차이는 $\{20, 20, 20, 15, 15\}$로 $\bar{D} = 18$, $s_D = 2.74$이다. 표준오차는
 
 $$
 \text{SE}_{\text{paired}} = \frac{s_D}{\sqrt{n}} = \frac{2.74}{\sqrt{5}} \approx 1.22
 $$
 
-**Independent analysis (ignoring the pairing).** Treating the groups as independent samples: $\bar{X}_1 = 280$, $\bar{X}_2 = 262$, with $s_1 = 46.37$ and $s_2 = 46.69$. The pooled standard error is
+**독립 분석(짝짓기를 무시한 경우).** 두 집단을 독립표본으로 취급하면 $\bar{X}_1 = 280$, $\bar{X}_2 = 262$이고 $s_1 = 47.43$, $s_2 = 47.51$이다. 합동 표준오차는
 
 $$
-\text{SE}_{\text{indep}} = s_p\sqrt{\frac{1}{n_1} + \frac{1}{n_2}} = 46.53 \times \sqrt{\frac{2}{5}} \approx 29.43
+\text{SE}_{\text{indep}} = s_p\sqrt{\frac{1}{n_1} + \frac{1}{n_2}} = 47.47 \times \sqrt{\frac{2}{5}} \approx 30.02
 $$
 
-The paired standard error (1.22) is roughly 24 times smaller than the independent standard error (29.43). The large subject-to-subject variability in baseline reaction times (220 ms to 340 ms) dominates when pairing is ignored, but it cancels almost entirely in the within-subject differences.
+대응 표준오차(1.22)는 독립 표준오차(30.02)보다 약 25배 작다. 짝짓기를 무시하면 기저 반응시간의 큰 피험자 간 변동성(220 ms에서 340 ms까지)이 지배하지만, 피험자 내 차이에서는 그것이 거의 완전히 상쇄된다.
 
-!!! tip "Practical Guidance"
-    The gains from pairing are largest when between-subject variability is large relative to within-subject variability. In the example above, subjects differ by over 100 ms in baseline reaction time, but the treatment effect is remarkably consistent (15--20 ms), producing a very high within-pair correlation.
+!!! tip "실무 지침"
+    짝짓기의 이득은 피험자 간 변동성이 피험자 내 변동성에 비해 클 때 가장 크다. 위 예에서 피험자들의 기저 반응시간은 100 ms 넘게 차이 나지만 처리 효과는 놀랄 만큼 일관되어(15–20 ms) 짝 내 상관이 매우 높다.
 
-## Decision Guidelines
+## 결정 지침
 
-| Factor | Favors Paired | Favors Independent |
+| 요인 | 대응이 유리 | 독립이 유리 |
 |---|---|---|
-| Within-pair correlation $\rho$ | High ($\rho > 0$) | Near zero or negative |
-| Carryover effects | Absent or controllable | Present and uncontrollable |
-| Logistics | Feasible to measure twice | Impractical to re-measure |
-| Matching variables | Good predictors available | No strong predictors |
-| Sample size | Limited (pairing extracts more information) | Abundant |
+| 짝 내 상관 $\rho$ | 높음 ($\rho > 0$) | 0에 가깝거나 음수 |
+| 이월 효과 | 없거나 통제 가능 | 있고 통제 불가 |
+| 실행 여건 | 두 번 측정이 가능 | 재측정이 비현실적 |
+| 짝짓기 변수 | 좋은 예측변수가 있음 | 강한 예측변수가 없음 |
+| 표본크기 | 제한적(짝짓기가 더 많은 정보를 뽑아낸다) | 넉넉함 |
 
-!!! warning "Do Not Mix Methods"
-    Applying an independent-sample confidence interval to paired data ignores the correlation and produces intervals that are too wide, wasting statistical power. Applying a paired-sample interval to truly independent data violates the assumption of dependence and can produce intervals that are too narrow or too wide depending on the structure of the data.
+!!! warning "방법을 섞지 말 것"
+    대응 자료에 독립표본 신뢰구간을 적용하면 상관을 무시하여 구간이 너무 넓어지고 통계적 검정력을 낭비하게 된다. 진짜 독립인 자료에 대응표본 구간을 적용하면 종속성 가정을 위반하며, 자료의 구조에 따라 구간이 너무 좁아지거나 너무 넓어질 수 있다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-A study measures blood pressure before and after a medication in 30 patients. The within-pair correlation is $\rho = 0.85$. Explain why a paired design is more powerful than an independent-samples design in this case.
+**연습문제 1.**
+어떤 연구가 환자 30명의 혈압을 투약 전후로 측정한다. 짝 내 상관은 $\rho = 0.85$이다. 이 경우 대응 설계가 독립표본 설계보다 검정력이 높은 이유를 설명하라.
 
-??? success "Solution to Exercise 1"
-    With $\rho = 0.85$, the variance of the paired differences is:
+??? success "연습문제 1 풀이"
+    $\rho = 0.85$이면 대응 차이의 분산은:
 
     $$
     \text{Var}(D) = \sigma_1^2 + \sigma_2^2 - 2\rho\sigma_1\sigma_2
     $$
 
-    The high positive correlation means $2\rho\sigma_1\sigma_2$ is large, which substantially reduces $\text{Var}(D)$ compared to the independent-sample variance $\sigma_1^2 + \sigma_2^2$. A smaller variance of differences leads to a smaller standard error, narrower confidence intervals, and more statistical power. Each patient serves as their own control, removing between-patient variability from the comparison.
+    양의 상관이 높으면 $2\rho\sigma_1\sigma_2$가 크므로, 독립표본 분산 $\sigma_1^2 + \sigma_2^2$에 비해 $\text{Var}(D)$가 크게 줄어든다. 차이의 분산이 작으면 표준오차가 작아지고 신뢰구간이 좁아지며 통계적 검정력이 커진다. 각 환자가 자기 자신의 대조 역할을 하여 환자 간 변동성이 비교에서 제거된다.
 
 ---
 
-**Exercise 2.**
-For each scenario, determine whether a paired or independent design is more appropriate: (a) comparing test scores of students before and after a tutoring program, (b) comparing average heights of randomly selected men and women.
+**연습문제 2.**
+다음 각 상황에서 대응 설계와 독립 설계 중 무엇이 더 적절한지 판단하라: (a) 과외 프로그램 전후 학생들의 시험 점수 비교, (b) 무작위로 뽑은 남성과 여성의 평균 키 비교.
 
-??? success "Solution to Exercise 2"
-    **(a) Paired design.** Each student is measured twice (before and after), creating natural pairs. The paired design accounts for individual differences in baseline ability, isolating the effect of the tutoring program.
+??? success "연습문제 2 풀이"
+    **(a) 대응 설계.** 각 학생을 (전후로) 두 번 측정하므로 자연스러운 쌍이 만들어진다. 대응 설계는 기저 능력의 개인차를 감안하여 과외 프로그램의 효과를 분리해 낸다.
 
-    **(b) Independent design.** Men and women are separate, unrelated groups with no natural pairing. There is no meaningful way to match a specific man to a specific woman. An independent two-sample approach is appropriate.
-
----
-
-**Exercise 3.**
-A researcher has paired data but accidentally analyzes it as independent samples. If the true within-pair correlation is $\rho = 0.7$ and both groups have $\sigma = 10$, compare the standard error of the difference under both analyses when $n = 25$ pairs.
-
-??? success "Solution to Exercise 3"
-    **Paired analysis:** $\text{Var}(D) = \sigma_1^2 + \sigma_2^2 - 2\rho\sigma_1\sigma_2 = 100 + 100 - 2(0.7)(100) = 60$. So $\text{SE}_{\text{paired}} = \sqrt{60/25} = \sqrt{2.4} \approx 1.549$.
-
-    **Independent analysis (incorrect):** $\text{SE}_{\text{indep}} = \sqrt{\sigma_1^2/n_1 + \sigma_2^2/n_2} = \sqrt{100/25 + 100/25} = \sqrt{8} \approx 2.828$.
-
-    The incorrect independent analysis produces a standard error that is $2.828/1.549 \approx 1.83$ times larger. The confidence interval would be 83% wider than necessary, substantially reducing the chance of detecting a real effect.
+    **(b) 독립 설계.** 남성과 여성은 자연스러운 짝짓기가 없는 서로 다른 집단이다. 특정 남성과 특정 여성을 짝지을 의미 있는 방법이 없다. 독립 이표본 접근이 적절하다.
 
 ---
 
-**Exercise 4.**
-Describe a scenario where carryover effects make a paired (crossover) design inappropriate despite the availability of repeated measurements.
+**연습문제 3.**
+어떤 연구자가 대응 자료를 실수로 독립표본으로 분석했다. 참 짝 내 상관이 $\rho = 0.7$이고 두 집단 모두 $\sigma = 10$일 때, $n = 25$쌍에서 두 분석의 차이에 대한 표준오차를 비교하라.
 
-??? success "Solution to Exercise 4"
-    In a drug trial comparing a new analgesic to a placebo, each patient receives both treatments in sequence. If the new drug has a long-lasting biological effect (e.g., it permanently alters pain receptor sensitivity), then the response to the placebo in the second period is contaminated by the residual effect of the drug from the first period. This **carryover effect** means the second measurement does not reflect the true placebo response.
+??? success "연습문제 3 풀이"
+    **대응 분석:** $\text{Var}(D) = \sigma_1^2 + \sigma_2^2 - 2\rho\sigma_1\sigma_2 = 100 + 100 - 2(0.7)(100) = 60$. 따라서 $\text{SE}_{\text{paired}} = \sqrt{60/25} = \sqrt{2.4} \approx 1.549$.
 
-    In this case, even though repeated measurements are available, the paired analysis is invalid because the difference $D_i = X_{i,\text{drug}} - X_{i,\text{placebo}}$ is biased. An independent-samples design with separate groups (one receiving the drug, the other the placebo) would avoid this problem entirely.
+    **독립 분석(잘못된 방법):** $\text{SE}_{\text{indep}} = \sqrt{\sigma_1^2/n_1 + \sigma_2^2/n_2} = \sqrt{100/25 + 100/25} = \sqrt{8} \approx 2.828$.
+
+    잘못된 독립 분석의 표준오차는 $2.828/1.549 \approx 1.83$배 크다. 신뢰구간이 필요보다 83% 넓어져 실제 효과를 탐지할 가능성이 크게 줄어든다.
+
+---
+
+**연습문제 4.**
+반복측정이 가능한데도 이월 효과 때문에 대응(교차) 설계가 부적절해지는 상황을 기술하라.
+
+??? success "연습문제 4 풀이"
+    새 진통제를 위약과 비교하는 약물시험에서 각 환자가 두 처리를 차례로 받는다고 하자. 새 약이 오래가는 생물학적 효과를 낸다면(예: 통증 수용체 민감도를 영구적으로 바꾼다면) 두 번째 기간의 위약 반응이 첫 기간 약물의 잔여 효과에 오염된다. 이런 **이월 효과**는 두 번째 측정이 참된 위약 반응을 반영하지 못한다는 뜻이다.
+
+    이 경우 반복측정이 가능하더라도 차이 $D_i = X_{i,\text{drug}} - X_{i,\text{placebo}}$가 편향되므로 대응 분석이 타당하지 않다. 집단을 나누는 독립표본 설계(한 집단은 약, 다른 집단은 위약)라면 이 문제를 완전히 피할 수 있다.

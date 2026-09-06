@@ -1,160 +1,160 @@
-# Paired Interval for Proportions (McNemar)
+# 비율의 대응 구간 (McNemar)
 
-## Overview
+## 개요
 
-When the same subjects are measured under two conditions --- such as before and after a treatment --- the resulting binary outcomes are dependent. The standard two-proportion confidence interval assumes independence between groups and is therefore invalid for paired data. McNemar's approach resolves this by recognizing that only the **discordant pairs** (subjects whose outcomes changed between conditions) carry information about the difference in proportions. This section develops the McNemar confidence interval for the difference in paired proportions.
+같은 피험자를 두 조건에서 측정하면 — 처리 전후처럼 — 그 결과인 이진 결과들은 종속이다. 표준적인 두 비율 신뢰구간은 집단 간 독립성을 가정하므로 대응 자료에는 타당하지 않다. McNemar 방식은 조건 사이에서 결과가 바뀐 피험자, 즉 **불일치 짝**만이 비율 차이에 관한 정보를 담고 있음을 인식하여 이 문제를 해결한다. 이 절에서는 대응 비율 차이에 대한 McNemar 신뢰구간을 전개한다.
 
-## The Concordance--Discordance Table
+## 일치–불일치 표
 
-Suppose $n$ subjects are each observed under two conditions, producing a pair of binary outcomes $(Y_{i1}, Y_{i2})$ for each subject $i$. We classify the $n$ pairs into four cells:
+$n$명의 피험자를 각각 두 조건에서 관측하여 피험자 $i$마다 이진 결과의 쌍 $(Y_{i1}, Y_{i2})$을 얻는다고 하자. $n$개의 쌍을 네 칸으로 분류한다:
 
-|  | Condition 2: Success | Condition 2: Failure |
+|  | 조건 2: 성공 | 조건 2: 실패 |
 |---|---|---|
-| **Condition 1: Success** | $a$ | $b$ |
-| **Condition 1: Failure** | $c$ | $d$ |
+| **조건 1: 성공** | $a$ | $b$ |
+| **조건 1: 실패** | $c$ | $d$ |
 
-Here $a + b + c + d = n$. The cells $a$ and $d$ are **concordant pairs** --- subjects whose outcome did not change. The cells $b$ and $c$ are **discordant pairs** --- subjects whose outcome differs between conditions.
+여기서 $a + b + c + d = n$이다. 칸 $a$와 $d$는 결과가 바뀌지 않은 **일치 짝**이고, 칸 $b$와 $c$는 조건 사이에서 결과가 다른 **불일치 짝**이다.
 
-The marginal proportions of success under each condition are
+각 조건에서 성공의 주변비율은
 
 $$
 \hat{p}_1 = \frac{a + b}{n}, \qquad \hat{p}_2 = \frac{a + c}{n}
 $$
 
-so the difference in marginal proportions depends only on the discordant counts:
+이므로 주변비율의 차이는 불일치 개수에만 의존한다:
 
 $$
 \hat{p}_1 - \hat{p}_2 = \frac{(a + b) - (a + c)}{n} = \frac{b - c}{n}
 $$
 
-This is the key insight: concordant pairs ($a$ and $d$) cancel out. A subject who succeeds under both conditions, or fails under both, tells us nothing about whether one condition is better than the other. All information about the difference resides in the $b + c$ subjects who switched.
+이것이 핵심 통찰이다: 일치 짝($a$와 $d$)은 상쇄된다. 두 조건 모두에서 성공하거나 모두에서 실패한 피험자는 어느 조건이 더 나은지에 대해 아무것도 말해 주지 않는다. 차이에 관한 모든 정보는 결과가 바뀐 $b + c$명에게 있다.
 
-## McNemar Confidence Interval
+## McNemar 신뢰구간
 
-To construct a confidence interval for the population difference $p_1 - p_2$, we need the standard error of $(b - c)/n$. Conditional on $n$, the discordant pair counts $b$ and $c$ satisfy $b + c = m$ (the total number of discordant pairs), and under the null hypothesis $p_1 = p_2$, $b \sim \text{Binomial}(m, 1/2)$.
+모집단 차이 $p_1 - p_2$의 신뢰구간을 만들려면 $(b - c)/n$의 표준오차가 필요하다. $n$이 주어졌을 때 불일치 짝의 개수 $b$와 $c$는 $b + c = m$(불일치 짝의 총수)을 만족하며, 귀무가설 $p_1 = p_2$ 아래에서 $b \sim \text{Binomial}(m, 1/2)$이다.
 
-The Wald-type standard error for the difference in marginal proportions is
+주변비율 차이에 대한 Wald 형태의 표준오차는
 
 $$
 \text{SE} = \frac{1}{n}\sqrt{b + c - \frac{(b - c)^2}{n}}
 $$
 
-and the $(1 - \alpha)$ confidence interval is
+이고, $(1 - \alpha)$ 신뢰구간은
 
 $$
 \hat{p}_1 - \hat{p}_2 \pm z_{\alpha/2} \cdot \text{SE} = \frac{b - c}{n} \pm z_{\alpha/2} \cdot \frac{1}{n}\sqrt{b + c - \frac{(b - c)^2}{n}}
 $$
 
-where $z_{\alpha/2}$ is the upper $\alpha/2$ quantile of the standard normal distribution.
+여기서 $z_{\alpha/2}$는 표준정규분포의 상위 $\alpha/2$ 분위수이다.
 
-!!! note "Alternative Standard Error"
-    A simpler and commonly used form of the standard error treats $b$ and $c$ as independent binomial counts:
+!!! note "대안적인 표준오차"
+    더 단순하고 흔히 쓰이는 형태는 $b$와 $c$를 독립인 이항 개수로 취급한다:
 
     $$
     \text{SE}_{\text{simple}} = \frac{\sqrt{b + c}}{n}
     $$
 
-    This yields a slightly wider interval than the Wald form above and is often preferred in practice for its simplicity. The resulting CI is:
+    위의 Wald 형태보다 구간이 약간 넓어지지만 단순해서 실무에서 흔히 선호된다. 이때 신뢰구간은:
 
     $$
     \frac{b - c}{n} \pm z_{\alpha/2} \cdot \frac{\sqrt{b + c}}{n}
     $$
 
-## Worked Example
+## 풀이 예제
 
-A pharmaceutical company tests a new allergy medication on $n = 200$ patients. Each patient is evaluated for symptom relief both before and after treatment. The results are:
+한 제약회사가 새 알레르기 약을 환자 $n = 200$명에게 시험한다. 각 환자의 증상 완화 여부를 치료 전후로 평가했다. 결과는 다음과 같다:
 
-|  | After: Relief | After: No Relief |
+|  | 치료 후: 완화 | 치료 후: 미완화 |
 |---|---|---|
-| **Before: Relief** | $a = 20$ | $b = 50$ |
-| **Before: No Relief** | $c = 30$ | $d = 100$ |
+| **치료 전: 완화** | $a = 20$ | $b = 50$ |
+| **치료 전: 미완화** | $c = 30$ | $d = 100$ |
 
-**Step 1.** Compute the difference in proportions:
+**1단계.** 비율의 차이를 계산한다:
 
 $$
 \hat{p}_1 - \hat{p}_2 = \frac{b - c}{n} = \frac{50 - 30}{200} = 0.10
 $$
 
-The proportion with relief was 10 percentage points higher before treatment (i.e., $\hat{p}_{\text{before}} = 70/200 = 0.35$ versus $\hat{p}_{\text{after}} = 50/200 = 0.25$).
+완화된 비율이 치료 전에 10 퍼센트포인트 더 높았다(즉 $\hat{p}_{\text{before}} = 70/200 = 0.35$ 대 $\hat{p}_{\text{after}} = 50/200 = 0.25$).
 
-**Step 2.** Compute the standard error:
+**2단계.** 표준오차를 계산한다:
 
 $$
 \text{SE} = \frac{1}{200}\sqrt{50 + 30 - \frac{(50 - 30)^2}{200}} = \frac{1}{200}\sqrt{80 - 2} = \frac{\sqrt{78}}{200} \approx 0.0441
 $$
 
-**Step 3.** Construct the 95% confidence interval ($z_{0.025} = 1.96$):
+**3단계.** 95% 신뢰구간을 구성한다($z_{0.025} = 1.96$):
 
 $$
 0.10 \pm 1.96 \times 0.0441 = 0.10 \pm 0.0865 = (0.0135,\; 0.1865)
 $$
 
-Since the interval does not contain zero, we have evidence at the 95% level that the marginal proportions differ between the two conditions.
+구간이 0을 포함하지 않으므로 95% 수준에서 두 조건의 주변비율이 다르다는 증거가 있다.
 
-!!! tip "Interpreting the Result"
-    The confidence interval $(0.014, 0.187)$ means we are 95% confident that the true difference in population proportions (before minus after) lies between 1.4% and 18.7%. This suggests a statistically significant but potentially modest reduction in relief rates after treatment.
+!!! tip "결과의 해석"
+    신뢰구간 $(0.014, 0.187)$은 모비율의 참 차이(치료 전 빼기 치료 후)가 1.4%와 18.7% 사이에 있다고 95% 신뢰한다는 뜻이다. 치료 후 완화율이 통계적으로 유의하게, 그러나 크기는 크지 않을 수 있는 정도로 줄었음을 시사한다.
 
-## Assumptions
+## 가정
 
-The McNemar confidence interval relies on the following conditions:
+McNemar 신뢰구간은 다음 조건에 의존한다:
 
-- **Paired design**: Each observation under Condition 1 is matched with an observation under Condition 2 on the same subject (or a matched pair).
-- **Binary outcomes**: Each observation is classified as success or failure.
-- **Large sample**: The Wald-type CI requires a sufficient number of discordant pairs. A common guideline is $b + c \geq 10$. For small discordant counts, an exact binomial CI on $b/(b+c)$ is preferred.
+- **대응 설계**: 조건 1의 각 관측값이 같은 피험자(또는 짝지은 쌍)에서 얻은 조건 2의 관측값과 대응된다.
+- **이진 결과**: 각 관측값이 성공 또는 실패로 분류된다.
+- **큰 표본**: Wald 형태의 신뢰구간에는 불일치 짝이 충분히 많아야 한다. 흔한 지침은 $b + c \geq 10$이다. 불일치 개수가 적으면 $b/(b+c)$에 대한 정확한 이항 신뢰구간이 낫다.
 
-!!! warning "Small Discordant Counts"
-    When $b + c$ is small (say, fewer than 10), the normal approximation underlying the Wald CI is unreliable. In such cases, use an exact confidence interval based on the binomial distribution for $b$ given $b + c$.
+!!! warning "불일치 개수가 적을 때"
+    $b + c$가 작으면(가령 10 미만이면) Wald 신뢰구간의 바탕이 되는 정규근사를 믿을 수 없다. 이런 경우에는 $b + c$가 주어졌을 때 $b$의 이항분포에 기반한 정확한 신뢰구간을 쓰라.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-In a study of 150 patients tested before and after a new drug, the results are: $a = 60$ (positive both times), $b = 25$ (positive then negative), $c = 15$ (negative then positive), $d = 50$ (negative both times). Construct a 95% confidence interval for the difference in marginal proportions $p_1 - p_2$.
+**연습문제 1.**
+새 약을 쓰기 전후로 검사한 환자 150명의 연구에서 결과는 다음과 같다: $a = 60$(두 번 모두 양성), $b = 25$(양성 후 음성), $c = 15$(음성 후 양성), $d = 50$(두 번 모두 음성). 주변비율 차이 $p_1 - p_2$의 95% 신뢰구간을 구성하라.
 
-??? success "Solution to Exercise 1"
-    The point estimate is:
+??? success "연습문제 1 풀이"
+    점추정값은:
 
     $$
     \hat{p}_1 - \hat{p}_2 = \frac{b - c}{n} = \frac{25 - 15}{150} = \frac{10}{150} \approx 0.0667
     $$
 
-    The standard error is:
+    표준오차는:
 
     $$
     \text{SE} = \frac{1}{150}\sqrt{25 + 15 - \frac{(25-15)^2}{150}} = \frac{1}{150}\sqrt{40 - \frac{100}{150}} = \frac{1}{150}\sqrt{39.33} \approx \frac{6.272}{150} \approx 0.0418
     $$
 
-    The 95% CI is:
+    95% 신뢰구간은:
 
     $$
     0.0667 \pm 1.96 \times 0.0418 = 0.0667 \pm 0.0819 = (-0.015, 0.149)
     $$
 
-    Since the interval contains zero, we do not have sufficient evidence at the 95% level to conclude that the marginal proportions differ.
+    구간이 0을 포함하므로 95% 수준에서 주변비율이 다르다고 결론지을 충분한 증거가 없다.
 
 ---
 
-**Exercise 2.**
-In the data from Exercise 1, verify that the large-sample condition ($b + c \geq 10$) is satisfied.
+**연습문제 2.**
+연습문제 1의 자료에서 대표본 조건($b + c \geq 10$)이 만족되는지 확인하라.
 
-??? success "Solution to Exercise 2"
-    The number of discordant pairs is $b + c = 25 + 15 = 40$, which is well above the minimum of 10. The normal approximation for the McNemar confidence interval is therefore appropriate.
-
----
-
-**Exercise 3.**
-Explain why only the discordant pairs ($b$ and $c$) are relevant for the McNemar CI and why the concordant pairs ($a$ and $d$) provide no information about the difference in marginal proportions.
-
-??? success "Solution to Exercise 3"
-    The concordant pairs ($a$ and $d$) have the same outcome under both conditions, so they provide no evidence of a change. A subject who is positive both times or negative both times does not help distinguish whether one condition produces a higher proportion of positives than the other.
-
-    Only the discordant pairs — where the outcome changes between conditions — carry information about the difference. If $b > c$, more subjects changed from positive to negative than from negative to positive, suggesting $p_1 > p_2$. The McNemar test and CI formalize this by focusing exclusively on the ratio $b/(b+c)$ and whether it differs from 0.5.
+??? success "연습문제 2 풀이"
+    불일치 짝의 개수는 $b + c = 25 + 15 = 40$으로 최소 기준 10을 훨씬 넘는다. 따라서 McNemar 신뢰구간의 정규근사가 적절하다.
 
 ---
 
-**Exercise 4.**
-If $b = 3$ and $c = 2$ in a study of $n = 100$ subjects, explain why the Wald-type McNemar CI should not be used. What alternative would you recommend?
+**연습문제 3.**
+McNemar 신뢰구간에 불일치 짝($b$와 $c$)만 관련되고 일치 짝($a$와 $d$)은 주변비율 차이에 대해 아무 정보도 주지 않는 이유를 설명하라.
 
-??? success "Solution to Exercise 4"
-    The number of discordant pairs is $b + c = 3 + 2 = 5$, which is below the recommended minimum of 10 for the normal approximation. With so few discordant pairs, the Wald CI will be unreliable — the normal approximation to the binomial is poor for small counts.
+??? success "연습문제 3 풀이"
+    일치 짝($a$와 $d$)은 두 조건에서 결과가 같으므로 변화의 증거를 주지 않는다. 두 번 모두 양성이거나 두 번 모두 음성인 피험자는 어느 조건이 더 높은 양성 비율을 내는지 가려내는 데 도움이 되지 않는다.
 
-    The recommended alternative is an **exact binomial confidence interval** for the probability $\pi = P(\text{discordant pair is type } b) = b/(b+c)$. Under $H_0$: $p_1 = p_2$, the number of type-$b$ discordant pairs follows a Binomial$(b+c, 0.5)$ distribution. The exact CI for $\pi$ can then be transformed back to a CI for $p_1 - p_2$.
+    조건 사이에서 결과가 바뀐 불일치 짝만이 차이에 관한 정보를 담는다. $b > c$이면 양성에서 음성으로 바뀐 피험자가 그 반대보다 많다는 뜻이므로 $p_1 > p_2$를 시사한다. McNemar 검정과 신뢰구간은 오직 비 $b/(b+c)$와 그것이 0.5와 다른지에 집중하여 이를 형식화한다.
+
+---
+
+**연습문제 4.**
+피험자 $n = 100$명의 연구에서 $b = 3$, $c = 2$라면 Wald 형태의 McNemar 신뢰구간을 쓰지 말아야 하는 이유를 설명하라. 어떤 대안을 권하겠는가?
+
+??? success "연습문제 4 풀이"
+    불일치 짝의 개수가 $b + c = 3 + 2 = 5$로, 정규근사에 권장되는 최소 기준 10에 못 미친다. 불일치 짝이 이렇게 적으면 Wald 신뢰구간을 믿을 수 없다 — 개수가 작을 때 이항분포에 대한 정규근사가 나쁘기 때문이다.
+
+    권장되는 대안은 확률 $\pi = P(\text{불일치 짝이 } b \text{ 유형}) = b/(b+c)$에 대한 **정확한 이항 신뢰구간**이다. $H_0$: $p_1 = p_2$ 아래에서 $b$ 유형 불일치 짝의 개수는 Binomial$(b+c, 0.5)$을 따른다. $\pi$에 대한 정확한 신뢰구간을 구한 뒤 $p_1 - p_2$의 신뢰구간으로 되돌릴 수 있다.

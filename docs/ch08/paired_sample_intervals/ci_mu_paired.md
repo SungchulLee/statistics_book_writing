@@ -1,48 +1,48 @@
-# CI for μ_D (Mean of Differences)
+# μ_D (차이의 평균)의 신뢰구간
 
-## Paired-Sample Confidence Interval
+## 대응표본 신뢰구간
 
-When two related measurements are taken on the same subjects — such as pre-test and post-test scores, or before-and-after measurements — we use paired data to analyze the difference between the two measurements. The paired difference confidence interval estimates the mean difference $\mu_d$ between these two related measurements.
+사전 점수와 사후 점수, 또는 처리 전후 측정처럼 같은 피험자에게서 관련된 두 측정값을 얻는 경우에는 대응 자료로 두 측정값의 차이를 분석한다. 대응 차이 신뢰구간은 이 두 관련 측정값의 평균 차이 $\mu_d$를 추정한다.
 
-### Formula
+### 공식
 
-Let $d_i = X_{i,1} - X_{i,2}$ represent the difference between the two measurements for the $i$-th subject. The confidence interval for the mean of the paired differences is
+$i$번째 피험자의 두 측정값의 차이를 $d_i = X_{i,1} - X_{i,2}$라 하자. 대응 차이의 평균에 대한 신뢰구간은
 
 $$
 \bar{d} \pm t_{\alpha/2, \, n-1} \times \frac{s_d}{\sqrt{n}}
 $$
 
-where
+여기서
 
-- $\bar{d}$ is the mean of the paired differences,
-- $s_d$ is the standard deviation of the paired differences,
-- $n$ is the number of paired observations,
-- $\alpha$ is the significance level ($\text{significance level} = 1 - \text{confidence level}$),
-- $t_{\alpha/2, \, n-1}$ is the critical value from the $t$-distribution with $n-1$ degrees of freedom.
+- $\bar{d}$는 대응 차이의 평균,
+- $s_d$는 대응 차이의 표준편차,
+- $n$은 대응 관측값의 개수,
+- $\alpha$는 유의수준($\text{유의수준} = 1 - \text{신뢰수준}$),
+- $t_{\alpha/2, \, n-1}$은 자유도 $n-1$인 $t$-분포의 임계값이다.
 
-The formula is essentially the same as for a confidence interval for a single mean, but applied to the differences between pairs of measurements.
+이 공식은 단일 평균의 신뢰구간과 본질적으로 같으며, 다만 측정값 쌍의 차이에 적용된다.
 
-### Conditions for Validity
+### 타당성 조건
 
 $$
 \bar{x}_d \pm t_{\alpha/2,n-1}\frac{s_d}{\sqrt{n}}
 \quad\text{if}\quad
 \begin{cases}
-n < 30 \text{ (CLT does not apply)} \\
-\text{population of differences is normal} \\
-n \le 0.1N \text{ (IID)}
+n < 30 \text{ (중심극한정리가 적용되지 않음)} \\
+\text{차이의 모집단이 정규이다} \\
+n \le 0.1N \text{ (i.i.d.)}
 \end{cases}
 $$
 
-For large $n$ ($\ge 30$), the normality condition is less strict due to the Central Limit Theorem. The z-interval variants apply analogously:
+$n$이 크면($\ge 30$) 중심극한정리 덕분에 정규성 조건이 덜 엄격해진다. z-구간 변형도 마찬가지로 적용된다:
 
 $$
-\bar{x}_d \pm z_{\alpha/2}\frac{\sigma_d}{\sqrt{n}} \quad (\sigma_d \text{ known, large } n)
-\qquad\text{or}\qquad
-\bar{x}_d \pm z_{\alpha/2}\frac{s_d}{\sqrt{n}} \quad (s_d \text{ plug-in, large } n)
+\bar{x}_d \pm z_{\alpha/2}\frac{\sigma_d}{\sqrt{n}} \quad (\sigma_d \text{를 알고 } n \text{이 큰 경우})
+\qquad\text{또는}\qquad
+\bar{x}_d \pm z_{\alpha/2}\frac{s_d}{\sqrt{n}} \quad (s_d \text{를 대입, } n \text{이 큰 경우})
 $$
 
-### Python Code
+### Python 코드
 
 ```python
 import numpy as np
@@ -65,43 +65,43 @@ print(f"{confidence_interval = }")
 
 ---
 
-## Examples
+## 예제
 
-### Example 1: Blood Pressure Before and After Treatment
+### 예제 1: 치료 전후의 혈압
 
-A researcher measures the blood pressure of 10 patients before and after a treatment. The differences (before minus after) are:
+한 연구자가 환자 10명의 혈압을 치료 전후로 측정했다. 차이(치료 전 빼기 치료 후)는 다음과 같다:
 
 $$
 d = [5, 3, 4, -2, 0, 6, -1, 2, 3, 4]
 $$
 
-Construct a 95% confidence interval for the mean difference in blood pressure.
+혈압의 평균 차이에 대한 95% 신뢰구간을 구성하라.
 
-**Solution.**
+**풀이.**
 
 $$
 \bar{d} = \frac{5+3+4+(-2)+0+6+(-1)+2+3+4}{10} = \frac{24}{10} = 2.4
 $$
 
 $$
-s_d \approx 2.17, \qquad df = 9, \qquad t_{0.025, 9} \approx 2.262
+s_d \approx 2.633, \qquad df = 9, \qquad t_{0.025, 9} \approx 2.262
 $$
 
 $$
-\text{SE} = \frac{2.17}{\sqrt{10}} \approx 0.686, \qquad \text{ME} = 2.262 \times 0.686 \approx 1.552
+\text{SE} = \frac{2.633}{\sqrt{10}} \approx 0.833, \qquad \text{ME} = 2.262 \times 0.833 \approx 1.884
 $$
 
 $$
-\boxed{(0.848,\ 3.952)}
+\boxed{(0.516,\ 4.284)}
 $$
 
-We are 95% confident that the true mean difference in blood pressure after the treatment is between 0.848 and 3.952.
+치료 후 혈압의 참 평균 차이가 0.516과 4.284 사이에 있다고 95% 신뢰한다.
 
-### Example 2: Finger-Snapping Speed
+### 예제 2: 손가락 튕기기 속도
 
-Each of 5 participants snapped with both dominant and non-dominant hands for 10 seconds. The order was randomized by coin toss.
+참가자 5명이 각각 주로 쓰는 손과 그렇지 않은 손으로 10초 동안 손가락을 튕겼다. 순서는 동전 던지기로 무작위화했다.
 
-| Participant | Dominant | Non-Dominant | Difference |
+| 참가자 | 주로 쓰는 손 | 그렇지 않은 손 | 차이 |
 |---|---|---|---|
 | Jeff | 44 | 35 | 9 |
 | David | 42 | 37 | 5 |
@@ -109,9 +109,9 @@ Each of 5 participants snapped with both dominant and non-dominant hands for 10 
 | Charlotte | 37 | 31 | 6 |
 | Jake | 42 | 36 | 6 |
 
-Construct and interpret a 95% confidence interval for the mean difference.
+평균 차이에 대한 95% 신뢰구간을 구성하고 해석하라.
 
-**Solution.**
+**풀이.**
 
 $$
 \bar{d} = \frac{9+5+8+6+6}{5} = 6.8
@@ -129,7 +129,7 @@ $$
 \boxed{(4.76,\ 8.84)}
 $$
 
-We are 95% confident that the true mean difference in snaps between the dominant and non-dominant hands lies within $(4.76, 8.84)$.
+주로 쓰는 손과 그렇지 않은 손의 튕긴 횟수의 참 평균 차이가 $(4.76, 8.84)$ 안에 있다고 95% 신뢰한다.
 
 ```python
 import numpy as np
@@ -151,11 +151,11 @@ print(f"95% CI: ({mean_diff - margin_of_error:.2f}, {mean_diff + margin_of_error
 print(f"95% CI: {mean_diff:.2f} ± {margin_of_error:.2f}")
 ```
 
-### Example 3: Two Watches (Four Steps)
+### 예제 3: 두 시계 (네 단계)
 
-A running magazine reviewed watches A and B that use GPS to measure distance. Five runners each wore both watches simultaneously on a 10-km route.
+한 러닝 잡지가 GPS로 거리를 재는 시계 A와 B를 비교했다. 러너 다섯 명이 각각 두 시계를 동시에 차고 10 km 코스를 달렸다.
 
-| Runner | Watch A | Watch B | Difference (A−B) |
+| 러너 | 시계 A | 시계 B | 차이 (A−B) |
 |---|---|---|---|
 | 1 | 9.8 | 10.1 | −0.3 |
 | 2 | 9.8 | 10.0 | −0.2 |
@@ -163,17 +163,17 @@ A running magazine reviewed watches A and B that use GPS to measure distance. Fi
 | 4 | 10.1 | 9.9 | 0.2 |
 | 5 | 10.2 | 10.1 | 0.1 |
 
-Construct and interpret a 95% confidence interval for the mean difference.
+평균 차이에 대한 95% 신뢰구간을 구성하고 해석하라.
 
-**Step 1: Calculate Differences.** $d = [-0.3, -0.2, -0.1, 0.2, 0.1]$.
+**1단계: 차이 계산.** $d = [-0.3, -0.2, -0.1, 0.2, 0.1]$.
 
-**Step 2: Check Conditions.**
+**2단계: 조건 확인.**
 
-- **Simple Random Sample:** Satisfied (magazine selected random subscribers).
-- **Independence:** Satisfied (at least 50 subscribers in population).
-- **Normal Population Distribution:** Since $n = 5$ is small, we check: the differences are symmetric with no outliers, so proceeding is safe.
+- **단순확률표본:** 만족(잡지가 구독자를 무작위로 선정했다).
+- **독립성:** 만족(모집단에 구독자가 적어도 50명 있다).
+- **정규모집단:** $n = 5$로 작으므로 확인이 필요하다. 차이가 대칭이고 이상점이 없으므로 진행해도 안전하다.
 
-**Step 3: Construct Interval.**
+**3단계: 구간 구성.**
 
 ```python
 import numpy as np
@@ -195,11 +195,11 @@ margin_of_error = t_star * s / np.sqrt(n)
 print(f"{confidence_level:.0%} CI: {d_bar:.4f} ± {margin_of_error:.4f}")
 ```
 
-**Step 4: Interpret Interval.** With 95% confidence, the mean difference between the distances reported by the watches is likely to fall within the interval $(-0.32, 0.20)$ km. The interval includes zero, so there is no significant difference between the distances Watch A and Watch B reported.
+**4단계: 구간 해석.** 95% 신뢰수준에서 두 시계가 보고한 거리의 평균 차이는 구간 $(-0.32, 0.20)$ km 안에 있을 것으로 본다. 구간이 0을 포함하므로 시계 A와 B가 보고한 거리 사이에 유의한 차이는 없다.
 
 ---
 
-## Simulation: Paired Mean CI Coverage
+## 모의실험: 대응 평균 신뢰구간의 포함확률
 
 ```python
 #!/usr/bin/env python3
@@ -287,97 +287,97 @@ if __name__ == "__main__":
 
 ---
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Paired data: $n = 10$ pairs, $\bar d = 4.5$, $s_d = 2.0$. 99% CI for $\mu_D$.
+**연습문제 1.**
+대응 자료에서 $n = 10$쌍, $\bar d = 4.5$, $s_d = 2.0$이다. $\mu_D$의 99% 신뢰구간을 구하라.
 
-??? success "Solution to Exercise 1"
-    $t_{0.005, 9} = 3.250$. $\mathrm{SE} = 2.0/\sqrt{10} \approx 0.633$. ME = $3.250 \cdot 0.633 \approx 2.06$.
+??? success "연습문제 1 풀이"
+    $t_{0.005, 9} = 3.250$. $\mathrm{SE} = 2.0/\sqrt{10} \approx 0.633$. 오차한계 = $3.250 \cdot 0.633 \approx 2.06$.
 
-    CI: $(4.5 - 2.06, 4.5 + 2.06) = (2.44, 6.56)$.
+    신뢰구간: $(4.5 - 2.06, 4.5 + 2.06) = (2.44, 6.56)$.
 
 ---
 
-**Exercise 2.**
-Pre/post training differences: $5, 3, 8, 2, 7, 1, 6, 4, 9, 5$. (a) 95% CI for $\mu_D$. (b) Is training effective at $\alpha = 0.05$?
+**연습문제 2.**
+훈련 전후 차이: $5, 3, 8, 2, 7, 1, 6, 4, 9, 5$. (a) $\mu_D$의 95% 신뢰구간. (b) $\alpha = 0.05$에서 훈련이 효과적인가?
 
-??? success "Solution to Exercise 2"
+??? success "연습문제 2 풀이"
     (a) $\bar D = 50/10 = 5.0$. $s_D = \sqrt{\sum(D_i - 5)^2/9} = \sqrt{60/9} \approx 2.58$.
 
-    $t_{0.025, 9} = 2.262$. ME = $2.262 \cdot 2.58/\sqrt{10} \approx 1.85$.
+    $t_{0.025, 9} = 2.262$. 오차한계 = $2.262 \cdot 2.58/\sqrt{10} \approx 1.85$.
 
-    CI: $(3.15, 6.85)$.
+    신뢰구간: $(3.15, 6.85)$.
 
-    (b) Entire CI > 0 — training effective at 5% level. Mean improvement is at least 3.15 points; estimated 5 points.
-
----
-
-**Exercise 3.**
-**Why paired vs unpaired matters.** Suppose pre and post scores have $\mathrm{SD} = 10$ each, $\rho(\mathrm{pre}, \mathrm{post}) = 0.8$. Compare SE of mean difference for paired vs treating as independent.
-
-??? success "Solution to Exercise 3"
-    Independent (unpaired) approximation: $\mathrm{Var}(\bar X_{\text{post}} - \bar X_{\text{pre}}) = (\sigma^2 + \sigma^2)/n = 200/n$. SE = $\sqrt{200/n}$.
-
-    Paired: $\mathrm{Var}(\bar D) = \mathrm{Var}(\mathrm{post} - \mathrm{pre})/n = (\sigma^2 + \sigma^2 - 2\rho\sigma^2)/n = 2\sigma^2(1-\rho)/n = 40/n$.
-
-    For $n = 10$: paired SE $= \sqrt{4} = 2$. Independent SE $= \sqrt{20} \approx 4.47$.
-
-    Paired is more than 2× tighter. With paired analysis, the same data gives more confident conclusions because the within-subject correlation is exploited.
+    (b) 신뢰구간 전체가 0보다 크다 — 5% 수준에서 훈련이 효과적이다. 평균 향상은 적어도 3.15점이며 추정값은 5점이다.
 
 ---
 
-**Exercise 4.**
-**When pairing fails.** What if some subjects "improve" because they were already improving, not because of the intervention? Discuss confounders.
+**연습문제 3.**
+**대응과 비대응의 차이가 중요한 이유.** 사전·사후 점수의 표준편차가 각각 10이고 $\rho(\mathrm{pre}, \mathrm{post}) = 0.8$이라 하자. 대응으로 다룰 때와 독립으로 다룰 때 평균 차이의 표준오차를 비교하라.
 
-??? success "Solution to Exercise 4"
-    Pre/post designs without a control group are vulnerable to:
+??? success "연습문제 3 풀이"
+    독립(비대응) 근사: $\mathrm{Var}(\bar X_{\text{post}} - \bar X_{\text{pre}}) = (\sigma^2 + \sigma^2)/n = 200/n$. 표준오차 = $\sqrt{200/n}$.
 
-    - **Regression to the mean:** subjects selected for low pre-scores tend to score higher next time regardless of intervention.
-    - **Maturation:** natural improvement over time (children growing, patients recovering).
-    - **Practice effects:** taking the test once improves performance the second time.
-    - **History:** other events between pre and post that affect outcome.
+    대응: $\mathrm{Var}(\bar D) = \mathrm{Var}(\mathrm{post} - \mathrm{pre})/n = (\sigma^2 + \sigma^2 - 2\rho\sigma^2)/n = 2\sigma^2(1-\rho)/n = 40/n$.
 
-    **Solution:** add a control group that takes both tests but doesn't receive the intervention. Then compare the **difference of differences**: $\bar D_{\text{treatment}} - \bar D_{\text{control}}$. This isolates the intervention effect from other temporal factors.
+    $n = 10$에서 대응 표준오차 $= \sqrt{4} = 2$, 독립 표준오차 $= \sqrt{20} \approx 4.47$.
 
-    Pre/post alone is suggestive evidence; controlled pre/post is rigorous evidence.
+    대응이 2배 넘게 조인다. 대응 분석은 피험자 내 상관을 활용하므로 같은 자료로 더 확실한 결론을 준다.
 
 ---
 
-**Exercise 5.**
-**Sign test for paired data.** Non-parametric alternative to $t$-test on differences. State and apply to Exercise 2.
+**연습문제 4.**
+**짝짓기가 통하지 않을 때.** 개입 때문이 아니라 이미 나아지고 있어서 "향상"된 피험자가 있다면? 교란요인을 논하라.
 
-??? success "Solution to Exercise 5"
-    **Sign test:** count positive differences ($+$), negative ($-$). Under $H_0: \mu_D = 0$, expect 50/50 split.
+??? success "연습문제 4 풀이"
+    대조군이 없는 사전·사후 설계는 다음에 취약하다:
 
-    Exercise 2: all 10 differences are positive. Test statistic = number of positives = 10.
+    - **평균으로의 회귀:** 사전 점수가 낮아 선택된 피험자는 개입과 무관하게 다음 번에 더 높은 점수를 내는 경향이 있다.
+    - **성숙:** 시간이 지나며 자연히 나아진다(아이가 자라거나 환자가 회복된다).
+    - **연습 효과:** 검사를 한 번 치르면 두 번째에 성적이 좋아진다.
+    - **역사:** 사전과 사후 사이에 결과에 영향을 주는 다른 사건이 일어난다.
 
-    Under $H_0 \sim \mathrm{Binomial}(10, 0.5)$: $P(X = 10) = (1/2)^{10} \approx 0.001$. Two-sided $p$-value $\approx 0.002$ — strongly reject.
+    **해법:** 두 검사를 모두 치르되 개입은 받지 않는 대조군을 추가한다. 그런 다음 **차이의 차이** $\bar D_{\text{treatment}} - \bar D_{\text{control}}$을 비교한다. 이렇게 하면 개입 효과를 다른 시간적 요인에서 분리할 수 있다.
 
-    **Advantages over $t$-test:** doesn't assume normality of differences. Works for ordinal data.
-
-    **Disadvantages:** less powerful when normality holds (ignores magnitude of differences, only sign). Wilcoxon signed-rank test compromises: uses ranks of |D_i|, more powerful than sign but doesn't assume normality.
+    사전·사후만으로는 시사적인 증거일 뿐이고, 대조가 있는 사전·사후라야 엄밀한 증거가 된다.
 
 ---
 
-**Exercise 6.**
-**Crossover design.** Subjects receive both treatments in random order. Briefly discuss why this design and the appropriate analysis.
+**연습문제 5.**
+**대응 자료에 대한 부호검정.** 차이에 대한 $t$-검정의 비모수적 대안이다. 진술하고 연습문제 2에 적용하라.
 
-??? success "Solution to Exercise 6"
-    **Crossover design:** each subject receives treatment A and B in random order, with a washout period between. Each subject contributes both an A-response and B-response.
+??? success "연습문제 5 풀이"
+    **부호검정:** 양의 차이($+$)와 음의 차이($-$)의 개수를 센다. $H_0: \mu_D = 0$ 아래에서 50대 50을 기대한다.
 
-    **Advantages:**
+    연습문제 2에서는 차이 10개가 모두 양수이다. 검정통계량 = 양수의 개수 = 10.
 
-    - Each subject serves as their own control (paired analysis).
-    - Maximum precision for the same number of subjects.
-    - Eliminates between-subject variability.
+    $H_0$ 아래에서 $\mathrm{Binomial}(10, 0.5)$이므로 $P(X = 10) = (1/2)^{10} \approx 0.001$이다. 양측 $p$-값 $\approx 0.002$ — 강하게 기각한다.
 
-    **Analysis:** paired $t$-test on $D_i = X_{A,i} - X_{B,i}$ (or Wilcoxon signed-rank for non-normal).
+    **$t$-검정 대비 장점:** 차이의 정규성을 가정하지 않는다. 순서형 자료에도 쓸 수 있다.
 
-    **Concerns:**
+    **단점:** 정규성이 성립할 때 검정력이 낮다(차이의 크기를 무시하고 부호만 쓴다). Wilcoxon 부호순위 검정이 절충안이다: $|D_i|$의 순위를 써서 부호검정보다 검정력이 크면서 정규성을 가정하지 않는다.
 
-    - **Carryover effect:** B may be influenced by previous exposure to A. Washout period must be long enough.
-    - **Period effect:** seasonal or temporal patterns (different time for A and B).
-    - **Order effect:** asymmetric carryover between treatments.
+---
 
-    Standard analysis includes period and order as covariates if needed. Used heavily in pharmacology (bioequivalence trials) and sensory studies.
+**연습문제 6.**
+**교차 설계.** 피험자가 두 처리를 무작위 순서로 모두 받는다. 이 설계를 쓰는 이유와 적절한 분석을 간단히 논하라.
+
+??? success "연습문제 6 풀이"
+    **교차 설계:** 각 피험자가 처리 A와 B를 무작위 순서로 받으며 사이에 세척기간을 둔다. 피험자마다 A 반응과 B 반응을 모두 제공한다.
+
+    **장점:**
+
+    - 각 피험자가 자기 자신의 대조가 된다(대응 분석).
+    - 같은 수의 피험자로 최대의 정밀도를 얻는다.
+    - 피험자 간 변동성을 제거한다.
+
+    **분석:** $D_i = X_{A,i} - X_{B,i}$에 대한 대응 $t$-검정(정규가 아니면 Wilcoxon 부호순위).
+
+    **우려:**
+
+    - **이월 효과:** 앞서 받은 A의 영향이 B에 남을 수 있다. 세척기간이 충분히 길어야 한다.
+    - **기간 효과:** 계절적·시간적 패턴(A와 B를 다른 시기에 받는다).
+    - **순서 효과:** 처리 사이의 비대칭적인 이월.
+
+    표준적인 분석에서는 필요하면 기간과 순서를 공변량으로 포함한다. 약리학(생물학적 동등성 시험)과 관능 연구에서 많이 쓰인다.

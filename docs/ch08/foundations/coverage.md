@@ -1,157 +1,157 @@
-# Confidence Level and Coverage
+# 신뢰수준과 포함확률
 
-## What Is a Confidence Interval?
+## 신뢰구간이란 무엇인가?
 
-Confidence intervals are a fundamental concept in inferential statistics, providing a way to quantify the uncertainty associated with estimating a population parameter. When working with sample data, there is always some sampling variability — differences between the sample and the population — since samples represent only a portion of the population. A point estimate, such as the sample mean, gives a single best guess for the population parameter (e.g., the population mean). However, this estimate does not reflect the uncertainty inherent in using a sample to make inferences about the entire population.
+신뢰구간은 추론통계의 근본적인 개념으로, 모수 추정에 따르는 불확실성을 정량화하는 방법을 제공한다. 표본자료를 다룰 때는 언제나 표본변동 — 표본과 모집단의 차이 — 이 존재한다. 표본은 모집단의 일부만을 나타내기 때문이다. 표본평균 같은 점추정값은 모수(예: 모평균)에 대한 하나의 최선의 추측을 준다. 그러나 이 추정값은 표본으로 모집단 전체를 추론하는 데 본래 따르는 불확실성을 반영하지 못한다.
 
-Confidence intervals address this by offering a range of plausible values for the population parameter, with an associated confidence level (usually 90%, 95%, or 99%). The general form of a confidence interval is given by
+신뢰구간은 모수에 대해 그럴듯한 값들의 범위를 신뢰수준(보통 90%, 95%, 99%)과 함께 제시하여 이 문제를 다룬다. 신뢰구간의 일반형은 다음과 같다.
 
 $$
-\text{Point Estimate} \pm \text{Margin of Error}
+\text{점추정값} \pm \text{오차한계}
 $$
 
-The margin of error is determined by the variability in the data (e.g., the standard deviation), the sample size, and the desired confidence level. The margin of error tends to be smaller for larger sample sizes because the sample provides a more precise estimate of the population parameter.
+오차한계는 자료의 변동성(예: 표준편차), 표본크기, 원하는 신뢰수준에 의해 정해진다. 표본이 클수록 모수를 더 정밀하게 추정하므로 오차한계는 작아지는 경향이 있다.
 
-The wider the interval, the greater the uncertainty acknowledged in the estimate; conversely, a narrower interval reflects more precision.
+구간이 넓을수록 추정에 인정되는 불확실성이 크고, 반대로 구간이 좁을수록 정밀도가 높다.
 
 ---
 
-## Formal Definition
+## 형식적 정의
 
-A confidence interval for a population parameter is an interval computed from sample data that is likely to cover the true value of the parameter with a specified probability, known as the confidence level. Mathematically, a confidence interval for a parameter $\theta$ is given by:
+모수에 대한 신뢰구간은 표본자료로부터 계산된 구간으로, 신뢰수준이라 불리는 지정된 확률로 모수의 참값을 담을 가능성이 있는 구간이다. 수식으로 쓰면 모수 $\theta$에 대한 신뢰구간은:
 
 $$
-\hat{\theta} \pm \text{Margin of Error}
+\hat{\theta} \pm \text{오차한계}
 $$
 
-where $\hat{\theta}$ is the point estimate of the parameter (e.g., the sample mean $\bar{X}$), and the margin of error is a function of the standard error and the desired confidence level.
+여기서 $\hat{\theta}$는 모수의 점추정값(예: 표본평균 $\bar{X}$)이고, 오차한계는 표준오차와 원하는 신뢰수준의 함수이다.
 
-The confidence level (typically 90%, 95%, or 99%) reflects the degree of certainty that the interval contains the true population parameter. For example, a 95% confidence interval means that if we were to take many random samples and compute a confidence interval for each, approximately 95% of these intervals would contain the true population parameter.
+신뢰수준(보통 90%, 95%, 99%)은 그 구간이 참 모수를 담고 있다는 확신의 정도를 나타낸다. 예를 들어 95% 신뢰구간이란, 확률표본을 여러 번 뽑아 각각에 대해 신뢰구간을 계산하면 그중 약 95%가 참 모수를 담게 된다는 뜻이다.
 
 ---
 
-## Population and Parameter
+## 모집단과 모수
 
-In statistics, the terms **population** and **parameter** are essential when discussing data analysis, as they help us understand the distinction between the entire group we are interested in and the specific measures that summarize its characteristics.
+통계학에서 **모집단**과 **모수**라는 용어는 자료분석을 논할 때 핵심적이다. 우리가 관심을 두는 전체 집단과 그 특성을 요약하는 구체적인 측도를 구분하게 해 주기 때문이다.
 
-The **population** refers to the entire data set or all possible observations we want to study. It is the complete collection of individuals, items, or data points that share a common characteristic or set of characteristics. For example, if we are studying the average height of adult men in a country, the population would be every adult man in that country. Populations can be finite (e.g., all students at a particular university) or infinite (e.g., all possible outcomes of rolling a fair die). Since populations are often large or inaccessible, collecting data from every individual in the population is usually impractical.
+**모집단**은 우리가 연구하려는 전체 자료 집합, 즉 가능한 모든 관측값을 가리킨다. 공통의 특성 하나 또는 여럿을 공유하는 개체, 항목, 자료점의 완전한 모임이다. 예를 들어 어떤 나라 성인 남성의 평균 키를 연구한다면 모집단은 그 나라의 모든 성인 남성이다. 모집단은 유한할 수도 있고(예: 특정 대학의 모든 학생) 무한할 수도 있다(예: 공정한 주사위를 굴려 나올 수 있는 모든 결과). 모집단은 대개 크거나 접근하기 어려우므로 모든 개체에서 자료를 모으는 것은 보통 비현실적이다.
 
-A **parameter** is a numerical value that summarizes some characteristic of the entire population. It is a fixed, usually unknown, value that describes a particular feature, such as the population mean ($\mu$), population proportion ($p$), population variance ($\sigma^2$), or population standard deviation ($\sigma$). Parameters represent the true value of the population but are often unknown because obtaining data from every member of the population is infeasible. Instead, we collect a **sample** (a population subset) and use this sample to compute statistics to estimate the population parameter.
+**모수**는 모집단 전체의 어떤 특성을 요약하는 수치이다. 모평균($\mu$), 모비율($p$), 모분산($\sigma^2$), 모표준편차($\sigma$)처럼 특정한 특징을 기술하는, 고정되어 있지만 대개 미지인 값이다. 모수는 모집단의 참값을 나타내지만 모집단의 모든 구성원에게서 자료를 얻는 일이 불가능한 경우가 많아 대개 알 수 없다. 대신 우리는 **표본**(모집단의 부분집합)을 모으고 이 표본으로 통계량을 계산하여 모수를 추정한다.
 
 $$
 \begin{array}{ccc}
-\textbf{Population} & \longrightarrow & \textbf{Parameter} \\
-\text{All adult men in a country} & & \text{Population mean height } (\mu) \\
-\text{All registered voters} & & \text{Population proportion of voters supporting a candidate } (p) \\
-\text{All manufactured products from a factory} & & \text{Population defect rate } (\theta) \\
+\textbf{모집단} & \longrightarrow & \textbf{모수} \\
+\text{한 나라의 모든 성인 남성} & & \text{키의 모평균 } (\mu) \\
+\text{모든 등록 유권자} & & \text{어떤 후보를 지지하는 유권자의 모비율 } (p) \\
+\text{한 공장에서 생산된 모든 제품} & & \text{모집단 불량률 } (\theta) \\
 \end{array}
 $$
 
-In most real-world situations, we cannot directly measure the population parameter, so we rely on **sample statistics** to estimate these unknown parameters.
+현실의 대부분 상황에서 우리는 모수를 직접 측정할 수 없으므로, 이 미지의 모수를 추정하기 위해 **표본통계량**에 의존한다.
 
 ---
 
-## Sample, Statistic, Estimator, and Estimate
+## 표본, 통계량, 추정량, 추정값
 
-A **sample** is a subset of individuals or observations selected from the larger population. Collecting data from the entire population can be impractical, time-consuming, or costly. **Random samples** are particularly valuable because they help ensure that the sample accurately reflects the population, minimizing bias. **Larger samples** tend to provide more reliable information about the population, as they reduce the sampling error.
+**표본**은 더 큰 모집단에서 뽑은 개체 또는 관측값의 부분집합이다. 모집단 전체에서 자료를 모으는 일은 비현실적이거나 시간이 오래 걸리거나 비용이 많이 들 수 있다. **확률표본**은 표본이 모집단을 정확히 반영하도록 도와 편향을 최소화하므로 특히 가치가 있다. **표본이 클수록** 표본추출오차가 줄어들어 모집단에 대해 더 믿을 만한 정보를 준다.
 
-A **statistic** is any numerical value that summarizes or describes some aspect of the sample data. Statistics include the sample mean $\bar{x}$, the sample proportion $\hat{p}$, and the sample variance $s^2$. We use these statistics to infer or estimate unknown population parameters.
+**통계량**은 표본자료의 어떤 측면을 요약하거나 기술하는 임의의 수치이다. 표본평균 $\bar{x}$, 표본비율 $\hat{p}$, 표본분산 $s^2$이 통계량에 속한다. 우리는 이런 통계량으로 미지의 모수를 추론하거나 추정한다.
 
-An **estimator** is a formula or method used to estimate a population parameter from sample data. For example, the estimator for the population mean $\mu$ is the sample mean:
+**추정량**은 표본자료로 모수를 추정하는 데 쓰는 공식 또는 방법이다. 예를 들어 모평균 $\mu$의 추정량은 표본평균이다:
 
 $$
 \bar{x} = \frac{1}{n}\sum_{i=1}^n x_i
 $$
 
-The estimator for the population proportion $p$ is the sample proportion:
+모비율 $p$의 추정량은 표본비율이다:
 
 $$
 \hat{p} = \frac{x}{n}
 $$
 
-An **estimate** is the specific numerical value calculated from sample data using the estimator. For instance, if we compute $\bar{x} = 10$ from a specific sample, then 10 is the estimate of $\mu$.
+**추정값**은 추정량을 써서 표본자료로부터 계산한 구체적인 수치이다. 예를 들어 어떤 표본에서 $\bar{x} = 10$을 얻었다면 10이 $\mu$의 추정값이다.
 
 $$
 \begin{array}{cccc}
-\textbf{Population} & \longrightarrow & \textbf{Parameter} & (\mu, p, \sigma^2, \text{etc.}) \\
+\textbf{모집단} & \longrightarrow & \textbf{모수} & (\mu, p, \sigma^2, \text{등}) \\
 \downarrow & & \uparrow & \\
-\textbf{Sample} & \longrightarrow & \textbf{Estimate} & (\bar{x}, \hat{p}, s^2, \text{etc.}) \\
+\textbf{표본} & \longrightarrow & \textbf{추정값} & (\bar{x}, \hat{p}, s^2, \text{등}) \\
 \end{array}
 $$
 
 ---
 
-## Structure of a Confidence Interval
+## 신뢰구간의 구조
 
-A **confidence interval** provides a range of values likely to contain the true population parameter. The general form is
+**신뢰구간**은 참 모수를 담고 있을 가능성이 있는 값들의 범위를 준다. 일반형은
 
 $$
-\text{estimate} \pm \text{margin of error}
+\text{추정값} \pm \text{오차한계}
 $$
 
-The **estimate** is the sample statistic (e.g., sample mean or sample proportion), and the **margin of error** captures the uncertainty in that estimate. The margin of error consists of two components: the **standard error** (which reflects the variability in the sample) and a **critical value** from a probability distribution, typically either the standard normal distribution or the $t$-distribution.
+**추정값**은 표본통계량(예: 표본평균이나 표본비율)이고, **오차한계**는 그 추정값의 불확실성을 담는다. 오차한계는 두 성분으로 이루어진다: **표준오차**(표본의 변동성을 반영한다)와 확률분포에서 나오는 **임계값**(보통 표준정규분포 또는 $t$-분포에서 나온다).
 
-- For large samples (usually when the sample size $n \geq 30$), we use the **standard normal distribution** ($z$-scores) to find the critical value.
-- For smaller samples (typically $n < 30$), we use the **$t$-distribution**, which adjusts for the additional uncertainty due to small sample sizes. When we use the $t$-distribution, we must ensure the original population follows the normal distribution.
+- 표본이 클 때(보통 표본크기 $n \geq 30$일 때)는 **표준정규분포**($z$-점수)로 임계값을 구한다.
+- 표본이 작을 때(보통 $n < 30$)는 작은 표본에서 오는 추가 불확실성을 보정하는 **$t$-분포**를 쓴다. $t$-분포를 쓸 때는 원래 모집단이 정규분포를 따르는지 확인해야 한다.
 
 $$
 \begin{array}{cccc}
-\textbf{Population} & \longrightarrow & \textbf{Parameter} \\
+\textbf{모집단} & \longrightarrow & \textbf{모수} \\
 \downarrow & & \uparrow \\
-\textbf{Sample} & \longrightarrow & \textbf{Estimate} \\
-& & \textbf{Estimate} & \pm & \textbf{Margin of Error} \\
+\textbf{표본} & \longrightarrow & \textbf{추정값} \\
+& & \textbf{추정값} & \pm & \textbf{오차한계} \\
 \end{array}
 $$
 
 ---
 
-## Correct Interpretation of Confidence Level
+## 신뢰수준의 올바른 해석
 
-The confidence level represents the probability that the interval contains the true population parameter if we were to sample from the population under the same conditions repeatedly. For example, a 95% confidence interval suggests that in 95 out of 100 such samples, the interval would contain the true population parameter.
+신뢰수준은 같은 조건에서 모집단으로부터 반복해서 표본을 뽑는다고 할 때 그 구간이 참 모수를 담을 확률을 나타낸다. 예를 들어 95% 신뢰구간은 그런 표본 100개 중 95개에서 구간이 참 모수를 담게 된다는 것을 뜻한다.
 
-!!! warning "Common Misconception"
-    A confidence interval does **not** give the probability that the parameter lies within the interval for a given sample. If we have a specific confidence interval, there are only two possibilities: either it contains the true parameter or it does not. Instead, the interval construction **procedure** has a level of confidence. When the procedure constructs many confidence intervals using different random samples from the population, some intervals contain the true parameter, and others do not. However, the ratio of the number of intervals containing the true parameter over all the generated intervals will be the confidence level in the long run. The confidence level describes the credential of the construction procedure, not a particular interval.
-
----
-
-## Importance of Confidence Intervals in Statistical Inference
-
-In practice, confidence intervals serve several vital functions in statistical analysis:
-
-**Estimating Population Parameters.** We typically use confidence intervals when we want to estimate unknown population parameters, such as the population mean ($\mu$), population proportion ($p$), or population variance ($\sigma^2$). Since it is often impractical or impossible to collect data from the entire population, we rely on sample data to provide estimates of these parameters. For example, in a survey estimating the average income in a city, we could take a random sample of individuals, calculate the sample mean, and construct a confidence interval around that mean to estimate the true population average.
-
-**Quantifying Uncertainty.** Due to the natural variability in data, every sample provides only an approximation of the true population parameter. A confidence interval gives us a way to quantify the uncertainty associated with an estimate. It accounts for the fact that different samples would yield slightly different estimates, and it provides a range within which we expect the true population parameter to fall with a specified level of confidence (e.g., 90%, 95%, 99%).
-
-**Providing a Range of Supported Values.** Instead of giving a single-point estimate, which might be misleading by itself, a confidence interval offers a range of values that are consistent with the data. For instance, a point estimate of the average height of students might be 170 cm, but this single value does not tell us how precise the estimate is. A confidence interval might say, "We are 95% confident that the true average height lies between 168 cm and 172 cm." This range allows for more informed decision-making.
+!!! warning "흔한 오해"
+    신뢰구간은 주어진 하나의 표본에서 모수가 그 구간 안에 있을 확률을 주지 **않는다**. 구체적인 신뢰구간 하나가 주어지면 가능성은 둘뿐이다: 참 모수를 담고 있거나 담고 있지 않거나. 신뢰수준은 구간을 만드는 **절차**가 갖는 성질이다. 그 절차가 모집단에서 뽑은 서로 다른 확률표본들로 많은 신뢰구간을 만들면 어떤 구간은 참 모수를 담고 어떤 구간은 담지 않는다. 그러나 만들어진 전체 구간 중 참 모수를 담은 구간의 비율은 장기적으로 신뢰수준에 수렴한다. 신뢰수준은 특정한 구간 하나가 아니라 구성 절차의 신뢰도를 기술한다.
 
 ---
 
-## Relationship Between Confidence Intervals and Hypothesis Testing
+## 통계적 추론에서 신뢰구간의 중요성
 
-There is a close relationship between confidence intervals and hypothesis testing. Consider the case where we are testing the null hypothesis $H_0: \mu = \mu_0$ against the alternative hypothesis $H_1: \mu \neq \mu_0$.
+실무에서 신뢰구간은 통계분석에서 몇 가지 중요한 기능을 한다.
 
-One way to make this determination is by constructing a confidence interval for $\mu$ and then seeing whether the hypothesized value $\mu_0$ lies within this interval:
+**모수의 추정.** 우리는 모평균($\mu$), 모비율($p$), 모분산($\sigma^2$) 같은 미지의 모수를 추정하고자 할 때 흔히 신뢰구간을 쓴다. 모집단 전체에서 자료를 모으는 일이 비현실적이거나 불가능한 경우가 많으므로, 이 모수의 추정값을 얻기 위해 표본자료에 의존한다. 예를 들어 한 도시의 평균 소득을 추정하는 조사에서 개인들의 확률표본을 뽑아 표본평균을 계산하고 그 주위에 신뢰구간을 구성하여 참 평균을 추정할 수 있다.
 
-- If the value of $\mu_0$ **falls outside** the confidence interval for $\mu$, we would **reject** the null hypothesis at the corresponding significance level, since values outside the confidence interval are considered unlikely given the observed data.
-- If $\mu_0$ **falls within** the confidence interval, we **fail to reject** the null hypothesis, as the data do not provide sufficient evidence to conclude that $\mu$ is different from $\mu_0$.
+**불확실성의 정량화.** 자료에는 본래 변동성이 있으므로 어떤 표본도 참 모수의 근삿값만을 준다. 신뢰구간은 추정에 따르는 불확실성을 정량화하는 방법을 준다. 표본이 달라지면 추정값도 조금씩 달라진다는 사실을 반영하며, 지정된 신뢰수준(예: 90%, 95%, 99%)으로 참 모수가 들어 있으리라 기대되는 범위를 제공한다.
 
-The **significance level** of a hypothesis test ($\alpha$) corresponds to the **confidence level** of a confidence interval:
+**뒷받침되는 값들의 범위 제시.** 그 자체로는 오해를 부를 수 있는 단일 점추정값 대신, 신뢰구간은 자료와 부합하는 값들의 범위를 제시한다. 예를 들어 학생 평균 키의 점추정값이 170 cm라고 해도 이 값 하나로는 추정이 얼마나 정밀한지 알 수 없다. 신뢰구간은 "참 평균 키가 168 cm와 172 cm 사이에 있다고 95% 신뢰한다"고 말해 준다. 이 범위가 더 정보에 근거한 의사결정을 가능하게 한다.
+
+---
+
+## 신뢰구간과 가설검정의 관계
+
+신뢰구간과 가설검정은 밀접하게 연관되어 있다. 귀무가설 $H_0: \mu = \mu_0$을 대립가설 $H_1: \mu \neq \mu_0$에 대해 검정하는 경우를 생각해 보자.
+
+이를 판단하는 한 가지 방법은 $\mu$에 대한 신뢰구간을 구성하고 가설의 값 $\mu_0$이 그 구간 안에 있는지 보는 것이다:
+
+- $\mu_0$의 값이 $\mu$의 신뢰구간 **밖에 있으면** 해당 유의수준에서 귀무가설을 **기각**한다. 신뢰구간 밖의 값은 관측된 자료에 비추어 볼 때 그럴듯하지 않다고 보기 때문이다.
+- $\mu_0$이 신뢰구간 **안에 있으면** 귀무가설을 **기각하지 못한다**. $\mu$가 $\mu_0$과 다르다고 결론지을 만한 충분한 증거가 자료에 없기 때문이다.
+
+가설검정의 **유의수준**($\alpha$)은 신뢰구간의 **신뢰수준**과 다음 관계에 있다:
 
 $$
-\textbf{significance level} = 1 - \textbf{confidence level}
+\textbf{유의수준} = 1 - \textbf{신뢰수준}
 $$
 
 ---
 
-## Confidence Interval Simulation
+## 신뢰구간 모의실험
 
-The following simulation scripts help visualize coverage properties of confidence intervals. Each script repeatedly draws random samples from a known population, constructs confidence intervals, and tracks what fraction of intervals capture the true parameter.
+다음 모의실험 스크립트는 신뢰구간의 포함 성질을 시각화하는 데 도움을 준다. 각 스크립트는 알려진 모집단에서 확률표본을 반복해서 뽑아 신뢰구간을 만들고, 그중 몇 퍼센트가 참 모수를 잡아내는지 추적한다.
 
-### Summary of Simulation Parameters
+### 모의실험 모수 정리
 
 $$
 \begin{array}{llll}
-\text{Parameter} & \text{Estimate} & \text{Sampling Distribution} & \text{CI Formula} \\
+\text{모수} & \text{추정값} & \text{표본분포} & \text{신뢰구간 공식} \\
 \hline
 \mu & \bar{x} & \displaystyle\frac{\bar{x}-\mu}{\sigma/\sqrt{n}}\approx z & \displaystyle\bar{x}\pm z_{\alpha/2}\frac{\sigma}{\sqrt{n}} \\[8pt]
 & & \displaystyle\frac{\bar{x}-\mu}{s/\sqrt{n}}\approx t_{n-1} & \displaystyle\bar{x}\pm t_{\alpha/2,n-1}\frac{s}{\sqrt{n}} \\[8pt]
@@ -159,20 +159,20 @@ p & \hat{p} & \displaystyle\frac{\hat{p}-p}{\sqrt{\hat{p}(1-\hat{p})/n}}\approx 
 \sigma^2 & s^2 & \displaystyle\frac{(n-1)s^2}{\sigma^2}\sim \chi^2_{n-1} & \displaystyle\left[\frac{(n-1)s^2}{\chi^2_{\alpha/2,n-1}},\frac{(n-1)s^2}{\chi^2_{1-\alpha/2,n-1}}\right] \\[8pt]
 \frac{\sigma_1^2}{\sigma_2^2} & \frac{s_1^2}{s_2^2} & \displaystyle\frac{s_1^2/\sigma_1^2}{s_2^2/\sigma_2^2}\sim F_{n_1-1,n_2-1} & \displaystyle\left[\frac{s_1^2/s_2^2}{F_{\alpha/2}},\frac{s_1^2/s_2^2}{F_{1-\alpha/2}}\right] \\[8pt]
 \mu_d & \bar{x}_d & \displaystyle\frac{\bar{x}_d-\mu_d}{s_d/\sqrt{n}}\approx t_{n-1} & \displaystyle\bar{x}_d\pm t_{\alpha/2,n-1}\frac{s_d}{\sqrt{n}} \\[8pt]
-\mu_1-\mu_2 & \bar{x}_1-\bar{x}_2 & \text{Welch or pooled } t & \displaystyle(\bar{x}_1-\bar{x}_2)\pm t_{\alpha/2,\text{df}}\cdot\text{SE} \\[8pt]
+\mu_1-\mu_2 & \bar{x}_1-\bar{x}_2 & \text{Welch 또는 합동 } t & \displaystyle(\bar{x}_1-\bar{x}_2)\pm t_{\alpha/2,\text{df}}\cdot\text{SE} \\[8pt]
 p_1-p_2 & \hat{p}_1-\hat{p}_2 & z & \displaystyle(\hat{p}_1-\hat{p}_2)\pm z_{\alpha/2}\cdot\text{SE}
 \end{array}
 $$
 
-### Finite Population Correction (FPC)
+### 유한모집단 수정 (FPC)
 
-If the data are sampled *without replacement* from a finite population of size $N$, the **finite population correction (FPC)** may be applied to the standard error:
+크기 $N$인 유한모집단에서 *비복원으로* 자료를 뽑았다면 표준오차에 **유한모집단 수정(FPC)**을 적용할 수 있다:
 
 $$
-\text{SE}_\text{FPC} = \frac{s}{\sqrt{n}} \sqrt{\frac{N-n}{N-1}}, \qquad \text{when } n > 0.1N \text{ is not negligible.}
+\text{SE}_\text{FPC} = \frac{s}{\sqrt{n}} \sqrt{\frac{N-n}{N-1}}, \qquad n > 0.1N \text{이어서 무시할 수 없을 때.}
 $$
 
-### Mean CI Simulation
+### 평균 신뢰구간 모의실험
 
 ```python
 #!/usr/bin/env python3
@@ -278,7 +278,7 @@ if __name__ == "__main__":
     main()
 ```
 
-### Proportion CI Simulation
+### 비율 신뢰구간 모의실험
 
 ```python
 #!/usr/bin/env python3
@@ -357,50 +357,50 @@ if __name__ == "__main__":
     main()
 ```
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-A 95% confidence interval for the mean is constructed from 100 independent samples. Approximately how many of these intervals would you expect to fail to contain the true mean?
+**연습문제 1.**
+독립인 표본 100개로 평균에 대한 95% 신뢰구간을 만든다. 이 구간들 중 참 평균을 담지 못하는 것은 대략 몇 개로 기대되는가?
 
-??? success "Solution to Exercise 1"
-    By definition, a 95% confidence interval has a 5% probability of not containing the true parameter value. Out of 100 independent samples, the expected number of intervals that fail to cover the true mean is:
+??? success "연습문제 1 풀이"
+    정의에 따라 95% 신뢰구간이 참 모수값을 담지 못할 확률은 5%이다. 독립인 표본 100개에서 참 평균을 담지 못하는 구간 수의 기댓값은:
 
     $$
     100 \times 0.05 = 5
     $$
 
-    The actual number will vary from experiment to experiment (following a Binomial(100, 0.05) distribution), but we expect approximately 5 failures.
+    실제 개수는 실험마다 (Binomial(100, 0.05) 분포를 따라) 달라지지만 약 5개의 실패를 기대한다.
 
 ---
 
-**Exercise 2.**
-Explain why a 95% confidence interval does NOT mean there is a 95% probability that the true parameter lies within the interval. What is the correct interpretation?
+**연습문제 2.**
+95% 신뢰구간이 참 모수가 그 구간 안에 있을 확률이 95%라는 뜻이 아닌 이유를 설명하라. 올바른 해석은 무엇인가?
 
-??? success "Solution to Exercise 2"
-    The parameter $\mu$ is a fixed (unknown) constant, not a random variable. Once the interval is computed from data, $\mu$ either lies inside it or it does not — there is no probability involved for that specific interval.
+??? success "연습문제 2 풀이"
+    모수 $\mu$는 확률변수가 아니라 고정된 (미지의) 상수이다. 자료로부터 구간을 계산하고 나면 $\mu$는 그 안에 있거나 없거나 둘 중 하나이다 — 그 특정한 구간에 대해서는 확률이 개입하지 않는다.
 
-    The correct interpretation is **frequentist**: if we repeated the sampling procedure many times and constructed a 95% CI each time, approximately 95% of those intervals would contain the true $\mu$. The "95%" refers to the long-run proportion of intervals that cover $\mu$, not to the probability that any particular interval contains $\mu$.
-
----
-
-**Exercise 3.**
-A researcher uses a z-interval with the sample standard deviation $s$ plugged in for $\sigma$ (the "z-plugin" method) when $n = 10$. Will the actual coverage be above or below the nominal 95%? Explain why.
-
-??? success "Solution to Exercise 3"
-    The actual coverage will be **below** 95%. The z-interval assumes $\sigma$ is known and uses $z_{0.025} = 1.96$ as the critical value. When $\sigma$ is unknown and estimated by $s$, there is additional variability from the estimation of $\sigma$ that the z-interval does not account for.
-
-    For small $n$, $s$ can substantially underestimate $\sigma$, producing intervals that are too narrow. The $t$-interval corrects for this by using the wider $t_{n-1}$ critical value (e.g., $t_{9, 0.025} = 2.262 > 1.96$), which accounts for the uncertainty in estimating $\sigma$. As $n \to \infty$, $s \to \sigma$ and the z- and t-intervals converge.
+    올바른 해석은 **빈도주의적**이다: 표본추출 절차를 여러 번 반복하여 매번 95% 신뢰구간을 만들면 그 구간들 중 약 95%가 참 $\mu$를 담는다. "95%"는 $\mu$를 담는 구간의 장기적 비율을 가리키는 것이지, 특정한 구간 하나가 $\mu$를 담을 확률이 아니다.
 
 ---
 
-**Exercise 4.**
-If sampling without replacement from a finite population of size $N = 500$ with a sample of $n = 100$, compute the finite population correction factor. How does it affect the width of the confidence interval compared to sampling with replacement?
+**연습문제 3.**
+어떤 연구자가 $n = 10$일 때 $\sigma$ 자리에 표본표준편차 $s$를 대입한 z-구간("z-plugin" 방법)을 쓴다. 실제 포함확률은 명목 95%보다 높겠는가, 낮겠는가? 이유를 설명하라.
 
-??? success "Solution to Exercise 4"
-    The finite population correction factor is:
+??? success "연습문제 3 풀이"
+    실제 포함확률은 95%보다 **낮다**. z-구간은 $\sigma$를 안다고 가정하고 임계값으로 $z_{0.025} = 1.96$을 쓴다. $\sigma$를 모르고 $s$로 추정하면 $\sigma$ 추정에서 오는 추가 변동성이 생기는데, z-구간은 이를 반영하지 않는다.
+
+    $n$이 작으면 $s$가 $\sigma$를 상당히 과소추정할 수 있어 구간이 너무 좁아진다. $t$-구간은 더 큰 $t_{n-1}$ 임계값(예: $t_{9, 0.025} = 2.262 > 1.96$)을 써서 $\sigma$ 추정의 불확실성을 반영해 이를 바로잡는다. $n \to \infty$이면 $s \to \sigma$이고 z-구간과 t-구간은 수렴한다.
+
+---
+
+**연습문제 4.**
+크기 $N = 500$인 유한모집단에서 $n = 100$인 표본을 비복원으로 뽑을 때 유한모집단 수정 인자를 계산하라. 복원추출과 비교하여 신뢰구간의 너비에 어떤 영향을 주는가?
+
+??? success "연습문제 4 풀이"
+    유한모집단 수정 인자는:
 
     $$
     \text{FPC} = \sqrt{\frac{N - n}{N - 1}} = \sqrt{\frac{500 - 100}{500 - 1}} = \sqrt{\frac{400}{499}} = \sqrt{0.8016} \approx 0.895
     $$
 
-    The standard error is multiplied by 0.895, so the confidence interval width is reduced by about 10.5% compared to the infinite-population (with-replacement) case. This makes sense because sampling 100 out of 500 individuals (20% of the population) provides more information than sampling 100 from an infinite population — we have already observed a substantial fraction of the population.
+    표준오차에 0.895가 곱해지므로 무한모집단(복원추출) 경우에 비해 신뢰구간 너비가 약 10.5% 줄어든다. 500명 중 100명(모집단의 20%)을 뽑는 것이 무한모집단에서 100명을 뽑는 것보다 더 많은 정보를 주므로 이는 자연스럽다 — 이미 모집단의 상당 부분을 관측했기 때문이다.

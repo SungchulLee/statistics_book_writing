@@ -1,44 +1,44 @@
-# Variance Confidence Interval Coverage Simulation
+# 분산 신뢰구간의 포함확률 모의실험
 
-## Overview
+## 개요
 
-This page demonstrates the chi-squared confidence interval for the population variance $\sigma^2$ and evaluates its coverage through simulation. The chi-squared variance interval is exact under normality but can fail when the underlying population is skewed or heavy-tailed. The simulation confirms the nominal coverage for normal data and highlights the sensitivity to the normality assumption.
+이 페이지에서는 모분산 $\sigma^2$에 대한 카이제곱 신뢰구간을 시연하고 모의실험으로 그 포함확률을 평가한다. 카이제곱 분산 구간은 정규성 아래에서 정확하지만 바탕 모집단이 치우쳐 있거나 꼬리가 두꺼우면 실패할 수 있다. 모의실험은 정규 자료에서 명목 포함확률이 달성됨을 확인하고 정규성 가정에 대한 민감성을 부각한다.
 
-## Chi-Squared Confidence Interval for Variance
+## 분산에 대한 카이제곱 신뢰구간
 
-### Pivotal Quantity
+### 추축량
 
-If $X_1, \ldots, X_n \overset{\text{iid}}{\sim} N(\mu, \sigma^2)$, then the statistic
+$X_1, \ldots, X_n \overset{\text{iid}}{\sim} N(\mu, \sigma^2)$이면 통계량
 
 $$
 \frac{(n-1)S^2}{\sigma^2} \sim \chi^2_{n-1}
 $$
 
-where $S^2 = \frac{1}{n-1}\sum_{i=1}^n (X_i - \bar{X})^2$ is the unbiased sample variance.
+이며, 여기서 $S^2 = \frac{1}{n-1}\sum_{i=1}^n (X_i - \bar{X})^2$은 불편 표본분산이다.
 
-### Confidence Interval
+### 신뢰구간
 
-Inverting the pivot yields the $(1-\alpha)100\%$ CI for $\sigma^2$:
+추축량을 뒤집으면 $\sigma^2$의 $(1-\alpha)100\%$ 신뢰구간을 얻는다:
 
 $$
 \left(\frac{(n-1)S^2}{\chi^2_{1-\alpha/2,\,n-1}},\;\;
       \frac{(n-1)S^2}{\chi^2_{\alpha/2,\,n-1}}\right)
 $$
 
-Note that the **larger** chi-squared quantile appears in the **lower** endpoint because dividing by a larger number produces a smaller result.
+**더 큰** 카이제곱 분위수가 **아래쪽** 끝점에 나타나는데, 큰 수로 나누면 결과가 작아지기 때문이다.
 
-A confidence interval for $\sigma$ is obtained by taking square roots:
+$\sigma$의 신뢰구간은 제곱근을 취해 얻는다:
 
 $$
 \left(\sqrt{\frac{(n-1)S^2}{\chi^2_{1-\alpha/2,\,n-1}}},\;\;
       \sqrt{\frac{(n-1)S^2}{\chi^2_{\alpha/2,\,n-1}}}\right)
 $$
 
-### Critical Normality Assumption
+### 결정적인 정규성 가정
 
-This interval is **exact only when the data are normally distributed**. Unlike confidence intervals for the mean (which benefit from the Central Limit Theorem), the chi-squared variance interval does not become robust to non-normality even for large $n$. For skewed or heavy-tailed data, consider a bootstrap confidence interval for $\sigma^2$.
+이 구간은 **자료가 정규분포를 따를 때에만 정확하다**. (중심극한정리의 도움을 받는) 평균의 신뢰구간과 달리, 카이제곱 분산 구간은 $n$이 커져도 비정규성에 로버스트해지지 않는다. 치우치거나 꼬리가 두꺼운 자료에는 $\sigma^2$에 대한 붓스트랩 신뢰구간을 고려하라.
 
-## Python Code
+## Python 코드
 
 ```python
 import numpy as np
@@ -72,7 +72,7 @@ coverage_pct = 100.0 * covered.mean()
 print(f"Coverage: {coverage_pct:.1f}%, Failures: {n_fail}")
 ```
 
-### Plotting the Intervals
+### 구간의 시각화
 
 ```python
 fig, ax = plt.subplots(figsize=(12, 12))
@@ -89,32 +89,32 @@ plt.tight_layout()
 plt.show()
 ```
 
-## Interpretation
+## 해석
 
-- When the data truly come from a normal distribution, the chi-squared interval achieves the stated coverage level. The simulation confirms empirical coverage close to 95 % for $n = 12$.
-- The intervals are **asymmetric** because the chi-squared distribution is right-skewed. The upper bound tends to be farther from $S^2$ than the lower bound.
-- If the population is non-normal (e.g., exponential, $t$ with low df, or log-normal), the chi-squared CI can drastically under- or over-cover. A bootstrap percentile or BCa interval for $\sigma^2$ is a more robust alternative.
-- The interval can optionally be reported on the standard deviation scale by taking square roots of both endpoints.
+- 자료가 실제로 정규분포에서 나오면 카이제곱 구간은 명시한 포함 수준을 달성한다. 모의실험에서 $n = 12$일 때 경험적 포함확률이 95%에 가까움이 확인된다.
+- 카이제곱분포가 오른쪽으로 치우쳐 있으므로 구간은 **비대칭**이다. 상한이 하한보다 $S^2$에서 더 멀어지는 경향이 있다.
+- 모집단이 정규가 아니면(예: 지수, 자유도가 작은 $t$, log-normal) 카이제곱 신뢰구간의 포함확률이 크게 부족하거나 과할 수 있다. $\sigma^2$에 대한 붓스트랩 백분위수나 BCa 구간이 더 로버스트한 대안이다.
+- 양 끝점에 제곱근을 취해 표준편차 척도로 보고할 수도 있다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.** A sample of size $n = 20$ from a normal population yields $s^2 = 16$. Construct a 95 % confidence interval for $\sigma^2$ and for $\sigma$.
+**연습문제 1.** 정규모집단에서 뽑은 크기 $n = 20$인 표본에서 $s^2 = 16$을 얻었다. $\sigma^2$과 $\sigma$의 95% 신뢰구간을 구성하라.
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
 
-    With $\text{df} = 19$ and $\alpha = 0.05$:
+    $\text{df} = 19$, $\alpha = 0.05$일 때:
 
     $$
     \chi^2_{0.025,\,19} = 8.907, \quad \chi^2_{0.975,\,19} = 32.852
     $$
 
-    The 95 % CI for $\sigma^2$ is
+    $\sigma^2$의 95% 신뢰구간은
 
     $$
     \left(\frac{19 \times 16}{32.852},\; \frac{19 \times 16}{8.907}\right) = \left(\frac{304}{32.852},\; \frac{304}{8.907}\right) = (9.25,\; 34.13)
     $$
 
-    Taking square roots, the 95 % CI for $\sigma$ is
+    제곱근을 취하면 $\sigma$의 95% 신뢰구간은
 
     $$
     (\sqrt{9.25},\; \sqrt{34.13}) = (3.04,\; 5.84)
@@ -124,41 +124,41 @@ plt.show()
 
 ---
 
-**Exercise 2.** Prove that $(n-1)S^2/\sigma^2 \sim \chi^2_{n-1}$ when $X_1, \ldots, X_n \overset{\text{iid}}{\sim} N(\mu, \sigma^2)$.
+**연습문제 2.** $X_1, \ldots, X_n \overset{\text{iid}}{\sim} N(\mu, \sigma^2)$일 때 $(n-1)S^2/\sigma^2 \sim \chi^2_{n-1}$임을 증명하라.
 
-??? success "Solution to Exercise 2"
+??? success "연습문제 2 풀이"
 
-    Define $Z_i = (X_i - \mu)/\sigma$, so $Z_i \overset{\text{iid}}{\sim} N(0,1)$. Then
+    $Z_i = (X_i - \mu)/\sigma$라 하면 $Z_i \overset{\text{iid}}{\sim} N(0,1)$이다. 그러면
 
     $$
     \sum_{i=1}^n Z_i^2 = \sum_{i=1}^n \frac{(X_i - \mu)^2}{\sigma^2} \sim \chi^2_n
     $$
 
-    Decompose via the identity $X_i - \mu = (X_i - \bar{X}) + (\bar{X} - \mu)$:
+    항등식 $X_i - \mu = (X_i - \bar{X}) + (\bar{X} - \mu)$로 분해하면:
 
     $$
     \sum_{i=1}^n (X_i - \mu)^2 = \sum_{i=1}^n (X_i - \bar{X})^2 + n(\bar{X} - \mu)^2
     $$
 
-    Dividing by $\sigma^2$:
+    $\sigma^2$으로 나누면:
 
     $$
     \chi^2_n = \frac{(n-1)S^2}{\sigma^2} + \frac{(\bar{X}-\mu)^2}{\sigma^2/n}
     $$
 
-    The second term is $Z^2$ where $Z = (\bar{X}-\mu)/(\sigma/\sqrt{n}) \sim N(0,1)$, so it follows $\chi^2_1$. By Cochran's theorem (or the independence of $\bar{X}$ and $S^2$ under normality), the two terms are independent. Therefore
+    둘째 항은 $Z = (\bar{X}-\mu)/(\sigma/\sqrt{n}) \sim N(0,1)$인 $Z^2$이므로 $\chi^2_1$을 따른다. (정규성 아래 $\bar{X}$와 $S^2$의 독립성, 즉 Cochran 정리에 의해) 두 항은 독립이다. 따라서 독립인 카이제곱 확률변수의 가법성에 의해
 
     $$
     \frac{(n-1)S^2}{\sigma^2} = \chi^2_n - \chi^2_1 \sim \chi^2_{n-1}
     $$
 
-    by the additive property of independent chi-squared random variables. $\square$
+    이다. $\square$
 
 ---
 
-**Exercise 3.** Modify the simulation to draw data from an exponential distribution with $\lambda = 1$ (so $\sigma^2 = 1$) and $n = 20$. Report the empirical coverage. Why does the chi-squared interval fail?
+**연습문제 3.** 모의실험을 고쳐서 $\lambda = 1$인 지수분포(따라서 $\sigma^2 = 1$)와 $n = 20$으로 자료를 뽑아라. 경험적 포함확률을 보고하라. 카이제곱 구간이 실패하는 이유는?
 
-??? success "Solution to Exercise 3"
+??? success "연습문제 3 풀이"
 
     ```python
     from scipy.stats import chi2
@@ -178,26 +178,26 @@ plt.show()
     print(f"Coverage: {100 * covers / n_sim:.1f}%")
     ```
 
-    Typical result: coverage $\approx$ 87--90 %, well below 95 %. The exponential distribution is right-skewed with excess kurtosis 6, which means $(n-1)S^2/\sigma^2$ does not follow $\chi^2_{n-1}$. The chi-squared pivot relies on normality, and no CLT-based argument rescues the variance CI the way it does for the mean. $\square$
+    전형적인 결과: 포함확률 $\approx$ 87–90%로 95%를 크게 밑돈다. 지수분포는 오른쪽으로 치우쳐 있고 초과첨도가 6이므로 $(n-1)S^2/\sigma^2$이 $\chi^2_{n-1}$을 따르지 않는다. 카이제곱 추축량은 정규성에 의존하며, 평균의 경우와 달리 중심극한정리에 기반한 논증이 분산 신뢰구간을 구해 주지 못한다. $\square$
 
 ---
 
-**Exercise 4.** Show that the chi-squared CI for $\sigma^2$ is not symmetric about $S^2$, and explain why geometrically.
+**연습문제 4.** $\sigma^2$의 카이제곱 신뢰구간이 $S^2$을 중심으로 대칭이 아님을 보이고, 그 이유를 기하적으로 설명하라.
 
-??? success "Solution to Exercise 4"
+??? success "연습문제 4 풀이"
 
-    The lower endpoint is $L = (n-1)S^2 / \chi^2_{1-\alpha/2}$ and the upper endpoint is $U = (n-1)S^2 / \chi^2_{\alpha/2}$. The distances from $S^2$ are:
+    하한은 $L = (n-1)S^2 / \chi^2_{1-\alpha/2}$이고 상한은 $U = (n-1)S^2 / \chi^2_{\alpha/2}$이다. $S^2$으로부터의 거리는:
 
     $$
     S^2 - L = S^2\!\left(1 - \frac{n-1}{\chi^2_{1-\alpha/2}}\right), \quad U - S^2 = S^2\!\left(\frac{n-1}{\chi^2_{\alpha/2}} - 1\right)
     $$
 
-    Since the $\chi^2_{n-1}$ distribution is right-skewed, $\chi^2_{\alpha/2} < n-1 < \chi^2_{1-\alpha/2}$ (the mean of $\chi^2_{n-1}$ is $n-1$, which lies closer to the upper quantile). This means $n-1/\chi^2_{\alpha/2}$ is larger than $n-1/\chi^2_{1-\alpha/2}$ is below 1, so $U - S^2 > S^2 - L$. The upper tail of the CI extends farther because the chi-squared distribution has a long right tail: small chi-squared values in the denominator produce large values of $\sigma^2$. $\square$
+    $\chi^2_{n-1}$ 분포가 오른쪽으로 치우쳐 있으므로 $\chi^2_{\alpha/2} < n-1 < \chi^2_{1-\alpha/2}$이다($\chi^2_{n-1}$의 평균 $n-1$이 위쪽 분위수에 더 가깝다). 따라서 $(n-1)/\chi^2_{\alpha/2} > 1$이고 $(n-1)/\chi^2_{1-\alpha/2} < 1$인데, 전자가 1을 넘는 양이 후자가 1에 못 미치는 양보다 커서 $U - S^2 > S^2 - L$이 된다. 예컨대 $\text{df} = 19$에서는 $19/8.907 - 1 = 1.13$ 대 $1 - 19/32.852 = 0.42$이다. 카이제곱분포의 오른쪽 꼬리가 길어 분모의 작은 카이제곱 값이 큰 $\sigma^2$ 값을 만들기 때문에 신뢰구간의 위쪽 꼬리가 더 멀리 뻗는다. $\square$
 
 ---
 
-**Exercise 5.** If a 95 % CI for $\sigma^2$ is $(9.25, 34.13)$, can we claim that the population standard deviation is less than 6? Justify your answer.
+**연습문제 5.** $\sigma^2$의 95% 신뢰구간이 $(9.25, 34.13)$이라면 모표준편차가 6보다 작다고 주장할 수 있는가? 답을 정당화하라.
 
-??? success "Solution to Exercise 5"
+??? success "연습문제 5 풀이"
 
-    The 95 % CI for $\sigma$ is $(\sqrt{9.25}, \sqrt{34.13}) = (3.04, 5.84)$. The entire interval lies below 6, so at the 95 % confidence level, the data are consistent with $\sigma < 6$. Equivalently, the value $\sigma = 6$ (i.e., $\sigma^2 = 36$) falls outside the 95 % CI for $\sigma^2$, which is $(9.25, 34.13)$. Therefore we have sufficient evidence at the 5 % significance level to conclude that $\sigma < 6$. $\square$
+    $\sigma$의 95% 신뢰구간은 $(\sqrt{9.25}, \sqrt{34.13}) = (3.04, 5.84)$이다. 구간 전체가 6보다 아래이므로 95% 신뢰수준에서 자료는 $\sigma < 6$과 부합한다. 동등하게, 값 $\sigma = 6$(즉 $\sigma^2 = 36$)은 $\sigma^2$의 95% 신뢰구간 $(9.25, 34.13)$ 밖에 있다. 따라서 5% 유의수준에서 $\sigma < 6$이라고 결론지을 충분한 증거가 있다. $\square$

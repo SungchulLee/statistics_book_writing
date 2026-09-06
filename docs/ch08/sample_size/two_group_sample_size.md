@@ -1,69 +1,69 @@
-# Sample Size for Comparing Two Groups
+# 두 집단 비교를 위한 표본크기
 
-## Overview
+## 개요
 
-Before collecting data for a two-group comparison, a researcher must determine how many subjects to enroll in each group. Too few subjects yield a test with low power --- the study may fail to detect a real treatment effect, wasting time and resources. Too many subjects are costly and may expose unnecessary participants to an inferior treatment. Sample size formulas translate the desired power, significance level, and minimum meaningful effect size into a concrete number of observations per group. These formulas connect directly to the Type I error rate $\alpha$, the Type II error rate $\beta$, and the power $1 - \beta$ introduced in previous chapters.
+두 집단을 비교하는 자료를 모으기 전에 연구자는 각 집단에 몇 명을 등록할지 정해야 한다. 피험자가 너무 적으면 검정력이 낮아 실제 처리 효과를 놓칠 수 있고, 그러면 시간과 자원을 낭비하게 된다. 너무 많으면 비용이 크고 불필요하게 많은 참가자를 열등한 처리에 노출시킬 수 있다. 표본크기 공식은 원하는 검정력, 유의수준, 의미 있는 최소 효과크기를 집단당 구체적인 관측값 수로 옮겨 준다. 이 공식들은 앞 장에서 소개한 제1종 오류율 $\alpha$, 제2종 오류율 $\beta$, 검정력 $1 - \beta$와 직접 연결된다.
 
-## Two-Sample Mean Comparison
+## 두 표본 평균의 비교
 
-### Intuition
+### 직관
 
-Three factors determine how many observations each group needs. First, **larger effects are easier to detect**: if the true difference between group means is large relative to the noise, fewer observations suffice. Second, **more variable data requires more observations**: when $\sigma$ is large, the signal is harder to distinguish from noise. Third, **stricter error control costs more observations**: demanding a smaller $\alpha$ (fewer false positives) or higher power $1 - \beta$ (fewer missed effects) both increase the required sample size.
+각 집단에 몇 개의 관측값이 필요한지는 세 가지 요인이 결정한다. 첫째, **효과가 클수록 탐지하기 쉽다**: 잡음에 비해 두 집단 평균의 참 차이가 크면 관측값이 적어도 된다. 둘째, **자료의 변동이 클수록 관측값이 많이 필요하다**: $\sigma$가 크면 신호를 잡음과 구분하기 어렵다. 셋째, **오류를 엄격히 통제할수록 관측값이 많이 든다**: $\alpha$를 작게(거짓 양성을 적게) 하거나 검정력 $1 - \beta$를 높게(놓치는 효과를 적게) 하면 둘 다 필요한 표본크기가 늘어난다.
 
-### Formula
+### 공식
 
-Consider a two-sided test of $H_0\colon \mu_1 = \mu_2$ against $H_1\colon \mu_1 \neq \mu_2$, assuming:
+$H_0\colon \mu_1 = \mu_2$를 $H_1\colon \mu_1 \neq \mu_2$에 대해 양측으로 검정한다고 하고, 다음을 가정하자:
 
-- Equal population variances: $\sigma_1^2 = \sigma_2^2 = \sigma^2$
-- Equal group sizes: $n_1 = n_2 = n$
-- Normal populations (or large enough samples for the CLT)
+- 모분산이 같음: $\sigma_1^2 = \sigma_2^2 = \sigma^2$
+- 집단 크기가 같음: $n_1 = n_2 = n$
+- 정규모집단(또는 중심극한정리가 통할 만큼 큰 표본)
 
-The required sample size per group to detect a difference $\delta = |\mu_1 - \mu_2|$ with power $1 - \beta$ at significance level $\alpha$ is
+유의수준 $\alpha$에서 검정력 $1 - \beta$로 차이 $\delta = |\mu_1 - \mu_2|$를 탐지하는 데 필요한 집단당 표본크기는
 
 $$
 n = \frac{2(z_{\alpha/2} + z_\beta)^2 \sigma^2}{\delta^2}
 $$
 
-where $z_{\alpha/2} = \mathcal{N}^{-1}(1 - \alpha/2)$ is the upper $\alpha/2$ quantile of the standard normal, and $z_\beta = \mathcal{N}^{-1}(1 - \beta)$ is the upper $\beta$ quantile. The numerator reflects the combined stringency of the Type I and Type II error requirements, while the denominator is the squared effect size --- the signal we want to detect.
+여기서 $z_{\alpha/2} = \mathcal{N}^{-1}(1 - \alpha/2)$는 표준정규의 상위 $\alpha/2$ 분위수이고 $z_\beta = \mathcal{N}^{-1}(1 - \beta)$는 상위 $\beta$ 분위수이다. 분자는 제1종·제2종 오류 요구의 엄격함을 함께 반영하고, 분모는 효과크기의 제곱 — 우리가 탐지하려는 신호 — 이다.
 
-### Worked Example
+### 풀이 예제
 
-A clinical trial compares a new drug to a placebo for reducing blood pressure. Prior studies suggest a common standard deviation of $\sigma = 12$ mmHg. The investigators want to detect a difference of $\delta = 5$ mmHg with 80% power ($\beta = 0.20$) at the 5% significance level ($\alpha = 0.05$).
+한 임상시험이 혈압을 낮추는 새 약을 위약과 비교한다. 선행 연구에서 공통 표준편차는 $\sigma = 12$ mmHg로 나타났다. 연구진은 유의수준 5%($\alpha = 0.05$)에서 검정력 80%($\beta = 0.20$)로 $\delta = 5$ mmHg의 차이를 탐지하고자 한다.
 
-The critical values are $z_{0.025} = 1.96$ and $z_{0.20} = 0.842$. Substituting:
+임계값은 $z_{0.025} = 1.96$, $z_{0.20} = 0.842$이다. 대입하면:
 
 $$
 n = \frac{2(1.96 + 0.842)^2 (12)^2}{(5)^2} = \frac{2(2.802)^2 (144)}{25} = \frac{2(7.851)(144)}{25} = \frac{2261.1}{25} \approx 90.4
 $$
 
-Rounding up, the trial needs **91 subjects per group** (182 total).
+올림하면 이 시험에는 **집단당 91명**(총 182명)이 필요하다.
 
-!!! tip "Always Round Up"
-    Since the formula gives a real number, always round up to the next integer. Rounding down would yield power slightly below the target.
+!!! tip "항상 올림하라"
+    공식이 실수를 주므로 항상 다음 정수로 올림한다. 내림하면 검정력이 목표보다 살짝 낮아진다.
 
-## Two-Sample Proportion Comparison
+## 두 표본 비율의 비교
 
-### Intuition
+### 직관
 
-Comparing two proportions follows the same logic, but the variance of a proportion $p(1-p)$ depends on $p$ itself. This introduces a subtlety: the variance under the null hypothesis (when $p_1 = p_2$) differs from the variance under the alternative (when $p_1 \neq p_2$). The sample size formula must account for both.
+두 비율의 비교도 같은 논리를 따르지만, 비율의 분산 $p(1-p)$가 $p$ 자체에 의존한다. 여기서 미묘한 점이 생긴다: 귀무가설 아래($p_1 = p_2$)의 분산과 대립가설 아래($p_1 \neq p_2$)의 분산이 다르다. 표본크기 공식은 둘 다 반영해야 한다.
 
-### Formula
+### 공식
 
-For a two-sided test of $H_0\colon p_1 = p_2$ against $H_1\colon p_1 \neq p_2$ with equal group sizes $n_1 = n_2 = n$:
+집단 크기가 같은($n_1 = n_2 = n$) 상황에서 $H_0\colon p_1 = p_2$를 $H_1\colon p_1 \neq p_2$에 대해 양측으로 검정할 때:
 
 $$
 n = \frac{\bigl(z_{\alpha/2}\sqrt{2\bar{p}(1-\bar{p})} + z_\beta\sqrt{p_1(1-p_1) + p_2(1-p_2)}\bigr)^2}{(p_1 - p_2)^2}
 $$
 
-where $\bar{p} = (p_1 + p_2)/2$ is the average of the two hypothesized proportions. The first term under the square root uses the pooled variance under $H_0$ (where both proportions equal $\bar{p}$), while the second term uses the separate variances under $H_1$.
+여기서 $\bar{p} = (p_1 + p_2)/2$는 가설상 두 비율의 평균이다. 제곱근 안의 첫 항은 $H_0$ 아래(두 비율이 모두 $\bar{p}$인 경우)의 합동분산을, 둘째 항은 $H_1$ 아래의 각각의 분산을 쓴다.
 
-### Worked Example
+### 풀이 예제
 
-A marketing team wants to compare conversion rates between a new website design ($p_1 = 0.12$) and the current design ($p_2 = 0.08$). They want 90% power ($\beta = 0.10$) at the 5% significance level.
+한 마케팅 팀이 새 웹사이트 디자인($p_1 = 0.12$)과 현재 디자인($p_2 = 0.08$)의 전환율을 비교하려 한다. 유의수준 5%에서 검정력 90%($\beta = 0.10$)를 원한다.
 
-First, compute the pooled proportion: $\bar{p} = (0.12 + 0.08)/2 = 0.10$.
+먼저 합동 비율을 계산한다: $\bar{p} = (0.12 + 0.08)/2 = 0.10$.
 
-The critical values are $z_{0.025} = 1.96$ and $z_{0.10} = 1.282$. The numerator is
+임계값은 $z_{0.025} = 1.96$, $z_{0.10} = 1.282$이다. 분자는
 
 $$
 \bigl(1.96\sqrt{2(0.10)(0.90)} + 1.282\sqrt{(0.12)(0.88) + (0.08)(0.92)}\bigr)^2
@@ -81,81 +81,81 @@ $$
 = (0.8316 + 0.5428)^2 = (1.3744)^2 = 1.889
 $$
 
-The denominator is $(0.12 - 0.08)^2 = 0.0016$. Therefore:
+분모는 $(0.12 - 0.08)^2 = 0.0016$이다. 따라서:
 
 $$
 n = \frac{1.889}{0.0016} \approx 1180.6
 $$
 
-The study needs **1181 subjects per group** (2362 total).
+이 연구에는 **집단당 1181명**(총 2362명)이 필요하다.
 
-## Practical Considerations
+## 실무적 고려사항
 
-!!! warning "Adjust for Dropout"
-    The formulas give the number of subjects needed for analysis. If a dropout rate $d$ is expected, enroll $n / (1 - d)$ subjects per group. For example, with 15% expected dropout and $n = 91$, enroll $\lceil 91 / 0.85 \rceil = 108$ per group.
+!!! warning "탈락을 감안하라"
+    위 공식은 분석에 필요한 피험자 수를 준다. 탈락률 $d$가 예상되면 집단당 $n / (1 - d)$명을 등록하라. 예를 들어 탈락률 15%가 예상되고 $n = 91$이면 집단당 $\lceil 91 / 0.85 \rceil = 108$명을 등록한다.
 
-**Unequal group sizes.** When $n_1 \neq n_2$, the mean comparison formula generalizes to
+**집단 크기가 다른 경우.** $n_1 \neq n_2$이면 평균 비교 공식은 다음으로 일반화된다:
 
 $$
 n_1 = \frac{(1 + 1/k)(z_{\alpha/2} + z_\beta)^2 \sigma^2}{\delta^2}
 $$
 
-where $k = n_2/n_1$ is the allocation ratio and $n_2 = k \cdot n_1$. Setting $k = 1$ recovers the equal-size formula (since $1 + 1/1 = 2$).
+여기서 $k = n_2/n_1$은 배정비이고 $n_2 = k \cdot n_1$이다. $k = 1$이면 ($1 + 1/1 = 2$이므로) 크기가 같은 경우의 공식이 된다.
 
-**Effect size formulation.** Dividing both sides of the mean comparison formula by $\sigma^2$ shows that the required sample size depends on the **standardized effect size** $d = \delta/\sigma$:
+**효과크기로 표현하기.** 평균 비교 공식의 양변을 $\sigma^2$으로 나누면 필요한 표본크기가 **표준화 효과크기** $d = \delta/\sigma$에만 의존함을 알 수 있다:
 
 $$
 n = \frac{2(z_{\alpha/2} + z_\beta)^2}{d^2}
 $$
 
-Common benchmarks are $d = 0.2$ (small), $d = 0.5$ (medium), and $d = 0.8$ (large).
+흔한 기준은 $d = 0.2$(작음), $d = 0.5$(중간), $d = 0.8$(큼)이다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-A researcher wants to detect a difference of $\delta = 5$ units between two groups with $\sigma = 10$, using $\alpha = 0.05$ (two-sided) and power $= 0.80$. Compute the required sample size per group.
+**연습문제 1.**
+어떤 연구자가 $\sigma = 10$인 두 집단에서 $\alpha = 0.05$(양측), 검정력 $= 0.80$으로 차이 $\delta = 5$ 단위를 탐지하려 한다. 집단당 필요한 표본크기를 계산하라.
 
-??? success "Solution to Exercise 1"
-    The critical values are $z_{0.025} = 1.96$ and $z_{0.20} = 0.842$ (since power $= 1 - \beta = 0.80$ gives $\beta = 0.20$).
+??? success "연습문제 1 풀이"
+    임계값은 $z_{0.025} = 1.96$, $z_{0.20} = 0.842$이다(검정력 $= 1 - \beta = 0.80$이므로 $\beta = 0.20$).
 
     $$
     n = \frac{2(z_{\alpha/2} + z_\beta)^2 \sigma^2}{\delta^2} = \frac{2(1.96 + 0.842)^2 \times 100}{25} = \frac{2 \times 7.8505 \times 100}{25} = \frac{1570.1}{25} = 62.8
     $$
 
-    Rounding up, $n = 63$ per group (126 total).
+    올림하면 집단당 $n = 63$명(총 126명)이다.
 
 ---
 
-**Exercise 2.**
-Using the effect size formulation, compute the required sample size per group to detect a "medium" effect ($d = 0.5$) with 80% power at $\alpha = 0.05$.
+**연습문제 2.**
+효과크기 표현을 써서 $\alpha = 0.05$, 검정력 80%로 "중간" 효과($d = 0.5$)를 탐지하는 데 필요한 집단당 표본크기를 계산하라.
 
-??? success "Solution to Exercise 2"
+??? success "연습문제 2 풀이"
     $$
     n = \frac{2(z_{\alpha/2} + z_\beta)^2}{d^2} = \frac{2(1.96 + 0.842)^2}{0.25} = \frac{2 \times 7.8505}{0.25} = \frac{15.701}{0.25} = 62.8
     $$
 
-    Rounding up, $n = 63$ per group. This is a widely cited benchmark: detecting a medium effect size at 80% power requires about 63 subjects per group.
+    올림하면 집단당 $n = 63$명이다. 널리 인용되는 기준값이다: 검정력 80%로 중간 크기의 효과를 탐지하려면 집단당 약 63명이 필요하다.
 
 ---
 
-**Exercise 3.**
-If the sample size is fixed at $n = 30$ per group and $\sigma = 10$ with $\alpha = 0.05$, what is the minimum detectable difference $\delta$ at 80% power?
+**연습문제 3.**
+표본크기가 집단당 $n = 30$으로 고정되어 있고 $\sigma = 10$, $\alpha = 0.05$일 때 검정력 80%에서 탐지 가능한 최소 차이 $\delta$는 얼마인가?
 
-??? success "Solution to Exercise 3"
-    Rearranging the formula:
+??? success "연습문제 3 풀이"
+    공식을 정리하면:
 
     $$
     \delta = \sqrt{\frac{2(z_{\alpha/2} + z_\beta)^2 \sigma^2}{n}} = \sqrt{\frac{2(1.96 + 0.842)^2 \times 100}{30}} = \sqrt{\frac{1570.1}{30}} = \sqrt{52.34} \approx 7.23
     $$
 
-    With 30 subjects per group, the study can detect a difference of about 7.23 units (or a standardized effect of $d = 7.23/10 = 0.72$) with 80% power.
+    집단당 30명이면 검정력 80%로 약 7.23 단위의 차이(표준화 효과로는 $d = 7.23/10 = 0.72$)를 탐지할 수 있다.
 
 ---
 
-**Exercise 4.**
-Explain intuitively why doubling the sample size does not double the detectable effect size. What is the precise relationship between $n$ and $\delta$?
+**연습문제 4.**
+표본크기를 두 배로 해도 탐지 가능한 효과크기가 두 배로 좋아지지 않는 이유를 직관적으로 설명하라. $n$과 $\delta$의 정확한 관계는 무엇인가?
 
-??? success "Solution to Exercise 4"
-    From the formula $n = 2(z_{\alpha/2} + z_\beta)^2 \sigma^2 / \delta^2$, solving for $\delta$ gives $\delta \propto 1/\sqrt{n}$. Doubling $n$ reduces the minimum detectable difference by a factor of $\sqrt{2} \approx 1.414$, not by a factor of 2.
+??? success "연습문제 4 풀이"
+    공식 $n = 2(z_{\alpha/2} + z_\beta)^2 \sigma^2 / \delta^2$을 $\delta$에 대해 풀면 $\delta \propto 1/\sqrt{n}$이다. $n$을 두 배로 하면 탐지 가능한 최소 차이가 2배가 아니라 $\sqrt{2} \approx 1.414$배 작아진다.
 
-    Intuitively, the standard error of the difference in means is $\sigma\sqrt{2/n}$, which decreases as $1/\sqrt{n}$. Since the power to detect $\delta$ depends on the ratio $\delta / \text{SE}$, improving precision by a factor of $\sqrt{2}$ (from doubling $n$) allows detecting a difference that is $\sqrt{2}$ times smaller. This diminishing-returns relationship means that halving the detectable effect size requires **quadrupling** the sample size.
+    직관적으로, 평균 차이의 표준오차는 $\sigma\sqrt{2/n}$으로 $1/\sqrt{n}$에 따라 줄어든다. $\delta$를 탐지하는 검정력은 비 $\delta / \text{SE}$에 달려 있으므로, ($n$을 두 배로 하여) 정밀도가 $\sqrt{2}$배 좋아지면 $\sqrt{2}$배 작은 차이를 탐지할 수 있다. 이 수확 체감 관계 때문에 탐지 가능한 효과크기를 절반으로 줄이려면 표본크기가 **네 배** 필요하다.

@@ -1,22 +1,22 @@
-# One-Sample Proportion Confidence Interval Computation
+# 일표본 비율 신뢰구간의 계산
 
-## Overview
+## 개요
 
-This page presents the practical computation of a confidence interval for a single population proportion $p$. Four methods are covered: the Wald interval, the Wilson score interval, the Agresti--Coull interval, and the Clopper--Pearson exact interval. The Python implementation accepts either success/failure counts or a CSV file of 0/1 values and supports any confidence level.
+이 페이지에서는 단일 모비율 $p$의 신뢰구간을 실제로 계산하는 방법을 다룬다. 네 가지 방법 — Wald 구간, Wilson score 구간, Agresti–Coull 구간, Clopper–Pearson 정확 구간 — 을 다룬다. Python 구현은 성공/실패 개수나 0/1 값이 담긴 CSV 파일 어느 쪽이든 받으며 임의의 신뢰수준을 지원한다.
 
-## Wald Interval
+## Wald 구간
 
-Given $k$ successes in $n$ independent Bernoulli trials, the sample proportion is $\hat{p} = k/n$. The Wald $(1-\alpha)100\%$ confidence interval is
+독립인 Bernoulli 시행 $n$번에서 성공이 $k$번이면 표본비율은 $\hat{p} = k/n$이다. Wald $(1-\alpha)100\%$ 신뢰구간은
 
 $$
 \hat{p} \pm z_{\alpha/2} \sqrt{\frac{\hat{p}(1-\hat{p})}{n}}
 $$
 
-This is the simplest method but can under-cover badly when $n$ is small or $\hat{p}$ is near 0 or 1, because the normal approximation to the binomial breaks down in those regimes.
+가장 단순한 방법이지만 $n$이 작거나 $\hat{p}$가 0 또는 1에 가까우면 이항분포에 대한 정규근사가 무너지므로 포함확률이 크게 부족할 수 있다.
 
-## Wilson Score Interval
+## Wilson score 구간
 
-The Wilson interval inverts the score test. Define $z = z_{\alpha/2}$. The interval endpoints are
+Wilson 구간은 score 검정을 뒤집어 얻는다. $z = z_{\alpha/2}$라 하면 구간의 끝점은
 
 $$
 \frac{\hat{p} + \dfrac{z^2}{2n}}{1 + \dfrac{z^2}{n}}
@@ -25,38 +25,38 @@ $$
 \sqrt{\frac{\hat{p}(1-\hat{p})}{n} + \frac{z^2}{4n^2}}
 $$
 
-The denominator $1 + z^2/n$ shrinks the interval toward $1/2$, improving coverage across the full range of $p$. The Wilson interval is the recommended default for most practical work.
+분모 $1 + z^2/n$이 구간을 $1/2$ 쪽으로 축소하여 $p$의 전 범위에서 포함확률을 개선한다. Wilson 구간은 대부분의 실무에서 권장되는 기본값이다.
 
-## Agresti--Coull Interval
+## Agresti–Coull 구간
 
-Add $z^2/2$ pseudo-successes and $z^2/2$ pseudo-failures to form adjusted quantities:
+가상의 성공 $z^2/2$개와 가상의 실패 $z^2/2$개를 더해 보정된 양을 만든다:
 
 $$
 \tilde{n} = n + z^2, \quad \tilde{p} = \frac{k + z^2/2}{\tilde{n}}
 $$
 
-Then apply the Wald formula using $\tilde{p}$ and $\tilde{n}$:
+그다음 $\tilde{p}$와 $\tilde{n}$으로 Wald 공식을 적용한다:
 
 $$
 \tilde{p} \pm z_{\alpha/2} \sqrt{\frac{\tilde{p}(1-\tilde{p})}{\tilde{n}}}
 $$
 
-At the 95% level this amounts to adding roughly 2 successes and 2 failures (the "plus-four" rule). Coverage is very close to Wilson with an even simpler computation.
+95% 수준에서는 성공과 실패를 각각 약 2개씩 더하는 셈이다("plus-four" 규칙). 계산이 더 간단하면서도 포함확률은 Wilson과 매우 가깝다.
 
-## Clopper--Pearson (Exact) Interval
+## Clopper–Pearson (정확) 구간
 
-The Clopper--Pearson interval uses Beta quantiles to invert two one-sided binomial tests:
+Clopper–Pearson 구간은 Beta 분위수로 두 개의 단측 이항검정을 뒤집는다:
 
 $$
 \left(\text{Beta}\!\left(\frac{\alpha}{2};\; k,\; n-k+1\right),\;\;
       \text{Beta}\!\left(1-\frac{\alpha}{2};\; k+1,\; n-k\right)\right)
 $$
 
-with the convention that the lower bound is 0 when $k = 0$ and the upper bound is 1 when $k = n$. This interval guarantees at least $(1-\alpha)100\%$ coverage for every $p$, but is conservative (wider than necessary).
+$k = 0$이면 하한을 0으로, $k = n$이면 상한을 1로 두는 관례를 따른다. 이 구간은 모든 $p$에서 적어도 $(1-\alpha)100\%$의 포함확률을 보장하지만 (필요보다 넓게) 보수적이다.
 
-## Python Code
+## Python 코드
 
-### Loading Data from a CSV
+### CSV에서 자료 읽기
 
 ```python
 import csv
@@ -80,7 +80,7 @@ def load_data(csv_path):
     return np.array(arr, dtype=float)
 ```
 
-### Computing the Confidence Interval
+### 신뢰구간의 계산
 
 ```python
 import math
@@ -133,9 +133,9 @@ lo, hi = ci_proportion(k=12, n=50, method="cp", cl=0.99)
 print(f"99% Clopper-Pearson CI: ({lo:.4f}, {hi:.4f})")
 ```
 
-### Command-Line Usage
+### 명령줄 사용법
 
-The companion script `ci_prop_calc.py` supports command-line arguments:
+함께 제공되는 스크립트 `ci_prop_calc.py`는 명령줄 인자를 지원한다:
 
 ```bash
 # Wilson interval from counts
@@ -148,95 +148,95 @@ python ci_prop_calc.py --csv bernoulli.csv --method cp
 python ci_prop_calc.py --k 12 --n 50 --method wilson --cl 0.99
 ```
 
-## Interpretation
+## 해석
 
-- The **Wald interval** is easy to compute but can produce nonsensical results (negative endpoints or endpoints above 1) when $\hat{p}$ is near 0 or 1. The endpoints are clipped to $[0, 1]$, but coverage still suffers in these cases.
-- The **Wilson score interval** adjusts the center toward $1/2$ and is recommended for general use. It maintains good coverage even for moderate sample sizes and extreme proportions.
-- The **Agresti--Coull interval** achieves coverage comparable to Wilson through a simpler device: inflating the sample size by $z^2$ and recentering $\hat{p}$. It is a practical choice when ease of hand calculation matters.
-- The **Clopper--Pearson interval** is the only method that guarantees at least $(1-\alpha)100\%$ coverage for all $p$, but it pays for this guarantee with excess width. For large $n$, the conservatism is mild; for small $n$, it can be substantial.
+- **Wald 구간**은 계산하기 쉽지만 $\hat{p}$가 0이나 1에 가까우면 말이 안 되는 결과(음수인 끝점이나 1을 넘는 끝점)를 낼 수 있다. 끝점을 $[0, 1]$로 자르더라도 이런 경우 포함확률은 여전히 나쁘다.
+- **Wilson score 구간**은 중심을 $1/2$ 쪽으로 조정하며 일반적인 용도로 권장된다. 표본크기가 중간이거나 비율이 극단적이어도 좋은 포함확률을 유지한다.
+- **Agresti–Coull 구간**은 표본크기를 $z^2$만큼 부풀리고 $\hat{p}$를 다시 중심화하는 더 간단한 장치로 Wilson에 필적하는 포함확률을 얻는다. 손으로 계산하기 쉬워야 할 때 실용적인 선택이다.
+- **Clopper–Pearson 구간**은 모든 $p$에서 적어도 $(1-\alpha)100\%$의 포함확률을 보장하는 유일한 방법이지만 그 대가로 너비가 커진다. $n$이 크면 보수성이 약하지만 $n$이 작으면 상당할 수 있다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.** In a quality-control sample, 8 out of 200 items are defective. Compute the 95% Wald and Wilson confidence intervals for the defect rate $p$. Comment on any differences.
+**연습문제 1.** 품질관리 표본에서 200개 중 8개가 불량이다. 불량률 $p$의 95% Wald와 Wilson 신뢰구간을 계산하라. 차이를 논하라.
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
 
-    Here $k = 8$, $n = 200$, $\hat{p} = 0.04$, and $z = 1.96$.
+    여기서 $k = 8$, $n = 200$, $\hat{p} = 0.04$, $z = 1.96$이다.
 
-    **Wald:** $\text{SE} = \sqrt{0.04 \times 0.96 / 200} = \sqrt{0.000192} = 0.01386$. CI: $0.04 \pm 1.96 \times 0.01386 = 0.04 \pm 0.02716 = (0.0128, 0.0672)$.
+    **Wald:** $\text{SE} = \sqrt{0.04 \times 0.96 / 200} = \sqrt{0.000192} = 0.01386$. 신뢰구간: $0.04 \pm 1.96 \times 0.01386 = 0.04 \pm 0.02716 = (0.0128, 0.0672)$.
 
-    **Wilson:** Denominator: $1 + 1.96^2/200 = 1 + 0.01921 = 1.01921$. Center: $(0.04 + 3.8416/400)/1.01921 = 0.04960/1.01921 = 0.04868$. Half-width: $1.96 \times \sqrt{0.04 \times 0.96/200 + 3.8416/160000}/1.01921 = 1.96 \times \sqrt{0.000192 + 0.000024}/1.01921 = 1.96 \times 0.01470/1.01921 = 0.02826$. CI: $(0.0204, 0.0770)$.
+    **Wilson:** 분모: $1 + 1.96^2/200 = 1 + 0.01921 = 1.01921$. 중심: $(0.04 + 3.8416/400)/1.01921 = 0.04960/1.01921 = 0.04868$. 반너비: $1.96 \times \sqrt{0.04 \times 0.96/200 + 3.8416/160000}/1.01921 = 1.96 \times \sqrt{0.000192 + 0.000024}/1.01921 = 1.96 \times 0.01470/1.01921 = 0.02826$. 신뢰구간: $(0.0204, 0.0770)$.
 
-    The Wilson interval is shifted to the right (center 0.049 vs. 0.040) and slightly wider. With $n\hat{p} = 8 < 10$, the normal approximation behind the Wald interval is borderline, and the Wilson interval provides more reliable coverage. $\square$
+    Wilson 구간은 오른쪽으로 옮겨져 있고(중심 0.049 대 0.040) 약간 더 넓다. $n\hat{p} = 8 < 10$이므로 Wald 구간의 바탕인 정규근사가 아슬아슬하며, Wilson 구간이 더 믿을 만한 포함확률을 준다. $\square$
 
 ---
 
-**Exercise 2.** Show that the Wald interval has zero width when $\hat{p} = 0$ or $\hat{p} = 1$, and explain why this is problematic.
+**연습문제 2.** $\hat{p} = 0$이거나 $\hat{p} = 1$일 때 Wald 구간의 너비가 0임을 보이고 왜 문제인지 설명하라.
 
-??? success "Solution to Exercise 2"
+??? success "연습문제 2 풀이"
 
-    When $\hat{p} = 0$ (i.e., $k = 0$), the standard error is
+    $\hat{p} = 0$(즉 $k = 0$)이면 표준오차는
 
     $$
     \text{SE} = \sqrt{\frac{0 \cdot 1}{n}} = 0
     $$
 
-    so the Wald interval collapses to the single point $[0, 0]$. Similarly, when $\hat{p} = 1$, the interval is $[1, 1]$.
+    이므로 Wald 구간이 한 점 $[0, 0]$으로 무너진다. $\hat{p} = 1$일 때도 마찬가지로 구간이 $[1, 1]$이 된다.
 
-    This is problematic because observing $k = 0$ successes in $n$ trials does not mean $p = 0$ with certainty. For example, if $p = 0.01$ and $n = 50$, the probability of observing $k = 0$ is $(1 - 0.01)^{50} \approx 0.605$, which is far from negligible. A degenerate interval at zero fails to capture any positive value of $p$, so the coverage probability drops far below the nominal level. Both the Wilson and Clopper--Pearson methods avoid this degeneracy by producing intervals of positive width even when $k = 0$ or $k = n$. $\square$
-
----
-
-**Exercise 3.** A survey finds that 540 out of 1000 respondents support a policy. Compute the 95% confidence intervals using all four methods (Wald, Wilson, Agresti--Coull, Clopper--Pearson) and compare the widths.
-
-??? success "Solution to Exercise 3"
-
-    Here $k = 540$, $n = 1000$, $\hat{p} = 0.54$, and $z = 1.96$.
-
-    **Wald:** $\text{SE} = \sqrt{0.54 \times 0.46/1000} = \sqrt{0.000248} = 0.01576$. CI: $0.54 \pm 0.03089 = (0.5091, 0.5709)$. Width = 0.0618.
-
-    **Wilson:** Denom $= 1 + 3.8416/1000 = 1.003842$. Center $= (0.54 + 0.001921)/1.003842 = 0.5398$. Half $= 1.96 \times \sqrt{0.000248 + 0.00000096}/1.003842 = 1.96 \times 0.01578/1.003842 = 0.03082$. CI: $(0.5090, 0.5706)$. Width = 0.0616.
-
-    **Agresti--Coull:** $\tilde{n} = 1003.84$, $\tilde{p} = (540 + 1.9208)/1003.84 = 0.5398$. $\text{SE}_{\tilde{}} = \sqrt{0.5398 \times 0.4602/1003.84} = 0.01574$. CI: $0.5398 \pm 0.03085 = (0.5090, 0.5707)$. Width = 0.0617.
-
-    **Clopper--Pearson:** $L = \text{Beta}(0.025;\,540,\,461) = 0.5087$. $U = \text{Beta}(0.975;\,541,\,460) = 0.5712$. Width = 0.0625.
-
-    With $n = 1000$ and $\hat{p}$ near $0.5$, all four methods produce nearly identical intervals. The Clopper--Pearson interval is marginally wider (0.0625 vs. approximately 0.0617 for the others). For large $n$ with $p$ away from the boundaries, the choice of method matters very little. $\square$
+    이것이 문제인 이유는 $n$번 시행에서 성공을 $k = 0$번 관측했다고 해서 $p = 0$이 확실한 것은 아니기 때문이다. 예를 들어 $p = 0.01$이고 $n = 50$이면 $k = 0$을 관측할 확률이 $(1 - 0.01)^{50} \approx 0.605$로 결코 무시할 수 없다. 0에서 퇴화한 구간은 $p$의 어떤 양수 값도 담지 못하므로 포함확률이 명목 수준보다 크게 떨어진다. Wilson과 Clopper–Pearson 방법은 $k = 0$이나 $k = n$일 때도 너비가 양수인 구간을 만들어 이 퇴화를 피한다. $\square$
 
 ---
 
-**Exercise 4.** A clinical trial observes 0 serious adverse events in 30 patients. Compute the one-sided 95% upper bound for $p$ using the Clopper--Pearson method, and state the "rule of three" approximation.
+**연습문제 3.** 어떤 조사에서 응답자 1000명 중 540명이 어떤 정책을 지지한다. 네 가지 방법(Wald, Wilson, Agresti–Coull, Clopper–Pearson)으로 95% 신뢰구간을 계산하고 너비를 비교하라.
 
-??? success "Solution to Exercise 4"
+??? success "연습문제 3 풀이"
 
-    With $k = 0$ and $n = 30$, the Clopper--Pearson two-sided 95% interval has lower bound 0. For the upper bound:
+    여기서 $k = 540$, $n = 1000$, $\hat{p} = 0.54$, $z = 1.96$이다.
+
+    **Wald:** $\text{SE} = \sqrt{0.54 \times 0.46/1000} = \sqrt{0.000248} = 0.01576$. 신뢰구간: $0.54 \pm 0.03089 = (0.5091, 0.5709)$. 너비 = 0.0618.
+
+    **Wilson:** 분모 $= 1 + 3.8416/1000 = 1.003842$. 중심 $= (0.54 + 0.001921)/1.003842 = 0.5398$. 반너비 $= 1.96 \times \sqrt{0.000248 + 0.00000096}/1.003842 = 1.96 \times 0.01578/1.003842 = 0.03082$. 신뢰구간: $(0.5090, 0.5706)$. 너비 = 0.0616.
+
+    **Agresti–Coull:** $\tilde{n} = 1003.84$, $\tilde{p} = (540 + 1.9208)/1003.84 = 0.5398$. 표준오차 $= \sqrt{0.5398 \times 0.4602/1003.84} = 0.01574$. 신뢰구간: $0.5398 \pm 0.03085 = (0.5090, 0.5707)$. 너비 = 0.0617.
+
+    **Clopper–Pearson:** $L = \text{Beta}(0.025;\,540,\,461) = 0.5087$. $U = \text{Beta}(0.975;\,541,\,460) = 0.5712$. 너비 = 0.0625.
+
+    $n = 1000$이고 $\hat{p}$가 $0.5$ 근처이므로 네 방법이 거의 같은 구간을 준다. Clopper–Pearson이 조금 더 넓다(0.0625 대 나머지 약 0.0617). $n$이 크고 $p$가 경계에서 멀면 방법의 선택이 거의 중요하지 않다. $\square$
+
+---
+
+**연습문제 4.** 어떤 임상시험에서 환자 30명 중 중대한 이상반응이 0건이다. Clopper–Pearson 방법으로 $p$의 단측 95% 상한을 계산하고 "3의 법칙" 근사를 진술하라.
+
+??? success "연습문제 4 풀이"
+
+    $k = 0$, $n = 30$이면 Clopper–Pearson 양측 95% 구간의 하한은 0이다. 상한은:
 
     $$
     U = 1 - (\alpha/2)^{1/n}
     $$
 
-    but more precisely, we use $U = \text{Beta}(0.975;\, 1,\, 30) = 1 - 0.025^{1/30}$. Computing: $\ln(0.025)/30 = -3.6889/30 = -0.12296$, so $U = 1 - e^{-0.12296} = 1 - 0.8843 = 0.1157$.
+    더 정확히는 $U = \text{Beta}(0.975;\, 1,\, 30) = 1 - 0.025^{1/30}$을 쓴다. 계산하면 $\ln(0.025)/30 = -3.6889/30 = -0.12296$이므로 $U = 1 - e^{-0.12296} = 1 - 0.8843 = 0.1157$이다.
 
-    For a one-sided 95% upper bound (setting $\alpha = 0.05$ for the upper tail alone):
+    단측 95% 상한(위쪽 꼬리에만 $\alpha = 0.05$를 두는 경우)은:
 
     $$
     U = 1 - (0.05)^{1/30} = 1 - e^{\ln(0.05)/30} = 1 - e^{-0.0999} \approx 0.0951
     $$
 
-    The **rule of three** provides a quick approximation: when $k = 0$, the 95% one-sided upper bound is approximately $3/n$. Here $3/30 = 0.10$, which is close to the exact value of 0.0951. The rule of three follows from the approximation $1 - \alpha^{1/n} \approx -\ln(\alpha)/n$ and the fact that $-\ln(0.05) \approx 3$. $\square$
+    **3의 법칙**은 빠른 근사를 준다: $k = 0$일 때 95% 단측 상한은 대략 $3/n$이다. 여기서는 $3/30 = 0.10$으로 정확한 값 0.0951에 가깝다. 3의 법칙은 근사 $1 - \alpha^{1/n} \approx -\ln(\alpha)/n$과 $-\ln(0.05) \approx 3$이라는 사실에서 나온다. $\square$
 
 ---
 
-**Exercise 5.** Verify numerically that the Wilson and Agresti--Coull intervals are nearly identical for $k = 7$, $n = 25$ at the 95% level, and explain algebraically why they are close but not exactly equal.
+**연습문제 5.** 95% 수준에서 $k = 7$, $n = 25$일 때 Wilson과 Agresti–Coull 구간이 거의 같음을 수치로 확인하고, 왜 가깝지만 정확히 같지는 않은지 대수적으로 설명하라.
 
-??? success "Solution to Exercise 5"
+??? success "연습문제 5 풀이"
 
-    With $k = 7$, $n = 25$, $\hat{p} = 0.28$, and $z = 1.96$:
+    $k = 7$, $n = 25$, $\hat{p} = 0.28$, $z = 1.96$일 때:
 
-    **Wilson:** Denom $= 1 + 3.8416/25 = 1.15366$. Center $= (0.28 + 0.07683)/1.15366 = 0.3094$. Half $= 1.96 \times \sqrt{0.28 \times 0.72/25 + 3.8416/2500}/1.15366 = 1.96 \times \sqrt{0.008064 + 0.001537}/1.15366 = 1.96 \times 0.09798/1.15366 = 0.1664$. CI: $(0.1430, 0.4758)$.
+    **Wilson:** 분모 $= 1 + 3.8416/25 = 1.15366$. 중심 $= (0.28 + 0.07683)/1.15366 = 0.3093$. 반너비 $= 1.96 \times \sqrt{0.28 \times 0.72/25 + 3.8416/2500}/1.15366 = 1.96 \times \sqrt{0.008064 + 0.001537}/1.15366 = 1.96 \times 0.09798/1.15366 = 0.1664$. 신뢰구간: $(0.1429, 0.4757)$.
 
-    **Agresti--Coull:** $\tilde{n} = 25 + 3.8416 = 28.8416$. $\tilde{p} = (7 + 1.9208)/28.8416 = 0.3093$. $\text{SE}_{\tilde{}} = \sqrt{0.3093 \times 0.6907/28.8416} = \sqrt{0.007404} = 0.08605$. CI: $0.3093 \pm 1.96 \times 0.08605 = 0.3093 \pm 0.1687 = (0.1407, 0.4780)$.
+    **Agresti–Coull:** $\tilde{n} = 25 + 3.8416 = 28.8416$. $\tilde{p} = (7 + 1.9208)/28.8416 = 0.3093$. 표준오차 $= \sqrt{0.3093 \times 0.6907/28.8416} = \sqrt{0.007408} = 0.08607$. 신뢰구간: $0.3093 \pm 1.96 \times 0.08607 = 0.3093 \pm 0.1687 = (0.1406, 0.4780)$.
 
-    The centers are nearly identical (0.3094 vs. 0.3093), and the half-widths differ by only 0.002.
+    중심이 사실상 같고(둘 다 0.3093) 반너비는 0.002 정도만 다르다.
 
-    **Algebraic explanation.** Both methods adjust the center to $\tilde{p} = (k + z^2/2)/(n + z^2)$. The Wilson interval uses the exact standard error $\sqrt{\hat{p}(1-\hat{p})/n + z^2/(4n^2)}$ divided by $1 + z^2/n$, while Agresti--Coull uses $\sqrt{\tilde{p}(1-\tilde{p})/\tilde{n}}$. These differ because the Wilson half-width involves $\hat{p}$ (the unadjusted proportion) under the radical, whereas Agresti--Coull uses $\tilde{p}$. For moderate $n$, $\hat{p}$ and $\tilde{p}$ are close, so the two intervals nearly coincide. They diverge more noticeably when $n$ is very small or $\hat{p}$ is extreme. $\square$
+    **대수적 설명.** 두 방법 모두 중심을 $\tilde{p} = (k + z^2/2)/(n + z^2)$으로 조정한다. Wilson 구간은 정확한 표준오차 $\sqrt{\hat{p}(1-\hat{p})/n + z^2/(4n^2)}$을 $1 + z^2/n$으로 나누어 쓰는 반면, Agresti–Coull은 $\sqrt{\tilde{p}(1-\tilde{p})/\tilde{n}}$을 쓴다. 차이는 Wilson의 반너비가 근호 안에 (보정하지 않은) $\hat{p}$를 쓰고 Agresti–Coull은 $\tilde{p}$를 쓰는 데서 온다. $n$이 적당하면 $\hat{p}$와 $\tilde{p}$가 가까우므로 두 구간이 거의 일치한다. $n$이 아주 작거나 $\hat{p}$가 극단적이면 차이가 더 눈에 띈다. $\square$

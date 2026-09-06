@@ -1,85 +1,85 @@
-# Chapter 8: Confidence Intervals
+# 8장: 신뢰구간
 
-## Overview
+## 개요
 
-Confidence intervals quantify the uncertainty in estimating population parameters by providing a range of plausible values together with a specified level of confidence. This chapter develops the theory and construction of confidence intervals for means, proportions, and variances across one-sample, two-sample, and paired-sample designs. It also addresses the practical question of how large a sample is needed to achieve a desired margin of error.
-
----
-
-## Chapter Structure
-
-### 8.1 Foundations
-
-The foundational theory behind confidence intervals, including what they are, how to interpret them correctly, and the most common misconceptions:
-
-- **Confidence Level and Coverage** -- Defines confidence intervals formally, explains the role of the confidence level (90%, 95%, 99%), and derives the general form as point estimate plus or minus margin of error.
-- **Interpretation and Common Pitfalls** -- Clarifies the repeated-sampling interpretation of confidence intervals and debunks the common misconception that a 95% CI means there is a 95% probability that the parameter lies in the interval.
-
-### 8.2 One-Sample Intervals
-
-Confidence intervals for a single population parameter estimated from one sample:
-
-- **CI for the Mean (mu)** -- Constructs z-intervals (known variance) and t-intervals (unknown variance) for the population mean, including validity conditions and the role of the Central Limit Theorem.
-- **CI for a Proportion (p)** -- Derives the Wald z-interval for a population proportion, discusses the Wilson and Clopper-Pearson alternatives, and states the normal approximation conditions.
-- **CI for the Variance (sigma squared)** -- Uses the chi-square distribution to build a confidence interval for the population variance, requiring the normality assumption.
-
-### 8.3 Two-Sample Intervals
-
-Confidence intervals for comparing parameters from two independent populations:
-
-- **CI for the Difference of Means (mu1 minus mu2)** -- Covers the z-interval (known variances), pooled t-interval (equal variances), and Welch t-interval (unequal variances) using the Welch-Satterthwaite degrees of freedom.
-- **CI for the Difference of Proportions (p1 minus p2)** -- Presents the Wald interval for the difference of two proportions and compares it with the Newcombe and Clopper-Pearson alternatives.
-- **CI for the Variance Ratio (sigma1 squared over sigma2 squared)** -- Constructs an F-distribution-based confidence interval for the ratio of two population variances.
-
-### 8.4 Paired-Sample Intervals
-
-Confidence intervals for data where observations are naturally paired:
-
-- **CI for the Mean of Differences (mu_D)** -- Applies the one-sample t-interval to the paired differences, estimating the mean difference between two related measurements.
-- **When to Use Paired vs Independent Designs** -- Provides guidance on choosing between paired and independent designs based on expected within-pair correlation and study logistics.
-- **Paired Interval for Proportions (McNemar)** -- Addresses paired binary data using McNemar's approach, focusing on discordant pairs to construct a confidence interval for the difference in paired proportions.
-
-### 8.5 Sample Size Determination
-
-Formulas for determining the minimum sample size required to achieve a target precision:
-
-- **Sample Size for Desired Margin of Error** -- Derives sample size formulas for estimating a mean and a proportion with a specified margin of error and confidence level.
-- **Sample Size for Comparing Two Groups** -- Extends sample size calculations to two-sample designs for comparing means and proportions, incorporating effect size and desired power.
-
-### 8.6 Code
-
-Complete Python implementations:
-
-- **confidence_intervals.py** -- Comprehensive demonstrations of confidence interval construction across multiple settings.
-- **sample_size.py** -- Sample size calculation utilities for one-sample and two-sample designs.
-- **ci_mean_sim.py** -- Monte Carlo simulation verifying coverage of the mean confidence interval.
-- **ci_prop_sim.py** -- Coverage simulation for the proportion confidence interval.
-- **ci_var_sim.py** -- Coverage simulation for the variance confidence interval using the chi-square distribution.
-- **ci_paired_sim.py** -- Coverage simulation for the paired-sample mean difference interval.
-- **ci_diff_means_sim.py** -- Coverage simulation for the two-sample difference of means interval.
-- **ci_mean_calc.py** -- One-sample mean CI computation with step-by-step output.
-- **ci_prop_calc.py** -- One-sample proportion CI computation with step-by-step output.
-
-### 8.7 Exercises
-
-Practice problems covering CI interpretation, construction of one-sample and two-sample intervals, sample size determination, and the relationship between confidence level and interval width.
+신뢰구간은 그럴듯한 값들의 범위를 지정된 신뢰수준과 함께 제시하여 모수 추정의 불확실성을 정량화한다. 이 장에서는 일표본, 이표본, 대응표본 설계에서 평균, 비율, 분산에 대한 신뢰구간의 이론과 구성법을 전개한다. 또한 원하는 오차한계를 달성하려면 표본이 얼마나 커야 하는가라는 실무적 질문도 다룬다.
 
 ---
 
-## Prerequisites
+## 장의 구성
 
-This chapter builds on:
+### 8.1 기초
 
-- **Chapter 5** (Sampling Distributions) -- The normal, t, chi-square, and F sampling distributions that serve as the basis for constructing pivotal quantities.
-- **Chapter 6** (Statistical Estimation) -- Maximum likelihood and method of moments estimators, including properties such as bias and consistency.
-- **Chapter 7** (Estimation of mu and sigma squared) -- The sample mean and sample variance as estimators, Bessel's correction, and their sampling distributions.
+신뢰구간이 무엇인지, 어떻게 올바르게 해석하는지, 가장 흔한 오해는 무엇인지를 비롯한 신뢰구간의 기초 이론:
+
+- **신뢰수준과 포함확률** -- 신뢰구간을 형식적으로 정의하고, 신뢰수준(90%, 95%, 99%)의 역할을 설명하며, 일반형을 점추정값 ± 오차한계로 유도한다.
+- **해석과 흔한 함정** -- 신뢰구간의 반복표본추출 해석을 분명히 하고, 95% 신뢰구간이 모수가 그 구간에 있을 확률이 95%라는 뜻이라는 흔한 오해를 바로잡는다.
+
+### 8.2 일표본 구간
+
+표본 하나로 추정하는 단일 모수의 신뢰구간:
+
+- **평균(mu)의 신뢰구간** -- 모평균에 대한 z-구간(분산을 아는 경우)과 t-구간(분산을 모르는 경우)을 구성하고, 타당성 조건과 중심극한정리의 역할을 다룬다.
+- **비율(p)의 신뢰구간** -- 모비율에 대한 Wald z-구간을 유도하고, Wilson과 Clopper-Pearson 대안을 논하며, 정규근사 조건을 제시한다.
+- **분산(sigma squared)의 신뢰구간** -- 카이제곱분포로 모분산의 신뢰구간을 만든다. 정규성 가정이 필요하다.
+
+### 8.3 이표본 구간
+
+두 독립 모집단의 모수를 비교하는 신뢰구간:
+
+- **평균 차이(mu1 - mu2)의 신뢰구간** -- z-구간(분산을 아는 경우), 합동 t-구간(분산이 같은 경우), Welch-Satterthwaite 자유도를 쓰는 Welch t-구간(분산이 다른 경우)을 다룬다.
+- **비율 차이(p1 - p2)의 신뢰구간** -- 두 비율 차이에 대한 Wald 구간을 제시하고 Newcombe, Clopper-Pearson 대안과 비교한다.
+- **분산비(sigma1 squared / sigma2 squared)의 신뢰구간** -- 두 모분산의 비에 대해 F-분포에 기반한 신뢰구간을 구성한다.
+
+### 8.4 대응표본 구간
+
+관측값이 자연스럽게 짝을 이루는 자료의 신뢰구간:
+
+- **차이의 평균(mu_D)의 신뢰구간** -- 대응된 차이에 일표본 t-구간을 적용하여 관련된 두 측정값의 평균 차이를 추정한다.
+- **대응 설계와 독립 설계 중 무엇을 쓸 것인가** -- 예상되는 짝 내 상관과 연구의 실행 여건에 따라 대응 설계와 독립 설계 중 무엇을 고를지 지침을 준다.
+- **비율의 대응 구간 (McNemar)** -- 대응된 이진 자료를 McNemar 방식으로 다루며, 불일치 짝에 초점을 맞추어 대응 비율 차이의 신뢰구간을 구성한다.
+
+### 8.5 표본크기의 결정
+
+목표 정밀도를 달성하는 데 필요한 최소 표본크기를 정하는 공식:
+
+- **원하는 오차한계를 위한 표본크기** -- 지정된 오차한계와 신뢰수준으로 평균과 비율을 추정하기 위한 표본크기 공식을 유도한다.
+- **두 집단 비교를 위한 표본크기** -- 표본크기 계산을 이표본 설계로 확장하여 평균과 비율을 비교하며, 효과크기와 원하는 검정력을 반영한다.
+
+### 8.6 코드
+
+완전한 Python 구현:
+
+- **confidence_intervals.py** -- 여러 상황에서의 신뢰구간 구성을 두루 시연한다.
+- **sample_size.py** -- 일표본·이표본 설계를 위한 표본크기 계산 도구.
+- **ci_mean_sim.py** -- 평균 신뢰구간의 포함확률을 검증하는 몬테카를로 모의실험.
+- **ci_prop_sim.py** -- 비율 신뢰구간의 포함확률 모의실험.
+- **ci_var_sim.py** -- 카이제곱분포를 쓰는 분산 신뢰구간의 포함확률 모의실험.
+- **ci_paired_sim.py** -- 대응표본 평균 차이 구간의 포함확률 모의실험.
+- **ci_diff_means_sim.py** -- 이표본 평균 차이 구간의 포함확률 모의실험.
+- **ci_mean_calc.py** -- 일표본 평균 신뢰구간을 단계별 출력과 함께 계산한다.
+- **ci_prop_calc.py** -- 일표본 비율 신뢰구간을 단계별 출력과 함께 계산한다.
+
+### 8.7 연습문제
+
+신뢰구간의 해석, 일표본·이표본 구간의 구성, 표본크기의 결정, 신뢰수준과 구간 너비의 관계를 다루는 연습문제들.
 
 ---
 
-## Key Takeaways
+## 선수 지식
 
-1. A confidence interval provides a range of plausible values for an unknown parameter; the confidence level refers to the long-run coverage rate under repeated sampling, not the probability that any single interval contains the parameter.
-2. The choice between z-intervals and t-intervals depends on whether the population variance is known and the sample size; t-intervals are more appropriate when sigma is unknown and the sample is small.
-3. Two-sample intervals allow comparison of means, proportions, and variances across independent groups, with Welch's approach providing robustness when variances are unequal.
-4. Paired-sample intervals exploit the within-pair correlation to reduce variability and produce narrower intervals than independent-sample designs when pairing is meaningful.
-5. Sample size formulas translate a desired margin of error and confidence level into the minimum number of observations required, enabling researchers to plan studies with sufficient precision.
+이 장은 다음 내용을 바탕으로 한다:
+
+- **5장** (표본분포) -- 추축량 구성의 바탕이 되는 normal, t, 카이제곱, F 표본분포.
+- **6장** (통계적 추정) -- 최대가능도추정량과 적률법 추정량, 그리고 편향과 일치성 같은 성질.
+- **7장** (mu와 sigma squared의 추정) -- 추정량으로서의 표본평균과 표본분산, Bessel 수정, 그리고 그 표본분포.
+
+---
+
+## 핵심 요약
+
+1. 신뢰구간은 미지의 모수에 대해 그럴듯한 값들의 범위를 준다. 신뢰수준은 반복표본추출에서의 장기적 포함 비율을 가리키는 것이지, 특정한 하나의 구간이 모수를 담을 확률이 아니다.
+2. z-구간과 t-구간 중 무엇을 쓸지는 모분산을 아는지와 표본크기에 달려 있다. sigma를 모르고 표본이 작을 때는 t-구간이 더 적절하다.
+3. 이표본 구간은 독립인 집단들 사이에서 평균, 비율, 분산을 비교하게 해 주며, 분산이 다를 때는 Welch 방식이 로버스트성을 준다.
+4. 대응표본 구간은 짝 내 상관을 활용해 변동성을 줄이며, 짝짓기가 의미 있을 때 독립표본 설계보다 좁은 구간을 만든다.
+5. 표본크기 공식은 원하는 오차한계와 신뢰수준을 필요한 최소 관측값 수로 옮겨 주어, 연구자가 충분한 정밀도로 연구를 계획할 수 있게 한다.

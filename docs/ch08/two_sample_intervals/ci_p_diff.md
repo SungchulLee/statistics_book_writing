@@ -1,35 +1,35 @@
-# CI for p₁ − p₂
+# p₁ − p₂의 신뢰구간
 
-## Two-Sample Proportion Confidence Interval
+## 이표본 비율 신뢰구간
 
-In many practical situations, we compare the proportions of two populations — for instance, the proportion of people who support two different policies or the defect rates from two production lines.
+실무의 여러 상황에서 우리는 두 모집단의 비율을 비교한다 — 예를 들어 서로 다른 두 정책을 지지하는 사람의 비율이나 두 생산라인의 불량률 같은 것이다.
 
-### Formula (Wald)
+### 공식 (Wald)
 
-Let $p_1$ and $p_2$ be the population proportions for two independent groups. The confidence interval for $p_1 - p_2$ is
+독립인 두 집단의 모비율을 $p_1$과 $p_2$라 하자. $p_1 - p_2$의 신뢰구간은
 
 $$
 (\hat{p}_1 - \hat{p}_2) \pm z_{\alpha/2} \times \sqrt{\frac{\hat{p}_1(1 - \hat{p}_1)}{n_1} + \frac{\hat{p}_2(1 - \hat{p}_2)}{n_2}}
 $$
 
-where $\hat{p}_1 = x_1/n_1$ and $\hat{p}_2 = x_2/n_2$ are the sample proportions.
+여기서 $\hat{p}_1 = x_1/n_1$과 $\hat{p}_2 = x_2/n_2$는 표본비율이다.
 
-### Conditions for Validity
+### 타당성 조건
 
-For the normal approximation to hold:
+정규근사가 성립하려면:
 
-- $n_1\hat{p}_1 \ge 5$ and $n_1(1 - \hat{p}_1) \ge 5$,
-- $n_2\hat{p}_2 \ge 5$ and $n_2(1 - \hat{p}_2) \ge 5$.
+- $n_1\hat{p}_1 \ge 5$이고 $n_1(1 - \hat{p}_1) \ge 5$,
+- $n_2\hat{p}_2 \ge 5$이고 $n_2(1 - \hat{p}_2) \ge 5$.
 
-### Alternative Methods
+### 대안적인 방법
 
-| Method | Description | When to Use |
+| 방법 | 설명 | 언제 쓰는가 |
 |---|---|---|
-| **Wald** | $\Delta \pm z \cdot \text{SE}$ | Large $n$, not near 0 or 1 |
-| **Newcombe (Wilson-based)** | Wilson CI per group, then combine: $[L_1 - U_2,\; U_1 - L_2]$ | **Recommended default** |
-| **Clopper–Pearson combined** | Exact CI per group, then combine | Small $n$, regulatory settings |
+| **Wald** | $\Delta \pm z \cdot \text{SE}$ | $n$이 크고 0이나 1에 가깝지 않을 때 |
+| **Newcombe (Wilson 기반)** | 집단마다 Wilson 신뢰구간을 구한 뒤 결합: $[L_1 - U_2,\; U_1 - L_2]$ | **권장되는 기본값** |
+| **Clopper–Pearson 결합** | 집단마다 정확한 신뢰구간을 구한 뒤 결합 | $n$이 작을 때, 규제 상황 |
 
-### Python Code
+### Python 코드
 
 ```python
 import numpy as np
@@ -52,13 +52,13 @@ print(f"{confidence_interval = }")
 
 ---
 
-## Examples
+## 예제
 
-### Example 1: 95% CI for Difference in Proportions
+### 예제 1: 비율 차이의 95% 신뢰구간
 
-Sample 1: $n_1 = 200$, $x_1 = 120$ successes. Sample 2: $n_2 = 250$, $x_2 = 130$ successes.
+표본 1: $n_1 = 200$, 성공 $x_1 = 120$회. 표본 2: $n_2 = 250$, 성공 $x_2 = 130$회.
 
-**Solution.**
+**풀이.**
 
 $$
 \hat{p}_1 = 0.60, \qquad \hat{p}_2 = 0.52
@@ -76,21 +76,21 @@ $$
 \boxed{(-0.0119,\ 0.1719)}
 $$
 
-We are 95% confident that the true difference lies between $-0.0119$ and $0.1719$. Since the interval includes zero, there is no statistically significant difference at the 95% level.
+참 차이가 $-0.0119$와 $0.1719$ 사이에 있다고 95% 신뢰한다. 구간이 0을 포함하므로 95% 수준에서 통계적으로 유의한 차이는 없다.
 
-### Example 2: New High School Construction
+### 예제 2: 새 고등학교 건립
 
-Duncan compares support for a new high school in north and south parts of the city.
+Duncan은 도시의 북부와 남부에서 새 고등학교에 대한 지지를 비교한다.
 
-| Support? | North | South |
+| 지지하는가? | 북부 | 남부 |
 |---|---|---|
-| Yes | 54 | 77 |
-| No | 66 | 63 |
-| Total | 120 | 140 |
+| 예 | 54 | 77 |
+| 아니오 | 66 | 63 |
+| 합계 | 120 | 140 |
 
-Construct a 90% CI for $p_N - p_S$.
+$p_N - p_S$의 90% 신뢰구간을 구성하라.
 
-**Solution.**
+**풀이.**
 
 ```python
 import numpy as np
@@ -112,7 +112,7 @@ print(f"90% CI: {p_1_hat - p_2_hat:.4f} ± {margin_of_error:.4f}")
 
 ---
 
-## Simulation: Difference of Two Proportions CI Coverage
+## 모의실험: 두 비율 차이 신뢰구간의 포함확률
 
 ```python
 #!/usr/bin/env python3
@@ -198,21 +198,21 @@ if __name__ == "__main__":
 
 ---
 
-## Key Points
+## 핵심 정리
 
-- The confidence interval for $p_1 - p_2$ uses the normal approximation to the binomial distribution, assuming large sample sizes.
-- The width depends on the sample proportions, sample sizes, and confidence level.
-- If the confidence interval includes zero, there is no statistically significant difference between the two proportions at the given confidence level.
-- The **Newcombe (Wilson-based)** method is recommended as the default for better coverage, especially with moderate sample sizes.
+- $p_1 - p_2$의 신뢰구간은 표본이 크다는 가정 아래 이항분포에 대한 정규근사를 쓴다.
+- 너비는 표본비율, 표본크기, 신뢰수준에 달려 있다.
+- 신뢰구간이 0을 포함하면 주어진 신뢰수준에서 두 비율 사이에 통계적으로 유의한 차이가 없다.
+- 포함확률이 더 좋으므로, 특히 표본크기가 중간 정도일 때 **Newcombe(Wilson 기반)** 방법을 기본으로 권한다.
 
 ---
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-In two independent samples, 150 out of 200 prefer a brand in sample 1, and 120 out of 180 prefer the same brand in sample 2. Construct a 95% CI for the difference in proportions.
+**연습문제 1.**
+독립인 두 표본에서 표본 1은 200명 중 150명이, 표본 2는 180명 중 120명이 같은 브랜드를 선호한다. 비율 차이의 95% 신뢰구간을 구성하라.
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
     $$
     \hat{p}_1 = \frac{150}{200} = 0.75, \qquad \hat{p}_2 = \frac{120}{180} \approx 0.667
     $$
@@ -229,35 +229,35 @@ In two independent samples, 150 out of 200 prefer a brand in sample 1, and 120 o
     (0.083 - 0.091,\ 0.083 + 0.091) = (-0.008,\ 0.175)
     $$
 
-    Since the interval includes zero, the difference is not statistically significant at the 5% level.
+    구간이 0을 포함하므로 5% 수준에서 차이는 통계적으로 유의하지 않다.
 
 ---
 
-**Exercise 2.**
-For the data in Exercise 1, verify that the validity conditions for the normal approximation are satisfied.
+**연습문제 2.**
+연습문제 1의 자료에서 정규근사의 타당성 조건이 만족되는지 확인하라.
 
-??? success "Solution to Exercise 2"
-    The conditions require $n_i\hat{p}_i \geq 5$ and $n_i(1-\hat{p}_i) \geq 5$:
+??? success "연습문제 2 풀이"
+    조건은 $n_i\hat{p}_i \geq 5$이고 $n_i(1-\hat{p}_i) \geq 5$이다:
 
-    - Sample 1: $200 \times 0.75 = 150 \geq 5$ and $200 \times 0.25 = 50 \geq 5$
-    - Sample 2: $180 \times 0.667 = 120 \geq 5$ and $180 \times 0.333 = 60 \geq 5$
+    - 표본 1: $200 \times 0.75 = 150 \geq 5$이고 $200 \times 0.25 = 50 \geq 5$
+    - 표본 2: $180 \times 0.667 = 120 \geq 5$이고 $180 \times 0.333 = 60 \geq 5$
 
-    All conditions are met.
-
----
-
-**Exercise 3.**
-Explain why the Newcombe (Wilson-based) method is recommended over the Wald method for confidence intervals on the difference of proportions.
-
-??? success "Solution to Exercise 3"
-    The Wald method uses the sample proportions directly in the standard error formula, which can produce poor coverage when the true proportions are near 0 or 1, or when sample sizes are moderate. The Wald interval can even produce intervals outside $[-1, 1]$.
-
-    The Newcombe method constructs the CI for the difference by combining Wilson confidence intervals for each individual proportion. The Wilson interval adds a correction term ($z^2/(2n)$) that "shrinks" extreme proportions toward 0.5, producing more stable intervals. Simulation studies consistently show that the Newcombe method achieves coverage closer to the nominal level across a wider range of parameter values and sample sizes.
+    모든 조건이 만족된다.
 
 ---
 
-**Exercise 4.**
-If the confidence interval for $p_1 - p_2$ is $(0.03, 0.15)$, interpret this result in context and state whether there is evidence of a significant difference.
+**연습문제 3.**
+비율 차이의 신뢰구간에서 Wald 방법보다 Newcombe(Wilson 기반) 방법을 권하는 이유를 설명하라.
 
-??? success "Solution to Exercise 4"
-    The 95% confidence interval $(0.03, 0.15)$ means we are 95% confident that the true difference $p_1 - p_2$ lies between 0.03 and 0.15. Since the entire interval is positive (it does not contain zero), we conclude that $p_1$ is significantly greater than $p_2$ at the 5% level. The estimated difference is between 3 and 15 percentage points in favor of group 1.
+??? success "연습문제 3 풀이"
+    Wald 방법은 표준오차 공식에 표본비율을 그대로 쓰는데, 참 비율이 0이나 1에 가깝거나 표본크기가 중간 정도이면 포함확률이 나빠질 수 있다. Wald 구간은 심지어 $[-1, 1]$ 밖으로 벗어나는 구간을 낼 수도 있다.
+
+    Newcombe 방법은 각 비율에 대한 Wilson 신뢰구간을 결합하여 차이의 신뢰구간을 만든다. Wilson 구간은 보정항 $z^2/(2n)$을 더해 극단적인 비율을 0.5 쪽으로 "축소"하므로 더 안정적인 구간이 나온다. 모의실험 연구들은 Newcombe 방법이 더 넓은 범위의 모수값과 표본크기에서 명목 수준에 더 가까운 포함확률을 달성함을 일관되게 보여준다.
+
+---
+
+**연습문제 4.**
+$p_1 - p_2$의 신뢰구간이 $(0.03, 0.15)$이라면 이 결과를 맥락에 맞게 해석하고 유의한 차이의 증거가 있는지 말하라.
+
+??? success "연습문제 4 풀이"
+    95% 신뢰구간 $(0.03, 0.15)$은 참 차이 $p_1 - p_2$가 0.03과 0.15 사이에 있다고 95% 신뢰한다는 뜻이다. 구간 전체가 양수이므로(0을 포함하지 않으므로) 5% 수준에서 $p_1$이 $p_2$보다 유의하게 크다고 결론짓는다. 추정된 차이는 집단 1에 유리하게 3~15 퍼센트포인트이다.

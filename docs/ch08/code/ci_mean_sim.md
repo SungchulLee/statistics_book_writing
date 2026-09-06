@@ -1,50 +1,50 @@
-# Mean Confidence Interval Coverage Simulation
+# 평균 신뢰구간의 포함확률 모의실험
 
-## Overview
+## 개요
 
-This page explores the coverage properties of one-sample confidence intervals for a population mean $\mu$ through Monte Carlo simulation. Three methods are compared: the $z$-interval with known $\sigma$, the $z$-interval with the plug-in sample standard deviation $s$, and the $t$-interval. The simulation reveals why the $t$-interval is the correct default when $\sigma$ is unknown, especially for small sample sizes.
+이 페이지에서는 모평균 $\mu$에 대한 일표본 신뢰구간의 포함 성질을 몬테카를로 모의실험으로 살펴본다. 세 가지 방법을 비교한다: $\sigma$를 아는 $z$-구간, 표본표준편차 $s$를 대입한 $z$-구간, 그리고 $t$-구간. 이 모의실험은 $\sigma$를 모를 때, 특히 표본이 작을 때 왜 $t$-구간이 올바른 기본값인지 보여준다.
 
-## Three Interval Methods
+## 세 가지 구간 방법
 
-### z-Interval with Known Variance
+### 분산을 아는 z-구간
 
-When the population standard deviation $\sigma$ is known, the exact $(1-\alpha)100\%$ confidence interval is
+모표준편차 $\sigma$를 알 때 정확한 $(1-\alpha)100\%$ 신뢰구간은
 
 $$
 \bar{X} \pm z_{\alpha/2} \cdot \frac{\sigma}{\sqrt{n}}
 $$
 
-### z-Interval with Plug-in s
+### s를 대입한 z-구간
 
-A common teaching variant replaces $\sigma$ by the sample standard deviation $s$:
+교육에서 흔히 쓰는 변형은 $\sigma$를 표본표준편차 $s$로 바꾼 것이다:
 
 $$
 \bar{X} \pm z_{\alpha/2} \cdot \frac{s}{\sqrt{n}}
 $$
 
-This interval **under-covers** for small $n$ because it ignores the extra variability introduced by estimating $\sigma$ with $s$.
+이 구간은 $s$로 $\sigma$를 추정하며 생기는 추가 변동성을 무시하므로 작은 $n$에서 **포함확률이 부족하다**.
 
-### t-Interval (Default in Practice)
+### t-구간 (실무의 기본)
 
-The $t$-interval accounts for the estimation of $\sigma$:
+$t$-구간은 $\sigma$의 추정을 반영한다:
 
 $$
 \bar{X} \pm t_{\alpha/2,\,n-1} \cdot \frac{s}{\sqrt{n}}
 $$
 
-Since $t_{\alpha/2,\,n-1} > z_{\alpha/2}$ for finite $n$, this interval is wider and achieves the nominal coverage.
+유한한 $n$에서 $t_{\alpha/2,\,n-1} > z_{\alpha/2}$이므로 이 구간이 더 넓고 명목 포함확률을 달성한다.
 
-## Finite Population Correction
+## 유한모집단 수정
 
-When sampling without replacement from a finite population of size $N$, multiply the standard error by the finite population correction (FPC) factor:
+크기 $N$인 유한모집단에서 비복원으로 표본을 뽑을 때는 표준오차에 유한모집단 수정(FPC) 인자를 곱한다:
 
 $$
 \text{FPC} = \sqrt{\frac{N - n}{N - 1}}
 $$
 
-This correction is negligible when $n \le 0.10 N$.
+$n \le 0.10 N$이면 이 수정은 무시할 만하다.
 
-## Python Code
+## Python 코드
 
 ```python
 import numpy as np
@@ -90,7 +90,7 @@ coverage_pct = 100.0 * covered.mean()
 print(f"t-interval coverage: {coverage_pct:.1f}%")
 ```
 
-### Plotting the Intervals
+### 구간의 시각화
 
 ```python
 fig, ax = plt.subplots(figsize=(12, 12))
@@ -108,18 +108,18 @@ plt.tight_layout()
 plt.show()
 ```
 
-## Interpretation
+## 해석
 
-- **z-known** achieves exactly $(1-\alpha)100\%$ coverage because the standard error involves no estimation.
-- **z-plugin** uses $s$ in place of $\sigma$ but retains the normal critical value, so it under-covers for small $n$. The under-coverage is most pronounced for $n < 15$.
-- **t-interval** compensates for the extra uncertainty in $s$ by using the heavier-tailed $t_{n-1}$ distribution. For all sample sizes, the empirical coverage stays close to the nominal level.
-- For large $n$, all three methods converge because $t_{\alpha/2,\,n-1} \to z_{\alpha/2}$ and $s \xrightarrow{P} \sigma$.
+- **z-known**은 표준오차에 추정이 개입하지 않으므로 정확히 $(1-\alpha)100\%$의 포함확률을 달성한다.
+- **z-plugin**은 $\sigma$ 자리에 $s$를 쓰면서도 정규 임계값을 유지하므로 작은 $n$에서 포함확률이 부족하다. $n < 15$에서 부족이 가장 두드러진다.
+- **t-구간**은 꼬리가 더 두꺼운 $t_{n-1}$ 분포를 써서 $s$의 추가 불확실성을 보상한다. 모든 표본크기에서 경험적 포함확률이 명목 수준에 가깝게 유지된다.
+- $n$이 크면 $t_{\alpha/2,\,n-1} \to z_{\alpha/2}$이고 $s \xrightarrow{P} \sigma$이므로 세 방법이 모두 수렴한다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.** Run the simulation with $n = 5$ and $n_{\text{sim}} = 10{,}000$. Report the empirical coverage for each of the three methods at the 95 % confidence level. Which method(s) achieve the nominal rate?
+**연습문제 1.** $n = 5$, $n_{\text{sim}} = 10{,}000$으로 모의실험을 돌려라. 95% 신뢰수준에서 세 방법 각각의 경험적 포함확률을 보고하라. 어느 방법(들)이 명목 수준을 달성하는가?
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
 
     ```python
     rng = np.random.default_rng(0)
@@ -134,46 +134,46 @@ plt.show()
         print(f"{method}: {100*cov:.1f}%")
     ```
 
-    Typical output: **z_known** $\approx$ 95.0 %, **z_plugin** $\approx$ 92 %, **t** $\approx$ 95.0 %. Only the $z$-known and $t$ intervals achieve the nominal 95 %. The plug-in $z$ under-covers because $s$ is highly variable for $n = 5$. $\square$
+    전형적인 출력: **z_known** $\approx$ 95.0%, **z_plugin** $\approx$ 92%, **t** $\approx$ 95.0%. $z$-known과 $t$ 구간만 명목 95%를 달성한다. $n = 5$에서는 $s$의 변동이 크므로 대입한 $z$는 포함확률이 부족하다. $\square$
 
 ---
 
-**Exercise 2.** Explain mathematically why the plug-in $z$-interval under-covers for small $n$. Specifically, show that if $X_1, \ldots, X_n \overset{\text{iid}}{\sim} N(\mu, \sigma^2)$, then the pivot $(\bar{X} - \mu)/(s/\sqrt{n})$ does not follow $N(0,1)$.
+**연습문제 2.** 작은 $n$에서 대입한 $z$-구간의 포함확률이 부족한 이유를 수학적으로 설명하라. 구체적으로, $X_1, \ldots, X_n \overset{\text{iid}}{\sim} N(\mu, \sigma^2)$일 때 추축량 $(\bar{X} - \mu)/(s/\sqrt{n})$이 $N(0,1)$을 따르지 않음을 보여라.
 
-??? success "Solution to Exercise 2"
+??? success "연습문제 2 풀이"
 
-    Under normality, $\bar{X} \sim N(\mu, \sigma^2/n)$ and $(n-1)s^2/\sigma^2 \sim \chi^2_{n-1}$, independently. The pivot
+    정규성 아래에서 $\bar{X} \sim N(\mu, \sigma^2/n)$이고 $(n-1)s^2/\sigma^2 \sim \chi^2_{n-1}$이며 둘은 독립이다. 추축량
 
     $$
     T = \frac{\bar{X} - \mu}{s / \sqrt{n}} = \frac{(\bar{X} - \mu)/(\sigma/\sqrt{n})}{s/\sigma}
     = \frac{Z}{\sqrt{\chi^2_{n-1}/(n-1)}}
     $$
 
-    where $Z \sim N(0,1)$. By definition, this ratio follows a $t_{n-1}$ distribution, not $N(0,1)$. The $t_{n-1}$ distribution has heavier tails than $N(0,1)$, so using $z_{\alpha/2}$ instead of $t_{\alpha/2,\,n-1}$ produces an interval that is too narrow, and the coverage probability $P(\mu \in \text{CI}) < 1 - \alpha$. $\square$
+    에서 $Z \sim N(0,1)$이다. 정의에 의해 이 비는 $N(0,1)$이 아니라 $t_{n-1}$ 분포를 따른다. $t_{n-1}$은 $N(0,1)$보다 꼬리가 두꺼우므로, $t_{\alpha/2,\,n-1}$ 대신 $z_{\alpha/2}$를 쓰면 구간이 너무 좁아지고 포함확률이 $P(\mu \in \text{CI}) < 1 - \alpha$가 된다. $\square$
 
 ---
 
-**Exercise 3.** Show that the finite population correction factor satisfies $\text{FPC} \to 1$ as $N \to \infty$ with $n$ fixed.
+**연습문제 3.** $n$을 고정하고 $N \to \infty$일 때 유한모집단 수정 인자가 $\text{FPC} \to 1$을 만족함을 보여라.
 
-??? success "Solution to Exercise 3"
+??? success "연습문제 3 풀이"
 
     $$
     \text{FPC} = \sqrt{\frac{N - n}{N - 1}} = \sqrt{\frac{1 - n/N}{1 - 1/N}}
     $$
 
-    As $N \to \infty$ with $n$ fixed, $n/N \to 0$ and $1/N \to 0$, so
+    $n$을 고정하고 $N \to \infty$이면 $n/N \to 0$, $1/N \to 0$이므로
 
     $$
     \text{FPC} \to \sqrt{\frac{1 - 0}{1 - 0}} = 1
     $$
 
-    Hence the correction has no effect for infinite (or very large) populations. $\square$
+    따라서 무한(또는 아주 큰) 모집단에서는 이 수정이 아무 영향도 주지 않는다. $\square$
 
 ---
 
-**Exercise 4.** Suppose the true population is not normal but instead follows an exponential distribution with rate $\lambda = 1$ (so $\mu = 1$, $\sigma = 1$). Design a simulation with $n = 10$ and $n_{\text{sim}} = 10{,}000$ to check whether the $t$-interval still achieves approximately 95 % coverage.
+**연습문제 4.** 참 모집단이 정규가 아니라 비율 $\lambda = 1$인 지수분포(따라서 $\mu = 1$, $\sigma = 1$)라고 하자. $n = 10$, $n_{\text{sim}} = 10{,}000$으로 모의실험을 설계하여 $t$-구간이 여전히 약 95%의 포함확률을 달성하는지 확인하라.
 
-??? success "Solution to Exercise 4"
+??? success "연습문제 4 풀이"
 
     ```python
     from scipy.stats import t as t_dist
@@ -192,16 +192,16 @@ plt.show()
     print(f"Coverage: {100 * covers / n_sim:.1f}%")
     ```
 
-    Typical result: coverage $\approx$ 91--93 %, below 95 %. The exponential distribution is strongly right-skewed, and for $n = 10$ the CLT approximation is not yet adequate. With $n = 30$ the coverage improves to $\approx$ 94 %, and by $n = 100$ it is close to 95 %. $\square$
+    전형적인 결과: 포함확률 $\approx$ 91–93%로 95%보다 낮다. 지수분포는 오른쪽으로 크게 치우쳐 있어 $n = 10$에서는 중심극한정리 근사가 아직 충분하지 않다. $n = 30$이면 포함확률이 $\approx$ 94%로 개선되고 $n = 100$이면 95%에 가까워진다. $\square$
 
 ---
 
-**Exercise 5.** A quality inspector samples $n = 50$ parts from a production run of $N = 400$ parts. Compute the FPC factor and explain its practical effect on the width of the confidence interval for the mean part weight.
+**연습문제 5.** 한 품질검사자가 $N = 400$개 생산분에서 부품 $n = 50$개를 뽑는다. FPC 인자를 계산하고 평균 부품 무게에 대한 신뢰구간 너비에 미치는 실질적 영향을 설명하라.
 
-??? success "Solution to Exercise 5"
+??? success "연습문제 5 풀이"
 
     $$
     \text{FPC} = \sqrt{\frac{400 - 50}{400 - 1}} = \sqrt{\frac{350}{399}} = \sqrt{0.8772} \approx 0.9366
     $$
 
-    The standard error is multiplied by 0.9366, reducing it by about 6.3 %. The confidence interval becomes narrower because sampling 50 out of 400 (12.5 %) exhausts a non-trivial fraction of the population, so there is less uncertainty about the remaining units than simple random sampling with replacement would suggest. Note that $n/N = 0.125 > 0.10$, confirming that the FPC should not be ignored here. $\square$
+    표준오차에 0.9366이 곱해져 약 6.3% 줄어든다. 400개 중 50개(12.5%)를 뽑으면 모집단의 무시할 수 없는 부분을 소진하므로, 복원 단순확률표본추출이 시사하는 것보다 남은 단위에 대한 불확실성이 작아져 신뢰구간이 좁아진다. $n/N = 0.125 > 0.10$이므로 여기서는 FPC를 무시하면 안 된다. $\square$

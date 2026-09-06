@@ -1,51 +1,51 @@
-# CI for μ
+# μ의 신뢰구간
 
-## One-Sample z Confidence Interval
+## 일표본 z 신뢰구간
 
-In numerous real-world applications, such as in business, healthcare, and education, estimating the population mean $\mu$ from a random sample is often essential. When the population variance is known, we can utilize the standard normal distribution to construct a confidence interval.
+경영, 의료, 교육을 비롯한 현실의 여러 응용에서 확률표본으로 모평균 $\mu$를 추정하는 일은 흔히 필수적이다. 모분산을 알고 있으면 표준정규분포를 이용해 신뢰구간을 구성할 수 있다.
 
-### Formula
+### 공식
 
-If we know the population variance $\sigma^2$, the confidence interval for the population mean $\mu$ based on a sample of size $n$ is
+모분산 $\sigma^2$을 알고 있다면, 크기 $n$인 표본에 기반한 모평균 $\mu$의 신뢰구간은
 
 $$
 \bar{X} \pm z_{\alpha/2} \times \frac{\sigma}{\sqrt{n}}
 $$
 
-where
+여기서
 
-- $\bar{X}$ is the sample mean,
-- $\alpha$ is the significance level ($\text{significance level} = 1 - \text{confidence level}$),
-- $z_{\alpha/2}$ is the critical value from the standard normal distribution, satisfying $P(Z > z_{\alpha/2}) = \alpha/2$,
-- $\sigma$ is the known population standard deviation,
-- $n$ is the sample size.
+- $\bar{X}$는 표본평균,
+- $\alpha$는 유의수준($\text{유의수준} = 1 - \text{신뢰수준}$),
+- $z_{\alpha/2}$는 $P(Z > z_{\alpha/2}) = \alpha/2$를 만족하는 표준정규분포의 임계값,
+- $\sigma$는 알려진 모표준편차,
+- $n$은 표본크기이다.
 
-The quantity $\sigma / \sqrt{n}$ is the standard error of the sample mean.
+양 $\sigma / \sqrt{n}$은 표본평균의 표준오차이다.
 
-### Conditions for Validity
+### 타당성 조건
 
 $$
 \bar{x}\pm z_{\alpha/2}\frac{\sigma}{\sqrt{n}}
 \quad\text{if}\quad
 \begin{cases}
-n \text{ is large, e.g., } n \ge 30, \text{ so that CLT approximation works} \\
-n \text{ is small relative to } N, \text{ e.g., } n \le 0.1N, \text{ so that IID approximation works}
+n \text{이 크다, 예: } n \ge 30, \text{ 그래야 중심극한정리 근사가 통한다} \\
+n \text{이 } N \text{에 비해 작다, 예: } n \le 0.1N, \text{ 그래야 i.i.d. 근사가 통한다}
 \end{cases}
 $$
 
-When $\sigma$ is unknown and $n$ is large, using the sample standard deviation $s$ in place of $\sigma$ is justified by the Law of Large Numbers:
+$\sigma$를 모르고 $n$이 클 때 $\sigma$ 자리에 표본표준편차 $s$를 쓰는 것은 대수의법칙으로 정당화된다:
 
 $$
 \bar{x}\pm z_{\alpha/2}\frac{s}{\sqrt{n}}
 \quad\text{if}\quad
 \begin{cases}
-n \ge 30 \text{ (CLT)} \\
-n \ge 30 \text{ (LLN for } s \approx \sigma\text{)} \\
-n \le 0.1N \text{ (IID)}
+n \ge 30 \text{ (중심극한정리)} \\
+n \ge 30 \text{ (} s \approx \sigma \text{를 위한 대수의법칙)} \\
+n \le 0.1N \text{ (i.i.d.)}
 \end{cases}
 $$
 
-### Python Code
+### Python 코드
 
 ```python
 import scipy.stats as stats
@@ -71,40 +71,40 @@ print(f"{confidence_interval = }")
 
 ---
 
-## One-Sample t Confidence Interval
+## 일표본 t 신뢰구간
 
-In practice, the population variance $\sigma^2$ is often unknown. When this is the case, we estimate the variance using the sample variance $s^2$, which introduces additional uncertainty. To account for this, we use the $t$-distribution instead of the normal distribution.
+실무에서는 모분산 $\sigma^2$을 모르는 경우가 많다. 이때는 표본분산 $s^2$으로 분산을 추정하는데, 이 과정에서 추가적인 불확실성이 생긴다. 이를 반영하기 위해 정규분포 대신 $t$-분포를 쓴다.
 
-### Formula
+### 공식
 
-The confidence interval for the population mean $\mu$ when the population variance is unknown is given by
+모분산을 모를 때 모평균 $\mu$의 신뢰구간은
 
 $$
 \bar{X} \pm t_{\alpha/2, \, n-1} \times \frac{s}{\sqrt{n}}
 $$
 
-where
+여기서
 
-- $\bar{X}$ is the sample mean,
-- $\alpha$ is the significance level ($\text{significance level} = 1 - \text{confidence level}$),
-- $n - 1$ is the degree of freedom of the $t$-distribution,
-- $t_{\alpha/2, \, n-1}$ is the critical value from the $t$-distribution, satisfying $P(T > t_{\alpha/2, \, n-1}) = \alpha/2$,
-- $s$ is the sample standard deviation,
-- $n$ is the sample size.
+- $\bar{X}$는 표본평균,
+- $\alpha$는 유의수준($\text{유의수준} = 1 - \text{신뢰수준}$),
+- $n - 1$은 $t$-분포의 자유도,
+- $t_{\alpha/2, \, n-1}$은 $P(T > t_{\alpha/2, \, n-1}) = \alpha/2$를 만족하는 $t$-분포의 임계값,
+- $s$는 표본표준편차,
+- $n$은 표본크기이다.
 
-### Conditions for Validity
+### 타당성 조건
 
 $$
 \bar{x}\pm t_{\alpha/2,n-1}\frac{s}{\sqrt{n}}
 \quad\text{if}\quad
 \begin{cases}
-n \text{ is small, e.g., } n < 30, \text{ so that CLT approximation does not work} \\
-\text{population distribution is normal, so that sampling distribution is known exactly} \\
-n \le 0.1N \text{ (IID)}
+n \text{이 작다, 예: } n < 30, \text{ 그래서 중심극한정리 근사가 통하지 않는다} \\
+\text{모집단 분포가 정규이다, 그래서 표본분포를 정확히 안다} \\
+n \le 0.1N \text{ (i.i.d.)}
 \end{cases}
 $$
 
-### Python Code
+### Python 코드
 
 ```python
 import scipy.stats as stats
@@ -131,31 +131,31 @@ print(f"{confidence_interval = }")
 
 ---
 
-## Examples
+## 예제
 
-### Example 1: 95% CI for Population Mean (Known Variance)
+### 예제 1: 모평균의 95% 신뢰구간 (분산을 아는 경우)
 
-Suppose we collect a random sample of size $n = 40$ from a population. The sample mean is $\bar{X} = 85$, and the known population standard deviation is $\sigma = 12$. Construct a 95% confidence interval for the population mean $\mu$.
+어떤 모집단에서 크기 $n = 40$인 확률표본을 모았다고 하자. 표본평균은 $\bar{X} = 85$이고 알려진 모표준편차는 $\sigma = 12$이다. 모평균 $\mu$의 95% 신뢰구간을 구성하라.
 
-**Solution.** For a 95% confidence level, the critical value $z_{\alpha/2}$ is approximately 1.96. Substituting:
+**풀이.** 95% 신뢰수준에서 임계값 $z_{\alpha/2}$는 약 1.96이다. 대입하면:
 
 $$
 85 \pm 1.96 \times \frac{12}{\sqrt{40}}
 $$
 
-Standard error: $\text{SE} = 12 / \sqrt{40} \approx 1.8974$. Margin of error: $1.96 \times 1.8974 \approx 3.717$.
+표준오차: $\text{SE} = 12 / \sqrt{40} \approx 1.8974$. 오차한계: $1.96 \times 1.8974 \approx 3.717$.
 
 $$
 \boxed{(81.283,\ 88.717)}
 $$
 
-We are 95% confident that the true population mean $\mu$ lies within $(81.283, 88.717)$.
+참 모평균 $\mu$가 $(81.283, 88.717)$ 안에 있다고 95% 신뢰한다.
 
-### Example 2: 95% CI for Population Mean (Large Sample)
+### 예제 2: 모평균의 95% 신뢰구간 (큰 표본)
 
-A random sample of 100 adult males yields a mean height of 175 cm and a standard deviation of 6 cm. Calculate the 95% confidence interval for the population mean height.
+성인 남성 100명의 확률표본에서 평균 키 175 cm, 표준편차 6 cm를 얻었다. 모평균 키의 95% 신뢰구간을 계산하라.
 
-**Solution.** Since $n = 100 \ge 30$, we use the standard normal distribution with the sample standard deviation.
+**풀이.** $n = 100 \ge 30$이므로 표본표준편차와 함께 표준정규분포를 쓴다.
 
 $$
 \text{SE} = \frac{6}{\sqrt{100}} = 0.6, \qquad \text{ME} = 1.96 \times 0.6 = 1.176
@@ -182,29 +182,29 @@ margin_of_error = z_star * standard_error
 print(f"{confidence_level:.0%} confidence interval: {x_bar} ± {margin_of_error:.2f}")
 ```
 
-### Example 3: Sample Size Determination (Astronomer)
+### 예제 3: 표본크기의 결정 (천문학자)
 
-An astronomer measures the distance to a distant star. Measurements are iid with mean $d$ (the actual distance) and variance 4 light-years. How many measurements should he take so that his estimate is accurate within $\pm 0.5$ light-year with 95% confidence?
+한 천문학자가 멀리 있는 별까지의 거리를 측정한다. 측정값은 i.i.d.이고 평균이 $d$(실제 거리), 분산이 4 광년이다. 추정값이 95% 신뢰수준에서 $\pm 0.5$ 광년 이내로 정확하려면 측정을 몇 번 해야 하는가?
 
-**Solution.** We need
+**풀이.** 다음이 필요하다.
 
 $$
 1.96 \sqrt{\frac{4}{n}} \leq 0.5
 $$
 
-Solving for $n$:
+$n$에 대해 풀면:
 
 $$
 n \geq \frac{4 \times 1.96^2}{0.5^2} = 61.4656
 $$
 
-Since $n$ must be an integer, at least **62 measurements** are required.
+$n$은 정수여야 하므로 적어도 **62번의 측정**이 필요하다.
 
-### Example 4: 95% CI for Population Mean (Unknown Variance, Small Sample)
+### 예제 4: 모평균의 95% 신뢰구간 (분산을 모르는 작은 표본)
 
-A random sample of size $n = 25$ yields $\bar{X} = 50$ and $s = 8$. Construct a 95% confidence interval for $\mu$.
+크기 $n = 25$인 확률표본에서 $\bar{X} = 50$, $s = 8$을 얻었다. $\mu$의 95% 신뢰구간을 구성하라.
 
-**Solution.** With $df = 24$ and 95% confidence, $t_{\alpha/2, 24} \approx 2.064$.
+**풀이.** 자유도 $df = 24$, 95% 신뢰수준에서 $t_{\alpha/2, 24} \approx 2.064$이다.
 
 $$
 \text{SE} = \frac{8}{\sqrt{25}} = 1.6, \qquad \text{ME} = 2.064 \times 1.6 \approx 3.302
@@ -214,10 +214,10 @@ $$
 \boxed{(46.698,\ 53.302)}
 $$
 
-### Example 5: Computation of t*
-What is the critical value $t_*$ for a 98% confidence interval with $n = 15$ observations?
+### 예제 5: t*의 계산
+관측값이 $n = 15$개일 때 98% 신뢰구간의 임계값 $t_*$는 얼마인가?
 
-**Solution.**
+**풀이.**
 
 ```python
 import scipy.stats as stats
@@ -231,84 +231,84 @@ t_star = stats.t(df=df).ppf(1 - alpha / 2)
 print(f"{t_star = :.4f}")
 ```
 
-### Example 6: Painting Thickness
+### 예제 6: 도장 두께
 
-Felix randomly selected 50 points on a car part and measured coating thickness. The sample yielded $\bar{x} = 148$ microns and $s = 3.3$ microns. He constructed a 95% confidence interval of $(147.1, 148.9)$ microns. Is it plausible for the average thickness to agree with the target value of 150 microns?
+Felix는 자동차 부품에서 무작위로 50개 지점을 골라 도막 두께를 측정했다. 표본에서 $\bar{x} = 148$ 마이크론, $s = 3.3$ 마이크론을 얻었고 95% 신뢰구간 $(147.1, 148.9)$ 마이크론을 구성했다. 평균 두께가 목표값 150 마이크론과 일치한다고 보는 것이 그럴듯한가?
 
-**Solution.** No, since the confidence interval $(147.1, 148.9)$ does not include the target thickness of 150 microns. The data provide evidence that the mean thickness significantly deviates from the target.
-
----
-
-## Exercises
-
-**Exercise 1.**
-50 bottles, $\bar X = 503$ mL, $s = 5$ mL. 95% CI for $\mu$.
-
-??? success "Solution to Exercise 1"
-    Large $n$, use $z$: $\mathrm{SE} = 5/\sqrt{50} \approx 0.707$. ME = $1.96 \cdot 0.707 \approx 1.39$.
-
-    CI: $(501.6, 504.4)$ mL.
-
-    Target 500 mL is outside the CI — evidence the batch mean exceeds target.
+**풀이.** 아니다. 신뢰구간 $(147.1, 148.9)$가 목표 두께 150 마이크론을 포함하지 않기 때문이다. 자료는 평균 두께가 목표에서 유의하게 벗어난다는 증거를 준다.
 
 ---
 
-**Exercise 2.**
-**Sample size planning.** Target ME = 10 km, $\sigma = 15$ km, 90% confidence. Required $n$?
+## 연습문제
 
-??? success "Solution to Exercise 2"
-    $z_{0.05} = 1.645$. $n = (1.645 \cdot 15/10)^2 = (2.47)^2 \approx 6.09$. Round up: $n = 7$.
+**연습문제 1.**
+병 50개에서 $\bar X = 503$ mL, $s = 5$ mL이다. $\mu$의 95% 신뢰구간을 구하라.
 
-    Very small — feasible. For higher confidence (95%), $z = 1.96$ and $n \approx 9$. For larger $\sigma$ (say 30): $n \approx 25$.
+??? success "연습문제 1 풀이"
+    $n$이 크므로 $z$를 쓴다: $\mathrm{SE} = 5/\sqrt{50} \approx 0.707$. 오차한계 = $1.96 \cdot 0.707 \approx 1.39$.
 
-    Sample size scales as $\sigma^2$ and $z^2$ — quadratic in both.
+    신뢰구간: $(501.6, 504.4)$ mL.
 
----
-
-**Exercise 3.**
-**$t$-interval with small sample.** $n = 25$ bottles, $\bar X = 500$ mL, $s = 10$ mL. 95% CI.
-
-??? success "Solution to Exercise 3"
-    $\sigma$ unknown, use $t$: $t_{0.025, 24} = 2.064$. ME = $2.064 \cdot 10/\sqrt{25} = 4.13$.
-
-    CI: $(495.87, 504.13)$.
-
-    Note $t_{0.025, 24} > z_{0.025}$ — $t$ intervals are wider than $z$ intervals at the same confidence level to account for uncertainty in $s$.
+    목표값 500 mL가 신뢰구간 밖이다 — 이 배치의 평균이 목표를 넘는다는 증거이다.
 
 ---
 
-**Exercise 4.**
-**Exam scores with known $\sigma$.** $n = 36$, $\bar X = 78$, $\sigma = 12$. 95% CI.
+**연습문제 2.**
+**표본크기 계획.** 목표 오차한계 10 km, $\sigma = 15$ km, 신뢰수준 90%. 필요한 $n$은?
 
-??? success "Solution to Exercise 4"
-    Known $\sigma$, use $z$: ME = $1.96 \cdot 12/\sqrt{36} = 1.96 \cdot 2 = 3.92$.
+??? success "연습문제 2 풀이"
+    $z_{0.05} = 1.645$. $n = (1.645 \cdot 15/10)^2 = (2.47)^2 \approx 6.09$. 올림하면 $n = 7$.
 
-    CI: $(74.08, 81.92)$.
+    아주 작아서 실행 가능하다. 신뢰수준을 높이면(95%) $z = 1.96$이고 $n \approx 9$이다. $\sigma$가 더 크면(예: 30) $n \approx 25$이다.
 
-    With known $\sigma$, the $z$ interval is the same regardless of sample size beyond the SE formula. Cleanest scenario but rarely realistic (we usually don't know $\sigma$).
-
----
-
-**Exercise 5.**
-**Confidence level trade-off.** A 90% CI is $(72, 78)$. (a) Interpretation. (b) Why a 99% CI is wider.
-
-??? success "Solution to Exercise 5"
-    (a) Correct interpretation: "If we repeated this sampling and CI construction many times, ~90% of resulting intervals would contain the true mean." NOT "there is a 90% probability $\mu \in (72, 78)$" — the parameter is fixed.
-
-    (b) 99% CI uses $z_{0.005} = 2.576$ vs 90% using $z_{0.05} = 1.645$. Ratio of widths: $2.576/1.645 \approx 1.57$. The 99% CI is 57% wider.
-
-    Higher confidence requires accommodating more variability — wider interval. Lower confidence is tighter but less reliable. Trade-off: precision vs. assurance.
+    표본크기는 $\sigma^2$과 $z^2$에 비례한다 — 둘 다에 대해 이차이다.
 
 ---
 
-**Exercise 6.**
-**Light bulbs.** $n = 25$, $\bar X = 1200$ h, $s = 150$ h. (a) 95% CI. (b) 99% CI. (c) $n$ for ME = 20 h.
+**연습문제 3.**
+**작은 표본에서의 $t$-구간.** 병 $n = 25$개에서 $\bar X = 500$ mL, $s = 10$ mL이다. 95% 신뢰구간을 구하라.
 
-??? success "Solution to Exercise 6"
-    (a) $t_{0.025, 24} = 2.064$. ME = $2.064 \cdot 150/5 = 61.9$. CI: $(1138.1, 1261.9)$.
+??? success "연습문제 3 풀이"
+    $\sigma$를 모르므로 $t$를 쓴다: $t_{0.025, 24} = 2.064$. 오차한계 = $2.064 \cdot 10/\sqrt{25} = 4.13$.
 
-    (b) $t_{0.005, 24} = 2.797$. ME = $2.797 \cdot 30 = 83.9$. CI: $(1116.1, 1283.9)$. Wider as expected.
+    신뢰구간: $(495.87, 504.13)$.
 
-    (c) Using $z$-approximation (large $n$ will result): $n = (1.96 \cdot 150/20)^2 = (14.7)^2 \approx 216.1$. Round up: $n = 217$.
+    $t_{0.025, 24} > z_{0.025}$임에 유의하라 — 같은 신뢰수준에서 $t$ 구간이 $z$ 구간보다 넓은 것은 $s$의 불확실성을 반영하기 때문이다.
 
-    Achieving ME of 20 requires nearly 9× more samples than the original $n = 25$. Reducing ME from $\sim 62$ to 20 requires $217/25 \approx 8.7\times$ more data — quadratic in ME reduction.
+---
+
+**연습문제 4.**
+**$\sigma$를 아는 시험점수.** $n = 36$, $\bar X = 78$, $\sigma = 12$. 95% 신뢰구간을 구하라.
+
+??? success "연습문제 4 풀이"
+    $\sigma$를 알므로 $z$를 쓴다: 오차한계 = $1.96 \cdot 12/\sqrt{36} = 1.96 \cdot 2 = 3.92$.
+
+    신뢰구간: $(74.08, 81.92)$.
+
+    $\sigma$를 알면 표준오차 공식 외에는 표본크기가 $z$ 구간의 형태를 바꾸지 않는다. 가장 깔끔한 상황이지만 현실적인 경우는 드물다(보통은 $\sigma$를 모른다).
+
+---
+
+**연습문제 5.**
+**신뢰수준의 맞바꿈.** 90% 신뢰구간이 $(72, 78)$이다. (a) 해석. (b) 99% 신뢰구간이 더 넓은 이유.
+
+??? success "연습문제 5 풀이"
+    (a) 올바른 해석: "이 표본추출과 신뢰구간 구성을 여러 번 반복하면 그 결과 구간들 중 약 90%가 참 평균을 담는다." "$\mu \in (72, 78)$일 확률이 90%이다"가 아니다 — 모수는 고정되어 있다.
+
+    (b) 99% 신뢰구간은 $z_{0.005} = 2.576$을 쓰고 90% 신뢰구간은 $z_{0.05} = 1.645$를 쓴다. 너비의 비: $2.576/1.645 \approx 1.57$. 99% 신뢰구간이 57% 더 넓다.
+
+    더 높은 확신을 위해서는 더 큰 변동을 감당해야 하므로 구간이 넓어진다. 신뢰수준이 낮으면 구간이 조이지만 덜 믿을 만하다. 정밀도와 확신 사이의 맞바꿈이다.
+
+---
+
+**연습문제 6.**
+**전구.** $n = 25$, $\bar X = 1200$시간, $s = 150$시간. (a) 95% 신뢰구간. (b) 99% 신뢰구간. (c) 오차한계 20시간을 위한 $n$.
+
+??? success "연습문제 6 풀이"
+    (a) $t_{0.025, 24} = 2.064$. 오차한계 = $2.064 \cdot 150/5 = 61.9$. 신뢰구간: $(1138.1, 1261.9)$.
+
+    (b) $t_{0.005, 24} = 2.797$. 오차한계 = $2.797 \cdot 30 = 83.9$. 신뢰구간: $(1116.1, 1283.9)$. 예상대로 더 넓다.
+
+    (c) ($n$이 커질 것이므로) $z$ 근사를 쓰면 $n = (1.96 \cdot 150/20)^2 = (14.7)^2 \approx 216.1$. 올림하면 $n = 217$.
+
+    오차한계 20을 달성하려면 원래의 $n = 25$보다 거의 9배 많은 표본이 필요하다. 오차한계를 약 62에서 20으로 줄이려면 자료가 $217/25 \approx 8.7$배 필요하다 — 오차한계 감소에 대해 이차이다.

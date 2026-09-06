@@ -1,52 +1,52 @@
-# Paired Mean Confidence Interval Coverage Simulation
+# 대응 평균 신뢰구간의 포함확률 모의실험
 
-## Overview
+## 개요
 
-When two measurements are taken on the same subject (e.g., before and after a treatment), the observations within each pair are correlated. The paired-sample confidence interval for the mean difference $\mu_D = \mu_X - \mu_Y$ reduces the problem to a one-sample interval on the differences $D_i = X_i - Y_i$. This page simulates coverage for three methods applied to paired data and shows how within-pair correlation affects the interval width.
+같은 피험자에게서 두 측정값을 얻으면(예: 처리 전후) 각 쌍 안의 관측값이 상관된다. 평균 차이 $\mu_D = \mu_X - \mu_Y$에 대한 대응표본 신뢰구간은 문제를 차이 $D_i = X_i - Y_i$에 대한 일표본 구간으로 환원한다. 이 페이지에서는 대응 자료에 세 가지 방법을 적용해 포함확률을 모의실험하고, 짝 내 상관이 구간 너비에 어떤 영향을 주는지 보인다.
 
-## Paired Confidence Interval
+## 대응 신뢰구간
 
-Given paired observations $(X_1, Y_1), \ldots, (X_n, Y_n)$, define the differences $D_i = X_i - Y_i$. The sample mean and standard deviation of the differences are
+대응 관측값 $(X_1, Y_1), \ldots, (X_n, Y_n)$이 주어졌을 때 차이를 $D_i = X_i - Y_i$로 정의한다. 차이의 표본평균과 표본표준편차는
 
 $$
 \bar{D} = \frac{1}{n}\sum_{i=1}^n D_i, \quad S_D = \sqrt{\frac{1}{n-1}\sum_{i=1}^n (D_i - \bar{D})^2}
 $$
 
-### t-Interval (Default)
+### t-구간 (기본)
 
 $$
 \bar{D} \pm t_{\alpha/2,\,n-1} \cdot \frac{S_D}{\sqrt{n}}
 $$
 
-### z-Interval with Known Variance of D
+### D의 분산을 아는 z-구간
 
-When $\sigma_D$ is known (rare in practice):
+$\sigma_D$를 아는 경우(실무에서는 드물다):
 
 $$
 \bar{D} \pm z_{\alpha/2} \cdot \frac{\sigma_D}{\sqrt{n}}
 $$
 
-The true variance of the difference is $\sigma_D^2 = \sigma_X^2 + \sigma_Y^2 - 2\rho\,\sigma_X \sigma_Y$, where $\rho$ is the within-pair correlation.
+차이의 참 분산은 $\sigma_D^2 = \sigma_X^2 + \sigma_Y^2 - 2\rho\,\sigma_X \sigma_Y$이며, 여기서 $\rho$는 짝 내 상관이다.
 
-### z-Interval with Plug-in s
+### s를 대입한 z-구간
 
 $$
 \bar{D} \pm z_{\alpha/2} \cdot \frac{S_D}{\sqrt{n}}
 $$
 
-This is a large-$n$ approximation that under-covers for small samples.
+$n$이 큰 경우의 근사이며 작은 표본에서는 포함확률이 부족하다.
 
-## Role of Correlation
+## 상관의 역할
 
-Notice the variance of the differences:
+차이의 분산에 주목하라:
 
 $$
 \operatorname{Var}(D) = \sigma_X^2 + \sigma_Y^2 - 2\rho\,\sigma_X\sigma_Y
 $$
 
-When $\rho > 0$ (positive within-pair correlation), the variance of $D$ is **reduced** compared to $\sigma_X^2 + \sigma_Y^2$. This is the statistical advantage of pairing: the confidence interval is narrower because much of the between-subject variability cancels out.
+$\rho > 0$(양의 짝 내 상관)이면 $D$의 분산이 $\sigma_X^2 + \sigma_Y^2$보다 **줄어든다**. 이것이 짝짓기의 통계적 이점이다: 피험자 간 변동성의 상당 부분이 상쇄되어 신뢰구간이 좁아진다.
 
-## Python Code
+## Python 코드
 
 ```python
 import numpy as np
@@ -105,7 +105,7 @@ coverage_pct = 100.0 * covered.mean()
 print(f"Paired {method} coverage: {coverage_pct:.1f}%")
 ```
 
-### Plotting the Intervals
+### 구간의 시각화
 
 ```python
 fig, ax = plt.subplots(figsize=(12, 12))
@@ -123,20 +123,20 @@ plt.tight_layout()
 plt.show()
 ```
 
-## Interpretation
+## 해석
 
-- The paired $t$-interval achieves the nominal 95 % coverage because it correctly accounts for the estimation of $\sigma_D$.
-- Higher within-pair correlation $\rho$ reduces $\sigma_D$, producing narrower confidence intervals.
-- The plug-in $z$-interval under-covers for small $n$ because the normal critical value is too small relative to the $t$ critical value.
-- Pairing is beneficial when $\rho > 0$. If $\rho \le 0$, pairing can actually **widen** the interval relative to an independent two-sample design, and the design should be reconsidered.
+- 대응 $t$-구간은 $\sigma_D$의 추정을 올바르게 반영하므로 명목 95% 포함확률을 달성한다.
+- 짝 내 상관 $\rho$가 클수록 $\sigma_D$가 줄어 신뢰구간이 좁아진다.
+- 대입한 $z$-구간은 정규 임계값이 $t$ 임계값보다 작아 작은 $n$에서 포함확률이 부족하다.
+- 짝짓기는 $\rho > 0$일 때 이롭다. $\rho \le 0$이면 짝짓기가 오히려 독립 이표본 설계보다 구간을 **넓힐** 수 있으므로 설계를 다시 생각해야 한다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.** Ten patients have their blood pressure measured before and after a medication. The differences $D_i$ (before minus after) are: 5, 3, 8, 2, 6, 4, 7, 1, 5, 3. Construct a 95 % $t$-interval for $\mu_D$.
+**연습문제 1.** 환자 10명의 혈압을 투약 전후로 측정했다. 차이 $D_i$(투약 전 빼기 투약 후)는 5, 3, 8, 2, 6, 4, 7, 1, 5, 3이다. $\mu_D$의 95% $t$-구간을 구성하라.
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
 
-    Computing summary statistics:
+    요약통계량을 계산하면:
 
     $$
     \bar{D} = \frac{5+3+8+2+6+4+7+1+5+3}{10} = \frac{44}{10} = 4.4
@@ -146,77 +146,77 @@ plt.show()
     S_D = \sqrt{\frac{1}{9}\sum_{i=1}^{10}(D_i - 4.4)^2} = \sqrt{\frac{1}{9}(0.36+1.96+12.96+5.76+2.56+0.16+6.76+11.56+0.36+1.96)} = \sqrt{\frac{44.4}{9}} = \sqrt{4.933} \approx 2.221
     $$
 
-    With $\text{df} = 9$ and $t_{0.025,9} = 2.262$:
+    $\text{df} = 9$이고 $t_{0.025,9} = 2.262$이므로:
 
     $$
     4.4 \pm 2.262 \times \frac{2.221}{\sqrt{10}} = 4.4 \pm 2.262 \times 0.7024 = 4.4 \pm 1.589
     $$
 
-    The 95 % CI for $\mu_D$ is $(2.81, 5.99)$. Since the interval is entirely positive, the medication appears to reduce blood pressure. $\square$
+    $\mu_D$의 95% 신뢰구간은 $(2.81, 5.99)$이다. 구간 전체가 양수이므로 이 약이 혈압을 낮추는 것으로 보인다. $\square$
 
 ---
 
-**Exercise 2.** Derive the formula $\sigma_D^2 = \sigma_X^2 + \sigma_Y^2 - 2\rho\,\sigma_X\sigma_Y$ for paired observations.
+**연습문제 2.** 대응 관측값에 대해 공식 $\sigma_D^2 = \sigma_X^2 + \sigma_Y^2 - 2\rho\,\sigma_X\sigma_Y$를 유도하라.
 
-??? success "Solution to Exercise 2"
+??? success "연습문제 2 풀이"
 
-    Let $D = X - Y$. By the properties of variance:
+    $D = X - Y$라 하자. 분산의 성질에 의해:
 
     $$
     \operatorname{Var}(D) = \operatorname{Var}(X - Y) = \operatorname{Var}(X) + \operatorname{Var}(Y) - 2\operatorname{Cov}(X,Y)
     $$
 
-    Since $\operatorname{Cov}(X,Y) = \rho\,\sigma_X\sigma_Y$ by definition of the correlation coefficient, we obtain
+    상관계수의 정의에 의해 $\operatorname{Cov}(X,Y) = \rho\,\sigma_X\sigma_Y$이므로
 
     $$
     \sigma_D^2 = \sigma_X^2 + \sigma_Y^2 - 2\rho\,\sigma_X\sigma_Y
     $$
 
-    When $\rho > 0$, the subtracted term $2\rho\,\sigma_X\sigma_Y > 0$ reduces the variance of $D$ below $\sigma_X^2 + \sigma_Y^2$, which is the variance one would get if $X$ and $Y$ were independent. $\square$
+    를 얻는다. $\rho > 0$이면 빼지는 항 $2\rho\,\sigma_X\sigma_Y > 0$ 덕분에 $D$의 분산이, $X$와 $Y$가 독립일 때 나올 값인 $\sigma_X^2 + \sigma_Y^2$보다 작아진다. $\square$
 
 ---
 
-**Exercise 3.** Suppose $\sigma_X = \sigma_Y = \sigma$ and $\rho = 0.8$. Compare the standard error of $\bar{D}$ from a paired design with $n$ pairs to the standard error of $\bar{X} - \bar{Y}$ from an independent two-sample design with $n$ observations per group.
+**연습문제 3.** $\sigma_X = \sigma_Y = \sigma$이고 $\rho = 0.8$이라 하자. $n$쌍인 대응 설계에서 $\bar{D}$의 표준오차와, 집단당 관측값이 $n$개인 독립 이표본 설계에서 $\bar{X} - \bar{Y}$의 표준오차를 비교하라.
 
-??? success "Solution to Exercise 3"
+??? success "연습문제 3 풀이"
 
-    **Paired design:** $\sigma_D^2 = \sigma^2 + \sigma^2 - 2(0.8)\sigma^2 = 2\sigma^2(1 - 0.8) = 0.4\sigma^2$. The standard error is
+    **대응 설계:** $\sigma_D^2 = \sigma^2 + \sigma^2 - 2(0.8)\sigma^2 = 2\sigma^2(1 - 0.8) = 0.4\sigma^2$. 표준오차는
 
     $$
     \text{SE}_{\text{paired}} = \frac{\sigma_D}{\sqrt{n}} = \frac{\sigma\sqrt{0.4}}{\sqrt{n}} = \frac{0.632\,\sigma}{\sqrt{n}}
     $$
 
-    **Independent design:** $\operatorname{Var}(\bar{X} - \bar{Y}) = \sigma^2/n + \sigma^2/n = 2\sigma^2/n$. The standard error is
+    **독립 설계:** $\operatorname{Var}(\bar{X} - \bar{Y}) = \sigma^2/n + \sigma^2/n = 2\sigma^2/n$. 표준오차는
 
     $$
     \text{SE}_{\text{indep}} = \sqrt{\frac{2\sigma^2}{n}} = \frac{\sigma\sqrt{2}}{\sqrt{n}} = \frac{1.414\,\sigma}{\sqrt{n}}
     $$
 
-    The ratio is $\text{SE}_{\text{paired}}/\text{SE}_{\text{indep}} = \sqrt{0.4}/\sqrt{2} = \sqrt{0.2} \approx 0.447$. The paired design cuts the standard error by more than half, yielding a much narrower confidence interval. $\square$
+    비는 $\text{SE}_{\text{paired}}/\text{SE}_{\text{indep}} = \sqrt{0.4}/\sqrt{2} = \sqrt{0.2} \approx 0.447$이다. 대응 설계가 표준오차를 절반 넘게 줄여 훨씬 좁은 신뢰구간을 준다. $\square$
 
 ---
 
-**Exercise 4.** For what value of $\rho$ does the paired design offer no advantage over an independent design? What happens when $\rho < 0$?
+**연습문제 4.** 어떤 $\rho$ 값에서 대응 설계가 독립 설계보다 나을 것이 없어지는가? $\rho < 0$이면 어떻게 되는가?
 
-??? success "Solution to Exercise 4"
+??? success "연습문제 4 풀이"
 
-    With $\sigma_X = \sigma_Y = \sigma$, the paired variance is $\sigma_D^2 = 2\sigma^2(1-\rho)$ and the independent variance of $\bar{X}-\bar{Y}$ is $2\sigma^2/n$ (with $n$ per group). Comparing standard errors:
+    $\sigma_X = \sigma_Y = \sigma$일 때 대응 분산은 $\sigma_D^2 = 2\sigma^2(1-\rho)$이고, (집단당 $n$개인) 독립 설계에서 $\bar{X}-\bar{Y}$의 분산은 $2\sigma^2/n$이다. 표준오차를 비교하면:
 
     $$
     \text{SE}_{\text{paired}} = \frac{\sigma\sqrt{2(1-\rho)}}{\sqrt{n}}, \quad \text{SE}_{\text{indep}} = \frac{\sigma\sqrt{2}}{\sqrt{n}}
     $$
 
-    These are equal when $\sqrt{2(1-\rho)} = \sqrt{2}$, i.e., $\rho = 0$. When $\rho = 0$ the measurements within a pair are uncorrelated and pairing provides no reduction in variance.
+    $\sqrt{2(1-\rho)} = \sqrt{2}$일 때, 즉 $\rho = 0$일 때 둘이 같다. $\rho = 0$이면 짝 안의 측정값이 무상관이어서 짝짓기가 분산을 줄여 주지 않는다.
 
-    When $\rho < 0$, we have $2(1-\rho) > 2$, so $\text{SE}_{\text{paired}} > \text{SE}_{\text{indep}}$. Negative within-pair correlation actually **increases** the variance of the differences, making the paired design **worse** than the independent design. This situation is unusual in practice but could arise if, for example, paired subjects tend to respond in opposite directions. $\square$
+    $\rho < 0$이면 $2(1-\rho) > 2$이므로 $\text{SE}_{\text{paired}} > \text{SE}_{\text{indep}}$이다. 음의 짝 내 상관은 오히려 차이의 분산을 **키워** 대응 설계를 독립 설계보다 **못하게** 만든다. 실무에서 흔치는 않지만, 예컨대 짝지은 피험자들이 반대 방향으로 반응하는 경향이 있다면 생길 수 있다. $\square$
 
 ---
 
-**Exercise 5.** A study uses $n = 15$ paired observations. The sample mean difference is $\bar{D} = 2.3$ and $S_D = 4.1$. Test whether $\mu_D = 0$ at the 5 % level by checking if 0 lies inside the 95 % confidence interval.
+**연습문제 5.** 어떤 연구가 대응 관측값 $n = 15$쌍을 쓴다. 표본 평균 차이는 $\bar{D} = 2.3$, $S_D = 4.1$이다. 95% 신뢰구간에 0이 들어 있는지 확인하여 5% 수준에서 $\mu_D = 0$을 검정하라.
 
-??? success "Solution to Exercise 5"
+??? success "연습문제 5 풀이"
 
-    With $\text{df} = 14$ and $t_{0.025,14} = 2.145$:
+    $\text{df} = 14$이고 $t_{0.025,14} = 2.145$이므로:
 
     $$
     \text{SE} = \frac{4.1}{\sqrt{15}} = \frac{4.1}{3.873} = 1.059
@@ -226,4 +226,4 @@ plt.show()
     \bar{D} \pm t_{0.025,14} \times \text{SE} = 2.3 \pm 2.145 \times 1.059 = 2.3 \pm 2.272
     $$
 
-    The 95 % CI is $(0.028, 4.572)$. Since $0$ falls outside this interval (just barely), we reject $H_0: \mu_D = 0$ at the 5 % significance level. The data provide evidence that the true mean difference is positive. $\square$
+    95% 신뢰구간은 $(0.028, 4.572)$이다. $0$이 (아슬아슬하게) 이 구간 밖에 있으므로 5% 유의수준에서 $H_0: \mu_D = 0$을 기각한다. 자료는 참 평균 차이가 양수라는 증거를 준다. $\square$

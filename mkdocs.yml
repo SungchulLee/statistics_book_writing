@@ -265,36 +265,36 @@ nav:
             - 로버스트 추정량 비교: ch07/code/robust_estimators.md
             - Cauchy에서 대수의법칙의 실패: ch07/code/cauchy_lln_failure.md
 
-    - 8 Confidence Intervals:
-        - Chapter Overview: ch08/index.md
-        - 8.1 Foundations:
-            - Confidence Level and Coverage: ch08/foundations/coverage.md
-            - Interpretation and Common Pitfalls: ch08/foundations/interpretation.md
-        - 8.2 One-Sample Intervals:
-            - Confidence Interval for μ: ch08/one_sample_intervals/ci_mu.md
-            - Confidence Interval for p: ch08/one_sample_intervals/ci_p.md
-            - Confidence Interval for σ²: ch08/one_sample_intervals/ci_sigma2.md
-        - 8.3 Two-Sample Intervals:
-            - Confidence Interval for μ₁−μ₂: ch08/two_sample_intervals/ci_mu_diff.md
-            - Confidence Interval for p₁−p₂: ch08/two_sample_intervals/ci_p_diff.md
-            - Confidence Interval for σ₁²/σ₂²: ch08/two_sample_intervals/ci_variance_ratio.md
-        - 8.4 Paired-Sample Intervals:
-            - Confidence Interval for μ_D (Mean of Differences): ch08/paired_sample_intervals/ci_mu_paired.md
-            - When to Use Paired vs Independent Designs: ch08/paired_sample_intervals/paired_vs_independent.md
-            - Paired Interval for Proportions (McNemar): ch08/paired_sample_intervals/ci_paired_proportions.md
-        - 8.5 Sample Size Determination:
-            - Sample Size for Desired Margin of Error: ch08/sample_size/margin_of_error.md
-            - Sample Size for Comparing Two Groups: ch08/sample_size/two_group_sample_size.md
-        - 8.6 Code:
-            - Confidence Interval Demonstrations: ch08/code/confidence_intervals.md
-            - Sample Size Calculations: ch08/code/sample_size.md
-            - Mean Confidence Interval Coverage Simulation: ch08/code/ci_mean_sim.md
-            - Proportion Confidence Interval Coverage Simulation: ch08/code/ci_prop_sim.md
-            - Variance Confidence Interval Coverage Simulation: ch08/code/ci_var_sim.md
-            - Paired Mean Confidence Interval Coverage Simulation: ch08/code/ci_paired_sim.md
-            - Difference of Means Confidence Interval Simulation: ch08/code/ci_diff_means_sim.md
-            - One-Sample Mean Confidence Interval Computation: ch08/code/ci_mean_calc.md
-            - One-Sample Proportion Confidence Interval Computation: ch08/code/ci_prop_calc.md
+    - 8 신뢰구간:
+        - 장 개요: ch08/index.md
+        - 8.1 기초:
+            - 신뢰수준과 포함확률: ch08/foundations/coverage.md
+            - 해석과 흔한 함정: ch08/foundations/interpretation.md
+        - 8.2 일표본 구간:
+            - μ의 신뢰구간: ch08/one_sample_intervals/ci_mu.md
+            - p의 신뢰구간: ch08/one_sample_intervals/ci_p.md
+            - σ²의 신뢰구간: ch08/one_sample_intervals/ci_sigma2.md
+        - 8.3 이표본 구간:
+            - μ₁−μ₂의 신뢰구간: ch08/two_sample_intervals/ci_mu_diff.md
+            - p₁−p₂의 신뢰구간: ch08/two_sample_intervals/ci_p_diff.md
+            - σ₁²/σ₂²의 신뢰구간: ch08/two_sample_intervals/ci_variance_ratio.md
+        - 8.4 대응표본 구간:
+            - μ_D (차이의 평균)의 신뢰구간: ch08/paired_sample_intervals/ci_mu_paired.md
+            - 대응 설계와 독립 설계 중 무엇을 쓸 것인가: ch08/paired_sample_intervals/paired_vs_independent.md
+            - 비율의 대응 구간 (McNemar): ch08/paired_sample_intervals/ci_paired_proportions.md
+        - 8.5 표본크기의 결정:
+            - 원하는 오차한계를 위한 표본크기: ch08/sample_size/margin_of_error.md
+            - 두 집단 비교를 위한 표본크기: ch08/sample_size/two_group_sample_size.md
+        - 8.6 코드:
+            - 신뢰구간 시연: ch08/code/confidence_intervals.md
+            - 표본크기 계산: ch08/code/sample_size.md
+            - 평균 신뢰구간의 포함확률 모의실험: ch08/code/ci_mean_sim.md
+            - 비율 신뢰구간의 포함확률 모의실험: ch08/code/ci_prop_sim.md
+            - 분산 신뢰구간의 포함확률 모의실험: ch08/code/ci_var_sim.md
+            - 대응 평균 신뢰구간의 포함확률 모의실험: ch08/code/ci_paired_sim.md
+            - 평균 차이 신뢰구간 모의실험: ch08/code/ci_diff_means_sim.md
+            - 일표본 평균 신뢰구간의 계산: ch08/code/ci_mean_calc.md
+            - 일표본 비율 신뢰구간의 계산: ch08/code/ci_prop_calc.md
 
     - 9 Hypothesis Testing:
         - Chapter Overview: ch09/index.md

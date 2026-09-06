@@ -1,24 +1,24 @@
-# Interpretation and Common Misconceptions
+# 해석과 흔한 오해
 
-## The Repeated-Sampling Interpretation
+## 반복표본추출 해석
 
-A 95% confidence interval does **not** mean "there is a 95% probability that $\mu$ is in this interval." The parameter $\mu$ is a fixed (but unknown) number — it either is or is not in the interval.
+95% 신뢰구간은 "$\mu$가 이 구간 안에 있을 확률이 95%이다"라는 뜻이 **아니다**. 모수 $\mu$는 고정된 (그러나 미지의) 수이며, 구간 안에 있거나 없거나 둘 중 하나이다.
 
-The correct interpretation: if we were to repeat the sampling process many times, each time constructing a 95% CI, then **approximately 95% of those intervals would contain the true parameter**.
+올바른 해석은 이렇다: 표본추출 과정을 여러 번 반복하여 매번 95% 신뢰구간을 만들면 **그 구간들 중 약 95%가 참 모수를 담는다**.
 
-### Formal Statement
+### 형식적 진술
 
-Let $X_1, \ldots, X_n \overset{\text{iid}}{\sim} N(\mu, \sigma^2)$ with $\sigma$ known. The interval
+$\sigma$를 아는 $X_1, \ldots, X_n \overset{\text{iid}}{\sim} N(\mu, \sigma^2)$을 생각하자. 구간
 
 $$\bar{X} \pm z_{\alpha/2} \cdot \frac{\sigma}{\sqrt{n}}$$
 
-satisfies:
+은 다음을 만족한다:
 
 $$P\left(\bar{X} - z_{\alpha/2}\frac{\sigma}{\sqrt{n}} \leq \mu \leq \bar{X} + z_{\alpha/2}\frac{\sigma}{\sqrt{n}}\right) = 1 - \alpha$$
 
-The probability statement is about the **random endpoints** $\bar{X} \pm z_{\alpha/2}\sigma/\sqrt{n}$, not about $\mu$.
+이 확률 진술은 $\mu$에 대한 것이 아니라 **확률적인 끝점** $\bar{X} \pm z_{\alpha/2}\sigma/\sqrt{n}$에 대한 것이다.
 
-### Simulation Demonstration
+### 모의실험을 통한 확인
 
 ```python
 import numpy as np
@@ -42,157 +42,157 @@ print(f"Coverage: {covers}/{n_simulations} = {covers/n_simulations:.3f}")
 # ≈ 0.950
 ```
 
-## Common Misconceptions
+## 흔한 오해
 
-### Misconception 1: "95% probability that μ is in this interval"
+### 오해 1: "μ가 이 구간 안에 있을 확률이 95%이다"
 
-After computing $[48.2, 51.8]$, the statement "there is a 95% probability that $\mu$ is between 48.2 and 51.8" is **wrong**. Either $\mu$ is in that interval or it is not — there is no randomness left.
+$[48.2, 51.8]$을 계산한 뒤에 "$\mu$가 48.2와 51.8 사이에 있을 확률이 95%이다"라고 말하는 것은 **틀렸다**. $\mu$는 그 구간 안에 있거나 없거나 둘 중 하나이며, 더 이상 확률적인 요소가 남아 있지 않다.
 
-The 95% refers to the **procedure**, not any single interval.
+95%는 특정한 구간 하나가 아니라 **절차**를 가리킨다.
 
-### Misconception 2: "95% of the data falls in the interval"
+### 오해 2: "자료의 95%가 구간 안에 들어간다"
 
-A CI estimates a **parameter** (like the population mean), not the range of individual observations. The interval $\bar{X} \pm z_{\alpha/2}\sigma/\sqrt{n}$ shrinks with $n$, while the range of data does not.
+신뢰구간은 개별 관측값의 범위가 아니라 (모평균 같은) **모수**를 추정한다. 구간 $\bar{X} \pm z_{\alpha/2}\sigma/\sqrt{n}$은 $n$이 커지면 좁아지지만 자료의 범위는 그렇지 않다.
 
-### Misconception 3: "If two CIs overlap, the difference is not significant"
+### 오해 3: "두 신뢰구간이 겹치면 차이가 유의하지 않다"
 
-Two 95% CIs can overlap even when the difference between parameters is statistically significant. The proper comparison uses a CI for the **difference** $\mu_1 - \mu_2$.
+모수의 차이가 통계적으로 유의할 때도 두 95% 신뢰구간이 겹칠 수 있다. 올바른 비교는 **차이** $\mu_1 - \mu_2$에 대한 신뢰구간을 쓰는 것이다.
 
-## Width, Confidence Level, and Sample Size
+## 너비, 신뢰수준, 표본크기
 
-The margin of error for a z-interval is:
+z-구간의 오차한계는:
 
 $$E = z_{\alpha/2} \cdot \frac{\sigma}{\sqrt{n}}$$
 
-Three relationships follow:
+여기서 세 가지 관계가 따라 나온다:
 
-1. **Higher confidence → wider interval.** Increasing from 95% to 99% increases $z_{\alpha/2}$ from 1.96 to 2.576, widening the interval by 31%.
+1. **신뢰수준이 높을수록 구간이 넓어진다.** 95%에서 99%로 올리면 $z_{\alpha/2}$가 1.96에서 2.576으로 커져 구간이 31% 넓어진다.
 
-2. **Larger sample → narrower interval.** The margin of error decreases as $1/\sqrt{n}$. To halve the width, you need 4 times the sample size.
+2. **표본이 클수록 구간이 좁아진다.** 오차한계는 $1/\sqrt{n}$으로 줄어든다. 너비를 절반으로 하려면 표본크기가 4배 필요하다.
 
-3. **Larger variance → wider interval.** More variability in the population makes estimation harder.
+3. **분산이 클수록 구간이 넓어진다.** 모집단의 변동성이 크면 추정이 더 어렵다.
 
-### Sample Size Determination
+### 표본크기의 결정
 
-To achieve a desired margin of error $E$ at confidence level $1 - \alpha$:
+신뢰수준 $1 - \alpha$에서 원하는 오차한계 $E$를 달성하려면:
 
 $$n = \left(\frac{z_{\alpha/2} \cdot \sigma}{E}\right)^2$$
 
-**Example:** To estimate a population mean within $\pm 2$ units with 95% confidence, given $\sigma = 10$:
+**예:** $\sigma = 10$일 때 95% 신뢰수준으로 모평균을 $\pm 2$ 단위 이내로 추정하려면:
 
 $$n = \left(\frac{1.96 \times 10}{2}\right)^2 = 96.04 \implies n = 97$$
 
-### Common Confidence Levels
+### 흔히 쓰는 신뢰수준
 
-| Confidence Level | $\alpha$ | $z_{\alpha/2}$ |
+| 신뢰수준 | $\alpha$ | $z_{\alpha/2}$ |
 |---|---|---|
 | 90% | 0.10 | 1.645 |
 | 95% | 0.05 | 1.960 |
 | 99% | 0.01 | 2.576 |
 
-## One-Sided Confidence Intervals (Confidence Bounds)
+## 단측 신뢰구간 (신뢰한계)
 
-Sometimes we only need a bound in one direction:
+한쪽 방향의 한계만 필요할 때도 있다:
 
-- **Upper bound:** $\mu \leq \bar{X} + z_\alpha \cdot \sigma/\sqrt{n}$ (with confidence $1 - \alpha$)
-- **Lower bound:** $\mu \geq \bar{X} - z_\alpha \cdot \sigma/\sqrt{n}$ (with confidence $1 - \alpha$)
+- **상한:** $\mu \leq \bar{X} + z_\alpha \cdot \sigma/\sqrt{n}$ (신뢰수준 $1 - \alpha$)
+- **하한:** $\mu \geq \bar{X} - z_\alpha \cdot \sigma/\sqrt{n}$ (신뢰수준 $1 - \alpha$)
 
-Note that one-sided bounds use $z_\alpha$ (not $z_{\alpha/2}$). A 95% one-sided bound uses $z_{0.05} = 1.645$.
+단측 한계는 $z_{\alpha/2}$가 아니라 $z_\alpha$를 쓴다는 점에 유의하라. 95% 단측 한계는 $z_{0.05} = 1.645$를 쓴다.
 
-**Financial example:** A risk manager may want an upper bound on portfolio loss: "We are 95% confident that the expected loss does not exceed $X."
+**금융 예시:** 위험관리자는 포트폴리오 손실의 상한을 원할 수 있다: "기대손실이 \$X를 넘지 않는다고 95% 신뢰한다."
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-95% CI for cholesterol = $(188.3, 205.7)$. (a) Which interpretation is correct? (b) Point estimate and ME?
+**연습문제 1.**
+콜레스테롤에 대한 95% 신뢰구간이 $(188.3, 205.7)$이다. (a) 다음 중 올바른 해석은? (i) 참 평균이 188.3과 205.7 사이에 있을 확률이 95%이다. (ii) 이 연구를 여러 번 반복하면 그 결과 구간들 중 약 95%가 참 평균을 담는다. (iii) 콜레스테롤 수치의 95%가 188.3과 205.7 사이에 있다. (b) 점추정값과 오차한계는?
 
-??? success "Solution to Exercise 1"
-    (a) Only **(ii)** is correct: "If we repeated this study many times, about 95% of the resulting intervals would contain the true mean."
+??? success "연습문제 1 풀이"
+    (a) **(ii)**만 옳다: "이 연구를 여러 번 반복하면 그 결과 구간들 중 약 95%가 참 평균을 담는다."
 
-    (i) is wrong: it assigns probability to the fixed parameter (frequentist error). The parameter is fixed; the interval is random.
+    (i)은 틀렸다: 고정된 모수에 확률을 부여한다(빈도주의 관점의 오류). 모수는 고정되어 있고 구간이 확률적이다.
 
-    (iii) is wrong: confuses CI for the mean with the spread of data. The CI is about the population mean, not the range of individual cholesterol levels.
+    (iii)도 틀렸다: 평균에 대한 신뢰구간을 자료의 산포와 혼동한다. 신뢰구간은 개별 콜레스테롤 수치의 범위가 아니라 모평균에 관한 것이다.
 
-    (b) $\bar X = (188.3 + 205.7)/2 = 197.0$. ME = $(205.7 - 188.3)/2 = 8.7$.
-
----
-
-**Exercise 2.**
-**Why the parameter doesn't have a 95% probability.** Explain why the frequentist CI doesn't allow probability statements about $\mu$.
-
-??? success "Solution to Exercise 2"
-    In frequentist statistics, $\mu$ is a **fixed constant**, not a random variable. Random variables have probability distributions; constants do not. A statement like "$P(\mu \in (188, 206)) = 0.95$" is meaningless because $\mu$ is either inside the interval (probability 1) or outside (probability 0) — there is no randomness in $\mu$.
-
-    What IS random: the **interval** itself (its endpoints depend on the sample). The 95% refers to the **procedure**: among all 95% CIs constructed from many samples, 95% will trap $\mu$.
-
-    For a probability statement about $\mu$, you need Bayesian inference, where $\mu$ has a prior distribution and the posterior gives "$P(\mu \in \text{interval} \mid \text{data}) = 0.95$" — a **credible interval**.
+    (b) $\bar X = (188.3 + 205.7)/2 = 197.0$. 오차한계 = $(205.7 - 188.3)/2 = 8.7$.
 
 ---
 
-**Exercise 3.**
-**Coverage probability.** Define coverage and explain why a 95% CI might have actual coverage lower than 95%.
+**연습문제 2.**
+**모수에 95% 확률이 없는 이유.** 빈도주의 신뢰구간이 $\mu$에 대한 확률 진술을 허용하지 않는 이유를 설명하라.
 
-??? success "Solution to Exercise 3"
-    **Coverage probability:** $P(\theta \in \text{CI})$ — the probability the procedure traps the true parameter. Designed to equal $1 - \alpha$.
+??? success "연습문제 2 풀이"
+    빈도주의 통계학에서 $\mu$는 확률변수가 아니라 **고정된 상수**이다. 확률변수는 확률분포를 갖지만 상수는 그렇지 않다. "$P(\mu \in (188, 206)) = 0.95$" 같은 진술은 무의미하다. $\mu$는 구간 안에 있거나(확률 1) 밖에 있을 뿐(확률 0)이며 $\mu$에는 확률적인 요소가 없기 때문이다.
 
-    **Reasons for actual coverage < nominal:**
+    확률적인 것은 **구간** 자체이다(끝점이 표본에 따라 달라진다). 95%는 **절차**를 가리킨다: 여러 표본으로 만든 모든 95% 신뢰구간 중 95%가 $\mu$를 잡아낸다.
 
-    - **Approximation error:** CI based on asymptotic theory (CLT) at finite $n$. Wald CI for proportion has coverage well below 95% near $p = 0$ or $p = 1$.
-    - **Distribution misspecification:** $t$-interval assumes normality; for skewed data with small $n$, coverage can be 85-90% instead of 95%.
-    - **Garden of forking paths:** if the procedure is chosen after seeing data, "CI" is not a proper CI — coverage may be far from nominal.
-    - **Multiple-testing:** the CI's $1 - \alpha$ guarantee is per CI; making 20 CIs and reporting the "interesting" one inflates miscoverage.
-
-    Wilson CI for proportion was developed specifically to fix Wald's poor coverage. Always check coverage via simulation when in doubt.
+    $\mu$에 대한 확률 진술을 하려면 Bayes 추론이 필요하다. 거기서는 $\mu$가 사전분포를 갖고 사후분포가 "$P(\mu \in \text{구간} \mid \text{자료}) = 0.95$"를 주며, 이를 **신용구간**이라 한다.
 
 ---
 
-**Exercise 4.**
-**Width and confidence level.** How does CI width change with (a) higher confidence level, (b) larger sample size, (c) higher population variance?
+**연습문제 3.**
+**포함확률.** 포함확률을 정의하고, 95% 신뢰구간의 실제 포함확률이 95%보다 낮을 수 있는 이유를 설명하라.
 
-??? success "Solution to Exercise 4"
-    CI width = $2 \cdot z_{\alpha/2} \cdot \mathrm{SE} = 2 z_{\alpha/2} \sigma/\sqrt n$.
+??? success "연습문제 3 풀이"
+    **포함확률:** $P(\theta \in \text{CI})$ — 절차가 참 모수를 잡아낼 확률. $1 - \alpha$와 같도록 설계된다.
 
-    (a) **Higher confidence** ($1 - \alpha = 0.99$ vs 0.95): $z_{0.005} = 2.576$ vs $z_{0.025} = 1.96$. Width grows by 31%. More confidence = wider interval.
+    **실제 포함확률이 명목값보다 낮아지는 이유:**
 
-    (b) **Larger $n$:** width shrinks as $1/\sqrt n$. Quadruple $n$ → halve width.
+    - **근사오차:** 신뢰구간이 유한한 $n$에서 점근이론(중심극한정리)에 기반한다. 비율에 대한 Wald 신뢰구간은 $p = 0$이나 $p = 1$ 근처에서 포함확률이 95%를 크게 밑돈다.
+    - **분포의 잘못된 지정:** $t$-구간은 정규성을 가정한다. 치우친 자료에 $n$이 작으면 포함확률이 95%가 아니라 85–90%가 될 수 있다.
+    - **갈림길의 정원:** 자료를 본 뒤에 절차를 고르면 그 "신뢰구간"은 제대로 된 신뢰구간이 아니며 포함확률이 명목값에서 크게 벗어날 수 있다.
+    - **다중검정:** 신뢰구간의 $1 - \alpha$ 보장은 구간 하나당 보장이다. 20개를 만들고 "흥미로운" 것 하나만 보고하면 미포함 확률이 부풀려진다.
 
-    (c) **Higher $\sigma$:** width grows linearly with $\sigma$. Doubling SD → doubling width.
-
-    Practical: to achieve target ME, $n = (z_{\alpha/2} \sigma/\mathrm{ME})^2$. Quadratic in both $z$ and $\sigma$, inverse-square in ME.
-
----
-
-**Exercise 5.**
-**One-sided CI.** When is a one-sided CI appropriate? Give one example.
-
-??? success "Solution to Exercise 5"
-    One-sided CI: $(-\infty, \hat\theta + z_\alpha \mathrm{SE})$ or $(\hat\theta - z_\alpha \mathrm{SE}, \infty)$, depending on direction of interest.
-
-    Appropriate when only one direction matters:
-
-    - **Quality control:** "guaranteed at most 5% defect rate" — upper one-sided CI for $p$.
-    - **Equivalence/non-inferiority:** new treatment is *no worse* than old — lower one-sided CI for treatment difference.
-    - **Drug toxicity:** dose limit guaranteed to be exceeded with <1% probability.
-
-    Advantage: tighter bound on the side of interest (uses entire $\alpha$ on one tail). Disadvantage: no information about the other side.
-
-    Default for scientific reporting is two-sided unless one-sided is well-justified. Regulatory contexts often require one-sided.
+    비율에 대한 Wilson 신뢰구간은 Wald의 나쁜 포함확률을 고치려고 개발되었다. 의심스러울 때는 항상 모의실험으로 포함확률을 확인하라.
 
 ---
 
-**Exercise 6.**
-**Bayesian credible intervals.** What is a Bayesian 95% credible interval and how does it differ from a frequentist CI?
+**연습문제 4.**
+**너비와 신뢰수준.** (a) 신뢰수준이 높아질 때, (b) 표본크기가 커질 때, (c) 모분산이 커질 때 신뢰구간의 너비는 어떻게 변하는가?
 
-??? success "Solution to Exercise 6"
-    **Bayesian 95% credible interval:** $(\theta_L, \theta_U)$ such that posterior probability $P(\theta_L \le \theta \le \theta_U \mid x) = 0.95$.
+??? success "연습문제 4 풀이"
+    신뢰구간 너비 = $2 \cdot z_{\alpha/2} \cdot \mathrm{SE} = 2 z_{\alpha/2} \sigma/\sqrt n$.
 
-    **Frequentist CI:** interval whose construction procedure has 95% coverage over repeated sampling.
+    (a) **신뢰수준이 높으면**(0.95 대신 $1 - \alpha = 0.99$): $z_{0.005} = 2.576$ 대 $z_{0.025} = 1.96$. 너비가 31% 커진다. 더 확신하려면 구간이 넓어진다.
 
-    **Differences:**
+    (b) **$n$이 크면:** 너비가 $1/\sqrt n$으로 줄어든다. $n$을 4배 하면 너비가 절반이 된다.
 
-    - **Interpretation:** Bayesian directly assigns probability to $\theta$; frequentist's probability is about the procedure.
-    - **Subjectivity:** Bayesian requires a prior; frequentist requires the sampling distribution.
-    - **Asymptotic agreement:** with informative data, both converge to similar intervals (Bernstein-von Mises theorem).
-    - **Small-sample:** can differ significantly. Bayesian CI may be much narrower if the prior is informative.
+    (c) **$\sigma$가 크면:** 너비가 $\sigma$에 비례해 커진다. 표준편차가 두 배면 너비도 두 배이다.
 
-    Which to report depends on philosophy and audience. Modern practice often uses both: Bayesian for inference, frequentist for testing hypothesis $H_0: \theta = \theta_0$. Many physicists report both in major experiments.
+    실무적으로, 목표 오차한계를 달성하려면 $n = (z_{\alpha/2} \sigma/\mathrm{ME})^2$이다. $z$와 $\sigma$에 대해 이차이고 오차한계에 대해 역제곱이다.
+
+---
+
+**연습문제 5.**
+**단측 신뢰구간.** 단측 신뢰구간은 언제 적절한가? 예를 하나 들라.
+
+??? success "연습문제 5 풀이"
+    단측 신뢰구간은 관심 방향에 따라 $(-\infty, \hat\theta + z_\alpha \mathrm{SE})$ 또는 $(\hat\theta - z_\alpha \mathrm{SE}, \infty)$이다.
+
+    한쪽 방향만 중요할 때 적절하다:
+
+    - **품질관리:** "불량률이 최대 5%임을 보장" — $p$에 대한 상한 단측 신뢰구간.
+    - **동등성/비열등성:** 새 치료법이 기존 치료법보다 *나쁘지 않다* — 치료 효과 차이에 대한 하한 단측 신뢰구간.
+    - **약물 독성:** 용량 한계를 넘을 확률이 1% 미만임을 보장.
+
+    장점: $\alpha$ 전부를 한쪽 꼬리에 쓰므로 관심 있는 쪽의 한계가 더 조인다. 단점: 반대쪽에 대한 정보가 없다.
+
+    과학적 보고의 기본값은 단측이 충분히 정당화되지 않는 한 양측이다. 규제 맥락에서는 단측을 요구하는 경우가 많다.
+
+---
+
+**연습문제 6.**
+**베이즈 신용구간.** 베이즈 95% 신용구간이란 무엇이며 빈도주의 신뢰구간과 어떻게 다른가?
+
+??? success "연습문제 6 풀이"
+    **베이즈 95% 신용구간:** 사후확률이 $P(\theta_L \le \theta \le \theta_U \mid x) = 0.95$가 되는 구간 $(\theta_L, \theta_U)$.
+
+    **빈도주의 신뢰구간:** 반복표본추출에서 구성 절차의 포함확률이 95%인 구간.
+
+    **차이점:**
+
+    - **해석:** 베이즈는 $\theta$에 직접 확률을 부여하고, 빈도주의의 확률은 절차에 관한 것이다.
+    - **주관성:** 베이즈는 사전분포가 필요하고, 빈도주의는 표본분포가 필요하다.
+    - **점근적 일치:** 자료가 충분히 정보를 담고 있으면 (Bernstein–von Mises 정리에 의해) 둘이 비슷한 구간으로 수렴한다.
+    - **작은 표본:** 상당히 다를 수 있다. 사전분포가 정보를 많이 담고 있으면 베이즈 구간이 훨씬 좁을 수 있다.
+
+    무엇을 보고할지는 철학과 독자에 달려 있다. 현대의 실무에서는 둘 다 쓰는 경우가 많다: 추론에는 베이즈, 가설 $H_0: \theta = \theta_0$의 검정에는 빈도주의. 많은 물리학자들이 주요 실험에서 둘 다 보고한다.

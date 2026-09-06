@@ -1,59 +1,59 @@
-# CI for μ₁ − μ₂
+# μ₁ − μ₂의 신뢰구간
 
-## Two-Sample Confidence Interval for the Difference of Means
+## 평균 차이에 대한 이표본 신뢰구간
 
-When comparing two populations, we are often interested in the difference between their means. A confidence interval for $\mu_1 - \mu_2$ provides a range of plausible values for this difference, considering sampling variability.
+두 모집단을 비교할 때 우리는 흔히 두 평균의 차이에 관심을 둔다. $\mu_1 - \mu_2$의 신뢰구간은 표본변동을 감안하여 이 차이에 대해 그럴듯한 값들의 범위를 준다.
 
 ---
 
-## Formulas by Scenario
+## 상황별 공식
 
-### Known Variances (z-Interval)
+### 분산을 아는 경우 (z-구간)
 
 $$
 (\bar{X}_1 - \bar{X}_2) \pm z_{\alpha/2} \times \sqrt{\frac{\sigma_1^2}{n_1} + \frac{\sigma_2^2}{n_2}}
 $$
 
-where $\sigma_1^2$ and $\sigma_2^2$ are the known population variances, $z_{\alpha/2}$ is the critical value satisfying $P(Z > z_{\alpha/2}) = \alpha/2$.
+여기서 $\sigma_1^2$과 $\sigma_2^2$은 알려진 모분산이고, $z_{\alpha/2}$는 $P(Z > z_{\alpha/2}) = \alpha/2$를 만족하는 임계값이다.
 
-### Unknown, Unequal Variances — Welch's t-Interval
+### 분산을 모르고 서로 다른 경우 — Welch의 t-구간
 
 $$
 (\bar{X}_1 - \bar{X}_2) \pm t_{\alpha/2, \, \text{df}} \times \sqrt{\frac{s_1^2}{n_1} + \frac{s_2^2}{n_2}}
 $$
 
-where the degrees of freedom are computed using the **Welch–Satterthwaite equation**:
+여기서 자유도는 **Welch–Satterthwaite 식**으로 계산한다:
 
 $$
 \text{df} = \frac{\left(\frac{s_1^2}{n_1} + \frac{s_2^2}{n_2}\right)^2}{\frac{1}{n_1 - 1}\left(\frac{s_1^2}{n_1}\right)^2 + \frac{1}{n_2 - 1}\left(\frac{s_2^2}{n_2}\right)^2}
 $$
 
-!!! tip "Default Choice"
-    Prefer Welch's t-interval unless you have strong justification for equal variances.
+!!! tip "기본 선택"
+    분산이 같다는 강한 근거가 없다면 Welch의 t-구간을 택하라.
 
-### Unknown, Equal Variances — Pooled t-Interval
+### 분산을 모르고 서로 같은 경우 — 합동 t-구간
 
 $$
 (\bar{X}_1 - \bar{X}_2) \pm t_{\alpha/2, \, n_1+n_2-2} \times \sqrt{s_p^2\left(\frac{1}{n_1} + \frac{1}{n_2}\right)}
 $$
 
-where the **pooled variance** is
+여기서 **합동분산**은
 
 $$
 s_p^2 = \frac{(n_1 - 1)s_1^2 + (n_2 - 1)s_2^2}{n_1 + n_2 - 2}
 $$
 
-and $\text{df} = n_1 + n_2 - 2$.
+이고 $\text{df} = n_1 + n_2 - 2$이다.
 
-### Large Sample Size (z-Interval with Sample Variances)
+### 큰 표본 (표본분산을 쓰는 z-구간)
 
-For $n_1 \ge 30$ and $n_2 \ge 30$, the normal approximation can be used even with unknown, unequal variances:
+$n_1 \ge 30$이고 $n_2 \ge 30$이면 분산을 모르고 서로 달라도 정규근사를 쓸 수 있다:
 
 $$
 (\bar{X}_1 - \bar{X}_2) \pm z_{\alpha/2} \times \sqrt{\frac{s_1^2}{n_1} + \frac{s_2^2}{n_2}}
 $$
 
-### Python Code
+### Python 코드
 
 ```python
 import numpy as np
@@ -86,39 +86,39 @@ print(f"{confidence_interval = }")
 
 ---
 
-## Examples
+## 예제
 
-### Example 1: 95% CI for Difference in Means (Welch)
+### 예제 1: 평균 차이의 95% 신뢰구간 (Welch)
 
-Two independent samples: Sample 1 has $n_1 = 30$, $\bar{X}_1 = 100$, $s_1 = 15$; Sample 2 has $n_2 = 25$, $\bar{X}_2 = 90$, $s_2 = 20$.
+독립인 두 표본: 표본 1은 $n_1 = 30$, $\bar{X}_1 = 100$, $s_1 = 15$이고, 표본 2는 $n_2 = 25$, $\bar{X}_2 = 90$, $s_2 = 20$이다.
 
-**Solution.**
+**풀이.**
 
 $$
 \text{SE} = \sqrt{\frac{225}{30} + \frac{400}{25}} = \sqrt{7.5 + 16} = \sqrt{23.5} \approx 4.847
 $$
 
-Welch–Satterthwaite degrees of freedom:
+Welch–Satterthwaite 자유도:
 
 $$
-\text{df} = \frac{(7.5 + 16)^2}{\frac{7.5^2}{29} + \frac{16^2}{24}} \approx 48.35 \approx 48
+\text{df} = \frac{(7.5 + 16)^2}{\frac{7.5^2}{29} + \frac{16^2}{24}} = \frac{552.25}{12.606} \approx 43.8
 $$
 
-With $t_{0.025, 48} \approx 2.011$:
+$t_{0.025, 43} \approx 2.017$이므로:
 
 $$
-\text{ME} = 2.011 \times 4.847 \approx 9.75
+\text{ME} = 2.017 \times 4.847 \approx 9.78
 $$
 
 $$
-\boxed{(0.25,\ 19.75)}
+\boxed{(0.22,\ 19.78)}
 $$
 
-We are 95% confident that the true difference between the population means lies between 0.25 and 19.75.
+두 모평균의 참 차이가 0.22와 19.78 사이에 있다고 95% 신뢰한다.
 
 ---
 
-## Simulation: Two-Sample Mean CI Coverage
+## 모의실험: 이표본 평균 신뢰구간의 포함확률
 
 ```python
 #!/usr/bin/env python3
@@ -204,98 +204,98 @@ if __name__ == "__main__":
 
 ---
 
-## Key Points
+## 핵심 정리
 
-- When comparing two population means, we construct a confidence interval for $\mu_1 - \mu_2$.
-- If the population variances are unknown and unequal, use **Welch's t-interval** (the default).
-- If variances are assumed equal, the **pooled t-interval** uses a combined variance estimate.
-- The width of the confidence interval depends on the sample sizes, sample variances, and confidence level.
+- 두 모평균을 비교할 때는 $\mu_1 - \mu_2$의 신뢰구간을 구성한다.
+- 모분산을 모르고 서로 다르면 **Welch의 t-구간**을 쓴다(기본 선택).
+- 분산이 같다고 가정하면 **합동 t-구간**이 결합된 분산추정값을 쓴다.
+- 신뢰구간의 너비는 표본크기, 표본분산, 신뢰수준에 달려 있다.
 
 ---
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Two independent samples: $\sigma_A = 15, n_A = 36$; $\sigma_B = 20, n_B = 49$. Compute $\mathrm{SE}(\bar X_A - \bar X_B)$.
+**연습문제 1.**
+독립인 두 표본: $\sigma_A = 15, n_A = 36$; $\sigma_B = 20, n_B = 49$. $\mathrm{SE}(\bar X_A - \bar X_B)$를 계산하라.
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
     $\mathrm{SE} = \sqrt{15^2/36 + 20^2/49} = \sqrt{6.25 + 8.16} = \sqrt{14.41} \approx 3.80$.
 
 ---
 
-**Exercise 2.**
-Sample 1: $\bar X_1 = 55, s_1 = 8, n_1 = 30$. Sample 2: $\bar X_2 = 50, s_2 = 10, n_2 = 35$. 95% CI for $\mu_1 - \mu_2$.
+**연습문제 2.**
+표본 1: $\bar X_1 = 55, s_1 = 8, n_1 = 30$. 표본 2: $\bar X_2 = 50, s_2 = 10, n_2 = 35$. $\mu_1 - \mu_2$의 95% 신뢰구간을 구하라.
 
-??? success "Solution to Exercise 2"
-    $\mathrm{SE} = \sqrt{64/30 + 100/35} \approx 2.233$. With large $n$'s, use $z$: ME = $1.96 \cdot 2.233 \approx 4.38$.
+??? success "연습문제 2 풀이"
+    $\mathrm{SE} = \sqrt{64/30 + 100/35} \approx 2.233$. $n$이 크므로 $z$를 쓴다: 오차한계 = $1.96 \cdot 2.233 \approx 4.38$.
 
-    CI: $(5 - 4.38, 5 + 4.38) = (0.62, 9.38)$. Does *not* include 0 — evidence of a difference.
+    신뢰구간: $(5 - 4.38, 5 + 4.38) = (0.62, 9.38)$. 0을 포함하지 *않는다* — 차이가 있다는 증거이다.
 
 ---
 
-**Exercise 3.**
-Welch's CI for two teaching methods: A ($n = 30, \bar X = 78, s = 8$), B ($n = 35, \bar X = 82, s = 10$). 95% CI for $\mu_A - \mu_B$.
+**연습문제 3.**
+두 교수법에 대한 Welch 신뢰구간: A ($n = 30, \bar X = 78, s = 8$), B ($n = 35, \bar X = 82, s = 10$). $\mu_A - \mu_B$의 95% 신뢰구간을 구하라.
 
-??? success "Solution to Exercise 3"
+??? success "연습문제 3 풀이"
     $\mathrm{SE} = \sqrt{64/30 + 100/35} \approx 2.234$.
 
-    Welch's df: $\nu = (2.133 + 2.857)^2/[2.133^2/29 + 2.857^2/34] = 24.9/0.397 \approx 62.7$. Use $t_{62}$.
+    Welch 자유도: $\nu = (2.133 + 2.857)^2/[2.133^2/29 + 2.857^2/34] = 24.9/0.397 \approx 62.7$. $t_{62}$를 쓴다.
 
-    $t_{0.975, 62} \approx 2.00$. CI: $(78 - 82) \pm 2.00 \cdot 2.234 = -4 \pm 4.47 = (-8.47, 0.47)$.
+    $t_{0.975, 62} \approx 2.00$. 신뢰구간: $(78 - 82) \pm 2.00 \cdot 2.234 = -4 \pm 4.47 = (-8.47, 0.47)$.
 
-    Contains 0 — cannot conclude a significant difference at 5% level. Mostly negative, suggesting Method B may be better, but evidence inconclusive.
-
----
-
-**Exercise 4.**
-**Pooled vs Welch.** When to use each, and what assumption distinguishes them?
-
-??? success "Solution to Exercise 4"
-    **Pooled $t$-test:** assumes $\sigma_1 = \sigma_2$. Pools both samples to estimate the common $\sigma$. Df $= n_1 + n_2 - 2$.
-
-    **Welch's $t$-test:** allows $\sigma_1 \ne \sigma_2$. Uses separate variances. Approximate df via Welch-Satterthwaite formula.
-
-    **When to use pooled:** when variances are *known* to be equal (e.g., by experimental design). Modest efficiency gain.
-
-    **When to use Welch:** default. Doesn't require equal variances; nearly as efficient as pooled when variances are actually equal.
-
-    Modern recommendation: **always use Welch** unless equal-variance is structurally guaranteed. R's `t.test` defaults to Welch. The cost of "wrongly" using Welch when variances are equal is small; the cost of "wrongly" pooling when they aren't can be substantial.
+    0을 포함한다 — 5% 수준에서 유의한 차이를 결론지을 수 없다. 대부분 음수여서 방법 B가 더 나을 수 있음을 시사하지만 증거가 결정적이지 않다.
 
 ---
 
-**Exercise 5.**
-**Paired vs independent.** $n = 50$ subjects measured pre/post treatment. Should the two-sample CI from this exercise apply?
+**연습문제 4.**
+**합동 대 Welch.** 각각 언제 쓰며, 둘을 가르는 가정은 무엇인가?
 
-??? success "Solution to Exercise 5"
-    **No.** The pre/post measurements are *paired* — same subject twice. They are *not* independent. Using a two-sample CI would treat them as independent and ignore the within-subject correlation.
+??? success "연습문제 4 풀이"
+    **합동 $t$-검정:** $\sigma_1 = \sigma_2$를 가정한다. 두 표본을 합쳐 공통 $\sigma$를 추정한다. 자유도 $= n_1 + n_2 - 2$.
 
-    **Correct approach:** compute differences $D_i = \mathrm{post}_i - \mathrm{pre}_i$ for each subject. One-sample CI on $D$ using $\bar D, s_D, n - 1$ degrees of freedom.
+    **Welch $t$-검정:** $\sigma_1 \ne \sigma_2$를 허용한다. 각각의 분산을 따로 쓴다. Welch-Satterthwaite 공식으로 근사 자유도를 구한다.
 
-    **Why this matters:** if pre/post are positively correlated (typical), $\mathrm{Var}(D) < \mathrm{Var}(\mathrm{pre}) + \mathrm{Var}(\mathrm{post})$. Paired analysis has smaller SE, tighter CI, more power.
+    **합동을 쓸 때:** (예컨대 실험설계에 의해) 분산이 같다고 *알려져* 있을 때. 효율 이득이 크지 않다.
 
-    The two-sample CI loses information about pairing and gives wider intervals than necessary. Always match the analysis to the design.
+    **Welch를 쓸 때:** 기본. 분산이 같을 필요가 없고, 실제로 분산이 같을 때도 합동에 거의 맞먹는 효율을 낸다.
+
+    현대의 권고: 등분산이 구조적으로 보장되지 않는 한 **항상 Welch를 쓰라**. R의 `t.test`는 기본이 Welch이다. 분산이 같은데 Welch를 "잘못" 쓰는 대가는 작지만, 다른데 "잘못" 합동하는 대가는 클 수 있다.
 
 ---
 
-**Exercise 6.**
-**Effect size.** In addition to the CI for $\mu_1 - \mu_2$, report **Cohen's $d$** = (effect)/(pooled SD). Interpret.
+**연습문제 5.**
+**대응 대 독립.** 피험자 $n = 50$명을 치료 전후로 측정했다. 이 연습문제의 이표본 신뢰구간을 적용해야 하는가?
 
-??? success "Solution to Exercise 6"
-    For Exercise 3: pooled SD $= \sqrt{((29 \cdot 64) + (34 \cdot 100))/63} = \sqrt{(1856 + 3400)/63} = \sqrt{83.4} \approx 9.13$.
+??? success "연습문제 5 풀이"
+    **아니다.** 전후 측정은 같은 피험자를 두 번 잰 것이므로 *대응*되어 있다. 서로 독립이 *아니다*. 이표본 신뢰구간을 쓰면 이들을 독립으로 취급하여 피험자 내 상관을 무시하게 된다.
 
-    Cohen's $d = (78 - 82)/9.13 \approx -0.44$.
+    **올바른 접근:** 피험자마다 차이 $D_i = \mathrm{post}_i - \mathrm{pre}_i$를 계산하고, $\bar D, s_D$와 자유도 $n - 1$로 $D$에 대한 일표본 신뢰구간을 구한다.
 
-    **Interpretation:**
+    **왜 중요한가:** 전후가 (흔히 그렇듯) 양의 상관을 가지면 $\mathrm{Var}(D) < \mathrm{Var}(\mathrm{pre}) + \mathrm{Var}(\mathrm{post})$이다. 대응 분석은 표준오차가 작고 신뢰구간이 좁으며 검정력이 크다.
 
-    - $|d| = 0.2$: small effect.
-    - $|d| = 0.5$: medium effect.
-    - $|d| = 0.8$: large effect.
+    이표본 신뢰구간은 대응에 관한 정보를 잃고 필요 이상으로 넓은 구간을 준다. 분석은 항상 설계에 맞추어야 한다.
 
-    A $d$ of $-0.44$ is a "medium-small" effect — Method B's mean is about 0.44 SDs above A's mean. The CI didn't quite reach significance, but the effect size is non-negligible.
+---
 
-    Always report both:
+**연습문제 6.**
+**효과크기.** $\mu_1 - \mu_2$의 신뢰구간과 함께 **Cohen의 $d$** = (효과)/(합동 표준편차)를 보고하라. 해석하라.
 
-    - **Statistical significance** (CI excludes 0, $p < \alpha$).
-    - **Practical significance** (effect size large enough to matter).
+??? success "연습문제 6 풀이"
+    연습문제 3에서 합동 표준편차 $= \sqrt{((29 \cdot 64) + (34 \cdot 100))/63} = \sqrt{(1856 + 3400)/63} = \sqrt{83.4} \approx 9.13$.
 
-    Effect sizes are dimensionless and comparable across studies and disciplines — useful for meta-analysis. Significance tests are sample-size-dependent; effect sizes are not.
+    Cohen의 $d = (78 - 82)/9.13 \approx -0.44$.
+
+    **해석:**
+
+    - $|d| = 0.2$: 작은 효과.
+    - $|d| = 0.5$: 중간 효과.
+    - $|d| = 0.8$: 큰 효과.
+
+    $d = -0.44$는 "중간에 조금 못 미치는" 효과이다 — 방법 B의 평균이 A의 평균보다 약 0.44 표준편차 위에 있다. 신뢰구간은 유의성에 살짝 못 미쳤지만 효과크기는 무시할 수준이 아니다.
+
+    항상 둘 다 보고하라:
+
+    - **통계적 유의성** (신뢰구간이 0을 배제, $p < \alpha$).
+    - **실질적 유의성** (효과크기가 의미 있을 만큼 큰가).
+
+    효과크기는 무차원이어서 연구와 분야를 넘어 비교할 수 있으므로 메타분석에 유용하다. 유의성 검정은 표본크기에 좌우되지만 효과크기는 그렇지 않다.
