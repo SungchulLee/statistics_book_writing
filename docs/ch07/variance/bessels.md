@@ -1,96 +1,96 @@
-# Bessel's Correction
+# Bessel 수정
 
-## Introduction
+## 들어가며
 
-**Bessel's correction** refers to the use of $n-1$ instead of $n$ in the denominator of the sample variance formula, yielding an unbiased estimator of the population variance. Named after Friedrich Bessel, this correction accounts for the fact that estimating the mean from the same data "uses up" one degree of freedom, causing the naive estimator (dividing by $n$) to systematically underestimate the true variance.
+**Bessel 수정**은 표본분산 공식의 분모에 $n$ 대신 $n-1$을 쓰는 것을 말하며, 그 결과 모분산의 불편추정량을 얻는다. Friedrich Bessel의 이름을 딴 이 수정은 같은 자료로 평균을 추정하느라 자유도 하나가 "소모"되어 소박한 추정량($n$으로 나누기)이 참 분산을 체계적으로 과소추정한다는 사실을 보정한다.
 
-## Definition
+## 정의
 
-The **Bessel-corrected sample variance** is:
+**Bessel 수정 표본분산**은:
 
 $$S^2 = \frac{1}{n-1}\sum_{i=1}^n (X_i - \bar{X})^2$$
 
-This is the standard "sample variance" used in most statistical software (e.g., `numpy.var(ddof=1)`, R's `var()`).
+대부분의 통계 소프트웨어에서 쓰는 표준적인 "표본분산"이다(예: `numpy.var(ddof=1)`, R의 `var()`).
 
-## Unbiasedness Proof
+## 불편성의 증명
 
-### Main Result
+### 주요 결과
 
 $$E[S^2] = \sigma^2$$
 
-### Proof
+### 증명
 
-Starting from the key identity:
+핵심 항등식에서 출발한다:
 
 $$\sum_{i=1}^n (X_i - \bar{X})^2 = \sum_{i=1}^n (X_i - \mu)^2 - n(\bar{X} - \mu)^2$$
 
-Taking expectations:
+기댓값을 취하면:
 
 $$E\left[\sum_{i=1}^n (X_i - \bar{X})^2\right] = n\sigma^2 - n \cdot \frac{\sigma^2}{n} = (n-1)\sigma^2$$
 
-Therefore:
+따라서:
 
 $$E\left[\frac{1}{n-1}\sum_{i=1}^n (X_i - \bar{X})^2\right] = \frac{(n-1)\sigma^2}{n-1} = \sigma^2$$
 
-### Why n-1? The Degrees of Freedom Argument
-The $n$ deviations $d_i = X_i - \bar{X}$ are subject to the constraint:
+### 왜 n-1인가? 자유도 논증
+$n$개의 편차 $d_i = X_i - \bar{X}$는 다음 제약을 받는다:
 
 $$\sum_{i=1}^n d_i = \sum_{i=1}^n (X_i - \bar{X}) = 0$$
 
-This means only $n-1$ of the deviations are free to vary independently. We say there are $n-1$ **degrees of freedom**. Dividing by the degrees of freedom ($n-1$) instead of the number of observations ($n$) corrects the bias.
+즉 편차 중 $n-1$개만이 독립적으로 자유롭게 변할 수 있다. 이를 두고 **자유도**가 $n-1$이라고 한다. 관측값의 개수($n$)가 아니라 자유도($n-1$)로 나누면 편향이 보정된다.
 
-**General principle:** When estimating a variance using $k$ estimated parameters, divide by $n - k$:
+**일반 원리:** 추정한 모수가 $k$개일 때 분산을 추정하려면 $n - k$로 나눈다:
 
-- Mean unknown, variance of $X$: divide by $n - 1$
-- Regression with $p$ coefficients: residual variance uses $n - p$
+- 평균을 모르고 $X$의 분산을 추정: $n - 1$로 나눈다
+- 계수가 $p$개인 회귀: 잔차분산은 $n - p$를 쓴다
 
-## Distribution of S-squared
-### For Normal Populations
+## S-squared의 분포
+### 정규모집단의 경우
 
-If $X_i \sim N(\mu, \sigma^2)$, then:
+$X_i \sim N(\mu, \sigma^2)$이면,
 
 $$\frac{(n-1)S^2}{\sigma^2} = \frac{\sum_{i=1}^n (X_i - \bar{X})^2}{\sigma^2} \sim \chi^2_{n-1}$$
 
-This exact distributional result gives us:
+이 정확한 분포 결과로부터:
 
-$$E[S^2] = \sigma^2 \cdot \frac{n-1}{n-1} = \sigma^2 \quad \text{(confirming unbiasedness)}$$
-
-$$\text{Var}(S^2) = \frac{2\sigma^4}{n-1}$$
-
-### Independence of X-bar and S-squared
-For normal populations, $\bar{X}$ and $S^2$ are **independent**. This is a remarkable property unique to the normal distribution (by Cochran's theorem) and is crucial for the derivation of the $t$-distribution used in hypothesis testing.
-
-## Properties
-
-### Variance and MSE
-
-For normal populations:
+$$E[S^2] = \sigma^2 \cdot \frac{n-1}{n-1} = \sigma^2 \quad \text{(불편성 확인)}$$
 
 $$\text{Var}(S^2) = \frac{2\sigma^4}{n-1}$$
 
-$$\text{MSE}(S^2) = \text{Var}(S^2) = \frac{2\sigma^4}{n-1} \quad \text{(since bias = 0)}$$
+### X-bar와 S-squared의 독립성
+정규모집단에서 $\bar{X}$와 $S^2$은 **독립**이다. 이는 (Cochran 정리에 의해) 정규분포에만 있는 놀라운 성질이며, 가설검정에 쓰이는 $t$-분포를 유도하는 데 결정적이다.
 
-### Consistency
+## 성질
 
-$S^2$ is consistent for $\sigma^2$:
+### 분산과 평균제곱오차
 
-$$S^2 \xrightarrow{p} \sigma^2 \quad \text{as } n \to \infty$$
+정규모집단에서:
 
-### MSE Comparison with Alternatives
+$$\text{Var}(S^2) = \frac{2\sigma^4}{n-1}$$
 
-For normal populations:
+$$\text{MSE}(S^2) = \text{Var}(S^2) = \frac{2\sigma^4}{n-1} \quad \text{(편향 = 0이므로)}$$
+
+### 일치성
+
+$S^2$은 $\sigma^2$에 대해 일치한다:
+
+$$S^2 \xrightarrow{p} \sigma^2 \quad (n \to \infty)$$
+
+### 대안과의 평균제곱오차 비교
+
+정규모집단에서:
 
 $$\text{MSE}(S^2) = \frac{2}{n-1}\sigma^4 > \frac{2n-1}{n^2}\sigma^4 = \text{MSE}(\tilde{S}^2)$$
 
-The unbiased estimator has **higher MSE** than the biased naive estimator. This is because unbiasedness comes at the cost of increased variance, and the variance increase outweighs the bias reduction (in MSE terms).
+불편추정량이 편향된 소박한 추정량보다 **평균제곱오차가 크다**. 불편성이 분산 증가라는 대가를 치르며, (평균제곱오차 관점에서) 그 분산 증가가 편향 감소보다 크기 때문이다.
 
-## Practical Significance
+## 실질적 의의
 
-### When Does It Matter?
+### 언제 중요한가?
 
-The difference between dividing by $n$ and $n-1$:
+$n$으로 나누는 것과 $n-1$로 나누는 것의 차이:
 
-| $n$ | $(n-1)/n$ | Relative error |
+| $n$ | $(n-1)/n$ | 상대오차 |
 |-----|-----------|---------------|
 | 3 | 0.667 | 33.3% |
 | 5 | 0.800 | 20.0% |
@@ -99,156 +99,156 @@ The difference between dividing by $n$ and $n-1$:
 | 100 | 0.990 | 1.0% |
 | 1000 | 0.999 | 0.1% |
 
-For $n > 30$, the practical difference is small. For $n < 10$, the correction is substantial.
+$n > 30$이면 실질적인 차이가 작다. $n < 10$이면 수정이 상당하다.
 
-### Standard Deviation Bias
+### 표준편차의 편향
 
-While $S^2$ is unbiased for $\sigma^2$, the sample standard deviation $S = \sqrt{S^2}$ is **not** unbiased for $\sigma$. By Jensen's inequality (since $\sqrt{\cdot}$ is concave):
+$S^2$은 $\sigma^2$에 대해 불편이지만, 표본표준편차 $S = \sqrt{S^2}$은 $\sigma$에 대해 불편이 **아니다**. ($\sqrt{\cdot}$가 오목이므로) Jensen 부등식에 의해:
 
 $$E[S] = E[\sqrt{S^2}] < \sqrt{E[S^2]} = \sigma$$
 
-For normal populations:
+정규모집단에서:
 
 $$E[S] = \sigma \cdot \sqrt{\frac{2}{n-1}} \cdot \frac{\Gamma(n/2)}{\Gamma((n-1)/2)}$$
 
-The correction factor $c_4 = \sqrt{2/(n-1)} \cdot \Gamma(n/2)/\Gamma((n-1)/2)$ can be used to obtain an unbiased estimator of $\sigma$: $\hat{\sigma} = S/c_4$.
+보정인자 $c_4 = \sqrt{2/(n-1)} \cdot \Gamma(n/2)/\Gamma((n-1)/2)$를 쓰면 $\sigma$의 불편추정량 $\hat{\sigma} = S/c_4$를 얻을 수 있다.
 
-## Software Implementation
+## 소프트웨어 구현
 
-Different software has different defaults:
+소프트웨어마다 기본값이 다르다:
 
-| Software | `var()` default | Divisor |
+| 소프트웨어 | `var()` 기본값 | 나누는 수 |
 |----------|----------------|---------|
-| Python `numpy.var()` | $n$ (population) | `ddof=0` |
-| Python `numpy.var(ddof=1)` | $n-1$ (sample) | `ddof=1` |
-| R `var()` | $n-1$ (sample) | — |
-| Excel `VAR.S()` | $n-1$ (sample) | — |
-| Excel `VAR.P()` | $n$ (population) | — |
-| pandas `.var()` | $n-1$ (sample) | `ddof=1` |
+| Python `numpy.var()` | $n$ (모집단) | `ddof=0` |
+| Python `numpy.var(ddof=1)` | $n-1$ (표본) | `ddof=1` |
+| R `var()` | $n-1$ (표본) | — |
+| Excel `VAR.S()` | $n-1$ (표본) | — |
+| Excel `VAR.P()` | $n$ (모집단) | — |
+| pandas `.var()` | $n-1$ (표본) | `ddof=1` |
 
-**Common pitfall:** Using `numpy.var()` without `ddof=1` gives the biased (naive) estimator. Always specify `ddof=1` when you want the unbiased sample variance.
+**흔한 함정:** `ddof=1` 없이 `numpy.var()`를 쓰면 편향된(소박한) 추정량이 나온다. 불편 표본분산을 원한다면 항상 `ddof=1`을 지정하라.
 
-## Generalization: Degrees of Freedom in Regression
+## 일반화: 회귀에서의 자유도
 
-In linear regression $Y = X\beta + \epsilon$, the residual variance estimator is:
+선형회귀 $Y = X\beta + \epsilon$에서 잔차분산추정량은:
 
 $$\hat{\sigma}^2 = \frac{1}{n-p}\sum_{i=1}^n (Y_i - \hat{Y}_i)^2 = \frac{\text{RSS}}{n-p}$$
 
-where $p$ is the number of estimated coefficients. This generalizes Bessel's correction: we lose one degree of freedom for each estimated parameter.
+여기서 $p$는 추정한 계수의 개수이다. 이는 Bessel 수정을 일반화한 것이다: 추정한 모수 하나마다 자유도 하나를 잃는다.
 
-## Connections to Finance
+## 금융과의 연결
 
-- **Realized volatility**: When computing daily realized volatility from intraday returns, the choice of $n$ vs $n-1$ is often irrelevant (many observations). But for monthly volatility from daily data (~21 observations), the correction matters.
+- **실현변동성**: 일중 수익률로 일별 실현변동성을 계산할 때는 $n$이냐 $n-1$이냐가 대개 무의미하다(관측값이 많다). 그러나 일별 자료로 월별 변동성을 구할 때(약 21개 관측값)는 수정이 의미가 있다.
 
-- **Tracking error**: Computing tracking error of a portfolio vs. benchmark uses $S = \sqrt{\frac{1}{n-1}\sum(r_p - r_b)^2}$ with Bessel's correction.
+- **추적오차**: 포트폴리오와 벤치마크의 추적오차는 Bessel 수정을 써서 $S = \sqrt{\frac{1}{n-1}\sum(r_p - r_b)^2}$로 계산한다.
 
-- **Risk budgeting**: Variance decomposition in portfolio risk uses the unbiased covariance matrix, which divides by $n-1$.
+- **위험 배분**: 포트폴리오 위험의 분산분해는 $n-1$로 나누는 불편 공분산행렬을 쓴다.
 
-## Summary
+## 요약
 
-Bessel's correction ($n-1$ in the denominator) produces an unbiased estimator of the population variance. The correction compensates for the "lost" degree of freedom from estimating the mean. While the unbiased estimator has higher MSE than the naive one, unbiasedness is often preferred for its theoretical properties and is the standard in most statistical software. For large samples, the choice between $n$ and $n-1$ is inconsequential.
+Bessel 수정(분모의 $n-1$)은 모분산의 불편추정량을 만든다. 이 수정은 평균을 추정하느라 "잃어버린" 자유도를 보상한다. 불편추정량이 소박한 추정량보다 평균제곱오차가 크기는 하지만, 이론적 성질 덕분에 불편성이 흔히 선호되며 대부분의 통계 소프트웨어에서 표준이다. 큰 표본에서는 $n$과 $n-1$ 중 무엇을 택하든 중요하지 않다.
 
-## Key Formulas
+## 핵심 공식
 
-| Quantity | Formula |
+| 양 | 공식 |
 |----------|---------|
-| Bessel-corrected variance | $S^2 = \frac{1}{n-1}\sum(X_i - \bar{X})^2$ |
-| Unbiasedness | $E[S^2] = \sigma^2$ |
-| Distribution (Normal) | $(n-1)S^2/\sigma^2 \sim \chi^2_{n-1}$ |
-| Variance (Normal) | $\text{Var}(S^2) = 2\sigma^4/(n-1)$ |
-| $S$ is biased for $\sigma$ | $E[S] < \sigma$ (Jensen's inequality) |
-| General regression | $\hat{\sigma}^2 = \text{RSS}/(n-p)$ |
+| Bessel 수정 분산 | $S^2 = \frac{1}{n-1}\sum(X_i - \bar{X})^2$ |
+| 불편성 | $E[S^2] = \sigma^2$ |
+| 분포 (정규) | $(n-1)S^2/\sigma^2 \sim \chi^2_{n-1}$ |
+| 분산 (정규) | $\text{Var}(S^2) = 2\sigma^4/(n-1)$ |
+| $S$는 $\sigma$에 대해 편향 | $E[S] < \sigma$ (Jensen 부등식) |
+| 일반적인 회귀 | $\hat{\sigma}^2 = \text{RSS}/(n-p)$ |
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-**Chi-squared distribution of $S^2$** for normal data. (a) Show $(n-1)S^2/\sigma^2 \sim \chi^2_{n-1}$. (b) 95% CI for $\sigma^2$ with $n = 20, S^2 = 16$. (c) Why asymmetric?
+**연습문제 1.**
+정규 자료에서 **$S^2$의 카이제곱분포.** (a) $(n-1)S^2/\sigma^2 \sim \chi^2_{n-1}$임을 보여라. (b) $n = 20, S^2 = 16$일 때 $\sigma^2$의 95% 신뢰구간. (c) 왜 비대칭인가?
 
-??? success "Solution to Exercise 1"
-    (a) $\sum(X_i - \bar X)^2/\sigma^2 = \sum(X_i - \mu)^2/\sigma^2 - n(\bar X - \mu)^2/\sigma^2$. The first is $\chi^2_n$, the second is $\chi^2_1$ and independent (Cochran's theorem). So the difference is $\chi^2_{n-1}$.
+??? success "연습문제 1 풀이"
+    (a) $\sum(X_i - \bar X)^2/\sigma^2 = \sum(X_i - \mu)^2/\sigma^2 - n(\bar X - \mu)^2/\sigma^2$. 첫 항은 $\chi^2_n$, 둘째 항은 $\chi^2_1$이며 (Cochran 정리에 의해) 서로 독립이다. 따라서 그 차이는 $\chi^2_{n-1}$이다.
 
-    (b) $\chi^2_{19, 0.025} = 8.907$, $\chi^2_{19, 0.975} = 32.852$. CI: $(19 \cdot 16/32.852, 19 \cdot 16/8.907) = (9.25, 34.13)$.
+    (b) $\chi^2_{19, 0.025} = 8.907$, $\chi^2_{19, 0.975} = 32.852$. 신뢰구간: $(19 \cdot 16/32.852, 19 \cdot 16/8.907) = (9.25, 34.13)$.
 
-    (c) Chi-squared is right-skewed; quantiles are asymmetric. Upper bound farther from $S^2$ than lower. The asymmetry shrinks as $n \to \infty$ (chi-squared approaches normal by CLT applied to squared standard normals).
-
----
-
-**Exercise 2.**
-**Bias of $S$.** (a) Why $\mathbb{E}[S] < \sigma$. (b) For $n = 5$, compute $c_4$. (c) Used in practice?
-
-??? success "Solution to Exercise 2"
-    (a) $\sqrt{\cdot}$ is concave. Jensen: $\mathbb{E}[\sqrt{S^2}] < \sqrt{\mathbb{E}[S^2]} = \sigma$. Strict because $S^2$ has nontrivial variance.
-
-    (b) $c_4 = \sqrt{2/(n-1)} \cdot \Gamma(n/2)/\Gamma((n-1)/2)$. For $n = 5$: $c_4 = \sqrt{2/4} \cdot \Gamma(2.5)/\Gamma(2) = (1/\sqrt 2) \cdot (3\sqrt\pi/4)/1 \approx 0.940$.
-
-    Bias-corrected SD: $S/c_4$.
-
-    (c) Rarely used; bias is small ($\sim 6\%$ at $n = 5$, $< 1\%$ at $n \ge 30$). SPC charts (Shewhart) use $c_4$; most other applications report $S$ uncorrected.
+    (c) 카이제곱분포는 오른쪽으로 치우쳐 있어 분위수가 비대칭이다. 상한이 하한보다 $S^2$에서 멀다. $n \to \infty$이면 비대칭성이 줄어든다(표준정규 제곱에 중심극한정리를 적용하면 카이제곱이 정규에 가까워진다).
 
 ---
 
-**Exercise 3.**
-**Realized volatility.** 78 five-minute returns per day. (a) Naive bias fraction. (b) Does Bessel matter? (c) 21-day rolling window?
+**연습문제 2.**
+**$S$의 편향.** (a) $\mathbb{E}[S] < \sigma$인 이유. (b) $n = 5$일 때 $c_4$를 계산하라. (c) 실무에서 쓰이는가?
 
-??? success "Solution to Exercise 3"
-    (a) Naive bias = $-\sigma^2/n = -\sigma^2/78 \approx -1.3\%$ of true variance. Negligible.
+??? success "연습문제 2 풀이"
+    (a) $\sqrt{\cdot}$는 오목이다. Jensen: $\mathbb{E}[\sqrt{S^2}] < \sqrt{\mathbb{E}[S^2]} = \sigma$. $S^2$의 분산이 0이 아니므로 부등호는 엄격하다.
 
-    (b) Bessel correction: factor $78/77 \approx 1.013$. Smaller than microstructure noise and intraday volatility patterns. Doesn't matter.
+    (b) $c_4 = \sqrt{2/(n-1)} \cdot \Gamma(n/2)/\Gamma((n-1)/2)$. $n = 5$일 때: $c_4 = \sqrt{2/4} \cdot \Gamma(2.5)/\Gamma(2) = (1/\sqrt 2) \cdot (3\sqrt\pi/4)/1 \approx 0.940$.
 
-    (c) 21-day rolling = 21 daily variance estimates. SE of mean variance estimate: $\sqrt{2 \sigma^4/(n_{\text{day}} - 1)}/\sqrt{21}$. Trade-off: smoother estimates but lag volatility regime changes by 10 days on average. Half-life of regime shift: ~10 days.
+    편향 보정 표준편차: $S/c_4$.
 
----
-
-**Exercise 4.**
-**Bessel's correction generalization.** For regression with $p$ parameters, residual variance estimator divides by $n - p$. Why?
-
-??? success "Solution to Exercise 4"
-    Residuals $e_i = Y_i - \hat Y_i$ satisfy linear constraints (normal equations: $\mathbf X^T \mathbf e = 0$). $\mathbf X$ has $p$ columns, so there are $p$ linear constraints, leaving $n - p$ effective dof.
-
-    $\mathbb{E}[\mathrm{SSE}/\sigma^2] = n - p$ (chi-squared distribution under normality). So $\hat\sigma^2 = \mathrm{SSE}/(n - p)$ is unbiased.
-
-    Generalizes Bessel's correction: $n - 1$ is the case $p = 1$ (intercept only).
-
-    Connection to t-test/F-test: residual variance with $n - p$ dof determines the appropriate $t$ critical value (df $= n - p$).
+    (c) 거의 쓰이지 않는다. 편향이 작기 때문이다($n = 5$에서 약 6%, $n \ge 30$에서 1% 미만). 통계적 공정관리(Shewhart) 관리도는 $c_4$를 쓰지만, 다른 대부분의 응용에서는 보정하지 않은 $S$를 보고한다.
 
 ---
 
-**Exercise 5.**
-**Why divide by $n - 1$ exactly?** Could other denominators be justified?
+**연습문제 3.**
+**실현변동성.** 하루에 5분 수익률 78개. (a) 소박한 추정량의 편향 비율. (b) Bessel 수정이 중요한가? (c) 21일 이동창은?
 
-??? success "Solution to Exercise 5"
-    **Unbiasedness:** $n - 1$ is the unique divisor making $S^2$ unbiased.
+??? success "연습문제 3 풀이"
+    (a) 소박한 추정량의 편향 = $-\sigma^2/n = -\sigma^2/78$로 참 분산의 약 $-1.3\%$. 무시할 만하다.
 
-    **MSE-optimal:** $n + 1$ minimizes MSE (Exercise from earlier section).
+    (b) Bessel 수정의 인자는 $78/77 \approx 1.013$이다. 미시구조 잡음이나 일중 변동성 패턴보다 작다. 중요하지 않다.
 
-    **MLE:** $n$ is the MLE divisor (for normal data).
-
-    **Justification for $n - 1$:** unbiasedness is a "clean" property — averages of unbiased estimators are unbiased; expectations are interpretable. Statistical convention favors $n - 1$ even though it's not MSE-optimal.
-
-    Different fields make different choices:
-
-    - Engineering / SPC: $n - 1$ for sample variance, $c_4$-corrected for SD.
-    - Machine learning: often $n$ (MLE) without thinking about bias.
-    - Bayesian: posterior credible intervals based on $\chi^2_{n-1}$.
-    - Robust statistics: median absolute deviation, irrelevant divisor choice.
+    (c) 21일 이동창은 일별 분산추정값 21개이다. 평균 분산추정값의 표준오차: $\sqrt{2 \sigma^4/(n_{\text{day}} - 1)}/\sqrt{21}$. 맞바꿈: 추정값이 매끄러워지지만 변동성 국면 전환을 평균 10일 뒤늦게 반영한다. 국면 전환의 반감기: 약 10일.
 
 ---
 
-**Exercise 6.**
-**Why bias correction matters for very small samples but not large samples.** Concrete demonstration with $n = 3, 10, 100$.
+**연습문제 4.**
+**Bessel 수정의 일반화.** 모수가 $p$개인 회귀에서 잔차분산추정량은 $n - p$로 나눈다. 왜인가?
 
-??? success "Solution to Exercise 6"
-    Naive vs unbiased estimator difference: $\hat\sigma^2_{\text{naive}}/\hat\sigma^2_{\text{unbiased}} = (n-1)/n$.
+??? success "연습문제 4 풀이"
+    잔차 $e_i = Y_i - \hat Y_i$는 선형 제약(정규방정식: $\mathbf X^T \mathbf e = 0$)을 만족한다. $\mathbf X$의 열이 $p$개이므로 선형 제약이 $p$개이고, 유효 자유도는 $n - p$가 남는다.
 
-    | $n$ | $(n-1)/n$ | Discrepancy |
+    $\mathbb{E}[\mathrm{SSE}/\sigma^2] = n - p$이다(정규성 아래에서 카이제곱분포). 따라서 $\hat\sigma^2 = \mathrm{SSE}/(n - p)$는 불편이다.
+
+    Bessel 수정의 일반화이다: $n - 1$은 $p = 1$(절편만)인 경우이다.
+
+    t-검정/F-검정과의 연결: 자유도가 $n - p$인 잔차분산이 적절한 $t$ 임계값(자유도 $= n - p$)을 결정한다.
+
+---
+
+**연습문제 5.**
+**하필 $n - 1$로 나누는 이유는?** 다른 분모를 정당화할 수 있는가?
+
+??? success "연습문제 5 풀이"
+    **불편성:** $n - 1$은 $S^2$을 불편으로 만드는 유일한 분모이다.
+
+    **평균제곱오차 최적:** $n + 1$이 평균제곱오차를 최소화한다(앞 절의 연습문제).
+
+    **MLE:** (정규 자료에서) $n$이 MLE의 분모이다.
+
+    **$n - 1$의 정당화:** 불편성은 "깔끔한" 성질이다 — 불편추정량들의 평균은 불편이고, 기댓값은 해석하기 쉽다. 평균제곱오차 최적은 아니지만 통계학의 관례는 $n - 1$을 선호한다.
+
+    분야마다 선택이 다르다:
+
+    - 공학 / 통계적 공정관리: 표본분산에 $n - 1$, 표준편차에 $c_4$ 보정.
+    - 기계학습: 편향을 신경 쓰지 않고 흔히 $n$(MLE)을 쓴다.
+    - Bayes: $\chi^2_{n-1}$에 기반한 사후 신용구간.
+    - 로버스트 통계: 중앙값 절대편차 — 분모 선택이 무관하다.
+
+---
+
+**연습문제 6.**
+**아주 작은 표본에서는 편향 보정이 중요하지만 큰 표본에서는 그렇지 않은 이유.** $n = 3, 10, 100$으로 구체적으로 보여라.
+
+??? success "연습문제 6 풀이"
+    소박한 추정량과 불편추정량의 차이: $\hat\sigma^2_{\text{naive}}/\hat\sigma^2_{\text{unbiased}} = (n-1)/n$.
+
+    | $n$ | $(n-1)/n$ | 차이 |
     |---|---|---|
     | 3 | 0.667 | 33% |
     | 10 | 0.900 | 10% |
     | 100 | 0.990 | 1% |
     | 1000 | 0.999 | 0.1% |
 
-    For $n = 3$: missing the Bessel correction means underestimating variance by 1/3 — a serious error.
+    $n = 3$일 때: Bessel 수정을 빠뜨리면 분산을 1/3만큼 과소추정한다 — 심각한 오류이다.
 
-    For $n = 100$: 1% — within rounding error of most measurements. Bessel correction is mostly conventional.
+    $n = 100$일 때: 1% — 대부분의 측정에서 반올림 오차 수준이다. Bessel 수정은 거의 관례에 가깝다.
 
-    **Practical implication:** for small samples (< 30), always use Bessel correction. For large samples (> 100), the choice is mostly academic. Real-data noise typically dominates the small bias correction.
+    **실무적 함의:** 작은 표본(30 미만)에서는 항상 Bessel 수정을 쓰라. 큰 표본(100 초과)에서는 선택이 거의 학술적이다. 실제 자료의 잡음이 이 작은 편향 보정을 대개 압도한다.

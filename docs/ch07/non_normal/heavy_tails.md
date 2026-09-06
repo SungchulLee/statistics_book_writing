@@ -1,68 +1,68 @@
-# Heavy-Tailed Distributions
+# 꼬리가 두꺼운 분포
 
-## Overview
+## 개요
 
-When the underlying distribution has heavy tails, the sample mean can have poor performance due to extreme observations. This is particularly relevant in finance, where asset returns exhibit substantially heavier tails than the normal distribution.
+바탕 분포의 꼬리가 두꺼우면 극단 관측값 때문에 표본평균의 성능이 나빠질 수 있다. 자산 수익률이 정규분포보다 훨씬 두꺼운 꼬리를 보이는 금융에서 특히 그렇다.
 
-## Characteristics
+## 특징
 
-Heavy-tailed distributions have tails that decay slower than exponential. Examples include:
+꼬리가 두꺼운 분포는 꼬리가 지수보다 느리게 감쇠한다. 예를 들면:
 
-- **Student's $t$ distribution** (with low degrees of freedom)
-- **Cauchy distribution** (undefined mean and variance)
-- **Pareto distribution** (power-law tails)
-- **Log-normal distribution** (right-skewed)
-- **Financial returns** (empirically observed in stock, currency, and commodity markets)
+- **Student $t$ 분포** (자유도가 작을 때)
+- **Cauchy 분포** (평균과 분산이 정의되지 않음)
+- **Pareto 분포** (거듭제곱 법칙 꼬리)
+- **Log-normal 분포** (오른쪽으로 치우침)
+- **금융 수익률** (주식, 외환, 원자재 시장에서 경험적으로 관찰됨)
 
-## Kurtosis and Tail Weight
+## 첨도와 꼬리의 무게
 
-Tail weight is often quantified by **kurtosis**. The normal distribution has kurtosis of 3 (excess kurtosis of 0). Distributions with excess kurtosis > 1 are considered heavy-tailed.
+꼬리의 무게는 흔히 **첨도**로 정량화한다. 정규분포의 첨도는 3(초과첨도 0)이다. 초과첨도가 1보다 큰 분포는 꼬리가 두껍다고 본다.
 
-$$\text{Excess Kurtosis} = E\left[\left(\frac{X - \mu}{\sigma}\right)^4\right] - 3$$
+$$\text{초과첨도} = E\left[\left(\frac{X - \mu}{\sigma}\right)^4\right] - 3$$
 
-**Examples**:
+**예시**:
 
-- Normal distribution: excess kurtosis = 0
-- Student's $t$ with df=5: excess kurtosis ≈ 6 (much heavier tails)
-- Real stock returns: excess kurtosis typically 3-10 (depend on frequency and asset)
+- 정규분포: 초과첨도 = 0
+- 자유도 5인 Student $t$: 초과첨도 ≈ 6 (훨씬 두꺼운 꼬리)
+- 실제 주식 수익률: 초과첨도는 보통 3–10 (빈도와 자산에 따라 다름)
 
-## Impact on the Sample Mean
+## 표본평균에 미치는 영향
 
-When data come from heavy-tailed distributions:
+자료가 꼬리가 두꺼운 분포에서 나오면:
 
-1. **Higher variance of $\bar{X}$**: The standard error is larger than predicted by the normal approximation
-2. **Slower convergence to normality**: The Central Limit Theorem still applies, but convergence is slower; $n = 30$ may not be sufficient
-3. **Outliers have outsized influence**: A single extreme observation can substantially shift the sample mean
-4. **Confidence intervals underestimate uncertainty**: Intervals based on normal theory are too narrow, leading to undercoverage
+1. **$\bar{X}$의 분산이 커진다**: 표준오차가 정규근사가 예측하는 것보다 크다
+2. **정규성으로의 수렴이 느리다**: 중심극한정리는 여전히 성립하지만 수렴이 느리다. $n = 30$으로는 부족할 수 있다
+3. **이상점의 영향이 과도하다**: 극단 관측값 하나가 표본평균을 크게 옮길 수 있다
+4. **신뢰구간이 불확실성을 과소평가한다**: 정규이론에 기반한 구간이 너무 좁아 포함확률이 명목값에 못 미친다
 
-## Financial Context: Asset Returns
+## 금융에서의 맥락: 자산 수익률
 
-Empirical evidence consistently shows that financial returns exhibit heavy tails:
+경험적 증거는 금융 수익률이 두꺼운 꼬리를 보인다는 것을 일관되게 확인해 준다:
 
-- **Daily stock returns**: Excess kurtosis 3-6 (typically)
-- **Intraday returns**: Even heavier tails
-- **Commodity prices**: Very heavy tails during supply shocks
-- **Foreign exchange**: Moderate excess kurtosis
+- **일별 주식 수익률**: 초과첨도 3–6 (전형적으로)
+- **일중 수익률**: 꼬리가 더 두껍다
+- **원자재 가격**: 공급 충격 때 꼬리가 매우 두껍다
+- **외환**: 초과첨도가 중간 정도
 
-### Why Do Financial Returns Have Heavy Tails?
+### 금융 수익률의 꼬리가 두꺼운 이유
 
-1. **Rare events cluster**: Market crashes and rallies happen in waves, not uniformly
-2. **Volatility clustering**: High volatility periods attract more large moves
-3. **Information asymmetries**: Sudden news creates discontinuous jumps
-4. **Leverage and margin calls**: Can amplify downward moves
+1. **드문 사건이 뭉쳐서 일어난다**: 시장 폭락과 급등은 고르게가 아니라 물결처럼 온다
+2. **변동성 군집**: 변동성이 높은 시기에 큰 움직임이 더 많이 몰린다
+3. **정보 비대칭**: 갑작스러운 뉴스가 불연속적인 점프를 만든다
+4. **레버리지와 마진콜**: 하락 움직임을 증폭할 수 있다
 
-### Consequences for Risk Management
+### 위험관리에 대한 함의
 
-If you assume normality when returns are heavy-tailed:
+수익률의 꼬리가 두꺼운데 정규성을 가정하면:
 
-- **Value at Risk (VaR)** at the 99th percentile is severely underestimated
-- **Expected Shortfall (CVaR)** is underestimated
-- **Hedging ratios** are too small, leaving positions under-protected
-- **Capital requirements** are inadequate during stress
+- 99번째 백분위수에서의 **VaR**가 심각하게 과소평가된다
+- **기대부족액(CVaR)**이 과소평가된다
+- **헤지 비율**이 너무 작아 포지션이 충분히 보호되지 않는다
+- 스트레스 시기에 **자본 요구량**이 부족해진다
 
-**Example**: A normal distribution predicts a 5% loss occurs with probability 0.01%. Heavy-tailed financial returns might exhibit this loss with probability 0.1% — a 10x underestimation!
+**예시**: 정규분포는 5% 손실이 확률 0.01%로 일어난다고 예측한다. 꼬리가 두꺼운 금융 수익률에서는 이 손실이 확률 0.1%로 일어날 수 있다 — 10배의 과소평가다!
 
-## Visual Comparison
+## 시각적 비교
 
 ```python
 import numpy as np
@@ -120,14 +120,14 @@ print("Heavy-Tailed (t) Distribution:")
 print(f"  Excess Kurtosis: {stats.kurtosis(heavy_tailed_returns):.2f}")
 ```
 
-## Robust Alternatives to the Mean
+## 평균의 로버스트한 대안
 
-For heavy-tailed data, consider these alternatives:
+꼬리가 두꺼운 자료에서는 다음 대안을 고려하라.
 
-### 1. Median
-- **Robustness**: Unaffected by extreme values
-- **Efficiency**: Lower efficiency than mean for normal data, comparable for heavy-tailed
-- **Inference**: Use bootstrap for standard errors and confidence intervals
+### 1. 중앙값
+- **로버스트성**: 극단값의 영향을 받지 않는다
+- **효율**: 정규 자료에서는 평균보다 효율이 낮지만, 꼬리가 두꺼운 자료에서는 비슷하다
+- **추론**: 표준오차와 신뢰구간에는 붓스트랩을 쓴다
 
 ```python
 import numpy as np
@@ -142,12 +142,12 @@ se_median = np.std(bootstrap_medians)
 print(f"Median: {original_median:.4f} ± {se_median:.4f}")
 ```
 
-### 2. Trimmed Mean
-Remove a fixed percentage from each tail before computing mean:
+### 2. 절사평균
+평균을 계산하기 전에 양쪽 꼬리에서 일정 비율을 제거한다:
 
 $$\bar{X}_{\text{trim}, \alpha} = \frac{1}{n(1-2\alpha)} \sum_{i=\lceil n\alpha \rceil}^{\lfloor n(1-\alpha) \rfloor} X_{(i)}$$
 
-where $X_{(i)}$ are order statistics and $\alpha$ is the trim fraction (e.g., 0.1 for 10%).
+여기서 $X_{(i)}$는 순서통계량이고 $\alpha$는 절사비율이다(예: 10%이면 0.1).
 
 ```python
 from scipy.stats import trim_mean
@@ -156,8 +156,8 @@ data = stats.t.rvs(df=5, size=100)
 mean_trim10 = trim_mean(data, 0.1)  # 10% trimmed mean
 ```
 
-### 3. Winsorized Mean
-Replace extreme values with the $\alpha$-quantiles rather than discarding them:
+### 3. 윈저화 평균
+극단값을 버리는 대신 $\alpha$-분위수로 대체한다:
 
 ```python
 def winsorize_mean(data, alpha=0.1):
@@ -171,8 +171,8 @@ data = stats.t.rvs(df=5, size=100)
 mean_wins = winsorize_mean(data, alpha=0.1)
 ```
 
-### 4. M-Estimators (Huber's Estimator)
-Downweight extreme values smoothly using a loss function that transitions from quadratic (for small errors) to absolute (for large errors):
+### 4. M-추정량 (Huber 추정량)
+작은 오차에서는 이차식, 큰 오차에서는 절댓값으로 넘어가는 손실함수를 써서 극단값의 가중치를 매끄럽게 낮춘다:
 
 ```python
 from scipy.stats import huber
@@ -182,7 +182,7 @@ result = huber(0.1, data)  # Tuning parameter 0.1
 print(f"Huber M-estimate: {result.estimate:.4f}")
 ```
 
-## Comparison of Estimators
+## 추정량의 비교
 
 ```python
 import numpy as np
@@ -200,68 +200,68 @@ print(f"  Winsorized mean:     {winsorize_mean(data, 0.1):7.4f}")
 print(f"  Huber's estimator:   {huber(0.1, data).estimate:7.4f}")
 ```
 
-## Summary
+## 요약
 
-Heavy-tailed distributions present significant challenges for statistical inference:
+꼬리가 두꺼운 분포는 통계적 추론에 상당한 어려움을 준다:
 
-- The sample mean is inefficient and unstable
-- Normal-theory confidence intervals are too narrow
-- Risk measures based on normality are dangerously optimistic
+- 표본평균이 비효율적이고 불안정하다
+- 정규이론 신뢰구간이 너무 좁다
+- 정규성에 기반한 위험 측도가 위험할 정도로 낙관적이다
 
-For financial data especially, robust alternatives like the median, trimmed means, or M-estimators provide more reliable inference. Bootstrap methods (which require no distributional assumptions) are ideal for constructing confidence intervals around any of these estimators.
+특히 금융 자료에서는 중앙값, 절사평균, M-추정량 같은 로버스트한 대안이 더 믿을 만한 추론을 준다. (분포 가정이 필요 없는) 붓스트랩 방법은 이런 추정량 어느 것에 대해서든 신뢰구간을 만드는 데 이상적이다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-The Cauchy distribution has PDF $f(x) = \frac{1}{\pi(1+x^2)}$. Show that its mean does not exist by demonstrating that $\int_{-\infty}^{\infty} |x| f(x)\,dx$ diverges.
+**연습문제 1.**
+Cauchy 분포의 PDF는 $f(x) = \frac{1}{\pi(1+x^2)}$이다. $\int_{-\infty}^{\infty} |x| f(x)\,dx$가 발산함을 보여 평균이 존재하지 않음을 증명하라.
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
     $$
     \int_{-\infty}^{\infty} |x| f(x)\,dx = \frac{2}{\pi}\int_0^{\infty} \frac{x}{1+x^2}\,dx
     $$
 
-    Using the substitution $u = 1 + x^2$, $du = 2x\,dx$:
+    치환 $u = 1 + x^2$, $du = 2x\,dx$를 쓰면:
 
     $$
     = \frac{2}{\pi} \cdot \frac{1}{2}\int_1^{\infty} \frac{du}{u} = \frac{1}{\pi}\left[\log u\right]_1^{\infty} = \frac{1}{\pi}(\infty - 0) = \infty
     $$
 
-    Since $E[|X|] = \infty$, the mean $E[X]$ does not exist. The integral diverges logarithmically, which means even averaging over very large samples does not stabilize.
+    $E[|X|] = \infty$이므로 평균 $E[X]$가 존재하지 않는다. 적분이 로그 속도로 발산하므로, 아주 큰 표본에서 평균을 내도 값이 안정되지 않는다.
 
 ---
 
-**Exercise 2.**
-A Student-$t$ distribution with $\nu$ degrees of freedom has finite variance only when $\nu > 2$. For $\nu = 3$, the variance is $\sigma^2 = \nu/(\nu-2) = 3$. Compare the sample mean's behavior for $n = 100$ observations from $t_3$ versus $N(0,3)$ in terms of the standard error of $\bar{X}$.
+**연습문제 2.**
+자유도 $\nu$인 Student-$t$ 분포는 $\nu > 2$일 때만 분산이 유한하다. $\nu = 3$이면 분산은 $\sigma^2 = \nu/(\nu-2) = 3$이다. $t_3$에서 뽑은 관측값 $n = 100$개와 $N(0,3)$에서 뽑은 경우를 $\bar{X}$의 표준오차 관점에서 비교하라.
 
-??? success "Solution to Exercise 2"
-    For $N(0,3)$: the standard error is $\text{SE} = \sqrt{3/100} = \sqrt{0.03} \approx 0.173$. The CLT applies perfectly since the population is normal.
+??? success "연습문제 2 풀이"
+    $N(0,3)$에서 표준오차는 $\text{SE} = \sqrt{3/100} = \sqrt{0.03} \approx 0.173$이다. 모집단이 정규이므로 중심극한정리가 완벽하게 적용된다.
 
-    For $t_3$: the population variance is also 3, so the theoretical standard error is the same: $\text{SE} = \sqrt{3/100} \approx 0.173$. However, the $t_3$ distribution has excess kurtosis $\kappa = 6(\nu-2)^{-1} = 6$ (when $\nu > 4$ kurtosis is $6/(\nu-4)$; for $\nu = 3$, kurtosis is technically infinite since the fourth moment does not exist).
+    $t_3$에서도 모분산이 3이므로 이론적 표준오차는 같다: $\text{SE} = \sqrt{3/100} \approx 0.173$. 그러나 $t_\nu$의 초과첨도는 $\nu > 4$일 때 $6/(\nu-4)$이고, $2 < \nu \le 4$에서는 4차 적률이 존재하지 않아 초과첨도가 무한하다. $\nu = 3$이 바로 그 경우이다.
 
-    In practice, the sample mean from $t_3$ will show much more variability than predicted by the standard error formula because occasional extreme observations inflate $\bar{X}$ dramatically. The CLT convergence is very slow for $t_3$, and the normal approximation for $\bar{X}$ at $n = 100$ will be poor — confidence intervals based on normality will have coverage well below the nominal level.
-
----
-
-**Exercise 3.**
-Explain why the median is a better estimator of the center of a Cauchy distribution than the sample mean, despite the sample mean being the standard choice for normal data.
-
-??? success "Solution to Exercise 3"
-    The **sample mean** of Cauchy data does not converge: by a remarkable property, the sample mean of $n$ i.i.d. Cauchy observations has the same Cauchy distribution regardless of $n$. Averaging does not reduce variability at all because the LLN does not apply (the mean does not exist).
-
-    The **sample median**, in contrast, is consistent for the location parameter of the Cauchy distribution and has asymptotic variance $\pi^2/(4n)$, which decreases at the standard $1/n$ rate. The median is unaffected by extreme observations in the tails, making it robust to the heavy tails that render the mean useless. For the Cauchy distribution specifically, the median is the MLE of the location parameter.
+    실제로 $t_3$에서 얻은 표본평균은 이따금 나타나는 극단 관측값이 $\bar{X}$를 크게 밀어내기 때문에 표준오차 공식이 예측하는 것보다 훨씬 크게 요동친다. $t_3$에서는 중심극한정리의 수렴이 매우 느려 $n = 100$에서도 $\bar{X}$의 정규근사가 나쁘다 — 정규성에 기반한 신뢰구간의 포함확률이 명목 수준을 크게 밑돈다.
 
 ---
 
-**Exercise 4.**
-A risk manager estimates the 99th percentile of daily portfolio losses using a normal model and obtains \$2.33 million. If the true distribution of losses follows a $t_5$ distribution with the same scale, how much larger is the true 99th percentile?
+**연습문제 3.**
+정규 자료에서는 표본평균이 표준적인 선택인데도, Cauchy 분포의 중심 추정에서는 왜 중앙값이 더 나은지 설명하라.
 
-??? success "Solution to Exercise 4"
-    For a standard normal, the 99th percentile is $z_{0.99} = 2.326$. For a $t_5$ distribution, the 99th percentile is $t_{5, 0.99} \approx 3.365$.
+??? success "연습문제 3 풀이"
+    Cauchy 자료의 **표본평균**은 수렴하지 않는다: 주목할 만한 성질에 의해, i.i.d. Cauchy 관측값 $n$개의 표본평균은 $n$과 무관하게 같은 Cauchy 분포를 따른다. 평균이 존재하지 않아 대수의법칙이 적용되지 않으므로 평균을 내도 변동성이 전혀 줄지 않는다.
 
-    The ratio is:
+    반면 **표본중앙값**은 Cauchy 분포의 위치모수에 대해 일치하며 점근분산이 $\pi^2/(4n)$으로 표준적인 $1/n$ 속도로 줄어든다. 중앙값은 꼬리의 극단 관측값에 영향받지 않으므로, 평균을 무용지물로 만드는 두꺼운 꼬리에 로버스트하다. 특히 Cauchy 분포에서 중앙값은 위치모수의 MLE이다.
+
+---
+
+**연습문제 4.**
+어떤 위험관리자가 정규 모형으로 일별 포트폴리오 손실의 99번째 백분위수를 추정하여 \$233만을 얻었다. 손실의 참 분포가 같은 척도의 $t_5$ 분포를 따른다면 참 99번째 백분위수는 얼마나 더 큰가?
+
+??? success "연습문제 4 풀이"
+    표준정규의 99번째 백분위수는 $z_{0.99} = 2.326$이다. $t_5$ 분포의 99번째 백분위수는 $t_{5, 0.99} \approx 3.365$이다.
+
+    비는:
 
     $$
     \frac{t_{5,0.99}}{z_{0.99}} = \frac{3.365}{2.326} \approx 1.447
     $$
 
-    The true 99th percentile under the $t_5$ model is approximately 44.7% larger: $\$2.33\text{M} \times 1.447 \approx \$3.37\text{M}$. This underestimation of tail risk by the normal model is a well-known danger in financial risk management and was a contributing factor in the 2008 financial crisis.
+    $t_5$ 모형에서의 참 99번째 백분위수는 약 44.7% 더 크다: $\$233\text{만} \times 1.447 \approx \$337\text{만}$. 정규 모형이 꼬리 위험을 이렇게 과소평가하는 것은 금융 위험관리에서 잘 알려진 위험 요인이며 2008년 금융위기의 한 원인이기도 했다.

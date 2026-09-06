@@ -1,79 +1,79 @@
-# Chapter 7: Estimation of mu and sigma-squared
+# 7장: mu와 sigma-squared의 추정
 
-## Overview
+## 개요
 
-This chapter applies the general estimation theory developed in Chapter 6 to the two most fundamental population parameters: the mean $\mu$ and the variance $\sigma^2$. It examines the sample mean and sample variance as estimators in detail --- their bias, consistency, efficiency, and MSE --- derives the Gaussian MLEs, and explores robust alternatives for situations where the normality assumption fails, such as heavy-tailed or skewed distributions.
-
----
-
-## Chapter Structure
-
-### 7.1 Estimation of the Mean
-
-A thorough analysis of the sample mean and its alternatives as estimators of the population mean:
-
-- **Sample Mean as Estimator** --- Presents $\bar{X}$ as the most fundamental estimator in statistics, deriving its expectation, variance, and distribution, and explaining why it is the natural starting point for estimating $\mu$.
-- **Bias and Consistency** --- Proves that $\bar{X}$ is exactly unbiased for all sample sizes and consistent under mild conditions (finite variance), with detailed discussion of the minimal assumptions required.
-- **Efficiency of the Sample Mean** --- Shows that $\bar{X}$ achieves the Cramer--Rao lower bound for the normal mean, making it the most efficient unbiased estimator, and introduces asymptotic relative efficiency (ARE) for comparing estimators under non-normality.
-- **Trimmed and Winsorized Means** --- Introduces robust alternatives that reduce the influence of outliers by removing or capping extreme observations, with a comparison of breakdown points and efficiency under normality.
-
-### 7.2 Estimation of the Variance
-
-A detailed study of variance estimators, the origin of Bessel's correction, and robust alternatives:
-
-- **Naive Variance Estimator** --- Defines the biased estimator $\tilde{S}^2 = \frac{1}{n}\sum(X_i - \bar{X})^2$, derives its downward bias of $-\sigma^2/n$ through a fundamental algebraic identity, and explains the intuition for why dividing by $n$ underestimates the true variance.
-- **Bessel's Correction** --- Proves that dividing by $n-1$ instead of $n$ yields the unbiased estimator $S^2$, explains the degrees-of-freedom interpretation, and connects it to the standard implementation in statistical software.
-- **MSE of Variance Estimators** --- Compares the MLE ($1/n$), Bessel-corrected ($1/(n-1)$), and MSE-optimal ($1/(n+1)$) variance estimators for normal data, demonstrating the bias--variance tradeoff in a concrete setting.
-- **Robust Variance Estimators (MAD, IQR-based)** --- Introduces the Median Absolute Deviation and IQR-based estimators as outlier-resistant alternatives, comparing their breakdown points and efficiency relative to the classical sample variance.
-
-### 7.3 Gaussian MLE
-
-The maximum likelihood approach to jointly estimating the mean and variance of a normal population:
-
-- **MLE of $\mu$ and $\sigma^2$** --- Derives the closed-form MLEs $\hat{\mu} = \bar{X}$ and $\hat{\sigma}^2 = \frac{1}{n}\sum(X_i - \bar{X})^2$ from the normal log-likelihood, analyzing the properties of each estimator.
-- **Bias of Gaussian MLE for $\sigma^2$** --- Shows that the MLE of variance is biased with $E[\hat{\sigma}^2_{MLE}] = \frac{n-1}{n}\sigma^2$, quantifies the bias as $-\sigma^2/n$, and notes that despite being biased, the MLE can have lower MSE than the unbiased estimator.
-- **Sufficiency and Completeness** --- Identifies $(\bar{X}, S^2)$ as jointly sufficient and complete for $(\mu, \sigma^2)$ in the normal model, and applies the Lehmann--Scheffe theorem to establish $\bar{X}$ and $S^2$ as the unique UMVUEs for their respective parameters.
-
-### 7.4 Estimation Under Non-Normality
-
-How the performance of standard estimators changes when the normality assumption is violated:
-
-- **Heavy-Tailed Distributions** --- Examines the impact of heavy tails (e.g., Student's $t$, Cauchy, Pareto) on the sample mean, showing that extreme observations can inflate variance and that robust estimators may outperform the mean, with particular relevance to financial return data.
-- **Skewed Distributions** --- Discusses how skewness causes the mean and median to diverge, explains when the median may be a more representative measure of center, and introduces transformations (log, Box-Cox) to reduce skewness and improve mean-based inference.
-
-### 7.5 Code
-
-Complete Python implementations for exploring estimator properties through simulation:
-
-- **Sample Mean Properties** --- Simulates the unbiasedness and variance reduction of the sample mean with increasing sample size.
-- **Consistency and Convergence** --- Visualizes how the sample mean converges to the population mean as $n$ grows.
-- **Variance Estimators** --- Compares the behavior of $1/n$, $1/(n-1)$, and $1/(n+1)$ variance estimators through simulation.
-- **Bessel's Correction** --- Demonstrates the bias of the naive estimator and the correction provided by dividing by $n-1$.
-- **Gaussian MLE** --- Implements maximum likelihood estimation for the normal distribution and visualizes the log-likelihood surface.
-- **Return Estimation** --- Applies mean and variance estimation methods to financial return data.
-- **Robust Estimators Comparison** --- Compares classical and robust estimators (trimmed mean, MAD, IQR-based) on clean and contaminated data.
-
-### 7.6 Exercises
-
-Practice problems covering unbiasedness proofs, variance under correlated data, relative efficiency of mean vs median, shrinkage estimators, Bessel's correction derivations, MSE-optimal variance estimators, and robust estimation in finance.
+이 장은 6장에서 세운 일반적인 추정이론을 가장 근본적인 두 모수, 즉 평균 $\mu$와 분산 $\sigma^2$에 적용한다. 표본평균과 표본분산을 추정량으로서 자세히 살펴 그 편향, 일치성, 효율성, 평균제곱오차를 따지고, Gaussian MLE를 유도하며, 꼬리가 두껍거나 치우친 분포처럼 정규성 가정이 깨지는 상황을 위한 로버스트한 대안을 탐구한다.
 
 ---
 
-## Prerequisites
+## 장의 구성
 
-This chapter builds on:
+### 7.1 평균의 추정
 
-- **Chapter 4** (Distributions) --- Properties of the normal distribution, heavy-tailed distributions, and skewness.
-- **Chapter 5** (Sampling Distributions) --- The sampling distributions of $\bar{X}$ and $S^2$, standard error, and the chi-square connection.
-- **Chapter 6** (Statistical Estimation) --- Bias, variance, MSE, consistency, efficiency, the Cramer--Rao lower bound, MLE methodology, and sufficiency.
+모평균의 추정량으로서 표본평균과 그 대안들을 두루 분석한다:
+
+- **추정량으로서의 표본평균** --- $\bar{X}$를 통계학에서 가장 근본적인 추정량으로 제시하고, 그 기댓값, 분산, 분포를 유도하며, 왜 $\mu$ 추정의 자연스러운 출발점인지 설명한다.
+- **편향과 일치성** --- $\bar{X}$가 모든 표본크기에서 정확히 불편이고 온건한 조건(유한한 분산) 아래에서 일치함을 증명하며, 필요한 최소한의 가정을 자세히 논한다.
+- **표본평균의 효율성** --- $\bar{X}$가 정규분포 평균에 대해 Cramér–Rao 하한을 달성하여 가장 효율적인 불편추정량임을 보이고, 정규성이 없을 때 추정량을 비교하기 위한 점근 상대효율(ARE)을 소개한다.
+- **절사평균과 윈저화 평균** --- 극단 관측값을 제거하거나 상한을 씌워 이상점의 영향을 줄이는 로버스트한 대안을 소개하고, 붕괴점과 정규성 아래에서의 효율을 비교한다.
+
+### 7.2 분산의 추정
+
+분산추정량, Bessel 수정의 유래, 로버스트한 대안을 자세히 살펴본다:
+
+- **소박한 분산추정량** --- 편향추정량 $\tilde{S}^2 = \frac{1}{n}\sum(X_i - \bar{X})^2$을 정의하고, 기본적인 대수 항등식을 통해 아래쪽 편향 $-\sigma^2/n$을 유도하며, $n$으로 나누면 왜 참 분산을 과소추정하는지 직관을 설명한다.
+- **Bessel 수정** --- $n$ 대신 $n-1$로 나누면 불편추정량 $S^2$이 됨을 증명하고, 자유도 관점의 해석을 설명하며, 통계 소프트웨어의 표준 구현과 연결한다.
+- **분산추정량의 평균제곱오차** --- 정규 자료에서 MLE($1/n$), Bessel 수정($1/(n-1)$), 평균제곱오차 최적($1/(n+1)$) 분산추정량을 비교하여 편향–분산 맞바꿈을 구체적인 상황에서 보인다.
+- **로버스트 분산추정량 (MAD, IQR 기반)** --- 중앙값 절대편차와 IQR 기반 추정량을 이상점에 강한 대안으로 소개하고, 고전적 표본분산 대비 붕괴점과 효율을 비교한다.
+
+### 7.3 Gaussian 최대가능도
+
+정규모집단의 평균과 분산을 함께 추정하는 최대가능도 접근:
+
+- **$\mu$와 $\sigma^2$의 MLE** --- 정규 로그가능도로부터 닫힌 형태의 MLE $\hat{\mu} = \bar{X}$와 $\hat{\sigma}^2 = \frac{1}{n}\sum(X_i - \bar{X})^2$을 유도하고 각 추정량의 성질을 분석한다.
+- **$\sigma^2$에 대한 Gaussian MLE의 편향** --- 분산의 MLE가 $E[\hat{\sigma}^2_{MLE}] = \frac{n-1}{n}\sigma^2$으로 편향되어 있음을 보이고 편향을 $-\sigma^2/n$으로 정량화하며, 편향되어 있음에도 MLE가 불편추정량보다 평균제곱오차가 작을 수 있음을 짚는다.
+- **충분성과 완비성** --- 정규 모형에서 $(\bar{X}, S^2)$이 $(\mu, \sigma^2)$에 대해 결합충분이고 완비임을 확인하고, Lehmann–Scheffé 정리를 적용하여 $\bar{X}$와 $S^2$이 각 모수의 유일한 UMVUE임을 확립한다.
+
+### 7.4 정규성이 없을 때의 추정
+
+정규성 가정이 깨질 때 표준 추정량의 성능이 어떻게 달라지는지 살펴본다:
+
+- **꼬리가 두꺼운 분포** --- 두꺼운 꼬리(예: Student $t$, Cauchy, Pareto)가 표본평균에 미치는 영향을 살피고, 극단 관측값이 분산을 부풀릴 수 있으며 로버스트 추정량이 평균을 능가할 수 있음을 보인다. 금융 수익률 자료와 특히 관련이 깊다.
+- **치우친 분포** --- 치우침이 평균과 중앙값을 어떻게 갈라놓는지 논하고, 중앙값이 중심을 더 잘 대표할 수 있는 경우를 설명하며, 치우침을 줄이고 평균 기반 추론을 개선하는 변환(로그, Box-Cox)을 소개한다.
+
+### 7.5 코드
+
+모의실험으로 추정량의 성질을 탐구하는 완전한 Python 구현:
+
+- **표본평균의 성질** --- 표본크기가 커질 때 표본평균의 불편성과 분산 감소를 모의실험한다.
+- **일치성과 수렴** --- $n$이 커질 때 표본평균이 모평균으로 수렴하는 모습을 시각화한다.
+- **분산추정량** --- $1/n$, $1/(n-1)$, $1/(n+1)$ 분산추정량의 거동을 모의실험으로 비교한다.
+- **Bessel 수정** --- 소박한 추정량의 편향과 $n-1$로 나누어 얻는 보정을 보인다.
+- **Gaussian MLE** --- 정규분포의 최대가능도추정을 구현하고 로그가능도 곡면을 시각화한다.
+- **수익률 추정** --- 평균과 분산 추정 방법을 금융 수익률 자료에 적용한다.
+- **로버스트 추정량 비교** --- 깨끗한 자료와 오염된 자료에서 고전적 추정량과 로버스트 추정량(절사평균, MAD, IQR 기반)을 비교한다.
+
+### 7.6 연습문제
+
+불편성 증명, 상관된 자료에서의 분산, 평균과 중앙값의 상대효율, 축소추정량, Bessel 수정의 유도, 평균제곱오차 최적 분산추정량, 금융에서의 로버스트 추정을 다루는 연습문제들.
 
 ---
 
-## Key Takeaways
+## 선수 지식
 
-1. The sample mean $\bar{X}$ is unbiased for $\mu$ under minimal assumptions and is the most efficient unbiased estimator of the normal mean (it achieves the CRLB).
-2. The naive variance estimator (dividing by $n$) is biased downward by $\sigma^2/n$; Bessel's correction (dividing by $n-1$) removes this bias, though the MSE-optimal estimator divides by $n+1$.
-3. The Gaussian MLEs are $\hat{\mu} = \bar{X}$ and $\hat{\sigma}^2 = \frac{1}{n}\sum(X_i - \bar{X})^2$; the pair $(\bar{X}, S^2)$ forms a jointly sufficient and complete statistic, yielding the unique UMVUEs for $\mu$ and $\sigma^2$.
-4. Under heavy-tailed distributions, the sample mean can perform poorly due to extreme observations; robust alternatives such as trimmed means and the median offer better stability at the cost of some efficiency under normality.
-5. For skewed data, the mean and median can differ substantially; log or Box-Cox transformations can reduce skewness and improve the reliability of mean-based inference.
-6. The choice between classical and robust estimators depends on the data-generating process: when normality holds, classical estimators are optimal; when it does not, robust methods provide essential protection against outliers and heavy tails.
+이 장은 다음 내용을 바탕으로 한다:
+
+- **4장** (분포) --- 정규분포, 꼬리가 두꺼운 분포, 치우침의 성질.
+- **5장** (표본분포) --- $\bar{X}$와 $S^2$의 표본분포, 표준오차, 카이제곱과의 연결.
+- **6장** (통계적 추정) --- 편향, 분산, 평균제곱오차, 일치성, 효율성, Cramér–Rao 하한, MLE 방법론, 충분성.
+
+---
+
+## 핵심 요약
+
+1. 표본평균 $\bar{X}$는 최소한의 가정 아래에서 $\mu$에 대해 불편이며, 정규분포 평균의 가장 효율적인 불편추정량이다(CRLB를 달성한다).
+2. 소박한 분산추정량($n$으로 나눔)은 $\sigma^2/n$만큼 아래로 편향되어 있다. Bessel 수정($n-1$로 나눔)이 이 편향을 없애지만, 평균제곱오차가 최적인 추정량은 $n+1$로 나눈다.
+3. Gaussian MLE는 $\hat{\mu} = \bar{X}$와 $\hat{\sigma}^2 = \frac{1}{n}\sum(X_i - \bar{X})^2$이다. 쌍 $(\bar{X}, S^2)$은 결합충분이자 완비인 통계량을 이루어 $\mu$와 $\sigma^2$의 유일한 UMVUE를 준다.
+4. 꼬리가 두꺼운 분포에서는 극단 관측값 때문에 표본평균의 성능이 나빠질 수 있다. 절사평균이나 중앙값 같은 로버스트한 대안은 정규성 아래에서 약간의 효율을 대가로 더 나은 안정성을 제공한다.
+5. 치우친 자료에서는 평균과 중앙값이 상당히 다를 수 있다. 로그 변환이나 Box-Cox 변환이 치우침을 줄이고 평균 기반 추론의 신뢰도를 높일 수 있다.
+6. 고전적 추정량과 로버스트 추정량 사이의 선택은 자료생성과정에 달려 있다. 정규성이 성립하면 고전적 추정량이 최적이고, 그렇지 않으면 로버스트 방법이 이상점과 두꺼운 꼬리에 대한 필수적인 보호를 제공한다.

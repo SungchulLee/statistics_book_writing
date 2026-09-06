@@ -1,240 +1,240 @@
-# Sample Mean as Estimator
+# 추정량으로서의 표본평균
 
-## Introduction
+## 들어가며
 
-The **sample mean** $\bar{X} = \frac{1}{n}\sum_{i=1}^n X_i$ is the most fundamental estimator in all of statistics. It serves as the natural estimator for the population mean $\mu = E[X]$ and plays a central role in estimation theory, hypothesis testing, and nearly every branch of applied statistics and finance. Understanding its properties — why it works, when it works optimally, and when it fails — is essential for statistical practice.
+**표본평균** $\bar{X} = \frac{1}{n}\sum_{i=1}^n X_i$은 통계학 전체에서 가장 근본적인 추정량이다. 모평균 $\mu = E[X]$의 자연스러운 추정량 역할을 하며, 추정이론, 가설검정, 그리고 응용통계와 금융의 거의 모든 분야에서 중심적인 자리를 차지한다. 그 성질 — 왜 잘 작동하는지, 언제 최적으로 작동하는지, 언제 실패하는지 — 을 이해하는 것은 통계 실무에 필수적이다.
 
-## Definition
+## 정의
 
-Given a random sample $X_1, X_2, \ldots, X_n$ from a population with mean $\mu$ and variance $\sigma^2$, the **sample mean** is:
+평균이 $\mu$이고 분산이 $\sigma^2$인 모집단에서 뽑은 확률표본 $X_1, X_2, \ldots, X_n$이 주어졌을 때 **표본평균**은:
 
 $$\bar{X} = \frac{1}{n}\sum_{i=1}^n X_i$$
 
-The sample mean is a **statistic** (a function of the data) and hence a random variable. Its value changes with each sample drawn.
+표본평균은 **통계량**(자료의 함수)이며 따라서 확률변수이다. 표본을 뽑을 때마다 값이 달라진다.
 
-## Properties
+## 성질
 
-### Expectation
+### 기댓값
 
 $$E[\bar{X}] = E\left[\frac{1}{n}\sum_{i=1}^n X_i\right] = \frac{1}{n}\sum_{i=1}^n E[X_i] = \frac{1}{n} \cdot n\mu = \mu$$
 
-The sample mean is an **unbiased estimator** of $\mu$ regardless of the population distribution, sample size, or whether observations are identically distributed (as long as they share the same mean).
+표본평균은 모집단 분포, 표본크기, 관측값이 동일한 분포를 따르는지 여부와 무관하게(평균만 같으면) $\mu$의 **불편추정량**이다.
 
-### Variance
+### 분산
 
-For iid observations:
+i.i.d. 관측값에 대해:
 
 $$\text{Var}(\bar{X}) = \text{Var}\left(\frac{1}{n}\sum_{i=1}^n X_i\right) = \frac{1}{n^2}\sum_{i=1}^n \text{Var}(X_i) = \frac{\sigma^2}{n}$$
 
-**Key implications:**
+**핵심 함의:**
 
-- Variance decreases linearly in $n$
-- Standard error: $\text{SE}(\bar{X}) = \sigma/\sqrt{n}$
-- To halve the standard error, quadruple the sample size
+- 분산은 $n$에 반비례하여 줄어든다
+- 표준오차: $\text{SE}(\bar{X}) = \sigma/\sqrt{n}$
+- 표준오차를 절반으로 줄이려면 표본크기를 네 배로 늘려야 한다
 
-### Mean Squared Error
+### 평균제곱오차
 
-Since $\bar{X}$ is unbiased:
+$\bar{X}$가 불편이므로:
 
 $$\text{MSE}(\bar{X}) = \text{Var}(\bar{X}) = \frac{\sigma^2}{n}$$
 
-### Distribution of the Sample Mean
+### 표본평균의 분포
 
-**For normal populations:** If $X_i \sim N(\mu, \sigma^2)$, then:
+**정규모집단의 경우:** $X_i \sim N(\mu, \sigma^2)$이면,
 
-$$\bar{X} \sim N\left(\mu, \frac{\sigma^2}{n}\right) \quad \text{exactly, for all } n$$
+$$\bar{X} \sim N\left(\mu, \frac{\sigma^2}{n}\right) \quad \text{모든 } n \text{에 대해 정확히}$$
 
-**Central Limit Theorem (any population):** For large $n$:
+**중심극한정리(임의의 모집단):** 큰 $n$에 대해,
 
 $$\frac{\bar{X} - \mu}{\sigma/\sqrt{n}} \xrightarrow{d} N(0, 1)$$
 
-or equivalently $\bar{X} \approx N(\mu, \sigma^2/n)$ for large $n$.
+또는 동등하게, 큰 $n$에 대해 $\bar{X} \approx N(\mu, \sigma^2/n)$이다.
 
-## Optimality Properties
+## 최적성
 
-### MVUE for Normal Populations
+### 정규모집단에서의 MVUE
 
-For $X_i \sim N(\mu, \sigma^2)$ with known $\sigma^2$, the sample mean $\bar{X}$ is the **Minimum Variance Unbiased Estimator (MVUE)** of $\mu$. It achieves the Cramér-Rao Lower Bound:
+$\sigma^2$이 알려진 $X_i \sim N(\mu, \sigma^2)$에 대해 표본평균 $\bar{X}$는 $\mu$의 **최소분산불편추정량(MVUE)**이다. Cramér-Rao 하한을 달성한다:
 
 $$\text{Var}(\bar{X}) = \frac{\sigma^2}{n} = \frac{1}{nI_1(\mu)}$$
 
-where $I_1(\mu) = 1/\sigma^2$ is the Fisher information per observation.
+여기서 $I_1(\mu) = 1/\sigma^2$은 관측값 하나당 Fisher 정보량이다.
 
-### Sufficiency
+### 충분성
 
-For the normal distribution, $\bar{X}$ is a **sufficient statistic** for $\mu$ (when $\sigma^2$ is known). By the Rao-Blackwell theorem, any unbiased estimator can be improved (in terms of MSE) by conditioning on a sufficient statistic. Since $\bar{X}$ is already based on the sufficient statistic, it cannot be improved.
+정규분포에서 ($\sigma^2$이 알려져 있을 때) $\bar{X}$는 $\mu$에 대한 **충분통계량**이다. Rao-Blackwell 정리에 따르면 임의의 불편추정량은 충분통계량으로 조건부기댓값을 취해 (평균제곱오차 관점에서) 개선할 수 있다. $\bar{X}$는 이미 충분통계량에 기반하므로 더 개선할 수 없다.
 
-### Gauss-Markov Theorem
+### Gauss-Markov 정리
 
-In the linear regression context $Y = X\beta + \epsilon$, the OLS estimator (which includes $\bar{X}$ as a special case when $X = \mathbf{1}$) is the **Best Linear Unbiased Estimator (BLUE)**: it has the smallest variance among all linear unbiased estimators, regardless of the error distribution.
+선형회귀 맥락 $Y = X\beta + \epsilon$에서 OLS 추정량($X = \mathbf{1}$인 특수한 경우로 $\bar{X}$를 포함한다)은 **최량선형불편추정량(BLUE)**이다. 오차의 분포와 무관하게 모든 선형 불편추정량 중에서 분산이 가장 작다.
 
-### Efficiency Relative to Other Estimators
+### 다른 추정량과의 상대효율
 
-For normal populations, compare the sample mean with alternatives:
+정규모집단에서 표본평균을 대안들과 비교하면:
 
-| Estimator | Variance (Normal) | Relative Efficiency |
+| 추정량 | 분산 (정규) | 상대효율 |
 |-----------|-------------------|-------------------|
-| Sample Mean $\bar{X}$ | $\sigma^2/n$ | 1.000 (reference) |
-| Sample Median | $\frac{\pi}{2} \cdot \frac{\sigma^2}{n}$ | $\frac{2}{\pi} \approx 0.637$ |
-| Midrange | $\frac{\sigma^2}{2\log n}$ (approx.) | Inconsistent |
-| 10% Trimmed Mean | $\approx 1.05 \cdot \frac{\sigma^2}{n}$ | $\approx 0.952$ |
+| 표본평균 $\bar{X}$ | $\sigma^2/n$ | 1.000 (기준) |
+| 표본중앙값 | $\frac{\pi}{2} \cdot \frac{\sigma^2}{n}$ | $\frac{2}{\pi} \approx 0.637$ |
+| 중간범위 | $\frac{\sigma^2}{2\log n}$ (근사) | 일치하지 않음 |
+| 10% 절사평균 | $\approx 1.05 \cdot \frac{\sigma^2}{n}$ | $\approx 0.952$ |
 
-For normal data, the sample mean is strictly the best. For heavy-tailed data, alternatives like the trimmed mean or median can be better.
+정규 자료에서는 표본평균이 엄밀히 최선이다. 꼬리가 두꺼운 자료에서는 절사평균이나 중앙값 같은 대안이 더 나을 수 있다.
 
-## Sample Mean for Non-iid Data
+## i.i.d.가 아닌 자료에서의 표본평균
 
-### Correlated Observations
+### 상관된 관측값
 
-If observations are correlated (common in time series), the variance formula changes:
+관측값이 상관되어 있으면(시계열에서 흔하다) 분산 공식이 달라진다:
 
 $$\text{Var}(\bar{X}) = \frac{1}{n^2}\sum_{i=1}^n\sum_{j=1}^n \text{Cov}(X_i, X_j)$$
 
-For stationary data with autocorrelation $\rho_k = \text{Corr}(X_t, X_{t+k})$:
+자기상관이 $\rho_k = \text{Corr}(X_t, X_{t+k})$인 정상 자료에 대해:
 
 $$\text{Var}(\bar{X}) = \frac{\sigma^2}{n}\left(1 + 2\sum_{k=1}^{n-1}\left(1 - \frac{k}{n}\right)\rho_k\right)$$
 
-With positive autocorrelation, $\text{Var}(\bar{X}) > \sigma^2/n$ — the effective sample size is smaller than $n$.
+자기상관이 양수이면 $\text{Var}(\bar{X}) > \sigma^2/n$이다 — 유효표본크기가 $n$보다 작다.
 
-### Weighted Mean
+### 가중평균
 
-When observations have unequal reliability, use the **weighted mean**:
+관측값의 신뢰도가 서로 다를 때는 **가중평균**을 쓴다:
 
 $$\bar{X}_w = \frac{\sum_{i=1}^n w_i X_i}{\sum_{i=1}^n w_i}$$
 
-If $\text{Var}(X_i) = \sigma_i^2$ and observations are independent, the optimal weights are $w_i = 1/\sigma_i^2$ (inverse variance weighting), yielding:
+$\text{Var}(X_i) = \sigma_i^2$이고 관측값이 독립이면 최적 가중치는 $w_i = 1/\sigma_i^2$(역분산 가중)이고, 이때
 
 $$\text{Var}(\bar{X}_w) = \frac{1}{\sum_{i=1}^n 1/\sigma_i^2}$$
 
-## When the Sample Mean Fails
+## 표본평균이 실패할 때
 
-The sample mean is not always the best estimator:
+표본평균이 언제나 최선의 추정량인 것은 아니다:
 
-1. **Heavy-tailed distributions** (e.g., Cauchy, Student-t with few df): The sample mean may have infinite variance or not even exist. The median is more robust.
+1. **꼬리가 두꺼운 분포** (예: Cauchy, 자유도가 작은 Student-t): 표본평균의 분산이 무한하거나 평균 자체가 존재하지 않을 수 있다. 중앙값이 더 로버스트하다.
 
-2. **Contaminated data** (outliers): A single extreme observation can dramatically shift $\bar{X}$. Robust alternatives (trimmed mean, Huber estimator) are preferable.
+2. **오염된 자료** (이상점): 극단 관측값 하나가 $\bar{X}$를 크게 옮길 수 있다. 로버스트한 대안(절사평균, Huber 추정량)이 더 낫다.
 
-3. **Skewed distributions**: For highly skewed data, the mean may not be the most useful summary. The median or a transformed mean may be better.
+3. **치우친 분포**: 심하게 치우친 자료에서는 평균이 가장 유용한 요약이 아닐 수 있다. 중앙값이나 변환된 평균이 더 나을 수 있다.
 
-4. **Small samples from non-normal populations**: The CLT approximation may be poor, leading to unreliable confidence intervals based on $\bar{X}$.
+4. **정규가 아닌 모집단에서의 작은 표본**: 중심극한정리 근사가 나빠서 $\bar{X}$에 기반한 신뢰구간이 신뢰할 수 없게 된다.
 
-## Connections to Finance
+## 금융과의 연결
 
-The sample mean is ubiquitous in finance, but its limitations are especially important:
+표본평균은 금융에서 어디에나 쓰이지만, 그 한계가 특히 중요하다:
 
-- **Expected return estimation**: The sample mean of historical returns is the standard estimator for expected returns, but it is notoriously imprecise. With typical annual return volatility of 20% and 50 years of data, $\text{SE}(\bar{X}) \approx 20\%/\sqrt{50} \approx 2.8\%$, which is large relative to typical risk premia.
+- **기대수익률 추정**: 과거 수익률의 표본평균이 기대수익률의 표준적인 추정량이지만, 악명 높을 만큼 부정확하다. 연간 수익률 변동성이 20%이고 자료가 50년치라는 전형적인 설정에서 $\text{SE}(\bar{X}) \approx 20\%/\sqrt{50} \approx 2.8\%$인데, 이는 전형적인 위험프리미엄에 비해 크다.
 
-- **Sharpe ratio**: $\hat{SR} = \bar{X}/S$ inherits the imprecision of $\bar{X}$. The estimation error in the numerator dominates.
+- **Sharpe 비율**: $\hat{SR} = \bar{X}/S$는 $\bar{X}$의 부정확성을 그대로 물려받는다. 분자의 추정오차가 지배한다.
 
-- **Time series dependence**: Financial returns exhibit volatility clustering and other forms of dependence, making the standard $\sigma/\sqrt{n}$ formula an underestimate of uncertainty.
+- **시계열 종속성**: 금융 수익률은 변동성 군집을 비롯한 여러 형태의 종속성을 보이므로, 표준적인 $\sigma/\sqrt{n}$ 공식은 불확실성을 과소평가한다.
 
-- **Portfolio optimization**: The sensitivity of mean-variance optimization to estimated means is well known (estimation error dominates, leading to extreme weights). Shrinkage estimators and Bayesian approaches address this.
+- **포트폴리오 최적화**: 평균-분산 최적화가 추정된 평균에 민감하다는 사실은 잘 알려져 있다(추정오차가 지배하여 극단적인 가중치가 나온다). 축소추정량과 Bayes 접근이 이를 다룬다.
 
-## Summary
+## 요약
 
-The sample mean is the simplest and most natural estimator of a population mean. For normal populations, it is optimal by every criterion: unbiased, minimum variance, sufficient, and efficient. For large samples from any distribution with finite variance, it is consistent and approximately normal (by the CLT). However, its sensitivity to outliers and heavy tails, and the slowness of its convergence ($1/\sqrt{n}$), make it important to understand alternatives and to use it wisely, especially in financial applications where estimation precision is at a premium.
+표본평균은 모평균의 가장 단순하고 자연스러운 추정량이다. 정규모집단에서는 모든 기준에서 최적이다: 불편이고, 분산이 최소이며, 충분하고, 효율적이다. 분산이 유한한 임의의 분포에서 표본이 크면 일치하고 (중심극한정리에 의해) 근사적으로 정규이다. 그러나 이상점과 두꺼운 꼬리에 민감하고 수렴이 느리므로($1/\sqrt{n}$), 대안을 이해하고 현명하게 사용하는 것이 중요하다. 추정 정밀도가 귀한 금융 응용에서는 더욱 그렇다.
 
-## Key Formulas
+## 핵심 공식
 
-| Quantity | Formula |
+| 양 | 공식 |
 |----------|---------|
-| Sample mean | $\bar{X} = \frac{1}{n}\sum X_i$ |
-| $E[\bar{X}]$ | $\mu$ (unbiased) |
+| 표본평균 | $\bar{X} = \frac{1}{n}\sum X_i$ |
+| $E[\bar{X}]$ | $\mu$ (불편) |
 | $\text{Var}(\bar{X})$ | $\sigma^2/n$ |
-| Standard error | $\sigma/\sqrt{n}$ |
-| For normal: exact distribution | $\bar{X} \sim N(\mu, \sigma^2/n)$ |
-| CLT | $\sqrt{n}(\bar{X} - \mu)/\sigma \to N(0,1)$ |
-| Cramér-Rao bound | $\sigma^2/n$ (achieved) |
+| 표준오차 | $\sigma/\sqrt{n}$ |
+| 정규일 때 정확한 분포 | $\bar{X} \sim N(\mu, \sigma^2/n)$ |
+| 중심극한정리 | $\sqrt{n}(\bar{X} - \mu)/\sigma \to N(0,1)$ |
+| Cramér-Rao 하한 | $\sigma^2/n$ (달성됨) |
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Strategy: 5% mean annual return, 18% volatility. (a) SE from 10 years. (b) Years until 95% CI excludes 0. (c) Does monthly data help?
+**연습문제 1.**
+어떤 전략의 연평균 수익률이 5%, 변동성이 18%이다. (a) 10년 자료에서의 표준오차. (b) 95% 신뢰구간이 0을 배제하기까지 필요한 햇수. (c) 월별 자료를 쓰면 도움이 되는가?
 
-??? success "Solution to Exercise 1"
-    (a) $\mathrm{SE} = 0.18/\sqrt{10} \approx 0.057$. Larger than the point estimate 0.05.
+??? success "연습문제 1 풀이"
+    (a) $\mathrm{SE} = 0.18/\sqrt{10} \approx 0.057$. 점추정값 0.05보다 크다.
 
-    (b) Need $|\mu|/\mathrm{SE} > 1.96$: $\sqrt n > 1.96 \cdot 0.18/0.05 \approx 7.06 \Rightarrow n \ge 50$ years.
+    (b) $|\mu|/\mathrm{SE} > 1.96$이 필요하다: $\sqrt n > 1.96 \cdot 0.18/0.05 \approx 7.06 \Rightarrow n \ge 50$년.
 
-    (c) Under i.i.d. assumption, switching to monthly data scales both mean (by $1/12$) and variance (by $1/12$). The $t$-statistic stays the same — sampling more frequently within the same calendar window doesn't help. The "drift estimation problem" in finance is fundamentally about *time span*, not data density.
-
----
-
-**Exercise 2.**
-**Prove $\bar X$ is BLUE** (Best Linear Unbiased Estimator) of $\mu$ for any distribution with finite variance.
-
-??? success "Solution to Exercise 2"
-    Consider linear unbiased estimators $\hat\mu = \sum w_i X_i$ with $\sum w_i = 1$ (for unbiasedness).
-
-    $\mathrm{Var}(\hat\mu) = \sum w_i^2 \sigma^2 = \sigma^2 \sum w_i^2$, subject to $\sum w_i = 1$.
-
-    By Cauchy-Schwarz or Lagrange multipliers, $\sum w_i^2$ is minimized at $w_i = 1/n$ (uniform weights). So $\bar X = (1/n)\sum X_i$ has minimum variance among linear unbiased estimators.
-
-    $\bar X$ is BLUE for i.i.d. samples with finite variance, regardless of the distribution shape. Under normality, $\bar X$ is also UMVUE (uniformly minimum variance among *all* unbiased estimators, not just linear).
+    (c) i.i.d. 가정 아래에서 월별 자료로 바꾸면 평균도 ($1/12$배로) 분산도 ($1/12$배로) 함께 축소된다. $t$-통계량은 그대로다 — 같은 달력 구간 안에서 더 자주 표본을 뽑아도 도움이 되지 않는다. 금융의 "추세 추정 문제"는 근본적으로 자료의 밀도가 아니라 *시간 범위*의 문제이다.
 
 ---
 
-**Exercise 3.**
-**Robustness failure.** Show that adding one outlier to a sample arbitrarily shifts $\bar X$.
+**연습문제 2.**
+분산이 유한한 임의의 분포에서 **$\bar X$가 $\mu$의 BLUE**(최량선형불편추정량)임을 증명하라.
 
-??? success "Solution to Exercise 3"
-    Sample $\{X_1, \ldots, X_n, M\}$ where $M$ is a single outlier. New mean: $(\sum X_i + M)/(n + 1)$. As $M \to \infty$, new mean $\to \infty$.
+??? success "연습문제 2 풀이"
+    (불편성을 위해) $\sum w_i = 1$인 선형 불편추정량 $\hat\mu = \sum w_i X_i$를 생각하자.
 
-    So the **breakdown point** of $\bar X$ is $1/(n+1) \to 0$: even a single corrupted observation can move $\bar X$ arbitrarily far. Zero asymptotic breakdown.
+    $\mathrm{Var}(\hat\mu) = \sum w_i^2 \sigma^2 = \sigma^2 \sum w_i^2$이고, 제약은 $\sum w_i = 1$이다.
 
-    Compare with the median: breakdown point $\approx 1/2$ — half the data must be corrupted. The price for the median is lower efficiency under normality (~64% relative to mean).
+    Cauchy-Schwarz 또는 Lagrange 승수법에 의해 $\sum w_i^2$은 $w_i = 1/n$(균등 가중)에서 최소가 된다. 따라서 $\bar X = (1/n)\sum X_i$는 선형 불편추정량 중 분산이 최소이다.
 
-    For real data with potential outliers, prefer robust location estimators (median, trimmed mean, M-estimators) over $\bar X$.
-
----
-
-**Exercise 4.**
-**Bessel's correction.** Why does $S^2 = \sum(X_i - \bar X)^2/(n-1)$ have $n - 1$ in the denominator?
-
-??? success "Solution to Exercise 4"
-    Two views:
-
-    **Algebraic:** $\sum(X_i - \bar X)^2 = \sum X_i^2 - n\bar X^2$. Taking expectations:
-
-    $\mathbb{E}[\sum X_i^2] = n(\sigma^2 + \mu^2)$, $\mathbb{E}[n\bar X^2] = \sigma^2 + n\mu^2$. Subtracting: $(n-1)\sigma^2$.
-
-    Dividing by $n - 1$: $\mathbb{E}[S^2] = \sigma^2$. Unbiased.
-
-    **Geometric (degrees of freedom):** observations $X_i$ are unconstrained ($n$ dof), but residuals $X_i - \bar X$ satisfy $\sum(X_i - \bar X) = 0$ — one linear constraint. So they have $n - 1$ effective dof. Variance estimation divides by effective dof.
-
-    With $\mu$ known (e.g., for centered data), use $\sum X_i^2/n$ — no correction since no dof is consumed.
+    분산이 유한한 i.i.d. 표본에서 $\bar X$는 분포의 모양과 무관하게 BLUE이다. 정규성 아래에서는 $\bar X$가 UMVUE이기도 하다(선형에 한하지 않고 *모든* 불편추정량 중에서 균일하게 분산이 최소).
 
 ---
 
-**Exercise 5.**
-**Sample mean of dependent data.** $X_1, \ldots, X_n$ are AR(1): $X_t = \rho X_{t-1} + \varepsilon_t$. Derive $\mathrm{Var}(\bar X)$ in terms of $\rho$, $n$, and $\sigma^2_\varepsilon$.
+**연습문제 3.**
+**로버스트성의 실패.** 표본에 이상점 하나를 추가하면 $\bar X$가 얼마든지 이동함을 보여라.
 
-??? success "Solution to Exercise 5"
-    For stationary AR(1): $X_t = \sum_{k=0}^\infty \rho^k \varepsilon_{t-k}$, with $\mathrm{Var}(X_t) = \sigma^2_\varepsilon/(1 - \rho^2)$ and $\mathrm{Cov}(X_s, X_t) = \rho^{|s-t|} \sigma^2_\varepsilon/(1-\rho^2)$.
+??? success "연습문제 3 풀이"
+    표본 $\{X_1, \ldots, X_n, M\}$에서 $M$이 이상점 하나라고 하자. 새 평균은 $(\sum X_i + M)/(n + 1)$이다. $M \to \infty$이면 새 평균 $\to \infty$이다.
 
-    $\mathrm{Var}(\bar X) = (1/n^2)\sum_{s, t} \mathrm{Cov}(X_s, X_t)$. After algebra:
+    따라서 $\bar X$의 **붕괴점**은 $1/(n+1) \to 0$이다: 오염된 관측값 하나만으로도 $\bar X$를 얼마든지 멀리 옮길 수 있다. 점근 붕괴점이 0이다.
 
-    $\mathrm{Var}(\bar X) \approx \frac{\sigma^2_X}{n} \cdot \frac{1 + \rho}{1 - \rho}$ (for large $n$, with $\sigma^2_X = \sigma^2_\varepsilon/(1-\rho^2)$).
+    중앙값과 비교하면 붕괴점이 $\approx 1/2$이다 — 자료의 절반이 오염되어야 한다. 중앙값의 대가는 정규성 아래에서의 낮은 효율이다(평균 대비 약 64%).
 
-    **Inflation factor** $(1+\rho)/(1-\rho)$ > 1 for $\rho > 0$. For $\rho = 0.5$: factor 3 — equivalent to using $n/3$ independent observations.
-
-    **Implication:** dependent data is less informative than i.i.d. data with the same nominal sample size. The **effective sample size** is $n_{\text{eff}} = n(1-\rho)/(1+\rho)$ for AR(1).
-
-    This is critical in time-series analysis: naively computing $\mathrm{SE} = \sigma/\sqrt n$ underestimates uncertainty for autocorrelated data.
+    이상점이 있을 수 있는 실제 자료에서는 $\bar X$보다 로버스트한 위치추정량(중앙값, 절사평균, M-추정량)을 택하라.
 
 ---
 
-**Exercise 6.**
-**Weighted sample mean.** When observations have different variances ($\mathrm{Var}(X_i) = \sigma_i^2$), the inverse-variance-weighted mean $\hat\mu = \sum w_i X_i$ with $w_i \propto 1/\sigma_i^2$ minimizes variance. Derive the optimal $w_i$.
+**연습문제 4.**
+**Bessel 수정.** $S^2 = \sum(X_i - \bar X)^2/(n-1)$의 분모가 왜 $n - 1$인가?
 
-??? success "Solution to Exercise 6"
-    Constraint: $\sum w_i = 1$ for unbiasedness. Variance: $\mathrm{Var}(\hat\mu) = \sum w_i^2 \sigma_i^2$.
+??? success "연습문제 4 풀이"
+    두 가지 관점이 있다:
 
-    Minimize $\sum w_i^2 \sigma_i^2$ subject to $\sum w_i = 1$. Lagrangian: $L = \sum w_i^2 \sigma_i^2 - \lambda(\sum w_i - 1)$.
+    **대수적 관점:** $\sum(X_i - \bar X)^2 = \sum X_i^2 - n\bar X^2$. 기댓값을 취하면:
+
+    $\mathbb{E}[\sum X_i^2] = n(\sigma^2 + \mu^2)$, $\mathbb{E}[n\bar X^2] = \sigma^2 + n\mu^2$. 빼면 $(n-1)\sigma^2$.
+
+    $n - 1$로 나누면 $\mathbb{E}[S^2] = \sigma^2$. 불편이다.
+
+    **기하적 관점(자유도):** 관측값 $X_i$는 제약이 없지만($n$ 자유도) 잔차 $X_i - \bar X$는 $\sum(X_i - \bar X) = 0$을 만족한다 — 선형 제약 하나. 따라서 유효 자유도는 $n - 1$이다. 분산추정은 유효 자유도로 나눈다.
+
+    $\mu$가 알려져 있으면(예: 중심화된 자료) $\sum X_i^2/n$을 쓴다 — 소모된 자유도가 없으므로 수정도 없다.
+
+---
+
+**연습문제 5.**
+**종속 자료의 표본평균.** $X_1, \ldots, X_n$이 AR(1)이다: $X_t = \rho X_{t-1} + \varepsilon_t$. $\rho$, $n$, $\sigma^2_\varepsilon$으로 $\mathrm{Var}(\bar X)$를 유도하라.
+
+??? success "연습문제 5 풀이"
+    정상 AR(1)에서 $X_t = \sum_{k=0}^\infty \rho^k \varepsilon_{t-k}$이고, $\mathrm{Var}(X_t) = \sigma^2_\varepsilon/(1 - \rho^2)$, $\mathrm{Cov}(X_s, X_t) = \rho^{|s-t|} \sigma^2_\varepsilon/(1-\rho^2)$이다.
+
+    $\mathrm{Var}(\bar X) = (1/n^2)\sum_{s, t} \mathrm{Cov}(X_s, X_t)$. 계산을 정리하면:
+
+    $\mathrm{Var}(\bar X) \approx \frac{\sigma^2_X}{n} \cdot \frac{1 + \rho}{1 - \rho}$ (큰 $n$에 대해, $\sigma^2_X = \sigma^2_\varepsilon/(1-\rho^2)$).
+
+    **팽창인자** $(1+\rho)/(1-\rho)$는 $\rho > 0$이면 1보다 크다. $\rho = 0.5$이면 인자가 3 — 독립 관측값 $n/3$개를 쓰는 것과 같다.
+
+    **함의:** 종속 자료는 명목 표본크기가 같은 i.i.d. 자료보다 정보량이 적다. AR(1)의 **유효표본크기**는 $n_{\text{eff}} = n(1-\rho)/(1+\rho)$이다.
+
+    이는 시계열 분석에서 결정적이다: 자기상관된 자료에 대해 $\mathrm{SE} = \sigma/\sqrt n$을 소박하게 계산하면 불확실성을 과소평가한다.
+
+---
+
+**연습문제 6.**
+**가중 표본평균.** 관측값의 분산이 서로 다를 때($\mathrm{Var}(X_i) = \sigma_i^2$), $w_i \propto 1/\sigma_i^2$인 역분산 가중평균 $\hat\mu = \sum w_i X_i$가 분산을 최소화한다. 최적 $w_i$를 유도하라.
+
+??? success "연습문제 6 풀이"
+    제약: 불편성을 위해 $\sum w_i = 1$. 분산: $\mathrm{Var}(\hat\mu) = \sum w_i^2 \sigma_i^2$.
+
+    $\sum w_i = 1$ 아래에서 $\sum w_i^2 \sigma_i^2$을 최소화한다. Lagrangian: $L = \sum w_i^2 \sigma_i^2 - \lambda(\sum w_i - 1)$.
 
     $\partial L/\partial w_i = 2 w_i \sigma_i^2 - \lambda = 0 \Rightarrow w_i = \lambda/(2\sigma_i^2)$.
 
-    Normalize: $\lambda = 2/\sum(1/\sigma_i^2)$, so $w_i^* = (1/\sigma_i^2)/\sum_j(1/\sigma_j^2)$.
+    정규화하면 $\lambda = 2/\sum(1/\sigma_i^2)$이므로 $w_i^* = (1/\sigma_i^2)/\sum_j(1/\sigma_j^2)$이다.
 
-    **Inverse-variance weighting.** Variance of the optimal estimator: $\mathrm{Var}(\hat\mu^*) = 1/\sum(1/\sigma_i^2)$.
+    **역분산 가중.** 최적 추정량의 분산: $\mathrm{Var}(\hat\mu^*) = 1/\sum(1/\sigma_i^2)$.
 
-    Used in meta-analysis (combining studies of different precision), Kalman filtering (combining sensor measurements), and weighted least squares regression.
+    메타분석(정밀도가 다른 연구들의 결합), Kalman 필터링(센서 측정값의 결합), 가중최소제곱 회귀에서 쓰인다.

@@ -1,22 +1,22 @@
-# Gaussian Maximum Likelihood
+# Gaussian 최대가능도
 
-## Overview
+## 개요
 
-Maximum likelihood estimation (MLE) for the normal distribution yields closed-form estimators: $\hat{\mu} = \bar{X}$ for the mean and $\hat{\sigma}^2 = \frac{1}{n}\sum(X_i - \bar{X})^2$ for the variance. This page verifies the analytical MLEs against numerical optimization, visualizes the log-likelihood surface, quantifies finite-sample bias, derives the Cramer-Rao lower bound, validates confidence interval coverage, and applies Gaussian MLE to Value at Risk estimation.
+정규분포의 최대가능도추정(MLE)은 닫힌 형태의 추정량을 준다: 평균은 $\hat{\mu} = \bar{X}$, 분산은 $\hat{\sigma}^2 = \frac{1}{n}\sum(X_i - \bar{X})^2$이다. 이 페이지에서는 해석적 MLE를 수치최적화와 대조해 확인하고, 로그가능도 곡면을 시각화하며, 유한표본 편향을 정량화하고, Cramer-Rao 하한을 유도하며, 신뢰구간의 포함확률을 검증하고, Gaussian MLE를 VaR 추정에 적용한다.
 
-## Analytical MLE
+## 해석적 MLE
 
-For iid observations $X_1, \ldots, X_n \sim N(\mu, \sigma^2)$, the log-likelihood is:
+i.i.d. 관측값 $X_1, \ldots, X_n \sim N(\mu, \sigma^2)$에 대해 로그가능도는:
 
 $$\ell(\mu, \sigma^2) = -\frac{n}{2}\ln(2\pi\sigma^2) - \frac{1}{2\sigma^2}\sum_{i=1}^n(X_i - \mu)^2$$
 
-Setting the partial derivatives to zero gives the MLEs:
+편도함수를 0으로 놓으면 MLE를 얻는다:
 
 $$\hat{\mu}_{\text{MLE}} = \bar{X} = \frac{1}{n}\sum_{i=1}^n X_i$$
 
 $$\hat{\sigma}^2_{\text{MLE}} = \frac{1}{n}\sum_{i=1}^n (X_i - \bar{X})^2$$
 
-Note: the variance MLE divides by $n$, not $n-1$.
+유의: 분산의 MLE는 $n-1$이 아니라 $n$으로 나눈다.
 
 ```python
 import numpy as np
@@ -45,12 +45,12 @@ def mle_analytical_vs_numerical(seed=42):
     print(f"Numerical:  mu={mu_num:.6f}, sigma²={s2_num:.6f}")
 ```
 
-!!! tip "Agreement"
-    The analytical and numerical solutions agree to many decimal places, confirming the closed-form derivation.
+!!! tip "일치"
+    해석적 해와 수치해가 소수점 아래 여러 자리까지 일치하여 닫힌 형태 유도가 확인된다.
 
-## Log-Likelihood Surface
+## 로그가능도 곡면
 
-The log-likelihood forms a smooth, concave surface with a unique maximum at $(\hat{\mu}, \hat{\sigma}^2)$. Profile likelihoods allow visualization of each parameter separately.
+로그가능도는 $(\hat{\mu}, \hat{\sigma}^2)$에서 유일한 최댓값을 갖는 매끄러운 오목 곡면을 이룬다. 프로파일 가능도를 쓰면 각 모수를 따로 시각화할 수 있다.
 
 ```python
 import matplotlib.pyplot as plt
@@ -102,13 +102,13 @@ def loglikelihood_surface(seed=42):
     plt.show()
 ```
 
-## Finite-Sample Bias
+## 유한표본 편향
 
-The mean MLE $\hat{\mu}$ is unbiased, but the variance MLE $\hat{\sigma}^2_{\text{MLE}}$ is biased downward:
+평균의 MLE $\hat{\mu}$은 불편이지만 분산의 MLE $\hat{\sigma}^2_{\text{MLE}}$은 아래로 편향되어 있다:
 
 $$E[\hat{\sigma}^2_{\text{MLE}}] = \frac{n-1}{n}\sigma^2$$
 
-The bias is $-\sigma^2/n$, which vanishes as $n \to \infty$ (so the MLE is asymptotically unbiased).
+편향은 $-\sigma^2/n$으로 $n \to \infty$일 때 사라진다(따라서 MLE는 점근적으로 불편이다).
 
 ```python
 def finite_sample_bias(n_sim=200_000, seed=42):
@@ -125,17 +125,17 @@ def finite_sample_bias(n_sim=200_000, seed=42):
               f"E[S²]={s2_ub.mean():.4f}  Bias(MLE)={s2_mle.mean()-sigma2:.4f}")
 ```
 
-## Fisher Information and Cramer-Rao Lower Bound
+## Fisher 정보량과 Cramer-Rao 하한
 
-The **Fisher information matrix** for $N(\mu, \sigma^2)$ is:
+$N(\mu, \sigma^2)$의 **Fisher 정보행렬**은:
 
 $$I_n(\mu, \sigma^2) = \begin{pmatrix} n/\sigma^2 & 0 \\ 0 & n/(2\sigma^4) \end{pmatrix}$$
 
-The **Cramer-Rao Lower Bound (CRLB)** gives the minimum variance of any unbiased estimator:
+**Cramer-Rao 하한(CRLB)**은 임의의 불편추정량이 가질 수 있는 최소 분산을 준다:
 
 $$\text{Var}(\hat{\mu}) \geq \frac{\sigma^2}{n}, \qquad \text{Var}(\hat{\sigma}^2) \geq \frac{2\sigma^4}{n}$$
 
-The mean MLE achieves the CRLB exactly. The variance MLE approaches it asymptotically.
+평균의 MLE는 CRLB를 정확히 달성한다. 분산의 MLE는 점근적으로 도달한다.
 
 ```python
 def fisher_information_crlb(sigma=3.0, n_sim=100_000, seed=42):
@@ -155,18 +155,18 @@ def fisher_information_crlb(sigma=3.0, n_sim=100_000, seed=42):
               f"CRLB={2*sigma**4/n:.6f}  Ratio={s2_h.var()/(2*sigma**4/n):.4f}")
 ```
 
-!!! info "Efficiency"
-    The ratio $\text{Var}/\text{CRLB}$ is exactly 1 for $\hat{\mu}$ (it is efficient at all sample sizes) and converges to 1 for $\hat{\sigma}^2$ as $n \to \infty$ (asymptotically efficient).
+!!! info "효율성"
+    비 $\text{Var}/\text{CRLB}$는 $\hat{\mu}$에서 정확히 1이고(모든 표본크기에서 효율적이다), $\hat{\sigma}^2$에서는 $n \to \infty$일 때 1로 수렴한다(점근적으로 효율적이다).
 
-## Confidence Interval Coverage
+## 신뢰구간의 포함확률
 
-Three types of confidence intervals arise from the Gaussian model:
+Gaussian 모형에서는 세 종류의 신뢰구간이 나온다:
 
-| Parameter | Known | Interval Type | Pivotal Quantity |
+| 모수 | 알려진 것 | 구간의 종류 | 추축량 |
 |-----------|-------|---------------|-----------------|
-| $\mu$ | $\sigma$ known | $z$-interval | $\frac{\bar{X}-\mu}{\sigma/\sqrt{n}} \sim N(0,1)$ |
-| $\mu$ | $\sigma$ unknown | $t$-interval | $\frac{\bar{X}-\mu}{S/\sqrt{n}} \sim t_{n-1}$ |
-| $\sigma^2$ | $\mu$ unknown | $\chi^2$-interval | $\frac{(n-1)S^2}{\sigma^2} \sim \chi^2_{n-1}$ |
+| $\mu$ | $\sigma$를 앎 | $z$-구간 | $\frac{\bar{X}-\mu}{\sigma/\sqrt{n}} \sim N(0,1)$ |
+| $\mu$ | $\sigma$를 모름 | $t$-구간 | $\frac{\bar{X}-\mu}{S/\sqrt{n}} \sim t_{n-1}$ |
+| $\sigma^2$ | $\mu$를 모름 | $\chi^2$-구간 | $\frac{(n-1)S^2}{\sigma^2} \sim \chi^2_{n-1}$ |
 
 ```python
 def confidence_interval_coverage(seed=42):
@@ -200,16 +200,16 @@ def confidence_interval_coverage(seed=42):
     print(f"chi²-interval (sigma²):        {chi_ok/n_sim:.1%} (target: {1-alpha:.1%})")
 ```
 
-!!! success "Coverage matches"
-    All three intervals achieve their nominal 95% coverage, confirming the theoretical derivations.
+!!! success "포함확률이 맞는다"
+    세 구간 모두 명목 95% 포함확률을 달성하여 이론적 유도가 확인된다.
 
-## Financial Application: Value at Risk
+## 금융 응용: Value at Risk
 
-**Value at Risk (VaR)** at level $\alpha$ is the loss exceeded with probability $\alpha$. Under a Gaussian model for daily returns $R \sim N(\hat{\mu}, \hat{\sigma}^2)$:
+수준 $\alpha$에서의 **VaR(Value at Risk)**는 확률 $\alpha$로 초과되는 손실이다. 일별 수익률에 대한 Gaussian 모형 $R \sim N(\hat{\mu}, \hat{\sigma}^2)$ 아래에서:
 
 $$\text{VaR}_\alpha = -(\hat{\mu} + z_\alpha \hat{\sigma})$$
 
-where $z_\alpha = \mathcal{N}^{-1}(\alpha)$ is the normal quantile.
+여기서 $z_\alpha = \mathcal{N}^{-1}(\alpha)$는 정규분위수이다.
 
 ```python
 def var_estimation_finance(seed=42):
@@ -231,114 +231,114 @@ def var_estimation_finance(seed=42):
               f"Historical VaR={v_h*100:.3f}%  Ratio={v_h/v_p:.3f}")
 ```
 
-!!! warning "Model risk"
-    When the true return distribution has heavier tails than the normal (as is typical in finance), the Gaussian VaR **underestimates** tail risk. The historical VaR at the 1% level is typically larger than the parametric VaR, reflecting the true distribution's fatter tails.
+!!! warning "모형 위험"
+    참 수익률 분포의 꼬리가 (금융에서 흔하듯) 정규보다 두꺼우면 Gaussian VaR는 꼬리 위험을 **과소평가**한다. 1% 수준의 역사적 VaR가 대개 모수적 VaR보다 크며, 이는 참 분포의 두꺼운 꼬리를 반영한다.
 
-## Interpretation
+## 해석
 
-- The Gaussian MLE has elegant **closed-form solutions** and the mean estimator is globally efficient (achieves the CRLB).
-- The **variance MLE is biased** by a factor of $(n-1)/n$, but this bias vanishes asymptotically and can be corrected by Bessel's factor.
-- The **log-likelihood surface** is concave with a unique maximum, making optimization straightforward.
-- The Fisher information provides a fundamental limit on estimation precision through the **Cramer-Rao lower bound**.
-- All three standard confidence intervals ($z$, $t$, $\chi^2$) achieve their nominal coverage under normality.
-- In finance, the Gaussian assumption leads to simple VaR formulas but systematically **underestimates tail risk**.
+- Gaussian MLE는 우아한 **닫힌 형태의 해**를 가지며 평균추정량은 (CRLB를 달성하여) 전역적으로 효율적이다.
+- **분산의 MLE는 편향**되어 있어 $(n-1)/n$배가 되지만, 이 편향은 점근적으로 사라지고 Bessel 인자로 보정할 수 있다.
+- **로그가능도 곡면**은 오목이며 최댓값이 유일하여 최적화가 쉽다.
+- Fisher 정보량은 **Cramer-Rao 하한**을 통해 추정 정밀도의 근본적인 한계를 준다.
+- 정규성 아래에서 세 가지 표준 신뢰구간($z$, $t$, $\chi^2$) 모두 명목 포함확률을 달성한다.
+- 금융에서 Gaussian 가정은 간단한 VaR 공식을 주지만 **꼬리 위험을 체계적으로 과소평가**한다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Derive the MLE for $\mu$ and $\sigma^2$ by differentiating the log-likelihood and solving the first-order conditions.
+**연습문제 1.**
+로그가능도를 미분하고 1계 조건을 풀어 $\mu$와 $\sigma^2$의 MLE를 유도하라.
 
-??? success "Solution to Exercise 1"
-    The log-likelihood for iid $X_1, \ldots, X_n \sim N(\mu, \sigma^2)$ is:
+??? success "연습문제 1 풀이"
+    i.i.d. $X_1, \ldots, X_n \sim N(\mu, \sigma^2)$의 로그가능도는:
 
     $$\ell(\mu, \sigma^2) = -\frac{n}{2}\ln(2\pi) - \frac{n}{2}\ln(\sigma^2) - \frac{1}{2\sigma^2}\sum_{i=1}^n(X_i - \mu)^2$$
 
-    **For $\mu$:** $\frac{\partial \ell}{\partial \mu} = \frac{1}{\sigma^2}\sum_{i=1}^n(X_i - \mu) = 0$ gives $\sum X_i = n\mu$, so $\hat{\mu} = \bar{X}$.
+    **$\mu$에 대해:** $\frac{\partial \ell}{\partial \mu} = \frac{1}{\sigma^2}\sum_{i=1}^n(X_i - \mu) = 0$에서 $\sum X_i = n\mu$이므로 $\hat{\mu} = \bar{X}$이다.
 
-    **For $\sigma^2$:** $\frac{\partial \ell}{\partial \sigma^2} = -\frac{n}{2\sigma^2} + \frac{1}{2\sigma^4}\sum_{i=1}^n(X_i - \mu)^2 = 0$.
+    **$\sigma^2$에 대해:** $\frac{\partial \ell}{\partial \sigma^2} = -\frac{n}{2\sigma^2} + \frac{1}{2\sigma^4}\sum_{i=1}^n(X_i - \mu)^2 = 0$.
 
-    Solving: $n\sigma^2 = \sum(X_i - \mu)^2$, and substituting $\hat{\mu} = \bar{X}$:
+    풀면 $n\sigma^2 = \sum(X_i - \mu)^2$이고, $\hat{\mu} = \bar{X}$을 대입하면:
 
     $$\hat{\sigma}^2 = \frac{1}{n}\sum_{i=1}^n(X_i - \bar{X})^2$$
 
-    The second-order conditions confirm this is a maximum (the Hessian is negative definite at the MLE). $\square$
+    2계 조건이 이것이 최댓값임을 확인해 준다(MLE에서 Hessian이 음정부호이다). $\square$
 
 ---
 
-**Exercise 2.**
-Show that the Fisher information for $\mu$ in the $N(\mu, \sigma^2)$ model is $I(\mu) = 1/\sigma^2$ per observation, and that the CRLB for estimating $\mu$ from $n$ observations is $\sigma^2/n$.
+**연습문제 2.**
+$N(\mu, \sigma^2)$ 모형에서 $\mu$에 대한 관측값당 Fisher 정보량이 $I(\mu) = 1/\sigma^2$이고, 관측값 $n$개로 $\mu$를 추정할 때의 CRLB가 $\sigma^2/n$임을 보여라.
 
-??? success "Solution to Exercise 2"
-    The log-likelihood for a single observation is:
+??? success "연습문제 2 풀이"
+    관측값 하나의 로그가능도는:
 
     $$\ell(\mu; x) = -\frac{1}{2}\ln(2\pi\sigma^2) - \frac{(x-\mu)^2}{2\sigma^2}$$
 
-    The score function is:
+    점수함수는:
 
     $$\frac{\partial \ell}{\partial \mu} = \frac{x - \mu}{\sigma^2}$$
 
-    The Fisher information per observation is:
+    관측값당 Fisher 정보량은:
 
     $$I_1(\mu) = E\left[\left(\frac{\partial \ell}{\partial \mu}\right)^2\right] = E\left[\frac{(X-\mu)^2}{\sigma^4}\right] = \frac{\sigma^2}{\sigma^4} = \frac{1}{\sigma^2}$$
 
-    For $n$ iid observations, $I_n(\mu) = nI_1(\mu) = n/\sigma^2$. The CRLB is:
+    i.i.d. 관측값 $n$개에 대해 $I_n(\mu) = nI_1(\mu) = n/\sigma^2$이다. CRLB는:
 
     $$\text{Var}(\hat{\mu}) \geq \frac{1}{I_n(\mu)} = \frac{\sigma^2}{n}$$
 
-    Since $\text{Var}(\bar{X}) = \sigma^2/n$, the sample mean achieves the CRLB exactly and is therefore an **efficient** estimator. $\square$
+    $\text{Var}(\bar{X}) = \sigma^2/n$이므로 표본평균은 CRLB를 정확히 달성하며 따라서 **효율적인** 추정량이다. $\square$
 
 ---
 
-**Exercise 3.**
-Construct a 95% confidence interval for the mean of a normal population when $n = 25$, $\bar{x} = 12.4$, and $s = 3.1$. Compare the $z$-interval (pretending $\sigma$ is known) with the correct $t$-interval.
+**연습문제 3.**
+$n = 25$, $\bar{x} = 12.4$, $s = 3.1$일 때 정규모집단 평균의 95% 신뢰구간을 구성하라. ($\sigma$를 아는 척한) $z$-구간과 올바른 $t$-구간을 비교하라.
 
-??? success "Solution to Exercise 3"
-    **$z$-interval** (treating $s$ as $\sigma$): $z_{0.025} = 1.960$.
+??? success "연습문제 3 풀이"
+    **$z$-구간** ($s$를 $\sigma$로 취급): $z_{0.025} = 1.960$.
 
     $$\bar{x} \pm z_{0.025}\frac{s}{\sqrt{n}} = 12.4 \pm 1.960 \times \frac{3.1}{\sqrt{25}} = 12.4 \pm 1.216$$
 
     $$\text{CI}_z = [11.184, 13.616]$$
 
-    **$t$-interval** (correct): $t_{24, 0.025} = 2.064$.
+    **$t$-구간** (올바른 방법): $t_{24, 0.025} = 2.064$.
 
     $$\bar{x} \pm t_{24, 0.025}\frac{s}{\sqrt{n}} = 12.4 \pm 2.064 \times \frac{3.1}{\sqrt{25}} = 12.4 \pm 1.280$$
 
     $$\text{CI}_t = [11.120, 13.680]$$
 
-    The $t$-interval is wider (by about 5%) because it accounts for the additional uncertainty from estimating $\sigma$. For $n = 25$, the difference is modest; for smaller $n$, it would be more substantial. $\square$
+    $t$-구간이 (약 5%) 더 넓은데, $\sigma$를 추정하는 데서 오는 추가 불확실성을 반영하기 때문이다. $n = 25$에서는 차이가 크지 않지만 $n$이 작으면 훨씬 커진다. $\square$
 
 ---
 
-**Exercise 4.**
-A portfolio has 504 daily returns with sample mean $\hat{\mu} = 0.035\%$ and sample standard deviation $\hat{\sigma} = 1.30\%$. Compute the 1% and 5% parametric (Gaussian) VaR. If the true returns have a $t$-distribution with 5 degrees of freedom, would you expect the Gaussian VaR to over- or underestimate the true VaR?
+**연습문제 4.**
+어떤 포트폴리오의 일별 수익률 504개에서 표본평균 $\hat{\mu} = 0.035\%$, 표본표준편차 $\hat{\sigma} = 1.30\%$를 얻었다. 1%와 5% 모수적(Gaussian) VaR를 계산하라. 참 수익률이 자유도 5인 $t$-분포를 따른다면 Gaussian VaR가 참 VaR를 과대평가할 것 같은가, 과소평가할 것 같은가?
 
-??? success "Solution to Exercise 4"
+??? success "연습문제 4 풀이"
     **Gaussian VaR:**
 
     $$\text{VaR}_{1\%} = -(\hat{\mu} + z_{0.01}\hat{\sigma}) = -(0.035\% + (-2.326)(1.30\%)) = -(0.035\% - 3.024\%) = 2.989\%$$
 
     $$\text{VaR}_{5\%} = -(\hat{\mu} + z_{0.05}\hat{\sigma}) = -(0.035\% + (-1.645)(1.30\%)) = -(0.035\% - 2.139\%) = 2.103\%$$
 
-    **Effect of heavy tails:** The $t$-distribution with 5 degrees of freedom has heavier tails than the normal. Its 1st percentile is $t_{5, 0.01} = -3.365$ (compared to $z_{0.01} = -2.326$). The Gaussian VaR **underestimates** the true tail risk because the normal model does not capture the excess probability in the tails.
+    **두꺼운 꼬리의 효과:** 자유도 5인 $t$-분포는 정규보다 꼬리가 두껍다. 그 1번째 백분위수는 $t_{5, 0.01} = -3.365$로 ($z_{0.01} = -2.326$과 비교된다). Gaussian VaR는 정규 모형이 꼬리의 초과 확률을 담지 못하므로 참 꼬리 위험을 **과소평가**한다.
 
-    This is a systematic problem: Gaussian VaR is anti-conservative for fat-tailed distributions, which is exactly the situation encountered in financial returns. $\square$
+    이는 체계적인 문제이다: Gaussian VaR는 꼬리가 두꺼운 분포에서 보수적이지 않은데, 금융 수익률이 정확히 그런 상황이다. $\square$
 
 ---
 
-**Exercise 5.**
-Prove that the MLE for $\sigma^2$ is asymptotically efficient, i.e., $n \cdot \text{Var}(\hat{\sigma}^2_{\text{MLE}}) \to 2\sigma^4$ as $n \to \infty$.
+**연습문제 5.**
+$\sigma^2$의 MLE가 점근적으로 효율적임을, 즉 $n \to \infty$일 때 $n \cdot \text{Var}(\hat{\sigma}^2_{\text{MLE}}) \to 2\sigma^4$임을 증명하라.
 
-??? success "Solution to Exercise 5"
-    We have $\hat{\sigma}^2_{\text{MLE}} = \frac{1}{n}\sum(X_i - \bar{X})^2 = \frac{n-1}{n}S^2$.
+??? success "연습문제 5 풀이"
+    $\hat{\sigma}^2_{\text{MLE}} = \frac{1}{n}\sum(X_i - \bar{X})^2 = \frac{n-1}{n}S^2$이다.
 
-    For normal data, $(n-1)S^2/\sigma^2 \sim \chi^2_{n-1}$, so $\text{Var}(S^2) = 2\sigma^4/(n-1)$.
+    정규 자료에서 $(n-1)S^2/\sigma^2 \sim \chi^2_{n-1}$이므로 $\text{Var}(S^2) = 2\sigma^4/(n-1)$이다.
 
     $$\text{Var}(\hat{\sigma}^2_{\text{MLE}}) = \left(\frac{n-1}{n}\right)^2 \text{Var}(S^2) = \left(\frac{n-1}{n}\right)^2 \cdot \frac{2\sigma^4}{n-1} = \frac{2(n-1)\sigma^4}{n^2}$$
 
-    Therefore:
+    따라서:
 
-    $$n \cdot \text{Var}(\hat{\sigma}^2_{\text{MLE}}) = \frac{2(n-1)\sigma^4}{n} \to 2\sigma^4 \text{ as } n \to \infty$$
+    $$n \cdot \text{Var}(\hat{\sigma}^2_{\text{MLE}}) = \frac{2(n-1)\sigma^4}{n} \to 2\sigma^4 \quad (n \to \infty)$$
 
-    The CRLB for $\sigma^2$ is $1/I_n(\sigma^2) = 2\sigma^4/n$, so $n \cdot \text{CRLB} = 2\sigma^4$.
+    $\sigma^2$에 대한 CRLB는 $1/I_n(\sigma^2) = 2\sigma^4/n$이므로 $n \cdot \text{CRLB} = 2\sigma^4$이다.
 
-    Since the asymptotic variance equals the CRLB, $\hat{\sigma}^2_{\text{MLE}}$ is asymptotically efficient. $\square$
+    점근분산이 CRLB와 같으므로 $\hat{\sigma}^2_{\text{MLE}}$은 점근적으로 효율적이다. $\square$

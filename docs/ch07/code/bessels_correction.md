@@ -1,16 +1,14 @@
-# Bessel's Correction
+# Bessel 수정
 
-## Overview
+## 개요
 
-Bessel's correction replaces the divisor $n$ with $n - 1$ in the sample variance formula, yielding an unbiased estimator of $\sigma^2$. This page verifies unbiasedness across distributions, confirms the chi-squared distributional result for normal data, demonstrates the independence of $\bar{X}$ and $S^2$ (a property unique to the normal distribution), explores the standard deviation bias from Jensen's inequality, highlights software default pitfalls, and applies these ideas to financial tracking error estimation.
+Bessel 수정은 표본분산 공식의 분모 $n$을 $n - 1$로 바꾸어 $\sigma^2$의 불편추정량을 얻는다. 이 페이지에서는 여러 분포에서 불편성을 확인하고, 정규 자료에 대한 카이제곱 분포 결과를 검증하며, (정규분포에만 있는 성질인) $\bar{X}$와 $S^2$의 독립성을 보이고, Jensen 부등식에서 오는 표준편차의 편향을 살피며, 소프트웨어 기본값의 함정을 짚고, 이 아이디어를 금융의 추적오차 추정에 적용한다.
 
-## Unbiasedness Across Distributions
+## 여러 분포에서의 불편성
 
-The Bessel-corrected sample variance $S^2 = \frac{1}{n-1}\sum_{i=1}^n(X_i - \bar{X})^2$ satisfies:
+Bessel 수정 표본분산 $S^2 = \frac{1}{n-1}\sum_{i=1}^n(X_i - \bar{X})^2$은 정규분포만이 아니라 분산이 유한한 **모든** 분포에서 다음을 만족한다:
 
 $$E[S^2] = \sigma^2$$
-
-for **any** distribution with finite variance, not just the normal.
 
 ```python
 import numpy as np
@@ -34,16 +32,16 @@ def unbiasedness_across_distributions(n_sim=200_000, seed=42):
               f"E[S²]={s2_vals.mean():.4f}  Bias={s2_vals.mean()-true_var:.4f}")
 ```
 
-!!! tip "Distribution-free result"
-    The proof of $E[S^2] = \sigma^2$ uses only the identity $\sum(X_i - \bar{X})^2 = \sum(X_i - \mu)^2 - n(\bar{X} - \mu)^2$ and linearity of expectation. No distributional assumption is needed beyond finite variance.
+!!! tip "분포와 무관한 결과"
+    $E[S^2] = \sigma^2$의 증명은 항등식 $\sum(X_i - \bar{X})^2 = \sum(X_i - \mu)^2 - n(\bar{X} - \mu)^2$과 기댓값의 선형성만 쓴다. 분산이 유한하다는 것 외에 분포에 대한 가정은 필요 없다.
 
-## Chi-Squared Distribution
+## 카이제곱분포
 
-For normal data $X_i \sim N(\mu, \sigma^2)$, the scaled sample variance follows a chi-squared distribution:
+정규 자료 $X_i \sim N(\mu, \sigma^2)$에서 축척된 표본분산은 카이제곱분포를 따른다:
 
 $$\frac{(n-1)S^2}{\sigma^2} \sim \chi^2_{n-1}$$
 
-This exact distributional result is the foundation for chi-squared tests and confidence intervals for $\sigma^2$.
+이 정확한 분포 결과가 $\sigma^2$에 대한 카이제곱 검정과 신뢰구간의 토대이다.
 
 ```python
 import matplotlib.pyplot as plt
@@ -69,13 +67,13 @@ def chi_squared_verification(sigma=3.0, n_sim=100_000, seed=42):
     plt.show()
 ```
 
-From the chi-squared distribution, we can immediately derive:
+카이제곱분포로부터 곧바로 다음을 얻는다:
 
 $$E[S^2] = \sigma^2, \qquad \text{Var}(S^2) = \frac{2\sigma^4}{n-1}$$
 
-## Independence of X-bar and S-squared
+## X-bar와 S-squared의 독립성
 
-**Cochran's theorem** states that for normal data, $\bar{X}$ and $S^2$ are independent. This is a remarkable property that does **not** hold for non-normal distributions.
+**Cochran 정리**는 정규 자료에서 $\bar{X}$와 $S^2$이 독립임을 말한다. 정규가 아닌 분포에서는 성립하지 **않는** 놀라운 성질이다.
 
 ```python
 def independence_xbar_s2(sigma=3.0, n_sim=100_000, seed=42):
@@ -98,20 +96,20 @@ def independence_xbar_s2(sigma=3.0, n_sim=100_000, seed=42):
     print(f"Exponential: Corr(X̄, S²) = {corr_e:.6f}  (≠ 0)")
 ```
 
-!!! note "Why this matters"
-    The independence of $\bar{X}$ and $S^2$ is what makes the $t$-distribution derivation work. The $t$-statistic $T = \frac{\bar{X} - \mu}{S/\sqrt{n}}$ involves the ratio of $\bar{X} - \mu$ (related to a normal) and $S$ (related to a chi-squared). Independence ensures this ratio has the $t$-distribution.
+!!! note "왜 중요한가"
+    $\bar{X}$와 $S^2$의 독립성이 $t$-분포의 유도를 가능하게 한다. $t$-통계량 $T = \frac{\bar{X} - \mu}{S/\sqrt{n}}$은 (정규와 관련된) $\bar{X} - \mu$와 (카이제곱과 관련된) $S$의 비이다. 독립성이 이 비가 $t$-분포를 따르도록 보장한다.
 
-## Standard Deviation Bias
+## 표준편차의 편향
 
-Although $S^2$ is unbiased for $\sigma^2$, its square root $S$ is **biased** for $\sigma$. By Jensen's inequality (since $\sqrt{\cdot}$ is concave):
+$S^2$은 $\sigma^2$에 대해 불편이지만 그 제곱근 $S$는 $\sigma$에 대해 **편향**되어 있다. ($\sqrt{\cdot}$가 오목이므로) Jensen 부등식에 의해:
 
 $$E[S] = E[\sqrt{S^2}] < \sqrt{E[S^2]} = \sigma$$
 
-The correction factor $c_4$ depends on $n$:
+보정인자 $c_4$는 $n$에 의존한다:
 
 $$c_4(n) = \sqrt{\frac{2}{n-1}} \cdot \frac{\Gamma(n/2)}{\Gamma((n-1)/2)}$$
 
-and an unbiased estimator of $\sigma$ is $S/c_4$.
+이때 $\sigma$의 불편추정량은 $S/c_4$이다.
 
 ```python
 from scipy.special import gamma as gamma_func
@@ -128,12 +126,12 @@ def std_deviation_bias(sigma=3.0, n_sim=200_000, seed=42):
               f"Bias={s.mean()-sigma:.4f}  c₄={c4:.4f}  E[S/c₄]={(s/c4).mean():.4f}")
 ```
 
-!!! warning "Bias is largest for small samples"
-    For $n = 3$, $c_4 \approx 0.886$, so $E[S] \approx 0.886\sigma$ — the standard deviation is underestimated by about 11%. By $n = 50$, the bias is less than 0.5%.
+!!! warning "편향은 작은 표본에서 가장 크다"
+    $n = 3$이면 $c_4 \approx 0.886$이므로 $E[S] \approx 0.886\sigma$ — 표준편차를 약 11% 과소추정한다. $n = 50$이면 편향이 0.5% 미만이다.
 
-## Software Defaults Pitfall
+## 소프트웨어 기본값의 함정
 
-Different software packages use different defaults for the variance divisor:
+소프트웨어 패키지마다 분산의 분모 기본값이 다르다:
 
 ```python
 import numpy as np
@@ -145,12 +143,12 @@ print(f"np.var(data)          = {np.var(data):.4f}  <- divides by n={n}  (BIASED
 print(f"np.var(data, ddof=1)  = {np.var(data, ddof=1):.4f}  <- divides by n-1={n-1}  (UNBIASED)")
 ```
 
-!!! danger "Always check your divisor"
-    NumPy defaults to `ddof=0` (biased), while R and pandas default to `ddof=1` (unbiased). Always explicitly specify `ddof=1` in NumPy when computing sample variance.
+!!! danger "분모를 항상 확인하라"
+    NumPy의 기본값은 `ddof=0`(편향)인 반면 R과 pandas의 기본값은 `ddof=1`(불편)이다. NumPy로 표본분산을 계산할 때는 항상 `ddof=1`을 명시하라.
 
-## Financial Application: Tracking Error
+## 금융 응용: 추적오차
 
-**Tracking error** measures how closely a portfolio follows its benchmark, defined as the standard deviation of excess returns (portfolio return minus benchmark return). Bessel's correction matters when estimating tracking error from short histories.
+**추적오차**는 포트폴리오가 벤치마크를 얼마나 가깝게 따라가는지를 재며, 초과수익률(포트폴리오 수익률 - 벤치마크 수익률)의 표준편차로 정의된다. 짧은 이력으로 추적오차를 추정할 때 Bessel 수정이 중요해진다.
 
 ```python
 def tracking_error_estimation(seed=42):
@@ -174,122 +172,122 @@ def tracking_error_estimation(seed=42):
     print(f"True TE: {te_true_annual*100:.3f}%")
 ```
 
-## Interpretation
+## 해석
 
-- Bessel's correction produces an **unbiased** estimator of $\sigma^2$ for any distribution, but the $\chi^2$ distributional result requires normality.
-- The **independence** of $\bar{X}$ and $S^2$ is specific to normal populations and is the key ingredient for Student's $t$-test.
-- Unbiasedness of $S^2$ does **not** imply unbiasedness of $S$. Jensen's inequality causes $S$ to underestimate $\sigma$, especially for small $n$.
-- Always be explicit about the `ddof` parameter in NumPy to avoid silent errors.
-- In finance, tracking error estimation from short windows benefits meaningfully from Bessel's correction.
+- Bessel 수정은 임의의 분포에서 $\sigma^2$의 **불편** 추정량을 주지만, $\chi^2$ 분포 결과에는 정규성이 필요하다.
+- $\bar{X}$와 $S^2$의 **독립성**은 정규모집단에만 해당하며 Student $t$-검정의 핵심 재료이다.
+- $S^2$이 불편이라고 해서 $S$가 불편인 것은 **아니다**. Jensen 부등식 때문에, 특히 작은 $n$에서 $S$는 $\sigma$를 과소추정한다.
+- 조용한 오류를 피하려면 NumPy의 `ddof` 매개변수를 항상 명시하라.
+- 금융에서 짧은 구간으로 추적오차를 추정할 때는 Bessel 수정의 이득이 의미 있다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Show that $\frac{(n-1)S^2}{\sigma^2} \sim \chi^2_{n-1}$ when $X_i \sim N(\mu, \sigma^2)$, by writing the sum of squares in terms of independent standard normals.
+**연습문제 1.**
+$X_i \sim N(\mu, \sigma^2)$일 때 제곱합을 독립인 표준정규들로 표현하여 $\frac{(n-1)S^2}{\sigma^2} \sim \chi^2_{n-1}$임을 보여라.
 
-??? success "Solution to Exercise 1"
-    Let $Z_i = (X_i - \mu)/\sigma \sim N(0,1)$ iid. Then:
+??? success "연습문제 1 풀이"
+    $Z_i = (X_i - \mu)/\sigma \sim N(0,1)$이 i.i.d.라 하자. 그러면:
 
     $$\frac{1}{\sigma^2}\sum_{i=1}^n(X_i - \bar{X})^2 = \sum_{i=1}^n Z_i^2 - n\bar{Z}^2$$
 
-    where $\bar{Z} = \frac{1}{n}\sum Z_i$. Now $\sum Z_i^2 \sim \chi^2_n$ and $n\bar{Z}^2 = \left(\sqrt{n}\bar{Z}\right)^2 \sim \chi^2_1$ since $\sqrt{n}\bar{Z} \sim N(0,1)$.
+    여기서 $\bar{Z} = \frac{1}{n}\sum Z_i$이다. 이제 $\sum Z_i^2 \sim \chi^2_n$이고, $\sqrt{n}\bar{Z} \sim N(0,1)$이므로 $n\bar{Z}^2 = \left(\sqrt{n}\bar{Z}\right)^2 \sim \chi^2_1$이다.
 
-    By Cochran's theorem, since the quadratic forms are based on an orthogonal decomposition of $\mathbb{R}^n$ into complementary subspaces of dimensions $n-1$ and $1$:
+    이 이차형식들이 $\mathbb{R}^n$을 차원 $n-1$과 $1$인 서로 보완적인 부분공간으로 직교분해한 것에 기반하므로, Cochran 정리에 의해:
 
     $$\sum Z_i^2 - n\bar{Z}^2 \sim \chi^2_{n-1}$$
 
-    and the two components are independent. Therefore $(n-1)S^2/\sigma^2 \sim \chi^2_{n-1}$. $\square$
+    이고 두 성분은 독립이다. 따라서 $(n-1)S^2/\sigma^2 \sim \chi^2_{n-1}$이다. $\square$
 
 ---
 
-**Exercise 2.**
-Prove that for exponential data $X_i \sim \text{Exp}(\lambda)$, the sample mean $\bar{X}$ and sample variance $S^2$ are **not** independent. (Hint: compute $\text{Cov}(\bar{X}, S^2)$ using the third central moment.)
+**연습문제 2.**
+지수 자료 $X_i \sim \text{Exp}(\lambda)$에서 표본평균 $\bar{X}$와 표본분산 $S^2$이 독립이 **아님**을 증명하라. (힌트: 3차 중심적률을 써서 $\text{Cov}(\bar{X}, S^2)$을 계산하라.)
 
-??? success "Solution to Exercise 2"
-    For the exponential distribution with rate $\lambda$: $\mu = 1/\lambda$, $\sigma^2 = 1/\lambda^2$, and the third central moment $\mu_3 = E[(X - \mu)^3] = 2/\lambda^3$.
+??? success "연습문제 2 풀이"
+    비율이 $\lambda$인 지수분포에서 $\mu = 1/\lambda$, $\sigma^2 = 1/\lambda^2$이고 3차 중심적률은 $\mu_3 = E[(X - \mu)^3] = 2/\lambda^3$이다.
 
-    We can show that:
+    다음을 보일 수 있다:
 
     $$\text{Cov}(\bar{X}, S^2) = \frac{\mu_3}{n}$$
 
-    This is a general result. The proof uses:
+    이는 일반적인 결과이다. 증명은 다음을 쓴다:
 
     $$\text{Cov}(\bar{X}, S^2) = E[\bar{X} \cdot S^2] - E[\bar{X}]\cdot E[S^2]$$
 
-    Expanding $S^2 = \frac{1}{n-1}\sum(X_i - \bar{X})^2$ and using $\bar{X} = \frac{1}{n}\sum X_i$, after algebraic manipulation:
+    $S^2 = \frac{1}{n-1}\sum(X_i - \bar{X})^2$을 전개하고 $\bar{X} = \frac{1}{n}\sum X_i$를 쓴 뒤 정리하면:
 
     $$\text{Cov}(\bar{X}, S^2) = \frac{1}{n}E[(X_1 - \mu)^3] = \frac{\mu_3}{n} = \frac{2}{n\lambda^3}$$
 
-    Since $\mu_3 \neq 0$ for the exponential (it is positively skewed), we have $\text{Cov}(\bar{X}, S^2) \neq 0$, so they are not independent.
+    지수분포는 오른쪽으로 치우쳐 있어 $\mu_3 \neq 0$이므로 $\text{Cov}(\bar{X}, S^2) \neq 0$이고, 따라서 둘은 독립이 아니다.
 
-    For the normal distribution, $\mu_3 = 0$ (symmetric), so this covariance is zero. Zero covariance combined with joint normality of the underlying quadratic forms gives full independence. $\square$
+    정규분포에서는 (대칭이므로) $\mu_3 = 0$이어서 이 공분산이 0이다. 공분산이 0이라는 사실과 바탕 이차형식들의 결합정규성이 합쳐져 완전한 독립성을 준다. $\square$
 
 ---
 
-**Exercise 3.**
-Using Jensen's inequality, explain why $E[\sqrt{S^2}] < \sigma$. For $n = 5$ and normal data, compute the exact value of $c_4$ and the percentage bias in $S$ as an estimator of $\sigma$.
+**연습문제 3.**
+Jensen 부등식을 써서 $E[\sqrt{S^2}] < \sigma$인 이유를 설명하라. $n = 5$인 정규 자료에서 $c_4$의 정확한 값과 $\sigma$의 추정량으로서 $S$의 백분율 편향을 계산하라.
 
-??? success "Solution to Exercise 3"
-    Jensen's inequality states that for a concave function $g$ (such as $g(x) = \sqrt{x}$):
+??? success "연습문제 3 풀이"
+    Jensen 부등식은 ($g(x) = \sqrt{x}$ 같은) 오목함수 $g$에 대해
 
     $$E[g(X)] \leq g(E[X])$$
 
-    with strict inequality when $X$ is non-degenerate. Applying this to $S^2$:
+    임을 말하며, $X$가 퇴화되어 있지 않으면 부등호가 엄격하다. 이를 $S^2$에 적용하면:
 
     $$E[S] = E[\sqrt{S^2}] < \sqrt{E[S^2]} = \sqrt{\sigma^2} = \sigma$$
 
-    For $n = 5$:
+    $n = 5$이면:
 
     $$c_4 = \sqrt{\frac{2}{4}} \cdot \frac{\Gamma(5/2)}{\Gamma(2)} = \sqrt{\frac{1}{2}} \cdot \frac{\frac{3}{4}\sqrt{\pi}}{1} = \frac{1}{\sqrt{2}} \cdot \frac{3\sqrt{\pi}}{4}$$
 
-    Computing: $\Gamma(5/2) = \frac{3}{2}\cdot\frac{1}{2}\cdot\sqrt{\pi} = \frac{3\sqrt{\pi}}{4}$ and $\Gamma(2) = 1! = 1$.
+    계산하면 $\Gamma(5/2) = \frac{3}{2}\cdot\frac{1}{2}\cdot\sqrt{\pi} = \frac{3\sqrt{\pi}}{4}$이고 $\Gamma(2) = 1! = 1$이다.
 
     $$c_4 = \frac{1}{\sqrt{2}} \cdot \frac{3\sqrt{\pi}}{4} = \frac{3\sqrt{\pi}}{4\sqrt{2}} \approx \frac{3 \times 1.7725}{5.6569} \approx 0.9400$$
 
-    The percentage bias is $(c_4 - 1) \times 100\% \approx -6.0\%$. So $S$ underestimates $\sigma$ by about 6% on average when $n = 5$. $\square$
+    백분율 편향은 $(c_4 - 1) \times 100\% \approx -6.0\%$이다. 즉 $n = 5$일 때 $S$는 평균적으로 $\sigma$를 약 6% 과소추정한다. $\square$
 
 ---
 
-**Exercise 4.**
-A portfolio tracker has 36 months of excess returns. The estimated annualized tracking error using `ddof=1` is 3.8%. Construct a 95% confidence interval for the true annualized tracking error, assuming normality.
+**연습문제 4.**
+어떤 포트폴리오 추적자가 36개월치 초과수익률을 갖고 있다. `ddof=1`로 추정한 연율화 추적오차가 3.8%이다. 정규성을 가정하고 참 연율화 추적오차의 95% 신뢰구간을 구성하라.
 
-??? success "Solution to Exercise 4"
-    Monthly tracking error estimate: $\hat{\sigma}_m = 3.8\%/\sqrt{12} \approx 1.097\%$. The sample variance is $\hat{\sigma}_m^2$.
+??? success "연습문제 4 풀이"
+    월별 추적오차 추정값: $\hat{\sigma}_m = 3.8\%/\sqrt{12} \approx 1.097\%$. 표본분산은 $\hat{\sigma}_m^2$이다.
 
-    With $n = 36$ months and $\nu = n - 1 = 35$ degrees of freedom:
+    $n = 36$개월, 자유도 $\nu = n - 1 = 35$일 때:
 
     $$\frac{(n-1)\hat{\sigma}_m^2}{\sigma_m^2} \sim \chi^2_{35}$$
 
-    The 95% CI for $\sigma_m^2$ is:
+    $\sigma_m^2$의 95% 신뢰구간은:
 
     $$\left[\frac{35 \hat{\sigma}_m^2}{\chi^2_{35, 0.975}}, \frac{35 \hat{\sigma}_m^2}{\chi^2_{35, 0.025}}\right]$$
 
-    Using $\chi^2_{35, 0.975} = 53.20$ and $\chi^2_{35, 0.025} = 20.57$:
+    $\chi^2_{35, 0.975} = 53.20$, $\chi^2_{35, 0.025} = 20.57$을 쓰면:
 
     $$\sigma_m^2 \in \left[\frac{35 \times 1.097^2}{53.20}, \frac{35 \times 1.097^2}{20.57}\right] = [0.7916, 2.0477]$$
 
-    Taking square roots and annualizing (multiply by $\sqrt{12}$):
+    제곱근을 취하고 연율화하면($\sqrt{12}$를 곱하면):
 
     $$\sigma_{\text{annual}} \in [\sqrt{0.7916} \times \sqrt{12}, \sqrt{2.0477} \times \sqrt{12}] = [3.08\%, 4.96\%]$$
 
-    This is a wide interval, reflecting the imprecision of volatility estimates from only 3 years of monthly data. $\square$
+    구간이 넓은데, 이는 3년치 월별 자료만으로 얻은 변동성 추정값이 얼마나 부정확한지를 보여준다. $\square$
 
 ---
 
-**Exercise 5.**
-Explain the "general principle" of degrees of freedom: when estimating variance after fitting a model with $k$ parameters, we divide by $n - k$. Give three examples.
+**연습문제 5.**
+자유도의 "일반 원리"를 설명하라: 모수가 $k$개인 모형을 적합한 뒤 분산을 추정할 때는 $n - k$로 나눈다. 예를 세 가지 들라.
 
-??? success "Solution to Exercise 5"
-    **General principle:** Fitting a model with $k$ estimated parameters imposes $k$ constraints on the residuals (analogous to $\sum(X_i - \bar{X}) = 0$ for $k=1$). The residuals have only $n - k$ degrees of freedom, so dividing the residual sum of squares by $n - k$ gives an unbiased variance estimate.
+??? success "연습문제 5 풀이"
+    **일반 원리:** 추정한 모수가 $k$개인 모형을 적합하면 잔차에 $k$개의 제약이 걸린다($k=1$일 때의 $\sum(X_i - \bar{X}) = 0$과 같은 꼴이다). 잔차의 자유도는 $n - k$뿐이므로 잔차제곱합을 $n - k$로 나누면 불편 분산추정값을 얻는다.
 
-    **Example 1: One-sample variance.** With $k = 1$ (estimating $\mu$ by $\bar{X}$), the constraint is $\sum(X_i - \bar{X}) = 0$, and we divide by $n - 1$.
+    **예 1: 일표본 분산.** $k = 1$($\bar{X}$로 $\mu$를 추정)이면 제약이 $\sum(X_i - \bar{X}) = 0$이고 $n - 1$로 나눈다.
 
-    **Example 2: Simple linear regression.** With $Y_i = \beta_0 + \beta_1 x_i + \epsilon_i$, we estimate $k = 2$ parameters. The residual variance is:
+    **예 2: 단순선형회귀.** $Y_i = \beta_0 + \beta_1 x_i + \epsilon_i$에서는 모수 $k = 2$개를 추정한다. 잔차분산은:
 
     $$\hat{\sigma}^2 = \frac{\sum(Y_i - \hat{Y}_i)^2}{n - 2}$$
 
-    **Example 3: Multiple regression with $p$ predictors.** With $\mathbf{Y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\epsilon}$ and $k = p$ coefficients (including intercept):
+    **예 3: 예측변수가 $p$개인 다중회귀.** $\mathbf{Y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\epsilon}$에서 (절편을 포함하여) 계수가 $k = p$개이면:
 
     $$\hat{\sigma}^2 = \frac{\|\mathbf{Y} - \mathbf{X}\hat{\boldsymbol{\beta}}\|^2}{n - p}$$
 
-    In each case, the denominator equals the dimension of the residual space (the orthogonal complement of the column space of the design matrix), ensuring unbiasedness. $\square$
+    각 경우에 분모는 잔차공간(설계행렬의 열공간의 직교여공간)의 차원과 같으며, 이것이 불편성을 보장한다. $\square$

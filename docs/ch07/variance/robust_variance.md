@@ -1,103 +1,103 @@
-# Robust Variance Estimators
+# 로버스트 분산추정량
 
-## Overview
+## 개요
 
-A single outlier can inflate the sample variance by orders of magnitude, making it unreliable for contaminated data. Consider a dataset of exam scores $\{70, 72, 74, 76, 78\}$ with sample variance $s^2 = 10$. Replacing the last observation with $780$ yields $s^2 = 100{,}490$ --- a ten-thousand-fold increase driven entirely by one corrupted value. This fragility motivates the study of **robust** variance estimators: measures of spread that remain stable even when a substantial fraction of the data is contaminated.
+이상점 하나가 표본분산을 자릿수 단위로 부풀려 오염된 자료에서 믿을 수 없게 만들 수 있다. 표본분산이 $s^2 = 10$인 시험점수 자료 $\{70, 72, 74, 76, 78\}$을 생각하자. 마지막 관측값을 $780$으로 바꾸면 $s^2 \approx 99{,}975$가 된다 --- 오로지 오염된 값 하나 때문에 만 배가 뛴 것이다. 이 취약함이 **로버스트** 분산추정량, 즉 자료의 상당 부분이 오염되어도 안정적으로 남는 산포 측도를 공부할 동기가 된다.
 
-Two key concepts help us evaluate robustness. The **breakdown point** of an estimator is the largest proportion of observations that can be arbitrarily corrupted before the estimator produces unbounded (or completely misleading) results. The **asymptotic relative efficiency** (ARE) measures how much information the estimator extracts relative to the best possible estimator under a specific model --- typically the normal distribution. An ARE of 100% means no information is lost; lower values indicate a price paid for robustness.
+로버스트성을 평가하는 데 핵심 개념 두 가지가 도움이 된다. 추정량의 **붕괴점**은 추정량이 무한히 커지거나 완전히 오해를 부르는 결과를 내기 전까지 임의로 오염시킬 수 있는 관측값의 최대 비율이다. **점근 상대효율(ARE)**은 특정 모형 --- 보통 정규분포 --- 아래에서 가능한 최선의 추정량 대비 그 추정량이 얼마나 많은 정보를 뽑아내는지를 잰다. ARE가 100%이면 정보 손실이 없다는 뜻이고, 값이 낮을수록 로버스트성의 대가를 치른 것이다.
 
-## Median Absolute Deviation (MAD)
+## 중앙값 절대편차 (MAD)
 
-The sample variance measures average squared deviations from the mean, but both the mean and squaring amplify the effect of outliers. A natural fix is to replace the mean with the median --- itself a robust location estimator --- and to use absolute deviations instead of squared deviations. This leads to the **Median Absolute Deviation** (MAD).
+표본분산은 평균으로부터의 평균 제곱편차를 재는데, 평균도 제곱도 이상점의 영향을 증폭한다. 자연스러운 해법은 평균을 (그 자체로 로버스트한 위치추정량인) 중앙값으로 바꾸고, 제곱편차 대신 절대편차를 쓰는 것이다. 이것이 **중앙값 절대편차**(MAD)로 이어진다.
 
-For observations $X_1, X_2, \ldots, X_n$, define
+관측값 $X_1, X_2, \ldots, X_n$에 대해
 
 $$
 \text{MAD} = \text{Median}\bigl(|X_i - \text{Median}(X)|\bigr)
 $$
 
-The MAD first computes the median of the data, then finds the absolute deviation of each observation from that median, and finally takes the median of those deviations.
+MAD는 먼저 자료의 중앙값을 계산하고, 각 관측값의 그 중앙값으로부터의 절대편차를 구한 뒤, 그 편차들의 중앙값을 취한다.
 
-To use MAD as an estimator of the population standard deviation $\sigma$ under normality, we apply a **consistency factor**:
+정규성 아래에서 MAD를 모표준편차 $\sigma$의 추정량으로 쓰려면 **일치성 인자**를 적용한다:
 
 $$
 \hat{\sigma}_{\text{MAD}} = \frac{1}{\mathcal{N}^{-1}(3/4)} \cdot \text{MAD} \approx 1.4826 \cdot \text{MAD}
 $$
 
-where $\mathcal{N}^{-1}(3/4) \approx 0.6745$ is the 75th percentile of the standard normal distribution. This scaling ensures that $\hat{\sigma}_{\text{MAD}}$ is a consistent estimator of $\sigma$ when the data are truly normal.
+여기서 $\mathcal{N}^{-1}(3/4) \approx 0.6745$는 표준정규분포의 75번째 백분위수이다. 이 축척 덕분에 자료가 실제로 정규일 때 $\hat{\sigma}_{\text{MAD}}$가 $\sigma$의 일치추정량이 된다.
 
-The MAD achieves a **breakdown point of 50%**, meaning that up to half the observations can be arbitrarily corrupted before the estimator breaks down. This is the highest possible breakdown point for any translation-equivariant estimator.
+MAD는 **붕괴점 50%**를 달성한다. 즉 관측값의 절반까지 임의로 오염되어도 추정량이 무너지지 않는다. 이는 평행이동 동변인 임의의 추정량이 가질 수 있는 가장 높은 붕괴점이다.
 
-## IQR-based Estimator
+## IQR 기반 추정량
 
-The interquartile range (IQR) measures the spread of the middle 50% of the data, which is unaffected by extreme values in either tail. This provides another route to a robust scale estimator.
+사분위수범위(IQR)는 자료 가운데 50%의 산포를 재며, 양쪽 꼬리의 극단값에 영향받지 않는다. 이것이 로버스트한 척도추정량으로 가는 또 다른 길을 준다.
 
-The IQR-based estimator of $\sigma$ is
+$\sigma$의 IQR 기반 추정량은
 
 $$
 \hat{\sigma}_{\text{IQR}} = \frac{\text{IQR}}{2\,\mathcal{N}^{-1}(3/4)} \approx \frac{\text{IQR}}{1.3490}
 $$
 
-where $\text{IQR} = Q_3 - Q_1$ is the difference between the 75th and 25th percentiles. Under normality, $Q_3 - Q_1 = 2\,\mathcal{N}^{-1}(3/4)\,\sigma$, so dividing by $2\,\mathcal{N}^{-1}(3/4)$ recovers $\sigma$.
+여기서 $\text{IQR} = Q_3 - Q_1$은 75번째 백분위수와 25번째 백분위수의 차이다. 정규성 아래에서 $Q_3 - Q_1 = 2\,\mathcal{N}^{-1}(3/4)\,\sigma$이므로 $2\,\mathcal{N}^{-1}(3/4)$로 나누면 $\sigma$를 되찾는다.
 
-The IQR-based estimator has a **breakdown point of 25%**, since corrupting more than a quarter of the data from either end can shift a quartile arbitrarily.
+IQR 기반 추정량의 **붕괴점은 25%**이다. 어느 한쪽 끝에서 자료의 4분의 1 이상을 오염시키면 사분위수를 얼마든지 옮길 수 있기 때문이다.
 
-## Worked Example
+## 풀이 예제
 
-Consider the dataset $\{2, 3, 4, 5, 100\}$, where $100$ is an obvious outlier.
+$100$이 명백한 이상점인 자료 $\{2, 3, 4, 5, 100\}$을 생각하자.
 
-**Sample standard deviation:**
+**표본표준편차:**
 
-The sample mean is $\bar{x} = (2 + 3 + 4 + 5 + 100)/5 = 22.8$, so
+표본평균은 $\bar{x} = (2 + 3 + 4 + 5 + 100)/5 = 22.8$이므로
 
 $$
-s = \sqrt{\frac{1}{4}\sum_{i=1}^{5}(x_i - 22.8)^2} = \sqrt{\frac{(20.8)^2 + (19.8)^2 + (18.8)^2 + (17.8)^2 + (77.2)^2}{4}} \approx 42.15
+s = \sqrt{\frac{1}{4}\sum_{i=1}^{5}(x_i - 22.8)^2} = \sqrt{\frac{(20.8)^2 + (19.8)^2 + (18.8)^2 + (17.8)^2 + (77.2)^2}{4}} \approx 43.17
 $$
 
-The outlier inflates the estimate far beyond the spread of the clean observations.
+이상점이 추정값을 깨끗한 관측값들의 산포보다 훨씬 크게 부풀린다.
 
-**MAD-based estimate:**
+**MAD 기반 추정값:**
 
-The median is $\text{Median} = 4$. The absolute deviations from the median are $|2-4|, |3-4|, |4-4|, |5-4|, |100-4| = 2, 1, 0, 1, 96$. Sorting gives $\{0, 1, 1, 2, 96\}$, so $\text{MAD} = 1$. Then
+중앙값은 $\text{Median} = 4$이다. 중앙값으로부터의 절대편차는 $|2-4|, |3-4|, |4-4|, |5-4|, |100-4| = 2, 1, 0, 1, 96$이다. 정렬하면 $\{0, 1, 1, 2, 96\}$이므로 $\text{MAD} = 1$이다. 그러면
 
 $$
 \hat{\sigma}_{\text{MAD}} = 1.4826 \times 1 = 1.4826
 $$
 
-**IQR-based estimate:**
+**IQR 기반 추정값:**
 
-The quartiles are $Q_1 = 2.5$ and $Q_3 = 52.5$ (using linear interpolation with $n=5$), giving $\text{IQR} = 50.0$. With only five observations, the IQR is still influenced by the outlier because $Q_3$ is pulled toward $100$.
+($n=5$에서 선형보간으로 계산한) 사분위수는 $Q_1 = 2.5$, $Q_3 = 52.5$이므로 $\text{IQR} = 50.0$이다. 관측값이 다섯 개뿐이면 $Q_3$이 $100$ 쪽으로 끌려가므로 IQR도 여전히 이상점의 영향을 받는다.
 
-Using simple quartile positions ($Q_1 = 3$, $Q_3 = 5$), we get $\text{IQR} = 2$, so
+단순한 사분위수 위치($Q_1 = 3$, $Q_3 = 5$)를 쓰면 $\text{IQR} = 2$이므로
 
 $$
 \hat{\sigma}_{\text{IQR}} = \frac{2}{1.349} \approx 1.48
 $$
 
-!!! tip "Practical Guidance"
-    With small samples, the quartile computation method matters significantly. The MAD is generally more robust than the IQR-based estimator for small samples with outliers, because the median of absolute deviations is less sensitive to the specific interpolation method used for quartiles.
+!!! tip "실무 지침"
+    표본이 작으면 사분위수를 계산하는 방법이 결과에 크게 영향을 준다. 이상점이 있는 작은 표본에서는 대체로 MAD가 IQR 기반 추정량보다 더 로버스트하다. 절대편차의 중앙값은 사분위수에 쓰는 특정 보간 방식에 덜 민감하기 때문이다.
 
-## Comparison
+## 비교
 
-The following table summarizes the key properties of each estimator.
+다음 표는 각 추정량의 핵심 성질을 정리한 것이다.
 
-| Estimator | Breakdown Point | ARE at Normal |
+| 추정량 | 붕괴점 | 정규에서의 ARE |
 |---|---|---|
-| Sample standard deviation $s$ | $1/n \to 0\%$ | 100% |
-| MAD-based $\hat{\sigma}_{\text{MAD}}$ | 50% | 37% |
-| IQR-based $\hat{\sigma}_{\text{IQR}}$ | 25% | 37% |
+| 표본표준편차 $s$ | $1/n \to 0\%$ | 100% |
+| MAD 기반 $\hat{\sigma}_{\text{MAD}}$ | 50% | 37% |
+| IQR 기반 $\hat{\sigma}_{\text{IQR}}$ | 25% | 37% |
 
-The sample standard deviation is the most efficient estimator when the data are truly normal, but it has effectively zero breakdown point --- a single extreme outlier can make it arbitrarily large. The MAD-based estimator sacrifices 63% of efficiency at the normal model in exchange for the maximum possible breakdown point of 50%. The IQR-based estimator offers a compromise, though in practice the MAD is often preferred because of its higher breakdown point.
+표본표준편차는 자료가 실제로 정규일 때 가장 효율적인 추정량이지만 붕괴점이 사실상 0이다 --- 극단 이상점 하나가 값을 얼마든지 크게 만들 수 있다. MAD 기반 추정량은 정규 모형에서 효율의 63%를 희생하는 대신 가능한 최대 붕괴점 50%를 얻는다. IQR 기반 추정량은 절충안이지만, 실무에서는 붕괴점이 더 높은 MAD가 흔히 선호된다.
 
-!!! warning "Robustness--Efficiency Tradeoff"
-    No estimator can simultaneously achieve maximum breakdown (50%) and full efficiency (100%) at the normal model. Choosing a robust estimator always involves accepting some loss of efficiency under ideal conditions in exchange for protection against contaminated data.
+!!! warning "로버스트성–효율성 맞바꿈"
+    최대 붕괴점(50%)과 정규 모형에서의 완전한 효율(100%)을 동시에 달성하는 추정량은 없다. 로버스트 추정량을 고른다는 것은 오염된 자료에 대한 보호를 얻는 대가로 이상적인 조건에서 어느 정도의 효율 손실을 받아들인다는 뜻이다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-**Ledoit-Wolf shrinkage** for covariance. Simulate $p = 30$ assets, $n = 60$. Compare with sample covariance.
+**연습문제 1.**
+공분산에 대한 **Ledoit-Wolf 축소.** 자산 $p = 30$개, $n = 60$으로 모의실험하라. 표본공분산과 비교하라.
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
     ```python
     import numpy as np
     from sklearn.covariance import LedoitWolf
@@ -115,88 +115,88 @@ The sample standard deviation is the most efficient estimator when the data are 
     print(f"MSE: sample={err_s/R:.1f}, LW={err_lw/R:.1f}, shrinkage={np.mean(shr):.2f}")
     ```
 
-    Expected: LW MSE roughly 40-60% lower; shrinkage intensity $\sim 0.3$ at $p/n = 0.5$. Higher $p/n$ → more shrinkage. In high-dim regimes ($p \approx n$), sample covariance becomes singular; LW provides invertibility plus better MSE.
+    예상 결과: LW의 평균제곱오차가 대략 40–60% 낮고, $p/n = 0.5$에서 축소 강도는 $\sim 0.3$이다. $p/n$이 클수록 축소가 강해진다. 고차원 영역($p \approx n$)에서는 표본공분산이 특이행렬이 되는데, LW는 역행렬 존재성과 더 나은 평균제곱오차를 함께 준다.
 
 ---
 
-**Exercise 2.**
-**MAD as robust scale.** For $\{2, 4, 6, 8, 10, 100\}$, compute $\text{MAD}$ and the scaled MAD ($1.4826 \cdot \mathrm{MAD}$). Compare with sample SD.
+**연습문제 2.**
+**로버스트 척도로서의 MAD.** $\{2, 4, 6, 8, 10, 100\}$에 대해 $\text{MAD}$와 축척된 MAD($1.4826 \cdot \mathrm{MAD}$)를 계산하라. 표본표준편차와 비교하라.
 
-??? success "Solution to Exercise 2"
-    Median = 7. Absolute deviations: $|2-7|, |4-7|, |6-7|, |8-7|, |10-7|, |100-7| = 5, 3, 1, 1, 3, 93$.
+??? success "연습문제 2 풀이"
+    중앙값 = 7. 절대편차: $|2-7|, |4-7|, |6-7|, |8-7|, |10-7|, |100-7| = 5, 3, 1, 1, 3, 93$.
 
-    Sorted: 1, 1, 3, 3, 5, 93. Median (MAD) = (3 + 3)/2 = 3.
+    정렬하면 1, 1, 3, 3, 5, 93. 중앙값(MAD) = (3 + 3)/2 = 3.
 
-    Scaled MAD = $1.4826 \cdot 3 \approx 4.45$.
+    축척된 MAD = $1.4826 \cdot 3 \approx 4.45$.
 
-    Sample SD = $\sqrt{(\sum(x_i - \bar x)^2)/(n-1)}$ with $\bar x = 21.67$. $\sum(x_i - \bar x)^2 \approx 7188$. $\mathrm{SD} \approx 37.9$.
+    표본표준편차 = $\sqrt{(\sum(x_i - \bar x)^2)/(n-1)}$, $\bar x = 21.67$. $\sum(x_i - \bar x)^2 \approx 7403$. $\mathrm{SD} \approx 38.5$.
 
-    SD is dominated by the outlier; MAD captures the typical scale of the bulk of the data.
-
----
-
-**Exercise 3.**
-**Breakdown point of variance estimators.** Compare sample variance, MAD, IQR.
-
-??? success "Solution to Exercise 3"
-    **Sample variance:** breakdown 0% (one corrupted observation moves it arbitrarily, especially through squaring).
-
-    **MAD:** breakdown 50%. Median of absolute deviations from the median — both layers of medians are robust.
-
-    **IQR:** breakdown 25%. One quartile can be moved by corrupting 25% of one tail.
-
-    For outlier-prone data, MAD is the most robust; sample variance is the least.
+    표준편차는 이상점에 지배되는 반면, MAD는 자료 대부분의 전형적인 척도를 포착한다.
 
 ---
 
-**Exercise 4.**
-**Trimmed variance.** Define and compute for $\{1, 3, 5, 7, 9, 11, 100\}$ at 20% trimming.
+**연습문제 3.**
+**분산추정량의 붕괴점.** 표본분산, MAD, IQR을 비교하라.
 
-??? success "Solution to Exercise 4"
-    20% trimming with $n = 7$: $k = 1$. Trim smallest and largest: remaining $\{3, 5, 7, 9, 11\}$.
+??? success "연습문제 3 풀이"
+    **표본분산:** 붕괴점 0%(오염된 관측값 하나가, 특히 제곱을 통해, 값을 얼마든지 옮긴다).
 
-    Trimmed mean: 7 (from earlier exercise).
+    **MAD:** 붕괴점 50%. 중앙값으로부터의 절대편차의 중앙값 — 두 겹의 중앙값이 모두 로버스트하다.
 
-    Trimmed variance: $\frac{1}{n-2k}\sum_{i=k+1}^{n-k}(X_{(i)} - \bar X_{\text{trim}})^2 = (1/5)[(3-7)^2 + (5-7)^2 + (7-7)^2 + (9-7)^2 + (11-7)^2] = 40/5 = 8$.
+    **IQR:** 붕괴점 25%. 한쪽 꼬리의 25%를 오염시키면 사분위수 하나를 옮길 수 있다.
 
-    Sample variance of original: dominated by 100. Trimmed variance captures the spread of the typical observations.
-
-    Scaling: for normal data, trimmed variance is a biased estimator of $\sigma^2$; scaling constants exist (analog of $1.4826$ for MAD).
+    이상점이 잦은 자료에서는 MAD가 가장 로버스트하고 표본분산이 가장 취약하다.
 
 ---
 
-**Exercise 5.**
-**Robust covariance.** Why is the sample covariance matrix sensitive to multivariate outliers, and what are alternative estimators?
+**연습문제 4.**
+**절사분산.** 정의하고 $\{1, 3, 5, 7, 9, 11, 100\}$에 대해 20% 절사로 계산하라.
 
-??? success "Solution to Exercise 5"
-    Sample covariance: $S = (1/(n-1))\sum (X_i - \bar X)(X_i - \bar X)^T$. Squared deviations amplify any outlier in any dimension.
+??? success "연습문제 4 풀이"
+    $n = 7$에서 20% 절사: $k = 1$. 가장 작은 값과 가장 큰 값을 절사하면 $\{3, 5, 7, 9, 11\}$이 남는다.
 
-    **Alternatives:**
+    절사평균: 7 (앞의 연습문제).
 
-    - **Minimum Covariance Determinant (MCD):** find subset of $\lceil n/2 \rceil$ observations with smallest determinant of sample covariance. Robust but computationally expensive.
-    - **Minimum Volume Ellipsoid (MVE):** find smallest ellipsoid containing $\lceil n/2 \rceil$ observations. Highly robust.
-    - **Tukey's bisquare M-estimator:** down-weight observations based on Mahalanobis distance from the center.
-    - **Ledoit-Wolf:** shrinks toward a structured target (diagonal). Not robust to outliers but addresses high-dimensional noise.
+    절사분산: $\frac{1}{n-2k}\sum_{i=k+1}^{n-k}(X_{(i)} - \bar X_{\text{trim}})^2 = (1/5)[(3-7)^2 + (5-7)^2 + (7-7)^2 + (9-7)^2 + (11-7)^2] = 40/5 = 8$.
 
-    For multivariate outlier detection (financial portfolios, multivariate quality control), MCD is the standard. Implemented in `sklearn.covariance.MinCovDet`.
+    원래 자료의 표본분산은 100에 지배된다. 절사분산은 전형적인 관측값들의 산포를 포착한다.
+
+    축척: 정규 자료에서 절사분산은 $\sigma^2$의 편향추정량이며, (MAD의 $1.4826$에 해당하는) 축척 상수가 존재한다.
 
 ---
 
-**Exercise 6.**
-**When to use robust covariance.** Application contexts.
+**연습문제 5.**
+**로버스트 공분산.** 표본공분산행렬이 다변량 이상점에 민감한 이유는 무엇이며, 어떤 대안 추정량이 있는가?
 
-??? success "Solution to Exercise 6"
-    **Use robust covariance when:**
+??? success "연습문제 5 풀이"
+    표본공분산: $S = (1/(n-1))\sum (X_i - \bar X)(X_i - \bar X)^T$. 제곱편차가 어느 차원의 이상점이든 증폭한다.
 
-    - **Outlier detection:** want to identify points far from the bulk (via Mahalanobis distance using robust $\hat\boldsymbol\Sigma$).
-    - **Mahalanobis distance for classification:** outliers shouldn't drive the covariance estimate used in QDA, LDA, or k-NN.
-    - **PCA on contaminated data:** robust covariance gives robust principal components.
-    - **Multivariate quality control:** detecting unusual patterns (Hotelling's $T^2$).
+    **대안:**
 
-    **Use sample covariance when:**
+    - **최소공분산행렬식(MCD):** 표본공분산의 행렬식이 가장 작은 $\lceil n/2 \rceil$개 관측값의 부분집합을 찾는다. 로버스트하지만 계산 비용이 크다.
+    - **최소부피타원체(MVE):** $\lceil n/2 \rceil$개 관측값을 담는 가장 작은 타원체를 찾는다. 매우 로버스트하다.
+    - **Tukey의 bisquare M-추정량:** 중심으로부터의 Mahalanobis 거리에 따라 관측값의 가중치를 낮춘다.
+    - **Ledoit-Wolf:** 구조화된 목표(대각행렬) 쪽으로 축소한다. 이상점에는 로버스트하지 않지만 고차원 잡음을 다룬다.
 
-    - Data is clean (controlled experiments, simulation).
-    - High-dimensional / low-noise regime where shrinkage estimators are preferred.
-    - Computational efficiency required.
+    다변량 이상점 탐지(금융 포트폴리오, 다변량 품질관리)에서는 MCD가 표준이다. `sklearn.covariance.MinCovDet`에 구현되어 있다.
 
-    **High-dimensional caveat:** when $p > n$, sample covariance is singular regardless of outliers. Need shrinkage (Ledoit-Wolf) or sparse methods (graphical lasso) — and possibly both robust and shrinkage components.
+---
+
+**연습문제 6.**
+**로버스트 공분산은 언제 쓰는가.** 적용 맥락.
+
+??? success "연습문제 6 풀이"
+    **로버스트 공분산을 쓸 때:**
+
+    - **이상점 탐지:** (로버스트한 $\hat{\boldsymbol\Sigma}$로 계산한 Mahalanobis 거리를 통해) 자료 대부분에서 멀리 떨어진 점을 찾고 싶을 때.
+    - **분류를 위한 Mahalanobis 거리:** QDA, LDA, k-NN에 쓰는 공분산추정값을 이상점이 좌우해서는 안 될 때.
+    - **오염된 자료의 PCA:** 로버스트 공분산이 로버스트한 주성분을 준다.
+    - **다변량 품질관리:** 이상 패턴 탐지(Hotelling의 $T^2$).
+
+    **표본공분산을 쓸 때:**
+
+    - 자료가 깨끗할 때(통제된 실험, 모의실험).
+    - 축소추정량이 선호되는 고차원 / 저잡음 영역.
+    - 계산 효율이 필요할 때.
+
+    **고차원에서의 주의:** $p > n$이면 이상점과 무관하게 표본공분산이 특이행렬이 된다. 축소(Ledoit-Wolf)나 희소 방법(그래프 라소)이 필요하며, 로버스트 성분과 축소 성분이 둘 다 필요할 수도 있다.

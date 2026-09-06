@@ -1,240 +1,240 @@
-# Bias and Consistency of the Sample Mean
+# 표본평균의 편향과 일치성
 
-## Introduction
+## 들어가며
 
-Two fundamental questions about any estimator are: (1) Does it systematically over- or underestimate the true parameter? (**bias**) and (2) Does it converge to the true value as the sample size grows? (**consistency**). For the sample mean $\bar{X}$, the answers are reassuringly simple — it is unbiased and consistent under very mild conditions — but the precise statements and their implications are worth studying carefully.
+어떤 추정량에 대해서든 근본적인 질문 두 가지는 다음과 같다: (1) 참 모수를 체계적으로 과대 또는 과소추정하는가? (**편향**) (2) 표본크기가 커질 때 참값으로 수렴하는가? (**일치성**) 표본평균 $\bar{X}$에 대한 답은 안심할 만큼 단순하다 — 매우 온건한 조건 아래에서 불편이고 일치한다 — 그러나 그 정확한 진술과 함의는 꼼꼼히 살펴볼 가치가 있다.
 
-## Bias of the Sample Mean
+## 표본평균의 편향
 
-### Unbiasedness
+### 불편성
 
-The sample mean $\bar{X} = \frac{1}{n}\sum_{i=1}^n X_i$ is **unbiased** for $\mu = E[X]$:
+표본평균 $\bar{X} = \frac{1}{n}\sum_{i=1}^n X_i$은 $\mu = E[X]$에 대해 **불편**이다:
 
-$$E[\bar{X}] = \mu \quad \text{for all } n \geq 1$$
+$$E[\bar{X}] = \mu \quad \text{모든 } n \geq 1 \text{에 대해}$$
 
-**Proof:** By linearity of expectation:
+**증명:** 기댓값의 선형성에 의해:
 
 $$E[\bar{X}] = E\left[\frac{1}{n}\sum_{i=1}^n X_i\right] = \frac{1}{n}\sum_{i=1}^n E[X_i] = \frac{1}{n} \cdot n\mu = \mu$$
 
-This holds under minimal conditions:
+이는 최소한의 조건 아래에서 성립한다:
 
-- Observations need not be identically distributed (only requires $E[X_i] = \mu$ for all $i$)
-- Observations need not be independent
-- No distributional assumptions are needed
-- Valid for any sample size $n \geq 1$
+- 관측값이 동일한 분포를 따를 필요가 없다(모든 $i$에 대해 $E[X_i] = \mu$이기만 하면 된다)
+- 관측값이 독립일 필요가 없다
+- 분포에 대한 가정이 필요 없다
+- 임의의 표본크기 $n \geq 1$에서 유효하다
 
-### Finite Sample Bias is Zero
+### 유한표본 편향이 0이다
 
-Unlike many estimators (e.g., the MLE of variance), the sample mean has **exactly zero bias** for every finite sample size. This is a strong property — most estimators have nonzero bias for finite samples and are only asymptotically unbiased.
+(분산의 MLE 같은) 많은 추정량과 달리, 표본평균은 모든 유한 표본크기에서 **편향이 정확히 0**이다. 이는 강한 성질이다 — 대부분의 추정량은 유한표본에서 편향이 0이 아니고 점근적으로만 불편이다.
 
-### Comparison with Biased Alternatives
+### 편향된 대안과의 비교
 
-Some estimators of the population mean are intentionally biased:
+모평균의 추정량 중에는 의도적으로 편향된 것도 있다:
 
-| Estimator | Bias | MSE |
+| 추정량 | 편향 | 평균제곱오차 |
 |-----------|------|-----|
-| $\bar{X}$ (sample mean) | $0$ | $\sigma^2/n$ |
-| $\lambda\bar{X}$ (shrinkage, $\lambda < 1$) | $(\lambda-1)\mu$ | $\lambda^2\sigma^2/n + (1-\lambda)^2\mu^2$ |
-| $c$ (constant) | $c - \mu$ | $(c-\mu)^2$ |
+| $\bar{X}$ (표본평균) | $0$ | $\sigma^2/n$ |
+| $\lambda\bar{X}$ (축소, $\lambda < 1$) | $(\lambda-1)\mu$ | $\lambda^2\sigma^2/n + (1-\lambda)^2\mu^2$ |
+| $c$ (상수) | $c - \mu$ | $(c-\mu)^2$ |
 
-As discussed in the bias-variance tradeoff, biased estimators can sometimes have lower MSE, especially when $|\mu|$ is small relative to $\sigma/\sqrt{n}$.
+편향–분산 맞바꿈에서 논의했듯이, 특히 $|\mu|$가 $\sigma/\sqrt{n}$에 비해 작을 때 편향추정량이 더 작은 평균제곱오차를 가질 수 있다.
 
-## Consistency
+## 일치성
 
-### Consistency in Probability
+### 확률수렴 의미의 일치성
 
-The sample mean is **consistent** for $\mu$:
+표본평균은 $\mu$에 대해 **일치**한다:
 
-$$\bar{X}_n \xrightarrow{p} \mu \quad \text{as } n \to \infty$$
+$$\bar{X}_n \xrightarrow{p} \mu \quad (n \to \infty)$$
 
-This means: for any $\epsilon > 0$,
+즉, 임의의 $\epsilon > 0$에 대해
 
 $$\lim_{n \to \infty} P\left(|\bar{X}_n - \mu| > \epsilon\right) = 0$$
 
-### Proof via Chebyshev's Inequality
+### Chebyshev 부등식을 통한 증명
 
-Using Chebyshev's inequality with the known variance of $\bar{X}$:
+$\bar{X}$의 알려진 분산과 함께 Chebyshev 부등식을 쓰면:
 
 $$P(|\bar{X} - \mu| > \epsilon) \leq \frac{\text{Var}(\bar{X})}{\epsilon^2} = \frac{\sigma^2}{n\epsilon^2} \to 0$$
 
-This requires only that $\sigma^2 < \infty$ (finite variance).
+여기에는 $\sigma^2 < \infty$(유한한 분산)만 필요하다.
 
-### Proof via the Weak Law of Large Numbers (WLLN)
+### 약대수의법칙(WLLN)을 통한 증명
 
-The consistency of $\bar{X}$ is precisely the statement of the **Weak Law of Large Numbers**: if $X_1, X_2, \ldots$ are iid with $E[X_i] = \mu$ and $\text{Var}(X_i) = \sigma^2 < \infty$, then:
+$\bar{X}$의 일치성은 바로 **약대수의법칙**의 진술이다: $X_1, X_2, \ldots$가 i.i.d.이고 $E[X_i] = \mu$, $\text{Var}(X_i) = \sigma^2 < \infty$이면,
 
 $$\bar{X}_n \xrightarrow{p} \mu$$
 
-**Khintchine's WLLN** weakens the requirement: only $E[|X|] < \infty$ is needed (no finite variance requirement).
+**Khintchine의 WLLN**은 조건을 약화한다: $E[|X|] < \infty$만 있으면 된다(분산이 유한할 필요가 없다).
 
-### Almost Sure Convergence (Strong Consistency)
+### 거의 확실한 수렴 (강일치성)
 
-Under the same conditions, the **Strong Law of Large Numbers (SLLN)** provides a stronger result:
+같은 조건 아래에서 **강대수의법칙(SLLN)**은 더 강한 결과를 준다:
 
 $$P\left(\lim_{n \to \infty} \bar{X}_n = \mu\right) = 1$$
 
-This means $\bar{X}_n \to \mu$ almost surely, not just in probability.
+즉 $\bar{X}_n \to \mu$가 확률수렴을 넘어 거의 확실하게 성립한다.
 
-### Rate of Convergence
+### 수렴 속도
 
-How fast does $\bar{X}_n$ converge to $\mu$?
+$\bar{X}_n$은 얼마나 빨리 $\mu$로 수렴하는가?
 
-**MSE convergence rate:**
+**평균제곱오차의 수렴 속도:**
 
 $$\text{MSE}(\bar{X}_n) = \frac{\sigma^2}{n} = O(1/n)$$
 
-**Standard error convergence rate:**
+**표준오차의 수렴 속도:**
 
 $$\text{SE}(\bar{X}_n) = \frac{\sigma}{\sqrt{n}} = O(1/\sqrt{n})$$
 
-This $O(1/\sqrt{n})$ rate is fundamental — it means:
+이 $O(1/\sqrt{n})$ 속도는 근본적이다 — 다음을 뜻한다:
 
-- Doubling accuracy requires 4× the data
-- For 10× accuracy, you need 100× the data
-- This rate cannot be improved (in general) without additional assumptions
+- 정확도를 두 배로 하려면 자료가 4배 필요하다
+- 정확도를 10배로 하려면 자료가 100배 필요하다
+- 추가 가정 없이는 (일반적으로) 이 속도를 개선할 수 없다
 
-### MSE Consistency
+### 평균제곱오차 일치성
 
-An estimator is **MSE-consistent** if $\text{MSE}(\hat{\theta}_n) \to 0$. For $\bar{X}$:
+$\text{MSE}(\hat{\theta}_n) \to 0$이면 추정량이 **평균제곱오차 일치**라고 한다. $\bar{X}$에 대해서는:
 
 $$\text{MSE}(\bar{X}_n) = \underbrace{[\text{Bias}(\bar{X}_n)]^2}_{= 0} + \underbrace{\text{Var}(\bar{X}_n)}_{= \sigma^2/n \to 0} \to 0$$
 
-MSE-consistency implies consistency in probability (by Markov's inequality).
+평균제곱오차 일치성은 (Markov 부등식에 의해) 확률수렴 의미의 일치성을 함의한다.
 
-## Conditions for Consistency
+## 일치성의 조건
 
-### When X-bar is Consistent
-The sample mean is consistent under various relaxations of the iid assumption:
+### X-bar가 일치하는 경우
+표본평균은 i.i.d. 가정을 여러 방식으로 완화해도 일치한다:
 
-1. **Independent, not identically distributed**: If $E[X_i] = \mu$ for all $i$ and $\frac{1}{n^2}\sum_{i=1}^n \text{Var}(X_i) \to 0$, then $\bar{X}_n \xrightarrow{p} \mu$.
+1. **독립이지만 동일 분포가 아닌 경우**: 모든 $i$에 대해 $E[X_i] = \mu$이고 $\frac{1}{n^2}\sum_{i=1}^n \text{Var}(X_i) \to 0$이면 $\bar{X}_n \xrightarrow{p} \mu$이다.
 
-2. **Dependent observations**: For stationary ergodic processes, $\bar{X}_n \to \mu$ a.s. by the Ergodic Theorem.
+2. **종속 관측값**: 정상 에르고딕 과정에서는 에르고딕 정리에 의해 $\bar{X}_n \to \mu$가 거의 확실하게 성립한다.
 
-3. **Weakly dependent time series**: If autocorrelations decay fast enough (e.g., $\sum_{k=0}^\infty |\rho_k| < \infty$), then $\bar{X}_n$ is consistent.
+3. **약종속 시계열**: 자기상관이 충분히 빨리 감쇠하면(예: $\sum_{k=0}^\infty |\rho_k| < \infty$) $\bar{X}_n$은 일치한다.
 
-### When X-bar Fails to be Consistent
-1. **Infinite variance** (e.g., Cauchy distribution): $\bar{X}_n$ is still consistent if $E[|X|] < \infty$ (by Khintchine's WLLN), even though $\text{Var}(X)$ doesn't exist.
+### X-bar가 일치하지 않는 경우
+1. **무한한 분산** (예: 자유도 2인 Student-t): $\text{Var}(X)$가 존재하지 않더라도 $E[|X|] < \infty$이면 (Khintchine의 WLLN에 의해) $\bar{X}_n$은 여전히 일치한다.
 
-2. **Infinite mean** (e.g., Cauchy): $E[X]$ doesn't exist, so there is no $\mu$ for $\bar{X}$ to converge to. The sample mean fluctuates wildly and does not converge.
+2. **무한한 평균** (예: Cauchy): $E[X]$가 존재하지 않으므로 $\bar{X}$가 수렴할 $\mu$ 자체가 없다. 표본평균은 심하게 요동치며 수렴하지 않는다.
 
-3. **Non-stationary data**: If the mean changes over time, $\bar{X}$ converges to the average of the changing means, not to any single "true" value.
+3. **비정상 자료**: 평균이 시간에 따라 변하면 $\bar{X}$는 변하는 평균들의 평균으로 수렴할 뿐, 어떤 하나의 "참"값으로 수렴하지 않는다.
 
-## Asymptotic Distribution
+## 점근분포
 
-Beyond consistency, the CLT provides the asymptotic distribution:
+일치성을 넘어, 중심극한정리는 점근분포를 준다:
 
 $$\sqrt{n}(\bar{X}_n - \mu) \xrightarrow{d} N(0, \sigma^2)$$
 
-This allows construction of confidence intervals and hypothesis tests:
+이로부터 신뢰구간과 가설검정을 구성할 수 있다:
 
-$$\bar{X} \pm z_{\alpha/2} \frac{\sigma}{\sqrt{n}} \quad \text{(known } \sigma\text{)}$$
+$$\bar{X} \pm z_{\alpha/2} \frac{\sigma}{\sqrt{n}} \quad (\sigma \text{를 아는 경우})$$
 
-$$\bar{X} \pm t_{n-1,\alpha/2} \frac{S}{\sqrt{n}} \quad \text{(unknown } \sigma\text{)}$$
+$$\bar{X} \pm t_{n-1,\alpha/2} \frac{S}{\sqrt{n}} \quad (\sigma \text{를 모르는 경우})$$
 
-## Connections to Finance
+## 금융과의 연결
 
-Understanding bias and consistency of the mean is critical in finance:
+평균의 편향과 일치성을 이해하는 것은 금융에서 결정적이다:
 
-- **Return estimation**: While $\bar{X}$ is consistent, the convergence rate $O(1/\sqrt{n})$ is too slow for practical return prediction. With 30 years of monthly data ($n = 360$), $\text{SE} \approx \sigma_{\text{monthly}} / 19$, which is still substantial.
+- **수익률 추정**: $\bar{X}$가 일치하기는 하지만 수렴 속도 $O(1/\sqrt{n})$은 실제 수익률 예측에 쓰기에는 너무 느리다. 30년치 월별 자료($n = 360$)에서도 $\text{SE} \approx \sigma_{\text{월별}} / 19$로 여전히 상당하다.
 
-- **Stationarity concerns**: Financial return distributions change over time (regime changes, structural breaks), violating the stationarity assumption. The sample mean of historical returns may not estimate the *current* expected return.
+- **정상성에 대한 우려**: 금융 수익률 분포는 시간에 따라 변하므로(국면 전환, 구조적 단절) 정상성 가정이 깨진다. 과거 수익률의 표본평균이 *현재의* 기대수익률을 추정하지 못할 수 있다.
 
-- **Mean reversion testing**: Testing whether asset prices are mean-reverting requires careful attention to the convergence properties of $\bar{X}$ under various dependency structures.
+- **평균회귀 검정**: 자산가격이 평균회귀하는지 검정하려면 여러 종속 구조 아래에서 $\bar{X}$의 수렴 성질에 세심한 주의가 필요하다.
 
-- **High-frequency estimation**: With high-frequency data, microstructure noise introduces bias. The "realized" mean of tick-by-tick prices is biased by bid-ask bounce effects.
+- **고빈도 추정**: 고빈도 자료에서는 미시구조 잡음이 편향을 만든다. 틱 단위 가격의 "실현" 평균은 매수–매도 호가 튐 효과로 편향된다.
 
-## Summary
+## 요약
 
-The sample mean is unbiased (zero bias for all $n$) and consistent (converges to $\mu$ as $n \to \infty$) under very mild conditions. The convergence rate is $O(1/\sqrt{n})$, which is optimal but practically slow. Almost sure convergence (SLLN) provides a stronger guarantee than convergence in probability (WLLN). These properties make $\bar{X}$ the default estimator for population means, but the slow convergence rate and sensitivity to distributional assumptions must be recognized, especially in financial applications.
+표본평균은 매우 온건한 조건 아래에서 불편이고(모든 $n$에서 편향이 0) 일치한다($n \to \infty$일 때 $\mu$로 수렴). 수렴 속도는 $O(1/\sqrt{n})$으로, 최적이지만 실무적으로는 느리다. 거의 확실한 수렴(SLLN)은 확률수렴(WLLN)보다 강한 보장을 준다. 이런 성질 덕분에 $\bar{X}$가 모평균의 기본 추정량이 되지만, 느린 수렴 속도와 분포 가정에 대한 민감성은 특히 금융 응용에서 반드시 인식해야 한다.
 
-## Key Formulas
+## 핵심 공식
 
-| Property | Result | Condition |
+| 성질 | 결과 | 조건 |
 |----------|--------|-----------|
-| Unbiasedness | $E[\bar{X}] = \mu$ | $E[X_i] = \mu$ |
-| Consistency (WLLN) | $\bar{X}_n \xrightarrow{p} \mu$ | iid, $E[|X|] < \infty$ |
-| Strong consistency (SLLN) | $\bar{X}_n \to \mu$ a.s. | iid, $E[|X|] < \infty$ |
-| MSE rate | $O(1/n)$ | $\text{Var}(X) < \infty$ |
-| SE rate | $O(1/\sqrt{n})$ | $\text{Var}(X) < \infty$ |
-| CLT | $\sqrt{n}(\bar{X}-\mu)/\sigma \to N(0,1)$ | iid, $\text{Var}(X) < \infty$ |
+| 불편성 | $E[\bar{X}] = \mu$ | $E[X_i] = \mu$ |
+| 일치성 (WLLN) | $\bar{X}_n \xrightarrow{p} \mu$ | i.i.d., $E[|X|] < \infty$ |
+| 강일치성 (SLLN) | $\bar{X}_n \to \mu$ a.s. | i.i.d., $E[|X|] < \infty$ |
+| 평균제곱오차 속도 | $O(1/n)$ | $\text{Var}(X) < \infty$ |
+| 표준오차 속도 | $O(1/\sqrt{n})$ | $\text{Var}(X) < \infty$ |
+| 중심극한정리 | $\sqrt{n}(\bar{X}-\mu)/\sigma \to N(0,1)$ | i.i.d., $\text{Var}(X) < \infty$ |
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-$X_1, \ldots, X_n$ have $\mathbb{E}[X_i] = \mu$. Show $\bar X$ is unbiased. Does this need independence?
+**연습문제 1.**
+$X_1, \ldots, X_n$이 $\mathbb{E}[X_i] = \mu$를 만족한다. $\bar X$가 불편임을 보여라. 여기에 독립성이 필요한가?
 
-??? success "Solution to Exercise 1"
-    By linearity (no independence needed): $\mathbb{E}[\bar X] = (1/n)\sum \mathbb{E}[X_i] = \mu$. $\square$
+??? success "연습문제 1 풀이"
+    선형성에 의해(독립성 불필요): $\mathbb{E}[\bar X] = (1/n)\sum \mathbb{E}[X_i] = \mu$. $\square$
 
-    Unbiasedness only requires equal means. The estimator's *variance* depends on independence, but its *expected value* does not.
+    불편성에는 평균이 같다는 것만 필요하다. 추정량의 *분산*은 독립성에 의존하지만 *기댓값*은 그렇지 않다.
 
 ---
 
-**Exercise 2.**
-Correlated data: $X_i$ have common mean $\mu$, variance $\sigma^2$, pairwise correlation $\rho$. (a) Derive $\mathrm{Var}(\bar X)$. (b) Is $\bar X$ consistent? (c) Fund of 20 hedge funds, 15% vol, $\rho = 0.4$ — find SE.
+**연습문제 2.**
+상관된 자료: $X_i$가 공통 평균 $\mu$, 분산 $\sigma^2$, 쌍별 상관계수 $\rho$를 갖는다. (a) $\mathrm{Var}(\bar X)$를 유도하라. (b) $\bar X$는 일치하는가? (c) 헤지펀드 20개로 이루어진 펀드, 변동성 15%, $\rho = 0.4$일 때 표준오차를 구하라.
 
-??? success "Solution to Exercise 2"
+??? success "연습문제 2 풀이"
     (a) $\mathrm{Var}(\bar X) = (1/n^2)[n\sigma^2 + n(n-1)\rho\sigma^2] = \sigma^2[1 + (n-1)\rho]/n$.
 
-    (b) As $n \to \infty$, $\mathrm{Var}(\bar X) \to \rho\sigma^2$ (positive limit). $\bar X$ is **inconsistent** unless $\rho = 0$. Positive correlation creates an irreducible variance floor.
+    (b) $n \to \infty$일 때 $\mathrm{Var}(\bar X) \to \rho\sigma^2$(양의 극한). $\rho = 0$이 아닌 한 $\bar X$는 **일치하지 않는다**. 양의 상관은 줄일 수 없는 분산의 바닥을 만든다.
 
-    (c) $\mathrm{Var}(\bar X) = 0.15^2 \cdot 8.6/20 = 0.00968$. $\mathrm{SE} \approx 0.098$ (9.8%). Effective independent sample size $\approx 2.4$ — almost no benefit from 20 funds because their correlations are high.
-
----
-
-**Exercise 3.**
-**Define consistency.** State the Weak LLN and Strong LLN, and show $\bar X$ is consistent for $\mu$ under each.
-
-??? success "Solution to Exercise 3"
-    **Consistency:** $\hat\theta_n \to \theta$ as $n \to \infty$, in some mode.
-
-    **Weak consistency** (in probability): $\bar X \xrightarrow{P} \mu$. Follows from **WLLN**: for i.i.d. data with finite mean, $P(|\bar X - \mu| > \varepsilon) \to 0$.
-
-    **Strong consistency** (almost surely): $\bar X \to \mu$ with probability 1. Follows from **SLLN**.
-
-    Proof outline (WLLN via Chebyshev): with finite variance $\sigma^2$, $P(|\bar X - \mu| > \varepsilon) \le \mathrm{Var}(\bar X)/\varepsilon^2 = \sigma^2/(n\varepsilon^2) \to 0$. $\square$
+    (c) $\mathrm{Var}(\bar X) = 0.15^2 \cdot 8.6/20 = 0.00968$. $\mathrm{SE} \approx 0.098$ (9.8%). 유효 독립 표본크기가 $\approx 2.4$ — 상관이 높아 펀드 20개에서 얻는 이득이 거의 없다.
 
 ---
 
-**Exercise 4.**
-**Bias-variance trade-off** for the median. Show that for normal data, the median is **biased** if $\mu$ is replaced by the population median (still works), but its **MSE asymptotically exceeds** that of the mean.
+**연습문제 3.**
+**일치성의 정의.** 약대수의법칙과 강대수의법칙을 진술하고, 각각으로부터 $\bar X$가 $\mu$에 대해 일치함을 보여라.
 
-??? success "Solution to Exercise 4"
-    For symmetric distributions like normal: population mean = population median, both equal $\mu$. Sample median is unbiased for $\mu$ (by symmetry of the sampling distribution).
+??? success "연습문제 3 풀이"
+    **일치성:** $n \to \infty$일 때 어떤 수렴 방식으로 $\hat\theta_n \to \theta$.
 
-    Asymptotic variance of sample median = $\pi\sigma^2/(2n)$ vs. mean $\sigma^2/n$. Ratio = $\pi/2 \approx 1.57$.
+    **약일치성**(확률수렴): $\bar X \xrightarrow{P} \mu$. **WLLN**에서 따라 나온다: 평균이 유한한 i.i.d. 자료에서 $P(|\bar X - \mu| > \varepsilon) \to 0$.
 
-    MSE(median) $> $ MSE(mean) by factor $\pi/2$ — the price for robustness.
+    **강일치성**(거의 확실하게): 확률 1로 $\bar X \to \mu$. **SLLN**에서 따라 나온다.
 
-    For non-symmetric distributions, population mean $\ne$ population median, so they target different quantities. Compare each to its own target, not to each other.
+    증명 개요(Chebyshev를 통한 WLLN): 분산 $\sigma^2$이 유한하면 $P(|\bar X - \mu| > \varepsilon) \le \mathrm{Var}(\bar X)/\varepsilon^2 = \sigma^2/(n\varepsilon^2) \to 0$. $\square$
 
 ---
 
-**Exercise 5.**
-**Effect of finite-population sampling.** $X_i$ drawn without replacement from a finite population of size $N$, mean $\mu$. Derive $\mathrm{Var}(\bar X)$.
+**연습문제 4.**
+중앙값의 **편향–분산 맞바꿈.** 정규 자료에서 표본중앙값이 $\mu$에 대해 **불편**이지만 그 **평균제곱오차가 점근적으로** 표본평균의 평균제곱오차를 **초과**함을 보여라.
 
-??? success "Solution to Exercise 5"
+??? success "연습문제 4 풀이"
+    정규분포처럼 대칭인 분포에서는 모평균 = 모중앙값이고 둘 다 $\mu$이다. 표본중앙값은 (표본분포의 대칭성에 의해) $\mu$에 대해 불편이다.
+
+    표본중앙값의 점근분산은 $\pi\sigma^2/(2n)$이고 평균은 $\sigma^2/n$이다. 비는 $\pi/2 \approx 1.57$이다.
+
+    MSE(중앙값) $>$ MSE(평균), 인자는 $\pi/2$ — 로버스트성의 대가이다.
+
+    대칭이 아닌 분포에서는 모평균 $\ne$ 모중앙값이므로 둘은 서로 다른 양을 겨냥한다. 서로를 비교하지 말고 각자의 목표와 비교해야 한다.
+
+---
+
+**연습문제 5.**
+**유한모집단 표본추출의 효과.** 크기 $N$, 평균 $\mu$인 유한모집단에서 비복원으로 $X_i$를 뽑는다. $\mathrm{Var}(\bar X)$를 유도하라.
+
+??? success "연습문제 5 풀이"
     $\mathrm{Var}(\bar X) = (\sigma^2/n) \cdot (N - n)/(N - 1)$.
 
-    Derivation: pairs of distinct draws have covariance $-\sigma^2/(N-1)$ (sampling without replacement). Sum over all pairs and individual variances, divide by $n^2$.
+    유도: 서로 다른 두 추출의 공분산은 $-\sigma^2/(N-1)$이다(비복원 추출). 모든 쌍과 개별 분산을 더하고 $n^2$으로 나눈다.
 
-    The factor $(N-n)/(N-1)$ is the **finite-population correction (FPC)**:
+    인자 $(N-n)/(N-1)$이 **유한모집단 수정(FPC)**이다:
 
-    - $n = N$ (census): FPC = 0, $\mathrm{Var}(\bar X) = 0$. We've measured everyone.
-    - $n \ll N$: FPC $\approx 1$, $\mathrm{Var}(\bar X) \approx \sigma^2/n$. Standard formula.
+    - $n = N$ (전수조사): FPC = 0, $\mathrm{Var}(\bar X) = 0$. 모두를 측정했다.
+    - $n \ll N$: FPC $\approx 1$, $\mathrm{Var}(\bar X) \approx \sigma^2/n$. 표준 공식.
 
-    Often ignored when $n/N < 5\%$. Important in auditing, recount, or small population surveys.
+    $n/N < 5\%$이면 흔히 무시한다. 감사, 재검표, 소규모 모집단 조사에서는 중요하다.
 
 ---
 
-**Exercise 6.**
-**Bias of MoM estimator.** For Pareto$(\alpha)$ on $[1, \infty)$, $\mathbb{E}[X] = \alpha/(\alpha - 1)$. MoM: $\hat\alpha = \bar X/(\bar X - 1)$. Is it unbiased? Consistent?
+**연습문제 6.**
+**적률법 추정량의 편향.** $[1, \infty)$ 위의 Pareto$(\alpha)$에서 $\mathbb{E}[X] = \alpha/(\alpha - 1)$이다. 적률법: $\hat\alpha = \bar X/(\bar X - 1)$. 불편인가? 일치하는가?
 
-??? success "Solution to Exercise 6"
-    **Consistency:** by LLN, $\bar X \to \mu = \alpha/(\alpha - 1)$. Hence $\hat\alpha \to \mu/(\mu - 1) = \alpha$. Consistent.
+??? success "연습문제 6 풀이"
+    **일치성:** 대수의법칙에 의해 $\bar X \to \mu = \alpha/(\alpha - 1)$. 따라서 $\hat\alpha \to \mu/(\mu - 1) = \alpha$. 일치한다.
 
-    **Unbiasedness:** $\mathbb{E}[\hat\alpha] = \mathbb{E}[\bar X/(\bar X - 1)]$. By Jensen's inequality (since $g(x) = x/(x-1)$ is convex on $x > 1$), $\mathbb{E}[g(\bar X)] > g(\mathbb{E}[\bar X]) = \alpha$. So **MoM is biased upward**.
+    **불편성:** $\mathbb{E}[\hat\alpha] = \mathbb{E}[\bar X/(\bar X - 1)]$. ($g(x) = x/(x-1)$이 $x > 1$에서 볼록이므로) Jensen 부등식에 의해 $\mathbb{E}[g(\bar X)] > g(\mathbb{E}[\bar X]) = \alpha$이다. 따라서 **적률법 추정량은 위쪽으로 편향**되어 있다.
 
-    For large $n$: $\bar X \to \mu$ and Jensen gap $\to 0$, so bias $\to 0$. Asymptotically unbiased but finite-sample biased.
+    큰 $n$에서는 $\bar X \to \mu$이고 Jensen 간격 $\to 0$이므로 편향 $\to 0$이다. 점근적으로는 불편이지만 유한표본에서는 편향되어 있다.
 
-    Most MoM estimators have this pattern: consistent (by LLN) but biased in finite samples. The bias is $O(1/n)$, vanishing slower than the variance $O(1/\sqrt n)$.
+    대부분의 적률법 추정량이 이 양상을 보인다: (대수의법칙에 의해) 일치하지만 유한표본에서는 편향된다. 편향은 $O(1/n)$으로, 표준편차의 $O(1/\sqrt n)$보다 빨리 사라진다.

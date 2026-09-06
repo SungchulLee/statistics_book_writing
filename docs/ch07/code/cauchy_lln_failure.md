@@ -1,28 +1,28 @@
-# Cauchy Law of Large Numbers Failure
+# Cauchy에서 대수의법칙의 실패
 
-## Overview
+## 개요
 
-The Cauchy distribution provides the most dramatic counterexample to the Law of Large Numbers. Because the Cauchy distribution has no finite mean ($E[|X|] = \infty$), the sample mean of iid Cauchy observations does not converge — it has the same distribution as a single observation regardless of sample size. This page contrasts Cauchy and normal sample mean behavior through trajectory plots, sampling distribution histograms, and Q-Q plots.
+Cauchy 분포는 대수의법칙에 대한 가장 극적인 반례를 제공한다. Cauchy 분포는 평균이 유한하지 않으므로($E[|X|] = \infty$) i.i.d. Cauchy 관측값의 표본평균은 수렴하지 않는다 — 표본크기와 무관하게 관측값 하나와 같은 분포를 갖는다. 이 페이지에서는 궤적 그림, 표본분포 히스토그램, Q-Q 그림으로 Cauchy와 정규의 표본평균 거동을 대조한다.
 
-## The Cauchy Distribution
+## Cauchy 분포
 
-The standard Cauchy distribution has density:
+표준 Cauchy 분포의 밀도는:
 
 $$f(x) = \frac{1}{\pi(1 + x^2)}, \quad x \in \mathbb{R}$$
 
-Key properties:
+핵심 성질:
 
-- **No finite mean:** $E[|X|] = \int_0^\infty \frac{2x}{\pi(1+x^2)}dx = \frac{2}{\pi}\left[\frac{1}{2}\ln(1+x^2)\right]_0^\infty = \infty$
-- **No finite variance** (since the mean does not exist)
-- **Heavy tails:** $P(|X| > t) \sim 2/(\pi t)$ as $t \to \infty$ (polynomial decay, compared to exponential decay for the normal)
-- **Characteristic function:** $\varphi(t) = e^{-|t|}$
+- **평균이 유한하지 않다:** $E[|X|] = \int_0^\infty \frac{2x}{\pi(1+x^2)}dx = \frac{2}{\pi}\left[\frac{1}{2}\ln(1+x^2)\right]_0^\infty = \infty$
+- **분산도 유한하지 않다** (평균이 존재하지 않으므로)
+- **두꺼운 꼬리:** $t \to \infty$일 때 $P(|X| > t) \sim 2/(\pi t)$ (정규의 지수 감쇠와 달리 다항 감쇠)
+- **특성함수:** $\varphi(t) = e^{-|t|}$
 
-!!! danger "LLN does not apply"
-    The Law of Large Numbers requires $E[|X|] < \infty$. Since this fails for the Cauchy, the sample mean $\bar{X}_n$ does not converge to any value. In fact, $\bar{X}_n$ has exactly the same Cauchy distribution for every $n$.
+!!! danger "대수의법칙이 적용되지 않는다"
+    대수의법칙은 $E[|X|] < \infty$를 요구한다. Cauchy에서는 이것이 깨지므로 표본평균 $\bar{X}_n$은 어떤 값으로도 수렴하지 않는다. 사실 $\bar{X}_n$은 모든 $n$에서 정확히 같은 Cauchy 분포를 갖는다.
 
-## Sample Mean Trajectories
+## 표본평균의 궤적
 
-The running average $\bar{X}_n = \frac{1}{n}\sum_{i=1}^n X_i$ shows strikingly different behavior for normal vs Cauchy data.
+누적평균 $\bar{X}_n = \frac{1}{n}\sum_{i=1}^n X_i$은 정규 자료와 Cauchy 자료에서 놀랄 만큼 다른 거동을 보인다.
 
 ```python
 import numpy as np
@@ -70,12 +70,12 @@ plt.tight_layout()
 plt.show()
 ```
 
-!!! note "Convergence vs non-convergence"
-    For the normal distribution (right panel), all 20 trajectories visibly converge to 0 as $n$ grows. For the Cauchy (left panel), the trajectories continue to wander erratically — occasional extreme observations "reset" the running average even at large $n$.
+!!! note "수렴과 비수렴"
+    정규분포(오른쪽 그림)에서는 $n$이 커지면 20개 궤적이 모두 눈에 띄게 0으로 수렴한다. Cauchy(왼쪽 그림)에서는 궤적이 계속 불규칙하게 떠돈다 — $n$이 커진 뒤에도 이따금 나타나는 극단 관측값이 누적평균을 "초기화"해 버린다.
 
-## Distribution of Sample Means
+## 표본평균의 분포
 
-For the normal distribution, the sampling distribution of $\bar{X}_n$ narrows as $n$ increases (by the CLT, its standard deviation is $1/\sqrt{n}$). For the Cauchy, the distribution of $\bar{X}_n$ does **not** narrow at all.
+정규분포에서는 $n$이 커질수록 $\bar{X}_n$의 표본분포가 좁아진다(중심극한정리에 의해 표준편차가 $1/\sqrt{n}$이다). Cauchy에서는 $\bar{X}_n$의 분포가 전혀 좁아지지 **않는다**.
 
 ```python
 from scipy import stats
@@ -109,12 +109,12 @@ plt.tight_layout()
 plt.show()
 ```
 
-!!! warning "The Cauchy distribution does not concentrate"
-    At $n = 10{,}000$, the normal sample mean distribution has collapsed to a spike at 0 (std $= 0.01$), while the Cauchy sample mean distribution looks virtually identical to the $n = 100$ case. Averaging more Cauchy data does not help.
+!!! warning "Cauchy 분포는 집중되지 않는다"
+    $n = 10{,}000$에서 정규 표본평균의 분포는 0에 뾰족하게 모여들지만(표준편차 $= 0.01$), Cauchy 표본평균의 분포는 $n = 100$일 때와 사실상 똑같아 보인다. Cauchy 자료를 더 많이 평균해도 도움이 되지 않는다.
 
-## Q-Q Plot: Visualizing Heavy Tails
+## Q-Q 그림: 두꺼운 꼬리의 시각화
 
-A **Q-Q plot** comparing Cauchy quantiles against normal quantiles reveals the extreme heaviness of the Cauchy tails.
+Cauchy 분위수를 정규 분위수와 비교하는 **Q-Q 그림**은 Cauchy 꼬리가 얼마나 극단적으로 두꺼운지 드러낸다.
 
 ```python
 cauchy_sample = np.random.standard_cauchy(1000)
@@ -125,144 +125,144 @@ plt.tight_layout()
 plt.show()
 ```
 
-The characteristic S-shape (or hockey-stick shape) shows that the Cauchy generates values far more extreme than a normal distribution would.
+특유의 S자(또는 하키스틱) 모양은 Cauchy가 정규분포보다 훨씬 극단적인 값을 만들어낸다는 것을 보여준다.
 
-## Why Averaging Fails: The Characteristic Function Proof
+## 평균이 실패하는 이유: 특성함수를 통한 증명
 
-The characteristic function of the standard Cauchy is $\varphi_X(t) = e^{-|t|}$.
+표준 Cauchy의 특성함수는 $\varphi_X(t) = e^{-|t|}$이다.
 
-For the sample mean of $n$ iid Cauchy variables:
+i.i.d. Cauchy 변수 $n$개의 표본평균에 대해:
 
 $$\varphi_{\bar{X}_n}(t) = \left[\varphi_X(t/n)\right]^n = \left[e^{-|t|/n}\right]^n = e^{-|t|}$$
 
-This is the characteristic function of a single Cauchy observation. Therefore:
+이는 Cauchy 관측값 하나의 특성함수이다. 따라서:
 
-$$\bar{X}_n \sim \text{Cauchy}(0, 1) \quad \text{for all } n$$
+$$\bar{X}_n \sim \text{Cauchy}(0, 1) \quad \text{모든 } n \text{에 대해}$$
 
-!!! info "Stability property"
-    The Cauchy distribution is a **stable distribution** with index $\alpha = 1$. For stable distributions, linear combinations of iid copies have the same distributional form (after rescaling). The Cauchy is the only symmetric stable distribution for which the sample mean has the same distribution as a single observation, because the scale parameter of the sum $S_n$ grows as $n$ rather than $\sqrt{n}$, exactly canceling the $1/n$ division.
+!!! info "안정성"
+    Cauchy 분포는 지수 $\alpha = 1$인 **안정분포**이다. 안정분포에서는 i.i.d. 복사본들의 선형결합이 (축척을 조정하면) 같은 분포 형태를 갖는다. Cauchy는 표본평균이 관측값 하나와 같은 분포를 갖는 유일한 대칭 안정분포인데, 합 $S_n$의 척도모수가 $\sqrt{n}$이 아니라 $n$에 비례해 커져서 $1/n$로 나누는 것과 정확히 상쇄되기 때문이다.
 
-## Alternative Estimators for Cauchy Data
+## Cauchy 자료를 위한 대안 추정량
 
-Since the sample mean is useless for Cauchy data, what alternatives work?
+Cauchy 자료에서 표본평균이 쓸모없다면 어떤 대안이 통할까?
 
-| Estimator | Converges? | Rate |
+| 추정량 | 수렴하는가? | 속도 |
 |-----------|-----------|------|
-| Sample mean | No | N/A |
-| Sample median | Yes | $O(1/\sqrt{n})$ |
-| MLE (location) | Yes | $O(1/\sqrt{n})$ |
-| Trimmed mean ($\alpha > 0$) | Yes | $O(1/\sqrt{n})$ |
+| 표본평균 | 아니오 | 해당 없음 |
+| 표본중앙값 | 예 | $O(1/\sqrt{n})$ |
+| MLE (위치) | 예 | $O(1/\sqrt{n})$ |
+| 절사평균 ($\alpha > 0$) | 예 | $O(1/\sqrt{n})$ |
 
-The **sample median** is consistent for the Cauchy location parameter and has asymptotic variance $\pi^2/(4n) \approx 2.47/n$, which is actually better than the MLE's asymptotic variance of $2/n$ by a factor of... wait, the MLE is *more* efficient: $\text{Var}(\hat{\mu}_{\text{MLE}}) \approx 2/n$ vs $\text{Var}(\text{median}) \approx \pi^2/(4n)$. The MLE's ARE relative to the median is $\pi^2/8 \approx 1.23$.
+**표본중앙값**은 Cauchy 위치모수에 대해 일치하며 점근분산이 $\pi^2/(4n) \approx 2.47/n$이다. 위치모수의 MLE는 점근분산이 $2/n$으로 더 작아 중앙값보다 효율적이며, 중앙값 대비 MLE의 ARE는 $\pi^2/8 \approx 1.23$이다.
 
-## Interpretation
+## 해석
 
-- The Cauchy distribution is the canonical example of a distribution where the **LLN fails**. It demonstrates that finite mean is not just a mathematical technicality but a genuine requirement.
-- The sample mean of Cauchy data has the **same distribution** as a single observation, so averaging provides zero improvement.
-- **Heavy tails** are the root cause: occasional extreme observations dominate the sum, preventing concentration.
-- The **median** and **MLE** are viable alternatives that do converge, at the usual $1/\sqrt{n}$ rate.
-- In practice, the Cauchy serves as a warning: always verify that your estimator is appropriate for the data. If the data has extremely heavy tails, the sample mean may be misleading or meaningless.
+- Cauchy 분포는 **대수의법칙이 실패하는** 대표적인 예이다. 평균이 유한하다는 조건이 수학적 형식이 아니라 진짜 요구사항임을 보여준다.
+- Cauchy 자료의 표본평균은 관측값 하나와 **같은 분포**를 가지므로 평균을 내도 전혀 나아지지 않는다.
+- **두꺼운 꼬리**가 근본 원인이다: 이따금 나타나는 극단 관측값이 합을 지배하여 집중을 막는다.
+- **중앙값**과 **MLE**는 통상적인 $1/\sqrt{n}$ 속도로 수렴하는 쓸 만한 대안이다.
+- 실무에서 Cauchy는 경고 역할을 한다: 추정량이 자료에 적절한지 항상 확인하라. 자료의 꼬리가 극단적으로 두꺼우면 표본평균이 오해를 부르거나 무의미할 수 있다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Show that $E[|X|] = \infty$ for the standard Cauchy distribution by evaluating the integral directly.
+**연습문제 1.**
+적분을 직접 계산하여 표준 Cauchy 분포에서 $E[|X|] = \infty$임을 보여라.
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
     $$E[|X|] = \int_{-\infty}^{\infty} \frac{|x|}{\pi(1+x^2)}\,dx = \frac{2}{\pi}\int_0^{\infty} \frac{x}{1+x^2}\,dx$$
 
-    Using the substitution $u = 1 + x^2$, $du = 2x\,dx$:
+    치환 $u = 1 + x^2$, $du = 2x\,dx$를 쓰면:
 
     $$\frac{2}{\pi}\int_0^{\infty} \frac{x}{1+x^2}\,dx = \frac{2}{\pi}\cdot\frac{1}{2}\int_1^{\infty}\frac{du}{u} = \frac{1}{\pi}\left[\ln u\right]_1^{\infty} = \frac{1}{\pi}\cdot\infty = \infty$$
 
-    Since $E[|X|] = \infty$, the mean $E[X]$ does not exist. This is the fundamental reason the LLN fails for the Cauchy. $\square$
+    $E[|X|] = \infty$이므로 평균 $E[X]$가 존재하지 않는다. 이것이 Cauchy에서 대수의법칙이 실패하는 근본 이유이다. $\square$
 
 ---
 
-**Exercise 2.**
-Using characteristic functions, prove that $\bar{X}_n$ of $n$ iid standard Cauchy random variables has the same distribution as a single standard Cauchy random variable.
+**연습문제 2.**
+특성함수를 써서, i.i.d. 표준 Cauchy 확률변수 $n$개의 $\bar{X}_n$이 표준 Cauchy 확률변수 하나와 같은 분포를 가짐을 증명하라.
 
-??? success "Solution to Exercise 2"
-    The characteristic function of the standard Cauchy is $\varphi_X(t) = e^{-|t|}$.
+??? success "연습문제 2 풀이"
+    표준 Cauchy의 특성함수는 $\varphi_X(t) = e^{-|t|}$이다.
 
-    For iid $X_1, \ldots, X_n$, the sum $S_n = \sum_{i=1}^n X_i$ has:
+    i.i.d. $X_1, \ldots, X_n$에 대해 합 $S_n = \sum_{i=1}^n X_i$은:
 
     $$\varphi_{S_n}(t) = \prod_{i=1}^n \varphi_{X_i}(t) = \left(e^{-|t|}\right)^n = e^{-n|t|}$$
 
-    This is the characteristic function of $\text{Cauchy}(0, n)$ (Cauchy with scale parameter $n$).
+    이는 $\text{Cauchy}(0, n)$(척도모수가 $n$인 Cauchy)의 특성함수이다.
 
-    For the sample mean $\bar{X}_n = S_n/n$:
+    표본평균 $\bar{X}_n = S_n/n$에 대해:
 
     $$\varphi_{\bar{X}_n}(t) = \varphi_{S_n}(t/n) = e^{-n|t/n|} = e^{-|t|}$$
 
-    This is exactly $\varphi_X(t)$, the characteristic function of the standard Cauchy. Since the characteristic function uniquely determines the distribution:
+    이는 정확히 표준 Cauchy의 특성함수 $\varphi_X(t)$이다. 특성함수가 분포를 유일하게 결정하므로:
 
-    $$\bar{X}_n \sim \text{Cauchy}(0, 1) \quad \text{for every } n \geq 1$$
+    $$\bar{X}_n \sim \text{Cauchy}(0, 1) \quad \text{모든 } n \geq 1 \text{에 대해}$$
 
     $\square$
 
 ---
 
-**Exercise 3.**
-Compare the tails of the Cauchy and normal distributions. What is $P(|X| > 10)$ for each? What does this imply for the behavior of the sample mean?
+**연습문제 3.**
+Cauchy와 정규분포의 꼬리를 비교하라. 각각에서 $P(|X| > 10)$은 얼마인가? 이것이 표본평균의 거동에 대해 무엇을 함의하는가?
 
-??? success "Solution to Exercise 3"
-    **Normal:** $P(|Z| > 10) = 2\mathcal{N}(-10) \approx 2 \times 7.62 \times 10^{-24} \approx 1.52 \times 10^{-23}$.
+??? success "연습문제 3 풀이"
+    **정규:** $P(|Z| > 10) = 2\mathcal{N}(-10) \approx 2 \times 7.62 \times 10^{-24} \approx 1.52 \times 10^{-23}$.
 
     **Cauchy:** $P(|X| > 10) = 2\left(\frac{1}{2} - \frac{1}{\pi}\arctan(10)\right) = 1 - \frac{2}{\pi}\arctan(10) \approx 1 - \frac{2}{\pi}(1.4711) \approx 1 - 0.9366 = 0.0634$.
 
-    So $P(|X| > 10) \approx 6.3\%$ for the Cauchy — more than $10^{21}$ times larger than for the normal.
+    즉 Cauchy에서는 $P(|X| > 10) \approx 6.3\%$로 정규보다 $10^{21}$배 넘게 크다.
 
-    **Implications for the sample mean:** In a sample of $n = 100$ Cauchy observations, we expect roughly 6 values exceeding 10 in absolute value. These extreme values contribute disproportionately to the sum, overwhelming the more moderate observations. Since such extreme values occur at a rate that does not decrease fast enough with $n$, the $1/n$ normalization in $\bar{X}_n$ cannot "tame" the sum. This is the intuitive reason the sample mean does not converge. $\square$
+    **표본평균에 대한 함의:** Cauchy 관측값 $n = 100$개의 표본에서는 절댓값이 10을 넘는 값이 대략 6개 나올 것으로 기대된다. 이런 극단값이 합에 불균형하게 기여하여 온건한 관측값들을 압도한다. 그런 극단값의 발생률이 $n$이 커져도 충분히 빨리 줄지 않으므로 $\bar{X}_n$의 $1/n$ 정규화가 합을 "길들이지" 못한다. 이것이 표본평균이 수렴하지 않는 직관적인 이유이다. $\square$
 
 ---
 
-**Exercise 4.**
-The sample median is consistent for the Cauchy location parameter. What is its asymptotic variance? Compare with the asymptotic variance of the MLE for the Cauchy location parameter.
+**연습문제 4.**
+표본중앙값은 Cauchy 위치모수에 대해 일치한다. 그 점근분산은 얼마인가? Cauchy 위치모수 MLE의 점근분산과 비교하라.
 
-??? success "Solution to Exercise 4"
-    For the Cauchy density $f(x) = \frac{1}{\pi(1+x^2)}$, the value at the median (which is 0 for the standard Cauchy) is $f(0) = 1/\pi$.
+??? success "연습문제 4 풀이"
+    Cauchy 밀도 $f(x) = \frac{1}{\pi(1+x^2)}$에서 (표준 Cauchy의 중앙값인) 0에서의 값은 $f(0) = 1/\pi$이다.
 
-    The asymptotic variance of the sample median is:
+    표본중앙값의 점근분산은:
 
     $$\text{Var}(\text{median}) \approx \frac{1}{4nf(0)^2} = \frac{1}{4n(1/\pi)^2} = \frac{\pi^2}{4n} \approx \frac{2.467}{n}$$
 
-    The Fisher information for the Cauchy location parameter $\mu$ is:
+    Cauchy 위치모수 $\mu$에 대한 Fisher 정보량은:
 
     $$I(\mu) = \int_{-\infty}^{\infty} \frac{[f'(x-\mu)]^2}{f(x-\mu)}\,dx = \frac{1}{2}$$
 
-    So the CRLB (and asymptotic variance of the MLE) is:
+    따라서 CRLB(그리고 MLE의 점근분산)는:
 
     $$\text{Var}(\hat{\mu}_{\text{MLE}}) \approx \frac{1}{nI(\mu)} = \frac{2}{n}$$
 
-    The asymptotic relative efficiency of the median relative to the MLE is:
+    MLE 대비 중앙값의 점근 상대효율은:
 
     $$\text{ARE} = \frac{2/n}{\pi^2/(4n)} = \frac{8}{\pi^2} \approx 0.811$$
 
-    So the median is about 81% as efficient as the MLE for Cauchy data — a reasonable tradeoff given the median's simplicity and computational ease. $\square$
+    즉 Cauchy 자료에서 중앙값의 효율은 MLE의 약 81%이다 — 중앙값의 단순함과 계산의 편의를 생각하면 합리적인 맞바꿈이다. $\square$
 
 ---
 
-**Exercise 5.**
-Explain what a "stable distribution" is and why the Cauchy is one. What is the stability index of the Cauchy, and what does it determine about tail behavior?
+**연습문제 5.**
+"안정분포"가 무엇인지, Cauchy가 왜 안정분포인지 설명하라. Cauchy의 안정지수는 얼마이며, 그것이 꼬리 거동에 대해 무엇을 결정하는가?
 
-??? success "Solution to Exercise 5"
-    A random variable $X$ has a **stable distribution** with index $\alpha \in (0, 2]$ if for any $n$ iid copies $X_1, \ldots, X_n$:
+??? success "연습문제 5 풀이"
+    확률변수 $X$가 지수 $\alpha \in (0, 2]$인 **안정분포**를 따른다는 것은, 임의의 $n$개 i.i.d. 복사본 $X_1, \ldots, X_n$에 대해 어떤 상수 $c_n$이 존재하여
 
     $$X_1 + X_2 + \cdots + X_n \overset{d}{=} n^{1/\alpha} X + c_n$$
 
-    for some constant $c_n$. Equivalently, the family is closed under addition (up to location and scale). The characteristic function has the form $\varphi(t) = \exp(-c|t|^\alpha + i\delta t)$ for symmetric stable distributions.
+    이 성립한다는 뜻이다. 동등하게, 이 족은 (위치와 척도를 조정하면) 덧셈에 대해 닫혀 있다. 대칭 안정분포의 특성함수는 $\varphi(t) = \exp(-c|t|^\alpha + i\delta t)$ 꼴이다.
 
-    **The Cauchy has $\alpha = 1$:**
+    **Cauchy는 $\alpha = 1$이다:**
 
-    - Characteristic function: $\varphi(t) = e^{-|t|}$, which is $e^{-|t|^1}$ (so $\alpha = 1$).
-    - Sum property: $S_n = \sum X_i$ has $\varphi_{S_n}(t) = e^{-n|t|}$, which corresponds to $\text{Cauchy}(0, n)$. This matches $n^{1/\alpha}X = n^1 X \sim \text{Cauchy}(0, n)$.
+    - 특성함수: $\varphi(t) = e^{-|t|}$, 즉 $e^{-|t|^1}$이므로 $\alpha = 1$.
+    - 합의 성질: $S_n = \sum X_i$은 $\varphi_{S_n}(t) = e^{-n|t|}$이므로 $\text{Cauchy}(0, n)$에 해당한다. 이는 $n^{1/\alpha}X = n^1 X \sim \text{Cauchy}(0, n)$과 일치한다.
 
-    **The stability index $\alpha$ determines tail behavior:**
+    **안정지수 $\alpha$가 꼬리 거동을 결정한다:**
 
-    - $P(|X| > t) \sim t^{-\alpha}$ as $t \to \infty$ (for $\alpha < 2$).
-    - $\alpha = 2$: Gaussian (exponential tails, all moments finite).
-    - $\alpha = 1$: Cauchy ($P(|X|>t) \sim 1/t$, no mean).
-    - $0 < \alpha < 1$: Even heavier tails (no mean, $P(|X|>t) \sim t^{-\alpha}$).
+    - ($\alpha < 2$일 때) $t \to \infty$에서 $P(|X| > t) \sim t^{-\alpha}$.
+    - $\alpha = 2$: Gaussian(지수 꼬리, 모든 적률이 유한).
+    - $\alpha = 1$: Cauchy($P(|X|>t) \sim 1/t$, 평균 없음).
+    - $0 < \alpha < 1$: 꼬리가 더 두꺼움(평균 없음, $P(|X|>t) \sim t^{-\alpha}$).
 
-    The smaller $\alpha$ is, the heavier the tails. For $\alpha < 2$, moments of order $\geq \alpha$ are infinite. For $\alpha \leq 1$, the mean does not exist, and the LLN fails for the sample mean. $\square$
+    $\alpha$가 작을수록 꼬리가 두껍다. $\alpha < 2$이면 차수가 $\alpha$ 이상인 적률이 무한하다. $\alpha \leq 1$이면 평균이 존재하지 않고 표본평균에 대해 대수의법칙이 실패한다. $\square$

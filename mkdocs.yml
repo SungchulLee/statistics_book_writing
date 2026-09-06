@@ -236,34 +236,34 @@ nav:
             - 베이즈 Beta 켤레 사전분포: ch06/code/bayesian_beta_conjugate.md
             - Geometric과 Poisson의 최대가능도: ch06/code/geometric_poisson_mle.md
 
-    - 7 Estimation of μ and σ²: 
-        - Chapter Overview: ch07/index.md
-        - 7.1 Estimation of the Mean:
-            - Sample Mean as Estimator: ch07/mean/sample_mean.md
-            - Bias and Consistency: ch07/mean/bias_consistency.md
-            - Efficiency of the Sample Mean: ch07/mean/efficiency.md
-            - Trimmed and Winsorized Means: ch07/mean/robust_means.md
-        - 7.2 Estimation of the Variance:
-            - Naive Variance Estimator: ch07/variance/naive.md
-            - Bessel's Correction: ch07/variance/bessels.md
-            - Mean Squared Error of Variance Estimators: ch07/variance/mse_comparison.md
-            - Robust Variance Estimators: ch07/variance/robust_variance.md
-        - 7.3 Gaussian Maximum Likelihood:
-            - Maximum Likelihood Estimation of μ and σ²: ch07/mle/gaussian_mle.md
-            - Bias of Gaussian Maximum Likelihood for σ²: ch07/mle/mle_bias.md
-            - Sufficiency and Completeness: ch07/mle/sufficiency_completeness.md
-        - 7.4 Estimation Under Non-Normality:
-            - Heavy-Tailed Distributions: ch07/non_normal/heavy_tails.md
-            - Skewed Distributions: ch07/non_normal/skewed.md
-        - 7.5 Code:
-            - Sample Mean Properties: ch07/code/sample_mean_properties.md
-            - Consistency and Convergence: ch07/code/consistency_convergence.md
-            - Variance Estimators: ch07/code/variance_estimators.md
-            - Bessel's Correction: ch07/code/bessels_correction.md
-            - Gaussian Maximum Likelihood: ch07/code/gaussian_mle.md
-            - Return Estimation: ch07/code/return_estimation.md
-            - Robust Estimators Comparison: ch07/code/robust_estimators.md
-            - Cauchy Law of Large Numbers Failure: ch07/code/cauchy_lln_failure.md
+    - 7 μ와 σ²의 추정:
+        - 장 개요: ch07/index.md
+        - 7.1 평균의 추정:
+            - 추정량으로서의 표본평균: ch07/mean/sample_mean.md
+            - 편향과 일치성: ch07/mean/bias_consistency.md
+            - 표본평균의 효율성: ch07/mean/efficiency.md
+            - 절사평균과 윈저화 평균: ch07/mean/robust_means.md
+        - 7.2 분산의 추정:
+            - 소박한 분산추정량: ch07/variance/naive.md
+            - Bessel 수정: ch07/variance/bessels.md
+            - 분산추정량의 평균제곱오차: ch07/variance/mse_comparison.md
+            - 로버스트 분산추정량: ch07/variance/robust_variance.md
+        - 7.3 Gaussian 최대가능도:
+            - μ와 σ²의 최대가능도추정: ch07/mle/gaussian_mle.md
+            - σ²에 대한 Gaussian 최대가능도의 편향: ch07/mle/mle_bias.md
+            - 충분성과 완비성: ch07/mle/sufficiency_completeness.md
+        - 7.4 정규성이 없을 때의 추정:
+            - 꼬리가 두꺼운 분포: ch07/non_normal/heavy_tails.md
+            - 치우친 분포: ch07/non_normal/skewed.md
+        - 7.5 코드:
+            - 표본평균의 성질: ch07/code/sample_mean_properties.md
+            - 일치성과 수렴: ch07/code/consistency_convergence.md
+            - 분산추정량: ch07/code/variance_estimators.md
+            - Bessel 수정 시연: ch07/code/bessels_correction.md
+            - Gaussian 최대가능도: ch07/code/gaussian_mle.md
+            - 수익률 추정: ch07/code/return_estimation.md
+            - 로버스트 추정량 비교: ch07/code/robust_estimators.md
+            - Cauchy에서 대수의법칙의 실패: ch07/code/cauchy_lln_failure.md
 
     - 8 Confidence Intervals:
         - Chapter Overview: ch08/index.md

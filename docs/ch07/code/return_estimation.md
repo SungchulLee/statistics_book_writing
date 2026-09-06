@@ -1,16 +1,16 @@
-# Return Estimation
+# 수익률 추정
 
-## Overview
+## 개요
 
-Estimating expected returns and volatility from financial data is one of the most important — and most challenging — applications of estimation theory. Expected returns are notoriously imprecise to estimate (the signal-to-noise ratio is very low), Sharpe ratios inherit this imprecision, and volatility estimates depend heavily on the choice of estimation window. This page explores these challenges through simulation, covering estimation precision, Sharpe ratio uncertainty, realized volatility windows, and annualization conventions.
+금융 자료로 기대수익률과 변동성을 추정하는 일은 추정이론의 가장 중요하면서도 가장 어려운 응용에 속한다. 기대수익률은 (신호 대 잡음 비가 매우 낮아) 악명 높을 만큼 부정확하게 추정되고, Sharpe 비율은 이 부정확성을 그대로 물려받으며, 변동성 추정값은 추정 구간의 선택에 크게 좌우된다. 이 페이지에서는 추정 정밀도, Sharpe 비율의 불확실성, 실현변동성 구간, 연율화 관례를 모의실험으로 탐구한다.
 
-## Expected Return Precision
+## 기대수익률의 정밀도
 
-The standard error of the estimated annual return from $T$ years of data is:
+$T$년치 자료로 추정한 연간 수익률의 표준오차는:
 
 $$\text{SE}(\hat{\mu}) = \frac{\sigma}{\sqrt{T}}$$
 
-With typical equity parameters ($\mu = 8\%$, $\sigma = 20\%$), the standard error is large relative to the quantity being estimated.
+전형적인 주식 모수($\mu = 8\%$, $\sigma = 20\%$)에서는 추정 대상에 비해 표준오차가 크다.
 
 ```python
 import numpy as np
@@ -31,10 +31,10 @@ def expected_return_precision(seed=42):
               f"95% CI=[{lo*100:.2f}%, {hi*100:.2f}%]  Width={2*1.96*se*100:.2f}%")
 ```
 
-!!! danger "The fundamental problem"
-    With 10 years of data, the 95% confidence interval for the mean return is roughly $[-4.4\%, 20.4\%]$ — so wide that it includes zero. Even 50 years of data gives a standard error of 2.8%, barely enough to distinguish the expected return from zero.
+!!! danger "근본적인 문제"
+    자료가 10년치이면 평균 수익률의 95% 신뢰구간이 대략 $[-4.4\%, 20.4\%]$로, 0을 포함할 만큼 넓다. 50년치 자료에서도 표준오차가 2.8%로, 기대수익률을 0과 구분하기에 겨우 충분한 정도이다.
 
-The following simulation shows the distribution of estimated annual returns from 10 and 50 years of monthly data:
+다음 모의실험은 10년치와 50년치 월별 자료로 추정한 연간 수익률의 분포를 보여준다:
 
 ```python
 def return_precision_simulation(seed=42):
@@ -60,13 +60,13 @@ def return_precision_simulation(seed=42):
     plt.show()
 ```
 
-## Sharpe Ratio Uncertainty
+## Sharpe 비율의 불확실성
 
-The **Sharpe ratio** $\text{SR} = \mu/\sigma$ (or excess return divided by volatility) is the standard measure of risk-adjusted performance. Its estimation uncertainty is approximately:
+**Sharpe 비율** $\text{SR} = \mu/\sigma$(또는 초과수익률을 변동성으로 나눈 값)는 위험조정 성과의 표준적인 측도이다. 그 추정 불확실성은 대략:
 
 $$\text{SE}(\widehat{\text{SR}}) \approx \frac{1}{\sqrt{T}} \sqrt{1 + \frac{\text{SR}^2}{2}}$$
 
-where $T$ is the number of periods. For annual Sharpe ratios near 0.5, you need roughly 16 years for a $t$-statistic of 2.
+여기서 $T$는 기간의 수이다. 연간 Sharpe 비율이 0.5 근처이면 $t$-통계량 2를 얻는 데 대략 18년이 필요하다.
 
 ```python
 def sharpe_ratio_uncertainty(seed=42):
@@ -89,15 +89,15 @@ def sharpe_ratio_uncertainty(seed=42):
               f"SD(SR)={sr_ests.std():.3f}  P(SR<0)={( sr_ests < 0).mean():.1%}")
 ```
 
-!!! note "Implications for fund evaluation"
-    With only 3 years of data, a fund with a true Sharpe ratio of 0.5 has a roughly 20% probability of showing a *negative* estimated Sharpe ratio. Even 10 years gives a standard deviation of about 0.3 around the true value. Reliably distinguishing skilled from unskilled managers requires decades of data.
+!!! note "펀드 평가에 대한 함의"
+    자료가 3년치뿐이면 참 Sharpe 비율이 0.5인 펀드도 추정 Sharpe 비율이 *음수*로 나올 확률이 약 20%이다. 10년치라도 참값 주위의 표준편차가 약 0.3이다. 실력 있는 운용자와 그렇지 않은 운용자를 믿을 만하게 구분하려면 수십 년치 자료가 필요하다.
 
-## Realized Volatility Windows
+## 실현변동성의 구간
 
-Volatility is time-varying in practice (GARCH effects). The choice of estimation window involves a **bias-variance tradeoff**:
+실제로 변동성은 시간에 따라 변한다(GARCH 효과). 추정 구간의 선택에는 **편향–분산 맞바꿈**이 따른다:
 
-- **Short windows** (5-21 days): responsive to recent changes but noisy
-- **Long windows** (126-252 days): smooth but lagging
+- **짧은 구간** (5–21일): 최근 변화에 민감하지만 잡음이 많다
+- **긴 구간** (126–252일): 매끄럽지만 뒤늦다
 
 ```python
 def realized_volatility_windows(seed=42):
@@ -132,17 +132,17 @@ def realized_volatility_windows(seed=42):
     plt.show()
 ```
 
-!!! info "Practical guidance"
-    There is no single "correct" window. Practitioners often use 21-day (monthly) windows for short-term risk management and 252-day (annual) windows for strategic allocation. More sophisticated approaches (exponentially weighted, GARCH models) address the tradeoff more explicitly.
+!!! info "실무 지침"
+    유일하게 "옳은" 구간은 없다. 실무자들은 단기 위험관리에는 21일(월간) 구간을, 전략적 자산배분에는 252일(연간) 구간을 흔히 쓴다. 더 정교한 접근(지수가중, GARCH 모형)은 이 맞바꿈을 더 명시적으로 다룬다.
 
-## Annualization Conventions
+## 연율화 관례
 
-Financial data is collected at different frequencies. Standard annualization assumes iid returns:
+금융 자료는 서로 다른 빈도로 수집된다. 표준적인 연율화는 수익률이 i.i.d.라고 가정한다:
 
-| Frequency | Mean | Volatility | Sharpe Ratio |
+| 빈도 | 평균 | 변동성 | Sharpe 비율 |
 |-----------|------|------------|--------------|
-| Daily to Annual | $\mu_a = \mu_d \times 252$ | $\sigma_a = \sigma_d \times \sqrt{252}$ | $\text{SR}_a = \text{SR}_d \times \sqrt{252}$ |
-| Monthly to Annual | $\mu_a = \mu_m \times 12$ | $\sigma_a = \sigma_m \times \sqrt{12}$ | $\text{SR}_a = \text{SR}_m \times \sqrt{12}$ |
+| 일별 → 연간 | $\mu_a = \mu_d \times 252$ | $\sigma_a = \sigma_d \times \sqrt{252}$ | $\text{SR}_a = \text{SR}_d \times \sqrt{252}$ |
+| 월별 → 연간 | $\mu_a = \mu_m \times 12$ | $\sigma_a = \sigma_m \times \sqrt{12}$ | $\text{SR}_a = \text{SR}_m \times \sqrt{12}$ |
 
 ```python
 def annualization_conventions():
@@ -156,117 +156,117 @@ def annualization_conventions():
     print(f"  SR_annual   = {mu_d/sigma_d*np.sqrt(252):.3f}")
 ```
 
-!!! warning "iid assumption"
-    Annualization formulas assume returns are iid. Autocorrelation in returns (momentum or mean-reversion) and volatility clustering (GARCH effects) invalidate the simple $\sqrt{T}$ scaling rules. In practice, these are useful approximations but should be used with awareness of their limitations.
+!!! warning "i.i.d. 가정"
+    연율화 공식은 수익률이 i.i.d.라고 가정한다. 수익률의 자기상관(모멘텀이나 평균회귀)과 변동성 군집(GARCH 효과)은 단순한 $\sqrt{T}$ 축척 규칙을 무너뜨린다. 실무에서는 유용한 근사이지만 그 한계를 인식하고 써야 한다.
 
-## Interpretation
+## 해석
 
-- **Expected return estimation** is fundamentally imprecise in finance. The signal-to-noise ratio $\mu/\sigma$ is typically small (around 0.03 daily), requiring decades of data for meaningful precision.
-- **Sharpe ratios** are noisy estimates. A 3-year track record is insufficient to reliably judge whether a manager has skill.
-- **Volatility estimation** is much more precise than return estimation (volatility is observable from high-frequency data, but expected return is not). This is why risk models are more reliable than return forecasts.
-- The **bias-variance tradeoff** in window selection is a practical manifestation of the classical tradeoff: short windows have low bias but high variance, and vice versa.
-- **Annualization** is straightforward under iid assumptions but should be interpreted cautiously when returns exhibit serial dependence.
+- 금융에서 **기대수익률 추정**은 본질적으로 부정확하다. 신호 대 잡음 비 $\mu/\sigma$가 대개 작아서(일별로 약 0.03) 의미 있는 정밀도를 얻으려면 수십 년치 자료가 필요하다.
+- **Sharpe 비율**은 잡음이 큰 추정값이다. 3년의 실적으로는 운용자에게 실력이 있는지 믿을 만하게 판단할 수 없다.
+- **변동성 추정**은 수익률 추정보다 훨씬 정밀하다(변동성은 고빈도 자료에서 관측할 수 있지만 기대수익률은 그렇지 않다). 위험 모형이 수익률 예측보다 믿을 만한 이유가 여기에 있다.
+- 구간 선택에서의 **편향–분산 맞바꿈**은 고전적 맞바꿈이 실무에 드러난 모습이다: 짧은 구간은 편향이 작고 분산이 크며, 긴 구간은 그 반대이다.
+- **연율화**는 i.i.d. 가정 아래에서는 간단하지만 수익률에 계열 종속성이 있으면 조심스럽게 해석해야 한다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-A fund has a true annual expected return of 10% and annual volatility of 15%. Compute the standard error of the estimated annual return from 5 years of monthly data. What is the probability that the estimated return is negative?
+**연습문제 1.**
+어떤 펀드의 참 연간 기대수익률이 10%, 연간 변동성이 15%이다. 5년치 월별 자료로 추정한 연간 수익률의 표준오차를 계산하라. 추정 수익률이 음수일 확률은?
 
-??? success "Solution to Exercise 1"
-    Monthly parameters: $\mu_m = 10\%/12 \approx 0.833\%$ and $\sigma_m = 15\%/\sqrt{12} \approx 4.330\%$.
+??? success "연습문제 1 풀이"
+    월별 모수: $\mu_m = 10\%/12 \approx 0.833\%$, $\sigma_m = 15\%/\sqrt{12} \approx 4.330\%$.
 
-    With $n = 60$ months, $\text{SE}(\hat{\mu}_m) = \sigma_m/\sqrt{60}$. Annualized:
+    $n = 60$개월이면 $\text{SE}(\hat{\mu}_m) = \sigma_m/\sqrt{60}$이다. 연율화하면:
 
     $$\text{SE}(\hat{\mu}_a) = \sigma_a / \sqrt{T} = 15\% / \sqrt{5} = 6.71\%$$
 
-    The probability of a negative estimated return:
+    추정 수익률이 음수일 확률은:
 
     $$P(\hat{\mu}_a < 0) = P\left(Z < \frac{0 - 10\%}{6.71\%}\right) = P(Z < -1.49) = \mathcal{N}(-1.49) \approx 6.8\%$$
 
-    Even with a true 10% expected return, there is about a 7% chance of estimating a negative value from 5 years of data. $\square$
+    참 기대수익률이 10%인데도 5년치 자료로는 음수 값을 추정할 확률이 약 7%이다. $\square$
 
 ---
 
-**Exercise 2.**
-Derive the approximate standard error of the estimated Sharpe ratio, $\text{SE}(\widehat{\text{SR}}) \approx \sqrt{(1 + \text{SR}^2/2)/T}$, using the delta method.
+**연습문제 2.**
+델타 방법을 써서 추정 Sharpe 비율의 근사 표준오차 $\text{SE}(\widehat{\text{SR}}) \approx \sqrt{(1 + \text{SR}^2/2)/T}$를 유도하라.
 
-??? success "Solution to Exercise 2"
-    The Sharpe ratio is $\text{SR} = \mu/\sigma = g(\mu, \sigma^2)$ where $g(a, b) = a/\sqrt{b}$.
+??? success "연습문제 2 풀이"
+    Sharpe 비율은 $g(a, b) = a/\sqrt{b}$에 대해 $\text{SR} = \mu/\sigma = g(\mu, \sigma^2)$이다.
 
-    By the delta method, for $\hat{\mu} = \bar{X}$ and $\hat{\sigma}^2 = S^2$:
+    델타 방법에 의해 $\hat{\mu} = \bar{X}$, $\hat{\sigma}^2 = S^2$에 대해:
 
     $$\text{Var}(\widehat{\text{SR}}) \approx \nabla g^T \Sigma \nabla g$$
 
-    where $\Sigma = \text{Cov}(\hat{\mu}, \hat{\sigma}^2)$. For normal data, $\hat{\mu}$ and $\hat{\sigma}^2$ are independent, so $\Sigma$ is diagonal:
+    여기서 $\Sigma = \text{Cov}(\hat{\mu}, \hat{\sigma}^2)$이다. 정규 자료에서는 $\hat{\mu}$과 $\hat{\sigma}^2$이 독립이므로 $\Sigma$가 대각행렬이다:
 
     $$\Sigma = \begin{pmatrix} \sigma^2/n & 0 \\ 0 & 2\sigma^4/(n-1) \end{pmatrix}$$
 
-    The gradient of $g(\mu, \sigma^2) = \mu(\sigma^2)^{-1/2}$:
+    $g(\mu, \sigma^2) = \mu(\sigma^2)^{-1/2}$의 기울기는:
 
     $$\frac{\partial g}{\partial \mu} = \frac{1}{\sigma}, \qquad \frac{\partial g}{\partial \sigma^2} = -\frac{\mu}{2\sigma^3}$$
 
-    Therefore:
+    따라서:
 
     $$\text{Var}(\widehat{\text{SR}}) \approx \frac{1}{\sigma^2}\cdot\frac{\sigma^2}{n} + \frac{\mu^2}{4\sigma^6}\cdot\frac{2\sigma^4}{n} = \frac{1}{n}\left(1 + \frac{\mu^2}{2\sigma^2}\right) = \frac{1}{n}\left(1 + \frac{\text{SR}^2}{2}\right)$$
 
-    Taking the square root: $\text{SE}(\widehat{\text{SR}}) \approx \sqrt{(1 + \text{SR}^2/2)/n}$.
+    제곱근을 취하면 $\text{SE}(\widehat{\text{SR}}) \approx \sqrt{(1 + \text{SR}^2/2)/n}$이다.
 
-    For annual data, $n = T$ (years), giving the stated formula. $\square$
-
----
-
-**Exercise 3.**
-Explain why increasing the sampling frequency (e.g., from monthly to daily) does not improve the precision of expected return estimation but does improve volatility estimation.
-
-??? success "Solution to Exercise 3"
-    **Expected return:** Under iid assumptions, the annual standard error is $\text{SE} = \sigma_a/\sqrt{T}$, where $T$ is the number of *years* of data. If we sample daily instead of monthly within the same $T$ years, we get more observations but each has proportionally smaller mean and variance. The net effect cancels:
-
-    - Daily: $n = 252T$ observations, $\mu_d = \mu_a/252$, $\sigma_d = \sigma_a/\sqrt{252}$. SE of annualized mean: $\sigma_d\sqrt{252}/\sqrt{n} = \sigma_a/\sqrt{T}$.
-
-    The precision depends only on the time span $T$, not the sampling frequency. This is because the mean return accumulates linearly with time.
-
-    **Volatility:** Volatility estimation precision improves with more observations. The standard error of $\hat{\sigma}^2$ is proportional to $1/\sqrt{n}$, where $n$ is the number of observations. Daily data gives 252 observations per year instead of 12, improving volatility estimation by a factor of $\sqrt{252/12} \approx 4.6$.
-
-    Intuitively, each daily return reveals information about the current variance (through its squared magnitude), so more frequent sampling genuinely helps. In contrast, each daily return carries only a tiny signal about the drift, and that signal does not compound faster with more frequent observation. $\square$
+    연간 자료에서는 $n = T$(년)이므로 위 공식이 된다. $\square$
 
 ---
 
-**Exercise 4.**
-A GARCH(1,1) model has parameters $\omega = 0.00001$, $\alpha = 0.08$, $\beta = 0.90$. Compute the unconditional (long-run) annualized volatility. Is the process stationary?
+**연습문제 3.**
+표본추출 빈도를 높이는 것이(예: 월별에서 일별로) 기대수익률 추정의 정밀도는 개선하지 못하면서 변동성 추정은 개선하는 이유를 설명하라.
 
-??? success "Solution to Exercise 4"
-    The GARCH(1,1) model is $\sigma_t^2 = \omega + \alpha r_{t-1}^2 + \beta \sigma_{t-1}^2$.
+??? success "연습문제 3 풀이"
+    **기대수익률:** i.i.d. 가정 아래에서 연간 표준오차는 $\text{SE} = \sigma_a/\sqrt{T}$이며, 여기서 $T$는 자료의 *햇수*이다. 같은 $T$년 안에서 월별 대신 일별로 표본을 뽑으면 관측값은 늘지만 각각의 평균과 분산이 비례해서 작아진다. 순효과는 상쇄된다:
 
-    Stationarity requires $\alpha + \beta < 1$. Here $\alpha + \beta = 0.08 + 0.90 = 0.98 < 1$, so the process is stationary.
+    - 일별: 관측값 $n = 252T$개, $\mu_d = \mu_a/252$, $\sigma_d = \sigma_a/\sqrt{252}$. 연율화 평균의 표준오차: $\sigma_d\sqrt{252}/\sqrt{n} = \sigma_a/\sqrt{T}$.
 
-    The unconditional variance is:
+    정밀도는 표본추출 빈도가 아니라 오직 시간 범위 $T$에 달려 있다. 평균 수익률이 시간에 따라 선형으로 누적되기 때문이다.
+
+    **변동성:** 변동성 추정의 정밀도는 관측값이 많아질수록 좋아진다. $\hat{\sigma}^2$의 표준오차는 관측값 수 $n$에 대해 $1/\sqrt{n}$에 비례한다. 일별 자료는 연간 12개 대신 252개의 관측값을 주므로 변동성 추정이 $\sqrt{252/12} \approx 4.6$배 개선된다.
+
+    직관적으로, 각 일별 수익률은 (제곱 크기를 통해) 현재 분산에 대한 정보를 드러내므로 더 자주 표본을 뽑는 것이 실제로 도움이 된다. 반면 각 일별 수익률이 추세에 대해 담고 있는 신호는 아주 작고, 그 신호는 관측을 자주 한다고 해서 더 빨리 쌓이지 않는다. $\square$
+
+---
+
+**연습문제 4.**
+GARCH(1,1) 모형의 모수가 $\omega = 0.00001$, $\alpha = 0.08$, $\beta = 0.90$이다. 무조건(장기) 연율화 변동성을 계산하라. 이 과정은 정상인가?
+
+??? success "연습문제 4 풀이"
+    GARCH(1,1) 모형은 $\sigma_t^2 = \omega + \alpha r_{t-1}^2 + \beta \sigma_{t-1}^2$이다.
+
+    정상성에는 $\alpha + \beta < 1$이 필요하다. 여기서는 $\alpha + \beta = 0.08 + 0.90 = 0.98 < 1$이므로 정상이다.
+
+    무조건 분산은:
 
     $$\sigma^2 = \frac{\omega}{1 - \alpha - \beta} = \frac{0.00001}{1 - 0.98} = \frac{0.00001}{0.02} = 0.0005$$
 
-    The unconditional daily volatility is $\sigma = \sqrt{0.0005} \approx 0.02236$ or $2.236\%$.
+    무조건 일별 변동성은 $\sigma = \sqrt{0.0005} \approx 0.02236$, 즉 $2.236\%$이다.
 
-    Annualized: $\sigma_a = 0.02236 \times \sqrt{252} \approx 35.5\%$.
+    연율화하면 $\sigma_a = 0.02236 \times \sqrt{252} \approx 35.5\%$이다.
 
-    Note that $\alpha + \beta = 0.98$ is close to 1, indicating high volatility persistence — shocks to volatility decay slowly. $\square$
+    $\alpha + \beta = 0.98$이 1에 가깝다는 것은 변동성의 지속성이 높다는 뜻이다 — 변동성 충격이 천천히 감쇠한다. $\square$
 
 ---
 
-**Exercise 5.**
-A practitioner claims that because daily returns are roughly iid, the monthly Sharpe ratio multiplied by $\sqrt{12}$ gives the annual Sharpe ratio. Under what conditions is this correct, and when might it fail?
+**연습문제 5.**
+어떤 실무자가 일별 수익률이 대체로 i.i.d.이므로 월별 Sharpe 비율에 $\sqrt{12}$를 곱하면 연간 Sharpe 비율이 된다고 주장한다. 어떤 조건에서 맞고, 언제 틀릴 수 있는가?
 
-??? success "Solution to Exercise 5"
-    The claim relies on the iid assumption for daily returns. Under iid:
+??? success "연습문제 5 풀이"
+    이 주장은 일별 수익률의 i.i.d. 가정에 기댄다. i.i.d. 아래에서:
 
     $$\text{SR}_{\text{annual}} = \text{SR}_{\text{monthly}} \times \sqrt{12} = \text{SR}_{\text{daily}} \times \sqrt{252}$$
 
-    This is correct because under iid: $\mu_a = 12\mu_m$ and $\sigma_a = \sqrt{12}\sigma_m$, so $\text{SR}_a = 12\mu_m/(\sqrt{12}\sigma_m) = \sqrt{12}\cdot\text{SR}_m$.
+    i.i.d.이면 $\mu_a = 12\mu_m$이고 $\sigma_a = \sqrt{12}\sigma_m$이므로 $\text{SR}_a = 12\mu_m/(\sqrt{12}\sigma_m) = \sqrt{12}\cdot\text{SR}_m$이 되어 옳다.
 
-    **Conditions for failure:**
+    **틀리게 되는 조건:**
 
-    1. **Serial correlation in returns:** If returns are positively autocorrelated (momentum), the true annual volatility is higher than $\sqrt{12}\sigma_m$, so the $\sqrt{12}$ scaling **overstates** the annual Sharpe ratio. Negative autocorrelation (mean reversion) leads to understating it.
+    1. **수익률의 계열상관:** 수익률이 양의 자기상관을 가지면(모멘텀) 참 연간 변동성이 $\sqrt{12}\sigma_m$보다 크므로 $\sqrt{12}$ 축척은 연간 Sharpe 비율을 **과대평가**한다. 음의 자기상관(평균회귀)이면 과소평가하게 된다.
 
-    2. **Volatility clustering (GARCH):** Time-varying volatility means that the compounding of daily returns does not follow the simple $\sqrt{T}$ rule. The annual distribution has fatter tails than the scaled daily distribution.
+    2. **변동성 군집(GARCH):** 변동성이 시간에 따라 변하면 일별 수익률의 복리가 단순한 $\sqrt{T}$ 규칙을 따르지 않는다. 연간 분포는 축척한 일별 분포보다 꼬리가 두껍다.
 
-    3. **Non-zero serial correlation in squared returns:** Even if returns are uncorrelated, autocorrelation in $r_t^2$ (which is present in GARCH models) affects the annualized volatility.
+    3. **제곱수익률의 계열상관:** 수익률이 무상관이더라도 (GARCH 모형에 존재하는) $r_t^2$의 자기상관이 연율화 변동성에 영향을 준다.
 
-    In practice, the $\sqrt{T}$ rule is a useful approximation but should be validated against direct computation from the relevant frequency. $\square$
+    실무에서 $\sqrt{T}$ 규칙은 유용한 근사이지만 해당 빈도에서 직접 계산한 값과 대조해 검증해야 한다. $\square$

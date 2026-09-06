@@ -1,34 +1,34 @@
-# MLE of μ and σ²
+# μ와 σ²의 MLE
 
-## Introduction
+## 들어가며
 
-The **Maximum Likelihood Estimators of the Gaussian (Normal) distribution parameters** are among the most important results in statistics. For $X_1, \ldots, X_n \sim N(\mu, \sigma^2)$, the MLE provides closed-form estimators for both the mean $\mu$ and variance $\sigma^2$. This section derives these estimators, analyzes their properties, and connects the results to the broader theory of estimation.
+**Gaussian(정규) 분포 모수의 최대가능도추정량**은 통계학에서 가장 중요한 결과에 속한다. $X_1, \ldots, X_n \sim N(\mu, \sigma^2)$에 대해 MLE는 평균 $\mu$와 분산 $\sigma^2$ 모두에 대한 닫힌 형태의 추정량을 준다. 이 절에서는 이 추정량들을 유도하고, 성질을 분석하며, 그 결과를 더 넓은 추정이론과 연결한다.
 
-## The Normal Log-Likelihood
+## 정규 로그가능도
 
-For an iid sample $x_1, \ldots, x_n$ from $N(\mu, \sigma^2)$, the log-likelihood is:
+$N(\mu, \sigma^2)$에서 얻은 i.i.d. 표본 $x_1, \ldots, x_n$에 대해 로그가능도는:
 
 $$\ell(\mu, \sigma^2) = -\frac{n}{2}\log(2\pi) - \frac{n}{2}\log(\sigma^2) - \frac{1}{2\sigma^2}\sum_{i=1}^n (x_i - \mu)^2$$
 
-## Deriving the MLEs
+## MLE의 유도
 
-### MLE of mu
-Differentiate with respect to $\mu$:
+### mu의 MLE
+$\mu$에 대해 미분하면:
 
 $$\frac{\partial \ell}{\partial \mu} = \frac{1}{\sigma^2}\sum_{i=1}^n (x_i - \mu) = \frac{n}{\sigma^2}(\bar{x} - \mu)$$
 
-Setting to zero:
+0으로 놓으면:
 
 $$\bar{x} - \mu = 0 \implies \boxed{\hat{\mu}_{\text{MLE}} = \bar{X} = \frac{1}{n}\sum_{i=1}^n X_i}$$
 
-The MLE of the mean is the **sample mean**.
+평균의 MLE는 **표본평균**이다.
 
-### MLE of sigma-squared
-Differentiate with respect to $\sigma^2$ (treating $\sigma^2$ as a single variable):
+### sigma-squared의 MLE
+($\sigma^2$을 하나의 변수로 보고) $\sigma^2$에 대해 미분하면:
 
 $$\frac{\partial \ell}{\partial \sigma^2} = -\frac{n}{2\sigma^2} + \frac{1}{2\sigma^4}\sum_{i=1}^n (x_i - \mu)^2$$
 
-Setting to zero and substituting $\hat{\mu} = \bar{x}$:
+0으로 놓고 $\hat{\mu} = \bar{x}$를 대입하면:
 
 $$-\frac{n}{2\sigma^2} + \frac{1}{2\sigma^4}\sum_{i=1}^n (x_i - \bar{x})^2 = 0$$
 
@@ -36,186 +36,186 @@ $$\sigma^2 = \frac{1}{n}\sum_{i=1}^n (x_i - \bar{x})^2$$
 
 $$\boxed{\hat{\sigma}^2_{\text{MLE}} = \frac{1}{n}\sum_{i=1}^n (X_i - \bar{X})^2}$$
 
-The MLE of the variance divides by $n$, **not** $n-1$.
+분산의 MLE는 $n-1$이 **아니라** $n$으로 나눈다.
 
-### Verification: Second-Order Conditions
+### 확인: 2계 조건
 
-The Hessian matrix evaluated at $(\hat{\mu}, \hat{\sigma}^2)$ is:
+$(\hat{\mu}, \hat{\sigma}^2)$에서 평가한 Hessian 행렬은:
 
 $$H = \begin{pmatrix} -n/\hat{\sigma}^2 & 0 \\ 0 & -n/(2\hat{\sigma}^4) \end{pmatrix}$$
 
-This is negative definite (both diagonal entries are negative), confirming a maximum.
+대각 성분이 모두 음수이므로 음정부호이며, 최댓값임이 확인된다.
 
-## Properties of the Gaussian MLEs
+## Gaussian MLE의 성질
 
-### Properties of mu-hat = X-bar
-| Property | Result |
+### mu-hat = X-bar의 성질
+| 성질 | 결과 |
 |----------|--------|
-| Bias | $E[\hat{\mu}] = \mu$ (unbiased) |
-| Variance | $\text{Var}(\hat{\mu}) = \sigma^2/n$ |
-| Distribution | $\hat{\mu} \sim N(\mu, \sigma^2/n)$ exactly |
-| Efficiency | Achieves CRLB; MVUE |
-| Sufficiency | Sufficient for $\mu$ (given $\sigma^2$) |
-| Consistency | $\hat{\mu} \xrightarrow{p} \mu$ |
+| 편향 | $E[\hat{\mu}] = \mu$ (불편) |
+| 분산 | $\text{Var}(\hat{\mu}) = \sigma^2/n$ |
+| 분포 | 정확히 $\hat{\mu} \sim N(\mu, \sigma^2/n)$ |
+| 효율성 | CRLB 달성, MVUE |
+| 충분성 | ($\sigma^2$이 주어지면) $\mu$에 대해 충분 |
+| 일치성 | $\hat{\mu} \xrightarrow{p} \mu$ |
 
-### Properties of sigma-squared (MLE)
-| Property | Result |
+### sigma-squared (MLE)의 성질
+| 성질 | 결과 |
 |----------|--------|
-| Bias | $E[\hat{\sigma}^2] = \frac{n-1}{n}\sigma^2$ (biased) |
-| Bias magnitude | $\text{Bias} = -\sigma^2/n$ |
-| Distribution | $n\hat{\sigma}^2/\sigma^2 \sim \chi^2_{n-1}$ |
-| Variance | $\text{Var}(\hat{\sigma}^2) = \frac{2(n-1)}{n^2}\sigma^4$ |
-| MSE | $\frac{2n-1}{n^2}\sigma^4$ |
-| Consistency | $\hat{\sigma}^2 \xrightarrow{p} \sigma^2$ |
-| Asymptotically unbiased | $E[\hat{\sigma}^2] \to \sigma^2$ as $n \to \infty$ |
+| 편향 | $E[\hat{\sigma}^2] = \frac{n-1}{n}\sigma^2$ (편향됨) |
+| 편향의 크기 | $\text{Bias} = -\sigma^2/n$ |
+| 분포 | $n\hat{\sigma}^2/\sigma^2 \sim \chi^2_{n-1}$ |
+| 분산 | $\text{Var}(\hat{\sigma}^2) = \frac{2(n-1)}{n^2}\sigma^4$ |
+| 평균제곱오차 | $\frac{2n-1}{n^2}\sigma^4$ |
+| 일치성 | $\hat{\sigma}^2 \xrightarrow{p} \sigma^2$ |
+| 점근적 불편성 | $n \to \infty$일 때 $E[\hat{\sigma}^2] \to \sigma^2$ |
 
-### Independence
+### 독립성
 
-$\hat{\mu}$ and $\hat{\sigma}^2$ are **independent** (by Cochran's theorem). This is a special property of the normal distribution and is crucial for deriving the $t$-distribution.
+$\hat{\mu}$과 $\hat{\sigma}^2$은 (Cochran 정리에 의해) **독립**이다. 정규분포에만 있는 특별한 성질이며 $t$-분포를 유도하는 데 결정적이다.
 
-## Fisher Information Matrix
+## Fisher 정보행렬
 
-The Fisher information matrix for $(\mu, \sigma^2)$ is:
+$(\mu, \sigma^2)$에 대한 Fisher 정보행렬은:
 
 $$I(\mu, \sigma^2) = \begin{pmatrix} n/\sigma^2 & 0 \\ 0 & n/(2\sigma^4) \end{pmatrix}$$
 
-The zero off-diagonal entries confirm that $\mu$ and $\sigma^2$ carry independent information.
+비대각 성분이 0이라는 사실은 $\mu$와 $\sigma^2$이 서로 독립적인 정보를 담고 있음을 확인해 준다.
 
-### Cramér-Rao Lower Bounds
+### Cramér-Rao 하한
 
 $$\text{Var}(\hat{\mu}) \geq \frac{\sigma^2}{n}, \quad \text{Var}(\hat{\sigma}^2) \geq \frac{2\sigma^4}{n}$$
 
-The MLE of $\mu$ achieves the CRLB exactly. The MLE of $\sigma^2$ does *not* achieve the CRLB in finite samples (it has variance $2(n-1)\sigma^4/n^2 < 2\sigma^4/n$), but it does asymptotically.
+$\mu$의 MLE는 CRLB를 정확히 달성한다. $\sigma^2$의 MLE는 유한표본에서는 CRLB에 도달하지 *못하지만*(분산이 $2(n-1)\sigma^4/n^2 < 2\sigma^4/n$이다) 점근적으로는 도달한다.
 
-## Alternative Parametrization: (mu, sigma)
-If we parametrize by $(\mu, \sigma)$ instead of $(\mu, \sigma^2)$, the MLE of $\sigma$ is:
+## 다른 모수화: (mu, sigma)
+$(\mu, \sigma^2)$ 대신 $(\mu, \sigma)$로 모수화하면 $\sigma$의 MLE는:
 
 $$\hat{\sigma}_{\text{MLE}} = \sqrt{\hat{\sigma}^2_{\text{MLE}}} = \sqrt{\frac{1}{n}\sum_{i=1}^n (X_i - \bar{X})^2}$$
 
-This follows from the **invariance property** of MLEs: if $\hat{\theta}$ is the MLE of $\theta$, then $g(\hat{\theta})$ is the MLE of $g(\theta)$.
+이는 MLE의 **불변성**에서 따라 나온다: $\hat{\theta}$가 $\theta$의 MLE이면 $g(\hat{\theta})$는 $g(\theta)$의 MLE이다.
 
-Note that $\hat{\sigma}_{\text{MLE}}$ is biased for $\sigma$ (by Jensen's inequality, $E[\sqrt{X}] < \sqrt{E[X]}$).
+$\hat{\sigma}_{\text{MLE}}$은 $\sigma$에 대해 편향되어 있음에 유의하라(Jensen 부등식에 의해 $E[\sqrt{X}] < \sqrt{E[X]}$).
 
-## Bias-Corrected Estimator
+## 편향 보정 추정량
 
-The unbiased estimator of $\sigma^2$ is:
+$\sigma^2$의 불편추정량은:
 
 $$S^2 = \frac{n}{n-1}\hat{\sigma}^2_{\text{MLE}} = \frac{1}{n-1}\sum_{i=1}^n (X_i - \bar{X})^2$$
 
-Comparison:
+비교:
 
-| Estimator | Formula | $E[\cdot]$ | MSE |
+| 추정량 | 공식 | $E[\cdot]$ | 평균제곱오차 |
 |-----------|---------|------------|-----|
 | MLE | $\frac{1}{n}\sum(X_i - \bar{X})^2$ | $\frac{n-1}{n}\sigma^2$ | $\frac{2n-1}{n^2}\sigma^4$ |
-| Bessel's | $\frac{1}{n-1}\sum(X_i - \bar{X})^2$ | $\sigma^2$ | $\frac{2}{n-1}\sigma^4$ |
-| MSE-optimal | $\frac{1}{n+1}\sum(X_i - \bar{X})^2$ | $\frac{n-1}{n+1}\sigma^2$ | minimum |
+| Bessel | $\frac{1}{n-1}\sum(X_i - \bar{X})^2$ | $\sigma^2$ | $\frac{2}{n-1}\sigma^4$ |
+| 평균제곱오차 최적 | $\frac{1}{n+1}\sum(X_i - \bar{X})^2$ | $\frac{n-1}{n+1}\sigma^2$ | 최소 |
 
-## Log-Likelihood Surface
+## 로그가능도 곡면
 
-The log-likelihood function $\ell(\mu, \sigma^2)$ forms a surface over the $(\mu, \sigma^2)$ plane:
+로그가능도함수 $\ell(\mu, \sigma^2)$은 $(\mu, \sigma^2)$ 평면 위의 곡면을 이룬다:
 
-- For fixed $\sigma^2$: $\ell$ is a downward-opening parabola in $\mu$, maximized at $\bar{X}$
-- For fixed $\mu$: $\ell$ is a concave function of $\sigma^2$
-- The global maximum is at $(\bar{X}, \hat{\sigma}^2)$
-- Contours of constant log-likelihood are ellipses centered at the MLE (approximately, for large $n$)
+- $\sigma^2$을 고정하면 $\ell$은 $\mu$에 대해 위로 볼록한(아래로 열린) 포물선이며 $\bar{X}$에서 최대가 된다
+- $\mu$를 고정하면 $\ell$은 $\sigma^2$의 오목함수이다
+- 전역 최댓값은 $(\bar{X}, \hat{\sigma}^2)$에 있다
+- 로그가능도가 일정한 등고선은 (큰 $n$에서 근사적으로) MLE를 중심으로 하는 타원이다
 
-## Confidence Regions from the Likelihood
+## 가능도로부터의 신뢰영역
 
-### For mu (σ² known)
+### mu에 대해 (σ²를 아는 경우)
 
 $$\bar{X} \pm z_{\alpha/2}\frac{\sigma}{\sqrt{n}}$$
 
-### For mu (σ² unknown)
+### mu에 대해 (σ²를 모르는 경우)
 
 $$\bar{X} \pm t_{n-1, \alpha/2}\frac{S}{\sqrt{n}}$$
 
-where $S = \sqrt{S^2}$ and $t_{n-1}$ is the Student's $t$-distribution with $n-1$ degrees of freedom.
+여기서 $S = \sqrt{S^2}$이고 $t_{n-1}$은 자유도 $n-1$인 Student $t$-분포이다.
 
-### For sigma-squared
+### sigma-squared에 대해
 
 $$\left(\frac{(n-1)S^2}{\chi^2_{n-1, \alpha/2}}, \quad \frac{(n-1)S^2}{\chi^2_{n-1, 1-\alpha/2}}\right)$$
 
-## MLE Under Constraints
+## 제약 아래에서의 MLE
 
-### Known Mean
+### 평균을 아는 경우
 
-If $\mu = \mu_0$ is known, the constrained MLE of $\sigma^2$ is:
+$\mu = \mu_0$이 알려져 있으면 $\sigma^2$의 제약 MLE는:
 
 $$\hat{\sigma}^2_{\mu_0} = \frac{1}{n}\sum_{i=1}^n (X_i - \mu_0)^2$$
 
-This is unbiased (unlike the case when $\mu$ is estimated).
+($\mu$를 추정하는 경우와 달리) 이 추정량은 불편이다.
 
-### Equal Means (Pooled Variance)
+### 평균이 같은 경우 (합동분산)
 
-For two groups $X_1, \ldots, X_{n_1} \sim N(\mu_1, \sigma^2)$ and $Y_1, \ldots, Y_{n_2} \sim N(\mu_2, \sigma^2)$ with common variance, the MLE of $\sigma^2$ is:
+공통 분산을 갖는 두 집단 $X_1, \ldots, X_{n_1} \sim N(\mu_1, \sigma^2)$과 $Y_1, \ldots, Y_{n_2} \sim N(\mu_2, \sigma^2)$에 대해 $\sigma^2$의 MLE는:
 
 $$\hat{\sigma}^2_{\text{pooled}} = \frac{\sum(X_i - \bar{X})^2 + \sum(Y_j - \bar{Y})^2}{n_1 + n_2}$$
 
-The unbiased version divides by $n_1 + n_2 - 2$.
+불편 버전은 $n_1 + n_2 - 2$로 나눈다.
 
-## Connections to Finance
+## 금융과의 연결
 
-- **Return modeling**: Assuming log-returns $r_t \sim N(\mu, \sigma^2)$ is the foundation of many financial models. The MLEs $\hat{\mu} = \bar{r}$ and $\hat{\sigma}^2 = \frac{1}{n}\sum(r_t - \bar{r})^2$ are the standard estimates.
+- **수익률 모형화**: 로그수익률이 $r_t \sim N(\mu, \sigma^2)$이라는 가정이 많은 금융 모형의 토대이다. MLE $\hat{\mu} = \bar{r}$과 $\hat{\sigma}^2 = \frac{1}{n}\sum(r_t - \bar{r})^2$이 표준적인 추정값이다.
 
-- **Black-Scholes**: The model assumes $\log(S_T/S_t) \sim N((\mu - \sigma^2/2)(T-t), \sigma^2(T-t))$. MLE of volatility from historical returns is a key input.
+- **Black-Scholes**: 이 모형은 $\log(S_T/S_t) \sim N((\mu - \sigma^2/2)(T-t), \sigma^2(T-t))$를 가정한다. 과거 수익률로 구한 변동성의 MLE가 핵심 입력이다.
 
-- **VaR estimation**: Under normality, $\text{VaR}_\alpha = -(\hat{\mu} + z_\alpha \hat{\sigma})$, which uses the Gaussian MLEs directly.
+- **VaR 추정**: 정규성 아래에서 $\text{VaR}_\alpha = -(\hat{\mu} + z_\alpha \hat{\sigma})$로, Gaussian MLE를 직접 쓴다.
 
-- **Portfolio theory**: Markowitz optimization uses $\hat{\mu}$ and $\hat{\Sigma}$ (the sample mean vector and covariance matrix), which are the multivariate Gaussian MLEs.
+- **포트폴리오 이론**: Markowitz 최적화는 $\hat{\mu}$과 $\hat{\Sigma}$(표본평균 벡터와 공분산행렬)를 쓰는데, 이들이 다변량 Gaussian MLE이다.
 
-- **Normality testing**: Before using Gaussian MLE, one should test whether the normal distribution is appropriate. Financial returns often exhibit fat tails, making the Gaussian MLE suboptimal.
+- **정규성 검정**: Gaussian MLE를 쓰기 전에 정규분포가 적절한지 검정해야 한다. 금융 수익률은 흔히 두꺼운 꼬리를 보이므로 Gaussian MLE가 최적이 아니게 된다.
 
-## Summary
+## 요약
 
-The Gaussian MLEs — $\hat{\mu} = \bar{X}$ and $\hat{\sigma}^2 = \frac{1}{n}\sum(X_i - \bar{X})^2$ — are closed-form, computationally trivial, and have excellent properties. The mean estimator is unbiased and efficient; the variance estimator is biased but consistent and has lower MSE than the unbiased alternative. Their independence (unique to the normal distribution) enables exact inference via $t$ and $\chi^2$ distributions. These estimators form the foundation of classical statistical inference and are the starting point for financial parameter estimation.
+Gaussian MLE — $\hat{\mu} = \bar{X}$과 $\hat{\sigma}^2 = \frac{1}{n}\sum(X_i - \bar{X})^2$ — 는 닫힌 형태이고 계산이 아주 쉬우며 훌륭한 성질을 갖는다. 평균추정량은 불편이고 효율적이며, 분산추정량은 편향되어 있지만 일치하고 불편 대안보다 평균제곱오차가 작다. (정규분포에만 있는) 이들의 독립성 덕분에 $t$와 $\chi^2$ 분포를 통한 정확한 추론이 가능하다. 이 추정량들은 고전적 통계추론의 토대이며 금융 모수추정의 출발점이다.
 
-## Key Formulas
+## 핵심 공식
 
-| Quantity | Formula |
+| 양 | 공식 |
 |----------|---------|
 | $\hat{\mu}_{\text{MLE}}$ | $\bar{X}$ |
 | $\hat{\sigma}^2_{\text{MLE}}$ | $\frac{1}{n}\sum(X_i - \bar{X})^2$ |
-| Fisher info for $\mu$ | $I_n(\mu) = n/\sigma^2$ |
-| Fisher info for $\sigma^2$ | $I_n(\sigma^2) = n/(2\sigma^4)$ |
-| $\hat{\mu}$ distribution | $N(\mu, \sigma^2/n)$ |
-| $n\hat{\sigma}^2/\sigma^2$ distribution | $\chi^2_{n-1}$ |
-| $t$-statistic | $(\bar{X}-\mu)/(S/\sqrt{n}) \sim t_{n-1}$ |
+| $\mu$의 Fisher 정보량 | $I_n(\mu) = n/\sigma^2$ |
+| $\sigma^2$의 Fisher 정보량 | $I_n(\sigma^2) = n/(2\sigma^4)$ |
+| $\hat{\mu}$의 분포 | $N(\mu, \sigma^2/n)$ |
+| $n\hat{\sigma}^2/\sigma^2$의 분포 | $\chi^2_{n-1}$ |
+| $t$-통계량 | $(\bar{X}-\mu)/(S/\sqrt{n}) \sim t_{n-1}$ |
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Derive $\hat\mu_{\text{MLE}} = \bar X$ and $\hat\sigma^2_{\text{MLE}} = (1/n)\sum(X_i - \bar X)^2$ for $N(\mu, \sigma^2)$, and verify second-order conditions.
+**연습문제 1.**
+$N(\mu, \sigma^2)$에 대해 $\hat\mu_{\text{MLE}} = \bar X$와 $\hat\sigma^2_{\text{MLE}} = (1/n)\sum(X_i - \bar X)^2$을 유도하고 2계 조건을 확인하라.
 
-??? success "Solution to Exercise 1"
-    Log-lik: $\ell(\mu, \sigma^2) = -(n/2)\ln(2\pi\sigma^2) - (1/(2\sigma^2))\sum(x_i - \mu)^2$.
+??? success "연습문제 1 풀이"
+    로그가능도: $\ell(\mu, \sigma^2) = -(n/2)\ln(2\pi\sigma^2) - (1/(2\sigma^2))\sum(x_i - \mu)^2$.
 
     $\partial\ell/\partial\mu = (1/\sigma^2)\sum(x_i - \mu) = 0 \Rightarrow \hat\mu = \bar X$.
 
-    $\partial\ell/\partial\sigma^2 = -n/(2\sigma^2) + (1/(2\sigma^4))\sum(x_i - \mu)^2 = 0$; plugging in $\hat\mu$ gives $\hat\sigma^2_{\text{MLE}} = (1/n)\sum(x_i - \bar X)^2$.
+    $\partial\ell/\partial\sigma^2 = -n/(2\sigma^2) + (1/(2\sigma^4))\sum(x_i - \mu)^2 = 0$이고, $\hat\mu$을 대입하면 $\hat\sigma^2_{\text{MLE}} = (1/n)\sum(x_i - \bar X)^2$을 얻는다.
 
-    **Hessian:** $\partial^2\ell/\partial\mu^2 = -n/\sigma^2 < 0$; $\partial^2\ell/\partial(\sigma^2)^2 = -n/(2\sigma^4) < 0$ at the MLE; mixed partial vanishes in expectation. Negative-definite — confirms a maximum.
+    **Hessian:** MLE에서 $\partial^2\ell/\partial\mu^2 = -n/\sigma^2 < 0$, $\partial^2\ell/\partial(\sigma^2)^2 = -n/(2\sigma^4) < 0$이고, 혼합편도함수는 기댓값이 0이다. 음정부호이므로 최댓값임이 확인된다.
 
 ---
 
-**Exercise 2.**
-**Fisher information matrix** for $N(\mu, \sigma^2)$. Show off-diagonals are zero and verify $\bar X$ achieves the CRLB exactly.
+**연습문제 2.**
+$N(\mu, \sigma^2)$의 **Fisher 정보행렬.** 비대각 성분이 0임을 보이고 $\bar X$가 CRLB를 정확히 달성함을 확인하라.
 
-??? success "Solution to Exercise 2"
+??? success "연습문제 2 풀이"
     $I_{\mu\mu} = n/\sigma^2$, $I_{\sigma^2 \sigma^2} = n/(2\sigma^4)$, $I_{\mu \sigma^2} = \mathbb{E}[-(X-\mu)/\sigma^4] = 0$.
 
-    Diagonal Fisher info: $\mu$ and $\sigma^2$ are **orthogonal parameters**. Estimating one doesn't affect the asymptotic variance of estimating the other.
+    Fisher 정보행렬이 대각이다: $\mu$와 $\sigma^2$은 **직교 모수**이다. 하나를 추정하는 것이 다른 하나를 추정하는 점근분산에 영향을 주지 않는다.
 
-    $\mathrm{Var}(\bar X) = \sigma^2/n = 1/I_{\mu\mu}$ — $\bar X$ achieves the CRLB **exactly** for any $n$, not just asymptotically. The MLE for $\mu$ is fully efficient.
+    $\mathrm{Var}(\bar X) = \sigma^2/n = 1/I_{\mu\mu}$ — $\bar X$는 점근적으로만이 아니라 임의의 $n$에서 CRLB를 **정확히** 달성한다. $\mu$의 MLE는 완전히 효율적이다.
 
-    For $\sigma^2$: $\mathrm{Var}(\hat\sigma^2_{\text{MLE}}) = 2(n-1)\sigma^4/n^2$, CRLB = $2\sigma^4/n$. Slightly above CRLB — asymptotically efficient.
+    $\sigma^2$의 경우: $\mathrm{Var}(\hat\sigma^2_{\text{MLE}}) = 2(n-1)\sigma^4/n^2$, CRLB $= 2\sigma^4/n$. CRLB보다 약간 위이며 점근적으로 효율적이다.
 
 ---
 
-**Exercise 3.**
-**MLE invariance.** Find the MLE of (a) $\sigma$, (b) $\mathrm{CV} = \sigma/\mu$, (c) the 99th percentile $\mu + 2.326\sigma$.
+**연습문제 3.**
+**MLE의 불변성.** (a) $\sigma$, (b) $\mathrm{CV} = \sigma/\mu$, (c) 99번째 백분위수 $\mu + 2.326\sigma$의 MLE를 구하라.
 
-??? success "Solution to Exercise 3"
-    By MLE invariance, $\widehat{g(\theta)} = g(\hat\theta_{\text{MLE}})$:
+??? success "연습문제 3 풀이"
+    MLE 불변성에 의해 $\widehat{g(\theta)} = g(\hat\theta_{\text{MLE}})$:
 
     (a) $\hat\sigma = \sqrt{\hat\sigma^2_{\text{MLE}}}$.
 
@@ -223,40 +223,40 @@ Derive $\hat\mu_{\text{MLE}} = \bar X$ and $\hat\sigma^2_{\text{MLE}} = (1/n)\su
 
     (c) $\widehat{q_{0.99}} = \bar X + 2.326 \hat\sigma$.
 
-    **Caveat:** invariance preserves MLE point estimates but not unbiasedness. $\hat\sigma$ is biased (Jensen's inequality on concave $\sqrt{\cdot}$); bias correction available via the $c_4$ constant.
+    **주의:** 불변성은 MLE 점추정값은 보존하지만 불편성은 보존하지 않는다. $\hat\sigma$은 편향되어 있으며(오목함수 $\sqrt{\cdot}$에 대한 Jensen 부등식), $c_4$ 상수로 편향을 보정할 수 있다.
 
 ---
 
-**Exercise 4.**
-**Constrained MLE with $\mu = 0$.** Derive $\hat\sigma^2$ when $\mu$ is known to be zero. Compare its variance with the unconstrained MLE.
+**연습문제 4.**
+**$\mu = 0$이라는 제약 아래의 MLE.** $\mu$가 0임을 알 때 $\hat\sigma^2$을 유도하라. 제약 없는 MLE와 분산을 비교하라.
 
-??? success "Solution to Exercise 4"
-    With $\mu = 0$: $\hat\sigma^2_0 = (1/n) \sum X_i^2$. $\mathbb{E}[\hat\sigma^2_0] = (1/n) \cdot n\sigma^2 = \sigma^2$ — **unbiased** (no Bessel correction needed because $\mu$ is known, not estimated).
+??? success "연습문제 4 풀이"
+    $\mu = 0$이면 $\hat\sigma^2_0 = (1/n) \sum X_i^2$이다. $\mathbb{E}[\hat\sigma^2_0] = (1/n) \cdot n\sigma^2 = \sigma^2$ — **불편**이다($\mu$를 추정한 것이 아니라 알고 있으므로 Bessel 수정이 필요 없다).
 
-    $n\hat\sigma^2_0/\sigma^2 \sim \chi^2_n$, so $\mathrm{Var}(\hat\sigma^2_0) = 2\sigma^4/n$.
+    $n\hat\sigma^2_0/\sigma^2 \sim \chi^2_n$이므로 $\mathrm{Var}(\hat\sigma^2_0) = 2\sigma^4/n$이다.
 
-    Unconstrained: $\mathrm{Var}(\hat\sigma^2_{\text{MLE}}) = 2\sigma^4(n-1)/n^2$.
+    제약 없는 경우: $\mathrm{Var}(\hat\sigma^2_{\text{MLE}}) = 2\sigma^4(n-1)/n^2$.
 
-    Constrained has slightly larger variance per observation (one extra dof), but is unbiased. The "cost" of estimating $\mu$ is a $-1$ in dof.
-
----
-
-**Exercise 5.**
-**Parametric VaR.** Given $\hat\mu = 0.0003$, $\hat\sigma = 0.012$ from 252 daily returns: (a) 1-day 99% VaR. (b) 10-day VaR via square-root rule. (c) If true kurtosis is 3 (excess), does normal VaR over- or under-estimate?
-
-??? success "Solution to Exercise 5"
-    (a) $\mathrm{VaR}_{0.99}^{\text{1-day}} = -(\hat\mu + z_{0.01} \hat\sigma) = -(0.0003 - 2.326 \cdot 0.012) = 0.0276$ (2.76% loss).
-
-    (b) $\mathrm{VaR}_{0.99}^{\text{10-day}} = \sqrt{10} \cdot 0.0276 \approx 0.0873$ (8.73%). Valid under i.i.d. zero-drift assumption.
-
-    (c) Heavy tails (excess kurtosis 3 > 0) mean the true 99th percentile loss is *larger* than normal predicts. Normal VaR **underestimates** real risk. Conservative practice: use $t$-distribution-based VaR or empirical quantiles for risk management.
+    제약 있는 추정량은 (자유도가 하나 더 많아) 분산이 약간 크지만 불편이다. $\mu$를 추정하는 "대가"는 자유도 $-1$이다.
 
 ---
 
-**Exercise 6.**
-**Monte Carlo verification.** Simulate 10000 samples of $n = 20$ from $N(5, 9)$. Verify $\mathbb{E}[\hat\mu], \mathbb{E}[\hat\sigma^2_{\text{MLE}}], \mathbb{E}[S^2]$.
+**연습문제 5.**
+**모수적 VaR.** 일별 수익률 252개에서 $\hat\mu = 0.0003$, $\hat\sigma = 0.012$를 얻었다. (a) 1일 99% VaR. (b) 제곱근 규칙에 의한 10일 VaR. (c) 참 초과첨도가 3이라면 정규 VaR는 위험을 과대평가하는가, 과소평가하는가?
 
-??? success "Solution to Exercise 6"
+??? success "연습문제 5 풀이"
+    (a) $\mathrm{VaR}_{0.99}^{\text{1일}} = -(\hat\mu + z_{0.01} \hat\sigma) = -(0.0003 - 2.326 \cdot 0.012) = 0.0276$ (2.76% 손실).
+
+    (b) $\mathrm{VaR}_{0.99}^{\text{10일}} = \sqrt{10} \cdot 0.0276 \approx 0.0873$ (8.73%). i.i.d.이고 추세가 0이라는 가정 아래에서 유효하다.
+
+    (c) 두꺼운 꼬리(초과첨도 3 > 0)는 참 99번째 백분위수 손실이 정규 예측보다 *크다*는 뜻이다. 정규 VaR는 실제 위험을 **과소평가**한다. 보수적인 실무: 위험관리에는 $t$-분포 기반 VaR나 경험적 분위수를 쓰라.
+
+---
+
+**연습문제 6.**
+**몬테카를로 검증.** $N(5, 9)$에서 $n = 20$인 표본 10000개를 모의실험하라. $\mathbb{E}[\hat\mu], \mathbb{E}[\hat\sigma^2_{\text{MLE}}], \mathbb{E}[S^2]$을 확인하라.
+
+??? success "연습문제 6 풀이"
     ```python
     import numpy as np
     rng = np.random.default_rng(0)
@@ -270,10 +270,10 @@ Derive $\hat\mu_{\text{MLE}} = \bar X$ and $\hat\sigma^2_{\text{MLE}} = (1/n)\su
     print(f"E[S^2]      = {s2.mean():.4f}       (true {var})")
     ```
 
-    Expected:
+    예상 결과:
 
-    - $\mathbb{E}[\bar X] \approx 5.00$ (unbiased).
-    - $\mathbb{E}[\hat\sigma^2_{\text{MLE}}] \approx 8.55 = (19/20) \cdot 9$ (biased downward by $\sigma^2/n$).
-    - $\mathbb{E}[S^2] \approx 9.00$ (Bessel-corrected, unbiased).
+    - $\mathbb{E}[\bar X] \approx 5.00$ (불편).
+    - $\mathbb{E}[\hat\sigma^2_{\text{MLE}}] \approx 8.55 = (19/20) \cdot 9$ ($\sigma^2/n$만큼 아래로 편향).
+    - $\mathbb{E}[S^2] \approx 9.00$ (Bessel 수정, 불편).
 
-    Confirms theoretical results and demonstrates the bias of the MLE for variance.
+    이론적 결과가 확인되며 분산에 대한 MLE의 편향이 드러난다.

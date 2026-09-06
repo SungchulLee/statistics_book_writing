@@ -1,24 +1,24 @@
-# MSE of Variance Estimators
+# 분산추정량의 평균제곱오차
 
-## Motivation
+## 동기
 
-In previous sections, we encountered two natural estimators for the population variance: dividing by $n$ (the MLE) and dividing by $n-1$ (Bessel's correction). The MLE is biased but has smaller variance, while Bessel's estimator is unbiased but more variable. Mean squared error (MSE) provides a single criterion that balances bias and variance, letting us ask: is there a divisor that minimizes overall estimation error?
+앞 절들에서 모분산의 자연스러운 추정량 둘을 만났다: $n$으로 나누기(MLE)와 $n-1$로 나누기(Bessel 수정). MLE는 편향되어 있지만 분산이 작고, Bessel 추정량은 불편이지만 변동이 크다. 평균제곱오차(MSE)는 편향과 분산을 함께 저울질하는 하나의 기준을 주므로 이렇게 물을 수 있다: 전체 추정오차를 최소화하는 분모가 존재하는가?
 
-## Setup
+## 설정
 
-Assume $X_1, X_2, \ldots, X_n \overset{iid}{\sim} N(\mu, \sigma^2)$. Define the sum of squared deviations
+$X_1, X_2, \ldots, X_n \overset{iid}{\sim} N(\mu, \sigma^2)$이라 하자. 편차제곱합을 다음과 같이 정의한다.
 
 $$
 Q = \sum_{i=1}^n (X_i - \bar{X})^2
 $$
 
-Under normality, $Q / \sigma^2 \sim \chi^2_{n-1}$. This distributional result gives us the moments we need:
+정규성 아래에서 $Q / \sigma^2 \sim \chi^2_{n-1}$이다. 이 분포 결과가 필요한 적률을 준다:
 
 $$
 E[Q] = (n-1)\sigma^2, \quad \text{Var}(Q) = 2(n-1)\sigma^4
 $$
 
-Any estimator of $\sigma^2$ that takes the form $\hat{\sigma}^2 = cQ$ for a constant $c > 0$ has
+상수 $c > 0$에 대해 $\hat{\sigma}^2 = cQ$ 형태인 $\sigma^2$의 추정량은 다음을 만족한다.
 
 $$
 \text{Bias}(cQ) = E[cQ] - \sigma^2 = [c(n-1) - 1]\,\sigma^2
@@ -32,156 +32,156 @@ $$
 \text{MSE}(cQ) = \text{Var}(cQ) + \text{Bias}^2(cQ) = \left[2c^2(n-1) + \bigl(c(n-1)-1\bigr)^2\right]\sigma^4
 $$
 
-## Three Estimators
+## 세 가지 추정량
 
-Substituting the three common choices of $c$ into the formulas above produces the following comparison:
+위 공식에 흔히 쓰는 세 가지 $c$를 대입하면 다음 비교를 얻는다:
 
-| Estimator | Divisor | Bias | MSE |
+| 추정량 | 나누는 수 | 편향 | 평균제곱오차 |
 |---|---|---|---|
 | MLE | $n$ | $-\sigma^2/n$ | $\dfrac{2n-1}{n^2}\,\sigma^4$ |
-| Bessel's correction | $n-1$ | $0$ | $\dfrac{2}{n-1}\,\sigma^4$ |
-| MSE-optimal | $n+1$ | $-\dfrac{2\sigma^2}{n+1}$ | $\dfrac{2}{n+1}\,\sigma^4$ |
+| Bessel 수정 | $n-1$ | $0$ | $\dfrac{2}{n-1}\,\sigma^4$ |
+| 평균제곱오차 최적 | $n+1$ | $-\dfrac{2\sigma^2}{n+1}$ | $\dfrac{2}{n+1}\,\sigma^4$ |
 
-Each entry follows from plugging $c = 1/n$, $c = 1/(n-1)$, or $c = 1/(n+1)$ into the general MSE formula derived above.
+각 항목은 위에서 유도한 일반 MSE 공식에 $c = 1/n$, $c = 1/(n-1)$, $c = 1/(n+1)$을 대입한 결과이다.
 
-## Deriving the Optimal Divisor
+## 최적 분모의 유도
 
-Among all estimators of the form $cQ$, which value of $c$ minimizes MSE? Expanding the MSE expression:
+$cQ$ 형태의 모든 추정량 중에서 어느 $c$가 평균제곱오차를 최소화하는가? MSE 식을 전개하면:
 
 $$
 \text{MSE}(c) = \left[2c^2(n-1) + c^2(n-1)^2 - 2c(n-1) + 1\right]\sigma^4
 $$
 
-Differentiating with respect to $c$ and setting the result to zero:
+$c$에 대해 미분하고 0으로 놓으면:
 
 $$
 \frac{d}{dc}\,\text{MSE}(c) = \left[4c(n-1) + 2c(n-1)^2 - 2(n-1)\right]\sigma^4 = 0
 $$
 
-Factoring out $2(n-1)$:
+$2(n-1)$을 묶어내면:
 
 $$
 2(n-1)\left[2c + c(n-1) - 1\right] = 0
 $$
 
-Since $n \geq 2$, we can divide by $2(n-1)$ to get $c(n+1) = 1$, so
+$n \geq 2$이므로 $2(n-1)$로 나눌 수 있고, $c(n+1) = 1$에서
 
 $$
 c^* = \frac{1}{n+1}
 $$
 
-This confirms that dividing by $n+1$ yields the smallest MSE among all estimators of this form.
+이 형태의 모든 추정량 중에서 $n+1$로 나눌 때 평균제곱오차가 가장 작음이 확인된다.
 
-## Numerical Example
+## 수치 예제
 
-To see the practical difference, consider $n = 10$ and $\sigma^2 = 1$. The MSE values for the three estimators are:
+실질적인 차이를 보기 위해 $n = 10$, $\sigma^2 = 1$을 생각하자. 세 추정량의 평균제곱오차는:
 
-| Estimator | MSE formula | MSE value |
+| 추정량 | MSE 공식 | MSE 값 |
 |---|---|---|
 | MLE ($c = 1/10$) | $(2 \cdot 10 - 1)/100$ | $0.190$ |
 | Bessel ($c = 1/9$) | $2/9$ | $0.222$ |
-| MSE-optimal ($c = 1/11$) | $2/11$ | $0.182$ |
+| 평균제곱오차 최적 ($c = 1/11$) | $2/11$ | $0.182$ |
 
-The MSE-optimal estimator reduces MSE by about 4% compared to the MLE and by about 18% compared to Bessel's correction. The improvement over the MLE is modest because the MLE is already nearly optimal -- it is only slightly too biased. Bessel's correction, while unbiased, pays a meaningful variance penalty.
+평균제곱오차 최적 추정량은 MLE보다 약 4%, Bessel 수정보다 약 18% 평균제곱오차를 줄인다. MLE 대비 개선이 크지 않은 것은 MLE가 이미 거의 최적이기 때문이다 — 편향이 살짝 클 뿐이다. Bessel 수정은 불편이지만 의미 있는 분산 대가를 치른다.
 
-## Key Insight
+## 핵심 통찰
 
-The MSE-optimal divisor $n+1$ demonstrates the bias-variance tradeoff in a clean, closed-form setting. By accepting a small bias of $-2\sigma^2/(n+1)$, the estimator achieves a variance reduction that more than compensates. As the sample size $n$ grows, all three estimators converge to the same value, and the differences in MSE become negligible -- but for small samples, the choice of divisor matters.
+평균제곱오차 최적 분모 $n+1$은 편향–분산 맞바꿈을 깔끔한 닫힌 형태로 보여준다. $-2\sigma^2/(n+1)$이라는 작은 편향을 받아들이는 대가로 그 이상을 보상하는 분산 감소를 얻는다. 표본크기 $n$이 커지면 세 추정량이 모두 같은 값으로 수렴하고 평균제곱오차의 차이도 무시할 만해진다 — 그러나 작은 표본에서는 분모의 선택이 중요하다.
 
-!!! tip "When to use which estimator"
-    In practice, Bessel's correction ($n-1$ divisor) remains the default because unbiasedness simplifies theoretical analysis and is expected by downstream procedures like $t$-tests. The MSE-optimal estimator is primarily of theoretical interest, illustrating that unbiasedness is not always the best criterion.
+!!! tip "어느 추정량을 언제 쓸 것인가"
+    실무에서는 Bessel 수정($n-1$로 나누기)이 여전히 기본이다. 불편성이 이론적 분석을 단순하게 하고 $t$-검정 같은 후속 절차가 이를 전제하기 때문이다. 평균제곱오차 최적 추정량은 주로 이론적 관심의 대상으로, 불편성이 언제나 최선의 기준은 아님을 보여준다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-For $\hat\sigma^2_c = (1/c)\sum(X_i - \bar X)^2$ on normal data: (a) derive $\mathrm{MSE}$; (b) find optimal $c^*$; (c) verify for $n = 10$.
+**연습문제 1.**
+정규 자료에서 $\hat\sigma^2_c = (1/c)\sum(X_i - \bar X)^2$에 대해: (a) $\mathrm{MSE}$를 유도하라. (b) 최적 $c^*$를 구하라. (c) $n = 10$에서 확인하라.
 
-??? success "Solution to Exercise 1"
-    (a) With $W = \sum(X_i - \bar X)^2 \sim \sigma^2 \chi^2_{n-1}$: $\mathbb{E}[\hat\sigma^2_c] = (n-1)\sigma^2/c$, $\mathrm{Var}(\hat\sigma^2_c) = 2(n-1)\sigma^4/c^2$.
+??? success "연습문제 1 풀이"
+    (a) $W = \sum(X_i - \bar X)^2 \sim \sigma^2 \chi^2_{n-1}$일 때: $\mathbb{E}[\hat\sigma^2_c] = (n-1)\sigma^2/c$, $\mathrm{Var}(\hat\sigma^2_c) = 2(n-1)\sigma^4/c^2$.
 
     $\mathrm{MSE}(c) = (\sigma^4/c^2)[(n-1-c)^2 + 2(n-1)]$.
 
-    (b) Differentiate and set to 0: $c^* = n + 1$.
+    (b) 미분하여 0으로 놓으면 $c^* = n + 1$.
 
-    (c) $n = 10$, $\sigma = 1$: $\mathrm{MSE}(9) \approx 0.222$, $\mathrm{MSE}(10) = 0.190$, $\mathrm{MSE}(11) \approx 0.182$. $c^* = 11$ wins.
+    (c) $n = 10$, $\sigma = 1$: $\mathrm{MSE}(9) \approx 0.222$, $\mathrm{MSE}(10) = 0.190$, $\mathrm{MSE}(11) \approx 0.182$. $c^* = 11$이 이긴다.
 
 ---
 
-**Exercise 2.**
-**Compare the three divisors** (n, n-1, n+1) for variance estimation.
+**연습문제 2.**
+분산추정에서 **세 가지 분모**(n, n-1, n+1)를 **비교**하라.
 
-??? success "Solution to Exercise 2"
-    | Estimator | Divisor | Bias | $\mathrm{Var}/\sigma^4$ | $\mathrm{MSE}/\sigma^4$ |
+??? success "연습문제 2 풀이"
+    | 추정량 | 나누는 수 | 편향 | $\mathrm{Var}/\sigma^4$ | $\mathrm{MSE}/\sigma^4$ |
     |---|---|---|---|---|
     | $\hat\sigma^2_{\text{MLE}}$ | $n$ | $-\sigma^2/n$ | $2(n-1)/n^2$ | $(2n-1)/n^2$ |
-    | $S^2$ (unbiased) | $n-1$ | 0 | $2/(n-1)$ | $2/(n-1)$ |
+    | $S^2$ (불편) | $n-1$ | 0 | $2/(n-1)$ | $2/(n-1)$ |
     | $\hat\sigma^2_{c^*}$ | $n+1$ | $-2\sigma^2/(n+1)$ | $2(n-1)/(n+1)^2$ | $2/(n+1)$ |
 
-    **Minimum MSE:** divisor $n+1$ beats both MLE and unbiased. The trade-off: a small bias is accepted to gain larger variance reduction.
+    **최소 평균제곱오차:** 분모 $n+1$이 MLE와 불편추정량을 모두 이긴다. 맞바꿈은 이렇다: 작은 편향을 받아들여 더 큰 분산 감소를 얻는다.
 
-    Despite winning on MSE, the $n+1$ divisor is rarely used because $S^2$ has the cleaner interpretation (unbiased) and the MSE difference is small for moderate $n$.
-
----
-
-**Exercise 3.**
-**MSE depends on the loss function.** Why is MSE the standard, and what alternatives exist?
-
-??? success "Solution to Exercise 3"
-    MSE = squared-error loss: $L(\hat\theta, \theta) = (\hat\theta - \theta)^2$. Popular because:
-
-    - Mathematically tractable (linearity of expectation, decomposition into bias + variance).
-    - Differentiable everywhere — analytic optimization.
-    - Penalizes large errors heavily (squared).
-
-    **Alternatives:**
-
-    - **Absolute error:** $|\hat\theta - \theta|$. Minimized by posterior median, more robust to outliers.
-    - **Quantile loss:** $\rho_\tau(\hat\theta - \theta) = (\hat\theta - \theta)(\tau - \mathbf 1\{\hat\theta < \theta\})$. Used in quantile regression.
-    - **0-1 loss:** $\mathbf 1\{\hat\theta \ne \theta\}$. For classification.
-    - **Log-loss / KL divergence:** for density estimation, probabilistic forecasting.
-
-    Choice of loss reflects what kinds of errors are penalized. MSE is the *default* but not always the *right* choice.
+    평균제곱오차에서 이기는데도 $n+1$ 분모가 거의 쓰이지 않는 이유는 $S^2$의 해석이 더 깔끔하고(불편) 적당한 $n$에서는 평균제곱오차 차이가 작기 때문이다.
 
 ---
 
-**Exercise 4.**
-**Shrinkage and James-Stein.** The MLE for multivariate normal mean is the sample mean for each component. James-Stein shows this is **inadmissible** when $p \ge 3$. Sketch the idea.
+**연습문제 3.**
+**평균제곱오차는 손실함수에 따라 달라진다.** 평균제곱오차가 표준이 된 이유는 무엇이며 어떤 대안이 있는가?
 
-??? success "Solution to Exercise 4"
-    Estimate $\boldsymbol\mu \in \mathbb{R}^p$ from $\mathbf X \sim N(\boldsymbol\mu, I_p)$ (single observation). MLE: $\hat{\boldsymbol\mu} = \mathbf X$. MSE: $\mathbb{E}[\|\mathbf X - \boldsymbol\mu\|^2] = p$.
+??? success "연습문제 3 풀이"
+    MSE는 제곱오차 손실 $L(\hat\theta, \theta) = (\hat\theta - \theta)^2$이다. 널리 쓰이는 이유:
 
-    **James-Stein estimator:** $\hat{\boldsymbol\mu}_{\text{JS}} = (1 - (p-2)/\|\mathbf X\|^2) \mathbf X$ (shrinkage toward 0).
+    - 수학적으로 다루기 쉽다(기댓값의 선형성, 편향 + 분산으로의 분해).
+    - 어디서나 미분 가능하다 — 해석적 최적화가 가능하다.
+    - 큰 오차에 큰 벌점을 준다(제곱).
 
-    Stein (1956) showed: $\mathrm{MSE}(\hat{\boldsymbol\mu}_{\text{JS}}) < p$ for **every** $\boldsymbol\mu$ when $p \ge 3$. The MLE is **dominated** — there's always a better estimator.
+    **대안:**
 
-    Intuition: even when shrinking toward an *arbitrary* point, the JS estimator does better than MLE in MSE. The bias introduced is more than compensated by variance reduction in high dimensions.
+    - **절대오차:** $|\hat\theta - \theta|$. 사후 중앙값에서 최소가 되며 이상점에 더 로버스트하다.
+    - **분위 손실:** $\rho_\tau(\hat\theta - \theta) = (\hat\theta - \theta)(\tau - \mathbf 1\{\hat\theta < \theta\})$. 분위회귀에서 쓰인다.
+    - **0-1 손실:** $\mathbf 1\{\hat\theta \ne \theta\}$. 분류에서 쓰인다.
+    - **로그 손실 / KL 발산:** 밀도추정, 확률적 예측에서 쓰인다.
 
-    Modern statistics: shrinkage estimators (ridge, lasso, James-Stein) routinely beat MLEs on MSE for high-dimensional problems. Empirical Bayes and hierarchical models formalize this.
-
----
-
-**Exercise 5.**
-**Sample size and MSE.** Show that quadrupling $n$ approximately halves $\sqrt{\mathrm{MSE}}$ for $S^2$.
-
-??? success "Solution to Exercise 5"
-    $\mathrm{MSE}(S^2) = 2\sigma^4/(n-1)$. Square root: $\sqrt{\mathrm{MSE}} = \sigma^2 \sqrt{2/(n-1)}$.
-
-    For $n' = 4n$: $\sqrt{\mathrm{MSE}'} = \sigma^2 \sqrt{2/(4n - 1)} \approx \sigma^2 \sqrt{2/(n-1)}/2 = \sqrt{\mathrm{MSE}}/2$.
-
-    Halving as $n$ quadruples. This is the same $\sqrt n$ scaling as for $\bar X$, applied to RMSE of variance estimation.
+    손실의 선택은 어떤 종류의 오차에 벌점을 줄지를 반영한다. MSE는 *기본값*이지만 언제나 *옳은* 선택은 아니다.
 
 ---
 
-**Exercise 6.**
-**Asymptotic optimality.** Show that as $n \to \infty$, all three estimators ($n$, $n-1$, $n+1$ divisors) have the same asymptotic MSE.
+**연습문제 4.**
+**축소와 James-Stein.** 다변량 정규 평균의 MLE는 각 성분의 표본평균이다. James-Stein은 $p \ge 3$일 때 이것이 **허용 불가능**함을 보였다. 그 아이디어를 스케치하라.
 
-??? success "Solution to Exercise 6"
-    All three:
+??? success "연습문제 4 풀이"
+    (관측값 하나로) $\mathbf X \sim N(\boldsymbol\mu, I_p)$에서 $\boldsymbol\mu \in \mathbb{R}^p$를 추정한다. MLE: $\hat{\boldsymbol\mu} = \mathbf X$. 평균제곱오차: $\mathbb{E}[\|\mathbf X - \boldsymbol\mu\|^2] = p$.
+
+    **James-Stein 추정량:** $\hat{\boldsymbol\mu}_{\text{JS}} = (1 - (p-2)/\|\mathbf X\|^2) \mathbf X$ (0 쪽으로 축소).
+
+    Stein(1956)이 보인 것: $p \ge 3$일 때 **모든** $\boldsymbol\mu$에 대해 $\mathrm{MSE}(\hat{\boldsymbol\mu}_{\text{JS}}) < p$이다. MLE가 **지배당한다** — 언제나 더 나은 추정량이 있다.
+
+    직관: *임의의* 점 쪽으로 축소하더라도 JS 추정량이 평균제곱오차에서 MLE보다 낫다. 고차원에서는 도입된 편향보다 분산 감소가 더 크다.
+
+    현대 통계학: 고차원 문제에서 축소추정량(능형, 라소, James-Stein)이 평균제곱오차 기준으로 MLE를 일상적으로 이긴다. 경험적 Bayes와 계층 모형이 이를 형식화한다.
+
+---
+
+**연습문제 5.**
+**표본크기와 평균제곱오차.** $S^2$에 대해 $n$을 네 배로 하면 $\sqrt{\mathrm{MSE}}$가 대략 절반이 됨을 보여라.
+
+??? success "연습문제 5 풀이"
+    $\mathrm{MSE}(S^2) = 2\sigma^4/(n-1)$. 제곱근을 취하면 $\sqrt{\mathrm{MSE}} = \sigma^2 \sqrt{2/(n-1)}$.
+
+    $n' = 4n$이면 $\sqrt{\mathrm{MSE}'} = \sigma^2 \sqrt{2/(4n - 1)} \approx \sigma^2 \sqrt{2/(n-1)}/2 = \sqrt{\mathrm{MSE}}/2$.
+
+    $n$이 네 배가 되면 절반이 된다. $\bar X$에서와 같은 $\sqrt n$ 축척이며, 여기서는 분산추정의 RMSE에 적용된 것이다.
+
+---
+
+**연습문제 6.**
+**점근적 최적성.** $n \to \infty$일 때 세 추정량(분모 $n$, $n-1$, $n+1$)의 점근 평균제곱오차가 같음을 보여라.
+
+??? success "연습문제 6 풀이"
+    세 가지 모두:
 
     - $\mathrm{MSE}(\hat\sigma^2_{\text{MLE}})/\sigma^4 = (2n-1)/n^2 \to 2/n$.
     - $\mathrm{MSE}(S^2)/\sigma^4 = 2/(n-1) \to 2/n$.
     - $\mathrm{MSE}(\hat\sigma^2_{c^*})/\sigma^4 = 2/(n+1) \to 2/n$.
 
-    Asymptotically equivalent — to first order in $1/n$, all three have MSE $\approx 2\sigma^4/n$.
+    점근적으로 동등하다 — $1/n$의 1차 항까지 보면 셋 모두 MSE $\approx 2\sigma^4/n$이다.
 
-    **Implication:** the choice of divisor matters only for finite samples. For large $n$, just use whichever is most convenient. For small $n$ where the difference is non-negligible, choose based on loss function: unbiasedness ($n-1$), MLE convenience ($n$), or minimum MSE ($n+1$).
+    **함의:** 분모의 선택은 유한표본에서만 중요하다. 큰 $n$에서는 편한 것을 쓰면 된다. 차이가 무시할 수 없는 작은 $n$에서는 손실함수에 따라 고르라: 불편성($n-1$), MLE의 편의($n$), 최소 평균제곱오차($n+1$).

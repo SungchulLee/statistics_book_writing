@@ -1,211 +1,211 @@
-# Naive Variance Estimator
+# 소박한 분산추정량
 
-## Introduction
+## 들어가며
 
-The **naive variance estimator** divides the sum of squared deviations by $n$ (the sample size) rather than by $n-1$. While this is the most intuitive approach — simply averaging the squared deviations from the sample mean — it turns out to be biased. Understanding *why* it is biased provides deep insight into the nature of estimation and motivates Bessel's correction.
+**소박한 분산추정량**은 편차제곱합을 $n-1$이 아니라 $n$(표본크기)으로 나눈다. 표본평균으로부터의 편차제곱을 그냥 평균하는 것이니 가장 직관적인 접근이지만, 알고 보면 편향되어 있다. *왜* 편향되는지를 이해하면 추정의 본질에 대한 깊은 통찰을 얻고 Bessel 수정의 동기를 알게 된다.
 
-## Definition
+## 정의
 
-Given a random sample $X_1, X_2, \ldots, X_n$ with sample mean $\bar{X}$, the **naive variance estimator** is:
+표본평균이 $\bar{X}$인 확률표본 $X_1, X_2, \ldots, X_n$이 주어졌을 때 **소박한 분산추정량**은:
 
 $$\tilde{S}^2 = \frac{1}{n}\sum_{i=1}^n (X_i - \bar{X})^2$$
 
-This is also called the **population variance formula applied to the sample**, the **biased sample variance**, or the **MLE of variance** (for normal populations).
+이는 **모분산 공식을 표본에 적용한 것**, **편향 표본분산**, 또는 (정규모집단에서) **분산의 MLE**라고도 불린다.
 
-## Bias Derivation
+## 편향의 유도
 
-### The Key Identity
+### 핵심 항등식
 
-The fundamental identity underlying the bias calculation is:
+편향 계산의 바탕이 되는 근본적인 항등식은 다음과 같다:
 
 $$\sum_{i=1}^n (X_i - \bar{X})^2 = \sum_{i=1}^n (X_i - \mu)^2 - n(\bar{X} - \mu)^2$$
 
-**Proof:** Expand $(X_i - \bar{X})^2 = (X_i - \mu - (\bar{X} - \mu))^2$:
+**증명:** $(X_i - \bar{X})^2 = (X_i - \mu - (\bar{X} - \mu))^2$을 전개하면:
 
 $$\sum_{i=1}^n (X_i - \bar{X})^2 = \sum_{i=1}^n(X_i - \mu)^2 - 2(\bar{X} - \mu)\sum_{i=1}^n(X_i - \mu) + n(\bar{X} - \mu)^2$$
 
-Since $\sum(X_i - \mu) = n(\bar{X} - \mu)$, the middle term is $-2n(\bar{X} - \mu)^2$:
+$\sum(X_i - \mu) = n(\bar{X} - \mu)$이므로 가운데 항은 $-2n(\bar{X} - \mu)^2$이 되어:
 
 $$= \sum_{i=1}^n(X_i - \mu)^2 - n(\bar{X} - \mu)^2$$
 
-### Computing the Expectation
+### 기댓값의 계산
 
-Taking expectations:
+기댓값을 취하면:
 
 $$E\left[\sum_{i=1}^n (X_i - \bar{X})^2\right] = \sum_{i=1}^n E[(X_i - \mu)^2] - nE[(\bar{X} - \mu)^2]$$
 
 $$= n\sigma^2 - n \cdot \frac{\sigma^2}{n} = n\sigma^2 - \sigma^2 = (n-1)\sigma^2$$
 
-Therefore:
+따라서:
 
 $$E[\tilde{S}^2] = E\left[\frac{1}{n}\sum_{i=1}^n(X_i - \bar{X})^2\right] = \frac{n-1}{n}\sigma^2$$
 
-### The Bias
+### 편향
 
 $$\text{Bias}(\tilde{S}^2) = E[\tilde{S}^2] - \sigma^2 = \frac{n-1}{n}\sigma^2 - \sigma^2 = -\frac{\sigma^2}{n}$$
 
-The naive estimator **underestimates** the true variance by a factor of $(n-1)/n$.
+소박한 추정량은 참 분산을 $(n-1)/n$배만큼 **과소추정**한다.
 
-## Intuition: Why the Bias Exists
+## 직관: 편향이 생기는 이유
 
-The bias arises because we use $\bar{X}$ instead of $\mu$ in the sum of squares. Since $\bar{X}$ is the value that minimizes $\sum(X_i - c)^2$ over all constants $c$, we have:
+편향은 제곱합에서 $\mu$ 대신 $\bar{X}$를 쓰기 때문에 생긴다. $\bar{X}$는 모든 상수 $c$에 대해 $\sum(X_i - c)^2$을 최소화하는 값이므로:
 
 $$\sum_{i=1}^n (X_i - \bar{X})^2 \leq \sum_{i=1}^n (X_i - \mu)^2$$
 
-The sum of squared deviations from $\bar{X}$ is **always** less than or equal to the sum from the true mean $\mu$. By using $\bar{X}$, we systematically undercount the variability, leading to downward bias.
+$\bar{X}$로부터의 편차제곱합은 **항상** 참 평균 $\mu$로부터의 제곱합보다 작거나 같다. $\bar{X}$를 사용함으로써 변동성을 체계적으로 적게 세게 되고, 이것이 아래쪽 편향으로 이어진다.
 
-Another way to see it: computing $\bar{X}$ "uses up" one piece of information from the data. The $n$ deviations $(X_i - \bar{X})$ satisfy $\sum(X_i - \bar{X}) = 0$, so only $n-1$ of them are free to vary. There are only $n-1$ **degrees of freedom**, not $n$.
+다르게 보는 방법도 있다: $\bar{X}$를 계산하는 데 자료의 정보 한 조각이 "소모된다". $n$개의 편차 $(X_i - \bar{X})$는 $\sum(X_i - \bar{X}) = 0$을 만족하므로 자유롭게 변할 수 있는 것은 $n-1$개뿐이다. **자유도**가 $n$이 아니라 $n-1$이다.
 
-## Properties
+## 성질
 
-### Variance of S-tilde-squared
-For normal populations:
+### S-tilde-squared의 분산
+정규모집단에서:
 
 $$\text{Var}(\tilde{S}^2) = \frac{2(n-1)}{n^2}\sigma^4$$
 
-### MSE of S-tilde-squared
+### S-tilde-squared의 평균제곱오차
 
 $$\text{MSE}(\tilde{S}^2) = \text{Var}(\tilde{S}^2) + [\text{Bias}(\tilde{S}^2)]^2 = \frac{2(n-1)}{n^2}\sigma^4 + \frac{\sigma^4}{n^2} = \frac{2n-1}{n^2}\sigma^4$$
 
-### Consistency
+### 일치성
 
-Despite being biased, $\tilde{S}^2$ is **consistent**:
+편향되어 있음에도 $\tilde{S}^2$은 **일치**한다:
 
 $$\tilde{S}^2 = \frac{n-1}{n} S^2 \xrightarrow{p} \sigma^2$$
 
-since $(n-1)/n \to 1$ and $S^2 \xrightarrow{p} \sigma^2$.
+$(n-1)/n \to 1$이고 $S^2 \xrightarrow{p} \sigma^2$이기 때문이다.
 
-### Asymptotic Equivalence
+### 점근적 동등성
 
-For large $n$, $\tilde{S}^2$ and $S^2$ are practically identical:
+큰 $n$에서 $\tilde{S}^2$과 $S^2$은 사실상 같다:
 
-$$\tilde{S}^2 = \frac{n-1}{n}S^2 \approx S^2 \quad \text{for large } n$$
+$$\tilde{S}^2 = \frac{n-1}{n}S^2 \approx S^2 \quad (\text{큰 } n \text{에 대해})$$
 
-The bias $-\sigma^2/n \to 0$, and the ratio $(n-1)/n \to 1$.
+편향 $-\sigma^2/n \to 0$이고 비 $(n-1)/n \to 1$이다.
 
-## Comparison: Divide by n vs n-1 vs n+1
-| Estimator | Divisor | Bias | MSE (Normal) | Notes |
+## 비교: n, n-1, n+1로 나누기
+| 추정량 | 나누는 수 | 편향 | 평균제곱오차 (정규) | 비고 |
 |-----------|---------|------|--------------|-------|
-| $\tilde{S}^2$ | $n$ | $-\sigma^2/n$ | $\frac{2n-1}{n^2}\sigma^4$ | MLE; biased |
-| $S^2$ | $n-1$ | $0$ | $\frac{2}{n-1}\sigma^4$ | Unbiased (Bessel's) |
-| $\hat{S}^2$ | $n+1$ | $-\frac{2}{n+1}\sigma^2$ | $\frac{2(n-1)}{(n+1)^2}\sigma^4 + \frac{4}{(n+1)^2}\sigma^4$ | MSE-optimal (Normal) |
+| $\tilde{S}^2$ | $n$ | $-\sigma^2/n$ | $\frac{2n-1}{n^2}\sigma^4$ | MLE, 편향됨 |
+| $S^2$ | $n-1$ | $0$ | $\frac{2}{n-1}\sigma^4$ | 불편 (Bessel) |
+| $\hat{S}^2$ | $n+1$ | $-\frac{2}{n+1}\sigma^2$ | $\frac{2(n-1)}{(n+1)^2}\sigma^4 + \frac{4}{(n+1)^2}\sigma^4$ | 평균제곱오차 최적 (정규) |
 
-**Surprising fact:** $\text{MSE}(\tilde{S}^2) < \text{MSE}(S^2)$ for all $n$. The biased estimator has lower MSE than the unbiased one! This is a textbook example of the bias-variance tradeoff.
+**놀라운 사실:** 모든 $n$에 대해 $\text{MSE}(\tilde{S}^2) < \text{MSE}(S^2)$이다. 편향추정량이 불편추정량보다 평균제곱오차가 작다! 편향–분산 맞바꿈의 교과서적 예이다.
 
-## When mu is Known
-If the true mean $\mu$ is known (rare in practice), we can use:
+## mu를 아는 경우
+참 평균 $\mu$가 알려져 있다면(실무에서는 드물다) 다음을 쓸 수 있다:
 
 $$\hat{\sigma}^2_\mu = \frac{1}{n}\sum_{i=1}^n (X_i - \mu)^2$$
 
-This estimator is unbiased: $E[\hat{\sigma}^2_\mu] = \sigma^2$, and it has lower variance than $S^2$:
+이 추정량은 불편이며($E[\hat{\sigma}^2_\mu] = \sigma^2$) $S^2$보다 분산이 작다:
 
 $$\text{Var}(\hat{\sigma}^2_\mu) = \frac{2\sigma^4}{n} < \frac{2\sigma^4}{n-1} = \text{Var}(S^2)$$
 
-## Connection to MLE
+## MLE와의 연결
 
-For normal populations, $\tilde{S}^2$ is the MLE of $\sigma^2$. The MLE is biased in finite samples but asymptotically unbiased. This is a common pattern: MLEs are often biased for finite samples but consistent.
+정규모집단에서 $\tilde{S}^2$은 $\sigma^2$의 MLE이다. MLE는 유한표본에서 편향되지만 점근적으로 불편이다. 이는 흔한 양상이다: MLE는 유한표본에서 편향되는 경우가 많지만 일치한다.
 
-## Connections to Finance
+## 금융과의 연결
 
-- **Volatility estimation**: The realized variance of daily returns uses the formula $\frac{1}{n}\sum r_i^2$ (with $\mu \approx 0$), which is the naive estimator when the mean is set to zero.
-- **Risk metrics**: When computing portfolio variance for risk management with large samples ($n > 250$ daily observations), the difference between dividing by $n$ and $n-1$ is negligible.
-- **Bias correction**: For small samples (e.g., monthly data over a few years), the bias can be material and Bessel's correction should be used.
+- **변동성 추정**: 일별 수익률의 실현분산은 ($\mu \approx 0$으로 두고) $\frac{1}{n}\sum r_i^2$ 공식을 쓰는데, 이는 평균을 0으로 놓은 소박한 추정량이다.
+- **위험 지표**: 큰 표본($n > 250$ 일별 관측값)으로 위험관리용 포트폴리오 분산을 계산할 때는 $n$으로 나누느냐 $n-1$로 나누느냐의 차이가 무시할 만하다.
+- **편향 보정**: 작은 표본(예: 몇 년치 월별 자료)에서는 편향이 실질적일 수 있으므로 Bessel 수정을 써야 한다.
 
-## Summary
+## 요약
 
-The naive variance estimator $\tilde{S}^2 = \frac{1}{n}\sum(X_i - \bar{X})^2$ is biased downward by $\sigma^2/n$ because using the sample mean instead of the true mean systematically underestimates variability. Despite this bias, it has lower MSE than the unbiased $S^2$ and is consistent. It is also the MLE for normal populations. For large samples, the bias is negligible, but for small samples, Bessel's correction (dividing by $n-1$) is standard.
+소박한 분산추정량 $\tilde{S}^2 = \frac{1}{n}\sum(X_i - \bar{X})^2$은 참 평균 대신 표본평균을 쓰면 변동성을 체계적으로 과소추정하기 때문에 $\sigma^2/n$만큼 아래로 편향된다. 이 편향에도 불구하고 불편추정량 $S^2$보다 평균제곱오차가 작고 일치한다. 또한 정규모집단에서 MLE이기도 하다. 큰 표본에서는 편향이 무시할 만하지만, 작은 표본에서는 Bessel 수정($n-1$로 나누기)이 표준이다.
 
-## Key Formulas
+## 핵심 공식
 
-| Quantity | Formula |
+| 양 | 공식 |
 |----------|---------|
-| Naive estimator | $\tilde{S}^2 = \frac{1}{n}\sum(X_i - \bar{X})^2$ |
-| Expectation | $E[\tilde{S}^2] = \frac{n-1}{n}\sigma^2$ |
-| Bias | $-\sigma^2/n$ |
-| MSE (Normal) | $\frac{2n-1}{n^2}\sigma^4$ |
-| Key identity | $\sum(X_i - \bar{X})^2 = \sum(X_i - \mu)^2 - n(\bar{X}-\mu)^2$ |
+| 소박한 추정량 | $\tilde{S}^2 = \frac{1}{n}\sum(X_i - \bar{X})^2$ |
+| 기댓값 | $E[\tilde{S}^2] = \frac{n-1}{n}\sigma^2$ |
+| 편향 | $-\sigma^2/n$ |
+| 평균제곱오차 (정규) | $\frac{2n-1}{n^2}\sigma^4$ |
+| 핵심 항등식 | $\sum(X_i - \bar{X})^2 = \sum(X_i - \mu)^2 - n(\bar{X}-\mu)^2$ |
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Prove $\mathbb{E}[(1/n)\sum(X_i - \bar X)^2] = (n-1)\sigma^2/n$.
+**연습문제 1.**
+$\mathbb{E}[(1/n)\sum(X_i - \bar X)^2] = (n-1)\sigma^2/n$임을 증명하라.
 
-??? success "Solution to Exercise 1"
-    Use the identity $\sum(X_i - \bar X)^2 = \sum(X_i - \mu)^2 - n(\bar X - \mu)^2$.
+??? success "연습문제 1 풀이"
+    항등식 $\sum(X_i - \bar X)^2 = \sum(X_i - \mu)^2 - n(\bar X - \mu)^2$을 쓴다.
 
     $\mathbb{E}[\sum(X_i - \mu)^2] = n\sigma^2$. $\mathbb{E}[n(\bar X - \mu)^2] = n \cdot \sigma^2/n = \sigma^2$.
 
-    $\mathbb{E}[\sum(X_i - \bar X)^2] = (n-1)\sigma^2$. Divide by $n$: $(n-1)\sigma^2/n$. $\square$
+    $\mathbb{E}[\sum(X_i - \bar X)^2] = (n-1)\sigma^2$. $n$으로 나누면 $(n-1)\sigma^2/n$. $\square$
 
-    The naive estimator is biased downward by $\sigma^2/n$. Bessel's correction multiplies by $n/(n-1)$ to fix this.
-
----
-
-**Exercise 2.**
-**Known-mean variance.** When $\mu$ is known, $\hat\sigma^2 = (1/n)\sum(X_i - \mu)^2$. (a) Unbiased? (b) Variance under normality. (c) Efficiency gain over $S^2$.
-
-??? success "Solution to Exercise 2"
-    (a) $\mathbb{E}[\hat\sigma^2] = (1/n) \cdot n\sigma^2 = \sigma^2$. **Unbiased** (no Bessel correction needed; no dof used by estimating $\mu$).
-
-    (b) $n\hat\sigma^2/\sigma^2 \sim \chi^2_n$ (sum of $n$ squared standard normals). $\mathrm{Var}(\hat\sigma^2) = 2\sigma^4/n$.
-
-    (c) $\mathrm{Var}(S^2) = 2\sigma^4/(n-1)$ (one fewer dof). Efficiency gain: $(n-1)/n$.
-
-    For $n = 10$: gain is 10% (knowing $\mu$ is worth ~1 extra observation). For $n = 100$: 1% (negligible).
+    소박한 추정량은 $\sigma^2/n$만큼 아래로 편향된다. Bessel 수정은 $n/(n-1)$을 곱해 이를 바로잡는다.
 
 ---
 
-**Exercise 3.**
-**Why the bias?** Intuitively, why does the naive estimator underestimate $\sigma^2$?
+**연습문제 2.**
+**평균을 아는 경우의 분산.** $\mu$가 알려져 있으면 $\hat\sigma^2 = (1/n)\sum(X_i - \mu)^2$이다. (a) 불편인가? (b) 정규성 아래에서의 분산. (c) $S^2$ 대비 효율 이득.
 
-??? success "Solution to Exercise 3"
-    $\bar X$ minimizes $\sum(X_i - c)^2$ over $c$. So $\sum(X_i - \bar X)^2 \le \sum(X_i - \mu)^2$ always.
+??? success "연습문제 2 풀이"
+    (a) $\mathbb{E}[\hat\sigma^2] = (1/n) \cdot n\sigma^2 = \sigma^2$. **불편**이다($\mu$를 추정하느라 소모한 자유도가 없으므로 Bessel 수정이 필요 없다).
 
-    Taking expectations: $\mathbb{E}[\sum(X_i - \bar X)^2] \le \mathbb{E}[\sum(X_i - \mu)^2] = n\sigma^2$. Specifically, smaller by exactly $\sigma^2$ (the variance of $n\bar X^2$).
+    (b) $n\hat\sigma^2/\sigma^2 \sim \chi^2_n$(표준정규 제곱 $n$개의 합). $\mathrm{Var}(\hat\sigma^2) = 2\sigma^4/n$.
 
-    **Conceptually:** by fitting $\bar X$ to the data, the residuals $(X_i - \bar X)$ are "smaller than they would be from the truth" because $\bar X$ has adapted to the sample. This is the same "double counting" issue that motivates degrees-of-freedom corrections throughout statistics (regression $R^2$, AIC penalties, etc.).
+    (c) $\mathrm{Var}(S^2) = 2\sigma^4/(n-1)$(자유도가 하나 적다). 효율 이득: $(n-1)/n$.
 
----
-
-**Exercise 4.**
-**Estimator $\hat\sigma^2_{c}$ family.** Compute the bias of $\hat\sigma^2_c = (1/c)\sum(X_i - \bar X)^2$ for $c = n, n-1, n+1$.
-
-??? success "Solution to Exercise 4"
-    Using $\mathbb{E}[\sum(X_i - \bar X)^2] = (n-1)\sigma^2$:
-
-    - $c = n$ (MLE): bias = $(n-1)\sigma^2/n - \sigma^2 = -\sigma^2/n$. Underestimates.
-    - $c = n - 1$ (unbiased): bias = 0.
-    - $c = n + 1$ (MSE-optimal): bias = $(n-1)\sigma^2/(n+1) - \sigma^2 = -2\sigma^2/(n+1)$. Underestimates more than MLE.
-
-    Trade-off: smaller divisor → less bias but more variance. Larger divisor → more bias but less variance (more shrinkage).
+    $n = 10$이면 이득이 10%이다($\mu$를 아는 것이 관측값 약 1개의 가치가 있다). $n = 100$이면 1%로 무시할 만하다.
 
 ---
 
-**Exercise 5.**
-**Sample variance with known mean is better than unknown mean.** Specifically, the variance estimator is unbiased without correction. Show this preserves chi-squared distribution.
+**연습문제 3.**
+**편향은 왜 생기는가?** 직관적으로, 소박한 추정량이 $\sigma^2$을 과소추정하는 이유는?
 
-??? success "Solution to Exercise 5"
-    With $\mu$ known: $(X_i - \mu)/\sigma \sim N(0, 1)$, so $(X_i - \mu)^2/\sigma^2 \sim \chi^2_1$ and $\sum(X_i - \mu)^2/\sigma^2 \sim \chi^2_n$.
+??? success "연습문제 3 풀이"
+    $\bar X$는 $c$에 대해 $\sum(X_i - c)^2$을 최소화한다. 따라서 항상 $\sum(X_i - \bar X)^2 \le \sum(X_i - \mu)^2$이다.
 
-    With $\mu$ estimated: $\sum(X_i - \bar X)^2/\sigma^2 \sim \chi^2_{n-1}$ (loses one dof for $\bar X$).
+    기댓값을 취하면 $\mathbb{E}[\sum(X_i - \bar X)^2] \le \mathbb{E}[\sum(X_i - \mu)^2] = n\sigma^2$이다. 구체적으로는 정확히 $\sigma^2$만큼 작다($\mathbb{E}[n(\bar X - \mu)^2] = \sigma^2$).
 
-    The difference of one dof is captured by Bessel's correction. The deeper reason: residuals from $\bar X$ are constrained to sum to zero, removing one dof.
+    **개념적으로:** $\bar X$를 자료에 맞추었기 때문에 잔차 $(X_i - \bar X)$는 "참값으로부터의 편차보다 작다" — $\bar X$가 표본에 적응했기 때문이다. 이는 통계학 전반에서 자유도 보정을 낳는 것과 같은 "이중 계산" 문제이다(회귀의 $R^2$, AIC 벌점 등).
 
 ---
 
-**Exercise 6.**
-**Naive variance in regression context.** Why does linear regression report **residual variance** $\hat\sigma^2 = \mathrm{SSE}/(n - p)$ rather than $\mathrm{SSE}/n$ or $\mathrm{SSE}/(n-1)$?
+**연습문제 4.**
+**추정량 $\hat\sigma^2_{c}$ 계열.** $c = n, n-1, n+1$에 대해 $\hat\sigma^2_c = (1/c)\sum(X_i - \bar X)^2$의 편향을 구하라.
 
-??? success "Solution to Exercise 6"
-    Linear regression with $p$ parameters estimates the residual variance from $\mathrm{SSE} = \sum(Y_i - \hat Y_i)^2$.
+??? success "연습문제 4 풀이"
+    $\mathbb{E}[\sum(X_i - \bar X)^2] = (n-1)\sigma^2$을 쓰면:
 
-    Each fitted parameter removes one dof. With $p$ parameters (including intercept), the residuals have $n - p$ effective dof.
+    - $c = n$ (MLE): 편향 = $(n-1)\sigma^2/n - \sigma^2 = -\sigma^2/n$. 과소추정.
+    - $c = n - 1$ (불편): 편향 = 0.
+    - $c = n + 1$ (평균제곱오차 최적): 편향 = $(n-1)\sigma^2/(n+1) - \sigma^2 = -2\sigma^2/(n+1)$. MLE보다 더 과소추정.
 
-    $\hat\sigma^2 = \mathrm{SSE}/(n - p)$ is unbiased: $\mathbb{E}[\mathrm{SSE}/\sigma^2] = n - p$.
+    맞바꿈: 나누는 수가 작을수록 편향은 작아지지만 분산은 커진다. 나누는 수가 클수록 편향은 커지지만 분산은 작아진다(더 강한 축소).
 
-    **Edge cases:**
+---
 
-    - $p = 1$ (intercept only): same as sample variance with Bessel's correction, divides by $n - 1$.
-    - $p = n$ (perfect fit): no dof left, variance undefined. Reflects overfitting.
+**연습문제 5.**
+**평균을 아는 표본분산이 모르는 경우보다 낫다.** 구체적으로, 이 분산추정량은 보정 없이도 불편이다. 이것이 카이제곱분포를 보존함을 보여라.
 
-    Degrees-of-freedom corrections generalize Bessel's correction to multi-parameter settings — same principle, more parameters to subtract.
+??? success "연습문제 5 풀이"
+    $\mu$를 아는 경우: $(X_i - \mu)/\sigma \sim N(0, 1)$이므로 $(X_i - \mu)^2/\sigma^2 \sim \chi^2_1$이고 $\sum(X_i - \mu)^2/\sigma^2 \sim \chi^2_n$이다.
+
+    $\mu$를 추정하는 경우: $\sum(X_i - \bar X)^2/\sigma^2 \sim \chi^2_{n-1}$이다($\bar X$ 때문에 자유도 하나를 잃는다).
+
+    자유도 하나의 차이가 Bessel 수정에 담겨 있다. 더 깊은 이유는 $\bar X$로부터의 잔차가 합이 0이라는 제약을 받아 자유도 하나가 사라지기 때문이다.
+
+---
+
+**연습문제 6.**
+**회귀 맥락에서의 소박한 분산.** 선형회귀가 $\mathrm{SSE}/n$이나 $\mathrm{SSE}/(n-1)$이 아니라 **잔차분산** $\hat\sigma^2 = \mathrm{SSE}/(n - p)$를 보고하는 이유는?
+
+??? success "연습문제 6 풀이"
+    모수가 $p$개인 선형회귀는 $\mathrm{SSE} = \sum(Y_i - \hat Y_i)^2$으로부터 잔차분산을 추정한다.
+
+    적합된 모수 하나마다 자유도 하나가 사라진다. (절편을 포함하여) 모수가 $p$개이면 잔차의 유효 자유도는 $n - p$이다.
+
+    $\hat\sigma^2 = \mathrm{SSE}/(n - p)$는 불편이다: $\mathbb{E}[\mathrm{SSE}/\sigma^2] = n - p$.
+
+    **경계 사례:**
+
+    - $p = 1$ (절편만): Bessel 수정을 한 표본분산과 같아 $n - 1$로 나눈다.
+    - $p = n$ (완벽한 적합): 남은 자유도가 없어 분산이 정의되지 않는다. 과적합을 반영한다.
+
+    자유도 보정은 Bessel 수정을 다중모수 상황으로 일반화한 것이다 — 원리는 같고, 빼야 할 모수가 더 많을 뿐이다.

@@ -1,57 +1,57 @@
-# Trimmed and Winsorized Means
+# 절사평균과 윈저화 평균
 
-The sample mean is the most efficient estimator of the population mean under Normality, but a single extreme observation can shift it arbitrarily far from the true center. Robust estimators sacrifice a small amount of efficiency under ideal conditions in exchange for stability when the data deviate from the assumed model. This section introduces two such estimators — the trimmed mean and the Winsorized mean — and compares their trade-offs.
+표본평균은 정규성 아래에서 모평균의 가장 효율적인 추정량이지만, 극단 관측값 하나가 참 중심에서 얼마든지 멀리 밀어낼 수 있다. 로버스트 추정량은 이상적인 조건에서 약간의 효율을 희생하는 대신 자료가 가정한 모형에서 벗어날 때의 안정성을 얻는다. 이 절에서는 그런 추정량 둘 — 절사평균과 윈저화 평균 — 을 소개하고 그 맞바꿈을 비교한다.
 
-## Trimmed Mean
+## 절사평균
 
-The idea behind trimming is simple: remove the most extreme observations on both ends before averaging. By discarding the values most likely to be outliers or heavy-tail artifacts, the estimator resists contamination while still using the bulk of the data.
+절사의 발상은 단순하다: 평균을 내기 전에 양쪽 끝의 가장 극단적인 관측값을 제거한다. 이상점이거나 두꺼운 꼬리의 산물일 가능성이 가장 높은 값을 버림으로써, 자료의 대부분을 여전히 사용하면서도 오염에 저항한다.
 
-Given a sample $X_1, \ldots, X_n$, let $X_{(1)} \leq X_{(2)} \leq \cdots \leq X_{(n)}$ denote the **order statistics** (the observations sorted from smallest to largest). The $\alpha$-trimmed mean removes the smallest and largest $\lfloor n\alpha \rfloor$ observations and averages the rest:
+표본 $X_1, \ldots, X_n$이 주어졌을 때 $X_{(1)} \leq X_{(2)} \leq \cdots \leq X_{(n)}$을 **순서통계량**(작은 것부터 정렬한 관측값)이라 하자. $\alpha$-절사평균은 가장 작은 쪽과 가장 큰 쪽에서 각각 $\lfloor n\alpha \rfloor$개를 제거하고 나머지를 평균한다:
 
 $$
 \bar{X}_{\text{trim}(\alpha)} = \frac{1}{n - 2\lfloor n\alpha \rfloor} \sum_{i=\lfloor n\alpha \rfloor + 1}^{n - \lfloor n\alpha \rfloor} X_{(i)}
 $$
 
-Setting $\alpha = 0$ recovers the ordinary sample mean, while $\alpha = 0.5$ yields the median.
+$\alpha = 0$이면 보통의 표본평균이 되고, $\alpha = 0.5$이면 중앙값이 된다.
 
-!!! example "Trimmed Mean with 20% Trimming"
-    Consider the sample $\{1, 3, 5, 7, 100\}$ with $n = 5$ and $\alpha = 0.2$. Since $\lfloor 5 \times 0.2 \rfloor = 1$, the trimmed mean removes the smallest value ($1$) and the largest value ($100$), then averages the remaining three: $\bar{X}_{\text{trim}(0.2)} = (3 + 5 + 7)/3 = 5.0$. The ordinary sample mean is $(1 + 3 + 5 + 7 + 100)/5 = 23.2$, showing how a single outlier inflates the untrimmed estimate.
+!!! example "20% 절사한 절사평균"
+    $n = 5$인 표본 $\{1, 3, 5, 7, 100\}$에서 $\alpha = 0.2$를 생각하자. $\lfloor 5 \times 0.2 \rfloor = 1$이므로 절사평균은 가장 작은 값($1$)과 가장 큰 값($100$)을 제거하고 남은 셋을 평균한다: $\bar{X}_{\text{trim}(0.2)} = (3 + 5 + 7)/3 = 5.0$. 보통의 표본평균은 $(1 + 3 + 5 + 7 + 100)/5 = 23.2$로, 이상점 하나가 절사하지 않은 추정값을 얼마나 부풀리는지 보여준다.
 
-## Winsorized Mean
+## 윈저화 평균
 
-Rather than discarding extreme observations, the Winsorized mean replaces them with the nearest non-extreme value. This retains the original sample size, which can simplify variance estimation.
+윈저화 평균은 극단 관측값을 버리는 대신 가장 가까운 극단이 아닌 값으로 대체한다. 원래의 표본크기가 유지되므로 분산추정이 간단해질 수 있다.
 
-For trimming fraction $\alpha$, let $k = \lfloor n\alpha \rfloor$. The $\alpha$-Winsorized mean replaces the $k$ smallest observations with $X_{(k+1)}$ and the $k$ largest with $X_{(n-k)}$, then averages all $n$ values:
+절사비율 $\alpha$에 대해 $k = \lfloor n\alpha \rfloor$라 하자. $\alpha$-윈저화 평균은 가장 작은 $k$개를 $X_{(k+1)}$로, 가장 큰 $k$개를 $X_{(n-k)}$로 바꾼 뒤 $n$개 값을 모두 평균한다:
 
 $$
 \bar{X}_{\text{win}(\alpha)} = \frac{1}{n}\left( k \cdot X_{(k+1)} + \sum_{i=k+1}^{n-k} X_{(i)} + k \cdot X_{(n-k)} \right)
 $$
 
-!!! example "Winsorized Mean with 20% Winsorizing"
-    Using the same sample $\{1, 3, 5, 7, 100\}$ with $\alpha = 0.2$ ($k = 1$), the Winsorized mean replaces $1$ with $3$ and $100$ with $7$: $\bar{X}_{\text{win}(0.2)} = (3 + 3 + 5 + 7 + 7)/5 = 5.0$. The result matches the trimmed mean in this case, though they generally differ for larger samples.
+!!! example "20% 윈저화한 윈저화 평균"
+    같은 표본 $\{1, 3, 5, 7, 100\}$에서 $\alpha = 0.2$($k = 1$)를 쓰면 윈저화 평균은 $1$을 $3$으로, $100$을 $7$로 바꾼다: $\bar{X}_{\text{win}(0.2)} = (3 + 3 + 5 + 7 + 7)/5 = 5.0$. 이 경우에는 결과가 절사평균과 같지만, 표본이 커지면 일반적으로 서로 다르다.
 
-## Breakdown Point and Efficiency
+## 붕괴점과 효율
 
-The **breakdown point** of an estimator is the largest fraction of observations that can be replaced by arbitrary values before the estimator produces an unbounded result. A higher breakdown point indicates greater robustness.
+추정량의 **붕괴점**은 추정량이 무한히 커지기 전까지 임의의 값으로 바꿀 수 있는 관측값의 최대 비율이다. 붕괴점이 높을수록 로버스트하다.
 
-| Estimator | Breakdown Point | ARE vs Sample Mean (Normal) |
+| 추정량 | 붕괴점 | 표본평균 대비 ARE (정규) |
 |---|---|---|
-| Sample mean | 0% | 100% |
-| 10% trimmed mean | 10% | ~97% |
-| 20% trimmed mean | 20% | ~93% |
-| Median (50% trimmed) | 50% | ~64% |
+| 표본평균 | 0% | 100% |
+| 10% 절사평균 | 10% | ~97% |
+| 20% 절사평균 | 20% | ~93% |
+| 중앙값 (50% 절사) | 50% | ~64% |
 
-The efficiency column reports the asymptotic relative efficiency compared to the sample mean under a Normal distribution. The 10% trimmed mean loses only about 3% efficiency under Normality while gaining substantial protection against outliers. The median achieves the maximum breakdown point of 50% but at a cost of roughly 36% efficiency loss under Normality.
+효율 열은 정규분포 아래에서 표본평균과 비교한 점근 상대효율이다. 10% 절사평균은 정규성 아래에서 효율을 약 3%만 잃으면서 이상점에 대한 상당한 보호를 얻는다. 중앙값은 최대 붕괴점 50%를 달성하지만 정규성 아래에서 약 36%의 효율 손실을 대가로 치른다.
 
-!!! tip "Choosing a Trimming Fraction"
-    In practice, $\alpha = 0.1$ (10% trimming) or $\alpha = 0.2$ (20% trimming) offer a good balance between robustness and efficiency. When the distribution is expected to be heavy-tailed, the efficiency loss relative to the sample mean under Normality is more than offset by the gain in stability.
+!!! tip "절사비율의 선택"
+    실무에서는 $\alpha = 0.1$(10% 절사)이나 $\alpha = 0.2$(20% 절사)가 로버스트성과 효율 사이의 좋은 균형을 준다. 분포의 꼬리가 두꺼울 것으로 예상되면, 정규성 아래에서 표본평균 대비 잃는 효율보다 얻는 안정성이 훨씬 크다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Bootstrap SEs for $n = 30$ Gamma(3, 2). Compare with theoretical/asymptotic formulas for mean and median.
+**연습문제 1.**
+$n = 30$인 Gamma(3, 2) 자료에서 붓스트랩 표준오차를 구하라. 평균과 중앙값에 대한 이론적/점근적 공식과 비교하라.
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
     ```python
     import numpy as np
     from scipy import stats
@@ -67,100 +67,100 @@ Bootstrap SEs for $n = 30$ Gamma(3, 2). Compare with theoretical/asymptotic form
     print(f"SE(med): boot={med_boot.std(ddof=1):.3f}, asymp={1/(2*f_hat*np.sqrt(n)):.3f}")
     ```
 
-    Mean: bootstrap and theory agree closely.
+    평균: 붓스트랩과 이론이 잘 일치한다.
 
-    Median: bootstrap typically exceeds asymptotic formula by 5–15% at $n = 30$ — asymptotic formula assumes large-sample regime not fully reached. Bootstrap captures finite-sample behavior more accurately.
-
----
-
-**Exercise 2.**
-**Breakdown point** of trimmed and Winsorized means. For 20% trimming, what fraction of data must be corrupted to push the estimator arbitrarily far?
-
-??? success "Solution to Exercise 2"
-    With 20% trimming ($\alpha = 0.2$, $k = \lfloor 0.2n \rfloor$): the trimmed mean averages observations $X_{(k+1)}$ through $X_{(n-k)}$. To move this average arbitrarily, you must corrupt at least one observation *inside* the trimmed range — i.e., make one of the middle observations extreme.
-
-    More than $k$ corruptions in one tail might be needed to shift the order statistic into the middle. Practical breakdown: $k/n = \alpha = 0.2$ or 20%.
-
-    **General rule:** $\alpha$-trimmed mean has breakdown $\alpha$. Higher trimming = higher robustness = lower efficiency under normal.
+    중앙값: $n = 30$에서 붓스트랩이 점근 공식보다 대개 5–15% 크다 — 점근 공식은 아직 완전히 도달하지 않은 대표본 영역을 가정하기 때문이다. 붓스트랩이 유한표본 거동을 더 정확히 포착한다.
 
 ---
 
-**Exercise 3.**
-**Compute the 20% trimmed mean** of $\{1, 3, 5, 7, 9, 11, 100\}$. Compare with sample mean and median.
+**연습문제 2.**
+절사평균과 윈저화 평균의 **붕괴점.** 20% 절사에서 추정량을 얼마든지 멀리 밀어내려면 자료의 몇 퍼센트가 오염되어야 하는가?
 
-??? success "Solution to Exercise 3"
+??? success "연습문제 2 풀이"
+    20% 절사($\alpha = 0.2$, $k = \lfloor 0.2n \rfloor$)에서 절사평균은 $X_{(k+1)}$부터 $X_{(n-k)}$까지를 평균한다. 이 평균을 얼마든지 움직이려면 절사 후 남는 범위 *안쪽*의 관측값을 적어도 하나 오염시켜야 한다 — 즉 가운데 관측값 하나를 극단적으로 만들어야 한다.
+
+    한쪽 꼬리의 순서통계량을 가운데로 밀어넣으려면 그 꼬리에서 $k$개보다 많은 오염이 필요할 수 있다. 실질적인 붕괴점: $k/n = \alpha = 0.2$, 즉 20%.
+
+    **일반 규칙:** $\alpha$-절사평균의 붕괴점은 $\alpha$이다. 절사를 늘리면 로버스트성이 올라가고 정규 아래에서의 효율은 내려간다.
+
+---
+
+**연습문제 3.**
+$\{1, 3, 5, 7, 9, 11, 100\}$의 **20% 절사평균을 계산**하라. 표본평균, 중앙값과 비교하라.
+
+??? success "연습문제 3 풀이"
     $n = 7$, $\alpha = 0.2$, $k = \lfloor 1.4 \rfloor = 1$.
 
-    Trim smallest 1 and largest 1: remaining $\{3, 5, 7, 9, 11\}$. Trimmed mean = $(3+5+7+9+11)/5 = 7$.
+    가장 작은 1개와 가장 큰 1개를 절사하면 $\{3, 5, 7, 9, 11\}$이 남는다. 절사평균 = $(3+5+7+9+11)/5 = 7$.
 
-    Sample mean: $(1+3+5+7+9+11+100)/7 \approx 19.4$. Dominated by outlier.
+    표본평균: $(1+3+5+7+9+11+100)/7 \approx 19.4$. 이상점에 지배된다.
 
-    Median: $7$ (middle value).
+    중앙값: $7$ (가운데 값).
 
-    The trimmed mean and median both give 7; sample mean is misleading. Robust estimators recover the "typical" value of the clean part of the data.
-
----
-
-**Exercise 4.**
-**Asymptotic relative efficiency** of trimmed mean vs sample mean for normal data. Why does efficiency *decrease* with more trimming?
-
-??? success "Solution to Exercise 4"
-    Trimming discards information. For normal data, all observations carry mean information; discarding any reduces effective sample size.
-
-    Specifically, the $\alpha$-trimmed mean has asymptotic variance approximately $\sigma^2 \cdot c(\alpha)/n$ where $c(\alpha) > 1$ for $\alpha > 0$. ARE = $1/c(\alpha) < 1$.
-
-    Typical values: $\alpha = 0.1$ gives ARE $\approx 0.97$. $\alpha = 0.2$: $\approx 0.93$. Median ($\alpha = 0.5$): $\approx 0.64$.
-
-    **Conclusion:** small trimming (10-20%) costs little efficiency under normal but provides substantial robustness. Aggressive trimming (toward median) loses efficiency without much robustness gain (breakdown $\alpha = 0.5$ vs 0.2 is rarely needed).
+    절사평균과 중앙값은 모두 7을 주는 반면 표본평균은 오해를 부른다. 로버스트 추정량은 자료의 깨끗한 부분의 "전형적인" 값을 되찾아 준다.
 
 ---
 
-**Exercise 5.**
-**M-estimators** generalize trimmed means. Briefly describe Huber's $M$-estimator and its breakdown/efficiency.
+**연습문제 4.**
+정규 자료에서 절사평균과 표본평균의 **점근 상대효율.** 절사를 늘릴수록 효율이 *떨어지는* 이유는?
 
-??? success "Solution to Exercise 5"
-    Huber's M-estimator solves $\sum \psi((X_i - \hat\mu)/s) = 0$ where $\psi(u) = u$ for $|u| \le c$ and $\psi(u) = c \cdot \text{sign}(u)$ for $|u| > c$. Combines OLS (in the middle) with median-like behavior (in the tails).
+??? success "연습문제 4 풀이"
+    절사는 정보를 버린다. 정규 자료에서는 모든 관측값이 평균에 관한 정보를 담고 있으므로 무엇을 버리든 유효표본크기가 줄어든다.
 
-    With $c$ small: behaves like the median. With $c$ large: behaves like the sample mean.
+    구체적으로 $\alpha$-절사평균의 점근분산은 대략 $\sigma^2 \cdot c(\alpha)/n$이며 $\alpha > 0$이면 $c(\alpha) > 1$이다. ARE = $1/c(\alpha) < 1$.
 
-    Standard choice $c = 1.345 \sigma$: 95% efficiency under normal, breakdown point $\approx \min(\alpha, 0.5)$ where $\alpha$ depends on tuning.
+    전형적인 값: $\alpha = 0.1$이면 ARE $\approx 0.97$. $\alpha = 0.2$: $\approx 0.93$. 중앙값($\alpha = 0.5$): $\approx 0.64$.
 
-    **Why M-estimators dominate trimmed means in practice:**
-
-    - Smooth transition between OLS and median (no sharp cutoff).
-    - Can incorporate covariates (robust regression).
-    - Better efficiency at intermediate contamination levels.
-
-    The default robust estimator in `statsmodels.RLM` and most modern statistical software.
+    **결론:** 약한 절사(10–20%)는 정규 아래에서 효율을 거의 잃지 않으면서 상당한 로버스트성을 준다. 과감한 절사(중앙값 쪽으로)는 로버스트성의 이득이 크지 않은 채 효율만 잃는다(붕괴점 0.2 대신 0.5가 필요한 경우는 드물다).
 
 ---
 
-**Exercise 6.**
-**When to use trimmed mean vs median vs mean.** Decision flowchart.
+**연습문제 5.**
+**M-추정량**은 절사평균을 일반화한다. Huber의 $M$-추정량과 그 붕괴점/효율을 간단히 설명하라.
 
-??? success "Solution to Exercise 6"
-    **Use sample mean** when:
+??? success "연습문제 5 풀이"
+    Huber의 M-추정량은 $\sum \psi((X_i - \hat\mu)/s) = 0$을 푼다. 여기서 $|u| \le c$이면 $\psi(u) = u$, $|u| > c$이면 $\psi(u) = c \cdot \text{sign}(u)$이다. 가운데에서는 OLS처럼, 꼬리에서는 중앙값처럼 행동한다.
 
-    - Data is approximately symmetric and roughly normal.
-    - You need full efficiency (large $n$ or precise estimates needed).
-    - Outliers are believed absent or have been pre-processed.
+    $c$가 작으면 중앙값처럼, $c$가 크면 표본평균처럼 행동한다.
 
-    **Use median** when:
+    표준적인 선택 $c = 1.345 \sigma$: 정규 아래에서 효율 95%, 붕괴점은 조율에 따라 $\approx \min(\alpha, 0.5)$.
 
-    - Data has extreme outliers or heavy tails.
-    - You want maximum breakdown (50%).
-    - You don't care about efficiency (large $n$ available).
+    **실무에서 M-추정량이 절사평균을 앞서는 이유:**
 
-    **Use trimmed mean** when:
+    - OLS와 중앙값 사이를 매끄럽게 이어준다(급격한 절단이 없다).
+    - 공변량을 넣을 수 있다(로버스트 회귀).
+    - 중간 정도의 오염 수준에서 효율이 더 좋다.
 
-    - Moderate outliers expected (5-20% contamination).
-    - Want a compromise between efficiency and robustness.
-    - Need a simple, well-known estimator.
+    `statsmodels.RLM`을 비롯한 대부분의 현대 통계 소프트웨어에서 기본 로버스트 추정량이다.
 
-    **Use M-estimator** when:
+---
 
-    - Need flexibility (regression context, custom loss).
-    - Want better efficiency than trimmed mean at intermediate contamination.
-    - Have access to specialized software.
+**연습문제 6.**
+**절사평균, 중앙값, 평균 중 무엇을 언제 쓸 것인가.** 의사결정 흐름.
 
-    In practice, default to mean for clean data, median for "outlier-prone" data, trimmed mean (10-20%) when in doubt.
+??? success "연습문제 6 풀이"
+    **표본평균을 쓸 때:**
+
+    - 자료가 근사적으로 대칭이고 대략 정규일 때.
+    - 완전한 효율이 필요할 때(큰 $n$ 또는 정밀한 추정이 필요할 때).
+    - 이상점이 없다고 믿거나 이미 전처리했을 때.
+
+    **중앙값을 쓸 때:**
+
+    - 자료에 극단적인 이상점이 있거나 꼬리가 두꺼울 때.
+    - 최대 붕괴점(50%)을 원할 때.
+    - 효율이 중요하지 않을 때(큰 $n$을 쓸 수 있을 때).
+
+    **절사평균을 쓸 때:**
+
+    - 중간 정도의 이상점이 예상될 때(오염 5–20%).
+    - 효율과 로버스트성 사이의 절충을 원할 때.
+    - 단순하고 잘 알려진 추정량이 필요할 때.
+
+    **M-추정량을 쓸 때:**
+
+    - 유연성이 필요할 때(회귀 맥락, 사용자 정의 손실).
+    - 중간 정도의 오염에서 절사평균보다 나은 효율을 원할 때.
+    - 전용 소프트웨어를 쓸 수 있을 때.
+
+    실무에서는 깨끗한 자료에는 평균, "이상점이 잦은" 자료에는 중앙값, 판단이 서지 않으면 절사평균(10–20%)을 기본으로 삼는다.

@@ -1,26 +1,26 @@
-# Variance Estimators
+# 분산추정량
 
-## Overview
+## 개요
 
-Estimating the population variance $\sigma^2$ involves a fundamental choice of divisor: the naive MLE uses $1/n$, Bessel's correction uses $1/(n-1)$, and the MSE-optimal estimator (under normality) uses $1/(n+1)$. This page compares these three estimators, explores the degrees-of-freedom intuition, examines the benefit of knowing the true mean, and applies these ideas to financial volatility estimation.
+모분산 $\sigma^2$을 추정할 때는 분모의 선택이라는 근본적인 문제가 따른다: 소박한 MLE는 $1/n$, Bessel 수정은 $1/(n-1)$, (정규성 아래) 평균제곱오차 최적 추정량은 $1/(n+1)$을 쓴다. 이 페이지에서는 세 추정량을 비교하고, 자유도의 직관을 살피며, 참 평균을 알 때의 이득을 따지고, 이 아이디어를 금융의 변동성 추정에 적용한다.
 
-## Three Variance Estimators
+## 세 가지 분산추정량
 
-Given iid observations $X_1, \ldots, X_n$ from a population with variance $\sigma^2$, define the sum of squared deviations:
+분산이 $\sigma^2$인 모집단에서 뽑은 i.i.d. 관측값 $X_1, \ldots, X_n$이 주어졌을 때 편차제곱합을 다음과 같이 정의한다:
 
 $$\text{SS} = \sum_{i=1}^n (X_i - \bar{X})^2$$
 
-The three estimators are:
+세 추정량은:
 
-| Estimator | Formula | Bias | MSE (Normal) |
+| 추정량 | 공식 | 편향 | 평균제곱오차 (정규) |
 |-----------|---------|------|--------------|
-| Naive (MLE) | $\tilde{S}^2 = \text{SS}/n$ | $-\sigma^2/n$ | $\frac{(2n-1)\sigma^4}{n^2}$ |
-| Bessel's | $S^2 = \text{SS}/(n-1)$ | $0$ | $\frac{2\sigma^4}{n-1}$ |
-| MSE-optimal | $\hat{S}^2 = \text{SS}/(n+1)$ | $-\frac{2\sigma^2}{n+1}$ | $\frac{2(n-1)\sigma^4 + 4\sigma^4}{(n+1)^2}$ |
+| 소박한 추정량 (MLE) | $\tilde{S}^2 = \text{SS}/n$ | $-\sigma^2/n$ | $\frac{(2n-1)\sigma^4}{n^2}$ |
+| Bessel | $S^2 = \text{SS}/(n-1)$ | $0$ | $\frac{2\sigma^4}{n-1}$ |
+| 평균제곱오차 최적 | $\hat{S}^2 = \text{SS}/(n+1)$ | $-\frac{2\sigma^2}{n+1}$ | $\frac{2(n-1)\sigma^4 + 4\sigma^4}{(n+1)^2}$ |
 
-## Bias Verification
+## 편향의 확인
 
-The naive estimator has a predictable downward bias:
+소박한 추정량은 예측 가능한 아래쪽 편향을 갖는다:
 
 $$E[\tilde{S}^2] = \frac{n-1}{n}\sigma^2 \implies \text{Bias} = -\frac{\sigma^2}{n}$$
 
@@ -40,12 +40,12 @@ def bias_verification(sigma=3.0, n_sim=200_000, seed=42):
               f"Bias={s_tilde2.mean()-sigma2:.4f}  -σ²/n={-sigma2/n:.4f}")
 ```
 
-!!! note "Bias shrinks with n"
-    For $n = 3$ the bias is $-\sigma^2/3 = -3.0$, which is 33% of the true variance. By $n = 500$, the bias is negligible ($-0.018$). The bias matters most for small samples.
+!!! note "편향은 n이 커지면 줄어든다"
+    $n = 3$에서 편향은 $-\sigma^2/3 = -3.0$으로 참 분산의 33%이다. $n = 500$이면 편향이 $-0.018$로 무시할 만하다. 편향은 작은 표본에서 가장 중요하다.
 
-## MSE Comparison
+## 평균제곱오차 비교
 
-The unbiased estimator ($1/(n-1)$) does **not** minimize MSE. The MSE-optimal estimator under normality uses $1/(n+1)$, trading a small bias for a larger reduction in variance.
+불편추정량($1/(n-1)$)은 평균제곱오차를 최소화하지 **않는다**. 정규성 아래에서 평균제곱오차가 최적인 추정량은 $1/(n+1)$을 쓰며, 작은 편향을 대가로 더 큰 분산 감소를 얻는다.
 
 ```python
 import matplotlib.pyplot as plt
@@ -68,16 +68,16 @@ def three_estimators_mse(sigma=3.0, n_sim=100_000, seed=42):
     plt.show()
 ```
 
-!!! info "Bias-variance tradeoff"
-    The MSE-optimal estimator has the lowest MSE for all $n$, despite being biased. This is a clean illustration of the bias-variance tradeoff: sometimes accepting a small bias leads to lower overall estimation error.
+!!! info "편향–분산 맞바꿈"
+    평균제곱오차 최적 추정량은 편향되어 있음에도 모든 $n$에서 평균제곱오차가 가장 작다. 편향–분산 맞바꿈을 깔끔하게 보여주는 예이다: 때로는 작은 편향을 받아들이는 편이 전체 추정오차를 줄인다.
 
-## Degrees of Freedom Intuition
+## 자유도의 직관
 
-The $n$ deviations $d_i = X_i - \bar{X}$ satisfy the constraint:
+$n$개의 편차 $d_i = X_i - \bar{X}$는 다음 제약을 만족한다:
 
 $$\sum_{i=1}^n (X_i - \bar{X}) = 0$$
 
-Only $n - 1$ of these deviations are free to vary independently. Dividing by the degrees of freedom corrects for the fact that $\bar{X}$ is closer to the data than $\mu$ is, systematically shrinking the sum of squares.
+이 편차들 가운데 $n - 1$개만이 독립적으로 자유롭게 변할 수 있다. 자유도로 나누는 것은 $\bar{X}$가 $\mu$보다 자료에 가까워 제곱합이 체계적으로 작아진다는 사실을 보정한다.
 
 ```python
 def degrees_of_freedom_intuition(seed=42):
@@ -100,19 +100,19 @@ def degrees_of_freedom_intuition(seed=42):
     print(f"  Difference = n·(X̄−μ)² = {n*(x_bar-mu)**2:.3f}")
 ```
 
-The key identity connecting the two sums of squares is:
+두 제곱합을 잇는 핵심 항등식은:
 
 $$\sum_{i=1}^n (X_i - \mu)^2 = \sum_{i=1}^n (X_i - \bar{X})^2 + n(\bar{X} - \mu)^2$$
 
-Since $E[n(\bar{X} - \mu)^2] = \sigma^2$, the deviations from $\bar{X}$ underestimate the deviations from $\mu$ by exactly $\sigma^2$ on average.
+$E[n(\bar{X} - \mu)^2] = \sigma^2$이므로, $\bar{X}$로부터의 편차는 평균적으로 정확히 $\sigma^2$만큼 $\mu$로부터의 편차를 과소평가한다.
 
-## Known vs Unknown Mean
+## 평균을 아는 경우와 모르는 경우
 
-When the true mean $\mu$ is known, we can use:
+참 평균 $\mu$가 알려져 있으면 다음을 쓸 수 있다:
 
 $$\hat{\sigma}^2_{\text{known}} = \frac{1}{n}\sum_{i=1}^n (X_i - \mu)^2$$
 
-This estimator is unbiased and has **lower variance** than $S^2$, because it does not lose a degree of freedom to estimate $\mu$.
+이 추정량은 불편이며 $\mu$를 추정하느라 자유도를 잃지 않으므로 $S^2$보다 **분산이 작다**.
 
 ```python
 def known_vs_unknown_mean(sigma=3.0, n_sim=100_000, seed=42):
@@ -130,9 +130,9 @@ def known_vs_unknown_mean(sigma=3.0, n_sim=100_000, seed=42):
               f"MSE(unknown)={mse_u:.4f}  Ratio={mse_u/mse_k:.3f}")
 ```
 
-## Financial Application: Volatility Estimation
+## 금융 응용: 변동성 추정
 
-In finance, volatility is typically estimated as the annualized standard deviation of returns. The choice of divisor ($n$ vs $n-1$) matters most for short estimation windows.
+금융에서 변동성은 보통 수익률의 연율화된 표준편차로 추정한다. 분모의 선택($n$이냐 $n-1$이냐)은 추정 구간이 짧을수록 중요해진다.
 
 ```python
 def volatility_estimation_finance(seed=42):
@@ -155,61 +155,61 @@ def volatility_estimation_finance(seed=42):
               f"Diff={(np.mean(vol_n1)-np.mean(vol_n))/np.mean(vol_n)*100:.2f}%")
 ```
 
-!!! warning "Short windows amplify the difference"
-    With a 5-day window, the Bessel-corrected volatility is roughly 12% higher than the naive estimate. For quarterly (63-day) and longer windows, the difference is negligible. In practice, many financial applications use $n-1$ by default.
+!!! warning "짧은 구간은 차이를 키운다"
+    5일 구간에서는 Bessel 수정 변동성이 소박한 추정값보다 대략 12% 높다. 분기(63일) 이상의 구간에서는 차이가 무시할 만하다. 실무에서는 많은 금융 응용이 기본적으로 $n-1$을 쓴다.
 
-## Interpretation
+## 해석
 
-- The **naive estimator** ($1/n$) is biased downward, underestimating $\sigma^2$ by exactly $\sigma^2/n$.
-- **Bessel's correction** ($1/(n-1)$) removes the bias but does not minimize MSE.
-- The **MSE-optimal** estimator ($1/(n+1)$ for normal data) accepts a small bias for a larger reduction in variance — a classic illustration of the bias-variance tradeoff.
-- **Degrees of freedom** provide the intuition: estimating the mean "uses up" one degree of freedom.
-- Knowing the **true mean** yields a better variance estimator. In practice, this rarely happens, but it motivates ideas like shrinkage estimation.
-- In finance, the divisor choice matters mainly for **short estimation windows** (weekly or biweekly).
+- **소박한 추정량**($1/n$)은 아래로 편향되어 정확히 $\sigma^2/n$만큼 $\sigma^2$을 과소추정한다.
+- **Bessel 수정**($1/(n-1)$)은 편향을 없애지만 평균제곱오차를 최소화하지는 않는다.
+- **평균제곱오차 최적** 추정량(정규 자료에서 $1/(n+1)$)은 작은 편향을 받아들여 더 큰 분산 감소를 얻는다 — 편향–분산 맞바꿈의 고전적인 예이다.
+- **자유도**가 직관을 준다: 평균을 추정하는 데 자유도 하나가 "소모된다".
+- **참 평균**을 알면 더 나은 분산추정량을 얻는다. 실무에서는 드문 일이지만, 축소추정 같은 아이디어의 동기가 된다.
+- 금융에서는 분모의 선택이 주로 **짧은 추정 구간**(주 단위나 격주 단위)에서 중요하다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Prove that $E[\tilde{S}^2] = \frac{n-1}{n}\sigma^2$ where $\tilde{S}^2 = \frac{1}{n}\sum_{i=1}^n(X_i - \bar{X})^2$, using the identity $\sum(X_i - \bar{X})^2 = \sum(X_i - \mu)^2 - n(\bar{X} - \mu)^2$.
+**연습문제 1.**
+항등식 $\sum(X_i - \bar{X})^2 = \sum(X_i - \mu)^2 - n(\bar{X} - \mu)^2$을 써서 $\tilde{S}^2 = \frac{1}{n}\sum_{i=1}^n(X_i - \bar{X})^2$에 대해 $E[\tilde{S}^2] = \frac{n-1}{n}\sigma^2$임을 증명하라.
 
-??? success "Solution to Exercise 1"
-    Starting from the identity:
+??? success "연습문제 1 풀이"
+    항등식에서 출발한다:
 
     $$\sum_{i=1}^n(X_i - \bar{X})^2 = \sum_{i=1}^n(X_i - \mu)^2 - n(\bar{X} - \mu)^2$$
 
-    Taking expectations:
+    기댓값을 취하면:
 
     $$E\left[\sum_{i=1}^n(X_i - \bar{X})^2\right] = \sum_{i=1}^n E[(X_i - \mu)^2] - nE[(\bar{X} - \mu)^2] = n\sigma^2 - n\cdot\frac{\sigma^2}{n} = (n-1)\sigma^2$$
 
-    Therefore:
+    따라서:
 
     $$E[\tilde{S}^2] = E\left[\frac{1}{n}\sum_{i=1}^n(X_i - \bar{X})^2\right] = \frac{(n-1)\sigma^2}{n} = \frac{n-1}{n}\sigma^2$$
 
-    The bias is $E[\tilde{S}^2] - \sigma^2 = -\sigma^2/n$. $\square$
+    편향은 $E[\tilde{S}^2] - \sigma^2 = -\sigma^2/n$이다. $\square$
 
 ---
 
-**Exercise 2.**
-Compute the MSE of the Bessel-corrected estimator $S^2 = \frac{1}{n-1}\sum(X_i - \bar{X})^2$ for normal data, using the fact that $(n-1)S^2/\sigma^2 \sim \chi^2_{n-1}$.
+**연습문제 2.**
+$(n-1)S^2/\sigma^2 \sim \chi^2_{n-1}$이라는 사실을 이용하여, 정규 자료에서 Bessel 수정 추정량 $S^2 = \frac{1}{n-1}\sum(X_i - \bar{X})^2$의 평균제곱오차를 계산하라.
 
-??? success "Solution to Exercise 2"
-    Let $Q = (n-1)S^2/\sigma^2 \sim \chi^2_{n-1}$. Then $S^2 = Q\sigma^2/(n-1)$.
+??? success "연습문제 2 풀이"
+    $Q = (n-1)S^2/\sigma^2 \sim \chi^2_{n-1}$이라 하자. 그러면 $S^2 = Q\sigma^2/(n-1)$이다.
 
-    Since $S^2$ is unbiased, $\text{MSE}(S^2) = \text{Var}(S^2)$.
+    $S^2$이 불편이므로 $\text{MSE}(S^2) = \text{Var}(S^2)$이다.
 
     $$\text{Var}(S^2) = \frac{\sigma^4}{(n-1)^2}\text{Var}(Q) = \frac{\sigma^4}{(n-1)^2}\cdot 2(n-1) = \frac{2\sigma^4}{n-1}$$
 
-    where we used $\text{Var}(\chi^2_k) = 2k$ with $k = n - 1$. $\square$
+    여기서 $k = n - 1$인 $\text{Var}(\chi^2_k) = 2k$를 썼다. $\square$
 
 ---
 
-**Exercise 3.**
-Show that the MSE-optimal divisor for estimating $\sigma^2$ under normality is $n + 1$ by minimizing $\text{MSE}(\text{SS}/d)$ over $d > 0$.
+**연습문제 3.**
+$d > 0$에 대해 $\text{MSE}(\text{SS}/d)$를 최소화하여, 정규성 아래에서 $\sigma^2$ 추정의 평균제곱오차 최적 분모가 $n + 1$임을 보여라.
 
-??? success "Solution to Exercise 3"
-    Let the estimator be $\hat{\sigma}^2 = \text{SS}/d$ where $\text{SS} = \sum(X_i - \bar{X})^2$ and $\text{SS}/\sigma^2 \sim \chi^2_{n-1}$.
+??? success "연습문제 3 풀이"
+    추정량을 $\hat{\sigma}^2 = \text{SS}/d$라 하자. 여기서 $\text{SS} = \sum(X_i - \bar{X})^2$이고 $\text{SS}/\sigma^2 \sim \chi^2_{n-1}$이다.
 
-    Then $E[\text{SS}] = (n-1)\sigma^2$ and $\text{Var}(\text{SS}) = 2(n-1)\sigma^4$.
+    그러면 $E[\text{SS}] = (n-1)\sigma^2$이고 $\text{Var}(\text{SS}) = 2(n-1)\sigma^4$이다.
 
     $$\text{Bias} = \frac{(n-1)\sigma^2}{d} - \sigma^2 = \sigma^2\left(\frac{n-1}{d} - 1\right)$$
 
@@ -217,11 +217,11 @@ Show that the MSE-optimal divisor for estimating $\sigma^2$ under normality is $
 
     $$\text{MSE} = \text{Bias}^2 + \text{Var} = \sigma^4\left(\frac{n-1}{d} - 1\right)^2 + \frac{2(n-1)\sigma^4}{d^2}$$
 
-    Setting $\frac{d(\text{MSE}/\sigma^4)}{dd} = 0$:
+    $\text{MSE}/\sigma^4$을 $d$에 대해 미분하여 0으로 놓으면:
 
-    $$2\left(\frac{n-1}{d} - 1\right)\left(-\frac{n-1}{d^2}\right) + 2(n-1)\left(-\frac{2}{d^3}\right)\sigma^4/\sigma^4 = 0$$
+    $$2\left(\frac{n-1}{d} - 1\right)\left(-\frac{n-1}{d^2}\right) - \frac{4(n-1)}{d^3} = 0$$
 
-    Simplifying (multiply through by $d^3$):
+    양변에 $d^3$을 곱하여 정리하면:
 
     $$-2(n-1)\left[(n-1) - d\right] - 4(n-1) = 0$$
 
@@ -231,44 +231,44 @@ Show that the MSE-optimal divisor for estimating $\sigma^2$ under normality is $
 
 ---
 
-**Exercise 4.**
-A portfolio manager estimates daily volatility from 21 trading days (one month) of returns. If the true daily volatility is 1.26%, compute the expected annualized volatility estimate using both the $1/n$ and $1/(n-1)$ divisors. Which one is closer to the true annualized volatility of 20%?
+**연습문제 4.**
+어떤 포트폴리오 매니저가 거래일 21일(한 달)치 수익률로 일별 변동성을 추정한다. 참 일별 변동성이 1.26%라면 $1/n$과 $1/(n-1)$ 분모 각각으로 얻는 연율화 변동성 추정값의 기댓값을 계산하라. 어느 쪽이 참 연율화 변동성 20%에 더 가까운가?
 
-??? success "Solution to Exercise 4"
-    True daily volatility: $\sigma_d = 0.0126$. True annualized: $\sigma_a = 0.0126 \times \sqrt{252} \approx 0.20$ (20%).
+??? success "연습문제 4 풀이"
+    참 일별 변동성: $\sigma_d = 0.0126$. 참 연율화 변동성: $\sigma_a = 0.0126 \times \sqrt{252} \approx 0.20$ (20%).
 
-    With 21 days of data:
+    자료가 21일치일 때:
 
-    **Using $1/n$:** $E[\tilde{S}^2] = \frac{n-1}{n}\sigma_d^2 = \frac{20}{21}\sigma_d^2$. Expected annualized vol:
+    **$1/n$을 쓰면:** $E[\tilde{S}^2] = \frac{n-1}{n}\sigma_d^2 = \frac{20}{21}\sigma_d^2$. 연율화 변동성의 기댓값은:
 
     $$\sqrt{\frac{20}{21}} \times 20\% \approx \sqrt{0.9524} \times 20\% \approx 0.976 \times 20\% = 19.52\%$$
 
-    **Using $1/(n-1)$:** $E[S^2] = \sigma_d^2$. But note that $E[S] < \sigma_d$ by Jensen's inequality (since square root is concave). The expected annualized vol is:
+    **$1/(n-1)$을 쓰면:** $E[S^2] = \sigma_d^2$이다. 다만 (제곱근이 오목하므로) Jensen 부등식에 의해 $E[S] < \sigma_d$임에 유의하라. 연율화 변동성의 기댓값은:
 
     $$E[\sqrt{S^2 \times 252}] = \sqrt{252}\cdot E[S] < \sqrt{252}\cdot \sigma_d = 20\%$$
 
-    So neither estimator is unbiased for $\sigma$ (as opposed to $\sigma^2$). However, the $1/(n-1)$ estimator is closer to the true value. The bias of $S$ can be corrected using the $c_4$ factor from the chi-squared distribution. $\square$
+    따라서 ($\sigma^2$이 아니라) $\sigma$에 대해서는 어느 추정량도 불편이 아니다. 그래도 $1/(n-1)$ 추정량이 참값에 더 가깝다. $S$의 편향은 카이제곱분포에서 나오는 $c_4$ 인자로 보정할 수 있다. $\square$
 
 ---
 
-**Exercise 5.**
-Explain why knowing the true mean $\mu$ reduces the MSE of variance estimation. Quantify the improvement for $n = 5$.
+**연습문제 5.**
+참 평균 $\mu$를 알면 분산추정의 평균제곱오차가 줄어드는 이유를 설명하라. $n = 5$에서 개선 정도를 정량화하라.
 
-??? success "Solution to Exercise 5"
-    When $\mu$ is known, we use $\hat{\sigma}^2 = \frac{1}{n}\sum(X_i - \mu)^2$, which is unbiased with:
+??? success "연습문제 5 풀이"
+    $\mu$를 알면 $\hat{\sigma}^2 = \frac{1}{n}\sum(X_i - \mu)^2$을 쓰는데, 이는 불편이며:
 
     $$\text{Var}(\hat{\sigma}^2) = \frac{1}{n^2}\text{Var}\left(\sum(X_i-\mu)^2\right) = \frac{1}{n^2}\cdot n\cdot\text{Var}((X-\mu)^2)$$
 
-    For normal data, $(X-\mu)^2/\sigma^2 \sim \chi^2_1$, so $\text{Var}((X-\mu)^2) = 2\sigma^4$, giving:
+    정규 자료에서 $(X-\mu)^2/\sigma^2 \sim \chi^2_1$이므로 $\text{Var}((X-\mu)^2) = 2\sigma^4$이고, 따라서:
 
     $$\text{MSE}(\hat{\sigma}^2_{\text{known}}) = \frac{2\sigma^4}{n}$$
 
-    When $\mu$ is unknown, the best unbiased estimator has:
+    $\mu$를 모르면 최량 불편추정량은:
 
     $$\text{MSE}(S^2) = \frac{2\sigma^4}{n-1}$$
 
-    For $n = 5$:
+    $n = 5$에서:
 
     $$\frac{\text{MSE}(S^2)}{\text{MSE}(\hat{\sigma}^2_{\text{known}})} = \frac{2\sigma^4/4}{2\sigma^4/5} = \frac{5}{4} = 1.25$$
 
-    Knowing $\mu$ reduces MSE by 20%. The improvement comes from using all $n$ degrees of freedom for variance estimation instead of $n - 1$. As $n$ grows, the ratio approaches 1. $\square$
+    $\mu$를 알면 평균제곱오차가 20% 줄어든다. 분산추정에 자유도를 $n-1$이 아니라 $n$개 모두 쓰기 때문이다. $n$이 커지면 이 비는 1에 가까워진다. $\square$

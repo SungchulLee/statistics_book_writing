@@ -1,146 +1,146 @@
-# Skewed Distributions
+# 치우친 분포
 
-## Why Skewness Matters for Estimation
+## 치우침이 추정에서 중요한 이유
 
-Many real-world data sets exhibit asymmetry: household incomes tend to be right-skewed with a long upper tail, while failure-time data and insurance claims often follow exponential or log-normal distributions. When the underlying distribution is skewed, the usual estimation methods — built on the assumption of symmetry or normality — may perform poorly. The sample mean can be unduly influenced by extreme values in the tail, confidence intervals based on the Central Limit Theorem converge more slowly, and the choice between mean and median as a measure of center becomes a substantive question. This page examines how skewness affects estimation and what tools are available to address it.
+현실의 많은 자료는 비대칭이다. 가계소득은 위쪽 꼬리가 긴 오른쪽 치우침을 보이고, 고장시간 자료와 보험 청구액은 흔히 지수분포나 log-normal 분포를 따른다. 바탕 분포가 치우쳐 있으면 대칭성이나 정규성을 전제로 만들어진 보통의 추정 방법이 잘 작동하지 않을 수 있다. 표본평균이 꼬리의 극단값에 지나치게 휘둘리고, 중심극한정리에 기반한 신뢰구간의 수렴이 느려지며, 중심의 척도로 평균과 중앙값 중 무엇을 쓸지가 실질적인 문제가 된다. 이 페이지에서는 치우침이 추정에 어떤 영향을 주는지, 그리고 이를 다룰 어떤 도구가 있는지 살펴본다.
 
-## Measuring Skewness
+## 치우침의 측정
 
-Before discussing its effects, we need a precise definition. The **skewness coefficient** of a random variable $X$ with mean $\mu$ and standard deviation $\sigma$ is
+영향을 논하기 전에 정확한 정의가 필요하다. 평균이 $\mu$이고 표준편차가 $\sigma$인 확률변수 $X$의 **왜도 계수**는
 
 $$
 \gamma_1 = \frac{E[(X - \mu)^3]}{\sigma^3}
 $$
 
-- $\gamma_1 > 0$: the distribution is **right-skewed** (the right tail is longer or heavier).
-- $\gamma_1 < 0$: the distribution is **left-skewed** (the left tail is longer or heavier).
-- $\gamma_1 = 0$: the distribution is symmetric about its mean.
+- $\gamma_1 > 0$: 분포가 **오른쪽으로 치우친다**(오른쪽 꼬리가 더 길거나 무겁다).
+- $\gamma_1 < 0$: 분포가 **왼쪽으로 치우친다**(왼쪽 꼬리가 더 길거나 무겁다).
+- $\gamma_1 = 0$: 분포가 평균을 중심으로 대칭이다.
 
-The sample skewness, which estimates $\gamma_1$, is
+$\gamma_1$을 추정하는 표본왜도는
 
 $$
 g_1 = \frac{\frac{1}{n}\sum_{i=1}^n (X_i - \bar{X})^3}{\left(\frac{1}{n}\sum_{i=1}^n (X_i - \bar{X})^2\right)^{3/2}}
 $$
 
-## Effects of Skewness on Location Measures
+## 치우침이 위치 측도에 미치는 영향
 
-For many common unimodal distributions, skewness pulls the mean toward the longer tail relative to the median:
+흔한 단봉분포에서는 치우침이 중앙값에 비해 평균을 긴 꼬리 쪽으로 끌어당긴다:
 
-- **Right-skewed** ($\gamma_1 > 0$): the mean tends to exceed the median (e.g., income data, exponential waiting times).
-- **Left-skewed** ($\gamma_1 < 0$): the mean tends to fall below the median.
+- **오른쪽 치우침** ($\gamma_1 > 0$): 평균이 중앙값보다 큰 경향(예: 소득 자료, 지수 대기시간).
+- **왼쪽 치우침** ($\gamma_1 < 0$): 평균이 중앙값보다 작은 경향.
 
-!!! warning "This Is a Heuristic, Not a Theorem"
+!!! warning "이것은 정리가 아니라 경험적 규칙이다"
 
-    The ordering Mean > Median > Mode for right-skewed distributions is widely cited but is not universally true. Counterexamples exist among multimodal or discrete distributions. The relationship holds reliably for many standard unimodal continuous distributions (exponential, log-normal, gamma), but should not be applied blindly to arbitrary data.
+    오른쪽으로 치우친 분포에서 평균 > 중앙값 > 최빈값이라는 순서는 널리 인용되지만 항상 참은 아니다. 다봉분포나 이산분포 중에 반례가 있다. 이 관계는 여러 표준적인 단봉 연속분포(지수, log-normal, gamma)에서는 안정적으로 성립하지만, 임의의 자료에 무턱대고 적용해서는 안 된다.
 
-!!! example "Exponential Distribution"
+!!! example "지수분포"
 
-    Let $X \sim \text{Exp}(\lambda)$ with rate $\lambda > 0$. The mean is $1/\lambda$, the median is $\ln 2 / \lambda \approx 0.693/\lambda$, and the mode is 0. We have
+    비율 $\lambda > 0$인 $X \sim \text{Exp}(\lambda)$를 생각하자. 평균은 $1/\lambda$, 중앙값은 $\ln 2 / \lambda \approx 0.693/\lambda$, 최빈값은 0이다. 따라서
 
     $$
-    \text{Mean} = \frac{1}{\lambda} > \text{Median} = \frac{\ln 2}{\lambda} > \text{Mode} = 0
+    \text{평균} = \frac{1}{\lambda} > \text{중앙값} = \frac{\ln 2}{\lambda} > \text{최빈값} = 0
     $$
 
-    The skewness coefficient is $\gamma_1 = 2$ regardless of $\lambda$, confirming substantial right skewness.
+    왜도 계수는 $\lambda$와 무관하게 $\gamma_1 = 2$로, 상당한 오른쪽 치우침을 확인해 준다.
 
-## Estimation Considerations
+## 추정에서 고려할 점
 
-### Unbiasedness vs Efficiency
+### 불편성 대 효율성
 
-The sample mean $\bar{X}$ is an unbiased estimator of the population mean $\mu = E[X]$ regardless of the shape of the distribution — this follows directly from linearity of expectation and does not require normality or symmetry. However, unbiasedness does not address the precision of the estimate.
+표본평균 $\bar{X}$는 분포의 모양과 무관하게 모평균 $\mu = E[X]$의 불편추정량이다 — 기댓값의 선형성에서 곧바로 나오며 정규성이나 대칭성이 필요 없다. 그러나 불편성은 추정의 정밀도에 대해서는 아무 말도 해 주지 않는다.
 
-For skewed distributions, the sample mean can have high variance because extreme observations in the long tail contribute disproportionately to $\bar{X}$. The sample median, while potentially biased for the mean, can be a more efficient estimator of the center of the distribution in terms of MSE when the data are heavily skewed.
+치우친 분포에서는 긴 꼬리의 극단 관측값이 $\bar{X}$에 불균형하게 기여하므로 표본평균의 분산이 클 수 있다. 표본중앙값은 평균에 대해서는 편향될 수 있지만, 자료가 심하게 치우쳐 있을 때는 평균제곱오차 관점에서 분포의 중심을 더 효율적으로 추정할 수 있다.
 
-### CLT Convergence Rate
+### 중심극한정리의 수렴 속도
 
-The Central Limit Theorem guarantees that $\bar{X}$ is asymptotically normal, but the speed of convergence depends on the distribution's shape. The Berry-Esseen theorem provides a bound on the approximation error:
+중심극한정리는 $\bar{X}$가 점근적으로 정규임을 보장하지만, 수렴 속도는 분포의 모양에 달려 있다. Berry-Esseen 정리는 근사오차의 상한을 준다:
 
 $$
 \sup_z \left|P\left(\frac{\bar{X} - \mu}{\sigma/\sqrt{n}} \leq z\right) - \mathcal{N}(z)\right| \leq \frac{C \cdot E[|X - \mu|^3]}{\sigma^3 \sqrt{n}}
 $$
 
-where $C \leq 0.4748$. For highly skewed distributions, $E[|X - \mu|^3]/\sigma^3$ is large, so larger sample sizes are needed before the normal approximation becomes reliable. A common rule of thumb is that $n \geq 30$ suffices for mildly skewed data, but $n \geq 100$ or more may be needed for strongly skewed distributions.
+여기서 $C \leq 0.4748$이다. 심하게 치우친 분포에서는 $E[|X - \mu|^3]/\sigma^3$이 크므로 정규근사가 믿을 만해지기까지 더 큰 표본이 필요하다. 흔한 경험칙은 약하게 치우친 자료에는 $n \geq 30$이면 충분하지만 강하게 치우친 분포에서는 $n \geq 100$ 이상이 필요할 수 있다는 것이다.
 
-## Transformations to Reduce Skewness
+## 치우침을 줄이는 변환
 
-When working with right-skewed data, applying a concave transformation can pull in the long right tail and produce a distribution closer to symmetry.
+오른쪽으로 치우친 자료를 다룰 때 오목변환을 적용하면 긴 오른쪽 꼬리를 끌어당겨 대칭에 더 가까운 분포를 얻을 수 있다.
 
-### Log Transformation
+### 로그 변환
 
-The simplest approach for right-skewed positive data is the **log transformation**: replace each observation $x_i$ with $\log x_i$. If $X$ follows a log-normal distribution, then $\log X$ is exactly normal, and standard methods apply directly to the transformed data.
+오른쪽으로 치우친 양수 자료에 가장 단순한 접근은 **로그 변환**이다: 각 관측값 $x_i$를 $\log x_i$로 바꾼다. $X$가 log-normal 분포를 따르면 $\log X$는 정확히 정규이므로 변환된 자료에 표준적인 방법을 그대로 적용할 수 있다.
 
-!!! example "Log-Normal Data"
+!!! example "Log-Normal 자료"
 
-    If $X \sim \text{LogNormal}(\mu, \sigma^2)$, then $\gamma_1 = (e^{\sigma^2} + 2)\sqrt{e^{\sigma^2} - 1}$, which can be very large. After the log transformation, $Y = \log X \sim N(\mu, \sigma^2)$ with $\gamma_1 = 0$.
+    $X \sim \text{LogNormal}(\mu, \sigma^2)$이면 $\gamma_1 = (e^{\sigma^2} + 2)\sqrt{e^{\sigma^2} - 1}$로 매우 커질 수 있다. 로그 변환 후에는 $Y = \log X \sim N(\mu, \sigma^2)$이고 $\gamma_1 = 0$이다.
 
-### Box-Cox Transformation
+### Box-Cox 변환
 
-The **Box-Cox family** generalizes the log transformation by introducing a parameter $\lambda$ that controls the strength of the transformation. For strictly positive data ($y > 0$):
+**Box-Cox 계열**은 변환의 강도를 조절하는 모수 $\lambda$를 도입하여 로그 변환을 일반화한다. 순양수 자료($y > 0$)에 대해:
 
 $$
-y^{(\lambda)} = \begin{cases} \dfrac{y^\lambda - 1}{\lambda} & \text{if } \lambda \neq 0 \\[6pt] \log y & \text{if } \lambda = 0 \end{cases}
+y^{(\lambda)} = \begin{cases} \dfrac{y^\lambda - 1}{\lambda} & \lambda \neq 0 \text{일 때} \\[6pt] \log y & \lambda = 0 \text{일 때} \end{cases}
 $$
 
-The parameter $\lambda$ is typically chosen by maximum likelihood: for each candidate $\lambda$, transform the data, fit a normal model to the transformed data, and select the $\lambda$ that maximizes the profile log-likelihood. Common special cases include $\lambda = 1$ (no transformation), $\lambda = 0.5$ (square root), $\lambda = 0$ (log), and $\lambda = -1$ (reciprocal).
+모수 $\lambda$는 보통 최대가능도로 고른다: 후보 $\lambda$마다 자료를 변환하고, 변환된 자료에 정규 모형을 적합하여, 프로파일 로그가능도를 최대화하는 $\lambda$를 택한다. 흔한 특수 경우로 $\lambda = 1$(변환 없음), $\lambda = 0.5$(제곱근), $\lambda = 0$(로그), $\lambda = -1$(역수)이 있다.
 
-!!! warning "Interpretation After Transformation"
+!!! warning "변환 후의 해석"
 
-    After applying a transformation, inferences are on the transformed scale. Back-transforming point estimates to the original scale requires care: the mean of $\log X$ is **not** the log of the mean of $X$. For the log-normal case, the back-transformed mean is $\exp(\hat{\mu} + \hat{\sigma}^2/2)$, not $\exp(\hat{\mu})$.
+    변환을 적용하고 나면 추론은 변환된 척도 위에서 이루어진다. 점추정값을 원래 척도로 되돌릴 때는 주의해야 한다: $\log X$의 평균은 $X$의 평균의 로그가 **아니다**. Log-normal의 경우 역변환한 평균은 $\exp(\hat{\mu})$가 아니라 $\exp(\hat{\mu} + \hat{\sigma}^2/2)$이다.
 
-## When to Use the Mean vs the Median
+## 평균과 중앙값 중 무엇을 쓸 것인가
 
-The choice between mean and median as a summary of center depends on the purpose of the analysis:
+중심의 요약으로 평균과 중앙값 중 무엇을 택할지는 분석의 목적에 달려 있다:
 
-- **Mean**: appropriate when the goal is to estimate the expected value (e.g., average cost, total revenue projection). Sensitive to outliers and tail behavior.
-- **Median**: appropriate when the goal is to describe the "typical" observation. Robust to outliers and invariant to monotone transformations of the data.
+- **평균**: 기댓값을 추정하는 것이 목표일 때 적절하다(예: 평균 비용, 총매출 예측). 이상점과 꼬리 거동에 민감하다.
+- **중앙값**: "전형적인" 관측값을 기술하는 것이 목표일 때 적절하다. 이상점에 로버스트하고 자료의 단조변환에 불변이다.
 
-For policy or business decisions that depend on totals or averages, the mean is the natural target. For describing what a "typical" individual experiences, the median is often more informative in the presence of skewness.
+총액이나 평균에 의존하는 정책·사업 의사결정에서는 평균이 자연스러운 목표이다. "전형적인" 개인이 겪는 바를 기술하려면, 치우침이 있을 때 중앙값이 흔히 더 유익하다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-The exponential distribution with rate $\lambda$ has skewness equal to 2 (regardless of $\lambda$). Explain intuitively why the exponential distribution is always right-skewed.
+**연습문제 1.**
+비율이 $\lambda$인 지수분포의 왜도는 ($\lambda$와 무관하게) 2이다. 지수분포가 언제나 오른쪽으로 치우치는 이유를 직관적으로 설명하라.
 
-??? success "Solution to Exercise 1"
-    The exponential distribution is supported on $[0, \infty)$ with density $f(x) = \lambda e^{-\lambda x}$. The mode is at $x = 0$ (the density is highest at zero) and the mean is at $1/\lambda > 0$. Since the distribution has a hard boundary at zero but a long tail extending to infinity, there is more probability mass compressed near zero with occasional large values pulling the mean to the right.
+??? success "연습문제 1 풀이"
+    지수분포는 $[0, \infty)$ 위에서 밀도 $f(x) = \lambda e^{-\lambda x}$를 갖는다. 최빈값은 $x = 0$이고(밀도가 0에서 가장 높다) 평균은 $1/\lambda > 0$이다. 0이라는 단단한 경계가 있지만 꼬리가 무한대까지 길게 뻗으므로, 확률질량이 0 근처에 몰려 있고 이따금 나타나는 큰 값이 평균을 오른쪽으로 끌어당긴다.
 
-    This right-skewness (skewness = 2) is a consequence of the one-sided support: the distribution cannot go below zero, so all the "extreme" observations are on the right side, creating asymmetry with the right tail longer than the left.
-
----
-
-**Exercise 2.**
-For a sample from a skewed distribution, explain why the sample mean and sample median can differ substantially. Which is a better measure of central tendency for right-skewed income data?
-
-??? success "Solution to Exercise 2"
-    The sample mean is pulled toward the long tail because it sums all values (including extreme ones) and divides by $n$. The sample median, being the middle order statistic, is unaffected by how extreme the largest values are.
-
-    For right-skewed income data, the mean is inflated by a small number of very high earners. For example, if 99 people earn \$50K and one person earns \$10M, the mean is about \$149K (misleading) while the median is \$50K (representative of the typical person).
-
-    The **median** is the better measure of central tendency for right-skewed income data because it describes the experience of the typical individual. The mean is useful for different purposes (e.g., total revenue divided by population) but misrepresents the "center" of the distribution.
+    이 오른쪽 치우침(왜도 = 2)은 한쪽만 열린 받침의 결과이다: 분포가 0 아래로 갈 수 없으므로 모든 "극단" 관측값이 오른쪽에 있게 되어 오른쪽 꼬리가 왼쪽보다 긴 비대칭이 만들어진다.
 
 ---
 
-**Exercise 3.**
-The log transformation is commonly used to reduce right skewness. If $X$ is log-normal with $\log X \sim N(\mu, \sigma^2)$, what is the distribution of $\log X$? Why does this transformation help with inference?
+**연습문제 2.**
+치우친 분포에서 뽑은 표본에서 표본평균과 표본중앙값이 크게 다를 수 있는 이유를 설명하라. 오른쪽으로 치우친 소득 자료에서는 어느 쪽이 중심경향의 더 나은 측도인가?
 
-??? success "Solution to Exercise 3"
-    By definition, $\log X \sim N(\mu, \sigma^2)$, which is symmetric. The log transformation maps the right-skewed log-normal distribution to a symmetric normal distribution.
+??? success "연습문제 2 풀이"
+    표본평균은 (극단값을 포함한) 모든 값을 더해 $n$으로 나누므로 긴 꼬리 쪽으로 끌려간다. 표본중앙값은 가운데 순서통계량이므로 가장 큰 값이 얼마나 극단적인지에 영향받지 않는다.
 
-    This helps with inference because many statistical methods (t-tests, linear regression, ANOVA) assume normality or at least approximate symmetry. After the log transformation:
+    오른쪽으로 치우친 소득 자료에서는 소수의 고소득자가 평균을 부풀린다. 예를 들어 99명이 \$5만을 벌고 한 명이 \$1000만을 번다면 평균은 약 \$14.9만(오해를 부른다)인 반면 중앙값은 \$5만(전형적인 사람을 대표한다)이다.
 
-    - The normal-theory t-test can be validly applied to $\log X$ values.
-    - Confidence intervals on $\mu = E[\log X]$ are symmetric and meaningful.
-    - Back-transforming via $e^{\hat{\mu}}$ gives the geometric mean of $X$, which is a natural measure of central tendency for right-skewed positive data.
-
-    The transformation works well when the data are approximately log-normal, which is common for incomes, stock prices, and biological measurements.
+    오른쪽으로 치우친 소득 자료에서는 **중앙값**이 중심경향의 더 나은 측도이다. 전형적인 개인의 경험을 기술하기 때문이다. 평균은 다른 목적(예: 총소득을 인구로 나누기)에는 유용하지만 분포의 "중심"을 잘못 나타낸다.
 
 ---
 
-**Exercise 4.**
-The skewness coefficient is $\gamma_1 = E[(X - \mu)^3]/\sigma^3$. Compute $\gamma_1$ for the Bernoulli$(p)$ distribution and determine for which value of $p$ the distribution is symmetric.
+**연습문제 3.**
+로그 변환은 오른쪽 치우침을 줄이는 데 흔히 쓰인다. $X$가 log-normal이고 $\log X \sim N(\mu, \sigma^2)$이면 $\log X$의 분포는 무엇인가? 이 변환이 추론에 도움이 되는 이유는?
 
-??? success "Solution to Exercise 4"
-    For $X \sim \text{Bernoulli}(p)$: $\mu = p$, $\sigma^2 = p(1-p)$.
+??? success "연습문제 3 풀이"
+    정의에 의해 $\log X \sim N(\mu, \sigma^2)$이며 대칭이다. 로그 변환은 오른쪽으로 치우친 log-normal 분포를 대칭인 정규분포로 옮긴다.
+
+    많은 통계 방법(t-검정, 선형회귀, 분산분석)이 정규성 또는 적어도 근사적인 대칭성을 가정하므로 이 변환은 추론에 도움이 된다. 로그 변환 후에는:
+
+    - $\log X$ 값에 정규이론 t-검정을 타당하게 적용할 수 있다.
+    - $\mu = E[\log X]$에 대한 신뢰구간이 대칭이고 의미가 있다.
+    - $e^{\hat{\mu}}$로 역변환하면 $X$의 기하평균을 얻는데, 이는 오른쪽으로 치우친 양수 자료의 자연스러운 중심경향 측도이다.
+
+    이 변환은 자료가 근사적으로 log-normal일 때 잘 작동하며, 소득, 주가, 생물학적 측정값에서 흔한 경우이다.
+
+---
+
+**연습문제 4.**
+왜도 계수는 $\gamma_1 = E[(X - \mu)^3]/\sigma^3$이다. Bernoulli$(p)$ 분포의 $\gamma_1$을 계산하고 어느 $p$에서 분포가 대칭인지 구하라.
+
+??? success "연습문제 4 풀이"
+    $X \sim \text{Bernoulli}(p)$에서 $\mu = p$, $\sigma^2 = p(1-p)$이다.
 
     $$
     E[(X - p)^3] = (1-p)^3 \cdot p + (-p)^3 \cdot (1-p) = p(1-p)\bigl[(1-p)^2 - p^2\bigr] = p(1-p)(1-2p)
@@ -150,4 +150,4 @@ The skewness coefficient is $\gamma_1 = E[(X - \mu)^3]/\sigma^3$. Compute $\gamm
     \gamma_1 = \frac{p(1-p)(1-2p)}{[p(1-p)]^{3/2}} = \frac{1-2p}{\sqrt{p(1-p)}}
     $$
 
-    The distribution is symmetric when $\gamma_1 = 0$, i.e., $1 - 2p = 0$, so $p = 1/2$. For $p < 1/2$, the skewness is positive (right-skewed); for $p > 1/2$, the skewness is negative (left-skewed).
+    $\gamma_1 = 0$일 때 대칭이므로 $1 - 2p = 0$, 즉 $p = 1/2$이다. $p < 1/2$이면 왜도가 양수(오른쪽 치우침)이고, $p > 1/2$이면 음수(왼쪽 치우침)이다.
