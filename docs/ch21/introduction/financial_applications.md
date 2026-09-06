@@ -1,186 +1,256 @@
-# Financial Applications of Survival Analysis
+# 생존분석의 금융 응용
 
-Survival analysis originated in medical research and reliability engineering,
-but its tools apply wherever the outcome is a duration subject to censoring.
-Finance is rich with such outcomes: the time until a borrower defaults, the
-time until a customer churns, the duration of a trade, and the time until an
-insurance claim is filed.  In each case, the portfolio or customer base contains
-active (right-censored) observations alongside completed events.
+생존분석은 의학 연구와 신뢰성 공학에서 출발했지만, 결과가 중도절단을 겪는 지속시간이면 어디에나
+그 도구를 쓸 수 있다. 금융에는 그런 결과가 풍부하다. 차입자가 부도를 낼 때까지의 시간, 고객이
+이탈할 때까지의 시간, 거래의 지속시간, 보험금 청구가 접수될 때까지의 시간이 그렇다. 각 경우에
+포트폴리오나 고객 기반에는 완결된 사건과 함께 활성 상태의(우측절단된) 관측치가 섞여 있다.
 
-This section surveys four financial applications where survival methods provide
-insights that conventional regression cannot.
+이 절에서는 통상적인 회귀로는 얻을 수 없는 통찰을 생존분석이 제공하는 네 가지 금융 응용을
+살펴본다.
 
-## Credit Default Modeling
+## 신용 부도 모형화
 
-A bank holds a portfolio of $n$ loans.  For each loan $i$, the event of interest
-is **default**---the borrower fails to meet payment obligations.  The survival
-time $T_i$ is the duration from origination to default.
+어떤 은행이 대출 $n$건으로 이루어진 포트폴리오를 보유하고 있다. 각 대출 $i$에서 관심 사건은
+**부도**, 곧 차입자가 상환 의무를 이행하지 못하는 것이다. 생존시간 $T_i$는 실행에서 부도까지의
+기간이다.
 
-**Why survival analysis?**  At any reporting date, most loans are still
-performing (right-censored).  Logistic regression can model the probability of
-default within a fixed horizon (e.g., 12 months), but it discards timing
-information and cannot produce a full default-time distribution.
+**왜 생존분석인가.** 어느 보고 시점에서든 대부분의 대출은 여전히 정상이다(우측절단). 로지스틱
+회귀는 고정된 기간(예: 12개월) 안의 부도 확률을 모형화할 수 있지만, 시점 정보를 버리고 부도
+시점의 완전한 분포를 만들지 못한다.
 
-The hazard function $h(t)$ for credit default often exhibits a characteristic
-shape:
+신용 부도의 위험함수 $h(t)$는 특징적인 모양을 보이는 경우가 많다.
 
-- **Early period (0--12 months).** Low hazard as borrowers have recently been
-  screened and approved.
-- **Seasoning period (12--36 months).** Rising hazard as financial shocks
-  accumulate and weak borrowers begin to default.
-- **Mature period (36+ months).** Declining or stable hazard among surviving
-  borrowers, who have demonstrated creditworthiness.
+- **초기(0--12개월).** 차입자가 최근에 심사와 승인을 거쳤으므로 위험이 낮다.
+- **숙성기(12--36개월).** 재무적 충격이 누적되고 약한 차입자가 부도를 내기 시작하면서 위험이
+  올라간다.
+- **성숙기(36개월 이후).** 살아남은 차입자는 신용도를 입증한 셈이므로 위험이 감소하거나
+  안정된다.
 
-This hump-shaped hazard is well captured by log-normal or log-logistic models
-(Section 21.3) or by a Cox model with time-varying covariates (Section 21.4).
+이 봉우리형 위험은 로그정규나 로그로지스틱 모형(21.3절), 또는 시간에 따라 변하는 공변량을 갖는
+콕스 모형(21.4절)으로 잘 포착된다.
 
-!!! example "Survival Curve for a Loan Portfolio"
+!!! example "대출 포트폴리오의 생존곡선"
 
-    Suppose a Kaplan--Meier estimate yields $\hat{S}(12) = 0.97$,
-    $\hat{S}(24) = 0.93$, and $\hat{S}(36) = 0.90$.  This means that an
-    estimated 97% of loans survive past 12 months, 93% past 24 months, and
-    90% past 36 months.  The conditional default probability between months
-    24 and 36, given survival to month 24, is
-    $1 - \hat{S}(36)/\hat{S}(24) = 1 - 0.90/0.93 \approx 0.032$.
+    카플란-마이어 추정이 $\hat{S}(12) = 0.97$, $\hat{S}(24) = 0.93$, $\hat{S}(36) = 0.90$을
+    주었다고 하자. 대출의 97%가 12개월을, 93%가 24개월을, 90%가 36개월을 넘겨 생존한다는
+    뜻이다. 24개월까지 생존했다는 조건에서 24개월과 36개월 사이의 조건부 부도확률은
+    $1 - \hat{S}(36)/\hat{S}(24) = 1 - 0.90/0.93 \approx 0.032$이다.
 
-## Customer Churn Analysis
+## 고객 이탈 분석
 
-Subscription-based businesses (banks, telecom providers, SaaS platforms) track
-the time until a customer **churns**---cancels the service or closes the account.
-The survival time is the duration of the customer relationship.
+구독 기반 사업(은행, 통신사, SaaS 플랫폼)은 고객이 **이탈**할 때까지의 시간, 즉 서비스를
+해지하거나 계좌를 닫을 때까지의 시간을 추적한다. 생존시간은 고객 관계의 지속기간이다.
 
-Key features of churn data:
+이탈 자료의 주요 특징은 다음과 같다.
 
-- **Right censoring is pervasive.** Active customers are censored at the
-  analysis date.
-- **Covariates evolve over time.** Usage patterns, complaint frequency, and
-  payment behavior change monthly.  The Cox model accommodates time-varying
-  covariates naturally.
-- **Competing risks.** A customer may leave voluntarily (churn) or be
-  terminated by the company (involuntary closure).  These are distinct events
-  that require competing-risk models for rigorous analysis.
+- **우측절단이 만연하다.** 활성 고객은 분석 시점에 절단된다.
+- **공변량이 시간에 따라 변한다.** 사용 양상, 불만 접수 빈도, 결제 행태가 매달 바뀐다. 콕스
+  모형은 시간에 따라 변하는 공변량을 자연스럽게 수용한다.
+- **경쟁 위험.** 고객이 자발적으로 떠날 수도(이탈) 회사가 계약을 종료할 수도(비자발적 해지)
+  있다. 이는 서로 다른 사건이며 엄밀한 분석에는 경쟁위험 모형이 필요하다.
 
-The hazard function for churn often decreases with tenure: customers who
-survive the first few months tend to stay longer.  This suggests a Weibull
-model with shape parameter $k < 1$ (decreasing hazard).
+이탈의 위험함수는 가입 기간이 길어질수록 감소하는 경우가 많다. 초기 몇 달을 버틴 고객은 더 오래
+머무는 경향이 있다. 이는 형상모수 $k < 1$인 와이불 모형(감소 위험)을 시사한다.
 
-!!! tip "Hazard Ratios for Churn Drivers"
+!!! tip "이탈 요인의 위험비"
 
-    A Cox model fitted to churn data might yield a hazard ratio of
-    $\text{HR} = 1.45$ for customers who contacted support more than three
-    times in a quarter.  This means such customers churn at 1.45 times the
-    rate of those with fewer contacts, holding other covariates constant.
+    이탈 자료에 적합한 콕스 모형이 분기당 고객지원 문의를 세 번 넘게 한 고객에 대해 위험비
+    $\text{HR} = 1.45$를 주었다고 하자. 다른 공변량을 고정할 때 그런 고객이 문의가 적은 고객의
+    1.45배 속도로 이탈한다는 뜻이다.
 
-## Trade Duration Analysis
+## 거래 지속시간 분석
 
-In market microstructure, the **duration** between consecutive transactions is
-itself the variable of interest.  The Autoregressive Conditional Duration (ACD)
-model, introduced by Engle and Russell (1998), adapts survival analysis ideas to
-model the time between trades.
+시장미시구조에서는 연속된 거래 사이의 **지속시간** 자체가 관심 변수다. Engle과 Russell(1998)이
+도입한 자기회귀 조건부 지속시간(ACD) 모형은 생존분석의 착상을 거래 간 시간 모형화에 적용한다.
 
-Let $x_i$ denote the duration between trade $i-1$ and trade $i$.  The
-conditional hazard of the next trade arriving, given the history of past
-durations, captures the intensity of trading activity.
+$x_i$를 거래 $i-1$과 거래 $i$ 사이의 지속시간이라 하자. 과거 지속시간의 이력이 주어졌을 때 다음
+거래가 도착할 조건부 위험이 거래 활동의 강도를 포착한다.
 
-- **High hazard** periods correspond to rapid trading (high liquidity, volatile
-  markets).
-- **Low hazard** periods correspond to slow trading (low liquidity, calm
-  markets).
+- **위험이 높은** 구간은 빠른 거래에 대응한다(높은 유동성, 변동성 큰 시장).
+- **위험이 낮은** 구간은 느린 거래에 대응한다(낮은 유동성, 조용한 시장).
 
-The exponential model serves as a baseline (constant arrival rate), while the
-Weibull model allows the arrival intensity to depend on elapsed time since the
-last trade.
+지수 모형이 기준선(일정한 도착률) 역할을 하고, 와이불 모형은 도착 강도가 마지막 거래 이후
+경과시간에 의존하도록 허용한다.
 
-!!! note "Connection to Point Processes"
+!!! note "점과정과의 연결"
 
-    Trade arrival times form a point process on the positive real line.  The
-    hazard function $h(t)$ is the conditional intensity of the process, linking
-    survival analysis to the broader theory of counting processes and
-    martingales.
+    거래 도착 시각은 양의 실선 위의 점과정을 이룬다. 위험함수 $h(t)$가 이 과정의 조건부
+    강도이며, 이를 통해 생존분석이 계수과정과 마팅게일의 더 넓은 이론과 연결된다.
 
-## Insurance Claims and Duration
+## 보험금 청구와 지속시간
 
-Insurance companies model the time until a claim is filed after a policy is
-issued.  Survival analysis is essential because:
+보험사는 증권 발행 후 청구가 접수될 때까지의 시간을 모형화한다. 생존분석이 필수적인 이유는
+다음과 같다.
 
-- **Policies lapse.** A policyholder who cancels before filing a claim is
-  right-censored.
-- **Claim frequency varies with time.** Auto insurance claims often cluster in
-  the first year (inexperience), then decline.
-- **Loss reserving.** Actuaries use survival models to estimate the number of
-  claims that have been incurred but not yet reported (IBNR).
+- **증권이 실효된다.** 청구 전에 계약을 해지한 가입자는 우측절단된다.
+- **청구 빈도가 시간에 따라 변한다.** 자동차보험 청구는 첫해(미숙)에 몰렸다가 감소하는 경우가
+  많다.
+- **손해액 적립.** 보험계리사는 이미 발생했지만 아직 보고되지 않은(IBNR) 청구 건수를 추정하는
+  데 생존 모형을 쓴다.
 
-The hazard function for claim filing depends on the insurance line:
+청구의 위험함수는 보험 종목에 따라 다르다.
 
-| Insurance Line | Typical Hazard Shape | Model Choice |
+| 보험 종목 | 전형적인 위험 모양 | 모형 선택 |
 |:---------------|:---------------------|:-------------|
-| Auto liability | Decreasing after initial peak | Log-logistic, Weibull ($k < 1$) |
-| Life insurance | Increasing with age | Weibull ($k > 1$), Gompertz |
-| Property (catastrophe) | Constant between events | Exponential |
+| 자동차 배상책임 | 초기 정점 후 감소 | 로그로지스틱, 와이불($k < 1$) |
+| 생명보험 | 연령에 따라 증가 | 와이불($k > 1$), 곰페르츠 |
+| 재물(대재해) | 사건 사이에 일정 | 지수 |
 
-## Why Not Just Use Logistic Regression?
+## 왜 로지스틱 회귀만으로는 안 되는가
 
-Logistic regression models a binary outcome (event vs no event) within a fixed
-time window.  Survival analysis extends this in three ways:
+로지스틱 회귀는 고정된 시간창 안의 이항 결과(사건 대 비사건)를 모형화한다. 생존분석은 이를 세
+가지 방향으로 확장한다.
 
-1. **Uses all available follow-up time.** A subject observed for 6 months
-   contributes 6 months of information, even if the study window is 12 months.
-2. **Handles variable follow-up.** Subjects enter the study at different times
-   and are observed for different durations.
-3. **Models the timing of the event.** The survival and hazard functions
-   describe *when* the event occurs, not just *whether* it occurs.
+1. **가용한 추적 기간을 모두 쓴다.** 연구 창이 12개월이더라도 6개월간 관측된 대상은 6개월치
+   정보를 기여한다.
+2. **가변적인 추적 기간을 다룬다.** 대상들이 서로 다른 시점에 연구에 들어오고 서로 다른 기간
+   동안 관측된다.
+3. **사건의 시점을 모형화한다.** 생존함수와 위험함수는 사건이 일어나는지 여부만이 아니라
+   *언제* 일어나는지를 기술한다.
 
-!!! warning "Bias from Ignoring Censoring"
+!!! warning "중도절단을 무시할 때의 편향"
 
-    Fitting a logistic regression to predict 12-month default while excluding
-    loans that are only 6 months old throws away useful data.  Including them
-    as "no default" biases the default probability downward because these loans
-    have not yet had the opportunity to default in months 7--12.  Survival
-    analysis avoids this bias by explicitly modeling the censoring mechanism.
+    12개월 부도를 예측하는 로지스틱 회귀를 적합하면서 실행 후 6개월밖에 되지 않은 대출을
+    제외하면 유용한 자료를 버리는 것이다. 그렇다고 이들을 "부도 없음"으로 포함시키면
+    7--12개월에 부도를 낼 기회가 아직 없었으므로 부도확률이 아래로 편향된다. 생존분석은
+    절단 기제를 명시적으로 모형화하여 이 편향을 피한다.
 
-## Summary
+## 요약
 
-| Application | Event | Censoring Source | Typical Hazard Shape |
+| 응용 | 사건 | 절단의 원천 | 전형적인 위험 모양 |
 |:------------|:------|:-----------------|:---------------------|
-| Credit default | Loan default | Active loans | Hump-shaped |
-| Customer churn | Service cancellation | Active customers | Decreasing |
-| Trade duration | Next trade arrival | End of trading day | Varies with market regime |
-| Insurance claims | Claim filing | Policy lapse | Depends on insurance line |
+| 신용 부도 | 대출 부도 | 정상 대출 | 봉우리형 |
+| 고객 이탈 | 서비스 해지 | 활성 고객 | 감소 |
+| 거래 지속시간 | 다음 거래 도착 | 거래일 종료 | 시장 국면에 따라 다름 |
+| 보험금 청구 | 청구 접수 | 증권 실효 | 종목에 따라 다름 |
 
-Survival methods unify these applications under a common mathematical framework.
-The tools developed in the remainder of this chapter---Kaplan--Meier estimation,
-parametric models, and the Cox proportional hazards model---apply directly to
-all four settings.
+생존분석은 이 응용들을 하나의 수학 틀로 통합한다. 이 장의 나머지에서 전개하는 도구 --- 카플란-마이어
+추정, 모수 모형, 콕스 비례위험 모형 --- 는 네 상황 모두에 그대로 적용된다.
 
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Describe the main concept of Financial Applications of Survival Analysis and explain why it matters for statistical practice.
+**연습문제 1.**
+위 대출 포트폴리오 예제에서 $\hat{S}(12) = 0.97$, $\hat{S}(24) = 0.93$,
+$\hat{S}(36) = 0.90$이 주어졌다.
 
-??? success "Solution to Exercise 1"
-    Financial Applications of Survival Analysis is a core topic in statistics that provides tools for drawing reliable inferences from data. It matters because proper application ensures valid conclusions, correctly quantified uncertainty, and appropriate handling of the assumptions that underpin the method. Practitioners who understand this concept can avoid common pitfalls and choose the right analytical approach for their data.
+**(a)** 0--12개월, 12--24개월, 24--36개월 각 구간의 **조건부** 부도확률을 계산하라.
+
+**(b)** 각 구간의 평균 위험률(연 단위)을 근사하라.
+
+**(c)** 이 결과가 본문에서 말한 "봉우리형" 위험과 일치하는가?
+
+??? success "연습문제 1 풀이"
+
+    **(a)** 구간 $(a, b]$의 조건부 부도확률은 $1 - S(b)/S(a)$이다($S(0) = 1$).
+
+    | 구간 | 계산 | 조건부 부도확률 |
+    |---|---|---|
+    | 0--12 | $1 - 0.97/1.00$ | $0.0300$ |
+    | 12--24 | $1 - 0.93/0.97$ | $0.0412$ |
+    | 24--36 | $1 - 0.90/0.93$ | $0.0323$ |
+
+    **(b)** 구간 $(a,b]$에서 위험이 상수 $\bar h$라면
+    $S(b)/S(a) = e^{-\bar h (b-a)}$이므로
+
+    $$
+    \bar h = \frac{-\ln\bigl(S(b)/S(a)\bigr)}{b-a}
+    $$
+
+    이다. 연 단위(구간 폭 1년)로 계산하면,
+
+    | 구간 | $\bar h$(연) |
+    |---|---|
+    | 0--12 | $-\ln(0.97) = 0.0305$ |
+    | 12--24 | $-\ln(0.93/0.97) = 0.0421$ |
+    | 24--36 | $-\ln(0.90/0.93) = 0.0328$ |
+
+    **(c)** 그렇다. 위험이 $0.0305 \to 0.0421 \to 0.0328$로 올랐다가 내려오므로 봉우리형과
+    일치하며, 정점이 12--24개월 구간에 있다. 이는 본문에서 서술한 "숙성기" 양상과 부합한다.
+
+    다만 자료점이 세 개뿐이므로 모양을 확정할 수는 없다. 실제 자료라면 각 추정치의 표준오차를
+    함께 보아야 하고, 카플란-마이어 곡선을 더 촘촘한 격자로 그려 확인해야 한다. $\square$
 
 ---
 
-**Exercise 2.**
-State the key assumptions required by the method discussed here. How can each assumption be checked?
+**연습문제 2.**
+어떤 분석가가 "12개월 부도" 로지스틱 회귀를 적합하면서, 실행 후 6개월밖에 되지 않은 대출을
+"부도 없음"으로 포함시켰다. 부도확률 추정치의 편향 방향과 크기를 모의실험으로 확인하라.
 
-??? success "Solution to Exercise 2"
-    The main assumptions typically include: (1) independence of observations -- verified by understanding the data collection process and checking for serial correlation; (2) distributional requirements (e.g., normality) -- checked with Q-Q plots and formal tests like Shapiro-Wilk; (3) equal variances (if applicable) -- assessed with boxplots and Levene's test. When assumptions are violated, consider robust alternatives, transformations, or nonparametric methods.
+??? success "연습문제 2 풀이"
+
+    ```python
+    import numpy as np
+
+    rng = np.random.default_rng(11)
+    n = 200_000
+    # true default times: exponential with 12-month default prob = 0.10
+    lam = -np.log(0.90) / 12
+    T = rng.exponential(1 / lam, n)
+
+    # half the loans have 12 months of follow-up, half only 6
+    followup = np.where(rng.random(n) < 0.5, 12.0, 6.0)
+
+    true_p12 = 1 - np.exp(-lam * 12)
+    # naive: label 1 if defaulted within the available follow-up, else 0
+    naive_y = (T <= followup).astype(int)
+
+    print(f"true 12-month default prob : {true_p12:.4f}")
+    print(f"naive estimate             : {naive_y.mean():.4f}")
+    print(f"complete cases only (12m)  : {(T[followup == 12] <= 12).mean():.4f}")
+    ```
+
+    | 방법 | 추정치 |
+    |---|---|
+    | 참 12개월 부도확률 | $0.1000$ |
+    | 순진한 방법(6개월 대출을 "부도 없음"으로 포함) | $0.0748$ |
+    | 12개월 완전 관측만 사용 | $0.0990$ |
+
+    순진한 방법은 참값을 약 $25\%$ 과소추정한다. 절반의 대출이 7--12개월에 부도를 낼 기회를
+    갖지 못한 채 "부도 없음"으로 세어졌기 때문이다.
+
+    **완전 사례만 쓰면 편향이 없다.** 이 모의실험에서는 추적 기간이 사건시간과 독립이므로
+    12개월 관측만 골라도 편향이 생기지 않는다. 그러나 **표본의 절반을 버리는 대가**를 치른다.
+    표준오차가 $\sqrt{2} = 1.41$배 커진다.
+
+    **생존분석이 하는 일:** 6개월 대출을 "부도 없음"이 아니라 "6개월에 절단"으로 취급하여,
+    편향 없이 **모든 자료를 쓴다.** 이것이 이 절에서 말한 "가용한 추적 기간을 모두 쓴다"의
+    구체적인 의미다.
+
+    !!! warning "추적 기간이 위험과 상관되면 완전 사례도 편향된다"
+        위 모의실험은 추적 기간을 무작위로 배정했다. 실제 포트폴리오에서는 오래된 대출이
+        다른 시기, 다른 심사 기준으로 실행되었을 수 있다. 그러면 완전 사례만 쓰는 것도
+        편향되며, 실행 연도(vintage)를 공변량으로 넣어 보정해야 한다. $\square$
 
 ---
 
-**Exercise 3.**
-Work through a small numerical example illustrating the application of the technique from this section.
+**연습문제 3.**
+이탈 자료의 위험이 감소한다는 것($k < 1$인 와이불)이 실무적으로 무엇을 뜻하는지 설명하라.
+이것이 고객 유지 전략에 주는 함의는?
 
-??? success "Solution to Exercise 3"
-    A structured approach to applying this technique involves: (1) clearly stating the hypotheses or estimation goal; (2) verifying that the data meet the required assumptions; (3) computing the relevant test statistic, estimate, or model fit; (4) obtaining the p-value, confidence interval, or posterior distribution; (5) interpreting the result in the context of the original question. Following these steps systematically ensures a rigorous and reproducible analysis.
+??? success "연습문제 3 풀이"
 
----
+    **감소 위험의 의미.** $h(t)$가 감소한다는 것은 고객이 오래 머물수록 다음 달에 이탈할
+    조건부 확률이 낮아진다는 뜻이다. 무기억성(상수 위험)과 달리, 여기서는 **가입 기간 자체가
+    정보**다.
 
-**Exercise 4.**
-Compare the approach from this section with an alternative method. When would you choose each?
+    두 가지 설명이 가능하며 구별이 중요하다.
 
-??? success "Solution to Exercise 4"
-    The method discussed here is appropriate when its assumptions hold and the sample size is sufficient for the asymptotic approximations to be accurate. Alternative approaches include: (1) nonparametric methods -- preferred when distributional assumptions are suspect; (2) bootstrap methods -- useful when analytical reference distributions are unavailable; (3) Bayesian methods -- valuable when incorporating prior information or when direct probability statements about parameters are desired. Running multiple approaches and comparing results provides a useful robustness check.
+    1. **참된 상태 의존.** 시간이 지나면서 고객이 서비스에 익숙해지고 전환비용(자료 이전,
+       습관, 통합)이 쌓여 실제로 이탈 성향이 낮아진다.
+    2. **집단 이질성(선택).** 개별 고객의 위험은 상수이지만 고객마다 값이 다르다. 위험이 높은
+       고객이 먼저 떠나므로, 시간이 지날수록 남은 집단이 위험이 낮은 쪽으로 **선택**된다.
+       개인 수준에서는 아무 변화가 없어도 집단 수준의 위험은 반드시 감소한다.
+
+    이를 **약함(frailty)** 문제라 하며, 관측 자료만으로는 두 설명을 구별할 수 없다.
+
+    **유지 전략에 주는 함의가 정반대다.**
+
+    - 설명 1이 맞다면 **초기 개입이 효과적이다.** 신규 고객을 첫 3개월만 붙잡아 두면 이후에는
+      스스로 머문다. 온보딩 투자가 정당화된다.
+    - 설명 2가 맞다면 **초기 개입은 헛수고에 가깝다.** 일찍 떠나는 고객은 애초에 위험이 높은
+      집단이며, 붙잡아도 곧 떠난다. 자원은 고위험 고객을 **식별해 선별적으로** 쓰는 편이 낫다.
+
+    **구별하는 방법:** 무작위 실험이다. 신규 고객 일부에게 온보딩 개입을 무작위로 배정하고
+    이탈 곡선을 비교한다. 관측 자료의 위험 모양만으로는 인과적 결론을 내릴 수 없다. 1장에서
+    다룬 관찰연구와 통제실험의 구별이 여기에서 그대로 되풀이된다. $\square$

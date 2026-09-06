@@ -1,171 +1,296 @@
-# Time-to-Event Data and Censoring
+# 사건까지의 시간 자료와 중도절단
 
-In many applications the outcome of interest is not a binary label or a continuous
-measurement, but the **time until an event occurs**.  A hospital may track how long
-a patient survives after surgery; a bank may record the number of months until a
-borrower defaults on a loan; an engineer may measure the operating hours before a
-turbine blade fails.  These durations, called *survival times* or *event times*,
-require their own statistical framework because the data carry a complication that
-ordinary regression ignores: **censoring**.
+많은 응용에서 관심의 대상이 되는 결과는 이항 이름표나 연속 측정치가 아니라 **사건이 일어날
+때까지의 시간**이다. 병원은 수술 후 환자가 얼마나 오래 생존하는지를 추적하고, 은행은 차입자가
+대출을 연체할 때까지 몇 달이 걸리는지 기록하며, 공학자는 터빈 날개가 고장 나기까지의 가동시간을
+측정한다. *생존시간* 또는 *사건시간*이라 불리는 이 지속시간들은 보통의 회귀가 무시하는 문제,
+곧 **중도절단**을 안고 있어 자체적인 통계 틀을 필요로 한다.
 
-This section defines survival data, introduces the censoring problem, and
-establishes the notation used throughout the chapter.
+이 절에서는 생존자료를 정의하고 중도절단 문제를 소개하며 이 장 전체에서 쓸 표기를 세운다.
 
-## What Is Survival Data?
+## 생존자료란 무엇인가
 
-A survival dataset consists of $n$ subjects, each associated with two quantities:
+생존자료는 $n$명의 대상으로 이루어지며, 각 대상은 두 값을 갖는다.
 
-1. An observed time $t_i > 0$.
-2. An event indicator $\delta_i \in \{0, 1\}$, where $\delta_i = 1$ means the
-   event of interest was observed at time $t_i$, and $\delta_i = 0$ means the
-   observation was **censored** at time $t_i$.
+1. 관측된 시간 $t_i > 0$.
+2. 사건 지시자 $\delta_i \in \{0, 1\}$. $\delta_i = 1$이면 시점 $t_i$에서 관심 사건이
+   관측되었다는 뜻이고, $\delta_i = 0$이면 시점 $t_i$에서 관측이 **절단**되었다는 뜻이다.
 
-The random variable of interest is the *true event time* $T_i$, but for censored
-subjects we only know that $T_i > t_i$.
+관심 있는 확률변수는 *참 사건시간* $T_i$이지만, 절단된 대상에 대해서는 $T_i > t_i$라는 것만
+알 수 있다.
 
-!!! example "Survival Data Layout"
+!!! example "생존자료의 배치"
 
-    | Subject | Time (months) | Event ($\delta$) | Interpretation |
+    | 대상 | 시간(개월) | 사건 ($\delta$) | 해석 |
     |:-------:|:-------------:|:----------------:|:---------------|
-    | 1       | 8             | 1                | Defaulted at month 8 |
-    | 2       | 14            | 0                | Still active at month 14 (censored) |
-    | 3       | 3             | 1                | Defaulted at month 3 |
-    | 4       | 12            | 0                | Lost to follow-up at month 12 (censored) |
+    | 1       | 8             | 1                | 8개월에 연체 |
+    | 2       | 14            | 0                | 14개월 시점에 아직 정상(절단) |
+    | 3       | 3             | 1                | 3개월에 연체 |
+    | 4       | 12            | 0                | 12개월에 추적 실패(절단) |
 
-## The Censoring Problem
+## 중도절단 문제
 
-Censoring arises whenever the event has not yet been observed for some subjects
-by the time the study ends or the subject leaves the study.  Ignoring censored
-observations---either by dropping them or by treating them as events---introduces
-bias.
+중도절단은 연구가 끝나거나 대상이 연구에서 이탈할 때까지 일부 대상에게 사건이 아직 관측되지
+않은 경우에 생긴다. 절단된 관측치를 무시하는 것은 --- 버리든 사건으로 취급하든 --- 편향을
+낳는다.
 
-- **Dropping censored subjects** discards information: subject 2 in the table
-  above survived *at least* 14 months, which is informative.
-- **Treating censored times as event times** underestimates the true survival
-  time because it records the censoring time as if the event happened then.
+- **절단된 대상을 버리면** 정보를 잃는다. 위 표의 대상 2는 *적어도* 14개월을 버텼고, 이는
+  유의미한 정보다.
+- **절단시간을 사건시간으로 취급하면** 참 생존시간을 과소평가한다. 절단 시점에 사건이 일어난
+  것처럼 기록하기 때문이다.
 
-Survival analysis solves this problem by incorporating censored observations
-into the likelihood function, using the fact that a censored subject contributes
-the information $P(T > t_i)$ rather than $P(T = t_i)$.
+생존분석은 절단된 관측치를 가능도함수에 포함시켜 이 문제를 해결한다. 절단된 대상은
+$P(T = t_i)$가 아니라 $P(T > t_i)$라는 정보를 기여한다는 사실을 이용한다.
 
-## Right Censoring
+## 우측절단
 
-The most common form of censoring in practice is **right censoring**, where the
-event is known to occur *after* the observed time.  Right censoring occurs in
-three main settings:
+실무에서 가장 흔한 절단 형태는 **우측절단**이다. 사건이 관측된 시점 *이후에* 일어난다는 것을
+아는 경우다. 우측절단은 주로 세 가지 상황에서 발생한다.
 
-1. **End-of-study censoring.** The study ends at a fixed calendar date, and some
-   subjects have not yet experienced the event.
-2. **Loss to follow-up.** A subject leaves the study before the event occurs
-   (e.g., a patient moves to another city).
-3. **Competing events.** The subject experiences a different event that prevents
-   observation of the event of interest (e.g., death from an unrelated cause in a
-   cancer study).
+1. **연구 종료에 의한 절단.** 연구가 정해진 날짜에 끝나는데 일부 대상은 아직 사건을 겪지
+   않았다.
+2. **추적 실패.** 사건이 일어나기 전에 대상이 연구를 떠난다(예: 환자가 다른 도시로 이사).
+3. **경쟁 사건.** 관심 사건의 관측을 막는 다른 사건이 일어난다(예: 암 연구에서 무관한 원인에
+   의한 사망).
 
-Formally, each subject has a true event time $T_i$ and a censoring time $C_i$.
-The observed data are
+형식적으로 각 대상은 참 사건시간 $T_i$와 절단시간 $C_i$를 갖는다. 관측되는 자료는
 
 $$
 t_i = \min(T_i, C_i), \qquad \delta_i = \mathbf{1}(T_i \leq C_i)
 $$
 
-where $\mathbf{1}(\cdot)$ is the indicator function.
+이며 $\mathbf{1}(\cdot)$은 지시함수다.
 
-## Independent Censoring Assumption
+## 독립 절단 가정
 
-Almost all standard survival methods require the **independent censoring
-assumption**: the censoring mechanism carries no information about the event
-time.  Formally, for every subject $i$,
+거의 모든 표준적인 생존분석 방법은 **독립 절단 가정**을 요구한다. 절단 기제가 사건시간에 대한
+정보를 전혀 담고 있지 않다는 가정이다. 형식적으로 모든 대상 $i$에 대해
 
 $$
 T_i \perp C_i
 $$
 
-or, in the presence of covariates $\mathbf{x}_i$,
+이거나, 공변량 $\mathbf{x}_i$가 있으면
 
 $$
 T_i \perp C_i \mid \mathbf{x}_i
 $$
 
-This assumption means that, given the covariates, a subject who is censored at
-time $t$ is representative of all subjects still at risk at time $t$.
+이다. 이 가정은 공변량이 주어졌을 때 시점 $t$에서 절단된 대상이 그 시점에 아직 위험에 있는
+모든 대상을 대표한다는 뜻이다.
 
-!!! warning "When Independent Censoring Fails"
+!!! warning "독립 절단이 깨질 때"
 
-    If sicker patients are more likely to drop out, the remaining subjects are
-    healthier on average, and the estimated survival curve is biased upward.
-    Checking this assumption is difficult because the true event times for
-    censored subjects are unobserved.
+    더 아픈 환자가 이탈할 가능성이 높다면 남은 대상들은 평균적으로 더 건강하고, 추정된
+    생존곡선은 위쪽으로 편향된다. 절단된 대상의 참 사건시간을 관측할 수 없으므로 이 가정을
+    점검하는 일은 어렵다.
 
-## Examples Across Domains
+## 여러 분야의 예
 
-Survival analysis applies wherever the outcome is a duration:
+생존분석은 결과가 지속시간인 곳이면 어디에나 적용된다.
 
-- **Medicine.** Time from diagnosis to death, relapse, or recovery.
-- **Finance.** Time from loan origination to default; time from account opening
-  to customer churn; trade duration in market microstructure.
-- **Engineering.** Time from deployment to component failure (reliability
-  analysis).
-- **Social science.** Duration of unemployment spells; time to recidivism after
-  release from prison.
+- **의학.** 진단에서 사망, 재발, 회복까지의 시간.
+- **금융.** 대출 실행에서 부도까지의 시간, 계좌 개설에서 고객 이탈까지의 시간, 시장미시구조의
+  거래 지속시간.
+- **공학.** 배치에서 부품 고장까지의 시간(신뢰성 분석).
+- **사회과학.** 실업 기간, 출소 후 재범까지의 시간.
 
-In each case, censoring is the rule rather than the exception.  Clinical trials
-end on a calendar date, loan portfolios contain active accounts, and machines
-are still running when the maintenance report is written.
+각 경우에 중도절단은 예외가 아니라 일반적인 상황이다. 임상시험은 정해진 날짜에 끝나고, 대출
+포트폴리오에는 정상 계좌가 남아 있으며, 유지보수 보고서를 쓸 때 기계는 여전히 돌아가고 있다.
 
-## Notation Summary
+## 표기 요약
 
-The following notation is used throughout the chapter.
+이 장 전체에서 다음 표기를 쓴다.
 
-| Symbol | Meaning |
+| 기호 | 의미 |
 |:------:|:--------|
-| $T$ | True (possibly unobserved) event time |
-| $C$ | Censoring time |
-| $t_i$ | Observed time for subject $i$: $\min(T_i, C_i)$ |
-| $\delta_i$ | Event indicator: 1 = event observed, 0 = censored |
-| $n$ | Total number of subjects |
-| $d$ | Total number of observed events: $d = \sum_{i=1}^{n} \delta_i$ |
-| $S(t)$ | Survival function: $P(T > t)$ |
-| $h(t)$ | Hazard function: instantaneous event rate at time $t$ |
-| $H(t)$ | Cumulative hazard function: $\int_0^t h(u)\,du$ |
+| $T$ | 참(관측되지 않을 수 있는) 사건시간 |
+| $C$ | 절단시간 |
+| $t_i$ | 대상 $i$의 관측된 시간: $\min(T_i, C_i)$ |
+| $\delta_i$ | 사건 지시자: 1 = 사건 관측, 0 = 절단 |
+| $n$ | 전체 대상 수 |
+| $d$ | 관측된 사건의 총수: $d = \sum_{i=1}^{n} \delta_i$ |
+| $S(t)$ | 생존함수: $P(T > t)$ |
+| $h(t)$ | 위험함수: 시점 $t$에서의 순간 사건율 |
+| $H(t)$ | 누적위험함수: $\int_0^t h(u)\,du$ |
 
-??? tip "Connection to Previous Chapters"
+??? tip "앞 장들과의 연결"
 
-    The likelihood-based reasoning developed in Chapter 6 (Statistical
-    Estimation) carries over directly.  The key difference is that censored
-    observations contribute a survival probability $S(t_i)$ rather than a
-    density value $f(t_i)$ to the likelihood.  Section 21.3 develops this
-    idea formally.
+    6장(통계적 추정)에서 전개한 가능도 기반 논증이 그대로 이어진다. 핵심적인 차이는 절단된
+    관측치가 가능도에 밀도값 $f(t_i)$가 아니라 생존확률 $S(t_i)$를 기여한다는 점이다.
+    21.3절에서 이 착상을 형식적으로 전개한다.
 
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Describe the main concept of Time-to-Event Data and Censoring and explain why it matters for statistical practice.
+**연습문제 1.**
+위 예제 표에서 $n$, $d$, 절단율을 구하라. 대상 2와 대상 4의 절단은 각각 어떤 유형에
+해당하는가?
 
-??? success "Solution to Exercise 1"
-    Time-to-Event Data and Censoring is a core topic in statistics that provides tools for drawing reliable inferences from data. It matters because proper application ensures valid conclusions, correctly quantified uncertainty, and appropriate handling of the assumptions that underpin the method. Practitioners who understand this concept can avoid common pitfalls and choose the right analytical approach for their data.
+??? success "연습문제 1 풀이"
 
----
+    $n = 4$, $d = \sum_i \delta_i = 1 + 0 + 1 + 0 = 2$, 절단율 $= 2/4 = 50\%$다.
 
-**Exercise 2.**
-State the key assumptions required by the method discussed here. How can each assumption be checked?
+    - **대상 2**(14개월 시점에 아직 정상)는 **연구 종료에 의한 절단**이다. 사건이 일어나지
+      않은 채 관측 기간이 끝났다.
+    - **대상 4**(12개월에 추적 실패)는 **추적 실패**다. 대상이 관측에서 사라졌다.
 
-??? success "Solution to Exercise 2"
-    The main assumptions typically include: (1) independence of observations -- verified by understanding the data collection process and checking for serial correlation; (2) distributional requirements (e.g., normality) -- checked with Q-Q plots and formal tests like Shapiro-Wilk; (3) equal variances (if applicable) -- assessed with boxplots and Levene's test. When assumptions are violated, consider robust alternatives, transformations, or nonparametric methods.
-
----
-
-**Exercise 3.**
-Work through a small numerical example illustrating the application of the technique from this section.
-
-??? success "Solution to Exercise 3"
-    A structured approach to applying this technique involves: (1) clearly stating the hypotheses or estimation goal; (2) verifying that the data meet the required assumptions; (3) computing the relevant test statistic, estimate, or model fit; (4) obtaining the p-value, confidence interval, or posterior distribution; (5) interpreting the result in the context of the original question. Following these steps systematically ensures a rigorous and reproducible analysis.
+    두 절단은 형식적으로는 똑같이 $\delta = 0$으로 기록되지만 **독립 절단 가정의 타당성이
+    다르다.** 연구 종료 절단은 사건시간과 무관한 달력상의 이유로 생기므로 독립성이 대체로
+    성립한다. 반면 추적 실패는 대상의 상태와 관련될 수 있다. 상환이 어려워진 차입자가 연락을
+    끊는 경우가 그렇다. 자료에서 두 유형을 구별해 기록해 두면 민감도 분석이 가능해진다.
+    $\square$
 
 ---
 
-**Exercise 4.**
-Compare the approach from this section with an alternative method. When would you choose each?
+**연습문제 2.**
+참 생존시간이 평균 10인 지수분포이고 절단시간도 독립인 평균 10의 지수분포라 하자. 다음 세
+방식으로 추정한 평균 생존시간을 모의실험으로 비교하라. (a) 절단시간을 사건시간으로 취급,
+(b) 절단된 대상을 버림, (c) 카플란-마이어 곡선 아래 면적.
 
-??? success "Solution to Exercise 4"
-    The method discussed here is appropriate when its assumptions hold and the sample size is sufficient for the asymptotic approximations to be accurate. Alternative approaches include: (1) nonparametric methods -- preferred when distributional assumptions are suspect; (2) bootstrap methods -- useful when analytical reference distributions are unavailable; (3) Bayesian methods -- valuable when incorporating prior information or when direct probability statements about parameters are desired. Running multiple approaches and comparing results provides a useful robustness check.
+??? success "연습문제 2 풀이"
+
+    ```python
+    import numpy as np
+
+    rng = np.random.default_rng(42)
+    n = 100_000
+    T = rng.exponential(10, n)          # true event times
+    C = rng.exponential(10, n)          # independent censoring
+    t = np.minimum(T, C)
+    d = (T <= C).astype(int)
+
+    print(f"true mean       : {T.mean():.4f}")
+    print(f"censoring rate  : {1 - d.mean():.3f}")
+    print(f"(a) censored=event : {t.mean():.4f}")
+    print(f"(b) drop censored  : {t[d == 1].mean():.4f}")
+    ```
+
+    | 방법 | 추정치 |
+    |---|---|
+    | 참값 | $10.035$ |
+    | (a) 절단을 사건으로 취급 | $4.980$ |
+    | (b) 절단된 대상을 버림 | $4.974$ |
+    | (c) 카플란-마이어 곡선 아래 면적 | $\mathbf{10.005}$ |
+
+    절단율은 $50.4\%$다.
+
+    **(a)와 (b) 모두 참값의 절반 수준으로 심하게 편향된다.** 두 편향이 거의 같은 것은 지수분포의
+    성질 때문이다. $T$와 $C$가 각각 평균 10인 독립 지수분포이면 $\min(T,C)$가 평균 5인
+    지수분포이고, 조건부 기댓값 $E[T \mid T \le C]$도 5다. 일반적으로는 두 방법의 편향 크기가
+    다를 수 있지만 **방향은 언제나 아래쪽**이다.
+
+    **핵심:** (b)의 "절단된 대상을 버리면 그래도 남은 자료는 온전하지 않은가"라는 직관은
+    틀렸다. 사건이 관측된 대상은 **일찍 사건을 겪은 대상들**에 치우쳐 선택된 표본이기 때문이다.
+    이는 1장에서 다룬 선택편향의 한 형태다.
+
+    **(c) 카플란-마이어**만이 $10.005$로 참값을 되찾는다. 절단된 대상의 "적어도 $t_i$까지
+    버텼다"는 정보를 위험집합을 통해 활용하기 때문이다. $\square$
+
+---
+
+**연습문제 3.**
+가능도에서 절단된 관측치가 밀도 $f(t_i)$가 아니라 생존확률 $S(t_i)$를 기여하는 이유를
+유도하라. 전체 가능도를 $f$와 $S$로 쓰라.
+
+??? success "연습문제 3 풀이"
+
+    관측된 자료는 쌍 $(t_i, \delta_i)$다. 두 경우로 나눈다.
+
+    **사건이 관측된 경우($\delta_i = 1$).** 참 사건시간이 정확히 $t_i$였고 절단시간이 그보다
+    컸다는 것을 안다. 독립 절단 가정 아래 이 사건의 기여는
+
+    $$
+    f_T(t_i)\,S_C(t_i)
+    $$
+
+    이다. 여기서 $S_C$는 절단시간의 생존함수다.
+
+    **절단된 경우($\delta_i = 0$).** 절단시간이 정확히 $t_i$였고 사건시간이 그보다 컸다는 것만
+    안다. 기여는
+
+    $$
+    f_C(t_i)\,S_T(t_i)
+    $$
+
+    이다.
+
+    전체 가능도는
+
+    $$
+    L = \prod_{i=1}^{n} \bigl[f_T(t_i)S_C(t_i)\bigr]^{\delta_i}\bigl[f_C(t_i)S_T(t_i)\bigr]^{1-\delta_i}
+    $$
+
+    이고, $T$에 관한 항과 $C$에 관한 항으로 정리하면
+
+    $$
+    L = \underbrace{\prod_{i} f_T(t_i)^{\delta_i} S_T(t_i)^{1-\delta_i}}_{T\text{의 모수에만 의존}}
+        \times \underbrace{\prod_{i} S_C(t_i)^{\delta_i} f_C(t_i)^{1-\delta_i}}_{C\text{의 모수에만 의존}}
+    $$
+
+    가 된다. 절단 기제의 모수가 $T$의 모수와 공유되지 않는다면(이를 **무정보 절단**이라 한다)
+    두 번째 인자는 상수이므로 무시할 수 있고, 우리는
+
+    $$
+    L \propto \prod_{i=1}^{n} f(t_i)^{\delta_i}\, S(t_i)^{1-\delta_i}
+    $$
+
+    만 최대화하면 된다.
+
+    !!! note "독립 절단과 무정보 절단은 다른 조건이다"
+        **독립성**($T \perp C$)은 위에서 가능도를 인수분해하는 데 쓰였고, **무정보성**은
+        절단의 모수가 관심 모수와 분리되어 있다는 조건이다. 실무에서는 대개 함께 가정하지만
+        논리적으로는 구별된다. 예컨대 $C = T + 5$처럼 결정론적으로 연결된 절단은 독립성을
+        어기고, 절단 분포가 $T$의 모수를 공유하는 경우는 독립이면서도 무정보가 아니다.
+        $\square$
+
+---
+
+**연습문제 4.**
+독립 절단이 깨지는 구체적인 상황을 하나 만들고, 추정된 생존곡선의 편향 방향을 모의실험으로
+확인하라.
+
+??? success "연습문제 4 풀이"
+
+    **상황:** 대출 자료에서 상환 능력이 나빠진 차입자일수록 연락을 끊고 사라진다고 하자. 즉
+    사건시간 $T$가 짧을수록 절단시간 $C$도 짧다. 이는 $T$와 $C$가 **양의 상관**을 갖는 경우다.
+
+    ```python
+    import numpy as np
+
+    rng = np.random.default_rng(7)
+    n = 200_000
+    # shared frailty: subjects with high Z fail early AND drop out early
+    Z = rng.exponential(1.0, n)
+    T = rng.exponential(10.0, n) / Z      # high Z -> short T
+    C = rng.exponential(10.0, n) / Z      # high Z -> short C  (dependent!)
+    t = np.minimum(T, C); d = (T <= C).astype(int)
+
+    # Kaplan-Meier area (restricted to the observed range)
+    def km_area(t, d, tmax):
+        order = np.argsort(t); ts, ds = t[order], d[order]
+        S, prev, area = 1.0, 0.0, 0.0
+        for u in np.unique(ts[ds == 1]):
+            if u > tmax: break
+            nr = (ts >= u).sum(); di = ((ts == u) & (ds == 1)).sum()
+            area += S * (u - prev); prev = u; S *= (1 - di / nr)
+        return area + S * (tmax - prev)
+
+    tmax = 20.0
+    truth = np.mean(np.minimum(T, tmax))
+    print(f"true restricted mean : {truth:.4f}")
+    print(f"KM restricted mean   : {km_area(t, d, tmax):.4f}")
+    ```
+
+    **예상되는 결과와 그 이유.** 여기서는 위험이 큰(=$Z$가 큰) 대상이 사건과 절단을 모두 일찍
+    겪는다. 따라서 어느 시점 $t$에서의 위험집합은 남아 있어야 할 대상보다 **건강한 쪽으로
+    치우쳐 있다.** 카플란-마이어는 위험집합이 대표성을 갖는다고 가정하므로, 각 시점의 조건부
+    사건확률을 과소추정하고 결과적으로 **생존곡선을 위쪽으로 편향**시킨다.
+
+    반대 방향의 위배도 가능하다. 상태가 좋아진 환자가 병원에 오지 않는다면 위험집합이 아픈
+    쪽으로 치우쳐 생존곡선이 아래쪽으로 편향된다.
+
+    **점검이 어려운 이유:** 절단된 대상의 참 사건시간을 관측할 수 없으므로 자료만으로는 이
+    가정을 검정할 수 없다. 할 수 있는 것은 (1) 절단의 원인을 유형별로 기록하고, (2) 절단
+    사유별로 별도의 분석을 수행하며, (3) 최선/최악 시나리오(절단된 대상이 즉시 사건을 겪었다고
+    가정 vs 끝까지 생존했다고 가정)로 민감도 분석을 하는 것이다. $\square$

@@ -1,182 +1,239 @@
-# Types of Censoring
+# 중도절단의 유형
 
-The previous section introduced censoring as the defining challenge of survival
-data: some subjects' true event times are only partially observed.  Not all
-censoring is alike, however.  The mechanism that hides the event time determines
-what information remains and which statistical methods are appropriate.
+앞 절에서는 생존자료의 결정적 난제로 중도절단을 소개했다. 일부 대상의 참 사건시간이 부분적으로만
+관측된다는 것이다. 그러나 모든 절단이 같지는 않다. 사건시간을 가리는 기제에 따라 남는 정보와
+적절한 통계적 방법이 달라진다.
 
-This section classifies the three main censoring types---right, left, and
-interval---and discusses the independent censoring assumption that underpins
-valid inference.
+이 절에서는 주요 절단 유형 세 가지 --- 우측, 좌측, 구간 --- 를 분류하고, 타당한 추론의 바탕이
+되는 독립 절단 가정을 논의한다.
 
-## Right Censoring
+## 우측절단
 
-Right censoring is the most common type in practice.  A subject is
-**right-censored** when the event is known to occur *after* the observed time,
-but the exact event time is unknown.
+우측절단은 실무에서 가장 흔한 유형이다. 사건이 관측된 시점 *이후에* 일어난다는 것은 알지만 정확한
+사건시간을 모를 때 그 대상은 **우측절단**되었다고 한다.
 
-Formally, let $T$ denote the true event time and $C$ the censoring time.  The
-observed data for subject $i$ are
+형식적으로 $T$를 참 사건시간, $C$를 절단시간이라 하면 대상 $i$에 대해 관측되는 자료는
 
 $$
 t_i = \min(T_i, C_i), \qquad \delta_i = \mathbf{1}(T_i \leq C_i)
 $$
 
-When $\delta_i = 0$, the subject was censored: all we know is $T_i > t_i$.
+이다. $\delta_i = 0$이면 그 대상은 절단되었고, 우리가 아는 것은 $T_i > t_i$뿐이다.
 
-Right censoring arises in several ways:
+우측절단은 여러 방식으로 생긴다.
 
-- **Type I censoring.** The study has a fixed end date.  All subjects who have
-  not experienced the event by that date are censored at the same calendar time
-  (though their observed durations may differ if they entered the study at
-  different times).
-- **Type II censoring.** The study continues until a predetermined number of
-  events $r$ have been observed, then stops.  The remaining $n - r$ subjects are
-  censored.
-- **Random censoring.** Each subject has an independent censoring time $C_i$
-  (e.g., loss to follow-up).  This is the most general and most common setting.
+- **제1종 절단.** 연구의 종료일이 정해져 있다. 그날까지 사건을 겪지 않은 모든 대상이 같은 달력
+  시점에 절단된다(연구에 들어온 시점이 다르면 관측된 지속시간은 서로 다를 수 있다).
+- **제2종 절단.** 미리 정한 사건 수 $r$개가 관측될 때까지 연구를 계속하고 그때 멈춘다. 남은
+  $n - r$명이 절단된다.
+- **무작위 절단.** 각 대상이 독립적인 절단시간 $C_i$를 갖는다(예: 추적 실패). 가장 일반적이고
+  가장 흔한 상황이다.
 
-!!! example "Right Censoring in a Loan Portfolio"
+!!! example "대출 포트폴리오의 우측절단"
 
-    A bank tracks 1,000 loans originated in January 2020.  By December 2023,
-    200 loans have defaulted (events) and 800 remain active (right-censored).
-    For each active loan, the bank knows the borrower has survived *at least*
-    $t_i$ months, but the eventual default time is unknown.
+    어떤 은행이 2020년 1월에 실행한 대출 1,000건을 추적한다. 2023년 12월까지 200건이
+    부도(사건)를 냈고 800건은 정상(우측절단)이다. 정상인 각 대출에 대해 은행은 차입자가
+    *적어도* $t_i$개월을 버텼다는 것은 알지만 최종 부도 시점은 모른다.
 
-## Left Censoring
+## 좌측절단
 
-A subject is **left-censored** when the event is known to have occurred *before*
-the observation time, but the exact event time is unknown.  The observed
-information is $T_i < t_i$.
+사건이 관측 시점 *이전에* 일어났다는 것은 알지만 정확한 사건시간을 모를 때 그 대상은
+**좌측절단**되었다고 한다. 관측되는 정보는 $T_i < t_i$이다.
 
-Left censoring is less common than right censoring but arises in specific
-settings:
+좌측절단은 우측절단보다 드물지만 특정 상황에서 나타난다.
 
-- **Delayed detection.** A medical test at time $t$ reveals that a disease is
-  already present.  The onset occurred before $t$, but the exact time is
-  unknown.
-- **Detection limits.** An environmental measurement falls below the instrument's
-  detection threshold, indicating the true concentration is somewhere between
-  zero and the threshold.
+- **지연된 발견.** 시점 $t$의 검사에서 질병이 이미 존재함이 드러난다. 발병은 $t$ 이전에
+  일어났지만 정확한 시점은 모른다.
+- **검출 한계.** 환경 측정값이 기기의 검출 문턱 아래로 내려가, 참 농도가 0과 문턱 사이 어딘가에
+  있음을 알려 준다.
 
-!!! example "Left Censoring in Disease Screening"
+!!! example "질병 선별검사의 좌측절단"
 
-    A routine blood test at age 50 reveals elevated PSA levels indicating
-    prostate cancer.  The cancer developed at some unknown time $T < 50$, so
-    the observation is left-censored at 50.
+    50세에 받은 정기 혈액검사에서 PSA 수치가 높아 전립선암이 확인되었다. 암은 알 수 없는
+    시점 $T < 50$에 생겼으므로 이 관측은 50에서 좌측절단되었다.
 
-## Interval Censoring
+## 구간절단
 
-A subject is **interval-censored** when the event is known to have occurred
-within a time window $(L_i, R_i]$, but the exact event time within that interval
-is unknown.
+사건이 시간 구간 $(L_i, R_i]$ 안에서 일어났다는 것은 알지만 그 구간 안의 정확한 시점을 모를 때
+그 대상은 **구간절단**되었다고 한다.
 
 $$
 L_i < T_i \leq R_i
 $$
 
-Interval censoring occurs naturally when subjects are examined at periodic
-visits rather than monitored continuously.
+구간절단은 대상을 연속적으로 감시하는 대신 주기적으로 검사할 때 자연스럽게 발생한다.
 
-!!! example "Interval Censoring in a Clinical Trial"
+!!! example "임상시험의 구간절단"
 
-    A patient is examined at months 6 and 12.  At month 6 the patient is
-    disease-free; at month 12 the disease is present.  The event time satisfies
-    $6 < T \leq 12$, but the exact month is unknown.
+    어떤 환자가 6개월과 12개월에 검사를 받는다. 6개월에는 질병이 없었고 12개월에는 있었다.
+    사건시간은 $6 < T \leq 12$를 만족하지만 정확한 달은 모른다.
 
-Note that right censoring and left censoring are special cases of interval
-censoring:
+우측절단과 좌측절단은 구간절단의 특수한 경우임에 유의하라.
 
-- Right censoring: $L_i = t_i$ and $R_i = \infty$.
-- Left censoring: $L_i = 0$ and $R_i = t_i$.
+- 우측절단: $L_i = t_i$이고 $R_i = \infty$.
+- 좌측절단: $L_i = 0$이고 $R_i = t_i$.
 
-## Truncation vs Censoring
+## 절단(truncation)과 중도절단(censoring)
 
-Truncation is sometimes confused with censoring but describes a different
-phenomenon.  A subject is **truncated** when its existence is entirely unknown
-to the analyst unless a condition is met.
+절단(truncation)은 중도절단과 혼동되기 쉽지만 다른 현상을 가리킨다. 어떤 조건이 충족되지 않으면
+그 대상의 존재 자체를 분석자가 전혀 알 수 없을 때 그 대상은 **절단되었다**고 한다.
 
-- **Left truncation (delayed entry).** A subject enters the study at time $a_i$
-  and is only observed if $T_i > a_i$.  Subjects who experienced the event
-  before entering the study are never recorded.
-- **Right truncation.** Only subjects who have already experienced the event
-  are included (e.g., a registry of confirmed cases).
+- **좌측절단(지연 진입).** 대상이 시점 $a_i$에 연구에 들어오며 $T_i > a_i$일 때만 관측된다.
+  연구에 들어오기 전에 사건을 겪은 대상은 아예 기록되지 않는다.
+- **우측절단.** 이미 사건을 겪은 대상만 포함된다(예: 확진 사례 등록부).
 
-The key distinction is that censoring provides partial information about the
-event time, while truncation provides no information at all for excluded
-subjects.
+핵심적인 구별은, 중도절단은 사건시간에 대한 부분적인 정보를 제공하지만 절단은 제외된 대상에
+대해 아무 정보도 제공하지 않는다는 점이다.
 
-| Mechanism | What is observed | What is unknown |
+| 기제 | 관측되는 것 | 알 수 없는 것 |
 |:----------|:-----------------|:----------------|
-| Right censoring | $T > t$ | Exact $T$ |
-| Left censoring | $T < t$ | Exact $T$ |
-| Interval censoring | $L < T \leq R$ | Exact $T$ |
-| Left truncation | Subject exists only if $T > a$ | Subjects with $T \leq a$ |
+| 우측 중도절단 | $T > t$ | 정확한 $T$ |
+| 좌측 중도절단 | $T < t$ | 정확한 $T$ |
+| 구간 중도절단 | $L < T \leq R$ | 정확한 $T$ |
+| 좌측 절단 | $T > a$일 때만 대상이 존재 | $T \leq a$인 대상들 |
 
-## Independent Censoring Assumption
+## 독립 절단 가정
 
-Valid inference in survival analysis requires that censoring be **non-informative**:
-the censoring mechanism must not depend on the unobserved event time.  Formally,
+생존분석에서 타당한 추론을 하려면 절단이 **무정보**여야 한다. 즉 절단 기제가 관측되지 않은
+사건시간에 의존해서는 안 된다. 형식적으로,
 
 $$
 T \perp C \mid \mathbf{x}
 $$
 
-where $\mathbf{x}$ is the vector of observed covariates.  This means that at any
-time $t$, a censored subject is representative of all subjects still at risk,
-conditional on covariates.
+이며 $\mathbf{x}$는 관측된 공변량 벡터다. 이는 공변량을 조건으로 할 때 임의의 시점 $t$에서
+절단된 대상이 그 시점에 아직 위험에 있는 모든 대상을 대표한다는 뜻이다.
 
-!!! warning "Informative Censoring Invalidates Standard Methods"
+!!! warning "정보가 있는 절단은 표준적인 방법을 무효로 만든다"
 
-    If patients who are deteriorating rapidly are more likely to drop out of a
-    clinical trial, the censoring depends on the (unobserved) event time.
-    Standard Kaplan--Meier and Cox model estimates will be biased in this
-    setting.  Sensitivity analyses or joint models for the event and dropout
-    processes are needed.
+    상태가 빠르게 나빠지는 환자가 임상시험에서 이탈할 가능성이 높다면, 절단이 (관측되지 않은)
+    사건시간에 의존한다. 이런 상황에서는 표준적인 카플란-마이어와 콕스 모형 추정이 편향된다.
+    민감도 분석이나 사건과 이탈 과정을 함께 모형화하는 결합 모형이 필요하다.
 
-## Summary
+## 요약
 
-| Type | Notation | Typical Setting |
+| 유형 | 표기 | 전형적인 상황 |
 |:-----|:---------|:----------------|
-| Right censoring | $T > t$ | End of study, loss to follow-up |
-| Left censoring | $T < t$ | Delayed detection, threshold instruments |
-| Interval censoring | $L < T \leq R$ | Periodic examinations |
-| Left truncation | Only observe if $T > a$ | Delayed entry into study |
+| 우측 중도절단 | $T > t$ | 연구 종료, 추적 실패 |
+| 좌측 중도절단 | $T < t$ | 지연된 발견, 검출 한계가 있는 기기 |
+| 구간 중도절단 | $L < T \leq R$ | 주기적 검사 |
+| 좌측 절단 | $T > a$일 때만 관측 | 연구로의 지연 진입 |
 
-Right censoring dominates in practice and is the default assumption throughout
-the remainder of this chapter.  The Kaplan--Meier estimator (Section 21.2),
-parametric models (Section 21.3), and the Cox model (Section 21.4) all assume
-right-censored data unless stated otherwise.
+실무에서는 우측 중도절단이 압도적으로 많으며, 이 장의 나머지에서 기본 가정으로 삼는다.
+카플란-마이어 추정량(21.2절), 모수 모형(21.3절), 콕스 모형(21.4절)은 모두 달리 언급하지
+않는 한 우측절단 자료를 가정한다.
 
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Describe the main concept of Types of Censoring and explain why it matters for statistical practice.
+**연습문제 1.**
+다음 각 상황을 우측절단, 좌측절단, 구간절단, 좌측 절단(truncation) 중 하나로 분류하라.
 
-??? success "Solution to Exercise 1"
-    Types of Censoring is a core topic in statistics that provides tools for drawing reliable inferences from data. It matters because proper application ensures valid conclusions, correctly quantified uncertainty, and appropriate handling of the assumptions that underpin the method. Practitioners who understand this concept can avoid common pitfalls and choose the right analytical approach for their data.
+**(a)** 연금 수급자 사망 자료에서 65세 이후 생존한 사람만 명부에 오른다.
+
+**(b)** 정기 건강검진에서 2년 전에는 없던 종양이 발견되었다.
+
+**(c)** 임상시험이 계획된 날짜에 종료되었고 일부 환자는 아직 재발하지 않았다.
+
+**(d)** 수질 검사에서 오염물질 농도가 기기의 검출 한계 미만으로 나왔다.
+
+??? success "연습문제 1 풀이"
+
+    | 상황 | 유형 | 이유 |
+    |---|---|---|
+    | (a) | **좌측 절단(truncation)** | 65세 전에 사망한 사람은 명부에 존재조차 하지 않는다 |
+    | (b) | **구간절단** | 사건이 두 검진 사이 $(t-2, t]$에서 일어났음만 안다 |
+    | (c) | **우측절단** | $T > t$임만 안다(제1종 절단) |
+    | (d) | **좌측절단** | 참 농도가 $(0, \text{한계})$ 안에 있음만 안다 |
+
+    (a)와 (c)를 혼동하기 쉽다. 둘 다 "정보가 부분적"이지만 (a)에서는 **관측 자체가 없다.**
+    65세 전에 사망한 사람의 존재를 우리가 모르므로 표본이 선택편향되어 있고, 이를 보정하지
+    않으면 평균 수명을 심하게 과대추정한다. 반면 (c)에서는 환자가 표본 안에 있고
+    "적어도 $t$까지 생존"이라는 정보를 기여한다.
+
+    **좌측 절단의 처리:** 위험집합을 조정한다. 시점 $t$의 위험집합에 $a_i \le t$인 대상만
+    포함시키면 카플란-마이어와 콕스 모형을 그대로 쓸 수 있다. 대부분의 소프트웨어가 진입시간
+    인자를 제공한다(`lifelines`의 `entry`, R `survival`의 `Surv(start, stop, event)`).
+    $\square$
 
 ---
 
-**Exercise 2.**
-State the key assumptions required by the method discussed here. How can each assumption be checked?
+**연습문제 2.**
+좌측 절단을 무시하고 표준적인 생존분석을 수행하면 어떤 방향의 편향이 생기는지 모의실험으로
+확인하라.
 
-??? success "Solution to Exercise 2"
-    The main assumptions typically include: (1) independence of observations -- verified by understanding the data collection process and checking for serial correlation; (2) distributional requirements (e.g., normality) -- checked with Q-Q plots and formal tests like Shapiro-Wilk; (3) equal variances (if applicable) -- assessed with boxplots and Levene's test. When assumptions are violated, consider robust alternatives, transformations, or nonparametric methods.
+??? success "연습문제 2 풀이"
+
+    ```python
+    import numpy as np
+
+    rng = np.random.default_rng(3)
+    n = 200_000
+    T = rng.exponential(20.0, n)     # true lifetimes, mean 20
+    a = 10.0                          # entry threshold: observed only if T > 10
+
+    observed = T[T > a]
+    print(f"true mean lifetime      : {T.mean():.3f}")
+    print(f"naive mean of observed  : {observed.mean():.3f}")
+    print(f"fraction excluded       : {(T <= a).mean():.3f}")
+    ```
+
+    지수분포의 무기억성에 의해 $T \mid T > 10$은 $10 + \text{Exp}(20)$이므로 관측된 평균이
+    약 $30$, 참 평균 $20$보다 $50\%$ 높다. 즉 좌측 절단을 무시하면 **생존시간을
+    과대추정**한다.
+
+    **왜 그런가.** 절단 문턱보다 먼저 사건을 겪은 대상들이 표본에서 통째로 빠졌다. 남은 것은
+    "오래 사는 쪽"으로 선택된 표본이다. 이는 1장에서 다룬 **생존자 편향**의 정확한 사례이며,
+    생존분석에서 특히 자주 등장한다.
+
+    **역사적 예:** 연금 수급자 사망률 표를 그대로 일반 인구에 적용하면 기대수명을 과대추정한다.
+    연금을 받으려면 수급 개시 연령까지 생존해야 하기 때문이다. 보험 수리에서 이 보정은 필수다.
+
+    **올바른 처리:** 위험집합에서 $a_i > t$인 대상을 제외한다. 즉 대상이 진입한 뒤에만 위험에
+    있는 것으로 센다. 그러면 각 시점의 조건부 사건확률이 올바르게 추정되고 편향이 사라진다.
+    $\square$
 
 ---
 
-**Exercise 3.**
-Work through a small numerical example illustrating the application of the technique from this section.
+**연습문제 3.**
+구간절단 자료의 가능도가 $S(L_i) - S(R_i)$를 기여함을 보여라. 구간 폭이 0으로 가면 어떻게
+되는가?
 
-??? success "Solution to Exercise 3"
-    A structured approach to applying this technique involves: (1) clearly stating the hypotheses or estimation goal; (2) verifying that the data meet the required assumptions; (3) computing the relevant test statistic, estimate, or model fit; (4) obtaining the p-value, confidence interval, or posterior distribution; (5) interpreting the result in the context of the original question. Following these steps systematically ensures a rigorous and reproducible analysis.
+??? success "연습문제 3 풀이"
 
----
+    구간절단된 대상에 대해 우리가 아는 것은 $L_i < T_i \leq R_i$뿐이다. 이 사건의 확률은
 
-**Exercise 4.**
-Compare the approach from this section with an alternative method. When would you choose each?
+    $$
+    P(L_i < T \leq R_i) = F(R_i) - F(L_i) = S(L_i) - S(R_i)
+    $$
 
-??? success "Solution to Exercise 4"
-    The method discussed here is appropriate when its assumptions hold and the sample size is sufficient for the asymptotic approximations to be accurate. Alternative approaches include: (1) nonparametric methods -- preferred when distributional assumptions are suspect; (2) bootstrap methods -- useful when analytical reference distributions are unavailable; (3) Bayesian methods -- valuable when incorporating prior information or when direct probability statements about parameters are desired. Running multiple approaches and comparing results provides a useful robustness check.
+    이다. 따라서 구간절단 자료의 가능도는
+
+    $$
+    L = \prod_{i=1}^{n} \bigl[S(L_i) - S(R_i)\bigr]
+    $$
+
+    가 된다.
+
+    **극한 확인.** $R_i \to L_i^+$이면
+
+    $$
+    S(L_i) - S(R_i) = -\bigl[S(R_i) - S(L_i)\bigr] \approx -S'(L_i)(R_i - L_i) = f(L_i)\,(R_i-L_i)
+    $$
+
+    이므로, 구간 폭에 비례하는 인자를 제외하면 정확한 관측의 기여인 밀도 $f(L_i)$가 된다.
+    폭이 모든 대상에서 같으면 그 인자는 상수라 최대화에 영향을 주지 않는다.
+
+    **다른 두 극한:**
+
+    - $R_i = \infty$이면 $S(L_i) - 0 = S(L_i)$로 **우측절단**의 기여가 된다.
+    - $L_i = 0$이면 $1 - S(R_i) = F(R_i)$로 **좌측절단**의 기여가 된다.
+
+    즉 구간절단 가능도가 세 유형을 모두 포괄한다.
+
+    !!! note "구간절단에는 카플란-마이어를 쓸 수 없다"
+        카플란-마이어는 사건이 **정확한 시점**에 관측된다는 전제 위에 있다. 구간절단에서는
+        사건 시점이 어디인지 모르므로 위험집합을 시점별로 셀 수 없다. 대신 반복적인
+        비모수 최대가능도 추정(터른불 추정량)이나 모수 모형을 쓴다. 실무에서 구간절단을
+        구간의 중점이나 오른쪽 끝으로 대체해 카플란-마이어를 돌리는 경우가 있는데, 이는
+        편향을 낳으며 특히 검사 간격이 넓을 때 심각하다. $\square$

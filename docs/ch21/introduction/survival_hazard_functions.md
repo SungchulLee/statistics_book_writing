@@ -1,199 +1,300 @@
-# Survival and Hazard Functions
+# 생존함수와 위험함수
 
-Once the structure of time-to-event data and censoring is understood, the next
-step is to define the mathematical quantities that describe how event times are
-distributed.  In ordinary statistics a distribution is characterized by its PDF
-and CDF.  Survival analysis uses the same information but repackages it into
-two functions that are more natural for duration data: the **survival function**
-and the **hazard function**.
+사건까지의 시간 자료와 중도절단의 구조를 이해했다면, 다음 단계는 사건시간이 어떻게 분포하는지
+기술하는 수학량을 정의하는 것이다. 보통의 통계학에서는 분포를 확률밀도함수와 누적분포함수로
+특징짓는다. 생존분석은 같은 정보를 쓰되 지속시간 자료에 더 자연스러운 두 함수, 곧 **생존함수**와
+**위험함수**로 다시 포장한다.
 
-This section defines both functions, derives the cumulative hazard, and
-establishes the relationships that connect all four quantities.
+이 절에서는 두 함수를 정의하고 누적위험을 유도하며, 네 양 사이를 잇는 관계를 세운다.
 
-## The Survival Function
+## 생존함수
 
-Let $T$ be a non-negative continuous random variable representing the time until
-an event.  The **survival function** is the probability that the event has not
-yet occurred by time $t$:
+$T$를 사건이 일어날 때까지의 시간을 나타내는 음이 아닌 연속확률변수라 하자. **생존함수**는
+시점 $t$까지 사건이 아직 일어나지 않았을 확률이다.
 
 $$
 S(t) = P(T > t) = 1 - F(t)
 $$
 
-where $F(t) = P(T \leq t)$ is the usual cumulative distribution function.
+여기서 $F(t) = P(T \leq t)$는 통상의 누적분포함수다.
 
-**Properties of the survival function:**
+**생존함수의 성질:**
 
-1. $S(0) = 1$ --- every subject is alive (event-free) at time zero.
-2. $\lim_{t \to \infty} S(t) = 0$ --- the event eventually occurs for everyone.
-3. $S(t)$ is non-increasing in $t$.
+1. $S(0) = 1$ --- 시점 0에서는 모든 대상이 사건을 겪지 않은 상태다.
+2. $\lim_{t \to \infty} S(t) = 0$ --- 결국 모두에게 사건이 일어난다.
+3. $S(t)$는 $t$에 대해 비증가다.
 
-!!! note "Proper vs Improper Survival Functions"
+!!! note "정상 생존함수와 비정상 생존함수"
 
-    Some models allow $\lim_{t \to \infty} S(t) = p > 0$, meaning a fraction
-    $p$ of the population never experiences the event (a "cured" fraction).
-    These are called **cure rate models** and lie outside the scope of this
-    chapter.
+    어떤 모형은 $\lim_{t \to \infty} S(t) = p > 0$을 허용하는데, 이는 모집단의 비율 $p$가
+    사건을 결코 겪지 않는다는 뜻이다("치유된" 비율). 이런 모형을 **치유율 모형**이라 하며 이
+    장의 범위를 벗어난다.
 
-## The Hazard Function
+## 위험함수
 
-While the survival function answers "what fraction survives past time $t$?",
-the **hazard function** answers a more local question: "given that a subject
-has survived to time $t$, how likely is the event in the next instant?"
+생존함수가 "시점 $t$를 넘겨 생존하는 비율은 얼마인가?"에 답한다면, **위험함수**는 더 국소적인
+질문에 답한다. "어떤 대상이 시점 $t$까지 생존했다는 조건에서, 바로 다음 순간에 사건이 일어날
+가능성은 얼마인가?"
 
-The hazard function is defined as
+위험함수는 다음과 같이 정의된다.
 
 $$
 h(t) = \lim_{\Delta t \to 0} \frac{P(t \leq T < t + \Delta t \mid T \geq t)}{\Delta t}
 $$
 
-This is not a probability (it can exceed 1) but an instantaneous rate.  It
-measures the intensity of the event at time $t$ among those still at risk.
+이것은 확률이 아니라(1을 넘을 수 있다) 순간적인 **비율**이다. 아직 위험에 있는 대상들 사이에서
+시점 $t$의 사건 강도를 잰다.
 
-**Relationship to the density and survival function.**  Using the definition of
-conditional probability,
+**밀도 및 생존함수와의 관계.** 조건부확률의 정의를 쓰면
 
 $$
 h(t) = \frac{f(t)}{S(t)}
 $$
 
-where $f(t) = F'(t) = -S'(t)$ is the probability density function.
+이고, 여기서 $f(t) = F'(t) = -S'(t)$는 확률밀도함수다.
 
-!!! example "Interpreting the Hazard"
+!!! example "위험함수 해석하기"
 
-    Suppose $h(t) = 0.03$ per month at $t = 24$ months.  Among subjects who
-    have survived to month 24, approximately 3% will experience the event in
-    the next month.  This interpretation holds for small time increments:
+    $t = 24$개월에서 $h(t) = 0.03$(월 단위)이라 하자. 24개월까지 생존한 대상들 가운데 약 3%가
+    다음 한 달 안에 사건을 겪는다. 이 해석은 작은 시간 증분에서 성립한다.
     $P(T \in [t, t + \Delta t) \mid T \geq t) \approx h(t) \cdot \Delta t$.
 
-## The Cumulative Hazard Function
+## 누적위험함수
 
-The **cumulative hazard function** accumulates the instantaneous hazard over
-time:
+**누적위험함수**는 순간위험을 시간에 걸쳐 누적한다.
 
 $$
 H(t) = \int_0^t h(u)\,du
 $$
 
-The cumulative hazard has a useful interpretation: it measures the total amount
-of risk that has been accumulated by time $t$.  Unlike $h(t)$, which is a rate,
-$H(t)$ is a dimensionless quantity that ranges from 0 to $\infty$.
+누적위험에는 유용한 해석이 있다. 시점 $t$까지 축적된 위험의 총량을 잰다. 비율인 $h(t)$와 달리
+$H(t)$는 0에서 $\infty$까지 값을 갖는 무차원 양이다.
 
-## Relationships Among the Four Functions
+## 네 함수 사이의 관계
 
-The survival function, hazard function, cumulative hazard, and density are all
-deterministic transformations of one another.  Specifying any one of them
-determines the other three.
+생존함수, 위험함수, 누적위험, 밀도는 모두 서로의 결정론적 변환이다. 어느 하나를 지정하면
+나머지 셋이 결정된다.
 
-**From $S(t)$ to $H(t)$.**  Starting from $h(t) = -S'(t)/S(t)$, integrate both
-sides:
+**$S(t)$에서 $H(t)$로.** $h(t) = -S'(t)/S(t)$에서 출발해 양변을 적분하면
 
 $$
 H(t) = -\ln S(t)
 $$
 
-**From $H(t)$ to $S(t)$.**  Exponentiating the above:
+**$H(t)$에서 $S(t)$로.** 위 식을 지수화하면
 
 $$
 S(t) = \exp\!\bigl(-H(t)\bigr) = \exp\!\left(-\int_0^t h(u)\,du\right)
 $$
 
-**From $h(t)$ to $f(t)$.**  Combining $f(t) = h(t) S(t)$:
+**$h(t)$에서 $f(t)$로.** $f(t) = h(t) S(t)$와 결합하면
 
 $$
 f(t) = h(t) \exp\!\bigl(-H(t)\bigr)
 $$
 
-The following table summarizes the conversions.
+변환을 정리하면 다음과 같다.
 
-| Given | $S(t)$ | $h(t)$ | $H(t)$ | $f(t)$ |
+| 주어진 것 | $S(t)$ | $h(t)$ | $H(t)$ | $f(t)$ |
 |:------|:-------|:-------|:--------|:-------|
 | $S(t)$ | --- | $-S'(t)/S(t)$ | $-\ln S(t)$ | $-S'(t)$ |
 | $h(t)$ | $e^{-\int_0^t h}$ | --- | $\int_0^t h$ | $h \cdot e^{-\int_0^t h}$ |
 | $H(t)$ | $e^{-H(t)}$ | $H'(t)$ | --- | $H'(t) e^{-H(t)}$ |
 | $f(t)$ | $1 - \int_0^t f$ | $f/(1-\int_0^t f)$ | $-\ln(1 - \int_0^t f)$ | --- |
 
-## Shapes of the Hazard Function
+## 위험함수의 모양
 
-Different event-generating processes produce different hazard shapes.  The
-shape of $h(t)$ is often the primary object of scientific interest.
+사건을 만드는 과정이 다르면 위험의 모양도 다르다. $h(t)$의 모양이 과학적 관심의 주된 대상인
+경우가 많다.
 
-- **Constant hazard:** $h(t) = \lambda$.  The event rate does not change over
-  time.  This corresponds to the exponential distribution and implies the
-  memoryless property.
-- **Increasing hazard:** $h(t)$ grows with $t$.  Components wear out over time
-  (aging, fatigue).
-- **Decreasing hazard:** $h(t)$ decreases with $t$.  Early failures are most
-  likely; survivors become more robust ("burn-in" effects).
-- **Bathtub curve:** $h(t)$ decreases initially (infant mortality), remains
-  roughly constant (useful life), then increases (wear-out).  Common in
-  reliability engineering.
-- **Hump-shaped hazard:** $h(t)$ rises to a peak and then declines.  Seen in
-  some disease processes where risk peaks shortly after diagnosis.
+- **상수 위험:** $h(t) = \lambda$. 사건율이 시간에 따라 변하지 않는다. 지수분포에 대응하며
+  무기억성을 함의한다.
+- **증가 위험:** $h(t)$가 $t$에 따라 커진다. 부품이 시간이 지나며 마모된다(노화, 피로).
+- **감소 위험:** $h(t)$가 $t$에 따라 작아진다. 초기 고장이 가장 흔하고 살아남은 것은 더
+  견고해진다("번인" 효과).
+- **욕조 곡선:** $h(t)$가 처음에 감소하고(초기 고장), 대체로 일정하다가(유효 수명), 다시
+  증가한다(마모). 신뢰성 공학에서 흔하다.
+- **봉우리형 위험:** $h(t)$가 정점까지 올랐다가 내려온다. 진단 직후에 위험이 정점을 이루는
+  일부 질병 과정에서 나타난다.
 
-The parametric models in Section 21.3 formalize these shapes: the exponential
-model captures constant hazard, the Weibull model captures monotone hazard,
-and the log-normal and log-logistic models capture hump-shaped hazard.
+21.3절의 모수 모형들이 이 모양들을 형식화한다. 지수 모형은 상수 위험을, 와이불 모형은 단조
+위험을, 로그정규와 로그로지스틱 모형은 봉우리형 위험을 포착한다.
 
-## Worked Example
+## 예제
 
-Consider the exponential distribution with rate $\lambda > 0$.  Its density is
-$f(t) = \lambda e^{-\lambda t}$ for $t \geq 0$.
+비율모수가 $\lambda > 0$인 지수분포를 생각하자. 밀도는 $t \geq 0$에서
+$f(t) = \lambda e^{-\lambda t}$다.
 
-**Survival function:**
+**생존함수:**
 
 $$
 S(t) = P(T > t) = \int_t^{\infty} \lambda e^{-\lambda u}\,du = e^{-\lambda t}
 $$
 
-**Hazard function:**
+**위험함수:**
 
 $$
 h(t) = \frac{f(t)}{S(t)} = \frac{\lambda e^{-\lambda t}}{e^{-\lambda t}} = \lambda
 $$
 
-The hazard is constant, confirming the memoryless property.
+위험이 상수이며, 이는 무기억성을 확인해 준다.
 
-**Cumulative hazard:**
+**누적위험:**
 
 $$
 H(t) = \int_0^t \lambda\,du = \lambda t
 $$
 
-**Verification:** $S(t) = e^{-H(t)} = e^{-\lambda t}$, which matches.
+**검산:** $S(t) = e^{-H(t)} = e^{-\lambda t}$로 일치한다.
 
-??? tip "Why the Hazard Function Matters"
+??? tip "위험함수가 중요한 이유"
 
-    In many applications the hazard function carries more scientific meaning
-    than the survival function.  A clinician wants to know whether the risk of
-    relapse increases or decreases over time.  A credit analyst wants to know
-    whether default risk peaks in the first year or grows steadily.  The
-    survival function answers cumulative questions; the hazard function answers
-    instantaneous questions about risk dynamics.
+    많은 응용에서 위험함수가 생존함수보다 더 큰 과학적 의미를 갖는다. 임상의는 재발 위험이
+    시간에 따라 커지는지 작아지는지 알고 싶어 한다. 신용 분석가는 부도 위험이 첫해에 정점을
+    이루는지 꾸준히 커지는지 알고 싶어 한다. 생존함수는 누적된 질문에 답하고, 위험함수는
+    위험 동학에 관한 순간적인 질문에 답한다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Survival and Hazard Function Relationships
+**연습문제 1.**
+생존함수와 위험함수의 관계
 
-A continuous random variable $T$ has hazard function $h(t) = 0.05$ for all
-$t \geq 0$.
+연속확률변수 $T$의 위험함수가 모든 $t \geq 0$에 대해 $h(t) = 0.05$다.
 
-**(a)** Identify the distribution of $T$ and state its parameter.
+**(a)** $T$의 분포를 밝히고 그 모수를 서술하라.
 
-**(b)** Compute the survival function $S(t)$ and evaluate $S(10)$.
+**(b)** 생존함수 $S(t)$를 구하고 $S(10)$을 계산하라.
 
-**(c)** Compute the cumulative hazard $H(20)$.
+**(c)** 누적위험 $H(20)$을 계산하라.
 
-**(d)** What is the median survival time?
+**(d)** 중앙 생존시간은 얼마인가?
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
 
-    **(a)** The constant hazard $h(t) = 0.05$ implies $T \sim \text{Exp}(\lambda = 0.05)$.
+    **(a)** 상수 위험 $h(t) = 0.05$는 $T \sim \text{Exp}(\lambda = 0.05)$를 함의한다.
 
-    **(b)** $S(t) = e^{-0.05t}$, so $S(10) = e^{-0.5} \approx 0.607$.
+    **(b)** $S(t) = e^{-0.05t}$이므로 $S(10) = e^{-0.5} \approx 0.607$이다.
 
-    **(c)** $H(20) = 0.05 \times 20 = 1.0$.
+    **(c)** $H(20) = 0.05 \times 20 = 1.0$이다.
 
-    **(d)** Solve $S(t_{0.5}) = 0.5$: $e^{-0.05 t_{0.5}} = 0.5$, so
-    $t_{0.5} = \ln(2)/0.05 = 13.86$.
+    **(d)** $S(t_{0.5}) = 0.5$를 풀면 $e^{-0.05 t_{0.5}} = 0.5$이므로
+    $t_{0.5} = \ln(2)/0.05 = 13.86$이다.
+
+    !!! note "중앙값과 평균은 다르다"
+        지수분포의 평균은 $1/\lambda = 20$이지만 중앙값은 $13.86$이다. 분포가 오른쪽으로 크게
+        치우쳐 있기 때문이다. 생존분석에서 **중앙 생존시간을 보고하는 것이 관례**인 이유는
+        두 가지다. 첫째, 중앙값이 이 치우침에 강건하다. 둘째, 중앙값은 생존곡선이 $0.5$까지만
+        내려가면 추정할 수 있지만, 평균은 곡선의 꼬리 전체가 필요한데 절단 때문에 그 부분이
+        관측되지 않는 경우가 많다. 그래서 실무에서는 **제한 평균 생존시간**(RMST), 즉
+        $\int_0^{\tau} S(t)\,dt$를 쓰기도 한다.
+
+---
+
+**연습문제 2.**
+$H(t) = -\ln S(t)$를 유도하라. 이 항등식이 넬슨-알렌 추정량의 바탕이 되는 이유를 설명하라.
+
+??? success "연습문제 2 풀이"
+
+    $h(t) = f(t)/S(t)$이고 $f(t) = -S'(t)$이므로
+
+    $$
+    h(t) = \frac{-S'(t)}{S(t)} = -\frac{d}{dt}\ln S(t)
+    $$
+
+    이다. 양변을 $0$에서 $t$까지 적분하면
+
+    $$
+    H(t) = \int_0^t h(u)\,du = -\bigl[\ln S(u)\bigr]_0^t = -\ln S(t) + \ln S(0)
+    $$
+
+    이고 $S(0) = 1$이므로 $\ln S(0) = 0$이다. 따라서 $H(t) = -\ln S(t)$이다.
+
+    **넬슨-알렌과의 연결.** 이 항등식은 위험을 추정하는 두 가지 길을 열어 준다.
+
+    - **생존함수를 먼저 추정하고 로그를 취한다.** 카플란-마이어 추정량
+      $\hat S(t) = \prod_{t_j \le t}(1 - d_j/n_j)$를 구한 뒤 $-\ln \hat S(t)$를 계산한다.
+    - **위험을 먼저 누적하고 지수화한다.** 넬슨-알렌 추정량
+      $\hat H(t) = \sum_{t_j \le t} d_j/n_j$를 구한 뒤 $\hat S(t) = e^{-\hat H(t)}$를 얻는다.
+
+    두 방법은 **점근적으로 동등하지만 유한표본에서는 다르다.** $\ln(1-x) \approx -x$가
+    작은 $x$에서만 성립하기 때문이다. 위험집합 $n_j$가 작아지는 꼬리 부분에서 $d_j/n_j$가
+    커지면 차이가 벌어지며, 언제나
+    $-\ln \hat S_{\text{KM}}(t) \ge \hat H_{\text{NA}}(t)$, 즉
+    $\hat S_{\text{KM}}(t) \le e^{-\hat H_{\text{NA}}(t)}$가 성립한다. $\square$
+
+---
+
+**연습문제 3.**
+와이불 분포의 위험함수가 $h(t) = \frac{k}{\lambda}\left(\frac{t}{\lambda}\right)^{k-1}$임을
+보이고, 형상모수 $k$의 값에 따라 위험의 모양이 어떻게 달라지는지 서술하라.
+
+??? success "연습문제 3 풀이"
+
+    형상 $k > 0$, 척도 $\lambda > 0$인 와이불 분포의 생존함수는
+
+    $$
+    S(t) = \exp\!\left[-\left(\frac{t}{\lambda}\right)^{k}\right]
+    $$
+
+    이다. 따라서 누적위험은
+
+    $$
+    H(t) = -\ln S(t) = \left(\frac{t}{\lambda}\right)^{k}
+    $$
+
+    이고, 미분하면
+
+    $$
+    h(t) = H'(t) = \frac{k}{\lambda}\left(\frac{t}{\lambda}\right)^{k-1}
+    $$
+
+    이다.
+
+    **형상모수에 따른 위험의 모양:**
+
+    | $k$ | $h(t)$의 거동 | 해석 |
+    |---|---|---|
+    | $k < 1$ | 감소(그리고 $t \to 0^+$에서 $\to \infty$) | 초기 고장, 번인 |
+    | $k = 1$ | 상수 $= 1/\lambda$ | 지수분포, 무기억성 |
+    | $k > 1$ | 증가 | 마모, 노화 |
+    | $k = 2$ | 선형 증가 | 레일리 분포 |
+
+    핵심은 $h(t) \propto t^{k-1}$이라는 점이다. 지수 $k-1$의 부호가 단조성의 방향을 정한다.
+
+    **와이불의 한계:** $h(t)$가 $t$의 멱함수이므로 **언제나 단조**다. 욕조 곡선이나 봉우리형
+    위험은 표현할 수 없다. 그래서 21.3절에서 봉우리형을 위해 로그정규와 로그로지스틱을,
+    욕조 곡선을 위해서는 조각별 모형이나 여러 와이불의 혼합을 쓴다. $\square$
+
+---
+
+**연습문제 4.**
+$h(t)$가 확률이 아니라 비율이며 1을 넘을 수 있음을 구체적인 예로 보여라. 그럼에도
+$\int_0^\infty h(u)\,du = \infty$가 성립해야 하는 이유는 무엇인가?
+
+??? success "연습문제 4 풀이"
+
+    **1을 넘는 예.** $\lambda = 5$인 지수분포는 $h(t) = 5$로 모든 $t$에서 1을 넘는다. 이것이
+    모순이 아닌 이유는 $h(t)$가 **단위 시간당** 비율이기 때문이다. 시간 단위를 년에서 개월로
+    바꾸면 같은 과정의 위험이 $5$에서 $5/12 = 0.417$로 바뀐다. 확률이라면 단위를 바꿨다고
+    값이 달라질 수 없다.
+
+    올바른 확률 해석은 근사식 $P(T \in [t, t+\Delta t) \mid T \ge t) \approx h(t)\Delta t$이며,
+    $\Delta t$가 충분히 작으면 우변이 항상 1보다 작다. $h(t) = 5$이면 $\Delta t = 0.01$에서
+    확률이 약 $0.05$다.
+
+    **왜 $\int_0^\infty h = \infty$인가.** 생존함수의 성질 2에서
+    $\lim_{t\to\infty} S(t) = 0$이었다. $S(t) = e^{-H(t)}$이므로
+
+    $$
+    \lim_{t\to\infty} S(t) = 0 \iff \lim_{t\to\infty} H(t) = \infty
+    $$
+
+    이다. 즉 누적위험이 발산해야 모든 대상이 결국 사건을 겪는다.
+
+    **역도 성립한다.** $\int_0^\infty h(u)\,du = c < \infty$이면 $S(\infty) = e^{-c} > 0$이
+    되어 비율 $e^{-c}$가 사건을 결코 겪지 않는다. 이것이 앞에서 언급한 **치유율 모형**이다.
+    따라서 "위험함수가 적분 발산한다"는 조건과 "정상 생존함수"라는 조건은 같은 말이다.
+
+    실무적 함의: 자료에서 카플란-마이어 곡선이 어떤 수준에서 평평해지고 내려오지 않는다면,
+    이는 절단 때문일 수도 있지만 치유된 부분모집단의 존재를 시사할 수도 있다. 두 설명을
+    구별하려면 추적 기간이 충분히 긴 자료가 필요하다. $\square$
