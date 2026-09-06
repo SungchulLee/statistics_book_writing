@@ -793,28 +793,28 @@ nav:
             - 선형판별분석과 이차판별분석 (코드): ch19/code/lda_qda_classification.md
         - 장 연습문제: ch19/exercises/exercises.md
 
-    - 20 Softmax Regression:
-        - Chapter Overview: ch20/index.md
-        - 20.1 Softmax Regression:
-            - Multinomial Logistic Regression: ch20/softmax_regression/multinomial.md
-            - Softmax Function and Probability Simplex: ch20/softmax_regression/softmax.md
-            - Numerical Stability (Log-Sum-Exp Trick): ch20/softmax_regression/numerical_stability.md
-        - 20.2 Estimation and Optimization:
-            - Cross-Entropy Loss: ch20/optimization/cross_entropy.md
-            - Gradient-Based Optimization: ch20/optimization/optimization.md
-            - Regularization for Softmax: ch20/optimization/regularization.md
-        - 20.3 Model Evaluation and Case Studies:
-            - Multiclass Metrics (Accuracy, Confusion Matrix): ch20/case_studies/metrics.md
-            - Macro, Micro, and Weighted Averaging: ch20/case_studies/averaging.md
-            - MNIST Case Study: ch20/case_studies/mnist.md
-        - 20.4 One-vs-Rest and One-vs-One Strategies:
-            - One-vs-Rest Approach: ch20/strategies/ovr.md
-            - One-vs-One Approach: ch20/strategies/ovo.md
-            - Comparison with Softmax: ch20/strategies/comparison.md
-        - 20.5 Code:
-            - Softmax Regression Implementation: ch20/code/softmax_implementation.md
-            - Multiclass Evaluation Metrics: ch20/code/multiclass_metrics.md
-            - MNIST Classification: ch20/code/mnist_classification.md
+    - 20 소프트맥스 회귀:
+        - 장 개요: ch20/index.md
+        - 20.1 소프트맥스 회귀:
+            - 다항 로지스틱 회귀: ch20/softmax_regression/multinomial.md
+            - 소프트맥스 함수와 확률단체: ch20/softmax_regression/softmax.md
+            - 수치적 안정성 (로그-합-지수 기법): ch20/softmax_regression/numerical_stability.md
+        - 20.2 추정과 최적화:
+            - 교차엔트로피 손실: ch20/optimization/cross_entropy.md
+            - 기울기 기반 최적화: ch20/optimization/optimization.md
+            - 소프트맥스의 정칙화: ch20/optimization/regularization.md
+        - 20.3 모형 평가와 사례연구:
+            - 다범주 지표 (정확도, 혼동행렬): ch20/case_studies/metrics.md
+            - 거시·미시·가중 평균: ch20/case_studies/averaging.md
+            - MNIST 사례연구: ch20/case_studies/mnist.md
+        - 20.4 일대다와 일대일 전략:
+            - 일대다(OvR) 접근: ch20/strategies/ovr.md
+            - 일대일(OvO) 접근: ch20/strategies/ovo.md
+            - 소프트맥스와의 비교: ch20/strategies/comparison.md
+        - 20.5 코드:
+            - 소프트맥스 회귀 구현 (코드): ch20/code/softmax_implementation.md
+            - 다범주 평가지표 구현 (코드): ch20/code/multiclass_metrics.md
+            - MNIST 분류 (코드): ch20/code/mnist_classification.md
 
     - 21 Survival Models:
         - Chapter Overview: ch21/index.md

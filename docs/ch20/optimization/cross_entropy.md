@@ -1,42 +1,38 @@
-# Cross-Entropy Loss
+# 교차엔트로피 손실
 
 
-## Definition
+## 정의
 
-For $n$ observations with $C$ classes, the **categorical cross-entropy
-loss** is
+관측치 $n$개와 범주 $C$개에 대해 **범주형 교차엔트로피 손실**은
 
 $$
 J = -\sum_{i=0}^{n-1}\sum_{c=0}^{C-1} y_{ic}\,\log\hat{y}_{ic}
 $$
 
-where $\mathbf{Y}$ is the $n\times C$ one-hot label matrix and
-$\hat{\mathbf{Y}}$ is the $n\times C$ matrix of predicted probabilities
-from the softmax.
+이다. 여기서 $\mathbf{Y}$는 $n\times C$ 원-핫 이름표 행렬이고 $\hat{\mathbf{Y}}$는 소프트맥스가
+낸 $n\times C$ 예측확률 행렬이다.
 
-## Derivation of the Gradient dJ/dZ^o
-This gradient is the starting point of backpropagation through the
-softmax layer and has a beautifully simple form.
+## 기울기 dJ/dZ^o의 유도
 
-### Step 1 — Rewrite the Loss
+이 기울기는 소프트맥스 층을 거치는 역전파의 출발점이며 놀랄 만큼 단순한 형태를 갖는다.
 
-Since $\hat{y}_{ic} = e^{z_{ic}^o}\big/\sum_{c'}e^{z_{ic'}^o}$ :
+### 1단계 --- 손실 다시 쓰기
 
-$$
-J = -\sum_i\sum_c y_{ic}\,z_{ic}^o
-
-    + \sum_i\sum_c y_{ic}\,\log\sum_{c'}e^{z_{ic'}^o}
-$$
-
-Using $\sum_c y_{ic}=1$ (one-hot):
+$\hat{y}_{ic} = e^{z_{ic}^o}\big/\sum_{c'}e^{z_{ic'}^o}$이므로
 
 $$
-J = -\sum_i\sum_c y_{ic}\,z_{ic}^o
-
-    + \sum_i\log\sum_{c'}e^{z_{ic'}^o}
+J = -\sum_i\sum_c y_{ic}\,z_{ic}^o + \sum_i\sum_c y_{ic}\,\log\sum_{c'}e^{z_{ic'}^o}
 $$
 
-### Step 2 — Differentiate
+이고, $\sum_c y_{ic}=1$(원-핫)이므로
+
+$$
+J = -\sum_i\sum_c y_{ic}\,z_{ic}^o + \sum_i\log\sum_{c'}e^{z_{ic'}^o}
+$$
+
+이다.
+
+### 2단계 --- 미분하기
 
 $$
 \frac{\partial J}{\partial z_{ic}^o}
@@ -44,34 +40,31 @@ $$
 = \hat{y}_{ic} - y_{ic}
 $$
 
-### Matrix Form
+### 행렬 형태
 
 $$
 \frac{\partial J}{\partial \mathbf{Z}^o}
 = \hat{\mathbf{Y}} - \mathbf{Y}
 $$
 
-This is the same "prediction minus target" residual that appears in
-binary logistic regression — the softmax + cross-entropy combination
-produces a clean gradient regardless of the number of classes.
+이는 이항 로지스틱 회귀에 나타나는 "예측값 빼기 목표값" 잔차와 같은 형태다. 소프트맥스와
+교차엔트로피의 조합은 범주 수와 무관하게 깔끔한 기울기를 만들어 낸다.
 
-## Relationship to KL Divergence
+## KL 발산과의 관계
 
-The cross-entropy decomposes as
+교차엔트로피는
 
 $$
 H(\mathbf{y}_i,\hat{\mathbf{y}}_i)
 = H(\mathbf{y}_i) + D_{\mathrm{KL}}(\mathbf{y}_i\|\hat{\mathbf{y}}_i)
 $$
 
-For one-hot labels $H(\mathbf{y}_i)=0$, so minimizing cross-entropy is
-equivalent to minimizing the KL divergence between the true and
-predicted distributions.
+로 분해된다. 원-핫 이름표에서는 $H(\mathbf{y}_i)=0$이므로, 교차엔트로피를 최소화하는 것은 참
+분포와 예측 분포 사이의 KL 발산을 최소화하는 것과 같다.
 
-## Numerical Stability
+## 수치적 안정성
 
-In practice the loss is computed from logits $\mathbf{z}$ directly using
-the **log-sum-exp** trick:
+실무에서는 **로그-합-지수** 기법을 써서 로짓 $\mathbf{z}$로부터 손실을 직접 계산한다.
 
 $$
 \log\hat{y}_{ic}
@@ -79,96 +72,115 @@ $$
 = z_{ic} - \Bigl(m_i + \log\sum_{c'}\exp(z_{ic'}-m_i)\Bigr)
 $$
 
-where $m_i=\max_c z_{ic}$.  This avoids both overflow and loss of
-precision in the logarithm.  PyTorch's `nn.CrossEntropyLoss` and
-TensorFlow's `tf.nn.softmax_cross_entropy_with_logits` implement this
-automatically.
+여기서 $m_i=\max_c z_{ic}$다. 이렇게 하면 오버플로와 로그에서의 정밀도 손실을 모두 피할 수
+있다. PyTorch의 `nn.CrossEntropyLoss`와 TensorFlow의
+`tf.nn.softmax_cross_entropy_with_logits`가 이를 자동으로 구현한다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Cross-Entropy Loss
+**연습문제 1.**
+교차엔트로피 손실
 
-Consider a single training example with true class label $y = 2$ (out of $C = 4$ classes) and predicted probability vector $\hat{\mathbf{p}} = (0.1, 0.6, 0.2, 0.1)^\top$.
+참 범주 이름표가 $y = 2$($C = 4$개 범주 중)이고 예측확률 벡터가
+$\hat{\mathbf{p}} = (0.1, 0.6, 0.2, 0.1)^\top$인 훈련 사례 하나를 생각하자.
 
-**(a)** Write the one-hot encoding $\mathbf{y}$ for this example.
+**(a)** 이 사례의 원-핫 부호화 $\mathbf{y}$를 쓰라.
 
-**(b)** Compute the cross-entropy loss:
+**(b)** 교차엔트로피 손실을 계산하라.
 
 $$
 L = -\sum_{k=1}^C y_k \log \hat{p}_k
 $$
 
-**(c)** Suppose another model predicts $\hat{\mathbf{p}}' = (0.05, 0.85, 0.05, 0.05)^\top$. Compute its cross-entropy loss and explain which model is better.
+**(c)** 다른 모형이 $\hat{\mathbf{p}}' = (0.05, 0.85, 0.05, 0.05)^\top$을 예측했다고 하자. 그
+교차엔트로피 손실을 계산하고 어느 모형이 더 나은지 설명하라.
 
-**(d)** What is the minimum possible cross-entropy loss for a correctly classified example? When is it achieved?
+**(d)** 옳게 분류된 사례의 교차엔트로피 손실의 최솟값은 얼마인가? 언제 달성되는가?
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
 
-    **(a)** The one-hot encoding for class 2 (using 1-based indexing) is:
+    **(a)** 범주 2의 원-핫 부호화는(1부터 세는 색인 기준)
 
     $$
     \mathbf{y} = (0, 1, 0, 0)^\top
     $$
 
-    **(b)** Since only $y_2 = 1$, the sum reduces to a single term:
+    이다.
+
+    **(b)** $y_2 = 1$만 0이 아니므로 합이 한 항으로 줄어든다.
 
     $$
     L = -\log \hat{p}_2 = -\log(0.6) \approx 0.511
     $$
 
-    **(c)** For the second model:
+    **(c)** 두 번째 모형은
 
     $$
     L' = -\log(0.85) \approx 0.163
     $$
 
-    Since $L' < L$, the second model is better — it assigns higher probability to the correct class. Cross-entropy penalizes low confidence in the true class. The closer $\hat{p}_y$ is to 1, the lower the loss.
+    이다. $L' < L$이므로 두 번째 모형이 더 낫다. 참 범주에 더 높은 확률을 부여했기 때문이다.
+    교차엔트로피는 참 범주에 대한 확신이 낮은 것을 벌한다. $\hat{p}_y$가 1에 가까울수록 손실이
+    작아진다.
 
-    **(d)** The minimum cross-entropy loss is 0, achieved when $\hat{p}_y = 1$ (i.e., the model assigns probability 1 to the correct class). Since $-\log(1) = 0$, a perfectly confident and correct prediction incurs zero loss.
+    **(d)** 최솟값은 0이며, $\hat{p}_y = 1$일 때(모형이 참 범주에 확률 1을 부여할 때) 달성된다.
+    $-\log(1) = 0$이므로 완벽히 확신하고 옳은 예측은 손실이 0이다.
+
+    !!! note "0은 도달할 수 없는 하한이다"
+        소프트맥스의 출력은 항상 **엄밀히** 0과 1 사이이므로 $\hat p_y = 1$은 유한한 로짓으로
+        달성할 수 없다. $\hat p_y \to 1$이 되려면 $z_y - \max_{k \ne y} z_k \to \infty$가
+        필요하다. 즉 훈련자료가 완전히 분리 가능하면 손실이 0으로 수렴하되 도달하지는 않으며,
+        가중치가 발산한다. 19장의 완전 분리 문제가 다범주에서 되풀이되는 것이며, 정칙화가
+        필요한 이유이기도 하다.
 
 ---
 
-**Exercise 2.**
-Cross-Entropy Gradient
+**연습문제 2.**
+교차엔트로피의 기울기
 
-Consider softmax regression with $C$ classes. The predicted probability for class $k$ is $\hat{p}_k = \text{softmax}(\mathbf{z})_k$ where $\mathbf{z} = \mathbf{W}\mathbf{x} + \mathbf{b}$.
+범주 $C$개인 소프트맥스 회귀를 생각하자. 범주 $k$의 예측확률은
+$\hat{p}_k = \text{softmax}(\mathbf{z})_k$이고 $\mathbf{z} = \mathbf{W}\mathbf{x} + \mathbf{b}$
+이다.
 
-**(a)** Show that the derivative of the softmax function satisfies:
+**(a)** 소프트맥스 함수의 도함수가
 
 $$
 \frac{\partial \hat{p}_k}{\partial z_j} = \hat{p}_k(\delta_{kj} - \hat{p}_j)
 $$
 
-where $\delta_{kj}$ is the Kronecker delta.
+를 만족함을 보여라($\delta_{kj}$는 크로네커 델타).
 
-**(b)** Using the result from (a), derive the gradient of the cross-entropy loss with respect to the logits:
+**(b)** (a)의 결과를 이용해 로짓에 대한 교차엔트로피 손실의 기울기
 
 $$
 \frac{\partial L}{\partial z_j} = \hat{p}_j - y_j
 $$
 
-**(c)** Interpret this gradient. What happens when the model is very confident and correct? What about when it is confident and wrong?
+를 유도하라.
 
-??? success "Solution to Exercise 2"
+**(c)** 이 기울기를 해석하라. 모형이 매우 확신하며 옳을 때는 어떻게 되는가? 확신하며 틀렸을
+때는?
 
-    **(a)** The softmax function is $\hat{p}_k = e^{z_k} / S$ where $S = \sum_m e^{z_m}$.
+??? success "연습문제 2 풀이"
 
-    **Case $k = j$:** Using the quotient rule:
+    **(a)** 소프트맥스는 $\hat{p}_k = e^{z_k} / S$이고 $S = \sum_m e^{z_m}$이다.
+
+    **경우 $k = j$:** 몫의 미분법으로
 
     $$
     \frac{\partial \hat{p}_k}{\partial z_k} = \frac{e^{z_k} \cdot S - e^{z_k} \cdot e^{z_k}}{S^2} = \frac{e^{z_k}}{S} - \left(\frac{e^{z_k}}{S}\right)^2 = \hat{p}_k - \hat{p}_k^2 = \hat{p}_k(1 - \hat{p}_k)
     $$
 
-    **Case $k \ne j$:**
+    **경우 $k \ne j$:**
 
     $$
     \frac{\partial \hat{p}_k}{\partial z_j} = \frac{0 - e^{z_k} \cdot e^{z_j}}{S^2} = -\hat{p}_k \hat{p}_j
     $$
 
-    Both cases are unified by $\frac{\partial \hat{p}_k}{\partial z_j} = \hat{p}_k(\delta_{kj} - \hat{p}_j)$.
+    두 경우가 $\frac{\partial \hat{p}_k}{\partial z_j} = \hat{p}_k(\delta_{kj} - \hat{p}_j)$로
+    통합된다.
 
-    **(b)** The cross-entropy loss is $L = -\sum_k y_k \log \hat{p}_k$. By the chain rule:
+    **(b)** 교차엔트로피 손실은 $L = -\sum_k y_k \log \hat{p}_k$이고, 연쇄법칙에 의해
 
     $$
     \frac{\partial L}{\partial z_j} = -\sum_k y_k \frac{1}{\hat{p}_k} \frac{\partial \hat{p}_k}{\partial z_j} = -\sum_k y_k \frac{1}{\hat{p}_k} \hat{p}_k(\delta_{kj} - \hat{p}_j)
@@ -178,18 +190,30 @@ $$
     = -\sum_k y_k (\delta_{kj} - \hat{p}_j) = -y_j + \hat{p}_j \sum_k y_k
     $$
 
-    Since $\mathbf{y}$ is one-hot, $\sum_k y_k = 1$, giving:
+    이다. $\mathbf{y}$가 원-핫이므로 $\sum_k y_k = 1$이고, 따라서
 
     $$
     \frac{\partial L}{\partial z_j} = \hat{p}_j - y_j
     $$
 
-    In vector form: $\nabla_{\mathbf{z}} L = \hat{\mathbf{p}} - \mathbf{y}$.
+    벡터 형태로는 $\nabla_{\mathbf{z}} L = \hat{\mathbf{p}} - \mathbf{y}$다.
 
-    **(c)** The gradient $\hat{p}_j - y_j$ has a clean interpretation:
+    **(c)** 기울기 $\hat{p}_j - y_j$는 깔끔하게 해석된다.
 
-    - **Correct and confident** ($y_j = 1$, $\hat{p}_j \approx 1$): gradient $\approx 0$. The model is already correct, so little update is needed.
-    - **Correct but uncertain** ($y_j = 1$, $\hat{p}_j \approx 0.3$): gradient $\approx -0.7$. The negative gradient pushes $z_j$ upward to increase $\hat{p}_j$.
-    - **Wrong and confident** ($y_j = 0$, $\hat{p}_j \approx 0.9$): gradient $\approx 0.9$. The large positive gradient pushes $z_j$ downward to decrease $\hat{p}_j$.
+    - **옳고 확신함**($y_j = 1$, $\hat{p}_j \approx 1$): 기울기 $\approx 0$. 이미 옳으므로
+      갱신이 거의 필요 없다.
+    - **옳지만 불확실함**($y_j = 1$, $\hat{p}_j \approx 0.3$): 기울기 $\approx -0.7$. 음의
+      기울기가 $z_j$를 올려 $\hat{p}_j$를 키운다.
+    - **틀렸고 확신함**($y_j = 0$, $\hat{p}_j \approx 0.9$): 기울기 $\approx 0.9$. 큰 양의
+      기울기가 $z_j$를 내려 $\hat{p}_j$를 줄인다.
 
-    This "residual" form $(\hat{\mathbf{p}} - \mathbf{y})$ parallels the gradient of squared error in linear regression $(\hat{\mathbf{y}} - \mathbf{y})$, making gradient descent updates intuitive.
+    이 "잔차" 형태 $(\hat{\mathbf{p}} - \mathbf{y})$는 선형회귀에서 제곱오차의 기울기
+    $(\hat{\mathbf{y}} - \mathbf{y})$와 나란하여 경사하강 갱신을 직관적으로 만든다.
+
+    !!! note "제곱오차를 썼다면 이렇게 되지 않는다"
+        분류에 제곱손실 $\frac{1}{2}\|\hat{\mathbf{p}} - \mathbf{y}\|^2$를 쓰면 기울기가
+        $(\hat{\mathbf{p}} - \mathbf{y})$에 소프트맥스 야코비가 곱해진 형태가 되어
+        $\hat p_j(1-\hat p_j)$ 인자가 남는다. 그러면 **확신하며 틀린** 경우
+        ($\hat p_j \approx 1$, $y_j = 0$)에 이 인자가 0에 가까워져 기울기가 사라진다. 가장
+        크게 틀린 사례에서 학습이 가장 느려지는 것이다. 교차엔트로피에서는 이 인자가 정확히
+        소거되므로 그런 문제가 없다. 이것이 분류에 교차엔트로피를 쓰는 실질적인 이유다.

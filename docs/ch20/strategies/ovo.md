@@ -1,117 +1,107 @@
-# One-vs-One Approach
+# 일대일(OvO) 접근
 
-## Idea
+## 착상
 
-The **One-vs-One** (OVO) strategy decomposes a $C$-class problem into
-$\binom{C}{2} = C(C-1)/2$ binary sub-problems, one for every pair of
-classes.  Each binary classifier is trained on only the examples from the two
-classes it distinguishes, making each sub-problem smaller and often easier to
-solve.  At prediction time the classifiers vote, and the class with the most
-votes wins.
+**일대일**(OvO) 전략은 $C$범주 문제를 범주 쌍마다 하나씩
+$\binom{C}{2} = C(C-1)/2$개의 이항 부분문제로 분해한다. 각 이항 분류기는 자신이 구별하는 두
+범주의 사례만으로 학습되므로 부분문제가 작아지고 대체로 풀기 쉬워진다. 예측 시점에는 분류기들이
+투표하고 표를 가장 많이 받은 범주가 이긴다.
 
-## Training Procedure
+## 학습 절차
 
-For each pair $(c, c')$ with $1 \le c < c' \le C$:
+$1 \le c < c' \le C$인 각 쌍 $(c, c')$에 대해,
 
-1. Extract the subset of training data belonging to class $c$ or class $c'$:
+1. 범주 $c$ 또는 $c'$에 속하는 훈련자료 부분집합을 추출한다.
 
 $$
 \mathcal{D}_{c,c'} = \{(\mathbf{x}_i, y_i) : y_i \in \{c, c'\}\}
 $$
 
-2. Train a binary classifier $f_{c,c'}$ on $\mathcal{D}_{c,c'}$, where class
-   $c$ is treated as positive and class $c'$ as negative.
+2. $\mathcal{D}_{c,c'}$로 이항 분류기 $f_{c,c'}$를 학습시킨다. 범주 $c$를 양성, $c'$를
+   음성으로 둔다.
 
-The total number of classifiers is
+분류기의 총 개수는
 
 $$
 \binom{C}{2} = \frac{C(C-1)}{2}
 $$
 
-For $C = 10$ classes this gives 45 classifiers; for $C = 26$ (e.g., letter
-recognition) it gives 325.
+이다. $C = 10$이면 45개, $C = 26$(예: 알파벳 인식)이면 325개다.
 
-## Prediction by Majority Voting
+## 다수결 예측
 
-At test time, each of the $C(C-1)/2$ classifiers casts a vote for one of its
-two classes.  Let $v_c$ denote the number of votes received by class $c$:
+검정 시점에 $C(C-1)/2$개의 분류기가 각자 두 범주 중 하나에 표를 던진다. 범주 $c$가 받은 표
+수를 $v_c$라 하면
 
 $$
 v_c = \sum_{\substack{c' = 1 \\ c' \neq c}}^{C}
 \mathbf{1}\{f_{c,c'}(\mathbf{x}) \text{ predicts class } c\}
 $$
 
-The predicted class is
+이고 예측 범주는
 
 $$
 \hat{y} = \arg\max_{c \in \{1,\ldots,C\}} v_c
 $$
 
-Each class participates in $C - 1$ pairwise contests, so the maximum possible
-vote count for any class is $C - 1$.
+이다. 각 범주는 $C - 1$번의 쌍별 대결에 참여하므로 한 범주가 얻을 수 있는 최대 표 수는
+$C - 1$이다.
 
-### Tie Breaking
+### 동점 처리
 
-Ties can occur when two or more classes receive the same number of votes.
-Common tie-breaking strategies include:
+두 개 이상의 범주가 같은 표 수를 받는 동점이 생길 수 있다. 흔한 동점 처리 전략은 다음과 같다.
 
-- Predict the class with the **highest total confidence** (sum of predicted
-  probabilities from all pairwise classifiers involving that class).
-- Predict the class with the **smallest index** (arbitrary but deterministic).
+- **총 확신도가 가장 높은** 범주를 예측한다(그 범주가 참여한 모든 쌍별 분류기의 예측확률 합).
+- **색인이 가장 작은** 범주를 예측한다(임의적이지만 결정론적이다).
 
-## Computational Cost
+## 계산 비용
 
-| Quantity | OVR | OVO |
+| 양 | OvR | OvO |
 |---|---|---|
-| Number of classifiers | $C$ | $C(C-1)/2$ |
-| Training samples per classifier | $n$ | $\approx 2n/C$ (on average) |
-| Total training cost | $C \cdot T(n, p)$ | $\frac{C(C-1)}{2}\cdot T(2n/C, p)$ |
+| 분류기 개수 | $C$ | $C(C-1)/2$ |
+| 분류기당 훈련 표본 | $n$ | 평균 약 $2n/C$ |
+| 총 학습 비용 | $C \cdot T(n, p)$ | $\frac{C(C-1)}{2}\cdot T(2n/C, p)$ |
 
-Here $T(m, p)$ is the cost of training one binary classifier on $m$ examples
-with $p$ features.  Because each OVO classifier uses only a fraction of the
-data, the per-classifier training time is much smaller.  For algorithms whose
-training cost is super-linear in $n$ (e.g., SVMs with $O(n^2)$ to $O(n^3)$
-cost), OVO can be **faster** overall than OVR despite having more classifiers.
+여기서 $T(m, p)$는 특성 $p$개인 사례 $m$개로 이항 분류기 하나를 학습시키는 비용이다. OvO의
+각 분류기는 자료의 일부만 쓰므로 분류기당 학습 시간이 훨씬 짧다. 학습 비용이 $n$에 대해
+초선형인 알고리즘(예: $O(n^2)$--$O(n^3)$인 SVM)에서는 분류기 수가 더 많음에도 OvO가 전체적으로
+**더 빠를** 수 있다.
 
-For logistic regression, where training is roughly $O(np)$, the total OVO cost
-is approximately $C(C-1)/2 \cdot O(2np/C) = O((C-1)np)$, which is comparable
-to OVR's $O(Cnp)$.
+학습이 대략 $O(np)$인 로지스틱 회귀에서는 OvO의 총 비용이
+$C(C-1)/2 \cdot O(2np/C) = O((C-1)np)$로 OvR의 $O(Cnp)$와 비슷하다.
 
-## Advantages and Disadvantages
+## 장점과 단점
 
-| Aspect | Assessment |
+| 측면 | 평가 |
 |---|---|
-| Sub-problem size | Small (only two classes per classifier) |
-| Training speed for super-linear algorithms | Often faster than OVR |
-| Number of classifiers | Quadratic in $C$ — can be large |
-| Prediction speed | Must evaluate $C(C-1)/2$ classifiers |
-| Class imbalance | Less severe than OVR (balanced binary sub-problems) |
-| Probability estimates | Not directly available; require aggregation |
+| 부분문제 크기 | 작다(분류기당 두 범주만) |
+| 초선형 알고리즘의 학습 속도 | 대체로 OvR보다 빠르다 |
+| 분류기 개수 | $C$에 대해 이차. 매우 많아질 수 있다 |
+| 예측 속도 | $C(C-1)/2$개 분류기를 모두 평가해야 한다 |
+| 범주 불균형 | OvR보다 덜 심각하다(이항 부분문제가 균형적) |
+| 확률 추정 | 직접 얻을 수 없고 집계가 필요하다 |
 
-### When OVO Shines
+### OvO가 빛나는 경우
 
-OVO is the default strategy for SVMs in many libraries (e.g., libsvm and
-scikit-learn's `SVC`) because SVMs scale poorly with $n$, and OVO's smaller
-sub-problems offset the quadratic number of classifiers.  For logistic
-regression the benefit is less pronounced, and native softmax regression is
-typically preferred.
+libsvm과 scikit-learn의 `SVC` 같은 여러 라이브러리에서 SVM의 기본 전략이 OvO다. SVM은 $n$에
+대한 확장성이 나쁜데, OvO의 작은 부분문제가 이차적으로 늘어난 분류기 수를 상쇄하기 때문이다.
+로지스틱 회귀에서는 이 이점이 뚜렷하지 않으며 고유 소프트맥스 회귀가 대개 낫다.
 
-??? example "Worked Example: 4-Class OVO"
-    Consider $C = 4$ classes (A, B, C, D).  The number of classifiers is
-    $\binom{4}{2} = 6$:
+??? example "예제: 4범주 OvO"
+    범주 $C = 4$개(A, B, C, D)를 생각하자. 분류기 개수는 $\binom{4}{2} = 6$이다.
 
-    | Classifier | Classes | Training subset size |
+    | 분류기 | 범주 | 학습 부분집합 크기 |
     |---|---|---|
-    | $f_{A,B}$ | A vs B | $n_A + n_B$ |
-    | $f_{A,C}$ | A vs C | $n_A + n_C$ |
-    | $f_{A,D}$ | A vs D | $n_A + n_D$ |
-    | $f_{B,C}$ | B vs C | $n_B + n_C$ |
-    | $f_{B,D}$ | B vs D | $n_B + n_D$ |
-    | $f_{C,D}$ | C vs D | $n_C + n_D$ |
+    | $f_{A,B}$ | A 대 B | $n_A + n_B$ |
+    | $f_{A,C}$ | A 대 C | $n_A + n_C$ |
+    | $f_{A,D}$ | A 대 D | $n_A + n_D$ |
+    | $f_{B,C}$ | B 대 C | $n_B + n_C$ |
+    | $f_{B,D}$ | B 대 D | $n_B + n_D$ |
+    | $f_{C,D}$ | C 대 D | $n_C + n_D$ |
 
-    For a new point $\mathbf{x}_*$, suppose the votes are:
+    새로운 점 $\mathbf{x}_*$에 대해 투표 결과가 다음과 같다고 하자.
 
-    | Classifier | Winner |
+    | 분류기 | 승자 |
     |---|---|
     | $f_{A,B}$ | A |
     | $f_{A,C}$ | A |
@@ -120,13 +110,13 @@ typically preferred.
     | $f_{B,D}$ | B |
     | $f_{C,D}$ | D |
 
-    Vote tallies: A = 2, B = 2, C = 0, D = 2.  Three classes are tied at 2
-    votes.  A tie-breaking rule (e.g., highest total confidence) is needed to
-    produce a final prediction.
+    표 집계: A = 2, B = 2, C = 0, D = 2. 세 범주가 2표로 동점이다. 최종 예측을 내려면
+    동점 처리 규칙(예: 총 확신도 최대)이 필요하다. 연습문제 2에서 이 예제가 단순한 동점보다
+    더 근본적인 문제를 담고 있음을 본다.
 
-## Scikit-learn Usage
+## scikit-learn에서의 사용
 
-Scikit-learn provides the `OneVsOneClassifier` wrapper:
+scikit-learn은 `OneVsOneClassifier` 래퍼를 제공한다.
 
 ```python
 from sklearn.linear_model import LogisticRegression
@@ -137,41 +127,183 @@ model.fit(X_train, y_train)
 y_pred = model.predict(X_test)
 ```
 
-For SVMs, OVO is the default behavior of `SVC` — no explicit wrapper is
-needed.
+SVM에서는 OvO가 `SVC`의 기본 동작이므로 별도의 래퍼가 필요 없다.
 
-See [Comparison with Softmax](comparison.md) for guidance on choosing between
-OVO, OVR, and native softmax regression.
+OvO, OvR, 고유 소프트맥스 회귀 중 무엇을 고를지는
+[소프트맥스와의 비교](comparison.md)를 보라.
 
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Describe the main concept of One-vs-One Approach and explain why it matters for statistical practice.
+**연습문제 1.**
+$C = 3, 10, 26, 100, 1000$에 대해 OvO 분류기의 개수를 계산하고 OvR의 $C$개와 비교하라.
+전체 학습에 처리되는 사례의 총 개수도 두 방식에 대해 각각 구하라.
 
-??? success "Solution to Exercise 1"
-    One-vs-One Approach is a core topic in statistics that provides tools for drawing reliable inferences from data. It matters because proper application ensures valid conclusions, correctly quantified uncertainty, and appropriate handling of the assumptions that underpin the method. Practitioners who understand this concept can avoid common pitfalls and choose the right analytical approach for their data.
+??? success "연습문제 1 풀이"
+
+    | $C$ | OvR 분류기 | OvO 분류기 | 비율 |
+    |---|---|---|---|
+    | 3 | 3 | 3 | $1.0$ |
+    | 10 | 10 | 45 | $4.5$ |
+    | 26 | 26 | 325 | $12.5$ |
+    | 100 | 100 | 4,950 | $49.5$ |
+    | 1000 | 1,000 | 499,500 | $499.5$ |
+
+    비율은 $\frac{C(C-1)/2}{C} = \frac{C-1}{2}$로 $C$에 선형으로 증가한다.
+
+    **처리되는 사례의 총 개수.** 범주가 균형 잡혀 각 범주에 $n/C$개가 있다고 하자.
+
+    - **OvR:** 분류기마다 전체 $n$개를 쓰므로 총 $C \cdot n = Cn$.
+    - **OvO:** 분류기마다 $2n/C$개를 쓰고 분류기가 $C(C-1)/2$개이므로
+      $$
+      \frac{C(C-1)}{2}\cdot\frac{2n}{C} = (C-1)\,n
+      $$
+
+    두 값이 거의 같다는 점이 흥미롭다. $Cn$ 대 $(C-1)n$으로 차이가 1인 인자뿐이다. 이는
+    우연이 아니다. 각 사례는 OvR에서 $C$개 분류기 모두에 나타나고, OvO에서는 자기 범주가
+    참여하는 $C-1$개 분류기에 나타난다.
+
+    **따라서 학습 비용의 차이는 사례 수가 아니라 비용함수의 모양에서 온다.** $T$가 $n$에
+    선형이면 두 방식이 비슷하고, $T$가 초선형이면 작은 문제 여러 개(OvO)가 큰 문제 몇 개(OvR)
+    보다 싸다. $T(m) = m^2$이라면 OvR은 $C n^2$, OvO는 $\frac{C(C-1)}{2}(2n/C)^2 = \frac{2(C-1)n^2}{C}
+    \approx 2n^2$으로, OvO가 $C/2$배 빠르다. $\square$
 
 ---
 
-**Exercise 2.**
-State the key assumptions required by the method discussed here. How can each assumption be checked?
+**연습문제 2.**
+위 예제의 투표 결과를 쌍별 승패 관계로 정리하라. 일관된 순위가 존재하는가?
 
-??? success "Solution to Exercise 2"
-    The main assumptions typically include: (1) independence of observations -- verified by understanding the data collection process and checking for serial correlation; (2) distributional requirements (e.g., normality) -- checked with Q-Q plots and formal tests like Shapiro-Wilk; (3) equal variances (if applicable) -- assessed with boxplots and Levene's test. When assumptions are violated, consider robust alternatives, transformations, or nonparametric methods.
+??? success "연습문제 2 풀이"
+
+    승패 관계를 정리하면
+
+    $$
+    A \succ B, \quad A \succ C, \quad D \succ A, \quad B \succ C, \quad B \succ D, \quad D \succ C
+    $$
+
+    이다. 여기서 $A \succ B$는 "쌍별 대결에서 A가 B를 이겼다"는 뜻이다.
+
+    **일관된 순위는 없다.** 실제로
+
+    $$
+    A \succ B \succ D \succ A
+    $$
+
+    라는 **순환**이 존재한다. A가 B를 이기고, B가 D를 이기고, D가 A를 이긴다. 이런 순환이 있으면
+    "A가 B보다 낫고 B가 D보다 낫다"에서 "A가 D보다 낫다"를 이끌어 낼 수 없으므로, 범주들을
+    한 줄로 세우는 어떤 순위도 이 승패표와 일치하지 않는다.
+
+    이는 사회선택이론의 **콩도르세 역설**과 정확히 같은 현상이다. 쌍별 다수결이 개별적으로는
+    합리적이면서 전체적으로는 이행성을 잃을 수 있다는 것이다.
+
+    **OvO에 대한 함의.**
+
+    - 동점은 우연한 사고가 아니라 **구조적으로 발생한다.** $C \ge 3$이면 순환이 가능하고,
+      순환이 있으면 반드시 동점이 생긴다.
+    - 따라서 동점 처리 규칙은 부수적인 세부사항이 아니라 알고리즘의 필수 구성요소다.
+    - 확신도의 합으로 동점을 처리하는 것이 색인 순서보다 나은 이유도 여기 있다. 순환이 있을
+      때 이항 분류기들이 얼마나 확신했는지가 유일하게 남은 정보이기 때문이다.
+    - 소프트맥스에는 이 문제가 없다. 하나의 점수 벡터 $\mathbf{z}$가 항상 전순서를 정의하므로
+      순환이 원리적으로 불가능하다. $\square$
 
 ---
 
-**Exercise 3.**
-Work through a small numerical example illustrating the application of the technique from this section.
+**연습문제 3.**
+균형 잡힌 범주에서 OvO 각 부분문제의 표본 크기가 $2n/C$임을 보여라. 범주가 불균형하면 어떻게
+되는가?
 
-??? success "Solution to Exercise 3"
-    A structured approach to applying this technique involves: (1) clearly stating the hypotheses or estimation goal; (2) verifying that the data meet the required assumptions; (3) computing the relevant test statistic, estimate, or model fit; (4) obtaining the p-value, confidence interval, or posterior distribution; (5) interpreting the result in the context of the original question. Following these steps systematically ensures a rigorous and reproducible analysis.
+??? success "연습문제 3 풀이"
+
+    범주 $c$의 크기를 $n_c$라 하면 분류기 $f_{c,c'}$의 훈련 표본은 $n_c + n_{c'}$개다.
+
+    **균형 잡힌 경우.** 모든 $n_c = n/C$이므로
+
+    $$
+    n_c + n_{c'} = \frac{n}{C} + \frac{n}{C} = \frac{2n}{C}
+    $$
+
+    이다. 모든 부분문제의 크기가 정확히 같다.
+
+    **불균형한 경우.** 부분문제의 크기가 $n_c + n_{c'}$로 쌍마다 달라진다. 더 중요한 것은
+    각 부분문제 **안에서의** 균형이다. 이항 문제의 양성 비율은
+    $n_c/(n_c + n_{c'})$이므로, 두 범주의 크기가 크게 다르면 그 쌍은 여전히 불균형하다.
+
+    예를 들어 $n_A = 10{,}000$, $n_B = 100$이면 $f_{A,B}$의 양성 비율이 $99\%$다. 다만 이는
+    OvR보다는 훨씬 나은 상황이다. OvR에서 범주 B의 분류기는 $100$ 대 $10{,}000+\cdots$를
+    상대해야 하기 때문이다.
+
+    **OvO의 실질적 이점.** 범주 크기의 **최대/최소 비**가 $r$이면, OvO 부분문제의 불균형은
+    최악의 경우에도 $r$을 넘지 않는다. 반면 OvR에서 가장 작은 범주의 불균형은
+    $(n - n_{\min})/n_{\min}$으로, 범주 수가 많아지면 $r$보다 훨씬 커진다. 이것이 표에서
+    "범주 불균형: OvR보다 덜 심각"이라고 한 이유다. $\square$
 
 ---
 
-**Exercise 4.**
-Compare the approach from this section with an alternative method. When would you choose each?
+**연습문제 4.**
+예측 시점의 계산 비용을 OvR, OvO, 소프트맥스에 대해 비교하라. $C = 1000$, $p = 512$일 때
+각각 몇 번의 곱셈이 필요한가?
 
-??? success "Solution to Exercise 4"
-    The method discussed here is appropriate when its assumptions hold and the sample size is sufficient for the asymptotic approximations to be accurate. Alternative approaches include: (1) nonparametric methods -- preferred when distributional assumptions are suspect; (2) bootstrap methods -- useful when analytical reference distributions are unavailable; (3) Bayesian methods -- valuable when incorporating prior information or when direct probability statements about parameters are desired. Running multiple approaches and comparing results provides a useful robustness check.
+??? success "연습문제 4 풀이"
+
+    입력 하나를 분류하는 데 필요한 내적 계산은,
+
+    | 방식 | 평가할 분류기 | 곱셈 횟수 |
+    |---|---|---|
+    | 소프트맥스 | 1개(행렬곱) | $pC$ |
+    | OvR | $C$개 | $pC$ |
+    | OvO | $C(C-1)/2$개 | $p\,C(C-1)/2$ |
+
+    소프트맥스와 OvR은 곱셈 횟수가 같다. 소프트맥스가 한 번의 행렬곱
+    $\mathbf{x}^T\mathbf{W}$($p \times C$)로 처리하는 것을 OvR은 $C$번의 내적으로 나누어
+    할 뿐이다. 실제로는 행렬곱이 BLAS로 최적화되어 있어 소프트맥스가 상수배 빠르다.
+
+    **$C = 1000$, $p = 512$일 때:**
+
+    | 방식 | 곱셈 횟수 |
+    |---|---|
+    | 소프트맥스 | $512 \times 1000 = 5.12 \times 10^5$ |
+    | OvR | $5.12 \times 10^5$ |
+    | OvO | $512 \times 499{,}500 = 2.56 \times 10^8$ |
+
+    OvO가 **500배** 비싸다. 게다가 모형 저장 공간도 그만큼 커서, 각 이항 모형이 $p+1$개의
+    실수를 가지면 OvO 전체가 $499{,}500 \times 513 \approx 2.6 \times 10^8$개의 모수,
+    배정도로 2GB가 넘는다.
+
+    **결론:** 범주 수가 많으면 OvO는 실용적이지 않다. OvO가 매력적인 것은 $C$가 작고($\le 10$
+    정도) 기저 알고리즘의 학습 비용이 $n$에 초선형일 때뿐이다. 그마저도 **학습** 시간의
+    이야기이며, **예측** 비용은 언제나 OvO가 가장 나쁘다. $\square$
+
+---
+
+**연습문제 5.**
+OvO에서 확률 추정을 얻으려면 어떻게 해야 하는가? 쌍별 확률 $r_{cc'} = P(y = c \mid y \in \{c,c'\}, \mathbf{x})$
+로부터 $p_c = P(y = c \mid \mathbf{x})$를 복원하는 문제를 논하라.
+
+??? success "연습문제 5 풀이"
+
+    쌍별 분류기가 확률을 낸다면 $r_{cc'} \approx \dfrac{p_c}{p_c + p_{c'}}$가 성립해야 한다.
+    미지수는 $p_1, \ldots, p_C$($C-1$개의 자유도)인데 방정식은 $C(C-1)/2$개이므로,
+    $C \ge 3$이면 **과결정계**다. 쌍별 추정치가 서로 완벽히 일관되지 않으면 정확한 해가 없다.
+
+    **표준 해법(하스티-팁시라니 결합, 그리고 우와 린 확장).** 다음을 푼다.
+
+    $$
+    \min_{\mathbf{p}} \sum_{c < c'} n_{cc'}\left(r_{cc'} - \frac{p_c}{p_c+p_{c'}}\right)^2
+    \quad \text{subject to} \quad \sum_c p_c = 1,\; p_c \ge 0
+    $$
+
+    이는 쌍별 추정치에 가장 잘 맞는 확률벡터를 찾는 것이며, 반복 알고리즘으로 푼다.
+    scikit-learn의 `SVC(probability=True)`가 내부적으로 이 방식을 쓴다.
+
+    **문제점 세 가지.**
+
+    1. **비쌈.** 예측마다 반복 최적화를 풀어야 한다.
+    2. **불일치가 정보를 담고 있다.** 쌍별 추정치가 서로 크게 어긋난다는 것은 모형이 이 입력을
+       잘 다루지 못한다는 신호인데, 결합 과정에서 그 정보가 하나의 확률벡터로 뭉개진다.
+       연습문제 2의 순환이 극단적인 예다.
+    3. **보정이 이중으로 필요하다.** 각 쌍별 분류기의 $r_{cc'}$가 이미 잘 보정되어 있어야
+       결합 결과도 보정된다. 각각을 플랫 척도화로 보정한 뒤 다시 결합해야 한다.
+
+    **대조:** 소프트맥스는 확률을 **직접** 최적화 대상으로 삼는다. 복원 문제도, 과결정계도,
+    이중 보정도 없다. 확률이 필요한 응용에서 고유 소프트맥스를 선호하는 가장 강한 이유다.
+    $\square$

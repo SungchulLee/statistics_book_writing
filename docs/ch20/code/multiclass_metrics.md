@@ -1,14 +1,18 @@
-# Multiclass Evaluation Metrics
+# 다범주 평가지표 구현
 
-## Overview
+## 개요
 
-This page implements multiclass evaluation metrics from scratch in Python and compares the results with scikit-learn. We build the confusion matrix, extract per-class precision, recall, and F1-score, and compute macro- and micro-averaged summaries. The code makes the mathematical definitions concrete and provides a template for evaluating any multiclass classifier.
+이 절에서는 다범주 평가지표를 파이썬으로 처음부터 구현하고 그 결과를 scikit-learn과 비교한다.
+혼동행렬을 만들고, 범주별 정밀도·재현율·F1 점수를 뽑아내며, 거시평균과 미시평균 요약을
+계산한다. 코드가 수학적 정의를 구체적으로 보여 주며, 어떤 다범주 분류기에도 쓸 수 있는 틀을
+제공한다.
 
 ---
 
-## Confusion Matrix
+## 혼동행렬
 
-The $C \times C$ confusion matrix $\mathbf{M}$ has entry $M_{jk}$ equal to the number of observations with true class $j$ and predicted class $k$. A perfect classifier produces a diagonal matrix.
+$C \times C$ 혼동행렬 $\mathbf{M}$의 원소 $M_{jk}$는 참 범주가 $j$이고 예측 범주가 $k$인 관측치의
+수다. 완벽한 분류기는 대각행렬을 만든다.
 
 ```python
 import numpy as np
@@ -36,7 +40,7 @@ def confusion_matrix(y_true, y_pred, C):
     return M
 ```
 
-Example with a small 3-class problem:
+작은 3범주 문제로 예를 들면 다음과 같다.
 
 ```python
 y_true = np.array([0, 0, 0, 1, 1, 1, 2, 2, 2])
@@ -51,9 +55,9 @@ print(M)
 
 ---
 
-## Overall Accuracy
+## 전체 정확도
 
-Accuracy is the fraction of correct predictions, which equals the trace of the confusion matrix divided by the total number of observations:
+정확도는 옳은 예측의 비율이며, 혼동행렬의 대각합을 전체 관측치 수로 나눈 값과 같다.
 
 $$
 \text{Accuracy} = \frac{\operatorname{tr}(\mathbf{M})}{n} = \frac{\sum_{c=0}^{C-1} M_{cc}}{\sum_{j,k} M_{jk}}
@@ -70,11 +74,11 @@ print(f"Accuracy: {accuracy(M):.4f}")
 
 ---
 
-## Per-Class Precision, Recall, and F1
+## 범주별 정밀도, 재현율, F1
 
-By treating each class as a one-vs-rest binary problem we extract per-class metrics from the confusion matrix.
+각 범주를 일대다 이항 문제로 보면 혼동행렬에서 범주별 지표를 뽑아낼 수 있다.
 
-For class $c$:
+범주 $c$에 대해,
 
 $$
 \text{Precision}_c = \frac{M_{cc}}{\sum_{j=0}^{C-1} M_{jc}}, \qquad
@@ -85,7 +89,8 @@ $$
 F_{1,c} = \frac{2 \cdot \text{Precision}_c \cdot \text{Recall}_c}{\text{Precision}_c + \text{Recall}_c}
 $$
 
-Precision is the fraction of predictions for class $c$ that are correct (column-wise), while recall is the fraction of actual class $c$ observations that are correctly identified (row-wise).
+정밀도는 범주 $c$로 예측한 것 중 옳은 비율(열 방향)이고, 재현율은 실제 범주 $c$인 관측치 중
+옳게 식별한 비율(행 방향)이다.
 
 ```python
 def per_class_metrics(M):
@@ -121,22 +126,22 @@ for c in range(3):
 
 ---
 
-## Macro and Micro Averaging
+## 거시평균과 미시평균
 
-**Macro-averaging** computes the metric for each class independently, then takes the unweighted mean:
+**거시평균**은 각 범주에 대해 지표를 독립적으로 계산한 뒤 가중치 없이 평균한다.
 
 $$
 F_1^{\text{macro}} = \frac{1}{C}\sum_{c=0}^{C-1} F_{1,c}
 $$
 
-**Micro-averaging** pools all true positives, false positives, and false negatives across classes before computing a single metric:
+**미시평균**은 하나의 지표를 계산하기 전에 모든 범주의 참양성, 위양성, 위음성을 합산한다.
 
 $$
 \text{Precision}_{\text{micro}} = \frac{\sum_c \text{TP}_c}{\sum_c \text{TP}_c + \sum_c \text{FP}_c}, \qquad
 \text{Recall}_{\text{micro}} = \frac{\sum_c \text{TP}_c}{\sum_c \text{TP}_c + \sum_c \text{FN}_c}
 $$
 
-For a single-label problem, micro-averaged precision equals micro-averaged recall equals accuracy.
+단일 이름표 문제에서는 미시평균 정밀도와 미시평균 재현율이 같고 그 값이 정확도와 같다(연습문제 2).
 
 ```python
 def macro_f1(M):
@@ -167,9 +172,10 @@ print(f"Micro F1: {micro_f1(M):.4f}")
 
 ---
 
-## Verification Against scikit-learn
+## scikit-learn과의 검증
 
-We train a softmax regression model on the Iris dataset and compare our from-scratch metrics with scikit-learn's `classification_report`.
+붓꽃 자료에 소프트맥스 회귀 모형을 학습시키고, 직접 만든 지표를 scikit-learn의
+`classification_report`와 비교한다.
 
 ```python
 from sklearn.datasets import load_iris
@@ -182,8 +188,7 @@ iris = load_iris()
 X_train, X_test, y_train, y_test = train_test_split(
     iris.data, iris.target, test_size=0.3, random_state=42)
 
-clf = LogisticRegression(multi_class='multinomial', solver='lbfgs',
-                         max_iter=1000)
+clf = LogisticRegression(solver='lbfgs', max_iter=1000)
 clf.fit(X_train, y_train)
 y_pred = clf.predict(X_test)
 
@@ -201,13 +206,24 @@ print(f"Our Macro F1:  {macro_f1(M_ours):.4f}")
 print(f"Our Micro F1:  {micro_f1(M_ours):.4f}")
 ```
 
-The outputs should match, confirming the correctness of our implementation.
+실행하면 이 분할에서는 검정자료 45개를 모두 옳게 분류하여 혼동행렬이 완전한 대각행렬
+$\operatorname{diag}(19, 13, 13)$이 되고, 거시 F1과 미시 F1이 모두 $1.0000$이다. 두 구현의
+출력이 일치하여 구현의 정확성이 확인된다.
+
+!!! note "완벽한 결과는 검증에 좋은 사례가 아니다"
+    혼동행렬이 대각행렬이면 모든 지표가 1이 되므로, 거시평균과 미시평균의 **차이**를 확인할 수
+    없고 구현의 미묘한 버그도 드러나지 않는다. 검증할 때는 오분류가 섞인 사례를 쓰는 편이 낫다.
+    위의 3범주 장난감 예제(정확도 $0.6667$)나 연습문제 1의 4범주 행렬이 그런 용도에 적합하다.
+
+!!! note "`multi_class='multinomial'`은 더 이상 필요하지 않다"
+    이 인자는 scikit-learn 0.22부터 기본값 `'auto'`가 다항 방식을 고르므로 불필요해졌고,
+    1.5에서 폐기 예고되어 1.7에서 제거되었다. 최신 버전에서는 쓰지 않는 것이 맞다.
 
 ---
 
-## Visualizing the Confusion Matrix
+## 혼동행렬 시각화
 
-A heatmap makes it easy to spot systematic misclassification patterns.
+열지도로 그리면 체계적인 오분류 양상을 쉽게 찾을 수 있다.
 
 ```python
 import matplotlib.pyplot as plt
@@ -242,50 +258,55 @@ plot_confusion_matrix(M_ours, class_names=iris.target_names)
 
 ---
 
-## Interpretation
+## 해석
 
-The from-scratch implementation highlights several key points:
+직접 구현해 보면 몇 가지 핵심이 드러난다.
 
-1. **Accuracy can be misleading.** When classes are imbalanced, a model that always predicts the majority class achieves high accuracy but zero recall on minority classes. Per-class metrics and macro-averaging reveal this failure.
-2. **Macro vs micro.** Macro-averaging treats all classes equally regardless of their size, making it sensitive to poor performance on rare classes. Micro-averaging is dominated by the majority class, which makes it equivalent to accuracy in single-label problems.
-3. **Confusion matrix is the master summary.** Every scalar metric (accuracy, precision, recall, F1) can be derived from the confusion matrix. The matrix itself carries strictly more information than any single number.
-4. **Off-diagonal patterns are diagnostic.** Systematically large off-diagonal entries (e.g., class 4 predicted as class 9 in digit recognition) point to specific modeling deficiencies that can guide feature engineering or data augmentation.
+1. **정확도는 오도할 수 있다.** 범주가 불균형하면 언제나 다수 범주를 예측하는 모형이 높은
+   정확도를 내면서 소수 범주의 재현율은 0이다. 범주별 지표와 거시평균이 이 실패를 드러낸다.
+2. **거시 대 미시.** 거시평균은 크기와 무관하게 모든 범주를 동등하게 다루므로 드문 범주의
+   나쁜 성능에 민감하다. 미시평균은 다수 범주에 지배되며, 단일 이름표 문제에서는 정확도와
+   같아진다.
+3. **혼동행렬이 근본 요약이다.** 정확도, 정밀도, 재현율, F1 등 모든 스칼라 지표가 혼동행렬에서
+   유도된다. 행렬 자체가 어떤 단일 수치보다 엄밀히 더 많은 정보를 담는다.
+4. **비대각 양상이 진단이다.** 체계적으로 큰 비대각 원소(예: 숫자 인식에서 4를 9로 예측)는
+   특정한 모형의 결함을 가리키며, 특성공학이나 자료 증강의 방향을 알려 준다.
 
 ---
 
 ## Exercises
 
-**Exercise 1.**
-A 4-class classifier produces the following confusion matrix:
+**연습문제 1.**
+4범주 분류기가 다음 혼동행렬을 냈다.
 
-|  | Pred 0 | Pred 1 | Pred 2 | Pred 3 |
+|  | 0으로 예측 | 1로 예측 | 2로 예측 | 3으로 예측 |
 |:---:|:---:|:---:|:---:|:---:|
-| **True 0** | 40 | 5 | 3 | 2 |
-| **True 1** | 2 | 35 | 8 | 5 |
-| **True 2** | 1 | 4 | 42 | 3 |
-| **True 3** | 0 | 6 | 2 | 42 |
+| **실제 0** | 40 | 5 | 3 | 2 |
+| **실제 1** | 2 | 35 | 8 | 5 |
+| **실제 2** | 1 | 4 | 42 | 3 |
+| **실제 3** | 0 | 6 | 2 | 42 |
 
-Compute the overall accuracy, per-class precision and recall, and the macro-averaged F1-score by hand.
+전체 정확도, 범주별 정밀도와 재현율, 거시평균 F1 점수를 손으로 계산하라.
 
 ??? success "Solution to Exercise 1"
-    The total number of observations is $40+5+3+2+2+35+8+5+1+4+42+3+0+6+2+42 = 200$.
+    전체 관측치 수는 $40+5+3+2+2+35+8+5+1+4+42+3+0+6+2+42 = 200$이다(각 행의 합이 50).
 
-    **Overall accuracy:**
+    **전체 정확도:**
 
     $$
     \text{Accuracy} = \frac{40 + 35 + 42 + 42}{200} = \frac{159}{200} = 0.795
     $$
 
-    **Per-class metrics:**
+    **범주별 지표:**
 
-    | Class | TP | Col sum | Row sum | Prec | Rec | F1 |
+    | 범주 | TP | 열 합 | 행 합 | 정밀도 | 재현율 | F1 |
     |:---:|:---:|:---:|:---:|:---:|:---:|:---:|
     | 0 | 40 | 43 | 50 | 40/43 = 0.930 | 40/50 = 0.800 | 0.860 |
     | 1 | 35 | 50 | 50 | 35/50 = 0.700 | 35/50 = 0.700 | 0.700 |
     | 2 | 42 | 55 | 50 | 42/55 = 0.764 | 42/50 = 0.840 | 0.800 |
     | 3 | 42 | 52 | 50 | 42/52 = 0.808 | 42/50 = 0.840 | 0.824 |
 
-    **Macro F1:**
+    **거시 F1:**
 
     $$
     F_1^{\text{macro}} = \frac{0.860 + 0.700 + 0.800 + 0.824}{4} = \frac{3.184}{4} = 0.796
@@ -293,17 +314,18 @@ Compute the overall accuracy, per-class precision and recall, and the macro-aver
 
 ---
 
-**Exercise 2.**
-Show that for a single-label multiclass problem, micro-averaged precision equals micro-averaged recall equals overall accuracy. (Hint: relate $\sum_c \text{FP}_c$ and $\sum_c \text{FN}_c$ to the off-diagonal entries of $\mathbf{M}$.)
+**연습문제 2.**
+단일 이름표 다범주 문제에서 미시평균 정밀도 = 미시평균 재현율 = 전체 정확도임을 보여라.
+(힌트: $\sum_c \text{FP}_c$와 $\sum_c \text{FN}_c$를 $\mathbf{M}$의 비대각 원소와 연결하라.)
 
 ??? success "Solution to Exercise 2"
-    For each class $c$:
+    각 범주 $c$에 대해,
 
     - $\text{TP}_c = M_{cc}$
-    - $\text{FP}_c = \sum_{j \neq c} M_{jc}$ (other rows in column $c$)
-    - $\text{FN}_c = \sum_{k \neq c} M_{ck}$ (other columns in row $c$)
+    - $\text{FP}_c = \sum_{j \neq c} M_{jc}$(열 $c$의 다른 행들)
+    - $\text{FN}_c = \sum_{k \neq c} M_{ck}$(행 $c$의 다른 열들)
 
-    Summing over all classes:
+    모든 범주에 대해 더하면,
 
     $$
     \sum_c \text{TP}_c = \sum_c M_{cc} = \operatorname{tr}(\mathbf{M})
@@ -313,50 +335,67 @@ Show that for a single-label multiclass problem, micro-averaged precision equals
     \sum_c \text{FP}_c = \sum_c \sum_{j \neq c} M_{jc} = \sum_{j,c} M_{jc} - \sum_c M_{cc} = n - \operatorname{tr}(\mathbf{M})
     $$
 
-    Similarly:
+    마찬가지로,
 
     $$
     \sum_c \text{FN}_c = \sum_c \sum_{k \neq c} M_{ck} = n - \operatorname{tr}(\mathbf{M})
     $$
 
-    Therefore $\sum_c \text{FP}_c = \sum_c \text{FN}_c$, and:
+    따라서 $\sum_c \text{FP}_c = \sum_c \text{FN}_c$이고,
 
     $$
     \text{Precision}_{\text{micro}} = \frac{\operatorname{tr}(\mathbf{M})}{\operatorname{tr}(\mathbf{M}) + (n - \operatorname{tr}(\mathbf{M}))} = \frac{\operatorname{tr}(\mathbf{M})}{n} = \text{Accuracy}
     $$
 
-    The same calculation applies to recall. Since micro-precision equals micro-recall, the micro-F1 also equals accuracy. $\square$
+    재현율에도 같은 계산이 적용된다. 미시 정밀도와 미시 재현율이 같으므로 미시 F1도 정확도와
+    같다. $\square$
 
 ---
 
-**Exercise 3.**
-A medical screening test classifies patients into 3 categories: healthy (0), condition A (1), and condition B (2). The class distribution is 900 healthy, 70 with condition A, and 30 with condition B out of 1000 patients. A classifier that always predicts "healthy" achieves 90% accuracy. Compute the macro-averaged F1 for this trivial classifier and explain why macro-F1 is a better evaluation criterion than accuracy for this problem.
+**연습문제 3.**
+어떤 의학적 선별검사가 환자를 건강(0), 질환 A(1), 질환 B(2)의 세 범주로 분류한다. 환자
+1000명 중 건강 900명, 질환 A 70명, 질환 B 30명이다. 언제나 "건강"을 예측하는 분류기는 정확도
+90%를 달성한다. 이 무의미한 분류기의 거시평균 F1을 계산하고, 이 문제에서 거시 F1이 정확도보다
+나은 평가 기준인 이유를 설명하라.
 
 ??? success "Solution to Exercise 3"
-    The confusion matrix for the "always predict 0" classifier is:
+    "항상 0을 예측"하는 분류기의 혼동행렬은 다음과 같다.
 
-    |  | Pred 0 | Pred 1 | Pred 2 |
+    |  | 0으로 예측 | 1로 예측 | 2로 예측 |
     |:---:|:---:|:---:|:---:|
-    | **True 0** | 900 | 0 | 0 |
-    | **True 1** | 70 | 0 | 0 |
-    | **True 2** | 30 | 0 | 0 |
+    | **실제 0** | 900 | 0 | 0 |
+    | **실제 1** | 70 | 0 | 0 |
+    | **실제 2** | 30 | 0 | 0 |
 
-    Per-class metrics:
+    범주별 지표:
 
-    - **Class 0:** Precision $= 900/1000 = 0.900$, Recall $= 900/900 = 1.000$, $F_1 = 2(0.9)(1.0)/(0.9+1.0) = 0.947$
-    - **Class 1:** Precision $= 0/0$ (undefined, set to 0), Recall $= 0/70 = 0$, $F_1 = 0$
-    - **Class 2:** Precision $= 0/0$ (undefined, set to 0), Recall $= 0/30 = 0$, $F_1 = 0$
+    - **범주 0:** 정밀도 $= 900/1000 = 0.900$, 재현율 $= 900/900 = 1.000$,
+      $F_1 = 2(0.9)(1.0)/(0.9+1.0) = 0.947$
+    - **범주 1:** 정밀도 $= 0/0$(정의되지 않음, 0으로 둔다), 재현율 $= 0/70 = 0$, $F_1 = 0$
+    - **범주 2:** 정밀도 $= 0/0$(정의되지 않음, 0으로 둔다), 재현율 $= 0/30 = 0$, $F_1 = 0$
 
     $$
     F_1^{\text{macro}} = \frac{0.947 + 0 + 0}{3} = 0.316
     $$
 
-    While accuracy is 90%, macro-F1 is only 0.316, correctly reflecting that the classifier is useless for the two disease classes. In medical screening, failing to detect conditions A and B has severe consequences. Macro-F1 penalizes this failure heavily because it weights all classes equally, regardless of prevalence.
+    정확도는 90%이지만 거시 F1은 $0.316$에 불과하여, 이 분류기가 두 질환 범주에 대해
+    쓸모없다는 사실을 정확히 반영한다. 의학적 선별검사에서 질환 A와 B를 탐지하지 못하는 것은
+    심각한 결과를 낳는다. 거시 F1은 유병률과 무관하게 모든 범주를 동등하게 가중하므로 이
+    실패를 무겁게 벌한다.
+
+    !!! warning "$0/0$을 0으로 두는 관례에 주의"
+        범주 1과 2의 정밀도는 분모가 0이라 **정의되지 않는다.** 0으로 두는 것은 관례일 뿐이며,
+        그 선택이 결과를 바꾼다. 만약 정의되지 않은 정밀도를 가진 범주를 평균에서 **제외**한다면
+        거시 F1이 $0.947$이 되어 정반대의 인상을 준다. scikit-learn은 이 경우
+        `UndefinedMetricWarning`을 내고 `zero_division` 인자로 동작을 고를 수 있게 한다.
+        기본값은 0이며, 이 예에서는 그것이 옳은 선택이다. 예측을 아예 하지 않은 범주를
+        평균에서 빼 주면 아무것도 예측하지 않는 분류기가 가장 좋아 보이게 되기 때문이다.
 
 ---
 
-**Exercise 4.**
-Implement a `weighted_f1` function that computes the weighted-average F1, where each class's F1-score is weighted by its support (number of true instances). Show that for a balanced dataset, weighted-F1 equals macro-F1.
+**연습문제 4.**
+각 범주의 F1 점수를 지지도(실제 사례 수)로 가중하여 가중평균 F1을 계산하는 `weighted_f1`
+함수를 구현하라. 균형 잡힌 자료에서는 가중 F1이 거시 F1과 같아짐을 보여라.
 
 ??? success "Solution to Exercise 4"
     ```python
@@ -368,36 +407,49 @@ Implement a `weighted_f1` function that computes the weighted-average F1, where 
         return np.sum(f1s * supports) / total
     ```
 
-    For a balanced dataset, every class has the same support $s = n/C$. Then:
+    균형 잡힌 자료에서는 모든 범주의 지지도가 $s = n/C$로 같다. 그러면,
 
     $$
     F_1^{\text{weighted}} = \frac{\sum_c F_{1,c} \cdot s}{\sum_c s} = \frac{s \sum_c F_{1,c}}{C \cdot s} = \frac{1}{C}\sum_c F_{1,c} = F_1^{\text{macro}}
     $$
 
-    The weights $s/Cs = 1/C$ become uniform, reducing to the unweighted mean. $\square$
+    가중치 $s/Cs = 1/C$가 균일해져 비가중 평균으로 환원된다. $\square$
 
 ---
 
-**Exercise 5.**
-Prove that for any confusion matrix $\mathbf{M}$ and any class $c$, the F1-score satisfies $0 \leq F_{1,c} \leq 1$, with $F_{1,c} = 1$ if and only if class $c$ has perfect precision and perfect recall.
+**연습문제 5.**
+임의의 혼동행렬 $\mathbf{M}$과 임의의 범주 $c$에 대해 F1 점수가
+$0 \leq F_{1,c} \leq 1$을 만족하며, $F_{1,c} = 1$인 것은 범주 $c$의 정밀도와 재현율이 모두
+완벽할 때 그리고 그때뿐임을 증명하라.
 
 ??? success "Solution to Exercise 5"
-    The F1-score is the harmonic mean of precision and recall:
+    F1 점수는 정밀도와 재현율의 조화평균이다.
 
     $$
     F_{1,c} = \frac{2 \cdot P_c \cdot R_c}{P_c + R_c}
     $$
 
-    where $P_c, R_c \in [0, 1]$.
+    여기서 $P_c, R_c \in [0, 1]$이다.
 
-    **Lower bound:** Since $P_c \geq 0$ and $R_c \geq 0$, the numerator $2P_c R_c \geq 0$ and the denominator $P_c + R_c \geq 0$. If either $P_c = 0$ or $R_c = 0$, then $F_{1,c} = 0$. Hence $F_{1,c} \geq 0$.
+    **하한:** $P_c \geq 0$이고 $R_c \geq 0$이므로 분자 $2P_c R_c \geq 0$이고 분모
+    $P_c + R_c \geq 0$이다. $P_c = 0$이거나 $R_c = 0$이면 $F_{1,c} = 0$이다. 따라서
+    $F_{1,c} \geq 0$이다.
 
-    **Upper bound:** By the AM-GM inequality, $P_c R_c \leq \left(\frac{P_c + R_c}{2}\right)^2$, so:
+    **상한:** 산술-기하 평균 부등식에 의해
+    $P_c R_c \leq \left(\frac{P_c + R_c}{2}\right)^2$이므로,
 
     $$
     F_{1,c} = \frac{2 P_c R_c}{P_c + R_c} \leq \frac{2 \cdot \frac{(P_c + R_c)^2}{4}}{P_c + R_c} = \frac{P_c + R_c}{2} \leq \frac{1 + 1}{2} = 1
     $$
 
-    Alternatively, note directly that the harmonic mean of two numbers in $[0,1]$ is at most their arithmetic mean, which is at most 1.
+    또는 $[0,1]$의 두 수의 조화평균이 산술평균 이하이고 산술평균이 1 이하임을 직접 관찰해도
+    된다.
 
-    **Equality at 1:** $F_{1,c} = 1$ requires $2P_c R_c = P_c + R_c$, i.e., $2P_c R_c - P_c - R_c = 0$. Factoring: $(2P_c - 1)(2R_c - 1) = 1$. Since $P_c, R_c \in [0,1]$, the factors $(2P_c - 1)$ and $(2R_c - 1)$ are each in $[-1, 1]$. Their product equals 1 only when both equal 1, giving $P_c = R_c = 1$. Thus $F_{1,c} = 1$ if and only if precision and recall are both perfect. $\square$
+    **1에서의 등호:** $F_{1,c} = 1$이려면 $2P_c R_c = P_c + R_c$, 즉
+    $2P_c R_c - P_c - R_c = 0$이어야 한다. 양변에 2를 곱하고 1을 더하면
+    $4P_cR_c - 2P_c - 2R_c + 1 = 1$이므로 $(2P_c - 1)(2R_c - 1) = 1$로 인수분해된다.
+    $P_c, R_c \in [0,1]$이므로 두 인자 $(2P_c - 1)$과 $(2R_c - 1)$은 각각 $[-1, 1]$에 있다.
+    두 인자의 곱이 1이 되는 것은 둘 다 1이거나 둘 다 $-1$일 때인데, 둘 다 $-1$이면
+    $P_c = R_c = 0$이 되어 $F_{1,c} = 0 \ne 1$이므로 모순이다. 따라서 둘 다 1, 즉
+    $P_c = R_c = 1$이다. 그러므로 $F_{1,c} = 1$인 것은 정밀도와 재현율이 모두 완벽할 때
+    그리고 그때뿐이다. $\square$

@@ -1,76 +1,101 @@
-# Chapter 20: Softmax Regression
+# 20장: 소프트맥스 회귀
 
 
-## Overview
+## 개요
 
-This chapter extends binary logistic regression to the multiclass setting by developing softmax regression (multinomial logistic regression). Starting from the softmax function and its geometric interpretation on the probability simplex, we derive the cross-entropy loss and its gradients, explore regularization and optimization strategies, and evaluate multiclass models using confusion matrices and averaging schemes. The chapter also covers alternative decomposition strategies---one-vs-rest and one-vs-one---and concludes with a hands-on MNIST case study.
-
----
-
-## Chapter Structure
-
-### 20.1 Softmax Regression
-
-The foundations of multiclass classification via the softmax model:
-
-- **Multinomial Logistic Regression** --- Generalizes binary logistic regression to $C > 2$ classes by learning a weight matrix and bias vector that produce per-class logits, establishing the single-layer softmax architecture.
-- **Softmax Function and Probability Simplex** --- Defines the softmax mapping from real-valued logits to a valid probability distribution on the $(C{-}1)$-simplex, covering key properties such as non-negativity, normalization, monotonicity, and shift invariance.
-- **Numerical Stability (Log-Sum-Exp Trick)** --- Addresses the overflow and underflow issues that arise when exponentiating large logits, introducing the log-sum-exp trick to ensure stable computation.
-
-### 20.2 Estimation and Optimization
-
-Training the softmax model via gradient-based methods:
-
-- **Cross-Entropy Loss** --- Derives the categorical cross-entropy objective for one-hot encoded labels and shows that its gradient with respect to the logits has the elegant form $\hat{\mathbf{Y}} - \mathbf{Y}$.
-- **Gradient-Based Optimization** --- Presents full gradient derivations for both single-layer and two-layer networks (with logistic hidden activations), including output-layer and hidden-layer backpropagation steps.
-- **Regularization for Softmax** --- Discusses L1 and L2 penalty terms added to the cross-entropy loss to prevent overfitting and improve generalization in multiclass models.
-
-### 20.3 Model Evaluation and Case Studies
-
-Assessing multiclass classifier performance and applying the theory to real data:
-
-- **Multiclass Metrics (Accuracy, Confusion Matrix)** --- Introduces accuracy and the $C \times C$ confusion matrix for diagnosing per-class misclassification patterns, with guidance on extracting precision and recall from the matrix.
-- **Macro, Micro, and Weighted Averaging** --- Explains the three principal strategies for aggregating per-class precision, recall, and F1-score into a single summary metric, and when each is appropriate.
-- **MNIST Case Study** --- Applies softmax regression and deeper architectures (two-layer network, simple CNN) to the MNIST handwritten digit dataset, comparing model complexity, training procedures, and test-set performance.
-
-### 20.4 One-vs-Rest and One-vs-One Strategies
-
-Alternative approaches to multiclass classification that reduce it to a collection of binary problems:
-
-- **OvR (One-vs-Rest) Approach** --- Trains $C$ binary classifiers, each distinguishing one class from all others, and combines their outputs for prediction.
-- **OvO (One-vs-One) Approach** --- Trains $\binom{C}{2}$ binary classifiers, one for each pair of classes, and aggregates predictions via majority voting.
-- **Comparison with Softmax** --- Contrasts the OvR and OvO decomposition strategies with native softmax regression in terms of computational cost, calibration, and scalability.
-
-### 20.5 Code
-
-Complete Python implementations:
-
-- **Softmax Regression Implementation** --- End-to-end softmax regression with gradient descent.
-- **Multiclass Evaluation Metrics** --- Functions for confusion matrices, per-class precision/recall, and averaging schemes.
-- **MNIST Classification** --- Full MNIST pipeline comparing single-layer, two-layer, and CNN models in PyTorch.
-
-### 20.6 Exercises
-
-Practice problems covering the softmax function, cross-entropy loss derivations, multiclass evaluation metrics, and comparisons between softmax regression and OvR/OvO strategies.
+이 장은 이항 로지스틱 회귀를 다범주 상황으로 확장하여 소프트맥스 회귀(다항 로지스틱 회귀)를
+전개한다. 소프트맥스 함수와 확률단체 위에서의 기하학적 해석에서 출발하여 교차엔트로피 손실과
+그 기울기를 유도하고, 정칙화와 최적화 전략을 살펴보며, 혼동행렬과 평균화 방식으로 다범주
+모형을 평가한다. 또한 대안적인 분해 전략인 일대다(OvR)와 일대일(OvO)을 다루고, MNIST 사례연구로
+마무리한다.
 
 ---
 
-## Prerequisites
+## 장의 구성
 
-This chapter builds on:
+### 20.1 소프트맥스 회귀
 
-- **Chapter 19** (Logistic Regression) --- The logit link, odds ratios, maximum likelihood estimation for binary classification, and evaluation metrics such as ROC curves and the confusion matrix.
-- **Chapter 18** (Regularization Techniques) --- L1 and L2 penalties, the bias--variance tradeoff, and cross-validation for hyperparameter tuning.
-- **Chapter 13** (Linear Regression) --- Least squares estimation, gradient computation, and model evaluation, which underpin the linear scoring layer in softmax regression.
-- **Chapter 6** (Statistical Estimation) --- Maximum likelihood estimation principles and Fisher information, used throughout the optimization derivations.
+소프트맥스 모형을 통한 다범주 분류의 기초를 다룬다.
+
+- **다항 로지스틱 회귀** --- 범주별 로짓을 만드는 가중행렬과 편향벡터를 학습하여 이항 로지스틱
+  회귀를 $C > 2$ 범주로 일반화하고, 단층 소프트맥스 구조를 세운다.
+- **소프트맥스 함수와 확률단체** --- 실숫값 로짓을 $(C{-}1)$-단체 위의 유효한 확률분포로 옮기는
+  소프트맥스 사상을 정의하고, 비음성·정규화·단조성·평행이동 불변성 같은 주요 성질을 다룬다.
+- **수치적 안정성(로그-합-지수 기법)** --- 큰 로짓을 지수화할 때 생기는 오버플로와 언더플로
+  문제를 다루고, 안정적인 계산을 위한 로그-합-지수 기법을 소개한다.
+
+### 20.2 추정과 최적화
+
+기울기 기반 방법으로 소프트맥스 모형을 학습시킨다.
+
+- **교차엔트로피 손실** --- 원-핫 부호화된 이름표에 대한 범주형 교차엔트로피 목적함수를 유도하고,
+  로짓에 대한 기울기가 $\hat{\mathbf{Y}} - \mathbf{Y}$라는 우아한 형태를 가짐을 보인다.
+- **기울기 기반 최적화** --- 단층 모형과 (로지스틱 은닉활성을 갖는) 이층 신경망 모두에 대해
+  출력층과 은닉층의 역전파 단계를 포함한 완전한 기울기 유도를 제시한다.
+- **소프트맥스의 정칙화** --- 과적합을 막고 다범주 모형의 일반화 성능을 높이기 위해 교차엔트로피
+  손실에 더하는 L1·L2 벌점항을 논의한다.
+
+### 20.3 모형 평가와 사례연구
+
+다범주 분류기의 성능을 평가하고 이론을 실제 자료에 적용한다.
+
+- **다범주 지표(정확도, 혼동행렬)** --- 정확도와 $C \times C$ 혼동행렬로 범주별 오분류 양상을
+  진단하는 방법을 소개하고, 행렬에서 정밀도와 재현율을 뽑아내는 방법을 안내한다.
+- **거시·미시·가중 평균** --- 범주별 정밀도·재현율·F1 점수를 하나의 요약 지표로 집계하는 세 가지
+  주요 전략과 각각이 적절한 상황을 설명한다.
+- **MNIST 사례연구** --- 손글씨 숫자 자료 MNIST에 소프트맥스 회귀와 더 깊은 구조(이층 신경망,
+  간단한 CNN)를 적용하여 모형 복잡도, 학습 절차, 검정 성능을 비교한다.
+
+### 20.4 일대다와 일대일 전략
+
+다범주 문제를 여러 개의 이항 문제로 환원하는 대안적 접근을 다룬다.
+
+- **OvR(일대다) 접근** --- 한 범주를 나머지 전부와 구별하는 이항 분류기 $C$개를 학습시키고 그
+  출력을 결합해 예측한다.
+- **OvO(일대일) 접근** --- 범주 쌍마다 하나씩 $\binom{C}{2}$개의 이항 분류기를 학습시키고
+  다수결로 예측을 집계한다.
+- **소프트맥스와의 비교** --- 계산 비용, 보정, 확장성 측면에서 OvR·OvO 분해 전략과 고유
+  소프트맥스 회귀를 대비한다.
+
+### 20.5 코드
+
+완전한 파이썬 구현을 제공한다.
+
+- **소프트맥스 회귀 구현** --- 경사하강으로 하는 소프트맥스 회귀의 전 과정.
+- **다범주 평가지표** --- 혼동행렬, 범주별 정밀도·재현율, 평균화 방식을 계산하는 함수들.
+- **MNIST 분류** --- PyTorch로 단층·이층·CNN 모형을 비교하는 전체 MNIST 파이프라인.
+
+### 20.6 연습문제
+
+소프트맥스 함수, 교차엔트로피 손실 유도, 다범주 평가지표, 소프트맥스 회귀와 OvR/OvO 전략의
+비교를 다루는 연습문제들.
 
 ---
 
-## Key Takeaways
+## 선행 지식
 
-1. Softmax regression is the natural multiclass generalization of logistic regression, mapping $C$ logits through the softmax function to produce a valid probability distribution over classes.
-2. Cross-entropy loss, combined with the softmax function, yields a clean gradient ($\hat{\mathbf{Y}} - \mathbf{Y}$) that makes gradient-based optimization straightforward and efficient.
-3. Numerical stability requires the log-sum-exp trick: subtracting the maximum logit before exponentiation prevents overflow without changing the result.
-4. Multiclass evaluation goes beyond accuracy---confusion matrices, per-class metrics, and macro/micro/weighted averaging reveal performance disparities across classes.
-5. One-vs-rest and one-vs-one are viable alternatives to native softmax regression, but softmax provides naturally calibrated probabilities and scales more gracefully to many classes.
-6. Regularization (L1/L2 penalties on the weight matrix) is essential when the feature dimension is large relative to the number of training examples, as in image classification tasks like MNIST.
+이 장은 다음 내용 위에 세워진다.
+
+- **19장**(로지스틱 회귀) --- 로짓 연결, 오즈비, 이항 분류의 최대가능도 추정, 그리고 ROC 곡선과
+  혼동행렬 같은 평가지표.
+- **18장**(정칙화 기법) --- L1·L2 벌점, 편향-분산 절충, 초모수 조율을 위한 교차검증.
+- **13장**(선형회귀) --- 최소제곱 추정, 기울기 계산, 모형 평가. 소프트맥스 회귀의 선형 점수화
+  층의 바탕이 된다.
+- **6장**(통계적 추정) --- 최대가능도 추정의 원리와 피셔 정보. 최적화 유도 전반에 쓰인다.
+
+---
+
+## 핵심 요약
+
+1. 소프트맥스 회귀는 로지스틱 회귀의 자연스러운 다범주 일반화로, $C$개의 로짓을 소프트맥스
+   함수에 통과시켜 범주에 대한 유효한 확률분포를 만든다.
+2. 교차엔트로피 손실과 소프트맥스 함수를 결합하면 기울기가 $\hat{\mathbf{Y}} - \mathbf{Y}$라는
+   깔끔한 형태가 되어 기울기 기반 최적화가 단순하고 효율적이다.
+3. 수치적 안정성을 위해서는 로그-합-지수 기법이 필요하다. 지수화 전에 최대 로짓을 빼면 결과를
+   바꾸지 않으면서 오버플로를 막는다.
+4. 다범주 평가는 정확도를 넘어서야 한다. 혼동행렬, 범주별 지표, 거시·미시·가중 평균이 범주 간
+   성능 격차를 드러낸다.
+5. 일대다와 일대일은 고유 소프트맥스 회귀의 실행 가능한 대안이지만, 소프트맥스는 자연스럽게
+   보정된 확률을 주고 범주 수가 많아져도 더 우아하게 확장된다.
+6. 정칙화(가중행렬에 대한 L1·L2 벌점)는 특성 차원이 훈련표본 수에 비해 클 때 필수적이며,
+   MNIST 같은 이미지 분류 과제가 그 전형이다.

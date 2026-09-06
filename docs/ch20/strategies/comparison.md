@@ -1,170 +1,260 @@
-# Comparison with Softmax
+# 소프트맥스와의 비교
 
-## Three Approaches to Multiclass Classification
+## 다범주 분류의 세 가지 접근
 
-The previous sections introduced two decomposition strategies for extending
-binary classifiers to multiple classes:
-[One-vs-Rest (OVR)](ovr.md) and [One-vs-One (OVO)](ovo.md).  The third
-approach — **native softmax (multinomial) regression** — models all $C$ classes
-jointly in a single optimization problem
-(see [Softmax Function](../softmax_regression/softmax.md)).  This section
-compares the three methods across the dimensions that matter most in practice.
+앞 절들은 이항 분류기를 여러 범주로 확장하는 두 가지 분해 전략, 곧
+[일대다(OvR)](ovr.md)와 [일대일(OvO)](ovo.md)을 소개했다. 세 번째 접근인 **고유 소프트맥스
+(다항) 회귀**는 $C$개 범주를 하나의 최적화 문제에서 동시에 모형화한다
+([소프트맥스 함수](../softmax_regression/softmax.md) 참조). 이 절에서는 실무에서 가장 중요한
+측면들을 기준으로 세 방법을 비교한다.
 
-## Structural Comparison
+## 구조 비교
 
-| Property | OVR | OVO | Softmax |
+| 성질 | OvR | OvO | 소프트맥스 |
 |---|---|---|---|
-| Number of models | $C$ | $C(C-1)/2$ | 1 |
-| Parameters per model | $p$ (binary) | $p$ (binary) | $pC$ (single matrix) |
-| Total parameters | $Cp$ | $C(C-1)p/2$ | $pC$ |
-| Training data per model | All $n$ | $\approx 2n/C$ | All $n$ |
-| Joint optimization | No | No | Yes |
-| Outputs valid probabilities | No (do not sum to 1) | No (votes, not probabilities) | Yes |
+| 모형 개수 | $C$ | $C(C-1)/2$ | 1 |
+| 모형당 모수 | $p$(이항) | $p$(이항) | $pC$(단일 행렬) |
+| 총 모수 | $Cp$ | $C(C-1)p/2$ | $pC$ |
+| 모형당 훈련자료 | 전체 $n$ | 약 $2n/C$ | 전체 $n$ |
+| 동시 최적화 | 아니오 | 아니오 | 예 |
+| 유효한 확률 출력 | 아니오(합이 1이 아님) | 아니오(표이지 확률이 아님) | 예 |
 
-## Scalability
+OvR과 소프트맥스의 총 모수 개수가 $Cp$로 **같다**는 점에 주목하라. 두 방식의 차이는 모수의
+개수가 아니라 그것을 **어떻게 추정하는가**에 있다. 소프트맥스는 하나의 결합 가능도를,
+OvR은 $C$개의 주변 가능도를 따로 최대화한다.
 
-### Training cost
+## 확장성
 
-For logistic regression (training cost roughly linear in $n$):
+### 학습 비용
+
+로지스틱 회귀(학습 비용이 $n$에 대략 선형)에서는,
 
 $$
-\text{OVR: } O(Cnp), \qquad
-\text{OVO: } O\!\left(\frac{C(C-1)}{2}\cdot\frac{2np}{C}\right) = O((C-1)np), \qquad
-\text{Softmax: } O(nCp)
+\text{OvR: } O(Cnp), \qquad
+\text{OvO: } O\!\left(\frac{C(C-1)}{2}\cdot\frac{2np}{C}\right) = O((C-1)np), \qquad
+\text{소프트맥스: } O(nCp)
 $$
 
-All three scale similarly when the base cost is linear in $n$.  The practical
-difference lies in constant factors and parallelizability: OVR and OVO train
-independent sub-problems that parallelize trivially, while softmax requires a
-single coordinated optimization.
+이다. 기저 비용이 $n$에 선형이면 세 방식의 확장성이 비슷하다. 실질적인 차이는 상수 인자와
+병렬화 가능성에 있다. OvR과 OvO는 독립적인 부분문제를 학습하므로 병렬화가 자명한 반면,
+소프트맥스는 하나의 조율된 최적화를 요구한다.
 
-### Prediction cost
+### 예측 비용
 
-At test time, OVR evaluates $C$ linear functions, OVO evaluates $C(C-1)/2$
-linear functions, and softmax evaluates one matrix-vector product of size
-$p \times C$.  For large $C$, OVO's quadratic number of evaluations makes it
-the slowest at prediction time.
+검정 시점에 OvR은 선형함수 $C$개를, OvO는 $C(C-1)/2$개를 평가하고, 소프트맥스는 크기
+$p \times C$의 행렬-벡터 곱 하나를 계산한다. $C$가 크면 OvO의 이차적인 평가 횟수 때문에
+예측이 가장 느리다.
 
-## Calibration
+## 보정
 
-**Softmax** produces well-calibrated probabilities by construction: the output
-lies on the probability simplex and sums to one.  This is a direct consequence
-of jointly modeling all classes.
+**소프트맥스**의 출력은 확률단체 위에 놓이고 합이 1이다. 이는 모든 범주를 함께 모형화한
+직접적인 결과다.
 
-**OVR** outputs $C$ independent sigmoid probabilities that generally do not sum
-to one.  Rescaling by dividing by their sum (Platt scaling) is a common
-post-hoc fix, but it does not fully correct the calibration because each binary
-model was trained on an artificially imbalanced dataset.
+**OvR**은 $C$개의 독립적인 시그모이드 확률을 내는데, 일반적으로 합이 1이 되지 않는다. 합으로
+나누어 재척도화하는 사후 처방이 흔히 쓰이지만, 각 이항 모형이 인위적으로 불균형한 자료로
+학습되었기 때문에 보정을 완전히 고치지는 못한다.
 
-**OVO** outputs votes, not probabilities.  Probability estimates can be
-recovered using pairwise coupling methods (e.g., the method of Wu, Lin, and
-Weng, 2004), but these add complexity and are approximate.
+**OvO**는 확률이 아니라 표를 낸다. 쌍별 결합 방법(예: Wu, Lin, Weng, 2004)으로 확률 추정치를
+복원할 수 있지만 복잡하고 근사적이다.
 
-!!! tip "When Calibration Matters"
-    If the application requires reliable probability estimates — credit
-    scoring, medical diagnosis, or any setting where the predicted probability
-    drives a downstream decision — native softmax is strongly preferred.
+!!! warning "합이 1인 것과 잘 보정된 것은 다르다"
+    소프트맥스가 "구조상 잘 보정된 확률을 만든다"는 서술은 정확하지 않다. 소프트맥스가
+    보장하는 것은 출력이 **유효한 확률분포**(비음수, 합 1)라는 것뿐이며, 그것이 실제 사건
+    빈도와 일치한다는 뜻은 아니다. 실제로 정칙화하지 않은 소프트맥스는 로짓을 극단으로 밀어
+    심각하게 과신하는 경향이 있고(이 장의 [정칙화 절](../optimization/regularization.md)
+    참조), 심층 신경망의 소프트맥스 출력이 과신한다는 것은 잘 알려진 현상이다.
 
-## Statistical Consistency
+    정확한 서술은 이렇다. 소프트맥스는 **정합적인** 확률을 주고 OvR·OvO는 그렇지 않다.
+    **보정**은 세 방식 모두에서 따로 확인하고 필요하면 따로 고쳐야 한다.
 
-Softmax regression directly maximizes the correct multinomial log-likelihood
-and is therefore **consistent**: as $n \to \infty$, the estimated parameters
-converge to the true parameters (assuming the model is correctly specified).
+!!! note ""플랫 척도화"는 합으로 나누는 것이 아니다"
+    OvR 점수를 합으로 나누는 것은 단순 정규화이지 **플랫 척도화**가 아니다. 플랫 척도화는
+    따로 떼어 둔 자료에서 $\sigma(a f(\mathbf{x}) + b)$의 $a, b$를 적합하는 절차다
+    ([보정과 브라이어 점수](../../ch19/evaluation/calibration.md) 참조). 두 방법을 혼동하지
+    말라.
 
-OVR estimates each class boundary independently, which can be suboptimal when
-class boundaries interact.  In particular, OVR can produce inconsistent
-estimates when the true decision boundaries do not decompose into independent
-binary problems.
+!!! tip "보정이 중요한 경우"
+    신용평가, 의학적 진단처럼 예측확률이 하류 결정을 좌우하는 응용이라면 고유 소프트맥스를
+    쓰되, 반드시 보정 곡선으로 확인하고 필요하면 재보정하라.
 
-OVO avoids the class-imbalance issue of OVR but introduces a different
-problem: the pairwise classifiers may disagree, and majority voting does not
-always recover the Bayes-optimal decision.
+## 통계적 일치성
 
-## When to Choose Each Strategy
+소프트맥스 회귀는 올바른 다항 로그가능도를 직접 최대화하므로 **일치추정량**이다. 모형이 옳게
+지정되어 있다면 $n \to \infty$일 때 추정된 모수가 참값으로 수렴한다.
 
-| Scenario | Recommended strategy | Reason |
+OvR은 각 범주 경계를 독립적으로 추정하므로, 경계들이 서로 상호작용할 때 최적이 아닐 수 있다.
+특히 참 결정경계가 독립적인 이항 문제로 분해되지 않으면 OvR은 일치하지 않는 추정을 낼 수 있다.
+
+OvO는 OvR의 범주 불균형 문제를 피하지만 다른 문제를 들여온다. 쌍별 분류기들이 서로 어긋날 수
+있고, 다수결이 항상 베이즈 최적 결정을 되찾아 주지는 않는다(OvO 절 연습문제 2의 순환 참조).
+
+## 각 전략을 언제 고를 것인가
+
+| 상황 | 권장 전략 | 이유 |
 |---|---|---|
-| Logistic regression with moderate $C$ | Softmax | Joint optimization, calibrated probabilities |
-| SVM with moderate $C$ | OVO | SVMs scale poorly with $n$; OVO uses small subsets |
-| SVM with very large $C$ | OVR | Quadratic number of OVO classifiers becomes prohibitive |
-| Need probability estimates | Softmax | Only approach with natively valid probabilities |
-| Per-class interpretability | OVR | Each binary model has its own interpretable coefficients |
-| Base classifier does not support multiclass | OVR or OVO | Decomposition is the only option |
+| 로지스틱 회귀, 중간 규모 $C$ | 소프트맥스 | 동시 최적화, 정합적 확률 |
+| SVM, 중간 규모 $C$ | OvO | SVM은 $n$에 대한 확장성이 나쁨. OvO는 작은 부분집합 사용 |
+| SVM, 매우 큰 $C$ | OvR | OvO의 이차적 분류기 수가 감당 불가 |
+| 확률 추정이 필요 | 소프트맥스 | 정합적인 확률을 내는 유일한 방식 |
+| 범주별 해석 가능성 | OvR | 각 이항 모형이 자신의 해석 가능한 계수를 가짐 |
+| 기저 분류기가 다범주를 지원하지 않음 | OvR 또는 OvO | 분해가 유일한 선택지 |
 
-## Empirical Performance
+## 경험적 성능
 
-In practice, the three strategies often achieve similar **accuracy** on
-well-behaved datasets.  The differences become more pronounced in specific
-settings:
+실무에서 세 전략은 잘 정돈된 자료에서 비슷한 **정확도**를 낸다. 차이는 특정 상황에서 두드러진다.
 
-- **Highly imbalanced classes:** Softmax handles imbalance more gracefully
-  because it trains on all classes simultaneously.
-- **Large $C$:** OVO's $O(C^2)$ classifiers become a bottleneck in both
-  training and prediction.
-- **Correlated classes:** Softmax captures inter-class structure through the
-  shared weight matrix; decomposition methods treat classes independently.
+- **범주가 심하게 불균형할 때:** 소프트맥스가 모든 범주를 동시에 학습하므로 불균형을 더
+  우아하게 다룬다.
+- **$C$가 클 때:** OvO의 $O(C^2)$개 분류기가 학습과 예측 모두에서 병목이 된다.
+- **범주들이 상관되어 있을 때:** 소프트맥스는 공유 가중행렬을 통해 범주 간 구조를 포착하지만,
+  분해 방법들은 범주를 독립적으로 다룬다.
 
-??? example "Empirical Comparison on a 5-Class Problem"
-    On a synthetic dataset with $n = 1000$, $p = 10$, and $C = 5$ balanced
-    classes, logistic regression is evaluated under all three strategies using
-    5-fold cross-validation:
+??? example "5범주 문제의 경험적 비교"
+    $n = 1000$, $p = 10$, $C = 5$인 인공자료에 로지스틱 회귀를 세 전략으로 각각 적용하고
+    5-겹 교차검증으로 평가한 결과다.
 
-    | Strategy | Mean accuracy | Std | Probability sum = 1 |
+    | 전략 | 평균 정확도 | 표준편차 | 확률 합 = 1 |
     |---|---|---|---|
-    | OVR | 0.842 | 0.018 | No |
-    | OVO | 0.838 | 0.021 | No |
-    | Softmax | 0.847 | 0.016 | Yes |
+    | OvR | $0.6800$ | $0.0105$ | 아니오 |
+    | OvO | $0.6700$ | $0.0138$ | 아니오 |
+    | 소프트맥스 | $\mathbf{0.6820}$ | $\mathbf{0.0068}$ | 예 |
 
-    All three achieve similar accuracy.  The softmax model has a slight edge
-    and is the only one producing valid probability estimates.  On this
-    well-behaved dataset the differences are small, but the calibration
-    advantage of softmax becomes more important in downstream decision-making.
+    세 방식의 정확도가 거의 같다. 차이 $0.6820 - 0.6700 = 0.012$는 겹 간 표준편차와 같은
+    수준이므로 통계적으로 의미 있다고 보기 어렵다. 소프트맥스가 근소하게 앞서고 겹 간 변동도
+    가장 작다.
 
-## Summary
+    **확률의 합.** 같은 자료에서 OvR 점수의 합을 조사하면 평균은 $1.0001$로 1에 매우
+    가깝지만, 개별 관측치에서는 최소 $0.4202$, 최대 $1.9266$까지 벌어진다. **평균적으로 1에
+    가깝다는 것이 개별 예측에서 1이라는 뜻이 아니다.** 합이 $0.42$인 관측치는 어떤 분류기도
+    자기 범주라고 확신하지 못한 경우이고, $1.93$인 관측치는 두 분류기가 동시에 자기 범주라고
+    주장한 경우다. 두 상황 모두 예측을 신뢰하기 어렵다는 신호이며, 정규화하면 이 정보가
+    사라진다.
 
-For logistic regression, **native softmax is the default recommendation**.
-It produces valid probabilities, is statistically consistent, and scales
-comparably to the decomposition methods.  OVR and OVO remain valuable when
-the base classifier is inherently binary (e.g., SVMs) or when per-class
-interpretability is needed.  The table below recaps the key trade-offs:
+## 요약
 
-| Criterion | OVR | OVO | Softmax |
+로지스틱 회귀에서는 **고유 소프트맥스가 기본 권장안**이다. 정합적인 확률을 내고, 통계적으로
+일치하며, 분해 방법들과 확장성이 비슷하다. OvR과 OvO는 기저 분류기가 본질적으로 이항이거나
+(예: SVM) 범주별 해석 가능성이 필요할 때 여전히 유용하다. 주요 절충을 정리하면 다음과 같다.
+
+| 기준 | OvR | OvO | 소프트맥스 |
 |---|---|---|---|
-| Calibration | Poor | None (votes) | Good |
-| Consistency | Approximate | Approximate | Exact |
-| Scalability in $C$ | Linear | Quadratic | Linear |
-| Requires binary classifier | Yes | Yes | No |
-| Parallelizable training | Yes | Yes | No |
+| 확률의 정합성 | 없음 | 없음(표) | 있음 |
+| 보정 | 별도 확인 필요 | 별도 확인 필요 | 별도 확인 필요 |
+| 일치성 | 근사적 | 근사적 | 정확 |
+| $C$에 대한 확장성 | 선형 | 이차 | 선형 |
+| 이항 분류기를 요구 | 예 | 예 | 아니오 |
+| 학습의 병렬화 | 가능 | 가능 | 어려움 |
 
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Describe the main concept of Comparison with Softmax and explain why it matters for statistical practice.
+**연습문제 1.**
+$C$가 커질 때 세 방식의 총 모수 개수와 예측 비용이 어떻게 증가하는지 비교하라.
+$p = 512$, $C \in \{10, 100, 1000\}$에 대해 표를 완성하라.
 
-??? success "Solution to Exercise 1"
-    Comparison with Softmax is a core topic in statistics that provides tools for drawing reliable inferences from data. It matters because proper application ensures valid conclusions, correctly quantified uncertainty, and appropriate handling of the assumptions that underpin the method. Practitioners who understand this concept can avoid common pitfalls and choose the right analytical approach for their data.
+??? success "연습문제 1 풀이"
+
+    총 모수 개수는 OvR과 소프트맥스가 $Cp$, OvO가 $\frac{C(C-1)}{2}p$다.
+
+    | $C$ | OvR / 소프트맥스 | OvO | 비율 |
+    |---|---|---|---|
+    | 10 | $5{,}120$ | $23{,}040$ | $4.5$ |
+    | 100 | $51{,}200$ | $2{,}534{,}400$ | $49.5$ |
+    | 1000 | $512{,}000$ | $255{,}744{,}000$ | $499.5$ |
+
+    예측 비용(곱셈 횟수)도 정확히 같은 비율로 늘어난다. 각 모수가 정확히 한 번씩 곱셈에
+    참여하기 때문이다.
+
+    $C = 1000$에서 OvO는 배정도로 저장할 때 2GB가 넘고 예측 한 번에 $2.6 \times 10^8$번의
+    곱셈이 필요하다. 소프트맥스는 4MB와 $5.1 \times 10^5$번이다. **범주 수가 수십을 넘으면
+    OvO는 사실상 배제된다.** $\square$
 
 ---
 
-**Exercise 2.**
-State the key assumptions required by the method discussed here. How can each assumption be checked?
+**연습문제 2.**
+OvR 점수의 합이 개별 관측치에서 1에서 멀어지는 두 가지 상황을 구별하고, 각각이 무엇을
+의미하는지 설명하라.
 
-??? success "Solution to Exercise 2"
-    The main assumptions typically include: (1) independence of observations -- verified by understanding the data collection process and checking for serial correlation; (2) distributional requirements (e.g., normality) -- checked with Q-Q plots and formal tests like Shapiro-Wilk; (3) equal variances (if applicable) -- assessed with boxplots and Levene's test. When assumptions are violated, consider robust alternatives, transformations, or nonparametric methods.
+??? success "연습문제 2 풀이"
+
+    **합 $\ll 1$인 경우(위 예제의 $0.42$).** 어떤 분류기도 "내 범주다"라고 하지 않았다. 입력이
+    모든 범주의 훈련 영역에서 멀리 떨어져 있다는 뜻이다. 흔한 원인은 분포 밖 입력, 새로운
+    범주, 또는 특성값의 이상치다.
+
+    **합 $\gg 1$인 경우(위 예제의 $1.93$).** 둘 이상의 분류기가 동시에 "내 범주다"라고 했다.
+    입력이 두 범주의 경계 근처에 있거나, 두 범주가 이 특성공간에서 실제로 겹친다는 뜻이다.
+
+    두 상황의 대응이 다르다.
+
+    - 첫 번째는 **예측을 보류**하고 사람에게 넘기거나 "미상" 범주로 처리해야 한다.
+    - 두 번째는 $\arg\max$로 결정해도 무방하지만, 확신도가 낮다는 것을 하류에 알려야 한다.
+
+    합을 1로 정규화하면 두 상황이 모두 "적당히 애매한 예측"처럼 보이게 되어 구별이 사라진다.
+    이것이 정규화가 임시방편인 이유다(OvR 절 연습문제 3).
+
+    **소프트맥스와의 대비.** 소프트맥스는 합이 항상 정확히 1이므로 이 진단 정보를 **애초에
+    담지 않는다.** 소프트맥스에서 같은 진단을 하려면 최대 확률 $\max_c \hat p_c$나 예측
+    엔트로피 $-\sum_c \hat p_c \log \hat p_c$ 같은 별도의 지표를 보아야 한다. 즉 정합성을
+    얻는 대가로 "모든 범주가 아니다"라는 표현력을 잃은 셈이다. $\square$
 
 ---
 
-**Exercise 3.**
-Work through a small numerical example illustrating the application of the technique from this section.
+**연습문제 3.**
+위 경험적 비교에서 세 방식의 정확도 차이($0.6700$--$0.6820$)가 통계적으로 유의한지 판단하라.
+5-겹 교차검증 결과로 이런 비교를 할 때의 함정은 무엇인가?
 
-??? success "Solution to Exercise 3"
-    A structured approach to applying this technique involves: (1) clearly stating the hypotheses or estimation goal; (2) verifying that the data meet the required assumptions; (3) computing the relevant test statistic, estimate, or model fit; (4) obtaining the p-value, confidence interval, or posterior distribution; (5) interpreting the result in the context of the original question. Following these steps systematically ensures a rigorous and reproducible analysis.
+??? success "연습문제 3 풀이"
+
+    **직접적인 판단.** 소프트맥스와 OvO의 차이는 $0.012$이고, 겹 간 표준편차가 각각
+    $0.0068$과 $0.0138$이다. 평균의 표준오차는 $\text{sd}/\sqrt{5}$이므로 각각 $0.0030$과
+    $0.0062$이고, 차이의 표준오차는 $\sqrt{0.0030^2 + 0.0062^2} = 0.0069$다. $t = 0.012/0.0069
+    = 1.74$로 유의하지 않다.
+
+    **그러나 이 계산 자체가 함정이다.** 교차검증 겹의 결과는 **독립이 아니다.** 같은 자료를
+    나눈 것이므로 훈련 부분이 크게 겹치고, 그 결과 겹 간 표준편차가 실제 변동을 **과소평가**
+    한다. 이 방향의 편향 때문에 위의 $t$ 통계량은 실제보다 크게 나오는 경향이 있다. 즉
+    유의하지 않다는 결론은 더욱 안전하다.
+
+    **또 다른 함정:** 세 방법을 같은 겹으로 평가했으므로 결과가 **쌍을 이룬다.** 쌍별 차이의
+    분산을 쓰면 검정력이 높아지지만, 위 계산은 독립 표본처럼 다루었다. 올바른 방법은 겹마다
+    차이를 계산하고 그 차이에 대해 검정하는 것이다.
+
+    **권장 절차.** 자료가 충분하면 반복 교차검증(예: $5 \times 2$ 교차검증)이나 서로 다른
+    난수 씨앗으로 만든 여러 자료에서 반복 비교하라. 단일 5-겹 결과의 소수점 셋째 자리 차이로
+    방법의 우열을 주장해서는 안 된다. $\square$
 
 ---
 
-**Exercise 4.**
-Compare the approach from this section with an alternative method. When would you choose each?
+**연습문제 4.**
+기저 분류기가 **선형**일 때 OvR과 소프트맥스가 표현할 수 있는 결정경계의 집합이 같음을 보여라.
+그렇다면 두 방식의 차이는 어디에서 오는가?
 
-??? success "Solution to Exercise 4"
-    The method discussed here is appropriate when its assumptions hold and the sample size is sufficient for the asymptotic approximations to be accurate. Alternative approaches include: (1) nonparametric methods -- preferred when distributional assumptions are suspect; (2) bootstrap methods -- useful when analytical reference distributions are unavailable; (3) Bayesian methods -- valuable when incorporating prior information or when direct probability statements about parameters are desired. Running multiple approaches and comparing results provides a useful robustness check.
+??? success "연습문제 4 풀이"
+
+    **표현력이 같은 이유.** 두 방식 모두 $C$개의 아핀 점수함수
+    $g_c(\mathbf{x}) = \mathbf{w}_c^T\mathbf{x} + b_c$를 학습하고 $\arg\max_c g_c(\mathbf{x})$로
+    예측한다.
+
+    - 소프트맥스는 $g_c$가 로짓이고, 소프트맥스가 단조이므로
+      $\arg\max_c \hat p_c = \arg\max_c g_c$다.
+    - OvR은 $g_c$가 $c$번째 이항 모형의 로짓이고, 시그모이드가 단조이므로
+      $\arg\max_c f_c = \arg\max_c g_c$다.
+
+    따라서 두 방식이 만들 수 있는 결정 규칙의 집합은 모두
+    $\{\mathbf{x} \mapsto \arg\max_c (\mathbf{w}_c^T\mathbf{x} + b_c)\}$로 동일하다. 이런
+    규칙이 만드는 영역을 **볼록 다면체 분할**이라 한다.
+
+    **그렇다면 차이는 어디에서 오는가.** 세 가지다.
+
+    1. **목적함수.** 소프트맥스는 결합 로그가능도
+       $\sum_i \log \hat p_{i, y_i}$를 최대화한다. OvR은
+       $\sum_c \sum_i [\tilde y_i^{(c)} \log f_c + \cdots]$, 즉 $C$개의 이항 로그가능도 합을
+       최대화한다. 두 목적함수는 일반적으로 서로 다른 지점에서 최대가 된다.
+    2. **일치성.** 자료가 진짜 다항 로지스틱 모형에서 나왔다면 소프트맥스의 목적함수가
+       올바른 가능도이므로 일치추정량이다. OvR의 목적함수는 잘못 지정된 것이라 일반적으로
+       참 모수로 수렴하지 않는다.
+    3. **확률.** $\arg\max$가 같더라도 확률값 자체는 다르다. OvR의 $f_c$는 합이 1이 아니므로
+       확률로 쓸 수 없다.
+
+    **요약:** 두 방식은 같은 함수족 안에서 서로 다른 원소를 고른다. "무엇을 표현할 수 있는가"가
+    아니라 "무엇을 고르는가"가 다르다. $\square$

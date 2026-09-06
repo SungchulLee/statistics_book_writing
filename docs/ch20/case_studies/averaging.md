@@ -1,24 +1,22 @@
-# Macro, Micro, and Weighted Averaging
+# 거시·미시·가중 평균
 
-## From Binary to Multiclass Metrics
+## 이항에서 다범주 지표로
 
-In binary classification, precision and recall each produce a single number.
-For $C > 2$ classes, these metrics are computed **per class**, yielding $C$
-precision values and $C$ recall values.  To obtain a single summary number we
-must **average** across classes.  The choice of averaging strategy can
-dramatically affect the reported performance, especially when class sizes are
-imbalanced.  This section defines the three standard strategies and explains
-when each is appropriate.
+이항 분류에서 정밀도와 재현율은 각각 하나의 수를 낸다. $C > 2$개 범주에서는 이 지표들을
+**범주별로** 계산하므로 정밀도 $C$개와 재현율 $C$개가 나온다. 하나의 요약 수치를 얻으려면
+범주에 걸쳐 **평균**해야 한다. 평균 방식의 선택은 보고되는 성능을 크게 바꿀 수 있으며, 범주
+크기가 불균형할 때 특히 그렇다. 이 절에서는 세 가지 표준 전략을 정의하고 각각이 언제 적절한지
+설명한다.
 
-## Per-Class Metrics
+## 범주별 지표
 
-For class $c \in \{1, \ldots, C\}$, define the confusion-matrix quantities:
+범주 $c \in \{1, \ldots, C\}$에 대해 혼동행렬의 양들을 다음과 같이 정의한다.
 
-- $\text{TP}_c$: true positives (correctly predicted as class $c$)
-- $\text{FP}_c$: false positives (incorrectly predicted as class $c$)
-- $\text{FN}_c$: false negatives (class $c$ examples predicted as another class)
+- $\text{TP}_c$: 참양성(범주 $c$로 옳게 예측)
+- $\text{FP}_c$: 위양성(범주 $c$로 잘못 예측)
+- $\text{FN}_c$: 위음성(실제 범주 $c$인데 다른 범주로 예측)
 
-Per-class precision and recall are
+범주별 정밀도와 재현율은
 
 $$
 P_c = \frac{\text{TP}_c}{\text{TP}_c + \text{FP}_c},
@@ -26,16 +24,15 @@ P_c = \frac{\text{TP}_c}{\text{TP}_c + \text{FP}_c},
 R_c = \frac{\text{TP}_c}{\text{TP}_c + \text{FN}_c}
 $$
 
-and the per-class F1-score is their harmonic mean:
+이고, 범주별 F1 점수는 둘의 조화평균이다.
 
 $$
 F_{1,c} = \frac{2\,P_c\,R_c}{P_c + R_c}
 $$
 
-## Macro-Average
+## 거시평균
 
-The **macro-average** computes the metric for each class independently and then
-takes the unweighted mean:
+**거시평균**은 각 범주에 대해 지표를 따로 계산한 뒤 가중치 없이 평균한다.
 
 $$
 P_{\text{macro}} = \frac{1}{C}\sum_{c=1}^{C}P_c,
@@ -45,20 +42,16 @@ R_{\text{macro}} = \frac{1}{C}\sum_{c=1}^{C}R_c,
 F_{1,\text{macro}} = \frac{1}{C}\sum_{c=1}^{C}F_{1,c}
 $$
 
-Every class contributes equally regardless of its size.  Macro-averaging is
-therefore sensitive to performance on **rare classes**: a model that performs
-poorly on a small minority class will see its macro score drop even if it
-handles the majority classes well.
+크기와 무관하게 모든 범주가 동등하게 기여한다. 따라서 거시평균은 **드문 범주**의 성능에
+민감하다. 다수 범주를 잘 다루더라도 작은 소수 범주에서 성능이 나쁘면 거시 점수가 떨어진다.
 
-!!! tip "When to Use Macro-Average"
-    Use macro-averaging when all classes are equally important, regardless of
-    their frequency.  This is common in medical diagnosis (every disease
-    matters) and document classification with balanced topic importance.
+!!! tip "거시평균을 쓸 때"
+    빈도와 무관하게 모든 범주가 똑같이 중요할 때 쓴다. 모든 질병이 중요한 의학적 진단이나,
+    주제의 중요도가 균등한 문서 분류가 그 예다.
 
-## Micro-Average
+## 미시평균
 
-The **micro-average** pools the TP, FP, and FN counts across all classes before
-computing the metric:
+**미시평균**은 지표를 계산하기 전에 모든 범주의 TP, FP, FN을 합산한다.
 
 $$
 P_{\text{micro}} = \frac{\sum_{c=1}^{C}\text{TP}_c}{\sum_{c=1}^{C}(\text{TP}_c + \text{FP}_c)},
@@ -66,27 +59,30 @@ P_{\text{micro}} = \frac{\sum_{c=1}^{C}\text{TP}_c}{\sum_{c=1}^{C}(\text{TP}_c +
 R_{\text{micro}} = \frac{\sum_{c=1}^{C}\text{TP}_c}{\sum_{c=1}^{C}(\text{TP}_c + \text{FN}_c)}
 $$
 
-For multiclass classification (where every sample receives exactly one label),
-the micro-averaged precision, recall, and F1-score all equal the overall
-**accuracy**:
+모든 표본이 정확히 하나의 이름표를 받는 다범주 분류에서는 미시 정밀도, 미시 재현율, 미시 F1이
+모두 전체 **정확도**와 같아진다.
 
 $$
 P_{\text{micro}} = R_{\text{micro}} = F_{1,\text{micro}} = \frac{\text{total correct}}{n}
 $$
 
-Micro-averaging gives more weight to **larger classes** because they contribute
-more counts to the pooled totals.
+미시평균은 **큰 범주**에 더 큰 무게를 준다. 합산 총계에 더 많이 기여하기 때문이다.
 
-!!! tip "When to Use Micro-Average"
-    Use micro-averaging when you want a metric that reflects overall
-    performance across all samples.  It is appropriate when class imbalance
-    mirrors the true deployment distribution and you care about per-sample
-    accuracy.
+!!! note "이 등식이 성립하는 이유"
+    단일 이름표 다범주 분류에서는 모든 예측이 어떤 범주의 TP이거나 어떤 범주의 FP이므로
+    $\sum_c(\text{TP}_c + \text{FP}_c) = n$이고, 모든 관측치가 어떤 범주의 TP이거나 어떤
+    범주의 FN이므로 $\sum_c(\text{TP}_c + \text{FN}_c) = n$이다. 따라서 두 분모가 모두 $n$이
+    되어 미시 정밀도와 미시 재현율이 같아지고, 그 값이 곧 정확도다. 동시에
+    $\sum_c \text{FP}_c = \sum_c \text{FN}_c = (\text{오류 수})$라는 항등식도 따라온다.
+    표를 만들 때 이 등식이 성립하지 않으면 그 표는 어떤 실제 혼동행렬에서도 나올 수 없다.
 
-## Weighted Average
+!!! tip "미시평균을 쓸 때"
+    모든 표본에 걸친 전체 성능을 반영하는 지표가 필요할 때 쓴다. 범주 불균형이 실제 배치
+    분포를 그대로 반영하고 표본 단위의 정확도가 관심사일 때 적절하다.
 
-The **weighted average** computes a weighted mean of the per-class metrics,
-with weights proportional to class size (support):
+## 가중평균
+
+**가중평균**은 범주 크기(support)에 비례하는 가중치로 범주별 지표의 가중평균을 구한다.
 
 $$
 P_{\text{weighted}} = \sum_{c=1}^{C}\frac{n_c}{n}\,P_c,
@@ -94,88 +90,100 @@ P_{\text{weighted}} = \sum_{c=1}^{C}\frac{n_c}{n}\,P_c,
 R_{\text{weighted}} = \sum_{c=1}^{C}\frac{n_c}{n}\,R_c
 $$
 
-where $n_c = \text{TP}_c + \text{FN}_c$ is the number of true examples in
-class $c$ and $n = \sum_c n_c$.  Weighted averaging is a compromise: it
-accounts for class imbalance (like micro) while still computing per-class
-metrics (like macro).
+여기서 $n_c = \text{TP}_c + \text{FN}_c$는 범주 $c$의 실제 사례 수이고 $n = \sum_c n_c$다.
+가중평균은 절충안이다. (미시처럼) 범주 불균형을 반영하면서도 (거시처럼) 범주별 지표를
+계산한다.
 
-## Comparison
+## 비교
 
-| Strategy | Weight per class | Sensitive to rare classes | Equals accuracy |
+| 전략 | 범주별 가중치 | 드문 범주에 민감 | 정확도와 일치 |
 |---|---|---|---|
-| Macro | $1/C$ (equal) | Yes | No |
-| Micro | Proportional to support | No | Yes (single-label) |
-| Weighted | $n_c / n$ | Intermediate | No |
+| 거시 | $1/C$(동등) | 예 | 아니오 |
+| 미시 | 크기에 비례 | 아니오 | 예(단일 이름표) |
+| 가중 | $n_c / n$ | 중간 | 재현율만 일치 |
 
-??? example "Worked Example: 3-Class Imbalanced Problem"
-    Consider a classifier evaluated on $n = 1000$ test samples with three
-    classes:
+??? example "예제: 불균형한 3범주 문제"
+    검정 표본 $n = 1000$개, 범주 세 개로 평가한 분류기를 생각하자. 혼동행렬(행 = 실제,
+    열 = 예측)은 다음과 같다.
 
-    | Class | $n_c$ | $\text{TP}_c$ | $\text{FP}_c$ | $\text{FN}_c$ | $P_c$ | $R_c$ | $F_{1,c}$ |
+    | | A로 예측 | B로 예측 | C로 예측 | 합계 |
+    |---|---|---|---|---|
+    | **실제 A** | 760 | 30 | 10 | 800 |
+    | **실제 B** | 40 | 100 | 10 | 150 |
+    | **실제 C** | 25 | 5 | 20 | 50 |
+    | **합계** | 825 | 135 | 40 | 1000 |
+
+    여기에서 범주별 지표를 뽑으면,
+
+    | 범주 | $n_c$ | $\text{TP}_c$ | $\text{FP}_c$ | $\text{FN}_c$ | $P_c$ | $R_c$ | $F_{1,c}$ |
     |---|---|---|---|---|---|---|---|
-    | A | 800 | 760 | 30 | 40 | 0.962 | 0.950 | 0.956 |
-    | B | 150 | 100 | 40 | 50 | 0.714 | 0.667 | 0.690 |
-    | C | 50 | 20 | 10 | 30 | 0.667 | 0.400 | 0.500 |
+    | A | 800 | 760 | 65 | 40 | $0.9212$ | $0.9500$ | $0.9354$ |
+    | B | 150 | 100 | 35 | 50 | $0.7407$ | $0.6667$ | $0.7018$ |
+    | C | 50 | 20 | 20 | 30 | $0.5000$ | $0.4000$ | $0.4444$ |
 
-    **Macro-average:**
+    $\sum_c \text{FP}_c = \sum_c \text{FN}_c = 120$이고 이는 오류의 총 개수와 같다. 위
+    상자에서 말한 항등식이 성립한다.
 
-    $$
-    P_{\text{macro}} = \frac{0.962 + 0.714 + 0.667}{3} = 0.781
-    $$
-
-    $$
-    F_{1,\text{macro}} = \frac{0.956 + 0.690 + 0.500}{3} = 0.715
-    $$
-
-    **Micro-average:**
+    **거시평균:**
 
     $$
-    P_{\text{micro}} = \frac{760 + 100 + 20}{760 + 100 + 20 + 30 + 40 + 10} = \frac{880}{960} = 0.917
+    P_{\text{macro}} = \frac{0.9212 + 0.7407 + 0.5000}{3} = 0.7207
     $$
 
-    **Weighted average:**
-
     $$
-    P_{\text{weighted}} = \frac{800}{1000}(0.962) + \frac{150}{1000}(0.714) + \frac{50}{1000}(0.667) = 0.910
+    F_{1,\text{macro}} = \frac{0.9354 + 0.7018 + 0.4444}{3} = 0.6939
     $$
 
-    The macro-average (0.781 precision) is much lower than the micro-average
-    (0.917) because it gives equal weight to class C, where the model performs
-    poorly.  Which number to report depends on whether rare-class performance
-    is a priority.
+    **미시평균:**
 
-## Practical Recommendations
+    $$
+    P_{\text{micro}} = \frac{760 + 100 + 20}{1000} = \frac{880}{1000} = 0.8800 = \text{정확도}
+    $$
 
-1. **Report all three** in research papers so readers can assess performance
-   from different perspectives.
-2. **Macro** for applications where every class matters equally.
-3. **Micro** when overall per-sample correctness is the primary goal.
-4. **Weighted** as a balanced default in scikit-learn's `classification_report`.
-5. When classes are approximately balanced, all three averages converge to
-   similar values, and the choice matters less.
+    **가중평균:**
 
-## Exercises
+    $$
+    P_{\text{weighted}} = \frac{800}{1000}(0.9212) + \frac{150}{1000}(0.7407) + \frac{50}{1000}(0.5000) = 0.8731
+    $$
 
-**Exercise 1.**
-Macro, Micro, and Weighted Averaging
+    거시평균 정밀도 $0.7207$이 미시평균 $0.8800$보다 훨씬 낮다. 모형이 잘 못하는 범주 C에
+    동등한 무게를 주기 때문이다. 어느 값을 보고할지는 드문 범주의 성능이 중요한지에 달려 있다.
 
-Consider a test set with 3 classes of highly imbalanced size:
+    가중 정밀도 $0.8731$은 가중 재현율(= 정확도 $0.8800$)과 다르다는 점에도 유의하라. 가중
+    재현율은 항상 정확도와 같지만 가중 정밀도는 그렇지 않다. 이것이 위 비교표의 "재현율만
+    일치"가 뜻하는 바다.
 
-| Class | Support | Precision | Recall |
+## 실무 권장사항
+
+1. 연구 논문에서는 **셋 다 보고**하여 독자가 여러 관점에서 성능을 판단할 수 있게 한다.
+2. 모든 범주가 똑같이 중요한 응용에는 **거시**.
+3. 표본 단위의 전체 정확성이 주된 목표라면 **미시**.
+4. scikit-learn의 `classification_report`에서 균형 잡힌 기본값으로는 **가중**.
+5. 범주가 대략 균형 잡혀 있으면 세 평균이 비슷한 값으로 수렴하므로 선택이 덜 중요하다.
+
+## 연습문제
+
+**연습문제 1.**
+거시·미시·가중 평균
+
+크기가 심하게 불균형한 3범주 검정자료를 생각하자.
+
+| 범주 | 지지도 | 정밀도 | 재현율 |
 |:---:|:---:|:---:|:---:|
 | 0 | 900 | 0.95 | 0.98 |
 | 1 | 80 | 0.70 | 0.50 |
 | 2 | 20 | 0.40 | 0.30 |
 
-**(a)** Compute the macro-averaged precision and recall.
+**(a)** 거시평균 정밀도와 재현율을 계산하라.
 
-**(b)** Compute the weighted-averaged precision and recall (weighted by support).
+**(b)** 가중평균 정밀도와 재현율을 계산하라(지지도로 가중).
 
-**(c)** Explain why macro-averaging is preferred when minority class performance matters, and why micro-averaging can be misleading with imbalanced data.
+**(c)** 소수 범주의 성능이 중요할 때 거시평균이 선호되는 이유와, 불균형 자료에서 미시평균이
+오도할 수 있는 이유를 설명하라.
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
 
-    **(a)** Macro-averaged (simple unweighted mean):
+    **(a)** 거시평균(단순 비가중 평균):
 
     $$
     \text{Precision}_{\text{macro}} = \frac{0.95 + 0.70 + 0.40}{3} = \frac{2.05}{3} \approx 0.683
@@ -185,7 +193,7 @@ Consider a test set with 3 classes of highly imbalanced size:
     \text{Recall}_{\text{macro}} = \frac{0.98 + 0.50 + 0.30}{3} = \frac{1.78}{3} \approx 0.593
     $$
 
-    **(b)** Weighted-averaged (weighted by support, total $= 1000$):
+    **(b)** 가중평균(지지도로 가중, 합계 $= 1000$):
 
     $$
     \text{Precision}_{\text{weighted}} = \frac{900(0.95) + 80(0.70) + 20(0.40)}{1000} = \frac{855 + 56 + 8}{1000} = 0.919
@@ -195,4 +203,87 @@ Consider a test set with 3 classes of highly imbalanced size:
     \text{Recall}_{\text{weighted}} = \frac{900(0.98) + 80(0.50) + 20(0.30)}{1000} = \frac{882 + 40 + 6}{1000} = 0.928
     $$
 
-    **(c)** Macro-averaging treats all classes equally regardless of size. The poor performance on Class 2 (precision 0.40, recall 0.30) pulls down the macro-averaged metrics to 0.68 and 0.59, flagging that the model struggles on rare classes. Weighted-averaging (and similarly micro-averaging, which is equivalent to accuracy for single-label classification) is dominated by the majority class (Class 0, 90% of the data), producing metrics above 0.90 that obscure the near-failure on minority classes. When the cost of misclassifying minority classes is high (e.g., rare disease detection, fraud), macro-averaging provides a more honest assessment of model quality.
+    **(c)** 거시평균은 크기와 무관하게 모든 범주를 동등하게 다룬다. 범주 2의 나쁜 성능(정밀도
+    0.40, 재현율 0.30)이 거시 지표를 0.68과 0.59까지 끌어내려, 모형이 드문 범주에서 고전하고
+    있음을 드러낸다. 가중평균(그리고 단일 이름표 분류에서 정확도와 같아지는 미시평균)은 자료의
+    90%를 차지하는 다수 범주 0에 지배되어 0.90을 넘는 지표를 내고, 소수 범주에서의 사실상의
+    실패를 가린다. 소수 범주를 잘못 분류하는 비용이 큰 상황(희귀질환 탐지, 이상거래 등)에서는
+    거시평균이 모형의 질을 더 정직하게 알려 준다.
+
+    !!! note "가중 재현율 0.928이 곧 정확도다"
+        (b)에서 구한 가중 재현율 $0.928$은 우연히 정확도와 같은 값이 아니라 **항상** 같다.
+        $\sum_c \frac{n_c}{n} R_c = \sum_c \frac{n_c}{n}\cdot\frac{\text{TP}_c}{n_c}
+        = \frac{\sum_c \text{TP}_c}{n}$이기 때문이다. 즉 이 자료의 정확도는 $92.8\%$인데,
+        범주 2의 재현율은 $30\%$에 불과하다. 하나의 숫자가 얼마나 많은 것을 가릴 수 있는지
+        보여주는 예다.
+
+---
+
+**연습문제 2.**
+어떤 표에 $\sum_c \text{FP}_c = 80$, $\sum_c \text{FN}_c = 120$이라 적혀 있다. 이 표가
+단일 이름표 다범주 혼동행렬에서 나올 수 있는가?
+
+??? success "연습문제 2 풀이"
+
+    **나올 수 없다.** 단일 이름표 다범주 분류에서는 각 관측치가 정확히 하나의 예측을 받으므로,
+    잘못 분류된 관측치 하나가 **정확히 하나의 FN**(참 범주에 대해)과 **정확히 하나의 FP**(예측된
+    범주에 대해)를 만든다. 따라서
+
+    $$
+    \sum_c \text{FP}_c = \sum_c \text{FN}_c = (\text{잘못 분류된 관측치 수})
+    $$
+
+    가 항상 성립한다. $80 \ne 120$이므로 그런 혼동행렬은 존재하지 않는다.
+
+    **어떻게 이런 표가 만들어지는가.** 범주별 지표를 혼동행렬에서 계산하지 않고 손으로 그럴듯한
+    숫자를 채워 넣으면 이 제약을 어기기 쉽다. 실제로 이 절의 예제 표도 처음에는 이 오류를 담고
+    있었다.
+
+    **검산 방법.** 범주별 표를 볼 때마다 다음 세 등식을 확인하라.
+
+    1. $\sum_c \text{FP}_c = \sum_c \text{FN}_c$
+    2. $\sum_c (\text{TP}_c + \text{FP}_c) = n$
+    3. $\sum_c (\text{TP}_c + \text{FN}_c) = n$
+
+    **예외:** 다중 이름표 분류(한 관측치가 여러 범주에 속할 수 있는 경우)에서는 이 등식들이
+    성립하지 않는다. 그때는 미시 정밀도와 미시 재현율이 서로 다르고, 둘 다 정확도와도 다르다.
+    $\square$
+
+---
+
+**연습문제 3.**
+거시 F1이 거시 정밀도와 거시 재현율의 조화평균과 **같지 않음**을 예제로 보여라. 어느 쪽을
+보고해야 하는가?
+
+??? success "연습문제 3 풀이"
+
+    위 예제 표에서,
+
+    $$
+    F_{1,\text{macro}} = \frac{0.9354 + 0.7018 + 0.4444}{3} = 0.6939
+    $$
+
+    반면 거시 정밀도와 거시 재현율의 조화평균은
+
+    $$
+    \frac{2 \times 0.7207 \times 0.6722}{0.7207 + 0.6722} = \frac{0.9690}{1.3929} = 0.6957
+    $$
+
+    로 $0.6939$와 다르다.
+
+    **이유.** 조화평균은 비선형이므로 "평균의 조화평균"과 "조화평균의 평균"이 일치하지 않는다.
+    옌센 부등식에 의해 이 둘의 대소관계는 범주별 $P_c$와 $R_c$의 분포에 따라 달라진다.
+
+    이 예에서 차이는 $0.0018$로 작지만, 범주별 정밀도와 재현율이 서로 크게 엇갈리면 차이가
+    커진다. 극단적으로 범주 1이 $(P, R) = (1, 0.01)$, 범주 2가 $(0.01, 1)$이면,
+
+    - $F_{1,\text{macro}} = (0.0198 + 0.0198)/2 = 0.0198$
+    - 거시 $P$와 $R$의 조화평균 $= 2(0.505)(0.505)/1.01 = 0.505$
+
+    로 25배 차이가 난다.
+
+    **어느 쪽을 보고할 것인가.** **범주별 F1을 먼저 계산하고 평균하는 쪽**($F_{1,\text{macro}}$)이
+    표준이며 scikit-learn의 `average='macro'`가 계산하는 값이다. 이 정의가 옳은 이유는, F1의
+    취지가 "한 범주 안에서 정밀도와 재현율이 모두 좋은가"를 묻는 것이기 때문이다. 범주를 가로질러
+    평균한 뒤 조화평균을 취하면 한 범주의 높은 정밀도가 다른 범주의 높은 재현율로 상쇄되어
+    그 취지가 사라진다. $\square$

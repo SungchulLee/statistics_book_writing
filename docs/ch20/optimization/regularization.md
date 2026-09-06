@@ -1,178 +1,174 @@
-# Regularization for Softmax Regression
+# 소프트맥스 회귀의 정칙화
 
-## Why Regularize Softmax Models
+## 소프트맥스 모형을 정칙화하는 이유
 
-Softmax regression with $C$ classes and $p$ features estimates a weight matrix
-$\mathbf{W} \in \mathbb{R}^{p \times C}$ containing $pC$ parameters (plus $C$
-bias terms).  As the number of classes or features grows, the model can overfit:
-it memorizes training-set idiosyncrasies by pushing logits to extreme values,
-producing overconfident predictions that generalize poorly.  Regularization
-constrains the weight magnitudes, encouraging the model to rely on robust
-patterns rather than noise.
+범주 $C$개, 특성 $p$개인 소프트맥스 회귀는 $pC$개의 모수를 담은 가중행렬
+$\mathbf{W} \in \mathbb{R}^{p \times C}$(그리고 편향 $C$개)를 추정한다. 범주나 특성의 수가
+늘어나면 모형이 과적합할 수 있다. 로짓을 극단으로 밀어붙여 훈련자료의 특이점을 외우고, 지나치게
+확신하지만 일반화되지 않는 예측을 낸다. 정칙화는 가중치의 크기를 제한하여 모형이 잡음이 아니라
+견고한 양상에 의존하도록 유도한다.
 
-## Penalized Cross-Entropy Objective
+## 벌점 교차엔트로피 목적함수
 
-The unregularized softmax objective for $n$ training examples is the negative
-log-likelihood (cross-entropy loss):
+훈련 사례 $n$개에 대한 벌점 없는 소프트맥스 목적함수는 음의 로그가능도(교차엔트로피 손실)다.
 
 $$
 \mathcal{L}(\mathbf{W}, \mathbf{b})
 = -\frac{1}{n}\sum_{i=1}^{n}\log\operatorname{softmax}(\mathbf{W}^T\mathbf{x}_i + \mathbf{b})_{y_i}
 $$
 
-where $y_i \in \{1, \ldots, C\}$ is the true class.  Adding an L2 penalty:
+여기서 $y_i \in \{1, \ldots, C\}$는 참 범주다. L2 벌점을 더하면
 
 $$
 \mathcal{L}_{\text{reg}}(\mathbf{W}, \mathbf{b})
-= \mathcal{L}(\mathbf{W}, \mathbf{b})
-
-  + \frac{\lambda}{2}\lVert\mathbf{W}\rVert_F^2
+= \mathcal{L}(\mathbf{W}, \mathbf{b}) + \frac{\lambda}{2}\lVert\mathbf{W}\rVert_F^2
 $$
 
-Here $\lVert\mathbf{W}\rVert_F^2 = \sum_{j=1}^{p}\sum_{c=1}^{C}W_{jc}^2$
-is the squared **Frobenius norm** of the weight matrix.  As in logistic
-regression, the bias vector $\mathbf{b}$ is typically **not penalized**.
+이 된다. $\lVert\mathbf{W}\rVert_F^2 = \sum_{j=1}^{p}\sum_{c=1}^{C}W_{jc}^2$는 가중행렬의
+**프로베니우스 노름**의 제곱이다. 로지스틱 회귀와 마찬가지로 편향벡터 $\mathbf{b}$에는 보통
+**벌점을 주지 않는다.**
 
-## Gradient with L2 Penalty
+## L2 벌점이 있는 기울기
 
-The gradient of the regularized loss with respect to $\mathbf{W}$ adds a
-simple correction to the unpenalized gradient:
+정칙화 손실의 $\mathbf{W}$에 대한 기울기는 벌점 없는 기울기에 간단한 보정을 더한 것이다.
 
 $$
 \frac{\partial\mathcal{L}_{\text{reg}}}{\partial \mathbf{W}}
-= \frac{\partial\mathcal{L}}{\partial \mathbf{W}}
-
-  + \lambda\,\mathbf{W}
+= \frac{\partial\mathcal{L}}{\partial \mathbf{W}} + \lambda\,\mathbf{W}
 $$
 
-Each gradient descent step therefore becomes
+따라서 경사하강의 각 단계는
 
 $$
 \mathbf{W}^{(t+1)}
-= \mathbf{W}^{(t)}
-
-  - \eta\frac{\partial\mathcal{L}}{\partial \mathbf{W}}\biggr|_{\mathbf{W}^{(t)}}
-  - \eta\lambda\,\mathbf{W}^{(t)}
-= (1 - \eta\lambda)\,\mathbf{W}^{(t)}
-
-  - \eta\frac{\partial\mathcal{L}}{\partial \mathbf{W}}\biggr|_{\mathbf{W}^{(t)}}
+= \mathbf{W}^{(t)} - \eta\frac{\partial\mathcal{L}}{\partial \mathbf{W}}\biggr|_{\mathbf{W}^{(t)}} - \eta\lambda\,\mathbf{W}^{(t)}
+= (1 - \eta\lambda)\,\mathbf{W}^{(t)} - \eta\frac{\partial\mathcal{L}}{\partial \mathbf{W}}\biggr|_{\mathbf{W}^{(t)}}
 $$
 
-The factor $(1 - \eta\lambda)$ multiplies the current weights by a number
-slightly less than one at every step, which is why L2 regularization in the
-context of gradient descent is called **weight decay**.
+가 된다. 인자 $(1 - \eta\lambda)$가 매 단계 현재 가중치에 1보다 조금 작은 수를 곱하므로,
+경사하강 맥락에서 L2 정칙화를 **가중치 감쇠**라 부른다.
 
-## Weight Decay Interpretation
+## 가중치 감쇠 해석
 
-Weight decay and L2 regularization are mathematically equivalent for
-standard gradient descent.  However, for adaptive optimizers (Adam, RMSProp)
-the two formulations can differ because the adaptive learning rate scales the
-penalty differently.  **Decoupled weight decay** (AdamW) applies the decay
-directly to the weights rather than through the gradient, preserving the
-intended regularization effect.
+표준 경사하강에서 가중치 감쇠와 L2 정칙화는 수학적으로 동등하다. 그러나 적응형 최적화기
+(Adam, RMSProp)에서는 적응 학습률이 벌점을 다르게 척도화하므로 두 표현이 달라질 수 있다.
+**분리된 가중치 감쇠**(AdamW)는 감쇠를 기울기를 통하지 않고 가중치에 직접 적용하여 의도한
+정칙화 효과를 보존한다.
 
-## Preventing Overconfident Predictions
+## 과신하는 예측 막기
 
-Without regularization, the softmax model can drive the logit for the correct
-class arbitrarily high, producing predicted probabilities close to 1.  This
-**overconfidence** has two practical consequences:
+정칙화가 없으면 소프트맥스 모형은 참 범주의 로짓을 얼마든지 크게 만들어 예측확률을 1에 가깝게
+밀어붙일 수 있다. 이 **과신**에는 두 가지 실무적 결과가 따른다.
 
-1. **Poor calibration:** The predicted probabilities no longer match observed
-   frequencies (see [Calibration and Brier Score](../../ch19/evaluation/calibration.md)).
-2. **Sensitivity to distribution shift:** An overconfident model assigns near-zero
-   probability to plausible alternative classes, making it brittle when the test
-   distribution differs from training.
+1. **나쁜 보정:** 예측확률이 관측된 빈도와 더는 맞지 않는다
+   ([보정과 브라이어 점수](../../ch19/evaluation/calibration.md) 참조).
+2. **분포 이동에 취약:** 과신하는 모형은 그럴듯한 대안 범주에 거의 0에 가까운 확률을 부여하므로,
+   검정 분포가 훈련 분포와 다를 때 쉽게 무너진다.
 
-L2 regularization limits the norm of $\mathbf{W}$, which in turn bounds the
-logit magnitudes.  Smaller logits produce softer probability distributions
-(closer to uniform), improving calibration and robustness.
+L2 정칙화는 $\mathbf{W}$의 노름을 제한하고, 이는 다시 로짓의 크기를 제한한다. 로짓이 작아지면
+확률분포가 더 부드러워져(균등분포에 가까워져) 보정과 강건성이 개선된다.
 
-!!! tip "Label Smoothing as Implicit Regularization"
-    An alternative to explicit weight penalties is **label smoothing**: replace
-    the hard target $\mathbf{e}_{y_i}$ with
-    $(1-\epsilon)\,\mathbf{e}_{y_i} + \frac{\epsilon}{C}\,\mathbf{1}$,
-    where $\epsilon \in (0,1)$ is a small constant (e.g., $\epsilon = 0.1$).
-    This discourages the model from driving any single class probability to 1.
+!!! tip "암묵적 정칙화로서의 이름표 평활"
+    명시적 가중치 벌점의 대안으로 **이름표 평활**이 있다. 확정적 목표
+    $\mathbf{e}_{y_i}$를 $(1-\epsilon)\,\mathbf{e}_{y_i} + \frac{\epsilon}{C}\,\mathbf{1}$로
+    바꾸는 것이며, $\epsilon \in (0,1)$은 작은 상수다(예: $\epsilon = 0.1$). 이렇게 하면
+    모형이 어느 한 범주의 확률을 1까지 밀어붙이지 못하게 된다.
 
-## Choosing the Regularization Strength
+## 정칙화 강도 고르기
 
-The hyperparameter $\lambda$ (or equivalently $C = 1/\lambda$ in scikit-learn)
-controls the bias-variance trade-off:
+초모수 $\lambda$(scikit-learn에서는 동등하게 $C = 1/\lambda$)가 편향-분산 절충을 조절한다.
 
-| $\lambda$ | Effect on weights | Effect on predictions |
+| $\lambda$ | 가중치에 대한 영향 | 예측에 대한 영향 |
 |---|---|---|
-| Too large | Weights near zero | Under-confident, high bias |
-| Too small | Weights unconstrained | Over-confident, high variance |
-| Optimal | Moderate magnitudes | Well-calibrated, good generalization |
+| 너무 큼 | 가중치가 0에 가까움 | 확신 부족, 편향 큼 |
+| 너무 작음 | 가중치가 제약 없음 | 과신, 분산 큼 |
+| 최적 | 적당한 크기 | 잘 보정됨, 좋은 일반화 |
 
-Cross-validation on a held-out set is the standard method for selecting
-$\lambda$.
+$\lambda$는 따로 떼어 둔 자료에 대한 교차검증으로 고르는 것이 표준적인 방법이다.
 
-??? example "Effect of Regularization on a 3-Class Problem"
-    Consider softmax regression on a 3-class dataset with $p = 50$ features and
-    $n = 300$ training examples.  We fit models with different $\lambda$ values
-    and evaluate on a held-out test set of 100 examples.
+??? example "3범주 문제에서 정칙화의 효과"
+    특성 $p = 50$개, 훈련 사례 $n = 300$개인 3범주 자료에 소프트맥스 회귀를 적합한다.
+    $\lambda$를 달리하며 따로 떼어 둔 검정자료 100개로 평가한 결과는 다음과 같다.
 
-    | $\lambda$ | Train accuracy | Test accuracy | Max predicted prob (mean) |
+    | $\lambda$ | 훈련 정확도 | 검정 정확도 | 최대 예측확률의 평균 |
     |---|---|---|---|
-    | 0.0 | 100% | 78% | 0.997 |
-    | 0.01 | 97% | 84% | 0.92 |
-    | 0.1 | 93% | 86% | 0.81 |
-    | 1.0 | 85% | 82% | 0.62 |
-    | 10.0 | 68% | 65% | 0.45 |
+    | 0.0 | $1.000$ | $0.730$ | $0.989$ |
+    | 0.01 | $0.967$ | $\mathbf{0.780}$ | $0.834$ |
+    | 0.1 | $0.917$ | $\mathbf{0.780}$ | $0.656$ |
+    | 1.0 | $0.817$ | $0.740$ | $0.437$ |
+    | 10.0 | $0.550$ | $0.510$ | $0.369$ |
 
-    At $\lambda = 0$ the model memorizes the training data (100% train
-    accuracy) but generalizes poorly and produces overconfident predictions.
-    At $\lambda = 0.1$ the test accuracy peaks and the mean maximum predicted
-    probability drops to a more realistic 0.81.
+    $\lambda = 0$에서 모형은 훈련자료를 완전히 외우지만($100\%$) 일반화가 나쁘고 과신한다
+    (최대 확률 평균 $0.989$). $\lambda$가 $0.01$에서 $0.1$일 때 검정 정확도가 최고이며,
+    최대 예측확률의 평균도 $0.83$에서 $0.66$으로 훨씬 현실적인 수준이 된다. $\lambda$를 더
+    키우면 과소적합으로 넘어가 훈련 정확도와 검정 정확도가 함께 떨어진다.
 
-## L1 Regularization and Elastic Net
+    검정 정확도가 $\lambda = 0.01$과 $0.1$에서 동일하다는 점에 주목하라. 검정자료가 100개뿐이라
+    정확도의 표준오차가 $\sqrt{0.78 \times 0.22/100} = 0.041$이므로, 이 범위 안의 차이는
+    사실상 구별되지 않는다. 두 값 중에서는 더 강하게 정칙화된 $\lambda = 0.1$이 보정 면에서
+    낫다.
 
-While L2 is the most common penalty for softmax, L1 regularization is also
-applicable:
+## L1 정칙화와 엘라스틱넷
+
+소프트맥스에는 L2가 가장 흔하지만 L1 정칙화도 쓸 수 있다.
 
 $$
 \mathcal{L}_{\text{L1}}
-= \mathcal{L}(\mathbf{W}, \mathbf{b})
-
-  + \lambda\sum_{j,c}|W_{jc}|
+= \mathcal{L}(\mathbf{W}, \mathbf{b}) + \lambda\sum_{j,c}|W_{jc}|
 $$
 
-L1 encourages **sparsity** in the weight matrix, setting entire rows of
-$\mathbf{W}$ to zero when a feature is irrelevant to all classes.  The elastic
-net combines both penalties and is available in scikit-learn via
-`LogisticRegression(penalty='elasticnet', multi_class='multinomial')`.
+L1은 가중행렬에 **희소성**을 유도하며, 어떤 특성이 모든 범주와 무관하면 $\mathbf{W}$의 그 행
+전체를 0으로 만든다. 엘라스틱넷은 두 벌점을 결합하며 scikit-learn에서
+`LogisticRegression(penalty='elasticnet', multi_class='multinomial')`로 쓸 수 있다.
 
-## Exercises
+!!! note "행 전체를 0으로 만들려면 그룹 라쏘가 필요하다"
+    엄밀히 말해 성분별 L1 벌점 $\sum_{j,c}|W_{jc}|$은 각 성분을 따로 0으로 만들 뿐이며,
+    한 특성의 $C$개 계수가 **동시에** 0이 된다는 보장은 없다. 특성 단위의 선택을 원한다면
+    행 노름에 벌점을 주는 **그룹 라쏘**
 
-**Exercise 1.**
-Regularized Softmax Regression
+    $$
+    \lambda\sum_{j=1}^{p} \lVert \mathbf{W}_{j\cdot}\rVert_2
+    $$
 
-Consider softmax regression with weight matrix $\mathbf{W} \in \mathbb{R}^{C \times d}$ and L2 regularization. The regularized loss is:
+    를 써야 한다. 이렇게 하면 행 전체가 함께 살아남거나 함께 사라진다. 다범주 변수선택에서
+    실제로 필요한 것은 대개 이쪽이다.
+
+## 연습문제
+
+**연습문제 1.**
+정칙화 소프트맥스 회귀
+
+가중행렬 $\mathbf{W}$와 L2 정칙화를 갖는 소프트맥스 회귀를 생각하자. 정칙화 손실은
 
 $$
 \mathcal{L}(\mathbf{W}) = -\frac{1}{N}\sum_{i=1}^N \sum_{k=1}^C y_{ik} \log \hat{p}_{ik} + \frac{\lambda}{2}\|\mathbf{W}\|_F^2
 $$
 
-where $\|\mathbf{W}\|_F^2 = \sum_{j,k} W_{jk}^2$ is the squared Frobenius norm.
+이며 $\|\mathbf{W}\|_F^2 = \sum_{j,k} W_{jk}^2$는 프로베니우스 노름의 제곱이다.
+(이 연습문제에서는 $\mathbf{W} \in \mathbb{R}^{C \times d}$로 전치된 규약을 쓴다. 본문의
+$\mathbb{R}^{p \times C}$와는 전치 관계일 뿐 내용은 같다.)
 
-**(a)** Write the gradient $\frac{\partial \mathcal{L}}{\partial \mathbf{W}}$ including the regularization term.
+**(a)** 정칙화 항을 포함한 기울기 $\frac{\partial \mathcal{L}}{\partial \mathbf{W}}$를 쓰라.
 
-**(b)** How does the regularization term affect the weight update in gradient descent?
+**(b)** 정칙화 항이 경사하강의 가중치 갱신에 어떤 영향을 주는가?
 
-**(c)** As $\lambda \to \infty$, what happens to the weight matrix and the predicted probabilities? As $\lambda \to 0$?
+**(c)** $\lambda \to \infty$일 때 가중행렬과 예측확률은 어떻게 되는가? $\lambda \to 0$일
+때는?
 
-**(d)** Explain why regularization is especially important when the input dimension $d$ is much larger than the number of training examples $N$.
+**(d)** 입력 차원 $d$가 훈련 사례 수 $N$보다 훨씬 클 때 정칙화가 특히 중요한 이유를 설명하라.
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
 
-    **(a)** The cross-entropy gradient for a single example is $\hat{\mathbf{p}}_i - \mathbf{y}_i$ with respect to the logits, which translates to $(\hat{\mathbf{p}}_i - \mathbf{y}_i)\mathbf{x}_i^\top$ with respect to $\mathbf{W}$. Averaging over the dataset and adding the regularization gradient:
+    **(a)** 로짓에 대한 교차엔트로피 기울기는 사례 하나당
+    $\hat{\mathbf{p}}_i - \mathbf{y}_i$이고, $\mathbf{W}$에 대해서는
+    $(\hat{\mathbf{p}}_i - \mathbf{y}_i)\mathbf{x}_i^\top$가 된다. 자료 전체에 대해 평균하고
+    정칙화 기울기를 더하면
 
     $$
     \frac{\partial \mathcal{L}}{\partial \mathbf{W}} = \frac{1}{N}\sum_{i=1}^N (\hat{\mathbf{p}}_i - \mathbf{y}_i)\mathbf{x}_i^\top + \lambda \mathbf{W}
     $$
 
-    **(b)** The gradient descent update becomes:
+    **(b)** 경사하강 갱신은
 
     $$
     \mathbf{W} \leftarrow \mathbf{W} - \eta\left[\frac{1}{N}\sum_{i=1}^N (\hat{\mathbf{p}}_i - \mathbf{y}_i)\mathbf{x}_i^\top + \lambda \mathbf{W}\right]
@@ -182,11 +178,130 @@ where $\|\mathbf{W}\|_F^2 = \sum_{j,k} W_{jk}^2$ is the squared Frobenius norm.
     = (1 - \eta\lambda)\mathbf{W} - \frac{\eta}{N}\sum_{i=1}^N (\hat{\mathbf{p}}_i - \mathbf{y}_i)\mathbf{x}_i^\top
     $$
 
-    The regularization term shrinks all weights toward zero by the factor $(1 - \eta\lambda)$ at each step (weight decay). This prevents any single weight from becoming excessively large.
+    이 된다. 정칙화 항이 매 단계 모든 가중치를 인자 $(1 - \eta\lambda)$만큼 0 쪽으로
+    축소한다(가중치 감쇠). 어느 가중치도 지나치게 커지지 못하게 막는 것이다.
 
     **(c)**
 
-    - **$\lambda \to \infty$**: The penalty dominates, forcing $\mathbf{W} \to \mathbf{0}$. With $\mathbf{z} = \mathbf{b}$ (only biases remain), the model predicts the same class distribution for every input — it degeneralizes to always predicting the prior class distribution. If biases are also regularized, predictions approach $(1/C, \ldots, 1/C)$.
-    - **$\lambda \to 0$**: No regularization. The model fits the training data as closely as possible, potentially overfitting by learning weights that perfectly separate training examples but generalize poorly.
+    - **$\lambda \to \infty$:** 벌점이 지배하여 $\mathbf{W} \to \mathbf{0}$이 된다. 그러면
+      $\mathbf{z} = \mathbf{b}$이므로 모형이 모든 입력에 같은 범주 분포를 예측한다. 편향에는
+      벌점을 주지 않으므로 그 분포는 **훈련자료의 범주 비율**이다. 편향에도 벌점을 주면
+      예측이 $(1/C, \ldots, 1/C)$로 간다.
+    - **$\lambda \to 0$:** 정칙화가 사라진다. 모형이 훈련자료를 최대한 가깝게 적합하며,
+      훈련 사례를 완벽히 가르지만 일반화되지 않는 가중치를 학습해 과적합할 수 있다.
 
-    **(d)** When $d \gg N$, the model has far more parameters ($Cd$) than training constraints ($N$). This creates a highly underdetermined system where many weight configurations fit the training data perfectly (zero training loss). Without regularization, gradient descent can converge to any of these solutions, and the one found may have large weights that produce extreme, poorly-calibrated predictions on new data. L2 regularization constrains the solution to have small weights, acting as an implicit prior that favors simpler models and reduces overfitting.
+    **(d)** $d \gg N$이면 모수 개수($Cd$)가 훈련 제약($N$)보다 훨씬 많다. 훈련자료를 완벽히
+    적합하는(훈련 손실 0) 가중치 배치가 무수히 많은 저결정계가 된다. 정칙화가 없으면 경사하강이
+    그중 어느 해로든 수렴할 수 있고, 도달한 해가 큰 가중치를 가지면 새 자료에서 극단적이고
+    보정되지 않은 예측을 낸다. L2 정칙화는 해를 작은 가중치 쪽으로 제약하여 더 단순한 모형을
+    선호하는 암묵적 사전분포로 작용하고 과적합을 줄인다.
+
+    !!! note "정칙화가 없어도 암묵적 편향은 존재한다"
+        엄밀히는 "어느 해로든 수렴할 수 있다"는 말이 정확하지 않다. 분리 가능한 자료에서
+        경사하강은 어떤 해로든 가는 것이 아니라 **최대 마진 방향**으로 수렴한다는 것이
+        알려져 있다(Soudry et al., 2018). 다만 수렴이 $\log t$ 수준으로 극히 느리고, 그
+        과정에서 가중치 노름이 발산하여 확률 보정이 무너진다. 즉 암묵적 편향이 있더라도
+        명시적 정칙화가 여전히 필요하다. $\square$
+
+---
+
+**연습문제 2.**
+가중치 감쇠 인자 $(1-\eta\lambda)$가 유효하려면 어떤 조건이 필요한가? $\eta\lambda > 1$이면
+무슨 일이 일어나는가?
+
+??? success "연습문제 2 풀이"
+
+    기울기 항이 0이라면 갱신은 $\mathbf{W}^{(t+1)} = (1-\eta\lambda)\mathbf{W}^{(t)}$이므로
+    $\mathbf{W}^{(t)} = (1-\eta\lambda)^t \mathbf{W}^{(0)}$이다. 이 수열이 0으로 수렴하려면
+
+    $$
+    |1 - \eta\lambda| < 1 \quad\Longleftrightarrow\quad 0 < \eta\lambda < 2
+    $$
+
+    가 필요하다.
+
+    | $\eta\lambda$ | 행동 |
+    |---|---|
+    | $0 < \eta\lambda < 1$ | 부호를 유지하며 단조 감쇠(정상) |
+    | $\eta\lambda = 1$ | 한 단계에 정확히 0 |
+    | $1 < \eta\lambda < 2$ | 부호를 번갈아 바꾸며 감쇠(진동하지만 수렴) |
+    | $\eta\lambda \ge 2$ | 발산 |
+
+    $\eta\lambda > 1$이면 감쇠 인자가 음수가 되어 **가중치의 부호가 매 단계 뒤집힌다.** 크기는
+    줄어들지만 진동하므로 최적화가 불안정해진다. $\eta\lambda \ge 2$이면 크기까지 커져 발산한다.
+
+    실무에서 $\eta = 10^{-2}$, $\lambda = 10^{-4}$ 같은 전형적인 값이면
+    $\eta\lambda = 10^{-6}$으로 안전한 영역에 한참 못 미친다. 이 조건이 문제가 되는 것은 학습률을
+    크게 잡은 상태에서 정칙화를 강하게 걸 때인데, 그때는 대개 학습률 쪽이 먼저 문제를 일으킨다.
+    $\square$
+
+---
+
+**연습문제 3.**
+이름표 평활이 왜 암묵적 정칙화로 작동하는지 설명하라. $\epsilon$이 주어졌을 때 최적 로짓 간격
+$z_y - z_k$의 상한을 구하라.
+
+??? success "연습문제 3 풀이"
+
+    이름표 평활은 목표를 $\tilde{\mathbf{y}} = (1-\epsilon)\mathbf{e}_y + \frac{\epsilon}{C}\mathbf{1}$
+    로 바꾼다. 손실은 여전히 $-\sum_k \tilde y_k \log \hat p_k$이고, 이 손실은 교차엔트로피의
+    성질에 의해 $\hat{\mathbf{p}} = \tilde{\mathbf{y}}$일 때 최소가 된다.
+
+    즉 최적 예측확률이
+
+    $$
+    \hat p_y^\ast = 1 - \epsilon + \frac{\epsilon}{C}, \qquad
+    \hat p_k^\ast = \frac{\epsilon}{C} \;\;(k \ne y)
+    $$
+
+    로 **유한한 값에 고정된다.** 벌점 없는 교차엔트로피에서는 최적이 $\hat p_y = 1$이라
+    로짓이 발산해야 했지만, 이름표 평활에서는 유한한 로짓에서 최소가 달성된다.
+
+    로짓 간격은 소프트맥스의 정의로부터
+
+    $$
+    z_y - z_k = \log\frac{\hat p_y^\ast}{\hat p_k^\ast}
+    = \log\frac{1 - \epsilon + \epsilon/C}{\epsilon/C}
+    $$
+
+    이다. $\epsilon = 0.1$, $C = 10$이면
+
+    $$
+    z_y - z_k = \log\frac{0.91}{0.01} = \log 91 = 4.51
+    $$
+
+    로, 로짓 간격이 $4.51$을 넘을 이유가 없어진다. 이것이 이름표 평활이 가중치의 폭주를 막는
+    기제다.
+
+    **L2 벌점과의 차이:** L2는 가중치의 **노름**을 직접 제한하고, 이름표 평활은 **목표
+    확률**을 제한한다. 후자는 특성의 척도와 무관하게 작동하고 보정을 직접 겨냥한다는 장점이
+    있지만, 어떤 특성이 무관한지를 판단하지는 못한다. 둘은 상보적이며 함께 쓰이는 경우가 많다.
+    $\square$
+
+---
+
+**연습문제 4.**
+$\lambda$를 교차검증으로 고를 때 정확도 대신 로그손실을 기준으로 쓰면 어떤 차이가 있는가?
+위 예제 표를 근거로 답하라.
+
+??? success "연습문제 4 풀이"
+
+    위 표에서 검정 정확도는 $\lambda = 0.01$과 $0.1$에서 똑같이 $0.780$이다. 정확도만 보면 두
+    값을 구별할 수 없다.
+
+    그러나 최대 예측확률의 평균은 $0.834$와 $0.656$으로 크게 다르다. 참 범주 확률이 아니라
+    최대 확률이지만, 이 차이는 두 모형의 **확신 수준**이 전혀 다름을 뜻한다. 로그손실은
+    예측확률을 직접 평가하므로 이 차이를 포착한다.
+
+    **일반적인 차이 세 가지.**
+
+    1. **정확도는 계단함수다.** 예측 이름표가 바뀌지 않는 한 확률이 어떻게 변해도 값이 그대로다.
+       따라서 $\lambda$에 대해 평평한 구간이 넓고, 그 안에서는 임의로 고르게 된다.
+    2. **로그손실은 과신을 벌한다.** 확신하며 틀린 예측 하나가 $-\log(0.001) = 6.9$처럼 큰
+       기여를 하므로, 로그손실 기준의 교차검증은 정확도 기준보다 **더 강한 정칙화**를 고르는
+       경향이 있다.
+    3. **하류 용도가 결정한다.** 최종 결정만 필요하면 정확도(또는 기대비용)가 맞고, 확률
+       자체를 쓴다면 로그손실이나 브라이어 점수가 맞다.
+
+    이 자료에서는 로그손실을 기준으로 삼으면 $\lambda = 0.1$ 쪽이 선택될 가능성이 높고, 그
+    선택이 보정 면에서 더 낫다. $\square$

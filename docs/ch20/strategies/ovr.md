@@ -1,20 +1,18 @@
-# One-vs-Rest Approach
+# 일대다(OvR) 접근
 
-## Idea
+## 착상
 
-Many classification algorithms — logistic regression, SVMs, perceptrons — are
-designed for **binary** problems.  The **One-vs-Rest** (OVR, also called
-One-vs-All) strategy extends any binary classifier to $C$ classes by
-decomposing the multiclass problem into $C$ independent binary sub-problems.
-Each sub-problem asks: "Is this observation class $c$, or is it something else?"
+로지스틱 회귀, SVM, 퍼셉트론 등 많은 분류 알고리즘은 **이항** 문제를 위해 설계되었다.
+**일대다**(OvR, One-vs-All이라고도 한다) 전략은 다범주 문제를 $C$개의 독립적인 이항 부분문제로
+분해하여 어떤 이항 분류기든 $C$개 범주로 확장한다. 각 부분문제는 "이 관측치가 범주 $c$인가,
+아니면 그 밖의 무엇인가?"를 묻는다.
 
-## Training Procedure
+## 학습 절차
 
-Given training data $\{(\mathbf{x}_i, y_i)\}_{i=1}^{n}$ with
-$y_i \in \{1, \ldots, C\}$, OVR trains $C$ binary classifiers
-$f_1, \ldots, f_C$.  For classifier $f_c$:
+$y_i \in \{1, \ldots, C\}$인 훈련자료 $\{(\mathbf{x}_i, y_i)\}_{i=1}^{n}$가 주어지면, OvR은
+$C$개의 이항 분류기 $f_1, \ldots, f_C$를 학습시킨다. 분류기 $f_c$에 대해,
 
-1. Relabel the targets:
+1. 목표값을 다시 붙인다.
 
 $$
 \tilde{y}_i^{(c)} =
@@ -24,102 +22,97 @@ $$
 \end{cases}
 $$
 
-2. Train a binary classifier on the relabeled dataset
-   $\{(\mathbf{x}_i, \tilde{y}_i^{(c)})\}_{i=1}^{n}$.
-3. The result is a scoring function $f_c(\mathbf{x})$ — for logistic
-   regression, this is $P(Y = c \mid \mathbf{x})$ from the $c$-th binary
-   model.
+2. 새로 붙인 자료 $\{(\mathbf{x}_i, \tilde{y}_i^{(c)})\}_{i=1}^{n}$로 이항 분류기를 학습시킨다.
+3. 그 결과가 점수함수 $f_c(\mathbf{x})$다. 로지스틱 회귀라면 $c$번째 이항 모형이 낸
+   $P(Y = c \mid \mathbf{x})$이다.
 
-## Prediction Rule
+## 예측 규칙
 
-At test time, compute all $C$ scores and predict the class with the highest
-score:
+검정 시점에 $C$개의 점수를 모두 계산하고 가장 높은 점수의 범주를 예측한다.
 
 $$
 \hat{y} = \arg\max_{c \in \{1,\ldots,C\}} f_c(\mathbf{x})
 $$
 
-For logistic regression each $f_c$ outputs a probability, but these
-probabilities are estimated from $C$ separate models and generally **do not sum
-to one**.
+로지스틱 회귀에서는 각 $f_c$가 확률을 내지만, 이 확률들은 $C$개의 별개 모형에서 추정된 것이라
+일반적으로 **합이 1이 되지 않는다.**
 
-## Class Imbalance in OVR
+## OvR에서의 범주 불균형
 
-Each binary sub-problem is typically **imbalanced**: if the $C$ classes are
-roughly equal in size, the "rest" class has about $(C-1)/C$ of the data.  For
-example, with $C = 10$ balanced classes, each binary classifier sees a 1:9
-positive-to-negative ratio.
+각 이항 부분문제는 대개 **불균형**하다. $C$개 범주의 크기가 비슷하다면 "나머지" 범주가 전체
+자료의 약 $(C-1)/C$를 차지한다. 예컨대 균형 잡힌 $C = 10$개 범주에서 각 이항 분류기는 양성 대
+음성이 1:9인 자료를 보게 된다.
 
-This artificial imbalance can cause:
+이 인위적 불균형은 다음을 낳을 수 있다.
 
-- Bias toward predicting "rest" (class 0 in the binary sub-problem).
-- Poorly calibrated probability estimates.
+- "나머지"(이항 부분문제의 범주 0)를 예측하는 쪽으로의 치우침.
+- 잘 보정되지 않은 확률 추정.
 
-!!! warning "Handling Artificial Imbalance"
-    Standard remedies include class-weight adjustment
-    (`class_weight='balanced'` in scikit-learn), oversampling the positive
-    class, or using a calibration step after training.
+!!! warning "인위적 불균형 다루기"
+    표준적인 처방으로는 범주 가중치 조정(scikit-learn의 `class_weight='balanced'`), 양성
+    범주의 과대표집, 학습 후 보정 단계 추가가 있다.
 
-## Advantages and Disadvantages
+!!! note "다만 여기서의 "불균형"은 대개 문제가 아니다"
+    19장의 [불균형 자료 다루기](../../ch19/evaluation/imbalanced_data.md)에서 보았듯이,
+    로지스틱 회귀의 MLE는 불균형 자체 때문에 편향되지 않는다. 문제가 되는 것은 문턱 0.5뿐인데,
+    OvR의 예측 규칙은 문턱이 아니라 $\arg\max$를 쓰므로 그 문제조차 자동으로 비껴간다. 실제로
+    OvR에 `class_weight='balanced'`를 걸면 각 이항 모형의 절편이 이동할 뿐이고, 그 이동량이
+    범주마다 다르면 오히려 $\arg\max$ 비교가 왜곡될 수 있다. 균형 잡힌 범주에서는 가중치를
+    건드리지 않는 편이 낫다.
 
-| Aspect | Assessment |
+## 장점과 단점
+
+| 측면 | 평가 |
 |---|---|
-| Number of classifiers | $C$ (linear in the number of classes) |
-| Training data per classifier | All $n$ examples |
-| Interpretability | Each classifier has its own coefficients |
-| Parallelization | All $C$ classifiers can be trained independently |
-| Probability calibration | Scores do not sum to 1 without recalibration |
-| Decision boundaries | Piecewise — can produce ambiguous regions |
+| 분류기 개수 | $C$개(범주 수에 선형) |
+| 분류기당 훈련자료 | 전체 $n$개 |
+| 해석 가능성 | 각 분류기가 자신의 계수를 가짐 |
+| 병렬화 | $C$개 분류기를 독립적으로 학습 가능 |
+| 확률 보정 | 재보정 없이는 점수의 합이 1이 아님 |
+| 결정경계 | 조각별. 모호한 영역이 생길 수 있음 |
 
-### Ambiguous Regions
+### 모호한 영역
 
-Because the $C$ classifiers are trained independently, it is possible for two
-or more classifiers to assign high scores to the same input, or for all
-classifiers to assign low scores.  In the first case the $\arg\max$ resolves
-the tie; in the second the prediction is unreliable.  These **ambiguous
-regions** do not arise in native softmax regression, which always produces a
-valid probability distribution.
+$C$개 분류기가 독립적으로 학습되므로, 같은 입력에 둘 이상의 분류기가 높은 점수를 주거나 모든
+분류기가 낮은 점수를 주는 일이 생길 수 있다. 앞의 경우는 $\arg\max$가 동점을 해소하지만, 뒤의
+경우 예측을 신뢰하기 어렵다. 이런 **모호한 영역**은 항상 유효한 확률분포를 내는 고유 소프트맥스
+회귀에서는 나타나지 않는다.
 
-## OVR with Logistic Regression
+## 로지스틱 회귀를 쓰는 OvR
 
-When the base classifier is logistic regression, each binary model estimates
+기저 분류기가 로지스틱 회귀이면 각 이항 모형은
 
 $$
 f_c(\mathbf{x}) = \sigma(\mathbf{w}_c^T\mathbf{x} + b_c)
 = \frac{1}{1 + e^{-(\mathbf{w}_c^T\mathbf{x} + b_c)}}
 $$
 
-The collection of weight vectors $\mathbf{w}_1, \ldots, \mathbf{w}_C$ and
-biases $b_1, \ldots, b_C$ defines $C$ linear decision boundaries in feature
-space.
+를 추정한다. 가중벡터 $\mathbf{w}_1, \ldots, \mathbf{w}_C$와 편향 $b_1, \ldots, b_C$의 모음이
+특성공간에 $C$개의 선형 결정경계를 정의한다.
 
-??? example "Worked Example: 3-Class OVR"
-    Consider three classes (A, B, C) with $n = 300$ training examples (100 per
-    class) and $p = 2$ features.
+??? example "예제: 3범주 OvR"
+    범주 세 개(A, B, C)와 훈련 사례 $n = 300$개(범주당 100개), 특성 $p = 2$개를 생각하자.
 
-    **Training.** Three binary logistic regressions are fitted:
+    **학습.** 세 개의 이항 로지스틱 회귀를 적합한다.
 
-    | Classifier | Positive class | Negative class | $n_+$ | $n_-$ |
+    | 분류기 | 양성 범주 | 음성 범주 | $n_+$ | $n_-$ |
     |---|---|---|---|---|
     | $f_A$ | A | B $\cup$ C | 100 | 200 |
     | $f_B$ | B | A $\cup$ C | 100 | 200 |
     | $f_C$ | C | A $\cup$ B | 100 | 200 |
 
-    **Prediction.** For a new point $\mathbf{x}_*$, suppose:
+    **예측.** 새로운 점 $\mathbf{x}_*$에 대해 다음과 같다고 하자.
 
     - $f_A(\mathbf{x}_*) = 0.72$
     - $f_B(\mathbf{x}_*) = 0.35$
     - $f_C(\mathbf{x}_*) = 0.18$
 
-    The predicted class is A because $0.72 = \max(0.72, 0.35, 0.18)$.  Note
-    that the scores sum to $1.25 \neq 1$ — they are not a valid probability
-    distribution.
+    $0.72 = \max(0.72, 0.35, 0.18)$이므로 예측 범주는 A다. 점수의 합이
+    $1.25 \neq 1$이라는 점에 유의하라. 유효한 확률분포가 아니다.
 
-## Scikit-learn Usage
+## scikit-learn에서의 사용
 
-Scikit-learn's `LogisticRegression` uses OVR by default when
-`multi_class='ovr'` (the default for solvers that do not support multinomial).
-The `OneVsRestClassifier` wrapper applies OVR to any binary classifier:
+`sklearn.multiclass.OneVsRestClassifier` 래퍼는 어떤 이항 분류기에든 OvR을 적용한다.
 
 ```python
 from sklearn.linear_model import LogisticRegression
@@ -131,43 +124,135 @@ model.fit(X_train, y_train)
 y_pred = model.predict(X_test)
 ```
 
-See [Comparison with Softmax](comparison.md) for a discussion of when OVR is
-preferred over native multinomial softmax regression.
+!!! warning "`LogisticRegression`의 기본값은 OvR이 아니다"
+    `LogisticRegression`이 기본으로 OvR을 쓴다는 서술을 자주 보게 되지만, 이는 오래된
+    정보다. scikit-learn 0.22부터 `multi_class='auto'`가 기본값이며, `solver='liblinear'`
+    이거나 범주가 두 개인 경우를 제외하면 **다항(소프트맥스)** 방식을 고른다. 나아가
+    `multi_class` 인자 자체가 1.5에서 폐기 예고되고 1.7에서 제거되었으며, 이제
+    `LogisticRegression`은 언제나 다항 방식으로 적합한다. OvR을 쓰려면 위처럼
+    `OneVsRestClassifier`로 명시적으로 감싸야 한다.
 
-## Exercises
+고유 다항 소프트맥스 회귀 대신 OvR을 쓰는 것이 언제 유리한지는
+[소프트맥스와의 비교](comparison.md)를 보라.
 
-**Exercise 1.**
-One-vs-Rest versus Softmax
+## 연습문제
 
-Consider a 4-class problem where a one-vs-rest (OvR) approach trains 4 binary classifiers, and a softmax model is trained natively.
+**연습문제 1.**
+일대다 대 소프트맥스
 
-**(a)** The OvR classifiers produce the following scores for a test example:
+4범주 문제에서 일대다(OvR)는 이항 분류기 4개를 학습시키고, 소프트맥스 모형은 고유하게
+학습된다.
 
-| Classifier | P(class $k$ vs rest) |
+**(a)** OvR 분류기들이 어떤 검정 사례에 대해 다음 점수를 냈다.
+
+| 분류기 | P(범주 $k$ 대 나머지) |
 |:---:|:---:|
-| Class 1 vs rest | 0.80 |
-| Class 2 vs rest | 0.65 |
-| Class 3 vs rest | 0.40 |
-| Class 4 vs rest | 0.55 |
+| 범주 1 대 나머지 | 0.80 |
+| 범주 2 대 나머지 | 0.65 |
+| 범주 3 대 나머지 | 0.40 |
+| 범주 4 대 나머지 | 0.55 |
 
-Do these probabilities form a valid probability distribution? Explain.
+이 확률들이 유효한 확률분포를 이루는가? 설명하라.
 
-**(b)** How would you make a prediction from the OvR scores? What is the predicted class?
+**(b)** OvR 점수로부터 어떻게 예측하는가? 예측 범주는 무엇인가?
 
-**(c)** A softmax model produces $\hat{\mathbf{p}} = (0.45, 0.30, 0.10, 0.15)^\top$ for the same example. How do these probabilities differ fundamentally from the OvR scores?
+**(c)** 소프트맥스 모형이 같은 사례에 대해
+$\hat{\mathbf{p}} = (0.45, 0.30, 0.10, 0.15)^\top$을 냈다. 이 확률들은 OvR 점수와 근본적으로
+어떻게 다른가?
 
-**(d)** State two advantages of native softmax regression over the OvR approach.
+**(d)** 고유 소프트맥스 회귀가 OvR 접근보다 나은 점 두 가지를 서술하라.
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
 
-    **(a)** The scores sum to $0.80 + 0.65 + 0.40 + 0.55 = 2.40 \ne 1$. They do **not** form a valid probability distribution. Each OvR classifier independently estimates the probability that the example belongs to its class versus all others. These individual binary probabilities are not constrained to sum to 1, and their magnitudes depend on the decision boundary of each separate binary model.
+    **(a)** 점수의 합이 $0.80 + 0.65 + 0.40 + 0.55 = 2.40 \ne 1$이다. 유효한 확률분포가
+    **아니다.** 각 OvR 분류기는 그 사례가 자기 범주에 속할 확률을 나머지 전부와 견주어
+    독립적으로 추정한다. 이 개별 이항 확률들은 합이 1이 되도록 제약되지 않으며, 그 크기는
+    각각의 이항 모형이 그은 결정경계에 달려 있다.
 
-    **(b)** The standard OvR prediction assigns the class with the highest score: $\arg\max_k \text{score}_k = 1$, since Class 1 has the highest score (0.80). While simple, this rule can lead to ties and does not produce calibrated probabilities. One could normalize the scores by dividing by their sum ($0.80/2.40 = 0.333$), but this is ad hoc and does not guarantee well-calibrated probabilities.
+    **(b)** 표준적인 OvR 예측은 점수가 가장 높은 범주를 고른다.
+    $\arg\max_k \text{score}_k = 1$, 즉 범주 1이다(점수 0.80). 단순하지만 이 규칙은 동점을
+    만들 수 있고 보정된 확률을 주지 못한다. 점수를 합으로 나누어 정규화할 수는 있지만
+    ($0.80/2.40 = 0.333$) 임시방편일 뿐 보정을 보장하지 않는다.
 
-    **(c)** The softmax probabilities $\hat{\mathbf{p}} = (0.45, 0.30, 0.10, 0.15)^\top$ sum to exactly 1 and are jointly estimated by a single model. They represent a coherent probability distribution over all classes, calibrated through the softmax function. The OvR scores, by contrast, come from independently trained classifiers that do not communicate during training.
+    **(c)** 소프트맥스 확률 $\hat{\mathbf{p}} = (0.45, 0.30, 0.10, 0.15)^\top$은 정확히 합이
+    1이고 하나의 모형이 동시에 추정한 값이다. 모든 범주에 대한 정합적인 확률분포를 이루며
+    소프트맥스 함수를 통해 보정된다. 반면 OvR 점수는 학습 중에 서로 소통하지 않는 독립적인
+    분류기들에서 나온다.
 
-    **(d)** Two advantages of native softmax over OvR:
+    **(d)** 고유 소프트맥스가 OvR보다 나은 점 두 가지.
 
-    1. **Calibrated probabilities**: Softmax inherently produces a valid probability distribution (non-negative, sums to 1) without post-hoc normalization. This makes the outputs directly interpretable as class probabilities and suitable for downstream probabilistic reasoning.
+    1. **보정된 확률:** 소프트맥스는 사후 정규화 없이도 본질적으로 유효한 확률분포
+       (비음수이고 합이 1)를 만든다. 출력을 범주 확률로 직접 해석할 수 있고 하류의 확률적
+       추론에 그대로 쓸 수 있다.
 
-    2. **Joint training**: The softmax model's weight matrix is optimized to separate all classes simultaneously, allowing the model to share information across class boundaries. OvR trains each classifier independently, so it cannot exploit the structure of the multiclass problem. For example, features useful for distinguishing Class 1 from Class 2 might also help distinguish Class 3 from Class 4, but OvR cannot leverage this.
+    2. **동시 학습:** 소프트맥스의 가중행렬은 모든 범주를 동시에 가르도록 최적화되므로 범주
+       경계들 사이에서 정보를 공유할 수 있다. OvR은 각 분류기를 독립적으로 학습시키므로 다범주
+       문제의 구조를 활용하지 못한다. 예컨대 범주 1과 2를 가르는 데 유용한 특성이 범주 3과 4를
+       가르는 데도 도움이 될 수 있지만 OvR은 이를 이용할 수 없다.
+
+    !!! note "선형 모형에서는 두 방식의 표현력이 같다"
+        공정하게 덧붙이면, 기저 분류기가 선형이면 OvR과 소프트맥스 모두 $C$개의 선형 점수함수를
+        학습하고 $\arg\max$로 예측하므로 **표현 가능한 결정경계의 집합이 같다.** 다른 것은
+        학습 목적함수다. 소프트맥스는 결합 가능도를 최대화하고 OvR은 $C$개의 주변 가능도를
+        따로 최대화한다. 따라서 (d)의 두 번째 항목은 "표현력"이 아니라 "추정 효율과 확률의
+        정합성"에 관한 이야기로 읽어야 정확하다.
+
+---
+
+**연습문제 2.**
+$C$개의 균형 잡힌 범주가 있을 때, OvR 각 이항 문제의 양성 비율은 얼마인가? $C = 100$이면
+어떤 문제가 생기는가?
+
+??? success "연습문제 2 풀이"
+
+    범주가 균형 잡혀 있으면 각 범주의 비율이 $1/C$이므로, 이항 부분문제의 양성 비율도 $1/C$다.
+
+    | $C$ | 양성 비율 | 양성:음성 |
+    |---|---|---|
+    | 3 | $33.3\%$ | 1:2 |
+    | 10 | $10\%$ | 1:9 |
+    | 100 | $1\%$ | 1:99 |
+    | 1000 | $0.1\%$ | 1:999 |
+
+    **$C = 100$에서의 문제.**
+
+    1. **절대 표본 수 부족.** 전체 $n = 10{,}000$이라면 각 이항 문제의 양성이 100개뿐이다.
+       특성 차원이 100을 넘으면 분리가 발생하기 쉽고, 벌점 없이는 계수가 발산한다.
+    2. **점수의 비교 가능성 저하.** 각 이항 모형의 절편이 $\log(1/99) \approx -4.6$ 근처로
+       내려가 모든 $f_c(\mathbf{x})$가 작아진다. $\arg\max$ 비교 자체는 여전히 작동하지만,
+       모형마다 보정 상태가 달라 비교가 신뢰하기 어려워진다.
+    3. **계산 비용.** 분류기가 100개이므로 학습·저장·추론 비용이 그만큼 늘어난다. 다만
+       OvO의 $\binom{100}{2} = 4{,}950$개보다는 훨씬 낫다.
+
+    범주 수가 많으면 고유 소프트맥스가 확실히 유리하다. 모수를 하나의 행렬로 공유하고, 확률이
+    자동으로 정합적이며, 학습이 한 번으로 끝난다. $\square$
+
+---
+
+**연습문제 3.**
+OvR 점수를 합으로 나누어 정규화하는 것이 왜 "임시방편"인지 구체적으로 설명하라. 어떤 상황에서
+잘못된 결과를 낳는가?
+
+??? success "연습문제 3 풀이"
+
+    정규화 $\tilde p_c = f_c(\mathbf{x}) / \sum_{c'} f_{c'}(\mathbf{x})$는 합을 1로 만들 뿐
+    각 값이 실제 조건부확률에 가까워지도록 하지는 않는다.
+
+    **문제가 되는 상황 두 가지.**
+
+    1. **모든 점수가 낮을 때.** 훈련자료에서 멀리 떨어진 입력에서는 모든 $f_c$가 작을 수 있다.
+       예컨대 $(0.05, 0.04, 0.03, 0.02)$이면 정규화 결과는
+       $(0.357, 0.286, 0.214, 0.143)$으로, 모형이 어느 범주에도 확신이 없다는 **중요한
+       정보가 완전히 사라진다.** 정규화 후에는 첫 범주에 상당한 확신이 있는 것처럼 보인다.
+
+    2. **여러 점수가 높을 때.** $(0.9, 0.85, 0.1, 0.05)$이면 두 분류기가 모두 "내 범주다"라고
+       주장하는 모순 상태인데, 정규화하면 $(0.45, 0.425, 0.05, 0.025)$가 되어 마치 두 범주 중
+       어느 쪽인지 애매하다는 정상적인 상태처럼 보인다. 실제로는 모형들이 **서로 충돌**하고
+       있으며, 이는 학습이 잘못되었거나 입력이 분포 밖에 있다는 신호다.
+
+    두 경우 모두 정규화가 진단에 필요한 정보를 지운다. 원래 점수를 함께 보관하고,
+    $\max_c f_c(\mathbf{x})$가 낮거나 상위 두 점수의 합이 1을 크게 넘으면 예측을 보류하는
+    편이 낫다.
+
+    **더 나은 대안:** 각 $f_c$를 따로 떼어 둔 자료에서 보정한 뒤(플랫 척도화나 등위회귀)
+    정규화하거나, 애초에 고유 소프트맥스를 쓴다. $\square$

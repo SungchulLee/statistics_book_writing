@@ -1,14 +1,19 @@
-# MNIST Classification
+# MNIST 분류
 
-## Overview
+## 개요
 
-This page walks through a complete MNIST handwritten digit classification pipeline using PyTorch. We implement three models of increasing complexity -- a single linear layer (softmax regression), a two-layer feedforward network, and a convolutional neural network (CNN) -- and compare their performance. The goal is to see how model architecture affects accuracy on a real-world 10-class image classification task.
+이 절에서는 PyTorch로 MNIST 손글씨 숫자 분류의 전체 파이프라인을 따라간다. 복잡도가 점점 커지는
+세 모형 --- 단일 선형층(소프트맥스 회귀), 이층 순방향 신경망, 합성곱 신경망(CNN) --- 을
+구현하고 성능을 비교한다. 실제 10범주 이미지 분류 과제에서 모형 구조가 정확도에 어떤 영향을
+주는지 확인하는 것이 목표다.
 
 ---
 
-## The MNIST Dataset
+## MNIST 자료
 
-MNIST consists of 60,000 training and 10,000 test grayscale images of handwritten digits (0--9), each $28 \times 28$ pixels. The task is multiclass classification with $C = 10$ classes. Each pixel value lies in $[0, 1]$ after normalization.
+MNIST는 손글씨 숫자(0--9)의 회색조 이미지로 훈련 60,000장과 검정 10,000장으로 이루어져 있으며,
+각 이미지는 $28 \times 28$ 화소다. 과제는 $C = 10$인 다범주 분류이고, 정규화 후 각 화소값은
+$[0, 1]$에 있다.
 
 ```python
 import torch
@@ -35,9 +40,9 @@ print(f"Image shape:      {train_dataset[0][0].shape}")
 
 ---
 
-## Visualizing Sample Images
+## 표본 이미지 시각화
 
-Before modeling, it is essential to inspect the data.
+모형화에 앞서 자료를 살펴보는 일이 필수적이다.
 
 ```python
 images, labels = next(iter(test_loader))
@@ -52,15 +57,16 @@ plt.show()
 
 ---
 
-## Model 1 -- Softmax Regression (Single Linear Layer)
+## 모형 1 --- 소프트맥스 회귀(단일 선형층)
 
-The simplest approach flattens each $28 \times 28$ image into a 784-dimensional vector and applies a single linear transformation:
+가장 단순한 접근은 각 $28 \times 28$ 이미지를 784차원 벡터로 펼치고 선형변환 하나를 적용하는
+것이다.
 
 $$
 \mathbf{z} = \mathbf{W}\mathbf{x} + \mathbf{b}, \qquad \hat{\mathbf{p}} = \operatorname{softmax}(\mathbf{z})
 $$
 
-where $\mathbf{W} \in \mathbb{R}^{10 \times 784}$ and $\mathbf{b} \in \mathbb{R}^{10}$.
+여기서 $\mathbf{W} \in \mathbb{R}^{10 \times 784}$이고 $\mathbf{b} \in \mathbb{R}^{10}$이다.
 
 ```python
 import torch.nn as nn
@@ -75,13 +81,14 @@ class SoftmaxRegression(nn.Module):
         return self.fc(x.view(x.size(0), -1))
 ```
 
-PyTorch's `nn.CrossEntropyLoss` combines log-softmax and negative log-likelihood in a single, numerically stable operation.
+PyTorch의 `nn.CrossEntropyLoss`는 log-softmax와 음의 로그가능도를 수치적으로 안정한 하나의
+연산으로 결합한다. 따라서 모형의 `forward`는 확률이 아니라 **로짓**을 반환해야 한다.
 
 ---
 
-## Training Loop
+## 학습 루프
 
-The training loop is shared across all three models.
+학습 루프는 세 모형이 공유한다.
 
 ```python
 def train_model(model, train_loader, epochs=5, lr=0.1):
@@ -106,7 +113,7 @@ def train_model(model, train_loader, epochs=5, lr=0.1):
     return loss_history
 ```
 
-Training the softmax regression model:
+소프트맥스 회귀 모형을 학습시킨다.
 
 ```python
 model_linear = SoftmaxRegression()
@@ -115,7 +122,7 @@ loss_linear = train_model(model_linear, train_loader, epochs=5, lr=0.1)
 
 ---
 
-## Evaluation
+## 평가
 
 ```python
 def evaluate(model, test_loader):
@@ -145,13 +152,13 @@ def evaluate(model, test_loader):
 acc_linear = evaluate(model_linear, test_loader)
 ```
 
-**Typical result: approximately 92% test accuracy.**
+**전형적인 결과: 검정 정확도 약 92%.**
 
 ---
 
-## Model 2 -- Two-Layer Feedforward Network
+## 모형 2 --- 이층 순방향 신경망
 
-Adding a hidden layer with ReLU activation allows the model to learn nonlinear feature combinations:
+ReLU 활성함수를 갖는 은닉층을 추가하면 모형이 비선형 특성 조합을 학습할 수 있다.
 
 $$
 \mathbf{h} = \operatorname{ReLU}(\mathbf{W}_1 \mathbf{x} + \mathbf{b}_1), \qquad \mathbf{z} = \mathbf{W}_2 \mathbf{h} + \mathbf{b}_2
@@ -174,13 +181,14 @@ loss_twolayer = train_model(model_twolayer, train_loader, epochs=5, lr=0.1)
 acc_twolayer = evaluate(model_twolayer, test_loader)
 ```
 
-**Typical result: approximately 97% test accuracy.** The hidden layer learns stroke patterns and curves that are more discriminative than raw pixel values.
+**전형적인 결과: 검정 정확도 약 97%.** 은닉층이 원시 화소값보다 판별력이 높은 획의 양상과
+곡선을 학습한다.
 
 ---
 
-## Model 3 -- Convolutional Neural Network
+## 모형 3 --- 합성곱 신경망
 
-A CNN exploits the spatial structure of images through local receptive fields and weight sharing:
+CNN은 국소 수용영역과 가중치 공유를 통해 이미지의 공간 구조를 활용한다.
 
 ```python
 import torch.nn.functional as F
@@ -202,25 +210,33 @@ loss_cnn = train_model(model_cnn, train_loader, epochs=5, lr=0.01)
 acc_cnn = evaluate(model_cnn, test_loader)
 ```
 
-**Typical result: approximately 98--99% test accuracy.** Convolutional layers detect local patterns (edges, corners, loops) regardless of position, making them highly effective for image data.
+**전형적인 결과: 검정 정확도 약 98--99%.** 합성곱층은 위치와 무관하게 국소 양상(모서리, 꼭짓점,
+고리)을 검출하므로 이미지 자료에 매우 효과적이다.
 
 ---
 
-## Model Comparison
+## 모형 비교
 
-| Model | Parameters | Test Accuracy |
+| 모형 | 모수 개수 | 검정 정확도 |
 |---|---|---|
-| Softmax regression (linear) | $10 \times 784 + 10 = 7{,}850$ | ~92% |
-| Two-layer network (256 hidden) | $784 \times 256 + 256 + 256 \times 10 + 10 = 203{,}530$ | ~97% |
-| Simple CNN (16, 32 filters) | ~26,000 | ~98--99% |
+| 소프트맥스 회귀(선형) | $10 \times 784 + 10 = 7{,}850$ | 약 92% |
+| 이층 신경망(은닉 256) | $784 \times 256 + 256 + 256 \times 10 + 10 = 203{,}530$ | 약 97% |
+| 간단한 CNN(필터 16, 32) | $160 + 4{,}640 + 15{,}690 = 20{,}490$ | 약 98--99% |
 
-The parameter count of the CNN is much smaller than the two-layer network, yet it achieves higher accuracy. This efficiency comes from weight sharing: a $3 \times 3$ convolutional filter has only 9 weights but is applied at every spatial location.
+CNN의 모수 개수가 이층 신경망보다 훨씬 적은데도 정확도는 더 높다. 이 효율은 가중치 공유에서
+온다. $3 \times 3$ 합성곱 필터는 가중치가 9개뿐이지만 모든 공간 위치에 적용된다.
+
+!!! note "CNN 모수 개수의 내역"
+    $20{,}490$의 내역은 `conv1` $160$개, `conv2` $4{,}640$개, 완전연결층 $15{,}690$개다
+    (계산은 연습문제 4). 즉 합성곱층은 전체의 $23\%$에 불과하고 나머지는 마지막 선형층이
+    차지한다. CNN을 더 작게 만들려면 합성곱 필터가 아니라 마지막 완전연결층을 줄여야 하며,
+    실제 구조들이 전역 평균 풀링으로 이 층을 대체하는 이유가 그것이다.
 
 ---
 
-## Training Loss Curves
+## 훈련 손실 곡선
 
-Plotting the loss curves for all three models reveals their convergence behavior.
+세 모형의 손실 곡선을 함께 그리면 수렴 양상을 볼 수 있다.
 
 ```python
 fig, ax = plt.subplots(figsize=(8, 4))
@@ -237,9 +253,9 @@ plt.show()
 
 ---
 
-## Confusion Matrix Visualization
+## 혼동행렬 시각화
 
-The confusion matrix for the CNN reveals which digit pairs the model still confuses.
+CNN의 혼동행렬은 모형이 여전히 헷갈려 하는 숫자 쌍을 드러낸다.
 
 ```python
 import numpy as np
@@ -271,23 +287,33 @@ plt.tight_layout()
 plt.show()
 ```
 
-Common confusions include 4 vs 9 (both have a vertical stroke on the right) and 3 vs 5 (similar upper curves).
+흔한 혼동으로는 4와 9(둘 다 오른쪽에 세로획이 있다), 3과 5(위쪽 곡선이 비슷하다)가 있다.
 
 ---
 
-## Interpretation
+## 해석
 
-1. **Linear models have a ceiling.** Softmax regression achieves ~92% on MNIST, which is respectable but far from state-of-the-art. The limitation is that pixel intensities are not linearly separable by digit class -- a handwritten "1" shifted by a few pixels looks very different in raw pixel space.
-2. **Hidden layers learn features.** The two-layer network overcomes the linear limitation by learning an intermediate representation $\mathbf{h}$ where digits are more separable. The 256-dimensional hidden layer acts as a learned feature extractor.
-3. **CNNs exploit spatial structure.** Convolutional layers are translation-equivariant: a filter that detects an edge at one location can detect the same edge anywhere in the image. This inductive bias dramatically reduces the number of parameters needed and improves generalization.
-4. **Cross-entropy loss naturally pairs with softmax.** PyTorch's `nn.CrossEntropyLoss` implements the log-sum-exp trick internally, avoiding the numerical instability of computing softmax and then taking its logarithm.
+1. **선형 모형에는 천장이 있다.** 소프트맥스 회귀는 MNIST에서 약 92%를 달성하는데, 나쁘지
+   않지만 최신 수준과는 거리가 멀다. 한계는 화소 강도가 숫자 범주별로 선형분리되지 않는다는
+   데 있다. 손글씨 "1"이 몇 화소만 옮겨져도 원시 화소공간에서는 아주 다르게 보인다.
+2. **은닉층이 특성을 학습한다.** 이층 신경망은 숫자들이 더 잘 분리되는 중간 표현
+   $\mathbf{h}$를 학습하여 선형 한계를 넘어선다. 256차원 은닉층이 학습된 특성 추출기 역할을
+   한다.
+3. **CNN은 공간 구조를 활용한다.** 합성곱층은 평행이동 등변이다. 한 위치에서 모서리를 검출하는
+   필터가 이미지의 어느 위치에서든 같은 모서리를 검출한다. 이 귀납적 편향이 필요한 모수의
+   수를 극적으로 줄이고 일반화를 개선한다.
+4. **교차엔트로피 손실은 소프트맥스와 자연스럽게 짝을 이룬다.** PyTorch의
+   `nn.CrossEntropyLoss`는 내부에서 로그-합-지수 기법을 구현하여, 소프트맥스를 계산한 뒤
+   로그를 취할 때 생기는 수치적 불안정을 피한다.
 
 ---
 
 ## Exercises
 
-**Exercise 1.**
-The softmax regression model has $\mathbf{W} \in \mathbb{R}^{10 \times 784}$. Each row $\mathbf{w}_k$ can be reshaped into a $28 \times 28$ image. Visualize the 10 weight vectors as images and interpret what they represent.
+**연습문제 1.**
+소프트맥스 회귀 모형은 $\mathbf{W} \in \mathbb{R}^{10 \times 784}$을 갖는다. 각 행
+$\mathbf{w}_k$는 $28 \times 28$ 이미지로 재구성할 수 있다. 가중벡터 10개를 이미지로 시각화하고
+무엇을 나타내는지 해석하라.
 
 ??? success "Solution to Exercise 1"
     ```python
@@ -303,35 +329,68 @@ The softmax regression model has $\mathbf{W} \in \mathbb{R}^{10 \times 784}$. Ea
     plt.show()
     ```
 
-    Each weight image $\mathbf{w}_k$ acts as a **template** for digit $k$. The logit $z_k = \mathbf{w}_k^\top \mathbf{x} + b_k$ computes the inner product between the template and the input image. Positive (red) regions indicate pixels whose presence supports class $k$; negative (blue) regions indicate pixels whose presence argues against class $k$. For example, the template for "0" typically shows a positive ring shape and a negative center, matching the visual structure of the digit zero.
+    각 가중치 이미지 $\mathbf{w}_k$는 숫자 $k$에 대한 **주형(template)** 역할을 한다. 로짓
+    $z_k = \mathbf{w}_k^\top \mathbf{x} + b_k$는 주형과 입력 이미지의 내적이다. 양수(빨강)
+    영역은 그 화소가 켜져 있으면 범주 $k$를 지지하는 곳이고, 음수(파랑) 영역은 반대로 범주
+    $k$에 반하는 곳이다. 예컨대 "0"의 주형은 대개 양수인 고리 모양과 음수인 중앙부를 보여
+    숫자 0의 시각적 구조와 일치한다.
+
+    !!! note "주형 해석은 소프트맥스 회귀에서만 유효하다"
+        이렇게 가중치를 곧바로 그림으로 읽을 수 있는 것은 모형이 **선형**이기 때문이다. 이층
+        신경망의 $\mathbf{W}_1$을 같은 방식으로 그리면 알아보기 어려운 무늬가 나오는데, 은닉
+        단위 하나가 최종 결정에 어떻게 기여하는지는 $\mathbf{W}_2$를 거쳐야 정해지기
+        때문이다. 즉 **해석 가능성은 성능과 맞바꾼 것**이며, 이 장에서 반복해서 만나는
+        절충이다.
 
 ---
 
-**Exercise 2.**
-Compute the number of floating-point multiply-accumulate operations (MACs) for a single forward pass through each of the three models. Use this to explain why the CNN is more computationally expensive per sample than the linear model despite having fewer parameters.
+**연습문제 2.**
+세 모형 각각에 대해 표본 하나의 순전파에 필요한 부동소수점 곱셈-누산 연산(MAC)의 수를
+계산하라. 이를 이용해, CNN이 모수는 더 적은데도 표본당 계산은 왜 더 비싼지 설명하라.
 
 ??? success "Solution to Exercise 2"
-    **Softmax regression:** A single matrix-vector product $\mathbf{W}\mathbf{x}$ with $\mathbf{W} \in \mathbb{R}^{10 \times 784}$ requires $10 \times 784 = 7{,}840$ MACs.
+    **소프트맥스 회귀:** $\mathbf{W} \in \mathbb{R}^{10 \times 784}$인 행렬-벡터 곱
+    $\mathbf{W}\mathbf{x}$ 하나에 $10 \times 784 = 7{,}840$번의 MAC이 필요하다.
 
-    **Two-layer network:**
+    **이층 신경망:**
 
-    - First layer: $784 \times 256 = 200{,}704$ MACs
-    - Second layer: $256 \times 10 = 2{,}560$ MACs
-    - Total: $\approx 203{,}264$ MACs
+    - 첫 층: $784 \times 256 = 200{,}704$ MAC
+    - 둘째 층: $256 \times 10 = 2{,}560$ MAC
+    - 합계: $203{,}264$ MAC
 
-    **Simple CNN:**
+    **간단한 CNN:**
 
-    - Conv1: $16$ filters of size $3 \times 3 \times 1$ applied to $28 \times 28$ spatial locations: $16 \times 9 \times 28 \times 28 = 112{,}896$ MACs
-    - Conv2: $32$ filters of size $3 \times 3 \times 16$ applied to $14 \times 14$ locations: $32 \times 144 \times 14 \times 14 = 903{,}168$ MACs
-    - FC layer: $32 \times 7 \times 7 \times 10 = 15{,}680$ MACs
-    - Total: $\approx 1{,}031{,}744$ MACs
+    - Conv1: $3 \times 3 \times 1$ 크기의 필터 $16$개를 $28 \times 28$개 공간 위치에 적용:
+      $16 \times 9 \times 28 \times 28 = 112{,}896$ MAC
+    - Conv2: $3 \times 3 \times 16$ 크기의 필터 $32$개를 $14 \times 14$개 위치에 적용:
+      $32 \times 144 \times 14 \times 14 = 903{,}168$ MAC
+    - 완전연결층: $32 \times 7 \times 7 \times 10 = 15{,}680$ MAC
+    - 합계: $1{,}031{,}744$ MAC
 
-    The CNN has fewer parameters (~26K vs ~203K) because each convolutional filter is shared across all spatial locations. However, it has more MACs because the same small filter is applied to every position in the feature map. The CNN trades parameter efficiency for computational cost, gaining translation equivariance in the process.
+    CNN의 모수는 $20{,}490$개로 이층 신경망의 $203{,}530$개보다 **10분의 1 수준**이다. 각
+    합성곱 필터가 모든 공간 위치에서 공유되기 때문이다. 그러나 MAC은 $1{,}031{,}744$번으로
+    이층 신경망의 $203{,}264$번보다 **5배 많다.** 같은 작은 필터를 특성지도의 모든 위치에
+    적용하기 때문이다.
+
+    | 모형 | 모수 | MAC | MAC/모수 |
+    |---|---|---|---|
+    | 소프트맥스 회귀 | $7{,}850$ | $7{,}840$ | $1.0$ |
+    | 이층 신경망 | $203{,}530$ | $203{,}264$ | $1.0$ |
+    | 간단한 CNN | $20{,}490$ | $1{,}031{,}744$ | $50.4$ |
+
+    완전연결층에서는 모수 하나가 정확히 한 번씩 쓰이므로 MAC/모수 비가 1이다. 합성곱층에서는
+    같은 가중치가 여러 위치에서 재사용되므로 이 비가 크게 올라간다. 즉 CNN은 **모수 효율을
+    계산 비용과 맞바꾸고**, 그 대가로 평행이동 등변성을 얻는다.
+
+    실무적 함의: 메모리가 제약이면(모바일, 임베디드) CNN이 유리하고, 계산량이 제약이면
+    (배치 추론량이 많은 서버) 반대다.
 
 ---
 
-**Exercise 3.**
-Modify the two-layer network to use dropout with probability $p = 0.5$ after the ReLU activation. Train for 10 epochs and compare the train/test accuracy gap with and without dropout. Explain why dropout acts as a regularizer.
+**연습문제 3.**
+이층 신경망의 ReLU 활성함수 뒤에 확률 $p = 0.5$의 드롭아웃을 넣도록 수정하라. 10 에포크 학습한
+뒤 드롭아웃이 있을 때와 없을 때의 훈련/검정 정확도 격차를 비교하라. 드롭아웃이 왜 정칙화로
+작동하는지 설명하라.
 
 ??? success "Solution to Exercise 3"
     ```python
@@ -353,21 +412,42 @@ Modify the two-layer network to use dropout with probability $p = 0.5$ after the
     acc_drop = evaluate(model_drop, test_loader)
     ```
 
-    Without dropout, the two-layer network may achieve ~99% training accuracy but ~97% test accuracy (a 2-point gap). With dropout, the training accuracy is lower (~97%) but the test accuracy is similar or slightly better, reducing the gap.
+    드롭아웃이 없으면 이층 신경망이 훈련 정확도 약 99%, 검정 정확도 약 97%를 내어 2%포인트의
+    격차가 생긴다. 드롭아웃을 넣으면 훈련 정확도가 낮아지지만(약 97%) 검정 정확도는 비슷하거나
+    조금 좋아져 격차가 줄어든다.
 
-    Dropout works as a regularizer because during training it randomly sets each hidden unit to zero with probability $p$. This means the network cannot rely on any single neuron and must spread its learned representation across many units. Effectively, dropout trains an exponentially large ensemble of sub-networks (all $2^{256}$ possible masks) and averages their predictions at test time (by scaling weights by $1-p$). This reduces co-adaptation of features and improves generalization.
+    드롭아웃이 정칙화로 작동하는 이유는, 학습 중에 각 은닉 단위를 확률 $p$로 무작위로 0으로
+    만들기 때문이다. 그러면 신경망이 어느 한 뉴런에 의존할 수 없고 학습된 표현을 여러 단위에
+    분산시켜야 한다. 사실상 드롭아웃은 지수적으로 많은 부분 신경망의 앙상블(가능한 마스크
+    $2^{256}$가지 전부)을 학습시키고 검정 시점에 그 예측을 평균한다. 이는 특성 사이의
+    공적응을 줄이고 일반화를 개선한다.
+
+    !!! note "가중치 척도화는 PyTorch에서 학습 시점에 일어난다"
+        위 설명은 "검정 시점에 가중치를 $1-p$배 한다"는 원논문(Srivastava et al., 2014)의
+        서술이다. 그러나 PyTorch의 `nn.Dropout`은 **역 드롭아웃**을 구현한다. 학습 시점에
+        살아남은 단위를 $1/(1-p)$배 키우고 검정 시점에는 아무 일도 하지 않는다. 기댓값이
+        같으므로 수학적으로 동등하지만, 추론 코드에 특별한 처리가 필요 없다는 장점이 있다.
+
+        중요한 실무 수칙: 평가 전에 반드시 `model.eval()`을 호출해야 드롭아웃이 꺼진다. 이를
+        잊으면 검정 시점에도 무작위로 뉴런이 꺼져 정확도가 낮게 나오고, 예측이 호출할 때마다
+        달라진다. 위 `evaluate` 함수가 첫 줄에서 `model.eval()`을 부르는 이유다.
 
 ---
 
-**Exercise 4.**
-Prove that the number of parameters in a convolutional layer with $C_{\text{in}}$ input channels, $C_{\text{out}}$ output channels, and kernel size $k \times k$ is $C_{\text{out}}(C_{\text{in}} k^2 + 1)$. Verify this for the two convolutional layers in our CNN.
+**연습문제 4.**
+입력 채널 $C_{\text{in}}$개, 출력 채널 $C_{\text{out}}$개, 커널 크기 $k \times k$인 합성곱층의
+모수 개수가 $C_{\text{out}}(C_{\text{in}} k^2 + 1)$임을 증명하라. 위 CNN의 두 합성곱층에 대해
+확인하라.
 
 ??? success "Solution to Exercise 4"
-    Each of the $C_{\text{out}}$ filters has a $k \times k$ spatial kernel for each of the $C_{\text{in}}$ input channels, plus one bias term. Thus the total parameter count is:
+    $C_{\text{out}}$개의 필터 각각은 $C_{\text{in}}$개의 입력 채널마다 $k \times k$ 공간 커널을
+    가지고, 여기에 편향 하나가 더해진다. 따라서 총 모수 개수는
 
     $$
     C_{\text{out}} \times (C_{\text{in}} \times k^2 + 1)
     $$
+
+    이다.
 
     **Conv1:** $C_{\text{in}} = 1$, $C_{\text{out}} = 16$, $k = 3$:
 
@@ -381,11 +461,12 @@ Prove that the number of parameters in a convolutional layer with $C_{\text{in}}
     32 \times (16 \times 9 + 1) = 32 \times 145 = 4{,}640
     $$
 
-    **FC layer:** $32 \times 7 \times 7 = 1{,}568$ inputs, 10 outputs: $1{,}568 \times 10 + 10 = 15{,}690$.
+    **완전연결층:** 입력 $32 \times 7 \times 7 = 1{,}568$개, 출력 10개이므로
+    $1{,}568 \times 10 + 10 = 15{,}690$개.
 
-    **Total:** $160 + 4{,}640 + 15{,}690 = 20{,}490$ parameters.
+    **합계:** $160 + 4{,}640 + 15{,}690 = 20{,}490$개.
 
-    We can verify in PyTorch:
+    PyTorch로 확인할 수 있다.
 
     ```python
     total = sum(p.numel() for p in model_cnn.parameters())
@@ -396,18 +477,37 @@ Prove that the number of parameters in a convolutional layer with $C_{\text{in}}
 
 ---
 
-**Exercise 5.**
-The softmax regression model on MNIST learns linear decision boundaries in 784-dimensional pixel space. Give a concrete example of two images that belong to different classes but have a small Euclidean distance in pixel space, and explain why this is problematic for a linear classifier. Then explain how a CNN overcomes this limitation.
+**연습문제 5.**
+MNIST의 소프트맥스 회귀 모형은 784차원 화소공간에서 선형 결정경계를 학습한다. 서로 다른 범주에
+속하면서 화소공간에서 유클리드 거리가 작은 두 이미지의 구체적인 예를 들고, 이것이 왜 선형
+분류기에 문제가 되는지 설명하라. 그다음 CNN이 이 한계를 어떻게 극복하는지 설명하라.
 
 ??? success "Solution to Exercise 5"
-    Consider a digit "1" drawn as a thin vertical stroke centered in the image, and the same "1" shifted 3 pixels to the right. In pixel space, every nonzero pixel in the original has moved, so the Euclidean distance between the two images is substantial:
+    이미지 가운데에 가는 세로획으로 그린 숫자 "1"과, 같은 "1"을 오른쪽으로 3화소 옮긴 것을
+    생각하자. 화소공간에서는 원본의 0이 아닌 화소가 모두 이동했으므로 두 이미지 사이의 유클리드
+    거리가 상당히 크다.
 
     $$
     \|\mathbf{x}_{\text{centered}} - \mathbf{x}_{\text{shifted}}\|_2 = \sqrt{\sum_{i} (x_i^{\text{cen}} - x_i^{\text{shift}})^2} > 0
     $$
 
-    even though both are clearly "1". Conversely, a "7" written with a particular stroke style might happen to activate similar pixels as the shifted "1", giving it a small Euclidean distance despite being a different class.
+    둘 다 분명히 "1"인데도 그렇다. 반대로 특정한 획 방식으로 쓴 "7"이 옮겨진 "1"과 비슷한
+    화소를 활성화하여, 다른 범주인데도 유클리드 거리가 작을 수 있다.
 
-    For a linear classifier, the logit $z_k = \mathbf{w}_k^\top \mathbf{x} + b_k$ depends on the absolute pixel positions. A 3-pixel shift changes every $z_k$, potentially changing the predicted class. The linear model must learn separate templates for each position variant, which is impossible with limited data.
+    선형 분류기에서 로짓 $z_k = \mathbf{w}_k^\top \mathbf{x} + b_k$는 화소의 절대 위치에
+    의존한다. 3화소 이동이 모든 $z_k$를 바꾸고 예측 범주까지 바꿀 수 있다. 선형 모형은 위치
+    변형마다 별도의 주형을 학습해야 하는데, 제한된 자료로는 불가능하다.
 
-    A CNN overcomes this through **translation equivariance**. Convolutional layers apply the same learned filter at every spatial position. If a filter detects a vertical edge at position $(i, j)$, it also detects that same edge at $(i, j+3)$. The subsequent max-pooling layers introduce approximate **translation invariance**, further reducing sensitivity to small shifts. The CNN learns to recognize the stroke pattern "vertical line" regardless of its position, which is precisely the invariance needed for digit recognition.
+    CNN은 **평행이동 등변성**으로 이를 극복한다. 합성곱층은 학습된 같은 필터를 모든 공간
+    위치에 적용한다. 어떤 필터가 위치 $(i, j)$에서 세로 모서리를 검출한다면 $(i, j+3)$에서도
+    같은 모서리를 검출한다. 뒤따르는 최대 풀링층이 근사적인 **평행이동 불변성**을 도입하여
+    작은 이동에 대한 민감도를 더 줄인다. CNN은 위치와 무관하게 "세로선"이라는 획 양상을
+    인식하도록 학습하며, 이것이 숫자 인식에 필요한 바로 그 불변성이다.
+
+    !!! note "등변성과 불변성은 다르다"
+        두 용어가 혼용되는 경우가 많지만 구별해야 한다. **등변성**은 입력을 옮기면 출력도 같은
+        만큼 옮겨진다는 뜻이고($f(T x) = T f(x)$), **불변성**은 입력을 옮겨도 출력이 변하지
+        않는다는 뜻이다($f(T x) = f(x)$). 합성곱 자체는 등변이지 불변이 아니다. 불변성은
+        풀링이나 전역 평균 같은 집계 연산에서 나온다. 그리고 이 CNN의 불변성은 **근사적**이다.
+        $2 \times 2$ 최대 풀링을 두 번 거치면 대략 4화소 정도의 이동에 둔감해질 뿐, 그보다 큰
+        이동에는 여전히 민감하다. 그래서 자료 증강(무작위 이동, 회전)이 여전히 도움이 된다.
