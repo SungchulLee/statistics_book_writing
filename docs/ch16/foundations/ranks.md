@@ -1,27 +1,27 @@
-# Ranks and Rank Transformations
+# 순위와 순위변환
 
-Most non-parametric tests achieve their distribution-free property by replacing raw observations with their **ranks** -- the positions the observations occupy when sorted from smallest to largest. This simple transformation discards the specific numerical values while preserving the ordering, which is exactly the information needed to detect location shifts, stochastic dominance, and monotonic association.
+대부분의 비모수 검정은 원자료를 **순위** --- 관측값을 작은 값부터 정렬했을 때 차지하는 위치 --- 로 바꾸어 분포무관 성질을 얻는다. 이 단순한 변환은 구체적인 수치를 버리면서 순서는 보존하는데, 위치 이동·확률적 우월·단조 연관성을 탐지하는 데 필요한 정보는 정확히 그 순서이다.
 
-This section defines the rank transformation formally, explains how to handle tied observations using **midranks**, and introduces the key properties that make rank statistics the foundation of non-parametric inference.
+이 절에서는 순위변환을 형식적으로 정의하고, **중간순위**로 동점을 처리하는 방법을 설명하며, 순위통계량을 비모수 추론의 토대로 만드는 핵심 성질을 소개한다.
 
-## Definition of Ranks
+## 순위의 정의
 
-Given a sample $X_1, X_2, \ldots, X_n$, the **rank** of observation $X_i$ is the position of $X_i$ in the ordered sample. Formally, let $X_{(1)} \le X_{(2)} \le \cdots \le X_{(n)}$ denote the order statistics. If all values are distinct, the rank of $X_i$ is the unique integer $R_i$ such that
+표본 $X_1, X_2, \ldots, X_n$이 주어졌을 때 관측값 $X_i$의 **순위**는 정렬된 표본에서 $X_i$가 차지하는 위치이다. 형식적으로 $X_{(1)} \le X_{(2)} \le \cdots \le X_{(n)}$을 순서통계량이라 하자. 모든 값이 서로 다르면 $X_i$의 순위는 다음을 만족하는 유일한 정수 $R_i$이다.
 
 $$
 X_i = X_{(R_i)}
 $$
 
-Equivalently,
+동치로,
 
 $$
 R_i = \sum_{j=1}^{n} \mathbf{1}(X_j \le X_i)
 $$
 
-where $\mathbf{1}(\cdot)$ is the indicator function.
+여기서 $\mathbf{1}(\cdot)$은 지시함수이다.
 
-??? example "Ranking a small sample"
-    Consider the sample $X = (7.3, \; 2.1, \; 5.8, \; 9.0, \; 4.5)$. Sorting gives the order statistics $(2.1, \; 4.5, \; 5.8, \; 7.3, \; 9.0)$. The ranks are:
+??? example "작은 표본에 순위 매기기"
+    표본 $X = (7.3, \; 2.1, \; 5.8, \; 9.0, \; 4.5)$를 보자. 정렬하면 순서통계량은 $(2.1, \; 4.5, \; 5.8, \; 7.3, \; 9.0)$이다. 순위는 다음과 같다.
 
     | $i$ | $X_i$ | $R_i$ |
     |:---:|:-----:|:-----:|
@@ -31,20 +31,20 @@ where $\mathbf{1}(\cdot)$ is the indicator function.
     | 4 | 9.0 | 5 |
     | 5 | 4.5 | 2 |
 
-## Handling Ties with Midranks
+## 중간순위로 동점 처리하기
 
-When two or more observations share the same value, assigning a unique integer rank to each is ambiguous. The standard resolution is to assign each tied observation the **midrank** (also called the **average rank**): the arithmetic mean of the ranks that the tied values would occupy.
+관측값 둘 이상이 같은 값을 가지면 각각에 서로 다른 정수 순위를 배정하는 일이 모호해진다. 표준적인 해법은 동점인 관측값 모두에 **중간순위**(**평균순위**라고도 한다), 즉 그 동점값들이 차지했을 순위들의 산술평균을 배정하는 것이다.
 
-If observations at positions $j, j+1, \ldots, j+k-1$ in the sorted sample are all equal, each receives the midrank
+정렬된 표본에서 위치 $j, j+1, \ldots, j+k-1$의 관측값이 모두 같다면 각각은 다음 중간순위를 받는다.
 
 $$
 \bar{R} = \frac{1}{k} \sum_{l=0}^{k-1} (j + l) = j + \frac{k - 1}{2}
 $$
 
-??? example "Midranks with tied values"
-    Consider $X = (4, \; 7, \; 7, \; 7, \; 10)$. The sorted values occupy positions 1 through 5. The three 7s occupy positions 2, 3, and 4, so each receives midrank $(2 + 3 + 4)/3 = 3$:
+??? example "동점이 있을 때의 중간순위"
+    $X = (4, \; 7, \; 7, \; 7, \; 10)$을 보자. 정렬된 값들은 위치 1부터 5를 차지한다. 세 개의 7이 위치 2, 3, 4를 차지하므로 각각 중간순위 $(2 + 3 + 4)/3 = 3$을 받는다.
 
-    | $i$ | $X_i$ | Rank position(s) | Midrank $R_i$ |
+    | $i$ | $X_i$ | 순위 위치 | 중간순위 $R_i$ |
     |:---:|:-----:|:-----------------:|:-------------:|
     | 1 | 4 | 1 | 1 |
     | 2 | 7 | 2, 3, 4 | 3 |
@@ -52,106 +52,203 @@ $$
     | 4 | 7 | 2, 3, 4 | 3 |
     | 5 | 10 | 5 | 5 |
 
-    Notice that the sum of midranks still equals $1 + 3 + 3 + 3 + 5 = 15 = n(n+1)/2$, a property that always holds.
+    중간순위의 합은 여전히 $1 + 3 + 3 + 3 + 5 = 15 = n(n+1)/2$임에 주목하라. 이 성질은 언제나 성립한다.
 
-!!! warning "Effect of ties on test statistics"
-    Many non-parametric test statistics assume no ties when deriving their null distributions. When ties are present, a **tie correction factor** must be applied. For example, the Kruskal-Wallis and Wilcoxon rank-sum tests divide by a correction term that depends on the number and size of tied groups. Ignoring ties inflates the variance of the test statistic, making the test conservative.
+!!! warning "동점이 검정통계량에 미치는 영향"
+    많은 비모수 검정통계량은 귀무분포를 유도할 때 동점이 없다고 가정한다. 동점이 있으면 **동점 보정계수**를 적용해야 한다. 예를 들어 Kruskal-Wallis 검정과 Wilcoxon 순위합검정은 동점 집단의 개수와 크기에 의존하는 보정항으로 나눈다. 동점을 무시하면 검정통계량의 분산이 부풀려져 검정이 보수적으로 된다.
 
-## Properties of Ranks
+## 순위의 성질
 
-Several properties make ranks especially useful for distribution-free inference.
+순위를 분포무관 추론에 특히 유용하게 만드는 성질이 여럿 있다.
 
-**Sum of ranks.** For any sample of size $n$, the ranks $R_1, R_2, \ldots, R_n$ are a permutation of $\{1, 2, \ldots, n\}$ (or midranks summing to the same total), so
+**순위의 합.** 크기 $n$인 임의의 표본에서 순위 $R_1, R_2, \ldots, R_n$은 $\{1, 2, \ldots, n\}$의 순열이므로(동점이 있어 중간순위를 써도 총합은 같다),
 
 $$
 \sum_{i=1}^{n} R_i = \frac{n(n+1)}{2}
 $$
 
-**Mean rank.** The average rank is always
+**평균순위.** 순위의 평균은 밑에 깔린 분포의 모양과 무관하게 언제나
 
 $$
 \bar{R} = \frac{n+1}{2}
 $$
 
-regardless of the shape of the underlying distribution.
+이다.
 
-**Variance of ranks.** When there are no ties, the variance of the ranks is
+**순위의 분산.** 동점이 없을 때 순위의 분산은
 
 $$
 \text{Var}(R) = \frac{1}{n} \sum_{i=1}^{n} \left(i - \frac{n+1}{2}\right)^2 = \frac{n^2 - 1}{12}
 $$
 
-**Distribution-free property.** Under the null hypothesis that all observations come from the same continuous distribution, every permutation of the ranks is equally likely. This means the null distribution of any statistic that depends only on the ranks can be computed exactly by enumeration, without knowing the population distribution.
+**분포무관 성질.** 모든 관측값이 같은 연속분포에서 나왔다는 귀무가설 아래에서는 순위의 모든 순열이 동등하게 가능하다. 따라서 순위에만 의존하는 임의의 통계량의 귀무분포를 모집단 분포를 몰라도 열거만으로 정확히 계산할 수 있다.
 
-## The Rank Transformation in Practice
+## 실전에서의 순위변환
 
-The rank transformation converts an arbitrary continuous distribution into a discrete uniform distribution on $\{1, 2, \ldots, n\}$. This has two important consequences:
+순위변환은 임의의 연속분포를 $\{1, 2, \ldots, n\}$ 위의 이산균등분포로 바꾼다. 여기에는 두 가지 중요한 귀결이 있다.
 
-1. **Outlier resistance.** An extreme observation receives rank $n$ regardless of whether it is 10 or 10,000. The rank transformation bounds the influence of every observation.
-2. **Scale invariance.** Ranks are invariant under any monotone increasing transformation of the data. If we apply a log or square-root transformation before ranking, the ranks do not change.
+1. **이상치 저항성.** 극단적인 관측값은 그 값이 10이든 10{,}000이든 순위 $n$을 받는다. 순위변환은 모든 관측값의 영향력에 상한을 씌운다.
+2. **척도 불변성.** 순위는 자료에 대한 임의의 단조증가 변환에 불변이다. 순위를 매기기 전에 로그변환이나 제곱근변환을 적용해도 순위는 바뀌지 않는다.
 
-!!! tip "Ranks as a normalizing transformation"
-    For moderately non-normal data, replacing observations with their ranks (or with the normal scores $\mathcal{N}^{-1}(R_i / (n+1))$, known as the **van der Waerden transformation**) can serve as a practical normalization step. The resulting rank-transformed data can then be analyzed with standard ANOVA or regression methods, yielding tests with good robustness properties.
+!!! tip "정규화 변환으로서의 순위"
+    적당히 비정규인 자료에서는 관측값을 순위로(또는 **van der Waerden 변환**이라 불리는 정규점수 $\Phi^{-1}(R_i / (n+1))$로) 바꾸는 것이 실용적인 정규화 단계가 될 수 있다. 이렇게 순위변환된 자료를 표준적인 분산분석이나 회귀 방법으로 분석하면 로버스트성이 좋은 검정을 얻는다.
 
-## Tie Correction Factor
+## 동점 보정계수
 
-When ties are present, the exact null distributions of rank-based statistics change. Most test statistics incorporate a correction factor. Let $g$ denote the number of distinct tied groups, and let $t_j$ be the number of tied observations in the $j$-th group. The commonly used correction factor is
+동점이 있으면 순위 기반 통계량의 정확 귀무분포가 달라진다. 대부분의 검정통계량은 보정계수를 넣는다. $g$를 서로 다른 동점 집단의 개수, $t_j$를 $j$번째 집단의 동점 관측값 개수라 하자. 흔히 쓰는 보정계수는
 
 $$
 C = 1 - \frac{\sum_{j=1}^{g} (t_j^3 - t_j)}{n^3 - n}
 $$
 
-The corrected test statistic is obtained by dividing the uncorrected statistic by $C$ (or equivalently, dividing its variance by $C$). When there are no ties, $t_j = 1$ for all $j$, so $C = 1$ and no correction is needed.
+이다. 보정된 검정통계량은 보정되지 않은 통계량을 $C$로 나누어 얻는다(동치로, 그 분산을 $C$로 나눈다). 동점이 없으면 모든 $j$에 대해 $t_j = 1$이므로 $C = 1$이고 보정이 필요 없다.
 
-## Common Rank-Based Statistics
+## 흔히 쓰는 순위 기반 통계량
 
-The following rank-based test statistics appear throughout this chapter:
+이 장 전체에서 다음 순위 기반 검정통계량이 등장한다.
 
-| Statistic | Definition | Used in |
+| 통계량 | 정의 | 쓰이는 곳 |
 |:----------|:-----------|:--------|
-| Wilcoxon $W^+$ | Sum of ranks of positive differences | Signed-rank test |
-| Wilcoxon $W$ | Sum of ranks in one group | Rank-sum test |
-| Mann-Whitney $U$ | Count of pairwise wins | Two-sample test |
-| Kruskal-Wallis $H$ | Between-group rank variance | Multi-group test |
-| Friedman $\chi^2_F$ | Within-block rank variance | Repeated measures |
-| Spearman $r_s$ | Pearson correlation of ranks | Correlation |
-| Kendall $\tau$ | Normalized concordance count | Correlation |
+| Wilcoxon $W^+$ | 양의 차이들의 순위합 | 부호순위검정 |
+| Wilcoxon $W$ | 한 집단의 순위합 | 순위합검정 |
+| Mann-Whitney $U$ | 쌍별 승수 | 이표본 검정 |
+| Kruskal-Wallis $H$ | 집단 간 순위 변동 | 다집단 검정 |
+| Friedman $\chi^2_F$ | 블록 내 순위 변동 | 반복측정 |
+| Spearman $r_s$ | 순위의 Pearson 상관 | 상관 |
+| Kendall $\tau$ | 정규화된 일치도 계수 | 상관 |
 
-Each of these statistics operates on the ranks rather than the raw data, inheriting the distribution-free property and outlier resistance described above.
+이들 통계량은 모두 원자료가 아니라 순위 위에서 작동하므로, 위에서 설명한 분포무관 성질과 이상치 저항성을 물려받는다.
 
-## Summary
+## 요약
 
-The rank transformation is the central mechanism behind non-parametric testing. By replacing observations with their positions in the sorted sample, rank-based methods achieve distribution-freeness, robustness to outliers, and applicability to ordinal data. When ties occur, midranks preserve the key properties of the rank transformation, and correction factors ensure that test statistics maintain their nominal significance levels. The specific rank-based procedures built on this foundation are developed in the sections that follow.
+순위변환은 비모수 검정의 중심 장치이다. 관측값을 정렬된 표본에서의 위치로 대체함으로써 순위 기반 방법은 분포무관성, 이상치에 대한 로버스트성, 순서형 자료에 대한 적용성을 얻는다. 동점이 생기면 중간순위가 순위변환의 핵심 성질을 보존하고, 보정계수가 검정통계량의 명목 유의수준을 유지하게 한다. 이 토대 위에 세워지는 구체적인 순위 기반 절차들은 이어지는 절에서 전개한다.
 
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Describe the main concept of Ranks and Rank Transformations and explain why it matters for statistical practice.
+**연습문제 1.**
+$X = (3, 5, 5, 5, 8, 8, 11, 11, 11, 11)$의 중간순위를 손으로 구하고, 합이 $n(n+1)/2$인지 확인하라. 이 표본의 동점 보정계수 $C$도 계산하라.
 
-??? success "Solution to Exercise 1"
-    Ranks and Rank Transformations is a core topic in statistics that provides tools for drawing reliable inferences from data. It matters because proper application ensures valid conclusions, correctly quantified uncertainty, and appropriate handling of the assumptions that underpin the method. Practitioners who understand this concept can avoid common pitfalls and choose the right analytical approach for their data.
+??? success "연습문제 1 풀이"
+    정렬된 위치는 1부터 10까지이다.
+
+    | 값 | 차지하는 위치 | 중간순위 | 개수 $t_j$ |
+    |:---:|:---:|:---:|:---:|
+    | 3 | 1 | $1$ | 1 |
+    | 5 | 2, 3, 4 | $(2+3+4)/3 = 3$ | 3 |
+    | 8 | 5, 6 | $(5+6)/2 = 5.5$ | 2 |
+    | 11 | 7, 8, 9, 10 | $(7+8+9+10)/4 = 8.5$ | 4 |
+
+    순위 벡터는 $(1, 3, 3, 3, 5.5, 5.5, 8.5, 8.5, 8.5, 8.5)$이고 합은
+
+    $$
+    1 + 9 + 11 + 34 = 55 = \frac{10 \cdot 11}{2} \quad \checkmark
+    $$
+
+    보정계수는 $t = (1, 3, 2, 4)$이므로($t_j = 1$인 집단은 $t_j^3 - t_j = 0$이라 기여하지 않는다)
+
+    $$
+    C = 1 - \frac{(3^3 - 3) + (2^3 - 2) + (4^3 - 4)}{10^3 - 10}
+      = 1 - \frac{24 + 6 + 60}{990} = 1 - \frac{90}{990} = \frac{10}{11} \approx 0.9091
+    $$
+
+    ```python
+    import numpy as np
+    from scipy import stats
+    x = np.array([3, 5, 5, 5, 8, 8, 11, 11, 11, 11])
+    r = stats.rankdata(x)
+    print(r, r.sum())   # [1. 3. 3. 3. 5.5 5.5 8.5 8.5 8.5 8.5] 55.0
+    ```
 
 ---
 
-**Exercise 2.**
-State the key assumptions required by the method discussed here. How can each assumption be checked?
+**연습문제 2.**
+연습문제 1의 표본에서 중간순위의 (모)분산을 계산하고, 동점이 없을 때의 값 $(n^2-1)/12$와 비교하라. 두 값 사이의 관계에서 보정계수 $C$가 왜 그런 형태인지 설명하라.
 
-??? success "Solution to Exercise 2"
-    The main assumptions typically include: (1) independence of observations -- verified by understanding the data collection process and checking for serial correlation; (2) distributional requirements (e.g., normality) -- checked with Q-Q plots and formal tests like Shapiro-Wilk; (3) equal variances (if applicable) -- assessed with boxplots and Levene's test. When assumptions are violated, consider robust alternatives, transformations, or nonparametric methods.
+??? success "연습문제 2 풀이"
+    ```python
+    print(r.var())              # 7.5
+    print((10**2 - 1) / 12)     # 8.25
+    print(7.5 / 8.25)           # 0.9090909...
+    ```
+
+    동점이 없을 때 $8.25$, 동점이 있을 때 $7.5$이고, 그 비가 정확히 $C = 10/11 = 0.9091$이다. 이것은 우연이 아니라 **항등식**이다.
+
+    $$
+    \frac{1}{n}\sum_i R_i^2 - \bar{R}^2 = \frac{n^2 - 1}{12} \cdot C
+    $$
+
+    직관은 이렇다. 동점 집단 하나를 중간순위로 뭉개면 그 집단 내부의 순위 변동이 완전히 사라진다. $t_j$개짜리 집단이 잃는 제곱합은 정확히 $t_j(t_j^2-1)/12$이고, 이를 전체 $n(n^2-1)/12$로 나누면
+
+    $$
+    \frac{\sum_j t_j(t_j^2-1)}{n(n^2-1)} = \frac{\sum_j (t_j^3 - t_j)}{n^3 - n}
+    $$
+
+    가 되어 $C$의 정의에 나오는 분수와 정확히 일치한다.
+
+    이 때문에 동점을 무시한 검정이 **보수적**이 된다. Kruskal-Wallis 같은 통계량은 순위 분산으로 표준화하는데, 실제 분산($7.5$)보다 큰 값($8.25$)으로 나누면 통계량이 과소평가되어 기각을 덜 하게 된다. 통계량을 $C$로 나누는 것이 바로 이 과소평가를 되돌리는 조작이다.
 
 ---
 
-**Exercise 3.**
-Work through a small numerical example illustrating the application of the technique from this section.
+**연습문제 3.**
+$Y = (2.0, \; 7.5, \; 1.1, \; 9.9, \; 4.4)$에 대해 $\text{rank}(Y)$, $\text{rank}(\log Y)$, $\text{rank}(Y^3)$, $\text{rank}(-Y)$, $\text{rank}((Y-5)^2)$을 각각 구하라. 어느 것이 원래 순위와 같고 어느 것이 다른가? 그 이유는?
 
-??? success "Solution to Exercise 3"
-    A structured approach to applying this technique involves: (1) clearly stating the hypotheses or estimation goal; (2) verifying that the data meet the required assumptions; (3) computing the relevant test statistic, estimate, or model fit; (4) obtaining the p-value, confidence interval, or posterior distribution; (5) interpreting the result in the context of the original question. Following these steps systematically ensures a rigorous and reproducible analysis.
+??? success "연습문제 3 풀이"
+    ```python
+    y = np.array([2.0, 7.5, 1.1, 9.9, 4.4])
+    for name, z in [("y", y), ("log y", np.log(y)), ("y^3", y**3),
+                    ("-y", -y), ("(y-5)^2", (y - 5)**2)]:
+        print(name, stats.rankdata(z))
+    ```
+
+    | 변환 | 순위 | 원래와 같은가 |
+    |:---|:---|:---:|
+    | $Y$ | $(2, 4, 1, 5, 3)$ | --- |
+    | $\log Y$ | $(2, 4, 1, 5, 3)$ | 같다 |
+    | $Y^3$ | $(2, 4, 1, 5, 3)$ | 같다 |
+    | $-Y$ | $(4, 2, 5, 1, 3)$ | 정확히 뒤집힘 |
+    | $(Y-5)^2$ | $(3, 2, 4, 5, 1)$ | 완전히 다름 |
+
+    $\log$와 세제곱은 **단조증가** 함수이므로 $Y_i < Y_j \iff g(Y_i) < g(Y_j)$가 그대로 유지되어 순위가 보존된다. $-Y$는 단조**감소**이므로 순위가 $R \mapsto n + 1 - R$로 뒤집힌다. 검정통계량이 대칭적이면 이 뒤집기는 $p$값을 바꾸지 않는다.
+
+    $(Y-5)^2$는 단조가 아니다. $5$ 아래와 위를 접어 버리므로 순서 정보가 파괴된다. $Y = 4.4$(원래 순위 3)가 새 순위 1이 되고, $Y = 2.0$(원래 순위 2)이 새 순위 3이 된다.
+
+    실무적 함의: 순위 기반 검정에 **로그변환을 먼저 적용하는 것은 의미가 없다**. $p$값이 소수점 이하 전부 동일하게 나온다. 반대로 $t$ 검정에서는 로그변환이 결과를 크게 바꾼다. 이 불변성이 순위 검정의 장점이자 한계이다. 척도 선택에 흔들리지 않지만, 척도를 잘 골라 얻을 수 있었을 정보도 쓰지 못한다.
 
 ---
 
-**Exercise 4.**
-Compare the approach from this section with an alternative method. When would you choose each?
+**연습문제 4.**
+연습문제 1의 자료를 세 집단 $A = (3, 5, 5, 8)$, $B = (5, 8, 11, 11)$, $C = (11, 11)$로 나누어 Kruskal-Wallis 검정을 수행하라. `scipy.stats.kruskal`이 동점 보정을 자동으로 하는지 확인하고, 보정을 하지 않으면 통계량이 어떻게 달라지는지 계산하라.
 
-??? success "Solution to Exercise 4"
-    The method discussed here is appropriate when its assumptions hold and the sample size is sufficient for the asymptotic approximations to be accurate. Alternative approaches include: (1) nonparametric methods -- preferred when distributional assumptions are suspect; (2) bootstrap methods -- useful when analytical reference distributions are unavailable; (3) Bayesian methods -- valuable when incorporating prior information or when direct probability statements about parameters are desired. Running multiple approaches and comparing results provides a useful robustness check.
+??? success "연습문제 4 풀이"
+    ```python
+    a, b, c = [3, 5, 5, 8], [5, 8, 11, 11], [11, 11]
+    print(stats.kruskal(a, b, c))
+    # KruskalResult(statistic=5.235, pvalue=0.0730)
+    ```
+
+    손으로 확인해 보자. 합친 자료의 중간순위는 연습문제 1과 같다. 집단별 순위합은
+
+    - $A$: $1 + 3 + 3 + 5.5 = 12.5$ ($n_A = 4$)
+    - $B$: $3 + 5.5 + 8.5 + 8.5 = 25.5$ ($n_B = 4$)
+    - $C$: $8.5 + 8.5 = 17$ ($n_C = 2$)
+
+    보정하지 않은 통계량은
+
+    $$
+    H_0' = \frac{12}{n(n+1)} \sum_i \frac{R_i^2}{n_i} - 3(n+1)
+    = \frac{12}{110}\left(\frac{12.5^2}{4} + \frac{25.5^2}{4} + \frac{17^2}{2}\right) - 33
+    $$
+
+    ```python
+    import numpy as np
+    R = np.array([12.5, 25.5, 17.0]); ni = np.array([4, 4, 2]); n = 10
+    H_raw = 12 / (n * (n + 1)) * np.sum(R**2 / ni) - 3 * (n + 1)
+    print(H_raw, H_raw / (10 / 11))    # 4.759... 5.235...
+    ```
+
+    보정 전 $H' = 4.759$, 보정 후 $H = H'/C = 4.759 \times 11/10 = 5.235$로 SciPy 결과와 일치한다. **SciPy는 동점 보정을 자동으로 한다.**
+
+    $p$값에 미치는 영향은 $\chi^2_2$ 기준으로 $0.0925 \to 0.0730$이다. 이 표본에서는 동점 비율이 높아($10$개 중 $9$개가 동점) 보정이 $p$값을 20% 넘게 줄였다. 동점이 적으면 $C$가 $1$에 가까워 차이는 무시할 만하다.
+
+    다만 여기서 더 중요한 경고가 있다. 집단 크기가 $4, 4, 2$로 매우 작고 자료가 심하게 이산적이어서 $\chi^2$ 근사 자체가 신뢰할 만하지 않다. 이런 경우에는 순열검정으로 정확 $p$값을 구하는 편이 낫다.

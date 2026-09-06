@@ -1,61 +1,66 @@
-# Paired-Sample Non-Parametric Tests
+# 대응표본 비모수 검정
 
 
-## Paired-Sample Wilcoxon Signed-Rank Test
+## 대응표본 Wilcoxon 부호순위검정
 
-The **Paired-Sample Wilcoxon Signed-Rank Test** is a non-parametric test used to determine whether the median difference between paired observations is significantly different from zero. It serves as a non-parametric alternative to the paired t-test when the data do not meet the normality assumption.
+**대응표본 Wilcoxon 부호순위검정**은 대응 관측값 사이의 중앙값 차이가 0과 유의하게 다른지 판정하는 비모수 검정이다. 자료가 정규성 가정을 만족하지 않을 때 대응 t 검정의 비모수 대안으로 쓰인다.
 
-### Key Features
+### 주요 특징
 
-- **Purpose**: Test whether the median difference between paired observations is zero.
-- **Null Hypothesis ($H_0$)**: The median of the differences between the paired samples is zero.
-- **Alternative Hypothesis ($H_a$)**:
-    - Two-tailed: The median difference is not zero.
-    - One-tailed: The median difference is either greater than or less than zero.
-- **Data Requirements**:
-    - Data must be paired and continuous or ordinal.
-    - The differences between pairs should be symmetrically distributed.
+- **목적**: 대응 관측값 사이의 중앙값 차이가 0인지 검정한다.
+- **귀무가설 ($H_0$)**: 대응표본 차이의 중앙값이 0이다.
+- **대립가설 ($H_a$)**:
+    - 양측: 중앙값 차이가 0이 아니다.
+    - 단측: 중앙값 차이가 0보다 크거나, 0보다 작다.
+- **자료 요건**:
+    - 자료가 대응되어 있고 연속형 또는 순서형이어야 한다.
+    - 쌍 사이의 차이가 대칭으로 분포해야 한다.
 
-### Test Procedure
+### 검정 절차
 
-**Step 1: Calculate Differences**
+**1단계: 차이 계산**
 
-Compute the difference between paired observations:
+대응 관측값 사이의 차이를 계산한다.
 
 $$d_i = X_i - Y_i$$
 
-Ignore pairs where $d_i = 0$ (these are excluded from the test).
+$d_i = 0$인 쌍은 무시한다(검정에서 제외된다).
 
-**Step 2: Rank the Absolute Differences**
+**2단계: 절대차이 순위 매기기**
 
-Take the absolute values $|d_i|$ and rank them in ascending order, assigning tied ranks if necessary.
+절댓값 $|d_i|$를 오름차순으로 순위를 매기고, 필요하면 동점 순위를 배정한다.
 
-**Step 3: Assign Signs to Ranks**
+**3단계: 순위에 부호 배정**
 
-Assign the sign of each difference to its corresponding rank.
+각 차이의 부호를 대응하는 순위에 배정한다.
 
-**Step 4: Compute the Test Statistic**
+**4단계: 검정통계량 계산**
 
-- Sum the ranks of the positive differences: $W^+$
-- Sum the ranks of the negative differences: $W^-$
-- The test statistic is: $W = \min(W^+, W^-)$
+- 양의 차이들의 순위합: $W^+$
+- 음의 차이들의 순위합: $W^-$
+- 검정통계량: $W = \min(W^+, W^-)$
 
-**Step 5: Determine Significance**
+**5단계: 유의성 판정**
 
-- Compare $W$ to a critical value from the Wilcoxon Signed-Rank Test table for the given sample size and significance level ($\alpha$).
-- For larger samples ($n > 20$), use the normal approximation:
+- 주어진 표본크기와 유의수준 $\alpha$에 대해 Wilcoxon 부호순위검정표의 임계값과 $W$를 비교한다.
+- 표본이 크면($n > 20$) 정규근사를 쓴다.
 
-$$Z = \frac{W - \frac{n(n+1)}{4}}{\sqrt{\frac{n(n+1)(2n+1)}{24}}}$$
+$$Z = \frac{W^+ - \frac{n(n+1)}{4}}{\sqrt{\frac{n(n+1)(2n+1)}{24}}}$$
+
+!!! warning "정규근사의 분자에는 $W^+$를 쓴다"
+    표준화할 때 분자에 넣는 것은 $W = \min(W^+, W^-)$가 아니라 **$W^+$**(또는 $W^-$ 중 하나를 일관되게)이다. $\min$을 쓰면 언제나 $Z \le 0$이 되어 방향 정보가 사라진다.
+
+    양측검정에서는 $\min$을 쓰고 $|Z|$를 보아도 같은 결과가 나오지만, 단측검정에서는 반드시 $W^+$를 써야 한다.
 
 ---
 
-### Worked Example: Teaching Method Improvement
+### 예제: 교수법 개선
 
-**Scenario**: A researcher wants to test whether a new teaching method improves test scores. Ten students take a test before and after using the new method. Test if there is a significant improvement in scores.
+**상황**: 한 연구자가 새 교수법이 시험 점수를 높이는지 검정하려 한다. 학생 10명이 새 방법을 쓰기 전과 후에 시험을 본다. 점수가 유의하게 향상되었는지 검정하라.
 
-**Data:**
+**자료:**
 
-| Student | Before | After | Difference ($d_i$) |
+| 학생 | 전 | 후 | 차이 ($d_i$) |
 |---|---|---|---|
 | 1 | 70 | 72 | 2 |
 | 2 | 68 | 69 | 1 |
@@ -68,35 +73,46 @@ $$Z = \frac{W - \frac{n(n+1)}{4}}{\sqrt{\frac{n(n+1)(2n+1)}{24}}}$$
 | 9 | 73 | 74 | 1 |
 | 10 | 76 | 80 | 4 |
 
-**Step 1 — Differences:** All differences are positive: $d = [2, 1, 3, 5, 3, 2, 1, 2, 1, 4]$
+**1단계 --- 차이:** 모든 차이가 양수이다. $d = [2, 1, 3, 5, 3, 2, 1, 2, 1, 4]$
 
-**Step 2 — Rank Absolute Differences:**
+**2단계 --- 절대차이 순위:**
 
 $$|d| = [2, 1, 3, 5, 3, 2, 1, 2, 1, 4]$$
 
-Sorted: $[1, 1, 1, 2, 2, 2, 3, 3, 4, 5]$
+정렬: $[1, 1, 1, 2, 2, 2, 3, 3, 4, 5]$
 
-Tied ranks: $[2, 2, 2, 5, 5, 5, 7.5, 7.5, 9, 10]$
+동점 순위: $[2, 2, 2, 5, 5, 5, 7.5, 7.5, 9, 10]$
 
-Assigned to original order: $[5, 2, 7.5, 10, 7.5, 5, 2, 5, 2, 9]$
+원래 순서로 배정: $[5, 2, 7.5, 10, 7.5, 5, 2, 5, 2, 9]$
 
-**Step 3 — Assign Signs:** Since all differences are positive, all ranks are positive.
+**3단계 --- 부호 배정:** 모든 차이가 양수이므로 모든 순위가 양수이다.
 
-**Step 4 — Compute $W^+$ and $W^-$:**
+**4단계 --- $W^+$와 $W^-$ 계산:**
 
 - $W^+ = 5 + 2 + 7.5 + 10 + 7.5 + 5 + 2 + 5 + 2 + 9 = 55$
 - $W^- = 0$
 - $W = \min(55, 0) = 0$
 
-**Step 5 — Determine Significance:**
+**5단계 --- 유의성 판정:**
 
-Using a Wilcoxon table for $n = 10$, $\alpha = 0.05$ (two-tailed), the critical value is 8. Since $W = 0 < 8$, we **reject** $H_0$.
+$n = 10$, $\alpha = 0.05$(양측)에 대한 Wilcoxon 표의 임계값은 8이다. $W = 0 < 8$이므로 $H_0$을 **기각**한다.
 
-**Conclusion**: There is significant evidence that the new teaching method improves test scores.
+**결론**: 새 교수법이 시험 점수를 향상시킨다는 유의한 증거가 있다.
+
+!!! note "정확 $p$값과 근사 $p$값"
+    모든 차이가 양수인 이 자료의 정확 양측 $p$값은
+
+    $$
+    p = 2 \times \left(\tfrac{1}{2}\right)^{10} = \frac{2}{1024} = 0.001953
+    $$
+
+    이다. 동점 보정을 적용한 정규근사는 $Z = (55 - 27.5)/\sqrt{95.125} = 2.820$에서 $p = 0.00481$을 준다. 근사값이 정확값의 **2.5배**로, $n = 10$에서 정규근사가 얼마나 부정확한지를 보여 준다.
+
+    이 자료에서는 모든 차이가 같은 방향이므로 부호검정도 같은 정확 $p$값 $0.001953$을 낸다. 부호검정이 크기 정보를 버려도 손해를 보지 않는 유일한 경우이다.
 
 ---
 
-### Python Implementation
+### 파이썬 구현
 
 ```python
 import numpy as np
@@ -109,8 +125,8 @@ after = np.array([72, 69, 78, 85, 75, 76, 70, 79, 74, 80])
 # Perform Wilcoxon Signed-Rank Test
 stat, p_value = wilcoxon(after, before)
 
-print(f"Test Statistic: {stat}")
-print(f"P-value: {p_value}")
+print(f"Test Statistic: {stat}")     # 0.0
+print(f"P-value: {p_value}")         # 0.001953125
 
 # Interpretation
 alpha = 0.05
@@ -122,16 +138,16 @@ else:
 
 ---
 
-## Paired Sign Test
+## 대응 부호검정
 
-When the symmetry assumption of the Wilcoxon Signed-Rank test is violated, the **Paired Sign Test** can be used. It only considers the signs of the paired differences, ignoring both magnitude and ranks.
+Wilcoxon 부호순위검정의 대칭성 가정이 깨질 때는 **대응 부호검정**을 쓸 수 있다. 대응차이의 부호만 고려하고 크기와 순위는 모두 무시한다.
 
-### Procedure
+### 절차
 
-1. Compute differences $d_i = X_i - Y_i$.
-2. Count the number of positive ($n_+$) and negative ($n_-$) differences. Ignore ties ($d_i = 0$).
-3. Under $H_0$, each difference is equally likely to be positive or negative, so $n_+ \sim \text{Binomial}(n, 0.5)$.
-4. Compute p-value using the binomial distribution.
+1. 차이 $d_i = X_i - Y_i$를 계산한다.
+2. 양의 차이 개수($n_+$)와 음의 차이 개수($n_-$)를 센다. 동점($d_i = 0$)은 무시한다.
+3. $H_0$ 아래에서 각 차이가 양수일 확률과 음수일 확률이 같으므로 $n_+ \sim \text{Binomial}(n, 0.5)$이다.
+4. 이항분포로 $p$값을 계산한다.
 
 ```python
 from scipy.stats import binom
@@ -146,73 +162,175 @@ n_minus = np.sum(differences < 0)
 n = n_plus + n_minus
 W = min(n_plus, n_minus)
 
-p_value = 2 * binom.cdf(W, n, 0.5)  # Two-tailed
+p_value = min(1.0, 2 * binom.cdf(W, n, 0.5))  # Two-tailed
 
-print(f"n+ = {n_plus}, n- = {n_minus}")
-print(f"P-value: {p_value:.4f}")
+print(f"n+ = {n_plus}, n- = {n_minus}")   # n+ = 10, n- = 0
+print(f"P-value: {p_value:.6f}")          # 0.001953
 ```
 
+!!! warning "$2 \times$ 규칙은 1을 넘을 수 있다"
+    $2 \times P(S \le W)$는 $W$가 $n/2$에 가까우면 1을 넘는다. 예를 들어 $n = 10$, $W = 5$이면 $2 \times 0.6230 = 1.246$이다. 반드시 1로 자르거나 `scipy.stats.binomtest`를 쓰는 편이 안전하다.
+
 ---
 
-## Comparison: Paired t-Test vs Non-Parametric Alternatives
+## 비교: 대응 t 검정 대 비모수 대안
 
-| Feature | Paired t-Test | Paired Wilcoxon | Paired Sign Test |
+| 특징 | 대응 t 검정 | 대응 Wilcoxon | 대응 부호검정 |
 |---|---|---|---|
-| **Assumption** | Normal differences | Symmetric differences | None |
-| **Tests** | Mean difference | Median difference | Median difference |
-| **Uses** | Raw differences | Ranks of differences | Signs only |
-| **Power** | Highest (when normal) | Moderate | Lowest |
-| **Robustness** | Sensitive to outliers | Moderate | Very robust |
+| **가정** | 차이가 정규 | 차이가 대칭 | 없음 |
+| **검정 대상** | 평균 차이 | 중앙값 차이 | 중앙값 차이 |
+| **사용 정보** | 원 차이값 | 차이의 순위 | 부호만 |
+| **검정력** | 최고 (정규일 때) | 높음 (ARE $\approx 0.955$) | 낮음 (ARE $\approx 0.637$) |
+| **로버스트성** | 이상치에 민감 | 높음 | 매우 높음 |
 
-### Guideline for Choosing
+### 선택 지침
 
-- **Normal differences**: Use the **paired t-test** for maximum power.
-- **Symmetric but non-normal differences**: Use the **paired Wilcoxon signed-rank test**.
-- **No assumptions met** (skewed, ordinal): Use the **paired sign test**.
+- **차이가 정규**: 검정력을 최대로 얻으려면 **대응 t 검정**.
+- **대칭이지만 비정규**: **대응 Wilcoxon 부호순위검정**.
+- **가정이 하나도 성립하지 않음**(치우침, 순서형): **대응 부호검정**.
 
-### Advantages and Limitations
+### 장점과 한계
 
-**Advantages:**
+**장점:**
 
-- Does not assume normality.
-- Robust to outliers.
-- Works with ordinal data.
+- 정규성을 가정하지 않는다.
+- 이상치에 로버스트하다.
+- 순서형 자료에도 쓸 수 있다.
 
-**Limitations:**
+**한계:**
 
-- Assumes symmetry of the distribution of differences (Wilcoxon only).
-- Less powerful than parametric tests when normality holds.
-- Sign test discards magnitude information, reducing power further.
+- 차이 분포의 대칭성을 가정한다(Wilcoxon만 해당).
+- 정규성이 성립할 때 모수적 검정보다 검정력이 낮다.
+- 부호검정은 크기 정보를 버려 검정력이 더 떨어진다.
 
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Describe the main concept of Paired-Sample Non-Parametric Tests and explain why it matters for statistical practice.
+**연습문제 1.**
+교수법 예제 자료에서 네 가지 검정(대응 $t$, Wilcoxon 정확·근사, 부호검정)의 $p$값을 모두 계산하고, 왜 부호검정이 Wilcoxon과 같은 값을 내는지 설명하라.
 
-??? success "Solution to Exercise 1"
-    Paired-Sample Non-Parametric Tests is a core topic in statistics that provides tools for drawing reliable inferences from data. It matters because proper application ensures valid conclusions, correctly quantified uncertainty, and appropriate handling of the assumptions that underpin the method. Practitioners who understand this concept can avoid common pitfalls and choose the right analytical approach for their data.
+??? success "연습문제 1 풀이"
+    ```python
+    import numpy as np
+    from scipy import stats
+    before = np.array([70, 68, 75, 80, 72, 74, 69, 77, 73, 76])
+    after  = np.array([72, 69, 78, 85, 75, 76, 70, 79, 74, 80])
+    d = after - before
+
+    print(stats.ttest_rel(after, before).pvalue)                    # 0.000325
+    print(stats.wilcoxon(d, method='exact').pvalue)                 # 0.001953
+    print(stats.wilcoxon(d, method='approx', correction=False).pvalue)  # 0.004809
+    print(stats.binomtest(10, 10).pvalue)                           # 0.001953
+    ```
+
+    | 검정 | 양측 $p$값 |
+    |:---|---:|
+    | 대응 $t$ | $0.000325$ |
+    | Wilcoxon (정확) | $0.001953$ |
+    | 부호검정 (정확) | $0.001953$ |
+    | Wilcoxon (정규근사) | $0.004809$ |
+
+    **부호검정과 Wilcoxon 정확검정이 같은 값을 낸다.** 이유는 자료가 극단적으로 한쪽에 쏠려 있기 때문이다.
+
+    두 검정 모두 $2^{10} = 1024$가지 부호 배정을 귀무분포로 쓴다. 관측된 배정은 "모두 $+$"인 단 하나이다. Wilcoxon에서 $W^+ = 55$는 도달 가능한 최댓값이고, 이를 달성하는 배정은 하나뿐이다. 부호검정에서 $n_+ = 10$을 달성하는 배정도 하나뿐이다. 따라서 두 정확 $p$값이 모두 $2/1024$가 된다.
+
+    일반적으로는 두 검정이 갈라진다. 음의 차이가 하나라도 있으면 그 차이의 크기가 Wilcoxon에는 영향을 주지만 부호검정에는 주지 않는다.
+
+    Wilcoxon 정규근사가 $0.004809$로 정확값의 2.5배임에 유의하라. 관측값이 분포의 **끝점**에 놓여 있어 정규근사가 가장 나쁘게 작동하는 위치이다. 꼬리 확률을 근사할 때 정규근사가 체계적으로 부정확한 이유이다.
 
 ---
 
-**Exercise 2.**
-State the key assumptions required by the method discussed here. How can each assumption be checked?
+**연습문제 2.**
+$n = 10$일 때 Wilcoxon 부호순위검정의 양측 임계값이 왜 $8$인지 정확 귀무분포를 열거하여 확인하라. 이 임계값의 실제 유의수준은 얼마인가?
 
-??? success "Solution to Exercise 2"
-    The main assumptions typically include: (1) independence of observations -- verified by understanding the data collection process and checking for serial correlation; (2) distributional requirements (e.g., normality) -- checked with Q-Q plots and formal tests like Shapiro-Wilk; (3) equal variances (if applicable) -- assessed with boxplots and Levene's test. When assumptions are violated, consider robust alternatives, transformations, or nonparametric methods.
+??? success "연습문제 2 풀이"
+    ```python
+    import numpy as np, itertools
+    n = 10
+    ranks = np.arange(1, n + 1)
+    W = np.array([np.dot(s, ranks) for s in itertools.product([0, 1], repeat=n)])
+    T = np.minimum(W, n * (n + 1) // 2 - W)      # min(W+, W-)
+    for c in range(6, 12):
+        print(c, (T <= c).mean())
+    ```
+
+    | 임계값 $c$ | $P(T \le c)$ |
+    |---:|---:|
+    | 6 | 0.0273 |
+    | 7 | 0.0371 |
+    | 8 | **0.0488** |
+    | 9 | 0.0645 |
+    | 10 | 0.0840 |
+    | 11 | 0.1055 |
+
+    $c = 8$이 $0.05$를 넘지 않는 가장 큰 값이다($0.0488 \le 0.05 < 0.0645$). 그래서 표에 $8$이 실려 있다.
+
+    실제 유의수준은 $0.0488$로 명목값 $0.05$에 매우 가깝다. $n = 10$에서 부호검정의 실제 크기가 $0.0215$였던 것과 비교하면 훨씬 낫다. Wilcoxon의 귀무분포는 $T = \min(W^+, W^-)$가 가질 수 있는 값이 $28$가지($0$부터 $27$까지)라 $\alpha$를 촘촘히 채울 수 있는 반면, 부호검정은 $6$가지밖에 없다.
+
+    이것이 Wilcoxon 검정이 부호검정보다 강력한 두 번째 이유이다. ARE가 $0.955$ 대 $0.637$인 것뿐 아니라, 소표본에서 유의수준을 훨씬 효율적으로 쓴다.
 
 ---
 
-**Exercise 3.**
-Work through a small numerical example illustrating the application of the technique from this section.
+**연습문제 3.**
+`p_value = 2 * binom.cdf(W, n, 0.5)`가 언제 1을 넘는가? $n = 10$에서 $W = 0, 1, \ldots, 5$에 대해 계산하고, 올바른 처리 방법을 제시하라.
 
-??? success "Solution to Exercise 3"
-    A structured approach to applying this technique involves: (1) clearly stating the hypotheses or estimation goal; (2) verifying that the data meet the required assumptions; (3) computing the relevant test statistic, estimate, or model fit; (4) obtaining the p-value, confidence interval, or posterior distribution; (5) interpreting the result in the context of the original question. Following these steps systematically ensures a rigorous and reproducible analysis.
+??? success "연습문제 3 풀이"
+    ```python
+    from scipy.stats import binom, binomtest
+    n = 10
+    for W in range(6):
+        naive = 2 * binom.cdf(W, n, 0.5)
+        print(W, round(naive, 4), round(binomtest(W, n, 0.5).pvalue, 4))
+    ```
+
+    | $W = \min(n_+, n_-)$ | $2 \times P(S \le W)$ | `binomtest` |
+    |---:|---:|---:|
+    | 0 | 0.0020 | 0.0020 |
+    | 1 | 0.0215 | 0.0215 |
+    | 2 | 0.1094 | 0.1094 |
+    | 3 | 0.3438 | 0.3438 |
+    | 4 | 0.7539 | 0.7539 |
+    | 5 | **1.2461** | 1.0000 |
+
+    $W = 5$(즉 $n_+ = n_- = 5$)에서 $1.2461$이 나온다. $P(S \le 5) = 0.6230$을 두 배 했기 때문이다.
+
+    원인은 $S = 5$가 두 꼬리에 **중복해서 세어지기** 때문이다. $P(S \le 5)$와 $P(S \ge 5)$는 둘 다 $P(S = 5) = 0.2461$을 포함하므로 합이 $1 + 0.2461$이 된다.
+
+    올바른 처리 방법은 셋 중 하나이다.
+
+    1. **1로 자른다.** `min(1.0, 2 * binom.cdf(W, n, 0.5))` --- 가장 간단하고 대부분의 교과서가 쓰는 규칙이다.
+    2. **`scipy.stats.binomtest`를 쓴다.** SciPy는 "관측값만큼 가능성이 낮은 결과들의 확률합" 정의를 쓰므로 자동으로 1을 넘지 않는다.
+    3. **중복을 뺀다.** $2P(S \le W) - P(S = W)$ --- 이론적으로 깔끔하지만 표준 관행은 아니다.
+
+    $p_0 = 0.5$일 때는 분포가 대칭이라 1과 2가 $W < n/2$에서 정확히 일치한다. $p_0 \ne 0.5$이면 두 정의가 갈라진다.
 
 ---
 
-**Exercise 4.**
-Compare the approach from this section with an alternative method. When would you choose each?
+**연습문제 4.**
+교수법 예제에서 모든 차이가 양수인 것은 우연이 아닐 수 있다. 이 자료가 실제로 정규 차이에서 나왔다면 $n = 10$에서 모두 같은 부호일 확률은 얼마인가? 관측된 차이의 분포는 무엇을 시사하는가?
 
-??? success "Solution to Exercise 4"
-    The method discussed here is appropriate when its assumptions hold and the sample size is sufficient for the asymptotic approximations to be accurate. Alternative approaches include: (1) nonparametric methods -- preferred when distributional assumptions are suspect; (2) bootstrap methods -- useful when analytical reference distributions are unavailable; (3) Bayesian methods -- valuable when incorporating prior information or when direct probability statements about parameters are desired. Running multiple approaches and comparing results provides a useful robustness check.
+??? success "연습문제 4 풀이"
+    차이는 $d = [2, 1, 3, 5, 3, 2, 1, 2, 1, 4]$로 평균 $2.4$, 표준편차 $1.35$이다.
+
+    참인 차이 분포가 $\mathcal{N}(2.4, 1.35^2)$이라면 한 관측값이 음수일 확률은
+
+    $$
+    \Phi\!\left(\frac{0 - 2.4}{1.35}\right) = \Phi(-1.78) = 0.0377
+    $$
+
+    이고, 10개가 모두 양수일 확률은 $(1 - 0.0377)^{10} = 0.681$이다. **전혀 놀랍지 않다.**
+
+    ```python
+    import numpy as np
+    from scipy import stats
+    d = np.array([2, 1, 3, 5, 3, 2, 1, 2, 1, 4])
+    print(d.mean(), d.std(ddof=1))                          # 2.4, 1.3499
+    p_neg = stats.norm.cdf(0, d.mean(), d.std(ddof=1))
+    print(p_neg, (1 - p_neg) ** 10)                         # 0.0377, 0.681
+    ```
+
+    그러나 자료 자체를 보면 다른 문제가 보인다. 차이의 값이 $\{1, 2, 3, 4, 5\}$ 다섯 가지뿐이고 모두 정수이다. 시험 점수가 정수라 차이도 정수인 것은 자연스럽지만, 이 정도 이산성에서는 **동점이 많이 생겨** 순위 기반 검정의 정확 귀무분포가 엄밀하게는 성립하지 않는다.
+
+    실제로 이 자료에는 크기 3, 3, 2의 동점 집단이 있다. SciPy가 반환한 "정확" $p$값 $0.001953$은 동점이 없다고 가정한 값이다. 다행히 모든 차이가 양수라 $W^+$가 최댓값이라는 사실은 동점 여부와 무관하므로 이 경우에는 문제가 되지 않는다.
+
+    **일반적 교훈:** 이산 척도(정수 점수, Likert 척도)에서는 동점이 필연적이며, 순위 기반 검정의 "정확" $p$값이 사실은 근사이다. 동점 비율이 높으면 순열검정으로 동점을 포함한 실제 귀무분포를 직접 계산하는 편이 정직하다.

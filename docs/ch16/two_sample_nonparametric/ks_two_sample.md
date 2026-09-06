@@ -1,66 +1,66 @@
-# Kolmogorov-Smirnov Two-Sample Test
+# Kolmogorov-Smirnov 이표본 검정
 
-The [Wilcoxon rank-sum](rank_sum.md) and [Mann-Whitney U](mann_whitney.md) tests are primarily sensitive to **location shifts** -- differences in the central tendency of two distributions. The **Kolmogorov-Smirnov (KS) two-sample test** takes a broader view: it compares the *entire* empirical cumulative distribution functions (ECDFs) of two samples and can detect differences in location, spread, shape, or any other distributional feature.
+[Wilcoxon 순위합](rank_sum.md) 검정과 [Mann-Whitney U](mann_whitney.md) 검정은 주로 **위치이동** --- 두 분포의 중심경향 차이 --- 에 민감하다. **Kolmogorov-Smirnov(KS) 이표본 검정**은 더 넓은 관점을 취한다. 두 표본의 *전체* 경험적 누적분포함수(ECDF)를 비교하여 위치, 산포, 모양, 그 밖의 어떤 분포적 특징의 차이든 탐지할 수 있다.
 
-This generality makes the KS test a versatile diagnostic tool, though it comes at the cost of lower power against specific alternatives (such as pure location shifts) compared to rank-based tests.
+이 일반성 덕에 KS 검정은 다재다능한 진단도구가 되지만, 순수한 위치이동 같은 특정 대립가설에 대해서는 순위 기반 검정보다 검정력이 낮다는 대가를 치른다.
 
-## Intuition
+## 직관
 
-Given two independent samples, each sample generates an empirical CDF -- a step function that jumps by $1/n$ at each observed value. If the two populations are identical, their ECDFs should track each other closely. The KS test measures the largest vertical gap between the two ECDFs and rejects $H_0$ when this gap is too large to be explained by sampling variability alone.
+독립인 두 표본이 주어지면 각 표본이 경험적 CDF --- 관측값마다 $1/n$씩 뛰는 계단함수 --- 를 만든다. 두 모집단이 동일하다면 두 ECDF가 서로 가까이 붙어 움직여야 한다. KS 검정은 두 ECDF 사이의 최대 수직 간격을 재고, 그 간격이 표집변동만으로 설명하기에 너무 크면 $H_0$을 기각한다.
 
-## Hypotheses
-
-$$
-H_0 \colon F_X = F_Y \quad \text{(the two populations have the same continuous distribution)}
-$$
+## 가설
 
 $$
-H_a \colon F_X \ne F_Y \quad \text{(the distributions differ in some way)}
+H_0 \colon F_X = F_Y \quad \text{(두 모집단이 같은 연속분포를 갖는다)}
 $$
 
-The test is inherently two-sided: it detects *any* difference between the distributions.
+$$
+H_a \colon F_X \ne F_Y \quad \text{(분포가 어떤 식으로든 다르다)}
+$$
 
-## Test Statistic
+이 검정은 본질적으로 양측이다. 분포 사이의 *임의의* 차이를 탐지한다.
 
-Let $\hat{F}_1(x)$ and $\hat{F}_2(x)$ be the ECDFs of the two samples of sizes $n_1$ and $n_2$. The KS statistic is the supremum of the absolute difference:
+## 검정통계량
+
+크기 $n_1$과 $n_2$인 두 표본의 ECDF를 $\hat{F}_1(x)$, $\hat{F}_2(x)$라 하자. KS 통계량은 절대차이의 상한이다.
 
 $$
 D_{n_1, n_2} = \sup_{x \in \mathbb{R}} \left|\hat{F}_1(x) - \hat{F}_2(x)\right|
 $$
 
-In practice, $D$ is computed by combining and sorting all $N = n_1 + n_2$ observations and evaluating $|\hat{F}_1 - \hat{F}_2|$ at each observed value (and just before each jump).
+실제로는 $N = n_1 + n_2$개 관측값을 모두 합쳐 정렬한 뒤, 각 관측값에서(그리고 각 도약 직전에서) $|\hat{F}_1 - \hat{F}_2|$를 평가하여 $D$를 계산한다.
 
-## Null Distribution
+## 귀무분포
 
-Under $H_0$ with continuous distributions, the null distribution of $D_{n_1, n_2}$ does not depend on the common distribution $F$ -- the test is distribution-free.
+연속분포라는 $H_0$ 아래에서 $D_{n_1, n_2}$의 귀무분포는 공통분포 $F$에 의존하지 않는다. 즉 검정이 분포무관이다.
 
-For large samples, the scaled statistic
+표본이 크면 척도조정된 통계량
 
 $$
 \sqrt{\frac{n_1 \, n_2}{n_1 + n_2}} \, D_{n_1, n_2}
 $$
 
-converges in distribution to the **Kolmogorov distribution**, whose CDF is
+이 **Kolmogorov 분포**로 분포수렴하며, 그 CDF는
 
 $$
 K(t) = 1 - 2\sum_{k=1}^{\infty} (-1)^{k-1} e^{-2k^2 t^2}
 $$
 
-The asymptotic $p$-value is $p = 1 - K(c)$ where $c = \sqrt{n_1 n_2 / (n_1 + n_2)} \cdot D$.
+이다. 점근 $p$값은 $c = \sqrt{n_1 n_2 / (n_1 + n_2)} \cdot D$일 때 $p = 1 - K(c)$이다.
 
-For small samples, exact $p$-values are computed by enumeration or dynamic programming.
+소표본에서는 열거나 동적계획법으로 정확 $p$값을 계산한다.
 
-## Worked Example
+## 예제
 
-Two manufacturing processes produce ball bearings. We measure diameter (mm) for samples from each process.
+두 제조공정이 볼베어링을 생산한다. 각 공정의 표본에서 지름(mm)을 측정했다.
 
-**Process A** ($n_1 = 5$): 10.1, 10.3, 10.2, 10.5, 10.4
+**공정 A** ($n_1 = 5$): 10.1, 10.3, 10.2, 10.5, 10.4
 
-**Process B** ($n_2 = 5$): 10.0, 10.2, 10.6, 10.8, 10.4
+**공정 B** ($n_2 = 5$): 10.0, 10.2, 10.6, 10.8, 10.4
 
-**Step 1.** Sort the combined sample and compute ECDFs:
+**1단계.** 합친 표본을 정렬하고 ECDF를 계산한다.
 
-| Value | $\hat{F}_1(x)$ | $\hat{F}_2(x)$ | $|\hat{F}_1 - \hat{F}_2|$ |
+| 값 | $\hat{F}_1(x)$ | $\hat{F}_2(x)$ | $\lvert \hat{F}_1 - \hat{F}_2 \rvert$ |
 |:-----:|:-----:|:-----:|:-----:|
 | 10.0 | 0/5 = 0.0 | 1/5 = 0.2 | 0.2 |
 | 10.1 | 1/5 = 0.2 | 1/5 = 0.2 | 0.0 |
@@ -71,66 +71,79 @@ Two manufacturing processes produce ball bearings. We measure diameter (mm) for 
 | 10.6 | 5/5 = 1.0 | 4/5 = 0.8 | 0.2 |
 | 10.8 | 5/5 = 1.0 | 5/5 = 1.0 | 0.0 |
 
-**Step 2.** The KS statistic is $D = 0.4$, occurring at $x = 10.5$.
+**2단계.** KS 통계량은 $x = 10.5$에서 나타나는 $D = 0.4$이다.
 
-**Step 3.** Scaled statistic: $\sqrt{5 \times 5 / 10} \times 0.4 = \sqrt{2.5} \times 0.4 \approx 0.632$.
+**3단계.** 척도조정 통계량: $\sqrt{5 \times 5 / 10} \times 0.4 = \sqrt{2.5} \times 0.4 \approx 0.632$.
 
-Using the Kolmogorov distribution (or exact tables for $n_1 = n_2 = 5$), the $p$-value is approximately $0.73$.
+**4단계.** $p$값을 구한다.
 
-At $\alpha = 0.05$, we fail to reject $H_0$. The two processes do not show a significant difference in diameter distributions.
+```python
+from scipy import stats
+A = [10.1, 10.3, 10.2, 10.5, 10.4]
+B = [10.0, 10.2, 10.6, 10.8, 10.4]
+print(stats.ks_2samp(A, B, method='exact').pvalue)   # 0.873016
+print(stats.ks_2samp(A, B, method='asymp').pvalue)   # 0.820000
+```
 
-## What the KS Test Detects
+정확 $p$값은 $0.873$, 점근 $p$값은 $0.820$이다.
 
-Unlike rank-based tests that focus on location, the KS test is sensitive to differences in:
+$\alpha = 0.05$에서 $H_0$을 기각하지 못한다. 두 공정의 지름 분포에 유의한 차이가 나타나지 않는다.
 
-- **Location** -- one distribution shifted relative to the other
-- **Scale** -- one distribution more spread out
-- **Shape** -- different skewness, kurtosis, or modality
-- **Any combination** of the above
+!!! warning "이 자료는 동점을 포함한다"
+    공정 A와 B가 $10.2$와 $10.4$를 공유한다. KS 검정은 연속분포를 가정하므로 엄밀히는 동점이 없어야 한다. 동점이 있으면 정확 귀무분포가 성립하지 않고 검정이 **보수적**으로 된다. 반올림된 측정값에서는 이런 상황이 흔하므로, 동점이 많다면 순열검정으로 실제 귀무분포를 직접 계산하는 편이 낫다.
 
-!!! warning "Lower power for specific alternatives"
-    The KS test's generality comes at a cost. For a pure location shift, the Wilcoxon rank-sum test will typically have higher power. The KS test is most useful when the nature of the difference is unknown or when differences in shape or spread are of interest.
+## KS 검정이 탐지하는 것
 
-## Comparison with Rank-Based Tests
+위치에 집중하는 순위 기반 검정과 달리 KS 검정은 다음 차이에 민감하다.
 
-| Feature | Wilcoxon Rank-Sum | KS Two-Sample |
+- **위치** --- 한 분포가 다른 분포에 대해 이동
+- **척도** --- 한 분포가 더 퍼져 있음
+- **모양** --- 왜도, 첨도, 봉우리 수의 차이
+- **위의 임의의 조합**
+
+!!! warning "특정 대립가설에 대한 검정력은 낮다"
+    KS 검정의 일반성에는 대가가 있다. 순수한 위치이동에 대해서는 Wilcoxon 순위합검정의 검정력이 대체로 더 높다. KS 검정은 차이의 성격을 모르거나 모양·산포의 차이가 관심사일 때 가장 유용하다.
+
+## 순위 기반 검정과의 비교
+
+| 특징 | Wilcoxon 순위합 | KS 이표본 |
 |:--------|:-----------------|:--------------|
-| Detects location shift | High power | Moderate power |
-| Detects spread difference | Low power | Moderate power |
-| Detects shape difference | Low power | Moderate power |
-| Test statistic | Sum of ranks ($W$) | Maximum ECDF gap ($D$) |
-| Handles ties | Via midranks | Requires continuity |
-| Effect size interpretation | $P(X > Y)$ via $U$ | Maximum distributional gap |
+| 위치이동 탐지 | 높은 검정력 | 중간 검정력 |
+| 산포 차이 탐지 | 낮은 검정력 | 중간 검정력 |
+| 모양 차이 탐지 | 낮은 검정력 | 중간 검정력 |
+| 검정통계량 | 순위합 ($W$) | 최대 ECDF 간격 ($D$) |
+| 동점 처리 | 중간순위로 처리 | 연속성을 요구 |
+| 효과크기 해석 | $U$를 통한 $P(X > Y)$ | 최대 분포 간격 |
 
-## Summary
+## 요약
 
-The Kolmogorov-Smirnov two-sample test compares the entire empirical distribution functions of two independent samples by computing the maximum absolute difference $D = \sup|\hat{F}_1(x) - \hat{F}_2(x)|$. It is distribution-free under the null hypothesis of identical continuous distributions and can detect differences in location, spread, and shape. This versatility makes it a useful complement to rank-based tests, especially when the alternative hypothesis is not restricted to a location shift. For pure location alternatives, the Wilcoxon rank-sum test generally provides higher power.
+Kolmogorov-Smirnov 이표본 검정은 독립인 두 표본의 경험적 분포함수 전체를 비교하여 최대 절대차이 $D = \sup|\hat{F}_1(x) - \hat{F}_2(x)|$를 계산한다. 동일한 연속분포라는 귀무가설 아래에서 분포무관이며 위치, 산포, 모양의 차이를 모두 탐지할 수 있다. 이 다재다능함 덕에 순위 기반 검정을 보완하는 유용한 도구가 되며, 특히 대립가설이 위치이동으로 국한되지 않을 때 그렇다. 순수한 위치 대립가설에 대해서는 Wilcoxon 순위합검정이 대체로 더 높은 검정력을 준다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Two groups of students take different preparation courses, and their exam scores are:
+**연습문제 1.**
+두 집단의 학생이 서로 다른 준비 과정을 수강했고 시험 점수는 다음과 같다.
 
-- **Course 1**: 72, 78, 85, 90, 65
-- **Course 2**: 80, 88, 92, 95, 85, 76
+- **과정 1**: 72, 78, 85, 90, 65
+- **과정 2**: 80, 88, 92, 95, 85, 76
 
-**(a)** Compute the empirical CDF $\hat{F}_1(x)$ and $\hat{F}_2(x)$ for each group.
+**(a)** 각 집단의 경험적 CDF $\hat{F}_1(x)$와 $\hat{F}_2(x)$를 계산하라.
 
-**(b)** Find the Kolmogorov-Smirnov test statistic $D = \max_x |\hat{F}_1(x) - \hat{F}_2(x)|$.
+**(b)** Kolmogorov-Smirnov 검정통계량 $D = \max_x |\hat{F}_1(x) - \hat{F}_2(x)|$를 구하라.
 
-**(c)** Explain what a large value of $D$ indicates about the two distributions.
+**(c)** $D$가 크다는 것은 두 분포에 대해 무엇을 뜻하는가?
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
 
-    **(a)** Sort each sample and compute the ECDF (each jump has size $1/n_i$):
+    **(a)** 각 표본을 정렬하고 ECDF를 계산한다(각 도약의 크기는 $1/n_i$).
 
-    **Course 1** ($n_1 = 5$): 65, 72, 78, 85, 90. ECDF jumps by $1/5 = 0.2$ at each value.
+    **과정 1** ($n_1 = 5$): 65, 72, 78, 85, 90. ECDF가 각 값에서 $1/5 = 0.2$씩 뛴다.
 
-    **Course 2** ($n_2 = 6$): 76, 80, 85, 88, 92, 95. ECDF jumps by $1/6 \approx 0.167$ at each value.
+    **과정 2** ($n_2 = 6$): 76, 80, 85, 88, 92, 95. ECDF가 각 값에서 $1/6 \approx 0.167$씩 뛴다.
 
-    **(b)** To find $D$, evaluate $|\hat{F}_1(x) - \hat{F}_2(x)|$ at every observed value:
+    **(b)** $D$를 찾기 위해 관측된 모든 값에서 $|\hat{F}_1(x) - \hat{F}_2(x)|$를 평가한다.
 
-    | $x$ | $\hat{F}_1(x)$ | $\hat{F}_2(x)$ | $|\hat{F}_1 - \hat{F}_2|$ |
+    | $x$ | $\hat{F}_1(x)$ | $\hat{F}_2(x)$ | $\lvert \hat{F}_1 - \hat{F}_2 \rvert$ |
     |:---:|:---:|:---:|:---:|
     | 65 | 0.2 | 0 | 0.200 |
     | 72 | 0.4 | 0 | 0.400 |
@@ -144,7 +157,155 @@ Two groups of students take different preparation courses, and their exam scores
     | 95 | 1.0 | 1.0 | 0.000 |
 
     $$
-    D = \max_x |\hat{F}_1(x) - \hat{F}_2(x)| = 0.433 \text{ (at } x = 78\text{)}
+    D = \max_x |\hat{F}_1(x) - \hat{F}_2(x)| = 0.433 \quad (x = 78 \text{에서})
     $$
 
-    **(c)** A large value of $D$ indicates that the two empirical CDFs differ substantially, suggesting the two samples come from different underlying distributions. The KS test is sensitive to differences in both location (shift) and shape. For these data, $D = 0.433$ suggests Course 2 students tend to score higher, but with $n_1 = 5$ and $n_2 = 6$, the critical value at $\alpha = 0.05$ is approximately $c(\alpha)\sqrt{(n_1 + n_2)/(n_1 n_2)} = 1.36\sqrt{11/30} \approx 0.823$, so $D = 0.433 < 0.823$ and we would not reject $H_0$ at this sample size.
+    **(c)** $D$가 크면 두 경험적 CDF가 상당히 다르다는 뜻이고, 두 표본이 서로 다른 모집단 분포에서 왔음을 시사한다. KS 검정은 위치(이동)와 모양의 차이 모두에 민감하다.
+
+    이 자료에서 $D = 0.433$은 과정 2 학생들이 더 높은 점수를 내는 경향을 시사하지만, $n_1 = 5$, $n_2 = 6$에서 $\alpha = 0.05$의 임계값은
+
+    $$
+    c(\alpha)\sqrt{\frac{n_1 + n_2}{n_1 n_2}} = 1.36\sqrt{\frac{11}{30}} \approx 0.824
+    $$
+
+    이므로 $D = 0.433 < 0.824$이고 이 표본크기에서는 $H_0$을 기각하지 못한다.
+
+    ```python
+    from scipy import stats
+    c1 = [72, 78, 85, 90, 65]; c2 = [80, 88, 92, 95, 85, 76]
+    print(stats.ks_2samp(c1, c2, method='exact'))
+    # statistic=0.4333, pvalue=0.5909
+    print(stats.mannwhitneyu(c1, c2, method='exact').pvalue)   # 0.2468
+    ```
+
+    정확 $p$값은 $0.591$이다. Mann-Whitney의 $0.247$과 비교하면 두 배가 넘는데, 이 자료의 차이가 주로 위치이동이라 순위 기반 검정이 더 효율적으로 잡아내기 때문이다.
+
+---
+
+**연습문제 2.**
+KS 검정과 Mann-Whitney 검정의 검정력을 **위치이동**과 **척도 차이** 두 상황에서 모의실험으로 비교하라.
+
+??? success "연습문제 2 풀이"
+    ```python
+    import numpy as np
+    from scipy import stats
+    rng = np.random.default_rng(0)
+    B, n = 3000, 25
+
+    def rates(gen):
+        pk, pm = [], []
+        for _ in range(B):
+            x, y = gen()
+            pk.append(stats.ks_2samp(x, y).pvalue)
+            pm.append(stats.mannwhitneyu(x, y).pvalue)
+        return round(np.mean(np.array(pk) < .05), 3), \
+               round(np.mean(np.array(pm) < .05), 3)
+
+    for d in (0.0, 0.8):
+        print("shift", d, rates(lambda: (rng.normal(0, 1, n), rng.normal(d, 1, n))))
+    for s in (1.0, 2.0, 3.0):
+        print("scale", s, rates(lambda: (rng.normal(0, 1, n), rng.normal(0, s, n))))
+    ```
+
+    **위치이동** ($n = 25$씩, $\alpha = 0.05$):
+
+    | 이동 $\delta$ | KS | Mann-Whitney |
+    |---:|---:|---:|
+    | 0.0 (크기) | 0.039 | 0.047 |
+    | 0.8 | 0.614 | **0.757** |
+
+    **척도 차이** (평균은 둘 다 0):
+
+    | 척도비 | KS | Mann-Whitney |
+    |---:|---:|---:|
+    | 1.0 (크기) | 0.037 | 0.047 |
+    | 2.0 | **0.153** | 0.058 |
+    | 3.0 | **0.414** | 0.069 |
+
+    두 검정의 성격이 정반대로 갈린다.
+
+    - **위치이동**에서는 Mann-Whitney가 $0.757$ 대 $0.614$로 명백히 앞선다. 순위합이 위치 차이에 최적화된 통계량이기 때문이다.
+    - **척도 차이**에서는 Mann-Whitney가 사실상 **무력하다**. 척도비가 3배여도 기각률이 $0.069$로 명목수준을 겨우 넘는다. 두 분포가 모두 0 대칭이라 $P(X > Y) = 0.5$가 그대로 유지되어 순위합이 아무 신호도 받지 못한다.
+    - KS는 척도비 3에서 $0.414$를 낸다. 완벽하지는 않지만 유일하게 탐지한다.
+
+    **크기 확인:** 두 검정 모두 귀무가설 아래 기각률이 $0.05$ 아래이다(KS $0.037$--$0.039$, MWU $0.047$). KS가 다소 보수적인데, 이는 $D$의 이산성 때문이다.
+
+    **실무 지침:** 관심이 "중심이 다른가"라면 Mann-Whitney를, "분포가 다른가"라면 KS를 쓴다. 둘 다 돌려 보고 유의한 쪽을 고르는 것은 다중검정 문제를 낳는다.
+
+---
+
+**연습문제 3.**
+KS 검정이 분포무관인 이유를 설명하라. 즉 $D$의 귀무분포가 왜 공통분포 $F$에 의존하지 않는가?
+
+??? success "연습문제 3 풀이"
+    핵심은 **확률적분변환**이다. $F$가 연속이면 $U = F(X) \sim \text{Uniform}(0,1)$이다.
+
+    두 표본 $X_1, \ldots, X_{n_1}$과 $Y_1, \ldots, Y_{n_2}$가 모두 $F$에서 나왔다고 하자. 각 관측값에 $F$를 적용하면 $U_i = F(X_i)$, $V_j = F(Y_j)$가 되고, 모두 $\text{Uniform}(0,1)$이다.
+
+    $F$가 단조증가이므로 순서가 보존되고 ECDF는 다음 관계를 만족한다.
+
+    $$
+    \hat{F}_1(x) = \hat{G}_1(F(x)), \qquad \hat{F}_2(x) = \hat{G}_2(F(x))
+    $$
+
+    여기서 $\hat{G}_1$, $\hat{G}_2$는 균등 표본의 ECDF이다. 따라서
+
+    $$
+    D = \sup_x |\hat{F}_1(x) - \hat{F}_2(x)| = \sup_{u \in (0,1)} |\hat{G}_1(u) - \hat{G}_2(u)|
+    $$
+
+    가 되어 $D$가 $F$에 전혀 의존하지 않는다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+    rng = np.random.default_rng(1)
+    for name, gen in [("normal", lambda: rng.normal(0, 1, 30)),
+                      ("exp",    lambda: rng.exponential(1, 30)),
+                      ("cauchy", lambda: rng.standard_cauchy(30)),
+                      ("unif",   lambda: rng.random(30))]:
+        D = [stats.ks_2samp(gen(), gen()).statistic for _ in range(20000)]
+        print(name, round(np.mean(D), 4), round(np.std(D), 4))
+    ```
+
+    출력은 네 분포 모두 평균 약 $0.208$, 표준편차 약 $0.067$로 사실상 동일하다(normal 0.2086, exp 0.2075, cauchy 0.2086, uniform 0.2079).
+
+    이것이 KS 검정의 근본적 장점이다. 모집단 분포를 몰라도, 심지어 Cauchy처럼 평균이 존재하지 않아도 정확한 $p$값을 계산할 수 있다.
+
+    **다만 두 조건이 필요하다.** (1) $F$가 **연속**이어야 한다. 이산분포에서는 $F(X)$가 균등하지 않아 검정이 보수적으로 된다. (2) 일표본 KS 검정에서 $F$의 모수를 자료로 추정하면 이 성질이 깨진다. 이것이 Lilliefors 보정이 필요한 이유이다([14장](../../ch14/index.md) 참조).
+
+---
+
+**연습문제 4.**
+KS 통계량이 최댓값을 갖는 위치 $x^*$는 무엇을 알려 주는가? 두 분포가 다른 방식으로 다를 때 $x^*$가 어디에 나타나는지 확인하라.
+
+??? success "연습문제 4 풀이"
+    ```python
+    import numpy as np
+    from scipy import stats
+    rng = np.random.default_rng(7)
+    n = 500
+
+    cases = {
+        "위치이동":   (rng.normal(0, 1, n),  rng.normal(1, 1, n)),
+        "척도차이":   (rng.normal(0, 1, n),  rng.normal(0, 2.5, n)),
+        "오른쪽 꼬리": (rng.normal(0, 1, n),  rng.standard_t(3, n)),
+    }
+    for name, (x, y) in cases.items():
+        r = stats.ks_2samp(x, y)
+        print(name, round(r.statistic, 3), round(r.statistic_location, 3))
+    ```
+
+    | 상황 | $D$ | $x^*$ (최대 간격 위치) |
+    |:---|---:|---:|
+    | 위치이동 $\mathcal{N}(0,1)$ 대 $\mathcal{N}(1,1)$ | 0.478 | $0.217$ |
+    | 척도차이 $\mathcal{N}(0,1)$ 대 $\mathcal{N}(0,2.5^2)$ | 0.220 | $-1.570$ |
+    | 꼬리차이 $\mathcal{N}(0,1)$ 대 $t(3)$ | 0.078 | $1.199$ |
+
+    $x^*$의 위치가 차이의 성격을 알려 준다.
+
+    - **위치이동**에서 $x^*$는 두 중앙값 사이($0$과 $1$ 사이)에 나타난다. 두 CDF가 서로 평행하게 이동했을 때 간격이 가장 벌어지는 곳이다.
+    - **척도차이**에서 $x^*$는 중심이 아니라 한쪽 어깨($\approx -1.6$)에 나타난다. 두 CDF가 중앙($x = 0$)에서 교차하므로 그 지점의 간격은 0이고, 간격은 $\pm 1.5\sigma$ 부근에서 최대가 된다. 대칭이므로 $+1.6$ 근처에도 거의 같은 크기의 간격이 있다.
+    - **꼬리차이**에서도 어깨 부근($\approx 1.2$)이지만 $D$ 자체가 $0.078$로 작다. $t(3)$과 정규분포의 차이는 주로 **극단 꼬리**에 있는데, 그곳은 CDF 값이 이미 0이나 1에 가까워 절대 간격이 클 수 없다.
+
+    **핵심 한계:** KS 검정은 CDF의 **절대** 차이를 재므로 분포의 중앙부에 가장 민감하고 꼬리에는 둔감하다. 꼬리 차이를 잡아내려면 [14장](../../ch14/index.md)의 Anderson-Darling 검정처럼 $\sqrt{F(1-F)}$로 가중한 통계량을 써야 한다.

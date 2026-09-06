@@ -1,121 +1,198 @@
-# Power Comparison with Parametric Tests
+# 모수적 검정과의 검정력 비교
 
-A natural question arises whenever a non-parametric test is chosen over its parametric counterpart: how much statistical power do we lose? If the parametric assumptions happen to hold, the rank-based test discards potentially useful information (the exact magnitudes), so we expect some efficiency loss. The key insight is that this loss is often surprisingly small, and when the assumptions fail, the non-parametric test can actually be *more* powerful.
+비모수 검정을 모수적 대응물 대신 택할 때면 언제나 자연스러운 질문이 따라온다. 검정력을 얼마나 잃는가? 모수적 가정이 마침 성립한다면 순위 기반 검정은 쓸모 있을 수도 있었던 정보(정확한 크기)를 버리므로 효율 손실을 예상해야 한다. 핵심은 그 손실이 놀랍도록 작다는 점, 그리고 가정이 깨지면 비모수 검정이 오히려 *더* 강력해질 수 있다는 점이다.
 
-This section formalizes the comparison using **asymptotic relative efficiency** (ARE), also known as **Pitman efficiency**, and summarizes the main results for the tests covered in this chapter.
+이 절에서는 **점근상대효율**(ARE, **Pitman 효율**이라고도 한다)로 이 비교를 형식화하고, 이 장에서 다루는 검정들에 대한 주요 결과를 정리한다.
 
-## Power of a Test
+## 검정의 검정력
 
-Recall from [Chapter 9](../../ch09/index.md) that the **power** of a test is the probability of correctly rejecting the null hypothesis when a specific alternative is true:
+[9장](../../ch09/index.md)에서 보았듯 검정의 **검정력**은 특정 대립가설이 참일 때 귀무가설을 올바르게 기각할 확률이다.
 
 $$
-\text{Power} = 1 - \beta = P(\text{reject } H_0 \mid H_a \text{ is true})
+\text{검정력} = 1 - \beta = P(H_0 \text{ 기각} \mid H_a \text{ 참})
 $$
 
-Power depends on the sample size $n$, the significance level $\alpha$, the effect size $\delta$, and the choice of test statistic. Two tests applied to the same problem may differ in power, and comparing their power functions is the standard way to evaluate their relative performance.
+검정력은 표본크기 $n$, 유의수준 $\alpha$, 효과크기 $\delta$, 그리고 검정통계량의 선택에 의존한다. 같은 문제에 적용된 두 검정은 검정력이 다를 수 있으며, 검정력함수를 비교하는 것이 상대적 성능을 평가하는 표준적인 방법이다.
 
-## Asymptotic Relative Efficiency
+## 점근상대효율
 
-The **asymptotic relative efficiency** (ARE) of test $B$ relative to test $A$ is defined as the limiting ratio of sample sizes needed to achieve the same power against a sequence of local alternatives converging to the null:
+검정 $A$에 대한 검정 $B$의 **점근상대효율**(ARE)은 귀무가설로 수렴하는 국소 대립가설 열에 대해 같은 검정력을 얻는 데 필요한 표본크기 비의 극한으로 정의된다.
 
 $$
 \text{ARE}(B, A) = \lim_{n \to \infty} \frac{n_A}{n_B}
 $$
 
-where $n_A$ is the sample size required by test $A$ and $n_B$ is the sample size required by test $B$ to achieve the same power at the same significance level, as the effect size shrinks toward zero at rate $n^{-1/2}$.
+여기서 $n_A$는 검정 $A$가, $n_B$는 검정 $B$가 같은 유의수준에서 같은 검정력에 도달하는 데 필요한 표본크기이며, 효과크기는 $n^{-1/2}$의 속도로 0에 수렴한다.
 
-An ARE of 0.95 means that test $B$ needs $n_B / 0.95 \approx 1.05 \, n_A$ observations to match the power of test $A$. An ARE greater than 1 means test $B$ is *more* efficient than test $A$.
+ARE가 $0.95$라는 것은 검정 $B$가 검정 $A$의 검정력에 맞추려면 $n_B / 0.95 \approx 1.05\, n_A$개의 관측값이 필요하다는 뜻이다. ARE가 1보다 크면 검정 $B$가 검정 $A$보다 *더* 효율적이다.
 
-!!! note "Pitman efficiency"
-    The ARE defined above is often called **Pitman efficiency** because it evaluates tests against *contiguous alternatives* -- alternatives that approach the null as $n \to \infty$. This is the most widely used framework for comparing non-parametric and parametric tests.
+!!! note "Pitman 효율"
+    위에서 정의한 ARE를 흔히 **Pitman 효율**이라 부르는 것은, $n \to \infty$일 때 귀무가설로 접근하는 *인접 대립가설*을 기준으로 검정을 평가하기 때문이다. 이것이 비모수 검정과 모수적 검정을 비교하는 가장 널리 쓰이는 틀이다.
 
-## Key ARE Results
+## 주요 ARE 결과
 
-The following table summarizes the ARE of the most common non-parametric tests relative to their parametric counterparts, assuming the parametric model (normality) holds.
+다음 표는 모수적 모형(정규성)이 성립한다는 가정 아래, 가장 흔한 비모수 검정들의 모수적 대응물에 대한 ARE를 정리한 것이다.
 
-| Non-parametric test | Parametric counterpart | ARE (under normality) |
+| 비모수 검정 | 모수적 대응물 | ARE (정규성 아래) |
 |:--------------------|:----------------------|:---------------------:|
-| Wilcoxon signed-rank | One-sample $t$-test | $3/\pi \approx 0.955$ |
-| Sign test | One-sample $t$-test | $2/\pi \approx 0.637$ |
-| Wilcoxon rank-sum (Mann-Whitney) | Two-sample $t$-test | $3/\pi \approx 0.955$ |
-| Kruskal-Wallis | One-way ANOVA $F$-test | $3/\pi \approx 0.955$ |
-| Friedman | Repeated-measures ANOVA | $3/\pi \approx 0.955$ |
-| Spearman's $r_s$ | Pearson's $r$ | $3/\pi \approx 0.955$ |
+| Wilcoxon 부호순위 | 일표본 $t$ 검정 | $3/\pi \approx 0.955$ |
+| 부호검정 | 일표본 $t$ 검정 | $2/\pi \approx 0.637$ |
+| Wilcoxon 순위합 (Mann-Whitney) | 이표본 $t$ 검정 | $3/\pi \approx 0.955$ |
+| Kruskal-Wallis | 일원분산분석 $F$ 검정 | $3/\pi \approx 0.955$ |
+| Friedman | 반복측정 분산분석 | $3/\pi \approx 0.955$ |
+| Spearman $r_s$ | Pearson $r$ | $3/\pi \approx 0.955$ |
 
-### Interpretation
+### 해석
 
-The remarkable result is that under normality, the Wilcoxon-type rank tests lose only about 4.5% efficiency compared to the optimal parametric tests. The sign test, which uses only the direction of deviations and ignores magnitudes entirely, pays a heavier price at about 63.7% efficiency.
+주목할 만한 결과는, 정규성 아래에서 Wilcoxon 계열 순위검정이 최적 모수적 검정에 비해 효율을 겨우 4.5% 정도만 잃는다는 것이다. 편차의 방향만 쓰고 크기는 완전히 무시하는 부호검정은 약 63.7%의 효율로 더 큰 대가를 치른다.
 
-!!! tip "The 3/pi rule"
-    The value $3/\pi \approx 0.955$ appears repeatedly because it is the ARE of any rank-based test that uses the Wilcoxon (linear rank) scores relative to the corresponding normal-theory test. This universality arises from the properties of the rank transformation applied to normal data.
+!!! tip "3/π 규칙"
+    $3/\pi \approx 0.955$가 반복해서 나타나는 것은, 이 값이 Wilcoxon 점수(선형 순위 점수)를 쓰는 임의의 순위 기반 검정의 정규이론 검정 대비 ARE이기 때문이다. 이 보편성은 정규자료에 적용된 순위변환의 성질에서 나온다.
 
-## ARE Under Non-Normal Distributions
+## 비정규분포에서의 ARE
 
-The ARE values above assume normality -- the best-case scenario for parametric tests. Under heavier-tailed distributions, the comparison reverses dramatically.
+위의 ARE 값들은 정규성 --- 모수적 검정에 가장 유리한 최선의 시나리오 --- 을 가정한 것이다. 꼬리가 더 두꺼운 분포에서는 비교가 극적으로 뒤집힌다.
 
-**Heavy-tailed distributions.** For data from a double-exponential (Laplace) distribution:
-
-$$
-\text{ARE}(\text{Wilcoxon signed-rank}, \; t\text{-test}) = \frac{3}{2} = 1.5
-$$
-
-This means the Wilcoxon test requires only two-thirds as many observations as the $t$-test to achieve the same power. The advantage grows further for even heavier tails.
-
-**Contaminated normals.** A mixture $(1 - \varepsilon) \, \mathcal{N}(0,1) + \varepsilon \, \mathcal{N}(0, \sigma^2)$ with even modest contamination ($\varepsilon = 0.05$, $\sigma = 3$) can push the ARE of rank tests well above 1.
-
-**Lower bound.** A fundamental result states that for any continuous distribution:
+**두꺼운 꼬리 분포.** 이중지수(Laplace) 분포에서 나온 자료에 대해
 
 $$
-\text{ARE}(\text{Wilcoxon rank-sum}, \; t\text{-test}) \ge 0.864
+\text{ARE}(\text{Wilcoxon 부호순위}, \; t\text{ 검정}) = \frac{3}{2} = 1.5
 $$
 
-This means the Wilcoxon test never loses more than about 14% efficiency relative to the $t$-test, regardless of the true distribution. There is no corresponding upper bound -- the ARE can be arbitrarily large for sufficiently heavy-tailed distributions.
+이다. 즉 Wilcoxon 검정은 같은 검정력을 얻는 데 $t$ 검정의 3분의 2만큼의 관측값만 있으면 된다. 꼬리가 더 두꺼워지면 이 이점은 더 커진다.
 
-!!! warning "No upper bound on ARE"
-    While the worst-case efficiency loss of rank tests relative to $t$-tests is bounded and small ($\approx 14\%$), the potential gain under non-normality is unbounded. This asymmetry strongly favors non-parametric methods when the distributional assumption is uncertain.
+**오염 정규분포.** 혼합 $(1 - \varepsilon) \, \mathcal{N}(0,1) + \varepsilon \, \mathcal{N}(0, \sigma^2)$은 오염이 완만해도($\varepsilon = 0.05$, $\sigma = 3$) 순위검정의 ARE를 1보다 훨씬 위로 밀어 올릴 수 있다.
 
-## Finite-Sample Power
+**하한.** 임의의 연속분포에 대해 다음이 성립한다는 근본적인 결과가 있다.
 
-The ARE describes limiting behavior as $n \to \infty$. For finite samples, the actual power comparison depends on the specific sample size, effect size, and distribution. Monte Carlo simulations provide the most reliable finite-sample comparisons.
+$$
+\text{ARE}(\text{Wilcoxon 순위합}, \; t\text{ 검정}) \ge 0.864
+$$
 
-General patterns from simulation studies include:
+즉 Wilcoxon 검정은 참인 분포가 무엇이든 $t$ 검정에 비해 약 14%를 넘는 효율을 잃지 않는다. 반면 이에 대응하는 상한은 없다. 꼬리가 충분히 두꺼우면 ARE는 얼마든지 커질 수 있다.
 
-- For $n \ge 20$ and moderate effect sizes, finite-sample power differences closely track the ARE predictions.
-- For very small samples ($n < 10$), exact non-parametric tests (based on permutation distributions) can have *higher* power than parametric tests when the normality assumption is violated, even though the ARE comparison assumes large samples.
-- The sign test, despite its low ARE of $2/\pi$ under normality, remains competitive when the underlying distribution is highly asymmetric or when only the direction of change is reliably measured.
+!!! warning "ARE에는 상한이 없다"
+    $t$ 검정 대비 순위검정의 최악의 효율 손실은 유계이고 작지만($\approx 14\%$), 비정규성 아래의 잠재적 이득은 무한하다. 이 비대칭은 분포 가정이 불확실할 때 비모수 방법을 강하게 지지한다.
 
-## Practical Guidelines
+## 유한표본 검정력
 
-The following decision principles emerge from the ARE analysis:
+ARE는 $n \to \infty$일 때의 극한 거동을 기술한다. 유한표본에서 실제 검정력 비교는 구체적인 표본크기, 효과크기, 분포에 의존한다. 몬테카를로 모의실험이 가장 신뢰할 만한 유한표본 비교를 제공한다.
 
-1. **Under confirmed normality**, parametric tests are preferred, but the power advantage over Wilcoxon-type tests is only about 4.5% -- often negligible in practice.
-2. **Under uncertain normality**, non-parametric tests offer insurance: at most a 14% efficiency loss if normality holds, with potentially large gains if it does not.
-3. **Under known non-normality**, non-parametric tests are often *more* powerful than their parametric counterparts, especially for heavy-tailed or contaminated distributions.
-4. **The sign test** should be reserved for situations where only the direction of change is meaningful, or where the symmetry assumption of the Wilcoxon signed-rank test is suspect.
+모의실험 연구에서 나타나는 일반적인 양상은 다음과 같다.
 
-## Summary
+- $n \ge 20$이고 효과크기가 중간 정도이면 유한표본 검정력 차이가 ARE 예측을 꽤 정확히 따라간다.
+- 표본이 아주 작으면($n < 10$) 정규성 가정이 깨졌을 때 정확 비모수 검정(순열분포에 기반한)이 모수적 검정보다 *더 높은* 검정력을 가질 수 있다. ARE 비교가 대표본을 가정함에도 그렇다.
+- 부호검정은 정규성 아래 ARE가 $2/\pi$로 낮지만, 밑에 깔린 분포가 심하게 비대칭이거나 변화의 방향만 신뢰성 있게 측정되는 상황에서는 여전히 경쟁력이 있다.
 
-The asymptotic relative efficiency provides a principled framework for comparing non-parametric and parametric tests. The Wilcoxon family of rank-based tests achieves an ARE of $3/\pi \approx 0.955$ under normality, meaning they lose less than 5% efficiency in the best case for parametric methods. Under non-normal distributions the ARE can exceed 1, making rank tests more powerful. The worst-case ARE for the Wilcoxon rank-sum test is bounded below by 0.864, ensuring that the efficiency cost of choosing a non-parametric test is always modest. These results provide strong justification for using rank-based methods when distributional assumptions are in doubt.
+## 실무 지침
 
-## Exercises
+ARE 분석에서 다음 의사결정 원칙이 나온다.
 
-**Exercise 1.**
-For each scenario below, state whether you would use a parametric or non-parametric test, name the specific test, and justify your choice.
+1. **정규성이 확인되었다면** 모수적 검정이 낫지만, Wilcoxon 계열 대비 검정력 이점은 4.5% 정도에 불과하여 실무에서는 무시할 만한 경우가 많다.
+2. **정규성이 불확실하다면** 비모수 검정이 보험이 된다. 정규성이 성립할 때 최대 14% 손실, 성립하지 않을 때 잠재적으로 큰 이득이다.
+3. **비정규성이 알려져 있다면** 비모수 검정이 모수적 대응물보다 *더 강력한* 경우가 많다. 특히 두꺼운 꼬리나 오염된 분포에서 그렇다.
+4. **부호검정**은 변화의 방향만 의미가 있거나 Wilcoxon 부호순위검정의 대칭성 가정이 의심스러운 상황에 아껴 두어야 한다.
 
-**(a)** You want to compare the mean blood pressure of two groups (drug vs. placebo). Both groups have $n = 50$ observations, and Q-Q plots suggest approximate normality.
+## 요약
 
-**(b)** You have 8 observations of customer satisfaction ratings (on a 1--5 Likert scale) from two store locations and want to test if the locations differ.
+점근상대효율은 비모수 검정과 모수적 검정을 비교하는 원칙 있는 틀을 제공한다. Wilcoxon 계열 순위 기반 검정은 정규성 아래에서 $3/\pi \approx 0.955$의 ARE를 달성한다. 모수적 방법에 가장 유리한 상황에서도 효율 손실이 5% 미만이라는 뜻이다. 비정규분포에서는 ARE가 1을 넘어 순위검정이 더 강력해진다. Wilcoxon 순위합검정의 최악 ARE는 $0.864$로 아래에서 유계이므로, 비모수 검정을 택하는 효율 비용은 언제나 완만하다. 이 결과들은 분포 가정이 의심스러울 때 순위 기반 방법을 쓸 강력한 정당화를 제공한다.
 
-**(c)** You have paired before/after measurements for 12 subjects, but the differences are heavily right-skewed with one extreme outlier.
+## 연습문제
 
-**(d)** You want to test whether three teaching methods produce different exam score distributions. Group sizes are 8, 10, and 7, and Shapiro-Wilk tests reject normality in two of the three groups.
+**연습문제 1.**
+아래 각 상황에서 모수적 검정과 비모수 검정 중 무엇을 쓸지 밝히고, 구체적인 검정 이름을 대고, 선택의 근거를 설명하라.
 
-??? success "Solution to Exercise 1"
+**(a)** 두 집단(약물 대 위약)의 평균 혈압을 비교하려 한다. 두 집단 모두 $n = 50$이고, Q-Q 그림이 근사적 정규성을 시사한다.
 
-    **(a)** **Parametric: two-sample $t$-test** (or Welch's $t$-test). With $n = 50$ per group and approximate normality confirmed by Q-Q plots, the conditions for a parametric test are well satisfied. The $t$-test will have higher power than a non-parametric alternative under these conditions.
+**(b)** 두 매장에서 고객 만족도(1--5 Likert 척도) 관측값 8개씩을 얻었고, 매장 간 차이를 검정하려 한다.
 
-    **(b)** **Non-parametric: Mann-Whitney U test** (Wilcoxon rank-sum test). Likert-scale data are ordinal, not continuous, so means and standard deviations are not meaningful. The small sample size ($n = 8$) and discrete nature of the data make non-parametric methods more appropriate.
+**(c)** 12명의 피험자에게서 처치 전후 대응측정값을 얻었는데, 차이가 오른쪽으로 심하게 치우쳐 있고 극단적인 이상치가 하나 있다.
 
-    **(c)** **Non-parametric: Wilcoxon signed-rank test** (or even the sign test if symmetry of differences is in doubt). The heavy skewness and extreme outlier violate the normality assumption of the paired $t$-test. With only 12 observations, the CLT does not provide reliable normal approximations for highly skewed data. The Wilcoxon signed-rank test, based on ranks, is resistant to the outlier.
+**(d)** 세 가지 교수법이 서로 다른 시험점수 분포를 내는지 검정하려 한다. 집단 크기는 8, 10, 7이고, 세 집단 중 두 집단에서 Shapiro-Wilk 검정이 정규성을 기각한다.
 
-    **(d)** **Non-parametric: Kruskal-Wallis test**. Since normality is rejected in two of three groups, one-way ANOVA assumptions are violated. The sample sizes are relatively small (7--10), offering insufficient data for the CLT to compensate. The Kruskal-Wallis test does not require normality and is the appropriate multi-group comparison. If the Kruskal-Wallis test is significant, follow up with Dunn's test for pairwise comparisons.
+??? success "연습문제 1 풀이"
+
+    **(a)** **모수적: 이표본 $t$ 검정**(또는 Welch $t$ 검정). 집단당 $n = 50$이고 Q-Q 그림으로 근사적 정규성이 확인되었으므로 모수적 검정의 조건이 잘 만족된다. 이 조건에서는 $t$ 검정이 비모수 대안보다 검정력이 높다.
+
+    **(b)** **비모수: Mann-Whitney U 검정**(Wilcoxon 순위합검정). Likert 척도 자료는 연속형이 아니라 순서형이므로 평균과 표준편차가 의미를 갖지 않는다. 작은 표본크기($n = 8$)와 자료의 이산성 때문에 비모수 방법이 더 적절하다.
+
+    **(c)** **비모수: Wilcoxon 부호순위검정**(차이의 대칭성이 의심스럽다면 부호검정). 심한 치우침과 극단 이상치가 대응 $t$ 검정의 정규성 가정을 어긴다. 관측값이 12개뿐이므로 심하게 치우친 자료에 대해 중심극한정리가 믿을 만한 정규근사를 주지 못한다. 순위에 기반한 Wilcoxon 부호순위검정은 이상치에 저항한다.
+
+    **(d)** **비모수: Kruskal-Wallis 검정**. 세 집단 중 둘에서 정규성이 기각되었으므로 일원분산분석 가정이 깨진다. 표본크기도 상대적으로 작아(7--10) 중심극한정리가 보완해 주기에 자료가 부족하다. Kruskal-Wallis 검정은 정규성을 요구하지 않으며 적절한 다집단 비교이다. 유의하다면 쌍별 비교를 위해 Dunn 검정으로 이어 간다.
+
+---
+
+**연습문제 2.**
+$n = 20$, $\alpha = 0.05$에서 일표본 $t$ 검정, Wilcoxon 부호순위검정, 부호검정의 검정력을 세 분포(정규, Laplace, $t(3)$)에 대해 모의실험으로 비교하고, ARE 이론이 예측한 순서와 맞는지 확인하라.
+
+??? success "연습문제 2 풀이"
+    Laplace 분포는 분산이 1이 되도록 척도를 $1/\sqrt{2}$로 맞춘다. 위치 이동은 세 경우 모두 $\delta = 0.4$이다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+    rng = np.random.default_rng(11)
+    B, n = 4000, 20
+
+    def powers(x):
+        pt = stats.ttest_1samp(x, 0, axis=1).pvalue
+        pw = np.array([stats.wilcoxon(x[i]).pvalue for i in range(B)])
+        ps = np.array([stats.binomtest(int((x[i] > 0).sum()), n).pvalue
+                       for i in range(B)])
+        return (pt < .05).mean(), (pw < .05).mean(), (ps < .05).mean()
+
+    print("normal ", powers(rng.normal(0.4, 1, (B, n))))
+    print("laplace", powers(rng.laplace(0.4, 1/np.sqrt(2), (B, n))))
+    print("t(3)   ", powers(rng.standard_t(3, (B, n)) + 0.4))
+    ```
+
+    먼저 $\delta = 0$에서의 실제 크기(모두 명목 $0.05$ 근처):
+
+    | 분포 | $t$ | Wilcoxon | 부호검정 |
+    |:---|---:|---:|---:|
+    | Normal | 0.051 | 0.049 | 0.042 |
+    | Laplace | 0.044 | 0.050 | 0.042 |
+    | $t(3)$ | 0.042 | 0.048 | 0.043 |
+
+    $\delta = 0.4$에서의 검정력:
+
+    | 분포 | $t$ | Wilcoxon | 부호검정 |
+    |:---|---:|---:|---:|
+    | Normal | **0.382** | 0.370 | 0.264 |
+    | Laplace | 0.422 | **0.497** | 0.478 |
+    | $t(3)$ | 0.230 | **0.271** | 0.224 |
+
+    ARE 이론과 정확히 맞는다.
+
+    - **정규분포**에서 $t$가 가장 강하지만 Wilcoxon과의 차이는 $0.382$ 대 $0.370$으로 3% 남짓이다. $\text{ARE} = 0.955$가 예측하는 수준이다. 부호검정은 $0.264$로 확연히 뒤처지며, 이는 $\text{ARE} = 2/\pi = 0.637$에 부합한다.
+    - **Laplace**에서 순서가 뒤집혀 Wilcoxon($0.497$)이 $t$($0.422$)를 이긴다. $\text{ARE} = 1.5$가 예측한 그대로이다. 부호검정도 $0.478$로 $t$를 이기는데, Laplace에서 부호검정의 ARE는 2이다(Laplace 분포에서 중앙값은 최대가능도추정량이다).
+    - **$t(3)$**에서도 Wilcoxon이 이긴다. 여기서는 세 검정 모두 검정력이 낮은데, $t(3)$의 분산이 3이라 표준화된 효과크기가 정규 경우의 $1/\sqrt{3}$에 불과하기 때문이다.
+
+    유의할 점: 이 비교가 공정한 것은 세 검정의 **실제 크기가 모두 $0.05$에 가깝기** 때문이다. 크기가 부풀려진 검정의 높은 기각률은 검정력이 아니다. 검정력을 비교할 때는 언제나 크기부터 확인해야 한다.
+
+---
+
+**연습문제 3.**
+정규성 아래에서 Wilcoxon 순위합검정을 쓰면 $t$ 검정 대비 표본을 얼마나 더 모아야 하는가? $\text{ARE} = 3/\pi$를 이용해 계산하고, 실무에서 이 수치가 의미하는 바를 논하라. 또 부호검정에 대해서도 같은 계산을 하라.
+
+??? success "연습문제 3 풀이"
+    ARE의 정의에서 필요한 표본크기 배수는 $1/\text{ARE}$이다.
+
+    $$
+    \frac{1}{3/\pi} = \frac{\pi}{3} \approx 1.0472, \qquad
+    \frac{1}{2/\pi} = \frac{\pi}{2} \approx 1.5708
+    $$
+
+    | 검정 | ARE | 필요 표본 배수 | $n_t = 30$일 때 필요한 $n$ |
+    |:---|---:|---:|---:|
+    | Wilcoxon 순위합 | $0.955$ | $1.047$ | $32$ (2명 추가) |
+    | 부호검정 | $0.637$ | $1.571$ | $48$ (18명 추가) |
+
+    **Wilcoxon.** 4.7% 증가는 실무적으로 거의 무의미하다. 집단당 30명 연구에서 2명을 더 모으는 비용은 대개 정규성 검정을 하고 그 결과에 결론을 걸어 두는 위험보다 훨씬 싸다. 게다가 이 4.7%는 정규성이 **정확히** 성립할 때의 값이고, 조금이라도 벗어나면 격차는 줄거나 뒤집힌다.
+
+    **부호검정.** 57% 증가는 무시할 수 없다. 부호검정을 쓸 이유는 효율이 아니라 다음 둘 중 하나여야 한다.
+
+    1. 변화의 **방향만** 신뢰성 있게 측정된다(예: "호전/악화"만 기록된 임상 자료).
+    2. 차이의 분포가 **대칭이라고 볼 수 없다**. Wilcoxon 부호순위검정은 대칭성을 가정하지만 부호검정은 가정하지 않는다.
+
+    두 번째 이유가 특히 중요하다. 대응차이가 비대칭이면 Wilcoxon 부호순위검정이 검정하는 것은 더 이상 "중앙값이 0"이 아니게 되어, 효율이 높아도 엉뚱한 가설을 검정하게 된다. 검정력이 낮더라도 옳은 가설을 검정하는 편이 낫다.

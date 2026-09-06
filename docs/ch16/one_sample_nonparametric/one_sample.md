@@ -1,45 +1,45 @@
-# 19.1 One-Sample Non-Parametric Tests
+# 16.2 일표본 비모수 검정
 
 
-This section introduces three foundational non-parametric tests that operate on a single sample (or treat paired data as a single sample of differences): the **Runs Test** for randomness, the **Sign Test** for the median, and the **Wilcoxon Signed-Rank Test** which uses both the sign and magnitude of deviations.
+이 절에서는 하나의 표본에 적용하는(또는 대응자료를 차이의 단일 표본으로 다루는) 기초적인 비모수 검정 세 가지를 소개한다. 무작위성에 대한 **런 검정**, 중앙값에 대한 **부호검정**, 그리고 편차의 부호와 크기를 모두 쓰는 **Wilcoxon 부호순위검정**이다.
 
 ---
 
-## 19.1.1 Runs Test (Wald–Wolfowitz)
+## 16.2.1 런 검정 (Wald–Wolfowitz)
 
-### Concept
+### 개념
 
-The **Wald–Wolfowitz runs test** checks whether a two-valued data sequence is random. A **run** is a maximal consecutive subsequence of identical elements. For example, in the sequence
-
-$$
-\underbrace{+ + +}_{\text{run 1}} \; \underbrace{- -}_{\text{run 2}} \; \underbrace{+}_{\text{run 3}} \; \underbrace{- - -}_{\text{run 4}}
-$$
-
-there are 4 runs. Too few runs suggest the data are clustered (positive autocorrelation); too many suggest systematic alternation.
-
-### Hypotheses
+**Wald–Wolfowitz 런 검정**은 두 값으로 이루어진 자료 수열이 무작위인지 확인한다. **런**은 같은 원소가 연달아 이어지는 최대 부분수열이다. 예를 들어 수열
 
 $$
-H_0: \text{The elements of the sequence are mutually independent (random).}
+\underbrace{+ + +}_{\text{런 1}} \; \underbrace{- -}_{\text{런 2}} \; \underbrace{+}_{\text{런 3}} \; \underbrace{- - -}_{\text{런 4}}
+$$
+
+에는 런이 4개 있다. 런이 너무 적으면 자료가 뭉쳐 있음(양의 자기상관)을, 너무 많으면 체계적인 교대를 시사한다.
+
+### 가설
+
+$$
+H_0: \text{수열의 원소들이 서로 독립이다(무작위이다).}
 $$
 
 $$
-H_a: \text{The elements are not independent.}
+H_a: \text{원소들이 독립이 아니다.}
 $$
 
-### Test Statistic
+### 검정통계량
 
-Given a sequence of length $N$ containing $N_+$ values of one type and $N_- = N - N_+$ of the other:
+길이가 $N$이고 한 종류의 값이 $N_+$개, 다른 종류가 $N_- = N - N_+$개인 수열에서
 
-**Number of runs:**
+**런의 개수:**
 
 $$
 R = \frac{N_+ + N_- + 1 - \sum_{i=1}^{N-1} x_i \, x_{i+1}}{2}
 $$
 
-where the data are coded as $+1$ and $-1$.
+여기서 자료는 $+1$과 $-1$로 부호화된다.
 
-**Mean and standard deviation under $H_0$:**
+**$H_0$ 아래의 평균과 표준편차:**
 
 $$
 \mu_R = \frac{2 \, N_+ \, N_-}{N} + 1
@@ -49,21 +49,21 @@ $$
 \sigma_R = \sqrt{\frac{(\mu_R - 1)(\mu_R - 2)}{N - 1}}
 $$
 
-**Standardized test statistic (normal approximation):**
+**표준화 검정통계량 (정규근사):**
 
 $$
 Z = \frac{R - \mu_R}{\sigma_R}
 $$
 
-Under $H_0$, $Z \xrightarrow{d} \mathcal{N}(0,1)$ for large $N$.
+$H_0$ 아래에서 $N$이 크면 $Z \xrightarrow{d} \mathcal{N}(0,1)$이다.
 
-**p-value (two-sided):**
+**p값 (양측):**
 
 $$
-p = 2 \, \mathcal{N}(-|Z|)
+p = 2 \, \Phi(-|Z|)
 $$
 
-### Implementation
+### 구현
 
 ```python
 import numpy as np
@@ -102,110 +102,126 @@ def runs_test(data):
     return statistic, p_value
 ```
 
-### Worked Examples
+### 예제
 
-**Example 1 — Clustered data (non-random):**
+**예제 1 --- 뭉친 자료 (무작위가 아님):**
 
 ```python
 data = np.array([1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-statistic, p_value = runs_test(data * 2 - 1)  # convert {0,1} → {-1,+1}
-print(f"{statistic = :.4f}")   # large |Z|
-print(f"{p_value   = :.4f}")   # p < 0.05 → reject randomness
+statistic, p_value = runs_test(data * 2 - 1)  # {0,1} → {-1,+1} 변환
+print(f"{statistic = :.4f}")   # -3.7335
+print(f"{p_value   = :.4f}")   # 0.0002 → 무작위성 기각
 ```
 
-This sequence has only 2 runs (one block of 1s, one block of 0s), far fewer than expected under randomness.
+이 수열은 런이 2개뿐이다(1의 덩어리 하나, 0의 덩어리 하나). $N_+ = 6$, $N_- = 11$이므로 무작위성 아래 기댓값은 $\mu_R = 2(6)(11)/17 + 1 = 8.76$이고, 관측값 $2$는 이보다 훨씬 적다.
 
-**Example 2 — Well-mixed data (random):**
+**예제 2 --- 지나치게 교대하는 자료 (역시 무작위가 아님):**
 
 ```python
 data = np.array([1, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0])
 statistic, p_value = runs_test(data * 2 - 1)
-print(f"{statistic = :.4f}")
-print(f"{p_value   = :.4f}")   # p > 0.05 → cannot reject randomness
+print(f"{statistic = :.4f}")   # +2.2775
+print(f"{p_value   = :.4f}")   # 0.0228 → 무작위성 기각
 ```
 
-**Example 3 — Simulated binomial data:**
+!!! warning "'잘 섞인' 것처럼 보인다고 무작위인 것은 아니다"
+    이 수열은 언뜻 잘 섞여 보이지만 런이 $14$개로, 기댓값 $9.24$보다 **너무 많다**. 사람이 무작위 수열을 흉내 낼 때 전형적으로 저지르는 실수가 바로 이것이다. 같은 값이 연달아 나오는 것을 피하려다 실제 무작위 수열보다 훨씬 자주 교대하게 된다. 런 검정은 뭉침만이 아니라 이 과잉 교대도 잡아낸다.
+
+**예제 3 --- 모의 이항자료:**
 
 ```python
 np.random.seed(1)
 data = np.random.binomial(n=1, p=0.4, size=200)
 statistic, p_value = runs_test(data * 2 - 1)
-print(f"{statistic = :.4f}")
-print(f"{p_value   = :.4f}")   # truly random → expect p > 0.05
+print(f"{statistic = :.4f}")   # +1.3294
+print(f"{p_value   = :.4f}")   # 0.1837 → 무작위성을 기각하지 못함
 ```
 
-### Interpretation
+이 자료는 진짜로 독립이므로 기각하지 않는 것이 옳다.
 
-| Outcome | Meaning |
+### 해석
+
+| 결과 | 의미 |
 |:--------|:--------|
-| $p < \alpha$ | Reject $H_0$: samples are **not** independently drawn |
-| $p \geq \alpha$ | Fail to reject $H_0$: samples are consistent with independence |
+| $p < \alpha$ | $H_0$ 기각: 표본이 독립적으로 추출된 것이 **아니다** |
+| $p \geq \alpha$ | $H_0$ 기각 못 함: 표본이 독립성과 일관된다 |
 
-### Applications in Finance
+### 금융에서의 응용
 
-The runs test is commonly applied to stock return series to test the **random walk hypothesis**: if successive returns are independent, the sequence of positive and negative returns should appear random.
+런 검정은 **임의보행 가설**을 검정하기 위해 주식 수익률 계열에 흔히 적용된다. 연속된 수익률이 독립이라면 양·음 수익률의 수열이 무작위로 보여야 한다.
 
 ---
 
-## 19.1.2 Sign Test
+## 16.2.2 부호검정
 
-### Concept
+### 개념
 
-The **sign test** is one of the simplest non-parametric tests. It tests whether the median of a distribution equals a hypothesized value $m_0$ by counting how many observations fall above and below $m_0$.
+**부호검정**은 가장 단순한 비모수 검정 중 하나이다. 가설값 $m_0$보다 큰 관측값과 작은 관측값의 개수를 세어 분포의 중앙값이 $m_0$과 같은지 검정한다.
 
-For paired data $(x_i, y_i)$, we compute differences $d_i = x_i - y_i$ and test whether the median difference is zero. The test only uses the **signs** of the differences, ignoring their magnitudes.
+대응자료 $(x_i, y_i)$에서는 차이 $d_i = x_i - y_i$를 구하여 중앙값 차이가 0인지 검정한다. 이 검정은 차이의 **부호**만 쓰고 크기는 무시한다.
 
-### Hypotheses
+### 가설
 
-Let $p = P(X > m_0)$ (or $p = P(d_i > 0)$ for paired data). Under $H_0$: median $= m_0$, we have $p = 0.5$.
+$p = P(X > m_0)$(대응자료에서는 $p = P(d_i > 0)$)이라 하자. $H_0$: 중앙값 $= m_0$ 아래에서 $p = 0.5$이다.
 
-| Test type | $H_0$ | $H_a$ |
+| 검정 유형 | $H_0$ | $H_a$ |
 |:----------|:-------|:-------|
-| Two-sided | $p = 0.5$ | $p \neq 0.5$ |
-| Left-tailed | $p = 0.5$ | $p < 0.5$ |
-| Right-tailed | $p = 0.5$ | $p > 0.5$ |
+| 양측 | $p = 0.5$ | $p \neq 0.5$ |
+| 왼쪽 꼬리 | $p = 0.5$ | $p < 0.5$ |
+| 오른쪽 꼬리 | $p = 0.5$ | $p > 0.5$ |
 
-### Handling Ties
+### 동점 처리
 
-Observations exactly equal to $m_0$ (or tied pairs where $d_i = 0$) are **excluded** from the analysis. Only the remaining $n = n_+ + n_-$ observations are used.
+$m_0$과 정확히 같은 관측값(대응자료에서는 $d_i = 0$인 쌍)은 분석에서 **제외**한다. 남은 $n = n_+ + n_-$개만 사용한다.
 
-### Test Statistic
+### 검정통계량
 
 $$
-T = \sum_{i=1}^{N} \operatorname{sign}(d_i) \quad \text{(excluding ties)}
+T = \sum_{i=1}^{N} \operatorname{sign}(d_i) \quad \text{(동점 제외)}
 $$
 
-Equivalently, let $\hat{p} = n_+ / n$ where $n = n_+ + n_-$. The normal approximation gives:
+동치로, $n = n_+ + n_-$일 때 $\hat{p} = n_+ / n$이라 두면 정규근사는
 
 $$
 Z = \frac{\hat{p} - 0.5}{\sqrt{0.25 / n}}
 $$
 
-### Example Data
+이다.
 
-The following paired data compare post-treatment and pre-treatment scores for 15 students:
+### 예제 자료
 
-| Student | Post | Pre | Sign | Abs Diff | Rank of Abs Diff |
+다음 대응자료는 학생 15명의 처치 후 점수와 처치 전 점수를 비교한 것이다. 절대차이의 순위는 **Pratt 방법**(0을 순위 매기기에 포함)으로 매겼다.
+
+| 학생 | 후 | 전 | 부호 | 절대차이 | 절대차이의 순위 |
 |:-------:|:----:|:---:|:----:|:--------:|:----------------:|
-| 6 | 54 | 54 | 0 | 0 | 1 |
+| 6 | 54 | 54 | 0 | 0 | 2 |
 | 13 | 78 | 78 | 0 | 0 | 2 |
-| 15 | 76 | 76 | 0 | 0 | 3 |
-| 2 | 70 | 72 | − | 2 | 4 |
-| 4 | 65 | 68 | − | 3 | 5 |
-| 3 | 81 | 75 | + | 6 | 6 |
-| 7 | 94 | 88 | + | 6 | 7 |
-| 10 | 65 | 57 | + | 8 | 8 |
-| 11 | 95 | 86 | + | 9 | 9 |
-| 8 | 91 | 81 | + | 10 | 10 |
-| 9 | 77 | 65 | + | 12 | 11 |
-| 12 | 89 | 87 | + | 12 | 12 |
-| 5 | 79 | 65 | + | 14 | 13 |
-| 1 | 93 | 76 | + | 17 | 14 |
-| 14 | 80 | 77 | + | 17 | 15 |
+| 15 | 76 | 76 | 0 | 0 | 2 |
+| 2 | 70 | 72 | − | 2 | 4.5 |
+| 12 | 89 | 87 | + | 2 | 4.5 |
+| 4 | 65 | 68 | − | 3 | 6.5 |
+| 14 | 80 | 77 | + | 3 | 6.5 |
+| 3 | 81 | 75 | + | 6 | 8.5 |
+| 7 | 94 | 88 | + | 6 | 8.5 |
+| 10 | 65 | 57 | + | 8 | 10 |
+| 11 | 95 | 86 | + | 9 | 11 |
+| 8 | 91 | 81 | + | 10 | 12 |
+| 9 | 77 | 65 | + | 12 | 13 |
+| 5 | 79 | 65 | + | 14 | 14 |
+| 1 | 93 | 76 | + | 17 | 15 |
 
-After excluding the 3 ties: $n_+ = 10$, $n_- = 2$, $n = 12$.
+동점 3개를 제외하면 $n_+ = 10$, $n_- = 2$, $n = 12$이다.
 
-### Implementation
+부호검정의 정규근사는
+
+$$
+\hat{p} = \frac{10}{12} = 0.8333, \qquad
+Z = \frac{0.8333 - 0.5}{\sqrt{0.25/12}} = 2.309, \qquad p = 0.0209
+$$
+
+이다.
+
+### 구현
 
 ```python
 import numpy as np
@@ -256,68 +272,77 @@ data = np.array([
     [95, 86], [89, 87], [78, 78], [80, 77], [76, 76]
 ])
 z, p_value = sign_test(data)
-print(f"{z       = :.4f}")
-print(f"{p_value = :.4f}")
+print(f"{z       = :.4f}")   # 2.3094
+print(f"{p_value = :.4f}")   # 0.0209
 ```
 
-### When to Use
+### 언제 쓰는가
 
-The sign test is appropriate when only the direction of change matters (or is measurable) and when differences can only be classified as positive, negative, or tied. If the magnitudes of differences are also meaningful, the **Wilcoxon signed-rank test** (Section 19.1.3) will generally have greater power.
+부호검정은 변화의 방향만 중요하거나(또는 방향만 측정 가능하거나) 차이를 양수·음수·동점으로만 분류할 수 있을 때 적절하다. 차이의 크기도 의미가 있다면 **Wilcoxon 부호순위검정**(16.2.3절)이 대체로 검정력이 더 높다.
 
 ---
 
-## 19.1.3 Wilcoxon Signed-Rank Test
+## 16.2.3 Wilcoxon 부호순위검정
 
-### Concept
+### 개념
 
-The **Wilcoxon signed-rank test** extends the sign test by considering not only the *direction* but also the *magnitude* of each deviation from the hypothesized median. It does so by ranking the absolute deviations and summing ranks for positive and negative differences separately.
+**Wilcoxon 부호순위검정**은 가설 중앙값으로부터의 각 편차에서 *방향*뿐 아니라 *크기*까지 고려하여 부호검정을 확장한다. 절대편차에 순위를 매기고 양·음 차이의 순위를 각각 합산하는 방식이다.
 
-!!! note "Not to be confused with"
-    The **Wilcoxon rank-sum test** (Section 19.3.1) is for two independent samples. The **signed-rank** test is for one sample or paired data.
+!!! note "혼동하지 말 것"
+    **Wilcoxon 순위합검정**(16.4.1절)은 독립인 두 표본을 위한 것이다. **부호순위**검정은 일표본 또는 대응자료를 위한 것이다.
 
-### Hypotheses
+### 가설
 
-For paired data with differences $d_i = x_i - y_i$:
-
-$$
-H_0: \text{The median of } d_i \text{ is zero}
-$$
+차이 $d_i = x_i - y_i$인 대응자료에서
 
 $$
-H_a: \text{The median of } d_i \text{ is not zero (two-sided)}
+H_0: d_i \text{의 중앙값이 0이다}
 $$
 
-### Test Statistic
+$$
+H_a: d_i \text{의 중앙값이 0이 아니다 (양측)}
+$$
 
-1. Compute differences $d_i = x_i - y_i$.
-2. Rank the $|d_i|$ values from smallest to largest.
-3. The test statistic is:
+### 검정통계량
+
+1. 차이 $d_i = x_i - y_i$를 계산한다.
+2. $|d_i|$ 값들을 작은 값부터 순위를 매긴다.
+3. 검정통계량은 다음과 같다.
 
 $$
 T = \sum_{i=1}^{N} \operatorname{sign}(d_i) \times \text{Rank}(|d_i|)
 $$
 
-This gives more weight to observations that deviate further from zero, unlike the sign test which treats all non-zero differences equally.
+0이 아닌 모든 차이를 똑같이 취급하는 부호검정과 달리, 이 통계량은 0에서 더 멀리 벗어난 관측값에 더 큰 가중치를 준다.
 
-### Handling Ties (Zero Differences)
+### 동점(0인 차이) 처리
 
-The `zero_method` parameter controls how zero differences are handled:
+`zero_method` 매개변수가 0인 차이의 처리 방식을 정한다.
 
-| Method | Description |
+| 방법 | 설명 |
 |:-------|:------------|
-| `"wilcox"` | Discard zeros, rank remaining values |
-| `"pratt"` | Include zeros in ranking, then exclude from sum |
-| `"zsplit"` | Split zeros evenly between positive and negative ranks |
+| `"wilcox"` | 0을 버리고 남은 값들에 순위를 매긴다 |
+| `"pratt"` | 0을 순위 매기기에 포함시킨 뒤 합에서 제외한다 |
+| `"zsplit"` | 0의 순위를 양·음에 절반씩 나눈다 |
 
-### Example Calculation
+### 계산 예제
 
-Using the same student data from the Sign Test section, with the Pratt method:
+부호검정 절의 학생 자료를 Pratt 방법으로 계산하면
 
-$T = (-1)(4) + (-1)(5) + (+1)(6) + (+1)(7) + \cdots + (+1)(14) + (+1)(15)$
+$$
+T = (-1)(4.5) + (+1)(4.5) + (-1)(6.5) + (+1)(6.5) + (+1)(8.5) + \cdots + (+1)(15)
+$$
 
-The positive ranks dominate, yielding a large positive $T$.
+이고 순위합은
 
-### Implementation with SciPy
+$$
+W^+ = 4.5 + 6.5 + 8.5 + 8.5 + 10 + 11 + 12 + 13 + 14 + 15 = 103,
+\qquad W^- = 4.5 + 6.5 = 11
+$$
+
+이다. 양의 순위가 압도한다.
+
+### SciPy 구현
 
 ```python
 import numpy as np
@@ -332,54 +357,161 @@ data = np.array([
 statistic, p_value = stats.wilcoxon(
     data[:, 0], data[:, 1],
     alternative="two-sided",
-    mode="approx",        # normal approximation
-    zero_method="pratt"   # include zeros in ranking
+    method="approx",      # 정규근사
+    zero_method="pratt"   # 0을 순위 매기기에 포함
 )
-print(f"{statistic = }")
-print(f"{p_value   = :.4f}")
+print(f"{statistic = }")   # 11.0  (= W^-)
+print(f"{p_value   = :.4f}")   # 0.0086
 ```
 
-### Sign Test vs Wilcoxon Signed-Rank Test
+!!! warning "`mode=` 는 더 이상 쓰이지 않는다"
+    옛 SciPy 코드는 `mode="approx"`를 썼지만 이 인자는 `method=`로 바뀌었다. 옛 이름은 SciPy 1.9에서 폐기되었고 이후 제거되었다.
 
-| Feature | Sign Test | Wilcoxon Signed-Rank |
+    또 `zero_method="pratt"`를 쓰면 정확검정을 쓸 수 없다(0이 있으면 정확 귀무분포가 정의되지 않는다). SciPy는 이 경우 경고와 함께 정규근사로 자동 전환한다.
+
+### 부호검정과 Wilcoxon 부호순위검정
+
+| 특징 | 부호검정 | Wilcoxon 부호순위 |
 |:--------|:----------|:---------------------|
-| Uses signs | ✓ | ✓ |
-| Uses magnitudes | ✗ | ✓ (via ranks) |
-| Assumption | None beyond i.i.d. | Symmetric distribution of differences |
-| Power | Lower | Higher (when symmetry holds) |
-| Robustness to outliers | Very high | High |
+| 부호를 쓰는가 | ✓ | ✓ |
+| 크기를 쓰는가 | ✗ | ✓ (순위를 통해) |
+| 가정 | i.i.d. 외에 없음 | 차이의 분포가 대칭 |
+| 검정력 | 낮음 | 높음 (대칭성이 성립할 때) |
+| 이상치에 대한 로버스트성 | 매우 높음 | 높음 |
 
-The sign test requires only that $P(d_i > 0) = P(d_i < 0)$ under $H_0$, while the Wilcoxon signed-rank test additionally assumes the distribution of differences is symmetric about zero.
+부호검정은 $H_0$ 아래에서 $P(d_i > 0) = P(d_i < 0)$만 요구하는 반면, Wilcoxon 부호순위검정은 차이의 분포가 0을 중심으로 대칭이라는 것까지 가정한다.
 
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Describe the main concept of 19.1 One-Sample Non-Parametric Tests and explain why it matters for statistical practice.
+**연습문제 1.**
+위 학생 자료에서 세 검정(런 검정은 제외)의 $p$값을 모두 구하고 비교하라. 부호검정, Wilcoxon(Pratt), Wilcoxon(wilcox), 대응 $t$ 검정을 각각 계산하라.
 
-??? success "Solution to Exercise 1"
-    19.1 One-Sample Non-Parametric Tests is a core topic in statistics that provides tools for drawing reliable inferences from data. It matters because proper application ensures valid conclusions, correctly quantified uncertainty, and appropriate handling of the assumptions that underpin the method. Practitioners who understand this concept can avoid common pitfalls and choose the right analytical approach for their data.
+??? success "연습문제 1 풀이"
+    ```python
+    import numpy as np, scipy.stats as stats
+    data = np.array([
+        [93, 76], [70, 72], [81, 75], [65, 68], [79, 65],
+        [54, 54], [94, 88], [91, 81], [77, 65], [65, 57],
+        [95, 86], [89, 87], [78, 78], [80, 77], [76, 76]])
+    d = data[:, 0] - data[:, 1]
+
+    print(stats.binomtest(int((d > 0).sum()), int((d != 0).sum())).pvalue)
+    print(stats.wilcoxon(d, zero_method='pratt', method='approx').pvalue)
+    print(stats.wilcoxon(d, zero_method='wilcox', method='exact').pvalue)
+    print(stats.ttest_1samp(d, 0).pvalue)
+    ```
+
+    | 검정 | $p$값 (양측) |
+    |:---|---:|
+    | 부호검정 (정확) | $0.0386$ |
+    | 부호검정 (정규근사) | $0.0209$ |
+    | Wilcoxon, Pratt | $0.0086$ |
+    | Wilcoxon, wilcox | $0.0076$ |
+    | 대응 $t$ | $0.0038$ |
+
+    검정력의 서열이 그대로 드러난다. $t$ < Wilcoxon < 부호검정 순으로 $p$값이 커진다. 이 자료가 대략 대칭이고 이상치가 없어 $t$ 검정에 유리한 조건이기 때문이다.
+
+    부호검정에서 정확 $p$값 $0.0386$이 정규근사 $0.0209$의 거의 두 배임에도 주목하라. $n = 12$는 정규근사를 쓰기에 너무 작다. 이 자료에서는 두 값 모두 $0.05$ 아래라 결론이 같지만, 소표본에서 정규근사를 쓰면 $p$값을 크게 과소평가할 수 있다.
+
+    Pratt와 wilcox의 차이는 작다($0.0086$ 대 $0.0076$). Pratt 방법이 0을 순위 매기기에 포함시켜 나머지 순위를 모두 3칸씩 밀어 올리므로 $W^+$와 $W^-$가 함께 커지고, 결과적으로 표준화된 값이 살짝 보수적으로 나온다.
 
 ---
 
-**Exercise 2.**
-State the key assumptions required by the method discussed here. How can each assumption be checked?
+**연습문제 2.**
+예제 2의 수열 $(1,1,0,1,0,1,0,0,1,0,1,0,1,0,1,1,0)$은 "잘 섞인" 것처럼 보이지만 런 검정이 기각한다. 사람이 만든 무작위 수열이 왜 이런 특징을 보이는지 설명하고, 진짜 무작위 수열에서 가장 긴 런의 기대 길이를 모의실험으로 확인하라.
 
-??? success "Solution to Exercise 2"
-    The main assumptions typically include: (1) independence of observations -- verified by understanding the data collection process and checking for serial correlation; (2) distributional requirements (e.g., normality) -- checked with Q-Q plots and formal tests like Shapiro-Wilk; (3) equal variances (if applicable) -- assessed with boxplots and Levene's test. When assumptions are violated, consider robust alternatives, transformations, or nonparametric methods.
+??? success "연습문제 2 풀이"
+    ```python
+    import numpy as np
+    rng = np.random.default_rng(0)
+
+    def max_run(s):
+        best = cur = 1
+        for i in range(1, len(s)):
+            cur = cur + 1 if s[i] == s[i - 1] else 1
+            best = max(best, cur)
+        return best
+
+    for n in (17, 50, 100, 200):
+        m = [max_run(rng.integers(0, 2, n)) for _ in range(20000)]
+        print(n, np.mean(m), np.percentile(m, [5, 95]))
+    ```
+
+    | $n$ | 최장 런의 평균 | 5--95 백분위 |
+    |---:|---:|:---:|
+    | 17 | 4.4 | 3 -- 7 |
+    | 50 | 6.0 | 4 -- 9 |
+    | 100 | 7.0 | 5 -- 10 |
+    | 200 | 8.0 | 6 -- 11 |
+
+    동전을 100번 던지면 같은 면이 **평균 7번** 연달아 나온다. 사람이 무작위 수열을 흉내 낼 때는 이런 긴 덩어리를 "무작위처럼 보이지 않는다"는 이유로 피하기 때문에 지나치게 자주 교대하게 된다.
+
+    예제 2의 수열은 길이 17에서 최장 런이 2에 불과하다. 기대되는 $4.4$의 절반도 안 되고, 5% 백분위인 $3$보다도 작다. 그래서 런 개수가 $14$로 기댓값 $9.24$를 크게 넘고, $Z = +2.28$로 기각된다.
+
+    이것은 실무적으로 중요한 진단이다. 자료 조작이나 설문 응답 위조를 탐지할 때 "너무 규칙적으로 불규칙한" 패턴이 오히려 신호가 된다.
 
 ---
 
-**Exercise 3.**
-Work through a small numerical example illustrating the application of the technique from this section.
+**연습문제 3.**
+`runs_test` 구현에서 $R = (N_+ + N_- + 1 - \sum_i x_i x_{i+1})/2$가 왜 런의 개수와 같은지 증명하라.
 
-??? success "Solution to Exercise 3"
-    A structured approach to applying this technique involves: (1) clearly stating the hypotheses or estimation goal; (2) verifying that the data meet the required assumptions; (3) computing the relevant test statistic, estimate, or model fit; (4) obtaining the p-value, confidence interval, or posterior distribution; (5) interpreting the result in the context of the original question. Following these steps systematically ensures a rigorous and reproducible analysis.
+??? success "연습문제 3 풀이"
+    $x_i \in \{-1, +1\}$이라 하자. 인접한 쌍에 대해
+
+    $$
+    x_i x_{i+1} = \begin{cases} +1 & x_i = x_{i+1} \ (\text{같음}) \\ -1 & x_i \ne x_{i+1} \ (\text{바뀜}) \end{cases}
+    $$
+
+    이다. 부호가 바뀌는 위치의 개수를 $D$라 하면, 인접 쌍은 총 $N - 1$개이고 그중 $D$개가 바뀌는 쌍, $N - 1 - D$개가 같은 쌍이므로
+
+    $$
+    \sum_{i=1}^{N-1} x_i x_{i+1} = (N - 1 - D)(+1) + D(-1) = N - 1 - 2D
+    $$
+
+    이다. 한편 런의 개수는 부호가 바뀔 때마다 하나씩 늘어나므로 $R = D + 1$이다. 따라서
+
+    $$
+    \frac{N_+ + N_- + 1 - \sum_i x_i x_{i+1}}{2}
+    = \frac{N + 1 - (N - 1 - 2D)}{2}
+    = \frac{2 + 2D}{2} = D + 1 = R \quad \square
+    $$
+
+    이 항등식이 유용한 이유는 벡터 연산 한 줄로 런을 셀 수 있기 때문이다. `np.sum(data[1:] * data[:-1])`은 반복문 없이 $O(N)$에 끝난다. 다만 이 공식은 자료가 정확히 $\pm 1$로 부호화되어 있을 것을 요구한다. $\{0, 1\}$ 자료를 그대로 넣으면 곱이 모두 0이 되어 잘못된 답이 나오므로 예제의 `data * 2 - 1` 변환이 반드시 필요하다.
 
 ---
 
-**Exercise 4.**
-Compare the approach from this section with an alternative method. When would you choose each?
+**연습문제 4.**
+`zero_method`의 세 선택지(`wilcox`, `pratt`, `zsplit`)는 언제 갈라지는가? 0이 아닌 차이는 그대로 두고 0의 개수만 늘려 가며 세 방법의 $p$값을 비교하라.
 
-??? success "Solution to Exercise 4"
-    The method discussed here is appropriate when its assumptions hold and the sample size is sufficient for the asymptotic approximations to be accurate. Alternative approaches include: (1) nonparametric methods -- preferred when distributional assumptions are suspect; (2) bootstrap methods -- useful when analytical reference distributions are unavailable; (3) Bayesian methods -- valuable when incorporating prior information or when direct probability statements about parameters are desired. Running multiple approaches and comparing results provides a useful robustness check.
+??? success "연습문제 4 풀이"
+    0이 아닌 차이를 $(3, 5, 8, 12, 15, 2, 6, -4, -9, -1)$로 고정하고 0의 개수만 바꾼다.
+
+    ```python
+    import numpy as np, scipy.stats as stats
+    nonzero = [3, 5, 8, 12, 15, 2, 6, -4, -9, -1]
+    for nz in (0, 10, 20, 30, 40):
+        d = np.array([0] * nz + nonzero)
+        print(nz,
+              round(stats.wilcoxon(d, zero_method='wilcox', method='approx').pvalue, 4),
+              round(stats.wilcoxon(d, zero_method='pratt',  method='approx').pvalue, 4),
+              round(stats.wilcoxon(d, zero_method='zsplit', method='approx').pvalue, 4))
+    ```
+
+    | 0의 개수 | 전체 $n$ | wilcox | pratt | zsplit |
+    |---:|---:|---:|---:|---:|
+    | 0 | 10 | 0.1394 | 0.1394 | 0.1394 |
+    | 10 | 20 | 0.1394 | 0.1663 | 0.1912 |
+    | 20 | 30 | 0.1394 | 0.1792 | 0.2450 |
+    | 30 | 40 | 0.1394 | 0.1859 | 0.2908 |
+    | 40 | 50 | 0.1394 | 0.1899 | 0.3297 |
+
+    결정적인 관찰: **`wilcox`의 $p$값은 0을 아무리 많이 붙여도 전혀 변하지 않는다.** 0을 통째로 버리므로 $n = 10$짜리 검정을 반복하는 것과 같다. 반면 `pratt`과 `zsplit`은 0이 늘수록 보수적으로 변한다.
+
+    - **wilcox**가 묻는 질문은 "변화가 있었던 쌍들 중에서 양의 변화가 우세한가?"이다. 변화 없는 쌍이 90%라도 답이 같다.
+    - **pratt**은 0을 순위 매기기에 포함시켜 전체 $n$을 유지한다. 0들이 가장 낮은 순위를 차지하므로 0이 아닌 값들의 순위가 위로 밀리지만, 표준화 분산도 함께 커진다. 순 효과는 완만한 보수화이고 $0.19$ 부근에서 포화된다.
+    - **zsplit**은 0의 순위를 양·음에 절반씩 나눈다. 나뉜 순위가 $W^+$와 $W^-$를 모두 중앙값 쪽으로 끌어당기므로 신호가 가장 강하게 희석되어 $0.33$까지 올라간다.
+
+    **어느 쪽이 옳은가는 맥락에 달렸다.** 0이 측정 해상도의 한계로 생긴 것(실제로는 미세한 변화가 있었으나 반올림됨)이라면 wilcox가 합리적이다. 0이 진짜로 "효과 없음"을 뜻한다면 pratt이나 zsplit이 정직하다. 변화 없는 쌍이 90%인데 나머지 10%에서 방향이 우세하다는 이유로 "처치에 효과가 있다"고 말하는 것은 오도이기 때문이다.
+
+    Pratt이 자신의 방법을 제안한 이유가 정확히 이것이다. 0을 버리면 자료를 본 뒤에 표본크기를 정하는 셈이 되어 검정의 실제 크기가 명목수준을 넘을 수 있다.

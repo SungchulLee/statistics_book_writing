@@ -1,73 +1,73 @@
-# Sign Test
+# 부호검정
 
-The **sign test** is one of the oldest and simplest non-parametric procedures. It tests whether the median of a population equals a hypothesized value $m_0$ by counting how many observations fall above versus below $m_0$. Because it uses only the *signs* of the deviations $X_i - m_0$ and ignores their magnitudes, the sign test requires almost no assumptions -- making it applicable even to ordinal data or situations where only the direction of change is reliably measured.
+**부호검정**은 가장 오래되고 가장 단순한 비모수 절차 중 하나이다. 모집단의 중앙값이 가설값 $m_0$과 같은지를, $m_0$보다 큰 관측값과 작은 관측값의 개수를 세어 검정한다. 편차 $X_i - m_0$의 *부호*만 쓰고 크기는 무시하므로 가정이 거의 필요 없다. 그 덕에 순서형 자료나 변화의 방향만 신뢰성 있게 측정되는 상황에도 적용할 수 있다.
 
-## Intuition
+## 직관
 
-If the true median is $m_0$, then by definition half the population lies above $m_0$ and half lies below. Each observation is therefore equally likely to be above or below, so the number of observations exceeding $m_0$ follows a binomial distribution with success probability $p = 0.5$. A large excess of positive or negative signs provides evidence that the true median differs from $m_0$.
+참인 중앙값이 $m_0$이라면 정의에 의해 모집단의 절반이 $m_0$ 위에, 절반이 아래에 있다. 따라서 각 관측값이 위에 있을 확률과 아래에 있을 확률이 같으므로, $m_0$을 넘는 관측값의 개수는 성공확률 $p = 0.5$인 이항분포를 따른다. 양의 부호나 음의 부호가 크게 넘치면 참인 중앙값이 $m_0$과 다르다는 증거가 된다.
 
-## Hypotheses
+## 가설
 
-Let $p = P(X_i > m_0)$. Under $H_0$, the median equals $m_0$, which implies $p = 0.5$.
+$p = P(X_i > m_0)$이라 하자. $H_0$ 아래에서 중앙값이 $m_0$이고, 이는 $p = 0.5$를 뜻한다.
 
-| Test type | $H_0$ | $H_a$ |
+| 검정 유형 | $H_0$ | $H_a$ |
 |:----------|:------|:------|
-| Two-sided | $p = 0.5$ | $p \ne 0.5$ |
-| Left-tailed | $p = 0.5$ | $p < 0.5$ |
-| Right-tailed | $p = 0.5$ | $p > 0.5$ |
+| 양측 | $p = 0.5$ | $p \ne 0.5$ |
+| 왼쪽 꼬리 | $p = 0.5$ | $p < 0.5$ |
+| 오른쪽 꼬리 | $p = 0.5$ | $p > 0.5$ |
 
-## Handling Ties
+## 동점 처리
 
-Observations exactly equal to $m_0$ (i.e., $X_i = m_0$) are **excluded** from the analysis. Only the remaining $n = n_+ + n_-$ observations are used, where $n_+$ counts the values above $m_0$ and $n_-$ counts those below.
+$m_0$과 정확히 같은 관측값($X_i = m_0$)은 분석에서 **제외**한다. 남은 $n = n_+ + n_-$개의 관측값만 사용하며, $n_+$는 $m_0$보다 큰 값의 개수, $n_-$는 작은 값의 개수이다.
 
-## Test Statistic
+## 검정통계량
 
-### Exact Test (Small Samples)
+### 정확검정 (소표본)
 
-The test statistic is
+검정통계량은 양의 부호 개수
 
 $$
 S = n_+
 $$
 
-the number of positive signs. Under $H_0$,
+이다. $H_0$ 아래에서
 
 $$
 S \sim \text{Binomial}(n, 0.5)
 $$
 
-The exact two-sided $p$-value is
+정확 양측 $p$값은
 
 $$
 p = 2 \min\!\bigl(P(S \le s_{\text{obs}}), \; P(S \ge s_{\text{obs}})\bigr)
 $$
 
-where $s_{\text{obs}}$ is the observed value of $S$.
+이며 $s_{\text{obs}}$는 관측된 $S$의 값이다.
 
-### Normal Approximation (Large Samples)
+### 정규근사 (대표본)
 
-For large $n$ (typically $n \ge 20$), the standardized statistic
+$n$이 크면(보통 $n \ge 20$) 표준화된 통계량
 
 $$
 Z = \frac{S - n/2}{\sqrt{n/4}} = \frac{n_+ - n_-}{\sqrt{n}}
 $$
 
-is approximately $\mathcal{N}(0, 1)$ under $H_0$.
+은 $H_0$ 아래 근사적으로 $\mathcal{N}(0, 1)$을 따른다.
 
-!!! note "Continuity correction"
-    A continuity correction can improve the normal approximation for moderate sample sizes. The corrected statistic is $Z = (S - n/2 \pm 0.5) / \sqrt{n/4}$, where the sign of the correction is chosen to bring $S$ closer to $n/2$.
+!!! note "연속성 보정"
+    중간 정도의 표본크기에서는 연속성 보정으로 정규근사를 개선할 수 있다. 보정된 통계량은 $Z = (S - n/2 \pm 0.5) / \sqrt{n/4}$이며, 보정의 부호는 $S$를 $n/2$ 쪽으로 당기도록 고른다.
 
-## Worked Example
+## 예제
 
-A nutritionist hypothesizes that the median daily caloric intake of a certain population is 2000 calories. A random sample of $n = 14$ individuals yields:
+한 영양학자가 어떤 모집단의 하루 열량 섭취 중앙값이 2000칼로리라고 가정한다. $n = 14$인 확률표본은 다음과 같다.
 
 $$
 1850, \; 2100, \; 1950, \; 2200, \; 1900, \; 2050, \; 2000, \; 1800, \; 2150, \; 1975, \; 2300, \; 1920, \; 2080, \; 2010
 $$
 
-**Step 1.** Compute signs relative to $m_0 = 2000$:
+**1단계.** $m_0 = 2000$을 기준으로 부호를 구한다.
 
-| Value | Sign |
+| 값 | 부호 |
 |:-----:|:----:|
 | 1850 | $-$ |
 | 2100 | $+$ |
@@ -75,7 +75,7 @@ $$
 | 2200 | $+$ |
 | 1900 | $-$ |
 | 2050 | $+$ |
-| 2000 | (tie) |
+| 2000 | (동점) |
 | 1800 | $-$ |
 | 2150 | $+$ |
 | 1975 | $-$ |
@@ -84,51 +84,51 @@ $$
 | 2080 | $+$ |
 | 2010 | $+$ |
 
-**Step 2.** Exclude the tie: $n = 13$, $n_+ = 7$, $n_- = 6$.
+**2단계.** 동점을 제외하면 $n = 13$, $n_+ = 7$, $n_- = 6$이다.
 
-**Step 3.** Compute the exact two-sided $p$-value. Under $H_0$, $S \sim \text{Binomial}(13, 0.5)$.
+**3단계.** 정확 양측 $p$값을 계산한다. $H_0$ 아래 $S \sim \text{Binomial}(13, 0.5)$이다.
 
 $$
-P(S \ge 7) = \sum_{k=7}^{13} \binom{13}{k} \left(\frac{1}{2}\right)^{13} \approx 0.500
+P(S \ge 7) = \sum_{k=7}^{13} \binom{13}{k} \left(\frac{1}{2}\right)^{13} = 0.500
 $$
 
 $$
 p = 2 \times 0.500 = 1.000
 $$
 
-Since $p = 1.000 \gg 0.05$, we fail to reject $H_0$. The data are consistent with a median caloric intake of 2000.
+$p = 1.000 \gg 0.05$이므로 $H_0$을 기각하지 못한다. 자료는 열량 섭취 중앙값이 2000이라는 것과 일관된다.
 
-??? example "A significant result"
-    Suppose instead we observed $n_+ = 12$ and $n_- = 1$ out of $n = 13$. Then $P(S \ge 12) = \binom{13}{12}(0.5)^{13} + \binom{13}{13}(0.5)^{13} = 14/8192 \approx 0.0017$. The two-sided $p$-value is $2 \times 0.0017 = 0.0034$, providing strong evidence against $H_0$.
+??? example "유의한 결과"
+    대신 $n = 13$ 중 $n_+ = 12$, $n_- = 1$을 관측했다고 하자. 그러면 $P(S \ge 12) = \binom{13}{12}(0.5)^{13} + \binom{13}{13}(0.5)^{13} = 14/8192 \approx 0.0017$이다. 양측 $p$값은 $2 \times 0.0017 = 0.0034$로 $H_0$에 반하는 강한 증거가 된다.
 
-## Relationship to the Binomial Test
+## 이항검정과의 관계
 
-The sign test is a special case of the **binomial test** (covered in [Binomial Test](binomial_test.md)) with $p_0 = 0.5$. More generally, the binomial test can test any hypothesized proportion, while the sign test is restricted to the median hypothesis $p_0 = 0.5$.
+부호검정은 $p_0 = 0.5$인 **이항검정**([이항검정](binomial_test.md) 참조)의 특수한 경우이다. 더 일반적으로 이항검정은 임의의 가설 비율을 검정할 수 있는 반면, 부호검정은 중앙값 가설 $p_0 = 0.5$에 국한된다.
 
-## Power and Limitations
+## 검정력과 한계
 
-The sign test has the lowest power among the common one-sample non-parametric tests because it discards all magnitude information. Its ARE relative to the one-sample $t$-test under normality is
+부호검정은 크기 정보를 모두 버리므로 흔한 일표본 비모수 검정 중 검정력이 가장 낮다. 정규성 아래 일표본 $t$ 검정 대비 ARE는
 
 $$
-\text{ARE}(\text{sign test}, \; t\text{-test}) = \frac{2}{\pi} \approx 0.637
+\text{ARE}(\text{부호검정}, \; t\text{ 검정}) = \frac{2}{\pi} \approx 0.637
 $$
 
-This means the sign test requires roughly $\pi/2 \approx 1.57$ times as many observations as the $t$-test to achieve the same power under normal data. However, the sign test remains valuable when:
+이다. 정규자료에서 같은 검정력에 도달하려면 $t$ 검정의 약 $\pi/2 \approx 1.57$배의 관측값이 필요하다는 뜻이다. 그럼에도 부호검정은 다음 상황에서 여전히 가치가 있다.
 
-- Data are ordinal and magnitudes are not meaningful.
-- The distribution of differences is highly asymmetric, violating the symmetry assumption of the Wilcoxon signed-rank test.
-- Only the direction of change (better/worse) can be reliably determined.
+- 자료가 순서형이라 크기가 의미를 갖지 않을 때.
+- 차이의 분포가 심하게 비대칭이어서 Wilcoxon 부호순위검정의 대칭성 가정을 어길 때.
+- 변화의 방향(호전/악화)만 신뢰성 있게 판정할 수 있을 때.
 
-## Summary
+## 요약
 
-The sign test converts a median hypothesis into a binomial proportion test by encoding each observation as above ($+$) or below ($-$) the hypothesized value. Its minimal assumptions make it the most broadly applicable one-sample non-parametric test, at the cost of lower power compared to the [Wilcoxon signed-rank test](wilcoxon_signed_rank.md), which additionally exploits the magnitudes of deviations.
+부호검정은 각 관측값을 가설값보다 위($+$) 또는 아래($-$)로 부호화하여 중앙값 가설을 이항비율 검정으로 바꾼다. 가정이 최소한이라 일표본 비모수 검정 중 가장 폭넓게 적용되지만, 편차의 크기까지 활용하는 [Wilcoxon 부호순위검정](wilcoxon_signed_rank.md)에 비해 검정력이 낮다는 대가를 치른다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-A nutrition study claims that a new diet reduces cholesterol. The cholesterol levels (mg/dL) of 10 patients are measured before and after the diet:
+**연습문제 1.**
+어떤 영양 연구가 새 식단이 콜레스테롤을 낮춘다고 주장한다. 환자 10명의 식단 전후 콜레스테롤 수치(mg/dL)는 다음과 같다.
 
-| Patient | Before | After | Difference (Before $-$ After) |
+| 환자 | 전 | 후 | 차이 (전 $-$ 후) |
 |:---:|:---:|:---:|:---:|
 | 1 | 220 | 210 | 10 |
 | 2 | 240 | 235 | 5 |
@@ -141,26 +141,26 @@ A nutrition study claims that a new diet reduces cholesterol. The cholesterol le
 | 9 | 235 | 220 | 15 |
 | 10 | 245 | 235 | 10 |
 
-**(a)** State the null and alternative hypotheses for a one-sided sign test.
+**(a)** 단측 부호검정의 귀무가설과 대립가설을 세워라.
 
-**(b)** Count the number of positive and negative signs (ignoring zeros). Compute the test statistic.
+**(b)** 0을 제외한 양·음 부호의 개수를 세고 검정통계량을 구하라.
 
-**(c)** Under $H_0$, what distribution does the number of positive signs follow? Compute the p-value.
+**(c)** $H_0$ 아래 양의 부호 개수는 어떤 분포를 따르는가? $p$값을 계산하라.
 
-**(d)** At $\alpha = 0.05$, what is your conclusion?
+**(d)** $\alpha = 0.05$에서 결론은 무엇인가?
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
 
-    **(a)** Let $\tilde{\mu}_d$ denote the population median of the paired differences.
+    **(a)** $\tilde{\mu}_d$를 대응차이의 모중앙값이라 하자.
 
-    - $H_0$: $\tilde{\mu}_d = 0$ (the diet has no effect)
-    - $H_1$: $\tilde{\mu}_d > 0$ (the diet reduces cholesterol)
+    - $H_0$: $\tilde{\mu}_d = 0$ (식단에 효과가 없다)
+    - $H_1$: $\tilde{\mu}_d > 0$ (식단이 콜레스테롤을 낮춘다)
 
-    **(b)** Counting signs of the differences: 8 positive ($+$), 2 negative ($-$), 0 zeros. The test statistic for the sign test is the number of positive signs: $S^+ = 8$.
+    **(b)** 차이의 부호를 세면 양수 8개($+$), 음수 2개($-$), 0은 없다. 부호검정의 검정통계량은 양의 부호 개수 $S^+ = 8$이다.
 
-    **(c)** Under $H_0$, each difference is equally likely to be positive or negative, so $S^+ \sim \text{Binomial}(n = 10, p = 0.5)$.
+    **(c)** $H_0$ 아래에서 각 차이가 양수일 확률과 음수일 확률이 같으므로 $S^+ \sim \text{Binomial}(n = 10, p = 0.5)$이다.
 
-    For a one-sided test ($H_1$: median $> 0$), the p-value is:
+    단측검정($H_1$: 중앙값 $> 0$)의 $p$값은
 
     $$
     p = P(S^+ \ge 8) = P(S^+ = 8) + P(S^+ = 9) + P(S^+ = 10)
@@ -174,4 +174,104 @@ A nutrition study claims that a new diet reduces cholesterol. The cholesterol le
     = \frac{45 + 10 + 1}{1024} = \frac{56}{1024} \approx 0.0547
     $$
 
-    **(d)** Since $p \approx 0.055 > 0.05$, we fail to reject $H_0$ at the 5% significance level. The evidence for a cholesterol reduction is suggestive but not statistically significant by the sign test. Note that the sign test is conservative because it discards magnitude information — the Wilcoxon signed-rank test may yield a different conclusion.
+    **(d)** $p \approx 0.055 > 0.05$이므로 5% 유의수준에서 $H_0$을 기각하지 못한다. 콜레스테롤 감소의 증거가 시사적이기는 하나 부호검정으로는 통계적으로 유의하지 않다. 부호검정이 크기 정보를 버리기 때문에 보수적임에 유의하라. Wilcoxon 부호순위검정은 다른 결론을 낼 수 있다.
+
+---
+
+**연습문제 2.**
+연습문제 1의 자료에 Wilcoxon 부호순위검정과 대응 $t$ 검정을 적용하여 세 검정의 $p$값을 비교하라. 왜 이렇게 큰 차이가 나는가?
+
+??? success "연습문제 2 풀이"
+    ```python
+    import numpy as np
+    from scipy import stats
+    d = np.array([10, 5, -5, 15, 2, 5, 10, -3, 15, 10])
+    print(stats.binomtest(8, 10, 0.5, alternative='greater').pvalue)  # 0.0547
+    print(stats.wilcoxon(d, alternative='greater').pvalue)            # 0.01367
+    print(stats.ttest_1samp(d, 0, alternative='greater').pvalue)      # 0.00833
+    ```
+
+    | 검정 | $p$값 (단측) | $\alpha = 0.05$ 결론 |
+    |:---|---:|:---|
+    | 부호검정 | $0.0547$ | 기각 못 함 |
+    | Wilcoxon 부호순위 | $0.0137$ | 기각 |
+    | 대응 $t$ | $0.0083$ | 기각 |
+
+    부호검정만 결론이 다르다. 이유는 자료의 구조에 있다. 두 개의 음의 차이 $-5$와 $-3$은 **절댓값이 가장 작은 축에 속한다**. 절댓값 순위는
+
+    $$
+    |d| = (10, 5, 5, 15, 2, 5, 10, 3, 15, 10) \;\to\; R = (7, 4, 4, 9.5, 1, 4, 7, 2, 9.5, 7)
+    $$
+
+    이고, 음의 차이가 받은 순위는 $4$와 $2$로 총 $6$뿐이다. 전체 순위합 $55$ 중 $W^+ = 49$가 양의 차이에 몰려 있다.
+
+    부호검정은 이 정보를 전혀 쓰지 않는다. 부호검정에게 $-3$은 $-300$과 똑같은 한 개의 음수이다. 반면 Wilcoxon은 "반대 방향의 증거가 있긴 하지만 모두 미미하다"를 읽어 낸다.
+
+    이것이 $\text{ARE}(\text{부호}, t) = 0.637$과 $\text{ARE}(\text{Wilcoxon}, t) = 0.955$의 차이가 현실에서 드러나는 모습이다. 다만 이 자료가 Wilcoxon에 유리하게 짜여 있다는 점도 유의하라. 음의 차이가 컸다면 순서가 뒤집혔을 것이다.
+
+---
+
+**연습문제 3.**
+부호검정의 정확검정은 유의수준 $\alpha = 0.05$를 정확히 달성하지 못한다. $n = 10, 13, 20, 25, 30$에서 정확 양측 부호검정의 **실제 크기**를 계산하고, 왜 명목수준에 못 미치는지 설명하라.
+
+??? success "연습문제 3 풀이"
+    ```python
+    import numpy as np
+    from scipy import stats
+    for n in (10, 13, 20, 25, 30):
+        pv = np.array([stats.binomtest(k, n, 0.5).pvalue for k in range(n + 1)])
+        pmf = stats.binom.pmf(np.arange(n + 1), n, 0.5)
+        print(n, pmf[pv <= 0.05].sum())
+    ```
+
+    | $n$ | 실제 크기 |
+    |---:|---:|
+    | 10 | 0.0215 |
+    | 13 | 0.0225 |
+    | 20 | 0.0414 |
+    | 25 | 0.0433 |
+    | 30 | 0.0428 |
+
+    모두 $0.05$보다 작다. 원인은 $S$가 **이산**이기 때문이다. 기각역은 $\{S \le c\} \cup \{S \ge n - c\}$ 형태여야 하는데, 이 집합의 확률이 $\alpha$를 정확히 맞추는 정수 $c$가 없다.
+
+    $n = 10$을 보자. 양측 확률은 $c = 1$일 때 $2 \times P(S \le 1) = 2 \times 11/1024 = 0.0215$이고, $c = 2$일 때 $2 \times 56/1024 = 0.1094$이다. $0.05$를 넘지 않으려면 $c = 1$을 택할 수밖에 없고, 그러면 실제 크기가 $0.0215$로 명목값의 절반도 안 된다.
+
+    귀결은 **검정력 손실**이다. 부호검정이 $t$ 검정보다 검정력이 낮은 것은 ARE가 $0.637$이라서만이 아니라, 소표본에서 유의수준을 절반밖에 쓰지 못하기 때문이기도 하다. 이 이산성 손실은 $n$이 커지면서 줄어들어 $n = 20$ 이상에서는 $0.043$ 근처로 안정된다.
+
+    이 문제를 완화하려면 중간 $p$값(mid-$p$)을 쓸 수 있다. $p_{\text{mid}} = P(S > s) + \tfrac{1}{2}P(S = s)$로 정의하면 평균적으로 크기가 명목수준에 가까워지지만, 더 이상 크기를 $\alpha$ 이하로 **보장하지는** 않는다.
+
+---
+
+**연습문제 4.**
+부호검정이 검정하는 것은 정확히 무엇인가? "중앙값이 $m_0$이다"와 "$P(X > m_0) = 0.5$"가 언제 다른가?
+
+??? success "연습문제 4 풀이"
+    연속분포에서는 두 진술이 동치이다. 그러나 **이산분포나 $m_0$에 확률질량이 있는 분포**에서는 갈라진다.
+
+    $X$가 $P(X = 0) = 0.4$, $P(X = 1) = 0.3$, $P(X = -1) = 0.3$인 분포를 따른다고 하자. 중앙값은 $0$이다. 그러나
+
+    $$
+    P(X > 0) = 0.3, \qquad P(X < 0) = 0.3, \qquad P(X = 0) = 0.4
+    $$
+
+    이다. 부호검정은 동점을 버리므로 남은 관측값에 대해 $p = P(X > 0 \mid X \ne 0) = 0.5$를 검정하고, 이 경우 옳은 답을 낸다.
+
+    문제는 분포가 $m_0$에서 비대칭일 때다. $P(X = 0) = 0.4$, $P(X = 1) = 0.4$, $P(X = -1) = 0.2$라 하자. 중앙값은 여전히 $0$이지만($P(X \le 0) = 0.6 \ge 0.5$이고 $P(X \ge 0) = 0.8 \ge 0.5$),
+
+    $$
+    P(X > 0 \mid X \ne 0) = \frac{0.4}{0.6} = \frac{2}{3} \ne 0.5
+    $$
+
+    이다. 부호검정은 $H_0$을 기각할 것이고 --- 중앙값 가설은 참인데도 --- 이는 **제1종 오류가 아니라 다른 가설을 검정한 결과**이다.
+
+    ```python
+    from scipy import stats
+    import numpy as np
+    rng = np.random.default_rng(2)
+    x = rng.choice([-1, 0, 1], size=200, p=[0.2, 0.4, 0.4])
+    nz = x[x != 0]
+    print(np.median(x), stats.binomtest((nz > 0).sum(), len(nz), 0.5).pvalue)
+    # 0.0  0.00017  ← 중앙값은 0인데 기각한다
+    ```
+
+    정확한 서술은 이렇다. **부호검정의 귀무가설은 "$P(X > m_0) = P(X < m_0)$"이다.** 연속분포에서는 이것이 중앙값 조건과 같지만, 동점이 생길 수 있는 자료(순서형 척도, 반올림된 측정값)에서는 같지 않다. 순서형 자료가 부호검정의 주된 응용 영역임을 생각하면 이는 실제로 마주치는 문제이다.

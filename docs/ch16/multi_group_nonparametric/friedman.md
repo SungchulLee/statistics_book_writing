@@ -1,65 +1,65 @@
-# Friedman Test (Repeated Measures)
+# Friedman 검정 (반복측정)
 
-The [Kruskal-Wallis test](kruskal_wallis.md) compares independent groups. When the same subjects are measured under multiple conditions (repeated measures) or when data are collected in matched blocks, the observations are no longer independent across groups. The **Friedman test** is the non-parametric counterpart to repeated-measures ANOVA: it accounts for the block structure by ranking observations *within each block* rather than across the entire sample.
+[Kruskal-Wallis 검정](kruskal_wallis.md)은 독립인 집단들을 비교한다. 같은 피험자를 여러 조건에서 측정하거나(반복측정) 자료가 짝지은 블록으로 수집되면 관측값이 집단 간에 더 이상 독립이 아니다. **Friedman 검정**은 반복측정 분산분석의 비모수 대응물로, 전체 표본이 아니라 *각 블록 안에서* 순위를 매겨 블록 구조를 반영한다.
 
-## Assumptions
+## 가정
 
-1. There are $b$ blocks (e.g., subjects) and $k$ treatments (conditions).
-2. Within each block, the $k$ observations can be ranked.
-3. The blocks are independent of each other.
-4. The data are at least ordinal within each block.
+1. $b$개의 블록(예: 피험자)과 $k$개의 처리(조건)가 있다.
+2. 각 블록 안에서 $k$개의 관측값에 순위를 매길 수 있다.
+3. 블록들이 서로 독립이다.
+4. 각 블록 안에서 자료가 적어도 순서형이다.
 
-## Hypotheses
-
-$$
-H_0 \colon \text{All } k \text{ treatments have the same effect (identical distributions within blocks)}
-$$
+## 가설
 
 $$
-H_a \colon \text{At least one treatment differs from the others}
+H_0 \colon k \text{개 처리의 효과가 모두 같다(블록 안에서 분포가 동일하다)}
 $$
 
-## Procedure
+$$
+H_a \colon \text{적어도 한 처리가 나머지와 다르다}
+$$
 
-**Step 1.** For each block $j = 1, \ldots, b$, rank the $k$ observations from 1 to $k$. Assign midranks to ties within a block.
+## 절차
 
-**Step 2.** Compute the rank sum for each treatment $i$:
+**1단계.** 각 블록 $j = 1, \ldots, b$에서 $k$개의 관측값에 1부터 $k$까지 순위를 매긴다. 블록 안의 동점에는 중간순위를 배정한다.
+
+**2단계.** 각 처리 $i$의 순위합을 계산한다.
 
 $$
 R_i = \sum_{j=1}^{b} r_{ij}
 $$
 
-where $r_{ij}$ is the rank of treatment $i$ in block $j$.
+여기서 $r_{ij}$는 블록 $j$에서 처리 $i$의 순위이다.
 
-**Step 3.** Compute the Friedman statistic:
+**3단계.** Friedman 통계량을 계산한다.
 
 $$
 \chi^2_F = \frac{12}{bk(k+1)} \sum_{i=1}^{k} R_i^2 - 3b(k+1)
 $$
 
-This can equivalently be written as
+동치로
 
 $$
 \chi^2_F = \frac{12}{bk(k+1)} \sum_{i=1}^{k} \left(R_i - \frac{b(k+1)}{2}\right)^2
 $$
 
-which shows that $\chi^2_F$ measures how much the treatment rank sums deviate from their common expected value under $H_0$.
+로 쓸 수 있으며, 이는 $\chi^2_F$가 처리 순위합이 $H_0$ 아래의 공통 기댓값에서 얼마나 벗어나는지를 재는 양임을 보여 준다.
 
-## Null Distribution
+## 귀무분포
 
-Under $H_0$, within each block every permutation of the ranks $\{1, 2, \ldots, k\}$ is equally likely. For large $b$, the Friedman statistic is approximately distributed as
+$H_0$ 아래에서 각 블록 안의 순위 $\{1, 2, \ldots, k\}$의 모든 순열이 동등하게 가능하다. $b$가 크면 Friedman 통계량은 근사적으로
 
 $$
 \chi^2_F \sim \chi^2_{k-1}
 $$
 
-For small $b$ and $k$, exact $p$-values are available from tables or software.
+로 분포한다. $b$와 $k$가 작으면 표나 소프트웨어로 정확 $p$값을 얻을 수 있다.
 
-## Worked Example
+## 예제
 
-Four pain medications are tested on 5 patients. Each patient rates their pain relief on a 1--100 scale for each medication.
+진통제 네 가지를 환자 5명에게 시험한다. 각 환자가 각 약에 대해 통증 완화 정도를 1--100 척도로 평가한다.
 
-| Patient | Drug A | Drug B | Drug C | Drug D |
+| 환자 | 약 A | 약 B | 약 C | 약 D |
 |:-------:|:------:|:------:|:------:|:------:|
 | 1 | 30 | 45 | 60 | 50 |
 | 2 | 25 | 40 | 55 | 35 |
@@ -67,9 +67,9 @@ Four pain medications are tested on 5 patients. Each patient rates their pain re
 | 4 | 20 | 30 | 50 | 40 |
 | 5 | 40 | 55 | 70 | 60 |
 
-**Step 1.** Rank within each patient (block):
+**1단계.** 각 환자(블록) 안에서 순위를 매긴다.
 
-| Patient | Drug A | Drug B | Drug C | Drug D |
+| 환자 | 약 A | 약 B | 약 C | 약 D |
 |:-------:|:------:|:------:|:------:|:------:|
 | 1 | 1 | 2 | 4 | 3 |
 | 2 | 1 | 3 | 4 | 2 |
@@ -77,11 +77,11 @@ Four pain medications are tested on 5 patients. Each patient rates their pain re
 | 4 | 1 | 2 | 4 | 3 |
 | 5 | 1 | 2 | 4 | 3 |
 
-**Step 2.** Rank sums: $R_A = 5$, $R_B = 12$, $R_C = 20$, $R_D = 13$.
+**2단계.** 순위합: $R_A = 5$, $R_B = 12$, $R_C = 20$, $R_D = 13$.
 
-**Check:** $5 + 12 + 20 + 13 = 50 = 5 \times 4 \times (4+1)/2$. $\checkmark$
+**검산:** $5 + 12 + 20 + 13 = 50 = 5 \times 4 \times (4+1)/2$. $\checkmark$
 
-**Step 3.** Compute $\chi^2_F$:
+**3단계.** $\chi^2_F$를 계산한다.
 
 $$
 \chi^2_F = \frac{12}{5 \times 4 \times 5}(5^2 + 12^2 + 20^2 + 13^2) - 3 \times 5 \times 5
@@ -91,65 +91,94 @@ $$
 = \frac{12}{100}(25 + 144 + 400 + 169) - 75 = \frac{12 \times 738}{100} - 75 = 88.56 - 75 = 13.56
 $$
 
-**Step 4.** Compare to $\chi^2_3$: $P(\chi^2_3 > 13.56) \approx 0.0036$.
+**4단계.** $\chi^2_3$과 비교한다: $P(\chi^2_3 > 13.56) = 0.00357$.
 
-At $\alpha = 0.05$, we reject $H_0$. There is significant evidence that the medications differ in pain relief effectiveness. The mean ranks (Drug A: 1.0, Drug B: 2.4, Drug C: 4.0, Drug D: 2.6) indicate that Drug C provides the most relief and Drug A the least.
+```python
+import numpy as np
+from scipy import stats
+d = np.array([[30, 45, 60, 50], [25, 40, 55, 35], [35, 50, 65, 45],
+              [20, 30, 50, 40], [40, 55, 70, 60]])
+print(stats.friedmanchisquare(*d.T))
+# statistic=13.56, pvalue=0.0035696
+```
 
-## Post-Hoc Comparisons
+$\alpha = 0.05$에서 $H_0$을 기각한다. 약들의 통증 완화 효과가 다르다는 유의한 증거가 있다. 평균순위(약 A: 1.0, 약 B: 2.4, 약 C: 4.0, 약 D: 2.6)를 보면 약 C가 가장 큰 완화를, 약 A가 가장 작은 완화를 준다.
 
-After a significant Friedman test, pairwise comparisons can identify which treatments differ. The most common approach is the **Nemenyi test**, which compares all pairs of mean ranks:
+!!! warning "$b = 5$에서 $\chi^2$ 근사는 매우 보수적이다"
+    $b = 5$, $k = 4$이면 가능한 블록 내 순위 배정이 $(4!)^5 = 24^5 = 7{,}962{,}624$가지이고, 모두 열거하여 정확 $p$값을 구할 수 있다. 결과는 $p = 0.000139$로 $\chi^2$ 근사값 $0.00357$의 **26분의 1**이다.
+
+    ```python
+    import numpy as np, itertools
+    b, k = 5, 4
+    perms = list(itertools.permutations(range(1, k + 1)))
+    cnt = tot = 0
+    for combo in itertools.product(perms, repeat=b):
+        R = np.sum(np.array(combo), axis=0)
+        chi = 12 / (b * k * (k + 1)) * np.sum(R ** 2) - 3 * b * (k + 1)
+        tot += 1
+        cnt += chi >= 13.56 - 1e-9
+    print(cnt / tot, tot)      # 0.000139  7962624
+    ```
+
+    이 자료에서 약 A가 다섯 블록 **전부**에서 최하위, 약 C가 전부에서 최상위였다. 이런 완벽한 일관성은 귀무가설 아래에서 극히 드물지만, $\chi^2$ 근사는 $b$가 작을 때 그 희소성을 제대로 반영하지 못한다.
+
+    다만 근사가 언제나 보수적인 것은 아니다. 연습문제 1에서는 반대 방향으로 틀린다.
+
+## 사후비교
+
+Friedman 검정이 유의하면 쌍별 비교로 어느 처리가 다른지 밝힐 수 있다. 가장 흔한 접근은 모든 평균순위 쌍을 비교하는 **Nemenyi 검정**이다.
 
 $$
 |\bar{R}_i - \bar{R}_j| > q_\alpha \sqrt{\frac{k(k+1)}{6b}}
 $$
 
-where $q_\alpha$ is the critical value from the studentized range distribution. Alternatively, pairwise Wilcoxon signed-rank tests with a Bonferroni correction can be used.
+여기서 $q_\alpha$는 스튜던트화 범위 분포의 임계값이다. 대안으로 Bonferroni 보정을 적용한 쌍별 Wilcoxon 부호순위검정을 쓸 수도 있다.
 
-!!! tip "Connection to the Kruskal-Wallis test"
-    The Kruskal-Wallis test ranks all $N$ observations globally, while the Friedman test ranks observations *within each block*. This within-block ranking removes between-block variability, analogous to how repeated-measures ANOVA removes between-subject variability. When the block structure is present, the Friedman test is more powerful than the Kruskal-Wallis test.
+!!! tip "Kruskal-Wallis 검정과의 관계"
+    Kruskal-Wallis 검정은 $N$개 관측값 전체에 전역적으로 순위를 매기는 반면, Friedman 검정은 *각 블록 안에서* 순위를 매긴다. 블록 내 순위 매기기는 블록 간 변동을 제거하며, 이는 반복측정 분산분석이 피험자 간 변동을 제거하는 것과 같다. 블록 구조가 존재할 때 Friedman 검정이 Kruskal-Wallis 검정보다 강력하다.
 
-## Summary
+## 요약
 
-The Friedman test extends non-parametric group comparison to repeated-measures and randomized block designs by ranking observations within each block. The test statistic $\chi^2_F$ measures the variance of treatment rank sums and follows an approximate $\chi^2_{k-1}$ distribution under the null hypothesis. The test is the non-parametric analogue of repeated-measures ANOVA and is applicable whenever the data within blocks can be meaningfully ranked, even if they are ordinal. Post-hoc procedures such as the Nemenyi test identify which specific treatments differ.
+Friedman 검정은 각 블록 안에서 관측값에 순위를 매김으로써 비모수 집단비교를 반복측정 및 확률화블록 설계로 확장한다. 검정통계량 $\chi^2_F$는 처리 순위합의 변동을 재며 귀무가설 아래에서 근사적으로 $\chi^2_{k-1}$ 분포를 따른다. 반복측정 분산분석의 비모수 대응물이며, 블록 안에서 자료에 의미 있게 순위를 매길 수 있으면 순서형이어도 적용할 수 있다. Nemenyi 검정 같은 사후절차가 구체적으로 어느 처리가 다른지 밝혀 준다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Four panelists rate three brands of coffee on a 1--10 scale:
+**연습문제 1.**
+평가자 4명이 커피 세 브랜드를 1--10 척도로 평가했다.
 
-| Panelist | Brand A | Brand B | Brand C |
+| 평가자 | 브랜드 A | 브랜드 B | 브랜드 C |
 |:---:|:---:|:---:|:---:|
 | 1 | 7 | 5 | 8 |
 | 2 | 6 | 8 | 7 |
 | 3 | 5 | 4 | 9 |
 | 4 | 8 | 6 | 7 |
 
-**(a)** Rank the brands within each panelist (block) from 1 to 3.
+**(a)** 각 평가자(블록) 안에서 브랜드에 1부터 3까지 순위를 매겨라.
 
-**(b)** Compute the rank sums $R_j$ for each brand across all panelists.
+**(b)** 모든 평가자에 걸쳐 각 브랜드의 순위합 $R_j$를 계산하라.
 
-**(c)** Compute the Friedman test statistic:
+**(c)** Friedman 검정통계량
 
 $$
 \chi_F^2 = \frac{12}{bk(k+1)} \sum_{j=1}^{k} R_j^2 - 3b(k+1)
 $$
 
-where $b = 4$ (panelists) and $k = 3$ (brands).
+을 계산하라. 여기서 $b = 4$(평가자), $k = 3$(브랜드)이다.
 
-**(d)** Under $H_0$, $\chi_F^2 \sim \chi^2(k-1)$. Test at $\alpha = 0.05$.
+**(d)** $H_0$ 아래에서 $\chi_F^2 \sim \chi^2(k-1)$이다. $\alpha = 0.05$에서 검정하라.
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
 
-    **(a)** Ranking within each panelist (1 = lowest, 3 = highest):
+    **(a)** 각 평가자 안에서 순위를 매기면(1 = 가장 낮음, 3 = 가장 높음)
 
-    | Panelist | Brand A | Brand B | Brand C |
+    | 평가자 | 브랜드 A | 브랜드 B | 브랜드 C |
     |:---:|:---:|:---:|:---:|
     | 1 | 2 | 1 | 3 |
     | 2 | 1 | 3 | 2 |
     | 3 | 2 | 1 | 3 |
     | 4 | 3 | 1 | 2 |
 
-    **(b)** Rank sums:
+    **(b)** 순위합:
 
     $$
     R_A = 2 + 1 + 2 + 3 = 8
@@ -163,7 +192,7 @@ where $b = 4$ (panelists) and $k = 3$ (brands).
     R_C = 3 + 2 + 3 + 2 = 10
     $$
 
-    Check: $R_A + R_B + R_C = 24 = bk(k+1)/2 = 4 \times 3 \times 4/2 = 24$.
+    검산: $R_A + R_B + R_C = 24 = bk(k+1)/2 = 4 \times 3 \times 4/2 = 24$.
 
     **(c)**
 
@@ -175,6 +204,134 @@ where $b = 4$ (panelists) and $k = 3$ (brands).
     = \frac{12}{48}(64 + 36 + 100) - 48 = \frac{12 \times 200}{48} - 48 = 50 - 48 = 2.0
     $$
 
-    **(d)** Under $H_0$, $\chi_F^2 \sim \chi^2(2)$. The critical value at $\alpha = 0.05$ is 5.991.
+    **(d)** $H_0$ 아래에서 $\chi_F^2 \sim \chi^2(2)$이고 $\alpha = 0.05$의 임계값은 $5.991$이다.
 
-    Since $\chi_F^2 = 2.0 < 5.991$, we fail to reject $H_0$. There is no statistically significant difference in the ratings of the three coffee brands. The p-value is $P(\chi^2(2) > 2.0) \approx 0.368$. With only 4 panelists, the test has limited power to detect moderate differences.
+    $\chi_F^2 = 2.0 < 5.991$이므로 $H_0$을 기각하지 못한다. 세 커피 브랜드의 평가에 통계적으로 유의한 차이가 없다. $p$값은 $P(\chi^2(2) > 2.0) = 0.3679$이다. 평가자가 4명뿐이라 중간 정도의 차이를 탐지할 검정력이 제한적이다.
+
+    **정확 $p$값과의 비교.** $(3!)^4 = 1296$가지 배정을 모두 열거하면 정확 $p = 0.4306$이다.
+
+    ```python
+    import numpy as np, itertools
+    b, k = 4, 3
+    perms = list(itertools.permutations(range(1, k + 1)))
+    cnt = tot = 0
+    for combo in itertools.product(perms, repeat=b):
+        R = np.sum(np.array(combo), axis=0)
+        chi = 12 / (b * k * (k + 1)) * np.sum(R ** 2) - 3 * b * (k + 1)
+        tot += 1
+        cnt += chi >= 2.0 - 1e-9
+    print(cnt / tot, tot)      # 0.4306  1296
+    ```
+
+    여기서는 $\chi^2$ 근사($0.368$)가 정확값($0.431$)보다 **작다**. 즉 이 영역에서는 근사가 **비보수적**이다. 본문 예제에서 26배 보수적이었던 것과 방향이 반대이다.
+
+    이유는 $\chi^2_F$의 귀무분포가 이산적이고 $b$가 작을 때 $\chi^2$ 곡선과 계단이 어긋나기 때문이다. 분포의 중앙부(작은 $\chi^2_F$)에서는 근사가 $p$를 과소평가하고, 극단 꼬리에서는 크게 과대평가한다.
+
+    **권고:** $b < 10$이면 정확 $p$값이나 몬테카를로 순열 $p$값을 쓴다. $\chi^2$ 근사의 오차 방향을 미리 알 수 없기 때문이다.
+
+---
+
+**연습문제 2.**
+같은 자료를 Friedman 검정과 Kruskal-Wallis 검정으로 각각 분석하면 어떻게 다른가? 본문의 진통제 자료로 확인하고, 왜 차이가 나는지 설명하라.
+
+??? success "연습문제 2 풀이"
+    Kruskal-Wallis는 블록 구조를 무시하고 $20$개 관측값 전체에 순위를 매긴다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+    d = np.array([[30, 45, 60, 50], [25, 40, 55, 35], [35, 50, 65, 45],
+                  [20, 30, 50, 40], [40, 55, 70, 60]])
+    print(stats.friedmanchisquare(*d.T))      # 13.560, p=0.003570
+    print(stats.kruskal(*d.T))                # 12.237, p=0.006615
+    print(np.corrcoef(d.T)[0])                # 블록 간 상관
+    ```
+
+    | 검정 | 통계량 | $p$값 |
+    |:---|---:|---:|
+    | Friedman (블록 반영) | $13.56$ | $0.00357$ |
+    | Kruskal-Wallis (블록 무시) | $12.24$ | $0.00661$ |
+
+    Friedman이 $p$값을 1.9배 작게 준다. 즉 블록 구조를 반영하는 편이 더 강력하다.
+
+    차이가 극적이지 않은 것은 이 자료에서 처리 효과가 환자 간 변동보다 크기 때문이다. 그래도 방향은 분명하다. 환자 4는 모든 약에 대해 낮게(20--50) 평가하고 환자 5는 높게(40--70) 평가한다. Kruskal-Wallis에서는 이 **개인차가 모두 잡음으로 들어간다**. 환자 5가 약 A에 준 $40$이 환자 4가 약 D에 준 $40$과 같은 순위를 받아 신호가 희석된다.
+
+    Friedman은 각 환자 안에서만 순위를 매기므로 개인차가 통째로 제거된다. 실제로 이 자료에서 각 환자의 순위 패턴이 거의 동일하다(약 A가 언제나 1위, 약 C가 언제나 4위).
+
+    이는 [대응 부호검정](../paired_sample_nonparametric/paired_sign.md) 연습문제 4에서 본 것과 같은 원리이다. 블록 간 변동이 처리 효과에 비해 클수록 격차가 벌어진다. 그 예제에서는 개인차가 압도적이어서 $p$값이 11배 차이 났다.
+
+---
+
+**연습문제 3.**
+Friedman 검정은 각 블록 안에서 **순위만** 쓴다. 이것이 어떤 정보를 버리는가? 처리 효과의 **크기**가 블록마다 크게 다른 자료를 만들어 확인하라.
+
+??? success "연습문제 3 풀이"
+    두 자료를 비교하자. 둘 다 각 블록에서 순위 패턴은 동일하지만 효과의 크기가 다르다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    # 자료 1: 모든 블록에서 효과가 일정하다
+    d1 = np.array([[10, 11, 12], [20, 21, 22], [30, 31, 32],
+                   [40, 41, 42], [50, 51, 52], [60, 61, 62]])
+    # 자료 2: 한 블록의 효과만 압도적으로 크다
+    d2 = np.array([[10, 11, 12], [20, 21, 22], [30, 31, 32],
+                   [40, 41, 42], [50, 51, 52], [60, 160, 260]])
+
+    for name, d in (("d1", d1), ("d2", d2)):
+        print(name, stats.friedmanchisquare(*d.T))
+    ```
+
+    두 자료 모두 $\chi^2_F = 12.0$, $p = 0.002479$로 **완전히 같은 결과**가 나온다.
+
+    각 블록에서 세 열의 순위가 언제나 $(1, 2, 3)$이므로 순위합이 $R = (6, 12, 18)$로 동일하기 때문이다. Friedman 검정은 $10 \to 11 \to 12$라는 미미한 차이와 $60 \to 160 \to 260$이라는 거대한 차이를 구별하지 못한다.
+
+    이것은 장점이자 단점이다.
+
+    - **장점:** 자료가 순서형이거나 척도가 블록마다 다를 때(예: 평가자마다 점수 사용 습관이 다를 때) 이 불변성이 정확히 필요한 성질이다.
+    - **단점:** 효과크기를 재지 못한다. Friedman 검정이 유의하다는 것은 "순서가 일관되게 다르다"는 뜻이지 "차이가 실질적으로 크다"는 뜻이 아니다.
+
+    **권고:** Friedman 검정 결과와 함께 반드시 **원자료의 요약**(블록별 프로파일 그림, 처리별 중앙값과 사분위범위)을 제시한다. $p$값만으로는 $10 \to 12$와 $60 \to 260$을 구별할 수 없다.
+
+---
+
+**연습문제 4.**
+블록 안에 동점이 있으면 어떻게 하는가? 중간순위를 쓸 때 $\chi^2_F$의 귀무분포가 어떻게 달라지는지 설명하고, 보정된 통계량을 유도하라.
+
+??? success "연습문제 4 풀이"
+    블록 $j$ 안에서 동점이 생기면 중간순위를 배정한다. 순위의 합은 여전히 $k(k+1)/2$로 유지되지만, **블록 내 순위의 분산이 줄어든다**.
+
+    동점이 없으면 블록 내 순위의 (모)분산은 $(k^2-1)/12$이다. 블록 $j$에 크기 $t_{j1}, \ldots, t_{jg_j}$인 동점 집단이 있으면 분산이
+
+    $$
+    \frac{k^2 - 1}{12} - \frac{\sum_l (t_{jl}^3 - t_{jl})}{12k}
+    $$
+
+    로 감소한다. 이는 [순위와 순위변환](../foundations/ranks.md) 연습문제 2에서 본 항등식과 같은 구조이다.
+
+    $\chi^2_F$는 순위합의 변동을 순위의 이론적 분산으로 표준화한 양이므로, 실제 분산이 줄었는데 이론값으로 나누면 통계량이 **과소평가**되어 검정이 보수적으로 된다. 보정된 통계량은
+
+    $$
+    \chi^2_{F,\text{corrected}} = \frac{\chi^2_F}{1 - \frac{\sum_{j=1}^{b}\sum_{l}(t_{jl}^3 - t_{jl})}{bk(k^2-1)}}
+    $$
+
+    이다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+    # 블록마다 동점이 하나씩 있는 자료
+    d = np.array([[5, 5, 8], [6, 6, 9], [4, 4, 7], [3, 3, 6], [7, 7, 10]])
+    print(stats.friedmanchisquare(*d.T))
+    ```
+
+    이 자료에서 각 블록의 처음 두 열이 동점이라 순위가 $(1.5, 1.5, 3)$이다. $R = (7.5, 7.5, 15)$이고
+
+    - 보정 없는 $\chi^2_F = \frac{12}{5 \cdot 3 \cdot 4}(7.5^2 + 7.5^2 + 15^2) - 3 \cdot 5 \cdot 4 = \frac{12}{60}(337.5) - 60 = 67.5 - 60 = 7.5$
+    - 보정계수 $= 1 - \frac{5 \times (2^3-2)}{5 \times 3 \times (9-1)} = 1 - \frac{30}{120} = 0.75$
+    - 보정된 $\chi^2_F = 7.5 / 0.75 = 10.0$
+
+    SciPy의 `friedmanchisquare`는 이 보정을 자동으로 적용하여 $10.0$을 반환한다. $p$값은 $0.0067$로 보정 없는 $7.5$의 $p = 0.0235$보다 훨씬 작다.
+
+    **동점이 많으면 보정이 결정적이다.** 이 예처럼 $k = 3$에서 블록마다 동점이 하나씩만 있어도 보정계수가 $0.75$로 떨어져 통계량이 33% 커진다. Likert 척도 자료에서는 흔한 상황이다.

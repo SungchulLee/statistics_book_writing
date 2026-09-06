@@ -1,88 +1,88 @@
-# Kruskal-Wallis Test
+# Kruskal-Wallis 검정
 
-When comparing three or more independent groups, one-way ANOVA is the standard parametric approach, but it requires normality and equal variances. The **Kruskal-Wallis test** is the non-parametric counterpart: it tests whether the groups share the same distribution by comparing their mean ranks. Like the [Wilcoxon rank-sum test](../two_sample_nonparametric/rank_sum.md), it operates on ranks of the combined sample, inheriting robustness to outliers and non-normality.
+독립인 세 집단 이상을 비교할 때 표준적인 모수적 접근은 일원분산분석이지만, 여기에는 정규성과 등분산성이 필요하다. **Kruskal-Wallis 검정**은 그 비모수 대응물로, 평균순위를 비교하여 집단들이 같은 분포를 갖는지 검정한다. [Wilcoxon 순위합검정](../two_sample_nonparametric/rank_sum.md)과 마찬가지로 합친 표본의 순위 위에서 작동하므로 이상치와 비정규성에 대한 로버스트성을 물려받는다.
 
-When there are only two groups ($k = 2$), the Kruskal-Wallis test reduces to the Wilcoxon rank-sum (Mann-Whitney) test.
+집단이 둘뿐이면($k = 2$) Kruskal-Wallis 검정은 Wilcoxon 순위합(Mann-Whitney) 검정으로 환원된다.
 
-## Assumptions
+## 가정
 
-1. The $k$ samples are **independent**.
-2. The observations are drawn from **continuous** distributions.
-3. The distributions have the **same shape** (the test is primarily sensitive to location differences).
+1. $k$개의 표본이 서로 **독립**이다.
+2. 관측값이 **연속**분포에서 추출된다.
+3. 분포들의 **모양이 같다**(이 검정은 주로 위치 차이에 민감하다).
 
-## Hypotheses
-
-$$
-H_0 \colon F_1 = F_2 = \cdots = F_k \quad \text{(all groups share the same distribution)}
-$$
+## 가설
 
 $$
-H_a \colon \text{At least one group differs from the others}
+H_0 \colon F_1 = F_2 = \cdots = F_k \quad \text{(모든 집단이 같은 분포를 갖는다)}
 $$
 
-Under the location shift model, this is equivalent to testing whether all group medians are equal.
+$$
+H_a \colon \text{적어도 한 집단이 나머지와 다르다}
+$$
 
-## Test Statistic
+위치이동 모형 아래에서 이는 모든 집단의 중앙값이 같은지 검정하는 것과 동치이다.
 
-**Step 1.** Combine all $N = \sum_{i=1}^{k} n_i$ observations and rank them from 1 to $N$, using midranks for ties.
+## 검정통계량
 
-**Step 2.** Compute the rank sum $R_i$ and mean rank $\bar{R}_i = R_i / n_i$ for each group $i$.
+**1단계.** $N = \sum_{i=1}^{k} n_i$개의 관측값을 모두 합쳐 1부터 $N$까지 순위를 매기고, 동점에는 중간순위를 쓴다.
 
-**Step 3.** The Kruskal-Wallis $H$ statistic is
+**2단계.** 각 집단 $i$의 순위합 $R_i$와 평균순위 $\bar{R}_i = R_i / n_i$를 계산한다.
+
+**3단계.** Kruskal-Wallis $H$ 통계량은
 
 $$
 H = \frac{12}{N(N+1)} \sum_{i=1}^{k} \frac{R_i^2}{n_i} - 3(N+1)
 $$
 
-This can equivalently be written as
+이다. 동치로
 
 $$
 H = \frac{12}{N(N+1)} \sum_{i=1}^{k} n_i \left(\bar{R}_i - \frac{N+1}{2}\right)^2
 $$
 
-which shows that $H$ measures the weighted between-group variance of the mean ranks.
+로 쓸 수 있으며, 이는 $H$가 평균순위의 가중 집단간 변동을 재는 양임을 보여 준다.
 
-## Tie Correction
+## 동점 보정
 
-When ties are present, divide $H$ by the correction factor:
+동점이 있으면 $H$를 다음 보정계수로 나눈다.
 
 $$
 H_{\text{corrected}} = \frac{H}{1 - \frac{\sum_{j=1}^{g}(t_j^3 - t_j)}{N^3 - N}}
 $$
 
-where $g$ is the number of tied groups and $t_j$ is the number of tied observations in the $j$-th group. Without ties, the correction factor equals 1.
+여기서 $g$는 동점 집단의 개수, $t_j$는 $j$번째 집단의 동점 관측값 개수이다. 동점이 없으면 보정계수는 1이다.
 
-## Null Distribution
+## 귀무분포
 
-Under $H_0$, for large sample sizes, $H$ is approximately distributed as
+$H_0$ 아래에서 표본이 크면 $H$는 근사적으로
 
 $$
 H \sim \chi^2_{k-1}
 $$
 
-with $k - 1$ degrees of freedom. The approximation is considered reliable when each $n_i \ge 5$.
+로 분포한다. 이 근사는 각 $n_i \ge 5$일 때 신뢰할 만하다고 본다.
 
-For small samples, exact $p$-values can be obtained by enumerating all possible rank assignments.
+소표본에서는 가능한 모든 순위 배정을 열거하여 정확 $p$값을 얻을 수 있다.
 
-## Worked Example
+## 예제
 
-Three fertilizers are tested on plant growth (height in cm). Five plants are randomly assigned to each fertilizer.
+세 가지 비료를 식물 생장(키, cm)에 대해 시험한다. 각 비료에 식물 5개체를 무작위로 배정했다.
 
-**Fertilizer A** ($n_1 = 5$): 12, 15, 14, 10, 13
+**비료 A** ($n_1 = 5$): 12, 15, 14, 10, 13
 
-**Fertilizer B** ($n_2 = 5$): 20, 18, 22, 17, 19
+**비료 B** ($n_2 = 5$): 20, 18, 22, 17, 19
 
-**Fertilizer C** ($n_3 = 5$): 8, 11, 9, 7, 10
+**비료 C** ($n_3 = 5$): 8, 11, 9, 7, 10
 
-**Step 1.** Combine and rank ($N = 15$):
+**1단계.** 합쳐서 순위를 매긴다($N = 15$).
 
-| Value | Group | Rank |
+| 값 | 집단 | 순위 |
 |:-----:|:-----:|:----:|
 | 7 | C | 1 |
 | 8 | C | 2 |
 | 9 | C | 3 |
-| 10 | A, C | 4.5 |
-| 10 | A, C | 4.5 |
+| 10 | A | 4.5 |
+| 10 | C | 4.5 |
 | 11 | C | 6 |
 | 12 | A | 7 |
 | 13 | A | 8 |
@@ -94,74 +94,94 @@ Three fertilizers are tested on plant growth (height in cm). Five plants are ran
 | 20 | B | 14 |
 | 22 | B | 15 |
 
-**Step 2.** Rank sums:
+값 $10$이 집단 A와 C에 하나씩 있어 동점이므로 둘 다 중간순위 $4.5$를 받는다.
+
+**2단계.** 순위합:
 
 - $R_A = 4.5 + 7 + 8 + 9 + 10 = 38.5$
 - $R_B = 11 + 12 + 13 + 14 + 15 = 65$
 - $R_C = 1 + 2 + 3 + 4.5 + 6 = 16.5$
 
-**Check:** $38.5 + 65 + 16.5 = 120 = 15 \times 16/2$. $\checkmark$
+**검산:** $38.5 + 65 + 16.5 = 120 = 15 \times 16/2$. $\checkmark$
 
-**Step 3.** Compute $H$:
+**3단계.** $H$를 계산한다.
 
 $$
 H = \frac{12}{15 \times 16}\left(\frac{38.5^2}{5} + \frac{65^2}{5} + \frac{16.5^2}{5}\right) - 3(16)
 $$
 
 $$
-= \frac{12}{240}\left(\frac{1482.25 + 4225 + 272.25}{5}\right) - 48
+= \frac{12}{240}\left(296.45 + 845 + 54.45\right) - 48
 $$
 
 $$
 = 0.05 \times 1195.9 - 48 = 59.795 - 48 = 11.795
 $$
 
-**Step 4.** Compare to $\chi^2_2$: $P(\chi^2_2 > 11.795) \approx 0.003$.
+**4단계.** 동점 보정을 적용한다. 크기 2인 동점 집단이 하나 있으므로
 
-At $\alpha = 0.05$, we reject $H_0$. At least one fertilizer produces significantly different plant growth. The mean ranks ($\bar{R}_A = 7.7$, $\bar{R}_B = 13.0$, $\bar{R}_C = 3.3$) indicate that Fertilizer B produces the tallest plants and Fertilizer C the shortest.
+$$
+H_{\text{corrected}} = \frac{11.795}{1 - \frac{2^3 - 2}{15^3 - 15}} = \frac{11.795}{1 - \frac{6}{3360}} = \frac{11.795}{0.998214} = 11.816
+$$
 
-## Post-Hoc Comparisons
+**5단계.** $\chi^2_2$와 비교한다: $P(\chi^2_2 > 11.816) = 0.0027$.
 
-A significant Kruskal-Wallis result tells us that at least one group differs, but not which pairs differ. Post-hoc analysis options include:
+```python
+from scipy import stats
+A = [12, 15, 14, 10, 13]; B = [20, 18, 22, 17, 19]; C = [8, 11, 9, 7, 10]
+print(stats.kruskal(A, B, C))
+# KruskalResult(statistic=11.8161, pvalue=0.0027175)
+```
 
-- **[Dunn's test](dunn.md)** -- pairwise comparisons based on mean rank differences, with $p$-value adjustment for multiple testing (Bonferroni, Holm, or Benjamini-Hochberg).
-- **Pairwise Mann-Whitney tests** -- conduct $\binom{k}{2}$ two-sample tests with a Bonferroni correction.
+$\alpha = 0.05$에서 $H_0$을 기각한다. 적어도 한 비료가 유의하게 다른 생장을 낸다. 평균순위($\bar{R}_A = 7.7$, $\bar{R}_B = 13.0$, $\bar{R}_C = 3.3$)를 보면 비료 B가 가장 큰 식물을, 비료 C가 가장 작은 식물을 낸다.
 
-!!! warning "Do not skip the omnibus test"
-    Post-hoc pairwise comparisons should only be conducted after the Kruskal-Wallis test rejects $H_0$. Performing pairwise tests without first establishing an overall difference inflates the familywise error rate.
+!!! note "동점 보정의 크기"
+    이 예제에서 동점 보정은 $H$를 $11.795$에서 $11.816$으로, $p$값을 $0.00275$에서 $0.00272$로 아주 조금 바꾼다. 동점 집단이 하나뿐이고 크기가 2라 보정계수가 $0.998$에 불과하기 때문이다.
 
-## Summary
+    동점 비율이 높으면 이야기가 달라진다. Likert 척도처럼 값의 종류가 몇 개뿐인 자료에서는 보정계수가 $0.9$ 아래로 내려가 $H$를 10% 이상 키운다. `scipy.stats.kruskal`은 언제나 보정을 자동으로 적용한다.
 
-The Kruskal-Wallis test extends the rank-sum approach to $k \ge 2$ independent groups by comparing the between-group variance of mean ranks. Under the null hypothesis of identical distributions, the $H$ statistic follows an approximate $\chi^2_{k-1}$ distribution. The test achieves an ARE of $3/\pi \approx 0.955$ relative to one-way ANOVA under normality and can be substantially more powerful under non-normal conditions. When $H$ is significant, post-hoc procedures such as [Dunn's test](dunn.md) identify which pairs of groups differ.
+## 사후비교
 
-## Exercises
+Kruskal-Wallis 결과가 유의하다는 것은 적어도 한 집단이 다르다는 뜻이지, 어느 쌍이 다른지는 알려 주지 않는다. 사후분석의 선택지는 다음과 같다.
 
-**Exercise 1.**
-Three fertilizers are tested on plant growth (height in cm after 4 weeks):
+- **[Dunn 검정](dunn.md)** --- 평균순위 차이에 기반한 쌍별 비교로, 다중검정에 대한 $p$값 보정(Bonferroni, Holm, Benjamini-Hochberg)을 적용한다.
+- **쌍별 Mann-Whitney 검정** --- $\binom{k}{2}$개의 이표본 검정을 Bonferroni 보정과 함께 수행한다.
 
-- **Fertilizer A**: 15, 18, 20, 17
-- **Fertilizer B**: 22, 25, 19, 23
-- **Fertilizer C**: 12, 14, 16, 13
+!!! warning "전체검정을 건너뛰지 말 것"
+    사후 쌍별 비교는 Kruskal-Wallis 검정이 $H_0$을 기각한 뒤에만 수행해야 한다. 전체적인 차이를 먼저 확인하지 않고 쌍별 검정을 하면 집단별 오류율이 부풀려진다.
 
-**(a)** Combine all observations and assign ranks.
+## 요약
 
-**(b)** Compute the mean rank for each group.
+Kruskal-Wallis 검정은 순위합 접근을 $k \ge 2$개의 독립집단으로 확장하여 평균순위의 집단간 변동을 비교한다. 분포가 동일하다는 귀무가설 아래에서 $H$ 통계량은 근사적으로 $\chi^2_{k-1}$ 분포를 따른다. 정규성 아래 일원분산분석 대비 ARE $3/\pi \approx 0.955$를 달성하며, 비정규 조건에서는 훨씬 더 강력할 수 있다. $H$가 유의하면 [Dunn 검정](dunn.md) 같은 사후절차로 어느 쌍이 다른지 밝힌다.
 
-**(c)** The Kruskal-Wallis test statistic is:
+## 연습문제
+
+**연습문제 1.**
+세 비료를 식물 생장(4주 후 키, cm)에 대해 시험했다.
+
+- **비료 A**: 15, 18, 20, 17
+- **비료 B**: 22, 25, 19, 23
+- **비료 C**: 12, 14, 16, 13
+
+**(a)** 모든 관측값을 합쳐 순위를 배정하라.
+
+**(b)** 각 집단의 평균순위를 계산하라.
+
+**(c)** Kruskal-Wallis 검정통계량
 
 $$
 H = \frac{12}{N(N+1)} \sum_{i=1}^{k} n_i (\bar{R}_i - \bar{R})^2
 $$
 
-where $N$ is the total sample size, $n_i$ is the size of group $i$, $\bar{R}_i$ is the mean rank for group $i$, and $\bar{R} = (N+1)/2$. Compute $H$.
+을 계산하라. 여기서 $N$은 전체 표본크기, $n_i$는 집단 $i$의 크기, $\bar{R}_i$는 집단 $i$의 평균순위, $\bar{R} = (N+1)/2$이다.
 
-**(d)** Under $H_0$, $H$ approximately follows a $\chi^2$ distribution with $k - 1$ degrees of freedom. Find the p-value and state your conclusion at $\alpha = 0.05$.
+**(d)** $H_0$ 아래에서 $H$는 근사적으로 자유도 $k - 1$인 $\chi^2$ 분포를 따른다. $p$값을 구하고 $\alpha = 0.05$에서 결론을 내려라.
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
 
-    **(a)** Combined and sorted with ranks:
+    **(a)** 합쳐서 정렬하고 순위를 매기면
 
-    | Value | Group | Rank |
+    | 값 | 집단 | 순위 |
     |:---:|:---:|:---:|
     | 12 | C | 1 |
     | 13 | C | 2 |
@@ -176,7 +196,7 @@ where $N$ is the total sample size, $n_i$ is the size of group $i$, $\bar{R}_i$ 
     | 23 | B | 11 |
     | 25 | B | 12 |
 
-    **(b)** Mean ranks:
+    **(b)** 평균순위:
 
     $$
     \bar{R}_A = \frac{4 + 6 + 7 + 9}{4} = \frac{26}{4} = 6.5
@@ -190,7 +210,7 @@ where $N$ is the total sample size, $n_i$ is the size of group $i$, $\bar{R}_i$ 
     \bar{R}_C = \frac{1 + 2 + 3 + 5}{4} = \frac{11}{4} = 2.75
     $$
 
-    The overall mean rank is $\bar{R} = (N+1)/2 = 13/2 = 6.5$.
+    전체 평균순위는 $\bar{R} = (N+1)/2 = 13/2 = 6.5$이다.
 
     **(c)**
 
@@ -203,11 +223,153 @@ where $N$ is the total sample size, $n_i$ is the size of group $i$, $\bar{R}_i$ 
     $$
 
     $$
-    = \frac{1}{13}\left[4(0) + 4(14.0625) + 4(14.0625)\right] = \frac{1}{13}(0 + 56.25 + 56.25) = \frac{112.5}{13} \approx 8.654
+    = \frac{1}{13}\left[0 + 4(14.0625) + 4(14.0625)\right] = \frac{112.5}{13} \approx 8.654
     $$
 
-    **(d)** Under $H_0$, $H \sim \chi^2(k-1) = \chi^2(2)$. The critical value for $\chi^2(2)$ at $\alpha = 0.05$ is 5.991.
+    **(d)** $H_0$ 아래에서 $H \sim \chi^2(k-1) = \chi^2(2)$이다. $\alpha = 0.05$에서 $\chi^2(2)$의 임계값은 $5.991$이다.
 
-    Since $H = 8.654 > 5.991$, we reject $H_0$. The p-value is $P(\chi^2(2) > 8.654) \approx 0.013$.
+    $H = 8.654 > 5.991$이므로 $H_0$을 기각한다. $p$값은 $P(\chi^2(2) > 8.654) = 0.0132$이다.
 
-    There is significant evidence that the three fertilizers produce different growth distributions. Post-hoc analysis (e.g., Dunn's test) would be needed to determine which pairs differ.
+    ```python
+    from scipy import stats
+    a = [15, 18, 20, 17]; b = [22, 25, 19, 23]; c = [12, 14, 16, 13]
+    print(stats.kruskal(a, b, c))          # H=8.6538, p=0.013208
+    print(stats.f_oneway(a, b, c))         # F=16.130, p=0.001057
+    ```
+
+    세 비료가 서로 다른 생장 분포를 낸다는 유의한 증거가 있다. 어느 쌍이 다른지는 사후분석(예: Dunn 검정)으로 판정해야 한다.
+
+    참고로 일원분산분석은 $p = 0.00106$으로 훨씬 작은 값을 준다. 이 자료가 정규성과 등분산성을 잘 만족하고 $n_i = 4$로 매우 작아, 순위로 정보를 버리는 대가가 크게 나타난 경우이다.
+
+---
+
+**연습문제 2.**
+$k = 3$이고 $n_i = 4$인 이 예제에서 $\chi^2$ 근사가 얼마나 믿을 만한가? 정확 순열분포를 열거하여 확인하라.
+
+??? success "연습문제 2 풀이"
+    $12$개 순위를 세 집단에 $4$개씩 나누는 방법은 $\binom{12}{4}\binom{8}{4} = 495 \times 70 = 34{,}650$가지이다. 모두 열거할 수 있다.
+
+    ```python
+    import numpy as np, itertools
+    from scipy import stats
+
+    N, k, n = 12, 3, 4
+    ranks = np.arange(1, N + 1)
+    Rbar = (N + 1) / 2
+    Hs = []
+    for g1 in itertools.combinations(range(N), n):
+        rest = [i for i in range(N) if i not in g1]
+        for g2 in itertools.combinations(rest, n):
+            g3 = [i for i in rest if i not in g2]
+            means = [ranks[list(g)].mean() for g in (g1, g2, g3)]
+            Hs.append(12 / (N * (N + 1)) * n * sum((m - Rbar) ** 2 for m in means))
+    Hs = np.array(Hs)
+    print(len(Hs))                                  # 34650
+    print("exact p:", (Hs >= 8.6538 - 1e-9).mean()) # 0.00139
+    print("chi2  p:", stats.chi2.sf(8.6538, 2))     # 0.01321
+    ```
+
+    | 방법 | $p$값 |
+    |:---|---:|
+    | 정확 (열거) | $0.00139$ |
+    | $\chi^2_2$ 근사 | $0.01321$ |
+
+    $\chi^2$ 근사가 정확값의 **9.5배**로 $p$값을 크게 과대평가한다. 즉 이 표본크기에서 근사는 심하게 **보수적**이다.
+
+    이유는 $H$의 귀무분포가 아직 이산적이고 오른쪽으로 덜 치우쳐 있기 때문이다. $n_i \ge 5$라는 통상적 지침이 여기서 지켜지지 않았다.
+
+    다행히 이 자료에서는 두 값 모두 $0.05$ 아래여서 결론이 같다. 그러나 $p$가 $0.05$ 근처였다면 근사에 기대는 것이 위험했을 것이다.
+
+    **권고:** 집단당 관측값이 5개 미만이면 `scipy.stats.permutation_test`로 정확 또는 몬테카를로 $p$값을 구한다.
+
+---
+
+**연습문제 3.**
+Kruskal-Wallis 검정은 분포의 **모양이 같다**고 가정한다. 모양이 다르면 어떻게 되는가? 중앙값이 모두 같지만 왜도가 다른 세 집단을 만들어 제1종 오류율을 확인하라.
+
+??? success "연습문제 3 풀이"
+    중앙값이 모두 0인 세 분포를 만든다. 각각 오른쪽 치우침, 대칭, 왼쪽 치우침이다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+    rng = np.random.default_rng(0)
+    B = 2000
+
+    def sim(n):
+        rej = 0
+        for _ in range(B):
+            g1 = rng.exponential(1, n) - np.log(2)          # 오른쪽 치우침
+            g2 = rng.normal(0, 1, n)                        # 대칭
+            g3 = -(rng.exponential(1, n) - np.log(2))       # 왼쪽 치우침
+            rej += stats.kruskal(g1, g2, g3).pvalue < 0.05
+        return rej / B
+
+    for n in (10, 20, 50, 100):
+        print(n, sim(n))
+    ```
+
+    | 집단당 $n$ | 기각률 |
+    |---:|---:|
+    | 10 | 0.097 |
+    | 20 | 0.136 |
+    | 50 | 0.330 |
+    | 100 | 0.614 |
+
+    세 집단의 **중앙값이 모두 정확히 0**인데도 기각률이 명목수준의 두 배($n=10$)에서 12배($n=100$)까지 올라가고, $n$이 커질수록 **더 나빠진다**.
+
+    이유는 Kruskal-Wallis가 검정하는 것이 "중앙값이 같다"가 아니라 "분포가 같다"이기 때문이다. 평균순위는 중앙값이 아니라 $P(X_i > X_j)$ 형태의 양에 민감하다. 오른쪽으로 치우친 분포는 극단적으로 큰 값을 자주 내므로 합친 표본에서 높은 순위를 더 많이 차지한다.
+
+    구체적으로, 세 분포의 기대 평균순위를 계산해 보면 $g_1 > g_2 > g_3$ 순으로 갈리며, 이 차이가 표본이 커질수록 잡음에 비해 뚜렷해진다.
+
+    **실무적 함의:** "Kruskal-Wallis는 중앙값을 비교한다"는 흔한 설명은 **모양이 같을 때만** 옳다. 집단별 상자그림을 그려 모양이 눈에 띄게 다르면, 중앙값 비교가 목적일 때는 Mood 중앙값검정이나 중앙값의 붓스트랩 신뢰구간을 쓰는 편이 정직하다.
+
+---
+
+**연습문제 4.**
+Kruskal-Wallis $H$의 두 표현
+
+$$
+\frac{12}{N(N+1)} \sum_i \frac{R_i^2}{n_i} - 3(N+1)
+\quad\text{와}\quad
+\frac{12}{N(N+1)} \sum_i n_i \left(\bar{R}_i - \frac{N+1}{2}\right)^2
+$$
+
+이 같음을 보여라.
+
+??? success "연습문제 4 풀이"
+    두 번째 식을 전개한다. $\bar{R} = (N+1)/2$이고 $\bar{R}_i = R_i/n_i$이므로
+
+    $$
+    \sum_i n_i (\bar{R}_i - \bar{R})^2
+    = \sum_i n_i \bar{R}_i^2 - 2\bar{R}\sum_i n_i \bar{R}_i + \bar{R}^2 \sum_i n_i
+    $$
+
+    각 항을 정리하자.
+
+    - $\sum_i n_i \bar{R}_i^2 = \sum_i n_i \frac{R_i^2}{n_i^2} = \sum_i \frac{R_i^2}{n_i}$
+    - $\sum_i n_i \bar{R}_i = \sum_i R_i = \frac{N(N+1)}{2}$ (전체 순위합)
+    - $\sum_i n_i = N$
+
+    따라서
+
+    $$
+    \sum_i n_i (\bar{R}_i - \bar{R})^2
+    = \sum_i \frac{R_i^2}{n_i} - 2 \cdot \frac{N+1}{2} \cdot \frac{N(N+1)}{2} + \left(\frac{N+1}{2}\right)^2 N
+    $$
+
+    $$
+    = \sum_i \frac{R_i^2}{n_i} - \frac{N(N+1)^2}{2} + \frac{N(N+1)^2}{4}
+    = \sum_i \frac{R_i^2}{n_i} - \frac{N(N+1)^2}{4}
+    $$
+
+    이제 앞의 계수 $\frac{12}{N(N+1)}$을 곱하면
+
+    $$
+    \frac{12}{N(N+1)}\sum_i \frac{R_i^2}{n_i} - \frac{12}{N(N+1)} \cdot \frac{N(N+1)^2}{4}
+    = \frac{12}{N(N+1)}\sum_i \frac{R_i^2}{n_i} - 3(N+1) \quad \square
+    $$
+
+    두 표현이 각각 유용한 지점이 다르다. 첫 번째는 손계산에 편하고(순위합만 있으면 된다), 두 번째는 $H$가 무엇을 재는지 --- **평균순위의 집단간 변동** --- 를 드러낸다.
+
+    두 번째 표현은 분산분석과의 유비도 명확히 한다. 일원분산분석의 $F$ 통계량이 집단간 제곱합을 집단내 제곱합으로 나눈 것이라면, $H$는 순위의 집단간 제곱합을 순위의 **전체** 분산 $N(N+1)/12$로 나눈 것이다. 순위의 전체 분산은 자료와 무관하게 고정되어 있으므로 집단내 변동을 따로 추정할 필요가 없고, 이것이 $H$가 분포무관인 이유이다.

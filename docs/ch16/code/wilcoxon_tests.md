@@ -1,48 +1,46 @@
-# Wilcoxon Tests
+# Wilcoxon 검정
 
-## Overview
+## 개요
 
-The **Wilcoxon tests** are a family of rank-based nonparametric procedures that use the
-ordinal information in the data without assuming a specific parametric distribution. The two
-most important members are the **Wilcoxon signed-rank test** for paired or one-sample
-problems and the **Wilcoxon rank-sum test** (equivalent to the Mann--Whitney $U$ test) for
-comparing two independent samples. Both tests are more powerful than the sign test when the
-underlying distributions are symmetric, yet remain valid under much weaker conditions than
-their parametric counterparts.
+**Wilcoxon 검정**은 특정 모수적 분포를 가정하지 않고 자료의 순서 정보를 쓰는
+순위 기반 비모수 절차의 계열이다. 가장 중요한 두 구성원은 대응 또는 일표본 문제를 위한
+**Wilcoxon 부호순위검정**과, 독립인 두 표본을 비교하기 위한
+**Wilcoxon 순위합검정**(Mann--Whitney $U$ 검정과 동치)이다. 두 검정 모두 밑에 깔린 분포가
+대칭일 때 부호검정보다 강력하면서도, 모수적 대응물보다 훨씬 약한 조건에서 타당하다.
 
-## Wilcoxon Signed-Rank Test
+## Wilcoxon 부호순위검정
 
-### Setup
+### 설정
 
-Given $n$ paired observations $(X_i, Y_i)$, form the differences $D_i = X_i - Y_i$.
-Exclude any ties ($D_i = 0$), leaving $n'$ nonzero differences.
+$n$개의 대응 관측값 $(X_i, Y_i)$에서 차이 $D_i = X_i - Y_i$를 만든다.
+동점($D_i = 0$)을 제외하면 0이 아닌 차이가 $n'$개 남는다.
 
-1. Rank the absolute values $|D_1|, |D_2|, \dots, |D_{n'}|$ from $1$ to $n'$.
-2. Attach the sign of $D_i$ to each rank, producing **signed ranks**
-   $R_i^{+} = \operatorname{rank}(|D_i|) \cdot \operatorname{sgn}(D_i)$.
-3. Compute the test statistic
+1. 절댓값 $|D_1|, |D_2|, \dots, |D_{n'}|$에 $1$부터 $n'$까지 순위를 매긴다.
+2. 각 순위에 $D_i$의 부호를 붙여 **부호순위**
+   $R_i^{+} = \operatorname{rank}(|D_i|) \cdot \operatorname{sgn}(D_i)$를 만든다.
+3. 검정통계량을 계산한다.
 
 $$
 W^{+} = \sum_{i:\, D_i > 0} \operatorname{rank}(|D_i|).
 $$
 
-Under $H_0{:}\;\text{median}(D) = 0$ with symmetric differences, each signed rank is
-equally likely to be positive or negative, so
+차이가 대칭인 $H_0{:}\;\text{median}(D) = 0$ 아래에서 각 부호순위가 양수일 확률과
+음수일 확률이 같으므로
 
 $$
 \operatorname{E}[W^{+}] = \frac{n'(n'+1)}{4}, \qquad
 \operatorname{Var}(W^{+}) = \frac{n'(n'+1)(2n'+1)}{24}.
 $$
 
-The standardized statistic
+표준화된 통계량
 
 $$
 Z = \frac{W^{+} - \operatorname{E}[W^{+}]}{\sqrt{\operatorname{Var}(W^{+})}}
 $$
 
-is approximately standard normal for moderate $n'$.
+은 $n'$이 중간 이상이면 근사적으로 표준정규를 따른다.
 
-### Implementation
+### 구현
 
 ```python
 import numpy as np
@@ -57,80 +55,96 @@ paired_data = np.array([
 statistic, p_value = stats.wilcoxon(
     paired_data[:, 0], paired_data[:, 1],
     alternative="two-sided",
-    mode="approx",
+    method="approx",       # 옛 SciPy의 mode= 는 제거되었다
     zero_method="pratt"
 )
-print(f"W+ = {statistic}, p = {p_value:.4f}")
+print(f"W = {statistic}, p = {p_value:.4f}")
+# W = 11.0, p = 0.0086
 ```
 
-## Wilcoxon Rank-Sum Test
+!!! warning "`mode=`가 아니라 `method=`이다"
+    SciPy 1.9에서 `wilcoxon`의 `mode` 인자가 `method`로 이름이 바뀌었고 옛 이름은
+    이후 제거되었다. 또 반환되는 `statistic`은 $W^+$가 아니라
+    $\min(W^+, W^-)$임에 유의하라. 이 자료에서는 $W^+ = 103$, $W^- = 11$이므로
+    $11$이 반환된다.
 
-### Setup
+## Wilcoxon 순위합검정
 
-Given two independent samples $X_1, \dots, X_m$ and $Y_1, \dots, Y_n$, pool and rank all
-$N = m + n$ observations together. Let $W$ be the sum of ranks assigned to the first sample.
+### 설정
 
-Under $H_0$: the two populations have identical distributions,
+독립인 두 표본 $X_1, \dots, X_m$과 $Y_1, \dots, Y_n$을 합쳐 $N = m + n$개 관측값 전체에
+순위를 매긴다. 첫 번째 표본에 배정된 순위의 합을 $W$라 하자.
+
+두 모집단의 분포가 동일하다는 $H_0$ 아래에서
 
 $$
 \operatorname{E}[W] = \frac{m(N + 1)}{2}, \qquad
 \operatorname{Var}(W) = \frac{m\,n\,(N + 1)}{12}.
 $$
 
-The standardized rank-sum statistic
+표준화된 순위합통계량
 
 $$
 Z = \frac{W - \operatorname{E}[W]}{\sqrt{\operatorname{Var}(W)}}
 $$
 
-is asymptotically standard normal.
+은 점근적으로 표준정규를 따른다.
 
-### Implementation
+### 구현
 
 ```python
 from scipy import stats
 
-x = [93, 70, 81, 65, 79, 54, 94, 91, 77, 65, 95, 89, 78, 80, 76]
-y = [76, 72, 75, 68, 65, 54, 88, 81, 65, 57, 86, 87, 78, 77, 76]
+# 서로 다른 두 집단에서 독립적으로 얻은 관측값이어야 한다
+a = [12, 15, 18, 22, 25]
+b = [8, 10, 14, 19, 21, 24]
 
-statistic, p_value = stats.ranksums(x, y, alternative="two-sided")
+statistic, p_value = stats.ranksums(a, b, alternative="two-sided")
 print(f"Z = {statistic:.4f}, p = {p_value:.4f}")
+# Z = 0.7303, p = 0.4652
 ```
 
-## Relationship to the Mann--Whitney U
+!!! danger "대응자료에 순위합검정을 쓰지 말 것"
+    부호순위검정 예제의 학생 자료를 두 열로 쪼개어 `ranksums`에 넣으면
+    $Z = 1.472$, $p = 0.141$이 나온다. 부호순위검정의 $p = 0.0086$과 비교하면
+    16배이다.
 
-The Mann--Whitney $U$ statistic counts the number of pairs $(X_i, Y_j)$ where $X_i > Y_j$.
-It is related to the rank-sum by
+    이는 **대응 구조를 버렸기 때문**이며, 오류이다. 같은 학생의 처치 전 점수와
+    처치 후 점수는 독립이 아니다. 대응자료에는 반드시 부호순위검정이나
+    대응 $t$ 검정을 써야 한다.
+
+## Mann--Whitney U와의 관계
+
+Mann--Whitney $U$ 통계량은 $X_i > Y_j$인 쌍 $(X_i, Y_j)$의 개수이다. 순위합과는
 
 $$
-U = W - \frac{m(m+1)}{2},
+U = W - \frac{m(m+1)}{2}
 $$
 
-so the two tests are algebraically equivalent and always produce the same $p$-value.
+로 연결되므로 두 검정은 대수적으로 동치이고 언제나 같은 $p$값을 낸다.
 
-## Interpretation
+## 해석
 
-| Test | Null Hypothesis | Key Assumption |
+| 검정 | 귀무가설 | 핵심 가정 |
 |---|---|---|
-| Signed-rank | Median difference is zero | Differences are **symmetric** about zero |
-| Rank-sum | Two populations are identical | Observations are **independent** across groups |
+| 부호순위 | 중앙값 차이가 0 | 차이가 0을 중심으로 **대칭** |
+| 순위합 | 두 모집단이 동일 | 관측값이 집단 간 **독립** |
 
-- **Signed-rank vs. sign test**: The signed-rank test uses both the sign and the rank of each
-  difference, giving it greater power when the symmetry assumption holds.
-- **Rank-sum vs. two-sample $t$-test**: The rank-sum test is robust to outliers and
-  heavy-tailed distributions but slightly less powerful than the $t$-test under exact
-  normality.
+- **부호순위 대 부호검정**: 부호순위검정은 각 차이의 부호와 순위를 모두 쓰므로,
+  대칭성 가정이 성립할 때 검정력이 더 높다.
+- **순위합 대 이표본 $t$ 검정**: 순위합검정은 이상치와 두꺼운 꼬리에 로버스트하지만
+  정확히 정규분포일 때는 $t$ 검정보다 약간 덜 강력하다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.** Six subjects produce the following paired differences:
-$D = (4, -1, 7, 3, -2, 5)$. Compute the signed-rank statistic $W^+$ by hand.
+**연습문제 1.** 피험자 6명의 대응차이가
+$D = (4, -1, 7, 3, -2, 5)$이다. 부호순위통계량 $W^+$를 손으로 계산하라.
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
 
-    Rank the absolute values:
+    절댓값에 순위를 매기면
 
-    | $D_i$ | $\lvert D_i \rvert$ | Rank | Sign |
+    | $D_i$ | $\lvert D_i \rvert$ | 순위 | 부호 |
     |---|---|---|---|
     | $-1$ | $1$ | $1$ | $-$ |
     | $-2$ | $2$ | $2$ | $-$ |
@@ -143,18 +157,50 @@ $D = (4, -1, 7, 3, -2, 5)$. Compute the signed-rank statistic $W^+$ by hand.
     W^+ = 3 + 4 + 5 + 6 = 18.
     $$
 
-    The maximum possible value is $6 \cdot 7 / 2 = 21$, so $W^+ = 18$ out of $21$
-    suggests a strong positive shift. $\square$
+    가능한 최댓값이 $6 \cdot 7 / 2 = 21$이므로 $21$ 중 $18$은 강한 양의 이동을
+    시사한다.
+
+    정확 $p$값을 손으로 세어 보자. $2^6 = 64$가지 부호 배정이 모두 동등하게 가능하고
+    $W^+ + W^- = 21$이다.
+
+    **단측** ($H_1$: 중앙값 $> 0$): $W^+ \ge 18$인 배정을 센다. $W^+ = 21 - (\text{음의 순위합})$
+    이므로 음의 순위합이 $3$ 이하인 부분집합을 세면 된다. $\varnothing$(합 0), $\{1\}$,
+    $\{2\}$, $\{3\}$, $\{1,2\}$의 **5개**이므로
+
+    $$
+    p_{\text{단측}} = \frac{5}{64} = 0.078125.
+    $$
+
+    **양측**: $\min(W^+, W^-) \le 3$인 배정을 센다. 대칭이므로 위의 5개와 그 여집합
+    5개를 합쳐 $10$개이고
+
+    $$
+    p_{\text{양측}} = \frac{10}{64} = 0.15625.
+    $$
+
+    ```python
+    import numpy as np
+    from scipy import stats
+    D = np.array([4, -1, 7, 3, -2, 5])
+    print(stats.wilcoxon(D, method='exact'))
+    # WilcoxonResult(statistic=3.0, pvalue=0.15625)
+    print(stats.wilcoxon(D, alternative='greater', method='exact').pvalue)
+    # 0.078125
+    ```
+
+    손계산과 SciPy가 정확히 일치한다. $n' = 6$에서 도달 가능한 최소 양측 $p$값이
+    $2/64 = 0.03125$이므로, 이 자료는 강한 양의 이동을 보이면서도
+    $\alpha = 0.05$에 이르지 못한다. $\square$
 
 ---
 
-**Exercise 2.** Show that $\operatorname{E}[W^+] = n'(n'+1)/4$ under $H_0$.
+**연습문제 2.** $H_0$ 아래에서 $\operatorname{E}[W^+] = n'(n'+1)/4$임을 보여라.
 
-??? success "Solution to Exercise 2"
+??? success "연습문제 2 풀이"
 
-    Under the null hypothesis, each difference $D_i$ is equally likely to be positive or
-    negative (by the symmetry assumption). Therefore the signed rank for observation $i$
-    with rank $r_i$ contributes $r_i$ to $W^+$ with probability $1/2$ and $0$ otherwise.
+    귀무가설(대칭성) 아래에서 각 차이 $D_i$는 양수일 확률과 음수일 확률이 같다.
+    따라서 순위 $r_i$를 갖는 관측값은 확률 $1/2$로 $r_i$를 $W^+$에 기여하고,
+    나머지 확률로 $0$을 기여한다.
 
     $$
     \operatorname{E}[W^+]
@@ -166,16 +212,20 @@ $D = (4, -1, 7, 3, -2, 5)$. Compute the signed-rank statistic $W^+$ by hand.
 
     $\square$
 
+    핵심은 $\{r_1, \ldots, r_{n'}\}$이 어떤 순서로 배정되든 **$1$부터 $n'$까지의
+    순열**이라는 점이다. 따라서 $\sum_i r_i = n'(n'+1)/2$가 자료와 무관하게 고정된다.
+    이것이 부호순위검정이 분포무관인 이유이다.
+
 ---
 
-**Exercise 3.** Two independent groups have the following values:
+**연습문제 3.** 독립인 두 집단의 값이 다음과 같다.
 
-- Group A: $12, 15, 18, 22, 25$
-- Group B: $8, 10, 14, 19, 21, 24$
+- 집단 A: $12, 15, 18, 22, 25$
+- 집단 B: $8, 10, 14, 19, 21, 24$
 
-Perform the Wilcoxon rank-sum test at $\alpha = 0.05$ using Python.
+$\alpha = 0.05$에서 Wilcoxon 순위합검정을 파이썬으로 수행하라.
 
-??? success "Solution to Exercise 3"
+??? success "연습문제 3 풀이"
 
     ```python
     from scipy import stats
@@ -183,65 +233,126 @@ Perform the Wilcoxon rank-sum test at $\alpha = 0.05$ using Python.
     a = [12, 15, 18, 22, 25]
     b = [8, 10, 14, 19, 21, 24]
 
-    stat, p = stats.ranksums(a, b)
-    print(f"Z = {stat:.4f}, p = {p:.4f}")
+    print(stats.ranksums(a, b))
+    # RanksumsResult(statistic=0.7303, pvalue=0.4652)
+    print(stats.mannwhitneyu(a, b, method='exact'))
+    # MannwhitneyuResult(statistic=19.0, pvalue=0.5368)
     ```
 
-    Pooling and ranking the 11 values: $8(1), 10(2), 12(3), 14(4), 15(5), 18(6),
-    19(7), 21(8), 22(9), 24(10), 25(11)$.
+    11개 값을 합쳐 순위를 매기면 $8(1), 10(2), 12(3), 14(4), 15(5), 18(6),
+    19(7), 21(8), 22(9), 24(10), 25(11)$이다.
 
-    Group A ranks: $3 + 5 + 6 + 9 + 11 = 34$.
-    Expected: $5 \cdot 12 / 2 = 30$.
+    집단 A의 순위합: $3 + 5 + 6 + 9 + 11 = 34$.
+    기댓값: $5 \cdot 12 / 2 = 30$. 분산: $5 \cdot 6 \cdot 12 / 12 = 30$.
 
-    The $p$-value is well above $0.05$, so we fail to reject the null hypothesis that
-    the two groups come from the same distribution. $\square$
+    $$
+    Z = \frac{34 - 30}{\sqrt{30}} = \frac{4}{5.477} = 0.730, \qquad p = 0.465.
+    $$
 
----
+    $p$값이 $0.05$보다 훨씬 크므로 두 집단이 같은 분포에서 왔다는 귀무가설을
+    기각하지 못한다.
 
-**Exercise 4.** Explain why the Wilcoxon signed-rank test requires the assumption that
-the distribution of differences is symmetric, while the sign test does not. Give an example
-of a distribution where this distinction matters.
-
-??? success "Solution to Exercise 4"
-
-    The signed-rank test assigns rank magnitudes to each observation and then uses the
-    symmetry assumption to conclude that each signed rank is equally likely to be positive
-    or negative *independently*. If the distribution of $|D_i|$ differs between positive
-    and negative differences (i.e., the distribution is skewed), the null distribution of
-    $W^+$ is no longer the one derived under symmetry.
-
-    The sign test only uses $\operatorname{sgn}(D_i)$, so it requires only that
-    $P(D_i > 0) = P(D_i < 0) = 0.5$ under $H_0$---a property that holds for any
-    continuous distribution with median zero, symmetric or not.
-
-    **Example**: Suppose $D_i$ follows an Exponential(1) distribution shifted to have
-    median zero: $D_i \sim \text{Exp}(1) - \ln 2$. This distribution is right-skewed.
-    The sign test is valid (the median is zero), but the signed-rank test's null
-    distribution is incorrect because the symmetry assumption fails. $\square$
+    정확 $p$값 $0.5368$이 정규근사값 $0.4652$보다 큼에 유의하라. $m = 5$, $n = 6$은
+    정규근사에 작다. 두 값 모두 기각하지 않으므로 결론은 같다. $\square$
 
 ---
 
-**Exercise 5.** Derive the relationship $U = W - m(m+1)/2$ between the Mann--Whitney $U$
-statistic and the Wilcoxon rank-sum $W$.
+**연습문제 4.** Wilcoxon 부호순위검정은 차이의 분포가 대칭이라는 가정을 요구하는데
+부호검정은 그렇지 않은 이유를 설명하라. 이 구별이 중요해지는 분포의 예를 들어라.
 
-??? success "Solution to Exercise 5"
+??? success "연습문제 4 풀이"
 
-    Let $R_1, R_2, \dots, R_m$ be the ranks of the $m$ observations from sample $X$ in
-    the combined ranking of all $N = m + n$ observations, so $W = \sum_{i=1}^{m} R_i$.
+    부호순위검정은 각 관측값에 순위 크기를 배정한 뒤, 대칭성 가정을 이용해 각
+    부호순위가 양수일 확률과 음수일 확률이 **독립적으로** 같다고 결론짓는다.
+    $|D_i|$의 분포가 양의 차이와 음의 차이에서 다르면(즉 분포가 치우쳐 있으면)
+    $W^+$의 귀무분포가 대칭 아래에서 유도한 것과 달라진다.
 
-    The Mann--Whitney $U$ counts pairs:
+    부호검정은 $\operatorname{sgn}(D_i)$만 쓰므로 $H_0$ 아래에서
+    $P(D_i > 0) = P(D_i < 0) = 0.5$만 요구한다. 이는 중앙값이 0인 임의의 연속분포에서
+    대칭 여부와 무관하게 성립한다.
+
+    **예:** $D_i$가 중앙값 0이 되도록 이동한 지수분포
+    $D_i \sim \text{Exp}(1) - \ln 2$를 따른다고 하자. 이 분포는 오른쪽으로 치우쳐 있다.
+    부호검정은 타당하지만(중앙값이 0이다) 부호순위검정의 귀무분포는 대칭성 가정이
+    깨져 옳지 않다.
+
+    [Wilcoxon 부호순위검정](../one_sample_nonparametric/wilcoxon_signed_rank.md)
+    연습문제 2에서 이 상황의 제1종 오류율을 모의실험했다. $n = 100$에서
+    부호순위검정의 기각률이 $0.376$까지 올라가는 반면 부호검정은 $0.035$를
+    유지한다. $\square$
+
+---
+
+**연습문제 5.** Mann--Whitney $U$ 통계량과 Wilcoxon 순위합 $W$ 사이의 관계
+$U = W - m(m+1)/2$를 유도하라.
+
+??? success "연습문제 5 풀이"
+
+    표본 $X$의 관측값을 **정렬하여** $X_{(1)} < X_{(2)} < \cdots < X_{(m)}$이라 하고,
+    $N = m + n$개 전체 순위에서 $X_{(i)}$의 순위를 $R_{(i)}$라 하자.
+    $W = \sum_{i=1}^{m} R_{(i)}$이다.
+
+    Mann--Whitney $U$는 쌍을 센다.
 
     $$
     U = \sum_{i=1}^{m} \sum_{j=1}^{n} \mathbf{1}[X_i > Y_j].
     $$
 
-    For a fixed $X_i$ with rank $R_i$ among all $N$ observations, the number of
-    $Y_j$ values smaller than $X_i$ equals the number of observations ranked below
-    $R_i$ that come from sample $Y$, which is $R_i - (\text{number of } X\text{'s ranked}
-    \leq R_i)$. Summing over all $X_i$:
+    $X_{(i)}$ 하나를 고정하면 $R_{(i)}$는 $X_{(i)}$ 이하인 관측값의 개수이다.
+    이는 두 부분으로 나뉜다.
+
+    - 표본 $X$ 안에서 $X_{(i)}$ 이하인 것: 정렬했으므로 정확히 $i$개(자신 포함).
+    - 표본 $Y$ 안에서 $X_{(i)}$보다 작은 것: $c_i$개.
+
+    따라서 $R_{(i)} = i + c_i$이고 $c_i = R_{(i)} - i$이다. 모든 $i$에 대해 합하면
 
     $$
-    U = \sum_{i=1}^{m} \bigl(R_i - i\bigr) = W - \sum_{i=1}^{m} i = W - \frac{m(m+1)}{2}.
+    U = \sum_{i=1}^{m} c_i = \sum_{i=1}^{m} \bigl(R_{(i)} - i\bigr)
+      = W - \sum_{i=1}^{m} i = W - \frac{m(m+1)}{2}.
     $$
 
     $\square$
+
+    **정렬이 필수임에 유의하라.** $R_i$를 원래 순서대로 두고 $\sum_i (R_i - i)$를
+    계산해도 합은 같지만, 각 항 $R_i - i$가 "그보다 작은 $Y$의 개수"라는 의미를
+    갖지 않는다. 총합만 우연히 일치하는 것이다.
+
+---
+
+**연습문제 6.** `stats.wilcoxon`이 반환하는 `statistic`이 $W^+$가 아니라
+$\min(W^+, W^-)$임을 확인하고, `alternative`를 바꾸면 무엇이 달라지는지 조사하라.
+
+??? success "연습문제 6 풀이"
+
+    ```python
+    import numpy as np
+    from scipy import stats
+    D = np.array([4, -1, 7, 3, -2, 5])
+    r = stats.rankdata(np.abs(D))
+    print("W+ =", r[D > 0].sum(), " W- =", r[D < 0].sum())   # 18.0  3.0
+
+    for alt in ("two-sided", "greater", "less"):
+        res = stats.wilcoxon(D, alternative=alt, method='exact')
+        print(alt, res.statistic, round(res.pvalue, 5))
+    ```
+
+    출력:
+
+    | `alternative` | `statistic` | $p$값 |
+    |:---|---:|---:|
+    | `"two-sided"` | $3.0$ | $0.15625$ |
+    | `"greater"` | $18.0$ | $0.07813$ |
+    | `"less"` | $18.0$ | $0.95313$ |
+
+    반환되는 `statistic`이 `alternative`에 따라 **달라진다**.
+
+    - `"two-sided"`: $\min(W^+, W^-) = 3$
+    - `"greater"`, `"less"`: $W^+ = 18$
+
+    이는 SciPy의 문서화된 동작이지만 혼동을 부르기 쉽다. 논문에 통계량을 보고할
+    때는 어느 쪽인지 명시하거나, 아예 $W^+$와 $W^-$를 직접 계산하여 함께 보고하는
+    편이 안전하다.
+
+    단측 $p$값 $0.07813 = 5/64$와 $0.95313 = 61/64$의 합이 $1$을 넘는다는 점도
+    유의하라($66/64$). 이산분포에서 $P(W^+ \ge 18)$과 $P(W^+ \le 18)$이 모두
+    $P(W^+ = 18)$을 포함하기 때문이다.

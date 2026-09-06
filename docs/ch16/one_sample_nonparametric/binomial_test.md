@@ -1,145 +1,255 @@
-# Binomial Test
+# 이항검정
 
-The **binomial test** is an exact non-parametric test for whether the probability of "success" in a sequence of independent Bernoulli trials equals a hypothesized value $p_0$. It is the most general member of the sign-test family: the [sign test](sign_test.md) is the special case with $p_0 = 0.5$, while the binomial test allows testing any proportion.
+**이항검정**은 독립인 Bernoulli 시행열에서 "성공" 확률이 가설값 $p_0$과 같은지를 검정하는 정확 비모수 검정이다. 부호검정 계열에서 가장 일반적인 구성원으로, [부호검정](sign_test.md)은 $p_0 = 0.5$인 특수한 경우이고 이항검정은 임의의 비율을 검정할 수 있다.
 
-Because the test is based directly on the binomial distribution, it produces exact $p$-values without relying on normal approximations, making it especially appropriate for small samples.
+이 검정은 이항분포에 직접 기반하므로 정규근사에 기대지 않고 정확 $p$값을 산출한다. 그래서 소표본에 특히 적합하다.
 
-## Hypotheses
+## 가설
 
-Let $X_1, X_2, \ldots, X_n$ be independent Bernoulli trials with success probability $p$. The hypothesized value is $p_0$.
+$X_1, X_2, \ldots, X_n$을 성공확률 $p$인 독립 Bernoulli 시행이라 하자. 가설값은 $p_0$이다.
 
-| Test type | $H_0$ | $H_a$ |
+| 검정 유형 | $H_0$ | $H_a$ |
 |:----------|:------|:------|
-| Two-sided | $p = p_0$ | $p \ne p_0$ |
-| Left-tailed | $p = p_0$ | $p < p_0$ |
-| Right-tailed | $p = p_0$ | $p > p_0$ |
+| 양측 | $p = p_0$ | $p \ne p_0$ |
+| 왼쪽 꼬리 | $p = p_0$ | $p < p_0$ |
+| 오른쪽 꼬리 | $p = p_0$ | $p > p_0$ |
 
-## Test Statistic
+## 검정통계량
 
-The test statistic is the observed number of successes:
+검정통계량은 관측된 성공 횟수이다.
 
 $$
 S = \sum_{i=1}^{n} X_i
 $$
 
-Under $H_0$,
+$H_0$ 아래에서
 
 $$
 S \sim \text{Binomial}(n, p_0)
 $$
 
-No further transformation or standardization is needed because the exact distribution is fully known.
+정확분포를 완전히 알고 있으므로 추가적인 변환이나 표준화가 필요 없다.
 
-## Exact p-Values
+## 정확 p값
 
-**Right-tailed test** ($H_a \colon p > p_0$):
-
-$$
-p\text{-value} = P(S \ge s_{\text{obs}}) = \sum_{k=s_{\text{obs}}}^{n} \binom{n}{k} p_0^k (1 - p_0)^{n-k}
-$$
-
-**Left-tailed test** ($H_a \colon p < p_0$):
+**오른쪽 꼬리 검정** ($H_a \colon p > p_0$):
 
 $$
-p\text{-value} = P(S \le s_{\text{obs}}) = \sum_{k=0}^{s_{\text{obs}}} \binom{n}{k} p_0^k (1 - p_0)^{n-k}
+p\text{값} = P(S \ge s_{\text{obs}}) = \sum_{k=s_{\text{obs}}}^{n} \binom{n}{k} p_0^k (1 - p_0)^{n-k}
 $$
 
-**Two-sided test** ($H_a \colon p \ne p_0$):
+**왼쪽 꼬리 검정** ($H_a \colon p < p_0$):
 
 $$
-p\text{-value} = 2 \min\!\bigl(P(S \le s_{\text{obs}}), \; P(S \ge s_{\text{obs}})\bigr)
+p\text{값} = P(S \le s_{\text{obs}}) = \sum_{k=0}^{s_{\text{obs}}} \binom{n}{k} p_0^k (1 - p_0)^{n-k}
 $$
 
-capped at 1. An alternative definition sums the probabilities of all outcomes at least as unlikely as the observed one.
+**양측검정** ($H_a \colon p \ne p_0$):
 
-!!! tip "No need for a normal approximation"
-    Unlike many non-parametric tests that rely on large-sample normal approximations, the binomial test computes $p$-values exactly for any sample size. This makes it the preferred choice for small samples when testing a single proportion.
+$$
+p\text{값} = 2 \min\!\bigl(P(S \le s_{\text{obs}}), \; P(S \ge s_{\text{obs}})\bigr)
+$$
 
-## Worked Example
+이며 1을 넘으면 1로 자른다. 관측값만큼 또는 그보다 더 가능성이 낮은 모든 결과의 확률을 더하는 정의도 쓰인다.
 
-A pharmaceutical company claims that its drug is effective in 70% of patients ($p_0 = 0.70$). In a clinical trial with $n = 20$ patients, only $s_{\text{obs}} = 10$ respond. Test whether the true response rate is less than 70%.
+!!! warning "두 정의는 같은 값을 주지 않는다"
+    $p_0 \ne 0.5$이면 이항분포가 비대칭이라 두 정의가 갈라진다. SciPy의 `binomtest`는 **두 번째** 정의(가능성이 낮은 결과들의 확률합)를 쓴다. 예를 들어 $n = 20$, $s = 10$, $p_0 = 0.7$에서 SciPy는 $0.0834$를 주는 반면 $2\min(\cdot)$ 규칙은 $0.0959$를 준다. 어느 쪽도 틀리지 않지만, 결과를 보고할 때 어느 정의를 썼는지 밝혀야 한다.
 
-**Hypotheses:** $H_0 \colon p = 0.70$ vs $H_a \colon p < 0.70$.
+!!! tip "정규근사가 필요 없다"
+    대표본 정규근사에 기대는 많은 비모수 검정과 달리 이항검정은 어떤 표본크기에서도 $p$값을 정확히 계산한다. 그래서 단일 비율을 검정하는 소표본 문제에서 우선적인 선택이다.
 
-**$p$-value (left-tailed):**
+## 예제
+
+한 제약회사가 자사 약이 환자의 70%에게 효과가 있다고 주장한다($p_0 = 0.70$). 환자 $n = 20$명을 대상으로 한 임상시험에서 $s_{\text{obs}} = 10$명만 반응했다. 참인 반응률이 70%보다 낮은지 검정하라.
+
+**가설:** $H_0 \colon p = 0.70$ 대 $H_a \colon p < 0.70$.
+
+**$p$값 (왼쪽 꼬리):**
 
 $$
 p = P(S \le 10) = \sum_{k=0}^{10} \binom{20}{k} (0.70)^k (0.30)^{20-k}
 $$
 
-Computing this sum (or using software):
+이 합을 계산하면(또는 소프트웨어를 쓰면)
 
 $$
 p \approx 0.0480
 $$
 
-At $\alpha = 0.05$, we reject $H_0$. There is evidence that the true response rate is below 70%.
+$\alpha = 0.05$에서 $H_0$을 기각한다. 참인 반응률이 70% 아래라는 증거가 있다.
 
-??? example "Exact computation detail"
-    The individual terms are $P(S = k) = \binom{20}{k}(0.7)^k(0.3)^{20-k}$ for $k = 0, 1, \ldots, 10$. The cumulative sum can be obtained in Python via `scipy.stats.binom.cdf(10, 20, 0.70)`, which returns approximately 0.048.
+??? example "정확 계산 상세"
+    개별 항은 $k = 0, 1, \ldots, 10$에 대해 $P(S = k) = \binom{20}{k}(0.7)^k(0.3)^{20-k}$이다. 누적합은 파이썬에서 `scipy.stats.binom.cdf(10, 20, 0.70)`로 얻을 수 있으며 약 $0.048$을 반환한다.
 
-## Relationship to the Sign Test
+## 부호검정과의 관계
 
-The sign test for the median is a binomial test with $p_0 = 0.5$. When testing $H_0 \colon \text{median} = m_0$, each observation is coded as a success ($X_i > m_0$) or failure ($X_i < m_0$), with ties excluded. Under $H_0$, the number of successes follows $\text{Binomial}(n, 0.5)$.
+중앙값에 대한 부호검정은 $p_0 = 0.5$인 이항검정이다. $H_0 \colon \text{중앙값} = m_0$을 검정할 때 각 관측값을 성공($X_i > m_0$) 또는 실패($X_i < m_0$)로 부호화하고 동점은 제외한다. $H_0$ 아래에서 성공 횟수는 $\text{Binomial}(n, 0.5)$를 따른다.
 
-The binomial test generalizes this by allowing any $p_0$, which is useful when:
+이항검정은 임의의 $p_0$을 허용하여 이를 일반화한다. 다음 상황에서 유용하다.
 
-- Testing whether a treatment has a specific success rate (not necessarily 50%).
-- Testing whether the proportion of values exceeding a threshold matches a known baseline.
+- 처치가 특정한(반드시 50%는 아닌) 성공률을 갖는지 검정할 때.
+- 어떤 임계값을 넘는 값의 비율이 알려진 기준선과 일치하는지 검정할 때.
 
-## Normal Approximation for Large Samples
+## 대표본 정규근사
 
-For large $n$, the exact binomial computation can be replaced by the normal approximation. The standardized statistic is
+$n$이 크면 정확 이항 계산을 정규근사로 대체할 수 있다. 표준화된 통계량은
 
 $$
 Z = \frac{\hat{p} - p_0}{\sqrt{p_0(1 - p_0)/n}}
 $$
 
-where $\hat{p} = S/n$ is the sample proportion. This approximation is reliable when both $np_0 \ge 5$ and $n(1 - p_0) \ge 5$.
+이며 $\hat{p} = S/n$은 표본비율이다. 이 근사는 $np_0 \ge 5$이고 $n(1 - p_0) \ge 5$일 때 믿을 만하다.
 
-## Confidence Interval for p
+## p에 대한 신뢰구간
 
-The binomial test naturally yields a confidence interval for the true proportion $p$. The **Clopper-Pearson** exact confidence interval inverts the two one-sided binomial tests:
+이항검정에서 참인 비율 $p$에 대한 신뢰구간이 자연스럽게 따라 나온다. **Clopper-Pearson** 정확 신뢰구간은 두 개의 단측 이항검정을 역전시켜 얻는다.
 
 $$
 \text{CI}_{1-\alpha} = \bigl(p_L, \; p_U\bigr)
 $$
 
-where $p_L$ and $p_U$ are the values of $p$ for which the observed result lies at the boundary of significance. This interval has guaranteed coverage of at least $1 - \alpha$, though it can be conservative.
+여기서 $p_L$과 $p_U$는 관측된 결과가 유의성의 경계에 놓이게 하는 $p$의 값이다. 이 구간은 최소 $1 - \alpha$의 포함확률을 보장하지만 보수적일 수 있다.
 
-## Summary
+## 요약
 
-The binomial test provides exact inference for a population proportion without distributional assumptions beyond independence. It generalizes the sign test from $p_0 = 0.5$ to arbitrary hypothesized proportions and is particularly valuable for small samples where normal approximations are unreliable. For large samples, the standard normal approximation to the binomial provides a computationally simpler alternative with equivalent conclusions.
+이항검정은 독립성 외에 분포 가정 없이 모비율에 대한 정확 추론을 제공한다. 부호검정을 $p_0 = 0.5$에서 임의의 가설 비율로 일반화하며, 정규근사가 믿을 수 없는 소표본에서 특히 가치가 있다. 대표본에서는 이항분포의 표준정규근사가 계산이 더 간단하면서도 같은 결론을 주는 대안이 된다.
 
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Describe the main concept of Binomial Test and explain why it matters for statistical practice.
+**연습문제 1.**
+$n = 20$, $s = 10$, $p_0 = 0.70$인 예제에서 양측 $p$값을 두 가지 정의로 각각 계산하고 왜 다른지 설명하라. SciPy는 어느 쪽을 쓰는가?
 
-??? success "Solution to Exercise 1"
-    Binomial Test is a core topic in statistics that provides tools for drawing reliable inferences from data. It matters because proper application ensures valid conclusions, correctly quantified uncertainty, and appropriate handling of the assumptions that underpin the method. Practitioners who understand this concept can avoid common pitfalls and choose the right analytical approach for their data.
+??? success "연습문제 1 풀이"
+    ```python
+    from scipy import stats
+    lo = stats.binom.cdf(10, 20, 0.7)     # P(S <= 10) = 0.04796
+    hi = stats.binom.sf(9, 20, 0.7)       # P(S >= 10) = 0.98320
+    print(2 * min(lo, hi))                # 0.09592
+    print(stats.binomtest(10, 20, 0.7).pvalue)   # 0.08345
+    ```
+
+    | 정의 | $p$값 |
+    |:---|---:|
+    | $2\min(P(S \le 10), P(S \ge 10))$ | $0.0959$ |
+    | 확률이 $P(S=10)$ 이하인 모든 $k$의 합 (SciPy) | $0.0834$ |
+
+    차이는 $p_0 = 0.7 \ne 0.5$라서 $\text{Binomial}(20, 0.7)$이 **비대칭**이기 때문이다. 최빈값은 $k = 14$이고, 관측값 $s = 10$은 왼쪽 꼬리에 있다.
+
+    - **$2\min$ 규칙**은 왼쪽 꼬리 확률 $0.048$을 그대로 두 배 한다. 오른쪽 꼬리를 실제로 보지 않고 "대칭이라 치고" 같은 크기로 잡는 것이다.
+    - **확률합 규칙**은 $P(S = k) \le P(S = 10) = 0.0308$인 모든 $k$를 모은다. 오른쪽에서 이 조건을 만족하는 것은 $k = 18, 19, 20$이고 그 확률의 합은 $0.0355$이다. 따라서 $0.0480 + 0.0355 = 0.0834$가 된다.
+
+    $2\min$ 규칙이 오른쪽 꼬리의 몫을 과대평가한 셈이다. $p_0 = 0.5$이면 분포가 대칭이라 두 정의가 정확히 일치한다.
+
+    실무적 함의: 이 예제에서 $\alpha = 0.05$ 양측검정의 결론이 정의에 따라 갈리지는 않지만($0.0834$와 $0.0959$ 모두 기각 못 함), 경계 근처에서는 갈릴 수 있다. 보고할 때는 소프트웨어 기본값에 의존하지 말고 정의를 명시해야 한다.
 
 ---
 
-**Exercise 2.**
-State the key assumptions required by the method discussed here. How can each assumption be checked?
+**연습문제 2.**
+$p_0 = 0.3$일 때 정확 이항검정의 실제 크기를 $n = 20, 50, 100$에 대해 계산하라. 부호검정에서와 같은 이산성 문제가 나타나는가?
 
-??? success "Solution to Exercise 2"
-    The main assumptions typically include: (1) independence of observations -- verified by understanding the data collection process and checking for serial correlation; (2) distributional requirements (e.g., normality) -- checked with Q-Q plots and formal tests like Shapiro-Wilk; (3) equal variances (if applicable) -- assessed with boxplots and Levene's test. When assumptions are violated, consider robust alternatives, transformations, or nonparametric methods.
+??? success "연습문제 2 풀이"
+    ```python
+    import numpy as np
+    from scipy import stats
+    for n in (20, 50, 100):
+        pv = np.array([stats.binomtest(k, n, 0.3).pvalue for k in range(n + 1)])
+        pmf = stats.binom.pmf(np.arange(n + 1), n, 0.3)
+        print(n, round(pmf[pv <= 0.05].sum(), 4))
+    ```
+
+    | $n$ | 실제 크기 |
+    |---:|---:|
+    | 20 | 0.0248 |
+    | 50 | 0.0433 |
+    | 100 | 0.0498 |
+
+    같은 이산성 문제가 나타난다. $n = 20$에서 실제 크기는 명목값의 절반인 $0.0248$이다. 정확검정은 **어떤 $n$에서도 크기가 $\alpha$를 넘지 않는다는 것을 보장**하지만, 그 대가로 소표본에서는 유의수준의 절반만 사용한다.
+
+    부호검정($p_0 = 0.5$)과 비교하면 흥미로운 차이가 있다. $p_0 = 0.5$에서는 $n = 20$의 크기가 $0.0414$였는데 여기서는 $0.0248$이다. 이항분포가 비대칭일수록 확률질량 덩어리가 고르지 않아 $\alpha$를 촘촘히 채우기가 더 어렵기 때문이다.
+
+    "정확"이 "정확히 $\alpha$"를 뜻하지 않는다는 점을 기억해야 한다. 정확검정에서 "정확"은 **귀무분포를 근사 없이 계산한다**는 뜻이지 크기가 명목값과 일치한다는 뜻이 아니다.
 
 ---
 
-**Exercise 3.**
-Work through a small numerical example illustrating the application of the technique from this section.
+**연습문제 3.**
+$n = 20$에서 Clopper-Pearson 구간, Wilson 구간, Wald 구간의 실제 포함확률을 $p = 0.1, 0.3, 0.5, 0.7, 0.9$에 대해 계산하고 비교하라.
 
-??? success "Solution to Exercise 3"
-    A structured approach to applying this technique involves: (1) clearly stating the hypotheses or estimation goal; (2) verifying that the data meet the required assumptions; (3) computing the relevant test statistic, estimate, or model fit; (4) obtaining the p-value, confidence interval, or posterior distribution; (5) interpreting the result in the context of the original question. Following these steps systematically ensures a rigorous and reproducible analysis.
+??? success "연습문제 3 풀이"
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    def coverage(n, p):
+        out = []
+        for method in ("exact", "wilson", "wald"):
+            c = 0.0
+            for k in range(n + 1):
+                pr = stats.binom.pmf(k, n, p)
+                if method == "wald":
+                    ph = k / n; se = np.sqrt(ph * (1 - ph) / n)
+                    lo, hi = ph - 1.96 * se, ph + 1.96 * se
+                else:
+                    lo, hi = stats.binomtest(k, n, 0.5).proportion_ci(method=method)
+                c += pr * (lo <= p <= hi)
+            out.append(c)
+        return out
+
+    for p in (0.1, 0.3, 0.5, 0.7, 0.9):
+        print(p, ["%.4f" % v for v in coverage(20, p)])
+    ```
+
+    | 참값 $p$ | Clopper-Pearson | Wilson | Wald |
+    |---:|---:|---:|---:|
+    | 0.1 | 0.9887 | 0.9568 | **0.8760** |
+    | 0.3 | 0.9752 | 0.9752 | 0.9474 |
+    | 0.5 | 0.9586 | 0.9586 | 0.9586 |
+    | 0.7 | 0.9752 | 0.9752 | 0.9474 |
+    | 0.9 | 0.9887 | 0.9568 | **0.8760** |
+
+    세 구간의 성격이 뚜렷이 갈린다.
+
+    - **Clopper-Pearson**은 모든 $p$에서 $0.95$ 이상을 보장하지만 극단에서 $0.989$까지 올라가 지나치게 넓다. 보수적이다.
+    - **Wilson**은 $0.95$ 근처를 꽤 잘 지킨다. 가장 좋은 절충안이다.
+    - **Wald**($\hat{p} \pm 1.96\sqrt{\hat{p}(1-\hat{p})/n}$)는 $p = 0.1$에서 포함확률이 $0.876$으로 무너진다. 명목수준보다 7%p 넘게 낮다.
+
+    Wald가 무너지는 이유는 $k = 0$일 때 $\hat{p} = 0$이 되어 구간이 $[0, 0]$이라는 **점 하나로 붕괴**하기 때문이다. $p = 0.1$, $n = 20$에서 $P(S = 0) = 0.9^{20} = 0.122$이므로 이 사건만으로 이미 12%의 실패가 생긴다.
+
+    실무 권고: 소표본 비율의 신뢰구간에는 Wald를 쓰지 말라. 보수성을 감수하더라도 보장이 필요하면 Clopper-Pearson, 실제 포함확률이 명목값에 가깝기를 원하면 Wilson을 쓴다.
 
 ---
 
-**Exercise 4.**
-Compare the approach from this section with an alternative method. When would you choose each?
+**연습문제 4.**
+$p_0 = 0.5$, $n = 20$에서 모든 $s = 0, \ldots, 20$에 대해 정확 $p$값, 보정 없는 정규근사 $p$값, 연속성 보정 정규근사 $p$값을 비교하라. 세 방법의 $\alpha = 0.05$ 결론이 갈리는 $s$가 있는가?
 
-??? success "Solution to Exercise 4"
-    The method discussed here is appropriate when its assumptions hold and the sample size is sufficient for the asymptotic approximations to be accurate. Alternative approaches include: (1) nonparametric methods -- preferred when distributional assumptions are suspect; (2) bootstrap methods -- useful when analytical reference distributions are unavailable; (3) Bayesian methods -- valuable when incorporating prior information or when direct probability statements about parameters are desired. Running multiple approaches and comparing results provides a useful robustness check.
+??? success "연습문제 4 풀이"
+    ```python
+    import numpy as np
+    from scipy import stats
+    n, p0 = 20, 0.5
+    for s in range(n + 1):
+        pe = stats.binomtest(s, n, p0).pvalue
+        z = (s / n - p0) / np.sqrt(p0 * (1 - p0) / n)
+        pn = 2 * stats.norm.sf(abs(z))
+        zc = (abs(s - n * p0) - 0.5) / np.sqrt(n * p0 * (1 - p0))
+        pc = 2 * stats.norm.sf(max(zc, 0))
+        print(s, round(pe, 4), round(pn, 4), round(pc, 4))
+    ```
+
+    꼬리 근처의 값들만 보면(대칭이므로 $s$와 $20-s$가 같다):
+
+    | $s$ | 정확 | 정규근사 (보정 없음) | 정규근사 (연속성 보정) |
+    |---:|---:|---:|---:|
+    | 4 | $0.0118$ | $0.0073$ | $0.0139$ |
+    | 5 | $0.0414$ | $0.0253$ | $0.0442$ |
+    | 6 | $0.1153$ | $0.0736$ | $0.1175$ |
+    | 7 | $0.2632$ | $0.1797$ | $0.2636$ |
+    | 8 | $0.5034$ | $0.3711$ | $0.5023$ |
+
+    **결론이 갈리는 $s$는 없다.** $\alpha = 0.05$에서 세 방법 모두 $s \le 5$ 또는 $s \ge 15$에서 기각한다.
+
+    그러나 $p$값 자체는 크게 다르다. 보정 없는 정규근사는 $s = 5$에서 $0.0253$을 주어 정확값 $0.0414$의 **61%**에 불과하다. 결론이 같은 것은 근사가 좋아서가 아니라 $S$가 이산이라 $p$값이 $0.0414$에서 $0.1153$으로 건너뛰기 때문이다. 그 사이에 $\alpha = 0.05$가 놓여 있어 어느 쪽으로 틀려도 결정이 바뀌지 않는다.
+
+    연속성 보정은 $0.0442$로 정확값에 훨씬 가깝다. 완전히 같지는 않지만 오차가 $0.0028$로, 보정 없는 근사의 오차 $0.0161$의 6분의 1이다. 보정이 하는 일은 이산 계단함수의 계단 중앙을 지나도록 정규곡선을 맞추는 것이며, 이로써 근사 오차의 1차 항이 상쇄된다.
+
+    권고: 정규근사를 쓴다면 **반드시 연속성 보정을 함께 쓴다**. 보정 없는 근사는 $p$값을 체계적으로 과소평가하여 기각을 지나치게 많이 하게 만든다. 다만 오늘날 $n$이 수천 이하이면 정확 계산이 즉시 끝나므로, 근사를 쓸 이유는 손계산 말고는 별로 없다.

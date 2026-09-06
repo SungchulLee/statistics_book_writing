@@ -1,51 +1,51 @@
-# Wilcoxon Rank-Sum Test
+# Wilcoxon 순위합검정
 
-The **Wilcoxon rank-sum test** is the most widely used non-parametric test for comparing two independent samples. It tests whether the two populations have the same distribution -- specifically, whether one group tends to produce systematically larger values than the other. The test works by combining both samples, ranking all observations together, and comparing the sum of ranks assigned to each group.
+**Wilcoxon 순위합검정**은 독립인 두 표본을 비교하는 가장 널리 쓰이는 비모수 검정이다. 두 모집단이 같은 분포를 갖는지 --- 더 구체적으로는 한 집단이 다른 집단보다 체계적으로 큰 값을 내는 경향이 있는지 --- 를 검정한다. 두 표본을 합쳐 모든 관측값에 함께 순위를 매기고, 각 집단에 배정된 순위의 합을 비교하는 방식이다.
 
-The Wilcoxon rank-sum test is mathematically equivalent to the [Mann-Whitney U test](mann_whitney.md); the two are different formulations of the same procedure.
+Wilcoxon 순위합검정은 [Mann-Whitney U 검정](mann_whitney.md)과 수학적으로 동치이다. 둘은 같은 절차의 서로 다른 표현이다.
 
-## Assumptions
+## 가정
 
-1. The two samples are **independent** of each other.
-2. The observations are drawn from **continuous** distributions.
-3. The two populations have the **same shape** (under $H_0$, they share the same distribution).
+1. 두 표본이 서로 **독립**이다.
+2. 관측값이 **연속**분포에서 추출된다.
+3. 두 모집단이 **같은 모양**을 갖는다($H_0$ 아래에서 같은 분포를 공유한다).
 
-!!! note "Location shift model"
-    Many textbooks present the rank-sum test under the **location shift model**: $F_Y(x) = F_X(x - \Delta)$, where $\Delta$ is a shift parameter. Under this model, the test is specifically testing $H_0 \colon \Delta = 0$. More generally, the test detects any form of stochastic ordering, not just location shifts.
+!!! note "위치이동 모형"
+    많은 교과서가 순위합검정을 **위치이동 모형** $F_Y(x) = F_X(x - \Delta)$ 아래에서 제시한다. 여기서 $\Delta$는 이동 모수이다. 이 모형에서 검정은 구체적으로 $H_0 \colon \Delta = 0$을 검정한다. 더 일반적으로는 위치이동만이 아니라 임의의 형태의 확률적 순서를 탐지한다.
 
-## Hypotheses
-
-$$
-H_0 \colon F_X = F_Y \quad \text{(the two populations have the same distribution)}
-$$
+## 가설
 
 $$
-H_a \colon F_X \ne F_Y \quad \text{(two-sided)}
+H_0 \colon F_X = F_Y \quad \text{(두 모집단이 같은 분포를 갖는다)}
 $$
 
-One-sided alternatives: $H_a \colon X$ tends to be larger than $Y$, or vice versa.
+$$
+H_a \colon F_X \ne F_Y \quad \text{(양측)}
+$$
 
-## Test Statistic
+단측 대립가설: $H_a \colon X$가 $Y$보다 큰 경향이 있다, 또는 그 반대.
 
-**Step 1.** Combine the two samples of sizes $n_1$ and $n_2$ into a single sample of size $N = n_1 + n_2$.
+## 검정통계량
 
-**Step 2.** Rank all $N$ observations from smallest to largest, assigning midranks to ties.
+**1단계.** 크기 $n_1$과 $n_2$인 두 표본을 합쳐 크기 $N = n_1 + n_2$인 하나의 표본을 만든다.
 
-**Step 3.** Compute the rank sum for group 1:
+**2단계.** $N$개 관측값 전체에 작은 값부터 순위를 매기고 동점에는 중간순위를 배정한다.
+
+**3단계.** 집단 1의 순위합을 계산한다.
 
 $$
 W = \sum_{i=1}^{n_1} R_i
 $$
 
-where $R_i$ is the rank of the $i$-th observation from group 1 in the combined sample.
+여기서 $R_i$는 합친 표본에서 집단 1의 $i$번째 관측값의 순위이다.
 
-Since the total rank sum is fixed at $N(N+1)/2$, the rank sum for group 2 is $W_2 = N(N+1)/2 - W$.
+전체 순위합이 $N(N+1)/2$로 고정되므로 집단 2의 순위합은 $W_2 = N(N+1)/2 - W$이다.
 
-## Null Distribution
+## 귀무분포
 
-Under $H_0$, every assignment of ranks to the two groups is equally likely. The number of ways to choose $n_1$ ranks from $\{1, 2, \ldots, N\}$ is $\binom{N}{n_1}$.
+$H_0$ 아래에서 두 집단에 대한 순위 배정이 모두 동등하게 가능하다. $\{1, 2, \ldots, N\}$에서 $n_1$개를 고르는 방법은 $\binom{N}{n_1}$가지이다.
 
-**Mean and variance of $W$ under $H_0$:**
+**$H_0$ 아래 $W$의 평균과 분산:**
 
 $$
 \mu_W = \frac{n_1(N + 1)}{2}
@@ -55,33 +55,33 @@ $$
 \sigma_W^2 = \frac{n_1 \, n_2 \,(N + 1)}{12}
 $$
 
-With a tie correction: if there are $g$ groups of tied observations of sizes $t_1, \ldots, t_g$,
+동점 보정: 크기가 $t_1, \ldots, t_g$인 동점 집단이 $g$개 있으면
 
 $$
 \sigma_W^2 = \frac{n_1 \, n_2}{12}\left(N + 1 - \frac{\sum_{j=1}^{g}(t_j^3 - t_j)}{N(N-1)}\right)
 $$
 
-## Normal Approximation
+## 정규근사
 
-For large samples (typically $n_1, n_2 \ge 10$), the standardized statistic
+표본이 크면(보통 $n_1, n_2 \ge 10$) 표준화된 통계량
 
 $$
 Z = \frac{W - \mu_W}{\sigma_W}
 $$
 
-is approximately $\mathcal{N}(0, 1)$ under $H_0$.
+은 $H_0$ 아래 근사적으로 $\mathcal{N}(0, 1)$을 따른다.
 
-## Worked Example
+## 예제
 
-Two teaching methods are compared using exam scores from two independent groups.
+두 교수법을 독립인 두 집단의 시험 점수로 비교한다.
 
-**Group A** ($n_1 = 6$): 78, 64, 85, 72, 91, 80
+**집단 A** ($n_1 = 6$): 78, 64, 85, 72, 91, 80
 
-**Group B** ($n_2 = 6$): 55, 68, 61, 70, 66, 58
+**집단 B** ($n_2 = 6$): 55, 68, 61, 70, 66, 58
 
-**Step 1.** Combine and rank all $N = 12$ observations:
+**1단계.** $N = 12$개 관측값을 합쳐 순위를 매긴다.
 
-| Value | Group | Rank |
+| 값 | 집단 | 순위 |
 |:-----:|:-----:|:----:|
 | 55 | B | 1 |
 | 58 | B | 2 |
@@ -96,9 +96,9 @@ Two teaching methods are compared using exam scores from two independent groups.
 | 85 | A | 11 |
 | 91 | A | 12 |
 
-**Step 2.** Rank sum for Group A: $W = 4 + 8 + 9 + 10 + 11 + 12 = 54$.
+**2단계.** 집단 A의 순위합: $W = 4 + 8 + 9 + 10 + 11 + 12 = 54$.
 
-**Step 3.** Null parameters:
+**3단계.** 귀무 모수:
 
 $$
 \mu_W = \frac{6 \times 13}{2} = 39
@@ -108,97 +108,168 @@ $$
 \sigma_W = \sqrt{\frac{6 \times 6 \times 13}{12}} = \sqrt{39} \approx 6.245
 $$
 
-**Step 4.** Standardized statistic:
+**4단계.** 표준화 통계량:
 
 $$
 Z = \frac{54 - 39}{6.245} \approx 2.402
 $$
 
-**Step 5.** Two-sided $p$-value:
+**5단계.** 양측 $p$값:
 
 $$
-p = 2\,\mathcal{N}(-2.402) \approx 0.016
+p = 2\,\Phi(-2.402) \approx 0.016
 $$
 
-At $\alpha = 0.05$, we reject $H_0$. Group A's scores are significantly higher than Group B's.
+$\alpha = 0.05$에서 $H_0$을 기각한다. 집단 A의 점수가 집단 B보다 유의하게 높다.
 
-## Relationship to the Mann-Whitney U Test
+!!! note "정확 $p$값과의 비교"
+    $n_1 = n_2 = 6$이면 $\binom{12}{6} = 924$가지 순위 배정을 모두 열거할 수 있다. 정확 양측 $p$값은 $0.01515$로 정규근사값 $0.01631$과 매우 가깝다.
 
-The Mann-Whitney $U$ statistic is a simple linear transformation of $W$:
+    ```python
+    from scipy import stats
+    A = [78, 64, 85, 72, 91, 80]; B = [55, 68, 61, 70, 66, 58]
+    print(stats.mannwhitneyu(A, B, method='exact').pvalue)    # 0.015152
+    print(stats.ranksums(A, B).pvalue)                        # 0.016309
+    ```
+
+    두 집단이 완전히 분리되지 않은(집단 A의 $64$가 집단 B의 값 넷보다 작다) 자료임에도 근사가 잘 맞는다.
+
+## Mann-Whitney U 검정과의 관계
+
+Mann-Whitney $U$ 통계량은 $W$의 단순한 선형변환이다.
 
 $$
 U_1 = W - \frac{n_1(n_1 + 1)}{2}
 $$
 
-The two tests always produce the same $p$-value. See [Mann-Whitney U Test](mann_whitney.md) for the $U$-statistic formulation and its probability interpretation.
+두 검정은 언제나 같은 $p$값을 낸다. $U$ 통계량 표현과 그 확률적 해석은 [Mann-Whitney U 검정](mann_whitney.md)을 보라.
 
-## Exact Tables and Software
+## 정확표와 소프트웨어
 
-For small samples ($n_1, n_2 \le 20$), exact critical values are available in published tables or computed by software (e.g., `scipy.stats.ranksums` or `scipy.stats.mannwhitneyu` in Python). The exact distribution is obtained by enumerating all $\binom{N}{n_1}$ equally likely rank assignments.
+소표본($n_1, n_2 \le 20$)에서는 출간된 표나 소프트웨어(파이썬의 `scipy.stats.ranksums`, `scipy.stats.mannwhitneyu` 등)로 정확 임계값을 얻을 수 있다. 정확분포는 동등하게 가능한 $\binom{N}{n_1}$가지 순위 배정을 모두 열거하여 구한다.
 
-## Summary
+## 요약
 
-The Wilcoxon rank-sum test compares two independent samples by combining the observations, assigning ranks, and computing the rank sum for one group. Under the null hypothesis, large or small rank sums are unlikely, and the test detects any systematic tendency for one group to produce larger values. The normal approximation is reliable for moderate to large samples, while exact tables handle small samples. The rank-sum test is equivalent to the Mann-Whitney $U$ test and achieves an ARE of $3/\pi \approx 0.955$ relative to the two-sample $t$-test under normality.
+Wilcoxon 순위합검정은 두 독립표본의 관측값을 합쳐 순위를 매기고 한 집단의 순위합을 계산하여 비교한다. 귀무가설 아래에서 순위합이 너무 크거나 너무 작을 확률이 낮으므로, 한 집단이 체계적으로 큰 값을 내는 경향을 탐지한다. 중간 이상의 표본에서는 정규근사가 신뢰할 만하고, 소표본은 정확표로 다룬다. 순위합검정은 Mann-Whitney $U$ 검정과 동치이며, 정규성 아래에서 이표본 $t$ 검정 대비 ARE $3/\pi \approx 0.955$를 달성한다.
 
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Apply the Wilcoxon rank-sum test to: Group A = {3, 5, 7, 9} and Group B = {6, 8, 10, 12, 14}. Compute the test statistic $W$.
+**연습문제 1.**
+집단 A $= \{3, 5, 7, 9\}$, 집단 B $= \{6, 8, 10, 12, 14\}$에 Wilcoxon 순위합검정을 적용하여 검정통계량 $W$를 계산하라.
 
-??? success "Solution to Exercise 1"
-    Combined and ranked: 3(1), 5(2), 6(3), 7(4), 8(5), 9(6), 10(7), 12(8), 14(9).
+??? success "연습문제 1 풀이"
+    합쳐서 순위를 매기면 3(1), 5(2), 6(3), 7(4), 8(5), 9(6), 10(7), 12(8), 14(9)이다.
 
-    Group A ranks: 1, 2, 4, 6. Sum $W_A = 13$.
+    집단 A의 순위: 1, 2, 4, 6. 합 $W_A = 13$.
 
-    Group B ranks: 3, 5, 7, 8, 9. Sum $W_B = 32$.
+    집단 B의 순위: 3, 5, 7, 8, 9. 합 $W_B = 32$.
 
-    Using the smaller group (A, $n_1 = 4$) as the reference: $W = W_A = 13$.
+    검산: $13 + 32 = 45 = 9 \times 10 / 2$. $\checkmark$
 
-    Under $H_0$, the expected rank sum for Group A is $n_1(n_1 + n_2 + 1)/2 = 4(10)/2 = 20$. Since $W = 13 < 20$, Group A tends to have smaller values, consistent with the data.
+    작은 집단(A, $n_1 = 4$)을 기준으로 $W = W_A = 13$이다.
+
+    $H_0$ 아래에서 집단 A의 기대 순위합은 $n_1(n_1 + n_2 + 1)/2 = 4(10)/2 = 20$이다. $W = 13 < 20$이므로 집단 A가 작은 값을 갖는 경향이 있으며, 이는 자료와 일관된다.
+
+    정확 양측 $p$값은 $0.1111$로 유의하지 않다. $n_1 = 4$, $n_2 = 5$에서 가능한 배정이 $\binom{9}{4} = 126$가지뿐이라 최소 $p$값이 $2/126 = 0.0159$이고, 이 자료는 완전 분리에서 멀다.
 
 ---
 
-**Exercise 2.**
-Explain the relationship between the Wilcoxon rank-sum test and the Mann-Whitney U test. Are they equivalent?
+**연습문제 2.**
+Wilcoxon 순위합검정과 Mann-Whitney U 검정의 관계를 설명하라. 두 검정은 동치인가?
 
-??? success "Solution to Exercise 2"
-    Yes, they are equivalent tests that use different but related test statistics. The Mann-Whitney $U$ counts the number of pairs $(x_i, y_j)$ where $x_i < y_j$:
+??? success "연습문제 2 풀이"
+    그렇다. 두 검정은 서로 관련된 다른 통계량을 쓰지만 동치이다. Mann-Whitney $U_1$은 $x_i > y_j$인 쌍 $(x_i, y_j)$의 개수이다.
 
     $$
-    U = W_A - \frac{n_1(n_1+1)}{2}
+    U_1 = W_A - \frac{n_1(n_1+1)}{2}
     $$
 
-    where $W_A$ is the Wilcoxon rank sum for Group A. They always give the same p-value. The choice of statistic is a matter of convention: the rank-sum form is simpler to compute, while the $U$ statistic has a cleaner probabilistic interpretation ($U/(n_1 n_2)$ estimates $P(X < Y)$).
+    여기서 $W_A$는 집단 A의 Wilcoxon 순위합이다. 두 통계량은 언제나 같은 $p$값을 준다.
+
+    !!! warning "부등호의 방향에 주의"
+        $U_1 = W_A - n_1(n_1+1)/2$가 세는 것은 $x_i > y_j$인 쌍이지 $x_i < y_j$인 쌍이 아니다. 따라서
+
+        $$
+        \frac{U_1}{n_1 n_2} \text{ 는 } P(X > Y) \text{ 의 추정값이다.}
+        $$
+
+        연습문제 1의 자료로 확인해 보자. $W_A = 13$이므로 $U_1 = 13 - 10 = 3$이다. 실제로 $x > y$인 쌍을 세면 $(7,6)$, $(9,6)$, $(9,8)$의 3개로 정확히 일치한다. $x < y$인 쌍은 17개이다.
+
+        ```python
+        a = [3, 5, 7, 9]; b = [6, 8, 10, 12, 14]
+        print(sum(1 for x in a for y in b if x > y))   # 3
+        print(sum(1 for x in a for y in b if x < y))   # 17
+        ```
+
+    통계량의 선택은 관례의 문제이다. 순위합 형태가 계산이 간단하고, $U$ 통계량은 확률적 해석이 깔끔하다.
 
 ---
 
-**Exercise 3.**
-What does the Wilcoxon rank-sum test actually test? Is it a test for equal medians?
+**연습문제 3.**
+Wilcoxon 순위합검정이 실제로 검정하는 것은 무엇인가? 중앙값이 같은지를 검정하는 것인가?
 
-??? success "Solution to Exercise 3"
-    The Wilcoxon rank-sum test tests $H_0$: the two populations have the same distribution, against $H_a$: one population tends to produce larger values (stochastic dominance).
+??? success "연습문제 3 풀이"
+    Wilcoxon 순위합검정은 $H_0$: 두 모집단이 같은 분포를 갖는다를, $H_a$: 한 모집단이 큰 값을 내는 경향이 있다(확률적 우월)에 대해 검정한다.
 
-    It is commonly described as a "test for equal medians," but this is only accurate when the two distributions have the same shape (differing only in location). If the distributions differ in shape (e.g., different variances or skewness), the test can reject even when medians are equal.
+    흔히 "중앙값이 같은지를 검정한다"고 설명하지만, 이는 두 분포가 같은 모양을 갖고 위치만 다를 때만 정확하다. 분포의 모양이 다르면(예: 분산이나 왜도가 다르면) 중앙값이 같아도 기각할 수 있다.
 
-    Under the location-shift model ($Y = X + \Delta$), the test is equivalent to testing $H_0: \Delta = 0$, and rejection implies different medians (and means).
+    구체적인 반례를 보자. $X \sim \mathcal{N}(0, 1)$, $Y \sim \mathcal{N}(0, 25)$이면 중앙값이 둘 다 0이고 $P(X > Y) = 0.5$이므로 검정이 기각하지 않는다. 그러나 $X \sim \text{Exp}(1) - \ln 2$와 $Y \sim -(\text{Exp}(1) - \ln 2)$는 둘 다 중앙값이 0이지만 $P(X > Y) \approx 0.596 \ne 0.5$이다. 한쪽은 오른쪽으로, 다른 쪽은 왼쪽으로 치우쳐 있어 모양이 다르기 때문이다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+    rng = np.random.default_rng(0)
+    x = rng.exponential(1, 200000) - np.log(2)
+    y = -(rng.exponential(1, 200000) - np.log(2))
+    print(np.median(x), np.median(y))     # 약 0.000, 0.000
+    print((x > y).mean())                 # 0.596  ← 0.5가 아니다
+    ```
+
+    $n = 100$씩 표본을 뽑아 검정하면 기각률이 명목수준을 크게 넘는다. 중앙값이 같은데도 그렇다.
+
+    위치이동 모형($Y = X + \Delta$)에서는 검정이 $H_0: \Delta = 0$과 동치이며, 기각은 중앙값(과 평균)이 다름을 함의한다.
 
 ---
 
-**Exercise 4.**
-For large samples, the rank-sum test uses a normal approximation. State the formula for the z-statistic.
+**연습문제 4.**
+대표본에서 순위합검정은 정규근사를 쓴다. $z$ 통계량의 공식을 쓰고, 연속성 보정의 효과를 예제 자료로 확인하라.
 
-??? success "Solution to Exercise 4"
-    Under $H_0$, the rank sum $W$ has:
+??? success "연습문제 4 풀이"
+    $H_0$ 아래에서 순위합 $W$는
 
     $$
     E[W] = \frac{n_1(n_1 + n_2 + 1)}{2}, \quad \text{Var}(W) = \frac{n_1 n_2 (n_1 + n_2 + 1)}{12}
     $$
 
-    The z-statistic is:
+    를 가지며 $z$ 통계량은
 
     $$
-    Z = \frac{W - E[W]}{\sqrt{\text{Var}(W)}} \approx N(0,1)
+    Z = \frac{W - E[W]}{\sqrt{\text{Var}(W)}} \approx \mathcal{N}(0,1)
     $$
 
-    A continuity correction of $\pm 0.5$ is sometimes applied. This approximation is accurate for $n_1, n_2 \geq 10$. For smaller samples, exact p-values from the permutation distribution should be used.
+    이다. 이 근사는 $n_1, n_2 \ge 10$에서 정확하다. 더 작은 표본에서는 순열분포의 정확 $p$값을 써야 한다.
+
+    본문 예제($W = 54$, $n_1 = n_2 = 6$)로 세 가지를 비교하면
+
+    ```python
+    from scipy import stats
+    A = [78, 64, 85, 72, 91, 80]; B = [55, 68, 61, 70, 66, 58]
+    print(stats.mannwhitneyu(A, B, method='exact').pvalue)              # 0.015152
+    print(stats.mannwhitneyu(A, B, method='asymptotic',
+                             use_continuity=False).pvalue)              # 0.016309
+    print(stats.mannwhitneyu(A, B, method='asymptotic',
+                             use_continuity=True).pvalue)               # 0.020241
+    ```
+
+    | 방법 | $p$값 |
+    |:---|---:|
+    | 정확 (열거) | $0.01515$ |
+    | 정규근사, 보정 없음 | $0.01631$ |
+    | 정규근사, 연속성 보정 | $0.02024$ |
+
+    여기서는 **연속성 보정이 오히려 정확값에서 멀어지게 한다**. 보정 없는 근사의 오차가 $0.0012$인데 보정한 쪽은 $0.0051$로 네 배가 넘는다.
+
+    부호검정이나 부호순위검정에서 연속성 보정이 도움이 되었던 것과 대조적이다. 이유는 $W$의 귀무분포가 격자 간격 1로 촘촘한 반면(가능한 값이 $21$부터 $57$까지 $37$가지), 관측값 $54$가 이미 꼬리 깊숙이 있어 계단 보정보다 정규곡선 자체의 꼬리 오차가 더 크기 때문이다.
+
+    **일반 지침:** 연속성 보정은 근사를 보수적으로(= $p$값을 크게) 만든다. 근사가 이미 $p$값을 과대평가하고 있다면 보정이 상황을 악화시킨다. $n \le 20$이면 보정 여부를 고민하지 말고 정확검정을 쓰는 것이 옳다.

@@ -628,42 +628,42 @@ nav:
             - 붓스트랩 분산 검정 (코드): ch15/code/bootstrap_var_test.md
             - Bayes 분산 검정 (코드): ch15/code/bayesian_var_test.md
 
-    - 16 Non-Parametric Tests:
-        - Chapter Overview: ch16/index.md
-        - 16.1 Foundations:
-            - When and Why to Use Non-Parametric Tests: ch16/foundations/motivation.md
-            - Ranks and Rank Transformations: ch16/foundations/ranks.md
-            - Power Comparison with Parametric Tests: ch16/foundations/power_comparison.md
-        - 16.2 One-Sample Non-Parametric Tests:
-            - Runs Test for Randomness: ch16/one_sample_nonparametric/runs_test.md
-            - Sign Test: ch16/one_sample_nonparametric/sign_test.md
-            - Wilcoxon Signed-Rank Test: ch16/one_sample_nonparametric/wilcoxon_signed_rank.md
-            - Binomial Test: ch16/one_sample_nonparametric/binomial_test.md
-            - One-Sample Tests Overview: ch16/one_sample_nonparametric/one_sample.md
-        - 16.3 Paired-Sample Non-Parametric Tests:
-            - Paired Sign Test: ch16/paired_sample_nonparametric/paired_sign.md
-            - Wilcoxon Signed-Rank for Paired Data: ch16/paired_sample_nonparametric/paired_wilcoxon.md
-            - Paired Permutation Test: ch16/paired_sample_nonparametric/paired_permutation.md
-            - Paired Tests Overview: ch16/paired_sample_nonparametric/paired.md
-        - 16.4 Two-Sample Non-Parametric Tests:
-            - Wilcoxon Rank-Sum Test: ch16/two_sample_nonparametric/rank_sum.md
-            - Mann-Whitney U Test: ch16/two_sample_nonparametric/mann_whitney.md
-            - Kolmogorov-Smirnov Two-Sample Test: ch16/two_sample_nonparametric/ks_two_sample.md
-            - Two-Sample Tests Overview: ch16/two_sample_nonparametric/two_sample.md
-        - 16.5 Multi-Group Non-Parametric Tests:
-            - Kruskal-Wallis Test: ch16/multi_group_nonparametric/kruskal_wallis.md
-            - Friedman Test (Repeated Measures): ch16/multi_group_nonparametric/friedman.md
-            - Mood's Median Test: ch16/multi_group_nonparametric/median_test.md
-            - Post-Hoc Dunn's Test: ch16/multi_group_nonparametric/dunn.md
-        - 16.6 Non-Parametric Correlation:
-            - Spearman's ρ (Revisited): ch16/correlation/spearman.md
-            - Kendall's τ (Revisited): ch16/correlation/kendall.md
-        - 16.7 Code:
-            - Runs Test: ch16/code/runs_test.md
-            - Sign Test: ch16/code/sign_test.md
-            - Wilcoxon Tests: ch16/code/wilcoxon_tests.md
-            - Two-Sample and Multi-Group Tests: ch16/code/two_sample_tests.md
-            - Non-Parametric Test Suite: ch16/code/nonparametric_suite.md
+    - 16 비모수 검정:
+        - 장 개요: ch16/index.md
+        - 16.1 기초:
+            - 비모수 검정을 언제, 왜 쓰는가: ch16/foundations/motivation.md
+            - 순위와 순위변환: ch16/foundations/ranks.md
+            - 모수적 검정과의 검정력 비교: ch16/foundations/power_comparison.md
+        - 16.2 일표본 비모수 검정:
+            - 무작위성에 대한 런 검정: ch16/one_sample_nonparametric/runs_test.md
+            - 부호검정: ch16/one_sample_nonparametric/sign_test.md
+            - Wilcoxon 부호순위검정: ch16/one_sample_nonparametric/wilcoxon_signed_rank.md
+            - 이항검정: ch16/one_sample_nonparametric/binomial_test.md
+            - 일표본 검정 개관: ch16/one_sample_nonparametric/one_sample.md
+        - 16.3 대응표본 비모수 검정:
+            - 대응 부호검정: ch16/paired_sample_nonparametric/paired_sign.md
+            - 대응자료에 대한 Wilcoxon 부호순위검정: ch16/paired_sample_nonparametric/paired_wilcoxon.md
+            - 대응 순열검정: ch16/paired_sample_nonparametric/paired_permutation.md
+            - 대응표본 검정 개관: ch16/paired_sample_nonparametric/paired.md
+        - 16.4 이표본 비모수 검정:
+            - Wilcoxon 순위합검정: ch16/two_sample_nonparametric/rank_sum.md
+            - Mann-Whitney U 검정: ch16/two_sample_nonparametric/mann_whitney.md
+            - Kolmogorov-Smirnov 이표본 검정: ch16/two_sample_nonparametric/ks_two_sample.md
+            - 이표본 검정 개관: ch16/two_sample_nonparametric/two_sample.md
+        - 16.5 다집단 비모수 검정:
+            - Kruskal-Wallis 검정: ch16/multi_group_nonparametric/kruskal_wallis.md
+            - Friedman 검정 (반복측정): ch16/multi_group_nonparametric/friedman.md
+            - Mood 중앙값검정: ch16/multi_group_nonparametric/median_test.md
+            - 사후 Dunn 검정: ch16/multi_group_nonparametric/dunn.md
+        - 16.6 비모수 상관:
+            - Spearman의 ρ (재론): ch16/correlation/spearman.md
+            - Kendall의 τ (재론): ch16/correlation/kendall.md
+        - 16.7 코드:
+            - 런 검정 (코드): ch16/code/runs_test.md
+            - 부호검정 (코드): ch16/code/sign_test.md
+            - Wilcoxon 검정 (코드): ch16/code/wilcoxon_tests.md
+            - 이표본 및 다집단 검정 (코드): ch16/code/two_sample_tests.md
+            - 비모수 검정 모음: ch16/code/nonparametric_suite.md
 
     - 17 Resampling Methods:
         - Chapter Overview: ch17/index.md

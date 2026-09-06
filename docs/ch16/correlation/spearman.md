@@ -1,118 +1,144 @@
-# Spearman's Rank Correlation (Revisited)
+# Spearman 순위상관 (재론)
 
-Spearman's rank correlation coefficient $r_s$ was introduced in [Chapter 12](../../ch12/correlation/spearman.md) as a measure of monotonic association between two variables. This section revisits $r_s$ from the non-parametric testing perspective, focusing on hypothesis testing, the handling of ties, and the connection to the rank-based framework developed throughout this chapter.
+Spearman 순위상관계수 $r_s$는 [12장](../../ch12/correlation/spearman.md)에서 두 변수 사이의 단조 연관성 측도로 소개되었다. 이 절에서는 비모수 검정의 관점에서 $r_s$를 다시 보며, 가설검정, 동점 처리, 그리고 이 장 전체에서 전개한 순위 기반 틀과의 연결에 집중한다.
 
-## Definition
+## 정의
 
-Given paired observations $(X_1, Y_1), (X_2, Y_2), \ldots, (X_n, Y_n)$, let $R_i$ be the rank of $X_i$ among $X_1, \ldots, X_n$ and let $S_i$ be the rank of $Y_i$ among $Y_1, \ldots, Y_n$. Spearman's correlation is the Pearson correlation computed on the ranks:
+대응 관측값 $(X_1, Y_1), (X_2, Y_2), \ldots, (X_n, Y_n)$이 주어졌을 때, $R_i$를 $X_1, \ldots, X_n$ 안에서 $X_i$의 순위, $S_i$를 $Y_1, \ldots, Y_n$ 안에서 $Y_i$의 순위라 하자. Spearman 상관은 순위에 대해 계산한 Pearson 상관이다.
 
 $$
 r_s = \frac{\sum_{i=1}^{n}(R_i - \bar{R})(S_i - \bar{S})}{\sqrt{\sum_{i=1}^{n}(R_i - \bar{R})^2 \sum_{i=1}^{n}(S_i - \bar{S})^2}}
 $$
 
-When there are no ties, this simplifies to
+동점이 없으면 이 식은 다음으로 단순해진다.
 
 $$
 r_s = 1 - \frac{6 \sum_{i=1}^{n} d_i^2}{n(n^2 - 1)}
 $$
 
-where $d_i = R_i - S_i$ is the difference between the paired ranks.
+여기서 $d_i = R_i - S_i$는 대응 순위의 차이이다.
 
-The coefficient satisfies $-1 \le r_s \le 1$, with $r_s = 1$ indicating a perfect monotonically increasing relationship and $r_s = -1$ a perfect monotonically decreasing one.
+이 계수는 $-1 \le r_s \le 1$을 만족하며, $r_s = 1$은 완전한 단조증가 관계를, $r_s = -1$은 완전한 단조감소 관계를 뜻한다.
 
-## Hypothesis Test
+## 가설검정
 
-### Hypotheses
-
-$$
-H_0 \colon \rho_s = 0 \quad \text{(no monotonic association)}
-$$
+### 가설
 
 $$
-H_a \colon \rho_s \ne 0 \quad \text{(two-sided)}
+H_0 \colon \rho_s = 0 \quad \text{(단조 연관성이 없다)}
 $$
 
-where $\rho_s$ is the population Spearman correlation.
+$$
+H_a \colon \rho_s \ne 0 \quad \text{(양측)}
+$$
 
-### Test Statistic
+여기서 $\rho_s$는 모집단 Spearman 상관이다.
 
-For large $n$ (typically $n \ge 10$), the statistic
+### 검정통계량
+
+$n$이 크면(보통 $n \ge 10$) 통계량
 
 $$
 t = r_s \sqrt{\frac{n - 2}{1 - r_s^2}}
 $$
 
-follows approximately a $t$-distribution with $n - 2$ degrees of freedom under $H_0$.
+가 $H_0$ 아래 근사적으로 자유도 $n - 2$인 $t$ 분포를 따른다.
 
-For small $n$, exact critical values based on the permutation distribution of $r_s$ are available in tables.
+$n$이 작으면 $r_s$의 순열분포에 기반한 정확 임계값을 표에서 얻을 수 있다.
 
-### Exact Null Distribution
+### 정확 귀무분포
 
-Under $H_0$ (independence), every permutation of the ranks is equally likely. There are $n!$ possible rank permutations, and the exact null distribution of $r_s$ can be obtained by computing $r_s$ for each. For small $n$, this is feasible; for larger $n$, the $t$-approximation is used.
+$H_0$(독립) 아래에서 순위의 모든 순열이 동등하게 가능하다. 가능한 순위 순열이 $n!$개이고 각각에 대해 $r_s$를 계산하면 정확 귀무분포를 얻는다. $n$이 작으면 실행 가능하고, 크면 $t$ 근사를 쓴다.
 
-## Handling Ties
+## 동점 처리
 
-When tied observations occur, the simplified formula $1 - 6\sum d_i^2 / [n(n^2-1)]$ is no longer exact. Instead, the full Pearson formula applied to midranks should be used:
+동점이 있으면 단순화된 공식 $1 - 6\sum d_i^2 / [n(n^2-1)]$이 더 이상 정확하지 않다. 대신 중간순위에 완전한 Pearson 공식을 적용해야 한다.
 
 $$
 r_s = \frac{\sum_{i=1}^{n}(R_i - \bar{R})(S_i - \bar{S})}{\sqrt{\sum_{i=1}^{n}(R_i - \bar{R})^2 \sum_{i=1}^{n}(S_i - \bar{S})^2}}
 $$
 
-where $R_i$ and $S_i$ are the midranks. This formula naturally handles ties and reduces to the simplified version when no ties are present.
+여기서 $R_i$와 $S_i$는 중간순위이다. 이 공식은 동점을 자연스럽게 처리하며 동점이 없을 때 단순화된 형태로 환원된다.
 
-!!! warning "Do not use the shortcut formula with ties"
-    The formula $r_s = 1 - 6\sum d_i^2 / [n(n^2-1)]$ assumes no tied ranks. When ties are present, this formula can produce values outside $[-1, 1]$ or give incorrect results. Always use the full Pearson-on-ranks formula when ties exist.
+!!! warning "동점이 있을 때 축약 공식을 쓰지 말 것"
+    공식 $r_s = 1 - 6\sum d_i^2 / [n(n^2-1)]$은 동점이 없다고 가정한다. 동점이 있으면 이 공식은 틀린 값을 준다. 동점이 있으면 언제나 순위에 대한 완전한 Pearson 공식을 쓴다.
 
-## Worked Example
+## 예제
 
-An analyst examines the relationship between employee experience (years) and customer satisfaction rating (1--10 scale) for 8 employees.
+한 분석가가 직원 8명의 경력(년)과 고객만족도(1--10 척도)의 관계를 살펴본다.
 
-| Employee | Experience ($X$) | Satisfaction ($Y$) | $R_i$ | $S_i$ | $d_i$ | $d_i^2$ |
-|:--------:|:------:|:------:|:--:|:--:|:---:|:---:|
-| 1 | 2 | 7 | 1 | 4 | $-3$ | 9 |
-| 2 | 5 | 8 | 3 | 5.5 | $-2.5$ | 6.25 |
-| 3 | 3 | 6 | 2 | 2.5 | $-0.5$ | 0.25 |
-| 4 | 8 | 9 | 5.5 | 7.5 | $-2$ | 4 |
-| 5 | 10 | 10 | 7.5 | 8 | $-0.5$ | 0.25 (not used) |
-| 6 | 8 | 8 | 5.5 | 5.5 | 0 | 0 |
-| 7 | 10 | 6 | 7.5 | 2.5 | 5 | 25 (not used) |
-| 8 | 6 | 9 | 4 | 7.5 | $-3.5$ | 12.25 (not used) |
+| 직원 | 경력 ($X$) | 만족도 ($Y$) | $R_i$ | $S_i$ | $d_i$ |
+|:--------:|:------:|:------:|:--:|:--:|:---:|
+| 1 | 2 | 7 | 1 | 3 | $-2$ |
+| 2 | 5 | 8 | 3 | 4.5 | $-1.5$ |
+| 3 | 3 | 6 | 2 | 1.5 | $0.5$ |
+| 4 | 8 | 9 | 5.5 | 6.5 | $-1$ |
+| 5 | 10 | 10 | 7.5 | 8 | $-0.5$ |
+| 6 | 8 | 8 | 5.5 | 4.5 | $1$ |
+| 7 | 10 | 6 | 7.5 | 1.5 | $6$ |
+| 8 | 6 | 9 | 4 | 6.5 | $-2.5$ |
 
-Because of ties (Experience: 8 appears twice, 10 appears twice; Satisfaction: 8 appears twice, 6 appears twice, 9 appears twice), we use the full Pearson formula on the midranks.
+동점이 많다. 경력에서는 $8$이 두 번, $10$이 두 번 나타나고, 만족도에서는 $6$, $8$, $9$가 각각 두 번씩 나타난다. 따라서 중간순위에 완전한 Pearson 공식을 적용한다.
 
-Computing directly from the midranks: $r_s \approx 0.619$.
+```python
+import numpy as np
+from scipy import stats
+X = np.array([2, 5, 3, 8, 10, 8, 10, 6])
+Y = np.array([7, 8, 6, 9, 10, 8, 6, 9])
+print(stats.rankdata(X))   # [1.  3.  2.  5.5 7.5 5.5 7.5 4. ]
+print(stats.rankdata(Y))   # [3.  4.5 1.5 6.5 8.  4.5 1.5 6.5]
+print(stats.spearmanr(X, Y))
+# SignificanceResult(statistic=0.37424, pvalue=0.36106)
+```
 
-**Test:** $t = 0.619\sqrt{6/(1 - 0.619^2)} = 0.619\sqrt{6/0.617} \approx 0.619 \times 3.118 \approx 1.930$.
+$$
+r_s = 0.374
+$$
 
-With $n - 2 = 6$ degrees of freedom, $p \approx 0.10$ (two-sided). At $\alpha = 0.05$, we fail to reject $H_0$.
+**검정:**
 
-## Comparison with Pearson's r
+$$
+t = 0.374\sqrt{\frac{6}{1 - 0.374^2}} = 0.374 \times 2.642 = 0.989
+$$
 
-| Feature | Pearson's $r$ | Spearman's $r_s$ |
+자유도 $n - 2 = 6$에서 양측 $p = 0.361$이다. $\alpha = 0.05$에서 $H_0$을 기각하지 못한다.
+
+!!! note "축약 공식을 쓰면 얼마나 틀리는가"
+    이 자료에서 $\sum d_i^2 = 4 + 2.25 + 0.25 + 1 + 0.25 + 1 + 36 + 6.25 = 51$이다. 축약 공식을 잘못 적용하면
+
+    $$
+    1 - \frac{6 \times 51}{8 \times 63} = 1 - \frac{306}{504} = 0.393
+    $$
+
+    이 나와 올바른 값 $0.374$와 다르다. 동점이 8쌍 중 여러 곳에 있어 순위의 분산이 이론값 $(n^2-1)/12 = 5.25$보다 작아졌기 때문이다. 이 예제에서 차이는 $0.02$로 작지만, 동점이 많을수록 커진다.
+
+## Pearson r과의 비교
+
+| 특징 | Pearson $r$ | Spearman $r_s$ |
 |:--------|:-------------|:-----------------|
-| Measures | Linear association | Monotonic association |
-| Sensitive to | Outliers, non-linearity | Robust to both |
-| Assumes | Bivariate normality (for testing) | None (rank-based) |
-| ARE vs Pearson (bivariate normal) | 1.0 | $3/\pi \approx 0.955$ |
-| Detects non-linear monotonic trends | Poorly | Well |
+| 재는 것 | 선형 연관성 | 단조 연관성 |
+| 민감한 대상 | 이상치, 비선형성 | 둘 다에 로버스트 |
+| 가정 | 이변량 정규성(검정 시) | 없음(순위 기반) |
+| Pearson 대비 ARE (이변량 정규) | 1.0 | $3/\pi \approx 0.955$ |
+| 비선형 단조 추세 탐지 | 약함 | 잘함 |
 
-## When to Prefer Spearman over Pearson
+## 언제 Pearson 대신 Spearman을 쓰는가
 
-- The relationship is monotonic but not linear (e.g., diminishing returns).
-- The data contain outliers that could inflate or deflate Pearson's $r$.
-- The data are ordinal (e.g., survey ratings, rankings).
-- Bivariate normality is not a reasonable assumption.
+- 관계가 단조이지만 선형이 아닐 때(예: 수확체감).
+- 자료에 Pearson $r$을 부풀리거나 줄일 수 있는 이상치가 있을 때.
+- 자료가 순서형일 때(예: 설문 평가, 순위).
+- 이변량 정규성이 합리적인 가정이 아닐 때.
 
-## Summary
+## 요약
 
-Spearman's $r_s$ is the Pearson correlation coefficient applied to the ranks of the observations, providing a non-parametric measure of monotonic association. The hypothesis test uses a $t$-approximation for large samples and the exact permutation distribution for small samples. Ties are handled by using midranks in the full Pearson formula. Spearman's $r_s$ achieves an ARE of $3/\pi \approx 0.955$ relative to Pearson's $r$ under bivariate normality and can be substantially more informative under non-normality or non-linearity.
+Spearman $r_s$는 관측값의 순위에 적용한 Pearson 상관계수로, 단조 연관성의 비모수 측도를 제공한다. 가설검정은 대표본에서 $t$ 근사를, 소표본에서 정확 순열분포를 쓴다. 동점은 완전한 Pearson 공식에 중간순위를 넣어 처리한다. Spearman $r_s$는 이변량 정규성 아래 Pearson $r$ 대비 ARE $3/\pi \approx 0.955$를 달성하며, 비정규성이나 비선형성이 있으면 훨씬 더 유용할 수 있다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-A teacher ranks 8 students by their performance on a math test and an English test:
+**연습문제 1.**
+한 교사가 학생 8명을 수학 시험과 영어 시험 성적으로 각각 순위를 매겼다.
 
-| Student | Math rank | English rank |
+| 학생 | 수학 순위 | 영어 순위 |
 |:---:|:---:|:---:|
 | 1 | 1 | 3 |
 | 2 | 2 | 1 |
@@ -123,27 +149,29 @@ A teacher ranks 8 students by their performance on a math test and an English te
 | 7 | 7 | 6 |
 | 8 | 8 | 7 |
 
-**(a)** Compute the rank differences $d_i$ and $d_i^2$.
+**(a)** 순위차이 $d_i$와 $d_i^2$을 계산하라.
 
-**(b)** Compute Spearman's rank correlation coefficient:
+**(b)** Spearman 순위상관계수
 
 $$
 r_s = 1 - \frac{6 \sum d_i^2}{n(n^2 - 1)}
 $$
 
-**(c)** Test whether $r_s$ is significantly different from zero using the $t$-approximation:
+을 계산하라.
+
+**(c)** $t$ 근사
 
 $$
 t = r_s \sqrt{\frac{n-2}{1 - r_s^2}}
 $$
 
-with $n - 2$ degrees of freedom.
+로 $r_s$가 0과 유의하게 다른지 자유도 $n - 2$에서 검정하라.
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
 
     **(a)**
 
-    | Student | Math | English | $d_i$ | $d_i^2$ |
+    | 학생 | 수학 | 영어 | $d_i$ | $d_i^2$ |
     |:---:|:---:|:---:|:---:|:---:|
     | 1 | 1 | 3 | $-2$ | 4 |
     | 2 | 2 | 1 | 1 | 1 |
@@ -164,12 +192,145 @@ with $n - 2$ degrees of freedom.
     r_s = 1 - \frac{6 \times 14}{8(64 - 1)} = 1 - \frac{84}{504} = 1 - 0.1667 = 0.8333
     $$
 
-    **(c)** The $t$-statistic:
+    **(c)** $t$ 통계량은
 
     $$
     t = 0.8333 \sqrt{\frac{6}{1 - 0.6944}} = 0.8333 \sqrt{\frac{6}{0.3056}} = 0.8333 \sqrt{19.63} = 0.8333 \times 4.431 = 3.692
     $$
 
-    With 6 degrees of freedom, the critical value for a two-sided test at $\alpha = 0.05$ is $t_{0.025, 6} = 2.447$.
+    자유도 6에서 $\alpha = 0.05$ 양측 임계값은 $t_{0.025, 6} = 2.447$이다.
 
-    Since $|t| = 3.69 > 2.447$, we reject $H_0$. The p-value is approximately 0.010. There is a statistically significant positive monotonic association between math and English performance ($r_s = 0.83$).
+    $|t| = 3.69 > 2.447$이므로 $H_0$을 기각한다. $p$값은 약 $0.0102$이다. 수학 성적과 영어 성적 사이에 통계적으로 유의한 양의 단조 연관성이 있다($r_s = 0.83$).
+
+    ```python
+    import numpy as np
+    from scipy import stats
+    math = np.arange(1, 9); eng = np.array([3, 1, 2, 5, 4, 8, 6, 7])
+    print(stats.spearmanr(math, eng))
+    # SignificanceResult(statistic=0.83333, pvalue=0.010176)
+    ```
+
+    SciPy의 `spearmanr`은 $t$ 근사를 쓰므로 $p = 0.010176$을 반환하며, 위에서 손으로 계산한 $0.010185$와 같다. 다만 이것은 정확 $p$값이 아니다. 연습문제 2에서 보듯 $n = 8$의 정확값은 $0.0154$이다.
+
+---
+
+**연습문제 2.**
+$n = 8$에서 $r_s$의 정확 귀무분포를 열거로 구하고, $t$ 근사가 얼마나 정확한지 확인하라.
+
+??? success "연습문제 2 풀이"
+    한쪽 변수의 순위를 $1, \ldots, 8$로 고정하고 다른 쪽의 $8! = 40{,}320$가지 순열을 모두 열거한다.
+
+    ```python
+    import numpy as np, itertools
+    from scipy import stats
+
+    n = 8
+    R = np.arange(1, n + 1)
+    denom = n * (n * n - 1) / 6
+    rs_all = np.array([1 - ((R - np.array(p)) ** 2).sum() / denom
+                       for p in itertools.permutations(R)])
+    print(len(rs_all), rs_all.mean().round(6), rs_all.std().round(4))
+
+    for obs in (0.8333, 0.6190, 0.4762, 0.3810):
+        exact = 2 * (rs_all >= obs - 1e-9).mean()
+        t = obs * np.sqrt((n - 2) / (1 - obs ** 2))
+        approx = 2 * stats.t.sf(t, n - 2)
+        print(round(obs, 4), round(exact, 5), round(approx, 5))
+    ```
+
+    | 관측 $r_s$ | 정확 양측 $p$ | $t$ 근사 $p$ |
+    |---:|---:|---:|
+    | 0.8333 | 0.0154 | 0.0102 |
+    | 0.6190 | 0.1150 | 0.1018 |
+    | 0.4762 | 0.2162 | 0.2329 |
+    | 0.3810 | 0.3268 | 0.3518 |
+
+    귀무분포의 평균은 정확히 $0$이고 표준편차는 $1/\sqrt{n-1} = 0.3780$으로, 이론값과 소수점 넷째 자리까지 일치한다.
+
+    $t$ 근사의 오차 방향이 $r_s$의 크기에 따라 **뒤집힌다**. 꼬리($r_s \ge 0.62$)에서는 $p$값을 과소평가하고(예: $0.0102$ 대 $0.0154$, 34% 작다) 중앙부($r_s \le 0.48$)에서는 과대평가한다.
+
+    실무적으로 위험한 쪽은 꼬리이다. $r_s = 0.8333$에서 $t$ 근사가 $p = 0.0102$를 주어 $\alpha = 0.01$ 근처에서 기각하게 만들지만 정확값은 $0.0154$로 기각하지 못한다. **$n \le 15$ 정도에서는 정확 $p$값을 쓰는 편이 안전하다.** SciPy의 `spearmanr`은 $t$ 근사를 쓰므로, 정확값이 필요하면 `scipy.stats.permutation_test`를 쓴다.
+
+---
+
+**연습문제 3.**
+Spearman $r_s$가 이상치에 로버스트하다고 하지만, 어떤 종류의 이상치에는 여전히 취약하다. Pearson $r$과 $r_s$가 이상치 하나에 어떻게 반응하는지 비교하라.
+
+??? success "연습문제 3 풀이"
+    두 가지 이상치를 구별해야 한다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+    rng = np.random.default_rng(0)
+    n = 30
+    x = rng.normal(0, 1, n)
+    y = x + rng.normal(0, 0.5, n)      # 강한 양의 상관
+
+    print("원자료:", stats.pearsonr(x, y).statistic.round(3),
+          stats.spearmanr(x, y).statistic.round(3))
+
+    # (A) 두 변수 모두 극단이지만 추세를 따르는 점
+    xa, ya = np.append(x, 10), np.append(y, 10)
+    print("추세 따름:", stats.pearsonr(xa, ya).statistic.round(3),
+          stats.spearmanr(xa, ya).statistic.round(3))
+
+    # (B) 추세를 거스르는 지렛대점
+    xb, yb = np.append(x, 10), np.append(y, -10)
+    print("추세 거스름:", stats.pearsonr(xb, yb).statistic.round(3),
+          stats.spearmanr(xb, yb).statistic.round(3))
+    ```
+
+    | 자료 | Pearson $r$ | Spearman $r_s$ |
+    |:---|---:|---:|
+    | 원자료 ($n = 30$) | 0.829 | 0.840 |
+    | (A) 추세를 따르는 극단점 추가 | **0.972** | 0.855 |
+    | (B) 추세를 거스르는 극단점 추가 | **$-0.701$** | 0.668 |
+
+    **(A)** 추세를 따르는 극단점 하나가 Pearson $r$을 $0.829$에서 $0.972$로 밀어 올린다. 상관이 실제보다 훨씬 강해 보이게 만드는 것이다. $r_s$는 $0.840 \to 0.855$로 거의 움직이지 않는다.
+
+    **(B)** 추세를 거스르는 점 하나가 Pearson $r$을 $+0.829$에서 $-0.701$로 뒤집는다. **부호까지 반대가 되어** 강한 음의 상관을 보고한다. $r_s$는 $0.668$로 줄기는 하지만 여전히 올바른 방향의 강한 연관성을 보고한다.
+
+    **왜 $r_s$가 안전한가.** 순위변환이 $(10, -10)$이라는 점을 $(31, 1)$이라는 순위로 바꾼다. 여전히 반대 방향의 증거이지만 그 크기가 순위 하나만큼으로 제한된다. Pearson은 $10 \times (-10) = -100$이라는 거대한 음의 교차곱을 그대로 받으며, 이 하나가 나머지 30개의 기여를 압도한다.
+
+    **그러나 $r_s$도 무적은 아니다.** $0.840 \to 0.668$은 21% 감소로 결코 작지 않다. 이상치가 여러 개이거나 $n$이 더 작으면 $r_s$도 크게 흔들린다. 로버스트성은 정도의 문제이지 절대적 보장이 아니다.
+
+---
+
+**연습문제 4.**
+Spearman $r_s$와 Pearson $r$이 완전히 다른 결론을 주는 상황을 만들어라. 어느 쪽이 옳은가?
+
+??? success "연습문제 4 풀이"
+    **상황 1: 완전한 단조 관계이지만 비선형.**
+
+    ```python
+    import numpy as np
+    from scipy import stats
+    x = np.arange(1, 21)
+    y = np.exp(x / 2)          # 완전한 단조증가
+    print(stats.pearsonr(x, y).statistic.round(4))    # 0.6991
+    print(stats.spearmanr(x, y).statistic.round(4))   # 1.0000
+    ```
+
+    $y = e^{x/2}$는 $x$의 완전한 단조증가 함수이므로 $r_s = 1$이 **정확히** 맞다. Pearson $r = 0.70$은 "관계가 선형이 아니다"를 반영할 뿐이며, 이것을 "연관성이 약하다"로 읽으면 오독이다.
+
+    **상황 2: 강한 관계이지만 단조가 아님.**
+
+    ```python
+    x = np.linspace(-3, 3, 41)
+    y = x ** 2                 # 완벽한 결정론적 관계
+    print(stats.pearsonr(x, y).statistic.round(4))    # -0.0000
+    print(stats.spearmanr(x, y).statistic.round(4))   # -0.0146
+    ```
+
+    여기서는 **둘 다 사실상 0**이다($r = 0.0000$, $r_s = -0.0146$). $y$가 $x$로 완전히 결정되는데도 그렇다. 두 계수 모두 단조성을 전제하므로 U자 관계를 전혀 잡아내지 못한다.
+
+    **어느 쪽이 옳은가?** 질문에 따라 다르다.
+
+    | 질문 | 적절한 측도 |
+    |:---|:---|
+    | "$x$가 커지면 $y$도 커지는가?" | $r_s$ 또는 $\tau$ |
+    | "$y$를 $x$의 선형함수로 얼마나 잘 예측하는가?" | $r$ |
+    | "$x$와 $y$가 독립인가?" | 둘 다 부적절 --- 거리상관이나 상호정보량 |
+
+    **가장 중요한 교훈:** 어떤 상관계수도 산점도를 대체하지 못한다. 상황 2에서 $r \approx r_s \approx 0$이라는 숫자만 보고 "관계 없음"이라 결론지으면 완벽한 포물선 관계를 놓친다. Anscombe의 사중주가 보여 준 것과 같은 교훈이다.

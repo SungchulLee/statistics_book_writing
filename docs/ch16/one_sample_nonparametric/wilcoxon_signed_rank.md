@@ -1,69 +1,69 @@
-# Wilcoxon Signed-Rank Test
+# Wilcoxon 부호순위검정
 
-The [sign test](sign_test.md) uses only the direction of each deviation from the hypothesized median, discarding all information about how far each observation falls from $m_0$. The **Wilcoxon signed-rank test** improves on this by incorporating both the sign *and* the rank of the absolute deviation, giving greater weight to observations that differ substantially from $m_0$. This additional information yields a more powerful test whenever the underlying distribution of deviations is symmetric.
+[부호검정](sign_test.md)은 가설 중앙값으로부터의 편차에서 방향만 쓰고, 각 관측값이 $m_0$에서 얼마나 떨어져 있는지에 대한 정보를 모두 버린다. **Wilcoxon 부호순위검정**은 부호와 함께 절대편차의 *순위*까지 반영하여 $m_0$에서 크게 벗어난 관측값에 더 큰 가중치를 준다. 이 추가 정보 덕에, 편차의 분포가 대칭이기만 하면 더 강력한 검정이 된다.
 
-!!! note "Not to be confused with the rank-sum test"
-    The **Wilcoxon signed-rank test** is for one sample or paired data. The **Wilcoxon rank-sum test** (covered in [Rank-Sum Test](../two_sample_nonparametric/rank_sum.md)) is for comparing two independent samples.
+!!! note "순위합검정과 혼동하지 말 것"
+    **Wilcoxon 부호순위검정**은 일표본 또는 대응자료를 위한 것이다. **Wilcoxon 순위합검정**([순위합검정](../two_sample_nonparametric/rank_sum.md) 참조)은 독립인 두 표본을 비교하기 위한 것이다.
 
-## Assumptions
+## 가정
 
-1. The observations $X_1, X_2, \ldots, X_n$ are independent.
-2. Each $X_i$ comes from a continuous distribution.
-3. The distribution of $X_i - m_0$ is **symmetric** about zero under $H_0$.
+1. 관측값 $X_1, X_2, \ldots, X_n$이 독립이다.
+2. 각 $X_i$가 연속분포에서 나온다.
+3. $H_0$ 아래에서 $X_i - m_0$의 분포가 0을 중심으로 **대칭**이다.
 
-The symmetry assumption is the key additional requirement compared to the sign test. When symmetry is violated, the sign test is the safer choice.
+대칭성 가정이 부호검정에 비해 추가로 요구되는 핵심 조건이다. 대칭성이 깨지면 부호검정이 더 안전한 선택이다.
 
-## Hypotheses
+## 가설
 
-For a one-sample test with hypothesized median $m_0$:
-
-$$
-H_0 \colon \text{The median of } X \text{ equals } m_0
-$$
+가설 중앙값이 $m_0$인 일표본 검정에서
 
 $$
-H_a \colon \text{The median of } X \text{ does not equal } m_0 \quad \text{(two-sided)}
+H_0 \colon X \text{의 중앙값이 } m_0 \text{과 같다}
 $$
 
-One-sided alternatives $H_a \colon \text{median} > m_0$ or $H_a \colon \text{median} < m_0$ follow analogously.
+$$
+H_a \colon X \text{의 중앙값이 } m_0 \text{과 다르다} \quad \text{(양측)}
+$$
 
-## Test Statistic
+단측 대립가설 $H_a \colon \text{중앙값} > m_0$ 또는 $H_a \colon \text{중앙값} < m_0$도 마찬가지 방식으로 다룬다.
 
-**Step 1.** Compute the deviations $D_i = X_i - m_0$.
+## 검정통계량
 
-**Step 2.** Discard any $D_i = 0$ (observations equal to $m_0$). Let $n$ be the number of remaining observations.
+**1단계.** 편차 $D_i = X_i - m_0$을 계산한다.
 
-**Step 3.** Rank the absolute deviations $|D_1|, |D_2|, \ldots, |D_n|$ from smallest to largest. Assign midranks to ties.
+**2단계.** $D_i = 0$인 관측값($m_0$과 같은 값)을 버린다. 남은 관측값의 개수를 $n$이라 하자.
 
-**Step 4.** Define the signed ranks:
+**3단계.** 절대편차 $|D_1|, |D_2|, \ldots, |D_n|$을 작은 값부터 순위를 매긴다. 동점에는 중간순위를 배정한다.
+
+**4단계.** 부호순위를 정의한다.
 
 $$
 W_i = \operatorname{sign}(D_i) \cdot R_i
 $$
 
-where $R_i$ is the rank of $|D_i|$.
+여기서 $R_i$는 $|D_i|$의 순위이다.
 
-**Step 5.** Compute the positive and negative rank sums:
+**5단계.** 양·음 순위합을 계산한다.
 
 $$
 W^+ = \sum_{\{i : D_i > 0\}} R_i, \qquad W^- = \sum_{\{i : D_i < 0\}} R_i
 $$
 
-Note that $W^+ + W^- = n(n+1)/2$.
+$W^+ + W^- = n(n+1)/2$임에 유의하라.
 
-The test statistic for the two-sided test is
+양측검정의 검정통계량은
 
 $$
 T = \min(W^+, W^-)
 $$
 
-Small values of $T$ provide evidence against $H_0$.
+이다. $T$가 작으면 $H_0$에 반하는 증거가 된다.
 
-## Null Distribution
+## 귀무분포
 
-Under $H_0$ with symmetric deviations, each of the $2^n$ sign assignments is equally likely. The exact null distribution of $T$ (or equivalently $W^+$) can be tabulated by enumeration for small $n$.
+편차가 대칭인 $H_0$ 아래에서 $2^n$가지 부호 배정이 모두 동등하게 가능하다. $T$(또는 동치로 $W^+$)의 정확 귀무분포는 $n$이 작을 때 열거로 표를 만들 수 있다.
 
-**Mean and variance of $W^+$ under $H_0$:**
+**$H_0$ 아래 $W^+$의 평균과 분산:**
 
 $$
 \mu_{W^+} = \frac{n(n+1)}{4}
@@ -73,27 +73,29 @@ $$
 \sigma_{W^+}^2 = \frac{n(n+1)(2n+1)}{24}
 $$
 
-## Normal Approximation
+## 정규근사
 
-For large $n$ (typically $n \ge 20$), the standardized statistic
+$n$이 크면(보통 $n \ge 20$) 표준화된 통계량
 
 $$
 Z = \frac{W^+ - \mu_{W^+}}{\sigma_{W^+}}
 $$
 
-is approximately $\mathcal{N}(0, 1)$.
+은 근사적으로 $\mathcal{N}(0, 1)$을 따른다.
 
-When ties are present among the $|D_i|$ values, the variance requires a correction. If there are $g$ groups of ties with sizes $t_1, t_2, \ldots, t_g$, the corrected variance is
+$|D_i|$ 값들에 동점이 있으면 분산에 보정이 필요하다. 크기가 $t_1, t_2, \ldots, t_g$인 동점 집단이 $g$개 있을 때 보정된 분산은
 
 $$
 \sigma_{W^+}^2 = \frac{n(n+1)(2n+1)}{24} - \frac{1}{48}\sum_{j=1}^{g}(t_j^3 - t_j)
 $$
 
-## Worked Example
+이다.
 
-A psychologist measures reaction times (in ms) for 10 subjects under a new protocol and wants to test whether the median reaction time differs from $m_0 = 250$ ms.
+## 예제
 
-| Subject | $X_i$ | $D_i = X_i - 250$ | $|D_i|$ | Rank | Signed rank |
+한 심리학자가 새 프로토콜에서 피험자 10명의 반응시간(ms)을 측정하고, 중앙값 반응시간이 $m_0 = 250$ ms와 다른지 검정하려 한다.
+
+| 피험자 | $X_i$ | $D_i = X_i - 250$ | $\lvert D_i \rvert$ | 순위 | 부호순위 |
 |:-------:|:------:|:------------------:|:--------:|:----:|:-----------:|
 | 1 | 268 | 18 | 18 | 5 | $+5$ |
 | 2 | 241 | $-9$ | 9 | 2 | $-2$ |
@@ -106,7 +108,7 @@ A psychologist measures reaction times (in ms) for 10 subjects under a new proto
 | 9 | 295 | 45 | 45 | 10 | $+10$ |
 | 10 | 275 | 25 | 25 | 8 | $+8$ |
 
-**Compute rank sums:**
+**순위합 계산:**
 
 $$
 W^+ = 5 + 7 + 1 + 3 + 9 + 10 + 8 = 43
@@ -116,11 +118,11 @@ $$
 W^- = 2 + 6 + 4 = 12
 $$
 
-**Check:** $W^+ + W^- = 43 + 12 = 55 = 10(11)/2$. $\checkmark$
+**검산:** $W^+ + W^- = 43 + 12 = 55 = 10(11)/2$. $\checkmark$
 
-**Test statistic:** $T = \min(43, 12) = 12$.
+**검정통계량:** $T = \min(43, 12) = 12$.
 
-**Normal approximation:**
+**정규근사:**
 
 $$
 \mu_{W^+} = \frac{10(11)}{4} = 27.5
@@ -135,55 +137,69 @@ Z = \frac{43 - 27.5}{9.811} \approx 1.580
 $$
 
 $$
-p = 2\,\mathcal{N}(-1.580) \approx 0.114
+p = 2\,\Phi(-1.580) \approx 0.114
 $$
 
-At $\alpha = 0.05$, we fail to reject $H_0$. There is insufficient evidence that the median reaction time differs from 250 ms.
+$\alpha = 0.05$에서 $H_0$을 기각하지 못한다. 중앙값 반응시간이 250 ms와 다르다는 증거가 충분하지 않다.
 
-## Comparison with the Sign Test
+!!! warning "$n = 10$에서 정규근사는 낙관적이다"
+    같은 자료의 **정확** 양측 $p$값은 $0.1309$로, 정규근사값 $0.114$보다 15% 크다. 연속성 보정을 넣으면 $0.1263$으로 정확값에 가까워진다.
 
-| Feature | Sign Test | Wilcoxon Signed-Rank |
+    ```python
+    import numpy as np
+    from scipy import stats
+    d = np.array([268, 241, 273, 230, 255, 262, 289, 237, 295, 275]) - 250
+    print(stats.wilcoxon(d, method='exact').pvalue)                     # 0.13086
+    print(stats.wilcoxon(d, method='approx', correction=False).pvalue)  # 0.11413
+    print(stats.wilcoxon(d, method='approx', correction=True).pvalue)   # 0.12628
+    ```
+
+    이 예제에서는 세 값 모두 $\alpha = 0.05$에서 같은 결론을 주지만, 근사가 $p$값을 체계적으로 과소평가한다는 점은 기억해야 한다. $n \le 20$에서는 SciPy가 기본적으로 정확검정을 쓰며, 그 편이 옳다.
+
+## 부호검정과의 비교
+
+| 특징 | 부호검정 | Wilcoxon 부호순위 |
 |:--------|:----------|:---------------------|
-| Uses signs | Yes | Yes |
-| Uses magnitudes | No | Yes (via ranks) |
-| Symmetry assumption | No | Yes |
-| ARE vs $t$-test (normal data) | $2/\pi \approx 0.637$ | $3/\pi \approx 0.955$ |
-| Robustness to outliers | Very high | High |
+| 부호를 쓰는가 | 예 | 예 |
+| 크기를 쓰는가 | 아니오 | 예 (순위를 통해) |
+| 대칭성 가정 | 없음 | 있음 |
+| $t$ 검정 대비 ARE (정규자료) | $2/\pi \approx 0.637$ | $3/\pi \approx 0.955$ |
+| 이상치에 대한 로버스트성 | 매우 높음 | 높음 |
 
-The signed-rank test achieves nearly the same power as the $t$-test under normality (ARE $\approx 0.955$) and can exceed the $t$-test's power under heavy-tailed distributions. The sign test is preferred only when the symmetry assumption is untenable or when data are purely ordinal.
+부호순위검정은 정규성 아래에서 $t$ 검정과 거의 같은 검정력(ARE $\approx 0.955$)에 도달하며, 두꺼운 꼬리 분포에서는 $t$ 검정을 넘어설 수 있다. 부호검정은 대칭성 가정을 받아들일 수 없거나 자료가 순수하게 순서형일 때만 선호된다.
 
-## Summary
+## 요약
 
-The Wilcoxon signed-rank test extends the sign test by ranking the absolute deviations from the hypothesized median and weighting each sign by its rank. This produces a more powerful test whenever the distribution of deviations is symmetric, at the cost of an additional assumption. The test statistic $T = \min(W^+, W^-)$ can be evaluated exactly for small samples or via a normal approximation for larger samples.
+Wilcoxon 부호순위검정은 가설 중앙값으로부터의 절대편차에 순위를 매기고 각 부호에 그 순위만큼 가중치를 주어 부호검정을 확장한다. 편차의 분포가 대칭이면 더 강력한 검정이 되지만 가정이 하나 늘어난다는 대가를 치른다. 검정통계량 $T = \min(W^+, W^-)$은 소표본에서는 정확히, 대표본에서는 정규근사로 평가할 수 있다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Using the cholesterol data below, perform a Wilcoxon signed-rank test.
+**연습문제 1.**
+아래 콜레스테롤 자료로 Wilcoxon 부호순위검정을 수행하라.
 
-| Patient | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |
+| 환자 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |
 |:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
-| Difference | 10 | 5 | $-5$ | 15 | 2 | 5 | 10 | $-3$ | 15 | 10 |
+| 차이 | 10 | 5 | $-5$ | 15 | 2 | 5 | 10 | $-3$ | 15 | 10 |
 
-**(a)** Compute the absolute differences $|d_i|$ and rank them from smallest to largest. Assign signed ranks.
+**(a)** 절대차이 $|d_i|$를 구해 작은 값부터 순위를 매기고 부호순위를 배정하라.
 
-**(b)** Compute the test statistic $W^+ = \sum \text{(ranks of positive differences)}$.
+**(b)** 검정통계량 $W^+ = \sum \text{(양의 차이들의 순위)}$를 계산하라.
 
-**(c)** For $n = 10$, under $H_0$ the expected value of $W^+$ is $n(n+1)/4$ and the variance is $n(n+1)(2n+1)/24$. Compute the $z$-statistic and the approximate p-value.
+**(c)** $n = 10$일 때 $H_0$ 아래 $W^+$의 기댓값은 $n(n+1)/4$, 분산은 $n(n+1)(2n+1)/24$이다. **동점 보정을 적용하여** $z$ 통계량과 근사 $p$값을 계산하라.
 
-**(d)** Compare the conclusion with the sign test result.
+**(d)** 부호검정 결과와 결론을 비교하라.
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
 
-    **(a)** Sorted $|d_i|$: 2, 3, 5, 5, 5, 10, 10, 10, 15, 15.
+    **(a)** $|d_i|$를 정렬하면 2, 3, 5, 5, 5, 10, 10, 10, 15, 15이다.
 
-    - 2 → rank 1
-    - 3 → rank 2
-    - 5, 5, 5 → ranks 3, 4, 5 → average rank 4
-    - 10, 10, 10 → ranks 6, 7, 8 → average rank 7
-    - 15, 15 → ranks 9, 10 → average rank 9.5
+    - 2 → 순위 1
+    - 3 → 순위 2
+    - 5, 5, 5 → 위치 3, 4, 5 → 중간순위 4
+    - 10, 10, 10 → 위치 6, 7, 8 → 중간순위 7
+    - 15, 15 → 위치 9, 10 → 중간순위 9.5
 
-    | Patient | $d_i$ | $|d_i|$ | Rank | Signed rank |
+    | 환자 | $d_i$ | $\lvert d_i \rvert$ | 순위 | 부호순위 |
     |:---:|:---:|:---:|:---:|:---:|
     | 5 | 2 | 2 | 1 | $+1$ |
     | 8 | $-3$ | 3 | 2 | $-2$ |
@@ -206,108 +222,173 @@ Using the cholesterol data below, perform a Wilcoxon signed-rank test.
     W^- = 2 + 4 = 6
     $$
 
-    Check: $W^+ + W^- = 49 + 6 = 55 = n(n+1)/2 = 10 \times 11/2$.
+    검산: $W^+ + W^- = 49 + 6 = 55 = n(n+1)/2 = 10 \times 11/2$.
 
-    **(c)** Under $H_0$:
-
-    $$
-    E[W^+] = \frac{n(n+1)}{4} = \frac{10 \times 11}{4} = 27.5
-    $$
-
-    $$
-    \text{Var}(W^+) = \frac{n(n+1)(2n+1)}{24} = \frac{10 \times 11 \times 21}{24} = \frac{2310}{24} = 96.25
-    $$
-
-    $$
-    z = \frac{W^+ - E[W^+]}{\sqrt{\text{Var}(W^+)}} = \frac{49 - 27.5}{\sqrt{96.25}} = \frac{21.5}{9.811} \approx 2.19
-    $$
-
-    For a one-sided test, the p-value is:
-
-    $$
-    p = P(Z \ge 2.19) = 1 - \mathcal{N}(2.19) \approx 0.0143
-    $$
-
-    **(d)** The Wilcoxon signed-rank test gives $p \approx 0.014$, which is significant at $\alpha = 0.05$, whereas the sign test gave $p \approx 0.055$, which was not significant. The Wilcoxon test reaches significance because it uses the magnitudes of the differences — the larger positive differences (10 and 15) receive high ranks that contribute substantially to $W^+$. The sign test treats all positive differences equally, wasting this information.
-
-**(a)** Compute the absolute differences $|d_i|$ and rank them from smallest to largest. Assign signed ranks.
-
-**(b)** Compute the test statistic $W^+ = \sum \text{(ranks of positive differences)}$.
-
-**(c)** For $n = 10$, under $H_0$ the expected value of $W^+$ is $n(n+1)/4$ and the variance is $n(n+1)(2n+1)/24$. Compute the $z$-statistic and the approximate p-value.
-
-**(d)** Compare the conclusion with the sign test result from Exercise 1.
-
-??? success "Solution to Exercise 1"
-
-    **(a)** Absolute differences and ranks:
-
-    | Patient | $d_i$ | $|d_i|$ | Rank | Signed rank |
-    |:---:|:---:|:---:|:---:|:---:|
-    | 5 | 2 | 2 | 1 | $+1$ |
-    | 3 | $-5$ | 5 | 3 | $-3$ |
-    | 8 | $-3$ | 3 | 2 | $-2$ |
-    | 2 | 5 | 5 | 3 | $+3$ |
-    | 6 | 5 | 5 | 3 | $+3$ |
-    | 1 | 10 | 10 | 6.5 | $+6.5$ |
-    | 7 | 10 | 10 | 6.5 | $+6.5$ |
-    | 10 | 10 | 10 | 6.5 | $+6.5$ |
-    | 4 | 15 | 15 | 9.5 | $+9.5$ |
-    | 9 | 15 | 15 | 9.5 | $+9.5$ |
-
-    Tied values of $|d_i|$ receive the average of the ranks they would occupy. The three values of 5 occupy ranks 2, 3, 4, so each gets rank 3. The three values of 10 occupy ranks 6, 7, 8, so each gets rank $(6+7+8)/3 = 7$. Let me re-rank properly:
-
-    Sorted $|d_i|$: 2, 3, 5, 5, 5, 10, 10, 10, 15, 15.
-
-    - 2 → rank 1
-    - 3 → rank 2
-    - 5, 5, 5 → ranks 3, 4, 5 → average rank 4
-    - 10, 10, 10 → ranks 6, 7, 8 → average rank 7
-    - 15, 15 → ranks 9, 10 → average rank 9.5
-
-    | Patient | $d_i$ | $|d_i|$ | Rank | Signed rank |
-    |:---:|:---:|:---:|:---:|:---:|
-    | 5 | 2 | 2 | 1 | $+1$ |
-    | 8 | $-3$ | 3 | 2 | $-2$ |
-    | 3 | $-5$ | 5 | 4 | $-4$ |
-    | 2 | 5 | 5 | 4 | $+4$ |
-    | 6 | 5 | 5 | 4 | $+4$ |
-    | 1 | 10 | 10 | 7 | $+7$ |
-    | 7 | 10 | 10 | 7 | $+7$ |
-    | 10 | 10 | 10 | 7 | $+7$ |
-    | 4 | 15 | 15 | 9.5 | $+9.5$ |
-    | 9 | 15 | 15 | 9.5 | $+9.5$ |
-
-    **(b)**
-
-    $$
-    W^+ = 1 + 4 + 4 + 7 + 7 + 7 + 9.5 + 9.5 = 49
-    $$
-
-    $$
-    W^- = 2 + 4 = 6
-    $$
-
-    Check: $W^+ + W^- = 49 + 6 = 55 = n(n+1)/2 = 10 \times 11/2$.
-
-    **(c)** Under $H_0$:
+    **(c)** $H_0$ 아래에서
 
     $$
     E[W^+] = \frac{n(n+1)}{4} = \frac{10 \times 11}{4} = 27.5
     $$
 
-    $$
-    \text{Var}(W^+) = \frac{n(n+1)(2n+1)}{24} = \frac{10 \times 11 \times 21}{24} = \frac{2310}{24} = 96.25
-    $$
+    보정하지 않은 분산은
 
     $$
-    z = \frac{W^+ - E[W^+]}{\sqrt{\text{Var}(W^+)}} = \frac{49 - 27.5}{\sqrt{96.25}} = \frac{21.5}{9.811} \approx 2.19
+    \frac{n(n+1)(2n+1)}{24} = \frac{10 \times 11 \times 21}{24} = 96.25
     $$
 
-    For a one-sided test, the p-value is:
+    이다. 동점 집단은 크기 3(값 5), 크기 3(값 10), 크기 2(값 15)이므로 보정항은
 
     $$
-    p = P(Z \ge 2.19) = 1 - \mathcal{N}(2.19) \approx 0.0143
+    \frac{1}{48}\sum_j (t_j^3 - t_j) = \frac{(27-3) + (27-3) + (8-2)}{48} = \frac{54}{48} = 1.125
     $$
 
-    **(d)** The Wilcoxon signed-rank test gives $p \approx 0.014$, which is significant at $\alpha = 0.05$, whereas the sign test gave $p \approx 0.055$, which was not significant. The Wilcoxon test reaches significance because it uses the magnitudes of the differences — the larger positive differences (10 and 15) receive high ranks that contribute substantially to $W^+$. The sign test treats all positive differences equally, wasting this information.
+    이고 보정된 분산은 $96.25 - 1.125 = 95.125$, 표준편차는 $9.753$이다.
+
+    $$
+    z = \frac{49 - 27.5}{9.753} = \frac{21.5}{9.753} \approx 2.204
+    $$
+
+    단측 $p$값은
+
+    $$
+    p = P(Z \ge 2.204) = 1 - \Phi(2.204) \approx 0.0137
+    $$
+
+    ```python
+    import numpy as np
+    from scipy import stats
+    d = np.array([10, 5, -5, 15, 2, 5, 10, -3, 15, 10])
+    print(stats.wilcoxon(d, alternative='greater', method='exact').pvalue)   # 0.013672
+    print(stats.wilcoxon(d, alternative='greater', method='approx',
+                         correction=False).pvalue)                           # 0.013748
+    ```
+
+    정확 $p$값 $0.01367$과 거의 일치한다. 동점 보정을 빠뜨리면 $z = 2.191$, $p = 0.0142$가 되어 정확값에서 조금 더 멀어진다.
+
+    **(d)** Wilcoxon 부호순위검정은 $p \approx 0.0137$로 $\alpha = 0.05$에서 유의한 반면, 부호검정은 $p \approx 0.055$로 유의하지 않았다. Wilcoxon이 유의성에 도달한 것은 차이의 크기를 쓰기 때문이다. 큰 양의 차이(10과 15)가 높은 순위를 받아 $W^+$에 크게 기여한다. 부호검정은 모든 양의 차이를 똑같이 취급하여 이 정보를 낭비한다.
+
+---
+
+**연습문제 2.**
+Wilcoxon 부호순위검정의 대칭성 가정이 깨지면 무슨 일이 일어나는가? 중앙값이 정확히 0인 비대칭 분포에서 제1종 오류율을 모의실험으로 확인하라.
+
+??? success "연습문제 2 풀이"
+    중앙값이 0인 비대칭 분포를 만들자. $\text{Exp}(1)$에서 중앙값 $\ln 2$를 빼면 중앙값이 0이면서 오른쪽으로 치우친 분포가 된다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+    rng = np.random.default_rng(0)
+    B = 3000
+    for n in (10, 20, 50, 100):
+        x = rng.exponential(1, (B, n)) - np.log(2)
+        pw = np.array([stats.wilcoxon(x[i]).pvalue for i in range(B)])
+        ps = np.array([stats.binomtest(int((x[i] > 0).sum()), n).pvalue
+                       for i in range(B)])
+        print(n, (pw < .05).mean(), (ps < .05).mean())
+    ```
+
+    | $n$ | Wilcoxon 부호순위 | 부호검정 |
+    |---:|---:|---:|
+    | 10 | 0.058 | 0.019 |
+    | 20 | 0.109 | 0.040 |
+    | 50 | 0.219 | 0.037 |
+    | 100 | 0.376 | 0.035 |
+
+    Wilcoxon 검정이 **무너진다**. 중앙값이 참으로 0인데도 $n = 100$에서 표본의 38%를 기각한다. 결정적으로, $n$이 커질수록 **더 나빠진다**. 크기가 명목수준으로 수렴하지 않고 1로 발산한다. 이것은 근사 오차가 아니라 검정이 다른 가설을 검정하고 있다는 신호이다.
+
+    이유는 이렇다. Wilcoxon 부호순위검정이 실제로 검정하는 귀무가설은 "중앙값이 0"이 아니라
+
+    $$
+    H_0 \colon P(X_i + X_j > 0) = \tfrac{1}{2} \quad (i \ne j)
+    $$
+
+    즉 **Hodges-Lehmann 중앙값**(모든 쌍 평균 $(X_i + X_j)/2$의 중앙값, Walsh 평균이라고도 한다)이 0이라는 것이다. 대칭분포에서는 이것이 중앙값과 같지만 비대칭분포에서는 다르다. 중앙값 이동 지수분포에서 Walsh 평균의 중앙값은 약 $+0.147$로 0이 아니다.
+
+    ```python
+    y = rng.exponential(1, 200000) - np.log(2)
+    w = (y[:100000] + y[100000:]) / 2
+    print(np.median(y), np.median(w))     # 0.0001, 0.147
+    ```
+
+    이 $+0.147$이 바로 검정이 잡아내는 것이며, 표본이 커질수록 그 신호가 확실해지므로 기각률이 1로 간다.
+
+    부호검정은 이 문제에서 자유롭다. 중앙값을 직접 검정하므로 크기가 $0.05$ 근처를 유지한다.
+
+    **실무 지침:** 대응차이의 히스토그램이나 Q-Q 그림이 뚜렷한 치우침을 보이면 Wilcoxon 부호순위검정을 쓰지 말라. 검정력이 낮더라도 부호검정이 옳은 답을 준다.
+
+---
+
+**연습문제 3.**
+$W^+$의 평균 $n(n+1)/4$와 분산 $n(n+1)(2n+1)/24$를 유도하라.
+
+??? success "연습문제 3 풀이"
+    $H_0$(대칭성) 아래에서 각 순위 $i$의 부호가 독립적으로 $\pm$ 중 하나를 확률 $1/2$씩 갖는다. 지시확률변수
+
+    $$
+    Z_i = \begin{cases} 1 & i\text{번째로 작은 절대편차가 양수} \\ 0 & \text{음수} \end{cases}
+    $$
+
+    를 두면 $Z_1, \ldots, Z_n$은 독립이고 $Z_i \sim \text{Bernoulli}(1/2)$이며
+
+    $$
+    W^+ = \sum_{i=1}^n i \, Z_i
+    $$
+
+    이다.
+
+    **평균.** $E[Z_i] = 1/2$이므로
+
+    $$
+    E[W^+] = \sum_{i=1}^n i \cdot \frac{1}{2} = \frac{1}{2} \cdot \frac{n(n+1)}{2} = \frac{n(n+1)}{4}
+    $$
+
+    **분산.** $\text{Var}(Z_i) = 1/4$이고 $Z_i$들이 독립이므로
+
+    $$
+    \text{Var}(W^+) = \sum_{i=1}^n i^2 \cdot \frac{1}{4}
+    = \frac{1}{4} \cdot \frac{n(n+1)(2n+1)}{6}
+    = \frac{n(n+1)(2n+1)}{24}
+    $$
+
+    독립성이 성립하는 이유가 핵심이다. 대칭성 아래에서 $|D_i|$와 $\operatorname{sign}(D_i)$가 **독립**이므로, 어떤 절대편차가 어떤 순위를 받았는지와 무관하게 부호가 동전던지기로 결정된다. 이것이 대칭성 가정이 필요한 정확한 지점이며, 연습문제 2에서 이 가정이 깨질 때 검정이 무너지는 이유이기도 하다.
+
+    동점이 있으면 순위 $i$가 중간순위 $r_i$로 대체되어 $\text{Var}(W^+) = \frac{1}{4}\sum_i r_i^2$이 된다. 이 합을 정리하면 본문의 보정식이 나온다.
+
+---
+
+**연습문제 4.**
+Wilcoxon 부호순위검정을 역전시켜 중앙값의 신뢰구간을 만들 수 있다. $n = 10$인 예제 자료에서 95% 신뢰구간을 구하고, $t$ 신뢰구간과 비교하라.
+
+??? success "연습문제 4 풀이"
+    부호순위검정의 신뢰구간은 **Walsh 평균**에 기반한다. 모든 쌍 $(i \le j)$에 대해 $(X_i + X_j)/2$를 계산하면 $n(n+1)/2 = 55$개의 값이 나온다. 정렬한 뒤 양 끝에서 $k$개씩 잘라내는데, $k$는 정확 부호순위 임계값이다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+    x = np.array([268, 241, 273, 230, 255, 262, 289, 237, 295, 275])
+    n = len(x)
+    walsh = np.array([(x[i] + x[j]) / 2 for i in range(n) for j in range(i, n)])
+    walsh.sort()
+    # 양측 95%: W+ <= 8 이면 기각 (2 * P(W+ <= 8) = 0.0488)
+    k = 8
+    print(len(walsh), walsh[k], walsh[-(k + 1)])   # 55 248.0 278.5
+    print(np.median(walsh), x.mean(), np.median(x))  # 263.0 262.5 265.0
+    print(stats.ttest_1samp(x, 0).confidence_interval())  # (246.90, 278.10)
+    ```
+
+    $k$는 $2P(W^+ \le k) \le 0.05$를 만족하는 가장 큰 정수이다. $n = 10$에서 $2P(W^+ \le 8) = 0.0488$이고 $2P(W^+ \le 9) = 0.0645$이므로 $k = 8$이다.
+
+    | 양 | 값 |
+    |:---|---:|
+    | Walsh 평균 개수 | $55$ |
+    | Wilcoxon 95% 신뢰구간 | $(248.0, \; 278.5)$ |
+    | Hodges-Lehmann 추정값 | $263.0$ |
+    | $t$ 95% 신뢰구간 | $(246.9, \; 278.1)$ |
+    | 표본평균 / 표본중앙값 | $262.5$ / $265.0$ |
+
+    두 구간이 거의 같다. Wilcoxon 구간의 폭은 $30.5$, $t$ 구간의 폭은 $31.2$로 오히려 Wilcoxon이 살짝 좁다. 자료가 대칭에 가까워 순위 방법이 잃는 것이 거의 없기 때문이며, $\text{ARE} = 0.955$가 실제로 뜻하는 바이다.
+
+    두 구간 모두 $250$을 포함하므로 앞의 검정 결과($p = 0.131$, 기각 못 함)와 일관된다. 검정과 구간이 이렇게 맞물리는 것은 우연이 아니다. 신뢰구간이 검정을 역전시켜 만들어졌으므로 **구조적으로** 일치한다.
+
+    Hodges-Lehmann 추정값 $263.0$이 표본평균 $262.5$와 표본중앙값 $265.0$ 사이에 놓인다는 점도 눈여겨보라. Walsh 평균의 중앙값은 평균의 효율성과 중앙값의 로버스트성 사이의 절충으로, 정규분포에서 평균 대비 효율이 $0.955$이면서(중앙값은 $0.637$) 붕괴점은 $0.29$이다(평균은 $0$).

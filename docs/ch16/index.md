@@ -1,98 +1,94 @@
-# Chapter 16: Non-Parametric Tests
+# 16장: 비모수 검정
 
 
-## Overview
+## 개요
 
-Non-parametric tests are statistical methods that do not assume a specific parametric form (such as normality) for the underlying population distribution. They are also called **distribution-free tests** because their validity does not depend on the data following a particular distribution. This chapter provides a comprehensive treatment of rank-based and sign-based tests for one-sample, paired-sample, two-sample, and multi-group settings, along with non-parametric correlation measures.
-
----
-
-## Chapter Structure
-
-### 16.1 Foundations
-
-This section establishes the theoretical groundwork for non-parametric testing, covering when and why to use these methods, and how they compare to their parametric counterparts:
-
-- **When and Why to Use Non-Parametric Tests** --- Motivates the use of distribution-free methods when normality is violated, data are ordinal, sample sizes are small, or outliers are present.
-- **Ranks and Rank Transformations** --- Introduces the core mechanism underlying most non-parametric tests: replacing raw observations with their ranks to reduce the influence of extreme values.
-- **Power Comparison with Parametric Tests** --- Quantifies the efficiency trade-off between non-parametric and parametric tests, including the asymptotic relative efficiency (ARE) of rank-based procedures.
-
-### 16.2 One-Sample Non-Parametric Tests
-
-Tests designed for a single sample or for assessing properties of a univariate sequence:
-
-- **Runs Test for Randomness** --- Tests whether a binary sequence is random by counting the number of maximal consecutive runs of identical elements (Wald--Wolfowitz test).
-- **Sign Test** --- A simple test for the population median that uses only the signs of deviations from a hypothesized value, requiring minimal assumptions.
-- **Wilcoxon Signed-Rank Test** --- A more powerful alternative to the sign test that incorporates both the signs and magnitudes of deviations from the hypothesized median.
-- **Binomial Test** --- An exact test for whether a proportion matches a hypothesized value, based on the binomial distribution.
-- **One-Sample Tests Overview** --- A unified summary of all one-sample non-parametric tests with detailed procedures, formulas, and worked examples including the runs test, sign test, and Wilcoxon signed-rank test.
-
-### 16.3 Paired-Sample Non-Parametric Tests
-
-Non-parametric alternatives to the paired t-test for dependent or matched data:
-
-- **Paired Sign Test** --- Applies the sign test to paired differences, testing whether the median difference is zero using only the direction of change.
-- **Wilcoxon Signed-Rank for Paired Data** --- Applies the Wilcoxon signed-rank procedure to paired differences, exploiting both sign and magnitude information for greater power.
-- **Paired Permutation Test** --- Uses resampling-based permutation logic to test for a treatment effect in paired designs without distributional assumptions.
-- **Paired Tests Overview** --- A comprehensive summary of paired-sample non-parametric methods with step-by-step procedures, decision criteria, and practical examples.
-
-### 16.4 Two-Sample Non-Parametric Tests
-
-Distribution-free tests for comparing two independent groups:
-
-- **Wilcoxon Rank-Sum Test** --- Tests whether two independent samples come from the same distribution by comparing the sum of ranks assigned to each group.
-- **Mann-Whitney U Test** --- An equivalent formulation of the rank-sum test that counts the number of pairwise wins between groups, with explicit handling of tied observations.
-- **Kolmogorov-Smirnov Two-Sample Test** --- Tests whether two samples come from the same continuous distribution by measuring the maximum difference between their empirical CDFs.
-- **Two-Sample Tests Overview** --- A unified reference covering the Mann-Whitney U test and rank-sum test procedures, including the U-statistic computation, normal approximation, and interpretation guidelines.
-
-### 16.5 Multi-Group Non-Parametric Tests
-
-Extensions to three or more independent or related groups:
-
-- **Kruskal-Wallis Test** --- The non-parametric counterpart to one-way ANOVA, testing whether multiple independent groups share the same distribution by comparing mean ranks.
-- **Friedman Test (Repeated Measures)** --- The non-parametric counterpart to repeated-measures ANOVA, testing for differences across related groups using within-block rankings.
-- **Mood's Median Test** --- A simple chi-square-based test for whether multiple groups share the same median, using counts above and below the grand median.
-- **Post-Hoc Dunn's Test** --- A pairwise multiple-comparison procedure used after a significant Kruskal-Wallis test, with p-value adjustments for multiple testing.
-
-### 16.6 Non-Parametric Correlation
-
-Rank-based measures of association that do not require bivariate normality:
-
-- **Spearman's rho (Revisited)** --- A rank-based correlation coefficient that measures the monotonic association between two variables by computing the Pearson correlation on their ranks.
-- **Kendall's tau (Revisited)** --- A concordance-based correlation coefficient that measures association by counting concordant and discordant pairs of observations.
-
-### 16.7 Code
-
-Complete Python implementations:
-
-- **runs_test.py** --- Implementation of the Wald-Wolfowitz runs test for randomness.
-- **sign_test.py** --- Implementation of the sign test for a population median.
-- **wilcoxon_tests.py** --- Implementation of Wilcoxon signed-rank and rank-sum tests.
-- **two_sample_tests.py** --- Two-sample and multi-group non-parametric test implementations.
-- **nonparametric_suite.py** --- A comprehensive test suite combining all non-parametric methods.
-
-### 16.8 Exercises
-
-Practice problems covering the application and interpretation of non-parametric tests across one-sample, paired-sample, two-sample, and multi-group scenarios.
+비모수 검정(non-parametric test)은 모집단 분포에 정규성 같은 특정한 모수적 형태를 가정하지 않는 통계적 방법이다. 자료가 특정 분포를 따르는지에 타당성이 의존하지 않으므로 **분포무관 검정(distribution-free test)**이라고도 부른다. 이 장에서는 일표본, 대응표본, 이표본, 다집단 상황에 쓰이는 순위 기반·부호 기반 검정을 두루 다루고, 비모수 상관 측도도 함께 살펴본다.
 
 ---
 
-## Prerequisites
+## 장의 구성
 
-This chapter builds on:
+### 16.1 기초
 
-- **Chapter 9** (Hypothesis Testing) --- Null and alternative hypotheses, p-values, test statistics, significance levels, and Type I/II errors.
-- **Chapter 5** (Sampling Distributions) --- Normal approximations for large-sample versions of rank-based test statistics.
-- **Chapter 11** (ANOVA) --- One-way and repeated-measures ANOVA as parametric counterparts to Kruskal-Wallis and Friedman tests.
-- **Chapter 12** (Correlation and Causation) --- Pearson, Spearman, and Kendall correlation foundations.
-- **Chapter 14** (Normality Tests) --- Methods for determining when parametric assumptions fail and non-parametric alternatives are needed.
+이 절은 비모수 검정의 이론적 토대를 세운다. 언제·왜 이 방법을 쓰는지, 그리고 대응하는 모수적 검정과 어떻게 비교되는지를 다룬다.
+
+- **비모수 검정을 언제, 왜 쓰는가** --- 정규성이 깨졌거나, 자료가 순서형이거나, 표본크기가 작거나, 이상치가 있을 때 분포무관 방법이 필요한 이유를 설명한다.
+- **순위와 순위변환** --- 대부분의 비모수 검정이 기대는 핵심 장치, 즉 원자료를 순위로 바꾸어 극단값의 영향을 줄이는 방법을 소개한다.
+- **모수적 검정과의 검정력 비교** --- 비모수 검정과 모수적 검정 사이의 효율 맞교환을 정량화하고, 순위 기반 절차의 점근상대효율(ARE)을 다룬다.
+
+### 16.2 일표본 비모수 검정
+
+하나의 표본, 또는 일변량 수열의 성질을 다루는 검정이다.
+
+- **무작위성에 대한 런 검정** --- 이진 수열에서 같은 값이 연달아 이어지는 최대 구간(런)의 개수를 세어 무작위성을 검정한다(Wald--Wolfowitz 검정).
+- **부호검정** --- 가설값으로부터의 편차의 **부호만** 사용하는 모중앙값 검정으로, 가정이 가장 약하다.
+- **Wilcoxon 부호순위검정** --- 편차의 부호와 크기를 함께 사용하여 부호검정보다 검정력이 높은 대안이다.
+- **이항검정** --- 이항분포에 근거하여 비율이 가설값과 같은지를 검정하는 정확검정이다.
+- **일표본 검정 개관** --- 런 검정, 부호검정, Wilcoxon 부호순위검정의 절차·공식·예제를 한데 모은 통합 요약이다.
+
+### 16.3 대응표본 비모수 검정
+
+대응자료 또는 짝지은 자료에 대한 대응표본 t 검정의 비모수 대안이다.
+
+- **대응 부호검정** --- 짝지은 차이에 부호검정을 적용하여, 변화의 방향만으로 중앙값 차이가 0인지 검정한다.
+- **대응자료에 대한 Wilcoxon 부호순위검정** --- 짝지은 차이에 Wilcoxon 절차를 적용하여 부호와 크기를 모두 활용하므로 검정력이 더 높다.
+- **대응 순열검정** --- 재표집에 기반한 순열 논리로, 분포 가정 없이 대응설계의 처리효과를 검정한다.
+- **대응표본 검정 개관** --- 대응표본 비모수 방법의 단계별 절차, 선택 기준, 실제 예제를 종합한 요약이다.
+
+### 16.4 이표본 비모수 검정
+
+독립인 두 집단을 비교하는 분포무관 검정이다.
+
+- **Wilcoxon 순위합검정** --- 각 집단에 배정된 순위의 합을 비교하여 두 독립표본이 같은 분포에서 왔는지 검정한다.
+- **Mann-Whitney U 검정** --- 순위합검정과 동치인 형태로, 집단 간 쌍별 승수를 세며 동점 처리를 명시적으로 다룬다.
+- **Kolmogorov-Smirnov 이표본 검정** --- 두 경험적 누적분포함수의 최대 차이를 재어 두 표본이 같은 연속분포에서 왔는지 검정한다.
+- **이표본 검정 개관** --- Mann-Whitney U 검정과 순위합검정의 절차를 U 통계량 계산, 정규근사, 해석 지침과 함께 정리한 통합 참고 자료이다.
+
+### 16.5 다집단 비모수 검정
+
+셋 이상의 독립 또는 관련 집단으로의 확장이다.
+
+- **Kruskal-Wallis 검정** --- 일원분산분석의 비모수 대응물로, 평균순위를 비교하여 여러 독립집단이 같은 분포를 갖는지 검정한다.
+- **Friedman 검정 (반복측정)** --- 반복측정 분산분석의 비모수 대응물로, 블록 내 순위를 이용하여 관련 집단 간 차이를 검정한다.
+- **Mood 중앙값검정** --- 전체 중앙값 위·아래 도수를 이용하는 간단한 카이제곱 기반 검정으로, 여러 집단의 중앙값이 같은지 검정한다.
+- **사후 Dunn 검정** --- Kruskal-Wallis 검정이 유의할 때 이어서 쓰는 쌍별 다중비교 절차로, 다중검정에 대한 p값 보정을 포함한다.
+
+### 16.6 비모수 상관
+
+이변량 정규성을 요구하지 않는 순위 기반 연관성 측도이다.
+
+- **Spearman의 rho (재론)** --- 두 변수의 순위에 Pearson 상관을 적용하여 단조 연관성을 재는 순위 기반 상관계수이다.
+- **Kendall의 tau (재론)** --- 부합쌍과 비부합쌍의 개수를 세어 연관성을 재는 일치도 기반 상관계수이다.
+
+### 16.7 코드
+
+완전한 파이썬 구현이다.
+
+- **runs_test.py** --- 무작위성에 대한 Wald-Wolfowitz 런 검정 구현.
+- **sign_test.py** --- 모중앙값에 대한 부호검정 구현.
+- **wilcoxon_tests.py** --- Wilcoxon 부호순위검정과 순위합검정 구현.
+- **two_sample_tests.py** --- 이표본 및 다집단 비모수 검정 구현.
+- **nonparametric_suite.py** --- 모든 비모수 방법을 묶은 종합 검정 모음.
 
 ---
 
-## Key Takeaways
+## 선수 지식
 
-1. Non-parametric tests replace raw data with ranks, making them robust to outliers and violations of normality, at the cost of a modest loss of power when parametric assumptions hold.
-2. For one-sample and paired problems, the sign test requires the fewest assumptions, while the Wilcoxon signed-rank test is more powerful when the symmetry assumption is met.
-3. The Mann-Whitney U test and Wilcoxon rank-sum test are equivalent formulations for comparing two independent groups without assuming equal variances or normality.
-4. The Kruskal-Wallis test extends two-sample rank-based testing to multiple groups, with Dunn's test available for post-hoc pairwise comparisons.
-5. Spearman's rho and Kendall's tau provide robust alternatives to Pearson's r for measuring monotonic association in the presence of non-linearity or non-normality.
+이 장은 다음 내용 위에 세워진다.
+
+- **9장** (가설검정) --- 귀무가설과 대립가설, p값, 검정통계량, 유의수준, 제1종·제2종 오류.
+- **5장** (표본분포) --- 순위 기반 검정통계량의 대표본 형태에 쓰이는 정규근사.
+- **11장** (분산분석) --- Kruskal-Wallis 검정과 Friedman 검정의 모수적 대응물인 일원 및 반복측정 분산분석.
+- **12장** (상관과 인과) --- Pearson, Spearman, Kendall 상관의 기초.
+- **14장** (정규성 검정) --- 모수적 가정이 언제 깨져 비모수 대안이 필요해지는지 판단하는 방법.
+
+---
+
+## 핵심 요약
+
+1. 비모수 검정은 원자료를 순위로 대체하여 이상치와 정규성 위반에 로버스트해진다. 대가는 모수적 가정이 성립할 때의 완만한 검정력 손실이다.
+2. 일표본과 대응표본 문제에서는 부호검정의 가정이 가장 약하고, 대칭성 가정이 성립하면 Wilcoxon 부호순위검정이 더 강력하다.
+3. Mann-Whitney U 검정과 Wilcoxon 순위합검정은 두 독립집단을 등분산이나 정규성 없이 비교하는 동치인 두 형태이다.
+4. Kruskal-Wallis 검정은 순위 기반 이표본 검정을 여러 집단으로 확장하며, 사후 쌍별 비교에는 Dunn 검정을 쓸 수 있다.
+5. Spearman의 rho와 Kendall의 tau는 비선형성이나 비정규성이 있을 때 단조 연관성을 재는 Pearson r의 로버스트한 대안이다.

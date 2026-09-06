@@ -1,173 +1,175 @@
-# Runs Test for Randomness
+# 무작위성에 대한 런 검정
 
-Before testing whether a sample comes from a particular distribution or whether two groups differ, it is often important to verify a more basic property: **randomness**. If the observations in a sequence exhibit systematic patterns -- clusters of similar values or excessive alternation -- then the independence assumption underlying most statistical tests is violated. The **Wald-Wolfowitz runs test** detects such departures from randomness by counting the number of "runs" in a binary-coded sequence.
+표본이 특정 분포에서 왔는지, 두 집단이 다른지를 검정하기 전에 더 기본적인 성질을 먼저 확인해야 할 때가 많다. 바로 **무작위성**이다. 수열의 관측값이 체계적인 패턴 --- 비슷한 값들의 뭉침이나 지나친 교대 --- 을 보인다면 대부분의 통계적 검정이 깔고 있는 독립성 가정이 깨진 것이다. **Wald-Wolfowitz 런 검정**은 이진 부호화된 수열에서 "런"의 개수를 세어 이런 무작위성 이탈을 탐지한다.
 
-## Definition of a Run
+## 런의 정의
 
-A **run** is a maximal consecutive subsequence of identical elements. Given a sequence of two types of symbols (e.g., $+$ and $-$), each contiguous block of the same symbol constitutes one run. For example, in the sequence
-
-$$
-\underbrace{+ + +}_{\text{run 1}} \; \underbrace{- -}_{\text{run 2}} \; \underbrace{+}_{\text{run 3}} \; \underbrace{- - -}_{\text{run 4}}
-$$
-
-there are $R = 4$ runs. A truly random sequence should have neither too few runs (which indicates clustering) nor too many (which indicates systematic alternation).
-
-## Hypotheses
+**런**(run)은 같은 원소가 연달아 이어지는 최대 부분수열이다. 두 종류의 기호(예: $+$와 $-$)로 이루어진 수열에서 같은 기호가 이어지는 각 덩어리가 하나의 런이다. 예를 들어 수열
 
 $$
-H_0 \colon \text{The elements of the sequence are mutually independent (random order)}
+\underbrace{+ + +}_{\text{런 1}} \; \underbrace{- -}_{\text{런 2}} \; \underbrace{+}_{\text{런 3}} \; \underbrace{- - -}_{\text{런 4}}
+$$
+
+에는 $R = 4$개의 런이 있다. 진정으로 무작위인 수열은 런이 너무 적어서도(뭉침을 뜻한다), 너무 많아서도(체계적 교대를 뜻한다) 안 된다.
+
+## 가설
+
+$$
+H_0 \colon \text{수열의 원소들이 서로 독립이다(순서가 무작위이다)}
 $$
 
 $$
-H_a \colon \text{The sequence is not random}
+H_a \colon \text{수열이 무작위가 아니다}
 $$
 
-The test is typically two-sided: both clustering (too few runs) and alternation (too many runs) are considered departures from randomness.
+검정은 보통 양측이다. 뭉침(런이 너무 적음)과 교대(런이 너무 많음) 모두 무작위성으로부터의 이탈로 본다.
 
-## Constructing the Binary Sequence
+## 이진 수열 만들기
 
-In practice, the input data are usually continuous observations rather than binary symbols. The standard approach is to compare each observation to the sample median $\tilde{x}$ and encode values above the median as $+$ and values below as $-$. Observations exactly equal to the median are typically dropped from the sequence.
+실제로는 입력자료가 이진 기호가 아니라 연속 관측값인 경우가 많다. 표준적인 방법은 각 관측값을 표본중앙값 $\tilde{x}$와 비교하여 중앙값보다 큰 값을 $+$, 작은 값을 $-$로 부호화하는 것이다. 중앙값과 정확히 같은 관측값은 보통 수열에서 제외한다.
 
-## Test Statistic
+## 검정통계량
 
-Let the sequence have length $N$, with $n_1$ elements of one type and $n_2 = N - n_1$ of the other. The number of runs $R$ is the test statistic.
+수열의 길이를 $N$, 한 종류의 원소 개수를 $n_1$, 다른 종류를 $n_2 = N - n_1$이라 하자. 런의 개수 $R$이 검정통계량이다.
 
-**Expected number of runs under $H_0$:**
+**$H_0$ 아래 런 개수의 기댓값:**
 
 $$
 \mu_R = \frac{2 \, n_1 \, n_2}{N} + 1
 $$
 
-**Variance of the number of runs under $H_0$:**
+**$H_0$ 아래 런 개수의 분산:**
 
 $$
 \sigma_R^2 = \frac{2 \, n_1 \, n_2 \, (2 \, n_1 \, n_2 - N)}{N^2 (N - 1)}
 $$
 
-This can equivalently be written as
+이는 동치로 다음과 같이 쓸 수 있다.
 
 $$
 \sigma_R^2 = \frac{(\mu_R - 1)(\mu_R - 2)}{N - 1}
 $$
 
-## Normal Approximation
+## 정규근사
 
-For large $N$ (typically $n_1 \ge 10$ and $n_2 \ge 10$), the standardized statistic
+$N$이 크면(보통 $n_1 \ge 10$이고 $n_2 \ge 10$) 표준화된 통계량
 
 $$
 Z = \frac{R - \mu_R}{\sigma_R}
 $$
 
-is approximately standard normal under $H_0$. The two-sided $p$-value is
+은 $H_0$ 아래 근사적으로 표준정규를 따른다. 양측 $p$값은
 
 $$
-p = 2 \, \mathcal{N}(-|Z|)
+p = 2 \, \Phi(-|Z|)
 $$
 
-where $\mathcal{N}$ is the standard normal CDF.
+이며, 여기서 $\Phi$는 표준정규 누적분포함수이다.
 
-!!! note "Exact distribution for small samples"
-    For small $N$, exact critical values can be obtained from tables of the runs distribution. The exact null distribution is computed by enumerating all $\binom{N}{n_1}$ equally likely arrangements and counting the number of runs in each.
+!!! note "소표본에서의 정확분포"
+    $N$이 작으면 런 분포표에서 정확 임계값을 얻을 수 있다. 정확 귀무분포는 동등하게 가능한 $\binom{N}{n_1}$가지 배열을 모두 열거하고 각각의 런 개수를 세어 계산한다.
 
-## Worked Example
+## 예제
 
-Consider the following sequence of 15 stock returns classified as positive ($+$) or negative ($-$):
+양수($+$) 또는 음수($-$)로 분류된 다음 15개 주식 수익률 수열을 보자.
 
 $$
 +, +, +, -, -, +, +, -, +, -, -, -, +, +, -
 $$
 
-**Step 1.** Count the elements: $n_1 = 8$ (positive), $n_2 = 7$ (negative), $N = 15$.
+**1단계.** 원소를 센다. $n_1 = 8$(양수), $n_2 = 7$(음수), $N = 15$.
 
-**Step 2.** Count the runs: $+\!+\!+$, $-\!-$, $+\!+$, $-$, $+$, $-\!-\!-$, $+\!+$, $-$, giving $R = 8$.
+**2단계.** 런을 센다. $+\!+\!+$, $-\!-$, $+\!+$, $-$, $+$, $-\!-\!-$, $+\!+$, $-$이므로 $R = 8$.
 
-**Step 3.** Compute the null mean and standard deviation:
+**3단계.** 귀무가설 아래 평균과 표준편차를 계산한다.
 
 $$
 \mu_R = \frac{2(8)(7)}{15} + 1 = \frac{112}{15} + 1 \approx 8.467
 $$
 
 $$
-\sigma_R^2 = \frac{(8.467 - 1)(8.467 - 2)}{15 - 1} = \frac{(7.467)(6.467)}{14} \approx 3.448
+\sigma_R^2 = \frac{(8.467 - 1)(8.467 - 2)}{15 - 1} = \frac{(7.467)(6.467)}{14} \approx 3.449
 $$
 
 $$
 \sigma_R \approx 1.857
 $$
 
-**Step 4.** Compute the $Z$-statistic:
+**4단계.** $Z$ 통계량을 계산한다.
 
 $$
 Z = \frac{8 - 8.467}{1.857} \approx -0.251
 $$
 
-**Step 5.** Compute the $p$-value: $p = 2\,\mathcal{N}(-0.251) \approx 0.802$.
+**5단계.** $p$값을 계산한다. $p = 2\,\Phi(-0.251) \approx 0.802$.
 
-Since $p = 0.802 \gg 0.05$, we fail to reject $H_0$. The data are consistent with a random sequence.
+$p = 0.802 \gg 0.05$이므로 $H_0$을 기각하지 못한다. 자료는 무작위 수열과 일관된다.
 
-??? example "Detecting clustering"
-    If the same 15 observations were arranged as $+,+,+,+,+,+,+,+,-,-,-,-,-,-,-$, there would be only $R = 2$ runs. With $\mu_R \approx 8.467$ and $\sigma_R \approx 1.857$, the $Z$-statistic would be $(2 - 8.467)/1.857 \approx -3.48$, giving $p \approx 0.0005$. This provides strong evidence that the sequence is not random (the values are clustered).
+??? example "뭉침 탐지하기"
+    같은 15개 관측값이 $+,+,+,+,+,+,+,+,-,-,-,-,-,-,-$로 배열되어 있다면 런은 $R = 2$개뿐이다. $\mu_R \approx 8.467$, $\sigma_R \approx 1.857$이므로 $Z = (2 - 8.467)/1.857 \approx -3.48$이고 $p \approx 0.0005$이다. 수열이 무작위가 아니라는(값들이 뭉쳐 있다는) 강한 증거이다.
 
-## Interpretation
+## 해석
 
-| Outcome | Meaning |
+| 결과 | 의미 |
 |:--------|:--------|
-| Too few runs ($R \ll \mu_R$) | Observations are clustered -- positive autocorrelation |
-| Too many runs ($R \gg \mu_R$) | Observations alternate excessively -- negative autocorrelation |
-| $R \approx \mu_R$ | No evidence against randomness |
+| 런이 너무 적음 ($R \ll \mu_R$) | 관측값이 뭉쳐 있다 --- 양의 자기상관 |
+| 런이 너무 많음 ($R \gg \mu_R$) | 관측값이 지나치게 교대한다 --- 음의 자기상관 |
+| $R \approx \mu_R$ | 무작위성에 반하는 증거가 없다 |
 
-## Applications
+## 응용
 
-- **Random walk hypothesis.** Testing whether successive stock returns are independent by coding each return as above or below zero (or above/below the median).
-- **Quality control.** Checking whether defects on a production line occur randomly or in clusters.
-- **Residual diagnostics.** After fitting a regression model, applying the runs test to the sequence of positive and negative residuals checks the independence assumption.
+- **임의보행 가설.** 각 수익률을 0 위/아래(또는 중앙값 위/아래)로 부호화하여 연속된 주식 수익률이 독립인지 검정한다.
+- **품질관리.** 생산라인의 불량이 무작위로 발생하는지 뭉쳐서 발생하는지 확인한다.
+- **잔차 진단.** 회귀모형을 적합한 뒤 양·음 잔차 수열에 런 검정을 적용하여 독립성 가정을 확인한다.
 
-## Summary
+## 요약
 
-The Wald-Wolfowitz runs test provides a simple, distribution-free method for detecting departures from randomness in a sequence. By counting the number of maximal consecutive blocks of identical elements and comparing to the expected count under independence, the test identifies both clustering and alternation patterns. The normal approximation is reliable for sequences with at least 10 elements of each type; for smaller samples, exact tables should be consulted.
+Wald-Wolfowitz 런 검정은 수열에서 무작위성으로부터의 이탈을 탐지하는 간단한 분포무관 방법이다. 같은 원소가 이어지는 최대 덩어리의 개수를 세어 독립 아래의 기대 개수와 비교함으로써 뭉침과 교대 패턴을 모두 잡아낸다. 각 종류의 원소가 최소 10개씩 있으면 정규근사가 믿을 만하다. 표본이 더 작으면 정확표를 참조해야 한다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-A coin is flipped 20 times, producing the sequence:
+**연습문제 1.**
+동전을 20번 던져 다음 수열을 얻었다.
 
 $$
 H, H, T, T, T, H, H, H, H, T, T, H, T, H, H, T, T, T, H, H
 $$
 
-**(a)** Count the number of runs $R$ in this sequence.
+**(a)** 이 수열의 런 개수 $R$을 세라.
 
-**(b)** Let $n_H = 11$ and $n_T = 9$. Under the null hypothesis of randomness, compute the expected number of runs:
+**(b)** $n_H = 11$, $n_T = 9$일 때 무작위성 귀무가설 아래 런 개수의 기댓값
 
 $$
 E[R] = \frac{2 n_H n_T}{n_H + n_T} + 1
 $$
 
-and the variance:
+과 분산
 
 $$
 \text{Var}(R) = \frac{2 n_H n_T (2 n_H n_T - n_H - n_T)}{(n_H + n_T)^2 (n_H + n_T - 1)}
 $$
 
-**(c)** Compute the $z$-statistic and perform a two-sided test at $\alpha = 0.05$.
+을 계산하라.
 
-??? success "Solution to Exercise 1"
+**(c)** $z$ 통계량을 계산하고 $\alpha = 0.05$에서 양측검정을 수행하라.
 
-    **(a)** Identifying the runs (maximal consecutive identical elements):
+??? success "연습문제 1 풀이"
 
-    - Run 1: HH
-    - Run 2: TTT
-    - Run 3: HHHH
-    - Run 4: TT
-    - Run 5: H
-    - Run 6: T
-    - Run 7: HH
-    - Run 8: TTT
-    - Run 9: HH
+    **(a)** 런(같은 원소가 이어지는 최대 덩어리)을 찾으면
 
-    The number of runs is $R = 9$.
+    - 런 1: HH
+    - 런 2: TTT
+    - 런 3: HHHH
+    - 런 4: TT
+    - 런 5: H
+    - 런 6: T
+    - 런 7: HH
+    - 런 8: TTT
+    - 런 9: HH
 
-    **(b)** With $n_H = 11$ and $n_T = 9$:
+    런의 개수는 $R = 9$이다.
+
+    **(b)** $n_H = 11$, $n_T = 9$이므로
 
     $$
     E[R] = \frac{2(11)(9)}{20} + 1 = \frac{198}{20} + 1 = 9.9 + 1 = 10.9
@@ -183,10 +185,119 @@ $$
     z = \frac{R - E[R]}{\sqrt{\text{Var}(R)}} = \frac{9 - 10.9}{\sqrt{4.637}} = \frac{-1.9}{2.153} \approx -0.883
     $$
 
-    Two-sided p-value:
+    양측 $p$값은
 
     $$
-    p = 2 \times P(Z \le -0.883) = 2 \times \mathcal{N}(-0.883) \approx 2 \times 0.189 = 0.377
+    p = 2 \times P(Z \le -0.883) = 2 \times \Phi(-0.883) \approx 2 \times 0.189 = 0.377
     $$
 
-    Since $p = 0.377 \gg 0.05$, we fail to reject $H_0$. The sequence does not show statistically significant evidence of non-randomness. The observed number of runs (9) is close to the expected value (10.9), consistent with a random sequence.
+    $p = 0.377 \gg 0.05$이므로 $H_0$을 기각하지 못한다. 이 수열은 비무작위성의 통계적으로 유의한 증거를 보이지 않는다. 관측된 런 개수 $9$가 기댓값 $10.9$에 가까워 무작위 수열과 일관된다.
+
+---
+
+**연습문제 2.**
+런 검정은 무작위성으로부터의 어떤 이탈을 탐지하지 **못하는가**? 다음 두 수열을 보라.
+
+$$
+S_1 = +,-,+,-,+,-,+,-,+,-,+,-,+,-,+,-,+,-,+,- \\
+S_2 = +,+,-,-,+,+,-,-,+,+,-,-,+,+,-,-,+,+,-,-
+$$
+
+각각에 런 검정을 적용하고, 두 수열 모두 명백히 무작위가 아님에도 결과가 어떻게 다른지 설명하라.
+
+??? success "연습문제 2 풀이"
+    두 수열 모두 $n_1 = n_2 = 10$, $N = 20$이므로
+
+    $$
+    \mu_R = \frac{2(10)(10)}{20} + 1 = 11, \qquad
+    \sigma_R^2 = \frac{(11-1)(11-2)}{19} = \frac{90}{19} \approx 4.737, \quad \sigma_R \approx 2.176
+    $$
+
+    | 수열 | $R$ | $Z$ | $p$ |
+    |:---|---:|---:|---:|
+    | $S_1$ (완전 교대) | 20 | $+4.14$ | $0.0000355$ |
+    | $S_2$ (주기 4) | 10 | $-0.46$ | $0.646$ |
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    def runs_z(s):
+        s = np.asarray(s); N = len(s)
+        R = 1 + np.sum(s[1:] != s[:-1])
+        n1 = s.sum(); n2 = N - n1
+        mu = 2 * n1 * n2 / N + 1
+        sd = np.sqrt((mu - 1) * (mu - 2) / (N - 1))
+        z = (R - mu) / sd
+        return R, z, 2 * stats.norm.sf(abs(z))
+
+    print(runs_z([1, 0] * 10))       # (20, 4.135, 3.55e-05)
+    print(runs_z([1, 1, 0, 0] * 5))  # (10, -0.459, 0.646)
+    ```
+
+    $S_1$은 잡아낸다. 완전한 교대는 런을 최대치인 $20$까지 밀어 올려 $Z = +4.14$가 된다.
+
+    $S_2$는 **전혀 잡아내지 못한다**. 주기가 4인 완벽하게 결정론적인 수열인데도 $p = 0.646$으로 무작위성과 완전히 일관되어 보인다. 런이 정확히 10개인데 이는 기댓값 11에 거의 딱 맞기 때문이다.
+
+    교훈: 런 검정은 **지연 1의 자기상관에만** 민감하다. 뭉침(지연 1 양의 상관)과 교대(지연 1 음의 상관)를 본다. 더 긴 주기의 구조는 런 개수를 정상 범위에 남겨 두므로 보이지 않는다. 주기적 패턴을 찾으려면 자기상관함수 전체나 주기도(periodogram)를 봐야 한다.
+
+---
+
+**연습문제 3.**
+연속자료에 런 검정을 적용할 때 중앙값을 기준으로 부호화하면 $n_1$과 $n_2$가 거의 같아진다. 이것이 검정에 어떤 영향을 주는가? 중앙값 대신 평균을 쓰면 무엇이 달라지는가?
+
+??? success "연습문제 3 풀이"
+    $n_1 + n_2 = N$을 고정하고 $\mu_R = 2n_1n_2/N + 1$을 보면, $n_1 n_2$는 $n_1 = n_2 = N/2$에서 최대가 된다. 즉 중앙값 부호화는 **런 개수의 기댓값을 최대로** 만든다($\mu_R \approx N/2 + 1$).
+
+    이것이 좋은 이유는 검정의 해상도 때문이다. $\mu_R$이 크면 관측된 $R$이 위아래 양쪽으로 움직일 여지가 넓어져 뭉침과 교대를 모두 탐지할 수 있다. 극단적으로 $n_1 = 1$이면 $\mu_R = 2(N-1)/N + 1 \approx 3$이고 $R$이 가질 수 있는 값은 $2$ 또는 $3$뿐이라 검정이 사실상 무력해진다.
+
+    **평균을 쓰면** 자료가 치우쳤을 때 $n_1$과 $n_2$가 크게 불균형해진다. 예를 들어 지수분포 자료에서는 관측값의 약 63%가 평균보다 작다.
+
+    ```python
+    import numpy as np
+    rng = np.random.default_rng(3)
+    x = rng.exponential(1, 2000)
+    print((x < x.mean()).mean())      # 0.6275  (이론값 1 - e^-1 = 0.632)
+    print((x < np.median(x)).mean())  # 0.5
+    ```
+
+    $N = 2000$에서 평균 부호화는 $n_1 = 745$, $n_2 = 1255$를 주어 $\mu_R = 936.0$인 반면, 중앙값 부호화는 $\mu_R = 1001.0$이다. 손실이 크지는 않지만 치우침이 심해질수록 나빠진다.
+
+    더 중요한 문제는 **해석**이다. 중앙값 부호화에서 $H_0$은 "수열이 무작위이다"이고, 이는 자료의 분포와 무관하게 성립한다. 평균 부호화에서는 $+$의 비율 자체가 분포 모양에 의존하므로 검정이 순수하게 분포무관이 아니게 된다. 실무에서는 언제나 중앙값을 쓴다.
+
+---
+
+**연습문제 4.**
+런 검정을 회귀 잔차의 독립성 진단에 쓰는 상황을 생각하자. $y_t = 2 + 0.5t + \varepsilon_t$인 자료에 **상수만 있는 모형** $y_t = \beta_0 + \varepsilon_t$를 적합하면 잔차의 런 검정이 어떻게 반응하는가? 모의실험으로 확인하라.
+
+??? success "연습문제 4 풀이"
+    ```python
+    import numpy as np
+    rng = np.random.default_rng(5)
+    n = 40
+    t = np.arange(n)
+    y = 2 + 0.5 * t + rng.normal(0, 3, n)
+
+    def runs_z(res):
+        s = (res > np.median(res)).astype(int)
+        R = 1 + np.sum(s[1:] != s[:-1])
+        n1 = s.sum(); n2 = n - n1; N = n
+        mu = 2 * n1 * n2 / N + 1
+        sd = np.sqrt((mu - 1) * (mu - 2) / (N - 1))
+        return R, (R - mu) / sd
+
+    print("상수만:", runs_z(y - y.mean()))
+    b1, b0 = np.polyfit(t, y, 1)
+    print("추세 포함:", runs_z(y - (b0 + b1 * t)))
+    ```
+
+    | 모형 | $R$ | $Z$ | $p$ |
+    |:---|---:|---:|---:|
+    | 상수만 ($y = \beta_0$) | 8 | $-4.16$ | $3.1 \times 10^{-5}$ |
+    | 추세 포함 ($y = \beta_0 + \beta_1 t$) | 23 | $+0.64$ | $0.52$ |
+
+    상수만 적합하면 잔차의 부호가 앞쪽에 음수, 뒤쪽에 양수로 몰려 런이 $8$개에 그친다(기댓값 $21$). 잡음의 표준편차가 $3$으로 작지 않아 런이 $2$까지 내려가지는 않지만, 런 검정은 여전히 압도적으로 기각한다.
+
+    이것이 런 검정의 잔차 진단으로서의 가치이다. 검정이 잡아낸 것은 오차항의 자기상관이 아니라 **모형의 설정 오류**이다. 빠진 추세가 잔차에 체계적인 부호 패턴을 남겼고, 런 검정은 그 패턴을 본다.
+
+    반대로 옳은 모형을 적합하면 $R = 23$으로 기댓값 $21$에 가깝고 $p = 0.52$이다. 다만 주의할 점이 있다. 여기서 잔차는 자료에서 추정한 두 모수에 의존하므로 엄밀히 독립이 아니다. 순위 기반 귀무분포는 근사일 뿐이며, 잔차의 개수가 적으면 이 근사가 다소 보수적으로 작동한다.

@@ -1,70 +1,72 @@
-# Wilcoxon Signed-Rank Test for Paired Data
+# 대응자료에 대한 Wilcoxon 부호순위검정
 
-The [paired sign test](paired_sign.md) tests whether the median paired difference is zero but ignores how large each difference is. When the differences are measured on a meaningful numerical scale and their distribution is approximately symmetric, the **Wilcoxon signed-rank test for paired data** provides a more powerful alternative by incorporating both the sign and the rank of each absolute difference. This is the same [Wilcoxon signed-rank procedure](../one_sample_nonparametric/wilcoxon_signed_rank.md) applied to the differences $D_i = X_i - Y_i$.
+[대응 부호검정](paired_sign.md)은 대응차이의 중앙값이 0인지 검정하지만 각 차이가 얼마나 큰지는 무시한다. 차이가 의미 있는 수치 척도로 측정되고 그 분포가 근사적으로 대칭이라면, **대응자료에 대한 Wilcoxon 부호순위검정**이 각 절대차이의 부호와 순위를 모두 반영하여 더 강력한 대안을 제공한다. 이는 [Wilcoxon 부호순위 절차](../one_sample_nonparametric/wilcoxon_signed_rank.md)를 차이 $D_i = X_i - Y_i$에 그대로 적용한 것이다.
 
-## Assumptions
+## 가정
 
-1. The pairs $(X_i, Y_i)$ are independent.
-2. Each difference $D_i = X_i - Y_i$ comes from a continuous distribution.
-3. The distribution of $D_i$ is **symmetric** about its median under $H_0$.
+1. 쌍 $(X_i, Y_i)$들이 독립이다.
+2. 각 차이 $D_i = X_i - Y_i$가 연속분포에서 나온다.
+3. $H_0$ 아래에서 $D_i$의 분포가 중앙값을 중심으로 **대칭**이다.
 
-The symmetry requirement is the key additional assumption compared to the paired sign test. If the differences are noticeably skewed, the paired sign test or [paired permutation test](paired_permutation.md) may be more appropriate.
+대칭성 요구가 대응 부호검정에 비해 추가되는 핵심 가정이다. 차이가 눈에 띄게 치우쳐 있다면 대응 부호검정이나 [대응 순열검정](paired_permutation.md)이 더 적절할 수 있다.
 
-## Hypotheses
-
-$$
-H_0 \colon \text{The median of } D_i = X_i - Y_i \text{ is zero}
-$$
+## 가설
 
 $$
-H_a \colon \text{The median of } D_i \ne 0 \quad \text{(two-sided)}
+H_0 \colon D_i = X_i - Y_i \text{의 중앙값이 0이다}
 $$
 
-One-sided alternatives ($H_a \colon \text{median} > 0$ or $< 0$) follow analogously.
+$$
+H_a \colon D_i \text{의 중앙값이 0이 아니다} \quad \text{(양측)}
+$$
 
-## Procedure
+단측 대립가설($H_a \colon \text{중앙값} > 0$ 또는 $< 0$)도 마찬가지이다.
 
-**Step 1.** Compute paired differences $D_i = X_i - Y_i$.
+## 절차
 
-**Step 2.** Exclude pairs where $D_i = 0$. Let $n$ be the number of remaining pairs.
+**1단계.** 대응차이 $D_i = X_i - Y_i$를 계산한다.
 
-**Step 3.** Rank the absolute differences $|D_1|, |D_2|, \ldots, |D_n|$ from smallest to largest, assigning midranks to ties.
+**2단계.** $D_i = 0$인 쌍을 제외한다. 남은 쌍의 개수를 $n$이라 하자.
 
-**Step 4.** Compute the signed rank sums:
+**3단계.** 절대차이 $|D_1|, |D_2|, \ldots, |D_n|$을 작은 값부터 순위를 매기고 동점에는 중간순위를 배정한다.
+
+**4단계.** 부호순위합을 계산한다.
 
 $$
 W^+ = \sum_{\{i : D_i > 0\}} R_i, \qquad W^- = \sum_{\{i : D_i < 0\}} R_i
 $$
 
-Note that $W^+ + W^- = n(n+1)/2$.
+$W^+ + W^- = n(n+1)/2$임에 유의하라.
 
-**Step 5.** The test statistic is $T = \min(W^+, W^-)$ for a two-sided test. Equivalently, use $W^+$ and compare against its null distribution.
+**5단계.** 양측검정의 검정통계량은 $T = \min(W^+, W^-)$이다. 동치로 $W^+$를 그 귀무분포와 비교해도 된다.
 
-## Null Distribution
+## 귀무분포
 
-Under $H_0$ with symmetric differences, each sign assignment is equally likely. The null distribution of $W^+$ has
+차이가 대칭인 $H_0$ 아래에서 모든 부호 배정이 동등하게 가능하다. $W^+$의 귀무분포는
 
 $$
 \mu_{W^+} = \frac{n(n+1)}{4}, \qquad \sigma_{W^+}^2 = \frac{n(n+1)(2n+1)}{24}
 $$
 
-The normal approximation for large $n$:
+을 갖는다. $n$이 클 때의 정규근사는
 
 $$
 Z = \frac{W^+ - n(n+1)/4}{\sqrt{n(n+1)(2n+1)/24}}
 $$
 
-With a tie correction for $g$ groups of tied absolute differences of sizes $t_1, \ldots, t_g$:
+이다. 절대차이의 동점 집단이 $g$개이고 크기가 $t_1, \ldots, t_g$일 때 보정된 분산은
 
 $$
 \sigma_{W^+}^2 = \frac{n(n+1)(2n+1)}{24} - \frac{1}{48}\sum_{j=1}^{g}(t_j^3 - t_j)
 $$
 
-## Worked Example
+이다.
 
-A company tests whether a training program improves employee productivity scores. Twelve employees are measured before and after the program.
+## 예제
 
-| Employee | Before ($X_i$) | After ($Y_i$) | $D_i$ | $|D_i|$ | Rank | Signed Rank |
+한 회사가 교육 프로그램이 직원의 생산성 점수를 높이는지 검정한다. 직원 12명을 프로그램 전후에 측정했다.
+
+| 직원 | 전 ($Y_i$) | 후 ($X_i$) | $D_i = X_i - Y_i$ | $\lvert D_i \rvert$ | 순위 | 부호순위 |
 |:--------:|:------:|:------:|:-----:|:--------:|:----:|:-----------:|
 | 1 | 45 | 52 | 7 | 7 | 5.5 | $+5.5$ |
 | 2 | 38 | 41 | 3 | 3 | 2 | $+2$ |
@@ -79,7 +81,7 @@ A company tests whether a training program improves employee productivity scores
 | 11 | 50 | 62 | 12 | 12 | 11 | $+11$ |
 | 12 | 46 | 59 | 13 | 13 | 12 | $+12$ |
 
-**Compute rank sums:**
+**순위합 계산:**
 
 $$
 W^+ = 5.5 + 2 + 5.5 + 3.5 + 3.5 + 8 + 9.5 + 9.5 + 11 + 12 = 70
@@ -89,24 +91,24 @@ $$
 W^- = 1 + 7 = 8
 $$
 
-**Check:** $W^+ + W^- = 70 + 8 = 78 = 12(13)/2$. $\checkmark$
+**검산:** $W^+ + W^- = 70 + 8 = 78 = 12(13)/2$. $\checkmark$
 
-**Test statistic:** $T = \min(70, 8) = 8$.
+**검정통계량:** $T = \min(70, 8) = 8$.
 
-**Normal approximation** ($n = 12$):
+**정규근사** ($n = 12$):
 
 $$
 \mu_{W^+} = \frac{12 \times 13}{4} = 39
 $$
 
 $$
-\sigma_{W^+} = \sqrt{\frac{12 \times 13 \times 25}{24}} = \sqrt{162.5} \approx 12.748
+\sigma_{W^+}^2 = \frac{12 \times 13 \times 25}{24} = 162.5
 $$
 
-Tie correction for two groups of size 2 (ranks 5.5 and ranks 3.5 and ranks 9.5): there are three tied groups each of size 2, so $\sum(t_j^3 - t_j) = 3(8 - 2) = 18$.
+절대차이에 크기 2인 동점 집단이 세 개 있다($|D| = 5$가 둘, $|D| = 7$이 둘, $|D| = 11$이 둘). 따라서 $\sum_j (t_j^3 - t_j) = 3(8 - 2) = 18$이고
 
 $$
-\sigma_{W^+} = \sqrt{162.5 - \frac{18}{48}} = \sqrt{162.5 - 0.375} \approx 12.733
+\sigma_{W^+} = \sqrt{162.5 - \frac{18}{48}} = \sqrt{162.125} \approx 12.733
 $$
 
 $$
@@ -114,51 +116,180 @@ Z = \frac{70 - 39}{12.733} \approx 2.434
 $$
 
 $$
-p = 2\,\mathcal{N}(-2.434) \approx 0.015
+p = 2\,\Phi(-2.434) \approx 0.015
 $$
 
-At $\alpha = 0.05$, we reject $H_0$. There is significant evidence that the training program improved productivity scores.
+$\alpha = 0.05$에서 $H_0$을 기각한다. 교육 프로그램이 생산성 점수를 개선했다는 유의한 증거가 있다.
 
-## Why More Powerful than the Paired Sign Test
+!!! note "정확 $p$값"
+    $n = 12$에서는 SciPy가 정확검정을 쓸 수 있으며 결과는 $p = 0.0122$이다. 정규근사값 $0.0149$보다 작다.
 
-The paired sign test would count $n_+ = 10$ and $n_- = 2$ from the same data. It ignores the fact that the negative differences ($-2$ and $-8$) are generally smaller in magnitude than the positive ones. The Wilcoxon signed-rank test captures this by assigning the negative differences low ranks (1 and 7) while the positive differences accumulate higher ranks. This magnitude-aware weighting concentrates the evidence more effectively.
+    ```python
+    import numpy as np
+    from scipy import stats
+    D = np.array([7, 3, -2, 7, 5, 5, 9, -8, 11, 11, 12, 13])
+    print(stats.wilcoxon(D, method='exact').pvalue)   # 0.012207
+    print(stats.wilcoxon(D, method='approx', correction=False).pvalue)  # 0.014906
+    ```
 
-!!! note "ARE comparison"
-    Under normal differences, the ARE of the paired Wilcoxon test relative to the paired $t$-test is $3/\pi \approx 0.955$. The ARE of the paired sign test is only $2/\pi \approx 0.637$. The Wilcoxon test thus requires about 5% more observations than the $t$-test to match its power, while the sign test requires about 57% more.
+    동점이 있으면 정확 귀무분포가 엄밀하게는 성립하지 않으므로, SciPy의 정확값도 "동점이 없었다면"의 값임에 유의하라.
 
-## Summary
+## 왜 대응 부호검정보다 강력한가
 
-The Wilcoxon signed-rank test for paired data ranks the absolute paired differences and weights each sign by its rank, producing a more powerful test than the paired sign test whenever the symmetry assumption holds. The procedure is identical to the one-sample Wilcoxon signed-rank test applied to the differences $D_i = X_i - Y_i$. For small samples, exact critical values are available; for larger samples, the normal approximation with tie correction provides reliable $p$-values.
+같은 자료에서 대응 부호검정은 $n_+ = 10$, $n_- = 2$를 셀 뿐이다. 음의 차이($-2$와 $-8$)가 양의 차이보다 대체로 작다는 사실을 무시한다. Wilcoxon 부호순위검정은 음의 차이에 낮은 순위(1과 7)를 배정하고 양의 차이가 높은 순위를 쌓아 가게 함으로써 이 사실을 포착한다. 크기를 반영한 이 가중치가 증거를 훨씬 효과적으로 모은다.
+
+!!! note "ARE 비교"
+    차이가 정규일 때 대응 Wilcoxon 검정의 대응 $t$ 검정 대비 ARE는 $3/\pi \approx 0.955$이다. 대응 부호검정의 ARE는 $2/\pi \approx 0.637$에 그친다. 즉 Wilcoxon 검정은 $t$ 검정의 검정력에 맞추려면 관측값이 약 5% 더 필요한 반면, 부호검정은 약 57% 더 필요하다.
+
+## 요약
+
+대응자료에 대한 Wilcoxon 부호순위검정은 절대 대응차이에 순위를 매기고 각 부호에 그 순위만큼 가중치를 준다. 대칭성 가정이 성립하면 대응 부호검정보다 강력한 검정이 된다. 절차는 차이 $D_i = X_i - Y_i$에 일표본 Wilcoxon 부호순위검정을 적용한 것과 동일하다. 소표본에서는 정확 임계값을 쓸 수 있고, 표본이 크면 동점 보정을 적용한 정규근사가 신뢰할 만한 $p$값을 준다.
 
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Describe the main concept of Wilcoxon Signed-Rank Test for Paired Data and explain why it matters for statistical practice.
+**연습문제 1.**
+위 생산성 자료에 네 가지 대응 검정(부호검정, Wilcoxon, 순열검정, $t$ 검정)을 모두 적용하여 양측 $p$값을 비교하고, 순서를 설명하라.
 
-??? success "Solution to Exercise 1"
-    Wilcoxon Signed-Rank Test for Paired Data is a core topic in statistics that provides tools for drawing reliable inferences from data. It matters because proper application ensures valid conclusions, correctly quantified uncertainty, and appropriate handling of the assumptions that underpin the method. Practitioners who understand this concept can avoid common pitfalls and choose the right analytical approach for their data.
+??? success "연습문제 1 풀이"
+    ```python
+    import numpy as np, itertools
+    from scipy import stats
+    D = np.array([7, 3, -2, 7, 5, 5, 9, -8, 11, 11, 12, 13])
+
+    print(stats.binomtest(10, 12).pvalue)                      # 0.03857
+    print(stats.wilcoxon(D, method='exact').pvalue)            # 0.01221
+    print(stats.ttest_1samp(D, 0).pvalue)                      # 0.00569
+
+    a = np.abs(D); T = D.sum()
+    allT = np.array([np.dot(s, a) for s in itertools.product([-1, 1], repeat=12)])
+    print((np.abs(allT) >= abs(T)).mean())                     # 0.01074
+    ```
+
+    | 검정 | 양측 $p$값 |
+    |:---|---:|
+    | 대응 부호검정 | $0.0386$ |
+    | 대응 Wilcoxon (정확) | $0.0122$ |
+    | 대응 순열검정 | $0.0107$ |
+    | 대응 $t$ | $0.0057$ |
+
+    사용하는 정보량 순서와 정확히 일치한다. 부호만 → 부호+순위 → 부호+원값 → 정규모형까지 가정. 각 단계마다 $p$값이 작아진다.
+
+    이 자료는 차이가 대칭에 가깝고 이상치가 없어 $t$ 검정에 유리한 조건이다. $-8$이라는 비교적 큰 음의 차이가 하나 있지만 $+13$, $+12$, $+11$, $+11$이 이를 압도한다.
+
+    순열검정($0.0107$)이 Wilcoxon($0.0122$)보다 조금 작다. 순열검정이 원값을 그대로 쓰므로 $+13$과 $+11$의 차이를 순위 $12$와 $9.5$의 차이보다 정확하게 반영하기 때문이다.
 
 ---
 
-**Exercise 2.**
-State the key assumptions required by the method discussed here. How can each assumption be checked?
+**연습문제 2.**
+$n = 12$에서 Wilcoxon 부호순위검정의 정확 귀무분포를 직접 열거하여 구하고, 관측된 $W^+ = 70$의 정확 $p$값을 계산하라. 정규근사와 비교하라.
 
-??? success "Solution to Exercise 2"
-    The main assumptions typically include: (1) independence of observations -- verified by understanding the data collection process and checking for serial correlation; (2) distributional requirements (e.g., normality) -- checked with Q-Q plots and formal tests like Shapiro-Wilk; (3) equal variances (if applicable) -- assessed with boxplots and Levene's test. When assumptions are violated, consider robust alternatives, transformations, or nonparametric methods.
+??? success "연습문제 2 풀이"
+    ```python
+    import numpy as np, itertools
+    n = 12
+    ranks = np.arange(1, n + 1)
+    Wplus = np.array([np.dot(s, ranks)
+                      for s in itertools.product([0, 1], repeat=n)])
+    print(len(Wplus))                       # 4096 = 2^12
+    print(Wplus.mean(), Wplus.var())        # 39.0, 162.5
+    p = 2 * min((Wplus >= 70).mean(), (Wplus <= 70).mean())
+    print(p)                                # 0.012207
+    ```
+
+    열거로 얻은 평균 $39.0$과 분산 $162.5$가 공식 $n(n+1)/4$와 $n(n+1)(2n+1)/24$의 값과 정확히 일치한다.
+
+    | 방법 | $p$값 |
+    |:---|---:|
+    | 정확 (열거) | $0.01221$ |
+    | 정규근사, 동점 보정 없음 | $0.01502$ |
+    | 정규근사, 동점 보정 | $0.01491$ |
+
+    동점 보정의 효과가 미미하다($0.01502 \to 0.01491$, 0.8% 감소). 보정항 $18/48 = 0.375$가 분산 $162.5$의 0.23%에 불과하기 때문이다. 동점이 크기 2짜리 세 개뿐이라 그렇다.
+
+    반면 정규근사 자체의 오차는 훨씬 크다. $0.0149$ 대 $0.0122$로 22% 과대평가한다. $n = 12$에서 $W^+$의 분포가 아직 계단이 굵어 정규곡선과 잘 맞지 않기 때문이다.
+
+    **교훈:** 동점 보정보다 정확검정을 쓰는 편이 훨씬 중요하다. $n \le 25$ 정도면 정확 계산이 즉시 끝난다.
 
 ---
 
-**Exercise 3.**
-Work through a small numerical example illustrating the application of the technique from this section.
+**연습문제 3.**
+차이 분포가 대칭이 아니면 대응 Wilcoxon 검정이 위험하다. 처치 효과가 **일부 피험자에게만** 나타나는 상황을 모형화하여 이 문제를 보여라.
 
-??? success "Solution to Exercise 3"
-    A structured approach to applying this technique involves: (1) clearly stating the hypotheses or estimation goal; (2) verifying that the data meet the required assumptions; (3) computing the relevant test statistic, estimate, or model fit; (4) obtaining the p-value, confidence interval, or posterior distribution; (5) interpreting the result in the context of the original question. Following these steps systematically ensures a rigorous and reproducible analysis.
+??? success "연습문제 3 풀이"
+    처치가 피험자의 30%에게만 크게 작용하고 나머지 70%에게는 아무 효과가 없다고 하자. 이때 차이의 분포는 0에 몰린 덩어리와 오른쪽 꼬리로 이루어진 심한 비대칭 혼합이다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+    rng = np.random.default_rng(4)
+
+    def sim(n, B=2000):
+        pw = np.empty(B); ps = np.empty(B)
+        for b in range(B):
+            responder = rng.random(n) < 0.3
+            d = rng.normal(0, 1, n) + responder * 3.0
+            pw[b] = stats.wilcoxon(d).pvalue
+            nz = d[d != 0]
+            ps[b] = stats.binomtest(int((nz > 0).sum()), len(nz)).pvalue
+        return (pw < .05).mean(), (ps < .05).mean()
+
+    for n in (10, 20, 40):
+        print(n, sim(n))
+    ```
+
+    여기서 참인 중앙값 차이는 0이 **아니다**(반응자가 30%이므로 중앙값은 여전히 0 근처이지만 평균은 $+0.9$이다). 따라서 이것은 크기 문제가 아니라 **두 검정이 서로 다른 것을 재고 있음**을 보여 주는 예이다.
+
+    | $n$ | Wilcoxon 기각률 | 부호검정 기각률 |
+    |---:|---:|---:|
+    | 10 | 0.244 | 0.088 |
+    | 20 | 0.486 | 0.246 |
+    | 40 | 0.811 | 0.432 |
+
+    Wilcoxon이 훨씬 자주 기각한다. 그런데 이것을 "검정력이 높다"고 말할 수 있을까?
+
+    문제는 **무엇을 결론으로 삼느냐**이다. Wilcoxon이 기각할 때 우리가 아는 것은 "Walsh 평균의 중앙값이 0이 아니다"이고, 이는 여기서 참이다. 그러나 실무자는 이를 "전형적인 환자가 개선된다"로 읽기 쉽다. 그런데 참가자의 **70%는 아무 효과도 없다**.
+
+    부호검정은 정직하게 "개선된 사람이 절반을 넘는가?"를 묻고, 답은 "그렇다, 하지만 약하게"이다($n = 40$에서 기각률 0.43으로 Wilcoxon의 0.81의 절반이다).
+
+    **실무 권고:** 반응자/비반응자 혼합이 의심되면 검정 하나로 요약하지 말고 차이의 히스토그램을 반드시 그려야 한다. 이봉 분포가 보이면 "평균 효과"라는 개념 자체가 오도적이며, 반응자 비율을 추정하는 것이 옳은 분석이다.
 
 ---
 
-**Exercise 4.**
-Compare the approach from this section with an alternative method. When would you choose each?
+**연습문제 4.**
+대응 Wilcoxon 검정으로 중앙값 차이의 신뢰구간을 만들고, 대응 부호검정 기반 구간 및 $t$ 구간과 폭을 비교하라.
 
-??? success "Solution to Exercise 4"
-    The method discussed here is appropriate when its assumptions hold and the sample size is sufficient for the asymptotic approximations to be accurate. Alternative approaches include: (1) nonparametric methods -- preferred when distributional assumptions are suspect; (2) bootstrap methods -- useful when analytical reference distributions are unavailable; (3) Bayesian methods -- valuable when incorporating prior information or when direct probability statements about parameters are desired. Running multiple approaches and comparing results provides a useful robustness check.
+??? success "연습문제 4 풀이"
+    Wilcoxon 구간은 차이의 **Walsh 평균** $(D_i + D_j)/2$ ($i \le j$)에 기반한다.
+
+    ```python
+    import numpy as np, itertools
+    from scipy import stats
+    D = np.array([7, 3, -2, 7, 5, 5, 9, -8, 11, 11, 12, 13])
+    n = len(D)
+
+    walsh = np.sort([(D[i] + D[j]) / 2 for i in range(n) for j in range(i, n)])
+    ranks = np.arange(1, n + 1)
+    Wplus = np.array([np.dot(s, ranks) for s in itertools.product([0, 1], repeat=n)])
+    k = max(c for c in range(30) if 2 * (Wplus <= c).mean() <= 0.05)
+    print(k, len(walsh), walsh[k], walsh[-(k + 1)])   # 13 78 1.5 10.0
+
+    Ds = np.sort(D)
+    m = max(c for c in range(n) if 2 * stats.binom.cdf(c, n, 0.5) <= 0.05)
+    print(m, Ds[m + 1], Ds[n - m - 1])                # 2 5 11
+    print(stats.ttest_1samp(D, 0).confidence_interval())
+    ```
+
+    | 방법 | 95% 신뢰구간 | 폭 | 실제 포함확률 |
+    |:---|:---:|---:|---:|
+    | 대응 부호검정 | $(5, \; 11)$ | $6.0$ | $0.961$ |
+    | 대응 Wilcoxon | $(1.5, \; 10.0)$ | $8.5$ | $0.958$ |
+    | 대응 $t$ | $(2.17, \; 9.99)$ | $7.8$ | $0.950$ |
+
+    세 구간 모두 0을 포함하지 않으므로 세 검정이 모두 기각한 것과 일관된다.
+
+    부호검정 구간이 가장 **좁다**는 것이 뜻밖으로 보인다. 검정력이 가장 낮은 검정이 왜 가장 좁은 구간을 주는가? 이는 두 구간이 다른 방식으로 만들어지기 때문이다. 부호검정 구간은 **순서통계량** $D_{(3)} = 5$와 $D_{(10)} = 11$ 사이이고, 이 자료의 차이가 대부분 $5$ 이상에 몰려 있어 우연히 좁게 나왔다. Wilcoxon 구간은 Walsh 평균에 기반하므로 $-8$과 $-2$가 만드는 낮은 쌍평균들까지 반영되어 아래쪽으로 늘어난다.
+
+    구간의 폭은 검정력의 좋은 지표가 아니다. 표본이 하나뿐일 때 어느 구간이 좁은지는 그 표본의 우연에 크게 좌우된다. 검정력을 비교하려면 여러 표본에 걸친 평균 폭을 보아야 한다.
+
+    점추정값을 비교하면 부호검정의 점추정은 표본중앙값 $7.0$, Wilcoxon의 Hodges-Lehmann 추정은 Walsh 평균의 중앙값 $7.0$, $t$의 점추정은 표본평균 $6.08$이다.

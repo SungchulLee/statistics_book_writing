@@ -1,115 +1,218 @@
-# When and Why to Use Non-Parametric Tests
+# 비모수 검정을 언제, 왜 쓰는가
 
-Parametric tests such as the $t$-test and ANOVA derive their power from strong distributional assumptions -- most commonly that the data follow a normal distribution. When those assumptions hold, parametric methods are the most efficient tools available. However, real-world data frequently violate these assumptions: distributions may be heavily skewed, contaminated by outliers, or measured on an ordinal scale that lacks meaningful numerical distances. Non-parametric tests provide a principled alternative in all of these situations.
+$t$ 검정이나 분산분석 같은 모수적 검정은 강한 분포 가정 --- 대개 자료가 정규분포를 따른다는 가정 --- 에서 검정력을 얻는다. 그 가정이 성립하면 모수적 방법은 쓸 수 있는 도구 중 가장 효율적이다. 그러나 실제 자료는 이 가정을 자주 어긴다. 분포가 심하게 치우치거나, 이상치에 오염되어 있거나, 수치적 거리가 의미 없는 순서형 척도로 측정되었을 수 있다. 비모수 검정은 이 모든 상황에서 원칙 있는 대안을 제공한다.
 
-This section motivates the use of **distribution-free** (non-parametric) methods by examining the conditions under which parametric assumptions break down and by clarifying the trade-offs involved in choosing between the two families of tests.
+이 절에서는 모수적 가정이 무너지는 조건을 살펴보고 두 검정 계열 사이의 맞교환을 분명히 하여 **분포무관**(비모수) 방법을 쓸 이유를 설명한다.
 
-## When Parametric Assumptions Fail
+## 모수적 가정이 깨질 때
 
-### Normality Violations
+### 정규성 위반
 
-Many parametric procedures assume that the population distribution is normal, or that the sampling distribution of the test statistic is approximately normal. The central limit theorem guarantees the latter for large samples, but for small samples the normality of the underlying data matters directly. Common violations include:
+많은 모수적 절차는 모집단 분포가 정규이거나, 검정통계량의 표본분포가 근사적으로 정규라고 가정한다. 중심극한정리는 대표본에서 후자를 보장하지만, 소표본에서는 자료 자체의 정규성이 직접 문제가 된다. 흔한 위반은 다음과 같다.
 
-- **Heavy-tailed distributions** -- Data from Cauchy, $t$ with small degrees of freedom, or contaminated normal distributions produce extreme observations far more often than a Gaussian model predicts.
-- **Skewed distributions** -- Income data, survival times, and many biological measurements follow right-skewed distributions (e.g., log-normal, exponential, Weibull).
-- **Multimodal distributions** -- Mixture populations create multiple peaks that no single parametric family can capture.
+- **두꺼운 꼬리 분포** --- Cauchy 분포, 자유도가 작은 $t$ 분포, 오염 정규분포에서 나온 자료는 Gauss 모형이 예측하는 것보다 훨씬 자주 극단적인 관측값을 만든다.
+- **치우친 분포** --- 소득자료, 생존시간, 많은 생물학적 측정값은 오른쪽으로 치우친 분포(로그정규, 지수, Weibull 등)를 따른다.
+- **다봉 분포** --- 혼합 모집단은 봉우리를 여럿 만들며, 어떤 단일 모수족도 이를 담아내지 못한다.
 
-When the sample size is small (say $n < 30$) and the population departs substantially from normality, the Type I error rate of a $t$-test can deviate significantly from the nominal $\alpha$.
+표본크기가 작고($n < 30$ 정도) 모집단이 정규에서 크게 벗어나면 $t$ 검정의 제1종 오류율은 명목 $\alpha$에서 상당히 벗어날 수 있다.
 
-### Ordinal or Ranked Data
+!!! warning "지수분포에서 일표본 $t$ 검정의 실제 크기"
+    $\text{Exp}(1)$에서 $n$개를 뽑아 $H_0: \mu = 1$을 유의수준 $0.05$로 검정한 결과(각 20{,}000회 모의실험):
 
-Some measurement scales are inherently ordinal: pain ratings on a 1--10 scale, letter grades, or Likert-scale survey responses. Arithmetic operations like computing a mean are not meaningful for ordinal data because the distances between categories are not guaranteed to be equal. Non-parametric tests, which operate on ranks rather than raw values, respect the ordinal structure of such data.
+    | $n$ | 실제 크기 | 왼쪽 꼬리 기각 | 오른쪽 꼬리 기각 |
+    |---:|---:|---:|---:|
+    | 5 | 0.121 | 0.117 | 0.004 |
+    | 10 | 0.099 | 0.095 | 0.005 |
+    | 30 | 0.071 | 0.064 | 0.007 |
+    | 100 | 0.058 | 0.046 | 0.012 |
 
-### Outliers and Contamination
+    문제는 크기가 부풀려진 것만이 아니다. 기각이 **한쪽 꼬리에 몰려 있다**. $n = 5$에서 기각의 97%가 왼쪽 꼬리에서 나온다. 오른쪽으로 치우친 자료에서는 $\bar{X}$와 $S$가 양의 상관을 가지므로, 작은 표본평균이 작은 표준오차와 짝지어져 $t$를 지나치게 음수로 만든다. 이 편향은 $n$이 커져도 매우 천천히 사라진다.
 
-A single extreme observation can dramatically shift a sample mean and inflate the sample variance, distorting the results of any test that depends on these quantities. Rank-based tests are inherently resistant to outliers because replacing each observation with its rank bounds the influence of any single data point to at most one rank position.
+### 순서형 자료와 순위 자료
 
-### Small Sample Sizes
+어떤 측정 척도는 본질적으로 순서형이다. 1--10 척도의 통증 점수, 학점, Likert 척도 설문 응답 등이 그렇다. 범주 사이의 거리가 같다는 보장이 없으므로 평균 계산 같은 산술 연산은 순서형 자료에서 의미가 없다. 원값 대신 순위로 작동하는 비모수 검정은 이런 자료의 순서 구조를 존중한다.
 
-With very small samples ($n < 10$), the normal approximation underlying many parametric tests becomes unreliable. Several non-parametric tests offer **exact** $p$-values computed directly from the permutation distribution of the test statistic, eliminating the need for any large-sample approximation.
+### 이상치와 오염
 
-## What Makes a Test Non-Parametric
+극단적인 관측값 하나가 표본평균을 크게 옮기고 표본분산을 부풀려, 이 두 양에 의존하는 모든 검정의 결과를 왜곡한다. 순위 기반 검정은 각 관측값을 순위로 바꾸는 순간 어떤 한 자료점의 영향력이 순위 한 칸 이내로 제한되므로 본질적으로 이상치에 저항한다.
 
-A statistical test is called **non-parametric** (or **distribution-free**) if its validity does not depend on the assumption that the data come from a specific parametric family of distributions. More precisely, under the null hypothesis $H_0$, the distribution of the test statistic is the same for all continuous distributions.
+### 작은 표본크기
 
-!!! note "Distribution-free under the null"
-    The term "distribution-free" refers to the null distribution of the test statistic, not to the data themselves. Non-parametric tests still make *some* assumptions -- typically that observations are independent and identically distributed from a continuous distribution.
+표본이 아주 작으면($n < 10$) 많은 모수적 검정이 기대는 정규근사가 믿을 수 없게 된다. 여러 비모수 검정은 검정통계량의 순열분포에서 직접 계산한 **정확** $p$값을 제공하므로 대표본 근사가 아예 필요 없다.
 
-The most common mechanism for achieving distribution-freeness is the **rank transformation**: replace each observation $X_i$ by its rank $R_i$ among the combined sample. Under the null hypothesis (e.g., that two groups share the same distribution), every permutation of the ranks is equally likely, so the null distribution of any rank-based statistic can be derived without knowing the shape of the population.
+## 무엇이 검정을 비모수로 만드는가
 
-## Advantages of Non-Parametric Tests
+통계적 검정이 **비모수**(또는 **분포무관**)라 불리는 것은, 자료가 특정 모수족에서 나왔다는 가정에 그 타당성이 의존하지 않을 때이다. 더 정확히는, 귀무가설 $H_0$ 아래에서 검정통계량의 분포가 모든 연속분포에 대해 동일하다는 뜻이다.
 
-| Advantage | Explanation |
+!!! note "귀무가설 아래에서의 분포무관"
+    "분포무관"은 검정통계량의 **귀무분포**를 두고 하는 말이지 자료 자체를 두고 하는 말이 아니다. 비모수 검정도 *어떤* 가정은 한다. 보통 관측값이 연속분포에서 독립적이고 동일하게 분포한다는 가정이다.
+
+분포무관성을 얻는 가장 흔한 장치는 **순위변환**이다. 각 관측값 $X_i$를 합친 표본 안에서의 순위 $R_i$로 바꾼다. 귀무가설(예를 들어 두 집단이 같은 분포를 갖는다) 아래에서는 순위의 모든 순열이 동등하게 가능하므로, 모집단 모양을 몰라도 임의의 순위 기반 통계량의 귀무분포를 유도할 수 있다.
+
+## 비모수 검정의 장점
+
+| 장점 | 설명 |
 |:----------|:------------|
-| Fewer assumptions | Valid without requiring normality or equal variances |
-| Robustness to outliers | Rank transformation limits the influence of extreme values |
-| Applicability to ordinal data | Meaningful when only the ordering of observations is available |
-| Exact $p$-values for small samples | Permutation-based null distributions avoid reliance on asymptotics |
-| Broadly applicable | Can test hypotheses about medians, distributions, or stochastic ordering |
+| 가정이 적다 | 정규성이나 등분산성 없이도 타당하다 |
+| 이상치에 로버스트하다 | 순위변환이 극단값의 영향을 제한한다 |
+| 순서형 자료에 적용 가능하다 | 관측값의 순서만 알 수 있어도 의미가 있다 |
+| 소표본에서 정확 $p$값 | 순열 기반 귀무분포는 점근이론에 기대지 않는다 |
+| 폭넓게 적용된다 | 중앙값, 분포, 확률적 순서에 대한 가설을 검정할 수 있다 |
 
-## Disadvantages and Trade-offs
+## 단점과 맞교환
 
-Non-parametric methods are not without cost. The primary trade-off is **statistical power**: when the parametric assumptions are satisfied, a non-parametric test will generally require a larger sample to achieve the same power as its parametric counterpart. This efficiency loss is quantified by the **asymptotic relative efficiency** (ARE), discussed in detail in the [Power Comparison](power_comparison.md) section.
+비모수 방법에도 대가는 있다. 가장 큰 맞교환은 **검정력**이다. 모수적 가정이 만족될 때 비모수 검정이 같은 검정력에 도달하려면 대체로 더 큰 표본이 필요하다. 이 효율 손실은 **점근상대효율**(ARE)로 정량화되며, [검정력 비교](power_comparison.md) 절에서 자세히 다룬다.
 
-| Limitation | Explanation |
+| 한계 | 설명 |
 |:-----------|:------------|
-| Lower power under normality | Discarding magnitude information (by ranking) loses some efficiency |
-| Less familiar confidence intervals | Constructing CIs from rank-based tests is less straightforward than from $t$-based methods |
-| Ties complicate exact tests | When observations share the same value, exact permutation distributions require adjustment |
-| Fewer diagnostic tools | Residual plots and influence diagnostics are less developed for rank-based tests |
+| 정규성 아래 낮은 검정력 | 순위를 매기며 크기 정보를 버리므로 효율을 다소 잃는다 |
+| 신뢰구간이 덜 친숙하다 | 순위 기반 검정에서 신뢰구간을 만드는 일은 $t$ 기반 방법보다 덜 직관적이다 |
+| 동점이 정확검정을 복잡하게 한다 | 관측값이 같은 값을 가지면 정확 순열분포에 보정이 필요하다 |
+| 진단도구가 적다 | 잔차그림과 영향력 진단이 순위 기반 검정에서는 덜 발달했다 |
 
-## Decision Framework
+## 의사결정 틀
 
-Choosing between parametric and non-parametric tests is not an all-or-nothing decision. The following guidelines help navigate the choice:
+모수적 검정과 비모수 검정 사이의 선택은 전부 아니면 전무의 문제가 아니다. 다음 지침이 도움이 된다.
 
-1. **Check normality first.** Use graphical methods (QQ-plots, histograms) and formal tests (Shapiro-Wilk, Anderson-Darling) from [Chapter 14](../../ch14/index.md) to assess whether the normality assumption is reasonable.
-2. **Consider the sample size.** For large samples ($n > 30$), the central limit theorem often makes parametric tests robust to moderate departures from normality. For small samples, non-parametric tests offer safer inference.
-3. **Assess the measurement scale.** If the data are ordinal, a rank-based test is the natural choice regardless of sample size.
-4. **Evaluate the impact of outliers.** If the data contain extreme values that cannot be removed on substantive grounds, non-parametric tests protect against their distorting influence.
-5. **Weigh power against robustness.** When the assumptions hold, parametric tests are more powerful. When they do not, non-parametric tests can be substantially more powerful because the parametric test's actual Type I error rate may differ from the nominal level.
+1. **먼저 정규성을 확인한다.** [14장](../../ch14/index.md)의 그래프 방법(Q-Q 그림, 히스토그램)과 형식적 검정(Shapiro-Wilk, Anderson-Darling)으로 정규성 가정이 합리적인지 판단한다.
+2. **표본크기를 고려한다.** 대표본($n > 30$)에서는 중심극한정리 덕에 모수적 검정이 정규성의 완만한 위반에 로버스트한 경우가 많다. 소표본에서는 비모수 검정이 더 안전한 추론을 준다.
+3. **측정 척도를 평가한다.** 자료가 순서형이면 표본크기와 무관하게 순위 기반 검정이 자연스러운 선택이다.
+4. **이상치의 영향을 따진다.** 실질적 근거로 제거할 수 없는 극단값이 있다면 비모수 검정이 그 왜곡으로부터 보호해 준다.
+5. **검정력과 로버스트성의 균형을 잡는다.** 가정이 성립하면 모수적 검정이 더 강력하다. 성립하지 않으면 모수적 검정의 실제 제1종 오류율이 명목수준과 달라지므로, 비모수 검정이 훨씬 더 강력할 수 있다.
 
-??? example "When to choose non-parametric over parametric"
-    **Scenario:** A researcher collects pain scores (1--10 Likert scale) from 12 patients in a treatment group and 10 in a control group. The distribution of scores is heavily right-skewed with a floor effect at 1.
+??? example "모수적 대신 비모수를 택할 때"
+    **상황:** 한 연구자가 처리군 환자 12명과 대조군 10명에게서 통증 점수(1--10 Likert 척도)를 수집했다. 점수의 분포는 오른쪽으로 심하게 치우쳐 있고 1에서 바닥효과가 있다.
 
-    - The data are **ordinal**, so the mean is not a meaningful summary.
-    - The sample is **small** ($n_1 = 12$, $n_2 = 10$), so the CLT provides a weak guarantee.
-    - The distribution is **skewed**, violating the normality assumption.
+    - 자료가 **순서형**이므로 평균은 의미 있는 요약이 아니다.
+    - 표본이 **작아서**($n_1 = 12$, $n_2 = 10$) 중심극한정리의 보장이 약하다.
+    - 분포가 **치우쳐** 있어 정규성 가정을 어긴다.
 
-    A Mann-Whitney $U$ test (or equivalently, the Wilcoxon rank-sum test) is the appropriate choice here. It tests whether one group tends to produce systematically higher scores than the other, without assuming anything about the shape of the distribution.
+    여기서는 Mann-Whitney $U$ 검정(동치로 Wilcoxon 순위합검정)이 적절한 선택이다. 이 검정은 분포 모양에 대해 아무것도 가정하지 않고, 한 집단이 다른 집단보다 체계적으로 높은 점수를 내는 경향이 있는지를 검정한다.
 
-## Summary
+## 요약
 
-Non-parametric tests trade a modest amount of power under ideal conditions for broad applicability and robustness. They are indispensable when the data are ordinal, when samples are small and non-normal, or when outliers threaten the validity of parametric inference. The remainder of this chapter develops the most widely used non-parametric procedures for one-sample, paired-sample, two-sample, and multi-group comparisons.
+비모수 검정은 이상적인 조건에서의 완만한 검정력 손실을 폭넓은 적용성과 로버스트성으로 맞바꾼다. 자료가 순서형일 때, 표본이 작고 비정규일 때, 이상치가 모수적 추론의 타당성을 위협할 때 이 검정들은 없어서는 안 된다. 이 장의 나머지에서는 일표본, 대응표본, 이표본, 다집단 비교에 널리 쓰이는 비모수 절차를 차례로 전개한다.
 
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Describe the main concept of When and Why to Use Non-Parametric Tests and explain why it matters for statistical practice.
+**연습문제 1.**
+$\text{Exp}(1)$ 모집단에서 $n = 5$인 표본을 뽑아 $H_0: \mu = 1$을 양측 $t$ 검정으로 검정한다고 하자. 위 표에 따르면 실제 크기는 $0.121$이고 기각의 대부분이 **왼쪽** 꼬리에서 나온다. 왜 오른쪽이 아니라 왼쪽 꼬리에 몰리는지 설명하라.
 
-??? success "Solution to Exercise 1"
-    When and Why to Use Non-Parametric Tests is a core topic in statistics that provides tools for drawing reliable inferences from data. It matters because proper application ensures valid conclusions, correctly quantified uncertainty, and appropriate handling of the assumptions that underpin the method. Practitioners who understand this concept can avoid common pitfalls and choose the right analytical approach for their data.
+??? success "연습문제 1 풀이"
+    $t = (\bar{X} - 1)/(S/\sqrt{n})$의 분자와 분모가 **양의 상관**을 갖기 때문이다.
+
+    오른쪽으로 치우친 분포에서 표본이 큰 값을 하나도 뽑지 못하면 $\bar{X}$가 작아지는데, **동시에** $S$도 작아진다. 작은 분자와 작은 분모가 만나면 비율이 크게 음수가 된다. 반대로 표본이 큰 값을 하나 뽑으면 $\bar{X}$가 커지지만 $S$는 더 크게 부풀어, 비율이 오히려 0 쪽으로 눌린다.
+
+    지수분포 표본에서 $\bar{X}$와 $S$의 상관은 실제로 매우 높다.
+
+    ```python
+    import numpy as np
+    rng = np.random.default_rng(0)
+    x = rng.exponential(1, (20000, 5))
+    print(np.corrcoef(x.mean(1), x.std(1, ddof=1))[0, 1])   # 약 0.77
+    ```
+
+    이것이 왜도가 $t$ 통계량에 미치는 1차 효과이며, Edgeworth 전개에서 $-\gamma_1/(6\sqrt{n})$ 항으로 나타난다. $\gamma_1 = 2$이고 $n = 5$이면 이 항의 크기가 $0.15$로, 무시할 수 없다. 또한 $\sqrt{n}$에 반비례해 사라지므로 $n = 100$에서도 여전히 총 크기가 $0.058$이다.
+
+    실무적 함의: 치우친 자료에 대한 $t$ 검정의 실패는 "크기가 조금 크다"가 아니라 **어느 방향으로 틀리는지가 정해져 있다**는 데 있다. 부호검정이나 Wilcoxon 검정에는 이런 비대칭이 없다.
 
 ---
 
-**Exercise 2.**
-State the key assumptions required by the method discussed here. How can each assumption be checked?
+**연습문제 2.**
+다음 두 집단을 보자.
 
-??? success "Solution to Exercise 2"
-    The main assumptions typically include: (1) independence of observations -- verified by understanding the data collection process and checking for serial correlation; (2) distributional requirements (e.g., normality) -- checked with Q-Q plots and formal tests like Shapiro-Wilk; (3) equal variances (if applicable) -- assessed with boxplots and Levene's test. When assumptions are violated, consider robust alternatives, transformations, or nonparametric methods.
+$$
+A = (5.1, 5.6, 4.9, 5.3, 5.8, 5.0, 5.4, 5.2, 5.7, 5.5), \quad
+B = (6.2, 6.5, 6.0, 6.8, 6.3, 6.1, 6.6, 6.4, 6.7, 6.9)
+$$
+
+$B$의 마지막 값 $6.9$를 기록 오류로 $30.0$이라 적었다고 하자. 이표본 $t$ 검정과 Mann-Whitney 검정의 $p$값이 각각 어떻게 변하는지 계산하고 해석하라.
+
+??? success "연습문제 2 풀이"
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    a = np.array([5.1, 5.6, 4.9, 5.3, 5.8, 5.0, 5.4, 5.2, 5.7, 5.5])
+    b = np.array([6.2, 6.5, 6.0, 6.8, 6.3, 6.1, 6.6, 6.4, 6.7, 6.9])
+    b_bad = b.copy(); b_bad[-1] = 30.0
+
+    for name, y in [("원자료", b), ("오염", b_bad)]:
+        print(name,
+              "t p=%.6f" % stats.ttest_ind(a, y).pvalue,
+              "MW p=%.6f" % stats.mannwhitneyu(a, y).pvalue)
+    ```
+
+    | | $t$ 검정 $p$ | Mann-Whitney $p$ |
+    |:---|---:|---:|
+    | 원자료 | $1.97 \times 10^{-7}$ | $0.000183$ |
+    | 오염 후 | $0.166$ | $0.000183$ |
+
+    이상치는 **차이를 더 크게 만드는 방향으로** 들어갔는데($B$의 평균이 $6.45$에서 $8.76$으로 상승) $t$ 검정의 $p$값은 $2 \times 10^{-7}$에서 $0.166$으로 올라 유의성을 완전히 잃었다. 분자($\bar{B} - \bar{A}$)는 커졌지만 $B$의 표본표준편차가 $0.30$에서 $7.4$로 25배 부풀어 분모가 훨씬 더 빨리 커졌기 때문이다.
+
+    Mann-Whitney의 $p$값은 **소수점 이하 전부 그대로**이다. $30.0$은 여전히 20개 중 순위 20위일 뿐이고, $6.9$도 순위 20위였다. 통계량이 순위만 보므로 값이 얼마나 극단적인지는 아무 영향이 없다.
+
+    이것이 순위 기반 검정의 로버스트성이 갖는 정확한 의미이다. 이상치가 통계량을 조금 덜 흔드는 것이 아니라, **순위를 바꾸지 않는 한 전혀 흔들지 않는다**.
 
 ---
 
-**Exercise 3.**
-Work through a small numerical example illustrating the application of the technique from this section.
+**연습문제 3.**
+연습문제 2에서 이상치를 $B$ 대신 $A$에 넣으면(즉 $A$의 마지막 값 $5.5$를 $30.0$으로) 어떻게 되는가? 두 검정을 다시 계산하고, 이 경우가 왜 더 위험한지 설명하라.
 
-??? success "Solution to Exercise 3"
-    A structured approach to applying this technique involves: (1) clearly stating the hypotheses or estimation goal; (2) verifying that the data meet the required assumptions; (3) computing the relevant test statistic, estimate, or model fit; (4) obtaining the p-value, confidence interval, or posterior distribution; (5) interpreting the result in the context of the original question. Following these steps systematically ensures a rigorous and reproducible analysis.
+??? success "연습문제 3 풀이"
+    ```python
+    a_bad = a.copy(); a_bad[-1] = 30.0
+    print("t  p=%.4f" % stats.ttest_ind(a_bad, b).pvalue)     # 0.5914
+    print("MW p=%.4f" % stats.mannwhitneyu(a_bad, b).pvalue)  # 0.0028
+    ```
+
+    | | $t$ 검정 $p$ | Mann-Whitney $p$ |
+    |:---|---:|---:|
+    | 원자료 | $1.97 \times 10^{-7}$ | $0.000183$ |
+    | $A$에 이상치 | $0.591$ | $0.00283$ |
+
+    이 경우가 더 위험한 이유는 이상치가 **차이를 지워버리기** 때문이다. $\bar{A}$가 $5.35$에서 $7.8$로 뛰어 $\bar{B} = 6.45$를 넘어서므로 $t$ 통계량의 부호까지 뒤집힌다($t = +0.55$). 결론이 "$B$가 훨씬 크다"에서 "차이 없음"으로, 그것도 방향이 반대인 채로 바뀐다.
+
+    Mann-Whitney에서는 $p$값이 $0.000183$에서 $0.00283$으로 15배 커졌지만 여전히 강하게 유의하다. 이상치가 $A$의 한 관측값을 최하위권에서 최상위(순위 20)로 옮겼으므로 $U$가 $0$에서 $10$으로 바뀐 것뿐이다. 관측값 20개 중 정확히 하나만 순위가 바뀔 수 있고, 그것이 순위 기반 통계량이 받을 수 있는 최대 피해이다.
+
+    이것을 **붕괴점**(breakdown point)의 관점으로 말하면, 표본평균의 붕괴점은 $0$(관측값 하나면 무한대로 끌 수 있다)이고 순위합의 붕괴점은 그렇지 않다. 한 관측값이 순위합을 최대 $n$만큼만 움직인다.
 
 ---
 
-**Exercise 4.**
-Compare the approach from this section with an alternative method. When would you choose each?
+**연습문제 4.**
+비모수 검정이 이렇게 로버스트하다면 왜 항상 쓰지 않는가? 정규분포 자료에서 $t$ 검정과 Mann-Whitney 검정의 검정력을 비교하여 답하라.
 
-??? success "Solution to Exercise 4"
-    The method discussed here is appropriate when its assumptions hold and the sample size is sufficient for the asymptotic approximations to be accurate. Alternative approaches include: (1) nonparametric methods -- preferred when distributional assumptions are suspect; (2) bootstrap methods -- useful when analytical reference distributions are unavailable; (3) Bayesian methods -- valuable when incorporating prior information or when direct probability statements about parameters are desired. Running multiple approaches and comparing results provides a useful robustness check.
+??? success "연습문제 4 풀이"
+    두 정규 모집단이 $\mathcal{N}(0,1)$과 $\mathcal{N}(0.8, 1)$일 때(즉 모수적 가정이 완벽히 성립할 때) 유의수준 $0.05$에서의 검정력:
+
+    ```python
+    import numpy as np
+    from scipy import stats
+    rng = np.random.default_rng(7)
+
+    for n in (10, 20, 30):
+        x = rng.normal(0, 1, (3000, n))
+        y = rng.normal(0.8, 1, (3000, n))
+        pt = stats.ttest_ind(x, y, axis=1).pvalue
+        pm = np.array([stats.mannwhitneyu(x[i], y[i]).pvalue for i in range(3000)])
+        print(n, (pt < .05).mean(), (pm < .05).mean())
+    ```
+
+    | 집단당 $n$ | $t$ 검정 | Mann-Whitney |
+    |---:|---:|---:|
+    | 10 | 0.393 | 0.356 |
+    | 20 | 0.694 | 0.665 |
+    | 30 | 0.865 | 0.850 |
+
+    손실이 있지만 **작다**. 이것이 정규분포에서 Mann-Whitney 검정의 점근상대효율
+
+    $$
+    \text{ARE} = \frac{3}{\pi} \approx 0.955
+    $$
+
+    가 뜻하는 바이다. 같은 검정력을 얻으려면 표본을 약 $1/0.955 = 1.047$배, 즉 **5% 정도만** 더 모으면 된다. $n = 20$이면 한 집단에 한 명씩만 더 있으면 되는 셈이다.
+
+    반면 연습문제 2--3에서 보았듯 가정이 깨지면 $t$ 검정이 잃는 것은 5%가 아니라 결론 전체이다. 이 비대칭 --- 정상일 때 5% 손해, 비정상일 때 전면적 이득 --- 이 비모수 검정을 기본 선택지로 삼을 만하게 만드는 이유이다.
+
+    다만 "항상 비모수를 쓰라"는 결론도 지나치다. 순위 기반 검정은 평균차나 회귀계수 같은 **해석 가능한 모수의 추정치와 신뢰구간**을 자연스럽게 주지 못하며, 검정하는 귀무가설도 "평균이 같다"가 아니라 "분포가 같다" 또는 "확률적으로 크지 않다"이다. 목표가 효과의 크기를 재는 것이라면 로버스트 추정이나 붓스트랩이 더 나은 답인 경우가 많다.

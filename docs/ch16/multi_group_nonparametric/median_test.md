@@ -1,74 +1,82 @@
-# Mood's Median Test
+# Mood 중앙값검정
 
-**Mood's median test** is one of the simplest non-parametric tests for comparing two or more independent groups. It tests whether the groups share the same median by classifying each observation as above or below the grand median and then applying a chi-square test of independence to the resulting contingency table.
+**Mood 중앙값검정**은 독립인 두 집단 이상을 비교하는 가장 단순한 비모수 검정 중 하나이다. 각 관측값을 전체 중앙값보다 위인지 아래인지로 분류한 뒤 그 분할표에 카이제곱 독립성 검정을 적용하여 집단들이 같은 중앙값을 갖는지 검정한다.
 
-The test is conceptually straightforward and extremely robust to outliers, but it is generally less powerful than the [Kruskal-Wallis test](kruskal_wallis.md) because it discards all information about how far each observation falls from the median.
+개념이 명료하고 이상치에 극도로 로버스트하지만, 각 관측값이 중앙값에서 얼마나 떨어져 있는지에 대한 정보를 모두 버리므로 [Kruskal-Wallis 검정](kruskal_wallis.md)보다 대체로 검정력이 낮다.
 
-## Hypotheses
-
-$$
-H_0 \colon \text{All } k \text{ groups have the same median}
-$$
+## 가설
 
 $$
-H_a \colon \text{At least one group has a different median}
+H_0 \colon k \text{개 집단의 중앙값이 모두 같다}
 $$
 
-## Procedure
+$$
+H_a \colon \text{적어도 한 집단의 중앙값이 다르다}
+$$
 
-**Step 1.** Compute the **grand median** $\tilde{x}$ of the combined sample of size $N = \sum_{i=1}^{k} n_i$.
+## 절차
 
-**Step 2.** For each group, count the number of observations above and below (or equal to) the grand median. This produces a $2 \times k$ contingency table:
+**1단계.** 크기 $N = \sum_{i=1}^{k} n_i$인 합친 표본의 **전체 중앙값** $\tilde{x}$를 계산한다.
 
-|  | Group 1 | Group 2 | $\cdots$ | Group $k$ | Total |
+**2단계.** 각 집단에서 전체 중앙값보다 위인 관측값과 아래(또는 같은) 관측값의 개수를 센다. 이렇게 $2 \times k$ 분할표가 만들어진다.
+
+|  | 집단 1 | 집단 2 | $\cdots$ | 집단 $k$ | 합계 |
 |:-|:-------:|:-------:|:--------:|:---------:|:-----:|
-| Above $\tilde{x}$ | $a_1$ | $a_2$ | $\cdots$ | $a_k$ | $A$ |
-| Below $\tilde{x}$ | $b_1$ | $b_2$ | $\cdots$ | $b_k$ | $B$ |
-| **Total** | $n_1$ | $n_2$ | $\cdots$ | $n_k$ | $N$ |
+| $\tilde{x}$ 위 | $a_1$ | $a_2$ | $\cdots$ | $a_k$ | $A$ |
+| $\tilde{x}$ 아래 | $b_1$ | $b_2$ | $\cdots$ | $b_k$ | $B$ |
+| **합계** | $n_1$ | $n_2$ | $\cdots$ | $n_k$ | $N$ |
 
-Observations exactly equal to $\tilde{x}$ are typically placed in the "below or equal" category, though conventions vary.
+$\tilde{x}$와 정확히 같은 관측값은 보통 "아래 또는 같음" 범주에 넣지만 관례가 다양하다.
 
-**Step 3.** Apply the **Pearson chi-square test** to the contingency table:
+**3단계.** 분할표에 **Pearson 카이제곱 검정**을 적용한다.
 
 $$
 \chi^2 = \sum_{i=1}^{k} \left[\frac{(a_i - E_{a_i})^2}{E_{a_i}} + \frac{(b_i - E_{b_i})^2}{E_{b_i}}\right]
 $$
 
-where the expected counts under $H_0$ are
+여기서 $H_0$ 아래의 기대도수는
 
 $$
 E_{a_i} = \frac{n_i \times A}{N}, \qquad E_{b_i} = \frac{n_i \times B}{N}
 $$
 
-**Step 4.** Under $H_0$, the test statistic follows approximately
+이다.
+
+**4단계.** $H_0$ 아래에서 검정통계량은 근사적으로
 
 $$
 \chi^2 \sim \chi^2_{k-1}
 $$
 
-## Worked Example
+을 따른다.
 
-Three diets are compared for weight loss (kg) over 8 weeks.
+## 예제
 
-**Diet A** ($n_1 = 6$): 3.2, 4.5, 2.8, 5.1, 3.9, 4.2
+세 가지 식단을 8주간의 체중 감량(kg)으로 비교한다.
 
-**Diet B** ($n_2 = 6$): 1.5, 2.0, 3.0, 2.5, 1.8, 2.2
+**식단 A** ($n_1 = 6$): 3.2, 4.5, 2.8, 5.1, 3.9, 4.2
 
-**Diet C** ($n_3 = 6$): 4.0, 5.5, 3.5, 6.0, 4.8, 5.0
+**식단 B** ($n_2 = 6$): 1.5, 2.0, 3.0, 2.5, 1.8, 2.2
 
-**Step 1.** Combined sample (sorted): 1.5, 1.8, 2.0, 2.2, 2.5, 2.8, 3.0, 3.2, 3.5, 3.9, 4.0, 4.2, 4.5, 4.8, 5.0, 5.1, 5.5, 6.0.
+**식단 C** ($n_3 = 6$): 4.0, 5.5, 3.5, 6.0, 4.8, 5.0
 
-Grand median: $\tilde{x} = (3.2 + 3.5)/2 = 3.35$.
+**1단계.** 합친 표본을 정렬한다: 1.5, 1.8, 2.0, 2.2, 2.5, 2.8, 3.0, 3.2, 3.5, 3.9, 4.0, 4.2, 4.5, 4.8, 5.0, 5.1, 5.5, 6.0.
 
-**Step 2.** Count above and below $\tilde{x}$:
+$N = 18$이므로 전체 중앙값은 9번째와 10번째 값의 평균이다.
 
-|  | Diet A | Diet B | Diet C | Total |
+$$
+\tilde{x} = \frac{3.5 + 3.9}{2} = 3.7
+$$
+
+**2단계.** $\tilde{x} = 3.7$ 위·아래를 센다.
+
+|  | 식단 A | 식단 B | 식단 C | 합계 |
 |:-|:------:|:------:|:------:|:-----:|
-| Above 3.35 | 4 | 0 | 5 | 9 |
-| Below 3.35 | 2 | 6 | 1 | 9 |
-| **Total** | 6 | 6 | 6 | 18 |
+| 3.7 위 | 4 | 0 | 5 | 9 |
+| 3.7 아래 | 2 | 6 | 1 | 9 |
+| **합계** | 6 | 6 | 6 | 18 |
 
-**Step 3.** Expected counts: each $E = 6 \times 9/18 = 3$.
+**3단계.** 기대도수는 모두 $E = 6 \times 9/18 = 3$이다.
 
 $$
 \chi^2 = \frac{(4-3)^2}{3} + \frac{(0-3)^2}{3} + \frac{(5-3)^2}{3} + \frac{(2-3)^2}{3} + \frac{(6-3)^2}{3} + \frac{(1-3)^2}{3}
@@ -78,61 +86,208 @@ $$
 = \frac{1 + 9 + 4 + 1 + 9 + 4}{3} = \frac{28}{3} \approx 9.33
 $$
 
-**Step 4.** Compare to $\chi^2_2$: $P(\chi^2_2 > 9.33) \approx 0.009$.
+**4단계.** $\chi^2_2$와 비교한다: $P(\chi^2_2 > 9.33) = 0.0094$.
 
-At $\alpha = 0.05$, we reject $H_0$. There is significant evidence that the diets differ in median weight loss. Diet B appears least effective (0 out of 6 above the grand median), while Diet C appears most effective (5 out of 6).
+```python
+from scipy import stats
+A = [3.2, 4.5, 2.8, 5.1, 3.9, 4.2]
+B = [1.5, 2.0, 3.0, 2.5, 1.8, 2.2]
+C = [4.0, 5.5, 3.5, 6.0, 4.8, 5.0]
+print(stats.median_test(A, B, C))
+# statistic=9.3333, pvalue=0.0094036, median=3.7,
+# table=[[4 0 5]
+#        [2 6 1]]
+```
 
-## Advantages and Limitations
+$\alpha = 0.05$에서 $H_0$을 기각한다. 식단들의 중앙값 체중 감량이 다르다는 유의한 증거가 있다. 식단 B가 가장 효과가 낮고(6개 중 0개가 전체 중앙값 위), 식단 C가 가장 효과가 높다(6개 중 5개).
 
-| Advantage | Limitation |
+!!! note "$2 \times k$ 표에는 Yates 보정을 쓰지 않는다"
+    Yates 연속성 보정은 $2 \times 2$ 표에만 적용된다. 여기서는 $k = 3$이라 $2 \times 3$ 표이므로 보정 없이 계산하며, `scipy.stats.median_test`도 보정을 적용하지 않는다.
+
+    $k = 2$일 때는 [이표본 비모수 검정](../two_sample_nonparametric/two_sample.md)에서 보았듯 보정 여부가 결과를 크게 바꿀 수 있으므로 주의해야 한다.
+
+## 장점과 한계
+
+| 장점 | 한계 |
 |:----------|:-----------|
-| Very simple to compute | Low power (discards magnitude information) |
-| Extremely robust to outliers | Only detects differences in medians, not spread |
-| Works with ordinal data | Chi-square approximation may be poor for small expected counts |
-| Extends naturally to $k > 2$ groups | Generally outperformed by [Kruskal-Wallis](kruskal_wallis.md) |
+| 계산이 매우 간단하다 | 검정력이 낮다(크기 정보를 버린다) |
+| 이상치에 극도로 로버스트하다 | 중앙값 차이만 탐지하고 산포는 보지 못한다 |
+| 순서형 자료에도 쓸 수 있다 | 기대도수가 작으면 카이제곱 근사가 나쁘다 |
+| $k > 2$로 자연스럽게 확장된다 | 대체로 [Kruskal-Wallis](kruskal_wallis.md)에 밀린다 |
 
-!!! warning "Low power"
-    Mood's median test has substantially lower power than the Kruskal-Wallis test. It should be used primarily when outlier resistance is paramount or when data are naturally dichotomized around a meaningful threshold. For most routine comparisons, the Kruskal-Wallis test is preferred.
+!!! warning "낮은 검정력"
+    Mood 중앙값검정은 Kruskal-Wallis 검정보다 검정력이 상당히 낮다. 이상치 저항성이 무엇보다 중요하거나 자료가 의미 있는 임계값을 기준으로 자연스럽게 이분되는 경우에 주로 써야 한다. 일상적인 비교에는 Kruskal-Wallis 검정이 낫다.
 
-## When to Use
+## 언제 쓰는가
 
-- **Extreme outliers are present** and even rank-based tests might be influenced (though this is rare in practice).
-- **Quick exploratory analysis** is needed and a formal rank-based test will follow.
-- **The research question concerns the median specifically**, and the contingency table structure provides an intuitive summary.
+- **극단적인 이상치가 있어** 순위 기반 검정조차 영향을 받을 수 있을 때(실무에서는 드물다).
+- **빠른 탐색적 분석**이 필요하고 뒤이어 형식적인 순위 기반 검정을 할 때.
+- **연구 질문이 구체적으로 중앙값에 관한 것**이고 분할표 구조가 직관적인 요약이 될 때.
 
-## Summary
+## 요약
 
-Mood's median test compares group medians by constructing a $2 \times k$ contingency table of counts above and below the grand median, then applying a chi-square test of independence. Its extreme simplicity and robustness to outliers are offset by low statistical power. For most applications, the [Kruskal-Wallis test](kruskal_wallis.md) provides a more powerful alternative, and Mood's median test is best reserved for situations where outlier resistance is the primary concern.
+Mood 중앙값검정은 전체 중앙값 위·아래 도수의 $2 \times k$ 분할표를 만들고 카이제곱 독립성 검정을 적용하여 집단 중앙값을 비교한다. 극도의 단순함과 이상치 로버스트성이 낮은 통계적 검정력과 맞바꾸어진다. 대부분의 응용에서 [Kruskal-Wallis 검정](kruskal_wallis.md)이 더 강력한 대안이며, Mood 중앙값검정은 이상치 저항성이 최우선인 상황에 아껴 두는 것이 좋다.
 
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Describe the main concept of Mood's Median Test and explain why it matters for statistical practice.
+**연습문제 1.**
+본문의 식단 자료에 Kruskal-Wallis 검정을 적용하여 Mood 중앙값검정과 비교하라. 어느 쪽이 더 작은 $p$값을 주는가?
 
-??? success "Solution to Exercise 1"
-    Mood's Median Test is a core topic in statistics that provides tools for drawing reliable inferences from data. It matters because proper application ensures valid conclusions, correctly quantified uncertainty, and appropriate handling of the assumptions that underpin the method. Practitioners who understand this concept can avoid common pitfalls and choose the right analytical approach for their data.
+??? success "연습문제 1 풀이"
+    ```python
+    from scipy import stats
+    A = [3.2, 4.5, 2.8, 5.1, 3.9, 4.2]
+    B = [1.5, 2.0, 3.0, 2.5, 1.8, 2.2]
+    C = [4.0, 5.5, 3.5, 6.0, 4.8, 5.0]
+    print(stats.median_test(A, B, C).pvalue)   # 0.009404
+    print(stats.kruskal(A, B, C).pvalue)       # 0.002738
+    print(stats.f_oneway(A, B, C).pvalue)      # 1.20e-04
+    ```
+
+    | 검정 | 통계량 | $p$값 |
+    |:---|---:|---:|
+    | Mood 중앙값 | $\chi^2 = 9.33$ | $0.00940$ |
+    | Kruskal-Wallis | $H = 11.80$ | $0.00274$ |
+    | 일원분산분석 | $F = 17.5$ | $1.2 \times 10^{-4}$ |
+
+    사용하는 정보량 순서대로 $p$값이 작아진다.
+
+    - **Mood**는 각 관측값을 "위/아래"라는 이진값으로 뭉갠다. $18$개 자료점에서 남는 정보가 $2 \times 3$ 표의 6개 숫자뿐이다.
+    - **Kruskal-Wallis**는 $18$개의 순위를 모두 쓴다.
+    - **분산분석**은 원값을 쓴다. 이 자료는 각 집단이 거의 정규이고 등분산이라 분산분석에 매우 유리하다.
+
+    Mood 검정이 $\chi^2$의 자유도를 $k-1 = 2$로 유지하면서도 정보를 크게 잃으므로 Kruskal-Wallis보다 $p$값이 3.4배 커진다.
+
+    실무 결론: 세 검정 모두 $\alpha = 0.05$에서 기각하므로 이 자료에서는 어느 것을 써도 같다. 그러나 효과가 더 약했다면 Mood 검정만 놓쳤을 것이다.
 
 ---
 
-**Exercise 2.**
-State the key assumptions required by the method discussed here. How can each assumption be checked?
+**연습문제 2.**
+Mood 중앙값검정의 정규분포 아래 ARE는 얼마인가? 검정력을 모의실험으로 확인하고 Kruskal-Wallis와 비교하라.
 
-??? success "Solution to Exercise 2"
-    The main assumptions typically include: (1) independence of observations -- verified by understanding the data collection process and checking for serial correlation; (2) distributional requirements (e.g., normality) -- checked with Q-Q plots and formal tests like Shapiro-Wilk; (3) equal variances (if applicable) -- assessed with boxplots and Levene's test. When assumptions are violated, consider robust alternatives, transformations, or nonparametric methods.
+??? success "연습문제 2 풀이"
+    Mood 중앙값검정은 각 집단에서 "전체 중앙값을 넘는 비율"을 비교하는 것이므로 본질적으로 부호검정의 다집단 확장이다. 따라서 정규분포 아래 일원분산분석 대비 ARE는 부호검정과 같은
+
+    $$
+    \text{ARE} = \frac{2}{\pi} \approx 0.637
+    $$
+
+    이다. Kruskal-Wallis의 $3/\pi \approx 0.955$보다 훨씬 낮다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+    rng = np.random.default_rng(0)
+    B = 1500
+
+    for n in (10, 20, 40):
+        pm, pk, pf = [], [], []
+        for _ in range(B):
+            g1 = rng.normal(0.0, 1, n)
+            g2 = rng.normal(0.5, 1, n)
+            g3 = rng.normal(1.0, 1, n)
+            pm.append(stats.median_test(g1, g2, g3).pvalue)
+            pk.append(stats.kruskal(g1, g2, g3).pvalue)
+            pf.append(stats.f_oneway(g1, g2, g3).pvalue)
+        f = lambda p: round(np.mean(np.array(p) < .05), 3)
+        print(n, f(pm), f(pk), f(pf))
+    ```
+
+    처리 효과가 $(0, 0.5, 1.0)$인 세 정규집단의 검정력:
+
+    | 집단당 $n$ | Mood 중앙값 | Kruskal-Wallis | 일원분산분석 |
+    |---:|---:|---:|---:|
+    | 10 | 0.256 | 0.428 | 0.459 |
+    | 20 | 0.575 | 0.757 | 0.780 |
+    | 40 | 0.885 | 0.970 | 0.982 |
+
+    Kruskal-Wallis가 분산분석에 거의 붙어 있는 반면($0.757$ 대 $0.780$, 3% 손실) Mood 중앙값검정은 뚜렷이 뒤처진다($0.575$, 26% 손실).
+
+    $n = 20$에서 Kruskal-Wallis가 도달한 검정력 $0.757$을 Mood 검정으로 얻으려면 $n = 30$ 정도가 필요하다. ARE 비 $0.637/0.955 = 0.667$이 예측하는 배수 $1.5$와 대체로 부합한다.
 
 ---
 
-**Exercise 3.**
-Work through a small numerical example illustrating the application of the technique from this section.
+**연습문제 3.**
+전체 중앙값과 **정확히 같은** 관측값을 어떻게 처리하느냐가 결과를 바꿀 수 있다. `scipy.stats.median_test`의 `ties` 인자가 제공하는 세 가지 방식을 이산자료로 비교하라.
 
-??? success "Solution to Exercise 3"
-    A structured approach to applying this technique involves: (1) clearly stating the hypotheses or estimation goal; (2) verifying that the data meet the required assumptions; (3) computing the relevant test statistic, estimate, or model fit; (4) obtaining the p-value, confidence interval, or posterior distribution; (5) interpreting the result in the context of the original question. Following these steps systematically ensures a rigorous and reproducible analysis.
+??? success "연습문제 3 풀이"
+    ```python
+    import numpy as np
+    from scipy import stats
+    # 세 집단, 값이 1~5 인 Likert 자료
+    g1 = [3, 3, 3, 4, 4, 5]
+    g2 = [2, 3, 3, 3, 4, 4]
+    g3 = [1, 2, 3, 3, 3, 3]
+    print(np.median(g1 + g2 + g3))     # 3.0
+
+    for t in ("below", "above", "ignore"):
+        r = stats.median_test(g1, g2, g3, ties=t)
+        print(t, round(float(r.statistic), 4), round(float(r.pvalue), 4))
+        print(r.table)
+    ```
+
+    | `ties` | $\chi^2$ | $p$ | 분할표 |
+    |:---|---:|---:|:---|
+    | `"below"` (기본값) | 3.877 | 0.144 | $\begin{smallmatrix}3&2&0\\3&4&6\end{smallmatrix}$ |
+    | `"above"` | 2.400 | 0.301 | $\begin{smallmatrix}6&5&4\\0&1&2\end{smallmatrix}$ |
+    | `"ignore"` | 5.156 | 0.076 | $\begin{smallmatrix}3&2&0\\0&1&2\end{smallmatrix}$ |
+
+    $18$개 관측값 중 $10$개가 전체 중앙값 $3$과 같다. 처리 방식에 따라 $\chi^2$이 $2.4$에서 $5.16$까지, $p$값이 $0.301$에서 $0.076$까지 4배 범위로 움직인다.
+
+    `"ignore"`의 분할표는 자료가 $18$개에서 $8$개로 줄어든 것임에 유의하라. 통계량이 가장 크게 나오지만 표본크기를 절반 이상 버린 결과라 신뢰하기 어렵다.
+
+    이것이 Mood 중앙값검정의 근본적 약점이다. **자료가 이산적일수록 중앙값과 같은 값이 많아지고, 임의의 규칙이 결론을 좌우한다.**
+
+    Kruskal-Wallis는 이 문제에서 훨씬 자유롭다. 중간순위라는 원칙적인 동점 처리 방식이 있고 보정계수로 분산을 조정하기 때문이다.
+
+    ```python
+    print(stats.kruskal(g1, g2, g3))   # H=4.9342, p=0.08483
+    ```
+
+    이 자료에서는 어느 방법도 $\alpha = 0.05$에서 기각하지 않으므로 결론이 갈리지는 않는다. 그러나 $p$값의 요동 폭 자체가 경고 신호이다.
+
+    **권고:** 값의 종류가 적은 순서형 자료(Likert 척도, 등급)에는 Mood 중앙값검정을 쓰지 말라.
 
 ---
 
-**Exercise 4.**
-Compare the approach from this section with an alternative method. When would you choose each?
+**연습문제 4.**
+중앙값이 모두 같지만 산포가 크게 다른 세 집단에서 Mood 중앙값검정과 Kruskal-Wallis 검정의 제1종 오류율을 확인하라. 두 검정이 정말로 명목수준을 지키는가?
 
-??? success "Solution to Exercise 4"
-    The method discussed here is appropriate when its assumptions hold and the sample size is sufficient for the asymptotic approximations to be accurate. Alternative approaches include: (1) nonparametric methods -- preferred when distributional assumptions are suspect; (2) bootstrap methods -- useful when analytical reference distributions are unavailable; (3) Bayesian methods -- valuable when incorporating prior information or when direct probability statements about parameters are desired. Running multiple approaches and comparing results provides a useful robustness check.
+??? success "연습문제 4 풀이"
+    ```python
+    import numpy as np
+    from scipy import stats
+    rng = np.random.default_rng(1)
+    B = 2000
+
+    for n in (20, 50, 100):
+        rej_m = rej_k = 0
+        for _ in range(B):
+            g1 = rng.normal(0, 1, n)
+            g2 = rng.normal(0, 3, n)
+            g3 = rng.normal(0, 9, n)
+            rej_m += stats.median_test(g1, g2, g3).pvalue < 0.05
+            rej_k += stats.kruskal(g1, g2, g3).pvalue < 0.05
+        print(n, rej_m / B, rej_k / B)
+    ```
+
+    세 집단의 중앙값이 모두 0이고 표준편차만 $1, 3, 9$로 다르다.
+
+    | 집단당 $n$ | Mood 중앙값 | Kruskal-Wallis |
+    |---:|---:|---:|
+    | 20 | 0.092 | 0.075 |
+    | 50 | 0.102 | 0.086 |
+    | 100 | 0.117 | 0.079 |
+
+    **두 검정 모두 명목수준을 넘는다.** 중앙값이 정확히 0으로 같은데도 Mood 검정은 $9$--$12\%$, Kruskal-Wallis는 $8$--$9\%$를 기각한다.
+
+    Mood 검정이 왜 무너지는지가 특히 의외이다. "중앙값만 본다"면 문제가 없어야 하지 않은가?
+
+    핵심은 **전체 중앙값이 모수가 아니라 추정값**이라는 데 있다. $\chi^2$ 검정은 분할표의 행 합이 $N/2$로 고정되었을 때 열 도수가 초기하분포를 따른다고 가정한다. 이 가정은 세 집단이 **같은 분포**일 때만 성립한다. 분산이 다르면 표본 전체 중앙값의 변동이 각 집단의 도수와 다른 방식으로 상관되어 초기하 귀무분포가 깨진다.
+
+    구체적으로, 표본 전체 중앙값은 분산이 작은 집단($\sigma = 1$)의 관측값들에 의해 주로 결정된다. 그 집단의 표본이 우연히 오른쪽으로 치우치면 전체 중앙값이 올라가고, 그러면 분산이 큰 집단들의 "위" 도수가 함께 내려간다. 이 유도된 상관이 도수의 변동을 부풀린다.
+
+    Mood 검정이 Kruskal-Wallis보다 더 나쁘고 $n$이 커질수록 악화되는 것도 이 때문이다.
+
+    **정리:** "Mood 중앙값검정은 중앙값만 검정하므로 모양 차이에 안전하다"는 흔한 설명은 **정확하지 않다**. 등분산성이 크게 깨지면 두 검정 모두 신뢰할 수 없다. 이런 상황에서는 각 집단 중앙값의 붓스트랩 신뢰구간을 비교하는 편이 정직하다.

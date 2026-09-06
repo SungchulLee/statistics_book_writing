@@ -1,61 +1,61 @@
-# Paired Permutation Test
+# 대응 순열검정
 
-The [paired sign test](paired_sign.md) and [paired Wilcoxon test](paired_wilcoxon.md) both make specific choices about what information to use from the paired differences: signs only, or signs plus ranks. The **paired permutation test** takes a different approach -- it uses the full numerical values of the differences and derives the null distribution by considering all possible ways the signs could have been assigned. This yields an exact, assumption-free test that exploits all available information.
+[대응 부호검정](paired_sign.md)과 [대응 Wilcoxon 검정](paired_wilcoxon.md)은 대응차이에서 어떤 정보를 쓸지에 대해 각기 특정한 선택을 한다. 부호만 쓰거나, 부호에 순위를 더한다. **대응 순열검정**은 다른 접근을 취한다. 차이의 완전한 수치값을 쓰고, 부호가 배정될 수 있었던 모든 경우를 고려하여 귀무분포를 유도한다. 그 결과 가용한 정보를 모두 활용하면서도 가정이 없는 정확검정을 얻는다.
 
-## Intuition
+## 직관
 
-Under $H_0$ (no treatment effect), each difference $D_i = X_i - Y_i$ is just as likely to be positive as negative, because swapping the labels "before" and "after" within a pair would flip the sign of $D_i$ without changing its magnitude. If we randomly reassign the signs of all $n$ differences, the resulting test statistic should look similar to the observed one. The permutation test formalizes this reasoning by comparing the observed statistic to the distribution of the statistic over all $2^n$ possible sign assignments.
+$H_0$(처치 효과 없음) 아래에서 각 차이 $D_i = X_i - Y_i$는 양수일 확률과 음수일 확률이 같다. 한 쌍 안에서 "전"과 "후" 라벨을 맞바꾸면 크기는 그대로인 채 $D_i$의 부호만 뒤집히기 때문이다. $n$개 차이의 부호를 무작위로 다시 배정하면 그 결과 나오는 검정통계량이 관측값과 비슷해야 한다. 순열검정은 관측된 통계량을 가능한 $2^n$가지 부호 배정 전체에 걸친 통계량의 분포와 비교하여 이 논리를 형식화한다.
 
-## Hypotheses
-
-$$
-H_0 \colon \text{The distribution of } D_i \text{ is symmetric about zero}
-$$
+## 가설
 
 $$
-H_a \colon \text{The distribution of } D_i \text{ is not symmetric about zero (two-sided)}
+H_0 \colon D_i \text{의 분포가 0을 중심으로 대칭이다}
 $$
 
-One-sided alternatives follow by restricting attention to positive or negative shifts.
+$$
+H_a \colon D_i \text{의 분포가 0을 중심으로 대칭이 아니다 (양측)}
+$$
 
-## Test Statistic
+단측 대립가설은 양의 이동이나 음의 이동으로 관심을 제한하여 얻는다.
 
-Let $D_1, D_2, \ldots, D_n$ be the observed paired differences. Any function of the differences can serve as the test statistic. Common choices include:
+## 검정통계량
 
-- **Mean of differences:** $\bar{D} = \frac{1}{n}\sum_{i=1}^{n} D_i$
-- **Sum of differences:** $T = \sum_{i=1}^{n} D_i$
+$D_1, D_2, \ldots, D_n$을 관측된 대응차이라 하자. 차이의 임의의 함수를 검정통계량으로 쓸 수 있다. 흔한 선택은 다음과 같다.
 
-Both lead to equivalent tests since they are proportional. We use $T$ for simplicity.
+- **차이의 평균:** $\bar{D} = \frac{1}{n}\sum_{i=1}^{n} D_i$
+- **차이의 합:** $T = \sum_{i=1}^{n} D_i$
 
-## Permutation Distribution
+둘은 비례하므로 동치인 검정을 준다. 간단하게 $T$를 쓴다.
 
-Under $H_0$, each difference $D_i$ is equally likely to be $+|D_i|$ or $-|D_i|$. There are $2^n$ equally likely sign assignments $\mathbf{s} = (s_1, s_2, \ldots, s_n)$ where each $s_i \in \{-1, +1\}$. For each assignment, compute
+## 순열분포
+
+$H_0$ 아래에서 각 차이 $D_i$는 $+|D_i|$일 확률과 $-|D_i|$일 확률이 같다. 각 $s_i \in \{-1, +1\}$인 부호 배정 $\mathbf{s} = (s_1, s_2, \ldots, s_n)$이 $2^n$가지 있고 모두 동등하게 가능하다. 각 배정에 대해
 
 $$
 T(\mathbf{s}) = \sum_{i=1}^{n} s_i \, |D_i|
 $$
 
-The collection $\{T(\mathbf{s}) : \mathbf{s} \in \{-1, +1\}^n\}$ forms the **permutation distribution** of $T$ under $H_0$.
+를 계산한다. 집합 $\{T(\mathbf{s}) : \mathbf{s} \in \{-1, +1\}^n\}$이 $H_0$ 아래 $T$의 **순열분포**를 이룬다.
 
-## Exact p-Value
+## 정확 p값
 
-The exact two-sided $p$-value is the proportion of sign assignments that produce a test statistic at least as extreme as the observed value:
+정확 양측 $p$값은 관측값만큼 또는 그보다 극단적인 검정통계량을 내는 부호 배정의 비율이다.
 
 $$
 p = \frac{\#\{|\,T(\mathbf{s})| \ge |T_{\text{obs}}|\}}{2^n}
 $$
 
-For one-sided tests:
+단측검정에서는
 
 $$
-p = \frac{\#\{T(\mathbf{s}) \ge T_{\text{obs}}\}}{2^n} \qquad \text{(right-tailed)}
+p = \frac{\#\{T(\mathbf{s}) \ge T_{\text{obs}}\}}{2^n} \qquad \text{(오른쪽 꼬리)}
 $$
 
-## Worked Example
+## 예제
 
-A researcher tests whether a new study technique improves exam scores. Five students take two exams, one with the old method and one with the new.
+한 연구자가 새 학습법이 시험 점수를 높이는지 검정한다. 학생 5명이 옛 방법과 새 방법으로 각각 한 번씩 시험을 본다.
 
-| Student | Old ($Y_i$) | New ($X_i$) | $D_i = X_i - Y_i$ |
+| 학생 | 옛 ($Y_i$) | 새 ($X_i$) | $D_i = X_i - Y_i$ |
 |:-------:|:------:|:------:|:-----:|
 | 1 | 72 | 78 | 6 |
 | 2 | 85 | 82 | $-3$ |
@@ -63,94 +63,222 @@ A researcher tests whether a new study technique improves exam scores. Five stud
 | 4 | 90 | 93 | 3 |
 | 5 | 76 | 80 | 4 |
 
-**Observed test statistic:** $T_{\text{obs}} = 6 + (-3) + 7 + 3 + 4 = 17$.
+**관측 검정통계량:** $T_{\text{obs}} = 6 + (-3) + 7 + 3 + 4 = 17$.
 
-**Enumerate all $2^5 = 32$ sign assignments.** For each assignment $\mathbf{s} = (s_1, \ldots, s_5)$, compute $T(\mathbf{s}) = 6s_1 + 3s_2 + 7s_3 + 3s_4 + 4s_5$.
+**$2^5 = 32$가지 부호 배정을 모두 열거한다.** 각 배정 $\mathbf{s} = (s_1, \ldots, s_5)$에 대해 $T(\mathbf{s}) = 6s_1 + 3s_2 + 7s_3 + 3s_4 + 4s_5$를 계산한다.
 
-The absolute differences are $(6, 3, 7, 3, 4)$ and the maximum possible $T$ is $6 + 3 + 7 + 3 + 4 = 23$.
+절대차이는 $(6, 3, 7, 3, 4)$이고 $T$의 최댓값은 $6 + 3 + 7 + 3 + 4 = 23$이다.
 
-After enumerating all 32 assignments, we count those with $|T(\mathbf{s})| \ge 17$:
+32가지를 모두 열거한 뒤 $|T(\mathbf{s})| \ge 17$인 것을 센다.
 
-| $T(\mathbf{s})$ values $\ge 17$ | Sign assignment |
+| $T(\mathbf{s}) \ge 17$ | 부호 배정 |
 |:-:|:-:|
 | 23 | $(+,+,+,+,+)$ |
 | 17 | $(+,-,+,+,+)$ |
 | 17 | $(+,+,+,-,+)$ |
 
-And $T(\mathbf{s}) \le -17$:
+그리고 $T(\mathbf{s}) \le -17$인 것은
 
-| $T(\mathbf{s})$ values $\le -17$ | Sign assignment |
+| $T(\mathbf{s}) \le -17$ | 부호 배정 |
 |:-:|:-:|
 | $-23$ | $(-,-,-,-,-)$ |
 | $-17$ | $(-,+,-,-,-)$ |
 | $-17$ | $(-,-,-,+,-)$ |
 
-Total: 6 out of 32 assignments yield $|T| \ge 17$.
+합계 32가지 중 6가지가 $|T| \ge 17$을 만족한다.
 
 $$
 p = \frac{6}{32} = 0.1875
 $$
 
-At $\alpha = 0.05$, we fail to reject $H_0$. With only 5 pairs, the test lacks power to detect a moderate effect.
+$\alpha = 0.05$에서 $H_0$을 기각하지 못한다. 5쌍만으로는 중간 정도의 효과를 탐지할 검정력이 부족하다.
 
-## Monte Carlo Approximation
+!!! note "$n = 5$에서 도달 가능한 가장 작은 $p$값"
+    양측 순열검정이 $n = 5$에서 낼 수 있는 최소 $p$값은 $2/32 = 0.0625$이다. 모든 차이가 같은 방향일 때(즉 $T$가 최댓값 또는 최솟값일 때)에 해당한다.
 
-When $n$ is large, the $2^n$ permutations become computationally infeasible to enumerate. A **Monte Carlo approximation** randomly samples $B$ sign assignments (typically $B = 10{,}000$ or more) and estimates the $p$-value as
+    따라서 **$n = 5$에서는 양측 순열검정이 $\alpha = 0.05$에서 결코 기각할 수 없다.** 어떤 자료를 얻어도 그렇다. 유의성에 도달하려면 최소 $n = 6$($2/64 = 0.031$)이 필요하다. 이는 대응 부호검정과 Wilcoxon 부호순위검정에도 똑같이 적용되는 제약이다. 순열 기반 검정은 모두 $2^n$가지 부호 배정을 귀무분포로 쓰기 때문이다.
+
+## 몬테카를로 근사
+
+$n$이 크면 $2^n$가지 순열을 모두 열거하는 것이 계산적으로 불가능하다. **몬테카를로 근사**는 $B$개(보통 $B = 10{,}000$ 이상)의 부호 배정을 무작위로 뽑아 $p$값을 추정한다.
 
 $$
 \hat{p} = \frac{\#\{|T(\mathbf{s}_b)| \ge |T_{\text{obs}}| : b = 1, \ldots, B\} + 1}{B + 1}
 $$
 
-The $+1$ in numerator and denominator ensures the $p$-value is never exactly zero and accounts for the observed data being one of the permutations.
+분자와 분모의 $+1$은 $p$값이 정확히 0이 되지 않게 하고, 관측된 자료 자체가 순열 중 하나임을 반영한다.
 
-!!! note "Accuracy of Monte Carlo p-values"
-    With $B = 10{,}000$ random permutations, the Monte Carlo standard error of the estimated $p$-value is at most $\sqrt{0.25 / 10{,}000} = 0.005$. For most practical purposes, this precision is sufficient.
+!!! note "몬테카를로 p값의 정확도"
+    $B = 10{,}000$개의 무작위 순열을 쓰면 추정된 $p$값의 몬테카를로 표준오차는 최대 $\sqrt{0.25 / 10{,}000} = 0.005$이다. 대부분의 실무 목적에는 이 정밀도로 충분하다.
 
-## Comparison with Other Paired Tests
+## 다른 대응 검정과의 비교
 
-| Feature | Paired $t$-test | Paired Wilcoxon | Paired Sign | Paired Permutation |
+| 특징 | 대응 $t$ 검정 | 대응 Wilcoxon | 대응 부호검정 | 대응 순열검정 |
 |:--------|:----------------|:----------------|:------------|:-------------------|
-| Normality required | Yes | No | No | No |
-| Symmetry required | Yes | Yes | No | Under $H_0$ only |
-| Uses magnitudes | Yes | Via ranks | No | Yes (full values) |
-| Exact $p$-values | No (approx.) | Small $n$ only | Yes | Yes |
-| Power (normal data) | Highest | Very high | Low | Very high |
+| 정규성 필요 | 예 | 아니오 | 아니오 | 아니오 |
+| 대칭성 필요 | 예 | 예 | 아니오 | $H_0$ 아래에서만 |
+| 크기를 쓰는가 | 예 | 순위를 통해 | 아니오 | 예 (원값) |
+| 정확 $p$값 | 아니오 (근사) | 소표본만 | 예 | 예 |
+| 검정력 (정규자료) | 최고 | 매우 높음 | 낮음 | 매우 높음 |
 
-The paired permutation test uses the full numerical differences, giving it power comparable to the paired $t$-test without requiring normality. Its main limitation is computational: exact enumeration requires $2^n$ evaluations, though Monte Carlo sampling extends the method to arbitrarily large samples.
+대응 순열검정은 완전한 수치 차이를 쓰므로 정규성을 요구하지 않으면서도 대응 $t$ 검정에 비견할 만한 검정력을 갖는다. 주된 한계는 계산이다. 정확한 열거에는 $2^n$번의 계산이 필요하지만, 몬테카를로 표집으로 임의의 큰 표본까지 확장할 수 있다.
 
-## Summary
+## 요약
 
-The paired permutation test constructs the null distribution by enumerating (or randomly sampling) all $2^n$ possible sign reassignments of the observed paired differences. This yields exact, distribution-free $p$-values that exploit the full numerical information in the data. For small $n$, exact enumeration is feasible; for large $n$, Monte Carlo sampling provides accurate approximations. The test is especially valuable when neither the normality assumption of the paired $t$-test nor the symmetry assumption of the Wilcoxon signed-rank test is justified.
+대응 순열검정은 관측된 대응차이의 부호를 $2^n$가지로 재배정한 경우를 모두 열거하거나 무작위로 표집하여 귀무분포를 구성한다. 자료의 완전한 수치 정보를 활용하는 정확한 분포무관 $p$값을 얻는다. $n$이 작으면 정확한 열거가 가능하고, $n$이 크면 몬테카를로 표집이 정확한 근사를 준다. 대응 $t$ 검정의 정규성 가정도, Wilcoxon 부호순위검정의 대칭성 가정도 정당화되지 않을 때 특히 유용하다.
 
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Describe the main concept of Paired Permutation Test and explain why it matters for statistical practice.
+**연습문제 1.**
+위 학습법 자료에 네 가지 대응 검정을 적용하여 양측 $p$값을 비교하라. 순열검정과 Wilcoxon 검정의 $p$값이 왜 정확히 같은가?
 
-??? success "Solution to Exercise 1"
-    Paired Permutation Test is a core topic in statistics that provides tools for drawing reliable inferences from data. It matters because proper application ensures valid conclusions, correctly quantified uncertainty, and appropriate handling of the assumptions that underpin the method. Practitioners who understand this concept can avoid common pitfalls and choose the right analytical approach for their data.
+??? success "연습문제 1 풀이"
+    ```python
+    import numpy as np, itertools
+    from scipy import stats
+    D = np.array([6, -3, 7, 3, 4])
+
+    a = np.abs(D); T = D.sum()
+    allT = np.array([np.dot(s, a) for s in itertools.product([-1, 1], repeat=5)])
+    print((np.abs(allT) >= abs(T)).mean())        # 0.1875
+    print(stats.wilcoxon(D, method='exact').pvalue)  # 0.1875
+    print(stats.ttest_1samp(D, 0).pvalue)            # 0.1239
+    print(stats.binomtest(4, 5).pvalue)              # 0.3750
+    ```
+
+    | 검정 | 양측 $p$값 |
+    |:---|---:|
+    | 대응 $t$ | $0.1239$ |
+    | 대응 Wilcoxon | $0.1875$ |
+    | 대응 순열검정 | $0.1875$ |
+    | 대응 부호검정 | $0.3750$ |
+
+    순열검정과 Wilcoxon이 **소수점 이하 전부 일치**한다. 우연이 아니라 $n = 5$에서 순열분포가 아주 성기기 때문이다.
+
+    $p$값은 $\{|T(\mathbf{s})| \ge |T_{\text{obs}}|\}$인 부호 배정의 **개수**로 결정된다. Wilcoxon은 같은 논리를 $|D|$ 대신 순위 $(1, \ldots, 5)$에 적용한다. 이 자료의 절대차이 $(6, 3, 7, 3, 4)$가 순위로는 $(4, 1.5, 5, 1.5, 3)$인데, 두 벡터의 **순서 구조가 같으므로** 극단적인 배정 6개가 정확히 같은 6개가 된다.
+
+    두 검정이 언제나 일치하는 것은 아니다. 절대차이 사이의 비율이 순위 사이의 비율과 크게 다르면 갈라진다. 예를 들어 $|D| = (1, 2, 3, 4, 100)$이면 순열검정은 $100$의 압도적 크기를 반영하지만 Wilcoxon에게는 그냥 순위 5일 뿐이다.
 
 ---
 
-**Exercise 2.**
-State the key assumptions required by the method discussed here. How can each assumption be checked?
+**연습문제 2.**
+$|D| = (1, 2, 3, 4, 100)$처럼 한 차이가 압도적으로 큰 자료에서 순열검정과 Wilcoxon 검정의 $p$값을 비교하라. 이상치에 대한 두 검정의 태도가 어떻게 다른가?
 
-??? success "Solution to Exercise 2"
-    The main assumptions typically include: (1) independence of observations -- verified by understanding the data collection process and checking for serial correlation; (2) distributional requirements (e.g., normality) -- checked with Q-Q plots and formal tests like Shapiro-Wilk; (3) equal variances (if applicable) -- assessed with boxplots and Levene's test. When assumptions are violated, consider robust alternatives, transformations, or nonparametric methods.
+??? success "연습문제 2 풀이"
+    두 경우를 보자. $D_A = (1, 2, 3, 4, 100)$(모두 양수)과 $D_B = (1, 2, 3, 4, -100)$(가장 큰 것만 음수).
+
+    ```python
+    import numpy as np, itertools
+    from scipy import stats
+
+    def perm_p(D):
+        a = np.abs(D); T = D.sum()
+        allT = np.array([np.dot(s, a) for s in itertools.product([-1, 1], repeat=len(D))])
+        return (np.abs(allT) >= abs(T)).mean()
+
+    for D in (np.array([1, 2, 3, 4, 100]), np.array([1, 2, 3, 4, -100])):
+        print(D, perm_p(D),
+              stats.wilcoxon(D, method='exact').pvalue,
+              stats.ttest_1samp(D, 0).pvalue)
+    ```
+
+    | 자료 | 순열검정 | Wilcoxon | $t$ 검정 |
+    |:---|---:|---:|---:|
+    | $(1, 2, 3, 4, 100)$ | $0.0625$ | $0.0625$ | $0.3225$ |
+    | $(1, 2, 3, 4, -100)$ | $1.0000$ | $0.6250$ | $0.4296$ |
+
+    **첫 번째 자료**에서는 세 검정이 갈린다. 순열검정과 Wilcoxon은 $n = 5$의 최소값 $2/32 = 0.0625$를 준다. 모든 차이가 양수이므로 가능한 한 극단적이다. 반면 $t$ 검정은 $0.32$로 아무것도 못 찾는다. 분자 $\bar{D} = 22$가 크지만 $100$이 표본표준편차를 $43.6$까지 부풀려 $t = 1.13$밖에 안 되기 때문이다.
+
+    여기서 순위 기반 검정과 순열검정의 로버스트성이 드러난다. 두 검정 모두 "다섯 개가 모두 같은 방향"이라는 사실만 보고 판정하는 반면, $t$ 검정은 이상치 하나에 무너진다.
+
+    **두 번째 자료**에서 순열검정이 정확히 $p = 1$을 준다. $T = -90$인데, $|D| = (1,2,3,4,100)$의 어떤 부호 배정에서도 $100$이 나머지 합 $10$을 압도하므로 **모든** $|T(\mathbf{s})|$가 $90$ 이상이다($90$에서 $110$ 사이). 관측값이 가장 덜 극단적인 배정 중 하나인 셈이다.
+
+    Wilcoxon은 $W^+ = 1+2+3+4 = 10$, $W^- = 5$로 순위상 어느 정도 불균형이 있어 $p = 0.625$이다. 순위를 쓰면 $100$이 그저 "가장 큰 것"일 뿐이므로 다른 넷이 반대 방향이라는 사실이 약한 신호로 남는다.
+
+    **핵심 차이:** 순열검정은 크기의 **비율**에 민감하고 Wilcoxon은 그렇지 않다. $100$을 $1000$으로 바꾸어도 Wilcoxon $p$값은 $0.625$ 그대로지만, 순열검정에서는 $100$이 지배적일수록 $p$가 1에 붙는다. 이것이 항상 좋은 성질은 아니다. 지배적인 이상치 하나가 순열검정을 완전히 무력화할 수 있다.
 
 ---
 
-**Exercise 3.**
-Work through a small numerical example illustrating the application of the technique from this section.
+**연습문제 3.**
+몬테카를로 순열검정에서 $+1$ 보정이 왜 필요한가? 보정 없이 $\hat{p}_{\text{raw}} = c/B$를 쓰면 검정의 실제 크기가 명목수준을 넘음을 모의실험으로 보여라.
 
-??? success "Solution to Exercise 3"
-    A structured approach to applying this technique involves: (1) clearly stating the hypotheses or estimation goal; (2) verifying that the data meet the required assumptions; (3) computing the relevant test statistic, estimate, or model fit; (4) obtaining the p-value, confidence interval, or posterior distribution; (5) interpreting the result in the context of the original question. Following these steps systematically ensures a rigorous and reproducible analysis.
+??? success "연습문제 3 풀이"
+    $H_0$이 참인 자료($\mathcal{N}(0,1)$, $n = 15$)를 생성하여 두 방식의 실제 크기를 비교한다.
+
+    ```python
+    import numpy as np
+    rng = np.random.default_rng(0)
+    n, M = 15, 40000
+
+    for B in (20, 100, 200, 1000):
+        raw = adj = 0
+        for _ in range(M):
+            D = rng.normal(0, 1, n)
+            a = np.abs(D); T = abs(D.sum())
+            s = rng.choice([-1, 1], size=(B, n))
+            c = np.sum(np.abs(s @ a) >= T)
+            raw += (c / B) <= 0.05
+            adj += ((c + 1) / (B + 1)) <= 0.05
+        print(B, raw / M, adj / M)
+    ```
+
+    | $B$ | 보정 없음 $c/B$ | 보정 있음 $(c+1)/(B+1)$ |
+    |---:|---:|---:|
+    | 20 | **0.0942** | 0.0464 |
+    | 100 | 0.0588 | 0.0497 |
+    | 200 | 0.0532 | 0.0479 |
+    | 1000 | 0.0510 | 0.0499 |
+
+    $B = 20$에서 보정하지 않은 검정의 실제 크기가 $0.094$로 명목값의 **거의 두 배**이다. $B$가 커지면 차이가 줄어들지만 $B = 1000$에서도 여전히 $0.0510$ 대 $0.0499$로 보정한 쪽이 정확하다.
+
+    이유는 이렇다. $c/B \le 0.05$가 되려면 $B = 20$에서 $c \le 1$이면 된다. 관측값보다 극단적인 순열이 **하나까지 허용**되므로 기준이 느슨하다. 반면 $(c+1)/21 \le 0.05$는 $c = 0$을 요구한다.
+
+    개념적으로도 보정이 옳다. 귀무가설 아래에서 관측된 자료는 다른 모든 순열과 **교환 가능**하다. 따라서 $B$개의 무작위 순열과 관측값을 합쳐 $B+1$개를 만들고 관측값이 그중 상위 $\alpha$에 드는지를 물어야 한다. 분자와 분모의 $+1$이 바로 "관측값 자신"을 세는 것이다.
+
+    이 때문에 실무에서 $B$를 $999$나 $9999$로 잡는 관행이 생겼다. $B + 1$이 깔끔한 수가 되어 $\hat{p}$의 분모가 $1000$이나 $10000$이 된다.
 
 ---
 
-**Exercise 4.**
-Compare the approach from this section with an alternative method. When would you choose each?
+**연습문제 4.**
+$n$이 커지면 순열검정과 대응 $t$ 검정의 $p$값이 수렴한다. $n = 5, 10, 20, 50$에서 정규분포 차이에 대해 두 검정의 $p$값 상관을 모의실험으로 확인하라.
 
-??? success "Solution to Exercise 4"
-    The method discussed here is appropriate when its assumptions hold and the sample size is sufficient for the asymptotic approximations to be accurate. Alternative approaches include: (1) nonparametric methods -- preferred when distributional assumptions are suspect; (2) bootstrap methods -- useful when analytical reference distributions are unavailable; (3) Bayesian methods -- valuable when incorporating prior information or when direct probability statements about parameters are desired. Running multiple approaches and comparing results provides a useful robustness check.
+??? success "연습문제 4 풀이"
+    ```python
+    import numpy as np
+    from scipy import stats
+    rng = np.random.default_rng(9)
+
+    def perm_p_mc(D, B=4999, rng=rng):
+        a = np.abs(D); T = abs(D.sum())
+        signs = rng.choice([-1, 1], size=(B, len(D)))
+        Ts = np.abs(signs @ a)
+        return (np.sum(Ts >= T) + 1) / (B + 1)
+
+    for n in (5, 10, 20, 50):
+        pp, pt = [], []
+        for _ in range(300):
+            D = rng.normal(0.5, 1, n)
+            pp.append(perm_p_mc(D)); pt.append(stats.ttest_1samp(D, 0).pvalue)
+        pp, pt = np.array(pp), np.array(pt)
+        print(n, round(np.corrcoef(pp, pt)[0, 1], 4),
+              round(np.max(np.abs(pp - pt)), 4))
+    ```
+
+    | $n$ | $p$값 상관 | 최대 절대차 |
+    |---:|---:|---:|
+    | 5 | 0.9752 | 0.4711 |
+    | 10 | 0.9990 | 0.0784 |
+    | 20 | 0.9996 | 0.0391 |
+    | 50 | 0.9997 | 0.0108 |
+
+    상관이 $n = 10$에서 이미 $0.999$이다. 최대 차이는 $n = 5$에서 $0.47$로 매우 크지만($2^5 = 32$가지 순열밖에 없어 $p$값이 $1/32$ 단위로 계단을 이룬다) $n = 20$부터는 $0.04$ 아래로 떨어진다.
+
+    이유는 두 검정이 결국 같은 통계량 $\sum D_i$를 쓰기 때문이다. 차이는 귀무분포를 어떻게 얻느냐뿐이다. $t$ 검정은 정규이론으로, 순열검정은 열거로 얻는다. 자료가 정규이고 $n$이 커지면 순열분포가 $t$ 분포로 수렴한다.
+
+    **실무적 함의는 양방향이다.**
+
+    - 자료가 정규에 가까우면 순열검정을 써도 잃는 것이 거의 없다. 즉 순열검정을 기본으로 삼아도 비용이 없다.
+    - 반대로 자료가 정규이면 굳이 순열검정의 계산 비용을 치를 필요도 없다.
+
+    순열검정의 진짜 가치는 자료가 정규가 아닐 때 드러난다. 연습문제 2의 $(1, 2, 3, 4, 100)$에서 $t$ 검정은 $0.347$, 순열검정은 $0.0625$였다. 여기서는 두 검정이 전혀 수렴하지 않는다.
