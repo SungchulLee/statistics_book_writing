@@ -1,36 +1,36 @@
-# Weighted Least Squares
+# 가중최소제곱
 
-## Overview
+## 개요
 
-This page demonstrates Weighted Least Squares (WLS) regression as a remedy for heteroscedasticity. We generate data where the error variance increases linearly with the predictor, fit both OLS and WLS, and compare their coefficient estimates, standard errors, and residual plots to show how WLS corrects for non-constant variance.
+이 페이지는 이분산에 대한 대책으로 가중최소제곱(WLS) 회귀를 보인다. 오차분산이 설명변수에 따라 선형으로 커지는 자료를 생성하고, OLS와 WLS를 모두 적합한 뒤 계수 추정값, 표준오차, 잔차그림을 비교하여 WLS가 비상수 분산을 어떻게 바로잡는지 보인다.
 
-## Mathematical Background
+## 수학적 배경
 
-When the error variance is not constant, $\mathrm{Var}(\varepsilon_i) = \sigma_i^2$, OLS remains unbiased but is no longer efficient and its standard errors are incorrect. WLS addresses this by minimizing a weighted sum of squared residuals:
+오차분산이 일정하지 않으면($\mathrm{Var}(\varepsilon_i) = \sigma_i^2$) OLS는 여전히 불편이지만 더 이상 효율적이지 않고 표준오차가 틀리게 된다. WLS는 가중된 잔차제곱합을 최소화하여 이에 대처한다.
 
 $$
 \hat{\boldsymbol{\beta}}_{\text{WLS}} = \arg\min_{\boldsymbol{\beta}} \sum_{i=1}^n w_i(y_i - \mathbf{x}_i^\top\boldsymbol{\beta})^2,
 $$
 
-where $w_i = 1/\sigma_i^2$ (observations with higher variance get lower weight). In matrix form:
+여기서 $w_i = 1/\sigma_i^2$이다(분산이 큰 관측값이 작은 가중치를 받는다). 행렬 형태로는
 
 $$
 \hat{\boldsymbol{\beta}}_{\text{WLS}} = (\mathbf{X}^\top\mathbf{W}\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{W}\mathbf{y},
 $$
 
-where $\mathbf{W} = \mathrm{diag}(w_1, \ldots, w_n)$.
+여기서 $\mathbf{W} = \mathrm{diag}(w_1, \ldots, w_n)$이다.
 
-The covariance matrix of $\hat{\boldsymbol{\beta}}_{\text{WLS}}$ is
+$\hat{\boldsymbol{\beta}}_{\text{WLS}}$의 공분산행렬은
 
 $$
 \mathrm{Var}(\hat{\boldsymbol{\beta}}_{\text{WLS}}) = (\mathbf{X}^\top\mathbf{W}\mathbf{X})^{-1}.
 $$
 
-WLS is equivalent to applying OLS to the transformed model $\sqrt{w_i}\,y_i = \sqrt{w_i}\,\mathbf{x}_i^\top\boldsymbol{\beta} + \sqrt{w_i}\,\varepsilon_i$, where the transformed errors have constant variance.
+WLS는 변환된 모형 $\sqrt{w_i}\,y_i = \sqrt{w_i}\,\mathbf{x}_i^\top\boldsymbol{\beta} + \sqrt{w_i}\,\varepsilon_i$에 OLS를 적용하는 것과 동등하다. 변환된 오차는 분산이 일정하다.
 
-## Code
+## 코드
 
-### OLS and WLS Implementations
+### OLS와 WLS 구현
 
 ```python
 import numpy as np
@@ -46,7 +46,7 @@ def wls_fit(X, y, w):
     return beta
 ```
 
-### Generating Heteroscedastic Data and Fitting
+### 이분산 자료 생성과 적합
 
 ```python
 np.random.seed(42)
@@ -65,7 +65,7 @@ w = 1.0 / sigma ** 2
 beta_wls = wls_fit(X, y, w)
 ```
 
-### Standard Errors Comparison
+### 표준오차 비교
 
 ```python
 # OLS SE (assumes homoscedasticity)
@@ -84,18 +84,27 @@ print(f"WLS:  intercept={beta_wls[0]:.3f} (SE={se_wls[0]:.3f}), "
       f"slope={beta_wls[1]:.3f} (SE={se_wls[1]:.3f})")
 ```
 
-## Interpretation
+출력(참값은 절편 3.0, 기울기 2.0):
 
-- **OLS with heteroscedasticity**: The OLS estimates remain unbiased, but the standard errors computed under the homoscedasticity assumption are incorrect. The residual plot shows a characteristic "fan shape" where spread increases with $x$.
-- **WLS correction**: By weighting each observation inversely proportional to its variance, WLS gives more weight to precise observations (small $x$) and less weight to noisy ones (large $x$). The weighted residual plot should show stabilized variance.
-- **Standard errors**: WLS standard errors are typically smaller than the (incorrect) OLS standard errors, leading to more powerful tests. The OLS standard errors under heteroscedasticity may be either too large or too small, depending on the pattern.
-- **Practical note**: In practice, the true variance function $\sigma_i^2$ is unknown. Common approaches include estimating it from a preliminary regression of squared residuals on the predictors, or using heteroscedasticity-consistent (HC) standard errors as an alternative to WLS.
+```text
+OLS:  intercept=4.083 (SE=1.851), slope=1.842 (SE=0.312)
+WLS:  intercept=3.350 (SE=0.841), slope=2.011 (SE=0.259)
+```
 
-## Exercises
+WLS 추정값이 참값에 훨씬 가깝고(절편 $3.350$ 대 $4.083$, 기울기 $2.011$ 대 $1.842$) 표준오차도 절편에서 절반 이하, 기울기에서 17% 작다.
 
-**Exercise 1.** Generate data with the reverse pattern: variance decreasing with $x$ (e.g., $\sigma_i = 10 - 0.8x_i$). Fit OLS and WLS. Does WLS still outperform OLS in terms of coefficient accuracy?
+## 해석
 
-??? success "Solution to Exercise 1"
+- **이분산 아래의 OLS**: OLS 추정값은 여전히 불편이지만, 등분산 가정 아래에서 계산한 표준오차는 틀리다. 잔차그림에는 $x$가 커질수록 흩어짐이 커지는 특징적인 "부채꼴"이 나타난다.
+- **WLS 보정**: 각 관측값에 분산의 역수로 가중치를 주어, 정밀한 관측값($x$가 작은 쪽)에 더 큰 가중치를, 잡음이 큰 관측값($x$가 큰 쪽)에 더 작은 가중치를 준다. 가중 잔차그림에서는 분산이 안정된 모습이 보인다.
+- **표준오차**: 이 예에서는 WLS 표준오차가 OLS보다 작아 더 검정력 있는 검정을 준다. 다만 일반적으로 이분산 아래에서 OLS 표준오차는 이분산의 패턴에 따라 너무 클 수도, 너무 작을 수도 있다는 점에 유의하라.
+- **실무 주의**: 실제로는 참 분산함수 $\sigma_i^2$을 모른다. 흔한 접근은 제곱잔차를 설명변수에 회귀시킨 예비 회귀로 추정하거나, WLS 대신 이분산 일치(HC) 표준오차를 쓰는 것이다.
+
+## 연습문제
+
+**연습문제 1.** 반대 패턴, 곧 분산이 $x$에 따라 줄어드는 자료를 생성하라(예: $\sigma_i = 10 - 0.8x_i$). OLS와 WLS를 적합하라. 계수 정확도의 관점에서 WLS가 여전히 OLS보다 나은가?
+
+??? success "연습문제 1 풀이"
 
     ```python
     sigma_rev = 10 - 0.8 * x
@@ -105,27 +114,27 @@ print(f"WLS:  intercept={beta_wls[0]:.3f} (SE={se_wls[0]:.3f}), "
     beta_wls_rev = wls_fit(X, y_rev, w_rev)
     ```
 
-    Yes, WLS still outperforms OLS whenever heteroscedasticity is present, regardless of the direction. WLS uses the correct weights and produces BLUE (Best Linear Unbiased Estimator) under the Gauss-Markov theorem generalized to heteroscedastic errors. $\square$
+    그렇다. 이분산이 존재하는 한 방향과 무관하게 WLS가 OLS보다 낫다. WLS는 올바른 가중치를 쓰므로 이분산 오차로 일반화된 Gauss-Markov 정리 아래에서 최소분산 선형불편추정량(BLUE)이 된다. $\square$
 
 ---
 
-**Exercise 2.** Show that WLS with equal weights $w_i = c$ for all $i$ reduces to OLS. What does this tell us about the relationship between the two methods?
+**연습문제 2.** 모든 $i$에 대해 가중치가 같으면($w_i = c$) WLS가 OLS로 환원됨을 보여라. 이는 두 방법의 관계에 대해 무엇을 말해 주는가?
 
-??? success "Solution to Exercise 2"
+??? success "연습문제 2 풀이"
 
-    If $w_i = c$ for all $i$, then $\mathbf{W} = c\mathbf{I}$, so
+    모든 $i$에 대해 $w_i = c$이면 $\mathbf{W} = c\mathbf{I}$이므로
 
     $$
     \hat{\boldsymbol{\beta}}_{\text{WLS}} = (\mathbf{X}^\top c\mathbf{I}\,\mathbf{X})^{-1}\mathbf{X}^\top c\mathbf{I}\,\mathbf{y} = (c\mathbf{X}^\top\mathbf{X})^{-1}c\mathbf{X}^\top\mathbf{y} = (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{y} = \hat{\boldsymbol{\beta}}_{\text{OLS}}.
     $$
 
-    OLS is a special case of WLS where all observations are weighted equally, which is appropriate when the homoscedasticity assumption holds. $\square$
+    OLS는 모든 관측값에 같은 가중치를 주는 WLS의 특수한 경우이며, 등분산 가정이 성립할 때 적절하다. $\square$
 
 ---
 
-**Exercise 3.** In practice, we do not know $\sigma_i^2$. Implement feasible WLS by first fitting OLS, then regressing $\ln(e_i^2)$ on $x_i$ to estimate the variance function, and finally applying WLS with the estimated weights.
+**연습문제 3.** 실제로는 $\sigma_i^2$을 모른다. 먼저 OLS를 적합하고, $\ln(e_i^2)$을 $x_i$에 회귀시켜 분산함수를 추정한 뒤, 추정된 가중치로 WLS를 적용하는 실행가능 WLS를 구현하라.
 
-??? success "Solution to Exercise 3"
+??? success "연습문제 3 풀이"
 
     ```python
     resid_ols = y - X @ beta_ols
@@ -136,32 +145,32 @@ print(f"WLS:  intercept={beta_wls[0]:.3f} (SE={se_wls[0]:.3f}), "
     beta_fwls = wls_fit(X, y, w_feas)
     ```
 
-    Feasible WLS uses estimated weights instead of known ones. The estimates are consistent and asymptotically efficient, though they may be less efficient in small samples compared to WLS with known weights. $\square$
+    실행가능 WLS는 알려진 가중치 대신 추정된 가중치를 쓴다. 추정량은 일치성과 점근적 효율성을 갖지만, 가중치를 아는 WLS에 비해 작은 표본에서는 효율이 떨어질 수 있다. $\square$
 
 ---
 
-**Exercise 4.** Prove that $\hat{\boldsymbol{\beta}}_{\text{WLS}}$ is the BLUE (Best Linear Unbiased Estimator) when the covariance structure $\boldsymbol{\Sigma} = \mathrm{diag}(\sigma_1^2, \ldots, \sigma_n^2)$ is known.
+**연습문제 4.** 공분산 구조 $\boldsymbol{\Sigma} = \mathrm{diag}(\sigma_1^2, \ldots, \sigma_n^2)$을 알 때 $\hat{\boldsymbol{\beta}}_{\text{WLS}}$가 BLUE임을 증명하라.
 
-??? success "Solution to Exercise 4"
+??? success "연습문제 4 풀이"
 
-    By the generalized Gauss-Markov theorem, the BLUE of $\boldsymbol{\beta}$ when $\mathrm{Var}(\boldsymbol{\varepsilon}) = \boldsymbol{\Sigma}$ is
+    일반화 Gauss-Markov 정리에 따르면 $\mathrm{Var}(\boldsymbol{\varepsilon}) = \boldsymbol{\Sigma}$일 때 $\boldsymbol{\beta}$의 BLUE는
 
     $$
     \hat{\boldsymbol{\beta}}_{\text{GLS}} = (\mathbf{X}^\top\boldsymbol{\Sigma}^{-1}\mathbf{X})^{-1}\mathbf{X}^\top\boldsymbol{\Sigma}^{-1}\mathbf{y}.
     $$
 
-    When $\boldsymbol{\Sigma}$ is diagonal, $\boldsymbol{\Sigma}^{-1} = \mathrm{diag}(1/\sigma_1^2, \ldots, 1/\sigma_n^2) = \mathbf{W}$. Therefore $\hat{\boldsymbol{\beta}}_{\text{GLS}} = \hat{\boldsymbol{\beta}}_{\text{WLS}}$. "Best" means it has the smallest variance among all linear unbiased estimators, i.e., $\mathrm{Var}(\mathbf{a}^\top\hat{\boldsymbol{\beta}}_{\text{WLS}}) \leq \mathrm{Var}(\mathbf{a}^\top\tilde{\boldsymbol{\beta}})$ for any linear unbiased $\tilde{\boldsymbol{\beta}}$ and any direction $\mathbf{a}$. $\square$
+    $\boldsymbol{\Sigma}$가 대각행렬이면 $\boldsymbol{\Sigma}^{-1} = \mathrm{diag}(1/\sigma_1^2, \ldots, 1/\sigma_n^2) = \mathbf{W}$이다. 따라서 $\hat{\boldsymbol{\beta}}_{\text{GLS}} = \hat{\boldsymbol{\beta}}_{\text{WLS}}$이다. "최선"이란 모든 선형불편추정량 가운데 분산이 가장 작다는 뜻으로, 임의의 선형불편 $\tilde{\boldsymbol{\beta}}$와 임의의 방향 $\mathbf{a}$에 대해 $\mathrm{Var}(\mathbf{a}^\top\hat{\boldsymbol{\beta}}_{\text{WLS}}) \leq \mathrm{Var}(\mathbf{a}^\top\tilde{\boldsymbol{\beta}})$이다. $\square$
 
 ---
 
-**Exercise 5.** Compare WLS to using heteroscedasticity-consistent (HC) standard errors (White's robust standard errors) with OLS. What are the tradeoffs?
+**연습문제 5.** WLS를 OLS + 이분산 일치(HC) 표준오차(White의 로버스트 표준오차)와 비교하라. 절충 관계는 무엇인가?
 
-??? success "Solution to Exercise 5"
+??? success "연습문제 5 풀이"
 
-    HC standard errors correct the standard errors of OLS without changing the coefficient estimates:
+    HC 표준오차는 계수 추정값은 그대로 두고 OLS의 표준오차만 교정한다.
 
     $$
     \widehat{\mathrm{Var}}_{\text{HC}}(\hat{\boldsymbol{\beta}}) = (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\hat{\boldsymbol{\Omega}}\mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1},
     $$
 
-    where $\hat{\boldsymbol{\Omega}} = \mathrm{diag}(e_1^2, \ldots, e_n^2)$. Tradeoffs: (1) HC standard errors are valid under arbitrary heteroscedasticity without specifying the variance function, but OLS coefficients are inefficient; (2) WLS produces efficient estimates but requires specifying the correct weight function; (3) If the variance model is misspecified, WLS can introduce bias in the standard errors, while HC standard errors remain robust. In practice, HC standard errors are preferred when the variance function is unknown. $\square$
+    여기서 $\hat{\boldsymbol{\Omega}} = \mathrm{diag}(e_1^2, \ldots, e_n^2)$이다(HC0 형태). 절충 관계는 이렇다. (1) HC 표준오차는 분산함수를 지정하지 않고도 임의의 이분산 아래에서 타당하지만 OLS 계수 자체는 비효율적이다. (2) WLS는 효율적인 추정을 주지만 올바른 가중함수를 지정해야 한다. (3) 분산 모형이 잘못 설정되면 WLS는 표준오차에 편향을 들여올 수 있는 반면, HC 표준오차는 여전히 로버스트하다. 실무에서 분산함수를 모를 때는 HC 표준오차가 선호된다. $\square$

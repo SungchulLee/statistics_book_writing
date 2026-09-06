@@ -1,73 +1,73 @@
-# Homoscedasticity Assumption
+# 등분산성 가정
 
+## 정의
 
-## Definition
+등분산성은 오차(잔차)의 분산이 독립변수의 모든 수준에서 일정하다는 가정이다. 이 가정이 성립하면 예측값의 범위 전체에 걸쳐 잔차의 흩어짐이 대체로 같아야 한다.
 
-Homoscedasticity refers to the assumption that the variance of the errors (residuals) is constant across all levels of the independent variables. When this assumption holds, the spread of residuals should be roughly the same across the range of predicted values.
-
-Formally:
-
-$$
-\text{Var}(\epsilon_i \mid X_i) = \sigma^2 \quad \text{for all } i
-$$
-
-where $\sigma^2$ is a constant that does not depend on the value of $X_i$.
-
-The opposite condition, **heteroscedasticity**, occurs when the variance of errors changes systematically with the level of the independent variable:
+형식적으로
 
 $$
-\text{Var}(\epsilon_i \mid X_i) = \sigma_i^2 \quad \text{(not constant)}
+\text{Var}(\epsilon_i \mid X_i) = \sigma^2 \quad \text{(모든 } i \text{에 대해)}
 $$
 
-## Importance
+여기서 $\sigma^2$은 $X_i$의 값에 의존하지 않는 상수이다.
 
-Homoscedasticity is essential because heteroscedasticity leads to:
+반대 상황인 **이분산**은 오차의 분산이 독립변수의 수준에 따라 체계적으로 변할 때 나타난다.
 
-- **Inefficient estimates** — OLS estimates remain unbiased but are no longer the best linear unbiased estimators (BLUE). There exist more efficient estimators.
-- **Biased standard errors** — The usual OLS standard errors are incorrect, leading to unreliable confidence intervals and hypothesis tests.
-- **Invalid inference** — t-statistics and F-statistics may be too large or too small, producing misleading p-values.
+$$
+\text{Var}(\epsilon_i \mid X_i) = \sigma_i^2 \quad \text{(상수가 아님)}
+$$
 
-## Common Patterns of Heteroscedasticity
+## 중요성
 
-| Pattern | Description | Example |
+등분산성이 중요한 이유는 이분산이 다음을 낳기 때문이다.
+
+- **비효율적인 추정** — OLS 추정량은 여전히 불편이지만 더 이상 최소분산 선형불편추정량(BLUE)이 아니다. 더 효율적인 추정량이 존재한다.
+- **편향된 표준오차** — 통상적인 OLS 표준오차가 틀리게 되어 신뢰구간과 가설검정을 믿을 수 없게 된다.
+- **타당하지 않은 추론** — t 통계량과 F 통계량이 지나치게 크거나 작아져 오도하는 p값을 낳는다.
+
+## 이분산의 흔한 패턴
+
+| 패턴 | 설명 | 예 |
 |---------|-------------|---------|
-| Fan-shaped | Variance increases with fitted values | Income vs. spending data |
-| Inverse fan | Variance decreases with fitted values | Aggregated data with varying group sizes |
-| Bow-tie | Variance increases then decreases | Data with natural bounds |
-| Grouped | Different variances across groups | Multi-group comparisons |
+| 부채꼴 | 적합값이 커질수록 분산이 커진다 | 소득 대 지출 자료 |
+| 역부채꼴 | 적합값이 커질수록 분산이 작아진다 | 집단 크기가 다른 집계 자료 |
+| 나비넥타이 | 분산이 커졌다가 작아진다 | 자연스러운 상·하한이 있는 자료 |
+| 집단별 | 집단마다 분산이 다르다 | 다집단 비교 |
 
-## Diagnostics
+## 진단
 
-- **Residual vs. Fitted Plot:** Plot the residuals against the fitted values (predicted values) of the dependent variable. Homoscedasticity is suggested if the residuals are evenly spread around the horizontal axis without showing patterns or funnel shapes.
-- **Breusch-Pagan Test:** This statistical test assesses the presence of heteroscedasticity by regressing the squared residuals on the independent variables. A significant result indicates heteroscedasticity.
-- **White Test:** A more general test that also checks for nonlinearity in addition to heteroscedasticity.
-- **Scale-Location Plot:** Plots the square root of standardized residuals against fitted values.
+- **잔차-적합값 그림:** 잔차를 종속변수의 적합값(예측값)에 대해 그린다. 잔차가 수평축 주위에 패턴이나 깔때기 모양 없이 고르게 퍼져 있으면 등분산성을 시사한다.
+- **Breusch-Pagan 검정:** 제곱잔차를 독립변수에 회귀시켜 이분산의 존재를 평가하는 통계검정이다. 유의한 결과는 이분산을 나타낸다.
+- **White 검정:** 이분산뿐 아니라 비선형성까지 확인하는 더 일반적인 검정이다.
+- **척도-위치 그림:** 표준화 잔차의 제곱근을 적합값에 대해 그린다.
 
-## Remedies for Heteroscedasticity
+## 이분산에 대한 대책
 
-- **Transformations:** Applying a logarithmic or square root transformation to the dependent variable can stabilize the variance of the residuals.
-- **Weighted Least Squares (WLS):** WLS assigns different weights to different observations to account for heteroscedasticity, giving less weight to observations with higher variance.
-- **Robust Standard Errors:** Heteroscedasticity-consistent (HC) standard errors (White's robust standard errors) provide valid inference without transforming the model.
+- **변수변환:** 종속변수에 로그나 제곱근 변환을 적용하면 잔차의 분산을 안정화할 수 있다.
+- **가중최소제곱(WLS):** WLS는 관측값마다 다른 가중치를 부여하여 이분산에 대처하며, 분산이 큰 관측값에 더 작은 가중치를 준다.
+- **로버스트 표준오차:** 이분산 일치(HC) 표준오차(White의 로버스트 표준오차)는 모형을 변환하지 않고도 타당한 추론을 제공한다.
 
-For detailed diagnostic methods, see [Checking Homoscedasticity](checking_homoscedasticity.md).
-## Exercises
+자세한 진단 방법은 [등분산성 확인](checking_homoscedasticity.md)을 보라.
 
-**Exercise 1.**
-In a simple linear regression of salary on years of experience, the variance of residuals increases with experience level. Explain why OLS estimates remain unbiased under heteroscedasticity but are no longer efficient.
+## 연습문제
 
-??? success "Solution to Exercise 1"
-    OLS estimates are unbiased because the Gauss-Markov proof of unbiasedness ($E[\hat{\beta}] = \beta$) requires only that $E[\varepsilon|X] = 0$, which does not depend on constant variance.
+**연습문제 1.**
+연봉을 경력 연수에 회귀시킨 단순선형회귀에서 잔차의 분산이 경력 수준에 따라 커진다. 이분산 아래에서 OLS 추정량이 왜 여전히 불편이지만 더 이상 효율적이지 않은지 설명하라.
 
-    However, OLS is no longer **efficient** (no longer BLUE) because it assigns equal weight to all observations. Under heteroscedasticity, observations with larger variance carry less information about the regression line. Weighted least squares (which weights observations inversely to their variance) produces more efficient estimates.
+??? success "연습문제 1 풀이"
+    OLS 추정량이 불편인 이유는 불편성의 Gauss-Markov 증명($E[\hat{\beta}] = \beta$)이 $E[\varepsilon|X] = 0$만을 요구하고 분산이 일정할 것을 요구하지 않기 때문이다.
+
+    그러나 OLS는 모든 관측값에 같은 가중치를 주므로 더 이상 **효율적**이지(BLUE이지) 않다. 이분산 아래에서 분산이 큰 관측값은 회귀직선에 대한 정보를 적게 담고 있다. 관측값에 분산의 역수로 가중치를 주는 가중최소제곱이 더 효율적인 추정을 낳는다.
 
 ---
 
-**Exercise 2.**
-Write the mathematical definition of heteroscedasticity and explain how it differs from homoscedasticity.
+**연습문제 2.**
+이분산의 수학적 정의를 쓰고 등분산성과 어떻게 다른지 설명하라.
 
-??? success "Solution to Exercise 2"
-    **Homoscedasticity:** $\text{Var}(\varepsilon_i | X_i) = \sigma^2$ for all $i$ (constant variance).
+??? success "연습문제 2 풀이"
+    **등분산성:** 모든 $i$에 대해 $\text{Var}(\varepsilon_i | X_i) = \sigma^2$ (상수 분산).
 
-    **Heteroscedasticity:** $\text{Var}(\varepsilon_i | X_i) = \sigma_i^2$ where $\sigma_i^2$ varies with $X_i$ (non-constant variance).
+    **이분산:** $\text{Var}(\varepsilon_i | X_i) = \sigma_i^2$이고 $\sigma_i^2$이 $X_i$에 따라 변한다 (비상수 분산).
 
-    Under homoscedasticity, the spread of residuals is the same across all values of $X$. Under heteroscedasticity, the spread changes systematically -- for example, increasing with $X$ (fan-shaped residual plot) or differing across groups.
+    등분산성 아래에서는 $X$의 모든 값에서 잔차의 흩어짐이 같다. 이분산 아래에서는 흩어짐이 체계적으로 변한다. 예를 들어 $X$가 커질수록 커지거나(부채꼴 잔차그림) 집단마다 다르다.

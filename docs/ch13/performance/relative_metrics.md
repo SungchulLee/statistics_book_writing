@@ -1,128 +1,128 @@
-# Mean Absolute Percentage Error and Other Relative Metrics
+# 평균절대백분율오차와 그 밖의 상대 척도
 
-MAE, MSE, and RMSE all measure errors in the original units of $Y$. This makes them difficult to compare across datasets with different scales: an RMSE of 5 means something very different when the response ranges from 0 to 10 versus 0 to 10,000. Relative metrics address this by expressing errors as fractions or percentages of the observed values, enabling comparison across different contexts.
+MAE, MSE, RMSE는 모두 $Y$의 원래 단위로 오차를 잰다. 그래서 척도가 다른 자료끼리 비교하기 어렵다. RMSE가 5라는 것은 반응변수의 범위가 0–10일 때와 0–10,000일 때 전혀 다른 의미를 갖는다. 상대 척도는 오차를 관측값에 대한 비율이나 백분율로 표현하여 서로 다른 맥락 사이의 비교를 가능하게 한다.
 
 ---
 
-## 1. Mean Absolute Percentage Error
+## 1. 평균절대백분율오차
 
-The **mean absolute percentage error (MAPE)** expresses each prediction error as a percentage of the observed value:
+**평균절대백분율오차(MAPE)**는 각 예측오차를 관측값에 대한 백분율로 표현한다.
 
 $$
 \text{MAPE} = \frac{1}{n} \sum_{i=1}^{n} \left| \frac{y_i - \hat{y}_i}{y_i} \right| \times 100\%
 $$
 
-A MAPE of 5% means the model's predictions are off by an average of 5% relative to the true values.
+MAPE가 5%라는 것은 모형의 예측이 참값에 비해 평균 5%만큼 빗나간다는 뜻이다.
 
-### Advantages
+### 장점
 
-- **Scale-free**: MAPE allows direct comparison of model performance across datasets with different units or magnitudes.
-- **Intuitive**: Percentage errors are easy for non-technical audiences to interpret.
+- **척도무관**: 단위나 크기가 다른 자료들 사이에서 모형 성능을 직접 비교할 수 있다.
+- **직관적**: 백분율 오차는 비전문가도 쉽게 이해한다.
 
-### Limitations
+### 한계
 
-- **Undefined when $y_i = 0$**: The division by $y_i$ makes MAPE undefined whenever an observed value is zero. In practice, this limits MAPE to datasets where all observations are strictly positive.
-- **Asymmetric penalty**: MAPE penalizes over-predictions and under-predictions unequally. An over-prediction from $y = 100$ to $\hat{y} = 150$ yields a 50% error, but an under-prediction from $y = 100$ to $\hat{y} = 50$ also yields 50%. However, if we reverse the roles — an observation of $y = 50$ with prediction $\hat{y} = 100$ yields 100% error, while $y = 150$ with $\hat{y} = 100$ yields only 33%. This asymmetry biases MAPE toward models that systematically under-predict.
-- **Not bounded above**: Individual percentage errors can exceed 100%, and MAPE has no finite upper bound.
+- **$y_i = 0$이면 정의되지 않는다**: $y_i$로 나누므로 관측값이 0이면 MAPE가 정의되지 않는다. 실무에서는 모든 관측값이 순양수인 자료로 쓰임이 제한된다.
+- **비대칭 벌점**: MAPE는 과대예측과 과소예측에 서로 다른 벌점을 준다. 과소예측은 $\hat{y} = 0$인 극단에서도 오차가 100%를 넘을 수 없지만, 과대예측의 오차는 위로 제한이 없다. 이 비대칭 때문에 MAPE는 체계적으로 과소예측하는 모형을 선호하게 된다.
+- **위로 유계가 아니다**: 개별 백분율 오차가 100%를 넘을 수 있으며 MAPE에는 유한한 상한이 없다.
 
 ---
 
-## 2. Symmetric Mean Absolute Percentage Error
+## 2. 대칭 평균절대백분율오차
 
-The **symmetric mean absolute percentage error (sMAPE)** addresses the asymmetry of MAPE by using the average of the observed and predicted values in the denominator:
+**대칭 평균절대백분율오차(sMAPE)**는 분모에 관측값과 예측값의 평균을 써서 MAPE의 비대칭을 완화한다.
 
 $$
 \text{sMAPE} = \frac{1}{n} \sum_{i=1}^{n} \frac{|y_i - \hat{y}_i|}{(|y_i| + |\hat{y}_i|) / 2} \times 100\%
 $$
 
-This can be simplified to:
+이는 다음과 같이 정리할 수 있다.
 
 $$
 \text{sMAPE} = \frac{2}{n} \sum_{i=1}^{n} \frac{|y_i - \hat{y}_i|}{|y_i| + |\hat{y}_i|} \times 100\%
 $$
 
-### Properties
+### 성질
 
-- **Bounded**: Each term lies between 0% and 200%, so $\text{sMAPE} \in [0\%, 200\%]$.
-- **More symmetric**: Over-predictions and under-predictions of the same magnitude receive more comparable penalties than under MAPE.
-- **Still undefined when $y_i = \hat{y}_i = 0$**: The denominator vanishes when both the observed and predicted values are zero, though this case is typically handled by defining the contribution as zero.
+- **유계**: 각 항이 0%와 200% 사이에 있으므로 $\text{sMAPE} \in [0\%, 200\%]$이다.
+- **더 대칭적**: 같은 크기의 과대예측과 과소예측이 MAPE에서보다 비슷한 벌점을 받는다.
+- **$y_i = \hat{y}_i = 0$이면 여전히 정의되지 않는다**: 관측값과 예측값이 모두 0이면 분모가 사라진다. 다만 보통 그 항의 기여를 0으로 정의하여 처리한다.
 
-!!! warning "sMAPE is not truly symmetric"
-    Despite its name, sMAPE is not perfectly symmetric in all cases. When $y_i$ and $\hat{y}_i$ have opposite signs, the behavior can be counterintuitive. sMAPE works best when all values are positive.
+!!! warning "sMAPE도 완전히 대칭은 아니다"
+    이름과 달리 sMAPE가 모든 경우에 완벽하게 대칭인 것은 아니다. $y_i$와 $\hat{y}_i$의 부호가 반대이면 거동이 직관에 어긋날 수 있다. sMAPE는 모든 값이 양수일 때 가장 잘 작동한다.
 
 ---
 
-## 3. Mean Absolute Scaled Error
+## 3. 평균절대척도오차
 
-The **mean absolute scaled error (MASE)** scales prediction errors relative to the in-sample MAE of a naive baseline model. For cross-sectional regression, the naive baseline is typically the sample mean $\bar{y}$:
+**평균절대척도오차(MASE)**는 예측오차를 소박한 기준 모형의 표본 내 MAE에 대한 비로 척도화한다. 횡단면 회귀에서 소박한 기준 모형은 보통 표본평균 $\bar{y}$이다.
 
 $$
 \text{MASE} = \frac{\displaystyle \frac{1}{n}\sum_{i=1}^{n} |y_i - \hat{y}_i|}{\displaystyle \frac{1}{n}\sum_{i=1}^{n} |y_i - \bar{y}|}
 $$
 
-This simplifies to the ratio of the model's MAE to the baseline MAE:
+이는 모형 MAE와 기준 MAE의 비로 정리된다.
 
 $$
 \text{MASE} = \frac{\text{MAE}_{\text{model}}}{\text{MAE}_{\text{baseline}}}
 $$
 
-### Interpretation
+### 해석
 
-- $\text{MASE} < 1$: the model outperforms the naive baseline.
-- $\text{MASE} = 1$: the model performs no better than the baseline.
-- $\text{MASE} > 1$: the model performs worse than the baseline.
+- $\text{MASE} < 1$: 모형이 소박한 기준보다 낫다.
+- $\text{MASE} = 1$: 모형이 기준보다 나을 것이 없다.
+- $\text{MASE} > 1$: 모형이 기준보다 나쁘다.
 
-MASE is well-defined even when $y_i = 0$ (as long as the denominator is nonzero), making it a practical alternative to MAPE.
+MASE는 (분모가 0이 아닌 한) $y_i = 0$일 때도 잘 정의되므로 MAPE의 실용적인 대안이 된다.
 
 ---
 
-## 4. Relative Squared Error and Relative Absolute Error
+## 4. 상대제곱오차와 상대절대오차
 
-Two additional relative metrics normalize errors against the baseline model (predicting $\bar{y}$ for every observation):
+기준 모형(모든 관측값에 $\bar{y}$를 예측)에 대해 오차를 정규화하는 상대 척도가 둘 더 있다.
 
-**Relative Squared Error (RSE)**:
+**상대제곱오차(RSE)**:
 
 $$
 \text{RSE} = \frac{\sum_{i=1}^{n}(y_i - \hat{y}_i)^2}{\sum_{i=1}^{n}(y_i - \bar{y})^2} = \frac{\text{SSE}}{\text{SST}} = 1 - R^2
 $$
 
-**Relative Absolute Error (RAE)**:
+**상대절대오차(RAE)**:
 
 $$
 \text{RAE} = \frac{\sum_{i=1}^{n}|y_i - \hat{y}_i|}{\sum_{i=1}^{n}|y_i - \bar{y}|}
 $$
 
-Both RSE and RAE yield values less than 1 when the model outperforms the mean baseline. Note that RSE is simply the complement of $R^2$.
+모형이 평균 기준보다 나으면 RSE와 RAE 모두 1보다 작다. RSE는 단순히 $R^2$의 여집합임에 유의하라.
 
 ---
 
-## 5. Comparison of Relative Metrics
+## 5. 상대 척도의 비교
 
-| Metric | Handles $y_i = 0$ | Bounded | Symmetric | Scale-free |
+| 척도 | $y_i = 0$ 처리 | 유계 | 대칭 | 척도무관 |
 |--------|-------------------|---------|-----------|------------|
-| MAPE   | No                | No      | No        | Yes        |
-| sMAPE  | Partially         | Yes (0--200%) | Approximately | Yes |
-| MASE   | Yes               | No      | Yes       | Yes        |
-| RSE    | Yes               | No (but typically $\in [0,1]$) | Yes | Yes |
-| RAE    | Yes               | No (but typically $\in [0,1]$) | Yes | Yes |
+| MAPE   | 아니오                | 아니오      | 아니오        | 예        |
+| sMAPE  | 부분적으로         | 예 (0–200%) | 근사적으로 | 예 |
+| MASE   | 예               | 아니오      | 예       | 예        |
+| RSE    | 예               | 아니오(다만 보통 $\in [0,1]$) | 예 | 예 |
+| RAE    | 예               | 아니오(다만 보통 $\in [0,1]$) | 예 | 예 |
 
-!!! tip "Choosing a relative metric"
-    Use MAPE when communicating with non-technical stakeholders and all observed values are strictly positive. Use MASE when zeros are present or when you want a principled comparison against a baseline. Use RSE when you want a direct complement to $R^2$.
+!!! tip "상대 척도 고르기"
+    비전문가와 소통하고 모든 관측값이 순양수일 때는 MAPE를 쓴다. 0이 섞여 있거나 기준 모형과의 원칙 있는 비교를 원할 때는 MASE를 쓴다. $R^2$의 직접적인 여집합이 필요할 때는 RSE를 쓴다.
 
 ---
 
-## 6. Numerical Example
+## 6. 수치 예제
 
-Consider a model with $n = 4$ observations where all values are positive:
+모든 값이 양수인 관측값 $n = 4$개의 모형을 생각하자.
 
-| $i$ | $y_i$ | $\hat{y}_i$ | $|e_i|$ | $|e_i|/y_i$ | $2|e_i|/(y_i + \hat{y}_i)$ |
+| $i$ | $y_i$ | $\hat{y}_i$ | $\lvert e_i \rvert$ | $\lvert e_i \rvert/y_i$ | $2\lvert e_i \rvert/(y_i + \hat{y}_i)$ |
 |-----|--------|--------------|----------|--------------|-----------------------------|
 | 1   | 100    | 110          | 10       | 0.100        | 0.095                       |
 | 2   | 200    | 190          | 10       | 0.050        | 0.051                       |
 | 3   | 50     | 45           | 5        | 0.100        | 0.105                       |
 | 4   | 150    | 160          | 10       | 0.067        | 0.065                       |
 
-The sample mean is $\bar{y} = 125$.
+표본평균은 $\bar{y} = 125$이다.
 
 $$
 \text{MAPE} = \frac{0.100 + 0.050 + 0.100 + 0.067}{4} \times 100\% = 7.9\%
@@ -132,7 +132,7 @@ $$
 \text{sMAPE} = \frac{0.095 + 0.051 + 0.105 + 0.065}{4} \times 100\% = 7.9\%
 $$
 
-For MASE, the baseline MAE is:
+MASE를 구하기 위해 기준 MAE를 계산하면
 
 $$
 \text{MAE}_{\text{baseline}} = \frac{|100-125| + |200-125| + |50-125| + |150-125|}{4} = \frac{25+75+75+25}{4} = 50
@@ -146,14 +146,14 @@ $$
 \text{MASE} = \frac{8.75}{50} = 0.175
 $$
 
-A MASE of 0.175 indicates the model's average error is only 17.5% of the naive baseline's error, confirming strong predictive performance relative to predicting the mean.
+MASE가 0.175라는 것은 모형의 평균오차가 소박한 기준 모형 오차의 17.5%에 지나지 않는다는 뜻으로, 평균을 예측하는 것에 비해 예측 성능이 뛰어남을 확인해 준다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Compute the Mean Absolute Percentage Error (MAPE) for actual values $y = (100, 200, 50, 300)$ and predictions $\hat{y} = (110, 180, 55, 290)$.
+**연습문제 1.**
+실제값 $y = (100, 200, 50, 300)$과 예측값 $\hat{y} = (110, 180, 55, 290)$에 대해 평균절대백분율오차(MAPE)를 계산하라.
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
     $$
     \text{MAPE} = \frac{1}{n}\sum_{i=1}^n \left|\frac{y_i - \hat{y}_i}{y_i}\right| \times 100\%
     $$
@@ -168,46 +168,48 @@ Compute the Mean Absolute Percentage Error (MAPE) for actual values $y = (100, 2
 
 ---
 
-**Exercise 2.**
-Explain why MAPE is undefined or problematic when actual values are zero or near zero. What alternative metric can be used?
+**연습문제 2.**
+실제값이 0이거나 0에 가까울 때 MAPE가 왜 정의되지 않거나 문제가 되는지 설명하라. 어떤 대안 척도를 쓸 수 있는가?
 
-??? success "Solution to Exercise 2"
-    MAPE divides by $y_i$, so it is undefined when $y_i = 0$ (division by zero). When $y_i$ is close to zero, even small absolute errors produce enormous percentage errors, dominating the metric.
+??? success "연습문제 2 풀이"
+    MAPE는 $y_i$로 나누므로 $y_i = 0$이면 정의되지 않는다(0으로 나누기). $y_i$가 0에 가까우면 작은 절대오차도 엄청난 백분율 오차를 만들어 척도를 지배한다.
 
-    **Alternatives:**
+    **대안:**
 
-    - **Symmetric MAPE (sMAPE):** Uses $|y_i| + |\hat{y}_i|$ in the denominator, avoiding division by zero (unless both are zero) and treating over- and under-predictions symmetrically.
-    - **Mean Absolute Scaled Error (MASE):** Normalizes by the MAE of a naive forecast, avoiding division by individual $y_i$ values.
-    - **Log-based metrics:** If $y_i > 0$, use RMSLE (root mean squared log error) $= \sqrt{\frac{1}{n}\sum(\log y_i - \log \hat{y}_i)^2}$, which measures relative errors on the log scale.
-
----
-
-**Exercise 3.**
-MAPE treats over-predictions and under-predictions asymmetrically in percentage terms. Show this with an example.
-
-??? success "Solution to Exercise 3"
-    Consider $y = 100$:
-
-    - Over-prediction: $\hat{y} = 200$, percentage error $= |100-200|/100 = 100\%$.
-    - Under-prediction: $\hat{y} = 0$, percentage error $= |100-0|/100 = 100\%$.
-
-    But now consider $y = 200$:
-
-    - Over-prediction: $\hat{y} = 300$, percentage error $= 100/200 = 50\%$.
-    - Under-prediction: $\hat{y} = 100$, percentage error $= 100/200 = 50\%$.
-
-    The asymmetry is more subtle: MAPE penalizes errors on small values more heavily than on large values. A \$10 error on a \$20 item (50%) is penalized more than a \$10 error on a \$200 item (5%). This means MAPE-optimized models tend to under-predict large values (because percentage errors are small in the denominator).
+    - **대칭 MAPE(sMAPE):** 분모에 $|y_i| + |\hat{y}_i|$를 써서 (둘 다 0이 아닌 한) 0으로 나누기를 피하고 과대·과소예측을 대칭적으로 다룬다.
+    - **평균절대척도오차(MASE):** 소박한 예측의 MAE로 정규화하여 개별 $y_i$로 나누는 것을 피한다.
+    - **로그 기반 척도:** $y_i > 0$이면 RMSLE(제곱근평균제곱로그오차) $= \sqrt{\frac{1}{n}\sum(\log y_i - \log \hat{y}_i)^2}$를 쓴다. 로그 척도에서 상대오차를 잰다.
 
 ---
 
-**Exercise 4.**
-When is MAPE a good choice for evaluating forecasting models? Name two application domains where relative errors are more meaningful than absolute errors.
+**연습문제 3.**
+MAPE는 백분율의 관점에서 과대예측과 과소예측을 비대칭적으로 다룬다. 예를 들어 이를 보여라.
 
-??? success "Solution to Exercise 4"
-    MAPE is a good choice when the scale of the variable varies widely and relative accuracy matters more than absolute accuracy:
+??? success "연습문제 3 풀이"
+    $y = 100$을 고정하고 예측값을 바꿔 보자.
 
-    1. **Retail demand forecasting:** A 10% error on an item selling 1000 units (off by 100) is operationally comparable to a 10% error on an item selling 10 units (off by 1). MAPE treats both equally, while MAE would ignore the small item's error.
+    | $\hat{y}$ | 오차의 방향 | 백분율 오차 |
+    |---|---|---|
+    | 0 | 최대 과소예측 | 100% |
+    | 50 | 과소예측 | 50% |
+    | 150 | 과대예측 | 50% |
+    | 300 | 과대예측 | 200% |
+    | 1000 | 과대예측 | 900% |
 
-    2. **Financial forecasting:** Predicting stock prices or revenues across companies of different sizes. A \$1 error on a \$10 stock (10%) is more significant than a \$1 error on a \$1000 stock (0.1%). MAPE captures this scale-invariance.
+    **비대칭의 핵심**: 분모가 $y = 100$으로 고정되어 있으므로 과소예측이 만들 수 있는 오차는 $\hat{y} = 0$일 때의 **100%가 최대**이다(예측값은 음수가 될 수 없다고 가정). 반면 과대예측의 오차는 위로 아무런 제한이 없다. 따라서 MAPE는 과대예측에 훨씬 무거운 벌점을 주며, MAPE로 최적화한 모형은 체계적으로 **과소예측**하는 쪽으로 치우친다.
 
-    MAPE is less suitable when values can be zero or negative (e.g., profit/loss), when the distribution is heavily skewed, or when equal absolute accuracy is desired across all observations.
+    두 번째 비대칭도 있다. MAPE는 값이 작은 관측값의 오차에 더 무거운 벌점을 준다. \$20짜리 물건의 \$10 오차(50%)가 \$200짜리 물건의 \$10 오차(5%)보다 열 배 무겁게 계산된다.
+
+---
+
+**연습문제 4.**
+예측 모형을 평가할 때 MAPE가 좋은 선택이 되는 경우는 언제인가? 절대오차보다 상대오차가 더 의미 있는 응용 분야 두 가지를 들어라.
+
+??? success "연습문제 4 풀이"
+    변수의 척도가 크게 달라지고 절대 정확도보다 상대 정확도가 중요할 때 MAPE가 좋은 선택이다.
+
+    1. **소매 수요 예측:** 1000개 팔리는 품목의 10% 오차(100개 차이)는 10개 팔리는 품목의 10% 오차(1개 차이)와 운영상 비슷한 의미를 갖는다. MAPE는 둘을 똑같이 다루지만 MAE는 작은 품목의 오차를 사실상 무시한다.
+
+    2. **재무 예측:** 규모가 다른 기업들의 주가나 매출을 예측할 때. \$10짜리 주식의 \$1 오차(10%)가 \$1000짜리 주식의 \$1 오차(0.1%)보다 훨씬 중요하다. MAPE가 이 척도 불변성을 포착한다.
+
+    값이 0이나 음수가 될 수 있거나(예: 손익), 분포가 심하게 치우쳐 있거나, 모든 관측값에서 동일한 절대 정확도가 필요할 때는 MAPE가 적절하지 않다.

@@ -1,34 +1,34 @@
-# Residual Sum of Squares Surface Visualization
+# 잔차제곱합 곡면 시각화
 
-## Overview
+## 개요
 
-This page creates 3D visualizations of the Residual Sum of Squares (RSS) as a function of the regression coefficients $\beta_0$ (intercept) and $\beta_1$ (slope). These visualizations provide geometric intuition for why OLS produces unique optimal estimates and how the RSS surface relates to the convex optimization problem solved by least squares.
+이 페이지는 잔차제곱합(RSS)을 회귀계수 $\beta_0$(절편)과 $\beta_1$(기울기)의 함수로 3차원 시각화한다. 이 시각화는 OLS가 왜 유일한 최적 추정값을 주는지, 그리고 RSS 곡면이 최소제곱이 푸는 볼록 최적화 문제와 어떻게 이어지는지에 대한 기하적 직관을 제공한다.
 
-## Mathematical Background
+## 수학적 배경
 
-For the simple linear regression model $y_i = \beta_0 + \beta_1 x_i + \varepsilon_i$, the RSS is a function of the coefficients:
+단순선형회귀 모형 $y_i = \beta_0 + \beta_1 x_i + \varepsilon_i$에서 RSS는 계수의 함수이다.
 
 $$
 \mathrm{RSS}(\beta_0, \beta_1) = \sum_{i=1}^n (y_i - \beta_0 - \beta_1 x_i)^2.
 $$
 
-Expanding this expression reveals that RSS is a **quadratic function** (a paraboloid) in $(\beta_0, \beta_1)$:
+이 식을 전개하면 RSS가 $(\beta_0, \beta_1)$에 대한 **이차함수**(포물면)임이 드러난다.
 
 $$
 \mathrm{RSS}(\beta_0, \beta_1) = n\beta_0^2 + \beta_1^2 \sum x_i^2 + 2\beta_0\beta_1\sum x_i - 2\beta_0\sum y_i - 2\beta_1\sum x_i y_i + \sum y_i^2.
 $$
 
-The Hessian matrix of RSS is
+RSS의 헤세 행렬은
 
 $$
 \mathbf{H} = 2\mathbf{X}^\top\mathbf{X} = 2\begin{pmatrix} n & \sum x_i \\ \sum x_i & \sum x_i^2 \end{pmatrix},
 $$
 
-which is positive definite (assuming the $x_i$ are not all equal), guaranteeing that the RSS surface is **strictly convex** with a unique global minimum.
+이며 ($x_i$가 모두 같지 않다면) 양의 정부호이므로 RSS 곡면이 **강볼록**이고 유일한 전역 최솟값을 가짐이 보장된다.
 
-## Code
+## 코드
 
-### Data Generation and Model Fitting
+### 자료 생성과 모형 적합
 
 ```python
 import numpy as np
@@ -50,7 +50,9 @@ beta_0 = model.intercept_
 beta_1 = model.coef_[0]
 ```
 
-### Computing the RSS Surface
+$X$를 중심화만 했으므로($\bar{x} = 0$) 절편은 `Sales`의 평균과 같다. 적합 결과는 $\hat{\beta}_0 = 14.0506$, $\hat{\beta}_1 = 0.046935$이다.
+
+### RSS 곡면 계산
 
 ```python
 B0_range = np.linspace(beta_0 - 2, beta_0 + 2, 50)
@@ -64,7 +66,7 @@ for i in range(B0_mesh.shape[0]):
         RSS[i, j] = np.sum((Sales - y_pred) ** 2)
 ```
 
-### Visualization
+### 시각화
 
 ```python
 import matplotlib.pyplot as plt
@@ -91,18 +93,18 @@ plt.tight_layout()
 plt.show()
 ```
 
-## Interpretation
+## 해석
 
-- **Convexity**: The RSS surface is bowl-shaped (a paraboloid) with a single global minimum. This means gradient descent from any starting point will converge to the OLS solution.
-- **Contour shape**: The elliptical contours reflect the correlation structure of the predictors. When predictors are uncorrelated (after centering), the contours are aligned with the axes; when correlated, they tilt.
-- **Sensitivity**: Tightly packed contour lines indicate the RSS changes rapidly in that direction, meaning the corresponding coefficient is well-determined. Widely spaced contours indicate poor identifiability.
-- **Optimal point**: The red star marks $(\hat{\beta}_0, \hat{\beta}_1)$, the OLS solution where $\nabla \mathrm{RSS} = \mathbf{0}$.
+- **볼록성**: RSS 곡면은 전역 최솟값이 하나뿐인 그릇 모양(포물면)이다. 따라서 어떤 출발점에서 경사하강을 해도 OLS 해로 수렴한다.
+- **등고선의 모양**: 타원형 등고선이 설명변수의 상관 구조를 반영한다. (중심화한 뒤) 설명변수가 무상관이면 등고선이 좌표축과 나란하고, 상관되어 있으면 기울어진다.
+- **민감도**: 등고선이 촘촘하면 그 방향으로 RSS가 빠르게 변한다는 뜻이고, 그 계수가 잘 결정된다는 의미이다. 등고선이 성기면 식별이 어렵다.
+- **최적점**: 빨간 별이 $\nabla \mathrm{RSS} = \mathbf{0}$인 OLS 해 $(\hat{\beta}_0, \hat{\beta}_1)$이다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.** Verify analytically that the gradient of RSS is zero at the OLS solution by computing $\partial \mathrm{RSS}/\partial \beta_0$ and $\partial \mathrm{RSS}/\partial \beta_1$ and setting them to zero.
+**연습문제 1.** $\partial \mathrm{RSS}/\partial \beta_0$과 $\partial \mathrm{RSS}/\partial \beta_1$을 계산해 0으로 두어, OLS 해에서 RSS의 기울기가 0임을 해석적으로 확인하라.
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
 
     $$
     \frac{\partial \mathrm{RSS}}{\partial \beta_0} = -2\sum_{i=1}^n (y_i - \beta_0 - \beta_1 x_i) = 0 \implies n\hat{\beta}_0 + \hat{\beta}_1\sum x_i = \sum y_i.
@@ -112,47 +114,72 @@ plt.show()
     \frac{\partial \mathrm{RSS}}{\partial \beta_1} = -2\sum_{i=1}^n x_i(y_i - \beta_0 - \beta_1 x_i) = 0 \implies \hat{\beta}_0\sum x_i + \hat{\beta}_1\sum x_i^2 = \sum x_i y_i.
     $$
 
-    These are the normal equations $\mathbf{X}^\top\mathbf{X}\hat{\boldsymbol{\beta}} = \mathbf{X}^\top\mathbf{y}$, confirming the gradient is zero at the OLS solution. $\square$
+    이것이 정규방정식 $\mathbf{X}^\top\mathbf{X}\hat{\boldsymbol{\beta}} = \mathbf{X}^\top\mathbf{y}$이며, OLS 해에서 기울기가 0임을 확인해 준다. $\square$
 
 ---
 
-**Exercise 2.** Show that the Hessian $\mathbf{H} = 2\mathbf{X}^\top\mathbf{X}$ is positive definite when the $x_i$ are not all equal. What happens when they are all equal?
+**연습문제 2.** $x_i$가 모두 같지 않을 때 헤세 행렬 $\mathbf{H} = 2\mathbf{X}^\top\mathbf{X}$가 양의 정부호임을 보여라. 모두 같으면 어떻게 되는가?
 
-??? success "Solution to Exercise 2"
+??? success "연습문제 2 풀이"
 
-    The Hessian is $2\mathbf{X}^\top\mathbf{X}$ where $\mathbf{X} = [\mathbf{1} \mid \mathbf{x}]$. This is positive definite if and only if $\mathbf{X}$ has full column rank 2. If all $x_i$ are equal, the second column of $\mathbf{X}$ is a constant times the first column, so $\mathbf{X}$ is rank 1 and $\mathbf{X}^\top\mathbf{X}$ is singular. The RSS surface degenerates: the minimum lies along a line rather than at a unique point, reflecting the fact that $\beta_0$ and $\beta_1$ are not separately identifiable. $\square$
-
----
-
-**Exercise 3.** Generate a dataset with a higher noise level ($\sigma = 10$) and recreate the surface. How does the shape change compared to $\sigma = 2$?
-
-??? success "Solution to Exercise 3"
-
-    With higher noise, the minimum RSS value increases (the bowl is higher), but the shape of the surface and the location of the minimum remain qualitatively similar. The contours expand because the RSS values are larger everywhere. The OLS estimates remain at the minimum but have larger standard errors, meaning the "valley" around the minimum is wider and shallower relative to the total RSS. $\square$
+    헤세 행렬은 $\mathbf{X} = [\mathbf{1} \mid \mathbf{x}]$일 때 $2\mathbf{X}^\top\mathbf{X}$이다. 이는 $\mathbf{X}$가 완전 열계수 2를 가질 때에만 양의 정부호이다. 모든 $x_i$가 같으면 $\mathbf{X}$의 둘째 열이 첫째 열의 상수배이므로 $\mathbf{X}$의 계수가 1이 되고 $\mathbf{X}^\top\mathbf{X}$가 특이행렬이 된다. RSS 곡면은 퇴화하여 최솟값이 한 점이 아니라 직선 위에 놓이며, 이는 $\beta_0$과 $\beta_1$을 따로 식별할 수 없음을 반영한다. $\square$
 
 ---
 
-**Exercise 4.** Implement gradient descent to find the minimum of the RSS surface. Compare the number of iterations needed with different learning rates.
+**연습문제 3.** 잡음 수준을 높인($\sigma = 10$) 자료를 생성해 곡면을 다시 그려라. $\sigma = 2$일 때와 모양이 어떻게 달라지는가?
 
-??? success "Solution to Exercise 4"
+??? success "연습문제 3 풀이"
+
+    잡음이 커지면 RSS의 최솟값이 커지지만(그릇이 위로 올라간다) 곡면의 모양과 최솟값의 위치는 질적으로 비슷하다. RSS 값이 전반적으로 커지므로 등고선이 퍼진다. OLS 추정값은 여전히 최솟값에 있지만 표준오차가 커지며, 이는 전체 RSS에 견주었을 때 최솟값 주변의 "골짜기"가 더 넓고 얕아진다는 뜻이다. $\square$
+
+---
+
+**연습문제 4.** 경사하강법을 구현하여 RSS 곡면의 최솟값을 찾아라. 학습률에 따라 필요한 반복 횟수를 비교하라.
+
+??? success "연습문제 4 풀이"
+
+    먼저 **왜 학습률을 아무렇게나 고르면 안 되는지**부터 짚어야 한다. 이 자료를 중심화만 했을 때 헤세 행렬의 고윳값은
+
+    $$
+    \lambda_{\min} = 2n = 200, \qquad \lambda_{\max} = 2\sum x_i^2 = 1.577 \times 10^6
+    $$
+
+    이다. 경사하강이 수렴하려면 $\eta < 2/\lambda_{\max} = 1.27 \times 10^{-6}$이어야 한다. $\eta = 10^{-4}$이나 $10^{-5}$로 두면 곧바로 **발산**한다(오버플로가 난다). $\eta = 10^{-6}$이면 발산은 면하지만 조건수가 $\lambda_{\max}/\lambda_{\min} \approx 7885$로 크기 때문에 $\beta_0$ 방향의 수렴이 극도로 느려, 1000회 반복 후에도 $\beta_0 = 2.55$에 머문다(참값은 $14.05$).
+
+    올바른 처방은 설명변수를 **표준화**하는 것이다. 그러면 $\sum x_i^2 = n$이 되어 (평균 기울기를 쓰면) 헤세 행렬이 $2\mathbf{I}$가 되고 조건수가 1이 된다.
 
     ```python
-    lr = 0.0001
-    beta = np.array([0.0, 0.0])  # initial guess
-    for step in range(1000):
-        residuals = Sales - beta[0] - beta[1] * X_scaled.flatten()
-        grad = np.array([-2 * np.sum(residuals),
-                         -2 * np.sum(residuals * X_scaled.flatten())])
+    from sklearn.preprocessing import StandardScaler
+
+    Xz = StandardScaler().fit_transform(TV.reshape(-1, 1)).flatten()
+
+    beta = np.array([0.0, 0.0])
+    lr = 0.1
+    for step in range(200):
+        residuals = Sales - beta[0] - beta[1] * Xz
+        grad = np.array([-2 * residuals.mean(),
+                         -2 * (residuals * Xz).mean()])
         beta -= lr * grad
-    print(f"GD solution: beta_0={beta[0]:.4f}, beta_1={beta[1]:.4f}")
+    print(f"GD solution: beta_0={beta[0]:.6f}, beta_1={beta[1]:.6f}")
     ```
 
-    Smaller learning rates require more iterations but converge reliably. Larger learning rates converge faster but risk overshooting. The optimal rate depends on the eigenvalues of $\mathbf{X}^\top\mathbf{X}$. $\square$
+    출력은 `beta_0=14.050550, beta_1=4.167789`로 정확한 OLS 해와 소수점 여섯 자리까지 일치한다. 표준화된 기울기를 원래 척도로 되돌리려면 $\text{sd}(TV) = 88.80$으로 나눈다: $4.167789 / 88.80 = 0.046935$.
+
+    학습률에 따른 수렴 속도(최대 오차가 $10^{-6}$ 아래로 내려가는 데 걸린 반복 횟수):
+
+    | 학습률 $\eta$ | 반복 횟수 |
+    |---|---|
+    | 0.5 | 1 |
+    | 0.3 | 18 |
+    | 0.1 | 74 |
+    | 0.01 | 815 |
+
+    표준화한 경우 헤세 행렬이 $2\mathbf{I}$이므로 $\eta = 0.5$가 정확히 한 걸음에 최솟값에 도달하는 이상적인 학습률이다($\eta = 1/\lambda$). 그보다 작으면 반복이 늘고, $\eta > 2/\lambda = 1$이면 발산한다. $\square$
 
 ---
 
-**Exercise 5.** Explain why the contour ellipses are aligned with the coordinate axes when $\bar{x} = 0$ (centered predictors), and tilt when $\bar{x} \neq 0$.
+**연습문제 5.** $\bar{x} = 0$(중심화된 설명변수)일 때 등고선 타원이 좌표축과 나란하고 $\bar{x} \neq 0$일 때 기울어지는 이유를 설명하라.
 
-??? success "Solution to Exercise 5"
+??? success "연습문제 5 풀이"
 
-    The contour shape is determined by $\mathbf{X}^\top\mathbf{X}$. When predictors are centered ($\bar{x} = 0$), the off-diagonal element $\sum x_i = n\bar{x} = 0$, making $\mathbf{X}^\top\mathbf{X}$ diagonal. Diagonal matrices produce axis-aligned ellipses. When $\bar{x} \neq 0$, the off-diagonal is nonzero, introducing correlation between $\beta_0$ and $\beta_1$ and tilting the ellipses. Centering predictors orthogonalizes the intercept and slope estimates, simplifying both visualization and numerical computation. $\square$
+    등고선의 모양은 $\mathbf{X}^\top\mathbf{X}$가 결정한다. 설명변수를 중심화하면($\bar{x} = 0$) 비대각원소 $\sum x_i = n\bar{x} = 0$이 되어 $\mathbf{X}^\top\mathbf{X}$가 대각행렬이 된다. 대각행렬은 축과 나란한 타원을 만든다. $\bar{x} \neq 0$이면 비대각원소가 0이 아니어서 $\beta_0$과 $\beta_1$ 사이에 상관이 생기고 타원이 기울어진다. 설명변수를 중심화하면 절편과 기울기의 추정이 직교화되어 시각화와 수치 계산이 모두 간단해진다. $\square$

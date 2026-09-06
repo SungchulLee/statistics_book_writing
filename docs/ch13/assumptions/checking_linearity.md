@@ -1,19 +1,18 @@
-# Checking Linearity in Linear Regression
+# 선형회귀의 선형성 확인
 
+선형성은 종속변수와 각 독립변수 사이에 직선 관계가 있다고 상정하는 선형회귀의 기초 가정이다. 이 가정이 성립하는지 확인하는 일은 회귀모형의 타당성에 결정적이다. 변수들 사이의 관계가 선형이 아니면 모형이 편향된 추정을 내놓아 나쁜 예측과 잘못된 추론을 낳는다. 이 절은 선형회귀에서 선형성을 평가하는 여러 방법을 살펴본다.
 
-Linearity is a foundational assumption in linear regression that posits a straight-line relationship between the dependent variable and each independent variable. Ensuring that this assumption holds is critical for the validity of the regression model. If the relationship between the variables is not linear, the model may yield biased estimates, resulting in poor predictions and incorrect inferences. This section explores various methods for assessing linearity in linear regression.
+## 1. 산점도를 이용한 시각적 점검
 
-## 1. Visual Inspection Using Scatterplots
+**산점도**는 선형성을 확인하는 가장 간단하고 직관적인 방법이다. 각 독립변수를 종속변수에 대해 그려 관계가 직선처럼 보이는지 눈으로 확인할 수 있다.
 
-**Scatterplots** are one of the simplest and most intuitive ways to check for linearity. By plotting each independent variable against the dependent variable, you can visually inspect whether the relationship appears to be a straight line.
+**절차:**
 
-**Steps:**
+1. **자료 그리기:** 각 독립변수에 대해 $y$축에 종속변수, $x$축에 독립변수를 두고 산점도를 그린다.
+2. **모양 평가:** 자료점들의 전반적인 모양을 관찰한다. 선형 관계라면 대체로 직선 주위에 모인 점구름으로 나타난다.
+3. **패턴 찾기:** 자료점이 곡선이나 그 밖의 비선형 패턴을 이루면 선형성 가정이 위배되었을 가능성이 높다.
 
-1. **Plot the Data:** For each independent variable, create a scatterplot with the dependent variable on the y-axis and the independent variable on the x-axis.
-2. **Assess the Shape:** Observe the overall shape of the data points. A linear relationship will typically appear as a cloud of points centered around a straight line.
-3. **Look for Patterns:** If the data points form a curve or any other non-linear pattern, the linearity assumption is likely violated.
-
-**Example:**
+**예시:**
 
 ```python
 import matplotlib.pyplot as plt
@@ -26,22 +25,22 @@ plt.title('Scatterplot of Y vs X')
 plt.show()
 ```
 
-**Interpretation:**
+**해석:**
 
-- A straight-line pattern indicates that the linearity assumption is likely satisfied.
-- Curves, clusters, or any non-linear patterns suggest a potential violation of the linearity assumption.
+- 직선 패턴은 선형성 가정이 충족되었을 가능성이 높음을 나타낸다.
+- 곡선, 군집, 그 밖의 비선형 패턴은 선형성 가정의 위배 가능성을 시사한다.
 
-## 2. Residual Plots
+## 2. 잔차그림
 
-A **residual plot** is another powerful tool for checking linearity. Residuals are the differences between the observed values and the values predicted by the regression model. Plotting residuals against predicted values can help you assess whether the linearity assumption holds.
+**잔차그림**은 선형성을 확인하는 또 하나의 강력한 도구이다. 잔차는 관측값과 회귀모형이 예측한 값의 차이이다. 잔차를 예측값에 대해 그리면 선형성 가정이 성립하는지 평가할 수 있다.
 
-**Steps:**
+**절차:**
 
-1. **Fit the Linear Regression Model:** First, fit your linear regression model to obtain the predicted values.
-2. **Plot the Residuals:** Create a plot with the predicted values on the x-axis and the residuals on the y-axis.
-3. **Assess the Residuals:** Check whether the residuals are randomly scattered around the horizontal axis.
+1. **선형회귀 모형 적합:** 먼저 모형을 적합하여 예측값을 얻는다.
+2. **잔차 그리기:** $x$축에 예측값, $y$축에 잔차를 두고 그린다.
+3. **잔차 평가:** 잔차가 수평축 주위에 무작위로 흩어져 있는지 확인한다.
 
-**Example:**
+**예시:**
 
 ```python
 import statsmodels.api as sm
@@ -60,76 +59,81 @@ plt.axhline(y=0, color='red', linestyle='--')
 plt.show()
 ```
 
-**Interpretation:**
+**해석:**
 
-- **Random Scatter:** If the residuals are randomly scattered around zero without any clear pattern, the linearity assumption is likely met.
-- **Patterns in Residuals:** A curved pattern, systematic clustering, or any structure in the residuals indicates non-linearity, suggesting that a linear model may not be appropriate.
+- **무작위 흩어짐:** 잔차가 뚜렷한 패턴 없이 0 주위에 무작위로 흩어져 있으면 선형성 가정이 충족되었을 가능성이 높다.
+- **잔차의 패턴:** 잔차에 곡선 패턴, 체계적인 군집, 그 밖의 구조가 있으면 비선형성을 나타내며 선형모형이 적절하지 않을 수 있음을 시사한다.
 
-## 3. Component-Plus-Residual Plots (Partial Residual Plots)
+## 3. 성분+잔차 그림(부분잔차 그림)
 
-**Component-Plus-Residual (CPR) plots**, also known as **Partial Residual Plots**, extend the concept of residual plots by allowing you to assess the linearity of individual predictors in a multiple regression setting.
+**성분+잔차(CPR) 그림**은 **부분잔차 그림**이라고도 하며, 잔차그림의 개념을 확장하여 다중회귀에서 개별 설명변수의 선형성을 평가하게 해 준다.
 
-**Mathematical Definition:**
+**수학적 정의:**
 
-For a predictor $X_j$ in a multiple regression model, the partial residual is defined as:
+다중회귀 모형의 설명변수 $X_j$에 대해 부분잔차는 다음으로 정의된다.
 
 $$
-e_j^{(\text{partial})} = \hat{\beta}_j X_j + e
+e_j^{(\text{부분})} = \hat{\beta}_j X_j + e
 $$
 
-where $\hat{\beta}_j$ is the estimated coefficient for $X_j$ and $e$ is the ordinary residual from the full model.
+여기서 $\hat{\beta}_j$는 $X_j$의 추정된 계수이고 $e$는 완전모형의 통상적인 잔차이다.
 
-**Steps:**
+**절차:**
 
-1. **Fit the Full Model:** Fit your multiple linear regression model.
-2. **Compute the Partial Residuals:** For each independent variable, plot the partial residuals, which are the residuals plus the product of the estimated coefficient and the predictor.
-3. **Assess Linearity:** Check if the relationship between the partial residuals and the predictor is linear.
+1. **완전모형 적합:** 다중선형회귀 모형을 적합한다.
+2. **부분잔차 계산:** 각 독립변수에 대해 잔차에 추정계수와 설명변수의 곱을 더한 부분잔차를 그린다.
+3. **선형성 평가:** 부분잔차와 설명변수의 관계가 선형인지 확인한다.
 
-**Example:**
+**예시:**
 
 ```python
-from statsmodels.graphics.regressionplots import plot_partregress
+import statsmodels.api as sm
+from statsmodels.graphics.regressionplots import plot_ccpr
 import matplotlib.pyplot as plt
 
-# Assuming X is the independent variable and Y is the dependent variable
-# And other_vars are other independent variables in the model
+# Fit the full model first; exog_idx selects the predictor to examine
+results = sm.OLS(y, sm.add_constant(X)).fit()
+
 fig, ax = plt.subplots(figsize=(8, 6))
-plot_partregress(endog='Y', exog='X', exog_others=other_vars, data=df, ax=ax)
+plot_ccpr(results, exog_idx=1, ax=ax)
 plt.show()
 ```
 
-**Interpretation:**
+!!! note "`plot_ccpr`와 `plot_partregress`는 다르다"
+    성분+잔차(부분잔차) 그림은 `plot_ccpr`이다. 이름이 비슷한 `plot_partregress`는 **부분회귀 그림**(추가변수 그림)으로, $Y$를 나머지 설명변수에 회귀시킨 잔차를 $X_j$를 나머지 설명변수에 회귀시킨 잔차에 대해 그린 것이다. 둘 다 유용하지만 서로 다른 그림이며, `plot_partregress`의 인자 이름도 `exog`가 아니라 `exog_i`이다.
 
-- **Linear Trend:** A straight-line trend in the CPR plot suggests that the linearity assumption for that predictor is met.
-- **Non-Linear Trend:** A curved or non-linear trend suggests that the relationship between the predictor and the dependent variable is not linear.
+**해석:**
 
-## 4. Adding Polynomial Terms
+- **선형 추세:** CPR 그림에 직선 추세가 보이면 그 설명변수에 대한 선형성 가정이 충족된다.
+- **비선형 추세:** 곡선이나 비선형 추세가 보이면 그 설명변수와 종속변수의 관계가 선형이 아님을 시사한다.
 
-If the relationship between the dependent variable and an independent variable is not linear, adding **polynomial terms** (e.g., squared or cubic terms) to the regression model can help in capturing the non-linear relationship. This method allows the model to account for curvature while still using a linear regression framework.
+## 4. 다항 항 추가하기
 
-**Mathematical Formulation:**
+종속변수와 독립변수의 관계가 선형이 아니라면 회귀모형에 **다항 항**(제곱항이나 세제곱항 등)을 추가하여 비선형 관계를 포착할 수 있다. 이 방법은 선형회귀의 틀을 유지하면서 곡률을 반영하게 해 준다.
 
-A quadratic polynomial model for a single predictor:
+**수학적 정식화:**
+
+설명변수가 하나인 이차 다항 모형:
 
 $$
 Y = \beta_0 + \beta_1 X + \beta_2 X^2 + \epsilon
 $$
 
-A cubic polynomial model:
+삼차 다항 모형:
 
 $$
 Y = \beta_0 + \beta_1 X + \beta_2 X^2 + \beta_3 X^3 + \epsilon
 $$
 
-Note that these are still **linear regression** models because they are linear in the parameters $\beta_0, \beta_1, \beta_2, \beta_3$.
+이들도 모수 $\beta_0, \beta_1, \beta_2, \beta_3$에 대해 선형이므로 여전히 **선형회귀** 모형임에 유의하라.
 
-**Steps:**
+**절차:**
 
-1. **Include Polynomial Terms:** Add higher-order terms of the independent variable to the regression model.
-2. **Refit the Model:** Fit the model with these polynomial terms.
-3. **Assess Linearity:** Check whether the addition of polynomial terms improves the fit of the model (e.g., by comparing $R^2$ values or using AIC/BIC).
+1. **다항 항 포함:** 독립변수의 고차 항을 회귀모형에 추가한다.
+2. **모형 재적합:** 다항 항을 포함하여 모형을 적합한다.
+3. **선형성 평가:** 다항 항 추가가 모형의 적합을 개선하는지 확인한다(예: $R^2$ 비교, AIC/BIC 사용).
 
-**Example:**
+**예시:**
 
 ```python
 import numpy as np
@@ -141,48 +145,49 @@ model = sm.OLS(Y, sm.add_constant(X_poly)).fit()
 print(model.summary())
 ```
 
-**Interpretation:**
+**해석:**
 
-- **Improved Fit:** If the polynomial model significantly improves the fit (e.g., higher $R^2$, significant coefficient on the squared term), it suggests that the original relationship was non-linear.
-- **No Improvement:** If there is no significant improvement, the original linearity assumption may still be valid.
+- **적합 개선:** 다항 모형이 적합을 유의하게 개선하면(예: $R^2$ 상승, 제곱항 계수가 유의) 원래 관계가 비선형이었음을 시사한다.
+- **개선 없음:** 유의한 개선이 없으면 원래의 선형성 가정이 여전히 타당할 수 있다.
 
-## Summary of Linearity Diagnostics
+## 선형성 진단 요약
 
-| Method | Type | Best For | Key Indicator |
+| 방법 | 유형 | 적합한 상황 | 핵심 지표 |
 |--------|------|----------|---------------|
-| Scatterplot | Visual | Simple regression, initial assessment | Non-linear pattern in data cloud |
-| Residual Plot | Visual | Any regression model | Curved pattern in residuals |
-| CPR Plot | Visual | Multiple regression | Non-linear trend in partial residuals |
-| Polynomial Terms | Formal | Testing specific non-linear relationships | Significant higher-order coefficients |
+| 산점도 | 시각적 | 단순회귀, 1차 평가 | 점구름의 비선형 패턴 |
+| 잔차그림 | 시각적 | 모든 회귀모형 | 잔차의 곡선 패턴 |
+| CPR 그림 | 시각적 | 다중회귀 | 부분잔차의 비선형 추세 |
+| 다항 항 | 형식적 | 특정 비선형 관계의 검정 | 유의한 고차 계수 |
 
-Ensuring the linearity assumption in linear regression is critical for producing accurate and interpretable models. The methods discussed provide robust tools for diagnosing and addressing potential violations of this assumption. By carefully checking linearity and making necessary adjustments, you can enhance the reliability of your linear regression models and the validity of the conclusions drawn from them.
-## Exercises
+선형회귀에서 선형성 가정을 확인하는 일은 정확하고 해석 가능한 모형을 만드는 데 결정적이다. 여기서 다룬 방법들은 이 가정의 위배 가능성을 진단하고 대처하는 견실한 도구를 제공한다. 선형성을 신중히 확인하고 필요한 조정을 하면 선형회귀 모형의 신뢰성과 그로부터 끌어낸 결론의 타당성을 높일 수 있다.
 
-**Exercise 1.**
-A component-plus-residual (CPR) plot for predictor $X_2$ in a multiple regression shows a clear U-shaped curve. Describe two ways to modify the model to address this non-linearity.
+## 연습문제
 
-??? success "Solution to Exercise 1"
+**연습문제 1.**
+다중회귀에서 설명변수 $X_2$의 성분+잔차(CPR) 그림에 뚜렷한 U자 곡선이 나타났다. 이 비선형성에 대처하기 위해 모형을 수정하는 두 가지 방법을 기술하라.
 
-    1. **Add a polynomial term:** Include $X_2^2$ as an additional predictor in the model, changing the specification to $Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \beta_3 X_2^2 + \varepsilon$. This captures the quadratic relationship within the linear regression framework.
+??? success "연습문제 1 풀이"
 
-    2. **Apply a transformation:** Transform $X_2$ using $\log(X_2)$, $\sqrt{X_2}$, or another monotone transformation that linearizes the relationship before fitting the regression.
+    1. **다항 항 추가:** $X_2^2$을 설명변수로 추가하여 모형을 $Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \beta_3 X_2^2 + \varepsilon$으로 바꾼다. 선형회귀의 틀 안에서 이차 관계를 포착한다.
 
----
-
-**Exercise 2.**
-Explain the difference between a scatterplot of $Y$ vs. $X_j$ and a partial residual plot for $X_j$ in a multiple regression. When would they give different conclusions about linearity?
-
-??? success "Solution to Exercise 2"
-    A **scatterplot** of $Y$ vs. $X_j$ shows the marginal relationship, which may be confounded by the effects of other predictors. A **partial residual plot** (component-plus-residual plot) plots $e + \hat{\beta}_j X_j$ vs. $X_j$, isolating the relationship between $Y$ and $X_j$ after removing the effects of all other predictors.
-
-    They differ when other predictors are correlated with $X_j$. For example, if $X_1$ and $X_2$ are positively correlated and both affect $Y$, the scatterplot of $Y$ vs. $X_2$ might appear linear (because $X_1$'s effect reinforces $X_2$'s), while the partial residual plot reveals a nonlinear partial relationship after adjusting for $X_1$.
+    2. **변수변환:** 회귀를 적합하기 전에 $\log(X_2)$, $\sqrt{X_2}$ 등 관계를 선형화하는 단조 변환을 $X_2$에 적용한다.
 
 ---
 
-**Exercise 3.**
-A regression of house price on square footage appears linear in a scatterplot, but the residual-vs-fitted plot shows a subtle curvature. Explain why these diagnostics can disagree and which one to trust.
+**연습문제 2.**
+다중회귀에서 $Y$ 대 $X_j$의 산점도와 $X_j$의 부분잔차 그림이 어떻게 다른지 설명하라. 두 그림이 선형성에 대해 서로 다른 결론을 줄 때는 언제인가?
 
-??? success "Solution to Exercise 3"
-    The scatterplot shows the raw data, which may have large variance that masks subtle nonlinearity. The residual-vs-fitted plot removes the linear trend, making any remaining curvature more visible because the $y$-axis scale is compressed to the residual range.
+??? success "연습문제 2 풀이"
+    $Y$ 대 $X_j$의 **산점도**는 주변 관계를 보여주며, 다른 설명변수의 효과에 의해 교란되어 있을 수 있다. **부분잔차 그림**(성분+잔차 그림)은 $e + \hat{\beta}_j X_j$를 $X_j$에 대해 그려, 다른 모든 설명변수의 효과를 제거한 뒤 $Y$와 $X_j$의 관계를 분리해 보여준다.
 
-    The **residual-vs-fitted plot** should be trusted because it directly assesses whether the model's linear assumption is adequate. The scatterplot is useful for initial exploration but cannot detect subtle departures from linearity when the signal-to-noise ratio is low.
+    두 그림은 다른 설명변수가 $X_j$와 상관되어 있을 때 달라진다. 예를 들어 $X_1$과 $X_2$가 양의 상관을 가지며 둘 다 $Y$에 영향을 준다면, $Y$ 대 $X_2$의 산점도는 ($X_1$의 효과가 $X_2$의 효과를 강화하여) 선형으로 보일 수 있지만, $X_1$을 조정한 부분잔차 그림에서는 비선형 부분관계가 드러날 수 있다.
+
+---
+
+**연습문제 3.**
+집값을 면적에 회귀시켰을 때 산점도에서는 선형으로 보이는데 잔차-적합값 그림에는 미묘한 곡률이 보인다. 두 진단이 어긋날 수 있는 이유와 어느 쪽을 믿어야 하는지 설명하라.
+
+??? success "연습문제 3 풀이"
+    산점도는 원자료를 보여주므로 분산이 크면 미묘한 비선형성이 가려질 수 있다. 잔차-적합값 그림은 선형 추세를 제거하고 $y$축 눈금을 잔차 범위로 압축하므로 남아 있는 곡률이 훨씬 잘 보인다.
+
+    **잔차-적합값 그림**을 믿어야 한다. 모형의 선형성 가정이 적절한지를 직접 평가하기 때문이다. 산점도는 1차 탐색에는 유용하지만 신호 대 잡음비가 낮을 때 선형성에서의 미묘한 이탈을 탐지하지 못한다.

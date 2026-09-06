@@ -1,12 +1,12 @@
-# sklearn LinearRegression Interface
+# sklearn LinearRegression 인터페이스
 
-While `statsmodels` is designed for statistical inference, scikit-learn's `LinearRegression` is designed for prediction. It follows scikit-learn's consistent estimator API — `fit`, `predict`, `score` — and integrates seamlessly with the library's preprocessing, pipeline, and cross-validation tools. The tradeoff is that `sklearn` does not provide p-values, confidence intervals, or diagnostic tests out of the box.
+`statsmodels`가 통계적 추론을 위해 설계된 반면, scikit-learn의 `LinearRegression`은 예측을 위해 설계되었다. scikit-learn의 일관된 추정기 API — `fit`, `predict`, `score` — 를 따르며 라이브러리의 전처리, 파이프라인, 교차검증 도구와 매끄럽게 통합된다. 대가는 `sklearn`이 p값, 신뢰구간, 진단검정을 기본으로 제공하지 않는다는 점이다.
 
 ---
 
-## 1. Basic Usage
+## 1. 기본 사용법
 
-The `LinearRegression` class fits the model $Y = \mathbf{X}\boldsymbol{\beta} + \varepsilon$ by ordinary least squares. Unlike `statsmodels`, it adds the intercept automatically by default.
+`LinearRegression` 클래스는 최소제곱으로 모형 $Y = \mathbf{X}\boldsymbol{\beta} + \varepsilon$을 적합한다. `statsmodels`와 달리 절편을 기본으로 자동 추가한다.
 
 ```python
 import numpy as np
@@ -28,13 +28,13 @@ print("Intercept:", model.intercept_)
 print("Coefficients:", model.coef_)
 ```
 
-The fitted model stores the intercept in `model.intercept_` and the slope coefficients in `model.coef_`. Note that `X` does not need a column of ones — the intercept is handled internally when `fit_intercept=True` (the default).
+적합된 모형은 절편을 `model.intercept_`에, 기울기 계수를 `model.coef_`에 저장한다. `X`에 1로 채운 열이 필요하지 않다는 점에 유의하라. `fit_intercept=True`(기본값)일 때 절편은 내부에서 처리된다.
 
 ---
 
-## 2. Prediction
+## 2. 예측
 
-The `predict` method computes fitted values for new data:
+`predict` 메서드는 새 자료의 적합값을 계산한다.
 
 ```python
 # Predict on training data
@@ -46,20 +46,20 @@ y_pred_new = model.predict(X_new)
 print("Predictions:", y_pred_new)
 ```
 
-The input to `predict` must have the same number of columns as the training data. Each row is a new observation, and the output is the vector of predicted values $\hat{y} = \hat{\beta}_0 + \mathbf{X}_{\text{new}} \hat{\boldsymbol{\beta}}$.
+`predict`의 입력은 훈련자료와 열의 개수가 같아야 한다. 각 행이 새로운 관측값이며 출력은 예측값의 벡터 $\hat{y} = \hat{\beta}_0 + \mathbf{X}_{\text{new}} \hat{\boldsymbol{\beta}}$이다.
 
 ---
 
-## 3. Evaluating Model Performance
+## 3. 모형 성능 평가
 
-The `score` method returns $R^2$ on a given dataset:
+`score` 메서드는 주어진 자료에서의 $R^2$를 돌려준다.
 
 ```python
 r2_train = model.score(X, y)
 print(f"R-squared (training): {r2_train:.4f}")
 ```
 
-For other metrics, use `sklearn.metrics`:
+다른 척도가 필요하면 `sklearn.metrics`를 쓴다.
 
 ```python
 from sklearn.metrics import mean_absolute_error, mean_squared_error, root_mean_squared_error
@@ -75,11 +75,14 @@ print(f"MSE:  {mse:.4f}")
 print(f"RMSE: {rmse:.4f}")
 ```
 
+!!! note "`root_mean_squared_error`는 scikit-learn 1.4부터"
+    이 함수는 scikit-learn 1.4에서 추가되었다. 더 낮은 버전에서는 `mean_squared_error(y, y_pred, squared=False)`를 쓰거나 `np.sqrt(mean_squared_error(...))`로 직접 계산한다.
+
 ---
 
-## 4. Train-Test Split
+## 4. 훈련-검정 분할
 
-To estimate out-of-sample performance, split the data before fitting:
+표본 밖 성능을 추정하려면 적합하기 전에 자료를 나눈다.
 
 ```python
 from sklearn.model_selection import train_test_split
@@ -95,13 +98,13 @@ r2_test = model.score(X_test, y_test)
 print(f"R-squared (test): {r2_test:.4f}")
 ```
 
-The test $R^2$ is a more honest estimate of predictive performance than the training $R^2$ because the model has not seen the test data during fitting.
+검정 $R^2$는 모형이 적합 과정에서 검정자료를 보지 않았으므로 훈련 $R^2$보다 예측 성능을 정직하게 추정한다.
 
 ---
 
-## 5. Cross-Validation
+## 5. 교차검증
 
-scikit-learn provides cross-validation utilities that automate the repeated train-test splitting:
+scikit-learn은 훈련-검정 분할의 반복을 자동화하는 교차검증 도구를 제공한다.
 
 ```python
 from sklearn.model_selection import cross_val_score
@@ -114,13 +117,13 @@ print(f"Mean CV R-squared: {cv_scores.mean():.4f}")
 print(f"Std CV R-squared: {cv_scores.std():.4f}")
 ```
 
-The `scoring` parameter accepts any scikit-learn scorer. Common choices for regression include `'r2'`, `'neg_mean_squared_error'`, and `'neg_mean_absolute_error'`. The "neg" prefix is used because scikit-learn's convention is that higher scores are better, so error metrics are negated.
+`scoring` 인자는 scikit-learn의 어떤 채점기도 받는다. 회귀에서 흔한 선택은 `'r2'`, `'neg_mean_squared_error'`, `'neg_mean_absolute_error'`이다. "neg" 접두사가 붙는 것은 점수가 높을수록 좋다는 scikit-learn의 관례 때문이며, 그래서 오차 척도에 음수를 붙인다.
 
 ---
 
-## 6. Pipelines
+## 6. 파이프라인
 
-Pipelines chain preprocessing and modeling steps into a single object, ensuring that transformations are applied consistently during training and prediction:
+파이프라인은 전처리와 모형화 단계를 하나의 객체로 엮어, 훈련과 예측에서 변환이 일관되게 적용되도록 보장한다.
 
 ```python
 from sklearn.pipeline import Pipeline
@@ -137,36 +140,36 @@ r2_pipeline = pipeline.score(X_test, y_test)
 print(f"Pipeline R-squared (test): {r2_pipeline:.4f}")
 ```
 
-This pipeline first standardizes each predictor to zero mean and unit variance, then creates polynomial features (including interaction terms), and finally fits a linear regression. The entire pipeline can be passed to `cross_val_score` for cross-validated evaluation.
+이 파이프라인은 먼저 각 설명변수를 평균 0, 분산 1로 표준화하고, 다음으로 (교호작용 항을 포함한) 다항 특성을 만들고, 마지막으로 선형회귀를 적합한다. 파이프라인 전체를 `cross_val_score`에 넘겨 교차검증으로 평가할 수 있다.
 
-!!! note "Why pipelines matter"
-    Without a pipeline, it is easy to accidentally standardize or transform the test data using training statistics that were computed on the full dataset (data leakage). Pipelines prevent this by applying each transformation step only to the data that is available at that point in the workflow.
+!!! note "파이프라인이 중요한 이유"
+    파이프라인 없이 작업하면 전체 자료로 계산한 훈련 통계량으로 검정자료를 표준화하거나 변환하는 실수(자료 누출)를 저지르기 쉽다. 파이프라인은 각 변환 단계를 그 시점에 사용 가능한 자료에만 적용하여 이를 막아 준다.
 
 ---
 
-## 7. When to Use sklearn vs statsmodels
+## 7. sklearn과 statsmodels 중 무엇을 쓸 것인가
 
-| Task | Recommended library |
+| 작업 | 권장 라이브러리 |
 |---|---|
-| Hypothesis testing on coefficients | `statsmodels` |
-| Confidence intervals for $\beta_j$ | `statsmodels` |
-| Residual diagnostics (normality, heteroscedasticity) | `statsmodels` |
-| Model comparison via AIC/BIC | `statsmodels` |
-| Prediction on new data | `sklearn` |
-| Cross-validated model evaluation | `sklearn` |
-| Integration with preprocessing pipelines | `sklearn` |
-| Regularized regression (ridge, lasso) | `sklearn` |
-| High-dimensional data ($p > n$) | `sklearn` |
+| 계수에 대한 가설검정 | `statsmodels` |
+| $\beta_j$의 신뢰구간 | `statsmodels` |
+| 잔차 진단(정규성, 이분산) | `statsmodels` |
+| AIC/BIC를 통한 모형 비교 | `statsmodels` |
+| 새 자료에 대한 예측 | `sklearn` |
+| 교차검증 기반 모형 평가 | `sklearn` |
+| 전처리 파이프라인과의 통합 | `sklearn` |
+| 정칙화 회귀(릿지, 라쏘) | `sklearn` |
+| 고차원 자료 ($p > n$) | `sklearn` |
 
-!!! tip "They are complementary, not competing"
-    A common workflow is to use `statsmodels` during the model-building phase to test hypotheses, examine diagnostics, and select predictors, then refit the final model in `sklearn` for deployment in a prediction pipeline. The coefficient estimates are identical (both use OLS), so the choice is about which tools you need around the model.
+!!! tip "경쟁이 아니라 상호보완 관계이다"
+    흔한 작업 흐름은 모형을 세우는 단계에서 `statsmodels`로 가설을 검정하고 진단을 살피고 설명변수를 고른 뒤, 예측 파이프라인에 배포하기 위해 최종 모형을 `sklearn`으로 다시 적합하는 것이다. 계수 추정값은 (둘 다 OLS를 쓰므로) 동일하며, 선택의 기준은 모형 주위에 어떤 도구가 필요한가이다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Write Python code using scikit-learn to fit a linear regression on synthetic data, compute predictions, and print the $R^2$ score.
+**연습문제 1.**
+scikit-learn으로 인공자료에 선형회귀를 적합하고, 예측을 계산하며, $R^2$ 점수를 출력하는 Python 코드를 작성하라.
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
     ```python
     import numpy as np
     from sklearn.linear_model import LinearRegression
@@ -188,17 +191,17 @@ Write Python code using scikit-learn to fit a linear regression on synthetic dat
 
 ---
 
-**Exercise 2.**
-Explain the difference between `model.score()` and manually computing $R^2$ from predictions. Are they equivalent?
+**연습문제 2.**
+`model.score()`와 예측값에서 $R^2$를 직접 계산하는 것의 차이를 설명하라. 둘은 동등한가?
 
-??? success "Solution to Exercise 2"
-    `model.score(X, y)` computes:
+??? success "연습문제 2 풀이"
+    `model.score(X, y)`는 다음을 계산한다.
 
     $$
     R^2 = 1 - \frac{\sum(y_i - \hat{y}_i)^2}{\sum(y_i - \bar{y})^2}
     $$
 
-    where $\hat{y}_i$ = `model.predict(X)` and $\bar{y}$ is the mean of the provided `y`. This is equivalent to manually computing:
+    여기서 $\hat{y}_i$는 `model.predict(X)`이고 $\bar{y}$는 넘겨준 `y`의 평균이다. 이는 다음을 직접 계산하는 것과 동등하다.
 
     ```python
     y_pred = model.predict(X)
@@ -207,29 +210,29 @@ Explain the difference between `model.score()` and manually computing $R^2$ from
     r2 = 1 - ss_res / ss_tot
     ```
 
-    They are mathematically identical. Note: when applied to test data, $\bar{y}$ is the test set mean (not the training set mean), which can make test $R^2$ negative if the model fits poorly.
+    둘은 수학적으로 동일하다. 다만 검정자료에 적용할 때 $\bar{y}$는 (훈련자료가 아니라) 검정자료의 평균이며, 그래서 모형이 나쁘게 적합하면 검정 $R^2$가 음수가 될 수 있다.
 
 ---
 
-**Exercise 3.**
-Why does scikit-learn's `LinearRegression` not provide p-values or confidence intervals for coefficients? How can you obtain them?
+**연습문제 3.**
+scikit-learn의 `LinearRegression`이 계수의 p값이나 신뢰구간을 제공하지 않는 이유는 무엇인가? 어떻게 얻을 수 있는가?
 
-??? success "Solution to Exercise 3"
-    Scikit-learn is designed primarily for prediction, not statistical inference. `LinearRegression` implements OLS as a machine learning algorithm and focuses on `.fit()`, `.predict()`, and `.score()`. It does not compute standard errors, t-statistics, p-values, or confidence intervals.
+??? success "연습문제 3 풀이"
+    scikit-learn은 통계적 추론이 아니라 예측을 주된 목적으로 설계되었다. `LinearRegression`은 OLS를 기계학습 알고리즘으로 구현하며 `.fit()`, `.predict()`, `.score()`에 집중한다. 표준오차, t 통계량, p값, 신뢰구간은 계산하지 않는다.
 
-    To obtain inferential statistics, use:
+    추론 통계량을 얻으려면
 
-    1. **statsmodels:** `import statsmodels.api as sm; model = sm.OLS(y, sm.add_constant(X)).fit(); print(model.summary())` provides a full regression table with p-values, CIs, and diagnostic statistics.
-    2. **Manual computation:** Compute $\hat{\boldsymbol{\beta}}$, then $s^2 = \text{SSE}/(n-p)$, $\text{SE}(\hat{\beta}_j) = s\sqrt{[(\mathbf{X}^T\mathbf{X})^{-1}]_{jj}}$, and $t_j = \hat{\beta}_j/\text{SE}(\hat{\beta}_j)$.
+    1. **statsmodels 사용:** `import statsmodels.api as sm; model = sm.OLS(y, sm.add_constant(X)).fit(); print(model.summary())`가 p값, 신뢰구간, 진단 통계량을 담은 완전한 회귀표를 제공한다.
+    2. **직접 계산:** $\hat{\boldsymbol{\beta}}$를 구한 뒤 $s^2 = \text{SSE}/(n-p)$($p$는 절편을 포함한 모수의 개수), $\text{SE}(\hat{\beta}_j) = s\sqrt{[(\mathbf{X}^T\mathbf{X})^{-1}]_{jj}}$, $t_j = \hat{\beta}_j/\text{SE}(\hat{\beta}_j)$를 계산한다.
 
-    The separation between prediction-focused (sklearn) and inference-focused (statsmodels) tools reflects the models-vs-algorithms distinction.
+    예측 중심(sklearn)과 추론 중심(statsmodels) 도구가 나뉘어 있는 것은 모형과 알고리즘의 구분을 반영한다.
 
 ---
 
-**Exercise 4.**
-Describe how to use `sklearn.model_selection.cross_val_score` to estimate the generalization performance of a linear regression model.
+**연습문제 4.**
+`sklearn.model_selection.cross_val_score`로 선형회귀 모형의 일반화 성능을 추정하는 방법을 기술하라.
 
-??? success "Solution to Exercise 4"
+??? success "연습문제 4 풀이"
     ```python
     from sklearn.linear_model import LinearRegression
     from sklearn.model_selection import cross_val_score
@@ -242,6 +245,6 @@ Describe how to use `sklearn.model_selection.cross_val_score` to estimate the ge
     print(f"Mean R^2: {scores.mean():.4f} (+/- {scores.std():.4f})")
     ```
 
-    `cross_val_score` performs k-fold CV internally: it splits the data into `cv=5` folds, fits the model on 4 folds, evaluates on the 5th, and repeats for all folds. The `scoring` parameter specifies the metric (options include `"r2"`, `"neg_mean_squared_error"`, `"neg_mean_absolute_error"`).
+    `cross_val_score`는 내부에서 k-겹 교차검증을 수행한다. 자료를 `cv=5`개의 겹으로 나누고, 4개 겹으로 모형을 적합한 뒤 5번째 겹에서 평가하며, 모든 겹에 대해 반복한다. `scoring` 인자가 척도를 지정한다(선택지로 `"r2"`, `"neg_mean_squared_error"`, `"neg_mean_absolute_error"` 등이 있다).
 
-    Note: sklearn uses negative MSE (`neg_mean_squared_error`) so that higher values are always better (consistent with the convention that the scorer should be maximized).
+    참고: sklearn은 점수가 클수록 좋다는 관례(채점기는 최대화되어야 한다)를 지키기 위해 음의 MSE(`neg_mean_squared_error`)를 쓴다.

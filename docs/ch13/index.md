@@ -1,138 +1,137 @@
-# Chapter 13: Linear Regression
+# 13장: 선형회귀
 
+## 개요
 
-## Overview
-
-This chapter provides a comprehensive treatment of linear regression, from simple models with a single predictor through multiple regression with interaction, polynomial, and spline-based extensions. The chapter covers the full modeling workflow: estimation via ordinary least squares, inference on coefficients, assumption checking and diagnostics, performance evaluation, model selection, and practical implementation in Python using both statsmodels and scikit-learn.
-
----
-
-## Chapter Structure
-
-### 13.1 Linear Regression
-
-The foundational regression models:
-
-- **Simple Linear Regression** -- Models the relationship between a single predictor $X$ and a response $Y$ as a straight line $Y = \beta_0 + \beta_1 X + \varepsilon$, with geometric intuition from scatter plots and fitted lines.
-- **Multiple Linear Regression** -- Extends to multiple predictors using matrix notation $\mathbf{y} = X\boldsymbol{\beta} + \boldsymbol{\varepsilon}$, including interaction terms and implementation with scikit-learn.
-
-### 13.2 Estimation and Inference
-
-How regression coefficients are estimated and their statistical properties:
-
-- **Least Squares Estimation** -- Derives the OLS estimator from three perspectives: the least squares criterion, maximum likelihood under Gaussian errors, and the normal equation with vector calculus.
-- **Sampling Distributions (Simple OLS)** -- Derives the $t$-distributions of the slope estimator, mean response, and predicted response under classical assumptions.
-- **Confidence Intervals for Coefficients** -- Constructs interval estimates for the slope, expected response, and individual predictions, including the characteristic "bowtie" shape of confidence bands.
-- **Sampling Distributions and Tests (General OLS)** -- Extends inferential results to the multiple regression setting using matrix notation, deriving the distribution of $\hat{\beta}$, $s^2$, and the $t$-statistic for each coefficient.
-
-### 13.3 Testing Coefficients
-
-Evaluating the statistical significance of individual predictors:
-
-- **Hypothesis Tests (t-tests)** -- Formulates and conducts $t$-tests for individual regression coefficients to assess whether each predictor has a significant effect on the response.
-- **p-values and Confidence Intervals** -- Interprets $p$-values and confidence intervals for coefficients, with practical examples showing how to read regression output tables.
-- **Interpretation of Significance** -- Distinguishes between statistical significance and practical significance, with guidance on threshold conventions and common misinterpretations.
-
-### 13.4 Interaction and Polynomial Extensions
-
-Capturing complex relationships beyond additivity and linearity:
-
-- **Interaction Terms** -- Models how the effect of one predictor depends on the level of another by including product terms $X_1 \times X_2$ in the regression equation.
-- **Polynomial Regression** -- Models non-linear (curved) relationships using powers of predictors $X, X^2, \ldots, X^d$, while remaining a linear model in the parameters.
-
-### 13.5 Assumptions and Diagnostics
-
-The four key assumptions (LINE) and how to verify them:
-
-- **Assumptions Overview (LINE)** -- Summarizes the four requirements: Linearity, Independence, Normality of residuals, and Equal variance (homoscedasticity), with a diagnostic workflow.
-- **Linearity Assumption** -- What linearity means and why violations lead to biased predictions.
-- **Independence Assumption** -- Why residual independence matters, especially in time-series contexts where autocorrelation may occur.
-- **Homoscedasticity Assumption** -- Constant error variance and the consequences of heteroscedasticity for inference.
-- **Normality Assumption** -- Why normally distributed residuals are needed for valid confidence intervals and hypothesis tests.
-- **Checking Linearity / Independence / Homoscedasticity / Normality** -- Visual diagnostics (residual plots, Q-Q plots) and formal tests (Durbin-Watson, Breusch-Pagan, Shapiro-Wilk) for each assumption.
-
-### 13.6 Diagnostics
-
-Identifying problems with the fitted model:
-
-- **Residual Analysis** -- Examines residuals (observed minus predicted) to check for patterns indicating model misspecification, non-constant variance, or non-normality.
-- **Multicollinearity and VIF** -- Detects highly correlated predictors using the Variance Inflation Factor, with discussion of consequences for coefficient stability and interpretation.
-- **Influence and Leverage (Cook's Distance, DFFITS)** -- Identifies observations that disproportionately affect regression results, using Cook's distance, leverage values, and DFFITS.
-
-### 13.7 Performance Metrics
-
-Quantifying how well the model fits and predicts:
-
-- **$R^2$ and Adjusted $R^2$** -- Measures the proportion of variance explained by the model, with adjusted $R^2$ penalizing for the number of predictors.
-- **MAE, MSE, and RMSE** -- Absolute and squared error metrics for assessing prediction accuracy on the original scale of the response.
-- **MAPE and Other Relative Metrics** -- Scale-independent measures useful for comparing models across different datasets or response scales.
-
-### 13.8 Model Selection Criteria
-
-Choosing among competing models:
-
-- **AIC (Akaike Information Criterion)** -- Balances goodness of fit against model complexity, favoring models that predict well out of sample.
-- **BIC (Bayesian Information Criterion)** -- Similar to AIC but with a stronger penalty for additional parameters, tending to select simpler models.
-- **Cross-Validation for Model Selection** -- Uses hold-out or $k$-fold strategies to estimate out-of-sample prediction error directly.
-- **Stepwise and Best-Subset Selection** -- Automated procedures for searching the space of possible predictor subsets.
-
-### 13.9 Splines and GAMs
-
-Flexible non-parametric extensions to linear regression:
-
-- **Splines and GAMs Overview** -- Introduces step functions, piecewise polynomial splines, and their advantages over global polynomials for capturing local patterns.
-- **Generalized Additive Models** -- Extends regression by replacing linear terms with smooth non-parametric functions $f_j(X_j)$ learned from data, maintaining interpretability through the additive structure.
-
-### 13.10 Package Usage
-
-Practical tools for implementing regression in Python:
-
-- **statsmodels OLS Interface** -- The go-to library for statistical inference, providing detailed summaries with $p$-values, confidence intervals, and diagnostic tests.
-- **sklearn LinearRegression Interface** -- The go-to library for prediction workflows, with built-in cross-validation, pipelines, and regularization.
-- **Comparison and When to Use Which** -- Side-by-side feature comparison showing that statsmodels excels at inference while sklearn excels at prediction and machine learning pipelines.
-
-### 13.11 Code
-
-Complete Python implementations:
-
-- **CI for Slope (Caffeine Example)** -- Confidence interval computation for the regression slope.
-- **CI and Prediction Bands** -- Confidence and prediction intervals plotted alongside the regression line.
-- **OLS Regression Output Reproduction** -- Reproducing the full statsmodels OLS summary table from scratch.
-- **Multiple Regression Diagnostics** -- VIF, residual analysis, influence diagnostics, and interaction terms.
-- **Testing Coefficients Examples** -- Demonstrations of $t$-tests and $F$-tests for regression coefficients.
-- **Model Selection Comparison** -- AIC, BIC, and cross-validation applied to competing models.
-- **Weighted Least Squares** -- Regression with non-constant variance using observation weights.
-- **GAM Housing Analysis** -- Generalized additive model fitted to housing data with smooth terms.
-- **Regression Diagnostics (Housing)** -- Full diagnostic suite on the California Housing dataset.
-- **RSS Surface Visualization** -- 3D visualization of the residual sum of squares as a function of $\beta_0$ and $\beta_1$.
-- **3D Regression Plane** -- Visualization of a multiple regression surface in three dimensions.
-- **CV Polynomial Model Selection** -- Cross-validation to select the optimal polynomial degree.
-- **Step Functions** -- Piecewise constant regression implementations.
-- **Splines with Patsy** -- B-spline and natural spline fitting using the patsy formula interface.
-
-### 13.12 Exercises
-
-Practice problems covering regression modeling, OLS output interpretation, diagnostics, coefficient testing, model selection, and polynomial and interaction extensions.
+이 장은 설명변수가 하나인 단순모형에서 시작해 교호작용·다항식·스플라인 확장을 포함하는 다중회귀에 이르기까지 선형회귀를 폭넓게 다룬다. 최소제곱법에 의한 추정, 계수에 대한 추론, 가정 확인과 진단, 성능 평가, 모형선택, 그리고 statsmodels와 scikit-learn을 이용한 Python 구현까지 모형화의 전 과정을 다룬다.
 
 ---
 
-## Prerequisites
+## 장의 구성
 
-This chapter builds on:
+### 13.1 선형회귀
 
-- **Chapter 5** (Sampling Distributions) -- Understanding the $t$, $\chi^2$, and $F$ distributions and how they arise from normal samples.
-- **Chapter 8** (Confidence Intervals) -- Constructing interval estimates for population parameters.
-- **Chapter 9** (Hypothesis Testing) -- Formulating null and alternative hypotheses, computing $p$-values, and making decisions at given significance levels.
-- **Chapter 12** (Correlation and Causation) -- Pearson correlation as the foundation for simple linear regression, and the distinction between association and causation.
+회귀의 기초가 되는 모형들:
+
+- **단순선형회귀** — 하나의 설명변수 $X$와 반응변수 $Y$의 관계를 직선 $Y = \beta_0 + \beta_1 X + \varepsilon$으로 모형화하며, 산점도와 적합된 직선에서 얻는 기하적 직관을 함께 다룬다.
+- **다중선형회귀** — 행렬 표기 $\mathbf{y} = X\boldsymbol{\beta} + \boldsymbol{\varepsilon}$을 써서 설명변수가 여럿인 경우로 확장한다. 교호작용 항과 scikit-learn 구현을 포함한다.
+
+### 13.2 추정과 추론
+
+회귀계수를 어떻게 추정하며 그 통계적 성질은 무엇인가:
+
+- **최소제곱 추정** — 최소제곱 기준, 정규오차 아래의 최대가능도, 벡터 미적분을 이용한 정규방정식이라는 세 관점에서 OLS 추정량을 유도한다.
+- **표집분포(단순 OLS)** — 고전적 가정 아래에서 기울기 추정량, 평균반응, 예측반응의 $t$ 분포를 유도한다.
+- **계수의 신뢰구간** — 기울기, 기대반응, 개별 예측에 대한 구간추정을 구성하며, 신뢰띠의 특징적인 "나비넥타이" 모양도 다룬다.
+- **표집분포와 검정(일반 OLS)** — 행렬 표기를 써서 추론 결과를 다중회귀 상황으로 확장하고, $\hat{\beta}$, $s^2$, 각 계수의 $t$ 통계량의 분포를 유도한다.
+
+### 13.3 계수 검정
+
+개별 설명변수의 통계적 유의성 평가:
+
+- **가설검정(t-검정)** — 각 설명변수가 반응변수에 유의한 효과를 갖는지 평가하기 위해 개별 회귀계수에 대한 $t$ 검정을 세우고 수행한다.
+- **p값과 신뢰구간** — 계수의 $p$값과 신뢰구간을 해석하며, 회귀 출력표를 읽는 실전 예를 든다.
+- **유의성의 해석** — 통계적 유의성과 실질적 유의성을 구분하고, 문턱값 관행과 흔한 오해를 짚는다.
+
+### 13.4 교호작용과 다항식 확장
+
+가법성과 선형성을 넘어서는 복잡한 관계 포착:
+
+- **교호작용 항** — 곱항 $X_1 \times X_2$를 회귀식에 넣어 한 설명변수의 효과가 다른 설명변수의 수준에 어떻게 의존하는지 모형화한다.
+- **다항회귀** — 설명변수의 거듭제곱 $X, X^2, \ldots, X^d$을 써서 비선형(굽은) 관계를 모형화하되, 모수에 대해서는 여전히 선형모형을 유지한다.
+
+### 13.5 가정과 진단
+
+네 가지 핵심 가정(LINE)과 그 확인 방법:
+
+- **가정 개관(LINE)** — 선형성(Linearity), 독립성(Independence), 잔차의 정규성(Normality), 등분산성(Equal variance)이라는 네 요건을 정리하고 진단 절차를 제시한다.
+- **선형성 가정** — 선형성이 무엇을 뜻하며 위배될 때 왜 예측이 편향되는가.
+- **독립성 가정** — 잔차의 독립성이 왜 중요한가. 특히 자기상관이 나타날 수 있는 시계열 맥락에서.
+- **등분산성 가정** — 오차분산이 일정하다는 가정과 이분산이 추론에 미치는 결과.
+- **정규성 가정** — 타당한 신뢰구간과 가설검정을 위해 왜 잔차의 정규분포가 필요한가.
+- **선형성 / 독립성 / 등분산성 / 정규성 확인** — 각 가정에 대한 시각적 진단(잔차그림, Q-Q 그림)과 형식적 검정(Durbin-Watson, Breusch-Pagan, Shapiro-Wilk).
+
+### 13.6 진단
+
+적합된 모형의 문제 찾아내기:
+
+- **잔차 분석** — 잔차(관측값 빼기 예측값)를 살펴 모형 오설정, 비상수 분산, 비정규성을 시사하는 패턴을 확인한다.
+- **다중공선성과 VIF** — 분산팽창인자로 강하게 상관된 설명변수를 탐지하고, 계수의 안정성과 해석에 미치는 영향을 논한다.
+- **영향점과 지렛대(Cook 거리, DFFITS)** — Cook 거리, 지렛대 값, DFFITS를 써서 회귀 결과에 지나치게 큰 영향을 주는 관측값을 찾아낸다.
+
+### 13.7 성능 척도
+
+모형이 얼마나 잘 적합하고 잘 예측하는지 수량화하기:
+
+- **$R^2$와 수정 $R^2$** — 모형이 설명하는 분산의 비율을 재며, 수정 $R^2$는 설명변수의 개수에 벌점을 준다.
+- **MAE, MSE, RMSE** — 반응변수의 원래 척도에서 예측 정확도를 평가하는 절대오차·제곱오차 척도.
+- **MAPE와 그 밖의 상대 척도** — 자료나 반응변수 척도가 다른 모형들을 비교할 때 유용한 척도무관 측도.
+
+### 13.8 모형선택 기준
+
+경쟁하는 모형들 가운데 고르기:
+
+- **AIC(Akaike 정보기준)** — 적합도와 모형 복잡도를 저울질하여 표본 밖 예측을 잘하는 모형을 선호한다.
+- **BIC(Bayes 정보기준)** — AIC와 비슷하지만 모수 추가에 더 강한 벌점을 주어 더 단순한 모형을 고르는 경향이 있다.
+- **모형선택을 위한 교차검증** — 홀드아웃이나 $k$-겹 방식으로 표본 밖 예측오차를 직접 추정한다.
+- **단계적 선택과 최량 부분집합 선택** — 가능한 설명변수 부분집합의 공간을 탐색하는 자동화된 절차.
+
+### 13.9 스플라인과 GAM
+
+선형회귀의 유연한 비모수 확장:
+
+- **스플라인과 GAM 개관** — 계단함수, 조각별 다항 스플라인을 소개하고, 국소 패턴을 잡아내는 데 전역 다항식보다 나은 이유를 설명한다.
+- **일반화가법모형** — 선형항을 자료에서 학습한 매끄러운 비모수 함수 $f_j(X_j)$로 대체하여 회귀를 확장하되, 가법 구조 덕분에 해석 가능성을 유지한다.
+
+### 13.10 패키지 사용법
+
+Python에서 회귀를 구현하는 실용적 도구:
+
+- **statsmodels OLS 인터페이스** — 통계적 추론의 표준 라이브러리로, $p$값, 신뢰구간, 진단검정을 담은 상세한 요약을 제공한다.
+- **sklearn LinearRegression 인터페이스** — 예측 작업의 표준 라이브러리로, 교차검증, 파이프라인, 정칙화를 내장하고 있다.
+- **비교와 선택 기준** — 나란히 놓고 비교하면 statsmodels는 추론에, sklearn은 예측과 기계학습 파이프라인에 강하다.
+
+### 13.11 코드
+
+완전한 Python 구현:
+
+- **기울기의 신뢰구간(카페인 예제)** — 회귀 기울기의 신뢰구간 계산.
+- **신뢰띠와 예측띠** — 회귀직선과 함께 그린 신뢰구간과 예측구간.
+- **OLS 회귀 출력 재현** — statsmodels OLS 요약표 전체를 밑바닥부터 재현하기.
+- **다중회귀 진단** — VIF, 잔차 분석, 영향 진단, 교호작용 항.
+- **계수 검정 예제** — 회귀계수에 대한 $t$ 검정과 $F$ 검정 시연.
+- **모형선택 비교** — 경쟁 모형들에 AIC, BIC, 교차검증을 적용하기.
+- **가중최소제곱** — 관측값 가중치를 이용해 비상수 분산을 다루는 회귀.
+- **GAM 주택 분석** — 매끄러운 항으로 주택 자료에 적합한 일반화가법모형.
+- **회귀 진단(주택)** — California Housing 자료에 대한 전체 진단 모음.
+- **RSS 곡면 시각화** — 잔차제곱합을 $\beta_0$와 $\beta_1$의 함수로 3차원 시각화.
+- **3차원 회귀평면** — 다중회귀 곡면의 3차원 시각화.
+- **교차검증 다항 모형선택** — 교차검증으로 최적 다항 차수 고르기.
+- **계단함수** — 조각별 상수 회귀 구현.
+- **Patsy를 이용한 스플라인** — patsy 식 인터페이스를 이용한 B-스플라인과 자연 스플라인 적합.
+
+### 13.12 연습문제
+
+회귀 모형화, OLS 출력 해석, 진단, 계수 검정, 모형선택, 다항식·교호작용 확장을 아우르는 연습문제.
 
 ---
 
-## Key Takeaways
+## 선행 지식
 
-1. Simple linear regression models a straight-line relationship between one predictor and a response; multiple regression generalizes this to any number of predictors, with each coefficient representing the effect of one predictor holding all others constant.
-2. OLS estimation minimizes the sum of squared residuals and, under Gaussian errors, coincides with maximum likelihood estimation; the resulting estimators have known $t$-distributions that enable inference.
-3. Interaction and polynomial terms extend the linear model to capture non-additive and non-linear relationships without abandoning the OLS framework.
-4. The LINE assumptions (Linearity, Independence, Normality, Equal variance) must be verified through residual diagnostics; violations invalidate inference and may require transformations, robust methods, or alternative models.
-5. Model selection criteria (AIC, BIC, cross-validation) provide principled approaches to choosing among competing models, balancing fit against complexity.
-6. Splines and GAMs offer flexible alternatives when the true relationship is non-linear, providing smooth, locally adaptive fits while maintaining interpretability.
-7. statsmodels and scikit-learn serve complementary roles: use statsmodels for inference and diagnostics, and scikit-learn for prediction pipelines and deployment.
+이 장은 다음 내용 위에 세워진다:
+
+- **5장**(표집분포) — $t$, $\chi^2$, $F$ 분포와 이들이 정규표본에서 어떻게 생기는지에 대한 이해.
+- **8장**(신뢰구간) — 모수에 대한 구간추정의 구성.
+- **9장**(가설검정) — 귀무가설과 대립가설의 설정, $p$값 계산, 주어진 유의수준에서의 판정.
+- **12장**(상관과 인과) — 단순선형회귀의 토대가 되는 Pearson 상관, 그리고 연관과 인과의 구분.
+
+---
+
+## 핵심 요약
+
+1. 단순선형회귀는 하나의 설명변수와 반응변수 사이의 직선 관계를 모형화한다. 다중회귀는 이를 임의 개수의 설명변수로 일반화하며, 각 계수는 나머지를 모두 고정했을 때 그 설명변수 하나의 효과를 나타낸다.
+2. OLS 추정은 잔차제곱합을 최소화하며, 정규오차 아래에서는 최대가능도 추정과 일치한다. 이렇게 얻은 추정량은 알려진 $t$ 분포를 따르므로 추론이 가능하다.
+3. 교호작용 항과 다항식 항은 OLS 틀을 버리지 않으면서 비가법적·비선형적 관계를 포착하도록 선형모형을 확장한다.
+4. LINE 가정(선형성, 독립성, 정규성, 등분산성)은 잔차 진단으로 확인해야 한다. 위배되면 추론이 무효가 되며 변수변환, 로버스트 방법, 대안 모형이 필요할 수 있다.
+5. 모형선택 기준(AIC, BIC, 교차검증)은 적합도와 복잡도를 저울질하여 경쟁 모형 가운데 고르는 원칙 있는 방법을 제공한다.
+6. 참 관계가 비선형일 때 스플라인과 GAM은 유연한 대안이 되어, 해석 가능성을 유지하면서 매끄럽고 국소적으로 적응하는 적합을 제공한다.
+7. statsmodels와 scikit-learn은 상호보완적이다. 추론과 진단에는 statsmodels를, 예측 파이프라인과 배포에는 scikit-learn을 쓴다.

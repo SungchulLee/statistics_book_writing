@@ -1,16 +1,16 @@
-# Performance Metrics
+# 성능 척도
 
+## 결정계수
 
-## R-squared (R-squared)
-### Definition
+### 정의
 
-$R^2$ represents the proportion of the variance in the dependent variable that is predictable from the independent variables:
+$R^2$는 독립변수로부터 예측할 수 있는 종속변수 분산의 비율이다.
 
 $$
 R^2 = 1 - \frac{SS_{\text{Residual}}}{SS_{\text{Total}}}
 $$
 
-where:
+여기서
 
 $$
 \begin{array}{lll}
@@ -19,10 +19,11 @@ SS_{\text{Residual}} &=& \displaystyle \sum_{i}\left(y_{i}-\hat{y}_{i}\right)^{2
 \end{array}
 $$
 
-$R^2$ values range from 0 to 1, with higher values indicating a better fit. However, $R^2$ always increases as more predictors are added, even if they do not improve predictive power, which can lead to overfitting.
+절편이 있는 모형을 훈련자료에 적합했다면 $R^2$는 0과 1 사이의 값을 가지며 클수록 적합이 좋다. 그러나 $R^2$는 설명변수를 추가하면 예측력이 나아지지 않아도 항상 커지므로 과대적합으로 이어질 수 있다.
 
-### Decomposition of SS_Total
-The total variation in $y$ decomposes cleanly into explained and unexplained components:
+### 총제곱합의 분해
+
+$y$의 전체 변동은 설명된 부분과 설명되지 않은 부분으로 깔끔하게 분해된다.
 
 $$
 \begin{array}{lll}
@@ -33,62 +34,67 @@ SS_{\text{Total}} &=& \displaystyle \sum_{i}\left(y_{i}-\bar{y}\right)^{2} \\[10
 \end{array}
 $$
 
-where $SS_{\text{Treatment}}$ represents the variation explained by the regression model. The cross terms vanish due to the properties of OLS estimation.
+여기서 $SS_{\text{Treatment}}$는 회귀모형이 설명하는 변동을 나타내며, 다른 절에서 쓰는 $\text{SSR}$(회귀제곱합)과 같은 양이다. 교차항은 OLS 추정의 성질에 의해 사라진다.
 
-### Interpretation in Simple Linear Regression
+### 단순선형회귀에서의 해석
 
-In simple linear regression, $SS_{\text{Treatment}}$ can be expressed in terms of the correlation coefficient:
+단순선형회귀에서 $SS_{\text{Treatment}}$는 상관계수로 표현할 수 있다.
 
 $$
 \begin{array}{lll}
 SS_{\text{Treatment}} &=& \displaystyle \sum_{i}\left(\hat{y}_{i} - \bar{y}\right)^{2} \\[10pt]
-&\approx& \displaystyle \beta^2 \sum_{i}\left(x_i - \bar{x}\right)^{2} \\[10pt]
+&=& \displaystyle \beta^2 \sum_{i}\left(x_i - \bar{x}\right)^{2} \\[10pt]
 &\approx& \displaystyle n\sigma_x^2\beta^2 \\[10pt]
 &\approx& \displaystyle n\sigma_x^2\left(\rho\frac{\sigma_y}{\sigma_x}\right)^2 \\[10pt]
 &=& \displaystyle n\sigma_y^2\rho^2
 \end{array}
 $$
 
-Therefore:
+따라서
 
 $$
 R^2 = \frac{SS_{\text{Treatment}}}{SS_{\text{Total}}} \approx \frac{n\sigma_y^2 \rho^2}{n\sigma_y^2} = \rho^2
 $$
 
-In simple linear regression, $R^2$ is approximately the square of the correlation coefficient between $x$ and $y$.
+!!! note "사실은 정확한 등식이다"
+    위 유도에서 $\approx$가 등장하는 것은 표본분산을 $n$으로 나누느냐 $n-1$로 나누느냐를 얼버무렸기 때문이다. 두 곳에서 같은 규약을 쓰면 인자가 상쇄되어 단순선형회귀에서는 $R^2 = \rho^2$이 **정확히** 성립한다. 첫 줄의 $\hat{y}_i - \bar{y} = \hat{\beta}(x_i - \bar{x})$도 근사가 아니라 정확한 등식이다(회귀직선이 평균점 $(\bar{x}, \bar{y})$를 지나기 때문이다).
 
-!!! tip "References"
+단순선형회귀에서 $R^2$는 $x$와 $y$의 상관계수의 제곱이다.
+
+!!! tip "참고"
 
     - [R-squared or coefficient of determination (Khan Academy)](https://www.khanacademy.org/math/ap-statistics/bivariate-data-ap/assessing-fit-least-squares-regression/v/r-squared-or-coefficient-of-determination)
     - [R-squared intuition (Khan Academy)](https://www.khanacademy.org/math/ap-statistics/bivariate-data-ap/assessing-fit-least-squares-regression/a/r-squared-intuition)
 
-## Adjusted R-squared
-### Definition
+## 수정 결정계수
 
-Adjusted $R^2$ accounts for the number of predictors, penalizing unnecessary complexity:
+### 정의
+
+수정 $R^2$는 설명변수의 개수를 반영하여 불필요한 복잡도에 벌점을 준다.
 
 $$
 \text{Adjusted } R^2 = 1 - \left(1 - R^2\right) \frac{n - 1}{n - p - 1}
 $$
 
-where $n$ is the sample size and $p$ is the number of predictors (excluding the intercept).
+여기서 $n$은 표본크기이고 $p$는 (절편을 제외한) 설명변수의 개수이다.
 
-### Derivation of the Adjustment Factor
+### 조정 인자의 유도
 
-The adjustment replaces the raw sums of squares with their unbiased estimates (divided by degrees of freedom):
+조정은 원래의 제곱합을 자유도로 나눈 불편추정값으로 바꾸는 것이다.
 
 $$
 \text{Adjusted } R^2 = 1 - \frac{SS_{\text{Residual}} / (n - p - 1)}{SS_{\text{Total}} / (n - 1)}
 $$
 
-This ensures that adding a predictor only improves Adjusted $R^2$ if the reduction in $SS_{\text{Residual}}$ justifies the lost degree of freedom.
+이렇게 하면 $SS_{\text{Residual}}$의 감소가 잃어버린 자유도를 정당화할 때에만 설명변수 추가가 수정 $R^2$를 높인다.
 
-### Key Differences from R-squared
-- **Model Complexity**: Adjusted $R^2$ accounts for the number of predictors; $R^2$ does not.
-- **Model Comparison**: Adjusted $R^2$ is better for comparing models with different numbers of predictors.
-- **Direction**: Adjusted $R^2$ can decrease when adding a predictor that does not improve the model, while $R^2$ can only increase.
+### 결정계수와의 주요 차이
 
-## Other Performance Metrics
+- **모형 복잡도**: 수정 $R^2$는 설명변수의 개수를 반영하지만 $R^2$는 그렇지 않다.
+- **모형 비교**: 설명변수 개수가 다른 모형들을 비교할 때는 수정 $R^2$가 낫다.
+- **방향**: 모형을 개선하지 못하는 설명변수를 넣으면 수정 $R^2$는 줄어들 수 있지만 $R^2$는 커지기만 한다.
+
+## 그 밖의 성능 척도
 
 $$
 \begin{array}{lll}
@@ -98,11 +104,11 @@ $$
 \end{array}
 $$
 
-- **MAE (Mean Absolute Error)**: Average absolute difference between predicted and actual values. Less sensitive to outliers than MSE. Provides error in the same units as the response.
-- **MSE (Mean Squared Error)**: Average squared difference. Penalizes larger errors more heavily. Used as the loss function in OLS.
-- **RMSE (Root Mean Squared Error)**: Square root of MSE. Returns error to the original units of the response, making it more interpretable than MSE.
+- **MAE(평균절대오차)**: 예측값과 실제값의 절대차이의 평균이다. MSE보다 이상점에 덜 민감하다. 반응변수와 같은 단위로 오차를 제공한다.
+- **MSE(평균제곱오차)**: 제곱차이의 평균이다. 큰 오차에 더 무거운 벌점을 준다. OLS의 손실함수로 쓰인다.
+- **RMSE(제곱근평균제곱오차)**: MSE의 제곱근이다. 오차를 반응변수의 원래 단위로 되돌려 MSE보다 해석하기 쉽다.
 
-### Implementation
+### 구현
 
 ```python
 import pandas as pd
@@ -152,34 +158,40 @@ print(f"Testing MSE: {metrics.mean_squared_error(y_test, y_test_pred)}\n")
 print(f"Training RMSE: {np.sqrt(metrics.mean_squared_error(y_train, y_train_pred))}")
 print(f"Testing RMSE: {np.sqrt(metrics.mean_squared_error(y_test, y_test_pred))}\n")
 ```
-## Exercises
 
-**Exercise 1.**
-A regression model has MSE = 16.0 and MAE = 3.2 on a test set. A second model has MSE = 14.5 and MAE = 3.5. Which model is better, and what does the disagreement between MSE and MAE suggest about the data?
+## 연습문제
 
-??? success "Solution to Exercise 1"
-    The choice depends on the application. Model 2 has lower MSE (14.5 vs. 16.0), while Model 1 has lower MAE (3.2 vs. 3.5).
+**연습문제 1.**
+어떤 회귀모형이 검정자료에서 MSE = 16.0, MAE = 3.2이다. 두 번째 모형은 MSE = 14.5, MAE = 3.5이다. 어느 모형이 더 나은가? MSE와 MAE가 엇갈리는 것은 자료에 대해 무엇을 시사하는가?
 
-    The disagreement suggests that Model 2 has a few **large errors** that inflate its MAE more than its MSE (since MSE squares errors, it penalizes large errors more). Model 1 may have more uniform errors (lower MAE) but a few moderate outliers, while Model 2 has better average squared error but more consistently elevated absolute errors.
+??? success "연습문제 1 풀이"
+    선택은 응용 상황에 달려 있다. 모형 2는 MSE가 더 낮고(14.5 대 16.0), 모형 1은 MAE가 더 낮다(3.2 대 3.5).
 
-    If large errors are costly, prefer Model 2 (lower MSE). If typical error magnitude matters more, prefer Model 1 (lower MAE).
+    두 척도가 엇갈리는 것은 **오차 분포의 모양**이 다르다는 뜻이다. RMSE/MAE 비를 보면 뚜렷해진다.
 
----
+    - 모형 1: $\text{RMSE} = \sqrt{16.0} = 4.0$, 비 $= 4.0/3.2 = 1.25$
+    - 모형 2: $\text{RMSE} = \sqrt{14.5} = 3.81$, 비 $= 3.81/3.5 = 1.09$
 
-**Exercise 2.**
-A model achieves $R^2 = 0.95$ on the training data but $R^2 = 0.60$ on the test data. Diagnose the problem and suggest a remedy.
+    비가 클수록 오차 분포의 꼬리가 무겁다. 곧 **모형 1**이 전형적인 오차는 작지만 몇 개의 큰 오차를 갖고 있고, **모형 2**는 오차가 더 고르게 퍼져 있되 평균적인 오차 크기는 조금 더 크다. MSE는 오차를 제곱하므로 큰 오차에 더 큰 벌점을 주고, 그래서 큰 오차가 있는 모형 1의 MSE가 더 높게 나온 것이다.
 
-??? success "Solution to Exercise 2"
-    The large gap between training $R^2$ (0.95) and test $R^2$ (0.60) indicates **overfitting**. The model has learned patterns specific to the training data (including noise) that do not generalize to new data.
-
-    Remedies: (1) **Reduce model complexity** by removing predictors, using regularization (ridge/lasso), or reducing polynomial degree. (2) **Increase training data** if possible. (3) **Use cross-validation** during model selection to estimate out-of-sample performance more reliably.
+    큰 오차의 비용이 크다면 모형 2(낮은 MSE)를, 전형적인 오차 크기가 더 중요하다면 모형 1(낮은 MAE)을 택한다.
 
 ---
 
-**Exercise 3.**
-Explain why $R^2$ can be negative on a test set, even though it is always between 0 and 1 on the training set (when an intercept is included).
+**연습문제 2.**
+어떤 모형이 훈련자료에서 $R^2 = 0.95$, 검정자료에서 $R^2 = 0.60$이다. 문제를 진단하고 대책을 제안하라.
 
-??? success "Solution to Exercise 3"
-    On the training set with an intercept, OLS guarantees that $\text{SSR} \leq \text{SST}$, so $R^2 = 1 - \text{SSE}/\text{SST} \geq 0$.
+??? success "연습문제 2 풀이"
+    훈련 $R^2$(0.95)와 검정 $R^2$(0.60)의 큰 격차는 **과대적합**을 나타낸다. 모형이 훈련자료에만 있는 패턴(잡음 포함)을 학습하여 새 자료에 일반화되지 않는 것이다.
 
-    On the test set, $R^2 = 1 - \sum(y_i - \hat{y}_i)^2 / \sum(y_i - \bar{y}_{\text{test}})^2$. The predictions $\hat{y}_i$ are generated by the training model and may be systematically biased for the test data. If the model's predictions are worse than simply predicting the test set mean for every observation, then $\text{SSE} > \text{SST}$ and $R^2 < 0$. This means the model is not just bad -- it is worse than no model at all.
+    대책: (1) 설명변수를 빼거나, 정칙화(릿지/라쏘)를 쓰거나, 다항 차수를 낮추어 **모형 복잡도를 줄인다**. (2) 가능하면 **훈련자료를 늘린다**. (3) 모형 선택 과정에서 **교차검증**을 써서 표본 밖 성능을 더 신뢰성 있게 추정한다.
+
+---
+
+**연습문제 3.**
+(절편이 있을 때) 훈련자료에서는 $R^2$가 항상 0과 1 사이인데도 검정자료에서는 음수가 될 수 있는 이유를 설명하라.
+
+??? success "연습문제 3 풀이"
+    절편이 있는 훈련자료에서는 OLS가 $\text{SSE} \leq \text{SST}$를 보장하므로 $R^2 = 1 - \text{SSE}/\text{SST} \geq 0$이다.
+
+    검정자료에서는 $R^2 = 1 - \sum(y_i - \hat{y}_i)^2 / \sum(y_i - \bar{y}_{\text{test}})^2$이다. 예측값 $\hat{y}_i$는 훈련 모형이 만들어 낸 것이므로 검정자료에서는 체계적으로 치우쳐 있을 수 있다. 모형의 예측이 모든 관측값에 대해 단순히 검정자료의 평균을 예측하는 것보다 나쁘다면 $\text{SSE} > \text{SST}$가 되어 $R^2 < 0$이다. 이는 모형이 단지 나쁜 정도가 아니라 아무 모형도 쓰지 않는 것보다 나쁘다는 뜻이다.

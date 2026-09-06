@@ -1,124 +1,124 @@
-# Polynomial Regression
+# 다항회귀
 
+## 왜 다항회귀를 쓰는가
 
-## Why Use Polynomial Regression?
+**다항회귀**는 설명변수의 거듭제곱을 회귀식에 넣어 비선형 관계를 모형화한다. 직선 관계를 가정하는 단순선형회귀와 달리 다양한 모양의 곡선을 모형화할 수 있다.
 
-**Polynomial regression** models non-linear relationships by including powers of the predictors in the regression equation. Unlike simple linear regression, which assumes a straight-line relationship, polynomial regression can model curves of various shapes.
+비선형 관계는 실무에서 자주 나타난다.
 
-Non-linear relationships appear frequently in practice:
-
-- In physics, the relationship between distance and time for an accelerating object is quadratic: $y = ax^2 + bx + c$.
-- In economics, diminishing returns often follow a polynomial relationship between input and output.
-- In finance, the volatility smile suggests a curved relationship between option strike prices and implied volatility.
+- 물리학에서 가속하는 물체의 거리와 시간의 관계는 이차식이다: $y = ax^2 + bx + c$.
+- 경제학에서 수익체감은 흔히 투입과 산출 사이의 다항 관계를 따른다.
+- 금융에서 변동성 스마일은 옵션 행사가와 내재변동성 사이의 굽은 관계를 시사한다.
 
 ---
 
-## Mathematical Formulation
+## 수학적 정식화
 
-Polynomial regression extends linear regression by including polynomial terms of the predictors:
+다항회귀는 설명변수의 다항 항을 넣어 선형회귀를 확장한다.
 
 $$
 Y = \beta_0 + \beta_1 X + \beta_2 X^2 + \beta_3 X^3 + \cdots + \beta_d X^d + \epsilon
 $$
 
-where $X^2, X^3, \ldots, X^d$ are the polynomial terms of the predictor $X$, and $d$ is the **degree** of the polynomial.
+여기서 $X^2, X^3, \ldots, X^d$는 설명변수 $X$의 다항 항이고 $d$는 다항식의 **차수**이다.
 
-!!! info "Still a Linear Model"
-    Despite the non-linear relationship between $X$ and $Y$, polynomial regression is still a **linear** model in the parameters $\beta_0, \beta_1, \ldots, \beta_d$. This means that ordinary least squares (OLS) can be applied directly by treating $X, X^2, \ldots, X^d$ as separate predictor variables.
+!!! info "여전히 선형모형이다"
+    $X$와 $Y$ 사이의 관계는 비선형이지만, 다항회귀는 모수 $\beta_0, \beta_1, \ldots, \beta_d$에 대해서는 여전히 **선형** 모형이다. 따라서 $X, X^2, \ldots, X^d$를 각각 별개의 설명변수로 취급하면 최소제곱법(OLS)을 그대로 적용할 수 있다.
 
-The degree of the polynomial determines the flexibility of the curve:
+다항식의 차수가 곡선의 유연성을 결정한다.
 
-| Degree | Name | Shape |
+| 차수 | 이름 | 모양 |
 |---|---|---|
-| 1 | Linear | Straight line |
-| 2 | Quadratic | Parabola (one bend) |
-| 3 | Cubic | S-curve (two bends) |
-| $d$ | Degree-$d$ | Up to $d - 1$ bends |
+| 1 | 선형 | 직선 |
+| 2 | 이차 | 포물선(굽이 하나) |
+| 3 | 삼차 | S자 곡선(굽이 둘) |
+| $d$ | $d$차 | 최대 $d - 1$개의 굽이 |
 
 ---
 
-## Interpreting Polynomial Terms
+## 다항 항의 해석
 
-The sign and magnitude of the coefficients indicate the direction and strength of the curvature:
+계수의 부호와 크기가 곡률의 방향과 강도를 나타낸다.
 
-- **$\beta_2 > 0$** (quadratic term): The curve is **U-shaped** (convex). $Y$ decreases and then increases as $X$ grows.
-- **$\beta_2 < 0$** (quadratic term): The curve is **inverted-U-shaped** (concave). $Y$ increases and then decreases.
-- **Higher-order terms** ($X^3$, $X^4$, etc.) capture more complex patterns with additional inflection points.
+- **$\beta_2 > 0$** (이차항): 곡선이 **U자 모양**(볼록)이다. $X$가 커질수록 $Y$는 줄었다가 늘어난다.
+- **$\beta_2 < 0$** (이차항): 곡선이 **뒤집힌 U자 모양**(오목)이다. $Y$는 늘었다가 줄어든다.
+- **고차 항**($X^3$, $X^4$ 등)은 변곡점이 더 많은 복잡한 패턴을 포착한다.
 
-!!! warning "Overfitting Risk"
-    Higher-order polynomial terms increase model flexibility but also increase the risk of **overfitting**, especially with limited data. A high-degree polynomial may fit the training data closely but generalize poorly to new observations. Model selection criteria such as AIC and BIC should be used to choose the appropriate polynomial degree.
+!!! warning "과대적합의 위험"
+    고차 다항 항은 모형의 유연성을 높이지만 **과대적합**의 위험도 함께 키운다. 자료가 적을 때 특히 그렇다. 차수가 높은 다항식은 훈련자료에는 잘 맞지만 새 관측값에는 일반화가 잘 안 될 수 있다. AIC나 BIC 같은 모형선택 기준으로 적절한 차수를 골라야 한다.
 
 ---
 
-## Example: Age and Income
+## 예제: 나이와 소득
 
-In a study on the relationship between age and income, a linear model might miss the reality that income increases with age until a certain point, after which it plateaus or decreases (e.g., after retirement). A quadratic model captures this:
+나이와 소득의 관계를 연구할 때 선형모형은 소득이 어느 시점까지는 나이와 함께 늘다가 이후 정체하거나 (은퇴 후처럼) 줄어드는 현실을 놓칠 수 있다. 이차 모형이 이를 포착한다.
 
 $$
 \text{Income} = \beta_0 + \beta_1 \cdot \text{Age} + \beta_2 \cdot \text{Age}^2 + \epsilon
 $$
 
-If $\beta_1 > 0$ and $\beta_2 < 0$, the model describes income that rises with age, reaches a peak, and then declines—an inverted-U relationship.
+$\beta_1 > 0$이고 $\beta_2 < 0$이면 모형은 소득이 나이와 함께 오르다가 정점에 이른 뒤 떨어지는, 곧 뒤집힌 U자 관계를 기술한다.
 
 ---
 
-## Combining Polynomial and Interaction Terms
+## 다항 항과 교호작용 항 결합하기
 
-In some cases, both interaction terms and polynomial regression can be combined to capture more complex relationships. For instance, an interaction term can be included between a linear predictor and a polynomial term:
+더 복잡한 관계를 포착하기 위해 교호작용 항과 다항회귀를 함께 쓸 수 있다. 예를 들어 선형 설명변수와 다항 항 사이에 교호작용 항을 넣을 수 있다.
 
 $$
 Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \beta_3 X_1^2 + \beta_4 (X_1 \times X_2) + \epsilon
 $$
 
-This models a situation where the non-linear relationship between $X_1$ and $Y$ depends on the level of $X_2$.
+이는 $X_1$과 $Y$의 비선형 관계가 $X_2$의 수준에 의존하는 상황을 모형화한다.
 
-**Example (Agriculture):** The relationship between fertilizer use ($X_1$) and crop yield ($Y$) might be quadratic (increasing returns then diminishing returns), but this relationship could also depend on rainfall levels ($X_2$). Using both polynomial and interaction terms captures this more accurately.
-
----
-
-## Assessing Model Fit
-
-When adding polynomial terms, it is important to assess whether the additional complexity genuinely improves the model:
-
-- **Adjusted $R^2$** penalizes for the number of terms and is useful for comparing models of different polynomial degrees.
-- **AIC and BIC** provide a principled trade-off between fit and complexity. BIC's stronger penalty is especially useful for preventing overfitting with high-degree polynomials.
-- **F-tests** can compare nested models (e.g., a quadratic model versus a linear model) to test whether the additional polynomial terms are statistically significant.
+**예제(농업):** 비료 사용량($X_1$)과 작물 수확량($Y$)의 관계는 이차식일 수 있다(수익체증 뒤 수익체감). 그런데 이 관계가 강수량($X_2$)에도 의존할 수 있다. 다항 항과 교호작용 항을 함께 쓰면 이를 더 정확히 포착한다.
 
 ---
 
-## Summary
+## 모형 적합도 평가
 
-Polynomial regression extends the linear framework to model curved relationships between predictors and the response. While powerful, higher-degree polynomials carry an increased risk of overfitting. Careful use of model selection criteria ensures that polynomial terms add genuine predictive value rather than fitting noise.
-## Exercises
+다항 항을 넣을 때는 늘어난 복잡도가 정말로 모형을 개선하는지 평가하는 것이 중요하다.
 
-**Exercise 1.**
-A researcher fits $Y = \beta_0 + \beta_1 X + \beta_2 X^2 + \varepsilon$ and obtains $\hat{\beta}_2 = -0.03$ with $p = 0.01$. Interpret the sign and significance of $\hat{\beta}_2$.
-
-??? success "Solution to Exercise 1"
-    The significant negative $\hat{\beta}_2$ indicates a **concave (inverted U-shaped)** relationship between $X$ and $Y$. As $X$ increases, $Y$ initially increases (assuming $\hat{\beta}_1 > 0$) but eventually the quadratic term dominates and $Y$ decreases.
-
-    The turning point occurs at $X^* = -\hat{\beta}_1 / (2\hat{\beta}_2)$. Beyond this point, further increases in $X$ are associated with decreases in $Y$. The $p = 0.01$ confirms that this curvature is statistically significant and not due to chance.
+- **수정 $R^2$**는 항의 개수에 벌점을 주므로 차수가 다른 모형들을 비교하는 데 유용하다.
+- **AIC와 BIC**는 적합도와 복잡도 사이의 원칙 있는 절충을 제공한다. BIC의 더 강한 벌점은 고차 다항식의 과대적합을 막는 데 특히 유용하다.
+- **F 검정**으로 내포된 모형들(예: 이차 모형 대 선형 모형)을 비교해 추가된 다항 항이 통계적으로 유의한지 검정할 수 있다.
 
 ---
 
-**Exercise 2.**
-Explain why centering the predictor $X$ (replacing $X$ with $X - \bar{X}$) before fitting a polynomial regression is recommended. What problem does it address?
+## 요약
 
-??? success "Solution to Exercise 2"
-    Without centering, $X$ and $X^2$ are typically highly correlated (especially if $X > 0$), causing **multicollinearity** that inflates the standard errors of $\hat{\beta}_1$ and $\hat{\beta}_2$.
+다항회귀는 설명변수와 반응변수 사이의 굽은 관계를 모형화하도록 선형 틀을 확장한다. 강력하지만 차수가 높아질수록 과대적합의 위험이 커진다. 모형선택 기준을 신중히 써야 다항 항이 잡음을 적합하는 대신 실질적인 예측 가치를 더하게 된다.
 
-    Centering replaces $X$ with $X_c = X - \bar{X}$, so $X_c^2 = (X - \bar{X})^2$. Since $X_c$ has mean zero, the correlation between $X_c$ and $X_c^2$ is substantially reduced, leading to more stable and interpretable coefficient estimates. The fit of the model ($R^2$, predictions) is unchanged.
+## 연습문제
+
+**연습문제 1.**
+어떤 연구자가 $Y = \beta_0 + \beta_1 X + \beta_2 X^2 + \varepsilon$을 적합하여 $\hat{\beta}_2 = -0.03$, $p = 0.01$을 얻었다. $\hat{\beta}_2$의 부호와 유의성을 해석하라.
+
+??? success "연습문제 1 풀이"
+    유의한 음의 $\hat{\beta}_2$는 $X$와 $Y$ 사이의 **오목한(뒤집힌 U자)** 관계를 나타낸다. $X$가 커지면 ($\hat{\beta}_1 > 0$이라 할 때) 처음에는 $Y$가 늘지만 결국 이차항이 지배하여 $Y$가 줄어든다.
+
+    전환점은 $X^* = -\hat{\beta}_1 / (2\hat{\beta}_2)$에서 나타난다. 이 점을 넘어서면 $X$가 더 늘어날수록 $Y$가 줄어든다. $p = 0.01$은 이 곡률이 우연이 아니라 통계적으로 유의함을 확인해 준다.
 
 ---
 
-**Exercise 3.**
-What are the dangers of fitting a high-degree polynomial (e.g., degree 8) to a dataset with $n = 50$ observations? Relate your answer to the bias-variance tradeoff.
+**연습문제 2.**
+다항회귀를 적합하기 전에 설명변수 $X$를 중심화하는($X$를 $X - \bar{X}$로 바꾸는) 것이 왜 권장되는지 설명하라. 어떤 문제를 해결하는가?
 
-??? success "Solution to Exercise 3"
-    A degree-8 polynomial uses 9 parameters (including the intercept) to fit 50 observations, leaving only 41 degrees of freedom for error. The dangers are:
+??? success "연습문제 2 풀이"
+    중심화하지 않으면 $X$와 $X^2$은 (특히 $X > 0$일 때) 대체로 강하게 상관되며, 이 **다중공선성**이 $\hat{\beta}_1$과 $\hat{\beta}_2$의 표준오차를 부풀린다.
 
-    1. **Overfitting:** The model captures noise in the training data rather than the true underlying relationship, leading to poor predictions on new data.
-    2. **High variance:** Small changes in the data cause large swings in the fitted polynomial, especially near the boundaries (Runge's phenomenon).
-    3. **Poor extrapolation:** High-degree polynomials oscillate wildly outside the data range.
+    중심화는 $X$를 $X_c = X - \bar{X}$로 바꾸므로 $X_c^2 = (X - \bar{X})^2$이 된다. $X_c$의 평균이 0이므로 $X_c$와 $X_c^2$의 상관이 크게 줄어들고(대칭분포라면 정확히 0이 된다) 계수 추정이 더 안정적이고 해석 가능해진다. 모형의 적합도($R^2$, 예측값)는 바뀌지 않는다.
 
-    In the bias-variance tradeoff, the high-degree polynomial has low bias (it can fit almost any pattern) but very high variance. A simpler model (degree 2 or 3) typically has better predictive performance because the reduction in variance outweighs the increase in bias.
+---
+
+**연습문제 3.**
+관측값이 $n = 50$개인 자료에 차수가 높은 다항식(예: 8차)을 적합할 때의 위험은 무엇인가? 편향-분산 절충과 연결지어 답하라.
+
+??? success "연습문제 3 풀이"
+    8차 다항식은 (절편을 포함해) 모수 9개로 관측값 50개를 적합하므로 오차에 남는 자유도는 41개뿐이다. 위험은 다음과 같다.
+
+    1. **과대적합:** 모형이 참된 근본 관계가 아니라 훈련자료의 잡음을 포착하여 새 자료에 대한 예측이 나빠진다.
+    2. **큰 분산:** 자료가 조금만 달라져도 적합된 다항식이 크게 흔들리며, 특히 경계 근처에서 심하다(Runge 현상).
+    3. **나쁜 외삽:** 차수가 높은 다항식은 자료 범위 밖에서 격렬하게 진동한다.
+
+    편향-분산 절충의 관점에서 고차 다항식은 편향이 작지만(거의 어떤 패턴이든 적합할 수 있다) 분산이 매우 크다. 더 단순한 모형(2차나 3차)이 대개 예측 성능이 낫다. 분산의 감소가 편향의 증가를 능가하기 때문이다.

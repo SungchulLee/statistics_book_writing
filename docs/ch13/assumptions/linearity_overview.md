@@ -1,81 +1,81 @@
-# Linearity Assumption
+# 선형성 가정
 
+## 정의
 
-## Definition
+선형성 가정은 종속변수와 각 독립변수 사이에 직선 관계가 있다고 상정한다. 곧 종속변수의 변화가 독립변수의 변화에 비례한다는 뜻이다.
 
-The assumption of linearity posits that there is a straight-line relationship between the dependent variable and each independent variable. This means that the change in the dependent variable is proportional to the change in the independent variables.
+## 수학적 표현
 
-## Mathematical Representation
-
-In a simple linear regression model with one independent variable, the relationship can be expressed as:
+독립변수가 하나인 단순선형회귀 모형에서 관계는 다음과 같이 쓸 수 있다.
 
 $$
 Y = \beta_0 + \beta_1 X + \epsilon
 $$
 
-where:
+여기서
 
-- $Y$ is the dependent variable.
-- $\beta_0$ is the intercept.
-- $\beta_1$ is the slope of the regression line.
-- $X$ is the independent variable.
-- $\epsilon$ is the error term.
+- $Y$는 종속변수,
+- $\beta_0$은 절편,
+- $\beta_1$은 회귀직선의 기울기,
+- $X$는 독립변수,
+- $\epsilon$은 오차항이다.
 
-For multiple linear regression with $p$ predictors:
+설명변수가 $p$개인 다중선형회귀에서는
 
 $$
 Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \cdots + \beta_p X_p + \epsilon
 $$
 
-The linearity assumption requires that the expected value of $Y$ is a linear function of the $X$ variables:
+선형성 가정은 $Y$의 기댓값이 $X$ 변수들의 선형함수임을 요구한다.
 
 $$
 E[Y \mid X_1, \ldots, X_p] = \beta_0 + \beta_1 X_1 + \cdots + \beta_p X_p
 $$
 
-## Importance
+## 중요성
 
-Linearity is crucial because if the relationship between the variables is not linear, the model will either overestimate or underestimate the true relationship, leading to:
+선형성은 결정적으로 중요하다. 변수들 사이의 관계가 선형이 아니면 모형이 참 관계를 과대 또는 과소 추정하게 되어 다음을 낳는다.
 
-- **Biased predictions** — Systematic errors in the predicted values.
-- **Invalid statistical inferences** — Confidence intervals and hypothesis tests become unreliable.
-- **Poor model fit** — The model fails to capture the true pattern in the data.
+- **편향된 예측** — 예측값에 체계적인 오차가 생긴다.
+- **타당하지 않은 통계적 추론** — 신뢰구간과 가설검정을 믿을 수 없게 된다.
+- **나쁜 모형 적합** — 모형이 자료의 참된 패턴을 포착하지 못한다.
 
-## Diagnostics
+## 진단
 
-To check the linearity assumption:
+선형성 가정을 점검하려면
 
-- **Residual Plots:** Plot the residuals (the differences between observed and predicted values) against the independent variables. If the residuals are randomly scattered around the horizontal axis, the linearity assumption is likely satisfied. However, patterns like curves or clusters suggest non-linearity.
-- **Scatterplots:** Visual inspection of scatterplots between each independent variable and the dependent variable can also provide insights into whether the relationship is linear.
-- **Component-Plus-Residual Plots:** In multiple regression, partial residual plots allow assessment of linearity for each predictor individually.
+- **잔차그림:** 잔차(관측값과 예측값의 차이)를 독립변수에 대해 그린다. 잔차가 수평축 주위에 무작위로 흩어져 있으면 선형성 가정이 충족되었을 가능성이 높다. 반면 곡선이나 군집 같은 패턴은 비선형성을 시사한다.
+- **산점도:** 각 독립변수와 종속변수의 산점도를 눈으로 살펴도 관계가 선형인지에 대한 통찰을 얻을 수 있다.
+- **성분+잔차 그림:** 다중회귀에서 부분잔차 그림은 각 설명변수의 선형성을 개별적으로 평가하게 해 준다.
 
-## Remedies for Non-Linearity
+## 비선형성에 대한 대책
 
-- **Transformations:** Apply transformations to the dependent or independent variables, such as logarithmic, square root, or polynomial transformations, to achieve linearity.
-- **Polynomial Terms:** Add squared or cubic terms of the independent variable to capture curvature within the linear regression framework.
-- **Non-linear Models:** Consider using non-linear regression models if transformations do not resolve the issue.
+- **변수변환:** 로그, 제곱근, 다항 변환 등을 종속변수나 독립변수에 적용해 선형성을 얻는다.
+- **다항 항:** 독립변수의 제곱항이나 세제곱항을 넣어 선형회귀 틀 안에서 곡률을 포착한다.
+- **비선형 모형:** 변환으로 해결되지 않으면 비선형 회귀모형을 고려한다.
 
-For detailed diagnostic methods, see [Checking Linearity](checking_linearity.md).
-## Exercises
+자세한 진단 방법은 [선형성 확인](checking_linearity.md)을 보라.
 
-**Exercise 1.**
-A simple linear regression of test scores on study hours produces a residual plot with a clear parabolic pattern. Write the mathematical model that would capture this nonlinearity and explain how it remains within the linear regression framework.
+## 연습문제
 
-??? success "Solution to Exercise 1"
-    The appropriate model is:
+**연습문제 1.**
+시험 점수를 공부 시간에 회귀시킨 단순선형회귀에서 잔차그림에 뚜렷한 포물선 패턴이 나타났다. 이 비선형성을 포착할 수학적 모형을 쓰고, 그것이 어떻게 여전히 선형회귀의 틀 안에 있는지 설명하라.
+
+??? success "연습문제 1 풀이"
+    적절한 모형은
 
     $$
     Y = \beta_0 + \beta_1 X + \beta_2 X^2 + \varepsilon
     $$
 
-    Despite the $X^2$ term, this is still a **linear regression** model because "linear" refers to linearity in the **parameters** ($\beta_0, \beta_1, \beta_2$), not in the predictors. The model can be estimated by OLS after creating a new variable $X_2 = X^2$ and fitting $Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \varepsilon$.
+    $X^2$ 항이 있음에도 이것은 여전히 **선형회귀** 모형이다. "선형"이란 설명변수가 아니라 **모수**($\beta_0, \beta_1, \beta_2$)에 대한 선형성을 뜻하기 때문이다. 새 변수 $X_2 = X^2$을 만들어 $Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \varepsilon$을 적합하면 OLS로 추정할 수 있다.
 
 ---
 
-**Exercise 2.**
-Explain the difference between a violation of linearity and a violation of the correct functional form. Can a model satisfy the linearity assumption yet still be misspecified?
+**연습문제 2.**
+선형성의 위배와 올바른 함수 형태의 위배가 어떻게 다른지 설명하라. 선형성 가정을 만족하면서도 모형이 잘못 설정될 수 있는가?
 
-??? success "Solution to Exercise 2"
-    The **linearity assumption** states that $E[Y|X]$ is a linear function of the parameters. A **misspecified functional form** means the model omits relevant predictors or transformations, even if the included terms enter linearly.
+??? success "연습문제 2 풀이"
+    **선형성 가정**은 $E[Y|X]$가 모수의 선형함수라는 것이다. **함수 형태의 오설정**은 포함된 항들이 선형으로 들어가더라도 모형이 관련 설명변수나 변환을 빠뜨렸다는 뜻이다.
 
-    Yes, a model can satisfy linearity yet be misspecified. For example, $Y = \beta_0 + \beta_1 X + \varepsilon$ satisfies linearity in parameters, but if the true relationship is $Y = \beta_0 + \beta_1 X + \beta_2 Z + \varepsilon$ (omitting variable $Z$), the model is misspecified due to omitted variable bias, even though the linearity assumption is not violated.
+    그렇다. 모형이 선형성을 만족하면서도 잘못 설정될 수 있다. 예를 들어 $Y = \beta_0 + \beta_1 X + \varepsilon$은 모수에 대해 선형이지만, 참 관계가 $Y = \beta_0 + \beta_1 X + \beta_2 Z + \varepsilon$인데 $Z$를 빠뜨렸다면 선형성 가정은 위배되지 않았어도 누락변수 편향으로 모형이 잘못 설정된 것이다.

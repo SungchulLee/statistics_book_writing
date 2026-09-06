@@ -1,106 +1,106 @@
-# Mean Absolute, Mean Squared, and Root Mean Squared Error
+# 평균절대오차, 평균제곱오차, 제곱근평균제곱오차
 
-R-squared tells us the proportion of variance explained, but it does not tell us how large the prediction errors are in the original units of $Y$. Error metrics such as MAE, MSE, and RMSE quantify the magnitude of prediction errors directly, providing complementary information about model performance.
+$R^2$는 설명된 분산의 비율을 알려주지만 예측오차가 $Y$의 원래 단위로 얼마나 큰지는 알려주지 않는다. MAE, MSE, RMSE 같은 오차 척도는 예측오차의 크기를 직접 수량화하여 모형 성능에 대한 보완적인 정보를 제공한다.
 
 ---
 
-## 1. Residuals
+## 1. 잔차
 
-All error metrics are built from the **residuals**, defined as the difference between the observed and fitted values:
+모든 오차 척도는 **잔차**에서 출발한다. 잔차는 관측값과 적합값의 차이이다.
 
 $$
 e_i = y_i - \hat{y}_i, \quad i = 1, \ldots, n
 $$
 
-A good model produces residuals that are small in magnitude and show no systematic pattern. The metrics below summarize these residuals into a single number.
+좋은 모형은 크기가 작고 체계적 패턴이 없는 잔차를 만든다. 아래 척도들은 이 잔차들을 하나의 수치로 요약한다.
 
 ---
 
-## 2. Mean Absolute Error
+## 2. 평균절대오차
 
-The **mean absolute error (MAE)** is the average of the absolute residuals:
+**평균절대오차(MAE)**는 절대잔차의 평균이다.
 
 $$
 \text{MAE} = \frac{1}{n} \sum_{i=1}^{n} |y_i - \hat{y}_i|
 $$
 
-MAE is measured in the same units as $Y$, making it directly interpretable. If $\text{MAE} = 3.2$ and $Y$ is measured in dollars, then the average prediction is off by \$3.20.
+MAE는 $Y$와 같은 단위로 측정되므로 곧바로 해석할 수 있다. $\text{MAE} = 3.2$이고 $Y$가 달러 단위라면 예측이 평균적으로 \$3.20만큼 빗나간다는 뜻이다.
 
-### Properties
+### 성질
 
-- **Robust to outliers**: MAE treats all errors linearly, so a single large error does not disproportionately inflate the metric.
-- **Not differentiable at zero**: The absolute value function has a corner at zero, which complicates optimization. This is why least squares (which minimizes MSE) is more common in parameter estimation.
-- **Median connection**: The value that minimizes $\sum |y_i - c|$ over $c$ is the sample median, just as the value that minimizes $\sum (y_i - c)^2$ is the sample mean.
+- **이상점에 로버스트**: MAE는 모든 오차를 선형으로 다루므로 큰 오차 하나가 척도를 지나치게 부풀리지 않는다.
+- **0에서 미분 불가능**: 절댓값 함수는 0에서 꺾이므로 최적화가 까다롭다. 모수 추정에서 (MSE를 최소화하는) 최소제곱이 더 흔한 이유가 여기 있다.
+- **중앙값과의 관계**: $\sum |y_i - c|$를 $c$에 대해 최소화하는 값이 표본중앙값이다. $\sum (y_i - c)^2$을 최소화하는 값이 표본평균인 것과 짝을 이룬다.
 
 ---
 
-## 3. Mean Squared Error
+## 3. 평균제곱오차
 
-The **mean squared error (MSE)** is the average of the squared residuals:
+**평균제곱오차(MSE)**는 제곱잔차의 평균이다.
 
 $$
 \text{MSE} = \frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2
 $$
 
-MSE is the most common loss function in regression because it leads to closed-form solutions through the normal equations. However, its units are the square of the original units of $Y$, which makes direct interpretation difficult.
+MSE는 정규방정식을 통해 닫힌 형태의 해를 주므로 회귀에서 가장 흔히 쓰는 손실함수이다. 다만 단위가 $Y$의 원래 단위의 제곱이어서 직접 해석하기는 어렵다.
 
-### Properties
+### 성질
 
-- **Sensitive to outliers**: Squaring the residuals amplifies large errors. A single observation with $|e_i| = 10$ contributes 100 to the sum, while ten observations with $|e_i| = 1$ contribute only 10 total.
-- **Differentiable**: MSE is smooth everywhere, making it well-suited for gradient-based optimization.
-- **Decomposition**: For a random variable framework, MSE decomposes into bias squared plus variance: $\text{MSE}(\hat{\theta}) = \text{Bias}^2(\hat{\theta}) + \text{Var}(\hat{\theta})$.
+- **이상점에 민감**: 잔차를 제곱하면 큰 오차가 증폭된다. $|e_i| = 10$인 관측값 하나가 합에 100을 보태는 반면, $|e_i| = 1$인 관측값 열 개는 다 합쳐도 10만 보탠다.
+- **미분 가능**: MSE는 어디서나 매끄러워 기울기 기반 최적화에 잘 맞는다.
+- **분해**: 확률변수의 틀에서 MSE는 편향의 제곱과 분산의 합으로 분해된다: $\text{MSE}(\hat{\theta}) = \text{Bias}^2(\hat{\theta}) + \text{Var}(\hat{\theta})$.
 
-!!! note "MSE vs SSE"
-    MSE and SSE differ only by a scaling factor: $\text{MSE} = \text{SSE} / n$. In some texts, the denominator is $n - p - 1$ instead of $n$ to produce an unbiased estimate of $\sigma^2$. This unbiased version is often denoted $s^2$ or $\hat{\sigma}^2$.
+!!! note "MSE와 SSE"
+    MSE와 SSE는 척도 인자만 다르다: $\text{MSE} = \text{SSE} / n$. 어떤 문헌에서는 $\sigma^2$의 불편추정값을 얻기 위해 분모로 $n$ 대신 $n - p - 1$을 쓴다. 이 불편 버전은 흔히 $s^2$이나 $\hat{\sigma}^2$으로 표기한다.
 
 ---
 
-## 4. Root Mean Squared Error
+## 4. 제곱근평균제곱오차
 
-The **root mean squared error (RMSE)** is the square root of MSE:
+**제곱근평균제곱오차(RMSE)**는 MSE의 제곱근이다.
 
 $$
 \text{RMSE} = \sqrt{\text{MSE}} = \sqrt{\frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2}
 $$
 
-RMSE restores the original units of $Y$, combining the mathematical convenience of MSE with the interpretability of MAE.
+RMSE는 $Y$의 원래 단위를 되살려, MSE의 수학적 편리함과 MAE의 해석 가능성을 결합한다.
 
-### Properties
+### 성질
 
-- **Same units as $Y$**: Like MAE, RMSE is directly interpretable in the scale of the response.
-- **Always at least as large as MAE**: By Jensen's inequality (since square root is concave), $\text{RMSE} \geq \text{MAE}$, with equality only when all residuals have the same absolute value.
-- **More sensitive to outliers than MAE**: RMSE inherits the outlier sensitivity of MSE because large squared errors contribute more before the square root is taken.
+- **$Y$와 같은 단위**: MAE와 마찬가지로 반응변수의 척도에서 곧바로 해석할 수 있다.
+- **언제나 MAE 이상**: (제곱근이 오목하므로) Jensen 부등식에 의해 $\text{RMSE} \geq \text{MAE}$이며, 모든 잔차의 절댓값이 같을 때만 등호가 성립한다.
+- **MAE보다 이상점에 민감**: 제곱근을 취하기 전에 큰 제곱오차가 더 큰 기여를 하므로 RMSE는 MSE의 이상점 민감성을 물려받는다.
 
 ---
 
-## 5. Comparing MAE and RMSE
+## 5. MAE와 RMSE의 비교
 
-The relationship between MAE and RMSE reveals information about the distribution of errors:
+MAE와 RMSE의 관계는 오차 분포에 대한 정보를 드러낸다.
 
 $$
 \text{MAE} \leq \text{RMSE} \leq \sqrt{n} \cdot \text{MAE}
 $$
 
-The lower bound is achieved when all absolute residuals are equal. The upper bound is achieved when a single residual accounts for all the error. When RMSE is much larger than MAE, it indicates that the error distribution has large outliers or heavy tails.
+아래쪽 경계는 모든 절대잔차가 같을 때, 위쪽 경계는 잔차 하나가 오차 전부를 차지할 때 달성된다. RMSE가 MAE보다 훨씬 크면 오차 분포에 큰 이상점이 있거나 꼬리가 두껍다는 뜻이다.
 
-| Property | MAE | RMSE |
+| 성질 | MAE | RMSE |
 |---|---|---|
-| Units | Same as $Y$ | Same as $Y$ |
-| Outlier sensitivity | Low | High |
-| Differentiability | No (at zero) | Yes |
-| Optimization | Leads to median regression | Leads to OLS regression |
-| Interpretation | Average absolute error | Standard deviation of errors |
+| 단위 | $Y$와 같음 | $Y$와 같음 |
+| 이상점 민감도 | 낮음 | 높음 |
+| 미분 가능성 | 아니오(0에서) | 예 |
+| 최적화 | 중앙값 회귀로 이어짐 | OLS 회귀로 이어짐 |
+| 해석 | 평균 절대오차 | 오차의 표준편차 |
 
-!!! tip "When to prefer MAE over RMSE"
-    Use MAE when outliers are expected and should not dominate the evaluation (e.g., real estate price prediction where a few luxury homes create extreme errors). Use RMSE when large errors are particularly undesirable and the model should be penalized more heavily for them (e.g., predicting structural loads where underestimation is dangerous).
+!!! tip "MAE를 RMSE보다 선호할 때"
+    이상점이 예상되고 그것이 평가를 지배해서는 안 될 때 MAE를 쓴다(예: 고급 주택 몇 채가 극단적 오차를 만드는 부동산 가격 예측). 큰 오차가 특히 바람직하지 않아 모형에 더 무거운 벌점을 주어야 할 때는 RMSE를 쓴다(예: 과소추정이 위험한 구조 하중 예측).
 
 ---
 
-## 6. Numerical Example
+## 6. 수치 예제
 
-Consider a model with $n = 5$ observations:
+관측값 $n = 5$개인 모형을 생각하자.
 
-| $i$ | $y_i$ | $\hat{y}_i$ | $e_i$ | $|e_i|$ | $e_i^2$ |
+| $i$ | $y_i$ | $\hat{y}_i$ | $e_i$ | $\lvert e_i \rvert$ | $e_i^2$ |
 |-----|--------|--------------|--------|----------|---------|
 | 1   | 10     | 11           | $-1$   | 1        | 1       |
 | 2   | 20     | 19           | 1      | 1        | 1       |
@@ -108,7 +108,7 @@ Consider a model with $n = 5$ observations:
 | 4   | 40     | 41           | $-1$   | 1        | 1       |
 | 5   | 50     | 44           | 6      | 6        | 36      |
 
-Computing each metric:
+각 척도를 계산하면
 
 $$
 \text{MAE} = \frac{1 + 1 + 2 + 1 + 6}{5} = \frac{11}{5} = 2.2
@@ -122,15 +122,15 @@ $$
 \text{RMSE} = \sqrt{8.6} \approx 2.93
 $$
 
-Notice that RMSE ($2.93$) is substantially larger than MAE ($2.2$). This gap is driven by the single large error $e_5 = 6$, which contributes $36/43 \approx 84\%$ of MSE but only $6/11 \approx 55\%$ of the total absolute error. This example illustrates how RMSE disproportionately reflects the influence of outlying residuals.
+RMSE($2.93$)가 MAE($2.2$)보다 상당히 크다는 점에 주목하라. 이 격차는 큰 오차 $e_5 = 6$ 하나가 만든 것이다. 이 오차는 MSE의 $36/43 \approx 84\%$를 차지하지만 전체 절대오차에서는 $6/11 \approx 55\%$만 차지한다. RMSE가 이상적인 잔차의 영향을 불균형하게 반영함을 보여주는 예이다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Given actual values $y = (3, 5, 2, 8)$ and predictions $\hat{y} = (2.5, 5.5, 1.5, 7)$, compute the MAE, MSE, and RMSE.
+**연습문제 1.**
+실제값 $y = (3, 5, 2, 8)$과 예측값 $\hat{y} = (2.5, 5.5, 1.5, 7)$에 대해 MAE, MSE, RMSE를 계산하라.
 
-??? success "Solution to Exercise 1"
-    Errors: $e = (0.5, -0.5, 0.5, 1.0)$.
+??? success "연습문제 1 풀이"
+    오차: $e = (0.5, -0.5, 0.5, 1.0)$.
 
     $$
     \text{MAE} = \frac{1}{4}(|0.5| + |-0.5| + |0.5| + |1.0|) = \frac{2.5}{4} = 0.625
@@ -146,38 +146,38 @@ Given actual values $y = (3, 5, 2, 8)$ and predictions $\hat{y} = (2.5, 5.5, 1.5
 
 ---
 
-**Exercise 2.**
-Explain why MSE penalizes large errors more heavily than MAE. Give a practical scenario where MAE is preferred.
+**연습문제 2.**
+MSE가 MAE보다 큰 오차에 더 무거운 벌점을 주는 이유를 설명하라. MAE가 선호되는 실제 상황을 하나 들어라.
 
-??? success "Solution to Exercise 2"
-    MSE squares each error, so an error of 10 contributes $10^2 = 100$ to the sum, while an error of 1 contributes only $1$. This means a single large error dominates the MSE. MAE uses absolute values, so the same errors contribute 10 and 1 respectively -- a 10:1 ratio instead of 100:1.
+??? success "연습문제 2 풀이"
+    MSE는 각 오차를 제곱하므로 오차 10은 합에 $10^2 = 100$을 보태고 오차 1은 $1$만 보탠다. 곧 큰 오차 하나가 MSE를 지배한다. MAE는 절댓값을 쓰므로 같은 오차들이 각각 10과 1을 보태어 100:1이 아닌 10:1의 비가 된다.
 
-    **MAE is preferred when:** outliers are expected and should not disproportionately influence model evaluation. For example, in real estate price prediction, a few luxury homes with large prediction errors should not dominate the assessment of model quality. MAE evaluates the "typical" error magnitude, while MSE evaluates the "worst-case-penalized" error.
+    **MAE가 선호되는 경우:** 이상점이 예상되며 그것이 모형 평가에 불균형하게 영향을 주어서는 안 될 때이다. 예를 들어 부동산 가격 예측에서 예측오차가 큰 고급 주택 몇 채가 모형 품질 평가를 지배해서는 안 된다. MAE는 "전형적인" 오차 크기를 평가하고, MSE는 "최악의 경우에 벌점을 준" 오차를 평가한다.
 
 ---
 
-**Exercise 3.**
-Show that the value $c$ that minimizes $\sum(y_i - c)^2$ is the mean $\bar{y}$, while the value that minimizes $\sum|y_i - c|$ is the median.
+**연습문제 3.**
+$\sum(y_i - c)^2$을 최소화하는 $c$가 평균 $\bar{y}$이고, $\sum|y_i - c|$를 최소화하는 값이 중앙값임을 보여라.
 
-??? success "Solution to Exercise 3"
-    **MSE minimizer (mean):** Differentiate $f(c) = \sum(y_i - c)^2$ with respect to $c$:
+??? success "연습문제 3 풀이"
+    **MSE 최소화(평균):** $f(c) = \sum(y_i - c)^2$을 $c$에 대해 미분하면
 
     $$
     f'(c) = -2\sum(y_i - c) = -2(n\bar{y} - nc) = 0 \implies c = \bar{y}
     $$
 
-    **MAE minimizer (median):** The function $g(c) = \sum|y_i - c|$ is piecewise linear and convex. Its derivative is $g'(c) = -\#\{y_i > c\} + \#\{y_i < c\}$. Setting $g'(c) = 0$ requires equal numbers of observations above and below $c$, which defines the median.
+    **MAE 최소화(중앙값):** 함수 $g(c) = \sum|y_i - c|$는 조각별 선형이고 볼록이다. 그 도함수는 $g'(c) = -\#\{y_i > c\} + \#\{y_i < c\}$이다. $g'(c) = 0$이 되려면 $c$의 위와 아래에 있는 관측값의 개수가 같아야 하며, 이것이 곧 중앙값의 정의이다.
 
-    This connection explains why models optimized for MSE (e.g., OLS) predict the conditional mean, while models optimized for MAE (e.g., quantile regression at $\tau = 0.5$) predict the conditional median. $\square$
+    이 관계는 MSE로 최적화한 모형(예: OLS)이 조건부 평균을 예측하고, MAE로 최적화한 모형(예: $\tau = 0.5$의 분위수 회귀)이 조건부 중앙값을 예측하는 이유를 설명해 준다. $\square$
 
 ---
 
-**Exercise 4.**
-Why is RMSE preferred over MSE for reporting model performance? What is its unit?
+**연습문제 4.**
+모형 성능을 보고할 때 MSE보다 RMSE가 선호되는 이유는 무엇인가? RMSE의 단위는 무엇인가?
 
-??? success "Solution to Exercise 4"
-    RMSE $= \sqrt{\text{MSE}}$ is preferred because it has the **same units** as the response variable $y$, making it directly interpretable. If $y$ is measured in dollars, RMSE is in dollars and represents the "typical" prediction error magnitude. MSE is in dollars-squared, which is unintuitive.
+??? success "연습문제 4 풀이"
+    RMSE $= \sqrt{\text{MSE}}$가 선호되는 이유는 반응변수 $y$와 **같은 단위**를 가져 곧바로 해석할 수 있기 때문이다. $y$가 달러 단위라면 RMSE도 달러 단위이며 "전형적인" 예측오차의 크기를 나타낸다. MSE는 달러의 제곱 단위여서 직관적이지 않다.
 
-    RMSE also has a statistical interpretation: for a model with normally distributed errors, approximately 68% of predictions fall within $\pm$ RMSE of the actual value, and about 95% fall within $\pm 2 \cdot$ RMSE.
+    RMSE에는 통계적 해석도 있다. 오차가 정규분포를 따르는 모형에서 예측의 약 68%가 실제값의 $\pm$ RMSE 안에 들어오고 약 95%가 $\pm 2 \cdot$ RMSE 안에 들어온다.
 
-    However, RMSE shares MSE's sensitivity to outliers (since it is a monotonic transformation of MSE). For robustness, report both RMSE and MAE.
+    다만 RMSE는 MSE의 단조변환이므로 MSE의 이상점 민감성을 그대로 갖는다. 로버스트한 평가를 위해서는 RMSE와 MAE를 함께 보고하는 것이 좋다.

@@ -1,35 +1,34 @@
-# Multiple Linear Regression
+# 다중선형회귀
 
+## 모형
 
-## The Model
-
-Multiple linear regression extends simple linear regression to include multiple predictor variables:
+다중선형회귀는 단순선형회귀를 설명변수가 여럿인 경우로 확장한 것이다.
 
 $$
 y_i = \beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + \cdots + \beta_p x_{ip} + \varepsilon_i
 $$
 
-In matrix notation, this can be written compactly as:
+행렬 표기로는 간결하게 다음과 같이 쓸 수 있다.
 
 $$
 \mathbf{y} = X\boldsymbol{\beta} + \boldsymbol{\varepsilon}
 $$
 
-where $X$ is the $n \times (p+1)$ design matrix (with a column of ones for the intercept), $\boldsymbol{\beta}$ is the $(p+1) \times 1$ coefficient vector, and $\boldsymbol{\varepsilon}$ is the $n \times 1$ error vector.
+여기서 $X$는 $n \times (p+1)$ 설계행렬(절편을 위한 1의 열을 포함한다), $\boldsymbol{\beta}$는 $(p+1) \times 1$ 계수벡터, $\boldsymbol{\varepsilon}$는 $n \times 1$ 오차벡터이다.
 
-## Interaction Terms
+## 교호작용 항
 
-In many applications, the effect of one predictor on the response depends on the level of another predictor. An **interaction term** captures this combined effect. For example, with predictors TV and Radio:
+많은 응용에서 한 설명변수가 반응변수에 미치는 효과는 다른 설명변수의 수준에 따라 달라진다. **교호작용 항**은 이 결합 효과를 포착한다. 예를 들어 설명변수가 TV와 Radio일 때
 
 $$
 \hat{y} = \beta_0 + \beta_1 \cdot \text{TV} + \beta_2 \cdot \text{Radio} + \beta_3 \cdot (\text{TV} \times \text{Radio})
 $$
 
-A positive and significant interaction coefficient $\beta_3$ indicates a **synergistic effect**: the combined impact of both predictors is greater than the sum of their individual effects.
+교호작용 계수 $\beta_3$이 양수이고 유의하면 **상승효과**가 있다는 뜻이다. 두 설명변수를 함께 썼을 때의 영향이 각각의 효과를 더한 것보다 크다.
 
-## Implementation with scikit-learn
+## scikit-learn으로 구현하기
 
-### Random Train-Test Split
+### 무작위 훈련-검정 분할
 
 ```python
 import pandas as pd
@@ -88,7 +87,7 @@ plt.tight_layout()
 plt.show()
 ```
 
-### Deterministic Train-Test Split
+### 결정론적 훈련-검정 분할
 
 ```python
 import pandas as pd
@@ -141,9 +140,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-## Implementation with statsmodels
+## statsmodels로 구현하기
 
-The `statsmodels` library provides extensive statistical output including p-values, confidence intervals, and diagnostic tests. See [Package Usage Comparison](../package_usage/comparison.md) for a detailed comparison with scikit-learn.
+`statsmodels` 라이브러리는 p값, 신뢰구간, 진단검정을 포함한 풍부한 통계 출력을 제공한다. scikit-learn과의 자세한 비교는 [패키지 비교](../package_usage/comparison.md)를 보라.
 
 ### Sales ~ TV + Radio + Newspaper
 
@@ -206,86 +205,87 @@ print("Model with TV, Radio, and TV:Radio as predictors:")
 print(model.summary(), end="\n\n")
 ```
 
-## Interpreting statsmodels Output
+## statsmodels 출력 읽기
 
-The `model.summary()` output contains several important sections:
+`model.summary()` 출력은 몇 개의 중요한 부분으로 이루어진다.
 
-**Model Summary Section**
+**모형 요약 부분**
 
-- **R-squared**: Proportion of variance in the dependent variable explained by the model.
-- **Adj. R-squared**: R-squared adjusted for the number of predictors; penalizes unnecessary complexity.
-- **F-statistic and Prob (F-statistic)**: Tests whether all coefficients are jointly zero. A high F-statistic with low p-value indicates the model is significant overall.
-- **AIC and BIC**: Information criteria for model comparison; lower values indicate better models.
+- **R-squared**: 모형이 설명하는 종속변수 분산의 비율.
+- **Adj. R-squared**: 설명변수 개수를 반영해 조정한 $R^2$. 불필요한 복잡도에 벌점을 준다.
+- **F-statistic과 Prob (F-statistic)**: 모든 계수가 동시에 0인지 검정한다. F 통계량이 크고 p값이 작으면 모형이 전체적으로 유의하다.
+- **AIC와 BIC**: 모형 비교를 위한 정보기준. 값이 작을수록 좋은 모형이다.
 
-**Coefficients Table**
+**계수 표**
 
-- **coef**: Estimated coefficient values.
-- **std err**: Standard error of the estimate.
-- **t**: t-statistic for testing whether the coefficient differs from zero.
-- **P>|t|**: p-value for the coefficient; values below 0.05 indicate statistical significance.
-- **[0.025, 0.975]**: 95% confidence interval for the coefficient.
+- **coef**: 추정된 계수 값.
+- **std err**: 추정값의 표준오차.
+- **t**: 계수가 0과 다른지 검정하는 t 통계량.
+- **P>|t|**: 계수의 p값. 0.05 미만이면 통계적으로 유의하다.
+- **[0.025, 0.975]**: 계수의 95% 신뢰구간.
 
-**Diagnostic Metrics**
+**진단 지표**
 
-- **Omnibus and Jarque-Bera**: Tests for normality of residuals.
-- **Durbin-Watson**: Tests for autocorrelation in residuals (values near 2 suggest no autocorrelation).
-- **Skew and Kurtosis**: Describe the shape of the residual distribution.
-- **Condition Number**: Measures multicollinearity; values above 30 suggest potential issues.
+- **Omnibus와 Jarque-Bera**: 잔차의 정규성 검정.
+- **Durbin-Watson**: 잔차의 자기상관 검정(2에 가까우면 자기상관이 없음을 시사한다).
+- **Skew와 Kurtosis**: 잔차 분포의 모양을 기술한다.
+- **Condition Number**: 다중공선성의 측도. 30을 넘으면 문제가 있을 수 있다.
 
-## Model Comparison Example
+## 모형 비교 예제
 
-Comparing three models on the Advertising dataset:
+Advertising 자료에서 세 모형을 비교한다(앞 절과 같이 처음 140개 관측값을 훈련자료로 쓴다).
 
-| Metric | TV, Radio, Newspaper | TV, Radio | TV, Radio, TV:Radio |
+| 지표 | TV, Radio, Newspaper | TV, Radio | TV, Radio, TV:Radio |
 |---|---|---|---|
 | **R-squared** | 0.894 | 0.894 | **0.965** |
 | **Adj. R-squared** | 0.891 | 0.892 | **0.964** |
 | **F-statistic** | 381.2 | 575.1 | **1256** |
 | **AIC** | 555.8 | 554.0 | **399.6** |
 | **BIC** | 567.5 | 562.8 | **411.4** |
-| **Significant Predictors** | TV, Radio | TV, Radio | TV, Radio, TV:Radio |
+| **유의한 설명변수** | TV, Radio | TV, Radio | TV, Radio, TV:Radio |
 | **Condition Number** | 457 | 424 | **1.84e+04** |
 
-Key findings from this comparison:
+이 비교에서 얻는 핵심 발견:
 
-- Removing Newspaper does not reduce $R^2$, and AIC/BIC improve slightly, confirming Newspaper is not a useful predictor.
-- Adding the interaction term TV:Radio significantly improves the model ($R^2$ from 0.894 to 0.965), with substantially lower AIC and BIC.
-- The interaction model has a very high condition number (1.84e+04), indicating strong multicollinearity that may affect coefficient stability. Variable centering or regularization can help address this.
-- All models show residual normality violations, but the interaction model shows the most severe deviations.
+- Newspaper를 빼도 $R^2$가 줄지 않고 AIC/BIC는 오히려 조금 좋아진다. Newspaper가 쓸모 있는 설명변수가 아님을 확인해 준다(그 계수의 $p$값은 0.669이다).
+- 교호작용 항 TV:Radio를 넣으면 모형이 크게 좋아진다($R^2$가 0.894에서 0.965로). AIC와 BIC도 대폭 낮아진다.
+- 교호작용 모형은 조건수가 $1.84 \times 10^4$로 매우 커서 강한 다중공선성을 시사하며, 이는 계수의 안정성에 영향을 줄 수 있다. 변수 중심화나 정칙화가 도움이 된다.
+- 세 모형 모두 잔차의 정규성을 위배하지만, 교호작용 모형의 이탈이 가장 심하다(Jarque-Bera 통계량이 각각 131.4, 122.2, 767.1이고 첨도는 6.74, 6.56, 13.53이다).
 
-The **TV, Radio, and Interaction Model** is preferred for predictive power, while the **TV and Radio Model** may be preferable when interpretability and coefficient stability are priorities.
-## Exercises
+예측력 면에서는 **TV, Radio, 교호작용 모형**이 낫고, 해석 가능성과 계수의 안정성이 중요하다면 **TV와 Radio 모형**이 나을 수 있다.
 
-**Exercise 1.**
-In a multiple regression $Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \varepsilon$, interpret $\beta_1$ precisely. How does this interpretation differ from the slope in a simple regression of $Y$ on $X_1$ alone?
+## 연습문제
 
-??? success "Solution to Exercise 1"
-    In multiple regression, $\beta_1$ is the expected change in $Y$ for a one-unit increase in $X_1$, **holding $X_2$ constant** (ceteris paribus). This is a partial or conditional effect.
+**연습문제 1.**
+다중회귀 $Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \varepsilon$에서 $\beta_1$을 정확히 해석하라. 이 해석은 $Y$를 $X_1$에만 회귀시킨 단순회귀의 기울기와 어떻게 다른가?
 
-    In simple regression of $Y$ on $X_1$, the slope captures the **marginal** (unconditional) effect, which includes both the direct effect of $X_1$ and any indirect effect through $X_2$ (if $X_1$ and $X_2$ are correlated). If $X_1$ and $X_2$ are correlated, the simple regression slope is biased for the partial effect due to omitted variable bias.
+??? success "연습문제 1 풀이"
+    다중회귀에서 $\beta_1$은 **$X_2$를 고정한 채로**(다른 조건이 같을 때) $X_1$이 한 단위 늘어날 때 기대되는 $Y$의 변화이다. 이는 부분효과, 곧 조건부 효과이다.
 
----
-
-**Exercise 2.**
-A multiple regression with $p = 5$ predictors has $R^2 = 0.85$ and adjusted $R^2 = 0.82$. Adding a sixth predictor increases $R^2$ to $0.853$ but adjusted $R^2$ drops to $0.818$. Should the sixth predictor be included? Explain.
-
-??? success "Solution to Exercise 2"
-    No. The increase in $R^2$ from 0.850 to 0.853 is trivial (0.3%), and the **decrease** in adjusted $R^2$ from 0.820 to 0.818 indicates that the new predictor does not improve the model enough to justify the added complexity.
-
-    Adjusted $R^2$ penalizes for additional predictors: $\bar{R}^2 = 1 - (1-R^2)(n-1)/(n-p-1)$. A decrease means the penalty for the extra parameter outweighs the gain in explained variance. The new predictor is not contributing meaningful predictive power.
+    $Y$를 $X_1$에 회귀시킨 단순회귀에서 기울기는 **주변**(무조건) 효과를 포착하며, 여기에는 $X_1$의 직접 효과와 ($X_1$과 $X_2$가 상관되어 있다면) $X_2$를 거치는 간접 효과가 모두 들어 있다. $X_1$과 $X_2$가 상관되어 있으면 단순회귀의 기울기는 누락변수 편향 때문에 부분효과에 대해 편향된 추정이 된다.
 
 ---
 
-**Exercise 3.**
-Explain the concept of omitted variable bias. If the true model is $Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \varepsilon$ but we fit $Y = \gamma_0 + \gamma_1 X_1 + u$, derive the relationship between $\gamma_1$ and $\beta_1$.
+**연습문제 2.**
+설명변수가 $p = 5$개인 다중회귀에서 $R^2 = 0.85$, 수정 $R^2 = 0.82$이다. 여섯 번째 설명변수를 넣으면 $R^2$가 $0.853$으로 오르지만 수정 $R^2$는 $0.818$로 떨어진다. 여섯 번째 설명변수를 포함해야 하는가? 설명하라.
 
-??? success "Solution to Exercise 3"
-    Let $\delta$ be the coefficient from regressing $X_2$ on $X_1$: $X_2 = \delta_0 + \delta_1 X_1 + v$. Then the omitted variable bias formula gives:
+??? success "연습문제 2 풀이"
+    포함하지 않아야 한다. $R^2$가 0.850에서 0.853으로 오른 것은 미미하고(0.3%p), 수정 $R^2$가 0.820에서 0.818로 **떨어졌다**는 것은 새 설명변수가 늘어난 복잡도를 정당화할 만큼 모형을 개선하지 못했다는 뜻이다.
+
+    수정 $R^2$는 설명변수가 추가되는 데 벌점을 준다: $\bar{R}^2 = 1 - (1-R^2)(n-1)/(n-p-1)$. 값이 떨어졌다는 것은 모수 하나를 더 쓴 벌점이 설명분산의 증가분보다 크다는 뜻이다. 새 설명변수는 의미 있는 예측력을 보태지 못하고 있다.
+
+---
+
+**연습문제 3.**
+누락변수 편향의 개념을 설명하라. 참 모형이 $Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \varepsilon$인데 $Y = \gamma_0 + \gamma_1 X_1 + u$를 적합했다면, $\gamma_1$과 $\beta_1$의 관계를 유도하라.
+
+??? success "연습문제 3 풀이"
+    $X_2$를 $X_1$에 회귀시킨 계수를 $\delta_1$이라 하자: $X_2 = \delta_0 + \delta_1 X_1 + v$. 그러면 누락변수 편향 공식에서
 
     $$
     \text{plim}(\hat{\gamma}_1) = \beta_1 + \beta_2 \delta_1
     $$
 
-    The bias is $\beta_2 \delta_1$, which is nonzero when both: (1) $X_2$ affects $Y$ ($\beta_2 \neq 0$), and (2) $X_2$ is correlated with $X_1$ ($\delta_1 \neq 0$).
+    편향은 $\beta_2 \delta_1$이며, 다음 두 조건이 모두 성립할 때에만 0이 아니다. (1) $X_2$가 $Y$에 영향을 준다($\beta_2 \neq 0$). (2) $X_2$가 $X_1$과 상관되어 있다($\delta_1 \neq 0$).
 
-    The sign of the bias depends on the product $\beta_2 \delta_1$. For example, if education ($X_2$) positively affects income ($\beta_2 > 0$) and is positively correlated with experience ($\delta_1 > 0$), then omitting education causes $\hat{\gamma}_1$ to overestimate the true effect of experience.
+    편향의 부호는 곱 $\beta_2 \delta_1$의 부호로 정해진다. 예를 들어 교육($X_2$)이 소득에 양의 영향을 주고($\beta_2 > 0$) 경력과 양의 상관을 가진다면($\delta_1 > 0$), 교육을 빠뜨렸을 때 $\hat{\gamma}_1$은 경력의 참 효과를 과대추정한다.

@@ -1,34 +1,34 @@
-# Testing Coefficients Examples
+# 계수 검정 예제
 
-## Overview
+## 개요
 
-This page demonstrates hypothesis testing for regression coefficients using statsmodels. Through three progressively complex examples, we show how to extract $t$-statistics, $p$-values, and confidence intervals from OLS output, and how to interpret statistical significance in the context of single-predictor and multiple-predictor regression models.
+이 페이지는 statsmodels로 회귀계수의 가설검정을 수행하는 방법을 보인다. 점점 복잡해지는 세 예제를 통해 OLS 출력에서 $t$ 통계량, $p$값, 신뢰구간을 뽑아내는 법과, 설명변수가 하나일 때와 여럿일 때의 통계적 유의성을 해석하는 법을 다룬다.
 
-## Mathematical Background
+## 수학적 배경
 
-For the linear model $\mathbf{y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon}$, the hypothesis test for the $j$-th coefficient is
-
-$$
-H_0\colon \beta_j = 0 \quad \text{vs} \quad H_1\colon \beta_j \neq 0.
-$$
-
-The test statistic follows a $t$-distribution under $H_0$:
+선형모형 $\mathbf{y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon}$에서 $j$번째 계수에 대한 가설검정은
 
 $$
-t_j = \frac{\hat{\beta}_j}{\mathrm{SE}(\hat{\beta}_j)} \sim t_{n-k} \quad \text{under } H_0.
+H_0\colon \beta_j = 0 \quad \text{대} \quad H_1\colon \beta_j \neq 0.
 $$
 
-The two-sided $p$-value is
+$H_0$ 아래에서 검정통계량은 $t$ 분포를 따른다.
+
+$$
+t_j = \frac{\hat{\beta}_j}{\mathrm{SE}(\hat{\beta}_j)} \sim t_{n-k} \quad (H_0 \text{ 아래에서}).
+$$
+
+양측 $p$값은
 
 $$
 p = 2\,P(T_{n-k} > |t_j|).
 $$
 
-We reject $H_0$ at significance level $\alpha$ if $p < \alpha$, equivalently if $|t_j| > t^*_{n-k,\,\alpha/2}$, equivalently if the $(1-\alpha)$-level confidence interval for $\beta_j$ does not contain zero.
+$p < \alpha$이면, 동등하게 $|t_j| > t^*_{n-k,\,\alpha/2}$이면, 동등하게 $\beta_j$의 $(1-\alpha)$ 수준 신뢰구간이 0을 포함하지 않으면 유의수준 $\alpha$에서 $H_0$을 기각한다.
 
-## Code
+## 코드
 
-### Example 1: Two Predictors
+### 예제 1: 설명변수 두 개
 
 ```python
 import numpy as np
@@ -43,7 +43,7 @@ results = sm.OLS(y, X_const).fit()
 print(results.summary())
 ```
 
-### Example 2: Extracting p-values and Confidence Intervals
+### 예제 2: p값과 신뢰구간 뽑아내기
 
 ```python
 np.random.seed(42)
@@ -60,7 +60,7 @@ print("P-values:", p_values)
 print("95% CI:\n", confidence_intervals)
 ```
 
-### Example 3: Interpreting Multiple Predictors
+### 예제 3: 여러 설명변수의 해석
 
 ```python
 np.random.seed(42)
@@ -72,27 +72,39 @@ X = np.column_stack((study_hours, sleep_hours))
 X_const = sm.add_constant(X)
 results = sm.OLS(exam_scores, X_const).fit()
 
+conf = results.conf_int()   # ndarray when the input is a NumPy array
 for i, name in enumerate(["Intercept", "Study Hours", "Sleep Hours"]):
     pval = results.pvalues[i]
-    ci = results.conf_int().iloc[i]
+    ci = conf[i]
     status = "Significant" if pval < 0.05 else "Not Significant"
     print(f"{name}: coef={results.params[i]:.4f}, "
-          f"p={pval:.4f} ({status}), "
+          f"p={pval:.4g} ({status}), "
           f"95% CI=({ci[0]:.4f}, {ci[1]:.4f})")
 ```
 
-## Interpretation
+출력:
 
-- In Example 1, both predictors ($x_1$ and $x_2$) have true nonzero coefficients (3 and 5), so we expect both $p$-values to be small and both to be declared significant.
-- In Example 2, the single predictor has a true coefficient of 2.5 with noise standard deviation 1. The $p$-value for the slope should be very small, confirming the linear relationship.
-- In Example 3, "Study Hours" has a positive effect (coefficient $\approx 2.5$) and "Sleep Hours" has a negative effect (coefficient $\approx -1.5$) on exam scores. Both should be statistically significant. The confidence intervals provide a range of plausible effect sizes.
-- A predictor being "not significant" ($p > 0.05$) does not prove the effect is zero; it means we lack sufficient evidence to reject $H_0$ at the chosen level. The confidence interval conveys the same information more informatively.
+```text
+Intercept: coef=4.8212, p=1.754e-15 (Significant), 95% CI=(3.8122, 5.8303)
+Study Hours: coef=2.4317, p=2.171e-58 (Significant), 95% CI=(2.2992, 2.5641)
+Sleep Hours: coef=-1.3202, p=3.633e-28 (Significant), 95% CI=(-1.4883, -1.1521)
+```
 
-## Exercises
+!!! warning "`conf_int()`의 반환 형식은 입력에 따라 달라진다"
+    `sm.OLS`에 NumPy 배열을 넘기면 `conf_int()`가 `ndarray`를 돌려주므로 `conf[i]`로 색인해야 한다. pandas `Series`/`DataFrame`을 넘겼을 때에만 `DataFrame`이 반환되어 `.iloc[i]`를 쓸 수 있다. 배열 입력에 `.iloc`를 쓰면 `AttributeError`가 난다.
 
-**Exercise 1.** In Example 1, compute the $t$-statistic for $\hat{\beta}_1$ manually from the coefficient and its standard error. Verify it matches the value from `results.tvalues[1]`.
+## 해석
 
-??? success "Solution to Exercise 1"
+- 예제 1에서는 두 설명변수($x_1$과 $x_2$)의 참 계수가 모두 0이 아니므로(3과 5) 두 $p$값이 모두 작고 둘 다 유의하다고 판정될 것으로 기대한다.
+- 예제 2에서는 설명변수 하나의 참 계수가 2.5이고 잡음 표준편차가 1이다. 기울기의 $p$값이 매우 작아 선형관계를 확인해 줄 것이다.
+- 예제 3에서는 "Study Hours"가 시험 점수에 양의 효과(계수 $\approx 2.5$)를, "Sleep Hours"가 음의 효과(계수 $\approx -1.5$)를 갖는다. 둘 다 통계적으로 유의해야 한다. 신뢰구간이 효과 크기의 그럴듯한 범위를 준다. 추정값이 참값과 조금 다른 것은($2.43$ 대 $2.5$, $-1.32$ 대 $-1.5$) 표집변동 때문이며, 참값이 신뢰구간 안에 들어 있는지 확인해 보면 좋다.
+- 어떤 설명변수가 "유의하지 않다"($p > 0.05$)는 것이 효과가 0임을 증명하지는 않는다. 선택한 유의수준에서 $H_0$을 기각할 증거가 부족하다는 뜻일 뿐이다. 신뢰구간이 같은 정보를 더 유익하게 전달한다.
+
+## 연습문제
+
+**연습문제 1.** 예제 1에서 계수와 그 표준오차로부터 $\hat{\beta}_1$의 $t$ 통계량을 직접 계산하라. `results.tvalues[1]`의 값과 일치하는지 확인하라.
+
+??? success "연습문제 1 풀이"
 
     ```python
     t_manual = results.params[1] / results.bse[1]
@@ -102,13 +114,13 @@ for i, name in enumerate(["Intercept", "Study Hours", "Sleep Hours"]):
     print(f"Match: {np.isclose(t_manual, t_auto)}")
     ```
 
-    The two values are identical because the summary table simply computes $t_j = \hat{\beta}_j / \mathrm{SE}(\hat{\beta}_j)$. $\square$
+    요약표가 $t_j = \hat{\beta}_j / \mathrm{SE}(\hat{\beta}_j)$를 그대로 계산하는 것이므로 두 값은 동일하다. $\square$
 
 ---
 
-**Exercise 2.** Modify Example 2 to increase the noise standard deviation from 1 to 5. How does this affect the $p$-value and confidence interval for the slope?
+**연습문제 2.** 예제 2에서 잡음 표준편차를 1에서 5로 키우도록 고쳐라. 기울기의 $p$값과 신뢰구간은 어떻게 달라지는가?
 
-??? success "Solution to Exercise 2"
+??? success "연습문제 2 풀이"
 
     ```python
     y_noisy = 2.5 * X[:, 0] + 5 * np.random.randn(100)
@@ -116,34 +128,34 @@ for i, name in enumerate(["Intercept", "Study Hours", "Sleep Hours"]):
     print(results_noisy.summary())
     ```
 
-    With more noise, the residual standard error $s$ increases, inflating $\mathrm{SE}(\hat{\beta}_1)$. The $t$-statistic decreases, the $p$-value increases, and the confidence interval widens. With enough noise, the slope may no longer be statistically significant despite the true effect being nonzero. $\square$
+    잡음이 커지면 잔차 표준오차 $s$가 커져 $\mathrm{SE}(\hat{\beta}_1)$이 부풀려진다. $t$ 통계량이 작아지고 $p$값이 커지며 신뢰구간이 넓어진다. 잡음이 충분히 크면 참 효과가 0이 아닌데도 기울기가 더 이상 통계적으로 유의하지 않을 수 있다. $\square$
 
 ---
 
-**Exercise 3.** In Example 3, add a third predictor `caffeine = np.random.rand(100) * 5` that is unrelated to exam scores. What do you expect for its $p$-value, and why?
+**연습문제 3.** 예제 3에 시험 점수와 무관한 세 번째 설명변수 `caffeine = np.random.rand(100) * 5`를 추가하라. 그 $p$값에 대해 무엇을 기대하며 그 이유는 무엇인가?
 
-??? success "Solution to Exercise 3"
+??? success "연습문제 3 풀이"
 
-    Since caffeine is generated independently of exam scores, its true coefficient is zero. The OLS estimate $\hat{\beta}_{\text{caffeine}}$ should be close to zero with a large $p$-value (typically $> 0.05$). Occasionally, by chance alone (about 5% of the time at the $\alpha = 0.05$ level), the $p$-value may fall below 0.05, which is a Type I error. $\square$
-
----
-
-**Exercise 4.** Explain the connection between the $F$-test for overall model significance and the individual $t$-tests. When can they give different conclusions?
-
-??? success "Solution to Exercise 4"
-
-    The $F$-test evaluates $H_0\colon \beta_1 = \beta_2 = \cdots = \beta_{k-1} = 0$ (all slopes are zero simultaneously), while each $t$-test evaluates a single coefficient. When predictors are uncorrelated, the individual $t$-tests are independent, and rejecting any $t$-test essentially implies the $F$-test rejects. When predictors are correlated, it is possible for the $F$-test to reject (the model is useful overall) while no individual $t$-test rejects (no single predictor is significant after adjusting for the others). This occurs with multicollinearity. $\square$
+    caffeine이 시험 점수와 독립적으로 생성되었으므로 참 계수는 0이다. OLS 추정값 $\hat{\beta}_{\text{caffeine}}$은 0에 가깝고 $p$값은 클 것이다(대개 $> 0.05$). 다만 순전히 우연으로($\alpha = 0.05$ 수준에서 약 5%의 경우) $p$값이 0.05 아래로 떨어질 수 있는데, 그것이 제1종 오류이다. $\square$
 
 ---
 
-**Exercise 5.** Prove that for simple linear regression with one predictor, $t_1^2 = F$ where $F$ is the overall $F$-statistic. Under what condition does this equivalence break down?
+**연습문제 4.** 전체 모형 유의성의 $F$ 검정과 개별 $t$ 검정의 관계를 설명하라. 둘이 다른 결론을 줄 수 있는 경우는 언제인가?
 
-??? success "Solution to Exercise 5"
+??? success "연습문제 4 풀이"
 
-    In simple regression, $k = 2$ (intercept + slope), and the $F$-statistic is
+    $F$ 검정은 $H_0\colon \beta_1 = \beta_2 = \cdots = \beta_{k-1} = 0$(모든 기울기가 동시에 0)을 평가하고, 각 $t$ 검정은 계수 하나를 평가한다. 설명변수들이 무상관이면 개별 $t$ 검정들이 독립이고, 어느 $t$ 검정이 기각하면 사실상 $F$ 검정도 기각한다. 설명변수들이 상관되어 있으면 $F$ 검정은 기각하는데(모형 전체는 유용한데) 어느 개별 $t$ 검정도 기각하지 않는(나머지를 조정하고 나면 어느 설명변수도 유의하지 않은) 일이 가능하다. 다중공선성이 있을 때 일어나는 현상이다. $\square$
+
+---
+
+**연습문제 5.** 설명변수가 하나인 단순선형회귀에서 $t_1^2 = F$임을 증명하라. 이 동등성이 깨지는 조건은 무엇인가?
+
+??? success "연습문제 5 풀이"
+
+    단순회귀에서는 $k = 2$(절편 + 기울기)이고 $F$ 통계량은
 
     $$
     F = \frac{\mathrm{ESS}/1}{\mathrm{RSS}/(n-2)}.
     $$
 
-    The $t$-statistic for the slope is $t_1 = \hat{\beta}_1 / \mathrm{SE}(\hat{\beta}_1)$. One can show algebraically that $t_1^2 = \mathrm{ESS}/s^2 = F$. This equivalence holds exactly when there is a single predictor (one numerator degree of freedom). It breaks down in multiple regression where the $F$-test has $k-1 > 1$ numerator degrees of freedom and tests all slopes simultaneously. $\square$
+    기울기의 $t$ 통계량은 $t_1 = \hat{\beta}_1 / \mathrm{SE}(\hat{\beta}_1)$이다. 대수적으로 $t_1^2 = \mathrm{ESS}/s^2 = F$임을 보일 수 있다. 이 동등성은 설명변수가 하나일 때(분자 자유도가 1일 때) 정확히 성립한다. 다중회귀에서는 $F$ 검정의 분자 자유도가 $k-1 > 1$이고 모든 기울기를 동시에 검정하므로 동등성이 깨진다. $\square$

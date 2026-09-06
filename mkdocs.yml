@@ -458,74 +458,73 @@ nav:
             - 교란과 인과 시연: ch12/code/confounding_causation_demo.md
             - 상관과 인과: ch12/code/correlation_causation.md
 
-    - 13 Linear Regression:
-        - Chapter Overview: ch13/index.md
-        - 13.1 Linear Regression:
-            - Simple Linear Regression: ch13/linear_regression/simple.md
-            - Multiple Linear Regression: ch13/linear_regression/multiple.md
-        - 13.2 Estimation and Inference:
-            - Least Squares Estimation: ch13/estimation_inference/least_squares.md
-            - Sampling Distributions (Simple Ordinary Least Squares): ch13/estimation_inference/sampling_dist_simple.md
-            - Confidence Intervals for Coefficients: ch13/estimation_inference/ci_coeff.md
-            - Sampling Distributions and Tests (General Least Squares): ch13/estimation_inference/tests_coeff.md
-        - 13.3 Testing Coefficients:
-            - Hypothesis Tests (t-tests): ch13/testing_coefficients/hypothesis_tests.md
-            - p-values and Confidence Intervals: ch13/testing_coefficients/pvalues_ci.md
-            - Interpretation of Significance: ch13/testing_coefficients/significance.md
-        - 13.4 Interaction and Polynomial Extensions:
-            - Interaction Terms: ch13/interaction_polynomial/interaction_terms.md
-            - Polynomial Regression: ch13/interaction_polynomial/polynomial_regression.md
-        - 13.5 Assumptions and Diagnostics:
-            - Assumptions Overview (LINE): ch13/assumptions/index.md
-            - Linearity Assumption: ch13/assumptions/linearity_overview.md
-            - Independence Assumption: ch13/assumptions/independence_overview.md
-            - Homoscedasticity Assumption: ch13/assumptions/homoscedasticity_overview.md
-            - Normality Assumption: ch13/assumptions/normality_overview.md
-            - Checking Linearity: ch13/assumptions/checking_linearity.md
-            - Checking Independence: ch13/assumptions/checking_independence.md
-            - Checking Homoscedasticity: ch13/assumptions/checking_homoscedasticity.md
-            - Checking Normality: ch13/assumptions/checking_normality.md
-        - 13.6 Diagnostics:
-            - Residual Analysis: ch13/diagnostics/residuals.md
-            - Multicollinearity and Variance Inflation Factor: ch13/diagnostics/multicollinearity.md
-            - Influence and Leverage (Cook's Distance, DFFITS): ch13/diagnostics/influence.md
-        - 13.7 Performance Metrics:
-            - R² and Adjusted R²: ch13/performance/r_squared.md
-            - 'Mean Absolute, Mean Squared, and Root Mean Squared Error': ch13/performance/mae_mse_rmse.md
-            - Mean Absolute Percentage Error and Other Relative Metrics: ch13/performance/relative_metrics.md
-            - Performance Metrics Overview: ch13/performance/metrics.md
-        - 13.8 Model Selection Criteria:
-            - Akaike Information Criterion: ch13/model_selection/aic.md
-            - Bayesian Information Criterion: ch13/model_selection/bic.md
-            - Cross-Validation for Model Selection: ch13/model_selection/cross_validation.md
-            - Stepwise and Best-Subset Selection: ch13/model_selection/stepwise_subset.md
-            - Akaike and Bayesian Information Criteria Overview: ch13/model_selection/aic_bic.md
-        - 13.9 Splines and Generalized Additive Models:
-            - Splines and Generalized Additive Models Overview: ch13/splines_gams/index.md
-            - Generalized Additive Models: ch13/splines_gams/generalized_additive_models.md
-        - 13.10 Package Usage:
-            - statsmodels Ordinary Least Squares Interface: ch13/package_usage/statsmodels.md
-            - sklearn LinearRegression Interface: ch13/package_usage/sklearn.md
-            - Comparison and When to Use Which: ch13/package_usage/comparison.md
-        - 13.10 Code:
-            - Confidence Interval for Slope (Caffeine Example): ch13/code/ci_slope_example.md
-            - Confidence Interval and Prediction Bands: ch13/code/ci_prediction_bands.md
-            - Ordinary Least Squares Regression Output Reproduction: ch13/code/ols_regression_output.md
-            - Multiple Regression Diagnostics: ch13/code/multi_reg_diag.md
-            - Testing Coefficients Examples: ch13/code/testing_coefficients.md
-            - Model Selection Comparison: ch13/code/model_selection.md
-            - Weighted Least Squares: ch13/code/weighted_regression.md
-            - Generalized Additive Model Housing Analysis: ch13/code/gam_housing_analysis.md
-            - Regression Diagnostics (Housing): ch13/code/regression_diagnostics_housing.md
-            - Residual Sum of Squares Surface Visualization: ch13/code/rss_surface_visualization.md
-            - 3D Regression Plane: ch13/code/regression_plane_3d.md
-            - Cross-Validation Polynomial Model Selection: ch13/code/cv_polynomial_model_selection.md
-            - Step Functions: ch13/code/step_functions.md
-            - Splines with Patsy: ch13/code/splines_patsy_examples.md
-            - Regression (Weed Price vs Demographics): ch13/code/regression_weed_demographics.md
-            - Ordinary Least Squares Simulation (Monte Carlo): ch13/code/ols_simulation.md
-            - Subset and Stepwise Selection: ch13/code/subset_stepwise_selection.md
-
+    - 13 선형회귀:
+        - 장 개요: ch13/index.md
+        - 13.1 선형회귀:
+            - 단순선형회귀: ch13/linear_regression/simple.md
+            - 다중선형회귀: ch13/linear_regression/multiple.md
+        - 13.2 추정과 추론:
+            - 최소제곱 추정: ch13/estimation_inference/least_squares.md
+            - 단순 OLS 추정량의 표집분포: ch13/estimation_inference/sampling_dist_simple.md
+            - 단순 OLS 추정량의 신뢰구간: ch13/estimation_inference/ci_coeff.md
+            - 일반 OLS 추정량의 표집분포: ch13/estimation_inference/tests_coeff.md
+        - 13.3 계수 검정:
+            - 회귀계수의 가설검정 (t-검정): ch13/testing_coefficients/hypothesis_tests.md
+            - 계수의 p값과 신뢰구간: ch13/testing_coefficients/pvalues_ci.md
+            - 유의성의 해석: ch13/testing_coefficients/significance.md
+        - 13.4 교호작용과 다항식 확장:
+            - 교호작용 항: ch13/interaction_polynomial/interaction_terms.md
+            - 다항회귀: ch13/interaction_polynomial/polynomial_regression.md
+        - 13.5 가정과 진단:
+            - 가정 개관 (LINE): ch13/assumptions/index.md
+            - 선형성 가정: ch13/assumptions/linearity_overview.md
+            - 독립성 가정: ch13/assumptions/independence_overview.md
+            - 등분산성 가정: ch13/assumptions/homoscedasticity_overview.md
+            - 정규성 가정: ch13/assumptions/normality_overview.md
+            - 선형성 확인: ch13/assumptions/checking_linearity.md
+            - 독립성 확인: ch13/assumptions/checking_independence.md
+            - 등분산성 확인: ch13/assumptions/checking_homoscedasticity.md
+            - 정규성 확인: ch13/assumptions/checking_normality.md
+        - 13.6 진단:
+            - 잔차 분석: ch13/diagnostics/residuals.md
+            - 다중공선성과 분산팽창인자: ch13/diagnostics/multicollinearity.md
+            - 영향점과 지렛대 (Cook 거리, DFFITS): ch13/diagnostics/influence.md
+        - 13.7 성능 척도:
+            - 결정계수와 수정 결정계수: ch13/performance/r_squared.md
+            - '평균절대오차, 평균제곱오차, 제곱근평균제곱오차': ch13/performance/mae_mse_rmse.md
+            - 평균절대백분율오차와 그 밖의 상대 척도: ch13/performance/relative_metrics.md
+            - 성능 척도 개관: ch13/performance/metrics.md
+        - 13.8 모형선택 기준:
+            - Akaike 정보기준: ch13/model_selection/aic.md
+            - Bayes 정보기준: ch13/model_selection/bic.md
+            - 모형선택을 위한 교차검증: ch13/model_selection/cross_validation.md
+            - 단계적 선택과 최량 부분집합 선택: ch13/model_selection/stepwise_subset.md
+            - AIC와 BIC 개관: ch13/model_selection/aic_bic.md
+        - 13.9 스플라인과 일반화가법모형:
+            - 스플라인과 GAM 개관: ch13/splines_gams/index.md
+            - 일반화가법모형: ch13/splines_gams/generalized_additive_models.md
+        - 13.10 패키지 사용법:
+            - statsmodels 최소제곱 인터페이스: ch13/package_usage/statsmodels.md
+            - sklearn LinearRegression 인터페이스: ch13/package_usage/sklearn.md
+            - 무엇을 언제 쓸 것인가 (비교): ch13/package_usage/comparison.md
+        - 13.11 코드:
+            - 기울기의 신뢰구간 (카페인 예제): ch13/code/ci_slope_example.md
+            - 신뢰띠와 예측띠: ch13/code/ci_prediction_bands.md
+            - OLS 회귀 출력 재현: ch13/code/ols_regression_output.md
+            - 다중회귀 진단: ch13/code/multi_reg_diag.md
+            - 계수 검정 예제: ch13/code/testing_coefficients.md
+            - 모형선택 비교: ch13/code/model_selection.md
+            - 가중최소제곱: ch13/code/weighted_regression.md
+            - GAM 주택 분석: ch13/code/gam_housing_analysis.md
+            - 회귀 진단 (주택): ch13/code/regression_diagnostics_housing.md
+            - 잔차제곱합 곡면 시각화: ch13/code/rss_surface_visualization.md
+            - 3차원 회귀평면: ch13/code/regression_plane_3d.md
+            - 교차검증 다항 모형선택: ch13/code/cv_polynomial_model_selection.md
+            - 계단함수: ch13/code/step_functions.md
+            - Patsy를 이용한 스플라인: ch13/code/splines_patsy_examples.md
+            - 회귀 (대마초 가격과 인구통계): ch13/code/regression_weed_demographics.md
+            - 최소제곱 모의실험 (몬테카를로): ch13/code/ols_simulation.md
+            - 부분집합 선택과 단계적 선택: ch13/code/subset_stepwise_selection.md
     - 14 Normality Tests:
         - Chapter Overview: ch14/index.md
         - 14.1 Introduction to Normality:

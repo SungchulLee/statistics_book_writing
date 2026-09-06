@@ -1,134 +1,138 @@
-# Generalized Additive Models (GAMs)
+# 일반화가법모형 (GAM)
 
+## 개요
 
-## Overview
+**일반화가법모형(GAM)**은 선형 관계를 가정하는 대신 설명변수의 매끄러운 비모수 함수를 허용하여 선형회귀를 확장한다. GAM은 경직된 선형모형과 신경망 같은 지나치게 복잡한 블랙박스 방법 사이에서 유연한 중간 지대를 제공한다.
 
-**Generalized Additive Models (GAMs)** extend linear regression by allowing smooth, non-parametric functions of predictors instead of assuming linear relationships. GAMs provide a flexible middle ground between rigid linear models and overly complex black-box methods like neural networks.
+GAM의 핵심 혁신은 해석 가능성을 유지하면서 선형항을 매끄러운 함수로 대체하는 것이다.
 
-The key innovation of GAMs is replacing linear terms with smooth functions while maintaining interpretability:
-
-**Linear Regression:**
+**선형회귀:**
 
 $$Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \cdots + \beta_p X_p + \epsilon$$
 
-**Generalized Additive Model:**
+**일반화가법모형:**
 
 $$Y = \beta_0 + f_1(X_1) + f_2(X_2) + \cdots + f_p(X_p) + \epsilon$$
 
-where each $f_j$ is a smooth function (typically a spline) learned from the data.
+여기서 각 $f_j$는 자료에서 학습한 매끄러운 함수(보통 스플라인)이다.
 
 ---
 
-## Why Use GAMs?
+## 왜 GAM을 쓰는가
 
-GAMs address several limitations of linear regression:
+GAM은 선형회귀의 여러 한계에 대처한다.
 
-1. **Non-linear relationships** — Many real-world relationships are curved. GAMs capture these automatically without manually specifying polynomial degrees.
+1. **비선형 관계** — 현실의 많은 관계는 굽어 있다. GAM은 다항 차수를 손으로 지정하지 않고도 이를 자동으로 포착한다.
 
-2. **Different smoothness per variable** — Each predictor can have its own degree of smoothing, controlled by a penalty parameter (lambda).
+2. **변수마다 다른 매끄러움** — 각 설명변수가 벌점 모수(람다)로 조절되는 자기만의 평활 정도를 가질 수 있다.
 
-3. **Interpretability** — Unlike neural networks, each smooth function $f_j(X_j)$ can be visualized and interpreted independently. The additive structure means effects don't interact by default.
+3. **해석 가능성** — 신경망과 달리 각 매끄러운 함수 $f_j(X_j)$를 개별적으로 시각화하고 해석할 수 있다. 가법 구조 덕분에 기본적으로 효과들이 서로 얽히지 않는다.
 
-4. **Automatic overfitting control** — Regularization prevents spurious wiggles in the smooth functions while maintaining flexibility.
+4. **자동 과대적합 통제** — 정칙화가 유연성을 유지하면서도 매끄러운 함수의 허위 요동을 막는다.
 
-5. **Uncertainty quantification** — Unlike tree-based methods, GAMs provide confidence bands around predictions through standard errors.
+5. **불확실성 수량화** — 나무 기반 방법과 달리 GAM은 표준오차를 통해 예측 주위의 신뢰띠를 제공한다.
 
 ---
 
-## Mathematical Formulation
+## 수학적 정식화
 
-### The Basic GAM
+### 기본 GAM
 
-For a continuous response, the Gaussian GAM is:
+연속형 반응변수에 대한 정규 GAM은
 
 $$Y = \beta_0 + \sum_{j=1}^{p} f_j(X_j) + \epsilon, \quad \epsilon \sim N(0, \sigma^2)$$
 
-### Smooth Functions Using Splines
+### 스플라인을 이용한 매끄러운 함수
 
-The smooth functions $f_j$ are typically represented as linear combinations of basis functions:
+매끄러운 함수 $f_j$는 보통 기저함수들의 선형결합으로 표현된다.
 
 $$f_j(X_j) = \sum_{k=1}^{K_j} b_{jk}(X_j) \cdot c_{jk}$$
 
-where:
+여기서
 
-- $b_{jk}$ are basis functions (e.g., B-splines, thin-plate splines)
-- $c_{jk}$ are coefficients learned from data
-- $K_j$ is the number of basis functions for variable $j$
+- $b_{jk}$는 기저함수(예: B-스플라인, 박판 스플라인),
+- $c_{jk}$는 자료에서 학습한 계수,
+- $K_j$는 변수 $j$의 기저함수 개수이다.
 
-### Regularization: Penalized Estimation
+### 정칙화: 벌점 추정
 
-To avoid overfitting while allowing flexibility, GAMs use a roughness penalty:
+유연성을 허용하면서 과대적합을 피하기 위해 GAM은 거칢 벌점을 쓴다.
 
 $$\text{Loss} = \frac{1}{n} \sum_{i=1}^{n} \left(y_i - \beta_0 - \sum_{j=1}^{p} f_j(x_{ij})\right)^2 + \sum_{j=1}^{p} \lambda_j \int [f_j''(x)]^2 dx$$
 
-where:
+여기서
 
-- The first term is the sum of squared residuals
-- $\lambda_j$ controls the smoothness of the $j$-th function: larger $\lambda_j$ results in smoother (less wiggly) functions
-- The integral term measures the "roughness" (second derivative squared)
+- 첫째 항은 잔차제곱합이고,
+- $\lambda_j$는 $j$번째 함수의 매끄러움을 조절한다. $\lambda_j$가 클수록 더 매끄러운(덜 요동치는) 함수가 된다.
+- 적분항은 "거칢"(2계 도함수의 제곱)을 잰다.
 
-### Degrees of Freedom and Effective DoF
+### 자유도와 유효 자유도
 
-Unlike linear regression where degrees of freedom equal the number of parameters, GAMs have **effective degrees of freedom (eDoF)** accounting for the smoothness penalty:
+자유도가 모수의 개수와 같은 선형회귀와 달리, GAM은 매끄러움 벌점을 반영한 **유효 자유도(eDoF)**를 갖는다.
 
 $$\text{eDoF}_j = \text{tr}(S_j)$$
 
-where $S_j$ is a matrix depending on the basis and the penalty. The total model complexity is:
+여기서 $S_j$는 기저와 벌점에 의존하는 행렬이다. 모형 전체의 복잡도는
 
 $$\text{eDoF}_{\text{total}} = 1 + \sum_{j=1}^{p} \text{eDoF}_j$$
 
-This allows model comparison using the same criteria (AIC, BIC) as linear regression, with eDoF replacing traditional parameter counts.
+이 덕분에 전통적인 모수 개수 대신 eDoF를 써서 선형회귀와 같은 기준(AIC, BIC)으로 모형을 비교할 수 있다.
 
 ---
 
-## Fitting GAMs: The Backfitting Algorithm
+## GAM 적합: 역적합 알고리즘
 
-The most common fitting approach is **backfitting**, an iterative algorithm:
+가장 흔한 적합 방법은 반복적 알고리즘인 **역적합**이다.
 
-1. Initialize: $\hat{f}_j^{(0)} = 0$ for all $j$, and $\hat{\beta}_0 = \bar{y}$
+1. 초기화: 모든 $j$에 대해 $\hat{f}_j^{(0)} = 0$, 그리고 $\hat{\beta}_0 = \bar{y}$
 
-2. For iteration $t$:
-   - For each $j = 1, 2, \ldots, p$:
-     - Compute partial residuals: $r_{-j} = y - \hat{\beta}_0 - \sum_{k \neq j} \hat{f}_k(X_k)$
-     - Fit a smooth function to $(X_j, r_{-j})$ with penalty $\lambda_j$: $\hat{f}_j^{(t)} = S(r_{-j} | X_j, \lambda_j)$
+2. 반복 $t$에서:
+   - 각 $j = 1, 2, \ldots, p$에 대해:
+     - 부분잔차를 계산한다: $r_{-j} = y - \hat{\beta}_0 - \sum_{k \neq j} \hat{f}_k(X_k)$
+     - 벌점 $\lambda_j$로 $(X_j, r_{-j})$에 매끄러운 함수를 적합한다: $\hat{f}_j^{(t)} = S(r_{-j} | X_j, \lambda_j)$
 
-3. Repeat until convergence (coefficients stabilize)
+3. 수렴할 때까지(계수가 안정될 때까지) 반복한다.
 
-This decomposes the fitting problem into univariate smoothing problems, making GAMs computationally efficient compared to fitting high-dimensional non-parametric functions directly.
+이 방법은 적합 문제를 일변량 평활 문제들로 분해하므로, 고차원 비모수 함수를 직접 적합하는 것에 비해 GAM을 계산적으로 효율적으로 만든다.
 
 ---
 
-## Types of Smooth Terms
+## 매끄러운 항의 종류
 
-### Linear Terms
-A linear term is included as:
+### 선형항
+
+선형항은 다음과 같이 포함된다.
 
 $$f_j(X_j) = \beta_j X_j$$
 
-This has no smoothness penalty and is useful when a relationship is genuinely linear.
+매끄러움 벌점이 없으며, 관계가 정말로 선형일 때 유용하다.
 
-### Spline Terms (s)
-Represented by basis functions with a smoothness penalty:
+### 스플라인 항 (s)
 
-$$f_j(X_j) = \sum_{k=1}^{K_j} b_{jk}(X_j) c_{jk} + \lambda_j \int [f_j''(x)]^2 dx$$
+기저함수로 표현하고 목적함수에 매끄러움 벌점을 더한다.
 
-Common choices:
+$$f_j(X_j) = \sum_{k=1}^{K_j} b_{jk}(X_j) c_{jk}, \qquad \text{벌점: } \lambda_j \int [f_j''(x)]^2 dx$$
 
-- **Cubic B-splines**: Smooth, locally-supported, computationally efficient
-- **Thin-plate splines**: Optimal in a smoothness sense, but computationally expensive
+함수 자체는 기저함수의 선형결합이고 벌점은 함수의 일부가 아니라 목적함수에 더해지는 항이라는 점에 유의하라.
 
-The `df` (degrees of freedom) parameter controls the flexibility: larger `df` allows more wiggles.
+흔한 선택:
 
-### Cyclic Splines
-For periodic data (e.g., time of day, day of week), cyclic splines enforce $f(0) = f(1)$ (or appropriate boundaries).
+- **삼차 B-스플라인**: 매끄럽고 국소 지지를 가지며 계산이 효율적이다.
+- **박판 스플라인**: 매끄러움의 의미에서 최적이지만 계산 비용이 크다.
+
+`df`(자유도) 인자가 유연성을 조절한다. `df`가 클수록 더 많은 요동을 허용한다.
+
+### 순환 스플라인
+
+주기적 자료(예: 하루 중 시각, 요일)에는 순환 스플라인이 $f(0) = f(1)$(또는 적절한 경계 조건)을 강제한다.
 
 ---
 
-## Python Implementation
+## Python 구현
 
-### Using statsmodels
+### statsmodels 사용하기
 
-The `statsmodels.gam` module provides GAM fitting:
+`statsmodels.gam` 모듈이 GAM 적합을 제공한다.
 
 ```python
 import numpy as np
@@ -162,13 +166,12 @@ results = gam.fit()
 print(results.summary())
 ```
 
-### Using pyGAM
+### pyGAM 사용하기
 
-The `pygam` library provides a more user-friendly interface with automatic lambda selection via grid search:
+`pygam` 라이브러리는 격자탐색으로 람다를 자동 선택해 주는 더 친절한 인터페이스를 제공한다.
 
 ```python
 from pygam import LinearGAM, s, l
-from pygam.utils import generate_X_grid
 
 # Fit GAM with smoothing spline on x0 and linear terms on x1, x2
 gam = LinearGAM(s(0, n_splines=12) + l(1) + l(2))
@@ -183,12 +186,10 @@ print(gam.summary())
 fig, axes = plt.subplots(1, 3, figsize=(14, 4))
 for i in range(3):
     XX = gam.generate_X_grid(term=i)
+    pdep, confi = gam.partial_dependence(term=i, X=XX, width=0.95)
     ax = axes[i]
-    ax.plot(XX[:, i], gam.partial_dependence(term=i, X=XX))
-    ax.fill_between(XX[:, i],
-                     gam.partial_dependence(term=i, X=XX, width=0.95)[1],
-                     gam.partial_dependence(term=i, X=XX, width=0.95)[2],
-                     alpha=0.3)
+    ax.plot(XX[:, i], pdep)
+    ax.fill_between(XX[:, i], confi[:, 0], confi[:, 1], alpha=0.3)
     ax.set_xlabel(f'x{i}')
     ax.set_ylabel(f'f{i}(x{i})')
     ax.set_title(f'Partial Dependence: x{i}')
@@ -197,67 +198,70 @@ plt.tight_layout()
 plt.show()
 ```
 
+!!! note "`partial_dependence`의 반환값"
+    `width`(또는 `quantiles`)를 주면 `partial_dependence`는 부분의존값과 신뢰구간의 **쌍**을 돌려준다. 신뢰구간은 모양이 $(n, 2)$인 배열이므로 위처럼 `pdep, confi = ...`로 풀어서 `confi[:, 0]`, `confi[:, 1]`을 쓴다. 반환값을 `[1]`, `[2]`로 색인하면 `IndexError`가 난다. 격자를 만드는 `generate_X_grid`도 별도 함수가 아니라 모형 객체의 메서드이다.
+
 ---
 
-## Model Selection for GAMs
+## GAM의 모형선택
 
-### Smoothing Parameter Selection
+### 평활 모수 선택
 
-The smoothing parameters $\lambda_j$ control the bias-variance tradeoff:
+평활 모수 $\lambda_j$는 편향-분산 절충을 조절한다.
 
-- **Larger $\lambda_j$** → smoother function (high bias, low variance)
-- **Smaller $\lambda_j$** → wigglier function (low bias, high variance)
+- **$\lambda_j$가 크면** → 더 매끄러운 함수(편향 큼, 분산 작음)
+- **$\lambda_j$가 작으면** → 더 요동치는 함수(편향 작음, 분산 큼)
 
-Common selection methods:
+흔한 선택 방법:
 
-1. **Generalized Cross-Validation (GCV)**: Balances fit and complexity, computationally efficient
-2. **UBRE (Un-biased Risk Estimator)**: Similar to AIC, works well for Gaussian responses
-3. **Automatic grid search**: pyGAM automatically searches a grid of lambda values
+1. **일반화 교차검증(GCV)**: 적합과 복잡도의 균형을 맞추며 계산이 효율적이다.
+2. **UBRE(불편 위험 추정량)**: AIC와 비슷하며 정규 반응변수에서 잘 작동한다.
+3. **자동 격자탐색**: pyGAM이 람다 값의 격자를 자동으로 탐색한다.
 
-### Comparing GAMs
+### GAM 비교하기
 
-Once smooth functions are estimated, compare models using:
+매끄러운 함수를 추정한 뒤에는 다음으로 모형을 비교한다.
 
-- **Deviance** (residual sum of squares for Gaussian responses)
-- **Effective DoF** (reflects model complexity)
-- **AIC/BIC** with eDoF in place of parameter count:
+- **이탈도**(정규 반응변수에서는 잔차제곱합)
+- **유효 자유도**(모형 복잡도를 반영)
+- 모수 개수 대신 eDoF를 넣은 **AIC/BIC**:
 
   $$\text{AIC} = -2 \log L + 2 \cdot \text{eDoF}$$
 
-### Adjusting Model Complexity
+### 모형 복잡도 조절
 
-Control overall model complexity via:
+전체 복잡도는 다음으로 조절한다.
 
-1. **Degrees of freedom per term** (`df` parameter): fewer basis functions → smoother
-2. **Global smoothing penalty**: multiply all lambdas by a constant
-3. **Model formula**: include only relevant smooth terms
-
----
-
-## Advantages and Disadvantages
-
-### Advantages
-
-- **Flexibility**: Captures non-linear relationships without manual specification
-- **Interpretability**: Individual smooth functions are visualizable and understandable
-- **Automatic smoothness selection**: Many algorithms optimize smoothing parameters automatically
-- **Uncertainty quantification**: Provides confidence bands and standard errors
-- **Efficiency**: Backfitting makes fitting scalable to moderate dimensions
-- **Fairness**: Additive structure avoids interactions by default, making effects comparable
-
-### Disadvantages
-
-- **Curse of dimensionality**: Performance degrades as the number of predictors increases beyond 10-15 (though more efficient than non-parametric methods)
-- **Assumption of additivity**: Interactions must be explicitly included; more complex for high-order interactions
-- **Smoothing parameter selection**: Can be sensitive to the choice of lambda; grid search adds computation
-- **Interpretability trade-off**: More complex relationships are harder to summarize than simple parametric forms
-- **Software dependence**: Results may vary slightly across implementations (statsmodels vs. pyGAM vs. R's mgcv)
+1. **항별 자유도**(`df` 인자): 기저함수가 적을수록 더 매끄럽다.
+2. **전역 평활 벌점**: 모든 람다에 상수를 곱한다.
+3. **모형 식**: 관련 있는 매끄러운 항만 포함한다.
 
 ---
 
-## Practical Example: Housing Prices
+## 장점과 단점
 
-Consider predicting house prices from multiple features. A GAM allows different degrees of smoothness for each predictor:
+### 장점
+
+- **유연성**: 손으로 지정하지 않고도 비선형 관계를 포착한다.
+- **해석 가능성**: 개별 매끄러운 함수를 시각화하고 이해할 수 있다.
+- **자동 매끄러움 선택**: 많은 알고리즘이 평활 모수를 자동으로 최적화한다.
+- **불확실성 수량화**: 신뢰띠와 표준오차를 제공한다.
+- **효율성**: 역적합 덕분에 중간 정도의 차원까지 확장 가능하다.
+- **효과의 비교 가능성**: 가법 구조가 기본적으로 교호작용을 배제하므로 효과들을 나란히 비교할 수 있다.
+
+### 단점
+
+- **차원의 저주**: 설명변수가 10–15개를 넘어가면 성능이 떨어진다(비모수 방법보다는 효율적이지만).
+- **가법성 가정**: 교호작용을 명시적으로 넣어야 하며, 고차 교호작용은 더 복잡해진다.
+- **평활 모수 선택**: 람다의 선택에 민감할 수 있고 격자탐색은 계산량을 늘린다.
+- **해석의 절충**: 관계가 복잡해질수록 단순한 모수적 형태보다 요약하기 어렵다.
+- **소프트웨어 의존성**: 구현체마다 결과가 조금씩 다를 수 있다(statsmodels 대 pyGAM 대 R의 mgcv).
+
+---
+
+## 실전 예제: 주택 가격
+
+여러 특성으로 집값을 예측한다고 하자. GAM은 설명변수마다 다른 정도의 매끄러움을 허용한다.
 
 ```python
 from pygam import LinearGAM, s, l
@@ -307,52 +311,53 @@ plt.show()
 
 ---
 
-## Summary
+## 요약
 
-Generalized Additive Models provide a powerful, interpretable approach to non-linear regression:
+일반화가법모형은 비선형 회귀에 대한 강력하고 해석 가능한 접근을 제공한다.
 
-- **Flexible smooth functions** replace rigid linear terms while maintaining additivity
-- **Automatic smoothing** via regularization prevents overfitting
-- **Individual visualization** of each effect aids interpretation
-- **Practical tools** (statsmodels, pyGAM) make GAMs accessible for real applications
-- **Trade-offs** between flexibility and interpretability make GAMs ideal when moderate non-linearity is expected
+- **유연한 매끄러운 함수**가 가법성을 유지하면서 경직된 선형항을 대체한다.
+- 정칙화를 통한 **자동 평활**이 과대적합을 막는다.
+- 각 효과의 **개별 시각화**가 해석을 돕는다.
+- **실용적인 도구**(statsmodels, pyGAM)가 GAM을 실제 응용에서 쓸 수 있게 해 준다.
+- 유연성과 해석 가능성 사이의 **절충** 덕분에 중간 정도의 비선형성이 예상될 때 GAM이 이상적이다.
 
-When data suggests non-linear relationships and interpretation is important, GAMs offer an excellent balance between the simplicity of linear regression and the flexibility of fully non-parametric methods.
-## Exercises
+자료가 비선형 관계를 시사하고 해석이 중요할 때, GAM은 선형회귀의 단순함과 완전 비모수 방법의 유연함 사이에서 훌륭한 균형을 제공한다.
 
-**Exercise 1.**
-Write the general form of a GAM with three predictors and explain how it differs from a standard multiple linear regression model.
+## 연습문제
 
-??? success "Solution to Exercise 1"
-    A GAM with three predictors is:
+**연습문제 1.**
+설명변수가 세 개인 GAM의 일반형을 쓰고 표준적인 다중선형회귀 모형과 어떻게 다른지 설명하라.
+
+??? success "연습문제 1 풀이"
+    설명변수가 셋인 GAM은
 
     $$
     E[Y] = \beta_0 + f_1(X_1) + f_2(X_2) + f_3(X_3)
     $$
 
-    where $f_1, f_2, f_3$ are smooth (typically nonparametric) functions estimated from the data.
+    여기서 $f_1, f_2, f_3$은 자료에서 추정한 매끄러운(보통 비모수) 함수이다.
 
-    In standard multiple linear regression, $E[Y] = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \beta_3 X_3$, each $f_j$ is constrained to be linear ($f_j(X_j) = \beta_j X_j$). A GAM relaxes this constraint, allowing each predictor to have a flexible nonlinear relationship with $Y$ while maintaining the additive structure (no interactions between the smooth functions).
-
----
-
-**Exercise 2.**
-Explain the role of the smoothing parameter in a GAM. What happens when it is set too high or too low?
-
-??? success "Solution to Exercise 2"
-    The smoothing parameter $\lambda$ controls the tradeoff between fitting the data closely and having a smooth function:
-
-    - **$\lambda$ too low:** The smooth function overfits the data, capturing noise and producing a wiggly curve with high variance.
-    - **$\lambda$ too high:** The smooth function is oversmoothed, approaching a straight line. This introduces bias by missing genuine nonlinear patterns but reduces variance.
-
-    In practice, $\lambda$ is selected by cross-validation (e.g., generalized cross-validation, GCV) to balance bias and variance.
+    표준적인 다중선형회귀에서는 $E[Y] = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \beta_3 X_3$이며 각 $f_j$가 선형으로 제약된다($f_j(X_j) = \beta_j X_j$). GAM은 이 제약을 풀어 각 설명변수가 $Y$와 유연한 비선형 관계를 갖도록 허용하되 가법 구조(매끄러운 함수들 사이의 교호작용 없음)는 유지한다.
 
 ---
 
-**Exercise 3.**
-Describe one advantage and one limitation of GAMs compared to polynomial regression for modeling nonlinear relationships.
+**연습문제 2.**
+GAM에서 평활 모수의 역할을 설명하라. 너무 크게 또는 너무 작게 설정하면 어떻게 되는가?
 
-??? success "Solution to Exercise 3"
-    **Advantage:** GAMs automatically adapt the degree of flexibility to each predictor using data-driven smoothing, whereas polynomial regression requires choosing the degree in advance. GAMs avoid Runge's phenomenon (wild oscillation at boundaries) that plagues high-degree polynomials.
+??? success "연습문제 2 풀이"
+    평활 모수 $\lambda$는 자료에 가깝게 적합하는 것과 함수를 매끄럽게 유지하는 것 사이의 절충을 조절한다.
 
-    **Limitation:** GAMs assume an additive structure ($f_1(X_1) + f_2(X_2)$) and do not natively capture interactions between predictors. Polynomial regression can include interaction terms ($X_1 X_2$, $X_1^2 X_2$) directly. To model interactions in GAMs, tensor product smooths or explicit interaction terms must be added, increasing complexity.
+    - **$\lambda$가 너무 작으면:** 매끄러운 함수가 자료를 과대적합하여 잡음까지 포착하고 분산이 큰 요동치는 곡선이 나온다.
+    - **$\lambda$가 너무 크면:** 함수가 과도하게 평활되어 직선에 가까워진다. 실제 비선형 패턴을 놓쳐 편향이 생기지만 분산은 줄어든다.
+
+    실무에서 $\lambda$는 편향과 분산의 균형을 맞추도록 교차검증(예: 일반화 교차검증, GCV)으로 고른다.
+
+---
+
+**연습문제 3.**
+비선형 관계를 모형화할 때 다항회귀와 비교한 GAM의 장점 하나와 한계 하나를 기술하라.
+
+??? success "연습문제 3 풀이"
+    **장점:** GAM은 자료 기반 평활로 각 설명변수의 유연성 정도를 자동으로 맞춘다. 반면 다항회귀는 차수를 미리 정해야 한다. GAM은 고차 다항식을 괴롭히는 Runge 현상(경계에서의 격렬한 진동)을 피한다.
+
+    **한계:** GAM은 가법 구조($f_1(X_1) + f_2(X_2)$)를 가정하며 설명변수 사이의 교호작용을 기본적으로 포착하지 못한다. 다항회귀는 교호작용 항($X_1 X_2$, $X_1^2 X_2$)을 직접 넣을 수 있다. GAM에서 교호작용을 모형화하려면 텐서곱 평활이나 명시적 교호작용 항을 추가해야 하며 복잡도가 늘어난다.

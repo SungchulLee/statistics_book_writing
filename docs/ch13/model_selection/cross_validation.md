@@ -1,116 +1,116 @@
-# Cross-Validation for Model Selection
+# 모형선택을 위한 교차검증
 
-Information criteria like AIC and BIC estimate out-of-sample performance using mathematical approximations. Cross-validation takes a more direct approach: it repeatedly splits the data into training and validation subsets, fits the model on training data, and evaluates predictions on held-out data. This provides a concrete estimate of how well the model generalizes to new observations.
+AIC나 BIC 같은 정보기준은 수학적 근사로 표본 밖 성능을 추정한다. 교차검증은 더 직접적인 접근을 취한다. 자료를 훈련 부분집합과 검증 부분집합으로 반복해 나누고, 훈련자료로 모형을 적합한 뒤 남겨 둔 자료에서 예측을 평가한다. 이렇게 하면 모형이 새 관측값에 얼마나 잘 일반화되는지에 대한 구체적인 추정값을 얻는다.
 
 ---
 
-## 1. The Validation Set Approach
+## 1. 검증집합 방법
 
-The simplest strategy is to split the data into two disjoint subsets: a **training set** used to fit the model and a **validation set** (or hold-out set) used to evaluate it.
+가장 단순한 전략은 자료를 서로 겹치지 않는 두 부분집합, 곧 모형을 적합할 **훈련집합**과 평가할 **검증집합**(홀드아웃 집합)으로 나누는 것이다.
 
-Given $n$ observations, randomly assign a fraction (typically 50--80%) to training and the rest to validation. Fit the model on the training set and compute the prediction error on the validation set:
+관측값 $n$개가 있을 때 일정 비율(보통 50–80%)을 무작위로 훈련에 배정하고 나머지를 검증에 배정한다. 훈련집합으로 모형을 적합하고 검증집합에서 예측오차를 계산한다.
 
 $$
 \text{CV}_{\text{val}} = \frac{1}{n_{\text{val}}} \sum_{i \in \text{val}} (y_i - \hat{y}_i)^2
 $$
 
-where $\hat{y}_i$ is the prediction for observation $i$ using the model fit to the training set only.
+여기서 $\hat{y}_i$는 훈련집합만으로 적합한 모형이 내놓은 관측값 $i$의 예측값이다.
 
-### Limitations
+### 한계
 
-- **High variance**: The estimate depends heavily on which observations end up in training versus validation. Different random splits can produce substantially different error estimates.
-- **Reduced training data**: The model is trained on fewer observations than are available, leading to a pessimistic bias in the error estimate.
+- **큰 분산**: 추정값이 어떤 관측값이 훈련에 가고 어떤 것이 검증에 가느냐에 크게 좌우된다. 무작위 분할이 달라지면 오차 추정값이 상당히 달라질 수 있다.
+- **줄어든 훈련자료**: 모형이 쓸 수 있는 것보다 적은 관측값으로 훈련되므로 오차 추정값에 비관적 편향이 생긴다.
 
 ---
 
-## 2. K-Fold Cross-Validation
+## 2. K-겹 교차검증
 
-**K-fold cross-validation** addresses the limitations of the validation set approach by using every observation for both training and validation.
+**K-겹 교차검증**은 모든 관측값을 훈련과 검증에 모두 쓰게 하여 검증집합 방법의 한계를 극복한다.
 
-### Procedure
+### 절차
 
-1. Randomly partition the $n$ observations into $K$ roughly equal-sized groups (folds) $C_1, C_2, \ldots, C_K$.
-2. For each fold $k = 1, \ldots, K$:
-    - Fit the model using all observations except those in fold $C_k$.
-    - Predict the held-out observations in $C_k$ and record the errors.
-3. Average the prediction errors across all folds.
+1. $n$개의 관측값을 크기가 대략 같은 $K$개의 묶음(겹) $C_1, C_2, \ldots, C_K$으로 무작위로 나눈다.
+2. 각 겹 $k = 1, \ldots, K$에 대해:
+    - 겹 $C_k$에 속한 관측값을 제외한 모든 관측값으로 모형을 적합한다.
+    - $C_k$의 남겨 둔 관측값을 예측하고 오차를 기록한다.
+3. 모든 겹의 예측오차를 평균낸다.
 
-### Formula
+### 공식
 
-Let $n_k = |C_k|$ be the number of observations in fold $k$, and let $\hat{y}_i^{(-k)}$ denote the prediction for observation $i$ from the model trained without fold $k$. The K-fold CV estimate of prediction error is:
+$n_k = |C_k|$를 겹 $k$의 관측값 개수라 하고, $\hat{y}_i^{(-k)}$를 겹 $k$ 없이 훈련한 모형이 내놓은 관측값 $i$의 예측값이라 하자. 예측오차의 K-겹 교차검증 추정값은
 
 $$
 \text{CV}_{(K)} = \frac{1}{n} \sum_{k=1}^{K} \sum_{i \in C_k} (y_i - \hat{y}_i^{(-k)})^2
 $$
 
-This is equivalent to:
+모든 겹의 크기가 같다면 이는 다음과 동등하다.
 
 $$
 \text{CV}_{(K)} = \frac{1}{K} \sum_{k=1}^{K} \text{MSE}_k
 $$
 
-where $\text{MSE}_k = \frac{1}{n_k} \sum_{i \in C_k} (y_i - \hat{y}_i^{(-k)})^2$ is the mean squared error on fold $k$, provided all folds have the same size.
+여기서 $\text{MSE}_k = \frac{1}{n_k} \sum_{i \in C_k} (y_i - \hat{y}_i^{(-k)})^2$는 겹 $k$의 평균제곱오차이다.
 
-Common choices are $K = 5$ and $K = 10$. Both have been shown empirically to provide a good tradeoff between bias and variance of the CV estimate.
+흔한 선택은 $K = 5$와 $K = 10$이다. 두 값 모두 교차검증 추정값의 편향과 분산 사이에서 좋은 절충을 이룬다는 것이 경험적으로 확인되었다.
 
 ---
 
-## 3. Leave-One-Out Cross-Validation
+## 3. 하나 빼기 교차검증
 
-**Leave-one-out cross-validation (LOOCV)** is the special case of K-fold CV with $K = n$: each fold contains exactly one observation.
+**하나 빼기 교차검증(LOOCV)**은 $K = n$인 K-겹 교차검증의 특수한 경우로, 각 겹이 정확히 관측값 하나를 담는다.
 
 $$
 \text{CV}_{(n)} = \frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i^{(-i)})^2
 $$
 
-where $\hat{y}_i^{(-i)}$ is the prediction for observation $i$ from the model trained on all observations except $i$.
+여기서 $\hat{y}_i^{(-i)}$는 $i$를 제외한 모든 관측값으로 훈련한 모형이 내놓은 관측값 $i$의 예측값이다.
 
-### Shortcut for Linear Regression
+### 선형회귀에서의 지름길
 
-For linear regression, LOOCV has a remarkable computational shortcut. Rather than fitting $n$ separate models, the LOOCV error can be computed from a single fit using the **hat matrix** $\mathbf{H} = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T$:
+선형회귀에서 LOOCV에는 놀라운 계산 지름길이 있다. $n$개의 모형을 따로 적합하는 대신, **모자행렬** $\mathbf{H} = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T$를 이용해 한 번의 적합으로 LOOCV 오차를 계산할 수 있다.
 
 $$
 \text{CV}_{(n)} = \frac{1}{n} \sum_{i=1}^{n} \left(\frac{e_i}{1 - h_{ii}}\right)^2
 $$
 
-where $e_i = y_i - \hat{y}_i$ is the ordinary residual and $h_{ii}$ is the $i$-th diagonal element of $\mathbf{H}$. This formula shows that the leave-one-out prediction error for observation $i$ is simply the ordinary residual divided by $1 - h_{ii}$, where $h_{ii}$ measures the leverage of observation $i$.
+여기서 $e_i = y_i - \hat{y}_i$는 통상적인 잔차이고 $h_{ii}$는 $\mathbf{H}$의 $i$번째 대각원소이다. 이 공식은 관측값 $i$의 하나 빼기 예측오차가 통상적인 잔차를 $1 - h_{ii}$로 나눈 것에 지나지 않음을 보여준다. 여기서 $h_{ii}$는 관측값 $i$의 지렛대를 잰다.
 
-??? note "Derivation of the LOOCV shortcut"
-    When observation $i$ is removed, the Sherman-Morrison-Woodbury formula gives the change in $\hat{\boldsymbol{\beta}}$, and the prediction at $x_i$ changes by exactly $e_i \cdot h_{ii} / (1 - h_{ii})$. The leave-one-out residual is therefore $y_i - \hat{y}_i^{(-i)} = e_i / (1 - h_{ii})$.
+??? note "LOOCV 지름길의 유도"
+    관측값 $i$를 제거하면 Sherman-Morrison-Woodbury 공식이 $\hat{\boldsymbol{\beta}}$의 변화를 주며, $x_i$에서의 예측값은 정확히 $e_i \cdot h_{ii} / (1 - h_{ii})$만큼 바뀐다. 따라서 하나 빼기 잔차는 $y_i - \hat{y}_i^{(-i)} = e_i / (1 - h_{ii})$이다.
 
 ---
 
-## 4. Bias-Variance Tradeoff in Cross-Validation
+## 4. 교차검증의 편향-분산 절충
 
-The choice of $K$ involves a tradeoff:
+$K$의 선택에는 절충이 따른다.
 
-**Bias**: Each training set in K-fold CV has size approximately $n(K-1)/K$. When $K$ is small (e.g., $K = 2$), each training set is much smaller than the full dataset, leading to models that underperform relative to the model trained on all data. This introduces an upward bias in the CV error estimate. LOOCV ($K = n$) minimizes this bias because each training set has $n - 1$ observations.
+**편향**: K-겹 교차검증에서 각 훈련집합의 크기는 대략 $n(K-1)/K$이다. $K$가 작으면(예: $K = 2$) 각 훈련집합이 전체 자료보다 훨씬 작아, 모든 자료로 훈련한 모형에 비해 성능이 떨어지는 모형이 나온다. 이는 교차검증 오차 추정값에 위쪽 편향을 만든다. LOOCV($K = n$)는 각 훈련집합이 $n - 1$개의 관측값을 가지므로 이 편향을 최소화한다.
 
-**Variance**: The $K$ training sets in LOOCV overlap almost completely (they share $n - 2$ observations), so the $K$ fitted models are highly correlated. Averaging correlated quantities reduces variance less effectively than averaging uncorrelated quantities. As a result, LOOCV can have high variance. Smaller $K$ (e.g., $K = 5$ or $K = 10$) produces less correlated estimates and typically lower variance.
+**분산**: LOOCV의 $K$개 훈련집합은 거의 완전히 겹치므로($n - 2$개의 관측값을 공유한다) $K$개의 적합된 모형이 강하게 상관되어 있다. 상관된 양들을 평균내는 것은 무상관인 양들을 평균내는 것보다 분산을 덜 줄인다. 그 결과 LOOCV는 분산이 클 수 있다. $K$가 작으면(예: $K = 5$나 $K = 10$) 추정값들의 상관이 덜해 분산이 보통 더 작다.
 
-| Choice of $K$ | Bias of CV estimate | Variance of CV estimate | Computation |
+| $K$의 선택 | 교차검증 추정값의 편향 | 교차검증 추정값의 분산 | 계산량 |
 |----------------|---------------------|-------------------------|-------------|
-| $K = 5$       | Moderate (upward)   | Low                     | 5 model fits |
-| $K = 10$      | Small               | Moderate                | 10 model fits |
-| $K = n$ (LOOCV) | Approximately unbiased | Can be high          | 1 fit (with shortcut) |
+| $K = 5$       | 중간(위쪽)   | 작음                     | 모형 5회 적합 |
+| $K = 10$      | 작음               | 중간                | 모형 10회 적합 |
+| $K = n$ (LOOCV) | 거의 불편 | 클 수 있음          | 1회 적합(선형회귀의 지름길을 쓸 때) |
 
-!!! tip "Default recommendation"
-    In practice, $K = 5$ or $K = 10$ is recommended. James et al. (2013) note that these values have been empirically shown to yield CV error estimates that suffer from neither excessively high bias nor excessively high variance.
+!!! tip "기본 권장"
+    실무에서는 $K = 5$나 $K = 10$이 권장된다. James 등(2013)은 이 값들이 편향도 분산도 지나치게 크지 않은 교차검증 오차 추정값을 준다는 것이 경험적으로 확인되었다고 지적한다.
 
 ---
 
-## 5. Cross-Validation for Model Selection
+## 5. 모형선택을 위한 교차검증
 
-To select among $M$ candidate models using K-fold CV:
+K-겹 교차검증으로 $M$개의 후보 모형 가운데 고르려면
 
-1. For each model $j = 1, \ldots, M$, compute $\text{CV}_{(K)}^{(j)}$.
-2. Select the model with the smallest CV error: $\hat{j} = \arg\min_j \text{CV}_{(K)}^{(j)}$.
+1. 각 모형 $j = 1, \ldots, M$에 대해 $\text{CV}_{(K)}^{(j)}$를 계산한다.
+2. 교차검증 오차가 가장 작은 모형을 고른다: $\hat{j} = \arg\min_j \text{CV}_{(K)}^{(j)}$.
 
-### One-Standard-Error Rule
+### 1 표준오차 규칙
 
-Rather than selecting the model with the absolute lowest CV error, the **one-standard-error rule** selects the simplest model whose CV error is within one standard error of the minimum. This provides an additional guard against overfitting.
+절대적으로 가장 낮은 교차검증 오차를 갖는 모형을 고르는 대신, **1 표준오차 규칙**은 교차검증 오차가 최솟값의 1 표준오차 안에 드는 가장 단순한 모형을 고른다. 과대적합에 대한 추가 방어책이 된다.
 
-Let $\text{SE}(\text{CV}_{(K)}^{(j)})$ be the standard error of the CV estimate for model $j$, computed as the standard deviation of the $K$ fold-specific MSE values divided by $\sqrt{K}$. The one-SE rule selects the simplest model $j$ satisfying:
+$\text{SE}(\text{CV}_{(K)}^{(j)})$를 모형 $j$의 교차검증 추정값의 표준오차라 하자. 이는 $K$개 겹별 MSE의 표준편차를 $\sqrt{K}$로 나눈 값이다. 1 표준오차 규칙은 다음을 만족하는 가장 단순한 모형 $j$를 고른다.
 
 $$
 \text{CV}_{(K)}^{(j)} \leq \text{CV}_{(K)}^{(\hat{j})} + \text{SE}(\text{CV}_{(K)}^{(\hat{j})})
@@ -118,74 +118,74 @@ $$
 
 ---
 
-## 6. Connection to AIC
+## 6. AIC와의 관계
 
-Stone (1977) proved that, for linear regression, AIC model selection is asymptotically equivalent to LOOCV. This means that in large samples, AIC and LOOCV tend to select the same model. K-fold CV with small $K$ is not equivalent to AIC; it is closer to BIC in its tendency to select simpler models due to the upward bias in the CV error estimate from using smaller training sets.
+Stone(1977)은 선형회귀에서 AIC에 의한 모형선택이 LOOCV와 점근적으로 동등함을 증명했다. 곧 큰 표본에서 AIC와 LOOCV는 같은 모형을 고르는 경향이 있다. $K$가 작은 K-겹 교차검증은 AIC와 동등하지 않다. 훈련집합이 작아 생기는 위쪽 편향 때문에 더 단순한 모형을 고르는 경향이 있어 오히려 BIC에 가깝다.
 
-!!! warning "Cross-validation is not free of assumptions"
-    Cross-validation assumes that observations are exchangeable (roughly, that their order does not matter). For time series data, standard random-fold CV violates the temporal structure and produces misleadingly optimistic estimates. Time series data requires specialized CV strategies such as rolling-window or expanding-window cross-validation.
+!!! warning "교차검증에도 가정이 있다"
+    교차검증은 관측값이 교환 가능하다고(대략 순서가 중요하지 않다고) 가정한다. 시계열 자료에서 표준적인 무작위 겹 교차검증은 시간 구조를 위배하여 오도할 만큼 낙관적인 추정값을 낸다. 시계열 자료에는 이동창이나 확장창 교차검증 같은 전용 전략이 필요하다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Explain the difference between k-fold cross-validation and leave-one-out cross-validation (LOOCV). What are the trade-offs in bias and variance of the estimated test error?
+**연습문제 1.**
+k-겹 교차검증과 하나 빼기 교차검증(LOOCV)의 차이를 설명하라. 추정된 검정오차의 편향과 분산에는 어떤 절충이 있는가?
 
-??? success "Solution to Exercise 1"
-    **k-fold CV** splits the data into $k$ roughly equal folds, trains on $k-1$ folds, and tests on the held-out fold, rotating through all $k$ folds. The CV estimate is the average test error across folds. Common choice: $k = 5$ or $10$.
+??? success "연습문제 1 풀이"
+    **k-겹 교차검증**은 자료를 크기가 대략 같은 $k$개의 겹으로 나누고 $k-1$개 겹으로 훈련한 뒤 남겨 둔 겹에서 검정하며, 모든 겹을 돌아가면서 반복한다. 교차검증 추정값은 겹들의 검정오차 평균이다. 흔한 선택은 $k = 5$나 $10$이다.
 
-    **LOOCV** is the special case $k = n$: each observation serves as its own test set. The model is trained $n$ times, each time on $n-1$ observations.
+    **LOOCV**는 $k = n$인 특수한 경우로, 각 관측값이 자기 자신의 검정집합이 된다. 모형을 $n$번 훈련하며 매번 $n-1$개의 관측값을 쓴다.
 
-    **Bias-variance trade-off:**
+    **편향-분산 절충:**
 
-    - LOOCV has low bias (training sets are nearly the full dataset) but high variance (the $n$ training sets overlap heavily, making the $n$ error estimates highly correlated).
-    - 5- or 10-fold CV has slightly higher bias (training sets are smaller) but lower variance (less overlap between training sets reduces correlation among estimates).
+    - LOOCV는 편향이 작지만(훈련집합이 거의 전체 자료이다) 분산이 크다($n$개의 훈련집합이 크게 겹쳐 $n$개의 오차 추정값이 강하게 상관된다).
+    - 5-겹이나 10-겹은 편향이 조금 더 크지만(훈련집합이 더 작다) 분산이 더 작다(훈련집합이 덜 겹쳐 추정값 사이의 상관이 줄어든다).
 
-    In practice, 5- or 10-fold CV tends to give a better estimate of test error because the variance reduction outweighs the small increase in bias.
-
----
-
-**Exercise 2.**
-A data scientist fits a polynomial regression and uses the training data to select the degree that minimizes training error. They find degree 15 is best. Why is this problematic, and how would cross-validation help?
-
-??? success "Solution to Exercise 2"
-    Using training error to select model complexity always favors the most complex model because training error decreases monotonically as the model becomes more flexible. A degree-15 polynomial will likely overfit the training data, memorizing noise and performing poorly on new data.
-
-    Cross-validation addresses this by estimating test error (performance on unseen data). For each candidate degree $d$:
-
-    1. Split data into $k$ folds.
-    2. For each fold, fit a degree-$d$ polynomial on the remaining data and compute the prediction error on the held-out fold.
-    3. Average the errors across folds.
-
-    The degree that minimizes the CV error balances fit and complexity. Typically, CV would select a much lower degree (e.g., 2-4) that generalizes better.
+    실무에서는 분산 감소가 작은 편향 증가를 능가하므로 5-겹이나 10-겹이 검정오차를 더 잘 추정하는 편이다.
 
 ---
 
-**Exercise 3.**
-In stratified k-fold cross-validation, what is the stratification based on, and when is it important?
+**연습문제 2.**
+한 데이터 과학자가 다항회귀를 적합하고 훈련자료로 훈련오차를 최소화하는 차수를 골랐다. 그 결과 15차가 최선이라고 나왔다. 무엇이 문제이며 교차검증은 어떻게 도움이 되는가?
 
-??? success "Solution to Exercise 3"
-    In stratified k-fold CV, the folds are constructed so that each fold has approximately the same distribution of the response variable as the full dataset. For classification, this means each fold has roughly the same proportion of each class.
+??? success "연습문제 2 풀이"
+    훈련오차로 모형 복잡도를 고르면 언제나 가장 복잡한 모형이 선택된다. 모형이 유연해질수록 훈련오차가 단조롭게 줄어들기 때문이다. 15차 다항식은 훈련자료를 과대적합하여 잡음까지 외워 버리고 새 자료에서 성능이 나쁠 가능성이 높다.
 
-    Stratification is important when:
+    교차검증은 (보지 않은 자료에서의 성능인) 검정오차를 추정하여 이 문제에 대처한다. 각 후보 차수 $d$에 대해
 
-    1. **Class imbalance:** If only 5% of observations belong to the minority class, a random fold might contain zero minority examples, making the test error estimate unreliable.
-    2. **Small datasets:** With limited data, each fold must be representative to avoid high-variance CV estimates.
-    3. **Ordinal or grouped responses:** Ensuring each fold spans the range of the outcome variable.
+    1. 자료를 $k$개의 겹으로 나눈다.
+    2. 각 겹에 대해 나머지 자료로 $d$차 다항식을 적합하고 남겨 둔 겹에서 예측오차를 계산한다.
+    3. 겹들의 오차를 평균낸다.
 
-    For regression, stratification can be based on binned values of $Y$. Most CV implementations in scikit-learn support stratified splitting via `StratifiedKFold`.
+    교차검증 오차를 최소화하는 차수가 적합과 복잡도의 균형을 이룬다. 보통 교차검증은 훨씬 낮은 차수(예: 2–4차)를 고르며 이쪽이 더 잘 일반화된다.
 
 ---
 
-**Exercise 4.**
-Explain the "one-standard-error rule" for model selection via cross-validation and its rationale.
+**연습문제 3.**
+층화 k-겹 교차검증에서 층화의 기준은 무엇이며 언제 중요한가?
 
-??? success "Solution to Exercise 4"
-    The one-standard-error rule selects the simplest model whose CV error is within one standard error of the minimum CV error. That is:
+??? success "연습문제 3 풀이"
+    층화 k-겹 교차검증에서는 각 겹이 전체 자료와 대략 같은 반응변수 분포를 갖도록 겹을 구성한다. 분류 문제에서는 각 겹이 각 범주를 대략 같은 비율로 담는다는 뜻이다.
 
-    1. Compute the mean CV error $\overline{\text{CV}}_d$ and its standard error $\text{SE}_d$ for each model $d$.
-    2. Find the model $d^*$ with the minimum $\overline{\text{CV}}_{d^*}$.
-    3. Select the simplest model $d$ such that $\overline{\text{CV}}_d \leq \overline{\text{CV}}_{d^*} + \text{SE}_{d^*}$.
+    층화가 중요한 경우:
 
-    **Rationale:** The CV error estimate is noisy, and the model with the absolute minimum may be more complex than necessary. Models within one SE of the minimum are statistically indistinguishable in predictive performance. Among these, the simplest model is preferred for parsimony, interpretability, and robustness.
+    1. **범주 불균형:** 소수 범주가 관측값의 5%뿐이라면 무작위로 만든 겹에 소수 범주 사례가 하나도 없을 수 있어 검정오차 추정을 믿을 수 없게 된다.
+    2. **작은 자료:** 자료가 적을 때는 각 겹이 대표성을 가져야 교차검증 추정값의 분산이 커지지 않는다.
+    3. **순서형이거나 묶인 반응변수:** 각 겹이 결과변수의 범위를 고루 담도록 한다.
 
-    This rule was popularized by Breiman et al. (1984) in the context of CART and is widely used in regularization (e.g., LASSO cross-validation).
+    회귀에서는 $Y$를 구간으로 나눈 값을 기준으로 층화할 수 있다. 다만 scikit-learn의 `StratifiedKFold`는 이산 라벨을 요구하므로, 회귀에서는 먼저 $Y$를 직접 구간화하여 라벨을 만든 뒤 그 라벨로 `StratifiedKFold`를 써야 한다.
+
+---
+
+**연습문제 4.**
+교차검증을 이용한 모형선택에서 "1 표준오차 규칙"과 그 근거를 설명하라.
+
+??? success "연습문제 4 풀이"
+    1 표준오차 규칙은 교차검증 오차가 최소 교차검증 오차의 1 표준오차 안에 드는 가장 단순한 모형을 고른다. 곧
+
+    1. 각 모형 $d$에 대해 평균 교차검증 오차 $\overline{\text{CV}}_d$와 그 표준오차 $\text{SE}_d$를 계산한다.
+    2. $\overline{\text{CV}}_{d^*}$가 최소인 모형 $d^*$를 찾는다.
+    3. $\overline{\text{CV}}_d \leq \overline{\text{CV}}_{d^*} + \text{SE}_{d^*}$를 만족하는 가장 단순한 모형 $d$를 고른다.
+
+    **근거:** 교차검증 오차 추정값은 잡음이 있고, 절대 최솟값을 갖는 모형이 필요 이상으로 복잡할 수 있다. 최솟값의 1 표준오차 안에 있는 모형들은 예측 성능에서 통계적으로 구별되지 않는다. 그중에서는 절약성, 해석 가능성, 로버스트성을 위해 가장 단순한 모형을 선호한다.
+
+    이 규칙은 Breiman 등(1984)이 CART의 맥락에서 널리 알렸으며 정칙화(예: LASSO 교차검증)에서도 널리 쓰인다.

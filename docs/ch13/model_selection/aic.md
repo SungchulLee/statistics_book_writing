@@ -1,155 +1,155 @@
-# Akaike Information Criterion
+# Akaike 정보기준
 
-When comparing regression models with different numbers of predictors, goodness-of-fit measures like $R^2$ always favor the more complex model. We need a criterion that balances fit against complexity — rewarding models that explain the data well while penalizing unnecessary parameters. The Akaike Information Criterion (AIC) achieves this by estimating the information lost when a model approximates the true data-generating process.
+설명변수의 개수가 다른 회귀모형들을 비교할 때 $R^2$ 같은 적합도 척도는 언제나 더 복잡한 모형을 선호한다. 자료를 잘 설명하는 모형에 보상을 주되 불필요한 모수에는 벌점을 주어 적합과 복잡도를 저울질하는 기준이 필요하다. Akaike 정보기준(AIC)은 모형이 참 자료생성과정을 근사할 때 잃어버리는 정보량을 추정함으로써 이를 달성한다.
 
 ---
 
-## 1. Motivation from Information Theory
+## 1. 정보이론에서 온 동기
 
-Suppose the true distribution of the data is $f$ and a candidate model has distribution $g$. The **Kullback-Leibler (KL) divergence** measures the information lost when $g$ is used to approximate $f$:
+자료의 참 분포가 $f$이고 후보 모형의 분포가 $g$라 하자. **Kullback-Leibler(KL) 발산**은 $f$를 $g$로 근사할 때 잃는 정보량을 잰다.
 
 $$
 D_{\text{KL}}(f \| g) = \int f(x) \ln \frac{f(x)}{g(x)} \, dx
 $$
 
-We cannot compute $D_{\text{KL}}$ directly because $f$ is unknown, but Akaike (1973) showed that the expected log-likelihood, evaluated at the maximum likelihood estimate, provides an asymptotically unbiased estimate of the relative KL divergence — up to a bias correction of $k$ parameters. This insight leads to the AIC formula.
+$f$를 모르므로 $D_{\text{KL}}$을 직접 계산할 수는 없다. 그러나 Akaike(1973)는 최대가능도 추정값에서 평가한 기대 로그가능도가 상대적 KL 발산의 점근적 불편추정값을 제공하며, 다만 모수 개수 $k$만큼의 편향 보정이 필요함을 보였다. 이 통찰에서 AIC 공식이 나온다.
 
 ---
 
-## 2. Definition
+## 2. 정의
 
-The **Akaike Information Criterion** for a model with $k$ estimated parameters and maximized log-likelihood $\ln \hat{L}$ is:
+추정 모수가 $k$개이고 최대화된 로그가능도가 $\ln \hat{L}$인 모형의 **Akaike 정보기준**은
 
 $$
 \text{AIC} = 2k - 2 \ln \hat{L}
 $$
 
-where:
+여기서
 
-- $k$ is the total number of estimated parameters (including the intercept and the error variance $\sigma^2$ if applicable).
-- $\hat{L}$ is the value of the likelihood function evaluated at the maximum likelihood estimates.
+- $k$는 추정한 모수의 총 개수(절편과, 해당된다면 오차분산 $\sigma^2$까지 포함),
+- $\hat{L}$은 최대가능도 추정값에서 평가한 가능도함수의 값이다.
 
-The term $2k$ penalizes model complexity, while $-2 \ln \hat{L}$ rewards goodness of fit. A **lower AIC indicates a better model** — one that achieves a favorable tradeoff between fit and parsimony.
+$2k$ 항은 모형 복잡도에 벌점을 주고 $-2 \ln \hat{L}$ 항은 적합도에 보상을 준다. **AIC가 작을수록 좋은 모형**이며, 적합과 절약성 사이에서 유리한 절충을 이룬 모형이다.
 
 ---
 
-## 3. AIC for Linear Regression
+## 3. 선형회귀의 AIC
 
-For a linear regression model with Gaussian errors, the maximized log-likelihood takes the form:
+정규오차를 갖는 선형회귀 모형에서 최대화된 로그가능도는 다음 형태를 갖는다.
 
 $$
 \ln \hat{L} = -\frac{n}{2} \ln(2\pi) - \frac{n}{2} \ln \hat{\sigma}^2 - \frac{n}{2}
 $$
 
-where $\hat{\sigma}^2 = \text{SSE}/n$ is the maximum likelihood estimate of the error variance. Substituting into the AIC formula:
+여기서 $\hat{\sigma}^2 = \text{SSE}/n$은 오차분산의 최대가능도 추정값이다. AIC 공식에 대입하면
 
 $$
 \text{AIC} = 2k + n \ln\!\left(\frac{\text{SSE}}{n}\right) + n \ln(2\pi) + n
 $$
 
-Since the terms $n \ln(2\pi) + n$ are constant across models with the same data, model comparisons can use the simplified form:
+같은 자료를 쓰는 모형들 사이에서 $n \ln(2\pi) + n$은 상수이므로, 모형 비교에는 다음의 간단한 형태를 쓸 수 있다.
 
 $$
 \text{AIC} = 2k + n \ln\!\left(\frac{\text{SSE}}{n}\right)
 $$
 
-Here $k = p + 2$ (the $p$ regression coefficients, the intercept, and $\sigma^2$).
+여기서 $k = p + 2$이다($p$개의 회귀계수, 절편, 그리고 $\sigma^2$).
 
 ---
 
-## 4. Small-Sample Correction (AICc)
+## 4. 소표본 보정(AICc)
 
-When the sample size $n$ is small relative to the number of parameters $k$, AIC tends to select overly complex models. Hurvich and Tsai (1989) proposed a corrected version:
+표본크기 $n$이 모수 개수 $k$에 비해 작으면 AIC는 지나치게 복잡한 모형을 고르는 경향이 있다. Hurvich와 Tsai(1989)는 보정된 형태를 제안했다.
 
 $$
 \text{AIC}_c = \text{AIC} + \frac{2k(k+1)}{n - k - 1}
 $$
 
-The correction term $\frac{2k(k+1)}{n-k-1}$ is negligible when $n \gg k$ but substantial when $n/k < 40$. A common rule of thumb is to use AICc whenever $n / k < 40$.
+보정항 $\frac{2k(k+1)}{n-k-1}$은 $n \gg k$일 때 무시할 만하지만 $n/k < 40$이면 상당히 커진다. 흔한 경험 법칙은 $n / k < 40$일 때마다 AICc를 쓰는 것이다.
 
-!!! tip "When in doubt, use AICc"
-    AICc converges to AIC as $n \to \infty$, so using AICc is always at least as good as AIC for model selection. Many practitioners default to AICc regardless of sample size.
+!!! tip "망설여지면 AICc를 쓴다"
+    $n \to \infty$일 때 AICc는 AIC로 수렴하므로, 모형선택에서 AICc를 쓰는 것은 언제나 AIC 못지않다. 많은 실무자가 표본크기와 무관하게 기본적으로 AICc를 쓴다.
 
 ---
 
-## 5. Using AIC for Model Comparison
+## 5. 모형 비교에 AIC 쓰기
 
-AIC is meaningful only in relative terms — the absolute value of AIC has no interpretation. To compare $M$ candidate models, compute $\text{AIC}_j$ for each model $j = 1, \ldots, M$ and select the model with the smallest AIC.
+AIC는 상대적인 의미에서만 뜻이 있다. AIC의 절댓값 자체에는 해석이 없다. 후보 모형 $M$개를 비교하려면 각 모형 $j = 1, \ldots, M$의 $\text{AIC}_j$를 계산하고 AIC가 가장 작은 모형을 고른다.
 
-### Delta AIC
+### 델타 AIC
 
-The **delta AIC** for model $j$ is:
+모형 $j$의 **델타 AIC**는
 
 $$
 \Delta_j = \text{AIC}_j - \text{AIC}_{\min}
 $$
 
-where $\text{AIC}_{\min}$ is the smallest AIC among all candidates. Burnham and Anderson (2002) suggest the following interpretation:
+여기서 $\text{AIC}_{\min}$은 모든 후보 가운데 가장 작은 AIC이다. Burnham과 Anderson(2002)은 다음 해석을 제안한다.
 
-| $\Delta_j$ | Interpretation |
+| $\Delta_j$ | 해석 |
 |-------------|----------------|
-| 0 -- 2     | Substantial support; model is competitive |
-| 4 -- 7     | Considerably less support |
-| > 10       | Essentially no support |
+| 0 – 2     | 상당한 근거가 있음. 경쟁력 있는 모형 |
+| 4 – 7     | 근거가 상당히 약함 |
+| > 10       | 사실상 근거 없음 |
 
-### Akaike Weights
+### Akaike 가중치
 
-Akaike weights provide a probability-like measure of each model's relative support:
+Akaike 가중치는 각 모형의 상대적 근거를 확률처럼 나타낸다.
 
 $$
 w_j = \frac{\exp(-\Delta_j / 2)}{\sum_{m=1}^{M} \exp(-\Delta_m / 2)}
 $$
 
-The weights sum to 1 and can be interpreted as the approximate probability that model $j$ is the best model among the candidates, given the data.
+가중치의 합은 1이며, 자료가 주어졌을 때 모형 $j$가 후보들 가운데 최선일 근사적 확률로 해석할 수 있다.
 
 ---
 
-## 6. Important Properties
+## 6. 중요한 성질
 
-- **Not a hypothesis test**: AIC does not test whether a model is "significantly" better. It ranks models by estimated predictive accuracy.
-- **Relative, not absolute**: AIC values are only meaningful when compared within the same dataset. Comparing AIC across different datasets is invalid.
-- **Favors prediction**: AIC is asymptotically equivalent to leave-one-out cross-validation for model selection, making it prediction-oriented rather than oriented toward identifying the "true" model.
-- **No consistency**: If the true model is among the candidates and $n \to \infty$, AIC does not necessarily select the true model. It tends to select slightly more complex models. BIC has this consistency property instead.
+- **가설검정이 아니다**: AIC는 어떤 모형이 "유의하게" 나은지를 검정하지 않는다. 추정된 예측 정확도로 모형들의 순위를 매긴다.
+- **절대적이 아니라 상대적이다**: AIC 값은 같은 자료 안에서 비교할 때에만 의미가 있다. 서로 다른 자료의 AIC를 비교하는 것은 타당하지 않다.
+- **예측을 선호한다**: AIC는 모형선택에서 하나 빼기 교차검증과 점근적으로 동등하므로, "참" 모형의 식별보다는 예측에 지향되어 있다.
+- **일치성이 없다**: 참 모형이 후보에 들어 있고 $n \to \infty$여도 AIC가 반드시 참 모형을 고르지는 않는다. 조금 더 복잡한 모형을 고르는 경향이 있다. 이 일치성은 대신 BIC가 갖는다.
 
-!!! warning "Same data required"
-    When comparing models via AIC, all models must be fit to exactly the same dataset (same observations). Comparing AIC values across models fit to datasets of different sizes or with different observations is meaningless.
+!!! warning "같은 자료여야 한다"
+    AIC로 모형을 비교할 때 모든 모형은 정확히 같은 자료(같은 관측값들)에 적합되어야 한다. 크기가 다르거나 관측값이 다른 자료에 적합한 모형들의 AIC를 비교하는 것은 의미가 없다.
 
 ---
 
-## 7. Numerical Example
+## 7. 수치 예제
 
-Consider three candidate models for a dataset with $n = 50$ observations:
+관측값 $n = 50$개인 자료에 대한 후보 모형 셋을 생각하자.
 
-| Model | Predictors ($p$) | $k$ | SSE | $\text{AIC}$ |
+| 모형 | 설명변수 수 ($p$) | $k$ | SSE | $\text{AIC}$ |
 |-------|-------------------|------|------|---------------|
 | A     | 1                 | 3    | 120  | $50\ln(120/50) + 2(3) = 50(0.875) + 6 = 49.8$ |
 | B     | 3                 | 5    | 90   | $50\ln(90/50) + 2(5) = 50(0.588) + 10 = 39.4$ |
 | C     | 6                 | 8    | 85   | $50\ln(85/50) + 2(8) = 50(0.531) + 16 = 42.5$ |
 
-Model B has the lowest AIC (39.4), suggesting the best balance between fit and complexity. Model C achieves a slightly lower SSE than Model B, but its three additional parameters are not justified by the modest improvement in fit — the complexity penalty of $2 \times 8 = 16$ versus $2 \times 5 = 10$ outweighs the gain.
+모형 B의 AIC가 가장 작아(39.4) 적합과 복잡도의 균형이 가장 좋다. 모형 C는 모형 B보다 SSE가 조금 더 작지만, 세 개의 추가 모수가 그 미미한 적합 개선으로 정당화되지 않는다. 복잡도 벌점 $2 \times 8 = 16$이 $2 \times 5 = 10$을 넘어서는 몫이 이득보다 크기 때문이다.
 
-The delta values are $\Delta_A = 10.4$, $\Delta_B = 0$, and $\Delta_C = 3.1$. Under Burnham and Anderson's guidelines, Model A has essentially no support, Model B is the best, and Model C has noticeably less support but cannot be dismissed entirely.
+델타 값은 $\Delta_A = 10.4$, $\Delta_B = 0$, $\Delta_C = 3.1$이다. Burnham과 Anderson의 지침에 따르면 모형 A는 사실상 근거가 없고, 모형 B가 최선이며, 모형 C는 근거가 눈에 띄게 약하지만 완전히 배제할 수는 없다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Two linear regression models, **Model A** and **Model B**, were fitted to the same dataset. The results show that:
+**연습문제 1.**
+같은 자료에 **모형 A**와 **모형 B**라는 두 선형회귀 모형을 적합했다. 결과는 다음과 같다.
 
-- Model A has a higher $R^2$ value.
-- Model B has a lower AIC (Akaike Information Criterion).
+- 모형 A의 $R^2$가 더 높다.
+- 모형 B의 AIC(Akaike 정보기준)가 더 낮다.
 
-**(a)** Between Model A (higher $R^2$) and Model B (lower AIC), which model should be selected?
+**(a)** 모형 A($R^2$가 높음)와 모형 B(AIC가 낮음) 가운데 어느 것을 골라야 하는가?
 
-**(b)** Why is AIC preferred over $R^2$ for model selection?
+**(b)** 모형선택에서 $R^2$보다 AIC가 선호되는 이유는 무엇인가?
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
 
-    **(a)** It is generally recommended to prioritize the model with the **lower AIC** (Model B in this case).
+    **(a)** 일반적으로 **AIC가 더 낮은 모형**(여기서는 모형 B)을 우선하는 것이 권장된다.
 
-    **(b)** Three key reasons:
+    **(b)** 세 가지 핵심 이유가 있다.
 
-    1. **Limitations of $R^2$**: $R^2$ measures the proportion of variance explained but does not penalize for model complexity. A model with more predictors can artificially increase $R^2$, even if those predictors do not improve true predictive performance, leading to overfitting.
+    1. **$R^2$의 한계**: $R^2$는 설명된 분산의 비율을 재지만 모형 복잡도에 벌점을 주지 않는다. 설명변수가 많은 모형은 그 변수들이 참된 예측 성능을 개선하지 않아도 $R^2$를 인위적으로 높일 수 있어 과대적합으로 이어진다.
 
-    2. **Strengths of AIC**: AIC balances model fit (how well the model explains the data) and model simplicity (penalizing additional predictors). This helps select the model likely to have better predictive performance on unseen data.
+    2. **AIC의 강점**: AIC는 모형의 적합(자료를 얼마나 잘 설명하는가)과 단순성(추가 설명변수에 벌점)을 균형 있게 반영한다. 그래서 보지 않은 자료에서 더 나은 예측 성능을 낼 가능성이 높은 모형을 고르는 데 도움이 된다.
 
-    3. **Key Difference**: $R^2$ focuses solely on explanatory power, while AIC accounts for both explanation and complexity. AIC is therefore a more reliable criterion for comparing models in terms of prediction accuracy.
+    3. **핵심 차이**: $R^2$는 설명력에만 초점을 맞추지만 AIC는 설명력과 복잡도를 함께 고려한다. 따라서 예측 정확도의 관점에서 모형을 비교할 때 AIC가 더 믿을 만한 기준이다.

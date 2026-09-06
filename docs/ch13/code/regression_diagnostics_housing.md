@@ -1,48 +1,51 @@
-# Regression Diagnostics (Housing)
+# 회귀 진단 (주택)
 
-## Overview
+## 개요
 
-This page demonstrates a comprehensive regression diagnostics workflow using the King County housing dataset. We cover studentized residuals for outlier detection, Cook's distance and hat values for influence analysis, heteroscedasticity testing via the Breusch-Pagan test, partial residual plots, and the impact of removing influential observations on model estimates.
+이 페이지는 King County 주택 자료를 이용해 회귀 진단의 전체 흐름을 보인다. 이상점 탐지를 위한 스튜던트화 잔차, 영향 분석을 위한 Cook 거리와 모자값, Breusch-Pagan 검정을 통한 이분산 검정, 부분잔차 그림, 그리고 영향점 제거가 모형 추정에 미치는 영향을 다룬다.
 
-## Mathematical Background
+!!! note "자료에 대하여"
+    `house_98105`는 King County 주택 매매 자료 가운데 우편번호 98105 지역만 걸러 낸 부분자료를 담은 pandas `DataFrame`이다. 아래 코드는 이 변수가 이미 만들어져 있다고 가정한다. 다른 자료로 바꾸어도 진단 절차 자체는 그대로 적용된다.
 
-### Studentized Residuals
+## 수학적 배경
 
-The internally studentized residual for observation $i$ is
+### 스튜던트화 잔차
+
+관측값 $i$의 내부 스튜던트화 잔차는
 
 $$
 r_i = \frac{e_i}{s\sqrt{1 - h_{ii}}},
 $$
 
-where $e_i = y_i - \hat{y}_i$ is the raw residual and $h_{ii}$ is the leverage (diagonal of the hat matrix $\mathbf{H} = \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top$). Observations with $|r_i| > 2.5$ are potential outliers.
+여기서 $e_i = y_i - \hat{y}_i$는 원잔차이고 $h_{ii}$는 지렛대(모자행렬 $\mathbf{H} = \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top$의 대각원소)이다. $|r_i| > 2.5$인 관측값은 잠재적 이상점이다.
 
-### Hat Values (Leverage)
+### 모자값(지렛대)
 
-The leverage $h_{ii}$ measures how far observation $i$ is from the center of the predictor space. High leverage means $\mathbf{x}_i$ is unusual. Observations with $h_{ii} > 2k/n$ or $h_{ii} > 3\bar{h}$ (where $\bar{h} = k/n$) are high-leverage points.
+지렛대 $h_{ii}$는 관측값 $i$가 설명변수 공간의 중심에서 얼마나 떨어져 있는지를 잰다. 지렛대가 크다는 것은 $\mathbf{x}_i$가 특이하다는 뜻이다. $h_{ii} > 2k/n$이거나 $h_{ii} > 3\bar{h}$($\bar{h} = k/n$)인 관측값을 높은 지렛대 점으로 본다.
 
-### Cook's Distance
+### Cook 거리
 
-Cook's distance combines residual magnitude and leverage:
+Cook 거리는 잔차의 크기와 지렛대를 결합한다.
 
 $$
 D_i = \frac{1}{k}\,r_i^2\,\frac{h_{ii}}{1 - h_{ii}}.
 $$
 
-Equivalently, $D_i$ measures the change in all fitted values when observation $i$ is deleted. A common threshold is $D_i > 4/n$.
+동등하게 $D_i$는 관측값 $i$를 뺐을 때 모든 적합값이 변하는 정도를 잰다. 흔한 문턱값은 $D_i > 4/n$이다.
 
-### Breusch-Pagan Test
+### Breusch-Pagan 검정
 
-The Breusch-Pagan test for heteroscedasticity regresses squared residuals on the predictors:
+이분산에 대한 Breusch-Pagan 검정은 제곱잔차를 설명변수에 회귀시킨다.
 
 $$
 e_i^2 = \gamma_0 + \gamma_1 x_{i1} + \cdots + \gamma_p x_{ip} + v_i.
 $$
 
-Under $H_0$ (homoscedasticity), the test statistic $nR^2$ from this auxiliary regression follows $\chi^2_p$.
+$H_0$(등분산) 아래에서 이 보조회귀의 검정통계량 $nR^2$은 $\chi^2_p$를 따른다.
 
-## Code
+## 코드
 
-### Baseline Model and Influence Diagnostics
+### 기준 모형과 영향 진단
 
 ```python
 import numpy as np
@@ -62,7 +65,7 @@ hat_values = influence.hat_matrix_diag
 cooks_dist, _ = influence.cooks_distance
 ```
 
-### Effect of Removing Influential Points
+### 영향점 제거의 효과
 
 ```python
 threshold_cooks = 4 / len(y)
@@ -79,7 +82,7 @@ comparison = pd.DataFrame({
 })
 ```
 
-### Heteroscedasticity Test
+### 이분산 검정
 
 ```python
 from statsmodels.stats.diagnostic import het_breuschpagan
@@ -88,19 +91,19 @@ bp_stat, bp_pval, _, _ = het_breuschpagan(results.resid, X)
 print(f"Breusch-Pagan p-value: {bp_pval:.4f}")
 ```
 
-## Interpretation
+## 해석
 
-- **Studentized residuals**: Large values indicate observations that are poorly predicted by the model. These may be data entry errors, unusual cases, or signals that the model is misspecified.
-- **Leverage**: High-leverage points are not necessarily harmful; they become influential only when they also have large residuals. A high-leverage point that lies on the regression surface actually stabilizes the fit.
-- **Cook's distance**: Points with high Cook's distance affect the entire regression surface. Removing them and comparing results reveals whether conclusions are sensitive to a few observations.
-- **Breusch-Pagan test**: A significant result ($p < 0.05$) indicates heteroscedasticity, suggesting that OLS standard errors are unreliable. Remedies include WLS, robust standard errors, or variance-stabilizing transformations.
-- **Partial residual plots** (CCPR plots) show the relationship between each predictor and the response after accounting for other predictors, revealing potential nonlinearities.
+- **스튜던트화 잔차**: 값이 크면 모형이 그 관측값을 잘 예측하지 못한다는 뜻이다. 자료 입력 오류, 특이한 사례, 혹은 모형 오설정의 신호일 수 있다.
+- **지렛대**: 지렛대가 큰 점이 반드시 해로운 것은 아니다. 잔차까지 클 때에만 영향점이 된다. 회귀 곡면 위에 놓인 높은 지렛대 점은 오히려 적합을 안정시킨다.
+- **Cook 거리**: Cook 거리가 큰 점은 회귀 곡면 전체에 영향을 준다. 그 점들을 빼고 결과를 비교해 보면 결론이 몇몇 관측값에 민감한지 드러난다.
+- **Breusch-Pagan 검정**: 유의한 결과($p < 0.05$)는 이분산을 나타내며 OLS 표준오차를 믿을 수 없음을 시사한다. 대책으로는 WLS, 로버스트 표준오차, 분산 안정화 변환이 있다.
+- **부분잔차 그림**(CCPR 그림)은 다른 설명변수를 고려한 뒤 각 설명변수와 반응변수의 관계를 보여주어 잠재적 비선형성을 드러낸다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.** Compute externally studentized residuals (using the leave-one-out variance estimate) and compare them to the internally studentized residuals. Which observations show the largest discrepancy?
+**연습문제 1.** (하나 빼기 분산 추정을 쓰는) 외부 스튜던트화 잔차를 계산하여 내부 스튜던트화 잔차와 비교하라. 어떤 관측값에서 차이가 가장 큰가?
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
 
     ```python
     ext_resids = influence.resid_studentized_external
@@ -109,27 +112,27 @@ print(f"Breusch-Pagan p-value: {bp_pval:.4f}")
     top_idx = np.argsort(discrepancy)[-5:]
     ```
 
-    The largest discrepancies occur at observations where the residual is large and $h_{ii}$ is also large. The external residual uses $s_{(i)}$ (computed without observation $i$), which differs most from $s$ when observation $i$ strongly affects the residual variance. $\square$
+    차이가 가장 큰 곳은 잔차가 크면서 $h_{ii}$도 큰 관측값이다. 외부 잔차는 관측값 $i$를 빼고 계산한 $s_{(i)}$를 쓰는데, 관측값 $i$가 잔차분산에 강한 영향을 줄수록 $s$와 $s_{(i)}$의 차이가 커지기 때문이다. $\square$
 
 ---
 
-**Exercise 2.** Prove that the sum of all hat values equals $k$ (the number of parameters). What does this imply about the average leverage?
+**연습문제 2.** 모든 모자값의 합이 $k$(모수의 개수)임을 증명하라. 이는 평균 지렛대에 대해 무엇을 뜻하는가?
 
-??? success "Solution to Exercise 2"
+??? success "연습문제 2 풀이"
 
-    The hat matrix is $\mathbf{H} = \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top$. Since $\mathbf{H}$ is idempotent ($\mathbf{H}^2 = \mathbf{H}$) and symmetric:
+    모자행렬은 $\mathbf{H} = \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top$이다. $\mathbf{H}$가 멱등($\mathbf{H}^2 = \mathbf{H}$)이고 대칭이므로
 
     $$
     \sum_{i=1}^n h_{ii} = \operatorname{tr}(\mathbf{H}) = \operatorname{tr}(\mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top) = \operatorname{tr}((\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{X}) = \operatorname{tr}(\mathbf{I}_k) = k.
     $$
 
-    The average leverage is $\bar{h} = k/n$, so the threshold $3\bar{h} = 3k/n$ identifies points with leverage three times the average. $\square$
+    따라서 평균 지렛대는 $\bar{h} = k/n$이고, 문턱값 $3\bar{h} = 3k/n$은 평균의 세 배가 넘는 지렛대를 가진 점을 찾아낸다. $\square$
 
 ---
 
-**Exercise 3.** Implement the Breusch-Pagan test from scratch by running the auxiliary regression of $e_i^2$ on $\mathbf{X}$ and computing $nR^2$. Verify it matches the statsmodels result.
+**연습문제 3.** $e_i^2$을 $\mathbf{X}$에 회귀시키고 $nR^2$을 계산하여 Breusch-Pagan 검정을 직접 구현하라. statsmodels 결과와 일치하는지 확인하라.
 
-??? success "Solution to Exercise 3"
+??? success "연습문제 3 풀이"
 
     ```python
     resid_sq = results.resid ** 2
@@ -139,20 +142,20 @@ print(f"Breusch-Pagan p-value: {bp_pval:.4f}")
     bp_pval_manual = 1 - stats.chi2.cdf(bp_stat_manual, X.shape[1] - 1)
     ```
 
-    The manual computation should closely match `het_breuschpagan` (minor differences may arise from implementation details in the constant term handling). $\square$
+    직접 계산한 값은 `het_breuschpagan`과 거의 일치한다(상수항 처리 같은 구현 세부에서 미세한 차이가 날 수 있다). 자유도는 상수를 제외한 설명변수의 개수이므로 `X.shape[1] - 1`을 쓴다. $\square$
 
 ---
 
-**Exercise 4.** After removing influential observations, the coefficient estimates change. Discuss when it is appropriate to remove such observations versus when they should be retained.
+**연습문제 4.** 영향점을 제거하면 계수 추정값이 달라진다. 그런 관측값을 제거하는 것이 적절한 경우와 남겨 두어야 하는 경우를 논하라.
 
-??? success "Solution to Exercise 4"
+??? success "연습문제 4 풀이"
 
-    Removal is appropriate when influential observations are clearly erroneous (data entry mistakes, measurement failures) or come from a different population. Retention is appropriate when the observations are legitimate data points that happen to be unusual. In this case, the sensitivity analysis itself is informative: if results change drastically, the conclusions are fragile. Alternatives to removal include robust regression (e.g., Huber or bisquare weighting), which downweights influential points without entirely excluding them. $\square$
+    영향점이 명백히 잘못된 값(자료 입력 실수, 측정 실패)이거나 다른 모집단에서 온 것이라면 제거가 적절하다. 특이하긴 하지만 정당한 자료점이라면 남겨야 한다. 이 경우 민감도 분석 자체가 유익한 정보를 준다. 결과가 크게 달라진다면 결론이 취약하다는 뜻이다. 제거의 대안으로는 영향점을 완전히 배제하지 않고 가중치를 낮추는 로버스트 회귀(예: Huber나 bisquare 가중)가 있다. $\square$
 
 ---
 
-**Exercise 5.** Explain why the Q-Q plot tails often deviate from the diagonal even when the true errors are normal. How does sample size affect this phenomenon?
+**연습문제 5.** 참 오차가 정규분포를 따르는데도 Q-Q 그림의 꼬리가 대각선에서 자주 벗어나는 이유를 설명하라. 표본크기는 이 현상에 어떤 영향을 주는가?
 
-??? success "Solution to Exercise 5"
+??? success "연습문제 5 풀이"
 
-    In a Q-Q plot, the extreme order statistics (the smallest and largest residuals) have the highest sampling variability. Even when errors are exactly normal, the tails of the empirical distribution fluctuate substantially in finite samples. With $n$ observations, the expected range of a normal sample is approximately $2\sqrt{2\ln n}\,\sigma$, but the actual range varies considerably. As $n$ increases, the Q-Q plot tails become more stable (the law of large numbers stabilizes the empirical quantiles), so large-sample Q-Q plots provide more reliable evidence about tail behavior. $\square$
+    Q-Q 그림에서 극단의 순서통계량(가장 작은 잔차와 가장 큰 잔차)은 표집변동이 가장 크다. 오차가 정확히 정규여도 유한표본에서는 경험분포의 꼬리가 상당히 흔들린다. 관측값이 $n$개일 때 정규표본의 범위는 대략 $2\sqrt{2\ln n}\,\sigma$이지만 실제 범위는 크게 변동한다. $n$이 커지면 (큰 수의 법칙이 경험분위수를 안정시키므로) Q-Q 그림의 꼬리가 더 안정되고, 따라서 큰 표본의 Q-Q 그림이 꼬리 거동에 대해 더 믿을 만한 증거를 준다. $\square$

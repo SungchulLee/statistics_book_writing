@@ -1,122 +1,124 @@
-# Hypothesis Tests for Regression Coefficients (t-tests)
+# 회귀계수의 가설검정 (t-검정)
 
-
-In linear regression, a key objective is to evaluate the impact of each predictor on the dependent variable. Hypothesis tests for regression coefficients, typically conducted using **t-tests**, assess whether the predictors significantly contribute to the model.
+선형회귀에서 핵심 목표 가운데 하나는 각 설명변수가 종속변수에 미치는 영향을 평가하는 것이다. 보통 **t-검정**으로 수행하는 회귀계수의 가설검정은 설명변수가 모형에 유의하게 기여하는지를 판단한다.
 
 ---
 
-## Formulation of the t-test
+## t-검정의 설정
 
-A t-test in linear regression evaluates the null hypothesis that a regression coefficient equals zero, indicating that the corresponding predictor variable has no effect on the dependent variable.
+선형회귀의 t-검정은 회귀계수가 0이라는 귀무가설, 곧 해당 설명변수가 종속변수에 아무 효과가 없다는 가설을 평가한다.
 
-The hypotheses are:
+가설은 다음과 같다.
 
-- **Null Hypothesis ($H_0$):** $\beta_i = 0$ — the predictor has no effect.
-- **Alternative Hypothesis ($H_1$):** $\beta_i \neq 0$ — the predictor has a significant effect.
+- **귀무가설 ($H_0$):** $\beta_i = 0$ — 설명변수에 효과가 없다.
+- **대립가설 ($H_1$):** $\beta_i \neq 0$ — 설명변수에 유의한 효과가 있다.
 
-The **t-statistic** is calculated for each coefficient:
+각 계수에 대해 **t 통계량**을 계산한다.
 
 $$
 t = \frac{\hat{\beta}_i}{SE(\hat{\beta}_i)}
 $$
 
-where:
+여기서
 
-- $\hat{\beta}_i$ is the estimated coefficient for predictor $i$,
-- $SE(\hat{\beta}_i)$ is the standard error of the estimated coefficient, representing the variability of the estimate.
+- $\hat{\beta}_i$는 설명변수 $i$의 추정된 계수,
+- $SE(\hat{\beta}_i)$는 추정값의 표준오차로, 추정의 변동을 나타낸다.
 
-The t-statistic measures how many standard errors the estimated coefficient is away from zero. A larger absolute value indicates stronger evidence against the null hypothesis.
-
----
-
-## p-values in t-tests
-
-The **p-value** is the probability of observing a t-statistic as extreme as (or more extreme than) the one computed, assuming the null hypothesis is true.
-
-- **Low p-value (< 0.05):** The coefficient is significantly different from zero — reject $H_0$. The predictor has a significant impact on the dependent variable.
-- **High p-value ($\geq$ 0.05):** We fail to reject $H_0$. The predictor might not significantly affect the dependent variable, and its inclusion may not improve predictive performance.
-
-!!! example "Salary Prediction"
-    In a linear regression model predicting salary based on years of experience, a t-test assesses whether "years of experience" has a significant effect on salary. If the p-value for its coefficient is 0.001, we conclude that years of experience is a significant predictor of salary.
+t 통계량은 추정된 계수가 0에서 표준오차 몇 개만큼 떨어져 있는지를 잰다. 절댓값이 클수록 귀무가설에 반하는 증거가 강하다.
 
 ---
 
-## Confidence Intervals for Coefficients
+## t-검정의 p값
 
-While p-values provide a binary significance decision, **confidence intervals** (CIs) give a range of plausible values for the coefficient. A 95% CI is computed as:
+**p값**은 귀무가설이 참이라고 가정했을 때 계산된 t 통계량만큼 또는 그보다 더 극단적인 값을 관측할 확률이다.
+
+- **작은 p값 (< 0.05):** 계수가 0과 유의하게 다르다 — $H_0$을 기각한다. 그 설명변수는 종속변수에 유의한 영향을 준다.
+- **큰 p값 ($\geq$ 0.05):** $H_0$을 기각하지 못한다. 그 설명변수는 종속변수에 유의한 영향을 주지 않을 수 있고, 포함해도 예측 성능이 나아지지 않을 수 있다.
+
+!!! example "연봉 예측"
+    경력 연수로 연봉을 예측하는 선형회귀 모형에서 t-검정은 "경력 연수"가 연봉에 유의한 효과를 갖는지 평가한다. 그 계수의 p값이 0.001이라면 경력 연수가 연봉의 유의한 설명변수라고 결론짓는다.
+
+---
+
+## 계수의 신뢰구간
+
+p값이 유의성에 대한 이분법적 판정을 준다면, **신뢰구간**은 계수가 취할 만한 값의 범위를 준다. 95% 신뢰구간은 다음과 같이 계산한다.
 
 $$
 CI = \hat{\beta}_i \pm \left( t_{\alpha/2} \times SE(\hat{\beta}_i) \right)
 $$
 
-where $t_{\alpha/2}$ is the critical value from the t-distribution at the desired confidence level.
+여기서 $t_{\alpha/2}$는 원하는 신뢰수준에서 t 분포의 임계값이다.
 
-**Interpretation:**
+**해석:**
 
-- If the CI **includes 0**, the coefficient is not significantly different from zero — the predictor may not have a significant impact.
-- If the CI **excludes 0**, the predictor is significant, providing stronger evidence that it contributes meaningfully to the model.
+- 신뢰구간이 **0을 포함하면** 계수는 0과 유의하게 다르지 않다. 그 설명변수는 유의한 영향을 주지 않을 수 있다.
+- 신뢰구간이 **0을 배제하면** 그 설명변수는 유의하며, 모형에 의미 있게 기여한다는 더 강한 증거가 된다.
 
-!!! example "Advertising Budget"
-    For a predictor "advertising budget" in a regression model predicting sales, a 95% CI of $(0.03, 0.12)$ does not contain 0, so we conclude that advertising budget significantly influences sales.
-
----
-
-## Interpreting Significance
-
-The significance of a predictor is determined by the t-test outcome and its associated p-value.
-
-**Statistically Significant Coefficient** ($p < 0.05$):
-
-- The predictor explains some variability in the dependent variable and improves the model.
-- Changes in this variable are associated with changes in the outcome.
-- For example, if "education level" is significant in predicting job performance, education level is an important determinant.
-
-**Statistically Insignificant Coefficient** ($p \geq 0.05$):
-
-- There is not enough evidence to claim this predictor impacts the dependent variable.
-- The variable may be removed from the model if it does not improve overall fit.
+!!! example "광고 예산"
+    매출을 예측하는 회귀모형에서 "광고 예산"이라는 설명변수의 95% 신뢰구간이 $(0.03, 0.12)$라면 0을 포함하지 않으므로 광고 예산이 매출에 유의한 영향을 준다고 결론짓는다.
 
 ---
 
-## The Role of Multicollinearity in t-tests
+## 유의성의 해석
 
-**Multicollinearity** occurs when two or more predictors are highly correlated, making it difficult to distinguish their individual effects. This can:
+설명변수의 유의성은 t-검정의 결과와 그에 딸린 p값으로 정해진다.
 
-- Inflate standard errors of coefficients, reducing t-statistics.
-- Inflate p-values, leading to incorrect conclusions about significance.
-- Widen confidence intervals, making it harder to conclude significance.
+**통계적으로 유의한 계수** ($p < 0.05$):
 
-**Addressing Multicollinearity:**
+- 그 설명변수는 종속변수의 변동 일부를 설명하며 모형을 개선한다.
+- 이 변수의 변화는 결과의 변화와 연관된다.
+- 예를 들어 직무 성과를 예측하는 데 "교육 수준"이 유의하다면 교육 수준은 중요한 결정 요인이다.
 
-- **Variance Inflation Factor (VIF):** A VIF greater than 5 or 10 suggests multicollinearity. Corrective actions include removing or combining correlated predictors.
-- **Principal Component Analysis (PCA):** Transforms predictors into uncorrelated components.
-- **Ridge Regression:** Regularizes coefficients to reduce the impact of multicollinearity.
+**통계적으로 유의하지 않은 계수** ($p \geq 0.05$):
+
+- 이 설명변수가 종속변수에 영향을 준다고 주장할 증거가 충분하지 않다.
+- 전반적인 적합을 개선하지 못한다면 모형에서 뺄 수 있다.
 
 ---
 
-## Summary
+## t-검정에서 다중공선성의 역할
 
-Hypothesis tests for regression coefficients (t-tests) are critical for determining the significance of individual predictors. By evaluating p-values and confidence intervals, we determine which predictors significantly contribute to explaining variability in the dependent variable. It is also important to check for multicollinearity, which can obscure the true significance of predictors.
+**다중공선성**은 둘 이상의 설명변수가 강하게 상관되어 개별 효과를 구분하기 어려워지는 상황이다. 이는 다음을 일으킨다.
 
-## Exercises
+- 계수의 표준오차를 부풀려 t 통계량을 줄인다.
+- p값을 부풀려 유의성에 대한 잘못된 결론을 낳는다.
+- 신뢰구간을 넓혀 유의성을 결론짓기 어렵게 만든다.
 
-**Exercise 1.**
-A researcher studying education in Italy and France wanted to compare how many years, on average, men in each country spent in school. The researcher obtained a random sample of men from each country:
+**다중공선성에 대처하기:**
 
-| | Italy | France |
+- **분산팽창인자(VIF):** VIF가 5나 10을 넘으면 다중공선성을 시사한다. 상관된 설명변수를 빼거나 결합하는 것이 대책이다.
+- **주성분분석(PCA):** 설명변수를 서로 무상관인 성분으로 변환한다.
+- **릿지 회귀:** 계수를 정칙화하여 다중공선성의 영향을 줄인다.
+
+---
+
+## 요약
+
+회귀계수의 가설검정(t-검정)은 개별 설명변수의 유의성을 판단하는 데 결정적이다. p값과 신뢰구간을 평가하여 어떤 설명변수가 종속변수의 변동을 설명하는 데 유의하게 기여하는지 가려낸다. 설명변수의 참된 유의성을 가릴 수 있는 다중공선성을 확인하는 일도 중요하다.
+
+## 연습문제
+
+!!! note "이 절의 연습문제에 대하여"
+    아래 네 문제는 두 표본의 평균을 비교하는 $t$ 검정이다. 회귀계수의 $t$ 검정과 통계량의 구조($\hat{\theta}/SE(\hat{\theta})$)와 판정 규칙이 동일하므로, $t$ 검정의 기계적 절차를 익히는 연습으로 삼는다.
+
+**연습문제 1.**
+이탈리아와 프랑스의 교육을 연구하는 한 연구자가 두 나라 남성이 평균적으로 학교를 몇 년 다녔는지 비교하려 한다. 각 나라에서 남성을 무작위로 표본추출하여 다음을 얻었다.
+
+| | 이탈리아 | 프랑스 |
 |:---:|:---:|:---:|
-| Mean | 10.7 | 10.4 |
-| Standard Deviation | 2.3 | 2.5 |
-| Number of Samples | 46 | 58 |
+| 평균 | 10.7 | 10.4 |
+| 표준편차 | 2.3 | 2.5 |
+| 표본 수 | 46 | 58 |
 
-Test whether there is a significant difference between the two countries' mean school years with significance level $\alpha = 0.05$.
+유의수준 $\alpha = 0.05$에서 두 나라의 평균 재학 연수에 유의한 차이가 있는지 검정하라.
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
 
-    Two Sample $t$-Test (pooled variance):
+    두 표본 $t$ 검정(합동분산):
 
     $$
-    H_0: \mu_A = \mu_B \quad \text{vs} \quad H_1: \mu_A \neq \mu_B
+    H_0: \mu_A = \mu_B \quad \text{대} \quad H_1: \mu_A \neq \mu_B
     $$
 
     ```python
@@ -146,25 +148,35 @@ Test whether there is a significant difference between the two countries' mean s
         main()
     ```
 
+    출력:
+
+    ```text
+    df = 102.0000
+    statistic = 0.6295
+    p_value   = 0.5304
+    ```
+
+    $p = 0.530 > 0.05$이므로 $H_0$을 기각하지 못한다. 두 나라의 평균 재학 연수가 다르다는 증거가 없다.
+
 ---
 
-**Exercise 2.**
-An economist studying income in Norway and the United States wanted to compare the average annual income between the two countries. The economist obtained incomes for a random sample of people from each country denominated in thousands of US dollars:
+**연습문제 2.**
+노르웨이와 미국의 소득을 연구하는 한 경제학자가 두 나라의 연평균 소득을 비교하려 한다. 각 나라에서 사람들을 무작위로 표본추출하여 천 달러 단위로 소득을 얻었다.
 
-| | Norway | US |
+| | 노르웨이 | 미국 |
 |:---:|:---:|:---:|
-| Mean | 64.3 | 53.4 |
-| Standard Deviation | 18.2 | 23.9 |
-| Number of Samples | 65 | 75 |
+| 평균 | 64.3 | 53.4 |
+| 표준편차 | 18.2 | 23.9 |
+| 표본 수 | 65 | 75 |
 
-Test whether there is a significant difference between the two countries' mean annual income with significance level $\alpha = 0.05$.
+유의수준 $\alpha = 0.05$에서 두 나라의 평균 연소득에 유의한 차이가 있는지 검정하라.
 
-??? success "Solution to Exercise 2"
+??? success "연습문제 2 풀이"
 
-    Two Sample $t$-Test (Welch's, unpooled variance):
+    두 표본 $t$ 검정(Welch, 비합동분산):
 
     $$
-    H_0: \mu_A = \mu_B \quad \text{vs} \quad H_1: \mu_A \neq \mu_B
+    H_0: \mu_A = \mu_B \quad \text{대} \quad H_1: \mu_A \neq \mu_B
     $$
 
     ```python
@@ -178,7 +190,7 @@ Test whether there is a significant difference between the two countries' mean a
 
         statistic = (X_1_bar - X_2_bar) / np.sqrt(s_1**2 / n_1 + s_2**2 / n_2)
         top = (s_1**2 / n_1 + s_2**2 / n_2)**2
-        bottom = (s_1**2 / n_1)**2 / n_1 + (s_2**2 / n_2)**2 / n_2
+        bottom = (s_1**2 / n_1)**2 / (n_1 - 1) + (s_2**2 / n_2)**2 / (n_2 - 1)
         df = top / bottom
         p_value = 2 * stats.t(df).cdf(-abs(statistic))
         print(f"{df = :.4f}")
@@ -195,25 +207,44 @@ Test whether there is a significant difference between the two countries' mean a
         main()
     ```
 
+    출력:
+
+    ```text
+    df = 135.8395
+    statistic = 3.0572
+    p_value   = 0.0027
+    ```
+
+    $p = 0.0027 < 0.05$이므로 $H_0$을 기각한다. 두 나라의 평균 연소득에 유의한 차이가 있다.
+
+    !!! warning "Welch 자유도 공식"
+        Welch–Satterthwaite 자유도의 분모는
+
+        $$
+        \frac{(s_1^2/n_1)^2}{n_1 - 1} + \frac{(s_2^2/n_2)^2}{n_2 - 1}
+        $$
+
+        이다. 분모를 $n_1$, $n_2$로 나누는 실수를 자주 보는데, 표본이 크면 차이가 미미하지만(여기서는 135.84 대 137.77) 표본이 작으면 자유도를 크게 부풀려 $p$값을 과소평가하게 된다. 연습문제 4가 그 예이다.
+
 ---
 
-**Exercise 3.**
-A sociologist studying marriages in the United States and Canada wanted to compare how old, on average, women in each country were when they first got married. The sociologist obtained a random sample of married women from each country:
+**연습문제 3.**
+미국과 캐나다의 결혼을 연구하는 한 사회학자가 두 나라 여성이 처음 결혼했을 때의 평균 나이를 비교하려 한다. 각 나라에서 기혼 여성을 무작위로 표본추출하여 다음을 얻었다.
 
-| | US | Canada |
+| | 미국 | 캐나다 |
 |:---:|:---:|:---:|
-| Mean | 25.5 | 26.3 |
-| Standard Deviation | 3.8 | 3.2 |
-| Number of Samples | 108 | 102 |
+| 평균 | 25.5 | 26.3 |
+| 표준편차 | 3.8 | 3.2 |
+| 표본 수 | 108 | 102 |
 
-Test whether there is a significant difference between the two countries' mean age at first marriage with significance level $\alpha = 0.05$.
+유의수준 $\alpha = 0.05$에서 두 나라의 초혼 평균 연령에 유의한 차이가 있는지 검정하라.
 
-??? success "Solution to Exercise 3"
+??? success "연습문제 3 풀이"
 
-    Two Sample $t$-Test (pooled variance):
+    두 표본 $t$ 검정(합동분산):
 
     $$
-    H_0: \mu_A = \mu_B \quad \text{vs} \quad H_1: \mu_A \neq \mu_B
+    H_0: \mu_A = \mu_B \quad \text{대} \quad H_1: \mu_A \neq \mu_B
     $$
 
     ```python
@@ -243,25 +274,35 @@ Test whether there is a significant difference between the two countries' mean a
         main()
     ```
 
+    출력:
+
+    ```text
+    df = 208.0000
+    statistic = -1.6454
+    p_value   = 0.1014
+    ```
+
+    $p = 0.101 > 0.05$이므로 $H_0$을 기각하지 못한다. 표본평균의 차이 0.8년은 이 표본크기에서 우연으로 설명될 수 있다.
+
 ---
 
-**Exercise 4.**
-Julie was testing how far two new electric cars — models A and B — could drive on a full charge. She obtained a sample of 5 new cars of each model, charged them fully, and drove them as far as she could along a controlled route:
+**연습문제 4.**
+Julie는 새로 나온 전기차 두 모델 A와 B가 완전 충전 후 얼마나 멀리 갈 수 있는지 시험했다. 각 모델의 새 차 5대씩을 표본으로 얻어 완전히 충전한 뒤 통제된 경로에서 최대한 멀리 주행했다.
 
-| | Model A | Model B |
+| | 모델 A | 모델 B |
 |:---:|:---:|:---:|
-| Mean | 168 km | 172 km |
-| Standard Deviation | 5.4 km | 7.5 km |
-| Number of Samples | 5 | 5 |
+| 평균 | 168 km | 172 km |
+| 표준편차 | 5.4 km | 7.5 km |
+| 표본 수 | 5 | 5 |
 
-Test whether there is a significant difference between the two models' mean distance with significance level $\alpha = 0.05$.
+유의수준 $\alpha = 0.05$에서 두 모델의 평균 주행거리에 유의한 차이가 있는지 검정하라.
 
-??? success "Solution to Exercise 4"
+??? success "연습문제 4 풀이"
 
-    Two Sample $t$-Test (Welch's, unpooled variance):
+    두 표본 $t$ 검정(Welch, 비합동분산):
 
     $$
-    H_0: \mu_A = \mu_B \quad \text{vs} \quad H_1: \mu_A \neq \mu_B
+    H_0: \mu_A = \mu_B \quad \text{대} \quad H_1: \mu_A \neq \mu_B
     $$
 
     ```python
@@ -275,7 +316,7 @@ Test whether there is a significant difference between the two models' mean dist
 
         statistic = (X_1_bar - X_2_bar) / np.sqrt(s_1**2 / n_1 + s_2**2 / n_2)
         top = (s_1**2 / n_1 + s_2**2 / n_2)**2
-        bottom = (s_1**2 / n_1)**2 / n_1 + (s_2**2 / n_2)**2 / n_2
+        bottom = (s_1**2 / n_1)**2 / (n_1 - 1) + (s_2**2 / n_2)**2 / (n_2 - 1)
         df = top / bottom
         p_value = 2 * stats.t(df).cdf(-abs(statistic))
         print(f"{df = :.4f}")
@@ -291,3 +332,15 @@ Test whether there is a significant difference between the two models' mean dist
     if __name__ == "__main__":
         main()
     ```
+
+    출력:
+
+    ```text
+    df = 7.2688
+    statistic = -0.9678
+    p_value   = 0.3642
+    ```
+
+    $p = 0.364 > 0.05$이므로 $H_0$을 기각하지 못한다. 각 모델 5대로는 4 km의 차이를 탐지할 검정력이 거의 없다.
+
+    자유도 분모에 $n-1$ 대신 $n$을 쓰면 자유도가 7.27이 아니라 9.09가 되고 $p$값도 0.364가 아닌 0.358이 된다. 결론은 같지만, 표본이 작을수록 이 오류의 영향이 커진다.

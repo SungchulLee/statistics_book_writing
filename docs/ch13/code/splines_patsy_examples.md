@@ -1,47 +1,47 @@
-# Splines with Patsy
+# Patsy를 이용한 스플라인
 
-## Overview
+## 개요
 
-This page demonstrates spline regression using the patsy formula interface for constructing B-spline and natural spline basis matrices. Using the King County housing dataset, we compare B-splines, natural splines with various degrees of freedom, custom knot placements, and contrast these flexible methods with linear and polynomial regression.
+이 페이지는 patsy의 식 인터페이스로 B-스플라인과 자연 스플라인 기저행렬을 만들어 스플라인 회귀를 수행하는 방법을 보인다. King County 주택 자료를 써서 B-스플라인, 자유도를 달리한 자연 스플라인, 사용자 지정 매듭 배치를 비교하고, 이 유연한 방법들을 선형·다항 회귀와 대조한다.
 
-## Mathematical Background
+## 수학적 배경
 
-### B-Splines (Basis Splines)
+### B-스플라인(기저 스플라인)
 
-A B-spline of degree $d$ with knots $\xi_1 < \cdots < \xi_K$ is a piecewise polynomial that is $(d-1)$-times continuously differentiable at each knot. The regression model is
+매듭이 $\xi_1 < \cdots < \xi_K$인 $d$차 B-스플라인은 각 매듭에서 $(d-1)$번 연속미분 가능한 조각별 다항식이다. 회귀모형은
 
 $$
 f(x) = \sum_{m=1}^{K+d+1} \gamma_m B_{m,d}(x),
 $$
 
-where $B_{m,d}$ are the B-spline basis functions. The number of basis functions is $K + d + 1$ (interior knots + degree + 1).
+여기서 $B_{m,d}$는 B-스플라인 기저함수이다. 기저함수의 개수는 $K + d + 1$이다(내부 매듭 + 차수 + 1).
 
-### Natural Splines
+### 자연 스플라인
 
-Natural cubic splines add the constraint that $f(x)$ is linear beyond the boundary knots. This reduces the degrees of freedom by 4 (two constraints at each boundary: $f'' = 0$ and $f''' = 0$), producing more stable extrapolation behavior.
+자연 삼차 스플라인은 경계 매듭 바깥에서 $f(x)$가 선형이라는 제약을 추가한다. 이 제약이 자유도를 4만큼 줄이고(각 경계에서 $f'' = 0$과 $f''' = 0$, 두 경계에 각각 두 개) 외삽 거동을 훨씬 안정적으로 만든다.
 
-### Degrees of Freedom
+### 자유도
 
-The degrees of freedom (df) of a spline controls its flexibility:
+스플라인의 자유도(df)가 유연성을 조절한다.
 
-- For B-splines: $\mathrm{df} = K + d + 1 - 1$ (number of basis functions minus intercept)
-- Higher df allows more wiggly fits
-- The optimal df can be chosen via cross-validation
+- B-스플라인: $\mathrm{df} = K + d + 1 - 1$ (기저함수 개수에서 절편을 뺀 것)
+- df가 클수록 더 요동치는 적합이 가능하다
+- 최적 df는 교차검증으로 고를 수 있다
 
-### Patsy Syntax
+### Patsy 문법
 
-- `bs(x, df=4, degree=3)`: B-spline with 4 df and cubic degree
-- `bs(x, knots=[20, 40, 60])`: B-spline with specified interior knots
-- `cr(x, df=4)`: natural cubic regression spline with 4 df
+- `bs(x, df=4, degree=3)`: 자유도 4의 삼차 B-스플라인
+- `bs(x, knots=[20, 40, 60])`: 내부 매듭을 지정한 B-스플라인
+- `cr(x, df=4)`: 자유도 4의 자연 삼차 회귀 스플라인
 
-## Code
+## 코드
 
-### B-Spline Regression
+### B-스플라인 회귀
 
 ```python
 import numpy as np
 import pandas as pd
-from patsy import dmatrix
+from patsy import dmatrix, build_design_matrices
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import r2_score, mean_squared_error
 
@@ -55,7 +55,7 @@ bs_model = LinearRegression().fit(bs_design, df['price'])
 bs_r2 = r2_score(df['price'], bs_model.predict(bs_design))
 ```
 
-### B-Spline with Custom Knots
+### 사용자 지정 매듭을 쓰는 B-스플라인
 
 ```python
 knots_custom = [20, 40, 60]
@@ -66,7 +66,7 @@ bs_custom_design = dmatrix(
 bs_custom_model = LinearRegression().fit(bs_custom_design, df['price'])
 ```
 
-### Natural Splines
+### 자연 스플라인
 
 ```python
 cs_design = dmatrix("cr(age, df=4) - 1",
@@ -75,79 +75,109 @@ cs_model = LinearRegression().fit(cs_design, df['price'])
 cs_r2 = r2_score(df['price'], cs_model.predict(cs_design))
 ```
 
-### Prediction on a Grid
+### 격자에서의 예측
 
 ```python
 age_grid = np.linspace(df['age'].min(), df['age'].max(), 300)
 
-# B-spline predictions
-bs_grid = dmatrix("bs(age, df=4, degree=3, include_intercept=False) - 1",
-                  {"age": age_grid}, return_type='dataframe')
-bs_pred = bs_model.predict(bs_grid)
+# Reuse the ORIGINAL basis (same knots) via design_info
+bs_grid = build_design_matrices([bs_design.design_info], {"age": age_grid})[0]
+bs_pred = bs_model.predict(np.asarray(bs_grid))
 
-# Natural spline predictions
-cs_grid = dmatrix("cr(age, df=4) - 1",
-                  {"age": age_grid}, return_type='dataframe')
-cs_pred = cs_model.predict(cs_grid)
+cs_grid = build_design_matrices([cs_design.design_info], {"age": age_grid})[0]
+cs_pred = cs_model.predict(np.asarray(cs_grid))
 ```
 
-## Interpretation
+!!! warning "새 자료에 `dmatrix`를 다시 부르면 안 된다"
+    식 문자열로 `dmatrix`를 다시 호출하면 patsy가 **새로 넘긴 자료로 매듭을 다시 계산한다**. 그러면 훈련에 쓴 기저와 다른 기저가 만들어져 계수가 엉뚱한 기저에 곱해진다. 반드시 원래 설계행렬의 `design_info`를 `build_design_matrices`에 넘겨 같은 매듭을 재사용해야 한다.
 
-- **B-splines** provide local control: each basis function is nonzero only over a small range, so the fit at one region is relatively independent of distant data. This makes B-splines numerically stable and interpretable.
-- **Natural splines** are more stable at the boundaries because they constrain the fit to be linear beyond the extreme knots. This avoids the wild extrapolation behavior that unconstrained cubic splines exhibit.
-- **Degrees of freedom**: Increasing df improves fit on training data but risks overfitting. The optimal df can be selected via cross-validation or information criteria.
-- **Knot placement**: Automatic placement (uniform quantiles) works well in most cases. Custom knots are useful when domain knowledge suggests where the relationship changes character.
-- **Comparison**: Splines typically outperform polynomials of the same complexity because they provide local flexibility rather than imposing a single global shape.
+## 해석
 
-## Exercises
+- **B-스플라인**은 국소 제어를 제공한다. 각 기저함수가 좁은 구간에서만 0이 아니므로 한 구역의 적합이 멀리 떨어진 자료와 비교적 무관하다. 그래서 수치적으로 안정적이고 해석하기 좋다.
+- **자연 스플라인**은 극단 매듭 바깥에서 적합을 선형으로 제약하므로 경계에서 더 안정적이다. 제약 없는 삼차 스플라인이 보이는 격렬한 외삽을 피한다.
+- **자유도**: df를 키우면 훈련자료 적합은 좋아지지만 과대적합 위험이 커진다. 최적 df는 교차검증이나 정보기준으로 고른다.
+- **매듭 배치**: 자동 배치(균등 분위수)가 대부분의 경우 잘 작동한다. 관계의 성격이 바뀌는 지점을 분야 지식으로 안다면 사용자 지정 매듭이 유용하다.
+- **비교**: 스플라인은 하나의 전역적 모양을 강제하는 대신 국소적 유연성을 제공하므로, 복잡도가 같은 다항식보다 대체로 낫다.
 
-**Exercise 1.** Fit B-splines with df ranging from 2 to 8 and plot the resulting curves. At what df does the curve begin to show signs of overfitting?
+## 연습문제
 
-??? success "Solution to Exercise 1"
+**연습문제 1.** df를 2에서 8까지 바꿔 가며 B-스플라인을 적합하고 그 결과 곡선을 그려라. 어느 df에서 과대적합의 징후가 나타나기 시작하는가?
+
+??? success "연습문제 1 풀이"
 
     ```python
     for d in range(2, 9):
         design = dmatrix(f"bs(age, df={d}, degree=3, include_intercept=False) - 1",
                          {"age": df['age']}, return_type='dataframe')
         model = LinearRegression().fit(design, df['price'])
-        grid_design = dmatrix(f"bs(age, df={d}, degree=3, include_intercept=False) - 1",
-                              {"age": age_grid}, return_type='dataframe')
-        plt.plot(age_grid, model.predict(grid_design), label=f'df={d}')
+        grid_design = build_design_matrices([design.design_info],
+                                           {"age": age_grid})[0]
+        plt.plot(age_grid, model.predict(np.asarray(grid_design)), label=f'df={d}')
     ```
 
-    Overfitting manifests as excessive wiggliness, particularly near the boundaries where data is sparse. Typically df > 6 begins to show overfitting for this dataset. $\square$
+    과대적합은 지나친 요동으로 나타나며, 특히 자료가 성긴 경계 근처에서 두드러진다. 이 자료에서는 대체로 df > 6에서 과대적합 징후가 보이기 시작한다. $\square$
 
 ---
 
-**Exercise 2.** Explain why a natural spline with $K$ interior knots has $K + 1$ degrees of freedom (not $K + 4$ as for an unconstrained cubic spline). Where do the 3 "lost" degrees of freedom go?
+**연습문제 2.** 매듭이 $K$개인 자연 삼차 스플라인의 자유도가 (제약 없는 삼차 스플라인의 $K + 4$가 아니라) $K$인 이유를 설명하라. "잃어버린" 4개의 자유도는 어디로 가는가?
 
-??? success "Solution to Exercise 2"
+??? success "연습문제 2 풀이"
 
-    An unconstrained cubic spline with $K$ interior knots has $K + 4$ basis functions ($K + 3 + 1$, accounting for the cubic polynomial in each region minus continuity constraints). Natural splines impose linearity beyond the boundary knots, adding 4 constraints (second and third derivatives equal zero at each boundary). However, the net reduction is $K + 4 - 3 = K + 1$ effective parameters because 3 of the 4 boundary constraints remove 3 degrees of freedom. The "lost" degrees of freedom correspond to the cubic and quadratic terms at the boundaries that are set to zero. $\square$
+    구간 $[a, b]$에 매듭 $\xi_1 < \cdots < \xi_K$가 있을 때(양 끝의 경계 매듭을 포함해 센다) 제약 없는 삼차 스플라인의 차원을 세어 보자. 매듭이 구간을 $K+1$개 조각으로 나누고 조각마다 삼차 다항식이므로 계수는 $4(K+1)$개이다. 각 내부 매듭에서 $f$, $f'$, $f''$의 연속성이 3개의 제약을 주므로 $3(K-2)$… 를 세는 대신, 널리 쓰이는 결과를 그대로 쓰면 **삼차 스플라인의 차원은 $K + 4$**이다.
+
+    자연 스플라인은 여기에 경계 바깥에서 선형이라는 조건을 얹는다. 이는 양쪽 끝 각각에서
+
+    $$
+    f''(\xi_1) = 0, \quad f'''(\xi_1) = 0, \qquad f''(\xi_K) = 0, \quad f'''(\xi_K) = 0
+    $$
+
+    이라는 **4개의 제약**을 뜻한다. 따라서 차원은
+
+    $$
+    (K + 4) - 4 = K
+    $$
+
+    가 된다. 잃어버린 4개의 자유도는 양쪽 바깥 조각의 이차항과 삼차항 계수 네 개이며, 이들이 0으로 강제되어 그 구간에서 함수가 직선이 된다.
+
+    !!! note "df 세는 방식의 차이"
+        절편을 df에 포함하느냐에 따라 문헌마다 숫자가 하나씩 달라진다. patsy의 `cr(x, df=4)`나 R의 `ns(x, df=4)`는 절편을 뺀 기저 열 4개를 돌려주므로, 모형 절편을 더하면 전체 차원이 5가 된다. 어떤 규약을 쓰든 **자연 스플라인이 같은 매듭의 삼차 스플라인보다 정확히 4만큼 작다**는 점은 변하지 않는다. $\square$
 
 ---
 
-**Exercise 3.** Compare the predictions of B-spline and natural spline models at ages beyond the data range (e.g., age = 150 or age = 0). Which extrapolates more sensibly?
+**연습문제 3.** 자료 범위 바깥(예: age = 150이나 age = 0)에서 B-스플라인 모형과 자연 스플라인 모형의 예측을 비교하라. 어느 쪽이 더 합리적으로 외삽하는가?
 
-??? success "Solution to Exercise 3"
+??? success "연습문제 3 풀이"
 
     ```python
-    age_extrap = np.array([0, 5, 145, 150])
-    bs_extrap = dmatrix(f"bs(age, df=4, degree=3, include_intercept=False) - 1",
-                        {"age": age_extrap}, return_type='dataframe')
-    cs_extrap = dmatrix("cr(age, df=4) - 1",
-                        {"age": age_extrap}, return_type='dataframe')
-    print("B-spline:", bs_model.predict(bs_extrap))
-    print("Natural:", cs_model.predict(cs_extrap))
+    age_extrap = np.array([0.0, 5.0, 145.0, 150.0])
+
+    # Natural spline: extrapolates linearly
+    cs_extrap = build_design_matrices([cs_design.design_info],
+                                      {"age": age_extrap})[0]
+    print("Natural:", cs_model.predict(np.asarray(cs_extrap)))
+
+    # B-spline: raises PatsyError / NotImplementedError
+    bs_extrap = build_design_matrices([bs_design.design_info],
+                                      {"age": age_extrap})[0]
     ```
 
-    Natural splines extrapolate linearly (using the slope at the boundary), which is generally more reasonable than the cubic extrapolation of B-splines, which can produce extreme and unrealistic predictions. $\square$
+    자연 스플라인은 문제없이 계산되며 경계에서의 기울기를 그대로 이어 **선형으로** 외삽한다.
+
+    B-스플라인 쪽은 값을 돌려주는 대신 **예외를 던진다**.
+
+    ```text
+    PatsyError: Error evaluating factor: NotImplementedError:
+    some data points fall outside the outermost knots,
+    and I'm not sure how to handle them.
+    ```
+
+    이 오류 자체가 답이다. B-스플라인 기저는 최외곽 매듭 바깥에서 정의되지 않으므로 patsy는 추측해서 값을 만들어 내는 대신 거부한다. 설령 삼차식을 그대로 연장하도록 구현했더라도 그 외삽값은 극단적이고 비현실적이었을 것이다. 자료 범위를 벗어나 예측해야 한다면 자연 스플라인을 써야 한다. $\square$
 
 ---
 
-**Exercise 4.** Implement a roughness penalty for B-splines by adding a ridge-like term $\lambda \|\boldsymbol{\gamma}\|^2$ to the fitting objective. How does this relate to smoothing splines?
+**연습문제 4.** 적합 목적함수에 릿지 형태의 항 $\lambda \|\boldsymbol{\gamma}\|^2$을 더해 B-스플라인에 거칢 벌점을 구현하라. 이것은 평활 스플라인과 어떤 관계인가?
 
-??? success "Solution to Exercise 4"
+??? success "연습문제 4 풀이"
 
     ```python
     from sklearn.linear_model import Ridge
@@ -157,18 +187,18 @@ cs_pred = cs_model.predict(cs_grid)
     ridge_model = Ridge(alpha=1e4).fit(design, df['price'])
     ```
 
-    Adding $\lambda\|\boldsymbol{\gamma}\|^2$ shrinks the basis coefficients toward zero, producing a smoother curve. This is an approximation to the smoothing spline penalty $\lambda\int [f'']^2$, which penalizes the second derivative. The exact smoothing spline uses a penalty matrix $\mathbf{D}$ where $D_{jk} = \int B_j''(t)B_k''(t)\,dt$, but $\lambda\mathbf{I}$ (ridge) provides a simpler approximation. $\square$
+    $\lambda\|\boldsymbol{\gamma}\|^2$을 더하면 기저 계수가 0 쪽으로 축소되어 곡선이 매끄러워진다. 이는 2계 도함수에 벌점을 주는 평활 스플라인의 벌점 $\lambda\int [f'']^2$에 대한 근사이다. 정확한 평활 스플라인은 $D_{jk} = \int B_j''(t)B_k''(t)\,dt$인 벌점행렬 $\mathbf{D}$를 쓰지만, $\lambda\mathbf{I}$(릿지)가 더 간단한 근사를 제공한다. $\square$
 
 ---
 
-**Exercise 5.** Prove that for a natural cubic spline with knots at the data points, the smoothing spline estimator minimizes $\sum(y_i - f(x_i))^2 + \lambda\int[f''(t)]^2\,dt$ over all twice-differentiable functions.
+**연습문제 5.** 매듭이 자료점에 놓인 자연 삼차 스플라인에 대해, 평활 스플라인 추정량이 두 번 미분 가능한 모든 함수 가운데 $\sum(y_i - f(x_i))^2 + \lambda\int[f''(t)]^2\,dt$를 최소화함을 증명하라.
 
-??? success "Solution to Exercise 5"
+??? success "연습문제 5 풀이"
 
-    This is a classical result in nonparametric regression. The key insight is that among all functions $g$ that interpolate given values at the knots, the natural cubic spline has the smallest $\int [g'']^2\,dt$ (the roughness). This follows from a variational argument: write $g = f + h$ where $f$ is the natural cubic spline. Then
+    비모수 회귀의 고전적 결과이다. 핵심은 매듭에서 주어진 값을 보간하는 모든 함수 $g$ 가운데 자연 삼차 스플라인이 $\int [g'']^2\,dt$(거칢)를 최소화한다는 것이다. 변분법적 논증으로 보인다. $f$를 자연 삼차 스플라인이라 하고 $g = f + h$로 쓰면
 
     $$
     \int [g'']^2 = \int [f'']^2 + 2\int f'' h'' + \int [h'']^2.
     $$
 
-    The cross term $\int f'' h'' = 0$ by integration by parts and the boundary conditions of the natural spline, so $\int[g'']^2 \geq \int[f'']^2$. Therefore the natural cubic spline is the unique minimizer of the penalized objective for any $\lambda > 0$. $\square$
+    부분적분과 자연 스플라인의 경계조건에 의해 교차항 $\int f'' h'' = 0$이므로 $\int[g'']^2 \geq \int[f'']^2$이다. 따라서 자연 삼차 스플라인이 임의의 $\lambda > 0$에 대해 벌점 목적함수의 유일한 최소화 함수이다. $\square$

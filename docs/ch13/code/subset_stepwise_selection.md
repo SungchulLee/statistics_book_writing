@@ -1,38 +1,38 @@
-# Subset and Stepwise Selection
+# 부분집합 선택과 단계적 선택
 
-## Overview
+## 개요
 
-This page demonstrates three feature selection strategies for linear regression: best subset selection, forward stepwise selection, and backward stepwise selection. Using synthetic data with 8 predictors (4 truly relevant, 4 noise), we compare these methods on training RSS, validation RSS, and selected feature sets to illustrate the tradeoffs between exhaustive search and greedy algorithms.
+이 페이지는 선형회귀의 세 가지 특성선택 전략 — 최량 부분집합 선택, 전진 단계적 선택, 후진 단계적 선택 — 을 보인다. 설명변수 8개(참으로 관련 있는 것 4개, 잡음 4개)인 인공자료로 훈련 RSS, 검증 RSS, 선택된 특성 집합을 비교하여 전수 탐색과 탐욕 알고리즘의 절충을 살펴본다.
 
-## Mathematical Background
+## 수학적 배경
 
-### Best Subset Selection
+### 최량 부분집합 선택
 
-For each model size $k = 1, \ldots, p$, best subset selection evaluates all $\binom{p}{k}$ possible $k$-variable models and selects the one with the lowest training RSS. The total number of models evaluated is $\sum_{k=1}^p \binom{p}{k} = 2^p - 1$, making this approach computationally feasible only for small $p$ (typically $p \leq 20$).
+각 모형 크기 $k = 1, \ldots, p$에 대해 최량 부분집합 선택은 가능한 $\binom{p}{k}$개의 $k$ 변수 모형을 모두 평가하여 훈련 RSS가 가장 낮은 것을 고른다. 평가하는 모형의 총 개수는 $\sum_{k=1}^p \binom{p}{k} = 2^p - 1$이므로, 이 방법은 $p$가 작을 때에만(보통 $p \leq 20$) 계산이 가능하다.
 
-### Forward Stepwise Selection
+### 전진 단계적 선택
 
-Starting from the null model (intercept only), forward selection greedily adds the predictor that produces the greatest reduction in RSS:
+영모형(절편만)에서 시작하여 RSS를 가장 크게 줄이는 설명변수를 탐욕적으로 더한다.
 
-1. Begin with $\mathcal{S} = \emptyset$
-2. For $k = 1, \ldots, p$: find $j^* = \arg\min_{j \notin \mathcal{S}} \mathrm{RSS}(\mathcal{S} \cup \{j\})$ and set $\mathcal{S} \leftarrow \mathcal{S} \cup \{j^*\}$
+1. $\mathcal{S} = \emptyset$에서 시작한다
+2. $k = 1, \ldots, p$에 대해: $j^* = \arg\min_{j \notin \mathcal{S}} \mathrm{RSS}(\mathcal{S} \cup \{j\})$를 찾고 $\mathcal{S} \leftarrow \mathcal{S} \cup \{j^*\}$로 둔다
 
-This evaluates $p + (p-1) + \cdots + 1 = p(p+1)/2$ models, far fewer than $2^p$.
+이는 $p + (p-1) + \cdots + 1 = p(p+1)/2$개의 모형만 평가하므로 $2^p$보다 훨씬 적다.
 
-### Backward Stepwise Selection
+### 후진 단계적 선택
 
-Starting from the full model, backward selection greedily removes the predictor whose removal increases RSS the least:
+완전모형에서 시작하여 제거했을 때 RSS 증가가 가장 작은 설명변수를 탐욕적으로 뺀다.
 
-1. Begin with $\mathcal{S} = \{1, \ldots, p\}$
-2. For $k = p-1, \ldots, 1$: find $j^* = \arg\min_{j \in \mathcal{S}} \mathrm{RSS}(\mathcal{S} \setminus \{j\})$ and set $\mathcal{S} \leftarrow \mathcal{S} \setminus \{j^*\}$
+1. $\mathcal{S} = \{1, \ldots, p\}$에서 시작한다
+2. $k = p-1, \ldots, 1$에 대해: $j^* = \arg\min_{j \in \mathcal{S}} \mathrm{RSS}(\mathcal{S} \setminus \{j\})$를 찾고 $\mathcal{S} \leftarrow \mathcal{S} \setminus \{j^*\}$로 둔다
 
-### Selecting the Optimal Size
+### 최적 크기 고르기
 
-The optimal $k$ is chosen by minimizing a criterion on held-out data (validation RSS, CV, AIC, or BIC), since training RSS always decreases with $k$.
+훈련 RSS는 $k$에 따라 언제나 줄어들므로, 최적 $k$는 남겨 둔 자료에서 계산한 기준(검증 RSS, 교차검증, AIC, BIC)을 최소화하여 고른다.
 
-## Code
+## 코드
 
-### Data Generation
+### 자료 생성
 
 ```python
 import numpy as np
@@ -46,7 +46,7 @@ y = X @ true_beta + np.random.normal(0, 2, n)
 names = [f"x{i+1}" for i in range(p)]
 ```
 
-### Best Subset Selection
+### 최량 부분집합 선택
 
 ```python
 from itertools import combinations
@@ -67,7 +67,7 @@ def best_subset(X, y, max_k=None):
     return results
 ```
 
-### Forward Stepwise Selection
+### 전진 단계적 선택
 
 ```python
 def forward_stepwise(X, y):
@@ -88,7 +88,7 @@ def forward_stepwise(X, y):
     return results
 ```
 
-### Backward Stepwise Selection
+### 후진 단계적 선택
 
 ```python
 def backward_stepwise(X, y):
@@ -111,19 +111,19 @@ def backward_stepwise(X, y):
     return results
 ```
 
-## Interpretation
+## 해석
 
-- **Best subset** is guaranteed to find the globally best model of each size but is computationally intractable for $p > 20$ (exponential growth).
-- **Forward stepwise** is a greedy approximation that may miss the globally optimal model but runs in $O(p^2)$ time. It cannot revisit a predictor once included.
-- **Backward stepwise** starts from the full model and may produce different solutions from forward selection. It requires $n > p$ to fit the initial full model.
-- All three methods agree on the optimal $k$ when the signal is strong and the true model is nested in the search path.
-- **Validation RSS** is essential: training RSS always decreases with $k$, so it cannot be used to select model size.
+- **최량 부분집합**은 크기별 전역 최적 모형을 반드시 찾아내지만 $p > 20$이면 계산이 불가능하다(지수적 증가).
+- **전진 단계적**은 탐욕적 근사이므로 전역 최적 모형을 놓칠 수 있지만 $O(p^2)$ 시간에 끝난다. 한번 들어간 설명변수를 다시 뺄 수 없다.
+- **후진 단계적**은 완전모형에서 시작하므로 전진 선택과 다른 해를 낼 수 있다. 처음 완전모형을 적합하려면 $n > p$가 필요하다.
+- 신호가 강하고 참 모형이 탐색 경로 위에 있으면 세 방법 모두 같은 최적 $k$에서 일치한다.
+- **검증 RSS**가 필수적이다. 훈련 RSS는 $k$에 따라 언제나 줄어들므로 모형 크기를 고르는 데 쓸 수 없다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.** Run all three methods and compare the features selected at the optimal $k$ (determined by validation RSS). Do they all identify the same 4 true predictors?
+**연습문제 1.** 세 방법을 모두 실행하고 (검증 RSS로 정한) 최적 $k$에서 선택된 특성을 비교하라. 모두 참 설명변수 4개를 찾아내는가?
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
 
     ```python
     n_train = 140
@@ -143,43 +143,49 @@ def backward_stepwise(X, y):
         print(f"{method_name}: k={opt_k}, features={res[opt_k]['features']}")
     ```
 
-    With a strong signal, all three methods typically identify $k = 4$ with features $\{x_1, x_2, x_3, x_4\}$. $\square$
+    세 방법 모두 $k = 4$에서 특성 $\{x_1, x_2, x_3, x_4\}$를 고르며 검증 RSS 곡선도 동일하다.
+
+    | $k$ | 1 | 2 | 3 | **4** | 5 | 6 | 7 | 8 |
+    |---|---|---|---|---|---|---|---|---|
+    | 검증 RSS | 729.3 | 416.6 | 300.9 | **259.5** | 265.7 | 264.6 | 266.7 | 267.3 |
+
+    $k = 4$까지는 검증 RSS가 가파르게 줄다가 그 뒤로는 오히려 조금 늘어난다. 잡음 설명변수 네 개를 넣어도 아무 도움이 되지 않고 오히려 손해임을 보여준다. 신호가 충분히 강하고 참 설명변수들이 처음 네 단계에 모두 들어오므로 탐욕적 방법도 전역 최적과 같은 답을 낸다. $\square$
 
 ---
 
-**Exercise 2.** Increase $p$ from 8 to 20 with the same 4 true predictors. Can best subset still be computed? How does forward selection perform?
+**연습문제 2.** 참 설명변수 4개는 그대로 두고 $p$를 8에서 20으로 늘려라. 최량 부분집합을 여전히 계산할 수 있는가? 전진 선택은 어떻게 작동하는가?
 
-??? success "Solution to Exercise 2"
+??? success "연습문제 2 풀이"
 
-    With $p = 20$, best subset requires evaluating $2^{20} - 1 = 1{,}048{,}575$ models, which is computationally expensive but still feasible. With $p = 30$ or more, it becomes impractical. Forward selection remains fast ($O(p^2)$ models) and still identifies the true predictors if their effects are sufficiently strong. The greedy nature of forward selection means it may select a noise predictor early if it happens to correlate with the response, but this is unlikely with strong true effects. $\square$
-
----
-
-**Exercise 3.** Construct an example where forward and backward stepwise select different features at the same $k$. What property of the data causes this discrepancy?
-
-??? success "Solution to Exercise 3"
-
-    This occurs when predictors are correlated. For instance, if $x_5$ is moderately correlated with both $x_1$ and $x_2$, forward selection might add $x_5$ early (before $x_2$) because $x_5$ captures some signal. Backward selection starts with all predictors and may remove $x_5$ before $x_2$ because $x_2$ is more useful given the full model. The discrepancy arises from the greedy, path-dependent nature of both algorithms: the order of addition/removal depends on what other predictors are already in the model. $\square$
+    $p = 20$이면 최량 부분집합은 $2^{20} - 1 = 1{,}048{,}575$개의 모형을 평가해야 하므로 계산이 비싸지만 아직은 가능하다. $p = 30$ 이상이면 비현실적이 된다. 전진 선택은 여전히 빠르고($O(p^2)$개 모형) 참 설명변수의 효과가 충분히 강하면 그것들을 찾아낸다. 탐욕적이라는 성질 때문에 우연히 반응변수와 상관된 잡음 설명변수를 일찍 고를 수도 있지만, 참 효과가 강하면 그럴 가능성은 낮다. $\square$
 
 ---
 
-**Exercise 4.** Prove that best subset selection with $k$ predictors has training RSS less than or equal to forward stepwise selection with $k$ predictors.
+**연습문제 3.** 같은 $k$에서 전진과 후진 단계적 선택이 서로 다른 특성을 고르는 예를 구성하라. 자료의 어떤 성질이 이 차이를 만드는가?
 
-??? success "Solution to Exercise 4"
+??? success "연습문제 3 풀이"
 
-    Best subset searches over all $\binom{p}{k}$ subsets and picks the one with the lowest RSS. Forward selection produces one specific $k$-variable model via a greedy path. Since the forward selection model is one of the $\binom{p}{k}$ subsets considered by best subset, best subset's RSS is at most as large:
+    설명변수들이 상관되어 있을 때 일어난다. 예를 들어 $x_5$가 $x_1$·$x_2$와 중간 정도로 상관되어 있다면, $x_5$가 일부 신호를 담고 있으므로 전진 선택이 ($x_2$보다 먼저) $x_5$를 일찍 넣을 수 있다. 후진 선택은 모든 설명변수에서 시작하는데, 완전모형 안에서는 $x_2$가 더 유용하므로 $x_2$보다 $x_5$를 먼저 뺄 수 있다. 이 차이는 두 알고리즘의 탐욕적이고 경로 의존적인 성질에서 온다. 추가/제거의 순서가 이미 모형에 들어 있는 다른 설명변수에 달려 있기 때문이다. $\square$
+
+---
+
+**연습문제 4.** 설명변수가 $k$개일 때 최량 부분집합 선택의 훈련 RSS가 전진 단계적 선택의 것보다 작거나 같음을 증명하라.
+
+??? success "연습문제 4 풀이"
+
+    최량 부분집합은 $\binom{p}{k}$개의 부분집합을 모두 탐색하여 RSS가 가장 낮은 것을 고른다. 전진 선택은 탐욕적 경로를 통해 하나의 특정한 $k$ 변수 모형을 만든다. 전진 선택이 만든 모형도 최량 부분집합이 고려한 $\binom{p}{k}$개 부분집합 가운데 하나이므로 최량 부분집합의 RSS가 그보다 크지 않다.
 
     $$
     \mathrm{RSS}_{\text{best}}(k) = \min_{\mathcal{S}: |\mathcal{S}|=k} \mathrm{RSS}(\mathcal{S}) \leq \mathrm{RSS}(\mathcal{S}_{\text{fwd}}(k)) = \mathrm{RSS}_{\text{fwd}}(k).
     $$
 
-    Equality holds when the greedy path happens to find the global optimum. $\square$
+    탐욕적 경로가 우연히 전역 최적을 찾았을 때 등호가 성립한다. $\square$
 
 ---
 
-**Exercise 5.** Implement model selection using AIC instead of validation RSS. Determine the optimal $k$ using AIC and compare to the validation approach.
+**연습문제 5.** 검증 RSS 대신 AIC로 모형선택을 구현하라. AIC로 최적 $k$를 정하고 검증 방식과 비교하라.
 
-??? success "Solution to Exercise 5"
+??? success "연습문제 5 풀이"
 
     ```python
     def aic(n, rss, k):
@@ -193,4 +199,11 @@ def backward_stepwise(X, y):
     print(f"Optimal k (AIC): {opt_k_aic}")
     ```
 
-    AIC typically selects $k = 4$ (the true model size), though it may occasionally favor $k = 5$ due to the mild penalty. Validation RSS is less biased but more variable (depends on the specific split). Both methods generally agree when the signal is clear. $\square$
+    출력:
+
+    ```text
+    AIC per k: [310.90, 267.13, 204.61, 178.62, 178.86, 179.83, 181.65, 183.59]
+    Optimal k (AIC): 4
+    ```
+
+    AIC도 검증 RSS와 마찬가지로 $k = 4$(참 모형 크기)를 고른다. 다만 $k = 4$와 $k = 5$의 차이가 $0.24$에 지나지 않아, AIC의 약한 벌점 때문에 $k = 5$가 선택될 뻔했다는 점에 주목할 만하다. 검증 RSS는 편향이 작지만 변동이 크고(특정 분할에 의존한다), AIC는 자료를 나누지 않아 안정적이지만 점근 근사에 기댄다. 신호가 뚜렷하면 두 방법은 대체로 일치한다. $\square$

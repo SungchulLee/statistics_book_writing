@@ -1,69 +1,68 @@
-# Checking Independence in Linear Regression
+# 선형회귀의 독립성 확인
 
+독립성은 관측값(과 그 잔차)이 서로 상관되어 있지 않음을 보장하는 선형회귀의 핵심 가정이다. 이 가정은 타당한 추론과 정확한 회귀계수 추정에 결정적이다. 독립성이 위배되면 모형의 표준오차가 과소추정되고 유의성 검정이 틀리게 된다. 이 절은 선형회귀에서 독립성을 확인하는 여러 방법을 살펴보며, 자기상관과 그 밖의 종속 형태를 찾아내고 대처하는 데 초점을 맞춘다.
 
-Independence is a key assumption in linear regression that ensures the observations (and their residuals) are not correlated with one another. This assumption is critical for making valid inferences and obtaining accurate estimates of regression coefficients. If independence is violated, the model may produce biased results, underestimated standard errors, and incorrect significance tests. This section explores various methods to check for independence in linear regression, with a focus on identifying and addressing autocorrelation and other forms of dependence among observations.
+## 1. 독립성 가정의 이해
 
-## 1. Understanding the Independence Assumption
+**정의:**
+선형회귀의 맥락에서 독립성 가정은 모형의 잔차(오차)들이 서로 독립이어야 한다는 뜻이다. 시계열 자료에서는 한 시점의 잔차가 다른 시점의 잔차와 상관되어서는 안 된다는 뜻이고, 횡단면 자료에서는 한 관측값의 잔차가 다른 어떤 관측값의 잔차와도 상관되어서는 안 된다는 뜻이다.
 
-**Definition:**
-In the context of linear regression, the independence assumption means that the residuals (errors) of the model should be independent of each other. For time-series data, this implies that the residuals at one time point should not be correlated with the residuals at another time point. For cross-sectional data, this means that the residuals for one observation should not be correlated with the residuals for any other observation.
-
-Formally, the assumption requires:
+형식적으로 이 가정은 다음을 요구한다.
 
 $$
-\text{Cov}(\epsilon_i, \epsilon_j) = 0 \quad \text{for all } i \neq j
+\text{Cov}(\epsilon_i, \epsilon_j) = 0 \quad \text{(모든 } i \neq j \text{에 대해)}
 $$
 
-This can also be expressed in matrix form. Under the independence assumption, the variance-covariance matrix of the errors is diagonal:
+행렬 형태로도 쓸 수 있다. 독립성 가정 아래에서 오차의 분산·공분산 행렬은 대각행렬이다.
 
 $$
 \text{Var}(\boldsymbol{\epsilon}) = \sigma^2 \mathbf{I}_n
 $$
 
-**Why It Matters:**
-If the independence assumption is violated, it can lead to:
+**왜 중요한가:**
+독립성 가정이 위배되면 다음이 나타날 수 있다.
 
-- **Autocorrelation:** When residuals are correlated across time or sequence, often seen in time-series data. Positive autocorrelation means a positive residual at time $t$ tends to be followed by a positive residual at time $t+1$.
-- **Clustered Errors:** When observations within certain groups or clusters are more similar to each other than to observations in other groups.
+- **자기상관:** 잔차가 시간이나 순서에 걸쳐 상관될 때이며 시계열 자료에서 흔히 보인다. 양의 자기상관은 시점 $t$의 양의 잔차 뒤에 시점 $t+1$의 양의 잔차가 따라오는 경향을 뜻한다.
+- **군집 오차:** 특정 집단이나 군집 안의 관측값이 다른 집단의 관측값보다 서로 더 비슷할 때이다.
 
-## 2. Durbin-Watson Test for Autocorrelation
+## 2. 자기상관을 위한 Durbin-Watson 검정
 
-The **Durbin-Watson (DW) test** is a widely used statistical test to detect the presence of first-order autocorrelation in the residuals of a regression model. This test is particularly useful for time-series data.
+**Durbin-Watson(DW) 검정**은 회귀모형 잔차의 1차 자기상관 유무를 탐지하는 데 널리 쓰이는 통계검정이다. 시계열 자료에서 특히 유용하다.
 
-**Test Statistic:**
+**검정통계량:**
 
-The Durbin-Watson statistic is defined as:
+Durbin-Watson 통계량은 다음으로 정의된다.
 
 $$
 DW = \frac{\sum_{t=2}^{n}(e_t - e_{t-1})^2}{\sum_{t=1}^{n} e_t^2}
 $$
 
-where $e_t$ is the residual at time $t$.
+여기서 $e_t$는 시점 $t$의 잔차이다.
 
-The DW statistic ranges between 0 and 4:
+DW 통계량은 0과 4 사이의 값을 갖는다.
 
-- $DW \approx 2$: No autocorrelation
-- $DW \to 0$: Strong positive autocorrelation
-- $DW \to 4$: Strong negative autocorrelation
+- $DW \approx 2$: 자기상관 없음
+- $DW \to 0$: 강한 양의 자기상관
+- $DW \to 4$: 강한 음의 자기상관
 
-**Relationship to autocorrelation:**
+**자기상관과의 관계:**
 
 $$
 DW \approx 2(1 - \hat{\rho})
 $$
 
-where $\hat{\rho}$ is the estimated first-order autocorrelation coefficient of the residuals.
+여기서 $\hat{\rho}$는 잔차의 추정된 1차 자기상관 계수이다.
 
-**Steps:**
+**절차:**
 
-1. **Fit the Linear Regression Model:** First, fit your linear regression model to obtain the residuals.
-2. **Calculate the Durbin-Watson Statistic:** The DW statistic will typically range between 0 and 4.
-3. **Interpret the Statistic:**
-   - A DW value around 2 indicates no autocorrelation.
-   - A value closer to 0 suggests positive autocorrelation.
-   - A value closer to 4 suggests negative autocorrelation.
+1. **선형회귀 모형 적합:** 먼저 모형을 적합하여 잔차를 얻는다.
+2. **Durbin-Watson 통계량 계산:** DW 통계량은 보통 0과 4 사이의 값을 갖는다.
+3. **통계량 해석:**
+   - DW가 2 근처면 자기상관이 없다.
+   - 0에 가까울수록 양의 자기상관을 시사한다.
+   - 4에 가까울수록 음의 자기상관을 시사한다.
 
-**Example:**
+**예시:**
 
 ```python
 from statsmodels.stats.stattools import durbin_watson
@@ -73,24 +72,24 @@ dw_stat = durbin_watson(model.resid)
 print(f'Durbin-Watson statistic: {dw_stat}')
 ```
 
-**Interpretation Guidelines:**
+**해석 지침:**
 
-| DW Value | Interpretation |
+| DW 값 | 해석 |
 |----------|---------------|
-| $DW \approx 2$ | No significant autocorrelation |
-| $DW < 1.5$ | Positive autocorrelation (violates independence) |
-| $DW > 2.5$ | Negative autocorrelation (violates independence) |
+| $DW \approx 2$ | 유의한 자기상관 없음 |
+| $DW < 1.5$ | 양의 자기상관 (독립성 위배) |
+| $DW > 2.5$ | 음의 자기상관 (독립성 위배) |
 
-## 3. Residual Plots for Detecting Patterns
+## 3. 패턴 탐지를 위한 잔차그림
 
-A **residual plot** is another effective tool for checking the independence assumption. By plotting the residuals against time (in time-series data) or the order of data collection (in cross-sectional data), you can visually inspect for patterns that may indicate dependence.
+**잔차그림**은 독립성 가정을 확인하는 또 하나의 효과적인 도구이다. 잔차를 (시계열 자료에서는) 시간에 대해, (횡단면 자료에서는) 자료 수집 순서에 대해 그리면 종속을 시사하는 패턴을 눈으로 확인할 수 있다.
 
-**Steps:**
+**절차:**
 
-1. **Plot Residuals:** Create a plot of residuals against time or the sequence/order of observations.
-2. **Assess Patterns:** Look for systematic patterns such as trends, cycles, or clusters in the plot.
+1. **잔차 그리기:** 잔차를 시간이나 관측 순서에 대해 그린다.
+2. **패턴 평가:** 추세, 주기, 군집 같은 체계적 패턴을 찾는다.
 
-**Example:**
+**예시:**
 
 ```python
 import matplotlib.pyplot as plt
@@ -104,44 +103,44 @@ plt.axhline(y=0, color='red', linestyle='--')
 plt.show()
 ```
 
-**Interpretation:**
+**해석:**
 
-- **No Clear Pattern:** Random scatter around zero indicates independence.
-- **Visible Pattern:** Trends, cycles, or clusters suggest a violation of independence, indicating potential autocorrelation or another form of dependence.
+- **뚜렷한 패턴 없음:** 0 주위의 무작위 흩어짐은 독립성을 나타낸다.
+- **눈에 띄는 패턴:** 추세, 주기, 군집은 독립성의 위배를 시사하며 자기상관이나 다른 형태의 종속 가능성을 나타낸다.
 
-**Common patterns and their meaning:**
+**흔한 패턴과 그 의미:**
 
-| Pattern | Likely Cause |
+| 패턴 | 유력한 원인 |
 |---------|-------------|
-| Smooth waves | Seasonal or cyclical autocorrelation |
-| Upward/downward trend | Missing trend variable in the model |
-| Alternating signs | Negative autocorrelation |
-| Runs of same sign | Positive autocorrelation |
+| 매끄러운 파동 | 계절성 또는 주기적 자기상관 |
+| 상승/하강 추세 | 모형에 추세 변수가 빠짐 |
+| 부호가 번갈아 나타남 | 음의 자기상관 |
+| 같은 부호가 이어짐 | 양의 자기상관 |
 
-## 4. Breusch-Godfrey Test for Higher-Order Autocorrelation
+## 4. 고차 자기상관을 위한 Breusch-Godfrey 검정
 
-The **Breusch-Godfrey test** is an extension of the Durbin-Watson test and is more versatile in detecting higher-order autocorrelation (not just the first-order). This test is useful when you suspect that the autocorrelation may extend beyond adjacent observations.
+**Breusch-Godfrey 검정**은 Durbin-Watson 검정의 확장으로, (1차만이 아니라) 고차 자기상관을 탐지하는 데 더 유연하다. 자기상관이 인접 관측값을 넘어 이어진다고 의심될 때 유용하다.
 
-**Hypotheses:**
+**가설:**
 
-- $H_0$: No autocorrelation up to lag $p$
-- $H_1$: Autocorrelation exists at some lag $\leq p$
+- $H_0$: 시차 $p$까지 자기상관이 없다
+- $H_1$: 어떤 시차 $\leq p$에서 자기상관이 존재한다
 
-The test regresses the residuals on the original predictors and lagged residuals:
+이 검정은 잔차를 원래의 설명변수와 시차 잔차에 회귀시킨다.
 
 $$
 e_t = \alpha_0 + \alpha_1 X_{1t} + \cdots + \rho_1 e_{t-1} + \rho_2 e_{t-2} + \cdots + \rho_p e_{t-p} + u_t
 $$
 
-The test statistic is $nR^2$ from this auxiliary regression, which follows a $\chi^2(p)$ distribution under $H_0$.
+검정통계량은 이 보조회귀의 $nR^2$이며, $H_0$ 아래에서 $\chi^2(p)$ 분포를 따른다.
 
-**Steps:**
+**절차:**
 
-1. **Fit the Linear Regression Model:** Obtain the residuals from your fitted model.
-2. **Perform the Breusch-Godfrey Test:** The test will provide a statistic and p-value.
-3. **Interpret the Results:** A significant p-value (typically < 0.05) suggests the presence of autocorrelation.
+1. **선형회귀 모형 적합:** 적합된 모형에서 잔차를 얻는다.
+2. **Breusch-Godfrey 검정 수행:** 검정이 통계량과 p값을 준다.
+3. **결과 해석:** p값이 유의하면(보통 < 0.05) 자기상관의 존재를 시사한다.
 
-**Example:**
+**예시:**
 
 ```python
 from statsmodels.stats.diagnostic import acorr_breusch_godfrey
@@ -152,87 +151,88 @@ print(f'Breusch-Godfrey LM statistic: {bg_test[0]}')
 print(f'Breusch-Godfrey p-value: {bg_test[1]}')
 ```
 
-**Interpretation:**
+**해석:**
 
-- **p-value > 0.05:** No significant autocorrelation detected.
-- **p-value < 0.05:** Significant autocorrelation present, indicating a violation of independence.
+- **p값 > 0.05:** 유의한 자기상관이 탐지되지 않았다.
+- **p값 < 0.05:** 유의한 자기상관이 존재하며 독립성 위배를 나타낸다.
 
-**Advantages over Durbin-Watson:**
+**Durbin-Watson보다 나은 점:**
 
-- Can detect higher-order autocorrelation (lag 2, 3, etc.)
-- Works with lagged dependent variables as regressors
-- More general and flexible
+- 고차 자기상관(시차 2, 3 등)을 탐지할 수 있다.
+- 시차 종속변수를 설명변수로 쓴 모형에서도 쓸 수 있다(이 경우 DW 검정은 타당하지 않다).
+- 더 일반적이고 유연하다.
 
-## 5. Examining Data Collection Process
+## 5. 자료 수집 과정 살피기
 
-Sometimes, dependence among observations arises from the data collection process itself, particularly in clustered or hierarchical data structures (e.g., students within schools, patients within hospitals). It is important to understand the structure of your data and check for potential clustering.
+관측값 사이의 종속은 때때로 자료 수집 과정 자체에서 비롯되며, 군집 또는 위계 구조를 갖는 자료(예: 학교 안의 학생, 병원 안의 환자)에서 특히 그렇다. 자료의 구조를 이해하고 군집 가능성을 확인하는 것이 중요하다.
 
-**Steps:**
+**절차:**
 
-1. **Understand Data Structure:** Identify if the data is collected in groups or clusters.
-2. **Check for Clustering:** Use hierarchical or mixed-effects models if clustering is suspected, as standard linear regression may not account for the within-cluster correlation.
+1. **자료 구조 이해:** 자료가 집단이나 군집 단위로 수집되었는지 확인한다.
+2. **군집 확인:** 군집이 의심되면 위계 모형이나 혼합효과 모형을 쓴다. 표준적인 선형회귀는 군집 내 상관을 반영하지 못한다.
 
-**Common clustered data structures:**
+**흔한 군집 자료 구조:**
 
-| Structure | Level 1 | Level 2 | Example |
+| 구조 | 1수준 | 2수준 | 예 |
 |-----------|---------|---------|---------|
-| Educational | Students | Schools | Test scores by school |
-| Medical | Patients | Hospitals | Treatment outcomes by hospital |
-| Geographic | Observations | Regions | Economic data by state |
-| Longitudinal | Time points | Subjects | Repeated measurements per person |
+| 교육 | 학생 | 학교 | 학교별 시험 점수 |
+| 의료 | 환자 | 병원 | 병원별 치료 결과 |
+| 지리 | 관측값 | 지역 | 주별 경제 자료 |
+| 종단 | 시점 | 대상자 | 개인별 반복측정 |
 
-**Interpretation:**
+**해석:**
 
-- **No Clustering:** If data is not clustered, independence may hold.
-- **Clustering Detected:** If data is clustered, independence may be violated, and you should consider alternative modeling approaches (e.g., mixed-effects models, clustered standard errors).
+- **군집 없음:** 자료가 군집화되어 있지 않으면 독립성이 성립할 수 있다.
+- **군집 탐지:** 자료가 군집화되어 있으면 독립성이 위배될 수 있으므로 대안적 모형화(예: 혼합효과 모형, 군집 표준오차)를 고려해야 한다.
 
-## Summary of Independence Diagnostics
+## 독립성 진단 요약
 
-| Method | Type | Detects | Best For |
+| 방법 | 유형 | 탐지 대상 | 적합한 상황 |
 |--------|------|---------|----------|
-| Durbin-Watson | Formal test | First-order autocorrelation | Time-series data |
-| Residual vs. time plot | Visual | Any temporal pattern | Time-series, ordered data |
-| Breusch-Godfrey | Formal test | Higher-order autocorrelation | Complex time dependence |
-| Data structure review | Conceptual | Clustering, hierarchical dependence | Cross-sectional clustered data |
+| Durbin-Watson | 형식적 검정 | 1차 자기상관 | 시계열 자료 |
+| 잔차-시간 그림 | 시각적 | 모든 시간 패턴 | 시계열, 순서가 있는 자료 |
+| Breusch-Godfrey | 형식적 검정 | 고차 자기상관 | 복잡한 시간 종속 |
+| 자료 구조 검토 | 개념적 | 군집, 위계적 종속 | 군집화된 횡단면 자료 |
 
-Ensuring independence in linear regression is crucial for valid statistical inference and reliable predictions. By employing tests like the Durbin-Watson test, Breusch-Godfrey test, and examining residual plots, you can diagnose potential violations of the independence assumption. In cases where independence is violated, it is important to address the issue through appropriate modeling techniques, such as adding lagged variables, using generalized least squares, or employing mixed-effects models for clustered data.
-## Exercises
+선형회귀에서 독립성을 확보하는 일은 타당한 통계적 추론과 신뢰할 만한 예측에 결정적이다. Durbin-Watson 검정, Breusch-Godfrey 검정, 잔차그림을 함께 써서 독립성 가정의 위배 가능성을 진단할 수 있다. 독립성이 위배된 경우에는 시차 변수 추가, 일반화최소제곱 사용, 군집 자료에 대한 혼합효과 모형 적용 같은 적절한 모형화 기법으로 문제에 대처해야 한다.
 
-**Exercise 1.**
-A regression model for quarterly sales data yields a Durbin-Watson statistic of $d = 0.95$. Interpret this result and recommend an appropriate remedy.
+## 연습문제
 
-??? success "Solution to Exercise 1"
-    A Durbin-Watson statistic of $d = 0.95$ is substantially below 2, indicating **positive first-order autocorrelation** in the residuals. Adjacent quarterly observations have similar residuals, which is common in time-series data.
+**연습문제 1.**
+분기별 매출 자료에 대한 회귀모형에서 Durbin-Watson 통계량 $d = 0.95$를 얻었다. 이 결과를 해석하고 적절한 대책을 제안하라.
 
-    This violates the independence assumption, causing standard errors to be underestimated. Recommended remedies:
+??? success "연습문제 1 풀이"
+    Durbin-Watson 통계량 $d = 0.95$는 2보다 상당히 작으므로 잔차에 **양의 1차 자기상관**이 있음을 나타낸다($\hat{\rho} \approx 1 - d/2 = 0.53$). 인접한 분기의 관측값이 비슷한 잔차를 갖는다는 뜻이며 시계열 자료에서 흔한 일이다.
 
-    1. **Include lagged variables** (e.g., $Y_{t-1}$) as predictors to capture the temporal dependence.
-    2. **Use Newey-West (HAC) standard errors** that are robust to autocorrelation.
-    3. **Fit an autoregressive model** (e.g., AR(1) errors) using generalized least squares.
+    이는 독립성 가정을 위배하여 표준오차를 과소추정하게 만든다. 권장 대책:
 
----
-
-**Exercise 2.**
-Explain why the independence assumption cannot be verified by looking at the data alone and must instead be ensured through study design. Give two examples of study designs that guarantee independence.
-
-??? success "Solution to Exercise 2"
-    Independence is a property of the **data-generating process**, not of the observed data. Correlated data can produce residual plots that appear random by chance, and independent data can show apparent patterns due to sampling variability.
-
-    Study designs that guarantee independence:
-
-    1. **Simple random sampling** from a population where each unit is selected independently with equal probability.
-    2. **Randomized controlled experiment** where subjects are randomly assigned to treatment conditions with no repeated measures.
+    1. **시차 변수 포함:** $Y_{t-1}$ 같은 시차 변수를 설명변수로 넣어 시간 종속을 포착한다.
+    2. **Newey-West(HAC) 표준오차 사용:** 자기상관에 로버스트한 표준오차를 쓴다.
+    3. **자기회귀 모형 적합:** 일반화최소제곱으로 AR(1) 오차 모형 등을 적합한다.
 
 ---
 
-**Exercise 3.**
-Students nested within classrooms violate the independence assumption. Explain the specific consequences for regression inference and name the modeling approach that addresses this issue.
+**연습문제 2.**
+독립성 가정을 자료만 보고 검증할 수 없고 연구 설계로 확보해야 하는 이유를 설명하라. 독립성을 보장하는 연구 설계의 예를 두 가지 들어라.
 
-??? success "Solution to Exercise 3"
-    Students in the same classroom share the same teacher, curriculum, and classroom environment, creating **within-cluster correlation**. This means:
+??? success "연습문제 2 풀이"
+    독립성은 관측된 자료가 아니라 **자료생성과정**의 성질이다. 상관된 자료도 우연히 무작위처럼 보이는 잔차그림을 낼 수 있고, 독립인 자료도 표집변동 때문에 겉보기 패턴을 보일 수 있다.
 
-    - The effective sample size is smaller than the nominal $n$.
-    - Standard errors are underestimated, leading to inflated $t$-statistics and artificially small p-values.
-    - Confidence intervals are too narrow.
+    독립성을 보장하는 연구 설계:
 
-    The appropriate approach is a **mixed-effects (hierarchical/multilevel) model** that includes classroom as a random effect. This accounts for the within-classroom correlation while correctly estimating standard errors for the fixed effects.
+    1. **단순무작위추출:** 각 개체가 같은 확률로 독립적으로 뽑히는 모집단에서의 추출.
+    2. **무작위대조실험:** 반복측정 없이 대상자를 처치 조건에 무작위로 배정하는 설계.
+
+---
+
+**연습문제 3.**
+학급 안에 중첩된 학생 자료는 독립성 가정을 위배한다. 회귀 추론에 미치는 구체적인 영향을 설명하고 이 문제를 다루는 모형화 접근을 말하라.
+
+??? success "연습문제 3 풀이"
+    같은 학급의 학생들은 같은 교사, 교육과정, 교실 환경을 공유하므로 **군집 내 상관**이 생긴다. 그 결과
+
+    - 실효 표본크기가 명목상의 $n$보다 작아진다.
+    - 표준오차가 과소추정되어 $t$ 통계량이 부풀려지고 p값이 인위적으로 작아진다.
+    - 신뢰구간이 지나치게 좁아진다.
+
+    적절한 접근은 학급을 확률효과로 포함하는 **혼합효과(위계/다수준) 모형**이다. 군집 내 상관을 반영하면서 고정효과의 표준오차를 올바르게 추정한다.

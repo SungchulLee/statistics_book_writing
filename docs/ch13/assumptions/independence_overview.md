@@ -1,71 +1,74 @@
-# Independence Assumption
+# 독립성 가정
 
+## 정의
 
-## Definition
+독립성 가정은 회귀모형의 잔차(오차)들이 서로 독립이라는 것이다. 다시 말해 한 관측값의 오차가 다른 관측값의 오차와 관련되어서는 안 된다.
 
-The independence assumption states that the residuals (errors) of the regression model are independent of each other. In other words, the error for one observation should not be related to the error for another observation.
-
-Formally, for any two distinct observations $i$ and $j$:
+형식적으로, 서로 다른 두 관측값 $i$와 $j$에 대해
 
 $$
-\text{Cov}(\epsilon_i, \epsilon_j) = 0 \quad \text{for all } i \neq j
+\text{Cov}(\epsilon_i, \epsilon_j) = 0 \quad \text{(모든 } i \neq j \text{에 대해)}
 $$
 
-## Importance
+## 중요성
 
-Violating the independence assumption can lead to:
+독립성 가정을 위배하면 다음이 일어난다.
 
-- **Biased estimates** of regression coefficients.
-- **Incorrect standard errors** — typically underestimated, making coefficients appear more significant than they truly are.
-- **Invalid hypothesis tests** — t-tests and F-tests produce misleading p-values.
+- **비효율적인 계수 추정** — OLS 추정량은 여전히 불편이지만 더 이상 최소분산 선형불편추정량이 아니다.
+- **틀린 표준오차** — 보통 과소추정되어 계수가 실제보다 더 유의해 보이게 만든다.
+- **타당하지 않은 가설검정** — t 검정과 F 검정이 오도하는 p값을 내놓는다.
 
-Independence is particularly critical in **time-series data**, where errors may be correlated over time (known as **autocorrelation**). It is also relevant in **clustered data**, where observations within groups may be more similar to each other than to observations in other groups.
+!!! note "자기상관이 계수를 편향시키는가"
+    설명변수가 외생적이면($E[\varepsilon \mid X] = 0$) 자기상관이 있어도 OLS 계수 추정량은 **불편**이다. 망가지는 것은 표준오차이지 추정값 자체가 아니다. 다만 예외가 있다. 시차 종속변수($Y_{t-1}$)를 설명변수로 넣은 모형에서 오차가 자기상관되어 있으면 설명변수와 오차가 상관되어 계수 추정 자체가 편향되고 일치성도 잃는다.
 
-## Common Violations
+독립성은 오차가 시간에 걸쳐 상관될 수 있는 **시계열 자료**에서 특히 결정적이다(이를 **자기상관**이라 한다). 같은 집단 안의 관측값이 다른 집단의 관측값보다 서로 비슷할 수 있는 **군집 자료**에서도 문제가 된다.
 
-| Data Type | Common Violation | Example |
+## 흔한 위배 사례
+
+| 자료 유형 | 흔한 위배 | 예 |
 |-----------|-----------------|---------|
-| Time-series | Autocorrelation | Stock returns, economic indicators |
-| Spatial | Spatial correlation | Geographic data, environmental measurements |
-| Clustered | Within-cluster correlation | Students within schools, patients within hospitals |
-| Repeated measures | Serial correlation | Longitudinal studies, panel data |
+| 시계열 | 자기상관 | 주식 수익률, 경제지표 |
+| 공간 | 공간상관 | 지리 자료, 환경 측정값 |
+| 군집 | 군집 내 상관 | 학교 안의 학생, 병원 안의 환자 |
+| 반복측정 | 계열상관 | 종단연구, 패널자료 |
 
-## Diagnostics
+## 진단
 
-- **Durbin-Watson Test:** A statistical test that detects first-order autocorrelation. A value close to 2 suggests no autocorrelation, while values significantly less than 2 indicate positive autocorrelation, and values significantly greater than 2 indicate negative autocorrelation.
-- **Residual Plots:** In time-series data, plot residuals against time to check for patterns. Any discernible pattern might indicate a violation of the independence assumption.
-- **Breusch-Godfrey Test:** Detects higher-order autocorrelation beyond just the first lag.
+- **Durbin-Watson 검정:** 1차 자기상관을 탐지하는 통계검정이다. 값이 2에 가까우면 자기상관이 없음을, 2보다 뚜렷이 작으면 양의 자기상관을, 2보다 뚜렷이 크면 음의 자기상관을 시사한다.
+- **잔차그림:** 시계열 자료에서는 잔차를 시간에 대해 그려 패턴을 확인한다. 눈에 띄는 패턴이 있으면 독립성 가정의 위배를 시사할 수 있다.
+- **Breusch-Godfrey 검정:** 1차를 넘어서는 고차 자기상관을 탐지한다.
 
-## Remedies for Non-Independence
+## 비독립성에 대한 대책
 
-- **Incorporate Lagged Variables:** In time-series models, including lagged variables (e.g., $Y_{t-1}$) can help account for autocorrelation.
-- **Generalized Least Squares (GLS):** GLS can be used to address autocorrelation by adjusting the standard errors of the regression coefficients.
-- **Mixed-Effects Models:** For clustered data, mixed-effects (hierarchical) models can account for within-cluster correlation.
-- **Newey-West Standard Errors:** Heteroscedasticity and autocorrelation consistent (HAC) standard errors provide valid inference even when independence is violated.
+- **시차 변수 도입:** 시계열 모형에서 시차 변수(예: $Y_{t-1}$)를 넣으면 자기상관을 설명할 수 있다.
+- **일반화최소제곱(GLS):** GLS는 회귀계수의 표준오차를 조정하여 자기상관에 대처한다.
+- **혼합효과모형:** 군집 자료에서는 혼합효과(위계) 모형이 군집 내 상관을 반영할 수 있다.
+- **Newey-West 표준오차:** 이분산·자기상관 일치(HAC) 표준오차는 독립성이 위배되어도 타당한 추론을 제공한다.
 
-For detailed diagnostic methods, see [Checking Independence](checking_independence.md).
-## Exercises
+자세한 진단 방법은 [독립성 확인](checking_independence.md)을 보라.
 
-**Exercise 1.**
-State the mathematical definition of the independence assumption for regression residuals. Give one example of a dataset where this assumption is likely violated.
+## 연습문제
 
-??? success "Solution to Exercise 1"
-    The independence assumption requires:
+**연습문제 1.**
+회귀 잔차에 대한 독립성 가정의 수학적 정의를 서술하라. 이 가정이 위배될 가능성이 높은 자료의 예를 하나 들어라.
+
+??? success "연습문제 1 풀이"
+    독립성 가정은 다음을 요구한다.
 
     $$
-    \text{Cov}(\varepsilon_i, \varepsilon_j) = 0 \quad \text{for all } i \neq j
+    \text{Cov}(\varepsilon_i, \varepsilon_j) = 0 \quad \text{(모든 } i \neq j \text{에 대해)}
     $$
 
-    **Example:** Monthly stock returns regressed on market factors. Returns in adjacent months are likely autocorrelated because economic conditions persist over time, causing $\text{Cov}(\varepsilon_t, \varepsilon_{t+1}) \neq 0$.
+    **예:** 월별 주식 수익률을 시장 요인에 회귀시키는 경우. 경기 상황이 시간에 걸쳐 지속되므로 인접한 달의 수익률은 자기상관되어 있을 가능성이 높고, 따라서 $\text{Cov}(\varepsilon_t, \varepsilon_{t+1}) \neq 0$이다.
 
 ---
 
-**Exercise 2.**
-Explain why violating the independence assumption is considered more serious than violating normality or homoscedasticity. What makes it harder to fix?
+**연습문제 2.**
+독립성 가정의 위배가 정규성이나 등분산성의 위배보다 더 심각하다고 여겨지는 이유를 설명하라. 왜 고치기가 더 어려운가?
 
-??? success "Solution to Exercise 2"
-    Independence violations are more serious because they affect the **core structure** of the statistical inference:
+??? success "연습문제 2 풀이"
+    독립성 위배는 통계적 추론의 **핵심 구조**에 영향을 주기 때문에 더 심각하다.
 
-    - Standard errors become biased (not just inefficient), making all $t$-tests and $F$-tests invalid.
-    - The effective sample size is smaller than the nominal $n$, so confidence intervals are misleadingly narrow.
-    - Unlike heteroscedasticity (fixable with robust SEs) or non-normality (mitigated by CLT), independence violations require fundamentally different models (mixed-effects, time-series models, GEE) that account for the correlation structure.
+    - 표준오차가 편향되므로(단지 비효율적인 것이 아니다) 모든 $t$ 검정과 $F$ 검정이 무효가 된다.
+    - 실효 표본크기가 명목상의 $n$보다 작아지므로 신뢰구간이 오도할 만큼 좁아진다.
+    - 이분산은 로버스트 표준오차로, 비정규성은 중심극한정리로 완화할 수 있지만, 독립성 위배는 상관 구조를 반영하는 근본적으로 다른 모형(혼합효과, 시계열, GEE)을 요구한다.

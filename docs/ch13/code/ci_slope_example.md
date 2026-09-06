@@ -1,34 +1,34 @@
-# Confidence Interval for Slope (Caffeine Example)
+# 기울기의 신뢰구간 (카페인 예제)
 
-## Overview
+## 개요
 
-This page demonstrates how to construct a confidence interval for the slope coefficient in simple linear regression. Using a study of 20 students examining the relationship between study hours and caffeine consumption, we compute the margin of error via the $t$-distribution and build a 95% confidence interval for $\beta_1$.
+이 페이지는 단순선형회귀에서 기울기 계수의 신뢰구간을 어떻게 구성하는지 보인다. 공부 시간과 카페인 섭취의 관계를 살핀 학생 20명의 연구를 이용해 $t$ 분포로 오차한계를 계산하고 $\beta_1$의 95% 신뢰구간을 만든다.
 
-## Mathematical Background
+## 수학적 배경
 
-In simple linear regression, the model is
+단순선형회귀 모형은
 
 $$
 y_i = \beta_0 + \beta_1 x_i + \varepsilon_i, \qquad \varepsilon_i \overset{\text{iid}}{\sim} N(0, \sigma^2).
 $$
 
-The least-squares estimator $\hat{\beta}_1$ has a sampling distribution
+최소제곱 추정량 $\hat{\beta}_1$의 표집분포는
 
 $$
 \hat{\beta}_1 \sim N\!\left(\beta_1,\; \frac{\sigma^2}{\sum_{i=1}^n (x_i - \bar{x})^2}\right).
 $$
 
-Because $\sigma^2$ is unknown, we replace it with the residual variance $s^2$ and use the $t$-distribution with $n - 2$ degrees of freedom. A $(1 - \alpha)$-level confidence interval for $\beta_1$ is
+$\sigma^2$을 모르므로 잔차분산 $s^2$으로 대체하고 자유도 $n - 2$의 $t$ 분포를 쓴다. $\beta_1$의 $(1 - \alpha)$ 수준 신뢰구간은
 
 $$
 \hat{\beta}_1 \pm t^*_{n-2,\,\alpha/2} \cdot \mathrm{SE}(\hat{\beta}_1),
 $$
 
-where $t^*_{n-2,\,\alpha/2}$ is the critical value from the $t$-distribution.
+여기서 $t^*_{n-2,\,\alpha/2}$는 $t$ 분포의 임계값이다.
 
-## Code
+## 코드
 
-The following code computes a 95% confidence interval for the slope in the caffeine study.
+다음 코드는 카페인 연구에서 기울기의 95% 신뢰구간을 계산한다.
 
 ```python
 from scipy import stats
@@ -60,20 +60,33 @@ print(f"{beta_1_hat:.4f} +/- {margin_of_error:.4f}")
 print(f"({ci_lower:.4f}, {ci_upper:.4f})")
 ```
 
-## Interpretation
+출력:
 
-- The estimated slope $\hat{\beta}_1 = 0.164$ means that, on average, each additional unit of caffeine consumption is associated with an increase of 0.164 study hours.
-- The 95% confidence interval tells us that, if we were to repeat the study many times, approximately 95% of the resulting intervals would contain the true slope $\beta_1$.
-- Because the interval does not contain zero (both bounds are positive), we can conclude at the 5% significance level that there is a statistically significant positive association between caffeine consumption and study hours.
-- The margin of error depends on three quantities: the critical value $t^*$ (which grows as the confidence level increases or $n$ decreases), the standard error of the slope, and implicitly the spread of the predictor values.
+```text
+Slope estimate: 0.1640
+Standard error: 0.0570
+t* (df=18): 2.1009
+Margin of error: 0.1198
 
-## Exercises
+95% confidence interval of the slope
+0.1640 +/- 0.1198
+(0.0442, 0.2838)
+```
 
-**Exercise 1.** Compute a 99% confidence interval for the same slope estimate. How does the interval width compare to the 95% interval?
+## 해석
 
-??? success "Solution to Exercise 1"
+- 추정된 기울기 $\hat{\beta}_1 = 0.164$는 카페인 섭취가 한 단위 늘어날 때 공부 시간이 평균 0.164만큼 늘어남과 연관됨을 뜻한다.
+- 95% 신뢰구간은, 이 연구를 여러 번 반복한다면 그렇게 얻은 구간의 약 95%가 참 기울기 $\beta_1$을 포함할 것임을 말해 준다.
+- 구간이 0을 포함하지 않으므로(양 끝이 모두 양수) 유의수준 5%에서 카페인 섭취와 공부 시간 사이에 통계적으로 유의한 양의 연관이 있다고 결론지을 수 있다.
+- 오차한계는 세 가지 양에 의존한다. 임계값 $t^*$(신뢰수준이 높아지거나 $n$이 작아지면 커진다), 기울기의 표준오차, 그리고 암묵적으로 설명변수 값들의 산포이다.
 
-    Replace $\alpha = 0.05$ with $\alpha = 0.01$:
+## 연습문제
+
+**연습문제 1.** 같은 기울기 추정값에 대해 99% 신뢰구간을 계산하라. 95% 구간과 폭을 비교하면 어떠한가?
+
+??? success "연습문제 1 풀이"
+
+    $\alpha = 0.05$를 $\alpha = 0.01$로 바꾼다.
 
     ```python
     alpha_99 = 0.01
@@ -84,42 +97,44 @@ print(f"({ci_lower:.4f}, {ci_upper:.4f})")
     print(f"99% CI: ({ci_lower_99:.4f}, {ci_upper_99:.4f})")
     ```
 
-    The 99% interval is wider than the 95% interval because a higher confidence level requires a larger critical value $t^*$. $\square$
+    $t^*_{18,\,0.005} = 2.8784$이므로 오차한계는 $0.1641$이고 99% 신뢰구간은 $(-0.0001, 0.3281)$이다. 신뢰수준이 높아지면 임계값 $t^*$가 커지므로 99% 구간이 95% 구간보다 넓다.
+
+    여기서 99% 구간은 0을 아슬아슬하게 **포함한다**. 곧 유의수준 1%에서는 $H_0\colon \beta_1 = 0$을 기각하지 못한다. 이는 $p$값이 $2 \times P(T_{18} > 0.164/0.057) = 0.0100$으로 0.01을 간발의 차로 넘는다는 사실과 정확히 일치한다. 회귀 출력표에 반올림되어 적힌 "0.010"이 실제로는 0.01보다 아주 조금 크다는 뜻이다. $\square$
 
 ---
 
-**Exercise 2.** If the sample size were $n = 50$ instead of $n = 20$ (with the same $\hat{\beta}_1$ and SE), how would the 95% confidence interval change? Explain why.
+**연습문제 2.** 표본크기가 $n = 20$이 아니라 $n = 50$이라면($\hat{\beta}_1$과 SE는 그대로) 95% 신뢰구간은 어떻게 달라지는가? 이유를 설명하라.
 
-??? success "Solution to Exercise 2"
+??? success "연습문제 2 풀이"
 
-    With $n = 50$, the degrees of freedom become $df = 48$. The critical value $t^*_{48, 0.025}$ is closer to the standard normal value $z^* = 1.96$, so the interval narrows slightly. More importantly, with a larger sample the standard error itself would likely decrease (since $\mathrm{SE} \propto 1/\sqrt{\sum(x_i - \bar{x})^2}$), producing a substantially tighter interval. Larger samples yield more precise estimates. $\square$
-
----
-
-**Exercise 3.** Use the confidence interval to perform a two-sided hypothesis test of $H_0\colon \beta_1 = 0$ at the $\alpha = 0.05$ level. State the decision and explain the duality between confidence intervals and hypothesis tests.
-
-??? success "Solution to Exercise 3"
-
-    The 95% confidence interval is approximately $(0.044, 0.284)$. Since $0$ is not contained in this interval, we reject $H_0\colon \beta_1 = 0$ at the 5% significance level. The duality states that rejecting $H_0$ at level $\alpha$ is equivalent to the $(1-\alpha)$-level confidence interval not containing the null value. $\square$
+    $n = 50$이면 자유도가 $df = 48$이 된다. 임계값 $t^*_{48, 0.025}$는 표준정규의 $z^* = 1.96$에 더 가까워지므로 구간이 조금 좁아진다. 더 중요한 것은, 표본이 커지면 표준오차 자체가 줄어들 가능성이 높다는 점이다($\mathrm{SE} \propto 1/\sqrt{\sum(x_i - \bar{x})^2}$이므로). 그러면 구간이 훨씬 더 좁아진다. 표본이 클수록 추정이 정밀해진다. $\square$
 
 ---
 
-**Exercise 4.** Derive the formula for $\mathrm{SE}(\hat{\beta}_1)$ starting from $\hat{\beta}_1 = \sum_{i=1}^n w_i y_i$ where $w_i = (x_i - \bar{x}) / \sum_{j=1}^n (x_j - \bar{x})^2$.
+**연습문제 3.** 신뢰구간을 이용해 $\alpha = 0.05$에서 $H_0\colon \beta_1 = 0$의 양측 가설검정을 수행하라. 판정을 서술하고 신뢰구간과 가설검정의 쌍대성을 설명하라.
 
-??? success "Solution to Exercise 4"
+??? success "연습문제 3 풀이"
 
-    Since $\hat{\beta}_1 = \sum_i w_i y_i$ with $w_i = (x_i - \bar{x})/S_{xx}$ where $S_{xx} = \sum_j (x_j - \bar{x})^2$, and the $y_i$ are independent with variance $\sigma^2$:
+    95% 신뢰구간은 약 $(0.044, 0.284)$이다. $0$이 이 구간에 들어 있지 않으므로 유의수준 5%에서 $H_0\colon \beta_1 = 0$을 기각한다. 쌍대성이란 유의수준 $\alpha$에서 $H_0$을 기각하는 것이 $(1-\alpha)$ 수준 신뢰구간이 귀무값을 포함하지 않는 것과 동치라는 뜻이다. $\square$
+
+---
+
+**연습문제 4.** $w_i = (x_i - \bar{x}) / \sum_{j=1}^n (x_j - \bar{x})^2$일 때 $\hat{\beta}_1 = \sum_{i=1}^n w_i y_i$에서 출발하여 $\mathrm{SE}(\hat{\beta}_1)$의 공식을 유도하라.
+
+??? success "연습문제 4 풀이"
+
+    $S_{xx} = \sum_j (x_j - \bar{x})^2$일 때 $w_i = (x_i - \bar{x})/S_{xx}$이고 $\hat{\beta}_1 = \sum_i w_i y_i$이며, $y_i$들은 독립이고 분산이 $\sigma^2$이므로
 
     $$
     \mathrm{Var}(\hat{\beta}_1) = \sum_{i=1}^n w_i^2 \,\sigma^2 = \frac{\sigma^2}{S_{xx}^2}\sum_{i=1}^n (x_i - \bar{x})^2 = \frac{\sigma^2}{S_{xx}}.
     $$
 
-    Therefore $\mathrm{SE}(\hat{\beta}_1) = s / \sqrt{S_{xx}}$, where $s$ is the residual standard error. $\square$
+    따라서 $\mathrm{SE}(\hat{\beta}_1) = s / \sqrt{S_{xx}}$이며 $s$는 잔차 표준오차이다. $\square$
 
 ---
 
-**Exercise 5.** Prove that as $n \to \infty$, the $t$-based confidence interval converges to the $z$-based interval. Under what conditions does the distinction matter in practice?
+**연습문제 5.** $n \to \infty$일 때 $t$ 기반 신뢰구간이 $z$ 기반 구간으로 수렴함을 증명하라. 실무에서 이 구분이 중요해지는 조건은 무엇인가?
 
-??? success "Solution to Exercise 5"
+??? success "연습문제 5 풀이"
 
-    The $t$-distribution with $\nu$ degrees of freedom converges in distribution to $N(0,1)$ as $\nu \to \infty$. For the confidence interval, as $n \to \infty$ we have $df = n - 2 \to \infty$, so $t^*_{n-2,\,\alpha/2} \to z_{\alpha/2}$, and the $t$-interval becomes the $z$-interval. The distinction matters in practice when $n$ is small (roughly $n < 30$), where the heavier tails of the $t$-distribution produce wider intervals that properly account for the additional uncertainty in estimating $\sigma$. $\square$
+    자유도 $\nu$의 $t$ 분포는 $\nu \to \infty$일 때 $N(0,1)$로 분포수렴한다. 신뢰구간에서는 $n \to \infty$이면 $df = n - 2 \to \infty$이므로 $t^*_{n-2,\,\alpha/2} \to z_{\alpha/2}$가 되어 $t$ 구간이 $z$ 구간이 된다. 실무에서 이 구분은 $n$이 작을 때(대략 $n < 30$) 중요하다. 그때는 $t$ 분포의 두꺼운 꼬리가 더 넓은 구간을 만들어 $\sigma$를 추정하는 데서 오는 추가 불확실성을 제대로 반영한다. $\square$

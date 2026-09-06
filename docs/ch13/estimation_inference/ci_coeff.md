@@ -1,71 +1,70 @@
-# Confidence Intervals for Simple OLS Estimators
+# 단순 OLS 추정량의 신뢰구간
 
+## 개요
 
-## Overview
-
-Given the sampling distributions derived in the [previous section](sampling_dist_simple.md), we can construct confidence intervals for the slope, the expected response, and individual predictions in simple linear regression. Each confidence interval takes the standard form: **point estimate $\pm$ critical value $\times$ standard error**.
+[앞 절](sampling_dist_simple.md)에서 유도한 표집분포를 이용하면 단순선형회귀에서 기울기, 기대반응, 개별 예측에 대한 신뢰구간을 만들 수 있다. 각 신뢰구간은 **점추정값 $\pm$ 임계값 $\times$ 표준오차**라는 표준적인 형태를 갖는다.
 
 ---
 
-## Confidence Interval Formulas
+## 신뢰구간 공식
 
-### Slope
+### 기울기
 
 $$
 \hat{\beta}_1 \pm t_{n-2}(0.975)\; s\sqrt{\frac{1}{\sum_{i=1}^n(x_i-\bar{x})^2}}
 $$
 
-This interval quantifies the uncertainty in the estimated rate of change of $y$ with respect to $x$. If the interval excludes zero, we have evidence at the 5% significance level that $x$ has a linear effect on $y$.
+이 구간은 $x$에 대한 $y$의 추정된 변화율의 불확실성을 수량화한다. 구간이 0을 포함하지 않으면 유의수준 5%에서 $x$가 $y$에 선형 효과를 갖는다는 증거가 된다.
 
-### Response Expectation (Mean Response at x_0)
+### 반응의 기댓값(x_0에서의 평균반응)
 
 $$
 (\hat{\beta}_0+\hat{\beta}_1 x_0) \pm t_{n-2}(0.975)\; s\sqrt{\frac{1}{n}+\frac{(x_0-\bar{x})^2}{\sum_{i=1}^n(x_i-\bar{x})^2}}
 $$
 
-This confidence interval captures the true mean of $y$ at a specific value $x_0$. The interval is narrowest when $x_0 = \bar{x}$ and widens as $x_0$ moves away from the center of the data, producing the characteristic "bowtie" shape when plotted across all $x_0$ values.
+이 신뢰구간은 특정한 값 $x_0$에서 $y$의 참 평균을 포착한다. $x_0 = \bar{x}$일 때 가장 좁고 $x_0$이 자료의 중심에서 멀어질수록 넓어지므로, 모든 $x_0$에 대해 그리면 특징적인 "나비넥타이" 모양이 나타난다.
 
-### Response (Prediction Interval at x_0)
+### 반응(x_0에서의 예측구간)
 
 $$
 (\hat{\beta}_0+\hat{\beta}_1 x_0) \pm t_{n-2}(0.975)\; s\sqrt{1+\frac{1}{n}+\frac{(x_0-\bar{x})^2}{\sum_{i=1}^n(x_i-\bar{x})^2}}
 $$
 
-This prediction interval captures where a **new individual observation** at $x_0$ is likely to fall. It is always wider than the confidence interval for the mean response because it includes the irreducible noise term $\sigma^2$ (the leading 1 under the square root).
+이 예측구간은 $x_0$에서 **새로운 개별 관측값**이 놓일 만한 범위를 포착한다. 줄일 수 없는 잡음항 $\sigma^2$(제곱근 안의 앞머리 1)을 포함하므로 항상 평균반응의 신뢰구간보다 넓다.
 
-### Key Distinction
+### 핵심 구분
 
-The confidence interval for the mean response and the prediction interval for an individual response share the same center $\hat{\beta}_0 + \hat{\beta}_1 x_0$, but differ in width. The mean response interval shrinks toward zero width as $n \to \infty$ (estimation uncertainty vanishes), while the prediction interval converges to $\hat{y}_0 \pm t \cdot s$ (irreducible noise remains).
+평균반응의 신뢰구간과 개별반응의 예측구간은 중심 $\hat{\beta}_0 + \hat{\beta}_1 x_0$이 같지만 폭이 다르다. 평균반응 구간은 $n \to \infty$일 때 폭이 0으로 줄어들지만(추정의 불확실성이 사라진다), 예측구간은 $\hat{y}_0 \pm t \cdot s$로 수렴한다(줄일 수 없는 잡음이 남는다).
 
-!!! info "Reference"
+!!! info "참고"
     [Khan Academy: Inference for Slope](https://www.khanacademy.org/math/ap-statistics/inference-slope-linear-regression/inference-slope/v/intro-inference-slope)
 
 ---
 
-## Example: Study Hours and Caffeine Consumption
+## 예제: 공부 시간과 카페인 섭취
 
-### Problem
+### 문제
 
-Musa investigates the correlation between studying hours and caffeine consumption among 20 students at his school. After performing a least-squares regression, he obtains the following output:
+Musa는 자기 학교 학생 20명을 대상으로 공부 시간과 카페인 섭취의 상관을 조사한다. 최소제곱 회귀를 수행하여 다음 출력을 얻었다.
 
 |  | Coef | SE Coef | T | P |
 |:---|---:|---:|---:|---:|
 | Constant | 2.544 | 0.134 | 18.955 | 0.000 |
 | Caffeine | 0.164 | 0.057 | 2.862 | 0.010 |
 
-$S = 1.532$, $R^2 = 60.0\%$
+$S = 1.532$, $R^2 = 31.3\%$
 
-**Task**: Determine the 95% confidence interval for the slope of the least-squares regression line.
+**과제**: 최소제곱 회귀직선 기울기의 95% 신뢰구간을 구하라.
 
-### Solution
+### 풀이
 
-From the regression output we extract:
+회귀 출력에서 다음을 읽는다.
 
-- $\hat{\beta}_1 = 0.164$ (the estimated slope)
-- $\text{SE}(\hat{\beta}_1) = 0.057$ (the standard error of the slope)
-- $n = 20$, so $\text{df} = n - 2 = 18$
+- $\hat{\beta}_1 = 0.164$ (추정된 기울기)
+- $\text{SE}(\hat{\beta}_1) = 0.057$ (기울기의 표준오차)
+- $n = 20$이므로 $\text{df} = n - 2 = 18$
 
-The 95% confidence interval is:
+95% 신뢰구간은
 
 $$
 \hat{\beta}_1 \pm t_{18}(0.975) \times \text{SE}(\hat{\beta}_1) = 0.164 \pm 2.1009 \times 0.057
@@ -75,12 +74,12 @@ $$
 = 0.164 \pm 0.1198 = (0.0442,\; 0.2838)
 $$
 
-**Interpretation**: We are 95% confident that the true slope relating caffeine consumption to study hours lies between 0.044 and 0.284. Since this interval does not contain zero, there is statistically significant evidence of a positive linear relationship.
+**해석**: 카페인 섭취와 공부 시간을 잇는 참 기울기가 0.044와 0.284 사이에 있다고 95% 신뢰한다. 이 구간이 0을 포함하지 않으므로 양의 선형관계에 대한 통계적으로 유의한 증거가 있다.
 
-!!! info "Reference"
-    [Khan Academy: Confidence Interval for Slope](https://www.khanacademy.org/math/ap-statistics/inference-slope-linear-regression/inference-slope/v/confidence-interval-slope)
+!!! note "$S$와 $R^2$는 이 문제에 쓰이지 않는다"
+    기울기의 신뢰구간은 $\hat{\beta}_1$과 그 표준오차만으로 계산된다. $S$와 $R^2$는 참고용 수치이다. 다만 이 둘은 서로 무관하지 않다. $t = 2.862$, $\text{df} = 18$에서 $R^2 = t^2/(t^2 + \text{df}) = 8.19/26.19 = 0.313$이므로, 출력표의 $R^2$는 반드시 31.3%가 되어야 한다.
 
-### Python Implementation
+### Python 구현
 
 ```python
 from scipy import stats
@@ -101,19 +100,20 @@ if __name__ == "__main__":
     main()
 ```
 
-**Output**:
-```
+**출력**:
+
+```text
 95% confidence interval of the slope
 0.1640 ± 0.1198
 ```
 
 ---
 
-## Visualization: Confidence and Prediction Bands
+## 시각화: 신뢰띠와 예측띠
 
-The following example generates synthetic regression data and plots both the 95% confidence interval for the mean response (inner band) and the 95% prediction interval for individual observations (outer band).
+다음 예제는 인공 회귀자료를 생성하고 평균반응에 대한 95% 신뢰구간(안쪽 띠)과 개별 관측값에 대한 95% 예측구간(바깥쪽 띠)을 함께 그린다.
 
-### Setup
+### 준비
 
 ```python
 import numpy as np
@@ -121,7 +121,7 @@ import matplotlib.pyplot as plt
 from scipy import stats
 ```
 
-### Data Generation
+### 자료 생성
 
 ```python
 def generate_data(n, sigma, seed=0):
@@ -148,7 +148,7 @@ def generate_data(n, sigma, seed=0):
     return x, y
 ```
 
-### Regression Estimation
+### 회귀 추정
 
 ```python
 def estimate_regression_line(x, y):
@@ -174,7 +174,7 @@ def estimate_regression_line(x, y):
     return y_hat, beta_hat, y_bar, x_bar
 ```
 
-### Residual Variance
+### 잔차분산
 
 ```python
 def calculate_residual_variance(y, y_hat, n):
@@ -186,7 +186,7 @@ def calculate_residual_variance(y, y_hat, n):
     return s_square, s
 ```
 
-### Confidence and Prediction Intervals
+### 신뢰구간과 예측구간
 
 ```python
 def confidence_intervals(x, y_hat, beta_hat, x_bar, y_bar, n, s):
@@ -223,7 +223,7 @@ def confidence_intervals(x, y_hat, beta_hat, x_bar, y_bar, n, s):
     return x0, lower, upper, lower2, upper2
 ```
 
-### Plotting
+### 그리기
 
 ```python
 def plot_intervals(x, y, y_hat, x0, lower, upper, lower2, upper2):
@@ -250,7 +250,7 @@ def plot_intervals(x, y, y_hat, x0, lower, upper, lower2, upper2):
     plt.show()
 ```
 
-### Full Example
+### 전체 예제
 
 ```python
 # Parameters
@@ -277,40 +277,41 @@ x0, lower, upper, lower2, upper2 = confidence_intervals(
 plot_intervals(x, y, y_hat, x0, lower, upper, lower2, upper2)
 ```
 
-The left panel shows the confidence band for the mean response—notice its characteristic "bowtie" shape, narrowest at $\bar{x}$. The right panel shows the wider prediction band that accounts for individual observation variability.
-## Exercises
+왼쪽 패널은 평균반응의 신뢰띠를 보여준다. $\bar{x}$에서 가장 좁은 특징적인 "나비넥타이" 모양에 주목하라. 오른쪽 패널은 개별 관측값의 변동까지 반영한 더 넓은 예측띠를 보여준다.
 
-**Exercise 1.**
-In a simple linear regression with $n = 20$, $\hat{\beta}_1 = 3.5$, and $\text{SE}(\hat{\beta}_1) = 1.2$, construct a 95% confidence interval for $\beta_1$.
+## 연습문제
 
-??? success "Solution to Exercise 1"
-    With $n - 2 = 18$ degrees of freedom, the critical value is $t_{0.025, 18} = 2.101$.
+**연습문제 1.**
+$n = 20$, $\hat{\beta}_1 = 3.5$, $\text{SE}(\hat{\beta}_1) = 1.2$인 단순선형회귀에서 $\beta_1$의 95% 신뢰구간을 구하라.
+
+??? success "연습문제 1 풀이"
+    자유도가 $n - 2 = 18$이므로 임계값은 $t_{0.025, 18} = 2.101$이다.
 
     $$
     \hat{\beta}_1 \pm t_{0.025, 18} \cdot \text{SE}(\hat{\beta}_1) = 3.5 \pm 2.101 \times 1.2 = 3.5 \pm 2.521
     $$
 
-    The 95% confidence interval is $(0.979, 6.021)$. Since this interval does not contain zero, $\beta_1$ is significantly different from zero at the 5% level.
+    95% 신뢰구간은 $(0.979, 6.021)$이다. 이 구간이 0을 포함하지 않으므로 $\beta_1$은 유의수준 5%에서 0과 유의하게 다르다.
 
 ---
 
-**Exercise 2.**
-Explain the relationship between the 95% confidence interval for $\beta_1$ and the two-sided $t$-test of $H_0: \beta_1 = 0$ at $\alpha = 0.05$. When do they lead to the same conclusion?
+**연습문제 2.**
+$\beta_1$의 95% 신뢰구간과 $\alpha = 0.05$에서 $H_0: \beta_1 = 0$에 대한 양측 $t$ 검정의 관계를 설명하라. 둘은 언제 같은 결론에 이르는가?
 
-??? success "Solution to Exercise 2"
-    The 95% confidence interval and the two-sided $t$-test at $\alpha = 0.05$ are **equivalent**: rejecting $H_0: \beta_1 = 0$ at the 5% level occurs if and only if the 95% confidence interval does not contain zero.
+??? success "연습문제 2 풀이"
+    95% 신뢰구간과 $\alpha = 0.05$의 양측 $t$ 검정은 **동등하다**. 유의수준 5%에서 $H_0: \beta_1 = 0$을 기각하는 것은 95% 신뢰구간이 0을 포함하지 않는 것과 필요충분이다.
 
-    This is because the $t$-test rejects when $|\hat{\beta}_1/\text{SE}| > t_{\alpha/2, n-2}$, which is equivalent to $0 \notin (\hat{\beta}_1 \pm t_{\alpha/2} \cdot \text{SE})$. They always lead to the same conclusion for any significance level $\alpha$ matched with a $(1-\alpha)$ confidence interval.
+    $t$ 검정은 $|\hat{\beta}_1/\text{SE}| > t_{\alpha/2, n-2}$일 때 기각하는데, 이는 $0 \notin (\hat{\beta}_1 \pm t_{\alpha/2} \cdot \text{SE})$와 같은 말이기 때문이다. 유의수준 $\alpha$와 $(1-\alpha)$ 신뢰구간을 짝지으면 언제나 같은 결론에 이른다.
 
 ---
 
-**Exercise 3.**
-As sample size $n$ increases, what happens to the width of the confidence interval for $\beta_1$? Explain the mathematical reason.
+**연습문제 3.**
+표본크기 $n$이 커지면 $\beta_1$의 신뢰구간 폭은 어떻게 되는가? 수학적 이유를 설명하라.
 
-??? success "Solution to Exercise 3"
-    The width decreases. The confidence interval width is $2 t_{\alpha/2, n-2} \cdot \text{SE}(\hat{\beta}_1)$. As $n$ increases:
+??? success "연습문제 3 풀이"
+    폭이 줄어든다. 신뢰구간의 폭은 $2 t_{\alpha/2, n-2} \cdot \text{SE}(\hat{\beta}_1)$이다. $n$이 커지면
 
-    1. $\text{SE}(\hat{\beta}_1) = \hat{\sigma}/\sqrt{\sum(x_i - \bar{x})^2}$ decreases because the denominator grows with $n$.
-    2. $t_{\alpha/2, n-2} \to z_{\alpha/2}$ (the $t$ critical value approaches the $z$ critical value as $df \to \infty$).
+    1. $\text{SE}(\hat{\beta}_1) = \hat{\sigma}/\sqrt{\sum(x_i - \bar{x})^2}$가 줄어든다. 분모가 $n$과 함께 커지기 때문이다.
+    2. $t_{\alpha/2, n-2} \to z_{\alpha/2}$가 된다($df \to \infty$일 때 $t$ 임계값이 $z$ 임계값으로 접근한다).
 
-    Both effects narrow the interval, reflecting the increased precision of the estimate with more data.
+    두 효과가 모두 구간을 좁히며, 이는 자료가 많아질수록 추정이 정밀해짐을 반영한다.

@@ -1,73 +1,73 @@
-# Normality Assumption
+# 정규성 가정
 
+## 정의
 
-## Definition
-
-The normality assumption asserts that the residuals of the regression model are normally distributed, with a mean of zero:
+정규성 가정은 회귀모형의 잔차가 평균 0인 정규분포를 따른다는 것이다.
 
 $$
 \epsilon_i \sim N(0, \sigma^2)
 $$
 
-This means that when the residuals are plotted, they should form a bell-shaped (Gaussian) curve centered around zero.
+곧 잔차를 그렸을 때 0을 중심으로 하는 종 모양(Gauss) 곡선을 이루어야 한다는 뜻이다.
 
-## Importance
+## 중요성
 
-Normality of residuals is crucial because many inferential statistics in linear regression rely on this assumption:
+선형회귀의 여러 추론 통계가 이 가정에 의존하므로 잔차의 정규성은 결정적으로 중요하다.
 
-- **t-tests for coefficients** — Testing whether individual regression coefficients are significantly different from zero requires normally distributed errors.
-- **F-tests for overall significance** — The overall F-test for model significance assumes normal errors.
-- **Confidence intervals** — The construction of confidence intervals for coefficients uses the t-distribution, which is derived under the normality assumption.
-- **Prediction intervals** — Prediction intervals for new observations require normality to be valid.
+- **계수의 t-검정** — 개별 회귀계수가 0과 유의하게 다른지 검정하려면 오차가 정규분포를 따라야 한다.
+- **전체 유의성의 F-검정** — 모형 유의성에 대한 전체 F 검정은 정규 오차를 가정한다.
+- **신뢰구간** — 계수의 신뢰구간은 정규성 가정 아래에서 유도된 t 분포를 쓴다.
+- **예측구간** — 새 관측값에 대한 예측구간이 타당하려면 정규성이 필요하다.
 
-**Important caveat:** The normality assumption is **not required** for unbiased estimation of regression coefficients. The OLS estimator $\hat{\beta}$ is unbiased regardless of the error distribution. However, without normality, the exact distributional results used for inference (t-tests, F-tests) are only asymptotically valid via the Central Limit Theorem.
+**중요한 단서:** 정규성 가정은 회귀계수의 불편추정에는 **필요하지 않다**. OLS 추정량 $\hat{\beta}$는 오차의 분포와 무관하게 불편이다. 다만 정규성이 없으면 추론에 쓰는 정확한 분포 결과(t 검정, F 검정)가 중심극한정리를 통해 점근적으로만 타당해진다.
 
-## When Normality Matters Most
+## 정규성이 가장 중요한 경우
 
-| Situation | Normality Importance |
+| 상황 | 정규성의 중요도 |
 |-----------|---------------------|
-| Small sample size ($n < 30$) | Critical — CLT does not provide sufficient approximation |
-| Large sample size ($n > 100$) | Less critical — CLT ensures approximate normality of test statistics |
-| Constructing prediction intervals | Always important regardless of sample size |
-| Heavy-tailed data | Important — outliers can strongly influence OLS estimates |
+| 작은 표본 ($n < 30$) | 결정적 — 중심극한정리의 근사가 충분하지 않다 |
+| 큰 표본 ($n > 100$) | 덜 중요 — 중심극한정리가 검정통계량의 근사 정규성을 보장한다 |
+| 예측구간을 만들 때 | 표본크기와 무관하게 항상 중요 |
+| 두꺼운 꼬리 자료 | 중요 — 이상점이 OLS 추정에 강한 영향을 줄 수 있다 |
 
-## Diagnostics
+## 진단
 
-- **Q-Q Plot (Quantile-Quantile Plot):** Compares the quantiles of the residuals to the quantiles of a normal distribution. If the points fall approximately along a straight line, the residuals are likely normally distributed.
-- **Shapiro-Wilk Test:** A formal statistical test for normality. A non-significant result suggests that the residuals are normally distributed.
-- **Histogram of Residuals:** A simple visual check — the histogram should resemble a bell curve centered at zero.
-- **Jarque-Bera Test:** Tests whether the skewness and kurtosis of the residuals match a normal distribution.
+- **Q-Q 그림(분위수-분위수 그림):** 잔차의 분위수를 정규분포의 분위수와 비교한다. 점들이 대략 직선을 따라 놓이면 잔차가 정규분포를 따를 가능성이 높다.
+- **Shapiro-Wilk 검정:** 정규성에 대한 형식적 통계검정이다. 유의하지 않은 결과는 잔차가 정규분포를 따름을 시사한다.
+- **잔차의 히스토그램:** 간단한 시각적 확인이다. 히스토그램이 0을 중심으로 하는 종 모양을 닮아야 한다.
+- **Jarque-Bera 검정:** 잔차의 왜도와 첨도가 정규분포와 일치하는지 검정한다.
 
-## Remedies for Non-Normality
+## 비정규성에 대한 대책
 
-- **Transformations:** Applying transformations to the dependent variable, such as log, square root, or Box-Cox transformations, can sometimes correct non-normality.
-- **Robust Regression:** When normality cannot be achieved, robust regression techniques can provide valid results by down-weighting the influence of outliers.
-- **Bootstrapping:** Bootstrap methods provide valid inference without relying on distributional assumptions.
-- **Larger samples:** With sufficiently large samples, the Central Limit Theorem ensures that test statistics are approximately normally distributed even if the errors are not.
+- **변수변환:** 종속변수에 로그, 제곱근, Box-Cox 변환 등을 적용하면 비정규성이 교정되기도 한다.
+- **로버스트 회귀:** 정규성을 얻을 수 없을 때 로버스트 회귀 기법이 이상점의 영향을 낮춰 타당한 결과를 제공한다.
+- **붓스트랩:** 붓스트랩 방법은 분포 가정에 기대지 않고 타당한 추론을 제공한다.
+- **더 큰 표본:** 표본이 충분히 크면 오차가 정규가 아니어도 중심극한정리에 의해 검정통계량이 근사적으로 정규분포를 따른다.
 
-For detailed diagnostic methods, see [Checking Normality](checking_normality.md).
-## Exercises
+자세한 진단 방법은 [정규성 확인](checking_normality.md)을 보라.
 
-**Exercise 1.**
-A researcher fits a regression model with $n = 15$ observations. The Q-Q plot of residuals shows substantial right skew. Explain why normality matters more in this setting than it would with $n = 500$.
+## 연습문제
 
-??? success "Solution to Exercise 1"
-    With only $n = 15$, the **Central Limit Theorem** does not provide a good approximation. The exact distributions of the $t$-statistics for individual coefficients and the $F$-statistic for overall significance depend on the normality of the errors. Right-skewed residuals mean the actual sampling distribution differs from the assumed $t$-distribution, producing inaccurate p-values and confidence intervals.
+**연습문제 1.**
+한 연구자가 관측값 $n = 15$개로 회귀모형을 적합했다. 잔차의 Q-Q 그림에서 오른쪽으로 상당히 치우친 모습이 보인다. 왜 이 상황에서 $n = 500$일 때보다 정규성이 더 중요한지 설명하라.
 
-    With $n = 500$, the CLT ensures that the sampling distributions are approximately normal regardless of the error distribution, so moderate departures from normality have negligible impact on inference.
+??? success "연습문제 1 풀이"
+    $n = 15$밖에 안 되면 **중심극한정리**가 좋은 근사를 제공하지 못한다. 개별 계수의 $t$ 통계량과 전체 유의성의 $F$ 통계량의 정확한 분포는 오차의 정규성에 의존한다. 잔차가 오른쪽으로 치우쳤다는 것은 실제 표집분포가 가정된 $t$ 분포와 다르다는 뜻이고, 따라서 p값과 신뢰구간이 부정확해진다.
+
+    $n = 500$이면 오차의 분포와 무관하게 중심극한정리가 표집분포의 근사 정규성을 보장하므로 정규성에서 어느 정도 벗어나도 추론에 미치는 영향이 미미하다.
 
 ---
 
-**Exercise 2.**
-Explain why normality is not required for unbiased estimation of $\hat{\beta}$ but is required for exact validity of $t$-tests on the coefficients.
+**연습문제 2.**
+$\hat{\beta}$의 불편추정에는 정규성이 필요하지 않지만 계수의 $t$ 검정이 정확히 타당하려면 정규성이 필요한 이유를 설명하라.
 
-??? success "Solution to Exercise 2"
-    The OLS estimator $\hat{\beta} = (X^T X)^{-1} X^T Y$ is a linear function of $Y$. Its expectation is:
+??? success "연습문제 2 풀이"
+    OLS 추정량 $\hat{\beta} = (X^T X)^{-1} X^T Y$는 $Y$의 선형함수이다. 그 기댓값은
 
     $$
     E[\hat{\beta}] = (X^T X)^{-1} X^T E[Y] = (X^T X)^{-1} X^T X \beta = \beta
     $$
 
-    This derivation uses only $E[\varepsilon] = 0$, not normality. Hence $\hat{\beta}$ is unbiased regardless of the error distribution.
+    이 유도에는 $E[\varepsilon] = 0$만 쓰였고 정규성은 쓰이지 않았다. 따라서 $\hat{\beta}$는 오차의 분포와 무관하게 불편이다.
 
-    The $t$-test statistic $t = \hat{\beta}_j / \text{SE}(\hat{\beta}_j)$ follows an exact $t$-distribution only when $\varepsilon \sim N(0, \sigma^2 I)$. Without normality, the ratio does not have an exact $t$-distribution for finite samples, so p-values from $t$-tables are only approximate.
+    반면 $t$ 검정통계량 $t = \hat{\beta}_j / \text{SE}(\hat{\beta}_j)$가 정확한 $t$ 분포를 따르는 것은 $\varepsilon \sim N(0, \sigma^2 I)$일 때뿐이다. 정규성이 없으면 유한표본에서 이 비는 정확한 $t$ 분포를 갖지 않으므로 $t$ 분포표에서 읽은 p값은 근삿값에 지나지 않는다.

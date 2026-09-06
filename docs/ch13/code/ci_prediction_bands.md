@@ -1,36 +1,36 @@
-# Confidence Interval and Prediction Bands
+# 신뢰띠와 예측띠
 
-## Overview
+## 개요
 
-This page explains and implements confidence intervals for the mean response $E[y \mid x]$ and prediction intervals for a new observation $y \mid x$ in simple linear regression. We generate synthetic data from a known model, fit OLS, and visualize both bands to illustrate how uncertainty about the regression line differs from uncertainty about individual predictions.
+이 페이지는 단순선형회귀에서 평균반응 $E[y \mid x]$의 신뢰구간과 새 관측값 $y \mid x$의 예측구간을 설명하고 구현한다. 알려진 모형에서 인공자료를 생성하고 OLS를 적합한 뒤 두 띠를 함께 그려, 회귀직선에 대한 불확실성과 개별 예측에 대한 불확실성이 어떻게 다른지 보인다.
 
-## Mathematical Background
+## 수학적 배경
 
-Consider the simple linear regression model
+단순선형회귀 모형을 생각하자.
 
 $$
 y_i = \beta_0 + \beta_1 x_i + \varepsilon_i, \qquad \varepsilon_i \overset{\text{iid}}{\sim} N(0, \sigma^2).
 $$
 
-Given a new predictor value $x_0$, the fitted value is $\hat{y}_0 = \hat{\beta}_0 + \hat{\beta}_1 x_0$. There are two types of intervals:
+새 설명변수 값 $x_0$이 주어지면 적합값은 $\hat{y}_0 = \hat{\beta}_0 + \hat{\beta}_1 x_0$이다. 두 종류의 구간이 있다.
 
-**Confidence interval for $E[y \mid x_0]$** (mean response):
+**$E[y \mid x_0]$의 신뢰구간**(평균반응):
 
 $$
 \hat{y}_0 \pm t^*_{n-2} \cdot s \sqrt{\frac{1}{n} + \frac{(x_0 - \bar{x})^2}{\sum_{i=1}^n (x_i - \bar{x})^2}}
 $$
 
-**Prediction interval for a new $y$ at $x_0$**:
+**$x_0$에서 새 $y$의 예측구간**:
 
 $$
 \hat{y}_0 \pm t^*_{n-2} \cdot s \sqrt{1 + \frac{1}{n} + \frac{(x_0 - \bar{x})^2}{\sum_{i=1}^n (x_i - \bar{x})^2}}
 $$
 
-The prediction interval is always wider because it accounts for both the uncertainty in estimating the mean and the irreducible noise $\sigma^2$.
+예측구간은 평균 추정의 불확실성과 줄일 수 없는 잡음 $\sigma^2$을 모두 반영하므로 언제나 더 넓다.
 
-## Code
+## 코드
 
-### Data Generation
+### 자료 생성
 
 ```python
 import numpy as np
@@ -42,7 +42,7 @@ def generate_data(n, sigma, seed=0):
     return x, y
 ```
 
-### Regression Line Estimation
+### 회귀직선 추정
 
 ```python
 def estimate_regression_line(x, y):
@@ -56,7 +56,7 @@ def estimate_regression_line(x, y):
     return y_hat, beta_hat, y_bar, x_bar
 ```
 
-### Residual Variance
+### 잔차분산
 
 ```python
 def calculate_residual_variance(y, y_hat, n):
@@ -65,7 +65,7 @@ def calculate_residual_variance(y, y_hat, n):
     return s_square, s
 ```
 
-### Confidence and Prediction Intervals
+### 신뢰구간과 예측구간
 
 ```python
 from scipy import stats
@@ -89,20 +89,20 @@ def confidence_intervals(x, y_hat, beta_hat, x_bar, y_bar, n, s):
     return x0, lower, upper, lower2, upper2
 ```
 
-## Interpretation
+## 해석
 
-- **Confidence bands** (CI) quantify uncertainty about where the true regression line lies. They are narrowest at $x = \bar{x}$ and widen as $x_0$ moves away from the center of the data.
-- **Prediction bands** (PI) quantify uncertainty about where a single new observation will fall. They include the additional $+1$ under the square root, making them always wider than the confidence bands.
-- As $n \to \infty$, the confidence band shrinks to zero width (the line is estimated perfectly), but the prediction band converges to $\hat{y}_0 \pm t^* \cdot s$, reflecting irreducible noise.
-- The "bow-tie" shape of both bands reflects the principle of leverage: predictions are most reliable near the center of the observed predictor values.
+- **신뢰띠**(CI)는 참 회귀직선이 어디에 있는지에 대한 불확실성을 수량화한다. $x = \bar{x}$에서 가장 좁고 $x_0$이 자료의 중심에서 멀어질수록 넓어진다.
+- **예측띠**(PI)는 새로운 관측값 하나가 어디에 떨어질지에 대한 불확실성을 수량화한다. 제곱근 안에 $+1$이 더 들어 있으므로 언제나 신뢰띠보다 넓다.
+- $n \to \infty$이면 신뢰띠의 폭은 0으로 줄어들지만(직선이 완벽하게 추정된다) 예측띠는 $\hat{y}_0 \pm t^* \cdot s$로 수렴하며, 이는 줄일 수 없는 잡음을 반영한다.
+- 두 띠의 "나비넥타이" 모양은 지렛대 원리를 보여준다. 예측은 관측된 설명변수 값들의 중심 근처에서 가장 믿을 만하다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.** Using the synthetic data with $n = 100$ and $\sigma = 3$, compute the 90% confidence interval for $E[y \mid x_0 = 0]$ and compare it with the 95% interval.
+**연습문제 1.** $n = 100$, $\sigma = 3$인 인공자료에서 $E[y \mid x_0 = 0]$의 90% 신뢰구간을 계산하고 95% 구간과 비교하라.
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
 
-    At $x_0 = 0$, which is approximately $\bar{x}$ for standard normal predictors:
+    표준정규 설명변수에서 $x_0 = 0$은 대략 $\bar{x}$이다.
 
     ```python
     t_90 = stats.t(n - 2).ppf(0.95)  # ~1.66
@@ -112,33 +112,33 @@ def confidence_intervals(x, y_hat, beta_hat, x_bar, y_bar, n, s):
     margin_95 = t_95 * s * np.sqrt(1 / n)
     ```
 
-    The 90% interval is narrower by the ratio $t_{0.95}/t_{0.975} \approx 1.66/1.98 \approx 0.84$. $\square$
+    90% 구간은 비 $t_{0.95}/t_{0.975} \approx 1.66/1.98 \approx 0.84$만큼 좁다. $\square$
 
 ---
 
-**Exercise 2.** Explain algebraically why the prediction interval is always wider than the confidence interval for any $x_0$.
+**연습문제 2.** 어떤 $x_0$에서든 예측구간이 신뢰구간보다 항상 넓은 이유를 대수적으로 설명하라.
 
-??? success "Solution to Exercise 2"
+??? success "연습문제 2 풀이"
 
-    The squared half-width of the CI is proportional to
+    신뢰구간 반폭의 제곱은 다음에 비례한다.
 
     $$
     \frac{1}{n} + \frac{(x_0 - \bar{x})^2}{S_{xx}},
     $$
 
-    while for the PI it is
+    반면 예측구간은
 
     $$
     1 + \frac{1}{n} + \frac{(x_0 - \bar{x})^2}{S_{xx}}.
     $$
 
-    The PI adds a term of $1$ (representing $\mathrm{Var}(\varepsilon_{\text{new}})/s^2 = 1$ after standardization), so the quantity under the square root is strictly larger for the PI. Since the critical value and $s$ are the same, the PI is always wider. $\square$
+    예측구간에는 $1$이라는 항이 더 붙는다(표준화한 뒤 $\mathrm{Var}(\varepsilon_{\text{new}})/s^2 = 1$에 해당한다). 따라서 제곱근 안의 값이 예측구간에서 항상 더 크다. 임계값과 $s$가 같으므로 예측구간이 언제나 더 넓다. $\square$
 
 ---
 
-**Exercise 3.** Modify the code to plot the bands for a model with $n = 30$ and $\sigma = 1$. How do the band widths compare to the original $n = 100$, $\sigma = 3$ case?
+**연습문제 3.** $n = 30$, $\sigma = 1$인 모형의 띠를 그리도록 코드를 고쳐라. 원래의 $n = 100$, $\sigma = 3$인 경우와 띠의 폭을 비교하면 어떠한가?
 
-??? success "Solution to Exercise 3"
+??? success "연습문제 3 풀이"
 
     ```python
     x30, y30 = generate_data(30, 1)
@@ -146,38 +146,38 @@ def confidence_intervals(x, y_hat, beta_hat, x_bar, y_bar, n, s):
     _, s30 = calculate_residual_variance(y30, y_hat30, 30)
     ```
 
-    The CI width depends on $s/\sqrt{n}$. With $n=30$ and $\sigma=1$, $s \approx 1$ and $s/\sqrt{30} \approx 0.18$, versus the original $s \approx 3$ and $s/\sqrt{100} = 0.3$. The new CI is narrower. The PI width is dominated by $s$, so with $\sigma=1$ the PI is much narrower than with $\sigma=3$. $\square$
+    신뢰구간의 폭은 $s/\sqrt{n}$에 의존한다. $n=30$, $\sigma=1$이면 $s \approx 1$이고 $s/\sqrt{30} \approx 0.18$인 반면, 원래는 $s \approx 3$이고 $s/\sqrt{100} = 0.3$이었다. 새 신뢰구간이 더 좁다. 예측구간의 폭은 $s$가 지배하므로 $\sigma=1$일 때의 예측구간은 $\sigma=3$일 때보다 훨씬 좁다. $\square$
 
 ---
 
-**Exercise 4.** Derive the variance of the prediction error $\hat{y}_0 - y_{\text{new}}$ where $y_{\text{new}} = \beta_0 + \beta_1 x_0 + \varepsilon_{\text{new}}$ and $\varepsilon_{\text{new}}$ is independent of the training data.
+**연습문제 4.** $y_{\text{new}} = \beta_0 + \beta_1 x_0 + \varepsilon_{\text{new}}$이고 $\varepsilon_{\text{new}}$이 훈련자료와 독립일 때, 예측오차 $\hat{y}_0 - y_{\text{new}}$의 분산을 유도하라.
 
-??? success "Solution to Exercise 4"
+??? success "연습문제 4 풀이"
 
-    The prediction error is $\hat{y}_0 - y_{\text{new}} = (\hat{y}_0 - E[y \mid x_0]) - \varepsilon_{\text{new}}$. Since $\hat{y}_0$ depends only on training data and $\varepsilon_{\text{new}}$ is independent:
+    예측오차는 $\hat{y}_0 - y_{\text{new}} = (\hat{y}_0 - E[y \mid x_0]) - \varepsilon_{\text{new}}$이다. $\hat{y}_0$은 훈련자료에만 의존하고 $\varepsilon_{\text{new}}$은 그와 독립이므로
 
     $$
     \mathrm{Var}(\hat{y}_0 - y_{\text{new}}) = \mathrm{Var}(\hat{y}_0) + \mathrm{Var}(\varepsilon_{\text{new}}) = \sigma^2\!\left(\frac{1}{n} + \frac{(x_0 - \bar{x})^2}{S_{xx}}\right) + \sigma^2.
     $$
 
-    Factoring out $\sigma^2$:
+    $\sigma^2$을 묶어 내면
 
     $$
     \mathrm{Var}(\hat{y}_0 - y_{\text{new}}) = \sigma^2\!\left(1 + \frac{1}{n} + \frac{(x_0 - \bar{x})^2}{S_{xx}}\right).
     $$
 
-    This is exactly the expression under the square root in the prediction interval formula (after replacing $\sigma$ with $s$). $\square$
+    이것이 ($\sigma$를 $s$로 바꾸면) 예측구간 공식의 제곱근 안 표현과 정확히 일치한다. $\square$
 
 ---
 
-**Exercise 5.** Show that at $x_0 = \bar{x}$, the confidence interval for the mean simplifies to $\bar{y} \pm t^*_{n-2} \cdot s / \sqrt{n}$. Compare this to the confidence interval for a population mean from introductory statistics.
+**연습문제 5.** $x_0 = \bar{x}$에서 평균의 신뢰구간이 $\bar{y} \pm t^*_{n-2} \cdot s / \sqrt{n}$으로 간단해짐을 보여라. 입문 통계학에서 배우는 모평균의 신뢰구간과 비교하라.
 
-??? success "Solution to Exercise 5"
+??? success "연습문제 5 풀이"
 
-    At $x_0 = \bar{x}$, the term $(x_0 - \bar{x})^2/S_{xx} = 0$, so the CI becomes
+    $x_0 = \bar{x}$에서는 $(x_0 - \bar{x})^2/S_{xx} = 0$이므로 신뢰구간이
 
     $$
-    \hat{y}_0 \pm t^*_{n-2} \cdot s \sqrt{\frac{1}{n}} = \bar{y} \pm \frac{t^*_{n-2} \cdot s}{\sqrt{n}},
+    \hat{y}_0 \pm t^*_{n-2} \cdot s \sqrt{\frac{1}{n}} = \bar{y} \pm \frac{t^*_{n-2} \cdot s}{\sqrt{n}}
     $$
 
-    since $\hat{y}_0 = \hat{\beta}_0 + \hat{\beta}_1 \bar{x} = \bar{y}$. This has the same form as the CI for a population mean $\bar{y} \pm t^*_{n-1} \cdot s/\sqrt{n}$, except the degrees of freedom are $n-2$ rather than $n-1$ because we estimate two parameters in regression. $\square$
+    가 된다. $\hat{y}_0 = \hat{\beta}_0 + \hat{\beta}_1 \bar{x} = \bar{y}$이기 때문이다. 이는 모평균의 신뢰구간 $\bar{y} \pm t^*_{n-1} \cdot s/\sqrt{n}$과 같은 형태이며, 다만 회귀에서는 모수를 두 개 추정하므로 자유도가 $n-1$이 아니라 $n-2$이다. $\square$

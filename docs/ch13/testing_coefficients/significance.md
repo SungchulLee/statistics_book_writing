@@ -1,130 +1,130 @@
-# Interpretation of Significance
+# 유의성의 해석
 
-
-Interpreting the significance of regression coefficients is a critical step in understanding linear regression results. Significance tells us whether a predictor variable has a meaningful relationship with the outcome variable, beyond what would be expected by random chance.
-
----
-
-## Statistical Significance vs. Practical Significance
-
-It is important to distinguish between these two concepts:
-
-- **Statistical Significance:** A coefficient is statistically significant if the p-value is less than a predefined threshold (usually 0.05). The relationship is unlikely to have occurred by chance.
-- **Practical Significance:** Even if a coefficient is statistically significant, the size of its effect might be too small to matter in the real world. Practical significance considers the magnitude of the relationship and whether it is meaningful in context.
-
-!!! example "Small but Significant"
-    In a model predicting salary based on years of education, a statistically significant coefficient might indicate that an additional year of education is associated with a \$100 increase in salary. However, if education costs far exceed this amount, the effect may not be practically meaningful.
+회귀계수의 유의성을 해석하는 일은 선형회귀 결과를 이해하는 데 결정적인 단계이다. 유의성은 설명변수가 우연으로 기대되는 수준을 넘어 결과변수와 의미 있는 관계를 갖는지를 알려준다.
 
 ---
 
-## Interpreting p-values for Significance
+## 통계적 유의성과 실질적 유의성
 
-The p-value represents the probability that the observed relationship (or a more extreme one) would occur under the null hypothesis ($\beta_i = 0$).
+이 두 개념을 구분하는 것이 중요하다.
 
-| p-value | Conclusion |
+- **통계적 유의성:** p값이 미리 정한 문턱값(보통 0.05)보다 작으면 계수가 통계적으로 유의하다. 그 관계가 우연히 나타났을 가능성이 낮다는 뜻이다.
+- **실질적 유의성:** 계수가 통계적으로 유의하더라도 효과의 크기가 현실에서 의미를 갖기에는 너무 작을 수 있다. 실질적 유의성은 관계의 크기와 그것이 맥락 안에서 의미 있는지를 따진다.
+
+!!! example "작지만 유의한 효과"
+    교육 연수로 연봉을 예측하는 모형에서 통계적으로 유의한 계수가 교육 1년 추가가 연봉 \$100 증가와 연관됨을 나타낼 수 있다. 그러나 교육 비용이 이 금액을 훨씬 웃돈다면 그 효과는 실질적으로 의미 있다고 하기 어렵다.
+
+---
+
+## 유의성 판단을 위한 p값 해석
+
+p값은 귀무가설($\beta_i = 0$) 아래에서 관측된 관계(또는 더 극단적인 관계)가 나타날 확률이다.
+
+| p값 | 결론 |
 |---------|------------|
-| $< 0.01$ | Strong evidence against $H_0$ — highly significant |
-| $< 0.05$ | Sufficient evidence — statistically significant |
-| $\geq 0.05$ | Insufficient evidence — not statistically significant |
+| $< 0.01$ | $H_0$에 반하는 강한 증거 — 매우 유의함 |
+| $< 0.05$ | 충분한 증거 — 통계적으로 유의함 |
+| $\geq 0.05$ | 증거 부족 — 통계적으로 유의하지 않음 |
 
-!!! warning "Threshold is Arbitrary"
-    The 0.05 threshold is a convention, not a natural law. In some contexts (e.g., medical trials), stricter thresholds like 0.01 are used. A low p-value indicates significance but provides no information about the size or practical importance of the effect.
+!!! warning "문턱값은 임의적이다"
+    0.05라는 문턱값은 관행이지 자연법칙이 아니다. 의학 시험처럼 어떤 맥락에서는 0.01 같은 더 엄격한 문턱값을 쓴다. p값이 작다는 것은 유의함을 나타낼 뿐, 효과의 크기나 실질적 중요성에 대해서는 아무 정보도 주지 않는다.
 
 ---
 
-## Confidence Intervals and Significance
+## 신뢰구간과 유의성
 
-Confidence intervals offer another perspective on significance. A 95% CI provides a range within which the true population coefficient is likely to lie.
+신뢰구간은 유의성을 보는 또 다른 관점을 제공한다. 95% 신뢰구간은 참 모집단 계수가 놓일 가능성이 높은 범위를 준다.
 
-| Scenario | 95% CI | Conclusion |
+| 경우 | 95% 신뢰구간 | 결론 |
 |----------|--------|------------|
-| Predictor A | (1.5, 3.5) | Significant — CI excludes 0 |
-| Predictor B | (−0.5, 2.5) | Not significant — CI includes 0 |
+| 설명변수 A | (1.5, 3.5) | 유의함 — 구간이 0을 배제한다 |
+| 설명변수 B | (−0.5, 2.5) | 유의하지 않음 — 구간이 0을 포함한다 |
 
-The width of the confidence interval also reflects precision: narrower intervals indicate more precise estimates.
-
----
-
-## Effect Size and Practical Interpretation
-
-Beyond statistical significance, the **effect size** measures how much the predictor changes the outcome variable. Large sample sizes can produce very small p-values for predictors with negligible effects.
-
-!!! example "Large Sample, Small Effect"
-    A study with 10,000 observations might find a predictor significant with $p = 0.001$, but the actual effect could be as small as 0.01 units of change per unit increase in the predictor. The predictor is statistically significant but not practically meaningful.
-
-Reporting effect sizes alongside p-values provides a more complete picture of the predictor's importance.
+신뢰구간의 폭은 정밀도도 나타낸다. 구간이 좁을수록 추정이 정밀하다.
 
 ---
 
-## Multiple Predictors and Joint Significance
+## 효과 크기와 실질적 해석
 
-In models with multiple predictors, individual predictors may not be significant even though the model as a whole explains significant variance. The **F-test** assesses joint significance:
+통계적 유의성을 넘어, **효과 크기**는 설명변수가 결과변수를 얼마나 변화시키는지를 잰다. 표본이 크면 효과가 무시할 만한 설명변수에서도 아주 작은 p값이 나올 수 있다.
 
-- The F-test evaluates whether **at least one** predictor has a significant effect on the outcome.
-- If the F-test is significant ($p < 0.05$), the overall model is statistically significant, even if some individual predictors are not.
+!!! example "큰 표본, 작은 효과"
+    관측값이 10,000개인 연구에서 $p = 0.001$로 유의한 설명변수를 찾았더라도, 실제 효과는 설명변수 한 단위 증가당 0.01 단위 변화 정도로 작을 수 있다. 통계적으로는 유의하지만 실질적으로는 의미가 없다.
 
-This is particularly important in models with correlated predictors, where multicollinearity can mask individual significance.
+p값과 함께 효과 크기를 보고하면 설명변수의 중요성을 더 온전히 보여줄 수 있다.
 
 ---
 
-## Common Pitfalls in Interpreting Significance
+## 여러 설명변수와 결합 유의성
 
-**1. Over-reliance on p-values**
+설명변수가 여럿인 모형에서는 모형 전체가 유의한 분산을 설명하더라도 개별 설명변수가 유의하지 않을 수 있다. **F-검정**이 결합 유의성을 평가한다.
 
-p-values are useful but should not be the sole criterion. Practical significance and effect size are equally important.
+- F-검정은 **적어도 하나의** 설명변수가 결과에 유의한 효과를 갖는지를 평가한다.
+- F-검정이 유의하면($p < 0.05$) 개별 설명변수 중 일부가 유의하지 않더라도 모형 전체는 통계적으로 유의하다.
 
-**2. Multiple comparisons problem**
+이는 설명변수들이 상관되어 다중공선성이 개별 유의성을 가릴 수 있는 모형에서 특히 중요하다.
 
-When testing multiple predictors, the probability of finding a significant result by chance increases. Adjustments such as the **Bonferroni correction** can control the false positive rate:
+---
+
+## 유의성 해석의 흔한 함정
+
+**1. p값에 대한 과도한 의존**
+
+p값은 유용하지만 유일한 기준이 되어서는 안 된다. 실질적 유의성과 효과 크기도 똑같이 중요하다.
+
+**2. 다중비교 문제**
+
+설명변수를 여럿 검정하면 우연히 유의한 결과를 얻을 확률이 커진다. **Bonferroni 보정** 같은 조정으로 거짓양성률을 통제할 수 있다.
 
 $$
-\alpha_{\text{adjusted}} = \frac{\alpha}{m}
+\alpha_{\text{조정}} = \frac{\alpha}{m}
 $$
 
-where $m$ is the number of comparisons.
+여기서 $m$은 비교 횟수이다.
 
-**3. Ignoring context**
+**3. 맥락 무시**
 
-Statistical significance does not always imply practical importance. Always interpret significance within the context of the problem and consider real-world implications.
+통계적 유의성이 언제나 실질적 중요성을 뜻하지는 않는다. 유의성은 항상 문제의 맥락 안에서 해석하고 현실적 함의를 고려해야 한다.
 
 ---
 
-## Summary
+## 요약
 
-| Tool | What It Tells You |
+| 도구 | 알려주는 것 |
 |------|-------------------|
-| p-value | Whether the predictor has a statistically significant effect |
-| Confidence interval | Range of plausible values and precision of the estimate |
-| Effect size | Magnitude and practical importance of the effect |
-| F-test | Joint significance of all predictors in the model |
+| p값 | 설명변수가 통계적으로 유의한 효과를 갖는지 |
+| 신뢰구간 | 그럴듯한 값의 범위와 추정의 정밀도 |
+| 효과 크기 | 효과의 크기와 실질적 중요성 |
+| F-검정 | 모형 안 모든 설명변수의 결합 유의성 |
 
-By using these tools together and understanding their limitations, analysts can make more informed decisions about the relationships between predictors and outcomes in linear regression.
-## Exercises
+이 도구들을 함께 쓰고 각각의 한계를 이해할 때, 선형회귀에서 설명변수와 결과의 관계에 대해 더 나은 판단을 내릴 수 있다.
 
-**Exercise 1.**
-A predictor has $\hat{\beta} = 0.002$ with $p < 0.001$ in a regression on $n = 100{,}000$ observations. Is this result practically significant? Explain the distinction between statistical and practical significance.
+## 연습문제
 
-??? success "Solution to Exercise 1"
-    The result is **statistically significant** (the coefficient is reliably different from zero) but may not be **practically significant** (the effect size of 0.002 may be too small to matter in context).
+**연습문제 1.**
+관측값이 $n = 100{,}000$개인 회귀에서 어떤 설명변수가 $\hat{\beta} = 0.002$, $p < 0.001$이다. 이 결과는 실질적으로 유의한가? 통계적 유의성과 실질적 유의성의 차이를 설명하라.
 
-    With $n = 100{,}000$, even tiny effects become statistically significant because the standard error shrinks as $1/\sqrt{n}$. Statistical significance means "unlikely to be zero," while practical significance means "large enough to matter for decisions." The researcher should evaluate whether a 0.002-unit change in $Y$ per unit change in $X$ is meaningful in the application domain.
+??? success "연습문제 1 풀이"
+    이 결과는 **통계적으로 유의하다**(계수가 0과 확실히 다르다). 그러나 **실질적으로 유의하지** 않을 수 있다(0.002라는 효과 크기가 맥락 안에서 의미를 갖기에 너무 작을 수 있다).
 
----
-
-**Exercise 2.**
-Explain why a non-significant p-value ($p = 0.15$) does not prove that the coefficient is zero. What does it actually mean?
-
-??? success "Solution to Exercise 2"
-    A p-value of 0.15 means that if $\beta = 0$, there is a 15% probability of observing a test statistic as extreme as (or more extreme than) the one obtained. This is **not** proof that $\beta = 0$; it means we lack sufficient evidence to reject $H_0$.
-
-    The failure to reject could be due to: (1) the true effect really is zero (or very small), (2) the sample size is too small to detect a real effect (insufficient power), or (3) high variance in the data obscuring a genuine relationship. A power analysis or confidence interval provides more information than the p-value alone.
+    $n = 100{,}000$이면 표준오차가 $1/\sqrt{n}$의 속도로 줄어들기 때문에 아주 작은 효과도 통계적으로 유의해진다. 통계적 유의성은 "0이 아닐 가능성이 높다"는 뜻이고, 실질적 유의성은 "의사결정에 영향을 줄 만큼 크다"는 뜻이다. 연구자는 $X$가 한 단위 변할 때 $Y$가 0.002 단위 변하는 것이 해당 응용 분야에서 의미 있는지를 판단해야 한다.
 
 ---
 
-**Exercise 3.**
-In a model with five predictors, all individual $t$-tests are non-significant ($p > 0.05$) but the overall $F$-test is significant ($p = 0.01$). Interpret this seemingly contradictory result.
+**연습문제 2.**
+유의하지 않은 p값($p = 0.15$)이 계수가 0임을 증명하지 않는 이유를 설명하라. 실제로는 무엇을 뜻하는가?
 
-??? success "Solution to Exercise 3"
-    This apparent contradiction arises from **multicollinearity**. The five predictors are likely correlated with each other, so each individual predictor's unique contribution (measured by its $t$-test) is small after accounting for the others. However, **collectively** they explain a significant amount of variance in $Y$ (detected by the $F$-test).
+??? success "연습문제 2 풀이"
+    p값 0.15는 $\beta = 0$일 때 얻은 것만큼 또는 그보다 더 극단적인 검정통계량을 관측할 확률이 15%라는 뜻이다. 이는 $\beta = 0$이라는 **증명이 아니며**, $H_0$을 기각할 증거가 부족하다는 뜻일 뿐이다.
 
-    The $F$-test tests whether all five coefficients are simultaneously zero and has more power for detecting joint effects. The individual $t$-tests suffer from inflated standard errors due to multicollinearity, reducing their power. Remedies include removing redundant predictors, using regularization, or computing VIF values to identify the collinear pairs.
+    기각하지 못한 이유는 다음 중 하나일 수 있다. (1) 참 효과가 정말로 0이거나 아주 작다, (2) 실제 효과를 탐지하기에 표본크기가 너무 작다(검정력 부족), (3) 자료의 분산이 커서 진짜 관계를 가리고 있다. 검정력 분석이나 신뢰구간이 p값 하나보다 훨씬 많은 정보를 준다.
+
+---
+
+**연습문제 3.**
+설명변수가 다섯 개인 모형에서 개별 $t$ 검정은 모두 유의하지 않은데($p > 0.05$) 전체 $F$ 검정은 유의하다($p = 0.01$). 모순처럼 보이는 이 결과를 해석하라.
+
+??? success "연습문제 3 풀이"
+    이 겉보기 모순은 **다중공선성**에서 비롯된다. 다섯 설명변수가 서로 상관되어 있을 가능성이 높아, 나머지를 고려한 뒤 각 설명변수가 고유하게 기여하는 몫($t$ 검정이 재는 것)은 작다. 그러나 **다 함께 놓고 보면** $Y$의 분산을 유의하게 설명한다($F$ 검정이 탐지하는 것).
+
+    $F$ 검정은 다섯 계수가 동시에 0인지를 검정하며 결합 효과를 탐지하는 데 더 큰 검정력을 갖는다. 개별 $t$ 검정은 다중공선성으로 표준오차가 부풀려져 검정력이 떨어진다. 대책으로는 중복된 설명변수를 빼거나, 정칙화를 쓰거나, VIF 값을 계산해 공선적인 쌍을 찾아내는 방법이 있다.

@@ -1,179 +1,182 @@
-# Interaction Terms
+# 교호작용 항
 
+## 왜 교호작용 항을 쓰는가
 
-## Why Use Interaction Terms?
+현실의 많은 상황에서 한 변수가 결과에 미치는 효과는 일정하지 않고 다른 변수에 따라 달라진다. **교호작용 항**은 둘 이상의 독립변수가 종속변수에 미치는 이런 결합 효과를 모형화한다.
 
-In many real-world scenarios, the effect of one variable on the outcome is not constant but changes depending on another variable. **Interaction terms** model this combined effect of two or more independent variables on the dependent variable.
+교호작용이 자연스럽게 나타나는 예:
 
-Examples where interactions arise naturally:
+- 운동과 식단이 체중 감량에 미치는 효과를 연구할 때, 운동의 영향은 특정 식단을 하는 사람에게서 더 클 수 있다.
+- 매출 예측에서 마케팅 캠페인의 효과는 경기 상황이나 계절에 따라 달라질 수 있다.
+- 금융에서 금리 변화가 자산 가격에 미치는 효과는 현재의 변동성 국면에 의존할 수 있다.
 
-- In a study on the effect of exercise and diet on weight loss, the impact of exercise might be greater for individuals with a specific type of diet.
-- In sales forecasting, the effectiveness of a marketing campaign might vary depending on the economic conditions or time of year.
-- In finance, the effect of interest rate changes on asset prices may depend on the current volatility regime.
-
-When interactions are present but not modeled, the resulting regression may be misleading because it assumes the effect of each predictor is the same regardless of the values of other predictors.
+교호작용이 존재하는데도 모형화하지 않으면, 각 설명변수의 효과가 다른 설명변수의 값과 무관하게 동일하다고 가정하는 셈이므로 회귀 결과가 오도할 수 있다.
 
 ---
 
-## Mathematical Formulation
+## 수학적 정식화
 
-An interaction between two variables $X_1$ and $X_2$ is added to the regression model as a product term:
+두 변수 $X_1$과 $X_2$의 교호작용은 곱항으로 회귀모형에 추가된다.
 
 $$
 Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \beta_3 (X_1 \times X_2) + \epsilon
 $$
 
-where:
+여기서
 
-- $Y$ is the dependent variable,
-- $\beta_1$ and $\beta_2$ are the **main effects** of $X_1$ and $X_2$,
-- $\beta_3$ is the **interaction effect** between $X_1$ and $X_2$,
-- $\epsilon$ is the error term.
+- $Y$는 종속변수,
+- $\beta_1$과 $\beta_2$는 $X_1$과 $X_2$의 **주효과**,
+- $\beta_3$은 $X_1$과 $X_2$ 사이의 **교호작용 효과**,
+- $\epsilon$은 오차항이다.
 
-The term $X_1 \times X_2$ captures the interaction: the partial effect of $X_1$ on $Y$ is no longer a constant $\beta_1$ but instead becomes $\beta_1 + \beta_3 X_2$, which depends on the level of $X_2$.
+항 $X_1 \times X_2$가 교호작용을 포착한다. $X_1$이 $Y$에 미치는 부분효과는 더 이상 상수 $\beta_1$이 아니라 $\beta_1 + \beta_3 X_2$가 되어 $X_2$의 수준에 의존한다.
 
-!!! note "Including Main Effects"
-    When an interaction term is included, both corresponding main effects ($X_1$ and $X_2$) should generally be retained in the model. Omitting a main effect while including the interaction can lead to biased and uninterpretable coefficients.
-
----
-
-## Interpreting Interaction Terms
-
-The sign and magnitude of $\beta_3$ determine the nature of the interaction:
-
-- **Positive interaction coefficient ($\beta_3 > 0$)**: When both predictors increase together, the combined effect on $Y$ is **greater** than the sum of their individual effects. The predictors reinforce each other.
-
-- **Negative interaction coefficient ($\beta_3 < 0$)**: The combined effect of both predictors is **less** than the sum of their individual effects. One predictor dampens the effect of the other.
-
-- **Zero interaction ($\beta_3 = 0$)**: The effect of $X_1$ on $Y$ does not depend on $X_2$. The model reduces to an additive model with no interaction.
-
-A statistically significant interaction term indicates that the relationship between one variable and the outcome changes depending on the other variable.
+!!! note "주효과를 함께 넣기"
+    교호작용 항을 포함할 때는 대응하는 두 주효과($X_1$과 $X_2$)도 일반적으로 모형에 남겨야 한다. 교호작용을 넣으면서 주효과를 빼면 계수가 편향되고 해석할 수 없게 된다.
 
 ---
 
-## Example 1: Study Hours, Sleep, and Performance
+## 교호작용 항의 해석
 
-Consider a study on the effect of study hours and sleep on student exam performance. Without an interaction term, the model assumes that additional study hours have the same benefit regardless of how much a student sleeps.
+$\beta_3$의 부호와 크기가 교호작용의 성격을 정한다.
 
-An interaction term between study hours and sleep might reveal that the benefit of additional study hours **diminishes** when sleep is inadequate. Formally:
+- **양의 교호작용 계수 ($\beta_3 > 0$)**: 두 설명변수가 함께 증가할 때 $Y$에 미치는 결합 효과가 각각의 효과를 더한 것보다 **크다**. 두 설명변수가 서로를 강화한다.
+
+- **음의 교호작용 계수 ($\beta_3 < 0$)**: 두 설명변수의 결합 효과가 각각의 효과를 더한 것보다 **작다**. 한 설명변수가 다른 쪽의 효과를 억누른다.
+
+- **교호작용이 0 ($\beta_3 = 0$)**: $X_1$이 $Y$에 미치는 효과가 $X_2$에 의존하지 않는다. 모형은 교호작용이 없는 가법모형으로 줄어든다.
+
+교호작용 항이 통계적으로 유의하다는 것은 한 변수와 결과의 관계가 다른 변수에 따라 달라진다는 뜻이다.
+
+---
+
+## 예제 1: 공부 시간, 수면, 성적
+
+공부 시간과 수면이 학생의 시험 성적에 미치는 효과를 연구한다고 하자. 교호작용 항이 없으면 모형은 학생이 얼마나 자든 공부 시간 추가의 이득이 동일하다고 가정한다.
+
+공부 시간과 수면의 교호작용 항은 수면이 부족할 때 공부 시간 추가의 이득이 **줄어든다**는 사실을 드러낼 수 있다. 형식적으로 쓰면
 
 $$
 \text{Score} = \beta_0 + \beta_1 \cdot \text{StudyHours} + \beta_2 \cdot \text{Sleep} + \beta_3 \cdot (\text{StudyHours} \times \text{Sleep}) + \epsilon
 $$
 
-If $\beta_3 > 0$, more sleep amplifies the benefit of studying. If $\beta_3 < 0$, studying more provides diminishing returns for students who sleep less.
+$\beta_3 > 0$이면 잠을 더 잘수록 공부의 이득이 커진다. $\beta_3 < 0$이면 적게 자는 학생에게는 공부를 더 해도 수익체감이 나타난다.
 
 ---
 
-## Example 2: Marketing Effectiveness (TV and Radio)
+## 예제 2: 마케팅 효과 (TV와 Radio)
 
-A classic example from advertising analytics examines how TV and Radio advertising spending affect Sales. The main effects model assumes each medium has an independent effect:
+광고 분석의 고전적 예는 TV와 Radio 광고 지출이 매출에 미치는 영향이다. 주효과만 있는 모형은 각 매체가 독립적인 효과를 갖는다고 가정한다.
 
 $$
 \text{Sales} = \beta_0 + \beta_1 \cdot \text{TV} + \beta_2 \cdot \text{Radio} + \epsilon
 $$
 
-However, there may be a **synergistic effect**: advertising on both TV and Radio together might be more effective than the sum of their individual effects. Adding an interaction term captures this:
+그러나 **상승효과**가 있을 수 있다. TV와 Radio에 함께 광고하면 각각의 효과를 더한 것보다 더 효과적일 수 있다. 교호작용 항이 이를 포착한다.
 
 $$
 \text{Sales} = \beta_0 + \beta_1 \cdot \text{TV} + \beta_2 \cdot \text{Radio} + \beta_3 \cdot (\text{TV} \times \text{Radio}) + \epsilon
 $$
 
-**Interpretation**:
+**해석**:
 
-- If $\beta_3 > 0$: Combining TV and Radio advertising creates a synergistic boost in sales beyond what each medium provides independently.
-- If $\beta_3 < 0$: There is a diminishing effect—spending heavily on both media simultaneously may be less efficient.
+- $\beta_3 > 0$이면 TV와 Radio 광고를 결합할 때 각 매체가 따로 주는 것을 넘어서는 상승효과가 매출에 생긴다.
+- $\beta_3 < 0$이면 효과가 체감한다. 두 매체에 동시에 많이 쓰는 것은 덜 효율적일 수 있다.
 
-This model can be fit using statsmodels' formula syntax for convenience:
+이 모형은 statsmodels의 식(formula) 문법으로 편리하게 적합할 수 있다.
 
 ```python
-import statsmodels.api as sm
+import statsmodels.formula.api as smf
 
 # Using formula syntax (R-like)
 # The * operator includes main effects and the interaction
-model = sm.ols('Sales ~ TV + Radio + TV*Radio', data=advertising).fit()
+model = smf.ols('Sales ~ TV * Radio', data=advertising).fit()
 print(model.summary())
 ```
 
+!!! warning "`statsmodels.api`에는 소문자 `ols`가 없다"
+    식 인터페이스는 `statsmodels.formula.api`(관례적으로 `smf`)에 있다. `statsmodels.api`(관례적으로 `sm`)에는 배열을 받는 대문자 `sm.OLS`만 있으므로 `sm.ols(...)`를 호출하면 `AttributeError`가 난다.
+
 ---
 
-## Example 3: Income and Student Status Interaction
+## 예제 3: 소득과 학생 여부의 교호작용
 
-Consider a model examining how balance (credit card debt) depends on income and student status. A **qualitative variable** (student: yes/no) can interact with a continuous variable (income):
+신용카드 잔액이 소득과 학생 여부에 어떻게 의존하는지 살피는 모형을 생각하자. **질적 변수**(학생: 예/아니오)가 연속변수(소득)와 교호작용할 수 있다.
 
 $$
 \text{Balance} = \beta_0 + \beta_1 \cdot \text{Income} + \beta_2 \cdot \text{Student} + \beta_3 \cdot (\text{Income} \times \text{Student}) + \epsilon
 $$
 
-Where Student is coded as 1 (yes) or 0 (no).
+여기서 Student는 1(예) 또는 0(아니오)으로 부호화한다.
 
-**Interpretation**:
+**해석**:
 
-- $\beta_1$: The effect of Income on Balance for **non-students** is $\beta_1$.
-- $\beta_1 + \beta_3$: The effect of Income on Balance for **students** is $\beta_1 + \beta_3$.
-- If $\beta_3 \neq 0$: The relationship between Income and Balance **differs by student status**.
+- $\beta_1$: **학생이 아닌 사람**에게 Income이 Balance에 미치는 효과는 $\beta_1$이다.
+- $\beta_1 + \beta_3$: **학생**에게 Income이 Balance에 미치는 효과는 $\beta_1 + \beta_3$이다.
+- $\beta_3 \neq 0$이면 Income과 Balance의 관계가 **학생 여부에 따라 다르다**.
 
-This type of interaction reveals whether different groups respond differently to the same predictor—a crucial insight for segmentation and targeted analysis.
+이런 교호작용은 서로 다른 집단이 같은 설명변수에 다르게 반응하는지를 드러내며, 세분화와 표적 분석에 결정적인 통찰을 준다.
 
 ```python
 # Example with categorical variable
 # statsmodels automatically encodes categorical variables
-model = sm.ols('Balance ~ Income + C(Student) + Income:C(Student)',
+model = smf.ols('Balance ~ Income + C(Student) + Income:C(Student)',
                 data=credit).fit()
 print(model.summary())
 ```
 
-Visual representation of such interactions often shows two separate regression lines (one for each group) with different slopes, demonstrating the differential effect of Income on Balance.
+이런 교호작용을 시각화하면 흔히 기울기가 다른 두 회귀직선(집단마다 하나씩)이 나타나며, Income이 Balance에 미치는 차별적 효과를 보여준다.
 
 ---
 
-## Higher-Order and Multi-Way Interactions
+## 고차 및 다원 교호작용
 
-Interactions are not limited to pairs of variables. A **three-way interaction** among $X_1$, $X_2$, and $X_3$ takes the form:
+교호작용은 변수 쌍에만 국한되지 않는다. $X_1$, $X_2$, $X_3$ 사이의 **3원 교호작용**은 다음 형태이다.
 
 $$
 Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \beta_3 X_3 + \beta_4 X_1 X_2 + \beta_5 X_1 X_3 + \beta_6 X_2 X_3 + \beta_7 X_1 X_2 X_3 + \epsilon
 $$
 
-In practice, three-way and higher-order interactions are difficult to interpret and are used sparingly. Most applied work focuses on two-way interactions.
+실무에서 3원 이상의 고차 교호작용은 해석하기 어려워 드물게만 쓴다. 대부분의 응용 연구는 2원 교호작용에 집중한다.
 
 ---
 
-## Summary
+## 요약
 
-Interaction terms extend the multiple regression framework by allowing the effect of one predictor to depend on the level of another. They are essential for accurately modeling many real-world relationships and should be tested whenever theory or domain knowledge suggests that predictor effects are not purely additive.
-## Exercises
+교호작용 항은 한 설명변수의 효과가 다른 설명변수의 수준에 의존하도록 허용함으로써 다중회귀의 틀을 확장한다. 현실의 여러 관계를 정확히 모형화하는 데 필수적이며, 이론이나 분야 지식이 설명변수의 효과가 순수하게 가법적이지 않다고 시사할 때는 반드시 검정해 보아야 한다.
 
-**Exercise 1.**
-In the model $Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \beta_3 X_1 X_2 + \varepsilon$, interpret $\beta_3$ in terms of how the effect of $X_1$ on $Y$ changes with $X_2$.
+## 연습문제
 
-??? success "Solution to Exercise 1"
-    The partial effect of $X_1$ on $Y$ is:
+**연습문제 1.**
+모형 $Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \beta_3 X_1 X_2 + \varepsilon$에서 $X_1$이 $Y$에 미치는 효과가 $X_2$에 따라 어떻게 변하는지의 관점에서 $\beta_3$을 해석하라.
+
+??? success "연습문제 1 풀이"
+    $X_1$이 $Y$에 미치는 부분효과는
 
     $$
     \frac{\partial E[Y]}{\partial X_1} = \beta_1 + \beta_3 X_2
     $$
 
-    So $\beta_3$ represents the **change in the slope of $X_1$** for each one-unit increase in $X_2$. If $\beta_3 > 0$, the effect of $X_1$ on $Y$ becomes stronger as $X_2$ increases. If $\beta_3 < 0$, the effect weakens. If $\beta_3 = 0$, the effect of $X_1$ is the same regardless of $X_2$ (no interaction).
+    따라서 $\beta_3$은 $X_2$가 한 단위 늘어날 때 **$X_1$의 기울기가 변하는 양**을 나타낸다. $\beta_3 > 0$이면 $X_2$가 커질수록 $X_1$이 $Y$에 미치는 효과가 강해진다. $\beta_3 < 0$이면 약해진다. $\beta_3 = 0$이면 $X_2$와 무관하게 $X_1$의 효과가 동일하다(교호작용 없음).
 
 ---
 
-**Exercise 2.**
-A model predicting salary includes experience, education (binary: 0 = no degree, 1 = degree), and their interaction. The estimated equation is $\hat{Y} = 30000 + 2000 X_1 + 10000 X_2 + 1500 X_1 X_2$. Write separate regression equations for individuals with and without a degree and interpret the difference.
+**연습문제 2.**
+연봉을 예측하는 모형에 경력, 학위(이진: 0 = 학위 없음, 1 = 학위 있음), 그리고 그 교호작용이 들어 있다. 추정된 식은 $\hat{Y} = 30000 + 2000 X_1 + 10000 X_2 + 1500 X_1 X_2$이다. 학위가 있는 사람과 없는 사람에 대해 회귀식을 따로 쓰고 그 차이를 해석하라.
 
-??? success "Solution to Exercise 2"
-    **Without degree** ($X_2 = 0$): $\hat{Y} = 30000 + 2000 X_1$. Each additional year of experience increases salary by \$2,000.
+??? success "연습문제 2 풀이"
+    **학위 없음** ($X_2 = 0$): $\hat{Y} = 30000 + 2000 X_1$. 경력 1년 추가마다 연봉이 \$2,000 오른다.
 
-    **With degree** ($X_2 = 1$): $\hat{Y} = (30000 + 10000) + (2000 + 1500) X_1 = 40000 + 3500 X_1$. Each additional year of experience increases salary by \$3,500.
+    **학위 있음** ($X_2 = 1$): $\hat{Y} = (30000 + 10000) + (2000 + 1500) X_1 = 40000 + 3500 X_1$. 경력 1년 추가마다 연봉이 \$3,500 오른다.
 
-    The interaction term (\$1,500) means that having a degree amplifies the return to experience by \$1,500 per year. Degree holders start higher (\$40,000 vs. \$30,000) and gain more from each year of experience (\$3,500 vs. \$2,000).
+    교호작용 항(\$1,500)은 학위가 경력의 수익률을 연간 \$1,500만큼 키운다는 뜻이다. 학위 소지자는 출발점도 높고(\$40,000 대 \$30,000) 경력 1년당 얻는 것도 많다(\$3,500 대 \$2,000).
 
 ---
 
-**Exercise 3.**
-Explain why it is generally inappropriate to remove a main effect ($X_1$ or $X_2$) from a model while retaining their interaction term ($X_1 X_2$). What statistical principle does this violate?
+**연습문제 3.**
+주효과($X_1$이나 $X_2$)를 빼면서 교호작용 항($X_1 X_2$)은 남겨 두는 것이 일반적으로 부적절한 이유를 설명하라. 이는 어떤 통계적 원칙을 어기는가?
 
-??? success "Solution to Exercise 3"
-    This violates the **hierarchy principle** (or marginality principle), which states that if an interaction term is included, all lower-order terms that compose it must also be present.
+??? success "연습문제 3 풀이"
+    이는 **위계 원칙**(주변성 원칙)을 어긴다. 교호작용 항을 포함한다면 그것을 이루는 모든 저차 항도 함께 있어야 한다는 원칙이다.
 
-    Removing a main effect while keeping the interaction changes the interpretation of the remaining terms. For example, dropping $X_1$ from $Y = \beta_0 + \beta_2 X_2 + \beta_3 X_1 X_2 + \varepsilon$ forces the model to assume that $X_1$ has zero effect when $X_2 = 0$, which is a strong and usually unjustified constraint. It also makes the interaction coefficient dependent on the coding of $X_2$, destroying interpretability.
+    교호작용을 남긴 채 주효과를 빼면 남은 항들의 해석이 달라진다. 예를 들어 $Y = \beta_0 + \beta_2 X_2 + \beta_3 X_1 X_2 + \varepsilon$에서 $X_1$을 빼면, 모형은 $X_2 = 0$일 때 $X_1$의 효과가 0이라고 강제하게 되는데 이는 강하고 대개 정당화되지 않는 제약이다. 또한 교호작용 계수가 $X_2$의 부호화 방식에 의존하게 되어 해석 가능성이 무너진다.

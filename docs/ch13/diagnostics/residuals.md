@@ -1,50 +1,49 @@
-# Residual Analysis
+# 잔차 분석
 
+잔차 분석은 선형회귀 모형이 자료에 얼마나 잘 맞는지 평가하는 결정적인 단계이다. 관측값과 예측값의 차이인 잔차를 살펴봄으로써 모형의 정확도와 핵심 가정의 성립 여부를 알 수 있다.
 
-Residual analysis is a critical step in evaluating how well a linear regression model fits a dataset. By examining the residuals—differences between observed values and predicted values—we gain insights into the model's accuracy and whether key assumptions hold.
+## 잔차의 이해
 
-## Understanding Residuals
-
-A residual is the difference between an observed value and its corresponding predicted value:
+잔차는 관측값과 그에 대응하는 예측값의 차이이다.
 
 $$
 e_i = y_i - \hat{y}_i
 $$
 
-where $y_i$ is the observed value and $\hat{y}_i$ is the predicted value from the regression model.
+여기서 $y_i$는 관측값이고 $\hat{y}_i$는 회귀모형의 예측값이다.
 
 $$\begin{array}{lll}
-\text{Predict} && \hat{y}_i \\
-\text{Residual} && y_i - \hat{y}_i \\\hline
-\text{Actual} && y_i
+\text{예측값} && \hat{y}_i \\
+\text{잔차} && y_i - \hat{y}_i \\\hline
+\text{실제값} && y_i
 \end{array}$$
 
-Residuals reveal how well the model fits each observation. Ideally, they should be as close to zero as possible, indicating that predictions align closely with observed values.
+잔차는 모형이 각 관측값에 얼마나 잘 맞는지를 드러낸다. 이상적으로는 0에 가까울수록 좋으며, 이는 예측이 관측값과 가깝게 일치함을 뜻한다.
 
-## Key Assumptions
+## 핵심 가정
 
-Residual analysis checks the following assumptions essential for reliable linear regression:
+잔차 분석은 신뢰할 만한 선형회귀에 필수적인 다음 가정들을 확인한다.
 
-- **Linearity**: The relationship between predictors and the response should be linear. Residuals should not show patterns when plotted against predicted values.
-- **Independence**: The residuals should be independent of each other, particularly important in time series data.
-- **Homoscedasticity (Constant Variance)**: The variance of residuals should remain constant across all levels of the independent variables.
-- **Normality**: Residuals should ideally follow a normal distribution, especially when the model is used for inference.
+- **선형성**: 설명변수와 반응변수의 관계가 선형이어야 한다. 잔차를 예측값에 대해 그렸을 때 패턴이 보이지 않아야 한다.
+- **독립성**: 잔차들이 서로 독립이어야 한다. 시계열 자료에서 특히 중요하다.
+- **등분산성(상수분산)**: 잔차의 분산이 독립변수의 모든 수준에서 일정해야 한다.
+- **정규성**: 잔차가 정규분포를 따르는 것이 이상적이다. 모형을 추론에 쓸 때 특히 그렇다.
 
-## Residual Plots
+## 잔차그림
 
-### Residuals vs. Fitted Values Plot
+### 잔차-적합값 그림
 
-This plot helps identify issues with **linearity** and **homoscedasticity**. Ideally, residuals scatter randomly around the horizontal line at zero without forming patterns. A curved pattern suggests non-linearity; a fan or funnel shape suggests heteroscedasticity.
+이 그림은 **선형성**과 **등분산성**의 문제를 찾아내는 데 도움이 된다. 이상적으로는 잔차가 0을 지나는 수평선 주위에 패턴 없이 무작위로 흩어져 있어야 한다. 곡선 패턴은 비선형성을, 부채꼴이나 깔때기 모양은 이분산을 시사한다.
 
-**Distinction from Residual Plot**: The Residuals vs. Fitted Values plot uses fitted (predicted) values on the x-axis for a global model check. A general "Residual Plot" may use individual predictors or observation indices on the x-axis to diagnose specific predictor relationships or time trends.
+**일반 잔차그림과의 구분**: 잔차-적합값 그림은 $x$축에 적합값(예측값)을 두어 모형 전체를 점검한다. 일반적인 "잔차그림"은 $x$축에 개별 설명변수나 관측 순번을 두어 특정 설명변수와의 관계나 시간 추세를 진단하기도 한다.
 
-| Feature | Residuals vs. Fitted Values Plot | Residual Plot |
+| 항목 | 잔차-적합값 그림 | 일반 잔차그림 |
 |---|---|---|
-| **Primary Purpose** | Check linearity and homoscedasticity | Assess individual predictor relationships |
-| **X-axis** | Fitted values (predicted values) | Predictor variable or observation index |
-| **When to Use** | After fitting to check global assumptions | To diagnose specific predictors or time effects |
+| **주된 목적** | 선형성과 등분산성 확인 | 개별 설명변수와의 관계 평가 |
+| **X축** | 적합값(예측값) | 설명변수 또는 관측 순번 |
+| **쓰는 때** | 적합 후 전반적 가정 점검 | 특정 설명변수나 시간 효과 진단 |
 
-#### Implementation with statsmodels
+#### statsmodels로 구현하기
 
 ```python
 import matplotlib.pyplot as plt
@@ -87,15 +86,15 @@ plt.tight_layout()
 plt.show()
 ```
 
-#### Interpreting the Plot
+#### 그림 해석
 
-1. **Random Scatter**: Residuals scattered randomly around zero suggest the linearity assumption holds.
-2. **Constant Spread**: Roughly constant spread across fitted values supports homoscedasticity.
-3. **Patterns or Funnel Shape**: A curved pattern indicates non-linearity; a funnel shape indicates heteroscedasticity.
+1. **무작위 흩어짐**: 잔차가 0 주위에 무작위로 흩어져 있으면 선형성 가정이 성립함을 시사한다.
+2. **일정한 폭**: 적합값 전 범위에 걸쳐 폭이 대체로 일정하면 등분산성을 뒷받침한다.
+3. **패턴이나 깔때기 모양**: 곡선 패턴은 비선형성을, 깔때기 모양은 이분산을 나타낸다.
 
-### Good Case: Linear Data with Linear Model
+### 좋은 경우: 선형 자료에 선형모형
 
-When data is truly linear and we fit a linear model, residuals scatter randomly with constant variance:
+자료가 실제로 선형이고 선형모형을 적합하면 잔차가 일정한 분산으로 무작위로 흩어진다.
 
 ```python
 import matplotlib.pyplot as plt
@@ -141,9 +140,9 @@ model, y_pred = perform_regression(x, y)
 plot_regression_and_residuals(x, y, y_pred)
 ```
 
-### Bad Case: Polynomial Data with Linear Model
+### 나쁜 경우: 다항 자료에 선형모형
 
-When data has a polynomial relationship but we fit only a linear model, residuals show a clear curved pattern—a sign that linearity is violated:
+자료가 다항 관계를 갖는데 선형모형만 적합하면 잔차에 뚜렷한 곡선 패턴이 나타난다. 선형성이 위배되었다는 신호이다.
 
 ```python
 def generate_data(n=50, noise_level=3.0, d=1, seed=0):
@@ -160,9 +159,9 @@ model, y_pred = perform_regression(x, y)
 plot_regression_and_residuals(x, y, y_pred)
 ```
 
-#### Linear vs. Quadratic Residual Comparison
+#### 선형 대 이차 잔차 비교
 
-To better diagnose model misspecification, directly comparing residuals from competing models can be insightful. Consider data that follows a quadratic relationship:
+모형 오설정을 더 잘 진단하려면 경쟁 모형들의 잔차를 직접 비교하는 것이 유용하다. 이차 관계를 따르는 자료를 생각하자.
 
 ```python
 import numpy as np
@@ -232,11 +231,21 @@ print(f"Linear Model RSS:    {np.sum(residuals_linear**2):.2f}")
 print(f"Quadratic Model RSS: {np.sum(residuals_quad**2):.2f}")
 ```
 
-**Key Insight**: The LOWESS (Locally Weighted Scatterplot Smoothing) smooth curve through the residuals makes the violation pattern obvious. In the linear model, the curve dips below and above zero, indicating systematic underprediction and overprediction. The quadratic model's residuals scatter randomly, indicating the form of non-linearity has been captured.
+출력:
 
-### Fix: Polynomial Regression
+```text
+Model Comparison:
+Linear Model R²:    0.0830
+Quadratic Model R²: 0.9534
+Linear Model RSS:    1530.56
+Quadratic Model RSS: 77.72
+```
 
-Adding polynomial features to match the true data-generating process resolves the pattern in residuals:
+**핵심 통찰**: 잔차를 지나는 LOWESS(국소가중 산점도 평활) 평활곡선이 위배 패턴을 뚜렷이 드러낸다. 선형모형에서는 이 곡선이 0 아래로 내려갔다가 위로 올라가며, 체계적인 과소예측과 과대예측이 일어나고 있음을 나타낸다. 이차 모형의 잔차는 무작위로 흩어져 비선형성의 형태가 제대로 포착되었음을 보여준다. $R^2$가 0.083에서 0.953으로 뛰고 잔차제곱합이 1530.56에서 77.72로 20분의 1 수준이 되는 것이 그 차이를 수치로 보여준다.
+
+### 해결: 다항회귀
+
+참 자료생성과정에 맞추어 다항 특성을 추가하면 잔차의 패턴이 해소된다.
 
 ```python
 def perform_regression(x, y, d=1):
@@ -251,12 +260,12 @@ model, y_pred = perform_regression(x, y, d=2)
 plot_regression_and_residuals(x, y, y_pred)
 ```
 
-!!! tip "Reference"
+!!! tip "참고"
     [Transforming nonlinear data (Khan Academy)](https://www.khanacademy.org/math/ap-statistics/bivariate-data-ap/assessing-fit-least-squares-regression/v/transforming-nonlinear-data)
 
-## Scale-Location Plot
+## 척도-위치 그림
 
-The Scale-Location plot checks for **homoscedasticity** by plotting the square root of absolute standardized residuals against fitted values. Consistent spread across the plot supports constant variance.
+척도-위치 그림은 표준화 잔차 절댓값의 제곱근을 적합값에 대해 그려 **등분산성**을 확인한다. 그림 전체에 걸쳐 폭이 일정하면 상수분산을 뒷받침한다.
 
 ```python
 import matplotlib.pyplot as plt
@@ -305,55 +314,56 @@ plt.tight_layout()
 plt.show()
 ```
 
-### Why Use Square Root?
+### 왜 제곱근을 쓰는가
 
-Taking the square root of absolute standardized residuals is conventional in Scale-Location plots for several reasons:
+척도-위치 그림에서 표준화 잔차 절댓값에 제곱근을 취하는 것이 관례인 이유는 다음과 같다.
 
-- **Stabilizes Variability**: The square root transformation compresses larger values, making trends in the spread easier to identify.
-- **Visual Clarity**: Reduces the impact of outliers, producing a more visually balanced plot.
-- **Statistical Tradition**: Consistent with standard diagnostic outputs from statistical software.
+- **변동의 안정화**: 제곱근 변환이 큰 값을 압축하여 흩어짐의 추세를 알아보기 쉽게 만든다.
+- **시각적 명료성**: 이상점의 영향을 줄여 시각적으로 더 균형 잡힌 그림을 만든다.
+- **통계적 관례**: 통계 소프트웨어의 표준 진단 출력과 일관된다.
 
-Using just absolute values (without the square root) is also valid, especially in introductory settings where simplicity is desired. It directly shows deviations from the fitted line without additional transformation.
+제곱근 없이 절댓값만 쓰는 것도 타당하며, 단순함이 필요한 입문 상황에서 특히 그렇다. 추가 변환 없이 적합선에서의 이탈을 직접 보여준다.
 
-## Addressing Assumption Violations
+## 가정 위배에 대한 대처
 
-If residual analysis reveals violations:
+잔차 분석에서 위배가 드러나면
 
-- **Transformations**: Apply log or square-root transformations to the dependent or independent variables to address non-linearity and heteroscedasticity.
-- **Weighted Least Squares (WLS)**: Assign different weights to observations based on variance, handling non-constant variance directly.
-- **Robust Regression**: Minimize the influence of outliers for greater resilience to assumption deviations.
-- **Polynomial Features**: Add polynomial terms when residual plots suggest non-linearity.
-## Exercises
+- **변수변환**: 종속변수나 독립변수에 로그나 제곱근 변환을 적용해 비선형성과 이분산에 대처한다.
+- **가중최소제곱(WLS)**: 분산에 따라 관측값마다 다른 가중치를 주어 비상수 분산을 직접 다룬다.
+- **로버스트 회귀**: 이상점의 영향을 최소화해 가정 이탈에 더 견고하게 만든다.
+- **다항 특성**: 잔차그림이 비선형성을 시사하면 다항 항을 추가한다.
 
-**Exercise 1.**
-Explain the difference between raw residuals, standardized residuals, and studentized (externally studentized) residuals. Which is most appropriate for identifying outliers and why?
+## 연습문제
 
-??? success "Solution to Exercise 1"
+**연습문제 1.**
+원잔차, 표준화 잔차, 스튜던트화(외부 스튜던트화) 잔차의 차이를 설명하라. 이상점 탐지에는 어느 것이 가장 적절하며 왜 그런가?
 
-    - **Raw residuals:** $e_i = Y_i - \hat{Y}_i$. Have unequal variances ($\text{Var}(e_i) = \sigma^2(1 - h_{ii})$), making direct comparison across observations misleading.
+??? success "연습문제 1 풀이"
 
-    - **Standardized (internally studentized) residuals:** $r_i = e_i / (\hat{\sigma}\sqrt{1 - h_{ii}})$. Scale each residual by its estimated standard deviation. Approximately follow $N(0,1)$ under the model assumptions.
+    - **원잔차:** $e_i = Y_i - \hat{Y}_i$. 분산이 서로 다르므로($\text{Var}(e_i) = \sigma^2(1 - h_{ii})$) 관측값끼리 직접 비교하면 오도할 수 있다.
 
-    - **Externally studentized residuals:** $t_i = e_i / (\hat{\sigma}_{(i)}\sqrt{1 - h_{ii}})$, where $\hat{\sigma}_{(i)}$ is estimated with observation $i$ deleted. Follow an exact $t$-distribution with $n - p - 2$ degrees of freedom.
+    - **표준화(내부 스튜던트화) 잔차:** $r_i = e_i / (\hat{\sigma}\sqrt{1 - h_{ii}})$. 각 잔차를 그 추정 표준편차로 나눈다. 모형 가정 아래에서 근사적으로 $N(0,1)$을 따른다.
 
-    **Externally studentized residuals** are most appropriate for outlier detection because they use a variance estimate that is not inflated by the potential outlier itself, providing a more honest assessment of whether the observation is extreme.
+    - **외부 스튜던트화 잔차:** $t_i = e_i / (\hat{\sigma}_{(i)}\sqrt{1 - h_{ii}})$. 여기서 $\hat{\sigma}_{(i)}$는 관측값 $i$를 뺀 뒤 추정한 값이다. 자유도 $n - p - 2$의 정확한 $t$ 분포를 따른다.
 
----
-
-**Exercise 2.**
-A residual plot shows residuals randomly scattered around zero with no visible pattern. What can you conclude about the model assumptions? Which assumptions does this plot NOT address?
-
-??? success "Solution to Exercise 2"
-    A residual-vs-fitted plot with random scatter around zero supports the assumptions of **linearity** (no systematic curvature) and **homoscedasticity** (constant spread). It also confirms that the mean of the errors is approximately zero.
-
-    However, this plot does **not** address: (1) **normality** of residuals (requires a Q-Q plot or histogram), (2) **independence** (requires residual-vs-order plot or Durbin-Watson test), or (3) **outliers/influence** (requires Cook's distance or leverage diagnostics, since a single influential point can create a "good-looking" residual plot by pulling the line toward it).
+    이상점 탐지에는 **외부 스튜던트화 잔차**가 가장 적절하다. 문제의 이상점 자체 때문에 부풀려지지 않은 분산 추정을 쓰므로 그 관측값이 정말 극단적인지를 더 정직하게 평가한다.
 
 ---
 
-**Exercise 3.**
-A scale-location plot shows a clear upward trend. Describe what this indicates and how it differs from a standard residual-vs-fitted plot.
+**연습문제 2.**
+어떤 잔차그림에서 잔차가 뚜렷한 패턴 없이 0 주위에 무작위로 흩어져 있다. 모형 가정에 대해 무엇을 결론지을 수 있는가? 이 그림이 다루지 **못하는** 가정은 무엇인가?
 
-??? success "Solution to Exercise 3"
-    A **scale-location plot** displays $\sqrt{|\text{standardized residuals}|}$ against fitted values. An upward trend means the **spread** of residuals (measured by their absolute magnitude) increases with the fitted values, indicating **heteroscedasticity**.
+??? success "연습문제 2 풀이"
+    잔차-적합값 그림이 0 주위의 무작위 흩어짐을 보이면 **선형성**(체계적 곡률 없음)과 **등분산성**(일정한 폭) 가정을 뒷받침한다. 오차의 평균이 대략 0임도 확인해 준다.
 
-    It differs from the standard residual-vs-fitted plot in that it focuses specifically on the **magnitude** (not sign) of residuals. The standard plot can show heteroscedasticity as a funnel shape, but the scale-location plot makes increasing variance easier to detect because it removes the sign of the residuals and uses a square-root scale to stabilize the variance of the plotted quantity.
+    그러나 이 그림은 다음을 다루지 **못한다**. (1) 잔차의 **정규성**(Q-Q 그림이나 히스토그램이 필요하다), (2) **독립성**(잔차-순서 그림이나 Durbin-Watson 검정이 필요하다), (3) **이상점과 영향점**(Cook 거리나 지렛대 진단이 필요하다. 영향점 하나가 직선을 자기 쪽으로 끌어당겨 "보기 좋은" 잔차그림을 만들 수 있기 때문이다).
+
+---
+
+**연습문제 3.**
+척도-위치 그림에 뚜렷한 상승 추세가 나타난다. 이것이 무엇을 나타내며 표준적인 잔차-적합값 그림과 어떻게 다른지 기술하라.
+
+??? success "연습문제 3 풀이"
+    **척도-위치 그림**은 $\sqrt{|\text{표준화 잔차}|}$를 적합값에 대해 그린다. 상승 추세는 잔차의 **흩어짐**(절대 크기로 잰)이 적합값과 함께 커진다는 뜻이며 **이분산**을 나타낸다.
+
+    표준적인 잔차-적합값 그림과 다른 점은 잔차의 부호가 아니라 **크기**에만 집중한다는 것이다. 표준 그림에서도 이분산이 깔때기 모양으로 나타날 수 있지만, 척도-위치 그림은 부호를 없애고 제곱근 척도로 그려지는 양의 분산을 안정화하므로 분산의 증가를 훨씬 쉽게 탐지할 수 있다.

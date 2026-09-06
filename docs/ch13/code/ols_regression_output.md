@@ -1,46 +1,46 @@
-# Ordinary Least Squares Regression Output Reproduction
+# OLS 회귀 출력 재현
 
-## Overview
+## 개요
 
-This page shows how to reproduce a full OLS regression summary table from scratch using the Normal Equation. Starting from the Advertising dataset (Sales regressed on TV, Radio, and Newspaper), we compute coefficients, standard errors, $t$-statistics, $p$-values, and 95% confidence intervals without relying on a pre-built regression summary function.
+이 페이지는 정규방정식을 써서 OLS 회귀 요약표 전체를 밑바닥부터 재현하는 방법을 보인다. Advertising 자료(Sales를 TV, Radio, Newspaper에 회귀)에서 출발하여, 미리 만들어진 회귀 요약 함수에 기대지 않고 계수, 표준오차, $t$ 통계량, $p$값, 95% 신뢰구간을 직접 계산한다.
 
-## Mathematical Background
+## 수학적 배경
 
-The multiple linear regression model in matrix form is
+행렬 형태의 다중선형회귀 모형은
 
 $$
 \mathbf{y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon}, \qquad \boldsymbol{\varepsilon} \sim N(\mathbf{0}, \sigma^2 \mathbf{I}).
 $$
 
-The OLS estimator is obtained via the **Normal Equation**:
+OLS 추정량은 **정규방정식**으로 얻는다.
 
 $$
 \hat{\boldsymbol{\beta}} = (\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top \mathbf{y}.
 $$
 
-The residual standard error is
+잔차 표준오차는
 
 $$
 s = \sqrt{\frac{\sum_{i=1}^n (y_i - \hat{y}_i)^2}{n - k}},
 $$
 
-where $k$ is the number of parameters (including intercept). The standard error of the $j$-th coefficient is
+여기서 $k$는 (절편을 포함한) 모수의 개수이다. $j$번째 계수의 표준오차는
 
 $$
 \mathrm{SE}(\hat{\beta}_j) = s \sqrt{[(\mathbf{X}^\top \mathbf{X})^{-1}]_{jj}}.
 $$
 
-The $t$-statistic and $p$-value for testing $H_0\colon \beta_j = 0$ are
+$H_0\colon \beta_j = 0$을 검정하는 $t$ 통계량과 $p$값은
 
 $$
 t_j = \frac{\hat{\beta}_j}{\mathrm{SE}(\hat{\beta}_j)}, \qquad p\text{-value} = 2\,P(T_{n-k} > |t_j|).
 $$
 
-A 95% confidence interval for $\beta_j$ is $\hat{\beta}_j \pm t^*_{n-k,\,0.025} \cdot \mathrm{SE}(\hat{\beta}_j)$.
+$\beta_j$의 95% 신뢰구간은 $\hat{\beta}_j \pm t^*_{n-k,\,0.025} \cdot \mathrm{SE}(\hat{\beta}_j)$이다.
 
-## Code
+## 코드
 
-### Fitting OLS via the Normal Equation
+### 정규방정식으로 OLS 적합하기
 
 ```python
 import numpy as np
@@ -56,7 +56,7 @@ def fit_ols(X, y):
     return beta_hat, s, cov_matrix
 ```
 
-### Producing the Regression Table
+### 회귀표 만들기
 
 ```python
 def regression_table(beta_hat, s, cov_matrix, n, k, var_names):
@@ -76,7 +76,7 @@ def regression_table(beta_hat, s, cov_matrix, n, k, var_names):
               f"CI=({ci_lo:.3f}, {ci_hi:.3f})")
 ```
 
-### Running on the Advertising Dataset
+### Advertising 자료에서 실행하기
 
 ```python
 import pandas as pd
@@ -98,19 +98,30 @@ var_names = ["Intercept", "TV", "Radio", "Newspaper"]
 regression_table(beta_hat, s, cov_matrix, n, k, var_names)
 ```
 
-## Interpretation
+출력($n = 140$, $k = 4$):
 
-- Each row in the regression table corresponds to one predictor. The coefficient estimates $\hat{\beta}_j$ give the expected change in Sales per unit increase in the predictor, holding other predictors constant.
-- The standard error quantifies the precision of each estimate. Smaller SE means more precise estimation.
-- The $t$-statistic measures how many standard errors the coefficient is away from zero. Large absolute values indicate statistical significance.
-- The $p$-value gives the probability of observing a $t$-statistic at least as extreme under $H_0\colon \beta_j = 0$. A $p$-value below 0.05 is conventionally considered significant.
-- The 95% confidence interval provides a range of plausible values for the true coefficient. If it excludes zero, the predictor is significant at the 5% level.
+```text
+Intercept   coef=3.0451  SE=0.391  t=7.782   p=0.000  CI=(2.271, 3.819)
+TV          coef=0.0470  SE=0.002  t=27.653  p=0.000  CI=(0.044, 0.050)
+Radio       coef=0.1797  SE=0.011  t=16.665  p=0.000  CI=(0.158, 0.201)
+Newspaper   coef=-0.0030 SE=0.007  t=-0.428  p=0.669  CI=(-0.017, 0.011)
+```
 
-## Exercises
+이 값들은 `statsmodels`의 `sm.OLS(y, X).fit().summary()`가 내놓는 계수표와 정확히 일치한다.
 
-**Exercise 1.** Verify numerically that $\hat{\boldsymbol{\beta}} = (\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top \mathbf{y}$ satisfies the normal equations $\mathbf{X}^\top \mathbf{X}\hat{\boldsymbol{\beta}} = \mathbf{X}^\top \mathbf{y}$.
+## 해석
 
-??? success "Solution to Exercise 1"
+- 회귀표의 각 행은 설명변수 하나에 대응한다. 계수 추정값 $\hat{\beta}_j$는 다른 설명변수를 고정했을 때 그 설명변수가 한 단위 늘어날 때 기대되는 Sales의 변화를 준다.
+- 표준오차는 각 추정의 정밀도를 수량화한다. SE가 작을수록 정밀한 추정이다.
+- $t$ 통계량은 계수가 0에서 표준오차 몇 개만큼 떨어져 있는지를 잰다. 절댓값이 크면 통계적 유의성을 나타낸다.
+- $p$값은 $H_0\colon \beta_j = 0$ 아래에서 적어도 그만큼 극단적인 $t$ 통계량을 관측할 확률이다. 0.05 미만이면 관행적으로 유의하다고 본다.
+- 95% 신뢰구간은 참 계수가 취할 만한 값의 범위를 준다. 0을 배제하면 그 설명변수는 유의수준 5%에서 유의하다.
+
+## 연습문제
+
+**연습문제 1.** $\hat{\boldsymbol{\beta}} = (\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top \mathbf{y}$가 정규방정식 $\mathbf{X}^\top \mathbf{X}\hat{\boldsymbol{\beta}} = \mathbf{X}^\top \mathbf{y}$를 만족함을 수치적으로 확인하라.
+
+??? success "연습문제 1 풀이"
 
     ```python
     lhs = X.T @ X @ beta_hat
@@ -118,13 +129,13 @@ regression_table(beta_hat, s, cov_matrix, n, k, var_names)
     print(np.allclose(lhs, rhs))  # True
     ```
 
-    By construction, multiplying both sides of $\hat{\boldsymbol{\beta}} = (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{y}$ on the left by $\mathbf{X}^\top\mathbf{X}$ yields $\mathbf{X}^\top\mathbf{X}\hat{\boldsymbol{\beta}} = \mathbf{X}^\top\mathbf{y}$. $\square$
+    구성상 $\hat{\boldsymbol{\beta}} = (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{y}$의 양변에 왼쪽에서 $\mathbf{X}^\top\mathbf{X}$를 곱하면 $\mathbf{X}^\top\mathbf{X}\hat{\boldsymbol{\beta}} = \mathbf{X}^\top\mathbf{y}$가 된다. $\square$
 
 ---
 
-**Exercise 2.** Compute $R^2$ and Adjusted $R^2$ from the residuals. Show that $R^2 = 1 - \mathrm{RSS}/\mathrm{TSS}$.
+**연습문제 2.** 잔차에서 $R^2$와 수정 $R^2$를 계산하라. $R^2 = 1 - \mathrm{RSS}/\mathrm{TSS}$임을 보여라.
 
-??? success "Solution to Exercise 2"
+??? success "연습문제 2 풀이"
 
     ```python
     y_hat = X @ beta_hat
@@ -135,44 +146,46 @@ regression_table(beta_hat, s, cov_matrix, n, k, var_names)
     print(f"R^2 = {R2:.4f}, Adjusted R^2 = {adj_R2:.4f}")
     ```
 
-    By definition, $\mathrm{TSS} = \sum(y_i - \bar{y})^2$, $\mathrm{RSS} = \sum(y_i - \hat{y}_i)^2$, and $R^2 = 1 - \mathrm{RSS}/\mathrm{TSS}$ measures the proportion of variance explained by the model. Adjusted $R^2$ penalizes for the number of predictors via $1 - \frac{n-1}{n-k}(1 - R^2)$. $\square$
+    이 자료에서는 $R^2 = 0.8938$, 수정 $R^2 = 0.8915$가 나온다.
+
+    정의에 따라 $\mathrm{TSS} = \sum(y_i - \bar{y})^2$, $\mathrm{RSS} = \sum(y_i - \hat{y}_i)^2$이고 $R^2 = 1 - \mathrm{RSS}/\mathrm{TSS}$는 모형이 설명하는 분산의 비율을 잰다. 수정 $R^2$는 $1 - \frac{n-1}{n-k}(1 - R^2)$로 설명변수의 개수에 벌점을 준다. $\square$
 
 ---
 
-**Exercise 3.** Explain why using $n - k$ instead of $n$ in the denominator of $s^2$ produces an unbiased estimator of $\sigma^2$.
+**연습문제 3.** $s^2$의 분모로 $n$ 대신 $n - k$를 쓰면 왜 $\sigma^2$의 불편추정량이 되는지 설명하라.
 
-??? success "Solution to Exercise 3"
+??? success "연습문제 3 풀이"
 
-    The residual vector $\mathbf{e} = \mathbf{M}\mathbf{y}$ where $\mathbf{M} = \mathbf{I} - \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top$. Under the model, $\mathbf{e} = \mathbf{M}\boldsymbol{\varepsilon}$. Then
+    잔차벡터는 $\mathbf{e} = \mathbf{M}\mathbf{y}$이며 $\mathbf{M} = \mathbf{I} - \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top$이다. 모형 아래에서 $\mathbf{e} = \mathbf{M}\boldsymbol{\varepsilon}$이므로
 
     $$
     E[\mathbf{e}^\top\mathbf{e}] = E[\boldsymbol{\varepsilon}^\top\mathbf{M}\boldsymbol{\varepsilon}] = \sigma^2 \operatorname{tr}(\mathbf{M}) = \sigma^2(n - k),
     $$
 
-    since $\mathbf{M}$ is idempotent with $\operatorname{tr}(\mathbf{M}) = n - k$. Dividing by $n - k$ gives $E[s^2] = \sigma^2$. $\square$
+    $\mathbf{M}$이 멱등이고 $\operatorname{tr}(\mathbf{M}) = n - k$이기 때문이다. $n - k$로 나누면 $E[s^2] = \sigma^2$을 얻는다. $\square$
 
 ---
 
-**Exercise 4.** Recompute the regression table using `numpy.linalg.lstsq` instead of explicitly inverting $\mathbf{X}^\top\mathbf{X}$. Discuss why `lstsq` is preferred numerically.
+**연습문제 4.** $\mathbf{X}^\top\mathbf{X}$를 명시적으로 역행렬 계산하는 대신 `numpy.linalg.lstsq`로 회귀표를 다시 계산하라. `lstsq`가 수치적으로 선호되는 이유를 논하라.
 
-??? success "Solution to Exercise 4"
+??? success "연습문제 4 풀이"
 
     ```python
     beta_lstsq, residuals, rank, sv = np.linalg.lstsq(X, y, rcond=None)
     ```
 
-    `lstsq` uses the SVD decomposition, which is numerically more stable than explicitly computing $(\mathbf{X}^\top\mathbf{X})^{-1}$. When $\mathbf{X}^\top\mathbf{X}$ is ill-conditioned (nearly singular), direct inversion amplifies floating-point errors, whereas the SVD gracefully handles near-collinearity. The results match to machine precision for well-conditioned problems. $\square$
+    `lstsq`는 SVD 분해를 쓰는데, 이는 $(\mathbf{X}^\top\mathbf{X})^{-1}$을 명시적으로 계산하는 것보다 수치적으로 안정적이다. $\mathbf{X}^\top\mathbf{X}$의 조건이 나쁘면(거의 특이행렬이면) 직접 역행렬을 구하는 것은 부동소수점 오차를 증폭시키지만, SVD는 거의 공선인 상황을 매끄럽게 처리한다. 조건이 좋은 문제에서는 두 결과가 기계 정밀도 수준으로 일치한다. $\square$
 
 ---
 
-**Exercise 5.** Prove that the $t$-statistic for the $j$-th coefficient can be written as $t_j = \hat{\beta}_j \sqrt{[(\mathbf{X}^\top\mathbf{X})]_{jj}} / s$ only when predictors are orthogonal. What happens in general?
+**연습문제 5.** $j$번째 계수의 $t$ 통계량을 $t_j = \hat{\beta}_j \sqrt{[(\mathbf{X}^\top\mathbf{X})]_{jj}} / s$로 쓸 수 있는 것은 설명변수들이 직교할 때뿐임을 증명하라. 일반적으로는 어떻게 되는가?
 
-??? success "Solution to Exercise 5"
+??? success "연습문제 5 풀이"
 
-    When predictors are orthogonal, $\mathbf{X}^\top\mathbf{X}$ is diagonal, so $[(\mathbf{X}^\top\mathbf{X})^{-1}]_{jj} = 1/[(\mathbf{X}^\top\mathbf{X})]_{jj}$. In this case:
+    설명변수들이 직교하면 $\mathbf{X}^\top\mathbf{X}$가 대각행렬이므로 $[(\mathbf{X}^\top\mathbf{X})^{-1}]_{jj} = 1/[(\mathbf{X}^\top\mathbf{X})]_{jj}$이다. 이때
 
     $$
     t_j = \frac{\hat{\beta}_j}{s\sqrt{[(\mathbf{X}^\top\mathbf{X})^{-1}]_{jj}}} = \frac{\hat{\beta}_j\sqrt{[(\mathbf{X}^\top\mathbf{X})]_{jj}}}{s}.
     $$
 
-    In general, $(\mathbf{X}^\top\mathbf{X})^{-1}$ is not simply the reciprocal of the diagonal, because off-diagonal elements of $\mathbf{X}^\top\mathbf{X}$ (correlations between predictors) inflate the diagonal entries of the inverse. This inflation is captured by the Variance Inflation Factor (VIF). $\square$
+    일반적으로 $(\mathbf{X}^\top\mathbf{X})^{-1}$은 대각원소의 역수가 아니다. $\mathbf{X}^\top\mathbf{X}$의 비대각원소(설명변수 사이의 상관)가 역행렬의 대각원소를 부풀리기 때문이다. 이 부풀림을 재는 것이 분산팽창인자(VIF)이다. $\square$

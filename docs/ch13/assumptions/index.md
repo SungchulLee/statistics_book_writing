@@ -1,46 +1,45 @@
-# Assumptions and Diagnostics for Linear Regression
+# 선형회귀의 가정과 진단
 
+선형회귀는 종속변수와 하나 이상의 독립변수 사이의 관계를 모형화하는 기본적인 통계 방법이다. 그러나 선형회귀 모형의 결과가 타당하려면 몇 가지 가정이 충족되어야 한다. 이 가정들은 모형이 적절히 설정되었으며 모형에서 끌어낸 통계적 추론이 신뢰할 만하다는 것을 보장한다.
 
-Linear regression is a fundamental statistical method used to model the relationship between a dependent variable and one or more independent variables. However, for the results of a linear regression model to be valid, certain assumptions must be met. These assumptions ensure that the model is appropriately specified and that the statistical inferences made from the model are reliable.
+## 네 가지 핵심 가정
 
-## The Four Key Assumptions
+선형회귀의 바탕이 되는 네 가지 핵심 가정은 흔히 머리글자 **LINE**으로 요약된다.
 
-The four key assumptions underlying linear regression are commonly summarized by the acronym **LINE**:
+1. **선형성(Linearity)** — 종속변수와 각 독립변수 사이에 직선 관계가 존재한다.
+2. **독립성(Independence)** — 회귀모형의 잔차(오차)들이 서로 독립이다.
+3. **정규성(Normality)** — 잔차가 평균 0인 정규분포를 따른다.
+4. **등분산성(Equal variance)** — 독립변수의 모든 수준에서 잔차의 분산이 일정하다.
 
-1. **Linearity** — A straight-line relationship exists between the dependent variable and each independent variable.
-2. **Independence** — The residuals (errors) of the regression model are independent of each other.
-3. **Normality** — The residuals are normally distributed with a mean of zero.
-4. **Equal Variance (Homoscedasticity)** — The variance of the residuals is constant across all levels of the independent variables.
+## 이 가정들이 왜 중요한가
 
-## Why These Assumptions Matter
+이 가정들을 이해하고 확인하는 일은 다음의 이유로 필수적이다.
 
-Understanding and verifying these assumptions is essential because:
+- **선형성 위배**는 모형이 참 관계를 과대 또는 과소 추정하게 만들어 편향된 예측과 타당하지 않은 추론을 낳는다.
+- **독립성 위배**는 표준오차를 틀리게 만들고 가설검정을 무효화한다. 자기상관이 나타날 수 있는 시계열 자료에서 특히 결정적이다.
+- **등분산성 위배**(이분산)는 계수 추정을 비효율적으로 만들고 표준오차를 편향시켜 결국 가설검정을 훼손한다.
+- **정규성 위배**는 신뢰구간, 가설검정(계수의 t-검정, 전체 유의성의 F-검정), 예측구간의 타당성을 흔든다.
 
-- **Violated linearity** leads to biased predictions and invalid inferences, as the model either overestimates or underestimates the true relationship.
-- **Violated independence** produces biased coefficient estimates, incorrect standard errors, and invalid hypothesis tests — particularly critical in time-series data where autocorrelation may be present.
-- **Violated homoscedasticity** (heteroscedasticity) yields inefficient coefficient estimates and biased standard errors, ultimately compromising hypothesis tests.
-- **Violated normality** undermines the validity of confidence intervals, hypothesis tests (t-tests for coefficients, F-tests for overall significance), and prediction intervals.
+## 진단 절차
 
-## Diagnostic Workflow
+회귀 가정을 점검하는 전형적인 진단 절차는 다음과 같다.
 
-A typical diagnostic workflow for checking regression assumptions involves:
+1. 회귀모형을 적합하고 잔차를 계산한다.
+2. **시각적 진단**(산점도, 잔차그림, Q-Q 그림, 히스토그램)으로 1차 평가를 한다.
+3. **형식적 통계검정**(Durbin-Watson, Breusch-Pagan, Shapiro-Wilk 등)으로 엄밀하게 평가한다.
+4. 위배가 발견되면 변수변환, 가중최소제곱, 로버스트 회귀, 대안 모형 설정 같은 **대책**을 적용한다.
 
-1. Fit the regression model and compute residuals.
-2. Use **visual diagnostics** (scatterplots, residual plots, Q-Q plots, histograms) for initial assessment.
-3. Apply **formal statistical tests** (Durbin-Watson, Breusch-Pagan, Shapiro-Wilk, etc.) for rigorous evaluation.
-4. If violations are detected, apply **remedies** such as variable transformations, weighted least squares, robust regression, or alternative model specifications.
+이어지는 절들에서 각 가정을 진단 방법, 형식적 검정, 위배 시의 대책과 함께 자세히 다룬다.
 
-The following sections provide detailed coverage of each assumption, including diagnostic methods, formal tests, and remedies for violations.
+## 절 개요
 
-## Section Overview
-
-| Section | Topic | Key Diagnostics |
+| 절 | 주제 | 핵심 진단 |
 |---------|-------|----------------|
-| [Linearity](linearity_overview.md) | Straight-line relationship assumption | Scatterplots, residual plots |
-| [Independence](independence_overview.md) | Uncorrelated residuals assumption | Durbin-Watson test, residual plots |
-| [Homoscedasticity](homoscedasticity_overview.md) | Constant variance assumption | Residual vs. fitted plot, Breusch-Pagan test |
-| [Normality](normality_overview.md) | Normal residuals assumption | Q-Q plot, Shapiro-Wilk test |
-| [Checking Linearity](checking_linearity.md) | Methods for linearity assessment | Scatterplots, CPR plots, polynomial terms |
-| [Checking Independence](checking_independence.md) | Methods for independence assessment | Durbin-Watson, Breusch-Godfrey, clustering |
-| [Checking Homoscedasticity](checking_homoscedasticity.md) | Methods for homoscedasticity assessment | Breusch-Pagan, White test, scale-location plot |
-| [Checking Normality](checking_normality.md) | Methods for normality assessment | Histogram, Q-Q plot, Shapiro-Wilk, Anderson-Darling, Jarque-Bera |
+| [선형성](linearity_overview.md) | 직선 관계 가정 | 산점도, 잔차그림 |
+| [독립성](independence_overview.md) | 무상관 잔차 가정 | Durbin-Watson 검정, 잔차그림 |
+| [등분산성](homoscedasticity_overview.md) | 상수분산 가정 | 잔차-적합값 그림, Breusch-Pagan 검정 |
+| [정규성](normality_overview.md) | 잔차의 정규성 가정 | Q-Q 그림, Shapiro-Wilk 검정 |
+| [선형성 확인](checking_linearity.md) | 선형성 평가 방법 | 산점도, 성분+잔차 그림, 다항 항 |
+| [독립성 확인](checking_independence.md) | 독립성 평가 방법 | Durbin-Watson, Breusch-Godfrey, 군집 |
+| [등분산성 확인](checking_homoscedasticity.md) | 등분산성 평가 방법 | Breusch-Pagan, White 검정, 척도-위치 그림 |
+| [정규성 확인](checking_normality.md) | 정규성 평가 방법 | 히스토그램, Q-Q 그림, Shapiro-Wilk, Anderson-Darling, Jarque-Bera |

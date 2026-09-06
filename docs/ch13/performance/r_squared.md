@@ -1,64 +1,64 @@
-# R-Squared and Adjusted R-Squared
+# 결정계수와 수정 결정계수
 
-After fitting a regression model, the natural first question is: how much of the variation in the response does this model actually explain? A model that captures nearly all the variability in $Y$ is more useful than one that explains very little. R-squared provides a single number that answers this question by comparing the model's residual variation to the total variation in the data.
+회귀모형을 적합하고 나면 자연스럽게 던지는 첫 질문은 이것이다. 이 모형은 반응변수의 변동을 실제로 얼마나 설명하는가? $Y$의 변동을 거의 다 포착하는 모형이 아주 조금만 설명하는 모형보다 쓸모 있다. 결정계수 $R^2$는 모형의 잔차 변동을 자료의 전체 변동과 비교하여 이 질문에 하나의 수치로 답한다.
 
 ---
 
-## 1. Decomposition of Variability
+## 1. 변동의 분해
 
-To measure how well a regression model fits the data, we decompose the total variability of the response variable $Y$ into two components.
+회귀모형이 자료에 얼마나 잘 맞는지 재기 위해 반응변수 $Y$의 전체 변동을 두 성분으로 분해한다.
 
-**Total Sum of Squares (SST)** measures the total variability of $Y$ around its mean:
+**총제곱합(SST)**은 $Y$가 평균 주위에서 갖는 전체 변동을 잰다.
 
 $$
 \text{SST} = \sum_{i=1}^{n} (y_i - \bar{y})^2
 $$
 
-**Regression Sum of Squares (SSR)** measures the variability explained by the model:
+**회귀제곱합(SSR)**은 모형이 설명하는 변동을 잰다.
 
 $$
 \text{SSR} = \sum_{i=1}^{n} (\hat{y}_i - \bar{y})^2
 $$
 
-**Residual Sum of Squares (SSE)** measures the variability left unexplained:
+**잔차제곱합(SSE)**은 설명되지 않고 남은 변동을 잰다.
 
 $$
 \text{SSE} = \sum_{i=1}^{n} (y_i - \hat{y}_i)^2
 $$
 
-When the model includes an intercept, these three quantities satisfy the fundamental identity:
+모형에 절편이 포함되어 있으면 이 세 양은 다음의 기본 항등식을 만족한다.
 
 $$
 \text{SST} = \text{SSR} + \text{SSE}
 $$
 
-??? note "Why the decomposition requires an intercept"
-    The identity $\text{SST} = \text{SSR} + \text{SSE}$ relies on the cross-term $\sum (y_i - \hat{y}_i)(\hat{y}_i - \bar{y})$ vanishing. This follows from the normal equations, which guarantee that $\sum e_i = 0$ and $\sum e_i \hat{y}_i = 0$ when the model includes an intercept. Without an intercept, these orthogonality conditions may fail, and the decomposition no longer holds.
+??? note "이 분해에 절편이 필요한 이유"
+    항등식 $\text{SST} = \text{SSR} + \text{SSE}$는 교차항 $\sum (y_i - \hat{y}_i)(\hat{y}_i - \bar{y})$이 0이 되는 데 의존한다. 이는 정규방정식에서 따라 나오는데, 모형에 절편이 있으면 $\sum e_i = 0$과 $\sum e_i \hat{y}_i = 0$이 보장된다. 절편이 없으면 이 직교성 조건이 깨질 수 있고 분해도 더 이상 성립하지 않는다.
 
 ---
 
-## 2. Coefficient of Determination
+## 2. 결정계수
 
-The **coefficient of determination** $R^2$ is the proportion of total variability in $Y$ that is explained by the regression model:
+**결정계수** $R^2$는 회귀모형이 설명하는 $Y$의 전체 변동의 비율이다.
 
 $$
 R^2 = \frac{\text{SSR}}{\text{SST}} = 1 - \frac{\text{SSE}}{\text{SST}}
 $$
 
-Since $\text{SSR} = \text{SST} - \text{SSE}$ and all sums of squares are non-negative, $R^2$ is bounded between 0 and 1 for models with an intercept:
+$\text{SSR} = \text{SST} - \text{SSE}$이고 모든 제곱합이 음이 아니므로, 절편이 있는 모형에서 $R^2$는 0과 1 사이의 값을 갖는다.
 
-- $R^2 = 0$: the model explains none of the variability (the fitted values equal $\bar{y}$ for every observation).
-- $R^2 = 1$: the model explains all the variability (every observation lies exactly on the fitted line).
+- $R^2 = 0$: 모형이 변동을 전혀 설명하지 못한다(모든 관측값의 적합값이 $\bar{y}$와 같다).
+- $R^2 = 1$: 모형이 변동을 전부 설명한다(모든 관측값이 적합선 위에 정확히 놓인다).
 
-### Connection to Correlation
+### 상관과의 관계
 
-In simple linear regression with a single predictor, $R^2$ equals the square of the Pearson correlation coefficient between $X$ and $Y$:
+설명변수가 하나인 단순선형회귀에서 $R^2$는 $X$와 $Y$의 Pearson 상관계수의 제곱과 같다.
 
 $$
 R^2 = r_{XY}^2
 $$
 
-In multiple regression, $R^2$ equals the square of the correlation between the observed values $y_i$ and the fitted values $\hat{y}_i$:
+다중회귀에서 $R^2$는 관측값 $y_i$와 적합값 $\hat{y}_i$의 상관의 제곱과 같다.
 
 $$
 R^2 = r_{y, \hat{y}}^2
@@ -66,162 +66,184 @@ $$
 
 ---
 
-## 3. Limitations of R-Squared
+## 3. 결정계수의 한계
 
-Although $R^2$ is widely used, it has a critical flaw for model comparison: **it never decreases when additional predictors are added to the model**, even if those predictors have no genuine relationship with $Y$.
+$R^2$는 널리 쓰이지만 모형 비교에는 결정적인 결함이 있다. **설명변수를 추가하면 결코 줄어들지 않는다.** 그 설명변수가 $Y$와 아무 관계가 없어도 그렇다.
 
-To see why, consider two nested models where Model 2 includes all predictors from Model 1 plus an additional variable. The least squares procedure minimizes SSE, so Model 2's SSE is at most equal to Model 1's SSE (it can always set the new coefficient to zero). Since SST is unchanged, $R^2$ for Model 2 is at least as large as for Model 1.
+이유를 보자. 모형 2가 모형 1의 모든 설명변수에 변수 하나를 더한 내포된 두 모형을 생각하자. 최소제곱은 SSE를 최소화하므로 모형 2의 SSE는 모형 1의 SSE보다 크지 않다(새 계수를 언제나 0으로 둘 수 있다). SST는 변하지 않으므로 모형 2의 $R^2$는 모형 1보다 작지 않다.
 
-This means a model with $p$ predictors will always have $R^2$ at least as large as a model with fewer predictors, regardless of whether the additional predictors are useful. Taken to the extreme, a model with $n$ parameters (one per observation) achieves $R^2 = 1$ by perfectly interpolating the data, despite having no predictive value.
+곧 설명변수가 $p$개인 모형은 그보다 적은 모형보다 $R^2$가 항상 크거나 같으며, 추가된 설명변수가 쓸모 있든 없든 마찬가지이다. 극단적으로 모수가 $n$개(관측값마다 하나)인 모형은 자료를 완벽하게 보간하여 $R^2 = 1$을 달성하지만 예측 가치는 전혀 없다.
 
 ---
 
-## 4. Adjusted R-Squared
+## 4. 수정 결정계수
 
-To correct for the automatic inflation of $R^2$ with additional predictors, we use **adjusted R-squared**, which penalizes model complexity by accounting for the number of parameters:
+설명변수 추가에 따라 $R^2$가 자동으로 부풀려지는 것을 바로잡기 위해 **수정 결정계수**를 쓴다. 모수의 개수를 반영하여 모형의 복잡도에 벌점을 준다.
 
 $$
 R^2_{\text{adj}} = 1 - \frac{\text{SSE} / (n - p - 1)}{\text{SST} / (n - 1)}
 $$
 
-where $n$ is the number of observations and $p$ is the number of predictors (not counting the intercept).
+여기서 $n$은 관측값의 개수이고 $p$는 (절편을 제외한) 설명변수의 개수이다.
 
-The ratio $\text{SSE} / (n - p - 1)$ is the unbiased estimate of the error variance $\sigma^2$, and $\text{SST} / (n - 1)$ is the sample variance of $Y$. Thus, adjusted $R^2$ compares variance estimates rather than raw sums of squares.
+비 $\text{SSE} / (n - p - 1)$은 오차분산 $\sigma^2$의 불편추정값이고 $\text{SST} / (n - 1)$은 $Y$의 표본분산이다. 따라서 수정 $R^2$는 제곱합 자체가 아니라 분산 추정값들을 비교한다.
 
-### Relationship to R-Squared
+### 결정계수와의 관계
 
-Adjusted $R^2$ can be expressed directly in terms of $R^2$:
+수정 $R^2$는 $R^2$로 직접 표현할 수 있다.
 
 $$
 R^2_{\text{adj}} = 1 - (1 - R^2) \frac{n - 1}{n - p - 1}
 $$
 
-Since $\dfrac{n - 1}{n - p - 1} > 1$ whenever $p \geq 1$, we have $R^2_{\text{adj}} \leq R^2$. The gap between $R^2$ and $R^2_{\text{adj}}$ grows as $p$ increases relative to $n$.
+$p \geq 1$이면 언제나 $\dfrac{n - 1}{n - p - 1} > 1$이므로 $R^2_{\text{adj}} \leq R^2$이다. $n$에 비해 $p$가 커질수록 $R^2$와 $R^2_{\text{adj}}$의 격차가 벌어진다.
 
-### Key Properties
+### 주요 성질
 
-- **Can decrease** when a useless predictor is added, because the penalty for increasing $p$ may outweigh the small reduction in SSE.
-- **Can be negative** when the model fits worse than the intercept-only model (i.e., when $\text{SSE}/(n - p - 1)$ exceeds $\text{SST}/(n - 1)$).
-- **Equals $R^2$** when $p = 0$ (intercept-only model), since the penalty factor becomes $\frac{n-1}{n-1} = 1$.
+- 쓸모없는 설명변수를 넣으면 **줄어들 수 있다**. $p$가 커지는 벌점이 SSE의 작은 감소를 웃돌 수 있기 때문이다.
+- 모형이 절편만 있는 모형보다도 나쁘게 적합하면(곧 $\text{SSE}/(n - p - 1)$이 $\text{SST}/(n - 1)$을 넘으면) **음수가 될 수 있다**.
+- $p = 0$(절편만 있는 모형)이면 벌점 인자가 $\frac{n-1}{n-1} = 1$이 되어 **$R^2$와 같아진다**.
 
 ---
 
-## 5. Interpreting R-Squared in Practice
+## 5. 실무에서 결정계수 해석하기
 
-There is no universal threshold for what constitutes a "good" $R^2$. The acceptable range depends heavily on the field and the nature of the data:
+"좋은" $R^2$가 무엇인지에 대한 보편적 기준은 없다. 받아들일 만한 범위는 분야와 자료의 성격에 크게 의존한다.
 
-| Context | Typical $R^2$ range |
+| 맥락 | 전형적인 $R^2$ 범위 |
 |---|---|
-| Physical sciences (controlled experiments) | 0.90 -- 0.99 |
-| Engineering models | 0.70 -- 0.95 |
-| Social sciences | 0.30 -- 0.70 |
-| Financial returns (daily) | 0.01 -- 0.10 |
+| 물리과학(통제된 실험) | 0.90 – 0.99 |
+| 공학 모형 | 0.70 – 0.95 |
+| 사회과학 | 0.30 – 0.70 |
+| 금융 수익률(일간) | 0.01 – 0.10 |
 
-!!! warning "R-squared does not validate model assumptions"
-    A high $R^2$ does not mean the model is correctly specified. A model can achieve a high $R^2$ while violating linearity, independence, or homoscedasticity assumptions. Always supplement $R^2$ with residual diagnostics to verify model adequacy.
+!!! warning "결정계수는 모형 가정을 검증해 주지 않는다"
+    $R^2$가 크다고 모형이 올바르게 설정되었다는 뜻은 아니다. 선형성, 독립성, 등분산성 가정을 위배하면서도 큰 $R^2$를 얻을 수 있다. 모형의 적절성을 확인하려면 항상 $R^2$에 잔차 진단을 곁들여야 한다.
 
 ---
 
-## 6. Numerical Example
+## 6. 수치 예제
 
-Consider a dataset with $n = 5$ observations where the observed and fitted values are:
+관측값 $n = 5$개인 자료를 생각하자.
+
+| $i$ | $x_i$ | $y_i$ |
+|---|---|---|
+| 1 | 1 | 2 |
+| 2 | 2 | 4 |
+| 3 | 3 | 5 |
+| 4 | 4 | 8 |
+| 5 | 5 | 11 |
+
+$\bar{x} = 3$, $\bar{y} = 6$이고 $S_{xx} = 10$, $S_{xy} = 22$이므로 OLS 적합선은
+
+$$
+\hat{y} = -0.6 + 2.2x
+$$
+
+이 적합선으로 각 항을 계산하면
 
 | $i$ | $y_i$ | $\hat{y}_i$ | $y_i - \bar{y}$ | $\hat{y}_i - \bar{y}$ | $y_i - \hat{y}_i$ |
 |-----|--------|--------------|------------------|------------------------|--------------------|
-| 1   | 2      | 2.2          | $-4$             | $-3.8$                 | $-0.2$             |
+| 1   | 2      | 1.6          | $-4$             | $-4.4$                 | 0.4                |
 | 2   | 4      | 3.8          | $-2$             | $-2.2$                 | 0.2                |
-| 3   | 5      | 5.4          | $-1$             | $-0.6$                 | $-0.4$             |
-| 4   | 8      | 7.0          | 2                | 1.0                    | 1.0                |
-| 5   | 11     | 11.6         | 5                | 5.6                    | $-0.6$             |
+| 3   | 5      | 6.0          | $-1$             | 0.0                    | $-1.0$             |
+| 4   | 8      | 8.2          | 2                | 2.2                    | $-0.2$             |
+| 5   | 11     | 10.4         | 5                | 4.4                    | 0.6                |
 
-The sample mean is $\bar{y} = 6$. Computing the sums of squares:
+제곱합을 계산하면
 
 $$
 \text{SST} = 16 + 4 + 1 + 4 + 25 = 50
 $$
 
 $$
-\text{SSE} = 0.04 + 0.04 + 0.16 + 1.00 + 0.36 = 1.60
+\text{SSR} = 19.36 + 4.84 + 0 + 4.84 + 19.36 = 48.40
 $$
 
 $$
-R^2 = 1 - \frac{1.60}{50} = 1 - 0.032 = 0.968
+\text{SSE} = 0.16 + 0.04 + 1.00 + 0.04 + 0.36 = 1.60
 $$
 
-For a simple linear regression ($p = 1$):
+분해가 성립함을 확인할 수 있다: $48.40 + 1.60 = 50 = \text{SST}$.
+
+$$
+R^2 = 1 - \frac{1.60}{50} = \frac{48.40}{50} = 0.968
+$$
+
+단순선형회귀이므로 $p = 1$이고
 
 $$
 R^2_{\text{adj}} = 1 - (1 - 0.968)\frac{5 - 1}{5 - 1 - 1} = 1 - 0.032 \times \frac{4}{3} = 1 - 0.0427 = 0.957
 $$
 
-The model explains about 96.8% of the total variability in $Y$, with the adjusted value of 95.7% reflecting the penalty for one predictor.
+모형은 $Y$의 전체 변동 가운데 약 96.8%를 설명하며, 수정값 95.7%는 설명변수 하나에 대한 벌점을 반영한다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-A model has SSE $= 200$ and SST $= 1000$. Compute $R^2$. If we add a useless predictor (random noise), what happens to $R^2$ and why is adjusted $R^2$ needed?
+**연습문제 1.**
+어떤 모형의 SSE $= 200$, SST $= 1000$이다. $R^2$를 계산하라. 쓸모없는 설명변수(무작위 잡음)를 넣으면 $R^2$는 어떻게 되며, 왜 수정 $R^2$가 필요한가?
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
     $$
     R^2 = 1 - \frac{\text{SSE}}{\text{SST}} = 1 - \frac{200}{1000} = 0.80
     $$
 
-    Adding any predictor (even random noise) can only decrease SSE (or leave it unchanged) because OLS minimizes SSE over a larger parameter space. So $R^2$ increases (or stays the same) regardless of whether the predictor is useful. This means $R^2$ always favors more complex models.
+    어떤 설명변수를 넣든(무작위 잡음이라도) OLS가 더 넓은 모수공간에서 SSE를 최소화하므로 SSE는 줄거나 그대로일 뿐 늘지 않는다. 따라서 그 설명변수의 쓸모와 무관하게 $R^2$는 커지거나 같다. 곧 $R^2$는 언제나 더 복잡한 모형을 선호한다.
 
-    **Adjusted $R^2$** corrects for this by penalizing additional parameters:
+    **수정 $R^2$**는 모수 추가에 벌점을 주어 이를 바로잡는다.
 
     $$
-    R^2_{\text{adj}} = 1 - \frac{\text{SSE}/(n-p)}{\text{SST}/(n-1)} = 1 - \frac{n-1}{n-p}(1 - R^2)
+    R^2_{\text{adj}} = 1 - \frac{\text{SSE}/(n-p-1)}{\text{SST}/(n-1)} = 1 - \frac{n-1}{n-p-1}(1 - R^2)
     $$
 
-    Adding a useless predictor increases $p$ without meaningfully reducing SSE, so the penalty $\frac{n-1}{n-p}$ grows and $R^2_{\text{adj}}$ decreases. This makes adjusted $R^2$ a better criterion for model comparison.
+    쓸모없는 설명변수를 넣으면 SSE는 의미 있게 줄지 않으면서 $p$만 커지므로 벌점 $\frac{n-1}{n-p-1}$이 커져 $R^2_{\text{adj}}$가 줄어든다. 그래서 수정 $R^2$가 모형 비교에 더 나은 기준이 된다.
 
 ---
 
-**Exercise 2.**
-Can $R^2$ be negative? Under what circumstances?
+**연습문제 2.**
+$R^2$가 음수가 될 수 있는가? 어떤 상황에서 그런가?
 
-??? success "Solution to Exercise 2"
-    For the training data with an intercept, $R^2 \geq 0$ by construction (OLS with an intercept guarantees SSE $\leq$ SST). However, $R^2$ can be negative in two scenarios:
+??? success "연습문제 2 풀이"
+    절편이 있는 모형을 훈련자료에 적합했다면 구성상 $R^2 \geq 0$이다(절편이 있는 OLS는 SSE $\leq$ SST를 보장한다). 그러나 다음 두 상황에서는 $R^2$가 음수가 될 수 있다.
 
-    1. **Test data:** When applying a model fitted on training data to test data, the predictions may be worse than simply predicting the test-set mean. This gives SSE $>$ SST (computed with the test-set mean), so $R^2 < 0$.
+    1. **검정자료:** 훈련자료로 적합한 모형을 검정자료에 적용하면 예측이 단순히 검정자료의 평균을 예측하는 것보다 나쁠 수 있다. 그러면 (검정자료의 평균으로 계산한) SST보다 SSE가 커져 $R^2 < 0$이 된다.
 
-    2. **No intercept:** If the model is fitted without an intercept, the prediction does not pass through $\bar{y}$, and SSE can exceed SST.
+    2. **절편 없는 모형:** 절편 없이 적합하면 예측이 $\bar{y}$를 지나지 않으므로 SSE가 SST를 넘을 수 있다.
 
-    A negative $R^2$ on test data indicates the model's predictions are worse than a constant baseline (just predicting the mean). This is a sign of severe overfitting or model misspecification.
+    검정자료에서 $R^2$가 음수라는 것은 모형의 예측이 상수 기준선(평균 예측)보다도 나쁘다는 뜻이다. 심각한 과대적합이나 모형 오설정의 신호이다.
 
 ---
 
-**Exercise 3.**
-Derive the relationship between $R^2$ and the Pearson correlation $r$ between $y$ and $\hat{y}$ in simple linear regression.
+**연습문제 3.**
+단순선형회귀에서 $R^2$와 $y$·$\hat{y}$ 사이의 Pearson 상관 $r$의 관계를 유도하라.
 
-??? success "Solution to Exercise 3"
-    In simple linear regression (one predictor), the Pearson correlation between $y$ and $\hat{y}$ equals $|r_{xy}|$ (the absolute correlation between $x$ and $y$). The $R^2$ is:
+??? success "연습문제 3 풀이"
+    설명변수가 하나인 단순선형회귀에서 $y$와 $\hat{y}$의 Pearson 상관은 $|r_{xy}|$($x$와 $y$의 상관의 절댓값)와 같다. 따라서
 
     $$
     R^2 = r_{xy}^2
     $$
 
-    More generally (multiple regression), $R^2 = r_{y\hat{y}}^2$ -- the squared correlation between observed and fitted values. This holds because:
+    더 일반적으로 다중회귀에서는 $R^2 = r_{y\hat{y}}^2$, 곧 관측값과 적합값 상관의 제곱이다. 다음이 성립하기 때문이다.
 
     $$
     R^2 = 1 - \frac{\text{SSE}}{\text{SST}} = \frac{\text{SSR}}{\text{SST}} = \frac{\lVert\hat{\mathbf{y}} - \bar{y}\mathbf{1}\rVert^2}{\lVert\mathbf{y} - \bar{y}\mathbf{1}\rVert^2} = r_{y\hat{y}}^2
     $$
 
-    This relationship provides the interpretation: $R^2$ is the proportion of variance in $y$ that is linearly explained by the model. $\square$
+    이 관계가 해석을 제공한다. $R^2$는 모형이 선형으로 설명하는 $y$의 분산 비율이다. $\square$
 
 ---
 
-**Exercise 4.**
-A model has $R^2 = 0.95$ on training data and $R^2 = 0.60$ on test data. Diagnose the likely problem and suggest remedies.
+**연습문제 4.**
+어떤 모형이 훈련자료에서 $R^2 = 0.95$, 검정자료에서 $R^2 = 0.60$이다. 문제를 진단하고 대책을 제안하라.
 
-??? success "Solution to Exercise 4"
-    The large gap between training $R^2$ (0.95) and test $R^2$ (0.60) is a classic sign of **overfitting**. The model fits the training data very well (including its noise) but fails to generalize.
+??? success "연습문제 4 풀이"
+    훈련 $R^2$(0.95)와 검정 $R^2$(0.60)의 큰 격차는 **과대적합**의 전형적인 신호이다. 모형이 훈련자료를 잡음까지 포함해 아주 잘 맞추었지만 일반화에 실패한 것이다.
 
-    Remedies:
+    대책:
 
-    1. **Regularization:** Apply ridge or LASSO regression to shrink coefficients and reduce variance.
-    2. **Feature selection:** Remove predictors that contribute noise rather than signal (use cross-validation or information criteria).
-    3. **More data:** Increasing $n$ reduces overfitting by providing more information relative to model complexity.
-    4. **Simpler model:** Reduce the number of predictors or the polynomial degree.
-    5. **Cross-validation:** Use CV during model development instead of relying on training $R^2$, which always overstates performance.
+    1. **정칙화:** 릿지나 LASSO 회귀로 계수를 축소하여 분산을 줄인다.
+    2. **변수 선택:** 신호가 아니라 잡음을 보태는 설명변수를 뺀다(교차검증이나 정보기준을 쓴다).
+    3. **자료 확충:** $n$을 늘리면 모형 복잡도 대비 정보가 늘어 과대적합이 줄어든다.
+    4. **더 단순한 모형:** 설명변수의 개수나 다항 차수를 줄인다.
+    5. **교차검증:** 언제나 성능을 과대평가하는 훈련 $R^2$에 기대지 말고 모형 개발 과정에서 교차검증을 쓴다.

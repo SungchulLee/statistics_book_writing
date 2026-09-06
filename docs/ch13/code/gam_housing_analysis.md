@@ -1,42 +1,45 @@
-# Generalized Additive Model Housing Analysis
+# GAM 주택 분석
 
-## Overview
+## 개요
 
-This page demonstrates Generalized Additive Models (GAMs) for house price prediction using the King County housing dataset. We compare linear regression, polynomial regression, and GAMs (via both statsmodels and pyGAM), visualize partial dependence plots, and assess model performance through RMSE and $R^2$ metrics.
+이 페이지는 King County 주택 자료를 이용해 집값 예측에 일반화가법모형(GAM)을 적용한다. 선형회귀, 다항회귀, GAM(statsmodels와 pyGAM 양쪽)을 비교하고, 부분의존 그림을 시각화하며, RMSE와 $R^2$로 모형 성능을 평가한다.
 
-## Mathematical Background
+!!! note "자료에 대하여"
+    `house_98105`는 King County 주택 매매 자료 가운데 우편번호 98105 지역만 걸러 낸 pandas `DataFrame`이다. 아래 코드는 이 변수가 이미 만들어져 있다고 가정한다.
 
-A Generalized Additive Model extends linear regression by allowing each predictor to have a nonlinear effect through smooth functions:
+## 수학적 배경
+
+일반화가법모형은 각 설명변수가 매끄러운 함수를 통해 비선형 효과를 갖도록 허용하여 선형회귀를 확장한다.
 
 $$
 y = \beta_0 + f_1(x_1) + f_2(x_2) + \cdots + f_p(x_p) + \varepsilon,
 $$
 
-where each $f_j$ is a smooth function estimated from the data (typically using splines). The model is "additive" because each predictor contributes independently to the response.
+여기서 각 $f_j$는 (보통 스플라인으로) 자료에서 추정한 매끄러운 함수이다. 각 설명변수가 반응변수에 독립적으로 기여하므로 "가법"이라 부른다.
 
-### Smoothing Splines
+### 평활 스플라인
 
-Each $f_j$ is represented using a basis expansion, commonly B-splines:
+각 $f_j$는 기저 전개, 흔히 B-스플라인으로 표현된다.
 
 $$
 f_j(x_j) = \sum_{m=1}^{M_j} \gamma_{jm}\, B_{jm}(x_j),
 $$
 
-where $B_{jm}$ are basis functions. The smoothness is controlled by a **smoothing parameter** $\lambda_j$, and the objective becomes
+여기서 $B_{jm}$은 기저함수이다. 매끄러움은 **평활 모수** $\lambda_j$로 조절되며 목적함수는 다음이 된다.
 
 $$
 \min_{\gamma} \sum_{i=1}^n \!\left(y_i - \beta_0 - \sum_{j=1}^p f_j(x_{ij})\right)^{\!2} + \sum_{j=1}^p \lambda_j \int [f_j''(t)]^2\, dt.
 $$
 
-The penalty $\lambda_j \int [f_j'']^2\,dt$ controls the wiggliness of $f_j$: larger $\lambda_j$ produces smoother curves.
+벌점 $\lambda_j \int [f_j'']^2\,dt$가 $f_j$의 요동을 조절한다. $\lambda_j$가 클수록 더 매끄러운 곡선이 된다.
 
-### Partial Dependence
+### 부분의존
 
-The **partial dependence** of $y$ on $x_j$ is the function $f_j(x_j)$, which shows the marginal effect of predictor $j$ on the response while averaging over the other predictors.
+$y$의 $x_j$에 대한 **부분의존**은 함수 $f_j(x_j)$이며, 다른 설명변수에 대해 평균을 낸 뒤 설명변수 $j$가 반응변수에 미치는 주변 효과를 보여준다.
 
-## Code
+## 코드
 
-### Linear and Polynomial Models
+### 선형 모형과 다항 모형
 
 ```python
 import numpy as np
@@ -57,7 +60,7 @@ formula_poly = ('AdjSalePrice ~ SqFtTotLiving + np.power(SqFtTotLiving, 2) + '
 result_poly = smf.ols(formula=formula_poly, data=house_98105).fit()
 ```
 
-### GAM with statsmodels
+### statsmodels로 만드는 GAM
 
 ```python
 from statsmodels.gam.api import GLMGam, BSplines
@@ -73,7 +76,9 @@ gam_sm = GLMGam.from_formula(
 res_sm = gam_sm.fit()
 ```
 
-### GAM with pyGAM
+`alpha`를 모두 0으로 두었으므로 평활 벌점이 없는 회귀 스플라인이다. 매끄러움은 오직 `df`(기저함수의 개수)로만 조절된다.
+
+### pyGAM으로 만드는 GAM
 
 ```python
 from pygam import LinearGAM, s, l
@@ -91,19 +96,19 @@ gam_py = LinearGAM(
 gam_py.gridsearch(X_gam, y_gam)
 ```
 
-## Interpretation
+## 해석
 
-- **Linear model**: Assumes each predictor has a constant marginal effect on price. Simple but may miss curvature in the relationship between living area and price.
-- **Polynomial model**: Captures curvature in $\text{SqFtTotLiving}$ via a quadratic term but imposes a global shape (the polynomial applies everywhere).
-- **GAM**: Allows the effect of $\text{SqFtTotLiving}$ to vary freely through a smooth spline while keeping other predictors linear. This flexibility typically improves fit.
-- **Partial dependence plots** reveal the shape of each $f_j$. A nearly linear partial dependence suggests the linear term is adequate; curvature justifies the smooth term.
-- **Effective degrees of freedom** (EDF) measure the complexity of each smooth term. Higher EDF means more wiggliness and greater risk of overfitting.
+- **선형 모형**: 각 설명변수가 가격에 일정한 주변 효과를 갖는다고 가정한다. 단순하지만 거주 면적과 가격 사이의 곡률을 놓칠 수 있다.
+- **다항 모형**: 이차항으로 $\text{SqFtTotLiving}$의 곡률을 포착하지만 전역적인 모양을 강제한다(다항식이 모든 구간에 똑같이 적용된다).
+- **GAM**: 다른 설명변수는 선형으로 두면서 $\text{SqFtTotLiving}$의 효과만 매끄러운 스플라인으로 자유롭게 변하도록 허용한다. 이 유연성이 대체로 적합을 개선한다.
+- **부분의존 그림**은 각 $f_j$의 모양을 드러낸다. 부분의존이 거의 선형이면 선형항으로 충분하다는 뜻이고, 곡률이 있으면 매끄러운 항이 정당화된다.
+- **유효 자유도**(EDF)는 각 매끄러운 항의 복잡도를 잰다. EDF가 클수록 요동이 심하고 과대적합 위험이 크다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.** Compare the $R^2$ and RMSE of the linear, polynomial, and GAM models. Which model performs best, and is the improvement substantial?
+**연습문제 1.** 선형, 다항, GAM 모형의 $R^2$와 RMSE를 비교하라. 어느 모형이 가장 좋으며 그 개선은 실질적인가?
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
 
     ```python
     from sklearn.metrics import mean_squared_error, r2_score
@@ -119,13 +124,15 @@ gam_py.gridsearch(X_gam, y_gam)
         print(f"{name}: R2={r2:.4f}, RMSE={rmse:.0f}")
     ```
 
-    The GAM typically shows modest improvement over the linear model and comparable performance to the polynomial. The improvement depends on how nonlinear the true relationship is. $\square$
+    GAM은 선형 모형보다 대체로 완만하게 개선되며 다항 모형과는 비슷한 성능을 보인다. 개선의 폭은 참 관계가 얼마나 비선형인가에 달려 있다.
+
+    다만 이 세 값은 모두 **훈련자료**에서 계산된 것이므로, 더 유연한 모형이 유리할 수밖에 없다는 점에 유의하라. 공정한 비교를 하려면 교차검증이나 남겨 둔 검정자료에서 평가해야 한다. $\square$
 
 ---
 
-**Exercise 2.** Modify the pyGAM specification to use smooth splines for all predictors instead of linear terms. Does this improve the fit? Discuss the risk of overfitting.
+**연습문제 2.** pyGAM 설정을 바꾸어 모든 설명변수에 선형항 대신 매끄러운 스플라인을 쓰도록 하라. 적합이 개선되는가? 과대적합의 위험을 논하라.
 
-??? success "Solution to Exercise 2"
+??? success "연습문제 2 풀이"
 
     ```python
     gam_all_smooth = LinearGAM(
@@ -134,40 +141,42 @@ gam_py.gridsearch(X_gam, y_gam)
     gam_all_smooth.gridsearch(X_gam, y_gam)
     ```
 
-    Using smooth terms for all predictors increases flexibility and typically improves training $R^2$, but may overfit. The effective degrees of freedom increase, and the model may capture noise rather than signal. Cross-validation should be used to assess whether the additional flexibility improves out-of-sample prediction. $\square$
+    모든 설명변수에 매끄러운 항을 쓰면 유연성이 커져 훈련 $R^2$는 대체로 오르지만 과대적합할 수 있다. 유효 자유도가 늘어나고 모형이 신호가 아니라 잡음을 포착할 수 있다. 늘어난 유연성이 표본 밖 예측을 실제로 개선하는지는 교차검증으로 확인해야 한다.
+
+    `Bathrooms`나 `Bedrooms`처럼 값이 몇 가지 정수뿐인 변수에 매끄러운 항을 쓰는 것은 특히 위험하다. 값의 종류가 적은 곳에 스플라인의 자유도를 쓰면 잡음을 외우기 쉽다. $\square$
 
 ---
 
-**Exercise 3.** Explain why GAMs are called "additive." What assumption does the additive structure impose, and when might it be violated?
+**연습문제 3.** GAM이 왜 "가법"이라 불리는지 설명하라. 가법 구조는 어떤 가정을 부과하며 언제 위배될 수 있는가?
 
-??? success "Solution to Exercise 3"
+??? success "연습문제 3 풀이"
 
-    GAMs assume the response is the sum of individual smooth functions: $y = \beta_0 + f_1(x_1) + \cdots + f_p(x_p) + \varepsilon$. This means the effect of each predictor is independent of the values of other predictors (no interactions). This assumption is violated when, for example, the effect of living area on price depends on the building grade (an interaction effect). Extensions such as tensor product smooths can handle interactions. $\square$
-
----
-
-**Exercise 4.** The smoothing parameter $\lambda$ controls the bias-variance tradeoff. Explain what happens as $\lambda \to 0$ and $\lambda \to \infty$.
-
-??? success "Solution to Exercise 4"
-
-    As $\lambda \to 0$, the penalty vanishes and $f_j$ interpolates the data (high variance, low bias, overfitting). As $\lambda \to \infty$, the penalty forces $f_j'' \equiv 0$, meaning $f_j$ must be linear (low variance, potentially high bias, underfitting). The optimal $\lambda$ balances these extremes. In pyGAM, `gridsearch` selects $\lambda$ by minimizing generalized cross-validation (GCV) or a similar criterion. $\square$
+    GAM은 반응변수가 개별 매끄러운 함수들의 합이라고 가정한다: $y = \beta_0 + f_1(x_1) + \cdots + f_p(x_p) + \varepsilon$. 곧 각 설명변수의 효과가 다른 설명변수의 값과 무관하다는 뜻이다(교호작용 없음). 예를 들어 거주 면적이 가격에 미치는 효과가 건물 등급에 따라 달라진다면(교호작용) 이 가정이 위배된다. 텐서곱 평활 같은 확장으로 교호작용을 다룰 수 있다. $\square$
 
 ---
 
-**Exercise 5.** Derive the matrix representation of the penalized least squares problem for a single-predictor GAM with B-spline basis. Show that the solution involves $(B^\top B + \lambda D)^{-1} B^\top y$ where $B$ is the basis matrix and $D$ is a penalty matrix.
+**연습문제 4.** 평활 모수 $\lambda$는 편향-분산 절충을 조절한다. $\lambda \to 0$과 $\lambda \to \infty$일 때 어떻게 되는지 설명하라.
 
-??? success "Solution to Exercise 5"
+??? success "연습문제 4 풀이"
 
-    Let $f(x) = \sum_{m=1}^M \gamma_m B_m(x)$, so $\mathbf{f} = \mathbf{B}\boldsymbol{\gamma}$ where $\mathbf{B}$ is the $n \times M$ basis matrix. The roughness penalty is $\int [f'']^2\,dt = \boldsymbol{\gamma}^\top\mathbf{D}\boldsymbol{\gamma}$ where $D_{jk} = \int B_j''(t) B_k''(t)\,dt$. The penalized objective is
+    $\lambda \to 0$이면 벌점이 사라져 $f_j$가 자료를 보간한다(분산 큼, 편향 작음, 과대적합). $\lambda \to \infty$이면 벌점이 $f_j'' \equiv 0$을 강제하여 $f_j$가 선형이 된다(분산 작음, 편향 클 수 있음, 과소적합). 최적 $\lambda$는 이 양극단의 균형을 잡는다. pyGAM에서는 `gridsearch`가 일반화 교차검증(GCV)이나 비슷한 기준을 최소화하여 $\lambda$를 고른다. $\square$
+
+---
+
+**연습문제 5.** B-스플라인 기저를 쓰는 단변량 GAM의 벌점최소제곱 문제를 행렬로 표현하라. $\mathbf{B}$가 기저행렬이고 $\mathbf{D}$가 벌점행렬일 때 해가 $(B^\top B + \lambda D)^{-1} B^\top y$임을 보여라.
+
+??? success "연습문제 5 풀이"
+
+    $f(x) = \sum_{m=1}^M \gamma_m B_m(x)$라 하면 $\mathbf{f} = \mathbf{B}\boldsymbol{\gamma}$이고 $\mathbf{B}$는 $n \times M$ 기저행렬이다. 거칢 벌점은 $\int [f'']^2\,dt = \boldsymbol{\gamma}^\top\mathbf{D}\boldsymbol{\gamma}$이며 $D_{jk} = \int B_j''(t) B_k''(t)\,dt$이다. 벌점 목적함수는
 
     $$
     (\mathbf{y} - \mathbf{B}\boldsymbol{\gamma})^\top(\mathbf{y} - \mathbf{B}\boldsymbol{\gamma}) + \lambda\,\boldsymbol{\gamma}^\top\mathbf{D}\boldsymbol{\gamma}.
     $$
 
-    Differentiating with respect to $\boldsymbol{\gamma}$ and setting to zero:
+    $\boldsymbol{\gamma}$에 대해 미분하여 0으로 두면
 
     $$
     -2\mathbf{B}^\top(\mathbf{y} - \mathbf{B}\boldsymbol{\gamma}) + 2\lambda\mathbf{D}\boldsymbol{\gamma} = \mathbf{0} \implies \hat{\boldsymbol{\gamma}} = (\mathbf{B}^\top\mathbf{B} + \lambda\mathbf{D})^{-1}\mathbf{B}^\top\mathbf{y}.
     $$
 
-    This is a ridge-like regression on the basis coefficients, where $\lambda\mathbf{D}$ acts as a structured penalty. $\square$
+    이는 기저 계수에 대한 릿지 형태의 회귀이며 $\lambda\mathbf{D}$가 구조를 가진 벌점 역할을 한다. $\square$

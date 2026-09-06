@@ -1,34 +1,33 @@
-# Simple Linear Regression
+# 단순선형회귀
 
-
-Simple linear regression models the relationship between a single independent variable $X$ and a dependent variable $Y$ as a straight line:
+단순선형회귀는 하나의 독립변수 $X$와 종속변수 $Y$의 관계를 직선으로 모형화한다.
 
 $$
 Y = \beta_0 + \beta_1 X + \varepsilon
 $$
 
-where:
+여기서
 
-- $Y$ is the dependent variable (the outcome we are trying to predict).
-- $X$ is the independent variable (the predictor).
-- $\beta_0$ is the y-intercept of the regression line.
-- $\beta_1$ is the slope of the regression line (the amount by which $Y$ changes for a one-unit change in $X$).
-- $\varepsilon$ represents the error term, accounting for the difference between the observed and predicted values.
+- $Y$는 종속변수(우리가 예측하려는 결과)이다.
+- $X$는 독립변수(설명변수)이다.
+- $\beta_0$은 회귀직선의 $y$ 절편이다.
+- $\beta_1$은 회귀직선의 기울기이다($X$가 한 단위 변할 때 $Y$가 변하는 양).
+- $\varepsilon$은 오차항으로, 관측값과 예측값의 차이를 설명한다.
 
-**Key assumptions**:
+**핵심 가정**:
 
-- **Linearity**: The model assumes a linear relationship between $X$ and $Y$.
-- **Deterministic vs. Stochastic**: The deterministic part of the model is $\beta_0 + \beta_1 X$, while $\varepsilon$ captures the stochastic (random) part, representing the variability in $Y$ not explained by $X$.
+- **선형성**: 모형은 $X$와 $Y$ 사이에 선형 관계가 있다고 가정한다.
+- **결정론적 부분과 확률적 부분**: 모형의 결정론적 부분은 $\beta_0 + \beta_1 X$이고, $\varepsilon$은 확률적(무작위) 부분으로 $X$가 설명하지 못하는 $Y$의 변동을 나타낸다.
 
 ---
 
-## 1. Visualizing the Relationship: Height and Weight
+## 1. 관계의 시각화: 키와 몸무게
 
-We begin with a concrete example — the relationship between height and weight among males — to build geometric intuition for regression.
+회귀에 대한 기하적 직관을 쌓기 위해 구체적인 예 — 남성의 키와 몸무게의 관계 — 로 시작한다.
 
-### Scatter Plot
+### 산점도
 
-A scatter plot reveals the overall pattern: taller individuals tend to weigh more, suggesting a positive association.
+산점도는 전반적인 패턴을 드러낸다. 키가 큰 사람일수록 몸무게가 더 나가는 경향이 있으며, 이는 양의 연관을 시사한다.
 
 ```python
 import matplotlib.pyplot as plt
@@ -65,9 +64,9 @@ ax.legend()
 plt.show()
 ```
 
-### Point of Averages
+### 평균점
 
-The **point of averages** $(\bar{x}, \bar{y})$ is the center of the scatter plot. Every regression line passes through this point.
+**평균점** $(\bar{x}, \bar{y})$는 산점도의 중심이다. 모든 회귀직선은 이 점을 지난다.
 
 ```python
 import matplotlib.pyplot as plt
@@ -97,11 +96,11 @@ ax.legend()
 plt.show()
 ```
 
-### Standard Deviation Bands
+### 표준편차 띠
 
-The **2 SD bands** mark the interval $[\bar{x} - 2\sigma_x,\; \bar{x} + 2\sigma_x]$ or $[\bar{y} - 2\sigma_y,\; \bar{y} + 2\sigma_y]$. Approximately 95% of the data falls within these bands (under normality).
+**2 SD 띠**는 구간 $[\bar{x} - 2\sigma_x,\; \bar{x} + 2\sigma_x]$ 또는 $[\bar{y} - 2\sigma_y,\; \bar{y} + 2\sigma_y]$를 표시한다. (정규성 아래에서) 자료의 약 95%가 이 띠 안에 들어온다.
 
-#### 2 SD x-Band (Height)
+#### 2 SD x-띠(키)
 
 ```python
 import matplotlib.pyplot as plt
@@ -142,7 +141,7 @@ axis.legend()
 plt.show()
 ```
 
-#### 2 SD y-Band (Weight)
+#### 2 SD y-띠(몸무게)
 
 ```python
 import matplotlib.pyplot as plt
@@ -183,13 +182,13 @@ axis.legend()
 plt.show()
 ```
 
-### The SD Line
+### SD 직선
 
-The **SD line** passes through the point of averages with slope $\pm \sigma_y / \sigma_x$. It connects points that are the same number of standard deviations away from the mean in both variables. When the correlation is positive, the positive SD line is more relevant; when negative, the negative SD line applies.
+**SD 직선**은 평균점을 지나며 기울기가 $\pm \sigma_y / \sigma_x$인 직선이다. 두 변수 모두에서 평균으로부터 같은 표준편차 배수만큼 떨어진 점들을 잇는다. 상관이 양수이면 양의 SD 직선이, 음수이면 음의 SD 직선이 의미를 갖는다.
 
-#### Positive SD Line
+#### 양의 SD 직선
 
-The positive SD line has slope $+\sigma_y / \sigma_x$. For every increase of $\sigma_x$ in height, weight increases by $\sigma_y$.
+양의 SD 직선은 기울기가 $+\sigma_y / \sigma_x$이다. 키가 $\sigma_x$만큼 늘어날 때마다 몸무게가 $\sigma_y$만큼 늘어난다.
 
 ```python
 import matplotlib.pyplot as plt
@@ -238,9 +237,9 @@ axis.legend(fontsize=15)
 plt.show()
 ```
 
-#### Negative SD Line
+#### 음의 SD 직선
 
-The negative SD line has slope $-\sigma_y / \sigma_x$. For every increase of $\sigma_x$ in height, weight *decreases* by $\sigma_y$.
+음의 SD 직선은 기울기가 $-\sigma_y / \sigma_x$이다. 키가 $\sigma_x$만큼 늘어날 때마다 몸무게가 $\sigma_y$만큼 *줄어든다*.
 
 ```python
 import matplotlib.pyplot as plt
@@ -288,9 +287,9 @@ axis.legend(fontsize=15)
 plt.show()
 ```
 
-### The Regression Line vs. the SD Line
+### 회귀직선과 SD 직선
 
-The **regression line** has slope $r \cdot \sigma_y / \sigma_x$, which is the SD line's slope multiplied by the correlation coefficient $r$. Since $|r| \leq 1$, the regression line is always flatter than (or equal to) the SD line. This flattening is the **regression effect** — predictions regress toward the mean.
+**회귀직선**의 기울기는 $r \cdot \sigma_y / \sigma_x$로, SD 직선의 기울기에 상관계수 $r$를 곱한 것이다. $|r| \leq 1$이므로 회귀직선은 항상 SD 직선보다 완만하거나 같다. 이 완만해짐이 곧 **회귀 효과**이며, 예측값이 평균 쪽으로 되돌아간다는 뜻이다.
 
 ```python
 import matplotlib.pyplot as plt
@@ -341,16 +340,16 @@ plt.show()
 
 ---
 
-## 2. The Two Regression Lines
+## 2. 두 개의 회귀직선
 
-There are two distinct regression lines depending on which variable is being predicted:
+어느 변수를 예측하느냐에 따라 서로 다른 두 개의 회귀직선이 있다.
 
-- **Regression of $Y$ on $X$** (predicting weight from height): $y = \alpha + \beta x$
-- **Regression of $X$ on $Y$** (predicting height from weight): $x = \alpha' + \beta' y$
+- **$Y$를 $X$에 회귀**(키로 몸무게 예측): $y = \alpha + \beta x$
+- **$X$를 $Y$에 회귀**(몸무게로 키 예측): $x = \alpha' + \beta' y$
 
-These two lines coincide only when $|r| = 1$ (perfect correlation). Otherwise they form a "V" shape opening around the point of averages.
+두 직선은 $|r| = 1$(완전상관)일 때만 일치한다. 그렇지 않으면 평균점 주위로 벌어지는 "V" 모양을 이룬다.
 
-### Both Regression Lines
+### 두 회귀직선을 함께 그리기
 
 ```python
 import matplotlib.pyplot as plt
@@ -418,8 +417,9 @@ axis.spines['right'].set_visible(False)
 plt.show()
 ```
 
-### Regression of Y on X with Vertical Strip
-Selecting a narrow vertical strip of data (at a fixed height value) and examining the average weight within that strip illustrates how the regression line predicts the conditional mean.
+### 세로 띠로 본 $Y$의 $X$에 대한 회귀
+
+(키 값을 고정한) 좁은 세로 띠를 골라 그 안의 평균 몸무게를 살펴보면, 회귀직선이 조건부 평균을 예측한다는 사실이 드러난다.
 
 ```python
 import matplotlib.pyplot as plt
@@ -475,8 +475,9 @@ axis.legend(fontsize=15)
 plt.show()
 ```
 
-### Regression of X on Y with Horizontal Strip
-Similarly, a horizontal strip at a fixed weight value shows the conditional mean of height.
+### 가로 띠로 본 $X$의 $Y$에 대한 회귀
+
+마찬가지로 몸무게 값을 고정한 가로 띠는 키의 조건부 평균을 보여준다.
 
 ```python
 import matplotlib.pyplot as plt
@@ -535,21 +536,21 @@ plt.show()
 
 ---
 
-## 3. Closed-Form Solution
+## 3. 닫힌 형태의 해
 
-[Reference: Khan Academy — Calculating the Equation of a Regression Line](https://www.khanacademy.org/math/ap-statistics/bivariate-data-ap/least-squares-regression/v/calculating-the-equation-of-a-regression-line)
+[참고: Khan Academy — Calculating the Equation of a Regression Line](https://www.khanacademy.org/math/ap-statistics/bivariate-data-ap/least-squares-regression/v/calculating-the-equation-of-a-regression-line)
 
-### L2 Loss
+### L2 손실
 
-The objective is to find parameters $\alpha$ and $\beta$ that minimize the mean squared error:
+목표는 평균제곱오차를 최소화하는 모수 $\alpha$와 $\beta$를 찾는 것이다.
 
 $$
 l = \frac{1}{n} \sum_{i=1}^n (\alpha + \beta x_i - y_i)^2
 $$
 
-### Normal Equations
+### 정규방정식
 
-Setting the partial derivatives to zero:
+편미분을 0으로 두면
 
 $$
 \begin{array}{lll}
@@ -562,9 +563,9 @@ $$
 \end{array}
 $$
 
-### Solution
+### 해
 
-Solving the normal equations yields:
+정규방정식을 풀면
 
 $$
 \begin{array}{lll}
@@ -579,9 +580,9 @@ $$
 \end{array}
 $$
 
-### Regression Line Equation
+### 회귀직선의 식
 
-Substituting back:
+다시 대입하면
 
 $$
 \begin{array}{lll}
@@ -591,21 +592,21 @@ y &=& \alpha + \beta x \\[4pt]
 \end{array}
 $$
 
-In standardized form:
+표준화된 형태로 쓰면
 
 $$
 \frac{y - \bar{y}}{\sigma_y} = \rho \frac{x - \bar{x}}{\sigma_x}
 $$
 
-This elegant result says: the predicted value of $y$ in standard units equals $r$ times the observed value of $x$ in standard units.
+이 우아한 결과가 말하는 바는 이렇다. 표준단위로 잰 $y$의 예측값은 표준단위로 잰 $x$의 관측값에 $r$를 곱한 것과 같다.
 
 ---
 
-## 4. Application: Linear Regression in Finance
+## 4. 응용: 금융에서의 선형회귀
 
-In finance, simple linear regression is used extensively to model the relationship between an individual asset's returns and a market benchmark's returns. The slope coefficient $\beta$ in this context is the **market beta** — a measure of systematic risk.
+금융에서는 개별 자산의 수익률과 시장 기준지수 수익률의 관계를 모형화하는 데 단순선형회귀를 널리 쓴다. 이 맥락에서 기울기 계수 $\beta$는 **시장 베타**로, 체계적 위험의 측도이다.
 
-### AAPL vs SPY Daily Returns
+### AAPL 대 SPY 일간 수익률
 
 ```python
 from sklearn.linear_model import LinearRegression
@@ -660,9 +661,12 @@ plt.tight_layout()
 plt.show()
 ```
 
-### WMT vs SPY Daily Returns
+!!! note "결과는 실행 시점에 따라 달라진다"
+    `yfinance`는 실시간 시장 자료를 내려받으므로 추정된 베타와 알파는 코드를 실행하는 날짜에 따라 달라진다. 여기서 중요한 것은 특정 수치가 아니라 절차이다.
 
-This example includes joint histograms to visualize the marginal distributions of both return series alongside the scatter plot and regression line.
+### WMT 대 SPY 일간 수익률
+
+이 예제는 산점도와 회귀직선 옆에 두 수익률 계열의 주변분포를 보여주는 결합 히스토그램을 함께 그린다.
 
 ```python
 import yfinance as yf
@@ -720,71 +724,89 @@ plt.tight_layout()
 plt.show()
 ```
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Statistical information on height and weight of 100 men sampled from a specific group:
+**연습문제 1.**
+어떤 집단에서 뽑은 남성 100명의 키와 몸무게에 대한 통계 정보:
 
-- **Height**: Mean = 173 cm, Standard Deviation = 6 cm
-- **Weight**: Mean = 70 kg, Standard Deviation = 7 kg
-- **Correlation between Height and Weight**: 0.59
+- **키**: 평균 = 173 cm, 표준편차 = 6 cm
+- **몸무게**: 평균 = 70 kg, 표준편차 = 7 kg
+- **키와 몸무게의 상관**: 0.59
 
-Since the sample size is large, use the normal distribution instead of the $t$-distribution.
+표본크기가 크므로 $t$ 분포 대신 정규분포를 쓴다.
 
-**(a)** What is the predicted weight of a man whose height is 179 cm?
+**(a)** 키가 179 cm인 남성의 예측 몸무게는 얼마인가?
 
-**(b)** Suppose the predicted weight obtained above represents the weight of a certain man. What is the predicted height of this man?
+**(b)** 위에서 얻은 예측 몸무게가 어떤 남성의 몸무게라고 하자. 이 남성의 예측 키는 얼마인가?
 
-**(c)** What is the 95% confidence interval for the mean predicted weight when the height is 179 cm?
+**(c)** 키가 179 cm일 때 평균 예측 몸무게에 대한 95% 신뢰구간은 얼마인가?
 
-**(d)** What is the 95% confidence interval for the predicted weight when the height is 179 cm?
+**(d)** 키가 179 cm일 때 예측 몸무게에 대한 95% 예측구간은 얼마인가?
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
 
-    **(a)** Predict the weight for a height of 179 cm:
+    **(a)** 키 179 cm에 대한 몸무게 예측:
+
+    $179 = 173 + 6$이므로 $X = \mu_X + \sigma_X$, 곧 표준단위로 $z_x = 1$이다. 표준화된 회귀식 $z_{\hat{y}} = r z_x$에서
 
     $$
     X = \mu_X + \sigma_X \quad \rightarrow \quad \hat{Y} = \mu_Y + r\sigma_Y = 70 + 0.59 \times 7 = 74.13
     $$
 
-    **(b)** Predict the height for a weight of 74.13 kg:
+    **(b)** 몸무게 74.13 kg에 대한 키 예측:
+
+    이제 $z_y = r = 0.59$이므로 $X$를 $Y$에 회귀시키면 $z_{\hat{x}} = r z_y = r^2$이다.
 
     $$
     Y = \mu_Y + r\sigma_Y \quad \rightarrow \quad \hat{X} = \mu_X + r^2\sigma_X = 173 + 0.59^2 \times 6 = 175.09
     $$
 
-    **(c)** 95% Confidence Interval for the Mean Predicted Weight:
+    출발점인 179 cm로 돌아오지 못하고 평균 쪽으로 되돌아온다는 점에 주목하라. 이것이 회귀 효과이다.
+
+    **(c)** 평균 예측 몸무게에 대한 95% 신뢰구간:
+
+    먼저 잔차 표준편차(회귀의 표준오차)를 구한다.
 
     $$
-    \hat{Y} \pm z_{0.025} \cdot SE(\hat{Y}) = (72.13, \; 76.13)
+    s_{Y \mid X} = \sigma_Y \sqrt{1 - r^2} = 7\sqrt{1 - 0.59^2} = 7 \times 0.8074 = 5.6518
     $$
 
-    where:
+    지렛대 항은 $\sum (X_i - \bar{X})^2 = (n-1)\sigma_X^2 = 99 \times 36 = 3564$이고 $(X - \bar{X})^2 = 36$이므로
 
     $$
-    SE(\hat{Y}) = s_Y \sqrt{\frac{1}{n} + \frac{(X - \bar{X})^2}{\sum (X_i - \bar{X})^2}}
+    h = \frac{1}{n} + \frac{(X - \bar{X})^2}{\sum (X_i - \bar{X})^2} = \frac{1}{100} + \frac{36}{3564} = 0.020101
     $$
 
-    **(d)** 95% Confidence Interval for the Predicted Weight:
-
     $$
-    \hat{Y} \pm z_{0.025} \cdot SE_{\text{prediction}} = (60.10, \; 88.16)
+    SE(\hat{Y}) = s_{Y \mid X} \sqrt{h} = 5.6518 \times 0.14178 = 0.8013
     $$
 
-    where:
+    $$
+    \hat{Y} \pm z_{0.025} \cdot SE(\hat{Y}) = 74.13 \pm 1.96 \times 0.8013 = (72.56, \; 75.70)
+    $$
+
+    **(d)** 예측 몸무게에 대한 95% 예측구간:
+
+    개별 관측값을 예측할 때는 오차항의 분산 $s_{Y \mid X}^2$이 추가로 더해진다.
 
     $$
-    SE_{\text{prediction}} = s_Y \sqrt{1 + \frac{1}{n} + \frac{(X - \bar{X})^2}{\sum (X_i - \bar{X})^2}}
+    SE_{\text{예측}} = s_{Y \mid X} \sqrt{1 + h} = 5.6518 \times \sqrt{1.020101} = 5.7083
     $$
+
+    $$
+    \hat{Y} \pm z_{0.025} \cdot SE_{\text{예측}} = 74.13 \pm 1.96 \times 5.7083 = (62.94, \; 85.32)
+    $$
+
+    예측구간이 신뢰구간보다 훨씬 넓다는 점에 주목하라. 폭의 비는 $\sqrt{(1+h)/h} = \sqrt{1.0201/0.0201} \approx 7.1$배이다. 평균을 추정하는 일과 개별 관측값을 예측하는 일은 정밀도가 전혀 다르다. $\square$
 
 ---
 
-**Exercise 2.**
-Use housing data and do the following:
+**연습문제 2.**
+주택 자료를 써서 다음을 하라.
 
-**(a)** Plot the regression line using $x = \text{df.median\_income}$ and $y = \text{df.median\_house\_value}$.
+**(a)** $x = \text{df.median\_income}$, $y = \text{df.median\_house\_value}$로 회귀직선을 그려라.
 
-**(b)** Compute the regression prediction of `median_house_value` when `median_income` is 8.
+**(b)** `median_income`이 8일 때 `median_house_value`의 회귀 예측값을 계산하라.
 
 ```python
 import os
@@ -818,7 +840,7 @@ if __name__ == "__main__":
     main()
 ```
 
-??? success "Solution to Exercise 2"
+??? success "연습문제 2 풀이"
 
     ```python
     import os
@@ -867,3 +889,5 @@ if __name__ == "__main__":
     if __name__ == "__main__":
         main()
     ```
+
+    (b)에서 적합된 직선은 `median_house_value = 45085.58 + 41793.85 * median_income`이므로 `median_income = 8`에서의 예측값은 379,436달러이다. 다만 이 자료의 `median_house_value`는 500,001에서 절단되어 있고(전체의 4.7%가 이 값이다) 그 때문에 고소득 구간에서 직선이 체계적으로 어긋난다는 점에 유의하라.

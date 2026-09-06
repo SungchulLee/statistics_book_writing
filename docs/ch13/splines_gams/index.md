@@ -1,71 +1,70 @@
-# Splines and Generalized Additive Models
+# 스플라인과 일반화가법모형
 
+## 개요
 
-## Overview
+[다항회귀](../interaction_polynomial/polynomial_regression.md)에서는 설명변수의 전 범위에 하나의 $d$차 다항식을 적합한다. 이 전역적 접근에는 근본적인 한계가 있다. 한 구역의 국소 곡률을 잡아내려고 차수를 높이면 다른 곳에서 원치 않는 진동이 생긴다(Runge 현상). 스플라인은 국소 구간마다 낮은 차수의 다항식을 적합하고 **매듭**이라 부르는 경계에서 매끄럽게 이어 붙임으로써 이를 극복한다. 일반화가법모형(GAM)은 이 아이디어를 여러 설명변수로 확장하여, 함수 형태를 미리 지정하지 않고 반응변수를 설명변수마다 하나씩의 매끄러운 함수를 더한 것으로 모형화한다.
 
-In [polynomial regression](../interaction_polynomial/polynomial_regression.md), a single polynomial of degree $d$ is fit to the entire range of a predictor. This global approach has a fundamental limitation: increasing the degree to capture local curvature in one region can introduce unwanted oscillations elsewhere (Runge's phenomenon). Splines overcome this by fitting low-degree polynomials within local intervals and joining them smoothly at boundaries called **knots**. Generalized Additive Models (GAMs) extend this idea to multiple predictors, modeling the response as an additive combination of smooth functions -- one for each predictor -- without specifying the functional form in advance.
+이 절은 이러한 유연한 비선형 회귀 방법의 수학적 토대와 실용적 사용법을 다룬다. 전체를 관통하는 핵심 발상은 적합과 매끄러움 사이의 절충이다. 매듭이 너무 적거나 벌점이 너무 크면 과소적합이 되고, 매듭이 너무 많거나 벌점이 너무 작으면 과대적합이 된다.
 
-This section covers the mathematical foundations and practical usage of these flexible non-linear regression methods. The key idea throughout is the trade-off between fit and smoothness: too few knots or too much penalization yields underfitting, while too many knots or too little penalization yields overfitting.
+## 내용
 
-## Contents
+이 절은 다음 페이지로 이루어진다.
 
-This section contains the following pages:
+- [**일반화가법모형**](generalized_additive_models.md) — 반응변수를 설명변수마다 하나씩의 매끄러운 함수의 합으로 모형화하고 벌점가능도로 추정하는 유연한 준모수 회귀
 
-- [**Generalized Additive Models**](generalized_additive_models.md) -- Flexible semi-parametric regression that models the response as a sum of smooth functions, one per predictor, estimated using penalized likelihood
+## 핵심 개념
 
-## Key Concepts
+### 기저함수
 
-### Basis Functions
-
-A spline of degree $d$ with $K$ knots is a linear combination of **basis functions**. The most common choice is the **B-spline basis**, which consists of local polynomial functions that are nonzero only over a small interval. A regression spline model takes the form:
+매듭이 $K$개인 $d$차 스플라인은 **기저함수**들의 선형결합이다. 가장 흔한 선택은 **B-스플라인 기저**로, 작은 구간에서만 0이 아닌 국소 다항함수들로 이루어진다. 회귀 스플라인 모형은 다음 형태를 갖는다.
 
 $$
 f(x) = \sum_{j=1}^{K+d+1} \beta_j B_j(x)
 $$
 
-where $B_j(x)$ are the B-spline basis functions. Because each $B_j$ is local, splines adapt to the data region by region without the global oscillation problems of high-degree polynomials.
+여기서 $B_j(x)$는 B-스플라인 기저함수이다. 각 $B_j$가 국소적이므로 스플라인은 고차 다항식의 전역적 진동 문제 없이 자료의 구역마다 적응한다.
 
-### Smoothing Penalty
+### 평활 벌점
 
-Regression splines with many knots can overfit the data. **Smoothing splines** address this by penalizing the roughness of the fitted curve. The objective function minimizes:
+매듭이 많은 회귀 스플라인은 자료를 과대적합할 수 있다. **평활 스플라인**은 적합된 곡선의 거칢에 벌점을 주어 이에 대처한다. 목적함수는 다음을 최소화한다.
 
 $$
 \sum_{i=1}^{n} (Y_i - f(x_i))^2 + \lambda \int [f''(x)]^2 \, dx
 $$
 
-The smoothing parameter $\lambda \geq 0$ controls the trade-off: $\lambda = 0$ interpolates the data, while $\lambda \to \infty$ forces $f$ toward a straight line. In practice, $\lambda$ is selected by cross-validation or generalized cross-validation (GCV).
+평활 모수 $\lambda \geq 0$이 절충을 조절한다. $\lambda = 0$이면 자료를 보간하고, $\lambda \to \infty$이면 $f$가 직선으로 밀려간다. 실무에서 $\lambda$는 교차검증이나 일반화 교차검증(GCV)으로 고른다.
 
-### Effective Degrees of Freedom
+### 유효 자유도
 
-The smoothing penalty means that the model's complexity is not simply the number of basis functions. The **effective degrees of freedom** (edf) quantifies the actual flexibility used:
+평활 벌점 때문에 모형의 복잡도는 단순히 기저함수의 개수가 아니다. **유효 자유도**(edf)는 실제로 쓰인 유연성을 수량화한다.
 
 $$
 \text{edf} = \operatorname{tr}(\mathbf{S})
 $$
 
-where $\mathbf{S}$ is the smoother (hat) matrix satisfying $\hat{\mathbf{f}} = \mathbf{S} \mathbf{Y}$. When $\lambda = 0$, $\text{edf}$ equals the number of basis functions (interpolation). When $\lambda \to \infty$, $\text{edf} \to 2$ (a straight line with intercept and slope). Intermediate values of $\lambda$ produce $\text{edf}$ between these extremes, providing a continuous measure of model complexity.
+여기서 $\mathbf{S}$는 $\hat{\mathbf{f}} = \mathbf{S} \mathbf{Y}$를 만족하는 평활자(모자) 행렬이다. $\lambda = 0$이면 $\text{edf}$는 기저함수의 개수와 같다(보간). $\lambda \to \infty$이면 $\text{edf} \to 2$가 된다(절편과 기울기를 갖는 직선). 그 사이의 $\lambda$ 값은 이 두 극단 사이의 $\text{edf}$를 주어 모형 복잡도의 연속적인 척도를 제공한다.
 
-### Additivity in GAMs
+### GAM의 가법성
 
-A GAM models the conditional mean as:
+GAM은 조건부 평균을 다음과 같이 모형화한다.
 
 $$
 g(\mathbb{E}[Y \mid X_1, \ldots, X_p]) = \alpha + \sum_{j=1}^{p} f_j(X_j)
 $$
 
-where $g$ is a link function and each $f_j$ is a smooth function estimated from the data. The **additivity** assumption means that each predictor's contribution to the response can be visualized and interpreted independently. This is more restrictive than allowing arbitrary interactions (which would require multivariate smooth functions) but far more flexible than assuming linearity.
+여기서 $g$는 연결함수이고 각 $f_j$는 자료에서 추정한 매끄러운 함수이다. **가법성** 가정은 각 설명변수가 반응변수에 기여하는 몫을 독립적으로 시각화하고 해석할 수 있다는 뜻이다. 임의의 교호작용(다변량 매끄러운 함수가 필요하다)을 허용하는 것보다는 제한적이지만 선형성을 가정하는 것보다는 훨씬 유연하다.
 
-## Practical Applications
+## 실제 응용
 
-- **Economics**: Modeling non-linear price-demand relationships using GAMs, where the effect of price on demand may flatten at extreme values
-- **Finance**: Capturing the volatility smile in options pricing with splines, where implied volatility varies non-linearly with strike price
-- **Medicine**: Estimating dose-response curves with smoothing splines, where the response plateaus at high doses
-- **Environmental science**: GAMs for assessing non-linear effects of multiple pollutant concentrations on health outcomes, with separate smooth functions for each pollutant
+- **경제학**: GAM으로 비선형 가격-수요 관계를 모형화한다. 극단적인 값에서는 가격이 수요에 미치는 효과가 평평해질 수 있다.
+- **금융**: 스플라인으로 옵션 가격의 변동성 스마일을 포착한다. 내재변동성이 행사가에 따라 비선형으로 변한다.
+- **의학**: 평활 스플라인으로 용량-반응 곡선을 추정한다. 고용량에서 반응이 정체된다.
+- **환경과학**: GAM으로 여러 오염물질 농도가 건강 결과에 미치는 비선형 효과를 평가한다. 오염물질마다 별도의 매끄러운 함수를 둔다.
 
-## Prerequisites
+## 선행 지식
 
-This section builds on:
+이 절은 다음 내용 위에 세워진다.
 
-- [Simple and multiple linear regression](../linear_regression/simple.md) -- the linear model that splines and GAMs generalize
-- [Polynomial regression](../interaction_polynomial/polynomial_regression.md) -- the global polynomial approach that motivates the piecewise construction of splines
-- [AIC and BIC](../model_selection/aic_bic.md) -- information criteria used for selecting the smoothing parameter and number of knots
+- [단순·다중선형회귀](../linear_regression/simple.md) — 스플라인과 GAM이 일반화하는 선형모형
+- [다항회귀](../interaction_polynomial/polynomial_regression.md) — 스플라인의 조각별 구성을 동기짓는 전역 다항식 접근
+- [AIC와 BIC](../model_selection/aic_bic.md) — 평활 모수와 매듭 개수를 고르는 데 쓰는 정보기준

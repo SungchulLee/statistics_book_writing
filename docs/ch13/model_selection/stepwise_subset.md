@@ -1,185 +1,185 @@
-# Stepwise and Best-Subset Selection
+# 단계적 선택과 최량 부분집합 선택
 
-When a regression problem involves many candidate predictors, we face the question of which subset to include in the final model. Trying every possible combination is the most thorough approach but becomes computationally infeasible as the number of predictors grows. Stepwise methods provide greedy alternatives that explore a manageable portion of the model space.
+회귀 문제에 후보 설명변수가 많으면 최종 모형에 어떤 부분집합을 넣을지 결정해야 한다. 가능한 모든 조합을 시도하는 것이 가장 철저하지만 설명변수가 늘어날수록 계산이 불가능해진다. 단계적 방법은 모형 공간의 관리 가능한 일부만 탐색하는 탐욕적 대안을 제공한다.
 
 ---
 
-## 1. Best-Subset Selection
+## 1. 최량 부분집합 선택
 
-**Best-subset selection** evaluates all possible subsets of the $p$ candidate predictors and selects the one that optimizes a given criterion.
+**최량 부분집합 선택**은 $p$개 후보 설명변수의 가능한 모든 부분집합을 평가하여 주어진 기준을 최적화하는 것을 고른다.
 
-### Algorithm
+### 알고리즘
 
-1. For each $k = 0, 1, \ldots, p$, fit all $\binom{p}{k}$ models that contain exactly $k$ predictors.
-2. Among the models of size $k$, identify the one with the smallest SSE (or equivalently, the largest $R^2$). Call this $\mathcal{M}_k$.
-3. Select the overall best model from $\mathcal{M}_0, \mathcal{M}_1, \ldots, \mathcal{M}_p$ using a criterion that penalizes complexity: adjusted $R^2$, AIC, BIC, or cross-validation error.
+1. 각 $k = 0, 1, \ldots, p$에 대해 정확히 $k$개의 설명변수를 담은 $\binom{p}{k}$개의 모형을 모두 적합한다.
+2. 크기가 $k$인 모형들 가운데 SSE가 가장 작은(동등하게 $R^2$가 가장 큰) 것을 찾아 $\mathcal{M}_k$라 한다.
+3. 복잡도에 벌점을 주는 기준(수정 $R^2$, AIC, BIC, 교차검증 오차)으로 $\mathcal{M}_0, \mathcal{M}_1, \ldots, \mathcal{M}_p$ 가운데 전체 최선 모형을 고른다.
 
-### Computational Cost
+### 계산 비용
 
-The total number of models to fit is:
+적합해야 할 모형의 총 개수는
 
 $$
 \sum_{k=0}^{p} \binom{p}{k} = 2^p
 $$
 
-This grows exponentially. For $p = 10$ there are $2^{10} = 1{,}024$ models, which is manageable. For $p = 20$ there are over one million. For $p = 40$ there are over one trillion, making exhaustive search impractical.
+이는 지수적으로 늘어난다. $p = 10$이면 $2^{10} = 1{,}024$개로 감당할 만하다. $p = 20$이면 백만 개를 넘고, $p = 40$이면 1조 개를 넘어 전수 탐색이 비현실적이 된다.
 
-!!! warning "Best subset is infeasible for large $p$"
-    Best-subset selection is generally limited to problems with $p \leq 20$ or so. For larger predictor sets, stepwise methods or regularization approaches (ridge, lasso, elastic net) are necessary.
+!!! warning "$p$가 크면 최량 부분집합은 불가능하다"
+    최량 부분집합 선택은 보통 $p \leq 20$ 정도의 문제로 제한된다. 설명변수 집합이 더 크면 단계적 방법이나 정칙화 접근(릿지, 라쏘, 엘라스틱넷)이 필요하다.
 
 ---
 
-## 2. Forward Stepwise Selection
+## 2. 전진 단계적 선택
 
-**Forward stepwise selection** builds a model by starting from the intercept-only model and adding one predictor at a time.
+**전진 단계적 선택**은 절편만 있는 모형에서 시작하여 설명변수를 하나씩 더해 나간다.
 
-### Algorithm
+### 알고리즘
 
-1. Let $\mathcal{M}_0$ be the intercept-only model (no predictors).
-2. For $k = 0, 1, \ldots, p-1$:
-    - Consider all $p - k$ predictors not yet in the model.
-    - Add the predictor that produces the greatest reduction in SSE (or equivalently, the highest partial F-statistic or lowest p-value).
-    - Call the resulting model $\mathcal{M}_{k+1}$.
-3. Select the best model from $\mathcal{M}_0, \mathcal{M}_1, \ldots, \mathcal{M}_p$ using adjusted $R^2$, AIC, BIC, or cross-validation.
+1. $\mathcal{M}_0$을 절편만 있는 모형(설명변수 없음)이라 한다.
+2. $k = 0, 1, \ldots, p-1$에 대해:
+    - 아직 모형에 없는 $p - k$개의 설명변수를 모두 고려한다.
+    - SSE를 가장 크게 줄이는(동등하게 부분 F 통계량이 가장 크거나 p값이 가장 작은) 설명변수를 넣는다.
+    - 그 결과 모형을 $\mathcal{M}_{k+1}$이라 한다.
+3. 수정 $R^2$, AIC, BIC, 교차검증으로 $\mathcal{M}_0, \mathcal{M}_1, \ldots, \mathcal{M}_p$ 가운데 최선 모형을 고른다.
 
-### Computational Cost
+### 계산 비용
 
-At step $k$, forward selection fits $p - k$ models. The total is:
+단계 $k$에서 전진 선택은 $p - k$개의 모형을 적합한다. 총합은
 
 $$
 \sum_{k=0}^{p-1} (p - k) = \frac{p(p+1)}{2}
 $$
 
-This is $O(p^2)$, far smaller than the $2^p$ models in best-subset selection. For $p = 20$, forward selection fits only 210 models versus over one million for best subset.
+$O(p^2)$이므로 최량 부분집합의 $2^p$보다 훨씬 작다. $p = 20$이면 전진 선택은 210개 모형만 적합하지만 최량 부분집합은 백만 개가 넘는다.
 
-### Limitation
+### 한계
 
-Forward selection is a greedy algorithm. Once a predictor enters the model, it stays forever. This means forward selection cannot find the best two-predictor model if neither of those predictors is the single best predictor. It explores only a path through the model space, not the full space.
-
----
-
-## 3. Backward Stepwise Selection
-
-**Backward stepwise selection** starts from the full model and removes one predictor at a time.
-
-### Algorithm
-
-1. Let $\mathcal{M}_p$ be the full model containing all $p$ predictors.
-2. For $k = p, p-1, \ldots, 1$:
-    - Consider removing each of the $k$ predictors currently in the model.
-    - Remove the predictor whose removal causes the smallest increase in SSE (or equivalently, the lowest partial F-statistic or highest p-value).
-    - Call the resulting model $\mathcal{M}_{k-1}$.
-3. Select the best model from $\mathcal{M}_0, \mathcal{M}_1, \ldots, \mathcal{M}_p$ using a complexity-penalized criterion.
-
-### Computational Cost
-
-The total number of models fit is the same as forward selection: $p(p+1)/2$.
-
-### Limitation
-
-Backward selection requires $n > p$ because the full model cannot be fit when there are more predictors than observations. Forward selection does not have this restriction, making it applicable even in high-dimensional settings ($p > n$) as long as the algorithm stops before exceeding $n$ predictors.
+전진 선택은 탐욕적 알고리즘이다. 한번 모형에 들어간 설명변수는 영원히 남는다. 곧 최선의 두 변수 모형에 포함된 변수 가운데 어느 것도 단독으로 최선이 아니라면 전진 선택은 그 모형을 찾아내지 못한다. 모형 공간 전체가 아니라 그 안의 한 경로만 탐색하기 때문이다.
 
 ---
 
-## 4. Hybrid Approaches
+## 3. 후진 단계적 선택
 
-Some implementations combine forward and backward steps:
+**후진 단계적 선택**은 완전모형에서 시작하여 설명변수를 하나씩 뺀다.
 
-- **Stepwise regression** (bidirectional): At each step, the algorithm considers both adding a new predictor and removing an existing one. A predictor that was added in an earlier step can be removed later if it becomes redundant in the presence of other predictors. This increases flexibility relative to pure forward or backward selection.
+### 알고리즘
 
-- **Sequential replacement**: After completing forward selection, the algorithm attempts to swap each included predictor with each excluded predictor, keeping any swap that improves the criterion.
+1. $\mathcal{M}_p$를 $p$개 설명변수를 모두 담은 완전모형이라 한다.
+2. $k = p, p-1, \ldots, 1$에 대해:
+    - 현재 모형에 있는 $k$개 설명변수를 각각 빼 보는 것을 고려한다.
+    - 뺐을 때 SSE 증가가 가장 작은(동등하게 부분 F 통계량이 가장 작거나 p값이 가장 큰) 설명변수를 뺀다.
+    - 그 결과 모형을 $\mathcal{M}_{k-1}$이라 한다.
+3. 복잡도에 벌점을 주는 기준으로 $\mathcal{M}_0, \mathcal{M}_1, \ldots, \mathcal{M}_p$ 가운데 최선 모형을 고른다.
+
+### 계산 비용
+
+적합하는 모형의 총 개수는 전진 선택과 같은 $p(p+1)/2$이다.
+
+### 한계
+
+후진 선택은 $n > p$를 요구한다. 관측값보다 설명변수가 많으면 완전모형을 적합할 수 없기 때문이다. 전진 선택에는 이런 제약이 없어 고차원 상황($p > n$)에서도, 알고리즘이 설명변수 $n$개를 넘기 전에 멈추기만 하면 적용할 수 있다.
 
 ---
 
-## 5. Selection Criteria
+## 4. 혼합 접근
 
-The choice of criterion in step 3 of each algorithm matters significantly:
+전진과 후진 단계를 결합하는 구현도 있다.
 
-| Criterion | Formula | Tendency |
+- **단계적 회귀**(양방향): 각 단계에서 새 설명변수를 넣는 것과 기존 설명변수를 빼는 것을 모두 고려한다. 앞 단계에서 들어온 설명변수도 다른 변수들이 들어온 뒤 중복이 되면 나중에 빠질 수 있다. 순수한 전진이나 후진보다 유연성이 커진다.
+
+- **순차 교체**: 전진 선택을 마친 뒤, 포함된 설명변수 각각을 제외된 설명변수 각각과 바꿔 보고 기준이 좋아지는 교체를 채택한다.
+
+---
+
+## 5. 선택 기준
+
+각 알고리즘의 3단계에서 어떤 기준을 쓰느냐가 결과에 큰 영향을 준다.
+
+| 기준 | 공식 | 경향 |
 |-----------|---------|----------|
-| Adjusted $R^2$ | $1 - \frac{\text{SSE}/(n-p-1)}{\text{SST}/(n-1)}$ | Moderate complexity |
-| AIC | $2k + n\ln(\text{SSE}/n)$ | Prediction-oriented |
-| BIC | $k\ln n + n\ln(\text{SSE}/n)$ | Parsimonious |
-| CV error | $\text{CV}_{(K)}$ | Direct estimate of prediction error |
+| 수정 $R^2$ | $1 - \frac{\text{SSE}/(n-p-1)}{\text{SST}/(n-1)}$ | 중간 정도의 복잡도 |
+| AIC | $2k + n\ln(\text{SSE}/n)$ | 예측 지향 |
+| BIC | $k\ln n + n\ln(\text{SSE}/n)$ | 절약적 |
+| 교차검증 오차 | $\text{CV}_{(K)}$ | 예측오차의 직접 추정 |
 
-Using SSE or $R^2$ alone (without a complexity penalty) always selects the largest model, which defeats the purpose of variable selection.
-
----
-
-## 6. Critique of Stepwise Methods
-
-Stepwise methods remain widely used in practice, but they have well-known drawbacks.
-
-**P-value inflation**: When many predictors are tested sequentially, the chance of including a spurious predictor by chance increases. The p-values from the final stepwise model are overly optimistic because they do not account for the search process that led to that model.
-
-**Instability**: Small changes in the data can lead to very different selected models. A predictor that narrowly enters the model in one dataset may be excluded in a slightly perturbed version of the same data.
-
-**Biased coefficients**: Coefficients in the selected model are biased away from zero because the selection process preferentially retains predictors with large estimated effects, some of which are large by chance.
-
-**Ignoring multicollinearity**: Stepwise methods do not explicitly handle correlated predictors. When two predictors are highly correlated, the method may arbitrarily include one and exclude the other, even though both carry similar information.
-
-!!! note "Modern alternatives"
-    Regularization methods (ridge, lasso, elastic net) address many of these criticisms by shrinking coefficients toward zero rather than performing hard inclusion/exclusion decisions. Lasso in particular performs variable selection as a byproduct of its $\ell_1$ penalty, providing a principled alternative to stepwise methods.
-
-## Exercises
-
-**Exercise 1.**
-Describe the difference between forward selection, backward elimination, and best-subset selection. Which is computationally most expensive?
-
-??? success "Solution to Exercise 1"
-    **Forward selection** starts with no predictors and adds one at a time, choosing at each step the predictor that most improves the model (e.g., largest reduction in AIC). It stops when no addition improves the criterion.
-
-    **Backward elimination** starts with all predictors and removes one at a time, choosing the predictor whose removal least degrades the model. It stops when every remaining predictor is significant or contributes to the criterion.
-
-    **Best-subset selection** evaluates all $2^p$ possible subsets of $p$ predictors and selects the best model of each size, then uses a criterion (AIC, BIC, adjusted $R^2$) to choose among sizes.
-
-    Best-subset is by far the most expensive: $2^p$ models must be fitted. With $p = 20$, that is over 1 million models. Forward and backward selection fit at most $O(p^2)$ models, making them feasible for larger $p$. However, stepwise methods may miss the globally best subset because they are greedy.
+복잡도 벌점 없이 SSE나 $R^2$만 쓰면 언제나 가장 큰 모형이 선택되어 변수선택의 목적이 무너진다.
 
 ---
 
-**Exercise 2.**
-Explain why stepwise selection can inflate Type I error rates and produce overfit models if p-values are not adjusted.
+## 6. 단계적 방법에 대한 비판
 
-??? success "Solution to Exercise 2"
-    At each step, stepwise selection tests multiple candidate predictors and selects the one with the smallest p-value (or largest improvement). This is a form of multiple testing: even if all predictors are truly unrelated to the response, the best among $p$ candidates is likely to have a small p-value by chance.
+단계적 방법은 실무에서 여전히 널리 쓰이지만 잘 알려진 결함이 있다.
 
-    The resulting p-values are not valid for inference because they do not account for the search process. A predictor that enters the model with $p = 0.03$ may have been selected from 20 candidates, making the true significance level much higher. Additionally, the model selected by stepwise methods tends to overfit training data because it was optimized to that specific dataset.
+**p값 부풀림**: 설명변수를 순차적으로 여럿 검정하면 우연히 허위 설명변수가 포함될 가능성이 커진다. 최종 단계적 모형의 p값은 그 모형에 이르게 한 탐색 과정을 반영하지 않으므로 지나치게 낙관적이다.
 
-    Remedies include: using information criteria (AIC, BIC) instead of p-values, cross-validation for final model assessment, and regularization methods (LASSO) that simultaneously select variables and shrink coefficients.
+**불안정성**: 자료가 조금만 달라져도 선택되는 모형이 크게 달라질 수 있다. 어떤 자료에서 아슬아슬하게 들어온 설명변수가 조금 흔들린 같은 자료에서는 제외될 수 있다.
+
+**편향된 계수**: 선택된 모형의 계수는 0에서 멀어지는 쪽으로 편향된다. 선택 과정이 추정된 효과가 큰 설명변수를 우선적으로 남기는데, 그중 일부는 우연히 커진 것이기 때문이다.
+
+**다중공선성 무시**: 단계적 방법은 상관된 설명변수를 명시적으로 다루지 않는다. 두 설명변수가 강하게 상관되어 있으면 둘이 비슷한 정보를 담고 있는데도 임의로 하나만 넣고 다른 하나를 뺄 수 있다.
+
+!!! note "현대적 대안"
+    정칙화 방법(릿지, 라쏘, 엘라스틱넷)은 포함/배제라는 이분법적 결정 대신 계수를 0 쪽으로 축소하여 이 비판들 상당수에 대처한다. 특히 라쏘는 $\ell_1$ 벌점의 부산물로 변수선택을 수행하여 단계적 방법의 원칙 있는 대안이 된다.
+
+## 연습문제
+
+**연습문제 1.**
+전진 선택, 후진 소거, 최량 부분집합 선택의 차이를 기술하라. 계산 비용이 가장 큰 것은 무엇인가?
+
+??? success "연습문제 1 풀이"
+    **전진 선택**은 설명변수 없이 시작하여 하나씩 더하며, 각 단계에서 모형을 가장 크게 개선하는(예: AIC를 가장 크게 낮추는) 설명변수를 고른다. 어떤 추가도 기준을 개선하지 못하면 멈춘다.
+
+    **후진 소거**는 모든 설명변수로 시작하여 하나씩 빼며, 뺐을 때 모형이 가장 덜 나빠지는 설명변수를 고른다. 남은 설명변수가 모두 유의하거나 기준에 기여할 때 멈춘다.
+
+    **최량 부분집합 선택**은 $p$개 설명변수의 가능한 $2^p$개 부분집합을 모두 평가하여 크기별 최선 모형을 찾고, 기준(AIC, BIC, 수정 $R^2$)으로 크기들 사이에서 고른다.
+
+    최량 부분집합이 압도적으로 비싸다. $2^p$개의 모형을 적합해야 하며, $p = 20$이면 백만 개가 넘는다. 전진과 후진 선택은 최대 $O(p^2)$개의 모형만 적합하므로 더 큰 $p$에서도 실행 가능하다. 다만 단계적 방법은 탐욕적이므로 전역 최선 부분집합을 놓칠 수 있다.
 
 ---
 
-**Exercise 3.**
-With $p = 5$ predictors, how many models must best-subset selection evaluate? List all possible model sizes.
+**연습문제 2.**
+p값을 조정하지 않으면 단계적 선택이 왜 제1종 오류율을 부풀리고 과대적합된 모형을 만들어 내는지 설명하라.
 
-??? success "Solution to Exercise 3"
-    With $p = 5$ predictors, the total number of subsets is $2^5 = 32$ (including the null model with no predictors).
+??? success "연습문제 2 풀이"
+    각 단계에서 단계적 선택은 여러 후보 설명변수를 검정하고 p값이 가장 작은(또는 개선이 가장 큰) 것을 고른다. 이는 다중검정의 한 형태이다. 모든 설명변수가 실제로는 반응변수와 무관하더라도 $p$개 후보 가운데 가장 좋은 것은 우연히 작은 p값을 가질 가능성이 높다.
 
-    Models by size:
+    그렇게 얻은 p값은 탐색 과정을 반영하지 않으므로 추론에 쓸 수 없다. $p = 0.03$으로 모형에 들어온 설명변수가 후보 20개 가운데 선택된 것이라면 실제 유의수준은 훨씬 높다. 게다가 단계적 방법이 고른 모형은 그 특정 자료에 최적화되었으므로 훈련자료를 과대적합하는 경향이 있다.
 
-    - Size 0 (intercept only): $\binom{5}{0} = 1$ model
-    - Size 1: $\binom{5}{1} = 5$ models
-    - Size 2: $\binom{5}{2} = 10$ models
-    - Size 3: $\binom{5}{3} = 10$ models
-    - Size 4: $\binom{5}{4} = 5$ models
-    - Size 5 (full model): $\binom{5}{5} = 1$ model
-
-    Total: $1 + 5 + 10 + 10 + 5 + 1 = 32$ models. Best-subset selection finds the best model at each size (6 candidates), then uses AIC/BIC/CV to select among the 6.
+    대책으로는 p값 대신 정보기준(AIC, BIC) 사용, 최종 모형 평가를 위한 교차검증, 변수선택과 계수 축소를 동시에 수행하는 정칙화 방법(LASSO)이 있다.
 
 ---
 
-**Exercise 4.**
-Compare LASSO variable selection with stepwise selection. Why is LASSO generally preferred in modern practice?
+**연습문제 3.**
+설명변수가 $p = 5$개일 때 최량 부분집합 선택은 몇 개의 모형을 평가해야 하는가? 가능한 모형 크기를 모두 나열하라.
 
-??? success "Solution to Exercise 4"
-    **LASSO** adds an $L_1$ penalty to the regression objective, shrinking some coefficients exactly to zero and thereby performing variable selection and estimation simultaneously. The regularization parameter $\lambda$ controls the trade-off between fit and sparsity.
+??? success "연습문제 3 풀이"
+    설명변수가 $p = 5$개면 부분집합의 총 개수는 $2^5 = 32$개이다(설명변수가 없는 영모형 포함).
 
-    **Advantages of LASSO over stepwise:**
+    크기별 모형 수:
 
-    1. **Continuous path:** LASSO produces a continuous path of models as $\lambda$ varies, avoiding the discrete, greedy decisions of stepwise methods.
-    2. **Shrinkage:** Non-selected coefficients are shrunk toward zero, reducing overfitting even for included predictors.
-    3. **Valid inference:** Post-selection inference methods exist for LASSO (e.g., selective inference). Stepwise p-values are invalid without correction.
-    4. **Scalability:** LASSO handles $p > n$ (more predictors than observations), where stepwise methods fail.
-    5. **Cross-validation integration:** $\lambda$ is chosen by CV, providing an honest estimate of test error.
+    - 크기 0(절편만): $\binom{5}{0} = 1$개
+    - 크기 1: $\binom{5}{1} = 5$개
+    - 크기 2: $\binom{5}{2} = 10$개
+    - 크기 3: $\binom{5}{3} = 10$개
+    - 크기 4: $\binom{5}{4} = 5$개
+    - 크기 5(완전모형): $\binom{5}{5} = 1$개
 
-    Stepwise methods remain useful when interpretability of each selection step is desired or when computational resources for regularization paths are limited.
+    합계: $1 + 5 + 10 + 10 + 5 + 1 = 32$개. 최량 부분집합 선택은 각 크기의 최선 모형(후보 6개)을 찾은 뒤 AIC/BIC/교차검증으로 그 6개 가운데 고른다.
+
+---
+
+**연습문제 4.**
+LASSO의 변수선택과 단계적 선택을 비교하라. 현대 실무에서 LASSO가 일반적으로 선호되는 이유는 무엇인가?
+
+??? success "연습문제 4 풀이"
+    **LASSO**는 회귀 목적함수에 $L_1$ 벌점을 더해 일부 계수를 정확히 0으로 축소함으로써 변수선택과 추정을 동시에 수행한다. 정칙화 모수 $\lambda$가 적합과 희소성 사이의 절충을 조절한다.
+
+    **단계적 방법에 대한 LASSO의 장점:**
+
+    1. **연속적인 경로:** $\lambda$가 변함에 따라 LASSO는 모형들의 연속적인 경로를 만들어, 단계적 방법의 이산적이고 탐욕적인 결정을 피한다.
+    2. **축소:** 선택된 설명변수의 계수도 0 쪽으로 축소되어 과대적합이 줄어든다.
+    3. **타당한 추론:** LASSO에 대해서는 선택 후 추론 방법(예: 선택적 추론)이 존재한다. 단계적 p값은 보정 없이는 타당하지 않다.
+    4. **확장성:** LASSO는 $p > n$(관측값보다 설명변수가 많은 경우)을 다룰 수 있다. 이 상황에서 후진 소거는 완전모형을 적합할 수 없어 아예 쓸 수 없다.
+    5. **교차검증과의 통합:** $\lambda$를 교차검증으로 고르므로 검정오차의 정직한 추정값을 함께 얻는다.
+
+    단계적 방법은 각 선택 단계의 해석 가능성이 중요하거나 정칙화 경로를 계산할 자원이 제한적일 때 여전히 쓸모가 있다.

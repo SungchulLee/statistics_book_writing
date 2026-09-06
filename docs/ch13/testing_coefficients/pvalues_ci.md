@@ -1,124 +1,128 @@
-# Understanding p-values and Confidence Intervals for Coefficients
+# 계수의 p값과 신뢰구간 이해하기
 
-
-In linear regression analysis, understanding **p-values** and **confidence intervals** is essential for interpreting the significance and precision of regression coefficients. These statistical measures provide insight into how strongly the predictors influence the dependent variable and the uncertainty associated with the estimated effects.
-
----
-
-## p-values in Linear Regression
-
-The p-value represents the probability that the observed relationship between a predictor and the dependent variable is due to random chance, assuming the null hypothesis is true.
-
-The hypotheses are:
-
-- **Null Hypothesis ($H_0$):** $\beta_i = 0$ — the predictor $X_i$ has no effect on the outcome $Y$.
-- **Alternative Hypothesis ($H_1$):** $\beta_i \neq 0$ — the predictor $X_i$ has a significant effect on $Y$.
-
-When we perform a t-test for each coefficient, the t-statistic computed from $\hat{\beta}_i$ and its standard error yields the p-value, which assesses statistical significance.
-
-- **Low p-value (< 0.05):** Reject $H_0$. The predictor is statistically significant and contributes to explaining variation in the dependent variable.
-- **High p-value ($\geq$ 0.05):** Fail to reject $H_0$. The predictor is not statistically significant and may not contribute much to the model.
+선형회귀 분석에서 **p값**과 **신뢰구간**을 이해하는 일은 회귀계수의 유의성과 정밀도를 해석하는 데 필수적이다. 이 통계량들은 설명변수가 종속변수에 얼마나 강하게 영향을 주는지, 그리고 추정된 효과에 어느 정도 불확실성이 따르는지를 알려준다.
 
 ---
 
-## Example: p-value Interpretation
+## 선형회귀의 p값
 
-Consider a regression model predicting house prices based on the number of bedrooms, lot size, and age of the house:
+p값은 귀무가설이 참이라고 가정했을 때, 설명변수와 종속변수 사이에서 관측된 관계가 우연으로 나타날 확률이다.
 
-| Predictor | p-value | Conclusion |
+가설은 다음과 같다.
+
+- **귀무가설 ($H_0$):** $\beta_i = 0$ — 설명변수 $X_i$는 결과 $Y$에 효과가 없다.
+- **대립가설 ($H_1$):** $\beta_i \neq 0$ — 설명변수 $X_i$는 $Y$에 유의한 효과가 있다.
+
+각 계수에 대해 t-검정을 수행하면 $\hat{\beta}_i$와 그 표준오차로 계산한 t 통계량에서 p값이 나오고, 이 p값이 통계적 유의성을 판정한다.
+
+- **작은 p값 (< 0.05):** $H_0$을 기각한다. 그 설명변수는 통계적으로 유의하며 종속변수의 변동을 설명하는 데 기여한다.
+- **큰 p값 ($\geq$ 0.05):** $H_0$을 기각하지 못한다. 그 설명변수는 통계적으로 유의하지 않으며 모형에 크게 기여하지 않을 수 있다.
+
+---
+
+## 예제: p값의 해석
+
+침실 수, 대지 면적, 주택 연식으로 집값을 예측하는 회귀모형을 생각하자.
+
+| 설명변수 | p값 | 결론 |
 |-----------|---------|------------|
-| Age of the house | 0.02 | Significant at 0.05 level — age is a significant predictor of house prices |
-| Lot size | 0.25 | Not significant at 0.05 level — lot size may not strongly influence house prices in this model |
+| 주택 연식 | 0.02 | 0.05 수준에서 유의 — 연식은 집값의 유의한 설명변수이다 |
+| 대지 면적 | 0.25 | 0.05 수준에서 유의하지 않음 — 이 모형에서 대지 면적은 집값에 큰 영향을 주지 않을 수 있다 |
 
 ---
 
-## Confidence Intervals for Coefficients
+## 계수의 신뢰구간
 
-**Confidence intervals** provide a range of values within which we expect the true population coefficient to lie, based on the sample data. While p-values offer a binary decision, confidence intervals convey the precision of the estimate.
+**신뢰구간**은 표본자료에 근거하여 참 모집단 계수가 놓일 것으로 기대되는 값의 범위를 제공한다. p값이 이분법적 판정을 준다면, 신뢰구간은 추정의 정밀도를 전달한다.
 
-A **95% confidence interval** means that if we were to take 100 different samples and compute 100 confidence intervals, approximately 95 would contain the true coefficient value.
+**95% 신뢰구간**은, 서로 다른 표본 100개를 뽑아 신뢰구간 100개를 만들면 그 가운데 약 95개가 참 계수값을 포함한다는 뜻이다.
 
-The formula for a 95% CI:
+95% 신뢰구간의 공식은
 
 $$
 CI = \hat{\beta}_i \pm \left( t_{\alpha/2} \times SE(\hat{\beta}_i) \right)
 $$
 
-where:
+여기서
 
-- $\hat{\beta}_i$ is the estimated regression coefficient,
-- $SE(\hat{\beta}_i)$ is the standard error of the estimate,
-- $t_{\alpha/2}$ is the critical value from the t-distribution at the 95% confidence level.
+- $\hat{\beta}_i$는 추정된 회귀계수,
+- $SE(\hat{\beta}_i)$는 추정값의 표준오차,
+- $t_{\alpha/2}$는 95% 신뢰수준에서 t 분포의 임계값이다.
 
-**Key interpretation rules:**
+**해석의 핵심 규칙:**
 
-- If the CI **contains 0**, the predictor may not be significantly different from zero — its effect is uncertain.
-- If the CI **excludes 0**, the predictor likely has a significant effect on the outcome.
+- 신뢰구간이 **0을 포함하면** 그 설명변수는 0과 유의하게 다르지 않을 수 있다. 효과가 불확실하다.
+- 신뢰구간이 **0을 배제하면** 그 설명변수는 결과에 유의한 효과를 가질 가능성이 높다.
 
 ---
 
-## Example: Confidence Interval Interpretation
+## 예제: 신뢰구간의 해석
 
-Consider a regression model predicting salary:
+연봉을 예측하는 회귀모형을 생각하자.
 
-| Predictor | $\hat{\beta}$ | 95% CI | Interpretation |
+| 설명변수 | $\hat{\beta}$ | 95% 신뢰구간 | 해석 |
 |-----------|---------------|--------|----------------|
-| Years of education | 2.5 | (1.2, 3.8) | Significant — CI excludes 0. The true effect lies between 1.2 and 3.8. |
-| Industry experience | 0.55 | (−0.4, 1.5) | Uncertain — CI includes 0. May not be an important predictor. |
+| 교육 연수 | 2.5 | (1.2, 3.8) | 유의함 — 구간이 0을 배제한다. 참 효과는 1.2와 3.8 사이에 있다. |
+| 업계 경력 | 0.55 | (−0.4, 1.5) | 불확실함 — 구간이 0을 포함한다. 중요한 설명변수가 아닐 수 있다. |
 
 ---
 
-## Relationship Between p-values and Confidence Intervals
+## p값과 신뢰구간의 관계
 
-p-values and confidence intervals are closely related and generally lead to the same conclusion:
+p값과 신뢰구간은 밀접하게 관련되어 있고 일반적으로 같은 결론에 이른다.
 
-- If the **p-value < 0.05**, the corresponding 95% CI will **exclude 0** — the predictor is significant.
-- If the **p-value $\geq$ 0.05**, the 95% CI will likely **include 0** — the predictor is not significant.
+- **p값 < 0.05**이면 대응하는 95% 신뢰구간은 **0을 배제한다** — 그 설명변수는 유의하다.
+- **p값 $\geq$ 0.05**이면 95% 신뢰구간은 **0을 포함한다** — 그 설명변수는 유의하지 않다.
 
-Both measures should be used together to understand not only statistical significance but also the practical significance and uncertainty of the predictor's effect.
+두 척도를 함께 써야 통계적 유의성뿐 아니라 설명변수 효과의 실질적 유의성과 불확실성까지 이해할 수 있다.
 
-!!! tip "Best Practice"
-    Report both p-values and confidence intervals. The p-value tells you *whether* an effect exists; the confidence interval tells you *how large* the effect might be and how precisely it is estimated.
+!!! tip "권장 실무"
+    p값과 신뢰구간을 모두 보고하라. p값은 효과가 존재하는지*를* 알려주고, 신뢰구간은 그 효과가 *얼마나 큰지*와 얼마나 정밀하게 추정되었는지를 알려준다.
 
 ---
 
-## Practical Interpretation
+## 실전 해석
 
-Suppose a regression output provides the following for the predictor "advertising budget":
+"광고 예산"이라는 설명변수에 대해 회귀 출력이 다음을 준다고 하자.
 
-| Metric | Value |
+| 지표 | 값 |
 |--------|-------|
-| Coefficient | 2.4 |
-| p-value | 0.001 |
-| 95% CI | (1.9, 2.9) |
+| 계수 | 2.4 |
+| p값 | 0.001 |
+| 95% 신뢰구간 | (1.9, 2.9) |
 
-**Interpretation:** Advertising budget has a significant positive impact on sales, with a very low probability (0.001) that the observed effect is due to chance. We are 95% confident that the true effect lies between 1.9 and 2.9 units of sales per unit increase in advertising budget.
-
----
-
-## Summary
-
-Understanding p-values and confidence intervals for regression coefficients is crucial for informed decision-making. p-values assess whether a predictor is statistically significant, while confidence intervals provide a measure of precision and uncertainty. Together, these tools guide researchers and analysts in evaluating the strength and reliability of the model's findings.
-## Exercises
-
-**Exercise 1.**
-A regression coefficient has $\hat{\beta}_1 = 4.2$, $\text{SE} = 1.5$, and $p = 0.008$ (two-sided). Construct the 99% confidence interval and explain why the p-value and CI convey the same information.
-
-??? success "Solution to Exercise 1"
-    With $p = 0.008 < 0.01$, the coefficient is significant at the 1% level, so the 99% CI should not contain zero. Using $t_{0.005, df} \approx 2.807$ (for large $df$):
-
-    $$
-    \hat{\beta}_1 \pm t_{0.005} \times \text{SE} = 4.2 \pm 2.807 \times 1.5 = 4.2 \pm 4.211 = (-0.011, 8.411)
-    $$
-
-    This barely includes zero, consistent with $p = 0.008$ being close to 0.01. The p-value and CI convey the same information: the p-value is the smallest $\alpha$ for which the $(1-\alpha)$ CI excludes zero. Since $p = 0.008$, the 99.2% CI is the narrowest interval that still excludes zero.
+**해석:** 광고 예산은 매출에 유의한 양의 영향을 준다. 관측된 효과가 우연 때문일 확률은 0.001로 매우 낮다. 광고 예산이 한 단위 늘어날 때 매출에 미치는 참 효과가 1.9와 2.9 단위 사이에 있다고 95% 신뢰한다.
 
 ---
 
-**Exercise 2.**
-A research paper reports "the effect of treatment was statistically significant ($p = 0.04$)" but does not report the coefficient estimate or confidence interval. Explain why this reporting is incomplete and what additional information is needed.
+## 요약
 
-??? success "Solution to Exercise 2"
-    The p-value alone tells us only that the effect is unlikely to be exactly zero -- it says nothing about the **magnitude** or **practical significance** of the effect. A statistically significant effect can be trivially small with a large sample.
+회귀계수의 p값과 신뢰구간을 이해하는 일은 근거 있는 의사결정에 결정적이다. p값은 설명변수가 통계적으로 유의한지를 판정하고, 신뢰구간은 정밀도와 불확실성의 척도를 제공한다. 이 둘을 함께 쓸 때 모형이 내놓은 발견의 강도와 신뢰성을 제대로 평가할 수 있다.
 
-    The report should include: (1) the **coefficient estimate** $\hat{\beta}$, which quantifies the effect size; (2) the **confidence interval**, which conveys both the estimate and its precision; and (3) **context** for whether the effect size is practically meaningful. For example, "$\hat{\beta} = 0.3$ with 95% CI $(0.01, 0.59)$" shows the effect is significant but the CI is wide, indicating considerable uncertainty about the true magnitude.
+## 연습문제
+
+**연습문제 1.**
+어떤 회귀계수가 $\hat{\beta}_1 = 4.2$, $\text{SE} = 1.5$, (양측) $p = 0.008$이다. 99% 신뢰구간을 구성하고, p값과 신뢰구간이 같은 정보를 전달하는 이유를 설명하라.
+
+??? success "연습문제 1 풀이"
+    $t = \hat{\beta}_1 / \text{SE} = 4.2/1.5 = 2.8$이다. 양측 $p = 0.008$이 되려면 자유도가 대략 $df = 40$이어야 한다($2 \times P(T_{40} > 2.8) = 0.0078$).
+
+    $t_{0.005, 40} = 2.7045$를 쓰면
+
+    $$
+    \hat{\beta}_1 \pm t_{0.005, 40} \times \text{SE} = 4.2 \pm 2.7045 \times 1.5 = 4.2 \pm 4.057 = (0.143, 8.257)
+    $$
+
+    구간이 0을 아슬아슬하게 **배제한다**. 이는 $p = 0.008 < 0.01$과 반드시 일치해야 하는 결과이다. $p$값이 0.01보다 작으면 99% 신뢰구간은 언제나 0을 배제한다. 둘은 같은 검정을 다르게 표현한 것일 뿐이기 때문이다.
+
+    더 정확히 말하면, $p$값은 $(1-\alpha)$ 신뢰구간이 0을 배제하게 되는 가장 작은 $\alpha$이다. $p = 0.008$이므로 신뢰수준 $1 - 0.008 = 99.2\%$의 신뢰구간이 0을 끝점으로 갖는, 곧 0을 배제하는 **가장 넓은** 구간이다. 그보다 신뢰수준이 높은 구간은 0을 포함하고, 낮은 구간은 배제한다.
+
+---
+
+**연습문제 2.**
+어떤 논문이 "처치의 효과는 통계적으로 유의했다($p = 0.04$)"라고만 보고하고 계수 추정값이나 신뢰구간은 보고하지 않았다. 이런 보고가 왜 불완전한지, 어떤 정보가 더 필요한지 설명하라.
+
+??? success "연습문제 2 풀이"
+    p값만으로는 효과가 정확히 0일 가능성이 낮다는 것밖에 알 수 없다. 효과의 **크기**나 **실질적 유의성**에 대해서는 아무것도 말해 주지 않는다. 표본이 크면 통계적으로 유의한 효과가 실질적으로는 무시할 만큼 작을 수 있다.
+
+    보고에는 다음이 포함되어야 한다. (1) 효과의 크기를 수량화하는 **계수 추정값** $\hat{\beta}$, (2) 추정값과 그 정밀도를 함께 전달하는 **신뢰구간**, (3) 그 효과 크기가 실질적으로 의미 있는지에 대한 **맥락**. 예를 들어 "$\hat{\beta} = 0.3$, 95% 신뢰구간 $(0.01, 0.59)$"라고 쓰면 효과가 유의하긴 하지만 구간이 넓어 참 크기에 상당한 불확실성이 있음이 드러난다.

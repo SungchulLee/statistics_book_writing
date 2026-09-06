@@ -1,197 +1,197 @@
-# Bayesian Information Criterion
+# Bayes 정보기준
 
-AIC estimates the relative predictive accuracy of competing models, but it does not aim to identify the true data-generating model. When the goal is to select the correct model from a set of candidates — and the true model is believed to be among them — the Bayesian Information Criterion (BIC) provides a criterion with stronger theoretical guarantees. BIC applies a heavier penalty for model complexity, making it more conservative than AIC.
+AIC는 경쟁 모형들의 상대적 예측 정확도를 추정하지만 참 자료생성 모형을 식별하는 것을 목표로 하지는 않는다. 후보 집합에서 올바른 모형을 고르는 것이 목표이고 참 모형이 그 안에 있다고 믿는다면, Bayes 정보기준(BIC)이 더 강한 이론적 보장을 제공한다. BIC는 모형 복잡도에 더 무거운 벌점을 주므로 AIC보다 보수적이다.
 
 ---
 
-## 1. Bayesian Motivation
+## 1. Bayes적 동기
 
-The BIC was derived by Schwarz (1978) from a Bayesian perspective. Consider $M$ candidate models $\mathcal{M}_1, \ldots, \mathcal{M}_M$, each with prior probability $P(\mathcal{M}_j)$. By Bayes' theorem, the posterior probability of model $j$ given data $\mathbf{y}$ is:
+BIC는 Schwarz(1978)가 Bayes 관점에서 유도했다. 후보 모형 $\mathcal{M}_1, \ldots, \mathcal{M}_M$이 각각 사전확률 $P(\mathcal{M}_j)$를 갖는다고 하자. Bayes 정리에 의해 자료 $\mathbf{y}$가 주어졌을 때 모형 $j$의 사후확률은
 
 $$
 P(\mathcal{M}_j \mid \mathbf{y}) \propto P(\mathbf{y} \mid \mathcal{M}_j) \cdot P(\mathcal{M}_j)
 $$
 
-The marginal likelihood $P(\mathbf{y} \mid \mathcal{M}_j)$ integrates over all parameter values:
+주변가능도 $P(\mathbf{y} \mid \mathcal{M}_j)$는 모든 모수 값에 대해 적분한 것이다.
 
 $$
 P(\mathbf{y} \mid \mathcal{M}_j) = \int P(\mathbf{y} \mid \boldsymbol{\theta}_j, \mathcal{M}_j) \, P(\boldsymbol{\theta}_j \mid \mathcal{M}_j) \, d\boldsymbol{\theta}_j
 $$
 
-Schwarz showed that, under regularity conditions, the log marginal likelihood can be approximated as:
+Schwarz는 정칙 조건 아래에서 로그 주변가능도가 다음과 같이 근사됨을 보였다.
 
 $$
 \ln P(\mathbf{y} \mid \mathcal{M}_j) \approx \ln \hat{L}_j - \frac{k_j}{2} \ln n
 $$
 
-where $\hat{L}_j$ is the maximized likelihood, $k_j$ is the number of parameters, and $n$ is the sample size. Multiplying by $-2$ yields the BIC.
+여기서 $\hat{L}_j$는 최대화된 가능도, $k_j$는 모수의 개수, $n$은 표본크기이다. 양변에 $-2$를 곱하면 BIC가 나온다.
 
 ---
 
-## 2. Definition
+## 2. 정의
 
-The **Bayesian Information Criterion** for a model with $k$ estimated parameters and maximized log-likelihood $\ln \hat{L}$ is:
+추정 모수가 $k$개이고 최대화된 로그가능도가 $\ln \hat{L}$인 모형의 **Bayes 정보기준**은
 
 $$
 \text{BIC} = k \ln n - 2 \ln \hat{L}
 $$
 
-where:
+여기서
 
-- $k$ is the total number of estimated parameters.
-- $n$ is the number of observations.
-- $\hat{L}$ is the maximized likelihood.
+- $k$는 추정한 모수의 총 개수,
+- $n$은 관측값의 개수,
+- $\hat{L}$은 최대화된 가능도이다.
 
-Like AIC, a **lower BIC indicates a better model**. The key difference is the penalty term: BIC uses $k \ln n$ instead of $2k$.
+AIC와 마찬가지로 **BIC가 작을수록 좋은 모형**이다. 핵심 차이는 벌점항이다. BIC는 $2k$ 대신 $k \ln n$을 쓴다.
 
 ---
 
-## 3. BIC for Linear Regression
+## 3. 선형회귀의 BIC
 
-For a linear regression model with Gaussian errors, substituting the maximized log-likelihood gives:
+정규오차를 갖는 선형회귀 모형에서 최대화된 로그가능도를 대입하면
 
 $$
 \text{BIC} = k \ln n + n \ln\!\left(\frac{\text{SSE}}{n}\right) + n \ln(2\pi) + n
 $$
 
-Since the constant terms do not affect model comparison, the working formula is:
+상수항은 모형 비교에 영향을 주지 않으므로 실제로 쓰는 공식은
 
 $$
 \text{BIC} = k \ln n + n \ln\!\left(\frac{\text{SSE}}{n}\right)
 $$
 
-where $k = p + 2$ counts the $p$ regression coefficients, the intercept, and the error variance.
+여기서 $k = p + 2$는 $p$개의 회귀계수, 절편, 오차분산을 센 것이다.
 
 ---
 
-## 4. BIC Penalty vs AIC Penalty
+## 4. BIC 벌점과 AIC 벌점
 
-The complexity penalties of AIC and BIC are:
+AIC와 BIC의 복잡도 벌점은 다음과 같다.
 
-| Criterion | Penalty per parameter |
+| 기준 | 모수 하나당 벌점 |
 |-----------|----------------------|
 | AIC       | $2$                  |
 | BIC       | $\ln n$              |
 
-Since $\ln n > 2$ when $n > e^2 \approx 7.39$, the BIC penalty is stricter than the AIC penalty for any sample size $n \geq 8$. In practice, virtually all datasets satisfy this condition, so BIC favors simpler models than AIC.
+$n > e^2 \approx 7.39$이면 $\ln n > 2$이므로, 표본크기가 $n \geq 8$인 어떤 경우에도 BIC의 벌점이 AIC보다 엄격하다. 실무의 거의 모든 자료가 이 조건을 만족하므로 BIC는 AIC보다 단순한 모형을 선호한다.
 
-The growing penalty means that as $n$ increases, BIC requires progressively stronger evidence in the likelihood to justify adding parameters. This is the mechanism behind BIC's consistency property.
-
----
-
-## 5. Consistency
-
-BIC is **consistent** for model selection: if the true data-generating model is among the candidates, BIC selects the true model with probability approaching 1 as $n \to \infty$.
-
-Formally, let $\mathcal{M}^*$ be the true model and $\hat{\mathcal{M}}_{\text{BIC}}$ be the model selected by BIC. Then:
-
-$$
-P(\hat{\mathcal{M}}_{\text{BIC}} = \mathcal{M}^*) \to 1 \quad \text{as } n \to \infty
-$$
-
-This property is not shared by AIC. AIC is asymptotically efficient (it minimizes the expected prediction error), but it does not converge to the true model. Instead, AIC tends to select slightly overfit models in large samples.
-
-!!! note "Consistency requires the true model to be a candidate"
-    BIC's consistency guarantee holds only when the true model is among the candidates. If the true model is not in the candidate set — which is arguably always the case for real data — BIC's consistency is irrelevant, and AIC's focus on predictive accuracy may be more appropriate.
+벌점이 커진다는 것은 $n$이 늘어날수록 모수 추가를 정당화하기 위해 BIC가 가능도에서 점점 더 강한 증거를 요구한다는 뜻이다. 이것이 BIC의 일치성을 만들어 내는 기제이다.
 
 ---
 
-## 6. AIC vs BIC Summary
+## 5. 일치성
 
-| Property | AIC | BIC |
+BIC는 모형선택에서 **일치성**을 갖는다. 참 자료생성 모형이 후보에 들어 있다면 $n \to \infty$일 때 BIC가 참 모형을 고를 확률이 1로 접근한다.
+
+형식적으로, $\mathcal{M}^*$를 참 모형, $\hat{\mathcal{M}}_{\text{BIC}}$를 BIC가 고른 모형이라 하면
+
+$$
+P(\hat{\mathcal{M}}_{\text{BIC}} = \mathcal{M}^*) \to 1 \quad (n \to \infty)
+$$
+
+AIC는 이 성질을 갖지 않는다. AIC는 점근적으로 효율적이지만(기대 예측오차를 최소화한다) 참 모형으로 수렴하지는 않는다. 오히려 큰 표본에서 조금 과대적합된 모형을 고르는 경향이 있다.
+
+!!! note "일치성은 참 모형이 후보에 있을 때만"
+    BIC의 일치성 보장은 참 모형이 후보 집합 안에 있을 때에만 성립한다. 실제 자료에서는 사실상 언제나 그렇지 않은데, 그런 경우 BIC의 일치성은 의미가 없고 예측 정확도에 초점을 맞추는 AIC가 더 적절할 수 있다.
+
+---
+
+## 6. AIC와 BIC 요약
+
+| 성질 | AIC | BIC |
 |---|---|---|
-| Penalty | $2k$ | $k \ln n$ |
-| Goal | Minimize prediction error | Identify the true model |
-| Consistency | No | Yes |
-| Efficiency | Yes (asymptotically) | No |
-| Tendency | Slightly overfit | Slightly underfit |
-| Small samples | AICc corrects for finite $n$ | No standard small-sample correction |
+| 벌점 | $2k$ | $k \ln n$ |
+| 목표 | 예측오차 최소화 | 참 모형 식별 |
+| 일치성 | 없음 | 있음 |
+| 효율성 | 있음(점근적으로) | 없음 |
+| 경향 | 약간 과대적합 | 약간 과소적합 |
+| 작은 표본 | AICc가 유한 $n$을 보정 | 표준적인 소표본 보정이 없음 |
 
-!!! tip "Practical guidance"
-    When the goal is prediction, prefer AIC (or AICc). When the goal is identifying a parsimonious explanatory model and you believe the true model is among the candidates, prefer BIC. When AIC and BIC agree, the choice is clear. When they disagree, the discrepancy often involves a single marginal predictor — consider the scientific context to decide.
+!!! tip "실무 지침"
+    예측이 목표면 AIC(또는 AICc)를 쓴다. 절약적인 설명 모형을 찾는 것이 목표이고 참 모형이 후보에 있다고 믿으면 BIC를 쓴다. AIC와 BIC가 일치하면 선택은 분명하다. 엇갈릴 때는 대개 애매한 설명변수 하나가 걸려 있는 경우이므로 과학적 맥락을 고려해 결정한다.
 
 ---
 
-## 7. Numerical Example
+## 7. 수치 예제
 
-Consider the same three models from the AIC page, with $n = 50$:
+AIC 페이지와 같은 세 모형을 $n = 50$에서 살펴보자.
 
-| Model | $p$ | $k$ | SSE | AIC | BIC |
+| 모형 | $p$ | $k$ | SSE | AIC | BIC |
 |-------|-----|------|------|------|------|
 | A     | 1   | 3    | 120  | 49.8 | $3 \ln(50) + 50 \ln(120/50) = 11.7 + 43.8 = 55.5$ |
 | B     | 3   | 5    | 90   | 39.4 | $5 \ln(50) + 50 \ln(90/50) = 19.6 + 29.4 = 49.0$ |
 | C     | 6   | 8    | 85   | 42.5 | $8 \ln(50) + 50 \ln(85/50) = 31.3 + 26.5 = 57.8$ |
 
-Both AIC and BIC select Model B as the best. However, BIC penalizes Model C more heavily: the BIC gap between B and C ($57.8 - 49.0 = 8.8$) is larger than the AIC gap ($42.5 - 39.4 = 3.1$), reflecting BIC's stronger penalty against the three additional parameters in Model C.
+AIC와 BIC 모두 모형 B를 최선으로 고른다. 다만 BIC는 모형 C에 더 무거운 벌점을 준다. B와 C의 BIC 격차($57.8 - 49.0 = 8.8$)가 AIC 격차($42.5 - 39.4 = 3.1$)보다 크며, 이는 모형 C의 추가 모수 세 개에 대한 BIC의 더 강한 벌점을 반영한다.
 
-In this case AIC and BIC agree, but with a larger sample or a smaller improvement from Model C's extra predictors, BIC would be even more decisive in favoring Model B.
+이 경우 AIC와 BIC가 일치하지만, 표본이 더 크거나 모형 C의 추가 설명변수가 주는 개선이 더 작았다면 BIC는 모형 B를 더욱 단호하게 선호했을 것이다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-A linear regression with $p = 3$ predictors and $n = 100$ observations has a maximized log-likelihood of $\ell_1 = -150$. A nested model with $p = 5$ predictors has $\ell_2 = -145$. Compute BIC for both models and determine which is preferred.
+**연습문제 1.**
+설명변수가 $p = 3$개이고 관측값이 $n = 100$개인 선형회귀의 최대화된 로그가능도가 $\ell_1 = -150$이다. 이 모형을 포함하는 $p = 5$개짜리 모형은 $\ell_2 = -145$이다. 두 모형의 BIC를 계산하고 어느 쪽이 선호되는지 판정하라.
 
-??? success "Solution to Exercise 1"
-    BIC $= -2\ell + k\ln(n)$, where $k$ is the number of estimated parameters.
+??? success "연습문제 1 풀이"
+    BIC $= -2\ell + k\ln(n)$이며 $k$는 추정한 모수의 개수이다.
 
-    Model 1 ($k = 3 + 1 = 4$ including intercept, plus $\sigma^2$, so $k = 5$):
+    모형 1(설명변수 3개 + 절편 = 4개, 여기에 $\sigma^2$까지 더해 $k = 5$):
 
     $$
     \text{BIC}_1 = -2(-150) + 5\ln(100) = 300 + 5(4.605) = 300 + 23.03 = 323.03
     $$
 
-    Model 2 ($k = 5 + 1 + 1 = 7$):
+    모형 2($k = 5 + 1 + 1 = 7$):
 
     $$
     \text{BIC}_2 = -2(-145) + 7\ln(100) = 290 + 7(4.605) = 290 + 32.24 = 322.24
     $$
 
-    Model 2 has slightly lower BIC (322.24 vs 323.03), so it is marginally preferred. The improvement in fit ($\Delta\ell = 5$) barely justifies the added complexity.
+    모형 2의 BIC가 조금 더 낮으므로(322.24 대 323.03) 근소하게 선호된다. 적합의 개선($\Delta\ell = 5$)이 늘어난 복잡도를 겨우 정당화하는 수준이다. 차이가 0.79에 지나지 않으므로 두 모형은 사실상 대등하다고 보아야 한다.
 
 ---
 
-**Exercise 2.**
-Compare the penalty terms of AIC ($2k$) and BIC ($k\ln n$). For what sample size $n$ does BIC penalize complexity more heavily than AIC?
+**연습문제 2.**
+AIC의 벌점항 $2k$와 BIC의 벌점항 $k\ln n$을 비교하라. 표본크기가 얼마일 때 BIC가 AIC보다 복잡도에 더 무거운 벌점을 주는가?
 
-??? success "Solution to Exercise 2"
-    BIC penalizes more heavily than AIC when $k\ln n > 2k$, i.e., $\ln n > 2$, which gives $n > e^2 \approx 7.39$.
+??? success "연습문제 2 풀이"
+    $k\ln n > 2k$, 곧 $\ln n > 2$일 때 BIC가 더 무거운 벌점을 주며, 이는 $n > e^2 \approx 7.39$를 뜻한다.
 
-    For any sample size $n \geq 8$, BIC imposes a stricter penalty per parameter than AIC. In practice, since $n$ is almost always much larger than 8, BIC consistently selects simpler (more parsimonious) models than AIC.
+    표본크기가 $n \geq 8$인 어떤 경우에도 BIC가 모수 하나당 더 엄격한 벌점을 부과한다. 실무에서 $n$은 거의 언제나 8보다 훨씬 크므로 BIC는 일관되게 AIC보다 단순한(더 절약적인) 모형을 고른다.
 
-    As $n$ grows, BIC's penalty grows without bound ($\ln n \to \infty$), while AIC's penalty remains constant at 2 per parameter. This means BIC increasingly favors simpler models for larger datasets. BIC is consistent (selects the true model as $n \to \infty$ if it is among the candidates), while AIC is efficient (minimizes prediction error) but may overfit.
+    $n$이 커지면 BIC의 벌점은 한없이 커지지만($\ln n \to \infty$) AIC의 벌점은 모수당 2로 일정하게 남는다. 그래서 자료가 클수록 BIC는 더욱 단순한 모형을 선호한다. BIC는 일치성을 갖고(참 모형이 후보에 있으면 $n \to \infty$일 때 그것을 고른다) AIC는 효율적이지만(예측오차를 최소화한다) 과대적합할 수 있다.
 
 ---
 
-**Exercise 3.**
-Explain the Bayesian justification for BIC. In what sense does BIC approximate a Bayesian model comparison?
+**연습문제 3.**
+BIC의 Bayes적 정당화를 설명하라. BIC는 어떤 의미에서 Bayes 모형비교를 근사하는가?
 
-??? success "Solution to Exercise 3"
-    BIC approximates the log marginal likelihood $\log m(\mathbf{y} \mid M)$, which is the key quantity in Bayesian model comparison:
+??? success "연습문제 3 풀이"
+    BIC는 Bayes 모형비교의 핵심 양인 로그 주변가능도 $\log m(\mathbf{y} \mid M)$을 근사한다.
 
     $$
     \log m(\mathbf{y} \mid M) \approx \ell(\hat{\theta}) - \frac{k}{2}\ln n + O(1)
     $$
 
-    Since $\text{BIC} = -2\ell(\hat{\theta}) + k\ln n$, we have $\text{BIC} \approx -2\log m(\mathbf{y} \mid M) + \text{constant}$.
+    $\text{BIC} = -2\ell(\hat{\theta}) + k\ln n$이므로 $\text{BIC} \approx -2\log m(\mathbf{y} \mid M) + \text{상수}$이다.
 
-    Minimizing BIC is approximately equivalent to maximizing the marginal likelihood, which integrates over the parameter space with respect to the prior. This integration naturally penalizes models with more parameters because a complex model "spreads" its prior probability over a larger parameter space (Occam's razor). The $k\ln n$ penalty is the leading-order term in the Laplace approximation to this integral.
+    BIC를 최소화하는 것은 주변가능도를 최대화하는 것과 근사적으로 같으며, 주변가능도는 사전분포에 대해 모수공간 전체를 적분한 값이다. 이 적분은 모수가 많은 모형에 자연스럽게 벌점을 준다. 복잡한 모형은 사전확률을 더 넓은 모수공간에 "펼쳐" 놓기 때문이다(Occam의 면도날). $k\ln n$ 벌점은 이 적분에 대한 Laplace 근사의 최고차 항이다.
 
 ---
 
-**Exercise 4.**
-When would you prefer AIC over BIC for model selection, and vice versa?
+**연습문제 4.**
+모형선택에서 AIC를 BIC보다 선호할 때는 언제이며, 반대의 경우는 언제인가?
 
-??? success "Solution to Exercise 4"
-    **Prefer AIC when:**
+??? success "연습문제 4 풀이"
+    **AIC를 선호할 때:**
 
-    - The goal is **prediction**: AIC minimizes the expected Kullback-Leibler divergence and is asymptotically equivalent to leave-one-out cross-validation. It selects models that predict well.
-    - The true model is not among the candidates (AIC performs better in misspecified settings).
-    - You want to avoid underfitting at the cost of slight overfitting.
+    - 목표가 **예측**일 때. AIC는 기대 Kullback-Leibler 발산을 최소화하며 하나 빼기 교차검증과 점근적으로 동등하다. 예측을 잘하는 모형을 고른다.
+    - 참 모형이 후보에 없을 때(오설정 상황에서 AIC가 더 잘 작동한다).
+    - 약간의 과대적합을 감수하더라도 과소적합을 피하고 싶을 때.
 
-    **Prefer BIC when:**
+    **BIC를 선호할 때:**
 
-    - The goal is **model identification**: finding the true data-generating process. BIC is consistent -- it selects the true model with probability approaching 1 as $n \to \infty$.
-    - Parsimony is important (e.g., scientific interpretation requires the simplest adequate model).
-    - The sample size is large and you want to guard against overfitting.
+    - 목표가 **모형 식별**, 곧 참 자료생성과정을 찾는 것일 때. BIC는 일치성을 가져 $n \to \infty$일 때 참 모형을 고를 확률이 1로 접근한다.
+    - 절약성이 중요할 때(예: 과학적 해석을 위해 가장 단순하면서 충분한 모형이 필요할 때).
+    - 표본이 크고 과대적합을 경계하고 싶을 때.
 
-    In practice, reporting both criteria and noting any disagreements provides the most informative analysis.
+    실무에서는 두 기준을 모두 보고하고 엇갈리는 지점을 짚어 주는 것이 가장 유익한 분석이다.

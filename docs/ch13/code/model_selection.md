@@ -1,40 +1,40 @@
-# Model Selection Comparison
+# 모형선택 비교
 
-## Overview
+## 개요
 
-This page demonstrates model selection using three criteria: Akaike Information Criterion (AIC), Bayesian Information Criterion (BIC), and cross-validation (CV). Using synthetic data with 8 predictors (only 3 truly relevant), we perform forward selection and compare which model size each criterion identifies as optimal.
+이 페이지는 세 가지 기준 — Akaike 정보기준(AIC), Bayes 정보기준(BIC), 교차검증(CV) — 을 이용한 모형선택을 보인다. 설명변수 8개 중 3개만 실제로 관련 있는 인공자료로 전진 선택을 수행하고, 각 기준이 어떤 모형 크기를 최적으로 판정하는지 비교한다.
 
-## Mathematical Background
+## 수학적 배경
 
-### Akaike Information Criterion (AIC)
+### Akaike 정보기준 (AIC)
 
 $$
 \mathrm{AIC} = n \ln\!\left(\frac{\mathrm{RSS}}{n}\right) + 2k,
 $$
 
-where $k$ is the number of estimated parameters (including intercept). AIC estimates the out-of-sample prediction error and penalizes complexity with a factor of $2$ per parameter.
+여기서 $k$는 (절편을 포함한) 추정 모수의 개수이다. AIC는 표본 밖 예측오차를 추정하며 모수 하나당 $2$의 벌점으로 복잡도를 억제한다.
 
-### Bayesian Information Criterion (BIC)
+### Bayes 정보기준 (BIC)
 
 $$
 \mathrm{BIC} = n \ln\!\left(\frac{\mathrm{RSS}}{n}\right) + k \ln(n).
 $$
 
-BIC uses a penalty of $\ln(n)$ per parameter, which exceeds 2 when $n > e^2 \approx 7.4$. BIC therefore favors smaller models for moderate to large sample sizes.
+BIC는 모수 하나당 $\ln(n)$의 벌점을 쓰며, $n > e^2 \approx 7.4$이면 이 값이 2를 넘는다. 따라서 표본이 중간 이상이면 BIC가 더 작은 모형을 선호한다.
 
-### Cross-Validation MSE
+### 교차검증 MSE
 
-The $K$-fold CV estimate of prediction error is
+예측오차의 $K$-겹 교차검증 추정값은
 
 $$
 \mathrm{CV}(K) = \frac{1}{K}\sum_{k=1}^{K} \mathrm{MSE}_k, \qquad \mathrm{MSE}_k = \frac{1}{|V_k|}\sum_{i \in V_k}(y_i - \hat{y}_i^{(-k)})^2,
 $$
 
-where $\hat{y}_i^{(-k)}$ is the prediction for observation $i$ from the model trained without fold $k$.
+여기서 $\hat{y}_i^{(-k)}$는 겹 $k$ 없이 훈련한 모형이 내놓은 관측값 $i$의 예측값이다.
 
-## Code
+## 코드
 
-### Information Criteria Functions
+### 정보기준 함수
 
 ```python
 import numpy as np
@@ -46,7 +46,7 @@ def bic(n, rss, k):
     return n * np.log(rss / n) + k * np.log(n)
 ```
 
-### Cross-Validation MSE
+### 교차검증 MSE
 
 ```python
 def cv_mse(X, y, folds=5):
@@ -66,7 +66,7 @@ def cv_mse(X, y, folds=5):
     return np.mean(mses)
 ```
 
-### Forward Selection
+### 전진 선택
 
 ```python
 np.random.seed(42)
@@ -100,34 +100,55 @@ for step in range(p_total):
     bic_history.append(bic(n, rss, k))
 ```
 
-## Interpretation
+### 결과
 
-- **AIC** tends to select slightly larger models because its penalty ($2k$) is relatively mild. It targets prediction accuracy.
-- **BIC** tends to select smaller models because $k \ln(n)$ grows with sample size. It is consistent, meaning it will select the true model as $n \to \infty$ (if the true model is among the candidates).
-- **Cross-validation** directly estimates out-of-sample prediction error without relying on asymptotic theory. It is computationally more expensive but makes fewer distributional assumptions.
-- In this example with 3 truly relevant predictors, all three methods should identify a model size near 3, confirming that the noise predictors are correctly excluded.
+선택 순서(0부터 시작하는 색인)는 `[0, 1, 2, 4, 7, 3, 5, 6]`으로, 참으로 관련 있는 세 설명변수 0, 1, 2가 정확히 먼저 뽑혔다.
 
-## Exercises
+| 모형 크기 | AIC | BIC | 5-겹 CV MSE |
+|---|---|---|---|
+| 1 | 464.79 | 471.38 | 10.1104 |
+| 2 | 371.54 | 381.44 | 6.3024 |
+| **3** | **262.06** | **275.25** | **3.7603** |
+| 4 | 262.67 | 279.16 | 3.7891 |
+| 5 | 264.07 | 283.86 | 3.8011 |
+| 6 | 266.02 | 289.10 | 3.8225 |
+| 7 | 267.99 | 294.38 | 3.8682 |
+| 8 | 269.99 | 299.67 | 3.8933 |
 
-**Exercise 1.** Run the forward selection procedure using BIC instead of AIC to determine the next predictor at each step. Does the order of selected predictors change?
+세 기준 모두 크기 3에서 최솟값을 갖는다. 잡음 설명변수 다섯 개가 올바르게 배제되었다.
 
-??? success "Solution to Exercise 1"
+크기 3과 크기 4의 AIC 차이가 $0.61$에 지나지 않는다는 점에 주목하라. AIC 벌점이 상대적으로 약하기 때문에, 네 번째 설명변수가 우연히 조금만 더 큰 적합 개선을 냈다면 AIC는 그것을 골랐을 수 있다. 반면 BIC 차이는 $3.91$로 훨씬 뚜렷하다. AIC보다 BIC가 절약적인 모형을 더 확실하게 선호한다는 사실을 그대로 보여준다.
 
-    Replace `score = aic(n, rss, len(cols) + 1)` with `score = bic(n, rss, len(cols) + 1)` in the inner loop. The order of selection often remains the same (the most important predictors are selected first regardless), but the optimal stopping point changes: BIC typically stops at fewer predictors. $\square$
+## 해석
+
+- **AIC**는 벌점($2k$)이 비교적 약해 조금 더 큰 모형을 고르는 경향이 있다. 예측 정확도를 겨냥한다.
+- **BIC**는 $k \ln(n)$이 표본크기와 함께 커지므로 더 작은 모형을 고르는 경향이 있다. 일치성을 가져 (참 모형이 후보에 있다면) $n \to \infty$일 때 참 모형을 고른다.
+- **교차검증**은 점근이론에 기대지 않고 표본 밖 예측오차를 직접 추정한다. 계산 비용이 크지만 분포 가정을 덜 요구한다.
+- 이 예에서는 참으로 관련 있는 설명변수가 3개이며, 세 방법 모두 크기 3의 모형을 찾아내어 잡음 설명변수가 올바르게 배제됨을 확인해 준다.
+
+## 연습문제
+
+**연습문제 1.** 각 단계에서 다음 설명변수를 정할 때 AIC 대신 BIC를 써서 전진 선택 절차를 수행하라. 선택되는 설명변수의 순서가 달라지는가?
+
+??? success "연습문제 1 풀이"
+
+    안쪽 반복문의 `score = aic(n, rss, len(cols) + 1)`을 `score = bic(n, rss, len(cols) + 1)`로 바꾼다.
+
+    선택 **순서는 바뀌지 않는다**. 한 단계 안에서 후보들은 모두 같은 $k$를 가지므로 AIC든 BIC든 벌점항이 상수이고, 결국 RSS를 가장 크게 줄이는 변수를 고르게 되어 두 기준이 동일한 선택을 한다. 달라지는 것은 **멈추는 지점**이다. BIC는 벌점이 더 강해 더 적은 설명변수에서 멈춘다. 위 표에서도 크기 4 이후 BIC의 증가폭이 AIC보다 훨씬 가파르다. $\square$
 
 ---
 
-**Exercise 2.** Increase the noise level from $\sigma = 2$ to $\sigma = 5$. How does this affect the optimal model size selected by each criterion?
+**연습문제 2.** 잡음 수준을 $\sigma = 2$에서 $\sigma = 5$로 키워라. 각 기준이 고르는 최적 모형 크기는 어떻게 달라지는가?
 
-??? success "Solution to Exercise 2"
+??? success "연습문제 2 풀이"
 
-    With more noise, the signal-to-noise ratio decreases. The RSS differences between models with and without the true predictors become smaller relative to the total RSS. AIC and BIC may select fewer predictors (possibly 1 or 2 instead of 3), and CV MSE curves become flatter with less distinct minima. The noise predictors become harder to distinguish from true predictors. $\square$
+    잡음이 커지면 신호 대 잡음비가 낮아진다. 참 설명변수를 넣고 뺄 때의 RSS 차이가 전체 RSS에 비해 작아진다. AIC와 BIC가 더 적은 설명변수를 고를 수 있고(3개 대신 1–2개), 교차검증 MSE 곡선은 평평해져 최솟값이 덜 뚜렷해진다. 잡음 설명변수와 참 설명변수를 구별하기 어려워진다. $\square$
 
 ---
 
-**Exercise 3.** Implement 10-fold CV and compare the results to 5-fold CV. Discuss the bias-variance tradeoff in the choice of $K$.
+**연습문제 3.** 10-겹 교차검증을 구현하여 5-겹과 비교하라. $K$의 선택에서 편향-분산 절충을 논하라.
 
-??? success "Solution to Exercise 3"
+??? success "연습문제 3 풀이"
 
     ```python
     cv5 = [cv_mse(np.column_stack([np.ones(n), X_raw[:, selected[:s]]]), y, folds=5)
@@ -136,28 +157,28 @@ for step in range(p_total):
             for s in range(1, p_total + 1)]
     ```
 
-    Larger $K$ means each training set is closer to size $n$ (less bias), but the folds overlap more (higher variance). $K = 5$ has slightly more bias but lower variance; $K = 10$ has less bias but more variance. The extreme case $K = n$ (LOOCV) is nearly unbiased but can have high variance. $\square$
+    $K$가 커지면 각 훈련집합의 크기가 $n$에 가까워져 편향이 줄지만, 겹들이 더 많이 겹쳐 분산이 커진다. $K = 5$는 편향이 조금 크지만 분산이 작고, $K = 10$은 편향이 작지만 분산이 크다. 극단인 $K = n$(LOOCV)은 거의 불편이지만 분산이 클 수 있다. $\square$
 
 ---
 
-**Exercise 4.** Derive the BIC penalty $k\ln(n)$ from a Bayesian model comparison perspective. Why does the penalty depend on $n$?
+**연습문제 4.** Bayes 모형비교의 관점에서 BIC 벌점 $k\ln(n)$을 유도하라. 왜 벌점이 $n$에 의존하는가?
 
-??? success "Solution to Exercise 4"
+??? success "연습문제 4 풀이"
 
-    In Bayesian model selection, we compute the marginal likelihood $p(\mathbf{y} \mid M)$ by integrating over the parameter space. Using a Laplace approximation for the integral yields
+    Bayes 모형선택에서는 모수공간에 대해 적분하여 주변가능도 $p(\mathbf{y} \mid M)$을 계산한다. 이 적분에 Laplace 근사를 쓰면
 
     $$
     \ln p(\mathbf{y} \mid M) \approx \ln p(\mathbf{y} \mid \hat{\boldsymbol{\theta}}, M) - \frac{k}{2}\ln(n) + O(1).
     $$
 
-    Multiplying by $-2$ gives $\mathrm{BIC} = -2\ln L + k\ln(n)$. The penalty depends on $n$ because with more data, the posterior concentrates more tightly, and the "volume" cost of additional parameters scales logarithmically with $n$. $\square$
+    양변에 $-2$를 곱하면 $\mathrm{BIC} = -2\ln L + k\ln(n)$을 얻는다. 벌점이 $n$에 의존하는 것은, 자료가 많아질수록 사후분포가 더 좁게 집중되어 모수 추가에 드는 "부피" 비용이 $n$에 대해 로그로 커지기 때문이다. $\square$
 
 ---
 
-**Exercise 5.** Suppose the true model has 3 relevant predictors. Prove that BIC is model-selection consistent, i.e., $P(\text{BIC selects the true model}) \to 1$ as $n \to \infty$, while AIC is not.
+**연습문제 5.** 참 모형에 관련 설명변수가 3개 있다고 하자. $n \to \infty$일 때 $P(\text{BIC가 참 모형을 고른다}) \to 1$이지만 AIC는 그렇지 않음을 증명하라.
 
-??? success "Solution to Exercise 5"
+??? success "연습문제 5 풀이"
 
-    For AIC, the penalty for adding one extra parameter is $2$, independent of $n$. As $n \to \infty$, the reduction in $n\ln(\mathrm{RSS}/n)$ from adding an irrelevant predictor converges to a $\chi^2_1$ random variable (which has mean 1), so there is a nonzero probability of exceeding 2. Hence AIC overfits asymptotically.
+    AIC에서 모수 하나를 더할 때의 벌점은 $n$과 무관하게 $2$이다. $n \to \infty$일 때 무관한 설명변수를 넣어 얻는 $n\ln(\mathrm{RSS}/n)$의 감소량은 $\chi^2_1$ 확률변수(평균 1)로 수렴하므로 2를 넘을 확률이 0이 아니다. 따라서 AIC는 점근적으로 과대적합한다.
 
-    For BIC, the penalty is $\ln(n) \to \infty$, while the improvement from adding an irrelevant predictor remains bounded (converges to $\chi^2_1$). Therefore, for large enough $n$, the penalty dominates, and irrelevant predictors are excluded with probability approaching 1. This proves BIC consistency. $\square$
+    BIC에서는 벌점이 $\ln(n) \to \infty$인 반면, 무관한 설명변수를 넣어 얻는 개선은 여전히 유계이다($\chi^2_1$로 수렴한다). 따라서 $n$이 충분히 크면 벌점이 지배하여 무관한 설명변수가 확률 1로 배제된다. 이것이 BIC의 일치성이다. $\square$

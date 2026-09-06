@@ -1,92 +1,92 @@
-# AIC and BIC: Model Selection Criteria
+# AIC와 BIC: 모형선택 기준
 
+통계 모형을 세울 때 핵심 과제 가운데 하나는 모형의 복잡도와 적합도를 저울질하는 일이다. **Akaike 정보기준(AIC)**과 **Bayes 정보기준(BIC)**은 모수의 개수에 벌점을 주어 이 절충을 다루는 널리 쓰이는 두 기법이다.
 
-When building statistical models, a core challenge is balancing model complexity against model fit. **Akaike Information Criterion (AIC)** and **Bayesian Information Criterion (BIC)** are two widely used techniques that address this trade-off by penalizing models for the number of parameters they use.
+## Akaike 정보기준(AIC)
 
-## Akaike Information Criterion (AIC)
-
-AIC measures the trade-off between model accuracy and complexity:
+AIC는 모형의 정확도와 복잡도 사이의 절충을 잰다.
 
 $$
 AIC = -2 \ln(L) + 2k
 $$
 
-where:
+여기서
 
-- $L$ is the likelihood of the model given the data (how well the model fits).
-- $k$ is the number of parameters in the model.
+- $L$은 자료가 주어졌을 때 모형의 가능도(모형이 얼마나 잘 맞는지),
+- $k$는 모형의 모수 개수이다.
 
-A lower AIC indicates a better model. AIC rewards goodness of fit but penalizes complexity, meaning adding parameters is only beneficial if it significantly improves the fit.
+AIC가 작을수록 좋은 모형이다. AIC는 적합도에 보상을 주되 복잡도에 벌점을 주므로, 모수를 추가하는 것은 적합이 뚜렷이 좋아질 때에만 이득이 된다.
 
-AIC emphasizes **predictive accuracy** and is often used when the main objective is finding a model that generalizes well to unseen data. It aims to balance bias and variance, which is crucial for making accurate predictions. AIC does not explicitly consider sample size in its penalty term, which can lead to different results compared to BIC for larger datasets.
+AIC는 **예측 정확도**를 강조하며, 보지 않은 자료에 잘 일반화되는 모형을 찾는 것이 주된 목표일 때 자주 쓰인다. 정확한 예측에 결정적인 편향과 분산의 균형을 맞추려 한다. AIC의 벌점항은 표본크기를 명시적으로 고려하지 않으므로, 큰 자료에서는 BIC와 다른 결과를 낼 수 있다.
 
-## Bayesian Information Criterion (BIC)
+## Bayes 정보기준(BIC)
 
-BIC is similar to AIC but applies a stronger penalty for model complexity:
+BIC는 AIC와 비슷하지만 모형 복잡도에 더 강한 벌점을 준다.
 
 $$
 BIC = -2 \ln(L) + k \ln(n)
 $$
 
-where:
+여기서
 
-- $L$ is the likelihood of the model.
-- $k$ is the number of parameters.
-- $n$ is the number of observations.
+- $L$은 모형의 가능도,
+- $k$는 모수의 개수,
+- $n$은 관측값의 개수이다.
 
-BIC penalizes complexity more heavily than AIC by incorporating $\ln(n)$. As the sample size increases, the penalty for additional parameters grows, making BIC more **conservative** and more likely to select simpler models.
+BIC는 $\ln(n)$을 넣어 AIC보다 복잡도에 더 무거운 벌점을 준다. 표본크기가 커질수록 모수 추가에 대한 벌점이 커지므로 BIC는 더 **보수적**이 되고 더 단순한 모형을 고르는 경향이 있다.
 
-BIC is rooted in Bayesian probability theory and focuses on finding the **true model** among candidates. It is particularly useful when interpretability is a priority and when overfitting is a significant concern. Unlike AIC, which focuses on predictive accuracy, BIC prioritizes explaining the data with the fewest parameters.
+BIC는 Bayes 확률론에 뿌리를 두며 후보들 가운데 **참 모형**을 찾는 데 초점을 맞춘다. 해석 가능성이 우선이거나 과대적합이 중대한 걱정거리일 때 특히 유용하다. 예측 정확도에 초점을 맞추는 AIC와 달리 BIC는 가장 적은 모수로 자료를 설명하는 것을 우선한다.
 
-## Comparison
+## 비교
 
-| Aspect | AIC | BIC |
+| 측면 | AIC | BIC |
 |---|---|---|
-| **Penalty** | $2k$ | $k \ln(n)$ |
-| **Complexity Preference** | Favors more complex models | Favors simpler models |
-| **Sample Size Sensitivity** | Not sensitive to $n$ | More conservative as $n$ grows |
-| **Primary Goal** | Predictive accuracy | Model parsimony and truth |
-| **Best Use Case** | Prediction and forecasting | Interpretation and explanation |
+| **벌점** | $2k$ | $k \ln(n)$ |
+| **복잡도 선호** | 더 복잡한 모형을 선호 | 더 단순한 모형을 선호 |
+| **표본크기 민감성** | $n$에 민감하지 않음 | $n$이 커질수록 보수적 |
+| **주된 목표** | 예측 정확도 | 절약성과 참 모형 |
+| **적합한 상황** | 예측과 예보 | 해석과 설명 |
 
-Key distinctions:
+핵심 차이:
 
-- **Complexity vs. Parsimony**: AIC tends to favor more flexible models; BIC chooses simpler, more interpretable models.
-- **Sample Size**: BIC explicitly accounts for sample size, making it more suitable for large datasets.
-- **Model Interpretation**: Use AIC when prediction is the primary goal; use BIC when the focus is on identifying the simplest adequate model.
+- **복잡도 대 절약성**: AIC는 더 유연한 모형을, BIC는 더 단순하고 해석 가능한 모형을 고르는 경향이 있다.
+- **표본크기**: BIC는 표본크기를 명시적으로 반영하므로 큰 자료에 더 적합하다.
+- **모형 해석**: 예측이 주된 목표면 AIC를, 가장 단순하면서 충분한 모형을 찾는 것이 초점이면 BIC를 쓴다.
 
-## Practical Example
+## 실전 예제
 
-Consider fitting several linear regression models to predict house prices. Starting with a simple model with one or two predictors, you gradually add features. As complexity increases, the likelihood improves, but overfitting risk grows.
+집값을 예측하는 선형회귀 모형 여러 개를 적합한다고 하자. 설명변수 한두 개인 단순한 모형에서 시작해 점차 특성을 추가한다. 복잡도가 커질수록 가능도는 좋아지지만 과대적합의 위험도 커진다.
 
-Suppose you have three candidate models: a simple model with two predictors, a medium model with five, and a complex model with ten.
+후보 모형이 셋 있다고 하자. 설명변수 2개인 단순 모형, 5개인 중간 모형, 10개인 복잡 모형.
 
-- **AIC** might select the medium or complex model if the improvement in fit justifies the added parameters.
-- **BIC**, with its stronger penalty, might prefer the simple model, particularly with a large dataset.
+- **AIC**는 적합의 개선이 추가된 모수를 정당화한다면 중간 모형이나 복잡 모형을 고를 수 있다.
+- **BIC**는 벌점이 더 강하므로, 특히 자료가 크다면 단순 모형을 선호할 수 있다.
 
-In the Advertising dataset example from the previous sections:
+앞 절들에서 다룬 Advertising 자료 예제에서는
 
-| Model | AIC | BIC |
+| 모형 | AIC | BIC |
 |---|---|---|
 | TV, Radio, Newspaper | 555.8 | 567.5 |
 | TV, Radio | 554.0 | 562.8 |
 | TV, Radio, TV:Radio | **399.6** | **411.4** |
 
-Both AIC and BIC agree that the interaction model is preferred, and both show that removing the insignificant Newspaper predictor slightly improves the criteria.
+AIC와 BIC 모두 교호작용 모형을 선호하는 데 의견이 일치하며, 유의하지 않은 Newspaper 설명변수를 빼면 두 기준이 모두 조금 좋아짐을 보여준다.
 
-## Summary
+## 요약
 
-AIC and BIC are essential tools for model selection that help avoid overfitting by incorporating penalties for complexity. AIC focuses on predictive accuracy, while BIC emphasizes simplicity. The choice between them depends on the analysis goals:
+AIC와 BIC는 복잡도에 벌점을 넣어 과대적합을 피하도록 돕는 모형선택의 필수 도구이다. AIC는 예측 정확도에, BIC는 단순성에 초점을 맞춘다. 둘 사이의 선택은 분석 목표에 달려 있다.
 
-- Use **AIC** when minimizing prediction error is the priority.
-- Use **BIC** when model simplicity, interpretability, or large sample sizes are priorities.
+- 예측오차 최소화가 우선이면 **AIC**를 쓴다.
+- 모형의 단순성, 해석 가능성, 또는 큰 표본크기가 우선이면 **BIC**를 쓴다.
 
-Neither should be used in isolation. They are best complemented with other methods such as cross-validation, which provides additional validation by assessing generalization to new data. By considering multiple criteria, analysts can make more informed decisions that balance fit, complexity, and predictive performance.
-## Exercises
+어느 쪽도 단독으로 쓰여서는 안 된다. 새 자료에 대한 일반화를 평가하여 추가 검증을 제공하는 교차검증 같은 방법과 함께 쓰는 것이 가장 좋다. 여러 기준을 함께 고려할 때 적합, 복잡도, 예측 성능을 균형 있게 반영한 판단을 내릴 수 있다.
 
-**Exercise 1.**
-Define AIC and BIC mathematically and explain the key difference in their penalty terms.
+## 연습문제
 
-??? success "Solution to Exercise 1"
+**연습문제 1.**
+AIC와 BIC를 수학적으로 정의하고 벌점항의 핵심 차이를 설명하라.
+
+??? success "연습문제 1 풀이"
     $$
     \text{AIC} = -2\ln(\hat{L}) + 2k
     $$
@@ -95,26 +95,26 @@ Define AIC and BIC mathematically and explain the key difference in their penalt
     \text{BIC} = -2\ln(\hat{L}) + k\ln(n)
     $$
 
-    where $\hat{L}$ is the maximized likelihood, $k$ is the number of parameters, and $n$ is the sample size.
+    여기서 $\hat{L}$은 최대화된 가능도, $k$는 모수의 개수, $n$은 표본크기이다.
 
-    The key difference is the penalty: AIC penalizes by $2k$ regardless of sample size, while BIC penalizes by $k\ln(n)$, which is larger than $2k$ when $n > e^2 \approx 7.4$ (i.e., almost always in practice). BIC therefore favors simpler models, especially for large samples.
-
----
-
-**Exercise 2.**
-Three candidate models have AIC values of 245.3, 243.1, and 248.7. Which model is preferred? If the AIC difference between the best and second-best models is only 0.5, what would you conclude?
-
-??? success "Solution to Exercise 2"
-    The model with the **lowest AIC (243.1)** is preferred. Lower AIC indicates a better balance between goodness of fit and complexity.
-
-    If the difference were only 0.5, the two models would be considered **essentially equivalent** in terms of information-theoretic support. A common guideline: AIC differences less than 2 indicate substantial support for both models, differences of 4-7 indicate considerably less support for the higher-AIC model, and differences greater than 10 indicate essentially no support.
+    핵심 차이는 벌점이다. AIC는 표본크기와 무관하게 $2k$의 벌점을 주지만, BIC는 $k\ln(n)$의 벌점을 준다. 이는 $n > e^2 \approx 7.4$이면(곧 실무에서 거의 언제나) $2k$보다 크다. 따라서 BIC는 특히 큰 표본에서 더 단순한 모형을 선호한다.
 
 ---
 
-**Exercise 3.**
-Explain why BIC is consistent (selects the true model as $n \to \infty$) but AIC is not. In what practical scenario would you prefer AIC over BIC?
+**연습문제 2.**
+후보 모형 셋의 AIC 값이 245.3, 243.1, 248.7이다. 어느 모형이 선호되는가? 최선과 차선 모형의 AIC 차이가 0.5뿐이라면 어떤 결론을 내리겠는가?
 
-??? success "Solution to Exercise 3"
-    BIC's penalty $k\ln(n)$ grows without bound as $n \to \infty$, so for any overly complex model, the penalty eventually dominates the likelihood improvement, ensuring BIC selects the true model. AIC's fixed penalty $2k$ does not grow with $n$, so it may continue to select slightly overfit models even with infinite data.
+??? success "연습문제 2 풀이"
+    **AIC가 가장 작은 모형(243.1)**이 선호된다. AIC가 작을수록 적합도와 복잡도의 균형이 좋다.
 
-    **Prefer AIC** when the goal is **prediction** rather than identifying the true model. AIC is asymptotically equivalent to leave-one-out cross-validation, making it better for selecting models that minimize prediction error. BIC's stronger penalty may exclude predictors that improve prediction even though they are not "truly" in the population model.
+    차이가 0.5뿐이라면 두 모형은 정보이론적 근거의 관점에서 **사실상 동등**하다고 본다. 흔한 지침은 이렇다. AIC 차이가 2 미만이면 두 모형 모두 상당한 근거를 가지며, 4–7이면 AIC가 더 큰 모형의 근거가 상당히 약하고, 10을 넘으면 사실상 근거가 없다.
+
+---
+
+**연습문제 3.**
+BIC는 일치성을 가지지만($n \to \infty$일 때 참 모형을 고른다) AIC는 그렇지 않은 이유를 설명하라. 실무에서 AIC를 BIC보다 선호할 상황은 언제인가?
+
+??? success "연습문제 3 풀이"
+    BIC의 벌점 $k\ln(n)$은 $n \to \infty$일 때 한없이 커지므로, 지나치게 복잡한 모형에서는 결국 벌점이 가능도의 개선을 압도하여 BIC가 참 모형을 고르게 된다. AIC의 고정 벌점 $2k$는 $n$과 함께 커지지 않으므로 자료가 무한히 많아도 조금 과대적합된 모형을 계속 고를 수 있다.
+
+    **AIC를 선호할 때**는 참 모형의 식별이 아니라 **예측**이 목표일 때이다. AIC는 하나 빼기 교차검증과 점근적으로 동등하므로 예측오차를 최소화하는 모형을 고르는 데 더 낫다. BIC의 강한 벌점은 모집단의 "참" 모형에 들어 있지 않더라도 예측을 개선하는 설명변수를 배제할 수 있다.

@@ -1,28 +1,27 @@
-# Sampling Distributions for General OLS Estimators
+# 일반 OLS 추정량의 표집분포
 
+## 개요
 
-## Overview
-
-This section extends the inferential results from simple linear regression to the **multiple linear regression** setting using matrix notation. We derive the sampling distributions of the OLS coefficient vector $\hat{\beta}$, the residual variance estimator $s^2$, and the $t$-statistic for testing individual coefficients.
+이 절은 단순선형회귀의 추론 결과를 행렬 표기를 써서 **다중선형회귀** 상황으로 확장한다. OLS 계수벡터 $\hat{\beta}$, 잔차분산 추정량 $s^2$, 개별 계수를 검정하는 $t$ 통계량의 표집분포를 유도한다.
 
 ---
 
-## Setup: The Multiple Linear Regression Model
+## 준비: 다중선형회귀 모형
 
-Consider the model in matrix form:
+행렬 형태의 모형을 생각하자.
 
 $$
 \mathbf{y} = \mathbf{X}\beta + \varepsilon
 $$
 
-where:
+여기서
 
-- $\mathbf{y}$ is an $N \times 1$ vector of responses,
-- $\mathbf{X}$ is an $N \times (p+1)$ design matrix (including an intercept column),
-- $\beta$ is a $(p+1) \times 1$ vector of unknown coefficients,
-- $\varepsilon \sim N(\mathbf{0}, \sigma^2 I_N)$ is the error vector.
+- $\mathbf{y}$는 $N \times 1$ 반응벡터,
+- $\mathbf{X}$는 $N \times (p+1)$ 설계행렬(절편 열을 포함한다),
+- $\beta$는 $(p+1) \times 1$ 미지 계수벡터,
+- $\varepsilon \sim N(\mathbf{0}, \sigma^2 I_N)$는 오차벡터이다.
 
-The OLS estimator is:
+OLS 추정량은
 
 $$
 \hat{\beta} = (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T \mathbf{y}
@@ -30,110 +29,112 @@ $$
 
 ---
 
-## 1. Sampling Distribution of beta-hat
-### Theorem
+## 1. 베타 추정량의 표집분포
 
-Under the assumptions of the linear regression model:
+### 정리
+
+선형회귀 모형의 가정 아래에서
 
 $$
 \hat{\beta} \sim N\!\left(\beta,\; \sigma^2 (\mathbf{X}^T \mathbf{X})^{-1}\right)
 $$
 
-That is, $\hat{\beta}$ is normally distributed with:
+곧 $\hat{\beta}$는 다음의 정규분포를 따른다.
 
-- **Mean**: $E(\hat{\beta}) = \beta$ (unbiased),
-- **Covariance**: $\text{Var}(\hat{\beta}) = \sigma^2 (\mathbf{X}^T \mathbf{X})^{-1}$.
+- **평균**: $E(\hat{\beta}) = \beta$ (불편),
+- **공분산**: $\text{Var}(\hat{\beta}) = \sigma^2 (\mathbf{X}^T \mathbf{X})^{-1}$.
 
-### Proof
+### 증명
 
-Substituting $\mathbf{y} = \mathbf{X}\beta + \varepsilon$ into the OLS formula:
+OLS 공식에 $\mathbf{y} = \mathbf{X}\beta + \varepsilon$을 대입하면
 
 $$
 \hat{\beta} = (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T (\mathbf{X}\beta + \varepsilon) = \beta + (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T \varepsilon
 $$
 
-**Unbiasedness**: Since $E(\varepsilon) = \mathbf{0}$:
+**불편성**: $E(\varepsilon) = \mathbf{0}$이므로
 
 $$
 E(\hat{\beta}) = \beta + (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T E(\varepsilon) = \beta
 $$
 
-**Covariance**: Let $\mathbf{A} = (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T$. Then $\hat{\beta} - \beta = \mathbf{A}\varepsilon$ and:
+**공분산**: $\mathbf{A} = (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T$라 두면 $\hat{\beta} - \beta = \mathbf{A}\varepsilon$이고
 
 $$
 \text{Var}(\hat{\beta}) = \mathbf{A}\,\text{Var}(\varepsilon)\,\mathbf{A}^T = \mathbf{A}(\sigma^2 I_N)\mathbf{A}^T = \sigma^2 \mathbf{A}\mathbf{A}^T
 $$
 
-Computing $\mathbf{A}\mathbf{A}^T$:
+$\mathbf{A}\mathbf{A}^T$를 계산하면
 
 $$
 \mathbf{A}\mathbf{A}^T = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1} = (\mathbf{X}^T\mathbf{X})^{-1}
 $$
 
-Therefore $\text{Var}(\hat{\beta}) = \sigma^2(\mathbf{X}^T\mathbf{X})^{-1}$.
+따라서 $\text{Var}(\hat{\beta}) = \sigma^2(\mathbf{X}^T\mathbf{X})^{-1}$이다.
 
-**Normality**: Since $\hat{\beta} - \beta = \mathbf{A}\varepsilon$ is a linear transformation of the multivariate normal vector $\varepsilon$, $\hat{\beta}$ is itself multivariate normal. $\square$
+**정규성**: $\hat{\beta} - \beta = \mathbf{A}\varepsilon$은 다변량정규벡터 $\varepsilon$의 선형변환이므로 $\hat{\beta}$ 자체도 다변량정규이다. $\square$
 
-### Implications
+### 함의
 
-This result provides the foundation for all inference in multiple regression: confidence intervals for individual coefficients, joint confidence regions, hypothesis tests, and prediction intervals all follow from this distributional result.
+이 결과는 다중회귀의 모든 추론의 토대가 된다. 개별 계수의 신뢰구간, 결합 신뢰영역, 가설검정, 예측구간이 모두 이 분포 결과에서 따라 나온다.
 
 ---
 
-## 2. Sampling Distribution of s-squared
-### Theorem
+## 2. s 제곱의 표집분포
 
-The residual variance estimator
+### 정리
+
+잔차분산 추정량
 
 $$
 s^2 = \frac{1}{N - p - 1} \sum_{i=1}^N (y^{(i)} - \hat{y}^{(i)})^2
 $$
 
-has the sampling distribution:
+의 표집분포는 다음과 같다.
 
 $$
 \frac{(N - p - 1)\,s^2}{\sigma^2} \sim \chi^2_{N-p-1}
 $$
 
-Equivalently:
+동등하게
 
 $$
 s^2 \sim \sigma^2 \frac{\chi^2_{N-p-1}}{N - p - 1}
 $$
 
-### Key Properties
+### 주요 성질
 
-**Unbiasedness**: $E(s^2) = \sigma^2$, so $s^2$ is an unbiased estimator of the error variance.
+**불편성**: $E(s^2) = \sigma^2$이므로 $s^2$은 오차분산의 불편추정량이다.
 
-**Degrees of freedom**: The $N - p - 1$ degrees of freedom reflect the $N$ observations minus the $p + 1$ parameters estimated.
+**자유도**: 자유도 $N - p - 1$은 관측값 $N$개에서 추정한 모수 $p + 1$개를 뺀 것을 반영한다.
 
-**Independence from $\hat{\beta}$**: Under the normality assumption, $s^2$ and $\hat{\beta}$ are statistically independent. This independence is essential for the validity of the $t$-tests.
+**$\hat{\beta}$와의 독립성**: 정규성 가정 아래에서 $s^2$과 $\hat{\beta}$는 통계적으로 독립이다. 이 독립성은 $t$ 검정이 타당하기 위한 필수 조건이다.
 
-### Proof
+### 증명
 
-**Step 1: Express residuals via projection.** Define the hat matrix $\mathbf{P} = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T$ and the residual-maker matrix $\mathbf{M} = I_N - \mathbf{P}$. The residual vector is:
+**1단계: 잔차를 사영으로 표현.** 모자행렬 $\mathbf{P} = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T$와 잔차생성행렬 $\mathbf{M} = I_N - \mathbf{P}$를 정의하자. 잔차벡터는
 
 $$
 \mathbf{e} = \mathbf{y} - \mathbf{X}\hat{\beta} = (I_N - \mathbf{P})\mathbf{y} = \mathbf{M}\varepsilon
 $$
 
-where the last equality uses $\mathbf{M}\mathbf{X} = \mathbf{0}$.
+마지막 등식에는 $\mathbf{M}\mathbf{X} = \mathbf{0}$을 썼다.
 
-**Step 2: Residual sum of squares as a quadratic form.**
+**2단계: 잔차제곱합을 이차형식으로.**
 
 $$
 \text{RSS} = \mathbf{e}^T\mathbf{e} = \varepsilon^T \mathbf{M}^T \mathbf{M}\,\varepsilon = \varepsilon^T \mathbf{M}\,\varepsilon
 $$
 
-since $\mathbf{M}$ is symmetric and idempotent ($\mathbf{M}^2 = \mathbf{M}$).
+$\mathbf{M}$이 대칭이고 멱등($\mathbf{M}^2 = \mathbf{M}$)이기 때문이다.
 
-**Step 3: Chi-squared distribution.** Since $\varepsilon \sim N(\mathbf{0}, \sigma^2 I_N)$ and $\mathbf{M}$ is a symmetric idempotent matrix with rank $\text{tr}(\mathbf{M}) = N - (p+1) = N - p - 1$:
+**3단계: 카이제곱분포.** $\varepsilon \sim N(\mathbf{0}, \sigma^2 I_N)$이고 $\mathbf{M}$이 계수 $\text{tr}(\mathbf{M}) = N - (p+1) = N - p - 1$인 대칭 멱등행렬이므로
 
 $$
 \frac{\varepsilon^T \mathbf{M}\,\varepsilon}{\sigma^2} = \frac{\text{RSS}}{\sigma^2} \sim \chi^2_{N-p-1}
 $$
 
-**Step 4: Conclusion.** Dividing by the degrees of freedom:
+**4단계: 결론.** 자유도로 나누면
 
 $$
 s^2 = \frac{\text{RSS}}{N - p - 1} \sim \sigma^2\frac{\chi^2_{N-p-1}}{N - p - 1} \qquad \square
@@ -141,59 +142,59 @@ $$
 
 ---
 
-## 3. T-Statistic for Individual Regression Coefficients
+## 3. 개별 회귀계수의 t 통계량
 
-### Theorem
+### 정리
 
-Under the null hypothesis $H_0: \beta_j = 0$, the test statistic:
+귀무가설 $H_0: \beta_j = 0$ 아래에서 검정통계량
 
 $$
 t_j = \frac{\hat{\beta}_j}{s\sqrt{v_j}} \sim t_{N-p-1}
 $$
 
-where $v_j = \left((\mathbf{X}^T\mathbf{X})^{-1}\right)_{jj}$ is the $j$-th diagonal element of $(\mathbf{X}^T\mathbf{X})^{-1}$.
+이다. 여기서 $v_j = \left((\mathbf{X}^T\mathbf{X})^{-1}\right)_{jj}$는 $(\mathbf{X}^T\mathbf{X})^{-1}$의 $j$번째 대각원소이다.
 
-### Interpretation
+### 해석
 
-The $t$-statistic $t_j$ tests whether the $j$-th predictor contributes to the model **after accounting for all other predictors**. A large absolute value provides evidence that $\beta_j \neq 0$, i.e., that the $j$-th variable has a statistically significant partial effect on $y$.
+$t$ 통계량 $t_j$는 **다른 모든 설명변수를 고려한 뒤에도** $j$번째 설명변수가 모형에 기여하는지를 검정한다. 절댓값이 크면 $\beta_j \neq 0$이라는 증거, 곧 $j$번째 변수가 $y$에 통계적으로 유의한 부분효과를 갖는다는 증거가 된다.
 
-The denominator $s\sqrt{v_j}$ is the **standard error** of $\hat{\beta}_j$:
+분모 $s\sqrt{v_j}$가 $\hat{\beta}_j$의 **표준오차**이다.
 
 $$
 \text{SE}(\hat{\beta}_j) = s\sqrt{v_j}
 $$
 
-### Proof
+### 증명
 
-**Step 1: Distribution of $\hat{\beta}_j$ under $H_0$.** From the sampling distribution of $\hat{\beta}$, each component satisfies:
+**1단계: $H_0$ 아래 $\hat{\beta}_j$의 분포.** $\hat{\beta}$의 표집분포에서 각 성분은
 
 $$
 \hat{\beta}_j \sim N(\beta_j, \sigma^2 v_j)
 $$
 
-Under $H_0: \beta_j = 0$:
+$H_0: \beta_j = 0$ 아래에서는
 
 $$
 \frac{\hat{\beta}_j}{\sigma\sqrt{v_j}} \sim N(0, 1)
 $$
 
-**Step 2: Independent chi-squared in the denominator.** From the distribution of $s^2$:
+**2단계: 분모의 독립 카이제곱.** $s^2$의 분포에서
 
 $$
 \frac{(N-p-1)s^2}{\sigma^2} \sim \chi^2_{N-p-1}
 $$
 
-and this is independent of $\hat{\beta}_j$ (since $\hat{\beta}$ depends on $\mathbf{P}\varepsilon$ while $s^2$ depends on $\mathbf{M}\varepsilon$, and $\mathbf{PM} = \mathbf{0}$).
+이고 이는 $\hat{\beta}_j$와 독립이다($\hat{\beta}$는 $\mathbf{P}\varepsilon$에, $s^2$은 $\mathbf{M}\varepsilon$에 의존하며 $\mathbf{PM} = \mathbf{0}$이기 때문이다).
 
-**Step 3: Form the $t$-ratio.** By the definition of the $t$-distribution:
+**3단계: $t$ 비 만들기.** $t$ 분포의 정의에 따라
 
 $$
 t_j = \frac{\hat{\beta}_j / (\sigma\sqrt{v_j})}{\sqrt{s^2/\sigma^2}} = \frac{\hat{\beta}_j}{s\sqrt{v_j}} \sim t_{N-p-1} \qquad \square
 $$
 
-### General Confidence Interval
+### 일반 신뢰구간
 
-For a $(1 - \alpha)$ confidence interval for $\beta_j$:
+$\beta_j$에 대한 $(1 - \alpha)$ 신뢰구간은
 
 $$
 \hat{\beta}_j \pm t_{N-p-1}(1 - \alpha/2)\; s\sqrt{v_j}
@@ -201,18 +202,18 @@ $$
 
 ---
 
-## Example: Reproducing Linear Regression Output
+## 예제: 선형회귀 출력 재현
 
-### Problem
+### 문제
 
-Using the Advertising dataset, reproduce the main regression output for the model $\text{Sales} \sim \text{TV} + \text{Radio} + \text{Newspaper}$ by computing coefficients, standard errors, $t$-statistics, $p$-values, and confidence intervals from scratch.
+Advertising 자료를 써서 모형 $\text{Sales} \sim \text{TV} + \text{Radio} + \text{Newspaper}$의 주요 회귀 출력 — 계수, 표준오차, $t$ 통계량, $p$값, 신뢰구간 — 을 밑바닥부터 계산해 재현하라.
 
-!!! info "Reference"
+!!! info "참고"
 
     - [Khan Academy: Using Least-Squares Regression Output](https://www.khanacademy.org/math/ap-statistics/bivariate-data-ap/least-squares-regression/v/using-least-squares-regression-output)
     - [Khan Academy: Interpreting Computer Regression Data](https://www.khanacademy.org/math/ap-statistics/bivariate-data-ap/assessing-fit-least-squares-regression/v/interpreting-computer-regression-data)
 
-### Implementation
+### 구현
 
 ```python
 import numpy as np
@@ -274,48 +275,61 @@ for name, j in zip(variable_names, range(p_plus_1)):
 print("=" * 100)
 ```
 
-### Understanding the Output
+출력(훈련자료 140개 관측값):
 
-Each row of the regression table contains:
+```text
+                coef    std err        t      P>|t|     [0.025      0.975]
+Intercept     3.0451      0.391      7.782      0.000      2.271      3.819
+TV            0.0470      0.002     27.653      0.000      0.044      0.050
+Radio         0.1797      0.011     16.665      0.000      0.158      0.201
+Newspaper    -0.0030      0.007     -0.428      0.669     -0.017      0.011
+```
 
-- **coef**: The OLS estimate $\hat{\beta}_j$.
-- **std err**: The standard error $s\sqrt{v_j}$, where $v_j = ((\mathbf{X}^T\mathbf{X})^{-1})_{jj}$.
-- **t**: The $t$-statistic $t_j = \hat{\beta}_j / (s\sqrt{v_j})$.
-- **P>|t|**: The two-tailed $p$-value from $t_{N-p-1}$.
-- **[0.025, 0.975]**: The 95% confidence interval $\hat{\beta}_j \pm t_{N-p-1}(0.975) \cdot s\sqrt{v_j}$.
+이 값들은 `statsmodels`의 `sm.ols('Sales ~ TV + Radio + Newspaper', train_data).fit().summary()`가 내놓는 표와 정확히 일치한다.
 
-A predictor is statistically significant at the 5% level when its $p$-value is less than 0.05, equivalently when its 95% confidence interval excludes zero.
-## Exercises
+### 출력 읽기
 
-**Exercise 1.**
-In a multiple regression with $p = 4$ predictors and $n = 50$, derive the degrees of freedom for the $t$-test of an individual coefficient and the $F$-test for overall significance.
+회귀표의 각 행은 다음을 담고 있다.
 
-??? success "Solution to Exercise 1"
+- **coef**: OLS 추정값 $\hat{\beta}_j$.
+- **std err**: 표준오차 $s\sqrt{v_j}$. 여기서 $v_j = ((\mathbf{X}^T\mathbf{X})^{-1})_{jj}$이다.
+- **t**: $t$ 통계량 $t_j = \hat{\beta}_j / (s\sqrt{v_j})$.
+- **P>|t|**: $t_{N-p-1}$에서 얻은 양측 $p$값.
+- **[0.025, 0.975]**: 95% 신뢰구간 $\hat{\beta}_j \pm t_{N-p-1}(0.975) \cdot s\sqrt{v_j}$.
 
-    - **$t$-test for individual coefficient $\beta_j$:** $t = \hat{\beta}_j / \text{SE}(\hat{\beta}_j) \sim t_{n-p-1} = t_{45}$ under $H_0: \beta_j = 0$.
+$p$값이 0.05보다 작으면, 동등하게 95% 신뢰구간이 0을 포함하지 않으면 그 설명변수는 유의수준 5%에서 통계적으로 유의하다. 위 표에서 Newspaper는 $p = 0.669$이고 신뢰구간 $(-0.017, 0.011)$이 0을 포함하므로 유의하지 않다.
 
-    - **$F$-test for overall significance:** Tests $H_0: \beta_1 = \beta_2 = \beta_3 = \beta_4 = 0$. $F = (\text{SSR}/p) / (\text{SSE}/(n-p-1)) \sim F_{p, n-p-1} = F_{4, 45}$ under $H_0$.
+## 연습문제
+
+**연습문제 1.**
+설명변수가 $p = 4$개이고 $n = 50$인 다중회귀에서 개별 계수의 $t$ 검정과 전체 유의성 $F$ 검정의 자유도를 유도하라.
+
+??? success "연습문제 1 풀이"
+
+    - **개별 계수 $\beta_j$의 $t$ 검정:** $H_0: \beta_j = 0$ 아래에서 $t = \hat{\beta}_j / \text{SE}(\hat{\beta}_j) \sim t_{n-p-1} = t_{45}$이다.
+
+    - **전체 유의성 $F$ 검정:** $H_0: \beta_1 = \beta_2 = \beta_3 = \beta_4 = 0$을 검정한다. $H_0$ 아래에서 $F = (\text{SSR}/p) / (\text{SSE}/(n-p-1)) \sim F_{p, n-p-1} = F_{4, 45}$이다.
 
 ---
 
-**Exercise 2.**
-In a regression output, predictor $X_3$ has $\hat{\beta}_3 = 2.1$ with $p = 0.04$, but when $X_4$ is added to the model, $\hat{\beta}_3$ changes to $0.3$ with $p = 0.72$. Explain this phenomenon.
+**연습문제 2.**
+어떤 회귀 출력에서 설명변수 $X_3$이 $\hat{\beta}_3 = 2.1$, $p = 0.04$였는데, 모형에 $X_4$를 넣으니 $\hat{\beta}_3$이 $0.3$으로 바뀌고 $p = 0.72$가 되었다. 이 현상을 설명하라.
 
-??? success "Solution to Exercise 2"
-    This is a consequence of **multicollinearity** or **confounding**. When $X_4$ is added:
+??? success "연습문제 2 풀이"
+    **다중공선성** 또는 **교란**의 결과이다. $X_4$를 넣으면
 
-    1. If $X_3$ and $X_4$ are correlated, adding $X_4$ "absorbs" the variation that $X_3$ was previously explaining. The partial effect of $X_3$ (holding $X_4$ constant) is much smaller than its marginal effect (ignoring $X_4$).
+    1. $X_3$과 $X_4$가 상관되어 있다면 $X_4$가 이전에 $X_3$이 설명하던 변동을 "흡수"한다. ($X_4$를 고정한) $X_3$의 부분효과는 ($X_4$를 무시한) 주변효과보다 훨씬 작다.
 
-    2. The standard error of $\hat{\beta}_3$ increases due to multicollinearity (VIF increases), further reducing the $t$-statistic.
+    2. 다중공선성 때문에 $\hat{\beta}_3$의 표준오차가 커지고(VIF가 커지고) $t$ 통계량이 더욱 작아진다.
 
-    This illustrates that coefficient estimates and their significance depend on which other predictors are in the model. The change from significant to non-significant suggests that $X_3$'s apparent effect was partly (or largely) due to its correlation with $X_4$.
+    이는 계수 추정값과 그 유의성이 모형에 어떤 다른 설명변수가 들어 있는지에 달려 있음을 보여준다. 유의하던 것이 유의하지 않게 바뀌었다는 것은 $X_3$의 겉보기 효과가 부분적으로(또는 상당 부분) $X_4$와의 상관에서 비롯되었음을 시사한다.
 
 ---
 
-**Exercise 3.**
-Explain why a significant $F$-test for overall model significance does not guarantee that any individual predictor will have a significant $t$-test. Construct a conceptual example.
+**연습문제 3.**
+전체 모형의 $F$ 검정이 유의하더라도 어떤 개별 설명변수의 $t$ 검정이 유의하리라는 보장은 없다. 그 이유를 설명하고 개념적인 예를 구성하라.
 
-??? success "Solution to Exercise 3"
-    The $F$-test tests the joint hypothesis $H_0: \beta_1 = \cdots = \beta_p = 0$. Individual $t$-tests test each $\beta_j = 0$ separately. These can disagree when predictors are highly correlated.
+??? success "연습문제 3 풀이"
+    $F$ 검정은 결합가설 $H_0: \beta_1 = \cdots = \beta_p = 0$을 검정한다. 개별 $t$ 검정은 각 $\beta_j = 0$을 따로 검정한다. 설명변수들이 강하게 상관되어 있으면 둘은 어긋날 수 있다.
 
-    **Example:** Two predictors $X_1$ and $X_2$ with $r = 0.95$ both strongly predict $Y$. The $F$-test is significant because together they explain substantial variance. But individually, each $t$-test is non-significant because the shared variance is split between them, and the standard errors are inflated by multicollinearity ($\text{VIF} \approx 10$). Neither predictor adds much beyond the other, but together they are clearly important.
+    **예:** 상관이 $r = 0.95$인 두 설명변수 $X_1$과 $X_2$가 모두 $Y$를 잘 예측한다고 하자. 둘이 함께 상당한 분산을 설명하므로 $F$ 검정은 유의하다. 그러나 개별적으로는 공유된 분산이 둘로 갈라지고 다중공선성으로 표준오차가 부풀려져($\text{VIF} = 1/(1-0.95^2) \approx 10.3$) 두 $t$ 검정 모두 유의하지 않을 수 있다. 어느 쪽도 상대를 넘어서는 기여를 별로 하지 못하지만, 함께 보면 분명히 중요하다.
