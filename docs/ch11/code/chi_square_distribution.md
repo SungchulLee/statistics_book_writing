@@ -1,54 +1,54 @@
-# Chi Square Distribution
+# 카이제곱 분포
 
-## Overview
+## 개요
 
-The chi-squared distribution is one of the most fundamental distributions in inferential statistics, underpinning tests for variance, goodness of fit, and independence. It arises naturally as the distribution of a sum of squared standard normal random variables. This page defines the distribution, derives its key properties, visualizes its PDF and CDF, and demonstrates that sampling from $\chi^2(d)$ directly and constructing it from $Z^2$ sums produce identical distributions.
+카이제곱 분포는 추론통계에서 가장 기본적인 분포 중 하나로, 분산에 대한 검정, 적합도 검정, 독립성 검정의 바탕이 된다. 표준정규 확률변수의 제곱합의 분포로 자연스럽게 나타난다. 이 페이지에서는 이 분포를 정의하고 핵심 성질을 유도하며, 확률밀도함수와 누적분포함수를 시각화하고, $\chi^2(d)$에서 직접 표집한 것과 $Z^2$의 합으로 구성한 것이 같은 분포임을 보인다.
 
-## Definition
+## 정의
 
-If $Z_1, Z_2, \dots, Z_d$ are independent standard normal random variables, $Z_i \sim N(0,1)$, then the sum of their squares follows a chi-squared distribution with $d$ degrees of freedom:
+$Z_1, Z_2, \dots, Z_d$가 독립인 표준정규 확률변수 $Z_i \sim N(0,1)$이면 그 제곱합은 자유도 $d$인 카이제곱 분포를 따른다:
 
 $$
 Q = \sum_{i=1}^{d} Z_i^2 \sim \chi^2(d)
 $$
 
-The probability density function for $x > 0$ is
+$x > 0$에서 확률밀도함수는
 
 $$
 f(x;\, d) = \frac{1}{2^{d/2}\, \Gamma(d/2)}\, x^{d/2 - 1}\, e^{-x/2}
 $$
 
-where $\Gamma(\cdot)$ is the gamma function.
+이며 $\Gamma(\cdot)$는 감마함수이다.
 
-## Key Properties
+## 핵심 성질
 
-| Property | Value |
+| 성질 | 값 |
 |---|---|
-| Mean | $d$ |
-| Variance | $2d$ |
-| Mode | $\max(d - 2,\, 0)$ |
-| Skewness | $\sqrt{8/d}$ |
-| MGF | $(1 - 2t)^{-d/2}$ for $t < 1/2$ |
+| 평균 | $d$ |
+| 분산 | $2d$ |
+| 최빈값 | $\max(d - 2,\, 0)$ |
+| 왜도 | $\sqrt{8/d}$ |
+| 적률생성함수 | $t < 1/2$에서 $(1 - 2t)^{-d/2}$ |
 
-As $d \to \infty$, the chi-squared distribution approaches a normal distribution by the Central Limit Theorem:
+$d \to \infty$이면 중심극한정리에 의해 카이제곱 분포가 정규분포에 가까워진다:
 
 $$
 \frac{Q - d}{\sqrt{2d}} \xrightarrow{d} N(0, 1)
 $$
 
-## Additivity Property
+## 가법성
 
-If $Q_1 \sim \chi^2(d_1)$ and $Q_2 \sim \chi^2(d_2)$ are independent, then
+$Q_1 \sim \chi^2(d_1)$과 $Q_2 \sim \chi^2(d_2)$가 독립이면
 
 $$
 Q_1 + Q_2 \sim \chi^2(d_1 + d_2)
 $$
 
-This follows directly from the definition: the sum of $d_1 + d_2$ independent squared standard normals has $d_1 + d_2$ degrees of freedom.
+이다. 정의에서 곧바로 따라온다. 독립인 표준정규 제곱 $d_1 + d_2$개의 합은 자유도 $d_1 + d_2$를 갖는다.
 
-## Visualizing the PDF and CDF
+## 확률밀도함수와 누적분포함수의 시각화
 
-The following code plots the PDF and CDF for a given degrees-of-freedom parameter:
+다음 코드는 주어진 자유도에 대해 확률밀도함수와 누적분포함수를 그린다:
 
 ```python
 import numpy as np
@@ -68,14 +68,14 @@ ax.set_title(f"PDF and CDF of chi-squared({df})")
 plt.show()
 ```
 
-For small $d$, the PDF is right-skewed with a mode near zero. As $d$ increases, the distribution becomes more symmetric and shifts to the right.
+$d$가 작으면 확률밀도함수가 오른쪽으로 치우치고 최빈값이 0 근처에 있다. $d$가 커지면 분포가 더 대칭적이 되고 오른쪽으로 이동한다.
 
-## Construction from Squared Normals
+## 정규 제곱합으로부터의 구성
 
-The defining property can be verified empirically by comparing two approaches:
+정의가 되는 성질은 두 방식을 비교하여 경험적으로 확인할 수 있다:
 
-1. **Direct sampling:** draw 10,000 values from $\chi^2(d)$.
-2. **Construction:** draw a $d \times 10{,}000$ matrix of $N(0,1)$ values, square each entry, and sum along columns.
+1. **직접 표집:** $\chi^2(d)$에서 10,000개를 뽑는다.
+2. **구성:** $N(0,1)$ 값으로 $d \times 10{,}000$ 행렬을 만들고 각 성분을 제곱한 뒤 열 방향으로 합한다.
 
 ```python
 df, seed = 5, 1
@@ -86,90 +86,92 @@ data_from_norm = np.sum(
 )
 ```
 
-Overlaying histograms of both samples against the theoretical PDF confirms that they match, validating the definition $\sum Z_i^2 \sim \chi^2(d)$.
+두 표본의 히스토그램을 이론적 확률밀도함수 위에 겹쳐 그리면 서로 일치하여 정의 $\sum Z_i^2 \sim \chi^2(d)$를 확인해 준다.
 
-## Interpretation
+## 해석
 
-- The degrees of freedom $d$ controls the shape: small $d$ gives a highly skewed distribution concentrated near zero, while large $d$ produces a nearly symmetric bell shape centered at $d$.
-- The chi-squared distribution only takes positive values, consistent with its definition as a sum of squares.
-- Critical values $\chi^2_{1-\alpha}(d)$ are widely used in hypothesis testing. For instance, the upper 5% critical value for $\chi^2(5)$ is approximately 11.07.
+- 자유도 $d$가 모양을 결정한다. $d$가 작으면 0 근처에 몰린 심하게 치우친 분포가 되고, $d$가 크면 $d$를 중심으로 하는 거의 대칭인 종 모양이 된다.
+- 카이제곱 분포는 제곱합으로 정의되므로 양수 값만 가진다.
+- 임계값 $\chi^2_{1-\alpha}(d)$는 가설검정에서 널리 쓰인다. 예를 들어 $\chi^2(5)$의 상위 5% 임계값은 약 11.07이다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Compute $E[Q]$ and $\text{Var}(Q)$ for $Q \sim \chi^2(10)$ using the properties table above, and verify by computing $E[Z^2]$ and $\text{Var}(Z^2)$ for $Z \sim N(0,1)$.
+**연습문제 1.**
+위 성질 표를 써서 $Q \sim \chi^2(10)$의 $E[Q]$와 $\text{Var}(Q)$를 계산하고, $Z \sim N(0,1)$에 대한 $E[Z^2]$과 $\text{Var}(Z^2)$으로 확인하라.
 
-??? success "Solution to Exercise 1"
-    From the table, $E[Q] = d = 10$ and $\text{Var}(Q) = 2d = 20$.
+??? success "연습문제 1 풀이"
+    표에서 $E[Q] = d = 10$, $\text{Var}(Q) = 2d = 20$이다.
 
-    Verification: For $Z \sim N(0,1)$, $E[Z^2] = 1$ and $\text{Var}(Z^2) = E[Z^4] - (E[Z^2])^2 = 3 - 1 = 2$. Since $Q = \sum_{i=1}^{10} Z_i^2$ with independent terms,
+    확인: $Z \sim N(0,1)$에서 $E[Z^2] = 1$이고 $\text{Var}(Z^2) = E[Z^4] - (E[Z^2])^2 = 3 - 1 = 2$이다. $Q = \sum_{i=1}^{10} Z_i^2$이고 항들이 독립이므로
 
     $$
     E[Q] = 10 \cdot 1 = 10, \qquad \text{Var}(Q) = 10 \cdot 2 = 20
     $$
 
-    Both approaches agree.
+    이다. 두 방식이 일치한다.
 
 ---
 
-**Exercise 2.**
-Show that the moment generating function of $\chi^2(d)$ is $M_Q(t) = (1 - 2t)^{-d/2}$ for $t < 1/2$, starting from the MGF of $Z^2$ where $Z \sim N(0,1)$.
+**연습문제 2.**
+$Z \sim N(0,1)$에 대한 $Z^2$의 적률생성함수에서 시작하여 $\chi^2(d)$의 적률생성함수가 $t < 1/2$에서 $M_Q(t) = (1 - 2t)^{-d/2}$임을 보여라.
 
-??? success "Solution to Exercise 2"
-    For $Z \sim N(0,1)$, the MGF of $Z^2$ is
+??? success "연습문제 2 풀이"
+    $Z \sim N(0,1)$에서 $Z^2$의 적률생성함수는
 
     $$
     M_{Z^2}(t) = E[e^{tZ^2}] = \int_{-\infty}^{\infty} e^{tz^2} \frac{1}{\sqrt{2\pi}} e^{-z^2/2}\, dz = \int_{-\infty}^{\infty} \frac{1}{\sqrt{2\pi}} e^{-z^2(1 - 2t)/2}\, dz
     $$
 
-    This integral converges when $1 - 2t > 0$, i.e., $t < 1/2$. Completing the Gaussian integral gives $M_{Z^2}(t) = (1 - 2t)^{-1/2}$.
+    이다. 이 적분은 $1 - 2t > 0$, 즉 $t < 1/2$일 때 수렴한다. Gauss 적분을 완성하면 $M_{Z^2}(t) = (1 - 2t)^{-1/2}$을 얻는다.
 
-    Since $Q = \sum_{i=1}^{d} Z_i^2$ with independent $Z_i$, the MGF of $Q$ is the product of the individual MGFs:
+    $Q = \sum_{i=1}^{d} Z_i^2$이고 $Z_i$가 독립이므로 $Q$의 적률생성함수는 개별 적률생성함수의 곱이다:
 
     $$
     M_Q(t) = \prod_{i=1}^{d} (1 - 2t)^{-1/2} = (1 - 2t)^{-d/2}
     $$
 
-    for $t < 1/2$. $\square$
+    ($t < 1/2$). $\square$
 
 ---
 
-**Exercise 3.**
-If $Q_1 \sim \chi^2(3)$ and $Q_2 \sim \chi^2(7)$ are independent, find the distribution of $Q_1 + Q_2$ and compute $P(Q_1 + Q_2 > 18.31)$.
+**연습문제 3.**
+$Q_1 \sim \chi^2(3)$과 $Q_2 \sim \chi^2(7)$이 독립일 때 $Q_1 + Q_2$의 분포를 구하고 $P(Q_1 + Q_2 > 18.31)$을 계산하라.
 
-??? success "Solution to Exercise 3"
-    By the additivity property, $Q_1 + Q_2 \sim \chi^2(3 + 7) = \chi^2(10)$.
+??? success "연습문제 3 풀이"
+    가법성에 의해 $Q_1 + Q_2 \sim \chi^2(3 + 7) = \chi^2(10)$이다.
 
-    The value 18.31 is the upper 5% critical value of $\chi^2(10)$, so
+    값 18.31은 $\chi^2(10)$의 상위 5% 임계값이므로
 
     $$
     P(Q_1 + Q_2 > 18.31) = 0.05
     $$
 
+    이다.
+
 ---
 
-**Exercise 4.**
-Explain why the chi-squared distribution with $d = 2$ is an exponential distribution. Identify the rate parameter.
+**연습문제 4.**
+자유도 $d = 2$인 카이제곱 분포가 지수분포인 이유를 설명하라. 비율 모수를 밝혀라.
 
-??? success "Solution to Exercise 4"
-    Setting $d = 2$ in the PDF:
+??? success "연습문제 4 풀이"
+    확률밀도함수에 $d = 2$를 넣으면
 
     $$
     f(x;\, 2) = \frac{1}{2^1 \Gamma(1)} x^{0} e^{-x/2} = \frac{1}{2} e^{-x/2}, \qquad x > 0
     $$
 
-    This is exactly the PDF of an $\text{Exponential}(\lambda = 1/2)$ distribution (equivalently, $\text{Exponential}$ with mean 2). The connection is not surprising: $\chi^2(d)$ is a special case of the $\text{Gamma}(d/2, 1/2)$ distribution, and $\text{Gamma}(1, \lambda) = \text{Exponential}(\lambda)$.
+    이다. 이는 정확히 $\text{Exponential}(\lambda = 1/2)$ 분포(동등하게 평균이 2인 지수분포)의 확률밀도함수이다. 놀랄 일은 아니다. $\chi^2(d)$는 $\text{Gamma}(d/2, 1/2)$의 특수한 경우이고 $\text{Gamma}(1, \lambda) = \text{Exponential}(\lambda)$이기 때문이다.
 
 ---
 
-**Exercise 5.**
-A researcher wants to use the normal approximation $(Q - d)/\sqrt{2d} \approx N(0,1)$ to find the upper 5% critical value of $\chi^2(50)$. Compute the approximate critical value and compare it to the exact value of 67.50.
+**연습문제 5.**
+어떤 연구자가 정규근사 $(Q - d)/\sqrt{2d} \approx N(0,1)$을 써서 $\chi^2(50)$의 상위 5% 임계값을 구하려 한다. 근사 임계값을 계산하고 정확한 값 67.50과 비교하라.
 
-??? success "Solution to Exercise 5"
-    Using the approximation with $d = 50$ and $z_{0.95} = 1.645$:
+??? success "연습문제 5 풀이"
+    $d = 50$과 $z_{0.95} = 1.645$로 근사하면
 
     $$
     Q \approx d + z_{0.95}\sqrt{2d} = 50 + 1.645\sqrt{100} = 50 + 16.45 = 66.45
     $$
 
-    The exact value is 67.50, so the approximation underestimates by about 1.05 (a relative error of roughly 1.6%). The approximation is reasonable for $d = 50$ and improves further as $d$ increases. For higher accuracy, Wilson-Hilferty's cube-root transformation $\bigl(\frac{Q}{d}\bigr)^{1/3} \approx N\!\bigl(1 - \frac{2}{9d},\, \frac{2}{9d}\bigr)$ is often preferred.
+    이다. 정확한 값은 67.50이므로 근사가 약 1.05만큼 과소추정한다(상대오차 약 1.6%). $d = 50$에서 근사가 그런대로 쓸 만하고 $d$가 커질수록 좋아진다. 더 정확하게 하려면 Wilson-Hilferty의 세제곱근 변환 $\bigl(\frac{Q}{d}\bigr)^{1/3} \approx N\!\bigl(1 - \frac{2}{9d},\, \frac{2}{9d}\bigr)$을 흔히 선호한다.

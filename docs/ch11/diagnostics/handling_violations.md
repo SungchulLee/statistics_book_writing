@@ -1,22 +1,21 @@
-# Handling Assumption Violations
+# 가정 위반의 처리
 
+## 개요
 
-## Overview
+진단 결과 분산분석의 가정이 하나 이상 어긋난 것으로 드러나면, 타당한 결론을 얻기 위해 시정 조치를 취해야 한다. 적절한 대응은 위반의 성격과 심각성에 따라 달라진다. 이 절은 위반 유형별로 대처하는 체계적인 지침을 제공한다.
 
-When diagnostic checks reveal that one or more ANOVA assumptions are violated, it is important to take corrective actions to ensure valid conclusions. The appropriate response depends on the nature and severity of the violation. This section provides a systematic guide to addressing each type of violation.
+## 단계별 접근
 
-## Step-by-Step Approach
+1. **원인 파악:** 앞 절들에서 설명한 진단 도구로 어느 가정이 어느 정도로 어긋났는지 판정한다.
+2. **심각성 평가:** 표본이 크고 균형 잡혀 있으면 가벼운 위반은 결과에 거의 영향을 주지 않을 수 있다. 심한 위반은 시정 조치가 필요하다.
+3. **처방 선택:** 구체적인 위반에 따라 아래 선택지 중에서 고른다.
+4. **개선 확인:** 보정을 적용한 뒤 진단을 다시 수행하여 가정이 이제 충족되는지 확인한다.
 
-1. **Identify the source:** Determine which assumption is violated and the extent of the violation using the diagnostic tools described in previous sections.
-2. **Assess severity:** Minor violations may have negligible impact on results, especially with large, balanced samples. Severe violations require corrective action.
-3. **Choose a remedy:** Select from the options below based on the specific violation.
-4. **Verify the fix:** After applying a correction, re-run the diagnostics to confirm the assumption is now met.
+## 비모수 대안
 
-## Non-Parametric Alternatives
+### Kruskal-Wallis 검정
 
-### Kruskal-Wallis Test
-
-When the normality assumption is violated, the Kruskal-Wallis test is a non-parametric alternative to one-way ANOVA. It compares the medians (more precisely, the mean ranks) rather than the means across groups and does not assume normality of residuals.
+정규성 가정이 어긋날 때 Kruskal-Wallis 검정은 일원배치 분산분석의 비모수 대안이 된다. 집단 사이에서 평균 대신 중앙값(더 정확히는 평균 순위)을 비교하며 잔차의 정규성을 가정하지 않는다.
 
 ```python
 from scipy.stats import kruskal
@@ -25,15 +24,15 @@ stat, p_value = kruskal(group1, group2, group3)
 print(f"Kruskal-Wallis: H = {stat:.4f}, p-value = {p_value:.4f}")
 ```
 
-The Kruskal-Wallis test is less sensitive to outliers and skewed distributions but assumes that the distributions have the same shape (differing only in location). For a detailed treatment, see [Kruskal-Wallis Test](../../ch16/multi_group_nonparametric/kruskal_wallis.md).
+Kruskal-Wallis 검정은 이상점이나 치우친 분포에 덜 민감하지만, 분포의 모양이 같고 위치만 다르다고 가정한다. 자세한 내용은 [Kruskal-Wallis 검정](../../ch16/multi_group_nonparametric/kruskal_wallis.md)을 보라.
 
-## Data Transformations
+## 자료 변환
 
-Transformations can simultaneously address violations of normality and homoscedasticity by changing the scale of the data.
+변환은 자료의 척도를 바꾸어 정규성과 등분산성 위반을 한꺼번에 다룰 수 있다.
 
-### Log Transformation
+### 로그 변환
 
-Used when the data is positively skewed or when the variance increases with the mean:
+자료가 양의 방향으로 치우쳐 있거나 분산이 평균과 함께 커질 때 쓴다:
 
 $$
 Y' = \log(Y) \quad \text{or} \quad Y' = \log(Y + c) \text{ if } Y \text{ contains zeros}
@@ -45,9 +44,9 @@ import numpy as np
 data['log_response'] = np.log(data['response'])
 ```
 
-### Square Root Transformation
+### 제곱근 변환
 
-Useful for count data that follow a Poisson-like distribution:
+Poisson 계열 분포를 따르는 도수 자료에 유용하다:
 
 $$
 Y' = \sqrt{Y}
@@ -57,9 +56,9 @@ $$
 data['sqrt_response'] = np.sqrt(data['response'])
 ```
 
-### Box-Cox Transformation
+### Box-Cox 변환
 
-A family of power transformations parameterized by $\lambda$ that can be optimized to achieve the best approximation to normality:
+$\lambda$로 모수화된 거듭제곱 변환의 족으로, 정규성에 가장 가까워지도록 $\lambda$를 최적화할 수 있다:
 
 $$
 Y'(\lambda) = \begin{cases} \frac{Y^\lambda - 1}{\lambda} & \text{if } \lambda \neq 0 \\ \log(Y) & \text{if } \lambda = 0 \end{cases}
@@ -69,17 +68,17 @@ $$
 from scipy.stats import boxcox
 
 transformed_data, best_lambda = boxcox(data['response'])
-print(f"Optimal λ = {best_lambda:.4f}")
+print(f"Optimal lambda = {best_lambda:.4f}")
 ```
 
-!!! note "Interpretation After Transformation"
-    After transforming the data, the ANOVA tests hypotheses about the transformed means, not the original means. Be careful when interpreting and reporting results—back-transform estimates when possible and clearly state what scale the analysis was conducted on.
+!!! note "변환 후의 해석"
+    자료를 변환하면 분산분석은 원래 평균이 아니라 변환된 평균에 관한 가설을 검정한다. 결과를 해석하고 보고할 때 주의하라. 가능하면 추정값을 역변환하고, 어떤 척도에서 분석했는지 분명히 밝혀야 한다.
 
-## Robust ANOVA Methods
+## 로버스트 분산분석 방법
 
-### Welch's ANOVA
+### Welch 분산분석
 
-Welch's ANOVA does not assume equal variances across groups. It adjusts the degrees of freedom of the F-test using the Welch-Satterthwaite approximation:
+Welch 분산분석은 집단 사이의 등분산을 가정하지 않는다. Welch-Satterthwaite 근사로 F-검정의 자유도를 조정한다:
 
 ```python
 from scipy.stats import f_oneway
@@ -90,11 +89,11 @@ welch_result = pg.welch_anova(dv='response', between='group', data=data)
 print(welch_result)
 ```
 
-For a full treatment, see [Welch's One-Way ANOVA](../anova_welch/welch_one_way.md).
+전체 논의는 [Welch의 일원배치 분산분석](../anova_welch/welch_one_way.md)을 보라.
 
-### Robust Estimators
+### 로버스트 추정량
 
-Methods like Huber or M-estimators can provide ANOVA-like results that are less sensitive to outliers:
+Huber나 M-추정량 같은 방법은 이상점에 덜 민감한 분산분석 유사 결과를 준다:
 
 ```python
 import statsmodels.api as sm
@@ -104,14 +103,14 @@ result = rlm_model.fit()
 print(result.summary())
 ```
 
-## Permutation Tests
+## 순열검정
 
-Permutation tests make minimal distributional assumptions. They work by:
+순열검정은 분포에 대한 가정을 최소한으로만 둔다. 작동 방식은 다음과 같다:
 
-1. Computing the observed F-statistic.
-2. Randomly shuffling the group labels many times.
-3. Recomputing the F-statistic for each permutation.
-4. Comparing the observed F-statistic to the permutation distribution.
+1. 관측된 F-통계량을 계산한다.
+2. 집단 표시를 여러 번 무작위로 섞는다.
+3. 각 순열마다 F-통계량을 다시 계산한다.
+4. 관측된 F-통계량을 순열분포와 비교한다.
 
 ```python
 import numpy as np
@@ -139,60 +138,61 @@ p_value = np.mean(np.array(perm_f_stats) >= observed_f)
 print(f"Permutation test p-value: {p_value:.4f}")
 ```
 
-For a detailed treatment, see [Permutation Tests](../../ch17/permutation/foundations.md).
+자세한 내용은 [순열검정](../../ch17/permutation/foundations.md)을 보라.
 
-## Summary of Remedies by Violation
+## 위반별 처방 요약
 
-| Violation | Recommended Remedies |
+| 위반 | 권장 처방 |
 |-----------|---------------------|
-| Non-normality | Transformations, Kruskal-Wallis, bootstrapping |
-| Heteroscedasticity | Welch's ANOVA, transformations, robust standard errors |
-| Non-independence | Mixed-effects models, repeated-measures ANOVA, GEE |
-| Nonlinearity | Polynomial terms, transformations, GAMs |
-| Outliers/Influential points | Robust estimators, sensitivity analysis, transformations |
-## Exercises
+| 비정규성 | 변환, Kruskal-Wallis, 붓스트랩 |
+| 이분산 | Welch 분산분석, 변환, 로버스트 표준오차 |
+| 비독립성 | 혼합효과 모형, 반복측정 분산분석, GEE |
+| 비선형성 | 다항 항, 변환, GAM |
+| 이상점/영향점 | 로버스트 추정량, 민감도 분석, 변환 |
 
-**Exercise 1.**
-A one-way ANOVA with four groups yields a significant F-test ($p = 0.008$), but Levene's test rejects the null of equal variances ($p = 0.003$) and the Shapiro-Wilk test on the residuals is non-significant ($p = 0.34$). Outline a step-by-step plan for obtaining valid inference.
+## 연습문제
 
-??? success "Solution to Exercise 1"
+**연습문제 1.**
+집단이 넷인 일원배치 분산분석에서 F-검정이 유의하게 나왔지만($p = 0.008$), Levene 검정이 등분산 귀무가설을 기각하고($p = 0.003$) 잔차에 대한 Shapiro-Wilk 검정은 유의하지 않다($p = 0.34$). 타당한 추론을 얻기 위한 단계별 계획을 제시하라.
 
-    1. **Normality:** The Shapiro-Wilk test is non-significant, so normality is not a concern. No action needed.
+??? success "연습문제 1 풀이"
 
-    2. **Homoscedasticity:** Levene's test strongly rejects equal variances. The standard ANOVA F-test results are unreliable.
+    1. **정규성:** Shapiro-Wilk 검정이 유의하지 않으므로 정규성은 문제가 아니다. 조치가 필요 없다.
 
-    3. **Recommended action:** Re-run the analysis using **Welch's one-way ANOVA**, which does not assume equal variances. If Welch's ANOVA is still significant, follow up with the **Games-Howell post-hoc test** (designed for unequal variances) rather than Tukey's HSD.
+    2. **등분산성:** Levene 검정이 등분산을 강하게 기각한다. 표준 분산분석 F-검정 결과를 믿을 수 없다.
 
-    4. **Optional:** Try a variance-stabilizing transformation (e.g., log) and check whether it resolves the heteroscedasticity. If so, the standard ANOVA on the transformed data may be used.
+    3. **권장 조치:** 등분산을 가정하지 않는 **Welch의 일원배치 분산분석**으로 다시 분석한다. Welch 분산분석도 유의하면 Tukey의 HSD 대신 (분산이 다를 때를 위해 설계된) **Games-Howell 사후검정**으로 이어간다.
 
----
-
-**Exercise 2.**
-Both the normality and homoscedasticity assumptions are violated in a dataset with three groups of sizes $n = 12, 15, 10$. Recommend an analysis strategy, justifying each choice.
-
-??? success "Solution to Exercise 2"
-    With both assumptions violated, the options in order of preference are:
-
-    1. **Kruskal-Wallis test.** This non-parametric alternative to one-way ANOVA does not assume normality or equal variances. It compares median ranks rather than means and is appropriate for ordinal or skewed data.
-
-    2. **Bootstrap ANOVA.** Use resampling to obtain the null distribution of the F-statistic without distributional assumptions. This preserves the mean-comparison framework while relaxing assumptions.
-
-    3. **Transformation + Welch's ANOVA.** If a transformation (e.g., log or Box-Cox) can approximately normalize the data, Welch's ANOVA handles the remaining heteroscedasticity.
-
-    The unequal sample sizes make the standard ANOVA particularly sensitive to heteroscedasticity, further supporting the use of Welch's ANOVA or non-parametric methods.
+    4. **선택 사항:** 분산 안정화 변환(예: 로그)을 시도하여 이분산이 해소되는지 확인한다. 해소되면 변환된 자료에 표준 분산분석을 써도 된다.
 
 ---
 
-**Exercise 3.**
-Explain why simply removing outliers detected by Cook's distance is not always the best strategy in ANOVA diagnostics. What should a researcher do instead?
+**연습문제 2.**
+크기가 $n = 12, 15, 10$인 세 집단의 자료에서 정규성과 등분산성이 모두 어긋났다. 분석 전략을 권하고 각 선택의 근거를 밝혀라.
 
-??? success "Solution to Exercise 3"
-    Removing outliers can introduce **selection bias** and reduce sample size, potentially eliminating valid observations that represent genuine population variability. The researcher should instead:
+??? success "연습문제 2 풀이"
+    두 가정이 모두 어긋났을 때 선호되는 순서대로 선택지는 다음과 같다:
 
-    1. **Investigate the outlier.** Determine whether it results from a data entry error, measurement malfunction, or a legitimately extreme observation.
+    1. **Kruskal-Wallis 검정.** 일원배치 분산분석의 비모수 대안으로 정규성이나 등분산을 가정하지 않는다. 평균 대신 중앙값 순위를 비교하며 순서형이거나 치우친 자료에 적합하다.
 
-    2. **Perform a sensitivity analysis.** Run the ANOVA with and without the outlier and compare results. If conclusions are the same, the outlier is not influential.
+    2. **붓스트랩 분산분석.** 재표본추출로 분포 가정 없이 F-통계량의 귀무분포를 얻는다. 평균 비교의 틀을 유지하면서 가정을 완화한다.
 
-    3. **Use robust methods.** Trimmed means, Winsorized ANOVA, or M-estimators down-weight extreme observations without discarding them.
+    3. **변환 + Welch 분산분석.** 변환(예: 로그나 Box-Cox)으로 자료를 근사적으로 정규화할 수 있다면, 남은 이분산은 Welch 분산분석이 처리한다.
 
-    4. **Report both analyses.** If conclusions differ, report results with and without the outlier and discuss the discrepancy.
+    표본크기가 서로 다르면 표준 분산분석이 이분산에 특히 민감해지므로 Welch 분산분석이나 비모수 방법을 쓸 근거가 더 강해진다.
+
+---
+
+**연습문제 3.**
+Cook의 거리로 탐지한 이상점을 그냥 제거하는 것이 분산분석 진단에서 언제나 최선의 전략은 아닌 이유를 설명하라. 연구자는 대신 무엇을 해야 하는가?
+
+??? success "연습문제 3 풀이"
+    이상점을 제거하면 **선택 편향**이 생기고 표본크기가 줄어들며, 모집단의 진짜 변동을 나타내는 타당한 관측값을 없앨 수도 있다. 연구자는 대신 다음을 해야 한다:
+
+    1. **이상점을 조사한다.** 자료 입력 오류인지, 측정 장비의 오작동인지, 아니면 정당하게 극단적인 관측인지 판정한다.
+
+    2. **민감도 분석을 수행한다.** 이상점을 포함한 경우와 제외한 경우로 분산분석을 수행하여 결과를 비교한다. 결론이 같으면 그 이상점은 영향점이 아니다.
+
+    3. **로버스트 방법을 쓴다.** 절사평균, 윈저화 분산분석, M-추정량은 극단 관측값을 버리지 않으면서 가중치를 낮춘다.
+
+    4. **두 분석을 모두 보고한다.** 결론이 다르면 이상점을 포함한 결과와 제외한 결과를 함께 보고하고 그 차이를 논의한다.

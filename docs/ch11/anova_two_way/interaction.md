@@ -1,81 +1,80 @@
-# Two-Way ANOVA: Interaction Effects
+# 이원배치 분산분석: 교호작용 효과
 
-
-## 1. Procedure for Conducting Two-Way ANOVA
+## 1. 이원배치 분산분석의 수행 절차
 
 [kor|](https://www.youtube.com/watch?v=i4NHIGvTB-g) [eng|](https://www.youtube.com/playlist?list=PLWtoq-EhUJe2TjJYfZUQtuq7a0dQCnOWp) [wiki|](https://en.wikipedia.org/wiki/Two-way_analysis_of_variance)
 
-### Step 1: Formulate the Hypotheses
+### 1단계: 가설 세우기
 
-- For **Main Effect A**:
+- **주효과 A**에 대해:
     - $H_0: \mu^A_1=\mu^A_2=\cdots=\mu^A_a$
-    - $H_A$: At least one mean is different across the levels of Factor A.
-- For **Main Effect B**:
+    - $H_A$: 요인 A의 수준 사이에서 적어도 한 평균이 다르다.
+- **주효과 B**에 대해:
     - $H_0: \mu^B_1=\mu^B_2=\cdots=\mu^B_b$
-    - $H_A$: At least one mean is different across the levels of Factor B.
-- For **Interaction Effect (A x B)**:
-    - $H_0: (\mu_{ij} - \mu_{i\cdot} - \mu_{\cdot j} + \mu_{\cdot \cdot}) = 0$ for all $i$ and $j$
-    - $H_A$: There is an interaction between Factor A and Factor B.
+    - $H_A$: 요인 B의 수준 사이에서 적어도 한 평균이 다르다.
+- **교호작용 효과 (A × B)**에 대해:
+    - 모든 $i$, $j$에 대해 $H_0: (\mu_{ij} - \mu_{i\cdot} - \mu_{\cdot j} + \mu_{\cdot \cdot}) = 0$
+    - $H_A$: 요인 A와 요인 B 사이에 교호작용이 있다.
 
-where $\mu_{ij}$ is the mean at level $i$ of Factor A and level $j$ of Factor B, $\mu_{i\cdot}$ is the marginal mean of Factor A at level $i$, $\mu_{\cdot j}$ is the marginal mean of Factor B at level $j$, and $\mu_{\cdot \cdot}$ is the overall mean.
+여기서 $\mu_{ij}$는 요인 A의 수준 $i$와 요인 B의 수준 $j$에서의 평균, $\mu_{i\cdot}$는 수준 $i$에서 요인 A의 주변평균, $\mu_{\cdot j}$는 수준 $j$에서 요인 B의 주변평균, $\mu_{\cdot \cdot}$는 전체 평균이다.
 
-### Step 2: Calculate the Overall Mean and Group Means
+### 2단계: 전체 평균과 집단 평균 계산
 
 $$ \bar{y}_{\cdot\cdot\cdot} = \frac{1}{abc}\sum_{i=1}^{a}\sum_{j=1}^{b}\sum_{k=1}^{c} y_{ijk} $$
 
 $$\begin{array}{lll}
 \bar{y}_{i\cdot\cdot}&=&\displaystyle \frac{1}{bc}\sum_{j=1}^{b}\sum_{k=1}^{c} y_{ijk}\\
 \bar{y}_{\cdot j\cdot}&=&\displaystyle \frac{1}{ac}\sum_{i=1}^{a}\sum_{k=1}^{c} y_{ijk}\\
-\bar{y}_{i j\cdot}&=&\displaystyle \frac{1}{k}\sum_{k=1}^{c} y_{ijk}\\
+\bar{y}_{i j\cdot}&=&\displaystyle \frac{1}{c}\sum_{k=1}^{c} y_{ijk}\\
 \end{array}$$
 
-### Step 3: Calculate Total Sum of Squares SST
+### 3단계: 총제곱합 SST 계산
 
 $$SST =\sum_{i=1}^{a}\sum_{j=1}^{b}\sum_{k=1}^{c} \left( y_{ijk} - \bar{y}_{\cdot\cdot\cdot} \right)^2$$
 
-### Step 4: Calculate SSA and SSB
+### 4단계: SSA와 SSB 계산
 
 $$\begin{array}{lll}
 SSA&=&\displaystyle \sum_{i=1}^{a} bc \left( \bar{y}_{i\cdot\cdot} - \bar{y}_{\cdot\cdot\cdot} \right)^2\\
 SSB&=&\displaystyle \sum_{j=1}^{b} ac \left( \bar{y}_{\cdot j\cdot} - \bar{y}_{\cdot\cdot\cdot} \right)^2\\
 \end{array}$$
 
-### Step 5: Calculate Interaction Variation SSAB
+### 5단계: 교호작용 변동 SSAB 계산
 
 $$SSAB = \sum_{i=1}^{a} \sum_{j=1}^{b} c \left( \bar{y}_{ij\cdot} - \bar{y}_{i\cdot\cdot} - \bar{y}_{\cdot j\cdot} + \bar{y}_{\cdot\cdot\cdot} \right)^2$$
 
-### Step 6: Calculate Residual Variation SSE
+### 6단계: 잔차 변동 SSE 계산
 
 $$SSE = \sum_{i=1}^{a} \sum_{j=1}^{b} \sum_{k=1}^{c} \left( y_{ijk} - \bar{y}_{ij\cdot} \right)^2$$
 
-### Step 7: Check the Partition
+### 7단계: 분해 확인
 
 $$SST = SSA + SSB + SSAB + SSE$$
 
-### Step 8: Calculate the F-Statistic
+### 8단계: F-통계량 계산
 
 $$\begin{array}{cccccccccc}
-\text{Factor}&\text{df}&SS&MS&F&H_0&\text{Sampling Dist under $H_0$}\\
+\text{요인}&\text{df}&SS&MS&F&H_0&H_0\text{ 아래 표본분포}\\
 \hline
-\text{Factor A}&a-1&SSA&MSA=\frac{SSA}{a-1}&F_A=\frac{MSA}{MSE}&\text{all }\beta^{(1)}_{i}=0&F_A\sim F_{a-1,ab(c-1)}\\
-\text{Factor B}&b-1&SSB&MSB=\frac{SSB}{b-1}&F_B=\frac{MSB}{MSE}&\text{all }\beta^{(2)}_{j}=0&F_B\sim F_{b-1,ab(c-1)}\\
-\text{Interaction}&(a-1)(b-1)&SSAB&MSAB=\frac{SSAB}{(a-1)(b-1)}&F_{AB}=\frac{MSAB}{MSE}&\text{all }\beta_{ij}=0&F_{AB}\sim F_{(a-1)(b-1),ab(c-1)}\\
-\text{Error}&ab(c-1)&SSE&MSE=\frac{SSE}{ab(c-1)}&\\
+\text{요인 A}&a-1&SSA&MSA=\frac{SSA}{a-1}&F_A=\frac{MSA}{MSE}&\text{모든 }\beta^{(1)}_{i}=0&F_A\sim F_{a-1,ab(c-1)}\\
+\text{요인 B}&b-1&SSB&MSB=\frac{SSB}{b-1}&F_B=\frac{MSB}{MSE}&\text{모든 }\beta^{(2)}_{j}=0&F_B\sim F_{b-1,ab(c-1)}\\
+\text{교호작용}&(a-1)(b-1)&SSAB&MSAB=\frac{SSAB}{(a-1)(b-1)}&F_{AB}=\frac{MSAB}{MSE}&\text{모든 }\beta_{ij}=0&F_{AB}\sim F_{(a-1)(b-1),ab(c-1)}\\
+\text{오차}&ab(c-1)&SSE&MSE=\frac{SSE}{ab(c-1)}&\\
 \hline
-\text{Total}&abc-1&SST&&\\
+\text{전체}&abc-1&SST&&\\
 \end{array}$$
 
-### Step 9: Determine the Critical Value or P-Value
+### 9단계: 임계값 또는 p-값 구하기
 
-Compare the F-statistics to the critical values from the F-distribution table, or use p-values.
+F-통계량을 F-분포표의 임계값과 비교하거나 p-값을 쓴다.
 
-### Step 10: Make Decisions
+### 10단계: 판정
 
-If the F-statistic for a main effect or interaction is greater than the critical value (or if the p-value is less than the chosen significance level), reject the null hypothesis for that effect.
+주효과나 교호작용의 F-통계량이 임계값보다 크면(또는 p-값이 선택한 유의수준보다 작으면) 그 효과에 대한 귀무가설을 기각한다.
 
-## 2. Two-Way ANOVA Packages
+## 2. 이원배치 분산분석 패키지
 
-### statsmodels: Interaction Plot and ANOVA
+### statsmodels: 교호작용 그림과 분산분석
 
 ```python
 import matplotlib.pyplot as plt
@@ -113,22 +112,22 @@ plot_interaction(df)
 perform_two_way_anova(df)
 ```
 
-### Output Interpretation
+### 출력 해석
 
-**Interaction Plot**: As the dose level increases from 0.5 to 2.0, tooth length generally increases for both supplements. At lower dose levels (0.5 and 1.0), "OJ" results in noticeably higher tooth length than "VC". At the highest dose level (2.0), the difference is much smaller. The non-parallel lines suggest a potential **interaction effect**.
+**교호작용 그림**: 용량이 0.5에서 2.0으로 커질수록 두 보충제 모두에서 치아 길이가 대체로 늘어난다. 낮은 용량(0.5와 1.0)에서는 "OJ"가 "VC"보다 뚜렷하게 긴 치아 길이를 낳는다. 가장 높은 용량(2.0)에서는 그 차이가 훨씬 작다. 두 선이 평행하지 않다는 점이 **교호작용 효과**의 가능성을 시사한다.
 
-**ANOVA Results Table**:
+**분산분석 결과표**:
 
-| Term               | df  | sum_sq    | mean_sq   | F          | PR(>F)         |
+| 항               | df  | sum_sq    | mean_sq   | F          | PR(>F)         |
 |--------------------|-----|-----------|-----------|------------|----------------|
 | **C(supp)**        | 1.0 | 205.350   | 205.350   | 15.572     | 2.31e-04       |
 | **C(dose)**        | 2.0 | 2426.434  | 1213.217  | 91.999     | 4.05e-18       |
 | **C(supp):C(dose)**| 2.0 | 108.319   | 54.160    | 4.107      | 2.19e-02       |
 | **Residual**       | 54.0| 712.106   | 13.187    | NaN        | NaN            |
 
-Both **supplement type** and **dose level** have statistically significant effects on tooth length. The interaction between them is also significant, suggesting that the effectiveness of each supplement varies depending on the dose level.
+**보충제 종류**와 **용량 수준** 모두 치아 길이에 통계적으로 유의한 효과를 갖는다. 둘 사이의 교호작용도 유의하여, 각 보충제의 효과가 용량 수준에 따라 달라짐을 시사한다.
 
-### Post-Hoc with Tukey's HSD
+### Tukey의 HSD를 이용한 사후검정
 
 ```python
 from statsmodels.stats.multicomp import pairwise_tukeyhsd
@@ -153,56 +152,56 @@ tukey_interaction = pairwise_tukeyhsd(endog=df['len'], groups=df['supp_dose'], a
 print(tukey_interaction, end="\n\n")
 ```
 
-**Key findings from interaction post-hoc**: At lower doses, OJ tends to produce significantly longer tooth growth than VC. At the highest dose (2.0), both supplements are similarly effective (OJ_2.0 vs VC_2.0: meandiff = 0.08, p = 1.0).
+**교호작용 사후검정의 핵심 결과**: 낮은 용량에서는 OJ가 VC보다 유의하게 긴 치아 성장을 낳는 경향이 있다. 가장 높은 용량(2.0)에서는 두 보충제의 효과가 비슷하다(OJ_2.0 대 VC_2.0: 평균차 = 0.08, p = 1.0).
 
-## 3. Example: Test Score Based On Teaching Method And Study Time
+## 3. 예제: 교수법과 학습시간에 따른 시험 점수
 
-### Question
+### 문제
 
-Two factors on test scores: **Factor A (Teaching Method)** with levels Traditional and Online, **Factor B (Study Time)** with levels 1 Hour and 2 Hours.
+시험 점수에 영향을 주는 두 요인: 전통식과 온라인 수준을 갖는 **요인 A(교수법)**, 1시간과 2시간 수준을 갖는 **요인 B(학습시간)**.
 
-| Teaching Method | Study Time | Score 1 | Score 2 | Average |
+| 교수법 | 학습시간 | 점수 1 | 점수 2 | 평균 |
 |-----------------|------------|---------|---------|---------|
-| Traditional     | 1 Hour     | 60      | 62      | 61      |
-| Traditional     | 2 Hours    | 68      | 70      | 69      |
-| Online          | 1 Hour     | 65      | 63      | 64      |
-| Online          | 2 Hours    | 72      | 74      | 73      |
+| 전통식     | 1시간     | 60      | 62      | 61      |
+| 전통식     | 2시간    | 68      | 70      | 69      |
+| 온라인          | 1시간     | 65      | 63      | 64      |
+| 온라인          | 2시간    | 72      | 74      | 73      |
 
-### Step 1: Calculate the Grand Mean
+### 1단계: 전체 평균 계산
 
 $$\bar{X} = \frac{534}{8} = 66.75$$
 
-### Step 2: Calculate Factor and Interaction Means
+### 2단계: 요인별 평균과 칸 평균 계산
 
-- Traditional: 65, Online: 68.5
-- 1 Hour: 62.5, 2 Hours: 71
-- Cell means: Traditional/1Hr = 61, Traditional/2Hr = 69, Online/1Hr = 64, Online/2Hr = 73
+- 전통식: 65, 온라인: 68.5
+- 1시간: 62.5, 2시간: 71
+- 칸 평균: 전통식/1시간 = 61, 전통식/2시간 = 69, 온라인/1시간 = 64, 온라인/2시간 = 73
 
-### Step 3: Calculate Sum of Squares
+### 3단계: 제곱합 계산
 
 - $SS_{\text{Total}} = 177.5$
 - $SS_A = 4 \times ((65 - 66.75)^2 + (68.5 - 66.75)^2) = 24.5$
 - $SS_B = 4 \times ((62.5 - 66.75)^2 + (71 - 66.75)^2) = 144.5$
-- $SS_{AB} = 0.5$ (each cell contributes 0.125)
+- $SS_{AB} = 0.5$ (각 칸이 0.125씩 기여)
 - $SS_E = 177.5 - 24.5 - 144.5 - 0.5 = 8$
 
-### Step 4: Degrees of Freedom, Mean Squares, and F-Statistics
+### 4단계: 자유도, 평균제곱, F-통계량
 
-| Source         | SS     | df | MS      | F      | PR(>F)   |
+| 원천         | SS     | df | MS      | F      | PR(>F)   |
 |----------------|--------|----|---------|--------|----------|
-| Factor A       | 24.5   | 1  | 24.5    | 12.25  | 0.024896 |
-| Factor B       | 144.5  | 1  | 144.5   | 72.25  | 0.001051 |
-| Interaction AB | 0.5    | 1  | 0.5     | 0.25   | 0.643330 |
-| Error          | 8.0    | 4  | 2.0     |        |          |
-| Total          | 177.5  | 7  |         |        |          |
+| 요인 A       | 24.5   | 1  | 24.5    | 12.25  | 0.024896 |
+| 요인 B       | 144.5  | 1  | 144.5   | 72.25  | 0.001051 |
+| 교호작용 AB | 0.5    | 1  | 0.5     | 0.25   | 0.643330 |
+| 오차          | 8.0    | 4  | 2.0     |        |          |
+| 전체          | 177.5  | 7  |         |        |          |
 
-### Interpretation
+### 해석
 
-- **Factor A (Teaching Method)**: $F_A = 12.25$, $p = 0.0249$, significant at 0.05. Teaching method has a significant effect on test scores.
-- **Factor B (Study Time)**: $F_B = 72.25$, $p = 0.0011$, significant at 0.01. Study time has a significant effect on test scores.
-- **Interaction (A x B)**: $F_{AB} = 0.25$, $p = 0.6433$, not significant. No significant interaction between teaching method and study time.
+- **요인 A(교수법)**: $F_A = 12.25$, $p = 0.0249$로 0.05에서 유의하다. 교수법이 시험 점수에 유의한 효과를 갖는다.
+- **요인 B(학습시간)**: $F_B = 72.25$, $p = 0.0011$로 0.01에서 유의하다. 학습시간이 시험 점수에 유의한 효과를 갖는다.
+- **교호작용 (A × B)**: $F_{AB} = 0.25$, $p = 0.6433$으로 유의하지 않다. 교수법과 학습시간 사이에 유의한 교호작용이 없다.
 
-### Python Implementation
+### Python 구현
 
 ```python
 import pandas as pd
@@ -224,7 +223,7 @@ print("Two-Way ANOVA Results:")
 print(anova_results)
 ```
 
-### R Code
+### R 코드
 
 ```r
 # Load necessary libraries
@@ -245,58 +244,59 @@ print("Two-Way ANOVA Results:")
 print(anova_results)
 ```
 
-### R Output Interpretation
+### R 출력 해석
 
-The R output provides the same ANOVA table with Df, Sum Sq, Mean Sq, F value, and Pr(>F) columns. The significance codes (`*` for p < 0.05, `**` for p < 0.01) confirm:
+R 출력은 Df, Sum Sq, Mean Sq, F value, Pr(>F) 열을 가진 동일한 분산분석표를 준다. 유의성 표시(`*`는 p < 0.05, `**`는 p < 0.01)가 다음을 확인해 준다:
 
-- Both `Teaching_Method` and `Study_Time` have statistically significant main effects on `Score`.
-- The interaction between `Teaching_Method` and `Study_Time` is not statistically significant, suggesting that the effect of teaching method on scores does not depend on study time.
-## Exercises
+- `Teaching_Method`와 `Study_Time` 모두 `Score`에 통계적으로 유의한 주효과를 갖는다.
+- `Teaching_Method`와 `Study_Time` 사이의 교호작용은 통계적으로 유의하지 않으므로, 교수법이 점수에 미치는 효과가 학습시간에 의존하지 않음을 시사한다.
 
-**Exercise 1.**
-In the two-way ANOVA model $Y_{ijk} = \mu + \alpha_i + \beta_j + (\alpha\beta)_{ij} + \varepsilon_{ijk}$, explain in words what the interaction term $(\alpha\beta)_{ij}$ represents. Give a concrete example from an educational context where you would expect a significant interaction.
+## 연습문제
 
-??? success "Solution to Exercise 1"
-    The interaction term $(\alpha\beta)_{ij}$ captures the additional effect on the response that occurs when Factor A is at level $i$ and Factor B is at level $j$, beyond what would be predicted by the main effects $\alpha_i$ and $\beta_j$ alone. It measures the degree to which the effect of one factor depends on the level of the other.
+**연습문제 1.**
+이원배치 분산분석 모형 $Y_{ijk} = \mu + \alpha_i + \beta_j + (\alpha\beta)_{ij} + \varepsilon_{ijk}$에서 교호작용 항 $(\alpha\beta)_{ij}$가 무엇을 나타내는지 말로 설명하라. 교육 맥락에서 유의한 교호작용이 예상되는 구체적인 예를 들어라.
 
-    **Example:** Suppose Factor A is teaching method (lecture vs. hands-on) and Factor B is student background (STEM vs. humanities). The main effect of hands-on teaching might be positive overall, but if it is much more beneficial for STEM students than humanities students, the interaction term would be significant. The non-parallel lines in an interaction plot would confirm this.
+??? success "연습문제 1 풀이"
+    교호작용 항 $(\alpha\beta)_{ij}$는 요인 A가 수준 $i$이고 요인 B가 수준 $j$일 때, 주효과 $\alpha_i$와 $\beta_j$만으로 예측되는 것을 넘어서 반응에 추가로 나타나는 효과를 담는다. 한 요인의 효과가 다른 요인의 수준에 얼마나 의존하는지를 잰다.
+
+    **예:** 요인 A가 교수법(강의식 대 실습식)이고 요인 B가 학생 배경(STEM 대 인문학)이라고 하자. 실습식 교육의 주효과가 전체적으로는 양수일 수 있지만, 인문학 학생보다 STEM 학생에게 훨씬 더 이롭다면 교호작용 항이 유의해진다. 교호작용 그림에서 두 선이 평행하지 않은 것으로 이를 확인할 수 있다.
 
 ---
 
-**Exercise 2.**
-A $2 \times 3$ factorial experiment with $c = 4$ replicates per cell yields $\text{SSA} = 30$, $\text{SSB} = 80$, $\text{SSAB} = 24$, $\text{SSE} = 60$. Construct the full ANOVA table and test all three effects at $\alpha = 0.05$.
+**연습문제 2.**
+칸당 반복 $c = 4$인 $2 \times 3$ 요인실험에서 $\text{SSA} = 30$, $\text{SSB} = 80$, $\text{SSAB} = 24$, $\text{SSE} = 60$을 얻었다. 전체 분산분석표를 작성하고 $\alpha = 0.05$에서 세 효과를 모두 검정하라.
 
-??? success "Solution to Exercise 2"
-    Degrees of freedom: $a - 1 = 1$, $b - 1 = 2$, $(a-1)(b-1) = 2$, $ab(c-1) = 6 \times 3 = 18$.
+??? success "연습문제 2 풀이"
+    자유도: $a - 1 = 1$, $b - 1 = 2$, $(a-1)(b-1) = 2$, $ab(c-1) = 6 \times 3 = 18$.
 
-    | Source | SS | df | MS | F |
+    | 원천 | SS | df | MS | F |
     |--------|-----|-----|-------|-------|
-    | Factor A | 30 | 1 | 30.0 | 9.00 |
-    | Factor B | 80 | 2 | 40.0 | 12.00 |
-    | Interaction | 24 | 2 | 12.0 | 3.60 |
-    | Error | 60 | 18 | 3.333 | |
-    | Total | 194 | 23 | | |
+    | 요인 A | 30 | 1 | 30.0 | 9.00 |
+    | 요인 B | 80 | 2 | 40.0 | 12.00 |
+    | 교호작용 | 24 | 2 | 12.0 | 3.60 |
+    | 오차 | 60 | 18 | 3.333 | |
+    | 전체 | 194 | 23 | | |
 
-    Critical values at $\alpha = 0.05$: $F_{0.05, 1, 18} \approx 4.41$, $F_{0.05, 2, 18} \approx 3.55$.
+    $\alpha = 0.05$에서 임계값: $F_{0.05, 1, 18} \approx 4.41$, $F_{0.05, 2, 18} \approx 3.55$.
 
-    - **Factor A:** $F = 9.00 > 4.41$, reject $H_0$. Significant main effect.
-    - **Factor B:** $F = 12.00 > 3.55$, reject $H_0$. Significant main effect.
-    - **Interaction:** $F = 3.60 > 3.55$, reject $H_0$. Significant interaction (barely).
-
----
-
-**Exercise 3.**
-Using the tooth growth dataset (supplement type OJ vs. VC, dose levels 0.5, 1.0, 2.0), the interaction plot shows that OJ produces higher tooth length than VC at low doses but the two supplements converge at dose 2.0. Explain why a researcher should not interpret the main effects of supplement type without also considering the significant interaction.
-
-??? success "Solution to Exercise 3"
-    When a significant interaction is present, the main effects are misleading because the effect of one factor depends on the level of the other. Reporting that OJ produces greater tooth growth on average (main effect) ignores the fact that this advantage disappears at the highest dose level. At dose 2.0, the two supplements are equally effective, so the main effect of supplement type is driven entirely by the lower dose levels. Proper interpretation requires examining simple effects: the effect of supplement at each dose level separately.
+    - **요인 A:** $F = 9.00 > 4.41$이므로 $H_0$을 기각한다. 주효과가 유의하다.
+    - **요인 B:** $F = 12.00 > 3.55$이므로 $H_0$을 기각한다. 주효과가 유의하다.
+    - **교호작용:** $F = 3.60 > 3.55$이므로 $H_0$을 기각한다. 교호작용이 (아슬아슬하게) 유의하다.
 
 ---
 
-**Exercise 4.**
-Explain the difference between a two-way ANOVA without replication and one with replication. In the without-replication case, why is the interaction sum of squares confounded with the error term?
+**연습문제 3.**
+치아 성장 자료(보충제 종류 OJ 대 VC, 용량 0.5, 1.0, 2.0)에서 교호작용 그림은 낮은 용량에서 OJ가 VC보다 긴 치아 길이를 낳지만 용량 2.0에서는 둘이 수렴함을 보여준다. 유의한 교호작용을 함께 고려하지 않고 보충제 종류의 주효과만 해석해서는 안 되는 이유를 설명하라.
 
-??? success "Solution to Exercise 4"
-    In two-way ANOVA **with replication**, each combination of factor levels has multiple observations, allowing the total variability to be decomposed into $\text{SSA} + \text{SSB} + \text{SSAB} + \text{SSE}$. The within-cell variability provides an independent estimate of error ($\text{SSE}$).
+??? success "연습문제 3 풀이"
+    유의한 교호작용이 있으면 한 요인의 효과가 다른 요인의 수준에 의존하므로 주효과가 오도한다. OJ가 평균적으로 더 큰 치아 성장을 낳는다고(주효과) 보고하면, 그 우위가 가장 높은 용량에서는 사라진다는 사실을 무시하는 것이다. 용량 2.0에서는 두 보충제의 효과가 같으므로 보충제 종류의 주효과는 전적으로 낮은 용량 수준에서 나온다. 올바른 해석에는 단순 효과, 즉 각 용량 수준에서 보충제의 효과를 따로 살피는 일이 필요하다.
 
-    In two-way ANOVA **without replication**, each cell has only one observation. With a single observation per cell, there is no within-cell variability to estimate $\text{SSE}$ separately. The residual $\text{SSAB}$ then serves as the error term, meaning the interaction effect cannot be tested independently. Any true interaction is absorbed into the error, potentially masking both the interaction and inflating the error variance.
+---
+
+**연습문제 4.**
+반복 없는 이원배치 분산분석과 반복 있는 경우의 차이를 설명하라. 반복이 없을 때 교호작용 제곱합이 오차항과 교란되는 이유는 무엇인가?
+
+??? success "연습문제 4 풀이"
+    **반복 있는** 이원배치 분산분석에서는 각 요인 수준 조합에 관측값이 여럿 있어 전체 변동을 $\text{SSA} + \text{SSB} + \text{SSAB} + \text{SSE}$로 분해할 수 있다. 칸 내 변동이 오차($\text{SSE}$)의 독립적인 추정값을 준다.
+
+    **반복 없는** 이원배치 분산분석에서는 각 칸에 관측값이 하나뿐이다. 칸당 관측값이 하나면 $\text{SSE}$를 따로 추정할 칸 내 변동이 없다. 그래서 잔차인 $\text{SSAB}$가 오차항 역할을 하게 되고, 교호작용 효과를 독립적으로 검정할 수 없다. 참 교호작용이 있으면 오차에 흡수되어 교호작용을 가리는 동시에 오차분산을 부풀릴 수 있다.

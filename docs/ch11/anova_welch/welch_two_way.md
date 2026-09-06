@@ -1,65 +1,64 @@
-# Welch's Two-Way ANOVA
+# Welch의 이원배치 분산분석
 
+**Welch의 이원배치 분산분석**은 **등분산** 가정이 어긋날 때 두 독립 요인에 걸쳐 평균을 비교할 수 있게 해 주는, Welch 일원배치 분산분석의 확장이다. 가중평균을 써서 이분산(분산이 서로 다름)을 조정하고 두 요인 사이의 교호작용 효과도 함께 다룬다.
 
-**Welch's Two-Way ANOVA** is an extension of Welch's one-way ANOVA that allows the comparison of means across two independent factors when the assumption of **equal variances** is violated. It adjusts for heteroscedasticity (unequal variances) by using weighted means and incorporates the interaction effects between the two factors.
+## 1. Welch의 이원배치 분산분석을 언제 쓰는가
 
-## 1. When to Use Welch's Two-Way ANOVA
+1. 분산이 서로 다를 때(이분산) 두 요인에 걸쳐 집단 평균을 비교하려 할 때.
+2. 두 요인 사이의 교호작용 효과를 분석해야 할 때.
+3. 전통적인 이원배치 분산분석의 가정, 특히 등분산과 동일 표본크기가 어긋날 때.
+4. 실험이나 설문 자료처럼 자료 수집 과정에서 집단 사이의 변동이 달라지는 실무 상황에서.
 
-1. To compare group means across two factors when variances are unequal (heteroscedasticity).
-2. When interaction effects between two factors need to be analyzed.
-3. When traditional two-way ANOVA assumptions are violated, especially equal variances and equal sample sizes.
-4. In practical settings where data collection leads to unequal variability between groups, such as experimental or survey data.
+## 2. 가정
 
-## 2. Assumptions
+1. 자료가 **독립적으로 무작위 추출**되었다.
+2. 각 집단의 자료가 근사적으로 **정규분포**를 따른다(또는 중심극한정리를 적용할 만큼 표본크기가 크다).
+3. 집단 분산이 **같지 않아도 된다**(이분산이 허용된다).
+4. 요인과 교호작용을 고정효과로 모형화한다.
 
-1. The data are **independently and randomly sampled**.
-2. Each group's data is approximately **normally distributed** (or the sample size is large enough for the Central Limit Theorem to apply).
-3. Group variances are **not equal** (heteroscedasticity is allowed).
-4. Factors and interactions are modeled as fixed effects.
+## 3. 가설
 
-## 3. Hypotheses
+**주효과:**
 
-**Main Effects:**
+- 요인 A에 대해:
+    - $H_0$: 요인 A의 모든 수준의 평균이 같다.
+    - $H_a$: 요인 A의 적어도 한 평균이 다르다.
+- 요인 B에 대해:
+    - $H_0$: 요인 B의 모든 수준의 평균이 같다.
+    - $H_a$: 요인 B의 적어도 한 평균이 다르다.
 
-- For Factor A:
-    - $H_0$: The means of all levels of Factor A are equal.
-    - $H_a$: At least one mean of Factor A is different.
-- For Factor B:
-    - $H_0$: The means of all levels of Factor B are equal.
-    - $H_a$: At least one mean of Factor B is different.
+**교호작용 효과:**
 
-**Interaction Effect:**
+- $H_0$: 요인 A와 요인 B 사이에 교호작용 효과가 없다.
+- $H_a$: 요인 A와 요인 B 사이에 교호작용 효과가 있다.
 
-- $H_0$: There is no interaction effect between Factor A and Factor B.
-- $H_a$: There is an interaction effect between Factor A and Factor B.
+## 4. Welch의 이원배치 분산분석은 어떻게 작동하는가
 
-## 4. How Welch's Two-Way ANOVA Works
+### 가중평균
 
-### Weighted Means
-
-Instead of pooling variances as in traditional ANOVA, Welch's method calculates weighted means for each group:
+전통적인 분산분석처럼 분산을 합동하는 대신 Welch 방법은 각 집단의 가중치를 계산한다:
 
 $$ w_{ij} = \frac{n_{ij}}{s_{ij}^2} $$
 
-Where $n_{ij}$ is the sample size and $s_{ij}^2$ is the variance of group $(i,j)$ for Factor A level $i$ and Factor B level $j$.
+여기서 $n_{ij}$는 표본크기, $s_{ij}^2$은 요인 A의 수준 $i$와 요인 B의 수준 $j$에 해당하는 칸 $(i,j)$의 분산이다.
 
-### Test Statistics
+### 검정통계량
 
-Separate F-tests are performed for main effects of Factor A and Factor B, and interaction effects between Factor A and Factor B. The test statistics are derived using weighted group means, and the degrees of freedom are adjusted using the **Welch-Satterthwaite equation** to account for unequal variances.
+요인 A의 주효과, 요인 B의 주효과, 그리고 두 요인의 교호작용에 대해 각각 F-검정을 수행한다. 검정통계량은 가중된 집단 평균으로 유도하고, 분산이 서로 다른 점을 반영하기 위해 **Welch-Satterthwaite 식**으로 자유도를 조정한다.
 
-## 5. Steps to Perform Welch's Two-Way ANOVA
+## 5. Welch의 이원배치 분산분석 수행 절차
 
-1. **Organize Data**: Data should include two independent factors and one dependent variable.
-2. **State Hypotheses**: Define null and alternative hypotheses for main effects and interaction effects.
-3. **Calculate Weighted Means**: Compute weighted group means and variances for each factor level.
-4. **Adjust Degrees of Freedom**: Use the Welch-Satterthwaite equation to calculate effective degrees of freedom.
-5. **Compute F-Statistics**: Perform separate F-tests for the main effects and interaction, using the adjusted degrees of freedom.
-6. **Interpret Results**: Compare the F-statistics to the critical values or use p-values.
-7. **Post Hoc Analysis**: If significant differences are found, conduct post hoc tests (e.g., Games-Howell).
+1. **자료 정리**: 두 개의 독립 요인과 하나의 종속변수를 포함해야 한다.
+2. **가설 진술**: 주효과와 교호작용 효과에 대한 귀무가설과 대립가설을 정의한다.
+3. **가중평균 계산**: 각 요인 수준의 가중 집단 평균과 분산을 계산한다.
+4. **자유도 조정**: Welch-Satterthwaite 식으로 유효 자유도를 계산한다.
+5. **F-통계량 계산**: 조정된 자유도로 주효과와 교호작용에 대해 각각 F-검정을 수행한다.
+6. **결과 해석**: F-통계량을 임계값과 비교하거나 p-값을 쓴다.
+7. **사후분석**: 유의한 차이가 발견되면 사후검정(예: Games-Howell)을 수행한다.
 
-## 6. Python Implementation
+## 6. Python 구현
 
-Consider an experiment to test the effects of two factors (e.g., **Temperature** and **Fertilizer Type**) on plant growth:
+두 요인(예: **온도**와 **비료 종류**)이 식물 성장에 미치는 효과를 알아보는 실험을 생각하자:
 
 ```python
 import pingouin as pg
@@ -73,30 +72,35 @@ data = {
 }
 df = pd.DataFrame(data)
 
-# Perform Welch's Two-Way ANOVA
-anova_results = pg.welch_anova(dv="Growth", between=["Temperature", "Fertilizer"], data=df)
-
-# Display results
-print(anova_results)
+# pingouin's welch_anova handles one factor at a time
+print(pg.welch_anova(dv="Growth", between="Temperature", data=df))
+print(pg.welch_anova(dv="Growth", between="Fertilizer", data=df))
 ```
 
-**Output:**
+**출력:**
+
 ```
-          Source        ddof1    ddof2         F       p-unc
-0     Temperature    2.000    5.400    7.124    0.024
-1     Fertilizer     2.000    5.200    6.345    0.035
-2 Temperature * Fertilizer  4.000    6.700    3.215    0.062
+        Source  ddof1  ddof2      F   p-unc
+0  Temperature    2.0  3.819  5.174  0.0818
+
+       Source  ddof1  ddof2      F   p-unc
+0  Fertilizer    2.0  3.915  1.466  0.3347
 ```
 
-**Interpretation:**
+**해석:**
 
-- **Temperature**: Significant effect ($p = 0.024$), suggesting that temperature levels affect growth.
-- **Fertilizer**: Significant effect ($p = 0.035$), indicating fertilizer types influence growth.
-- **Interaction**: No significant interaction ($p = 0.062$).
+- **온도**: $F = 5.17$, $p = 0.082$로 $\alpha = 0.05$에서 유의하지 않다. 다만 칸당 관측값이 하나뿐이어서 검정력이 매우 낮다.
+- **비료**: $F = 1.47$, $p = 0.335$로 유의하지 않다.
 
-### Post Hoc Testing
+!!! warning "pingouin에는 두 요인을 동시에 다루는 Welch 분산분석이 없다"
 
-If the main effects are significant, use post hoc tests like **Games-Howell** to identify which specific levels differ:
+    `pg.welch_anova`는 `between`에 요인 하나만 받는다. 위 코드처럼 요인별로 따로 돌리면 주효과는 볼 수 있지만 교호작용은 검정할 수 없다. 교호작용을 포함한 이분산 이원배치 분석에는 완전 요인 OLS 모형에 HC3 로버스트 공분산을 결합한 Wald F-검정을 쓴다. 자세한 내용은 [이원배치 Welch 분산분석 (로버스트 HC3)](../code/welch_twoway_robust.md) 페이지를 보라.
+
+    또한 이 예제는 칸마다 관측값이 하나뿐이어서 칸 내 분산을 추정할 수 없다. 실제 이원배치 분석에는 칸마다 반복이 필요하다.
+
+### 사후검정
+
+주효과가 유의하면 어느 수준이 다른지 찾기 위해 **Games-Howell** 같은 사후검정을 쓴다:
 
 ```python
 # Perform Games-Howell post hoc test for Temperature
@@ -108,49 +112,50 @@ post_hoc_fert = pg.pairwise_gameshowell(dv="Growth", between="Fertilizer", data=
 print(post_hoc_fert)
 ```
 
-## 7. Advantages
+## 7. 장점
 
-1. **Handles Unequal Variances**: Adjusts for heteroscedasticity, unlike traditional two-way ANOVA.
-2. **Interaction Effects**: Captures interaction between two factors while accounting for variance differences.
-3. **Robust to Unequal Sample Sizes**: Handles unbalanced designs effectively.
+1. **분산이 달라도 다룬다**: 전통적인 이원배치 분산분석과 달리 이분산을 조정한다.
+2. **교호작용 효과**: 분산 차이를 반영하면서 두 요인 사이의 교호작용을 포착한다.
+3. **표본크기가 달라도 로버스트하다**: 불균형 설계를 효과적으로 다룬다.
 
-## 8. Limitations
+## 8. 한계
 
-1. **Assumption of Normality**: Welch's ANOVA still assumes approximate normality within groups.
-2. **Complex Computation**: Requires more computational resources compared to traditional ANOVA.
-3. **Interpretation Challenges**: Interaction effects can be harder to interpret when variances are unequal.
+1. **정규성 가정**: Welch 분산분석도 집단 안의 근사적 정규성은 가정한다.
+2. **복잡한 계산**: 전통적인 분산분석보다 계산 자원이 더 든다.
+3. **해석의 어려움**: 분산이 서로 다르면 교호작용 효과를 해석하기가 더 어려울 수 있다.
 
-## 9. Summary
+## 9. 요약
 
-Welch's Two-Way ANOVA is a robust method for analyzing the effects of two factors on a dependent variable when group variances are unequal. It extends the principles of Welch's one-way ANOVA to factorial designs, ensuring accurate results even under heteroscedasticity. For practical applications, software tools like `pingouin` in Python make it easy to implement.
-## Exercises
+Welch의 이원배치 분산분석은 집단 분산이 서로 다를 때 두 요인이 종속변수에 미치는 효과를 분석하는 로버스트한 방법이다. Welch 일원배치 분산분석의 원리를 요인 설계로 확장하여 이분산 아래에서도 정확한 결과를 준다. 실무에서는 Python의 `pingouin` 같은 도구로 주효과를 쉽게 다룰 수 있고, 교호작용까지 포함하려면 HC3 로버스트 접근을 쓴다.
 
-**Exercise 1.**
-A two-factor experiment measures crop yield across three soil types and two fertilizers. The cell variances range from 2.1 to 14.8, and sample sizes are unbalanced (ranging from 5 to 15). Explain why standard two-way ANOVA is inappropriate and describe how Welch's two-way ANOVA addresses the issue.
+## 연습문제
 
-??? success "Solution to Exercise 1"
-    Standard two-way ANOVA assumes homoscedasticity (equal variances across all cells). Here the largest cell variance (14.8) is about seven times the smallest (2.1), and the sample sizes are unequal. This combination causes the pooled variance estimate to be unrepresentative, leading to biased F-statistics and incorrect p-values.
+**연습문제 1.**
+두 요인 실험에서 세 가지 토양과 두 가지 비료에 걸쳐 작물 수확량을 측정했다. 칸 분산은 2.1에서 14.8까지 분포하고 표본크기도 불균형하다(5에서 15까지). 표준 이원배치 분산분석이 부적절한 이유를 설명하고, Welch의 이원배치 분산분석이 이 문제를 어떻게 다루는지 기술하라.
 
-    Welch's two-way ANOVA addresses this by computing **weighted means** where each cell is weighted by $w_{ij} = n_{ij}/s_{ij}^2$, giving less influence to cells with higher variance. The degrees of freedom are adjusted using the **Welch-Satterthwaite equation** to account for the unequal variances, producing F-statistics that follow the correct reference distribution.
+??? success "연습문제 1 풀이"
+    표준 이원배치 분산분석은 모든 칸에서 분산이 같다는 등분산성을 가정한다. 여기서는 가장 큰 칸 분산(14.8)이 가장 작은 것(2.1)의 약 일곱 배이고 표본크기도 서로 다르다. 이 조합 때문에 합동분산 추정값이 대표성을 잃고, F-통계량이 편향되어 p-값이 부정확해진다.
 
----
-
-**Exercise 2.**
-In Welch's two-way ANOVA, the weight for cell $(i, j)$ is $w_{ij} = n_{ij}/s_{ij}^2$. Given three cells with $(n, s^2) = (10, 4.0)$, $(8, 12.0)$, and $(15, 3.0)$, compute the weights and explain which cell has the most influence on the weighted grand mean.
-
-??? success "Solution to Exercise 2"
-    Weights:
-
-    - Cell 1: $w_1 = 10/4.0 = 2.50$
-    - Cell 2: $w_2 = 8/12.0 = 0.667$
-    - Cell 3: $w_3 = 15/3.0 = 5.00$
-
-    Cell 3 has the largest weight (5.00) because it combines the largest sample size with the smallest variance, making its mean the most precisely estimated. Cell 2 has the smallest weight because its high variance and small sample size make its mean estimate the least reliable.
+    Welch의 이원배치 분산분석은 각 칸에 $w_{ij} = n_{ij}/s_{ij}^2$의 가중치를 주는 **가중평균**을 계산하여 분산이 큰 칸의 영향력을 줄인다. **Welch-Satterthwaite 식**으로 자유도를 조정하여 분산이 서로 다른 점을 반영하고, 그 결과 F-통계량이 올바른 기준분포를 따르게 된다.
 
 ---
 
-**Exercise 3.**
-After running Welch's two-way ANOVA and finding significant main effects for both factors but a non-significant interaction, which post-hoc test would you use, and why?
+**연습문제 2.**
+Welch의 이원배치 분산분석에서 칸 $(i, j)$의 가중치는 $w_{ij} = n_{ij}/s_{ij}^2$이다. $(n, s^2)$가 $(10, 4.0)$, $(8, 12.0)$, $(15, 3.0)$인 세 칸에 대해 가중치를 계산하고 어느 칸이 가중 전체평균에 가장 큰 영향을 주는지 설명하라.
 
-??? success "Solution to Exercise 3"
-    The **Games-Howell test** is the appropriate post-hoc procedure. Since Welch's ANOVA was used because of unequal variances, the post-hoc test must also not assume equal variances. Games-Howell uses separate variance estimates for each pairwise comparison and adjusts degrees of freedom via the Welch-Satterthwaite equation. Tukey's HSD would be inappropriate because it assumes equal variances across all groups.
+??? success "연습문제 2 풀이"
+    가중치:
+
+    - 칸 1: $w_1 = 10/4.0 = 2.50$
+    - 칸 2: $w_2 = 8/12.0 = 0.667$
+    - 칸 3: $w_3 = 15/3.0 = 5.00$
+
+    칸 3의 가중치가 가장 크다(5.00). 표본크기가 가장 크면서 분산이 가장 작아 평균이 가장 정밀하게 추정되기 때문이다. 칸 2는 분산이 크고 표본크기도 작아 평균 추정이 가장 덜 믿을 만하므로 가중치가 가장 작다.
+
+---
+
+**연습문제 3.**
+Welch의 이원배치 분산분석에서 두 요인의 주효과는 유의하고 교호작용은 유의하지 않게 나왔다면 어떤 사후검정을 쓰겠는가? 이유는?
+
+??? success "연습문제 3 풀이"
+    **Games-Howell 검정**이 적절한 사후 절차이다. 분산이 서로 다르기 때문에 Welch 분산분석을 썼으므로 사후검정도 등분산을 가정해서는 안 된다. Games-Howell은 각 쌍별 비교마다 분산을 따로 추정하고 Welch-Satterthwaite 식으로 자유도를 조정한다. Tukey의 HSD는 모든 집단의 등분산을 가정하므로 부적절하다.

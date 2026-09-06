@@ -1,191 +1,192 @@
-# Bonferroni and Scheffe Methods
+# Bonferroni와 Scheffé 방법
 
+## 개요
 
-## Overview
+일원배치 분산분석이 귀무가설을 기각하면 적어도 한 집단의 평균이 나머지와 다르다는 사실은 알 수 있지만, 어느 집단 때문인지는 알 수 없다. 자연스러운 다음 단계는 개별 비교를 검정하는 것이다. $\mu_i - \mu_j$ 같은 쌍별 차이나, 집단 평균의 더 복잡한 선형결합을 검정한다. 문제는 여러 검정을 동시에 하면 거짓 양성이 적어도 하나 나올 확률이 부풀려진다는 점이다. 독립인 비교 $m$개를 각각 수준 $\alpha$에서 검정하면 가족단위 오류율(FWER)이 $1 - (1 - \alpha)^m$까지 커질 수 있고, 이는 $m$과 함께 빠르게 증가한다.
 
-When a one-way ANOVA rejects the null hypothesis, it tells us that at least one group mean differs from the rest -- but not which group or groups are responsible. A natural next step is to test individual comparisons: pairwise differences such as $\mu_i - \mu_j$, or more complex linear combinations of the group means. The difficulty is that performing many tests simultaneously inflates the probability of at least one false positive. If we test $m$ independent comparisons each at level $\alpha$, the family-wise error rate (FWER) can be as high as $1 - (1 - \alpha)^m$, which grows quickly with $m$.
+Bonferroni 방법과 Scheffé 방법은 모두 FWER을 수준 $\alpha$로 통제하지만 방식이 다르고 적합한 상황도 다르다. Bonferroni는 비교당 유의수준을 조정하며 계획된 비교가 적을 때 가장 잘 작동한다. Scheffé는 가능한 모든 선형 대비에 대해 FWER을 동시에 통제하므로 자료에서 착안한 탐색적 비교에 알맞은 방법이다.
 
-The Bonferroni and Scheffe methods both control the FWER at level $\alpha$, but they do so in different ways and are suited to different situations. Bonferroni adjusts the per-comparison significance level and works best for a small number of planned comparisons. Scheffe controls the FWER simultaneously over all possible linear contrasts and is the method of choice for data-driven, exploratory comparisons.
+## Bonferroni 방법
 
-## Bonferroni Method
+### 직관
 
-### Intuition
+Bonferroni 보정은 가장 단순한 다중비교 조정이다. 유의수준 예산 $\alpha$를 모든 비교에 똑같이 나눈다. 비교 $m$개를 계획하고 각각을 수준 $\alpha/m$에서 검정하면, Boole–Bonferroni 부등식에 의해 검정통계량들의 상관 구조와 무관하게 제1종 오류를 적어도 한 번 범할 확률이 많아야 $\alpha$가 된다.
 
-The Bonferroni correction is the simplest multiple-comparison adjustment: divide the significance budget $\alpha$ equally among all comparisons. If we plan $m$ comparisons and test each one at level $\alpha/m$, the Boole--Bonferroni inequality guarantees that the probability of making at least one Type I error is at most $\alpha$, regardless of the correlation structure among the test statistics.
+### 형식적 절차
 
-### Formal Procedure
+집단이 $k$개, 전체 관측이 $N$개이고 자유도 $N - k$의 집단 내 평균제곱이 $\text{MS}_W$인 일원배치 분산분석 뒤에 비교 $m$개를 계획했다고 하자. 각 비교의 절차는 다음과 같다:
 
-Suppose we plan $m$ comparisons after a one-way ANOVA with $k$ groups, $N$ total observations, and within-group mean square $\text{MS}_W$ with $N - k$ degrees of freedom. For each comparison, the procedure is:
+**1단계.** 비교를 정의한다. 쌍별 비교 $\mu_i - \mu_j$이거나, 더 일반적으로 $\sum c_i = 0$인 임의의 대비 $L = \sum_{i=1}^{k} c_i \mu_i$이다.
 
-**Step 1.** Define the comparison. For a pairwise comparison $\mu_i - \mu_j$, or more generally for any contrast $L = \sum_{i=1}^{k} c_i \mu_i$ with $\sum c_i = 0$.
-
-**Step 2.** Compute the test statistic. For a pairwise comparison:
+**2단계.** 검정통계량을 계산한다. 쌍별 비교에서는
 
 $$
 t = \frac{\bar{Y}_{i\cdot} - \bar{Y}_{j\cdot}}{\sqrt{\text{MS}_W \left(\dfrac{1}{n_i} + \dfrac{1}{n_j}\right)}}
 $$
 
-For a general contrast $L = \sum c_i \mu_i$:
+이고, 일반적인 대비 $L = \sum c_i \mu_i$에서는
 
 $$
 t = \frac{\sum_{i=1}^{k} c_i \bar{Y}_{i\cdot}}{\sqrt{\text{MS}_W \sum_{i=1}^{k} \dfrac{c_i^2}{n_i}}}
 $$
 
-**Step 3.** Compare $|t|$ against the critical value $t_{\alpha/(2m),\, N-k}$. Reject $H_0: L = 0$ if $|t| > t_{\alpha/(2m),\, N-k}$.
+이다.
 
-Equivalently, compute the p-value for each test and reject if $p < \alpha/m$.
+**3단계.** $|t|$를 임계값 $t_{\alpha/(2m),\, N-k}$와 비교한다. $|t| > t_{\alpha/(2m),\, N-k}$이면 $H_0: L = 0$을 기각한다.
 
-!!! tip "When to use Bonferroni"
+동등하게, 각 검정의 p-값을 계산하여 $p < \alpha/m$이면 기각한다.
 
-    Bonferroni is most powerful when the number of planned comparisons $m$ is small. For all pairwise comparisons among $k$ groups, $m = \binom{k}{2}$, and Tukey's HSD is typically more powerful. The Bonferroni correction shines when you have a small set of pre-specified hypotheses -- for instance, testing 3 specific contrasts among 5 groups rather than all 10 pairwise comparisons.
+!!! tip "Bonferroni를 언제 쓰는가"
 
-### Worked Example
+    Bonferroni는 계획된 비교의 수 $m$이 작을 때 가장 강력하다. $k$개 집단의 모든 쌍별 비교라면 $m = \binom{k}{2}$이고, 이 경우에는 대개 Tukey의 HSD가 더 강력하다. Bonferroni 보정은 미리 지정한 가설이 소수일 때 빛을 발한다. 예를 들어 5개 집단에서 10개의 쌍별 비교를 모두 하는 대신 특정한 대비 3개만 검정할 때가 그렇다.
 
-A one-way ANOVA with $k = 4$ groups (each with $n = 8$ observations, so $N = 32$) yields $\text{MS}_W = 6.0$ with $N - k = 28$ degrees of freedom. The group means are $\bar{Y}_1 = 14.0$, $\bar{Y}_2 = 11.5$, $\bar{Y}_3 = 15.2$, $\bar{Y}_4 = 12.0$. The researcher planned $m = 3$ comparisons before collecting data:
+### 예제
+
+집단이 $k = 4$개(각각 $n = 8$개 관측, 따라서 $N = 32$)인 일원배치 분산분석에서 자유도 $N - k = 28$의 $\text{MS}_W = 6.0$을 얻었다. 집단 평균은 $\bar{Y}_1 = 14.0$, $\bar{Y}_2 = 11.5$, $\bar{Y}_3 = 15.2$, $\bar{Y}_4 = 12.0$이다. 연구자는 자료를 모으기 전에 $m = 3$개의 비교를 계획했다:
 
 1. $\mu_1 - \mu_2$
 2. $\mu_3 - \mu_4$
 3. $\mu_1 - \mu_4$
 
-The Bonferroni-adjusted significance level is $\alpha^* = 0.05 / 3 = 0.0167$, giving a two-sided critical value of $t_{0.0083, 28} \approx 2.57$.
+Bonferroni 조정 유의수준은 $\alpha^* = 0.05 / 3 = 0.0167$이며, 양측 임계값은 $t_{0.0083, 28} \approx 2.55$이다.
 
-For comparison 1:
+비교 1:
 
 $$
 t = \frac{14.0 - 11.5}{\sqrt{6.0 \times (1/8 + 1/8)}} = \frac{2.5}{\sqrt{1.5}} = \frac{2.5}{1.225} = 2.04
 $$
 
-Since $|2.04| < 2.57$, this comparison is not significant after the Bonferroni correction.
+$|2.04| < 2.55$이므로 Bonferroni 보정 후 이 비교는 유의하지 않다.
 
-For comparison 2:
+비교 2:
 
 $$
 t = \frac{15.2 - 12.0}{\sqrt{1.5}} = \frac{3.2}{1.225} = 2.61
 $$
 
-Since $|2.61| > 2.57$, this comparison is significant. Groups 3 and 4 differ at the Bonferroni-corrected level.
+$|2.61| > 2.55$이므로 이 비교는 유의하다. 집단 3과 4는 Bonferroni 보정 수준에서 다르다.
 
-For comparison 3:
+비교 3:
 
 $$
 t = \frac{14.0 - 12.0}{\sqrt{1.5}} = \frac{2.0}{1.225} = 1.63
 $$
 
-Since $|1.63| < 2.57$, this comparison is not significant.
+$|1.63| < 2.55$이므로 이 비교는 유의하지 않다.
 
-## Scheffe's Method
+## Scheffé 방법
 
-### Intuition
+### 직관
 
-While Bonferroni controls the FWER for a fixed, pre-specified set of comparisons, Scheffe's method provides a stronger guarantee: it controls the FWER simultaneously over all possible linear contrasts of the group means. This makes it the appropriate choice when comparisons are suggested by the data rather than planned in advance. The trade-off is that Scheffe's critical value is larger (more conservative), so the method has lower power for any individual comparison.
+Bonferroni가 미리 지정된 고정 비교 집합에 대해 FWER을 통제하는 반면, Scheffé 방법은 더 강한 보장을 준다. 집단 평균의 가능한 모든 선형 대비에 대해 FWER을 동시에 통제한다. 그래서 비교를 미리 계획하지 않고 자료를 보고 착안한 경우에 알맞다. 대가는 Scheffé의 임계값이 더 커서(더 보수적이어서) 개별 비교의 검정력은 낮다는 점이다.
 
-### Linear Contrasts
+### 선형 대비
 
-A **linear contrast** is a linear combination of the population means:
+**선형 대비**는 모평균들의 선형결합이다:
 
 $$
 L = \sum_{i=1}^{k} c_i \mu_i \quad \text{where} \quad \sum_{i=1}^{k} c_i = 0
 $$
 
-The constraint $\sum c_i = 0$ ensures that $L$ measures a difference rather than a level. Pairwise comparisons are a special case: $\mu_i - \mu_j$ corresponds to $c_i = 1$, $c_j = -1$, and all other coefficients zero. More complex contrasts are also possible, such as comparing one group to the average of two others: $\mu_1 - \frac{1}{2}(\mu_2 + \mu_3)$ uses coefficients $c_1 = 1$, $c_2 = -1/2$, $c_3 = -1/2$.
+제약 $\sum c_i = 0$은 $L$이 수준이 아니라 차이를 재도록 보장한다. 쌍별 비교는 특수한 경우이다. $\mu_i - \mu_j$는 $c_i = 1$, $c_j = -1$이고 나머지 계수가 0인 대비이다. 더 복잡한 대비도 가능하다. 예를 들어 한 집단을 다른 두 집단의 평균과 비교하는 $\mu_1 - \frac{1}{2}(\mu_2 + \mu_3)$은 계수 $c_1 = 1$, $c_2 = -1/2$, $c_3 = -1/2$을 쓴다.
 
-### Formal Procedure
+### 형식적 절차
 
-For a contrast $L = \sum c_i \mu_i$ with estimate $\hat{L} = \sum c_i \bar{Y}_{i\cdot}$:
+추정값이 $\hat{L} = \sum c_i \bar{Y}_{i\cdot}$인 대비 $L = \sum c_i \mu_i$에 대해:
 
-**Step 1.** Compute the F-statistic for the contrast:
+**1단계.** 대비의 F-통계량을 계산한다:
 
 $$
 F_L = \frac{\hat{L}^2}{\text{MS}_W \displaystyle\sum_{i=1}^{k} \dfrac{c_i^2}{n_i}}
 $$
 
-**Step 2.** Compare $F_L$ against the Scheffe critical value:
+**2단계.** $F_L$을 Scheffé 임계값과 비교한다:
 
 $$
 F_{\text{crit}}^{S} = (k - 1) \cdot F_{\alpha,\, k-1,\, N-k}
 $$
 
-**Step 3.** Reject $H_0: L = 0$ if $F_L > F_{\text{crit}}^{S}$.
+**3단계.** $F_L > F_{\text{crit}}^{S}$이면 $H_0: L = 0$을 기각한다.
 
-Equivalently, one can use a $t$-form of the test: reject if $|t_L| > \sqrt{(k-1) F_{\alpha, k-1, N-k}}$, where $t_L = \hat{L} / \text{SE}(\hat{L})$.
+동등하게 $t$ 형태로 쓸 수도 있다. $t_L = \hat{L} / \text{SE}(\hat{L})$일 때 $|t_L| > \sqrt{(k-1) F_{\alpha, k-1, N-k}}$이면 기각한다.
 
-!!! note "Why Scheffe uses (k-1) F rather than F"
+!!! note "Scheffé가 F가 아니라 (k−1)F를 쓰는 이유"
 
-    The factor $(k - 1)$ accounts for the fact that the FWER is controlled over all possible contrasts simultaneously. Roy's union-intersection principle shows that the maximum of $F_L$ over all contrasts $L$ equals the overall ANOVA F-statistic, which has critical value $F_{\alpha, k-1, N-k}$. Multiplying by $(k-1)$ converts the per-contrast F-statistic to the same scale, ensuring the family-wise guarantee.
+    인자 $(k - 1)$은 가능한 모든 대비에 대해 FWER을 동시에 통제한다는 사실을 반영한다. Roy의 합집합–교집합 원리에 따르면 모든 대비 $L$에 걸친 $F_L$의 최댓값은 전체 분산분석 F-통계량과 같고, 그 임계값은 $F_{\alpha, k-1, N-k}$이다. $(k-1)$을 곱하면 대비별 F-통계량이 같은 척도로 바뀌어 가족단위 보장이 확보된다.
 
-### Worked Example
+### 예제
 
-Using the same data as the Bonferroni example ($k = 4$, $n = 8$, $\text{MS}_W = 6.0$, $N - k = 28$), suppose a researcher notices the data and decides to test the contrast $L = \mu_3 - \frac{1}{3}(\mu_1 + \mu_2 + \mu_4)$, comparing group 3 to the average of the other three groups. The contrast coefficients are $c_1 = -1/3$, $c_2 = -1/3$, $c_3 = 1$, $c_4 = -1/3$.
+Bonferroni 예제와 같은 자료($k = 4$, $n = 8$, $\text{MS}_W = 6.0$, $N - k = 28$)에서, 연구자가 자료를 보고 대비 $L = \mu_3 - \frac{1}{3}(\mu_1 + \mu_2 + \mu_4)$을 검정하기로 했다고 하자. 집단 3을 나머지 세 집단의 평균과 비교하는 것이다. 대비 계수는 $c_1 = -1/3$, $c_2 = -1/3$, $c_3 = 1$, $c_4 = -1/3$이다.
 
-The contrast estimate is:
+대비 추정값은
 
 $$
 \hat{L} = -\frac{1}{3}(14.0) - \frac{1}{3}(11.5) + 1(15.2) - \frac{1}{3}(12.0) = -4.667 - 3.833 + 15.2 - 4.0 = 2.7
 $$
 
-The standard error denominator:
+이다. 표준오차의 분모는
 
 $$
 \text{MS}_W \sum \frac{c_i^2}{n_i} = 6.0 \times \frac{(1/9 + 1/9 + 1 + 1/9)}{8} = 6.0 \times \frac{1.333}{8} = 1.0
 $$
 
-The F-statistic for the contrast:
+이고, 대비의 F-통계량은
 
 $$
 F_L = \frac{(2.7)^2}{1.0} = 7.29
 $$
 
-The Scheffe critical value with $F_{0.05, 3, 28} \approx 2.95$:
+이다. $F_{0.05, 3, 28} \approx 2.95$이므로 Scheffé 임계값은
 
 $$
 F_{\text{crit}}^{S} = (4 - 1) \times 2.95 = 8.85
 $$
 
-Since $F_L = 7.29 < 8.85$, the contrast is not significant by Scheffe's method. This illustrates the conservatism of Scheffe's approach: the contrast has a sizable point estimate but does not reach the threshold required for simultaneous control over all possible contrasts.
+이다. $F_L = 7.29 < 8.85$이므로 Scheffé 방법으로는 이 대비가 유의하지 않다. Scheffé 접근의 보수성을 보여준다. 대비의 점추정값은 상당하지만, 가능한 모든 대비를 동시에 통제하기 위해 요구되는 문턱에는 이르지 못한다.
 
-## Comparison of Bonferroni and Scheffe
+## Bonferroni와 Scheffé의 비교
 
-The two methods address the same problem -- controlling the FWER -- but are optimal in different situations:
+두 방법은 FWER 통제라는 같은 문제를 다루지만 최적인 상황이 다르다:
 
-| Feature | Bonferroni | Scheffe |
+| 항목 | Bonferroni | Scheffé |
 |---------|-----------|---------|
-| **Controls FWER for** | A fixed set of $m$ pre-specified comparisons | All possible linear contrasts simultaneously |
-| **Critical value depends on** | Number of comparisons $m$ | Number of groups $k$ (not $m$) |
-| **Power** | Higher when $m$ is small | Lower for any fixed set, but applies to unlimited contrasts |
-| **Best used when** | Comparisons are planned before data collection | Comparisons are exploratory or data-driven |
-| **Conservatism** | Increases with $m$ | Constant regardless of how many contrasts are tested |
+| **FWER을 통제하는 대상** | 미리 지정한 고정된 $m$개의 비교 | 가능한 모든 선형 대비를 동시에 |
+| **임계값이 의존하는 것** | 비교의 수 $m$ | 집단의 수 $k$ ($m$이 아님) |
+| **검정력** | $m$이 작을 때 더 높다 | 고정된 집합에 대해서는 낮지만 무한한 대비에 적용된다 |
+| **적합한 경우** | 자료 수집 전에 비교를 계획했을 때 | 비교가 탐색적이거나 자료에서 착안했을 때 |
+| **보수성** | $m$과 함께 커진다 | 검정하는 대비의 수와 무관하게 일정하다 |
 
-!!! warning "Common pitfall"
+!!! warning "흔한 함정"
 
-    Using Bonferroni for data-driven comparisons violates the method's assumptions. If the choice of which comparisons to test was influenced by the data, the actual number of "implicit" comparisons exceeds $m$, and the FWER is no longer controlled at $\alpha$. In such cases, Scheffe's method is the correct choice because its guarantee holds regardless of how contrasts are selected.
+    자료에서 착안한 비교에 Bonferroni를 쓰면 방법의 가정을 위반한다. 어느 비교를 검정할지가 자료의 영향을 받았다면 실제로 "암묵적인" 비교의 수가 $m$을 넘어서므로 FWER이 더 이상 $\alpha$로 통제되지 않는다. 이런 경우에는 대비를 어떻게 고르든 보장이 유지되는 Scheffé 방법이 옳은 선택이다.
 
-As a rule of thumb: if the number of planned comparisons satisfies $m < k - 1$, Bonferroni is typically more powerful than Scheffe. When $m$ approaches or exceeds $\binom{k}{2}$, or when the comparisons are not pre-specified, Scheffe becomes the preferred method.
+경험 법칙: 계획된 비교의 수가 $m < k - 1$을 만족하면 대체로 Bonferroni가 Scheffé보다 강력하다. $m$이 $\binom{k}{2}$에 가까워지거나 넘어설 때, 또는 비교를 미리 지정하지 않았을 때에는 Scheffé가 선호된다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-A researcher performs a one-way ANOVA with $k = 5$ groups and $n = 10$ observations per group, yielding $\text{MS}_W = 4.0$. The researcher wants to test the following three planned contrasts at $\alpha = 0.05$:
+**연습문제 1.**
+어떤 연구자가 집단 $k = 5$개, 집단당 $n = 10$개 관측으로 일원배치 분산분석을 수행하여 $\text{MS}_W = 4.0$을 얻었다. 연구자는 $\alpha = 0.05$에서 다음 세 개의 계획된 대비를 검정하려 한다:
 
-- $C_1$: $\mu_1 - \mu_2 = 0$ (comparing groups 1 and 2)
-- $C_2$: $\mu_3 - \frac{1}{2}(\mu_4 + \mu_5) = 0$ (comparing group 3 to the average of groups 4 and 5)
-- $C_3$: $\mu_4 - \mu_5 = 0$ (comparing groups 4 and 5)
+- $C_1$: $\mu_1 - \mu_2 = 0$ (집단 1과 2의 비교)
+- $C_2$: $\mu_3 - \frac{1}{2}(\mu_4 + \mu_5) = 0$ (집단 3과 집단 4·5 평균의 비교)
+- $C_3$: $\mu_4 - \mu_5 = 0$ (집단 4와 5의 비교)
 
-**(a)** What is the Bonferroni-adjusted significance level for each contrast?
+**(a)** 각 대비의 Bonferroni 조정 유의수준은 얼마인가?
 
-**(b)** For $C_1$, suppose $\bar{Y}_1 = 12.0$ and $\bar{Y}_2 = 9.5$. Compute the test statistic and determine whether the contrast is significant using the Bonferroni correction.
+**(b)** $C_1$에 대해 $\bar{Y}_1 = 12.0$, $\bar{Y}_2 = 9.5$라고 하자. 검정통계량을 계산하고 Bonferroni 보정으로 이 대비가 유의한지 판정하라.
 
-**(c)** Would Scheffe's method be more or less powerful than Bonferroni for these three specific contrasts? Explain.
+**(c)** 이 세 대비에 대해 Scheffé 방법은 Bonferroni보다 강력한가, 덜 강력한가? 설명하라.
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
 
-    **(a)** With $m = 3$ planned contrasts and $\alpha = 0.05$, the Bonferroni-adjusted level is $\alpha^* = 0.05 / 3 = 0.0167$ per contrast.
+    **(a)** 계획된 대비가 $m = 3$개이고 $\alpha = 0.05$이므로 Bonferroni 조정 수준은 대비당 $\alpha^* = 0.05 / 3 = 0.0167$이다.
 
-    **(b)** For contrast $C_1: \mu_1 - \mu_2$, the test statistic is
+    **(b)** 대비 $C_1: \mu_1 - \mu_2$의 검정통계량은
 
     $$
     t = \frac{\bar{Y}_1 - \bar{Y}_2}{\sqrt{\text{MS}_W \left(\frac{1}{n_1} + \frac{1}{n_2}\right)}} = \frac{12.0 - 9.5}{\sqrt{4.0 \times (1/10 + 1/10)}} = \frac{2.5}{\sqrt{0.8}} = \frac{2.5}{0.894} = 2.80
     $$
 
-    The critical value from $t_{45}$ at $\alpha^*/2 = 0.0083$ is approximately $t_{0.0083, 45} \approx 2.50$. Since $2.80 > 2.50$, the contrast is significant: groups 1 and 2 differ at the Bonferroni-corrected level.
+    이다. $\alpha^*/2 = 0.0083$에서 $t_{45}$의 임계값은 약 $t_{0.0083, 45} \approx 2.49$이다. $2.80 > 2.49$이므로 이 대비는 유의하다. 집단 1과 2는 Bonferroni 보정 수준에서 다르다.
 
-    **(c)** Scheffe's method would be less powerful for these three specific contrasts. Scheffe controls the FWER for all possible contrasts (not just the three being tested), so its critical value is determined by $\sqrt{(k-1) F_{0.05, k-1, N-k}} = \sqrt{4 \times F_{0.05, 4, 45}} \approx \sqrt{4 \times 2.58} = 3.21$. This is larger than the Bonferroni critical value of approximately 2.50. Bonferroni is more powerful when the number of planned contrasts is small relative to the total number of possible contrasts.
+    **(c)** 이 세 대비에 대해서는 Scheffé 방법이 덜 강력하다. Scheffé는 (검정하는 셋만이 아니라) 가능한 모든 대비에 대해 FWER을 통제하므로 임계값이 $\sqrt{(k-1) F_{0.05, k-1, N-k}} = \sqrt{4 \times F_{0.05, 4, 45}} \approx \sqrt{4 \times 2.58} = 3.21$로 결정된다. 이는 Bonferroni의 임계값 약 2.49보다 크다. 계획된 대비의 수가 가능한 전체 대비 수에 비해 적을 때에는 Bonferroni가 더 강력하다.

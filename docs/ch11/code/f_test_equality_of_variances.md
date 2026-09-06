@@ -1,54 +1,56 @@
-# F Test Equality Of Variances
+# 등분산에 대한 F-검정
 
-## Overview
+## 개요
 
-The F-test for equality of variances compares the variances of two normally distributed populations by forming the ratio of sample variances. It is the classical two-sample test for homoscedasticity and forms the basis of many other procedures, including the ANOVA F-test. However, it is extremely sensitive to violations of normality, and Levene's test is generally preferred in practice. This page derives the test, implements it from scratch, and examines its behavior across several variance-ratio scenarios.
+등분산 F-검정은 표본분산의 비를 만들어 정규분포를 따르는 두 모집단의 분산을 비교한다. 등분산성에 대한 고전적인 이표본 검정이며 분산분석 F-검정을 비롯한 여러 절차의 바탕이 된다. 그러나 정규성 위반에 극도로 민감하여 실무에서는 대체로 Levene 검정이 선호된다. 이 페이지에서는 검정을 유도하고 처음부터 구현하며 여러 분산비 시나리오에서 그 행동을 살펴본다.
 
-## Hypotheses and Test Statistic
+## 가설과 검정통계량
 
-Given two independent samples of sizes $n_1$ and $n_2$ from normal populations with variances $\sigma_1^2$ and $\sigma_2^2$, the hypotheses are
+분산이 $\sigma_1^2$, $\sigma_2^2$인 정규 모집단에서 크기 $n_1$, $n_2$의 독립 표본 둘이 주어졌을 때 가설은
 
 $$
 H_0: \sigma_1^2 = \sigma_2^2, \qquad H_1: \sigma_1^2 \neq \sigma_2^2
 $$
 
-The test statistic is the ratio of sample variances:
+이다. 검정통계량은 표본분산의 비이다:
 
 $$
 F = \frac{S_1^2}{S_2^2}
 $$
 
-Under $H_0$, this ratio follows an F-distribution:
+$H_0$ 아래에서 이 비는 F-분포를 따른다:
 
 $$
 F \sim F(n_1 - 1,\; n_2 - 1)
 $$
 
-For a two-sided test at significance level $\alpha$, we reject $H_0$ when
+유의수준 $\alpha$의 양측검정에서는
 
 $$
 F < F_{\alpha/2}(n_1 - 1,\, n_2 - 1) \quad \text{or} \quad F > F_{1-\alpha/2}(n_1 - 1,\, n_2 - 1)
 $$
 
-The two-sided p-value is
+일 때 $H_0$을 기각한다. 양측 p-값은
 
 $$
 p = 2\min\!\bigl(P(F_{n_1-1,\, n_2-1} \le F_{\text{obs}}),\; P(F_{n_1-1,\, n_2-1} \ge F_{\text{obs}})\bigr)
 $$
 
-## Connection to the Chi-Squared Distribution
+이다.
 
-The F-distribution arises as a ratio of two independent chi-squared random variables, each divided by its degrees of freedom. Since $(n_i - 1)S_i^2 / \sigma_i^2 \sim \chi^2(n_i - 1)$ for normal data, under $H_0: \sigma_1^2 = \sigma_2^2$:
+## 카이제곱 분포와의 연결
+
+F-분포는 각각 자유도로 나눈 독립인 두 카이제곱 확률변수의 비로 나타난다. 정규 자료에서 $(n_i - 1)S_i^2 / \sigma_i^2 \sim \chi^2(n_i - 1)$이므로 $H_0: \sigma_1^2 = \sigma_2^2$ 아래에서
 
 $$
 F = \frac{S_1^2}{S_2^2} = \frac{\chi^2(n_1 - 1) / (n_1 - 1)}{\chi^2(n_2 - 1) / (n_2 - 1)}
 $$
 
-This is the defining form of the $F(n_1 - 1, n_2 - 1)$ distribution.
+이며, 이것이 $F(n_1 - 1, n_2 - 1)$ 분포의 정의 형태이다.
 
-## Implementation
+## 구현
 
-The following function implements the two-sided F-test:
+다음 함수는 양측 F-검정을 구현한다:
 
 ```python
 import numpy as np
@@ -65,7 +67,7 @@ def f_test(data_0, data_1):
     return statistic, p_value
 ```
 
-The demonstration generates $X \sim N(0, 1)$ and $Y \sim N(1, \sigma_Y)$ for several values of $\sigma_Y$:
+예제는 $X \sim N(0, 1)$과 여러 $\sigma_Y$ 값에 대한 $Y \sim N(1, \sigma_Y)$을 생성한다:
 
 ```python
 seed, size = 1, 100
@@ -77,76 +79,86 @@ for scale in [1.00, 1.05, 1.10, 1.15, 1.20]:
     print(f"sigma_y={scale:.2f}: F={stat:.2f}, p={pval:.3f}")
 ```
 
-## Interpretation
+출력은 다음과 같다:
 
-- When $\sigma_Y = 1.00$, the true variance ratio is 1 and the F-statistic is near 1, producing a large p-value. The test correctly retains $H_0$.
-- As $\sigma_Y$ increases, $S_Y^2$ grows relative to $S_X^2$, pushing the F-statistic away from 1 and reducing the p-value.
-- The test's power depends on the sample size: with $n = 100$ per group, moderate departures (e.g., $\sigma_Y = 1.15$) may or may not be detected, whereas larger samples would detect them reliably.
+| $\sigma_Y$ | $F = S_X^2/S_Y^2$ | p-값 |
+|---|---|---|
+| 1.00 | 1.000 | 1.000 |
+| 1.05 | 0.907 | 0.628 |
+| 1.10 | 0.826 | 0.345 |
+| 1.15 | 0.756 | 0.166 |
+| 1.20 | 0.694 | 0.071 |
 
-The critical limitation of this test is its extreme sensitivity to non-normality. Even mild departures from normality (e.g., moderate skewness or a few outliers) can inflate the Type I error rate substantially. For real-world data, Levene's test is recommended.
+## 해석
 
-## Exercises
+- $\sigma_Y = 1.00$이면 참 분산비가 1이고 F-통계량도 1에 가까워 p-값이 크다. 검정이 $H_0$을 올바르게 유지한다.
+- $\sigma_Y$가 커질수록 $S_Y^2$이 $S_X^2$에 비해 커져 F-통계량이 1에서 멀어지고 p-값이 작아진다.
+- 검정력은 표본크기에 달려 있다. 집단당 $n = 100$에서는 완만한 이탈(예: $\sigma_Y = 1.15$, $p = 0.166$)을 탐지하지 못하고, $\sigma_Y = 1.20$에서도 $p = 0.071$로 $\alpha = 0.05$에 미치지 못한다. 표본이 커야 안정적으로 탐지할 수 있다.
 
-**Exercise 1.**
-Two samples of sizes $n_1 = 20$ and $n_2 = 25$ yield sample variances $S_1^2 = 15.3$ and $S_2^2 = 8.7$. Compute the F-statistic and state the degrees of freedom.
+이 검정의 결정적인 한계는 비정규성에 극도로 민감하다는 점이다. 정규성에서 약간만 벗어나도(예: 완만한 치우침이나 이상점 몇 개) 제1종 오류율이 크게 부풀 수 있다. 실제 자료에는 Levene 검정을 권한다.
 
-??? success "Solution to Exercise 1"
-    The F-statistic is
+## 연습문제
+
+**연습문제 1.**
+크기가 $n_1 = 20$, $n_2 = 25$인 두 표본에서 표본분산 $S_1^2 = 15.3$, $S_2^2 = 8.7$을 얻었다. F-통계량을 계산하고 자유도를 진술하라.
+
+??? success "연습문제 1 풀이"
+    F-통계량은
 
     $$
     F = \frac{S_1^2}{S_2^2} = \frac{15.3}{8.7} \approx 1.759
     $$
 
-    The degrees of freedom are $df_1 = n_1 - 1 = 19$ and $df_2 = n_2 - 1 = 24$. Under $H_0$, $F \sim F(19, 24)$.
+    이다. 자유도는 $df_1 = n_1 - 1 = 19$, $df_2 = n_2 - 1 = 24$이다. $H_0$ 아래에서 $F \sim F(19, 24)$이다.
 
 ---
 
-**Exercise 2.**
-Show that if $F \sim F(d_1, d_2)$, then $1/F \sim F(d_2, d_1)$. Why does this property matter for the two-sided test?
+**연습문제 2.**
+$F \sim F(d_1, d_2)$이면 $1/F \sim F(d_2, d_1)$임을 보여라. 이 성질이 양측검정에서 왜 중요한가?
 
-??? success "Solution to Exercise 2"
-    By definition, if $U \sim \chi^2(d_1)$ and $V \sim \chi^2(d_2)$ are independent, then
+??? success "연습문제 2 풀이"
+    정의에 의해 $U \sim \chi^2(d_1)$과 $V \sim \chi^2(d_2)$가 독립이면
 
     $$
     F = \frac{U/d_1}{V/d_2} \sim F(d_1, d_2)
     $$
 
-    Taking the reciprocal:
+    이다. 역수를 취하면
 
     $$
     \frac{1}{F} = \frac{V/d_2}{U/d_1} \sim F(d_2, d_1)
     $$
 
-    This property matters because it means we can always arrange the F-test so that $F \ge 1$ by placing the larger sample variance in the numerator. The two-sided p-value can then be computed as $2 \cdot P(F_{d_1, d_2} \ge F_{\text{obs}})$. Alternatively, the $\min$ formulation in the implementation handles both tails directly without requiring this convention.
+    이다. 이 성질이 중요한 이유는 큰 쪽 표본분산을 분자에 두어 언제나 $F \ge 1$이 되도록 배치할 수 있기 때문이다. 그러면 양측 p-값을 $2 \cdot P(F_{d_1, d_2} \ge F_{\text{obs}})$로 계산할 수 있다. 한편 위 구현의 $\min$ 형태는 이런 규약 없이도 양쪽 꼬리를 직접 처리한다.
 
 ---
 
-**Exercise 3.**
-Explain why the F-test for equality of variances is more sensitive to non-normality than the two-sample $t$-test for equality of means.
+**연습문제 3.**
+등분산 F-검정이 평균에 대한 이표본 $t$-검정보다 비정규성에 더 민감한 이유를 설명하라.
 
-??? success "Solution to Exercise 3"
-    The $t$-test is based on sample means, which converge to normality by the Central Limit Theorem regardless of the underlying distribution (provided moments exist). The F-test for variances, however, is based on sample variances, which involve fourth moments of the data. The sampling distribution of $S^2$ is strongly affected by the kurtosis of the underlying distribution. Heavy-tailed distributions produce occasional extreme values that dramatically inflate $S^2$, causing the ratio $S_1^2/S_2^2$ to deviate from the F-distribution far more than the $t$-statistic deviates from the $t$-distribution. This is why the F-test for variances is considered one of the least robust classical tests.
+??? success "연습문제 3 풀이"
+    $t$-검정은 표본평균에 기반하는데, 적률이 존재하기만 하면 바탕 분포와 무관하게 중심극한정리에 의해 표본평균이 정규로 수렴한다. 반면 분산에 대한 F-검정은 표본분산에 기반하고 표본분산은 자료의 4차 적률과 관련된다. $S^2$의 표본분포는 바탕 분포의 첨도에 강하게 영향을 받는다. 꼬리가 두꺼운 분포에서는 이따금 나오는 극단값이 $S^2$을 크게 부풀려 비 $S_1^2/S_2^2$이 F-분포에서 크게 벗어난다. $t$-통계량이 $t$-분포에서 벗어나는 정도보다 훨씬 심하다. 그래서 분산에 대한 F-검정은 고전적 검정 중 가장 로버스트하지 않은 축에 든다.
 
 ---
 
-**Exercise 4.**
-For $n_1 = n_2 = 50$ and $\alpha = 0.05$, find the approximate critical values $F_{0.025}(49, 49)$ and $F_{0.975}(49, 49)$. Use the reciprocal relationship to express one in terms of the other.
+**연습문제 4.**
+$n_1 = n_2 = 50$, $\alpha = 0.05$에서 근사 임계값 $F_{0.025}(49, 49)$와 $F_{0.975}(49, 49)$를 구하라. 역수 관계로 하나를 다른 하나로 표현하라.
 
-??? success "Solution to Exercise 4"
-    From F-distribution tables or software, $F_{0.975}(49, 49) \approx 1.607$. By the reciprocal property:
+??? success "연습문제 4 풀이"
+    F-분포표나 소프트웨어에서 $F_{0.975}(49, 49) \approx 1.762$이다. 역수 성질에 의해
 
     $$
-    F_{0.025}(49, 49) = \frac{1}{F_{0.975}(49, 49)} \approx \frac{1}{1.607} \approx 0.622
+    F_{0.025}(49, 49) = \frac{1}{F_{0.975}(49, 49)} \approx \frac{1}{1.762} \approx 0.568
     $$
 
-    We reject $H_0$ when $F < 0.622$ or $F > 1.607$. Note that for equal degrees of freedom, the critical region is symmetric about 1 on the log scale: $\ln(0.622) \approx -0.476$ and $\ln(1.607) \approx 0.476$.
+    이다. $F < 0.568$이거나 $F > 1.762$이면 $H_0$을 기각한다. 자유도가 같으면 기각역이 로그 척도에서 1을 중심으로 대칭임에 유의하라: $\ln(0.568) \approx -0.567$, $\ln(1.762) \approx 0.567$.
 
 ---
 
-**Exercise 5.**
-A quality engineer measures the variance of a process at two factories and obtains $S_1^2 = 2.1$ from $n_1 = 30$ and $S_2^2 = 3.8$ from $n_2 = 30$. The data show moderate right skewness. Should the engineer use the F-test? Propose a better alternative and explain why.
+**연습문제 5.**
+어떤 품질 기술자가 두 공장에서 공정의 분산을 측정하여 $n_1 = 30$에서 $S_1^2 = 2.1$을, $n_2 = 30$에서 $S_2^2 = 3.8$을 얻었다. 자료는 완만하게 오른쪽으로 치우쳐 있다. F-검정을 써야 하는가? 더 나은 대안을 제시하고 이유를 설명하라.
 
-??? success "Solution to Exercise 5"
-    The engineer should not use the F-test because the data are right-skewed, violating the normality assumption that the F-test requires. Even moderate skewness can produce misleading p-values.
+??? success "연습문제 5 풀이"
+    자료가 오른쪽으로 치우쳐 F-검정이 요구하는 정규성 가정을 위반하므로 F-검정을 쓰면 안 된다. 완만한 치우침만으로도 오도하는 p-값이 나올 수 있다.
 
-    A better alternative is Levene's test, which computes absolute deviations from each group's median and then runs a standard ANOVA on these deviations. Because it operates on absolute deviations rather than squared deviations, it is far less affected by skewness and outliers. In Python: `scipy.stats.levene(data_1, data_2, center='median')`. If the engineer specifically needs a test for the ratio of variances, a bootstrap approach (resampling the variance ratio) provides a distribution-free alternative.
+    더 나은 대안은 각 집단의 중앙값으로부터의 절대편차를 계산한 뒤 그 편차에 표준 분산분석을 수행하는 Levene 검정이다. 제곱편차가 아니라 절대편차를 쓰므로 치우침과 이상점의 영향을 훨씬 덜 받는다. Python에서는 `scipy.stats.levene(data_1, data_2, center='median')`이다. 분산비에 대한 검정이 특별히 필요하다면 (분산비를 재표본추출하는) 붓스트랩 접근이 분포에 의존하지 않는 대안이 된다.

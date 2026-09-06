@@ -1,165 +1,165 @@
-# Financial Applications of ANOVA
+# 분산분석의 금융 응용
 
-## Overview
+## 개요
 
-Portfolio managers, risk analysts, and quantitative researchers routinely need to determine whether observed differences in returns, volatilities, or risk metrics across groups are statistically significant or merely due to sampling variability. The ANOVA framework developed in the preceding sections provides exactly this capability: it tests whether the mean of a continuous financial variable differs across two or more categories while controlling the Type I error rate. This section applies one-way and two-way ANOVA to four common financial analysis tasks and illustrates the complete workflow with a worked example.
+포트폴리오 매니저, 리스크 분석가, 퀀트 연구자는 집단 사이에서 관측된 수익률·변동성·위험 지표의 차이가 통계적으로 유의한지 아니면 단순한 표집 변동인지 판정해야 하는 경우가 많다. 앞 절들에서 전개한 분산분석의 틀이 바로 이 일을 해 준다. 제1종 오류율을 통제하면서 연속형 금융 변수의 평균이 둘 이상의 범주에서 다른지 검정한다. 이 절에서는 일원배치와 이원배치 분산분석을 흔한 금융 분석 과제 네 가지에 적용하고 예제로 전체 흐름을 보인다.
 
-## Comparing Portfolio Returns
+## 포트폴리오 수익률 비교
 
-A fundamental question in portfolio management is whether different investment strategies produce meaningfully different average returns. Suppose an analyst manages $k$ portfolios, each following a distinct strategy (e.g., value, momentum, low-volatility), and observes monthly returns over $T$ months. The one-way ANOVA tests
+포트폴리오 운용의 기본 질문 하나는 서로 다른 투자 전략이 의미 있게 다른 평균 수익률을 내는가이다. 어떤 분석가가 각기 다른 전략(예: 가치, 모멘텀, 저변동성)을 따르는 포트폴리오 $k$개를 운용하며 $T$개월 동안 월 수익률을 관측한다고 하자. 일원배치 분산분석은
 
 $$
-H_0: \mu_1 = \mu_2 = \cdots = \mu_k \quad \text{vs.} \quad H_1: \text{at least one } \mu_i \text{ differs}
+H_0: \mu_1 = \mu_2 = \cdots = \mu_k \quad \text{vs.} \quad H_1: \text{적어도 하나의 } \mu_i \text{가 다르다}
 $$
 
-where $\mu_i$ denotes the population mean monthly return of strategy $i$. If each strategy's returns are approximately normally distributed with equal variance across strategies, the F-statistic
+를 검정한다. 여기서 $\mu_i$는 전략 $i$의 모평균 월 수익률이다. 각 전략의 수익률이 근사적으로 정규이고 전략 사이의 분산이 같다면 F-통계량
 
 $$
 F = \frac{\text{MSB}}{\text{MSW}} = \frac{\text{SSB}/(k-1)}{\text{SSW}/(N-k)}
 $$
 
-follows an $F(k-1, \, N-k)$ distribution under $H_0$, where $N = kT$ is the total number of return observations.
+은 $H_0$ 아래에서 $F(k-1, \, N-k)$ 분포를 따르며 $N = kT$는 전체 수익률 관측 수이다.
 
-!!! warning "Heteroscedasticity in financial returns"
-    Financial return series frequently exhibit unequal variances across strategies or time periods (volatility clustering). When Levene's test rejects the equal-variance assumption, Welch's ANOVA should be used instead of the classical F-test. See [Welch's One-Way ANOVA](../anova_welch/welch_one_way.md) for the adjusted procedure.
+!!! warning "금융 수익률의 이분산"
+    금융 수익률 계열은 전략이나 기간에 따라 분산이 다른 경우가 많다(변동성 군집). Levene 검정이 등분산 가정을 기각하면 고전적 F-검정 대신 Welch 분산분석을 써야 한다. 조정된 절차는 [Welch의 일원배치 분산분석](../anova_welch/welch_one_way.md)을 보라.
 
-## Sector Analysis
+## 섹터 분석
 
-Equity analysts often ask whether mean returns differ across industry sectors (e.g., technology, healthcare, energy, financials). Here the groups are defined by sector classification, and each observation is the return of a stock belonging to that sector over a specified period. The one-way ANOVA hypothesis is
+주식 분석가는 산업 섹터(예: 기술, 헬스케어, 에너지, 금융)에 따라 평균 수익률이 다른지 자주 묻는다. 여기서 집단은 섹터 분류로 정의되고, 각 관측값은 해당 섹터에 속한 종목의 일정 기간 수익률이다. 일원배치 분산분석의 가설은
 
 $$
-H_0: \mu_{\text{tech}} = \mu_{\text{health}} = \mu_{\text{energy}} = \cdots \quad \text{vs.} \quad H_1: \text{at least one sector mean differs}
+H_0: \mu_{\text{tech}} = \mu_{\text{health}} = \mu_{\text{energy}} = \cdots \quad \text{vs.} \quad H_1: \text{적어도 한 섹터의 평균이 다르다}
 $$
 
-A significant F-test indicates that sector membership explains a meaningful portion of return variability. Post-hoc pairwise comparisons (e.g., Tukey HSD) then identify which specific sector pairs exhibit significantly different mean returns. The effect size $\eta^2 = \text{SSB}/\text{SST}$ quantifies the proportion of total return variability attributable to sector differences.
+이다. F-검정이 유의하면 섹터 소속이 수익률 변동의 의미 있는 부분을 설명함을 나타낸다. 그다음 사후 쌍별 비교(예: Tukey HSD)로 어느 섹터 쌍의 평균 수익률이 유의하게 다른지 찾는다. 효과크기 $\eta^2 = \text{SSB}/\text{SST}$는 전체 수익률 변동 중 섹터 차이로 설명되는 비율을 수치화한다.
 
-## Factor Model Testing
+## 팩터 모형 검정
 
-In the Fama-French framework, stocks are sorted into portfolios based on characteristics such as size (market capitalization) and value (book-to-market ratio). To test whether size explains cross-sectional variation in returns, an analyst forms $k$ size-sorted portfolios and applies one-way ANOVA to their mean returns. The null hypothesis is that all size groups earn the same average return:
+Fama-French 틀에서는 규모(시가총액)나 가치(장부가/시가 비율) 같은 특성에 따라 종목을 포트폴리오로 분류한다. 규모가 수익률의 횡단면 변동을 설명하는지 검정하려면 규모별 포트폴리오 $k$개를 만들어 평균 수익률에 일원배치 분산분석을 적용한다. 귀무가설은 모든 규모 집단이 같은 평균 수익률을 낸다는 것이다:
 
 $$
 H_0: \mu_{\text{small}} = \mu_{\text{mid}} = \mu_{\text{large}}
 $$
 
-Rejection of $H_0$ provides evidence for a size premium. When testing two characteristics simultaneously (e.g., size and value), two-way ANOVA is appropriate, with the model
+$H_0$을 기각하면 규모 프리미엄의 증거가 된다. 두 특성을 동시에 검정할 때(예: 규모와 가치)에는 이원배치 분산분석이 적절하며 모형은
 
 $$
 Y_{ijk} = \mu + \alpha_i + \beta_j + (\alpha\beta)_{ij} + \varepsilon_{ijk}
 $$
 
-where $\alpha_i$ represents the size effect, $\beta_j$ represents the value effect, and $(\alpha\beta)_{ij}$ captures any interaction between size and value. A significant interaction term indicates that the value premium depends on firm size (or vice versa).
+이다. 여기서 $\alpha_i$는 규모 효과, $\beta_j$는 가치 효과, $(\alpha\beta)_{ij}$는 규모와 가치 사이의 교호작용을 담는다. 교호작용 항이 유의하면 가치 프리미엄이 기업 규모에 의존함을(또는 그 반대를) 나타낸다.
 
-## Trading Strategy Evaluation Across Market Regimes
+## 시장 국면별 매매 전략 평가
 
-A trader may want to evaluate whether a strategy's performance varies across market regimes (e.g., bull, bear, and sideways markets). This naturally calls for a two-way ANOVA with Factor A = trading strategy and Factor B = market regime. The model is
+트레이더는 어떤 전략의 성과가 시장 국면(예: 상승장, 하락장, 횡보장)에 따라 달라지는지 평가하고 싶을 수 있다. 요인 A = 매매 전략, 요인 B = 시장 국면인 이원배치 분산분석이 자연스럽다. 모형은
 
 $$
 Y_{ijk} = \mu + \alpha_i + \beta_j + (\alpha\beta)_{ij} + \varepsilon_{ijk}
 $$
 
-where $Y_{ijk}$ is the return of strategy $i$ during regime $j$ in period $k$, $\alpha_i$ is the main effect of strategy $i$, $\beta_j$ is the main effect of regime $j$, and $(\alpha\beta)_{ij}$ captures the strategy-regime interaction. The three hypothesis tests of interest are:
+이며 $Y_{ijk}$는 국면 $j$의 기간 $k$에서 전략 $i$의 수익률, $\alpha_i$는 전략 $i$의 주효과, $\beta_j$는 국면 $j$의 주효과, $(\alpha\beta)_{ij}$는 전략–국면 교호작용이다. 관심 있는 세 가지 가설검정은 다음과 같다:
 
-- **Strategy main effect**: $H_0: \alpha_1 = \alpha_2 = \cdots = 0$ (strategies perform equally on average)
-- **Regime main effect**: $H_0: \beta_1 = \beta_2 = \cdots = 0$ (regimes do not affect average returns)
-- **Interaction**: $H_0: (\alpha\beta)_{ij} = 0$ for all $i, j$ (strategy performance does not depend on regime)
+- **전략 주효과**: $H_0: \alpha_1 = \alpha_2 = \cdots = 0$ (전략들의 평균 성과가 같다)
+- **국면 주효과**: $H_0: \beta_1 = \beta_2 = \cdots = 0$ (국면이 평균 수익률에 영향을 주지 않는다)
+- **교호작용**: 모든 $i, j$에 대해 $H_0: (\alpha\beta)_{ij} = 0$ (전략의 성과가 국면에 의존하지 않는다)
 
-A significant interaction is particularly informative: it reveals that some strategies thrive in specific regimes while underperforming in others, which has direct implications for regime-aware portfolio allocation.
+교호작용이 유의하면 특히 유익하다. 어떤 전략은 특정 국면에서 잘 작동하고 다른 국면에서는 부진함을 드러내며, 이는 국면을 고려한 자산배분에 직접적인 함의를 준다.
 
-## Worked Example: Comparing Three Fund Returns
+## 예제: 세 펀드의 수익률 비교
 
-!!! example "One-way ANOVA for fund comparison"
-    An analyst collects 12 monthly returns (in percent) for three mutual funds:
+!!! example "펀드 비교를 위한 일원배치 분산분석"
+    어떤 분석가가 뮤추얼 펀드 세 개에 대해 월 수익률(%)을 네 개씩, 모두 12개 수집했다:
 
-    | Fund A | Fund B | Fund C |
+    | 펀드 A | 펀드 B | 펀드 C |
     |--------|--------|--------|
     | 1.2 | 0.8 | 2.1 |
     | 0.9 | 1.1 | 1.8 |
     | 1.5 | 0.6 | 2.4 |
     | 1.1 | 0.9 | 1.9 |
 
-    **Step 1: Compute group means and the overall mean.**
+    **1단계: 집단 평균과 전체 평균을 계산한다.**
 
     $\bar{Y}_A = 1.175$, $\bar{Y}_B = 0.850$, $\bar{Y}_C = 2.050$, $\bar{Y} = 1.358$
 
-    **Step 2: Compute sums of squares.**
+    **2단계: 제곱합을 계산한다.**
 
     $$
-    \text{SSB} = \sum_{i=1}^{3} n_i (\bar{Y}_i - \bar{Y})^2 = 4[(1.175 - 1.358)^2 + (0.850 - 1.358)^2 + (2.050 - 1.358)^2] \approx 2.977
-    $$
-
-    $$
-    \text{SSW} = \sum_{i=1}^{3} \sum_{j=1}^{4} (Y_{ij} - \bar{Y}_i)^2 \approx 0.345
-    $$
-
-    **Step 3: Compute mean squares and F-statistic.**
-
-    $$
-    \text{MSB} = \frac{2.977}{3 - 1} = 1.489, \quad \text{MSW} = \frac{0.345}{12 - 3} = 0.0383
+    \text{SSB} = \sum_{i=1}^{3} n_i (\bar{Y}_i - \bar{Y})^2 = 4[(1.175 - 1.358)^2 + (0.850 - 1.358)^2 + (2.050 - 1.358)^2] \approx 3.082
     $$
 
     $$
-    F = \frac{1.489}{0.0383} \approx 38.8
+    \text{SSW} = \sum_{i=1}^{3} \sum_{j=1}^{4} (Y_{ij} - \bar{Y}_i)^2 \approx 0.528
     $$
 
-    **Step 4: Decision.** With $k - 1 = 2$ and $N - k = 9$ degrees of freedom, the critical value at $\alpha = 0.05$ is $F_{0.05, 2, 9} \approx 4.26$. Since $38.8 \gg 4.26$, we reject $H_0$ and conclude that the three funds have significantly different mean returns.
+    **3단계: 평균제곱과 F-통계량을 계산한다.**
 
-    **Step 5: Post-hoc analysis.** A Tukey HSD test would then identify which specific fund pairs differ. Given the group means, Fund C's substantially higher average return is likely the primary driver of the significant F-test. See [Tukey HSD](../post_hoc/tukey.md) for the pairwise comparison procedure.
+    $$
+    \text{MSB} = \frac{3.082}{3 - 1} = 1.541, \quad \text{MSW} = \frac{0.528}{12 - 3} = 0.0586
+    $$
 
-## Exercises
+    $$
+    F = \frac{1.541}{0.0586} \approx 26.3
+    $$
 
-**Exercise 1.**
-An analyst compares the mean monthly returns of three investment strategies over 60 months. The ANOVA F-statistic is 4.21 with $df_1 = 2$ and $df_2 = 177$. At $\alpha = 0.05$, is there a significant difference among the strategies?
+    **4단계: 판정.** 자유도 $k - 1 = 2$와 $N - k = 9$에서 $\alpha = 0.05$의 임계값은 $F_{0.05, 2, 9} \approx 4.26$이다. $26.3 \gg 4.26$이므로 $H_0$을 기각하고 세 펀드의 평균 수익률이 유의하게 다르다고 결론짓는다(p ≈ 0.0002).
 
-??? success "Solution to Exercise 1"
-    With $df_1 = 2$ and $df_2 = 177$, the critical value $F_{0.05, 2, 177} \approx 3.05$.
+    **5단계: 사후분석.** 이어서 Tukey HSD 검정으로 어느 펀드 쌍이 다른지 찾는다. 집단 평균을 보면 펀드 C의 뚜렷하게 높은 평균 수익률이 유의한 F-검정의 주된 원인일 가능성이 크다. 쌍별 비교 절차는 [Tukey HSD](../post_hoc/tukey.md)를 보라.
 
-    Since $F = 4.21 > 3.05$, we reject $H_0$ at the 5% level. There is significant evidence that at least one strategy has a different mean monthly return.
+## 연습문제
 
-    The p-value can be computed from the F-distribution: $P(F_{2, 177} > 4.21) \approx 0.016$. Post-hoc pairwise comparisons (e.g., Tukey's HSD) are needed to determine which strategies differ.
+**연습문제 1.**
+어떤 분석가가 세 투자 전략의 평균 월 수익률을 60개월에 걸쳐 비교했다. 분산분석의 F-통계량은 $df_1 = 2$, $df_2 = 177$에서 4.21이다. $\alpha = 0.05$에서 전략들 사이에 유의한 차이가 있는가?
+
+??? success "연습문제 1 풀이"
+    $df_1 = 2$, $df_2 = 177$에서 임계값은 $F_{0.05, 2, 177} \approx 3.05$이다.
+
+    $F = 4.21 > 3.05$이므로 5% 수준에서 $H_0$을 기각한다. 적어도 한 전략의 평균 월 수익률이 다르다는 유의한 증거가 있다.
+
+    p-값은 F-분포에서 계산할 수 있다: $P(F_{2, 177} > 4.21) \approx 0.016$. 어느 전략이 다른지 알려면 사후 쌍별 비교(예: Tukey의 HSD)가 필요하다.
 
 ---
 
-**Exercise 2.**
-Explain why financial return data often violate ANOVA assumptions. Describe which assumption is most commonly violated and suggest a remedy.
+**연습문제 2.**
+금융 수익률 자료가 분산분석의 가정을 자주 위반하는 이유를 설명하라. 가장 흔히 위반되는 가정이 무엇인지 밝히고 처방을 제시하라.
 
-??? success "Solution to Exercise 2"
-    Financial returns commonly violate:
+??? success "연습문제 2 풀이"
+    금융 수익률은 흔히 다음을 위반한다:
 
-    1. **Normality:** Returns exhibit heavy tails (excess kurtosis) and sometimes skewness. Extreme events (crashes, rallies) occur more frequently than the normal distribution predicts. This is the most commonly violated assumption.
+    1. **정규성:** 수익률은 두꺼운 꼬리(초과 첨도)를 보이고 때로 치우침도 있다. 극단적 사건(폭락, 급등)이 정규분포가 예측하는 것보다 자주 일어난다. 가장 흔히 위반되는 가정이다.
 
-    2. **Independence:** Returns may be serially correlated (autocorrelation in daily returns) or exhibit volatility clustering (GARCH effects), violating the independence assumption.
+    2. **독립성:** 수익률에 계열상관(일간 수익률의 자기상관)이 있거나 변동성 군집(GARCH 효과)이 나타나 독립성 가정을 위반할 수 있다.
 
-    3. **Equal variances:** Different strategies or asset classes often have different volatilities.
+    3. **등분산:** 전략이나 자산군마다 변동성이 다른 경우가 많다.
 
-    **Remedy for non-normality:** With $n = 60$ months per group, the CLT provides some protection for the F-test. For stronger robustness:
+    **비정규성에 대한 처방:** 집단당 $n = 60$개월이면 중심극한정리가 F-검정을 어느 정도 보호해 준다. 더 강한 로버스트성을 원하면:
 
-    - Use the Kruskal-Wallis test (nonparametric alternative).
-    - Use bootstrap ANOVA to avoid distributional assumptions.
-    - Apply a rank transformation before ANOVA.
-    - For serial dependence, use Newey-West standard errors or block bootstrap.
-
----
-
-**Exercise 3.**
-A portfolio manager claims their fund's mean return differs from two benchmark indices. Should they use one-way ANOVA or Dunnett's test? Explain.
-
-??? success "Solution to Exercise 3"
-    **Dunnett's test** is more appropriate because the manager is comparing a single treatment (their fund) against multiple controls (the two benchmarks), not comparing all groups pairwise.
-
-    Dunnett's test is designed for "many-to-one" comparisons and is more powerful than Tukey's HSD or Bonferroni for this specific comparison structure. It controls the FWER while using only the $k - 1$ comparisons of interest (fund vs. each benchmark), rather than all $\binom{k}{2}$ pairwise comparisons.
-
-    One-way ANOVA could be used as a preliminary omnibus test, but it tests whether any group differs from any other -- a broader question than what the manager is asking. If the two benchmarks differ from each other but the fund matches both, ANOVA might reject while the manager's specific question is unanswered.
+    - Kruskal-Wallis 검정(비모수 대안)을 쓴다.
+    - 붓스트랩 분산분석으로 분포 가정을 피한다.
+    - 분산분석 전에 순위 변환을 적용한다.
+    - 계열 의존에는 Newey-West 표준오차나 블록 붓스트랩을 쓴다.
 
 ---
 
-**Exercise 4.**
-Describe how to use ANOVA to test whether mean stock returns differ across calendar months (the "January effect" and other seasonal anomalies).
+**연습문제 3.**
+어떤 포트폴리오 매니저가 자기 펀드의 평균 수익률이 두 벤치마크 지수와 다르다고 주장한다. 일원배치 분산분석을 써야 하는가, Dunnett 검정을 써야 하는가? 설명하라.
 
-??? success "Solution to Exercise 4"
-    **Setup:** Collect monthly returns for a stock or index over $T$ years. The response variable is the monthly return, and the factor is the calendar month (12 levels: Jan, Feb, ..., Dec). Each year contributes one observation per month, so the design is a one-way ANOVA with $k = 12$ groups and approximately $T$ observations per group.
+??? success "연습문제 3 풀이"
+    **Dunnett 검정**이 더 적절하다. 매니저는 모든 집단을 쌍별로 비교하는 것이 아니라 하나의 처치(자기 펀드)를 여러 기준(두 벤치마크)과 비교하고 있기 때문이다.
 
-    **ANOVA test:** The null hypothesis is $H_0: \mu_{\text{Jan}} = \mu_{\text{Feb}} = \dots = \mu_{\text{Dec}}$ (no seasonal pattern). Rejecting $H_0$ indicates that at least one month has a significantly different mean return.
+    Dunnett 검정은 "다대일" 비교를 위해 설계되었으며 이 비교 구조에서는 Tukey의 HSD나 Bonferroni보다 강력하다. 모든 $\binom{k}{2}$개의 쌍별 비교가 아니라 관심 있는 $k - 1$개의 비교(펀드 대 각 벤치마크)만 쓰면서 FWER을 통제한다.
 
-    **Follow-up:** Use Tukey's HSD or Dunnett's test to identify which months differ. To test specifically for the January effect, compare January's mean to the average of the other 11 months.
+    일원배치 분산분석은 예비 전체검정으로 쓸 수 있지만, 어느 집단이든 다른 집단과 다른지를 검정하므로 매니저의 질문보다 넓다. 두 벤치마크가 서로 다르고 펀드는 둘 모두와 비슷하다면 분산분석은 기각하겠지만 매니저의 구체적인 질문에는 답하지 못한다.
 
-    **Caveats:** Returns may be serially correlated across months, violating independence. Using non-overlapping annual data or applying robust standard errors helps. Also, calendar anomalies found in historical data may have diminished due to increased awareness and trading.
+---
+
+**연습문제 4.**
+달력의 월에 따라 평균 주식 수익률이 다른지("1월 효과"와 다른 계절 이상현상) 검정하는 데 분산분석을 어떻게 쓰는지 기술하라.
+
+??? success "연습문제 4 풀이"
+    **설정:** 어떤 종목이나 지수의 월 수익률을 $T$년에 걸쳐 수집한다. 반응변수는 월 수익률이고 요인은 달력의 월(12개 수준: 1월, 2월, …, 12월)이다. 해마다 각 월에 관측값이 하나씩 생기므로 집단이 $k = 12$개, 집단당 관측값이 약 $T$개인 일원배치 분산분석 설계가 된다.
+
+    **분산분석 검정:** 귀무가설은 $H_0: \mu_{\text{1월}} = \mu_{\text{2월}} = \dots = \mu_{\text{12월}}$(계절 패턴 없음)이다. $H_0$을 기각하면 적어도 한 달의 평균 수익률이 유의하게 다름을 나타낸다.
+
+    **후속 분석:** Tukey의 HSD나 Dunnett 검정으로 어느 달이 다른지 찾는다. 1월 효과를 특정해 검정하려면 1월의 평균을 나머지 11개월의 평균과 비교한다.
+
+    **주의:** 수익률은 달 사이에 계열상관이 있어 독립성을 위반할 수 있다. 겹치지 않는 연간 자료를 쓰거나 로버스트 표준오차를 적용하면 도움이 된다. 또한 과거 자료에서 발견된 달력 이상현상은 인지도와 거래가 늘면서 약해졌을 수 있다.

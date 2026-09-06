@@ -1,42 +1,42 @@
-# Levene Test
+# Levene 검정
 
-## Overview
+## 개요
 
-Levene's test assesses the null hypothesis that two or more populations share the same variance. Unlike Bartlett's test and the F-test for equality of variances, Levene's test is robust to departures from normality, making it the preferred choice for checking homoscedasticity in practice. This page presents the test statistic, discusses the choice of centering function, and demonstrates the test across several variance-ratio scenarios using `scipy.stats.levene`.
+Levene 검정은 둘 이상의 모집단이 같은 분산을 갖는다는 귀무가설을 평가한다. Bartlett 검정이나 등분산 F-검정과 달리 정규성 이탈에 로버스트하여, 실무에서 등분산성을 확인할 때 선호되는 선택이다. 이 페이지에서는 검정통계량을 제시하고, 중심 함수의 선택을 논하며, `scipy.stats.levene`으로 여러 분산비 시나리오에서 검정을 보인다.
 
-## Hypotheses and Test Statistic
+## 가설과 검정통계량
 
-Consider $k$ groups with sample sizes $n_1, \dots, n_k$ and total sample size $N = \sum_{i=1}^{k} n_i$. The hypotheses are
+표본크기가 $n_1, \dots, n_k$이고 전체 표본크기가 $N = \sum_{i=1}^{k} n_i$인 $k$개 집단을 생각하자. 가설은
 
 $$
-H_0: \sigma_1^2 = \sigma_2^2 = \cdots = \sigma_k^2, \qquad H_1: \text{not all variances are equal}
+H_0: \sigma_1^2 = \sigma_2^2 = \cdots = \sigma_k^2, \qquad H_1: \text{분산이 모두 같지는 않다}
 $$
 
-Define the transformed variable
+이다. 변환된 변수를
 
 $$
 Z_{ij} = |y_{ij} - \tilde{y}_i|
 $$
 
-where $\tilde{y}_i$ is a measure of central tendency for group $i$ (typically the group median). Levene's test statistic is then
+로 정의한다. 여기서 $\tilde{y}_i$는 집단 $i$의 중심 측도(보통 집단 중앙값)이다. Levene 검정통계량은
 
 $$
 W = \frac{(N - k)}{(k - 1)} \cdot \frac{\sum_{i=1}^{k} n_i (\bar{Z}_{i\cdot} - \bar{Z}_{\cdot\cdot})^2}{\sum_{i=1}^{k} \sum_{j=1}^{n_i} (Z_{ij} - \bar{Z}_{i\cdot})^2}
 $$
 
-where $\bar{Z}_{i\cdot}$ is the mean of $Z_{ij}$ within group $i$ and $\bar{Z}_{\cdot\cdot}$ is the overall mean of all $Z_{ij}$. Under $H_0$, the statistic $W$ approximately follows an $F(k-1,\, N-k)$ distribution.
+이며 $\bar{Z}_{i\cdot}$는 집단 $i$ 안의 $Z_{ij}$ 평균, $\bar{Z}_{\cdot\cdot}$는 모든 $Z_{ij}$의 전체 평균이다. $H_0$ 아래에서 통계량 $W$는 근사적으로 $F(k-1,\, N-k)$ 분포를 따른다.
 
-## Choice of Center
+## 중심의 선택
 
-The centering function determines the robustness and power of the test:
+중심 함수는 검정의 로버스트성과 검정력을 결정한다:
 
-| Center | Notation | Properties |
+| 중심 | 표기 | 성질 |
 |---|---|---|
-| Mean | $\bar{y}_i$ | Original Levene (1960); most powerful under normality but sensitive to outliers |
-| Median | $\tilde{y}_i$ | Brown-Forsythe variant; robust to skewness and outliers |
-| Trimmed mean | $\bar{y}_i^{(\text{trim})}$ | Compromise between power and robustness |
+| 평균 | $\bar{y}_i$ | 원래의 Levene(1960). 정규성 아래에서 가장 강력하지만 이상점에 민감 |
+| 중앙값 | $\tilde{y}_i$ | Brown-Forsythe 변형. 치우침과 이상점에 로버스트 |
+| 절사평균 | $\bar{y}_i^{(\text{trim})}$ | 검정력과 로버스트성의 절충 |
 
-In `scipy.stats.levene`, the `center` parameter controls this choice. The default is `'median'`, which is the Brown-Forsythe variant:
+`scipy.stats.levene`에서는 `center` 인자로 이를 정한다. 기본값은 Brown-Forsythe 변형인 `'median'`이다:
 
 ```python
 from scipy.stats import levene
@@ -44,9 +44,9 @@ from scipy.stats import levene
 stat, pval = levene(group1, group2, center='median')
 ```
 
-## Demonstration
+## 예제
 
-The accompanying script generates $X \sim N(0, 1)$ and $Y \sim N(1, \sigma_Y)$ for $\sigma_Y \in \{1.00, 1.05, 1.10, 1.15, 1.20\}$, then applies Levene's test to each pair:
+함께 제공되는 스크립트는 $X \sim N(0, 1)$과 $\sigma_Y \in \{1.00, 1.05, 1.10, 1.15, 1.20\}$인 $Y \sim N(1, \sigma_Y)$을 생성하고 각 쌍에 Levene 검정을 적용한다:
 
 ```python
 import numpy as np
@@ -61,70 +61,80 @@ for scale in [1.00, 1.05, 1.10, 1.15, 1.20]:
     print(f"sigma_y={scale:.2f}: F={stat:.2f}, p={pval:.3f}")
 ```
 
-## Interpretation
+출력은 다음과 같다:
 
-- When $\sigma_Y = 1.00$, the variances are equal and the test produces a small $W$ with a large p-value, correctly retaining $H_0$.
-- As $\sigma_Y$ increases, the absolute deviations in the $Y$ group grow relative to those in the $X$ group, increasing $W$ and decreasing the p-value.
-- Compared to Bartlett's test on the same data, Levene's test is slightly less powerful under exact normality but maintains correct Type I error rates under non-normality.
+| $\sigma_Y$ | $W$ | p-값 |
+|---|---|---|
+| 1.00 | 0.00 | 1.000 |
+| 1.05 | 0.20 | 0.652 |
+| 1.10 | 0.78 | 0.379 |
+| 1.15 | 1.67 | 0.198 |
+| 1.20 | 2.82 | 0.095 |
 
-Levene's test is the standard pre-check before running a classical ANOVA. When it rejects, the analyst should switch to Welch's ANOVA or another heteroscedasticity-robust procedure.
+## 해석
 
-## Exercises
+- $\sigma_Y = 1.00$이면 분산이 같고 검정은 작은 $W$와 큰 p-값을 주어 $H_0$을 올바르게 유지한다.
+- $\sigma_Y$가 커질수록 $Y$ 집단의 절대편차가 $X$ 집단에 비해 커져 $W$가 커지고 p-값이 작아진다.
+- 같은 자료에 대한 Bartlett 검정과 비교하면(같은 조건에서 Bartlett은 $\sigma_Y = 1.20$에서 $p = 0.071$, Levene은 $p = 0.095$) 정확한 정규성 아래에서 Levene이 조금 덜 강력하지만, 비정규성 아래에서 올바른 제1종 오류율을 유지한다.
 
-**Exercise 1.**
-For two groups with $n_1 = n_2 = 50$, explain intuitively why Levene's test statistic $W$ is essentially a one-way ANOVA F-statistic applied to the transformed data $Z_{ij}$.
+Levene 검정은 고전적 분산분석을 수행하기 전의 표준적인 사전 확인이다. 기각되면 Welch 분산분석이나 다른 이분산 로버스트 절차로 옮겨야 한다.
 
-??? success "Solution to Exercise 1"
-    Levene's test replaces each observation $y_{ij}$ with its absolute deviation from the group center, $Z_{ij} = |y_{ij} - \tilde{y}_i|$. If the group variances are equal, these absolute deviations should have similar means across groups. If one group has larger variance, its absolute deviations will be systematically larger, producing a higher group mean $\bar{Z}_{i\cdot}$.
+## 연습문제
 
-    The test statistic $W$ measures the ratio of between-group variation to within-group variation in the $Z_{ij}$ values, which is exactly the one-way ANOVA F-statistic applied to the transformed data. A large $W$ means the group means of the absolute deviations differ more than expected by chance, providing evidence against equal variances.
+**연습문제 1.**
+$n_1 = n_2 = 50$인 두 집단에서 Levene 검정통계량 $W$가 사실상 변환된 자료 $Z_{ij}$에 적용한 일원배치 분산분석 F-통계량인 이유를 직관적으로 설명하라.
+
+??? success "연습문제 1 풀이"
+    Levene 검정은 각 관측값 $y_{ij}$를 집단 중심으로부터의 절대편차 $Z_{ij} = |y_{ij} - \tilde{y}_i|$로 바꾼다. 집단 분산이 같다면 이 절대편차들의 평균이 집단마다 비슷해야 한다. 한 집단의 분산이 크면 그 집단의 절대편차가 체계적으로 커져 집단 평균 $\bar{Z}_{i\cdot}$가 높아진다.
+
+    검정통계량 $W$는 $Z_{ij}$ 값에서 집단 간 변동과 집단 내 변동의 비를 재는데, 이는 변환된 자료에 적용한 일원배치 분산분석 F-통계량과 정확히 같다. $W$가 크면 절대편차의 집단 평균이 우연으로 기대되는 것보다 많이 다르다는 뜻이며 등분산에 반하는 증거가 된다.
 
 ---
 
-**Exercise 2.**
-A dataset has three groups with sample sizes $(15, 15, 15)$ and the data are approximately normal. Would you recommend Levene's test or Bartlett's test? What if the sample sizes were $(15, 15, 200)$?
+**연습문제 2.**
+어떤 자료에 표본크기 $(15, 15, 15)$인 세 집단이 있고 자료가 근사적으로 정규이다. Levene 검정과 Bartlett 검정 중 무엇을 권하겠는가? 표본크기가 $(15, 15, 200)$이라면?
 
-??? success "Solution to Exercise 2"
-    For the balanced case with approximate normality, Bartlett's test is slightly more powerful because it is the uniformly most powerful test under exact normality. However, Levene's test would also perform well and is the safer default.
+??? success "연습문제 2 풀이"
+    근사적 정규성을 갖는 균형 잡힌 경우에는 정확한 정규성 아래에서 균일최강력 검정인 Bartlett 검정이 조금 더 강력하다. 다만 Levene 검정도 잘 작동하며 더 안전한 기본 선택이다.
 
-    For the unbalanced case $(15, 15, 200)$, Levene's test is preferred even under normality. Bartlett's test can behave erratically with highly unbalanced designs because the pooled variance $S_p^2$ is dominated by the large group, and small departures from normality in any group can inflate the test statistic. Levene's median-based approach is more robust to both the imbalance and potential distributional issues.
+    불균형인 $(15, 15, 200)$의 경우에는 정규성이 성립해도 Levene 검정이 선호된다. 심하게 불균형한 설계에서는 합동분산 $S_p^2$이 큰 집단에 의해 지배되고, 어느 집단에서든 정규성에서 조금만 벗어나도 검정통계량이 부풀 수 있어 Bartlett 검정이 불안정하게 행동할 수 있다. 중앙값 기반의 Levene 접근이 불균형과 분포 문제 모두에 더 로버스트하다.
 
 ---
 
-**Exercise 3.**
-Prove that if all observations in every group have the same value (i.e., zero within-group variance), then $W = 0$.
+**연습문제 3.**
+모든 집단의 모든 관측값이 같은 값을 가지면(즉 집단 내 분산이 0이면) $W = 0$임을 증명하라.
 
-??? success "Solution to Exercise 3"
-    If every observation in group $i$ equals the same value $c_i$, then the group median is $\tilde{y}_i = c_i$ and
+??? success "연습문제 3 풀이"
+    집단 $i$의 모든 관측값이 같은 값 $c_i$라면 집단 중앙값은 $\tilde{y}_i = c_i$이고 모든 $i, j$에 대해
 
     $$
     Z_{ij} = |y_{ij} - \tilde{y}_i| = |c_i - c_i| = 0
     $$
 
-    for all $i, j$. Therefore $\bar{Z}_{i\cdot} = 0$ for every group and $\bar{Z}_{\cdot\cdot} = 0$. The numerator of $W$ becomes
+    이다. 따라서 모든 집단에서 $\bar{Z}_{i\cdot} = 0$이고 $\bar{Z}_{\cdot\cdot} = 0$이다. $W$의 분자는
 
     $$
     \sum_{i=1}^{k} n_i (0 - 0)^2 = 0
     $$
 
-    so $W = 0$ regardless of the denominator (which is also zero, but the convention is that no variability yields no evidence against $H_0$). $\square$
+    이 되므로 분모와 무관하게 $W = 0$이다(분모도 0이지만, 변동이 전혀 없으면 $H_0$에 반하는 증거도 없다고 보는 것이 관례이다). $\square$
 
 ---
 
-**Exercise 4.**
-Suppose Levene's test gives $p = 0.03$ for a three-group comparison. The researcher proceeds with a classical one-way ANOVA and finds $p = 0.04$ for the group means. Critique this approach and suggest an alternative.
+**연습문제 4.**
+세 집단 비교에서 Levene 검정이 $p = 0.03$을 주었다. 연구자는 고전적 일원배치 분산분석을 진행하여 집단 평균에 대해 $p = 0.04$를 얻었다. 이 접근을 비평하고 대안을 제시하라.
 
-??? success "Solution to Exercise 4"
-    The researcher has identified a violation of the equal-variance assumption (Levene's $p = 0.03 < 0.05$) but then used a procedure that requires that very assumption. The classical ANOVA F-test is unreliable when variances are unequal, especially with unbalanced designs: the actual Type I error rate can be substantially higher or lower than the nominal $\alpha$.
+??? success "연습문제 4 풀이"
+    연구자는 등분산 가정의 위반을 확인해 놓고(Levene의 $p = 0.03 < 0.05$) 바로 그 가정을 요구하는 절차를 썼다. 분산이 다를 때, 특히 설계가 불균형할 때 고전적 분산분석 F-검정은 믿을 수 없다. 실제 제1종 오류율이 명목 $\alpha$보다 상당히 높거나 낮을 수 있다.
 
-    The correct approach is to use Welch's ANOVA (`scipy.stats.alexandergovern` or a Welch-corrected F-test), which does not assume equal variances. For post-hoc comparisons, Games-Howell should replace Tukey HSD, as it also accounts for unequal variances.
+    올바른 접근은 등분산을 가정하지 않는 Welch 분산분석(`pingouin.welch_anova`)을 쓰는 것이다. SciPy에는 이분산 상황을 위한 관련 검정으로 `scipy.stats.alexandergovern`이 있다. 사후비교에서는 Tukey HSD 대신 분산 차이를 반영하는 Games-Howell을 써야 한다.
 
 ---
 
-**Exercise 5.**
-Derive the approximate distribution of $W$ under $H_0$ by arguing from the properties of the one-way ANOVA F-statistic applied to the $Z_{ij}$ values.
+**연습문제 5.**
+$Z_{ij}$ 값에 적용한 일원배치 분산분석 F-통계량의 성질로부터 $H_0$ 아래 $W$의 근사 분포를 유도하라.
 
-??? success "Solution to Exercise 5"
-    Under $H_0: \sigma_1^2 = \cdots = \sigma_k^2$, the absolute deviations $Z_{ij} = |y_{ij} - \tilde{y}_i|$ have the same expected value across all groups (since the spread of each group is identical). The $Z_{ij}$ values are not exactly normal, but for moderate to large sample sizes their group means $\bar{Z}_{i\cdot}$ are approximately normal by the Central Limit Theorem.
+??? success "연습문제 5 풀이"
+    $H_0: \sigma_1^2 = \cdots = \sigma_k^2$ 아래에서 각 집단의 흩어짐이 같으므로 절대편차 $Z_{ij} = |y_{ij} - \tilde{y}_i|$의 기댓값이 모든 집단에서 같다. $Z_{ij}$ 값은 정확히 정규는 아니지만 표본크기가 어느 정도 되면 중심극한정리에 의해 집단 평균 $\bar{Z}_{i\cdot}$가 근사적으로 정규를 따른다.
 
-    The statistic $W$ is the standard one-way ANOVA F-statistic computed on the $Z_{ij}$ values. Under the null hypothesis (equal means of the $Z_{ij}$ across groups), the ANOVA F-statistic follows $F(k-1, N-k)$ approximately. The approximation improves with sample size. The key insight is that even though the $Z_{ij}$ are not normal (they are non-negative by construction), the ratio of mean squares converges to the F-distribution as long as the group sample sizes are not too small.
+    통계량 $W$는 $Z_{ij}$ 값에 대해 계산한 표준 일원배치 분산분석 F-통계량이다. 귀무가설(집단 사이 $Z_{ij}$의 평균이 같음) 아래에서 이 F-통계량은 근사적으로 $F(k-1, N-k)$를 따른다. 표본크기가 클수록 근사가 좋아진다. 핵심은 $Z_{ij}$가 (구성상 음이 아니어서) 정규가 아니더라도 집단 표본크기가 너무 작지만 않으면 평균제곱의 비가 F-분포로 수렴한다는 점이다.

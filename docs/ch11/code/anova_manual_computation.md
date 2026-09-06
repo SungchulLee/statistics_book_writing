@@ -1,28 +1,28 @@
-# Manual Analysis of Variance with Fisher Method
+# Fisher 방법을 이용한 분산분석 수동 계산
 
-## Overview
+## 개요
 
-Understanding ANOVA deeply requires computing every quantity by hand at least once. This page derives the one-way ANOVA decomposition from first principles, walks through a manual calculation of SST, SSE, MST, MSE, and the F-statistic on synthetic height data, verifies the result against `scipy.stats.f_oneway`, and then applies the Fisher Least Significant Difference (LSD) post-hoc procedure to identify which specific pairs of groups differ.
+분산분석을 깊이 이해하려면 적어도 한 번은 모든 양을 손으로 계산해 보아야 한다. 이 페이지에서는 일원배치 분산분석의 분해를 처음부터 유도하고, 모의생성한 키 자료에 대해 SST, SSE, MST, MSE와 F-통계량을 수동으로 계산하며, 결과를 `scipy.stats.f_oneway`와 대조해 확인한 뒤, Fisher의 최소유의차(LSD) 사후 절차로 어느 집단 쌍이 다른지 찾는다.
 
-## One-Way ANOVA Decomposition
+## 일원배치 분산분석의 분해
 
-Suppose we observe $k$ groups with sample sizes $n_1, \dots, n_k$ and total sample size $N = \sum_{i=1}^{k} n_i$. Let $\bar{y}$ denote the grand mean and $\bar{y}_i$ the mean of group $i$. The total variation decomposes as
+표본크기가 $n_1, \dots, n_k$이고 전체 표본크기가 $N = \sum_{i=1}^{k} n_i$인 $k$개 집단을 관측한다고 하자. $\bar{y}$를 전체 평균, $\bar{y}_i$를 집단 $i$의 평균이라 하면 전체 변동은 다음과 같이 분해된다:
 
 $$
 \underbrace{\sum_{i=1}^{k}\sum_{j=1}^{n_i}(y_{ij} - \bar{y})^2}_{\text{SS}_{\text{total}}} = \underbrace{\sum_{i=1}^{k} n_i (\bar{y}_i - \bar{y})^2}_{\text{SST (between)}} + \underbrace{\sum_{i=1}^{k}\sum_{j=1}^{n_i}(y_{ij} - \bar{y}_i)^2}_{\text{SSE (within)}}
 $$
 
-The mean squares and F-statistic are
+평균제곱과 F-통계량은
 
 $$
 \text{MST} = \frac{\text{SST}}{k - 1}, \qquad \text{MSE} = \frac{\text{SSE}}{N - k}, \qquad F = \frac{\text{MST}}{\text{MSE}}
 $$
 
-Under $H_0: \mu_1 = \mu_2 = \cdots = \mu_k$, we have $F \sim F(k-1,\, N-k)$.
+이다. $H_0: \mu_1 = \mu_2 = \cdots = \mu_k$ 아래에서 $F \sim F(k-1,\, N-k)$이다.
 
-## Manual Computation in Python
+## Python으로 수동 계산
 
-The following function computes every ANOVA quantity from scratch:
+다음 함수는 분산분석의 모든 양을 처음부터 계산한다:
 
 ```python
 import numpy as np
@@ -46,23 +46,23 @@ def manual_anova(groups):
     return SST, SSE, MST, MSE, F, p_value
 ```
 
-The scipy verification is a single line:
+scipy로 확인하는 것은 한 줄이면 된다:
 
 ```python
 F_scipy, p_scipy = stats.f_oneway(*groups.values())
 ```
 
-Both approaches produce identical $F$ and $p$-values, confirming the manual calculation.
+두 방식이 동일한 $F$와 $p$-값을 주어 수동 계산이 맞음을 확인해 준다.
 
-## Fisher LSD Post-Hoc Comparison
+## Fisher LSD 사후비교
 
-After rejecting the global null, Fisher's Least Significant Difference identifies which pairs of means differ. For groups $i$ and $j$, the LSD threshold is
+전역 귀무가설을 기각한 뒤 Fisher의 최소유의차로 어느 평균 쌍이 다른지 찾는다. 집단 $i$와 $j$에 대한 LSD 문턱은
 
 $$
 \text{LSD} = t_{\alpha/2,\, N-k} \sqrt{\text{MSE}\!\left(\frac{1}{n_i} + \frac{1}{n_j}\right)}
 $$
 
-If $|\bar{y}_i - \bar{y}_j| > \text{LSD}$, the pair is declared significantly different at level $\alpha$.
+이다. $|\bar{y}_i - \bar{y}_j| > \text{LSD}$이면 그 쌍을 수준 $\alpha$에서 유의하게 다르다고 선언한다.
 
 ```python
 from itertools import combinations
@@ -83,25 +83,25 @@ def fisher_lsd(groups, MSE, alpha=0.05):
     return results
 ```
 
-## Interpretation
+## 해석
 
-In the accompanying script, three groups of simulated heights (Dutch $\mu = 183$, Japanese $\mu = 172$, Danish $\mu = 181$, each $n = 30$) produce a large F-statistic with $p \approx 0$, decisively rejecting $H_0$.
+함께 제공되는 스크립트에서 모의생성한 키 자료 세 집단(네덜란드 $\mu = 183$, 일본 $\mu = 172$, 덴마크 $\mu = 181$, 각각 $n = 30$)은 큰 F-통계량과 $p \approx 0$을 주어 $H_0$을 단호히 기각한다.
 
-The Fisher LSD follow-up typically finds:
+이어지는 Fisher LSD는 대체로 다음을 찾아낸다:
 
-- **Dutch vs. Japanese:** significant (large mean difference).
-- **Dutch vs. Danish:** not significant (similar means).
-- **Japanese vs. Danish:** significant (large mean difference).
+- **네덜란드 대 일본:** 유의함(평균 차이가 큼).
+- **네덜란드 대 덴마크:** 유의하지 않음(평균이 비슷함).
+- **일본 대 덴마크:** 유의함(평균 차이가 큼).
 
-This illustrates a common pattern: the global ANOVA rejects, but not every pairwise comparison is significant. Post-hoc methods are essential for determining which specific groups drive the overall effect.
+흔한 패턴을 잘 보여준다. 전역 분산분석은 기각하지만 모든 쌍별 비교가 유의하지는 않다. 어느 집단이 전체 효과를 이끄는지 알려면 사후 방법이 꼭 필요하다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Given three groups with means $\bar{y}_1 = 10$, $\bar{y}_2 = 14$, $\bar{y}_3 = 12$, each of size $n = 20$, and grand mean $\bar{y} = 12$, compute SST.
+**연습문제 1.**
+평균이 $\bar{y}_1 = 10$, $\bar{y}_2 = 14$, $\bar{y}_3 = 12$이고 각 크기가 $n = 20$이며 전체 평균이 $\bar{y} = 12$인 세 집단에서 SST를 계산하라.
 
-??? success "Solution to Exercise 1"
-    Using $\text{SST} = \sum_{i=1}^{k} n_i (\bar{y}_i - \bar{y})^2$:
+??? success "연습문제 1 풀이"
+    $\text{SST} = \sum_{i=1}^{k} n_i (\bar{y}_i - \bar{y})^2$을 쓰면
 
     $$
     \text{SST} = 20(10 - 12)^2 + 20(14 - 12)^2 + 20(12 - 12)^2 = 20(4) + 20(4) + 20(0) = 160
@@ -109,64 +109,64 @@ Given three groups with means $\bar{y}_1 = 10$, $\bar{y}_2 = 14$, $\bar{y}_3 = 1
 
 ---
 
-**Exercise 2.**
-Explain why the Fisher LSD procedure does not control the family-wise error rate when the number of groups $k$ is large. What alternative would you recommend?
+**연습문제 2.**
+집단 수 $k$가 클 때 Fisher LSD 절차가 가족단위 오류율을 통제하지 못하는 이유를 설명하라. 어떤 대안을 권하겠는가?
 
-??? success "Solution to Exercise 2"
-    Fisher LSD performs each pairwise comparison at level $\alpha$ without adjustment. With $\binom{k}{2}$ comparisons, the probability of at least one false rejection grows rapidly. For $k = 5$ groups there are 10 pairwise tests, giving a family-wise error rate that can approach $1 - (1 - \alpha)^{10} \approx 0.40$ under the global null.
+??? success "연습문제 2 풀이"
+    Fisher LSD는 각 쌍별 비교를 조정 없이 수준 $\alpha$에서 수행한다. 비교가 $\binom{k}{2}$개면 거짓 기각이 적어도 하나 나올 확률이 빠르게 커진다. $k = 5$이면 쌍별 검정이 10개이고, 전역 귀무가설 아래에서 가족단위 오류율이 $1 - (1 - \alpha)^{10} \approx 0.40$에 이를 수 있다.
 
-    The Tukey Honest Significant Difference (HSD) method is the standard alternative. It controls the family-wise error rate at $\alpha$ for all pairwise comparisons simultaneously by using the Studentized range distribution rather than the $t$-distribution.
+    표준적인 대안은 Tukey의 정직유의차(HSD) 방법이다. $t$-분포 대신 스튜던트화 범위 분포를 써서 모든 쌍별 비교에 대해 가족단위 오류율을 $\alpha$로 동시에 통제한다.
 
 ---
 
-**Exercise 3.**
-Show that $\text{SS}_{\text{total}} = \text{SST} + \text{SSE}$ by expanding the identity $y_{ij} - \bar{y} = (\bar{y}_i - \bar{y}) + (y_{ij} - \bar{y}_i)$.
+**연습문제 3.**
+항등식 $y_{ij} - \bar{y} = (\bar{y}_i - \bar{y}) + (y_{ij} - \bar{y}_i)$을 전개하여 $\text{SS}_{\text{total}} = \text{SST} + \text{SSE}$임을 보여라.
 
-??? success "Solution to Exercise 3"
-    Squaring both sides and summing:
+??? success "연습문제 3 풀이"
+    양변을 제곱하여 합하면
 
     $$
     \sum_{i}\sum_{j}(y_{ij} - \bar{y})^2 = \sum_{i}\sum_{j}(\bar{y}_i - \bar{y})^2 + 2\sum_{i}\sum_{j}(\bar{y}_i - \bar{y})(y_{ij} - \bar{y}_i) + \sum_{i}\sum_{j}(y_{ij} - \bar{y}_i)^2
     $$
 
-    The cross term vanishes because for each group $i$:
+    이다. 각 집단 $i$에서
 
     $$
     \sum_{j=1}^{n_i}(y_{ij} - \bar{y}_i) = 0
     $$
 
-    Therefore $(\bar{y}_i - \bar{y})\sum_j (y_{ij} - \bar{y}_i) = 0$ for every $i$. The remaining two terms are exactly $\text{SST}$ (noting $\sum_j (\bar{y}_i - \bar{y})^2 = n_i(\bar{y}_i - \bar{y})^2$) and $\text{SSE}$. $\square$
+    이므로 교차항이 사라진다. 따라서 모든 $i$에서 $(\bar{y}_i - \bar{y})\sum_j (y_{ij} - \bar{y}_i) = 0$이다. 남은 두 항은 각각 정확히 $\text{SST}$($\sum_j (\bar{y}_i - \bar{y})^2 = n_i(\bar{y}_i - \bar{y})^2$임에 유의)와 $\text{SSE}$이다. $\square$
 
 ---
 
-**Exercise 4.**
-In the height example, suppose the Danish group has $n = 5$ instead of $n = 30$. How would this affect the LSD threshold for Dutch vs. Danish compared to the balanced case?
+**연습문제 4.**
+키 예제에서 덴마크 집단의 크기가 $n = 30$이 아니라 $n = 5$라고 하자. 균형인 경우와 비교해 네덜란드 대 덴마크의 LSD 문턱은 어떻게 달라지는가?
 
-??? success "Solution to Exercise 4"
-    The LSD threshold is
+??? success "연습문제 4 풀이"
+    LSD 문턱은
 
     $$
     \text{LSD} = t_{\alpha/2,\, N-k}\sqrt{\text{MSE}\!\left(\frac{1}{n_i} + \frac{1}{n_j}\right)}
     $$
 
-    With $n_{\text{Danish}} = 5$ instead of 30, the term $1/n_j$ increases from $1/30 \approx 0.033$ to $1/5 = 0.2$. The sum $1/n_i + 1/n_j$ increases from roughly $0.067$ to $0.233$, nearly quadrupling the expression under the square root. Consequently the LSD threshold increases substantially, making it harder to declare the Dutch-Danish difference significant. Additionally, the total $N$ decreases and $\text{MSE}$ may change, further widening the threshold.
+    이다. $n_{\text{덴마크}}$가 30에서 5가 되면 $1/n_j$가 $1/30 \approx 0.033$에서 $1/5 = 0.2$로 커진다. 합 $1/n_i + 1/n_j$는 약 $0.067$에서 $0.233$으로 늘어 제곱근 안의 값이 거의 네 배가 된다. 그 결과 LSD 문턱이 크게 커져 네덜란드–덴마크 차이를 유의하다고 선언하기 어려워진다. 또한 전체 $N$이 줄고 $\text{MSE}$도 달라질 수 있어 문턱이 더 넓어질 수 있다.
 
 ---
 
-**Exercise 5.**
-Under what conditions does $\text{MST}$ provide an unbiased estimate of $\sigma^2$? What does $\text{MST}$ estimate when $H_0$ is false?
+**연습문제 5.**
+$\text{MST}$가 $\sigma^2$의 불편추정값이 되는 조건은 무엇인가? $H_0$이 거짓일 때 $\text{MST}$는 무엇을 추정하는가?
 
-??? success "Solution to Exercise 5"
-    Under $H_0: \mu_1 = \cdots = \mu_k$, each group mean $\bar{Y}_i$ estimates the common mean $\mu$, and
+??? success "연습문제 5 풀이"
+    $H_0: \mu_1 = \cdots = \mu_k$ 아래에서 각 집단 평균 $\bar{Y}_i$가 공통 평균 $\mu$를 추정하며
 
     $$
     E[\text{MST}] = \sigma^2
     $$
 
-    so MST is an unbiased estimator of the common variance. When $H_0$ is false,
+    이므로 MST는 공통 분산의 불편추정량이다. $H_0$이 거짓이면
 
     $$
     E[\text{MST}] = \sigma^2 + \frac{\sum_{i=1}^{k} n_i (\mu_i - \bar{\mu})^2}{k - 1}
     $$
 
-    where $\bar{\mu} = \sum n_i \mu_i / N$. The second term is positive whenever the group means are not all equal, so $E[\text{MST}] > \sigma^2$. Since $E[\text{MSE}] = \sigma^2$ regardless of $H_0$, the ratio $F = \text{MST}/\text{MSE}$ tends to be larger than 1 under the alternative, which is why the F-test has power to detect differences.
+    이며 $\bar{\mu} = \sum n_i \mu_i / N$이다. 집단 평균이 모두 같지 않으면 둘째 항이 양수이므로 $E[\text{MST}] > \sigma^2$이다. $H_0$과 무관하게 $E[\text{MSE}] = \sigma^2$이므로 대립가설 아래에서 비 $F = \text{MST}/\text{MSE}$가 1보다 커지는 경향이 있고, 이것이 F-검정이 차이를 탐지할 검정력을 갖는 이유이다.

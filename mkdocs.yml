@@ -367,52 +367,52 @@ nav:
             - McNemar 검정 (대응된 이진 자료): ch10/code/mcnemar_test.md
             - Cochran의 Q 검정 (관련된 k개의 결과): ch10/code/cochran_q.md
 
-    - 11 Analysis of Variance:
-        - Chapter Overview: ch11/index.md
-        - 11.1 One-Way ANOVA:
-            - Model and Assumptions: ch11/anova_one_way/one_way_model.md
-            - F-Test Procedure: ch11/anova_one_way/f_test.md
-        - 11.2 Two-Way ANOVA:
-            - Main Effects and Blocking: ch11/anova_two_way/two_way.md
-            - Interaction Effects: ch11/anova_two_way/interaction.md
-        - 11.3 Post-Hoc Comparisons:
-            - Tukey Honestly Significant Difference: ch11/post_hoc/tukey.md
-            - Bonferroni and Scheffé Methods: ch11/post_hoc/bonferroni_scheffe.md
-            - Dunnett's Test (vs Control): ch11/post_hoc/dunnett.md
-            - Games–Howell (Unequal Variances): ch11/post_hoc/games_howell.md
-        - 11.4 Welch's ANOVA:
-            - Welch's One-Way Analysis of Variance: ch11/anova_welch/welch_one_way.md
-            - Welch's Two-Way Analysis of Variance: ch11/anova_welch/welch_two_way.md
-        - 11.5 Assumptions:
-            - Assumptions Overview: ch11/assumptions/assumptions_overview.md
-            - Checking Normality of Residuals: ch11/assumptions/normality.md
-            - Checking Independence of Observations: ch11/assumptions/independence.md
-            - Checking Homoscedasticity: ch11/assumptions/homoscedasticity.md
-            - Checking Linearity: ch11/assumptions/linearity.md
-        - 11.6 Diagnostics:
-            - Residual Analysis: ch11/diagnostics/residual_analysis.md
-            - Influential Data Points: ch11/diagnostics/influential_points.md
-            - Handling Assumption Violations: ch11/diagnostics/handling_violations.md
-        - 11.7 Practical Applications:
-            - A/B Testing and Experimental Design: ch11/practical_applications/ab_testing.md
-            - Financial Applications of Analysis of Variance: ch11/practical_applications/finance_applications.md
-            - Case Studies: ch11/practical_applications/case_studies.md
-        - 11.8 Code:
-            - Analysis of Variance Diagnostics: ch11/code/anova_diagnostics.md
-            - Post-Hoc Comparison Examples: ch11/code/post_hoc_comparisons.md
-            - One-Way Analysis of Variance End-to-End Pipeline: ch11/code/oneway_pipeline.md
-            - One-Way Analysis of Variance with scipy and Plots: ch11/code/oneway_scipy.md
-            - Two-Way Analysis of Variance End-to-End Pipeline: ch11/code/twoway_pipeline.md
-            - Interaction Effect Plot: ch11/code/interaction_plot.md
-            - Welch Analysis of Variance Type I Error and Power Simulation: ch11/code/welch_simulation.md
-            - Two-Way Welch Analysis of Variance (Robust HC3): ch11/code/welch_twoway_robust.md
-            - Analysis of Variance F-Statistic Simulation: ch11/code/anova_f_simulation.md
-            - Manual Analysis of Variance with Fisher Method: ch11/code/anova_manual_computation.md
-            - Bartlett Test: ch11/code/bartlett_test.md
-            - Chi2 Test For Variance: ch11/code/chi2_test_for_variance.md
-            - Chi Square Distribution: ch11/code/chi_square_distribution.md
-            - F Test Equality Of Variances: ch11/code/f_test_equality_of_variances.md
-            - Levene Test: ch11/code/levene_test.md
+    - 11 분산분석:
+        - 장 개요: ch11/index.md
+        - 11.1 일원배치 분산분석:
+            - 모형과 가정: ch11/anova_one_way/one_way_model.md
+            - F-검정 절차: ch11/anova_one_way/f_test.md
+        - 11.2 이원배치 분산분석:
+            - 주효과와 블록화: ch11/anova_two_way/two_way.md
+            - 교호작용 효과: ch11/anova_two_way/interaction.md
+        - 11.3 사후비교:
+            - Tukey 정직유의차: ch11/post_hoc/tukey.md
+            - Bonferroni와 Scheffé 방법: ch11/post_hoc/bonferroni_scheffe.md
+            - Dunnett 검정 (대조군과의 비교): ch11/post_hoc/dunnett.md
+            - Games–Howell (분산이 다를 때): ch11/post_hoc/games_howell.md
+        - 11.4 Welch 분산분석:
+            - Welch의 일원배치 분산분석: ch11/anova_welch/welch_one_way.md
+            - Welch의 이원배치 분산분석: ch11/anova_welch/welch_two_way.md
+        - 11.5 가정:
+            - 가정 개관: ch11/assumptions/assumptions_overview.md
+            - 잔차의 정규성 확인: ch11/assumptions/normality.md
+            - 관측의 독립성 확인: ch11/assumptions/independence.md
+            - 등분산성 확인: ch11/assumptions/homoscedasticity.md
+            - 선형성 확인: ch11/assumptions/linearity.md
+        - 11.6 진단:
+            - 잔차 분석: ch11/diagnostics/residual_analysis.md
+            - 영향점: ch11/diagnostics/influential_points.md
+            - 가정 위반의 처리: ch11/diagnostics/handling_violations.md
+        - 11.7 실무 응용:
+            - A/B 검정과 실험 설계: ch11/practical_applications/ab_testing.md
+            - 분산분석의 금융 응용: ch11/practical_applications/finance_applications.md
+            - 사례 연구: ch11/practical_applications/case_studies.md
+        - 11.8 코드:
+            - 분산분석 진단: ch11/code/anova_diagnostics.md
+            - 사후비교 예제: ch11/code/post_hoc_comparisons.md
+            - 일원배치 분산분석 파이프라인: ch11/code/oneway_pipeline.md
+            - scipy를 이용한 일원배치 분산분석과 그림: ch11/code/oneway_scipy.md
+            - 이원배치 분산분석 파이프라인: ch11/code/twoway_pipeline.md
+            - 교호작용 효과 그림: ch11/code/interaction_plot.md
+            - Welch 분산분석의 제1종 오류와 검정력 모의실험: ch11/code/welch_simulation.md
+            - 이원배치 Welch 분산분석 (로버스트 HC3): ch11/code/welch_twoway_robust.md
+            - 분산분석 F-통계량 모의실험: ch11/code/anova_f_simulation.md
+            - Fisher 방법을 이용한 분산분석 수동 계산: ch11/code/anova_manual_computation.md
+            - Bartlett 검정: ch11/code/bartlett_test.md
+            - 분산에 대한 카이제곱 검정: ch11/code/chi2_test_for_variance.md
+            - 카이제곱 분포: ch11/code/chi_square_distribution.md
+            - 등분산에 대한 F-검정: ch11/code/f_test_equality_of_variances.md
+            - Levene 검정: ch11/code/levene_test.md
 
     - 12 Correlation and Causation:
         - Chapter Overview: ch12/index.md

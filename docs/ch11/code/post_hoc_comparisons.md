@@ -1,161 +1,170 @@
-# Post-Hoc Comparison Examples
+# 사후비교 예제
 
-## Overview
+## 개요
 
-When a one-way ANOVA rejects the null hypothesis, it tells us that at least one group mean differs from the rest, but it does not identify which pairs of means are different. Post-hoc comparison procedures fill this gap by performing pairwise tests while controlling the family-wise error rate. This page reviews the most common methods -- Tukey's HSD, Bonferroni correction, and Scheffe's method -- with worked examples and simulated data.
+일원배치 분산분석이 귀무가설을 기각하면 적어도 한 집단의 평균이 나머지와 다르다는 것은 알 수 있지만 어느 쌍이 다른지는 알 수 없다. 사후비교 절차는 가족단위 오류율을 통제하면서 쌍별 검정을 수행하여 이 빈틈을 메운다. 이 페이지는 가장 흔한 방법인 Tukey의 HSD, Bonferroni 보정, Scheffé 방법을 예제와 함께 살펴본다.
 
-## The Multiple-Comparisons Problem
+## 다중비교 문제
 
-With $k$ groups there are $\binom{k}{2}$ pairwise comparisons. If each test is conducted at significance level $\alpha$, the probability of at least one false rejection under the global null is
+집단이 $k$개면 쌍별 비교는 $\binom{k}{2}$개이다. 각 검정을 유의수준 $\alpha$에서 수행하면 전역 귀무가설 아래에서 거짓 기각이 적어도 하나 나올 확률은
 
 $$
 1 - (1 - \alpha)^{\binom{k}{2}}
 $$
 
-For $k = 5$ groups and $\alpha = 0.05$ there are 10 comparisons, giving a family-wise error rate of roughly $1 - 0.95^{10} \approx 0.40$. Post-hoc methods keep this inflated error under control.
+이다. $k = 5$이고 $\alpha = 0.05$이면 비교가 10개이므로 가족단위 오류율이 대략 $1 - 0.95^{10} \approx 0.40$이 된다. 사후 방법은 이 부풀려진 오류를 통제한다.
 
-## Tukey's Honest Significant Difference
+## Tukey의 정직유의차
 
-Tukey's HSD declares groups $i$ and $j$ significantly different when
+Tukey의 HSD는
 
 $$
 |\bar{y}_{i\cdot} - \bar{y}_{j\cdot}| > q_{\alpha,\, k,\, N-k} \sqrt{\frac{MSW}{n}}
 $$
 
-where $q_{\alpha,k,N-k}$ is the critical value of the studentized range distribution, $MSW$ is the mean square within groups, and $n$ is the common group size (for balanced designs).
+일 때 집단 $i$와 $j$가 유의하게 다르다고 선언한다. 여기서 $q_{\alpha,k,N-k}$는 스튜던트화 범위 분포의 임계값, $MSW$는 집단 내 평균제곱, $n$은 (균형 설계에서) 공통 집단 크기이다.
 
 ```python
 import numpy as np
-from scipy import stats
+import pandas as pd
 from statsmodels.stats.multicomp import pairwise_tukeyhsd
 
-np.random.seed(42)
-n = 100
-data = np.random.normal(loc=0, scale=1, size=n)
+rng = np.random.default_rng(42)
+n = 15
+df = pd.DataFrame({
+    "response": np.concatenate([
+        rng.normal(10.0, 3.5, n),
+        rng.normal(12.0, 3.5, n),
+        rng.normal(15.0, 3.5, n),
+    ]),
+    "group": ["A"] * n + ["B"] * n + ["C"] * n,
+})
+
+print(pairwise_tukeyhsd(endog=df["response"], groups=df["group"], alpha=0.05))
 ```
 
-For unbalanced designs, the Tukey-Kramer modification replaces $\sqrt{MSW/n}$ with $\sqrt{MSW \cdot (1/n_i + 1/n_j)/2}$.
+불균형 설계에서는 Tukey-Kramer 수정이 $\sqrt{MSW/n}$을 $\sqrt{MSW \cdot (1/n_i + 1/n_j)/2}$로 대체한다.
 
-## Bonferroni Correction
+## Bonferroni 보정
 
-The Bonferroni method adjusts each pairwise $p$-value by multiplying it by the number of comparisons $m = \binom{k}{2}$:
+Bonferroni 방법은 각 쌍별 $p$-값에 비교의 수 $m = \binom{k}{2}$를 곱해 조정한다:
 
 $$
 p_{\text{adj}} = \min(m \cdot p_{\text{raw}},\; 1)
 $$
 
-This is simple and widely applicable but can be conservative when $m$ is large. The Holm-Bonferroni step-down variant is uniformly more powerful while still controlling the family-wise error rate.
+간단하고 널리 쓸 수 있지만 $m$이 크면 보수적일 수 있다. Holm-Bonferroni 단계적 하강 변형은 가족단위 오류율을 여전히 통제하면서 균일하게 더 강력하다.
 
-## Scheffe's Method
+## Scheffé 방법
 
-Scheffe's procedure controls the family-wise error rate for all possible linear contrasts, not just pairwise differences. The critical value is based on the $F$-distribution:
+Scheffé 절차는 쌍별 차이만이 아니라 가능한 모든 선형 대비에 대해 가족단위 오류율을 통제한다. 임계값은 $F$-분포에 근거한다:
 
 $$
 |\bar{y}_{i\cdot} - \bar{y}_{j\cdot}| > \sqrt{(k-1)\, F_{\alpha,\, k-1,\, N-k}} \cdot \sqrt{MSW \left(\frac{1}{n_i} + \frac{1}{n_j}\right)}
 $$
 
-Scheffe's method is the most conservative of the three for pairwise comparisons because it controls error over a broader family of contrasts.
+Scheffé 방법은 더 넓은 대비의 족에 대해 오류를 통제하므로 쌍별 비교에서는 셋 중 가장 보수적이다.
 
-## Comparison of Methods
+## 방법 비교
 
-| Method | Controls error for | Power | Best used when |
+| 방법 | 오류를 통제하는 대상 | 검정력 | 적합한 경우 |
 |---|---|---|---|
-| Tukey HSD | All pairwise comparisons | High | All pairwise comparisons are of interest |
-| Bonferroni | Any pre-specified set | Moderate | Few planned comparisons |
-| Scheffe | All possible contrasts | Low (for pairs) | Complex contrasts are of interest |
+| Tukey HSD | 모든 쌍별 비교 | 높음 | 모든 쌍별 비교가 관심사일 때 |
+| Bonferroni | 미리 지정한 임의의 집합 | 중간 | 계획된 비교가 적을 때 |
+| Scheffé | 가능한 모든 대비 | (쌍별에서는) 낮음 | 복잡한 대비가 관심사일 때 |
 
-## Interpretation
+## 해석
 
-- **Tukey HSD** is the default choice when you want to compare every pair of group means. It is exact for balanced designs and approximate (Tukey-Kramer) for unbalanced designs.
-- **Bonferroni** is most useful when only a small number of planned comparisons are needed, since its power decreases as the number of comparisons grows.
-- **Scheffe** is the method of choice when you are interested in arbitrary linear contrasts (e.g., comparing the average of two groups against a third). For purely pairwise comparisons, Tukey HSD has higher power.
+- **Tukey HSD**는 모든 집단 평균 쌍을 비교하고 싶을 때의 기본 선택이다. 균형 설계에서는 정확하고 불균형 설계에서는 근사적이다(Tukey-Kramer).
+- **Bonferroni**는 계획된 비교가 소수일 때 가장 유용하다. 비교 수가 늘수록 검정력이 떨어지기 때문이다.
+- **Scheffé**는 임의의 선형 대비에 관심이 있을 때(예: 두 집단의 평균을 세 번째 집단과 비교할 때) 선택하는 방법이다. 순수하게 쌍별 비교만 한다면 Tukey HSD의 검정력이 더 높다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-A one-way ANOVA with $k = 4$ groups and $n_i = 15$ per group yields $MSW = 12.3$. The studentized range critical value at $\alpha = 0.05$ is $q_{0.05,4,56} = 3.74$. Compute the Tukey HSD threshold and determine whether a mean difference of $\bar{y}_1 - \bar{y}_3 = 3.5$ is significant.
+**연습문제 1.**
+집단 $k = 4$개, 집단당 $n_i = 15$인 일원배치 분산분석에서 $MSW = 12.3$을 얻었다. $\alpha = 0.05$의 스튜던트화 범위 임계값은 $q_{0.05,4,56} = 3.74$이다. Tukey HSD 문턱을 계산하고 평균 차이 $\bar{y}_1 - \bar{y}_3 = 3.5$가 유의한지 판정하라.
 
-??? success "Solution to Exercise 1"
-    The Tukey HSD threshold for balanced designs is
+??? success "연습문제 1 풀이"
+    균형 설계의 Tukey HSD 문턱은
 
     $$
     \text{HSD} = q_{\alpha,k,N-k} \sqrt{\frac{MSW}{n}} = 3.74 \sqrt{\frac{12.3}{15}} = 3.74 \sqrt{0.82} = 3.74 \times 0.9055 \approx 3.39
     $$
 
-    Since $|\bar{y}_1 - \bar{y}_3| = 3.5 > 3.39$, the difference is significant at the $\alpha = 0.05$ level.
+    이다. $|\bar{y}_1 - \bar{y}_3| = 3.5 > 3.39$이므로 $\alpha = 0.05$ 수준에서 차이가 유의하다.
 
 ---
 
-**Exercise 2.**
-A researcher plans $m = 6$ pairwise comparisons (from $k = 4$ groups) using the Bonferroni method at family-wise $\alpha = 0.05$. The raw $p$-values are $0.003, 0.012, 0.041, 0.078, 0.210, 0.530$. Which comparisons are significant under Bonferroni? Which additional comparisons become significant under the Holm-Bonferroni step-down procedure?
+**연습문제 2.**
+어떤 연구자가 ($k = 4$개 집단에서 나오는) $m = 6$개의 쌍별 비교를 가족단위 $\alpha = 0.05$의 Bonferroni 방법으로 수행하려 한다. 보정 전 $p$-값은 $0.003, 0.012, 0.041, 0.078, 0.210, 0.530$이다. Bonferroni에서 유의한 비교는 무엇인가? Holm-Bonferroni 단계적 하강 절차에서는 어떤 비교가 추가로 유의해지는가?
 
-??? success "Solution to Exercise 2"
-    **Bonferroni:** Multiply each raw $p$-value by $m = 6$.
+??? success "연습문제 2 풀이"
+    **Bonferroni:** 각 보정 전 $p$-값에 $m = 6$을 곱한다.
 
-    | Raw $p$ | Bonferroni $p_{\text{adj}}$ | Significant? |
+    | 보정 전 $p$ | Bonferroni $p_{\text{adj}}$ | 유의? |
     |---|---|---|
-    | 0.003 | 0.018 | Yes |
-    | 0.012 | 0.072 | No |
-    | 0.041 | 0.246 | No |
-    | 0.078 | 0.468 | No |
-    | 0.210 | 1.000 | No |
-    | 0.530 | 1.000 | No |
+    | 0.003 | 0.018 | 예 |
+    | 0.012 | 0.072 | 아니오 |
+    | 0.041 | 0.246 | 아니오 |
+    | 0.078 | 0.468 | 아니오 |
+    | 0.210 | 1.000 | 아니오 |
+    | 0.530 | 1.000 | 아니오 |
 
-    Only the first comparison is significant under Bonferroni.
+    Bonferroni에서는 첫 번째 비교만 유의하다.
 
-    **Holm-Bonferroni:** Sort the raw $p$-values in ascending order. Compare $p_{(j)}$ to $\alpha / (m - j + 1)$:
+    **Holm-Bonferroni:** 보정 전 $p$-값을 오름차순으로 정렬하고 $p_{(j)}$를 $\alpha / (m - j + 1)$과 비교한다:
 
-    - $p_{(1)} = 0.003 < 0.05/6 = 0.00833$ -- reject.
-    - $p_{(2)} = 0.012 < 0.05/5 = 0.01$ -- not rejected (since $0.012 > 0.01$). Stop.
+    - $p_{(1)} = 0.003 < 0.05/6 = 0.00833$ — 기각한다.
+    - $p_{(2)} = 0.012 < 0.05/5 = 0.01$이 아니다($0.012 > 0.01$) — 기각하지 못한다. 여기서 멈춘다.
 
-    Under Holm-Bonferroni, only the first comparison is significant. However, if the second raw $p$-value were slightly smaller (e.g., $0.009$), it would also be rejected, illustrating that Holm is strictly more powerful than Bonferroni.
+    Holm-Bonferroni에서도 첫 번째 비교만 유의하다. 다만 두 번째 $p$-값이 조금만 더 작았다면(예: $0.009$) 그것도 기각되었을 것이며, 이는 Holm이 Bonferroni보다 엄밀하게 더 강력함을 보여준다.
 
 ---
 
-**Exercise 3.**
-Show that for $k = 2$ groups the Tukey HSD test is equivalent to the two-sample $t$-test. Specifically, prove that $q_{\alpha,2,\nu}^2 = 2\, F_{\alpha,1,\nu}$ where $\nu = N - 2$.
+**연습문제 3.**
+$k = 2$일 때 Tukey HSD 검정이 이표본 $t$-검정과 동치임을 보여라. 구체적으로 $\nu = N - 2$일 때 $q_{\alpha,2,\nu}^2 = 2\, F_{\alpha,1,\nu}$임을 증명하라.
 
-??? success "Solution to Exercise 3"
-    For $k = 2$ groups the studentized range distribution with parameters $(2, \nu)$ relates to the $t$-distribution by $q_{2,\nu} = \sqrt{2}\, |t_\nu|$. Squaring both sides gives $q_{2,\nu}^2 = 2\, t_\nu^2$. Since $t_\nu^2 \sim F_{1,\nu}$, we have
+??? success "연습문제 3 풀이"
+    $k = 2$일 때 모수가 $(2, \nu)$인 스튜던트화 범위 분포는 $t$-분포와 $q_{2,\nu} = \sqrt{2}\, |t_\nu|$의 관계를 갖는다. 양변을 제곱하면 $q_{2,\nu}^2 = 2\, t_\nu^2$이다. $t_\nu^2 \sim F_{1,\nu}$이므로
 
     $$
     q_{\alpha,2,\nu}^2 = 2\, F_{\alpha,1,\nu}
     $$
 
-    The Tukey HSD test rejects when $|\bar{y}_1 - \bar{y}_2| / \sqrt{MSW/n} > q_{\alpha,2,\nu}$, which is equivalent to
+    이다. Tukey HSD 검정은 $|\bar{y}_1 - \bar{y}_2| / \sqrt{MSW/n} > q_{\alpha,2,\nu}$일 때 기각하는데, 이는
 
     $$
     \frac{(\bar{y}_1 - \bar{y}_2)^2}{MSW/n} > 2\, F_{\alpha,1,\nu}
     $$
 
-    The left side equals $2 F_{\text{obs}}$ where $F_{\text{obs}} = MSB/MSW$ is the standard ANOVA $F$-statistic for $k = 2$. Hence the Tukey test reduces to rejecting when $F_{\text{obs}} > F_{\alpha,1,\nu}$, which is exactly the two-sample $t$-test (equivalently, the $F$-test with $k-1 = 1$ numerator degree of freedom). $\square$
+    와 동치이다. 좌변은 $2 F_{\text{obs}}$와 같고 $F_{\text{obs}} = MSB/MSW$는 $k = 2$일 때의 표준 분산분석 $F$-통계량이다. 따라서 Tukey 검정은 $F_{\text{obs}} > F_{\alpha,1,\nu}$일 때 기각하는 것으로 환원되며, 이것이 바로 이표본 $t$-검정(동등하게 분자 자유도 $k-1 = 1$인 $F$-검정)이다. $\square$
 
 ---
 
-**Exercise 4.**
-Explain why Scheffe's method is more conservative than Tukey's HSD for pairwise comparisons but can detect effects that Tukey cannot. Give a concrete example of a contrast that Scheffe can test but Tukey cannot.
+**연습문제 4.**
+쌍별 비교에서 Scheffé 방법이 Tukey의 HSD보다 보수적이면서도 Tukey가 탐지할 수 없는 효과를 탐지할 수 있는 이유를 설명하라. Scheffé로는 검정할 수 있고 Tukey로는 할 수 없는 대비의 구체적인 예를 들어라.
 
-??? success "Solution to Exercise 4"
-    Scheffe's method controls the family-wise error rate over **all possible linear contrasts** $\psi = \sum c_i \mu_i$ with $\sum c_i = 0$, not just pairwise differences. Since this family is much larger than the set of pairwise comparisons, the critical value must be larger, making the test more conservative for any single pairwise comparison.
+??? success "연습문제 4 풀이"
+    Scheffé 방법은 쌍별 차이만이 아니라 $\sum c_i = 0$인 **가능한 모든 선형 대비** $\psi = \sum c_i \mu_i$에 대해 가족단위 오류율을 통제한다. 이 족이 쌍별 비교의 집합보다 훨씬 크므로 임계값이 커지고, 개별 쌍별 비교에서는 더 보수적이 된다.
 
-    However, Scheffe's method can test complex contrasts such as:
+    그러나 Scheffé 방법은 다음과 같은 복잡한 대비를 검정할 수 있다:
 
     $$
     \psi = \frac{\mu_1 + \mu_2}{2} - \mu_3
     $$
 
-    This contrast asks whether the average of groups 1 and 2 differs from group 3. Tukey's HSD is not designed for this type of comparison. For example, in a study comparing three teaching methods, a researcher might want to test whether the average effect of two lecture-based methods differs from a project-based method. Scheffe's method handles this directly, while Tukey cannot.
+    이 대비는 집단 1과 2의 평균이 집단 3과 다른지를 묻는다. Tukey의 HSD는 이런 유형의 비교를 위해 설계되지 않았다. 예를 들어 세 가지 교수법을 비교하는 연구에서 강의 중심 두 방법의 평균 효과가 프로젝트 중심 방법과 다른지 검정하고 싶을 수 있다. Scheffé 방법은 이를 직접 다루지만 Tukey는 그럴 수 없다.
 
 ---
 
-**Exercise 5.**
-Prove that the Bonferroni correction controls the family-wise error rate at level $\alpha$. That is, if each of $m$ tests is conducted at level $\alpha/m$, show that $P(\text{at least one false rejection under } H_0) \le \alpha$.
+**연습문제 5.**
+Bonferroni 보정이 가족단위 오류율을 수준 $\alpha$로 통제함을 증명하라. 즉 $m$개의 검정을 각각 수준 $\alpha/m$에서 수행하면 $P(H_0 \text{ 아래에서 거짓 기각이 적어도 하나}) \le \alpha$임을 보여라.
 
-??? success "Solution to Exercise 5"
-    Let $R_j$ be the event that the $j$-th null hypothesis is falsely rejected, for $j = 1, \ldots, m$. Each test is conducted at level $\alpha/m$, so $P(R_j) \le \alpha/m$. By Boole's inequality (the union bound),
+??? success "연습문제 5 풀이"
+    $R_j$를 $j$번째 귀무가설이 거짓으로 기각되는 사건이라 하자($j = 1, \ldots, m$). 각 검정을 수준 $\alpha/m$에서 수행하므로 $P(R_j) \le \alpha/m$이다. Boole의 부등식(합집합 상한)에 의해
 
     $$
     P\!\left(\bigcup_{j=1}^{m} R_j\right) \le \sum_{j=1}^{m} P(R_j) \le \sum_{j=1}^{m} \frac{\alpha}{m} = \alpha
     $$
 
-    This holds regardless of the dependence structure among the tests. The bound is tight when the tests are perfectly positively correlated and becomes conservative when the tests are independent or weakly correlated. $\square$
+    이다. 이는 검정들 사이의 의존 구조와 무관하게 성립한다. 이 상한은 기각 사건들이 서로 겹치지 않을 때 가장 빠듯하고, 검정들이 양의 상관을 가질수록(사건들이 많이 겹칠수록) 보수적이 된다. $\square$

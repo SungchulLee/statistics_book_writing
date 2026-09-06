@@ -1,30 +1,30 @@
-# Welch Analysis of Variance Type I Error and Power Simulation
+# Welch 분산분석의 제1종 오류와 검정력 모의실험
 
-## Overview
+## 개요
 
-Welch's ANOVA is an alternative to the classical one-way ANOVA that does not assume equal variances across groups. This page uses a Monte Carlo simulation to estimate the Type I error rate and power of Welch's ANOVA under heteroscedastic conditions with unbalanced group sizes. The simulation demonstrates that Welch's ANOVA maintains the nominal Type I error rate even when variances differ substantially, while still having reasonable power to detect group mean differences.
+Welch 분산분석은 집단 사이의 등분산을 가정하지 않는, 고전적 일원배치 분산분석의 대안이다. 이 페이지에서는 Monte Carlo 모의실험으로 이분산이고 집단 크기가 불균형한 조건에서 Welch 분산분석의 제1종 오류율과 검정력을 추정한다. 분산이 크게 달라도 Welch 분산분석이 명목 제1종 오류율을 유지하면서 집단 평균 차이를 탐지할 만한 검정력을 갖는다는 점을 보인다.
 
-## Why Welch's ANOVA?
+## 왜 Welch 분산분석인가
 
-Classical one-way ANOVA assumes homoscedasticity: $\sigma_1^2 = \sigma_2^2 = \cdots = \sigma_k^2$. When this assumption is violated and sample sizes are unequal, the classical $F$-test can have an inflated Type I error rate. Welch's ANOVA uses a weighted formulation:
+고전적 일원배치 분산분석은 등분산성 $\sigma_1^2 = \sigma_2^2 = \cdots = \sigma_k^2$을 가정한다. 이 가정이 어긋나고 표본크기도 다르면 고전적 $F$-검정의 제1종 오류율이 부풀려질 수 있다. Welch 분산분석은 가중된 형태를 쓴다:
 
 $$
 F_W = \frac{\sum_{i=1}^{k} w_i (\bar{y}_{i\cdot} - \tilde{y})^2 / (k-1)}{1 + \frac{2(k-2)}{k^2-1} \sum_{i=1}^{k} \frac{(1 - w_i/\sum w_j)^2}{n_i - 1}}
 $$
 
-where $w_i = n_i / s_i^2$ and $\tilde{y} = \sum w_i \bar{y}_i / \sum w_j$. The denominator adjusts the degrees of freedom via a Satterthwaite-type approximation, yielding a test that is robust to heteroscedasticity.
+여기서 $w_i = n_i / s_i^2$이고 $\tilde{y} = \sum w_i \bar{y}_i / \sum w_j$이다. 분모가 Satterthwaite 형태의 근사로 자유도를 조정하여 이분산에 로버스트한 검정을 만든다.
 
-## Simulation Design
+## 모의실험 설계
 
-The simulation compares three groups with deliberately unequal variances and unbalanced sizes:
+이 모의실험은 분산과 크기를 일부러 다르게 한 세 집단을 비교한다:
 
-| Group | $n_i$ | $\sigma_i$ | $\mu_i$ (null) | $\mu_i$ (alternative) |
+| 집단 | $n_i$ | $\sigma_i$ | $\mu_i$ (귀무) | $\mu_i$ (대립) |
 |---|---|---|---|---|
 | $G_1$ | 10 | 1.0 | 10.0 | 10.0 |
 | $G_2$ | 18 | 3.0 | 10.0 | 10.0 |
 | $G_3$ | 7 | 6.0 | 10.0 | 12.0 |
 
-Under the null, all means are equal. Under the alternative, group $G_3$ is shifted upward by 2 units.
+귀무가설 아래에서는 모든 평균이 같다. 대립가설 아래에서는 집단 $G_3$이 2만큼 위로 이동한다.
 
 ```python
 import numpy as np
@@ -48,9 +48,9 @@ def simulate_once(null=True):
     return float(aov["p-unc"].iloc[0])
 ```
 
-## Running the Simulation
+## 모의실험 실행
 
-For each scenario (null and alternative), generate many replications and estimate the rejection rate at $\alpha = 0.05$.
+각 시나리오(귀무와 대립)마다 많은 반복을 생성하여 $\alpha = 0.05$에서의 기각률을 추정한다.
 
 ```python
 def run(n_sims=500, alpha=0.05):
@@ -65,67 +65,67 @@ print(f"Estimated Type I error: {type1:.3f}")
 print(f"Estimated Power:        {power:.3f}")
 ```
 
-## Key Quantities
+## 핵심 값
 
-- **Type I error rate:** The proportion of simulations under $H_0$ where $p < \alpha$. A well-calibrated test should yield approximately $\alpha = 0.05$.
+- **제1종 오류율:** $H_0$ 아래 모의실험에서 $p < \alpha$인 비율. 잘 보정된 검정이라면 대략 $\alpha = 0.05$가 나와야 한다.
 
 $$
 \widehat{\alpha} = \frac{1}{B} \sum_{b=1}^{B} \mathbf{1}(p_b < \alpha)
 $$
 
-- **Power:** The proportion of simulations under $H_A$ where $p < \alpha$.
+- **검정력:** $H_A$ 아래 모의실험에서 $p < \alpha$인 비율.
 
 $$
 \widehat{\text{Power}} = \frac{1}{B} \sum_{b=1}^{B} \mathbf{1}(p_b < \alpha)
 $$
 
-where $B$ is the number of Monte Carlo replications.
+여기서 $B$는 Monte Carlo 반복 횟수이다.
 
-## Interpretation
+## 해석
 
-- **Type I error control:** Welch's ANOVA typically keeps the empirical Type I error close to the nominal $\alpha = 0.05$, even under severe heteroscedasticity ($\sigma_3 / \sigma_1 = 6$). The classical ANOVA $F$-test, by contrast, would have an inflated Type I error in this scenario because the smallest group ($n_3 = 7$) has the largest variance.
-- **Power:** The power to detect a shift of $\Delta = 2$ in $G_3$ depends on the sample size and variance of that group. With $n_3 = 7$ and $\sigma_3 = 6$, the signal-to-noise ratio is $\Delta / \sigma_3 = 1/3$, which is modest. Power increases with larger $n_3$, smaller $\sigma_3$, or larger $\Delta$.
-- **Simulation precision:** With $B = 300$ replications, the standard error of the estimated Type I error is approximately $\sqrt{0.05 \times 0.95 / 300} \approx 0.013$. More replications would narrow this margin.
+- **제1종 오류 통제:** Welch 분산분석은 심한 이분산($\sigma_3 / \sigma_1 = 6$)에서도 경험적 제1종 오류를 명목 $\alpha = 0.05$ 가까이 유지한다. 반면 고전적 분산분석 $F$-검정은 가장 작은 집단($n_3 = 7$)의 분산이 가장 크므로 이 상황에서 제1종 오류가 부풀려진다.
+- **검정력:** $G_3$의 $\Delta = 2$ 이동을 탐지할 검정력은 그 집단의 표본크기와 분산에 달려 있다. $n_3 = 7$, $\sigma_3 = 6$이면 신호 대 잡음 비가 $\Delta / \sigma_3 = 1/3$로 크지 않다. $n_3$이 커지거나 $\sigma_3$이 작아지거나 $\Delta$가 커지면 검정력이 커진다.
+- **모의실험의 정밀도:** 반복 $B = 300$에서 추정된 제1종 오류의 표준오차는 대략 $\sqrt{0.05 \times 0.95 / 300} \approx 0.013$이다. 반복을 늘리면 이 폭이 좁아진다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-With $B = 300$ Monte Carlo replications and a true Type I error rate of $\alpha = 0.05$, compute a 95% confidence interval for the estimated Type I error rate. How many replications would be needed to halve the width of this interval?
+**연습문제 1.**
+Monte Carlo 반복이 $B = 300$이고 참 제1종 오류율이 $\alpha = 0.05$일 때 추정된 제1종 오류율의 95% 신뢰구간을 계산하라. 이 구간의 폭을 절반으로 줄이려면 반복이 몇 번 필요한가?
 
-??? success "Solution to Exercise 1"
-    The estimated Type I error is a sample proportion $\hat{p}$ with standard error $\text{SE} = \sqrt{\hat{p}(1-\hat{p})/B}$. With $\hat{p} \approx 0.05$ and $B = 300$:
+??? success "연습문제 1 풀이"
+    추정된 제1종 오류는 표본비율 $\hat{p}$이고 표준오차는 $\text{SE} = \sqrt{\hat{p}(1-\hat{p})/B}$이다. $\hat{p} \approx 0.05$, $B = 300$이면
 
     $$
     \text{SE} = \sqrt{\frac{0.05 \times 0.95}{300}} \approx 0.0126
     $$
 
-    The 95% confidence interval is $0.05 \pm 1.96 \times 0.0126 \approx (0.025,\, 0.075)$, with width approximately $0.049$.
+    이다. 95% 신뢰구간은 $0.05 \pm 1.96 \times 0.0126 \approx (0.025,\, 0.075)$이고 폭은 약 $0.049$이다.
 
-    To halve the width, we need to double the precision, which requires quadrupling the sample size: $B = 4 \times 300 = 1200$ replications.
-
----
-
-**Exercise 2.**
-Explain why the classical ANOVA $F$-test has an inflated Type I error when the smallest group has the largest variance. What happens when the smallest group has the smallest variance?
-
-??? success "Solution to Exercise 2"
-    The classical $F$-test pools all groups to estimate $MSW$. When the smallest group has the largest variance, the pooled estimate underweights that group's large variance (because it contributes fewer observations). This makes $MSW$ too small, inflating the $F$-statistic and leading to too many rejections (liberal test, inflated Type I error).
-
-    Conversely, when the smallest group has the smallest variance, the pooled $MSW$ overestimates the effective error variance for that group. This makes the $F$-statistic too conservative, and the Type I error drops below the nominal level. The test loses power but does not have an inflated false positive rate. This asymmetry is a well-known result, sometimes called the Welch-Satterthwaite effect in the unbalanced heteroscedastic setting.
+    폭을 절반으로 줄이려면 정밀도를 두 배로 해야 하고, 그러려면 반복을 네 배로 늘려야 한다: $B = 4 \times 300 = 1200$.
 
 ---
 
-**Exercise 3.**
-The signal-to-noise ratio for detecting the shift in $G_3$ is $\Delta/\sigma_3 = 2/6 \approx 0.33$. Compute Cohen's $f$ for this three-group design and interpret its magnitude.
+**연습문제 2.**
+가장 작은 집단의 분산이 가장 클 때 고전적 분산분석 $F$-검정의 제1종 오류가 부풀려지는 이유를 설명하라. 가장 작은 집단의 분산이 가장 작으면 어떻게 되는가?
 
-??? success "Solution to Exercise 3"
-    Cohen's $f$ for one-way ANOVA is defined as
+??? success "연습문제 2 풀이"
+    고전적 $F$-검정은 모든 집단을 합동하여 $MSW$를 추정한다. 가장 작은 집단의 분산이 가장 크면, 그 집단이 기여하는 관측값이 적기 때문에 합동 추정값이 그 큰 분산을 과소 반영한다. 그러면 $MSW$가 너무 작아져 $F$-통계량이 부풀려지고 기각이 너무 잦아진다(관대한 검정, 제1종 오류 부풀림).
+
+    반대로 가장 작은 집단의 분산이 가장 작으면 합동 $MSW$가 그 집단의 유효 오차분산을 과대추정한다. 그러면 $F$-통계량이 지나치게 보수적이 되어 제1종 오류가 명목 수준 아래로 떨어진다. 검정력은 잃지만 거짓 양성이 늘지는 않는다. 이 비대칭성은 잘 알려진 결과이다.
+
+---
+
+**연습문제 3.**
+$G_3$의 이동을 탐지하는 신호 대 잡음 비는 $\Delta/\sigma_3 = 2/6 \approx 0.33$이다. 이 세 집단 설계의 Cohen의 $f$를 계산하고 그 크기를 해석하라.
+
+??? success "연습문제 3 풀이"
+    일원배치 분산분석의 Cohen의 $f$는
 
     $$
     f = \sqrt{\frac{\sum_{i=1}^{k} n_i (\mu_i - \bar{\mu})^2 / N}{\sigma_{\text{within}}^2}}
     $$
 
-    Under the alternative, $\mu_1 = \mu_2 = 10$, $\mu_3 = 12$. With $n_1 = 10$, $n_2 = 18$, $n_3 = 7$, $N = 35$:
+    로 정의된다. 대립가설 아래에서 $\mu_1 = \mu_2 = 10$, $\mu_3 = 12$이고 $n_1 = 10$, $n_2 = 18$, $n_3 = 7$, $N = 35$이므로
 
     $$
     \bar{\mu}_w = \frac{10 \times 10 + 18 \times 10 + 7 \times 12}{35} = \frac{364}{35} = 10.4
@@ -139,38 +139,40 @@ The signal-to-noise ratio for detecting the shift in $G_3$ is $\Delta/\sigma_3 =
     = 10(0.16) + 18(0.16) + 7(2.56) = 1.6 + 2.88 + 17.92 = 22.4
     $$
 
-    Since variances are unequal, we use a pooled variance estimate: $\sigma_{\text{pool}}^2 = (9 \times 1 + 17 \times 9 + 6 \times 36)/32 = (9 + 153 + 216)/32 = 378/32 = 11.8125$.
+    이다. 분산이 서로 다르므로 합동분산 추정값을 쓴다: $\sigma_{\text{pool}}^2 = (9 \times 1 + 17 \times 9 + 6 \times 36)/32 = (9 + 153 + 216)/32 = 378/32 = 11.8125$.
 
     $$
     f = \sqrt{\frac{22.4 / 35}{11.8125}} = \sqrt{\frac{0.64}{11.8125}} = \sqrt{0.0542} \approx 0.233
     $$
 
-    By Cohen's conventions, $f = 0.10$ is small, $f = 0.25$ is medium, and $f = 0.40$ is large. This effect size ($f \approx 0.23$) is between small and medium, which explains the moderate power observed in the simulation.
+    Cohen의 관례에서 $f = 0.10$은 작음, $f = 0.25$는 중간, $f = 0.40$은 큼이다. 이 효과크기($f \approx 0.23$)는 작음과 중간 사이이며, 모의실험에서 관측되는 중간 정도의 검정력을 설명해 준다.
 
 ---
 
-**Exercise 4.**
-Modify the simulation design so that all three groups have equal variances ($\sigma_i = 3$) but keep the sample sizes unbalanced at $n = (10, 18, 7)$. Predict whether the classical ANOVA or Welch's ANOVA will have higher power and explain why.
+**연습문제 4.**
+세 집단의 분산을 모두 같게($\sigma_i = 3$) 하되 표본크기는 $n = (10, 18, 7)$로 불균형하게 유지하도록 모의실험 설계를 고쳐라. 고전적 분산분석과 Welch 분산분석 중 어느 쪽의 검정력이 높을지 예측하고 이유를 설명하라.
 
-??? success "Solution to Exercise 4"
-    When variances are equal, both the classical ANOVA and Welch's ANOVA control the Type I error at the nominal level. However, the classical ANOVA has slightly higher power because it uses the exact $F_{k-1, N-k}$ distribution, whereas Welch's ANOVA uses an approximate reference distribution with reduced effective degrees of freedom.
+??? success "연습문제 4 풀이"
+    분산이 같으면 고전적 분산분석과 Welch 분산분석 모두 명목 수준에서 제1종 오류를 통제한다. 다만 고전적 분산분석은 정확한 $F_{k-1, N-k}$ 분포를 쓰는 반면 Welch 분산분석은 유효 자유도가 줄어든 근사 기준분포를 쓰므로, 고전적 쪽의 검정력이 약간 높다.
 
-    Welch's ANOVA pays a small power penalty for estimating separate variances and adjusting degrees of freedom. This penalty is the "insurance premium" for robustness to heteroscedasticity. When equal variances hold, this insurance is unnecessary, and the classical test is (slightly) more efficient. In practice, the power difference is small for moderate sample sizes, making Welch's ANOVA a reasonable default.
+    Welch 분산분석은 분산을 따로 추정하고 자유도를 조정하는 대가로 약간의 검정력 손실을 치른다. 이 손실은 이분산에 대한 로버스트성의 "보험료"이다. 등분산이 성립하면 이 보험이 불필요하므로 고전적 검정이 (약간) 더 효율적이다. 실무에서 표본크기가 어느 정도 되면 검정력 차이가 작아 Welch 분산분석을 기본값으로 삼을 만하다.
 
 ---
 
-**Exercise 5.**
-Prove that under $H_0$ with equal variances and equal sample sizes, Welch's $F_W$ statistic reduces to the classical ANOVA $F$-statistic.
+**연습문제 5.**
+등분산이고 표본크기가 같은 $H_0$ 아래에서 Welch의 $F_W$ 통계량이 고전적 분산분석 $F$-통계량으로 환원됨을 증명하라.
 
-??? success "Solution to Exercise 5"
-    Under $H_0$ with equal variances $\sigma_i^2 = \sigma^2$ and equal sample sizes $n_i = n$ for all $i$, the weights become $w_i = n / s_i^2$. As all $s_i^2$ converge to $\sigma^2$, the weights become equal: $w_i = n / \sigma^2$ for all $i$.
+??? success "연습문제 5 풀이"
+    분산이 $\sigma_i^2 = \sigma^2$으로 같고 표본크기가 모든 $i$에서 $n_i = n$으로 같은 $H_0$ 아래에서 가중치는 $w_i = n / s_i^2$이다. 모든 $s_i^2$이 $\sigma^2$으로 수렴하면 가중치가 같아진다: 모든 $i$에서 $w_i = n / \sigma^2$.
 
-    The weighted grand mean becomes $\tilde{y} = \sum w_i \bar{y}_i / \sum w_j = \bar{y}_{\cdot\cdot}$, the unweighted grand mean.
+    가중 전체평균은 $\tilde{y} = \sum w_i \bar{y}_i / \sum w_j = \bar{y}_{\cdot\cdot}$, 즉 가중하지 않은 전체평균이 된다.
 
-    The numerator of $F_W$ becomes
+    $F_W$의 분자는
 
     $$
     \frac{1}{k-1}\sum_{i=1}^{k} \frac{n}{\sigma^2} (\bar{y}_i - \bar{y}_{\cdot\cdot})^2 = \frac{n}{(k-1)\sigma^2} \sum_{i=1}^{k} (\bar{y}_i - \bar{y}_{\cdot\cdot})^2 = \frac{MSB}{\sigma^2}
     $$
 
-    The denominator correction term involves $\sum (1 - w_i / \sum w_j)^2 / (n_i - 1)$. With equal weights, $w_i / \sum w_j = 1/k$, so each term is $(1 - 1/k)^2 / (n-1)$. The sum is $k(k-1)^2/[k^2(n-1)]$. The full denominator simplifies to $1 + 2(k-2)/(k^2-1) \times (k-1)^2/[k(n-1)]$, which approaches 1 as $n \to \infty$. In the exact equal-variance case, the Welch statistic simplifies to $MSB/MSW$, the classical $F$-statistic. $\square$
+    이 된다.
+
+    분모의 보정항은 $\sum (1 - w_i / \sum w_j)^2 / (n_i - 1)$을 포함한다. 가중치가 같으면 $w_i / \sum w_j = 1/k$이므로 각 항이 $(1 - 1/k)^2 / (n-1)$이다. 그 합은 $k(k-1)^2/[k^2(n-1)]$이다. 전체 분모는 $1 + 2(k-2)/(k^2-1) \times (k-1)^2/[k(n-1)]$로 단순해지고 $n \to \infty$에서 1로 간다. 분산이 정확히 같은 경우 Welch 통계량은 고전적 $F$-통계량인 $MSB/MSW$로 단순해진다. $\square$

@@ -1,36 +1,36 @@
-# Two-Way Welch Analysis of Variance (Robust HC3)
+# 이원배치 Welch 분산분석 (로버스트 HC3)
 
-## Overview
+## 개요
 
-When a two-way factorial design exhibits heteroscedastic errors, the standard ANOVA $F$-tests based on the assumption of common variance become unreliable. A practical alternative is to fit an OLS model with the full factorial specification and then use the HC3 heteroscedasticity-consistent covariance estimator combined with Wald $F$-tests to test main effects and interactions. This approach provides a robust analog of two-way ANOVA without requiring a specialized Welch-James implementation.
+이원배치 요인 설계의 오차가 이분산이면, 공통 분산 가정에 기반한 표준 분산분석 $F$-검정을 믿을 수 없다. 실용적인 대안은 완전 요인 설정으로 OLS 모형을 적합한 뒤 HC3 이분산 일치 공분산 추정량과 Wald $F$-검정을 결합하여 주효과와 교호작용을 검정하는 것이다. 이 접근은 전용 Welch-James 구현 없이도 이원배치 분산분석의 로버스트한 대응물을 제공한다.
 
-## The Robust OLS Approach
+## 로버스트 OLS 접근
 
-The model is the standard two-way factorial:
+모형은 표준적인 이원배치 요인 모형이다:
 
 $$
 y_{ijk} = \mu + \alpha_i + \beta_j + (\alpha\beta)_{ij} + \varepsilon_{ijk}
 $$
 
-where $\text{Var}(\varepsilon_{ijk})$ is no longer assumed constant. The OLS coefficient estimates $\hat{\boldsymbol{\beta}}$ remain unbiased and consistent, but the classical covariance matrix $\hat{\sigma}^2 (X^\top X)^{-1}$ is invalid. The HC3 estimator replaces it with
+여기서 $\text{Var}(\varepsilon_{ijk})$는 더 이상 일정하다고 가정하지 않는다. OLS 계수 추정값 $\hat{\boldsymbol{\beta}}$는 여전히 불편이며 일치성을 갖지만, 고전적인 공분산행렬 $\hat{\sigma}^2 (X^\top X)^{-1}$은 타당하지 않다. HC3 추정량은 이를 다음으로 대체한다:
 
 $$
 \widehat{\text{Cov}}_{\text{HC3}}(\hat{\boldsymbol{\beta}}) = (X^\top X)^{-1} \left(\sum_{i=1}^{n} \frac{\hat{e}_i^2}{(1 - h_{ii})^2} \mathbf{x}_i \mathbf{x}_i^\top \right) (X^\top X)^{-1}
 $$
 
-where $h_{ii}$ is the $i$-th diagonal element of the hat matrix $H = X(X^\top X)^{-1}X^\top$ and $\hat{e}_i$ is the $i$-th OLS residual. This estimator is consistent under heteroscedasticity and has better small-sample performance than HC0 or HC1.
+여기서 $h_{ii}$는 햇 행렬 $H = X(X^\top X)^{-1}X^\top$의 $i$번째 대각 성분이고 $\hat{e}_i$는 $i$번째 OLS 잔차이다. 이 추정량은 이분산 아래에서 일치성을 가지며 HC0나 HC1보다 소표본 성능이 좋다.
 
-## Wald F-Tests for Each Term
+## 각 항에 대한 Wald F-검정
 
-To test a main effect or interaction, we formulate a joint linear hypothesis $R\boldsymbol{\beta} = \mathbf{0}$ where $R$ selects the rows corresponding to that term's coefficients. The Wald $F$-statistic is
+주효과나 교호작용을 검정하려면 그 항의 계수에 해당하는 행을 $R$이 고르는 결합 선형 가설 $R\boldsymbol{\beta} = \mathbf{0}$을 세운다. Wald $F$-통계량은
 
 $$
 F_W = \frac{1}{q} (R\hat{\boldsymbol{\beta}})^\top \bigl(R\, \widehat{\text{Cov}}_{\text{HC3}}(\hat{\boldsymbol{\beta}})\, R^\top\bigr)^{-1} (R\hat{\boldsymbol{\beta}})
 $$
 
-where $q$ is the number of restrictions (rows of $R$). Under $H_0$, $F_W$ is approximately $F_{q, \nu}$ where $\nu$ is an adjusted denominator degrees of freedom.
+이며 $q$는 제약의 수($R$의 행 수)이다. $H_0$ 아래에서 $F_W$는 근사적으로 $F_{q, \nu}$를 따르고 $\nu$는 조정된 분모 자유도이다.
 
-## Code Example
+## 코드 예제
 
 ```python
 import pandas as pd
@@ -60,9 +60,9 @@ print("Interaction: Temperature x Fertilizer")
 print(rob.f_test(constraint_inter))
 ```
 
-## Comparison with Standard ANOVA
+## 표준 분산분석과의 비교
 
-The standard (non-robust) ANOVA table can be obtained for reference:
+참고를 위해 (로버스트하지 않은) 표준 분산분석표를 얻을 수 있다:
 
 ```python
 import statsmodels.api as sm
@@ -70,88 +70,88 @@ import statsmodels.api as sm
 print(sm.stats.anova_lm(model, typ=2))
 ```
 
-When variances are equal, the HC3 Wald tests and the standard ANOVA give similar results. Discrepancies indicate that heteroscedasticity is affecting the standard tests.
+분산이 같으면 HC3 Wald 검정과 표준 분산분석이 비슷한 결과를 준다. 두 결과가 어긋난다면 이분산이 표준 검정에 영향을 주고 있다는 뜻이다.
 
-## Interpretation
+## 해석
 
-- **HC3 vs. HC0:** HC3 divides each squared residual by $(1 - h_{ii})^2$ rather than leaving it unscaled (HC0). This upward adjustment corrects for the tendency of high-leverage points to have smaller residuals, improving coverage in small samples.
-- **When to use this approach:** Whenever a formal test (Levene, Bartlett) or visual inspection (residual plots) suggests unequal variances, the HC3-based Wald test is preferred over the standard $F$-test.
-- **Limitations:** With very small cell sizes (as in the example above with $n = 1$ per cell), the HC3 estimator may be poorly behaved because individual leverage values $h_{ii}$ can be close to 1. Larger cell sizes improve the reliability of the robust estimator.
+- **HC3 대 HC0:** HC3는 각 제곱 잔차를 (HC0처럼 그대로 두지 않고) $(1 - h_{ii})^2$으로 나눈다. 지렛값이 큰 점의 잔차가 작아지는 경향을 이 상향 조정이 보정하여 소표본에서 포함확률을 개선한다.
+- **언제 이 접근을 쓰는가:** 형식적 검정(Levene, Bartlett)이나 시각적 검토(잔차 그림)가 분산이 다름을 시사할 때마다 표준 $F$-검정보다 HC3 기반 Wald 검정이 낫다.
+- **한계:** 칸 크기가 아주 작으면(위 예제처럼 칸당 $n = 1$이면) 개별 지렛값 $h_{ii}$가 1에 가까워질 수 있어 HC3 추정량이 제대로 작동하지 않을 수 있다. 칸 크기가 클수록 로버스트 추정량의 신뢰성이 높아진다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Explain why OLS coefficient estimates remain unbiased under heteroscedasticity, even though the standard errors are incorrect. What property of OLS is being used?
+**연습문제 1.**
+표준오차가 틀리게 되는데도 이분산 아래에서 OLS 계수 추정값이 여전히 불편인 이유를 설명하라. OLS의 어떤 성질이 쓰이는가?
 
-??? success "Solution to Exercise 1"
-    The OLS estimator is $\hat{\boldsymbol{\beta}} = (X^\top X)^{-1} X^\top \mathbf{y}$. Taking expectations:
+??? success "연습문제 1 풀이"
+    OLS 추정량은 $\hat{\boldsymbol{\beta}} = (X^\top X)^{-1} X^\top \mathbf{y}$이다. 기댓값을 취하면
 
     $$
     E[\hat{\boldsymbol{\beta}}] = (X^\top X)^{-1} X^\top E[\mathbf{y}] = (X^\top X)^{-1} X^\top X \boldsymbol{\beta} = \boldsymbol{\beta}
     $$
 
-    This derivation uses only the linearity of the estimator and the assumption that $E[\mathbf{y}] = X\boldsymbol{\beta}$ (correct specification of the conditional mean). It does not use the homoscedasticity assumption. Therefore, even when $\text{Var}(\varepsilon_i) = \sigma_i^2$ varies across observations, the OLS estimates are unbiased. The Gauss-Markov theorem guarantees that OLS is BLUE (Best Linear Unbiased Estimator) only under homoscedasticity, so OLS is still unbiased without it, but no longer efficient.
+    이다. 이 유도는 추정량의 선형성과 $E[\mathbf{y}] = X\boldsymbol{\beta}$(조건부 평균의 올바른 설정)만 쓸 뿐 등분산성 가정을 쓰지 않는다. 따라서 관측값마다 $\text{Var}(\varepsilon_i) = \sigma_i^2$이 달라도 OLS 추정값은 불편이다. Gauss-Markov 정리는 등분산성 아래에서만 OLS가 BLUE(최우수 선형 불편 추정량)임을 보장하므로, 등분산성이 없으면 OLS는 여전히 불편이지만 더 이상 효율적이지는 않다.
 
 ---
 
-**Exercise 2.**
-Write out the restriction matrix $R$ for testing the main effect of Temperature in a model with levels High, Low, Medium (with Low as the reference). How many rows does $R$ have?
+**연습문제 2.**
+수준이 High, Low, Medium(Low가 기준)인 모형에서 Temperature의 주효과를 검정하기 위한 제약행렬 $R$을 써라. $R$의 행은 몇 개인가?
 
-??? success "Solution to Exercise 2"
-    With Low as the reference level, the model includes indicator coefficients for Temperature[T.High] and Temperature[T.Medium]. Testing the main effect of Temperature means testing
+??? success "연습문제 2 풀이"
+    Low가 기준 수준이면 모형에는 Temperature[T.High]와 Temperature[T.Medium]의 지시 계수가 들어간다. Temperature의 주효과를 검정한다는 것은
 
     $$
     H_0: \beta_{\text{T.High}} = 0 \text{ and } \beta_{\text{T.Medium}} = 0
     $$
 
-    The restriction matrix selects these two coefficients from the full parameter vector $\boldsymbol{\beta} = (\beta_0, \beta_{\text{T.High}}, \beta_{\text{T.Medium}}, \beta_{\text{F.B}}, \beta_{\text{F.C}}, \ldots)^\top$. If Temperature[T.High] is the 2nd parameter and Temperature[T.Medium] is the 3rd:
+    을 검정한다는 뜻이다. 제약행렬은 전체 모수 벡터 $\boldsymbol{\beta} = (\beta_0, \beta_{\text{T.High}}, \beta_{\text{T.Medium}}, \beta_{\text{F.B}}, \beta_{\text{F.C}}, \ldots)^\top$에서 이 두 계수를 고른다. Temperature[T.High]가 두 번째 모수이고 Temperature[T.Medium]이 세 번째라면
 
     $$
     R = \begin{pmatrix} 0 & 1 & 0 & 0 & \cdots & 0 \\ 0 & 0 & 1 & 0 & \cdots & 0 \end{pmatrix}
     $$
 
-    The matrix $R$ has $q = a - 1 = 2$ rows (one for each non-reference level), corresponding to 2 degrees of freedom for the main effect.
+    이다. 행렬 $R$은 (기준이 아닌 수준마다 하나씩) $q = a - 1 = 2$개의 행을 가지며, 주효과의 자유도 2에 대응한다.
 
 ---
 
-**Exercise 3.**
-The HC3 estimator divides by $(1 - h_{ii})^2$ while HC2 divides by $(1 - h_{ii})$. Explain the intuition behind the $(1 - h_{ii})^2$ correction and why it improves small-sample performance.
+**연습문제 3.**
+HC3는 $(1 - h_{ii})^2$으로 나누고 HC2는 $(1 - h_{ii})$로 나눈다. $(1 - h_{ii})^2$ 보정의 직관과 그것이 소표본 성능을 개선하는 이유를 설명하라.
 
-??? success "Solution to Exercise 3"
-    The OLS residual $\hat{e}_i = y_i - \hat{y}_i = (1 - h_{ii})\varepsilon_i + \text{terms involving other } \varepsilon_j$. Therefore $E[\hat{e}_i^2] \approx (1 - h_{ii})^2 \sigma_i^2$ (ignoring cross terms), which means $\hat{e}_i^2$ systematically underestimates $\sigma_i^2$ by a factor of $(1 - h_{ii})^2$.
+??? success "연습문제 3 풀이"
+    OLS 잔차는 $\hat{e}_i = y_i - \hat{y}_i = (1 - h_{ii})\varepsilon_i + (\text{다른 } \varepsilon_j \text{에 관한 항})$이다. 따라서 (교차항을 무시하면) $E[\hat{e}_i^2] \approx (1 - h_{ii})^2 \sigma_i^2$이고, 이는 $\hat{e}_i^2$이 $\sigma_i^2$을 $(1 - h_{ii})^2$배만큼 체계적으로 과소추정한다는 뜻이다.
 
-    - **HC0** uses $\hat{e}_i^2$ directly, which is biased downward.
-    - **HC2** corrects by dividing by $(1 - h_{ii})$, which gives $E[\hat{e}_i^2 / (1 - h_{ii})] \approx (1 - h_{ii})\sigma_i^2$, still biased.
-    - **HC3** divides by $(1 - h_{ii})^2$, so $\hat{e}_i^2 / (1 - h_{ii})^2 \approx \sigma_i^2$, producing a nearly unbiased estimate of $\sigma_i^2$.
+    - **HC0**은 $\hat{e}_i^2$을 그대로 써서 아래로 편향된다.
+    - **HC2**는 $(1 - h_{ii})$로 나누어 $E[\hat{e}_i^2 / (1 - h_{ii})] \approx (1 - h_{ii})\sigma_i^2$이 되므로 여전히 편향된다.
+    - **HC3**는 $(1 - h_{ii})^2$으로 나누어 $\hat{e}_i^2 / (1 - h_{ii})^2 \approx \sigma_i^2$이 되므로 $\sigma_i^2$의 거의 불편한 추정값을 준다.
 
-    High-leverage points (large $h_{ii}$) have the most severely attenuated residuals. HC3's stronger correction ensures these influential observations contribute appropriately to the variance estimate, which is especially important in small samples where a few points can have substantial leverage.
-
----
-
-**Exercise 4.**
-In the example code, the design has only $n = 1$ observation per cell (a $3 \times 3$ design with 9 observations and 9 parameters). Explain why the HC3 estimator is problematic in this case and suggest a minimum cell size for reliable inference.
-
-??? success "Solution to Exercise 4"
-    With $n = 1$ per cell and 9 parameters fit to 9 observations, the hat matrix is $H = I$ (identity), so $h_{ii} = 1$ for every observation. The HC3 divisor $(1 - h_{ii})^2 = 0$, making the estimator undefined (division by zero).
-
-    Even when $h_{ii}$ is close to but not exactly 1, the HC3 estimates become extremely large and unstable. As a general rule, HC3 requires enough residual degrees of freedom for the squared residuals to provide meaningful variance estimates.
-
-    A common recommendation is at least $n = 3$ to $5$ observations per cell for HC3 to work reliably. With $n \ge 5$ per cell in a $3 \times 3$ design ($N = 45$, $p = 9$), the maximum leverage is bounded well below 1, and the HC3 estimator is well-behaved.
+    지렛값이 큰 점($h_{ii}$가 큰 점)일수록 잔차가 가장 심하게 축소된다. HC3의 더 강한 보정은 이런 영향력 있는 관측값이 분산 추정에 적절히 기여하도록 하며, 몇몇 점이 큰 지렛값을 가질 수 있는 소표본에서 특히 중요하다.
 
 ---
 
-**Exercise 5.**
-Prove that the HC3 sandwich estimator is consistent for $\text{Var}(\hat{\boldsymbol{\beta}})$ under heteroscedasticity. That is, show that as $n \to \infty$, it converges to the true variance of the OLS estimator.
+**연습문제 4.**
+예제 코드의 설계는 칸당 관측값이 $n = 1$뿐이다($3 \times 3$ 설계에 관측값 9개, 모수 9개). 이 경우 HC3 추정량이 왜 문제가 되는지 설명하고 믿을 만한 추론을 위한 최소 칸 크기를 제안하라.
 
-??? success "Solution to Exercise 5"
-    The true variance of the OLS estimator under heteroscedasticity is
+??? success "연습문제 4 풀이"
+    칸당 $n = 1$이고 관측값 9개에 모수 9개를 적합하면 햇 행렬이 $H = I$(항등행렬)가 되어 모든 관측값에서 $h_{ii} = 1$이다. HC3의 분모 $(1 - h_{ii})^2 = 0$이 되어 추정량이 정의되지 않는다(0으로 나눔).
+
+    $h_{ii}$가 정확히 1은 아니더라도 1에 가까우면 HC3 추정값이 극도로 커지고 불안정해진다. 일반적으로 HC3는 제곱 잔차가 의미 있는 분산 추정값을 주려면 잔차 자유도가 충분해야 한다.
+
+    흔한 권고는 HC3가 안정적으로 작동하려면 칸당 적어도 $n = 3$에서 $5$개의 관측값이 필요하다는 것이다. $3 \times 3$ 설계에서 칸당 $n \ge 5$이면($N = 45$, $p = 9$) 최대 지렛값이 1보다 충분히 낮게 억제되어 HC3 추정량이 잘 작동한다.
+
+---
+
+**연습문제 5.**
+이분산 아래에서 HC3 샌드위치 추정량이 $\text{Var}(\hat{\boldsymbol{\beta}})$에 대해 일치성을 가짐을, 즉 $n \to \infty$일 때 OLS 추정량의 참 분산으로 수렴함을 증명하라.
+
+??? success "연습문제 5 풀이"
+    이분산 아래에서 OLS 추정량의 참 분산은
 
     $$
     \text{Var}(\hat{\boldsymbol{\beta}}) = (X^\top X)^{-1} X^\top \Omega\, X\, (X^\top X)^{-1}
     $$
 
-    where $\Omega = \text{diag}(\sigma_1^2, \ldots, \sigma_n^2)$. The HC3 estimator replaces $\Omega$ with $\hat{\Omega}_{\text{HC3}} = \text{diag}(\hat{e}_i^2 / (1 - h_{ii})^2)$.
+    이며 $\Omega = \text{diag}(\sigma_1^2, \ldots, \sigma_n^2)$이다. HC3 추정량은 $\Omega$를 $\hat{\Omega}_{\text{HC3}} = \text{diag}(\hat{e}_i^2 / (1 - h_{ii})^2)$로 대체한다.
 
-    As $n \to \infty$, by regularity conditions: (1) each leverage $h_{ii} \to 0$ because $h_{ii} \le p/n \to 0$, so $(1 - h_{ii})^2 \to 1$; (2) by consistency of OLS, $\hat{e}_i^2 \to \varepsilon_i^2$ for each $i$; (3) by the law of large numbers, the sample average $(1/n) X^\top \hat{\Omega}_{\text{HC3}} X \to (1/n) X^\top \Omega\, X$.
+    정칙 조건 아래에서 $n \to \infty$일 때: (1) $h_{ii} \le p/n \to 0$이므로 각 지렛값이 0으로 가고 $(1 - h_{ii})^2 \to 1$이다. (2) OLS의 일치성에 의해 각 $i$에서 $\hat{e}_i^2 \to \varepsilon_i^2$이다. (3) 큰 수의 법칙에 의해 표본평균 $(1/n) X^\top \hat{\Omega}_{\text{HC3}} X \to (1/n) X^\top \Omega\, X$이다.
 
-    Therefore $\widehat{\text{Cov}}_{\text{HC3}}(\hat{\boldsymbol{\beta}}) \to \text{Var}(\hat{\boldsymbol{\beta}})$ in probability. The HC3 correction is a finite-sample improvement over HC0 (which also has this asymptotic property) but converges to the same limit as $n \to \infty$. $\square$
+    따라서 $\widehat{\text{Cov}}_{\text{HC3}}(\hat{\boldsymbol{\beta}})$는 확률적으로 $\text{Var}(\hat{\boldsymbol{\beta}})$로 수렴한다. HC3 보정은 (같은 점근 성질을 갖는) HC0에 대한 유한표본 개선이며 $n \to \infty$에서는 같은 극한으로 수렴한다. $\square$

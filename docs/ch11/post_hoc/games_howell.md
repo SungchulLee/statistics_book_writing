@@ -1,94 +1,91 @@
-# Games-Howell Test (Unequal Variances)
+# Games-Howell 검정 (분산이 다를 때)
 
+## 개요
 
-## Overview
+Tukey의 HSD나 Bonferroni 같은 사후 방법은 모든 집단의 모분산이 같다고 가정한다. 표준 분산분석 F-검정의 바탕에 있는 등분산성 가정과 같다. 이 가정이 어긋나면 이런 방법들이 오도하는 결과를 낼 수 있다. 작은 집단의 분산이 크면 제1종 오류율이 부풀려지고, 반대의 경우에는 검정력이 떨어진다. Games-Howell 절차(Games and Howell, 1976)는 각 쌍별 비교마다 분산을 따로 추정하고 Welch-Satterthwaite 근사로 자유도를 조정하여 이 문제를 해결한다. 등분산도 동일 표본크기도 가정하지 않으므로 Welch 분산분석 뒤의 기본 사후검정이 된다.
 
-Post-hoc methods such as Tukey's HSD and Bonferroni assume that the population variances are equal across all groups -- the same homoscedasticity assumption that underlies the standard ANOVA F-test. When this assumption is violated, these methods can produce misleading results: inflated Type I error rates when smaller groups have larger variances, or reduced power in the reverse case. The Games-Howell procedure (Games and Howell, 1976) addresses this problem by using separate variance estimates for each pairwise comparison and adjusting the degrees of freedom via the Welch-Satterthwaite approximation. It does not assume equal variances or equal sample sizes, making it the default post-hoc choice after Welch's ANOVA.
+## 가설
 
-## Hypotheses
-
-For each pair of groups $i$ and $j$ (where $1 \leq i < j \leq k$), the Games-Howell test evaluates:
+각 집단 쌍 $i$와 $j$($1 \leq i < j \leq k$)에 대해 Games-Howell 검정은 다음을 평가한다:
 
 $$
 H_0: \mu_i = \mu_j \quad \text{vs} \quad H_a: \mu_i \neq \mu_j
 $$
 
-Unlike Tukey's HSD, the test does not use a pooled variance estimate. Instead, it constructs a separate standard error and degrees-of-freedom estimate for each pair.
+Tukey의 HSD와 달리 합동분산 추정값을 쓰지 않는다. 대신 각 쌍마다 별도의 표준오차와 자유도 추정값을 만든다.
 
-## Test Statistic
+## 검정통계량
 
-For comparing groups $i$ and $j$, the test statistic is:
+집단 $i$와 $j$를 비교하는 검정통계량은
 
 $$
 t_{ij} = \frac{\bar{Y}_{i\cdot} - \bar{Y}_{j\cdot}}{\sqrt{\dfrac{s_i^2}{n_i} + \dfrac{s_j^2}{n_j}}}
 $$
 
-where:
+이다. 여기서
 
-- $\bar{Y}_{i\cdot}$ and $\bar{Y}_{j\cdot}$ are the sample means of groups $i$ and $j$
-- $s_i^2$ and $s_j^2$ are the sample variances of groups $i$ and $j$
-- $n_i$ and $n_j$ are the sample sizes
+- $\bar{Y}_{i\cdot}$와 $\bar{Y}_{j\cdot}$는 집단 $i$와 $j$의 표본평균
+- $s_i^2$와 $s_j^2$는 집단 $i$와 $j$의 표본분산
+- $n_i$와 $n_j$는 표본크기
 
-This is identical to the two-sample Welch $t$-statistic. The Games-Howell test applies this statistic to all $\binom{k}{2}$ pairs while controlling the family-wise error rate.
+이다. 이는 이표본 Welch $t$-통계량과 동일하다. Games-Howell 검정은 이 통계량을 $\binom{k}{2}$개의 모든 쌍에 적용하면서 가족단위 오류율을 통제한다.
 
-## Welch-Satterthwaite Degrees of Freedom
+## Welch-Satterthwaite 자유도
 
-Because the variance estimates differ across pairs, each comparison has its own degrees of freedom, computed via the Welch-Satterthwaite approximation:
+분산 추정값이 쌍마다 다르므로 각 비교가 자신의 자유도를 가지며, Welch-Satterthwaite 근사로 계산한다:
 
 $$
 \nu_{ij} = \frac{\left(\dfrac{s_i^2}{n_i} + \dfrac{s_j^2}{n_j}\right)^2}{\dfrac{\left(s_i^2 / n_i\right)^2}{n_i - 1} + \dfrac{\left(s_j^2 / n_j\right)^2}{n_j - 1}}
 $$
 
-The result is typically not an integer and is used directly (or rounded down) when looking up critical values.
+결과는 보통 정수가 아니며, 임계값을 찾을 때 그대로 쓰거나 내림해서 쓴다.
 
-## Decision Rule
+## 판정 규칙
 
-The Games-Howell test compares $|t_{ij}|$ against the critical value from the Studentized range distribution:
-
-Reject $H_0: \mu_i = \mu_j$ if
+Games-Howell 검정은 $|t_{ij}|$를 스튜던트화 범위 분포의 임계값과 비교한다:
 
 $$
 |t_{ij}| > \frac{q_{\alpha,\, k,\, \nu_{ij}}}{\sqrt{2}}
 $$
 
-where $q_{\alpha, k, \nu_{ij}}$ is the upper $\alpha$ critical value of the Studentized range distribution with $k$ groups and $\nu_{ij}$ degrees of freedom. The division by $\sqrt{2}$ converts from the range-based $q$-statistic scale to the $t$-statistic scale.
+이면 $H_0: \mu_i = \mu_j$을 기각한다. 여기서 $q_{\alpha, k, \nu_{ij}}$는 집단 $k$개, 자유도 $\nu_{ij}$인 스튜던트화 범위 분포의 상위 $\alpha$ 임계값이다. $\sqrt{2}$로 나누는 것은 범위 기반의 $q$-통계량 척도를 $t$-통계량 척도로 바꾸기 위해서이다.
 
-!!! note "Why the Studentized range distribution?"
+!!! note "왜 스튜던트화 범위 분포인가?"
 
-    The Studentized range distribution controls the FWER for all pairwise comparisons simultaneously, just as in Tukey's HSD. The difference is that Tukey uses a common degrees-of-freedom parameter (from the pooled $\text{MS}_W$), while Games-Howell uses pair-specific degrees of freedom $\nu_{ij}$, allowing each comparison to reflect its own variance structure.
+    스튜던트화 범위 분포는 Tukey의 HSD에서와 마찬가지로 모든 쌍별 비교에 대해 FWER을 동시에 통제한다. 차이는 Tukey가 (합동 $\text{MS}_W$에서 나오는) 공통 자유도를 쓰는 반면 Games-Howell은 쌍마다 다른 자유도 $\nu_{ij}$를 써서 각 비교가 자신의 분산 구조를 반영하게 한다는 점이다.
 
-## Worked Example
+## 예제
 
-A marketing team tests four advertising strategies. Due to budget constraints, the sample sizes and variability differ across groups:
+어떤 마케팅 팀이 네 가지 광고 전략을 시험한다. 예산 제약 때문에 집단마다 표본크기와 변동이 다르다:
 
-| Strategy | $n_i$ | $\bar{Y}_{i\cdot}$ | $s_i^2$ |
+| 전략 | $n_i$ | $\bar{Y}_{i\cdot}$ | $s_i^2$ |
 |----------|-------|---------------------|---------|
-| A (baseline) | 15 | 12.0 | 4.0 |
-| B (social media) | 10 | 16.5 | 12.0 |
-| C (email) | 20 | 13.2 | 3.5 |
-| D (influencer) | 8 | 18.0 | 15.0 |
+| A (기준) | 15 | 12.0 | 4.0 |
+| B (소셜 미디어) | 10 | 16.5 | 12.0 |
+| C (이메일) | 20 | 13.2 | 3.5 |
+| D (인플루언서) | 8 | 18.0 | 15.0 |
 
-Levene's test rejects homoscedasticity ($p = 0.003$), so the standard ANOVA F-test is inappropriate. Welch's ANOVA is significant ($F_W = 6.84$, $p = 0.002$), confirming that at least one strategy differs. We apply the Games-Howell test to identify which pairs differ.
+Levene 검정이 등분산성을 기각하므로($p = 0.003$) 표준 분산분석 F-검정은 적절하지 않다. Welch 분산분석이 유의하여($F_W = 6.84$, $p = 0.002$) 적어도 한 전략이 다름을 확인했다. 어느 쌍이 다른지 알아내기 위해 Games-Howell 검정을 적용한다.
 
-**Comparison: Strategy B vs Strategy A**
+**비교: 전략 B 대 전략 A**
 
-Test statistic:
+검정통계량:
 
 $$
 t_{BA} = \frac{16.5 - 12.0}{\sqrt{12.0/10 + 4.0/15}} = \frac{4.5}{\sqrt{1.200 + 0.267}} = \frac{4.5}{\sqrt{1.467}} = \frac{4.5}{1.211} = 3.72
 $$
 
-Degrees of freedom:
+자유도:
 
 $$
 \nu_{BA} = \frac{(1.200 + 0.267)^2}{\dfrac{(1.200)^2}{9} + \dfrac{(0.267)^2}{14}} = \frac{(1.467)^2}{\dfrac{1.440}{9} + \dfrac{0.071}{14}} = \frac{2.152}{0.160 + 0.005} = \frac{2.152}{0.165} = 13.04
 $$
 
-With $k = 4$ groups and $\nu_{BA} \approx 13$ degrees of freedom, the critical value is $q_{0.05, 4, 13} / \sqrt{2} \approx 3.97 / 1.414 \approx 2.81$.
+집단이 $k = 4$개이고 $\nu_{BA} \approx 13$이므로 임계값은 $q_{0.05, 4, 13} / \sqrt{2} \approx 4.15 / 1.414 \approx 2.94$이다.
 
-Since $|t_{BA}| = 3.72 > 2.81$, the difference between strategies B and A is **significant**.
+$|t_{BA}| = 3.72 > 2.94$이므로 전략 B와 A의 차이는 **유의하다**.
 
-**Comparison: Strategy C vs Strategy A**
+**비교: 전략 C 대 전략 A**
 
 $$
 t_{CA} = \frac{13.2 - 12.0}{\sqrt{3.5/20 + 4.0/15}} = \frac{1.2}{\sqrt{0.175 + 0.267}} = \frac{1.2}{\sqrt{0.442}} = \frac{1.2}{0.665} = 1.80
@@ -98,46 +95,46 @@ $$
 \nu_{CA} = \frac{(0.442)^2}{\dfrac{(0.175)^2}{19} + \dfrac{(0.267)^2}{14}} = \frac{0.195}{0.00161 + 0.00509} = \frac{0.195}{0.00670} = 29.1
 $$
 
-With $\nu_{CA} \approx 29$, the critical value is $q_{0.05, 4, 29} / \sqrt{2} \approx 3.85 / 1.414 \approx 2.72$.
+$\nu_{CA} \approx 29$이므로 임계값은 $q_{0.05, 4, 29} / \sqrt{2} \approx 3.85 / 1.414 \approx 2.72$이다.
 
-Since $|t_{CA}| = 1.80 < 2.72$, the difference between strategies C and A is **not significant**.
+$|t_{CA}| = 1.80 < 2.72$이므로 전략 C와 A의 차이는 **유의하지 않다**.
 
-The remaining four comparisons follow the same procedure. Each pair uses its own standard error and degrees of freedom, allowing the test to handle the heteroscedastic data appropriately.
+나머지 네 비교도 같은 절차를 따른다. 각 쌍이 자신의 표준오차와 자유도를 쓰므로 이분산 자료를 적절히 다룰 수 있다.
 
-## When to Use Games-Howell
+## Games-Howell을 언제 쓰는가
 
-The Games-Howell test is the appropriate post-hoc procedure when:
+Games-Howell 검정은 다음일 때 적절한 사후 절차이다:
 
-- **Levene's test** rejects the null hypothesis of equal variances
-- **Sample sizes** differ substantially across groups
-- The analysis follows **Welch's ANOVA** (which also does not assume equal variances)
+- **Levene 검정**이 등분산 귀무가설을 기각할 때
+- 집단 사이의 **표본크기**가 상당히 다를 때
+- 분석이 (역시 등분산을 가정하지 않는) **Welch 분산분석**에 뒤이을 때
 
-| Condition | Recommended Post-Hoc Method |
+| 조건 | 권장 사후 방법 |
 |-----------|---------------------------|
-| Equal variances, all pairwise comparisons | Tukey's HSD |
-| Equal variances, planned comparisons | Bonferroni |
-| Equal variances, comparisons to control | Dunnett's test |
-| **Unequal variances, any pairwise comparisons** | **Games-Howell** |
+| 등분산, 모든 쌍별 비교 | Tukey의 HSD |
+| 등분산, 계획된 비교 | Bonferroni |
+| 등분산, 대조군과의 비교 | Dunnett 검정 |
+| **분산이 다름, 임의의 쌍별 비교** | **Games-Howell** |
 
-!!! warning "Games-Howell with small sample sizes"
+!!! warning "표본이 작을 때의 Games-Howell"
 
-    The Games-Howell test relies on the Welch-Satterthwaite approximation, which performs well when group sample sizes are moderate ($n_i \geq 6$). With very small groups ($n_i < 6$), the variance estimates are unstable and the $\nu_{ij}$ approximation becomes unreliable. In such cases, consider non-parametric alternatives like the Kruskal-Wallis test followed by Dunn's test.
+    Games-Howell 검정은 Welch-Satterthwaite 근사에 의존하는데, 이 근사는 집단 표본크기가 어느 정도 될 때($n_i \geq 6$) 잘 작동한다. 집단이 아주 작으면($n_i < 6$) 분산 추정이 불안정해지고 $\nu_{ij}$ 근사를 믿기 어려워진다. 이런 경우에는 Kruskal-Wallis 검정 뒤에 Dunn 검정을 쓰는 비모수적 대안을 고려하라.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-A marketing analyst compares click-through rates across four advertisement designs. The one-way ANOVA yields $F = 5.12$ with $p = 0.008$, indicating at least one design differs from the others.
+**연습문제 1.**
+어떤 마케팅 분석가가 네 가지 광고 디자인의 클릭률을 비교한다. 일원배치 분산분석에서 $F = 5.12$, $p = 0.008$을 얻어 적어도 한 디자인이 다름을 확인했다.
 
-**(a)** The analyst wants to compare every design with every other design. Which post-hoc test is most appropriate? Justify your choice.
+**(a)** 분석가는 모든 디자인을 서로 비교하고자 한다. 어떤 사후검정이 가장 적절한가? 이유를 밝혀라.
 
-**(b)** The analyst's manager only cares about how each new design (B, C, D) compares to the current design (A). Which post-hoc test is more appropriate in this case, and why is it preferred over the method in part (a)?
+**(b)** 분석가의 관리자는 각 신규 디자인(B, C, D)이 현재 디자인(A)과 어떻게 다른지에만 관심이 있다. 이 경우 어떤 사후검정이 더 적절하며, (a)의 방법보다 선호되는 이유는 무엇인가?
 
-**(c)** A colleague points out that the group variances are $s_A^2 = 2.1$, $s_B^2 = 8.7$, $s_C^2 = 3.0$, $s_D^2 = 9.2$, and the sample sizes are $n_A = 30$, $n_B = 12$, $n_C = 25$, $n_D = 10$. Does this change your recommendation? Which test should be used now?
+**(c)** 한 동료가 집단 분산이 $s_A^2 = 2.1$, $s_B^2 = 8.7$, $s_C^2 = 3.0$, $s_D^2 = 9.2$이고 표본크기가 $n_A = 30$, $n_B = 12$, $n_C = 25$, $n_D = 10$이라고 지적한다. 권고가 달라지는가? 이제는 어떤 검정을 써야 하는가?
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
 
-    **(a)** Tukey's HSD is most appropriate for all pairwise comparisons. It controls the family-wise error rate (FWER) at $\alpha$ while being specifically designed for pairwise comparisons, making it more powerful than Bonferroni or Scheffe for this purpose.
+    **(a)** 모든 쌍별 비교에는 Tukey의 HSD가 가장 적절하다. 가족단위 오류율(FWER)을 $\alpha$로 통제하면서 쌍별 비교에 특화되어 있으므로 이 목적에서는 Bonferroni나 Scheffé보다 강력하다.
 
-    **(b)** Dunnett's test is more appropriate when comparing each treatment to a single control. It controls the FWER while making only $k - 1 = 3$ comparisons instead of $\binom{4}{2} = 6$, giving it greater statistical power than Tukey's HSD for this specific comparison structure.
+    **(b)** 각 처치를 하나의 대조군과 비교할 때에는 Dunnett 검정이 더 적절하다. FWER을 통제하면서 $\binom{4}{2} = 6$개가 아니라 $k - 1 = 3$개의 비교만 하므로, 이 비교 구조에서는 Tukey의 HSD보다 검정력이 높다.
 
-    **(c)** Yes, this changes the recommendation. The group variances differ substantially (the largest is more than 4 times the smallest), and the sample sizes are unequal. Under these conditions, Games-Howell is the appropriate post-hoc test because it does not assume equal variances or equal sample sizes. It uses separate variance estimates and Welch-Satterthwaite degrees of freedom for each pairwise comparison.
+    **(c)** 그렇다, 권고가 달라진다. 집단 분산이 상당히 다르고(가장 큰 값이 가장 작은 값의 네 배가 넘는다) 표본크기도 서로 다르다. 이런 조건에서는 등분산이나 동일 표본크기를 가정하지 않는 Games-Howell이 적절한 사후검정이다. 각 쌍별 비교마다 분산을 따로 추정하고 Welch-Satterthwaite 자유도를 쓴다.

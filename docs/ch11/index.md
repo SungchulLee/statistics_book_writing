@@ -1,104 +1,103 @@
-# Chapter 11: ANOVA
+# 11장: 분산분석
 
+## 개요
 
-## Overview
-
-Analysis of Variance (ANOVA) extends hypothesis testing to compare means across three or more groups simultaneously, avoiding the inflated Type I error rate that would result from performing multiple pairwise t-tests. This chapter covers one-way and two-way ANOVA models, a comprehensive suite of post-hoc comparison methods, Welch's ANOVA for heteroscedastic data, assumption checking and diagnostic tools, and practical applications including A/B testing and financial analysis.
-
----
-
-## Chapter Structure
-
-### 11.1 One-Way ANOVA
-
-The foundational ANOVA framework for comparing means across multiple independent groups:
-
-- **Model and Assumptions** -- Introduces one-way ANOVA as a method for partitioning total variability into between-group and within-group components, defines the F-statistic as the ratio of these variances, and states the assumptions of normality, independence, and homoscedasticity.
-- **F-Test Procedure** -- Provides a step-by-step procedure for conducting one-way ANOVA: formulating hypotheses, computing group means, calculating the total, between-group, and within-group sums of squares, constructing the ANOVA table, and interpreting the F-statistic and p-value.
-
-### 11.2 Two-Way ANOVA
-
-Extends the ANOVA framework to examine the effects of two factors simultaneously:
-
-- **Main Effects and Blocking** -- Introduces two-way ANOVA for assessing the individual effects of two factors on a continuous outcome, partitioning total variance into components due to Factor A, Factor B, and residual error, and explains the use of blocking to control nuisance variability.
-- **Interaction Effects** -- Defines interaction effects as the combined influence of two factors beyond their individual main effects, provides formulas for the interaction sum of squares and F-test, and demonstrates interpretation using interaction plots.
-
-### 11.3 Post-Hoc Comparisons
-
-Methods for identifying which specific group pairs differ after a significant ANOVA result:
-
-- **Tukey HSD** -- The most widely used post-hoc test for all pairwise comparisons, controlling the family-wise error rate using the Studentized range distribution.
-- **Bonferroni and Scheffe Methods** -- Bonferroni adjusts the significance level by the number of comparisons (suitable for a small number of planned comparisons), while Scheffe controls the FWER for all possible linear contrasts (more conservative but applicable to any set of comparisons).
-- **Dunnett's Test (vs Control)** -- A specialized test for comparing each of k minus 1 treatment groups against a single control group, using the multivariate t-distribution to account for the correlation between comparisons.
-- **Games-Howell (Unequal Variances)** -- A post-hoc procedure that does not assume equal variances or equal sample sizes, using Welch-Satterthwaite degrees of freedom for each pairwise comparison.
-
-### 11.4 Welch's ANOVA
-
-Robust alternatives to classical ANOVA when the equal-variance assumption is violated:
-
-- **Welch's One-Way ANOVA** -- Tests equality of group means without assuming homoscedasticity, using weighted means and an adjusted F-statistic with modified degrees of freedom.
-- **Welch's Two-Way ANOVA** -- Extends the Welch approach to two-factor designs, allowing analysis of main effects and interactions under heteroscedasticity using robust (HC3) standard errors.
-
-### 11.5 Assumptions
-
-A systematic treatment of the four assumptions underlying ANOVA and how to verify each one:
-
-- **Assumptions Overview** -- Summarizes the four key assumptions (normality, independence, homoscedasticity, linearity) and explains why each matters for the validity of the F-test.
-- **Checking Normality of Residuals** -- Describes Q-Q plots and the Shapiro-Wilk test for assessing whether residuals are approximately normally distributed, with guidance on robustness for large samples.
-- **Checking Independence of Observations** -- Emphasizes that independence is primarily ensured through proper study design (random sampling and assignment) and describes the Durbin-Watson test for detecting serial correlation.
-- **Checking Homoscedasticity** -- Uses Levene's test and residual-vs-fitted plots to detect unequal variances across groups, with guidance on when to switch to Welch's ANOVA.
-- **Checking Linearity** -- Discusses the relevance of the linearity assumption when ANOVA includes continuous covariates, using scatter plots and residual plots to detect nonlinear patterns.
-
-### 11.6 Diagnostics
-
-Tools for evaluating model adequacy and identifying problematic observations:
-
-- **Residual Analysis** -- Examines residual-vs-fitted plots, standardized residuals, and histograms of residuals to detect patterns indicating assumption violations such as heteroscedasticity, non-normality, and model misspecification.
-- **Influential Data Points** -- Identifies observations with disproportionate influence on ANOVA results using Cook's distance, leverage values, and DFFITS, with threshold guidelines and visualization.
-- **Handling Assumption Violations** -- Provides a systematic decision framework for addressing violations, including data transformations (log, square root, Box-Cox), non-parametric alternatives (Kruskal-Wallis), and robust methods (Welch's ANOVA).
-
-### 11.7 Practical Applications
-
-Real-world applications demonstrating the complete ANOVA workflow:
-
-- **A/B Testing and Experimental Design** -- Connects ANOVA to A/B testing with more than two groups, covering randomization, control groups, and the relationship between A/B tests and the one-way F-test.
-- **Financial Applications of ANOVA** -- Applies ANOVA to comparing portfolio returns, sector analysis, factor model testing, and trading strategy evaluation across market regimes.
-- **Case Studies** -- Complete worked examples (e.g., Iris species morphology) demonstrating the full ANOVA pipeline from model fitting through assumption checking and diagnostics using Python.
-
-### 11.8 Code
-
-Complete Python implementations:
-
-- **anova_diagnostics.py** -- Comprehensive ANOVA diagnostic toolkit including residual plots, normality tests, and homoscedasticity checks.
-- **post_hoc_comparisons.py** -- Implementations of Tukey HSD, Bonferroni, Scheffe, Dunnett, and Games-Howell post-hoc tests.
-- **oneway_pipeline.py** -- End-to-end one-way ANOVA pipeline from data loading through assumption checking and post-hoc analysis.
-- **oneway_scipy.py** -- One-way ANOVA using scipy with accompanying visualizations.
-- **twoway_pipeline.py** -- End-to-end two-way ANOVA pipeline with main effects and interaction analysis.
-- **interaction_plot.py** -- Visualization of interaction effects between two factors.
-- **welch_simulation.py** -- Monte Carlo simulation comparing Type I error rates and power of classical versus Welch ANOVA.
-- **welch_twoway_robust.py** -- Two-way Welch ANOVA implementation using robust HC3 standard errors.
-
-### 11.9 Exercises
-
-Practice problems covering one-way ANOVA computation, assumption checking, post-hoc test selection, two-way ANOVA with interaction interpretation, and complete analysis workflows on real datasets.
+분산분석(ANOVA)은 가설검정을 확장하여 셋 이상의 집단 평균을 한꺼번에 비교함으로써, 쌍별 t-검정을 여러 번 수행할 때 부풀려지는 제1종 오류율을 피한다. 이 장에서는 일원배치와 이원배치 분산분석 모형, 다양한 사후비교 방법, 이분산 자료를 위한 Welch 분산분석, 가정 확인과 진단 도구, 그리고 A/B 검정과 금융 분석을 포함한 실무 응용을 다룬다.
 
 ---
 
-## Prerequisites
+## 장의 구성
 
-This chapter builds on:
+### 11.1 일원배치 분산분석
 
-- **Chapter 5** (Sampling Distributions) -- The F-distribution, which is the reference distribution for the ANOVA F-test.
-- **Chapter 9** (Hypothesis Testing) -- The general hypothesis testing framework, including significance levels, p-values, Type I and Type II errors, and power.
-- **Chapter 8** (Confidence Intervals) -- Confidence intervals for means, which are used in post-hoc comparisons to construct simultaneous intervals for pairwise differences.
+여러 독립 집단의 평균을 비교하는 분산분석의 기본 틀:
+
+- **모형과 가정** --- 일원배치 분산분석을 전체 변동을 집단 간 성분과 집단 내 성분으로 분해하는 방법으로 소개하고, F-통계량을 이 두 분산의 비로 정의하며, 정규성·독립성·등분산성 가정을 제시한다.
+- **F-검정 절차** --- 일원배치 분산분석을 수행하는 단계별 절차를 제공한다: 가설 세우기, 집단 평균 계산, 전체·집단 간·집단 내 제곱합 계산, 분산분석표 작성, F-통계량과 p-값 해석.
+
+### 11.2 이원배치 분산분석
+
+두 요인의 효과를 동시에 살피도록 분산분석의 틀을 확장한다:
+
+- **주효과와 블록화** --- 두 요인이 연속형 결과에 미치는 개별 효과를 평가하는 이원배치 분산분석을 소개하고, 전체 분산을 요인 A, 요인 B, 잔차 오차에 의한 성분으로 분해하며, 성가신 변동을 통제하기 위한 블록화의 쓰임을 설명한다.
+- **교호작용 효과** --- 교호작용 효과를 두 요인의 개별 주효과를 넘어서는 결합 영향으로 정의하고, 교호작용 제곱합과 F-검정의 공식을 제시하며, 교호작용 그림을 이용한 해석을 보인다.
+
+### 11.3 사후비교
+
+분산분석이 유의하게 나온 뒤 구체적으로 어느 집단 쌍이 다른지 찾는 방법:
+
+- **Tukey HSD** --- 모든 쌍별 비교에 가장 널리 쓰이는 사후검정으로, 스튜던트화 범위 분포를 이용해 가족단위 오류율을 통제한다.
+- **Bonferroni와 Scheffé 방법** --- Bonferroni는 비교 횟수로 유의수준을 조정하여(계획된 비교가 적을 때 적합) 통제하고, Scheffé는 가능한 모든 선형 대비에 대해 FWER을 통제한다(더 보수적이지만 어떤 비교 집합에도 적용할 수 있다).
+- **Dunnett 검정 (대조군과 비교)** --- k − 1개의 처치군 각각을 하나의 대조군과 비교하는 특화된 검정으로, 비교들 사이의 상관을 반영하기 위해 다변량 t-분포를 쓴다.
+- **Games-Howell (분산이 다를 때)** --- 등분산이나 동일 표본크기를 가정하지 않고 각 쌍별 비교에 Welch-Satterthwaite 자유도를 쓰는 사후 절차이다.
+
+### 11.4 Welch 분산분석
+
+등분산 가정이 어긋날 때 고전적 분산분석을 대신하는 로버스트한 방법:
+
+- **Welch 일원배치 분산분석** --- 등분산성을 가정하지 않고 가중평균과 자유도를 수정한 F-통계량으로 집단 평균의 동일성을 검정한다.
+- **Welch 이원배치 분산분석** --- Welch 접근을 두 요인 설계로 확장하여, 로버스트(HC3) 표준오차로 이분산 아래에서 주효과와 교호작용을 분석한다.
+
+### 11.5 가정
+
+분산분석의 바탕이 되는 네 가지 가정과 각각을 확인하는 방법을 체계적으로 다룬다:
+
+- **가정 개관** --- 네 가지 핵심 가정(정규성, 독립성, 등분산성, 선형성)을 요약하고 각각이 F-검정의 타당성에 왜 중요한지 설명한다.
+- **잔차의 정규성 확인** --- 잔차가 근사적으로 정규분포를 따르는지 평가하기 위한 Q-Q 그림과 Shapiro-Wilk 검정을 설명하고, 표본이 클 때의 로버스트성에 관한 지침을 준다.
+- **관측의 독립성 확인** --- 독립성은 무엇보다 올바른 연구 설계(무작위 표집과 무작위 배정)로 확보된다는 점을 강조하고, 계열상관을 탐지하는 Durbin-Watson 검정을 설명한다.
+- **등분산성 확인** --- Levene 검정과 잔차 대 적합값 그림으로 집단 간 분산이 다른지 탐지하고, 언제 Welch 분산분석으로 옮겨야 하는지 안내한다.
+- **선형성 확인** --- 분산분석에 연속형 공변량이 들어갈 때 선형성 가정이 왜 중요한지 논의하고, 산점도와 잔차 그림으로 비선형 패턴을 탐지한다.
+
+### 11.6 진단
+
+모형의 적절성을 평가하고 문제가 되는 관측값을 찾아내는 도구:
+
+- **잔차 분석** --- 잔차 대 적합값 그림, 표준화 잔차, 잔차 히스토그램을 살펴 이분산성·비정규성·모형 오설정 같은 가정 위반을 시사하는 패턴을 탐지한다.
+- **영향점** --- Cook의 거리, 지렛값, DFFITS로 분산분석 결과에 지나치게 큰 영향을 주는 관측값을 찾아내고, 문턱 지침과 시각화를 제시한다.
+- **가정 위반의 처리** --- 위반에 대응하는 체계적인 판단 틀을 제공한다. 자료 변환(로그, 제곱근, Box-Cox), 비모수 대안(Kruskal-Wallis), 로버스트 방법(Welch 분산분석)을 포함한다.
+
+### 11.7 실무 응용
+
+분산분석의 전체 흐름을 보여주는 실제 응용:
+
+- **A/B 검정과 실험 설계** --- 집단이 셋 이상인 A/B 검정에 분산분석을 연결하고, 무작위화, 대조군, 그리고 A/B 검정과 일원배치 F-검정의 관계를 다룬다.
+- **분산분석의 금융 응용** --- 포트폴리오 수익 비교, 섹터 분석, 팩터 모형 검정, 시장 국면별 매매 전략 평가에 분산분석을 적용한다.
+- **사례 연구** --- 완결된 예제(예: 붓꽃 종의 형태)를 통해 Python으로 모형 적합부터 가정 확인과 진단까지 전체 분산분석 흐름을 보인다.
+
+### 11.8 코드
+
+완전한 Python 구현:
+
+- **anova_diagnostics.py** --- 잔차 그림, 정규성 검정, 등분산성 확인을 포함한 종합 분산분석 진단 도구.
+- **post_hoc_comparisons.py** --- Tukey HSD, Bonferroni, Scheffé, Dunnett, Games-Howell 사후검정의 구현.
+- **oneway_pipeline.py** --- 자료 적재부터 가정 확인과 사후분석까지 이어지는 일원배치 분산분석 파이프라인.
+- **oneway_scipy.py** --- scipy를 이용한 일원배치 분산분석과 시각화.
+- **twoway_pipeline.py** --- 주효과와 교호작용 분석을 포함한 이원배치 분산분석 파이프라인.
+- **interaction_plot.py** --- 두 요인 사이 교호작용 효과의 시각화.
+- **welch_simulation.py** --- 고전적 분산분석과 Welch 분산분석의 제1종 오류율과 검정력을 비교하는 Monte Carlo 모의실험.
+- **welch_twoway_robust.py** --- 로버스트 HC3 표준오차를 이용한 이원배치 Welch 분산분석 구현.
+
+### 11.9 연습문제
+
+일원배치 분산분석 계산, 가정 확인, 사후검정 선택, 교호작용 해석을 포함한 이원배치 분산분석, 실제 자료에 대한 전체 분석 흐름을 다루는 연습문제.
 
 ---
 
-## Key Takeaways
+## 선행 지식
 
-1. ANOVA compares group means by partitioning total variability into between-group and within-group components; a large F-statistic indicates that group means differ more than would be expected by chance alone.
-2. A significant ANOVA result indicates that at least one group mean differs but does not identify which groups differ; post-hoc tests (Tukey, Bonferroni, Scheffe, Dunnett, Games-Howell) are required to pinpoint the specific pairwise differences.
-3. Two-way ANOVA simultaneously assesses the effects of two factors and their interaction, where an interaction effect means the influence of one factor depends on the level of the other.
-4. The four ANOVA assumptions (normality, independence, homoscedasticity, linearity) should be checked systematically; when homoscedasticity is violated, Welch's ANOVA provides a robust alternative.
-5. Diagnostic tools such as residual plots, Cook's distance, and formal tests (Shapiro-Wilk, Levene's) are essential for validating the ANOVA model before interpreting results.
-6. ANOVA has broad practical applications including A/B testing with multiple treatments, comparing financial portfolio returns, and any experimental design comparing three or more groups.
+이 장은 다음 내용 위에 세워진다:
+
+- **5장** (표본분포) --- 분산분석 F-검정의 기준분포인 F-분포.
+- **9장** (가설검정) --- 유의수준, p-값, 제1종·제2종 오류, 검정력을 포함한 일반적인 가설검정의 틀.
+- **8장** (신뢰구간) --- 평균에 대한 신뢰구간. 사후비교에서 쌍별 차이의 동시 신뢰구간을 만드는 데 쓰인다.
+
+---
+
+## 핵심 요점
+
+1. 분산분석은 전체 변동을 집단 간 성분과 집단 내 성분으로 분해하여 집단 평균을 비교한다. F-통계량이 크면 집단 평균의 차이가 우연으로 기대되는 정도보다 크다는 뜻이다.
+2. 분산분석이 유의하다는 것은 적어도 한 집단의 평균이 다르다는 뜻이지 어느 집단이 다른지를 알려주지는 않는다. 구체적인 쌍별 차이를 짚어내려면 사후검정(Tukey, Bonferroni, Scheffé, Dunnett, Games-Howell)이 필요하다.
+3. 이원배치 분산분석은 두 요인의 효과와 그 교호작용을 동시에 평가한다. 교호작용 효과가 있다는 것은 한 요인의 영향이 다른 요인의 수준에 따라 달라진다는 뜻이다.
+4. 분산분석의 네 가정(정규성, 독립성, 등분산성, 선형성)은 체계적으로 확인해야 한다. 등분산성이 어긋나면 Welch 분산분석이 로버스트한 대안이 된다.
+5. 잔차 그림, Cook의 거리, 형식적 검정(Shapiro-Wilk, Levene) 같은 진단 도구는 결과를 해석하기 전에 분산분석 모형을 검증하는 데 필수적이다.
+6. 분산분석은 처치가 여럿인 A/B 검정, 금융 포트폴리오 수익 비교 등 셋 이상의 집단을 비교하는 모든 실험 설계에 폭넓게 응용된다.

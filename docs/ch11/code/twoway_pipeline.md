@@ -1,29 +1,29 @@
-# Two-Way Analysis of Variance End-to-End Pipeline
+# 이원배치 분산분석 파이프라인
 
-## Overview
+## 개요
 
-Two-way ANOVA extends the one-way design by examining the simultaneous effects of two factors and their interaction on a continuous response. This page walks through a complete pipeline on the ToothGrowth dataset: fitting a two-way ANOVA (Type II), running Tukey HSD post-hoc tests for each main effect and the interaction, and producing an interaction plot. The two factors are supplement type (OJ vs. VC) and dose level (0.5, 1.0, 2.0).
+이원배치 분산분석은 일원배치 설계를 확장하여 두 요인의 효과와 그 교호작용이 연속형 반응에 미치는 영향을 동시에 살핀다. 이 페이지는 ToothGrowth 자료로 완전한 파이프라인을 따라간다. 이원배치 분산분석(제II형) 적합, 각 주효과와 교호작용에 대한 Tukey HSD 사후검정, 교호작용 그림 작성. 두 요인은 보충제 종류(OJ 대 VC)와 용량 수준(0.5, 1.0, 2.0)이다.
 
-## The Two-Way ANOVA Model
+## 이원배치 분산분석 모형
 
-For factors $A$ (with $a$ levels) and $B$ (with $b$ levels), the cell-means model is
+수준이 $a$개인 요인 $A$와 수준이 $b$개인 요인 $B$에 대한 칸 평균 모형은
 
 $$
 y_{ijk} = \mu + \alpha_i + \beta_j + (\alpha\beta)_{ij} + \varepsilon_{ijk}
 $$
 
-where $\alpha_i$ is the main effect of factor $A$, $\beta_j$ is the main effect of factor $B$, $(\alpha\beta)_{ij}$ is the interaction effect, and $\varepsilon_{ijk} \sim N(0, \sigma^2)$.
+이며 $\alpha_i$는 요인 $A$의 주효과, $\beta_j$는 요인 $B$의 주효과, $(\alpha\beta)_{ij}$는 교호작용 효과, $\varepsilon_{ijk} \sim N(0, \sigma^2)$이다.
 
-The Type II ANOVA table tests three null hypotheses:
+제II형 분산분석표는 세 가지 귀무가설을 검정한다:
 
-| Source | $H_0$ | $df$ |
+| 원천 | $H_0$ | $df$ |
 |---|---|---|
-| Factor $A$ | All $\alpha_i = 0$ | $a - 1$ |
-| Factor $B$ | All $\beta_j = 0$ | $b - 1$ |
-| $A \times B$ | All $(\alpha\beta)_{ij} = 0$ | $(a-1)(b-1)$ |
-| Residual | | $N - ab$ |
+| 요인 $A$ | 모든 $\alpha_i = 0$ | $a - 1$ |
+| 요인 $B$ | 모든 $\beta_j = 0$ | $b - 1$ |
+| $A \times B$ | 모든 $(\alpha\beta)_{ij} = 0$ | $(a-1)(b-1)$ |
+| 잔차 | | $N - ab$ |
 
-## Step 1: Fit the Model
+## 1단계: 모형 적합
 
 ```python
 import pandas as pd
@@ -39,11 +39,11 @@ aov2 = anova_lm(model, typ=2)
 print(aov2)
 ```
 
-Type II sums of squares test each main effect after adjusting for the other main effect but ignoring the interaction. This is recommended when the design is balanced or nearly balanced.
+제II형 제곱합은 각 주효과를 다른 주효과로 조정하되 교호작용은 무시하고 검정한다. 설계가 균형이거나 거의 균형일 때 권장된다.
 
-## Step 2: Tukey HSD for Main Effects
+## 2단계: 주효과에 대한 Tukey HSD
 
-Post-hoc tests identify which levels of a factor differ. Run Tukey HSD separately for each main effect.
+사후검정은 한 요인의 어느 수준이 다른지 찾아낸다. 각 주효과에 대해 Tukey HSD를 따로 수행한다.
 
 ```python
 from statsmodels.stats.multicomp import pairwise_tukeyhsd
@@ -52,20 +52,20 @@ print(pairwise_tukeyhsd(endog=df['len'], groups=df['dose'], alpha=0.05))
 print(pairwise_tukeyhsd(endog=df['len'], groups=df['supp'], alpha=0.05))
 ```
 
-## Step 3: Tukey HSD for the Interaction
+## 3단계: 교호작용에 대한 Tukey HSD
 
-To compare all $a \times b$ cell means, create a combined grouping variable and run Tukey HSD on the interaction cells.
+$a \times b$개의 칸 평균을 모두 비교하려면 결합 집단 변수를 만들어 교호작용 칸에 Tukey HSD를 수행한다.
 
 ```python
 df['supp_dose'] = df['supp'].astype(str) + "_" + df['dose'].astype(str)
 print(pairwise_tukeyhsd(endog=df['len'], groups=df['supp_dose'], alpha=0.05))
 ```
 
-With $a \times b = 2 \times 3 = 6$ cells, there are $\binom{6}{2} = 15$ pairwise comparisons. The Tukey procedure controls the family-wise error rate across all 15 simultaneously.
+칸이 $a \times b = 2 \times 3 = 6$개이므로 쌍별 비교는 $\binom{6}{2} = 15$개이다. Tukey 절차는 이 15개 전체에 걸쳐 가족단위 오류율을 동시에 통제한다.
 
-## Step 4: Interaction Plot
+## 4단계: 교호작용 그림
 
-An interaction plot displays cell means with one factor on the horizontal axis and separate lines for each level of the other factor. Non-parallel lines suggest an interaction.
+교호작용 그림은 한 요인을 가로축에 두고 다른 요인의 각 수준을 별도의 선으로 그려 칸 평균을 보여준다. 선이 평행하지 않으면 교호작용을 시사한다.
 
 ```python
 import matplotlib.pyplot as plt
@@ -81,97 +81,97 @@ plt.tight_layout()
 plt.show()
 ```
 
-## Interpretation
+## 해석
 
-- **Main effect of dose:** If the ANOVA $p$-value for dose is small and Tukey HSD shows significant pairwise differences, higher doses lead to greater tooth growth.
-- **Main effect of supplement:** A significant $p$-value for supp indicates that the two supplement types (OJ vs. VC) produce different mean tooth lengths.
-- **Interaction:** A significant interaction means the effect of dose depends on supplement type (or vice versa). In the ToothGrowth data, OJ and VC produce similar results at dose 2.0 but differ at lower doses, which appears as converging lines in the interaction plot.
-- **Type II vs. Type III:** Type II is appropriate when there is no a priori reason to test main effects in the presence of interactions. If the interaction is significant and the design is unbalanced, Type III (which tests each effect controlling for all other effects including the interaction) may be preferred.
+- **용량의 주효과:** 용량에 대한 분산분석 $p$-값이 작고 Tukey HSD가 유의한 쌍별 차이를 보이면 용량이 클수록 치아 성장이 크다는 뜻이다.
+- **보충제의 주효과:** supp의 $p$-값이 유의하면 두 보충제 종류(OJ 대 VC)가 서로 다른 평균 치아 길이를 낳음을 나타낸다.
+- **교호작용:** 교호작용이 유의하면 용량의 효과가 보충제 종류에 (또는 그 반대로) 의존한다는 뜻이다. ToothGrowth 자료에서는 용량 2.0에서 OJ와 VC의 결과가 비슷하지만 낮은 용량에서는 다르며, 교호작용 그림에서 선이 수렴하는 모습으로 나타난다.
+- **제II형 대 제III형:** 교호작용이 있는 상태에서 주효과를 검정할 사전 이유가 없다면 제II형이 적절하다. 교호작용이 유의하고 설계가 불균형이면 (교호작용을 포함한 다른 모든 효과를 통제하고 각 효과를 검정하는) 제III형이 나을 수 있다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-In a $2 \times 3$ factorial design with $n = 10$ observations per cell, state the degrees of freedom for each source in the ANOVA table and the total degrees of freedom.
+**연습문제 1.**
+칸당 관측값이 $n = 10$개인 $2 \times 3$ 요인 설계에서 분산분석표의 각 원천별 자유도와 전체 자유도를 진술하라.
 
-??? success "Solution to Exercise 1"
-    With $a = 2$ levels of factor $A$, $b = 3$ levels of factor $B$, and $n = 10$ per cell, $N = 2 \times 3 \times 10 = 60$.
+??? success "연습문제 1 풀이"
+    요인 $A$의 수준이 $a = 2$개, 요인 $B$의 수준이 $b = 3$개, 칸당 $n = 10$이므로 $N = 2 \times 3 \times 10 = 60$이다.
 
-    | Source | $df$ |
+    | 원천 | $df$ |
     |---|---|
-    | Factor $A$ | $a - 1 = 1$ |
-    | Factor $B$ | $b - 1 = 2$ |
+    | 요인 $A$ | $a - 1 = 1$ |
+    | 요인 $B$ | $b - 1 = 2$ |
     | $A \times B$ | $(a-1)(b-1) = 2$ |
-    | Residual | $N - ab = 60 - 6 = 54$ |
-    | Total | $N - 1 = 59$ |
+    | 잔차 | $N - ab = 60 - 6 = 54$ |
+    | 전체 | $N - 1 = 59$ |
 
 ---
 
-**Exercise 2.**
-Explain the difference between Type I, Type II, and Type III sums of squares. Under what conditions do they give identical results?
+**연습문제 2.**
+제I형, 제II형, 제III형 제곱합의 차이를 설명하라. 어떤 조건에서 세 유형이 동일한 결과를 주는가?
 
-??? success "Solution to Exercise 2"
+??? success "연습문제 2 풀이"
 
-    - **Type I (sequential):** Each effect is tested after adjusting only for the effects entered before it. The results depend on the order of terms in the model.
-    - **Type II:** Each main effect is tested after adjusting for the other main effect but not for the interaction. The interaction is tested after adjusting for both main effects.
-    - **Type III:** Each effect is tested after adjusting for all other effects, including the interaction.
+    - **제I형(순차):** 각 효과를 그보다 앞서 들어간 효과들로만 조정하여 검정한다. 결과가 모형의 항 순서에 의존한다.
+    - **제II형:** 각 주효과를 다른 주효과로 조정하되 교호작용으로는 조정하지 않고 검정한다. 교호작용은 두 주효과로 조정한 뒤 검정한다.
+    - **제III형:** 각 효과를 교호작용을 포함한 다른 모든 효과로 조정하여 검정한다.
 
-    All three types give identical results when the design is **balanced** (equal cell sizes) and the model is fully specified. In balanced designs, the sums of squares are orthogonal, so the order of entry does not matter and the adjustment for other terms has no effect. For unbalanced designs, the three types can differ substantially.
+    설계가 **균형**(칸 크기가 같음)이고 모형이 완전히 지정되면 세 유형이 동일한 결과를 준다. 균형 설계에서는 제곱합이 직교하므로 항의 입력 순서가 문제되지 않고 다른 항으로 조정해도 달라지지 않는다. 불균형 설계에서는 세 유형이 상당히 다를 수 있다.
 
 ---
 
-**Exercise 3.**
-In the interaction plot, the lines for OJ and VC converge at dose 2.0. What does this imply about the interaction term? Write out the contrast that tests whether the OJ-VC difference is the same at dose 0.5 and dose 2.0.
+**연습문제 3.**
+교호작용 그림에서 OJ와 VC의 선이 용량 2.0에서 수렴한다. 이는 교호작용 항에 대해 무엇을 함의하는가? OJ와 VC의 차이가 용량 0.5와 2.0에서 같은지 검정하는 대비를 써라.
 
-??? success "Solution to Exercise 3"
-    Convergence means the supplement effect diminishes at higher doses, which is a form of interaction. The contrast testing whether the OJ-VC difference is the same at doses 0.5 and 2.0 is
+??? success "연습문제 3 풀이"
+    수렴한다는 것은 용량이 커질수록 보충제의 효과가 줄어든다는 뜻이며, 이는 교호작용의 한 형태이다. OJ–VC 차이가 용량 0.5와 2.0에서 같은지 검정하는 대비는
 
     $$
     \psi = (\mu_{\text{OJ},0.5} - \mu_{\text{VC},0.5}) - (\mu_{\text{OJ},2.0} - \mu_{\text{VC},2.0})
     $$
 
-    Under $H_0: \psi = 0$, the supplement effect is the same at both doses. A significant result indicates that the magnitude of the OJ-VC difference changes across dose levels, which is exactly what the interaction term captures in the ANOVA model.
+    이다. $H_0: \psi = 0$ 아래에서 보충제의 효과가 두 용량에서 같다. 결과가 유의하면 OJ–VC 차이의 크기가 용량 수준에 따라 달라진다는 뜻이며, 이것이 바로 분산분석 모형의 교호작용 항이 담아내는 것이다.
 
 ---
 
-**Exercise 4.**
-Show that the total sum of squares in a two-way ANOVA decomposes as
+**연습문제 4.**
+균형 설계의 이원배치 분산분석에서 총제곱합이
 
 $$
 SST = SS_A + SS_B + SS_{AB} + SSE
 $$
 
-for a balanced design. State the independence assumptions required for this decomposition.
+로 분해됨을 보여라. 이 분해에 필요한 독립성 가정을 진술하라.
 
-??? success "Solution to Exercise 4"
-    Start from the identity
+??? success "연습문제 4 풀이"
+    항등식
 
     $$
     y_{ijk} - \bar{y}_{\cdot\cdot\cdot} = (\bar{y}_{i\cdot\cdot} - \bar{y}_{\cdot\cdot\cdot}) + (\bar{y}_{\cdot j\cdot} - \bar{y}_{\cdot\cdot\cdot}) + (\bar{y}_{ij\cdot} - \bar{y}_{i\cdot\cdot} - \bar{y}_{\cdot j\cdot} + \bar{y}_{\cdot\cdot\cdot}) + (y_{ijk} - \bar{y}_{ij\cdot})
     $$
 
-    Squaring and summing over all $i, j, k$, all cross-product terms vanish due to orthogonality (which holds when the design is balanced), giving
+    에서 시작한다. 제곱하여 모든 $i, j, k$에 대해 합하면 (균형 설계에서 성립하는) 직교성 덕분에 모든 교차항이 사라져
 
     $$
     \sum_{i,j,k} (y_{ijk} - \bar{y}_{\cdot\cdot\cdot})^2 = bn\sum_i (\bar{y}_{i\cdot\cdot} - \bar{y}_{\cdot\cdot\cdot})^2 + an\sum_j (\bar{y}_{\cdot j\cdot} - \bar{y}_{\cdot\cdot\cdot})^2 + n\sum_{i,j}(\bar{y}_{ij\cdot} - \bar{y}_{i\cdot\cdot} - \bar{y}_{\cdot j\cdot} + \bar{y}_{\cdot\cdot\cdot})^2 + \sum_{i,j,k}(y_{ijk} - \bar{y}_{ij\cdot})^2
     $$
 
-    That is, $SST = SS_A + SS_B + SS_{AB} + SSE$.
+    가 된다. 즉 $SST = SS_A + SS_B + SS_{AB} + SSE$이다.
 
-    The decomposition requires: (1) balanced design (equal $n$ per cell), and (2) the errors $\varepsilon_{ijk}$ are independent with common variance $\sigma^2$. Independence ensures that $SSE / \sigma^2 \sim \chi^2_{N-ab}$ and that $SSE$ is independent of $SS_A$, $SS_B$, and $SS_{AB}$, which is needed for the $F$-tests to have exact $F$-distributions. $\square$
+    이 분해에는 (1) 균형 설계(칸당 $n$이 같음)와 (2) 오차 $\varepsilon_{ijk}$가 독립이고 공통 분산 $\sigma^2$을 갖는다는 가정이 필요하다. 독립성은 $SSE / \sigma^2 \sim \chi^2_{N-ab}$이고 $SSE$가 $SS_A$, $SS_B$, $SS_{AB}$와 독립임을 보장하며, 이는 $F$-검정이 정확한 $F$-분포를 갖는 데 필요하다. $\square$
 
 ---
 
-**Exercise 5.**
-When the interaction is significant but one main effect is not, some textbooks warn against interpreting the non-significant main effect. Explain why, using a concrete numerical example.
+**연습문제 5.**
+교호작용은 유의한데 한 주효과가 유의하지 않을 때, 여러 교과서가 그 주효과를 해석하지 말라고 경고한다. 구체적인 수치 예로 이유를 설명하라.
 
-??? success "Solution to Exercise 5"
-    A significant interaction means the effect of one factor depends on the level of the other. In this situation, the main effect -- which averages over the levels of the other factor -- may not represent any group's actual experience.
+??? success "연습문제 5 풀이"
+    교호작용이 유의하다는 것은 한 요인의 효과가 다른 요인의 수준에 의존한다는 뜻이다. 이 상황에서 다른 요인의 수준에 걸쳐 평균을 낸 주효과는 어느 집단의 실제 경험도 대표하지 못할 수 있다.
 
-    **Example:** Consider a $2 \times 2$ design with cell means:
+    **예:** 칸 평균이 다음과 같은 $2 \times 2$ 설계를 생각하자:
 
     | | $B_1$ | $B_2$ |
     |---|---|---|
     | $A_1$ | 10 | 20 |
     | $A_2$ | 20 | 10 |
 
-    The marginal means of $A$ are $\bar{y}_{1\cdot} = 15$ and $\bar{y}_{2\cdot} = 15$, so the main effect of $A$ is zero. However, $A$ clearly has a large effect: it increases the response by 10 units in the $B_2$ condition and decreases it by 10 units in the $B_1$ condition. These opposite effects cancel out in the marginal mean, making the main effect test meaningless. The interaction is the informative quantity here, and the correct interpretation is that the direction of $A$'s effect reverses depending on the level of $B$.
+    $A$의 주변평균은 $\bar{y}_{1\cdot} = 15$, $\bar{y}_{2\cdot} = 15$이므로 $A$의 주효과는 0이다. 그러나 $A$에는 분명 큰 효과가 있다. $A_1$에서 $A_2$로 가면 $B_1$ 조건에서는 반응이 10만큼 커지고 $B_2$ 조건에서는 10만큼 작아진다. 이 반대 방향의 효과가 주변평균에서 상쇄되어 주효과 검정이 무의미해진다. 여기서 정보를 담고 있는 양은 교호작용이며, 올바른 해석은 $A$의 효과 방향이 $B$의 수준에 따라 뒤집힌다는 것이다.

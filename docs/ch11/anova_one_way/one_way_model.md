@@ -1,67 +1,66 @@
-# One-Way ANOVA: Model and Assumptions
+# 일원배치 분산분석: 모형과 가정
 
+## 1. 일원배치 분산분석
 
-## 1. One-Way ANOVA (Analysis of Variance)
+### A. 일원배치 분산분석이란
 
-### A. One-Way ANOVA
+일원배치 분산분석(One-Way ANOVA)은 셋 이상의 독립 집단의 평균 사이에 유의한 차이가 있는지 판정하는 통계 기법이다. 두 집단만 비교할 수 있는 이표본 t-검정과 달리, 일원배치 분산분석은 여러 집단을 동시에 평가하는 방법을 제공하여, 쌍별 비교를 여러 번 수행할 때 참인 귀무가설을 잘못 기각하는 제1종 오류의 가능성을 줄여 준다.
 
-One-Way ANOVA (Analysis of Variance) is a statistical technique employed to determine if there are significant differences between the means of three or more independent groups. Unlike a two-sample t-test, which only allows for comparisons between two groups, One-Way ANOVA provides a method to simultaneously evaluate multiple groups, thereby reducing the likelihood of committing a Type I error—an incorrect rejection of a true null hypothesis—when conducting numerous pairwise comparisons.
+일원배치 분산분석의 핵심 개념은 자료에서 관측된 전체 변동을 두 성분으로 분해하는 것이다: 집단 **간** 변동과 각 집단 **내** 변동. 이 두 변동 원천을 비교하여, 관측된 집단 평균의 차이가 우연으로 기대되는 정도보다 큰지를 판정한다.
 
-The key concept in One-Way ANOVA is to partition the total variability observed in the data into two components: the variability **between** the groups and the variability **within** each group. By comparing these sources of variability, the test determines if the observed group means differ more than would be expected by chance.
+구체적으로 일원배치 분산분석은 집단 간 분산과 집단 내 분산의 비로 계산되는 **F-통계량**을 쓴다. F-통계량이 1보다 유의하게 크면 집단 평균의 차이가 무작위 변동만으로 생길 수 있는 정도보다 크다는 뜻이며, 적어도 한 집단의 평균이 다른 집단과 유의하게 다름을 시사한다.
 
-In detail, One-Way ANOVA uses the **F-statistic**, which is calculated as the ratio of the variance between groups to the variance within groups. If the F-statistic is significantly larger than 1, it suggests that the differences between group means are greater than what might occur by random variation alone, implying that at least one group mean is significantly different from the others.
+일원배치 분산분석의 가정 중 하나는 각 집단의 자료가 정규분포를 따르고 집단 사이의 분산이 대략 같다는 것(분산의 동질성)이다. 또한 관측값들이 서로 독립이어야 한다. 이 가정들이 어긋나면 부정확한 결론에 이를 수 있으므로 다른 접근이나 조정(예: Welch 분산분석이나 비모수 검정)이 필요할 수 있다.
 
-One of the assumptions of One-Way ANOVA is that the data in each group are normally distributed, and that the variances across these groups are approximately equal (homogeneity of variances). Moreover, the observations should be independent of each other. Violations of these assumptions can lead to inaccurate conclusions, and alternative approaches or adjustments (such as Welch's ANOVA or non-parametric tests) may be necessary.
+전체적으로 일원배치 분산분석은 의학, 심리학, 농학, 경영학처럼 서로 다른 처치·조건·집단의 효과를 비교하려는 여러 분야에서 특히 유용하다. 다중 가설검정에 따르는 오류 위험을 통제하면서 여러 집단 사이의 차이를 간결하고 효율적으로 평가하게 해 준다.
 
-Overall, One-Way ANOVA is particularly useful in a wide range of fields, such as medicine, psychology, agriculture, and business, where researchers or analysts want to compare the effects of different treatments, conditions, or groups. It provides a streamlined and efficient way to assess differences among multiple groups while controlling the risk of error associated with multiple hypothesis testing.
+일원배치 분산분석의 결과가 유의하면 어느 집단이 서로 다른지 짚어내기 위해 보통 추가 분석이 필요하다. 이 후속 과정은 흔히 **사후검정**(예: Tukey의 HSD, Bonferroni 보정)으로 이루어지며, 제1종 오류를 통제하면서 어느 집단 평균 쌍이 유의하게 다른지 판정하도록 돕는다.
 
-If the result of One-Way ANOVA is significant, further analysis is typically required to pinpoint which specific groups differ from each other. This follow-up process is often done using **post-hoc tests** (e.g., Tukey's HSD, Bonferroni correction), which help determine which pairs of group means are significantly different while controlling for Type I error.
+### B. 두 집단을 비교할 때 일원배치 분산분석과 t-검정
 
-### B. One-Way ANOVA vs. t-Test When Comparing Two Groups
+두 집단을 비교할 때 일원배치 분산분석과 t-검정은 공통점이 있지만 가정과 용도에서 중요한 차이도 있다.
 
-When comparing two groups, One-Way ANOVA and the t-test share some similarities but also have significant differences in terms of their assumptions and applications.
+#### 공통점
 
-#### What They Have in Common
+1. **목적**: 둘 다 집단 평균을 비교하여 통계적으로 유의한 차이가 있는지 판정하는 데 쓰인다. 관측된 차이가 우연히 생겼을 가능성을 검정하도록 설계되었다.
 
-1. **Purpose**: Both One-Way ANOVA and the t-test are used to compare group means and determine if there is a statistically significant difference between them. They are both designed to test whether the observed differences are likely to have occurred by chance.
+2. **귀무가설**: 두 검정 모두 집단 평균 사이에 차이가 없다는 귀무가설을 평가한다. 다시 말해 두 집단에 대해 반증되기 전까지 평균이 같다고 가정한다.
 
-2. **Null Hypothesis**: Both tests evaluate the null hypothesis that there is no difference between the group means. In other words, for two groups, both tests assume that the means are equal unless proven otherwise.
+3. **해석**: 둘 다 p-값을 제공하며 이를 통해 귀무가설을 기각할지 결정한다. p-값이 지정한 유의수준(예: 0.05)보다 작으면 귀무가설을 기각하고 평균 사이에 유의한 차이가 있다고 결론짓는다.
 
-3. **Interpretation**: Both One-Way ANOVA and the t-test provide a p-value, which is used to determine whether to reject the null hypothesis. If the p-value is less than the specified significance level (e.g., 0.05), we reject the null hypothesis and conclude that there is a significant difference between the means.
+4. **두 집단에서의 동치성**: 분산이 같은 두 집단만 비교하는 경우 일원배치 분산분석과 Student의 t-검정은 동치인 결과를 준다. 일원배치 분산분석의 F-통계량은 t-검정 t-통계량의 제곱과 같아서, 두 검정이 같은 p-값을 주고 같은 결론에 이른다.
 
-4. **Equivalent Results for Two Groups**: When comparing only two groups with equal variances, One-Way ANOVA and the Student's t-test yield equivalent results. The F-statistic from One-Way ANOVA is equal to the square of the t-statistic from the t-test, meaning both tests will produce the same p-value and lead to the same conclusion.
+#### 주요 차이
 
-#### Key Differences
+1. **분산에 대한 가정**: t-검정에는 두 형태가 있다. Student의 t-검정과 Welch의 t-검정이다. Student의 t-검정은 두 집단의 분산이 같다고(분산의 동질성) 가정한다. 반면 Welch의 t-검정은 등분산을 가정하지 않아 집단 분산이 다를 때 더 적합하다. 일원배치 분산분석은 집단 사이의 등분산을 가정한다. 등분산성이라 부르는 이 가정은 검정의 신뢰성에 결정적이다. 가정이 어긋나면 표준 일원배치 분산분석이 적절하지 않을 수 있고 Welch 분산분석 같은 형태를 대신 써야 한다.
 
-1. **Assumptions About Variance**: The t-test comes in two forms: the Student's t-test and Welch's t-test. The Student's t-test assumes that the variances of the two groups are equal (homogeneity of variance). Welch's t-test, on the other hand, does not assume equal variances, making it more suitable when the group variances are different. One-Way ANOVA assumes equal variances across groups. This assumption, called homoscedasticity, is crucial for the reliability of the test. If this assumption is violated, the standard One-Way ANOVA may not be appropriate, and a version like Welch's ANOVA should be used instead.
+2. **쓰임새**: t-검정은 두 집단의 평균을 비교하도록 특별히 설계되었다. 비교할 집단이 둘뿐이면 더 간단하고 효율적이다. 일원배치 분산분석은 보통 셋 이상의 집단 평균을 비교하는 데 쓰지만 두 집단에도 쓸 수 있다. 집단이 둘뿐이면 대개 t-검정이 더 간명하며, 분산이 같다면 일원배치 분산분석도 같은 결과를 준다.
 
-2. **Use Case**: The t-test is specifically designed for comparing the means of two groups. It is simpler and more efficient when there are only two groups to compare. One-Way ANOVA is generally used to compare the means of three or more groups, but it can also be used for two groups. When there are only two groups, the t-test is typically more straightforward, though One-Way ANOVA will give the same result if variances are equal.
+3. **통계적 출력**: t-검정은 t-통계량과 p-값을 준다. t-통계량은 집단 내 변동에 대비한 집단 평균의 차이를 나타낸다. 일원배치 분산분석은 F-통계량과 p-값을 준다. F-통계량은 집단 간 분산과 집단 내 분산의 비를 나타낸다. 두 집단에서는 F-통계량이 단순히 t-통계량의 제곱이다.
 
-3. **Statistical Output**: The t-test provides a t-statistic and a p-value. The t-statistic reflects the difference between group means relative to the variability within the groups. One-Way ANOVA provides an F-statistic and a p-value. The F-statistic represents the ratio of between-group variance to within-group variance. For two groups, the F-statistic is simply the square of the t-statistic.
+4. **유연성과 확장성**: t-검정은 두 집단 비교에 한정된다. 집단이 셋 이상이면 t-검정을 여러 번 수행할 때 제1종 오류(거짓 양성)의 위험이 커진다. 일원배치 분산분석은 둘 이상의 집단을 한 번에 비교할 수 있어 더 유연하다. 제1종 오류율을 통제하도록 설계되어 여러 집단을 비교할 때 더 적절하다.
 
-4. **Flexibility and Scalability**: The t-test is limited to comparing two groups. If there are more than two groups, performing multiple t-tests can increase the risk of a Type I error (false positive). One-Way ANOVA is more flexible, as it can compare two or more groups at once. It is designed to control the Type I error rate, making it more appropriate when comparing multiple groups.
+#### 각각을 언제 쓰는지에 대한 예
 
-#### Example of When to Use Each Test
+- **t-검정**: 서로 다른 두 학습법을 쓴 학생들의 평균 점수를 비교한다고 하자. 두 집단(예: 방법 A 대 방법 B)의 분산이 비슷하면 Student의 t-검정이 적절하다. 분산이 다르면 Welch의 t-검정을 써야 한다.
 
-- **t-Test**: Suppose you want to compare the mean scores of students who used two different study methods. If the two groups (e.g., Method A vs. Method B) have similar variances, a Student's t-test would be appropriate. If the variances are unequal, Welch's t-test should be used.
+- **일원배치 분산분석**: 서로 다른 세 학습법(방법 A, B, C)을 쓴 학생들의 평균 점수를 비교한다고 하자. 이 경우 일원배치 분산분석이 적절한 선택이다. 집단이 둘뿐이어도 일원배치 분산분석을 쓸 수 있지만 대개는 t-검정이 더 간단하다.
 
-- **One-Way ANOVA**: Suppose you want to compare the mean scores of students who used three different study methods (Method A, Method B, and Method C). In this case, One-Way ANOVA would be the appropriate choice. If you only have two groups, One-Way ANOVA can still be used, but a t-test is generally simpler.
+#### 요약
 
-#### Summary
+일원배치 분산분석과 t-검정은 집단 평균을 비교하여 유의한 차이가 있는지 판정한다는 공통 목표를 갖는다. 둘 다 평균이 같다는 귀무가설을 검정하고 해석을 위한 p-값을 준다. 그러나 분산에 대한 가정과 의도된 쓰임새가 다르다.
 
-One-Way ANOVA and the t-test share the common goal of comparing group means to determine if there are significant differences. They both test the null hypothesis of equal means and provide a p-value for interpretation. However, they differ in their assumptions about variance and in their intended use cases.
+- **분산이 같은 두 집단**을 비교할 때에는 간단하고 효율적인 **t-검정**(Student의 t-검정)이 흔히 더 나은 선택이다.
+- **분산이 다를 때** 두 집단을 비교하려면 **Welch의 t-검정**이 선호된다.
+- **집단이 셋 이상**일 때에는 여러 번의 t-검정보다 제1종 오류율을 잘 통제하는 **일원배치 분산분석**이 더 적절하다.
 
-- When comparing **two groups with equal variances**, a **t-test** (Student's t-test) is often the better choice due to its simplicity and efficiency.
-- When **variances are unequal**, **Welch's t-test** is preferred for comparing two groups.
-- When comparing **more than two groups**, **One-Way ANOVA** is more appropriate, as it controls for the Type I error rate better than performing multiple t-tests.
+이렇게 특정 조건에서는 두 집단에 대해 일원배치 분산분석과 t-검정이 동치인 결과를 주지만, 분산 가정과 유연성의 차이 때문에 각 검정이 적합한 상황이 다르다.
 
-Thus, while One-Way ANOVA and the t-test can produce equivalent results for two groups under certain conditions, differences in variance assumptions and flexibility make each test suitable for different situations.
-
-### C. Comparison of Null of One-Way ANOVA to Linear Regression
+### C. 일원배치 분산분석의 귀무가설과 선형회귀의 비교
 
 $$\begin{array}{cccccccc}
-&&\text{Linear Regression}&&\text{One Way ANOVA}\\
-\text{Model}&&y=\alpha+\beta x+\text{noise}
+&&\text{선형회귀}&&\text{일원배치 분산분석}\\
+\text{모형}&&y=\alpha+\beta x+\text{noise}
 &&
 y=\alpha+\sum_{i=1}^{k}\beta_i 1_{x\in C_i}+\text{noise}
 \\
@@ -70,83 +69,84 @@ y=\alpha+\sum_{i=1}^{k}\beta_i 1_{x\in C_i}+\text{noise}
 \quad\beta_1=\cdots=\beta_k=0\\
 \end{array}$$
 
-One-Way ANOVA (Analysis of Variance) can be viewed as a specific form of a linear regression model where the independent variable is categorical, representing distinct groups. In a typical linear regression, the predictor variable $x$ is continuous, and the relationship between the dependent variable $y$ and $x$ is expressed as:
+일원배치 분산분석은 독립변수가 서로 다른 집단을 나타내는 범주형인 선형회귀 모형의 특수한 형태로 볼 수 있다. 전형적인 선형회귀에서는 설명변수 $x$가 연속형이고 종속변수 $y$와 $x$의 관계가 다음으로 표현된다:
 
 $$y = \alpha + \beta x + \text{noise}$$
 
-where $\alpha$ is the intercept, $\beta$ is the slope, and "noise" refers to the random error. The null hypothesis, $H_0$, in this model is $\beta = 0$, meaning that $x$ has no effect on $y$.
+여기서 $\alpha$는 절편, $\beta$는 기울기, "noise"는 무작위 오차이다. 이 모형의 귀무가설 $H_0$은 $\beta = 0$, 즉 $x$가 $y$에 영향을 주지 않는다는 것이다.
 
 $$H_0: \beta = 0$$
 
-In contrast, One-Way ANOVA models the relationship by comparing the means of several groups. The categorical variable defines different groups $C_1, C_2, \dots, C_k$, and the model is written as:
+반면 일원배치 분산분석은 여러 집단의 평균을 비교하여 관계를 모형화한다. 범주형 변수가 집단 $C_1, C_2, \dots, C_k$를 정의하고 모형은 다음과 같이 쓰인다:
 
 $$y = \alpha + \sum_{i=1}^{k} \beta_i 1_{x \in C_i} + \text{noise}$$
 
-where $1_{x \in C_i}$ is an indicator function that equals 1 if $x$ belongs to group $C_i$ and 0 otherwise. Here, $\alpha$ is the overall mean, and each $\beta_i$ represents the deviation of group $C_i$ from the overall mean.
+여기서 $1_{x \in C_i}$는 $x$가 집단 $C_i$에 속하면 1, 아니면 0인 지시함수이다. $\alpha$는 전체 평균이고 각 $\beta_i$는 집단 $C_i$가 전체 평균에서 벗어난 정도를 나타낸다.
 
-The null hypothesis in One-Way ANOVA is that the means of all the groups are equal, which is expressed as:
+일원배치 분산분석의 귀무가설은 모든 집단의 평균이 같다는 것이며 다음으로 표현된다:
 
 $$H_0: \beta_1 = \beta_2 = \cdots = \beta_k = 0$$
 
-This means there are no significant differences among the group means. Rejecting this hypothesis suggests that at least one group mean differs significantly from the others.
+집단 평균들 사이에 유의한 차이가 없다는 뜻이다. 이 가설을 기각하면 적어도 한 집단의 평균이 다른 집단과 유의하게 다름을 시사한다.
 
-## 2. Assumptions of One-Way ANOVA
+## 2. 일원배치 분산분석의 가정
 
-### When to Use One-Way ANOVA
+### 언제 일원배치 분산분석을 쓰는가
 
-- **Independent Variable**: One-Way ANOVA is used when you have a single independent variable (also called a factor) that has three or more levels or groups. For example, if you're comparing the effects of three different diets on weight loss, the diets would be the groups.
+- **독립변수**: 일원배치 분산분석은 수준(집단)이 셋 이상인 독립변수(요인이라고도 한다)가 하나 있을 때 쓴다. 예를 들어 세 가지 식이요법이 체중 감량에 미치는 효과를 비교한다면 식이요법이 집단이 된다.
 
-- **Dependent Variable**: The dependent variable (what you're measuring) should be continuous. This means it can take on any value within a range, such as height, weight, or test scores.
+- **종속변수**: 종속변수(측정하는 것)는 연속형이어야 한다. 키, 몸무게, 시험 점수처럼 어떤 범위 안의 값을 가질 수 있다는 뜻이다.
 
-### Assumptions of One-Way ANOVA
+### 일원배치 분산분석의 가정
 
-Before conducting a One-Way ANOVA, certain assumptions must be met:
+일원배치 분산분석을 수행하기 전에 다음 가정들이 충족되어야 한다:
 
-- **Independence of Observations**: Each sample is independent of the others. The data should be collected through a random process, ensuring that the observations in each group are independent of one another.
+- **관측의 독립성**: 각 표본이 다른 표본과 독립이다. 자료는 무작위 과정을 통해 수집되어 각 집단의 관측값이 서로 독립임이 보장되어야 한다.
 
-- **Normality**: The dependent variable should be approximately normally distributed within each group. This is critical for small sample sizes and can be verified using visual methods like Q-Q plots or statistical tests like the Shapiro-Wilk test. For larger samples, the Central Limit Theorem helps approximate normality.
+- **정규성**: 종속변수가 각 집단 안에서 근사적으로 정규분포를 따라야 한다. 표본이 작을 때 특히 중요하며 Q-Q 그림 같은 시각적 방법이나 Shapiro-Wilk 검정 같은 통계적 방법으로 확인할 수 있다. 표본이 크면 중심극한정리가 정규성 근사를 돕는다.
 
-- **Homogeneity of Variance (Homoscedasticity)**: The variances across the groups should be similar (homogeneous). This assumption can be tested using Levene's test or Bartlett's Test. If this assumption is violated, alternative methods like Welch's ANOVA may be considered.
+- **분산의 동질성(등분산성)**: 집단 사이의 분산이 비슷해야(동질적이어야) 한다. 이 가정은 Levene 검정이나 Bartlett 검정으로 확인할 수 있다. 가정이 어긋나면 Welch 분산분석 같은 대안을 고려할 수 있다.
 
-## 3. Limitations
+## 3. 한계
 
-- **Assumption Sensitivity**: The results of a One-Way ANOVA can be sensitive to violations of assumptions, particularly homogeneity of variance and normality.
-- **Only Detects Overall Difference**: While One-Way ANOVA can detect if there is a significant difference between groups, it does not specify which groups are different. Post-hoc tests are needed for detailed comparisons.
-## Exercises
+- **가정에 대한 민감성**: 일원배치 분산분석의 결과는 가정 위반, 특히 분산의 동질성과 정규성 위반에 민감할 수 있다.
+- **전체 차이만 탐지**: 일원배치 분산분석은 집단 사이에 유의한 차이가 있는지는 탐지하지만 어느 집단이 다른지는 알려주지 않는다. 세부 비교에는 사후검정이 필요하다.
 
-**Exercise 1.**
-A researcher plans to compare average customer satisfaction scores across four different retail store layouts. Each layout will be tested with an independent group of 20 customers. State the three assumptions required for a valid one-way ANOVA and, for each assumption, name one diagnostic method that can be used to verify it.
+## 연습문제
 
-??? success "Solution to Exercise 1"
-    The three assumptions are:
+**연습문제 1.**
+어떤 연구자가 네 가지 매장 배치에 대한 평균 고객 만족도 점수를 비교하려 한다. 각 배치는 독립인 고객 20명으로 시험한다. 타당한 일원배치 분산분석에 필요한 세 가지 가정을 서술하고, 각 가정을 확인할 수 있는 진단 방법을 하나씩 제시하라.
 
-    1. **Independence of observations.** Verified by reviewing the study design: customers must be randomly sampled and randomly assigned to layouts, with no customer appearing in more than one group.
+??? success "연습문제 1 풀이"
+    세 가정은 다음과 같다:
 
-    2. **Normality.** The satisfaction scores within each group should be approximately normally distributed. This can be checked using a Q-Q plot of the residuals or the Shapiro-Wilk test.
+    1. **관측의 독립성.** 연구 설계를 검토하여 확인한다. 고객을 무작위로 뽑아 배치에 무작위로 배정해야 하며, 어떤 고객도 둘 이상의 집단에 나타나서는 안 된다.
 
-    3. **Homogeneity of variance (homoscedasticity).** The variances of the satisfaction scores should be approximately equal across the four groups. This can be checked using Levene's test.
+    2. **정규성.** 각 집단 안의 만족도 점수가 근사적으로 정규분포를 따라야 한다. 잔차의 Q-Q 그림이나 Shapiro-Wilk 검정으로 확인할 수 있다.
+
+    3. **분산의 동질성(등분산성).** 네 집단에서 만족도 점수의 분산이 대략 같아야 한다. Levene 검정으로 확인할 수 있다.
 
 ---
 
-**Exercise 2.**
-Explain why performing six separate two-sample $t$-tests to compare all pairs among four group means inflates the family-wise Type I error rate. If each test uses $\alpha = 0.05$, compute an upper bound on the probability of at least one false positive across all six tests.
+**연습문제 2.**
+네 집단 평균의 모든 쌍을 비교하기 위해 이표본 $t$-검정을 여섯 번 따로 수행하면 왜 가족단위 제1종 오류율이 부풀려지는지 설명하라. 각 검정이 $\alpha = 0.05$를 쓴다면 여섯 검정 전체에서 거짓 양성이 적어도 하나 나올 확률의 상한을 계산하라.
 
-??? success "Solution to Exercise 2"
-    With six independent tests each at $\alpha = 0.05$, the probability of making at least one Type I error is bounded by:
+??? success "연습문제 2 풀이"
+    각각 $\alpha = 0.05$인 독립인 검정 6개에서 제1종 오류를 적어도 한 번 범할 확률의 상한은
 
     $$
     1 - (1 - 0.05)^6 = 1 - 0.95^6 \approx 1 - 0.735 = 0.265
     $$
 
-    So the family-wise error rate can be as high as approximately $26.5\%$, far exceeding the nominal $5\%$ level. One-way ANOVA avoids this inflation by testing all group means simultaneously with a single F-test.
+    이다. 즉 가족단위 오류율이 약 $26.5\%$까지 올라가 명목 $5\%$ 수준을 크게 넘어선다. 일원배치 분산분석은 하나의 F-검정으로 모든 집단 평균을 동시에 검정하여 이 부풀림을 피한다.
 
 ---
 
-**Exercise 3.**
-Show that for $k = 2$ groups with equal variances, the one-way ANOVA F-statistic equals the square of the two-sample (pooled) $t$-statistic. Start from the definitions of SSB, SSW, and the pooled $t$-statistic.
+**연습문제 3.**
+$k = 2$이고 분산이 같은 두 집단에서 일원배치 분산분석의 F-통계량이 이표본(합동) $t$-통계량의 제곱과 같음을 보여라. SSB, SSW, 합동 $t$-통계량의 정의에서 시작하라.
 
-??? success "Solution to Exercise 3"
-    For $k = 2$ groups of sizes $n_1$ and $n_2$ with pooled variance $s_p^2 = \text{SSW}/(n_1 + n_2 - 2)$:
+??? success "연습문제 3 풀이"
+    크기가 $n_1$, $n_2$이고 합동분산이 $s_p^2 = \text{SSW}/(n_1 + n_2 - 2)$인 $k = 2$개 집단에서:
 
     $$
     \text{SSB} = \frac{n_1 n_2}{n_1 + n_2}(\bar{Y}_1 - \bar{Y}_2)^2
@@ -156,26 +156,26 @@ Show that for $k = 2$ groups with equal variances, the one-way ANOVA F-statistic
     F = \frac{\text{SSB}/1}{\text{SSW}/(N-2)} = \frac{n_1 n_2 (\bar{Y}_1 - \bar{Y}_2)^2}{(n_1+n_2) s_p^2}
     $$
 
-    The pooled two-sample $t$-statistic is:
+    합동 이표본 $t$-통계량은
 
     $$
     t = \frac{\bar{Y}_1 - \bar{Y}_2}{s_p \sqrt{1/n_1 + 1/n_2}}
     $$
 
-    Squaring:
+    이다. 제곱하면
 
     $$
     t^2 = \frac{(\bar{Y}_1 - \bar{Y}_2)^2}{s_p^2 (1/n_1 + 1/n_2)} = \frac{n_1 n_2 (\bar{Y}_1 - \bar{Y}_2)^2}{(n_1 + n_2) s_p^2} = F
     $$
 
-    Therefore $F = t^2$ when $k = 2$. $\square$
+    이므로 $k = 2$일 때 $F = t^2$이다. $\square$
 
 ---
 
-**Exercise 4.**
-A marketing team observes group variances of $s_1^2 = 4.2$, $s_2^2 = 18.7$, and $s_3^2 = 5.1$ across three advertising strategies with sample sizes $n_1 = 15$, $n_2 = 10$, $n_3 = 20$. Explain why the standard one-way ANOVA may produce misleading results and recommend a more appropriate test.
+**연습문제 4.**
+어떤 마케팅 팀이 세 광고 전략에서 집단 분산 $s_1^2 = 4.2$, $s_2^2 = 18.7$, $s_3^2 = 5.1$과 표본크기 $n_1 = 15$, $n_2 = 10$, $n_3 = 20$을 관측했다. 표준 일원배치 분산분석이 왜 오도하는 결과를 줄 수 있는지 설명하고 더 적절한 검정을 권하라.
 
-??? success "Solution to Exercise 4"
-    The largest variance ($18.7$) is more than four times the smallest ($4.2$), and the sample sizes are unequal. When the group with the largest variance also has the smallest sample size ($n_2 = 10$), the pooled variance in standard ANOVA underestimates the true variability for group 2 and overestimates it for the others. This makes the F-test liberal, rejecting $H_0$ more often than the nominal $\alpha$ level.
+??? success "연습문제 4 풀이"
+    가장 큰 분산($18.7$)이 가장 작은 분산($4.2$)의 네 배가 넘고 표본크기도 서로 다르다. 분산이 가장 큰 집단이 표본크기도 가장 작을 때($n_2 = 10$) 표준 분산분석의 합동분산은 집단 2의 참 변동을 과소추정하고 나머지는 과대추정한다. 그 결과 F-검정이 관대해져서 명목 $\alpha$ 수준보다 자주 $H_0$을 기각한다.
 
-    The appropriate alternative is **Welch's one-way ANOVA**, which uses separate variance estimates for each group and adjusts the degrees of freedom via the Welch-Satterthwaite equation, maintaining the correct Type I error rate under heteroscedasticity.
+    적절한 대안은 **Welch의 일원배치 분산분석**이다. 각 집단의 분산을 따로 추정하고 Welch-Satterthwaite 식으로 자유도를 조정하여 이분산 아래에서도 올바른 제1종 오류율을 유지한다.

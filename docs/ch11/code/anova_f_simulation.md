@@ -1,42 +1,44 @@
-# Analysis of Variance F-Statistic Simulation
+# 분산분석 F-통계량 모의실험
 
-## Overview
+## 개요
 
-The one-way ANOVA F-test detects whether at least one group mean differs from the others, but its power depends heavily on the interplay between group-mean separation, within-group variance, and sample size. This page uses Monte-Carlo simulation to build intuition for these relationships by running 1000 replications of the F-test under nine carefully chosen parameter settings and examining how the F-statistic distribution and rejection rate change.
+일원배치 분산분석 F-검정은 적어도 한 집단의 평균이 다른지 탐지하지만, 그 검정력은 집단 평균의 분리 정도, 집단 내 분산, 표본크기의 상호작용에 크게 좌우된다. 이 페이지에서는 신중하게 고른 아홉 가지 모수 설정에서 F-검정을 1000번씩 반복하는 Monte Carlo 모의실험으로 이 관계에 대한 직관을 쌓고, F-통계량의 분포와 기각률이 어떻게 달라지는지 살펴본다.
 
-## The One-Way ANOVA F-Statistic
+## 일원배치 분산분석의 F-통계량
 
-Given $k$ groups with sample sizes $n_1, \dots, n_k$ and total sample size $N = \sum_{i=1}^{k} n_i$, the F-statistic is
+집단이 $k$개이고 표본크기가 $n_1, \dots, n_k$, 전체 표본크기가 $N = \sum_{i=1}^{k} n_i$일 때 F-통계량은
 
 $$
 F = \frac{\text{MST}}{\text{MSE}} = \frac{\text{SST} / (k - 1)}{\text{SSE} / (N - k)}
 $$
 
-where $\text{SST}$ is the between-group sum of squares and $\text{SSE}$ is the within-group sum of squares. Under the null hypothesis $H_0: \mu_1 = \mu_2 = \cdots = \mu_k$, the statistic follows an $F(k-1,\, N-k)$ distribution. We reject $H_0$ at significance level $\alpha$ when
+이다. 여기서 $\text{SST}$는 집단 간 제곱합, $\text{SSE}$는 집단 내 제곱합이다. 귀무가설 $H_0: \mu_1 = \mu_2 = \cdots = \mu_k$ 아래에서 이 통계량은 $F(k-1,\, N-k)$ 분포를 따른다. 유의수준 $\alpha$에서
 
 $$
 F > F_{\text{crit}} = F_{1-\alpha}(k-1,\, N-k)
 $$
 
-## Simulation Design
+이면 $H_0$을 기각한다.
 
-Each scenario generates three normal groups with specified means $\boldsymbol{\mu}$, standard deviations $\boldsymbol{\sigma}$, and sizes $\boldsymbol{n}$, then runs `scipy.stats.f_oneway` 1000 times. The nine scenarios span a grid of conditions:
+## 모의실험 설계
 
-| Scenario | Means | Std. Devs. | Sizes |
+각 시나리오는 지정된 평균 $\boldsymbol{\mu}$, 표준편차 $\boldsymbol{\sigma}$, 크기 $\boldsymbol{n}$을 갖는 정규 집단 셋을 생성하고 `scipy.stats.f_oneway`를 1000번 실행한다. 아홉 시나리오는 다양한 조건을 훑는다:
+
+| 시나리오 | 평균 | 표준편차 | 크기 |
 |---|---|---|---|
-| Large separation, equal var | $(3, 6, 9)$ | $(6, 6, 6)$ | $(10, 20, 30)$ |
-| Tiny separation, equal var | $(3, 3.1, 2.9)$ | $(6, 6, 6)$ | $(10, 20, 30)$ |
-| Tiny separation, unequal var | $(3, 3.1, 2.9)$ | $(6, 12, 18)$ | $(10, 20, 30)$ |
-| Large separation, large var | $(3, 6, 9)$ | $(10, 10, 10)$ | $(10, 20, 30)$ |
-| Moderate sep., large var, small $n$ | $(3, 5, 6)$ | $(10, 10, 10)$ | $(10, 10, 10)$ |
-| Moderate sep., large var, large $n$ | $(3, 5, 6)$ | $(10, 10, 10)$ | $(5000, 5000, 5000)$ |
-| No separation, huge var | $(3, 3, 3)$ | $(100, 100, 100)$ | $(10, 10, 10)$ |
-| No separation, unequal var | $(3, 3, 3)$ | $(1, 1, 2)$ | $(10, 20, 30)$ |
-| No separation, small var | $(3, 3, 3)$ | $(1, 1, 2)$ | $(10, 20, 30)$ |
+| 큰 분리, 등분산 | $(3, 6, 9)$ | $(6, 6, 6)$ | $(10, 20, 30)$ |
+| 아주 작은 분리, 등분산 | $(3, 3.1, 2.9)$ | $(6, 6, 6)$ | $(10, 20, 30)$ |
+| 아주 작은 분리, 이분산 | $(3, 3.1, 2.9)$ | $(6, 12, 18)$ | $(10, 20, 30)$ |
+| 큰 분리, 큰 분산 | $(3, 6, 9)$ | $(10, 10, 10)$ | $(10, 20, 30)$ |
+| 중간 분리, 큰 분산, 작은 $n$ | $(3, 5, 6)$ | $(10, 10, 10)$ | $(10, 10, 10)$ |
+| 중간 분리, 큰 분산, 큰 $n$ | $(3, 5, 6)$ | $(10, 10, 10)$ | $(5000, 5000, 5000)$ |
+| 분리 없음, 아주 큰 분산 | $(3, 3, 3)$ | $(100, 100, 100)$ | $(10, 10, 10)$ |
+| 분리 없음, 이분산 | $(3, 3, 3)$ | $(1, 1, 2)$ | $(10, 20, 30)$ |
+| 분리 없음, 작은 등분산 | $(3, 3, 3)$ | $(1, 1, 1)$ | $(10, 20, 30)$ |
 
-## Core Simulation Code
+## 핵심 모의실험 코드
 
-The `simulate_f` function draws groups from their respective normal distributions and computes the ANOVA F-statistic for each replication:
+`simulate_f` 함수는 각 정규분포에서 집단을 뽑고 반복마다 분산분석 F-통계량을 계산한다:
 
 ```python
 import numpy as np
@@ -53,7 +55,7 @@ def simulate_f(mu, sigma, sizes, n_sim=1000):
     return np.array(F_vals), np.array(p_vals)
 ```
 
-For each scenario the critical value and empirical rejection rate are computed:
+각 시나리오마다 임계값과 경험적 기각률을 계산한다:
 
 ```python
 df1 = 2                          # k - 1
@@ -62,45 +64,45 @@ F_crit = stats.f.ppf(0.95, df1, df2)
 reject_pct = np.mean(F_vals > F_crit) * 100
 ```
 
-## Interpretation
+## 해석
 
-The simulation reveals several key principles:
+이 모의실험은 몇 가지 핵심 원리를 드러낸다:
 
-- **Signal-to-noise ratio drives power.** Scenario 1 (large mean separation, moderate variance) yields high rejection rates, whereas Scenario 4 (same separation but larger variance) shows a marked drop in power.
-- **Sample size compensates for noise.** Comparing Scenarios 5 and 6 (identical means and variances, but $n = 10$ vs. $n = 5000$) demonstrates that large samples can detect even moderate differences reliably.
-- **Null scenarios control Type I error.** Scenarios 7--9 have equal means, so any rejection is a false positive. With $\alpha = 0.05$, the empirical rejection rate should hover near 5%, confirming the test's calibration.
-- **Unequal variances distort the test.** Comparing Scenarios 2 and 3 (tiny separation with equal vs. unequal variances) shows that heteroscedasticity can reduce power or inflate the Type I error rate, depending on the relationship between variance and group size.
+- **신호 대 잡음 비가 검정력을 좌우한다.** 시나리오 1(큰 평균 분리, 중간 분산)은 높은 기각률을 주는 반면, 시나리오 4(같은 분리에 더 큰 분산)는 검정력이 뚜렷하게 떨어진다.
+- **표본크기가 잡음을 보상한다.** 시나리오 5와 6(평균과 분산은 같고 $n = 10$ 대 $n = 5000$)을 비교하면 표본이 크면 중간 정도의 차이도 안정적으로 탐지할 수 있음을 알 수 있다.
+- **귀무 시나리오는 제1종 오류를 통제한다.** 시나리오 7–9는 평균이 모두 같으므로 기각은 모두 거짓 양성이다. $\alpha = 0.05$에서 경험적 기각률이 5% 근처를 맴돌아야 검정이 잘 보정되었음을 확인해 준다.
+- **분산이 다르면 검정이 왜곡된다.** 시나리오 2와 3(아주 작은 분리에서 등분산 대 이분산)을 비교하면, 분산과 집단 크기의 관계에 따라 이분산이 검정력을 낮추거나 제1종 오류를 부풀릴 수 있음이 드러난다.
 
-The p-value histograms provide a complementary view: under the null hypothesis, p-values should be approximately uniform on $[0, 1]$, whereas under the alternative they pile up near zero.
+p-값 히스토그램은 보완적인 시각을 준다. 귀무가설 아래에서 p-값은 근사적으로 $[0, 1]$ 위에서 균등해야 하고, 대립가설 아래에서는 0 근처에 쌓인다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-In a simulation with $k = 3$ groups of sizes $(10, 20, 30)$ and equal means $\mu_i = 5$ with $\sigma_i = 1$, you observe an empirical rejection rate of 4.8% at $\alpha = 0.05$. Is this consistent with a correctly calibrated test? Justify your answer.
+**연습문제 1.**
+크기가 $(10, 20, 30)$인 $k = 3$개 집단에서 평균이 모두 $\mu_i = 5$이고 $\sigma_i = 1$인 모의실험을 했더니 $\alpha = 0.05$에서 경험적 기각률이 4.8%였다. 검정이 올바르게 보정되었다고 볼 수 있는가? 근거를 밝혀라.
 
-??? success "Solution to Exercise 1"
-    Under the null hypothesis the expected rejection rate equals $\alpha = 0.05$. With $n_{\text{sim}} = 1000$ replications, the observed proportion follows approximately $\hat{p} \sim N(0.05,\, 0.05 \cdot 0.95 / 1000)$, giving a standard error of $\sqrt{0.0000475} \approx 0.0069$. The observed rate 0.048 is within one standard error of 0.05, so it is entirely consistent with a correctly calibrated test.
+??? success "연습문제 1 풀이"
+    귀무가설 아래에서 기대 기각률은 $\alpha = 0.05$이다. 반복이 $n_{\text{sim}} = 1000$이면 관측된 비율이 근사적으로 $\hat{p} \sim N(0.05,\, 0.05 \cdot 0.95 / 1000)$을 따르므로 표준오차는 $\sqrt{0.0000475} \approx 0.0069$이다. 관측값 0.048은 0.05에서 표준오차 하나 이내에 있으므로 올바르게 보정된 검정과 전혀 어긋나지 않는다.
 
 ---
 
-**Exercise 2.**
-Explain intuitively why doubling the within-group standard deviation $\sigma$ has the same effect on the F-statistic as halving the between-group mean separation, assuming sample sizes stay fixed.
+**연습문제 2.**
+표본크기를 고정한 채 집단 내 표준편차 $\sigma$를 두 배로 하는 것이 집단 간 평균 분리를 절반으로 하는 것과 F-통계량에 같은 영향을 주는 이유를 직관적으로 설명하라.
 
-??? success "Solution to Exercise 2"
-    The F-statistic can be written as
+??? success "연습문제 2 풀이"
+    F-통계량은
 
     $$
     F = \frac{\text{MST}}{\text{MSE}}
     $$
 
-    The between-group mean square $\text{MST}$ is proportional to $n_i (\bar{y}_i - \bar{y})^2$, which scales with the square of the mean separation $\delta^2$. The within-group mean square $\text{MSE}$ is proportional to $\sigma^2$. Therefore $F \propto \delta^2 / \sigma^2$. Doubling $\sigma$ divides $F$ by 4, and halving $\delta$ also divides $F$ by 4. Both operations reduce the signal-to-noise ratio by the same factor.
+    로 쓸 수 있다. 집단 간 평균제곱 $\text{MST}$는 $n_i (\bar{y}_i - \bar{y})^2$에 비례하므로 평균 분리 $\delta$의 제곱에 비례한다. 집단 내 평균제곱 $\text{MSE}$는 $\sigma^2$에 비례한다. 따라서 $F \propto \delta^2 / \sigma^2$이다. $\sigma$를 두 배로 하면 $F$가 4로 나뉘고, $\delta$를 절반으로 해도 $F$가 4로 나뉜다. 두 조작 모두 신호 대 잡음 비를 같은 배수만큼 줄인다.
 
 ---
 
-**Exercise 3.**
-Design a simulation that estimates the minimum sample size per group needed to achieve 80% power for detecting a mean difference of $\delta = 2$ among $k = 3$ groups when $\sigma = 5$. Describe the algorithm in pseudocode.
+**연습문제 3.**
+$\sigma = 5$일 때 $k = 3$개 집단에서 평균 차이 $\delta = 2$를 검정력 80%로 탐지하는 데 필요한 집단당 최소 표본크기를 추정하는 모의실험을 설계하라. 알고리즘을 의사코드로 기술하라.
 
-??? success "Solution to Exercise 3"
+??? success "연습문제 3 풀이"
     ```
     for n in [10, 20, 30, 50, 100, 200, ...]:
         set mu = [0, delta, 0] = [0, 2, 0]
@@ -112,26 +114,26 @@ Design a simulation that estimates the minimum sample size per group needed to a
             return n
     ```
 
-    The algorithm iterates over candidate sample sizes, running many replications at each size and computing the empirical power. The first $n$ for which the rejection rate reaches 80% is the estimated minimum sample size. Using $n_{\text{sim}} = 5000$ or more keeps the Monte-Carlo error small.
+    후보 표본크기를 차례로 시도하며 각 크기에서 많은 반복을 실행해 경험적 검정력을 계산한다. 기각률이 80%에 이르는 첫 $n$이 추정된 최소 표본크기이다. $n_{\text{sim}} = 5000$ 이상을 쓰면 Monte Carlo 오차를 작게 유지할 수 있다.
 
 ---
 
-**Exercise 4.**
-Suppose the three groups have equal means but standard deviations $(1, 1, 10)$ with sample sizes $(50, 50, 5)$. Would you expect the empirical Type I error rate to be close to the nominal $\alpha = 0.05$? Explain.
+**연습문제 4.**
+세 집단의 평균이 같고 표준편차가 $(1, 1, 10)$, 표본크기가 $(50, 50, 5)$라고 하자. 경험적 제1종 오류율이 명목 $\alpha = 0.05$에 가까울 것으로 기대하는가? 설명하라.
 
-??? success "Solution to Exercise 4"
-    No. The classical F-test assumes homoscedasticity. When the group with the largest variance ($\sigma = 10$) has the smallest sample size ($n = 5$), the pooled MSE underestimates the variance of that small group's mean. This causes the F-statistic to be inflated on average, producing a liberal test with a Type I error rate well above 0.05. This is an example of the variance-sample-size confounding that makes the standard ANOVA unreliable under heteroscedasticity; Welch's ANOVA would be the appropriate alternative.
+??? success "연습문제 4 풀이"
+    아니다. 고전적 F-검정은 등분산성을 가정한다. 분산이 가장 큰 집단($\sigma = 10$)의 표본크기가 가장 작으면($n = 5$) 합동 MSE가 그 작은 집단 평균의 분산을 과소추정한다. 그러면 F-통계량이 평균적으로 부풀려져 제1종 오류율이 0.05를 크게 웃도는 관대한 검정이 된다. 이는 분산과 표본크기의 교란이 이분산 아래에서 표준 분산분석을 믿을 수 없게 만드는 예이며, Welch 분산분석이 적절한 대안이다.
 
 ---
 
-**Exercise 5.**
-Under the null hypothesis, the p-values from the F-test should follow a $\text{Uniform}(0, 1)$ distribution. Describe a formal test you could apply to the 1000 simulated p-values to verify this, and state its hypotheses.
+**연습문제 5.**
+귀무가설 아래에서 F-검정의 p-값은 $\text{Uniform}(0, 1)$ 분포를 따라야 한다. 모의생성한 1000개의 p-값에 이를 확인하기 위해 적용할 수 있는 형식적 검정을 기술하고 그 가설을 진술하라.
 
-??? success "Solution to Exercise 5"
-    The Kolmogorov-Smirnov (KS) goodness-of-fit test is appropriate. The hypotheses are
+??? success "연습문제 5 풀이"
+    Kolmogorov-Smirnov(KS) 적합도 검정이 적절하다. 가설은
 
     $$
     H_0: F_p = \text{Uniform}(0, 1), \qquad H_1: F_p \neq \text{Uniform}(0, 1)
     $$
 
-    where $F_p$ is the distribution of the simulated p-values. In Python this is `scipy.stats.kstest(p_vals, 'uniform')`. The KS statistic measures the maximum discrepancy between the empirical CDF of the p-values and the $\text{Uniform}(0, 1)$ CDF. Failing to reject $H_0$ confirms that the F-test is calibrated at the nominal level under the null scenario. $\square$
+    이며 $F_p$는 모의생성된 p-값의 분포이다. Python에서는 `scipy.stats.kstest(p_vals, 'uniform')`이다. KS 통계량은 p-값의 경험적 누적분포함수와 $\text{Uniform}(0, 1)$ 누적분포함수의 최대 차이를 잰다. $H_0$을 기각하지 못하면 귀무 시나리오에서 F-검정이 명목 수준으로 보정되어 있음을 확인해 준다. $\square$

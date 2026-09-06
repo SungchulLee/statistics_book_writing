@@ -1,83 +1,84 @@
-# Dunnett's Test (vs Control)
+# Dunnett 검정 (대조군과의 비교)
 
+## 개요
 
-## Overview
+많은 실험이 여러 처치군과 함께 **대조군**을 둔다. 예를 들어 위약군과 세 가지 약 용량, 또는 기준 공정과 네 가지 개선안이 그렇다. 이런 설계에서 관심 있는 비교는 모든 쌍별 차이가 아니라 각 처치군을 대조군과 견주는 $k - 1$개의 비교이다. $\binom{k}{2}$개의 쌍별 차이를 모두 보는 대신 이 $k - 1$개만 검정하면 다중검정 부담이 줄어드는데, Dunnett 검정은 이 구조를 활용하여 Tukey의 HSD나 Bonferroni보다 높은 검정력을 얻는다.
 
-Many experiments include a **control group** alongside several treatment groups -- for example, a placebo group and three drug dosages, or a baseline process and four proposed improvements. In these designs, the relevant comparisons are not all pairwise differences but specifically the $k - 1$ comparisons of each treatment group against the control. Testing only these $k - 1$ comparisons rather than all $\binom{k}{2}$ pairwise differences reduces the multiple-testing burden, and Dunnett's test exploits this structure to achieve higher statistical power than methods like Tukey's HSD or Bonferroni.
+Dunnett(1955)은 바로 이런 다대일 비교에 대해 가족단위 오류율(FWER)을 수준 $\alpha$로 통제하는 절차를 개발했다. 핵심 통찰은 $k - 1$개의 검정통계량이 독립이 아니라는 점이다. 이들은 분모에 대조군 평균을 공유하며, Dunnett의 임계값은 이 상관을 반영한다.
 
-Dunnett (1955) developed a procedure that controls the family-wise error rate (FWER) at level $\alpha$ for exactly these many-to-one comparisons. The key insight is that the $k - 1$ test statistics are not independent -- they share the control group mean in their denominators -- and Dunnett's critical values account for this correlation.
+## 가설
 
-## Hypotheses
+집단 $0$을 대조군, 집단 $1, 2, \ldots, k-1$을 처치군이라 하자. Dunnett 검정은 두 가지로 세울 수 있다:
 
-Let group $0$ denote the control and groups $1, 2, \ldots, k-1$ denote the treatments. Dunnett's test can be formulated in two ways:
-
-**Two-sided (non-directional):** For each treatment $i = 1, \ldots, k-1$:
+**양측(방향 없음):** 각 처치 $i = 1, \ldots, k-1$에 대해
 
 $$
 H_0: \mu_i = \mu_0 \quad \text{vs} \quad H_a: \mu_i \neq \mu_0
 $$
 
-**One-sided (directional):** If we expect treatments to increase the response:
+**단측(방향 있음):** 처치가 반응을 높일 것으로 예상하면
 
 $$
 H_0: \mu_i \leq \mu_0 \quad \text{vs} \quad H_a: \mu_i > \mu_0
 $$
 
-The one-sided version is more powerful when the direction of the expected effect is known in advance.
+기대되는 효과의 방향을 미리 알고 있다면 단측이 더 강력하다.
 
-## Test Statistic
+## 검정통계량
 
-For each treatment group $i$ compared to the control group $0$, the test statistic is:
+처치군 $i$를 대조군 $0$과 비교하는 검정통계량은
 
 $$
 t_i = \frac{\bar{Y}_{i\cdot} - \bar{Y}_{0\cdot}}{\sqrt{\text{MS}_W \left(\dfrac{1}{n_i} + \dfrac{1}{n_0}\right)}}
 $$
 
-where:
+이다. 여기서
 
-- $\bar{Y}_{i\cdot}$ is the sample mean of treatment group $i$
-- $\bar{Y}_{0\cdot}$ is the sample mean of the control group
-- $\text{MS}_W$ is the within-group mean square from the one-way ANOVA with $N - k$ degrees of freedom
-- $n_i$ and $n_0$ are the sample sizes of group $i$ and the control group, respectively
+- $\bar{Y}_{i\cdot}$는 처치군 $i$의 표본평균
+- $\bar{Y}_{0\cdot}$는 대조군의 표본평균
+- $\text{MS}_W$는 자유도 $N - k$인 일원배치 분산분석의 집단 내 평균제곱
+- $n_i$와 $n_0$는 각각 집단 $i$와 대조군의 표본크기
 
-## Correlation Structure and Critical Values
+이다.
 
-The $k - 1$ test statistics $t_1, t_2, \ldots, t_{k-1}$ are not independent because they all involve $\bar{Y}_{0\cdot}$. Under $H_0$, these statistics follow a joint multivariate $t$-distribution. When all treatment groups have the same sample size $n_i = n$, the pairwise correlation between any two test statistics is:
+## 상관 구조와 임계값
+
+$k - 1$개의 검정통계량 $t_1, t_2, \ldots, t_{k-1}$은 모두 $\bar{Y}_{0\cdot}$를 포함하므로 독립이 아니다. $H_0$ 아래에서 이 통계량들은 결합 다변량 $t$-분포를 따른다. 모든 처치군의 표본크기가 $n_i = n$으로 같을 때 임의의 두 검정통계량 사이의 상관은
 
 $$
-\rho = \frac{n_0}{n_0 + n}
+\rho = \frac{n}{n + n_0}
 $$
 
-When the control group and all treatment groups have equal sample sizes ($n_0 = n$), this simplifies to $\rho = 1/2$.
+이다. 대조군과 모든 처치군의 표본크기가 같으면($n_0 = n$) 이는 $\rho = 1/2$로 단순해진다.
 
-Dunnett's critical values $d_{\alpha, k-1, \nu}$ (where $\nu = N - k$) are tabulated from this multivariate $t$-distribution. They account for the simultaneous testing of $k - 1$ correlated comparisons and are smaller than the Bonferroni-adjusted critical values, which is why Dunnett's test has higher power.
+Dunnett의 임계값 $d_{\alpha, k-1, \nu}$($\nu = N - k$)는 이 다변량 $t$-분포로부터 표로 만들어진다. 상관된 $k - 1$개의 비교를 동시에 검정하는 것을 반영하므로 Bonferroni 조정 임계값보다 작고, 그래서 Dunnett 검정의 검정력이 더 높다.
 
-## Decision Rule
+## 판정 규칙
 
-**Two-sided test:** Reject $H_0: \mu_i = \mu_0$ if $|t_i| > d_{\alpha/2, k-1, N-k}$.
+**양측검정:** $|t_i| > d_{\alpha/2, k-1, N-k}$이면 $H_0: \mu_i = \mu_0$을 기각한다.
 
-**One-sided test (upper):** Reject $H_0: \mu_i \leq \mu_0$ if $t_i > d_{\alpha, k-1, N-k}$.
+**단측검정(위쪽):** $t_i > d_{\alpha, k-1, N-k}$이면 $H_0: \mu_i \leq \mu_0$을 기각한다.
 
-## Worked Example
+## 예제
 
-A pharmaceutical company tests three drug formulations against a placebo. The response variable is symptom reduction score (higher is better). Each group has $n = 6$ subjects ($N = 24$, $k = 4$):
+어떤 제약회사가 세 가지 약 제형을 위약과 비교한다. 반응변수는 증상 감소 점수(클수록 좋다)이다. 각 집단은 $n = 6$명이다($N = 24$, $k = 4$):
 
-| Group | Sample Mean | Sample Size |
+| 집단 | 표본평균 | 표본크기 |
 |-------|-------------|-------------|
-| Placebo (control) | $\bar{Y}_0 = 4.2$ | $n_0 = 6$ |
-| Drug A | $\bar{Y}_1 = 7.8$ | $n_1 = 6$ |
-| Drug B | $\bar{Y}_2 = 5.9$ | $n_2 = 6$ |
-| Drug C | $\bar{Y}_3 = 8.5$ | $n_3 = 6$ |
+| 위약(대조군) | $\bar{Y}_0 = 4.2$ | $n_0 = 6$ |
+| 약 A | $\bar{Y}_1 = 7.8$ | $n_1 = 6$ |
+| 약 B | $\bar{Y}_2 = 5.9$ | $n_2 = 6$ |
+| 약 C | $\bar{Y}_3 = 8.5$ | $n_3 = 6$ |
 
-The one-way ANOVA yields $\text{MS}_W = 3.2$ with $N - k = 20$ degrees of freedom. The overall F-test is significant, so we proceed with Dunnett's test to determine which drugs outperform the placebo.
+일원배치 분산분석에서 자유도 $N - k = 20$의 $\text{MS}_W = 3.2$를 얻었다. 전체 F-검정이 유의하므로 어느 약이 위약보다 나은지 판정하기 위해 Dunnett 검정으로 넘어간다.
 
-The standard error for each comparison is the same (equal sample sizes):
+표본크기가 같으므로 각 비교의 표준오차는 동일하다:
 
 $$
 \text{SE} = \sqrt{\text{MS}_W \left(\frac{1}{n_i} + \frac{1}{n_0}\right)} = \sqrt{3.2 \times \frac{2}{6}} = \sqrt{1.067} = 1.033
 $$
 
-The test statistics are:
+검정통계량은
 
 $$
 t_1 = \frac{7.8 - 4.2}{1.033} = \frac{3.6}{1.033} = 3.49
@@ -91,71 +92,72 @@ $$
 t_3 = \frac{8.5 - 4.2}{1.033} = \frac{4.3}{1.033} = 4.16
 $$
 
-For a two-sided test at $\alpha = 0.05$ with $k - 1 = 3$ comparisons and $\nu = 20$ degrees of freedom, the Dunnett critical value is $d_{0.025, 3, 20} \approx 2.54$.
+이다. 비교가 $k - 1 = 3$개이고 자유도 $\nu = 20$일 때 $\alpha = 0.05$ 양측검정의 Dunnett 임계값은 $d_{0.025, 3, 20} \approx 2.54$이다.
 
-| Comparison | $t_i$ | $\|t_i\| > 2.54$? | Conclusion |
+| 비교 | $t_i$ | $\|t_i\| > 2.54$? | 결론 |
 |------------|-------|-------------------|------------|
-| Drug A vs Placebo | 3.49 | Yes | Significant |
-| Drug B vs Placebo | 1.65 | No | Not significant |
-| Drug C vs Placebo | 4.16 | Yes | Significant |
+| 약 A 대 위약 | 3.49 | 예 | 유의 |
+| 약 B 대 위약 | 1.65 | 아니오 | 유의하지 않음 |
+| 약 C 대 위약 | 4.16 | 예 | 유의 |
 
-Drugs A and C produce significantly higher symptom reduction scores than the placebo. Drug B does not differ significantly from the placebo at the $\alpha = 0.05$ level.
+약 A와 C는 위약보다 유의하게 높은 증상 감소 점수를 낳는다. 약 B는 $\alpha = 0.05$ 수준에서 위약과 유의하게 다르지 않다.
 
-## When to Use Dunnett's Test
+## Dunnett 검정을 언제 쓰는가
 
-Dunnett's test is the optimal choice when the experimental design involves comparisons to a single reference group. The following comparison highlights when it is preferred:
+Dunnett 검정은 실험 설계가 하나의 기준 집단과의 비교를 포함할 때 최적의 선택이다. 다음 비교가 언제 선호되는지 보여준다:
 
-| Scenario | Recommended Method |
+| 상황 | 권장 방법 |
 |----------|-------------------|
-| All pairwise comparisons | Tukey's HSD |
-| Small number of planned comparisons | Bonferroni |
-| All contrasts (exploratory) | Scheffe |
-| Each treatment vs one control | **Dunnett's test** |
-| Unequal variances | Games-Howell |
+| 모든 쌍별 비교 | Tukey의 HSD |
+| 계획된 비교가 적을 때 | Bonferroni |
+| 모든 대비(탐색적) | Scheffé |
+| 각 처치 대 하나의 대조군 | **Dunnett 검정** |
+| 분산이 다를 때 | Games-Howell |
 
-Dunnett's test is more powerful than Bonferroni for the same set of $k - 1$ control comparisons because it accounts for the positive correlation among the test statistics rather than treating them as independent. For example, with $k = 5$ groups, Dunnett tests 4 comparisons using a critical value derived from their joint distribution, while Bonferroni would use $\alpha/4$ for each, ignoring the correlation and yielding a slightly larger critical value.
+같은 $k - 1$개의 대조군 비교에 대해 Dunnett 검정이 Bonferroni보다 강력한 것은, 검정통계량들을 독립으로 취급하지 않고 그들 사이의 양의 상관을 반영하기 때문이다. 예를 들어 집단이 $k = 5$개면 Dunnett은 결합분포에서 유도한 임계값으로 비교 4개를 검정하지만, Bonferroni는 상관을 무시하고 각각 $\alpha/4$를 써서 조금 더 큰 임계값을 낳는다.
 
-!!! warning "Do not use Dunnett's test for all pairwise comparisons"
+!!! warning "모든 쌍별 비교에 Dunnett 검정을 쓰지 말 것"
 
-    Dunnett's test is designed exclusively for many-to-one comparisons against a control. If you need to compare treatments to each other (e.g., Drug A vs Drug B), use Tukey's HSD or another all-pairwise method. Applying Dunnett's test to pairwise comparisons that do not involve the control group is incorrect because the critical values do not account for those additional comparisons.
-## Exercises
+    Dunnett 검정은 오로지 대조군과의 다대일 비교를 위해 설계되었다. 처치끼리 비교해야 한다면(예: 약 A 대 약 B) Tukey의 HSD나 다른 전체 쌍별 방법을 쓰라. 대조군이 끼지 않은 쌍별 비교에 Dunnett 검정을 적용하는 것은 틀렸다. 임계값이 그런 추가 비교를 반영하지 않기 때문이다.
 
-**Exercise 1.**
-A pharmaceutical trial has a placebo group (control) and four drug dosage groups. After a significant one-way ANOVA, the researcher wants to determine which dosages differ from the placebo. Explain why Dunnett's test is more appropriate than Tukey's HSD for this comparison.
+## 연습문제
 
-??? success "Solution to Exercise 1"
-    Dunnett's test is specifically designed for **many-to-one comparisons** against a single control group. With $k = 5$ groups, Dunnett's test performs only $k - 1 = 4$ comparisons (each dosage vs. placebo), while Tukey's HSD performs $\binom{5}{2} = 10$ pairwise comparisons.
+**연습문제 1.**
+어떤 임상시험에 위약군(대조군)과 네 가지 약 용량군이 있다. 일원배치 분산분석이 유의하게 나온 뒤, 연구자는 어느 용량이 위약과 다른지 판정하려 한다. 이 비교에 Tukey의 HSD보다 Dunnett 검정이 적절한 이유를 설명하라.
 
-    By restricting attention to the 4 relevant comparisons, Dunnett's test uses a smaller critical value (from the multivariate $t$-distribution that accounts for the positive correlation among the 4 test statistics). This yields **higher statistical power** for detecting differences between treatment and control, compared to Tukey's HSD which must control the family-wise error rate across all 10 comparisons.
+??? success "연습문제 1 풀이"
+    Dunnett 검정은 하나의 대조군에 대한 **다대일 비교**를 위해 설계되었다. 집단이 $k = 5$개면 Dunnett 검정은 $k - 1 = 4$개의 비교(각 용량 대 위약)만 수행하지만, Tukey의 HSD는 $\binom{5}{2} = 10$개의 쌍별 비교를 수행한다.
+
+    관심을 4개의 관련 비교로 제한하므로 Dunnett 검정은 (4개 검정통계량 사이의 양의 상관을 반영한 다변량 $t$-분포에서 나오는) 더 작은 임계값을 쓴다. 10개 비교 전체에 대해 가족단위 오류율을 통제해야 하는 Tukey의 HSD보다 처치와 대조군의 차이를 탐지하는 **검정력이 높다**.
 
 ---
 
-**Exercise 2.**
-In a Dunnett's test with $k = 4$ groups (1 control + 3 treatments), $n = 10$ per group, $\text{MSW} = 5.2$, and the group means are $\bar{Y}_0 = 12.0$ (control), $\bar{Y}_1 = 14.8$, $\bar{Y}_2 = 11.5$, $\bar{Y}_3 = 16.1$. Compute the test statistic for the comparison of group 3 versus the control.
+**연습문제 2.**
+집단이 $k = 4$개(대조군 1 + 처치군 3), 집단당 $n = 10$, $\text{MSW} = 5.2$이고 집단 평균이 $\bar{Y}_0 = 12.0$(대조군), $\bar{Y}_1 = 14.8$, $\bar{Y}_2 = 11.5$, $\bar{Y}_3 = 16.1$인 Dunnett 검정에서, 집단 3과 대조군의 비교에 대한 검정통계량을 계산하라.
 
-??? success "Solution to Exercise 2"
-    The Dunnett test statistic for comparing treatment $i$ against the control is:
+??? success "연습문제 2 풀이"
+    처치 $i$를 대조군과 비교하는 Dunnett 검정통계량은
 
     $$
     t_i = \frac{\bar{Y}_i - \bar{Y}_0}{\sqrt{\text{MSW}(1/n_i + 1/n_0)}}
     $$
 
-    For group 3 versus control:
+    이다. 집단 3 대 대조군에서는
 
     $$
     t_3 = \frac{16.1 - 12.0}{\sqrt{5.2(1/10 + 1/10)}} = \frac{4.1}{\sqrt{5.2 \times 0.2}} = \frac{4.1}{\sqrt{1.04}} = \frac{4.1}{1.020} = 4.02
     $$
 
-    This test statistic would be compared against the Dunnett critical value $d_{\alpha, k-1, \nu}$ with $k - 1 = 3$ treatment groups and $\nu = N - k = 36$ degrees of freedom.
+    이다. 이 통계량을 처치군 $k - 1 = 3$개, 자유도 $\nu = N - k = 36$인 Dunnett 임계값 $d_{\alpha, k-1, \nu}$와 비교한다.
 
 ---
 
-**Exercise 3.**
-Explain why Dunnett's test accounts for the correlation between the test statistics $t_1, t_2, \ldots, t_{k-1}$, and why ignoring this correlation (as Bonferroni does) results in a more conservative test.
+**연습문제 3.**
+Dunnett 검정이 검정통계량 $t_1, t_2, \ldots, t_{k-1}$ 사이의 상관을 반영하는 이유와, (Bonferroni처럼) 이 상관을 무시하면 왜 더 보수적인 검정이 되는지 설명하라.
 
-??? success "Solution to Exercise 3"
-    All $k - 1$ test statistics share the same control group mean $\bar{Y}_0$ in their denominators and numerators, which induces positive correlation among them. Specifically, $\text{Corr}(t_i, t_j) = n_0 / (n_0 + n_i)$ when sample sizes are equal.
+??? success "연습문제 3 풀이"
+    $k - 1$개의 검정통계량은 모두 분자와 분모에 같은 대조군 평균 $\bar{Y}_0$를 공유하므로 서로 양의 상관을 갖는다. 구체적으로 처치군의 표본크기가 모두 같을 때 $\text{Corr}(t_i, t_j) = n_i / (n_i + n_0)$이다.
 
-    Dunnett's test uses the **multivariate $t$-distribution** that accounts for this correlation structure to derive exact critical values. Because the statistics are positively correlated, observing one large value makes it more likely that others are also large, so the joint probability of at least one exceeding the threshold is lower than under independence.
+    Dunnett 검정은 이 상관 구조를 반영하는 **다변량 $t$-분포**로 정확한 임계값을 유도한다. 통계량들이 양의 상관을 가지므로, 하나가 크게 나오면 다른 것들도 클 가능성이 높아지고, 따라서 적어도 하나가 문턱을 넘을 결합확률이 독립일 때보다 낮다.
 
-    Bonferroni ignores this correlation and treats the tests as if they were independent, using $\alpha/(k-1)$ for each comparison. This overestimates the probability of false positives, leading to a larger critical value and reduced power.
+    Bonferroni는 이 상관을 무시하고 검정들을 독립인 것처럼 다루어 각 비교에 $\alpha/(k-1)$을 쓴다. 그래서 거짓 양성의 확률을 과대평가하고, 임계값이 커져 검정력이 떨어진다.

@@ -1,36 +1,38 @@
-# One-Way ANOVA: F-Test Procedure
+# 일원배치 분산분석: F-검정 절차
 
-
-## 1. Procedure for Conducting One-Way ANOVA
+## 1. 일원배치 분산분석의 수행 절차
 
 [eng|](https://www.youtube.com/watch?v=Lp2aV_4LF48&t=146s)
 
-### Step 1: Formulate the Hypotheses
+### 1단계: 가설 세우기
 
-- **Null Hypothesis** ($H_0$): All group means are equal.
+- **귀무가설** ($H_0$): 모든 집단의 평균이 같다.
 
 $$
 H_0: \mu_1 = \mu_2 = \mu_3 = \dots = \mu_k
 $$
 
-where $\mu_1, \mu_2, \dots, \mu_k$ represent the population means for each of the $k$ groups.
+여기서 $\mu_1, \mu_2, \dots, \mu_k$는 $k$개 집단 각각의 모평균이다.
 
-- **Alternative Hypothesis** ($H_A$): At least one group mean is different.
-### Step 2: Calculate the Overall Mean and Group Means
-Compute the mean of all the dependent variable:
+- **대립가설** ($H_A$): 적어도 한 집단의 평균이 다르다.
+
+### 2단계: 전체 평균과 집단 평균 계산
+
+종속변수 전체의 평균을 계산한다:
 
 $$
 \bar{y}_{\cdot\cdot} = \frac{1}{\sum_{i=1}^kn_i}\sum_{i=1}^k \sum_{j=1}^{n_i} y_{ij}
 $$
 
-For each group, compute the mean of the dependent variable:
+각 집단에 대해 종속변수의 평균을 계산한다:
 
 $$
 \bar{y}_{i\cdot} = \frac{1}{n_i} \sum_{j=1}^{n_i} y_{ij}
 $$
 
-### Step 3: Calculate Total Variation or Total Sum of Squares SST
-Calculate the total variation $SST$, which is given by
+### 3단계: 전체 변동(총제곱합) SST 계산
+
+전체 변동 $SST$를 다음으로 계산한다:
 
 $$
 SST
@@ -38,15 +40,17 @@ SST
 \sum_{i=1}^{k}\sum_{j=1}^{n_i} \left( y_{ij} - \bar{y}_{\cdot\cdot} \right)^2
 $$
 
-### Step 4: Calculate Within-Group Variation SSW
-Calculate the within-group variation $SSW$, which is given by
+### 4단계: 집단 내 변동 SSW 계산
+
+집단 내 변동 $SSW$를 다음으로 계산한다:
 
 $$
 SSW = \sum_{i=1}^{k} \sum_{j=1}^{n_i} \left( y_{ij} - \bar{y}_{i\cdot} \right)^2
 $$
 
-### Step 5: Calculate Between-Group Variation SSB
-Calculate the between-group variation $SSB$, which is given by
+### 5단계: 집단 간 변동 SSB 계산
+
+집단 간 변동 $SSB$를 다음으로 계산한다:
 
 $$
 SSB
@@ -54,8 +58,9 @@ SSB
 = \sum_{i=1}^{k} n_i \left( \bar{y}_{i\cdot} - \bar{y}_{\cdot\cdot} \right)^2
 $$
 
-### Step 6: Check the Partition of the Total Variation
-The total sum of squares can be written as:
+### 6단계: 전체 변동의 분해 확인
+
+총제곱합은 다음과 같이 쓸 수 있다:
 
 $$
 \begin{array}{lllllll}
@@ -71,49 +76,59 @@ SSW + SSB
 \end{array}
 $$
 
-### Step 7: Calculate the F-Statistic
+### 7단계: F-통계량 계산
 
 $$
 \begin{array}{cccccccccc}
-\text{Factor}&\text{df}&SS&MS&F&H_0&\text{Sampling Distribution of }F\text{ under $H_0$}\\
+\text{요인}&\text{df}&SS&MS&F&H_0&H_0\text{ 아래 }F\text{의 표본분포}\\
 \hline
-\text{Treatment}&k-1&SSB&\displaystyle MSB=\frac{SSB}{k-1}&\displaystyle F=\frac{MSB}{MSW}&\text{all }\beta_{i}=0&F\sim F_{k-1,N-k}\\
-\text{Error}&N-k&SSW&\displaystyle MSW=\frac{SSW}{N-k}&\\
+\text{처리}&k-1&SSB&\displaystyle MSB=\frac{SSB}{k-1}&\displaystyle F=\frac{MSB}{MSW}&\text{모든 }\beta_{i}=0&F\sim F_{k-1,N-k}\\
+\text{오차}&N-k&SSW&\displaystyle MSW=\frac{SSW}{N-k}&\\
 \hline
-\text{Total}&N-1&SST&&\\
+\text{전체}&N-1&SST&&\\
 \end{array}
 $$
 
-The test statistic for ANOVA is the F-statistic, calculated as the ratio of the mean square between groups (MSB) to the mean square within groups (MSW):
+분산분석의 검정통계량은 F-통계량이며, 집단 간 평균제곱(MSB)과 집단 내 평균제곱(MSW)의 비로 계산한다:
 
 $$
 F = \frac{\text{MSB}}{\text{MSW}} = \frac{\text{SSB}/(k-1)}{\text{SSW}/(N-k)}
 $$
 
-Where:
+여기서
 
-- $k$ is the number of groups
-- $N$ is the total number of observations across all groups
-- $\text{MSB} = \frac{\text{SSB}}{k - 1}$ is the **mean square between groups**
-- $\text{MSW} = \frac{\text{SSW}}{N - k}$ is the **mean square within groups**
-### Step 8: Determine the Critical Value or P-Value
-The sampling distribution of $F$ under $H_0$ is
+- $k$는 집단의 개수
+- $N$은 모든 집단을 합친 전체 관측 수
+- $\text{MSB} = \frac{\text{SSB}}{k - 1}$은 **집단 간 평균제곱**
+- $\text{MSW} = \frac{\text{SSW}}{N - k}$은 **집단 내 평균제곱**
+
+이다.
+
+### 8단계: 임계값 또는 p-값 구하기
+
+$H_0$ 아래에서 $F$의 표본분포는
 
 $$
 F\sim F_{k-1,N-k}
 $$
 
-- Compare the calculated F-statistic with the critical value from the F-distribution table (based on $k-1$ and $N-k$ degrees of freedom), or
-- Use the p-value approach. If the p-value is less than the significance level (e.g., $\alpha = 0.05$), reject the null hypothesis.
-### Step 9: Make a Decision
+이다.
+
+- 계산한 F-통계량을 ($k-1$과 $N-k$ 자유도의) F-분포표 임계값과 비교하거나,
+- p-값 접근을 쓴다. p-값이 유의수준(예: $\alpha = 0.05$)보다 작으면 귀무가설을 기각한다.
+
+### 9단계: 판정
 
 $$
-\text{statistic} > F_{\text{critical}} \quad\Rightarrow\quad\text{Choose $H_1$}
+\text{statistic} > F_{\text{critical}} \quad\Rightarrow\quad H_1\text{을 택한다}
 $$
 
-## 2. One-Way ANOVA Packages
+## 2. 일원배치 분산분석 패키지
+
 ### A. Scipy.Stats
+
 #### scipy.stats.f_oneway
+
 ```python
 import matplotlib.pyplot as plt
 import numpy as np
@@ -176,8 +191,11 @@ _, (data_ctrl, data_trt1, data_trt2), df1, df2 = load_data()
 statistic, p_value = perform_anova(data_ctrl, data_trt1, data_trt2)
 plot_data(data_ctrl, data_trt1, data_trt2, df1, df2, statistic, p_value)
 ```
+
 ### B. Statsmodels
-#### statsmodels.formula.api.ols and statsmodels.stats.anova.anova_lm
+
+#### statsmodels.formula.api.ols와 statsmodels.stats.anova.anova_lm
+
 ```python
 import matplotlib.pyplot as plt
 import numpy as np
@@ -237,95 +255,117 @@ df, (data_ctrl, data_trt1, data_trt2), df1, df2 = load_data()
 statistic, p_value = perform_anova(df)
 plot_data(data_ctrl, data_trt1, data_trt2, df1, df2, statistic, p_value)
 ```
-## 3. Example: Reaction Times After Consuming Different Types Of Drinks
-### Question
-Suppose we have three different study groups measuring reaction times (in milliseconds) after consuming different types of drinks: **Water**, **Energy Drink**, and **Coffee**. We want to determine if there is a statistically significant difference in reaction times between these groups.
-The data for each group is as follows:
 
-- **Water Group**: [19, 18, 17, 18, 20]
-- **Energy Drink Group**: [20, 22, 19, 21, 20]
-- **Coffee Group**: [18, 17, 16, 19, 20]
-We want to perform a One-Way ANOVA test to determine if there is a difference in the average reaction times between the groups.
-### Step 1: Formulate the Hypotheses
-**Null Hypothesis ($H_0$)**: The mean reaction times for the three groups are equal.
-**Alternative Hypothesis ($H_a$)**: At least one group has a different mean reaction time.
-### Step 2: Calculate the Overall Mean and Group Means
-1. **Overall Mean ($\bar{X}$)**:
+## 3. 예제: 음료 종류에 따른 반응시간
+
+### 문제
+
+서로 다른 음료를 마신 뒤의 반응시간(밀리초)을 측정한 세 집단이 있다고 하자: **물**, **에너지 드링크**, **커피**. 이 집단들 사이에 반응시간의 통계적으로 유의한 차이가 있는지 판정하려 한다.
+
+각 집단의 자료는 다음과 같다:
+
+- **물 집단**: [19, 18, 17, 18, 20]
+- **에너지 드링크 집단**: [20, 22, 19, 21, 20]
+- **커피 집단**: [18, 17, 16, 19, 20]
+
+집단 사이의 평균 반응시간에 차이가 있는지 판정하기 위해 일원배치 분산분석을 수행한다.
+
+### 1단계: 가설 세우기
+
+**귀무가설 ($H_0$)**: 세 집단의 평균 반응시간이 같다.
+
+**대립가설 ($H_a$)**: 적어도 한 집단의 평균 반응시간이 다르다.
+
+### 2단계: 전체 평균과 집단 평균 계산
+
+1. **전체 평균 ($\bar{X}$)**:
 
 $$
 \bar{X} = \frac{19 + 18 + 17 + 18 + 20 + 20 + 22 + 19 + 21 + 20 + 18 + 17 + 16 + 19 + 20}{15} = 19.0
 $$
 
-2. **Group Means**:
-   - **Water Group**: $(19 + 18 + 17 + 18 + 20) / 5 = 18.4$
-   - **Energy Drink Group**: $(20 + 22 + 19 + 21 + 20) / 5 = 20.4$
-   - **Coffee Group**: $(18 + 17 + 16 + 19 + 20) / 5 = 18.0$
-### Step 3: Calculate Total Variation or Total Sum of Squares SST
-The Total Sum of Squares (SST) measures the total variability in the data relative to the overall mean.
+2. **집단 평균**:
+   - **물 집단**: $(19 + 18 + 17 + 18 + 20) / 5 = 18.4$
+   - **에너지 드링크 집단**: $(20 + 22 + 19 + 21 + 20) / 5 = 20.4$
+   - **커피 집단**: $(18 + 17 + 16 + 19 + 20) / 5 = 18.0$
+
+### 3단계: 전체 변동(총제곱합) SST 계산
+
+총제곱합(SST)은 전체 평균에 대한 자료의 전체 변동을 잰다.
 
 $$
 SST = \sum_{i=1}^{k}\sum_{j=1}^{n_i} (X_{ij} - \bar{X}_{\cdot\cdot})^2
 $$
 
-For each value in the dataset:
-**Water Group**: $(19 - 19)^2 = 0$, $(18 - 19)^2 = 1$, $(17 - 19)^2 = 4$, $(18 - 19)^2 = 1$, $(20 - 19)^2 = 1$
-**Energy Drink Group**: $(20 - 19)^2 = 1$, $(22 - 19)^2 = 9$, $(19 - 19)^2 = 0$, $(21 - 19)^2 = 4$, $(20 - 19)^2 = 1$
-**Coffee Group**: $(18 - 19)^2 = 1$, $(17 - 19)^2 = 4$, $(16 - 19)^2 = 9$, $(19 - 19)^2 = 0$, $(20 - 19)^2 = 1$
-**Summing all these values**:
+자료의 각 값에 대해:
+
+**물 집단**: $(19 - 19)^2 = 0$, $(18 - 19)^2 = 1$, $(17 - 19)^2 = 4$, $(18 - 19)^2 = 1$, $(20 - 19)^2 = 1$
+
+**에너지 드링크 집단**: $(20 - 19)^2 = 1$, $(22 - 19)^2 = 9$, $(19 - 19)^2 = 0$, $(21 - 19)^2 = 4$, $(20 - 19)^2 = 1$
+
+**커피 집단**: $(18 - 19)^2 = 1$, $(17 - 19)^2 = 4$, $(16 - 19)^2 = 9$, $(19 - 19)^2 = 0$, $(20 - 19)^2 = 1$
+
+**모두 더하면**:
 
 $$
 SST = 0 + 1 + 4 + 1 + 1 + 1 + 9 + 0 + 4 + 1 + 1 + 4 + 9 + 0 + 1 = 37
 $$
 
-### Step 4: Calculate Within-Group Variation SSW
-The Within-Group Sum of Squares (SSW) measures the variability within each group.
+### 4단계: 집단 내 변동 SSW 계산
+
+집단 내 제곱합(SSW)은 각 집단 안의 변동을 잰다.
 
 $$
 SSW = \sum_{i=1}^{k} \sum_{j=1}^{n_i} (X_{ij} - \bar{X}_{i\cdot})^2
 $$
 
-**Water Group**:
+**물 집단**:
 
 $$
 SSW_{\text{Water}} = 0.36 + 0.16 + 1.96 + 0.16 + 2.56 = 5.20
 $$
 
-**Energy Drink Group**:
+**에너지 드링크 집단**:
 
 $$
 SSW_{\text{Energy Drink}} = 0.16 + 2.56 + 1.96 + 0.36 + 0.16 = 5.20
 $$
 
-**Coffee Group**:
+**커피 집단**:
 
 $$
 SSW_{\text{Coffee}} = 0 + 1 + 4 + 1 + 4 = 10.00
 $$
 
-**Summing these values**:
+**이들을 더하면**:
 
 $$
 SSW = 5.20 + 5.20 + 10.00 = 20.40
 $$
 
-### Step 5: Calculate Between-Group Variation SSB
-The Between-Group Sum of Squares (SSB) measures the variability between the group means and the overall mean.
+### 5단계: 집단 간 변동 SSB 계산
+
+집단 간 제곱합(SSB)은 집단 평균과 전체 평균 사이의 변동을 잰다.
 
 $$
 SSB = \sum_{i=1}^{k} n_i (\bar{X}_{i\cdot} - \bar{X}_{\cdot\cdot})^2
 $$
 
-**Water Group**: $SSB_{\text{Water}} = 5 \times (18.4 - 19)^2 = 5 \times 0.36 = 1.8$
-**Energy Drink Group**: $SSB_{\text{Energy Drink}} = 5 \times (20.4 - 19)^2 = 5 \times 1.96 = 9.8$
-**Coffee Group**: $SSB_{\text{Coffee}} = 5 \times (18.0 - 19)^2 = 5 \times 1.0 = 5.0$
-**Summing these values**:
+**물 집단**: $SSB_{\text{Water}} = 5 \times (18.4 - 19)^2 = 5 \times 0.36 = 1.8$
+
+**에너지 드링크 집단**: $SSB_{\text{Energy Drink}} = 5 \times (20.4 - 19)^2 = 5 \times 1.96 = 9.8$
+
+**커피 집단**: $SSB_{\text{Coffee}} = 5 \times (18.0 - 19)^2 = 5 \times 1.0 = 5.0$
+
+**이들을 더하면**:
 
 $$
 SSB = 1.8 + 9.8 + 5.0 = 16.6
 $$
 
-### Step 6: Check the Partition of the Total Variation
-Now, let's verify if:
+### 6단계: 전체 변동의 분해 확인
+
+이제 다음이 성립하는지 확인하자:
 
 $$
 SST = SSB + SSW
@@ -333,31 +373,42 @@ $$
 
 - **SST** = 37
 - **SSB + SSW** = 16.6 + 20.40 = 37
-The values match, confirming our calculations are consistent.
-### Step 7: Calculate the F-Statistic
-The **F-statistic** is calculated as:
+
+값이 일치하므로 계산이 일관됨을 확인할 수 있다.
+
+### 7단계: F-통계량 계산
+
+**F-통계량**은 다음으로 계산한다:
 
 $$
 F = \frac{MSB}{MSW}
 $$
 
-Where:
+여기서
 
-- **Mean Square Between (MSB)**: $MSB = \frac{SSB}{k - 1} = \frac{16.6}{3 - 1} = 8.3$
-- **Mean Square Within (MSW)**: $MSW = \frac{SSW}{N - k} = \frac{20.40}{15 - 3} = 1.70$
-Thus:
+- **집단 간 평균제곱(MSB)**: $MSB = \frac{SSB}{k - 1} = \frac{16.6}{3 - 1} = 8.3$
+- **집단 내 평균제곱(MSW)**: $MSW = \frac{SSW}{N - k} = \frac{20.40}{15 - 3} = 1.70$
+
+따라서
 
 $$
 F = \frac{8.3}{1.70} = 4.88
 $$
 
-### Step 8: Determine the Critical Value or P-Value
-To determine the p-value, we compare the F-statistic to the critical value from the F-distribution with $df_1 = 2$ (between groups) and $df_2 = 12$ (within groups).
-The **p-value for $F = 4.88$** with these degrees of freedom is approximately **0.03**.
-### Step 9: Make a Decision
-Since the p-value is **0.03**, which is **less than the typical significance level of $\alpha = 0.05$**, we **reject the null hypothesis**. This indicates that there is a significant difference between the means of the three groups.
-### Step 10: Post-Hoc Tests
-If the result were closer to significance, you might want to increase the sample size or use a different significance level to further test the hypothesis. Alternatively, conducting **post-hoc** tests could help in understanding more subtle differences between the groups.
+### 8단계: 임계값 또는 p-값 구하기
+
+p-값을 구하기 위해 F-통계량을 $df_1 = 2$(집단 간), $df_2 = 12$(집단 내)인 F-분포의 임계값과 비교한다.
+
+이 자유도에서 **$F = 4.88$의 p-값**은 약 **0.03**이다.
+
+### 9단계: 판정
+
+p-값이 **0.03**으로 **통상적인 유의수준 $\alpha = 0.05$보다 작으므로** **귀무가설을 기각한다**. 세 집단의 평균 사이에 유의한 차이가 있다는 뜻이다.
+
+### 10단계: 사후검정
+
+결과가 유의성 경계에 가까웠다면 표본크기를 늘리거나 다른 유의수준을 써서 가설을 더 검토할 수 있다. 아니면 **사후**검정을 수행하여 집단 사이의 좀 더 미세한 차이를 이해할 수 있다.
+
 ```python
 import scipy.stats as stats
 # Data for the three groups
@@ -370,6 +421,7 @@ f_statistic, p_value = stats.f_oneway(water_group, energy_drink_group, coffee_gr
 print(f"F-statistic: {f_statistic:.2f}")
 print(f"P-value: {p_value:.4f}")
 ```
+
 ```python
 import numpy as np
 import matplotlib.pyplot as plt
@@ -377,7 +429,7 @@ import scipy.stats as stats
 # Given F-statistic and degrees of freedom
 df_between = 3 - 1
 df_within = 15 - 3
-f_statistic = 4.86
+f_statistic = 4.88
 # Calculate p-value
 p_value = stats.f.sf(f_statistic, df_between, df_within)
 print(f"{f_statistic = :.04f}")
@@ -415,30 +467,40 @@ ax.set_ylabel('Probability Density')
 ax.set_title('F-distribution with Highlighted p-value Region')
 plt.show()
 ```
+
 ---
-## 4. Permutation-Based One-Way ANOVA
-Permutation tests for ANOVA provide a non-parametric alternative that requires no distributional assumptions. Two approaches are commonly used: testing the variance of group means or computing the F-statistic directly.
-### Approach 1: Permutation Test Using Variance of Group Means
-This approach tests whether the variance among group means is unusually large under the null hypothesis.
-#### Algorithm
-1. **Calculate observed variance of group means**:
+
+## 4. 순열 기반 일원배치 분산분석
+
+분산분석의 순열검정은 분포 가정을 전혀 요구하지 않는 비모수적 대안이다. 흔히 쓰이는 두 접근은 집단 평균의 분산을 검정하거나 F-통계량을 직접 계산하는 것이다.
+
+### 접근 1: 집단 평균의 분산을 이용한 순열검정
+
+이 접근은 귀무가설 아래에서 집단 평균들의 분산이 유별나게 큰지를 검정한다.
+
+#### 알고리즘
+
+1. **집단 평균의 관측 분산 계산**:
 
 $$
 \text{Var}(\bar{y}_{1\cdot}, \bar{y}_{2\cdot}, \ldots, \bar{y}_{k\cdot})
 $$
 
-2. **Permute data B times**:
-   - Pool all observations
-   - Randomly reassign observations to groups (maintaining group sizes)
-   - Calculate variance of group means for each permutation
-3. **Calculate p-value**:
+2. **자료를 B번 순열**:
+   - 모든 관측값을 합친다
+   - (집단 크기를 유지하며) 관측값을 무작위로 집단에 다시 배정한다
+   - 순열마다 집단 평균의 분산을 계산한다
+
+3. **p-값 계산**:
 
 $$
 p\text{-value} = \frac{\#\{\text{Perm Var} \geq \text{Obs Var}\}}{B}
 $$
 
-#### Example: Four Web Pages
-Suppose we test session times for four different web pages:
+#### 예제: 네 개의 웹페이지
+
+네 웹페이지의 체류시간을 검정한다고 하자:
+
 ```python
 import numpy as np
 import pandas as pd
@@ -490,7 +552,7 @@ def perm_test_anova(df, group_col='Page', value_col='Time', n_perms=3000):
 np.random.seed(42)
 p_val, perm_vars, obs_var = perm_test_anova(four_sessions)
 print(f"Permutation test p-value: {p_val:.4f}")
-print(f"Conclusion: {'Reject H₀' if p_val < 0.05 else 'Fail to reject H₀'}")
+print(f"Conclusion: {'Reject H0' if p_val < 0.05 else 'Fail to reject H0'}")
 # Visualization
 fig, ax = plt.subplots(figsize=(10, 6))
 ax.hist(perm_vars, bins=30, alpha=0.7, color='steelblue', edgecolor='black')
@@ -504,26 +566,32 @@ ax.spines['right'].set_visible(False)
 plt.tight_layout()
 plt.show()
 ```
-### Approach 2: Permutation Test Using F-Statistic
-While the variance-based approach is intuitive, we can also use the F-statistic as our test statistic for a more direct comparison with the parametric ANOVA.
-#### Algorithm
-1. **Calculate observed F-statistic**:
+
+### 접근 2: F-통계량을 이용한 순열검정
+
+분산 기반 접근이 직관적이기는 하지만, 모수적 분산분석과 더 직접 비교하려면 F-통계량을 검정통계량으로 쓸 수도 있다.
+
+#### 알고리즘
+
+1. **관측 F-통계량 계산**:
 
 $$
 F_{\text{obs}} = \frac{\text{MSB}}{\text{MSW}}
 $$
 
-2. **Permute data B times**:
-   - Pool all observations
-   - Randomly reassign to groups
-   - Calculate F-statistic for each permutation
-3. **Calculate p-value**:
+2. **자료를 B번 순열**:
+   - 모든 관측값을 합친다
+   - 무작위로 집단에 다시 배정한다
+   - 순열마다 F-통계량을 계산한다
+
+3. **p-값 계산**:
 
 $$
 p\text{-value} = \frac{\#\{F_b \geq F_{\text{obs}}\}}{B}
 $$
 
-#### Example: F-Statistic Based Test
+#### 예제: F-통계량 기반 검정
+
 ```python
 from scipy import stats
 def perm_test_anova_f(df, group_col='Page', value_col='Time', n_perms=3000):
@@ -556,8 +624,11 @@ print(f"\nF-statistic based permutation test:")
 print(f"Observed F: {obs_f:.4f}")
 print(f"p-value: {p_val_f:.4f}")
 ```
-### Comparison: Permutation vs. Parametric ANOVA
-Both approaches give similar results when parametric assumptions hold:
+
+### 비교: 순열검정 대 모수적 분산분석
+
+모수적 가정이 성립하면 두 접근이 비슷한 결과를 준다:
+
 ```python
 # Parametric ANOVA
 f_stat, p_param = stats.f_oneway(
@@ -572,26 +643,30 @@ print(f"p-value: {p_param:.4f}")
 print(f"\nPermutation ANOVA (variance-based):")
 print(f"p-value: {p_val:.4f}")
 ```
-### Advantages of Permutation ANOVA
-1. **No distributional assumptions**: Works with any data distribution
-2. **Naturally handles unequal variances**: No need for Levene's test
-3. **Exact Type I error control**: p-value is exact (not approximate)
-4. **Intuitive interpretation**: Results reflect actual randomization
-### When to Use Permutation ANOVA
-- **Small samples**: n < 30 per group
-- **Non-normal data**: Verified with Q-Q plots or Shapiro-Wilk test
-- **Unequal variances**: When Levene's test rejects homogeneity
-- **Robustness check**: Compare results to parametric ANOVA
 
-## Exercises
+### 순열 분산분석의 장점
 
-**Exercise 1.**
-Three groups of test scores: Morning $\bar Y = 88.6$, Afternoon $79.4$, Evening $94.2$ (5 students each). Grand mean 87.4. (a)-(e): Compute ANOVA at $\alpha = 0.05$.
+1. **분포 가정이 없다**: 어떤 분포의 자료에도 작동한다.
+2. **이분산을 자연스럽게 다룬다**: Levene 검정이 필요 없다.
+3. **제1종 오류를 정확히 통제한다**: p-값이 (근사가 아니라) 정확하다.
+4. **직관적인 해석**: 결과가 실제 무작위화를 반영한다.
 
-??? success "Solution to Exercise 1"
-    (a) $H_0: \mu_1 = \mu_2 = \mu_3$. $H_a$: at least one differs.
+### 순열 분산분석을 쓸 때
 
-    (b) Means: $\bar Y_1 = 88.6, \bar Y_2 = 79.4, \bar Y_3 = 94.2$. Grand: 87.4.
+- **작은 표본**: 집단당 n < 30.
+- **정규성에서 벗어난 자료**: Q-Q 그림이나 Shapiro-Wilk 검정으로 확인된 경우.
+- **분산이 다를 때**: Levene 검정이 동질성을 기각할 때.
+- **로버스트성 확인**: 모수적 분산분석과 결과를 비교할 때.
+
+## 연습문제
+
+**연습문제 1.**
+세 집단의 시험 점수: 오전 $\bar Y = 88.6$, 오후 $79.4$, 저녁 $94.2$ (각 5명). 전체 평균 87.4. (a)–(e): $\alpha = 0.05$에서 분산분석을 수행하라.
+
+??? success "연습문제 1 풀이"
+    (a) $H_0: \mu_1 = \mu_2 = \mu_3$. $H_a$: 적어도 하나가 다르다.
+
+    (b) 평균: $\bar Y_1 = 88.6, \bar Y_2 = 79.4, \bar Y_3 = 94.2$. 전체: 87.4.
 
     (c) $\mathrm{SSB} = 5 \cdot [(88.6-87.4)^2 + (79.4-87.4)^2 + (94.2-87.4)^2] = 5 \cdot 111.68 = 558.4$.
 
@@ -599,96 +674,97 @@ Three groups of test scores: Morning $\bar Y = 88.6$, Afternoon $79.4$, Evening 
 
     $\mathrm{SST} = 625.6 = \mathrm{SSB} + \mathrm{SSW}$. ✓
 
-    (d) MSB = 558.4/2 = 279.2. MSW = 67.2/12 = 5.6. $F = 279.2/5.6 = 49.86$.
+    (d) MSB $= 558.4/2 = 279.2$. MSW $= 67.2/12 = 5.6$. $F = 279.2/5.6 = 49.86$.
 
-    (e) Critical $F_{2, 12, 0.05} = 3.89$. $49.86 \gg 3.89$. **Reject $H_0$.** Time of day significantly affects test scores.
-
----
-
-**Exercise 2.**
-**Why ANOVA, not pairwise $t$-tests?**
-
-??? success "Solution to Exercise 2"
-    With $k = 3$ groups, $\binom{3}{2} = 3$ pairwise tests. At $\alpha = 0.05$ each: family-wise error $\approx 1 - 0.95^3 \approx 0.143$ — nearly triple the nominal $\alpha$.
-
-    ANOVA's omnibus test has Type I error $\alpha$ regardless of $k$.
-
-    **Workflow:**
-
-    1. ANOVA omnibus: detect ANY difference at controlled $\alpha$.
-    2. If reject: post-hoc pairwise (Tukey's HSD, Bonferroni-adjusted t-tests) to identify which pairs differ.
-
-    If you just want all pairwise: use Tukey directly. ANOVA is the gate before post-hoc.
+    (e) 임계값 $F_{2, 12, 0.05} = 3.89$. $49.86 \gg 3.89$이므로 **$H_0$을 기각한다.** 시간대가 시험 점수에 유의하게 영향을 준다.
 
 ---
 
-**Exercise 3.**
-**ANOVA assumptions.** List and discuss robustness.
+**연습문제 2.**
+**왜 쌍별 $t$-검정이 아니라 분산분석인가?**
 
-??? success "Solution to Exercise 3"
-    1. **Independence** between observations. Critical — violations (clustered data) seriously inflate Type I error.
-    2. **Normality** within each group. ANOVA is robust to mild departures, especially with equal $n$ and large samples.
-    3. **Homoscedasticity** (equal variances). Robust for balanced design; problematic with unequal $n$.
+??? success "연습문제 2 풀이"
+    집단이 $k = 3$개면 쌍별 검정이 $\binom{3}{2} = 3$개이다. 각각 $\alpha = 0.05$이면 가족단위 오류가 $\approx 1 - 0.95^3 \approx 0.143$으로 명목 $\alpha$의 거의 세 배가 된다.
 
-    **Robustness ranking:**
+    분산분석의 전체검정은 $k$와 무관하게 제1종 오류가 $\alpha$이다.
 
-    - Independence: not robust at all.
-    - Normality: quite robust (CLT).
-    - Equal variance: moderately robust with balanced design.
+    **작업 흐름:**
 
-    **When violated:** transformations, Welch's ANOVA (heteroscedasticity), Kruskal-Wallis (non-normality), mixed models (clustered data).
+    1. 분산분석 전체검정: 통제된 $\alpha$에서 어떤 차이든 있는지 탐지한다.
+    2. 기각하면: 사후 쌍별 비교(Tukey의 HSD, Bonferroni 조정 t-검정)로 어느 쌍이 다른지 찾는다.
 
----
-
-**Exercise 4.**
-**Effect size for ANOVA.** Compute $\eta^2$ and $\omega^2$ for Exercise 1.
-
-??? success "Solution to Exercise 4"
-    **Eta-squared:** $\eta^2 = \mathrm{SSB}/\mathrm{SST} = 558.4/625.6 \approx 0.89$.
-
-    Interpretation: 89% of variance in test scores is attributable to time of day. Very large effect.
-
-    **Omega-squared** (less biased): $\omega^2 = (\mathrm{SSB} - (k-1) \mathrm{MSW})/(\mathrm{SST} + \mathrm{MSW}) = (558.4 - 2 \cdot 5.6)/(625.6 + 5.6) \approx 0.87$.
-
-    Cohen's conventions:
-    - 0.01: small
-    - 0.06: medium
-    - 0.14: large
-
-    Our 0.89 is enormous. Always report effect size alongside p-value.
+    모든 쌍별 비교만 원한다면 Tukey를 바로 써도 된다. 분산분석은 사후검정으로 가는 관문이다.
 
 ---
 
-**Exercise 5.**
-**One-way vs two-way ANOVA** intuition.
+**연습문제 3.**
+**분산분석의 가정.** 나열하고 로버스트성을 논하라.
 
-??? success "Solution to Exercise 5"
-    **One-way:** single factor with $k$ levels. Tests $H_0: \mu_1 = \mu_2 = \cdots = \mu_k$.
+??? success "연습문제 3 풀이"
+    1. 관측값 사이의 **독립성**. 결정적이다. 위반(군집 자료)은 제1종 오류를 심각하게 부풀린다.
+    2. 각 집단 안의 **정규성**. 특히 $n$이 같고 표본이 크면 분산분석은 약한 이탈에 로버스트하다.
+    3. **등분산성**(분산이 같음). 균형 설계에서는 로버스트하지만 $n$이 다르면 문제가 된다.
 
-    **Two-way:** two factors with multiple levels each. Three tests:
+    **로버스트성 순위:**
 
-    1. Main effect of factor A.
-    2. Main effect of factor B.
-    3. Interaction: does effect of A depend on level of B?
+    - 독립성: 전혀 로버스트하지 않다.
+    - 정규성: 꽤 로버스트하다(중심극한정리).
+    - 등분산: 균형 설계에서는 어느 정도 로버스트하다.
 
-    The interaction term is the unique contribution of two-way ANOVA. Often the most scientifically interesting result.
-
-    Higher-way ANOVAs become unwieldy; with 3+ factors, prefer regression with interaction terms.
+    **위반 시:** 변환, Welch 분산분석(이분산), Kruskal-Wallis(비정규성), 혼합모형(군집 자료).
 
 ---
 
-**Exercise 6.**
-**Power analysis** for one-way ANOVA.
+**연습문제 4.**
+**분산분석의 효과크기.** 연습문제 1에 대해 $\eta^2$과 $\omega^2$을 계산하라.
 
-??? success "Solution to Exercise 6"
-    For 80% power at $\alpha = 0.05$:
+??? success "연습문제 4 풀이"
+    **에타제곱:** $\eta^2 = \mathrm{SSB}/\mathrm{SST} = 558.4/625.6 \approx 0.89$.
 
-    | Effect size $f$ | $n$ per group ($k = 3$) |
+    해석: 시험 점수 분산의 89%가 시간대로 설명된다. 아주 큰 효과이다.
+
+    **오메가제곱**(편향이 덜함): $\omega^2 = (\mathrm{SSB} - (k-1) \mathrm{MSW})/(\mathrm{SST} + \mathrm{MSW}) = (558.4 - 2 \cdot 5.6)/(625.6 + 5.6) \approx 0.87$.
+
+    Cohen의 관례:
+
+    - 0.01: 작음
+    - 0.06: 중간
+    - 0.14: 큼
+
+    여기서 0.89는 대단히 크다. p-값과 함께 효과크기를 항상 보고하라.
+
+---
+
+**연습문제 5.**
+**일원배치와 이원배치 분산분석**의 직관.
+
+??? success "연습문제 5 풀이"
+    **일원배치:** 수준이 $k$개인 요인 하나. $H_0: \mu_1 = \mu_2 = \cdots = \mu_k$을 검정한다.
+
+    **이원배치:** 각각 여러 수준을 갖는 요인 둘. 검정이 셋이다:
+
+    1. 요인 A의 주효과.
+    2. 요인 B의 주효과.
+    3. 교호작용: A의 효과가 B의 수준에 따라 달라지는가?
+
+    교호작용 항이 이원배치 분산분석만의 고유한 기여이다. 과학적으로 가장 흥미로운 결과인 경우도 많다.
+
+    삼원 이상의 분산분석은 다루기 번거로워진다. 요인이 셋 이상이면 교호작용 항을 넣은 회귀를 택하는 편이 낫다.
+
+---
+
+**연습문제 6.**
+일원배치 분산분석의 **검정력 분석**.
+
+??? success "연습문제 6 풀이"
+    $\alpha = 0.05$에서 검정력 80%를 얻으려면:
+
+    | 효과크기 $f$ | 집단당 $n$ ($k = 3$) |
     |---|---|
-    | Small (0.10) | ~324 |
-    | Medium (0.25) | ~52 |
-    | Large (0.40) | ~21 |
+    | 작음 (0.10) | 약 324 |
+    | 중간 (0.25) | 약 52 |
+    | 큼 (0.40) | 약 21 |
 
-    Cohen's $f = \sqrt{\eta^2/(1 - \eta^2)}$.
+    Cohen의 $f = \sqrt{\eta^2/(1 - \eta^2)}$.
 
-    Use `statsmodels.stats.power.FTestAnovaPower` for exact computation. Underpowered ANOVAs are common in social science; reporting non-significance from $n = 5$ groups is uninformative.
+    정확한 계산에는 `statsmodels.stats.power.FTestAnovaPower`를 쓴다. 사회과학에서는 검정력이 부족한 분산분석이 흔하다. 집단당 $n = 5$에서 유의하지 않다고 보고하는 것은 정보가 거의 없다.

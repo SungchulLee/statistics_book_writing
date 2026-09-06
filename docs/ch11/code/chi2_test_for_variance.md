@@ -1,44 +1,46 @@
-# Chi2 Test For Variance
+# 분산에 대한 카이제곱 검정
 
-## Overview
+## 개요
 
-The chi-squared test for variance is a one-sample test that assesses whether the variance of a normally distributed population equals a pre-specified value $\sigma_0^2$. It is the variance analogue of the one-sample $t$-test for the mean. This page derives the test statistic, shows its connection to the chi-squared distribution, and demonstrates it across several variance-ratio scenarios using Python.
+분산에 대한 카이제곱 검정은 정규 모집단의 분산이 미리 정한 값 $\sigma_0^2$과 같은지 평가하는 일표본 검정이다. 평균에 대한 일표본 $t$-검정의 분산 판이다. 이 페이지에서는 검정통계량을 유도하고 카이제곱 분포와의 연결을 보이며, Python으로 여러 분산비 시나리오에서 검정을 시연한다.
 
-## Hypotheses and Test Statistic
+## 가설과 검정통계량
 
-Given a random sample $X_1, \dots, X_n$ from $N(\mu, \sigma^2)$, the two-sided test is
+$N(\mu, \sigma^2)$에서 뽑은 확률표본 $X_1, \dots, X_n$이 주어졌을 때 양측검정은
 
 $$
 H_0: \sigma^2 = \sigma_0^2, \qquad H_1: \sigma^2 \neq \sigma_0^2
 $$
 
-The test statistic is
+이다. 검정통계량은
 
 $$
 T = \frac{(n - 1)\, S^2}{\sigma_0^2}
 $$
 
-where $S^2 = \frac{1}{n-1}\sum_{i=1}^{n}(X_i - \bar{X})^2$ is the sample variance. Under $H_0$, this statistic follows a chi-squared distribution:
+이며 $S^2 = \frac{1}{n-1}\sum_{i=1}^{n}(X_i - \bar{X})^2$은 표본분산이다. $H_0$ 아래에서 이 통계량은 카이제곱 분포를 따른다:
 
 $$
 T \sim \chi^2(n - 1)
 $$
 
-For a two-sided test at significance level $\alpha$, we reject $H_0$ when
+유의수준 $\alpha$의 양측검정에서는
 
 $$
 T < \chi^2_{\alpha/2}(n-1) \quad \text{or} \quad T > \chi^2_{1-\alpha/2}(n-1)
 $$
 
-The two-sided p-value is
+일 때 $H_0$을 기각한다. 양측 p-값은
 
 $$
 p = 2 \min\!\bigl(P(\chi^2_{n-1} \le T),\; P(\chi^2_{n-1} \ge T)\bigr)
 $$
 
-## Implementation
+이다.
 
-The following function implements the test from scratch:
+## 구현
+
+다음 함수는 이 검정을 처음부터 구현한다:
 
 ```python
 import numpy as np
@@ -55,7 +57,7 @@ def chi2_test_for_variance(data, sigma2_0=1.0):
     return statistic, p_value
 ```
 
-The demonstration generates samples from $N(1, \sigma_Y^2)$ for $\sigma_Y \in \{1.00, 1.05, 1.10, 1.15, 1.20\}$ and tests $H_0: \sigma^2 = 1$:
+예제는 $\sigma_Y \in \{1.00, 1.05, 1.10, 1.15, 1.20\}$에 대해 $N(1, \sigma_Y^2)$에서 표본을 생성하고 $H_0: \sigma^2 = 1$을 검정한다:
 
 ```python
 x = stats.norm(loc=0, scale=1).rvs(100, random_state=seed)
@@ -66,78 +68,88 @@ for scale in [1.00, 1.05, 1.10, 1.15, 1.20]:
     print(f"sigma={scale:.2f}: p={pval:.3f}")
 ```
 
-## Interpretation
+`seed = 1`일 때 출력은 다음과 같다:
 
-- When $\sigma_Y = 1.00$, the true variance matches $\sigma_0^2 = 1$ and the p-value is large, correctly retaining $H_0$.
-- As $\sigma_Y$ increases beyond 1.00, the sample variance $S^2$ tends to exceed 1, pushing $T$ into the upper tail of $\chi^2(n-1)$ and producing smaller p-values.
-- With $n = 100$, the test has reasonable power to detect moderate departures from $\sigma_0^2 = 1$ (e.g., $\sigma_Y = 1.15$).
+| $\sigma_Y$ | $S^2$ | $T$ | p-값 |
+|---|---|---|---|
+| 1.00 | 0.791 | 78.35 | 0.125 |
+| 1.05 | 0.873 | 86.38 | 0.373 |
+| 1.10 | 0.958 | 94.80 | 0.799 |
+| 1.15 | 1.047 | 103.62 | 0.711 |
+| 1.20 | 1.140 | 112.82 | 0.324 |
 
-An important limitation is that this test is valid only when the underlying population is normal. For non-normal data, the sampling distribution of $S^2$ deviates from the chi-squared form, and the test's Type I error rate is no longer controlled at the nominal level.
+## 해석
 
-## Exercises
+- 이 씨앗에서 뽑힌 표본은 $\sigma_Y = 1.00$일 때 표본분산이 $S^2 = 0.79$로 1보다 꽤 작다. 그래서 $T$가 아래쪽 꼬리 쪽에 있고 p-값이 0.125이다.
+- $\sigma_Y$가 커질수록 $T$가 커진다. 다만 여기서는 출발점이 1보다 작으므로 p-값이 단조 감소하지 않는다. $\sigma_Y = 1.10$ 부근에서 $S^2$이 1에 가장 가까워 p-값이 최대가 되고, 그 뒤 다시 작아진다.
+- $n = 100$에서도 표준편차가 20% 큰 경우($S^2 = 1.14$)의 p-값이 0.324로 $\alpha = 0.05$에 한참 못 미친다. 이 검정으로 완만한 분산 차이를 탐지하려면 표본이 훨씬 커야 한다.
 
-**Exercise 1.**
-A sample of $n = 25$ measurements yields $S^2 = 12.5$. Test $H_0: \sigma^2 = 10$ at $\alpha = 0.05$. Compute the test statistic and state your conclusion.
+중요한 한계는 이 검정이 바탕 모집단이 정규일 때에만 타당하다는 점이다. 비정규 자료에서는 $S^2$의 표본분포가 카이제곱 형태에서 벗어나 제1종 오류율이 명목 수준으로 통제되지 않는다.
 
-??? success "Solution to Exercise 1"
-    The test statistic is
+## 연습문제
+
+**연습문제 1.**
+$n = 25$개의 측정에서 $S^2 = 12.5$를 얻었다. $\alpha = 0.05$에서 $H_0: \sigma^2 = 10$을 검정하라. 검정통계량을 계산하고 결론을 진술하라.
+
+??? success "연습문제 1 풀이"
+    검정통계량은
 
     $$
     T = \frac{(n-1) S^2}{\sigma_0^2} = \frac{24 \times 12.5}{10} = 30.0
     $$
 
-    Under $H_0$, $T \sim \chi^2(24)$. The critical values at $\alpha = 0.05$ (two-sided) are $\chi^2_{0.025}(24) = 12.40$ and $\chi^2_{0.975}(24) = 39.36$. Since $12.40 < 30.0 < 39.36$, the test statistic falls inside the acceptance region. We fail to reject $H_0$ at the 5% level.
+    이다. $H_0$ 아래에서 $T \sim \chi^2(24)$이다. $\alpha = 0.05$(양측)의 임계값은 $\chi^2_{0.025}(24) = 12.40$과 $\chi^2_{0.975}(24) = 39.36$이다. $12.40 < 30.0 < 39.36$이므로 검정통계량이 채택역 안에 있다. 5% 수준에서 $H_0$을 기각하지 못한다.
 
 ---
 
-**Exercise 2.**
-Derive a $(1 - \alpha)$ confidence interval for $\sigma^2$ using the pivotal quantity $T = (n-1)S^2 / \sigma^2$.
+**연습문제 2.**
+추축량 $T = (n-1)S^2 / \sigma^2$을 써서 $\sigma^2$에 대한 $(1 - \alpha)$ 신뢰구간을 유도하라.
 
-??? success "Solution to Exercise 2"
-    Since $(n-1)S^2 / \sigma^2 \sim \chi^2(n-1)$ under normality, we have
+??? success "연습문제 2 풀이"
+    정규성 아래에서 $(n-1)S^2 / \sigma^2 \sim \chi^2(n-1)$이므로
 
     $$
     P\!\left(\chi^2_{\alpha/2}(n-1) \le \frac{(n-1)S^2}{\sigma^2} \le \chi^2_{1-\alpha/2}(n-1)\right) = 1 - \alpha
     $$
 
-    Inverting the inequalities:
+    이다. 부등식을 뒤집으면
 
     $$
     \frac{(n-1)S^2}{\chi^2_{1-\alpha/2}(n-1)} \le \sigma^2 \le \frac{(n-1)S^2}{\chi^2_{\alpha/2}(n-1)}
     $$
 
-    This is the $(1-\alpha)$ confidence interval for $\sigma^2$. Note that the larger chi-squared quantile appears in the denominator of the lower bound, producing the correct orientation. $\square$
+    이며, 이것이 $\sigma^2$에 대한 $(1-\alpha)$ 신뢰구간이다. 큰 쪽 카이제곱 분위수가 하한의 분모에 오는 것이 올바른 방향임에 유의하라. $\square$
 
 ---
 
-**Exercise 3.**
-Explain why the two-sided p-value uses $2\min(\cdot, \cdot)$ rather than simply $2 \cdot P(\chi^2_{n-1} \ge T)$.
+**연습문제 3.**
+양측 p-값이 단순히 $2 \cdot P(\chi^2_{n-1} \ge T)$가 아니라 $2\min(\cdot, \cdot)$을 쓰는 이유를 설명하라.
 
-??? success "Solution to Exercise 3"
-    The chi-squared distribution is not symmetric, so the two tails have different shapes and areas. The test can reject in either direction: $T$ may be unusually small (suggesting $\sigma^2 < \sigma_0^2$) or unusually large (suggesting $\sigma^2 > \sigma_0^2$). The p-value must measure the probability of a result at least as extreme as observed in whichever tail $T$ falls into, then double it to account for the two-sided nature.
+??? success "연습문제 3 풀이"
+    카이제곱 분포는 대칭이 아니므로 두 꼬리의 모양과 넓이가 다르다. 이 검정은 양쪽 방향으로 기각할 수 있다. $T$가 유별나게 작을 수도($\sigma^2 < \sigma_0^2$을 시사) 유별나게 클 수도($\sigma^2 > \sigma_0^2$을 시사) 있다. p-값은 $T$가 놓인 쪽 꼬리에서 관측값만큼 또는 그보다 극단적인 결과의 확률을 재고, 양측이므로 두 배해야 한다.
 
-    Using $2 \cdot P(\chi^2 \ge T)$ would only be correct if $T$ falls in the upper tail. When $T$ is in the lower tail, $P(\chi^2 \ge T)$ is close to 1 and doubling it gives a nonsensical value exceeding 1. The $\min$ formulation correctly identifies the relevant tail and doubles the smaller tail probability.
+    $2 \cdot P(\chi^2 \ge T)$는 $T$가 위쪽 꼬리에 있을 때에만 옳다. $T$가 아래쪽 꼬리에 있으면 $P(\chi^2 \ge T)$가 1에 가깝고 두 배하면 1을 넘는 말이 안 되는 값이 된다. $\min$ 형태는 관련 꼬리를 올바르게 찾아 작은 쪽 꼬리 확률을 두 배한다.
 
 ---
 
-**Exercise 4.**
-A factory produces bolts with a target variance of $\sigma_0^2 = 0.04 \text{ mm}^2$. A sample of $n = 50$ bolts yields $S^2 = 0.06 \text{ mm}^2$. Should the factory recalibrate its machine? Use $\alpha = 0.01$.
+**연습문제 4.**
+어떤 공장이 목표 분산 $\sigma_0^2 = 0.04 \text{ mm}^2$으로 볼트를 생산한다. 볼트 $n = 50$개의 표본에서 $S^2 = 0.06 \text{ mm}^2$을 얻었다. 공장은 기계를 재보정해야 하는가? $\alpha = 0.01$을 쓰라.
 
-??? success "Solution to Exercise 4"
-    The test statistic is
+??? success "연습문제 4 풀이"
+    검정통계량은
 
     $$
     T = \frac{(50 - 1)(0.06)}{0.04} = \frac{2.94}{0.04} = 73.5
     $$
 
-    Under $H_0$, $T \sim \chi^2(49)$. The upper critical value at $\alpha/2 = 0.005$ is $\chi^2_{0.995}(49) \approx 79.49$. Since $73.5 < 79.49$, the test statistic does not exceed the upper critical value. The lower critical value is $\chi^2_{0.005}(49) \approx 27.99$, and $73.5 > 27.99$. Therefore $T$ falls inside the acceptance region, and we fail to reject $H_0$ at the 1% level. The data do not provide sufficient evidence that the variance differs from the target, so immediate recalibration is not warranted. However, the sample variance is 50% larger than the target, so continued monitoring is prudent.
+    이다. $H_0$ 아래에서 $T \sim \chi^2(49)$이다. $\alpha/2 = 0.005$의 위쪽 임계값은 $\chi^2_{0.995}(49) \approx 78.23$이다. $73.5 < 78.23$이므로 위쪽 임계값을 넘지 않는다. 아래쪽 임계값은 $\chi^2_{0.005}(49) \approx 27.25$이고 $73.5 > 27.25$이다. 따라서 $T$가 채택역 안에 있으므로 1% 수준에서 $H_0$을 기각하지 못한다. 자료는 분산이 목표와 다르다는 충분한 증거를 주지 않으므로 즉각적인 재보정은 필요하지 않다. 다만 표본분산이 목표보다 50% 크므로 계속 관찰하는 편이 신중하다.
 
 ---
 
-**Exercise 5.**
-This test assumes normality. Describe what happens to the Type I error rate when the underlying distribution has excess kurtosis $\kappa > 0$, and suggest an alternative approach.
+**연습문제 5.**
+이 검정은 정규성을 가정한다. 바탕 분포의 초과 첨도가 $\kappa > 0$일 때 제1종 오류율이 어떻게 되는지 기술하고 대안을 제시하라.
 
-??? success "Solution to Exercise 5"
-    When the population has excess kurtosis $\kappa > 0$ (heavier tails than normal), the sampling distribution of $S^2$ has greater variability than the chi-squared theory predicts. Specifically, $\text{Var}(S^2) = \sigma^4 \bigl(\frac{2}{n-1} + \frac{\kappa}{n}\bigr)$, which exceeds the normal-theory value of $\frac{2\sigma^4}{n-1}$. This means the test statistic $T$ has a more dispersed distribution than $\chi^2(n-1)$, causing it to land in the rejection region more often than expected. The result is an inflated Type I error rate.
+??? success "연습문제 5 풀이"
+    모집단의 초과 첨도가 $\kappa > 0$이면(정규보다 꼬리가 두꺼우면) $S^2$의 표본분포가 카이제곱 이론이 예측하는 것보다 크게 변동한다. 구체적으로 $\text{Var}(S^2) = \sigma^4 \bigl(\frac{2}{n-1} + \frac{\kappa}{n}\bigr)$이고 이는 정규 이론의 값 $\frac{2\sigma^4}{n-1}$보다 크다. 따라서 검정통계량 $T$의 분포가 $\chi^2(n-1)$보다 퍼져 기각역에 더 자주 들어가고, 그 결과 제1종 오류율이 부풀려진다.
 
-    A robust alternative is the bootstrap test: resample the data with replacement many times, compute $S^2$ for each resample, and use the empirical distribution of $(n-1)S^2/\sigma_0^2$ to obtain the p-value. This approach makes no distributional assumptions.
+    로버스트한 대안은 붓스트랩 검정이다. 자료를 복원으로 여러 번 재표본추출하여 각 재표본의 $S^2$을 계산하고, $(n-1)S^2/\sigma_0^2$의 경험적 분포로 p-값을 얻는다. 이 접근은 분포 가정을 두지 않는다.

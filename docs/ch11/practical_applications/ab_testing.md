@@ -1,164 +1,164 @@
-# A/B Testing and Experimental Design
+# A/B 검정과 실험 설계
 
-## Overview
+## 개요
 
-In practice, researchers and analysts frequently need to compare the effectiveness of different treatments: a pharmaceutical company tests two drug formulations, a tech company evaluates three website layouts, or an economist compares policy interventions across regions. These comparisons require a principled statistical framework that controls error rates while providing clear decision rules. A/B testing formalizes this process by combining experimental design principles with hypothesis testing, and when the number of treatment groups exceeds two, the analysis reduces to the one-way ANOVA framework developed earlier in this chapter.
+실무에서 연구자와 분석가는 서로 다른 처치의 효과를 비교해야 하는 경우가 많다. 제약회사가 두 가지 약 제형을 시험하고, 기술기업이 세 가지 웹사이트 배치를 평가하며, 경제학자가 지역별 정책 개입을 비교한다. 이런 비교에는 오류율을 통제하면서 분명한 판정 규칙을 주는 원리적인 통계 틀이 필요하다. A/B 검정은 실험 설계 원리와 가설검정을 결합하여 이 과정을 형식화하며, 처치군이 셋 이상이면 분석은 이 장 앞부분에서 전개한 일원배치 분산분석의 틀로 귀착된다.
 
-This section establishes the statistical foundations of A/B testing, connects it explicitly to the ANOVA F-test, and addresses the practical considerations of sample size determination and multiple comparisons.
+이 절에서는 A/B 검정의 통계적 토대를 세우고, 분산분석 F-검정과의 연결을 명시적으로 짓고, 표본크기 결정과 다중비교라는 실무적 고려사항을 다룬다.
 
-## Design Principles
+## 설계 원리
 
-A well-designed A/B test rests on three foundational principles, each of which has a direct statistical justification.
+잘 설계된 A/B 검정은 세 가지 기본 원리에 기대며, 각각은 직접적인 통계적 정당화를 갖는다.
 
-**Randomization.** Subjects are assigned to treatment groups using a random mechanism (e.g., a pseudorandom number generator). Randomization ensures that the treatment assignment is independent of all potential confounders, both observed and unobserved. Without randomization, observed differences between groups may reflect pre-existing differences rather than genuine treatment effects.
+**무작위화.** 대상을 무작위 기제(예: 의사난수 생성기)로 처치군에 배정한다. 무작위화는 관측되든 관측되지 않든 모든 잠재적 교란변수와 처치 배정이 독립임을 보장한다. 무작위화가 없으면 집단 사이에서 관측된 차이가 참된 처치 효과가 아니라 사전에 존재하던 차이를 반영할 수 있다.
 
-**Control.** Every experiment includes a baseline group (the control) that receives either no treatment or the current standard. The control group provides the reference against which treatment effects are measured. In the ANOVA model, the control group mean serves as the benchmark $\mu_1$ (or equivalently, the intercept $\mu$ when treatment effects are parameterized as deviations $\alpha_i$).
+**통제.** 모든 실험은 처치를 받지 않거나 현재 표준을 적용받는 기준 집단(대조군)을 포함한다. 대조군은 처치 효과를 재는 기준을 제공한다. 분산분석 모형에서 대조군의 평균은 기준 $\mu_1$의 역할을 한다(처치 효과를 편차 $\alpha_i$로 모수화하면 절편 $\mu$가 그 역할을 한다).
 
-**Replication.** Each treatment group must contain enough independent observations to detect a practically meaningful effect with adequate statistical power. Replication reduces the within-group variance estimate and narrows the confidence intervals for treatment differences. The next subsection formalizes the sample size requirement.
+**반복.** 각 처치군은 실질적으로 의미 있는 효과를 충분한 검정력으로 탐지할 만큼의 독립인 관측값을 담아야 한다. 반복은 집단 내 분산 추정값을 줄이고 처치 차이의 신뢰구간을 좁힌다. 다음 소절에서 표본크기 요건을 형식화한다.
 
-These principles ensure that the resulting data satisfy the independence and identically distributed assumptions required by the ANOVA F-test.
+이 원리들은 그 결과 얻어지는 자료가 분산분석 F-검정이 요구하는 독립성과 동일분포 가정을 만족하도록 보장한다.
 
-## Connection to ANOVA
+## 분산분석과의 연결
 
-### Two-Group Case
+### 두 집단인 경우
 
-When an A/B test compares exactly two groups (control vs. treatment), the analyst tests
+A/B 검정이 정확히 두 집단(대조 대 처치)을 비교하면 분석가는
 
 $$
 H_0: \mu_1 = \mu_2 \quad \text{vs.} \quad H_1: \mu_1 \neq \mu_2
 $$
 
-where $\mu_1$ and $\mu_2$ denote the population means of the control and treatment groups, respectively. Under the equal-variance assumption, the test statistic is the two-sample $t$-statistic
+를 검정한다. 여기서 $\mu_1$과 $\mu_2$는 각각 대조군과 처치군의 모평균이다. 등분산 가정 아래에서 검정통계량은 이표본 $t$-통계량
 
 $$
 t = \frac{\bar{Y}_1 - \bar{Y}_2}{s_p \sqrt{\frac{1}{n_1} + \frac{1}{n_2}}}
 $$
 
-where $s_p$ is the pooled standard deviation and $n_1, n_2$ are the group sizes. This $t$-statistic follows a $t$-distribution with $n_1 + n_2 - 2$ degrees of freedom under $H_0$.
+이며 $s_p$는 합동 표준편차, $n_1, n_2$는 집단 크기이다. 이 $t$-통계량은 $H_0$ 아래에서 자유도 $n_1 + n_2 - 2$인 $t$-분포를 따른다.
 
-### Multi-Group Case
+### 여러 집단인 경우
 
-When the experiment involves $k \geq 2$ treatment groups (including the control), the hypothesis test generalizes to
+실험에 (대조군을 포함하여) $k \geq 2$개의 처치군이 있으면 가설검정은 다음으로 일반화된다:
 
 $$
-H_0: \mu_1 = \mu_2 = \cdots = \mu_k \quad \text{vs.} \quad H_1: \text{at least one } \mu_i \text{ differs}
+H_0: \mu_1 = \mu_2 = \cdots = \mu_k \quad \text{vs.} \quad H_1: \text{적어도 하나의 } \mu_i \text{가 다르다}
 $$
 
-This is precisely the one-way ANOVA hypothesis. Under the model
+이것이 바로 일원배치 분산분석의 가설이다. 모형
 
 $$
 Y_{ij} = \mu + \alpha_i + \varepsilon_{ij}, \quad \varepsilon_{ij} \overset{\text{iid}}{\sim} N(0, \sigma^2)
 $$
 
-where $i = 1, \ldots, k$ indexes groups, $j = 1, \ldots, n_i$ indexes observations within group $i$, $\mu$ is the overall mean, and $\alpha_i$ is the effect of treatment $i$ (with the constraint $\sum_{i=1}^k n_i \alpha_i = 0$ for identifiability), the test statistic is the F-ratio
+아래에서(여기서 $i = 1, \ldots, k$는 집단, $j = 1, \ldots, n_i$는 집단 $i$ 안의 관측값을 나타내고 $\mu$는 전체 평균, $\alpha_i$는 처치 $i$의 효과이며 식별을 위해 $\sum_{i=1}^k n_i \alpha_i = 0$을 둔다) 검정통계량은 F-비
 
 $$
 F = \frac{\text{MSB}}{\text{MSW}} = \frac{\text{SSB} / (k - 1)}{\text{SSW} / (N - k)}
 $$
 
-where $N = \sum_{i=1}^k n_i$ is the total sample size, SSB is the between-group sum of squares, and SSW is the within-group sum of squares. Under $H_0$, this statistic follows an $F(k-1, \, N-k)$ distribution. The null hypothesis is rejected at significance level $\alpha$ when $F > F_{\alpha, \, k-1, \, N-k}$.
+이다. $N = \sum_{i=1}^k n_i$는 전체 표본크기, SSB는 집단 간 제곱합, SSW는 집단 내 제곱합이다. $H_0$ 아래에서 이 통계량은 $F(k-1, \, N-k)$ 분포를 따른다. $F > F_{\alpha, \, k-1, \, N-k}$이면 유의수준 $\alpha$에서 귀무가설을 기각한다.
 
-!!! note "Two groups as a special case of ANOVA"
-    When $k = 2$, the F-statistic equals $t^2$, where $t$ is the two-sample $t$-statistic. The one-way ANOVA with two groups and the two-sample $t$-test always produce identical $p$-values.
+!!! note "두 집단은 분산분석의 특수한 경우"
+    $k = 2$일 때 F-통계량은 $t^2$과 같다. 여기서 $t$는 이표본 $t$-통계량이다. 두 집단의 일원배치 분산분석과 이표본 $t$-검정은 언제나 같은 $p$-값을 준다.
 
-### Post-Hoc Comparisons
+### 사후비교
 
-A significant F-test tells us that at least one group mean differs from the others, but it does not identify which specific pairs differ. To determine which treatments outperform the control (or each other), post-hoc pairwise comparison methods are required. These methods control the family-wise error rate (FWER) to avoid inflating the Type I error rate across multiple comparisons. Common choices include Tukey HSD for all pairwise comparisons and Dunnett's test when the goal is to compare each treatment to a single control. See [Post-Hoc Comparisons](../post_hoc/tukey.md) for a full treatment of these methods.
+F-검정이 유의하다는 것은 적어도 한 집단의 평균이 다르다는 뜻이지만 어느 쌍이 다른지는 알려주지 않는다. 어떤 처치가 대조군(또는 서로)보다 나은지 판정하려면 사후 쌍별 비교 방법이 필요하다. 이 방법들은 여러 비교에 걸쳐 제1종 오류율이 부풀려지지 않도록 가족단위 오류율(FWER)을 통제한다. 흔한 선택은 모든 쌍별 비교에 대한 Tukey HSD와, 각 처치를 하나의 대조군과 비교할 때의 Dunnett 검정이다. 이 방법들의 전체 논의는 [사후비교](../post_hoc/tukey.md)를 보라.
 
-## Sample Size Determination
+## 표본크기 결정
 
-Before running an A/B test, the analyst must determine how many observations are needed per group to detect a meaningful effect. The required sample size depends on three quantities: the significance level $\alpha$, the desired power $1 - \beta$, and the minimum detectable effect size.
+A/B 검정을 시작하기 전에 분석가는 의미 있는 효과를 탐지하는 데 집단당 관측값이 몇 개 필요한지 정해야 한다. 필요한 표본크기는 유의수준 $\alpha$, 원하는 검정력 $1 - \beta$, 최소 탐지 효과크기의 세 가지에 달려 있다.
 
-For the two-group case with equal group sizes, the per-group sample size required to detect an effect size $\delta = \mu_1 - \mu_2$ with power $1 - \beta$ at significance level $\alpha$ is approximately
+집단 크기가 같은 두 집단의 경우, 유의수준 $\alpha$에서 검정력 $1 - \beta$로 효과크기 $\delta = \mu_1 - \mu_2$를 탐지하는 데 필요한 집단당 표본크기는 근사적으로
 
 $$
 n \geq \frac{2\sigma^2 (z_{\alpha/2} + z_\beta)^2}{\delta^2}
 $$
 
-where $z_{\alpha/2}$ and $z_\beta$ are the standard normal critical values corresponding to the two-tailed significance level and the desired power, respectively, and $\sigma^2$ is the common within-group variance.
+이다. 여기서 $z_{\alpha/2}$와 $z_\beta$는 각각 양측 유의수준과 원하는 검정력에 대응하는 표준정규 임계값이고 $\sigma^2$은 공통 집단 내 분산이다.
 
-!!! example "Sample size calculation"
-    Suppose a website A/B test aims to detect a difference of $\delta = 0.5$ percentage points in conversion rate (on the probability scale, $\delta = 0.005$), with baseline rate $p = 0.05$ so that $\sigma^2 \approx p(1-p) = 0.0475$, at $\alpha = 0.05$ and power $1 - \beta = 0.80$. The critical values are $z_{0.025} = 1.96$ and $z_{0.20} = 0.84$. Then
+!!! example "표본크기 계산"
+    어떤 웹사이트 A/B 검정이 전환율에서 $\delta = 0.5$퍼센트포인트의 차이(확률 척도로는 $\delta = 0.005$)를, 기저 전환율 $p = 0.05$이어서 $\sigma^2 \approx p(1-p) = 0.0475$인 상황에서 $\alpha = 0.05$, 검정력 $1 - \beta = 0.80$으로 탐지하려 한다고 하자. 임계값은 $z_{0.025} = 1.96$, $z_{0.20} = 0.84$이다. 그러면
 
     $$
     n \geq \frac{2(0.0475)(1.96 + 0.84)^2}{0.005^2} = \frac{2(0.0475)(7.84)}{0.000025} \approx 29{,}792
     $$
 
-    Each group requires approximately 30,000 users — a reminder that detecting small effects demands large samples.
+    각 집단에 약 30,000명의 사용자가 필요하다. 작은 효과를 탐지하려면 큰 표본이 필요하다는 점을 새삼 일깨운다.
 
-For multi-group designs, power analysis extends to the F-test framework, and the effect size is typically expressed using Cohen's $f$, defined as
+여러 집단 설계에서는 검정력 분석이 F-검정 틀로 확장되며, 효과크기는 보통 Cohen의 $f$로 표현한다:
 
 $$
 f = \frac{\sigma_\alpha}{\sigma}
 $$
 
-where $\sigma_\alpha = \sqrt{\frac{1}{k}\sum_{i=1}^k \alpha_i^2}$ measures the standard deviation of the treatment effects. Conventional benchmarks are $f = 0.10$ (small), $f = 0.25$ (medium), and $f = 0.40$ (large).
+여기서 $\sigma_\alpha = \sqrt{\frac{1}{k}\sum_{i=1}^k \alpha_i^2}$는 처치 효과의 표준편차를 잰다. 관례적인 기준은 $f = 0.10$(작음), $f = 0.25$(중간), $f = 0.40$(큼)이다.
 
-## Common Pitfalls
+## 흔한 함정
 
-!!! warning "Peeking and early stopping"
-    A frequent mistake in A/B testing is to check results repeatedly during data collection and stop the experiment as soon as a significant result appears. This practice inflates the Type I error rate well beyond the nominal $\alpha$ because each interim look is an additional hypothesis test. Sequential testing methods (e.g., group sequential designs or always-valid $p$-values) provide principled alternatives that allow early stopping while controlling the overall error rate.
+!!! warning "엿보기와 조기 중단"
+    A/B 검정에서 자주 저지르는 실수는 자료를 모으는 동안 결과를 반복해서 확인하다가 유의한 결과가 나오는 즉시 실험을 멈추는 것이다. 이 관행은 중간에 들여다볼 때마다 가설검정을 하나 더 하는 셈이어서 제1종 오류율을 명목 $\alpha$보다 크게 부풀린다. 순차검정 방법(예: 그룹 순차 설계나 항상 타당한 $p$-값)은 전체 오류율을 통제하면서 조기 중단을 허용하는 원리적인 대안이다.
 
-!!! warning "Multiple comparisons without correction"
-    When testing $k$ groups, the number of pairwise comparisons is $\binom{k}{2}$. Performing each at level $\alpha$ without correction inflates the family-wise error rate to $1 - (1 - \alpha)^{\binom{k}{2}}$, which can be substantial. For example, with $k = 5$ groups and $\alpha = 0.05$, the FWER reaches approximately $0.40$. Always apply a multiple comparison correction such as Bonferroni or Tukey HSD.
+!!! warning "보정 없는 다중비교"
+    집단이 $k$개면 쌍별 비교의 수는 $\binom{k}{2}$이다. 보정 없이 각각을 수준 $\alpha$에서 수행하면 가족단위 오류율이 $1 - (1 - \alpha)^{\binom{k}{2}}$까지 부풀 수 있어 상당히 커진다. 예를 들어 $k = 5$이고 $\alpha = 0.05$이면 FWER이 약 $0.40$에 이른다. Bonferroni나 Tukey HSD 같은 다중비교 보정을 반드시 적용하라.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-A website runs an A/B test with three variants (A, B, C) for a checkout button. After 2 weeks, the conversion rates are: A = 5.2% ($n_A = 3000$), B = 6.1% ($n_B = 3000$), C = 5.8% ($n_C = 3000$). Why is it insufficient to simply compare each pair with a z-test?
+**연습문제 1.**
+어떤 웹사이트가 결제 버튼에 대해 세 가지 변형(A, B, C)으로 A/B 검정을 수행했다. 2주 뒤 전환율은 A = 5.2%($n_A = 3000$), B = 6.1%($n_B = 3000$), C = 5.8%($n_C = 3000$)이다. 각 쌍을 z-검정으로 단순 비교하는 것이 왜 충분하지 않은가?
 
-??? success "Solution to Exercise 1"
-    Comparing all three pairs (A vs B, A vs C, B vs C) involves 3 hypothesis tests, inflating the family-wise error rate. At $\alpha = 0.05$ per test, the FWER under the global null is $1 - 0.95^3 \approx 0.143$ -- nearly three times the intended level.
+??? success "연습문제 1 풀이"
+    세 쌍(A 대 B, A 대 C, B 대 C)을 모두 비교하면 가설검정이 3개가 되어 가족단위 오류율이 부풀려진다. 검정당 $\alpha = 0.05$이면 전역 귀무가설 아래에서 FWER이 $1 - 0.95^3 \approx 0.143$으로 의도한 수준의 거의 세 배가 된다.
 
-    Instead, one should either:
+    대신 다음 중 하나를 해야 한다:
 
-    1. **Use ANOVA (or a chi-squared test for proportions)** as an omnibus test first. If it rejects, follow up with pairwise comparisons using a multiple testing correction (Bonferroni, Tukey, or Dunnett if comparing to a control).
-    2. **Pre-specify a single primary comparison** (e.g., best variant vs. control) and adjust only for that comparison.
-    3. **Apply Bonferroni:** use $\alpha/3 = 0.0167$ for each pairwise comparison.
-
----
-
-**Exercise 2.**
-An A/B test is stopped early because the treatment group shows a "significant" improvement after 3 days. Explain the statistical problem with early stopping without pre-specified stopping rules.
-
-??? success "Solution to Exercise 2"
-    Early stopping without pre-specified rules inflates the Type I error rate through **optional stopping** (also called peeking). If you check for significance at multiple time points and stop as soon as $p < 0.05$, you are effectively performing multiple tests on accumulating data.
-
-    The more frequently you peek, the higher the probability of observing $p < 0.05$ by chance under the null. Simulations show that continuous monitoring can inflate the actual Type I error rate to 20-30% even with a nominal $\alpha = 0.05$.
-
-    Proper approaches include:
-
-    - **Sequential testing** (group sequential designs): pre-specify the number of interim analyses and use adjusted significance boundaries (e.g., O'Brien-Fleming, Pocock).
-    - **Always-valid p-values** or confidence sequences that maintain Type I error control under continuous monitoring.
-    - **Fixed-horizon testing:** commit to a sample size in advance and analyze only at the end.
+    1. **분산분석(또는 비율에 대한 카이제곱 검정)을 전체검정으로 먼저 수행한다.** 기각하면 다중검정 보정(Bonferroni, Tukey, 대조군과 비교한다면 Dunnett)을 적용한 쌍별 비교로 이어간다.
+    2. **하나의 주요 비교를 미리 지정한다**(예: 최선의 변형 대 대조). 그 비교에 대해서만 조정한다.
+    3. **Bonferroni를 적용한다.** 각 쌍별 비교에 $\alpha/3 = 0.0167$을 쓴다.
 
 ---
 
-**Exercise 3.**
-A company runs an A/B test for 1 week and finds a p-value of 0.04 with an estimated 0.3% increase in conversion rate. The CEO asks to launch the new feature immediately. What additional considerations should the data scientist raise?
+**연습문제 2.**
+어떤 A/B 검정이 3일 만에 처치군에서 "유의한" 개선이 보인다는 이유로 조기 중단되었다. 미리 정한 중단 규칙 없이 조기 중단할 때의 통계적 문제를 설명하라.
 
-??? success "Solution to Exercise 3"
+??? success "연습문제 2 풀이"
+    규칙을 미리 정하지 않은 조기 중단은 **임의 중단**(엿보기라고도 한다)을 통해 제1종 오류율을 부풀린다. 여러 시점에서 유의성을 확인하다가 $p < 0.05$가 되는 즉시 멈추면, 쌓여 가는 자료에 대해 사실상 여러 번 검정하는 셈이다.
 
-    1. **Practical significance:** A 0.3% increase may be statistically significant but economically negligible. The confidence interval should be examined: if it includes effects too small to matter, the finding may not justify the implementation cost.
+    자주 엿볼수록 귀무가설 아래에서 우연히 $p < 0.05$를 관측할 확률이 높아진다. 모의실험에 따르면 명목 $\alpha = 0.05$에서도 연속적인 모니터링은 실제 제1종 오류율을 20–30%까지 부풀릴 수 있다.
 
-    2. **Duration:** One week may not capture weekly cycles, seasonal effects, or novelty effects. The improvement might fade (users initially curious about the new feature revert to baseline behavior).
+    올바른 접근은 다음과 같다:
 
-    3. **Sample ratio mismatch:** Verify that the randomization was balanced. If the treatment and control groups have unexpected size differences, the experiment may be contaminated.
-
-    4. **Multiple metrics:** If the primary metric improved but secondary metrics (revenue per user, retention) degraded, the net effect could be negative.
-
-    5. **Segment effects:** The aggregate improvement might mask heterogeneity: the feature may help one user segment while harming another.
+    - **순차검정**(그룹 순차 설계): 중간분석의 횟수를 미리 정하고 조정된 유의성 경계(예: O'Brien-Fleming, Pocock)를 쓴다.
+    - **항상 타당한 p-값**이나 연속 모니터링에서도 제1종 오류를 통제하는 신뢰수열.
+    - **고정 지평 검정:** 표본크기를 미리 정하고 마지막에만 분석한다.
 
 ---
 
-**Exercise 4.**
-Explain the difference between using ANOVA and the chi-squared test for an A/B/C test on conversion rates. When is each appropriate?
+**연습문제 3.**
+어떤 회사가 1주일간 A/B 검정을 수행하여 p-값 0.04와 전환율 0.3% 증가 추정값을 얻었다. CEO가 새 기능을 즉시 출시하라고 한다. 데이터 과학자는 어떤 추가 고려사항을 제기해야 하는가?
 
-??? success "Solution to Exercise 4"
-    **Chi-squared test for independence:** Used when the outcome is categorical (e.g., converted vs. not converted). Constructs a contingency table of group $\times$ outcome and tests whether the conversion rate differs across groups. Appropriate for binary or multi-category outcomes.
+??? success "연습문제 3 풀이"
 
-    **ANOVA:** Used when the outcome is continuous (e.g., revenue per user, time on page). Tests whether the group means differ. Requires approximate normality and equal variances (or use Welch's ANOVA).
+    1. **실질적 유의성:** 0.3% 증가는 통계적으로 유의해도 경제적으로는 무시할 만할 수 있다. 신뢰구간을 살펴야 한다. 구간이 의미 없을 만큼 작은 효과를 포함한다면 구현 비용을 정당화하지 못할 수 있다.
 
-    For **conversion rates** (binary outcome), the chi-squared test or a logistic regression is more appropriate because the data are Bernoulli-distributed, not normal. ANOVA can approximate the chi-squared test for large samples (both are asymptotically equivalent for binary data), but the chi-squared test is the natural choice.
+    2. **기간:** 1주일로는 주간 주기, 계절 효과, 신기 효과를 담지 못할 수 있다. 개선이 사라질 수도 있다(새 기능에 처음 호기심을 보이던 사용자가 원래 행동으로 돌아간다).
 
-    For **continuous metrics** (revenue, engagement time), ANOVA is appropriate. If the data are heavily skewed (common for revenue, which has many zeros), consider a transformation, a nonparametric test, or a bootstrap approach.
+    3. **표본 비율 불일치:** 무작위화가 균형 잡혔는지 확인하라. 처치군과 대조군의 크기가 예상과 다르게 차이가 나면 실험이 오염되었을 수 있다.
+
+    4. **여러 지표:** 주요 지표는 개선되었지만 부차 지표(사용자당 매출, 유지율)가 나빠졌다면 순효과가 음수일 수 있다.
+
+    5. **세그먼트 효과:** 집계 수준의 개선이 이질성을 감출 수 있다. 어떤 사용자 집단에는 도움이 되고 다른 집단에는 해가 될 수 있다.
+
+---
+
+**연습문제 4.**
+전환율에 대한 A/B/C 검정에서 분산분석과 카이제곱 검정을 쓰는 것의 차이를 설명하라. 각각은 언제 적절한가?
+
+??? success "연습문제 4 풀이"
+    **카이제곱 독립성 검정:** 결과가 범주형일 때(예: 전환 대 비전환) 쓴다. 집단 × 결과의 분할표를 만들어 전환율이 집단마다 다른지 검정한다. 이진이거나 여러 범주인 결과에 적절하다.
+
+    **분산분석:** 결과가 연속형일 때(예: 사용자당 매출, 페이지 체류시간) 쓴다. 집단 평균이 다른지 검정한다. 근사적 정규성과 등분산을 요구한다(또는 Welch 분산분석을 쓴다).
+
+    **전환율**(이진 결과)에는 자료가 정규가 아니라 Bernoulli 분포를 따르므로 카이제곱 검정이나 로지스틱 회귀가 더 적절하다. 표본이 크면 분산분석이 카이제곱 검정을 근사할 수 있지만(이진 자료에서 둘은 점근적으로 동등하다), 카이제곱 검정이 자연스러운 선택이다.
+
+    **연속형 지표**(매출, 참여 시간)에는 분산분석이 적절하다. 자료가 심하게 치우쳐 있으면(0이 많은 매출 자료에서 흔하다) 변환, 비모수 검정, 또는 붓스트랩 접근을 고려하라.

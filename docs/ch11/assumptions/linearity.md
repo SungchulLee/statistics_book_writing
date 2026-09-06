@@ -1,23 +1,22 @@
-# Checking Linearity
+# 선형성 확인
 
+## 분산분석에서 선형성이 관련되는 이유
 
-## Why Linearity Is Relevant in ANOVA
-
-Although linearity is not always explicitly stated as a requirement for ANOVA, it becomes relevant when ANOVA is viewed through the lens of the general linear model. In the one-way ANOVA framework, the model is:
+선형성이 분산분석의 요구 조건으로 늘 명시되지는 않지만, 분산분석을 일반선형모형의 관점에서 보면 관련성이 드러난다. 일원배치 분산분석의 모형은
 
 $$
 Y_{ij} = \mu + \alpha_i + \varepsilon_{ij}
 $$
 
-where $\mu$ is the overall mean, $\alpha_i$ is the effect of group $i$, and $\varepsilon_{ij}$ is the random error. This model is inherently linear in the parameters. Linearity becomes more explicitly important in two-way ANOVA, ANCOVA (analysis of covariance), and when ANOVA is extended to include continuous covariates.
+이며 $\mu$는 전체 평균, $\alpha_i$는 집단 $i$의 효과, $\varepsilon_{ij}$는 무작위 오차이다. 이 모형은 본래 모수에 대해 선형이다. 선형성은 이원배치 분산분석, 공분산분석(ANCOVA), 그리고 분산분석에 연속형 공변량을 넣어 확장할 때 더 분명하게 중요해진다.
 
-The linearity assumption states that the relationship between any continuous independent variable and the dependent variable is linear within each group. Nonlinear relationships can lead to systematic patterns in residuals and model misspecification.
+선형성 가정은 연속형 독립변수와 종속변수의 관계가 각 집단 안에서 선형이라는 것이다. 비선형 관계는 잔차에 체계적인 패턴을 남기고 모형 오설정으로 이어질 수 있다.
 
-## How to Check
+## 확인 방법
 
-### Scatter Plots
+### 산점도
 
-When continuous covariates are present (e.g., in ANCOVA), plot the dependent variable against each covariate, colored by group.
+(공분산분석처럼) 연속형 공변량이 있으면 종속변수를 각 공변량에 대해 집단별 색으로 그린다.
 
 ```python
 import matplotlib.pyplot as plt
@@ -28,14 +27,14 @@ plt.title("Response vs. Covariate by Group")
 plt.show()
 ```
 
-Look for:
+살펴볼 것:
 
-- **Linear trends** within each group confirm the linearity assumption.
-- **Curved patterns** suggest a nonlinear relationship that may require polynomial terms or a different model.
+- 각 집단 안의 **선형 추세**는 선형성 가정을 확인해 준다.
+- **휘어진 패턴**은 다항 항이나 다른 모형이 필요할 수 있는 비선형 관계를 시사한다.
 
-### Residual Plots
+### 잔차 그림
 
-A plot of residuals against the independent variable (or fitted values) should show no systematic patterns. Random scatter around zero confirms linearity.
+잔차를 독립변수(또는 적합값)에 대해 그린 그림에는 체계적인 패턴이 없어야 한다. 0 주위의 무작위한 흩어짐이 선형성을 확인해 준다.
 
 ```python
 import matplotlib.pyplot as plt
@@ -48,44 +47,45 @@ plt.title("Residuals vs. Fitted Values")
 plt.show()
 ```
 
-- **Random scatter:** Linearity is satisfied.
-- **Curvature:** A curved pattern suggests the need for polynomial terms or a nonlinear model.
-- **Distinct clusters:** May indicate the need for additional grouping variables.
+- **무작위한 흩어짐:** 선형성이 만족된다.
+- **곡률:** 휘어진 패턴은 다항 항이나 비선형 모형이 필요함을 시사한다.
+- **뚜렷한 군집:** 추가적인 집단 변수가 필요함을 나타낼 수 있다.
 
-## What to Do If Linearity Is Violated
+## 선형성이 어긋날 때
 
-- **Polynomial terms:** Add quadratic or higher-order terms to the model.
-- **Nonlinear transformations:** Transform the dependent variable or covariates (e.g., log, square root).
-- **Generalized additive models (GAMs):** Use smooth functions of covariates instead of assuming a linear relationship.
-- **Nonparametric methods:** If the nonlinearity is severe, consider non-parametric alternatives that make no assumptions about functional form.
-## Exercises
+- **다항 항:** 이차 이상의 항을 모형에 추가한다.
+- **비선형 변환:** 종속변수나 공변량을 변환한다(예: 로그, 제곱근).
+- **일반화가법모형(GAM):** 선형 관계를 가정하는 대신 공변량의 매끄러운 함수를 쓴다.
+- **비모수 방법:** 비선형성이 심하면 함수 형태에 대한 가정을 두지 않는 비모수 대안을 고려한다.
 
-**Exercise 1.**
-In a one-way ANOVA with purely categorical factors and no continuous covariates, explain why the linearity assumption is automatically satisfied.
+## 연습문제
 
-??? success "Solution to Exercise 1"
-    The one-way ANOVA model $Y_{ij} = \mu + \alpha_i + \varepsilon_{ij}$ uses indicator variables for group membership. These indicator variables enter the model linearly by definition. Since there is no continuous predictor, there is no functional relationship that could be nonlinear. Linearity becomes a concern only when continuous covariates are included, as in ANCOVA or regression-based formulations.
+**연습문제 1.**
+순수하게 범주형인 요인만 있고 연속형 공변량이 없는 일원배치 분산분석에서 선형성 가정이 자동으로 만족되는 이유를 설명하라.
 
----
-
-**Exercise 2.**
-An ANCOVA model includes a continuous covariate (pre-test score) along with group indicators. The residual-vs-fitted plot shows a clear U-shaped pattern. Explain what this indicates and propose two remedies.
-
-??? success "Solution to Exercise 2"
-    A U-shaped pattern in the residual-vs-fitted plot indicates that the relationship between the covariate and the response is **nonlinear** -- the linear model systematically underpredicts at the extremes and overpredicts in the middle.
-
-    Two remedies:
-
-    1. **Add a polynomial term.** Include $X^2$ (and possibly $X^3$) for the covariate in the model to capture the curvature within the linear regression framework.
-
-    2. **Apply a nonlinear transformation.** Transform the covariate (e.g., $\log(X)$ or $\sqrt{X}$) so that its relationship with the response becomes approximately linear.
+??? success "연습문제 1 풀이"
+    일원배치 분산분석 모형 $Y_{ij} = \mu + \alpha_i + \varepsilon_{ij}$는 집단 소속을 나타내는 지시변수를 쓴다. 이 지시변수는 정의상 모형에 선형으로 들어간다. 연속형 설명변수가 없으므로 비선형일 수 있는 함수 관계 자체가 없다. 선형성은 공분산분석이나 회귀 기반 표현처럼 연속형 공변량이 포함될 때에만 문제가 된다.
 
 ---
 
-**Exercise 3.**
-Explain the difference between detecting nonlinearity via a scatterplot of $Y$ versus $X$ and detecting it via a residual plot. In which scenario might one method succeed where the other fails?
+**연습문제 2.**
+어떤 공분산분석 모형이 집단 지시변수와 함께 연속형 공변량(사전 점수)을 포함한다. 잔차 대 적합값 그림에 뚜렷한 U자 패턴이 보인다. 무엇을 뜻하는지 설명하고 두 가지 처방을 제시하라.
 
-??? success "Solution to Exercise 3"
-    A **scatterplot** of $Y$ versus $X$ shows the raw relationship between the variables, which may be obscured by the influence of other predictors in a multiple regression or ANOVA setting. A **residual plot** shows the relationship after removing the effects of all other predictors, isolating the contribution of the variable in question.
+??? success "연습문제 2 풀이"
+    잔차 대 적합값 그림의 U자 패턴은 공변량과 반응 사이의 관계가 **비선형**임을 나타낸다. 선형모형이 양 극단에서는 체계적으로 과소예측하고 가운데에서는 과대예측하고 있다.
 
-    In multiple regression or ANCOVA, the scatterplot of $Y$ versus a single covariate can appear linear even when the partial relationship (after adjusting for other predictors) is nonlinear. The residual plot would detect this. Conversely, in simple regression the two methods are largely equivalent.
+    두 가지 처방:
+
+    1. **다항 항 추가.** 공변량의 $X^2$(필요하면 $X^3$)을 모형에 넣어 선형회귀 틀 안에서 곡률을 담는다.
+
+    2. **비선형 변환 적용.** 공변량을 변환하여(예: $\log(X)$나 $\sqrt{X}$) 반응과의 관계가 근사적으로 선형이 되게 한다.
+
+---
+
+**연습문제 3.**
+$Y$ 대 $X$의 산점도로 비선형성을 탐지하는 것과 잔차 그림으로 탐지하는 것의 차이를 설명하라. 한 방법은 성공하고 다른 방법은 실패하는 상황은 어떤 경우인가?
+
+??? success "연습문제 3 풀이"
+    $Y$ 대 $X$의 **산점도**는 두 변수의 원래 관계를 보여주는데, 다중회귀나 분산분석 상황에서는 다른 설명변수의 영향 때문에 이 관계가 가려질 수 있다. **잔차 그림**은 다른 모든 설명변수의 효과를 제거한 뒤의 관계를 보여주므로 문제되는 변수의 기여만 떼어낸다.
+
+    다중회귀나 공분산분석에서는 (다른 설명변수를 조정한 뒤의) 부분 관계가 비선형인데도 하나의 공변량에 대한 $Y$의 산점도가 선형으로 보일 수 있다. 잔차 그림은 이를 탐지한다. 반대로 단순회귀에서는 두 방법이 대체로 동등하다.

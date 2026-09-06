@@ -1,18 +1,18 @@
-# One-Way Analysis of Variance End-to-End Pipeline
+# 일원배치 분산분석 파이프라인
 
-## Overview
+## 개요
 
-This page demonstrates a complete one-way ANOVA pipeline from model fitting through post-hoc testing to visualization. The workflow covers fitting the ANOVA model with statsmodels, running Tukey's HSD for pairwise comparisons, performing pairwise Welch $t$-tests with Bonferroni correction, and producing a boxplot summary. The PlantGrowth dataset serves as a running example throughout.
+이 페이지는 모형 적합부터 사후검정과 시각화까지 이어지는 완전한 일원배치 분산분석 파이프라인을 보여준다. statsmodels로 분산분석 모형을 적합하고, 쌍별 비교를 위해 Tukey의 HSD를 수행하고, Bonferroni 보정을 적용한 쌍별 Welch $t$-검정을 수행하며, 상자그림으로 요약한다. 전체에 걸쳐 PlantGrowth 자료를 예제로 쓴다.
 
-## Step 1: Fit the One-Way ANOVA Model
+## 1단계: 일원배치 분산분석 모형 적합
 
-The one-way ANOVA tests
+일원배치 분산분석은
 
 $$
 H_0: \mu_1 = \mu_2 = \cdots = \mu_k
 $$
 
-against $H_A$: at least one $\mu_i$ differs. Using the formula interface in statsmodels, the factor is wrapped in `C()` to indicate a categorical variable.
+을 $H_A$(적어도 하나의 $\mu_i$가 다르다)에 대해 검정한다. statsmodels의 수식 인터페이스에서는 요인을 `C()`로 감싸 범주형 변수임을 나타낸다.
 
 ```python
 import pandas as pd
@@ -28,15 +28,17 @@ aov = anova_lm(model)
 print(aov)
 ```
 
-The ANOVA table reports the between-group sum of squares ($SSB$), the within-group sum of squares ($SSW$), the $F$-statistic, and the $p$-value. Reject $H_0$ when $p < \alpha$.
+분산분석표는 집단 간 제곱합($SSB$), 집단 내 제곱합($SSW$), $F$-통계량, $p$-값을 보고한다. $p < \alpha$이면 $H_0$을 기각한다.
 
-## Step 2: Tukey HSD Post-Hoc Test
+## 2단계: Tukey HSD 사후검정
 
-When ANOVA rejects, Tukey's Honest Significant Difference identifies which specific pairs differ while controlling the family-wise error rate. For a balanced design with $n$ observations per group,
+분산분석이 기각되면 Tukey의 정직유의차가 가족단위 오류율을 통제하면서 어느 쌍이 다른지 찾아낸다. 집단당 관측값이 $n$개인 균형 설계에서는
 
 $$
 \text{HSD} = q_{\alpha,\, k,\, N-k}\; \sqrt{\frac{MSW}{n}}
 $$
+
+이다.
 
 ```python
 from statsmodels.stats.multicomp import pairwise_tukeyhsd
@@ -45,11 +47,11 @@ tukey = pairwise_tukeyhsd(endog=df['weight'], groups=df['group'], alpha=0.05)
 print(tukey)
 ```
 
-The output shows the mean difference, confidence interval, and whether each pair is significantly different.
+출력은 평균 차이, 신뢰구간, 각 쌍이 유의하게 다른지를 보여준다.
 
-## Step 3: Pairwise Welch t-Tests with Bonferroni Correction
+## 3단계: Bonferroni 보정을 적용한 쌍별 Welch t-검정
 
-When variances may differ across groups, Welch's $t$-test does not assume equal variances. The Bonferroni correction multiplies each raw $p$-value by $m = \binom{k}{2}$:
+집단 사이의 분산이 다를 수 있으면 등분산을 가정하지 않는 Welch $t$-검정을 쓴다. Bonferroni 보정은 각 보정 전 $p$-값에 $m = \binom{k}{2}$를 곱한다:
 
 $$
 p_{\text{adj}} = \min\!\bigl(m \cdot p_{\text{raw}},\; 1\bigr)
@@ -74,9 +76,9 @@ for lbl, p, pb in zip(labels, p_raw, p_bonf):
     print(f"{lbl:<12}  p = {p:.4f}   p_bonf = {pb:.4f}")
 ```
 
-## Step 4: Visualization
+## 4단계: 시각화
 
-A boxplot provides a quick visual comparison of group distributions.
+상자그림은 집단 분포를 빠르게 시각적으로 비교하게 해 준다.
 
 ```python
 import matplotlib.pyplot as plt
@@ -91,87 +93,87 @@ plt.tight_layout()
 plt.show()
 ```
 
-## Interpretation
+## 해석
 
-- **ANOVA $F$-test:** A significant $p$-value indicates that at least one treatment group differs from the control or from another treatment.
-- **Tukey HSD:** Provides simultaneous confidence intervals. Pairs whose intervals exclude zero are significantly different.
-- **Bonferroni-corrected Welch tests:** More conservative than Tukey for the same number of comparisons but do not require equal variances.
-- **Boxplot:** Visualizes the median, interquartile range, and potential outliers for each group, supporting the numerical findings.
+- **분산분석 $F$-검정:** $p$-값이 유의하면 적어도 한 처치군이 대조군이나 다른 처치군과 다름을 나타낸다.
+- **Tukey HSD:** 동시 신뢰구간을 제공한다. 구간이 0을 포함하지 않는 쌍이 유의하게 다르다.
+- **Bonferroni 보정 Welch 검정:** 같은 수의 비교에서 Tukey보다 보수적이지만 등분산을 요구하지 않는다.
+- **상자그림:** 각 집단의 중앙값, 사분위범위, 잠재적 이상점을 시각화하여 수치 결과를 뒷받침한다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-The PlantGrowth dataset has three groups: ctrl, trt1, trt2 with 10 observations each. The ANOVA yields $F = 4.85$ with $p = 0.016$. How many pairwise comparisons are needed, and what is the Bonferroni-adjusted significance level for each test?
+**연습문제 1.**
+PlantGrowth 자료에는 ctrl, trt1, trt2 세 집단이 있고 각각 관측값이 10개이다. 분산분석에서 $F = 4.85$, $p = 0.016$을 얻었다. 쌍별 비교는 몇 개가 필요하며 각 검정의 Bonferroni 조정 유의수준은 얼마인가?
 
-??? success "Solution to Exercise 1"
-    With $k = 3$ groups there are $\binom{3}{2} = 3$ pairwise comparisons. The Bonferroni-adjusted significance level for each individual test is
+??? success "연습문제 1 풀이"
+    집단이 $k = 3$개이므로 쌍별 비교는 $\binom{3}{2} = 3$개이다. 개별 검정의 Bonferroni 조정 유의수준은
 
     $$
     \alpha_{\text{adj}} = \frac{\alpha}{m} = \frac{0.05}{3} \approx 0.0167
     $$
 
-    Each pairwise test must have a raw $p$-value below $0.0167$ to be declared significant.
+    이다. 각 쌍별 검정은 보정 전 $p$-값이 $0.0167$보다 작아야 유의하다고 선언된다.
 
 ---
 
-**Exercise 2.**
-Explain why the Welch $t$-test is preferred over the pooled (Student) $t$-test for pairwise comparisons after ANOVA when group variances may differ. What happens to the Welch test when variances are actually equal?
+**연습문제 2.**
+집단 분산이 다를 수 있을 때 분산분석 뒤의 쌍별 비교에서 합동(Student) $t$-검정보다 Welch $t$-검정이 선호되는 이유를 설명하라. 분산이 실제로 같으면 Welch 검정은 어떻게 되는가?
 
-??? success "Solution to Exercise 2"
-    The pooled $t$-test assumes $\sigma_1^2 = \sigma_2^2$ and estimates a common variance by pooling both samples. When this assumption fails, the pooled test can have inflated Type I error (if the smaller group has larger variance) or reduced power (if the larger group has larger variance).
+??? success "연습문제 2 풀이"
+    합동 $t$-검정은 $\sigma_1^2 = \sigma_2^2$을 가정하고 두 표본을 합동하여 공통 분산을 추정한다. 이 가정이 무너지면 (작은 집단의 분산이 크면) 제1종 오류가 부풀려지거나 (큰 집단의 분산이 크면) 검정력이 떨어질 수 있다.
 
-    The Welch $t$-test uses separate variance estimates and adjusts the degrees of freedom via the Satterthwaite approximation:
+    Welch $t$-검정은 분산을 따로 추정하고 Satterthwaite 근사로 자유도를 조정한다:
 
     $$
     \nu = \frac{\left(\frac{s_1^2}{n_1} + \frac{s_2^2}{n_2}\right)^2}{\frac{(s_1^2/n_1)^2}{n_1-1} + \frac{(s_2^2/n_2)^2}{n_2-1}}
     $$
 
-    When variances are actually equal ($s_1^2 \approx s_2^2$), the Welch degrees of freedom approach $n_1 + n_2 - 2$, and the Welch test becomes nearly identical to the pooled test. The cost is a slight loss of power due to fewer effective degrees of freedom, but this loss is negligible for moderate sample sizes.
+    분산이 실제로 같으면($s_1^2 \approx s_2^2$) Welch 자유도가 $n_1 + n_2 - 2$에 가까워져 Welch 검정이 합동 검정과 거의 같아진다. 유효 자유도가 조금 줄어드는 만큼 검정력을 약간 잃지만, 표본크기가 어느 정도 되면 이 손실은 무시할 만하다.
 
 ---
 
-**Exercise 3.**
-A one-way ANOVA on four groups gives $MSW = 8.5$ with $N - k = 76$ degrees of freedom. The Tukey critical value is $q_{0.05,4,76} = 3.70$ and all groups have $n = 20$. Compute the minimum mean difference required for significance.
+**연습문제 3.**
+집단이 넷인 일원배치 분산분석에서 자유도 $N - k = 76$의 $MSW = 8.5$를 얻었다. Tukey 임계값은 $q_{0.05,4,76} = 3.70$이고 모든 집단의 $n = 20$이다. 유의해지는 데 필요한 최소 평균 차이를 계산하라.
 
-??? success "Solution to Exercise 3"
-    The Tukey HSD threshold is
+??? success "연습문제 3 풀이"
+    Tukey HSD 문턱은
 
     $$
     \text{HSD} = q_{\alpha,k,N-k} \sqrt{\frac{MSW}{n}} = 3.70 \sqrt{\frac{8.5}{20}} = 3.70 \sqrt{0.425} = 3.70 \times 0.6519 \approx 2.41
     $$
 
-    Any pair of group means with $|\bar{y}_i - \bar{y}_j| > 2.41$ is significantly different at the $\alpha = 0.05$ level.
+    이다. $|\bar{y}_i - \bar{y}_j| > 2.41$인 집단 평균 쌍은 $\alpha = 0.05$ 수준에서 유의하게 다르다.
 
 ---
 
-**Exercise 4.**
-In the pipeline above, Tukey HSD and Bonferroni-corrected Welch $t$-tests may give different conclusions for the same pair of groups. Under what conditions would you trust one over the other? Discuss assumptions and power.
+**연습문제 4.**
+위 파이프라인에서 Tukey HSD와 Bonferroni 보정 Welch $t$-검정이 같은 집단 쌍에 대해 다른 결론을 줄 수 있다. 어떤 조건에서 어느 쪽을 더 신뢰하겠는가? 가정과 검정력의 관점에서 논하라.
 
-??? success "Solution to Exercise 4"
-    **Trust Tukey HSD when:** (1) the equal-variance assumption holds (Levene's test is not significant), (2) group sizes are equal or nearly so, and (3) all pairwise comparisons are of interest. Tukey is designed specifically for the all-pairs problem and has higher power than Bonferroni in this setting.
+??? success "연습문제 4 풀이"
+    **Tukey HSD를 신뢰할 때:** (1) 등분산 가정이 성립하고(Levene 검정이 유의하지 않고), (2) 집단 크기가 같거나 거의 같으며, (3) 모든 쌍별 비교가 관심사일 때. Tukey는 전체 쌍 문제를 위해 설계되었으므로 이 상황에서 Bonferroni보다 검정력이 높다.
 
-    **Trust Bonferroni-corrected Welch tests when:** (1) group variances are unequal, (2) sample sizes are unbalanced, or (3) only a subset of comparisons are planned. The Welch test does not assume equal variances, making it more reliable when homoscedasticity is violated.
+    **Bonferroni 보정 Welch 검정을 신뢰할 때:** (1) 집단 분산이 다르거나, (2) 표본크기가 불균형하거나, (3) 비교의 일부만 계획했을 때. Welch 검정은 등분산을 가정하지 않으므로 등분산성이 어긋날 때 더 믿을 만하다.
 
-    In general, when both methods agree, the conclusion is robust. When they disagree, the disagreement usually involves a borderline comparison. In such cases, checking the diagnostic plots (boxplots, variance ratio) helps decide which set of assumptions is more defensible.
+    일반적으로 두 방법이 일치하면 결론이 로버스트하다. 불일치할 때에는 대개 경계선에 있는 비교가 문제이다. 이런 경우 진단 그림(상자그림, 분산비)을 확인하여 어느 쪽 가정이 더 옹호 가능한지 판단하면 도움이 된다.
 
 ---
 
-**Exercise 5.**
-Prove that for a balanced one-way ANOVA ($n_1 = n_2 = \cdots = n_k = n$), the $F$-statistic can be written as
+**연습문제 5.**
+균형 잡힌 일원배치 분산분석($n_1 = n_2 = \cdots = n_k = n$)에서 $F$-통계량이
 
 $$
 F = \frac{n \sum_{i=1}^{k}(\bar{y}_{i\cdot} - \bar{y}_{\cdot\cdot})^2 / (k-1)}{\sum_{i=1}^{k}\sum_{j=1}^{n}(y_{ij} - \bar{y}_{i\cdot})^2 / (kn - k)}
 $$
 
-and explain why larger $n$ increases power even if the group means do not change.
+로 쓰일 수 있음을 증명하고, 집단 평균이 변하지 않아도 $n$이 커지면 검정력이 커지는 이유를 설명하라.
 
-??? success "Solution to Exercise 5"
-    **Derivation.** For a balanced design with $n$ observations per group, $N = kn$. The between-group sum of squares is
+??? success "연습문제 5 풀이"
+    **유도.** 집단당 관측값이 $n$개인 균형 설계에서 $N = kn$이다. 집단 간 제곱합은
 
     $$
     SSB = \sum_{i=1}^{k} n(\bar{y}_{i\cdot} - \bar{y}_{\cdot\cdot})^2 = n \sum_{i=1}^{k}(\bar{y}_{i\cdot} - \bar{y}_{\cdot\cdot})^2
     $$
 
-    The within-group sum of squares is $SSW = \sum_{i=1}^{k}\sum_{j=1}^{n}(y_{ij} - \bar{y}_{i\cdot})^2$. The mean squares are $MSB = SSB/(k-1)$ and $MSW = SSW/(kn - k)$. The $F$-statistic is $F = MSB/MSW$, giving the stated expression.
+    이다. 집단 내 제곱합은 $SSW = \sum_{i=1}^{k}\sum_{j=1}^{n}(y_{ij} - \bar{y}_{i\cdot})^2$이다. 평균제곱은 $MSB = SSB/(k-1)$, $MSW = SSW/(kn - k)$이고 $F$-통계량은 $F = MSB/MSW$이므로 주어진 식이 나온다.
 
-    **Why larger $n$ increases power:** As $n$ grows, each group mean $\bar{y}_{i\cdot}$ converges to the population mean $\mu_i$ by the law of large numbers, so $\sum(\bar{y}_{i\cdot} - \bar{y}_{\cdot\cdot})^2$ stabilizes near $\sum(\mu_i - \bar{\mu})^2$. The numerator $MSB$ thus scales linearly with $n$. Meanwhile, $MSW$ converges to $\sigma^2$ regardless of $n$. Therefore $F \approx n \sum(\mu_i - \bar{\mu})^2 / [(k-1)\sigma^2]$ grows with $n$, making rejection of $H_0$ increasingly likely when the alternative is true. $\square$
+    **$n$이 커지면 검정력이 커지는 이유:** $n$이 커지면 큰 수의 법칙에 의해 각 집단 평균 $\bar{y}_{i\cdot}$가 모평균 $\mu_i$로 수렴하므로 $\sum(\bar{y}_{i\cdot} - \bar{y}_{\cdot\cdot})^2$이 $\sum(\mu_i - \bar{\mu})^2$ 근처에서 안정된다. 따라서 분자 $MSB$는 $n$에 비례해 커진다. 한편 $MSW$는 $n$과 무관하게 $\sigma^2$으로 수렴한다. 그러므로 $F \approx n \sum(\mu_i - \bar{\mu})^2 / [(k-1)\sigma^2]$이 $n$과 함께 커지고, 대립가설이 참일 때 $H_0$을 기각할 가능성이 점점 높아진다. $\square$

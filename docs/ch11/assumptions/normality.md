@@ -1,21 +1,20 @@
-# Checking Normality of Residuals
+# 잔차의 정규성 확인
 
+## 정규성이 중요한 이유
 
-## Why Normality Matters
+잔차(관측값과 예측값의 차이)는 각 집단에서 정규분포를 따라야 한다. 이 가정이 있어야 F-통계량이 귀무가설 아래에서 올바른 $F$-분포를 따른다. 잔차가 정규성에서 크게 벗어나면 분산분석이 주는 p-값이 부정확해져 잘못된 결론으로 이어질 수 있다.
 
-The residuals (differences between observed and predicted values) should be normally distributed for each group. This assumption ensures that the F-statistic follows the correct $F$-distribution under the null hypothesis. When residuals deviate substantially from normality, the p-values produced by ANOVA may be inaccurate, potentially leading to incorrect conclusions.
+정규성 가정은 표본이 작을 때 특히 중요하다. 표본이 크면(집단당 $n \geq 30$) 중심극한정리가 완만한 이탈에 대해 로버스트성을 제공한다. 바탕 분포가 무엇이든 집단 평균의 표본분포가 근사적으로 정규가 되기 때문이다.
 
-The normality assumption is particularly important for small sample sizes. For larger samples ($n \geq 30$ per group), the Central Limit Theorem provides robustness against moderate departures from normality, meaning the sampling distribution of the group means will be approximately normal regardless of the underlying distribution.
+## 확인 방법
 
-## How to Check
+### Q-Q 그림 (분위수-분위수 그림)
 
-### Q-Q Plot (Quantile-Quantile Plot)
+Q-Q 그림은 관측된 잔차의 분위수를 정규분포의 이론적 분위수와 비교한다. 잔차가 정규분포를 따르면 점들이 45도 기준선을 따라 대략 놓인다.
 
-A Q-Q plot compares the quantiles of the observed residuals against the theoretical quantiles of a normal distribution. If the residuals are normally distributed, the points fall approximately along a straight 45-degree reference line.
-
-- Points deviating from the line in the **tails** suggest heavy-tailed or light-tailed distributions.
-- A systematic **S-shaped** curve suggests skewness.
-- A few points deviating at the extremes may simply reflect natural sampling variability.
+- 점들이 **꼬리**에서 선을 벗어나면 꼬리가 두껍거나 얇은 분포를 시사한다.
+- 체계적인 **S자** 곡선은 치우침을 시사한다.
+- 양 극단의 몇몇 점이 벗어나는 것은 자연스러운 표집 변동을 반영한 것일 수 있다.
 
 ```python
 import statsmodels.api as sm
@@ -26,15 +25,15 @@ plt.title("Q-Q Plot of Residuals")
 plt.show()
 ```
 
-### Shapiro-Wilk Test
+### Shapiro-Wilk 검정
 
-The Shapiro-Wilk test evaluates the null hypothesis that the data is drawn from a normal distribution. A significant result ($p < 0.05$) suggests a departure from normality.
+Shapiro-Wilk 검정은 자료가 정규분포에서 추출되었다는 귀무가설을 평가한다. 결과가 유의하면($p < 0.05$) 정규성으로부터의 이탈을 시사한다.
 
 $$
 W = \frac{\left(\sum_{i=1}^n a_i x_{(i)}\right)^2}{\sum_{i=1}^n (x_i - \bar{x})^2}
 $$
 
-where $x_{(i)}$ are the ordered sample values and $a_i$ are constants generated from the means, variances, and covariances of the order statistics of a sample of size $n$ from a normal distribution.
+여기서 $x_{(i)}$는 정렬된 표본값이고, $a_i$는 정규분포에서 크기 $n$인 표본의 순서통계량의 평균, 분산, 공분산으로부터 만들어지는 상수이다.
 
 ```python
 from scipy.stats import shapiro
@@ -43,12 +42,12 @@ stat, p_value = shapiro(model.resid)
 print(f"Shapiro-Wilk Test: W = {stat:.4f}, p-value = {p_value:.4f}")
 ```
 
-!!! warning "Sensitivity to Sample Size"
-    The Shapiro-Wilk test can be overly sensitive with large samples, flagging trivial departures from normality as statistically significant. Conversely, with small samples, the test may lack power to detect meaningful departures. Always combine formal tests with visual inspection (Q-Q plots, histograms).
+!!! warning "표본크기에 대한 민감성"
+    Shapiro-Wilk 검정은 표본이 크면 지나치게 민감해져 사소한 이탈까지 통계적으로 유의하다고 표시할 수 있다. 반대로 표본이 작으면 의미 있는 이탈을 탐지할 검정력이 부족할 수 있다. 형식적 검정은 언제나 시각적 검토(Q-Q 그림, 히스토그램)와 함께 쓰라.
 
-### Histogram of Residuals
+### 잔차의 히스토그램
 
-Plotting the residuals in a histogram provides a quick visual assessment of their distribution shape.
+잔차를 히스토그램으로 그리면 분포의 모양을 빠르게 시각적으로 평가할 수 있다.
 
 ```python
 import matplotlib.pyplot as plt
@@ -60,45 +59,46 @@ plt.title("Histogram of Residuals")
 plt.show()
 ```
 
-Look for:
+살펴볼 것:
 
-- **Skewness:** The distribution is not symmetric around zero.
-- **Heavy tails (kurtosis):** More extreme values than expected under normality.
-- **Bimodality:** Two peaks may indicate a missing grouping variable.
+- **치우침:** 분포가 0을 중심으로 대칭이 아니다.
+- **두꺼운 꼬리(첨도):** 정규성 아래에서 기대되는 것보다 극단값이 많다.
+- **이봉성:** 봉우리가 둘이면 빠뜨린 집단 변수가 있음을 시사할 수 있다.
 
-## What to Do If Normality Is Violated
+## 정규성이 어긋날 때
 
-- **Data transformations:** Log, square root, or Box-Cox transformations can reduce skewness and make residuals more normal (see [Transformations to Achieve Normality](../../ch14/non_normal_data/transformations.md)).
-- **Non-parametric alternatives:** The Kruskal-Wallis test compares medians instead of means and does not require normality (see [Kruskal-Wallis Test](../../ch16/multi_group_nonparametric/kruskal_wallis.md)).
-- **Bootstrapping:** Resampling methods can provide valid inference without distributional assumptions (see [The Bootstrap Principle](../../ch17/bootstrap/principle.md)).
-## Exercises
+- **자료 변환:** 로그, 제곱근, Box-Cox 변환으로 치우침을 줄여 잔차를 더 정규에 가깝게 만들 수 있다([정규성을 얻기 위한 변환](../../ch14/non_normal_data/transformations.md) 참조).
+- **비모수 대안:** Kruskal-Wallis 검정은 평균 대신 중앙값을 비교하며 정규성을 요구하지 않는다([Kruskal-Wallis 검정](../../ch16/multi_group_nonparametric/kruskal_wallis.md) 참조).
+- **붓스트랩:** 재표본추출 방법은 분포 가정 없이 타당한 추론을 제공한다([붓스트랩 원리](../../ch17/bootstrap/principle.md) 참조).
 
-**Exercise 1.**
-A one-way ANOVA with $k = 3$ groups has $n = 8$ observations per group. The Shapiro-Wilk test on the residuals gives $p = 0.02$. Should the researcher abandon ANOVA? Explain your reasoning.
+## 연습문제
 
-??? success "Solution to Exercise 1"
-    Not necessarily. The researcher should combine the formal test result with visual diagnostics (Q-Q plot, histogram). With only $n = 8$ per group, the Shapiro-Wilk test may be detecting a moderate departure from normality that does not severely affect the F-test. ANOVA is reasonably robust to mild non-normality, especially when group sizes are equal.
+**연습문제 1.**
+집단이 $k = 3$개, 집단당 $n = 8$인 일원배치 분산분석에서 잔차에 대한 Shapiro-Wilk 검정이 $p = 0.02$를 주었다. 연구자는 분산분석을 포기해야 하는가? 근거를 설명하라.
 
-    However, if the Q-Q plot reveals heavy tails, strong skewness, or outliers, the researcher should consider alternatives: applying a variance-stabilizing transformation (log, square root), using Welch's ANOVA (which is more robust), or switching to a non-parametric alternative like the Kruskal-Wallis test.
+??? success "연습문제 1 풀이"
+    꼭 그럴 필요는 없다. 형식적 검정 결과를 시각적 진단(Q-Q 그림, 히스토그램)과 함께 보아야 한다. 집단당 $n = 8$뿐이므로 Shapiro-Wilk 검정이 F-검정에 심각한 영향을 주지 않는 완만한 이탈을 탐지했을 수 있다. 분산분석은 특히 집단 크기가 같을 때 약한 비정규성에 꽤 로버스트하다.
 
----
-
-**Exercise 2.**
-A Q-Q plot of ANOVA residuals shows points that follow the reference line in the center but curve upward at both tails. What does this pattern indicate about the residual distribution, and how might it affect ANOVA inference?
-
-??? success "Solution to Exercise 2"
-    Points curving upward at both tails indicate a **heavy-tailed (leptokurtic) distribution** -- the residuals have more extreme values than a normal distribution would predict. This means there is excess kurtosis.
-
-    Heavy tails can inflate the within-group variance estimate (MSW), making the F-statistic smaller and the test more conservative (reduced power). Additionally, extreme values may be influential observations that disproportionately affect group means. The researcher should check for outliers, consider robust methods, or use a non-parametric test if the departure is severe.
+    그러나 Q-Q 그림에서 두꺼운 꼬리, 강한 치우침, 이상점이 드러나면 대안을 고려해야 한다. 분산 안정화 변환(로그, 제곱근)을 적용하거나, 더 로버스트한 Welch 분산분석을 쓰거나, Kruskal-Wallis 검정 같은 비모수 대안으로 옮길 수 있다.
 
 ---
 
-**Exercise 3.**
-Explain why the normality assumption is less critical for large sample sizes (e.g., $n \geq 30$ per group) than for small ones. Which specific results in ANOVA remain valid without normality, and which do not?
+**연습문제 2.**
+분산분석 잔차의 Q-Q 그림에서 가운데는 기준선을 따르지만 양 꼬리에서 위로 휘는 점들이 보인다. 이 패턴은 잔차 분포에 대해 무엇을 뜻하며 분산분석의 추론에 어떤 영향을 줄 수 있는가?
 
-??? success "Solution to Exercise 3"
-    For large samples, the **Central Limit Theorem** ensures that the sampling distribution of the group means is approximately normal regardless of the underlying population distribution. Since the F-test is based on comparing group means, its reference distribution is approximately correct.
+??? success "연습문제 2 풀이"
+    양 꼬리에서 위로 휘는 점들은 **두꺼운 꼬리(급첨) 분포**를 나타낸다. 잔차에 정규분포가 예측하는 것보다 극단값이 많다는 뜻이며, 초과 첨도가 있다는 뜻이다.
 
-    **Results that remain valid:** The OLS estimates of group means are unbiased regardless of normality. The F-test p-values are approximately valid for large samples.
+    두꺼운 꼬리는 집단 내 분산 추정값(MSW)을 부풀려 F-통계량을 작게 만들고 검정을 보수적으로(검정력이 낮게) 만든다. 게다가 극단값이 집단 평균에 지나치게 큰 영향을 주는 영향점일 수도 있다. 연구자는 이상점을 확인하고, 로버스트 방법을 고려하거나, 이탈이 심하면 비모수 검정을 쓰는 편이 좋다.
 
-    **Results that may not remain valid:** Prediction intervals for individual observations still require normality. With small samples, the exact distribution of the F-statistic depends on normality, so p-values may be inaccurate if normality is violated.
+---
+
+**연습문제 3.**
+표본이 클 때(예: 집단당 $n \geq 30$) 정규성 가정이 작은 표본에서보다 덜 결정적인 이유를 설명하라. 분산분석의 어떤 결과가 정규성 없이도 유효하고, 어떤 결과가 그렇지 않은가?
+
+??? success "연습문제 3 풀이"
+    표본이 크면 **중심극한정리**에 의해 모집단 분포가 무엇이든 집단 평균의 표본분포가 근사적으로 정규가 된다. F-검정은 집단 평균을 비교하므로 그 기준분포가 근사적으로 옳다.
+
+    **여전히 유효한 결과:** 집단 평균의 OLS 추정값은 정규성과 무관하게 불편이다. 표본이 크면 F-검정의 p-값도 근사적으로 타당하다.
+
+    **유효하지 않을 수 있는 결과:** 개별 관측값에 대한 예측구간은 여전히 정규성을 요구한다. 표본이 작으면 F-통계량의 정확한 분포가 정규성에 의존하므로, 정규성이 어긋나면 p-값이 부정확할 수 있다.

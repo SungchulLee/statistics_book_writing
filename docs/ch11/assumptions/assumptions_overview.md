@@ -1,103 +1,103 @@
-# Assumptions in ANOVA
+# 분산분석의 가정
 
-The one-way ANOVA model decomposes each observation as $Y_{ij} = \mu_i + \epsilon_{ij}$, where $\mu_i$ is the population mean of group $i$ and $\epsilon_{ij}$ is a random error term. The validity of the F-test depends on specific conditions imposed on these error terms. Understanding why each assumption is needed -- and what goes wrong when it fails -- is essential before applying ANOVA to real data. This page summarizes the four key assumptions and their consequences; the remaining pages in this section provide detailed diagnostic procedures for each one.
+일원배치 분산분석 모형은 각 관측값을 $Y_{ij} = \mu_i + \epsilon_{ij}$로 분해한다. 여기서 $\mu_i$는 집단 $i$의 모평균이고 $\epsilon_{ij}$는 무작위 오차항이다. F-검정의 타당성은 이 오차항에 부과되는 조건들에 달려 있다. 각 가정이 왜 필요한지, 그리고 어긋나면 무엇이 잘못되는지를 이해하는 일은 실제 자료에 분산분석을 적용하기 전에 꼭 필요하다. 이 페이지는 네 가지 핵심 가정과 그 결과를 요약하며, 이 절의 나머지 페이지들이 각각에 대한 구체적인 진단 절차를 제공한다.
 
-## Summary of Assumptions
+## 가정 요약
 
-The four assumptions underlying the ANOVA F-test are:
+분산분석 F-검정의 바탕이 되는 네 가정은 다음과 같다:
 
-1. **Normality:** The error terms $\epsilon_{ij}$ are normally distributed within each group, so that $Y_{ij} \mid \text{group } i \sim N(\mu_i, \sigma^2)$. In practice, this is assessed by examining the residuals $e_{ij} = Y_{ij} - \bar{Y}_{i\cdot}$, which estimate the unobservable errors. See [Checking Normality](normality.md) for diagnostic methods.
+1. **정규성:** 오차항 $\epsilon_{ij}$가 각 집단 안에서 정규분포를 따라 $Y_{ij} \mid \text{집단 } i \sim N(\mu_i, \sigma^2)$이다. 실제로는 관측할 수 없는 오차를 추정하는 잔차 $e_{ij} = Y_{ij} - \bar{Y}_{i\cdot}$를 살펴 평가한다. 진단 방법은 [정규성 확인](normality.md)을 보라.
 
-2. **Independence:** Observations are statistically independent of one another. This assumption is primarily ensured through proper experimental design -- random sampling and random assignment -- rather than tested after the fact. See [Checking Independence](independence.md) for details.
+2. **독립성:** 관측값들이 통계적으로 서로 독립이다. 이 가정은 사후에 검정하기보다 올바른 실험 설계(무작위 표집과 무작위 배정)로 확보한다. 자세한 내용은 [독립성 확인](independence.md)을 보라.
 
-3. **Homoscedasticity:** The population variance $\sigma^2$ is the same across all groups. When group variances differ, the pooled mean-square-error no longer estimates a single common variance, and the F-ratio becomes unreliable. See [Checking Homoscedasticity](homoscedasticity.md) for Levene's test and related diagnostics.
+3. **등분산성:** 모분산 $\sigma^2$이 모든 집단에서 같다. 집단 분산이 다르면 합동 평균제곱오차가 더 이상 하나의 공통 분산을 추정하지 못하고 F-비를 믿을 수 없게 된다. Levene 검정과 관련 진단은 [등분산성 확인](homoscedasticity.md)을 보라.
 
-4. **Linearity:** The relationship between predictors and the response is linear. This assumption is relevant when the ANOVA model includes continuous covariates, as in ANCOVA; for purely categorical factors, linearity is automatically satisfied. See [Checking Linearity](linearity.md) for guidance.
+4. **선형성:** 설명변수와 반응 사이의 관계가 선형이다. 이 가정은 공분산분석처럼 분산분석 모형에 연속형 공변량이 들어갈 때 관련된다. 순수하게 범주형인 요인만 있으면 선형성은 자동으로 만족된다. 지침은 [선형성 확인](linearity.md)을 보라.
 
-## Why Assumptions Matter
+## 가정이 중요한 이유
 
-The F-test statistic follows an exact $F$-distribution under the null hypothesis only when normality, independence, and homoscedasticity all hold. Violations distort this reference distribution, leading to incorrect p-values and unreliable decisions.
+F-검정통계량이 귀무가설 아래에서 정확히 $F$-분포를 따르는 것은 정규성, 독립성, 등분산성이 모두 성립할 때뿐이다. 위반은 이 기준분포를 왜곡하여 잘못된 p-값과 신뢰할 수 없는 판정으로 이어진다.
 
-- **Normality.** When residuals are non-normal, the sampling distribution of the F-statistic deviates from the theoretical $F$-distribution, particularly in small samples. The Central Limit Theorem provides some robustness as sample sizes grow, but skewed or heavy-tailed distributions can still inflate or deflate the Type I error rate with fewer than 20--30 observations per group.
+- **정규성.** 잔차가 정규가 아니면 F-통계량의 표본분포가 이론적 $F$-분포에서 벗어나며, 특히 표본이 작을 때 그렇다. 표본이 커지면 중심극한정리가 어느 정도 로버스트성을 주지만, 집단당 관측이 20–30개 미만이면 치우침이나 두꺼운 꼬리가 여전히 제1종 오류율을 부풀리거나 줄일 수 있다.
 
-- **Independence.** Dependence among observations is the most consequential violation. Positive correlation reduces the effective degrees of freedom below the nominal count, causing the standard error estimates to be too small. The result is an inflated Type I error rate -- the test rejects far more often than the nominal $\alpha$ level suggests.
+- **독립성.** 관측값 사이의 의존성은 가장 치명적인 위반이다. 양의 상관은 유효 자유도를 명목값보다 낮추어 표준오차 추정을 너무 작게 만든다. 그 결과 제1종 오류율이 부풀려져 명목 $\alpha$ 수준이 시사하는 것보다 훨씬 자주 기각하게 된다.
 
-- **Homoscedasticity.** Unequal group variances cause the pooled variance estimate to over-represent groups with larger variances. The F-test then becomes liberal (rejecting too often) when smaller groups have larger variances, and conservative (rejecting too rarely) in the reverse scenario. Welch's ANOVA, which does not pool variances, provides a robust alternative.
+- **등분산성.** 집단 분산이 다르면 합동분산 추정값이 분산이 큰 집단을 과대 대표한다. 그러면 작은 집단의 분산이 클 때 F-검정이 관대해지고(너무 자주 기각하고), 반대의 경우에는 보수적이 된다(너무 드물게 기각한다). 분산을 합동하지 않는 Welch 분산분석이 로버스트한 대안이 된다.
 
-- **Linearity.** When continuous covariates are present and the true relationship is nonlinear, the model systematically misestimates group means. Residual plots reveal characteristic curved patterns that signal this type of misspecification.
+- **선형성.** 연속형 공변량이 있고 참 관계가 비선형이면 모형이 집단 평균을 체계적으로 잘못 추정한다. 잔차 그림에 특유의 곡선 패턴이 나타나 이런 오설정을 알려준다.
 
-??? example "Illustration: Effect of Unequal Variances on the F-Test"
+??? example "예시: 분산이 다를 때 F-검정에 미치는 영향"
 
-    Consider three groups with $n_1 = n_2 = n_3 = 10$ and identical population means $\mu_1 = \mu_2 = \mu_3 = 0$. Under homoscedasticity ($\sigma_1^2 = \sigma_2^2 = \sigma_3^2 = 1$), the F-test rejects at the $\alpha = 0.05$ level approximately 5% of the time, as expected.
+    $n_1 = n_2 = n_3 = 10$이고 모평균이 모두 같은($\mu_1 = \mu_2 = \mu_3 = 0$) 세 집단을 생각하자. 등분산($\sigma_1^2 = \sigma_2^2 = \sigma_3^2 = 1$) 아래에서 F-검정은 기대대로 $\alpha = 0.05$ 수준에서 약 5%의 비율로 기각한다.
 
-    Now suppose $\sigma_1^2 = 1$, $\sigma_2^2 = 1$, and $\sigma_3^2 = 9$ (group 3 has much higher variance). Even though all population means are still equal, the standard F-test rejects at roughly 8--10% instead of 5%, because the pooled variance estimate is distorted. Welch's ANOVA, which estimates each group's variance separately, maintains the correct 5% rejection rate in this scenario.
+    이제 $\sigma_1^2 = 1$, $\sigma_2^2 = 1$, $\sigma_3^2 = 9$라고 하자(집단 3의 분산이 훨씬 크다). 모평균이 여전히 모두 같은데도 표준 F-검정은 5%가 아니라 대략 8–10%의 비율로 기각한다. 합동분산 추정값이 왜곡되기 때문이다. 각 집단의 분산을 따로 추정하는 Welch 분산분석은 이 상황에서도 올바른 5% 기각률을 유지한다.
 
-    This example shows why checking homoscedasticity before interpreting the standard ANOVA F-test is important: the test can produce spurious "significant" results when variances differ substantially.
+    이 예는 표준 분산분석 F-검정을 해석하기 전에 등분산성을 확인해야 하는 이유를 보여준다. 분산이 크게 다르면 검정이 허위 "유의" 결과를 낼 수 있다.
 
-## Diagnostic Workflow
+## 진단 작업 흐름
 
-A systematic approach to assumption checking proceeds as follows:
+가정 확인의 체계적인 접근은 다음과 같이 진행된다:
 
-1. **Fit the ANOVA model** and compute the residuals $e_{ij} = Y_{ij} - \bar{Y}_{i\cdot}$.
-2. **Check independence** by reviewing the study design. If observations might be correlated (e.g., repeated measures, time-series data), consider mixed-effects models or repeated-measures ANOVA instead.
-3. **Check homoscedasticity** using Levene's test or a residual-vs-fitted-values plot. If variances are unequal, switch to Welch's ANOVA or apply a variance-stabilizing transformation.
-4. **Check normality** using a Q-Q plot of the residuals and the Shapiro-Wilk test. For large samples ($n > 30$ per group), moderate non-normality is generally tolerable.
-5. **Check linearity** if the model includes continuous covariates. Use scatter plots and partial-residual plots to detect curvature.
+1. **분산분석 모형을 적합**하고 잔차 $e_{ij} = Y_{ij} - \bar{Y}_{i\cdot}$를 계산한다.
+2. 연구 설계를 검토하여 **독립성을 확인**한다. 관측값이 상관될 수 있다면(예: 반복측정, 시계열 자료) 혼합효과 모형이나 반복측정 분산분석을 대신 고려한다.
+3. Levene 검정이나 잔차 대 적합값 그림으로 **등분산성을 확인**한다. 분산이 다르면 Welch 분산분석으로 옮기거나 분산 안정화 변환을 적용한다.
+4. 잔차의 Q-Q 그림과 Shapiro-Wilk 검정으로 **정규성을 확인**한다. 표본이 크면(집단당 $n > 30$) 어느 정도의 비정규성은 대체로 감내할 만하다.
+5. 모형에 연속형 공변량이 있으면 **선형성을 확인**한다. 산점도와 부분잔차 그림으로 곡률을 탐지한다.
 
-When one or more assumptions are violated, the appropriate remedy depends on which assumption fails. The [Handling Assumption Violations](../diagnostics/handling_violations.md) page provides a decision framework covering transformations, non-parametric alternatives (Kruskal-Wallis), and robust methods (Welch's ANOVA).
+가정이 하나 이상 어긋나면 어느 가정이 무너졌는지에 따라 적절한 처방이 달라진다. [가정 위반의 처리](../diagnostics/handling_violations.md) 페이지가 변환, 비모수 대안(Kruskal-Wallis), 로버스트 방법(Welch 분산분석)을 아우르는 판단 틀을 제공한다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-List the three standard assumptions for one-way ANOVA and explain what happens to the F-test if each is violated.
+**연습문제 1.**
+일원배치 분산분석의 표준적인 세 가정을 나열하고, 각각이 어긋나면 F-검정에 무슨 일이 생기는지 설명하라.
 
-??? success "Solution to Exercise 1"
-    The three assumptions are:
+??? success "연습문제 1 풀이"
+    세 가정은 다음과 같다:
 
-    1. **Independence:** Observations within and between groups are independent. Violation (e.g., repeated measures, clustered data) inflates the Type I error rate because the effective sample size is smaller than the nominal $n$.
+    1. **독립성:** 집단 안에서도, 집단 사이에서도 관측값이 독립이다. 위반(예: 반복측정, 군집 자료)은 유효 표본크기가 명목 $n$보다 작아지므로 제1종 오류율을 부풀린다.
 
-    2. **Normality:** The residuals (or equivalently, the observations within each group) are normally distributed. Moderate violations are tolerable with large samples (by the CLT), but severe skewness or heavy tails can distort the F-distribution, especially with small or unequal group sizes.
+    2. **정규성:** 잔차(또는 동등하게 각 집단 안의 관측값)가 정규분포를 따른다. 표본이 크면 중심극한정리 덕분에 어느 정도의 위반은 감내할 만하지만, 심한 치우침이나 두꺼운 꼬리는 특히 집단 크기가 작거나 서로 다를 때 F-분포를 왜곡할 수 있다.
 
-    3. **Homoscedasticity (equal variances):** All groups have the same population variance $\sigma^2$. Unequal variances inflate or deflate the F-statistic depending on whether larger variances are associated with smaller or larger groups. The Welch ANOVA is a robust alternative when this assumption fails.
-
----
-
-**Exercise 2.**
-A Levene's test for homogeneity of variances yields a p-value of 0.02. Should you proceed with standard ANOVA? Suggest an alternative approach.
-
-??? success "Solution to Exercise 2"
-    A Levene's test p-value of 0.02 provides evidence against the equal-variance assumption at the 5% level. Proceeding with standard ANOVA risks an incorrect F-test: if the larger variance is in the smaller group, the F-test is liberal (too many false positives); if in the larger group, it is conservative (loss of power).
-
-    Alternatives:
-
-    1. **Welch's ANOVA:** Does not assume equal variances and adjusts the degrees of freedom accordingly. This is the recommended default.
-    2. **Transformation:** Apply a variance-stabilizing transformation (e.g., log or square root) to equalize variances, then run standard ANOVA.
-    3. **Nonparametric test:** Use the Kruskal-Wallis test, which does not assume normality or equal variances.
+    3. **등분산성:** 모든 집단의 모분산 $\sigma^2$이 같다. 분산이 다르면 큰 분산이 작은 집단에 있는지 큰 집단에 있는지에 따라 F-통계량이 부풀거나 줄어든다. 이 가정이 무너지면 Welch 분산분석이 로버스트한 대안이다.
 
 ---
 
-**Exercise 3.**
-Explain why ANOVA is considered robust to moderate violations of the normality assumption when sample sizes are large and balanced.
+**연습문제 2.**
+분산의 동질성에 대한 Levene 검정이 p-값 0.02를 주었다. 표준 분산분석을 그대로 진행해야 하는가? 대안을 제시하라.
 
-??? success "Solution to Exercise 3"
-    ANOVA's robustness comes from two factors:
+??? success "연습문제 2 풀이"
+    Levene 검정의 p-값 0.02는 5% 수준에서 등분산 가정에 반하는 증거이다. 표준 분산분석을 그대로 진행하면 F-검정이 잘못될 위험이 있다. 큰 분산이 작은 집단에 있으면 F-검정이 관대해지고(거짓 양성이 많아지고), 큰 집단에 있으면 보수적이 된다(검정력을 잃는다).
 
-    1. **Central Limit Theorem:** The group means $\bar{X}_j$ are approximately normal even when individual observations are not, as long as $n_j$ is reasonably large (often $n_j \geq 20-30$ suffices). Since the F-statistic is based on comparing group means, normality of the means is what matters.
+    대안:
 
-    2. **Balanced designs:** When group sizes are equal ($n_1 = n_2 = \dots = n_k$), the F-test is robust to unequal variances because the pooled variance estimate weights each group equally. With unbalanced designs, the F-test becomes sensitive to heteroscedasticity.
-
-    However, ANOVA is not robust to heavy tails in small samples, severe skewness, or outliers. In these cases, transformations or nonparametric alternatives should be considered.
+    1. **Welch 분산분석:** 등분산을 가정하지 않고 자유도를 그에 맞게 조정한다. 권장되는 기본 선택이다.
+    2. **변환:** 분산 안정화 변환(예: 로그, 제곱근)으로 분산을 고르게 만든 뒤 표준 분산분석을 수행한다.
+    3. **비모수 검정:** 정규성이나 등분산을 가정하지 않는 Kruskal-Wallis 검정을 쓴다.
 
 ---
 
-**Exercise 4.**
-Describe how to use residual plots to assess the assumptions of normality and homoscedasticity after fitting an ANOVA model.
+**연습문제 3.**
+표본이 크고 균형 잡혀 있을 때 분산분석이 정규성 가정의 완만한 위반에 로버스트하다고 보는 이유를 설명하라.
 
-??? success "Solution to Exercise 4"
-    After fitting the ANOVA model, compute the residuals $e_{ij} = x_{ij} - \bar{x}_j$ (observation minus group mean). Then:
+??? success "연습문제 3 풀이"
+    분산분석의 로버스트성은 두 가지에서 나온다:
 
-    1. **Normality check:** Create a Q-Q plot of the residuals against theoretical normal quantiles. If the points lie approximately along a straight line, the normality assumption is reasonable. Systematic curvature indicates skewness; heavy tails appear as S-shaped departures. Alternatively, apply a Shapiro-Wilk test to the residuals.
+    1. **중심극한정리:** $n_j$가 어느 정도 크면(흔히 $n_j \geq 20$–30이면 충분하다) 개별 관측값이 정규가 아니어도 집단 평균 $\bar{X}_j$는 근사적으로 정규를 따른다. F-통계량은 집단 평균을 비교하므로 중요한 것은 평균의 정규성이다.
 
-    2. **Homoscedasticity check:** Plot residuals against the fitted values (group means) or group labels. The spread of residuals should be approximately equal across groups. A funnel shape (spread increasing with the mean) suggests heteroscedasticity. Alternatively, compare group-wise residual variances numerically or use Levene's test.
+    2. **균형 설계:** 집단 크기가 같으면($n_1 = n_2 = \dots = n_k$) 합동분산 추정값이 각 집단에 같은 가중치를 주므로 F-검정이 분산 차이에 로버스트하다. 불균형 설계에서는 F-검정이 이분산에 민감해진다.
 
-    3. **Independence check:** If data have a natural ordering (time, space), plot residuals in that order to check for patterns. Autocorrelation in residuals indicates violation of independence.
+    다만 분산분석은 작은 표본에서의 두꺼운 꼬리, 심한 치우침, 이상점에는 로버스트하지 않다. 이런 경우에는 변환이나 비모수 대안을 고려해야 한다.
+
+---
+
+**연습문제 4.**
+분산분석 모형을 적합한 뒤 잔차 그림으로 정규성과 등분산성 가정을 평가하는 방법을 기술하라.
+
+??? success "연습문제 4 풀이"
+    분산분석 모형을 적합한 뒤 잔차 $e_{ij} = x_{ij} - \bar{x}_j$(관측값에서 집단 평균을 뺀 값)를 계산한다. 그다음:
+
+    1. **정규성 확인:** 잔차를 이론적 정규분위수에 대해 Q-Q 그림으로 그린다. 점들이 대략 직선을 따라 놓이면 정규성 가정이 합당하다. 체계적인 곡률은 치우침을, S자 형태의 이탈은 두꺼운 꼬리를 뜻한다. 잔차에 Shapiro-Wilk 검정을 적용할 수도 있다.
+
+    2. **등분산성 확인:** 잔차를 적합값(집단 평균)이나 집단 표시에 대해 그린다. 잔차의 흩어짐이 집단마다 대략 같아야 한다. 깔때기 모양(평균이 커질수록 흩어짐이 커짐)은 이분산을 시사한다. 집단별 잔차분산을 수치로 비교하거나 Levene 검정을 쓸 수도 있다.
+
+    3. **독립성 확인:** 자료에 자연스러운 순서(시간, 공간)가 있으면 그 순서대로 잔차를 그려 패턴을 확인한다. 잔차의 자기상관은 독립성 위반을 나타낸다.

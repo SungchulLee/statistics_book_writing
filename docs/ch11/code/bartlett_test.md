@@ -1,34 +1,34 @@
-# Bartlett Test
+# Bartlett 검정
 
-## Overview
+## 개요
 
-Bartlett's test assesses the null hypothesis that two or more populations share the same variance (homoscedasticity). It is the uniformly most powerful unbiased test for equality of variances when the data are truly normal, but it is highly sensitive to departures from normality. This page presents the test statistic, demonstrates it in Python with `scipy.stats.bartlett`, and compares its behavior across several variance-ratio scenarios.
+Bartlett 검정은 둘 이상의 모집단이 같은 분산을 갖는다는(등분산성) 귀무가설을 평가한다. 자료가 정말로 정규일 때 등분산에 대한 균일최강력 불편검정이지만 정규성 이탈에 매우 민감하다. 이 페이지에서는 검정통계량을 제시하고, `scipy.stats.bartlett`으로 Python 예제를 보이며, 여러 분산비 시나리오에서 검정의 행동을 비교한다.
 
-## Hypotheses and Test Statistic
+## 가설과 검정통계량
 
-Consider $k$ independent samples of sizes $n_1, \dots, n_k$ drawn from normal populations with variances $\sigma_1^2, \dots, \sigma_k^2$. The hypotheses are
+분산이 $\sigma_1^2, \dots, \sigma_k^2$인 정규 모집단에서 크기 $n_1, \dots, n_k$의 독립 표본 $k$개를 뽑았다고 하자. 가설은
 
 $$
-H_0: \sigma_1^2 = \sigma_2^2 = \cdots = \sigma_k^2, \qquad H_1: \text{not all variances are equal}
+H_0: \sigma_1^2 = \sigma_2^2 = \cdots = \sigma_k^2, \qquad H_1: \text{분산이 모두 같지는 않다}
 $$
 
-Let $S_i^2$ denote the sample variance of group $i$ with $\nu_i = n_i - 1$ degrees of freedom, and let the pooled variance be
+이다. $S_i^2$을 자유도 $\nu_i = n_i - 1$인 집단 $i$의 표본분산이라 하고, 합동분산을
 
 $$
 S_p^2 = \frac{\sum_{i=1}^{k} \nu_i S_i^2}{\sum_{i=1}^{k} \nu_i}
 $$
 
-Bartlett's test statistic is
+라 하자. Bartlett 검정통계량은
 
 $$
 \chi^2_B = \frac{\left(\sum_{i=1}^{k} \nu_i\right) \ln S_p^2 - \sum_{i=1}^{k} \nu_i \ln S_i^2}{1 + \frac{1}{3(k-1)}\left(\sum_{i=1}^{k} \frac{1}{\nu_i} - \frac{1}{\sum_{i=1}^{k} \nu_i}\right)}
 $$
 
-Under $H_0$ and normality, $\chi^2_B \sim \chi^2(k-1)$ approximately. We reject $H_0$ when $\chi^2_B > \chi^2_{1-\alpha}(k-1)$.
+이다. $H_0$과 정규성 아래에서 $\chi^2_B$는 근사적으로 $\chi^2(k-1)$을 따른다. $\chi^2_B > \chi^2_{1-\alpha}(k-1)$이면 $H_0$을 기각한다.
 
-## Demonstration in Python
+## Python 예제
 
-The accompanying script generates a reference sample $X \sim N(0, 1)$ and compares it with samples $Y \sim N(1, \sigma_Y)$ for $\sigma_Y \in \{1.00, 1.05, 1.10, 1.15, 1.20\}$:
+함께 제공되는 스크립트는 기준 표본 $X \sim N(0, 1)$을 생성하고 $\sigma_Y \in \{1.00, 1.05, 1.10, 1.15, 1.20\}$인 표본 $Y \sim N(1, \sigma_Y)$과 비교한다:
 
 ```python
 import numpy as np
@@ -43,66 +43,76 @@ for scale in [1.00, 1.05, 1.10, 1.15, 1.20]:
     print(f"sigma_y={scale:.2f}: chi2={stat:.2f}, p={pval:.3f}")
 ```
 
-Each call returns the Bartlett $\chi^2$ statistic and its p-value. The overlaid histograms in the script's figure allow a visual comparison of the two distributions at each variance ratio.
+각 호출은 Bartlett $\chi^2$ 통계량과 그 p-값을 돌려준다. 스크립트가 그리는 겹친 히스토그램으로 각 분산비에서 두 분포를 시각적으로 비교할 수 있다.
 
-## Interpretation
+출력은 다음과 같다:
 
-- When $\sigma_Y = 1.00$, the two groups have identical variances and the p-value is large, correctly failing to reject $H_0$.
-- As $\sigma_Y$ increases from 1.05 to 1.20, the test statistic grows and the p-value decreases, reflecting the increasing departure from equal variances.
-- With $n = 100$ per group, Bartlett's test has good power to detect even modest variance ratios (e.g., $\sigma_Y = 1.15$).
+| $\sigma_Y$ | $\chi^2_B$ | p-값 |
+|---|---|---|
+| 1.00 | 0.00 | 1.000 |
+| 1.05 | 0.23 | 0.628 |
+| 1.10 | 0.89 | 0.345 |
+| 1.15 | 1.92 | 0.166 |
+| 1.20 | 3.26 | 0.071 |
 
-A critical caveat: if the underlying distributions are non-normal (e.g., heavy-tailed or skewed), Bartlett's test suffers from inflated Type I error rates. In such cases, Levene's test is preferred because it operates on absolute deviations from the group median, making it robust to distributional shape.
+## 해석
 
-## Exercises
+- $\sigma_Y = 1.00$이면 두 집단의 분산이 같고 p-값이 커서 $H_0$을 올바르게 기각하지 못한다.
+- $\sigma_Y$가 1.05에서 1.20으로 커질수록 검정통계량이 커지고 p-값이 작아져 등분산으로부터의 이탈이 커짐을 반영한다.
+- 다만 집단당 $n = 100$에서도 표준편차가 20% 큰 경우(분산비 1.44)의 p-값이 $0.071$로 $\alpha = 0.05$에 미치지 못한다. 완만한 분산 차이를 탐지하려면 표본이 훨씬 커야 한다.
 
-**Exercise 1.**
-For two groups with $n_1 = n_2 = 50$, compute the pooled variance $S_p^2$ when $S_1^2 = 4.0$ and $S_2^2 = 6.0$.
+결정적인 주의사항: 바탕 분포가 정규가 아니면(예: 꼬리가 두껍거나 치우쳐 있으면) Bartlett 검정의 제1종 오류율이 부풀려진다. 이런 경우에는 집단 중앙값으로부터의 절대편차를 쓰는 Levene 검정이 분포 모양에 로버스트하여 선호된다.
 
-??? success "Solution to Exercise 1"
-    With equal sample sizes, $\nu_1 = \nu_2 = 49$, so
+## 연습문제
+
+**연습문제 1.**
+$n_1 = n_2 = 50$인 두 집단에서 $S_1^2 = 4.0$, $S_2^2 = 6.0$일 때 합동분산 $S_p^2$을 계산하라.
+
+??? success "연습문제 1 풀이"
+    표본크기가 같으므로 $\nu_1 = \nu_2 = 49$이고
 
     $$
     S_p^2 = \frac{49 \cdot 4.0 + 49 \cdot 6.0}{49 + 49} = \frac{196 + 294}{98} = \frac{490}{98} = 5.0
     $$
 
-    The pooled variance is simply the arithmetic mean of the two sample variances when group sizes are equal.
+    집단 크기가 같으면 합동분산은 단순히 두 표본분산의 산술평균이다.
 
 ---
 
-**Exercise 2.**
-Explain why Bartlett's test is sensitive to non-normality. What specific property of the log-variance makes the test fragile?
+**연습문제 2.**
+Bartlett 검정이 비정규성에 민감한 이유를 설명하라. 로그 분산의 어떤 성질이 검정을 취약하게 만드는가?
 
-??? success "Solution to Exercise 2"
-    Bartlett's statistic is built from $\ln S_i^2$, the logarithm of the sample variance. The chi-squared approximation for the null distribution relies on the sample variances being approximately proportional to chi-squared random variables, which holds only when the underlying data are normal. Under non-normality, the distribution of $S_i^2$ can have heavier tails (due to excess kurtosis), causing $\ln S_i^2$ to be more dispersed than the chi-squared theory predicts. This inflates the test statistic under $H_0$, leading to an elevated Type I error rate.
+??? success "연습문제 2 풀이"
+    Bartlett 통계량은 표본분산의 로그인 $\ln S_i^2$으로 만들어진다. 귀무분포의 카이제곱 근사는 표본분산이 근사적으로 카이제곱 확률변수에 비례한다는 데 기대는데, 이는 바탕 자료가 정규일 때에만 성립한다. 비정규성 아래에서는 (초과 첨도 때문에) $S_i^2$의 분포가 더 두꺼운 꼬리를 가질 수 있고, 그러면 $\ln S_i^2$이 카이제곱 이론이 예측하는 것보다 더 퍼진다. 이 때문에 $H_0$ 아래에서 검정통계량이 부풀려져 제1종 오류율이 높아진다.
 
 ---
 
-**Exercise 3.**
-With $k = 3$ groups, state the degrees of freedom of the Bartlett test statistic under $H_0$ and find the critical value at $\alpha = 0.05$.
+**연습문제 3.**
+집단이 $k = 3$개일 때 $H_0$ 아래 Bartlett 검정통계량의 자유도를 진술하고 $\alpha = 0.05$의 임계값을 구하라.
 
-??? success "Solution to Exercise 3"
-    Under $H_0$, the Bartlett statistic follows $\chi^2(k - 1) = \chi^2(2)$. The critical value is
+??? success "연습문제 3 풀이"
+    $H_0$ 아래에서 Bartlett 통계량은 $\chi^2(k - 1) = \chi^2(2)$를 따른다. 임계값은
 
     $$
     \chi^2_{0.95}(2) = 5.991
     $$
 
-    We reject $H_0$ when $\chi^2_B > 5.991$.
+    이다. $\chi^2_B > 5.991$이면 $H_0$을 기각한다.
 
 ---
 
-**Exercise 4.**
-A colleague applies Bartlett's test to three groups of income data (which is heavily right-skewed) and obtains $p = 0.02$. They conclude that the group variances are unequal. Critique this analysis.
+**연습문제 4.**
+어떤 동료가 (오른쪽으로 심하게 치우친) 소득 자료 세 집단에 Bartlett 검정을 적용해 $p = 0.02$를 얻고 집단 분산이 다르다고 결론지었다. 이 분석을 비평하라.
 
-??? success "Solution to Exercise 4"
-    The conclusion is unreliable because Bartlett's test assumes normality, and income data are typically right-skewed with heavy tails. The excess kurtosis inflates the Bartlett statistic, so the small p-value may reflect non-normality rather than genuine variance differences. The correct approach is to use Levene's test (with the median as the center), which is robust to non-normality. Additionally, applying a log transformation to the income data before testing could help symmetrize the distribution if a normality-based test is desired.
+??? success "연습문제 4 풀이"
+    Bartlett 검정은 정규성을 가정하는데 소득 자료는 대개 오른쪽으로 치우치고 꼬리가 두꺼우므로 이 결론은 믿을 수 없다. 초과 첨도가 Bartlett 통계량을 부풀리므로 작은 p-값이 진짜 분산 차이가 아니라 비정규성을 반영한 것일 수 있다. 올바른 접근은 비정규성에 로버스트한 (중앙값을 중심으로 하는) Levene 검정을 쓰는 것이다. 정규성 기반 검정을 쓰고 싶다면 검정 전에 소득 자료에 로그 변환을 적용해 분포를 대칭에 가깝게 만드는 방법도 있다.
 
 ---
 
-**Exercise 5.**
-Derive the correction factor $C = 1 + \frac{1}{3(k-1)}\!\left(\sum_{i=1}^{k}\frac{1}{\nu_i} - \frac{1}{\sum \nu_i}\right)$ in the denominator of the Bartlett statistic. Why is this correction needed?
+**연습문제 5.**
+Bartlett 통계량 분모의 보정 인자 $C = 1 + \frac{1}{3(k-1)}\!\left(\sum_{i=1}^{k}\frac{1}{\nu_i} - \frac{1}{\sum \nu_i}\right)$를 유도하라. 이 보정이 왜 필요한가?
 
-??? success "Solution to Exercise 5"
-    Without the correction, the numerator $M = (\sum \nu_i)\ln S_p^2 - \sum \nu_i \ln S_i^2$ does not follow $\chi^2(k-1)$ exactly for finite samples. The ratio $M / C$ provides a better chi-squared approximation by accounting for the bias in $\ln S_i^2$ as an estimator. The correction factor $C$ is derived from a Box approximation: the exact distribution of $M$ is close to $C \cdot \chi^2(k-1)$, so dividing by $C$ yields an approximate $\chi^2(k-1)$ variate.
+??? success "연습문제 5 풀이"
+    보정이 없으면 분자 $M = (\sum \nu_i)\ln S_p^2 - \sum \nu_i \ln S_i^2$이 유한 표본에서 $\chi^2(k-1)$을 정확히 따르지 않는다. 비 $M / C$는 추정량으로서 $\ln S_i^2$이 갖는 편향을 반영하여 더 나은 카이제곱 근사를 준다. 보정 인자 $C$는 Box 근사에서 유도된다. $M$의 정확한 분포가 $C \cdot \chi^2(k-1)$에 가까우므로 $C$로 나누면 근사적인 $\chi^2(k-1)$ 확률변수를 얻는다.
 
-    Note that $C > 1$ always (each $1/\nu_i > 1/\sum \nu_i$ when $k \ge 2$), so the correction shrinks the test statistic relative to the uncorrected version, making the test slightly more conservative and improving the accuracy of the chi-squared approximation. $\square$
+    $C > 1$이 언제나 성립함에 유의하라($k \ge 2$일 때 각 $1/\nu_i > 1/\sum \nu_i$이다). 따라서 보정은 검정통계량을 보정 전보다 줄여 검정을 조금 더 보수적으로 만들고 카이제곱 근사의 정확도를 높인다. $\square$

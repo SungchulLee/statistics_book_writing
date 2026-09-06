@@ -1,31 +1,30 @@
-# Post-Hoc Comparisons: Tukey HSD
+# 사후비교: Tukey HSD
 
+## 1. 일원배치 분산분석의 사후검정
 
-## 1. Post-Hoc Tests in One-Way ANOVA
+**일원배치 분산분석**을 수행하면 집단 평균 사이에 유의한 차이가 있음을 알게 될 수 있다. 그러나 분산분석의 유의한 결과는 구체적으로 어느 집단이 서로 다른지는 알려주지 않는다. 이때 유의하게 다른 집단 쌍을 찾아내는 데 **사후검정**을 쓴다. 이 검정들은 여러 비교를 할 때 제1종 오류(거짓 양성)를 통제하도록 돕는다.
 
-When conducting a **one-way ANOVA**, we may find that there is a significant difference between the group means. However, a significant result from the ANOVA test does not tell us which specific groups are different from each other. **Post-hoc tests** are used in this case to identify the specific pairs of groups that differ significantly. These tests help control for Type I error (false positives) when making multiple comparisons.
+### A. 일원배치 분산분석의 사후검정 이해하기
 
-### A. Understanding Post-Hoc Tests for One-Way ANOVA
+일원배치 분산분석에서 사후검정은 다음일 때 수행한다:
 
-In a one-way ANOVA, post-hoc tests are conducted when:
+1. 일원배치 분산분석이 집단 평균 사이에 통계적으로 유의한 차이를 나타냈을 때.
+2. 구체적으로 어느 집단이 서로 다른지 알고자 할 때.
 
-1. The one-way ANOVA indicates a statistically significant difference between group means.
-2. We want to know which specific groups differ from each other.
+### B. 일원배치 분산분석의 사후검정 종류
 
-### B. Types of Post-Hoc Tests for One-Way ANOVA
+일원배치 분산분석에서 가장 흔한 사후검정은 다음과 같다:
 
-The most common post-hoc tests for one-way ANOVA include:
+- **Tukey의 정직유의차(HSD)**: 가족단위 오류율을 통제하는 널리 쓰이는 방법. 집단 크기가 같을 때 적합하지만 약간의 불균형에도 쓸 수 있다.
+- **Bonferroni 보정**: 유의수준을 비교 횟수로 나누는 보수적인 접근. 비교 횟수가 적거나 엄격한 오류 통제가 필요할 때 적합하다.
+- **Scheffé 검정**: 유연하고 보수적인 검정으로, 쌍별 비교를 넘어선 복잡한 비교를 검정할 때 특히 유용하다.
+- **Dunnett 검정**: 여러 처치군을 하나의 대조군과 비교할 때 쓴다.
 
-- **Tukey's Honest Significant Difference (HSD)**: A widely used method that controls the family-wise error rate. Tukey's HSD is appropriate for equal group sizes but can also be used with slight inequalities.
-- **Bonferroni Correction**: A conservative approach that adjusts the significance level by dividing it by the number of comparisons. Suitable when the number of comparisons is low or strict error control is needed.
-- **Scheffé's Test**: A flexible and conservative test that is particularly useful when testing complex comparisons beyond just pairwise comparisons.
-- **Dunnett's Test**: Specifically used when comparing multiple treatment groups against a single control group.
+### C. Python으로 사후검정 수행하기
 
-### C. Performing Post-Hoc Tests in Python
+#### 1단계: 일원배치 분산분석 수행
 
-#### Step 1: Conduct One-Way ANOVA
-
-Let's assume we have a dataset with three or more groups, and we want to test if there's a significant difference among their means.
+셋 이상의 집단이 있는 자료에서 평균 사이에 유의한 차이가 있는지 검정한다고 하자.
 
 ```python
 import pandas as pd
@@ -43,9 +42,9 @@ print("One-Way ANOVA Results:")
 print(anova_results)
 ```
 
-#### Step 2: Post-Hoc Tests Using Tukey's HSD
+#### 2단계: Tukey의 HSD를 이용한 사후검정
 
-If the one-way ANOVA is significant, we can use Tukey's HSD to find which pairs of groups are significantly different.
+일원배치 분산분석이 유의하면 Tukey의 HSD로 어느 집단 쌍이 유의하게 다른지 찾을 수 있다.
 
 ```python
 from statsmodels.stats.multicomp import pairwise_tukeyhsd
@@ -56,15 +55,15 @@ print("Tukey's HSD Test Results:")
 print(tukey_result)
 ```
 
-This output will show pairwise comparisons between each pair of groups, including:
+이 출력은 각 집단 쌍의 비교 결과를 보여주며 다음을 포함한다:
 
-- **meandiff**: The difference in means between the groups.
-- **p-adj**: The adjusted p-value for each pairwise comparison.
-- **reject**: A boolean indicating whether the null hypothesis (no difference) was rejected for each pair.
+- **meandiff**: 두 집단 평균의 차이.
+- **p-adj**: 각 쌍별 비교의 조정 p-값.
+- **reject**: 각 쌍에 대해 귀무가설(차이 없음)을 기각했는지를 나타내는 불리언.
 
-#### Step 3: Bonferroni Correction (Alternative to Tukey's HSD)
+#### 3단계: Bonferroni 보정 (Tukey HSD의 대안)
 
-For a more conservative approach, use the Bonferroni correction, which divides the alpha level by the number of comparisons.
+더 보수적인 접근으로, 유의수준을 비교 횟수로 나누는 Bonferroni 보정을 쓸 수 있다.
 
 ```python
 from statsmodels.stats.multitest import multipletests
@@ -94,9 +93,9 @@ for comparison, p_val, p_val_corr in zip(comparisons, p_values, p_values_correct
     print(f"{comparison}: p-value = {p_val:.4f}, Bonferroni-corrected p-value = {p_val_corr:.4f}")
 ```
 
-#### Step 4: Scheffé's Test (For Complex Comparisons)
+#### 4단계: Scheffé 검정 (복잡한 비교용)
 
-Scheffé's test is suitable for testing non-pairwise comparisons or contrasts, but it is complex and less commonly used in basic pairwise comparisons. In `statsmodels`, Scheffé's test isn't directly available, but you can manually construct contrasts if needed, especially for more advanced comparisons.
+Scheffé 검정은 쌍별이 아닌 비교나 대비를 검정하는 데 적합하지만 복잡하고 기본적인 쌍별 비교에는 덜 쓰인다. `statsmodels`에는 Scheffé 검정이 직접 제공되지 않지만, 필요하다면 특히 더 진전된 비교를 위해 대비를 직접 구성할 수 있다.
 
 ## 2. scipy.stats.tukey_hsd
 
@@ -165,84 +164,84 @@ perform_tukey_hsd(data_ctrl, data_trt1, data_trt2)
 perform_tukey_hsd(data_ctrl, data_trt1, data_trt2, confidence_level=0.99)
 ```
 
-### Output Interpretation
+### 출력 해석
 
-The table shows the results of Tukey's HSD (Honestly Significant Difference) pairwise comparisons for three groups (referred to as groups 0, 1, and 2), with a 95% confidence interval.
+이 표는 세 집단(집단 0, 1, 2로 표기)에 대한 Tukey의 HSD 쌍별 비교 결과를 95% 신뢰구간과 함께 보여준다.
 
-**Columns Explained:**
+**열 설명:**
 
-1. **Comparison**: The pair of groups being compared, denoted by their index numbers. For example, "(0 - 1)" represents the comparison between group 0 and group 1.
+1. **비교**: 비교하는 집단 쌍을 지표 번호로 나타낸다. 예를 들어 "(0 - 1)"은 집단 0과 집단 1의 비교를 뜻한다.
 
-2. **Statistic**: The mean difference between the two groups for that particular comparison. A positive value means that the mean of the first group is higher than the mean of the second group, while a negative value indicates the opposite.
+2. **통계량**: 해당 비교에서 두 집단 평균의 차이. 값이 양수이면 앞 집단의 평균이 더 크고, 음수이면 그 반대이다.
 
-3. **p-value**: The probability value associated with the comparison. This value indicates whether the difference in means is statistically significant. A low p-value (typically less than 0.05) suggests a statistically significant difference between the groups.
+3. **p-값**: 그 비교에 대응하는 확률값. 평균 차이가 통계적으로 유의한지를 나타낸다. p-값이 작으면(보통 0.05 미만) 집단 사이에 통계적으로 유의한 차이가 있음을 시사한다.
 
-4. **Lower CI**: The lower bound of the 95% confidence interval for the mean difference. If this interval does not include 0, the difference is considered statistically significant.
+4. **하한 CI**: 평균 차이에 대한 95% 신뢰구간의 하한. 이 구간이 0을 포함하지 않으면 차이가 통계적으로 유의하다고 본다.
 
-5. **Upper CI**: The upper bound of the 95% confidence interval for the mean difference.
+5. **상한 CI**: 평균 차이에 대한 95% 신뢰구간의 상한.
 
-**Interpretation of Each Comparison:**
+**각 비교의 해석:**
 
-- **(0 - 1) and (1 - 0)**: The mean difference between group 0 and group 1 is 0.371, with a p-value of 0.391. This high p-value indicates that the difference is not statistically significant, as the confidence interval (-0.320 to 1.062) includes 0.
+- **(0 - 1)과 (1 - 0)**: 집단 0과 집단 1의 평균 차이는 0.371이고 p-값은 0.391이다. p-값이 크므로 차이가 통계적으로 유의하지 않으며, 신뢰구간(-0.320에서 1.062)도 0을 포함한다.
 
-- **(0 - 2) and (2 - 0)**: The mean difference between group 0 and group 2 is -0.494, with a p-value of 0.198. Again, this p-value is not significant, and the confidence interval (-1.185 to 0.197) includes 0, suggesting no significant difference.
+- **(0 - 2)와 (2 - 0)**: 집단 0과 집단 2의 평균 차이는 -0.494이고 p-값은 0.198이다. 역시 유의하지 않으며 신뢰구간(-1.185에서 0.197)이 0을 포함하여 유의한 차이가 없음을 시사한다.
 
-- **(1 - 2) and (2 - 1)**: The mean difference between group 1 and group 2 is -0.865, with a p-value of 0.012. This p-value is below 0.05, indicating a statistically significant difference. The confidence interval (-1.556 to -0.174) does not include 0, which further confirms that the difference is significant.
+- **(1 - 2)와 (2 - 1)**: 집단 1과 집단 2의 평균 차이는 -0.865이고 p-값은 0.012이다. p-값이 0.05보다 작아 통계적으로 유의한 차이를 나타낸다. 신뢰구간(-1.556에서 -0.174)이 0을 포함하지 않아 유의성을 다시 확인해 준다.
 
-**Summary:**
+**요약:**
 
-The Tukey's HSD test results suggest that there is a statistically significant difference between groups 1 and 2 at the 95% confidence level, as indicated by the low p-value and a confidence interval that does not contain 0. There are no significant differences between groups 0 and 1 or between groups 0 and 2.
+Tukey의 HSD 결과는 95% 신뢰수준에서 집단 1과 집단 2 사이에 통계적으로 유의한 차이가 있음을 시사한다. p-값이 작고 신뢰구간이 0을 포함하지 않기 때문이다. 집단 0과 1, 집단 0과 2 사이에는 유의한 차이가 없다.
 
-### Positional Interpretation
+### 위치로 본 해석
 
-1. **Group 1 (Left) and Group 2 (Right)**: Groups 1 and 2 show a statistically significant difference, as indicated by a low p-value (0.012) and a confidence interval that does not contain 0 (from -1.556 to -0.174). This suggests that these two groups are quite distinct in terms of their mean values.
+1. **집단 1(왼쪽)과 집단 2(오른쪽)**: 두 집단은 통계적으로 유의한 차이를 보인다. p-값이 작고(0.012) 신뢰구간(-1.556에서 -0.174)이 0을 포함하지 않는다. 평균값 면에서 서로 꽤 구별됨을 시사한다.
 
-2. **Group 0 (Middle) and Group 1 (Left)**: There is no statistically significant difference between Group 0 and Group 1. The p-value is 0.391, and the confidence interval (-0.320 to 1.062) includes 0.
+2. **집단 0(가운데)과 집단 1(왼쪽)**: 통계적으로 유의한 차이가 없다. p-값이 0.391이고 신뢰구간(-0.320에서 1.062)이 0을 포함한다.
 
-3. **Group 0 (Middle) and Group 2 (Right)**: Similarly, there is no significant difference between Group 0 and Group 2, as the p-value is 0.198, and the confidence interval (-1.185 to 0.197) also includes 0.
+3. **집단 0(가운데)과 집단 2(오른쪽)**: 마찬가지로 유의한 차이가 없다. p-값이 0.198이고 신뢰구간(-1.185에서 0.197)도 0을 포함한다.
 
-**Interpretation:**
+**해석:**
 
-- **Group 0 (Middle) appears to be intermediate** between Groups 1 and 2, as it does not significantly differ from either.
-- **Group 1 (Left) and Group 2 (Right) are significantly different from each other**, implying that they represent distinct levels or conditions compared to each other.
-- Group 0 serves as an intermediate or transitional group, not significantly different from either Group 1 or Group 2.
+- **집단 0(가운데)은 집단 1과 2 사이의 중간**으로 보인다. 어느 쪽과도 유의하게 다르지 않기 때문이다.
+- **집단 1(왼쪽)과 집단 2(오른쪽)는 서로 유의하게 다르며**, 서로 구별되는 수준이나 조건을 대표함을 시사한다.
+- 집단 0은 중간 혹은 과도기적 집단 역할을 하며 집단 1과도 집단 2와도 유의하게 다르지 않다.
 
-### Does scipy.stats.tukey_hsd Run Pairwise t-Test For Each Pair?
+### scipy.stats.tukey_hsd는 각 쌍에 대해 쌍별 t-검정을 하는가?
 
-1. **Purpose and Context of Use**: Tukey's HSD test is specifically a **post-hoc** test, meaning it is applied after an ANOVA has determined that there is a statistically significant difference among group means. It answers the question: "Which group pairs have significantly different means?" This is different from t-tests, which can be conducted independently and without reference to ANOVA.
+1. **목적과 쓰임의 맥락**: Tukey의 HSD 검정은 특별히 **사후**검정이다. 즉 분산분석이 집단 평균 사이에 통계적으로 유의한 차이가 있다고 판정한 뒤에 적용한다. "어느 집단 쌍의 평균이 유의하게 다른가?"라는 질문에 답한다. 분산분석과 무관하게 독립적으로 수행할 수 있는 t-검정과는 다르다.
 
-2. **Studentized Range Distribution**: The reliance on the **Studentized range distribution** is a core distinguishing feature. This distribution accounts for the range of means in all groups simultaneously, rather than evaluating individual pairs in isolation (as t-tests do). It considers the number of groups being compared and controls the **family-wise error rate** (FWER) across all possible comparisons.
+2. **스튜던트화 범위 분포**: **스튜던트화 범위 분포**에 의존한다는 점이 핵심적인 차이이다. 이 분포는 (t-검정처럼 개별 쌍을 따로 평가하는 대신) 모든 집단 평균의 범위를 동시에 고려한다. 비교하는 집단의 수를 반영하여 가능한 모든 비교에 걸쳐 **가족단위 오류율**(FWER)을 통제한다.
 
-3. **Family-Wise Error Rate**: The adjustment made by Tukey's HSD ensures that the probability of making at least one Type I error across all comparisons does not exceed the pre-specified alpha level (e.g., 0.05). In contrast, conducting multiple t-tests increases the likelihood of Type I errors because the error rate compounds with the number of comparisons.
+3. **가족단위 오류율**: Tukey의 HSD가 하는 조정은 모든 비교에 걸쳐 제1종 오류를 적어도 한 번 범할 확률이 미리 정한 알파 수준(예: 0.05)을 넘지 않도록 보장한다. 반면 t-검정을 여러 번 수행하면 비교 횟수와 함께 오류율이 누적되어 제1종 오류의 가능성이 커진다.
 
-    For example, with $m$ groups, the number of pairwise comparisons is $\binom{m}{2} = \frac{m(m-1)}{2}$. If $m = 5$, there are 10 comparisons. Conducting these independently at a 5% significance level leads to an overall Type I error rate that can exceed 40%. Tukey's HSD prevents this inflation by incorporating multiple testing corrections.
+    예를 들어 집단이 $m$개면 쌍별 비교의 수는 $\binom{m}{2} = \frac{m(m-1)}{2}$이다. $m = 5$이면 비교가 10개이다. 이를 각각 5% 유의수준에서 독립적으로 수행하면 전체 제1종 오류율이 40%를 넘을 수도 있다. Tukey의 HSD는 다중검정 보정을 넣어 이 부풀림을 막는다.
 
-4. **Critical Value and Interpretation**: Tukey's test computes a single critical difference value (HSD) that applies uniformly to all group comparisons. If the absolute difference in means between two groups exceeds the HSD value, the difference is deemed significant. This uniform threshold simplifies interpretation and avoids the variability introduced by running separate t-tests, each with its own critical value.
+4. **임계값과 해석**: Tukey 검정은 모든 집단 비교에 일률적으로 적용되는 하나의 임계 차이값(HSD)을 계산한다. 두 집단 평균의 절대 차이가 이 HSD 값을 넘으면 차이가 유의하다고 본다. 이 균일한 문턱은 해석을 단순하게 하고, 각자 임계값을 갖는 개별 t-검정에서 생기는 변동을 피한다.
 
-5. **Conservativeness**: By controlling for family-wise error, Tukey's HSD is generally more **conservative** than individual t-tests. While this reduces the risk of Type I errors, it may slightly increase the risk of Type II errors (failing to detect true differences). However, this trade-off is often acceptable in studies where controlling for false positives is a priority.
+5. **보수성**: 가족단위 오류를 통제하기 때문에 Tukey의 HSD는 개별 t-검정보다 대체로 더 **보수적**이다. 제1종 오류의 위험을 줄이지만 제2종 오류(참 차이를 놓칠 위험)는 다소 커질 수 있다. 그래도 거짓 양성 통제가 우선인 연구에서는 이 맞바꿈이 흔히 받아들일 만하다.
 
-**Practical Implication**: Tukey's HSD is ideal for balanced designs (equal group sizes) but can still be applied to unbalanced designs with some adjustment. In such cases, other post-hoc tests like the Games-Howell test might be preferred for greater accuracy.
+**실무적 함의**: Tukey의 HSD는 균형 설계(집단 크기가 같은 경우)에 이상적이지만 약간의 조정으로 불균형 설계에도 적용할 수 있다. 그런 경우에는 정확도를 위해 Games-Howell 검정 같은 다른 사후검정이 선호될 수 있다.
 
-## 3. Post-Hoc Tests in Two-Way ANOVA
+## 3. 이원배치 분산분석의 사후검정
 
-Post-hoc tests for a two-way ANOVA are essential to explore significant main and interaction effects in detail.
+이원배치 분산분석의 사후검정은 유의한 주효과와 교호작용 효과를 자세히 살피는 데 꼭 필요하다.
 
-### A. Understanding When to Use Post-Hoc Tests in Two-Way ANOVA
+### A. 이원배치 분산분석에서 사후검정을 언제 쓰는가
 
-In two-way ANOVA, post-hoc tests are generally used to:
+이원배치 분산분석에서 사후검정은 대체로 다음에 쓴다:
 
-1. **Investigate Main Effects**: If one or both main effects (e.g., factor A or factor B) are significant, post-hoc tests can identify which levels of the factor are significantly different from each other.
-2. **Examine Interaction Effects**: If there is a significant interaction between factors A and B, post-hoc tests can help determine which specific combinations of factor levels show significant differences.
+1. **주효과 조사**: 주효과 중 하나 또는 둘 다(예: 요인 A나 요인 B) 유의하면, 사후검정으로 그 요인의 어느 수준이 서로 유의하게 다른지 찾을 수 있다.
+2. **교호작용 효과 검토**: 요인 A와 B 사이에 유의한 교호작용이 있으면, 사후검정으로 어떤 요인 수준 조합에서 유의한 차이가 나타나는지 판정할 수 있다.
 
-### B. Types of Post-Hoc Tests for Two-Way ANOVA
+### B. 이원배치 분산분석의 사후검정 종류
 
-- **Tukey's Honest Significant Difference (HSD)**: Widely used for pairwise comparisons in ANOVA because it controls the family-wise error rate.
-- **Bonferroni Correction**: A more conservative method that adjusts the significance level by dividing it by the number of comparisons.
-- **Simple Effects Analysis**: If there's a significant interaction effect, simple effects analysis can be used to examine the effect of one factor at each level of the other factor.
+- **Tukey의 정직유의차(HSD)**: 가족단위 오류율을 통제하기 때문에 분산분석의 쌍별 비교에 널리 쓰인다.
+- **Bonferroni 보정**: 유의수준을 비교 횟수로 나누는 더 보수적인 방법.
+- **단순 효과 분석**: 교호작용 효과가 유의하면, 다른 요인의 각 수준에서 한 요인의 효과를 살피는 단순 효과 분석을 쓸 수 있다.
 
-### C. Performing Post-Hoc Tests in Python
+### C. Python으로 사후검정 수행하기
 
-#### Step 1: Conduct the Two-Way ANOVA
+#### 1단계: 이원배치 분산분석 수행
 
 ```python
 import pandas as pd
@@ -259,7 +258,7 @@ anova_results = anova_lm(model)
 print(anova_results)
 ```
 
-#### Step 2: Post-Hoc Tests for Main Effects
+#### 2단계: 주효과에 대한 사후검정
 
 ```python
 from statsmodels.stats.multicomp import pairwise_tukeyhsd
@@ -275,7 +274,7 @@ print("Post-Hoc Test for Supplement:")
 print(tukey_supp)
 ```
 
-#### Step 3: Post-Hoc Tests for Interaction Effect
+#### 3단계: 교호작용 효과에 대한 사후검정
 
 ```python
 # Create a combined factor for interaction analysis
@@ -287,9 +286,9 @@ print("Post-Hoc Test for Interaction (Supplement x Dose):")
 print(tukey_interaction)
 ```
 
-#### Step 4: Simple Effects Analysis (Alternative to Interaction Post-Hoc)
+#### 4단계: 단순 효과 분석 (교호작용 사후검정의 대안)
 
-If the interaction effect is significant, a **simple effects analysis** can provide a detailed breakdown by examining the effect of one factor at each level of the other factor.
+교호작용 효과가 유의하면 **단순 효과 분석**으로 다른 요인의 각 수준에서 한 요인의 효과를 살펴 자세히 나눠 볼 수 있다.
 
 ```python
 # Separate data by supplement type
@@ -315,107 +314,108 @@ print("Tukey HSD for Dose within Supplement VC:")
 print(pairwise_tukeyhsd(endog=vc_data['len'], groups=vc_data['dose'], alpha=0.05))
 ```
 
-### D. Summary of Steps
+### D. 단계 요약
 
-1. **Run Two-Way ANOVA**: Identify significant main and interaction effects.
-2. **Post-Hoc for Main Effects**: Use Tukey's HSD or another pairwise test for each significant main effect.
-3. **Post-Hoc for Interaction**: If the interaction effect is significant, use Tukey's HSD on combined factor levels or perform simple effects analysis.
+1. **이원배치 분산분석 수행**: 유의한 주효과와 교호작용 효과를 파악한다.
+2. **주효과의 사후검정**: 유의한 각 주효과에 대해 Tukey의 HSD나 다른 쌍별 검정을 쓴다.
+3. **교호작용의 사후검정**: 교호작용 효과가 유의하면 결합된 요인 수준에 Tukey의 HSD를 적용하거나 단순 효과 분석을 수행한다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Workout: HIIT $\bar Y = 8.8$, Strength $6.4$, Yoga $4.4$, $n = 5$ each, $\mathrm{MSW} = 1.43$. (a) Omnibus ANOVA. (b) Tukey HSD. (c) Interpret.
+**연습문제 1.**
+운동: HIIT $\bar Y = 8.8$, 근력 $6.4$, 요가 $4.4$, 각 $n = 5$, $\mathrm{MSW} = 1.43$. (a) 전체 분산분석. (b) Tukey HSD. (c) 해석.
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
     (a) $\mathrm{SSB} = 5 \cdot [(8.8-6.53)^2 + (6.4-6.53)^2 + (4.4-6.53)^2] \approx 48.53$.
 
     $\mathrm{SSW} = 17.20$. $F = (48.53/2)/(17.20/12) = 24.27/1.43 \approx 16.93$.
 
-    $F_{0.05, 2, 12} = 3.89$. Reject $H_0$.
+    $F_{0.05, 2, 12} = 3.89$이므로 $H_0$을 기각한다.
 
-    (b) HSD = $q_{0.05, 3, 12} \cdot \sqrt{\mathrm{MSW}/n} = 3.77 \cdot \sqrt{1.43/5} \approx 2.02$.
+    (b) HSD $= q_{0.05, 3, 12} \cdot \sqrt{\mathrm{MSW}/n} = 3.77 \cdot \sqrt{1.43/5} \approx 2.02$.
 
-    Pairwise: HIIT-Strength = 2.4 > 2.02 ✓; HIIT-Yoga = 4.4 > 2.02 ✓; Strength-Yoga = 2.0 ≮ 2.02 ✗.
+    쌍별: HIIT–근력 = 2.4 > 2.02 ✓; HIIT–요가 = 4.4 > 2.02 ✓; 근력–요가 = 2.0 < 2.02 ✗.
 
-    (c) HIIT is significantly better than both. Strength vs Yoga: not significant. Can't distinguish those two.
-
----
-
-**Exercise 2.**
-**Why Tukey HSD over Bonferroni pairwise t-tests?**
-
-??? success "Solution to Exercise 2"
-    Tukey HSD uses the **Studentized range** distribution, exactly calibrated for pairwise comparisons of means.
-
-    Bonferroni applies the Bonferroni correction to pairwise $t$-tests: tests at $\alpha/k$ where $k = \binom{g}{2}$.
-
-    **Comparison:**
-
-    - **Tukey:** more powerful for pairwise comparisons of means; exactly controls family-wise error.
-    - **Bonferroni:** simple, very general (works for any tests), but conservative for many comparisons.
-
-    For balanced one-way ANOVA pairwise comparisons, Tukey is the standard. For complex contrasts or mixed designs, Bonferroni or Scheffé's method may be needed.
+    (c) HIIT는 다른 두 방식보다 유의하게 낫다. 근력 대 요가는 유의하지 않아 둘을 구별할 수 없다.
 
 ---
 
-**Exercise 3.**
-**Other post-hoc tests.** Briefly describe Bonferroni, Scheffé, Dunnett.
+**연습문제 2.**
+**Bonferroni 쌍별 t-검정 대신 Tukey HSD를 쓰는 이유는?**
 
-??? success "Solution to Exercise 3"
-    **Bonferroni:** test each comparison at $\alpha/k$. Works for any tests but conservative.
+??? success "연습문제 2 풀이"
+    Tukey HSD는 평균의 쌍별 비교에 정확히 맞춰 보정된 **스튜던트화 범위** 분포를 쓴다.
 
-    **Scheffé:** allows arbitrary contrasts (linear combinations of means, not just pairwise). Most conservative but most general.
+    Bonferroni는 쌍별 $t$-검정에 Bonferroni 보정을 적용한다. $k = \binom{g}{2}$일 때 $\alpha/k$에서 검정한다.
 
-    **Dunnett:** compares all groups to a single control group. More powerful than Tukey when only control comparisons matter.
+    **비교:**
 
-    **Fisher's LSD:** uses pooled variance from ANOVA but doesn't adjust for multiple testing. Liberal — useful only as quick screening.
+    - **Tukey:** 평균의 쌍별 비교에서 더 강력하며 가족단위 오류를 정확히 통제한다.
+    - **Bonferroni:** 간단하고 매우 일반적이지만(어떤 검정에도 쓸 수 있지만) 비교가 많으면 보수적이다.
 
-    Choose based on the hypotheses:
-    - All pairwise: Tukey.
-    - All pairs against control: Dunnett.
-    - Arbitrary linear contrasts: Scheffé.
+    균형 잡힌 일원배치 분산분석의 쌍별 비교에는 Tukey가 표준이다. 복잡한 대비나 혼합 설계에는 Bonferroni나 Scheffé 방법이 필요할 수 있다.
 
 ---
 
-**Exercise 4.**
-**Family-wise vs comparison-wise error.**
+**연습문제 3.**
+**다른 사후검정들.** Bonferroni, Scheffé, Dunnett을 간략히 설명하라.
 
-??? success "Solution to Exercise 4"
-    **Comparison-wise:** Type I error rate for any single comparison.
+??? success "연습문제 3 풀이"
+    **Bonferroni:** 각 비교를 $\alpha/k$에서 검정한다. 어떤 검정에도 쓸 수 있지만 보수적이다.
 
-    **Family-wise:** Type I error rate for at least one error among all comparisons in a family.
+    **Scheffé:** 쌍별에 국한되지 않고 임의의 대비(평균의 선형결합)를 허용한다. 가장 보수적이지만 가장 일반적이다.
 
-    Without correction, family-wise error grows with number of comparisons. Tukey, Bonferroni, etc. control family-wise.
+    **Dunnett:** 모든 집단을 하나의 대조군과 비교한다. 대조군과의 비교만 중요할 때 Tukey보다 강력하다.
 
-    Alternative: **False Discovery Rate (FDR)** controls expected proportion of false rejections among declared significant. Less conservative; useful for many comparisons (e.g., genomics).
+    **Fisher의 LSD:** 분산분석의 합동분산을 쓰지만 다중검정 보정을 하지 않는다. 관대하므로 빠른 선별용으로만 유용하다.
 
----
+    가설에 따라 고른다:
 
-**Exercise 5.**
-**Studentized range distribution.** Brief intro.
-
-??? success "Solution to Exercise 5"
-    Studentized range $q$: distribution of $(\max \bar Y_i - \min \bar Y_i)/\sqrt{\mathrm{MSW}/n}$ under $H_0$.
-
-    Depends on:
-
-    - Number of groups $g$.
-    - Within-group df ($N - g$).
-
-    Tables: critical values $q_{\alpha, g, df}$ exist.
-
-    Connection to Tukey HSD: HSD = $q_{\alpha} \sqrt{\mathrm{MSW}/n}$. Compare each pairwise difference to HSD.
+    - 모든 쌍별 비교: Tukey.
+    - 모든 집단 대 대조군: Dunnett.
+    - 임의의 선형 대비: Scheffé.
 
 ---
 
-**Exercise 6.**
-**Unbalanced designs** and Tukey.
+**연습문제 4.**
+**가족단위 오류와 비교단위 오류.**
 
-??? success "Solution to Exercise 6"
-    With unequal $n_i$: use **Tukey-Kramer** modification:
+??? success "연습문제 4 풀이"
+    **비교단위:** 개별 비교 하나의 제1종 오류율.
+
+    **가족단위:** 한 가족에 속한 모든 비교 중 적어도 하나에서 오류를 범할 확률.
+
+    보정하지 않으면 비교 횟수와 함께 가족단위 오류가 커진다. Tukey, Bonferroni 등은 가족단위를 통제한다.
+
+    대안: **거짓발견율(FDR)**은 유의하다고 선언한 것 중 거짓 기각의 기대 비율을 통제한다. 덜 보수적이어서 비교가 아주 많을 때(예: 유전체학) 유용하다.
+
+---
+
+**연습문제 5.**
+**스튜던트화 범위 분포.** 간단히 소개하라.
+
+??? success "연습문제 5 풀이"
+    스튜던트화 범위 $q$: $H_0$ 아래에서 $(\max \bar Y_i - \min \bar Y_i)/\sqrt{\mathrm{MSW}/n}$의 분포.
+
+    다음에 의존한다:
+
+    - 집단의 수 $g$.
+    - 집단 내 자유도($N - g$).
+
+    표: 임계값 $q_{\alpha, g, df}$가 표로 제공된다.
+
+    Tukey HSD와의 연결: HSD $= q_{\alpha} \sqrt{\mathrm{MSW}/n}$. 각 쌍별 차이를 HSD와 비교한다.
+
+---
+
+**연습문제 6.**
+**불균형 설계**와 Tukey.
+
+??? success "연습문제 6 풀이"
+    $n_i$가 서로 다르면 **Tukey-Kramer** 수정을 쓴다:
 
     $\mathrm{HSD}_{ij} = q_{\alpha} \sqrt{(\mathrm{MSW}/2)(1/n_i + 1/n_j)}$.
 
-    Each pair has its own HSD threshold (depending on $n_i, n_j$). Conservative but valid.
+    각 쌍이 ($n_i, n_j$에 따라) 자신의 HSD 문턱을 갖는다. 보수적이지만 타당하다.
 
-    Pure Tukey assumes equal $n$; Tukey-Kramer is the standard extension. R's `TukeyHSD` and Python's `statsmodels` use Tukey-Kramer when sizes differ.
+    순수한 Tukey는 $n$이 같다고 가정한다. Tukey-Kramer가 표준 확장이다. R의 `TukeyHSD`와 Python의 `statsmodels`는 크기가 다르면 Tukey-Kramer를 쓴다.

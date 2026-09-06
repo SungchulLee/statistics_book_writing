@@ -1,76 +1,82 @@
-# Welch's One-Way ANOVA
+# Welch의 일원배치 분산분석
 
+**Welch 분산분석**은 **등분산**(등분산성) 가정이 어긋날 때 둘 이상 집단의 평균이 유의하게 다른지 판정하는 검정이다. 집단 사이의 등분산을 가정하는 전통적인 일원배치 분산분석의 대안이다.
 
-**Welch's ANOVA** (Analysis of Variance) is a statistical test used to determine whether the means of two or more groups are significantly different when the assumption of **equal variances** (homoscedasticity) is violated. It is an alternative to the traditional one-way ANOVA, which assumes equal variances among groups.
+## 1. Welch 분산분석을 언제 쓰는가
 
-## 1. When to Use Welch's ANOVA
+- 둘 이상 집단의 평균을 비교할 때.
+- 집단 분산이 서로 다를 때(**이분산**).
+- 각 집단에서 정규성 가정이 근사적으로 만족될 때(또는 중심극한정리를 적용할 만큼 표본이 클 때).
 
-- When comparing the means of two or more groups.
-- When group variances are unequal (**heteroscedasticity**).
-- When the assumption of normality is approximately satisfied for each group (or sample sizes are large enough for the Central Limit Theorem to apply).
+## 2. 가정
 
-## 2. Assumptions
+1. 각 집단의 자료가 **독립적으로** **무작위 추출**되었다.
+2. 각 집단이 근사적으로 **정규분포**를 따른다(또는 중심극한정리를 적용할 만큼 표본크기가 크다).
+3. 집단 분산이 같다고 **가정하지 않는다**.
 
-1. The data in each group are **independently** and **randomly sampled**.
-2. Each group is approximately **normally distributed** (or the sample size is large enough for the Central Limit Theorem to apply).
-3. Group variances are **not assumed to be equal**.
+## 3. 가설
 
-## 3. Hypotheses
-
-- **Null Hypothesis ($H_0$)**: The group means are equal.
+- **귀무가설 ($H_0$)**: 집단 평균이 모두 같다.
 
 $$ H_0: \mu_1 = \mu_2 = \cdots = \mu_k $$
 
-- **Alternative Hypothesis ($H_a$)**: At least one group mean is different from the others.
+- **대립가설 ($H_a$)**: 적어도 한 집단의 평균이 다르다.
 
-## 4. Test Statistic
+## 4. 검정통계량
 
-Welch's ANOVA computes a test statistic $F$ using a weighted approach:
-
-$$ F = \frac{\sum_{i=1}^k w_i (\bar{X}_i - \bar{X})^2 / (k-1)}{\sum_{i=1}^k \frac{1 - w_i}{n_i - 1} / (k - \frac{1}{\sum_{i=1}^k \frac{1}{n_i - 1}})} $$
-
-Where:
-
-- $\bar{X}_i$: Mean of the $i$-th group.
-- $w_i = \frac{n_i}{s_i^2}$: Weight of the $i$-th group.
-- $s_i^2$: Variance of the $i$-th group.
-- $n_i$: Sample size of the $i$-th group.
-- $\bar{X}$: Weighted mean across all groups.
-
-The degrees of freedom are calculated using the **Welch-Satterthwaite equation**, leading to an $F$-statistic that is compared against the $F$-distribution.
-
-## 5. Welch-Satterthwaite Equation for Computing Degree of Freedom
-
-The **Welch-Satterthwaite equation** provides an approximation for the **degrees of freedom** (df) when comparing group means under unequal variances. This adjusted degrees of freedom is essential for ensuring that the test statistic follows the correct distribution.
-
-The formula for the effective degrees of freedom is:
+Welch 분산분석은 가중치를 이용해 검정통계량 $F$를 계산한다. 가중치와 가중 전체평균을
 
 $$
-\text{df} = \frac{\left( \sum_{i=1}^k \frac{w_i}{n_i} \right)^2}{\sum_{i=1}^k \frac{\left( \frac{w_i}{n_i} \right)^2}{n_i - 1}}
+w_i = \frac{n_i}{s_i^2}, \qquad W = \sum_{i=1}^k w_i, \qquad \tilde{X} = \frac{1}{W}\sum_{i=1}^k w_i \bar{X}_i
 $$
 
-**Components of the Formula:**
+로 두면 검정통계량은
 
-1. **Weights ($w_i$)**: $w_i = \frac{n_i}{s_i^2}$, where $n_i$ is the sample size and $s_i^2$ is the variance of group $i$. The weights adjust for the inverse variance of each group, giving more influence to groups with lower variances.
+$$
+F_W = \frac{\dfrac{1}{k-1}\sum_{i=1}^k w_i (\bar{X}_i - \tilde{X})^2}{1 + \dfrac{2(k-2)}{k^2-1} \displaystyle\sum_{i=1}^k \frac{(1 - w_i/W)^2}{n_i - 1}}
+$$
 
-2. **Numerator**: The sum of the weights scaled by their respective sample sizes is squared, accounting for the overall influence of all groups.
+이다. 여기서
 
-3. **Denominator**: The variability within each group is divided by its degrees of freedom ($n_i - 1$) and summed.
+- $\bar{X}_i$: $i$번째 집단의 평균.
+- $s_i^2$: $i$번째 집단의 분산.
+- $n_i$: $i$번째 집단의 표본크기.
+- $\tilde{X}$: 모든 집단에 걸친 가중평균.
 
-**Purpose**: The equation accounts for differences in variances and sample sizes, providing an effective degrees of freedom that is not necessarily an integer but is crucial for comparing the F-statistic against the critical value of an F-distribution.
+자유도는 **Welch-Satterthwaite 식**으로 계산하며, 그렇게 얻은 $F$-통계량을 $F$-분포와 비교한다.
 
-## 6. Steps for Performing Welch's ANOVA
+## 5. 자유도 계산을 위한 Welch-Satterthwaite 식
 
-1. **State the Hypotheses**: $H_0$: All group means are equal. $H_a$: At least one group mean is different.
-2. **Check Assumptions**: Independence, normality, and heteroscedasticity (no need for equal variances).
-3. **Compute the Test Statistic**: Calculate $F$ and its associated degrees of freedom.
-4. **Determine the p-value**: Compare the $F$-statistic to the $F$-distribution with the calculated degrees of freedom.
-5. **Make a Decision**: If $p \leq \alpha$ (e.g., 0.05), reject $H_0$.
-6. **Post Hoc Analysis**: If $H_0$ is rejected, conduct post hoc tests (e.g., Games-Howell test) to identify which groups differ.
+**Welch-Satterthwaite 식**은 분산이 다른 상황에서 집단 평균을 비교할 때 **자유도**의 근사를 제공한다. 이 조정된 자유도는 검정통계량이 올바른 분포를 따르도록 하는 데 필수적이다.
 
-## 7. Python Implementation
+분자 자유도는 $\text{df}_1 = k - 1$이고, 분모의 유효 자유도는 다음과 같다:
 
-### Example: Welch's ANOVA with Unequal Variances
+$$
+\text{df}_2 = \left[\frac{3}{k^2-1} \sum_{i=1}^k \frac{(1 - w_i/W)^2}{n_i - 1}\right]^{-1}
+$$
+
+**공식의 구성 요소:**
+
+1. **가중치 ($w_i$)**: $w_i = \frac{n_i}{s_i^2}$이며 $n_i$는 표본크기, $s_i^2$은 집단 $i$의 분산이다. 가중치는 각 집단의 분산에 반비례하도록 조정하여 분산이 작은 집단에 더 큰 영향력을 준다.
+
+2. **$1 - w_i/W$**: 전체 가중치 중 집단 $i$가 차지하는 몫이 얼마나 작은지를 나타낸다. 어느 한 집단이 압도적이면 유효 자유도가 줄어든다.
+
+3. **$n_i - 1$로 나누기**: 각 집단의 분산 추정이 얼마나 불확실한지를 반영한다.
+
+**목적**: 이 식은 분산과 표본크기의 차이를 반영하여 유효 자유도를 제공한다. 이 값은 반드시 정수는 아니지만, F-통계량을 F-분포의 임계값과 비교하는 데 결정적이다.
+
+## 6. Welch 분산분석의 수행 절차
+
+1. **가설 진술**: $H_0$: 모든 집단 평균이 같다. $H_a$: 적어도 한 집단의 평균이 다르다.
+2. **가정 확인**: 독립성, 정규성, 이분산(등분산일 필요는 없다).
+3. **검정통계량 계산**: $F$와 그에 대응하는 자유도를 계산한다.
+4. **p-값 결정**: 계산된 자유도의 $F$-분포와 $F$-통계량을 비교한다.
+5. **판정**: $p \leq \alpha$(예: 0.05)이면 $H_0$을 기각한다.
+6. **사후분석**: $H_0$을 기각하면 어느 집단이 다른지 찾기 위해 사후검정(예: Games-Howell 검정)을 수행한다.
+
+## 7. Python 구현
+
+### 예제: 분산이 다른 경우의 Welch 분산분석
 
 ```python
 import pingouin as pg
@@ -90,18 +96,19 @@ anova_results = pg.welch_anova(dv="Values", between="Group", data=df)
 print(anova_results)
 ```
 
-Output:
+출력:
+
 ```
-         Source  ddof1    ddof2         F         p-unc
-0  Group       2.000  5.654  45.236  0.00012
+   Source  ddof1  ddof2       F     p-unc
+0   Group    2.0  4.143  84.416  0.000439
 ```
 
-- $F$: Test statistic.
-- $p$: p-value indicating whether to reject $H_0$.
+- $F$: 검정통계량.
+- $p$: $H_0$을 기각할지 판단하는 p-값.
 
-### Post Hoc Testing
+### 사후검정
 
-If Welch's ANOVA finds significant differences, use a post hoc test such as the **Games-Howell test**, which does not assume equal variances or equal sample sizes:
+Welch 분산분석이 유의한 차이를 찾으면, 등분산이나 동일 표본크기를 가정하지 않는 **Games-Howell 검정** 같은 사후검정을 쓴다:
 
 ```python
 # Perform Games-Howell post hoc test
@@ -109,57 +116,57 @@ post_hoc = pg.pairwise_gameshowell(dv="Values", between="Group", data=df)
 print(post_hoc)
 ```
 
-## 8. Advantages
+## 8. 장점
 
-1. **No equal variance assumption**: Handles unequal variances (heteroscedasticity).
-2. **Robust to unbalanced designs**: Can be applied when group sizes are unequal.
-3. **More accurate** than traditional one-way ANOVA when variances differ.
+1. **등분산 가정이 없다**: 이분산을 다룰 수 있다.
+2. **불균형 설계에 로버스트하다**: 집단 크기가 달라도 적용할 수 있다.
+3. 분산이 다를 때 전통적인 일원배치 분산분석보다 **정확하다**.
 
-## 9. Limitations
+## 9. 한계
 
-1. Requires the assumption of normality for accurate results.
-2. May be less powerful than traditional ANOVA when variances are actually equal.
-3. More complex to compute manually.
+1. 정확한 결과를 위해서는 정규성 가정이 필요하다.
+2. 분산이 실제로 같을 때에는 전통적인 분산분석보다 검정력이 낮을 수 있다.
+3. 손으로 계산하기가 더 복잡하다.
 
-## 10. Summary
+## 10. 요약
 
-Welch's ANOVA is an extension of one-way ANOVA designed to compare means when the assumption of equal variances is violated. It is robust, flexible, and essential for analyzing data with heteroscedasticity. Post hoc tests like the Games-Howell test are recommended to identify which groups differ.
+Welch 분산분석은 등분산 가정이 어긋날 때 평균을 비교하도록 설계된 일원배치 분산분석의 확장이다. 로버스트하고 유연하며 이분산 자료를 분석하는 데 필수적이다. 어느 집단이 다른지 찾으려면 Games-Howell 검정 같은 사후검정을 권한다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Three investment strategies are compared based on monthly returns (%). The data show:
+**연습문제 1.**
+세 가지 투자 전략을 월 수익률(%)로 비교한다. 자료는 다음과 같다:
 
-| Strategy | $n$ | $\bar{Y}$ | $s^2$ |
+| 전략 | $n$ | $\bar{Y}$ | $s^2$ |
 |----------|-----|-----------|-------|
-| Momentum | 36 | 1.8 | 12.5 |
-| Value | 24 | 1.2 | 3.1 |
-| Index | 48 | 1.0 | 5.8 |
+| 모멘텀 | 36 | 1.8 | 12.5 |
+| 가치 | 24 | 1.2 | 3.1 |
+| 인덱스 | 48 | 1.0 | 5.8 |
 
-**(a)** Explain why the standard one-way ANOVA F-test may be inappropriate for these data.
+**(a)** 이 자료에 표준 일원배치 분산분석 F-검정이 적절하지 않을 수 있는 이유를 설명하라.
 
-**(b)** Welch's ANOVA uses the test statistic
+**(b)** Welch 분산분석은 다음 검정통계량을 쓴다:
 
 $$
 F_W = \frac{\sum_{i=1}^{k} w_i (\bar{Y}_i - \tilde{Y})^2 / (k-1)}{1 + \frac{2(k-2)}{k^2-1} \sum_{i=1}^{k} \frac{(1 - w_i/\sum w_j)^2}{n_i - 1}}
 $$
 
-where $w_i = n_i / s_i^2$ and $\tilde{Y} = \sum w_i \bar{Y}_i / \sum w_i$. Compute the weights $w_1, w_2, w_3$ and the weighted grand mean $\tilde{Y}$.
+여기서 $w_i = n_i / s_i^2$이고 $\tilde{Y} = \sum w_i \bar{Y}_i / \sum w_i$이다. 가중치 $w_1, w_2, w_3$과 가중 전체평균 $\tilde{Y}$를 계산하라.
 
-**(c)** Without completing the full calculation, explain conceptually why Welch's approach gives more weight to groups with smaller variances.
+**(c)** 전체 계산을 마치지 않더라도, Welch 접근이 분산이 작은 집단에 더 큰 가중치를 주는 이유를 개념적으로 설명하라.
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
 
-    **(a)** The group variances differ substantially: $s_1^2 = 12.5$, $s_2^2 = 3.1$, $s_3^2 = 5.8$. The largest variance is about four times the smallest. Combined with the unequal sample sizes ($n = 36, 24, 48$), the standard F-test's assumption of homoscedasticity is violated. The pooled variance estimate would not accurately represent any single group's variability.
+    **(a)** 집단 분산이 상당히 다르다: $s_1^2 = 12.5$, $s_2^2 = 3.1$, $s_3^2 = 5.8$. 가장 큰 분산이 가장 작은 것의 약 네 배이다. 표본크기도 서로 다르므로($n = 36, 24, 48$) 표준 F-검정의 등분산성 가정이 어긋난다. 합동분산 추정값은 어느 집단의 변동도 제대로 대표하지 못한다.
 
-    **(b)** Weights: $w_1 = 36/12.5 = 2.88$, $w_2 = 24/3.1 = 7.74$, $w_3 = 48/5.8 = 8.28$.
+    **(b)** 가중치: $w_1 = 36/12.5 = 2.88$, $w_2 = 24/3.1 = 7.74$, $w_3 = 48/5.8 = 8.28$.
 
-    Sum of weights: $\sum w_i = 2.88 + 7.74 + 8.28 = 18.90$.
+    가중치의 합: $\sum w_i = 2.88 + 7.74 + 8.28 = 18.90$.
 
-    Weighted grand mean:
+    가중 전체평균:
 
     $$
     \tilde{Y} = \frac{2.88 \times 1.8 + 7.74 \times 1.2 + 8.28 \times 1.0}{18.90} = \frac{5.184 + 9.288 + 8.280}{18.90} = \frac{22.752}{18.90} = 1.204
     $$
 
-    **(c)** The weight $w_i = n_i / s_i^2$ is inversely proportional to the group's variance. Groups with smaller variances provide more precise estimates of their population means, so they receive greater weight in the analysis. This is analogous to weighted least squares, where observations with lower variance contribute more to the estimate. The Momentum strategy, despite having the largest sample size, receives the lowest weight because its high variance ($s^2 = 12.5$) makes its sample mean a less reliable estimate of its population mean.
+    **(c)** 가중치 $w_i = n_i / s_i^2$은 집단 분산에 반비례한다. 분산이 작은 집단은 모평균을 더 정밀하게 추정하므로 분석에서 더 큰 가중치를 받는다. 분산이 작은 관측값이 추정에 더 많이 기여하는 가중최소제곱과 같은 원리이다. 모멘텀 전략은 표본크기가 가장 크지만 분산이 커서($s^2 = 12.5$) 표본평균이 모평균의 덜 신뢰할 만한 추정값이 되므로 가장 낮은 가중치를 받는다.

@@ -1,45 +1,44 @@
-# Checking Independence of Observations
+# 관측의 독립성 확인
 
+## 독립성이 중요한 이유
 
-## Why Independence Matters
+독립성 가정은 각 관측값이 집단 안에서나 집단 사이에서나 다른 모든 관측값과 무관해야 한다는 것이다. 분산분석에서 아마도 가장 결정적인 가정인데, 독립성 위반은 변환이나 다른 검정통계량으로 바로잡을 수 없고 근본적으로 다른 모형화 접근(예: 혼합효과 모형, 반복측정 분산분석)을 요구하기 때문이다.
 
-The independence assumption states that each observation should be unrelated to every other observation, both within and across groups. This is arguably the most critical assumption in ANOVA because violations of independence cannot be corrected by transformations or alternative test statistics—they require fundamentally different modeling approaches (e.g., mixed-effects models, repeated measures ANOVA).
+관측값이 상관되어 있으면 유효 표본크기가 명목 표본크기보다 작아지며, 그 결과:
 
-When observations are correlated, the effective sample size is smaller than the nominal sample size, which means:
+- 표준오차가 과소추정된다.
+- F-통계량이 부풀려진다.
+- 제1종 오류율이 극적으로 커진다.
 
-- Standard errors are underestimated.
-- The F-statistic is inflated.
-- Type I error rates increase dramatically.
+## 확인 방법
 
-## How to Check
+### 연구 설계 검토
 
-### Study Design Review
+독립성을 확보하는 가장 효과적인 방법은 올바른 실험 설계이다:
 
-The most effective way to ensure independence is through proper experimental design:
+- 모집단으로부터의 **무작위 표집**은 한 관측값이 다른 관측값에 영향을 주지 않도록 한다.
+- 처치군으로의 **무작위 배정**은 체계적인 의존을 막는다.
+- 일원배치 분산분석 틀 안에서는 같은 대상에 대한 **반복측정이 없어야** 한다. 같은 대상을 여러 조건에서 측정한다면 반복측정 분산분석이나 혼합효과 모형이 필요하다.
 
-- **Random sampling** from the population ensures that one observation does not influence another.
-- **Random assignment** to treatment groups prevents systematic dependencies.
-- **No repeated measures** on the same subject within a one-way ANOVA framework. If the same subjects are measured under multiple conditions, a repeated-measures ANOVA or mixed-effects model is required.
+독립성을 위반하는 흔한 상황:
 
-Common scenarios that violate independence:
+- 교실 안에 내포된 학생(군집 자료).
+- 같은 환자를 시간에 걸쳐 반복측정.
+- 관측값의 공간적·시간적 인접성(예: 농업 실험에서 서로 붙어 있는 구획).
 
-- Students nested within classrooms (clustered data).
-- Repeated measurements on the same patient over time.
-- Spatial or temporal proximity of observations (e.g., adjacent plots in an agricultural experiment).
+### Durbin-Watson 검정
 
-### Durbin-Watson Test
-
-The Durbin-Watson test is primarily used in regression to detect autocorrelation in residuals, but it can be applied to ANOVA residuals when observations have a natural ordering (e.g., time series data).
+Durbin-Watson 검정은 주로 회귀에서 잔차의 자기상관을 탐지하는 데 쓰이지만, 관측값에 자연스러운 순서가 있으면(예: 시계열 자료) 분산분석 잔차에도 적용할 수 있다.
 
 $$
 d = \frac{\sum_{i=2}^{n}(e_i - e_{i-1})^2}{\sum_{i=1}^{n}e_i^2}
 $$
 
-where $e_i$ are the residuals ordered by time or sequence.
+여기서 $e_i$는 시간이나 순서로 정렬된 잔차이다.
 
-- $d \approx 2$: No autocorrelation.
-- $d < 2$: Positive autocorrelation (adjacent residuals tend to be similar).
-- $d > 2$: Negative autocorrelation (adjacent residuals tend to alternate in sign).
+- $d \approx 2$: 자기상관 없음.
+- $d < 2$: 양의 자기상관(인접한 잔차가 비슷한 경향).
+- $d > 2$: 음의 자기상관(인접한 잔차의 부호가 번갈아 나타나는 경향).
 
 ```python
 from statsmodels.stats.stattools import durbin_watson
@@ -48,9 +47,9 @@ dw_stat = durbin_watson(model.resid)
 print(f"Durbin-Watson Statistic: {dw_stat:.4f}")
 ```
 
-### Residual Plots Against Order
+### 순서에 대한 잔차 그림
 
-If data has a natural ordering (e.g., time of collection), plotting residuals against this order can reveal patterns suggesting dependence.
+자료에 자연스러운 순서(예: 수집 시각)가 있으면 그 순서에 대해 잔차를 그려 의존을 시사하는 패턴을 찾을 수 있다.
 
 ```python
 import matplotlib.pyplot as plt
@@ -63,47 +62,48 @@ plt.title("Residuals vs. Observation Order")
 plt.show()
 ```
 
-Look for:
+살펴볼 것:
 
-- **Trends:** A systematic increase or decrease suggests a time effect.
-- **Cycles:** Periodic patterns indicate autocorrelation.
-- **Clusters:** Groups of similar residuals suggest block effects.
+- **추세:** 체계적인 증가나 감소는 시간 효과를 시사한다.
+- **주기:** 주기적인 패턴은 자기상관을 나타낸다.
+- **군집:** 비슷한 잔차의 무리는 블록 효과를 시사한다.
 
-## What to Do If Independence Is Violated
+## 독립성이 어긋날 때
 
-- **Mixed-effects models:** Account for hierarchical or clustered data structures by modeling both fixed effects (treatment) and random effects (cluster).
-- **Repeated-measures ANOVA:** If the same subjects appear in multiple groups, use a design that accounts for within-subject correlation.
-- **Generalized estimating equations (GEE):** Provide population-averaged estimates while accounting for correlation structures.
-- **Time-series methods:** If data are collected over time with autocorrelation, specialized time-series ANOVA approaches may be needed.
-## Exercises
+- **혼합효과 모형:** 고정효과(처치)와 임의효과(군집)를 함께 모형화하여 계층적이거나 군집화된 자료 구조를 반영한다.
+- **반복측정 분산분석:** 같은 대상이 여러 집단에 나타나면 대상 내 상관을 반영하는 설계를 쓴다.
+- **일반화추정방정식(GEE):** 상관 구조를 반영하면서 모집단 평균 수준의 추정값을 제공한다.
+- **시계열 방법:** 자기상관이 있는 시간에 걸친 자료라면 전용 시계열 분산분석 접근이 필요할 수 있다.
 
-**Exercise 1.**
-A researcher measures blood pressure in 30 patients, 10 from each of three clinics. Patients within the same clinic share the same physician. Explain why the independence assumption of one-way ANOVA may be violated and suggest an alternative modeling approach.
+## 연습문제
 
-??? success "Solution to Exercise 1"
-    Patients within the same clinic are likely to have correlated outcomes because they share the same physician, treatment protocols, and clinic environment. This creates a **clustered data structure** where within-cluster observations are more similar than between-cluster observations, violating the independence assumption.
+**연습문제 1.**
+어떤 연구자가 세 병원에서 각각 10명씩, 환자 30명의 혈압을 측정했다. 같은 병원의 환자는 같은 의사에게 진료받는다. 일원배치 분산분석의 독립성 가정이 왜 어긋날 수 있는지 설명하고 대안적인 모형화 접근을 제시하라.
 
-    An appropriate alternative is a **mixed-effects model** (also called a hierarchical or multilevel model) that includes clinic as a random effect. This accounts for the within-clinic correlation while still estimating the fixed effect of the treatment groups.
+??? success "연습문제 1 풀이"
+    같은 병원의 환자들은 같은 의사, 같은 진료 지침, 같은 병원 환경을 공유하므로 결과가 상관될 가능성이 높다. 이는 군집 안의 관측값이 군집 사이의 관측값보다 서로 더 비슷한 **군집 자료 구조**를 만들어 독립성 가정을 위반한다.
 
----
-
-**Exercise 2.**
-A quality control engineer collects measurements from a production line every 5 minutes over an 8-hour shift, recording 96 observations split across three machine settings. The Durbin-Watson statistic is $d = 0.87$. Interpret this result and explain how it affects the ANOVA conclusions.
-
-??? success "Solution to Exercise 2"
-    A Durbin-Watson statistic of $d = 0.87$ is substantially below 2, indicating **positive autocorrelation** in the residuals. Adjacent measurements tend to be similar, which is expected in time-ordered production data.
-
-    This autocorrelation means the effective sample size is smaller than the nominal 96, causing standard errors to be underestimated and the F-statistic to be inflated. The ANOVA is likely to produce false positives. The engineer should use a time-series ANOVA approach, include time as a covariate, or use Newey-West (HAC) standard errors to obtain valid inference.
+    적절한 대안은 병원을 임의효과로 포함하는 **혼합효과 모형**(계층 모형 또는 다수준 모형이라고도 한다)이다. 병원 내 상관을 반영하면서 처치군의 고정효과를 추정할 수 있다.
 
 ---
 
-**Exercise 3.**
-Describe three study design features that help ensure the independence assumption is satisfied in a one-way ANOVA. For each, give an example of what could go wrong if that feature is absent.
+**연습문제 2.**
+어떤 품질관리 기술자가 8시간 교대 동안 5분마다 생산 라인에서 측정하여, 세 가지 기계 설정으로 나뉜 관측값 96개를 기록했다. Durbin-Watson 통계량은 $d = 0.87$이다. 이 결과를 해석하고 분산분석의 결론에 어떤 영향을 주는지 설명하라.
 
-??? success "Solution to Exercise 3"
+??? success "연습문제 2 풀이"
+    Durbin-Watson 통계량 $d = 0.87$은 2보다 상당히 작아 잔차에 **양의 자기상관**이 있음을 나타낸다. 시간 순서로 수집한 생산 자료에서 예상되는 대로 인접한 측정값이 서로 비슷하다.
 
-    1. **Random sampling from the population.** Without random sampling, observations may be systematically related. For example, surveying only friends of existing participants creates network-based dependence.
+    이 자기상관은 유효 표본크기가 명목값 96보다 작다는 뜻이므로 표준오차가 과소추정되고 F-통계량이 부풀려진다. 분산분석이 거짓 양성을 낼 가능성이 크다. 기술자는 시계열 분산분석 접근을 쓰거나, 시간을 공변량으로 포함하거나, Newey-West(HAC) 표준오차를 써서 타당한 추론을 얻어야 한다.
 
-    2. **Random assignment to treatment groups.** Without randomization, pre-existing similarities among group members introduce confounding. For example, if patients self-select into treatment groups, those with more severe conditions may cluster in one group.
+---
 
-    3. **No repeated measures on the same subject.** If the same subject appears in multiple groups (e.g., before-and-after measurements treated as independent), within-subject correlation violates independence. A repeated-measures ANOVA or paired design is needed instead.
+**연습문제 3.**
+일원배치 분산분석에서 독립성 가정이 충족되도록 돕는 연구 설계 요소 세 가지를 기술하라. 각각에 대해 그 요소가 없을 때 무엇이 잘못될 수 있는지 예를 들어라.
+
+??? success "연습문제 3 풀이"
+
+    1. **모집단으로부터의 무작위 표집.** 무작위 표집이 없으면 관측값이 체계적으로 연관될 수 있다. 예를 들어 기존 참가자의 친구만 조사하면 관계망에 기반한 의존이 생긴다.
+
+    2. **처치군으로의 무작위 배정.** 무작위화가 없으면 집단 구성원 사이의 사전 유사성이 교란을 일으킨다. 예를 들어 환자가 처치군을 스스로 고르면 중증인 환자가 한 집단에 몰릴 수 있다.
+
+    3. **같은 대상에 대한 반복측정 없음.** 같은 대상이 여러 집단에 나타나면(예: 전후 측정을 독립인 것처럼 다루면) 대상 내 상관이 독립성을 위반한다. 반복측정 분산분석이나 대응 설계가 필요하다.

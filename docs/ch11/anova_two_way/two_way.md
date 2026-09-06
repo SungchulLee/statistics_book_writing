@@ -1,320 +1,319 @@
-# Two-Way ANOVA: Main Effects and Blocking
+# 이원배치 분산분석: 주효과와 블록화
 
+## 1. 이원배치 분산분석
 
-## 1. Two-Way ANOVA (Analysis of Variance)
+### A. 이원배치 분산분석이란
 
-### A. Two-Way ANOVA
+이원배치 분산분석은 일원배치 분산분석을 확장한 것으로, 두 개의 독립인 범주형 변수(요인)가 연속형 종속변수에 미치는 효과를 살필 수 있게 해 준다. 하나의 요인에 대한 평균 차이를 평가하는 일원배치와 달리, 이원배치 분산분석은 각 요인의 개별 효과(주효과)와 두 요인 사이의 교호작용 효과를 함께 평가할 수 있다. 그래서 두 요인이 독립적으로든 결합해서든 결과에 영향을 줄 수 있는 연구에서 특히 유용하다.
 
-Two-Way ANOVA (Analysis of Variance) is an extension of One-Way ANOVA that allows researchers to examine the effects of two independent categorical variables (factors) on a continuous dependent variable. Unlike One-Way ANOVA, which assesses the mean differences across a single factor, Two-Way ANOVA can evaluate both the individual effect of each factor (main effects) and the interaction effect between them. This makes it especially useful for studies where two factors might influence the outcome, either independently or jointly.
+이원배치 분산분석의 주된 목표는 다음을 평가하는 것이다:
 
-The primary objective of Two-Way ANOVA is to assess:
+1. **주효과**: 각 요인이 종속변수에 미치는 독립적인 효과. 예를 들어 "식이"와 "운동"이 체중 감량에 미치는 효과를 연구한다면 "식이"만의 효과와 "운동"만의 효과를 평가한다.
+2. **교호작용 효과**: 어느 한 요인만으로는 설명되지 않는, 두 요인의 결합 효과. 한 요인의 효과가 다른 요인의 수준에 따라 달라지면 교호작용 효과가 있는 것이다.
 
-1. **Main Effects**: The independent effect of each factor on the dependent variable. For instance, if studying the effects of "Diet" and "Exercise" on weight loss, Two-Way ANOVA would evaluate the effect of "Diet" alone and "Exercise" alone.
-2. **Interaction Effect**: The combined effect of both factors on the dependent variable, which is not explained by either factor alone. An interaction effect occurs if the effect of one factor depends on the level of the other factor.
+이원배치 분산분석은 자료의 전체 분산을 세 가지 주요 성분으로 분해한다:
 
-Two-Way ANOVA partitions the total variance in the data into three main components:
+- **요인 A에 의한 분산**: 첫 번째 요인의 수준 차이로 인한 종속변수의 변동.
+- **요인 B에 의한 분산**: 두 번째 요인의 수준 차이로 인한 변동.
+- **요인 A와 B의 교호작용에 의한 분산**: 개별 기여를 넘어서는 두 요인의 결합 효과.
 
-- **Variance due to Factor A**: This measures the variation in the dependent variable due to differences in the levels of the first factor.
-- **Variance due to Factor B**: This captures the variation due to differences in the levels of the second factor.
-- **Variance due to the Interaction between Factors A and B**: This represents the combined effect of both factors beyond their individual contributions.
+이원배치 분산분석에서는 분산의 각 원천(요인 A, 요인 B, 둘 사이의 교호작용)에 대해 **F-통계량**을 계산한다. 각 F-통계량은 해당 분산 성분이 집단 내 분산보다 유의하게 큰지를 평가한다. 요인이나 교호작용에 실제 효과가 있다면 그렇게 될 것이다.
 
-In Two-Way ANOVA, an **F-statistic** is calculated for each source of variance: Factor A, Factor B, and the interaction between them. Each F-statistic assesses whether the corresponding variance component is significantly greater than the variance within the groups, as would be expected if the factor or interaction has a real effect.
+**이원배치 분산분석의 가정**
 
-**Assumptions of Two-Way ANOVA**
+일원배치와 마찬가지로 이원배치에도 핵심 가정이 있다:
 
-Like One-Way ANOVA, Two-Way ANOVA has key assumptions:
+1. **정규성**: 각 집단 안의 자료가 정규분포를 따라야 한다.
+2. **분산의 동질성**: 모든 집단(요인 수준의 조합)의 분산이 대략 같아야 한다.
+3. **독립성**: 집단 안에서도, 집단 사이에서도 관측값이 독립이어야 한다.
 
-1. **Normality**: The data within each group should follow a normal distribution.
-2. **Homogeneity of Variances**: The variances across all groups (combinations of factor levels) should be approximately equal.
-3. **Independence**: Observations within and between groups should be independent.
+이 가정들이 어긋나면 결과를 믿기 어려워진다. 가정이 충족되지 않을 때에는 비모수 검정이나 일반화선형모형 같은 대안이 적절할 수 있다.
 
-Violations of these assumptions may lead to unreliable results. When assumptions are not met, alternative methods, such as non-parametric tests or adjustments like the use of a generalized linear model, may be appropriate.
+**장점과 응용**
 
-**Advantages and Applications**
+이원배치 분산분석은 여러 요인을 동시에 조사하는 농학, 심리학, 공학 등에서 널리 쓰인다. 핵심 장점은 요인 사이의 교호작용을 파악할 수 있어, 여러 변수가 종속변수에 어떻게 영향을 주는지 더 종합적으로 이해할 수 있다는 점이다.
 
-Two-Way ANOVA is widely used in fields like agriculture, psychology, and engineering, where researchers investigate multiple factors simultaneously. The key advantage of Two-Way ANOVA is its ability to identify interactions between factors, providing a more comprehensive understanding of how multiple variables influence the dependent variable.
+**사후분석**
 
-**Post-Hoc Analysis**
+이원배치 분산분석에서 유의한 주효과나 교호작용 효과가 나타나면 집단 사이의 구체적인 차이를 살피기 위해 사후검정을 수행할 수 있다. 예를 들어 Tukey의 HSD로 각 요인 안에서 어느 수준이 다른지, 또는 특정 요인 수준 조합이 특별한 효과를 보이는지 판정할 수 있다.
 
-If the Two-Way ANOVA indicates significant main effects or interaction effects, post-hoc tests may be conducted to explore specific differences between groups. For example, Tukey's HSD can help determine which levels within each factor differ, or if specific combinations of factor levels show unique effects.
+### B. 일원배치 분산분석과 이원배치 분산분석
 
-### B. One-Way ANOVA vs. Two-Way ANOVA
+일원배치와 이원배치 분산분석은 모두 여러 집단의 평균을 비교하는 통계 기법이지만, 평가하는 요인의 수와 분석의 복잡도가 다르다.
 
-Both One-Way ANOVA and Two-Way ANOVA are statistical techniques used to compare the means of different groups, but they differ in the number of factors they evaluate and the complexity of the analysis.
+#### 일원배치 분산분석
 
-#### One-Way ANOVA
+일원배치 분산분석은 하나의 범주형 요인(독립변수)에 근거하여 **셋 이상의 독립 집단** 평균 사이에 유의한 차이가 있는지 판정한다.
 
-One-Way ANOVA is used to determine whether there are significant differences between the means of **three or more independent groups** based on a single categorical factor (independent variable).
+- **분석하는 요인**: 요인 하나만 고려한다(예: 비료 종류).
+- **목적**: 어떤 집단의 평균이 다른 집단과 유의하게 다른지 검정한다.
+- **F-통계량**: **집단 간** 분산과 **집단 내** 분산의 비로 계산한다.
+- **해석**: 유의한 결과는 적어도 한 집단의 평균이 다르다는 뜻이지만 어느 집단인지는 알려주지 않는다. 흔히 **사후검정**이 필요하다.
+- **가정**: 정규성, 분산의 동질성, 관측의 독립성을 가정한다.
 
-- **Factors Analyzed**: Only one factor is considered (e.g., Fertilizer Type).
-- **Purpose**: Tests whether any group mean is significantly different from the others.
-- **F-Statistic**: Calculated as the ratio of the variance **between groups** to the variance **within groups**.
-- **Interpretation**: A significant result indicates that at least one group mean is different, but it does not specify which groups differ. **Post-hoc tests** are often needed.
-- **Assumptions**: Assumes normality, homogeneity of variances, and independence of observations.
+#### 이원배치 분산분석
 
-#### Two-Way ANOVA
+이원배치 분산분석은 일원배치를 확장하여 두 개의 독립 요인과 그 결합 효과를 종속변수에 대해 분석할 수 있게 한다.
 
-Two-Way ANOVA is an extension of One-Way ANOVA that allows for the analysis of two independent factors and their combined effect on the dependent variable.
+- **분석하는 요인**: 두 요인을 동시에 분석한다.
+- **목적**: 세 가지 효과를 검정한다. 첫 요인의 주효과, 둘째 요인의 주효과, 두 요인의 교호작용 효과.
+- **F-통계량**: 각 주효과와 교호작용 효과에 대해 별도의 F-통계량을 계산한다.
+- **해석**: 유의한 주효과는 한 요인의 적어도 한 수준이 다른 수준과 다름을 뜻하고, 유의한 교호작용 효과는 두 요인이 독립적으로 작동하지 않음을 시사한다.
+- **가정**: 일원배치와 마찬가지로 정규성, 분산의 동질성, 관측의 독립성을 가정한다.
 
-- **Factors Analyzed**: Two factors are analyzed simultaneously.
-- **Purpose**: Tests three effects: the main effect of the first factor, the main effect of the second factor, and the interaction effect between the two factors.
-- **F-Statistics**: Separate F-statistics are calculated for each main effect and the interaction effect.
-- **Interpretation**: Significant main effects indicate that at least one level of a factor differs from others, while a significant interaction effect suggests that the factors do not operate independently.
-- **Assumptions**: Like One-Way ANOVA, it assumes normality, homogeneity of variances, and independence of observations.
+#### 주요 차이
 
-#### Key Differences
-
-| Feature               | One-Way ANOVA                                 | Two-Way ANOVA                                      |
+| 항목               | 일원배치 분산분석                                 | 이원배치 분산분석                                      |
 |-----------------------|-----------------------------------------------|----------------------------------------------------|
-| **Number of Factors** | One factor                                    | Two factors                                        |
-| **Main Purpose**      | Determine if there are significant differences between group means based on one factor | Assess both main effects of each factor and their interaction effect |
-| **Interaction Effect**| Not analyzed                                  | Analyzed, showing whether factors affect the outcome jointly |
-| **F-Statistics**      | One F-statistic for the single factor         | Separate F-statistics for each main effect and interaction |
-| **Example**           | Testing the effect of different fertilizers on plant height | Testing the effects of fertilizer and watering frequency on plant height |
+| **요인의 수** | 하나                                    | 둘                                        |
+| **주된 목적**      | 하나의 요인에 근거해 집단 평균 사이에 유의한 차이가 있는지 판정 | 각 요인의 주효과와 그 교호작용 효과를 함께 평가 |
+| **교호작용 효과**| 분석하지 않음                                  | 분석한다. 두 요인이 결합해 결과에 영향을 주는지 보여준다 |
+| **F-통계량**      | 하나의 요인에 대해 F-통계량 하나         | 각 주효과와 교호작용에 대해 별도의 F-통계량 |
+| **예**           | 비료 종류가 식물 높이에 미치는 효과 검정 | 비료와 물 주는 빈도가 식물 높이에 미치는 효과 검정 |
 
-#### When to Use Each Type
+#### 각각을 언제 쓰는가
 
-- **Use One-Way ANOVA** when you are interested in testing the effect of a single categorical factor on a continuous outcome variable and have three or more groups to compare.
-- **Use Two-Way ANOVA** when you want to study the effects of two categorical factors on a continuous outcome and understand whether there's an interaction between these factors.
+- 하나의 범주형 요인이 연속형 결과변수에 미치는 효과를 검정하고 비교할 집단이 셋 이상일 때 **일원배치 분산분석**을 쓴다.
+- 두 범주형 요인이 연속형 결과에 미치는 효과를 연구하고 이 요인들 사이에 교호작용이 있는지 알고 싶을 때 **이원배치 분산분석**을 쓴다.
 
-### C. Comparison of Null of Two-Way ANOVA to Linear Regression
+### C. 이원배치 분산분석의 귀무가설과 선형회귀의 비교
 
 $$\begin{array}{ccc}
-&&\text{Linear Regression}&&\text{Two Way ANOVA}\\
-\text{Model}&&y=\alpha+\beta_1 x_1+\beta_2 x_2 + \gamma x_1x_2
+&&\text{선형회귀}&&\text{이원배치 분산분석}\\
+\text{모형}&&y=\alpha+\beta_1 x_1+\beta_2 x_2 + \gamma x_1x_2
 &&
 y=\alpha+\sum_{i=1}^{a}\beta^{(1)}_i 1_{C^{(1)}_i}
 +\sum_{j=1}^{b}\beta^{(2)}_j 1_{C^{(2)}_j}
 +\sum_{i=1}^{a}\sum_{j=1}^{b}\beta_{ij} 1_{C^{(1)}_iC^{(2)}_j}\\
 \text{H}_0&&\beta_1=0
-&&\quad\text{all }\beta^{(1)}_{i}=0\\
+&&\quad\text{모든 }\beta^{(1)}_{i}=0\\
 \text{H}_0&&\beta_2=0
-&&\quad\text{all }\beta^{(2)}_{j}=0\\
-\text{H}_0&&\gamma=0&&\quad\text{all }\beta_{ij}=0\\
+&&\quad\text{모든 }\beta^{(2)}_{j}=0\\
+\text{H}_0&&\gamma=0&&\quad\text{모든 }\beta_{ij}=0\\
 \end{array}$$
 
-Both **Linear Regression** and **Two-Way ANOVA** evaluate the effects of two independent variables (or factors) on a dependent variable, but they differ in how the independent variables are treated. Linear regression deals with continuous predictors, whereas Two-Way ANOVA uses categorical variables, allowing for the analysis of main effects and interactions between factors.
+**선형회귀**와 **이원배치 분산분석**은 모두 두 독립변수(또는 요인)가 종속변수에 미치는 효과를 평가하지만, 독립변수를 다루는 방식이 다르다. 선형회귀는 연속형 설명변수를 다루는 반면 이원배치 분산분석은 범주형 변수를 써서 주효과와 요인 사이의 교호작용을 분석한다.
 
-In linear regression, when there are two continuous independent variables, $x_1$ and $x_2$, the model is expressed as:
+선형회귀에서 두 연속형 독립변수 $x_1$, $x_2$가 있으면 모형은 다음으로 표현된다:
 
 $$
 y = \alpha + \beta_1 x_1 + \beta_2 x_2 + \gamma x_1 x_2
 $$
 
-where $\alpha$ is the intercept, $\beta_1$ and $\beta_2$ represent the effects of $x_1$ and $x_2$ on $y$, and $\gamma$ represents the interaction effect between $x_1$ and $x_2$.
+여기서 $\alpha$는 절편, $\beta_1$과 $\beta_2$는 $x_1$과 $x_2$가 $y$에 미치는 효과, $\gamma$는 $x_1$과 $x_2$ 사이의 교호작용 효과를 나타낸다.
 
-The hypotheses for this model are:
+이 모형의 가설은 다음과 같다:
 
-- $H_0: \beta_1 = 0$: There is no effect of $x_1$ on $y$
-- $H_0: \beta_2 = 0$: There is no effect of $x_2$ on $y$
-- $H_0: \gamma = 0$: There is no interaction between $x_1$ and $x_2$ on $y$
+- $H_0: \beta_1 = 0$: $x_1$이 $y$에 효과가 없다
+- $H_0: \beta_2 = 0$: $x_2$가 $y$에 효과가 없다
+- $H_0: \gamma = 0$: $x_1$과 $x_2$ 사이에 $y$에 대한 교호작용이 없다
 
-In contrast, **Two-Way ANOVA** deals with categorical independent variables (factors), and the model is represented as:
+반면 **이원배치 분산분석**은 범주형 독립변수(요인)를 다루며 모형은 다음과 같다:
 
 $$
 y = \alpha + \sum_{i=1}^{a} \beta^{(1)}_i 1_{C^{(1)}_i} + \sum_{j=1}^{b} \beta^{(2)}_j 1_{C^{(2)}_j} + \sum_{i=1}^{a} \sum_{j=1}^{b} \beta_{ij} 1_{C^{(1)}_i C^{(2)}_j} + \text{noise}
 $$
 
-where $C^{(1)}_i$ are the $a$ levels of Factor A, $C^{(2)}_j$ are the $b$ levels of Factor B, $1_{C^{(1)}_i}$ and $1_{C^{(2)}_j}$ are indicator functions, $\beta^{(1)}_i$ represents the effect of Factor A (Main Effect A), $\beta^{(2)}_j$ represents the effect of Factor B (Main Effect B), and $\beta_{ij}$ represents the interaction effect.
+여기서 $C^{(1)}_i$는 요인 A의 $a$개 수준, $C^{(2)}_j$는 요인 B의 $b$개 수준, $1_{C^{(1)}_i}$와 $1_{C^{(2)}_j}$는 지시함수, $\beta^{(1)}_i$는 요인 A의 효과(주효과 A), $\beta^{(2)}_j$는 요인 B의 효과(주효과 B), $\beta_{ij}$는 교호작용 효과이다.
 
-The hypotheses in **Two-Way ANOVA** are:
+**이원배치 분산분석**의 가설은 다음과 같다:
 
-- $H_0: \beta^{(1)}_i = 0$ for all $i$: No main effect of Factor A on $y$
-- $H_0: \beta^{(2)}_j = 0$ for all $j$: No main effect of Factor B on $y$
-- $H_0: \beta_{ij} = 0$ for all $i$ and $j$: No interaction between Factors A and B on $y$
+- $H_0: \beta^{(1)}_i = 0$ (모든 $i$에 대해): 요인 A의 주효과가 $y$에 없다
+- $H_0: \beta^{(2)}_j = 0$ (모든 $j$에 대해): 요인 B의 주효과가 $y$에 없다
+- $H_0: \beta_{ij} = 0$ (모든 $i$, $j$에 대해): 요인 A와 B 사이에 $y$에 대한 교호작용이 없다
 
-## 2. Two Different Types of Two-Way ANOVA
+## 2. 이원배치 분산분석의 두 유형
 
-### Two-Way ANOVA without Replication
+### 반복 없는 이원배치 분산분석
 
-In a **Two-Way ANOVA without Replication**, each combination of the levels of the two factors has only **one observation**.
+**반복 없는 이원배치 분산분석**에서는 두 요인의 각 수준 조합에 관측값이 **하나뿐**이다.
 
-**Characteristics:**
+**특징:**
 
-- **Single Observation per Cell**: Since each cell has only one data point, there is no way to estimate the variability within that cell.
-- **Analysis of Main Effects and Interaction**: The test can still assess whether there are significant differences due to each factor's levels and if there's a significant interaction.
-- **Limited Error Analysis**: Without replication, all variability that isn't explained by the main effects or interaction is lumped into a general term.
+- **칸당 관측값 하나**: 각 칸에 자료점이 하나뿐이므로 칸 안의 변동을 추정할 방법이 없다.
+- **주효과와 교호작용의 분석**: 각 요인의 수준에 따른 유의한 차이와 유의한 교호작용이 있는지는 여전히 평가할 수 있다.
+- **제한된 오차 분석**: 반복이 없으면 주효과나 교호작용으로 설명되지 않는 모든 변동이 하나의 항으로 묶인다.
 
-**Decomposition:**
+**분해:**
 
 $$
 SST=SSA+SSB+SSAB
 $$
 
-### Two-Way ANOVA with Replication
+### 반복 있는 이원배치 분산분석
 
-In a **Two-Way ANOVA with Replication**, there are **multiple observations** for each combination of the levels of the two factors.
+**반복 있는 이원배치 분산분석**에서는 두 요인의 각 수준 조합에 **여러 관측값**이 있다.
 
-**Characteristics:**
+**특징:**
 
-- **Multiple Observations per Cell**: Having replication allows for the measurement of within-cell variability, or "error" variance.
-- **Testing for Interaction Effects**: With replication, it's possible to detect and analyze interaction effects with greater accuracy.
-- **Separation of Variance Components**: Two-Way ANOVA with replication partitions total variability into: Factor A, Factor B, Interaction, and Error (within-cell variability).
-- **More Reliable Error Estimate**: By separating out within-cell variability, the error term is better estimated, improving reliability.
+- **칸당 여러 관측값**: 반복이 있으면 칸 내 변동, 즉 "오차" 분산을 측정할 수 있다.
+- **교호작용 효과 검정**: 반복이 있으면 교호작용 효과를 더 정확하게 탐지하고 분석할 수 있다.
+- **분산 성분의 분리**: 반복 있는 이원배치 분산분석은 전체 변동을 요인 A, 요인 B, 교호작용, 오차(칸 내 변동)로 분해한다.
+- **더 믿을 만한 오차 추정**: 칸 내 변동을 따로 떼어내므로 오차항이 더 잘 추정되어 신뢰성이 높아진다.
 
-**Decomposition:**
+**분해:**
 
 $$
 SST=SSA+SSB+SSAB+SSE
 $$
 
-### Summary Comparison
+### 비교 요약
 
-| Feature                     | Two-Way ANOVA without Replication       | Two-Way ANOVA with Replication      |
+| 항목                     | 반복 없는 이원배치       | 반복 있는 이원배치      |
 |-----------------------------|----------------------------------------|-------------------------------------|
-| **Observations per Cell**   | One                                     | Multiple                            |
-| **Error Term**              | Not separable (no within-group error)   | Separates within-group error        |
-| **Main Effects**            | Can estimate                           | Can estimate                        |
-| **Interaction Effects**     | Can estimate                           | Can estimate                        |
-| **Reliability**             | Lower (no within-group variance)       | Higher (within-group variance)      |
-| **Example**                 | One participant per condition          | Multiple participants per condition |
+| **칸당 관측값**   | 하나                                     | 여럿                            |
+| **오차항**              | 분리 불가(집단 내 오차 없음)   | 집단 내 오차를 분리        |
+| **주효과**            | 추정 가능                           | 추정 가능                        |
+| **교호작용 효과**     | 추정 가능                           | 추정 가능                        |
+| **신뢰성**             | 낮음(집단 내 분산 없음)       | 높음(집단 내 분산 있음)      |
+| **예**                 | 조건당 참가자 한 명          | 조건당 참가자 여러 명 |
 
-## 3. Assumptions of Two-Way ANOVA
+## 3. 이원배치 분산분석의 가정
 
-### When to Use Two-Way ANOVA
+### 언제 이원배치 분산분석을 쓰는가
 
-Two-Way ANOVA is a powerful statistical method used to examine the effects of two independent categorical variables on a single continuous dependent variable. It also allows researchers to investigate whether there is an *interaction effect* between the two factors.
+이원배치 분산분석은 두 개의 독립인 범주형 변수가 하나의 연속형 종속변수에 미치는 효과를 살피는 강력한 방법이다. 두 요인 사이에 *교호작용 효과*가 있는지도 조사할 수 있다.
 
-- **When There are Two Independent Variables (Factors)**: Two-Way ANOVA is most appropriate when the study involves two independent variables, and each of these variables can take on different levels. A crucial advantage over multiple one-way ANOVAs is that it can simultaneously assess the impact of both independent variables and their interaction.
+- **독립변수(요인)가 둘일 때**: 연구에 독립변수가 둘 있고 각 변수가 여러 수준을 가질 때 이원배치 분산분석이 가장 적절하다. 일원배치를 여러 번 하는 것보다 결정적으로 나은 점은 두 독립변수의 영향과 그 교호작용을 동시에 평가할 수 있다는 것이다.
 
-- **When Exploring Interaction Effects**: An interaction occurs when the effect of one factor on the dependent variable changes depending on the level of the other factor.
+- **교호작용 효과를 탐색할 때**: 한 요인이 종속변수에 미치는 효과가 다른 요인의 수준에 따라 달라질 때 교호작용이 있다고 한다.
 
-- **When the Dependent Variable is Continuous**: Two-Way ANOVA requires the dependent variable to be measured on a continuous scale.
+- **종속변수가 연속형일 때**: 이원배치 분산분석은 종속변수가 연속 척도로 측정되어야 한다.
 
-- **When Interested in Both Main and Interaction Effects**: Two-Way ANOVA provides insight into both the **main effects** of each independent variable and their **interaction effects**.
+- **주효과와 교호작용 효과 모두에 관심이 있을 때**: 이원배치 분산분석은 각 독립변수의 **주효과**와 그 **교호작용 효과** 모두에 대한 통찰을 준다.
 
-### Assumptions
+### 가정
 
-**Independence of Observations**
+**관측의 독립성**
 
-- Each observation is independent of one another.
-- This is typically ensured through the study's design (e.g., randomized controlled experiments).
+- 각 관측값이 서로 독립이다.
+- 보통 연구 설계(예: 무작위 대조 실험)로 확보한다.
 
-**Normality**
+**정규성**
 
-- The dependent variable is assumed to be approximately normally distributed within each group.
-- **How to Check**: Visual inspection using histograms or Q-Q plots; Shapiro-Wilk Test for formal assessment.
+- 종속변수가 각 집단 안에서 근사적으로 정규분포를 따른다고 가정한다.
+- **확인 방법**: 히스토그램이나 Q-Q 그림을 통한 시각적 검토, 형식적 평가로는 Shapiro-Wilk 검정.
 
-**Homogeneity of Variance (Homoscedasticity)**
+**분산의 동질성(등분산성)**
 
-- The variances of the dependent variable should be approximately equal across all groups.
-- **How to Check**: Levene's Test or visual inspection with residual plots or box plots.
-- **What to Do if Violated**: Log transformation of the dependent variable or using a more robust method such as Welch's ANOVA.
+- 종속변수의 분산이 모든 집단에서 대략 같아야 한다.
+- **확인 방법**: Levene 검정, 또는 잔차 그림이나 상자그림을 통한 시각적 검토.
+- **어긋날 때**: 종속변수의 로그 변환이나 Welch 분산분석 같은 더 로버스트한 방법.
 
-## 4. Limitations
+## 4. 한계
 
-- **Assumption Sensitivity**: As with One-Way ANOVA, the results of Two-Way ANOVA can be sensitive to violations of assumptions, especially homogeneity of variance.
-- **Complexity with Interaction**: Interpreting the interaction effect can be challenging, especially if the interaction is significant but the main effects are not. Graphical methods (like interaction plots) are often used to interpret these effects.
+- **가정에 대한 민감성**: 일원배치와 마찬가지로 이원배치 분산분석의 결과도 가정 위반, 특히 분산의 동질성 위반에 민감할 수 있다.
+- **교호작용이 있을 때의 복잡성**: 교호작용 효과의 해석은 까다로울 수 있다. 특히 교호작용은 유의한데 주효과는 그렇지 않을 때 그렇다. 이런 효과를 해석하는 데 교호작용 그림 같은 그래프 방법을 흔히 쓴다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Two factors: Training (online vs in-person) × Experience (junior vs senior), $n = 4$ per cell. Cell means: 12.5, 18.5, 15.0, 22.5. (a)-(d) Compute two-way ANOVA.
+**연습문제 1.**
+두 요인: 교육 방식(온라인 대 대면) × 경력(주니어 대 시니어), 칸당 $n = 4$. 칸 평균: 12.5, 18.5, 15.0, 22.5. (a)–(d) 이원배치 분산분석을 수행하라.
 
-??? success "Solution to Exercise 1"
-    (a) Row means: Online 15.5, In-person 18.75. Col means: Junior 13.75, Senior 20.5. Grand: 17.125.
+??? success "연습문제 1 풀이"
+    (a) 행 평균: 온라인 15.5, 대면 18.75. 열 평균: 주니어 13.75, 시니어 20.5. 전체: 17.125.
 
-    (b) $\mathrm{SSA}$ (Training) = 42.25, $\mathrm{SSB}$ (Experience) = 182.25, $\mathrm{SSAB}$ (Interaction) = 2.25, $\mathrm{SSW}$ = 20.0.
+    (b) $\mathrm{SSA}$(교육 방식) = 42.25, $\mathrm{SSB}$(경력) = 182.25, $\mathrm{SSAB}$(교호작용) = 2.25, $\mathrm{SSW}$ = 20.0.
 
-    (c) ANOVA table:
+    (c) 분산분석표:
 
-    | Source | SS | df | MS | F |
+    | 원천 | SS | df | MS | F |
     |---|---|---|---|---|
-    | Training | 42.25 | 1 | 42.25 | 25.35 |
-    | Experience | 182.25 | 1 | 182.25 | 109.35 |
-    | Interaction | 2.25 | 1 | 2.25 | 1.35 |
-    | Within | 20.0 | 12 | 1.667 | |
-    | Total | 246.75 | 15 | | |
+    | 교육 방식 | 42.25 | 1 | 42.25 | 25.35 |
+    | 경력 | 182.25 | 1 | 182.25 | 109.35 |
+    | 교호작용 | 2.25 | 1 | 2.25 | 1.35 |
+    | 집단 내 | 20.0 | 12 | 1.667 | |
+    | 전체 | 246.75 | 15 | | |
 
-    Critical $F_{1, 12, 0.05} = 4.75$. Both main effects significant; interaction not significant.
+    임계값 $F_{1, 12, 0.05} = 4.75$. 두 주효과는 모두 유의하고 교호작용은 유의하지 않다.
 
-    (d) Effect of training method on productivity does NOT depend on experience level. In-person uniformly better, by about the same amount for juniors and seniors. **Additive** model is adequate.
-
----
-
-**Exercise 2.**
-**Interaction interpretation.** What does a significant interaction mean for marginal effects?
-
-??? success "Solution to Exercise 2"
-    Significant interaction: effect of factor A depends on level of factor B (and vice versa).
-
-    **Marginal effects become misleading** when interaction is present:
-
-    - "Drug A increases blood pressure by 10 on average" — but might increase by 20 in elderly and decrease by 5 in young.
-    - The "marginal" effect averages over groups, hiding heterogeneity.
-
-    **Best practice with significant interaction:**
-
-    - Report **simple effects** (effect of A at each level of B).
-    - Interpret marginal effects with caution.
-    - Visualize interaction plot (each level of B as separate line).
-
-    Without interaction (Exercise 1): marginal effects are accurate descriptions. Each factor effect is the same across other factor's levels.
+    (d) 교육 방식이 생산성에 미치는 효과는 경력 수준에 의존하지 **않는다**. 대면이 일관되게 더 낫고 그 차이도 주니어와 시니어에서 거의 같다. **가법** 모형으로 충분하다.
 
 ---
 
-**Exercise 3.**
-**Crossed vs nested designs.**
+**연습문제 2.**
+**교호작용의 해석.** 교호작용이 유의하면 주변 효과에 어떤 의미가 있는가?
 
-??? success "Solution to Exercise 3"
-    **Crossed:** every level of A appears with every level of B (Exercise 1: training × experience). Standard two-way ANOVA.
+??? success "연습문제 2 풀이"
+    교호작용이 유의하다는 것은 요인 A의 효과가 요인 B의 수준에 따라 달라진다는(그 반대도 마찬가지) 뜻이다.
 
-    **Nested:** levels of one factor are unique to each level of another (departments nested within schools — different departments per school). Different analysis: hierarchical/mixed-effects models.
+    교호작용이 있으면 **주변 효과가 오도할 수 있다**:
 
-    Crossed designs allow estimating interaction; nested designs don't (the "interaction" is confounded with factor B).
+    - "약 A는 평균적으로 혈압을 10 올린다" — 그러나 노인에서는 20 올리고 젊은 층에서는 5 낮출 수도 있다.
+    - "주변" 효과는 집단에 걸쳐 평균을 내므로 이질성을 감춘다.
 
-    Common confusion: random vs fixed factors. Random factors (e.g., subjects) introduce additional variance components. Use mixed models.
+    **교호작용이 유의할 때의 모범 실무:**
 
----
+    - **단순 효과**(B의 각 수준에서 A의 효과)를 보고한다.
+    - 주변 효과는 신중하게 해석한다.
+    - 교호작용 그림(B의 각 수준을 별도의 선으로)을 그린다.
 
-**Exercise 4.**
-**Higher-order interactions.** Three-factor ANOVA has main effects, 2-way interactions, and 3-way interaction. What does the 3-way mean?
-
-??? success "Solution to Exercise 4"
-    3-way interaction (A × B × C): the 2-way A × B interaction depends on the level of C.
-
-    Example: drug effect depends on disease type, but the disease-dependence varies by age group.
-
-    **Higher-order interactions are hard to interpret.** Often suggests reorganizing the analysis:
-
-    - Subset to specific level of C and reanalyze.
-    - Look at the 2-way interaction within each level of C.
-
-    Practical advice: with $k$ factors, the number of interactions grows as $2^k - k - 1$. Beyond 2-way, often work in regression framework with explicit terms rather than ANOVA decomposition.
+    교호작용이 없으면(연습문제 1) 주변 효과가 정확한 기술이 된다. 각 요인의 효과가 다른 요인의 수준에 걸쳐 같기 때문이다.
 
 ---
 
-**Exercise 5.**
-**Sums-of-squares Type I/II/III** for unbalanced designs.
+**연습문제 3.**
+**교차 설계와 내포 설계.**
 
-??? success "Solution to Exercise 5"
-    For balanced designs, the orthogonality makes SS decomposition unambiguous. For unbalanced:
+??? success "연습문제 3 풀이"
+    **교차:** A의 모든 수준이 B의 모든 수준과 함께 나타난다(연습문제 1: 교육 방식 × 경력). 표준 이원배치 분산분석.
 
-    **Type I (sequential):** SS for each factor adjusted for previously entered factors. Order-dependent.
+    **내포:** 한 요인의 수준이 다른 요인의 각 수준에만 고유하게 존재한다(학교 안에 내포된 학과 — 학교마다 학과가 다르다). 분석이 달라진다. 계층/혼합효과 모형을 쓴다.
 
-    **Type II:** SS for each factor adjusted for other main effects, but not interactions. Symmetric across main effects.
+    교차 설계는 교호작용을 추정할 수 있지만 내포 설계는 그렇지 못하다("교호작용"이 요인 B와 교란된다).
 
-    **Type III:** SS for each factor adjusted for everything else (including interactions). Most commonly reported. SAS default.
-
-    R's `aov()` uses Type I; `car::Anova(type="III")` for Type III. For balanced designs, all types agree.
+    흔한 혼동: 임의 요인과 고정 요인. 임의 요인(예: 피험자)은 분산 성분을 추가로 도입한다. 혼합모형을 쓴다.
 
 ---
 
-**Exercise 6.**
-**Two-way vs separate one-way analyses.** Why is two-way preferred when both factors are studied?
+**연습문제 4.**
+**고차 교호작용.** 삼원 분산분석에는 주효과, 2원 교호작용, 3원 교호작용이 있다. 3원 교호작용은 무엇을 뜻하는가?
 
-??? success "Solution to Exercise 6"
-    Two-way ANOVA:
+??? success "연습문제 4 풀이"
+    3원 교호작용(A × B × C)은 2원 A × B 교호작용이 C의 수준에 따라 달라진다는 뜻이다.
 
-    - **Estimates interaction** (cannot be done with separate one-ways).
-    - **More efficient:** combines noise across cells for a better $\mathrm{MSW}$ estimate.
-    - **Power:** smaller residual variance → easier to detect main effects.
-    - **Control for confounding:** main effect of A is estimated holding B fixed.
+    예: 약의 효과가 질병 종류에 의존하는데, 그 질병 의존성이 연령대에 따라 달라진다.
 
-    Separate one-ways:
+    **고차 교호작용은 해석이 어렵다.** 대개 분석을 재구성하라는 신호이다:
 
-    - Lose interaction information.
-    - Inflated noise estimates (each separate analysis ignores other factor).
-    - Potential confounding if factor levels are correlated.
+    - C의 특정 수준으로 부분집합을 잡아 다시 분석한다.
+    - C의 각 수준 안에서 2원 교호작용을 살펴본다.
 
-    **Always use multi-way ANOVA (or regression) when multiple factors are manipulated.** This is the foundation of factorial experimental design (Fisher's seminal contribution).
+    실용적 조언: 요인이 $k$개면 교호작용의 수가 $2^k - k - 1$로 늘어난다. 2원을 넘어서면 분산분석 분해보다 항을 명시적으로 넣은 회귀 틀에서 작업하는 편이 흔히 낫다.
+
+---
+
+**연습문제 5.**
+불균형 설계의 **제I·II·III형 제곱합**.
+
+??? success "연습문제 5 풀이"
+    균형 설계에서는 직교성 덕분에 제곱합 분해가 모호하지 않다. 불균형에서는:
+
+    **제I형(순차):** 각 요인의 제곱합을 앞서 들어간 요인들로 조정한다. 순서에 의존한다.
+
+    **제II형:** 각 요인의 제곱합을 다른 주효과들로 조정하되 교호작용은 반영하지 않는다. 주효과들 사이에 대칭적이다.
+
+    **제III형:** 각 요인의 제곱합을 (교호작용을 포함한) 나머지 전부로 조정한다. 가장 흔히 보고되며 SAS의 기본값이다.
+
+    R의 `aov()`는 제I형을 쓰고, 제III형에는 `car::Anova(type="III")`을 쓴다. 균형 설계에서는 모든 유형이 일치한다.
+
+---
+
+**연습문제 6.**
+**이원배치와 일원배치 두 번의 비교.** 두 요인을 함께 연구할 때 이원배치가 선호되는 이유는?
+
+??? success "연습문제 6 풀이"
+    이원배치 분산분석은:
+
+    - **교호작용을 추정한다**(일원배치를 따로 두 번 해서는 불가능하다).
+    - **더 효율적이다:** 칸에 걸쳐 잡음을 모아 $\mathrm{MSW}$를 더 잘 추정한다.
+    - **검정력:** 잔차분산이 작아져 주효과를 탐지하기 쉬워진다.
+    - **교란 통제:** A의 주효과를 B를 고정한 채로 추정한다.
+
+    일원배치를 따로 하면:
+
+    - 교호작용 정보를 잃는다.
+    - 잡음 추정이 부풀려진다(각 분석이 다른 요인을 무시한다).
+    - 요인 수준이 상관되어 있으면 교란이 생길 수 있다.
+
+    **여러 요인을 조작한다면 언제나 다원 분산분석(또는 회귀)을 쓰라.** 이것이 요인 실험 설계(Fisher의 선구적 기여)의 토대이다.
