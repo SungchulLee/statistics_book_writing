@@ -235,6 +235,7 @@ nav:
             - 로그가능도 시각화: ch06/code/log_likelihood.md
             - 베이즈 Beta 켤레 사전분포: ch06/code/bayesian_beta_conjugate.md
             - Geometric과 Poisson의 최대가능도: ch06/code/geometric_poisson_mle.md
+        - 장 연습문제: ch06/exercises/exercises.md
 
     - 7 μ와 σ²의 추정:
         - 장 개요: ch07/index.md
@@ -295,6 +296,7 @@ nav:
             - 평균 차이 신뢰구간 모의실험: ch08/code/ci_diff_means_sim.md
             - 일표본 평균 신뢰구간의 계산: ch08/code/ci_mean_calc.md
             - 일표본 비율 신뢰구간의 계산: ch08/code/ci_prop_calc.md
+        - 장 연습문제: ch08/exercises/exercises.md
 
     - 9 가설검정:
         - 장 개요: ch09/index.md
@@ -366,6 +368,7 @@ nav:
             - Fisher의 정확검정 (2×2): ch10/code/fisher_exact.md
             - McNemar 검정 (대응된 이진 자료): ch10/code/mcnemar_test.md
             - Cochran의 Q 검정 (관련된 k개의 결과): ch10/code/cochran_q.md
+        - 장 연습문제: ch10/exercises/exercises.md
 
     - 11 분산분석:
         - 장 개요: ch11/index.md
@@ -413,6 +416,7 @@ nav:
             - 카이제곱 분포: ch11/code/chi_square_distribution.md
             - 등분산에 대한 F-검정: ch11/code/f_test_equality_of_variances.md
             - Levene 검정: ch11/code/levene_test.md
+        - 장 연습문제: ch11/exercises/exercises.md
 
     - 12 상관과 인과:
         - 장 개요: ch12/index.md
@@ -576,6 +580,7 @@ nav:
             - Shapiro-Wilk 검정 (코드): ch14/code/shapiro_wilk.md
             - Shapiro-Wilk 검정력 모의실험: ch14/code/shapiro_power_sim.md
             - 금융 수익률의 Q-Q 그림 (코드): ch14/code/qq_plot_financial_returns.md
+        - 장 연습문제: ch14/exercises/exercises.md
 
     - 15 분산 검정:
         - 장 개요: ch15/index.md
@@ -627,6 +632,7 @@ nav:
             - Fligner-Killeen 검정 (scipy): ch15/code/fligner_killeen.md
             - 붓스트랩 분산 검정 (코드): ch15/code/bootstrap_var_test.md
             - Bayes 분산 검정 (코드): ch15/code/bayesian_var_test.md
+        - 장 연습문제: ch15/exercises/exercises.md
 
     - 16 비모수 검정:
         - 장 개요: ch16/index.md
@@ -704,6 +710,7 @@ nav:
             - 중앙값의 붓스트랩 (코드): ch17/code/bootstrap_median.md
             - 재표집 (신발 판매 A/B 검정) (코드): ch17/code/resampling_shoe_sales.md
             - 교차검증 방법 비교 (코드): ch17/code/cv_methods_comparison.md
+        - 장 연습문제: ch17/exercises/exercises.md
 
     - 18 Regularization Techniques:
         - Chapter Overview: ch18/index.md
@@ -749,6 +756,7 @@ nav:
             - Cross-Validation and λ Tuning: ch18/code/cv_tuning.md
             - Lasso Housing Regularization Path: ch18/code/lasso_housing_regularization_path.md
             - Principal Components and Partial Least Squares Examples: ch18/code/pcr_pls_examples.md
+        - 장 연습문제: ch18/exercises/exercises.md
 
     - 19 Logistic Regression:
         - Chapter Overview: ch19/index.md
@@ -778,6 +786,7 @@ nav:
             - Regularized Logistic Regression: ch19/code/regularized_logistic.md
             - Logistic vs Linear Visualization: ch19/code/logistic_vs_linear_visualization.md
             - Linear and Quadratic Discriminant Analysis Classification: ch19/code/lda_qda_classification.md
+        - 장 연습문제: ch19/exercises/exercises.md
 
     - 20 Softmax Regression:
         - Chapter Overview: ch20/index.md
