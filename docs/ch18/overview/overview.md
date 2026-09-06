@@ -1,118 +1,231 @@
-# Overview of Regularization Methods and Their Applications
+# 정칙화 방법과 그 응용의 개관
 
 
-## Introduction
+## 서론
 
-Regularization techniques play a crucial role in enhancing the performance of machine learning models, particularly when dealing with complex datasets prone to overfitting. Overfitting occurs when a model captures not just the underlying patterns in the data but also the noise, leading to poor generalization on new, unseen data. Regularization methods mitigate this risk by adding a penalty to the loss function, thereby discouraging overly complex models.
+정칙화 기법은 과적합이 일어나기 쉬운 복잡한 자료를 다룰 때 기계학습 모형의 성능을 높이는 데 핵심적인 역할을 한다. 과적합은 모형이 자료의 기저 패턴뿐 아니라 잡음까지 포착하여 새로운 자료에 대한 일반화가 나빠지는 현상이다. 정칙화 방법은 손실함수에 벌점을 더해 지나치게 복잡한 모형을 억제함으로써 이 위험을 완화한다.
 
-This section provides a comparative overview of the three most commonly used regularization methods — Ridge Regression, Lasso Regression, and Elastic Net — highlighting their strengths, weaknesses, and practical applications.
+이 절에서는 가장 널리 쓰이는 세 가지 정칙화 방법 — 능형회귀, 라쏘 회귀, 엘라스틱넷 — 을 비교하며 각각의 강점, 약점, 실무적 응용을 짚는다.
 
-## Ridge Regression (L2 Regularization)
+## 능형회귀 (L2 정칙화)
 
-**Penalty Term:** $\lambda \sum_{j=1}^p w_j^2$ (L2 norm)
+**벌점항:** $\lambda \sum_{j=1}^p w_j^2$ (L2 노름)
 
-**Main Effect:** Shrinks coefficients towards zero but never exactly zero.
+**주된 효과:** 계수를 0 쪽으로 축소하되 정확히 0으로 만들지는 않는다.
 
-**Best For:** Datasets with multicollinearity, where predictors are highly correlated.
+**적합한 상황:** 설명변수들이 강하게 상관된 다중공선성 자료.
 
-### Key Characteristics
+### 주요 특징
 
-- **Shrinking effect**: Ridge imposes a penalty proportional to the square of the coefficients. This reduces the impact of less important features, leading to a more robust model that generalizes better.
-- **Handling multicollinearity**: Ridge distributes coefficient weights more evenly among correlated predictors, preventing any single predictor from dominating the model.
-- **No variable selection**: All predictors remain in the model, albeit with reduced coefficients.
+- **축소 효과**: 능형회귀는 계수의 제곱에 비례하는 벌점을 부과한다. 덜 중요한 변수의 영향을 줄여 일반화가 잘 되는 견고한 모형을 만든다.
+- **다중공선성 처리**: 상관된 설명변수들 사이에 계수 가중치를 고르게 분배하여, 한 변수가 모형을 지배하지 못하게 한다.
+- **변수선택 없음**: 모든 설명변수가 계수만 줄어든 채 모형에 남는다.
 
-### Applications
+### 응용
 
-- **Finance**: Predicting stock prices or risk metrics where predictors (e.g., economic indicators) are highly correlated.
-- **Genomics**: Gene expression analysis where thousands of genes may be correlated and predictive of a particular trait or disease.
+- **금융**: 경제지표처럼 설명변수가 강하게 상관된 상황에서 주가나 위험 지표를 예측할 때.
+- **유전체학**: 수천 개의 유전자가 서로 상관되어 있으면서 특정 형질이나 질병을 예측하는 유전자 발현 분석.
 
-## Lasso Regression (L1 Regularization)
+## 라쏘 회귀 (L1 정칙화)
 
-**Penalty Term:** $\lambda \sum_{j=1}^p |w_j|$ (L1 norm)
+**벌점항:** $\lambda \sum_{j=1}^p |w_j|$ (L1 노름)
 
-**Main Effect:** Shrinks some coefficients to exactly zero, effectively performing feature selection.
+**주된 효과:** 일부 계수를 정확히 0으로 만들어 사실상 변수선택을 수행한다.
 
-**Best For:** High-dimensional datasets where feature selection is important.
+**적합한 상황:** 변수선택이 중요한 고차원 자료.
 
-### Key Characteristics
+### 주요 특징
 
-- **Sparsity**: Lasso produces sparse models by setting some coefficients to zero, making it highly effective for feature selection.
-- **Handling of correlated predictors**: Lasso tends to select one predictor from a group of highly correlated predictors while shrinking the others to zero. This can be both an advantage and a limitation.
-- **Model interpretability**: By reducing the number of active predictors, Lasso leads to more interpretable models.
+- **희소성**: 일부 계수를 0으로 만들어 희소 모형을 낳으므로 변수선택에 매우 효과적이다.
+- **상관된 설명변수의 처리**: 강하게 상관된 변수 집단에서 하나를 고르고 나머지를 0으로 축소하는 경향이 있다. 이는 장점이자 한계가 된다.
+- **모형 해석 가능성**: 활성 변수의 수를 줄여 해석하기 쉬운 모형을 만든다.
 
-### Applications
+### 응용
 
-- **Genomics**: Identifying a subset of genes most predictive of a trait or disease.
-- **Marketing**: Identifying the most important factors driving customer behavior, such as purchasing decisions.
+- **유전체학**: 형질이나 질병을 가장 잘 예측하는 유전자 부분집합의 식별.
+- **마케팅**: 구매 결정 등 고객 행동을 이끄는 가장 중요한 요인의 식별.
 
-## Elastic Net
+## 엘라스틱넷
 
-**Penalty Term:** $\lambda \left( \alpha \sum_{j=1}^p |w_j| + (1-\alpha) \sum_{j=1}^p w_j^2 \right)$ (Combination of L1 and L2 norms)
+**벌점항:** $\lambda \left( \alpha \sum_{j=1}^p |w_j| + (1-\alpha) \sum_{j=1}^p w_j^2 \right)$ (L1과 L2의 결합)
 
-**Main Effect:** Combines the benefits of both Ridge and Lasso by balancing the L1 and L2 penalties.
+**주된 효과:** L1과 L2 벌점의 균형을 잡아 능형과 라쏘의 장점을 결합한다.
 
-**Best For:** Datasets with highly correlated predictors where feature selection is also desired.
+**적합한 상황:** 설명변수가 강하게 상관되어 있으면서 변수선택도 필요한 자료.
 
-### Key Characteristics
+### 주요 특징
 
-- **Combining strengths**: Elastic Net incorporates both L1 and L2 penalties, allowing variable selection like Lasso while handling multicollinearity like Ridge.
-- **Group selection**: Particularly effective at selecting or excluding groups of correlated predictors.
-- **Flexibility**: The mixing parameter $\alpha$ allows tuning along a continuum between Ridge and Lasso.
+- **장점의 결합**: L1과 L2 벌점을 모두 포함하여 라쏘처럼 변수를 선택하면서 능형처럼 다중공선성을 다룬다.
+- **집단 선택**: 상관된 설명변수 집단을 함께 선택하거나 함께 배제하는 데 특히 효과적이다.
+- **유연성**: 혼합모수 $\alpha$로 능형과 라쏘 사이의 연속체 위에서 조정할 수 있다.
 
-### Applications
+### 응용
 
-- **Genomics and bioinformatics**: Handling the large number of correlated predictors while performing feature selection.
-- **Finance**: Identifying relevant risk factors while accounting for correlations among predictors.
+- **유전체학과 생물정보학**: 상관된 설명변수가 매우 많은 상황에서 변수선택을 함께 수행.
+- **금융**: 설명변수 간 상관을 고려하면서 유의미한 위험요인을 식별.
 
-## Comparison Table
+## 비교표
 
-| **Method** | **Penalty** | **Feature Selection** | **Handling Correlations** | **Main Application Areas** |
+| **방법** | **벌점** | **변수선택** | **상관 처리** | **주요 응용 분야** |
 |---|---|---|---|---|
-| **Ridge** | $\lambda \sum w_j^2$ | No | Good | Finance, Genomics, Engineering |
-| **Lasso** | $\lambda \sum \|w_j\|$ | Yes | Poor | Genomics, Marketing, Social Sciences |
-| **Elastic Net** | $\lambda(\alpha \sum \|w_j\| + (1-\alpha) \sum w_j^2)$ | Yes | Good | Genomics, Bioinformatics, Finance |
+| **능형** | $\lambda \sum w_j^2$ | 없음 | 좋음 | 금융, 유전체학, 공학 |
+| **라쏘** | $\lambda \sum \|w_j\|$ | 있음 | 나쁨 | 유전체학, 마케팅, 사회과학 |
+| **엘라스틱넷** | $\lambda(\alpha \sum \|w_j\| + (1-\alpha) \sum w_j^2)$ | 있음 | 좋음 | 유전체학, 생물정보학, 금융 |
 
-## Choosing the Right Regularization Method
+!!! warning "scikit-learn의 모수 이름은 위 수식과 다르다"
+    이 페이지의 $\lambda$와 $\alpha$는 통계 문헌의 관례이다. scikit-learn은 다른 이름을 쓴다.
 
-The choice of regularization method depends on the specific characteristics of the dataset and the goals of the analysis:
+    | 수식 | scikit-learn |
+    |:---|:---|
+    | $\lambda$ (전체 벌점 강도) | `alpha` |
+    | $\alpha$ (L1 혼합비) | `l1_ratio` |
 
-1. **For multicollinear data**: Ridge Regression is often the go-to method due to its ability to handle multicollinearity effectively.
-2. **For feature selection**: Lasso Regression is ideal when the goal is to reduce the number of predictors and create a sparse model.
-3. **For a balance of both**: Elastic Net provides a middle ground, offering the benefits of both Ridge and Lasso, particularly when dealing with correlated predictors and the need for feature selection.
+    즉 `ElasticNet(alpha=0.6, l1_ratio=0.2)`는 이 페이지의 표기로 $\lambda = 0.6$, $\alpha = 0.2$를 뜻한다. `l1_ratio=1`이면 라쏘, `l1_ratio=0`이면 능형이다.
 
-## Summary
+    또한 sklearn의 목적함수는 잔차제곱합을 $2n$으로 나눈다.
 
-Regularization techniques such as Ridge, Lasso, and Elastic Net are essential tools in the machine learning and statistical modeling toolkit. Each method offers unique advantages suited to different types of data and modeling objectives. Understanding the strengths and limitations of each technique allows practitioners to select the most appropriate method for their specific application, leading to models that are both accurate and interpretable. In practice, the choice of regularization method often involves cross-validation and careful tuning of hyperparameters to strike the right balance between bias, variance, and model complexity.
+    $$
+    \frac{1}{2n}\|y - X\beta\|^2 + \lambda\left(\alpha\|\beta\|_1 + \frac{1-\alpha}{2}\|\beta\|_2^2\right)
+    $$
 
+    따라서 다른 소프트웨어의 $\lambda$와 직접 비교할 때는 $n$ 배율에 주의해야 한다.
 
-## Exercises
+## 올바른 정칙화 방법의 선택
 
-**Exercise 1.**
-Describe the main concept of Overview of Regularization Methods and Their Applications and explain why it matters for statistical practice.
+정칙화 방법의 선택은 자료의 특성과 분석 목표에 달려 있다.
 
-??? success "Solution to Exercise 1"
-    Overview of Regularization Methods and Their Applications is a core topic in statistics that provides tools for drawing reliable inferences from data. It matters because proper application ensures valid conclusions, correctly quantified uncertainty, and appropriate handling of the assumptions that underpin the method. Practitioners who understand this concept can avoid common pitfalls and choose the right analytical approach for their data.
+1. **다중공선성이 있는 자료**: 다중공선성을 효과적으로 다루므로 능형회귀가 우선 후보다.
+2. **변수선택이 목표**: 설명변수 수를 줄여 희소 모형을 만드는 것이 목표라면 라쏘가 적합하다.
+3. **둘 다 필요한 경우**: 엘라스틱넷이 중간 지점을 제공한다. 특히 상관된 설명변수를 다루면서 변수선택도 필요할 때 유용하다.
+
+## 요약
+
+능형, 라쏘, 엘라스틱넷 같은 정칙화 기법은 기계학습과 통계 모형화의 필수 도구다. 각 방법은 서로 다른 유형의 자료와 모형화 목표에 맞는 고유한 장점을 갖는다. 각 기법의 강점과 한계를 이해하면 특정 응용에 가장 적절한 방법을 고를 수 있고, 정확하면서도 해석 가능한 모형에 이를 수 있다. 실무에서 정칙화 방법의 선택에는 대개 교차검증과 세심한 초모수 조정이 따르며, 편향·분산·모형 복잡도 사이의 적절한 균형을 찾는 과정이 된다.
+
+## 연습문제
+
+**연습문제 1.**
+"능형회귀는 계수를 0으로 만들지 않는다"는 주장을 수치로 확인하라. $\lambda$를 극단적으로 키우면 어떻게 되는가?
+
+??? success "연습문제 1 풀이"
+    ```python
+    import numpy as np
+    from sklearn.linear_model import Ridge
+
+    rng = np.random.default_rng(1)
+    n, p = 60, 20
+    X = rng.normal(size=(n, p))
+    beta = np.zeros(p); beta[:3] = 2.0
+    y = X @ beta + rng.normal(0, 1, n)
+
+    for lam in (1, 100, 10_000, 1e6):
+        b = Ridge(alpha=lam).fit(X, y).coef_
+        print(lam, (b == 0).sum(), np.abs(b).max())
+    ```
+
+    | $\lambda$ | 정확히 0인 계수의 수 | $\max_j|\hat\beta_j|$ |
+    |---:|---:|---:|
+    | 1 | 0 | $2.16$ |
+    | 100 | 0 | $1.32$ |
+    | 10{,}000 | 0 | $4.02\times10^{-2}$ |
+    | $10^6$ | 0 | $4.11\times10^{-4}$ |
+
+    **$\lambda$를 백만까지 키워도 정확히 0이 되는 계수는 하나도 없다.** 계수들은 0에 한없이 가까워질 뿐이다.
+
+    이유는 닫힌 형태 해 $\hat\beta = (X^\top X + \lambda I)^{-1}X^\top y$에 있다. $\lambda \to \infty$이면 $\hat\beta \approx X^\top y/\lambda \to 0$이지만, $X^\top y$의 성분이 정확히 0이 아닌 한 어떤 유한한 $\lambda$에서도 $\hat\beta_j \neq 0$이다.
+
+    이것이 능형회귀가 **변수선택을 하지 못하는** 구조적 이유다. 실무에서 "능형으로 변수를 골랐다"는 말은 임의의 문턱을 적용했다는 뜻이며, 그 문턱은 자료가 아니라 사용자가 정한 것이다.
 
 ---
 
-**Exercise 2.**
-State the key assumptions required by the method discussed here. How can each assumption be checked?
+**연습문제 2.**
+다중공선성이 심해질수록 능형회귀의 이득이 커지는지 모의실험으로 확인하라. $\rho = 0, 0.9, 0.99$인 등상관 설명변수 10개에서 $\|\hat\beta - \beta\|^2$을 OLS와 능형회귀에 대해 비교하라.
 
-??? success "Solution to Exercise 2"
-    The main assumptions typically include: (1) independence of observations -- verified by understanding the data collection process and checking for serial correlation; (2) distributional requirements (e.g., normality) -- checked with Q-Q plots and formal tests like Shapiro-Wilk; (3) equal variances (if applicable) -- assessed with boxplots and Levene's test. When assumptions are violated, consider robust alternatives, transformations, or nonparametric methods.
+??? success "연습문제 2 풀이"
+    ```python
+    import numpy as np
+    from sklearn.linear_model import Ridge, LinearRegression
+    rng = np.random.default_rng(18)
+
+    def experiment(rho, n=50, p=10, M=400, lam=1.0):
+        beta = np.zeros(p); beta[:3] = [3, -2, 1.5]
+        S = rho*np.ones((p, p)) + (1-rho)*np.eye(p)
+        L = np.linalg.cholesky(S)
+        eo, er = [], []
+        for _ in range(M):
+            X = rng.normal(size=(n, p)) @ L.T
+            y = X @ beta + rng.normal(0, 1, n)
+            bo = LinearRegression(fit_intercept=False).fit(X, y).coef_
+            br = Ridge(alpha=lam, fit_intercept=False).fit(X, y).coef_
+            eo.append(((bo-beta)**2).sum()); er.append(((br-beta)**2).sum())
+        return np.mean(eo), np.mean(er)
+    ```
+
+    | $\rho$ | OLS $E\|\hat\beta-\beta\|^2$ | 능형 ($\lambda = 1$) | 개선 배수 |
+    |---:|---:|---:|---:|
+    | 0.00 | 0.258 | 0.255 | 1.01 |
+    | 0.90 | 2.209 | 1.962 | 1.13 |
+    | 0.99 | **23.197** | **8.846** | **2.62** |
+
+    **상관이 없으면 능형회귀의 이득이 사실상 없다**(1.01배). 설명변수가 직교에 가까우면 OLS가 이미 좋기 때문이다.
+
+    **$\rho = 0.99$에서는 OLS의 오차가 90배로 폭발하고**($0.258 \to 23.2$), 능형회귀가 그것을 $2.6$배 줄인다.
+
+    이 표가 정칙화의 핵심을 보여준다. **정칙화는 공짜가 아니라 조건부 이득이다.** 문제가 잘 조건화되어 있으면 편향만 더하고 얻는 것이 없다. 문제가 불량조건일수록 이득이 커진다.
+
+    관련 지표를 함께 보면 이해가 쉽다. 등상관 행렬의 조건수와 VIF는 다음과 같다.
+
+    | $\rho$ | $\text{cond}(\Sigma)$ | VIF |
+    |---:|---:|---:|
+    | 0.00 | 1.0 | 1.00 |
+    | 0.90 | 46.0 | 8.04 |
+    | 0.99 | 496.0 | 80.04 |
+    | 0.999 | 4996.0 | 800.04 |
+
+    조건수와 VIF가 모두 $\rho$에 따라 폭발한다. **VIF가 10을 넘으면 정칙화를 고려하라**는 실무 규칙의 근거다.
 
 ---
 
-**Exercise 3.**
-Work through a small numerical example illustrating the application of the technique from this section.
+**연습문제 3.**
+상관된 변수 집단에서 라쏘와 엘라스틱넷의 행동 차이를 확인하라. $\rho = 0.99$로 상관된 참 변수 3개와 잡음변수 17개가 있는 자료에서 두 방법의 계수를 비교하라.
 
-??? success "Solution to Exercise 3"
-    A structured approach to applying this technique involves: (1) clearly stating the hypotheses or estimation goal; (2) verifying that the data meet the required assumptions; (3) computing the relevant test statistic, estimate, or model fit; (4) obtaining the p-value, confidence interval, or posterior distribution; (5) interpreting the result in the context of the original question. Following these steps systematically ensures a rigorous and reproducible analysis.
+??? success "연습문제 3 풀이"
+    ```python
+    import numpy as np
+    from sklearn.linear_model import Lasso, ElasticNet
 
----
+    def make(n=60, p=20, rho=0.99, seed=0):
+        r = np.random.default_rng(seed)
+        Z = r.normal(size=n); X = r.normal(size=(n, p))
+        for j in range(3):
+            X[:, j] = np.sqrt(rho)*Z + np.sqrt(1-rho)*X[:, j]
+        beta = np.zeros(p); beta[:3] = 2.0
+        return X, X @ beta + r.normal(0, 1, n)
 
-**Exercise 4.**
-Compare the approach from this section with an alternative method. When would you choose each?
+    X, y = make(seed=3)
+    print(Lasso(alpha=0.6, max_iter=50000).fit(X, y).coef_[:3])
+    print(ElasticNet(alpha=0.6, l1_ratio=0.2, max_iter=50000).fit(X, y).coef_[:3])
+    ```
 
-??? success "Solution to Exercise 4"
-    The method discussed here is appropriate when its assumptions hold and the sample size is sufficient for the asymptotic approximations to be accurate. Alternative approaches include: (1) nonparametric methods -- preferred when distributional assumptions are suspect; (2) bootstrap methods -- useful when analytical reference distributions are unavailable; (3) Bayesian methods -- valuable when incorporating prior information or when direct probability statements about parameters are desired. Running multiple approaches and comparing results provides a useful robustness check.
+    **한 자료에서 상관된 세 변수의 계수 (참값은 셋 다 $2.0$)**
+
+    | 방법 | $\hat\beta_1$ | $\hat\beta_2$ | $\hat\beta_3$ |
+    |:---|---:|---:|---:|
+    | 라쏘 | 0.486 | 2.136 | **2.907** |
+    | 엘라스틱넷 | 1.706 | 1.727 | 1.774 |
+
+    **라쏘는 셋을 제멋대로 쪼갠다.** 참값이 모두 $2.0$인데 $0.49$부터 $2.91$까지 6배 차이가 난다. 셋이 거의 같은 정보를 담고 있으므로 L1 벌점 입장에서는 어디에 몰아주든 목적함수가 비슷하다. 자료가 조금만 바뀌어도 순위가 뒤집힌다.
+
+    **엘라스틱넷은 셋을 거의 균등하게 나눈다**($1.71, 1.73, 1.77$). 이것이 **그룹 효과**다. L2 항이 계수 제곱의 합에 벌점을 주므로, 같은 총합이라면 고르게 분배하는 쪽이 유리하다.
+
+    **400개 자료에 걸친 안정성**
+
+    | $\lambda$ | 라쏘: 3개 모두 유지 | 엘라스틱넷: 3개 모두 유지 | 라쏘 잡음변수 | 엘라스틱넷 잡음변수 |
+    |---:|---:|---:|---:|---:|
+    | 0.3 | 86% | 100% | 0.4 | 11.1 |
+    | 0.6 | 77% | 100% | 0.0 | 8.2 |
+    | 1.0 | 57% | 100% | 0.0 | 6.2 |
+
+    **절충이 분명하다.** 엘라스틱넷은 참 변수 3개를 항상 지키지만 잡음변수를 6–11개 함께 끌고 들어온다. 라쏘는 잡음을 깨끗이 제거하지만 참 변수를 놓친다.
+
+    **어느 쪽이 옳은가는 목적에 달렸다.** 예측이 목표면 상관된 변수를 모두 남기는 편이 대개 낫다. "어떤 유전자가 원인인가"처럼 **식별**이 목표라면 라쏘의 희소성이 필요하지만, 그 답이 자료의 사소한 변화에 뒤집힌다는 점을 알고 있어야 한다.

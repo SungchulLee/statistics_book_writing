@@ -1,117 +1,139 @@
-# Geometric Interpretation (L1 Penalty)
+# 기하적 해석 (L1 벌점)
 
-The geometric picture for lasso reveals why the L1 penalty produces exact zeros while the L2 penalty does not. The key difference lies in the shape of the constraint region: the L1 ball has corners on the coordinate axes, and these corners are exactly the points where one or more coefficients equal zero. Because the RSS contours are smooth ellipses, first contact with a cornered constraint set generically occurs at a corner.
+라쏘의 기하적 그림은 L1 벌점이 정확한 0을 만들고 L2 벌점은 그러지 못하는 이유를 드러낸다. 핵심 차이는 제약영역의 모양에 있다. L1 공은 좌표축 위에 꼭짓점을 가지며, 그 꼭짓점이 바로 하나 이상의 계수가 0인 점이다. RSS 등고선이 매끄러운 타원이므로 꼭짓점이 있는 제약집합과의 첫 접촉은 일반적으로 꼭짓점에서 일어난다.
 
-## The L1 Constraint Region
-
-The lasso constraint restricts $\boldsymbol{\beta}$ to the L1 ball:
+## L1 제약영역
 
 $$
 \|\boldsymbol{\beta}\|_1 = \sum_{j=1}^p |\beta_j| \leq t
 $$
 
-In two dimensions, this region is a **diamond** (square rotated 45 degrees) with vertices at $(\pm t, 0)$ and $(0, \pm t)$. In $p$ dimensions, it is a **cross-polytope** (hyperoctahedron).
+2차원에서 이 영역은 꼭짓점이 $(\pm t, 0)$과 $(0, \pm t)$인 **마름모**(45도 회전한 정사각형)이고, $p$차원에서는 **교차다면체**(초팔면체)다.
 
-The geometric properties that distinguish it from the L2 ball are:
+L2 공과 구별되는 기하적 성질은 다음과 같다.
 
-- **Corners on coordinate axes.** The vertices of the cross-polytope lie at $\pm t\,\mathbf{e}_j$ for each coordinate direction $\mathbf{e}_j$. At a vertex, all coordinates except one are exactly zero.
-- **Edges and faces on coordinate hyperplanes.** The edges of the diamond (in 2D) lie along lines where one coordinate is zero. Higher-dimensional faces similarly correspond to subsets of coordinates being zero.
-- **Non-smooth boundary.** The boundary has corners and edges where the normal direction is not unique.
+- **좌표축 위의 꼭짓점.** 교차다면체의 꼭짓점은 각 좌표방향 $\mathbf{e}_j$에 대해 $\pm t\,\mathbf{e}_j$에 놓인다. 꼭짓점에서는 하나를 뺀 모든 좌표가 정확히 0이다.
+- **좌표초평면 위의 모서리와 면.** 2차원 마름모의 모서리는 한 좌표가 0인 직선 위에 놓인다. 고차원의 면도 좌표의 부분집합이 0인 상황에 대응한다.
+- **매끄럽지 않은 경계.** 경계에 법선 방향이 유일하지 않은 꼭짓점과 모서리가 있다.
 
-## RSS Contours Meet the Diamond
+## RSS 등고선과 마름모의 만남
 
-As with ridge, the residual sum of squares defines elliptical contours centered at $\hat{\boldsymbol{\beta}}_{\text{OLS}}$. The lasso solution is the point on or inside the L1 ball that minimizes RSS, which is where the smallest RSS contour touches the diamond.
+능형에서처럼 잔차제곱합은 $\hat{\boldsymbol{\beta}}_{\text{OLS}}$를 중심으로 하는 타원 등고선을 정의한다. 라쏘 해는 L1 공 위 또는 안에서 RSS를 최소화하는 점, 즉 가장 작은 RSS 등고선이 마름모에 닿는 점이다.
 
-In two dimensions, picture an ellipse shrinking from its center $\hat{\boldsymbol{\beta}}_{\text{OLS}}$ (which typically lies outside the diamond for sufficiently large $\lambda$). As the ellipse shrinks, its first contact with the diamond is the lasso solution.
+2차원에서 $\lambda$가 충분히 크면 $\hat{\boldsymbol{\beta}}_{\text{OLS}}$가 마름모 바깥에 놓인다. 그 중심에서 타원을 줄여 나가다가 마름모에 처음 닿는 점이 라쏘 해다.
 
-## Why Sparsity Occurs
+## 희소성이 일어나는 이유
 
-The critical geometric observation is that **smooth ellipses generically touch cornered polytopes at corners**. Here is the precise argument.
+핵심 관찰은 **매끄러운 타원이 꼭짓점 있는 다면체와 일반적으로 꼭짓점에서 접한다**는 것이다.
 
-The boundary of the L1 ball consists of flat faces (in 2D, the four edges of the diamond). Each face lies in a subspace where one coordinate has a fixed sign and the others are constrained. The corners are intersections of faces.
+L1 공의 경계는 평평한 면들로 이루어져 있다(2차원에서는 마름모의 네 모서리). 각 면은 한 좌표의 부호가 고정된 부분공간에 놓이고, 꼭짓점은 면들의 교차점이다.
 
-For the tangency to occur on a flat face (away from a corner), the RSS gradient at that point must be perpendicular to the face. This requires the gradient to satisfy a specific alignment condition. In contrast, at a corner, the subdifferential of the constraint is a cone of directions, making it easier to satisfy the KKT conditions.
+평평한 면 위(꼭짓점이 아닌 곳)에서 접하려면 그 점에서 RSS 기울기가 면에 수직해야 한다. 이는 **등식** 조건이다. 반면 꼭짓점에서는 제약의 부분미분이 방향들의 **원뿔**이므로 KKT 조건이 **부등식**으로 완화된다. 부등식으로 정의된 집합은 양의 측도를 가지므로 꼭짓점 접촉이 실제로 자주 일어난다.
 
-!!! note "Generic Sparsity"
-    In a precise mathematical sense, for "most" data configurations (i.e., for a set of full Lebesgue measure), the lasso solution lies at a vertex or on a lower-dimensional face of the L1 ball, producing at least one zero coordinate. The solution lies in the interior of a face (all coordinates nonzero) only for a measure-zero set of data configurations.
+!!! note "일반적 희소성"
+    엄밀한 의미에서, "대부분의" 자료 배치(전체 르베그 측도를 갖는 집합)에 대해 라쏘 해는 L1 공의 꼭짓점이나 저차원 면 위에 놓이며 최소한 하나의 좌표가 0이 된다. 모든 좌표가 0이 아닌 면 내부에 해가 놓이는 것은 측도 0인 자료 배치에서만 일어난다.
 
-## The Two-Dimensional Picture
+## 2차원 그림
 
-Consider $p = 2$ predictors. The geometry has four distinct cases depending on where $\hat{\boldsymbol{\beta}}_{\text{OLS}}$ lies relative to the diamond:
+설명변수가 $p = 2$일 때 $\hat{\boldsymbol{\beta}}_{\text{OLS}}$의 위치에 따라 네 가지 경우가 있다.
 
-**Case 1: Tangency at a corner.** If $\hat{\boldsymbol{\beta}}_{\text{OLS}}$ lies roughly along a coordinate axis, the ellipse touches the diamond at a vertex. One coefficient is nonzero; the other is exactly zero. This is the lasso performing feature selection.
+**경우 1: 꼭짓점에서의 접촉.** $\hat{\boldsymbol{\beta}}_{\text{OLS}}$가 대체로 한 좌표축을 따라 놓이면 타원이 마름모의 꼭짓점에 닿는다. 한 계수는 0이 아니고 다른 하나는 정확히 0이다. 라쏘가 변수선택을 수행하는 상황이다.
 
-**Case 2: Tangency on an edge.** If $\hat{\boldsymbol{\beta}}_{\text{OLS}}$ lies between the coordinate axes, the ellipse may touch an edge of the diamond. Both coefficients are nonzero but constrained to lie on the edge $|\beta_1| + |\beta_2| = t$. Both coefficients are shrunk relative to OLS.
+**경우 2: 모서리에서의 접촉.** $\hat{\boldsymbol{\beta}}_{\text{OLS}}$가 좌표축 사이에 놓이면 타원이 마름모의 모서리에 닿을 수 있다. 두 계수가 모두 0이 아니지만 $|\beta_1| + |\beta_2| = t$ 위에 제약되며 OLS 대비 축소된다.
 
-**Case 3: Interior solution.** If $\hat{\boldsymbol{\beta}}_{\text{OLS}}$ lies inside the diamond (small OLS coefficients or large $t$), the constraint is not active and the lasso solution equals OLS. This occurs when $\lambda = 0$ or is very small.
+**경우 3: 내부 해.** $\hat{\boldsymbol{\beta}}_{\text{OLS}}$가 마름모 안에 있으면 제약이 활성화되지 않고 라쏘 해가 OLS와 같다.
 
-**Case 4: Both coefficients zero.** If $t$ is very small (large $\lambda$), the diamond shrinks to a point at the origin, and $\hat{\boldsymbol{\beta}}_{\text{lasso}} = \mathbf{0}$.
+**경우 4: 두 계수 모두 0.** $t$가 매우 작으면($\lambda$가 크면) 마름모가 원점의 한 점으로 줄어들어 $\hat{\boldsymbol{\beta}}_{\text{lasso}} = \mathbf{0}$이 된다.
 
-## Contrast with L2 Geometry
+## L2 기하와의 대조
 
-The L2 constraint region is a sphere (disk in 2D). Its key property is that the boundary is smooth everywhere, with a unique outward normal at every point. This means:
-
-- The tangency condition requires the RSS gradient to be parallel to the sphere's radial direction.
-- This tangency generically occurs at a point where no coordinate is exactly zero.
-- The sphere has no corners to "catch" the ellipse at a coordinate axis.
-
-| Property | L1 (Lasso) | L2 (Ridge) |
+| 성질 | L1 (라쏘) | L2 (능형) |
 |---|---|---|
-| Constraint shape | Diamond / cross-polytope | Sphere / hypersphere |
-| Boundary smoothness | Corners and edges | Smooth everywhere |
-| Generic tangency location | At a corner or edge | Interior of the boundary |
-| Coordinates at tangency | Some exactly zero | All nonzero |
-| Sparsity | Yes | No |
+| 제약 모양 | 마름모 / 교차다면체 | 구 / 초구 |
+| 경계의 매끄러움 | 꼭짓점과 모서리 있음 | 어디서나 매끄러움 |
+| 일반적 접촉 위치 | 꼭짓점 또는 모서리 | 경계의 내부 |
+| 접촉점의 좌표 | 일부가 정확히 0 | 모두 0이 아님 |
+| 희소성 | 있음 | 없음 |
 
-## Higher Dimensions
+## 고차원
 
-In $p$ dimensions, the L1 ball has $2p$ vertices (one pair per coordinate axis), $2^p$ faces of dimension $p-1$, and a rich combinatorial structure of lower-dimensional faces. The probability of the tangency occurring at a vertex (only one nonzero coefficient) increases when the ellipse is nearly spherical (predictors are weakly correlated) and decreases when it is highly elongated (strong correlations).
+$p$차원에서 L1 공은 $2p$개의 꼭짓점(좌표축당 한 쌍)과 $2^p$개의 $(p-1)$차원 면, 그리고 풍부한 저차원 면 구조를 갖는다. 꼭짓점에서 접촉할 확률(0이 아닌 계수가 하나)은 타원이 구에 가까울수록(설명변수의 상관이 약할수록) 커지고, 타원이 길게 늘어날수록(상관이 강할수록) 작아진다.
 
-The number of nonzero coefficients in the lasso solution at any given $\lambda$ corresponds to the dimension of the face where the tangency occurs. This dimension is at most $\min(n, p)$, reflecting the constraint that the lasso can select at most $n$ features when $p > n$.
+주어진 $\lambda$에서 라쏘 해의 0이 아닌 계수의 개수는 접촉이 일어나는 면의 차원에 대응한다. 이 차원은 최대 $\min(n, p)$이며, $p > n$일 때 라쏘가 최대 $n$개의 변수만 고를 수 있다는 제약을 반영한다.
 
-## The Solution Path as Lambda Varies
+## $\lambda$가 변할 때의 해 경로
 
-As $\lambda$ decreases from $\lambda_{\max}$ to 0, the constraint region expands. Geometrically:
+$\lambda$가 $\lambda_{\max}$에서 0으로 줄어들면 제약영역이 커진다.
 
-- At $\lambda = \lambda_{\max}$: the diamond is tiny, and $\hat{\boldsymbol{\beta}}_{\text{lasso}} = \mathbf{0}$.
-- As $\lambda$ decreases: the diamond grows, and the tangency point moves to faces of increasing dimension (more nonzero coefficients).
-- At $\lambda = 0$: the constraint is inactive, and $\hat{\boldsymbol{\beta}}_{\text{lasso}} = \hat{\boldsymbol{\beta}}_{\text{OLS}}$.
+- $\lambda = \lambda_{\max}$: 마름모가 아주 작고 $\hat{\boldsymbol{\beta}}_{\text{lasso}} = \mathbf{0}$이다.
+- $\lambda$가 줄면: 마름모가 커지고 접촉점이 점점 높은 차원의 면으로 옮겨간다(0이 아닌 계수가 늘어난다).
+- $\lambda = 0$: 제약이 비활성화되고 $\hat{\boldsymbol{\beta}}_{\text{lasso}} = \hat{\boldsymbol{\beta}}_{\text{OLS}}$이다.
 
-The path $\hat{\boldsymbol{\beta}}_{\text{lasso}}(\lambda)$ is piecewise linear in $\lambda$, with breakpoints where the tangency point moves to a different face of the polytope.
+경로 $\hat{\boldsymbol{\beta}}_{\text{lasso}}(\lambda)$는 $\lambda$에 대해 **조각별 선형**이며, 접촉점이 다른 면으로 옮겨가는 지점에서 꺾인다.
 
-## Summary
+## 요약
 
-The lasso constraint region is a diamond (cross-polytope) whose corners lie on the coordinate axes. Because RSS contours are smooth ellipses, their first contact with the diamond generically occurs at a corner, where one or more coordinates are zero. This is the geometric mechanism behind lasso sparsity. In contrast, the smooth sphere of the L2 penalty has no corners, so ridge regression generically produces solutions with all coordinates nonzero. The shape of the constraint region, not the nature of the objective function, determines whether the estimator is sparse.
+라쏘의 제약영역은 좌표축 위에 꼭짓점을 갖는 마름모(교차다면체)다. RSS 등고선이 매끄러운 타원이므로 마름모와의 첫 접촉이 일반적으로 꼭짓점에서 일어나고, 그곳에서 하나 이상의 좌표가 0이 된다. 이것이 라쏘 희소성의 기하적 기제다. 반면 L2 벌점의 매끄러운 구에는 꼭짓점이 없으므로 능형회귀는 일반적으로 모든 좌표가 0이 아닌 해를 낸다. **추정량이 희소한지를 결정하는 것은 목적함수의 성질이 아니라 제약영역의 모양이다.**
 
+## 연습문제
 
-## Exercises
+**연습문제 1.**
+"경로가 $\lambda$에 대해 조각별 선형"이라는 주장을 수치로 확인하고, 꺾이는 지점이 무엇을 뜻하는지 설명하라.
 
-**Exercise 1.**
-Describe the main concept of Geometric Interpretation (L1 Penalty) and explain why it matters for statistical practice.
+??? success "연습문제 1 풀이"
+    ```python
+    import numpy as np
+    from sklearn.linear_model import lasso_path
+    rng = np.random.default_rng(2)
+    n, p = 60, 6
+    X = rng.normal(size=(n, p)); X -= X.mean(0); X /= X.std(0)
+    beta = np.array([3., -2., 1., 0., 0., 0.])
+    y = X @ beta + rng.normal(0, 1, n); y -= y.mean()
 
-??? success "Solution to Exercise 1"
-    Geometric Interpretation (L1 Penalty) is a core topic in statistics that provides tools for drawing reliable inferences from data. It matters because proper application ensures valid conclusions, correctly quantified uncertainty, and appropriate handling of the assumptions that underpin the method. Practitioners who understand this concept can avoid common pitfalls and choose the right analytical approach for their data.
+    alphas, coefs, _ = lasso_path(X, y, n_alphas=200)
+    nz = (np.abs(coefs) > 1e-10).sum(axis=0)      # 각 alpha에서 활성 변수 수
+    ```
+
+    $\lambda$를 $\lambda_{\max}$에서 줄여 가며 활성 변수의 수를 보면 **계단 함수**처럼 $0 \to 1 \to 2 \to \cdots$로 증가한다. 계단이 올라가는 지점이 경로의 꺾인점이다.
+
+    **꺾인점의 의미.** 두 꺾인점 사이에서는 활성집합(0이 아닌 계수의 집합)이 고정되어 있고, 그 안에서 해가 $\lambda$의 **선형함수**다. 활성집합이 고정되면 KKT 조건이 선형 연립방정식이 되기 때문이다.
+
+    $$
+    \hat{\boldsymbol{\beta}}_A(\lambda) = (\mathbf{X}_A^\top\mathbf{X}_A)^{-1}(\mathbf{X}_A^\top\mathbf{y} - n\lambda\,\mathbf{s}_A)
+    $$
+
+    여기서 $\mathbf{s}_A$는 활성 계수들의 부호 벡터다. $\lambda$에 대해 명백히 선형이다.
+
+    **이것이 LARS 알고리즘의 근거다.** 경로가 조각별 선형이므로 꺾인점만 계산하면 전체 경로를 정확히 복원할 수 있다. 격자 위의 여러 $\lambda$를 각각 푸는 것보다 훨씬 효율적이다.
 
 ---
 
-**Exercise 2.**
-State the key assumptions required by the method discussed here. How can each assumption be checked?
+**연습문제 2.**
+설명변수의 상관이 강해지면 라쏘가 꼭짓점(변수 하나)에서 접촉할 확률이 낮아진다는 주장을 확인하라.
 
-??? success "Solution to Exercise 2"
-    The main assumptions typically include: (1) independence of observations -- verified by understanding the data collection process and checking for serial correlation; (2) distributional requirements (e.g., normality) -- checked with Q-Q plots and formal tests like Shapiro-Wilk; (3) equal variances (if applicable) -- assessed with boxplots and Levene's test. When assumptions are violated, consider robust alternatives, transformations, or nonparametric methods.
+??? success "연습문제 2 풀이"
+    ```python
+    import numpy as np
+    from sklearn.linear_model import Lasso
+    rng = np.random.default_rng(9)
 
----
+    def active_count(rho, n=60, p=2, alpha=0.4, M=500):
+        cnt = []
+        for _ in range(M):
+            z = rng.normal(size=n)
+            X = np.c_[np.sqrt(rho)*z + np.sqrt(1-rho)*rng.normal(size=n),
+                      np.sqrt(rho)*z + np.sqrt(1-rho)*rng.normal(size=n)]
+            X -= X.mean(0); X /= X.std(0)
+            y = X @ np.array([1., 1.]) + rng.normal(0, 1, n)
+            b = Lasso(alpha=alpha).fit(X, y).coef_
+            cnt.append((np.abs(b) > 1e-10).sum())
+        return np.mean(np.array(cnt) == 1)
+    ```
 
-**Exercise 3.**
-Work through a small numerical example illustrating the application of the technique from this section.
+    두 설명변수, 참 계수 $(1, 1)$, 고정된 $\lambda$에서 "정확히 하나만 활성"인 비율을 잰다.
 
-??? success "Solution to Exercise 3"
-    A structured approach to applying this technique involves: (1) clearly stating the hypotheses or estimation goal; (2) verifying that the data meet the required assumptions; (3) computing the relevant test statistic, estimate, or model fit; (4) obtaining the p-value, confidence interval, or posterior distribution; (5) interpreting the result in the context of the original question. Following these steps systematically ensures a rigorous and reproducible analysis.
+    직관은 이렇다. 상관이 **약하면** RSS 등고선이 원에 가깝다. 원이 마름모에 닿으면 가장 가까운 꼭짓점에 닿기 쉽다. 상관이 **강하면** 등고선이 마름모의 모서리와 나란한 방향으로 길게 늘어나, 꼭짓점이 아니라 모서리 전체에 걸쳐 닿는다.
 
----
+    **모서리 접촉은 두 계수가 모두 0이 아니면서 $|\beta_1|+|\beta_2| = t$ 위에 놓이는 상황**이다. 이때 두 계수를 어떻게 나눌지가 거의 결정되지 않으며, 이것이 [엘라스틱넷의 그룹 효과](../elastic_net/grouping_effect.md)에서 본 라쏘의 불안정성 $[0.486, 2.136, 2.907]$의 기하적 원인이다.
 
-**Exercise 4.**
-Compare the approach from this section with an alternative method. When would you choose each?
-
-??? success "Solution to Exercise 4"
-    The method discussed here is appropriate when its assumptions hold and the sample size is sufficient for the asymptotic approximations to be accurate. Alternative approaches include: (1) nonparametric methods -- preferred when distributional assumptions are suspect; (2) bootstrap methods -- useful when analytical reference distributions are unavailable; (3) Bayesian methods -- valuable when incorporating prior information or when direct probability statements about parameters are desired. Running multiple approaches and comparing results provides a useful robustness check.
+    **요약하면 라쏘의 변수선택은 설명변수가 서로 직교에 가까울 때 가장 잘 작동한다.** 강한 상관 아래에서는 "어느 것을 고를지"가 자료의 사소한 변화에 좌우된다.

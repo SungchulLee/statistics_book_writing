@@ -1,138 +1,155 @@
-# Bayesian Interpretation (Laplace Prior)
+# 베이즈 해석 (라플라스 사전분포)
 
-Just as ridge regression arises from a Gaussian prior on the coefficients, the lasso arises from a Laplace (double-exponential) prior. The shape of the Laplace density, with its sharp peak at zero and heavier tails than the Gaussian, provides the Bayesian mechanism behind sparsity: the prior concentrates substantial probability mass at exactly zero while still allowing large coefficients when the data provide strong evidence.
+능형회귀가 계수에 대한 가우스 사전분포에서 나오듯, 라쏘는 라플라스(이중지수) 사전분포에서 나온다. 0에서 뾰족하고 가우스보다 꼬리가 두꺼운 라플라스 밀도의 모양이 희소성의 베이즈적 기제를 제공한다. 이 사전분포는 0 근처에 상당한 확률질량을 몰아넣으면서도, 자료가 강한 증거를 줄 때는 큰 계수를 허용한다.
 
-## The Laplace Distribution
+## 라플라스 분포
 
-The Laplace distribution with location 0 and scale $b > 0$ has density:
+위치 0, 척도 $b > 0$인 라플라스 분포의 밀도는
 
 $$
 p(\beta_j) = \frac{1}{2b}\exp\left(-\frac{|\beta_j|}{b}\right)
 $$
 
-Key properties of this distribution compared to the Gaussian:
+이다. 가우스와 비교한 주요 성질은 다음과 같다.
 
-- **Cusp at zero.** The density has a non-differentiable peak at $\beta_j = 0$, unlike the smooth Gaussian peak. This cusp concentrates more probability mass near zero.
-- **Heavier tails.** The Laplace density decays exponentially (linearly in the log scale), while the Gaussian decays as $\exp(-\beta_j^2)$ (quadratically in the log scale). The Laplace therefore assigns more probability to large values of $|\beta_j|$.
-- **Variance.** The variance of the Laplace$(0, b)$ distribution is $2b^2$.
+- **0에서의 뾰족점.** 매끄러운 가우스 봉우리와 달리 $\beta_j = 0$에서 미분 불가능한 봉우리를 갖는다. 이 뾰족점이 0 근처에 더 많은 확률질량을 모은다.
+- **두꺼운 꼬리.** 라플라스 밀도는 지수적으로 감소하고(로그 척도에서 선형) 가우스는 $\exp(-\beta_j^2)$로 감소한다(로그 척도에서 이차). 따라서 라플라스가 큰 $|\beta_j|$에 더 많은 확률을 준다.
+- **분산.** Laplace$(0, b)$의 분산은 $2b^2$이다.
 
-## MAP Derivation
+## MAP 유도
 
-Place independent Laplace priors on each coefficient:
-
-$$
-\beta_j \overset{\text{iid}}{\sim} \text{Laplace}(0, b)
-$$
-
-Combined with the Gaussian likelihood $\mathbf{y} \mid \boldsymbol{\beta} \sim N(\mathbf{X}\boldsymbol{\beta}, \sigma^2\mathbf{I})$, the joint prior is:
+각 계수에 독립인 라플라스 사전분포 $\beta_j \overset{\text{iid}}{\sim} \text{Laplace}(0, b)$를 둔다. 결합 사전분포는
 
 $$
-p(\boldsymbol{\beta}) = \prod_{j=1}^p \frac{1}{2b}\exp\left(-\frac{|\beta_j|}{b}\right) = \frac{1}{(2b)^p}\exp\left(-\frac{\|\boldsymbol{\beta}\|_1}{b}\right)
+p(\boldsymbol{\beta}) = \frac{1}{(2b)^p}\exp\left(-\frac{\|\boldsymbol{\beta}\|_1}{b}\right)
 $$
 
-The negative log-posterior is:
+이고, 가우스 가능도와 결합한 음의 로그사후는
 
 $$
--\log p(\boldsymbol{\beta} \mid \mathbf{y}) = \frac{1}{2\sigma^2}\|\mathbf{y} - \mathbf{X}\boldsymbol{\beta}\|^2 + \frac{1}{b}\|\boldsymbol{\beta}\|_1 + \text{const}
+-\log p(\boldsymbol{\beta} \mid \mathbf{y}) = \frac{1}{2\sigma^2}\|\mathbf{y} - \mathbf{X}\boldsymbol{\beta}\|^2 + \frac{1}{b}\|\boldsymbol{\beta}\|_1 + \text{상수}
 $$
 
-Minimizing this expression is equivalent to solving the lasso problem with:
+이다. 이를 최소화하는 것은
 
 $$
 \lambda = \frac{\sigma^2}{nb}
 $$
 
-where the factor of $n$ arises from the $1/(2n)$ normalization convention in the lasso objective. The MAP estimate under a Laplace prior is the lasso estimator.
+인 라쏘 문제를 푸는 것과 동등하다($n$은 라쏘 목적함수의 $1/(2n)$ 규약에서 온다). 즉 **라플라스 사전분포 아래의 MAP 추정값이 라쏘 추정량이다.**
 
-## Why the Laplace Prior Induces Sparsity
+## 라플라스 사전분포가 희소성을 낳는 이유
 
-The MAP estimate corresponds to finding the mode of the posterior distribution. The cusp of the Laplace prior at zero creates a "ridge" in the posterior along the coordinate hyperplanes $\beta_j = 0$. For coefficients with weak data support, the posterior mode lies exactly at zero because the prior's cusp pulls the mode to $\beta_j = 0$ unless the likelihood pulls sufficiently hard in another direction.
+MAP 추정은 사후분포의 최빈값을 찾는 것이다. 0에서의 라플라스 뾰족점이 좌표초평면 $\beta_j = 0$을 따라 사후분포에 "능선"을 만든다. 자료의 지지가 약한 계수에서는, 가능도가 다른 방향으로 충분히 강하게 당기지 않는 한 사전분포의 뾰족점이 최빈값을 $\beta_j = 0$으로 끌어당긴다.
 
-!!! note "MAP versus Posterior Mean"
-    The sparsity of the lasso is a property of the MAP estimate (the posterior mode), not of the full posterior. The posterior mean under a Laplace prior is generally not sparse. If full posterior inference is desired (e.g., credible intervals), the Bayesian lasso requires MCMC methods because the Laplace prior is not conjugate to the Gaussian likelihood.
+!!! note "MAP와 사후평균은 다르다"
+    라쏘의 희소성은 MAP 추정값(사후최빈값)의 성질이지 사후분포 전체의 성질이 아니다. 라플라스 사전분포 아래의 **사후평균은 일반적으로 희소하지 않다.** 완전한 사후추론(신용구간 등)이 필요하면, 라플라스 사전분포는 가우스 가능도와 켤레가 아니므로 MCMC가 필요하다.
 
-## Comparing Gaussian and Laplace Priors
+## 가우스와 라플라스 사전분포의 비교
 
-The following table summarizes how the choice of prior shapes the resulting estimator:
-
-| Property | Gaussian prior $N(0, \tau^2)$ | Laplace prior Laplace$(0, b)$ |
+| 성질 | 가우스 $N(0, \tau^2)$ | 라플라스 $(0, b)$ |
 |---|---|---|
-| Density at 0 | Smooth, finite | Cusp, finite |
-| Tail behavior | Light (sub-Gaussian) | Heavier (exponential decay) |
-| Resulting estimator | Ridge | Lasso |
-| Penalty | $\lambda\|\boldsymbol{\beta}\|_2^2$ | $\lambda\|\boldsymbol{\beta}\|_1$ |
-| Sparsity of MAP | No | Yes |
-| Conjugacy | Yes (posterior is Gaussian) | No |
-| Posterior computation | Closed-form | Requires MCMC |
-| Regularization parameter | $\lambda = \sigma^2/\tau^2$ | $\lambda = \sigma^2/(nb)$ |
+| 0에서의 밀도 | 매끄럽고 유한 | 뾰족하고 유한 |
+| 꼬리 거동 | 가벼움(준가우스) | 무거움(지수적 감소) |
+| 결과 추정량 | 능형 | 라쏘 |
+| 벌점 | $\lambda\|\boldsymbol{\beta}\|_2^2$ | $\lambda\|\boldsymbol{\beta}\|_1$ |
+| MAP의 희소성 | 없음 | 있음 |
+| 켤레성 | 있음(사후가 가우스) | 없음 |
+| 사후 계산 | 닫힌 형태 | MCMC 필요 |
+| 정칙화 모수 | $\lambda = \sigma^2/\tau^2$ | $\lambda = \sigma^2/(nb)$ |
 
-The Gaussian prior penalizes large coefficients quadratically, resulting in smooth, proportional shrinkage. The Laplace prior penalizes them linearly, resulting in the soft-thresholding behavior that produces exact zeros.
+가우스 사전분포는 큰 계수를 이차적으로 벌하여 매끄러운 비례 축소를 낳는다. 라플라스 사전분포는 선형으로 벌하여 정확한 0을 만드는 연성 문턱 거동을 낳는다.
 
-## The Bayesian Lasso
+## 베이즈 라쏘
 
-Park and Casella (2008) developed a full Bayesian treatment of the lasso, called the **Bayesian lasso**. The key idea is to represent the Laplace prior as a scale mixture of normals:
+Park과 Casella(2008)는 라쏘의 완전한 베이즈 처리인 **베이즈 라쏘**를 개발했다. 핵심 착상은 라플라스 사전분포를 정규분포의 척도혼합으로 표현하는 것이다.
 
 $$
 \text{Laplace}(0, b) = \int_0^\infty N(0, s^2)\,\frac{1}{2b^2}\exp\left(-\frac{s^2}{2b^2}\right)\, ds^2
 $$
 
-This representation introduces latent variance parameters $s_j^2$ for each coefficient, enabling a Gibbs sampler that alternates between:
+이 표현은 계수마다 잠재 분산모수 $s_j^2$을 도입하여 다음을 번갈아 하는 깁스 표집을 가능하게 한다.
 
-1. Sampling $\boldsymbol{\beta} \mid s_1^2, \ldots, s_p^2, \mathbf{y}$ from a Gaussian conditional.
-2. Sampling each $s_j^2 \mid \beta_j$ from an inverse-Gaussian distribution.
+1. 가우스 조건부에서 $\boldsymbol{\beta} \mid s_1^2, \ldots, s_p^2, \mathbf{y}$를 표집.
+2. 역가우스 분포에서 각 $s_j^2 \mid \beta_j$를 표집.
 
-!!! tip "When to Use the Bayesian Lasso"
-    Use the Bayesian lasso when uncertainty quantification (credible intervals) for sparse models is needed. The frequentist lasso provides point estimates and variable selection but does not directly provide valid confidence intervals for the selected coefficients.
+!!! tip "베이즈 라쏘를 언제 쓰는가"
+    희소 모형에 대한 불확실성 정량화(신용구간)가 필요할 때 쓴다. 빈도주의 라쏘는 점추정과 변수선택을 제공하지만, 선택된 계수에 대한 타당한 신뢰구간은 직접 제공하지 않는다.
 
-## Spike-and-Slab Priors
+## 스파이크-앤-슬랩 사전분포
 
-For even stronger sparsity enforcement, **spike-and-slab** priors place a point mass at zero (the "spike") and a diffuse distribution on nonzero values (the "slab"):
+더 강한 희소성을 강제하려면 **스파이크-앤-슬랩** 사전분포가 0에 점질량("스파이크")을, 0이 아닌 값에 산만한 분포("슬랩")를 둔다.
 
 $$
 p(\beta_j) = (1 - \pi)\,\delta_0(\beta_j) + \pi\, g(\beta_j)
 $$
 
-where $\pi$ is the prior probability that $\beta_j \neq 0$ and $g$ is a continuous density (e.g., Gaussian). The MAP estimate under this prior corresponds to best subset selection with penalty $\lambda\|\boldsymbol{\beta}\|_0$ (the number of nonzero coefficients). The Laplace prior can be viewed as a continuous relaxation of the spike-and-slab, sitting between the Gaussian (no sparsity) and the spike-and-slab (strongest sparsity).
+이 사전분포 아래의 MAP 추정은 벌점 $\lambda\|\boldsymbol{\beta}\|_0$(0이 아닌 계수의 개수)을 갖는 최량 부분집합 선택에 대응한다. 라플라스 사전분포는 스파이크-앤-슬랩의 연속적 완화로 볼 수 있으며, 가우스(희소성 없음)와 스파이크-앤-슬랩(가장 강한 희소성) 사이에 놓인다.
 
-| Prior | Sparsity strength | MAP penalty | Computation |
-|---|---|---|---|
-| Gaussian $N(0, \tau^2)$ | None | $\lambda\|\boldsymbol{\beta}\|_2^2$ | Closed-form |
-| Laplace$(0, b)$ | Moderate | $\lambda\|\boldsymbol{\beta}\|_1$ | Convex optimization |
-| Spike-and-slab | Strongest | $\lambda\|\boldsymbol{\beta}\|_0$ | NP-hard (combinatorial) |
+## 연습문제
 
-## Summary
+**연습문제 1.**
+"라쏘의 희소성은 MAP의 성질이지 사후분포의 성질이 아니다"라는 주장을 확인하라. 라플라스 사전분포 아래에서 사후평균이 정확히 0이 될 수 있는가?
 
-The lasso is the MAP estimate under independent Laplace priors on the regression coefficients. The Laplace density's cusp at zero concentrates prior mass near zero, causing the posterior mode to sit exactly at $\beta_j = 0$ for weakly supported coefficients. The regularization parameter satisfies $\lambda = \sigma^2/(nb)$, linking the penalty strength to the prior scale. Unlike the Gaussian prior (which yields ridge), the Laplace prior is not conjugate, so full posterior inference requires MCMC. The Laplace prior occupies a natural middle ground between the Gaussian prior (no sparsity) and the spike-and-slab prior (maximum sparsity).
+??? success "연습문제 1 풀이"
+    **사후평균은 확률 1로 0이 아니다.**
 
+    이유는 간단하다. 사후분포 $p(\beta_j \mid \mathbf{y})$는 연속분포다(가우스 가능도와 라플라스 사전분포의 곱은 어디서나 양의 밀도를 갖는다). 연속분포의 평균이 정확히 0이 되려면 분포가 0에 대해 완벽히 대칭이어야 하는데, 자료가 $\beta_j$에 대해 어떤 정보든 주면 대칭이 깨진다.
 
-## Exercises
+    **최빈값은 다르다.** 라플라스 사전분포의 뾰족점 때문에 사후밀도가 $\beta_j = 0$에서 미분 불가능한 봉우리를 가질 수 있고, 그 봉우리가 전역 최빈값이 되면 MAP 추정값이 정확히 0이 된다.
 
-**Exercise 1.**
-Describe the main concept of Bayesian Interpretation (Laplace Prior) and explain why it matters for statistical practice.
+    ```python
+    # 1차원 직관: 사후 log-density ∝ -(b - z)^2/(2v) - |b|/s
+    # z(자료가 말하는 값)가 작으면 최빈값은 0, 그러나 평균은 0이 아니다
+    ```
 
-??? success "Solution to Exercise 1"
-    Bayesian Interpretation (Laplace Prior) is a core topic in statistics that provides tools for drawing reliable inferences from data. It matters because proper application ensures valid conclusions, correctly quantified uncertainty, and appropriate handling of the assumptions that underpin the method. Practitioners who understand this concept can avoid common pitfalls and choose the right analytical approach for their data.
+    **실무적 함의가 크다.**
 
----
+    | 원하는 것 | 써야 할 것 |
+    |:---|:---|
+    | 희소한 점추정 | 라쏘(= MAP) |
+    | 사후평균 | 베이즈 라쏘의 MCMC 출력 — 희소하지 않다 |
+    | 변수의 포함 확률 | 스파이크-앤-슬랩의 사후 포함확률 |
 
-**Exercise 2.**
-State the key assumptions required by the method discussed here. How can each assumption be checked?
-
-??? success "Solution to Exercise 2"
-    The main assumptions typically include: (1) independence of observations -- verified by understanding the data collection process and checking for serial correlation; (2) distributional requirements (e.g., normality) -- checked with Q-Q plots and formal tests like Shapiro-Wilk; (3) equal variances (if applicable) -- assessed with boxplots and Levene's test. When assumptions are violated, consider robust alternatives, transformations, or nonparametric methods.
-
----
-
-**Exercise 3.**
-Work through a small numerical example illustrating the application of the technique from this section.
-
-??? success "Solution to Exercise 3"
-    A structured approach to applying this technique involves: (1) clearly stating the hypotheses or estimation goal; (2) verifying that the data meet the required assumptions; (3) computing the relevant test statistic, estimate, or model fit; (4) obtaining the p-value, confidence interval, or posterior distribution; (5) interpreting the result in the context of the original question. Following these steps systematically ensures a rigorous and reproducible analysis.
+    "베이즈 라쏘를 돌렸더니 계수가 0이 안 나온다"는 흔한 혼란이 여기서 나온다. MCMC가 주는 것은 사후평균이나 사후중앙값이며, 둘 다 희소하지 않다. 희소성을 원하면 사후분포에서 최빈값을 찾거나 스파이크-앤-슬랩을 써야 한다.
 
 ---
 
-**Exercise 4.**
-Compare the approach from this section with an alternative method. When would you choose each?
+**연습문제 2.**
+$\lambda = \sigma^2/(nb)$ 관계를 유도하고, 이것이 $\lambda$의 해석에 무엇을 뜻하는지 설명하라.
 
-??? success "Solution to Exercise 4"
-    The method discussed here is appropriate when its assumptions hold and the sample size is sufficient for the asymptotic approximations to be accurate. Alternative approaches include: (1) nonparametric methods -- preferred when distributional assumptions are suspect; (2) bootstrap methods -- useful when analytical reference distributions are unavailable; (3) Bayesian methods -- valuable when incorporating prior information or when direct probability statements about parameters are desired. Running multiple approaches and comparing results provides a useful robustness check.
+??? success "연습문제 2 풀이"
+    음의 로그사후를 최소화한다.
+
+    $$
+    \frac{1}{2\sigma^2}\|\mathbf{y} - \mathbf{X}\boldsymbol{\beta}\|^2 + \frac{1}{b}\|\boldsymbol{\beta}\|_1
+    $$
+
+    양변에 $2\sigma^2$을 곱해도 최소점은 같으므로
+
+    $$
+    \|\mathbf{y} - \mathbf{X}\boldsymbol{\beta}\|^2 + \frac{2\sigma^2}{b}\|\boldsymbol{\beta}\|_1
+    $$
+
+    이다. 한편 라쏘 목적함수 $\frac{1}{2n}\|\cdot\|^2 + \lambda\|\boldsymbol{\beta}\|_1$에 $2n$을 곱하면
+
+    $$
+    \|\mathbf{y} - \mathbf{X}\boldsymbol{\beta}\|^2 + 2n\lambda\|\boldsymbol{\beta}\|_1
+    $$
+
+    이다. 두 식의 벌점 계수를 맞추면 $2n\lambda = 2\sigma^2/b$이므로
+
+    $$
+    \lambda = \frac{\sigma^2}{nb} \qquad \square
+    $$
+
+    **해석.** 능형의 $\lambda = \sigma^2/\tau^2$과 나란히 놓으면 구조가 보인다.
+
+    | | 정칙화 모수 |
+    |:---|:---|
+    | 능형 | $\lambda = \sigma^2/\tau^2$ — 잡음분산 대 사전분산의 비 |
+    | 라쏘 | $\lambda = \sigma^2/(nb)$ — 같은 비에 $1/n$이 붙는다 |
+
+    **$1/n$ 인자가 중요하다.** 라쏘의 $1/(2n)$ 규약 때문에 $\lambda$가 표본크기에 따라 자동으로 조정된다. 즉 같은 사전분포($b$ 고정)를 유지하면서 자료를 늘리면 $\lambda$가 $1/n$로 줄어든다. **자료가 많아질수록 사전분포의 영향이 줄어든다**는 베이즈의 상식과 정확히 부합한다.
+
+    능형의 규약($1/(2n)$이 없다)에서는 이 조정이 자동으로 일어나지 않으므로, 표본크기를 바꿀 때 $\lambda$를 직접 다시 골라야 한다. 이것이 sklearn에서 `Ridge`와 `Lasso`의 `alpha`를 같은 척도로 비교하면 안 되는 이유이기도 하다.

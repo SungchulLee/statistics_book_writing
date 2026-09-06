@@ -1,110 +1,110 @@
-# Chapter 18: Regularization Techniques
+# 18장: 정칙화 기법
 
 
-## Overview
+## 개요
 
-Regularization techniques address the fundamental problems of overfitting, multicollinearity, and instability in linear regression by adding penalty terms to the loss function. By deliberately introducing a small amount of bias, regularized estimators can substantially reduce variance and improve out-of-sample prediction. This chapter covers Ridge regression (L2), Lasso regression (L1), Elastic Net (combined L1+L2), hyperparameter tuning strategies, and dimensionality reduction alternatives including Principal Components Regression and Partial Least Squares.
-
----
-
-## Chapter Structure
-
-### 18.1 Motivation for Regularization
-
-The problems that motivate moving beyond ordinary least squares:
-
-- **Overfitting and the Bias-Variance Tradeoff** --- Explains how models with too many parameters capture noise rather than signal, and how regularization navigates the bias-variance tradeoff to minimize prediction error.
-- **Ill-Conditioned Design Matrices** --- Describes how near-singular design matrices cause OLS coefficient estimates to become numerically unstable, with small data perturbations leading to large changes in estimated coefficients.
-- **Multicollinearity and Regularization** --- Shows how highly correlated predictors inflate the variance of OLS estimates and how regularization stabilizes the solution by shrinking or selecting coefficients.
-
-### 18.2 Ridge Regression
-
-L2-penalized regression that shrinks all coefficients toward zero without eliminating any:
-
-- **Ridge Formulation and Closed-Form Solution** --- Derives the Ridge estimator as the minimizer of the residual sum of squares plus an L2 penalty, with the closed-form solution involving the regularized inverse of the design matrix.
-- **Geometric Interpretation (L2 Penalty)** --- Visualizes Ridge regression as the first contact point between elliptical OLS contours and a spherical constraint region centered at the origin.
-- **Bayesian Interpretation (Gaussian Prior)** --- Shows that the Ridge estimator is equivalent to the posterior mode under a Gaussian prior on the coefficients, connecting frequentist regularization to Bayesian inference.
-- **Ridge Trace and Choosing lambda** --- Introduces the Ridge trace plot (coefficients vs. lambda) and discusses strategies for selecting the regularization parameter.
-- **Ridge Regression Overview** --- A comprehensive reference covering motivation, formulation, closed-form solution, the Gauss-Markov tradeoff, geometric and Bayesian interpretations, and practical guidance.
-
-### 18.3 Lasso Regression
-
-L1-penalized regression that performs simultaneous shrinkage and variable selection:
-
-- **Lasso Formulation and Sparsity** --- Derives the Lasso estimator and explains why the L1 penalty drives some coefficients to exactly zero, producing sparse models.
-- **Geometric Interpretation (L1 Penalty)** --- Visualizes the Lasso as the contact between elliptical OLS contours and a diamond-shaped (cross-polytope) constraint, with corners on the axes explaining the sparsity property.
-- **Bayesian Interpretation (Laplace Prior)** --- Shows that the Lasso estimator corresponds to the posterior mode under a Laplace (double-exponential) prior, placing more mass near zero than the Gaussian prior.
-- **Coordinate Descent Algorithm** --- Describes the iterative optimization algorithm used to fit Lasso, which cycles through coordinates applying soft-thresholding updates.
-- **Lasso for Feature Selection** --- Discusses how the sparsity property of Lasso enables automatic feature selection and interpretable models in high-dimensional settings.
-- **Lasso Regression Overview** --- A detailed reference covering the Lasso formulation, the L1 sparsity mechanism, the geometric argument for exact zeros, and comparisons with Ridge.
-
-### 18.4 Elastic Net
-
-A hybrid regularization method combining L1 and L2 penalties:
-
-- **Elastic Net Formulation** --- Defines the Elastic Net objective function as a convex combination of L1 and L2 penalties controlled by two hyperparameters (or equivalently, a mixing ratio and overall penalty strength).
-- **Advantages over Pure Ridge and Lasso** --- Explains how Elastic Net overcomes Lasso's limitations with correlated predictors and Ridge's inability to perform variable selection.
-- **Grouping Effect for Correlated Features** --- Demonstrates how Elastic Net tends to select or exclude groups of correlated features together, rather than arbitrarily picking one and dropping the rest as Lasso does.
-- **Elastic Net Overview** --- A comprehensive reference covering the objective function, key features, the grouping effect, handling of correlated predictors, and practical comparison with Ridge and Lasso.
-
-### 18.5 Hyperparameter Tuning
-
-Strategies for selecting the regularization parameter(s):
-
-- **Cross-Validation for lambda Selection** --- Describes k-fold cross-validation as the standard method for choosing the regularization strength, including the one-standard-error rule for parsimonious models.
-- **Regularization Path** --- Traces how model coefficients evolve as lambda varies, illustrating feature activation order, the bias-variance tradeoff, and the connection to model complexity.
-- **Information Criteria for Regularized Models** --- Discusses the use of AIC, BIC, and related criteria as computationally cheaper alternatives to cross-validation for lambda selection.
-
-### 18.6 Dimensionality Reduction Methods
-
-Alternative approaches that reduce the predictor space rather than shrinking coefficients:
-
-- **PCR and PLS Overview** --- Motivates dimensionality reduction for settings where the number of predictors exceeds the number of observations or where severe multicollinearity exists.
-- **Principal Components Regression** --- Combines PCA with regression by extracting principal components that maximize variance in the predictor space, then regressing the response on a subset of these components.
-- **Partial Least Squares** --- A supervised dimensionality reduction method that constructs components by maximizing the covariance between predictors and the response, often requiring fewer components than PCR.
-
-### 18.7 Overview and Comparison
-
-Guidance for choosing the right regularization approach:
-
-- **Ridge vs. Lasso vs. Elastic Net** --- A side-by-side comparison of the three methods across penalty type, sparsity, multicollinearity handling, computational cost, and typical use cases.
-- **Guidelines for Choosing a Method** --- Practical decision rules based on data characteristics (number of predictors, correlation structure, interpretability requirements).
-- **Overview** --- A summary of all regularization methods and their applications, including Ridge, Lasso, Elastic Net, and dimensionality reduction approaches, with practical recommendations.
-
-### 18.8 Code
-
-Complete Python implementations:
-
-- **ridge_examples.py** --- Ridge regression fitting, coefficient paths, and cross-validation.
-- **lasso_examples.py** --- Lasso regression fitting, sparsity demonstration, and feature selection.
-- **elastic_net_examples.py** --- Elastic Net fitting and comparison with Ridge and Lasso.
-- **reg_compare.py** --- Side-by-side comparison of Ridge, Lasso, and Elastic Net on the same dataset.
-- **cv_tuning.py** --- Cross-validation and lambda tuning with visualization of the CV error curve.
-- **lasso_housing_regularization_path.py** --- Regularization path visualization for Lasso on housing data showing feature activation order.
-- **pcr_pls_examples.py** --- Principal Components Regression and Partial Least Squares implementations with cross-validated component selection.
-
-### 18.9 Exercises
-
-Practice problems covering both conceptual topics (Ridge and Lasso closed-form solutions for orthonormal design, the grouping effect of Elastic Net, effective degrees of freedom) and computational exercises (fitting regularized models, comparing coefficient estimates, cross-validation tuning, and regularization path analysis).
+정칙화 기법은 손실함수에 벌점항을 더함으로써 선형회귀의 근본적인 문제인 과적합, 다중공선성, 불안정성을 다룬다. 약간의 편향을 의도적으로 들여오는 대신 분산을 크게 줄여 표본외 예측을 개선한다. 이 장에서는 능형회귀(L2), 라쏘 회귀(L1), 엘라스틱넷(L1+L2 결합), 초모수 조정 전략, 그리고 주성분회귀와 부분최소제곱을 포함한 차원축소 대안을 다룬다.
 
 ---
 
-## Prerequisites
+## 장의 구성
 
-This chapter builds on:
+### 18.1 정칙화의 동기
 
-- **Chapter 13** (Linear Regression) --- Ordinary least squares estimation, the normal equations, residual analysis, and model selection criteria (AIC, BIC, cross-validation).
-- **Chapter 6** (Statistical Estimation) --- Bias-variance tradeoff, mean squared error decomposition, and maximum likelihood estimation.
-- **Chapter 0** (Prerequisites) --- Linear algebra foundations including matrix inverses, eigenvalues, singular value decomposition, and positive definite matrices.
-- **Chapter 12** (Correlation and Causation) --- Understanding of multicollinearity and its effects on regression estimates.
+보통최소제곱을 넘어서게 만드는 문제들:
+
+- **과적합과 편향-분산 절충** — 모수가 너무 많은 모형이 신호가 아니라 잡음을 포착하는 과정을 설명하고, 정칙화가 예측오차를 최소화하기 위해 편향-분산 절충을 어떻게 다루는지 보인다.
+- **불량조건 계획행렬** — 거의 특이한 계획행렬이 OLS 계수 추정값을 수치적으로 불안정하게 만들어, 자료의 작은 변화가 추정 계수의 큰 변화로 이어지는 현상을 서술한다.
+- **다중공선성과 정칙화** — 강하게 상관된 설명변수가 OLS 추정값의 분산을 부풀리는 방식과, 정칙화가 계수를 축소하거나 선택하여 해를 안정시키는 방식을 보인다.
+
+### 18.2 능형회귀
+
+어떤 계수도 제거하지 않으면서 모든 계수를 0 쪽으로 축소하는 L2 벌점 회귀:
+
+- **능형회귀의 정식화와 닫힌 형태 해** — 잔차제곱합에 L2 벌점을 더한 것의 최소화로 능형 추정량을 유도하며, 계획행렬의 정칙화된 역행렬을 포함하는 닫힌 형태 해를 제시한다.
+- **기하적 해석 (L2 벌점)** — 능형회귀를 타원형 OLS 등고선과 원점 중심의 구형 제약영역이 처음 닿는 점으로 시각화한다.
+- **베이즈 해석 (가우스 사전분포)** — 능형 추정량이 계수에 대한 가우스 사전분포 아래에서의 사후최빈값과 동등함을 보여, 빈도주의 정칙화를 베이즈 추론과 잇는다.
+- **능형 자취와 $\lambda$의 선택** — 능형 자취 그림(계수 대 $\lambda$)을 소개하고 정칙화 모수를 고르는 전략을 논한다.
+- **능형회귀 개관** — 동기, 정식화, 닫힌 형태 해, Gauss-Markov 절충, 기하적·베이즈적 해석, 실무 지침을 아우르는 종합 참고.
+
+### 18.3 라쏘 회귀
+
+축소와 변수선택을 동시에 수행하는 L1 벌점 회귀:
+
+- **라쏘의 정식화와 희소성** — 라쏘 추정량을 유도하고, L1 벌점이 왜 일부 계수를 정확히 0으로 만들어 희소 모형을 낳는지 설명한다.
+- **기하적 해석 (L1 벌점)** — 라쏘를 타원형 OLS 등고선과 마름모꼴(교차다면체) 제약이 닿는 지점으로 시각화하며, 축 위의 꼭짓점이 희소성을 설명함을 보인다.
+- **베이즈 해석 (라플라스 사전분포)** — 라쏘 추정량이 라플라스(이중지수) 사전분포 아래의 사후최빈값에 대응하며, 이 사전분포가 가우스보다 0 근처에 더 많은 질량을 둠을 보인다.
+- **좌표하강 알고리즘** — 좌표를 순회하며 연성 문턱 갱신을 적용하는 라쏘 적합용 반복 최적화 알고리즘을 서술한다.
+- **변수선택 도구로서의 라쏘** — 라쏘의 희소성이 고차원 상황에서 자동 변수선택과 해석 가능한 모형을 가능하게 하는 방식을 논한다.
+- **라쏘 회귀 개관** — 라쏘의 정식화, L1 희소성 기제, 정확한 0에 대한 기하적 논증, 능형회귀와의 비교를 담은 상세 참고.
+
+### 18.4 엘라스틱넷
+
+L1과 L2 벌점을 결합한 혼합 정칙화 방법:
+
+- **엘라스틱넷의 정식화** — 두 초모수(또는 동등하게 혼합비와 전체 벌점 강도)로 조절되는 L1과 L2 벌점의 볼록결합으로 목적함수를 정의한다.
+- **순수 능형·라쏘 대비 장점** — 상관된 설명변수에서 라쏘가 갖는 한계와 변수선택을 못 하는 능형회귀의 한계를 엘라스틱넷이 어떻게 극복하는지 설명한다.
+- **상관된 변수에 대한 그룹 효과** — 라쏘가 상관된 변수 중 하나를 임의로 고르고 나머지를 버리는 것과 달리, 엘라스틱넷이 상관된 변수 집단을 함께 선택하거나 함께 배제하는 경향을 보인다.
+- **엘라스틱넷 개관** — 목적함수, 주요 특징, 그룹 효과, 상관된 설명변수의 처리, 능형·라쏘와의 실무적 비교를 아우르는 종합 참고.
+
+### 18.5 초모수 조정
+
+정칙화 모수를 고르는 전략:
+
+- **$\lambda$ 선택을 위한 교차검증** — 정칙화 강도를 고르는 표준 방법인 $k$-겹 교차검증과, 더 단순한 모형을 위한 1-표준오차 규칙을 서술한다.
+- **정칙화 경로** — $\lambda$가 변할 때 모형 계수가 어떻게 변화하는지 추적하여, 변수 활성화 순서, 편향-분산 절충, 모형 복잡도와의 연결을 보인다.
+- **정칙화 모형의 정보기준** — $\lambda$ 선택에서 교차검증보다 계산이 싼 대안으로 AIC, BIC 및 관련 기준의 사용을 논한다.
+
+### 18.6 차원축소 방법
+
+계수를 축소하는 대신 설명변수 공간 자체를 줄이는 접근:
+
+- **PCR과 PLS 개관** — 설명변수 수가 관측 수를 넘거나 심한 다중공선성이 있는 상황에서 차원축소가 필요한 이유를 제시한다.
+- **주성분회귀** — 설명변수 공간의 분산을 최대화하는 주성분을 뽑은 뒤 그중 일부에 반응변수를 회귀시켜 PCA와 회귀를 결합한다.
+- **부분최소제곱** — 설명변수와 반응변수의 공분산을 최대화하는 성분을 구성하는 지도학습형 차원축소 방법으로, PCR보다 적은 성분으로 충분한 경우가 많다.
+
+### 18.7 개관과 비교
+
+적절한 정칙화 접근을 고르기 위한 지침:
+
+- **능형 대 라쏘 대 엘라스틱넷** — 벌점 유형, 희소성, 다중공선성 처리, 계산비용, 전형적 용도에 걸쳐 세 방법을 나란히 비교한다.
+- **방법 선택 지침** — 자료의 특성(설명변수 수, 상관 구조, 해석 가능성 요구)에 근거한 실무적 결정 규칙.
+- **개관** — 능형, 라쏘, 엘라스틱넷과 차원축소 접근을 포함한 모든 정칙화 방법과 그 응용을 요약하고 실무 권고를 제시한다.
+
+### 18.8 코드
+
+완전한 파이썬 구현:
+
+- **ridge_examples.py** — 능형회귀 적합, 계수 경로, 교차검증.
+- **lasso_examples.py** — 라쏘 회귀 적합, 희소성 시연, 변수선택.
+- **elastic_net_examples.py** — 엘라스틱넷 적합과 능형·라쏘와의 비교.
+- **reg_compare.py** — 같은 자료에서 능형, 라쏘, 엘라스틱넷의 나란한 비교.
+- **cv_tuning.py** — 교차검증과 $\lambda$ 조정, 교차검증 오차 곡선 시각화.
+- **lasso_housing_regularization_path.py** — 주택 자료에 대한 라쏘 정칙화 경로 시각화와 변수 활성화 순서.
+- **pcr_pls_examples.py** — 교차검증으로 성분 수를 고르는 주성분회귀와 부분최소제곱 구현.
+
+### 18.9 연습문제
+
+개념 문제(직교 설계에서 능형과 라쏘의 닫힌 형태 해, 엘라스틱넷의 그룹 효과, 유효자유도)와 계산 문제(정칙화 모형 적합, 계수 추정값 비교, 교차검증 조정, 정칙화 경로 분석)를 모두 다룬다.
 
 ---
 
-## Key Takeaways
+## 선행 지식
 
-1. Regularization introduces bias to reduce variance, deliberately trading a small increase in bias for a large reduction in variance to minimize overall prediction error.
-2. Ridge regression (L2) shrinks all coefficients toward zero but never eliminates any, making it ideal for handling multicollinearity when all predictors are potentially relevant.
-3. Lasso regression (L1) produces sparse models by driving irrelevant coefficients to exactly zero, enabling simultaneous regularization and feature selection.
-4. Elastic Net combines L1 and L2 penalties to overcome Lasso's instability with correlated predictors while retaining the ability to perform variable selection through the grouping effect.
-5. Cross-validation is the standard method for selecting regularization hyperparameters, with the regularization path providing visual insight into how model complexity changes with penalty strength.
-6. Dimensionality reduction methods (PCR, PLS) offer alternatives when the number of predictors is very large, constructing a small number of latent components that capture the essential structure in the predictors.
+이 장은 다음 내용 위에 세워진다:
+
+- **13장**(선형회귀) — 보통최소제곱 추정, 정규방정식, 잔차 분석, 모형선택 기준(AIC, BIC, 교차검증).
+- **6장**(통계적 추정) — 편향-분산 절충, 평균제곱오차의 분해, 최대가능도 추정.
+- **0장**(선수 지식) — 역행렬, 고윳값, 특이값분해, 양정치행렬을 포함한 선형대수의 토대.
+- **12장**(상관과 인과) — 다중공선성과 그것이 회귀 추정에 미치는 영향의 이해.
+
+---
+
+## 핵심 요약
+
+1. 정칙화는 분산을 줄이기 위해 편향을 들여온다. 편향의 작은 증가를 분산의 큰 감소와 맞바꾸어 전체 예측오차를 최소화한다.
+2. 능형회귀(L2)는 모든 계수를 0 쪽으로 축소하되 어떤 것도 제거하지 않으므로, 모든 설명변수가 잠재적으로 유의미한 다중공선성 상황에 적합하다.
+3. 라쏘 회귀(L1)는 무관한 계수를 정확히 0으로 만들어 희소 모형을 낳으며, 정칙화와 변수선택을 동시에 수행한다.
+4. 엘라스틱넷은 L1과 L2 벌점을 결합하여 상관된 설명변수에서 라쏘가 보이는 불안정성을 극복하면서, 그룹 효과를 통해 변수선택 능력을 유지한다.
+5. 교차검증은 정칙화 초모수를 고르는 표준 방법이며, 정칙화 경로는 벌점 강도에 따라 모형 복잡도가 어떻게 변하는지 시각적으로 보여준다.
+6. 차원축소 방법(PCR, PLS)은 설명변수가 매우 많을 때의 대안으로, 설명변수의 본질적 구조를 담은 소수의 잠재성분을 구성한다.

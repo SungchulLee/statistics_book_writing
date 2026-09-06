@@ -1,167 +1,193 @@
-# Bayesian Interpretation (Gaussian Prior)
+# 베이즈 해석 (가우스 사전분포)
 
-Ridge regression can be derived purely from a penalized optimization perspective, but it also arises naturally as the maximum a posteriori (MAP) estimate in a Bayesian linear model with a Gaussian prior on the coefficients. This connection provides both a principled interpretation of the regularization parameter $\lambda$ and a pathway to full posterior inference, including uncertainty quantification through credible intervals.
+능형회귀는 순전히 벌점최적화의 관점에서 유도할 수 있지만, 계수에 가우스 사전분포를 둔 베이즈 선형모형에서 사후최빈값(MAP) 추정으로도 자연스럽게 나온다. 이 연결은 정칙화 모수 $\lambda$에 원리적인 해석을 주고, 신용구간을 통한 불확실성 정량화를 포함한 완전한 사후추론으로 가는 길을 연다.
 
-## The Bayesian Linear Model
+## 베이즈 선형모형
 
-Assume the standard linear model with Gaussian errors:
+가우스 오차를 갖는 표준 선형모형을 가정한다.
 
 $$
 \mathbf{y} \mid \boldsymbol{\beta} \sim N(\mathbf{X}\boldsymbol{\beta},\; \sigma^2\mathbf{I}_n)
 $$
 
-Place a Gaussian prior on the coefficient vector, expressing the belief that coefficients are likely to be small:
+계수가 작을 가능성이 높다는 믿음을 표현하는 가우스 사전분포를 둔다.
 
 $$
 \boldsymbol{\beta} \sim N(\mathbf{0},\; \tau^2\mathbf{I}_p)
 $$
 
-The parameter $\tau^2$ controls the prior variance: a small $\tau^2$ expresses strong belief that coefficients are near zero, while a large $\tau^2$ represents a diffuse prior with minimal constraint.
+모수 $\tau^2$이 사전분산을 조절한다. $\tau^2$이 작으면 계수가 0 근처라는 강한 믿음을, 크면 제약이 거의 없는 산만한 사전분포를 뜻한다.
 
-## Deriving the MAP Estimate
+## MAP 추정값의 유도
 
-The posterior distribution is proportional to the product of the likelihood and the prior:
-
-$$
-p(\boldsymbol{\beta} \mid \mathbf{y}) \propto p(\mathbf{y} \mid \boldsymbol{\beta})\, p(\boldsymbol{\beta})
-$$
-
-Taking the negative log-posterior:
+사후분포는 가능도와 사전분포의 곱에 비례한다. 음의 로그사후를 취하면
 
 $$
--\log p(\boldsymbol{\beta} \mid \mathbf{y}) = \frac{1}{2\sigma^2}\|\mathbf{y} - \mathbf{X}\boldsymbol{\beta}\|^2 + \frac{1}{2\tau^2}\|\boldsymbol{\beta}\|^2 + \text{const}
+-\log p(\boldsymbol{\beta} \mid \mathbf{y}) = \frac{1}{2\sigma^2}\|\mathbf{y} - \mathbf{X}\boldsymbol{\beta}\|^2 + \frac{1}{2\tau^2}\|\boldsymbol{\beta}\|^2 + \text{상수}
 $$
 
-Minimizing the negative log-posterior is equivalent to minimizing:
+이며, 이를 최소화하는 것은
 
 $$
 \|\mathbf{y} - \mathbf{X}\boldsymbol{\beta}\|^2 + \frac{\sigma^2}{\tau^2}\|\boldsymbol{\beta}\|^2
 $$
 
-This is the ridge regression objective with:
+의 최소화와 동등하다. 이것이 바로 능형회귀 목적함수이며
 
 $$
 \lambda = \frac{\sigma^2}{\tau^2}
 $$
 
-The MAP estimate (the mode of the posterior) is therefore the ridge estimate:
+이다. 따라서 MAP 추정값(사후분포의 최빈값)은 능형 추정값이다.
 
 $$
 \hat{\boldsymbol{\beta}}_{\text{MAP}} = (\mathbf{X}^\top\mathbf{X} + \lambda\mathbf{I})^{-1}\mathbf{X}^\top\mathbf{y}
 $$
 
-!!! note "Interpreting the Regularization Parameter"
-    The relationship $\lambda = \sigma^2/\tau^2$ reveals that the regularization strength reflects the **signal-to-noise ratio** of the prior. When prior variance $\tau^2$ is small relative to noise variance $\sigma^2$, we have large $\lambda$ and strong regularization. When the prior is diffuse ($\tau^2 \to \infty$), $\lambda \to 0$ and the MAP estimate approaches OLS.
+!!! note "정칙화 모수의 해석"
+    관계식 $\lambda = \sigma^2/\tau^2$은 정칙화 강도가 사전분포의 **신호 대 잡음비**를 반영함을 보여준다. 사전분산 $\tau^2$이 잡음분산 $\sigma^2$에 비해 작으면 $\lambda$가 커져 강한 정칙화가 된다. 사전분포가 산만해지면($\tau^2 \to \infty$) $\lambda \to 0$이 되어 MAP 추정값이 OLS에 접근한다.
 
-## The Full Posterior Distribution
+## 완전한 사후분포
 
-Because both the likelihood and the prior are Gaussian, the posterior is also Gaussian. Using standard results for conjugate Gaussian models:
+가능도와 사전분포가 모두 가우스이므로 사후분포도 가우스다. 켤레 가우스 모형의 표준 결과를 쓰면
 
 $$
 \boldsymbol{\beta} \mid \mathbf{y} \sim N\bigl(\boldsymbol{\mu}_{\text{post}},\; \boldsymbol{\Sigma}_{\text{post}}\bigr)
 $$
 
-where the posterior mean and covariance are:
+이며
 
 $$
-\boldsymbol{\mu}_{\text{post}} = (\mathbf{X}^\top\mathbf{X} + \lambda\mathbf{I})^{-1}\mathbf{X}^\top\mathbf{y} = \hat{\boldsymbol{\beta}}_{\text{ridge}}
-$$
-
-$$
+\boldsymbol{\mu}_{\text{post}} = (\mathbf{X}^\top\mathbf{X} + \lambda\mathbf{I})^{-1}\mathbf{X}^\top\mathbf{y} = \hat{\boldsymbol{\beta}}_{\text{ridge}}, \qquad
 \boldsymbol{\Sigma}_{\text{post}} = \sigma^2(\mathbf{X}^\top\mathbf{X} + \lambda\mathbf{I})^{-1}
 $$
 
-The posterior mean coincides with the ridge estimate, and the posterior covariance provides a natural measure of uncertainty. Bayesian credible intervals for each coefficient $\beta_j$ follow directly from the marginal posterior:
-
-$$
-\beta_j \mid \mathbf{y} \sim N\bigl([\boldsymbol{\mu}_{\text{post}}]_j,\; [\boldsymbol{\Sigma}_{\text{post}}]_{jj}\bigr)
-$$
-
-A $95\%$ credible interval for $\beta_j$ is:
+이다. 사후평균이 능형 추정값과 일치하고, 사후공분산이 자연스러운 불확실성 척도를 제공한다. 각 계수의 $95\%$ 신용구간은
 
 $$
 [\boldsymbol{\mu}_{\text{post}}]_j \pm 1.96\,\sqrt{[\boldsymbol{\Sigma}_{\text{post}}]_{jj}}
 $$
 
-## Prior Strength and Its Effect
+이다.
 
-The prior $\boldsymbol{\beta} \sim N(\mathbf{0}, \tau^2\mathbf{I})$ assumes:
+## 사전분포의 강도와 그 효과
 
-1. **Zero mean.** The prior expects coefficients to be near zero, which is reasonable when there is no prior information favoring specific directions.
-2. **Isotropic variance.** All coefficients are given the same prior variance $\tau^2$, which is why standardizing predictors before applying ridge is important: it ensures the prior treats all coefficients symmetrically in their natural scales.
-3. **Independence.** The prior assumes coefficients are a priori independent, encoded by the identity covariance structure.
+사전분포 $\boldsymbol{\beta} \sim N(\mathbf{0}, \tau^2\mathbf{I})$은 다음을 가정한다.
 
-| Prior variance $\tau^2$ | $\lambda = \sigma^2/\tau^2$ | Effect |
+1. **평균 0.** 특정 방향을 선호할 사전정보가 없을 때 합리적이다.
+2. **등방 분산.** 모든 계수에 같은 사전분산 $\tau^2$을 준다. 능형회귀 전에 설명변수를 표준화해야 하는 이유가 여기에 있다. 표준화해야 사전분포가 모든 계수를 각자의 자연스러운 척도에서 대칭적으로 다룬다.
+3. **독립.** 단위행렬 공분산 구조가 계수들의 사전 독립을 부호화한다.
+
+| 사전분산 $\tau^2$ | $\lambda = \sigma^2/\tau^2$ | 효과 |
 |---|---|---|
-| Large (diffuse prior) | Small | Weak regularization, close to OLS |
-| Moderate | Moderate | Balanced shrinkage |
-| Small (tight prior) | Large | Strong shrinkage toward zero |
-| $\tau^2 \to 0$ | $\lambda \to \infty$ | All coefficients shrunk to zero |
+| 큼 (산만한 사전분포) | 작음 | 약한 정칙화, OLS에 근접 |
+| 중간 | 중간 | 균형 잡힌 축소 |
+| 작음 (조밀한 사전분포) | 큼 | 0 쪽으로 강한 축소 |
+| $\tau^2 \to 0$ | $\lambda \to \infty$ | 모든 계수가 0으로 |
 
-## Empirical Bayes and Hyperparameter Estimation
+## 경험적 베이즈와 초모수 추정
 
-In practice, $\sigma^2$ and $\tau^2$ (and hence $\lambda$) are unknown. The **empirical Bayes** approach estimates these from the data by maximizing the marginal likelihood:
-
-$$
-p(\mathbf{y}) = \int p(\mathbf{y} \mid \boldsymbol{\beta})\, p(\boldsymbol{\beta})\, d\boldsymbol{\beta}
-$$
-
-For the Gaussian model, this integral is tractable:
+실무에서 $\sigma^2$과 $\tau^2$(따라서 $\lambda$)은 알려져 있지 않다. **경험적 베이즈** 접근은 주변가능도를 최대화하여 이들을 자료에서 추정한다. 가우스 모형에서 이 적분은 다룰 수 있다.
 
 $$
 \mathbf{y} \sim N(\mathbf{0},\; \sigma^2\mathbf{I} + \tau^2\mathbf{X}\mathbf{X}^\top)
 $$
 
-Maximizing $p(\mathbf{y})$ over $\sigma^2$ and $\tau^2$ provides data-driven estimates of the regularization strength, connecting the Bayesian and cross-validation approaches to selecting $\lambda$.
+$p(\mathbf{y})$를 $\sigma^2$과 $\tau^2$에 대해 최대화하면 자료 기반의 정칙화 강도 추정값을 얻으며, 이는 $\lambda$ 선택의 베이즈적 접근과 교차검증 접근을 잇는다.
 
-!!! tip "Bayesian vs Frequentist Uncertainty"
-    The posterior covariance $\boldsymbol{\Sigma}_{\text{post}}$ is smaller than the frequentist covariance of OLS ($\sigma^2(\mathbf{X}^\top\mathbf{X})^{-1}$) because it incorporates the prior information. Bayesian credible intervals for ridge coefficients are therefore narrower than OLS confidence intervals, reflecting the reduced uncertainty from regularization.
+!!! tip "베이즈 불확실성과 빈도주의 불확실성"
+    사후공분산 $\boldsymbol{\Sigma}_{\text{post}}$은 OLS의 빈도주의 공분산 $\sigma^2(\mathbf{X}^\top\mathbf{X})^{-1}$보다 작다. 사전정보를 반영했기 때문이다. 따라서 능형 계수의 베이즈 신용구간은 OLS 신뢰구간보다 좁다.
 
-## Connection to Other Priors
+    **다만 이 비교를 "능형이 더 정확하다"로 읽으면 안 된다.** 신용구간이 좁은 것은 사전분포가 맞다는 **가정 아래에서**의 이야기다. 사전분포가 틀렸다면 구간이 참값을 포함하지 못한다. 빈도주의 관점에서 능형 추정량은 편향되어 있으므로, 사후 신용구간이 참 계수를 명목 확률로 덮는다는 보장이 없다.
 
-The Gaussian prior is just one choice. Different priors lead to different regularization methods:
+## 다른 사전분포와의 연결
 
-| Prior on $\boldsymbol{\beta}$ | Regularization | Penalty |
+가우스 사전분포는 하나의 선택일 뿐이다. 다른 사전분포는 다른 정칙화를 낳는다.
+
+| $\boldsymbol{\beta}$의 사전분포 | 정칙화 | 벌점 |
 |---|---|---|
-| $N(\mathbf{0}, \tau^2\mathbf{I})$ (Gaussian) | Ridge | $\lambda\|\boldsymbol{\beta}\|_2^2$ |
-| Laplace$(0, b)$ | Lasso | $\lambda\|\boldsymbol{\beta}\|_1$ |
-| Spike-and-slab | Best subset selection | $\lambda\|\boldsymbol{\beta}\|_0$ |
+| $N(\mathbf{0}, \tau^2\mathbf{I})$ (가우스) | 능형 | $\lambda\|\boldsymbol{\beta}\|_2^2$ |
+| Laplace$(0, b)$ | 라쏘 | $\lambda\|\boldsymbol{\beta}\|_1$ |
+| 스파이크-앤-슬랩 | 최량 부분집합 선택 | $\lambda\|\boldsymbol{\beta}\|_0$ |
 
-The Gaussian prior is smooth at zero with light tails, which explains why ridge shrinks coefficients smoothly without producing exact zeros. The Laplace prior, with its cusp at zero and heavier tails, encourages sparsity and corresponds to lasso regularization, as discussed in the next section.
+가우스 사전분포는 0에서 매끄럽고 꼬리가 가벼워, 능형이 정확한 0을 만들지 않고 매끄럽게 축소하는 이유를 설명한다. 라플라스 사전분포는 0에서 뾰족하고 꼬리가 두꺼워 희소성을 촉진하며 라쏘 정칙화에 대응한다.
 
-## Summary
+## 요약
 
-Ridge regression is the MAP estimate under a Bayesian linear model with Gaussian prior $\boldsymbol{\beta} \sim N(\mathbf{0}, \tau^2\mathbf{I})$. The regularization parameter is $\lambda = \sigma^2/\tau^2$, linking prior belief about coefficient magnitude to the penalty strength. The Gaussian conjugacy yields a closed-form posterior that provides both point estimates (the ridge solution) and uncertainty quantification (credible intervals). The choice of a Gaussian prior, with its smooth density at zero, is the Bayesian explanation for why ridge shrinks but does not eliminate coefficients.
+능형회귀는 가우스 사전분포 $\boldsymbol{\beta} \sim N(\mathbf{0}, \tau^2\mathbf{I})$을 둔 베이즈 선형모형의 MAP 추정값이다. 정칙화 모수는 $\lambda = \sigma^2/\tau^2$이며, 계수 크기에 대한 사전 믿음을 벌점 강도와 잇는다. 가우스 켤레성 덕분에 닫힌 형태의 사후분포를 얻어 점추정(능형 해)과 불확실성 정량화(신용구간)를 모두 제공한다. 0에서 매끄러운 가우스 밀도가 능형이 계수를 축소하되 제거하지 않는 이유에 대한 베이즈적 설명이다.
 
+## 연습문제
 
-## Exercises
+**연습문제 1.**
+사후 표준편차가 OLS 표준오차보다 작다는 주장을 수치로 확인하고, 그것이 무엇을 뜻하는지 논하라.
 
-**Exercise 1.**
-Describe the main concept of Bayesian Interpretation (Gaussian Prior) and explain why it matters for statistical practice.
+??? success "연습문제 1 풀이"
+    $\rho = 0.95$인 등상관 설명변수 4개, $n = 50$, $\sigma = 1$에서 계산한다.
 
-??? success "Solution to Exercise 1"
-    Bayesian Interpretation (Gaussian Prior) is a core topic in statistics that provides tools for drawing reliable inferences from data. It matters because proper application ensures valid conclusions, correctly quantified uncertainty, and appropriate handling of the assumptions that underpin the method. Practitioners who understand this concept can avoid common pitfalls and choose the right analytical approach for their data.
+    ```python
+    import numpy as np
+    A = X.T @ X
+    for lam in (0, 1, 10):
+        C = np.linalg.inv(A + lam*np.eye(p))      # sigma^2 = 1
+        print(lam, np.sqrt(np.diag(C)))
+    ```
+
+    | $\lambda$ | $\text{sd}(\hat\beta_1)$ | $\text{sd}(\hat\beta_2)$ | $\text{sd}(\hat\beta_3)$ | $\text{sd}(\hat\beta_4)$ |
+    |---:|---:|---:|---:|---:|
+    | 0 (OLS) | 0.656 | 0.663 | 0.666 | 0.650 |
+    | 1 | 0.526 | 0.523 | 0.530 | 0.519 |
+    | 10 | **0.257** | 0.252 | 0.258 | 0.254 |
+
+    $\lambda = 10$에서 표준편차가 OLS의 **약 39%**로 줄어든다.
+
+    **그러나 이것을 "능형이 더 정확하다"로 읽으면 안 된다.** 두 가지를 구별해야 한다.
+
+    - $\boldsymbol{\Sigma}_{\text{post}}$는 **사전분포가 맞다는 가정 아래** $\boldsymbol{\beta}$에 대한 불확실성이다.
+    - 빈도주의 관점에서 능형 추정량은 편향되어 있으므로, 참 오차는 분산뿐 아니라 **편향의 제곱**도 포함한다.
+
+    즉 위 표의 값들은 $\sqrt{\text{Var}}$이지 $\sqrt{\text{MSE}}$가 아니다. 좁은 신용구간이 참 계수를 95% 확률로 덮는다는 보장은 **사전분포가 실제로 옳을 때만** 성립한다.
+
+    실무적 함의: **능형 계수의 신용구간을 신뢰구간처럼 보고하지 말라.** 예측구간이 목표라면 붓스트랩(17장)이 더 안전하다.
 
 ---
 
-**Exercise 2.**
-State the key assumptions required by the method discussed here. How can each assumption be checked?
+**연습문제 2.**
+경험적 베이즈로 $\lambda$를 추정하고 교차검증이 고른 $\lambda$와 비교하라.
 
-??? success "Solution to Exercise 2"
-    The main assumptions typically include: (1) independence of observations -- verified by understanding the data collection process and checking for serial correlation; (2) distributional requirements (e.g., normality) -- checked with Q-Q plots and formal tests like Shapiro-Wilk; (3) equal variances (if applicable) -- assessed with boxplots and Levene's test. When assumptions are violated, consider robust alternatives, transformations, or nonparametric methods.
+??? success "연습문제 2 풀이"
+    주변가능도 $\mathbf{y} \sim N(\mathbf{0}, \sigma^2\mathbf{I} + \tau^2\mathbf{X}\mathbf{X}^\top)$을 $\tau^2$에 대해 최대화한다.
 
----
+    ```python
+    import numpy as np
+    from scipy.optimize import minimize_scalar
+    from sklearn.linear_model import RidgeCV
 
-**Exercise 3.**
-Work through a small numerical example illustrating the application of the technique from this section.
+    def neg_loglik(log_t2):
+        t2 = np.exp(log_t2)
+        Sig = sig**2*np.eye(n) + t2*(X @ X.T)
+        _, logdet = np.linalg.slogdet(Sig)
+        return 0.5*(logdet + y @ np.linalg.solve(Sig, y))
 
-??? success "Solution to Exercise 3"
-    A structured approach to applying this technique involves: (1) clearly stating the hypotheses or estimation goal; (2) verifying that the data meet the required assumptions; (3) computing the relevant test statistic, estimate, or model fit; (4) obtaining the p-value, confidence interval, or posterior distribution; (5) interpreting the result in the context of the original question. Following these steps systematically ensures a rigorous and reproducible analysis.
+    r = minimize_scalar(neg_loglik, bounds=(-8, 8), method='bounded')
+    tau2 = np.exp(r.x)
+    print("empirical Bayes lambda =", sig**2/tau2)
 
----
+    rc = RidgeCV(alphas=np.logspace(-3, 4, 200), fit_intercept=False).fit(X, y)
+    print("RidgeCV (LOOCV) lambda =", rc.alpha_)
+    ```
 
-**Exercise 4.**
-Compare the approach from this section with an alternative method. When would you choose each?
+    | 방법 | $\lambda$ |
+    |:---|---:|
+    | 경험적 베이즈 ($\hat\tau^2 = 1.781$) | **0.562** |
+    | 하나 남기기 교차검증 (`RidgeCV`) | **0.290** |
 
-??? success "Solution to Exercise 4"
-    The method discussed here is appropriate when its assumptions hold and the sample size is sufficient for the asymptotic approximations to be accurate. Alternative approaches include: (1) nonparametric methods -- preferred when distributional assumptions are suspect; (2) bootstrap methods -- useful when analytical reference distributions are unavailable; (3) Bayesian methods -- valuable when incorporating prior information or when direct probability statements about parameters are desired. Running multiple approaches and comparing results provides a useful robustness check.
+    같은 자릿수이지만 2배 차이가 난다. 두 방법이 **다른 것을 최적화**하기 때문이다.
+
+    | | 최적화 대상 |
+    |:---|:---|
+    | 경험적 베이즈 | 주변가능도 $p(\mathbf{y})$ — 모형이 자료를 얼마나 잘 설명하는가 |
+    | 교차검증 | 표본외 예측오차 — 새 자료를 얼마나 잘 맞히는가 |
+
+    두 목표는 관련되지만 같지 않다. 경험적 베이즈는 가우스 사전분포가 실제로 옳을 때 효율적이고, 교차검증은 사전분포가 틀려도 예측 성능을 직접 겨냥한다.
+
+    **실무 권고: 예측이 목적이면 교차검증을 쓴다.** 경험적 베이즈는 계산이 훨씬 싸므로(닫힌 형태의 주변가능도를 한 번 최적화한다) 자료가 매우 크거나 $\lambda$를 여러 번 다시 골라야 할 때 유용하다.

@@ -1,118 +1,145 @@
-# Geometric Interpretation (L2 Penalty)
+# 기하적 해석 (L2 벌점)
 
-The algebraic formulation of ridge regression, while precise, does not immediately reveal why ridge shrinks coefficients uniformly toward zero or why it never produces exact zeros. A geometric perspective makes both properties visually intuitive. By viewing the ridge problem as constrained optimization, we can understand the solution as the point where elliptical contours of the residual sum of squares first touch a spherical constraint region.
+능형회귀의 대수적 정식화는 정확하지만, 왜 계수가 0 쪽으로 고르게 축소되는지, 왜 정확한 0이 나오지 않는지를 곧바로 보여주지는 않는다. 기하적 관점은 두 성질을 시각적으로 명료하게 만든다. 능형 문제를 제약최적화로 보면, 해는 잔차제곱합의 타원형 등고선이 구형 제약영역에 처음 닿는 점이다.
 
-## RSS Contours in Coefficient Space
+## 계수공간에서의 RSS 등고선
 
-Consider a regression problem with two predictors for visualization. The residual sum of squares is:
+시각화를 위해 설명변수가 두 개인 회귀를 생각하자. 잔차제곱합은
 
 $$
 \text{RSS}(\boldsymbol{\beta}) = \|\mathbf{y} - \mathbf{X}\boldsymbol{\beta}\|^2
 $$
 
-This is a convex quadratic function of $\boldsymbol{\beta}$, and its level sets (contours of constant RSS) are **ellipses** centered at the OLS estimate $\hat{\boldsymbol{\beta}}_{\text{OLS}}$. The shape and orientation of these ellipses are determined by the eigenstructure of $\mathbf{X}^\top\mathbf{X}$:
+이다. 이는 $\boldsymbol{\beta}$의 볼록 이차함수이며 그 등위집합(RSS가 일정한 등고선)은 OLS 추정값 $\hat{\boldsymbol{\beta}}_{\text{OLS}}$를 중심으로 하는 **타원**이다. 타원의 모양과 방향은 $\mathbf{X}^\top\mathbf{X}$의 고유구조가 결정한다.
 
-- The axes of the ellipses align with the eigenvectors of $\mathbf{X}^\top\mathbf{X}$.
-- The axis lengths are inversely proportional to the square roots of the eigenvalues.
-- When eigenvalues differ substantially (near-collinearity), the ellipses are elongated.
+- 타원의 축은 $\mathbf{X}^\top\mathbf{X}$의 고유벡터와 정렬된다.
+- 축의 길이는 고윳값의 제곱근에 반비례한다.
+- 고윳값 차이가 크면(준선형종속) 타원이 길게 늘어난다.
 
-## The L2 Constraint Region
+## L2 제약영역
 
-The constrained form of ridge regression restricts $\boldsymbol{\beta}$ to the L2 ball:
+능형회귀의 제약 형태는 $\boldsymbol{\beta}$를 L2 공에 가둔다.
 
 $$
-\|\boldsymbol{\beta}\|_2^2 = \beta_1^2 + \beta_2^2 + \cdots + \beta_p^2 \leq t
+\|\boldsymbol{\beta}\|_2^2 = \beta_1^2 + \cdots + \beta_p^2 \leq t
 $$
 
-In two dimensions, this constraint region is a **disk** of radius $\sqrt{t}$ centered at the origin. In $p$ dimensions, it is a hypersphere. The key geometric properties are:
+2차원에서 이 제약영역은 원점을 중심으로 반지름 $\sqrt{t}$인 **원판**이고, $p$차원에서는 초구다. 핵심 기하적 성질은 다음과 같다.
 
-- The boundary $\|\boldsymbol{\beta}\|_2^2 = t$ is **smooth everywhere** (no corners, edges, or vertices).
-- The boundary is **strictly convex**: every boundary point has a unique supporting hyperplane.
-- The constraint region is **symmetric** about all coordinate axes and all rotations.
+- 경계 $\|\boldsymbol{\beta}\|_2^2 = t$는 **어디서나 매끄럽다**(꼭짓점, 모서리가 없다).
+- 경계는 **강볼록**이다. 모든 경계점이 유일한 지지초평면을 갖는다.
+- 제약영역은 모든 좌표축과 모든 회전에 대해 **대칭**이다.
 
-## The Ridge Solution as a Tangency Point
+## 접점으로서의 능형 해
 
-The ridge estimate is the point inside (or on the boundary of) the L2 ball that minimizes RSS. Geometrically, we shrink the RSS ellipse from its center $\hat{\boldsymbol{\beta}}_{\text{OLS}}$ until it first touches the ball. The touching point is $\hat{\boldsymbol{\beta}}_{\text{ridge}}$.
+능형 추정값은 L2 공 안(또는 경계 위)에서 RSS를 최소화하는 점이다. 기하적으로는 중심 $\hat{\boldsymbol{\beta}}_{\text{OLS}}$에서 RSS 타원을 줄여 나가다가 공에 처음 닿는 점이 $\hat{\boldsymbol{\beta}}_{\text{ridge}}$다.
 
-At this tangency point, the KKT conditions require:
+이 접점에서 KKT 조건은
 
 $$
 \nabla \text{RSS}(\hat{\boldsymbol{\beta}}_{\text{ridge}}) = -\lambda\,\nabla\|\boldsymbol{\beta}\|_2^2\big|_{\hat{\boldsymbol{\beta}}_{\text{ridge}}}
 $$
 
-which simplifies to the familiar normal equations:
+를 요구하며, 이는 익숙한 정규방정식으로 정리된다.
 
 $$
 -2\mathbf{X}^\top(\mathbf{y} - \mathbf{X}\hat{\boldsymbol{\beta}}_{\text{ridge}}) = -2\lambda\hat{\boldsymbol{\beta}}_{\text{ridge}}
 $$
 
-The gradient of the RSS (pointing away from the OLS center) must be parallel to the gradient of the constraint (pointing radially outward from the origin). This parallelism condition is what produces the ridge normal equations.
+RSS의 기울기(OLS 중심에서 바깥을 향한다)가 제약의 기울기(원점에서 방사상 바깥을 향한다)와 평행해야 한다. 이 평행 조건이 능형 정규방정식을 낳는다.
 
-## Why Ridge Never Produces Exact Zeros
+## 능형회귀가 정확한 0을 만들지 않는 이유
 
-The sphere boundary has no corners. In two dimensions, a corner at $(t, 0)$ would be a point where the boundary changes direction abruptly, creating a region where the tangent is not unique. The sphere has no such points.
+구의 경계에는 꼭짓점이 없다. 2차원에서 $(t, 0)$ 같은 꼭짓점은 경계의 방향이 급격히 바뀌어 접선이 유일하지 않은 점인데, 구에는 그런 점이 없다.
 
-For an RSS contour to be tangent to the sphere at a coordinate axis (say at $(\beta_1, 0)$), the gradient of RSS at that point would need to point exactly along the $\beta_1$-axis. This requires the off-diagonal structure of $\mathbf{X}^\top\mathbf{X}$ to satisfy a measure-zero condition. In practice, the tangency point generically lies in the interior of a face of the positive orthant, meaning all coordinates are nonzero.
+RSS 등고선이 좌표축 위(가령 $(\beta_1, 0)$)에서 구에 접하려면 그 점에서 RSS의 기울기가 정확히 $\beta_1$축을 향해야 한다. 이는 $\mathbf{X}^\top\mathbf{X}$의 비대각 구조가 측도 0인 조건을 만족해야 함을 뜻한다. 실제로는 접점이 양의 초팔분공간의 면 내부에 놓이므로 모든 좌표가 0이 아니다.
 
-!!! note "Contrast with the L1 Geometry"
-    The L1 constraint set (a diamond or cross-polytope) has corners exactly on the coordinate axes. Because RSS contours are smooth ellipses, the first contact with a diamond-shaped region generically occurs at a corner, producing exact zeros. This geometric difference is the fundamental reason lasso achieves sparsity while ridge does not.
+!!! note "L1 기하와의 대조"
+    L1 제약집합(마름모 또는 교차다면체)은 좌표축 위에 정확히 꼭짓점을 갖는다. RSS 등고선이 매끄러운 타원이므로 마름모꼴 영역과의 첫 접촉은 일반적으로 꼭짓점에서 일어나고 정확한 0이 만들어진다. 이 기하적 차이가 라쏘는 희소성을 얻고 능형은 얻지 못하는 근본 이유다.
 
-## Shrinkage Toward the Origin
+## 원점을 향한 축소
 
-The geometric picture also explains **why** ridge shrinks toward the origin (zero vector) rather than toward some other point. The L2 constraint $\|\boldsymbol{\beta}\|_2^2 \leq t$ is centered at the origin. The ridge solution lies on the line segment from the origin to $\hat{\boldsymbol{\beta}}_{\text{OLS}}$, pulled toward the center of the ball.
+기하적 그림은 능형이 **왜** 다른 점이 아니라 원점(영벡터)을 향해 축소하는지도 설명한다. 제약 $\|\boldsymbol{\beta}\|_2^2 \leq t$가 원점을 중심으로 하기 때문이다. 능형 해는 원점에서 $\hat{\boldsymbol{\beta}}_{\text{OLS}}$로 가는 방향 위에서 공의 중심 쪽으로 당겨진 위치에 놓인다.
 
-More precisely, in the SVD parameterization, ridge applies the shrinkage factor $d_j^2/(d_j^2 + \lambda)$ to each principal component. Each factor is less than 1, so the ridge solution is a shrunk version of OLS, moved toward $\mathbf{0}$ along every direction.
+더 정확히는 SVD 매개화에서 능형이 각 주성분에 축소인자 $d_j^2/(d_j^2 + \lambda)$를 적용한다. 각 인자가 1보다 작으므로 능형 해는 모든 방향에서 $\mathbf{0}$ 쪽으로 이동한 OLS의 축소판이다.
 
-## Effect of Eigenvalue Disparity
+## 고윳값 격차의 효과
 
-When $\mathbf{X}^\top\mathbf{X}$ has one large and one small eigenvalue (a common situation with correlated predictors), the RSS contours are highly elongated. The OLS estimate can lie far from the origin along the elongated direction.
+$\mathbf{X}^\top\mathbf{X}$가 큰 고윳값 하나와 작은 고윳값 하나를 가지면(상관된 설명변수에서 흔하다) RSS 등고선이 심하게 늘어난다. OLS 추정값은 늘어난 방향으로 원점에서 멀리 놓일 수 있다.
 
-The ridge constraint sphere "clips" this elongation. The tangency point lies much closer to the origin along the elongated axis (where the eigenvalue is small) but only slightly closer along the short axis (where the eigenvalue is large). This differential shrinkage is the geometric manifestation of ridge regression's ability to stabilize ill-conditioned problems.
+능형 제약구는 이 늘어남을 잘라낸다. 접점은 고윳값이 작은 긴 축 방향으로는 원점에 훨씬 가까워지고, 고윳값이 큰 짧은 축 방향으로는 조금만 가까워진다. 이 차등 축소가 불량조건 문제를 안정시키는 능형회귀의 기하적 발현이다.
 
-| Eigenvalue of $\mathbf{X}^\top\mathbf{X}$ | RSS contour axis | Shrinkage factor | Effect |
+| $\mathbf{X}^\top\mathbf{X}$의 고윳값 | RSS 등고선 축 | 축소인자 | 효과 |
 |---|---|---|---|
-| Large ($d_j^2 \gg \lambda$) | Short axis | $\approx 1$ | Minimal shrinkage |
-| Small ($d_j^2 \ll \lambda$) | Long axis | $\approx 0$ | Heavy shrinkage |
+| 큼 ($d_j^2 \gg \lambda$) | 짧은 축 | $\approx 1$ | 거의 축소하지 않음 |
+| 작음 ($d_j^2 \ll \lambda$) | 긴 축 | $\approx 0$ | 강하게 축소 |
 
-## The Budget Interpretation
+## 예산 해석
 
-The parameter $t$ in the constrained formulation acts as a **budget** for the total squared magnitude of coefficients. A small budget forces the model to distribute its coefficient mass carefully among predictors, favoring directions where the data provides strong signal over directions dominated by noise.
+제약 형태의 모수 $t$는 계수 크기 제곱합의 **예산** 역할을 한다. 예산이 작으면 모형은 계수의 질량을 신중히 배분해야 하며, 잡음이 지배하는 방향보다 자료가 강한 신호를 주는 방향을 선호하게 된다.
 
-As $t$ increases (equivalently, $\lambda$ decreases), the constraint relaxes, the feasible region grows, and the ridge solution approaches OLS. As $t$ decreases ($\lambda$ increases), the feasible region shrinks, and the ridge solution approaches the origin.
+$t$가 커지면($\lambda$가 작아지면) 제약이 느슨해지고 가능영역이 커져 능형 해가 OLS에 접근한다. $t$가 작아지면($\lambda$가 커지면) 가능영역이 줄어 능형 해가 원점에 접근한다.
 
-## Summary
+## 요약
 
-The ridge solution is the point where the smallest RSS contour ellipse is tangent to the L2 ball. Because the sphere boundary is smooth and strictly convex, this tangency point generically has all coordinates nonzero, explaining why ridge regression shrinks but does not eliminate coefficients. Components aligned with small eigenvalues of $\mathbf{X}^\top\mathbf{X}$ are shrunk the most, providing the strongest regularization where OLS is most unstable. The geometric contrast between the L2 sphere and the L1 diamond foreshadows why lasso, but not ridge, achieves sparsity.
+능형 해는 가장 작은 RSS 등고선 타원이 L2 공에 접하는 점이다. 구의 경계가 매끄럽고 강볼록이므로 이 접점은 일반적으로 모든 좌표가 0이 아니며, 이것이 능형회귀가 계수를 축소하되 제거하지는 않는 이유다. $\mathbf{X}^\top\mathbf{X}$의 작은 고윳값과 정렬된 성분이 가장 강하게 축소되어, OLS가 가장 불안정한 곳에 가장 강한 정칙화가 적용된다. L2 구와 L1 마름모의 기하적 대조가 라쏘만이 희소성을 얻는 이유를 예고한다.
 
+## 연습문제
 
-## Exercises
+**연습문제 1.**
+고윳값 격차가 큰 자료에서 축소인자가 실제로 얼마나 차등적인지 계산하라. $\rho = 0.95$인 등상관 설명변수 4개, $n = 50$에서 $\lambda = 1, 10, 100$의 축소인자와 유효자유도를 구하라.
 
-**Exercise 1.**
-Describe the main concept of Geometric Interpretation (L2 Penalty) and explain why it matters for statistical practice.
+??? success "연습문제 1 풀이"
+    ```python
+    import numpy as np
+    rng = np.random.default_rng(21)
+    n, p, rho = 50, 4, 0.95
+    S = rho*np.ones((p, p)) + (1-rho)*np.eye(p)
+    X = rng.normal(size=(n, p)) @ np.linalg.cholesky(S).T
+    X -= X.mean(0)
+    d2 = np.linalg.eigvalsh(X.T @ X)[::-1]
+    print(np.round(d2, 3))          # [186.149, 2.006, 1.741, 1.518]
+    ```
 
-??? success "Solution to Exercise 1"
-    Geometric Interpretation (L2 Penalty) is a core topic in statistics that provides tools for drawing reliable inferences from data. It matters because proper application ensures valid conclusions, correctly quantified uncertainty, and appropriate handling of the assumptions that underpin the method. Practitioners who understand this concept can avoid common pitfalls and choose the right analytical approach for their data.
+    $\mathbf{X}^\top\mathbf{X}$의 고윳값은 $186.1,\ 2.01,\ 1.74,\ 1.52$다. **첫 성분이 나머지의 100배 가까이 크다.** 등상관 구조에서 첫 고유벡터는 "모든 변수의 평균" 방향이고 나머지는 "변수들 간의 차이" 방향이다.
+
+    | $\lambda$ | $d_1^2$ 축소인자 | $d_2^2$ | $d_3^2$ | $d_4^2$ | $\text{df}(\lambda)$ |
+    |---:|---:|---:|---:|---:|---:|
+    | 0 | 1.000 | 1.000 | 1.000 | 1.000 | 4.000 |
+    | 1 | **0.995** | 0.667 | 0.635 | 0.603 | 2.900 |
+    | 10 | **0.949** | 0.167 | 0.148 | 0.132 | 1.396 |
+    | 100 | 0.651 | 0.020 | 0.017 | 0.015 | 0.702 |
+
+    **$\lambda = 10$에서 첫 성분은 95% 남지만 나머지 세 성분은 85% 이상 잘려 나간다.** 이것이 차등 축소의 실체다.
+
+    유효자유도가 $4 \to 1.40$으로 떨어지는데, 실질적으로 "평균 방향 하나만 추정하고 차이 방향은 거의 버렸다"는 뜻이다. 다중공선성 절에서 본 "합은 잘 결정되지만 차이는 결정되지 않는다"는 관찰과 정확히 대응한다.
+
+    **능형회귀는 자료가 말해주지 않는 방향을 스스로 포기한다.** $\lambda$를 고른다는 것은 몇 개의 방향을 살릴지 정하는 일이다.
 
 ---
 
-**Exercise 2.**
-State the key assumptions required by the method discussed here. How can each assumption be checked?
+**연습문제 2.**
+"구에는 꼭짓점이 없으므로 능형은 0을 만들지 않는다"는 논증을 2차원에서 구체화하라. 접점이 좌표축 위에 놓이려면 어떤 조건이 필요한가?
 
-??? success "Solution to Exercise 2"
-    The main assumptions typically include: (1) independence of observations -- verified by understanding the data collection process and checking for serial correlation; (2) distributional requirements (e.g., normality) -- checked with Q-Q plots and formal tests like Shapiro-Wilk; (3) equal variances (if applicable) -- assessed with boxplots and Levene's test. When assumptions are violated, consider robust alternatives, transformations, or nonparametric methods.
+??? success "연습문제 2 풀이"
+    2차원에서 접점이 $(\beta_1, 0)$, $\beta_1 > 0$이라 하자. KKT 조건은
 
----
+    $$
+    \mathbf{X}^\top(\mathbf{y} - \mathbf{X}\hat{\boldsymbol{\beta}}) = \lambda\hat{\boldsymbol{\beta}}
+    $$
 
-**Exercise 3.**
-Work through a small numerical example illustrating the application of the technique from this section.
+    이다. 둘째 성분을 보면 $\hat\beta_2 = 0$이므로 우변의 둘째 성분이 0이고, 따라서
 
-??? success "Solution to Exercise 3"
-    A structured approach to applying this technique involves: (1) clearly stating the hypotheses or estimation goal; (2) verifying that the data meet the required assumptions; (3) computing the relevant test statistic, estimate, or model fit; (4) obtaining the p-value, confidence interval, or posterior distribution; (5) interpreting the result in the context of the original question. Following these steps systematically ensures a rigorous and reproducible analysis.
+    $$
+    \mathbf{x}_2^\top(\mathbf{y} - \beta_1\mathbf{x}_1) = 0
+    \quad\Longleftrightarrow\quad
+    \beta_1 = \frac{\mathbf{x}_2^\top\mathbf{y}}{\mathbf{x}_2^\top\mathbf{x}_1}
+    $$
 
----
+    가 성립해야 한다. 동시에 첫째 성분의 조건도 만족해야 하므로, $\beta_1$이 **서로 다른 두 식을 동시에 만족**해야 한다.
 
-**Exercise 4.**
-Compare the approach from this section with an alternative method. When would you choose each?
+    두 식이 일치하는 것은 자료에 대한 하나의 등식 제약이며, 연속분포에서 이는 **측도 0인 사건**이다. 따라서 확률 1로 접점은 좌표축 위에 놓이지 않는다. $\square$
 
-??? success "Solution to Exercise 4"
-    The method discussed here is appropriate when its assumptions hold and the sample size is sufficient for the asymptotic approximations to be accurate. Alternative approaches include: (1) nonparametric methods -- preferred when distributional assumptions are suspect; (2) bootstrap methods -- useful when analytical reference distributions are unavailable; (3) Bayesian methods -- valuable when incorporating prior information or when direct probability statements about parameters are desired. Running multiple approaches and comparing results provides a useful robustness check.
+    **라쏘에서는 왜 다른가.** 마름모의 꼭짓점에서는 접선이 유일하지 않고 **법선의 원뿔**이 존재한다. 기울기가 그 원뿔 안에만 들어오면 되므로, 조건이 등식이 아니라 **부등식**이 된다. 부등식으로 정의된 집합은 양의 측도를 가지므로 꼭짓점에서의 접촉이 실제로 자주 일어난다.
+
+    이것이 두 방법을 가르는 수학적 핵심이다. **매끄러운 경계는 등식 조건을, 뾰족한 경계는 부등식 조건을 낳는다.**

@@ -1,146 +1,176 @@
-# Ridge Trace and Choosing Lambda
+# 능형 자취와 $\lambda$의 선택
 
-The ridge estimator depends on the regularization parameter $\lambda$, which controls the tradeoff between bias and variance. Too small a $\lambda$ provides insufficient regularization; too large a $\lambda$ overshrinks all coefficients toward zero. This section presents three approaches to selecting $\lambda$: the ridge trace (a visual diagnostic), cross-validation (the standard data-driven method), and generalized cross-validation (an efficient analytical approximation).
+능형 추정량은 편향과 분산의 절충을 조절하는 정칙화 모수 $\lambda$에 의존한다. $\lambda$가 너무 작으면 정칙화가 부족하고, 너무 크면 모든 계수를 0 쪽으로 지나치게 축소한다. 이 절에서는 $\lambda$를 고르는 세 가지 접근 — 능형 자취(시각적 진단), 교차검증(표준적인 자료 기반 방법), 일반화 교차검증(효율적인 해석적 근사) — 을 제시한다.
 
-## The Ridge Trace
+## 능형 자취
 
-The **ridge trace** is a plot of each coefficient $\hat{\beta}_j(\lambda)$ as a function of $\lambda$ (or $\log\lambda$). It provides a visual summary of how the ridge solution changes with the regularization strength.
+**능형 자취**는 각 계수 $\hat{\beta}_j(\lambda)$를 $\lambda$(또는 $\log\lambda$)의 함수로 그린 그림이다. 정칙화 강도에 따라 능형 해가 어떻게 변하는지 시각적으로 요약한다.
 
-As $\lambda$ increases from 0:
+$\lambda$가 0에서 커질 때
 
-- At $\lambda = 0$, the coefficients equal their OLS values.
-- Initially, coefficients may change rapidly, especially those inflated by multicollinearity.
-- Eventually, the coefficients stabilize and converge smoothly toward zero.
+- $\lambda = 0$에서 계수는 OLS 값과 같다.
+- 처음에는 계수가 빠르게 변할 수 있으며, 특히 다중공선성으로 부풀려진 계수가 그렇다.
+- 결국 계수가 안정되고 매끄럽게 0으로 수렴한다.
 
-The ridge trace helps identify a value of $\lambda$ where the coefficients have stabilized (no longer exhibiting wild fluctuations) but have not yet been driven too close to zero. This stability region is where regularization has successfully removed the effects of collinearity without excessive bias.
+능형 자취는 계수가 안정되었지만(격렬한 변동이 사라졌지만) 아직 0에 지나치게 가까워지지는 않은 $\lambda$를 찾는 데 도움을 준다. 이 안정 구간이 정칙화가 선형종속의 영향을 성공적으로 제거하면서 과도한 편향은 들이지 않은 지점이다.
 
-!!! note "Interpreting the Ridge Trace"
-    Look for the region where coefficient paths level off and run roughly parallel. This is the "elbow" region where the variance reduction from regularization has been captured, and further increases in $\lambda$ primarily add bias. In early applications of ridge regression, the ridge trace was the primary method for selecting $\lambda$.
+!!! note "능형 자취의 해석"
+    계수 경로가 평평해지고 대체로 나란히 가는 구간을 찾는다. 정칙화에 의한 분산 감소가 이미 확보되었고 $\lambda$를 더 키우면 편향만 늘어나는 "팔꿈치" 구간이다. 능형회귀 초기 응용에서는 능형 자취가 $\lambda$를 고르는 주된 방법이었다.
 
-## K-Fold Cross-Validation
+## $K$-겹 교차검증
 
-Cross-validation provides a data-driven, objective method for selecting $\lambda$. The procedure estimates the test error for each candidate $\lambda$ value.
+교차검증은 $\lambda$를 고르는 자료 기반의 객관적 방법을 제공한다. 각 후보 $\lambda$에 대해 검정오차를 추정한다.
 
-**Algorithm.** Given a grid of $\lambda$ values $\lambda_1 < \lambda_2 < \cdots < \lambda_M$:
+**알고리즘.** $\lambda$의 격자 $\lambda_1 < \cdots < \lambda_M$이 주어졌을 때
 
-1. Randomly partition the data into $K$ folds of approximately equal size.
-2. For each $\lambda_m$ and each fold $k = 1, \ldots, K$:
-    - Fit the ridge model on all data except fold $k$, using regularization $\lambda_m$.
-    - Predict the responses for fold $k$ and compute the prediction error.
-3. Average the prediction errors across folds to obtain:
+1. 자료를 크기가 비슷한 $K$개의 겹으로 무작위 분할한다.
+2. 각 $\lambda_m$과 각 겹 $k$에 대해, 겹 $k$를 뺀 자료로 능형 모형을 적합하고 겹 $k$의 반응을 예측하여 예측오차를 계산한다.
+3. 겹에 걸쳐 평균낸다.
 
 $$
 \text{CV}(\lambda_m) = \frac{1}{K}\sum_{k=1}^K \text{MSE}_k(\lambda_m)
 $$
 
-4. Select $\hat{\lambda} = \arg\min_{\lambda_m} \text{CV}(\lambda_m)$.
+4. $\hat{\lambda} = \arg\min_{\lambda_m} \text{CV}(\lambda_m)$을 고른다.
 
-The CV error curve $\text{CV}(\lambda)$ is typically U-shaped: high for very small $\lambda$ (overfitting), decreasing to a minimum (optimal bias-variance balance), then increasing for large $\lambda$ (underfitting).
+CV 오차 곡선은 대개 U자 모양이다. 아주 작은 $\lambda$에서 높고(과적합), 최솟값까지 감소했다가, 큰 $\lambda$에서 다시 증가한다(과소적합).
 
-## The One-Standard-Error Rule
+## 1-표준오차 규칙
 
-The minimum of the CV curve identifies $\lambda_{\min}$, but the CV estimates are noisy. The **one-standard-error rule** (1-SE rule) provides a more conservative choice:
-
-1. Compute $\text{CV}(\lambda_{\min})$ and its standard error $\text{SE}(\lambda_{\min})$.
-2. Select $\lambda_{1\text{SE}}$ as the largest $\lambda$ whose CV error is within one standard error of the minimum:
+CV 곡선의 최솟값이 $\lambda_{\min}$을 정하지만 CV 추정값 자체에 잡음이 있다. **1-표준오차 규칙**은 더 보수적인 선택을 제공한다.
 
 $$
 \lambda_{1\text{SE}} = \max\bigl\{\lambda : \text{CV}(\lambda) \leq \text{CV}(\lambda_{\min}) + \text{SE}(\lambda_{\min})\bigr\}
 $$
 
-This rule favors simpler models (more regularization) when the evidence for a more complex model is not statistically compelling.
+더 복잡한 모형을 지지하는 증거가 통계적으로 뚜렷하지 않을 때 더 단순한 모형(더 강한 정칙화)을 택하는 규칙이다.
 
-!!! tip "When to Use the 1-SE Rule"
-    Use $\lambda_{1\text{SE}}$ when interpretability or stability is valued over marginal improvements in prediction. Use $\lambda_{\min}$ when prediction accuracy is the primary goal.
+!!! tip "1-SE 규칙을 언제 쓰는가"
+    예측 정확도의 미미한 개선보다 해석 가능성이나 안정성이 중요할 때 $\lambda_{1\text{SE}}$를 쓴다. 예측 정확도가 주된 목표라면 $\lambda_{\min}$을 쓴다.
 
-## Leave-One-Out Cross-Validation
+## 하나 남기기 교차검증
 
-For ridge regression, leave-one-out cross-validation (LOOCV) has a closed-form shortcut that avoids refitting the model $n$ times. The LOOCV error is:
+능형회귀에서 LOOCV는 모형을 $n$번 재적합하지 않아도 되는 닫힌 형태의 지름길을 갖는다.
 
 $$
 \text{CV}_{\text{LOO}}(\lambda) = \frac{1}{n}\sum_{i=1}^n\left(\frac{y_i - \hat{y}_i(\lambda)}{1 - h_{ii}(\lambda)}\right)^2
 $$
 
-where $\hat{y}_i(\lambda) = \mathbf{x}_i^\top\hat{\boldsymbol{\beta}}_{\text{ridge}}(\lambda)$ is the fitted value using all $n$ observations, and $h_{ii}(\lambda)$ is the $i$-th diagonal element of the **hat matrix**:
+여기서 $h_{ii}(\lambda)$는 **모자 행렬**
 
 $$
 \mathbf{H}(\lambda) = \mathbf{X}(\mathbf{X}^\top\mathbf{X} + \lambda\mathbf{I})^{-1}\mathbf{X}^\top
 $$
 
-This formula requires only one model fit per $\lambda$ value, making LOOCV computationally efficient for ridge regression.
+의 $i$번째 대각원소다. 이 공식은 $\lambda$당 한 번의 적합만 요구하므로 능형회귀에서 LOOCV가 계산적으로 효율적이다.
 
-## Generalized Cross-Validation
+## 일반화 교차검증
 
-**Generalized cross-validation** (GCV) replaces the individual leverages $h_{ii}(\lambda)$ with their average, yielding:
-
-$$
-\text{GCV}(\lambda) = \frac{1}{n}\sum_{i=1}^n\left(\frac{y_i - \hat{y}_i(\lambda)}{1 - \text{df}(\lambda)/n}\right)^2 = \frac{\text{RSS}(\lambda)/n}{\bigl(1 - \text{df}(\lambda)/n\bigr)^2}
-$$
-
-where $\text{df}(\lambda) = \text{tr}[\mathbf{H}(\lambda)] = \sum_{j=1}^p d_j^2/(d_j^2 + \lambda)$ is the effective degrees of freedom.
-
-GCV has several advantages:
-
-- It is invariant under orthogonal rotations of the data.
-- It can be computed from a single quantity (the effective degrees of freedom) rather than $n$ individual leverages.
-- Under certain conditions, it is asymptotically optimal for prediction.
-
-## Practical Considerations
-
-### Grid of Lambda Values
-
-A standard approach uses a logarithmic grid:
+**일반화 교차검증**(GCV)은 개별 지렛값 $h_{ii}(\lambda)$를 그 평균으로 대체한다.
 
 $$
-\lambda_m = 10^{a + (b-a)\cdot m/M}, \quad m = 0, 1, \ldots, M
+\text{GCV}(\lambda) = \frac{\text{RSS}(\lambda)/n}{\bigl(1 - \text{df}(\lambda)/n\bigr)^2}
 $$
 
-where $a$ and $b$ define the range (e.g., $a = -4$ and $b = 4$) and $M$ is the number of grid points (typically 100). The logarithmic spacing ensures adequate resolution across orders of magnitude.
+여기서 $\text{df}(\lambda) = \text{tr}[\mathbf{H}(\lambda)] = \sum_j d_j^2/(d_j^2 + \lambda)$이다. GCV의 장점은 자료의 직교 회전에 대해 불변이고, $n$개의 지렛값 대신 유효자유도 하나로 계산되며, 일정 조건에서 예측에 대해 점근적으로 최적이라는 점이다.
 
-### Standardization
+## 실무적 고려
 
-Predictors should be standardized (mean zero, unit variance) before computing the ridge solution, so that the penalty $\lambda\|\boldsymbol{\beta}\|_2^2$ penalizes all coefficients on a comparable scale. After fitting, coefficients can be transformed back to the original scale.
+**$\lambda$ 격자.** 로그 격자를 쓴다. 예를 들어 $10^{-4}$부터 $10^{4}$까지 100개 점을 잡으면 여러 자릿수에 걸쳐 충분한 해상도를 얻는다.
 
-| Method | Computation | Advantages | Disadvantages |
+**표준화.** 능형 해를 계산하기 전에 설명변수를 표준화(평균 0, 분산 1)해야 벌점 $\lambda\|\boldsymbol{\beta}\|_2^2$이 모든 계수를 같은 척도에서 벌한다.
+
+| 방법 | 계산량 | 장점 | 단점 |
 |---|---|---|---|
-| Ridge trace | Visual inspection | Intuitive, reveals coefficient paths | Subjective, not automated |
-| $K$-fold CV | $K \times M$ model fits | Standard, well-understood | Computationally heavier |
-| LOOCV (closed-form) | $M$ model fits | Exact, no randomness from folds | Can overfit to individual observations |
-| GCV | Analytical formula | Efficient, rotation-invariant | Approximate (averages leverages) |
+| 능형 자취 | 시각적 판단 | 직관적, 계수 경로를 드러냄 | 주관적, 자동화되지 않음 |
+| $K$-겹 CV | $K \times M$번 적합 | 표준적, 잘 이해됨 | 계산이 무거움 |
+| LOOCV (닫힌 형태) | $M$번 적합 | 정확, 분할 난수 없음 | 개별 관측에 과적합할 수 있음 |
+| GCV | 해석적 공식 | 효율적, 회전 불변 | 근사(지렛값을 평균냄) |
 
-## Summary
+## 요약
 
-Selecting $\lambda$ for ridge regression requires balancing fit and complexity. The ridge trace provides visual intuition about coefficient stability. Cross-validation (either $K$-fold or LOOCV) gives data-driven estimates of test error, with the one-standard-error rule favoring parsimony. GCV offers an efficient analytical approximation. In practice, $K$-fold CV with the 1-SE rule on a logarithmic grid of $\lambda$ values is the most widely used approach.
+능형회귀의 $\lambda$ 선택은 적합도와 복잡도의 균형을 요구한다. 능형 자취는 계수 안정성에 대한 시각적 직관을, 교차검증은 검정오차의 자료 기반 추정을 제공하며, 1-표준오차 규칙은 간결성을 선호한다. GCV는 효율적인 해석적 근사를 제공한다. 실무에서는 로그 격자 위의 $K$-겹 교차검증에 1-SE 규칙을 결합하는 방식이 가장 널리 쓰인다.
 
+## 연습문제
 
-## Exercises
+**연습문제 1.**
+$\lambda_{\min}$과 $\lambda_{1\text{SE}}$가 실제로 얼마나 다른지, 그리고 유효자유도로 환산하면 어떤 의미인지 확인하라. $\rho = 0.9$인 표준화된 설명변수 15개 중 4개만 참인 자료($n = 80$)에서 10-겹 교차검증을 수행하라.
 
-**Exercise 1.**
-Describe the main concept of Ridge Trace and Choosing Lambda and explain why it matters for statistical practice.
+??? success "연습문제 1 풀이"
+    ```python
+    import numpy as np
+    from sklearn.linear_model import Ridge
+    from sklearn.model_selection import KFold
+    rng = np.random.default_rng(31)
 
-??? success "Solution to Exercise 1"
-    Ridge Trace and Choosing Lambda is a core topic in statistics that provides tools for drawing reliable inferences from data. It matters because proper application ensures valid conclusions, correctly quantified uncertainty, and appropriate handling of the assumptions that underpin the method. Practitioners who understand this concept can avoid common pitfalls and choose the right analytical approach for their data.
+    n, p, rho = 80, 15, 0.9
+    S = rho*np.ones((p, p)) + (1-rho)*np.eye(p)
+    X = rng.normal(size=(n, p)) @ np.linalg.cholesky(S).T
+    X -= X.mean(0); X /= X.std(0)
+    beta = np.zeros(p); beta[:4] = [3, -2, 1.5, 1]
+    y = X @ beta + rng.normal(0, 1, n); y -= y.mean()
+
+    lams = np.logspace(-2, 3, 60)
+    kf = KFold(10, shuffle=True, random_state=0)
+    mu, se = [], []
+    for lam in lams:
+        errs = [((y[te] - X[te] @ Ridge(alpha=lam, fit_intercept=False)
+                  .fit(X[tr], y[tr]).coef_)**2).mean() for tr, te in kf.split(X)]
+        mu.append(np.mean(errs)); se.append(np.std(errs, ddof=1)/np.sqrt(10))
+    mu, se = np.array(mu), np.array(se)
+    i = mu.argmin(); j = np.max(np.where(mu <= mu[i] + se[i])[0])
+    ```
+
+    | 규칙 | $\lambda$ | CV 오차 | $\text{df}(\lambda)$ |
+    |:---|---:|---:|---:|
+    | $\lambda_{\min}$ | **1.081** | 1.172 | **12.52** |
+    | $\lambda_{1\text{SE}}$ | **7.610** | 1.386 | **6.88** |
+
+    **$\lambda$가 7배 커지고 유효자유도는 절반이 된다.** CV 오차는 $1.172 \to 1.386$으로 18% 나빠지지만, 그 차이는 표준오차 $0.226$ 안에 있다.
+
+    **1-SE 규칙이 사는 것과 파는 것.** 파는 것은 CV 오차 18%다. 사는 것은 모형 복잡도의 절반이다. 자료가 $p = 15$ 중 참 변수 $4$개인 상황임을 감안하면 $\text{df} = 6.88$이 $12.52$보다 진실에 가깝다.
+
+    **표준오차 $0.226$이 평균 $1.172$의 19%라는 점에 주목하라.** CV 추정 자체가 그만큼 불안정하다는 뜻이며, 그래서 최솟값을 곧이곧대로 믿지 않는 규칙이 필요하다. 겹 수를 늘리거나 교차검증을 반복하면 이 표준오차가 줄어든다.
 
 ---
 
-**Exercise 2.**
-State the key assumptions required by the method discussed here. How can each assumption be checked?
+**연습문제 2.**
+LOOCV의 닫힌 형태 지름길이 실제로 $n$번 재적합한 결과와 일치하는지 확인하라. 왜 능형에는 이 지름길이 있고 라쏘에는 없는가?
 
-??? success "Solution to Exercise 2"
-    The main assumptions typically include: (1) independence of observations -- verified by understanding the data collection process and checking for serial correlation; (2) distributional requirements (e.g., normality) -- checked with Q-Q plots and formal tests like Shapiro-Wilk; (3) equal variances (if applicable) -- assessed with boxplots and Levene's test. When assumptions are violated, consider robust alternatives, transformations, or nonparametric methods.
+??? success "연습문제 2 풀이"
+    ```python
+    import numpy as np
+    from sklearn.linear_model import Ridge
 
----
+    def loocv_shortcut(X, y, lam):
+        n, p = X.shape
+        A = np.linalg.inv(X.T @ X + lam*np.eye(p))
+        H = X @ A @ X.T
+        yhat = H @ y; h = np.diag(H)
+        return np.mean(((y - yhat)/(1 - h))**2)
 
-**Exercise 3.**
-Work through a small numerical example illustrating the application of the technique from this section.
+    def loocv_brute(X, y, lam):
+        n = len(y); errs = []
+        for i in range(n):
+            m = np.ones(n, bool); m[i] = False
+            b = Ridge(alpha=lam, fit_intercept=False).fit(X[m], y[m]).coef_
+            errs.append((y[i] - X[i] @ b)**2)
+        return np.mean(errs)
 
-??? success "Solution to Exercise 3"
-    A structured approach to applying this technique involves: (1) clearly stating the hypotheses or estimation goal; (2) verifying that the data meet the required assumptions; (3) computing the relevant test statistic, estimate, or model fit; (4) obtaining the p-value, confidence interval, or posterior distribution; (5) interpreting the result in the context of the original question. Following these steps systematically ensures a rigorous and reproducible analysis.
+    for lam in (0.1, 1.0, 10.0):
+        assert np.isclose(loocv_shortcut(X, y, lam), loocv_brute(X, y, lam))
+    ```
 
----
+    두 값이 기계 정밀도까지 일치한다.
 
-**Exercise 4.**
-Compare the approach from this section with an alternative method. When would you choose each?
+    **왜 능형에는 지름길이 있는가.** 능형은 **선형 평활자**다. 적합값이 $\hat{\mathbf{y}} = \mathbf{H}(\lambda)\mathbf{y}$ 형태이고 $\mathbf{H}$가 $\mathbf{y}$에 의존하지 않는다. 이 성질이 항등식
 
-??? success "Solution to Exercise 4"
-    The method discussed here is appropriate when its assumptions hold and the sample size is sufficient for the asymptotic approximations to be accurate. Alternative approaches include: (1) nonparametric methods -- preferred when distributional assumptions are suspect; (2) bootstrap methods -- useful when analytical reference distributions are unavailable; (3) Bayesian methods -- valuable when incorporating prior information or when direct probability statements about parameters are desired. Running multiple approaches and comparing results provides a useful robustness check.
+    $$
+    y_i - \hat{y}_i^{(-i)} = \frac{y_i - \hat{y}_i}{1 - H_{ii}}
+    $$
+
+    를 성립시킨다.
+
+    **왜 라쏘에는 없는가.** 라쏘 해는 $\mathbf{y}$의 **비선형** 함수다. 활성집합(0이 아닌 계수의 집합)이 $\mathbf{y}$에 의존하므로, 관측 하나를 빼면 활성집합 자체가 바뀔 수 있다. $\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}$로 쓸 수 있는 고정된 $\mathbf{H}$가 존재하지 않는다.
+
+    실무적 결과: `RidgeCV`는 기본적으로 LOOCV를 쓰고 매우 빠르다. `LassoCV`는 $K$-겹 교차검증을 실제로 수행해야 하므로 훨씬 느리다. 대신 라쏘는 경로 알고리즘(LARS나 좌표하강의 온기 시작)으로 전체 $\lambda$ 격자를 한 번에 계산하여 이를 상쇄한다.

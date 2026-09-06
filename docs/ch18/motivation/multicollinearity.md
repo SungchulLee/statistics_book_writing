@@ -1,129 +1,186 @@
-# Multicollinearity and Regularization
+# 다중공선성과 정칙화
 
-When two or more predictors are highly correlated, OLS coefficient estimates become unreliable: their signs may flip, their magnitudes may be implausibly large, and small changes in the data can drastically alter the fitted model. This section defines multicollinearity precisely, introduces the variance inflation factor as a diagnostic, and explains how regularization stabilizes estimation in the presence of correlated predictors.
+두 개 이상의 설명변수가 강하게 상관되면 OLS 계수 추정값을 신뢰할 수 없게 된다. 부호가 뒤집히고, 크기가 터무니없이 커지며, 자료의 작은 변화가 적합된 모형을 크게 바꾼다. 이 절에서는 다중공선성을 정확히 정의하고, 진단 도구인 분산팽창인자를 소개하며, 정칙화가 상관된 설명변수 아래에서 추정을 어떻게 안정시키는지 설명한다.
 
-## What Is Multicollinearity
+## 다중공선성이란
 
-Multicollinearity exists when one predictor can be approximately expressed as a linear combination of others. Formally, if the design matrix $\mathbf{X}$ has columns $\mathbf{x}_1, \ldots, \mathbf{x}_p$, then multicollinearity means there exist constants $c_1, \ldots, c_p$ (not all zero) such that:
+다중공선성은 한 설명변수가 다른 변수들의 선형결합으로 근사 표현될 때 존재한다. 계획행렬 $\mathbf{X}$의 열이 $\mathbf{x}_1, \ldots, \mathbf{x}_p$일 때, 모두 0은 아닌 상수 $c_1, \ldots, c_p$가 존재하여
 
 $$
 c_1\mathbf{x}_1 + c_2\mathbf{x}_2 + \cdots + c_p\mathbf{x}_p \approx \mathbf{0}
 $$
 
-**Perfect multicollinearity** (exact equality) makes $\mathbf{X}^\top\mathbf{X}$ singular and OLS impossible. **Near-multicollinearity** (approximate equality) makes $\mathbf{X}^\top\mathbf{X}$ invertible but ill-conditioned, inflating the variance of coefficient estimates.
+이 성립하는 상황이다.
 
-## The Variance Inflation Factor
+**완전 다중공선성**(정확한 등식)은 $\mathbf{X}^\top\mathbf{X}$를 특이행렬로 만들어 OLS를 불가능하게 한다. **준다중공선성**(근사 등식)은 $\mathbf{X}^\top\mathbf{X}$가 가역이지만 불량조건이 되어 계수 추정값의 분산을 부풀린다.
 
-The **variance inflation factor** (VIF) for the $j$-th predictor quantifies how much the variance of $\hat{\beta}_j$ is inflated due to correlations with other predictors.
+## 분산팽창인자
 
-To compute $\text{VIF}_j$, regress $x_j$ on all other predictors and obtain the $R^2$ from that regression, denoted $R_j^2$. Then:
+$j$번째 설명변수의 **분산팽창인자**(VIF)는 다른 변수들과의 상관 때문에 $\hat{\beta}_j$의 분산이 얼마나 부풀려지는지를 정량화한다.
+
+$\text{VIF}_j$를 계산하려면 $x_j$를 나머지 모든 설명변수에 회귀시켜 그 회귀의 $R^2$인 $R_j^2$을 얻는다. 그러면
 
 $$
 \text{VIF}_j = \frac{1}{1 - R_j^2}
 $$
 
-The variance of the $j$-th OLS coefficient is:
+이다. $j$번째 OLS 계수의 분산은
 
 $$
 \text{Var}(\hat{\beta}_j) = \frac{\sigma^2}{n\, s_j^2} \cdot \text{VIF}_j
 $$
 
-where $s_j^2$ is the sample variance of $x_j$ (after centering). Without multicollinearity, $R_j^2 = 0$ and $\text{VIF}_j = 1$. As predictors become more collinear, $R_j^2 \to 1$ and $\text{VIF}_j \to \infty$.
+이며 $s_j^2$은 (중심화 후) $x_j$의 표본분산이다. 다중공선성이 없으면 $R_j^2 = 0$이고 $\text{VIF}_j = 1$이다. 변수들이 선형종속에 가까워질수록 $R_j^2 \to 1$이고 $\text{VIF}_j \to \infty$이다.
 
-!!! warning "VIF Interpretation Guidelines"
-    A common rule of thumb is:
+!!! warning "VIF 해석 지침"
+    흔히 쓰는 경험칙은 다음과 같다.
 
-    - $\text{VIF}_j < 5$: low concern
-    - $5 \leq \text{VIF}_j < 10$: moderate collinearity, investigate further
-    - $\text{VIF}_j \geq 10$: serious collinearity, coefficient estimates are unreliable
+    - $\text{VIF}_j < 5$: 우려할 수준이 아니다
+    - $5 \leq \text{VIF}_j < 10$: 중간 정도의 선형종속, 추가 조사 필요
+    - $\text{VIF}_j \geq 10$: 심각한 선형종속, 계수 추정값을 신뢰할 수 없다
 
-    These thresholds are guidelines, not rigid cutoffs. The impact depends on the sample size and the goals of the analysis.
+    이 문턱들은 절대 기준이 아니라 지침이다. 영향의 정도는 표본크기와 분석 목적에 달려 있다.
 
-## How Multicollinearity Inflates Variance
+## 다중공선성이 분산을 부풀리는 방식
 
-Consider the simplest case: two predictors $x_1$ and $x_2$ with sample correlation $r$. The variance of the OLS slope estimates is:
+가장 단순한 경우로 표본상관이 $r$인 설명변수 $x_1$, $x_2$를 생각하자. OLS 기울기 추정값의 분산은
 
 $$
 \text{Var}(\hat{\beta}_1) = \frac{\sigma^2}{n\, s_1^2(1 - r^2)}, \quad \text{Var}(\hat{\beta}_2) = \frac{\sigma^2}{n\, s_2^2(1 - r^2)}
 $$
 
-As $|r| \to 1$, both variances diverge. The OLS estimates remain unbiased but become so noisy that they are practically useless. The coefficient estimates for $\hat{\beta}_1$ and $\hat{\beta}_2$ become highly anti-correlated: a positive fluctuation in one is compensated by a negative fluctuation in the other.
+이다. $|r| \to 1$이면 두 분산이 모두 발산한다. OLS 추정값은 여전히 불편이지만 잡음이 너무 커서 실용적으로 쓸모가 없어진다. 또한 $\hat{\beta}_1$과 $\hat{\beta}_2$가 강하게 음의 상관을 갖게 되어, 한쪽의 양의 변동이 다른 쪽의 음의 변동으로 상쇄된다.
 
-In the general $p$-predictor case, the eigenvalue decomposition of $\mathbf{X}^\top\mathbf{X}$ reveals the same phenomenon. Let $\mathbf{X}^\top\mathbf{X} = \mathbf{V}\boldsymbol{\Lambda}\mathbf{V}^\top$ with eigenvalues $\lambda_1 \geq \cdots \geq \lambda_p$. The OLS coefficient variance along the $j$-th eigenvector direction is $\sigma^2/\lambda_j$. When collinearity makes $\lambda_p$ small, the variance along that direction explodes.
+일반적인 $p$변수 상황에서도 $\mathbf{X}^\top\mathbf{X}$의 고윳값 분해가 같은 현상을 드러낸다. $\mathbf{X}^\top\mathbf{X} = \mathbf{V}\boldsymbol{\Lambda}\mathbf{V}^\top$이고 고윳값이 $\lambda_1 \geq \cdots \geq \lambda_p$라 하면, $j$번째 고유벡터 방향의 OLS 계수 분산은 $\sigma^2/\lambda_j$이다. 선형종속으로 $\lambda_p$가 작아지면 그 방향의 분산이 폭발한다.
 
-## Ridge Regression and Correlated Predictors
+## 능형회귀와 상관된 설명변수
 
-Ridge regression addresses multicollinearity by replacing $(\mathbf{X}^\top\mathbf{X})^{-1}$ with $(\mathbf{X}^\top\mathbf{X} + \lambda\mathbf{I})^{-1}$. This has a specific effect on correlated predictors.
+능형회귀는 $(\mathbf{X}^\top\mathbf{X})^{-1}$을 $(\mathbf{X}^\top\mathbf{X} + \lambda\mathbf{I})^{-1}$로 바꾸어 다중공선성을 다룬다. 이는 상관된 설명변수에 특정한 효과를 낸다.
 
-Consider two highly correlated predictors $x_1 \approx x_2$. OLS may assign a large positive coefficient to one and a large negative coefficient to the other (they nearly cancel in prediction). Ridge penalizes this by shrinking both coefficients toward zero, distributing the coefficient mass more evenly among correlated predictors.
+강하게 상관된 두 변수 $x_1 \approx x_2$를 생각하자. OLS는 한쪽에 큰 양의 계수를, 다른 쪽에 큰 음의 계수를 부여할 수 있다(예측에서는 거의 상쇄된다). 능형회귀는 두 계수를 모두 0 쪽으로 축소하여 이를 벌하고, 계수의 질량을 상관된 변수들 사이에 더 고르게 분배한다.
 
-In the SVD framework, the ridge shrinkage factor for the $j$-th principal component is:
+SVD 틀에서 $j$번째 주성분에 대한 능형 축소인자는
 
 $$
 \frac{d_j^2}{d_j^2 + \lambda}
 $$
 
-Components with small singular values $d_j$ (the collinear directions) receive the strongest shrinkage, which is precisely where OLS variance is largest. Ridge regression therefore targets its regularization where it is most needed.
+이다. 특이값 $d_j$가 작은 성분(선형종속 방향)이 가장 강하게 축소되는데, 바로 그곳이 OLS 분산이 가장 큰 곳이다. 따라서 능형회귀는 정칙화가 가장 필요한 곳을 정확히 겨냥한다.
 
-!!! note "Ridge Distributes, Lasso Selects"
-    Ridge regression tends to assign similar coefficients to correlated predictors, distributing their effect. Lasso, by contrast, tends to select one predictor from a correlated group and set the others to zero. Elastic net offers a middle ground, as discussed in later sections.
+!!! note "능형은 분배하고 라쏘는 선택한다"
+    능형회귀는 상관된 설명변수에 비슷한 계수를 부여하여 효과를 분배하는 경향이 있다. 반면 라쏘는 상관된 집단에서 하나를 고르고 나머지를 0으로 만드는 경향이 있다. 엘라스틱넷은 그 중간을 제공하며 뒤의 절에서 다룬다.
 
-## Multicollinearity versus Ill-Conditioning
+## 다중공선성과 불량조건
 
-Multicollinearity and ill-conditioning are related but distinct concepts:
+두 개념은 관련되어 있지만 구별된다.
 
-| Concept | Focus | Diagnostic |
+| 개념 | 초점 | 진단 |
 |---|---|---|
-| Multicollinearity | Statistical: variance of coefficient estimates | VIF, pairwise correlations |
-| Ill-conditioning | Numerical: sensitivity to floating-point errors | Condition number $\kappa(\mathbf{X}^\top\mathbf{X})$ |
+| 다중공선성 | 통계적: 계수 추정값의 분산 | VIF, 쌍별 상관 |
+| 불량조건 | 수치적: 부동소수점 오차에 대한 민감도 | 조건수 $\kappa(\mathbf{X}^\top\mathbf{X})$ |
 
-Multicollinearity always causes ill-conditioning, but ill-conditioning can also arise from scale disparity without true collinearity. Standardizing predictors addresses scale-induced ill-conditioning but not collinearity-induced ill-conditioning, which requires regularization or predictor removal.
+다중공선성은 언제나 불량조건을 유발하지만, 불량조건은 진짜 선형종속 없이 척도 불일치만으로도 생길 수 있다. 설명변수를 표준화하면 척도 때문에 생긴 불량조건은 해소되지만 선형종속 때문에 생긴 불량조건은 남으며, 후자에는 정칙화나 변수 제거가 필요하다.
 
-## Detecting and Diagnosing Multicollinearity
+## 다중공선성의 탐지와 진단
 
-A systematic diagnostic procedure includes:
+1. **상관행렬.** 설명변수 사이의 쌍별 상관을 계산한다. 절댓값 0.8을 넘으면 선형종속을 의심한다. 다만 쌍별 상관이 모두 낮아도 변수 집단 사이에 다중공선성이 존재할 수 있다.
+2. **VIF 계산.** 각 변수의 $\text{VIF}_j$를 계산한다. 쌍별 선형종속과 다변수 선형종속을 모두 탐지한다.
+3. **고윳값 분석.** $\mathbf{X}^\top\mathbf{X}$의 고윳값을 살핀다. 큰 비 $\lambda_1/\lambda_p$(조건수)와 0에 가까운 고윳값이 선형종속 방향을 가리킨다.
+4. **계수 안정성.** 붓스트랩 표본이나 교란된 자료에 모형을 적합한다. 계수가 크게 변하면 선형종속이 불안정성을 낳고 있을 가능성이 높다.
 
-1. **Correlation matrix.** Compute pairwise correlations among predictors. Values above 0.8 in absolute value suggest collinearity, though multicollinearity can exist among groups of variables even when no pairwise correlation is high.
+## 요약
 
-2. **VIF computation.** Calculate $\text{VIF}_j$ for each predictor. This detects both pairwise and multiway collinearity.
+다중공선성은 OLS 계수의 분산을 부풀려, 불편임에도 신뢰할 수 없게 만든다. VIF는 변수별 진단을 제공하고 고윳값 스펙트럼은 선형종속 방향의 기하를 드러낸다. 능형회귀는 잘 결정되지 않은 방향의 계수를 축소하여 다중공선성을 직접 다루며, 계수의 질량을 상관된 변수들 사이에 분배해 격렬한 변동을 막는다. 이 통계적 동기는 불량조건에서 오는 수치적 동기, 편향-분산 절충에서 오는 예측적 동기와 서로 보완한다.
 
-3. **Eigenvalue analysis.** Examine the eigenvalues of $\mathbf{X}^\top\mathbf{X}$. A large ratio $\lambda_1/\lambda_p$ (the condition number) and eigenvalues near zero indicate collinear directions.
+## 연습문제
 
-4. **Coefficient stability.** Fit the model on bootstrap samples or perturbed data. If coefficients change dramatically, collinearity is likely driving instability.
+**연습문제 1.**
+등상관 구조 $\Sigma = \rho\mathbf{1}\mathbf{1}^\top + (1-\rho)\mathbf{I}$에서 VIF를 $\rho$의 함수로 계산하고, 경험칙 문턱 $\text{VIF} = 10$이 어떤 $\rho$에 해당하는지 구하라.
 
-## Summary
+??? success "연습문제 1 풀이"
+    등상관 행렬의 역행렬은 닫힌 형태로 알려져 있고 그 대각원소가 VIF다.
 
-Multicollinearity inflates the variance of OLS coefficients, making them unreliable even though they remain unbiased. The VIF provides a per-predictor diagnostic, while the eigenvalue spectrum reveals the geometry of collinear directions. Ridge regression directly addresses multicollinearity by shrinking coefficients along the poorly determined directions, distributing coefficient mass among correlated predictors rather than allowing wild fluctuations. This statistical motivation for regularization complements the numerical motivation from ill-conditioning and the predictive motivation from the bias-variance tradeoff.
+    ```python
+    import numpy as np
+    p = 5
+    for rho in (0.0, 0.5, 0.9, 0.99, 0.999):
+        S = rho*np.ones((p, p)) + (1-rho)*np.eye(p)
+        print(rho, np.linalg.cond(S), np.diag(np.linalg.inv(S))[0])
+    ```
 
+    | $\rho$ | $\text{cond}(\Sigma)$ | VIF |
+    |---:|---:|---:|
+    | 0.000 | 1.0 | 1.00 |
+    | 0.900 | 46.0 | **8.04** |
+    | 0.990 | 496.0 | **80.04** |
+    | 0.999 | 4996.0 | 800.04 |
 
-## Exercises
+    $p = 5$의 등상관 구조에서 VIF는 대략 $\dfrac{1}{1-\rho}$에 비례한다.
 
-**Exercise 1.**
-Describe the main concept of Multicollinearity and Regularization and explain why it matters for statistical practice.
+    **$\text{VIF} = 10$은 $\rho \approx 0.92$에 해당한다.** 즉 경험칙 문턱은 "다른 변수들로 이 변수의 분산 90%를 설명할 수 있으면 위험하다"는 뜻이다.
 
-??? success "Solution to Exercise 1"
-    Multicollinearity and Regularization is a core topic in statistics that provides tools for drawing reliable inferences from data. It matters because proper application ensures valid conclusions, correctly quantified uncertainty, and appropriate handling of the assumptions that underpin the method. Practitioners who understand this concept can avoid common pitfalls and choose the right analytical approach for their data.
+    **조건수와 VIF가 함께 움직인다는 점이 중요하다.** $\rho = 0.99$에서 VIF $= 80$이면 그 계수의 표준오차가 직교 설계 대비 $\sqrt{80} = 8.9$배다. 유의한 효과를 탐지하려면 자료가 80배 필요하다는 뜻이다.
 
 ---
 
-**Exercise 2.**
-State the key assumptions required by the method discussed here. How can each assumption be checked?
+**연습문제 2.**
+"OLS는 상관된 두 변수에 큰 양수와 큰 음수를 부여한다"는 주장을 확인하라. $r = 0.999$인 두 변수에서 OLS와 능형회귀의 계수를 여러 자료에 걸쳐 비교하라.
 
-??? success "Solution to Exercise 2"
-    The main assumptions typically include: (1) independence of observations -- verified by understanding the data collection process and checking for serial correlation; (2) distributional requirements (e.g., normality) -- checked with Q-Q plots and formal tests like Shapiro-Wilk; (3) equal variances (if applicable) -- assessed with boxplots and Levene's test. When assumptions are violated, consider robust alternatives, transformations, or nonparametric methods.
+??? success "연습문제 2 풀이"
+    ```python
+    import numpy as np
+    from sklearn.linear_model import Ridge, LinearRegression
+    rng = np.random.default_rng(5)
+    n, r = 50, 0.999
+    out = []
+    for _ in range(6):
+        z = rng.normal(size=n)
+        x1 = np.sqrt(r)*z + np.sqrt(1-r)*rng.normal(size=n)
+        x2 = np.sqrt(r)*z + np.sqrt(1-r)*rng.normal(size=n)
+        X = np.c_[x1, x2]
+        y = 1.0*x1 + 1.0*x2 + rng.normal(0, 1, n)     # 참값은 (1, 1)
+        bo = LinearRegression().fit(X, y).coef_
+        br = Ridge(alpha=1.0).fit(X, y).coef_
+        out.append((bo, br))
+    ```
+
+    참 계수는 $(1, 1)$이다. 여섯 개의 서로 다른 자료에서:
+
+    | 자료 | OLS $(\hat\beta_1, \hat\beta_2)$ | 합 | 능형 $(\hat\beta_1, \hat\beta_2)$ |
+    |---:|:---|---:|:---|
+    | — | 큰 양수 / 큰 음수 쌍이 흔히 나타난다 | $\approx 2$ | 둘 다 $1$ 근처 |
+
+    **핵심은 두 계수의 합은 안정적인데 개별 계수는 불안정하다는 것이다.** $x_1 \approx x_2$이므로 예측 $\hat\beta_1 x_1 + \hat\beta_2 x_2 \approx (\hat\beta_1 + \hat\beta_2)x_1$은 합에만 의존한다. 자료는 합을 잘 결정하지만 **차이는 거의 결정하지 못한다.**
+
+    고윳값으로 보면 명확하다. $\Sigma$의 고윳값은 합 방향에서 $1+r = 1.999$, 차 방향에서 $1-r = 0.001$이다. 차 방향의 분산이 합 방향의 $2000$배다.
+
+    **능형회귀가 하는 일은 차 방향을 억누르는 것이다.** 축소인자 $d_j^2/(d_j^2+\lambda)$가 합 방향에서는 $\approx 1$, 차 방향에서는 $\approx 0$이 되어, 자료가 결정하지 못한 성분을 버린다.
+
+    실무적 함의: **다중공선성이 있으면 개별 계수를 해석하지 말라.** 합이나 평균 같은 안정적인 조합을 해석하거나, 정칙화로 계수를 안정화한 뒤 예측에만 쓴다.
 
 ---
 
-**Exercise 3.**
-Work through a small numerical example illustrating the application of the technique from this section.
+**연습문제 3.**
+VIF는 쌍별 상관이 모두 낮아도 클 수 있다. 그런 자료를 구성하라.
 
-??? success "Solution to Exercise 3"
-    A structured approach to applying this technique involves: (1) clearly stating the hypotheses or estimation goal; (2) verifying that the data meet the required assumptions; (3) computing the relevant test statistic, estimate, or model fit; (4) obtaining the p-value, confidence interval, or posterior distribution; (5) interpreting the result in the context of the original question. Following these steps systematically ensures a rigorous and reproducible analysis.
+??? success "연습문제 3 풀이"
+    $x_3 = x_1 + x_2$ 관계를 쓰면 된다. $x_1, x_2$가 독립이면 $\text{corr}(x_1, x_3) = \text{corr}(x_2, x_3) = 1/\sqrt{2} = 0.707$로 각각 0.8 미만이다.
 
----
+    ```python
+    import numpy as np
+    rng = np.random.default_rng(0)
+    n = 200
+    x1 = rng.normal(size=n); x2 = rng.normal(size=n)
+    x3 = x1 + x2 + rng.normal(0, 0.05, n)       # 거의 정확한 선형종속
+    X = np.c_[x1, x2, x3]
+    print(np.round(np.corrcoef(X.T), 3))
+    S = np.corrcoef(X.T); print(np.diag(np.linalg.inv(S)))
+    ```
 
-**Exercise 4.**
-Compare the approach from this section with an alternative method. When would you choose each?
+    쌍별 상관은 모두 $0.71$ 부근으로 "0.8 미만"이라는 흔한 문턱을 통과한다. 그런데 VIF는 세 변수 모두 **$400$을 넘는다.**
 
-??? success "Solution to Exercise 4"
-    The method discussed here is appropriate when its assumptions hold and the sample size is sufficient for the asymptotic approximations to be accurate. Alternative approaches include: (1) nonparametric methods -- preferred when distributional assumptions are suspect; (2) bootstrap methods -- useful when analytical reference distributions are unavailable; (3) Bayesian methods -- valuable when incorporating prior information or when direct probability statements about parameters are desired. Running multiple approaches and comparing results provides a useful robustness check.
+    $R_3^2$이 $0.998$에 이르기 때문이다. $x_3$은 $x_1$이나 $x_2$ 어느 하나와도 특별히 강하게 상관되어 있지 않지만, **둘의 합**으로는 거의 완벽히 설명된다.
+
+    **교훈: 상관행렬만 보고 다중공선성을 판정하지 말라.** 상관행렬은 쌍별 관계만 본다. 세 개 이상의 변수가 얽힌 선형종속은 VIF나 고윳값 분석으로만 잡힌다.
+
+    이런 구조는 실무에서 흔하다. 총액과 그 구성요소를 함께 넣거나(매출 = 국내 + 해외), 비율과 분자·분모를 함께 넣는 경우가 대표적이다.

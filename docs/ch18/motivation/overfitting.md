@@ -1,135 +1,216 @@
-# Overfitting and the Bias-Variance Tradeoff
+# 과적합과 편향-분산 절충
 
-A model that memorizes its training data performs perfectly in-sample but poorly on new observations. This phenomenon, called **overfitting**, is the central motivation for regularization. Before introducing specific penalties, we need a precise framework for understanding why overfitting happens and how adding bias can actually improve predictions.
+훈련자료를 외워버린 모형은 표본 안에서는 완벽하지만 새 관측에서는 형편없다. **과적합**이라 불리는 이 현상이 정칙화의 핵심 동기다. 구체적인 벌점을 도입하기 전에, 과적합이 왜 일어나며 편향을 더하는 것이 어떻게 예측을 개선할 수 있는지 정확히 이해할 틀이 필요하다.
 
-## Training Error versus Test Error
+## 훈련오차와 검정오차
 
-Consider a regression model $\hat{f}$ fitted on training data $\{(x_i, y_i)\}_{i=1}^n$. Define two error measures.
+훈련자료 $\{(x_i, y_i)\}_{i=1}^n$에 적합한 회귀모형 $\hat{f}$를 생각하자. 두 가지 오차를 정의한다.
 
-**Training error** is the average loss on the data used to fit the model:
+**훈련오차**는 모형을 적합하는 데 쓴 자료에서의 평균 손실이다.
 
 $$
 \text{Err}_{\text{train}} = \frac{1}{n}\sum_{i=1}^n \bigl(y_i - \hat{f}(x_i)\bigr)^2
 $$
 
-**Test error** (or generalization error) is the expected loss on a new, independent observation $(x_0, y_0)$:
+**검정오차**(일반화 오차)는 새로운 독립 관측 $(x_0, y_0)$에서의 기대 손실이다.
 
 $$
 \text{Err}_{\text{test}} = E\bigl[(y_0 - \hat{f}(x_0))^2\bigr]
 $$
 
-As model complexity increases, training error monotonically decreases because the model gains more freedom to fit the observed data. Test error, however, follows a characteristic **U-shaped curve**: it first decreases as the model captures genuine signal, then increases as the model begins fitting noise.
+모형 복잡도가 커지면 훈련오차는 단조감소한다. 관측된 자료에 맞출 자유도가 늘어나기 때문이다. 반면 검정오차는 특징적인 **U자 곡선**을 그린다. 모형이 진짜 신호를 포착하는 동안 감소하다가, 잡음을 맞추기 시작하면 증가한다.
 
-The gap $\text{Err}_{\text{test}} - \text{Err}_{\text{train}}$ grows with model complexity. Regularization controls this gap by constraining the model, keeping test error near its minimum.
+$\text{Err}_{\text{test}} - \text{Err}_{\text{train}}$의 격차는 모형 복잡도와 함께 커진다. 정칙화는 모형을 제약하여 이 격차를 통제하고 검정오차를 최솟값 근처에 유지한다.
 
-## The Bias-Variance Decomposition
+## 편향-분산 분해
 
-The test error at a fixed input $x_0$ admits a fundamental decomposition. Assume the true data-generating process is $y = f(x) + \varepsilon$, where $\varepsilon$ has mean zero and variance $\sigma^2$, and the expectation below is over training sets of size $n$.
+고정된 입력 $x_0$에서의 검정오차는 근본적인 분해를 갖는다. 참 자료생성과정을 $y = f(x) + \varepsilon$이라 하고 $\varepsilon$의 평균은 0, 분산은 $\sigma^2$이라 하자. 아래 기댓값은 크기 $n$인 훈련집합 전체에 대한 것이다.
 
 $$
-E\bigl[(y_0 - \hat{f}(x_0))^2\bigr] = \underbrace{\bigl(f(x_0) - E[\hat{f}(x_0)]\bigr)^2}_{\text{Bias}^2} + \underbrace{E\bigl[(\hat{f}(x_0) - E[\hat{f}(x_0)])^2\bigr]}_{\text{Variance}} + \sigma^2
+E\bigl[(y_0 - \hat{f}(x_0))^2\bigr] = \underbrace{\bigl(f(x_0) - E[\hat{f}(x_0)]\bigr)^2}_{\text{편향}^2} + \underbrace{E\bigl[(\hat{f}(x_0) - E[\hat{f}(x_0)])^2\bigr]}_{\text{분산}} + \sigma^2
 $$
 
-Each term has a clear interpretation:
+각 항의 해석은 분명하다.
 
-- **Bias squared** measures how far the average prediction is from the truth. A model that is too simple (e.g., fitting a line to a curved relationship) has high bias.
-- **Variance** measures how much predictions fluctuate across different training sets. A model with too many parameters relative to the sample size has high variance.
-- **Irreducible error** $\sigma^2$ is the noise floor that no model can eliminate.
+- **편향의 제곱**은 평균적인 예측이 참값에서 얼마나 떨어져 있는지를 잰다. 너무 단순한 모형(굽은 관계에 직선을 맞추는 등)은 편향이 크다.
+- **분산**은 훈련집합이 바뀔 때 예측이 얼마나 요동치는지를 잰다. 표본크기에 비해 모수가 너무 많은 모형은 분산이 크다.
+- **환원불가 오차** $\sigma^2$은 어떤 모형도 없앨 수 없는 잡음의 바닥이다.
 
-!!! note "The Tradeoff"
-    Bias and variance pull in opposite directions. Simple models have high bias but low variance. Complex models have low bias but high variance. The optimal model complexity minimizes their sum, not either term alone.
+!!! note "절충"
+    편향과 분산은 반대 방향으로 당긴다. 단순한 모형은 편향이 크고 분산이 작다. 복잡한 모형은 편향이 작고 분산이 크다. 최적의 복잡도는 어느 한 항이 아니라 **둘의 합**을 최소화한다.
 
-## Overfitting in Linear Regression
+## 선형회귀에서의 과적합
 
-In the linear regression setting with $p$ predictors and $n$ observations, the OLS estimator $\hat{\boldsymbol{\beta}}_{\text{OLS}} = (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{y}$ has well-known bias-variance properties.
+설명변수 $p$개와 관측 $n$개인 선형회귀에서 OLS 추정량 $\hat{\boldsymbol{\beta}}_{\text{OLS}} = (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{y}$의 편향-분산 성질은 잘 알려져 있다.
 
-The bias of OLS is zero (it is unbiased), but its variance is:
+OLS의 편향은 0이지만(불편이다) 분산은
 
 $$
 \text{Var}(\hat{\boldsymbol{\beta}}_{\text{OLS}}) = \sigma^2 (\mathbf{X}^\top\mathbf{X})^{-1}
 $$
 
-When $p$ is large relative to $n$, or when the columns of $\mathbf{X}$ are nearly collinear, the matrix $\mathbf{X}^\top\mathbf{X}$ has small eigenvalues and $(\mathbf{X}^\top\mathbf{X})^{-1}$ has large eigenvalues. This inflates the variance of every coefficient estimate.
+이다. $p$가 $n$에 비해 크거나 $\mathbf{X}$의 열이 거의 선형종속이면 $\mathbf{X}^\top\mathbf{X}$의 고윳값이 작아지고 $(\mathbf{X}^\top\mathbf{X})^{-1}$의 고윳값이 커진다. 이는 모든 계수 추정값의 분산을 부풀린다.
 
-The expected in-sample prediction error for OLS can be expressed as:
+OLS의 기대 표본내 예측오차는 다음처럼 쓸 수 있다.
 
 $$
 E\bigl[\text{Err}_{\text{train}}\bigr] = \sigma^2\Bigl(1 - \frac{p}{n}\Bigr)
 $$
 
-while the expected test error is:
+같은 $\mathbf{X}$에서 새 $\mathbf{y}$를 관측할 때의 기대 예측오차는
 
 $$
 E\bigl[\text{Err}_{\text{test}}\bigr] = \sigma^2\Bigl(1 + \frac{p}{n}\Bigr)
 $$
 
-The gap between these two quantities is $2\sigma^2 p/n$, which grows linearly with the number of parameters. When $p$ approaches $n$, training error approaches zero while test error diverges.
+이다. 두 양의 격차는 $2\sigma^2 p/n$으로 모수 개수에 선형으로 커진다. $p$가 $n$에 가까워지면 훈련오차는 0으로 가는데 검정오차는 발산한다.
 
-## Regularization as Variance Reduction
+!!! note "이 두 공식이 말하는 '검정오차'의 범위"
+    위 $\text{Err}_{\text{test}}$는 **같은 계획행렬 $\mathbf{X}$에서 새로운 $\mathbf{y}$를 관측할 때**의 표본내 예측오차다. 새로운 $x_0$까지 무작위로 뽑는 완전한 표본외 오차는 이보다 크며 $\mathbf{X}$의 분포에 의존한다.
 
-Regularization introduces a penalty $P(\boldsymbol{\beta})$ into the objective:
+    두 공식을 나란히 쓰는 이유는 **격차가 정확히 $2\sigma^2 p/n$이라는 깔끔한 결과** 때문이다. 이 격차가 $C_p$ 통계량과 AIC의 출발점이다.
+
+## 분산 감소로서의 정칙화
+
+정칙화는 목적함수에 벌점 $P(\boldsymbol{\beta})$를 넣는다.
 
 $$
 \hat{\boldsymbol{\beta}}_{\text{reg}} = \arg\min_{\boldsymbol{\beta}} \left\{\|\mathbf{y} - \mathbf{X}\boldsymbol{\beta}\|^2 + \lambda\, P(\boldsymbol{\beta})\right\}
 $$
 
-The penalty $\lambda\, P(\boldsymbol{\beta})$ deliberately introduces bias by shrinking coefficients toward zero. In return, it reduces variance, often substantially. The total MSE of the regularized estimator can be written as:
+벌점 $\lambda\, P(\boldsymbol{\beta})$는 계수를 0 쪽으로 축소하여 의도적으로 편향을 들여온다. 그 대가로 분산을 줄이며, 그 감소폭이 클 때가 많다. 정칙화 추정량의 전체 MSE는
 
 $$
 \text{MSE}(\hat{\boldsymbol{\beta}}_{\text{reg}}) = \text{Bias}^2(\hat{\boldsymbol{\beta}}_{\text{reg}}) + \text{Var}(\hat{\boldsymbol{\beta}}_{\text{reg}})
 $$
 
-For any $\boldsymbol{\beta} \neq \mathbf{0}$, there exists a value $\lambda > 0$ such that the regularized estimator has lower MSE than OLS. This is the Hoerl-Kennard theorem for ridge regression, and similar results hold for other penalties.
+로 쓸 수 있다. **모든** $\boldsymbol{\beta}$에 대해, 능형 추정량의 MSE가 OLS보다 작아지는 $\lambda > 0$이 존재한다. 이것이 능형회귀에 대한 Hoerl-Kennard 존재정리이며, 다른 벌점에 대해서도 유사한 결과가 성립한다.
 
-!!! tip "Intuition for Why Bias Helps"
-    Imagine estimating a parameter near zero. OLS gives an unbiased but noisy estimate. A regularized estimator that shrinks toward zero has a small bias but dramatically reduced variance. The net effect is a lower total error whenever the true parameter is not too far from zero.
+!!! tip "편향이 왜 도움이 되는가에 대한 직관"
+    0에 가까운 모수를 추정한다고 상상해 보라. OLS는 불편이지만 잡음이 큰 추정값을 준다. 0 쪽으로 축소하는 정칙화 추정량은 작은 편향을 갖는 대신 분산을 크게 줄인다. 참 모수가 0에서 너무 멀지 않다면 총오차가 줄어든다.
 
-## The Role of the Tuning Parameter
+## 조정모수의 역할
 
-The regularization parameter $\lambda \geq 0$ controls the bias-variance tradeoff:
+정칙화 모수 $\lambda \geq 0$이 편향-분산 절충을 조절한다.
 
-| $\lambda$ | Bias | Variance | Model |
+| $\lambda$ | 편향 | 분산 | 모형 |
 |---|---|---|---|
-| $\lambda = 0$ | Zero (OLS) | High | Most complex |
-| Small $\lambda$ | Low | Moderate | Slightly constrained |
-| Large $\lambda$ | High | Low | Heavily constrained |
-| $\lambda \to \infty$ | Maximum | Zero | Null model ($\hat{\boldsymbol{\beta}} = \mathbf{0}$) |
+| $\lambda = 0$ | 0 (OLS) | 큼 | 가장 복잡 |
+| 작은 $\lambda$ | 작음 | 중간 | 약간 제약됨 |
+| 큰 $\lambda$ | 큼 | 작음 | 강하게 제약됨 |
+| $\lambda \to \infty$ | 최대 | 0 | 영모형 ($\hat{\boldsymbol{\beta}} = \mathbf{0}$) |
 
-Selecting the optimal $\lambda$ requires data-driven methods such as cross-validation, which are covered in detail in the tuning section of this chapter.
+최적의 $\lambda$를 고르려면 교차검증 같은 자료 기반 방법이 필요하며, 이 장의 조정 절에서 자세히 다룬다.
 
-## Summary
+## 요약
 
-Overfitting occurs when a model captures noise rather than signal, leading to a gap between training and test performance. The bias-variance decomposition provides the theoretical framework: total prediction error equals bias squared plus variance plus irreducible noise. OLS is unbiased but can have excessive variance, especially when $p/n$ is large or predictors are correlated. Regularization deliberately introduces a small amount of bias to achieve a much larger reduction in variance, lowering overall prediction error. The remaining sections of this chapter develop specific forms of the penalty $P(\boldsymbol{\beta})$ and methods for choosing $\lambda$.
+과적합은 모형이 신호가 아니라 잡음을 포착할 때 일어나며 훈련성능과 검정성능 사이의 격차로 나타난다. 편향-분산 분해가 이론적 틀을 제공한다. 전체 예측오차는 편향의 제곱, 분산, 환원불가 잡음의 합이다. OLS는 불편이지만 $p/n$이 크거나 설명변수가 상관되어 있으면 분산이 지나칠 수 있다. 정칙화는 작은 편향을 의도적으로 들여와 훨씬 큰 분산 감소를 얻어 전체 예측오차를 낮춘다. 이 장의 나머지 절들은 벌점 $P(\boldsymbol{\beta})$의 구체적 형태와 $\lambda$를 고르는 방법을 전개한다.
 
+## 연습문제
 
-## Exercises
+**연습문제 1.**
+$E[\text{Err}_{\text{train}}] = \sigma^2(1 - p/n)$과 $E[\text{Err}_{\text{test}}] = \sigma^2(1 + p/n)$을 모의실험으로 확인하라. $n = 60$, $\sigma^2 = 4$로 고정하고 $p = 3, 10, 20, 40$에 대해 계산하라.
 
-**Exercise 1.**
-Describe the main concept of Overfitting and the Bias-Variance Tradeoff and explain why it matters for statistical practice.
+??? success "연습문제 1 풀이"
+    ```python
+    import numpy as np
+    rng = np.random.default_rng(7)
+    n, s2 = 60, 4.0
 
-??? success "Solution to Exercise 1"
-    Overfitting and the Bias-Variance Tradeoff is a core topic in statistics that provides tools for drawing reliable inferences from data. It matters because proper application ensures valid conclusions, correctly quantified uncertainty, and appropriate handling of the assumptions that underpin the method. Practitioners who understand this concept can avoid common pitfalls and choose the right analytical approach for their data.
+    for p in (3, 10, 20, 40):
+        X = rng.normal(size=(n, p)); b = np.ones(p)
+        tr, te = [], []
+        for _ in range(4000):
+            y = X @ b + rng.normal(0, np.sqrt(s2), n)
+            bh = np.linalg.lstsq(X, y, rcond=None)[0]
+            tr.append(((y - X @ bh)**2).mean())
+            y2 = X @ b + rng.normal(0, np.sqrt(s2), n)   # 같은 X, 새 y
+            te.append(((y2 - X @ bh)**2).mean())
+        print(p, np.mean(tr), s2*(1-p/n), np.mean(te), s2*(1+p/n))
+    ```
+
+    | $p$ | 훈련(실측) | $\sigma^2(1-p/n)$ | 검정(실측) | $\sigma^2(1+p/n)$ | 격차 |
+    |---:|---:|---:|---:|---:|---:|
+    | 3 | 3.789 | 3.800 | 4.180 | 4.200 | 0.39 |
+    | 10 | 3.339 | 3.333 | 4.684 | 4.667 | 1.35 |
+    | 20 | 2.672 | 2.667 | 5.326 | 5.333 | 2.65 |
+    | 40 | 1.320 | 1.333 | 6.642 | 6.667 | 5.32 |
+
+    **네 경우 모두 이론값과 소수 둘째 자리까지 일치한다.**
+
+    두 가지를 읽어야 한다.
+
+    **첫째, 훈련오차가 $\sigma^2$보다 작다.** $p = 40$에서 훈련오차 $1.32$는 잡음 수준 $4.0$의 3분의 1이다. 모형이 잡음의 일부를 "설명"해 버렸기 때문이다. **훈련오차는 잡음 분산의 추정값으로 쓸 수 없다.**
+
+    **둘째, 격차가 정확히 $2\sigma^2 p/n$이다.** $p = 40$에서 $2 \times 4 \times 40/60 = 5.33$이고 실측 격차가 $5.32$다. 이 관계가 $C_p$와 AIC의 벌점항 $2p\hat\sigma^2$의 유래다.
 
 ---
 
-**Exercise 2.**
-State the key assumptions required by the method discussed here. How can each assumption be checked?
+**연습문제 2.**
+Hoerl-Kennard 정리는 "모든 $\boldsymbol{\beta}$에 대해 능형회귀가 OLS보다 MSE가 작아지는 $\lambda > 0$이 존재한다"고 말한다. $\|\boldsymbol{\beta}\|$가 매우 클 때도 성립하는지 확인하라.
 
-??? success "Solution to Exercise 2"
-    The main assumptions typically include: (1) independence of observations -- verified by understanding the data collection process and checking for serial correlation; (2) distributional requirements (e.g., normality) -- checked with Q-Q plots and formal tests like Shapiro-Wilk; (3) equal variances (if applicable) -- assessed with boxplots and Levene's test. When assumptions are violated, consider robust alternatives, transformations, or nonparametric methods.
+??? success "연습문제 2 풀이"
+    직관적으로는 "$\boldsymbol{\beta}$가 0에서 멀면 0 쪽으로 축소하는 것이 손해"일 것 같다. 확인해 보자.
+
+    ```python
+    import numpy as np
+    from sklearn.linear_model import Ridge
+    rng = np.random.default_rng(7)
+
+    def mse(lam, beta, n=40, p=8, M=3000, rho=0.9):
+        S = rho*np.ones((p, p)) + (1-rho)*np.eye(p)
+        L = np.linalg.cholesky(S)
+        e = []
+        for _ in range(M):
+            X = rng.normal(size=(n, p)) @ L.T
+            y = X @ beta + rng.normal(0, 1, n)
+            b = (Ridge(alpha=lam, fit_intercept=False).fit(X, y).coef_
+                 if lam > 0 else np.linalg.lstsq(X, y, rcond=None)[0])
+            e.append(((b - beta)**2).sum())
+        return np.mean(e)
+    ```
+
+    $\boldsymbol{\beta} = c\mathbf{1}_8$로 두고 $c$를 키워 본다($\rho = 0.9$, $n = 40$, $p = 8$).
+
+    | $c$ | OLS MSE | 최적 능형 $\lambda$ | 능형 MSE | 개선 |
+    |---:|---:|---:|---:|:---|
+    | 0.5 | 2.283 | 20 | **0.062** | 37배 |
+    | 2.0 | 2.280 | 20 | **0.256** | 8.9배 |
+    | 10.0 | 2.283 | 2 | **1.126** | 2.0배 |
+
+    **$c = 10$에서도 능형회귀가 이긴다.** $\|\boldsymbol{\beta}\| = 10\sqrt{8} = 28.3$으로 0에서 매우 먼데도 그렇다.
+
+    **왜 그런가.** 최적 $\lambda$가 $20 \to 2$로 줄어든다는 점이 핵심이다. $\boldsymbol{\beta}$가 커지면 최적 축소량이 작아지지만 **0이 되지는 않는다.** 어떤 $\boldsymbol{\beta}$에서도 아주 작은 축소는 편향을 $O(\lambda^2)$만큼 늘리는 대신 분산을 $O(\lambda)$만큼 줄이므로, $\lambda$가 충분히 작으면 항상 이득이다.
+
+    **그러므로 "OLS는 최적 불편추정량이다"라는 Gauss-Markov 정리와 모순이 없다.** Gauss-Markov는 **불편** 추정량 중에서 OLS가 최소분산임을 말한다. 능형은 편향되어 있으므로 그 경쟁 범위 밖에 있다. MSE 기준을 쓰면 편향추정량이 이길 여지가 열린다.
+
+    실무적 함의: **$\lambda$를 자료에서 고를 수만 있다면 정칙화가 손해를 볼 이유가 없다.** 위험은 $\lambda$를 잘못 고르는 데 있고, 그래서 교차검증이 필요하다.
 
 ---
 
-**Exercise 3.**
-Work through a small numerical example illustrating the application of the technique from this section.
+**연습문제 3.**
+$p$가 $n$에 가까워질 때 훈련오차와 검정오차가 갈라지는 것을 하나의 자료에서 관찰하라. $p/n$이 얼마를 넘으면 위험한가?
 
-??? success "Solution to Exercise 3"
-    A structured approach to applying this technique involves: (1) clearly stating the hypotheses or estimation goal; (2) verifying that the data meet the required assumptions; (3) computing the relevant test statistic, estimate, or model fit; (4) obtaining the p-value, confidence interval, or posterior distribution; (5) interpreting the result in the context of the original question. Following these steps systematically ensures a rigorous and reproducible analysis.
+??? success "연습문제 3 풀이"
+    연습문제 1의 표를 비율로 다시 보면 답이 나온다.
 
----
+    | $p/n$ | 훈련/$\sigma^2$ | 검정/$\sigma^2$ | 검정/훈련 |
+    |---:|---:|---:|---:|
+    | 0.05 | 0.95 | 1.05 | 1.10 |
+    | 0.17 | 0.83 | 1.17 | 1.40 |
+    | 0.33 | 0.67 | 1.33 | 2.00 |
+    | 0.67 | 0.33 | 1.67 | **5.03** |
 
-**Exercise 4.**
-Compare the approach from this section with an alternative method. When would you choose each?
+    비 $\dfrac{1+p/n}{1-p/n}$은 $p/n \to 1$에서 발산한다.
 
-??? success "Solution to Exercise 4"
-    The method discussed here is appropriate when its assumptions hold and the sample size is sufficient for the asymptotic approximations to be accurate. Alternative approaches include: (1) nonparametric methods -- preferred when distributional assumptions are suspect; (2) bootstrap methods -- useful when analytical reference distributions are unavailable; (3) Bayesian methods -- valuable when incorporating prior information or when direct probability statements about parameters are desired. Running multiple approaches and comparing results provides a useful robustness check.
+    | $p/n$ | 검정/훈련 |
+    |---:|---:|
+    | 0.1 | 1.22 |
+    | 0.3 | 1.86 |
+    | 0.5 | 3.00 |
+    | 0.8 | 9.00 |
+    | 0.9 | 19.0 |
+
+    **경험칙:** $p/n < 0.1$이면 안심할 수 있고, $p/n > 0.3$이면 정칙화나 변수선택을 고려해야 하며, $p/n > 0.5$에서는 OLS의 훈련오차가 사실상 아무 정보도 주지 않는다.
+
+    $p \ge n$이면 $\mathbf{X}^\top\mathbf{X}$가 특이행렬이 되어 OLS 해가 유일하지 않다. 이때는 정칙화가 선택이 아니라 **필수**다.
