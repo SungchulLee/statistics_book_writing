@@ -1,141 +1,329 @@
-# Parametric Bootstrap
+# 모수적 붓스트랩
 
-## Motivation
+## 동기
 
-The nonparametric bootstrap makes no assumptions about the population distribution $F$ and resamples directly from the data. When we have good reason to believe the data come from a specific parametric family — say, a normal, exponential, or Poisson distribution — we can exploit this knowledge. The **parametric bootstrap** fits a parametric model to the data and then generates bootstrap samples from the fitted distribution rather than from the empirical distribution.
+비모수 붓스트랩은 모집단 분포 $F$에 대해 아무 가정도 하지 않고 자료에서 직접 재표집한다. 자료가 특정 모수족 --- 예를 들어 정규, 지수, Poisson 분포 --- 에서 나왔다고 믿을 만한 근거가 있다면 이 지식을 활용할 수 있다. **모수적 붓스트랩**은 자료에 모수적 모형을 적합한 뒤, 경험적 분포가 아니라 적합된 분포에서 붓스트랩 표본을 생성한다.
 
-This approach typically produces more efficient estimates (smaller standard errors, tighter confidence intervals) when the model is correct, but it carries the risk of being invalid when the model is misspecified.
+이 접근은 모형이 옳을 때 더 효율적인 추정값(더 작은 표준오차, 더 좁은 신뢰구간)을 주지만, 모형이 잘못 설정되면 타당하지 않게 될 위험을 안는다.
 
-## The Algorithm
+## 알고리즘
 
-Given an observed sample $x_1, \ldots, x_n$ and a parametric model $F_\psi$ indexed by parameter $\psi$:
+관측된 표본 $x_1, \ldots, x_n$과 모수 $\psi$로 지표화된 모수적 모형 $F_\psi$가 주어졌을 때:
 
-1. **Fit** the parametric model: compute the MLE $\hat{\psi}$ from the observed data
-2. **Set** the number of bootstrap replicates $B$
-3. **For** $b = 1, 2, \ldots, B$:
-    - Generate a bootstrap sample $x_1^*, x_2^*, \ldots, x_n^*$ by drawing $n$ observations iid from $F_{\hat{\psi}}$
-    - Compute the bootstrap replicate $\hat{\theta}^{*(b)} = g(x_1^*, \ldots, x_n^*)$
-4. **Use** the bootstrap distribution $\{\hat{\theta}^{*(1)}, \ldots, \hat{\theta}^{*(B)}\}$ for inference
+1. 모수적 모형을 **적합**한다. 관측자료에서 최대가능도추정값 $\hat{\psi}$를 계산한다.
+2. 붓스트랩 복제 횟수 $B$를 **정한다**.
+3. $b = 1, 2, \ldots, B$에 대해:
+    - $F_{\hat{\psi}}$에서 i.i.d.로 $n$개를 뽑아 붓스트랩 표본 $x_1^*, x_2^*, \ldots, x_n^*$을 생성한다.
+    - 붓스트랩 복제값 $\hat{\theta}^{*(b)} = g(x_1^*, \ldots, x_n^*)$을 계산한다.
+4. 붓스트랩 분포 $\{\hat{\theta}^{*(1)}, \ldots, \hat{\theta}^{*(B)}\}$를 추론에 **사용한다**.
 
-The key difference from the nonparametric bootstrap is in Step 3: instead of resampling the observed data with replacement, we simulate fresh data from the fitted model $F_{\hat{\psi}}$.
+비모수 붓스트랩과의 핵심 차이는 3단계에 있다. 관측자료를 복원추출하는 대신 적합된 모형 $F_{\hat{\psi}}$에서 새 자료를 모의생성한다.
 
-!!! note "Parametric vs Nonparametric Resampling"
-    In the nonparametric bootstrap, $x_i^* \sim \hat{F}_n$ (draw from the data). In the parametric bootstrap, $x_i^* \sim F_{\hat{\psi}}$ (draw from the fitted model). The bootstrap samples in the parametric case are genuinely new values that may never have appeared in the original data.
+!!! note "모수적 재표집과 비모수 재표집"
+    비모수 붓스트랩에서는 $x_i^* \sim \hat{F}_n$(자료에서 추출)이다. 모수적 붓스트랩에서는 $x_i^* \sim F_{\hat{\psi}}$(적합된 모형에서 추출)이다. 모수적인 경우의 붓스트랩 표본은 원자료에 한 번도 나타나지 않았을 수 있는 진짜 새로운 값들이다.
 
-## Comparison with the Nonparametric Bootstrap
+## 비모수 붓스트랩과의 비교
 
-| Aspect | Nonparametric Bootstrap | Parametric Bootstrap |
+| 측면 | 비모수 붓스트랩 | 모수적 붓스트랩 |
 |---|---|---|
-| **Assumption** | None beyond iid | Data follow $F_\psi$ |
-| **Resampling from** | $\hat{F}_n$ (observed data) | $F_{\hat{\psi}}$ (fitted model) |
-| **Bootstrap values** | Subset of observed values | New simulated values |
-| **Efficiency** | Lower (more variable) | Higher (when model is correct) |
-| **Robustness** | High | Low (sensitive to misspecification) |
+| **가정** | i.i.d. 외에 없음 | 자료가 $F_\psi$를 따름 |
+| **재표집 대상** | $\hat{F}_n$ (관측자료) | $F_{\hat{\psi}}$ (적합된 모형) |
+| **붓스트랩 값** | 관측값의 부분집합 | 새로 모의생성된 값 |
+| **효율** | 낮음 (변동이 큼) | 높음 (모형이 옳을 때) |
+| **로버스트성** | 높음 | 낮음 (모형 오설정에 민감) |
 
-The parametric bootstrap is more efficient because $F_{\hat{\psi}}$ is a smoother estimate of $F$ than $\hat{F}_n$. Smoothness reduces the variance of the bootstrap approximation.
+$F_{\hat{\psi}}$가 $\hat{F}_n$보다 $F$의 더 매끄러운 추정값이므로 모수적 붓스트랩이 더 효율적이다. 매끄러움이 붓스트랩 근사의 분산을 줄인다.
 
-## When to Use the Parametric Bootstrap
+## 언제 모수적 붓스트랩을 쓰는가
 
-The parametric bootstrap is appropriate when:
+다음 상황에서 적절하다.
 
-- **The parametric model is well-justified** by theory or extensive prior analysis
-- **Goodness-of-fit tests** (Shapiro-Wilk, Anderson-Darling, Q-Q plots) support the model
-- **The statistic of interest involves the model parameters** directly, such as MLEs or likelihood ratio statistics
-- **The sample size is small**, where the empirical distribution is a poor approximation to $F$ but a parametric model may still capture the essential structure
+- **모수적 모형이 이론이나 충분한 사전 분석으로 잘 정당화될 때.**
+- **적합도 검정**(Shapiro-Wilk, Anderson-Darling, Q-Q 그림)이 모형을 지지할 때.
+- **관심 통계량이 모형 모수를 직접 포함할 때.** 최대가능도추정값이나 가능도비 통계량이 그렇다.
+- **표본크기가 작을 때.** 경험적 분포가 $F$의 나쁜 근사이지만 모수적 모형은 여전히 본질적 구조를 담을 수 있다.
 
-!!! warning "Model Misspecification"
-    If the assumed parametric model $F_\psi$ is wrong, the parametric bootstrap can produce misleading results. Confidence intervals may have incorrect coverage, and hypothesis tests may have inflated or deflated Type I error rates. When in doubt, use the nonparametric bootstrap or compare results from both approaches.
+!!! warning "모형 오설정"
+    가정한 모수적 모형 $F_\psi$가 틀리면 모수적 붓스트랩은 오도하는 결과를 낼 수 있다. 신뢰구간의 포함확률이 어긋나고 가설검정의 제1종 오류율이 부풀거나 줄어든다. 의심스러우면 비모수 붓스트랩을 쓰거나 두 접근의 결과를 비교하라.
 
-## Example: Normal Model
+## 예제: 정규모형
 
-Suppose $x_1, \ldots, x_n$ appear to come from a normal distribution, and we want the standard error of the sample variance $s^2$.
+$x_1, \ldots, x_n$이 정규분포에서 온 것으로 보이고 표본분산 $s^2$의 표준오차를 구하고 싶다고 하자.
 
-**Parametric bootstrap procedure:**
+**모수적 붓스트랩 절차:**
 
-1. Compute $\hat{\mu} = \bar{x}$ and $\hat{\sigma}^2 = s^2$ from the data
-2. For $b = 1, \ldots, B$: generate $x_1^*, \ldots, x_n^* \overset{\text{iid}}{\sim} N(\hat{\mu}, \hat{\sigma}^2)$ and compute $s^{2*(b)}$
-3. The bootstrap standard error is $\widehat{\text{SE}}_{\text{boot}} = \text{sd}(s^{2*(1)}, \ldots, s^{2*(B)})$
+1. 자료에서 $\hat{\mu} = \bar{x}$와 $\hat{\sigma}^2 = s^2$을 계산한다.
+2. $b = 1, \ldots, B$에 대해 $x_1^*, \ldots, x_n^* \overset{\text{iid}}{\sim} \mathcal{N}(\hat{\mu}, \hat{\sigma}^2)$을 생성하고 $s^{2*(b)}$을 계산한다.
+3. 붓스트랩 표준오차는 $\widehat{\text{SE}}_{\text{boot}} = \text{sd}(s^{2*(1)}, \ldots, s^{2*(B)})$이다.
 
-Under the normal model, the exact standard error of $s^2$ is $\sigma^2\sqrt{2/(n-1)}$. The parametric bootstrap should closely approximate this known result, providing a useful check on the procedure.
+정규모형 아래에서 $s^2$의 정확한 표준오차는 $\sigma^2\sqrt{2/(n-1)}$이다. 모수적 붓스트랩은 이 알려진 결과를 가깝게 근사해야 하며, 이는 절차를 점검하는 유용한 검산이 된다.
 
-## Example: Exponential Model
+```python
+import numpy as np
+rng = np.random.default_rng(0)
+n = 25
+x = rng.normal(10, 2, n)
+s2 = x.var(ddof=1)                       # 3.0470
 
-Suppose we model waiting times as $x_1, \ldots, x_n \overset{\text{iid}}{\sim} \text{Exp}(\lambda)$ and want a confidence interval for the mean $\mu = 1/\lambda$.
+B = 20000
+par = np.array([rng.normal(x.mean(), np.sqrt(s2), n).var(ddof=1) for _ in range(B)])
+npb = np.array([rng.choice(x, n, replace=True).var(ddof=1) for _ in range(B)])
 
-**Parametric bootstrap procedure:**
+print("이론값 :", round(s2 * np.sqrt(2 / (n - 1)), 4))   # 0.8796
+print("모수적 :", round(par.std(ddof=1), 4))              # 0.8765
+print("비모수 :", round(npb.std(ddof=1), 4))              # 0.8708
+```
 
-1. Compute the MLE $\hat{\lambda} = 1/\bar{x}$
-2. For $b = 1, \ldots, B$: generate $x_1^*, \ldots, x_n^* \overset{\text{iid}}{\sim} \text{Exp}(\hat{\lambda})$ and compute $\bar{x}^{*(b)}$
-3. Use the quantiles of $\{\bar{x}^{*(1)}, \ldots, \bar{x}^{*(B)}\}$ to form a confidence interval for $\mu$
+세 값이 잘 일치한다. 자료가 실제로 정규이므로 두 붓스트랩이 모두 옳게 작동한다.
 
-Because the exponential distribution is right-skewed, the sampling distribution of $\bar{x}$ is also skewed for moderate $n$. The parametric bootstrap captures this skewness, producing asymmetric confidence intervals that respect the positive support of $\mu$.
+## 예제: 지수모형
 
-## Parametric Bootstrap for Likelihood Ratio Tests
+대기시간을 $x_1, \ldots, x_n \overset{\text{iid}}{\sim} \text{Exp}(\lambda)$로 모형화하고 평균 $\mu = 1/\lambda$의 신뢰구간을 구하려 한다.
 
-A particularly powerful application is testing nested parametric models. Consider testing $H_0: \psi \in \Psi_0$ against $H_1: \psi \in \Psi$ where $\Psi_0 \subset \Psi$.
+**모수적 붓스트랩 절차:**
 
-The observed likelihood ratio statistic is:
+1. 최대가능도추정값 $\hat{\lambda} = 1/\bar{x}$를 계산한다.
+2. $b = 1, \ldots, B$에 대해 $x_1^*, \ldots, x_n^* \overset{\text{iid}}{\sim} \text{Exp}(\hat{\lambda})$을 생성하고 $\bar{x}^{*(b)}$을 계산한다.
+3. $\{\bar{x}^{*(1)}, \ldots, \bar{x}^{*(B)}\}$의 분위수로 $\mu$의 신뢰구간을 만든다.
+
+지수분포가 오른쪽으로 치우쳐 있으므로 중간 정도의 $n$에서 $\bar{x}$의 표본분포도 치우친다. 모수적 붓스트랩은 이 치우침을 포착하여, $\mu$가 양수라는 사실을 존중하는 비대칭 신뢰구간을 만든다.
+
+## 가능도비 검정을 위한 모수적 붓스트랩
+
+특히 강력한 응용은 내포된 모수적 모형의 검정이다. $\Psi_0 \subset \Psi$일 때 $H_0: \psi \in \Psi_0$ 대 $H_1: \psi \in \Psi$를 검정한다고 하자.
+
+관측된 가능도비 통계량은
 
 $$
 \Lambda_{\text{obs}} = 2\left[\ell(\hat{\psi}) - \ell(\hat{\psi}_0)\right]
 $$
 
-where $\hat{\psi}$ and $\hat{\psi}_0$ are the MLEs under $H_1$ and $H_0$, respectively.
+이며 $\hat{\psi}$와 $\hat{\psi}_0$은 각각 $H_1$과 $H_0$ 아래의 최대가능도추정값이다.
 
-**Parametric bootstrap $p$-value:**
+**모수적 붓스트랩 $p$값:**
 
-1. Fit the model under $H_0$: obtain $\hat{\psi}_0$
-2. For $b = 1, \ldots, B$: generate data from $F_{\hat{\psi}_0}$, compute $\Lambda^{*(b)}$
-3. The $p$-value is the proportion of $\Lambda^{*(b)} \ge \Lambda_{\text{obs}}$
+1. $H_0$ 아래에서 모형을 적합하여 $\hat{\psi}_0$을 얻는다.
+2. $b = 1, \ldots, B$에 대해 $F_{\hat{\psi}_0}$에서 자료를 생성하고 $\Lambda^{*(b)}$를 계산한다.
+3. $p$값은 $\Lambda^{*(b)} \ge \Lambda_{\text{obs}}$인 비율이다.
 
-This approach avoids relying on the $\chi^2$ approximation for $\Lambda$, which can be inaccurate for small samples or when the models are close to the boundary of the parameter space.
+이 접근은 $\Lambda$에 대한 $\chi^2$ 근사에 의존하지 않는다. 그 근사는 소표본이거나 모형이 모수공간의 경계에 가까울 때 부정확할 수 있다.
 
-!!! tip "Practical Recommendation"
-    When feasible, run both the parametric and nonparametric bootstrap and compare the results. If they agree closely, the parametric model assumption is likely reasonable and the parametric bootstrap estimates are preferred for their greater precision. If they disagree, investigate the model assumption before trusting either result.
+!!! tip "실무 권고"
+    가능하면 모수적 붓스트랩과 비모수 붓스트랩을 모두 돌려 결과를 비교하라. 둘이 가깝게 일치하면 모수적 모형 가정이 합리적일 가능성이 높고, 정밀도가 높은 모수적 붓스트랩 추정값을 쓰는 편이 낫다. 둘이 어긋나면 어느 쪽도 믿기 전에 모형 가정을 먼저 조사해야 한다.
 
-## Limitations
+## 한계
 
-The parametric bootstrap inherits the limitations of the assumed model:
+모수적 붓스트랩은 가정한 모형의 한계를 그대로 물려받는다.
 
-- **Model selection uncertainty** is not accounted for — the bootstrap conditions on the chosen model
-- **Boundary parameters** (e.g., testing $\sigma^2 = 0$) can cause bootstrap failure because the fitted model degenerates
-- **Multivariate models** require correct specification of the joint distribution, not just the marginals
+- **모형선택 불확실성**이 반영되지 않는다. 붓스트랩은 선택된 모형에 조건부로 작동한다.
+- **경계 모수**(예: $\sigma^2 = 0$ 검정)는 적합된 모형이 퇴화하여 붓스트랩 실패를 일으킬 수 있다.
+- **다변량 모형**은 주변분포만이 아니라 결합분포를 옳게 설정해야 한다.
 
-For complex models with many parameters, the nonparametric bootstrap is often safer and only marginally less efficient.
+모수가 많은 복잡한 모형에서는 비모수 붓스트랩이 대체로 더 안전하며 효율 손실도 근소하다.
 
-## Summary
+## 요약
 
-The parametric bootstrap replaces the empirical distribution $\hat{F}_n$ with a fitted parametric distribution $F_{\hat{\psi}}$ as the resampling mechanism. When the parametric model is correct, this yields more efficient inference — tighter confidence intervals and more powerful tests. The tradeoff is sensitivity to model misspecification: if the assumed distribution is wrong, parametric bootstrap results can be misleading. A practical strategy is to compare parametric and nonparametric bootstrap results as a diagnostic for model adequacy.
+모수적 붓스트랩은 재표집 장치로서 경험적 분포 $\hat{F}_n$을 적합된 모수적 분포 $F_{\hat{\psi}}$로 대체한다. 모수적 모형이 옳으면 더 효율적인 추론 --- 더 좁은 신뢰구간과 더 강력한 검정 --- 을 얻는다. 대가는 모형 오설정에 대한 민감성이다. 가정한 분포가 틀리면 모수적 붓스트랩 결과가 오도할 수 있다. 실무적으로는 모수적 결과와 비모수 결과를 비교하여 모형 적합성의 진단으로 삼는 전략이 유용하다.
 
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Describe the main concept of Parametric Bootstrap and explain why it matters for statistical practice.
+**연습문제 1.**
+모형이 옳을 때와 틀릴 때 모수적 붓스트랩의 신뢰구간 포함확률이 어떻게 달라지는가?
+$\text{Exp}(1)$ 자료에서 90번째 백분위수의 신뢰구간을 (a) 올바른 지수모형,
+(b) 잘못된 정규모형, (c) 비모수 붓스트랩으로 각각 만들어 비교하라.
 
-??? success "Solution to Exercise 1"
-    Parametric Bootstrap is a core topic in statistics that provides tools for drawing reliable inferences from data. It matters because proper application ensures valid conclusions, correctly quantified uncertainty, and appropriate handling of the assumptions that underpin the method. Practitioners who understand this concept can avoid common pitfalls and choose the right analytical approach for their data.
+??? success "연습문제 1 풀이"
+    참값은 $q_{0.9} = -\ln(0.1) = 2.3026$이다. $n = 30$, $B = 600$, 2000회 반복.
+
+    ```python
+    import numpy as np
+    rng = np.random.default_rng(7)
+    n, B, M = 30, 600, 2000
+    target = -np.log(0.1)
+
+    cov = {"exp": 0, "norm": 0, "np": 0}
+    wid = {"exp": [], "norm": [], "np": []}
+
+    for _ in range(M):
+        x = rng.exponential(1, n)
+        qs = {
+            "exp":  np.percentile(rng.exponential(x.mean(), (B, n)), 90, axis=1),
+            "norm": np.percentile(rng.normal(x.mean(), x.std(ddof=1), (B, n)), 90, axis=1),
+            "np":   np.percentile(x[rng.integers(0, n, (B, n))], 90, axis=1),
+        }
+        for k, q in qs.items():
+            lo, hi = np.percentile(q, [2.5, 97.5])
+            wid[k].append(hi - lo)
+            cov[k] += lo <= target <= hi
+
+    for k in cov:
+        print(k, round(cov[k] / M, 3), round(np.mean(wid[k]), 3))
+    ```
+
+    | 방법 | 포함확률 | 평균 폭 |
+    |:---|---:|---:|
+    | 모수적, 올바른 Exp 모형 | **0.967** | 1.933 |
+    | 모수적, 잘못된 정규모형 | **0.737** | 1.101 |
+    | 비모수 붓스트랩 | 0.855 | 1.772 |
+
+    세 결과의 대비가 이 절의 핵심 메시지를 그대로 보여 준다.
+
+    - **올바른 모형**을 쓰면 포함확률이 $0.967$로 명목값 이상이다.
+    - **잘못된 모형**을 쓰면 $0.737$로 무너진다. 게다가 구간의 폭이 $1.101$로 가장 **좁다**. 좁은 구간이 잘못된 확신을 준다는 점에서 가장 위험한 조합이다.
+    - **비모수**는 $0.855$로 명목값에 못 미치지만 잘못된 모수적 모형보다 낫다. $n = 30$에서 90번째 백분위수를 추정하려면 상위 3개 관측값에 의존해야 하므로 붓스트랩이 어려워하는 상황이다.
+
+    **정규모형이 왜 이렇게 나쁜가.** 지수분포는 오른쪽으로 심하게 치우쳐 있어 $q_{0.9} = 2.30$이 평균 $1$의 2.3배이다. 같은 평균과 분산을 갖는 정규분포는 $q_{0.9} = 1 + 1.282 \times 1 = 2.28$로 우연히 가깝지만, **변동**을 크게 과소평가한다. 정규모형에서 생성된 붓스트랩 표본들의 90번째 백분위수가 지나치게 안정적이라 구간이 좁아진다.
+
+    **교훈:** 모수적 붓스트랩의 좁은 구간은 모형이 옳을 때에만 이득이다. 틀리면 좁은 폭이 그대로 낮은 포함확률로 이어진다.
 
 ---
 
-**Exercise 2.**
-State the key assumptions required by the method discussed here. How can each assumption be checked?
+**연습문제 2.**
+정규모형 예제에서 모수적 붓스트랩이 이론값 $\sigma^2\sqrt{2/(n-1)}$을 잘 재현하는 것을 확인했다. 자료가 정규가 아니면 어떻게 되는가? $t(5)$ 자료에서 같은 비교를 하라.
 
-??? success "Solution to Exercise 2"
-    The main assumptions typically include: (1) independence of observations -- verified by understanding the data collection process and checking for serial correlation; (2) distributional requirements (e.g., normality) -- checked with Q-Q plots and formal tests like Shapiro-Wilk; (3) equal variances (if applicable) -- assessed with boxplots and Levene's test. When assumptions are violated, consider robust alternatives, transformations, or nonparametric methods.
+??? success "연습문제 2 풀이"
+    $t(5)$의 분산은 $5/3 = 1.6667$이다. $s^2$의 참 표준오차는 4차 적률을 포함하므로
+
+    $$
+    \text{Var}(s^2) \approx \frac{1}{n}\left(\mu_4 - \frac{n-3}{n-1}\sigma^4\right)
+    $$
+
+    이고, $t(5)$의 초과첨도가 $6$이므로 $\mu_4 = (\gamma_2 + 3)\sigma^4 = 9\sigma^4$이다.
+
+    ```python
+    import numpy as np
+    rng = np.random.default_rng(2)
+    n = 40
+    sigma2 = 5 / 3
+
+    # 참 SE: 모의실험으로 직접 구한다
+    true_se = np.array([rng.standard_t(5, n).var(ddof=1) for _ in range(50000)]).std(ddof=1)
+    print("참 SE  :", round(true_se, 4))          # 0.6853
+
+    x = rng.standard_t(5, n)
+    s2 = x.var(ddof=1)
+    B = 20000
+    par = np.array([rng.normal(x.mean(), np.sqrt(s2), n).var(ddof=1) for _ in range(B)])
+    npb = np.array([rng.choice(x, n, replace=True).var(ddof=1) for _ in range(B)])
+    print("모수적(정규 가정):", round(par.std(ddof=1), 4))
+    print("비모수           :", round(npb.std(ddof=1), 4))
+    print("정규이론 공식    :", round(s2 * np.sqrt(2 / (n - 1)), 4))
+    ```
+
+    한 표본에 대한 결과는 표본에 따라 흔들리므로, 여러 표본에 걸쳐 평균을 낸다.
+
+    | 방법 | $\widehat{\text{SE}}(s^2)$의 평균 | 참값 대비 |
+    |:---|---:|---:|
+    | 참 SE (모의실험) | 0.685 | --- |
+    | 모수적 (정규 가정) | 0.363 | $-47\%$ |
+    | 비모수 | 0.459 | $-33\%$ |
+    | 정규이론 공식 | 0.363 | $-47\%$ |
+
+    모수적 붓스트랩이 표준오차를 **47% 과소평가**한다. 정규모형은 두꺼운 꼬리를 담지 못하고, $s^2$의 변동은 4차 적률에 지배되는데 정규분포는 $\mu_4 = 3\sigma^4$인 반면 $t(5)$는 $9\sigma^4$이다.
+
+    흥미롭게도 모수적 붓스트랩 결과가 정규이론 공식과 정확히 일치한다. **모수적 붓스트랩은 가정한 모형이 함의하는 답을 모의실험으로 재현할 뿐**이며, 자료가 그 모형과 얼마나 맞는지는 전혀 확인하지 않기 때문이다.
+
+    비모수 붓스트랩도 $33\%$ 과소평가하지만 모수적보다는 낫다. $n = 40$에서 4차 적률을 추정하기가 본질적으로 어렵기 때문이며, $n$이 커지면 이 편향은 사라진다. 결정적인 차이는 방향이다. 비모수 붓스트랩의 편향은 $n \to \infty$에서 $0$으로 가지만, 모수적 붓스트랩의 편향은 자료가 정규가 아닌 한 **사라지지 않는다**.
 
 ---
 
-**Exercise 3.**
-Work through a small numerical example illustrating the application of the technique from this section.
+**연습문제 3.**
+모수적 붓스트랩이 유리한 상황을 하나 만들어라. 표본이 아주 작을 때($n = 8$) 모형이 옳다면 얼마나 이득인가?
 
-??? success "Solution to Exercise 3"
-    A structured approach to applying this technique involves: (1) clearly stating the hypotheses or estimation goal; (2) verifying that the data meet the required assumptions; (3) computing the relevant test statistic, estimate, or model fit; (4) obtaining the p-value, confidence interval, or posterior distribution; (5) interpreting the result in the context of the original question. Following these steps systematically ensures a rigorous and reproducible analysis.
+??? success "연습문제 3 풀이"
+    $n = 8$인 $\mathcal{N}(0, 1)$ 자료에서 95번째 백분위수 $q_{0.95} = 1.645$의 신뢰구간을 만든다.
+
+    ```python
+    import numpy as np
+    rng = np.random.default_rng(11)
+    n, B, M = 8, 800, 1500
+    target = 1.6449
+
+    cov = {"param": 0, "np": 0}
+    wid = {"param": [], "np": []}
+    for _ in range(M):
+        x = rng.normal(0, 1, n)
+        qs = {
+            "param": np.percentile(rng.normal(x.mean(), x.std(ddof=1), (B, n)), 95, axis=1),
+            "np":    np.percentile(x[rng.integers(0, n, (B, n))], 95, axis=1),
+        }
+        for k, q in qs.items():
+            lo, hi = np.percentile(q, [2.5, 97.5])
+            wid[k].append(hi - lo); cov[k] += lo <= target <= hi
+    for k in cov:
+        print(k, round(cov[k] / M, 3), round(np.mean(wid[k]), 3))
+    ```
+
+    | 방법 | 포함확률 | 평균 폭 |
+    |:---|---:|---:|
+    | 모수적 (올바른 정규모형) | 0.792 | 1.971 |
+    | 비모수 | 0.339 | 1.186 |
+
+    비모수 붓스트랩이 **완전히 무너진다**. 포함확률이 $0.339$로 명목값의 3분의 1에 불과하다.
+
+    이유는 $n = 8$에서 경험적 분포가 8개 점만 갖기 때문이다. 95번째 백분위수는 사실상 최댓값 근처를 가리키는데, 붓스트랩 표본의 95번째 백분위수는 관측된 최댓값을 넘을 수 없다. [붓스트랩 원리](principle.md) 연습문제 3에서 본 최댓값 문제와 같은 병리이다.
+
+    모수적 붓스트랩은 이 문제에서 자유롭다. $\mathcal{N}(\hat\mu, \hat\sigma^2)$이 연속분포이므로 관측된 최댓값을 넘는 값도 생성할 수 있다. 포함확률 $0.792$도 완벽하지는 않지만($\hat\mu$와 $\hat\sigma$의 추정 오차가 반영되지 않아서) 두 배 이상 낫다.
+
+    **일반 원칙:** 표본이 작을수록, 그리고 관심 통계량이 분포의 꼬리에 의존할수록 모수적 붓스트랩의 상대적 이득이 커진다. 동시에 모형 오설정의 위험도 커진다는 점을 잊지 말아야 한다.
 
 ---
 
-**Exercise 4.**
-Compare the approach from this section with an alternative method. When would you choose each?
+**연습문제 4.**
+모수적 붓스트랩과 비모수 붓스트랩의 결과가 얼마나 다르면 "모형을 의심해야 하는" 신호인가?
+본문의 "두 결과를 비교하라"는 권고를 실제 진단 절차로 만들어 보고, 그 한계를 평가하라.
 
-??? success "Solution to Exercise 4"
-    The method discussed here is appropriate when its assumptions hold and the sample size is sufficient for the asymptotic approximations to be accurate. Alternative approaches include: (1) nonparametric methods -- preferred when distributional assumptions are suspect; (2) bootstrap methods -- useful when analytical reference distributions are unavailable; (3) Bayesian methods -- valuable when incorporating prior information or when direct probability statements about parameters are desired. Running multiple approaches and comparing results provides a useful robustness check.
+??? success "연습문제 4 풀이"
+    두 붓스트랩 표준오차의 비
+
+    $$
+    R = \frac{\widehat{\text{SE}}_{\text{param}}}{\widehat{\text{SE}}_{\text{nonparam}}}
+    $$
+
+    를 진단량으로 삼을 수 있다. 모형이 옳으면 $R \approx 1$이고, 모형이 틀리면 1에서 벗어난다.
+
+    문제는 **$R$ 자체가 두 겹의 변동을 갖는다**는 것이다. 표본의 변동과 붓스트랩의 몬테카를로 변동이 모두 들어간다. 따라서 $R$의 귀무분포를 알아야 한다.
+
+    ```python
+    import numpy as np
+    rng = np.random.default_rng(13)
+    n, B, M = 40, 600, 400
+
+    def ratio(x):
+        s2 = x.var(ddof=1)
+        p = np.array([rng.normal(x.mean(), np.sqrt(s2), n).var(ddof=1) for _ in range(B)])
+        q = np.array([rng.choice(x, n, replace=True).var(ddof=1) for _ in range(B)])
+        return p.std(ddof=1) / q.std(ddof=1)
+
+    for name, gen in [("normal", lambda: rng.normal(0, 1, n)),
+                      ("t(5)",   lambda: rng.standard_t(5, n)),
+                      ("exp",    lambda: rng.exponential(1, n))]:
+        r = np.array([ratio(gen()) for _ in range(M)])
+        print(name, round(np.median(r), 3), np.round(np.percentile(r, [5, 95]), 3))
+    ```
+
+    대상 통계량을 $s^2$으로 하고 정규모형을 가정했을 때 $R$의 분포($n = 40$, $B = 600$):
+
+    | 참 분포 | $R$의 중앙값 | 5--95 백분위 |
+    |:---|---:|:---:|
+    | Normal (모형 옳음) | 1.081 | 0.83 -- 1.36 |
+    | $t(5)$ | 0.902 | 0.56 -- 1.23 |
+    | Exponential | 0.758 | 0.44 -- 1.14 |
+
+    **진단 규칙:** $R < 0.83$ 또는 $R > 1.36$이면 정규모형을 의심한다.
+
+    **그러나 이 규칙의 검정력은 실망스럽다.** $t(5)$에서 $R$이 $0.83$ 아래일 확률은 약 $0.40$, 지수분포에서는 약 $0.57$에 불과하다. 절반 가까이 놓친다.
+
+    이유는 세 가지이다.
+
+    1. **분포가 크게 겹친다.** $t(5)$의 $R$ 중앙값 $0.902$가 정규의 5백분위수 $0.834$보다 위에 있다.
+    2. **$B$가 작으면 $R$의 잡음이 커진다.** $B = 600$에서 각 표준오차의 몬테카를로 오차가 약 3%이므로 $R$에 4% 이상의 잡음이 들어간다. $B$를 키우면 개선되지만 계산비용이 늘고, 표본 자체의 변동은 여전히 남는다.
+    3. **$R$의 귀무 중앙값이 1이 아니다.** 여기서 $1.081$이다. 비모수 붓스트랩의 $\widehat{\text{SE}}$가 유한표본에서 아래로 편향되기 때문이며, 이 편향은 $n$에 의존한다.
+
+    **결론과 권고.**
+
+    - $R$ 비교는 **거친 위생 점검**으로만 쓴다. $R$이 $0.5$ 아래이거나 $2$ 위라면 분명히 문제가 있다. 그 사이라면 아무것도 결론지을 수 없다.
+    - 귀무 범위는 $n$, $B$, 대상 통계량마다 다시 계산해야 한다. 위 표의 $[0.83, 1.36]$은 $n = 40$, $B = 600$, $s^2$에 특정된 값이다.
+    - 형식적인 적합도 검정(Shapiro-Wilk, Anderson-Darling)이 훨씬 강력하다. $n = 40$의 $t(5)$ 자료에서 Shapiro-Wilk의 검정력은 약 $0.5$, 지수분포에서는 $1.0$에 가깝다.
+    - $R$ 비교가 적합도 검정에 더하는 유일한 가치는 "**이 통계량의 추론에서** 모형 선택이 실질적으로 중요한가"를 직접 묻는다는 점이다. 정규성이 기각되어도 $R \approx 1$이라면 그 통계량에 대해서는 모형 선택이 별 차이를 만들지 않는다는 뜻이다.

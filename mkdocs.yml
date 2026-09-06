@@ -665,45 +665,45 @@ nav:
             - 이표본 및 다집단 검정 (코드): ch16/code/two_sample_tests.md
             - 비모수 검정 모음: ch16/code/nonparametric_suite.md
 
-    - 17 Resampling Methods:
-        - Chapter Overview: ch17/index.md
-        - 17.1 Bootstrap Foundations:
-            - The Bootstrap Principle: ch17/bootstrap/principle.md
-            - Non-Parametric Bootstrap: ch17/bootstrap/nonparametric.md
-            - Parametric Bootstrap: ch17/bootstrap/parametric.md
-            - Resampling Method: ch17/bootstrap/resampling_method.md
-            - Bootstrap Overview: ch17/bootstrap/bootstrap.md
-        - 17.2 Bootstrap Confidence Intervals:
-            - Percentile Method: ch17/bootstrap_ci/percentile.md
-            - Bias-Corrected and Accelerated Bootstrap: ch17/bootstrap_ci/bca.md
-            - Bootstrap-t Method: ch17/bootstrap_ci/bootstrap_t.md
-            - Visualization of Confidence Levels: ch17/bootstrap_ci/visualization_confidence_levels.md
-            - Comparison of Bootstrap Confidence Interval Methods: ch17/bootstrap_ci/comparison.md
-        - 17.3 Bootstrap Hypothesis Testing:
-            - Bootstrap Test for a Single Mean: ch17/bootstrap_testing/single_mean.md
-            - Bootstrap Test for Two Means: ch17/bootstrap_testing/two_means.md
-            - Bootstrap Test for Correlation: ch17/bootstrap_testing/correlation.md
-        - 17.4 Permutation Tests:
-            - Permutation Test Foundations: ch17/permutation/foundations.md
-            - Permutation Test for Two-Sample Location: ch17/permutation/two_sample.md
-            - Permutation Test for Correlation: ch17/permutation/correlation.md
-            - Permutation Test for Paired Data: ch17/permutation/paired.md
-            - Permutation Tests Overview: ch17/permutation/permutation.md
-        - 17.5 Comparison and Practical Guidance:
-            - Bootstrap vs Permutation Tests: ch17/comparison/bootstrap_vs_permutation.md
-            - Number of Resamples and Convergence: ch17/comparison/convergence.md
-            - When Resampling Fails: ch17/comparison/limitations.md
-            - Comparison Overview: ch17/comparison/comparison.md
-        - 17.6 Code:
-            - Bootstrap Confidence Interval Methods: ch17/code/bootstrap_ci.md
-            - Bootstrap Hypothesis Tests: ch17/code/bootstrap_tests.md
-            - Permutation Test Demonstrations: ch17/code/permutation_tests.md
-            - Resampling Methods Comparison: ch17/code/resampling_methods.md
-            - A/B Testing Permutation: ch17/code/ab_testing_permutation.md
-            - Bootstrap Confidence Interval Visualization: ch17/code/bootstrap_ci_visualization.md
-            - Bootstrap Median: ch17/code/bootstrap_median.md
-            - Resampling (Shoe Sales A/B Test): ch17/code/resampling_shoe_sales.md
-            - Cross-Validation Methods Comparison: ch17/code/cv_methods_comparison.md
+    - 17 재표집 방법:
+        - 장 개요: ch17/index.md
+        - 17.1 붓스트랩의 기초:
+            - 붓스트랩 원리: ch17/bootstrap/principle.md
+            - 비모수 붓스트랩: ch17/bootstrap/nonparametric.md
+            - 모수적 붓스트랩: ch17/bootstrap/parametric.md
+            - 붓스트랩 재표집 방법: ch17/bootstrap/resampling_method.md
+            - 붓스트랩 개요: ch17/bootstrap/bootstrap.md
+        - 17.2 붓스트랩 신뢰구간:
+            - 백분위수법: ch17/bootstrap_ci/percentile.md
+            - 편향보정 가속 붓스트랩 (BCa): ch17/bootstrap_ci/bca.md
+            - 붓스트랩-t 방법: ch17/bootstrap_ci/bootstrap_t.md
+            - 신뢰수준의 시각화: ch17/bootstrap_ci/visualization_confidence_levels.md
+            - 붓스트랩 신뢰구간 방법의 비교: ch17/bootstrap_ci/comparison.md
+        - 17.3 붓스트랩 가설검정:
+            - 단일 평균에 대한 붓스트랩 검정: ch17/bootstrap_testing/single_mean.md
+            - 두 평균에 대한 붓스트랩 검정: ch17/bootstrap_testing/two_means.md
+            - 상관에 대한 붓스트랩 검정: ch17/bootstrap_testing/correlation.md
+        - 17.4 순열검정:
+            - 순열검정의 기초: ch17/permutation/foundations.md
+            - 이표본 위치에 대한 순열검정: ch17/permutation/two_sample.md
+            - 상관에 대한 순열검정: ch17/permutation/correlation.md
+            - 대응자료에 대한 순열검정: ch17/permutation/paired.md
+            - 순열검정 개요: ch17/permutation/permutation.md
+        - 17.5 비교와 실무 지침:
+            - 붓스트랩과 순열검정의 비교: ch17/comparison/bootstrap_vs_permutation.md
+            - 재표집 횟수와 수렴: ch17/comparison/convergence.md
+            - 재표집이 실패할 때: ch17/comparison/limitations.md
+            - 비교 개요: ch17/comparison/comparison.md
+        - 17.6 코드:
+            - 붓스트랩 신뢰구간 방법 (코드): ch17/code/bootstrap_ci.md
+            - 붓스트랩 가설검정 (코드): ch17/code/bootstrap_tests.md
+            - 순열검정 시연 (코드): ch17/code/permutation_tests.md
+            - 재표집 방법 비교 (코드): ch17/code/resampling_methods.md
+            - A/B 검정 순열검정 (코드): ch17/code/ab_testing_permutation.md
+            - 붓스트랩 신뢰구간 시각화 (코드): ch17/code/bootstrap_ci_visualization.md
+            - 중앙값의 붓스트랩 (코드): ch17/code/bootstrap_median.md
+            - 재표집 (신발 판매 A/B 검정) (코드): ch17/code/resampling_shoe_sales.md
+            - 교차검증 방법 비교 (코드): ch17/code/cv_methods_comparison.md
 
     - 18 Regularization Techniques:
         - Chapter Overview: ch18/index.md

@@ -1,230 +1,321 @@
-# Bootstrap Hypothesis Tests
+# 붓스트랩 가설검정 (코드)
 
-## Overview
+## 개요
 
-Bootstrap hypothesis testing constructs the null distribution by resampling the observed data rather than relying on parametric assumptions. This page covers three core bootstrap tests: a one-sample test for the mean, a two-sample test for comparing means, and a bootstrap standard-error estimate for the median. These methods are especially valuable when the sampling distribution of the test statistic is unknown or difficult to derive analytically.
+붓스트랩 가설검정은 모수적 가정에 기대는 대신 관측 자료를 재표집하여 귀무분포를 만든다. 이 페이지에서는 세 가지 핵심적인 붓스트랩 검정을 다룬다. 평균에 대한 일표본 검정, 두 평균을 비교하는 이표본 검정, 그리고 중앙값의 붓스트랩 표준오차 추정이다. 이 방법들은 검정통계량의 표집분포를 모르거나 해석적으로 유도하기 어려울 때 특히 값지다.
 
-## One-Sample Bootstrap Test
+## 일표본 붓스트랩 검정
 
-We wish to test $H_0\colon \mu = \mu_0$ against a two-sided alternative. The procedure is:
+$H_0\colon \mu = \mu_0$을 양측 대립가설에 대해 검정한다. 절차는 다음과 같다.
 
-1. **Center** the data under the null: $x_i^0 = x_i - \bar x + \mu_0$.
-2. **Resample** from $\{x_1^0, \ldots, x_n^0\}$ with replacement, $B$ times, computing the mean of each resample.
-3. **Compute** the $p$-value as the fraction of bootstrap means at least as extreme as the observed mean:
+1. 귀무가설 아래로 자료를 **중심화**한다. $x_i^0 = x_i - \bar x + \mu_0$.
+2. $\{x_1^0, \ldots, x_n^0\}$에서 복원추출로 $B$번 **재표집**하고 각 재표본의 평균을 계산한다.
+3. 관측 평균만큼 극단적인 붓스트랩 평균의 비율로 **$p$값을 계산**한다.
 
 $$
-p = \frac{1}{B}\sum_{b=1}^{B}\mathbf{1}\!\bigl(|\bar x^{*(b)} - \mu_0| \ge |\bar x - \mu_0|\bigr)
+p = \frac{\#\bigl\{b : |\bar x^{*(b)} - \mu_0| \ge |\bar x - \mu_0|\bigr\} + 1}{B + 1}
 $$
 
-The centering step is crucial: it ensures the resampled data have mean $\mu_0$ on average, thereby enforcing the null hypothesis in the bootstrap world.
+중심화 단계가 결정적이다. 재표집된 자료의 평균이 평균적으로 $\mu_0$이 되게 하여 붓스트랩 세계에서 귀무가설을 강제한다.
 
 ```python
-def bootstrap_mean_test(data, mu_0=0, n_boot=10_000, alpha=0.05):
-    """Bootstrap test for H0: mean = mu_0. Returns p-value (two-sided)."""
+import numpy as np
+
+def bootstrap_mean_test(data, mu_0=0, n_boot=10_000, rng=None):
+    """Bootstrap test for H0: mean = mu_0. Returns the two-sided p-value."""
+    rng = rng or np.random.default_rng(0)
     n = len(data)
     centered = data - data.mean() + mu_0
-    boot_means = np.array([
-        np.mean(centered[np.random.randint(0, n, n)])
-        for _ in range(n_boot)
-    ])
+    boot_means = centered[rng.integers(0, n, (n_boot, n))].mean(axis=1)
     obs_mean = data.mean()
-    p_value = np.mean(np.abs(boot_means - mu_0) >= np.abs(obs_mean - mu_0))
+    p_value = ((np.abs(boot_means - mu_0) >= abs(obs_mean - mu_0)).sum() + 1) \
+              / (n_boot + 1)
     return obs_mean, p_value, boot_means
 ```
 
-## Two-Sample Bootstrap Test
+!!! note "$+1$ 보정"
+    분자와 분모의 $+1$은 관측된 자료 자신을 하나의 재표본으로 세는 것이다. 이 보정이 없으면 $p$값이 정확히 $0$이 될 수 있고, 검정의 크기가 명목수준을 미세하게 넘는다([대응 순열검정](../permutation/paired.md) 연습문제 3 참조).
 
-To test $H_0\colon \mu_x = \mu_y$, we pool the two samples and resample from the pooled data. Under $H_0$ the group labels are exchangeable:
+## 이표본 붓스트랩 검정
 
-1. **Pool** $\{x_1,\ldots,x_m,y_1,\ldots,y_n\}$ into a single set of size $m + n$.
-2. **Resample** $m + n$ observations with replacement from the pool, assigning the first $m$ to group $X$ and the remaining $n$ to group $Y$.
-3. **Compute** the difference in means $\bar x^{*(b)} - \bar y^{*(b)}$ for each replicate.
-4. **$p$-value**: fraction of bootstrap differences at least as extreme as the observed difference.
+$H_0\colon \mu_x = \mu_y$를 검정하기 위해 두 표본을 합치고 합친 자료에서 재표집한다. $H_0$ 아래에서 집단 라벨은 교환 가능하다.
 
-$$
-p = \frac{1}{B}\sum_{b=1}^{B}\mathbf{1}\!\bigl(|\bar x^{*(b)} - \bar y^{*(b)}| \ge |\bar x - \bar y|\bigr)
-$$
+1. $\{x_1,\ldots,x_m,y_1,\ldots,y_n\}$을 크기 $m + n$의 한 집합으로 **합친다**.
+2. 그 집합에서 $m + n$개를 복원추출로 **재표집**하고, 앞의 $m$개를 집단 $X$에, 나머지 $n$개를 집단 $Y$에 배정한다.
+3. 각 반복에서 평균차 $\bar x^{*(b)} - \bar y^{*(b)}$를 **계산한다**.
+4. 관측 차이만큼 극단적인 붓스트랩 차이의 비율이 **$p$값**이다.
 
 ```python
-def bootstrap_two_sample(x, y, n_boot=10_000):
-    """Bootstrap test for H0: mean(x) = mean(y)."""
+def bootstrap_two_sample(x, y, n_boot=10_000, rng=None):
+    """Bootstrap test for H0: mean(x) = mean(y), pooling under the null."""
+    rng = rng or np.random.default_rng(0)
     obs_diff = x.mean() - y.mean()
     pooled = np.concatenate([x, y])
-    n_x = len(x)
-    boot_diffs = []
-    for _ in range(n_boot):
-        perm = pooled[np.random.randint(0, len(pooled), len(pooled))]
-        boot_diffs.append(perm[:n_x].mean() - perm[n_x:].mean())
-    boot_diffs = np.array(boot_diffs)
-    p_value = np.mean(np.abs(boot_diffs) >= np.abs(obs_diff))
+    m, N = len(x), len(pooled)
+    P = pooled[rng.integers(0, N, (n_boot, N))]
+    boot_diffs = P[:, :m].mean(axis=1) - P[:, m:].mean(axis=1)
+    p_value = ((np.abs(boot_diffs) >= abs(obs_diff)).sum() + 1) / (n_boot + 1)
     return obs_diff, p_value, boot_diffs
 ```
 
-## Bootstrap Standard Error of the Median
+!!! warning "합치기는 등분산도 가정한다"
+    합쳐진 자료에서 재표집하면 두 집단이 같은 분산을 갖게 된다. 두 집단의 분산이 실제로 다르고 표본크기가 불균형하면 이 검정의 제1종 오류율이 무너진다. 그때는 각 집단을 자기 평균으로 중심화한 뒤 **따로** 재표집해야 한다([두 평균에 대한 붓스트랩 검정](../bootstrap_testing/two_means.md) 참조).
 
-The median has no simple closed-form standard error. The bootstrap provides a direct estimate:
+## 중앙값의 붓스트랩 표준오차
+
+중앙값에는 간단한 닫힌 형태의 표준오차가 없다. 붓스트랩이 직접적인 추정값을 준다.
 
 $$
 \widehat{\text{SE}}_{\text{boot}}(\text{median}) = \sqrt{\frac{1}{B-1}\sum_{b=1}^{B}\bigl(\tilde x^{*(b)} - \overline{\tilde x^*}\bigr)^2}
 $$
 
-where $\tilde x^{*(b)}$ is the median of the $b$-th bootstrap sample. The bootstrap bias is:
+여기서 $\tilde x^{*(b)}$는 $b$번째 붓스트랩 표본의 중앙값이다. 붓스트랩 편향은
 
 $$
 \widehat{\text{bias}} = \overline{\tilde x^*} - \tilde x
 $$
 
+이다.
+
 ```python
-def bootstrap_se_median(data, n_boot=10_000):
-    """Estimate the standard error of the median via bootstrap."""
+def bootstrap_se_median(data, n_boot=10_000, rng=None):
+    """Estimate the standard error and bias of the median via bootstrap."""
+    rng = rng or np.random.default_rng(0)
     n = len(data)
-    boot_medians = np.array([
-        np.median(data[np.random.randint(0, n, n)])
-        for _ in range(n_boot)
-    ])
+    boot_medians = np.median(data[rng.integers(0, n, (n_boot, n))], axis=1)
     se = boot_medians.std(ddof=1)
     bias = boot_medians.mean() - np.median(data)
     return se, bias, boot_medians
 ```
 
-## Demonstration
+## 시연
 
-The script applies the three methods to synthetic data:
+세 방법을 모의자료에 적용한다.
 
 ```python
-# 1. One-sample test: exponential data shifted by 2
-data = np.random.exponential(scale=5, size=50) + 2
-mu_0 = 5.0
-obs, p, boots = bootstrap_mean_test(data, mu_0)
+import numpy as np
+from scipy import stats
 
-# 2. Two-sample test: two normal populations
-x = np.random.normal(52, 10, 40)
-y = np.random.normal(48, 10, 40)
-diff, p2, boots2 = bootstrap_two_sample(x, y)
+rng_data = np.random.default_rng(1)
+rng = np.random.default_rng(7)
 
-# 3. Bootstrap SE of the median: log-normal income
-income = np.random.lognormal(mean=10.5, sigma=0.8, size=200)
-se_med, bias, boot_med = bootstrap_se_median(income)
+# 1. 일표본 검정: 2 만큼 이동된 지수 자료
+data = rng_data.exponential(scale=5, size=50) + 2
+obs, p, boots = bootstrap_mean_test(data, mu_0=5.0, rng=rng)
+print(obs, p)                    # 8.1786  0.0032
+
+# 2. 이표본 검정: 두 정규 모집단
+x = rng_data.normal(52, 10, 40)
+y = rng_data.normal(48, 10, 40)
+diff, p2, boots2 = bootstrap_two_sample(x, y, rng=rng)
+print(diff, p2)                  # 4.151  0.0518
+
+# 3. 중앙값의 붓스트랩 표준오차: 로그정규 소득
+income = rng_data.lognormal(mean=10.5, sigma=0.8, size=200)
+se_med, bias, boot_med = bootstrap_se_median(income, rng=rng)
+print(np.median(income), se_med, bias)   # 31508  1912  269
 ```
 
-## Interpretation
+| 검정 | 결과 | 비교 대상 |
+|:---|:---|:---|
+| 일표본 ($H_0: \mu = 5$) | $\bar{x} = 8.179$, $p = 0.0032$ | $t$ 검정 $p = 0.0033$ |
+| 이표본 | $\bar{x} - \bar{y} = 4.151$, $p = 0.0518$ | Welch $t$ 검정 $p = 0.0504$ |
+| 중앙값 SE | $\tilde{x} = 31{,}508$, $\widehat{\text{SE}} = 1{,}912$ | 닫힌 형태 없음 |
 
-- The one-sample bootstrap test rejects $H_0\colon \mu = 5$ when the data mean is far from 5. Because the data are exponentially distributed (not normal), the bootstrap approach avoids reliance on the $t$-distribution.
-- The two-sample bootstrap test detects the 4-unit shift between the two normal populations. Its $p$-value is typically close to that of the two-sample $t$-test when normality holds.
-- The bootstrap SE of the median is especially useful for skewed distributions like the log-normal. There is no simple formula for $\text{SE}(\text{median})$ in this case, making the bootstrap the method of choice.
+## 해석
 
-A general principle: when parametric assumptions hold, bootstrap and classical tests agree. When assumptions are violated, the bootstrap is often more reliable.
+- **일표본 붓스트랩 검정**은 자료 평균이 $5$에서 멀 때 $H_0\colon \mu = 5$을 기각한다. 자료가 지수분포이므로(정규가 아니므로) 붓스트랩 접근은 $t$ 분포에 대한 의존을 피한다. 여기서는 $n = 50$이 충분히 커서 두 $p$값이 $0.0001$ 이내로 일치한다.
+- **이표본 붓스트랩 검정**은 두 정규 모집단 사이의 $4$단위 이동을 탐지한다. 정규성이 성립하면 $p$값이 이표본 $t$ 검정의 것과 대개 가깝다($0.0518$ 대 $0.0504$). 이 예제는 $\alpha = 0.05$ 문턱 바로 위에 걸려 있어, 두 방법 모두 "기각하지 못한다"는 같은 결론을 준다.
+- **중앙값의 붓스트랩 표준오차**는 로그정규 같은 치우친 분포에서 특히 유용하다. 이 경우 $\text{SE}(\text{median})$에 대한 간단한 공식이 없으므로 붓스트랩이 사실상 유일한 선택이다.
 
-## Exercises
+일반 원리: 모수적 가정이 성립하면 붓스트랩과 고전적 검정이 일치한다. 가정이 깨지면 붓스트랩이 대개 더 믿을 만하다.
 
-**Exercise 1.** Draw a sample of size $n = 40$ from a standard normal distribution. Perform the one-sample bootstrap test for $H_0\colon \mu = 0$. Repeat for $H_0\colon \mu = 0.5$. Report the $p$-values and explain why the results differ.
+## 연습문제
 
-??? success "Solution to Exercise 1"
+**연습문제 1.** 표준정규분포에서 크기 $n = 40$인 표본을 뽑아라. $H_0\colon \mu = 0$에 대해 일표본 붓스트랩 검정을 수행하고, $H_0\colon \mu = 0.5$에 대해서도 반복하라. $p$값을 보고하고 결과가 다른 이유를 설명하라.
+
+??? success "연습문제 1 풀이"
 
     ```python
     import numpy as np
-    np.random.seed(7)
-    data = np.random.normal(0, 1, 40)
+    from scipy import stats
+    rng = np.random.default_rng(101)
+    data = np.random.default_rng(3).normal(0, 1, 40)
+    print(data.mean(), data.std(ddof=1))       # -0.0411  1.1751
 
-    _, p0, _ = bootstrap_mean_test(data, mu_0=0.0)
-    _, p05, _ = bootstrap_mean_test(data, mu_0=0.5)
-
-    print(f"H0: mu = 0,   p-value = {p0:.4f}")
-    print(f"H0: mu = 0.5, p-value = {p05:.4f}")
+    _, p0, _ = bootstrap_mean_test(data, mu_0=0.0, rng=rng)
+    _, p05, _ = bootstrap_mean_test(data, mu_0=0.5, rng=rng)
     ```
 
-    Since the true mean is 0, the test for $H_0\colon \mu = 0$ yields a large $p$-value (typically $> 0.05$), meaning we fail to reject. For $H_0\colon \mu = 0.5$, the sample mean is far from 0.5 on average, so the $p$-value is smaller, often leading to rejection. The centering step shifts the resampled data to be centered at $\mu_0$, and if the observed mean is distant from $\mu_0$, the bootstrap null distribution rarely produces values that extreme. $\square$
+    | 가설 | 붓스트랩 $p$값 | $t$ 검정 $p$값 |
+    |:---|---:|---:|
+    | $H_0: \mu = 0$ | 0.821 | 0.826 |
+    | $H_0: \mu = 0.5$ | 0.0032 | 0.0059 |
+
+    참 평균이 $0$이므로 $H_0\colon \mu = 0$에서는 큰 $p$값이 나와 기각하지 못한다. $H_0\colon \mu = 0.5$에서는 표본평균 $-0.041$이 $0.5$에서 $2.9$ 표준오차 떨어져 있어($\widehat{\text{se}} = 1.175/\sqrt{40} = 0.186$) 강하게 기각한다.
+
+    **중심화가 무엇을 하는지 정확히 보자.** $\mu_0 = 0.5$일 때 중심화된 자료는 $x_i - (-0.041) + 0.5 = x_i + 0.541$이다. 이 자료의 평균은 정확히 $0.5$이고, 재표집된 평균들은 $0.5$ 주위에 표준편차 $0.186$으로 흩어진다.
+
+    관측된 편차 $|{-0.041} - 0.5| = 0.541$은 이 분포에서 $2.9$ 표준편차에 해당하므로 그만큼 극단적인 재표본이 거의 나오지 않는다.
+
+    **붓스트랩 $p$값이 $t$ 검정의 절반이다**($0.0032$ 대 $0.0059$). 이는 붓스트랩이 정규이론의 $t$ 보정을 하지 않기 때문이다. $n = 40$에서 $t_{39}$의 꼬리가 정규분포보다 두꺼운 만큼 차이가 난다. 꼬리로 갈수록 이 차이가 커지므로, **작은 $p$값을 붓스트랩으로 보고할 때는 주의해야 한다**.
+
+    !!! warning "표본에 따라 결론이 달라진다"
+        이 연습문제의 결과는 "참 평균이 $0$이면 $H_0: \mu = 0$이 기각되지 않는다"가 **아니다**. 그것은 $95$%의 표본에서만 참이다.
+
+        예를 들어 씨앗을 $7$로 바꾸면 표본평균이 $-0.395$가 되고 $H_0: \mu = 0$의 $p$값이 $0.0021$로 **기각된다**. 이것이 바로 제1종 오류이며, 설계상 $5$%의 확률로 일어난다.
 
 ---
 
-**Exercise 2.** The two-sample bootstrap test in the code resamples from the pooled data *with replacement*. Explain the conceptual difference between this approach and a permutation test that shuffles labels *without replacement*. Under what conditions do the two approaches give similar $p$-values?
+**연습문제 2.** 코드의 이표본 붓스트랩 검정은 합쳐진 자료에서 *복원*추출한다. 라벨을 *비복원*으로 섞는 순열검정과 개념적으로 어떻게 다른지 설명하라. 두 접근이 비슷한 $p$값을 주는 조건은 무엇인가?
 
-??? success "Solution to Exercise 2"
+??? success "연습문제 2 풀이"
 
-    In the bootstrap two-sample test, we draw $m + n$ observations *with replacement* from the pooled set, then split into groups of size $m$ and $n$. This means some observations appear multiple times while others may be absent from a given replicate.
+    이표본 붓스트랩 검정에서는 합친 집합에서 $m + n$개를 *복원*추출한 뒤 크기 $m$과 $n$으로 나눈다. 따라서 어떤 관측은 여러 번 나타나고 어떤 관측은 그 반복에서 아예 빠진다.
 
-    In a permutation test, we shuffle the $m + n$ labels without replacement, so every observation appears exactly once in each permuted dataset. This preserves the exact composition of the pooled sample.
+    순열검정에서는 $m + n$개의 라벨을 비복원으로 섞으므로 모든 관측이 각 순열된 자료에 정확히 한 번 나타난다. 합친 표본의 구성이 정확히 보존된다.
 
-    The two approaches give similar $p$-values when the sample sizes $m$ and $n$ are moderately large, because the bootstrap distribution of the difference in means converges to the permutation distribution as $m, n \to \infty$. For small samples, the permutation test is exact (conditional on the data), while the bootstrap test is approximate. The permutation test is also more natural under the null hypothesis of exchangeability, since it directly models the randomization mechanism. $\square$
+    **비슷한 $p$값을 주는 조건은 표본크기 $m$과 $n$이 어느 정도 클 때이다.** $m, n \to \infty$에서 평균차의 붓스트랩 분포가 순열분포로 수렴한다. 작은 표본에서는 순열검정이 (자료에 조건부로) 정확한 반면 붓스트랩 검정은 근사이다.
+
+    **구체적인 차이.** 붓스트랩 분산과 순열 분산의 비는 대략
+
+    $$
+    \frac{\text{Var}^*_{\text{boot}}}{\text{Var}^*_{\text{perm}}} \approx \frac{N}{N-1}
+    $$
+
+    이다($N = m + n$). 순열은 유한모집단 수정계수를 자동으로 반영하지만 복원추출은 그렇지 않기 때문이다. $N = 10$이면 $11$%, $N = 80$이면 $1.3$% 차이이다.
+
+    이 차이가 실제로 얼마나 큰지는 [비교](../comparison/comparison.md) 연습문제 1에서 확인했다. $m = n = 5$일 때 붓스트랩 꼬리 확률 $0.0006$과 정확 순열 $p$값 $0.0397$이 **$66$배** 차이가 났다. 위 비율만으로는 설명되지 않는 차이이며, 작은 표본에서 붓스트랩이 $t$ 보정을 놓치는 것이 더 큰 원인이다.
+
+    순열검정은 무작위화 메커니즘을 직접 모형화하므로 교환가능성이라는 귀무가설 아래에서 더 자연스럽기도 하다. $\square$
 
 ---
 
-**Exercise 3.** Derive the formula for the bootstrap bias of the median. Show that if the bootstrap distribution of the median is symmetric about $\tilde x$ (the sample median), the bias is zero.
+**연습문제 3.** 중앙값의 붓스트랩 편향 공식을 유도하라. 중앙값의 붓스트랩 분포가 표본중앙값 $\tilde x$에 대해 대칭이면 편향이 $0$임을 보여라.
 
-??? success "Solution to Exercise 3"
+??? success "연습문제 3 풀이"
 
-    The bootstrap bias is defined as:
+    붓스트랩 편향의 정의는
 
     $$
     \widehat{\text{bias}} = E^*[\tilde x^*] - \tilde x = \overline{\tilde x^*} - \tilde x
     $$
 
-    where $E^*$ denotes expectation under the bootstrap distribution (the empirical distribution of the data) and $\overline{\tilde x^*} = \frac{1}{B}\sum_{b=1}^{B}\tilde x^{*(b)}$ estimates this expectation.
+    이다. $E^*$는 붓스트랩 분포(자료의 경험분포) 아래의 기댓값이고 $\overline{\tilde x^*} = \frac{1}{B}\sum_{b=1}^{B}\tilde x^{*(b)}$가 이를 추정한다.
 
-    If the bootstrap distribution of the median is symmetric about $\tilde x$, then for every bootstrap replicate producing $\tilde x^{*(b)} = \tilde x + \delta$, there is (approximately) a matching replicate producing $\tilde x - \delta$. Therefore $E^*[\tilde x^*] = \tilde x$, which gives:
+    중앙값의 붓스트랩 분포가 $\tilde x$에 대해 대칭이면, $\tilde x^{*(b)} = \tilde x + \delta$를 내는 반복마다 (근사적으로) $\tilde x - \delta$를 내는 반복이 대응한다. 따라서 $E^*[\tilde x^*] = \tilde x$이고
 
     $$
     \widehat{\text{bias}} = \tilde x - \tilde x = 0
     $$
 
-    $\square$
+    이다. $\square$
+
+    **실제로는 대칭이 아니다.** 시연의 로그정규 소득 자료에서 붓스트랩 편향이 $+269$였다. 표본중앙값 $31{,}508$의 $0.85$%이다.
+
+    양의 편향이 나오는 이유는 두 가지가 겹친다.
+
+    **첫째, 중앙값의 붓스트랩 분포는 이산적이다.** 붓스트랩 중앙값은 원자료의 값(또는 짝수 개일 때 인접 두 값의 평균)만 취할 수 있다. $n = 200$이면 가능한 값이 몇 백 개뿐이다.
+
+    **둘째, 모분포가 오른쪽으로 치우쳐 있다.** 표본중앙값 위쪽의 관측들이 아래쪽보다 더 넓게 퍼져 있으므로, 붓스트랩 중앙값이 위로 움직일 여지가 아래로 움직일 여지보다 크다.
+
+    !!! note "편향 보정을 해야 하는가"
+        하지 않는 것이 보통이다. 편향 보정된 추정량 $2\tilde{x} - \overline{\tilde x^*}$는 편향을 줄이지만 분산을 늘린다. 여기서 편향 $269$는 표준오차 $1{,}912$의 $14$%에 불과하므로, 평균제곱오차 관점에서 보정이 손해이다.
+
+        경험칙으로 $|\widehat{\text{bias}}| / \widehat{\text{SE}} < 0.25$이면 무시한다. [비모수 붓스트랩](../bootstrap/nonparametric.md) 연습문제 3에서 보정이 오히려 MSE를 $0.0950$에서 $0.1013$으로 악화시키는 예를 다루었다.
 
 ---
 
-**Exercise 4.** Generate 200 observations from a $\text{Gamma}(2, 1)$ distribution. Use the bootstrap to estimate the standard error of both the mean and the median. Compare with the theoretical SE of the mean, $\sigma / \sqrt{n}$. Why is there no analogous formula for the median?
+**연습문제 4.** $\text{Gamma}(2, 1)$ 분포에서 $200$개의 관측을 생성하라. 붓스트랩으로 평균과 중앙값의 표준오차를 모두 추정하고, 평균의 이론적 표준오차 $\sigma/\sqrt{n}$과 비교하라. 중앙값에는 왜 유사한 공식이 없는가?
 
-??? success "Solution to Exercise 4"
+??? success "연습문제 4 풀이"
 
     ```python
     import numpy as np
-    np.random.seed(12)
-    data = np.random.gamma(shape=2, scale=1, size=200)
+    from scipy import stats
+    rng = np.random.default_rng(101)
+    data = np.random.default_rng(12).gamma(shape=2, scale=1, size=200)
+    print(data.mean(), np.median(data))       # 1.9889  1.7680
 
-    # Bootstrap SE of the mean
-    boot_means = np.array([
-        np.mean(np.random.choice(data, 200, replace=True))
-        for _ in range(10_000)
-    ])
+    boot_means = data[rng.integers(0, 200, (10_000, 200))].mean(axis=1)
     se_mean_boot = boot_means.std(ddof=1)
-
-    # Bootstrap SE of the median
-    se_med, _, _ = bootstrap_se_median(data, n_boot=10_000)
-
-    # Theoretical SE of the mean: sigma / sqrt(n)
-    # For Gamma(2,1): sigma = sqrt(2)
-    se_mean_theory = np.sqrt(2) / np.sqrt(200)
-
-    print(f"Bootstrap SE(mean):    {se_mean_boot:.4f}")
-    print(f"Theoretical SE(mean):  {se_mean_theory:.4f}")
-    print(f"Bootstrap SE(median):  {se_med:.4f}")
+    se_med, _, _ = bootstrap_se_median(data, rng=rng)
     ```
 
-    The bootstrap SE of the mean closely matches $\sigma/\sqrt{n} = \sqrt{2}/\sqrt{200} \approx 0.1$. There is no simple formula for the SE of the median because the median's sampling distribution depends on the density of the population at the median value, $f(m)$. The asymptotic formula is $\text{SE}(\text{median}) \approx 1/(2f(m)\sqrt{n})$, but this requires knowledge of $f(m)$, which is typically unknown. The bootstrap sidesteps this issue entirely by estimating the SE empirically. $\square$
+    | 양 | 값 |
+    |:---|---:|
+    | 붓스트랩 $\widehat{\text{SE}}$(평균) | 0.0861 |
+    | 표본에서의 $s/\sqrt{n}$ | 0.0860 |
+    | 이론값 $\sigma/\sqrt{n} = \sqrt{2}/\sqrt{200}$ | 0.1000 |
+    | 붓스트랩 $\widehat{\text{SE}}$(중앙값) | 0.1202 |
+    | 중앙값의 점근 공식 $1/(2f(m)\sqrt{n})$ | 0.1128 |
+
+    **붓스트랩 $\widehat{\text{SE}}$(평균)이 $s/\sqrt{n}$과 소수 넷째 자리까지 일치한다**($0.0861$ 대 $0.0860$). 이는 우연이 아니다. 평균의 붓스트랩 분산은 정확히 $\hat{\sigma}^2/n = \frac{n-1}{n}s^2/n$이므로 두 값이 이론적으로 같아야 한다.
+
+    **이론값 $0.1000$과는 $14$% 차이가 난다.** 이는 붓스트랩의 오차가 아니라 이 표본의 $s = 1.216$이 참값 $\sigma = \sqrt{2} = 1.414$보다 작기 때문이다. 붓스트랩은 참 $\sigma$를 알 수 없으므로 표본에서 추정할 수밖에 없다.
+
+    **중앙값에 공식이 없는 이유.** 중앙값의 점근 표준오차는
+
+    $$
+    \text{SE}(\tilde{X}) \approx \frac{1}{2f(m)\sqrt{n}}
+    $$
+
+    이다. 여기서 $f$는 모집단 밀도, $m$은 모중앙값이다. $\text{Gamma}(2,1)$에서 $m = 1.678$, $f(m) = 0.313$이므로 $1/(2 \times 0.313 \times 14.14) = 0.1128$이다.
+
+    문제는 이 공식이 **모집단 밀도를 중앙값 한 점에서 알아야 한다**는 것이다. 평균의 공식이 $\sigma$만 필요한 것과 대조적이다. $f(m)$은 밀도추정을 해야 하고, 그 자체가 대역폭 선택 등의 문제를 안고 있으며 수렴이 느리다($n^{-2/5}$).
+
+    **붓스트랩은 이 문제를 완전히 우회한다.** `np.median`을 반복 계산할 뿐이며 밀도를 추정할 필요가 없다. 위 표에서 붓스트랩 $0.1202$가 점근값 $0.1128$과 $7$% 이내로 일치한다.
+
+    !!! warning "중앙값의 붓스트랩은 수렴이 느리다"
+        중앙값은 매끄럽지 않은 통계량이므로 붓스트랩의 수렴 속도가 평균보다 느리다. 평균에서 $O(n^{-1})$인 오차가 중앙값에서는 $O(n^{-1/4})$이다.
+
+        일치하기는 하므로 $n = 200$ 정도면 실용적으로 쓸 만하다. 그러나 $n$이 작거나($n < 30$) 자료에 동점이 많으면 평활 붓스트랩(재표집된 값에 작은 잡음을 더하는 것)을 고려해야 한다.
 
 ---
 
-**Exercise 5.** Prove that the one-sample bootstrap test is consistent: as $n \to \infty$, if $\mu \neq \mu_0$, the $p$-value converges to 0. (Hint: consider the behavior of $|\bar x - \mu_0|$ and the bootstrap distribution of $|\bar x^* - \mu_0|$ under the centered data.)
+**연습문제 5.** 일표본 붓스트랩 검정이 일치성을 가짐을 증명하라. 즉 $\mu \neq \mu_0$이면 $n \to \infty$에서 $p$값이 $0$으로 수렴함을 보여라. (힌트: $|\bar x - \mu_0|$의 거동과 중심화된 자료에서의 $|\bar x^* - \mu_0|$의 붓스트랩 분포를 생각하라.)
 
-??? success "Solution to Exercise 5"
+??? success "연습문제 5 풀이"
 
-    Under the alternative $\mu \neq \mu_0$, by the law of large numbers $\bar x \to \mu$ as $n \to \infty$, so:
+    대립가설 $\mu \neq \mu_0$ 아래에서 큰 수의 법칙에 의해 $n \to \infty$일 때 $\bar x \to \mu$이므로
 
     $$
     |\bar x - \mu_0| \to |\mu - \mu_0| > 0
     $$
 
-    The centered data $x_i^0 = x_i - \bar x + \mu_0$ have sample mean exactly $\mu_0$. By the bootstrap CLT, the resampled means $\bar x^{*(b)}$ from the centered data satisfy:
+    이다.
+
+    중심화된 자료 $x_i^0 = x_i - \bar x + \mu_0$의 표본평균은 정확히 $\mu_0$이다. 붓스트랩 중심극한정리에 의해 중심화된 자료에서 재표집한 평균 $\bar x^{*(b)}$는
 
     $$
     \sqrt{n}(\bar x^{*(b)} - \mu_0) \xrightarrow{d} N(0, \sigma^2)
     $$
 
-    where $\sigma^2$ is the population variance. Therefore $|\bar x^{*(b)} - \mu_0| = O_p(n^{-1/2})$, which converges to 0.
+    를 만족한다. 여기서 $\sigma^2$은 모분산이다. 따라서 $|\bar x^{*(b)} - \mu_0| = O_p(n^{-1/2})$이고 이는 $0$으로 수렴한다.
 
-    Meanwhile, $|\bar x - \mu_0| \to |\mu - \mu_0| > 0$, a fixed positive constant. For large $n$, the probability that a bootstrap replicate produces $|\bar x^{*(b)} - \mu_0| \ge |\bar x - \mu_0|$ becomes negligible:
+    한편 $|\bar x - \mu_0| \to |\mu - \mu_0| > 0$은 고정된 양의 상수이다. $n$이 크면 붓스트랩 반복이 $|\bar x^{*(b)} - \mu_0| \ge |\bar x - \mu_0|$를 만족할 확률이 무시할 수준이 된다.
 
     $$
     p = P^*\!\bigl(|\bar x^{*(b)} - \mu_0| \ge |\bar x - \mu_0|\bigr) \to 0
     $$
 
-    Hence the test is consistent. $\square$
+    따라서 검정은 일치한다. $\square$
+
+    **수렴 속도.** 더 정확히는, $\bar{x}^* - \mu_0$가 근사적으로 $N(0, \sigma^2/n)$이므로
+
+    $$
+    p \approx 2\Bigl[1 - \Phi\Bigl(\frac{\sqrt{n}\,|\mu - \mu_0|}{\sigma}\Bigr)\Bigr]
+    $$
+
+    이고, 이는 $n$에 대해 **지수적으로** $0$에 접근한다. $|\mu - \mu_0|/\sigma = 0.5$일 때
+
+    | $n$ | 근사 $p$값 |
+    |---:|---:|
+    | 10 | 0.114 |
+    | 40 | 0.0016 |
+    | 100 | $5.7\times10^{-7}$ |
+    | 200 | $1.5\times10^{-12}$ |
+
+    실용적 함의가 하나 있다. **$B$가 유한하면 이 수렴을 관측할 수 없다.** $B = 10{,}000$이면 붓스트랩이 낼 수 있는 최소 $p$값이 $1/10001 = 0.0001$이다. $n = 100$의 참 $p$값 $5.7 \times 10^{-7}$은 표현조차 되지 않는다.
+
+    작은 $p$값을 정량적으로 보고해야 한다면 붓스트랩 대신 점근 근사를 쓰는 것이 옳다. 붓스트랩의 강점은 $p$값의 정밀도가 아니라 가정으로부터의 자유이다.

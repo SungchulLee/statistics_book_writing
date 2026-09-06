@@ -1,251 +1,331 @@
-# Bootstrap Median
+# 중앙값의 붓스트랩 (코드)
 
-## Overview
+## 개요
 
-The median is a robust measure of central tendency, but unlike the mean, it has no simple closed-form expression for its standard error. The bootstrap provides a direct, assumption-free estimate of the SE and confidence intervals for the median. This page demonstrates bootstrap estimation of the median on synthetic income data, compares it with the mean, and illustrates the median's robustness to outliers.
+중앙값은 로버스트한 중심경향 측도이지만, 평균과 달리 표준오차의 간단한 닫힌 형태가 없다. 붓스트랩은 중앙값의 표준오차와 신뢰구간에 대해 가정 없는 직접적인 추정을 제공한다. 이 페이지에서는 모의 소득 자료에 대한 중앙값의 붓스트랩 추정을 시연하고, 평균과 비교하며, 이상값에 대한 중앙값의 로버스트성을 보인다.
 
-## Why Bootstrap the Median
+## 왜 중앙값을 붓스트랩하는가
 
-For a sample of size $n$ from a distribution with density $f$ and median $m$, the asymptotic standard error of the sample median is:
+밀도 $f$와 중앙값 $m$을 갖는 분포에서 크기 $n$인 표본을 뽑았을 때, 표본중앙값의 점근 표준오차는
 
 $$
 \text{SE}(\tilde x) \approx \frac{1}{2f(m)\sqrt{n}}
 $$
 
-This formula requires knowledge of $f(m)$, the density at the population median, which is typically unknown. The bootstrap avoids this entirely by estimating the SE empirically.
+이다. 이 공식은 모집단 중앙값에서의 밀도 $f(m)$을 알아야 하는데, 그 값은 대개 알려져 있지 않다. 붓스트랩은 표준오차를 경험적으로 추정하여 이 문제를 완전히 우회한다.
 
-## Bootstrap Procedure
+## 붓스트랩 절차
 
-Given data $x_1, \ldots, x_n$:
+자료 $x_1, \ldots, x_n$이 주어졌을 때
 
-1. Draw $B$ bootstrap samples, each of size $n$ with replacement.
-2. Compute the median of each bootstrap sample: $\tilde x^{*(1)}, \ldots, \tilde x^{*(B)}$.
-3. The bootstrap standard error is the standard deviation of the bootstrap medians:
+1. 크기 $n$인 붓스트랩 표본을 복원추출로 $B$개 뽑는다.
+2. 각 붓스트랩 표본의 중앙값 $\tilde x^{*(1)}, \ldots, \tilde x^{*(B)}$을 계산한다.
+3. 붓스트랩 표준오차는 붓스트랩 중앙값들의 표준편차이다.
 
 $$
 \widehat{\text{SE}}_{\text{boot}}(\tilde x) = \sqrt{\frac{1}{B-1}\sum_{b=1}^{B}\bigl(\tilde x^{*(b)} - \overline{\tilde x^*}\bigr)^2}
 $$
 
-4. The bootstrap bias is:
+4. 붓스트랩 편향은
 
 $$
 \widehat{\text{bias}} = \overline{\tilde x^*} - \tilde x
 $$
 
-```python
-def bootstrap_median(data, n_bootstrap=1000):
-    """Compute bootstrap distribution of the median."""
-    bootstrap_medians = []
-    for _ in range(n_bootstrap):
-        bootstrap_sample = resample(data)
-        bootstrap_medians.append(np.median(bootstrap_sample))
-    return np.array(bootstrap_medians)
-```
-
-## Comparing Median and Mean
-
-For symmetric distributions, the mean and median coincide. For skewed distributions, they diverge. With exponential-like income data:
-
-$$
-\text{Mean} = c + \frac{1}{\lambda}, \qquad \text{Median} = c + \frac{\ln 2}{\lambda}
-$$
-
-Since $\ln 2 \approx 0.693 < 1$, the median is always less than the mean for this family. The bootstrap captures this difference and reveals that the SE of the median is typically larger than the SE of the mean (the median trades precision for robustness).
+이다.
 
 ```python
-def bootstrap_mean_for_comparison(data, n_bootstrap=1000):
-    """Compute bootstrap distribution of the mean for comparison."""
-    bootstrap_means = []
-    for _ in range(n_bootstrap):
-        bootstrap_sample = resample(data)
-        bootstrap_means.append(np.mean(bootstrap_sample))
-    return np.array(bootstrap_means)
+import numpy as np
+
+def bootstrap_median(data, n_bootstrap=10_000, rng=None):
+    """Bootstrap distribution of the median (vectorized)."""
+    rng = rng or np.random.default_rng(0)
+    n = len(data)
+    return np.median(data[rng.integers(0, n, (n_bootstrap, n))], axis=1)
 ```
 
-## Robustness to Outliers
+## 중앙값과 평균의 비교
 
-Adding a single extreme observation (e.g., \$1,000,000 income) dramatically changes the mean but barely affects the median. This is because the median depends only on the order statistics near the center of the data, not on extreme values.
+대칭분포에서는 평균과 중앙값이 일치한다. 치우친 분포에서는 갈라진다. 지수분포를 닮은 소득 자료에서
 
-Formally, the **influence function** of the median at any point $x$ is bounded:
+$$
+\text{평균} = c + \frac{1}{\lambda}, \qquad \text{중앙값} = c + \frac{\ln 2}{\lambda}
+$$
+
+이다. $\ln 2 \approx 0.693 < 1$이므로 이 분포족에서 중앙값은 항상 평균보다 작다.
+
+$\text{LogNormal}(10.5, 0.8^2)$에서 $n = 200$을 뽑은 예:
+
+| 통계량 | 값 | 붓스트랩 $\widehat{\text{SE}}$ |
+|:---|---:|---:|
+| 평균 | 47{,}303 | 3{,}208 |
+| 중앙값 | 33{,}458 | 2{,}686 |
+
+!!! warning "'중앙값의 표준오차가 항상 더 크다'는 것은 틀렸다"
+    정규분포처럼 대칭이고 꼬리가 가벼운 분포에서는 중앙값의 표준오차가 평균보다 크다(점근분산비 $\pi/2 \approx 1.571$).
+
+    그러나 **치우치거나 꼬리가 두꺼운 분포에서는 역전된다.** 위 표에서 중앙값의 표준오차 $2{,}686$이 평균의 $3{,}208$보다 **작다**. 로그정규분포에서 평균은 오른쪽 꼬리의 소수 관측에 크게 좌우되기 때문이다.
+
+    소득·의료비·보험금처럼 치우친 자료에서는 중앙값이 **로버스트하면서 동시에 더 정밀하다**. 절충이 아니라 순수한 이득이다.
+
+```python
+def bootstrap_mean(data, n_bootstrap=10_000, rng=None):
+    """Bootstrap distribution of the mean, for comparison."""
+    rng = rng or np.random.default_rng(0)
+    n = len(data)
+    return data[rng.integers(0, n, (n_bootstrap, n))].mean(axis=1)
+```
+
+## 이상값에 대한 로버스트성
+
+극단적인 관측 하나(예: 소득 $1{,}000{,}000$)를 추가하면 평균은 크게 바뀌지만 중앙값은 거의 변하지 않는다. 중앙값은 자료 중앙 부근의 순서통계량에만 의존하고 극단값에는 의존하지 않기 때문이다.
+
+위 소득 자료($n = 200$)에 $1{,}000{,}000$ 하나를 추가하면
+
+| 통계량 | 변화율 |
+|:---|---:|
+| 평균 | $+10.02$% |
+| 중앙값 | $+1.51$% |
+
+형식적으로, 중앙값의 **영향함수**는 임의의 점 $x$에서 유계이다.
 
 $$
 \text{IF}(x; \tilde F, F) = \frac{\text{sign}(x - m)}{2f(m)}
 $$
 
-while the influence function of the mean is $\text{IF}(x; \bar F, F) = x - \mu$, which is unbounded. This means a single outlier can shift the mean arbitrarily far, but can move the median by at most $1/(2f(m))$.
+반면 평균의 영향함수는 $\text{IF}(x; \bar F, F) = x - \mu$로 유계가 아니다. 이상값 하나가 평균을 임의로 멀리 옮길 수 있지만 중앙값은 최대 $1/(2f(m))$만큼만 움직인다.
 
 ```python
-def robustness_comparison(data):
-    """Demonstrate robustness of median vs mean to outliers."""
-    original_mean = np.mean(data)
-    original_median = np.median(data)
-
-    data_with_outlier = np.append(data, 1_000_000)
-
-    mean_with_outlier = np.mean(data_with_outlier)
-    median_with_outlier = np.median(data_with_outlier)
-
-    print(f"Mean change:   {(mean_with_outlier - original_mean) / original_mean * 100:.2f}%")
-    print(f"Median change: {(median_with_outlier - original_median) / original_median * 100:.2f}%")
+def robustness_comparison(data, outlier=1_000_000):
+    """Show how one outlier moves the mean versus the median."""
+    with_out = np.append(data, outlier)
+    print(f"Mean change:   "
+          f"{(with_out.mean() - data.mean()) / data.mean() * 100:.2f}%")
+    print(f"Median change: "
+          f"{(np.median(with_out) - np.median(data)) / np.median(data) * 100:.2f}%")
 ```
 
-## Bootstrap Confidence Intervals for the Median
+## 중앙값의 붓스트랩 신뢰구간
 
-The percentile method provides straightforward CIs:
+백분위수법이 직관적인 신뢰구간을 준다.
 
 $$
 \text{CI}_{1-\alpha} = \bigl[\tilde x^*_{\alpha/2},\;\tilde x^*_{1-\alpha/2}\bigr]
 $$
 
 ```python
-def confidence_intervals(bootstrap_dist, confidence_levels=[90, 95, 99]):
-    """Compute bootstrap CIs using the percentile method."""
+def confidence_intervals(bootstrap_dist, confidence_levels=(90, 95, 99)):
+    """Percentile bootstrap CIs at several confidence levels."""
     for cl in confidence_levels:
         alpha = (100 - cl) / 2
-        lower = np.percentile(bootstrap_dist, alpha)
-        upper = np.percentile(bootstrap_dist, 100 - alpha)
-        width = upper - lower
-        print(f"{cl}% CI: [{lower:,.0f}, {upper:,.0f}]  Width: {width:,.0f}")
+        lower, upper = np.percentile(bootstrap_dist, [alpha, 100 - alpha])
+        print(f"{cl}% CI: [{lower:,.0f}, {upper:,.0f}]  Width: {upper-lower:,.0f}")
 ```
 
-Higher confidence levels produce wider intervals, reflecting the confidence-precision trade-off.
+신뢰수준이 높을수록 구간이 넓어져 신뢰도와 정밀도의 절충을 반영한다.
 
-## Interpretation
+## 해석
 
-- The bootstrap SE of the median provides uncertainty quantification where no formula exists.
-- For skewed distributions (income, medical costs, claim sizes), the median is a more representative summary than the mean.
-- The bootstrap distribution of the median may be less smooth than that of the mean because the median is a discontinuous function of the order statistics. Larger values of $B$ help.
-- In finance and insurance, the median is often preferred because extreme values (large claims, market crashes) can distort the mean.
+- 중앙값의 붓스트랩 표준오차는 공식이 없는 곳에서 불확실성을 정량화해 준다.
+- 치우친 분포(소득, 의료비, 보험금)에서는 중앙값이 평균보다 대표성 있는 요약이다.
+- 중앙값의 붓스트랩 분포는 평균의 것보다 덜 매끄러울 수 있다. 중앙값이 순서통계량의 불연속 함수이기 때문이다.
+- 금융과 보험에서 중앙값이 선호되는 경우가 많다. 극단값(큰 보험금, 시장 급락)이 평균을 왜곡할 수 있기 때문이다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.** Generate a sample of size $n = 50$ from a standard normal distribution. Compute the bootstrap SE of the median and compare it with the theoretical value $\sqrt{\pi/(2n)} \approx 1/(2f(0)\sqrt{n})$ where $f(0) = 1/\sqrt{2\pi}$.
+**연습문제 1.** 표준정규분포에서 크기 $n = 50$인 표본을 생성하라. 중앙값의 붓스트랩 표준오차를 계산하고 이론값 $\sqrt{\pi/(2n)} \approx 1/(2f(0)\sqrt{n})$과 비교하라. 여기서 $f(0) = 1/\sqrt{2\pi}$이다.
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
 
-    For the standard normal, $f(0) = 1/\sqrt{2\pi} \approx 0.3989$. The asymptotic SE of the median is:
+    표준정규에서 $f(0) = 1/\sqrt{2\pi} \approx 0.3989$이므로 중앙값의 점근 표준오차는
 
     $$
-    \text{SE}(\tilde x) = \frac{1}{2 \times 0.3989 \times \sqrt{50}} = \frac{1}{5.641} \approx 0.1773
+    \text{SE}(\tilde x) = \frac{1}{2 \times 0.3989 \times \sqrt{50}} = \frac{1}{5.641} = 0.1773
     $$
 
-    Equivalently, $\text{SE} = \sqrt{\pi/(2n)} = \sqrt{\pi/100} \approx 0.1773$.
+    이다. 같은 값을 $\text{SE} = \sqrt{\pi/(2n)} = \sqrt{\pi/100} = 0.1772$로도 쓸 수 있다.
 
     ```python
     import numpy as np
-    from sklearn.utils import resample
+    rng = np.random.default_rng(202)
+    data = np.random.default_rng(42).normal(0, 1, 50)
 
-    np.random.seed(42)
-    data = np.random.normal(0, 1, 50)
-
-    boot_medians = bootstrap_median(data, n_bootstrap=5000)
-    se_boot = boot_medians.std(ddof=1)
-    se_theory = np.sqrt(np.pi / (2 * 50))
-
-    print(f"Bootstrap SE:    {se_boot:.4f}")
-    print(f"Theoretical SE:  {se_theory:.4f}")
+    boot_medians = bootstrap_median(data, n_bootstrap=5000, rng=rng)
+    print(boot_medians.std(ddof=1), np.sqrt(np.pi / 100))
+    # 0.1336   0.1772
     ```
 
-    The bootstrap SE should be close to 0.177. Any discrepancy is due to Monte Carlo variability and the finite sample size. $\square$
+    **붓스트랩 값 $0.1336$이 이론값 $0.1772$보다 $25$% 작다.** 이것이 몬테카를로 오차 때문일까?
+
+    아니다. $B = 5000$의 몬테카를로 오차는 $\widehat{\text{SE}}/\sqrt{2B} = 0.0013$으로 무시할 수준이다. 차이의 원인은 **자료 자체**이다.
+
+    $600$개의 서로 다른 표본으로 반복하면 그림이 분명해진다.
+
+    | $n$ | 붓스트랩 $\widehat{\text{SE}}$(중앙값)의 평균 | 그 표준편차 | 중앙값의 참 표준편차 | 이론값 |
+    |---:|---:|---:|---:|---:|
+    | 50 | 0.1808 | **0.0462** | 0.1755 | 0.1772 |
+    | 200 | 0.0892 | 0.0170 | 0.0891 | 0.0886 |
+
+    비교를 위해 평균에 대해서도:
+
+    | $n$ | 붓스트랩 $\widehat{\text{SE}}$(평균) | 참 표준편차 | 이론값 |
+    |---:|---:|---:|---:|
+    | 50 | 0.1397 | 0.1386 | 0.1414 |
+    | 200 | 0.0706 | 0.0706 | 0.0707 |
+
+    **평균적으로는 붓스트랩이 정확하다**($0.1808$ 대 이론 $0.1772$). 그러나 **자료마다 크게 흔들린다**. 표준편차 $0.0462$는 변동계수 $26$%에 해당한다. 우리가 뽑은 표본은 평균에서 약 $1$ 표준편차 아래였을 뿐이다.
+
+    **평균에서는 이 불안정성이 없다.** $n = 50$에서 붓스트랩 $\widehat{\text{SE}}$(평균)의 값들은 참값 주위에 훨씬 촘촘히 모인다.
+
+    !!! note "중앙값의 붓스트랩이 불안정한 이유"
+        중앙값은 순서통계량의 **불연속** 함수이다. $n = 50$에서 붓스트랩 중앙값은 원자료의 $25$번째와 $26$번째 순서통계량 부근 몇 개 값만 취한다.
+
+        따라서 $\widehat{\text{SE}}$가 사실상 그 몇 개 값 사이의 간격에 의해 결정된다. 그 간격은 표본마다 크게 다르다.
+
+        실용적 함의: **중앙값의 붓스트랩 표준오차 하나를 소수 셋째 자리까지 보고하지 말라.** $n = 50$에서 그 값의 불확실성이 $\pm 26$%이다.
 
 ---
 
-**Exercise 2.** The **asymptotic relative efficiency (ARE)** of the median to the mean for a normal distribution is $\pi/2 \approx 1.571$. This means the variance of the median is about 57% larger. Verify this empirically by comparing the bootstrap SEs of the mean and median from the same normal sample.
+**연습문제 2.** 정규분포에서 중앙값의 평균 대비 **점근상대효율**(ARE)은 $\pi/2 \approx 1.571$이다. 중앙값의 분산이 약 $57$% 크다는 뜻이다. 같은 정규 표본에서 평균과 중앙값의 붓스트랩 표준오차를 비교하여 경험적으로 확인하라.
 
-??? success "Solution to Exercise 2"
+??? success "연습문제 2 풀이"
 
     ```python
     import numpy as np
-    from sklearn.utils import resample
+    rng = np.random.default_rng(202)
+    data = np.random.default_rng(42).normal(0, 1, 200)
 
-    np.random.seed(42)
-    data = np.random.normal(0, 1, 200)
-
-    boot_means = np.array([np.mean(resample(data)) for _ in range(5000)])
-    boot_medians = np.array([np.median(resample(data)) for _ in range(5000)])
-
-    se_mean = boot_means.std(ddof=1)
-    se_median = boot_medians.std(ddof=1)
-    ratio = (se_median / se_mean) ** 2
-
-    print(f"SE(mean):   {se_mean:.4f}")
-    print(f"SE(median): {se_median:.4f}")
-    print(f"Var ratio:  {ratio:.3f} (theory: {np.pi/2:.3f})")
+    se_mean = bootstrap_mean(data, 5000, rng).std(ddof=1)
+    se_median = bootstrap_median(data, 5000, rng).std(ddof=1)
+    print(se_mean, se_median, (se_median / se_mean) ** 2)
+    # 0.0624  0.0996  2.548
     ```
 
-    The variance ratio $\text{Var}(\tilde x)/\text{Var}(\bar x)$ should be approximately $\pi/2 \approx 1.571$, meaning the median is less efficient than the mean for normal data. However, this efficiency loss is the price paid for robustness. For contaminated data (e.g., a normal mixture with outliers), the ARE reverses and the median becomes more efficient. $\square$
+    **단일 표본에서 분산비가 $2.548$로 이론값 $1.571$과 크게 다르다.**
+
+    연습문제 1과 같은 이유이다. 하나의 표본에서 얻은 중앙값의 붓스트랩 표준오차는 불안정하다. 이 표본에서는 우연히 큰 값이 나왔다.
+
+    **여러 표본에 걸쳐 평균내면 이론값이 회복된다.** 연습문제 1의 표에서 $n = 200$일 때
+
+    $$
+    \frac{\overline{\widehat{\text{SE}}}(\tilde x)}{\overline{\widehat{\text{SE}}}(\bar x)} = \frac{0.0892}{0.0706} = 1.263,
+    \qquad 1.263^2 = 1.596
+    $$
+
+    로 $\pi/2 = 1.571$과 $1.6$% 이내로 일치한다.
+
+    **연습문제의 원래 의도대로 하려면 자료를 여러 번 생성해야 한다.** 단일 표본으로 ARE를 확인하려는 시도는 실패하도록 되어 있다. 이것이 중요한 교훈이다. **점근상대효율은 여러 표본에 걸친 성질이지 한 표본의 성질이 아니다.**
+
+    정규자료에서 중앙값이 평균보다 비효율적인 것은 로버스트성의 대가이다. 오염된 자료(이상값이 섞인 정규혼합 등)에서는 ARE가 역전되어 중앙값이 더 효율적이 된다. [이표본 순열검정](../permutation/two_sample.md) 연습문제 3에서 그 역전을 검정력으로 확인했다.
 
 ---
 
-**Exercise 3.** Prove that the breakdown point of the median is 50%, meaning that up to half the observations can be replaced by arbitrary values without the median diverging to infinity. Show that the breakdown point of the mean is $0\%$ (a single outlier can make it arbitrarily large).
+**연습문제 3.** 중앙값의 붕괴점이 $50$%임을 증명하라. 즉 관측의 절반까지 임의의 값으로 바꾸어도 중앙값이 무한대로 발산하지 않음을 보여라. 평균의 붕괴점이 $0$%임(이상값 하나로 임의로 크게 만들 수 있음)도 보여라.
 
-??? success "Solution to Exercise 3"
+??? success "연습문제 3 풀이"
 
-    **Median.** Consider a sample $x_1 \le x_2 \le \cdots \le x_n$. The median is $x_{(k)}$ where $k = \lceil n/2 \rceil$. Now replace $m$ of the $n$ observations with arbitrarily large values. As long as $m < n/2$, at least $\lceil n/2 \rceil$ of the original values remain, so the $\lceil n/2 \rceil$-th order statistic is still bounded by the original data range. The median cannot diverge.
+    **중앙값.** 표본 $x_1 \le x_2 \le \cdots \le x_n$을 생각하자. 중앙값은 $k = \lceil n/2 \rceil$일 때 $x_{(k)}$이다. 이제 $n$개 중 $m$개를 임의로 큰 값으로 바꾼다. $m < n/2$인 한 원래 값이 최소 $\lceil n/2 \rceil$개 남으므로 $\lceil n/2 \rceil$번째 순서통계량은 여전히 원래 자료의 범위 안에 있다. 중앙값이 발산할 수 없다.
 
-    If $m = \lceil n/2 \rceil$ observations are replaced by $M \to \infty$, the median becomes $M \to \infty$. Therefore the breakdown point is:
+    $m = \lceil n/2 \rceil$개를 $M \to \infty$로 바꾸면 중앙값이 $M \to \infty$가 된다. 따라서 붕괴점은
 
     $$
-    \varepsilon^* = \frac{\lceil n/2 \rceil}{n} \to \frac{1}{2} \text{ as } n \to \infty
+    \varepsilon^* = \frac{\lceil n/2 \rceil}{n} \to \frac{1}{2} \quad (n \to \infty)
     $$
 
-    **Mean.** Replace a single observation $x_1$ by $M$. The mean becomes:
+    이다.
+
+    **평균.** 관측 하나 $x_1$을 $M$으로 바꾸면 평균은
 
     $$
     \bar x_M = \frac{M + \sum_{i=2}^{n} x_i}{n}
     $$
 
-    As $M \to \infty$, $\bar x_M \to \infty$. Therefore the breakdown point is $1/n \to 0$ as $n \to \infty$. $\square$
+    이 된다. $M \to \infty$이면 $\bar x_M \to \infty$이다. 따라서 붕괴점은 $1/n \to 0$이다. $\square$
+
+    **붕괴점은 이야기의 절반이다.** 붕괴점 $50$%는 "최악의 경우 얼마나 버티는가"를 재는 극단적 기준이다. 실무에서는 오염이 $1$--$5$% 수준일 때 얼마나 흔들리는지가 더 중요하며, 그것은 영향함수가 답한다.
+
+    | 추정량 | 붕괴점 | 정규자료에서의 효율 |
+    |:---|---:|---:|
+    | 평균 | 0% | 1.000 |
+    | $10$% 절사평균 | 10% | 0.968 |
+    | $20$% 절사평균 | 20% | 0.927 |
+    | 중앙값 | 50% | 0.637 |
+
+    **절사평균이 대개 더 나은 절충이다.** $20$% 절사평균은 붕괴점 $20$%(현실적인 오염 수준을 훨씬 넘는다)를 가지면서 정규자료에서 효율 $0.927$을 유지한다. 중앙값의 $0.637$보다 훨씬 낫다.
 
 ---
 
-**Exercise 4.** The bootstrap distribution of the median can exhibit a "lumpy" appearance with repeated values. Explain why this happens (hint: consider ties in the bootstrap sample) and describe how increasing $B$ or $n$ affects the smoothness.
+**연습문제 4.** 중앙값의 붓스트랩 분포는 값이 반복되는 "덩어리진" 모양을 보일 수 있다. 왜 그런지 설명하고(힌트: 붓스트랩 표본의 동점을 생각하라), $B$나 $n$을 늘리면 매끄러움이 어떻게 달라지는지 서술하라.
 
-??? success "Solution to Exercise 4"
+??? success "연습문제 4 풀이"
 
-    The median of a bootstrap sample depends on the order statistics near the center. Since bootstrap sampling is with replacement, many resamples share the same few central observations. The median can only take values that appear in the original sample (for odd $n$) or averages of adjacent order statistics (for even $n$). This creates **discrete jumps** in the bootstrap distribution, producing the lumpy histogram.
+    붓스트랩 표본의 중앙값은 중앙 부근의 순서통계량에 의존한다. 붓스트랩이 복원추출이므로 많은 재표본이 같은 소수의 중심 관측을 공유한다. 중앙값은 원래 표본에 나타난 값($n$이 홀수일 때)이나 인접한 순서통계량의 평균($n$이 짝수일 때)만 취할 수 있다. 이것이 붓스트랩 분포에 **이산적 도약**을 만들어 덩어리진 히스토그램을 낳는다.
 
-    **Increasing $B$** (number of bootstrap resamples) does not help with lumpiness. It merely provides more draws from the same discrete distribution, refining the histogram heights but not creating new median values.
+    **$B$를 늘려도 덩어리는 사라지지 않는다.** 같은 이산분포에서 더 많이 뽑을 뿐이며, 히스토그램의 높이가 정밀해질 뿐 새로운 중앙값 값이 생기지 않는다.
 
-    **Increasing $n$** (sample size) helps substantially. With more distinct data values, the set of possible medians becomes denser. In the limit, the bootstrap distribution of the median converges to a continuous distribution.
+    **$n$을 늘리면 크게 개선된다.** 서로 다른 자료값이 많아지면 가능한 중앙값의 집합이 조밀해진다. 극한에서 중앙값의 붓스트랩 분포는 연속분포로 수렴한다.
 
-    For small $n$, using a smoothed bootstrap (adding small noise to each resample) or the BCa method can mitigate discreteness. $\square$
+    **얼마나 이산적인가.** $n$이 홀수이면 붓스트랩 중앙값은 원자료의 $n$개 값 중 하나만 취할 수 있다. 실제로는 그중 중심 부근의 소수만 나타난다.
+
+    | $n$ | 붓스트랩 중앙값이 취하는 서로 다른 값의 수(대략) |
+    |---:|---:|
+    | 15 | 5--7 |
+    | 50 | 9--13 |
+    | 200 | 17--23 |
+
+    개수가 대략 $\sqrt{n}$에 비례한다. 중앙값의 표집분포 폭이 $O(n^{-1/2})$이고 인접 순서통계량 사이의 간격이 $O(n^{-1})$이므로, 그 비가 $O(n^{1/2})$이기 때문이다.
+
+    작은 $n$에서는 평활 붓스트랩(각 재표본에 작은 잡음을 더하는 것)이 이산성을 완화한다. 대역폭 $h$를 밀도추정처럼 골라야 하는 부담이 생기지만, 신뢰구간의 포함확률이 개선된다.
+
+    !!! warning "BCa는 이 문제를 해결하지 못한다"
+        BCa가 이산성을 완화한다고 기대하기 쉽지만 그렇지 않다. BCa는 붓스트랩 분포의 **분위수 수준을 조정**할 뿐 분포 자체를 매끄럽게 만들지 않는다.
+
+        더 나쁘게도, BCa의 가속계수 $\hat{a}$는 잭나이프에 기반하는데 중앙값에서 잭나이프가 사실상 작동하지 않는다. [BCa](../bootstrap_ci/bca.md) 연습문제 3에서 중앙값의 $\hat{a}$가 평균 $0.00001$, 표준편차 $0.00089$로 **안정적으로 $0$**임을 확인했다. 왜도가 있어도 탐지하지 못한다.
 
 ---
 
-**Exercise 5.** Compute the bootstrap 95% CI for both the mean and median of a sample of size $n = 30$ from a log-normal distribution with parameters $\mu = 10.5$ and $\sigma = 0.8$. Then add five outliers at $10^7$ and recompute. Discuss how the two statistics and their CIs are affected.
+**연습문제 5.** $\mu = 10.5$, $\sigma = 0.8$인 로그정규분포에서 크기 $n = 30$인 표본의 평균과 중앙값에 대한 붓스트랩 $95$% 신뢰구간을 계산하라. 그다음 $10^7$에 이상값 다섯 개를 추가하고 다시 계산하라. 두 통계량과 그 신뢰구간이 어떻게 영향받는지 논하라.
 
-??? success "Solution to Exercise 5"
+??? success "연습문제 5 풀이"
 
     ```python
     import numpy as np
-    from sklearn.utils import resample
+    rng = np.random.default_rng(202)
+    data = np.random.default_rng(42).lognormal(mean=10.5, sigma=0.8, size=30)
 
-    np.random.seed(42)
-    data = np.random.lognormal(mean=10.5, sigma=0.8, size=30)
+    def pct_ci(x, f, B=5000):
+        v = np.array([f(x[rng.integers(0, len(x), len(x))]) for _ in range(B)])
+        return np.percentile(v, [2.5, 97.5])
 
-    boot_means = np.array([np.mean(resample(data)) for _ in range(5000)])
-    boot_medians = np.array([np.median(resample(data)) for _ in range(5000)])
-
-    ci_mean = np.percentile(boot_means, [2.5, 97.5])
-    ci_median = np.percentile(boot_medians, [2.5, 97.5])
-
-    print("Before outliers:")
-    print(f"  Mean = {data.mean():,.0f}, 95% CI: [{ci_mean[0]:,.0f}, {ci_mean[1]:,.0f}]")
-    print(f"  Median = {np.median(data):,.0f}, 95% CI: [{ci_median[0]:,.0f}, {ci_median[1]:,.0f}]")
-
-    # Add outliers
     data_out = np.append(data, [1e7] * 5)
-
-    boot_means2 = np.array([np.mean(resample(data_out)) for _ in range(5000)])
-    boot_medians2 = np.array([np.median(resample(data_out)) for _ in range(5000)])
-
-    ci_mean2 = np.percentile(boot_means2, [2.5, 97.5])
-    ci_median2 = np.percentile(boot_medians2, [2.5, 97.5])
-
-    print("\nAfter adding 5 outliers at 10^7:")
-    print(f"  Mean = {data_out.mean():,.0f}, 95% CI: [{ci_mean2[0]:,.0f}, {ci_mean2[1]:,.0f}]")
-    print(f"  Median = {np.median(data_out):,.0f}, 95% CI: [{ci_median2[0]:,.0f}, {ci_median2[1]:,.0f}]")
     ```
 
-    The mean and its CI are dramatically affected by the outliers: the mean shifts from roughly \$50,000 to over \$1,000,000, and the CI becomes enormously wide. The median and its CI change only slightly, as the five outliers shift at most a few order statistics. This demonstrates the practical value of the median for data with potential contamination. $\square$
+    **이상값 추가 전 ($n = 30$)**
+
+    | 통계량 | 추정값 | $95$% 신뢰구간 | 폭 |
+    |:---|---:|:---|---:|
+    | 평균 | 43{,}415 | $[35{,}160,\ 52{,}135]$ | 16{,}975 |
+    | 중앙값 | 39{,}256 | $[29{,}761,\ 50{,}891]$ | 21{,}130 |
+
+    **$10^7$에 이상값 $5$개 추가 후 ($n = 35$)**
+
+    | 통계량 | 추정값 | $95$% 신뢰구간 | 폭 |
+    |:---|---:|:---|---:|
+    | 평균 | **1{,}465{,}784** | $[330{,}647,\ 2{,}606{,}878]$ | 2{,}276{,}231 |
+    | 중앙값 | **48{,}647** | $[32{,}092,\ 66{,}195]$ | 34{,}103 |
+
+    **평균이 $34$배로 폭발한다**($43{,}415 \to 1{,}465{,}784$). 신뢰구간의 폭은 $134$배가 된다. 이 구간은 실질적으로 아무 정보도 주지 않는다.
+
+    **중앙값은 $24$% 오른다**($39{,}256 \to 48{,}647$). 이는 오염의 직접적 효과가 아니라 표본크기가 $30$에서 $35$로 늘면서 중앙값이 $15$번째 순서통계량에서 $18$번째로 이동했기 때문이다. 다섯 개의 이상값이 모두 위쪽에 추가되었으므로 중앙값이 오른쪽으로 세 칸 밀렸다.
+
+    **신뢰구간의 폭에서 흥미로운 반전이 있다.** 오염 전에는 중앙값 구간($21{,}130$)이 평균 구간($16{,}975$)보다 **넓었다**. $n = 30$은 작아서 중앙값의 이산성 문제가 크기 때문이다. 오염 후에는 완전히 뒤집혀 중앙값 구간이 평균 구간의 $1.5$%에 불과하다.
+
+    !!! tip "이상값을 어떻게 다룰 것인가"
+        이 예제의 결론은 "중앙값을 써라"가 아니다. 다음 순서로 판단해야 한다.
+
+        1. **이상값이 오류인가 실제인가.** $10^7$의 소득이 입력 오류라면 고쳐야 한다. 실제 억만장자라면 자료의 일부이다.
+        2. **어떤 질문에 답하려는가.** "총 소득세 수입"을 알고 싶다면 평균이 옳다. 억만장자가 실제로 큰 몫을 차지한다. "전형적인 가구의 형편"을 알고 싶다면 중앙값이 옳다.
+        3. **평균이 필요하다면 로버스트한 대안을 쓴다.** $20$% 절사평균, Winsor화 평균, 또는 로그 변환 후의 평균(기하평균)을 고려한다.
+        4. **둘 다 보고한다.** 평균과 중앙값이 $34$배 다르다는 사실 자체가 자료에 대한 중요한 정보이다.
+
+        무엇을 하든 **이상값을 조용히 제거하지 말라.** 제거했다면 몇 개를, 어떤 기준으로 제거했는지 보고해야 한다.

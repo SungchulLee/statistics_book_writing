@@ -1,95 +1,91 @@
-# Chapter 17: Resampling Methods
+# 17장: 재표집 방법
 
 
-## Overview
+## 개요
 
-Resampling methods are computationally intensive approaches to statistical inference that construct the sampling distribution of a statistic empirically by repeatedly drawing samples from the observed data. Unlike parametric methods that rely on theoretical distributional assumptions, and unlike rank-based non-parametric methods that replace values with ranks, resampling methods work directly with the original data values. This chapter covers the two primary resampling paradigms --- the bootstrap (for estimation and confidence intervals) and permutation tests (for hypothesis testing) --- along with practical guidance on choosing between them.
-
----
-
-## Chapter Structure
-
-### 17.1 Bootstrap Foundations
-
-The theoretical basis and core algorithms for bootstrap resampling:
-
-- **The Bootstrap Principle** --- Introduces the key insight that the empirical distribution of the sample is a reasonable proxy for the unknown population distribution, enabling distribution-free inference.
-- **Non-Parametric Bootstrap** --- Details the standard bootstrap algorithm of sampling with replacement from the observed data and computing replicate statistics to approximate the sampling distribution.
-- **Parametric Bootstrap** --- Describes the variant where bootstrap samples are drawn from a fitted parametric model rather than the empirical distribution, useful when a distributional form is assumed.
-- **Resampling Method** --- Provides a comprehensive walkthrough of the bootstrap resampling algorithm, including standard error estimation, the 63.2% unique observation property, and practical implementation steps.
-- **Bootstrap Overview** --- A detailed reference covering the bootstrap principle, the substitution of the empirical distribution for the population, the nonparametric bootstrap algorithm, and bootstrap standard error computation.
-
-### 17.2 Bootstrap Confidence Intervals
-
-Methods for constructing confidence intervals from the bootstrap distribution:
-
-- **Percentile Method** --- The simplest approach, using quantiles of the bootstrap distribution directly as confidence interval endpoints.
-- **BCa (Bias-Corrected and Accelerated)** --- An improved method that corrects for bias and skewness in the bootstrap distribution, providing better coverage for non-symmetric statistics.
-- **Bootstrap-t Method** --- Studentizes the bootstrap distribution by estimating the standard error within each bootstrap sample, yielding intervals with higher-order accuracy.
-- **Visualization of Confidence Levels** --- Demonstrates how to visually interpret and compare bootstrap confidence intervals at different confidence levels (e.g., 90% vs. 95%), clarifying the coverage property.
-- **Comparison of Bootstrap CI Methods** --- A side-by-side evaluation of the percentile, BCa, and bootstrap-t methods in terms of coverage accuracy, computational cost, and applicability.
-
-### 17.3 Bootstrap Hypothesis Testing
-
-Using bootstrap resampling to perform hypothesis tests:
-
-- **Bootstrap Test for a Single Mean** --- Tests whether a population mean equals a hypothesized value by centering the bootstrap distribution under the null hypothesis.
-- **Bootstrap Test for Two Means** --- Tests whether two populations have the same mean by bootstrapping under the null hypothesis of no difference.
-- **Bootstrap Test for Correlation** --- Tests whether a population correlation coefficient is zero by resampling paired observations under the null.
-
-### 17.4 Permutation Tests
-
-Exact and approximate tests based on random rearrangement of data labels:
-
-- **Permutation Test Foundations** --- Introduces the logic of permutation testing: under the null hypothesis, group labels are exchangeable, and shuffling them generates the null distribution of any test statistic.
-- **Permutation Test for Two-Sample Location** --- Tests whether two independent groups differ in location (typically means) by repeatedly shuffling group labels and computing the difference statistic, with applications to A/B testing.
-- **Permutation Test for Correlation** --- Tests the significance of a correlation coefficient by permuting one variable while holding the other fixed, breaking any true association.
-- **Permutation Test for Paired Data** --- Adapts permutation logic to paired designs by randomly flipping the signs of paired differences under the null hypothesis of no treatment effect.
-- **Permutation Tests Overview** --- A comprehensive reference covering the general permutation test framework, hypotheses, step-by-step algorithm, and the distinction between exact and approximate permutation tests.
-
-### 17.5 Comparison and Practical Guidance
-
-When and how to choose between resampling approaches:
-
-- **Bootstrap vs. Permutation Tests** --- Contrasts the two methods across purpose (estimation vs. testing), resampling mechanism (with vs. without replacement), assumptions (representativeness vs. exchangeability), and typical outputs.
-- **Number of Resamples and Convergence** --- Provides guidance on choosing the number of bootstrap replicates or permutations (typically 1,000--10,000) and how to assess whether results have stabilized.
-- **When Resampling Fails** --- Discusses limitations and failure modes of resampling, including small samples, extreme quantiles, dependent data, and non-representative samples.
-- **Comparison Overview** --- A detailed side-by-side comparison table covering purpose, methodology, assumptions, outputs, strengths, and weaknesses of bootstrap and permutation test approaches.
-
-### 17.6 Code
-
-Complete Python implementations:
-
-- **bootstrap_ci.py** --- Bootstrap confidence interval methods (percentile, BCa, bootstrap-t).
-- **bootstrap_tests.py** --- Bootstrap hypothesis tests for means and correlations.
-- **permutation_tests.py** --- Permutation test implementations for two-sample, paired, and correlation settings.
-- **resampling_methods.py** --- Unified comparison of resampling methods across different scenarios.
-- **ab_testing_permutation.py** --- A/B testing application using permutation tests.
-- **bootstrap_ci_visualization.py** --- Visualization of bootstrap confidence intervals at multiple confidence levels.
-- **bootstrap_median.py** --- Bootstrap inference for the median, a statistic with no simple parametric standard error.
-
-### 17.7 Exercises
-
-Practice problems covering conceptual understanding (why sampling with replacement, exchangeability assumptions, BCa vs. percentile intervals) and computational exercises (bootstrap CIs for skewed distributions, permutation tests for A/B experiments, convergence analysis).
+재표집 방법은 관측된 자료에서 반복적으로 표본을 뽑아 통계량의 표본분포를 경험적으로 구성하는, 계산집약적인 통계적 추론 접근이다. 이론적 분포 가정에 기대는 모수적 방법과도, 값을 순위로 대체하는 순위 기반 비모수 방법과도 달리, 재표집 방법은 원자료의 값을 직접 다룬다. 이 장에서는 두 가지 주요 재표집 패러다임 --- 추정과 신뢰구간을 위한 붓스트랩, 가설검정을 위한 순열검정 --- 을 다루고, 둘 사이의 선택에 대한 실무 지침도 함께 제시한다.
 
 ---
 
-## Prerequisites
+## 장의 구성
 
-This chapter builds on:
+### 17.1 붓스트랩의 기초
 
-- **Chapter 8** (Confidence Intervals) --- Parametric confidence interval construction, coverage probability, and interpretation.
-- **Chapter 9** (Hypothesis Testing) --- Null and alternative hypotheses, p-values, Type I and II errors, and test statistic logic.
-- **Chapter 5** (Sampling Distributions) --- The concept of a sampling distribution and the distinction between a statistic and a parameter.
-- **Chapter 6** (Statistical Estimation) --- Maximum likelihood estimation and properties of estimators (bias, variance, consistency).
-- **Chapter 16** (Non-Parametric Tests) --- Rank-based distribution-free methods as an alternative approach to non-parametric inference.
+붓스트랩 재표집의 이론적 토대와 핵심 알고리즘이다.
+
+- **붓스트랩 원리** --- 표본의 경험적 분포가 알려지지 않은 모집단 분포의 합리적인 대용물이라는 핵심 통찰을 소개하고, 이것이 분포무관 추론을 가능하게 함을 보인다.
+- **비모수 붓스트랩** --- 관측자료에서 복원추출로 표본을 뽑아 복제 통계량을 계산함으로써 표본분포를 근사하는 표준 붓스트랩 알고리즘을 상세히 다룬다.
+- **모수적 붓스트랩** --- 경험적 분포 대신 적합된 모수적 모형에서 붓스트랩 표본을 뽑는 변형으로, 분포형이 가정될 때 유용하다.
+- **재표집 방법** --- 표준오차 추정, 63.2% 고유 관측값 성질, 실제 구현 단계를 포함하여 붓스트랩 재표집 알고리즘을 처음부터 끝까지 따라간다.
+- **붓스트랩 개관** --- 붓스트랩 원리, 모집단을 경험적 분포로 대체하는 발상, 비모수 붓스트랩 알고리즘, 붓스트랩 표준오차 계산을 아우르는 상세 참고 자료이다.
+
+### 17.2 붓스트랩 신뢰구간
+
+붓스트랩 분포에서 신뢰구간을 만드는 방법이다.
+
+- **백분위수법** --- 붓스트랩 분포의 분위수를 신뢰구간의 양 끝점으로 그대로 쓰는 가장 단순한 접근이다.
+- **BCa (편향보정 가속)** --- 붓스트랩 분포의 편향과 치우침을 보정하여 비대칭 통계량에 더 나은 포함확률을 주는 개선된 방법이다.
+- **붓스트랩-t 방법** --- 각 붓스트랩 표본 안에서 표준오차를 추정하여 붓스트랩 분포를 스튜던트화함으로써 더 높은 차수의 정확도를 갖는 구간을 얻는다.
+- **신뢰수준의 시각화** --- 서로 다른 신뢰수준(예: 90% 대 95%)의 붓스트랩 신뢰구간을 시각적으로 해석하고 비교하여 포함확률의 의미를 분명히 한다.
+- **붓스트랩 신뢰구간 방법의 비교** --- 백분위수법, BCa, 붓스트랩-t를 포함확률의 정확도, 계산비용, 적용범위 면에서 나란히 평가한다.
+
+### 17.3 붓스트랩 가설검정
+
+붓스트랩 재표집으로 가설검정을 수행한다.
+
+- **일표본 평균에 대한 붓스트랩 검정** --- 귀무가설 아래에서 붓스트랩 분포를 중심화하여 모평균이 가설값과 같은지 검정한다.
+- **두 평균에 대한 붓스트랩 검정** --- 차이가 없다는 귀무가설 아래에서 붓스트랩하여 두 모집단의 평균이 같은지 검정한다.
+- **상관에 대한 붓스트랩 검정** --- 귀무가설 아래에서 대응 관측값을 재표집하여 모상관계수가 0인지 검정한다.
+
+### 17.4 순열검정
+
+자료 라벨의 무작위 재배열에 기반한 정확검정과 근사검정이다.
+
+- **순열검정의 기초** --- 순열검정의 논리를 소개한다. 귀무가설 아래에서 집단 라벨은 교환 가능하므로, 이를 섞으면 임의의 검정통계량의 귀무분포가 생성된다.
+- **이표본 위치에 대한 순열검정** --- 집단 라벨을 반복해서 섞고 차이 통계량을 계산하여 독립인 두 집단의 위치(보통 평균)가 다른지 검정하며, A/B 검정에 응용한다.
+- **상관에 대한 순열검정** --- 한 변수를 고정한 채 다른 변수를 순열하여 참인 연관성을 끊음으로써 상관계수의 유의성을 검정한다.
+- **대응자료에 대한 순열검정** --- 처리효과가 없다는 귀무가설 아래에서 대응차이의 부호를 무작위로 뒤집어 순열 논리를 대응설계에 적용한다.
+- **순열검정 개관** --- 일반적인 순열검정 틀, 가설, 단계별 알고리즘, 그리고 정확 순열검정과 근사 순열검정의 구별을 아우르는 종합 참고 자료이다.
+
+### 17.5 비교와 실무 지침
+
+재표집 접근들 사이에서 언제 무엇을 어떻게 고를 것인가.
+
+- **붓스트랩 대 순열검정** --- 목적(추정 대 검정), 재표집 방식(복원 대 비복원), 가정(대표성 대 교환가능성), 전형적 출력의 네 측면에서 두 방법을 대비한다.
+- **재표집 횟수와 수렴** --- 붓스트랩 복제나 순열의 횟수를 고르는 지침(보통 1{,}000--10{,}000회)과 결과가 안정되었는지 평가하는 방법을 제시한다.
+- **재표집이 실패할 때** --- 작은 표본, 극단 분위수, 종속자료, 대표성 없는 표본 등 재표집의 한계와 실패 양상을 논한다.
+- **비교 개관** --- 붓스트랩과 순열검정 접근의 목적, 방법론, 가정, 출력, 강점, 약점을 나란히 정리한 상세 비교표이다.
+
+### 17.6 코드
+
+완전한 파이썬 구현이다.
+
+- **bootstrap_ci.py** --- 붓스트랩 신뢰구간 방법(백분위수, BCa, 붓스트랩-t).
+- **bootstrap_tests.py** --- 평균과 상관에 대한 붓스트랩 가설검정.
+- **permutation_tests.py** --- 이표본, 대응, 상관 상황의 순열검정 구현.
+- **resampling_methods.py** --- 여러 상황에 걸친 재표집 방법의 통합 비교.
+- **ab_testing_permutation.py** --- 순열검정을 이용한 A/B 검정 응용.
+- **bootstrap_ci_visualization.py** --- 여러 신뢰수준의 붓스트랩 신뢰구간 시각화.
+- **bootstrap_median.py** --- 간단한 모수적 표준오차가 없는 통계량인 중앙값에 대한 붓스트랩 추론.
 
 ---
 
-## Key Takeaways
+## 선수 지식
 
-1. The bootstrap approximates the sampling distribution of any statistic by resampling with replacement from the observed data, enabling standard errors and confidence intervals without closed-form derivations.
-2. The BCa bootstrap confidence interval corrects for bias and skewness and generally provides better coverage than the simple percentile method, especially for skewed statistics like the median.
-3. Permutation tests provide exact p-values under the null hypothesis of exchangeability by generating the null distribution through random rearrangement of group labels.
-4. Bootstrap is primarily for estimation (confidence intervals, standard errors), while permutation tests are primarily for hypothesis testing (p-values), though both can serve overlapping roles.
-5. Resampling methods can fail when the sample is too small to represent the population, when estimating extreme quantiles, or when observations are dependent, and the number of resamples must be large enough for results to converge.
+이 장은 다음 내용 위에 세워진다.
+
+- **8장** (신뢰구간) --- 모수적 신뢰구간 구성, 포함확률, 해석.
+- **9장** (가설검정) --- 귀무가설과 대립가설, p값, 제1종·제2종 오류, 검정통계량의 논리.
+- **5장** (표본분포) --- 표본분포의 개념과 통계량·모수의 구별.
+- **6장** (통계적 추정) --- 최대가능도추정과 추정량의 성질(편향, 분산, 일치성).
+- **16장** (비모수 검정) --- 비모수 추론의 또 다른 접근인 순위 기반 분포무관 방법.
+
+---
+
+## 핵심 요약
+
+1. 붓스트랩은 관측자료에서 복원추출로 재표집하여 임의의 통계량의 표본분포를 근사하므로, 닫힌 형태의 유도 없이 표준오차와 신뢰구간을 얻을 수 있다.
+2. BCa 붓스트랩 신뢰구간은 편향과 치우침을 보정하여 단순 백분위수법보다 대체로 나은 포함확률을 주며, 중앙값처럼 치우친 통계량에서 특히 그렇다.
+3. 순열검정은 교환가능성이라는 귀무가설 아래에서 집단 라벨을 무작위로 재배열하여 귀무분포를 생성함으로써 정확 p값을 제공한다.
+4. 붓스트랩은 주로 추정(신뢰구간, 표준오차)을 위한 것이고 순열검정은 주로 가설검정(p값)을 위한 것이지만, 둘의 역할은 겹치는 부분이 있다.
+5. 재표집 방법은 표본이 모집단을 대표하기에 너무 작을 때, 극단 분위수를 추정할 때, 관측값이 종속일 때 실패할 수 있으며, 결과가 수렴하려면 재표집 횟수가 충분히 커야 한다.

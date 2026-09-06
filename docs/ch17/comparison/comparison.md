@@ -1,183 +1,299 @@
-# Comparison: Bootstrap vs Permutation Tests
+# 비교: 붓스트랩과 순열검정
 
 
-## Overview
+## 개요
 
-The **Bootstrap** and **Permutation Test** are two widely used resampling techniques. While they share the principle of using observed data to construct sampling distributions, they differ fundamentally in purpose, methodology, and application.
-
----
-
-## Side-by-Side Comparison
-
-### 1. Purpose
-
-| Aspect | Bootstrap | Permutation Test |
-|---|---|---|
-| **Goal** | Estimate the distribution of a statistic for confidence intervals or variability | Test hypotheses by comparing the observed statistic to a null distribution |
-| **Primary Use** | Confidence intervals, standard errors, model validation | Hypothesis testing (e.g., testing differences between groups) |
-
-### 2. Methodology
-
-| Aspect | Bootstrap | Permutation Test |
-|---|---|---|
-| **How It Works** | Repeatedly resamples the observed data **with replacement** | Repeatedly **rearranges (permutes)** the data labels **without replacement** |
-| **Resampling Type** | With replacement | Without replacement |
-| **Key Idea** | Mimics drawing new samples from the population using the observed sample as a proxy | Breaks the association between data and groups under the null hypothesis |
-
-### 3. Assumptions
-
-| Aspect | Bootstrap | Permutation Test |
-|---|---|---|
-| **Distribution** | None. Assumes the observed data is representative of the population | Assumes exchangeability under the null hypothesis |
-| **Independence** | Assumes data points are independent (extensions exist for dependent data) | Assumes the null hypothesis holds, and labels can be shuffled |
-
-### 4. Applications
-
-| Aspect | Bootstrap | Permutation Test |
-|---|---|---|
-| **Confidence Intervals** | Widely used | Not typically used |
-| **Hypothesis Testing** | Can be adapted, though less intuitive | Primary use |
-| **Complex Statistics** | Handles complex statistics well (regression coefficients, skewness) | Best suited for simpler statistics (mean differences, correlation) |
-
-### 5. Computational Cost
-
-| Aspect | Bootstrap | Permutation Test |
-|---|---|---|
-| **Intensity** | High (resampling + recalculating for thousands of iterations) | Moderate to high (number of permutations grows factorially, but approximations are possible) |
-| **Small Samples** | Efficient and accurate | Exact results possible (all permutations feasible) |
+**붓스트랩**과 **순열검정**은 널리 쓰이는 두 가지 재표집 기법이다. 관측된 자료로 표집분포를 구성한다는 원리를 공유하지만, 목적·방법론·응용에서 근본적으로 다르다.
 
 ---
 
-## Practical Example: Testing Difference in Means
+## 나란히 비교
 
-### Bootstrap Approach
+### 1. 목적
 
-1. Resample the two groups **with replacement**.
-2. Compute the mean difference for each bootstrap sample.
-3. Estimate the **confidence interval** for the mean difference.
+| 측면 | 붓스트랩 | 순열검정 |
+|---|---|---|
+| **목표** | 신뢰구간이나 변동성을 위해 통계량의 분포를 추정 | 관측 통계량을 귀무분포와 비교하여 가설을 검정 |
+| **주 용도** | 신뢰구간, 표준오차, 모형 검증 | 가설검정(예: 집단 간 차이 검정) |
+
+### 2. 방법론
+
+| 측면 | 붓스트랩 | 순열검정 |
+|---|---|---|
+| **작동 방식** | 관측 자료에서 **복원**추출로 반복 재표집 | 자료 라벨을 **비복원**으로 반복 재배열(순열) |
+| **재표집 방식** | 복원추출 | 비복원 |
+| **핵심 착상** | 관측 표본을 모집단의 대리로 삼아 새 표본을 뽑는 것을 흉내낸다 | 귀무가설 아래에서 자료와 집단 사이의 연관을 끊는다 |
+
+### 3. 가정
+
+| 측면 | 붓스트랩 | 순열검정 |
+|---|---|---|
+| **분포** | 없음. 관측 자료가 모집단을 대표한다고 가정 | 귀무가설 아래 교환가능성을 가정 |
+| **독립성** | 관측이 독립이라고 가정(종속자료용 확장이 있다) | 귀무가설이 성립하여 라벨을 섞을 수 있다고 가정 |
+
+### 4. 응용
+
+| 측면 | 붓스트랩 | 순열검정 |
+|---|---|---|
+| **신뢰구간** | 널리 쓰인다 | 보통 쓰지 않는다 |
+| **가설검정** | 변형하면 가능하지만 덜 직관적이다 | 주 용도 |
+| **복잡한 통계량** | 잘 다룬다(회귀계수, 왜도) | 어떤 통계량이든 다루지만 귀무가설이 단순해야 한다 |
+
+### 5. 계산비용
+
+| 측면 | 붓스트랩 | 순열검정 |
+|---|---|---|
+| **강도** | 높음(수천 번의 재표집과 재계산) | 중간에서 높음(순열 수가 계승으로 증가하지만 근사가 가능하다) |
+| **작은 표본** | **주의가 필요하다**(아래 연습문제 1 참조) | 정확한 결과가 가능하다(모든 순열 열거) |
+
+---
+
+## 실전 예제: 평균차 검정
+
+### 붓스트랩 접근
+
+1. 두 집단을 각각 **복원**추출로 재표집한다.
+2. 각 붓스트랩 표본에서 평균차를 계산한다.
+3. 평균차의 **신뢰구간**을 추정한다.
 
 ```python
 import numpy as np
+rng = np.random.default_rng(55)
 
 group_a = np.array([8, 7, 9, 10, 6])
 group_b = np.array([5, 6, 4, 3, 7])
 
-n_resamples = 10000
-boot_diffs = []
-for _ in range(n_resamples):
-    a_boot = np.random.choice(group_a, size=len(group_a), replace=True)
-    b_boot = np.random.choice(group_b, size=len(group_b), replace=True)
-    boot_diffs.append(a_boot.mean() - b_boot.mean())
+n_resamples = 100_000
+A = group_a[rng.integers(0, 5, (n_resamples, 5))]
+B = group_b[rng.integers(0, 5, (n_resamples, 5))]
+boot_diffs = A.mean(axis=1) - B.mean(axis=1)
 
-boot_diffs = np.array(boot_diffs)
-ci_lower = np.percentile(boot_diffs, 2.5)
-ci_upper = np.percentile(boot_diffs, 97.5)
-print(f"Bootstrap 95% CI for mean difference: ({ci_lower:.2f}, {ci_upper:.2f})")
+ci = np.percentile(boot_diffs, [2.5, 97.5])
+print(f"Bootstrap 95% CI for mean difference: ({ci[0]:.2f}, {ci[1]:.2f})")
+# (1.20, 4.80)
 ```
 
-### Permutation Approach
+### 순열 접근
 
-1. Combine the two groups into a single dataset.
-2. Randomly shuffle the group labels **without replacement**.
-3. Compute the mean difference for each permutation.
-4. Compare the observed mean difference to the distribution of permuted differences to calculate a **p-value**.
+1. 두 집단을 하나의 자료로 합친다.
+2. 집단 라벨을 **비복원**으로 무작위로 섞는다.
+3. 각 순열에서 평균차를 계산한다.
+4. 관측 평균차를 순열된 차이들의 분포와 비교하여 **$p$값**을 구한다.
 
 ```python
-import numpy as np
+import numpy as np, itertools
 
 group_a = np.array([8, 7, 9, 10, 6])
 group_b = np.array([5, 6, 4, 3, 7])
-
 combined = np.concatenate([group_a, group_b])
 observed_diff = group_a.mean() - group_b.mean()
 
-n_permutations = 10000
-perm_diffs = []
-for _ in range(n_permutations):
-    np.random.shuffle(combined)
-    perm_diffs.append(combined[:len(group_a)].mean() - combined[len(group_a):].mean())
-
-perm_diffs = np.array(perm_diffs)
-p_value = np.mean(np.abs(perm_diffs) >= np.abs(observed_diff))
-print(f"Permutation p-value: {p_value:.4f}")
+# 각 집단이 5개뿐이므로 C(10,5) = 252 가지를 전부 열거한다
+perm_diffs = np.array([
+    combined[list(c)].mean() - np.delete(combined, list(c)).mean()
+    for c in itertools.combinations(range(10), 5)
+])
+p_value = (np.abs(perm_diffs) >= abs(observed_diff) - 1e-12).mean()
+print(f"Exact permutation p-value: {p_value:.4f}")   # 0.0397
 ```
 
+!!! danger "이 예제에서 두 방법이 심각하게 어긋난다"
+    | 방법 | 결과 |
+    |:---|:---|
+    | 정확 순열 $p$값 | $0.0397$ |
+    | Welch $t$ 검정 $p$값 | $0.0171$ |
+    | 붓스트랩 백분위수 구간 | $[1.20,\ 4.80]$ — $0$을 크게 벗어난다 |
+    | 붓스트랩 꼬리 확률 | $0.0006$ |
+
+    붓스트랩 꼬리 확률이 순열 $p$값의 **$1/66$**이다. 어느 쪽이 옳은가? 순열검정이다. $n = 5$에서 붓스트랩 신뢰구간은 심각하게 좁다. 연습문제 1에서 그 이유와 크기를 다룬다.
+
 ---
 
-## Summary Table
+## 요약표
 
-| Feature | **Bootstrap** | **Permutation Test** |
+| 특징 | **붓스트랩** | **순열검정** |
 |---|---|---|
-| **Primary Purpose** | Confidence intervals, variability estimation | Hypothesis testing |
-| **Resampling** | With replacement | Without replacement |
-| **Key Output** | Confidence intervals, standard errors | p-value |
-| **Assumptions** | Data representative of population | Exchangeability under $H_0$ |
-| **Computational Intensity** | High | Moderate to high |
-| **Flexibility** | Very flexible (any statistic, complex models) | Less flexible, focuses on simpler tests |
+| **주 목적** | 신뢰구간, 변동성 추정 | 가설검정 |
+| **재표집** | 복원추출 | 비복원 |
+| **주 산출물** | 신뢰구간, 표준오차 | $p$값 |
+| **가정** | 자료가 모집단을 대표 | $H_0$ 아래 교환가능성 |
+| **계산강도** | 높음 | 중간에서 높음 |
+| **유연성** | 매우 유연(임의의 통계량, 복잡한 모형) | 통계량은 자유롭지만 귀무가설이 교환가능성을 함의해야 한다 |
+| **작은 표본** | 신뢰구간이 지나치게 좁다 | 정확하다 |
 
 ---
 
-## Decision Guide
+## 선택 지침
 
-### Use Bootstrap when:
+### 붓스트랩을 쓸 때
 
-- You need **confidence intervals** or **standard errors**.
-- The statistic is complex (e.g., regression coefficients, quantiles, ratios).
-- You want to estimate variability in addition to testing hypotheses.
-- You need to assess uncertainty for a novel or unusual estimator.
+- **신뢰구간**이나 **표준오차**가 필요하다.
+- 통계량이 복잡하다(회귀계수, 분위수, 비).
+- 가설검정에 더해 변동성도 추정하고 싶다.
+- 새롭거나 특이한 추정량의 불확실성을 평가해야 한다.
 
-### Use Permutation Test when:
+### 순열검정을 쓸 때
 
-- You need to **test hypotheses** about differences or associations.
-- You have small datasets where all permutations are feasible.
-- You want a precise, assumption-free alternative to parametric tests.
-- You need an **exact** p-value (for small samples).
+- 차이나 연관에 대한 **가설을 검정**해야 한다.
+- 자료가 작아 모든 순열 열거가 가능하다.
+- 모수적 검정을 대신할 정밀하고 무가정인 방법이 필요하다.
+- **정확한** $p$값이 필요하다(작은 표본).
 
-### Use Both when:
+### 둘 다 쓸 때
 
-- You want comprehensive inference: use the **permutation test** for the p-value and the **bootstrap** for the confidence interval.
-- This combination provides both a decision (reject/fail to reject) and an estimate of effect size with uncertainty.
+- 포괄적인 추론을 원한다. **순열검정**으로 $p$값을, **붓스트랩**으로 신뢰구간을 얻는다.
+- 이 조합은 결정(기각/비기각)과 불확실성을 동반한 효과크기 추정을 함께 제공한다.
+- 두 결과가 **어긋나면** 그것 자체가 진단 정보이다.
 
 ---
 
-## Relationship to Other Methods
+## 다른 방법과의 관계
 
-| Method | Chapter | Resampling? | Key Difference |
+| 방법 | 장 | 재표집? | 주된 차이 |
 |---|---|---|---|
-| z-test, t-test | Ch 9 | No | Relies on theoretical distributions |
-| Wilcoxon, Mann-Whitney | Ch 15 | No | Uses ranks, not raw values |
-| Bootstrap | Ch 16 | Yes (with replacement) | Estimates any sampling distribution |
-| Permutation Test | Ch 16 | Yes (without replacement) | Tests hypotheses via label shuffling |
+| $z$ 검정, $t$ 검정 | 9장 | 아니오 | 이론적 분포에 의존 |
+| Wilcoxon, Mann-Whitney | 16장 | 아니오 | 원값이 아니라 순위를 쓴다 |
+| 붓스트랩 | 17장 | 예(복원) | 임의의 표집분포를 추정 |
+| 순열검정 | 17장 | 예(비복원) | 라벨 섞기로 가설을 검정 |
 
+## 연습문제
 
-## Exercises
+**연습문제 1.**
+위 예제에서 붓스트랩 신뢰구간 $[1.20, 4.80]$과 순열 $p$값 $0.0397$이 어긋났다.
 
-**Exercise 1.**
-Describe the main concept of Comparison: Bootstrap vs Permutation Tests and explain why it matters for statistical practice.
+**(a)** 순열검정을 역변환하여 평균차의 $95$% 신뢰구간을 구하고 붓스트랩 구간·Welch 구간과 비교하라.
 
-??? success "Solution to Exercise 1"
-    Comparison: Bootstrap vs Permutation Tests is a core topic in statistics that provides tools for drawing reliable inferences from data. It matters because proper application ensures valid conclusions, correctly quantified uncertainty, and appropriate handling of the assumptions that underpin the method. Practitioners who understand this concept can avoid common pitfalls and choose the right analytical approach for their data.
+**(b)** $n = 5, 10, 20, 40$에서 백분위수 붓스트랩 구간과 붓스트랩-$t$ 구간의 포함확률을 모의실험으로 구하라.
+
+**(c)** 붓스트랩 백분위수 구간이 작은 $n$에서 좁아지는 이유를 설명하라.
+
+??? success "연습문제 1 풀이"
+    **(a) 순열검정의 역변환**
+
+    $H_0: \mu_A - \mu_B = \delta$를 검정하려면 집단 A에서 $\delta$를 빼고 순열검정을 한다. 기각되지 않는 $\delta$들의 집합이 신뢰구간이다.
+
+    ```python
+    import numpy as np, itertools
+    a = np.array([8, 7, 9, 10, 6]); b = np.array([5, 6, 4, 3, 7])
+
+    def perm_p(delta):
+        x = a - delta
+        z = np.concatenate([x, b]); obs = abs(x.mean() - b.mean())
+        d = np.array([z[list(c)].mean() - np.delete(z, list(c)).mean()
+                      for c in itertools.combinations(range(10), 5)])
+        return (np.abs(d) >= obs - 1e-12).mean()
+
+    grid = np.arange(-2, 8.001, 0.05)
+    acc = [g for g in grid if perm_p(g) > 0.05]
+    print(min(acc), max(acc))       # 0.50  5.50
+    ```
+
+    | 방법 | $95$% 구간 | 폭 |
+    |:---|:---|---:|
+    | 붓스트랩 백분위수 | $[1.20,\ 4.80]$ | 3.60 |
+    | Welch $t$ | $[0.69,\ 5.31]$ | 4.61 |
+    | 순열검정 역변환 | $[0.50,\ 5.50]$ | **5.00** |
+
+    **순열검정 역변환 구간이 가장 넓고 붓스트랩이 가장 좁다.** 순열 구간이 $0$을 제외하므로 $p = 0.0397 < 0.05$와 일관된다.
+
+    붓스트랩 구간은 순열 구간의 $72$% 폭에 불과하다. 이 차이가 앞서 본 $p$값 불일치의 정체이다.
+
+    **(b) 포함확률 모의실험** ($X, Y \sim N(0,1)$, $H_0$ 참, $M = 4{,}000$)
+
+    | $n$ | 백분위수 붓스트랩 | 붓스트랩-$t$ | Welch $t$ |
+    |---:|---:|---:|---:|
+    | 5 | **0.890** | 0.960 | 0.961 |
+    | 10 | 0.916 | 0.946 | 0.948 |
+    | 20 | 0.927 | 0.941 | 0.941 |
+    | 40 | 0.944 | 0.951 | 0.953 |
+
+    **백분위수 붓스트랩이 $n = 5$에서 $0.890$으로 명목값에 크게 못 미친다.** $n$이 커지면서 $0.944$까지 회복하지만 수렴이 느리다.
+
+    **붓스트랩-$t$는 $n = 5$에서도 $0.960$으로 정상이다.** Welch $t$와 사실상 동일하다.
+
+    **(c) 왜 좁아지는가**
+
+    두 가지가 겹친다.
+
+    **첫째, 붓스트랩은 $t$ 보정을 하지 않는다.** 백분위수 구간은 사실상 $\hat{\theta} \pm 1.96\,\widehat{\text{se}}$에 해당한다. 정규이론은 $n = 5$에서 $t_4$의 임계값 $2.776$을 써야 한다고 말한다. 비가 $1.96/2.776 = 0.706$으로, 관측된 폭의 비 $3.60/5.00 = 0.72$와 거의 일치한다.
+
+    **둘째, 붓스트랩은 편향된 분산 추정량을 쓴다.** 붓스트랩 분산은 $s^2$이 아니라 $\frac{n-1}{n}s^2$에 해당한다. $n = 5$에서 이는 $20$% 과소추정이며, 표준오차로는 $\sqrt{0.8} = 0.894$배이다.
+
+    두 효과를 곱하면 $0.706 \times 0.894 = 0.63$으로, 실제 관측된 $0.72$보다 조금 더 좁다(백분위수법이 꼬리를 약간 넓히므로 상쇄된다).
+
+    !!! tip "작은 표본에서 붓스트랩을 쓸 때의 규칙"
+        $n < 20$이면 **백분위수 붓스트랩 구간을 그대로 쓰지 말라.** 대안은 순서대로
+
+        1. **붓스트랩-$t$**: 위 표에서 $n = 5$에도 잘 작동한다. 스튜던트화가 $t$ 보정 역할을 대신한다.
+        2. **순열검정**: 가설검정만 필요하다면 정확하다.
+        3. **정규이론**: 자료가 정규에 가깝다면 $t$ 구간이 가장 단순하고 정확하다.
+
+        BCa는 편향과 왜도를 보정하지만 $t$ 보정은 하지 않으므로, 작은 $n$에서의 이 문제를 완전히 해결하지 못한다.
 
 ---
 
-**Exercise 2.**
-State the key assumptions required by the method discussed here. How can each assumption be checked?
+**연습문제 2.**
+"붓스트랩은 신뢰구간, 순열검정은 $p$값"이라는 요약이 지나친 단순화인 지점을 세 가지 들어라.
 
-??? success "Solution to Exercise 2"
-    The main assumptions typically include: (1) independence of observations -- verified by understanding the data collection process and checking for serial correlation; (2) distributional requirements (e.g., normality) -- checked with Q-Q plots and formal tests like Shapiro-Wilk; (3) equal variances (if applicable) -- assessed with boxplots and Levene's test. When assumptions are violated, consider robust alternatives, transformations, or nonparametric methods.
+??? success "연습문제 2 풀이"
+    **(1) 붓스트랩도 $p$값을 준다.** 중심화나 합치기로 $H_0$을 강제하면 붓스트랩 가설검정이 된다([단일 평균](../bootstrap_testing/single_mean.md), [두 평균](../bootstrap_testing/two_means.md) 참조). 순열검정이 적용되지 않는 귀무가설 — 예를 들어 $H_0: \rho = 0.5$나 $H_0: \sigma = 2$ — 에는 붓스트랩이 유일한 재표집 도구이다.
+
+    **(2) 순열검정도 신뢰구간을 준다.** 연습문제 1(a)에서 실제로 만들었다. $H_0: \theta = \delta$를 각 $\delta$에 대해 검정하고 기각되지 않는 집합을 모으면 된다. 계산이 비싸다는 것이 실무에서 잘 쓰지 않는 유일한 이유이며, 원리적 한계가 아니다.
+
+    실제로 이 방법으로 얻은 구간은 **정확한 포함확률**을 갖는다. 붓스트랩 구간은 그렇지 않다. 작은 표본에서는 계산비용을 치를 가치가 있다.
+
+    **(3) "순열검정은 단순한 통계량용"이라는 통념이 틀렸다.** 순열검정은 통계량의 복잡도에 아무 제약을 두지 않는다([순열검정 개요](../permutation/permutation.md) 연습문제 3에서 분산비를, [상관](../permutation/correlation.md) 연습문제 3에서 비선형 종속성 통계량을 다루었다).
+
+    순열검정의 진짜 제약은 **귀무가설**에 있다. 라벨을 섞는 것이 $H_0$ 아래에서 자료 분포를 바꾸지 않아야 한다. 이는 통계량이 아니라 실험 설계와 가설의 성질이다.
+
+    | 흔한 요약 | 더 정확한 진술 |
+    |:---|:---|
+    | "붓스트랩 = 신뢰구간" | 붓스트랩은 표집분포를 근사한다. 신뢰구간은 그 응용 중 하나이다. |
+    | "순열검정 = $p$값" | 순열검정은 교환가능성 아래의 귀무분포를 만든다. |
+    | "순열검정은 단순한 통계량용" | 순열검정은 단순한 **귀무가설**용이다. 통계량은 자유롭다. |
+    | "붓스트랩은 가정이 없다" | 붓스트랩은 iid와 매끄러움을 가정한다([재표집이 실패할 때](limitations.md) 참조). |
 
 ---
 
-**Exercise 3.**
-Work through a small numerical example illustrating the application of the technique from this section.
+**연습문제 3.**
+다음 각 상황에서 붓스트랩, 순열검정, 또는 둘 다 중 무엇을 쓰겠는가? 이유를 밝혀라.
 
-??? success "Solution to Exercise 3"
-    A structured approach to applying this technique involves: (1) clearly stating the hypotheses or estimation goal; (2) verifying that the data meet the required assumptions; (3) computing the relevant test statistic, estimate, or model fit; (4) obtaining the p-value, confidence interval, or posterior distribution; (5) interpreting the result in the context of the original question. Following these steps systematically ensures a rigorous and reproducible analysis.
+**(a)** 무작위 배정 임상시험에서 신약과 위약의 반응률 차이를 검정한다. 각 군 $40$명이다.
 
----
+**(b)** 회귀모형의 $R^2$에 대한 $95$% 신뢰구간이 필요하다.
 
-**Exercise 4.**
-Compare the approach from this section with an alternative method. When would you choose each?
+**(c)** 두 기계가 만든 부품의 지름 분산이 다른지 검정한다. 표본은 각각 $12$개와 $30$개이다.
 
-??? success "Solution to Exercise 4"
-    The method discussed here is appropriate when its assumptions hold and the sample size is sufficient for the asymptotic approximations to be accurate. Alternative approaches include: (1) nonparametric methods -- preferred when distributional assumptions are suspect; (2) bootstrap methods -- useful when analytical reference distributions are unavailable; (3) Bayesian methods -- valuable when incorporating prior information or when direct probability statements about parameters are desired. Running multiple approaches and comparing results provides a useful robustness check.
+**(d)** 고객 이탈률의 월별 시계열에서 자기상관을 고려한 평균의 신뢰구간이 필요하다.
+
+??? success "연습문제 3 풀이"
+    **(a) 순열검정.** 무작위 배정이 교환가능성을 **설계로 보장**한다. 배정이 무작위였으므로 $H_0$(약효 없음) 아래에서 라벨은 문자 그대로 임의적이다. 이는 가정이 아니라 사실이다.
+
+    이진 결과이므로 순열분포가 초기하분포이고 Fisher 정확검정과 같아진다([기초](../permutation/foundations.md) 연습문제 4). 재표집조차 필요 없다.
+
+    효과크기 보고를 위해 붓스트랩 구간을 **함께** 주는 것이 좋다. 반응률 차이의 신뢰구간은 순열검정이 주지 않는다.
+
+    **(b) 붓스트랩.** $R^2$에 대해 검정할 자연스러운 귀무가설이 없고(모든 계수가 $0$이라는 $F$ 검정은 다른 질문이다) 신뢰구간이 필요하다. 순열검정은 애초에 신뢰구간 도구가 아니다.
+
+    구체적으로는 **쌍 붓스트랩**(관측 행 $(y_i, \mathbf{x}_i)$을 통째로 재표집)을 쓴다. $R^2$의 표집분포가 $[0,1]$에 갇혀 있고 강하게 치우쳐 있으므로 BCa가 적절하다.
+
+    **(c) 주의해서 순열검정, 또는 붓스트랩.** 함정이 있는 문제이다.
+
+    분산비의 순열검정은 [순열검정 개요](../permutation/permutation.md) 연습문제 3에서 잘 작동했지만, 그것은 $n_1 = n_2 = 25$인 **균형** 설계였다. 여기서는 $12$ 대 $30$으로 불균형하다.
+
+    더 근본적으로, $H_0: \sigma_1^2 = \sigma_2^2$는 교환가능성을 함의하지 **않는다**. 평균이 다르거나 분포 모양이 다르면 라벨을 섞을 수 없다. 각 표본을 자기 평균으로 중심화한 뒤 순열하는 보정이 필요하며, 그마저 근사이다.
+
+    안전한 선택은 두 집단을 **따로** 재표집하여 $\log(s_1^2/s_2^2)$의 붓스트랩 구간을 만드는 것이다. 정규성이 의심되면 $F$ 검정은 쓰지 않는다(제1종 오류율이 $0.318$까지 오른다).
+
+    **(d) 블록 붓스트랩.** 순열검정은 여기서 완전히 부적절하다. 관측을 섞는 것 자체가 시간 구조를 파괴하는데, 우리가 보존하려는 것이 바로 그 구조이다.
+
+    iid 붓스트랩도 안 된다. [재표집이 실패할 때](limitations.md) 연습문제 1에서 $\phi = 0.7$인 AR(1)의 포함확률이 $0.572$로 떨어지는 것을 보았다.
+
+    이동 블록 붓스트랩을 여러 블록 길이로 실행하고 결과의 민감도를 보고한다. 월별 자료라면 계절성도 확인해야 하며, 계절 주기의 배수를 블록 길이로 쓰는 것을 고려한다.
+
+    !!! note "판단의 순서"
+        어느 방법을 쓸지 정하는 질문은 "무엇을 계산하고 싶은가"가 아니라 다음 세 가지이다.
+
+        1. **$p$값인가 구간인가?** 구간이면 붓스트랩이 기본이다.
+        2. **귀무가설이 교환가능성을 함의하는가?** 무작위 배정 실험이면 예이다. $H_0: \theta = \theta_0$ 형태의 모수 가설이면 대개 아니다.
+        3. **관측이 독립인가?** 아니면 두 방법 모두 표준형으로는 쓸 수 없다.

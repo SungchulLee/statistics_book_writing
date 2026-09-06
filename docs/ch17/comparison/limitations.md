@@ -1,133 +1,295 @@
-# When Resampling Fails
+# 재표집이 실패할 때
 
-## Motivation
+## 동기
 
-The bootstrap and permutation methods are remarkably versatile, but they are not universally valid. Under certain conditions, resampling produces misleading results — confidence intervals with incorrect coverage, biased standard errors, or invalid $p$-values. Recognizing these failure modes is essential for applying resampling methods responsibly.
+붓스트랩과 순열 방법은 놀랄 만큼 다재다능하지만 보편적으로 타당하지는 않다. 어떤 조건에서는 재표집이 잘못된 결과를 만든다. 포함확률이 어긋난 신뢰구간, 편향된 표준오차, 타당하지 않은 $p$값이 그것이다. 이런 실패 양상을 알아보는 것은 재표집 방법을 책임 있게 쓰기 위한 필수 조건이다.
 
-This section catalogs the main situations where resampling breaks down, explains why each failure occurs, and suggests alternatives.
+이 절에서는 재표집이 무너지는 주요 상황을 정리하고, 각각의 이유를 설명하며, 대안을 제시한다.
 
-## Dependent Data
+## 종속자료
 
-The standard (iid) bootstrap assumes that the observations $x_1, \ldots, x_n$ are independent and identically distributed. When the data have temporal, spatial, or clustered dependence, resampling individual observations destroys the dependence structure.
+표준적인(iid) 붓스트랩은 관측값 $x_1, \ldots, x_n$이 독립이고 동일한 분포를 따른다고 가정한다. 자료에 시간적·공간적·군집 종속성이 있으면 개별 관측을 재표집하는 것이 종속 구조를 파괴한다.
 
-**Why it fails.** If $x_1, \ldots, x_n$ is a time series with positive autocorrelation, the true standard error of $\bar{x}$ exceeds $\sigma/\sqrt{n}$ because consecutive observations carry less independent information. The iid bootstrap underestimates this standard error because it treats every observation as independent.
+**왜 실패하는가.** $x_1, \ldots, x_n$이 양의 자기상관을 갖는 시계열이면 $\bar{x}$의 참 표준오차가 $\sigma/\sqrt{n}$보다 크다. 연속한 관측이 담고 있는 독립적 정보가 더 적기 때문이다. iid 붓스트랩은 모든 관측을 독립으로 취급하므로 이 표준오차를 과소추정한다.
 
-**Remedies:**
+**대책:**
 
-- **Block bootstrap** (Kunsch, 1989): resample contiguous blocks of observations to preserve local dependence. Block length $\ell \approx n^{1/3}$ is a common choice.
-- **Moving block bootstrap**: uses all $n - \ell + 1$ overlapping blocks.
-- **Circular block bootstrap**: wraps the series into a circle so all observations appear in the same number of blocks.
-- **Stationary bootstrap** (Politis and Romano, 1994): uses random block lengths drawn from a geometric distribution to produce stationary bootstrap samples.
+- **블록 붓스트랩** (Kunsch, 1989): 연속된 관측 블록을 재표집하여 국소적 종속성을 보존한다. 블록 길이 $\ell \approx n^{1/3}$이 흔한 선택이다.
+- **이동 블록 붓스트랩**: $n - \ell + 1$개의 겹치는 블록을 모두 쓴다.
+- **원형 블록 붓스트랩**: 계열을 원형으로 감아 모든 관측이 같은 개수의 블록에 나타나게 한다.
+- **정상 붓스트랩** (Politis and Romano, 1994): 기하분포에서 뽑은 무작위 블록 길이를 써서 정상인 붓스트랩 표본을 만든다.
 
-!!! warning "Ignoring Dependence"
-    Applying the standard bootstrap to dependent data typically produces confidence intervals that are too narrow and $p$-values that are too small. The results look more precise than they actually are, leading to overconfident conclusions.
+!!! warning "종속성을 무시하면"
+    종속자료에 표준 붓스트랩을 적용하면 대개 신뢰구간이 너무 좁고 $p$값이 너무 작아진다. 실제보다 정밀해 보이는 결과가 나와 과신을 부른다. 연습문제 1에서 그 크기를 확인한다.
 
-## Extreme Order Statistics
+## 극단 순서통계량
 
-The bootstrap fails for statistics that depend on the extreme values of the sample, such as the sample maximum $X_{(n)}$ or the sample minimum $X_{(1)}$.
+표본최댓값 $X_{(n)}$이나 최솟값 $X_{(1)}$처럼 표본의 극단값에 의존하는 통계량에서는 붓스트랩이 실패한다.
 
-**Classical example.** Let $X_1, \ldots, X_n \overset{\text{iid}}{\sim} \text{Uniform}(0, \theta)$ and estimate $\theta$ by $\hat{\theta} = X_{(n)}$. The true distribution of $n(\theta - X_{(n)})$ is $\text{Exp}(1)$, but the bootstrap distribution of $n(\hat{\theta} - X^*_{(n)})$ does not converge to $\text{Exp}(1)$.
+**고전적 예.** $X_1, \ldots, X_n \overset{\text{iid}}{\sim} \text{Uniform}(0, \theta)$에서 $\theta$를 $\hat{\theta} = X_{(n)}$으로 추정한다고 하자. $n(\theta - X_{(n)})$의 참 분포는 $\text{Exp}(1)$에 수렴하지만, $n(\hat{\theta} - X^*_{(n)})$의 붓스트랩 분포는 $\text{Exp}(1)$로 수렴하지 않는다.
 
-**Why it fails.** The bootstrap sample maximum $X^*_{(n)}$ can never exceed $X_{(n)}$ (since bootstrap values are drawn from the original data). The true $X_{(n)}$ can approach $\theta$ from below at rate $1/n$, but the bootstrap maximum is "stuck" at the observed maximum with positive probability.
+**왜 실패하는가.** 붓스트랩 표본의 최댓값 $X^*_{(n)}$은 $X_{(n)}$을 결코 넘을 수 없다(붓스트랩 값이 원래 자료에서 뽑히기 때문이다). 참 $X_{(n)}$은 $1/n$ 속도로 아래에서 $\theta$에 접근할 수 있지만, 붓스트랩 최댓값은 양의 확률로 관측된 최댓값에 "붙어" 있다. 실제로 $P(X^*_{(n)} = X_{(n)}) = 1 - (1-1/n)^n \to 1 - e^{-1} = 0.632$이다.
 
-**Remedies:**
+**대책:**
 
-- **Parametric bootstrap**: fit the parametric model and simulate from it
-- **Subsampling**: resample without replacement at a smaller size $m < n$ (Politis, Romano, and Wolf, 1999)
-- **$m$-out-of-$n$ bootstrap**: resample $m < n$ observations with replacement, where $m/n \to 0$
+- **모수적 붓스트랩**: 모수모형을 적합하고 그로부터 모의생성한다.
+- **부분표집**(subsampling): 더 작은 크기 $m < n$으로 비복원 재표집한다(Politis, Romano, and Wolf, 1999).
+- **$m$-out-of-$n$ 붓스트랩**: $m < n$개를 복원추출하되 $m/n \to 0$이 되게 한다.
 
-## Heavy-Tailed Distributions
+## 두꺼운 꼬리 분포
 
-When the population has infinite variance (e.g., stable distributions with index $\alpha < 2$ or Pareto distributions with shape parameter $\le 2$), the sample mean does not satisfy the CLT in its usual form.
+모집단의 분산이 무한이면(지수 $\alpha < 2$인 안정분포, 모양모수가 $\le 2$인 Pareto 분포 등) 표본평균이 통상적인 형태의 중심극한정리를 만족하지 않는다.
 
-**Why it fails.** The bootstrap approximation to the distribution of $\sqrt{n}(\bar{X} - \mu)$ is based on the empirical distribution, which inherits the heavy tails. However, the bootstrap variance $\text{Var}^*(\bar{X}^*) = s^2/n$ converges to infinity in probability, while the true limiting distribution of $\bar{X}$ is a stable law, not a normal distribution. The bootstrap standard error can fluctuate wildly across runs.
+**왜 실패하는가.** $\sqrt{n}(\bar{X} - \mu)$의 분포에 대한 붓스트랩 근사는 경험분포에 기반하는데, 경험분포는 두꺼운 꼬리를 그대로 물려받는다. 그러나 붓스트랩 분산 $\text{Var}^*(\bar{X}^*) = s^2/n$은 확률적으로 무한대로 발산하는 반면, $\bar{X}$의 참 극한분포는 정규분포가 아니라 안정분포이다. 붓스트랩 표준오차가 실행마다 크게 요동칠 수 있다.
 
-**Remedies:**
+**대책:**
 
-- **Subsampling**: valid under weaker moment conditions
-- **Robust statistics**: use the median or trimmed mean instead of the mean
-- **Tail-specific methods**: estimate the tail index and use extreme value theory
+- **부분표집**: 더 약한 적률 조건에서도 타당하다.
+- **로버스트 통계량**: 평균 대신 중앙값이나 절사평균을 쓴다.
+- **꼬리 특화 방법**: 꼬리지수를 추정하고 극단값 이론을 쓴다.
 
-!!! note "Finite vs Infinite Variance"
-    If the population has finite variance but very heavy tails (e.g., $t_3$ distribution), the bootstrap is still valid but converges slowly. Larger $B$ and larger $n$ are needed. The bootstrap is inconsistent only when the variance is truly infinite.
+!!! note "유한분산과 무한분산"
+    모집단의 분산이 유한하지만 꼬리가 매우 두꺼우면(예: $t_3$ 분포) 붓스트랩은 여전히 타당하되 수렴이 느리다. 더 큰 $B$와 더 큰 $n$이 필요하다. 붓스트랩이 일치성을 잃는 것은 분산이 진짜로 무한할 때뿐이다.
 
-## Small Sample Sizes
+## 작은 표본
 
-With very small $n$ (say $n < 10$), the empirical distribution $\hat{F}_n$ is a coarse approximation to $F$. The bootstrap distribution inherits this coarseness, and the resulting standard errors and confidence intervals can be unreliable.
+$n$이 매우 작으면(예: $n < 10$) 경험분포 $\hat{F}_n$이 $F$의 거친 근사에 불과하다. 붓스트랩 분포가 이 거칢을 물려받아 표준오차와 신뢰구간이 신뢰하기 어려워진다.
 
-**Specific problems with small $n$:**
+**작은 $n$의 구체적 문제:**
 
-- The bootstrap distribution is discrete with at most $\binom{2n-1}{n}$ distinct resamples
-- Confidence interval coverage can be far from nominal
-- The BCa acceleration estimate $\hat{a}$ based on $n$ jackknife values is noisy
-- The bootstrap-$t$ can have extreme outliers when $\hat{\text{se}}^*$ is near zero
+- 붓스트랩 분포가 이산적이며 서로 다른 재표집이 최대 $\binom{2n-1}{n}$가지뿐이다.
+- 신뢰구간의 포함확률이 명목값에서 크게 벗어날 수 있다.
+- $n$개의 잭나이프 값에 기반한 BCa 가속 추정값 $\hat{a}$가 불안정하다.
+- $\hat{\text{se}}^*$가 $0$에 가까울 때 붓스트랩-$t$에 극단적인 이상값이 생긴다.
 
-**Remedies:**
+**대책:**
 
-- **Parametric bootstrap**: if a parametric model is justifiable, it provides a smoother approximation to $F$
-- **Exact methods**: for simple statistics (mean, proportion), use exact distributional results when available
-- **Bayesian approaches**: incorporate prior information to regularize inference
+- **모수적 붓스트랩**: 모수모형이 정당화되면 $F$에 대한 더 매끄러운 근사를 준다.
+- **정확법**: 단순한 통계량(평균, 비율)에는 정확한 분포 결과를 쓴다.
+- **베이즈 접근**: 사전정보를 넣어 추론을 정칙화한다.
 
-## Non-Smooth Statistics
+## 매끄럽지 않은 통계량
 
-The bootstrap requires the statistic $\hat{\theta} = T(\hat{F}_n)$ to be a smooth functional of the empirical distribution. When $T$ is non-smooth (discontinuous or non-differentiable), the bootstrap can be inconsistent or have slow convergence.
+붓스트랩은 통계량 $\hat{\theta} = T(\hat{F}_n)$이 경험분포의 매끄러운 범함수이기를 요구한다. $T$가 매끄럽지 않으면(불연속이거나 미분 불가능하면) 붓스트랩이 일치성을 잃거나 수렴이 느려진다.
 
-**Examples of non-smooth statistics:**
+**매끄럽지 않은 통계량의 예:**
 
-- **Sample median** with tied or discrete data
-- **Mode** of a distribution
-- **Quantiles** at points where the density is zero
-- **Indicator functions** such as $\mathbf{1}(\hat{\theta} > c)$
+- 동점이 있거나 이산인 자료의 **표본중앙값**
+- 분포의 **최빈값**
+- 밀도가 $0$인 지점의 **분위수**
+- $\mathbf{1}(\hat{\theta} > c)$ 같은 **지시함수**
 
-For the sample median with continuous data, the bootstrap is consistent but converges slowly. For the mode, the bootstrap can be inconsistent.
+연속자료의 표본중앙값에 대해서는 붓스트랩이 일치하지만 수렴이 느리다. 최빈값에 대해서는 일치하지 않을 수 있다.
 
-**Remedies:**
+**대책:**
 
-- **Smoothed bootstrap**: add a small amount of noise to each resampled observation to smooth the empirical distribution
-- **Subsampling**: provides valid inference for a broader class of statistics
-- **$m$-out-of-$n$ bootstrap**: valid for some non-regular statistics with appropriate $m$
+- **평활 붓스트랩**: 재표집된 각 관측에 작은 잡음을 더해 경험분포를 매끄럽게 한다.
+- **부분표집**: 더 넓은 통계량 부류에 대해 타당한 추론을 준다.
+- **$m$-out-of-$n$ 붓스트랩**: 적절한 $m$에서 일부 비정칙 통계량에 타당하다.
 
-## Estimating Extreme Quantiles
+## 극단 분위수 추정
 
-Bootstrapping extreme quantiles (e.g., the 99th or 99.9th percentile) is unreliable because the bootstrap has limited information about the tails of the distribution. With $n$ observations, the empirical distribution has no data beyond the sample maximum and minimum.
+극단 분위수(예: $99$번째나 $99.9$번째 백분위수)의 붓스트랩은 신뢰할 수 없다. 붓스트랩이 분포의 꼬리에 대해 가진 정보가 제한적이기 때문이다. 관측이 $n$개이면 경험분포는 표본최댓값 너머와 최솟값 아래에 아무 자료도 갖지 않는다.
 
-**Why it fails.** The bootstrap can only generate values that appear in the original sample. Extreme quantiles depend on the tail behavior of $F$, which is poorly captured by $\hat{F}_n$ when $n$ is moderate.
+**왜 실패하는가.** 붓스트랩은 원래 표본에 나타난 값만 생성할 수 있다. 극단 분위수는 $F$의 꼬리 거동에 의존하는데, $n$이 중간 정도일 때 $\hat{F}_n$은 이를 제대로 담지 못한다.
 
-**Remedies:**
+**대책:**
 
-- **Extreme value theory**: fit a generalized Pareto distribution to the tail and extrapolate
-- **Parametric bootstrap**: use a parametric model that captures the tail behavior
-- **Peaks-over-threshold** methods
+- **극단값 이론**: 꼬리에 일반화 Pareto 분포를 적합하고 외삽한다.
+- **모수적 붓스트랩**: 꼬리 거동을 담는 모수모형을 쓴다.
+- **문턱 초과**(peaks-over-threshold) 방법
 
-!!! tip "Rule of Thumb for Quantile Estimation"
-    The bootstrap is reliable for estimating quantiles between the $1/\sqrt{n}$ and $1 - 1/\sqrt{n}$ levels. For $n = 100$, this means quantiles between 10% and 90% are reasonably estimated; for more extreme quantiles, use tail-specific methods.
+!!! tip "분위수 추정의 경험칙"
+    붓스트랩은 $1/\sqrt{n}$ 수준과 $1 - 1/\sqrt{n}$ 수준 사이의 분위수 추정에 신뢰할 만하다. $n = 100$이면 $10$%에서 $90$% 사이의 분위수가 합리적으로 추정된다는 뜻이다. 더 극단적인 분위수에는 꼬리 특화 방법을 쓴다.
 
-## Infinite-Dimensional Parameters
+## 무한차원 모수
 
-The bootstrap assumes that the parameter of interest can be expressed as a smooth functional of the data distribution. For infinite-dimensional objects (e.g., the entire CDF, a nonparametric density estimate, or a functional data curve), the bootstrap requires additional regularity conditions that may not hold.
+붓스트랩은 관심 모수가 자료 분포의 매끄러운 범함수로 표현될 수 있다고 가정한다. 무한차원 대상(전체 CDF, 비모수 밀도추정값, 함수형 자료 곡선 등)에 대해서는 성립하지 않을 수 있는 추가적인 정칙성 조건이 필요하다.
 
-## Summary Table
+## 실패 양상 요약
 
-| Failure Mode | Symptom | Alternative |
+| 실패 양상 | 증상 | 대안 |
 |---|---|---|
-| Dependent data | CI too narrow, $p$-values too small | Block bootstrap, stationary bootstrap |
-| Extreme order statistics | Bootstrap stuck at observed extremes | Parametric bootstrap, subsampling |
-| Infinite variance | Wildly fluctuating SE estimates | Subsampling, robust statistics |
-| Small $n$ ($< 10$) | Poor CI coverage, noisy estimates | Parametric bootstrap, exact methods |
-| Non-smooth statistics | Slow convergence, inconsistency | Smoothed bootstrap, subsampling |
-| Extreme quantiles | No data in tails | Extreme value theory |
+| 종속자료 | 신뢰구간이 좁고 $p$값이 작다 | 블록 붓스트랩, 정상 붓스트랩 |
+| 극단 순서통계량 | 붓스트랩이 관측 극단값에 붙는다 | 모수적 붓스트랩, 부분표집 |
+| 무한분산 | 표준오차 추정값이 크게 요동친다 | 부분표집, 로버스트 통계량 |
+| 작은 $n$ ($< 10$) | 포함확률이 나쁘고 추정이 불안정하다 | 모수적 붓스트랩, 정확법 |
+| 매끄럽지 않은 통계량 | 수렴이 느리거나 일치하지 않는다 | 평활 붓스트랩, 부분표집 |
+| 극단 분위수 | 꼬리에 자료가 없다 | 극단값 이론 |
 
-## Summary
+## 요약
 
-Resampling methods fail when the standard assumptions (independence, finite variance, smoothness, adequate sample size) are violated. The most common failure modes are dependent data (where the iid bootstrap underestimates uncertainty), extreme order statistics (where the bootstrap distribution cannot reach beyond the observed data range), heavy tails (where variance estimates are unstable), and small samples (where the empirical distribution is too coarse). Recognizing these limitations and knowing the appropriate remedies — block bootstrap, subsampling, parametric bootstrap, or specialized tail methods — is essential for responsible use of resampling techniques.
+재표집 방법은 표준 가정(독립성, 유한분산, 매끄러움, 충분한 표본크기)이 깨질 때 실패한다. 가장 흔한 실패 양상은 종속자료(iid 붓스트랩이 불확실성을 과소평가한다), 극단 순서통계량(붓스트랩 분포가 관측 범위를 넘어설 수 없다), 두꺼운 꼬리(분산 추정이 불안정하다), 작은 표본(경험분포가 너무 거칠다)이다. 이런 한계를 알아보고 적절한 대책 — 블록 붓스트랩, 부분표집, 모수적 붓스트랩, 꼬리 특화 방법 — 을 아는 것이 재표집 기법을 책임 있게 쓰기 위한 조건이다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Simulate an AR(1) process $X_t = 0.7 X_{t-1} + \varepsilon_t$ with $\varepsilon_t \sim N(0, 1)$ and $n = 200$.
+**연습문제 1.**
+$X_t = 0.7 X_{t-1} + \varepsilon_t$, $\varepsilon_t \sim N(0, 1)$인 AR(1) 과정을 $n = 200$으로 모의생성하라.
 
-(a) Apply the standard (iid) bootstrap to estimate the 95% CI for $E[X]$. What coverage do you observe in simulation?
+**(a)** 표준(iid) 붓스트랩으로 $E[X]$의 $95$% 신뢰구간을 구하라. 모의실험에서 포함확률이 얼마인가?
 
-(b) Apply the **moving block bootstrap** with block lengths $\ell = 5, 10, 20$.
+**(b)** 블록 길이 $\ell = 5, 10, 20, 40$인 **이동 블록 붓스트랩**을 적용하라.
 
-(c) Compare the widths and coverage of both approaches. Explain why the iid bootstrap fails for dependent data.
+**(c)** 두 접근의 폭과 포함확률을 비교하고, iid 붓스트랩이 종속자료에서 실패하는 이유를 설명하라.
+
+??? success "연습문제 1 풀이"
+    ```python
+    import numpy as np
+    rng = np.random.default_rng(101)
+    phi, n = 0.7, 200
+
+    def ar1(n, phi=0.7):
+        e = rng.normal(0, 1, n + 200); x = np.zeros(n + 200)
+        for t in range(1, n + 200):
+            x[t] = phi * x[t-1] + e[t]
+        return x[200:]                       # burn-in 제거
+
+    def mbb(x, ell, B=1000):
+        n = len(x); k = int(np.ceil(n / ell)); starts = n - ell + 1
+        out = np.empty(B)
+        for b in range(B):
+            s = rng.integers(0, starts, k)
+            out[b] = np.concatenate([x[i:i+ell] for i in s])[:n].mean()
+        return out
+    ```
+
+    **먼저 참값을 알아야 한다.** AR(1)의 주변 분산은 $\sigma^2/(1-\phi^2) = 1/0.51 = 1.961$이므로 주변 표준편차는 $1.400$이다. 그러나 $\bar{X}$의 참 표준오차는 **장기분산**으로 결정된다.
+
+    $$
+    \text{SE}(\bar{X}) \approx \sqrt{\frac{1+\phi}{1-\phi}}\cdot\frac{\sigma_X}{\sqrt{n}} = \sqrt{\frac{1.7}{0.3}}\cdot\frac{1.400}{\sqrt{200}} = 0.2357
+    $$
+
+    반면 독립을 가정한 순진한 값은 $1.400/\sqrt{200} = 0.0990$이다. **참값의 $42$%에 불과하다.**
+
+    **(a)–(b) 결과 ($M = 600$회 반복)**
+
+    | 방법 | 포함확률 | 평균 구간폭 |
+    |:---|---:|---:|
+    | iid 붓스트랩 | **0.572** | 0.379 |
+    | 이동 블록 $\ell = 5$ | 0.827 | 0.650 |
+    | 이동 블록 $\ell = 10$ | **0.865** | 0.742 |
+    | 이동 블록 $\ell = 20$ | 0.863 | 0.770 |
+    | 이동 블록 $\ell = 40$ | 0.805 | 0.720 |
+    | 이상적인 구간 | 0.95 | 0.924 |
+
+    **(c) iid 붓스트랩이 완전히 무너진다.** 포함확률이 $0.572$로, $95$%를 목표한 구간이 참 평균을 절반 조금 넘게만 담는다. 구간폭 $0.379$는 이상적인 $0.924$의 $41$%이다. 이 비는 $0.0990/0.2357 = 0.42$와 정확히 일치한다.
+
+    **왜 그런가.** 붓스트랩 표본은 원래 계열에서 관측을 **무작위로** 뽑으므로 시간 순서가 완전히 파괴된다. 붓스트랩 계열은 백색잡음이고, 그 평균의 변동은 $\hat\sigma_X/\sqrt{n}$이다. 원래 계열이 갖는 자기상관 — 인접한 값들이 같은 방향으로 움직여 평균을 더 크게 흔드는 성질 — 이 재표집 과정에서 사라진다.
+
+    **블록 붓스트랩이 크게 개선하지만 완전하지는 않다.** 최선인 $\ell = 10$에서도 포함확률이 $0.865$이다. 두 가지가 겹친다.
+
+    첫째, 블록 붓스트랩은 **블록 경계에서 종속성을 끊는다**. $k = n/\ell$개의 블록을 이어 붙이면 $k-1$개의 인위적인 단절이 생긴다. $\ell$이 작을수록 단절이 많아 장기분산이 과소추정된다.
+
+    둘째, $\ell$이 너무 크면 서로 다른 블록의 개수 $n - \ell + 1$이 줄어 붓스트랩 분포의 변동이 커진다. $\ell = 40$에서 포함확률이 $0.805$로 다시 나빠지는 이유이다.
+
+    **$\ell$ 선택.** $n^{1/3} = 200^{1/3} = 5.85$라는 경험칙은 여기서 최선이 아니다. $\ell = 5$의 포함확률 $0.827$보다 $\ell = 10$이나 $\ell = 20$이 낫다. 경험칙은 출발점일 뿐이며, $\phi$가 클수록(종속성이 강할수록) 더 긴 블록이 필요하다.
+
+    !!! warning "종속성 진단이 먼저다"
+        이 예제의 교훈은 "블록 붓스트랩을 쓰라"가 아니라 **"블록 붓스트랩도 완벽하지 않다"**이다. $n = 200$, $\phi = 0.7$에서 최선의 블록 붓스트랩도 $0.865$에 그친다.
+
+        실무에서는 순서가 반대여야 한다.
+
+        1. 자기상관함수(ACF)를 그려 종속성을 확인한다.
+        2. 종속성이 있으면 iid 붓스트랩을 **쓰지 않는다**.
+        3. 시계열 모형(ARMA 등)을 적합하고 **잔차를 붓스트랩**하거나, 블록 붓스트랩을 여러 $\ell$로 실행해 결과의 민감도를 본다.
+        4. 어떤 방법을 쓰든 $n = 200$ 정도로는 강한 종속성 아래에서 정확한 추론이 어렵다는 것을 인정한다.
+
+---
+
+**연습문제 2.**
+$X_1, \ldots, X_n \sim \text{Uniform}(0, 1)$에서 $\theta = 1$의 신뢰구간을 추축량 $n(\theta - X_{(n)})$으로 만들 때, 완전 붓스트랩·$m$-out-of-$n$ 붓스트랩·모수적 붓스트랩의 포함확률을 비교하라. $n = 50$과 $n = 200$에서 $m = \lfloor\sqrt{n}\rfloor$과 $m = \lfloor n^{2/3}\rceil$을 시도하라.
+
+??? success "연습문제 2 풀이"
+    ```python
+    import numpy as np
+    rng = np.random.default_rng(303)
+
+    def cov_max(n, M=3000, B=2000, theta=1.0):
+        res = dict(full=0, m_sqrt=0, m_n23=0, param=0)
+        m1, m2 = int(np.sqrt(n)), int(round(n**(2/3)))
+        for _ in range(M):
+            x = rng.uniform(0, theta, n); mx = x.max()
+            # 완전 붓스트랩
+            b = x[rng.integers(0, n, (B, n))].max(1)
+            lo, hi = np.percentile(n*(mx - b), [2.5, 97.5])
+            res['full'] += (mx + lo/n) <= theta <= (mx + hi/n)
+            # m-out-of-n
+            for key, m in (('m_sqrt', m1), ('m_n23', m2)):
+                bm = x[rng.integers(0, n, (B, m))].max(1)
+                lo, hi = np.percentile(m*(mx - bm), [2.5, 97.5])
+                res[key] += (mx + lo/n) <= theta <= (mx + hi/n)
+            # 모수적 붓스트랩: Uniform(0, mx) 에서 생성
+            bp = rng.uniform(0, mx, (B, n)).max(1)
+            lo, hi = np.percentile(n*(mx - bp), [2.5, 97.5])
+            res['param'] += (mx + lo/n) <= theta <= (mx + hi/n)
+        return {k: round(v/M, 3) for k, v in res.items()}
+    ```
+
+    | 방법 | $n = 50$ | $n = 200$ |
+    |:---|---:|---:|
+    | 완전 붓스트랩 | **0.870** | **0.883** |
+    | $m$-out-of-$n$, $m = \lfloor\sqrt{n}\rfloor$ | 0.923 ($m=7$) | 0.963 ($m=14$) |
+    | $m$-out-of-$n$, $m = \lfloor n^{2/3}\rceil$ | 0.937 ($m=14$) | 0.964 ($m=34$) |
+    | 모수적 붓스트랩 | 0.938 | 0.956 |
+
+    **완전 붓스트랩이 $n$을 늘려도 개선되지 않는다.** $0.870 \to 0.883$으로, $n$을 네 배 늘렸는데도 여전히 $0.95$에서 멀다. **이것이 비일치성의 증거이다.** 다른 실패 양상(작은 표본, 느린 수렴)이라면 $n$을 늘릴 때 $0.95$로 수렴해야 한다.
+
+    **왜 $0.87$ 근처에 머무는가.** 붓스트랩 표본이 원래 최댓값 $X_{(n)}$을 포함할 확률은 $1 - (1-1/n)^n \approx 0.632$이다. 즉 붓스트랩 최댓값 분포는 $X_{(n)}$에 **$63.2$%의 점질량**을 갖는 이산분포이다. 참 분포 $\text{Exp}(1)$은 연속인데, 이 두 분포는 아무리 $n$을 키워도 가까워지지 않는다.
+
+    **$m$-out-of-$n$이 문제를 고친다.** $m$개만 뽑으면 붓스트랩 최댓값이 $X_{(n)}$일 확률이 $1-(1-1/n)^m \approx m/n$으로 줄어든다. $n = 200$, $m = 14$이면 $7$%이다. 점질량이 사라지면서 근사가 회복된다.
+
+    $m$이 클수록($m = n^{2/3}$) 정보를 더 쓰지만 점질량 문제가 커진다. $m$이 작을수록 안전하지만 추정이 불안정해진다. $n = 50$에서 $m = n^{2/3} = 14$가 $m = \sqrt{n} = 7$보다 나은 것($0.937$ 대 $0.923$)은 이 절충의 결과이다.
+
+    **모수적 붓스트랩이 가장 자연스러운 해결책이다.** $\text{Uniform}(0, X_{(n)})$에서 새 표본을 생성하면 최댓값이 연속분포를 가지므로 점질량 문제가 아예 없다. $n = 50$에서 $0.938$, $n = 200$에서 $0.956$으로 정상적으로 수렴한다.
+
+    다만 이는 **분포를 안다는 대가**를 치른 것이다. 균등분포가 아니라 다른 분포였다면 이 방법은 틀린 답을 준다.
+
+---
+
+**연습문제 3.**
+무한분산에서 붓스트랩 표준오차가 "크게 요동친다"는 것이 정확히 무엇을 뜻하는가? Cauchy 자료($n = 100$)에서 평균과 중앙값의 붓스트랩 표준오차를, 서로 다른 세 자료에 대해 각각 $200$번씩 계산하여 확인하라.
+
+??? success "연습문제 3 풀이"
+    ```python
+    import numpy as np
+    rng = np.random.default_rng(303)
+
+    def instab(gen, n=100, R=200, B=2000):
+        x = gen(n)                       # 하나의 고정된 자료
+        sem, sed = [], []
+        for _ in range(R):               # 같은 자료에 붓스트랩을 R 번
+            s = x[rng.integers(0, n, (B, n))]
+            sem.append(s.mean(1).std())
+            sed.append(np.median(s, 1).std())
+        return (round(np.mean(sem), 4), round(np.std(sem)/np.mean(sem), 4),
+                round(np.mean(sed), 4), round(np.std(sed)/np.mean(sed), 4))
+    ```
+
+    | 자료 | 분포 | 평균의 $\widehat{\text{SE}}$ | 실행 간 변동계수 | 중앙값의 $\widehat{\text{SE}}$ | 실행 간 변동계수 |
+    |---:|:---|---:|---:|---:|---:|
+    | 1 | 정규 | 0.0887 | 1.5% | 0.1206 | 1.6% |
+    | 2 | 정규 | 0.0896 | 1.6% | 0.1415 | 1.4% |
+    | 3 | 정규 | 0.0921 | 1.5% | 0.1180 | 1.8% |
+    | 1 | Cauchy | **2.6885** | 1.9% | 0.2004 | 1.6% |
+    | 2 | Cauchy | **0.5777** | 1.6% | 0.1700 | 1.3% |
+    | 3 | Cauchy | **1.0456** | 1.7% | 0.1433 | 1.8% |
+
+    **"요동친다"는 말이 가리키는 것이 무엇인지 분명히 해야 한다.**
+
+    **같은 자료 안에서는 요동치지 않는다.** 실행 간 변동계수가 모든 경우에 $1.3$--$1.9$%로 일정하다. 이는 순전히 $B = 2{,}000$에서 오는 몬테카를로 오차이며, [수렴](convergence.md) 연습문제 1의 $1/\sqrt{2B}$ 공식이 예측하는 $1.6$%와 일치한다. Cauchy라고 해서 몬테카를로 오차가 커지지 않는다.
+
+    **요동치는 것은 자료가 바뀔 때이다.** 정규 자료에서는 세 자료의 $\widehat{\text{SE}}$가 $0.0887$, $0.0896$, $0.0921$로 $4$% 안에 모여 있다. Cauchy 자료에서는 $2.6885$, $0.5777$, $1.0456$으로 **$4.7$배 차이가 난다**.
+
+    이는 붓스트랩의 결함이 아니라 **추정하려는 대상이 존재하지 않는다는 사실의 반영**이다. Cauchy 분포에서 $\bar{X}$의 분산은 무한대이다. $\widehat{\text{SE}}$가 무엇에 수렴할 수 있겠는가? 아무것에도 수렴하지 않는다. 붓스트랩은 각 자료에서 그 자료의 표본분산 $s^2$을 반영하는 값을 내놓는데, Cauchy에서 $s^2$ 자체가 발산한다.
+
+    **중앙값은 완전히 안정적이다.** $0.2004$, $0.1700$, $0.1433$으로 $40$% 범위 안이다(정규 자료의 중앙값 $\widehat{\text{SE}}$가 보이는 변동과 비슷하다). Cauchy 분포의 중앙값은 잘 정의된 유한분산 추정량이며, 붓스트랩이 정상적으로 작동한다.
+
+    !!! tip "진단 방법"
+        붓스트랩이 무한분산 때문에 실패하고 있는지 어떻게 알 수 있는가?
+
+        1. **$B$를 두 배로 늘려도 $\widehat{\text{SE}}$가 안정되면** 몬테카를로 오차는 문제가 아니다. 위 표의 변동계수가 이 점검에 해당한다.
+        2. **붓스트랩 분포의 히스토그램을 그린다.** 몇 개의 극단값이 전체 폭을 결정하고 있으면 위험 신호이다.
+        3. **자료에서 가장 큰 관측 몇 개를 빼고 다시 계산한다.** $\widehat{\text{SE}}$가 크게 바뀌면 그 통계량은 소수의 관측에 지배되고 있다.
+        4. **로버스트 통계량으로 바꿔 본다.** 중앙값이나 절사평균의 $\widehat{\text{SE}}$가 안정적인데 평균의 것만 불안정하면 진단이 확정된다.
+
+        가장 중요한 것은 **문제가 붓스트랩이 아니라 통계량의 선택**이라는 점이다. 두꺼운 꼬리 자료에서 평균은 애초에 요약값으로 부적절하다.

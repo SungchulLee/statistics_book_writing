@@ -1,289 +1,361 @@
-# A/B Testing Permutation
+# A/B 검정 순열검정 (코드)
 
-## Overview
+## 개요
 
-Permutation tests provide a natural framework for A/B testing because they directly model the randomization inherent in experimental design. This page walks through three complete A/B testing scenarios: web page session duration (stickiness), conversion rate testing with binary outcomes, and multi-headline click-through rate comparison. Each example includes both a permutation test and a parametric alternative for comparison.
+순열검정은 실험 설계에 내재된 무작위화를 직접 모형화하므로 A/B 검정에 자연스러운 틀을 제공한다. 이 페이지에서는 세 가지 완전한 A/B 검정 시나리오를 다룬다. 웹페이지 세션 시간(체류도), 이진 결과를 갖는 전환율 검정, 그리고 여러 헤드라인의 클릭률 비교이다. 각 예제에는 순열검정과 비교를 위한 모수적 대안이 함께 제시된다.
 
-## Web Page Stickiness Test
+## 웹페이지 체류도 검정
 
-An experiment compares session durations (in seconds) for two web page designs with $n_A = 10$ and $n_B = 10$ users. The test statistic is the difference of sample means:
+두 웹페이지 디자인의 세션 시간(초)을 $n_A = 10$, $n_B = 10$명의 사용자로 비교한다. 검정통계량은 표본평균의 차이이다.
 
 $$
 T_{\text{obs}} = \bar x_B - \bar x_A
 $$
 
-Under $H_0$ (both pages produce the same session time distribution), the "Page A" and "Page B" labels are arbitrary. We shuffle labels $B$ times and compute:
+$H_0$(두 페이지가 같은 세션 시간 분포를 만든다) 아래에서 "페이지 A"와 "페이지 B" 라벨은 임의적이다. 라벨을 $B$번 섞어 계산한다.
 
 $$
-p = \frac{1}{B}\sum_{b=1}^{B}\mathbf{1}\!\bigl(|T^{(\pi_b)}| \ge |T_{\text{obs}}|\bigr)
+p = \frac{\#\bigl\{b : |T^{(\pi_b)}| \ge |T_{\text{obs}}|\bigr\} + 1}{B + 1}
 $$
 
 ```python
-session_data = {
-    'Time': [185, 188, 142, 160, 161, 157, 182, 181, 159, 167,
-             173, 181, 182, 170, 169, 177, 168, 183, 169, 164],
-    'Page': ['Page A'] * 10 + ['Page B'] * 10
-}
+import numpy as np
 
-def perm_test_two_sample_means(data_col, group_col, nA, nB, n_perms=1000):
-    """Permutation test for difference of means between two groups."""
-    obs_diff = (data_col[group_col == 'Page A'].mean()
-                - data_col[group_col == 'Page B'].mean())
-    pooled = data_col.values.copy()
-    perm_diffs = []
-    for _ in range(n_perms):
-        np.random.shuffle(pooled)
-        diff = pooled[:nA].mean() - pooled[nA:].mean()
-        perm_diffs.append(diff)
-    p_value = np.mean(np.abs(perm_diffs) >= np.abs(obs_diff))
+times = np.array([185, 188, 142, 160, 161, 157, 182, 181, 159, 167,   # Page A
+                  173, 181, 182, 170, 169, 177, 168, 183, 169, 164])  # Page B
+
+def perm_test_two_sample_means(data, nA, n_perms=9999, rng=None):
+    """Permutation test for a difference of means between two groups."""
+    rng = rng or np.random.default_rng(0)
+    obs_diff = data[:nA].mean() - data[nA:].mean()
+    perm_diffs = np.empty(n_perms)
+    for i in range(n_perms):
+        p = rng.permutation(data)
+        perm_diffs[i] = p[:nA].mean() - p[nA:].mean()
+    p_value = ((np.abs(perm_diffs) >= abs(obs_diff)).sum() + 1) / (n_perms + 1)
     return p_value, perm_diffs, obs_diff
 ```
 
-The result is compared with a Welch $t$-test:
+페이지 A의 평균은 $168.2$초, 페이지 B는 $173.6$초로 차이는 $-5.4$초이다. 순열검정은 $p = 0.327$을 준다.
+
+결과를 Welch $t$ 검정과 비교한다.
 
 $$
 t = \frac{\bar x_A - \bar x_B}{\sqrt{s_A^2/n_A + s_B^2/n_B}}
 $$
 
-With small sample sizes ($n = 10$ per group) and potentially non-normal data, the permutation test is more trustworthy than the $t$-test.
+Welch $t$ 검정은 $p = 0.320$으로 사실상 같은 답을 준다. 두 검정 모두 기각하지 못한다. 표본이 작고($n = 10$) 자료가 정규가 아닐 수 있으므로 순열검정 쪽이 더 믿을 만하다.
 
-## Conversion Rate A/B Test
+## 전환율 A/B 검정
 
-For binary outcomes, we test whether the treatment changes the conversion rate. Let:
+이진 결과에서는 처치가 전환율을 바꾸는지 검정한다.
 
-- Control: $c_0 = 200$ conversions out of $n_0 = 23{,}739$ users
-- Treatment: $c_1 = 182$ conversions out of $n_1 = 22{,}588$ users
+- 대조군: $n_0 = 23{,}739$명 중 $c_0 = 200$명 전환
+- 처치군: $n_1 = 22{,}588$명 중 $c_1 = 182$명 전환
 
-The observed difference in rates is:
+관측된 전환율 차이는
 
 $$
-T_{\text{obs}} = \frac{c_1}{n_1} - \frac{c_0}{n_0}
+T_{\text{obs}} = \frac{c_1}{n_1} - \frac{c_0}{n_0} = 0.008058 - 0.008425 = -0.000368
 $$
 
-The permutation approach creates a binary vector of length $n_0 + n_1$ with $c_0 + c_1$ ones and shuffles it:
+즉 $-0.0368$%p이다.
+
+순열 접근은 길이 $n_0 + n_1$의 이진 벡터에 $c_0 + c_1$개의 $1$을 넣고 섞는다.
 
 ```python
 def perm_test_proportion(n_control, conv_control, n_treatment, conv_treatment,
-                         n_perms=1000):
-    """Permutation test for difference in conversion rates."""
-    binary = np.zeros(n_control + n_treatment, dtype=int)
+                         n_perms=9999, rng=None):
+    """Permutation test for a difference in conversion rates."""
+    rng = rng or np.random.default_rng(0)
+    binary = np.zeros(n_control + n_treatment)
     binary[:conv_control + conv_treatment] = 1
     obs_diff = conv_treatment / n_treatment - conv_control / n_control
 
-    perm_diffs = []
-    for _ in range(n_perms):
-        np.random.shuffle(binary)
-        perm_rate_control = binary[:n_control].mean()
-        perm_rate_treatment = binary[n_control:].mean()
-        perm_diffs.append(perm_rate_treatment - perm_rate_control)
+    perm_diffs = np.empty(n_perms)
+    for i in range(n_perms):
+        p = rng.permutation(binary)
+        perm_diffs[i] = p[n_control:].mean() - p[:n_control].mean()
 
-    p_value = np.mean(np.abs(perm_diffs) >= np.abs(obs_diff))
+    p_value = ((np.abs(perm_diffs) >= abs(obs_diff)).sum() + 1) / (n_perms + 1)
     return p_value, perm_diffs, obs_diff
 ```
 
-The comparison uses a chi-squared test of independence on the $2 \times 2$ contingency table:
+비교 대상은 $2 \times 2$ 분할표에 대한 독립성 카이제곱 검정이다.
 
 $$
 \chi^2 = \sum_{i,j}\frac{(O_{ij} - E_{ij})^2}{E_{ij}}
 $$
 
-## Multi-Headline Click-Through Test
+카이제곱 검정은 $p = 0.6996$, Fisher 정확검정은 $p = 0.6811$을 준다. 순열검정도 같은 범위의 값을 준다.
 
-Three headlines are tested with 1,000 impressions each:
+!!! tip "이 경우 재표집은 낭비이다"
+    이진 자료의 이표본 순열분포는 초기하분포로 정확히 알려져 있으므로, 순열검정은 Fisher 정확검정과 **같은 것**이다. `stats.fisher_exact`가 근사 없이 답을 준다. 자세한 계산은 [기초](../permutation/foundations.md) 연습문제 4에 있다.
 
-| Headline | Clicks | No Clicks |
+## 다중 헤드라인 클릭률 검정
+
+각 $1{,}000$회 노출로 세 헤드라인을 시험했다.
+
+| 헤드라인 | 클릭 | 비클릭 |
 |---|---|---|
 | A | 14 | 986 |
 | B | 8 | 992 |
 | C | 12 | 988 |
 
-With more than two groups, a chi-squared test of independence is the standard parametric approach. A permutation analogue would use the variance of group proportions as the test statistic (similar to the multi-group permutation test).
+집단이 셋 이상이면 독립성에 대한 카이제곱 검정이 표준적인 모수적 접근이다. 이 자료에서 $\chi^2 = 1.666$, $df = 2$, $p = 0.435$로 유의한 차이가 없다. 기대 셀 도수는 모두 $11.33$과 $988.67$이므로 카이제곱 근사가 타당하다.
 
-## Power Analysis
+순열 대응물은 집단 비율들의 분산을 검정통계량으로 쓴다(다집단 순열검정과 같다).
 
-The power of an A/B test depends on the effect size $d$, sample size $n$, and significance level $\alpha$. For a two-sample test with equal group sizes:
+## 검정력 분석
+
+A/B 검정의 검정력은 효과크기 $d$, 표본크기 $n$, 유의수준 $\alpha$에 의존한다. 집단 크기가 같은 이표본 검정에서
 
 $$
-\text{Power} \approx 1 - \mathcal{N}\!\left(z_{1-\alpha/2} - d\sqrt{\frac{n}{2}}\right)
+\text{Power} \approx 1 - \Phi\!\left(z_{1-\alpha/2} - d\sqrt{\frac{n}{2}}\right)
 $$
 
-where $d = (\mu_1 - \mu_2)/\sigma$ is Cohen's $d$. Key benchmarks:
+이다. 여기서 $d = (\mu_1 - \mu_2)/\sigma$는 Cohen의 $d$이다. 주요 기준점은 다음과 같다.
 
-- $d = 0.2$: small effect -- requires $n \approx 400$ per group for 80% power
-- $d = 0.5$: medium effect -- requires $n \approx 65$ per group
-- $d = 0.8$: large effect -- requires $n \approx 25$ per group
+- $d = 0.2$(작은 효과): $80$% 검정력에 집단당 $n \approx 400$ 필요
+- $d = 0.5$(중간 효과): 집단당 $n \approx 65$ 필요
+- $d = 0.8$(큰 효과): 집단당 $n \approx 25$ 필요
 
-## Interpretation
+이 값들은 $n = 2(z_{1-\alpha/2} + z_{0.8})^2/d^2 = 15.7/d^2$에서 나온다.
 
-The three examples illustrate different facets of permutation-based A/B testing:
+## 해석
 
-1. **Session duration**: With continuous data and small samples, the permutation test closely mirrors the $t$-test but makes no normality assumption.
-2. **Conversion rates**: With binary data and large samples, the permutation $p$-value aligns with the chi-squared test. Both typically fail to reject $H_0$ for this dataset, since the observed rate difference is tiny.
-3. **Multi-headline**: When comparing more than two groups, chi-squared is standard, but a permutation test on the variance of group click rates provides a distribution-free alternative.
+세 예제는 순열 기반 A/B 검정의 서로 다른 측면을 보여준다.
 
-In practice, the permutation framework is especially attractive for A/B tests because:
+1. **세션 시간**: 연속자료와 작은 표본에서 순열검정이 $t$ 검정과 거의 일치하지만 정규성을 가정하지 않는다($p = 0.327$ 대 $0.320$).
+2. **전환율**: 이진자료와 큰 표본에서 순열 $p$값이 카이제곱 검정과 일치한다. 관측된 비율 차이가 극히 작으므로 둘 다 $H_0$을 기각하지 못한다.
+3. **다중 헤드라인**: 셋 이상을 비교할 때는 카이제곱이 표준이지만, 집단 클릭률의 분산에 대한 순열검정이 분포무관 대안을 제공한다.
 
-- It directly models the randomization used to assign users to groups.
-- It requires no distributional assumptions.
-- The $p$-value has a transparent interpretation: the fraction of random relabelings producing a result as extreme as observed.
+실무에서 순열 틀이 A/B 검정에 특히 매력적인 이유는 다음과 같다.
 
-## Exercises
+- 사용자를 집단에 배정하는 데 쓴 무작위화를 직접 모형화한다.
+- 분포 가정이 필요 없다.
+- $p$값의 해석이 투명하다. 관측된 것만큼 극단적인 결과를 만드는 무작위 재라벨링의 비율이다.
 
-**Exercise 1.** The session-duration example uses $n = 10$ per group. Simulate a scenario where Page B truly has 15 seconds longer mean session time. Run the permutation test 1000 times with $n = 10$ and $n = 50$ per group. Estimate the power at $\alpha = 0.05$ for each sample size.
+## 연습문제
 
-??? success "Solution to Exercise 1"
+**연습문제 1.** 세션 시간 예제는 집단당 $n = 10$을 쓴다. 페이지 B의 평균 세션 시간이 실제로 $15$초 더 길다고 하자. $n = 10$과 $n = 50$에서 순열검정을 $1000$번 실행하여 $\alpha = 0.05$에서의 검정력을 추정하라.
+
+??? success "연습문제 1 풀이"
 
     ```python
     import numpy as np
+    rng = np.random.default_rng(42)
 
-    np.random.seed(42)
-
-    def power_estimate(n_per_group, true_diff=15, sigma=20, n_sims=1000, n_perms=1000):
+    def power_estimate(n, true_diff=15, sigma=20, M=1000, B=999):
         reject = 0
-        for _ in range(n_sims):
-            a = np.random.normal(170, sigma, n_per_group)
-            b = np.random.normal(170 + true_diff, sigma, n_per_group)
+        for _ in range(M):
+            a = rng.normal(170, sigma, n)
+            b = rng.normal(170 + true_diff, sigma, n)
             obs = a.mean() - b.mean()
-            pooled = np.concatenate([a, b])
-            perm_diffs = []
-            for __ in range(n_perms):
-                np.random.shuffle(pooled)
-                perm_diffs.append(pooled[:n_per_group].mean() - pooled[n_per_group:].mean())
-            p = np.mean(np.abs(perm_diffs) >= np.abs(obs))
-            if p < 0.05:
-                reject += 1
-        return reject / n_sims
-
-    power_10 = power_estimate(10)
-    power_50 = power_estimate(50)
-    print(f"Power with n=10: {power_10:.3f}")
-    print(f"Power with n=50: {power_50:.3f}")
+            z = np.concatenate([a, b])
+            P = np.array([rng.permutation(z) for _ in range(B)])
+            d = P[:, :n].mean(1) - P[:, n:].mean(1)
+            reject += ((np.abs(d) >= abs(obs)).sum() + 1)/(B+1) < 0.05
+        return reject / M
     ```
 
-    With $n = 10$, the power is typically around 0.30--0.45 (under-powered). With $n = 50$, the power increases to approximately 0.90--0.99. This illustrates the well-known principle that larger sample sizes yield greater power to detect a given effect size. $\square$
+    | $n$ (집단당) | 순열검정 검정력 | 이론값 |
+    |---:|---:|---:|
+    | 10 | **0.374** | 0.389 |
+    | 50 | **0.955** | 0.963 |
+
+    이론값은 $1 - \Phi(1.96 - d\sqrt{n/2})$이며 $d = 15/20 = 0.75$이다.
+
+    **$n = 10$은 심각하게 검정력이 부족하다.** $0.374$는 참 효과가 존재해도 세 번 중 두 번은 놓친다는 뜻이다. $d = 0.75$가 "큰 효과"에 가까운데도 그렇다.
+
+    **$n = 50$에서 $0.955$로 충분해진다.** 표본을 다섯 배 늘리자 검정력이 $2.6$배가 되었다.
+
+    **순열검정의 검정력이 이론값보다 $1$--$2$%p 낮다.** 두 가지가 겹친다. 첫째, $+1$ 보정이 검정을 약간 보수적으로 만든다. 둘째, $B = 999$의 몬테카를로 오차가 문턱 근처의 결정을 일부 뒤집는다([수렴](../comparison/convergence.md) 연습문제 3 참조).
+
+    !!! warning "실무 A/B 검정에서 흔한 실수"
+        $n = 10$으로 실험하고 $p = 0.30$을 얻은 뒤 "차이가 없다"고 결론짓는 것은 잘못이다. 검정력이 $0.374$인 검정에서 기각하지 못한 것은 **증거가 없다**는 뜻이지 **효과가 없다**는 뜻이 아니다.
+
+        올바른 대응은 실험 **전에** 검정력 분석을 하는 것이다. 탐지하고 싶은 최소 효과크기를 정하고, $80$% 검정력에 필요한 $n$을 계산한 뒤 실험을 시작한다.
 
 ---
 
-**Exercise 2.** In the conversion-rate example, the observed rate difference is approximately $-0.04\%$. Calculate the minimum detectable effect (MDE) at 80% power and $\alpha = 0.05$ for the given sample sizes ($n_0 = 23{,}739$, $n_1 = 22{,}588$), assuming equal proportions under $H_0$.
+**연습문제 2.** 전환율 예제에서 관측된 비율 차이는 약 $-0.0368$%p이다. 주어진 표본크기($n_0 = 23{,}739$, $n_1 = 22{,}588$)에서 $80$% 검정력, $\alpha = 0.05$의 최소 탐지 효과(MDE)를 계산하라.
 
-??? success "Solution to Exercise 2"
+??? success "연습문제 2 풀이"
 
-    Under equal proportions, the pooled rate is:
-
-    $$
-    \hat p = \frac{200 + 182}{23739 + 22588} = \frac{382}{46327} \approx 0.00824
-    $$
-
-    The standard error of the difference under $H_0$ is:
+    $H_0$ 아래의 합쳐진 비율은
 
     $$
-    \text{SE} = \sqrt{\hat p(1 - \hat p)\left(\frac{1}{n_0} + \frac{1}{n_1}\right)} = \sqrt{0.00824 \times 0.99176 \times \left(\frac{1}{23739} + \frac{1}{22588}\right)}
+    \hat p = \frac{200 + 182}{23739 + 22588} = \frac{382}{46327} = 0.008246
+    $$
+
+    이다. $H_0$ 아래 차이의 표준오차는
+
+    $$
+    \text{SE} = \sqrt{\hat p(1 - \hat p)\left(\frac{1}{n_0} + \frac{1}{n_1}\right)}
+    = \sqrt{0.008246 \times 0.991754 \times 8.6397\times10^{-5}}
     $$
 
     $$
-    \text{SE} \approx \sqrt{0.00817 \times 0.0000841} \approx \sqrt{6.87 \times 10^{-7}} \approx 0.000829
+    \text{SE} = \sqrt{7.0657\times10^{-7}} = 8.406\times10^{-4}
     $$
 
-    The MDE at 80% power with $\alpha = 0.05$ (two-sided) is:
+    이다. $80$% 검정력, 양측 $\alpha = 0.05$의 MDE는
 
     $$
-    \text{MDE} = (z_{0.975} + z_{0.80})\times\text{SE} = (1.96 + 0.84)\times 0.000829 \approx 2.80 \times 0.000829 \approx 0.00232
+    \text{MDE} = (z_{0.975} + z_{0.80})\times\text{SE} = (1.960 + 0.842)\times 8.406\times10^{-4} = 2.355\times10^{-3}
     $$
 
-    So the minimum detectable absolute difference is about 0.23 percentage points. The observed difference of $-0.04\%$ is well below this threshold, which explains the failure to reject $H_0$. $\square$
+    이다. 즉 최소 탐지 가능한 절대 차이가 약 **$0.236$%p**이다.
+
+    관측된 차이 $-0.0368$%p는 이 문턱의 $16$%에 불과하다. $H_0$을 기각하지 못한 이유가 이것이다. $\square$
+
+    **상대적으로 보면 더 극적이다.** 기저 전환율이 $0.825$%이므로 MDE $0.236$%p는 **상대적 $28.6$% 변화**에 해당한다. $46{,}000$명을 모아 놓고도 $28$% 미만의 개선은 탐지할 수 없다는 뜻이다.
+
+    **필요한 표본크기.** 상대적 $10$% 개선($0.0825$%p)을 $80$% 검정력으로 탐지하려면
+
+    $$
+    n \approx \frac{2\hat p(1-\hat p)(z_{0.975}+z_{0.80})^2}{\delta^2}
+    = \frac{2 \times 0.008178 \times 7.849}{(8.25\times10^{-4})^2} = 189{,}000
+    $$
+
+    으로 집단당 $19$만 명이 필요하다.
+
+    !!! tip "희귀사건 A/B 검정의 어려움"
+        전환율이 낮으면 필요한 표본이 급격히 커진다. $\text{SE} \propto \sqrt{\hat p}$이지만 상대적 효과를 탐지하려면 $\delta \propto \hat p$이므로, 필요한 $n$이 $1/\hat p$에 비례한다.
+
+        | 기저 전환율 | 상대 $10$% 개선 탐지에 필요한 집단당 $n$ |
+        |---:|---:|
+        | 20% | 6{,}300 |
+        | 5% | 29{,}800 |
+        | 1% | 155{,}400 |
+        | 0.8% | 189{,}000 |
+
+        실무적 대응은 대리지표(proxy metric)를 쓰는 것이다. 최종 전환 대신 장바구니 담기, 페이지 체류 시간처럼 더 흔한 사건을 측정하면 훨씬 작은 표본으로 신호를 잡을 수 있다. 대신 대리지표가 최종 지표와 연결된다는 근거가 필요하다.
 
 ---
 
-**Exercise 3.** The chi-squared test for the headline data has 2 degrees of freedom. Explain why, and show that the chi-squared test is equivalent to a likelihood ratio test for the multinomial model. Under what conditions does the permutation approach have an advantage?
+**연습문제 3.** 헤드라인 자료의 카이제곱 검정은 자유도가 $2$이다. 이유를 설명하고, 카이제곱 검정이 다항모형에 대한 가능도비 검정과 동등함을 보여라. 순열 접근이 유리한 조건은 무엇인가?
 
-??? success "Solution to Exercise 3"
+??? success "연습문제 3 풀이"
 
-    The contingency table has 2 rows (click / no-click) and 3 columns (headlines A, B, C). The degrees of freedom for the chi-squared test of independence are:
+    분할표는 행이 $2$개(클릭/비클릭), 열이 $3$개(헤드라인 A, B, C)이다. 독립성 카이제곱 검정의 자유도는
 
     $$
     df = (r - 1)(c - 1) = (2 - 1)(3 - 1) = 2
     $$
 
-    Under $H_0$, the expected count in cell $(i, j)$ is $E_{ij} = R_i C_j / N$, where $R_i$ and $C_j$ are the row and column totals and $N$ is the grand total.
+    이다.
 
-    The likelihood ratio test statistic is:
+    $H_0$ 아래에서 셀 $(i, j)$의 기대 도수는 $E_{ij} = R_i C_j / N$이다. $R_i$와 $C_j$는 행합과 열합, $N$은 총합이다. 이 자료에서는 모든 헤드라인의 노출이 $1{,}000$으로 같으므로 기대 클릭 수가 세 헤드라인 모두 $34/3 = 11.33$이다.
+
+    가능도비 검정통계량은
 
     $$
     G^2 = 2\sum_{i,j} O_{ij}\ln\frac{O_{ij}}{E_{ij}}
     $$
 
-    By a Taylor expansion, $G^2 \approx \chi^2$ for large samples, so the two tests are asymptotically equivalent.
+    이다. Taylor 전개에 의해 큰 표본에서 $G^2 \approx \chi^2$이므로 두 검정은 점근적으로 동등하다.
 
-    The permutation approach has an advantage when:
+    **이 자료의 결과:** $\chi^2 = 1.666$, $df = 2$, $p = 0.435$. 세 헤드라인의 클릭률 $1.4$%, $0.8$%, $1.2$%의 차이는 우연으로 충분히 설명된다.
 
-    - Expected cell counts are small (the chi-squared approximation breaks down below $E_{ij} \approx 5$).
-    - The number of categories is large relative to the sample size.
-    - One wants an exact $p$-value without relying on asymptotic approximations. $\square$
+    순열 접근이 유리한 조건은 다음과 같다.
+
+    - 기대 셀 도수가 작을 때(카이제곱 근사는 $E_{ij} \approx 5$ 아래에서 무너진다)
+    - 범주 수가 표본크기에 비해 많을 때
+    - 점근 근사에 기대지 않은 정확 $p$값이 필요할 때
+
+    **이 자료는 순열검정이 필요 없다.** 기대 도수가 최소 $11.33$으로 충분히 크다. 노출이 각 $100$회였다면 기대 클릭 수가 $1.13$이 되어 카이제곱 근사를 쓸 수 없고, 순열검정이나 Fisher-Freeman-Halton 정확검정이 필요했을 것이다.
+
+    !!! note "다중비교 문제가 숨어 있다"
+        전체 검정이 유의하지 않으므로 여기서는 문제가 되지 않지만, 만약 유의했다면 "어느 헤드라인이 다른가"를 묻게 된다. 세 쌍의 비교를 각각 $\alpha = 0.05$로 하면 전체 제1종 오류율이 $0.14$로 오른다.
+
+        순열 틀에서는 최댓값 통계량 $\max_{j<k}|\hat p_j - \hat p_k|$를 쓰면 다중성이 자동으로 보정된다. 이는 Bonferroni보다 덜 보수적이다.
 
 ---
 
-**Exercise 4.** Implement a permutation-based A/B test for the difference in *medians* (rather than means) of session durations. Compare its $p$-value with the mean-based test. When would a median-based test be preferred?
+**연습문제 4.** 세션 시간의 **중앙값** 차이(평균 대신)에 대한 순열 A/B 검정을 구현하라. 평균 기반 검정의 $p$값과 비교하라. 중앙값 기반 검정은 언제 선호되는가?
 
-??? success "Solution to Exercise 4"
+??? success "연습문제 4 풀이"
 
     ```python
     import numpy as np
+    from scipy import stats
+    rng = np.random.default_rng(42)
 
-    np.random.seed(42)
     times = np.array([185, 188, 142, 160, 161, 157, 182, 181, 159, 167,
-                       173, 181, 182, 170, 169, 177, 168, 183, 169, 164])
+                      173, 181, 182, 170, 169, 177, 168, 183, 169, 164])
 
-    obs_diff_mean = times[:10].mean() - times[10:].mean()
-    obs_diff_median = np.median(times[:10]) - np.median(times[10:])
+    obs_mean = times[:10].mean() - times[10:].mean()
+    obs_med = np.median(times[:10]) - np.median(times[10:])
+    print(obs_mean, obs_med)          # -5.4  -7.5
 
-    perm_means = []
-    perm_medians = []
-    for _ in range(10_000):
-        np.random.shuffle(times)
-        perm_means.append(times[:10].mean() - times[10:].mean())
-        perm_medians.append(np.median(times[:10]) - np.median(times[10:]))
+    B = 99999
+    P = np.array([rng.permutation(times) for _ in range(B)])
+    pm  = P[:, :10].mean(1) - P[:, 10:].mean(1)
+    pmd = np.median(P[:, :10], axis=1) - np.median(P[:, 10:], axis=1)
 
-    p_mean = np.mean(np.abs(perm_means) >= np.abs(obs_diff_mean))
-    p_median = np.mean(np.abs(perm_medians) >= np.abs(obs_diff_median))
-
-    print(f"Mean-based p-value:   {p_mean:.4f}")
-    print(f"Median-based p-value: {p_median:.4f}")
+    p_mean = ((np.abs(pm)  >= abs(obs_mean) - 1e-12).sum() + 1) / (B + 1)
+    p_med  = ((np.abs(pmd) >= abs(obs_med)  - 1e-12).sum() + 1) / (B + 1)
     ```
 
-    The median-based test is preferred when:
+    | 검정 | 관측 차이 | $p$값 |
+    |:---|---:|---:|
+    | 순열검정(평균) | $-5.4$ | 0.327 |
+    | 순열검정(중앙값) | $-7.5$ | 0.313 |
+    | Welch $t$ 검정 | $-5.4$ | 0.320 |
+    | Mann-Whitney $U$ | — | 0.344 |
 
-    - The data contain outliers that could inflate the mean.
-    - The distribution is heavily skewed (e.g., session times with a few very long sessions).
-    - The research question concerns the "typical" user experience rather than the average.
+    **네 검정이 모두 $0.31$--$0.35$로 일치하며 어느 것도 기각하지 않는다.** 이 자료에는 극단적인 이상값이 없고 두 집단의 분포가 비슷한 모양이므로 통계량 선택이 결론에 영향을 주지 않는다.
 
-    In general, the median-based test has lower power than the mean-based test for symmetric distributions (by the asymptotic relative efficiency of the median versus the mean, which is $\pi/2 \approx 63.7\%$ for normal data), but it is more robust to contamination. $\square$
+    **중앙값 차이가 평균 차이보다 크지만($-7.5$ 대 $-5.4$) $p$값은 거의 같다.** 관측 통계량의 크기를 검정들 사이에서 비교하는 것이 무의미하다는 점을 다시 보여준다. 각 통계량은 자기 귀무분포에 대해서만 해석된다.
+
+    중앙값 기반 검정은 다음 상황에서 선호된다.
+
+    - 평균을 부풀릴 수 있는 이상값이 자료에 있다.
+    - 분포가 심하게 치우쳐 있다(예: 아주 긴 세션이 몇 개 있는 세션 시간).
+    - 연구 질문이 "평균"이 아니라 "전형적인" 사용자 경험에 관한 것이다.
+
+    일반적으로 대칭분포에서는 중앙값 기반 검정의 검정력이 평균 기반보다 낮다(정규자료에서 중앙값의 평균 대비 점근상대효율은 $2/\pi \approx 63.7$%이다). 대신 오염에 로버스트하다.
+
+    **세션 시간 자료는 사실 중앙값이 적절한 대표적 사례이다.** 실제 웹 로그의 세션 시간은 극단적으로 오른쪽으로 치우쳐 있다(사용자 몇 명이 탭을 열어둔 채 몇 시간을 보낸다). 여기 쓴 자료는 그 특성을 담지 않은 인공 자료이므로 두 검정의 차이가 드러나지 않았다. [이표본 순열검정](../permutation/two_sample.md) 연습문제 3에서 오염된 자료의 검정력 차이를 정량화했다.
 
 ---
 
-**Exercise 5.** Prove that if the two groups have the same distribution (i.e., $H_0$ is true), the expected value of the permutation $p$-value is $E[p] = (B + 1)^{-1}\lceil \alpha(B+1)\rceil$ when ties are absent. More simply, show that $P(p \le \alpha) \le \alpha$ for any valid permutation test.
+**연습문제 5.** 두 집단의 분포가 같으면($H_0$이 참이면) 순열 $p$값이 임의의 타당한 순열검정에서 $P(p \le \alpha) \le \alpha$를 만족함을 보여라.
 
-??? success "Solution to Exercise 5"
+??? success "연습문제 5 풀이"
 
-    Let $T_0 = |T_{\text{obs}}|$ and $T_1, \ldots, T_B$ be the absolute values of the permuted test statistics. Under $H_0$ and the assumption of no ties, all $(B + 1)$ values $T_0, T_1, \ldots, T_B$ are exchangeable and almost surely distinct.
+    $T_0 = |T_{\text{obs}}|$라 하고 $T_1, \ldots, T_B$를 순열된 검정통계량의 절댓값이라 하자. $H_0$ 아래에서 $B+1$개 값 $T_0, T_1, \ldots, T_B$는 교환 가능하며, 동점이 없다고 가정하면 거의 확실히 서로 다르다.
 
-    The $p$-value is:
-
-    $$
-    p = \frac{1}{B}\sum_{b=1}^{B}\mathbf{1}(T_b \ge T_0) = \frac{B + 1 - R}{B}
-    $$
-
-    where $R$ is the rank of $T_0$ among $\{T_0, T_1, \ldots, T_B\}$ (from largest to smallest). By exchangeability, $R$ is uniformly distributed on $\{1, 2, \ldots, B+1\}$.
-
-    Then:
+    **$p$값을 $+1$ 보정을 포함해 정의해야 한다.**
 
     $$
-    P(p \le \alpha) = P\!\left(\frac{B + 1 - R}{B} \le \alpha\right) = P\bigl(R \ge B + 1 - \alpha B\bigr) = P\bigl(R \ge (1-\alpha)B + 1\bigr)
+    p = \frac{\#\{b : T_b \ge T_0\} + 1}{B + 1} = \frac{R}{B+1}
     $$
 
-    Since $R$ is uniform on $\{1, \ldots, B+1\}$:
+    여기서 $R$은 $\{T_0, T_1, \ldots, T_B\}$ 중 $T_0$의 내림차순 순위이다($T_0$가 가장 크면 $R = 1$). 교환가능성에 의해 $R$은 $\{1, \ldots, B+1\}$ 위에서 균등분포이다.
+
+    따라서
 
     $$
-    P(p \le \alpha) = \frac{\lfloor \alpha B \rfloor + 1}{B + 1} \le \frac{\alpha B + 1}{B + 1} = \alpha + \frac{1 - \alpha}{B + 1} \le \alpha + \frac{1}{B + 1}
+    P(p \le \alpha) = P\!\left(R \le \alpha(B+1)\right)
+    = \frac{\lfloor \alpha(B+1) \rfloor}{B + 1} \le \alpha
     $$
 
-    For practical values of $B$ (e.g., $B = 1000$), the excess over $\alpha$ is negligible. More precisely, the test is conservative: $P(p \le \alpha) \le \alpha + 1/(B+1)$, which converges to $\alpha$ as $B \to \infty$. $\square$
+    이다. $\square$
+
+    **$(B+1)\alpha$가 정수이면 등호가 성립한다.** $\alpha = 0.05$에 $B = 199, 999, 9999$ 등을 고르면 검정이 $\alpha$ 수준을 **정확히** 달성한다. 그렇지 않으면 약간 보수적이다.
+
+    !!! danger "$+1$을 빼면 부등호가 뒤집힌다"
+        $p = \#\{b : T_b \ge T_0\}/B$로 정의하면 $R = 1$일 때 $p = 0$이 된다. 그러면
+
+        $$
+        P(p \le \alpha) \ge P(R = 1) = \frac{1}{B+1}
+        $$
+
+        이므로 $\alpha < 1/(B+1)$인 모든 $\alpha$에서 통제가 깨진다. 검정이 **보수적이 아니라 반보수적**이 된다.
+
+        [대응 순열검정](../permutation/paired.md) 연습문제 3에서 $B = 199$, $\alpha = 0.05$일 때 보정 없는 정의의 제1종 오류율이 $0.0512$, 보정한 정의가 $0.0458$임을 수치로 확인했다.
+
+        비용이 $0$이므로 항상 $+1$을 넣는다.

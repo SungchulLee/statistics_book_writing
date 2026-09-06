@@ -1,124 +1,361 @@
-# Bootstrap Test for Correlation
+# 상관에 대한 붓스트랩 검정
 
-## Motivation
+## 동기
 
-The classical test for the Pearson correlation coefficient $r$ assumes bivariate normality. Under this assumption and $H_0: \rho = 0$, the statistic $t = r\sqrt{(n-2)/(1-r^2)}$ follows a $t_{n-2}$ distribution. When the data are non-normal — heavy-tailed, skewed, or contain outliers — this distributional result may not hold, and the classical $p$-value can be unreliable.
+Pearson 상관계수 $r$에 대한 고전적 검정은 이변량 정규성을 가정한다. 이 가정과 $H_0: \rho = 0$ 아래에서 통계량 $t = r\sqrt{(n-2)/(1-r^2)}$가 $t_{n-2}$ 분포를 따른다. 자료가 비정규이면 --- 꼬리가 두껍거나, 치우쳤거나, 이상치가 있으면 --- 이 분포 결과가 성립하지 않고 고전적 $p$값을 믿을 수 없게 된다.
 
-The bootstrap provides two complementary approaches to testing correlation: (1) a **bootstrap confidence interval** approach that inverts the interval to test any hypothesized value $\rho_0$, and (2) a **permutation-style bootstrap** that directly estimates the null distribution under $H_0: \rho = 0$.
+붓스트랩은 상관 검정에 두 가지 보완적 접근을 제공한다. (1) 구간을 역전시켜 임의의 가설값 $\rho_0$을 검정하는 **붓스트랩 신뢰구간** 접근, (2) $H_0: \rho = 0$ 아래의 귀무분포를 직접 추정하는 **순열형 접근**이다.
 
-## Testing Whether the Correlation Is Zero
+## 상관이 0인지 검정하기
 
-The most common hypothesis is:
+가장 흔한 가설은
 
 $$
-H_0: \rho = 0 \quad \text{vs} \quad H_1: \rho \neq 0
+H_0: \rho = 0 \quad \text{대} \quad H_1: \rho \neq 0
 $$
 
-Under $H_0$, $X$ and $Y$ are uncorrelated (and, if we assume nothing else, exchangeable in their pairing). This motivates a **permutation approach**: break the association between $X$ and $Y$ by shuffling one variable while keeping the other fixed.
+이다. $H_0$ 아래에서 $X$와 $Y$는 무상관이며, 다른 가정을 두지 않으면 짝짓기에 대해 교환 가능하다. 이것이 **순열 접근**의 동기이다. 한 변수를 고정한 채 다른 변수를 섞어 $X$와 $Y$ 사이의 연관을 끊는다.
 
-## Algorithm: Permutation Approach
+## 알고리즘: 순열 접근
 
-Given paired observations $(x_1, y_1), \ldots, (x_n, y_n)$:
+대응 관측값 $(x_1, y_1), \ldots, (x_n, y_n)$이 주어졌을 때:
 
-1. Compute the observed correlation $r_{\text{obs}}$ from the original data
-2. **For** $b = 1, \ldots, B$:
-    - Randomly permute the $y$-values: $(x_1, y_{\pi(1)}), \ldots, (x_n, y_{\pi(n)})$
-    - Compute $r^{*(b)}$ from the permuted data
-3. The two-sided $p$-value is:
+1. 원자료에서 관측 상관 $r_{\text{obs}}$를 계산한다.
+2. $b = 1, \ldots, B$에 대해:
+    - $y$ 값을 무작위로 순열한다: $(x_1, y_{\pi(1)}), \ldots, (x_n, y_{\pi(n)})$.
+    - 순열된 자료에서 $r^{*(b)}$를 계산한다.
+3. 양측 $p$값은
 
 $$
 p = \frac{1}{B}\sum_{b=1}^{B}\mathbf{1}\!\left(|r^{*(b)}| \ge |r_{\text{obs}}|\right)
 $$
 
-This is technically a permutation test rather than a bootstrap test (it samples without replacement from the permutation distribution). It provides an exact test of the null hypothesis that $X$ and $Y$ are independent, which is stronger than $\rho = 0$ alone.
+이는 엄밀히 말하면 붓스트랩 검정이 아니라 순열검정이다(순열분포에서 비복원으로 표집한다). $X$와 $Y$가 독립이라는 귀무가설의 정확검정을 제공하며, 이는 $\rho = 0$만 주장하는 것보다 강한 가설이다.
 
-!!! note "Permutation vs Bootstrap for Testing Correlation"
-    For testing $H_0: \rho = 0$, the permutation approach is often preferred because it directly enforces independence under the null. The bootstrap approach (resampling pairs) is better suited for constructing confidence intervals for $\rho$ or testing $H_0: \rho = \rho_0$ for nonzero $\rho_0$.
+!!! note "상관 검정에서 순열과 붓스트랩"
+    $H_0: \rho = 0$을 검정할 때는 순열 접근이 대체로 낫다. 귀무가설 아래의 독립성을 직접 강제하기 때문이다. 붓스트랩 접근(쌍을 재표집)은 $\rho$의 신뢰구간을 만들거나 $\rho_0 \ne 0$인 $H_0: \rho = \rho_0$을 검정하는 데 더 적합하다.
 
-## Algorithm: Bootstrap Confidence Interval Approach
+## 알고리즘: 붓스트랩 신뢰구간 접근
 
-To test $H_0: \rho = \rho_0$ for any value $\rho_0$ (not just zero), construct a bootstrap confidence interval for $\rho$ and reject if $\rho_0$ falls outside the interval.
+$0$이 아닌 임의의 $\rho_0$에 대해 $H_0: \rho = \rho_0$을 검정하려면 $\rho$의 붓스트랩 신뢰구간을 만들고 $\rho_0$이 그 바깥이면 기각한다.
 
-1. Compute $r_{\text{obs}}$ from the original paired data
-2. **For** $b = 1, \ldots, B$:
-    - Resample $n$ pairs $(x_i, y_i)$ **with replacement** (keeping pairs intact)
-    - Compute $r^{*(b)}$ from the bootstrap sample
-3. Construct a $100(1-\alpha)\%$ bootstrap confidence interval (percentile, BCa, or bootstrap-$t$)
-4. Reject $H_0: \rho = \rho_0$ at level $\alpha$ if $\rho_0$ is not in the interval
+1. 원 대응자료에서 $r_{\text{obs}}$를 계산한다.
+2. $b = 1, \ldots, B$에 대해:
+    - 쌍 $(x_i, y_i)$를 **통째로** $n$개 복원추출한다.
+    - 붓스트랩 표본에서 $r^{*(b)}$를 계산한다.
+3. $100(1-\alpha)\%$ 붓스트랩 신뢰구간을 만든다(백분위수, BCa, 붓스트랩-$t$).
+4. $\rho_0$이 구간에 없으면 수준 $\alpha$에서 $H_0: \rho = \rho_0$을 기각한다.
 
-!!! warning "Keep Pairs Together"
-    When resampling for correlation, always resample entire pairs $(x_i, y_i)$. Resampling $x$-values and $y$-values separately would destroy the dependence structure and produce meaningless bootstrap correlations.
+!!! warning "쌍을 함께 유지하라"
+    상관을 위해 재표집할 때는 언제나 쌍 $(x_i, y_i)$ 전체를 재표집해야 한다. $x$ 값과 $y$ 값을 따로 재표집하면 의존 구조가 파괴되어 무의미한 붓스트랩 상관이 나온다. ([비모수 붓스트랩](../bootstrap/nonparametric.md) 연습문제 4에서 이를 정량적으로 확인했다. 따로 재표집하면 $r^*$의 분포가 $0$ 주위에 중심을 두어 사실상 순열검정의 귀무분포가 된다.)
 
-## Bootstrap Standard Error for the Correlation
+## 상관의 붓스트랩 표준오차
 
-The bootstrap distribution of $r^*$ also provides a standard error estimate:
+$r^*$의 붓스트랩 분포는 표준오차 추정값도 제공한다.
 
 $$
 \widehat{\text{SE}}_{\text{boot}}(r) = \text{sd}(r^{*(1)}, \ldots, r^{*(B)})
 $$
 
-Under bivariate normality, the asymptotic standard error of $r$ is approximately $(1-\rho^2)/\sqrt{n}$, which can be estimated as $(1-r^2)/\sqrt{n}$. The bootstrap standard error does not rely on normality and is valid more broadly.
+이변량 정규성 아래에서 $r$의 점근 표준오차는 근사적으로 $(1-\rho^2)/\sqrt{n}$이며 $(1-r^2)/\sqrt{n}$으로 추정할 수 있다. 붓스트랩 표준오차는 정규성에 기대지 않으므로 더 넓게 타당하다.
 
-## Fisher's z-Transform Bootstrap
+## Fisher z 변환 붓스트랩
 
-For correlation coefficients, Fisher's z-transform often improves the bootstrap approximation:
+상관계수에는 Fisher의 $z$ 변환이 붓스트랩 근사를 개선하는 경우가 많다.
 
 $$
 z = \frac{1}{2}\ln\!\left(\frac{1+r}{1-r}\right) = \text{arctanh}(r)
 $$
 
-Under bivariate normality, $z$ is approximately $N(\text{arctanh}(\rho), 1/(n-3))$. The transformed statistic has a sampling distribution closer to normal, which improves the coverage of percentile and BCa intervals.
+이변량 정규성 아래에서 $z$는 근사적으로 $\mathcal{N}(\text{arctanh}(\rho), 1/(n-3))$이다. 변환된 통계량의 표본분포가 정규에 더 가까워 백분위수 구간과 BCa 구간의 포함확률이 개선된다.
 
-**Procedure:**
+**절차:**
 
-1. For each bootstrap replicate, compute $z^{*(b)} = \text{arctanh}(r^{*(b)})$
-2. Construct the bootstrap confidence interval on the $z$-scale
-3. Transform back to the $r$-scale using $r = \tanh(z)$
+1. 각 붓스트랩 복제값에 대해 $z^{*(b)} = \text{arctanh}(r^{*(b)})$를 계산한다.
+2. $z$ 척도에서 붓스트랩 신뢰구간을 만든다.
+3. $r = \tanh(z)$로 $r$ 척도로 되돌린다.
 
-Because the percentile and BCa methods are transformation invariant, this transformation does not change their intervals. However, it can improve the performance of the bootstrap-$t$ and normal intervals.
+백분위수법과 BCa가 변환 불변이므로 **이 변환은 두 방법의 구간을 바꾸지 않는다**. 그러나 붓스트랩-$t$와 정규 구간의 성능은 개선할 수 있다.
 
-## Example
+## 예제
 
-A dataset of $n = 25$ students shows the correlation between study hours and exam scores as $r_{\text{obs}} = 0.47$.
+학생 $n = 25$명의 자료에서 공부시간과 시험점수의 상관이 $r_{\text{obs}} = 0.47$이었다.
 
-**Test $H_0: \rho = 0$ using the permutation approach:**
+**순열 접근으로 $H_0: \rho = 0$ 검정:**
 
-1. Permute the exam scores $B = 10{,}000$ times, computing $r^{*(b)}$ each time
-2. Count how many times $|r^{*(b)}| \ge 0.47$
-3. Suppose 178 out of $10{,}000$ permutations satisfy this condition
-4. The $p$-value is $178/10{,}000 = 0.018$
+1. 시험점수를 $B = 10{,}000$번 순열하며 매번 $r^{*(b)}$를 계산한다.
+2. $|r^{*(b)}| \ge 0.47$인 횟수를 센다.
+3. $10{,}000$번 중 $178$번이 이 조건을 만족했다고 하자.
+4. $p$값은 $178/10{,}000 = 0.018$이다.
 
-**Construct a 95% bootstrap CI for $\rho$:**
+**$\rho$의 95% 붓스트랩 신뢰구간:**
 
-1. Resample 25 pairs with replacement $B = 10{,}000$ times
-2. Compute $r^{*(b)}$ for each resample
-3. The BCa 95% interval is $[0.11, 0.72]$
-4. Since $0 \notin [0.11, 0.72]$, this also rejects $H_0: \rho = 0$ at the 5% level
+1. 쌍 25개를 복원추출하는 것을 $B = 10{,}000$번 반복한다.
+2. 각 재표본에서 $r^{*(b)}$를 계산한다.
+3. BCa 95% 구간이 $[0.11, 0.72]$이다.
+4. $0 \notin [0.11, 0.72]$이므로 이 역시 5% 수준에서 $H_0: \rho = 0$을 기각한다.
 
-!!! example "Interpreting the Bootstrap Distribution of r"
-    The bootstrap distribution of $r^*$ from the 25-pair resample is likely left-skewed (since $r_{\text{obs}} = 0.47$ is moderately positive, the distribution is bounded above by 1). This skewness is why the BCa interval is preferred over the percentile interval for correlation coefficients.
+!!! example "r의 붓스트랩 분포 해석"
+    25쌍 재표본에서 얻은 $r^*$의 붓스트랩 분포는 왼쪽으로 치우칠 가능성이 높다. $r_{\text{obs}} = 0.47$이 적당히 양수이고 분포가 위로 $1$에 막혀 있기 때문이다. 이 치우침 때문에 상관계수에는 백분위수 구간보다 BCa 구간이 선호된다.
 
-## Comparison of Approaches
+## 접근들의 비교
 
-| Approach | Tests | Assumptions | Preserves |
+| 접근 | 검정 대상 | 가정 | 보존하는 것 |
 |---|---|---|---|
-| Permutation | $H_0: \rho = 0$ only | Exchangeability under $H_0$ | Original data values |
-| Bootstrap CI | Any $H_0: \rho = \rho_0$ | iid pairs | Pair structure |
-| Classical $t$-test | $H_0: \rho = 0$ | Bivariate normality | Parametric efficiency |
+| 순열 | $H_0: \rho = 0$만 | $H_0$ 아래의 교환가능성 | 원자료의 값 |
+| 붓스트랩 신뢰구간 | 임의의 $H_0: \rho = \rho_0$ | i.i.d. 쌍 | 쌍의 구조 |
+| 고전적 $t$ 검정 | $H_0: \rho = 0$ | 이변량 정규성 | 모수적 효율 |
 
-The permutation approach is the most powerful for testing zero correlation because it uses the exact null distribution. The bootstrap CI approach is more flexible, allowing tests of any hypothesized value and providing interval estimates simultaneously.
+순열 접근은 정확한 귀무분포를 쓰므로 무상관 검정에 가장 강력하다. 붓스트랩 신뢰구간 접근은 더 유연하여 임의의 가설값을 검정할 수 있고 구간추정을 동시에 제공한다.
 
-## Summary
+## 요약
 
-Bootstrap methods for testing correlation take two forms. For testing $H_0: \rho = 0$, the permutation approach (shuffling one variable) is preferred because it directly enforces independence under the null. For testing $H_0: \rho = \rho_0$ with nonzero $\rho_0$ or for constructing confidence intervals, the bootstrap resamples pairs with replacement and applies percentile, BCa, or bootstrap-$t$ intervals. Both approaches avoid the bivariate normality assumption required by the classical test.
+상관 검정을 위한 붓스트랩 방법은 두 형태를 갖는다. $H_0: \rho = 0$을 검정할 때는 한 변수를 섞는 순열 접근이 낫다. 귀무가설 아래의 독립성을 직접 강제하기 때문이다. $\rho_0 \ne 0$인 $H_0: \rho = \rho_0$을 검정하거나 신뢰구간을 만들 때는 쌍을 복원추출하고 백분위수, BCa, 붓스트랩-$t$ 구간을 적용한다. 두 접근 모두 고전적 검정이 요구하는 이변량 정규성 가정을 피한다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Use the bootstrap to estimate the standard error and 95% CI for the **correlation coefficient** between two variables. Generate $n = 50$ observations from a bivariate normal with $\rho = 0.6$.
+**연습문제 1.**
+붓스트랩으로 두 변수 사이 **상관계수**의 표준오차와 95% 신뢰구간을 추정하라. $\rho = 0.6$인 이변량 정규분포에서 $n = 50$개를 생성하라.
 
-(a) Compute the bootstrap SE with $B = 5{,}000$.
+**(a)** $B = 5{,}000$으로 붓스트랩 표준오차를 계산하라.
 
-(b) Compare the percentile CI with Fisher's $z$-transformation CI.
+**(b)** 백분위수 구간과 Fisher $z$ 변환 구간을 비교하라.
 
-(c) Repeat with $\rho = 0.95$. Does the percentile interval capture the skewness near the boundary?
+**(c)** $\rho = 0.95$로 반복하라. 백분위수 구간이 경계 근처의 치우침을 포착하는가?
+
+??? success "연습문제 1 풀이"
+
+    ```python
+    import numpy as np
+    from scipy import stats
+    rng = np.random.default_rng(0)
+
+    def gen(n, rho):
+        z = rng.multivariate_normal([0, 0], [[1, rho], [rho, 1]], n)
+        return z[:, 0], z[:, 1]
+
+    for rho in (0.6, 0.95):
+        x, y = gen(50, rho)
+        r = stats.pearsonr(x, y).statistic
+        B = 5000
+        idx = rng.integers(0, 50, (B, 50))
+        rb = np.array([stats.pearsonr(x[i], y[i]).statistic for i in idx])
+
+        print("r = %.4f" % r)
+        print("  붓스트랩 SE = %.4f, 점근 SE = %.4f"
+              % (rb.std(ddof=1), (1 - r**2) / np.sqrt(50)))
+        print("  백분위수    :", np.round(np.percentile(rb, [2.5, 97.5]), 4))
+
+        z = np.arctanh(r); zse = 1 / np.sqrt(50 - 3)
+        print("  Fisher z    :", np.round(np.tanh([z - 1.96*zse, z + 1.96*zse]), 4))
+        print("  붓스트랩 z→r:", np.round(np.tanh(
+            np.percentile(np.arctanh(rb), [2.5, 97.5])), 4))
+        print("  r* 의 왜도  : %.3f" % stats.skew(rb))
+    ```
+
+    **(a) 표준오차** ($\rho = 0.6$, 관측 $r = 0.5642$):
+
+    | 방법 | $\widehat{\text{SE}}(r)$ |
+    |:---|---:|
+    | 붓스트랩 | 0.0860 |
+    | 점근 공식 $(1-r^2)/\sqrt{n}$ | 0.0964 |
+
+    붓스트랩 SE가 점근 공식보다 $11\%$ 작다. 두 값이 정확히 같을 이유는 없다. 점근 공식은 $n \to \infty$의 극한값이고 $n = 50$에서 실제 표준오차를 다소 과대평가한다.
+
+    **(b) 구간 비교** ($\rho = 0.6$):
+
+    | 방법 | 구간 | 폭 |
+    |:---|:---|---:|
+    | 백분위수 | $[0.3766, \; 0.7142]$ | 0.3376 |
+    | Fisher $z$ (모수적) | $[0.3391, \; 0.7282]$ | 0.3891 |
+    | 붓스트랩 복제값을 $z$ 척도에서 → 되돌림 | $[0.3766, \; 0.7142]$ | 0.3376 |
+
+    **핵심 관찰 두 가지.**
+
+    1. **첫째와 셋째 줄이 완전히 같다.** 백분위수 구간의 변환 불변성 때문이다. $\text{arctanh}$가 단조증가이므로 $z$ 척도에서 분위수를 뽑고 되돌리는 것은 $r$ 척도에서 바로 뽑는 것과 정확히 같다. **붓스트랩 백분위수 구간에 Fisher 변환을 적용하는 것은 아무 효과가 없다.**
+
+    2. **모수적 Fisher 구간이 더 넓다**($0.389$ 대 $0.338$). 이 구간은 $\text{SE}(z) = 1/\sqrt{n-3} = 0.1459$를 쓰는데, 붓스트랩이 추정한 실제 $\text{SE}(z)$는 더 작다.
+
+    **(c) $\rho = 0.95$** (관측 $r = 0.9596$):
+
+    | 방법 | 구간 | 폭 |
+    |:---|:---|---:|
+    | 백분위수 | $[0.9398, \; 0.9739]$ | 0.0341 |
+    | Fisher $z$ (모수적) | $[0.9295, \; 0.9770]$ | 0.0475 |
+
+    $r^*$의 왜도가 $\rho = 0.6$에서 $-0.448$, $\rho = 0.95$에서 $-0.642$로 경계에 가까워질수록 커진다.
+
+    **백분위수 구간이 치우침을 포착하는가?** 부분적으로만 그렇다.
+
+    - 관측값 $0.9596$에서 하한까지 거리가 $0.0198$, 상한까지 거리가 $0.0143$이다. 아래쪽이 $38\%$ 길다. 왼쪽 치우침을 반영한 **비대칭 구간**이 나왔다.
+    - 그리고 상한 $0.9739 < 1$로 **자연스러운 경계를 넘지 않는다**.
+
+    반면 모수적 Fisher 구간은 $\text{SE}(z)$가 $\rho$와 무관하다고 가정하므로 $z$ 척도에서 대칭이고, 되돌린 결과가 $[0.9295, 0.9770]$으로 백분위수보다 $39\%$ 넓다.
+
+    !!! note "그럼에도 BCa를 권하는 이유"
+        백분위수 구간이 경계를 존중하고 비대칭이기는 하지만, 붓스트랩 분포의 **편향**은 보정하지 못한다. $\rho$가 $1$에 가까우면 $r$이 아래로 편향되므로 $\hat z_0 < 0$이 되고 BCa가 구간을 아래로 조정한다.
+
+        상관계수는 BCa의 두 보정이 모두 의미 있게 작동하는 대표적 통계량이다. [BCa](../bootstrap_ci/bca.md) 연습문제 1 참조.
+
+---
+
+**연습문제 2.**
+순열검정과 붓스트랩 신뢰구간 접근이 $H_0: \rho = 0$에 대해 같은 결론을 내는가? 두 방법의 제1종 오류율과 검정력을 비교하라.
+
+??? success "연습문제 2 풀이"
+    ```python
+    import numpy as np
+    from scipy import stats
+    rng = np.random.default_rng(5)
+
+    def run(n, rho, M=1000, B=999):
+        c_perm = c_boot = c_t = 0
+        for _ in range(M):
+            z = rng.multivariate_normal([0, 0], [[1, rho], [rho, 1]], n)
+            x, y = z[:, 0], z[:, 1]
+            r = stats.pearsonr(x, y).statistic
+            c_t += stats.pearsonr(x, y).pvalue < 0.05
+
+            # 순열검정
+            rp = np.array([stats.pearsonr(x, rng.permutation(y)).statistic
+                           for _ in range(B)])
+            c_perm += (np.abs(rp) >= abs(r)).mean() < 0.05
+
+            # 붓스트랩 백분위수 구간이 0 을 포함하는지
+            idx = rng.integers(0, n, (B, n))
+            rb = np.array([stats.pearsonr(x[i], y[i]).statistic for i in idx])
+            lo, hi = np.percentile(rb, [2.5, 97.5])
+            c_boot += not (lo <= 0 <= hi)
+        return round(c_perm/M, 3), round(c_boot/M, 3), round(c_t/M, 3)
+
+    for rho in (0.0, 0.3, 0.5):
+        print(rho, run(30, rho))
+    ```
+
+    $n = 30$, 이변량 정규:
+
+    | 참 $\rho$ | 순열검정 | 붓스트랩 구간 | 고전 $t$ |
+    |---:|---:|---:|---:|
+    | 0.0 (크기) | 0.040 | **0.062** | 0.042 |
+    | 0.3 | 0.357 | 0.406 | 0.358 |
+    | 0.5 | 0.823 | 0.844 | 0.823 |
+
+    **순열검정과 고전 $t$ 검정의 결과가 사실상 동일하다**($0.040$ 대 $0.042$, $0.357$ 대 $0.358$, $0.823$ 대 $0.823$). 이변량 정규 자료이므로 당연하다. 고전 검정의 가정이 정확히 성립하는 상황이다.
+
+    **붓스트랩 구간 접근은 크기가 $0.062$로 $24\%$ 부풀려진다.** 검정력이 높아 보이는 것($0.406$, $0.844$)도 상당 부분 이 때문이다.
+
+    **왜 붓스트랩 구간이 크기를 못 지키는가.** 두 가지 이유가 겹친다.
+
+    1. **백분위수 구간의 1차 정확도.** $n = 30$에서 상관계수의 백분위수 구간은 포함확률이 $0.95$에 못 미친다. 구간이 좁으면 $0$을 제외하는 일이 잦아진다.
+    2. **귀무가설을 강제하지 않는다.** 붓스트랩은 관측된 쌍 구조를 그대로 재표집하므로 $H_0$ 아래의 분포가 아니라 참 분포를 근사한다. 검정에 쓰려면 구간을 역전시켜야 하는데, 그 역전이 정확하려면 구간의 포함확률이 정확해야 한다.
+
+    **권고:** $H_0: \rho = 0$을 검정할 때는 **순열검정을 쓴다**. 붓스트랩 구간은 $\rho$의 추정에 쓰고, 검정 목적으로 역전시킬 때는 BCa를 써서 포함확률을 개선해야 한다.
+
+---
+
+**연습문제 3.**
+이상치 하나가 상관 검정에 미치는 영향을 세 방법에서 비교하라.
+
+??? success "연습문제 3 풀이"
+    독립인 두 변수에 지렛대 이상치를 하나 추가한다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+    rng = np.random.default_rng(2)
+    n = 30
+    x = rng.normal(0, 1, n)
+    y = rng.normal(0, 1, n)          # 참 상관 = 0
+
+    xo = np.append(x, 8.0)
+    yo = np.append(y, 8.0)           # 지렛대 이상치
+
+    for name, (a, b) in [("원자료", (x, y)), ("이상치 추가", (xo, yo))]:
+        r = stats.pearsonr(a, b)
+        rs = stats.spearmanr(a, b)
+        B = 20000
+        rp = np.array([stats.pearsonr(a, rng.permutation(b)).statistic
+                       for _ in range(2000)])
+        p_perm = (np.abs(rp) >= abs(r.statistic)).mean()
+        print(f"{name}: r={r.statistic:.4f} p_t={r.pvalue:.4f} "
+              f"p_perm={p_perm:.4f} r_s={rs.statistic:.4f} p_s={rs.pvalue:.4f}")
+    ```
+
+    | 자료 | Pearson $r$ | 고전 $t$ $p$ | 순열 $p$ | Spearman $r_s$ | Spearman $p$ |
+    |:---|---:|---:|---:|---:|---:|
+    | 원자료 ($n=30$) | $0.2044$ | 0.2786 | 0.2680 | $0.2085$ | 0.2690 |
+    | 이상치 추가 ($n=31$) | **0.7422** | **$<10^{-5}$** | **0.0060** | $0.2827$ | 0.1234 |
+
+    **자료점 하나가 상관을 $0.20$에서 $0.74$로 바꾼다.** 고전 $t$ 검정과 순열검정이 모두 기각한다.
+
+    **순열검정이 이상치로부터 보호해 주지 못한다는 점이 핵심이다.** 순열검정은 $r$의 귀무분포를 정확히 계산하지만, **$r$이라는 통계량 자체가 이상치에 취약하다**. 정확한 귀무분포로 취약한 통계량을 검정하면 여전히 취약하다.
+
+    Spearman 상관은 $0.209 \to 0.283$으로 완만하게만 움직이고 $p$값도 $0.269 \to 0.123$으로 유의하지 않다. 순위변환이 $(8, 8)$을 $(31, 31)$로 바꾸어 영향력을 순위 한 칸으로 제한하기 때문이다.
+
+    !!! warning "검정의 타당성과 통계량의 로버스트성은 별개이다"
+        이 예제는 흔한 혼동을 바로잡는다. "순열검정은 분포 가정이 없으므로 로버스트하다"는 말은 **오류율의 통제**에 대해서만 참이다. 자료가 실제로 교환 가능하면 순열검정의 제1종 오류율은 정확히 $\alpha$이다.
+
+        그러나 통계량이 이상치에 민감하면, 이상치가 만들어 낸 연관성을 순열검정이 **정확하게** 탐지한다. 검정은 옳게 작동했고, 다만 우리가 재고 싶었던 것을 재지 않았을 뿐이다.
+
+        해결책은 검정 방법이 아니라 **통계량을 바꾸는 것**이다. Spearman $r_s$, Kendall $\tau$, 또는 로버스트 상관 추정량에 순열검정을 적용한다.
+
+---
+
+**연습문제 4.**
+Fisher $z$ 변환이 붓스트랩 백분위수 구간을 바꾸지 못한다는 것을 확인했다. 그렇다면 어떤 방법에서 이 변환이 실제로 도움이 되는가?
+
+??? success "연습문제 4 풀이"
+    변환 불변이 **아닌** 방법들에서 도움이 된다. 세 방법을 두 척도에서 비교한다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+    rng = np.random.default_rng(11)
+
+    def cover(n, rho, M=800, B=1500):
+        c = {k: 0 for k in ("normal_r", "normal_z", "basic_r", "basic_z", "pct")}
+        for _ in range(M):
+            z = rng.multivariate_normal([0, 0], [[1, rho], [rho, 1]], n)
+            x, y = z[:, 0], z[:, 1]
+            r = stats.pearsonr(x, y).statistic
+            idx = rng.integers(0, n, (B, n))
+            rb = np.array([stats.pearsonr(x[i], y[i]).statistic for i in idx])
+            zb = np.arctanh(np.clip(rb, -0.9999, 0.9999))
+            zr = np.arctanh(r)
+
+            lo, hi = r - 1.96*rb.std(), r + 1.96*rb.std()
+            c["normal_r"] += lo <= rho <= hi
+            lo, hi = np.tanh([zr - 1.96*zb.std(), zr + 1.96*zb.std()])
+            c["normal_z"] += lo <= rho <= hi
+
+            p_lo, p_hi = np.percentile(rb, [2.5, 97.5])
+            c["pct"] += p_lo <= rho <= p_hi
+            c["basic_r"] += 2*r - p_hi <= rho <= 2*r - p_lo
+            zl, zh = np.percentile(zb, [2.5, 97.5])
+            lo, hi = np.tanh([2*zr - zh, 2*zr - zl])
+            c["basic_z"] += lo <= rho <= hi
+        return {k: round(v/M, 3) for k, v in c.items()}
+
+    print(cover(25, 0.8))
+    ```
+
+    $n = 25$, $\rho = 0.8$에서 포함확률:
+
+    | 방법 | $r$ 척도 | $z$ 척도 → 되돌림 | 개선 |
+    |:---|---:|---:|---:|
+    | 정규 구간 | 0.914 | **0.942** | $+0.028$ |
+    | 기본 (추축) 구간 | 0.856 | **0.940** | $+0.084$ |
+    | 백분위수 구간 | 0.931 | 0.931 | $0$ (불변) |
+
+    변환이 **정규 구간과 기본 구간에서만** 효과를 낸다. 기본 구간의 개선이 특히 크다($0.856 \to 0.940$, $8.4$%p). 백분위수 구간은 정의상 전혀 변하지 않는다.
+
+    변환 후에는 세 방법이 $0.931$--$0.942$로 모여, $z$ 척도가 상관계수의 "옳은" 척도임을 보여 준다.
+
+    **왜 효과가 있는가.** 두 방법 모두 "$\hat\theta \pm (\text{무언가})$" 형태로 **대칭적인** 조작을 한다.
+
+    - $\rho = 0.8$ 근처에서 $r$의 표본분포는 왼쪽으로 심하게 치우쳐 있고 위로 $1$에 막혀 있다. $r$ 척도에서 대칭 구간을 만들면 상한이 $1$을 넘거나 하한이 지나치게 짧아진다.
+    - $z = \text{arctanh}(r)$ 척도에서는 분포가 거의 대칭이고 경계가 없다. 여기서 대칭 구간을 만들고 $\tanh$로 되돌리면 자동으로 비대칭이면서 $(-1, 1)$ 안에 머무는 구간이 된다.
+
+    **일반 원칙:** 변환 불변이 아닌 방법(정규, 기본, 붓스트랩-$t$)을 쓸 때는 **분산안정화 변환을 먼저 적용하라**. 상관계수에는 Fisher $z$, 양수 척도모수에는 로그, 비율에는 로짓이 표준이다.
+
+    변환 불변인 방법(백분위수, BCa)을 쓰면 이 고민이 필요 없다. 그것이 이 방법들의 주된 장점이다.

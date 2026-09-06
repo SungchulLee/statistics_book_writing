@@ -1,125 +1,358 @@
-# Bias-Corrected and Accelerated Bootstrap
+# 편향보정 가속 붓스트랩 (BCa)
 
-## Motivation
+## 동기
 
-The percentile method reads confidence interval endpoints directly from the bootstrap distribution. While simple, it can suffer from poor coverage when the bootstrap distribution is biased or when the standard error of $\hat{\theta}$ depends on $\theta$ (i.e., the sampling distribution is skewed). The **bias-corrected and accelerated (BCa) method**, introduced by Efron (1987), adjusts the percentile interval to correct for both of these problems.
+백분위수법은 붓스트랩 분포에서 신뢰구간의 끝점을 직접 읽는다. 단순하지만 붓스트랩 분포에 편향이 있거나 $\hat{\theta}$의 표준오차가 $\theta$에 의존할 때(즉 표본분포가 치우쳐 있을 때) 포함확률이 나빠질 수 있다. Efron(1987)이 도입한 **편향보정 가속(BCa) 방법**은 이 두 문제를 모두 보정하도록 백분위수 구간을 조정한다.
 
-The BCa interval is widely regarded as the best general-purpose bootstrap confidence interval. It achieves **second-order accuracy** (coverage error of $O(n^{-1})$ instead of $O(n^{-1/2})$) while retaining the transformation invariance of the percentile method.
+BCa 구간은 범용 붓스트랩 신뢰구간 중 최선으로 널리 평가된다. 백분위수법의 변환 불변성을 유지하면서 **2차 정확도**(포함확률 오차가 $O(n^{-1/2})$ 대신 $O(n^{-1})$)를 달성한다.
 
-## The BCa Interval
+## BCa 구간
 
-The BCa interval has the same form as the percentile interval but uses **adjusted quantiles**:
+BCa 구간은 백분위수 구간과 같은 형태이지만 **조정된 분위수**를 쓴다.
 
 $$
 \left[\hat{\theta}^*_{(\alpha_1)}, \quad \hat{\theta}^*_{(\alpha_2)}\right]
 $$
 
-where $\alpha_1$ and $\alpha_2$ replace the simple $\alpha/2$ and $1 - \alpha/2$ of the percentile method. These adjusted levels are:
+여기서 $\alpha_1$과 $\alpha_2$가 백분위수법의 단순한 $\alpha/2$와 $1 - \alpha/2$를 대신한다. 조정된 수준은
 
 $$
-\alpha_1 = \mathcal{N}\!\left(\hat{z}_0 + \frac{\hat{z}_0 + z_{\alpha/2}}{1 - \hat{a}(\hat{z}_0 + z_{\alpha/2})}\right)
+\alpha_1 = \Phi\!\left(\hat{z}_0 + \frac{\hat{z}_0 + z_{\alpha/2}}{1 - \hat{a}(\hat{z}_0 + z_{\alpha/2})}\right)
 $$
 
 $$
-\alpha_2 = \mathcal{N}\!\left(\hat{z}_0 + \frac{\hat{z}_0 + z_{1-\alpha/2}}{1 - \hat{a}(\hat{z}_0 + z_{1-\alpha/2})}\right)
+\alpha_2 = \Phi\!\left(\hat{z}_0 + \frac{\hat{z}_0 + z_{1-\alpha/2}}{1 - \hat{a}(\hat{z}_0 + z_{1-\alpha/2})}\right)
 $$
 
-Here $\mathcal{N}$ is the standard normal CDF, $z_q = \mathcal{N}^{-1}(q)$ is the $q$-th standard normal quantile, and the two correction factors $\hat{z}_0$ and $\hat{a}$ are defined below.
+이다. $\Phi$는 표준정규 누적분포함수, $z_q = \Phi^{-1}(q)$는 $q$번째 표준정규 분위수이며, 두 보정계수 $\hat{z}_0$과 $\hat{a}$는 아래에서 정의한다.
 
-## The Bias Correction Factor
+## 편향보정 계수
 
-The **bias correction** $\hat{z}_0$ measures how far the center of the bootstrap distribution is from the observed estimate $\hat{\theta}$. It is defined as:
+**편향보정** $\hat{z}_0$은 붓스트랩 분포의 중심이 관측 추정값 $\hat{\theta}$에서 얼마나 떨어져 있는지를 잰다.
 
 $$
-\hat{z}_0 = \mathcal{N}^{-1}\!\left(\frac{\#\{\hat{\theta}^{*(b)} < \hat{\theta}\}}{B}\right)
+\hat{z}_0 = \Phi^{-1}\!\left(\frac{\#\{\hat{\theta}^{*(b)} < \hat{\theta}\}}{B}\right)
 $$
 
-This is the proportion of bootstrap replicates that fall below the observed statistic, converted to a z-score. If the bootstrap distribution is centered exactly at $\hat{\theta}$, then half the replicates fall below, and $\hat{z}_0 = \mathcal{N}^{-1}(0.5) = 0$. In that case, the bias correction has no effect.
+이는 관측 통계량보다 아래에 있는 붓스트랩 복제값의 비율을 $z$ 점수로 변환한 것이다. 붓스트랩 분포가 정확히 $\hat{\theta}$에 중심을 두면 복제값의 절반이 아래에 있어 $\hat{z}_0 = \Phi^{-1}(0.5) = 0$이 되고, 편향보정이 아무 효과를 내지 않는다.
 
-When $\hat{z}_0 \neq 0$, the bootstrap distribution is biased relative to $\hat{\theta}$. The BCa interval shifts the quantile cutoffs to compensate.
+$\hat{z}_0 \neq 0$이면 붓스트랩 분포가 $\hat{\theta}$에 대해 편향되어 있다는 뜻이고, BCa 구간은 이를 보상하도록 분위수 절단점을 옮긴다.
 
-!!! note "Interpreting the Bias Correction"
-    A positive $\hat{z}_0$ means that more than half the bootstrap replicates exceed $\hat{\theta}$, indicating the bootstrap distribution is shifted upward relative to the observed estimate. A negative $\hat{z}_0$ indicates a downward shift.
+!!! note "편향보정의 해석"
+    $\hat{z}_0$이 양수라는 것은 붓스트랩 복제값의 절반 이상이 $\hat{\theta}$를 넘는다는 뜻이 아니라 **절반 미만이 넘는다**는 뜻이다. 정의상 $\hat z_0 > 0$은 $\hat\theta$보다 작은 복제값의 비율이 $0.5$를 넘는 경우, 즉 붓스트랩 분포가 $\hat{\theta}$에 대해 **아래로** 치우친 경우이다. 이때 BCa는 분위수를 위로 옮긴다.
 
-## The Acceleration Factor
+## 가속 계수
 
-The **acceleration** $\hat{a}$ measures how the standard error of $\hat{\theta}$ changes as $\theta$ varies. When the standard error is constant (independent of $\theta$), the acceleration is zero and the BCa interval reduces to the bias-corrected (BC) interval. When the standard error depends on $\theta$, the acceleration adjusts the quantile cutoffs to account for skewness.
+**가속** $\hat{a}$는 $\theta$가 변할 때 $\hat{\theta}$의 표준오차가 어떻게 변하는지를 잰다. 표준오차가 일정하면($\theta$와 무관하면) 가속이 $0$이고 BCa 구간이 편향보정(BC) 구간으로 환원된다. 표준오차가 $\theta$에 의존하면 가속이 치우침을 반영하여 분위수 절단점을 조정한다.
 
-The acceleration is typically estimated using the **jackknife**:
+가속은 보통 **잭나이프**로 추정한다.
 
 $$
 \hat{a} = \frac{\sum_{i=1}^{n}\left(\bar{\hat{\theta}}_{(\cdot)} - \hat{\theta}_{(-i)}\right)^3}{6\left[\sum_{i=1}^{n}\left(\bar{\hat{\theta}}_{(\cdot)} - \hat{\theta}_{(-i)}\right)^2\right]^{3/2}}
 $$
 
-where $\hat{\theta}_{(-i)} = g(x_1, \ldots, x_{i-1}, x_{i+1}, \ldots, x_n)$ is the statistic computed with the $i$-th observation removed, and $\bar{\hat{\theta}}_{(\cdot)} = \frac{1}{n}\sum_{i=1}^{n}\hat{\theta}_{(-i)}$ is the average of the jackknife values.
+여기서 $\hat{\theta}_{(-i)} = g(x_1, \ldots, x_{i-1}, x_{i+1}, \ldots, x_n)$은 $i$번째 관측값을 뺀 통계량이고 $\bar{\hat{\theta}}_{(\cdot)} = \frac{1}{n}\sum_{i=1}^{n}\hat{\theta}_{(-i)}$는 잭나이프 값들의 평균이다.
 
-The numerator captures the skewness of the jackknife distribution, and the denominator normalizes it. This formula is a consistent estimator of the acceleration constant in the underlying transformation model.
+분자는 잭나이프 분포의 치우침을, 분모는 그것을 정규화한다. 이 공식은 밑에 깔린 변환모형에서 가속 상수의 일치추정량이다.
 
-## Algorithm
+## 알고리즘
 
-1. Compute the observed statistic $\hat{\theta}$ from the original sample
-2. Generate $B$ bootstrap replicates $\hat{\theta}^{*(1)}, \ldots, \hat{\theta}^{*(B)}$
-3. Compute the **bias correction** $\hat{z}_0$:
-    - Count the proportion of replicates below $\hat{\theta}$
-    - Convert to a z-score via $\hat{z}_0 = \mathcal{N}^{-1}(\text{proportion})$
-4. Compute the **acceleration** $\hat{a}$:
-    - For each $i = 1, \ldots, n$: compute $\hat{\theta}_{(-i)}$ (leave-one-out)
-    - Apply the skewness formula above
-5. Compute adjusted quantile levels $\alpha_1$ and $\alpha_2$
-6. The BCa interval is $[\hat{\theta}^*_{(\alpha_1)}, \hat{\theta}^*_{(\alpha_2)}]$
+1. 원표본에서 관측 통계량 $\hat{\theta}$를 계산한다.
+2. $B$개의 붓스트랩 복제값 $\hat{\theta}^{*(1)}, \ldots, \hat{\theta}^{*(B)}$을 생성한다.
+3. **편향보정** $\hat{z}_0$을 계산한다.
+    - $\hat{\theta}$보다 작은 복제값의 비율을 센다.
+    - $\hat{z}_0 = \Phi^{-1}(\text{비율})$로 $z$ 점수로 변환한다.
+4. **가속** $\hat{a}$를 계산한다.
+    - 각 $i = 1, \ldots, n$에 대해 $\hat{\theta}_{(-i)}$를 계산한다(하나씩 제거).
+    - 위 치우침 공식을 적용한다.
+5. 조정된 분위수 수준 $\alpha_1$과 $\alpha_2$를 계산한다.
+6. BCa 구간은 $[\hat{\theta}^*_{(\alpha_1)}, \hat{\theta}^*_{(\alpha_2)}]$이다.
 
-!!! warning "Computational Cost"
-    The jackknife step requires computing $\hat{\theta}$ a total of $n$ additional times (once for each leave-one-out sample). For expensive statistics or large $n$, this can be a substantial overhead beyond the $B$ bootstrap replicates.
+!!! warning "계산비용"
+    잭나이프 단계는 $\hat{\theta}$를 추가로 $n$번 계산해야 한다(하나씩 제거한 표본마다 한 번). 계산이 무거운 통계량이나 큰 $n$에서는 $B$개의 붓스트랩 복제값에 더해 상당한 부담이 된다.
 
-## Special Cases
+## 특수한 경우
 
-When $\hat{z}_0 = 0$ and $\hat{a} = 0$, the adjusted quantiles reduce to $\alpha_1 = \alpha/2$ and $\alpha_2 = 1 - \alpha/2$, recovering the ordinary percentile interval.
+$\hat{z}_0 = 0$이고 $\hat{a} = 0$이면 조정된 분위수가 $\alpha_1 = \alpha/2$, $\alpha_2 = 1 - \alpha/2$로 환원되어 보통의 백분위수 구간이 된다.
 
-When $\hat{a} = 0$ but $\hat{z}_0 \neq 0$, the method is called the **bias-corrected (BC) interval**. It corrects for bias but not for skewness.
+$\hat{a} = 0$이지만 $\hat{z}_0 \neq 0$이면 **편향보정(BC) 구간**이라 부른다. 편향은 보정하지만 치우침은 보정하지 않는다.
 
-When both corrections are active, the BCa interval can produce substantially different endpoints from the percentile interval, especially for statistics with skewed sampling distributions (variance, odds ratios, correlation coefficients near $\pm 1$).
+두 보정이 모두 작동하면 BCa 구간이 백분위수 구간과 상당히 다른 끝점을 낼 수 있다. 표본분포가 치우친 통계량(분산, 오즈비, $\pm 1$에 가까운 상관계수)에서 특히 그렇다.
 
-## Theoretical Properties
+## 이론적 성질
 
-The BCa interval achieves **second-order accuracy**: the coverage probability satisfies:
-
-$$
-P(\theta \in \text{BCa interval}) = 1 - \alpha + O(n^{-1})
-$$
-
-compared to $1 - \alpha + O(n^{-1/2})$ for the percentile interval. This means the coverage error shrinks faster as the sample size grows.
-
-The BCa interval is also **transformation invariant**: for any monotone increasing function $m$, the BCa interval for $\phi = m(\theta)$ is exactly $[m(L), m(U)]$ where $[L, U]$ is the BCa interval for $\theta$.
-
-!!! tip "Why Second-Order Accuracy Matters"
-    For a 95% interval with $n = 20$, first-order accuracy might give actual coverage of 90%, while second-order accuracy typically gives 93-95%. The improvement is most noticeable for moderate sample sizes and skewed statistics.
-
-## Example: BCa Interval for the Variance
-
-Consider a sample of $n = 15$ observations from a right-skewed distribution. The sample variance is $s^2 = 8.4$.
-
-1. Generate $B = 10{,}000$ bootstrap replicates of $s^2$
-2. Suppose 62% of the replicates fall below $s^2 = 8.4$, so $\hat{z}_0 = \mathcal{N}^{-1}(0.62) = 0.305$
-3. Compute the $n = 15$ jackknife values $s^2_{(-1)}, \ldots, s^2_{(-15)}$ and find $\hat{a} = 0.042$
-4. The adjusted quantiles for a 95% interval are:
+BCa 구간은 **2차 정확도**를 달성한다. 포함확률이
 
 $$
-\alpha_1 = \mathcal{N}\!\left(0.305 + \frac{0.305 + (-1.96)}{1 - 0.042(0.305 + (-1.96))}\right) \approx \mathcal{N}(-1.44) \approx 0.075
+P(\theta \in \text{BCa 구간}) = 1 - \alpha + O(n^{-1})
+$$
+
+를 만족하며, 이는 백분위수 구간의 $1 - \alpha + O(n^{-1/2})$와 대비된다. 표본크기가 커질수록 포함확률 오차가 더 빨리 줄어든다는 뜻이다.
+
+BCa 구간은 **변환 불변**이기도 하다. 임의의 단조증가 함수 $m$에 대해, $[L, U]$가 $\theta$의 BCa 구간이면 $\phi = m(\theta)$의 BCa 구간은 $[m(L), m(U)]$이다.
+
+    (엄밀히 말하면 이 성질은 참 가속 상수 $a$를 쓸 때 정확하다. 잭나이프 추정값 $\hat a$는 변환 아래에서 1차 근사로만 보존되므로 실제 구현에서는 근사적 불변성이 된다. 연습문제 4에서 그 크기를 확인한다.)
+
+!!! tip "2차 정확도가 왜 중요한가"
+    $n = 20$인 95% 구간에서 1차 정확도는 실제 포함확률 90%를, 2차 정확도는 보통 93--95%를 준다. 개선 효과는 중간 정도의 표본크기와 치우친 통계량에서 가장 두드러진다.
+
+## 예제: 분산의 BCa 구간
+
+오른쪽으로 치우친 분포에서 $n = 15$인 표본을 얻었고 표본분산이 $s^2 = 8.4$라 하자.
+
+1. $s^2$의 붓스트랩 복제값 $B = 10{,}000$개를 생성한다.
+2. 복제값의 62%가 $s^2 = 8.4$ 아래에 있다고 하자. 그러면 $\hat{z}_0 = \Phi^{-1}(0.62) = 0.3055$이다.
+3. $n = 15$개의 잭나이프 값 $s^2_{(-1)}, \ldots, s^2_{(-15)}$을 계산하여 $\hat{a} = 0.042$를 얻었다고 하자.
+4. 95% 구간의 조정된 분위수는
+
+$$
+\alpha_1 = \Phi\!\left(0.3055 + \frac{0.3055 - 1.96}{1 - 0.042(0.3055 - 1.96)}\right) = \Phi(-1.2415) = 0.107
 $$
 
 $$
-\alpha_2 = \mathcal{N}\!\left(0.305 + \frac{0.305 + 1.96}{1 - 0.042(0.305 + 1.96)}\right) \approx \mathcal{N}(2.65) \approx 0.996
+\alpha_2 = \Phi\!\left(0.3055 + \frac{0.3055 + 1.96}{1 - 0.042(0.3055 + 1.96)}\right) = \Phi(2.8091) = 0.9975
 $$
 
-The BCa interval uses the 7.5th and 99.6th percentiles of the bootstrap distribution instead of the standard 2.5th and 97.5th. This shift upward reflects both the positive bias correction and the positive acceleration, producing a wider and higher interval appropriate for the right-skewed distribution of $s^2$.
+```python
+from scipy.stats import norm
+z0, a = norm.ppf(0.62), 0.042
+for z in (-1.959964, 1.959964):
+    v = z0 + (z0 + z) / (1 - a * (z0 + z))
+    print(round(v, 4), round(norm.cdf(v), 4))
+# -1.2415  0.1072
+#  2.8091  0.9975
+```
 
-## Summary
+BCa 구간은 표준적인 2.5와 97.5 백분위수 대신 붓스트랩 분포의 **10.7과 99.75 백분위수**를 쓴다. 두 절단점이 모두 위로 이동했으며, 이는 양의 편향보정과 양의 가속을 함께 반영한 것이다. 오른쪽으로 치우친 $s^2$의 분포에 맞게 구간이 위쪽으로 늘어난다.
 
-The BCa method improves upon the percentile interval by adjusting the quantile cutoffs using two correction factors: the bias correction $\hat{z}_0$ (measuring median bias in the bootstrap distribution) and the acceleration $\hat{a}$ (measuring how the standard error varies with the parameter, estimated via jackknife). These corrections yield second-order accurate, transformation-invariant confidence intervals. The BCa interval is the recommended default when computational cost permits the additional jackknife calculations.
+## 요약
 
-## Exercises
+BCa 방법은 두 보정계수로 분위수 절단점을 조정하여 백분위수 구간을 개선한다. 편향보정 $\hat{z}_0$은 붓스트랩 분포의 중앙값 편향을, 가속 $\hat{a}$는 표준오차가 모수에 따라 변하는 정도를 잭나이프로 추정하여 반영한다. 이 보정으로 2차 정확도를 갖는 변환 불변 신뢰구간을 얻는다. 추가적인 잭나이프 계산을 감당할 수 있다면 BCa 구간이 권장 기본값이다.
 
-**Exercise 1.**
-Explain the difference between the **percentile** and **BCa** bootstrap confidence intervals. When does the BCa interval substantially differ from the percentile interval?
+## 연습문제
 
-## Computation
+**연습문제 1.**
+**백분위수** 구간과 **BCa** 구간의 차이를 설명하라. BCa 구간이 백분위수 구간과 크게 달라지는 것은 언제인가?
+
+??? success "연습문제 1 풀이"
+    두 구간은 **같은 붓스트랩 복제값에서 다른 분위수를 읽는다**는 점만 다르다.
+
+    | | 하한 분위수 | 상한 분위수 |
+    |:---|:---|:---|
+    | 백분위수 | $\alpha/2$ | $1 - \alpha/2$ |
+    | BCa | $\alpha_1 = \Phi\!\left(\hat z_0 + \frac{\hat z_0 + z_{\alpha/2}}{1 - \hat a(\hat z_0 + z_{\alpha/2})}\right)$ | $\alpha_2$ (같은 꼴, $z_{1-\alpha/2}$ 사용) |
+
+    따라서 $\hat z_0$과 $\hat a$가 모두 $0$이면 두 구간이 **정확히 같다**.
+
+    **크게 달라지는 조건은 셋이다.**
+
+    1. **$\hat{z}_0$이 클 때.** 붓스트랩 분포의 중앙값이 $\hat{\theta}$에서 멀 때이다. 편향된 추정량(예: $\bar{X}^2$으로 $\mu^2$ 추정)이나 경계 근처의 모수에서 발생한다.
+
+    2. **$\hat{a}$가 클 때.** 표준오차가 $\theta$에 강하게 의존할 때이다. 분산, 비율, 오즈비처럼 척도 모수가 관여하는 통계량에서 흔하다.
+
+    3. **꼬리 밀도가 낮을 때.** 같은 $\alpha_1$ 변화라도 붓스트랩 분포의 꼬리가 평평하면 끝점이 크게 움직인다.
+
+    조정의 크기를 어림하려면 $z$ 척도에서의 이동을 보는 것이 편하다. 본문 예제에서 하한이 $z = -1.96$에서 $-1.24$로 $0.72$만큼 이동했다. 표준정규 척도에서 $0.72\sigma$는 큰 이동이다.
+
+    ```python
+    import numpy as np
+    from scipy.stats import norm
+    for z0 in (0.0, 0.1, 0.3):
+        for a in (0.0, 0.05, 0.15):
+            zl = -1.959964
+            v = z0 + (z0 + zl) / (1 - a * (z0 + zl))
+            print(f"z0={z0:.1f} a={a:.2f} -> alpha1={norm.cdf(v):.4f}")
+    ```
+
+    | $\hat z_0$ | $\hat a$ | $\alpha_1$ | 백분위수 대비 |
+    |---:|---:|---:|:---|
+    | 0.0 | 0.00 | 0.0250 | 동일 |
+    | 0.0 | 0.05 | 0.0371 | 조금 위 |
+    | 0.0 | 0.15 | 0.0649 | 뚜렷이 위 |
+    | 0.1 | 0.00 | 0.0392 | 조금 위 |
+    | 0.1 | 0.15 | 0.0878 | 크게 위 |
+    | 0.3 | 0.00 | 0.0869 | 크게 위 |
+    | 0.3 | 0.15 | 0.1517 | 매우 크게 위 |
+
+    $\hat z_0 = 0.3$, $\hat a = 0.15$이면 하한 분위수가 $2.5\%$에서 $15.2\%$로 6배 넘게 이동한다. 두 계수가 각각 $0.1$과 $0.05$ 정도만 되어도 $2.5\% \to 5.5\%$로 두 배가 된다.
+
+    **실무 지침:** $|\hat z_0| < 0.05$이고 $|\hat a| < 0.05$이면 BCa와 백분위수의 차이가 무시할 만하다. 잭나이프 계산을 아끼고 백분위수를 써도 좋다. 그보다 크면 BCa를 쓴다.
+
+---
+
+**연습문제 2.**
+BCa가 백분위수보다 실제로 나은지 모의실험으로 확인하라. $\text{Exp}(1)$ 자료의 분산(참값 $=1$)에 대해 $n = 20, 50, 200$에서 포함확률을 비교하라.
+
+??? success "연습문제 2 풀이"
+    ```python
+    import numpy as np
+    from scipy import stats
+    rng = np.random.default_rng(1)
+
+    def ci_pct_bca(x, stat, B=800, alpha=0.05):
+        n = len(x); th = stat(x)
+        idx = rng.integers(0, n, (B, n))
+        bs = np.array([stat(x[i]) for i in idx])
+        pct = np.percentile(bs, [100*alpha/2, 100*(1-alpha/2)])
+        z0 = stats.norm.ppf(np.clip((bs < th).mean(), 1e-6, 1-1e-6))
+        jk = np.array([stat(np.delete(x, i)) for i in range(n)])
+        d = jk.mean() - jk
+        den = ((d**2).sum())**1.5
+        a = (d**3).sum() / (6*den) if den > 0 else 0.0
+        zl, zu = stats.norm.ppf(alpha/2), stats.norm.ppf(1-alpha/2)
+        a1 = stats.norm.cdf(z0 + (z0+zl)/(1 - a*(z0+zl)))
+        a2 = stats.norm.cdf(z0 + (z0+zu)/(1 - a*(z0+zu)))
+        return pct, np.percentile(bs, [100*a1, 100*a2])
+
+    for n in (20, 50, 200):
+        M = 800; cp = cb = 0
+        for _ in range(M):
+            x = rng.exponential(1, n)
+            pct, bca = ci_pct_bca(x, lambda v: v.var(ddof=1))
+            cp += pct[0] <= 1 <= pct[1]
+            cb += bca[0] <= 1 <= bca[1]
+        print(n, round(cp/M, 3), round(cb/M, 3))
+    ```
+
+    | $n$ | 백분위수 | BCa | 개선폭 |
+    |---:|---:|---:|---:|
+    | 20 | 0.686 | 0.756 | $+0.070$ |
+    | 50 | 0.820 | 0.852 | $+0.032$ |
+    | 200 | 0.892 | 0.904 | $+0.012$ |
+
+    BCa가 세 표본크기에서 모두 낫다. 개선폭이 $n$이 커질수록 줄어드는 것도 이론과 부합한다. 두 방법의 오차 차수가 $O(n^{-1/2})$와 $O(n^{-1})$이므로 차이가 $O(n^{-1/2})$로 사라져야 한다. 실제로 $0.070 \to 0.032 \to 0.012$로 대략 $\sqrt{n}$에 반비례하여 줄어든다.
+
+    !!! warning "BCa도 만능은 아니다"
+        $n = 20$에서 BCa의 포함확률이 $0.756$이다. 백분위수의 $0.686$보다 낫지만 여전히 명목값 $0.95$에 크게 못 미친다.
+
+        지수분포 분산이 어려운 문제이기 때문이다. $s^2$의 표본분포가 4차 적률에 지배되고 지수분포의 초과첨도가 $6$이라, $n = 20$에서는 어떤 붓스트랩 방법도 잘 작동하지 않는다. 이런 경우에는 로그변환 후 구간을 만들거나 모수적 방법을 쓰는 것이 낫다.
+
+---
+
+**연습문제 3.**
+BCa의 가속 $\hat{a}$는 잭나이프로 추정한다. 잭나이프가 실패하는 통계량에서는 어떻게 되는가?
+중앙값에 대해 $\hat{a}$를 계산해 보라.
+
+??? success "연습문제 3 풀이"
+    [붓스트랩 방법](../bootstrap/bootstrap.md) 연습문제 2에서 보았듯, $n$이 홀수일 때
+    중앙값의 잭나이프 값 $\hat\theta_{(-i)}$는 **세 가지 값**만 갖는다.
+
+    ```python
+    import numpy as np
+    rng = np.random.default_rng(0)
+    x = rng.normal(0, 1, 41)
+    jk = np.array([np.median(np.delete(x, i)) for i in range(41)])
+    print(len(np.unique(np.round(jk, 10))))    # 3
+    ```
+
+    이 세 값 중 두 개는 $n$번의 제거 중 각각 $(n-1)/2$번씩 나타나고 나머지 하나는 한 번만
+    나타난다. 그 결과 잭나이프 분포가 **거의 완벽하게 대칭**이 되고, 3차 적률이 $0$에 가까워진다.
+
+    ```python
+    rng2 = np.random.default_rng(0)
+    def acc(gen, stat, n=41, M=2000):
+        out = []
+        for _ in range(M):
+            z = gen(n)
+            jk = np.array([stat(np.delete(z, i)) for i in range(n)])
+            d = jk.mean() - jk
+            den = ((d**2).sum())**1.5
+            out.append((d**3).sum() / (6*den) if den > 0 else 0.0)
+        return np.array(out)
+
+    a_med = acc(lambda n: rng2.exponential(1, n), np.median)
+    a_mean = acc(lambda n: rng2.exponential(1, n), np.mean)
+    print("median: %.5f +- %.5f" % (a_med.mean(), a_med.std()))
+    print("mean  : %.5f +- %.5f" % (a_mean.mean(), a_mean.std()))
+    ```
+
+    $\text{Exp}(1)$ 자료, $n = 41$:
+
+    | 통계량 | $\hat{a}$의 평균 | $\hat{a}$의 표준편차 |
+    |:---|---:|---:|
+    | 중앙값 | $0.00001$ | $0.00089$ |
+    | 평균 | $0.04130$ | $0.01584$ |
+
+    **문제는 $\hat a$가 흔들린다는 것이 아니다. 언제나 $0$이라는 것이다.**
+
+    지수분포의 중앙값은 표본분포가 분명히 오른쪽으로 치우쳐 있으므로 참 가속이 $0$이 아니어야
+    한다. 실제로 같은 자료의 평균에서는 $\hat a = 0.041$이 나온다. 그런데 중앙값에서는
+    잭나이프 분포가 대칭이라 치우침 신호를 전혀 잡아내지 못한다.
+
+    **결과.** 중앙값에 BCa를 적용하면 $\hat a \approx 0$이므로 사실상 **BC 구간**(편향보정만)이
+    된다. 잭나이프를 $n$번 계산하는 비용을 치르고도 가속 보정의 이득을 전혀 얻지 못한다.
+
+    **권고.** 매끄럽지 않은 통계량(중앙값, 분위수, 최댓값)에는
+
+    - **delete-$d$ 잭나이프**를 쓴다. 하나가 아니라 $d$개씩 제거하면 중앙값에서도 일치추정량이 된다.
+    - 또는 $\hat{a} = 0$임을 인정하고 **BC 구간**으로 부른다. 결과는 같지만 무엇을 하고 있는지 분명해진다.
+    - 또는 그냥 **백분위수 구간**을 쓴다. [붓스트랩 방법](../bootstrap/bootstrap.md) 연습문제 1에서
+      보았듯 지수분포 중앙값에서 백분위수 구간의 포함확률이 이미 $0.943$으로 충분히 좋다.
+
+---
+
+**연습문제 4.**
+BCa 구간의 변환 불변성을 수치로 확인하라. $\hat z_0$과 $\hat a$가 변환에 따라 어떻게 되는가?
+
+??? success "연습문제 4 풀이"
+    $\theta$의 BCa 구간이 $[L, U]$이면 $\phi = m(\theta)$의 BCa 구간은 $[m(L), m(U)]$여야 한다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+    rng = np.random.default_rng(6)
+    n = 40
+    x = rng.exponential(1, n)
+
+    def bca(x, stat, B=20000, alpha=0.05):
+        n = len(x); th = stat(x)
+        idx = rng.integers(0, n, (B, n))
+        bs = np.array([stat(x[i]) for i in idx])
+        z0 = stats.norm.ppf((bs < th).mean())
+        jk = np.array([stat(np.delete(x, i)) for i in range(n)])
+        d = jk.mean() - jk
+        a = (d**3).sum() / (6 * ((d**2).sum())**1.5)
+        zl, zu = stats.norm.ppf(alpha/2), stats.norm.ppf(1-alpha/2)
+        a1 = stats.norm.cdf(z0 + (z0+zl)/(1 - a*(z0+zl)))
+        a2 = stats.norm.cdf(z0 + (z0+zu)/(1 - a*(z0+zu)))
+        return np.percentile(bs, [100*a1, 100*a2]), z0, a
+
+    ci1, z01, a1_ = bca(x, np.mean)                    # 평균
+    ci2, z02, a2_ = bca(x, lambda v: np.log(v.mean())) # 로그 평균
+    print(np.round(ci1, 6), round(z01, 4), round(a1_, 4))
+    print(np.round(np.exp(ci2), 6), round(z02, 4), round(a2_, 4))
+    ```
+
+    두 호출이 같은 붓스트랩 재표본을 쓰도록 인덱스를 미리 뽑아 공유해야 비교가 공정하다.
+    아래 결과는 그렇게 계산한 것이다.
+
+    | 대상 | 구간 | $\hat z_0$ | $\hat a$ |
+    |:---|:---|---:|---:|
+    | $\mu$ 직접 | $[0.624251, \; 1.161511]$ | $0.0392$ | $0.0421$ |
+    | $\log\mu$ 후 지수변환 | $[0.624594, \; 1.164064]$ | $0.0392$ | $0.0440$ |
+
+    구간이 소수점 셋째 자리까지 일치한다. 상한이 $1.1615$와 $1.1641$로 $0.2\%$ 차이 난다.
+
+    **완전히 일치하지 않는 이유는 $\hat{a}$에 있다.** 두 보정계수를 나누어 보자.
+
+    - $\hat{z}_0$은 **정확히** 같다($0.0392$). $\#\{\hat\theta^{*} < \hat\theta\}/B$에만 의존하는데, $\log$가 단조증가이므로 $\log\hat\theta^{*} < \log\hat\theta \iff \hat\theta^{*} < \hat\theta$이고 비율이 바뀌지 않는다.
+    - $\hat{a}$는 $0.0421$과 $0.0440$으로 다르다. 잭나이프 값의 3차 적률과 2차 적률의 비인데, 이 비는 단조변환 아래에서 **1차 근사로만** 보존된다.
+
+    따라서 **BCa의 변환 불변성은 이론적으로는 정확하지만 실제 구현에서는 근사적**이다. 이론적 진술은 참 가속 상수 $a$에 대한 것이고, 잭나이프 추정값 $\hat a$가 그 성질을 정확히 물려받지는 않는다.
+
+    실무적으로 이 차이는 무시할 만하다. 여기서 $0.2\%$인데, 붓스트랩의 몬테카를로 오차보다 작다.
+
+    **기본 구간과 비교하면 차이가 확연하다.**
+
+    ```python
+    # 같은 붓스트랩 복제값으로 기본 구간을 두 척도에서 만든다
+    lo, hi = np.percentile(bs, [2.5, 97.5])
+    print(np.round([2*th - hi, 2*th - lo], 5))            # [0.56742 1.08876]
+    llo, lhi = np.percentile(np.log(bs), [2.5, 97.5])
+    lth = np.log(th)
+    print(np.round(np.exp([2*lth - lhi, 2*lth - llo]), 5)) # [0.63586 1.18821]
+    ```
+
+    기본 구간은 하한이 $0.567$과 $0.636$으로 **12% 차이** 난다. BCa의 $0.2\%$와 비교하면 두 자릿수 차이이다. 어느 척도에서 반사하느냐가 결과를 크게 바꾸기 때문이다.
+
+    **정리:** 변환 불변성의 강도는 BCa $>$ 백분위수 $\gg$ 기본 구간 순이다. 백분위수 구간은 **정확히** 불변이고(연습문제 1, 백분위수법 참조), BCa는 $\hat a$의 오차만큼 근사적으로 불변이며, 기본 구간과 붓스트랩-$t$는 불변이 아니다.

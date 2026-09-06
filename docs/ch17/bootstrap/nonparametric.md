@@ -1,129 +1,303 @@
-# Non-Parametric Bootstrap
+# 비모수 붓스트랩
 
-## Motivation
+## 동기
 
-The nonparametric bootstrap is the most widely used form of the bootstrap. It makes no assumptions about the underlying population distribution $F$ and works for virtually any statistic. Given an observed sample, the procedure generates an approximate sampling distribution through repeated resampling with replacement.
+비모수 붓스트랩은 가장 널리 쓰이는 붓스트랩 형태이다. 밑에 깔린 모집단 분포 $F$에 대해 아무 가정도 하지 않으며 사실상 모든 통계량에 적용된다. 관측된 표본이 주어지면 복원추출을 반복하여 근사 표본분포를 생성한다.
 
-This section details the algorithm, derives the key quantities it produces (standard errors, bias estimates, bootstrap distributions), and clarifies when and why the method works.
+이 절에서는 알고리즘을 상세히 다루고, 그것이 산출하는 핵심 양(표준오차, 편향 추정값, 붓스트랩 분포)을 유도하며, 이 방법이 언제 왜 작동하는지 밝힌다.
 
-## The Algorithm
+## 알고리즘
 
-Given an observed iid sample $x_1, x_2, \ldots, x_n$ and a statistic $\hat{\theta} = g(x_1, \ldots, x_n)$:
+관측된 i.i.d. 표본 $x_1, x_2, \ldots, x_n$과 통계량 $\hat{\theta} = g(x_1, \ldots, x_n)$이 주어졌을 때:
 
-1. **Set** the number of bootstrap replicates $B$ (typically $B = 1{,}000$ to $10{,}000$)
-2. **For** $b = 1, 2, \ldots, B$:
-    - Draw a bootstrap sample $x_1^*, x_2^*, \ldots, x_n^*$ by sampling $n$ observations **with replacement** from $\{x_1, \ldots, x_n\}$
-    - Compute the bootstrap replicate $\hat{\theta}^{*(b)} = g(x_1^*, \ldots, x_n^*)$
-3. **Collect** the bootstrap distribution $\{\hat{\theta}^{*(1)}, \hat{\theta}^{*(2)}, \ldots, \hat{\theta}^{*(B)}\}$
+1. 붓스트랩 복제 횟수 $B$를 **정한다**(보통 $B = 1{,}000$에서 $10{,}000$).
+2. $b = 1, 2, \ldots, B$에 대해:
+    - $\{x_1, \ldots, x_n\}$에서 $n$개를 **복원추출**하여 붓스트랩 표본 $x_1^*, x_2^*, \ldots, x_n^*$을 뽑는다.
+    - 붓스트랩 복제값 $\hat{\theta}^{*(b)} = g(x_1^*, \ldots, x_n^*)$을 계산한다.
+3. 붓스트랩 분포 $\{\hat{\theta}^{*(1)}, \hat{\theta}^{*(2)}, \ldots, \hat{\theta}^{*(B)}\}$를 **모은다**.
 
-The collection of $B$ bootstrap replicates forms the **bootstrap distribution** of $\hat{\theta}^*$, which serves as an approximation to the true sampling distribution of $\hat{\theta}$.
+$B$개 붓스트랩 복제값의 모임이 $\hat{\theta}^*$의 **붓스트랩 분포**를 이루며, 이것이 $\hat{\theta}$의 참 표본분포의 근사가 된다.
 
-!!! note "Same Sample Size"
-    Each bootstrap sample has the same size $n$ as the original data. Drawing fewer or more observations would change the sampling variability and invalidate the approximation.
+!!! note "표본크기를 같게 유지한다"
+    각 붓스트랩 표본은 원자료와 같은 크기 $n$을 갖는다. 더 적거나 많이 뽑으면 표집변동이 달라져 근사가 무효가 된다.
 
-## Bootstrap Standard Error
+## 붓스트랩 표준오차
 
-The bootstrap estimate of the standard error of $\hat{\theta}$ is the sample standard deviation of the bootstrap replicates:
+$\hat{\theta}$의 표준오차에 대한 붓스트랩 추정값은 붓스트랩 복제값의 표본표준편차이다.
 
 $$
 \widehat{\text{SE}}_{\text{boot}} = \sqrt{\frac{1}{B-1}\sum_{b=1}^{B}\left(\hat{\theta}^{*(b)} - \bar{\hat{\theta}}^*\right)^2}
 $$
 
-where $\bar{\hat{\theta}}^* = \frac{1}{B}\sum_{b=1}^{B}\hat{\theta}^{*(b)}$ is the mean of the bootstrap distribution.
+여기서 $\bar{\hat{\theta}}^* = \frac{1}{B}\sum_{b=1}^{B}\hat{\theta}^{*(b)}$은 붓스트랩 분포의 평균이다.
 
-This formula applies to any statistic: means, medians, correlation coefficients, regression parameters, or any function of the data.
+이 공식은 평균, 중앙값, 상관계수, 회귀모수 등 자료의 임의의 함수에 그대로 적용된다.
 
-## Bootstrap Bias Estimation
+## 붓스트랩 편향 추정
 
-The bootstrap also provides an estimate of the bias of $\hat{\theta}$ as an estimator of $\theta$:
+붓스트랩은 $\theta$의 추정량으로서 $\hat{\theta}$가 갖는 편향의 추정값도 제공한다.
 
 $$
 \widehat{\text{Bias}}_{\text{boot}} = \bar{\hat{\theta}}^* - \hat{\theta}
 $$
 
-The logic is as follows. In the real world, the bias is $E_F[\hat{\theta}] - \theta$. In the bootstrap world, $\hat{\theta}$ plays the role of the true parameter and $\hat{\theta}^*$ plays the role of the estimator, so the bootstrap bias is $E^*[\hat{\theta}^*] - \hat{\theta}$, which we estimate by $\bar{\hat{\theta}}^* - \hat{\theta}$.
+논리는 이렇다. 현실 세계에서 편향은 $E_F[\hat{\theta}] - \theta$이다. 붓스트랩 세계에서는 $\hat{\theta}$가 참 모수 역할을, $\hat{\theta}^*$가 추정량 역할을 하므로 붓스트랩 편향은 $E^*[\hat{\theta}^*] - \hat{\theta}$이고, 이를 $\bar{\hat{\theta}}^* - \hat{\theta}$로 추정한다.
 
-A **bias-corrected** estimator can be constructed as:
+**편향보정** 추정량은 다음과 같이 만들 수 있다.
 
 $$
 \hat{\theta}_{\text{corrected}} = \hat{\theta} - \widehat{\text{Bias}}_{\text{boot}} = 2\hat{\theta} - \bar{\hat{\theta}}^*
 $$
 
-!!! warning "Bias Correction Can Increase Variance"
-    While bias correction reduces systematic error, it can substantially increase the variance of the estimator. The bias-corrected estimator has lower bias but may have higher mean squared error. In practice, bias correction is most useful when the bias is large relative to the standard error.
+!!! warning "편향보정은 분산을 키울 수 있다"
+    편향보정이 체계적 오차를 줄이기는 하지만 추정량의 분산을 크게 늘릴 수 있다. 편향보정 추정량은 편향이 작은 대신 평균제곱오차가 더 클 수 있다. 실무에서는 편향이 표준오차에 비해 클 때에만 편향보정이 유용하다.
 
-## The Bootstrap Distribution
+## 붓스트랩 분포
 
-The histogram of $\{\hat{\theta}^{*(1)}, \ldots, \hat{\theta}^{*(B)}\}$ provides a visual approximation of the sampling distribution of $\hat{\theta}$. Key features that can be read from this distribution include:
+$\{\hat{\theta}^{*(1)}, \ldots, \hat{\theta}^{*(B)}\}$의 히스토그램은 $\hat{\theta}$의 표본분포를 시각적으로 근사한다. 이 분포에서 읽을 수 있는 주요 특징은 다음과 같다.
 
-- **Center**: $\bar{\hat{\theta}}^*$ approximates $E[\hat{\theta}]$
-- **Spread**: $\widehat{\text{SE}}_{\text{boot}}$ approximates $\text{SE}(\hat{\theta})$
-- **Shape**: skewness, multimodality, or heavy tails of the sampling distribution
-- **Quantiles**: used directly for confidence interval construction
+- **중심**: $\bar{\hat{\theta}}^*$가 $E[\hat{\theta}]$를 근사한다.
+- **산포**: $\widehat{\text{SE}}_{\text{boot}}$가 $\text{SE}(\hat{\theta})$를 근사한다.
+- **모양**: 표본분포의 치우침, 다봉성, 두꺼운 꼬리.
+- **분위수**: 신뢰구간 구성에 직접 쓴다.
 
-The shape information is particularly valuable because it reveals when normal-theory approximations would be inappropriate.
+모양 정보가 특히 값지다. 정규이론 근사가 부적절한 경우를 드러내 주기 때문이다.
 
-## Properties of Bootstrap Samples
+## 붓스트랩 표본의 성질
 
-Since each bootstrap sample draws $n$ observations with replacement from $n$ data points, some observations are selected multiple times and others are omitted entirely.
+각 붓스트랩 표본이 $n$개 자료점에서 $n$개를 복원추출하므로, 어떤 관측값은 여러 번 뽑히고 어떤 것은 아예 빠진다.
 
-The number of times observation $x_i$ appears in a single bootstrap sample follows a $\text{Binomial}(n, 1/n)$ distribution, which for large $n$ is approximately $\text{Poisson}(1)$. The probability that $x_i$ does not appear at all is:
+관측값 $x_i$가 한 붓스트랩 표본에 나타나는 횟수는 $\text{Binomial}(n, 1/n)$을 따르며, $n$이 크면 근사적으로 $\text{Poisson}(1)$이다. $x_i$가 전혀 나타나지 않을 확률은
 
 $$
-P(x_i \notin \text{bootstrap sample}) = \left(1 - \frac{1}{n}\right)^n \to e^{-1} \approx 0.368
+P(x_i \notin \text{붓스트랩 표본}) = \left(1 - \frac{1}{n}\right)^n \to e^{-1} \approx 0.368
 $$
 
-On average, each bootstrap sample contains approximately $63.2\%$ of the unique original observations.
+이다. 평균적으로 각 붓스트랩 표본은 원래 고유 관측값의 약 $63.2\%$를 담는다.
 
-!!! tip "Out-of-Bag Observations"
-    The observations not included in a given bootstrap sample are called **out-of-bag** (OOB) observations. These provide a natural held-out set for estimating prediction error, a technique exploited extensively in random forests and bagging.
+!!! tip "Out-of-bag 관측값"
+    주어진 붓스트랩 표본에 포함되지 않은 관측값을 **out-of-bag**(OOB) 관측값이라 한다. 이들은 예측오차를 추정하는 자연스러운 검증집합이 되며, 랜덤 포레스트와 배깅에서 널리 활용된다.
 
-## Theoretical Justification
+## 이론적 정당화
 
-The nonparametric bootstrap is consistent for a broad class of statistics. If $\hat{\theta}_n = T(\hat{F}_n)$ is a smooth functional of the empirical distribution, then under regularity conditions:
+비모수 붓스트랩은 넓은 부류의 통계량에 대해 일치한다. $\hat{\theta}_n = T(\hat{F}_n)$이 경험적 분포의 매끄러운 범함수이면 정칙조건 아래에서
 
 $$
 \sup_t \left|P^*\!\left(\sqrt{n}(\hat{\theta}^* - \hat{\theta}) \le t\right) - P\!\left(\sqrt{n}(\hat{\theta} - \theta) \le t\right)\right| \xrightarrow{P} 0
 $$
 
-where $P^*$ denotes probability under bootstrap resampling. This result follows from the Glivenko-Cantelli theorem (ensuring $\hat{F}_n \to F$ uniformly) combined with the functional delta method (ensuring smooth statistics inherit this convergence).
+이다. 여기서 $P^*$는 붓스트랩 재표집 아래의 확률이다. 이 결과는 Glivenko-Cantelli 정리($\hat{F}_n \to F$ 균등수렴 보장)와 범함수 델타법(매끄러운 통계량이 이 수렴을 물려받음을 보장)의 결합에서 나온다.
 
-For the sample mean specifically, the bootstrap achieves the same $O(n^{-1/2})$ rate of approximation as the central limit theorem. For more refined methods such as the bootstrap-$t$, second-order accuracy of $O(n^{-1})$ is attainable.
+표본평균의 경우 붓스트랩은 중심극한정리와 같은 $O(n^{-1/2})$의 근사 속도를 달성한다. 붓스트랩-$t$ 같은 더 정교한 방법에서는 $O(n^{-1})$의 2차 정확도에 도달할 수 있다.
 
-## Example: Bootstrap Standard Error of the Correlation Coefficient
+## 예제: 상관계수의 붓스트랩 표준오차
 
-Suppose we observe $n = 30$ paired observations $(x_i, y_i)$ and compute the sample correlation $r = 0.62$. There is no simple exact formula for $\text{SE}(r)$ that works for non-normal data.
+$n = 30$개의 대응 관측값 $(x_i, y_i)$에서 표본상관 $r = 0.62$를 얻었다고 하자. 비정규 자료에 통하는 $\text{SE}(r)$의 간단한 정확 공식은 없다.
 
-**Bootstrap procedure:**
+**붓스트랩 절차:**
 
-1. For $b = 1, \ldots, 5000$: resample 30 pairs $(x_i, y_i)$ with replacement, compute $r^{*(b)}$
-2. Compute $\widehat{\text{SE}}_{\text{boot}} = \text{sd}(r^{*(1)}, \ldots, r^{*(5000)})$
-3. Compute $\widehat{\text{Bias}}_{\text{boot}} = \bar{r}^* - r$
+1. $b = 1, \ldots, 5000$에 대해 30개 쌍 $(x_i, y_i)$를 복원추출하여 $r^{*(b)}$를 계산한다.
+2. $\widehat{\text{SE}}_{\text{boot}} = \text{sd}(r^{*(1)}, \ldots, r^{*(5000)})$을 계산한다.
+3. $\widehat{\text{Bias}}_{\text{boot}} = \bar{r}^* - r$을 계산한다.
 
-!!! example "Interpreting the Bootstrap Distribution"
-    If the histogram of $r^{*(1)}, \ldots, r^{*(5000)}$ is left-skewed (common for $r$ values near 1), then normal-based confidence intervals would be inappropriate. The bootstrap distribution directly reveals this skewness, guiding the choice of confidence interval method (e.g., BCa over the percentile method).
+!!! example "붓스트랩 분포의 해석"
+    $r^{*(1)}, \ldots, r^{*(5000)}$의 히스토그램이 왼쪽으로 치우쳐 있다면($r$이 1에 가까울 때 흔하다) 정규 기반 신뢰구간은 부적절하다. 붓스트랩 분포가 이 치우침을 직접 드러내어 신뢰구간 방법의 선택(예: 백분위수법 대신 BCa)을 안내한다.
 
-## Choosing the Number of Replicates
+    쌍 전체를 재표집해야 함에 유의하라. $x$와 $y$를 따로 재표집하면 두 변수 사이의 연관성이 파괴되어 $r^*$의 분포가 귀무가설 아래의 분포가 되어 버린다.
 
-The number of bootstrap replicates $B$ controls the **Monte Carlo error** in the bootstrap approximation. Larger $B$ reduces the noise in the bootstrap estimate but increases computation time:
+## 복제 횟수의 선택
 
-- **Standard errors**: $B = 1{,}000$ is usually sufficient
-- **Confidence intervals**: $B = 5{,}000$ to $10{,}000$ for stable quantile estimates
-- **Hypothesis testing**: $B = 10{,}000$ or more for precise $p$-values
+붓스트랩 복제 횟수 $B$는 붓스트랩 근사의 **몬테카를로 오차**를 좌우한다. $B$가 크면 붓스트랩 추정값의 잡음이 줄지만 계산시간이 늘어난다.
 
-The Monte Carlo standard error of the bootstrap standard error is approximately $\widehat{\text{SE}}_{\text{boot}} / \sqrt{2B}$, so doubling $B$ reduces the Monte Carlo error by a factor of $\sqrt{2}$.
+- **표준오차**: $B = 1{,}000$이면 대개 충분하다.
+- **신뢰구간**: 분위수 추정이 안정되려면 $B = 5{,}000$에서 $10{,}000$.
+- **가설검정**: 정밀한 $p$값을 위해 $B = 10{,}000$ 이상.
 
-## Summary
+붓스트랩 표준오차의 몬테카를로 표준오차는 대략 $\widehat{\text{SE}}_{\text{boot}} / \sqrt{2B}$이므로, $B$를 두 배로 하면 몬테카를로 오차가 $\sqrt{2}$배 줄어든다.
 
-The nonparametric bootstrap replaces the unknown population distribution with the empirical distribution and uses repeated resampling to approximate the sampling distribution of any statistic. It requires no distributional assumptions and provides estimates of standard errors, bias, and distributional shape that would be analytically intractable for most statistics. The method is consistent under regularity conditions and serves as the foundation for the bootstrap confidence intervals and hypothesis tests developed in subsequent sections.
+## 요약
 
-## Exercises
+비모수 붓스트랩은 알려지지 않은 모집단 분포를 경험적 분포로 대체하고 반복 재표집으로 임의의 통계량의 표본분포를 근사한다. 분포 가정이 전혀 필요 없으며, 대부분의 통계량에서 해석적으로 다루기 어려운 표준오차, 편향, 분포 모양의 추정값을 제공한다. 정칙조건 아래에서 일치하며, 이어지는 절에서 전개할 붓스트랩 신뢰구간과 가설검정의 토대가 된다.
 
-**Exercise 1.**
-A bootstrap sample of size $n$ drawn from a dataset of size $n$ contains, on average, only about 63.2% of the unique original observations.
+## 연습문제
 
-(a) Derive this result. (Hint: The probability that observation $i$ is *not* selected in any of the $n$ draws is $(1 - 1/n)^n$.)
+**연습문제 1.**
+크기 $n$인 자료에서 뽑은 크기 $n$의 붓스트랩 표본은 평균적으로 원래 고유 관측값의 약 63.2%만 담는다.
 
-(b) What happens to this percentage as $n \to \infty$?
+**(a)** 이 결과를 유도하라. (힌트: 관측값 $i$가 $n$번의 추출에서 한 번도 뽑히지 *않을* 확률은 $(1 - 1/n)^n$이다.)
 
-(c) The "out-of-bag" observations (those not in the bootstrap sample) are used in random forests for validation. Why does this work?
+**(b)** $n \to \infty$일 때 이 비율은 어떻게 되는가?
+
+**(c)** out-of-bag 관측값(붓스트랩 표본에 없는 것들)은 랜덤 포레스트에서 검증에 쓰인다. 왜 이것이 작동하는가?
+
+??? success "연습문제 1 풀이"
+
+    **(a)** 한 번의 추출에서 관측값 $i$가 뽑히지 않을 확률은 $1 - 1/n$이다. $n$번의 추출이 독립이므로 $n$번 모두 뽑히지 않을 확률은
+
+    $$
+    P(x_i \notin \text{붓스트랩 표본}) = \left(1 - \frac{1}{n}\right)^n.
+    $$
+
+    포함될 확률은 $1 - (1-1/n)^n$이다. 붓스트랩 표본에 담기는 고유 관측값의 기대 개수는 지시함수의 기댓값을 더하여
+
+    $$
+    E[\#\text{고유}] = \sum_{i=1}^n P(x_i \in \text{표본}) = n\left[1 - \left(1 - \frac{1}{n}\right)^n\right]
+    $$
+
+    이고, 비율은 $1 - (1-1/n)^n$이다.
+
+    **(b)** $\ln(1-1/n) = -1/n - 1/(2n^2) - \cdots$이므로
+
+    $$
+    n \ln\left(1 - \frac{1}{n}\right) = -1 - \frac{1}{2n} - O(n^{-2}) \to -1
+    $$
+
+    이고 따라서 $(1-1/n)^n \to e^{-1} = 0.3679$이다. 포함 비율은 $1 - e^{-1} = 0.6321$로 수렴한다.
+
+    ```python
+    import numpy as np
+    rng = np.random.default_rng(0)
+    for n in (10, 50, 200):
+        frac = [len(np.unique(rng.integers(0, n, n))) / n for _ in range(20000)]
+        print(n, round(np.mean(frac), 4), round(1 - (1 - 1/n) ** n, 4))
+    ```
+
+    | $n$ | 모의실험 평균 | 이론값 $1-(1-1/n)^n$ |
+    |---:|---:|---:|
+    | 10 | 0.6524 | 0.6513 |
+    | 50 | 0.6358 | 0.6358 |
+    | 200 | 0.6330 | 0.6330 |
+
+    **(c)** OOB 관측값이 검증에 쓸 수 있는 이유는 **모형 적합에 참여하지 않았기** 때문이다. 랜덤 포레스트의 각 나무는 하나의 붓스트랩 표본으로 학습되므로, 그 나무에게 OOB 관측값은 처음 보는 자료이다.
+
+    관측값 $x_i$에 대해 $x_i$를 쓰지 않은 나무들만 모아 예측을 집계하면 편향 없는 예측오차 추정값을 얻는다. 나무가 $T$개일 때 각 관측값은 평균적으로 $0.368T$개의 나무에서 OOB이므로 집계할 나무가 충분하다.
+
+    이는 교차검증과 같은 논리이며, 별도의 자료 분할 없이 공짜로 얻는다는 것이 장점이다. 다만 OOB 추정값은 $0.632T$개 나무로 이루어진 숲이 아니라 $T$개 나무 전체의 성능을 약간 비관적으로 추정한다.
+
+---
+
+**연습문제 2.**
+$B = 200$과 $B = 5000$에서 붓스트랩 표준오차의 몬테카를로 변동을 비교하라. 본문의 근사식 $\widehat{\text{SE}}_{\text{boot}}/\sqrt{2B}$가 맞는지 확인하라.
+
+??? success "연습문제 2 풀이"
+    같은 자료에 대해 붓스트랩 절차 전체를 여러 번 반복하고, 얻어진 $\widehat{\text{SE}}_{\text{boot}}$들의 변동을 본다.
+
+    ```python
+    import numpy as np
+    rng = np.random.default_rng(0)
+    x = rng.normal(0, 1, 50)          # 자료는 한 번만 생성해 고정
+
+    for B in (200, 1000, 5000):
+        ses = []
+        for _ in range(400):
+            idx = rng.integers(0, 50, (B, 50))
+            ses.append(x[idx].mean(axis=1).std(ddof=1))
+        ses = np.array(ses)
+        print(B, round(ses.mean(), 5), round(ses.std(ddof=1), 5),
+              round(ses.mean() / np.sqrt(2 * B), 5))
+    ```
+
+    | $B$ | $\widehat{\text{SE}}$의 평균 | $\widehat{\text{SE}}$의 실제 표준편차 | 예측값 $\widehat{\text{SE}}/\sqrt{2B}$ |
+    |---:|---:|---:|---:|
+    | 200 | 0.12881 | 0.00649 | 0.00644 |
+    | 1000 | 0.12859 | 0.00296 | 0.00288 |
+    | 5000 | 0.12883 | 0.00128 | 0.00129 |
+
+    근사식이 매우 정확하다. 세 경우 모두 예측값과 실제값이 3% 이내로 일치한다.
+
+    $B = 200$에서도 몬테카를로 표준오차가 $0.0065$로 $\widehat{\text{SE}} = 0.129$의 5%에 불과하다. **표준오차만 필요하다면 $B$를 크게 할 이유가 별로 없다.**
+
+    문제는 **분위수**이다. $2.5$ 백분위수의 몬테카를로 표준오차는 $\sqrt{p(1-p)/B}/f(q_p)$로, 꼬리의 밀도 $f(q_p)$가 작으면 훨씬 커진다.
+
+    ```python
+    for B in (200, 1000, 5000):
+        q = []
+        for _ in range(400):
+            idx = rng.integers(0, 50, (B, 50))
+            q.append(np.percentile(x[idx].mean(axis=1), 2.5))
+        print(B, round(np.std(q, ddof=1), 5))
+    # 200 0.02238 | 1000 0.01060 | 5000 0.00497
+    ```
+
+    $B = 200$에서 $2.5$ 백분위수의 변동이 $0.0224$로, 표준오차 변동 $0.0065$의 3배가 넘는다. 이것이 신뢰구간에 $B \ge 5000$을 권하는 이유이다.
+
+---
+
+**연습문제 3.**
+붓스트랩 편향보정이 평균제곱오차를 **악화**시키는 예를 만들어라.
+
+??? success "연습문제 3 풀이"
+    $\hat{\theta} = \frac{1}{n}\sum(x_i - \bar{x})^2$(분모가 $n$인 표본분산)를 생각하자. 이 추정량은 $\sigma^2$에 대해 편향 $-\sigma^2/n$을 갖는다.
+
+    ```python
+    import numpy as np
+    rng = np.random.default_rng(3)
+    n, B, M = 20, 500, 2000
+    true = 1.0
+    raw, corr = [], []
+    for _ in range(M):
+        x = rng.normal(0, 1, n)
+        th = x.var(ddof=0)
+        idx = rng.integers(0, n, (B, n))
+        bs = x[idx].var(axis=1, ddof=0)
+        raw.append(th)
+        corr.append(2 * th - bs.mean())
+    raw, corr = np.array(raw), np.array(corr)
+    for name, v in (("raw", raw), ("corrected", corr)):
+        print(name, "bias=%.4f var=%.4f mse=%.4f"
+              % (v.mean() - true, v.var(), ((v - true) ** 2).mean()))
+    ```
+
+    | 추정량 | 편향 | 분산 | MSE |
+    |:---|---:|---:|---:|
+    | 원래 $\hat{\theta}$ | $-0.0577$ | $0.0917$ | $0.0950$ |
+    | 편향보정 | $-0.0105$ | $0.1012$ | $0.1013$ |
+
+    편향이 $-0.058$에서 $-0.011$로 크게 줄었지만 분산이 $0.0917$에서 $0.1012$로 10% 늘어, **MSE가 $0.0950$에서 $0.1013$으로 7% 악화**되었다.
+
+    이유는 편향 추정값 $\bar{\hat{\theta}}^* - \hat{\theta}$ 자체가 잡음을 갖기 때문이다. 편향보정 추정량 $2\hat{\theta} - \bar{\hat{\theta}}^*$은 이 잡음을 그대로 흡수한다. 참 편향이 $-0.05$로 작은데 그것을 추정하느라 훨씬 큰 잡음을 들여온 셈이다.
+
+    **경험칙:** $|\widehat{\text{Bias}}| < 0.25 \times \widehat{\text{SE}}$이면 편향보정을 하지 않는다. 여기서 $\widehat{\text{SE}} \approx 0.303$이고 $|\widehat{\text{Bias}}| \approx 0.058$이므로 비가 $0.19$로 이 기준 아래이다.
+
+---
+
+**연습문제 4.**
+비모수 붓스트랩으로 상관계수를 추정할 때 **쌍 전체를 재표집**하는 것과 $x$, $y$를 **따로 재표집**하는 것의 차이를 보여라.
+
+??? success "연습문제 4 풀이"
+    ```python
+    import numpy as np
+    from scipy import stats
+    rng = np.random.default_rng(5)
+    n = 40
+    x = rng.normal(0, 1, n)
+    y = 0.7 * x + rng.normal(0, 0.7, n)
+    r_obs = stats.pearsonr(x, y).statistic
+    print("관측 r =", round(r_obs, 4))          # 0.6422
+
+    B = 10000
+    # (1) 쌍 전체를 재표집 -- 올바른 방법
+    idx = rng.integers(0, n, (B, n))
+    r_pair = np.array([stats.pearsonr(x[i], y[i]).statistic for i in idx])
+
+    # (2) x 와 y 를 따로 재표집 -- 연관성을 파괴한다
+    r_indep = np.array([stats.pearsonr(rng.choice(x, n), rng.choice(y, n)).statistic
+                        for _ in range(B)])
+
+    print("쌍 재표집: 평균 %.4f, sd %.4f" % (r_pair.mean(), r_pair.std()))
+    print("독립 재표집: 평균 %.4f, sd %.4f" % (r_indep.mean(), r_indep.std()))
+    ```
+
+    | 방법 | 평균 | 표준편차 | 2.5% | 97.5% |
+    |:---|---:|---:|---:|---:|
+    | 쌍 전체 재표집 | 0.6449 | 0.0764 | 0.4763 | 0.7759 |
+    | $x$, $y$ 따로 재표집 | $-0.0027$ | 0.1601 | $-0.3192$ | 0.3050 |
+
+    두 분포가 완전히 다르다.
+
+    - **쌍 재표집**은 관측값 $r = 0.642$ 주위에 중심을 두며, $\hat{\theta}$의 표본분포를 근사한다. 이것이 신뢰구간을 만드는 데 필요한 것이다.
+    - **따로 재표집**은 $0$ 주위에 중심을 둔다. $x$와 $y$의 연결을 끊었으므로 $\rho = 0$이라는 **귀무가설 아래의 분포**를 만든 셈이다.
+
+    두 번째 방법이 무용한 것은 아니다. 그것은 사실상 [상관에 대한 순열검정](../permutation/correlation.md)이며, $H_0: \rho = 0$을 검정하는 데 정확히 쓸 수 있다. 관측값 $0.642$가 $[-0.319, 0.305]$ 바깥이므로 $p < 0.05$이다.
+
+    **핵심:** 같은 재표집 도구라도 무엇을 재표집하느냐에 따라 **추정**이 되기도 하고 **검정**이 되기도 한다. 목적을 먼저 정하고 그에 맞는 재표집 방식을 골라야 한다.

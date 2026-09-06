@@ -1,138 +1,236 @@
-# Number of Resamples and Convergence
+# 재표집 횟수와 수렴
 
-## Motivation
+## 동기
 
-Every bootstrap or permutation procedure involves a choice: how many resamples $B$ should we use? Too few resamples introduce excessive **Monte Carlo error** — the variability due to the random resampling process itself, distinct from the statistical variability we are trying to estimate. Too many resamples waste computation without meaningful improvement. This section quantifies the Monte Carlo error, provides guidelines for choosing $B$, and describes methods for monitoring convergence.
+모든 붓스트랩·순열 절차에는 선택이 하나 따라온다. 재표집을 몇 번 할 것인가? $B$가 너무 작으면 **몬테카를로 오차**가 지나치게 커진다. 이는 재표집 과정 자체의 무작위성에서 오는 변동으로, 우리가 추정하려는 통계적 변동과는 별개이다. $B$가 너무 크면 의미 있는 개선 없이 계산만 낭비한다. 이 절에서는 몬테카를로 오차를 정량화하고, $B$ 선택 지침을 제시하며, 수렴을 점검하는 방법을 설명한다.
 
-## Monte Carlo Error
+## 몬테카를로 오차
 
-The bootstrap estimate of any quantity (standard error, confidence interval endpoint, $p$-value) is a random variable that depends on which bootstrap samples happen to be drawn. Running the same bootstrap procedure twice with different random seeds produces slightly different results. This variability is the **Monte Carlo error**.
+붓스트랩으로 얻은 모든 양(표준오차, 신뢰구간 끝점, $p$값)은 어떤 붓스트랩 표본이 뽑혔는지에 따라 달라지는 확률변수이다. 같은 절차를 다른 난수 씨앗으로 두 번 돌리면 결과가 조금씩 다르다. 이 변동이 **몬테카를로 오차**이다.
 
-Monte Carlo error decreases at rate $O(1/\sqrt{B})$: doubling $B$ reduces the Monte Carlo standard deviation by a factor of $\sqrt{2} \approx 1.41$.
+몬테카를로 오차는 $O(1/\sqrt{B})$ 속도로 감소한다. $B$를 두 배로 늘리면 몬테카를로 표준편차가 $\sqrt{2} \approx 1.41$배 줄어든다.
 
-## Monte Carlo Error for the Standard Error
+## 표준오차의 몬테카를로 오차
 
-The bootstrap standard error is:
+붓스트랩 표준오차는
 
 $$
 \widehat{\text{SE}}_{\text{boot}} = \sqrt{\frac{1}{B-1}\sum_{b=1}^{B}\left(\hat{\theta}^{*(b)} - \bar{\hat{\theta}}^*\right)^2}
 $$
 
-The Monte Carlo standard error of this estimate (i.e., the standard error of the standard error) is approximately:
+이다. 이 추정값의 몬테카를로 표준오차(표준오차의 표준오차)는 근사적으로
 
 $$
 \text{SE}_{\text{MC}}(\widehat{\text{SE}}_{\text{boot}}) \approx \frac{\widehat{\text{SE}}_{\text{boot}}}{\sqrt{2B}}
 $$
 
-For example, with $B = 1{,}000$ and $\widehat{\text{SE}}_{\text{boot}} = 2.5$:
+이다. 예를 들어 $B = 1{,}000$이고 $\widehat{\text{SE}}_{\text{boot}} = 2.5$이면
 
 $$
 \text{SE}_{\text{MC}} \approx \frac{2.5}{\sqrt{2000}} \approx 0.056
 $$
 
-The bootstrap standard error is determined to within about $\pm 0.11$ (two Monte Carlo standard errors). This level of precision is adequate for most purposes.
+이다. 붓스트랩 표준오차는 약 $\pm 0.11$(몬테카를로 표준오차의 두 배) 안에서 결정된다. 대부분의 목적에 충분한 정밀도이다.
 
-## Monte Carlo Error for Quantiles
+## 분위수의 몬테카를로 오차
 
-Confidence interval endpoints depend on the quantiles of the bootstrap distribution. The Monte Carlo error for the $q$-th quantile $\hat{\theta}^*_{(q)}$ is approximately:
+신뢰구간 끝점은 붓스트랩 분포의 분위수에 의존한다. $q$번째 분위수 $\hat{\theta}^*_{(q)}$의 몬테카를로 오차는 근사적으로
 
 $$
 \text{SE}_{\text{MC}}(\hat{\theta}^*_{(q)}) \approx \sqrt{\frac{q(1-q)}{B}} \cdot \frac{1}{f(\hat{\theta}^*_{(q)})}
 $$
 
-where $f$ is the density of the bootstrap distribution evaluated at the quantile. Extreme quantiles (near 0 or 1) require more resamples because the numerator $q(1-q)$ is small but the density $f$ at the tails is also small, so the ratio can be large.
+이다. 여기서 $f$는 붓스트랩 분포의 밀도를 그 분위수에서 평가한 값이다. 극단 분위수($0$이나 $1$ 근처)는 분자 $q(1-q)$가 작지만 꼬리에서 밀도 $f$도 작아 비가 커질 수 있으므로 더 많은 재표집이 필요하다.
 
-!!! note "Quantiles Need More Resamples Than Means"
-    Estimating the 2.5th and 97.5th percentiles (for a 95% CI) requires substantially more bootstrap replicates than estimating the standard error. With $B = 1{,}000$, the 2.5th percentile is determined by only 25 bootstrap values, making it noisy. With $B = 10{,}000$, it is determined by 250 values, which is far more stable.
+!!! note "분위수는 평균보다 많은 재표집을 요구한다"
+    $95$% 신뢰구간을 위한 $2.5$번째와 $97.5$번째 백분위수 추정은 표준오차 추정보다 훨씬 많은 붓스트랩 반복을 요구한다. $B = 1{,}000$이면 $2.5$번째 백분위수가 $25$개의 붓스트랩 값으로 결정되어 불안정하다. $B = 10{,}000$이면 $250$개가 되어 훨씬 안정적이다. 연습문제 2에서 이를 정량화한다.
 
-## Monte Carlo Error for p-Values
+## $p$값의 몬테카를로 오차
 
-The bootstrap $p$-value $\hat{p} = \frac{1}{B}\sum_{b=1}^{B}\mathbf{1}(|t^{*(b)}| \ge |t_{\text{obs}}|)$ is a sample proportion with Monte Carlo standard error:
+붓스트랩 $p$값 $\hat{p} = \frac{1}{B}\sum_{b=1}^{B}\mathbf{1}(|t^{*(b)}| \ge |t_{\text{obs}}|)$는 표본비율이므로 몬테카를로 표준오차가
 
 $$
 \text{SE}_{\text{MC}}(\hat{p}) = \sqrt{\frac{\hat{p}(1 - \hat{p})}{B}}
 $$
 
-| True $p$ | $B = 1{,}000$ | $B = 5{,}000$ | $B = 10{,}000$ |
+이다.
+
+| 참 $p$ | $B = 1{,}000$ | $B = 5{,}000$ | $B = 10{,}000$ |
 |---|---|---|---|
 | 0.05 | 0.0069 | 0.0031 | 0.0022 |
 | 0.01 | 0.0031 | 0.0014 | 0.0010 |
 | 0.001 | 0.0010 | 0.0004 | 0.0003 |
 
-!!! warning "p-Values Near the Significance Level"
-    When the true $p$-value is close to the significance level $\alpha$, the Monte Carlo error can cause the bootstrap to make the wrong decision. If $p \approx 0.05$ and $B = 1{,}000$, the estimated $p$-value fluctuates in the range roughly $[0.036, 0.064]$. Use $B \ge 10{,}000$ when precise $p$-values are needed.
+!!! warning "유의수준 근처의 $p$값"
+    참 $p$값이 유의수준 $\alpha$에 가까우면 몬테카를로 오차 때문에 잘못된 결정을 내릴 수 있다. $p \approx 0.05$이고 $B = 1{,}000$이면 추정된 $p$값이 대략 $[0.036, 0.064]$ 범위에서 흔들린다. 정확한 $p$값이 필요하면 $B \ge 10{,}000$을 쓴다. 연습문제 3에서 결정이 뒤집히는 빈도를 직접 센다.
 
-## Guidelines for Choosing B
+## $B$ 선택 지침
 
-The appropriate number of resamples depends on the inferential goal:
+적절한 재표집 횟수는 추론 목적에 따라 다르다.
 
-| Purpose | Recommended $B$ | Rationale |
+| 목적 | 권장 $B$ | 근거 |
 |---|---|---|
-| Standard error estimation | $1{,}000$ | $\text{SE}_{\text{MC}} \approx \widehat{\text{SE}}_{\text{boot}} / 45$ |
-| Percentile CI (95%) | $5{,}000$ to $10{,}000$ | Stable tail quantile estimates |
-| BCa CI | $5{,}000$ to $10{,}000$ | Same as percentile (plus jackknife) |
-| $p$-value at $\alpha = 0.05$ | $10{,}000$ | $\text{SE}_{\text{MC}}(\hat{p}) \approx 0.002$ |
-| $p$-value at $\alpha = 0.01$ | $50{,}000$ to $100{,}000$ | Precise estimation of small $p$ |
-| Publication-quality results | $10{,}000$ or more | Ensures reproducibility |
+| 표준오차 추정 | $1{,}000$ | $\text{SE}_{\text{MC}} \approx \widehat{\text{SE}}_{\text{boot}} / 45$ |
+| 백분위수 신뢰구간 (95%) | $5{,}000$--$10{,}000$ | 안정적인 꼬리 분위수 추정 |
+| BCa 신뢰구간 | $5{,}000$--$10{,}000$ | 백분위수와 동일(추가로 잭나이프) |
+| $\alpha = 0.05$의 $p$값 | $10{,}000$ | $\text{SE}_{\text{MC}}(\hat{p}) \approx 0.002$ |
+| $\alpha = 0.01$의 $p$값 | $50{,}000$--$100{,}000$ | 작은 $p$의 정밀 추정 |
+| 논문 수준의 결과 | $10{,}000$ 이상 | 재현성 확보 |
 
-These are minimum recommendations. Using more resamples than needed has no statistical cost beyond computation time.
+이는 최소 권장값이다. 필요보다 많이 쓰는 것은 계산시간 외에 통계적 대가가 없다.
 
-## Monitoring Convergence
+## 수렴 점검
 
-Rather than choosing $B$ in advance, a practical approach is to **monitor convergence** by tracking the stability of the bootstrap estimate as $B$ increases.
+$B$를 미리 정하는 대신, $B$가 커질 때 추정값이 얼마나 안정되는지를 **관찰**하는 실용적 접근이 있다.
 
-**Running estimate plot.** Compute the bootstrap standard error (or confidence interval endpoint) cumulatively as $b$ increases from $1$ to $B$. Plot the running estimate against $b$. When the curve stabilizes (fluctuations become negligible), $B$ is large enough.
+**누적 추정값 그림.** $b$를 $1$부터 $B$까지 늘려가며 붓스트랩 표준오차(또는 신뢰구간 끝점)를 누적 계산하고 $b$에 대해 그린다. 곡선이 안정되면(변동이 무시할 수준이 되면) $B$가 충분한 것이다.
 
-**Repeat-and-compare.** Run the bootstrap procedure twice with different random seeds. If the two estimates of the standard error or CI agree to the desired precision, $B$ is adequate.
+**반복 비교.** 다른 난수 씨앗으로 같은 절차를 두 번 돌린다. 두 추정값이 원하는 정밀도로 일치하면 $B$가 적절하다.
 
-**Coefficient of variation.** Compute the ratio $\text{SE}_{\text{MC}} / \widehat{\text{SE}}_{\text{boot}}$. This gives the relative Monte Carlo error. A target of 1-2% (i.e., $B \ge 2{,}500$) is reasonable for standard errors; tighter targets require proportionally more resamples.
+**변동계수.** $\text{SE}_{\text{MC}} / \widehat{\text{SE}}_{\text{boot}}$ 비를 계산한다. 상대적인 몬테카를로 오차이다. 표준오차 추정에는 $1$--$2$%(즉 $B \ge 2{,}500$)면 합리적이고, 더 엄격한 목표는 그에 비례해 더 많은 재표집을 요구한다.
 
-!!! tip "Practical Convergence Check"
-    A simple rule of thumb: run the bootstrap with $B = 1{,}000$, then again with $B = 2{,}000$. If the two standard error estimates agree to within 5%, $B = 1{,}000$ is sufficient. If they disagree substantially, increase $B$ and repeat.
+!!! tip "실용적 수렴 점검"
+    간단한 경험칙: $B = 1{,}000$으로 한 번, $B = 2{,}000$으로 한 번 돌린다. 두 표준오차 추정값이 $5$% 이내로 일치하면 $B = 1{,}000$으로 충분하다. 크게 다르면 $B$를 늘려 반복한다.
 
-## Diminishing Returns
+## 수확체감
 
-The Monte Carlo standard error decreases as $1/\sqrt{B}$. This means:
+몬테카를로 표준오차는 $1/\sqrt{B}$로 감소한다. 따라서
 
-- Going from $B = 100$ to $B = 1{,}000$: reduces Monte Carlo error by a factor of $\sqrt{10} \approx 3.2$
-- Going from $B = 1{,}000$ to $B = 10{,}000$: reduces by another factor of $\sqrt{10} \approx 3.2$
-- Going from $B = 10{,}000$ to $B = 100{,}000$: reduces by another factor of $\sqrt{10} \approx 3.2$
+- $B = 100 \to 1{,}000$: 몬테카를로 오차가 $\sqrt{10} \approx 3.2$배 감소
+- $B = 1{,}000 \to 10{,}000$: 또 $3.2$배 감소
+- $B = 10{,}000 \to 100{,}000$: 또 $3.2$배 감소
 
-Beyond $B = 10{,}000$, the improvement is rarely noticeable for standard errors and confidence intervals. For $p$-values near common thresholds, larger $B$ can still be worthwhile.
+표준오차와 신뢰구간에서는 $B = 10{,}000$을 넘으면 개선이 거의 눈에 띄지 않는다. 흔한 문턱 근처의 $p$값에는 더 큰 $B$가 여전히 값질 수 있다.
 
-## Summary
+## 요약
 
-The number of bootstrap resamples $B$ controls the Monte Carlo error in the bootstrap approximation. Standard error estimates converge quickly ($B = 1{,}000$ is usually sufficient), while confidence interval endpoints and $p$-values require more resamples ($B = 5{,}000$ to $10{,}000$ or more). Monte Carlo error decreases at rate $1/\sqrt{B}$, so there are diminishing returns to increasing $B$ indefinitely. Monitoring convergence through running estimate plots or repeat-and-compare checks is a practical alternative to choosing $B$ by rule of thumb.
+재표집 횟수 $B$는 붓스트랩 근사의 몬테카를로 오차를 통제한다. 표준오차 추정은 빠르게 수렴하지만($B = 1{,}000$이면 대개 충분하다) 신뢰구간 끝점과 $p$값은 더 많은 재표집을 요구한다($B = 5{,}000$--$10{,}000$ 이상). 몬테카를로 오차는 $1/\sqrt{B}$ 속도로 줄어들므로 $B$를 무한정 늘리는 데는 수확체감이 있다. 누적 추정값 그림이나 반복 비교로 수렴을 점검하는 것이 경험칙으로 $B$를 정하는 것보다 실용적이다.
 
+## 연습문제
 
-## Exercises
+이하의 연습문제는 하나의 고정된 자료를 쓴다. $N(10, 2^2)$에서 뽑은 $n = 40$개 관측으로, 표본평균 $9.766$, 표본표준편차 $2.206$, 따라서 $\widehat{\text{SE}} = 2.206/\sqrt{40} = 0.349$이다.
 
-**Exercise 1.**
-Describe the main concept of Number of Resamples and Convergence and explain why it matters for statistical practice.
+**연습문제 1.**
+공식 $\text{SE}_{\text{MC}}(\widehat{\text{SE}}_{\text{boot}}) \approx \widehat{\text{SE}}_{\text{boot}}/\sqrt{2B}$가 실제로 맞는지 확인하라. $B = 200, 1000, 5000$ 각각에 대해 붓스트랩 표준오차를 $400$번 반복 계산하고, 그 표준편차를 공식의 예측과 비교하라.
 
-??? success "Solution to Exercise 1"
-    Number of Resamples and Convergence is a core topic in statistics that provides tools for drawing reliable inferences from data. It matters because proper application ensures valid conclusions, correctly quantified uncertainty, and appropriate handling of the assumptions that underpin the method. Practitioners who understand this concept can avoid common pitfalls and choose the right analytical approach for their data.
+??? success "연습문제 1 풀이"
+    ```python
+    import numpy as np
+    rng = np.random.default_rng(77)
+    n = 40
+    x = rng.normal(10, 2, n)           # 고정된 자료
+    print(round(x.mean(), 4), round(x.std(ddof=1), 4))   # 9.7658  2.2062
+
+    def boot_se(B):
+        idx = rng.integers(0, n, (B, n))
+        return x[idx].mean(axis=1).std(ddof=1)
+
+    for B in (200, 1000, 5000):
+        ses = np.array([boot_se(B) for _ in range(400)])
+        print(B, round(ses.mean(), 5), round(ses.std(ddof=1), 5),
+              round(ses.mean()/np.sqrt(2*B), 5))
+    ```
+
+    | $B$ | $\widehat{\text{SE}}_{\text{boot}}$ 평균 | 관측된 표준편차 | 공식 예측 $\widehat{\text{SE}}/\sqrt{2B}$ | 비 |
+    |---:|---:|---:|---:|---:|
+    | 200 | 0.34311 | 0.01696 | 0.01716 | 0.99 |
+    | 1{,}000 | 0.34447 | 0.00729 | 0.00770 | 0.95 |
+    | 5{,}000 | 0.34453 | 0.00331 | 0.00345 | 0.96 |
+
+    **공식이 잘 맞는다.** 관측된 표준편차와 예측이 $5$% 이내로 일치한다. 관측값이 일관되게 조금 작은데, 이는 공식이 정규분포를 전제한 근사이고 실제 붓스트랩 평균 분포가 미세하게 다르기 때문이다.
+
+    **세 가지를 읽어야 한다.**
+
+    첫째, **$\widehat{\text{SE}}_{\text{boot}}$의 평균이 $B$에 거의 의존하지 않는다**($0.3431 \to 0.3445 \to 0.3445$). $B$는 편향이 아니라 변동만 통제한다. $B = 200$이라도 평균적으로는 옳은 값을 준다.
+
+    둘째, **$1/\sqrt{2B}$ 속도가 눈에 보인다.** $B$를 $25$배 늘리자($200 \to 5000$) 표준편차가 $0.01696/0.00331 = 5.12$배 줄었다. $\sqrt{25} = 5$와 일치한다.
+
+    셋째, **상대오차가 이미 작다.** $B = 1{,}000$에서 $0.00729/0.34447 = 2.1$%이다. 표준오차를 소수 셋째 자리까지 보고할 생각이 아니라면 이것으로 충분하다.
+
+    참고로 이 자료의 정규이론 표준오차는 $2.2062/\sqrt{40} = 0.3488$이다. 붓스트랩 값 $0.3445$가 이보다 약간 작은데, 붓스트랩이 $s^2$ 대신 $\hat{\sigma}^2 = \frac{n-1}{n}s^2$에 해당하는 양을 쓰기 때문이다. $0.3488 \times \sqrt{39/40} = 0.3444$로 정확히 설명된다.
 
 ---
 
-**Exercise 2.**
-State the key assumptions required by the method discussed here. How can each assumption be checked?
+**연습문제 2.**
+신뢰구간 끝점이 표준오차보다 얼마나 더 많은 재표집을 요구하는지 정량화하라. $B = 200, 1000, 5000, 20000$에서 $2.5$번째·$97.5$번째 백분위수와 표준오차의 몬테카를로 변동을 각각 $400$번 반복으로 측정하라.
 
-??? success "Solution to Exercise 2"
-    The main assumptions typically include: (1) independence of observations -- verified by understanding the data collection process and checking for serial correlation; (2) distributional requirements (e.g., normality) -- checked with Q-Q plots and formal tests like Shapiro-Wilk; (3) equal variances (if applicable) -- assessed with boxplots and Levene's test. When assumptions are violated, consider robust alternatives, transformations, or nonparametric methods.
+??? success "연습문제 2 풀이"
+    ```python
+    for B in (200, 1000, 5000, 20000):
+        lo, hi, se = [], [], []
+        for _ in range(400):
+            idx = rng.integers(0, n, (B, n))
+            b = x[idx].mean(axis=1)
+            l, h = np.percentile(b, [2.5, 97.5])
+            lo.append(l); hi.append(h); se.append(b.std(ddof=1))
+        print(B, round(np.std(lo), 5), round(np.std(hi), 5), round(np.std(se), 5))
+    ```
+
+    | $B$ | sd(하한) | sd(상한) | sd($\widehat{\text{SE}}$) | 끝점/SE 비 |
+    |---:|---:|---:|---:|---:|
+    | 200 | 0.06537 | 0.06831 | 0.01861 | 3.6 |
+    | 1{,}000 | 0.02901 | 0.02843 | 0.00747 | 3.8 |
+    | 5{,}000 | 0.01281 | 0.01331 | 0.00347 | 3.8 |
+    | 20{,}000 | 0.00627 | 0.00672 | 0.00177 | 3.7 |
+
+    **신뢰구간 끝점의 몬테카를로 변동이 표준오차의 약 $3.7$배이다.** 이 비는 $B$에 거의 무관하다. 두 양 모두 $1/\sqrt{B}$로 줄어들기 때문이다.
+
+    **같은 정밀도를 얻으려면 약 $14$배의 재표집이 필요하다.** $3.7^2 = 13.7$이기 때문이다. 표준오차에 $B = 1{,}000$이면 충분하다고 판단했다면, 신뢰구간 끝점에는 $B \approx 14{,}000$을 써야 같은 절대 정밀도가 나온다. 본문 표가 백분위수 신뢰구간에 $5{,}000$--$10{,}000$을 권하는 근거가 이것이다.
+
+    **실무적 기준.** 이 자료의 $95$% 신뢰구간 폭은 대략 $4 \times 0.345 = 1.38$이다. 끝점의 몬테카를로 변동이 구간 폭의 $1$% 이하이기를 원한다면 $0.0138$이 목표이고, 표에서 $B = 5{,}000$($0.0128$)이 이를 만족한다.
+
+    !!! note "왜 하필 $3.7$배인가"
+        분위수의 몬테카를로 표준오차는 $\sqrt{q(1-q)/B}/f(\theta_q)$이다. 붓스트랩 분포가 대략 $N(\bar{x}, \text{SE}^2)$이면 $q = 0.025$에서
+
+        $$
+        f(\theta_{0.025}) = \frac{\phi(1.96)}{\text{SE}} = \frac{0.0584}{\text{SE}}
+        $$
+
+        이므로
+
+        $$
+        \text{SE}_{\text{MC}}(\hat{\theta}_{0.025}) = \frac{\sqrt{0.025 \times 0.975}}{0.0584}\cdot\frac{\text{SE}}{\sqrt{B}} = 2.67\,\frac{\text{SE}}{\sqrt{B}}
+        $$
+
+        이다. 표준오차 쪽은 $\text{SE}/\sqrt{2B} = 0.707\,\text{SE}/\sqrt{B}$이므로 비는 $2.67/0.707 = 3.78$이다. 관측된 $3.7$--$3.8$과 정확히 일치한다.
 
 ---
 
-**Exercise 3.**
-Work through a small numerical example illustrating the application of the technique from this section.
+**연습문제 3.**
+$p$값이 유의수준 근처일 때 $B$가 결정을 얼마나 자주 뒤집는지 세어라. [순열검정](../permutation/permutation.md) 페이지의 자료(집단 A $[8,7,9,10,6]$, 집단 B $[5,6,4,3,7]$, 정확 $p = 10/252 = 0.0397$)에 대해 $B = 200, 1000, 10000$으로 각각 $2{,}000$번 순열검정을 하고, $\alpha = 0.05$에서 기각하는 비율을 구하라.
 
-??? success "Solution to Exercise 3"
-    A structured approach to applying this technique involves: (1) clearly stating the hypotheses or estimation goal; (2) verifying that the data meet the required assumptions; (3) computing the relevant test statistic, estimate, or model fit; (4) obtaining the p-value, confidence interval, or posterior distribution; (5) interpreting the result in the context of the original question. Following these steps systematically ensures a rigorous and reproducible analysis.
+??? success "연습문제 3 풀이"
+    ```python
+    a = np.array([8, 7, 9, 10, 6]); b = np.array([5, 6, 4, 3, 7])
+    z = np.concatenate([a, b]); obs = a.mean() - b.mean(); m = 5
 
----
+    for B in (200, 1000, 10000):
+        ps = []
+        for _ in range(2000):
+            P = np.array([rng.permutation(z) for _ in range(B)])
+            d = P[:, :m].mean(1) - P[:, m:].mean(1)
+            ps.append(((np.abs(d) >= obs - 1e-12).sum() + 1) / (B + 1))
+        ps = np.array(ps)
+        print(B, round(ps.mean(), 4), round(ps.std(), 4), round((ps < 0.05).mean(), 3))
+    ```
 
-**Exercise 4.**
-Compare the approach from this section with an alternative method. When would you choose each?
+    | $B$ | $\hat{p}$ 평균 | $\hat{p}$ 표준편차 | $\alpha = 0.05$에서 기각한 비율 |
+    |---:|---:|---:|---:|
+    | 200 | 0.0444 | 0.0135 | **0.729** |
+    | 1{,}000 | 0.0405 | 0.0061 | **0.943** |
+    | 10{,}000 | 0.0397 | 0.0019 | **1.000** |
+    | 정확값 | 0.0397 | 0 | 1 |
 
-??? success "Solution to Exercise 4"
-    The method discussed here is appropriate when its assumptions hold and the sample size is sufficient for the asymptotic approximations to be accurate. Alternative approaches include: (1) nonparametric methods -- preferred when distributional assumptions are suspect; (2) bootstrap methods -- useful when analytical reference distributions are unavailable; (3) Bayesian methods -- valuable when incorporating prior information or when direct probability statements about parameters are desired. Running multiple approaches and comparing results provides a useful robustness check.
+    **$B = 200$이면 같은 자료를 놓고 네 번 중 한 번은 다른 결론을 낸다.** 참 $p$값이 $0.0397$로 명확히 $0.05$ 미만인데도 그렇다.
+
+    이것은 통계적 불확실성이 아니라 **순전히 계산상의 자의성**이다. 자료는 고정되어 있고 참 $p$값도 고정되어 있다. 오직 난수 씨앗만 다르다. 연구자 두 명이 같은 자료, 같은 방법, 같은 코드로 정반대의 결론을 발표할 수 있다.
+
+    **$B = 1{,}000$에서도 $5.7$%가 뒤집힌다.** 참값이 $0.0397$로 문턱에서 꽤 떨어져 있는데도 그렇다. 참값이 $0.048$처럼 더 가까우면 상황은 훨씬 나빠진다.
+
+    **$B = 10{,}000$이면 안정된다**($2{,}000$번 모두 기각). 표준편차 $0.0019$이므로 문턱까지의 거리 $0.0103$이 $5.4$ 표준편차에 해당한다.
+
+    !!! tip "재현성을 위한 실무 규칙"
+        1. **난수 씨앗을 고정하고 보고하라.** 이것이 가장 값싼 해결책이다.
+        2. **$\hat{p}$가 $\alpha$의 $\pm 3\,\text{SE}_{\text{MC}}$ 안에 들면 $B$를 늘려라.** $B = 1{,}000$에서 $\hat{p} = 0.045$가 나왔다면 $\text{SE}_{\text{MC}} = 0.0066$이므로 문턱까지 $0.8$ 표준편차이다. $B$를 $10$배로 늘려 다시 계산해야 한다.
+        3. **가능하면 열거하라.** 이 예제는 순열이 $252$가지뿐이므로 몬테카를로를 쓸 이유가 아예 없다.
+        4. **$p$값을 이분법으로만 읽지 말라.** $p = 0.0397$과 $p = 0.052$의 증거 차이는 미미하다. 문턱 근처에서 $B$에 민감한 것은 몬테카를로의 결함이 아니라 이분법적 판단의 결함을 드러내는 것이기도 하다.

@@ -1,129 +1,290 @@
-# Bootstrap-t Method
+# 붓스트랩-t 방법
 
-## Motivation
+## 동기
 
-The classical $t$-interval $\hat{\theta} \pm t_{\alpha/2} \cdot \hat{\text{se}}$ assumes the pivot $(\hat{\theta} - \theta)/\hat{\text{se}}$ follows a known distribution (Student's $t$ or standard normal). The **bootstrap-$t$ method** (also called the **studentized bootstrap**) avoids this assumption by using the bootstrap to estimate the distribution of the pivot itself. This produces a confidence interval with **second-order accuracy**, matching the BCa method in coverage precision while providing an interval that is not transformation invariant.
+고전적인 $t$ 구간 $\hat{\theta} \pm t_{\alpha/2} \cdot \hat{\text{se}}$는 추축량 $(\hat{\theta} - \theta)/\hat{\text{se}}$가 알려진 분포(Student $t$ 또는 표준정규)를 따른다고 가정한다. **붓스트랩-$t$ 방법**(**스튜던트화 붓스트랩**이라고도 한다)은 붓스트랩으로 추축량 자체의 분포를 추정하여 이 가정을 피한다. 그 결과 **2차 정확도**를 갖는 신뢰구간을 얻는다. 포함확률의 정밀도는 BCa 방법과 맞먹지만, 변환 불변성은 갖지 않는다.
 
-The key idea is to bootstrap not just the statistic $\hat{\theta}$ but the entire $t$-statistic, including its denominator.
+핵심 발상은 통계량 $\hat{\theta}$만이 아니라 분모를 포함한 $t$ 통계량 전체를 붓스트랩한다는 것이다.
 
-## The Studentized Bootstrap Statistic
+## 스튜던트화 붓스트랩 통계량
 
-For each bootstrap sample, compute both the estimate and its estimated standard error:
+각 붓스트랩 표본에서 추정값과 그 추정 표준오차를 함께 계산한다.
 
 $$
 t^{*(b)} = \frac{\hat{\theta}^{*(b)} - \hat{\theta}}{\hat{\text{se}}^{*(b)}}
 $$
 
-where $\hat{\theta}^{*(b)}$ is the statistic computed from the $b$-th bootstrap sample, and $\hat{\text{se}}^{*(b)}$ is the estimated standard error of $\hat{\theta}$ computed from the same bootstrap sample.
+여기서 $\hat{\theta}^{*(b)}$는 $b$번째 붓스트랩 표본에서 계산한 통계량이고, $\hat{\text{se}}^{*(b)}$는 **같은 붓스트랩 표본에서** 계산한 $\hat{\theta}$의 추정 표준오차이다.
 
-The quantity $t^{*(b)}$ is a bootstrap version of the pivot $(\hat{\theta} - \theta)/\hat{\text{se}}$. Its distribution across bootstrap samples approximates the true distribution of the pivot.
+$t^{*(b)}$는 추축량 $(\hat{\theta} - \theta)/\hat{\text{se}}$의 붓스트랩 판본이다. 붓스트랩 표본에 걸친 그 분포가 추축량의 참 분포를 근사한다.
 
-## Algorithm
+## 알고리즘
 
-1. Compute the observed statistic $\hat{\theta}$ and its estimated standard error $\hat{\text{se}}$ from the original sample
-2. **For** $b = 1, \ldots, B$:
-    - Draw a bootstrap sample of size $n$ with replacement
-    - Compute $\hat{\theta}^{*(b)}$ from the bootstrap sample
-    - Compute $\hat{\text{se}}^{*(b)}$ from the bootstrap sample (see note below)
-    - Compute $t^{*(b)} = (\hat{\theta}^{*(b)} - \hat{\theta}) / \hat{\text{se}}^{*(b)}$
-3. Let $t^*_{(q)}$ denote the $q$-th quantile of $\{t^{*(1)}, \ldots, t^{*(B)}\}$
-4. The $100(1-\alpha)\%$ bootstrap-$t$ confidence interval is:
+1. 원표본에서 관측 통계량 $\hat{\theta}$와 그 추정 표준오차 $\hat{\text{se}}$를 계산한다.
+2. $b = 1, \ldots, B$에 대해:
+    - 크기 $n$인 붓스트랩 표본을 복원추출한다.
+    - 붓스트랩 표본에서 $\hat{\theta}^{*(b)}$를 계산한다.
+    - 붓스트랩 표본에서 $\hat{\text{se}}^{*(b)}$를 계산한다(아래 참고).
+    - $t^{*(b)} = (\hat{\theta}^{*(b)} - \hat{\theta}) / \hat{\text{se}}^{*(b)}$를 계산한다.
+3. $\{t^{*(1)}, \ldots, t^{*(B)}\}$의 $q$번째 분위수를 $t^*_{(q)}$라 하자.
+4. $100(1-\alpha)\%$ 붓스트랩-$t$ 신뢰구간은
 
 $$
 \left[\hat{\theta} - t^*_{(1-\alpha/2)} \cdot \hat{\text{se}}, \quad \hat{\theta} - t^*_{(\alpha/2)} \cdot \hat{\text{se}}\right]
 $$
 
-Note the reversal of quantiles: the upper quantile of $t^*$ is used for the lower bound of the interval and vice versa. This follows from inverting the pivot inequality $t^*_{(\alpha/2)} \le (\hat{\theta} - \theta)/\hat{\text{se}} \le t^*_{(1-\alpha/2)}$.
+분위수가 뒤바뀐 것에 주목하라. $t^*$의 상위 분위수가 구간의 하한에 쓰이고 그 반대도 마찬가지이다. 이는 추축량 부등식 $t^*_{(\alpha/2)} \le (\hat{\theta} - \theta)/\hat{\text{se}} \le t^*_{(1-\alpha/2)}$을 $\theta$에 대해 풀면 나온다.
 
-## Estimating the Inner Standard Error
+## 내부 표준오차의 추정
 
-The most critical and computationally demanding aspect of the bootstrap-$t$ is computing $\hat{\text{se}}^{*(b)}$ for each bootstrap sample. Three common approaches exist:
+붓스트랩-$t$에서 가장 결정적이고 계산이 무거운 부분은 각 붓스트랩 표본마다 $\hat{\text{se}}^{*(b)}$를 계산하는 일이다. 흔한 세 가지 접근이 있다.
 
-**Formula-based.** When a closed-form formula for $\hat{\text{se}}$ is available (e.g., $s/\sqrt{n}$ for the mean), apply the same formula to each bootstrap sample. This is fast and numerically stable.
+**공식 기반.** $\hat{\text{se}}$의 닫힌 공식이 있으면(예: 평균의 $s/\sqrt{n}$) 각 붓스트랩 표본에 같은 공식을 적용한다. 빠르고 수치적으로 안정적이다.
 
-**Jackknife within bootstrap.** For each bootstrap sample, compute the jackknife standard error by removing one observation at a time from that bootstrap sample. This requires $n$ additional computations per bootstrap replicate.
+**붓스트랩 안의 잭나이프.** 각 붓스트랩 표본에서 관측값을 하나씩 빼며 잭나이프 표준오차를 계산한다. 붓스트랩 복제마다 $n$번의 추가 계산이 필요하다.
 
-**Nested bootstrap (double bootstrap).** For each bootstrap sample, draw $B_2$ second-level bootstrap resamples to estimate $\hat{\text{se}}^{*(b)}$. This produces $B \times B_2$ total computations and is usually prohibitively expensive.
+**중첩 붓스트랩(이중 붓스트랩).** 각 붓스트랩 표본에서 $B_2$개의 2단계 재표본을 뽑아 $\hat{\text{se}}^{*(b)}$를 추정한다. 총 $B \times B_2$번의 계산이 들어 대개 감당하기 어렵다.
 
-!!! tip "Practical Recommendation for the Inner Standard Error"
-    Use a formula-based estimate when one exists. Otherwise, use the jackknife within each bootstrap sample. The nested bootstrap is rarely needed in practice and its computational cost ($B \times B_2$ evaluations) is seldom justified.
+!!! tip "내부 표준오차에 대한 실무 권고"
+    공식이 있으면 공식 기반 추정을 쓴다. 없으면 각 붓스트랩 표본 안에서 잭나이프를 쓴다. 중첩 붓스트랩은 실무에서 거의 필요 없고, $B \times B_2$의 계산비용이 정당화되는 경우가 드물다.
 
-## Why It Achieves Second-Order Accuracy
+## 2차 정확도를 달성하는 이유
 
-The bootstrap-$t$ interval has coverage error of $O(n^{-1})$ compared to $O(n^{-1/2})$ for the percentile interval. The reason is that the studentized statistic $t^* = (\hat{\theta}^* - \hat{\theta})/\hat{\text{se}}^*$ approximates the distribution of $(\hat{\theta} - \theta)/\hat{\text{se}}$ to a higher order than the unstudentized $\hat{\theta}^* - \hat{\theta}$ approximates $\hat{\theta} - \theta$.
+붓스트랩-$t$ 구간의 포함확률 오차는 백분위수 구간의 $O(n^{-1/2})$에 비해 $O(n^{-1})$이다. 이유는 스튜던트화된 통계량 $t^* = (\hat{\theta}^* - \hat{\theta})/\hat{\text{se}}^*$이 $(\hat{\theta} - \theta)/\hat{\text{se}}$의 분포를 근사하는 정확도가, 스튜던트화하지 않은 $\hat{\theta}^* - \hat{\theta}$가 $\hat{\theta} - \theta$를 근사하는 정확도보다 한 차수 높기 때문이다.
 
-Studentization absorbs the leading-order effect of non-constant variance. If $\text{Var}(\hat{\theta})$ depends on $\theta$, the unstudentized bootstrap distribution has the wrong spread; the studentized version self-corrects by dividing by $\hat{\text{se}}^*$.
+스튜던트화는 분산이 일정하지 않은 데서 오는 선행 효과를 흡수한다. $\text{Var}(\hat{\theta})$가 $\theta$에 의존하면 스튜던트화하지 않은 붓스트랩 분포는 산포가 틀리는데, 스튜던트화 판본은 $\hat{\text{se}}^*$로 나누어 스스로를 보정한다.
 
-!!! note "Comparison with BCa"
-    Both BCa and bootstrap-$t$ achieve second-order accuracy. The BCa interval is transformation invariant but requires jackknife calculations for the acceleration. The bootstrap-$t$ is not transformation invariant but directly uses the pivot, which can be more natural in certain contexts. In simulation studies, both methods typically give similar coverage for smooth statistics.
+!!! note "BCa와의 비교"
+    BCa와 붓스트랩-$t$ 둘 다 2차 정확도를 달성한다. BCa 구간은 변환 불변이지만 가속을 위한 잭나이프 계산이 필요하다. 붓스트랩-$t$는 변환 불변이 아니지만 추축량을 직접 쓰므로 어떤 맥락에서는 더 자연스럽다. 모의실험 연구에서 매끄러운 통계량에 대해 두 방법의 포함확률은 대체로 비슷하다.
 
-## Example: Bootstrap-t Interval for the Mean
+## 예제: 평균의 붓스트랩-t 구간
 
-Consider a sample of $n = 20$ observations with $\bar{x} = 7.3$ and $s = 2.1$, giving $\hat{\text{se}} = s/\sqrt{n} = 0.470$.
+$n = 20$인 표본에서 $\bar{x} = 7.3$, $s = 2.1$을 얻어 $\hat{\text{se}} = s/\sqrt{n} = 0.470$이라 하자.
 
-**Bootstrap-$t$ procedure:**
+**붓스트랩-$t$ 절차:**
 
-1. For $b = 1, \ldots, 10{,}000$: draw 20 observations with replacement, compute $\bar{x}^{*(b)}$ and $s^{*(b)}/\sqrt{20}$
-2. Compute $t^{*(b)} = (\bar{x}^{*(b)} - \bar{x}) / (s^{*(b)}/\sqrt{20})$
-3. Suppose the 2.5th and 97.5th percentiles of $\{t^{*(b)}\}$ are $t^*_{(0.025)} = -2.18$ and $t^*_{(0.975)} = 2.31$
-4. The 95% bootstrap-$t$ interval is:
+1. $b = 1, \ldots, 10{,}000$에 대해 20개를 복원추출하여 $\bar{x}^{*(b)}$와 $s^{*(b)}/\sqrt{20}$을 계산한다.
+2. $t^{*(b)} = (\bar{x}^{*(b)} - \bar{x}) / (s^{*(b)}/\sqrt{20})$을 계산한다.
+3. $\{t^{*(b)}\}$의 2.5 백분위수와 97.5 백분위수가 $t^*_{(0.025)} = -2.18$, $t^*_{(0.975)} = 2.31$이라 하자.
+4. 95% 붓스트랩-$t$ 구간은
 
 $$
 [7.3 - 2.31 \times 0.470, \quad 7.3 - (-2.18) \times 0.470] = [6.21, \; 8.32]
 $$
 
-Compare this with the classical $t$-interval: $7.3 \pm 2.093 \times 0.470 = [6.32, 8.28]$. The bootstrap-$t$ interval is asymmetric, reflecting the slight skewness of the sampling distribution.
+고전적 $t$ 구간 $7.3 \pm 2.093 \times 0.470 = [6.32, 8.28]$과 비교하라. 붓스트랩-$t$ 구간은 비대칭이며, 표본분포의 완만한 치우침을 반영한다.
 
-## Advantages
+## 장점
 
-- **Second-order accuracy**: coverage error of $O(n^{-1})$
-- **Natural for pivot-based inference**: directly extends the classical $t$-statistic approach
-- **No jackknife needed** (unlike BCa) when a formula for $\hat{\text{se}}$ is available
+- **2차 정확도**: 포함확률 오차가 $O(n^{-1})$이다.
+- **추축량 기반 추론에 자연스럽다**: 고전적 $t$ 통계량 접근의 직접적 확장이다.
+- **잭나이프가 필요 없다**($\hat{\text{se}}$의 공식이 있는 경우). BCa와 대비된다.
 
-## Limitations
+## 한계
 
-**Computational cost.** Computing $\hat{\text{se}}^{*(b)}$ inside each bootstrap loop can be expensive when no closed-form formula exists.
+**계산비용.** 닫힌 공식이 없으면 붓스트랩 루프 안에서 $\hat{\text{se}}^{*(b)}$를 계산하는 것이 비쌀 수 있다.
 
-**Not transformation invariant.** The bootstrap-$t$ interval for $\phi = m(\theta)$ is generally not $[m(L), m(U)]$. If transformation invariance is important, BCa is preferred.
+**변환 불변이 아니다.** $\phi = m(\theta)$의 붓스트랩-$t$ 구간이 일반적으로 $[m(L), m(U)]$가 아니다. 변환 불변성이 중요하면 BCa가 낫다.
 
-**Unstable tails.** When $\hat{\text{se}}^{*(b)}$ is occasionally very small (e.g., in small samples), $t^{*(b)}$ can be extremely large, producing erratic quantile estimates. Winsorizing or trimming extreme $t^*$ values can help.
+**꼬리가 불안정하다.** $\hat{\text{se}}^{*(b)}$가 이따금 매우 작으면(소표본에서 그렇다) $t^{*(b)}$가 극단적으로 커져 분위수 추정이 요동친다. 극단적인 $t^*$ 값을 윈저화하거나 절사하면 도움이 된다.
 
-!!! warning "Small Standard Errors in Bootstrap Samples"
-    If a bootstrap sample happens to have very low variability (e.g., many repeated values), $\hat{\text{se}}^{*(b)}$ can be near zero, producing extreme $t^{*(b)}$ values. These outliers inflate the interval width. Monitoring for and addressing extreme $t^*$ values is important in practice.
+!!! warning "붓스트랩 표본의 표준오차가 작을 때"
+    붓스트랩 표본이 우연히 변동이 매우 작으면(예: 같은 값이 많이 반복되면) $\hat{\text{se}}^{*(b)}$가 $0$에 가까워져 극단적인 $t^{*(b)}$가 나온다. 이 이상치가 구간 폭을 부풀린다. 실무에서는 극단적인 $t^*$를 감시하고 대응하는 일이 중요하다.
 
-## Summary
+## 요약
 
-The bootstrap-$t$ method estimates the distribution of the studentized pivot $(\hat{\theta} - \theta)/\hat{\text{se}}$ via bootstrap resampling. By incorporating the standard error estimate into each bootstrap replicate, it achieves second-order accurate coverage. The main challenge is computing the inner standard error $\hat{\text{se}}^{*(b)}$ efficiently. When a formula for the standard error exists, the bootstrap-$t$ is straightforward and highly effective; otherwise, the BCa method may be more practical.
+붓스트랩-$t$ 방법은 붓스트랩 재표집으로 스튜던트화된 추축량 $(\hat{\theta} - \theta)/\hat{\text{se}}$의 분포를 추정한다. 각 붓스트랩 복제에 표준오차 추정값을 포함시킴으로써 2차 정확도의 포함확률을 달성한다. 주된 난점은 내부 표준오차 $\hat{\text{se}}^{*(b)}$를 효율적으로 계산하는 일이다. 표준오차의 공식이 있으면 붓스트랩-$t$가 직관적이고 매우 효과적이며, 그렇지 않으면 BCa가 더 실용적일 수 있다.
 
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Describe the main concept of Bootstrap-t Method and explain why it matters for statistical practice.
+**연습문제 1.**
+붓스트랩-$t$가 정말로 백분위수법보다 나은지 확인하라. $\text{Exp}(1)$ 자료의 평균(참값 $=1$)에 대해 $n = 15, 30, 100$에서 포함확률과 구간 폭을 비교하라.
 
-??? success "Solution to Exercise 1"
-    Bootstrap-t Method is a core topic in statistics that provides tools for drawing reliable inferences from data. It matters because proper application ensures valid conclusions, correctly quantified uncertainty, and appropriate handling of the assumptions that underpin the method. Practitioners who understand this concept can avoid common pitfalls and choose the right analytical approach for their data.
+??? success "연습문제 1 풀이"
+    ```python
+    import numpy as np
+    rng = np.random.default_rng(2)
+
+    for n in (15, 30, 100):
+        M, B = 2000, 1000
+        ct = cp = cn = 0
+        wt, wp = [], []
+        for _ in range(M):
+            x = rng.exponential(1, n)
+            th = x.mean(); se = x.std(ddof=1) / np.sqrt(n)
+            idx = rng.integers(0, n, (B, n)); xb = x[idx]
+            bs = xb.mean(axis=1)
+            seb = xb.std(axis=1, ddof=1) / np.sqrt(n)
+            t = (bs - th) / seb
+
+            tl, tu = np.percentile(t, [2.5, 97.5])
+            lo, hi = th - tu*se, th - tl*se
+            ct += lo <= 1 <= hi; wt.append(hi - lo)
+
+            lo2, hi2 = np.percentile(bs, [2.5, 97.5])
+            cp += lo2 <= 1 <= hi2; wp.append(hi2 - lo2)
+
+            cn += th - 1.96*se <= 1 <= th + 1.96*se
+        print(n, round(ct/M, 3), round(cp/M, 3), round(cn/M, 3),
+              round(np.mean(wt), 3), round(np.mean(wp), 3))
+    ```
+
+    | $n$ | 붓스트랩-$t$ | 백분위수 | 정규근사 | $t$ 구간 폭 | 백분위수 폭 |
+    |---:|---:|---:|---:|---:|---:|
+    | 15 | **0.944** | 0.896 | 0.903 | 1.314 | 0.918 |
+    | 30 | **0.953** | 0.924 | 0.926 | 0.799 | 0.673 |
+    | 100 | 0.940 | 0.934 | 0.936 | 0.404 | 0.384 |
+
+    $n = 15$에서 붓스트랩-$t$가 $0.944$로 명목값에 거의 도달하는 반면 백분위수는 $0.896$에 그친다. **5%p 가까운 차이**이다.
+
+    대가는 **더 넓은 구간**이다. $n = 15$에서 폭이 $1.314$ 대 $0.918$로 43% 넓다. 그러나 이것은 손해가 아니다. 백분위수 구간이 좁은 것은 참값을 자주 놓친다는 뜻이기 때문이다. 정직한 비교는 **같은 포함확률을 달성하는 데 필요한 폭**이다.
+
+    $n = 100$이 되면 세 방법이 $0.934$--$0.940$으로 수렴하고 폭 차이도 5%로 줄어든다. 붓스트랩-$t$의 이득은 소표본에서 크다.
+
+    **왜 지수분포에서 이렇게 차이가 나는가.** $\text{Exp}(1)$의 왜도가 $2$로 크다. $\bar{X}$의 표본분포가 오른쪽으로 치우쳐 있고, 결정적으로 $\bar{X}$와 $s$가 강한 양의 상관을 갖는다([16장](../../ch16/foundations/motivation.md) 연습문제 1 참조). 스튜던트화가 이 상관을 자동으로 흡수한다.
 
 ---
 
-**Exercise 2.**
-State the key assumptions required by the method discussed here. How can each assumption be checked?
+**연습문제 2.**
+"꼬리가 불안정하다"는 한계를 실제로 보라. $n = 8$인 지수 자료에서 $t^*$ 분포가 어떻게 되는가?
 
-??? success "Solution to Exercise 2"
-    The main assumptions typically include: (1) independence of observations -- verified by understanding the data collection process and checking for serial correlation; (2) distributional requirements (e.g., normality) -- checked with Q-Q plots and formal tests like Shapiro-Wilk; (3) equal variances (if applicable) -- assessed with boxplots and Levene's test. When assumptions are violated, consider robust alternatives, transformations, or nonparametric methods.
+??? success "연습문제 2 풀이"
+    ```python
+    import numpy as np
+    rng = np.random.default_rng(11)
+    n = 8
+    x = rng.exponential(1, n)
+    th = x.mean(); se = x.std(ddof=1) / np.sqrt(n)
+
+    B = 20000
+    idx = rng.integers(0, n, (B, n)); xb = x[idx]
+    bs = xb.mean(axis=1)
+    seb = xb.std(axis=1, ddof=1) / np.sqrt(n)
+    t = (bs - th) / seb
+
+    print("최소 se*  :", round(seb.min(), 5))          # 0.01019
+    print("최대 |t*| :", round(np.abs(t).max(), 1))     # 66.0
+    print(np.round(np.percentile(t, [0.5, 2.5, 50, 97.5, 99.5]), 3))
+    # [-30.537 -11.302  -0.089   1.502   2.054]
+    ```
+
+    | 백분위수 | 0.5 | 2.5 | 50 | 97.5 | 99.5 |
+    |---:|---:|---:|---:|---:|---:|
+    | $t^*$ | $-30.54$ | $-11.30$ | $-0.09$ | $1.50$ | $2.05$ |
+
+    $t^*$ 분포가 **극도로 비대칭**이다. 2.5 백분위수가 $-11.3$인데 97.5 백분위수는 $+1.50$이다. 정상적인 $t$ 분포라면 $\pm 2.4$ 정도여야 한다.
+
+    결과적으로 신뢰구간이
+
+    $$
+    [\hat\theta - 1.50 \times \hat{\text{se}}, \; \hat\theta + 11.30 \times \hat{\text{se}}] = [0.086, \; 5.856]
+    $$
+
+    으로 폭이 $5.77$이다. 자료의 척도가 $1$ 정도인데 구간이 그 6배에 이른다.
+
+    **왜 이런 일이 생기는가.** $n = 8$에서 붓스트랩 표본이 같은 값 몇 개로만 채워지는 일이 드물지 않다. 그러면 $s^*$가 $0$에 가까워지고 $t^*$가 폭발한다. 최소 $\hat{\text{se}}^* = 0.0102$이고 최대 $|t^*| = 66$이다.
+
+    비대칭이 한쪽으로 쏠리는 것은 지수분포의 오른쪽 꼬리 때문이다. 큰 값이 붓스트랩 표본에서 빠지면 $\bar{x}^*$가 작아지는 **동시에** $s^*$도 작아져, 분자가 음수이고 분모가 작아 $t^*$가 크게 음수가 된다.
+
+    **완화 방법.**
+
+    ```python
+    # 극단 1%를 절사한다
+    m = np.abs(t) < np.percentile(np.abs(t), 99)
+    tl, tu = np.percentile(t[m], [2.5, 97.5])
+    print("절사 후 폭:", round((tu - tl) * se, 4))   # 5.4318 (원래 5.7699)
+    ```
+
+    절사가 도움이 되지만 $5.77 \to 5.43$으로 6% 줄이는 데 그친다. 근본 문제는 $n = 8$이 붓스트랩-$t$에 너무 작다는 것이다.
+
+    **권고:** $n < 15$ 정도에서는 붓스트랩-$t$를 피하거나, 표준오차의 안정적인 공식이 있는 통계량에만 쓴다. 평균처럼 $s/\sqrt{n}$을 쓰는 경우에도 $n$이 작으면 $s^*$의 변동이 문제가 된다.
 
 ---
 
-**Exercise 3.**
-Work through a small numerical example illustrating the application of the technique from this section.
+**연습문제 3.**
+붓스트랩-$t$ 구간의 분위수 반전이 왜 일어나는지 추축량 부등식에서 유도하라.
 
-??? success "Solution to Exercise 3"
-    A structured approach to applying this technique involves: (1) clearly stating the hypotheses or estimation goal; (2) verifying that the data meet the required assumptions; (3) computing the relevant test statistic, estimate, or model fit; (4) obtaining the p-value, confidence interval, or posterior distribution; (5) interpreting the result in the context of the original question. Following these steps systematically ensures a rigorous and reproducible analysis.
+??? success "연습문제 3 풀이"
+    추축량 $T = (\hat{\theta} - \theta)/\hat{\text{se}}$의 분포를 안다고 하자. $T$의 $q$번째 분위수를 $t_q$라 하면 정의에 의해
+
+    $$
+    P\!\left(t_{\alpha/2} \le \frac{\hat{\theta} - \theta}{\hat{\text{se}}} \le t_{1-\alpha/2}\right) = 1 - \alpha
+    $$
+
+    이다. $\hat{\text{se}} > 0$을 곱하면
+
+    $$
+    t_{\alpha/2}\,\hat{\text{se}} \le \hat{\theta} - \theta \le t_{1-\alpha/2}\,\hat{\text{se}}
+    $$
+
+    이다. 각 항에서 $\hat\theta$를 빼고 $-1$을 곱하면 **부등호의 방향이 뒤집힌다**.
+
+    $$
+    -t_{1-\alpha/2}\,\hat{\text{se}} \le \theta - \hat{\theta} \le -t_{\alpha/2}\,\hat{\text{se}}
+    $$
+
+    $$
+    \hat{\theta} - t_{1-\alpha/2}\,\hat{\text{se}} \le \theta \le \hat{\theta} - t_{\alpha/2}\,\hat{\text{se}}
+    $$
+
+    따라서 신뢰구간은 $\left[\hat{\theta} - t_{1-\alpha/2}\hat{\text{se}}, \; \hat{\theta} - t_{\alpha/2}\hat{\text{se}}\right]$이고, $T$의 **상위** 분위수가 구간의 **하한**을 만든다. $\square$
+
+    **$t_q$를 붓스트랩으로 추정한다.** 붓스트랩 원리에 따라 $T$의 분포를 $T^* = (\hat{\theta}^* - \hat{\theta})/\hat{\text{se}}^*$의 분포로 근사하므로 $t_q \approx t^*_{(q)}$이다.
+
+    !!! note "고전적 $t$ 구간에서 반전이 보이지 않는 이유"
+        고전적 $t$ 구간에서도 같은 반전이 일어나지만 **$t$ 분포가 대칭이라 눈에 띄지 않는다**. $t_{1-\alpha/2} = -t_{\alpha/2}$이므로
+
+        $$
+        [\hat\theta - t_{1-\alpha/2}\hat{\text{se}}, \; \hat\theta - t_{\alpha/2}\hat{\text{se}}]
+        = [\hat\theta - t_{1-\alpha/2}\hat{\text{se}}, \; \hat\theta + t_{1-\alpha/2}\hat{\text{se}}]
+        $$
+
+        이 되어 익숙한 $\hat\theta \pm t\,\hat{\text{se}}$ 형태가 된다. 붓스트랩-$t$에서는 $t^*$의 분포가 비대칭이라 반전이 실제 효과를 낸다.
 
 ---
 
-**Exercise 4.**
-Compare the approach from this section with an alternative method. When would you choose each?
+**연습문제 4.**
+스튜던트화를 하지 않으면 무엇을 잃는가? 같은 붓스트랩 복제값에서 $(\hat\theta^* - \hat\theta)$의 분위수만 쓰는 기본 구간과 붓스트랩-$t$를 비교하라.
 
-??? success "Solution to Exercise 4"
-    The method discussed here is appropriate when its assumptions hold and the sample size is sufficient for the asymptotic approximations to be accurate. Alternative approaches include: (1) nonparametric methods -- preferred when distributional assumptions are suspect; (2) bootstrap methods -- useful when analytical reference distributions are unavailable; (3) Bayesian methods -- valuable when incorporating prior information or when direct probability statements about parameters are desired. Running multiple approaches and comparing results provides a useful robustness check.
+??? success "연습문제 4 풀이"
+    두 구간의 차이는 **분모의 유무**뿐이다.
+
+    | 방법 | 사용하는 붓스트랩 양 | 구간 |
+    |:---|:---|:---|
+    | 기본 (추축) | $\hat\theta^* - \hat\theta$ | $[2\hat\theta - \hat\theta^*_{(1-\alpha/2)}, \; 2\hat\theta - \hat\theta^*_{(\alpha/2)}]$ |
+    | 붓스트랩-$t$ | $(\hat\theta^* - \hat\theta)/\hat{\text{se}}^*$ | $[\hat\theta - t^*_{(1-\alpha/2)}\hat{\text{se}}, \; \hat\theta - t^*_{(\alpha/2)}\hat{\text{se}}]$ |
+
+    ```python
+    import numpy as np
+    rng = np.random.default_rng(2)
+    for n in (15, 30, 100):
+        M, B = 2000, 1000
+        ct = cb = 0
+        for _ in range(M):
+            x = rng.exponential(1, n)
+            th = x.mean(); se = x.std(ddof=1) / np.sqrt(n)
+            idx = rng.integers(0, n, (B, n)); xb = x[idx]
+            bs = xb.mean(axis=1)
+            seb = xb.std(axis=1, ddof=1) / np.sqrt(n)
+            t = (bs - th) / seb
+            tl, tu = np.percentile(t, [2.5, 97.5])
+            ct += th - tu*se <= 1 <= th - tl*se
+            lo, hi = np.percentile(bs, [2.5, 97.5])
+            cb += 2*th - hi <= 1 <= 2*th - lo
+        print(n, round(ct/M, 3), round(cb/M, 3))
+    ```
+
+    | $n$ | 붓스트랩-$t$ | 기본 (추축) |
+    |---:|---:|---:|
+    | 15 | 0.944 | 0.878 |
+    | 30 | 0.953 | 0.906 |
+    | 100 | 0.940 | 0.927 |
+
+    스튜던트화 하나로 $n = 15$에서 포함확률이 $0.878 \to 0.944$로 6.6%p 개선된다.
+
+    **무엇이 개선되는가.** $\hat{\theta}^* - \hat{\theta}$의 분포는 $\hat{\text{se}}$가 얼마나 큰지에 따라 산포가 달라진다. 우연히 $s$가 큰 표본을 얻으면 붓스트랩 분포도 넓어지고, 그 넓은 분포를 그대로 구간에 쓰면 폭이 자료에 따라 요동친다.
+
+    $\hat{\text{se}}^*$로 나누면 이 요동이 제거된다. $t^*$는 척도에 대해 (근사적으로) 불변이므로 **자료마다 다른 척도를 자동으로 표준화**한다. 이것이 "스튜던트화가 추축성을 개선한다"는 말의 구체적 의미이다.
+
+    **비유.** 고전적 통계학에서 $\sigma$를 알면 $z = (\bar X - \mu)/(\sigma/\sqrt n)$을 쓰고, 모르면 $t = (\bar X - \mu)/(s/\sqrt n)$을 쓴다. $t$ 분포가 $z$보다 꼬리가 두꺼운 것은 $s$의 변동을 반영하기 때문이다. 붓스트랩-$t$는 이 논리를 비모수 상황으로 옮긴 것이며, $t^*$ 분포가 그 두꺼운 꼬리를 자료에서 직접 학습한다.

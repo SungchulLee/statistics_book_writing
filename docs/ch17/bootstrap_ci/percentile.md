@@ -1,133 +1,292 @@
-# Percentile Method
+# 백분위수법
 
-## Motivation
+## 동기
 
-The simplest bootstrap confidence interval uses the quantiles of the bootstrap distribution directly. Instead of assuming that $\hat{\theta}$ has a normal sampling distribution, the **percentile method** reads the interval endpoints straight from the bootstrap replicates. This makes the interval inherently adaptive: it respects skewness, respects natural parameter bounds, and requires no formula for the standard error.
+가장 단순한 붓스트랩 신뢰구간은 붓스트랩 분포의 분위수를 그대로 쓴다. $\hat{\theta}$의 표본분포가 정규라고 가정하는 대신, **백분위수법**은 구간의 양 끝점을 붓스트랩 복제값에서 직접 읽는다. 그 결과 구간이 본질적으로 적응적이다. 치우침을 존중하고, 모수의 자연스러운 경계를 존중하며, 표준오차 공식이 전혀 필요 없다.
 
-Despite its simplicity, the percentile method has well-understood theoretical limitations. This section presents the method, explains when it works well, and identifies the situations where more sophisticated methods are needed.
+단순함에도 불구하고 백분위수법에는 잘 알려진 이론적 한계가 있다. 이 절에서는 방법을 제시하고, 언제 잘 작동하는지 설명하며, 더 정교한 방법이 필요한 상황을 밝힌다.
 
-## Definition
+## 정의
 
-Let $\hat{\theta}^{*(1)}, \ldots, \hat{\theta}^{*(B)}$ be the bootstrap replicates obtained by resampling with replacement from the observed data and computing the statistic $\hat{\theta}$ on each resample. The **percentile bootstrap confidence interval** at level $1 - \alpha$ is:
+관측자료에서 복원추출하여 각 재표본에서 통계량 $\hat{\theta}$를 계산해 얻은 붓스트랩 복제값을 $\hat{\theta}^{*(1)}, \ldots, \hat{\theta}^{*(B)}$이라 하자. 수준 $1 - \alpha$의 **백분위수 붓스트랩 신뢰구간**은
 
 $$
 \left[\hat{\theta}^*_{(\alpha/2)}, \quad \hat{\theta}^*_{(1-\alpha/2)}\right]
 $$
 
-where $\hat{\theta}^*_{(q)}$ denotes the $q$-th quantile of the bootstrap distribution. For a 95% confidence interval ($\alpha = 0.05$), this is the interval from the 2.5th percentile to the 97.5th percentile of the bootstrap replicates.
+이며 $\hat{\theta}^*_{(q)}$는 붓스트랩 분포의 $q$번째 분위수이다. 95% 신뢰구간($\alpha = 0.05$)은 붓스트랩 복제값의 2.5 백분위수부터 97.5 백분위수까지이다.
 
-In practice, with $B$ replicates sorted in increasing order $\hat{\theta}^*_{[1]} \le \hat{\theta}^*_{[2]} \le \cdots \le \hat{\theta}^*_{[B]}$, the lower bound is $\hat{\theta}^*_{[\lfloor B \cdot \alpha/2 \rfloor]}$ and the upper bound is $\hat{\theta}^*_{[\lceil B \cdot (1-\alpha/2) \rceil]}$.
+실제로 복제값을 오름차순으로 정렬하여 $\hat{\theta}^*_{[1]} \le \hat{\theta}^*_{[2]} \le \cdots \le \hat{\theta}^*_{[B]}$라 하면, 하한은 $\hat{\theta}^*_{[\lfloor B \cdot \alpha/2 \rfloor]}$, 상한은 $\hat{\theta}^*_{[\lceil B \cdot (1-\alpha/2) \rceil]}$이다.
 
-## Algorithm
+## 알고리즘
 
-1. Compute the observed statistic $\hat{\theta} = g(x_1, \ldots, x_n)$
-2. Generate $B$ bootstrap replicates $\hat{\theta}^{*(1)}, \ldots, \hat{\theta}^{*(B)}$
-3. Sort the replicates in increasing order
-4. The $100(1-\alpha)\%$ confidence interval is:
+1. 관측 통계량 $\hat{\theta} = g(x_1, \ldots, x_n)$을 계산한다.
+2. $B$개의 붓스트랩 복제값 $\hat{\theta}^{*(1)}, \ldots, \hat{\theta}^{*(B)}$을 생성한다.
+3. 복제값을 오름차순으로 정렬한다.
+4. $100(1-\alpha)\%$ 신뢰구간은
 
 $$
 \left[\hat{\theta}^*_{[\lfloor B \cdot \alpha/2 \rfloor]}, \quad \hat{\theta}^*_{[\lceil B \cdot (1 - \alpha/2) \rceil]}\right]
 $$
 
-!!! tip "Choosing B for Percentile Intervals"
-    For the percentile method, $B$ should be large enough that the extreme quantiles are stable. With $B = 1{,}000$, the 2.5th percentile is the 25th smallest value — reasonable but noisy. With $B = 10{,}000$, it is the 250th smallest value, giving a much more stable estimate. A minimum of $B = 5{,}000$ is recommended for confidence intervals.
+!!! tip "백분위수 구간에 필요한 B"
+    백분위수법에서는 극단 분위수가 안정될 만큼 $B$가 커야 한다. $B = 1{,}000$이면 2.5 백분위수는 25번째로 작은 값이라 그런대로 쓸 만하지만 잡음이 있다. $B = 10{,}000$이면 250번째 값이 되어 훨씬 안정적이다. 신뢰구간에는 최소 $B = 5{,}000$을 권한다.
 
-## Why the Percentile Method Works
+## 백분위수법이 작동하는 이유
 
-The percentile method has an elegant justification when there exists a monotone transformation $\phi = m(\theta)$ such that $\hat{\phi} = m(\hat{\theta})$ is normally distributed with constant variance. In that case, $\hat{\phi}$ is a **pivotal quantity** (up to a location shift), and the percentile interval for $\phi$ has correct coverage. Because $m$ is monotone, transforming back gives:
+백분위수법에는 우아한 정당화가 있다. $\hat{\phi} = m(\hat{\theta})$가 분산이 일정한 정규분포를 갖게 하는 단조변환 $\phi = m(\theta)$가 존재한다고 하자. 그러면 $\hat{\phi}$는 (위치 이동을 제외하고) **추축량**이고, $\phi$에 대한 백분위수 구간의 포함확률이 정확하다. $m$이 단조이므로 되돌리면
 
 $$
 [m^{-1}(\hat{\phi}^*_{(\alpha/2)}), \quad m^{-1}(\hat{\phi}^*_{(1-\alpha/2)})] = [\hat{\theta}^*_{(\alpha/2)}, \quad \hat{\theta}^*_{(1-\alpha/2)}]
 $$
 
-The percentile interval on the $\theta$ scale is identical to the one on the $\phi$ scale transformed back, so it automatically respects the normalizing transformation without the user needing to know $m$.
+가 된다. $\theta$ 척도의 백분위수 구간이 $\phi$ 척도의 구간을 되돌린 것과 동일하므로, 사용자가 $m$을 알 필요 없이 정규화 변환이 자동으로 반영된다.
 
-!!! note "Transformation Invariance"
-    The percentile method is **transformation invariant**: if $\phi = m(\theta)$ for any monotone increasing function $m$, then the percentile interval for $\phi$ is exactly $[m(\hat{\theta}^*_{(\alpha/2)}), m(\hat{\theta}^*_{(1-\alpha/2)})]$. This is a property that the normal-approximation interval $\hat{\theta} \pm z_{\alpha/2} \cdot \widehat{\text{SE}}$ does not share.
+!!! note "변환 불변성"
+    백분위수법은 **변환 불변**이다. 임의의 단조증가 함수 $m$에 대해 $\phi = m(\theta)$이면 $\phi$의 백분위수 구간은 정확히 $[m(\hat{\theta}^*_{(\alpha/2)}), m(\hat{\theta}^*_{(1-\alpha/2)})]$이다. 정규근사 구간 $\hat{\theta} \pm z_{\alpha/2} \cdot \widehat{\text{SE}}$에는 이 성질이 없다.
 
-## Advantages
+## 장점
 
-1. **Simplicity**: no formula for the standard error is needed
-2. **Transformation invariance**: the interval automatically adapts to any monotone reparameterization
-3. **Respects parameter bounds**: if $\theta \ge 0$ and all bootstrap replicates are non-negative, the interval stays non-negative
-4. **Captures shape**: an asymmetric bootstrap distribution produces an asymmetric confidence interval
+1. **단순함**: 표준오차 공식이 필요 없다.
+2. **변환 불변성**: 임의의 단조 재모수화에 구간이 자동으로 적응한다.
+3. **모수 경계를 존중한다**: $\theta \ge 0$이고 모든 붓스트랩 복제값이 음이 아니면 구간도 음이 아니다.
+4. **모양을 포착한다**: 붓스트랩 분포가 비대칭이면 신뢰구간도 비대칭이 된다.
 
-## Limitations
+## 한계
 
-The percentile method has **first-order accuracy**, meaning its coverage error is $O(n^{-1/2})$. This can result in noticeable undercoverage or overcoverage for moderate sample sizes. The main sources of error are:
+백분위수법은 **1차 정확도**를 갖는다. 즉 포함확률 오차가 $O(n^{-1/2})$이다. 중간 정도의 표본크기에서 눈에 띄는 과소·과대 포함이 생길 수 있다. 오차의 주된 원천은 다음과 같다.
 
-**Bias.** If the bootstrap distribution of $\hat{\theta}^*$ is centered away from $\hat{\theta}$ (i.e., the bootstrap is biased), the percentile interval shifts in the wrong direction. For example, if $\hat{\theta}$ systematically overestimates $\theta$, the bootstrap replicates will be centered above $\theta$, and the percentile interval will be too high.
+**편향.** $\hat{\theta}^*$의 붓스트랩 분포가 $\hat{\theta}$에서 벗어난 곳에 중심을 두면(즉 붓스트랩에 편향이 있으면) 백분위수 구간이 잘못된 방향으로 이동한다. 예를 들어 $\hat{\theta}$가 $\theta$를 체계적으로 과대추정하면 붓스트랩 복제값이 $\theta$보다 위에 중심을 두고, 백분위수 구간도 너무 높아진다.
 
-**Skewness without a normalizing transformation.** When no monotone transformation makes the sampling distribution of $\hat{\theta}$ approximately normal, the percentile interval can have substantially incorrect coverage on one side.
+**정규화 변환이 없는 치우침.** $\hat{\theta}$의 표본분포를 근사적으로 정규로 만드는 단조변환이 존재하지 않으면, 백분위수 구간의 한쪽 포함확률이 크게 틀릴 수 있다.
 
-!!! warning "Coverage Can Be Poor"
-    Simulation studies show that the percentile method can have actual coverage of 85-90% when the nominal level is 95%, particularly for skewed statistics like the sample variance, odds ratios, or correlation coefficients with small $n$. The BCa and bootstrap-$t$ methods address these deficiencies.
+!!! warning "포함확률이 나쁠 수 있다"
+    모의실험 연구에 따르면 명목수준이 95%일 때 백분위수법의 실제 포함확률이 85--90%에 그칠 수 있다. 표본분산, 오즈비, 소표본 상관계수처럼 치우친 통계량에서 특히 그렇다. BCa와 붓스트랩-$t$ 방법이 이 결함을 다룬다.
 
-## Example: Confidence Interval for the Median
+## 예제: 중앙값의 신뢰구간
 
-Consider a sample of $n = 25$ observations from a right-skewed distribution. The sample median is $\hat{\theta} = 14.3$.
+오른쪽으로 치우친 분포에서 $n = 25$인 표본을 얻었고 표본중앙값이 $\hat{\theta} = 14.3$이라 하자.
 
-**Percentile bootstrap procedure:**
+**백분위수 붓스트랩 절차:**
 
-1. Generate $B = 10{,}000$ bootstrap replicates of the median
-2. Sort the replicates
-3. The 95% confidence interval is $[\hat{\theta}^*_{[250]}, \hat{\theta}^*_{[9750]}]$
+1. 중앙값의 붓스트랩 복제값 $B = 10{,}000$개를 생성한다.
+2. 복제값을 정렬한다.
+3. 95% 신뢰구간은 $[\hat{\theta}^*_{[250]}, \hat{\theta}^*_{[9750]}]$이다.
 
-Suppose the sorted bootstrap medians give $\hat{\theta}^*_{[250]} = 11.8$ and $\hat{\theta}^*_{[9750]} = 16.5$. The 95% percentile interval is $[11.8, 16.5]$.
+정렬된 붓스트랩 중앙값이 $\hat{\theta}^*_{[250]} = 11.8$, $\hat{\theta}^*_{[9750]} = 16.5$였다고 하자. 95% 백분위수 구간은 $[11.8, 16.5]$이다.
 
-Note that this interval is asymmetric around the observed median $14.3$: the distance to the lower bound ($2.5$) differs from the distance to the upper bound ($2.2$), reflecting the skewness of the sampling distribution.
+이 구간이 관측된 중앙값 $14.3$을 중심으로 비대칭임에 주목하라. 하한까지의 거리 $2.5$가 상한까지의 거리 $2.2$와 다르며, 이는 표본분포의 치우침을 반영한 것이다.
 
-## Comparison with the Normal Interval
+## 정규구간과의 비교
 
-The **normal bootstrap interval** uses the bootstrap standard error:
+**정규 붓스트랩 구간**은 붓스트랩 표준오차를 쓴다.
 
 $$
 \hat{\theta} \pm z_{\alpha/2} \cdot \widehat{\text{SE}}_{\text{boot}}
 $$
 
-This interval is always symmetric around $\hat{\theta}$ and can extend beyond natural parameter bounds. The percentile interval avoids both issues but can suffer from bias in the bootstrap distribution.
+이 구간은 언제나 $\hat{\theta}$를 중심으로 대칭이며 모수의 자연스러운 경계를 넘어갈 수 있다. 백분위수 구간은 두 문제를 모두 피하지만 붓스트랩 분포의 편향에 취약하다.
 
-The **basic (pivotal) bootstrap interval** attempts to correct for bias:
+**기본(추축) 붓스트랩 구간**은 편향을 보정하려 한다.
 
 $$
 \left[2\hat{\theta} - \hat{\theta}^*_{(1-\alpha/2)}, \quad 2\hat{\theta} - \hat{\theta}^*_{(\alpha/2)}\right]
 $$
 
-Note the reversed quantiles. The basic interval corrects the first-order bias of the percentile interval but sacrifices transformation invariance.
+분위수가 뒤바뀐 것에 주목하라. 기본 구간은 백분위수 구간의 1차 편향을 보정하지만 변환 불변성을 잃는다.
 
-## Summary
+## 요약
 
-The percentile method constructs confidence intervals by reading quantiles directly from the bootstrap distribution. Its simplicity, transformation invariance, and ability to respect parameter bounds make it a natural starting point. However, its first-order accuracy means that coverage can be poor when the bootstrap distribution is biased or when no normalizing transformation exists. For improved coverage, the BCa and bootstrap-$t$ methods (covered in the following sections) provide second-order corrections.
+백분위수법은 붓스트랩 분포에서 분위수를 직접 읽어 신뢰구간을 만든다. 단순함, 변환 불변성, 모수 경계를 존중하는 성질 덕에 자연스러운 출발점이 된다. 그러나 1차 정확도에 그치므로 붓스트랩 분포에 편향이 있거나 정규화 변환이 존재하지 않을 때 포함확률이 나빠질 수 있다. 포함확률을 개선하려면 이어지는 절의 BCa와 붓스트랩-$t$ 방법이 2차 보정을 제공한다.
 
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Describe the main concept of Percentile Method and explain why it matters for statistical practice.
+**연습문제 1.**
+백분위수 구간의 변환 불변성을 수치로 확인하라. 로그정규 자료의 평균에 대해 (a) 원 척도에서 백분위수 구간을 구한 것과 (b) 로그 척도에서 구간을 구한 뒤 지수변환한 것을 비교하라. 정규근사 구간에서는 어떤가?
 
-??? success "Solution to Exercise 1"
-    Percentile Method is a core topic in statistics that provides tools for drawing reliable inferences from data. It matters because proper application ensures valid conclusions, correctly quantified uncertainty, and appropriate handling of the assumptions that underpin the method. Practitioners who understand this concept can avoid common pitfalls and choose the right analytical approach for their data.
+??? success "연습문제 1 풀이"
+    ```python
+    import numpy as np
+    rng = np.random.default_rng(0)
+    n = 40
+    x = rng.lognormal(0, 1, n)
+    B = 20000
+    idx = rng.integers(0, n, (B, n))
+    m = x[idx].mean(axis=1)          # 원 척도 붓스트랩 복제값
+    lm = np.log(m)                    # 로그 척도 복제값
+
+    # 백분위수 구간
+    print(np.round(np.percentile(m, [2.5, 97.5]), 4))
+    print(np.round(np.exp(np.percentile(lm, [2.5, 97.5])), 4))
+
+    # 정규근사 구간
+    th = x.mean()
+    print(np.round([th - 1.96*m.std(ddof=1), th + 1.96*m.std(ddof=1)], 4))
+    lth = np.log(th); lse = lm.std(ddof=1)
+    print(np.round(np.exp([lth - 1.96*lse, lth + 1.96*lse]), 4))
+    ```
+
+    | 방법 | 구간 |
+    |:---|:---|
+    | 백분위수, 원 척도 | $[0.9639, \; 1.5910]$ |
+    | 백분위수, 로그 척도 → 지수변환 | $[0.9639, \; 1.5910]$ |
+    | 정규근사, 원 척도 | $[0.9468, \; 1.5776]$ |
+    | 정규근사, 로그 척도 → 지수변환 | $[0.9816, \; 1.6231]$ |
+
+    백분위수 구간이 **소수점 이하 전부 일치한다**. 우연이 아니라 정의에서 따라 나오는 항등식이다. $\log$가 단조증가이므로 $\log(m)$의 $q$번째 분위수는 $m$의 $q$번째 분위수의 로그와 정확히 같다.
+
+    $$
+    \text{Quantile}_q(\log m) = \log\left(\text{Quantile}_q(m)\right)
+    $$
+
+    정규근사 구간은 척도에 따라 다르다. 원 척도에서 $[0.947, 1.578]$, 로그 척도를 거치면 $[0.982, 1.623]$이다. 하한이 4% 차이 난다.
+
+    **어느 쪽이 옳은가?** 로그 척도를 거친 쪽이 낫다. 로그정규 평균의 표본분포가 오른쪽으로 치우쳐 있어 로그를 취하면 정규에 가까워지기 때문이다. 그러나 이를 알려면 **사용자가 올바른 변환을 미리 알아야** 한다.
+
+    백분위수법의 가치가 여기에 있다. 어떤 변환이 정규화 변환인지 몰라도, 그 변환을 적용한 결과와 같은 답을 준다.
 
 ---
 
-**Exercise 2.**
-State the key assumptions required by the method discussed here. How can each assumption be checked?
+**연습문제 2.**
+백분위수법의 1차 정확도가 실제로 어떤 결과를 낳는가? $\text{Exp}(1)$ 자료의 표본분산(참값 $= 1$)에 대해 $n = 25, 100, 400$에서 포함확률을 계산하라.
 
-??? success "Solution to Exercise 2"
-    The main assumptions typically include: (1) independence of observations -- verified by understanding the data collection process and checking for serial correlation; (2) distributional requirements (e.g., normality) -- checked with Q-Q plots and formal tests like Shapiro-Wilk; (3) equal variances (if applicable) -- assessed with boxplots and Levene's test. When assumptions are violated, consider robust alternatives, transformations, or nonparametric methods.
+??? success "연습문제 2 풀이"
+    ```python
+    import numpy as np
+    rng = np.random.default_rng(3)
+    for n in (25, 100, 400):
+        M, B = 1500, 1000
+        cn = cp = cb = 0
+        for _ in range(M):
+            x = rng.exponential(1, n)
+            th = x.var(ddof=1)
+            idx = rng.integers(0, n, (B, n))
+            bs = x[idx].var(axis=1, ddof=1)
+            se = bs.std(ddof=1)
+            cn += th - 1.96*se <= 1.0 <= th + 1.96*se
+            lo, hi = np.percentile(bs, [2.5, 97.5])
+            cp += lo <= 1.0 <= hi
+            cb += 2*th - hi <= 1.0 <= 2*th - lo
+        print(n, round(cn/M, 3), round(cp/M, 3), round(cb/M, 3))
+    ```
+
+    | $n$ | 정규 | 백분위수 | 기본 |
+    |---:|---:|---:|---:|
+    | 25 | 0.743 | 0.744 | 0.726 |
+    | 100 | 0.845 | 0.851 | 0.831 |
+    | 400 | 0.914 | 0.916 | 0.907 |
+
+    **세 방법 모두 명목수준에 크게 못 미친다.** $n = 25$에서 $0.74$, $n = 400$에서도 $0.92$에 그친다.
+
+    포함확률 오차가 $n^{-1/2}$에 비례하여 줄어드는 것을 확인할 수 있다. $0.95 - 0.744 = 0.206$, $0.95 - 0.851 = 0.099$, $0.95 - 0.916 = 0.034$이고, $n$이 16배가 될 때 오차가 대략 4배 줄었다($0.206/0.099 = 2.08 \approx \sqrt{4}$, $0.099/0.034 = 2.9 \approx \sqrt{4}$). 이것이 "1차 정확도, $O(n^{-1/2})$"의 구체적 의미이다.
+
+    **왜 분산이 이렇게 어려운가.** $s^2$의 표본분포는 모집단의 4차 적률에 지배되는데, 지수분포의 초과첨도는 $6$이다. 붓스트랩 재표집이 원표본의 4차 적률을 그대로 물려받으므로, $n$이 작으면 그 추정 자체가 매우 불안정하다.
+
+    **어떻게 개선하는가.** [BCa](bca.md)나 [붓스트랩-$t$](bootstrap_t.md)를 쓰면 2차 정확도 $O(n^{-1})$를 얻는다. 또는 로그변환처럼 분산을 안정화하는 변환 위에서 구간을 만든 뒤 되돌리는 방법도 있다.
 
 ---
 
-**Exercise 3.**
-Work through a small numerical example illustrating the application of the technique from this section.
+**연습문제 3.**
+$B$가 백분위수 구간의 안정성에 미치는 영향을 정량화하라. 같은 자료에 붓스트랩을 여러 번 반복하면 구간의 끝점이 얼마나 흔들리는가?
 
-??? success "Solution to Exercise 3"
-    A structured approach to applying this technique involves: (1) clearly stating the hypotheses or estimation goal; (2) verifying that the data meet the required assumptions; (3) computing the relevant test statistic, estimate, or model fit; (4) obtaining the p-value, confidence interval, or posterior distribution; (5) interpreting the result in the context of the original question. Following these steps systematically ensures a rigorous and reproducible analysis.
+??? success "연습문제 3 풀이"
+    자료를 고정하고 붓스트랩 절차만 반복한다. 이때 관측되는 변동은 순전히 몬테카를로 오차이다.
+
+    ```python
+    import numpy as np
+    rng = np.random.default_rng(5)
+    n = 50
+    x = rng.exponential(1, n)          # 자료 고정
+
+    for B in (500, 2000, 10000, 50000):
+        los, his = [], []
+        for _ in range(200):
+            idx = rng.integers(0, n, (B, n))
+            bs = x[idx].mean(axis=1)
+            lo, hi = np.percentile(bs, [2.5, 97.5])
+            los.append(lo); his.append(hi)
+        print(B, round(np.std(los), 5), round(np.std(his), 5),
+              round(np.mean(his) - np.mean(los), 5))
+    ```
+
+    | $B$ | 하한의 표준편차 | 상한의 표준편차 | 평균 구간 폭 |
+    |---:|---:|---:|---:|
+    | 500 | 0.01000 | 0.01093 | 0.35653 |
+    | 2000 | 0.00514 | 0.00597 | 0.35877 |
+    | 10000 | 0.00197 | 0.00235 | 0.35929 |
+    | 50000 | 0.00110 | 0.00112 | 0.35964 |
+
+    끝점의 몬테카를로 표준편차가 $\sqrt{B}$에 반비례하여 줄어든다. $B$가 100배가 되면 변동이 약 10배 줄어든다($0.0100 \to 0.0011$).
+
+    **실무적 판단 기준.** 구간 폭이 $0.359$인데 $B = 500$에서 끝점의 변동이 $0.010$이다. 폭의 2.8%로, 무시할 만하다고 보기에는 애매하다. $B = 10{,}000$이면 $0.0020$으로 폭의 0.55%가 되어 안전하다.
+
+    **경험칙:** 끝점의 몬테카를로 표준오차가 구간 폭의 1% 아래가 되도록 $B$를 정한다. 대체로 $B = 5{,}000$--$10{,}000$이면 충분하다.
+
+    **한 가지 함정.** $B$를 늘려도 **자료 자체의 변동은 전혀 줄지 않는다**. 위 표의 평균 구간 폭이 $B$에 따라 거의 변하지 않는 것에 주목하라. $B$는 붓스트랩 근사의 잡음만 줄일 뿐, 표본이 하나뿐이라는 근본적 한계는 그대로이다.
 
 ---
 
-**Exercise 4.**
-Compare the approach from this section with an alternative method. When would you choose each?
+**연습문제 4.**
+편향된 추정량에서 백분위수 구간과 기본 구간이 어떻게 달라지는가?
+$X_i \sim \mathcal{N}(\mu, 1)$에서 $\theta = \mu^2$을 $\hat{\theta} = \bar{X}^2$으로 추정하는 경우를 보라.
 
-??? success "Solution to Exercise 4"
-    The method discussed here is appropriate when its assumptions hold and the sample size is sufficient for the asymptotic approximations to be accurate. Alternative approaches include: (1) nonparametric methods -- preferred when distributional assumptions are suspect; (2) bootstrap methods -- useful when analytical reference distributions are unavailable; (3) Bayesian methods -- valuable when incorporating prior information or when direct probability statements about parameters are desired. Running multiple approaches and comparing results provides a useful robustness check.
+??? success "연습문제 4 풀이"
+    $\hat{\theta} = \bar{X}^2$은
+
+    $$
+    E[\bar{X}^2] = \mu^2 + \frac{1}{n}
+    $$
+
+    이므로 $1/n$만큼 **위로 편향**되어 있다.
+
+    ```python
+    import numpy as np
+    rng = np.random.default_rng(8)
+    n, B, M = 20, 2000, 3000
+    mu, true = 0.5, 0.25
+
+    cov_p = cov_b = 0
+    for _ in range(M):
+        x = rng.normal(mu, 1, n)
+        th = x.mean() ** 2
+        idx = rng.integers(0, n, (B, n))
+        bs = x[idx].mean(axis=1) ** 2
+        lo, hi = np.percentile(bs, [2.5, 97.5])
+        cov_p += lo <= true <= hi
+        cov_b += 2*th - hi <= true <= 2*th - lo
+    print(round(cov_p/M, 3), round(cov_b/M, 3))
+    ```
+
+    $\mu = 0.5$, $n = 20$, 참값 $\theta = 0.25$:
+
+    | 방법 | 포함확률 |
+    |:---|---:|
+    | 백분위수 | 0.932 |
+    | 기본 (추축) | **0.732** |
+
+    **기본 구간이 훨씬 나쁘다.** 편향을 보정하도록 설계된 방법이 오히려 무너진다.
+
+    **왜 그런가.** 두 힘이 반대로 작용한다.
+
+    1. **편향.** 붓스트랩 복제값 $\bar{X}^{*2}$의 평균이 $\hat{\theta}$보다 크다. 실제로 확인하면
+
+        ```python
+        x = rng.normal(0.5, 1, 20)
+        idx = rng.integers(0, 20, (20000, 20))
+        bs = x[idx].mean(axis=1) ** 2
+        print(round(x.mean()**2, 4), round(bs.mean(), 4))   # 0.7267  0.8094
+        ```
+
+        차이 $0.083$은 정확히 $\hat\sigma^2/n$이다($\bar{X}^{*2}$의 기댓값이 $\hat\theta + \text{Var}^*(\bar{X}^*)$이므로). 이 편향만 보면 기본 구간의 반사가 옳은 방향이다.
+
+    2. **치우침.** $\bar{X}^2$은 제곱이므로 $0$이라는 바닥이 있고 붓스트랩 분포가 오른쪽으로 심하게 치우친다. 참 표본분포도 **같은 방향으로** 치우쳐 있다. 기본 구간의 반사가 이 치우침을 왼쪽으로 뒤집어 버린다.
+
+    이 자료에서는 두 번째 효과가 압도적이라 기본 구간이 크게 실패한다. [붓스트랩 방법](../bootstrap/bootstrap.md) 연습문제 1에서 지수분포 중앙값에 대해 본 것과 정확히 같은 현상이다.
+
+    **그렇다면 편향은 어떻게 다루는가.** 반사가 아니라 **명시적인 편향보정**을 쓴다.
+
+    - 복제값에서 $\widehat{\text{Bias}} = \bar{\hat\theta}^* - \hat\theta$를 빼고 백분위수 구간을 만든다.
+    - 또는 [BCa](bca.md)를 쓴다. $\hat z_0$이 편향을, $\hat a$가 치우침을 각각 따로 조정하므로 두 효과가 서로 상쇄되지 않는다.
+
+    **경계 모수의 함정.** $\mu = 0$이면 상황이 더 나빠진다. $\theta = 0$이 모수공간의 **경계**에 있어 $\hat\theta \ge 0$이 언제나 성립하고, 어떤 붓스트랩 구간도 $0$을 잘 덮지 못한다. 경계 모수는 붓스트랩의 알려진 실패 지점이며 BCa로도 고쳐지지 않는다.

@@ -1,123 +1,282 @@
-# Bootstrap vs Permutation Tests
+# 붓스트랩과 순열검정의 비교
 
-## Motivation
+## 동기
 
-Both bootstrap and permutation methods use resampling to perform inference without relying on parametric distributional assumptions. However, they answer fundamentally different questions and operate under different mechanisms. Understanding these differences is essential for choosing the right tool for a given problem.
+붓스트랩과 순열 방법은 둘 다 재표집을 써서 모수적 분포 가정 없이 추론한다. 그러나 근본적으로 다른 질문에 답하며 다른 메커니즘으로 작동한다. 이 차이를 이해하는 것이 주어진 문제에 맞는 도구를 고르는 데 필수적이다.
 
-This section clarifies what each method estimates, when each is appropriate, and how they relate to each other.
+이 절에서는 각 방법이 무엇을 추정하는지, 언제 적절한지, 서로 어떻게 관련되는지를 명확히 한다.
 
-## The Fundamental Distinction
+## 근본적 구별
 
-The bootstrap and the permutation test approximate different distributions:
+붓스트랩과 순열검정은 서로 다른 분포를 근사한다.
 
-- **Bootstrap**: approximates the **sampling distribution** of a statistic under the true (unknown) data-generating process
-- **Permutation test**: approximates the **null distribution** of a test statistic under a specific null hypothesis (typically exchangeability or independence)
+- **붓스트랩**: 참(알려지지 않은) 자료생성과정 아래에서 통계량의 **표집분포**를 근사한다.
+- **순열검정**: 특정 귀무가설(보통 교환가능성 또는 독립성) 아래에서 검정통계량의 **귀무분포**를 근사한다.
 
-This distinction has far-reaching consequences for how each method is used and interpreted.
+이 구별은 두 방법의 사용법과 해석에 광범위한 영향을 미친다.
 
-## Side-by-Side Comparison
+## 나란히 비교
 
-| Aspect | Bootstrap | Permutation Test |
+| 측면 | 붓스트랩 | 순열검정 |
 |---|---|---|
-| **Goal** | Estimate sampling distribution | Estimate null distribution |
-| **Resampling** | With replacement | Without replacement (shuffle labels) |
-| **Null hypothesis** | Not required | Required and enforced |
-| **Produces** | SE, CI, bias, distribution shape | $p$-value |
-| **Confidence intervals** | Yes (percentile, BCa, bootstrap-$t$) | Only by inversion |
-| **Exactness** | Approximate (Monte Carlo) | Exact (conditional on data) |
-| **Sample values** | Can repeat observations | Each observation appears exactly once |
-| **Validity condition** | iid (or appropriate dependence structure) | Exchangeability under $H_0$ |
+| **목표** | 표집분포 추정 | 귀무분포 추정 |
+| **재표집** | 복원추출 | 비복원(라벨 섞기) |
+| **귀무가설** | 필요 없음 | 필요하며 강제된다 |
+| **산출물** | 표준오차, 신뢰구간, 편향, 분포 모양 | $p$값 |
+| **신뢰구간** | 가능(백분위수, BCa, 붓스트랩-$t$) | 역변환으로만 |
+| **정확성** | 근사(몬테카를로) | 정확(자료에 조건부) |
+| **표본값** | 관측이 반복될 수 있다 | 각 관측이 정확히 한 번 나타난다 |
+| **타당성 조건** | iid(또는 적절한 종속 구조) | $H_0$ 아래 교환가능성 |
 
-## What the Bootstrap Approximates
+## 붓스트랩이 근사하는 것
 
-The bootstrap draws samples with replacement from the observed data (or from a fitted model). Each bootstrap sample has the same size $n$ as the original data, but some observations are repeated and others are omitted. The bootstrap distribution of $\hat{\theta}^*$ approximates the sampling distribution of $\hat{\theta}$ — that is, the variability of $\hat{\theta}$ across hypothetical repeated samples from the population.
+붓스트랩은 관측된 자료(또는 적합된 모형)에서 복원추출로 표본을 뽑는다. 각 붓스트랩 표본은 원래 자료와 같은 크기 $n$이지만 일부 관측은 반복되고 일부는 빠진다. $\hat{\theta}^*$의 붓스트랩 분포는 $\hat{\theta}$의 표집분포, 즉 모집단에서 반복 표집했을 때 $\hat{\theta}$가 갖는 변동을 근사한다.
 
-Because the bootstrap does not enforce any null hypothesis, it is naturally suited for:
+붓스트랩은 어떤 귀무가설도 강제하지 않으므로 다음에 자연스럽게 적합하다.
 
-- Estimating standard errors
-- Constructing confidence intervals
-- Estimating bias
-- Assessing the shape of the sampling distribution
+- 표준오차 추정
+- 신뢰구간 구성
+- 편향 추정
+- 표집분포의 모양 평가
 
-For hypothesis testing, the bootstrap must be modified (e.g., by centering or pooling) to generate samples under $H_0$.
+가설검정에 쓰려면 $H_0$ 아래의 표본을 만들도록 수정해야 한다(중심화나 합치기).
 
-## What the Permutation Test Approximates
+## 순열검정이 근사하는 것
 
-The permutation test shuffles group labels (or breaks pairings) to generate the distribution of the test statistic under $H_0$. Each permuted dataset uses the exact same observations, just with reassigned labels. No observations are duplicated or omitted.
+순열검정은 집단 라벨을 섞거나 짝을 끊어 $H_0$ 아래에서 검정통계량의 분포를 생성한다. 각 순열된 자료는 정확히 같은 관측들을 쓰며 라벨만 재배정된다. 어떤 관측도 중복되거나 빠지지 않는다.
 
-The permutation distribution is the **exact conditional distribution** of the test statistic given the observed data, under the null hypothesis. This means the permutation $p$-value is exact (not approximate) for testing $H_0$, conditional on the sufficient statistic of the combined data.
+순열분포는 귀무가설 아래에서 관측된 자료가 주어졌을 때 검정통계량의 **정확 조건부 분포**이다. 따라서 순열 $p$값은 $H_0$ 검정에 대해 (합쳐진 자료의 충분통계량에 조건부로) 정확하다.
 
-The permutation test is naturally suited for:
+순열검정은 다음에 자연스럽게 적합하다.
 
-- Testing hypotheses about group differences (two-sample, multi-sample)
-- Testing independence or association
-- Situations where the null hypothesis implies exchangeability
+- 집단 차이에 대한 가설검정(이표본, 다표본)
+- 독립성이나 연관성 검정
+- 귀무가설이 교환가능성을 함의하는 상황
 
-!!! note "Exactness of Permutation Tests"
-    The permutation test provides an exact $p$-value in the sense that it controls the Type I error rate at exactly level $\alpha$ (conditional on the data). The only approximation arises when we use a random subset of all possible permutations rather than enumerating all $\binom{m+n}{m}$ arrangements. With $B = 10{,}000$ or more random permutations, this Monte Carlo approximation is negligible.
+!!! note "순열검정의 정확성"
+    순열검정은 (자료에 조건부로) 제1종 오류율을 정확히 $\alpha$ 수준에서 통제한다는 의미에서 정확한 $p$값을 준다. 근사가 생기는 유일한 지점은 가능한 모든 $\binom{m+n}{m}$가지 배열 대신 무작위 부분집합을 쓸 때이다. $B = 10{,}000$ 이상이면 이 몬테카를로 근사는 무시할 만하다.
 
-## When to Use the Bootstrap
+    다만 "정확하다"는 것은 **교환가능성이 성립할 때**의 이야기이다. [기초](../permutation/foundations.md) 연습문제 1이 보이듯, 분산이 다르고 표본크기가 불균형하면 제1종 오류율이 명목값의 네 배까지 올라간다.
 
-Choose the bootstrap when:
+## 붓스트랩을 선택하는 경우
 
-- **Confidence intervals** are the primary goal (not just a $p$-value)
-- **Standard error estimation** is needed for a complex statistic
-- **The null hypothesis does not imply exchangeability** (e.g., testing $H_0: \rho = 0.5$ rather than $\rho = 0$)
-- **The parameter of interest is not a simple group comparison** (e.g., regression coefficients, variance ratios)
-- **Bias estimation** or distributional shape assessment is needed
+- **신뢰구간**이 주된 목표일 때($p$값만이 아니라)
+- 복잡한 통계량의 **표준오차 추정**이 필요할 때
+- **귀무가설이 교환가능성을 함의하지 않을 때**(예: $\rho = 0$이 아니라 $\rho = 0.5$의 검정)
+- **관심 모수가 단순한 집단 비교가 아닐 때**(예: 회귀계수, 분산비, Sharpe 비율)
+- **편향 추정**이나 분포 모양 평가가 필요할 때
 
-## When to Use the Permutation Test
+## 순열검정을 선택하는 경우
 
-Choose the permutation test when:
+- 교환가능성을 함의하는 **날카로운 귀무가설**을 검정할 때(예: $H_0: F_X = F_Y$)
+- **정확한 제1종 오류 통제**가 중요할 때(규제·확증적 상황)
+- **표본이 작아** 붓스트랩 분포를 신뢰하기 어려울 때
+- **검정통계량은 복잡하지만 귀무가설은 단순할 때**(교환가능성)
+- **모수모형을 가정하지 않고** 분포무관 검정을 원할 때
 
-- **Testing a sharp null hypothesis** that implies exchangeability (e.g., $H_0: F_X = F_Y$)
-- **Exact Type I error control** is important (e.g., in regulatory or confirmatory settings)
-- **The sample size is small** and the bootstrap distribution may be unreliable
-- **The test statistic is complex** but the null hypothesis is simple (exchangeability)
-- **No parametric model is assumed** and you want a distribution-free test
+## 가설검정을 위한 붓스트랩
 
-## Bootstrap for Hypothesis Testing
+붓스트랩을 가설검정에 쓰려면 $H_0$을 만족하는 표본을 생성해야 한다. 두 가지 주요 접근이 있다.
 
-When the bootstrap is used for hypothesis testing, it must generate samples that respect $H_0$. The two main approaches are:
+**중심화.** $H_0$이 성립하도록 자료를 이동시킨 뒤 복원추출한다. 예를 들어 $H_0: \mu = \mu_0$을 검정하려면 $\tilde{x}_i = x_i - \bar{x} + \mu_0$으로 옮기고 $\{\tilde{x}_1, \ldots, \tilde{x}_n\}$에서 재표집한다.
 
-**Centering.** Shift the data so that $H_0$ is satisfied, then resample with replacement from the shifted data. Example: to test $H_0: \mu = \mu_0$, shift $\tilde{x}_i = x_i - \bar{x} + \mu_0$ and resample from $\{\tilde{x}_1, \ldots, \tilde{x}_n\}$.
+**합치기.** $H_0$ 아래에서 집단들을 합치고 합쳐진 표본에서 재표집한다. 예를 들어 $H_0: \mu_X = \mu_Y$를 검정하려면 모든 관측을 합쳐 크기 $m$과 $n$의 붓스트랩 표본을 뽑는다.
 
-**Pooling.** Combine the groups under $H_0$ and resample from the pooled sample. Example: to test $H_0: \mu_X = \mu_Y$, pool all observations and draw two bootstrap samples of sizes $m$ and $n$.
+두 접근 모두 순열검정의 정확한 조건부 추론을 넘어서는 근사를 도입한다. 붓스트랩 가설검정은 일치하지만 정확하지는 않다.
 
-Both approaches introduce approximation beyond the exact conditional inference of the permutation test. The bootstrap hypothesis test is consistent but not exact.
+!!! tip "둘 다 타당할 때는 어느 쪽인가"
+    두 독립표본으로 $H_0: F_X = F_Y$를 검정할 때는 순열검정과 합치기 붓스트랩이 모두 타당하다. 순열검정이 제1종 오류를 정확히 통제하므로 일반적으로 선호된다. 신뢰구간도 함께 원하거나 귀무가설이 단순한 교환가능성보다 미묘할 때는 붓스트랩이 낫다.
 
-!!! tip "When Both Are Valid, Which Is Better?"
-    For testing $H_0: F_X = F_Y$ with two independent samples, both the permutation test and the pooled bootstrap are valid. The permutation test has exact Type I error control and is generally preferred. The bootstrap is preferred when you also want confidence intervals or when the null hypothesis is more nuanced than simple exchangeability.
+## 혼합 접근
 
-## Hybrid Approaches
+실무에서는 두 방법을 함께 쓰는 경우가 많다.
 
-In practice, both methods are often used together:
+1. **순열검정**으로 $H_0$에 대한 정확한 $p$값을 얻는다.
+2. **붓스트랩**으로 효과크기의 신뢰구간을 만든다.
+3. 둘 다 보고한다. 순열 $p$값은 $H_0$에 반하는 증거를 정량화하고, 붓스트랩 신뢰구간은 효과의 크기와 불확실성을 정량화한다.
 
-1. Use the **permutation test** to obtain an exact $p$-value for $H_0$
-2. Use the **bootstrap** to construct a confidence interval for the effect size
-3. Report both: the permutation $p$-value quantifies evidence against $H_0$, and the bootstrap CI quantifies the magnitude and uncertainty of the effect
+## 흔한 오해
 
-## Common Misconceptions
+**"붓스트랩이 귀무가설을 검정한다."** 수정 없이(중심화나 합치기 없이) 쓰는 표준 붓스트랩은 귀무분포를 생성하지 않는다. 참 모수값 아래의 표집분포를 근사한다.
 
-**"The bootstrap tests a null hypothesis."** Without modification (centering or pooling), the standard bootstrap does not generate a null distribution. It approximates the sampling distribution under the true parameter value.
+**"순열검정이 신뢰구간을 준다."** 순열 $p$값을 역변환하여 신뢰구간을 만들 수 있지만 계산이 비싸고 실무에서 거의 하지 않는다. 구간추정에는 붓스트랩이 훨씬 자연스럽다.
 
-**"Permutation tests give confidence intervals."** While permutation $p$-values can be inverted to form confidence intervals, this is computationally expensive and rarely done in practice. The bootstrap is far more natural for interval estimation.
+**"두 방법이 같은 답을 준다."** $H_0: \mu_X = \mu_Y$의 검정에서 합치기 붓스트랩과 순열검정은 비슷한 $p$값을 내는 경우가 많지만, 집단의 분산이 다르거나 표본이 작으면 어긋날 수 있다.
 
-**"Both methods give the same answer."** For testing $H_0: \mu_X = \mu_Y$, the pooled bootstrap and the permutation test often give similar $p$-values, but they can disagree when the groups have different variances or when the sample sizes are small.
+## 요약
 
-## Summary
+붓스트랩은 표집분포를 근사하며 신뢰구간, 표준오차, 편향 추정에 가장 적합하다. 순열검정은 교환가능성 아래의 귀무분포를 근사하며 정확한 가설검정에 가장 적합하다. 강한 귀무가설($F_X = F_Y$) 아래의 이표본 비교에서는 두 방법 모두 타당하고 순열검정이 정확한 제1종 오류 통제를 제공한다. 신뢰구간, 교환가능하지 않은 귀무가설의 검정, 분포 성질의 추정 등 더 일반적인 추론에는 붓스트랩이 적절한 도구이다.
 
-The bootstrap approximates the sampling distribution and is best for confidence intervals, standard errors, and bias estimation. The permutation test approximates the null distribution under exchangeability and is best for exact hypothesis testing. For two-sample comparisons under a strong null ($F_X = F_Y$), both methods are valid and the permutation test offers exact Type I error control. For more general inference — confidence intervals, testing non-exchangeable nulls, or estimating distributional properties — the bootstrap is the appropriate tool.
+## 연습문제
 
-## Exercises
+**연습문제 1.**
+두 자산의 일별 수익률 $n = 252$일(약 1년)을 생성하여 두 방법을 나란히 적용하라. 자산 1은 일평균 $0.08$%, 일변동성 $1.2$%이고, 자산 2는 일평균 $0.04$%, 일변동성 $1.8$%이며, 두 수익률 모두 $t(5)$ 꼬리를 갖는다.
 
-**Exercise 1.**
-Download daily returns for two stocks (e.g., AAPL and MSFT) over the past year.
+```python
+import numpy as np
+rng = np.random.default_rng(2024)
+n = 252
+r1 = 0.0008 + 0.012 * rng.standard_t(5, n) / np.sqrt(5/3)
+r2 = 0.0004 + 0.018 * rng.standard_t(5, n) / np.sqrt(5/3)
+```
 
-(a) Use a permutation test to test whether the mean daily returns differ.
+**(a)** 순열검정으로 두 자산의 일평균 수익률이 다른지 검정하라.
 
-(b) Use the bootstrap to compute 95% CIs for the Sharpe ratio of each stock.
+**(b)** 붓스트랩으로 각 자산의 연율 Sharpe 비율에 대한 $95$% 신뢰구간을 구하라.
 
-(c) Test whether the Sharpe ratios differ using a permutation test with $\text{SR}_1 - \text{SR}_2$ as the test statistic.
+**(c)** $\text{SR}_1 - \text{SR}_2$를 검정통계량으로 하는 순열검정을 하라.
 
-(d) Why is the bootstrap especially useful for the Sharpe ratio? (Hint: consider the sampling distribution of a ratio.)
+**(d)** Sharpe 비율에 붓스트랩이 특히 유용한 이유는 무엇인가? (힌트: 비의 표집분포를 생각하라.)
+
+??? success "연습문제 1 풀이"
+    연율 Sharpe 비율은 $\text{SR} = \dfrac{\bar{r}}{s_r}\sqrt{252}$이다(무위험이자율은 $0$으로 둔다).
+
+    ```python
+    shp = lambda r: r.mean() / r.std(ddof=1)          # 일별
+    sh  = lambda r: shp(r) * np.sqrt(252)             # 연율
+    print(r1.mean(), r1.std(ddof=1), sh(r1))   # 0.001635  0.01225  2.1186
+    print(r2.mean(), r2.std(ddof=1), sh(r2))   # 0.000034  0.01955  0.0279
+    ```
+
+    **(a) 평균 수익률의 순열검정**
+
+    ```python
+    obs = r1.mean() - r2.mean()
+    z = np.concatenate([r1, r2]); B = 9999
+    P = np.array([rng.permutation(z) for _ in range(B)])
+    d = P[:, :n].mean(1) - P[:, n:].mean(1)
+    p = ((np.abs(d) >= abs(obs)).sum() + 1) / (B + 1)
+    ```
+
+    | 검정 | $p$값 |
+    |:---|---:|
+    | 순열검정(평균차) | 0.273 |
+    | Welch $t$ 검정 | 0.271 |
+
+    **차이가 유의하지 않다.** 일평균 수익률의 차이 $0.16$%p는 일변동성 $1.2$--$1.8$%에 완전히 묻힌다. 두 방법이 $0.002$ 이내로 일치한다.
+
+    **(b) Sharpe 비율의 붓스트랩 신뢰구간**
+
+    ```python
+    def boot_sr(r, Bb=10000):
+        s = r[rng.integers(0, len(r), (Bb, len(r)))]
+        return s.mean(1) / s.std(axis=1, ddof=1) * np.sqrt(252)
+    ```
+
+    | 자산 | $\widehat{\text{SR}}$ | 붓스트랩 SE | 백분위수 $95$% 구간 |
+    |:---|---:|---:|:---|
+    | 자산 1 | 2.119 | 0.961 | $[0.211,\ 3.992]$ |
+    | 자산 2 | 0.028 | 1.009 | $[-1.906,\ 2.057]$ |
+
+    **1년치 일별 자료로는 Sharpe 비율을 거의 알 수 없다.** 자산 1의 추정값 $2.12$는 매우 훌륭한 값이지만 구간은 $[0.21, 3.99]$로 "평범함"부터 "전설적"까지를 모두 포함한다.
+
+    이것이 이 연습문제의 가장 실용적인 교훈이다. 헤지펀드 자료에서 흔히 인용되는 Sharpe 비율은 **1년으로는 통계적으로 무의미하다**. 구간 폭 $3.78$을 절반으로 줄이려면 $n$을 네 배, 즉 4년치 자료가 필요하다.
+
+    비교를 위해 Lo (2002)의 정규근사 $\text{SE}(\widehat{\text{SR}}) = \sqrt{(1+\widehat{\text{SR}}_p^2/2)/n}\cdot\sqrt{252}$를 쓰면
+
+    | 자산 | 정규근사 SE | 정규근사 구간 |
+    |:---|---:|:---|
+    | 자산 1 | 1.004 | $[0.150,\ 4.087]$ |
+    | 자산 2 | 1.000 | $[-1.932,\ 1.988]$ |
+
+    **붓스트랩과 거의 같다.** 붓스트랩 분포의 왜도가 $-0.03$과 $+0.03$으로 사실상 대칭이므로 정규근사가 잘 작동한다.
+
+    **(c) Sharpe 비율 차이의 순열검정**
+
+    ```python
+    A, Bm = P[:, :n], P[:, n:]
+    ds = (A.mean(1)/A.std(axis=1, ddof=1)
+          - Bm.mean(1)/Bm.std(axis=1, ddof=1)) * np.sqrt(252)
+    p = ((np.abs(ds) >= abs(sh(r1) - sh(r2))).sum() + 1) / (B + 1)
+    ```
+
+    | 방법 | 관측값 | $p$값 또는 구간 |
+    |:---|---:|:---|
+    | 순열검정($\text{SR}_1 - \text{SR}_2$) | 2.091 | $p = 0.147$ |
+    | 붓스트랩 백분위수 구간 | 2.091 | $[-0.579,\ 4.661]$ |
+    | 붓스트랩 꼬리 확률 | | $p = 0.122$ |
+
+    **세 방법 모두 유의하지 않다고 답한다.** 붓스트랩 구간이 $0$을 포함하고, 두 $p$값이 $0.12$--$0.15$이다.
+
+    주목할 점은 **Sharpe 차이의 $p$값($0.147$)이 평균 차이의 $p$값($0.273$)보다 작다**는 것이다. Sharpe 비율은 평균뿐 아니라 변동성도 담고 있고, 두 자산의 변동성 차이($1.2$% 대 $2.0$%)가 상당하기 때문이다.
+
+    !!! warning "이 순열검정은 무엇을 검정하는가"
+        여기서 순열이 강제하는 귀무가설은 $H_0: \text{SR}_1 = \text{SR}_2$가 아니라 $H_0: F_1 = F_2$, 즉 **두 수익률 분포가 완전히 같다**는 것이다.
+
+        따라서 만약 이 검정이 기각했다면, 그 이유가 Sharpe 비율의 차이인지, 변동성만의 차이인지, 꼬리 모양의 차이인지 구별할 수 없다. 순열검정의 정확성은 이 강한 귀무가설에 대해서만 성립한다.
+
+        $H_0: \text{SR}_1 = \text{SR}_2$ 자체를 검정하고 싶다면 붓스트랩 구간이 $0$을 포함하는지 보는 쪽이 옳다. **이것이 붓스트랩과 순열검정이 다른 질문에 답한다는 말의 구체적 의미이다.**
+
+    **(d) Sharpe 비율에 붓스트랩이 유용한 이유**
+
+    Sharpe 비율은 두 추정량의 **비**이다.
+
+    $$
+    \widehat{\text{SR}} = \frac{\bar{r}}{s_r}\sqrt{252}
+    $$
+
+    분자와 분모가 모두 확률변수이고 서로 상관되어 있다. 비의 표집분포에는 일반적으로 닫힌 형태가 없다.
+
+    실제로 정규근사식 $\sqrt{(1+\text{SR}^2/2)/n}$을 얻으려면 델타법을 적용하고 $\bar{r}$과 $s_r$의 결합 점근분포를 유도해야 하며, 그 결과는 **정규성과 독립성**을 가정한다. 수익률이 자기상관을 갖거나 꼬리가 두꺼우면 이 식이 틀린다(Lo, 2002가 자기상관 보정을 별도로 유도한 이유이다).
+
+    붓스트랩은 이 유도를 전부 건너뛴다. `s.mean(1)/s.std(1)`을 계산할 뿐이며, 통계량이 얼마나 복잡하든 절차가 같다.
+
+    **더 결정적인 것은 (c)의 차이 통계량이다.** $\text{SR}_1 - \text{SR}_2$의 표준오차에는 초급 공식이 없다. Jobson-Korkie 검정통계량과 Memmel의 보정이 존재하지만 복잡하고 정규성에 의존한다. 붓스트랩은 한 줄로 $\text{SE} = 1.335$를 준다.
+
+    **포함확률 점검.** 그렇다면 붓스트랩이 정규근사보다 실제로 나은가?
+
+    | $n$ | 정규근사 | 붓스트랩 백분위수 |
+    |---:|---:|---:|
+    | 252 | 0.946 | 0.942 |
+    | 60 | 0.945 | 0.931 |
+    | 24 | 0.953 | 0.921 |
+
+    (참 $\text{SR} = 1.058$, $t(5)$ 수익률, $M = 1{,}500$)
+
+    **솔직한 답: 이 상황에서 붓스트랩이 더 낫지는 않다.** $n = 252$에서 두 방법이 모두 $0.94$대로 잘 작동하고, $n$이 작아지면 오히려 붓스트랩 쪽이 나빠진다($n = 24$에서 $0.921$ 대 $0.953$).
+
+    붓스트랩 백분위수 구간이 작은 $n$에서 좁아지는 것은 알려진 성질이다([백분위수법](../bootstrap_ci/percentile.md) 참조). BCa나 붓스트랩-$t$를 쓰면 개선된다($n = 252$에서 BCa는 $0.945$).
+
+    **따라서 붓스트랩의 이점은 정확성이 아니라 일반성이다.** Lo의 공식은 이 특정 통계량, 이 특정 가정에 대해 누군가 유도해 준 것이다. 통계량을 조금만 바꾸면 — 차이를 보거나, 하방편차를 쓴 Sortino 비율로 바꾸거나, 최대낙폭을 보면 — 공식은 없고 붓스트랩만 남는다.
+
+---
+
+**연습문제 2.**
+같은 자료에서 순열검정과 **합치기 붓스트랩** 검정을 평균차에 대해 실행하고 $p$값을 비교하라. 두 방법이 어긋나는 상황을 만들 수 있는가?
+
+??? success "연습문제 2 풀이"
+    합치기 붓스트랩은 두 표본을 합친 뒤 그로부터 크기 $m$과 $n$의 표본을 **복원추출**한다.
+
+    ```python
+    def pooled_boot_p(x, y, B=9999):
+        obs = abs(x.mean() - y.mean())
+        z = np.concatenate([x, y]); m, k = len(x), len(x) + len(y)
+        idx = rng.integers(0, k, (B, k))
+        s = z[idx]
+        d = np.abs(s[:, :m].mean(1) - s[:, m:].mean(1))
+        return ((d >= obs).sum() + 1) / (B + 1)
+    ```
+
+    **연습문제 1의 자료**($m = n = 252$)에서는 두 방법이 사실상 같은 답을 준다. 순열 $0.273$, 합치기 붓스트랩도 같은 자릿수이다. 표본이 크고 균형 잡혀 있으면 복원과 비복원의 차이가 $O(1/n)$이다.
+
+    **어긋나게 만들려면 두 조건을 겹친다.**
+
+    | 조건 | 이유 |
+    |:---|:---|
+    | 작은 표본 | 복원추출로 인한 중복이 상대적으로 크다 |
+    | 불균형 표본크기 | 합치기가 분산 구조를 왜곡한다 |
+    | 이분산 | 두 방법 모두 무너지지만 방식이 다르다 |
+
+    구체적으로 $m = 5$, $n = 25$, $\sigma_1 = 3$, $\sigma_2 = 1$을 쓰면 [기초](../permutation/foundations.md) 연습문제 1에서 본 대로 순열검정의 제1종 오류율이 크게 부풀고, 합치기 붓스트랩도 비슷하게 부푼다. 둘 다 같은 원인 — 합쳐진 분산을 두 집단에 똑같이 부여하는 것 — 을 공유하기 때문이다.
+
+    **핵심은 어느 쪽이 이기느냐가 아니다.** 두 방법이 어긋난다면 그것은 대개 **공통된 가정(교환가능성)이 깨졌다는 신호**이다. 그때의 올바른 대응은 둘 중 하나를 고르는 것이 아니라
+
+    - 스튜던트화 통계량으로 바꾸거나,
+    - 각 집단을 **따로** 재표집하는 중심화 붓스트랩으로 바꾸는 것
+
+    이다. 후자는 합치기를 하지 않으므로 분산 구조를 파괴하지 않는다([두 평균에 대한 붓스트랩 검정](../bootstrap_testing/two_means.md) 참조).
+
+    !!! note "두 방법을 함께 보고하는 실무 습관"
+        순열 $p$값과 붓스트랩 신뢰구간을 함께 보고하는 것은 단순한 형식이 아니다. 두 값이 서로 어긋나면 — 예를 들어 순열 $p = 0.01$인데 붓스트랩 $95$% 구간이 $0$을 포함하면 — 무언가 잘못되었다는 진단 신호이다.
+
+        가장 흔한 원인은 이분산과 불균형 표본의 조합이다. 그 경우 순열 $p$값이 과도하게 작아지고, 붓스트랩 구간이 더 정직한 답을 준다.
