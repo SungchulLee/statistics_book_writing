@@ -1,27 +1,26 @@
-# 18.1 Correlation
+# 상관의 이해
 
+## 변수 사이의 관계 이해하기
 
-## Understanding the Relationship Between Variables
-
-Correlation is a fundamental concept in statistics that describes the strength and direction of the relationship between two variables. It is a crucial tool for data analysis and helps in understanding how changes in one variable are associated with changes in another.
-
----
-
-## What Is Correlation?
-
-Correlation quantifies the degree to which two variables move in relation to each other. If two variables are correlated, it means that changes in one variable tend to be associated with changes in another. The correlation coefficient, a numerical value ranging from $-1$ to $1$, measures this relationship.
-
-- **Positive Correlation**: When two variables increase or decrease together, they exhibit a positive correlation. For instance, there is a positive correlation between education level and income; as educational attainment increases, income generally rises.
-
-- **Negative Correlation**: When one variable increases while the other decreases, a negative correlation exists. An example is the relationship between the amount of time spent watching TV and academic performance; generally, more TV time correlates with lower academic achievement.
-
-- **Zero Correlation**: When there is no discernible relationship between the variables, the correlation is zero. For example, the relationship between shoe size and intelligence is typically zero; changes in shoe size do not predict changes in intelligence.
+상관은 두 변수 사이 관계의 강도와 방향을 기술하는 통계학의 기본 개념이다. 자료 분석의 핵심 도구이며 한 변수의 변화가 다른 변수의 변화와 어떻게 연관되는지 이해하도록 돕는다.
 
 ---
 
-## Visualizing Positive Correlation
+## 상관이란 무엇인가
 
-The following code generates scatter plots of bivariate normal samples with increasing positive correlation coefficients, illustrating how the point cloud tightens around a line as $\rho$ increases.
+상관은 두 변수가 서로에 대해 얼마나 함께 움직이는지를 수치화한다. 두 변수가 상관되어 있다는 것은 한 변수의 변화가 다른 변수의 변화와 연관되는 경향이 있다는 뜻이다. 상관계수는 $-1$에서 $1$까지의 수치로 이 관계를 잰다.
+
+- **양의 상관**: 두 변수가 함께 커지거나 함께 작아지면 양의 상관을 보인다. 예를 들어 학력과 소득 사이에는 양의 상관이 있다. 학력이 높아질수록 소득도 대체로 늘어난다.
+
+- **음의 상관**: 한 변수가 커질 때 다른 변수가 작아지면 음의 상관이 있다. TV 시청 시간과 학업 성취의 관계가 그 예이다. 대체로 TV 시청 시간이 많을수록 학업 성취가 낮다.
+
+- **무상관**: 변수들 사이에 알아볼 만한 관계가 없으면 상관이 0이다. 예를 들어 신발 크기와 지능의 관계는 대체로 0이다. 신발 크기의 변화가 지능의 변화를 예측하지 못한다.
+
+---
+
+## 양의 상관 시각화
+
+다음 코드는 양의 상관계수를 점점 키우며 이변량 정규 표본의 산점도를 그려, $\rho$가 커질수록 점구름이 직선 주위로 좁아지는 모습을 보인다.
 
 ```python
 import matplotlib.pyplot as plt
@@ -56,7 +55,7 @@ def plot_correlations():
     for ax, rho in zip(axes, correlation_coefficients):
         xy = generate_samples(0, 0, 1, 1, rho, 100)
         ax.plot(xy[:, 0], xy[:, 1], 'ok')
-        ax.set_title(f'ρ = {rho}')
+        ax.set_title(f'rho = {rho}')
         ax.axis('off')
         ax.axis('equal')
         for loc in ('left', 'right', 'top', 'bottom'):
@@ -69,9 +68,9 @@ if __name__ == "__main__":
 
 ---
 
-## Visualizing Negative Correlation
+## 음의 상관 시각화
 
-Similarly, negative correlation coefficients produce point clouds that slope downward.
+마찬가지로 음의 상관계수는 아래로 기우는 점구름을 만든다.
 
 ```python
 import matplotlib.pyplot as plt
@@ -94,7 +93,7 @@ def plot_negative_correlations():
     for ax, rho in zip(axes, correlation_coefficients):
         xy = generate_samples(0, 0, 1, 1, rho, 100)
         ax.plot(xy[:, 0], xy[:, 1], 'ok')
-        ax.set_title(f'ρ = {rho}')
+        ax.set_title(f'rho = {rho}')
         ax.axis('off')
         ax.axis('equal')
         for loc in ('left', 'right', 'top', 'bottom'):
@@ -107,9 +106,9 @@ if __name__ == "__main__":
 
 ---
 
-## Full Spectrum: From Strong Negative to Strong Positive
+## 전체 스펙트럼: 강한 음에서 강한 양까지
 
-Placing all correlation values on a single row reveals the full continuum.
+모든 상관값을 한 행에 놓으면 전체 연속체가 드러난다.
 
 ```python
 import matplotlib.pyplot as plt
@@ -133,7 +132,7 @@ def plot_all_correlations():
     for ax, rho in zip(axes, rhos):
         xy = generate_samples(0, 0, 1, 1, rho, 100)
         ax.plot(xy[:, 0], xy[:, 1], 'ok')
-        ax.set_title(f'ρ = {rho}')
+        ax.set_title(f'rho = {rho}')
         ax.axis('off')
         ax.axis('equal')
         for loc in ('left', 'right', 'top', 'bottom'):
@@ -146,15 +145,15 @@ if __name__ == "__main__":
 
 ---
 
-## Definition: Pearson Correlation Coefficient
+## 정의: Pearson 상관계수
 
-The strength and direction of the linear relationship between two variables $X$ and $Y$ are captured by the **Pearson correlation coefficient**:
+두 변수 $X$와 $Y$ 사이 선형관계의 강도와 방향은 **Pearson 상관계수**로 포착된다:
 
 $$
 \rho = \rho_{X,Y} = \frac{\text{Cov}(X, Y)}{\sqrt{\text{Var}(X)}\;\sqrt{\text{Var}(Y)}}
 $$
 
-where:
+여기서
 
 $$
 \begin{aligned}
@@ -166,32 +165,33 @@ $$
 \end{aligned}
 $$
 
-The sample correlation coefficient can equivalently be written as:
+이다. 표본상관계수는 다음과 같이 쓸 수도 있다:
 
 $$
 r = \frac{n\left(\sum_{i=1}^n x_i y_i\right) - \left(\sum_{i=1}^n x_i\right)\left(\sum_{i=1}^n y_i\right)}{\sqrt{\left[n\sum_{i=1}^n x_i^2 - \left(\sum_{i=1}^n x_i\right)^2\right]\left[n\sum_{i=1}^n y_i^2 - \left(\sum_{i=1}^n y_i\right)^2\right]}}
 $$
 
-### Interpretation of Pearson's rho
-| Range | Interpretation |
+### Pearson rho의 해석
+
+| 범위 | 해석 |
 |-------|---------------|
-| $\rho > 0.7$ | Strong positive correlation |
-| $0.3 < \rho < 0.7$ | Moderate positive correlation |
-| $0 < \rho < 0.3$ | Weak positive correlation |
-| $\rho = 0$ | No correlation |
-| $-0.3 < \rho < 0$ | Weak negative correlation |
-| $-0.7 < \rho < -0.3$ | Moderate negative correlation |
-| $\rho < -0.7$ | Strong negative correlation |
+| $\rho > 0.7$ | 강한 양의 상관 |
+| $0.3 < \rho < 0.7$ | 중간 정도의 양의 상관 |
+| $0 < \rho < 0.3$ | 약한 양의 상관 |
+| $\rho = 0$ | 상관 없음 |
+| $-0.3 < \rho < 0$ | 약한 음의 상관 |
+| $-0.7 < \rho < -0.3$ | 중간 정도의 음의 상관 |
+| $\rho < -0.7$ | 강한 음의 상관 |
 
-Special values:
+특별한 값:
 
-- $\rho = 1$: Perfect positive correlation — the variables move together perfectly in the same direction.
-- $\rho = -1$: Perfect negative correlation — the variables move together perfectly in opposite directions.
-- $\rho = 0$: No linear correlation.
+- $\rho = 1$: 완전한 양의 상관. 두 변수가 같은 방향으로 완벽하게 함께 움직인다.
+- $\rho = -1$: 완전한 음의 상관. 두 변수가 반대 방향으로 완벽하게 함께 움직인다.
+- $\rho = 0$: 선형 상관이 없다.
 
 ---
 
-## Properties of Correlation
+## 상관의 성질
 
 $$
 \begin{aligned}
@@ -203,13 +203,13 @@ $$
 \end{aligned}
 $$
 
-These properties tell us that correlation measures the *shape* of the relationship, not its location or scale.
+이 성질들은 상관이 관계의 위치나 축척이 아니라 *모양*을 잰다는 것을 말해 준다.
 
 ---
 
-## Example: Height and Weight
+## 예제: 키와 몸무게
 
-A classic example of positive correlation in real data.
+실제 자료에서 볼 수 있는 고전적인 양의 상관이다.
 
 ```python
 import matplotlib.pyplot as plt
@@ -232,9 +232,9 @@ if __name__ == "__main__":
     plot_height_weight_scatter()
 ```
 
-### Exercise 1: Scatter Plot for Women
+### 실습 1: 여성에 대한 산점도
 
-**Objective**: Modify the code to filter for female individuals and plot height vs. weight.
+**목표**: 코드를 고쳐 여성만 걸러 키 대 몸무게를 그린다.
 
 ```python
 import matplotlib.pyplot as plt
@@ -257,9 +257,9 @@ if __name__ == "__main__":
     plot_height_weight_scatter_for_women()
 ```
 
-### Exercise 2: Scatter Plot for All Individuals
+### 실습 2: 전체에 대한 산점도
 
-**Objective**: Create a scatter plot distinguishing males and females with different colors.
+**목표**: 남성과 여성을 다른 색으로 구분한 산점도를 만든다.
 
 ```python
 import matplotlib.pyplot as plt
@@ -286,9 +286,9 @@ if __name__ == "__main__":
     plot_height_weight_scatter_for_all()
 ```
 
-### Exercise 3: Analyze Mixed Gender Data
+### 실습 3: 성별을 섞은 자료 분석
 
-**Objective**: Investigate why combining male and female data might weaken the observed linear relationship.
+**목표**: 남성과 여성 자료를 합치면 관측되는 선형관계가 왜 약해질 수 있는지 살펴본다.
 
 ```python
 import pandas as pd
@@ -308,11 +308,11 @@ print(f"Correlation for Females:       {female_corr:.4f}")
 print(f"Correlation for Combined Data: {combined_corr:.4f}")
 ```
 
-**Discussion Points**: The within-group correlations may differ from the combined correlation because males and females form distinct clusters. The combined correlation reflects both the within-group relationship and the between-group separation, which can either strengthen or weaken the overall observed association.
+**논의할 점**: 남성과 여성이 서로 구별되는 군집을 이루므로 집단 내 상관이 전체 상관과 다를 수 있다. 전체 상관은 집단 내 관계와 집단 간 분리를 함께 반영하며, 그 결과 전체 연관이 강해질 수도 약해질 수도 있다.
 
-### Exercise 4: Scatter Plot with Regression Line
+### 실습 4: 회귀직선을 포함한 산점도
 
-**Objective**: Add a regression line to the scatter plot.
+**목표**: 산점도에 회귀직선을 추가한다.
 
 ```python
 import matplotlib.pyplot as plt
@@ -348,106 +348,107 @@ if __name__ == "__main__":
 
 ---
 
-## Importance of Correlation
+## 상관의 중요성
 
-Correlation analysis is invaluable across many fields:
+상관 분석은 여러 분야에서 대단히 유용하다:
 
-- **Business**: Understanding market trends, customer behavior, and marketing effectiveness.
-- **Healthcare**: Investigating relationships between lifestyle factors and health outcomes, such as smoking and lung cancer.
-- **Education**: Analyzing the impact of teaching methods on student performance and the link between study habits and academic success.
-- **Social Sciences**: Exploring relationships between social factors and behaviors, such as the connection between income and education levels.
-
----
-
-## Limitations of Correlation
-
-While correlation is a powerful tool, it has important limitations:
-
-1. **Correlation Does Not Imply Causation**: A correlation between two variables does not mean that one causes the other. A correlation between ice cream sales and drowning incidents does not imply that ice cream consumption causes drowning—both are driven by warm weather.
-
-2. **Confounding Variables**: Correlations can be influenced by third factors that affect both variables. A correlation between hours of sleep and academic performance might be confounded by stress levels or study habits.
-
-3. **Non-linear Relationships**: The Pearson correlation coefficient measures *linear* relationships only. Non-linear associations may produce a Pearson $\rho$ near zero despite a strong relationship.
-
-### Correlation Measures Linear Association, Not Association in General
-
-Anscombe's quartet famously illustrates that very different data patterns can produce nearly identical correlation coefficients. The four datasets have the same mean, variance, correlation, and regression line, yet their scatter plots reveal fundamentally different structures—including non-linear relationships and the influence of outliers.
-
-See: [Anscombe's Quartet (Wikipedia)](https://en.wikipedia.org/wiki/Anscombe%27s_quartet)
-
-### Correlation Is Not Causation
-
-This principle is so important that it warrants its own section. See [Section 17.3: Correlation, Causation, and Confounding](../confounding/confounding.md) for a thorough treatment.
+- **경영**: 시장 추세, 고객 행동, 마케팅 효과의 이해.
+- **보건의료**: 흡연과 폐암처럼 생활습관 요인과 건강 결과 사이의 관계 조사.
+- **교육**: 교수법이 학생 성취에 미치는 영향, 학습 습관과 학업 성공의 연결 분석.
+- **사회과학**: 소득과 학력의 관계처럼 사회적 요인과 행동 사이의 관계 탐색.
 
 ---
 
-## Summary
+## 상관의 한계
 
-Correlation is a foundational concept in statistics that provides insight into linear relationships between variables. Understanding how to measure and interpret correlation helps identify patterns and inform decisions across disciplines. However, it is crucial to recognize its limitations—particularly that correlation does not imply causation—and to complement correlation analysis with other statistical methods to gain a comprehensive understanding of the data.
-## Exercises
+상관은 강력한 도구이지만 중요한 한계가 있다:
 
-**Exercise 1.**
-A dataset of 50 cities yields a Pearson correlation of $r = 0.72$ between average temperature and per-capita ice cream consumption. Compute the coefficient of determination and interpret it in context.
+1. **상관은 인과를 함의하지 않는다**: 두 변수의 상관이 하나가 다른 하나를 일으킨다는 뜻은 아니다. 아이스크림 판매량과 익사 사고의 상관은 아이스크림 소비가 익사를 일으킨다는 뜻이 아니다. 둘 다 더운 날씨에 이끌린다.
 
-??? success "Solution to Exercise 1"
-    The coefficient of determination is:
+2. **교란변수**: 상관은 두 변수 모두에 영향을 주는 제3의 요인에 좌우될 수 있다. 수면 시간과 학업 성취의 상관은 스트레스 수준이나 학습 습관으로 교란되었을 수 있다.
+
+3. **비선형 관계**: Pearson 상관계수는 *선형* 관계만 잰다. 강한 관계가 있어도 비선형 연관은 Pearson $\rho$를 0 근처로 만들 수 있다.
+
+### 상관은 일반적인 연관이 아니라 선형 연관을 잰다
+
+Anscombe의 사중주는 아주 다른 자료 패턴이 거의 같은 상관계수를 낳을 수 있음을 유명하게 보여준다. 네 자료는 평균, 분산, 상관, 회귀직선이 같지만 산점도는 근본적으로 다른 구조를 드러낸다. 비선형 관계와 이상점의 영향이 그 안에 있다.
+
+참고: [Anscombe's Quartet (Wikipedia)](https://en.wikipedia.org/wiki/Anscombe%27s_quartet)
+
+### 상관은 인과가 아니다
+
+이 원리는 매우 중요해서 별도의 절을 둘 만하다. 자세한 논의는 [12.3절: 상관, 인과, 교란](../confounding/confounding.md)을 보라.
+
+---
+
+## 요약
+
+상관은 변수 사이의 선형관계에 대한 통찰을 주는 통계학의 기초 개념이다. 상관을 재고 해석하는 법을 알면 여러 분야에서 패턴을 찾고 의사결정에 활용할 수 있다. 다만 그 한계, 특히 상관이 인과를 함의하지 않는다는 점을 인식하고, 자료를 종합적으로 이해하기 위해 다른 통계 방법으로 상관 분석을 보완하는 일이 중요하다.
+
+## 연습문제
+
+**연습문제 1.**
+도시 50곳의 자료에서 평균 기온과 1인당 아이스크림 소비 사이의 Pearson 상관이 $r = 0.72$이다. 결정계수를 계산하고 맥락 안에서 해석하라.
+
+??? success "연습문제 1 풀이"
+    결정계수는
 
     $$
     R^2 = r^2 = 0.72^2 = 0.5184
     $$
 
-    This means that approximately **51.8%** of the variation in per-capita ice cream consumption across cities can be explained by the linear relationship with average temperature. The remaining 48.2% is attributable to other factors (e.g., income levels, cultural preferences, availability of ice cream shops).
+    이다. 즉 도시별 1인당 아이스크림 소비 변동의 약 **51.8%**를 평균 기온과의 선형관계로 설명할 수 있다. 나머지 48.2%는 다른 요인(예: 소득 수준, 문화적 선호, 아이스크림 가게의 수)에 기인한다.
 
 ---
 
-**Exercise 2.**
-Two variables have a Pearson correlation of $r = 0.05$ but a Spearman rank correlation of $r_s = 0.91$. Explain how this is possible and which measure is more appropriate for these data.
+**연습문제 2.**
+두 변수의 Pearson 상관이 $r = 0.05$인데 Spearman 순위상관은 $r_s = 0.91$이다. 어떻게 이런 일이 가능한지, 이 자료에는 어느 측도가 더 적절한지 설명하라.
 
-??? success "Solution to Exercise 2"
-    This occurs when the relationship between the two variables is **strongly monotonic but highly nonlinear**. For example, if $Y = e^X$ for positive $X$, the relationship is perfectly monotonic (as $X$ increases, $Y$ always increases) but the relationship is exponential, not linear.
+??? success "연습문제 2 풀이"
+    두 변수의 관계가 **강하게 단조이지만 심하게 비선형**일 때 이런 일이 생긴다. 예를 들어 양수 $X$에 대해 $Y = e^X$이면 관계가 완전히 단조($X$가 커지면 $Y$도 언제나 커진다)이지만 선형이 아니라 지수적이다.
 
-    Pearson's $r$ measures only **linear** association, so it is close to zero for a curved relationship. Spearman's $r_s$ measures **monotonic** association based on ranks, so it captures the strong increasing trend regardless of the functional form.
+    Pearson의 $r$은 **선형** 연관만 재므로 휘어진 관계에서는 0에 가깝다. Spearman의 $r_s$는 순위에 기반한 **단조** 연관을 재므로 함수 형태와 무관하게 강한 증가 추세를 포착한다.
 
-    Spearman's correlation is more appropriate here because it correctly identifies the strong monotonic relationship that Pearson's correlation misses.
+    여기서는 Pearson이 놓치는 강한 단조 관계를 올바르게 짚어내는 Spearman 상관이 더 적절하다.
 
 ---
 
-**Exercise 3.**
-Prove that for any dataset, $-1 \leq r \leq 1$, where $r$ is the Pearson correlation coefficient. (Hint: use the Cauchy-Schwarz inequality.)
+**연습문제 3.**
+어떤 자료에서든 Pearson 상관계수가 $-1 \leq r \leq 1$임을 증명하라. (힌트: Cauchy-Schwarz 부등식을 쓰라.)
 
-??? success "Solution to Exercise 3"
-    The Pearson correlation is defined as:
+??? success "연습문제 3 풀이"
+    Pearson 상관은
 
     $$
     r = \frac{\sum_{i=1}^n (x_i - \bar{x})(y_i - \bar{y})}{\sqrt{\sum_{i=1}^n (x_i - \bar{x})^2} \sqrt{\sum_{i=1}^n (y_i - \bar{y})^2}}
     $$
 
-    Let $a_i = x_i - \bar{x}$ and $b_i = y_i - \bar{y}$. Then $r = \frac{\sum a_i b_i}{\|\mathbf{a}\| \|\mathbf{b}\|}$.
+    로 정의된다. $a_i = x_i - \bar{x}$, $b_i = y_i - \bar{y}$라 두면 $r = \frac{\sum a_i b_i}{\|\mathbf{a}\| \|\mathbf{b}\|}$이다.
 
-    By the **Cauchy-Schwarz inequality**:
+    **Cauchy-Schwarz 부등식**에 의해
 
     $$
     \left|\sum_{i=1}^n a_i b_i\right| \leq \sqrt{\sum a_i^2} \sqrt{\sum b_i^2}
     $$
 
-    Dividing both sides by $\|\mathbf{a}\| \|\mathbf{b}\|$:
+    이다. 양변을 $\|\mathbf{a}\| \|\mathbf{b}\|$로 나누면
 
     $$
     |r| \leq 1
     $$
 
-    Therefore $-1 \leq r \leq 1$. Equality holds when $\mathbf{a}$ and $\mathbf{b}$ are proportional, i.e., $y_i = a + bx_i$ for constants $a$ and $b$. $\square$
+    이므로 $-1 \leq r \leq 1$이다. 등호는 $\mathbf{a}$와 $\mathbf{b}$가 비례할 때, 즉 어떤 상수 $a$, $b$에 대해 $y_i = a + bx_i$일 때 성립한다. $\square$
 
 ---
 
-**Exercise 4.**
-A researcher computes the Pearson correlation between height (in cm) and weight (in kg) for a sample of adults and obtains $r = 0.68$. If height is converted to inches and weight to pounds, will the correlation change? Justify your answer mathematically.
+**연습문제 4.**
+어떤 연구자가 성인 표본에서 키(cm)와 몸무게(kg)의 Pearson 상관을 계산하여 $r = 0.68$을 얻었다. 키를 인치로, 몸무게를 파운드로 바꾸면 상관이 달라지는가? 수학적으로 근거를 밝혀라.
 
-??? success "Solution to Exercise 4"
-    No, the Pearson correlation will not change. Linear transformations of the form $X' = aX + b$ and $Y' = cY + d$ (with $a, c > 0$) do not affect the correlation because:
+??? success "연습문제 4 풀이"
+    아니다, Pearson 상관은 변하지 않는다. $X' = aX + b$, $Y' = cY + d$ 형태의 (단, $a, c > 0$인) 선형변환은 상관에 영향을 주지 않는다:
 
     $$
     r_{X',Y'} = \frac{\text{Cov}(aX+b, cY+d)}{\sqrt{\text{Var}(aX+b)} \sqrt{\text{Var}(cY+d)}} = \frac{ac \cdot \text{Cov}(X,Y)}{|a| \cdot \sigma_X \cdot |c| \cdot \sigma_Y} = \frac{\text{Cov}(X,Y)}{\sigma_X \sigma_Y} = r_{X,Y}
     $$
 
-    Converting cm to inches ($X' = X/2.54$) and kg to pounds ($Y' = 2.205Y$) are positive linear transformations, so the correlation remains $r = 0.68$.
+    cm를 인치로($X' = X/2.54$), kg을 파운드로($Y' = 2.205Y$) 바꾸는 것은 양수 배의 선형변환이므로 상관은 $r = 0.68$ 그대로이다.

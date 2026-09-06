@@ -1,172 +1,172 @@
-# Criteria for Causal Inference
+# 인과 추론의 기준
 
-Establishing that a correlation reflects a genuine causal relationship is one of the central challenges in science and statistics. Since correlation alone cannot distinguish causation from confounding or coincidence, researchers have developed frameworks of **criteria** that, taken together, provide evidence for or against a causal interpretation. Two influential frameworks are **Bradford Hill's criteria** from epidemiology and the **counterfactual (potential outcomes) framework** from statistics.
-
----
-
-## Bradford Hill's Criteria
-
-In 1965, the epidemiologist Sir Austin Bradford Hill proposed nine criteria for evaluating whether an observed association is causal. These criteria are guidelines for judgment, not a formal statistical test. No single criterion is necessary or sufficient, but the more criteria that are satisfied, the stronger the case for causation.
-
-### 1. Strength of Association
-
-Stronger associations are more likely to be causal. A relative risk of 10 is harder to explain by confounding than a relative risk of 1.2. However, weak associations can still be causal (e.g., passive smoking and lung cancer), and strong associations can still be confounded.
-
-### 2. Consistency
-
-The association is observed repeatedly across different populations, settings, and study designs. Replication reduces the likelihood that the finding is due to a study-specific bias or confounding structure.
-
-### 3. Specificity
-
-The exposure leads to a specific outcome (and the outcome is primarily caused by the exposure). This criterion is the weakest of the nine because many causal relationships are not specific -- smoking causes multiple diseases, not just lung cancer.
-
-### 4. Temporality
-
-The cause must precede the effect in time. This is the only criterion that is **necessary** for causation. If $X$ does not occur before $Y$, $X$ cannot cause $Y$.
-
-!!! note "Temporality is necessary but not sufficient"
-    Establishing that $X$ precedes $Y$ rules out reverse causation but does not rule out confounding by a lurking variable that precedes both $X$ and $Y$.
-
-### 5. Biological Gradient (Dose-Response)
-
-Greater exposure leads to a greater response. A dose-response relationship strengthens the causal argument because it is difficult (though not impossible) for confounding to produce a smooth gradient.
-
-### 6. Plausibility
-
-There is a biologically or mechanistically plausible explanation for how $X$ could cause $Y$. This criterion depends on current scientific knowledge and is therefore the most subjective.
-
-### 7. Coherence
-
-The causal interpretation does not conflict with the known natural history and biology of the disease. Coherence is related to plausibility but focuses on consistency with the broader body of knowledge.
-
-### 8. Experiment
-
-Experimental evidence (e.g., from randomized controlled trials or natural experiments) supports the causal claim. Experimental manipulation that changes $X$ and produces a change in $Y$ is strong evidence for causation.
-
-### 9. Analogy
-
-Similar causes produce similar effects. If one chemical is known to cause cancer, a structurally similar chemical might also cause cancer. This is the weakest criterion and is used mainly to support plausibility.
+상관이 참된 인과관계를 반영하는지 확립하는 일은 과학과 통계학의 핵심 과제 중 하나이다. 상관만으로는 인과를 교란이나 우연과 구별할 수 없으므로, 연구자들은 함께 놓고 보면 인과 해석에 대한 증거가 되는 **기준**의 틀을 발전시켜 왔다. 영향력 있는 두 틀은 역학에서 나온 **Bradford Hill의 기준**과 통계학에서 나온 **반사실(잠재결과) 틀**이다.
 
 ---
 
-## The Counterfactual Framework
+## Bradford Hill의 기준
 
-The **counterfactual** (or **potential outcomes**) framework, developed by Jerzy Neyman and Donald Rubin, provides a formal mathematical definition of causal effects. It is the foundation of modern causal inference in statistics and econometrics.
+1965년 역학자 Austin Bradford Hill 경은 관측된 연관이 인과인지 평가하는 아홉 가지 기준을 제안했다. 이 기준들은 형식적인 통계 검정이 아니라 판단을 위한 지침이다. 어느 하나도 필요조건이거나 충분조건은 아니지만, 충족되는 기준이 많을수록 인과에 대한 논거가 강해진다.
 
-### Potential Outcomes
+### 1. 연관의 강도
 
-For each individual $i$, define two potential outcomes:
+연관이 강할수록 인과일 가능성이 높다. 상대위험 10은 상대위험 1.2보다 교란으로 설명하기 어렵다. 다만 약한 연관도 인과일 수 있고(예: 간접흡연과 폐암) 강한 연관도 교란되어 있을 수 있다.
 
-- $Y_i(1)$: the outcome that would occur if $i$ receives treatment ($X = 1$).
-- $Y_i(0)$: the outcome that would occur if $i$ does not receive treatment ($X = 0$).
+### 2. 일관성
 
-The **individual causal effect** is
+여러 모집단, 상황, 연구 설계에서 반복적으로 같은 연관이 관측된다. 재현은 그 결과가 특정 연구의 편향이나 교란 구조 때문일 가능성을 줄인다.
+
+### 3. 특이성
+
+노출이 특정한 결과로 이어진다(그리고 그 결과가 주로 그 노출로 생긴다). 많은 인과관계가 특이적이지 않으므로 아홉 기준 중 가장 약하다. 흡연은 폐암만이 아니라 여러 질병을 일으킨다.
+
+### 4. 시간성
+
+원인이 결과보다 시간적으로 앞서야 한다. 인과에 **필요한** 유일한 기준이다. $X$가 $Y$보다 먼저 일어나지 않으면 $X$가 $Y$를 일으킬 수 없다.
+
+!!! note "시간성은 필요조건이지 충분조건이 아니다"
+    $X$가 $Y$보다 앞선다는 사실은 역인과를 배제하지만, $X$와 $Y$ 모두보다 앞서는 잠복변수에 의한 교란은 배제하지 못한다.
+
+### 5. 생물학적 기울기 (용량–반응)
+
+노출이 클수록 반응도 크다. 교란이 매끄러운 기울기를 만들어내기는 (불가능하지는 않아도) 어려우므로 용량–반응 관계는 인과 논거를 강화한다.
+
+### 6. 개연성
+
+$X$가 $Y$를 일으킬 수 있는 생물학적·기제적으로 그럴듯한 설명이 있다. 현재의 과학 지식에 의존하므로 가장 주관적인 기준이다.
+
+### 7. 정합성
+
+인과 해석이 질병의 알려진 자연 경과 및 생물학과 충돌하지 않는다. 개연성과 관련되지만 더 넓은 지식 체계와의 일관성에 초점을 둔다.
+
+### 8. 실험
+
+(무작위 대조 시험이나 자연실험 등) 실험적 증거가 인과 주장을 뒷받침한다. $X$를 실험적으로 조작했을 때 $Y$가 변하면 인과의 강한 증거가 된다.
+
+### 9. 유추
+
+비슷한 원인은 비슷한 결과를 낳는다. 어떤 화학물질이 암을 일으킨다면 구조가 비슷한 물질도 암을 일으킬 수 있다. 가장 약한 기준이며 주로 개연성을 뒷받침하는 데 쓰인다.
+
+---
+
+## 반사실 틀
+
+Jerzy Neyman과 Donald Rubin이 발전시킨 **반사실**(또는 **잠재결과**) 틀은 인과효과에 대한 형식적인 수학적 정의를 제공한다. 통계학과 계량경제학의 현대 인과추론의 토대이다.
+
+### 잠재결과
+
+각 개인 $i$에 대해 두 잠재결과를 정의한다:
+
+- $Y_i(1)$: $i$가 처치를 받으면($X = 1$) 나타날 결과.
+- $Y_i(0)$: $i$가 처치를 받지 않으면($X = 0$) 나타날 결과.
+
+**개인 인과효과**는
 
 $$
 \tau_i = Y_i(1) - Y_i(0)
 $$
 
-The **fundamental problem of causal inference** is that we can never observe both $Y_i(1)$ and $Y_i(0)$ for the same individual. We observe $Y_i(1)$ if the individual is treated and $Y_i(0)$ if not, but never both.
+이다. **인과추론의 근본 문제**는 같은 개인에 대해 $Y_i(1)$과 $Y_i(0)$을 동시에 관측할 수 없다는 점이다. 처치를 받으면 $Y_i(1)$을, 받지 않으면 $Y_i(0)$을 관측할 뿐 둘 다는 결코 볼 수 없다.
 
-### Average Treatment Effect
+### 평균처치효과
 
-Since individual causal effects are unobservable, causal inference focuses on average effects across a population:
+개인 인과효과는 관측할 수 없으므로 인과추론은 모집단에 걸친 평균 효과에 초점을 둔다:
 
 $$
 \text{ATE} = \mathbb{E}[Y(1) - Y(0)] = \mathbb{E}[Y(1)] - \mathbb{E}[Y(0)]
 $$
 
-Under random assignment, treated and untreated groups have the same distribution of potential outcomes, so
+무작위 배정 아래에서는 처치군과 대조군의 잠재결과 분포가 같으므로
 
 $$
 \text{ATE} = \mathbb{E}[Y \mid X = 1] - \mathbb{E}[Y \mid X = 0]
 $$
 
-Without randomization, this equality fails because of **selection bias**: individuals who choose (or are assigned to) treatment may differ systematically from those who do not.
+이다. 무작위화가 없으면 **선택 편향** 때문에 이 등식이 깨진다. 처치를 선택하거나 배정받은 개인이 그렇지 않은 개인과 체계적으로 다를 수 있기 때문이다.
 
-### Ignorability (Unconfoundedness)
+### 무시가능성 (비교란성)
 
-The key assumption that enables causal inference from observational data is **ignorability** (also called unconfoundedness):
+관찰자료로부터 인과추론을 가능하게 하는 핵심 가정이 **무시가능성**(비교란성이라고도 한다)이다:
 
 $$
 Y(0), Y(1) \perp\!\!\!\perp X \mid Z
 $$
 
-This states that, conditional on observed covariates $Z$, treatment assignment is independent of potential outcomes. Under this assumption, adjusting for $Z$ (via regression, matching, or propensity scores) identifies the causal effect.
+관측된 공변량 $Z$를 조건으로 하면 처치 배정이 잠재결과와 독립이라는 뜻이다. 이 가정 아래에서 $Z$를 조정하면(회귀, 짝짓기, 성향점수로) 인과효과가 식별된다.
 
 ---
 
-## Comparing the Two Frameworks
+## 두 틀의 비교
 
-| Feature | Bradford Hill | Counterfactual |
+| 항목 | Bradford Hill | 반사실 |
 |:---|:---|:---|
-| Origin | Epidemiology (1965) | Statistics (Neyman 1923, Rubin 1974) |
-| Nature | Guidelines for judgment | Formal mathematical framework |
-| Requires experiment? | No (but experiment is one criterion) | No (but identifies when observation suffices) |
-| Strength | Broad applicability, intuitive | Precise definitions, testable assumptions |
-| Limitation | Subjective, no formal decision rule | Requires strong assumptions (ignorability) |
+| 기원 | 역학(1965) | 통계학(Neyman 1923, Rubin 1974) |
+| 성격 | 판단을 위한 지침 | 형식적 수학 틀 |
+| 실험이 필요한가? | 아니오(다만 실험이 기준 중 하나) | 아니오(다만 관찰만으로 충분한 조건을 규정) |
+| 강점 | 폭넓게 적용 가능하고 직관적 | 정확한 정의와 검토 가능한 가정 |
+| 한계 | 주관적이고 형식적 판정 규칙이 없음 | 강한 가정(무시가능성)을 요구 |
 
-The two frameworks are complementary. Bradford Hill's criteria provide a qualitative checklist for evaluating evidence, while the counterfactual framework provides a rigorous foundation for defining and estimating causal effects.
-
----
-
-## Practical Guidelines
-
-When evaluating whether an observed correlation is causal:
-
-1. **Start with temporality.** If the cause does not precede the effect, causation is ruled out.
-2. **Look for a dose-response relationship.** A gradient strengthens the causal case.
-3. **Consider confounders.** Can [confounding variables](../confounding/confounding_variables.md) or [lurking variables](../confounding/lurking_variables.md) explain the association?
-4. **Seek experimental evidence.** Randomized experiments provide the strongest evidence for causation. See [Experiments and Causation](experiments_causation.md).
-5. **Check replication.** Does the finding hold across different studies and populations?
-6. **Evaluate plausibility.** Is there a credible mechanism?
-7. **Apply the counterfactual test.** Can you articulate what would have happened in the absence of the exposure?
+두 틀은 상호보완적이다. Bradford Hill의 기준은 증거를 평가하는 정성적 점검표를 주고, 반사실 틀은 인과효과를 정의하고 추정하는 엄밀한 토대를 준다.
 
 ---
 
-## Summary
+## 실무 지침
 
-Establishing causation from observational data requires evidence beyond correlation. Bradford Hill's nine criteria provide a qualitative framework for evaluating causal claims, with temporality being the only strictly necessary criterion. The counterfactual framework provides a formal definition of causal effects through potential outcomes and identifies the assumptions (particularly ignorability) needed to estimate causal effects from non-experimental data. Together, these frameworks guide researchers from observed associations to justified causal conclusions.
+관측된 상관이 인과인지 평가할 때:
 
-## Exercises
-
-**Exercise 1.**
-For each of the following claims, evaluate which of the five criteria for causation (temporal precedence, covariation, elimination of confounders, plausibility, experimental evidence) are met:
-
-1. "Smoking causes lung cancer"
-2. "Wearing a seatbelt prevents death in car accidents"
-3. "Eating organic food causes better health"
-4. "Social media use causes depression in teenagers"
-
-??? success "Solution to Exercise 1"
-
-    1. **Smoking causes lung cancer**: All five criteria are strongly met. Temporal precedence (smoking precedes cancer by years), covariation (dose-response relationship), elimination of confounders (extensive studies controlling for other risk factors), plausibility (carcinogens in smoke damage DNA), and experimental evidence (animal studies; human evidence is quasi-experimental due to ethical constraints, but prospective cohort studies provide strong support).
-
-    2. **Wearing a seatbelt prevents death**: Temporal precedence (wearing precedes the accident), covariation (strong statistical association between seatbelt use and survival), plausibility (physics of force distribution), experimental evidence (crash test data). Elimination of confounders is partially met — cautious drivers may be more likely to wear seatbelts, but the mechanical argument is very strong.
-
-    3. **Eating organic food causes better health**: Covariation may exist but is weak. Temporal precedence is met trivially. Elimination of confounders is the weakest criterion — people who buy organic food tend to be wealthier, more health-conscious, and engage in more exercise. Plausibility is debatable (lower pesticide exposure, but unclear clinical significance). Experimental evidence is very limited. The causal claim is not well supported.
-
-    4. **Social media use causes depression in teenagers**: Covariation exists in many studies. Temporal precedence is difficult to establish (does social media use precede depression, or do depressed teens use more social media?). Elimination of confounders is challenging (loneliness, family dynamics, and pre-existing mental health conditions confound). Plausibility exists (social comparison, cyberbullying). Experimental evidence is limited and ethically constrained. The causal claim remains contested.
+1. **시간성에서 시작한다.** 원인이 결과보다 앞서지 않으면 인과는 배제된다.
+2. **용량–반응 관계를 찾는다.** 기울기가 있으면 인과 논거가 강해진다.
+3. **교란요인을 고려한다.** [교란변수](../confounding/confounding_variables.md)나 [잠복변수](../confounding/lurking_variables.md)가 그 연관을 설명할 수 있는가?
+4. **실험적 증거를 찾는다.** 무작위 실험이 인과에 대한 가장 강한 증거를 준다. [실험과 인과](experiments_causation.md)를 보라.
+5. **재현을 확인한다.** 여러 연구와 모집단에서 결과가 유지되는가?
+6. **개연성을 평가한다.** 믿을 만한 기제가 있는가?
+7. **반사실 검사를 적용한다.** 노출이 없었다면 무슨 일이 일어났을지 말할 수 있는가?
 
 ---
 
-**Exercise 2.**
-Design a study to test the causal relationship between sleep duration and academic performance. Specify:
+## 요약
 
-1. The type of study (observational, RCT, longitudinal)
-2. How you would control for confounders
-3. What variables you would measure
-4. Potential ethical constraints
-5. How you would interpret the results
+관찰자료에서 인과를 확립하려면 상관을 넘어서는 증거가 필요하다. Bradford Hill의 아홉 기준은 인과 주장을 평가하는 정성적 틀을 제공하며, 그중 엄밀하게 필요한 것은 시간성뿐이다. 반사실 틀은 잠재결과를 통해 인과효과의 형식적 정의를 주고, 비실험 자료에서 인과효과를 추정하는 데 필요한 가정(특히 무시가능성)을 밝힌다. 두 틀은 함께 연구자를 관측된 연관에서 정당한 인과적 결론으로 이끈다.
 
-??? success "Solution to Exercise 2"
+## 연습문제
 
-    1. **Study type**: A longitudinal observational study with repeated measures is most feasible. A true RCT (randomly assigning sleep durations) would be ideal but raises ethical concerns about sleep deprivation.
+**연습문제 1.**
+다음 각 주장에 대해 인과의 다섯 기준(시간적 선행, 공변, 교란요인의 배제, 개연성, 실험적 증거) 중 무엇이 충족되는지 평가하라:
 
-    2. **Controlling for confounders**: Measure and adjust for socioeconomic status, prior academic performance, mental health, caffeine intake, screen time, extracurricular activities, and course difficulty. Use regression or propensity score matching to control for these confounders.
+1. "흡연이 폐암을 일으킨다"
+2. "안전벨트 착용이 교통사고 사망을 막는다"
+3. "유기농 식품을 먹으면 건강이 좋아진다"
+4. "소셜 미디어 사용이 청소년의 우울을 일으킨다"
 
-    3. **Variables to measure**: Sleep duration and quality (via actigraphy or sleep diaries), GPA or standardized test scores, demographics, health behaviors, mental health scales, and time-varying confounders measured at each follow-up.
+??? success "연습문제 1 풀이"
 
-    4. **Ethical constraints**: Cannot ethically force students to sleep specific amounts. Must rely on natural variation or gentle interventions (sleep hygiene education). Need informed consent and IRB approval.
+    1. **흡연이 폐암을 일으킨다**: 다섯 기준이 모두 강하게 충족된다. 시간적 선행(흡연이 암보다 수년 앞선다), 공변(용량–반응 관계), 교란요인의 배제(다른 위험요인을 통제한 방대한 연구), 개연성(연기 속 발암물질이 DNA를 손상시킨다), 실험적 증거(동물 실험. 사람에 대한 증거는 윤리적 제약 때문에 준실험이지만 전향적 코호트 연구가 강하게 뒷받침한다).
 
-    5. **Interpretation**: If the association between sleep and academic performance persists after controlling for confounders and the temporal ordering is correct (sleep measured before performance outcomes), the evidence supports a causal interpretation but cannot definitively prove causation due to potential unmeasured confounders. Effect sizes and confidence intervals should be reported alongside p-values.
+    2. **안전벨트 착용이 사망을 막는다**: 시간적 선행(착용이 사고보다 앞선다), 공변(안전벨트 사용과 생존 사이의 강한 통계적 연관), 개연성(힘 분산의 물리학), 실험적 증거(충돌시험 자료)가 충족된다. 교란요인의 배제는 부분적으로만 충족된다. 조심스러운 운전자가 안전벨트를 더 잘 맬 수 있지만 역학적 논거가 매우 강하다.
+
+    3. **유기농 식품을 먹으면 건강이 좋아진다**: 공변이 있을 수 있지만 약하다. 시간적 선행은 자명하게 충족된다. 교란요인의 배제가 가장 약한 기준이다. 유기농 식품을 사는 사람은 대체로 부유하고 건강을 더 의식하며 운동도 더 한다. 개연성은 논쟁의 여지가 있다(농약 노출은 적지만 임상적 의미는 불분명하다). 실험적 증거는 매우 제한적이다. 인과 주장이 잘 뒷받침되지 않는다.
+
+    4. **소셜 미디어 사용이 청소년의 우울을 일으킨다**: 많은 연구에서 공변이 존재한다. 시간적 선행은 확립하기 어렵다(소셜 미디어 사용이 우울보다 앞서는가, 아니면 우울한 청소년이 소셜 미디어를 더 쓰는가?). 교란요인의 배제도 어렵다(외로움, 가족 관계, 기존 정신건강 상태가 교란한다). 개연성은 있다(사회적 비교, 사이버 괴롭힘). 실험적 증거는 제한적이고 윤리적 제약이 있다. 인과 주장은 여전히 논쟁 중이다.
+
+---
+
+**연습문제 2.**
+수면 시간과 학업 성취 사이의 인과관계를 검정하는 연구를 설계하라. 다음을 명시하라:
+
+1. 연구의 유형(관찰연구, 무작위 대조 시험, 종단 연구)
+2. 교란요인을 어떻게 통제할지
+3. 어떤 변수를 측정할지
+4. 있을 수 있는 윤리적 제약
+5. 결과를 어떻게 해석할지
+
+??? success "연습문제 2 풀이"
+
+    1. **연구 유형**: 반복측정을 포함한 종단 관찰연구가 가장 현실적이다. (수면 시간을 무작위로 배정하는) 진짜 무작위 대조 시험이 이상적이지만 수면 박탈에 대한 윤리적 문제가 생긴다.
+
+    2. **교란요인 통제**: 사회경제적 지위, 이전 학업 성취, 정신건강, 카페인 섭취, 화면 사용 시간, 과외 활동, 수강 과목의 난이도를 측정하고 조정한다. 회귀나 성향점수 짝짓기로 이 교란요인들을 통제한다.
+
+    3. **측정할 변수**: 수면 시간과 질(활동기록계나 수면 일지), 평점이나 표준화 시험 점수, 인구통계, 건강 행동, 정신건강 척도, 각 추적 시점에서 측정한 시변 교란요인.
+
+    4. **윤리적 제약**: 학생에게 특정 수면 시간을 강제할 수 없다. 자연적인 변동이나 온건한 개입(수면 위생 교육)에 의존해야 한다. 사전 동의와 연구윤리위원회 승인이 필요하다.
+
+    5. **해석**: 교란요인을 통제한 뒤에도 수면과 학업 성취의 연관이 유지되고 시간 순서가 올바르면(성취 결과보다 수면을 먼저 측정했다면) 인과 해석을 뒷받침하는 증거가 된다. 다만 측정되지 않은 교란요인 가능성 때문에 인과를 결정적으로 증명하지는 못한다. p-값과 함께 효과크기와 신뢰구간을 보고해야 한다.

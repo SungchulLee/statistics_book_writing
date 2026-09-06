@@ -1,56 +1,58 @@
-# Testing Kendall's tau
+# Kendall의 타우 검정
 
-Kendall's tau measures monotonic association by comparing concordant and discordant pairs. To determine whether the observed value of $\tau$ is statistically significant, we test the null hypothesis that the two variables are independent. This section presents the hypothesis test, its null distribution for both small and large samples, and its implementation.
+Kendall의 타우는 일치쌍과 불일치쌍을 비교하여 단조 연관을 잰다. 관측된 $\tau$ 값이 통계적으로 유의한지 판정하려면 두 변수가 독립이라는 귀무가설을 검정한다. 이 절에서는 가설검정, 작은 표본과 큰 표본에서의 귀무분포, 그리고 그 구현을 다룬다.
 
 ---
 
-## Hypotheses
+## 가설
 
-The standard test is:
+표준 검정은
 
 $$
 H_0\!: \tau = 0 \quad \text{vs} \quad H_1\!: \tau \neq 0
 $$
 
-where $\tau$ is the population Kendall tau coefficient. Under $H_0$, the two variables are independent, meaning all orderings of one variable relative to the other are equally likely.
+이며 $\tau$는 모집단 Kendall 타우 계수이다. $H_0$ 아래에서 두 변수는 독립이고, 한 변수에 대한 다른 변수의 모든 순서가 똑같이 그럴듯하다.
 
-One-sided alternatives ($H_1\!: \tau > 0$ or $H_1\!: \tau < 0$) are used when the direction of the monotonic trend is specified in advance.
+단조 추세의 방향을 미리 지정한 경우에는 단측 대립가설($H_1\!: \tau > 0$ 또는 $H_1\!: \tau < 0$)을 쓴다.
 
 ---
 
-## The Test Statistic S
+## 검정통계량 S
 
-The test is based on the Kendall $S$ statistic:
+검정은 Kendall의 $S$ 통계량에 기반한다:
 
 $$
 S = C - D
 $$
 
-where $C$ is the number of concordant pairs and $D$ is the number of discordant pairs. The relationship to tau-a is
+여기서 $C$는 일치쌍의 수, $D$는 불일치쌍의 수이다. 타우-a와의 관계는
 
 $$
 \tau_a = \frac{S}{\binom{n}{2}}
 $$
 
+이다.
+
 ---
 
-## Exact Distribution for Small Samples
+## 작은 표본의 정확분포
 
-Under $H_0$, all $n!$ permutations of the $Y$-ranks are equally likely. The exact distribution of $S$ can be computed by enumerating all permutations or using a recursive algorithm.
+$H_0$ 아래에서 $Y$ 순위의 $n!$개 순열이 모두 똑같이 그럴듯하다. $S$의 정확분포는 모든 순열을 열거하거나 재귀 알고리즘으로 계산할 수 있다.
 
-For small samples (typically $n \le 10$), the exact p-value is computed by finding the proportion of permutations that yield a value of $|S|$ at least as large as the observed value:
+작은 표본(보통 $n \le 10$)에서는 관측값만큼 큰 $|S|$를 주는 순열의 비율로 정확 p-값을 계산한다:
 
 $$
 p = P(|S| \ge |s_{\text{obs}}| \mid H_0)
 $$
 
-Exact critical values of $S$ are available in statistical tables for small $n$.
+작은 $n$에 대한 $S$의 정확 임계값은 통계표로 제공된다.
 
 ---
 
-## Normal Approximation for Large Samples
+## 큰 표본의 정규근사
 
-For larger samples, $S$ is approximately normal under $H_0$. The expected value and variance of $S$ are:
+표본이 커지면 $H_0$ 아래에서 $S$가 근사적으로 정규를 따른다. $S$의 기댓값과 분산은
 
 $$
 \mathbb{E}[S] = 0
@@ -60,50 +62,42 @@ $$
 \text{Var}(S) = \frac{n(n-1)(2n+5)}{18}
 $$
 
-When there are no ties, the standardized test statistic is
+이다. 동점이 없으면 표준화된 검정통계량은
 
 $$
 Z = \frac{S}{\sqrt{\frac{n(n-1)(2n+5)}{18}}}
 $$
 
-Under $H_0$, $Z$ follows approximately a standard normal distribution for large $n$ (typically $n \ge 10$ is sufficient).
+이다. $H_0$ 아래에서 $n$이 크면(보통 $n \ge 10$이면 충분하다) $Z$는 근사적으로 표준정규분포를 따른다.
 
-### Correction for Ties
+### 동점 보정
 
-When ties are present, the variance is adjusted:
+동점이 있으면 분산을 조정한다:
 
 $$
 \text{Var}(S) = \frac{n(n-1)(2n+5) - \sum_t t_x(t_x-1)(2t_x+5) - \sum_u t_y(t_y-1)(2t_y+5)}{18}
-$$
-
-$$
-
 + \frac{\sum_t t_x(t_x-1)(t_x-2) \cdot \sum_u t_y(t_y-1)(t_y-2)}{9n(n-1)(n-2)}
-$$
-
-$$
-
 + \frac{\sum_t t_x(t_x-1) \cdot \sum_u t_y(t_y-1)}{2n(n-1)}
 $$
 
-where $t_x$ is the size of each tied group in $X$ and $t_y$ is the size of each tied group in $Y$. Most software handles this automatically.
+여기서 $t_x$는 $X$의 각 동점 묶음의 크기, $t_y$는 $Y$의 각 동점 묶음의 크기이다. 대부분의 소프트웨어가 자동으로 처리한다.
 
 ---
 
-## Decision Rule
+## 판정 규칙
 
-For a two-sided test at significance level $\alpha$:
+유의수준 $\alpha$의 양측검정에서:
 
-- **Small samples**: reject $H_0$ if the exact p-value $< \alpha$.
-- **Large samples**: reject $H_0$ if $|Z| > z_{\alpha/2}$.
+- **작은 표본**: 정확 p-값이 $\alpha$보다 작으면 $H_0$을 기각한다.
+- **큰 표본**: $|Z| > z_{\alpha/2}$이면 $H_0$을 기각한다.
 
 ---
 
-## Example
+## 예제
 
-Consider the five observations from the [Kendall's Tau](../correlation/kendall.md) section, where we computed $S = C - D = 3 - 7 = -4$ with $n = 5$.
+[Kendall의 타우](../correlation/kendall.md) 절에서 $n = 5$일 때 $S = C - D = 3 - 7 = -4$를 계산했던 다섯 관측값을 생각하자.
 
-Using the normal approximation:
+정규근사를 쓰면
 
 $$
 \text{Var}(S) = \frac{5 \times 4 \times 15}{18} = \frac{300}{18} = 16.67
@@ -113,31 +107,25 @@ $$
 Z = \frac{-4}{\sqrt{16.67}} = \frac{-4}{4.083} = -0.980
 $$
 
-The two-sided p-value is $2 \times P(Z < -0.980) = 2 \times 0.164 = 0.327$. We do not reject $H_0$ at $\alpha = 0.05$; there is insufficient evidence of a monotonic association.
+이다. 양측 p-값은 $2 \times P(Z < -0.980) = 2 \times 0.164 = 0.327$이다. $\alpha = 0.05$에서 $H_0$을 기각하지 못한다. 단조 연관의 증거가 충분하지 않다.
 
-For $n = 5$, the exact test would be more appropriate. The exact two-sided p-value (from permutation enumeration) is approximately $0.483$, confirming the conclusion.
-
----
-
-## Power Comparison with Spearman's Test
-
-Kendall's test and Spearman's test are both nonparametric tests for monotonic association. Their relative power depends on the alternative:
-
-- For **bivariate normal** data, the **asymptotic relative efficiency** (ARE) of Kendall's test relative to Spearman's test is
-
-    $$
-    \text{ARE} = \frac{9}{4\pi^2 - 36} \approx 0.98
-    $$
-
-    meaning both tests have nearly identical power.
-
-- For **small samples**, Kendall's test often performs slightly better due to the more regular distribution of $\tau$ compared to $r_s$.
-
-- In practice, the choice between the two tests matters little for the hypothesis testing conclusion. Kendall's tau is sometimes preferred for its clearer probabilistic interpretation ($P(\text{concordant}) - P(\text{discordant})$).
+$n = 5$에서는 정확검정이 더 적절하다. (순열 열거로 얻은) 정확 양측 p-값은 약 $0.483$으로 같은 결론을 확인해 준다.
 
 ---
 
-## Computation in Python
+## Spearman 검정과의 검정력 비교
+
+Kendall 검정과 Spearman 검정은 모두 단조 연관에 대한 비모수 검정이다. 상대적 검정력은 대립가설에 따라 달라진다:
+
+- **이변량 정규** 자료에서 두 검정 모두 Pearson 검정에 대한 **점근상대효율**(ARE)이 약 $0.912$이고, 서로에 대한 ARE는 사실상 $1$이다. 즉 두 검정의 검정력이 거의 같다.
+
+- **작은 표본**에서는 $\tau$의 분포가 $r_s$보다 규칙적이어서 Kendall 검정이 조금 더 잘 작동하는 경우가 있다.
+
+- 실무에서는 가설검정의 결론에 관한 한 두 검정의 선택이 큰 차이를 만들지 않는다. Kendall의 타우는 확률적 해석($P(\text{일치}) - P(\text{불일치})$)이 더 명료해서 선호되기도 한다.
+
+---
+
+## Python으로 계산하기
 
 ```python
 import numpy as np
@@ -164,66 +152,66 @@ p_manual = 2 * (1 - stats.norm.cdf(abs(Z)))
 print(f"S = {S}, Z = {Z:.4f}, Manual p = {p_manual:.4f}")
 ```
 
-The `scipy.stats.kendalltau` function computes tau-b and handles ties in the variance formula automatically.
+`scipy.stats.kendalltau` 함수는 타우-b를 계산하고 분산 공식에서 동점을 자동으로 처리한다.
 
 ---
 
-## Summary
+## 요약
 
-The hypothesis test for Kendall's $\tau$ determines whether the observed number of concordant minus discordant pairs is significantly different from zero. For small samples, the exact permutation distribution is used; for larger samples, a normal approximation based on $\text{Var}(S) = n(n-1)(2n+5)/18$ is employed. The test is distribution-free and has power comparable to Spearman's test. Kendall's test is preferred in small samples or when the probabilistic interpretation of $\tau$ is important.
+Kendall의 $\tau$에 대한 가설검정은 관측된 일치쌍 수에서 불일치쌍 수를 뺀 값이 0과 유의하게 다른지 판정한다. 작은 표본에서는 정확 순열분포를 쓰고, 표본이 크면 $\text{Var}(S) = n(n-1)(2n+5)/18$에 기반한 정규근사를 쓴다. 분포에 의존하지 않으며 Spearman 검정과 검정력이 비슷하다. 표본이 작거나 $\tau$의 확률적 해석이 중요할 때 Kendall 검정이 선호된다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-For $n = 8$ observations with Kendall's $\tau = 0.43$, test $H_0: \tau = 0$ at $\alpha = 0.05$ using the normal approximation.
+**연습문제 1.**
+$n = 8$인 관측값에서 Kendall의 $\tau = 0.43$일 때 정규근사로 $\alpha = 0.05$에서 $H_0: \tau = 0$을 검정하라.
 
-??? success "Solution to Exercise 1"
-    The standard error under $H_0$ is:
+??? success "연습문제 1 풀이"
+    $H_0$ 아래에서 표준오차는
 
     $$
     \text{SE}(\tau) = \sqrt{\frac{2(2n+5)}{9n(n-1)}} = \sqrt{\frac{2(21)}{9 \times 8 \times 7}} = \sqrt{\frac{42}{504}} = \sqrt{0.08333} = 0.2887
     $$
 
-    The test statistic is:
+    이다. 검정통계량은
 
     $$
     Z = \frac{\tau}{\text{SE}(\tau)} = \frac{0.43}{0.2887} = 1.489
     $$
 
-    For a two-sided test at $\alpha = 0.05$, the critical value is 1.96. Since $|Z| = 1.49 < 1.96$, we fail to reject $H_0$. There is insufficient evidence of monotonic association.
+    이다. $\alpha = 0.05$ 양측검정의 임계값은 1.96이다. $|Z| = 1.49 < 1.96$이므로 $H_0$을 기각하지 못한다. 단조 연관의 증거가 충분하지 않다.
 
-    Note: with $n = 8$, the normal approximation may be rough. An exact permutation test would be more reliable.
-
----
-
-**Exercise 2.**
-Explain why the exact distribution of Kendall's $\tau$ under $H_0$ is distribution-free and describe how it can be computed.
-
-??? success "Solution to Exercise 2"
-    Under $H_0: \tau = 0$ (independence of $X$ and $Y$), the $Y$-ranks are equally likely to be any permutation of $(1, 2, \dots, n)$, regardless of the distribution of $X$ or $Y$. This means the distribution of the number of concordant pairs $C$ (and hence $\tau$) depends only on $n$, not on the underlying distributions.
-
-    The exact distribution can be computed by enumerating all $n!$ permutations of the $Y$-ranks and computing $\tau$ for each. For small $n$, this is feasible (and implemented in statistical software). For large $n$, the normal approximation $Z = \tau/\text{SE}(\tau)$ is used, where the variance formula under $H_0$ involves $n$ alone.
+    참고: $n = 8$에서는 정규근사가 거칠 수 있다. 정확 순열검정이 더 믿을 만하다.
 
 ---
 
-**Exercise 3.**
-Compare the power of Kendall's $\tau$ test versus Spearman's $\rho$ test for detecting monotonic association. Which is generally more powerful?
+**연습문제 2.**
+$H_0$ 아래에서 Kendall $\tau$의 정확분포가 왜 분포에 의존하지 않는지 설명하고 어떻게 계산할 수 있는지 기술하라.
 
-??? success "Solution to Exercise 3"
-    In most settings, the Spearman test is slightly more powerful than the Kendall test for detecting monotonic associations, because Spearman's $\rho$ uses rank values (which carry more information than pairwise ordinal comparisons) and has a larger variance separation between $H_0$ and $H_a$.
+??? success "연습문제 2 풀이"
+    $H_0: \tau = 0$($X$와 $Y$의 독립) 아래에서 $Y$ 순위는 $X$나 $Y$의 분포와 무관하게 $(1, 2, \dots, n)$의 어떤 순열이든 똑같이 그럴듯하다. 따라서 일치쌍의 수 $C$(따라서 $\tau$)의 분포는 바탕 분포가 아니라 $n$에만 의존한다.
 
-    However, the differences are typically small (asymptotic relative efficiency of Kendall vs. Spearman is close to 1). Kendall's $\tau$ has advantages in other respects: simpler variance formula, cleaner probabilistic interpretation, and better performance with ties.
-
-    The choice between them is often based on convention within a field or the specific properties desired rather than power considerations.
+    정확분포는 $Y$ 순위의 $n!$개 순열을 모두 열거하여 각각의 $\tau$를 계산해 얻는다. $n$이 작으면 실행 가능하며 통계 소프트웨어에 구현되어 있다. $n$이 크면 $H_0$ 아래 분산 공식이 $n$만 포함하는 정규근사 $Z = \tau/\text{SE}(\tau)$를 쓴다.
 
 ---
 
-**Exercise 4.**
-A researcher computes Kendall's $\tau = -0.12$ with $n = 200$ and obtains $p = 0.03$. Interpret this result in terms of both statistical and practical significance.
+**연습문제 3.**
+단조 연관 탐지에서 Kendall $\tau$ 검정과 Spearman $\rho$ 검정의 검정력을 비교하라. 대체로 어느 쪽이 더 강력한가?
 
-??? success "Solution to Exercise 4"
-    **Statistical significance:** With $p = 0.03 < 0.05$, we reject $H_0: \tau = 0$. There is statistically significant evidence of a negative monotonic association.
+??? success "연습문제 3 풀이"
+    두 검정의 검정력은 대체로 거의 같다. 이변량 정규 자료에서 서로에 대한 점근상대효율이 사실상 1이므로 어느 한쪽이 체계적으로 더 강력하다고 말하기 어렵다. 표본이 작거나 특정한 대립가설에서는 차이가 조금 생길 수 있다.
 
-    **Practical significance:** $\tau = -0.12$ is a weak association. The probability interpretation: for a randomly chosen pair of observations, the probability of concordance exceeds the probability of discordance by only $0.12$ (i.e., $P(\text{concordant}) - P(\text{discordant}) = -0.12$, meaning discordance is slightly more common). The effect is detectable only because $n = 200$ provides high power.
+    다만 Kendall의 $\tau$는 다른 면에서 이점이 있다. 분산 공식이 단순하고, 확률적 해석이 명료하며, 동점을 다룰 때 성능이 더 낫다.
 
-    As with Pearson's $r$, large samples can detect trivially small associations. The researcher should report the effect size ($\tau = -0.12$) alongside the p-value and discuss whether this magnitude is meaningful in the applied context.
+    둘 중 무엇을 고를지는 검정력보다 분야의 관행이나 원하는 성질에 따라 정해지는 경우가 많다.
+
+---
+
+**연습문제 4.**
+어떤 연구자가 $n = 200$에서 Kendall의 $\tau = -0.12$와 $p = 0.03$을 얻었다. 통계적 유의성과 실질적 유의성의 관점에서 이 결과를 해석하라.
+
+??? success "연습문제 4 풀이"
+    **통계적 유의성:** $p = 0.03 < 0.05$이므로 $H_0: \tau = 0$을 기각한다. 음의 단조 연관에 대한 통계적으로 유의한 증거가 있다.
+
+    **실질적 유의성:** $\tau = -0.12$는 약한 연관이다. 확률적 해석으로 보면, 무작위로 고른 관측값 쌍에서 불일치 확률이 일치 확률보다 $0.12$만큼 높을 뿐이다(즉 $P(\text{일치}) - P(\text{불일치}) = -0.12$). $n = 200$이 높은 검정력을 주기 때문에 탐지된 것이다.
+
+    Pearson의 $r$과 마찬가지로 표본이 크면 사소한 연관도 탐지된다. 연구자는 p-값과 함께 효과크기($\tau = -0.12$)를 보고하고 그 크기가 응용 맥락에서 의미가 있는지 논해야 한다.

@@ -1,84 +1,84 @@
-# Spearman Rank Correlation
+# Spearman 순위상관
 
-The Pearson correlation captures linear relationships, but many real-world associations are monotonic without being strictly linear. For instance, the relationship between years of experience and salary may be consistently increasing but not along a straight line. **Spearman's rank correlation coefficient** measures the strength and direction of *monotonic* relationships by applying the Pearson formula to the ranks of the data rather than the raw values.
-
----
-
-## From Values to Ranks
-
-The key idea behind Spearman's correlation is simple: replace each observation with its rank, then compute the Pearson correlation on those ranks. This makes the measure robust to outliers and invariant to any monotone transformation of the data.
-
-Given paired observations $(x_1, y_1), \ldots, (x_n, y_n)$:
-
-1. Rank the $x$-values from smallest to largest, assigning rank $R(x_i)$ to each $x_i$.
-2. Rank the $y$-values similarly, assigning rank $R(y_i)$ to each $y_i$.
-3. Compute the Pearson correlation between the ranks $R(x_i)$ and $R(y_i)$.
-
-When there are tied values, each tied observation receives the average of the ranks it would have occupied.
+Pearson 상관은 선형관계를 포착하지만, 현실의 많은 연관은 엄밀히 선형은 아니면서 단조롭다. 예를 들어 경력 연수와 급여의 관계는 꾸준히 증가하지만 직선을 따르지는 않을 수 있다. **Spearman 순위상관계수**는 원자료 값 대신 순위에 Pearson 공식을 적용하여 *단조* 관계의 강도와 방향을 잰다.
 
 ---
 
-## Definition
+## 값에서 순위로
 
-**Spearman's rank correlation coefficient** $r_s$ is
+Spearman 상관의 핵심 착상은 간단하다. 각 관측값을 그 순위로 바꾼 뒤 그 순위들에 대해 Pearson 상관을 계산한다. 이렇게 하면 이상점에 로버스트해지고 자료의 어떤 단조 변환에도 불변이 된다.
+
+짝지어진 관측값 $(x_1, y_1), \ldots, (x_n, y_n)$이 주어지면:
+
+1. $x$ 값을 작은 것부터 큰 것까지 순위를 매겨 각 $x_i$에 $R(x_i)$를 부여한다.
+2. $y$ 값에도 마찬가지로 순위를 매겨 각 $y_i$에 $R(y_i)$를 부여한다.
+3. 순위 $R(x_i)$와 $R(y_i)$ 사이의 Pearson 상관을 계산한다.
+
+동점이 있으면 동점인 관측값들에는 그들이 차지했을 순위의 평균을 부여한다.
+
+---
+
+## 정의
+
+**Spearman 순위상관계수** $r_s$는
 
 $$
 r_s = \frac{\sum_{i=1}^n (R(x_i) - \bar{R}_x)(R(y_i) - \bar{R}_y)}{\sqrt{\sum_{i=1}^n (R(x_i) - \bar{R}_x)^2} \; \sqrt{\sum_{i=1}^n (R(y_i) - \bar{R}_y)^2}}
 $$
 
-where $\bar{R}_x$ and $\bar{R}_y$ are the mean ranks. Since the ranks are simply $1, 2, \ldots, n$ (when there are no ties), the mean rank is $\bar{R} = (n+1)/2$.
+이며 $\bar{R}_x$와 $\bar{R}_y$는 평균 순위이다. (동점이 없으면) 순위가 $1, 2, \ldots, n$이므로 평균 순위는 $\bar{R} = (n+1)/2$이다.
 
-### Shortcut Formula (No Ties)
+### 간편 공식 (동점이 없을 때)
 
-When there are no tied ranks, the formula simplifies to
+동점이 없으면 공식이 다음으로 단순해진다:
 
 $$
 r_s = 1 - \frac{6 \sum_{i=1}^n d_i^2}{n(n^2 - 1)}
 $$
 
-where $d_i = R(x_i) - R(y_i)$ is the difference between the ranks of the $i$-th pair. This shortcut formula is widely used for hand calculation.
+여기서 $d_i = R(x_i) - R(y_i)$는 $i$번째 쌍의 순위 차이이다. 손으로 계산할 때 널리 쓰인다.
 
 ---
 
-## Properties
+## 성질
 
-1. **Range.** $-1 \le r_s \le 1$, just like the Pearson coefficient.
+1. **범위.** Pearson 계수와 마찬가지로 $-1 \le r_s \le 1$이다.
 
-2. **Perfect monotonic relationship.** $r_s = 1$ if and only if $R(x_i) = R(y_i)$ for all $i$ (the ranks are identical). This means $Y$ is a perfectly increasing function of $X$, though not necessarily linear. Similarly, $r_s = -1$ when the ranks are perfectly reversed.
+2. **완전한 단조 관계.** $r_s = 1$일 필요충분조건은 모든 $i$에서 $R(x_i) = R(y_i)$인 것(순위가 동일한 것)이다. 이는 $Y$가 $X$의 완전히 증가하는 함수라는 뜻이며 반드시 선형일 필요는 없다. 마찬가지로 순위가 완전히 뒤집히면 $r_s = -1$이다.
 
-3. **Invariance under monotone transformations.** If $f$ is any strictly increasing function, then $r_s(f(X), Y) = r_s(X, Y)$. This means Spearman's $r_s$ is unchanged by log transforms, square roots, or any other order-preserving transformation.
+3. **단조 변환에 대한 불변성.** $f$가 임의의 순증가 함수이면 $r_s(f(X), Y) = r_s(X, Y)$이다. 즉 Spearman의 $r_s$는 로그 변환, 제곱근, 그 밖의 순서를 보존하는 어떤 변환에도 변하지 않는다.
 
-4. **Robustness to outliers.** Because ranks compress extreme values, a single outlier has limited influence on $r_s$.
+4. **이상점에 대한 로버스트성.** 순위가 극단값을 압축하므로 이상점 하나가 $r_s$에 미치는 영향은 제한적이다.
 
 ---
 
-## When to Use Spearman vs Pearson
+## Spearman과 Pearson 중 무엇을 쓸까
 
-| Criterion | Pearson $r$ | Spearman $r_s$ |
+| 기준 | Pearson $r$ | Spearman $r_s$ |
 |:---|:---|:---|
-| Relationship type | Linear | Monotonic |
-| Data scale | Interval or ratio | Ordinal, interval, or ratio |
-| Sensitivity to outliers | High | Low |
-| Distribution assumption | Best with bivariate normal | Distribution-free |
-| Interpretation | Strength of linear association | Strength of monotonic association |
+| 관계의 유형 | 선형 | 단조 |
+| 자료의 척도 | 구간 또는 비율 | 순서, 구간, 비율 |
+| 이상점에 대한 민감성 | 높음 | 낮음 |
+| 분포 가정 | 이변량 정규에서 최적 | 분포에 의존하지 않음 |
+| 해석 | 선형 연관의 강도 | 단조 연관의 강도 |
 
-Use Spearman when:
+Spearman을 쓸 때:
 
-- The relationship is monotonic but not linear (e.g., exponential, logarithmic).
-- The data contain outliers or are heavily skewed.
-- The variables are measured on an ordinal scale (e.g., Likert ratings).
+- 관계가 단조이지만 선형이 아닐 때(예: 지수, 로그).
+- 자료에 이상점이 있거나 심하게 치우쳐 있을 때.
+- 변수가 순서 척도로 측정되었을 때(예: 리커트 평정).
 
-Use Pearson when:
+Pearson을 쓸 때:
 
-- The relationship is approximately linear.
-- Both variables are continuous and roughly normally distributed.
-- You want a measure specifically tied to linear prediction.
+- 관계가 근사적으로 선형일 때.
+- 두 변수가 모두 연속형이고 대략 정규분포를 따를 때.
+- 선형 예측과 직접 연결된 측도를 원할 때.
 
 ---
 
-## Example: Monotonic but Nonlinear Relationship
+## 예제: 단조이지만 비선형인 관계
 
-Consider the relationship $Y = e^X$ for $X = 1, 2, \ldots, 8$. The relationship is perfectly monotonic (increasing) but nonlinear. Spearman's $r_s$ captures this perfectly, while Pearson's $r$ will be less than $1$.
+$X = 1, 2, \ldots, 8$에 대해 $Y = e^X$인 관계를 생각하자. 관계가 완전히 단조(증가)이지만 비선형이다. Spearman의 $r_s$는 이를 완벽히 포착하지만 Pearson의 $r$은 $1$보다 작다.
 
 | $x_i$ | $y_i = e^{x_i}$ | $R(x_i)$ | $R(y_i)$ | $d_i$ |
 |:---:|:---:|:---:|:---:|:---:|
@@ -91,29 +91,29 @@ Consider the relationship $Y = e^X$ for $X = 1, 2, \ldots, 8$. The relationship 
 | 7 | 1096.63 | 7 | 7 | 0 |
 | 8 | 2980.96 | 8 | 8 | 0 |
 
-Since $d_i = 0$ for all $i$, the shortcut formula gives
+모든 $i$에서 $d_i = 0$이므로 간편 공식은
 
 $$
 r_s = 1 - \frac{6 \cdot 0}{8(64 - 1)} = 1
 $$
 
-The Pearson $r$ for this data is approximately $0.76$ because the exponential curve departs substantially from a straight line.
+을 준다. 이 자료의 Pearson $r$은 약 $0.78$이다. 지수곡선이 직선에서 크게 벗어나기 때문이다.
 
 ---
 
-## Handling Ties
+## 동점 처리
 
-When tied values occur, the shortcut formula is no longer exact. The standard approach is:
+동점이 있으면 간편 공식이 더 이상 정확하지 않다. 표준적인 접근은 다음과 같다:
 
-1. Assign each tied observation the **average rank** (midrank).
-2. Use the full formula (Pearson correlation on ranks) rather than the shortcut.
+1. 동점인 관측값에 **평균 순위**(중간순위)를 부여한다.
+2. 간편 공식 대신 완전한 공식(순위에 대한 Pearson 상관)을 쓴다.
 
-??? example "Tied ranks illustration"
-    Suppose the $x$-values are $\{3, 5, 5, 7, 9\}$. The values 5 and 5 would occupy ranks 2 and 3, so each receives the average rank $(2 + 3)/2 = 2.5$. The final ranks are $\{1, 2.5, 2.5, 4, 5\}$.
+??? example "동점 순위의 예"
+    $x$ 값이 $\{3, 5, 5, 7, 9\}$라고 하자. 두 개의 5는 순위 2와 3을 차지하므로 각각 평균 순위 $(2 + 3)/2 = 2.5$를 받는다. 최종 순위는 $\{1, 2.5, 2.5, 4, 5\}$이다.
 
 ---
 
-## Computation in Python
+## Python으로 계산하기
 
 ```python
 import numpy as np
@@ -131,29 +131,29 @@ r_p, p_p = stats.pearsonr(x, y)
 print(f"Pearson  r   = {r_p:.4f}, p-value = {p_p:.6f}")
 ```
 
-The `scipy.stats.spearmanr` function handles ties automatically using midranks. For hypothesis testing details, see [Testing Spearman's rho](../correlation_test/test_spearman.md).
+`scipy.stats.spearmanr` 함수는 중간순위를 써서 동점을 자동으로 처리한다. 가설검정의 자세한 내용은 [Spearman의 rho 검정](../correlation_test/test_spearman.md)을 보라.
 
 ---
 
-## Summary
+## 요약
 
-Spearman's rank correlation $r_s$ measures the strength and direction of any monotonic relationship between two variables. By operating on ranks rather than raw values, it is robust to outliers and applicable to ordinal data. While Pearson's $r$ is optimal for linear relationships with normally distributed data, Spearman's $r_s$ is the preferred choice when the relationship is monotonic but nonlinear, when the data contain outliers, or when the measurement scale is ordinal.
+Spearman 순위상관 $r_s$는 두 변수 사이 임의의 단조 관계의 강도와 방향을 잰다. 원자료 값이 아니라 순위를 다루므로 이상점에 로버스트하고 순서형 자료에도 적용할 수 있다. 정규분포를 따르는 자료의 선형관계에는 Pearson의 $r$이 최적이지만, 관계가 단조이면서 비선형이거나 자료에 이상점이 있거나 측정 척도가 순서형일 때에는 Spearman의 $r_s$가 선호된다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Compute Spearman's rank correlation for $X = (10, 20, 30, 40, 50)$ and $Y = (15, 25, 5, 35, 45)$.
+**연습문제 1.**
+$X = (10, 20, 30, 40, 50)$과 $Y = (15, 25, 5, 35, 45)$에 대해 Spearman 순위상관을 계산하라.
 
-??? success "Solution to Exercise 1"
-    Assign ranks: $R_X = (1, 2, 3, 4, 5)$, $R_Y = (2, 3, 1, 4, 5)$.
+??? success "연습문제 1 풀이"
+    순위를 매기면 $R_X = (1, 2, 3, 4, 5)$, $R_Y = (2, 3, 1, 4, 5)$이다.
 
-    Compute rank differences $d_i = R_{X,i} - R_{Y,i}$: $d = (-1, -1, 2, 0, 0)$.
+    순위 차이 $d_i = R_{X,i} - R_{Y,i}$를 계산하면 $d = (-1, -1, 2, 0, 0)$이다.
 
     $$
     \sum d_i^2 = 1 + 1 + 4 + 0 + 0 = 6
     $$
 
-    Using the shortcut formula:
+    간편 공식을 쓰면
 
     $$
     r_s = 1 - \frac{6\sum d_i^2}{n(n^2 - 1)} = 1 - \frac{6 \times 6}{5 \times 24} = 1 - \frac{36}{120} = 1 - 0.3 = 0.7
@@ -161,23 +161,23 @@ Compute Spearman's rank correlation for $X = (10, 20, 30, 40, 50)$ and $Y = (15,
 
 ---
 
-**Exercise 2.**
-Explain why Spearman's $r_s$ is exactly the Pearson correlation of the ranks. Why does this make $r_s$ robust to outliers?
+**연습문제 2.**
+Spearman의 $r_s$가 정확히 순위의 Pearson 상관인 이유를 설명하라. 이것이 왜 $r_s$를 이상점에 로버스트하게 만드는가?
 
-??? success "Solution to Exercise 2"
-    By definition, $r_s = r(\text{rank}(X), \text{rank}(Y))$: the Pearson correlation applied to the rank-transformed data. The shortcut formula $1 - 6\sum d_i^2/[n(n^2-1)]$ is algebraically equivalent (when there are no ties).
+??? success "연습문제 2 풀이"
+    정의에 의해 $r_s = r(\text{rank}(X), \text{rank}(Y))$, 즉 순위 변환된 자료에 적용한 Pearson 상관이다. 간편 공식 $1 - 6\sum d_i^2/[n(n^2-1)]$은 (동점이 없을 때) 대수적으로 동등하다.
 
-    This makes $r_s$ robust to outliers because ranking discards information about the magnitude of observations. An extreme outlier (e.g., changing $X_5 = 50$ to $X_5 = 5000$) does not change its rank (still rank 5), so $r_s$ is unchanged. In contrast, Pearson's $r$ would be heavily influenced because it uses the actual values in computing covariances and variances.
+    순위를 매기면 관측값의 크기 정보가 버려지므로 $r_s$가 이상점에 로버스트해진다. 극단적인 이상점(예: $X_5 = 50$을 $X_5 = 5000$으로 바꾸는 것)이 생겨도 순위는 그대로(여전히 5위)이므로 $r_s$가 변하지 않는다. 반면 Pearson의 $r$은 공분산과 분산을 계산할 때 실제 값을 쓰므로 크게 영향받는다.
 
 ---
 
-**Exercise 3.**
-Data: $X = (1, 2, 3, 4, 5)$, $Y = (1, 4, 9, 16, 25)$ (i.e., $Y = X^2$). Compute Pearson's $r$ and Spearman's $r_s$. Why do they differ?
+**연습문제 3.**
+자료: $X = (1, 2, 3, 4, 5)$, $Y = (1, 4, 9, 16, 25)$(즉 $Y = X^2$). Pearson의 $r$과 Spearman의 $r_s$를 계산하라. 왜 다른가?
 
-??? success "Solution to Exercise 3"
-    **Spearman's $r_s$:** Since $Y = X^2$ is a strictly increasing function on positive $X$, the ranks of $Y$ are identical to the ranks of $X$. Therefore $r_s = 1.0$.
+??? success "연습문제 3 풀이"
+    **Spearman의 $r_s$:** 양수 $X$에서 $Y = X^2$이 순증가 함수이므로 $Y$의 순위가 $X$의 순위와 같다. 따라서 $r_s = 1.0$이다.
 
-    **Pearson's $r$:** $\bar{X} = 3$, $\bar{Y} = 11$. Computing:
+    **Pearson의 $r$:** $\bar{X} = 3$, $\bar{Y} = 11$이다. 계산하면
 
     $$
     \sum(X_i - 3)(Y_i - 11) = (-2)(-10) + (-1)(-7) + (0)(-2) + (1)(5) + (2)(14) = 20 + 7 + 0 + 5 + 28 = 60
@@ -191,18 +191,18 @@ Data: $X = (1, 2, 3, 4, 5)$, $Y = (1, 4, 9, 16, 25)$ (i.e., $Y = X^2$). Compute 
     r = \frac{60}{\sqrt{10 \times 374}} = \frac{60}{61.16} \approx 0.981
     $$
 
-    Pearson's $r \approx 0.98 < 1$ because it measures linear association, and $Y = X^2$ is nonlinear (though nearly linear in this range). Spearman's $r_s = 1$ because the relationship is perfectly monotonic.
+    Pearson의 $r \approx 0.98 < 1$인 것은 그것이 선형 연관을 재는데 $Y = X^2$이 (이 범위에서는 거의 선형이지만) 비선형이기 때문이다. 관계가 완전히 단조이므로 Spearman의 $r_s = 1$이다.
 
 ---
 
-**Exercise 4.**
-Under what conditions does Spearman's $r_s$ equal Pearson's $r$ exactly?
+**연습문제 4.**
+어떤 조건에서 Spearman의 $r_s$가 Pearson의 $r$과 정확히 같아지는가?
 
-??? success "Solution to Exercise 4"
-    Spearman's $r_s$ equals Pearson's $r$ when the ranks are a linear function of the original values, which happens when:
+??? success "연습문제 4 풀이"
+    순위가 원래 값의 선형함수일 때 Spearman의 $r_s$가 Pearson의 $r$과 같아진다. 다음과 같은 경우이다:
 
-    1. **The data have no ties and the values are equally spaced** (or more generally, when both $X$ and $Y$ have the same distribution of values such that ranking is a linear transformation).
+    1. **동점이 없고 값들이 등간격일 때**(더 일반적으로는 순위 매김이 선형변환이 되도록 $X$와 $Y$의 값 분포가 같을 때).
 
-    2. **Both variables are uniformly distributed** on their range (ranks are proportional to the values).
+    2. **두 변수가 각자의 범위에서 균등분포를 따를 때**(순위가 값에 비례한다).
 
-    In practice, $r_s \approx r$ when the relationship between $X$ and $Y$ is approximately linear and neither variable has extreme outliers. The two measures diverge when (a) the relationship is nonlinear but monotonic ($r_s > r$), (b) outliers are present ($r$ is distorted, $r_s$ is not), or (c) the relationship is linear but with outliers ($r$ may be pulled toward zero, $r_s$ remains stable).
+    실무에서는 $X$와 $Y$의 관계가 근사적으로 선형이고 어느 변수에도 극단적인 이상점이 없으면 $r_s \approx r$이다. 두 측도가 갈라지는 경우는 (a) 관계가 단조이지만 비선형일 때($r_s > r$), (b) 이상점이 있을 때($r$은 왜곡되고 $r_s$는 그렇지 않다), (c) 관계는 선형인데 이상점이 있을 때($r$이 0 쪽으로 끌릴 수 있고 $r_s$는 안정적이다)이다.

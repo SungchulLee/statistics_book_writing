@@ -414,49 +414,49 @@ nav:
             - 등분산에 대한 F-검정: ch11/code/f_test_equality_of_variances.md
             - Levene 검정: ch11/code/levene_test.md
 
-    - 12 Correlation and Causation:
-        - Chapter Overview: ch12/index.md
-        - 12.1 Correlation:
-            - Pearson Correlation Coefficient: ch12/correlation/pearson.md
-            - Spearman Rank Correlation: ch12/correlation/spearman.md
-            - Kendall's Tau: ch12/correlation/kendall.md
-            - Partial Correlation: ch12/correlation/partial.md
-            - Point-Biserial and Phi Coefficients: ch12/correlation/special_cases.md
-            - Understanding Correlation: ch12/correlation/understanding.md
-        - 12.2 Ecological Correlation:
-            - Ecological Fallacy: ch12/ecological_correlation/ecological_fallacy.md
-            - Simpson's Paradox: ch12/ecological_correlation/simpsons_paradox.md
-            - Aggregation Bias: ch12/ecological_correlation/aggregation_bias.md
-            - Ecological Correlation Overview: ch12/ecological_correlation/ecological_correlation.md
-        - 12.3 Correlation, Causation, and Confounding:
-            - Confounding Variables: ch12/confounding/confounding_variables.md
-            - Spurious Correlations: ch12/confounding/spurious_correlations.md
-            - Lurking Variables and Common Causes: ch12/confounding/lurking_variables.md
-            - Confounding Overview: ch12/confounding/confounding.md
-        - 12.4 Causation:
-            - Criteria for Causal Inference: ch12/causation/causal_criteria.md
-            - Randomized Experiments and Causation: ch12/causation/experiments_causation.md
-            - Instrumental Variables (Introduction): ch12/causation/instrumental_variables.md
-            - Directed Acyclic Graphs: ch12/causation/dags.md
-            - Causation Overview: ch12/causation/causation.md
-        - 12.5 Correlation Tests:
-            - Testing Pearson's r (t-Test for Correlation): ch12/correlation_test/test_pearson.md
-            - Testing Spearman's ρ: ch12/correlation_test/test_spearman.md
-            - Testing Kendall's τ: ch12/correlation_test/test_kendall.md
-            - Comparing Two Correlations: ch12/correlation_test/comparing_correlations.md
-            - Correlation Tests Overview: ch12/correlation_test/correlation_tests.md
-        - 12.6 Correlation Matrix and Visualization:
-            - Correlation Heatmaps: ch12/visualization/heatmaps.md
-            - Pair Plots and Scatter Matrices: ch12/visualization/pairplots.md
-        - 12.7 Code:
-            - Correlation Analysis Demonstrations: ch12/code/correlation_analysis.md
-            - Causal Inference Simulations: ch12/code/causal_simulations.md
-            - Correlation Visualization: ch12/code/corr_viz.md
-            - Correlation Ellipse Plot: ch12/code/correlation_ellipses.md
-            - Covariance from Scratch: ch12/code/covariance_from_scratch.md
-            - Regression Correlation Plot: ch12/code/regression_correlation_plot.md
-            - Confounding and Causation Demo: ch12/code/confounding_causation_demo.md
-            - Correlation Causation: ch12/code/correlation_causation.md
+    - 12 상관과 인과:
+        - 장 개요: ch12/index.md
+        - 12.1 상관:
+            - Pearson 상관계수: ch12/correlation/pearson.md
+            - Spearman 순위상관: ch12/correlation/spearman.md
+            - Kendall의 타우: ch12/correlation/kendall.md
+            - 부분상관: ch12/correlation/partial.md
+            - 점이연 상관과 파이 계수: ch12/correlation/special_cases.md
+            - 상관의 이해: ch12/correlation/understanding.md
+        - 12.2 생태학적 상관:
+            - 생태학적 오류: ch12/ecological_correlation/ecological_fallacy.md
+            - Simpson의 역설: ch12/ecological_correlation/simpsons_paradox.md
+            - 집계 편향: ch12/ecological_correlation/aggregation_bias.md
+            - 생태학적 상관 개관: ch12/ecological_correlation/ecological_correlation.md
+        - 12.3 상관, 인과, 교란:
+            - 교란변수: ch12/confounding/confounding_variables.md
+            - 허위상관: ch12/confounding/spurious_correlations.md
+            - 잠복변수와 공통원인: ch12/confounding/lurking_variables.md
+            - 교란 개관: ch12/confounding/confounding.md
+        - 12.4 인과:
+            - 인과 추론의 기준: ch12/causation/causal_criteria.md
+            - 무작위 실험과 인과: ch12/causation/experiments_causation.md
+            - 도구변수 (입문): ch12/causation/instrumental_variables.md
+            - 방향성 비순환 그래프: ch12/causation/dags.md
+            - 인과 개관: ch12/causation/causation.md
+        - 12.5 상관 검정:
+            - Pearson의 r 검정 (상관에 대한 t-검정): ch12/correlation_test/test_pearson.md
+            - Spearman의 rho 검정: ch12/correlation_test/test_spearman.md
+            - Kendall의 타우 검정: ch12/correlation_test/test_kendall.md
+            - 두 상관의 비교: ch12/correlation_test/comparing_correlations.md
+            - 상관 검정 개관: ch12/correlation_test/correlation_tests.md
+        - 12.6 상관행렬과 시각화:
+            - 상관행렬의 열지도: ch12/visualization/heatmaps.md
+            - 쌍 그림과 산점도 행렬: ch12/visualization/pairplots.md
+        - 12.7 코드:
+            - 상관 분석 시연: ch12/code/correlation_analysis.md
+            - 인과추론 모의실험: ch12/code/causal_simulations.md
+            - 상관 시각화: ch12/code/corr_viz.md
+            - 상관 타원 그림: ch12/code/correlation_ellipses.md
+            - 공분산 밑바닥부터 만들기: ch12/code/covariance_from_scratch.md
+            - 회귀와 상관 그림: ch12/code/regression_correlation_plot.md
+            - 교란과 인과 시연: ch12/code/confounding_causation_demo.md
+            - 상관과 인과: ch12/code/correlation_causation.md
 
     - 13 Linear Regression:
         - Chapter Overview: ch13/index.md

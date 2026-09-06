@@ -1,43 +1,42 @@
-# 18.2 Ecological Correlation
+# 생태학적 상관 개관
 
-
-Ecological correlation refers to the statistical relationship between variables that are **aggregated over groups or regions** rather than being measured at the individual level. The phenomenon where an ecological correlation misrepresents the relationship at the individual level is known as the **ecological fallacy**.
-
----
-
-## Understanding Ecological Correlation
-
-Ecological correlation often arises in studies that use data aggregated by regions, countries, or other groupings. For instance, researchers may study the relationship between average income and average health outcomes across different countries. Although such studies can reveal important trends, the correlation observed at the group level may not reflect the true relationship at the individual level.
-
-**Example**: If you analyze the average education level and average income across different cities, you might find a strong positive correlation, indicating that cities with higher average education levels tend to have higher average incomes. However, this does not necessarily imply that individuals within each city with higher education levels earn more than those with lower education levels.
+생태학적 상관은 개인 수준에서 측정한 것이 아니라 **집단이나 지역 단위로 집계된** 변수들 사이의 통계적 관계를 가리킨다. 생태학적 상관이 개인 수준의 관계를 잘못 나타내는 현상을 **생태학적 오류**라 한다.
 
 ---
 
-## Simpson's Paradox
+## 생태학적 상관의 이해
 
-Simpson's paradox occurs when a trend that appears in several different groups of data reverses or disappears when these groups are combined. It is one of the most striking illustrations of why aggregate data can be misleading.
+생태학적 상관은 지역, 국가, 그 밖의 단위로 집계된 자료를 쓰는 연구에서 흔히 나타난다. 예를 들어 연구자가 여러 나라에 걸쳐 평균 소득과 평균 건강 결과의 관계를 살펴볼 수 있다. 이런 연구가 중요한 추세를 드러낼 수는 있지만, 집단 수준에서 관측된 상관이 개인 수준의 참 관계를 반영하지 않을 수 있다.
 
-### Example 1: Derek Jeter vs. David Justice (Baseball)
+**예시**: 여러 도시의 평균 학력과 평균 소득을 분석하면 강한 양의 상관을 발견할 수 있다. 평균 학력이 높은 도시일수록 평균 소득도 높다는 뜻이다. 그러나 이것이 각 도시 안에서 학력이 높은 개인이 낮은 개인보다 더 번다는 뜻은 아니다.
 
-| | 1995 | 1996 | Combined |
+---
+
+## Simpson의 역설
+
+Simpson의 역설은 여러 자료 집단에서 나타나는 경향이 그 집단들을 합치면 뒤집히거나 사라질 때 일어난다. 집계 자료가 왜 오도할 수 있는지 보여주는 가장 인상적인 예 중 하나이다.
+
+### 예 1: Derek Jeter 대 David Justice (야구)
+
+| | 1995 | 1996 | 합계 |
 |---|---|---|---|
 | **Derek Jeter** | 12/48 = **.250** | 183/582 = **.314** | 195/630 = **.310** |
 | **David Justice** | 104/411 = **.253** | 45/140 = **.321** | 149/551 = **.270** |
 
-David Justice had a higher batting average than Derek Jeter in **both** 1995 and 1996 individually, yet Jeter had a higher **combined** average. The paradox arises because Jeter had far more at-bats in 1996 (his better year), while Justice had more at-bats in 1995 (his worse year). The unequal weighting across years reverses the overall comparison.
+David Justice는 1995년과 1996년 **각각** Derek Jeter보다 타율이 높았지만, **합산** 타율은 Jeter가 더 높았다. Jeter는 타율이 좋았던 1996년에 타석이 훨씬 많았고 Justice는 타율이 낮았던 1995년에 타석이 많았기 때문에 역설이 생긴다. 연도별 가중이 불균형해서 전체 비교가 뒤집힌다.
 
-### Example 2: Kidney Stone Treatment
+### 예 2: 신장결석 치료
 
-| | Small Stones | Large Stones | Combined |
+| | 작은 결석 | 큰 결석 | 합계 |
 |---|---|---|---|
-| **Treatment A** | 81/87 = **.93** | 192/263 = **.73** | 273/350 = .78 |
-| **Treatment B** | 234/270 = .87 | 55/80 = .69 | 289/350 = **.83** |
+| **치료 A** | 81/87 = **.93** | 192/263 = **.73** | 273/350 = .78 |
+| **치료 B** | 234/270 = .87 | 55/80 = .69 | 289/350 = **.83** |
 
-Treatment A is better for both small and large stones individually, yet Treatment B appears better when the data is combined. The confounding factor is that Treatment A was preferentially assigned to the more difficult (large stone) cases, dragging down its combined rate.
+치료 A가 작은 결석에서도 큰 결석에서도 각각 더 낫지만 자료를 합치면 치료 B가 나아 보인다. 치료 A가 더 어려운 사례(큰 결석)에 우선 배정되어 합산 성공률이 끌어내려진 것이 교란 요인이다.
 
-### Example 3: UC Berkeley Graduate Admissions Gender Bias
+### 예 3: UC 버클리 대학원 입학의 성별 편향
 
-| Major | Men Applicants | Men % Admitted | Women Applicants | Women % Admitted |
+| 전공 | 남성 지원 | 남성 합격률 | 여성 지원 | 여성 합격률 |
 |-------|---------------|---------------|-----------------|-----------------|
 | A | 825 | 62% | 108 | **82%** |
 | B | 560 | 63% | 25 | **68%** |
@@ -72,117 +71,112 @@ if __name__ == "__main__":
     main()
 ```
 
-At the aggregate level, men appear to be admitted at a significantly higher rate (44% vs. 30%). However, examining each department individually reveals that women were admitted at equal or higher rates in most departments. The paradox arises because women disproportionately applied to more competitive departments (C, D, E, F) with lower overall admission rates.
+이 여섯 전공을 합친 수준에서는 남성의 합격률이 훨씬 높아 보인다(44% 대 30%). 그러나 학과별로 살펴보면 대부분의 학과에서 여성이 같거나 더 높은 비율로 합격했다. 여성이 전체 합격률이 낮은 경쟁적인 학과(C, D, E, F)에 불균형하게 많이 지원했기 때문에 역설이 생긴다.
 
 ---
 
-## Real-World Examples of Ecological Correlation
+## 생태학적 상관의 실제 사례
 
-### Alcohol Consumption and Coronary Heart Disease
+### 음주와 관상동맥 심장질환
 
-An ecological study examined the relationship between per capita alcohol consumption and death rates from coronary heart disease (CHD) across different countries. The analysis revealed a notably strong **negative** correlation at the country level.
+어떤 생태학적 연구가 여러 나라에 걸쳐 1인당 알코올 소비량과 관상동맥 심장질환(CHD) 사망률의 관계를 살폈다. 국가 수준에서 뚜렷한 **음의** 상관이 드러났다.
 
-However, a cohort study analyzing **individual** alcohol consumption revealed a **J-shaped** relationship: individuals who drank moderately had lower mortality rates compared to abstainers, but as consumption increased beyond moderate levels, there was a significant linear rise in mortality.
+그러나 **개인**의 음주량을 분석한 코호트 연구는 **J자 형태**의 관계를 보였다. 적당히 마시는 사람은 금주자보다 사망률이 낮았지만, 소비가 적정 수준을 넘어서면 사망률이 뚜렷하게 선형으로 올라갔다.
 
-The ecological correlation (linear, negative) dramatically oversimplifies the true individual-level relationship (non-linear, J-shaped).
+생태학적 상관(선형, 음)은 개인 수준의 참 관계(비선형, J자)를 극적으로 단순화한다.
 
-Source: [Ecological Studies — Boston University](https://sphweb.bumc.bu.edu/otlt/MPH-Modules/PH717-QuantCore/PH717-Module1B-DescriptiveStudies_and_Statistics/PH717-Module1B-DescriptiveStudies_and_Statistics6.html)
+출처: [Ecological Studies — Boston University](https://sphweb.bumc.bu.edu/otlt/MPH-Modules/PH717-QuantCore/PH717-Module1B-DescriptiveStudies_and_Statistics/PH717-Module1B-DescriptiveStudies_and_Statistics6.html)
 
-### Smoking and Lung Cancer
+### 흡연과 폐암
 
-Countries with higher average cigarette consumption per capita tend to have higher lung cancer rates—a strong positive ecological correlation. However, assuming this directly reflects individual risk commits the ecological fallacy. In a country with high cigarette consumption, other factors (like air pollution or occupational exposures) may also contribute to high lung cancer rates.
+1인당 평균 담배 소비가 많은 나라일수록 폐암 발생률이 높은 경향이 있다. 강한 양의 생태학적 상관이다. 그러나 이것이 개인의 위험을 직접 반영한다고 가정하면 생태학적 오류를 범하는 것이다. 담배 소비가 많은 나라에서는 대기오염이나 직업적 노출 같은 다른 요인도 높은 폐암 발생률에 기여할 수 있다.
 
-### Cholesterol Levels and Heart Disease Across Countries
+### 국가별 콜레스테롤 수치와 심장질환
 
-Countries with higher average cholesterol levels tend to have higher rates of heart disease (positive ecological correlation). But this does not necessarily mean that individuals with higher cholesterol in those countries are more likely to develop heart disease. Dietary habits, healthcare access, genetic predispositions, and lifestyle differences across countries can influence both variables.
+평균 콜레스테롤 수치가 높은 나라일수록 심장질환 발생률이 높은 경향이 있다(양의 생태학적 상관). 그러나 그 나라들 안에서 콜레스테롤이 높은 개인이 반드시 심장질환에 더 잘 걸린다는 뜻은 아니다. 식습관, 의료 접근성, 유전적 소인, 생활방식의 국가별 차이가 두 변수 모두에 영향을 줄 수 있다.
 
-### Education and Crime Rates in Urban Areas
+### 도시 지역의 학력과 범죄율
 
-Neighborhoods with higher average education levels often have lower crime rates (negative ecological correlation). However, assuming this correlation applies to individuals within each neighborhood can be misleading. Economic opportunities, policing, community programs, and social cohesion may be influencing both education levels and crime rates at the neighborhood level.
+평균 학력이 높은 동네일수록 범죄율이 낮은 경우가 많다(음의 생태학적 상관). 그러나 이 상관이 각 동네 안의 개인에게 적용된다고 가정하면 오도될 수 있다. 경제적 기회, 치안, 지역사회 프로그램, 사회적 결속이 동네 수준에서 학력과 범죄율 모두에 영향을 줄 수 있다.
 
-### Voting Patterns and Income Levels
+### 투표 성향과 소득 수준
 
-Wealthier districts might show a tendency to vote for conservative candidates, leading to an ecological correlation between income and conservative voting behavior. But individuals with lower incomes in those districts might also vote conservatively, and some wealthy individuals might vote for liberal candidates. The ecological correlation may reflect broader regional trends rather than a direct individual-level relationship.
+부유한 선거구가 보수 후보에게 투표하는 경향을 보여 소득과 보수 투표 행동 사이에 생태학적 상관이 나타날 수 있다. 그러나 그 선거구의 저소득 개인도 보수적으로 투표할 수 있고 부유한 개인 중 일부는 진보 후보를 찍을 수 있다. 생태학적 상관은 개인 수준의 직접적인 관계가 아니라 더 넓은 지역적 추세를 반영한 것일 수 있다.
 
-### Income and Health Outcomes
+### 소득과 건강 결과
 
-Regions with higher average incomes tend to have better health outcomes and longer life expectancies (positive ecological correlation). However, individuals in lower-income regions might still enjoy good health due to strong community health programs, and individuals in higher-income regions might face health challenges due to stress or lifestyle choices.
+평균 소득이 높은 지역일수록 건강 결과가 좋고 기대수명이 긴 경향이 있다(양의 생태학적 상관). 그러나 저소득 지역의 개인도 탄탄한 지역 보건 프로그램 덕분에 건강할 수 있고, 고소득 지역의 개인도 스트레스나 생활방식 때문에 건강 문제를 겪을 수 있다.
 
-### Literacy Rates and Economic Development
+### 문해율과 경제 발전
 
-Countries with higher literacy rates tend to have higher GDP per capita (positive ecological correlation). But this does not mean that increasing literacy alone will lead to higher individual incomes. Economic development is a complex process influenced by government policies, natural resources, trade, and industrialization.
-
----
-
-## The Ecological Fallacy
-
-The ecological fallacy occurs when conclusions about **individual behavior** are drawn from **aggregate data**. This fallacy can lead to incorrect inferences because the correlation observed in group-level data does not necessarily apply to individuals within those groups.
-
-**Key Mechanisms**:
-
-1. **Aggregation bias**: Averaging across a group removes individual-level variation, potentially creating or masking associations.
-2. **Confounding at the group level**: Group-level variables may be correlated with other group characteristics that drive the observed pattern.
-3. **Unequal weighting**: As Simpson's paradox demonstrates, the composition of groups can reverse overall trends.
+문해율이 높은 나라일수록 1인당 GDP가 높은 경향이 있다(양의 생태학적 상관). 그러나 이것이 문해율만 높이면 개인 소득이 올라간다는 뜻은 아니다. 경제 발전은 정부 정책, 천연자원, 무역, 산업화의 영향을 받는 복잡한 과정이다.
 
 ---
 
-## Implications and Caution
+## 생태학적 오류
 
-Ecological correlations are useful for identifying broad trends and generating hypotheses for further study, but they should be interpreted with caution:
+생태학적 오류는 **집계 자료**로부터 **개인의 행동**에 대한 결론을 이끌어낼 때 일어난다. 집단 수준 자료에서 관측된 상관이 그 집단 안의 개인에게 반드시 적용되지는 않으므로 잘못된 추론으로 이어질 수 있다.
 
-1. **Do not assume individual-level relationships** from group-level data without additional evidence.
-2. **Complement ecological studies** with individual-level data analysis whenever possible.
-3. **Be aware of Simpson's paradox** — always check whether aggregate trends hold within meaningful subgroups.
-4. **Consider confounders** at both the group and individual level.
+**핵심 기제**:
 
----
-
-## Summary
-
-These examples highlight the importance of understanding the context when interpreting ecological correlations. While such correlations can provide valuable insights into group-level patterns, they should not be assumed to apply directly to individuals within those groups. To avoid the ecological fallacy, it is crucial to consider additional data and analysis at the individual level whenever possible.
-## Exercises
-
-**Exercise 1.**
-A study of 50 countries finds a correlation of $r = 0.78$ between national average income and national average life expectancy. Explain why it would be incorrect to conclude that a specific individual earning more money will live longer.
-
-??? success "Solution to Exercise 1"
-    This is an example of the **ecological fallacy** -- attributing a group-level relationship to individuals. The correlation of $r = 0.78$ describes the relationship between *country-level averages*, not between individual income and individual life expectancy.
-
-    At the individual level, the correlation is likely much weaker because within any single country, the variation in income and life expectancy is much greater than the between-country variation in averages. Additionally, the country-level correlation captures the effects of national infrastructure, healthcare systems, and public health policies, which benefit all citizens regardless of individual income.
+1. **집계 편향**: 집단에 걸쳐 평균을 내면 개인 수준 변동이 사라져 연관이 생기거나 가려질 수 있다.
+2. **집단 수준의 교란**: 집단 수준 변수가 관측된 패턴을 이끄는 다른 집단 특성과 상관되어 있을 수 있다.
+3. **불균형한 가중**: Simpson의 역설이 보여주듯 집단의 구성이 전체 추세를 뒤집을 수 있다.
 
 ---
 
-**Exercise 2.**
-Construct a hypothetical example where the ecological correlation (at the group level) is positive but the individual-level correlation within every group is negative.
+## 함의와 주의
 
-??? success "Solution to Exercise 2"
-    Consider two schools measuring hours of TV watched ($X$) and test scores ($Y$):
+생태학적 상관은 큰 추세를 파악하고 후속 연구의 가설을 만드는 데 유용하지만 신중하게 해석해야 한다:
 
-    - **School A (affluent):** Average TV = 1 hr, average score = 90. Within School A, students who watch more TV score lower ($r_{\text{within}} = -0.4$).
-    - **School B (less affluent):** Average TV = 3 hrs, average score = 70. Within School B, the same negative pattern holds ($r_{\text{within}} = -0.3$).
-    - **School C (middle):** Average TV = 2 hrs, average score = 80. Within-school $r = -0.35$.
-
-    The ecological correlation across the three school averages: as average TV increases (1, 2, 3), average scores decrease (90, 80, 70), giving $r_{\text{eco}} \approx -1.0$.
-
-    Wait -- that gives a negative ecological correlation too. Let me reverse: if we consider schools where the high-average-TV school happens to have higher scores due to confounding:
-
-    - **School A:** Average exercise = 2 hrs, average BMI = 22. Within school: more exercise correlates with lower BMI ($r = -0.5$).
-    - **School B:** Average exercise = 5 hrs, average BMI = 25. Within school: same negative pattern ($r = -0.4$).
-
-    The ecological correlation is positive ($r_{\text{eco}} > 0$: more average exercise, higher average BMI) because School B is a sports academy where students are heavier due to muscle mass, not fat. But within each school, individuals who exercise more have lower BMI.
+1. 추가 증거 없이 집단 수준 자료로부터 **개인 수준의 관계를 가정하지 말라**.
+2. 가능하면 언제나 개인 수준 자료 분석으로 **생태학적 연구를 보완하라**.
+3. **Simpson의 역설을 유념하라.** 집계 추세가 의미 있는 하위집단 안에서도 성립하는지 항상 확인하라.
+4. 집단 수준과 개인 수준 모두에서 **교란요인을 고려하라**.
 
 ---
 
-**Exercise 3.**
-Explain why aggregating data to a higher level (e.g., from individuals to counties) generally increases the magnitude of the observed correlation. What mathematical property drives this effect?
+## 요약
 
-??? success "Solution to Exercise 3"
-    Aggregation increases the correlation magnitude because averaging reduces **within-group variance** (noise) while preserving **between-group variance** (signal). By the law of total variance:
+이 사례들은 생태학적 상관을 해석할 때 맥락을 이해하는 일이 중요함을 보여준다. 이런 상관은 집단 수준 패턴에 대한 값진 통찰을 줄 수 있지만, 그 집단 안의 개인에게 직접 적용된다고 가정해서는 안 된다. 생태학적 오류를 피하려면 가능한 한 개인 수준의 추가 자료와 분석을 함께 고려해야 한다.
+
+## 연습문제
+
+**연습문제 1.**
+50개국에 대한 연구에서 국가 평균 소득과 국가 평균 기대수명의 상관이 $r = 0.78$이었다. 돈을 더 버는 특정 개인이 더 오래 산다고 결론짓는 것이 왜 틀렸는지 설명하라.
+
+??? success "연습문제 1 풀이"
+    이는 집단 수준의 관계를 개인에게 귀속시키는 **생태학적 오류**의 예이다. 상관 $r = 0.78$은 *국가 평균들* 사이의 관계를 기술하는 것이지 개인 소득과 개인 기대수명 사이의 관계가 아니다.
+
+    개인 수준에서는 상관이 훨씬 약할 가능성이 크다. 어느 한 나라 안에서 소득과 기대수명의 변동이 국가 평균들 사이의 변동보다 훨씬 크기 때문이다. 게다가 국가 수준 상관은 개인 소득과 무관하게 모든 시민에게 도움이 되는 국가 기반시설, 의료체계, 공중보건 정책의 효과도 담고 있다.
+
+---
+
+**연습문제 2.**
+(집단 수준의) 생태학적 상관은 양수인데 모든 집단 안의 개인 수준 상관은 음수인 가상의 예를 구성하라.
+
+??? success "연습문제 2 풀이"
+    두 학교에서 운동 시간($X$)과 체질량지수 BMI($Y$)를 측정한다고 하자:
+
+    - **학교 A(일반 학교):** 평균 운동 2시간, 평균 BMI 22. 학교 안에서는 운동을 많이 할수록 BMI가 낮다($r = -0.5$).
+    - **학교 B(체육 특기 학교):** 평균 운동 5시간, 평균 BMI 25. 학교 안에서도 같은 음의 패턴이 유지된다($r = -0.4$).
+
+    두 학교 평균에 걸친 생태학적 상관은 양수이다(평균 운동이 많은 학교의 평균 BMI가 더 높다). 학교 B는 학생들이 근육량 때문에 체중이 더 나가는 체육 학교이기 때문이다. 그러나 각 학교 안에서는 운동을 더 많이 하는 개인의 BMI가 더 낮다.
+
+    학교라는 교란변수가 운동 시간과 BMI를 함께 끌어올리므로 집단 수준의 부호가 개인 수준의 부호와 반대가 된다.
+
+---
+
+**연습문제 3.**
+자료를 더 높은 수준으로(예: 개인에서 카운티로) 집계하면 왜 대체로 관측되는 상관의 크기가 커지는지 설명하라. 이 효과를 이끄는 수학적 성질은 무엇인가?
+
+??? success "연습문제 3 풀이"
+    평균 내기가 **집단 내 분산**(잡음)은 줄이면서 **집단 간 분산**(신호)은 유지하기 때문에 집계는 상관의 크기를 키운다. 전체 분산의 법칙에 의해
 
     $$
     \text{Var}(X) = \text{Var}(E[X|G]) + E[\text{Var}(X|G)]
     $$
 
-    When we aggregate to the group level, we observe only $E[X|G]$, eliminating the within-group variance $E[\text{Var}(X|G)]$. The signal-to-noise ratio increases, making the correlation between group means stronger than the individual-level correlation.
+    이다. 집단 수준으로 집계하면 $E[X|G]$만 관측되고 집단 내 분산 $E[\text{Var}(X|G)]$은 사라진다. 신호 대 잡음 비가 커지므로 집단 평균들 사이의 상관이 개인 수준 상관보다 강해진다.
 
-    This means ecological correlations are systematically inflated relative to individual-level correlations, making them unreliable as estimates of individual-level relationships.
+    즉 생태학적 상관은 개인 수준 상관에 비해 체계적으로 부풀려지므로, 개인 수준 관계의 추정값으로 삼기에는 믿을 수 없다.

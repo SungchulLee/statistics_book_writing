@@ -1,185 +1,187 @@
-# Instrumental Variables (Introduction)
+# 도구변수 (입문)
 
-When randomized experiments are infeasible and unmeasured confounders threaten the validity of observational estimates, **instrumental variables** (IVs) offer a way to estimate causal effects despite the confounding. The idea is to find a variable -- the instrument -- that affects the treatment but has no direct effect on the outcome, so it can serve as a source of "as-if random" variation in the treatment. This section introduces the core logic and assumptions of IV estimation at an introductory level.
+무작위 실험이 어렵고 측정되지 않은 교란요인이 관찰 추정값의 타당성을 위협할 때, **도구변수**(IV)는 교란에도 불구하고 인과효과를 추정하는 방법을 제공한다. 착상은 처치에는 영향을 주지만 결과에는 직접 영향을 주지 않는 변수, 즉 도구를 찾아 처치에 "마치 무작위인 듯한" 변동의 원천으로 삼는 것이다. 이 절에서는 IV 추정의 핵심 논리와 가정을 입문 수준에서 소개한다.
 
 ---
 
-## The Problem: Unmeasured Confounding
+## 문제: 측정되지 않은 교란
 
-Recall that a confounder $U$ creates bias in the estimated effect of $X$ on $Y$ when $U$ is associated with both:
+교란요인 $U$가 $X$와 $Y$ 모두와 연관되어 있으면 $X$가 $Y$에 미치는 효과의 추정에 편향이 생긴다:
 
 $$
 X \leftarrow U \rightarrow Y
 $$
 
-If $U$ is unmeasured, standard methods (regression, matching, stratification) cannot remove the bias. We need a different strategy.
+$U$가 측정되지 않았다면 표준적인 방법(회귀, 짝짓기, 층화)으로는 편향을 제거할 수 없다. 다른 전략이 필요하다.
 
 ---
 
-## The Instrument
+## 도구
 
-An **instrumental variable** $Z$ is a variable that:
+**도구변수** $Z$는 다음을 만족하는 변수이다:
 
-1. **Relevance**: $Z$ is associated with the treatment $X$.
-2. **Exclusion restriction**: $Z$ affects the outcome $Y$ **only through** $X$ (no direct effect on $Y$).
-3. **Independence**: $Z$ is not associated with the unmeasured confounders $U$.
+1. **관련성**: $Z$가 처치 $X$와 연관되어 있다.
+2. **배제 제약**: $Z$가 결과 $Y$에 **오직 $X$를 통해서만** 영향을 준다($Y$에 직접 효과가 없다).
+3. **독립성**: $Z$가 측정되지 않은 교란요인 $U$와 연관되어 있지 않다.
 
-The causal structure can be depicted as:
+인과 구조는 다음과 같이 그릴 수 있다:
 
 $$
 Z \rightarrow X \rightarrow Y, \quad U \rightarrow X, \quad U \rightarrow Y
 $$
 
-with no arrow from $Z$ to $Y$ or from $U$ to $Z$.
+여기서 $Z$에서 $Y$로 가는 화살표도, $U$에서 $Z$로 가는 화살표도 없다.
 
-The instrument $Z$ provides variation in $X$ that is free from the influence of $U$. By isolating this "clean" variation, IV methods can estimate the causal effect of $X$ on $Y$ even when $U$ is unmeasured.
-
----
-
-## Intuition: The Two-Stage Process
-
-The logic of IV estimation can be understood in two stages:
-
-**Stage 1**: Use $Z$ to predict $X$. Since $Z$ is independent of $U$, the predicted values $\hat{X}$ contain only the "clean" variation in $X$ (the part driven by $Z$, not by $U$).
-
-**Stage 2**: Regress $Y$ on $\hat{X}$. Since $\hat{X}$ is free of confounding by $U$, the resulting coefficient estimates the causal effect of $X$ on $Y$.
-
-This procedure is called **two-stage least squares** (2SLS) and is the most common IV estimator.
+도구 $Z$는 $U$의 영향에서 자유로운 $X$의 변동을 제공한다. 이 "깨끗한" 변동을 분리함으로써 IV 방법은 $U$가 측정되지 않아도 $X$가 $Y$에 미치는 인과효과를 추정할 수 있다.
 
 ---
 
-## Simple IV Estimator
+## 직관: 두 단계 과정
 
-In the simplest case with a single instrument $Z$ and no additional covariates, the IV estimator of the causal effect $\beta$ of $X$ on $Y$ is the **Wald estimator**:
+IV 추정의 논리는 두 단계로 이해할 수 있다:
+
+**1단계**: $Z$로 $X$를 예측한다. $Z$가 $U$와 독립이므로 예측값 $\hat{X}$에는 $X$의 "깨끗한" 변동($U$가 아니라 $Z$가 이끈 부분)만 담긴다.
+
+**2단계**: $Y$를 $\hat{X}$에 회귀한다. $\hat{X}$는 $U$에 의한 교란에서 자유로우므로 그 계수가 $X$가 $Y$에 미치는 인과효과를 추정한다.
+
+이 절차를 **2단계 최소제곱**(2SLS)이라 하며 가장 흔한 IV 추정량이다.
+
+---
+
+## 단순 IV 추정량
+
+도구가 하나이고 추가 공변량이 없는 가장 단순한 경우, $X$가 $Y$에 미치는 인과효과 $\beta$의 IV 추정량은 **Wald 추정량**이다:
 
 $$
 \hat{\beta}_{IV} = \frac{\text{Cov}(Z, Y)}{\text{Cov}(Z, X)}
 $$
 
-This ratio captures the total effect of $Z$ on $Y$ divided by the effect of $Z$ on $X$, yielding the per-unit effect of $X$ on $Y$.
+이 비는 $Z$가 $Y$에 미치는 총효과를 $Z$가 $X$에 미치는 효과로 나눈 것이며, 결과적으로 $X$ 단위당 $Y$의 효과를 준다.
 
-Equivalently, using sample correlations:
+동등하게 표본상관으로 쓰면
 
 $$
 \hat{\beta}_{IV} = \frac{r_{ZY}}{r_{ZX}} \cdot \frac{S_Y}{S_X}
 $$
 
----
-
-## Classic Examples of Instruments
-
-### Distance to College as an Instrument for Education
-
-To estimate the causal effect of education ($X$) on wages ($Y$), Card (1993) used distance to the nearest college ($Z$) as an instrument:
-
-- **Relevance**: people who live closer to a college are more likely to attend.
-- **Exclusion**: distance to college does not directly affect wages (after controlling for geographic factors).
-- **Independence**: distance to college is plausibly unrelated to unmeasured ability ($U$).
-
-### Quarter of Birth as an Instrument for Schooling
-
-Angrist and Krueger (1991) used quarter of birth ($Z$) as an instrument for years of schooling ($X$):
-
-- **Relevance**: compulsory schooling laws interact with birth quarter to create variation in schooling.
-- **Exclusion**: birth quarter has no direct effect on wages.
-- **Independence**: birth quarter is essentially random.
-
-### Rainfall as an Instrument for Economic Activity
-
-Miguel, Satyanath, and Sergenti (2004) used rainfall ($Z$) as an instrument for economic growth ($X$) when studying the effect of economic conditions on civil conflict ($Y$) in Africa.
+이다.
 
 ---
 
-## Assumptions and Their Violations
+## 고전적인 도구의 예
 
-The validity of IV estimation depends critically on the three assumptions:
+### 교육의 도구로서 대학까지의 거리
 
-| Assumption | Violation | Consequence |
+교육($X$)이 임금($Y$)에 미치는 인과효과를 추정하기 위해 Card(1993)는 가장 가까운 대학까지의 거리($Z$)를 도구로 썼다:
+
+- **관련성**: 대학에 가까이 사는 사람이 대학에 갈 가능성이 높다.
+- **배제**: (지리적 요인을 통제한 뒤) 대학까지의 거리가 임금에 직접 영향을 주지는 않는다.
+- **독립성**: 대학까지의 거리가 측정되지 않은 능력($U$)과 무관하다고 볼 만하다.
+
+### 교육 연수의 도구로서 태어난 분기
+
+Angrist와 Krueger(1991)는 교육 연수($X$)의 도구로 태어난 분기($Z$)를 썼다:
+
+- **관련성**: 의무교육법이 태어난 분기와 상호작용하여 교육 연수에 변동을 만든다.
+- **배제**: 태어난 분기가 임금에 직접 영향을 주지 않는다.
+- **독립성**: 태어난 분기는 본질적으로 무작위이다.
+
+### 경제활동의 도구로서 강수량
+
+Miguel, Satyanath, Sergenti(2004)는 아프리카에서 경제 상황이 내전($Y$)에 미치는 효과를 연구하면서 경제성장($X$)의 도구로 강수량($Z$)을 썼다.
+
+---
+
+## 가정과 그 위반
+
+IV 추정의 타당성은 세 가정에 결정적으로 의존한다:
+
+| 가정 | 위반 | 결과 |
 |:---|:---|:---|
-| Relevance ($Z$ affects $X$) | Weak instrument ($Z$ barely affects $X$) | Large bias, unreliable inference |
-| Exclusion ($Z$ affects $Y$ only through $X$) | Direct effect of $Z$ on $Y$ | Biased IV estimate |
-| Independence ($Z$ independent of $U$) | $Z$ correlated with confounders | Biased IV estimate |
+| 관련성($Z$가 $X$에 영향) | 약한 도구($Z$가 $X$에 거의 영향 없음) | 큰 편향, 신뢰할 수 없는 추론 |
+| 배제($Z$가 $X$를 통해서만 $Y$에 영향) | $Z$가 $Y$에 직접 효과를 가짐 | 편향된 IV 추정 |
+| 독립성($Z$가 $U$와 독립) | $Z$가 교란요인과 상관 | 편향된 IV 추정 |
 
-!!! warning "Weak instruments"
-    When the instrument is only weakly correlated with the treatment, the IV estimator has large variance and can be severely biased, sometimes worse than the ordinary (confounded) OLS estimator. A common rule of thumb is that the first-stage F-statistic should exceed 10.
+!!! warning "약한 도구"
+    도구가 처치와 약하게만 상관되어 있으면 IV 추정량의 분산이 크고 심각하게 편향될 수 있으며, 때로는 (교란된) 보통 최소제곱 추정량보다 나쁘다. 흔한 경험 법칙은 1단계 F-통계량이 10을 넘어야 한다는 것이다.
 
-The exclusion restriction is typically the most controversial assumption because it cannot be tested directly from the data. It must be justified on substantive grounds.
+배제 제약은 자료로 직접 검정할 수 없으므로 대체로 가장 논쟁적인 가정이다. 실질적인 근거로 정당화해야 한다.
 
 ---
 
-## IV vs Other Methods
+## IV와 다른 방법의 비교
 
-| Method | Handles unmeasured confounders? | Key requirement |
+| 방법 | 측정되지 않은 교란을 다루는가? | 핵심 요건 |
 |:---|:---:|:---|
-| OLS regression | No | All confounders measured |
-| Matching / propensity scores | No | All confounders measured |
-| Instrumental variables | Yes | Valid instrument available |
-| Randomized experiment | Yes | Ethical and feasible |
+| OLS 회귀 | 아니오 | 모든 교란요인이 측정되어야 함 |
+| 짝짓기 / 성향점수 | 아니오 | 모든 교란요인이 측정되어야 함 |
+| 도구변수 | 예 | 타당한 도구가 있어야 함 |
+| 무작위 실험 | 예 | 윤리적이고 실행 가능해야 함 |
 
-IV methods fill an important gap between observational studies (which require all confounders to be measured) and experiments (which may be infeasible). The cost is that a valid instrument must be found, and the exclusion restriction must be credible.
-
----
-
-## Summary
-
-Instrumental variables provide a method for estimating causal effects in the presence of unmeasured confounding. An instrument is a variable that is relevant (affects the treatment), satisfies the exclusion restriction (affects the outcome only through the treatment), and is independent of unmeasured confounders. The two-stage least squares estimator uses the instrument to isolate variation in the treatment that is free from confounding. While powerful, IV methods require strong and often untestable assumptions, particularly the exclusion restriction. They are most convincing when the instrument has a clear, well-understood mechanism of action.
-
-## Exercises
-
-**Exercise 1.**
-State the two key conditions an instrumental variable $Z$ must satisfy to identify the causal effect of $X$ on $Y$ in the presence of an unobserved confounder $U$.
-
-??? success "Solution to Exercise 1"
-    An instrument $Z$ must satisfy:
-
-    1. **Relevance:** $Z$ is correlated with $X$ (i.e., $\text{Cov}(Z, X) \neq 0$). The instrument must actually affect the treatment variable.
-
-    2. **Exclusion restriction:** $Z$ affects $Y$ only through $X$, not directly or through any other path. Formally, $Z \perp Y \mid X, U$ (conditional on $X$ and the unobservable $U$, $Z$ has no effect on $Y$).
-
-    An additional assumption often stated separately is **independence:** $Z \perp U$ (the instrument is not correlated with the unobserved confounder). This is sometimes called the "exogeneity" condition.
-
-    Together, these conditions allow the IV estimator: $\hat{\beta}_{IV} = \text{Cov}(Z, Y)/\text{Cov}(Z, X)$, which consistently estimates the causal effect of $X$ on $Y$.
+IV 방법은 (모든 교란요인의 측정을 요구하는) 관찰연구와 (실행이 어려울 수 있는) 실험 사이의 중요한 빈틈을 메운다. 대가는 타당한 도구를 찾아야 하고 배제 제약이 설득력 있어야 한다는 점이다.
 
 ---
 
-**Exercise 2.**
-In the classic returns-to-education example, quarter of birth is used as an instrument for years of education to estimate the causal effect on earnings. Explain why quarter of birth satisfies the relevance condition and discuss whether the exclusion restriction is plausible.
+## 요약
 
-??? success "Solution to Exercise 2"
-    **Relevance:** Due to compulsory schooling laws, students born earlier in the year can legally drop out of school at a younger age (they reach the minimum dropout age earlier in their school career). Students born in Q1 therefore tend to have slightly less education than those born in Q4. This creates a correlation between quarter of birth and years of schooling.
+도구변수는 측정되지 않은 교란이 있을 때 인과효과를 추정하는 방법을 제공한다. 도구는 관련성이 있고(처치에 영향), 배제 제약을 만족하며(처치를 통해서만 결과에 영향), 측정되지 않은 교란요인과 독립인 변수이다. 2단계 최소제곱 추정량은 도구를 써서 교란에서 자유로운 처치의 변동을 분리한다. 강력하지만 IV 방법은 강하고 흔히 검정할 수 없는 가정, 특히 배제 제약을 요구한다. 도구의 작동 기제가 분명하고 잘 이해될 때 가장 설득력이 있다.
 
-    **Exclusion restriction:** This requires that quarter of birth affects earnings only through its effect on education, not through any other channel. Potential concerns:
+## 연습문제
 
-    - Seasonal effects on cognitive development or health (children born in different seasons may differ)
-    - Family planning: birth timing may correlate with family socioeconomic status
-    - Astrological beliefs in some cultures affecting hiring
+**연습문제 1.**
+관측되지 않은 교란요인 $U$가 있을 때 $X$가 $Y$에 미치는 인과효과를 식별하기 위해 도구변수 $Z$가 만족해야 하는 두 핵심 조건을 진술하라.
 
-    The exclusion restriction is debatable. While quarter of birth is plausibly exogenous (not caused by the individual's choices), the requirement that it has zero direct effect on earnings is a strong assumption that cannot be tested directly.
+??? success "연습문제 1 풀이"
+    도구 $Z$는 다음을 만족해야 한다:
 
----
+    1. **관련성:** $Z$가 $X$와 상관되어 있다(즉 $\text{Cov}(Z, X) \neq 0$). 도구가 실제로 처치변수에 영향을 주어야 한다.
 
-**Exercise 3.**
-Explain the problem of "weak instruments" and why it matters for IV estimation.
+    2. **배제 제약:** $Z$가 직접적으로도, 다른 경로를 통해서도 아니라 오직 $X$를 통해서만 $Y$에 영향을 준다. 형식적으로 $Z \perp Y \mid X, U$이다($X$와 관측되지 않은 $U$를 조건으로 하면 $Z$가 $Y$에 아무 효과가 없다).
 
-??? success "Solution to Exercise 3"
-    A **weak instrument** has a low correlation with the endogenous variable $X$ (relevance is barely satisfied). The first-stage F-statistic (from regressing $X$ on $Z$) is small (the rule of thumb is $F < 10$ indicates weakness).
+    별도로 자주 진술되는 추가 가정은 **독립성**이다: $Z \perp U$(도구가 관측되지 않은 교란요인과 상관되지 않음). "외생성" 조건이라고도 한다.
 
-    Weak instruments cause several problems:
-
-    1. **Large bias:** The IV estimator's finite-sample bias approaches the OLS bias. With a very weak instrument, IV can be as biased as the naive OLS estimate.
-    2. **Large variance:** The standard errors of IV estimates are inversely proportional to the first-stage correlation. Weak instruments produce imprecise estimates with wide confidence intervals.
-    3. **Distorted inference:** Standard confidence intervals and t-tests have incorrect coverage and size. The asymptotic normal approximation breaks down.
-
-    Remedies include testing for weak instruments (first-stage F-statistic), using Anderson-Rubin confidence sets (robust to weak instruments), or finding stronger instruments.
+    이 조건들이 함께 성립하면 IV 추정량 $\hat{\beta}_{IV} = \text{Cov}(Z, Y)/\text{Cov}(Z, X)$가 $X$가 $Y$에 미치는 인과효과를 일치추정한다.
 
 ---
 
-**Exercise 4.**
-Using the DAG $Z \to X \to Y$ with $U \to X$ and $U \to Y$ (where $U$ is unobserved), explain graphically why the IV estimator identifies the causal effect while OLS does not.
+**연습문제 2.**
+교육의 수익에 관한 고전적 예에서 태어난 분기를 교육 연수의 도구로 써서 소득에 대한 인과효과를 추정한다. 태어난 분기가 관련성 조건을 만족하는 이유를 설명하고 배제 제약이 그럴듯한지 논하라.
 
-??? success "Solution to Exercise 4"
-    In this DAG, OLS estimates the effect of $X$ on $Y$ by regressing $Y$ on $X$. However, the back-door path $X \leftarrow U \to Y$ is open and cannot be blocked (because $U$ is unobserved). OLS conflates the causal effect ($X \to Y$) with the confounding bias ($X \leftarrow U \to Y$).
+??? success "연습문제 2 풀이"
+    **관련성:** 의무교육법 때문에 연초에 태어난 학생은 학교생활 중 더 이른 시점에 최소 중퇴 가능 연령에 도달하여 더 어린 나이에 합법적으로 학교를 그만둘 수 있다. 그래서 1분기에 태어난 학생이 4분기에 태어난 학생보다 교육 연수가 조금 짧은 경향이 있다. 이것이 태어난 분기와 교육 연수 사이에 상관을 만든다.
 
-    The IV estimator uses $Z$ instead. The path from $Z$ to $Y$ goes only through $X$: $Z \to X \to Y$. There is no back-door path from $Z$ to $Y$ because $Z$ is independent of $U$ (by the exogeneity assumption) and $Z$ has no direct effect on $Y$ (exclusion restriction). Therefore, $\text{Cov}(Z, Y) = \beta \cdot \text{Cov}(Z, X)$ where $\beta$ is the causal effect, giving $\beta = \text{Cov}(Z, Y)/\text{Cov}(Z, X)$.
+    **배제 제약:** 태어난 분기가 교육을 통한 효과 말고 다른 경로로는 소득에 영향을 주지 않아야 한다. 우려되는 점들:
 
-    Graphically, the instrument "isolates" the exogenous variation in $X$ by using only the part of $X$'s variation caused by $Z$, which is free of confounding.
+    - 인지 발달이나 건강에 대한 계절 효과(다른 계절에 태어난 아이들이 다를 수 있다)
+    - 가족계획: 출산 시기가 가정의 사회경제적 지위와 상관될 수 있다
+    - 일부 문화권에서 채용에 영향을 주는 점성술적 믿음
+
+    배제 제약은 논쟁의 여지가 있다. 태어난 분기가 개인의 선택으로 결정되지 않는다는 점에서 외생적이라 볼 만하지만, 소득에 직접 효과가 전혀 없다는 요건은 직접 검정할 수 없는 강한 가정이다.
+
+---
+
+**연습문제 3.**
+"약한 도구" 문제를 설명하고 그것이 IV 추정에 왜 중요한지 밝혀라.
+
+??? success "연습문제 3 풀이"
+    **약한 도구**는 내생변수 $X$와의 상관이 낮은 도구이다(관련성이 간신히 충족된다). ($X$를 $Z$에 회귀한) 1단계 F-통계량이 작다(경험 법칙으로 $F < 10$이면 약하다고 본다).
+
+    약한 도구는 여러 문제를 일으킨다:
+
+    1. **큰 편향:** IV 추정량의 유한표본 편향이 OLS 편향에 가까워진다. 도구가 매우 약하면 IV가 순진한 OLS만큼 편향될 수 있다.
+    2. **큰 분산:** IV 추정값의 표준오차가 1단계 상관에 반비례한다. 약한 도구는 신뢰구간이 넓은 부정확한 추정을 낳는다.
+    3. **왜곡된 추론:** 표준 신뢰구간과 t-검정의 포함확률과 크기가 부정확해진다. 점근 정규근사가 무너진다.
+
+    대처로는 약한 도구 검정(1단계 F-통계량), (약한 도구에 로버스트한) Anderson-Rubin 신뢰집합의 사용, 더 강한 도구 찾기가 있다.
+
+---
+
+**연습문제 4.**
+($U$가 관측되지 않을 때) $U \to X$, $U \to Y$가 있는 DAG $Z \to X \to Y$를 써서 IV 추정량은 인과효과를 식별하지만 OLS는 그러지 못하는 이유를 그래프로 설명하라.
+
+??? success "연습문제 4 풀이"
+    이 DAG에서 OLS는 $Y$를 $X$에 회귀하여 $X$의 효과를 추정한다. 그러나 뒷문 경로 $X \leftarrow U \to Y$가 열려 있고 ($U$가 관측되지 않으므로) 막을 수 없다. OLS는 인과효과($X \to Y$)와 교란 편향($X \leftarrow U \to Y$)을 뒤섞는다.
+
+    IV 추정량은 대신 $Z$를 쓴다. $Z$에서 $Y$로 가는 경로는 $Z \to X \to Y$뿐이다. (외생성 가정에 의해) $Z$가 $U$와 독립이고 (배제 제약에 의해) $Z$가 $Y$에 직접 효과가 없으므로 $Z$에서 $Y$로 가는 뒷문 경로가 없다. 따라서 $\beta$가 인과효과일 때 $\text{Cov}(Z, Y) = \beta \cdot \text{Cov}(Z, X)$이고 $\beta = \text{Cov}(Z, Y)/\text{Cov}(Z, X)$가 된다.
+
+    그래프로 보면 도구는 $Z$가 일으킨 $X$의 변동만 사용하여 교란에서 자유로운 외생적 변동을 "분리"해 낸다.

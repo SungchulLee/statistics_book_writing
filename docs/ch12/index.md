@@ -1,96 +1,95 @@
-# Chapter 12: Correlation and Causation
+# 12장: 상관과 인과
 
+## 개요
 
-## Overview
-
-This chapter explores the fundamental concepts of correlation and causation -- two ideas that are central to statistical reasoning and data interpretation. While correlation quantifies the strength and direction of the relationship between two variables, causation implies that changes in one variable directly produce changes in another. The chapter covers how to measure, test, and visualize correlations, how to recognize pitfalls such as ecological fallacy and confounding, and how to reason about causal relationships using modern frameworks like directed acyclic graphs.
-
----
-
-## Chapter Structure
-
-### 12.1 Correlation
-
-Measures of association between two variables, covering both classical and rank-based approaches:
-
-- **Pearson Correlation Coefficient** -- Quantifies the strength and direction of the linear relationship between two continuous variables, ranging from $-1$ to $+1$.
-- **Spearman Rank Correlation** -- A non-parametric measure based on the ranks of observations, capturing monotonic (not necessarily linear) relationships.
-- **Kendall's Tau** -- A rank-based correlation coefficient that counts concordant and discordant pairs, offering robustness to outliers and ties.
-- **Partial Correlation** -- Measures the association between two variables after controlling for the effect of one or more additional variables.
-- **Point-Biserial and Phi Coefficients** -- Specialized correlation measures for situations involving binary variables (one continuous and one binary, or both binary).
-- **Understanding Correlation** -- A conceptual overview of what correlation is, how to visualize it across a range of values, and common misconceptions.
-
-### 12.2 Ecological Correlation
-
-How aggregated data can mislead about individual-level relationships:
-
-- **Ecological Fallacy** -- The error of inferring individual-level associations from group-level (aggregated) correlation data.
-- **Simpson's Paradox** -- A phenomenon where a trend that appears in aggregated data reverses or disappears when the data is separated into subgroups.
-- **Aggregation Bias** -- Systematic distortion introduced when individual-level data is summarized at a higher level, altering the apparent strength or direction of associations.
-
-### 12.3 Correlation, Causation, and Confounding
-
-Why correlation alone does not imply causation, and the role of hidden variables:
-
-- **Confounding Variables** -- Third variables that influence both the predictor and the outcome, creating a spurious association between them.
-- **Spurious Correlations** -- Statistically significant correlations that arise from chance, confounding, or data mining rather than a genuine causal relationship.
-- **Lurking Variables and Common Causes** -- Unobserved variables that drive observed associations, making it appear that two variables are directly related when they are not.
-
-### 12.4 Causation
-
-Frameworks and methods for establishing genuine causal relationships:
-
-- **Criteria for Causal Inference** -- Classical criteria (temporal precedence, covariation, elimination of confounders) and modern perspectives on what constitutes evidence for causation.
-- **Randomized Experiments and Causation** -- How random assignment eliminates confounding and provides the strongest evidence for causal claims.
-- **Instrumental Variables (Introduction)** -- A technique for estimating causal effects in observational data by leveraging a variable that affects the treatment but not the outcome directly.
-- **Directed Acyclic Graphs (DAGs)** -- A graphical framework for encoding causal assumptions, identifying confounders, and determining which variables to control for in an analysis.
-
-### 12.5 Correlation Tests
-
-Formal hypothesis tests for the significance of different correlation measures:
-
-- **Testing Pearson's $r$ (t-Test for Correlation)** -- A $t$-based test to determine whether the population Pearson correlation is significantly different from zero.
-- **Testing Spearman's $\rho$** -- Hypothesis testing for the significance of Spearman rank correlation using either exact or approximate methods.
-- **Testing Kendall's $\tau$** -- Hypothesis testing for the significance of Kendall's tau with normal approximation for larger samples.
-- **Comparing Two Correlations** -- Methods (such as Fisher's $z$-transformation) for testing whether two correlation coefficients differ significantly from each other.
-
-### 12.6 Correlation Matrix and Visualization
-
-Tools for exploring multivariate relationships visually:
-
-- **Correlation Heatmaps** -- Two-dimensional color-coded visualizations of correlation matrices that reveal patterns of association across many variables simultaneously.
-- **Pair Plots and Scatter Matrices** -- Grid displays of bivariate scatter plots for all variable pairs, useful for identifying non-linear patterns and outliers.
-
-### 12.7 Code
-
-Complete Python implementations:
-
-- **Correlation Analysis Demonstrations** -- End-to-end computation and comparison of Pearson, Spearman, and Kendall correlations.
-- **Causal Inference Simulations** -- Simulations illustrating confounding, spurious correlation, and the effect of randomization.
-- **Correlation Visualization** -- Scripts for generating heatmaps, scatter matrices, and annotated correlation plots.
-- **Correlation Ellipse Plot** -- Visualization of correlation strength using ellipses whose shape encodes the magnitude of association.
-
-### 12.8 Exercises
-
-Practice problems covering correlation computation and comparison, visualization of associations, identification of confounders and ecological fallacies, and application of correlation tests to real datasets.
+이 장에서는 통계적 추론과 자료 해석의 중심에 있는 두 개념, 상관과 인과를 살펴본다. 상관은 두 변수 사이 관계의 강도와 방향을 수치화하는 반면, 인과는 한 변수의 변화가 다른 변수의 변화를 직접 낳는다는 뜻이다. 이 장은 상관을 측정하고 검정하고 시각화하는 방법, 생태학적 오류나 교란 같은 함정을 알아보는 방법, 그리고 방향성 비순환 그래프 같은 현대적 틀로 인과관계를 사고하는 방법을 다룬다.
 
 ---
 
-## Prerequisites
+## 장의 구성
 
-This chapter builds on:
+### 12.1 상관
 
-- **Chapter 3** (Foundations of Probability) -- Random variables, expectation, and covariance.
-- **Chapter 4** (Distributions) -- Joint distributions, covariance, and the distinction between independence and zero correlation.
-- **Chapter 2** (Descriptive Statistics) -- Scatter plots, numerical summaries, and exploratory data analysis.
-- **Chapter 9** (Hypothesis Testing) -- Null and alternative hypotheses, $p$-values, and significance levels.
+두 변수 사이 연관을 재는 측도로, 고전적 접근과 순위 기반 접근을 함께 다룬다:
+
+- **Pearson 상관계수** --- 두 연속형 변수 사이 선형관계의 강도와 방향을 $-1$에서 $+1$까지의 값으로 수치화한다.
+- **Spearman 순위상관** --- 관측값의 순위에 기반한 비모수 측도로, (반드시 선형은 아닌) 단조 관계를 포착한다.
+- **Kendall의 타우** --- 일치쌍과 불일치쌍을 세는 순위 기반 상관계수로, 이상점과 동점에 로버스트하다.
+- **부분상관** --- 하나 이상의 다른 변수의 효과를 통제한 뒤 두 변수 사이의 연관을 잰다.
+- **점이연 상관과 파이 계수** --- 이진 변수가 관련된 상황(하나는 연속형이고 하나는 이진이거나, 둘 다 이진인 경우)을 위한 특화된 상관 측도.
+- **상관의 이해** --- 상관이 무엇인지, 여러 값에 걸쳐 어떻게 보이는지, 흔한 오해는 무엇인지에 대한 개념적 개관.
+
+### 12.2 생태학적 상관
+
+집계된 자료가 개인 수준의 관계를 어떻게 오도할 수 있는지 다룬다:
+
+- **생태학적 오류** --- 집단 수준(집계) 상관 자료로부터 개인 수준의 연관을 추론하는 잘못.
+- **Simpson의 역설** --- 집계 자료에서 나타나는 경향이 자료를 하위집단으로 나누면 뒤집히거나 사라지는 현상.
+- **집계 편향** --- 개인 수준 자료를 상위 수준에서 요약할 때 생기는 체계적 왜곡으로, 연관의 겉보기 강도나 방향을 바꾼다.
+
+### 12.3 상관, 인과, 교란
+
+상관만으로 인과를 말할 수 없는 이유와 숨은 변수의 역할:
+
+- **교란변수** --- 설명변수와 결과 모두에 영향을 주어 둘 사이에 허위 연관을 만드는 제3의 변수.
+- **허위상관** --- 진짜 인과관계가 아니라 우연, 교란, 자료 채굴에서 생기는 통계적으로 유의한 상관.
+- **잠복변수와 공통원인** --- 관측된 연관을 이끄는 관측되지 않은 변수로, 실제로는 직접 관련이 없는 두 변수가 관련된 것처럼 보이게 만든다.
+
+### 12.4 인과
+
+참된 인과관계를 확립하는 틀과 방법:
+
+- **인과 추론의 기준** --- 고전적 기준(시간적 선행, 공변, 교란요인의 배제)과 무엇이 인과의 증거가 되는지에 대한 현대적 관점.
+- **무작위 실험과 인과** --- 무작위 배정이 교란을 제거하여 인과 주장에 가장 강한 증거를 제공하는 방식.
+- **도구변수 (입문)** --- 처치에는 영향을 주지만 결과에는 직접 영향을 주지 않는 변수를 활용하여 관찰자료에서 인과효과를 추정하는 기법.
+- **방향성 비순환 그래프(DAG)** --- 인과 가정을 부호화하고 교란요인을 찾아내며 분석에서 무엇을 통제할지 결정하는 그래프 틀.
+
+### 12.5 상관 검정
+
+여러 상관 측도의 유의성에 대한 형식적 가설검정:
+
+- **Pearson의 $r$ 검정 (상관에 대한 t-검정)** --- 모집단 Pearson 상관이 0과 유의하게 다른지 판정하는 $t$ 기반 검정.
+- **Spearman의 $\rho$ 검정** --- 정확법이나 근사법으로 Spearman 순위상관의 유의성을 검정한다.
+- **Kendall의 $\tau$ 검정** --- 표본이 클 때 정규근사를 이용해 Kendall 타우의 유의성을 검정한다.
+- **두 상관의 비교** --- 두 상관계수가 서로 유의하게 다른지 검정하는 방법(예: Fisher의 $z$ 변환).
+
+### 12.6 상관행렬과 시각화
+
+다변량 관계를 시각적으로 탐색하는 도구:
+
+- **상관 열지도** --- 상관행렬을 색으로 부호화한 2차원 시각화로, 여러 변수에 걸친 연관 패턴을 한꺼번에 드러낸다.
+- **쌍 그림과 산점도 행렬** --- 모든 변수 쌍에 대한 이변량 산점도를 격자로 배열한 것으로, 비선형 패턴과 이상점을 찾는 데 유용하다.
+
+### 12.7 코드
+
+완전한 Python 구현:
+
+- **상관 분석 시연** --- Pearson, Spearman, Kendall 상관의 계산과 비교를 처음부터 끝까지 보인다.
+- **인과추론 모의실험** --- 교란, 허위상관, 무작위화의 효과를 보여주는 모의실험.
+- **상관 시각화** --- 열지도, 산점도 행렬, 주석이 달린 상관 그림을 만드는 스크립트.
+- **상관 타원 그림** --- 타원의 모양으로 연관의 크기를 부호화하여 상관의 강도를 시각화한다.
+
+### 12.8 연습문제
+
+상관의 계산과 비교, 연관의 시각화, 교란요인과 생태학적 오류의 식별, 실제 자료에 대한 상관 검정의 적용을 다루는 연습문제.
 
 ---
 
-## Key Takeaways
+## 선행 지식
 
-1. Correlation measures the strength and direction of association between variables, but it does not imply causation -- confounders, lurking variables, and aggregation effects can all produce misleading correlations.
-2. Pearson captures linear association, while Spearman and Kendall capture monotonic association and are more robust to outliers and non-normal data.
-3. The ecological fallacy and Simpson's paradox demonstrate that group-level patterns can differ dramatically from individual-level patterns, making careful data disaggregation essential.
-4. Establishing causation requires more than correlation: randomized experiments, instrumental variables, and directed acyclic graphs provide rigorous frameworks for causal inference.
-5. Formal correlation tests (with appropriate null hypotheses and $p$-values) are necessary to distinguish genuine associations from sampling variability, and Fisher's $z$-transformation allows comparison of correlations across samples.
+이 장은 다음 내용 위에 세워진다:
+
+- **3장** (확률의 기초) --- 확률변수, 기댓값, 공분산.
+- **4장** (분포) --- 결합분포, 공분산, 독립성과 무상관성의 차이.
+- **2장** (기술통계) --- 산점도, 수치 요약, 탐색적 자료분석.
+- **9장** (가설검정) --- 귀무가설과 대립가설, $p$-값, 유의수준.
+
+---
+
+## 핵심 요점
+
+1. 상관은 변수 사이 연관의 강도와 방향을 재지만 인과를 함의하지 않는다. 교란요인, 잠복변수, 집계 효과가 모두 오도하는 상관을 만들 수 있다.
+2. Pearson은 선형 연관을 포착하고, Spearman과 Kendall은 단조 연관을 포착하며 이상점과 비정규 자료에 더 로버스트하다.
+3. 생태학적 오류와 Simpson의 역설은 집단 수준의 패턴이 개인 수준의 패턴과 극적으로 다를 수 있음을 보여주며, 자료를 신중하게 분해하는 일이 필수적임을 알려준다.
+4. 인과를 확립하려면 상관 이상이 필요하다. 무작위 실험, 도구변수, 방향성 비순환 그래프가 인과추론의 엄밀한 틀을 제공한다.
+5. 표집 변동과 진짜 연관을 구별하려면 (적절한 귀무가설과 $p$-값을 갖춘) 형식적 상관 검정이 필요하며, Fisher의 $z$ 변환으로 표본 사이의 상관을 비교할 수 있다.

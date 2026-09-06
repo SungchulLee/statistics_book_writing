@@ -1,100 +1,100 @@
-# Partial Correlation
+# 부분상관
 
-Two variables may appear correlated simply because they share a common influence from a third variable. For example, ice cream sales and drowning incidents are positively correlated, but both are driven by temperature. **Partial correlation** measures the linear association between two variables after removing the linear effect of one or more controlling variables, revealing whether the relationship persists once the shared influence is accounted for.
-
----
-
-## Motivation
-
-Suppose we observe a strong correlation between variables $X$ and $Y$. Before concluding that $X$ and $Y$ are directly related, we should ask: is this association driven by a third variable $Z$? Partial correlation answers this question by "partialling out" the effect of $Z$.
-
-If the partial correlation $r_{XY \cdot Z}$ is close to zero while the marginal correlation $r_{XY}$ is large, the apparent association between $X$ and $Y$ is largely explained by $Z$. Conversely, if $r_{XY \cdot Z}$ remains large, the relationship between $X$ and $Y$ persists after accounting for $Z$.
+두 변수가 단지 제3의 변수로부터 공통의 영향을 받기 때문에 상관된 것처럼 보일 수 있다. 예를 들어 아이스크림 판매량과 익사 사고는 양의 상관을 보이지만 둘 다 기온에 이끌린다. **부분상관**은 하나 이상의 통제변수의 선형 효과를 제거한 뒤 두 변수 사이의 선형 연관을 재어, 공통의 영향을 걷어내도 관계가 남는지를 드러낸다.
 
 ---
 
-## Definition: First-Order Partial Correlation
+## 동기
 
-The **partial correlation** between $X$ and $Y$ controlling for a single variable $Z$ is
+변수 $X$와 $Y$ 사이에 강한 상관을 관측했다고 하자. $X$와 $Y$가 직접 관련되어 있다고 결론짓기 전에 물어야 한다. 이 연관이 제3의 변수 $Z$ 때문은 아닌가? 부분상관은 $Z$의 효과를 "덜어냄"으로써 이 질문에 답한다.
+
+주변상관 $r_{XY}$가 큰데 부분상관 $r_{XY \cdot Z}$가 0에 가깝다면 $X$와 $Y$ 사이의 겉보기 연관은 대부분 $Z$로 설명된다. 반대로 $r_{XY \cdot Z}$가 여전히 크면 $Z$를 반영한 뒤에도 $X$와 $Y$의 관계가 남아 있는 것이다.
+
+---
+
+## 정의: 1차 부분상관
+
+변수 하나 $Z$를 통제한 $X$와 $Y$ 사이의 **부분상관**은
 
 $$
 r_{XY \cdot Z} = \frac{r_{XY} - r_{XZ} \, r_{YZ}}{\sqrt{1 - r_{XZ}^2} \; \sqrt{1 - r_{YZ}^2}}
 $$
 
-where $r_{XY}$, $r_{XZ}$, and $r_{YZ}$ are the pairwise Pearson correlations.
+이며 $r_{XY}$, $r_{XZ}$, $r_{YZ}$는 쌍별 Pearson 상관이다.
 
-This formula is called the **first-order** partial correlation because we control for a single variable. The result satisfies $-1 \le r_{XY \cdot Z} \le 1$.
-
----
-
-## Geometric Interpretation
-
-Partial correlation has an equivalent interpretation through linear regression residuals:
-
-1. Regress $X$ on $Z$ and compute the residuals $e_X = X - \hat{X}$.
-2. Regress $Y$ on $Z$ and compute the residuals $e_Y = Y - \hat{Y}$.
-3. The partial correlation $r_{XY \cdot Z}$ equals the Pearson correlation between $e_X$ and $e_Y$.
-
-The residuals $e_X$ and $e_Y$ represent the parts of $X$ and $Y$ that are not linearly explained by $Z$. The partial correlation therefore measures the linear association between the "unexplained" components of $X$ and $Y$.
+변수 하나를 통제하므로 이 공식을 **1차** 부분상관이라 한다. 결과는 $-1 \le r_{XY \cdot Z} \le 1$을 만족한다.
 
 ---
 
-## Higher-Order Partial Correlation
+## 기하적 해석
 
-When controlling for multiple variables $Z_1, Z_2, \ldots, Z_k$, the partial correlation $r_{XY \cdot Z_1 Z_2 \cdots Z_k}$ can be computed recursively:
+부분상관은 선형회귀 잔차를 통해 동등하게 해석할 수 있다:
+
+1. $X$를 $Z$에 회귀하여 잔차 $e_X = X - \hat{X}$를 계산한다.
+2. $Y$를 $Z$에 회귀하여 잔차 $e_Y = Y - \hat{Y}$를 계산한다.
+3. 부분상관 $r_{XY \cdot Z}$는 $e_X$와 $e_Y$ 사이의 Pearson 상관과 같다.
+
+잔차 $e_X$와 $e_Y$는 $X$와 $Y$ 중 $Z$로 선형적으로 설명되지 않는 부분을 나타낸다. 따라서 부분상관은 $X$와 $Y$의 "설명되지 않은" 성분 사이의 선형 연관을 잰다.
+
+---
+
+## 고차 부분상관
+
+여러 변수 $Z_1, Z_2, \ldots, Z_k$를 통제할 때 부분상관 $r_{XY \cdot Z_1 Z_2 \cdots Z_k}$는 재귀적으로 계산할 수 있다:
 
 $$
 r_{XY \cdot Z_1 Z_2 \cdots Z_k} = \frac{r_{XY \cdot Z_1 \cdots Z_{k-1}} - r_{XZ_k \cdot Z_1 \cdots Z_{k-1}} \, r_{YZ_k \cdot Z_1 \cdots Z_{k-1}}}{\sqrt{1 - r_{XZ_k \cdot Z_1 \cdots Z_{k-1}}^2} \; \sqrt{1 - r_{YZ_k \cdot Z_1 \cdots Z_{k-1}}^2}}
 $$
 
-Equivalently, one can regress $X$ and $Y$ on all the control variables $Z_1, \ldots, Z_k$, then correlate the residuals. In practice, the residual approach is simpler for higher-order partial correlations.
+동등하게 $X$와 $Y$를 모든 통제변수 $Z_1, \ldots, Z_k$에 회귀한 뒤 잔차의 상관을 구해도 된다. 실무에서는 고차 부분상관에 잔차 방식이 더 간단하다.
 
 ---
 
-## Example: Ice Cream, Drowning, and Temperature
+## 예제: 아이스크림, 익사, 기온
 
-Consider three variables measured monthly:
+월별로 측정한 세 변수를 생각하자:
 
-- $X$: ice cream sales (thousands of units)
-- $Y$: drowning incidents
-- $Z$: average temperature (degrees)
+- $X$: 아이스크림 판매량(천 개)
+- $Y$: 익사 사고 건수
+- $Z$: 평균 기온(도)
 
-Suppose the pairwise correlations are:
+쌍별 상관이 다음과 같다고 하자:
 
 $$
 r_{XY} = 0.85, \quad r_{XZ} = 0.92, \quad r_{YZ} = 0.88
 $$
 
-The partial correlation between ice cream sales and drowning, controlling for temperature, is
+기온을 통제한 아이스크림 판매량과 익사 사고의 부분상관은
 
 $$
 r_{XY \cdot Z} = \frac{0.85 - (0.92)(0.88)}{\sqrt{1 - 0.92^2}\;\sqrt{1 - 0.88^2}} = \frac{0.85 - 0.8096}{\sqrt{0.1536}\;\sqrt{0.2256}} = \frac{0.0404}{0.3920 \times 0.4750} \approx 0.22
 $$
 
-The marginal correlation of $0.85$ drops to a partial correlation of approximately $0.22$. Most of the apparent association between ice cream sales and drowning is explained by their shared dependence on temperature.
+이다. 주변상관 $0.85$가 부분상관 약 $0.22$로 떨어진다. 아이스크림 판매량과 익사 사이의 겉보기 연관은 대부분 기온에 대한 공통 의존으로 설명된다.
 
 ---
 
-## Partial vs Semi-Partial Correlation
+## 부분상관과 준부분상관
 
-It is important to distinguish partial correlation from **semi-partial** (or **part**) correlation:
+부분상관과 **준부분상관**(또는 **부분**상관)을 구별하는 일이 중요하다:
 
-| | Partial $r_{XY \cdot Z}$ | Semi-partial $r_{X(Y \cdot Z)}$ |
+| | 부분 $r_{XY \cdot Z}$ | 준부분 $r_{X(Y \cdot Z)}$ |
 |:---|:---|:---|
-| What is controlled | Effect of $Z$ removed from **both** $X$ and $Y$ | Effect of $Z$ removed from $Y$ only |
-| Interpretation | Association after removing $Z$ from both | Unique contribution of $Y$ beyond $Z$ |
-| Common use | General association analysis | $R^2$ decomposition in regression |
+| 무엇을 통제하는가 | $X$와 $Y$ **둘 다**에서 $Z$의 효과를 제거 | $Y$에서만 $Z$의 효과를 제거 |
+| 해석 | 둘 다에서 $Z$를 제거한 뒤의 연관 | $Z$를 넘어선 $Y$의 고유 기여 |
+| 흔한 용도 | 일반적인 연관 분석 | 회귀에서의 $R^2$ 분해 |
 
-The semi-partial correlation is defined as
+준부분상관은 다음으로 정의된다:
 
 $$
 r_{X(Y \cdot Z)} = \frac{r_{XY} - r_{XZ} \, r_{YZ}}{\sqrt{1 - r_{YZ}^2}}
 $$
 
-Note that the numerator is the same, but the denominator adjusts only for $Z$'s effect on $Y$.
+분자는 같지만 분모가 $Y$에 대한 $Z$의 효과만 조정한다는 점에 유의하라.
 
 ---
 
-## Computation in Python
+## Python으로 계산하기
 
 ```python
 import numpy as np
@@ -121,83 +121,83 @@ print(f"Marginal r(X,Y)     = {r_xy:.4f}")
 print(f"Partial r(X,Y | Z)  = {r_xy_z:.4f}")
 ```
 
-For a dedicated function, the `pingouin` library provides `pingouin.partial_corr`, which also computes confidence intervals and p-values.
+전용 함수로는 `pingouin` 라이브러리의 `pingouin.partial_corr`가 있으며 신뢰구간과 p-값도 함께 계산해 준다.
 
 ---
 
-## Connection to Multiple Regression
+## 다중회귀와의 연결
 
-Partial correlations are closely related to the coefficients and tests in multiple regression. In a regression of $Y$ on both $X$ and $Z$, the t-test for the coefficient of $X$ is equivalent to testing whether $r_{XY \cdot Z} = 0$. This connection makes partial correlation a foundational concept for understanding regression output. See [Multiple Regression](../../ch13/linear_regression/multiple.md) for details.
+부분상관은 다중회귀의 계수 및 검정과 밀접하게 관련된다. $Y$를 $X$와 $Z$ 모두에 회귀할 때 $X$ 계수에 대한 t-검정은 $r_{XY \cdot Z} = 0$을 검정하는 것과 동치이다. 이 연결 덕분에 부분상관은 회귀 출력을 이해하는 기초 개념이 된다. 자세한 내용은 [다중회귀](../../ch13/linear_regression/multiple.md)를 보라.
 
 ---
 
-## Summary
+## 요약
 
-Partial correlation measures the linear association between two variables after controlling for one or more additional variables. It is computed either through a closed-form formula involving pairwise correlations or by correlating regression residuals. A large marginal correlation that vanishes (or shrinks substantially) after controlling for a third variable signals that the apparent association is driven by a common influence rather than a direct relationship. Partial correlation is essential for disentangling confounded relationships and forms the statistical foundation for many regression diagnostics.
+부분상관은 하나 이상의 변수를 통제한 뒤 두 변수 사이의 선형 연관을 잰다. 쌍별 상관을 이용한 닫힌 형태의 공식으로 계산하거나 회귀 잔차의 상관으로 계산한다. 큰 주변상관이 제3의 변수를 통제한 뒤 사라지거나(크게 줄어들면) 그 겉보기 연관이 직접적인 관계가 아니라 공통의 영향에서 비롯되었음을 알려준다. 부분상관은 교란된 관계를 풀어내는 데 필수적이며 여러 회귀 진단의 통계적 토대를 이룬다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-The correlations among three variables are $r_{XY} = 0.80$, $r_{XZ} = 0.90$, $r_{YZ} = 0.85$. Compute the partial correlation $r_{XY \cdot Z}$.
+**연습문제 1.**
+세 변수 사이의 상관이 $r_{XY} = 0.80$, $r_{XZ} = 0.90$, $r_{YZ} = 0.85$이다. 부분상관 $r_{XY \cdot Z}$를 계산하라.
 
-??? success "Solution to Exercise 1"
-    The partial correlation formula is:
+??? success "연습문제 1 풀이"
+    부분상관 공식은
 
     $$
     r_{XY \cdot Z} = \frac{r_{XY} - r_{XZ} \cdot r_{YZ}}{\sqrt{(1 - r_{XZ}^2)(1 - r_{YZ}^2)}}
     $$
 
-    Substituting:
+    이다. 값을 대입하면
 
     $$
     r_{XY \cdot Z} = \frac{0.80 - (0.90)(0.85)}{\sqrt{(1 - 0.81)(1 - 0.7225)}} = \frac{0.80 - 0.765}{\sqrt{0.19 \times 0.2775}} = \frac{0.035}{\sqrt{0.052725}} = \frac{0.035}{0.2296} \approx 0.152
     $$
 
-    After controlling for $Z$, the correlation between $X$ and $Y$ drops from 0.80 to 0.15. Much of the apparent association was due to both variables' relationship with $Z$.
+    이다. $Z$를 통제하면 $X$와 $Y$의 상관이 0.80에서 0.15로 떨어진다. 겉보기 연관의 상당 부분이 두 변수와 $Z$의 관계 때문이었다.
 
 ---
 
-**Exercise 2.**
-Explain how partial correlation can be interpreted using residuals from linear regression.
+**연습문제 2.**
+부분상관을 선형회귀 잔차로 해석하는 방법을 설명하라.
 
-??? success "Solution to Exercise 2"
-    The partial correlation $r_{XY \cdot Z}$ equals the Pearson correlation between the residuals of two regressions:
+??? success "연습문제 2 풀이"
+    부분상관 $r_{XY \cdot Z}$는 두 회귀의 잔차 사이 Pearson 상관과 같다:
 
-    1. Regress $X$ on $Z$ to get residuals $e_X = X - \hat{X}$ (the part of $X$ not explained by $Z$).
-    2. Regress $Y$ on $Z$ to get residuals $e_Y = Y - \hat{Y}$ (the part of $Y$ not explained by $Z$).
+    1. $X$를 $Z$에 회귀하여 잔차 $e_X = X - \hat{X}$($X$ 중 $Z$로 설명되지 않는 부분)를 얻는다.
+    2. $Y$를 $Z$에 회귀하여 잔차 $e_Y = Y - \hat{Y}$($Y$ 중 $Z$로 설명되지 않는 부분)를 얻는다.
 
-    Then $r_{XY \cdot Z} = r(e_X, e_Y)$.
+    그러면 $r_{XY \cdot Z} = r(e_X, e_Y)$이다.
 
-    Intuitively, partial correlation removes the linear influence of $Z$ from both $X$ and $Y$, then measures the remaining linear association. If $Z$ completely accounts for the $X$-$Y$ relationship, the residuals will be uncorrelated ($r_{XY \cdot Z} = 0$). If $X$ and $Y$ have a direct relationship beyond what $Z$ explains, $r_{XY \cdot Z}$ will be nonzero.
+    직관적으로 부분상관은 $X$와 $Y$ 모두에서 $Z$의 선형 영향을 제거한 뒤 남은 선형 연관을 잰다. $Z$가 $X$–$Y$ 관계를 완전히 설명한다면 잔차들이 무상관이 되어 $r_{XY \cdot Z} = 0$이다. $Z$가 설명하는 것을 넘어 $X$와 $Y$에 직접적인 관계가 있으면 $r_{XY \cdot Z}$가 0이 아니다.
 
 ---
 
-**Exercise 3.**
-Give an example where the partial correlation $r_{XY \cdot Z}$ has the opposite sign of the marginal correlation $r_{XY}$.
+**연습문제 3.**
+부분상관 $r_{XY \cdot Z}$가 주변상관 $r_{XY}$와 부호가 반대인 예를 들어라.
 
-??? success "Solution to Exercise 3"
-    Consider: $Z$ causes both $X$ and $Y$ strongly and positively, but $X$ has a direct negative effect on $Y$.
+??? success "연습문제 3 풀이"
+    $Z$가 $X$와 $Y$ 모두에 강한 양의 영향을 주지만 $X$가 $Y$에 직접적인 음의 효과를 갖는 경우를 생각하자.
 
-    Concretely: $Z = $ study hours, $X = $ caffeine consumption, $Y = $ sleep quality. Students who study more drink more coffee ($r_{XZ} > 0$) and have better grades that reduce anxiety, improving sleep ($r_{YZ} > 0$). This makes $r_{XY} > 0$ (both are associated with studying).
+    구체적으로 $Z = $ 공부 시간, $X = $ 카페인 섭취, $Y = $ 수면의 질이라 하자. 공부를 많이 하는 학생은 커피를 더 마시고($r_{XZ} > 0$), 성적이 좋아 불안이 줄어 잠도 잘 잔다($r_{YZ} > 0$). 그래서 $r_{XY} > 0$이 된다(둘 다 공부와 연관되어 있다).
 
-    However, the direct effect of caffeine on sleep is negative. After controlling for study hours: $r_{XY \cdot Z} < 0$.
+    그러나 카페인이 수면에 미치는 직접 효과는 음수이다. 공부 시간을 통제하면 $r_{XY \cdot Z} < 0$이다.
 
-    Numerically: if $r_{XY} = 0.40$, $r_{XZ} = 0.70$, $r_{YZ} = 0.65$:
+    수치로 보면 $r_{XY} = 0.40$, $r_{XZ} = 0.70$, $r_{YZ} = 0.65$일 때
 
     $$
     r_{XY \cdot Z} = \frac{0.40 - 0.455}{\sqrt{0.51 \times 0.5775}} = \frac{-0.055}{0.5427} \approx -0.101
     $$
 
-    The sign reversal illustrates Simpson's paradox in correlation form.
+    이다. 부호가 뒤집히는 이 현상은 상관 형태로 나타난 Simpson의 역설이다.
 
 ---
 
-**Exercise 4.**
-When is the partial correlation equal to zero even though the marginal correlation is nonzero? What does this imply about the relationship between $X$ and $Y$?
+**연습문제 4.**
+주변상관이 0이 아닌데도 부분상관이 0이 되는 것은 언제인가? 이는 $X$와 $Y$의 관계에 대해 무엇을 함의하는가?
 
-??? success "Solution to Exercise 4"
-    The partial correlation $r_{XY \cdot Z} = 0$ when $r_{XY} = r_{XZ} \cdot r_{YZ}$ (the numerator of the partial correlation formula vanishes). This occurs when the entire association between $X$ and $Y$ is explained by their mutual relationship with $Z$.
+??? success "연습문제 4 풀이"
+    $r_{XY} = r_{XZ} \cdot r_{YZ}$이면(부분상관 공식의 분자가 0이 되면) $r_{XY \cdot Z} = 0$이다. $X$와 $Y$ 사이의 연관 전부가 $Z$와의 상호 관계로 설명될 때 일어난다.
 
-    This implies that $X$ and $Y$ have no direct linear association after removing the influence of $Z$. The marginal correlation was entirely due to confounding by $Z$ (or mediation through $Z$).
+    이는 $Z$의 영향을 제거한 뒤 $X$와 $Y$ 사이에 직접적인 선형 연관이 없다는 뜻이다. 주변상관은 전적으로 $Z$에 의한 교란(또는 $Z$를 통한 매개) 때문이었다.
 
-    In a DAG, this is consistent with $Z$ being a common cause ($X \leftarrow Z \to Y$) with no direct edge between $X$ and $Y$. Conditioning on $Z$ blocks the only path connecting $X$ and $Y$, rendering them conditionally independent (at least linearly).
+    DAG로 보면 $X$와 $Y$ 사이에 직접 간선이 없고 $Z$가 공통원인인 구조($X \leftarrow Z \to Y$)와 부합한다. $Z$로 조건화하면 $X$와 $Y$를 잇는 유일한 경로가 막혀 (적어도 선형적으로는) 조건부 독립이 된다.

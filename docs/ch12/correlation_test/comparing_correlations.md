@@ -1,64 +1,64 @@
-# Comparing Two Correlations
+# 두 상관의 비교
 
-In many applications, we need to determine not just whether a single correlation is significant, but whether two correlations differ from each other. For example: is the correlation between study hours and GPA stronger for men than for women? Is the association between two biomarkers stronger in the treatment group than in the control group? This section covers the standard methods for testing whether two correlation coefficients are equal.
-
----
-
-## Two Settings
-
-There are two distinct settings for comparing correlations:
-
-1. **Independent samples**: the two correlations come from different, unrelated groups. For example, $r_1$ is the height-weight correlation among men and $r_2$ is the height-weight correlation among women.
-
-2. **Dependent (overlapping) samples**: the two correlations come from the same sample and share a variable. For example, $r_{XY}$ and $r_{XZ}$ both involve the same variable $X$.
-
-The methods differ substantially between these two cases.
+많은 응용에서 우리는 하나의 상관이 유의한지만이 아니라 두 상관이 서로 다른지도 판정해야 한다. 예를 들어 공부 시간과 학점의 상관이 남성에서 여성보다 강한가? 두 생체표지자 사이의 연관이 대조군보다 처치군에서 강한가? 이 절에서는 두 상관계수가 같은지 검정하는 표준적인 방법을 다룬다.
 
 ---
 
-## Fisher's z-Transformation
+## 두 가지 상황
 
-Both methods rely on **Fisher's z-transformation**, which stabilizes the variance of the sample correlation and makes its distribution approximately normal:
+상관을 비교하는 상황은 뚜렷하게 두 가지로 나뉜다:
+
+1. **독립 표본**: 두 상관이 서로 무관한 다른 집단에서 나온다. 예를 들어 $r_1$은 남성의 키–몸무게 상관이고 $r_2$는 여성의 키–몸무게 상관이다.
+
+2. **종속(겹치는) 표본**: 두 상관이 같은 표본에서 나오고 한 변수를 공유한다. 예를 들어 $r_{XY}$와 $r_{XZ}$가 모두 같은 변수 $X$를 포함한다.
+
+두 경우의 방법은 상당히 다르다.
+
+---
+
+## Fisher의 z 변환
+
+두 방법 모두 표본상관의 분산을 안정화하고 분포를 근사적으로 정규로 만드는 **Fisher의 z 변환**에 기댄다:
 
 $$
 z = \frac{1}{2} \ln\!\left(\frac{1 + r}{1 - r}\right) = \text{arctanh}(r)
 $$
 
-For a sample of size $n$ from a bivariate normal distribution, the transformed correlation $z$ is approximately normally distributed:
+이변량 정규분포에서 크기 $n$인 표본을 뽑으면 변환된 상관 $z$가 근사적으로 정규분포를 따른다:
 
 $$
 z \;\dot\sim\; N\!\left(\frac{1}{2}\ln\!\left(\frac{1+\rho}{1-\rho}\right),\; \frac{1}{n-3}\right)
 $$
 
-The key property is that the variance $1/(n-3)$ does **not depend on** $\rho$, unlike the variance of $r$ itself. This makes $z$ much more amenable to inference.
+핵심 성질은 $r$ 자체의 분산과 달리 분산 $1/(n-3)$이 $\rho$에 **의존하지 않는다**는 점이다. 덕분에 $z$로는 추론이 훨씬 쉬워진다.
 
 ---
 
-## Comparing Two Independent Correlations
+## 독립인 두 상관의 비교
 
-Given two independent samples of sizes $n_1$ and $n_2$ with sample correlations $r_1$ and $r_2$, we test
+크기가 $n_1$, $n_2$인 두 독립 표본에서 표본상관 $r_1$, $r_2$를 얻었을 때
 
 $$
 H_0\!: \rho_1 = \rho_2 \quad \text{vs} \quad H_1\!: \rho_1 \neq \rho_2
 $$
 
-Apply the Fisher z-transformation to each:
+를 검정한다. 각각에 Fisher z 변환을 적용한다:
 
 $$
 z_1 = \text{arctanh}(r_1), \quad z_2 = \text{arctanh}(r_2)
 $$
 
-Under $H_0$, the difference $z_1 - z_2$ has approximate variance $\frac{1}{n_1 - 3} + \frac{1}{n_2 - 3}$. The test statistic is
+$H_0$ 아래에서 차이 $z_1 - z_2$의 근사 분산은 $\frac{1}{n_1 - 3} + \frac{1}{n_2 - 3}$이다. 검정통계량은
 
 $$
 Z = \frac{z_1 - z_2}{\sqrt{\frac{1}{n_1 - 3} + \frac{1}{n_2 - 3}}}
 $$
 
-Under $H_0$, $Z$ follows approximately a standard normal distribution. Reject $H_0$ at level $\alpha$ if $|Z| > z_{\alpha/2}$.
+이다. $H_0$ 아래에서 $Z$는 근사적으로 표준정규분포를 따른다. $|Z| > z_{\alpha/2}$이면 수준 $\alpha$에서 $H_0$을 기각한다.
 
-### Example
+### 예제
 
-A researcher finds $r_1 = 0.65$ ($n_1 = 50$) for men and $r_2 = 0.40$ ($n_2 = 60$) for women.
+어떤 연구자가 남성에서 $r_1 = 0.65$($n_1 = 50$), 여성에서 $r_2 = 0.40$($n_2 = 60$)을 얻었다.
 
 $$
 z_1 = \text{arctanh}(0.65) = 0.7753, \quad z_2 = \text{arctanh}(0.40) = 0.4236
@@ -68,37 +68,37 @@ $$
 Z = \frac{0.7753 - 0.4236}{\sqrt{\frac{1}{47} + \frac{1}{57}}} = \frac{0.3517}{\sqrt{0.02128 + 0.01754}} = \frac{0.3517}{0.1970} = 1.785
 $$
 
-The two-sided p-value is $2 \times P(Z > 1.785) \approx 0.074$. At $\alpha = 0.05$, we do not reject $H_0$; there is insufficient evidence that the correlations differ between men and women.
+양측 p-값은 $2 \times P(Z > 1.785) \approx 0.074$이다. $\alpha = 0.05$에서 $H_0$을 기각하지 못한다. 남성과 여성 사이에 상관이 다르다는 증거가 충분하지 않다.
 
 ---
 
-## Comparing Two Dependent Correlations
+## 종속인 두 상관의 비교
 
-When two correlations share a common variable (e.g., $r_{XY}$ and $r_{XZ}$ from the same sample of size $n$), the Fisher z-test for independent samples does not apply because $r_{XY}$ and $r_{XZ}$ are correlated.
+두 상관이 공통 변수를 공유하면(예: 같은 크기 $n$의 표본에서 나온 $r_{XY}$와 $r_{XZ}$), $r_{XY}$와 $r_{XZ}$가 상관되어 있으므로 독립 표본용 Fisher z-검정을 쓸 수 없다.
 
-### Steiger's Test (Williams' Modification)
+### Steiger 검정 (Williams 수정)
 
-To test $H_0\!: \rho_{XY} = \rho_{XZ}$, the test statistic proposed by Williams (1959), building on Steiger (1980), is
+$H_0\!: \rho_{XY} = \rho_{XZ}$를 검정하기 위해 Steiger(1980)를 바탕으로 Williams(1959)가 제안한 검정통계량은
 
 $$
 t = (r_{XY} - r_{XZ}) \sqrt{\frac{(n-1)(1 + r_{YZ})}{2\left(\frac{n-1}{n-3}\right)|R| + \bar{r}^2(1 - r_{YZ})^3}}
 $$
 
-where $|R|$ is the determinant of the $3 \times 3$ correlation matrix of $(X, Y, Z)$ and $\bar{r} = (r_{XY} + r_{XZ})/2$.
+이다. 여기서 $|R|$은 $(X, Y, Z)$의 $3 \times 3$ 상관행렬의 행렬식이고 $\bar{r} = (r_{XY} + r_{XZ})/2$이다.
 
-Under $H_0$, this statistic follows approximately a $t$-distribution with $n - 3$ degrees of freedom.
+$H_0$ 아래에서 이 통계량은 근사적으로 자유도 $n - 3$인 $t$-분포를 따른다.
 
-A simpler (but less accurate) approximation replaces the denominator with a formula involving only $r_{YZ}$:
+더 단순하지만 덜 정확한 근사는 분모를 $r_{YZ}$만 포함하는 식으로 바꾼 형태이다:
 
 $$
 t \approx (r_{XY} - r_{XZ}) \sqrt{\frac{(n-3)(1 + r_{YZ})}{2(1 - r_{XY}^2 - r_{XZ}^2 - r_{YZ}^2 + 2 r_{XY} r_{XZ} r_{YZ})}}
 $$
 
-This is the version most commonly implemented in software.
+소프트웨어에 가장 흔히 구현되는 형태이다.
 
 ---
 
-## Computation in Python
+## Python으로 계산하기
 
 ```python
 import numpy as np
@@ -119,45 +119,45 @@ print(f"Z statistic = {Z_stat:.4f}")
 print(f"Two-sided p-value = {p_value:.4f}")
 ```
 
-For comparing dependent correlations, the `pingouin` library provides `pingouin.corr` with options for comparing overlapping correlations, and the `cocor` R package offers a comprehensive suite of comparison tests.
+종속인 상관의 비교에는 `pingouin` 라이브러리의 `pingouin.corr`가 겹치는 상관 비교 옵션을 제공하고, R의 `cocor` 패키지가 다양한 비교 검정을 제공한다.
 
 ---
 
-## Confidence Interval for the Difference
+## 차이에 대한 신뢰구간
 
-For two independent correlations, a $(1 - \alpha)$ confidence interval for $\rho_1 - \rho_2$ can be constructed by back-transforming:
+독립인 두 상관에 대해 $\rho_1 - \rho_2$의 $(1 - \alpha)$ 신뢰구간은 역변환으로 만들 수 있다:
 
 $$
 (z_1 - z_2) \pm z_{\alpha/2} \sqrt{\frac{1}{n_1 - 3} + \frac{1}{n_2 - 3}}
 $$
 
-gives a confidence interval for $\zeta_1 - \zeta_2$ (where $\zeta = \text{arctanh}(\rho)$). To convert back to the correlation scale, apply $\tanh$ to each endpoint. Note that this gives a confidence interval for $\zeta_1 - \zeta_2$, not directly for $\rho_1 - \rho_2$, because the tanh transformation is nonlinear.
+이는 $\zeta_1 - \zeta_2$($\zeta = \text{arctanh}(\rho)$)에 대한 신뢰구간을 준다. 상관 척도로 되돌리려면 각 끝점에 $\tanh$를 적용한다. 다만 tanh 변환이 비선형이므로 이것은 $\rho_1 - \rho_2$에 대한 신뢰구간이 아니라 $\zeta_1 - \zeta_2$에 대한 신뢰구간임에 유의하라.
 
 ---
 
-## Assumptions
+## 가정
 
-Both comparison methods assume:
+두 비교 방법 모두 다음을 가정한다:
 
-1. **Bivariate normality** within each sample.
-2. **Random sampling** from the respective populations.
-3. **Sufficient sample size** (typically $n \ge 25$ for each group for the normal approximation to be adequate).
+1. 각 표본 안의 **이변량 정규성**.
+2. 각 모집단으로부터의 **무작위 표집**.
+3. **충분한 표본크기**(정규근사가 적절하려면 대체로 각 집단에서 $n \ge 25$).
 
-When normality is violated, bootstrap methods provide a nonparametric alternative for comparing correlations.
+정규성이 어긋나면 붓스트랩 방법이 상관 비교의 비모수적 대안이 된다.
 
 ---
 
-## Summary
+## 요약
 
-Comparing two correlations requires different methods depending on whether the samples are independent or overlapping. For independent samples, Fisher's z-transformation converts each correlation to a normally distributed variable, and a simple $Z$-test compares the transformed values. For dependent samples with a shared variable, Steiger's test (Williams' modification) accounts for the correlation between the two coefficients. In both cases, the Fisher z-transformation is the key tool that stabilizes the variance and enables standard normal-theory inference.
+두 상관의 비교는 표본이 독립인지 겹치는지에 따라 다른 방법을 요구한다. 독립 표본에서는 Fisher의 z 변환이 각 상관을 정규분포 변수로 바꾸고 간단한 $Z$-검정으로 변환값을 비교한다. 변수를 공유하는 종속 표본에서는 Steiger 검정(Williams 수정)이 두 계수 사이의 상관을 반영한다. 두 경우 모두 분산을 안정화하여 표준적인 정규 이론 추론을 가능하게 하는 Fisher z 변환이 핵심 도구이다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Two independent samples yield $r_1 = 0.65$ ($n_1 = 50$) and $r_2 = 0.40$ ($n_2 = 60$). Test whether the two population correlations are equal using Fisher's z-transformation at $\alpha = 0.05$.
+**연습문제 1.**
+두 독립 표본에서 $r_1 = 0.65$($n_1 = 50$)와 $r_2 = 0.40$($n_2 = 60$)을 얻었다. Fisher의 z 변환으로 $\alpha = 0.05$에서 두 모상관이 같은지 검정하라.
 
-??? success "Solution to Exercise 1"
-    Apply Fisher's z-transformation: $z_r = \frac{1}{2}\ln\frac{1+r}{1-r}$.
+??? success "연습문제 1 풀이"
+    Fisher의 z 변환 $z_r = \frac{1}{2}\ln\frac{1+r}{1-r}$을 적용한다.
 
     $$
     z_1 = \frac{1}{2}\ln\frac{1.65}{0.35} = \frac{1}{2}\ln(4.714) = \frac{1}{2}(1.5506) = 0.7753
@@ -167,44 +167,44 @@ Two independent samples yield $r_1 = 0.65$ ($n_1 = 50$) and $r_2 = 0.40$ ($n_2 =
     z_2 = \frac{1}{2}\ln\frac{1.40}{0.60} = \frac{1}{2}\ln(2.333) = \frac{1}{2}(0.8473) = 0.4236
     $$
 
-    The test statistic is:
+    검정통계량은
 
     $$
     Z = \frac{z_1 - z_2}{\sqrt{\frac{1}{n_1-3} + \frac{1}{n_2-3}}} = \frac{0.7753 - 0.4236}{\sqrt{\frac{1}{47} + \frac{1}{57}}} = \frac{0.3517}{\sqrt{0.02128 + 0.01754}} = \frac{0.3517}{0.1970} = 1.785
     $$
 
-    Since $|Z| = 1.785 < 1.96$, we fail to reject $H_0: \rho_1 = \rho_2$ at $\alpha = 0.05$.
+    이다. $|Z| = 1.785 < 1.96$이므로 $\alpha = 0.05$에서 $H_0: \rho_1 = \rho_2$를 기각하지 못한다.
 
 ---
 
-**Exercise 2.**
-Explain why comparing correlations directly (without transformation) is problematic when correlations are far from zero.
+**연습문제 2.**
+상관이 0에서 멀 때 변환 없이 상관을 직접 비교하는 것이 왜 문제가 되는지 설명하라.
 
-??? success "Solution to Exercise 2"
-    The sampling distribution of $r$ is skewed when $\rho \neq 0$: it is compressed toward the boundary ($\pm 1$) on the side closer to $\rho$ and stretched on the other side. As $|\rho| \to 1$, the distribution becomes increasingly skewed and its variance decreases.
+??? success "연습문제 2 풀이"
+    $\rho \neq 0$이면 $r$의 표본분포가 치우친다. $\rho$에 가까운 쪽 경계($\pm 1$) 방향으로 압축되고 반대쪽으로는 늘어난다. $|\rho| \to 1$이면 분포가 점점 더 치우치고 분산이 줄어든다.
 
-    Fisher's z-transformation $z_r = \frac{1}{2}\ln\frac{1+r}{1-r}$ stabilizes the variance and symmetrizes the distribution. After transformation, $z_r$ is approximately $N(z_\rho, 1/(n-3))$ regardless of $\rho$. Without the transformation, the standard error of $r$ depends on $\rho$, making comparisons unreliable.
-
----
-
-**Exercise 3.**
-Two correlations are computed from the **same** sample: $r_{XY} = 0.70$ and $r_{XZ} = 0.50$ with $n = 100$. Why can't you use the independent-samples test to compare them?
-
-??? success "Solution to Exercise 3"
-    The independent-samples test assumes $r_1$ and $r_2$ come from separate, unrelated samples. When both correlations come from the same sample, they share the variable $X$ and the same observations, making them dependent. Their covariance depends on $r_{YZ}$ (the correlation between $Y$ and $Z$ in the sample).
-
-    Ignoring the dependence and using the independent-samples test would overestimate the standard error of the difference (treating the two correlations as more variable than they actually are), reducing power.
-
-    The correct test uses **Steiger's (1980) method** or **Hotelling's (1940) test**, which accounts for the correlation between the two correlation coefficients through the formula involving $r_{XY}$, $r_{XZ}$, and $r_{YZ}$.
+    Fisher의 z 변환 $z_r = \frac{1}{2}\ln\frac{1+r}{1-r}$은 분산을 안정화하고 분포를 대칭에 가깝게 만든다. 변환 후에는 $\rho$와 무관하게 $z_r$이 근사적으로 $N(z_\rho, 1/(n-3))$을 따른다. 변환하지 않으면 $r$의 표준오차가 $\rho$에 의존하므로 비교를 믿을 수 없게 된다.
 
 ---
 
-**Exercise 4.**
-A researcher reports that the correlation between height and income is $r = 0.15$ in a sample of $n = 2000$. Is this "small" correlation statistically significant? Is it practically important?
+**연습문제 3.**
+**같은** 표본에서 $r_{XY} = 0.70$과 $r_{XZ} = 0.50$을 $n = 100$으로 계산했다. 왜 독립 표본 검정으로 이 둘을 비교할 수 없는가?
 
-??? success "Solution to Exercise 4"
-    Testing $H_0: \rho = 0$: $t = r\sqrt{n-2}/\sqrt{1-r^2} = 0.15\sqrt{1998}/\sqrt{0.9775} = 0.15 \times 44.7/0.9887 = 6.78$.
+??? success "연습문제 3 풀이"
+    독립 표본 검정은 $r_1$과 $r_2$가 서로 무관한 별개의 표본에서 나왔다고 가정한다. 두 상관이 같은 표본에서 나오면 변수 $X$와 같은 관측값들을 공유하므로 서로 종속이다. 두 상관의 공분산은 (표본에서 $Y$와 $Z$의 상관인) $r_{YZ}$에 의존한다.
 
-    With $df = 1998$, $t = 6.78$ is highly significant ($p < 0.0001$). The correlation is statistically distinguishable from zero.
+    이 종속을 무시하고 독립 표본 검정을 쓰면 차이의 표준오차를 과대추정하여(두 상관이 실제보다 변동이 큰 것처럼 다루어) 검정력을 잃는다.
 
-    However, $r^2 = 0.0225$: height explains only 2.25% of the variance in income. Practically, this is a weak association. With $n = 2000$, even tiny correlations become significant. This illustrates the importance of distinguishing statistical significance (is the effect nonzero?) from practical significance (is the effect large enough to matter?). Effect size measures like $r^2$ are essential for interpretation.
+    올바른 검정은 $r_{XY}$, $r_{XZ}$, $r_{YZ}$를 포함하는 공식으로 두 상관계수 사이의 상관을 반영하는 **Steiger(1980)의 방법**이나 **Hotelling(1940)의 검정**이다.
+
+---
+
+**연습문제 4.**
+어떤 연구자가 $n = 2000$인 표본에서 키와 소득의 상관이 $r = 0.15$라고 보고했다. 이 "작은" 상관은 통계적으로 유의한가? 실질적으로 중요한가?
+
+??? success "연습문제 4 풀이"
+    $H_0: \rho = 0$을 검정하면 $t = r\sqrt{n-2}/\sqrt{1-r^2} = 0.15\sqrt{1998}/\sqrt{0.9775} = 0.15 \times 44.7/0.9887 = 6.78$이다.
+
+    $df = 1998$에서 $t = 6.78$은 매우 유의하다($p < 0.0001$). 상관이 통계적으로 0과 구별된다.
+
+    그러나 $r^2 = 0.0225$이므로 키는 소득 분산의 2.25%만 설명한다. 실질적으로는 약한 연관이다. $n = 2000$이면 아주 작은 상관도 유의해진다. 통계적 유의성(효과가 0이 아닌가?)과 실질적 유의성(효과가 의미 있을 만큼 큰가?)을 구별하는 일이 왜 중요한지 보여준다. 해석에는 $r^2$ 같은 효과크기 측도가 필수적이다.

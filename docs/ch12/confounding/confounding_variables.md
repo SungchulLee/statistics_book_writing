@@ -1,144 +1,144 @@
-# Confounding Variables
+# 교란변수
 
-A **confounding variable** is a variable that influences both the exposure (or predictor) and the outcome, creating a spurious association between them. Confounding is one of the most important concepts in statistics and epidemiology because it can make a non-causal relationship appear causal, or mask a genuine causal effect. Properly identifying and controlling for confounders is essential for drawing valid conclusions from observational data.
-
----
-
-## Definition
-
-A variable $Z$ is a **confounder** of the relationship between $X$ (exposure) and $Y$ (outcome) if all three of the following conditions hold:
-
-1. $Z$ is associated with $X$ (the exposure).
-2. $Z$ is associated with $Y$ (the outcome), conditional on $X$.
-3. $Z$ is not on the causal pathway from $X$ to $Y$ (i.e., $Z$ is not a mediator).
-
-When a confounder is present, the observed association between $X$ and $Y$ reflects both the direct relationship (if any) and the indirect path through $Z$. Failure to account for $Z$ leads to a **confounded** estimate of the $X$-$Y$ relationship.
+**교란변수**는 노출(또는 설명변수)과 결과 모두에 영향을 주어 둘 사이에 허위 연관을 만드는 변수이다. 인과가 아닌 관계를 인과처럼 보이게 하거나 진짜 인과효과를 가릴 수 있으므로, 교란은 통계학과 역학에서 가장 중요한 개념 중 하나이다. 교란요인을 올바르게 식별하고 통제하는 일은 관찰자료에서 타당한 결론을 이끌어내는 데 필수적이다.
 
 ---
 
-## The Confounding Structure
+## 정의
 
-The causal structure underlying confounding can be represented as a diagram where $Z$ has arrows pointing to both $X$ and $Y$:
+변수 $Z$가 $X$(노출)와 $Y$(결과) 사이 관계의 **교란요인**이 되려면 다음 세 조건이 모두 성립해야 한다:
+
+1. $Z$가 $X$(노출)와 연관되어 있다.
+2. $X$를 조건으로 했을 때 $Z$가 $Y$(결과)와 연관되어 있다.
+3. $Z$가 $X$에서 $Y$로 가는 인과 경로 위에 있지 않다(즉 $Z$가 매개자가 아니다).
+
+교란요인이 있으면 관측된 $X$–$Y$ 연관은 (있다면) 직접적인 관계와 $Z$를 통한 간접 경로를 함께 반영한다. $Z$를 반영하지 않으면 $X$–$Y$ 관계의 추정이 **교란**된다.
+
+---
+
+## 교란의 구조
+
+교란의 바탕이 되는 인과 구조는 $Z$에서 $X$와 $Y$ 모두로 화살표가 향하는 그림으로 나타낼 수 있다:
 
 $$
 X \leftarrow Z \rightarrow Y
 $$
 
-This "common cause" structure means that $X$ and $Y$ are associated even if there is no direct causal link between them. The association arises entirely through the backdoor path $X \leftarrow Z \rightarrow Y$.
+이 "공통원인" 구조는 $X$와 $Y$ 사이에 직접적인 인과 연결이 없어도 둘이 연관됨을 뜻한다. 연관은 전적으로 뒷문 경로 $X \leftarrow Z \rightarrow Y$를 통해 생긴다.
 
-??? example "Classic example: coffee and cancer"
-    Early observational studies found a positive association between coffee consumption ($X$) and lung cancer ($Y$). However, coffee drinkers were more likely to smoke ($Z$). Smoking is associated with both coffee consumption and lung cancer. After controlling for smoking, the coffee-cancer association largely disappeared. Smoking was the confounder.
-
----
-
-## Positive and Negative Confounding
-
-Confounding can either inflate or mask the true effect:
-
-- **Positive confounding**: the confounder creates or inflates a positive association. The crude association overestimates the true effect.
-- **Negative confounding**: the confounder masks or reduces the true association. The crude association underestimates the true effect.
-
-The direction of confounding depends on the signs of the relationships between $Z$ and $X$, and between $Z$ and $Y$.
+??? example "고전적인 예: 커피와 암"
+    초기 관찰연구들은 커피 소비($X$)와 폐암($Y$) 사이에 양의 연관을 발견했다. 그러나 커피를 마시는 사람은 담배도 피울 가능성이 높았다($Z$). 흡연은 커피 소비와 폐암 모두와 연관되어 있다. 흡연을 통제하자 커피–암 연관은 대부분 사라졌다. 흡연이 교란요인이었다.
 
 ---
 
-## How to Detect Confounding
+## 양의 교란과 음의 교란
 
-In practice, confounding is detected by comparing the crude (unadjusted) association with the adjusted association:
+교란은 참 효과를 부풀릴 수도 가릴 수도 있다:
 
-1. Compute the crude association between $X$ and $Y$ (ignoring $Z$).
-2. Compute the adjusted association, controlling for $Z$.
-3. If the two estimates differ meaningfully (typically by more than 10%), $Z$ is a confounder.
+- **양의 교란**: 교란요인이 양의 연관을 만들거나 부풀린다. 조정하지 않은 연관이 참 효과를 과대추정한다.
+- **음의 교란**: 교란요인이 참 연관을 가리거나 줄인다. 조정하지 않은 연관이 참 효과를 과소추정한다.
 
-This is sometimes called the "change-in-estimate" criterion. It is a practical heuristic, not a formal statistical test.
-
----
-
-## Methods for Controlling Confounders
-
-### At the Design Stage
-
-1. **Randomization.** Random assignment of the exposure breaks the association between $X$ and $Z$, eliminating confounding. This is why randomized controlled trials are the gold standard for causal inference. See [Experiments and Causation](../causation/experiments_causation.md).
-
-2. **Restriction.** Limit the study to individuals with the same value of $Z$. For example, study only non-smokers to eliminate smoking as a confounder.
-
-3. **Matching.** For each exposed individual, select an unexposed individual with the same (or similar) value of $Z$.
-
-### At the Analysis Stage
-
-4. **Stratification.** Analyze the data separately within each level of $Z$, then combine using methods like the Mantel-Haenszel estimator.
-
-5. **Regression adjustment.** Include $Z$ as a covariate in a regression model for $Y$ on $X$. The coefficient of $X$ then estimates the effect of $X$ holding $Z$ constant.
-
-6. **Propensity score methods.** Estimate the probability of exposure given $Z$, then use this propensity score for matching, stratification, or weighting.
+교란의 방향은 $Z$와 $X$의 관계, $Z$와 $Y$의 관계가 갖는 부호에 달려 있다.
 
 ---
 
-## Example: Exercise, Diet, and Heart Disease
+## 교란을 탐지하는 방법
 
-Suppose we observe that people who exercise regularly ($X = 1$) have lower rates of heart disease ($Y$). However, regular exercisers also tend to eat healthier diets ($Z$). Diet is a confounder because:
+실무에서는 조정하지 않은(조야한) 연관과 조정한 연관을 비교하여 교란을 탐지한다:
 
-1. Diet is associated with exercise ($r_{XZ} > 0$).
-2. Diet is associated with heart disease, given exercise status ($r_{YZ} \neq 0$).
-3. Diet is not on the causal pathway from exercise to heart disease (exercise does not cause diet in this context).
+1. ($Z$를 무시하고) $X$와 $Y$ 사이의 조야한 연관을 계산한다.
+2. $Z$를 통제한 조정 연관을 계산한다.
+3. 두 추정값이 의미 있게 다르면(보통 10% 이상 차이 나면) $Z$가 교란요인이다.
 
-If we fail to control for diet, the observed benefit of exercise may be partly attributable to the healthier diets of exercisers rather than exercise itself.
-
-After adjusting for diet:
-
-- If the exercise-heart disease association **persists**, exercise has an independent protective effect.
-- If the association **disappears**, the apparent benefit was driven by diet (confounding).
-- If the association **weakens but remains**, exercise has an independent effect, but its crude magnitude was confounded by diet.
+이를 "추정값 변화" 기준이라 부르기도 한다. 형식적인 통계 검정이 아니라 실용적인 발견법이다.
 
 ---
 
-## Confounding vs Mediation vs Collider Bias
+## 교란요인을 통제하는 방법
 
-It is crucial to distinguish confounding from two related but different phenomena:
+### 설계 단계에서
 
-| Structure | Diagram | Effect of controlling for $Z$ |
+1. **무작위화.** 노출을 무작위로 배정하면 $X$와 $Z$의 연관이 끊어져 교란이 제거된다. 무작위 대조 시험이 인과추론의 표준인 이유이다. [실험과 인과](../causation/experiments_causation.md)를 보라.
+
+2. **제한.** 연구를 $Z$의 값이 같은 개인들로 한정한다. 예를 들어 비흡연자만 연구하여 흡연을 교란요인에서 제거한다.
+
+3. **짝짓기.** 노출된 개인마다 $Z$ 값이 같은(또는 비슷한) 비노출 개인을 고른다.
+
+### 분석 단계에서
+
+4. **층화.** $Z$의 각 수준 안에서 자료를 따로 분석한 뒤 Mantel-Haenszel 추정량 같은 방법으로 합친다.
+
+5. **회귀 조정.** $Y$를 $X$에 회귀하는 모형에 $Z$를 공변량으로 넣는다. 그러면 $X$의 계수가 $Z$를 고정한 채의 $X$ 효과를 추정한다.
+
+6. **성향점수 방법.** $Z$가 주어졌을 때 노출될 확률을 추정한 뒤, 이 성향점수를 짝짓기·층화·가중에 쓴다.
+
+---
+
+## 예제: 운동, 식습관, 심장질환
+
+규칙적으로 운동하는 사람($X = 1$)의 심장질환($Y$) 발생률이 낮다고 관측했다고 하자. 그런데 규칙적으로 운동하는 사람은 더 건강한 식습관($Z$)을 갖는 경향도 있다. 식습관은 다음 이유로 교란요인이다:
+
+1. 식습관이 운동과 연관되어 있다($r_{XZ} > 0$).
+2. 운동 여부를 주었을 때 식습관이 심장질환과 연관되어 있다($r_{YZ} \neq 0$).
+3. 식습관이 운동에서 심장질환으로 가는 인과 경로 위에 있지 않다(이 맥락에서 운동이 식습관을 일으키지는 않는다).
+
+식습관을 통제하지 않으면 관측된 운동의 이득 중 일부가 운동 자체가 아니라 운동하는 사람들의 건강한 식습관에 기인한 것일 수 있다.
+
+식습관을 조정한 뒤:
+
+- 운동–심장질환 연관이 **유지되면** 운동에 독립적인 보호 효과가 있다.
+- 연관이 **사라지면** 겉보기 이득은 식습관 때문이었다(교란).
+- 연관이 **약해지지만 남으면** 운동에 독립적인 효과가 있으나 조정 전 크기는 식습관으로 교란되어 있었다.
+
+---
+
+## 교란, 매개, 충돌자 편향
+
+교란을 관련되지만 다른 두 현상과 구별하는 일이 결정적이다:
+
+| 구조 | 도식 | $Z$를 통제할 때의 효과 |
 |:---|:---:|:---|
-| Confounding | $X \leftarrow Z \rightarrow Y$ | Removes bias; reveals true $X \to Y$ effect |
-| Mediation | $X \rightarrow Z \rightarrow Y$ | Removes the indirect effect; shows only direct effect |
-| Collider | $X \rightarrow Z \leftarrow Y$ | *Introduces* bias; creates spurious association |
+| 교란 | $X \leftarrow Z \rightarrow Y$ | 편향을 제거하고 참 $X \to Y$ 효과를 드러낸다 |
+| 매개 | $X \rightarrow Z \rightarrow Y$ | 간접효과를 제거하고 직접효과만 남긴다 |
+| 충돌자 | $X \rightarrow Z \leftarrow Y$ | 편향을 *만든다*. 허위 연관을 생성한다 |
 
-Controlling for a mediator is not necessarily wrong, but it answers a different question (direct effect vs total effect). Controlling for a collider is always harmful -- it creates bias where none existed. These distinctions are formalized through [directed acyclic graphs](../causation/dags.md).
-
----
-
-## Summary
-
-A confounding variable is a common cause of both the exposure and the outcome that distorts the observed association between them. Confounding can inflate, reduce, or reverse the true effect. It can be addressed through study design (randomization, restriction, matching) or analysis (stratification, regression, propensity scores). The key to handling confounding correctly is understanding the underlying causal structure, which distinguishes confounders from mediators and colliders.
-
-## Exercises
-
-**Exercise 1.**
-For each of the following correlations, identify at least one plausible confounding variable:
-
-1. Countries with more chocolate consumption per capita win more Nobel Prizes.
-2. Students who eat breakfast perform better on exams.
-3. Cities with more police officers have higher crime rates.
-4. People who own more books tend to have higher incomes.
-
-??? success "Solution to Exercise 1"
-
-    1. **National wealth (GDP per capita)** confounds both chocolate consumption and Nobel Prizes. Wealthier countries can afford more chocolate and also invest more in education and research infrastructure.
-
-    2. **Socioeconomic status** confounds breakfast eating and exam performance. Students from higher-income families are more likely to eat breakfast regularly and also have access to better educational resources, tutoring, and study environments.
-
-    3. **City size and population density** confound the number of police officers and crime rate. Larger cities hire more police officers and also have higher crime rates due to population density, poverty concentration, and other urban factors.
-
-    4. **Education level** confounds book ownership and income. People with more education tend to buy more books and also tend to earn higher incomes. Parental education and socioeconomic background may also confound both variables.
+매개자를 통제하는 것이 반드시 틀린 것은 아니지만 다른 질문(총효과가 아니라 직접효과)에 답하게 된다. 충돌자를 통제하는 것은 언제나 해롭다. 없던 편향을 만들어내기 때문이다. 이런 구별은 [방향성 비순환 그래프](../causation/dags.md)로 형식화된다.
 
 ---
 
-**Exercise 2.**
-Using the California housing dataset:
+## 요약
 
-1. Compute the full correlation matrix
-2. Identify the variable most strongly correlated with `median_house_value`
-3. Discuss potential confounders in the relationship between `median_income` and `median_house_value`
-4. Create a scatter plot matrix for the four most correlated variables
+교란변수는 노출과 결과의 공통원인으로서 둘 사이의 관측된 연관을 왜곡한다. 교란은 참 효과를 부풀리거나 줄이거나 뒤집을 수 있다. 연구 설계(무작위화, 제한, 짝짓기)나 분석(층화, 회귀, 성향점수)으로 다룰 수 있다. 교란을 올바르게 다루는 열쇠는 바탕에 있는 인과 구조를 이해하는 것이며, 그것이 교란요인을 매개자·충돌자와 구별해 준다.
+
+## 연습문제
+
+**연습문제 1.**
+다음 각 상관에 대해 그럴듯한 교란변수를 적어도 하나씩 밝혀라:
+
+1. 1인당 초콜릿 소비가 많은 나라일수록 노벨상 수상자가 많다.
+2. 아침을 먹는 학생이 시험을 더 잘 본다.
+3. 경찰관이 많은 도시일수록 범죄율이 높다.
+4. 책을 많이 가진 사람일수록 소득이 높은 경향이 있다.
+
+??? success "연습문제 1 풀이"
+
+    1. **국가의 부(1인당 GDP)**가 초콜릿 소비와 노벨상 모두를 교란한다. 부유한 나라는 초콜릿도 더 살 수 있고 교육과 연구 기반시설에도 더 투자한다.
+
+    2. **사회경제적 지위**가 아침 식사와 시험 성적을 교란한다. 소득이 높은 가정의 학생은 아침을 규칙적으로 먹을 가능성이 크고 더 나은 교육 자원, 과외, 학습 환경도 갖는다.
+
+    3. **도시 규모와 인구밀도**가 경찰관 수와 범죄율을 교란한다. 큰 도시는 경찰관을 더 많이 고용하고 인구밀도, 빈곤 집중 등 도시적 요인 때문에 범죄율도 높다.
+
+    4. **학력**이 책 소유와 소득을 교란한다. 학력이 높은 사람은 책을 더 사고 소득도 더 높은 경향이 있다. 부모의 학력과 사회경제적 배경도 두 변수를 교란할 수 있다.
+
+---
+
+**연습문제 2.**
+캘리포니아 주택 자료를 써서:
+
+1. 전체 상관행렬을 계산하라
+2. `median_house_value`와 가장 강하게 상관된 변수를 찾아라
+3. `median_income`과 `median_house_value`의 관계에서 있을 수 있는 교란요인을 논하라
+4. 가장 강하게 상관된 네 변수에 대해 산점도 행렬을 그려라
 
 ```python
 import os, tarfile, urllib.request
@@ -162,6 +162,6 @@ def load_housing_data():
 # Your analysis here
 ```
 
-??? success "Solution to Exercise 2"
+??? success "연습문제 2 풀이"
 
-    `median_income` is the variable most strongly correlated with `median_house_value`. Potential confounders in this relationship include geographic location (proximity to the coast, urban vs. rural), housing age, and local amenities (school quality, employment opportunities). These variables affect both median income (through sorting of residents) and house values (through demand). The scatter plot matrix for the top four correlated variables will reveal that many relationships are nonlinear and that outliers (e.g., capped house values at \$500,000) can distort correlation estimates.
+    `median_house_value`와 가장 강하게 상관된 변수는 `median_income`이다. 이 관계에서 있을 수 있는 교란요인으로는 지리적 위치(해안 근접성, 도시 대 농촌), 주택 연식, 지역 편의시설(학군, 일자리)이 있다. 이 변수들은 (거주자의 분화를 통해) 중위소득에도, (수요를 통해) 주택 가격에도 영향을 준다. 상위 네 변수의 산점도 행렬을 그리면 많은 관계가 비선형이고, 이상점(예: \$500,000에서 잘린 주택 가격)이 상관 추정을 왜곡할 수 있음이 드러난다.

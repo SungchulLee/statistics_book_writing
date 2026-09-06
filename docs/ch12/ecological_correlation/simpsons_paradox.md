@@ -1,43 +1,43 @@
-# Simpson's Paradox
+# Simpson의 역설
 
-A trend that holds within every subgroup of a dataset can reverse or disappear when the subgroups are combined. This counterintuitive phenomenon is known as **Simpson's paradox**. It arises when a confounding variable influences both the grouping and the outcome, and it serves as a powerful reminder that aggregated data can be deeply misleading.
+자료의 모든 하위집단 안에서 성립하는 경향이 하위집단을 합치면 뒤집히거나 사라질 수 있다. 직관에 반하는 이 현상을 **Simpson의 역설**이라 한다. 교란변수가 집단 구분과 결과 모두에 영향을 줄 때 생기며, 집계된 자료가 얼마나 크게 오도할 수 있는지 강력하게 일깨워 준다.
 
 ---
 
-## Definition
+## 정의
 
-**Simpson's paradox** occurs when an association between two variables reverses direction after conditioning on (stratifying by) a third variable. Formally, it is possible to have
+**Simpson의 역설**은 제3의 변수로 조건화(층화)한 뒤 두 변수 사이 연관의 방향이 뒤집힐 때 일어난다. 형식적으로 모든 $z$에 대해
 
 $$
 P(Y = 1 \mid X = 1, Z = z) < P(Y = 1 \mid X = 0, Z = z) \quad \text{for every } z
 $$
 
-and yet
+이면서도 $Z$에 대해 주변화하면
 
 $$
 P(Y = 1 \mid X = 1) > P(Y = 1 \mid X = 0)
 $$
 
-when marginalizing over $Z$. The inequality reverses when the data are aggregated.
+이 되는 일이 가능하다. 자료를 집계하면 부등호가 뒤집힌다.
 
 ---
 
-## The Berkeley Admissions Example
+## 버클리 입학 사례
 
-The most famous illustration of Simpson's paradox comes from graduate admissions at UC Berkeley in 1973.
+Simpson 역설의 가장 유명한 예는 1973년 UC 버클리 대학원 입학 자료에서 나온다.
 
-**Aggregate data:**
+**집계 자료:**
 
-| | Applicants | Admitted | Rate |
+| | 지원자 | 합격자 | 합격률 |
 |:---|:---:|:---:|:---:|
-| Men | 8442 | 3738 | 44% |
-| Women | 4321 | 1494 | 35% |
+| 남성 | 8442 | 3738 | 44% |
+| 여성 | 4321 | 1494 | 35% |
 
-At first glance, men appear to be admitted at a substantially higher rate, suggesting possible gender bias.
+언뜻 보면 남성의 합격률이 상당히 높아 성차별의 가능성을 시사한다.
 
-**Stratified by department:**
+**학과별로 층화:**
 
-| Department | Men applied | Men admitted | Women applied | Women admitted |
+| 학과 | 남성 지원 | 남성 합격률 | 여성 지원 | 여성 합격률 |
 |:---:|:---:|:---:|:---:|:---:|
 | A | 825 | 62% | 108 | 82% |
 | B | 560 | 63% | 25 | 68% |
@@ -46,115 +46,119 @@ At first glance, men appear to be admitted at a substantially higher rate, sugge
 | E | 191 | 28% | 393 | 24% |
 | F | 373 | 6% | 341 | 7% |
 
-Within most departments, women had equal or higher admission rates. The paradox arose because women disproportionately applied to more competitive departments (C, D, E, F) with lower overall admission rates, while men applied more to less competitive departments (A, B).
+대부분의 학과에서 여성의 합격률이 같거나 더 높았다. 여성이 전체 합격률이 낮은 경쟁적인 학과(C, D, E, F)에 불균형하게 많이 지원하고 남성은 덜 경쟁적인 학과(A, B)에 더 많이 지원했기 때문에 역설이 생겼다.
 
-The confounding variable $Z$ (department choice) reversed the aggregate association.
+교란변수 $Z$(학과 선택)가 집계 수준의 연관을 뒤집은 것이다.
 
 ---
 
-## Why It Happens
+## 왜 일어나는가
 
-Simpson's paradox occurs when:
+Simpson의 역설은 다음일 때 일어난다:
 
-1. A confounding variable $Z$ is associated with both the treatment/exposure $X$ and the outcome $Y$.
-2. The groups defined by $X$ have different distributions over $Z$.
-3. The effect of $Z$ on $Y$ is strong enough to overwhelm the $X$-$Y$ relationship when data are aggregated.
+1. 교란변수 $Z$가 처치/노출 $X$와 결과 $Y$ 모두와 연관되어 있다.
+2. $X$로 정의된 집단들의 $Z$ 분포가 서로 다르다.
+3. 자료를 집계했을 때 $Z$가 $Y$에 미치는 효과가 $X$–$Y$ 관계를 압도할 만큼 강하다.
 
-The paradox is not a contradiction in the mathematics. The marginal probability $P(Y \mid X)$ is a weighted average of the conditional probabilities $P(Y \mid X, Z = z)$, with weights proportional to $P(Z = z \mid X)$. When those weights differ between the $X = 0$ and $X = 1$ groups, the weighted averages can reverse the direction of the conditional relationship.
+이 역설은 수학적 모순이 아니다. 주변확률 $P(Y \mid X)$는 조건부확률 $P(Y \mid X, Z = z)$의 가중평균이며 가중치는 $P(Z = z \mid X)$에 비례한다. $X = 0$ 집단과 $X = 1$ 집단에서 그 가중치가 다르면 가중평균이 조건부 관계의 방향을 뒤집을 수 있다.
 
-Formally:
+형식적으로
 
 $$
 P(Y = 1 \mid X = x) = \sum_z P(Y = 1 \mid X = x, Z = z) \, P(Z = z \mid X = x)
 $$
 
-Different weighting schemes (different $P(Z = z \mid X = x)$) can produce different aggregate results.
+이므로 가중 방식이 다르면($P(Z = z \mid X = x)$가 다르면) 집계 결과가 달라질 수 있다.
 
 ---
 
-## A Numerical Example
+## 수치 예제
 
-A hospital compares two treatments for kidney stones.
+어떤 병원이 신장결석에 대한 두 치료법을 비교한다.
 
-**Overall (aggregated):**
+**전체(집계):**
 
-| Treatment | Successes | Total | Rate |
+| 치료 | 성공 | 전체 | 비율 |
 |:---|:---:|:---:|:---:|
 | A | 273 | 350 | 78% |
 | B | 289 | 350 | 83% |
 
-Treatment B appears better overall.
+전체적으로는 치료 B가 나아 보인다.
 
-**Stratified by stone size:**
+**결석 크기로 층화:**
 
-| Stone size | Treatment A success rate | Treatment B success rate |
+| 결석 크기 | 치료 A 성공률 | 치료 B 성공률 |
 |:---:|:---:|:---:|
-| Small | 93% (81/87) | 87% (234/270) |
-| Large | 73% (192/263) | 69% (55/80) |
+| 작음 | 93% (81/87) | 87% (234/270) |
+| 큼 | 73% (192/263) | 69% (55/80) |
 
-Treatment A is better for small stones *and* better for large stones, yet Treatment B appears better overall. The paradox arises because Treatment A was disproportionately given to patients with large stones (harder cases), dragging down its aggregate success rate.
-
----
-
-## Connection to Confounding
-
-Simpson's paradox is a manifestation of **confounding**. The confounding variable $Z$ creates a spurious association (or masks a real one) in the aggregated data. The solution is the same as for any confounding problem:
-
-1. **Stratify** by the confounding variable and analyze each stratum separately.
-2. **Adjust** using statistical methods (e.g., standardization, regression).
-3. **Randomize** in experimental design to break the association between $X$ and $Z$.
-
-See [Confounding Variables](../confounding/confounding_variables.md) for a detailed treatment.
+치료 A가 작은 결석에서도 큰 결석에서도 더 낫지만 전체적으로는 치료 B가 나아 보인다. 치료 A가 (더 어려운 사례인) 큰 결석 환자에게 불균형하게 많이 시행되어 집계 성공률이 끌어내려졌기 때문에 역설이 생긴다.
 
 ---
 
-## When to Trust the Aggregate vs the Stratified Data
+## 교란과의 연결
 
-A common question is: should we believe the aggregate result or the stratified result? The answer depends on the causal structure:
+Simpson의 역설은 **교란**이 드러난 형태이다. 교란변수 $Z$가 집계 자료에 허위 연관을 만들거나 실제 연관을 가린다. 해법은 다른 교란 문제와 같다:
 
-- If $Z$ is a **confounder** (a common cause of $X$ and $Y$), then the stratified analysis is correct and the aggregate is misleading.
-- If $Z$ is a **mediator** (on the causal path from $X$ to $Y$), then stratifying on $Z$ removes part of the causal effect, and the aggregate may be more appropriate.
-- If $Z$ is a **collider** (caused by both $X$ and $Y$), then stratifying on $Z$ can *create* a spurious association where none exists.
+1. 교란변수로 **층화**하여 각 층을 따로 분석한다.
+2. 통계적 방법(예: 표준화, 회귀)으로 **조정**한다.
+3. 실험 설계에서 **무작위화**하여 $X$와 $Z$의 연관을 끊는다.
 
-Determining the correct analysis requires knowledge of the causal relationships, not just statistical associations. See [Directed Acyclic Graphs](../causation/dags.md) for a framework to reason about these structures.
-
----
-
-## Simpson's Paradox in Continuous Data
-
-While often illustrated with proportions and contingency tables, Simpson's paradox also occurs with continuous variables and regression. A positive correlation between $X$ and $Y$ in the overall data can become negative within every subgroup defined by $Z$. This is essentially the same phenomenon described in the [ecological fallacy](ecological_fallacy.md), viewed from a different angle.
+자세한 논의는 [교란변수](../confounding/confounding_variables.md)를 보라.
 
 ---
 
-## Summary
+## 집계 결과와 층화 결과 중 무엇을 믿을까
 
-Simpson's paradox occurs when an association reverses direction after stratifying by a confounding variable. It arises because aggregation changes the weighting of subgroups, allowing a confounding variable to distort the overall relationship. The Berkeley admissions case and the kidney stone treatment example illustrate that aggregate data can be deeply misleading. Resolving the paradox requires identifying the correct causal structure and analyzing the data at the appropriate level.
+흔한 질문은 집계 결과와 층화 결과 중 무엇을 믿어야 하는가이다. 답은 인과 구조에 달려 있다:
 
-## Exercises
+- $Z$가 **교란요인**($X$와 $Y$의 공통원인)이면 층화 분석이 옳고 집계는 오도한다.
+- $Z$가 **매개자**($X$에서 $Y$로 가는 인과 경로 위에 있음)이면 $Z$로 층화하는 것이 인과효과의 일부를 제거하므로 집계가 더 적절할 수 있다.
+- $Z$가 **충돌자**($X$와 $Y$ 모두에 의해 생김)이면 $Z$로 층화하는 것이 존재하지 않던 허위 연관을 *만들어낼* 수 있다.
 
-**Exercise 1.**
-Create a synthetic dataset with two groups where a trend reverses when the groups are combined:
-
-1. Generate Group A: $x \sim U(0, 5)$, $y = -0.5x + 10 + \epsilon$
-2. Generate Group B: $x \sim U(5, 10)$, $y = -0.5x + 5 + \epsilon$
-3. Plot each group separately and combined
-4. Compute the Pearson $r$ within each group and for the combined data
-
-Explain why the combined correlation can be positive even though both within-group correlations are negative.
-
-??? success "Solution to Exercise 1"
-
-    Within each group, $y$ decreases as $x$ increases (slope $= -0.5$), giving a negative within-group correlation. However, Group B has higher $x$ values (5--10) and lower $y$ values overall (because of the lower intercept), while Group A has lower $x$ values (0--5) and higher $y$ values. When combined, the between-group pattern (low $x$ with high $y$ for Group A, high $x$ with lower $y$ for Group B) is overwhelmed by the fact that within each range, the combined data trace an upward-sloping pattern driven by the group offset. The combined correlation can be positive because the between-group difference in intercepts creates an overall positive association that masks the within-group negative slopes.
+올바른 분석을 정하려면 통계적 연관만이 아니라 인과관계에 대한 지식이 필요하다. 이런 구조를 사고하는 틀은 [방향성 비순환 그래프](../causation/dags.md)를 보라.
 
 ---
 
-**Exercise 2.**
-Using the UC Berkeley admissions data, compute:
+## 연속형 자료에서의 Simpson 역설
 
-1. The overall admission rate for men and women
-2. The admission rate for men and women in each department
-3. Identify which departments contribute most to the paradox
+비율과 분할표로 예시하는 경우가 많지만 Simpson의 역설은 연속형 변수와 회귀에서도 일어난다. 전체 자료에서 $X$와 $Y$의 상관이 양수인데 $Z$로 정의된 모든 하위집단 안에서는 음수가 될 수 있다. 이는 [생태학적 오류](ecological_fallacy.md)에서 기술한 현상을 다른 각도에서 본 것과 본질적으로 같다.
 
-??? success "Solution to Exercise 2"
+---
 
-    The overall admission rate for men is higher than for women, suggesting possible gender bias. However, when stratified by department, women are admitted at equal or higher rates in most departments. The paradox arises because women disproportionately applied to more competitive departments (with lower overall admission rates), while men disproportionately applied to less competitive departments (with higher overall admission rates). The departments contributing most to the paradox are those with the largest discrepancy between male and female application rates combined with very different overall admission rates.
+## 요약
+
+Simpson의 역설은 교란변수로 층화한 뒤 연관의 방향이 뒤집힐 때 일어난다. 집계가 하위집단의 가중을 바꾸어 교란변수가 전체 관계를 왜곡할 수 있게 되기 때문이다. 버클리 입학 사례와 신장결석 치료 예제는 집계 자료가 크게 오도할 수 있음을 보여준다. 역설을 해소하려면 올바른 인과 구조를 파악하고 적절한 수준에서 자료를 분석해야 한다.
+
+## 연습문제
+
+**연습문제 1.**
+두 집단을 합쳤을 때 경향이 뒤집히는 모의 자료를 만들어라:
+
+1. 집단 A 생성: $x \sim U(0, 5)$, $y = -0.5x + 10 + \epsilon$
+2. 집단 B 생성: $x \sim U(5, 10)$, $y = -0.5x + 15 + \epsilon$
+3. 각 집단을 따로, 그리고 합쳐서 그린다
+4. 각 집단과 전체 자료에 대해 Pearson $r$을 계산한다
+
+두 집단 내 상관이 모두 음수인데 전체 상관은 양수가 될 수 있는 이유를 설명하라.
+
+??? success "연습문제 1 풀이"
+
+    각 집단 안에서는 $x$가 커질수록 $y$가 작아지므로(기울기 $= -0.5$) 집단 내 상관이 음수이다($\epsilon \sim N(0, 0.5^2)$일 때 대략 $r \approx -0.8$).
+
+    그런데 집단 B는 $x$ 값도 크고($5$–$10$) 절편이 5만큼 크므로 $y$ 값도 크다($10$–$12.5$ 대 집단 A의 $7.5$–$10$). 두 집단을 합치면 이 집단 간 이동이 "$x$가 크면 $y$도 크다"는 양의 추세를 만들어 각 집단 안의 음의 기울기를 압도한다. 위 설정에서 전체 상관은 약 $r \approx +0.47$이 된다.
+
+    핵심은 집단이라는 교란변수가 $x$와 $y$ 모두를 위로 밀어 올린다는 점이다. 그 집단 효과를 무시하고 자료를 합치면 집단 내 관계의 부호가 뒤집혀 보인다.
+
+---
+
+**연습문제 2.**
+UC 버클리 입학 자료를 써서 다음을 계산하라:
+
+1. 남성과 여성의 전체 합격률
+2. 각 학과에서 남성과 여성의 합격률
+3. 역설에 가장 크게 기여하는 학과 찾기
+
+??? success "연습문제 2 풀이"
+
+    전체 합격률은 남성이 여성보다 높아 성차별의 가능성을 시사한다. 그러나 학과별로 층화하면 대부분의 학과에서 여성의 합격률이 같거나 더 높다. 여성이 (전체 합격률이 낮은) 경쟁적인 학과에 불균형하게 많이 지원하고 남성이 (합격률이 높은) 덜 경쟁적인 학과에 불균형하게 많이 지원했기 때문에 역설이 생긴다. 역설에 가장 크게 기여하는 학과는 남녀 지원 비율의 차이가 크면서 전체 합격률도 크게 다른 학과들이다.

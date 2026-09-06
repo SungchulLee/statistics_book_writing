@@ -1,17 +1,16 @@
-# Heatmaps for Correlation Matrices
+# 상관행렬의 열지도
 
+## 개요
 
-## Overview
-
-A **heatmap** is a two-dimensional visualization that uses color intensity to represent numerical values in a matrix. For correlation matrices, heatmaps reveal patterns of association across many variables simultaneously, making them indispensable for exploratory analysis of multivariate datasets. Colors (typically blue for negative correlation, white for zero, red for positive) encode the strength and direction of relationships at a glance.
+**열지도**는 행렬의 수치를 색의 강도로 나타내는 2차원 시각화이다. 상관행렬에서 열지도는 여러 변수에 걸친 연관 패턴을 한꺼번에 드러내므로 다변량 자료의 탐색적 분석에 없어서는 안 될 도구이다. 색(보통 음의 상관은 파랑, 0은 흰색, 양의 상관은 빨강)이 관계의 강도와 방향을 한눈에 부호화한다.
 
 ---
 
-## Basic Heatmap of a Correlation Matrix
+## 상관행렬의 기본 열지도
 
-### Financial Example: S&P 500 Exchange-Traded Funds (ETFs)
+### 금융 예제: S&P 500 상장지수펀드(ETF)
 
-Exchange-traded funds (ETFs) track broad market segments. By examining correlations among sector ETFs, investors can assess diversification—whether holdings move independently or in lockstep.
+상장지수펀드(ETF)는 넓은 시장 구간을 추종한다. 섹터 ETF 사이의 상관을 살펴보면 보유 자산이 독립적으로 움직이는지 함께 움직이는지, 즉 분산투자 정도를 평가할 수 있다.
 
 ```python
 import pandas as pd
@@ -38,29 +37,29 @@ sns.heatmap(corr_matrix,
             ax=ax,
             square=True,
             cbar_kws={'label': 'Correlation'})
-ax.set_title('Correlation Heatmap: S&P 500 ETFs (2012–2015)')
+ax.set_title('Correlation Heatmap: S&P 500 ETFs (2012-2015)')
 plt.tight_layout()
 plt.show()
 ```
 
-### Interpreting the Heatmap
+### 열지도 해석하기
 
-The heatmap reveals:
+열지도는 다음을 드러낸다:
 
-- **Positive correlations (red):** Sector ETFs that rise and fall together (e.g., technology and communication services often move in sync during growth phases)
-- **Negative correlations (blue):** Sectors that tend to diverge (e.g., defensive sectors like utilities versus cyclical sectors like consumer discretionary)
-- **Near-zero correlations (white):** Independent movements, beneficial for portfolio diversification
-- **Diagonal (all 1.0, dark red):** Each ETF is perfectly correlated with itself
+- **양의 상관(빨강):** 함께 오르내리는 섹터 ETF들(예: 성장 국면에서 기술과 통신 서비스가 자주 함께 움직인다)
+- **음의 상관(파랑):** 서로 갈라지는 경향이 있는 섹터들(예: 유틸리티 같은 방어 섹터 대 경기소비재 같은 경기민감 섹터)
+- **0에 가까운 상관(흰색):** 독립적인 움직임. 포트폴리오 분산에 유리하다
+- **대각선(모두 1.0, 진한 빨강):** 각 ETF는 자기 자신과 완전히 상관된다
 
-### Portfolio Insight
+### 포트폴리오 관점의 함의
 
-High positive correlations limit diversification benefits. If you hold two ETFs with a correlation of 0.8, they move nearly in lockstep, providing less risk reduction than two uncorrelated ETFs. A well-diversified portfolio targets low or negative correlations.
+양의 상관이 높으면 분산 효과가 제한된다. 상관이 0.8인 두 ETF를 보유하면 거의 같이 움직이므로 무상관인 두 ETF보다 위험 감소 효과가 작다. 잘 분산된 포트폴리오는 낮거나 음인 상관을 목표로 한다.
 
 ---
 
-## Heatmap with Annotation
+## 값을 표시한 열지도
 
-Adding numerical values to heatmap cells aids interpretation:
+열지도 칸에 수치를 넣으면 해석에 도움이 된다:
 
 ```python
 import pandas as pd
@@ -90,20 +89,20 @@ plt.tight_layout()
 plt.show()
 ```
 
-With annotations, specific correlation pairs are easy to identify:
+값을 표시하면 특정 상관 쌍을 쉽게 확인할 수 있다:
 
-- SPY (S&P 500 total market) correlates highly with QQQ (tech-heavy Nasdaq) and DIA (large-cap), as expected
-- GLD (gold) often shows lower or negative correlation with equity ETFs, making it a hedge
+- SPY(S&P 500 전체 시장)는 예상대로 QQQ(기술 비중이 큰 나스닥), DIA(대형주)와 높은 상관을 보인다
+- GLD(금)는 주식형 ETF와 상관이 낮거나 음인 경우가 많아 헤지 수단이 된다
 
 ---
 
-## Handling Large Correlation Matrices
+## 큰 상관행렬 다루기
 
-When many variables create dense, hard-to-read heatmaps, consider:
+변수가 많아 열지도가 빽빽하고 읽기 어려울 때에는 다음을 고려한다:
 
-### 1. Clustering (Reordering)
+### 1. 군집화(재정렬)
 
-Use hierarchical clustering to group similar variables:
+계층적 군집화로 비슷한 변수를 묶는다:
 
 ```python
 import pandas as pd
@@ -126,11 +125,11 @@ plt.tight_layout()
 plt.show()
 ```
 
-Clustering reorders rows and columns so that strongly correlated variables cluster together, revealing block structure in the correlation matrix.
+군집화는 강하게 상관된 변수들이 붙어 있도록 행과 열을 재정렬하여 상관행렬의 블록 구조를 드러낸다.
 
-### 2. Subsetting
+### 2. 부분집합 선택
 
-Select only a subset of variables of interest:
+관심 있는 변수의 부분집합만 고른다:
 
 ```python
 # Focus on sector funds only (exclude single-asset ETFs)
@@ -146,9 +145,9 @@ plt.show()
 
 ---
 
-## Grayscale Heatmap (For Print)
+## 회색조 열지도 (인쇄용)
 
-When publishing in monochrome or with printing constraints, use a grayscale colormap and add visual cues:
+흑백으로 출판하거나 인쇄 제약이 있을 때에는 회색조 색상표를 쓰고 시각적 단서를 더한다:
 
 ```python
 import pandas as pd
@@ -171,63 +170,63 @@ plt.show()
 
 ---
 
-## Real-World Application: Risk Management
+## 실제 응용: 위험 관리
 
-Portfolio managers use correlation heatmaps to assess:
+포트폴리오 매니저는 상관 열지도로 다음을 평가한다:
 
-1. **Systemic risk:** Do all holdings rise and fall together? High correlations indicate vulnerability to market-wide shocks.
-2. **Hedging effectiveness:** Do some holdings move opposite to others? Negative correlations provide natural hedges.
-3. **Sector concentration:** Are positions redundant (high correlation) or diversified?
+1. **시스템 위험:** 보유 자산이 모두 함께 오르내리는가? 상관이 높으면 시장 전체의 충격에 취약하다.
+2. **헤지의 효과:** 일부 자산이 다른 자산과 반대로 움직이는가? 음의 상관은 자연스러운 헤지를 제공한다.
+3. **섹터 집중:** 포지션이 중복되어 있는가(높은 상관), 분산되어 있는가?
 
-A portfolio with correlations near 0.8 offers poor diversification. A portfolio with a mix of positive, near-zero, and negative correlations provides genuine risk mitigation.
-
----
-
-## Limitations and Considerations
-
-- **Correlation ≠ Causation:** A high correlation between two variables doesn't imply one causes the other.
-- **Time-varying correlations:** Correlations change over market regimes. Heatmaps represent a static snapshot.
-- **Non-linear relationships:** Heatmaps display Pearson correlation (linear). Non-linear dependencies may be missed.
-- **Outliers:** Extreme events can distort correlation estimates; consider robust alternatives for contaminated data.
+상관이 0.8 근처인 포트폴리오는 분산 효과가 나쁘다. 양·0 근처·음의 상관이 섞인 포트폴리오가 실질적인 위험 완화를 준다.
 
 ---
 
-## Summary
+## 한계와 유의점
 
-Heatmaps transform a correlation matrix into a visual format where patterns emerge instantly. For investors, they reveal diversification potential; for data scientists, they expose multicollinearity. Combined with clustering or subsetting techniques, heatmaps remain one of the most practical tools for multivariate exploratory analysis.
-
-## Exercises
-
-**Exercise 1.**
-A correlation heatmap of a 10-variable financial dataset shows a 2-by-2 block of dark red in one corner and a 3-by-3 block of dark blue elsewhere. Interpret what these patterns suggest about the variable relationships and any implications for portfolio diversification.
-
-??? success "Solution to Exercise 1"
-    The **dark red block** indicates a cluster of two variables with strong positive correlations (close to $+1$). These variables move together -- for example, two stocks in the same sector.
-
-    The **dark blue block** indicates a cluster of three variables with strong negative correlations (close to $-1$). These variables move in opposite directions.
-
-    For **portfolio diversification**, the negatively correlated cluster is valuable: combining these assets reduces portfolio risk because losses in one tend to be offset by gains in another. The positively correlated pair offers no diversification benefit when combined; holding both is essentially doubling down on the same risk factor.
+- **상관은 인과가 아니다:** 두 변수의 상관이 높다고 하나가 다른 하나를 일으키는 것은 아니다.
+- **시간에 따라 변하는 상관:** 상관은 시장 국면에 따라 달라진다. 열지도는 정적인 한 장면일 뿐이다.
+- **비선형 관계:** 열지도는 (선형인) Pearson 상관을 보여준다. 비선형 의존은 놓칠 수 있다.
+- **이상점:** 극단적 사건이 상관 추정을 왜곡할 수 있다. 오염된 자료에는 로버스트한 대안을 고려하라.
 
 ---
 
-**Exercise 2.**
-Explain why using hierarchical clustering to reorder the rows and columns of a correlation heatmap can reveal structure that a default (alphabetical) ordering misses.
+## 요약
 
-??? success "Solution to Exercise 2"
-    In alphabetical ordering, correlated variables may be scattered across the matrix, making patterns difficult to spot. **Hierarchical clustering** groups variables with similar correlation profiles adjacent to each other, forming visible **blocks** along the diagonal.
+열지도는 상관행렬을 패턴이 즉시 드러나는 시각적 형태로 바꾼다. 투자자에게는 분산 가능성을, 데이터 과학자에게는 다중공선성을 보여준다. 군집화나 부분집합 선택 기법과 결합하면 열지도는 다변량 탐색적 분석에서 가장 실용적인 도구 중 하나로 남는다.
 
-    The reordering algorithm computes a distance metric (e.g., $1 - |r|$) between all pairs of variables and builds a dendrogram. Variables that are highly correlated are placed next to each other, so clusters of positive correlation appear as contiguous red blocks and clusters of negative correlation appear as off-diagonal blue blocks. This makes latent factor structures, redundant variables, and diversification opportunities immediately apparent.
+## 연습문제
+
+**연습문제 1.**
+변수 10개인 금융 자료의 상관 열지도에서 한쪽 모서리에 2×2 크기의 진한 빨강 블록이, 다른 곳에 3×3 크기의 진한 파랑 블록이 보인다. 이 패턴들이 변수 관계에 대해 무엇을 시사하며 포트폴리오 분산에 어떤 함의가 있는지 해석하라.
+
+??? success "연습문제 1 풀이"
+    **진한 빨강 블록**은 강한 양의 상관($+1$에 가까움)을 갖는 변수 두 개의 군집을 나타낸다. 이 변수들은 함께 움직인다. 예를 들어 같은 섹터의 두 종목이 그렇다.
+
+    **진한 파랑 블록**은 강한 음의 상관($-1$에 가까움)을 갖는 변수 세 개의 군집을 나타낸다. 이 변수들은 반대 방향으로 움직인다.
+
+    **포트폴리오 분산**의 관점에서 음의 상관을 갖는 군집은 가치가 있다. 한쪽의 손실이 다른 쪽의 이익으로 상쇄되는 경향이 있어 이들을 결합하면 포트폴리오 위험이 줄어든다. 반면 양의 상관을 갖는 쌍은 함께 보유해도 분산 효과가 없다. 둘을 모두 갖는 것은 사실상 같은 위험 요인에 두 배로 베팅하는 셈이다.
 
 ---
 
-**Exercise 3.**
-When creating a heatmap for a symmetric correlation matrix, only the lower (or upper) triangle is typically displayed. Explain why, and describe one situation where showing the full matrix might be preferred.
+**연습문제 2.**
+계층적 군집화로 상관 열지도의 행과 열을 재정렬하면 기본(알파벳순) 정렬이 놓치는 구조가 드러나는 이유를 설명하라.
 
-??? success "Solution to Exercise 3"
-    A correlation matrix is symmetric ($r_{ij} = r_{ji}$), so the upper and lower triangles contain identical information. Displaying only one triangle:
+??? success "연습문제 2 풀이"
+    알파벳순으로 정렬하면 상관된 변수들이 행렬 곳곳에 흩어져 패턴을 알아보기 어렵다. **계층적 군집화**는 상관 프로필이 비슷한 변수를 서로 이웃하게 배치하여 대각선을 따라 눈에 보이는 **블록**을 만든다.
 
-    - Eliminates visual redundancy.
-    - Removes the diagonal (always 1.0), which carries no information.
-    - Makes the plot cleaner and easier to read.
+    재정렬 알고리즘은 모든 변수 쌍에 대해 거리 측도(예: $1 - |r|$)를 계산하고 덴드로그램을 만든다. 강하게 상관된 변수들이 나란히 놓이므로 양의 상관 군집은 연속된 빨강 블록으로, 음의 상관 군집은 대각선 밖의 파랑 블록으로 나타난다. 잠재 요인 구조, 중복 변수, 분산투자 기회가 즉시 드러난다.
 
-    The **full matrix** might be preferred when the heatmap is annotated with different information in each triangle -- for example, showing Pearson correlations in the lower triangle and Spearman correlations in the upper triangle, allowing direct comparison of the two measures.
+---
+
+**연습문제 3.**
+대칭인 상관행렬의 열지도를 만들 때 보통 아래쪽(또는 위쪽) 삼각형만 표시한다. 그 이유를 설명하고, 전체 행렬을 보이는 편이 나은 상황을 하나 기술하라.
+
+??? success "연습문제 3 풀이"
+    상관행렬은 대칭이므로($r_{ij} = r_{ji}$) 위쪽 삼각형과 아래쪽 삼각형이 같은 정보를 담는다. 한쪽 삼각형만 표시하면:
+
+    - 시각적 중복이 사라진다.
+    - 정보가 없는 대각선(항상 1.0)을 없앤다.
+    - 그림이 더 깔끔하고 읽기 쉬워진다.
+
+    삼각형마다 다른 정보를 표시할 때에는 **전체 행렬**이 나을 수 있다. 예를 들어 아래쪽 삼각형에 Pearson 상관을, 위쪽 삼각형에 Spearman 상관을 표시하면 두 측도를 직접 비교할 수 있다.

@@ -1,87 +1,87 @@
-# Kendall's Tau
+# Kendall의 타우
 
-Like Spearman's $r_s$, Kendall's tau is a rank-based measure of association between two variables. However, instead of correlating the ranks themselves, Kendall's tau counts the number of **concordant** and **discordant** pairs among the observations. This pair-counting approach gives Kendall's tau a more direct probabilistic interpretation and often better statistical properties for small samples.
-
----
-
-## Concordant and Discordant Pairs
-
-Given $n$ paired observations $(x_1, y_1), \ldots, (x_n, y_n)$, consider any pair of observations $(x_i, y_i)$ and $(x_j, y_j)$ with $i < j$.
-
-- The pair is **concordant** if $x_i < x_j$ and $y_i < y_j$, or $x_i > x_j$ and $y_i > y_j$. In other words, the two variables rank the pair in the same order.
-
-- The pair is **discordant** if $x_i < x_j$ and $y_i > y_j$, or $x_i > x_j$ and $y_i < y_j$. The two variables rank the pair in opposite order.
-
-- The pair is **tied** if $x_i = x_j$ or $y_i = y_j$ (or both).
-
-The total number of pairs is $\binom{n}{2} = \frac{n(n-1)}{2}$.
+Spearman의 $r_s$처럼 Kendall의 타우도 두 변수 사이 연관을 재는 순위 기반 측도이다. 다만 순위 자체의 상관을 구하는 대신, 관측값들 사이의 **일치**쌍과 **불일치**쌍의 개수를 센다. 이 쌍 세기 방식 덕분에 Kendall의 타우는 더 직접적인 확률적 해석을 갖고 작은 표본에서 통계적 성질도 흔히 더 낫다.
 
 ---
 
-## Kendall's Tau-a
+## 일치쌍과 불일치쌍
 
-The simplest version, **Kendall's tau-a**, is defined as
+$n$개의 짝지어진 관측값 $(x_1, y_1), \ldots, (x_n, y_n)$에서 $i < j$인 두 관측값 $(x_i, y_i)$와 $(x_j, y_j)$의 쌍을 생각하자.
+
+- $x_i < x_j$이고 $y_i < y_j$이거나 $x_i > x_j$이고 $y_i > y_j$이면 **일치**쌍이다. 다시 말해 두 변수가 그 쌍의 순서를 같게 매긴다.
+
+- $x_i < x_j$이고 $y_i > y_j$이거나 $x_i > x_j$이고 $y_i < y_j$이면 **불일치**쌍이다. 두 변수가 순서를 반대로 매긴다.
+
+- $x_i = x_j$이거나 $y_i = y_j$(또는 둘 다)이면 **동점**쌍이다.
+
+전체 쌍의 개수는 $\binom{n}{2} = \frac{n(n-1)}{2}$이다.
+
+---
+
+## Kendall의 타우-a
+
+가장 단순한 형태인 **Kendall의 타우-a**는
 
 $$
 \tau_a = \frac{C - D}{\binom{n}{2}} = \frac{C - D}{\frac{n(n-1)}{2}}
 $$
 
-where $C$ is the number of concordant pairs and $D$ is the number of discordant pairs.
+로 정의되며 $C$는 일치쌍의 수, $D$는 불일치쌍의 수이다.
 
-Tau-a does not make any adjustment for ties. When ties are present, $\tau_a$ cannot reach $\pm 1$ even for a perfectly monotonic relationship, because tied pairs are neither concordant nor discordant.
+타우-a는 동점을 전혀 조정하지 않는다. 동점이 있으면 동점쌍이 일치도 불일치도 아니므로, 관계가 완전히 단조여도 $\tau_a$가 $\pm 1$에 이르지 못한다.
 
 ---
 
-## Kendall's Tau-b
+## Kendall의 타우-b
 
-To handle ties, **Kendall's tau-b** adjusts the denominator:
+동점을 다루기 위해 **Kendall의 타우-b**는 분모를 조정한다:
 
 $$
 \tau_b = \frac{C - D}{\sqrt{(C + D + T_X)(C + D + T_Y)}}
 $$
 
-where:
+여기서
 
-- $T_X$ = number of pairs tied on $X$ but not on $Y$
-- $T_Y$ = number of pairs tied on $Y$ but not on $X$
+- $T_X$ = $X$에서는 동점이지만 $Y$에서는 아닌 쌍의 수
+- $T_Y$ = $Y$에서는 동점이지만 $X$에서는 아닌 쌍의 수
 
-Tau-b can attain $\pm 1$ when the data are perfectly monotonic, even in the presence of ties (as long as ties exist on at most one variable). It is the version most commonly reported in practice and the default in most statistical software.
+이다. 타우-b는 (동점이 많아야 한 변수에만 있다면) 동점이 있어도 자료가 완전히 단조일 때 $\pm 1$에 도달할 수 있다. 실무에서 가장 흔히 보고되며 대부분의 통계 소프트웨어에서 기본값이다.
 
 ---
 
-## Probabilistic Interpretation
+## 확률적 해석
 
-Kendall's tau has an elegant probabilistic interpretation. For two randomly chosen observation pairs $(x_i, y_i)$ and $(x_j, y_j)$:
+Kendall의 타우에는 우아한 확률적 해석이 있다. 무작위로 고른 두 관측값 쌍 $(x_i, y_i)$와 $(x_j, y_j)$에 대해
 
 $$
 \tau = P(\text{concordant}) - P(\text{discordant})
 $$
 
-This means:
+이다. 즉:
 
-- $\tau = 1$: every pair is concordant (perfect agreement in ordering).
-- $\tau = -1$: every pair is discordant (perfect reversal).
-- $\tau = 0$: concordant and discordant pairs are equally likely (no monotonic association).
-
----
-
-## Properties
-
-1. **Range.** $-1 \le \tau \le 1$ for both tau-a and tau-b (tau-a may not achieve the bounds when ties exist).
-
-2. **Symmetry.** $\tau_{XY} = \tau_{YX}$.
-
-3. **Invariance under monotone transformations.** Like Spearman's $r_s$, Kendall's tau depends only on the ordering of observations, not their numerical values.
-
-4. **Robustness.** Kendall's tau is robust to outliers since it depends on relative orderings.
-
-5. **Magnitude.** For the same data, $|\tau|$ is typically smaller than $|r_s|$. A rough conversion is $\tau \approx \frac{2}{\pi} \arcsin(r_s)$, though this is only exact for bivariate normal data.
+- $\tau = 1$: 모든 쌍이 일치한다(순서가 완전히 일치).
+- $\tau = -1$: 모든 쌍이 불일치한다(순서가 완전히 뒤집힘).
+- $\tau = 0$: 일치쌍과 불일치쌍이 똑같이 그럴듯하다(단조 연관 없음).
 
 ---
 
-## Example Calculation
+## 성질
 
-Consider the five paired observations:
+1. **범위.** 타우-a와 타우-b 모두 $-1 \le \tau \le 1$이다(동점이 있으면 타우-a는 경계에 도달하지 못할 수 있다).
+
+2. **대칭성.** $\tau_{XY} = \tau_{YX}$.
+
+3. **단조 변환에 대한 불변성.** Spearman의 $r_s$처럼 Kendall의 타우도 관측값의 수치가 아니라 순서에만 의존한다.
+
+4. **로버스트성.** 상대적 순서에만 의존하므로 Kendall의 타우는 이상점에 로버스트하다.
+
+5. **크기.** 같은 자료에서 $|\tau|$는 대체로 $|r_s|$보다 작다. 대략적인 환산은 $\tau \approx \frac{2}{\pi} \arcsin(r_s)$이지만 이변량 정규 자료에서만 정확하다.
+
+---
+
+## 계산 예제
+
+다섯 개의 짝지어진 관측값을 생각하자:
 
 | $i$ | $x_i$ | $y_i$ |
 |:---:|:---:|:---:|
@@ -91,47 +91,47 @@ Consider the five paired observations:
 | 4 | 4 | 2 |
 | 5 | 5 | 1 |
 
-There are $\binom{5}{2} = 10$ pairs. Sorting by $x$ (already sorted), we compare each pair:
+쌍은 $\binom{5}{2} = 10$개이다. $x$로 정렬한 상태(이미 정렬됨)에서 각 쌍을 비교한다:
 
-| Pair $(i,j)$ | $x$ order | $y$ order | Result |
+| 쌍 $(i,j)$ | $x$ 순서 | $y$ 순서 | 결과 |
 |:---:|:---:|:---:|:---:|
-| (1,2) | $1 < 2$ | $3 < 5$ | Concordant |
-| (1,3) | $1 < 3$ | $3 < 4$ | Concordant |
-| (1,4) | $1 < 4$ | $3 > 2$ | Discordant |
-| (1,5) | $1 < 5$ | $3 > 1$ | Discordant |
-| (2,3) | $2 < 3$ | $5 > 4$ | Discordant |
-| (2,4) | $2 < 4$ | $5 > 2$ | Discordant |
-| (2,5) | $2 < 5$ | $5 > 1$ | Discordant |
-| (3,4) | $3 < 4$ | $4 > 2$ | Discordant |
-| (3,5) | $3 < 5$ | $4 > 1$ | Discordant |
-| (4,5) | $4 < 5$ | $2 > 1$ | Concordant |
+| (1,2) | $1 < 2$ | $3 < 5$ | 일치 |
+| (1,3) | $1 < 3$ | $3 < 4$ | 일치 |
+| (1,4) | $1 < 4$ | $3 > 2$ | 불일치 |
+| (1,5) | $1 < 5$ | $3 > 1$ | 불일치 |
+| (2,3) | $2 < 3$ | $5 > 4$ | 불일치 |
+| (2,4) | $2 < 4$ | $5 > 2$ | 불일치 |
+| (2,5) | $2 < 5$ | $5 > 1$ | 불일치 |
+| (3,4) | $3 < 4$ | $4 > 2$ | 불일치 |
+| (3,5) | $3 < 5$ | $4 > 1$ | 불일치 |
+| (4,5) | $4 < 5$ | $2 > 1$ | 일치 |
 
-We have $C = 3$ concordant and $D = 7$ discordant pairs. Since there are no ties:
+일치쌍 $C = 3$, 불일치쌍 $D = 7$이다. 동점이 없으므로
 
 $$
 \tau_a = \tau_b = \frac{3 - 7}{10} = -0.4
 $$
 
-The negative value indicates a (moderate) tendency for $Y$ to decrease as $X$ increases.
+이다. 음수 값은 $X$가 커질수록 $Y$가 작아지는 (중간 정도의) 경향을 나타낸다.
 
 ---
 
-## Kendall vs Spearman
+## Kendall과 Spearman
 
-| Feature | Kendall $\tau$ | Spearman $r_s$ |
+| 항목 | Kendall $\tau$ | Spearman $r_s$ |
 |:---|:---|:---|
-| Basis | Concordant/discordant pairs | Rank correlation |
-| Typical magnitude | Smaller in absolute value | Larger in absolute value |
-| Small-sample behavior | Better variance properties | More variable |
-| Ties handling | Tau-b adjusts explicitly | Midranks |
-| Probabilistic interpretation | Direct: $P(C) - P(D)$ | Indirect |
-| Computational cost | $O(n \log n)$ with merge sort | $O(n \log n)$ for ranking |
+| 기반 | 일치/불일치 쌍 | 순위 상관 |
+| 전형적인 크기 | 절댓값이 더 작다 | 절댓값이 더 크다 |
+| 소표본 행동 | 분산 성질이 더 낫다 | 변동이 크다 |
+| 동점 처리 | 타우-b가 명시적으로 조정 | 중간순위 |
+| 확률적 해석 | 직접적: $P(C) - P(D)$ | 간접적 |
+| 계산 비용 | 병합정렬로 $O(n \log n)$ | 순위 매김에 $O(n \log n)$ |
 
-For large samples without ties, both tests have similar statistical power. Kendall's tau is often preferred in small samples or when a clear probabilistic interpretation is desired.
+동점이 없는 큰 표본에서는 두 검정의 검정력이 비슷하다. 표본이 작거나 명확한 확률적 해석을 원할 때 Kendall의 타우가 흔히 선호된다.
 
 ---
 
-## Computation in Python
+## Python으로 계산하기
 
 ```python
 import numpy as np
@@ -149,23 +149,23 @@ r_s, p_s = stats.spearmanr(x, y)
 print(f"Spearman r_s  = {r_s:.4f}, p-value = {p_s:.4f}")
 ```
 
-The `scipy.stats.kendalltau` function computes tau-b by default. For hypothesis testing details, see [Testing Kendall's tau](../correlation_test/test_kendall.md).
+`scipy.stats.kendalltau` 함수는 기본으로 타우-b를 계산한다. 가설검정의 자세한 내용은 [Kendall의 타우 검정](../correlation_test/test_kendall.md)을 보라.
 
 ---
 
-## Summary
+## 요약
 
-Kendall's tau measures monotonic association by comparing concordant and discordant pairs. The tau-b variant adjusts for ties and is the standard choice in practice. Compared to Spearman's $r_s$, Kendall's tau tends to be smaller in absolute value for the same data but offers a direct probabilistic interpretation and better small-sample properties. Both are robust, rank-based alternatives to Pearson's $r$ for nonlinear monotonic relationships.
+Kendall의 타우는 일치쌍과 불일치쌍을 비교하여 단조 연관을 잰다. 타우-b 변형은 동점을 조정하며 실무의 표준 선택이다. 같은 자료에서 Spearman의 $r_s$보다 절댓값이 작은 경향이 있지만 직접적인 확률적 해석과 더 나은 소표본 성질을 제공한다. 둘 다 비선형 단조 관계에 대해 Pearson의 $r$을 대신하는 로버스트한 순위 기반 대안이다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Compute Kendall's $\tau$ for the data: $X = (1, 2, 3, 4, 5)$, $Y = (2, 4, 1, 3, 5)$.
+**연습문제 1.**
+자료 $X = (1, 2, 3, 4, 5)$, $Y = (2, 4, 1, 3, 5)$에 대해 Kendall의 $\tau$를 계산하라.
 
-??? success "Solution to Exercise 1"
-    Count concordant and discordant pairs among all $\binom{5}{2} = 10$ pairs:
+??? success "연습문제 1 풀이"
+    전체 $\binom{5}{2} = 10$개 쌍에서 일치쌍과 불일치쌍을 센다:
 
-    | Pair $(i,j)$ | $X_j - X_i$ | $Y_j - Y_i$ | Concordant? |
+    | 쌍 $(i,j)$ | $X_j - X_i$ | $Y_j - Y_i$ | 일치? |
     |---|---|---|---|
     | (1,2) | + | + | C |
     | (1,3) | + | $-$ | D |
@@ -178,7 +178,7 @@ Compute Kendall's $\tau$ for the data: $X = (1, 2, 3, 4, 5)$, $Y = (2, 4, 1, 3, 
     | (3,5) | + | + | C |
     | (4,5) | + | + | C |
 
-    Concordant: $C = 7$, Discordant: $D = 3$.
+    일치: $C = 7$, 불일치: $D = 3$.
 
     $$
     \tau = \frac{C - D}{\binom{n}{2}} = \frac{7 - 3}{10} = 0.4
@@ -186,42 +186,42 @@ Compute Kendall's $\tau$ for the data: $X = (1, 2, 3, 4, 5)$, $Y = (2, 4, 1, 3, 
 
 ---
 
-**Exercise 2.**
-Explain the conceptual difference between Kendall's $\tau$ and Spearman's $\rho$, even though both measure monotonic association.
+**연습문제 2.**
+둘 다 단조 연관을 재는데도 Kendall의 $\tau$와 Spearman의 $\rho$가 개념적으로 어떻게 다른지 설명하라.
 
-??? success "Solution to Exercise 2"
-    **Kendall's $\tau$** counts the proportion of concordant minus discordant pairs among all pairs of observations. It has a direct probabilistic interpretation: $\tau = P(\text{concordant}) - P(\text{discordant})$ for a randomly chosen pair.
+??? success "연습문제 2 풀이"
+    **Kendall의 $\tau$**는 모든 관측값 쌍 중 일치쌍의 비율에서 불일치쌍의 비율을 뺀 값이다. 직접적인 확률적 해석을 갖는다: 무작위로 고른 쌍에 대해 $\tau = P(\text{일치}) - P(\text{불일치})$이다.
 
-    **Spearman's $\rho$** is the Pearson correlation applied to the ranks. It measures the linear association between ranks and is sensitive to the magnitude of rank differences.
+    **Spearman의 $\rho$**는 순위에 적용한 Pearson 상관이다. 순위 사이의 선형 연관을 재며 순위 차이의 크기에 민감하다.
 
-    Key differences: (1) $\tau$ is based on pairwise comparisons (ordinal), while $\rho$ uses actual rank values; (2) $\tau$ tends to be smaller in absolute value than $\rho$ for the same data; (3) $\tau$ has simpler asymptotic properties and its standard error is easier to compute; (4) $\rho$ is more powerful for detecting linear rank relationships, while $\tau$ is more robust.
-
----
-
-**Exercise 3.**
-Why is Kendall's $\tau$ preferred over Pearson's $r$ when data contain outliers or have a nonlinear but monotonic relationship?
-
-??? success "Solution to Exercise 3"
-    Kendall's $\tau$ is based only on the ordinal pattern (which observation is larger), not on the actual values. This makes it:
-
-    1. **Robust to outliers:** A single extreme value changes at most $n - 1$ pairwise comparisons (out of $\binom{n}{2}$), and only if it changes the ordering. Pearson's $r$, which uses squared deviations, is heavily influenced by a single extreme point.
-
-    2. **Appropriate for nonlinear monotonic relationships:** If $Y$ is a monotonically increasing but nonlinear function of $X$ (e.g., $Y = e^X$), Kendall's $\tau = 1$ (perfect concordance) while Pearson's $r < 1$ because $r$ measures only linear association.
-
-    3. **Distribution-free:** No normality assumption is required for the validity of inference based on $\tau$.
+    핵심 차이: (1) $\tau$는 쌍별 비교(순서형)에 기반하고 $\rho$는 실제 순위값을 쓴다. (2) 같은 자료에서 $\tau$가 $\rho$보다 절댓값이 작은 경향이 있다. (3) $\tau$는 점근 성질이 더 단순하고 표준오차를 계산하기 쉽다. (4) $\rho$는 선형적인 순위 관계를 탐지하는 데 더 강력하고 $\tau$는 더 로버스트하다.
 
 ---
 
-**Exercise 4.**
-How are ties handled in Kendall's $\tau$? State the formula for $\tau_b$ (the version adjusted for ties).
+**연습문제 3.**
+자료에 이상점이 있거나 관계가 비선형이면서 단조일 때 Pearson의 $r$보다 Kendall의 $\tau$가 선호되는 이유는?
 
-??? success "Solution to Exercise 4"
-    When ties exist, a pair with $X_i = X_j$ or $Y_i = Y_j$ is neither concordant nor discordant. The basic $\tau_a$ formula $\tau_a = (C - D)/\binom{n}{2}$ does not account for ties, so $|\tau_a| < 1$ even for perfectly monotonic data with ties.
+??? success "연습문제 3 풀이"
+    Kendall의 $\tau$는 실제 값이 아니라 순서형 패턴(어느 관측값이 더 큰가)에만 기반한다. 그래서:
 
-    Kendall's $\tau_b$ adjusts the denominator:
+    1. **이상점에 로버스트하다:** 극단값 하나는 ($\binom{n}{2}$개 중) 많아야 $n - 1$개의 쌍별 비교를 바꾸고, 그것도 순서를 바꿀 때에만 그렇다. 제곱편차를 쓰는 Pearson의 $r$은 극단값 하나에 크게 영향받는다.
+
+    2. **비선형 단조 관계에 적합하다:** $Y$가 $X$의 단조증가하지만 비선형인 함수라면(예: $Y = e^X$) Kendall의 $\tau = 1$(완전 일치)이지만 Pearson의 $r < 1$이다. $r$은 선형 연관만 재기 때문이다.
+
+    3. **분포에 의존하지 않는다:** $\tau$에 기반한 추론의 타당성에 정규성 가정이 필요하지 않다.
+
+---
+
+**연습문제 4.**
+Kendall의 $\tau$에서 동점은 어떻게 처리하는가? (동점을 조정한 형태인) $\tau_b$의 공식을 진술하라.
+
+??? success "연습문제 4 풀이"
+    동점이 있으면 $X_i = X_j$이거나 $Y_i = Y_j$인 쌍은 일치도 불일치도 아니다. 기본 공식 $\tau_a = (C - D)/\binom{n}{2}$는 동점을 반영하지 않으므로, 동점이 있는 완전 단조 자료에서도 $|\tau_a| < 1$이 된다.
+
+    Kendall의 $\tau_b$는 분모를 조정한다:
 
     $$
     \tau_b = \frac{C - D}{\sqrt{(C + D + T_X)(C + D + T_Y)}}
     $$
 
-    where $T_X$ is the number of pairs tied on $X$ only, and $T_Y$ is the number of pairs tied on $Y$ only. This ensures $\tau_b$ can reach $\pm 1$ when the data are as concordant (or discordant) as possible given the tie structure. Most software reports $\tau_b$ by default.
+    여기서 $T_X$는 $X$에서만 동점인 쌍의 수, $T_Y$는 $Y$에서만 동점인 쌍의 수이다. 이렇게 하면 동점 구조가 허용하는 한 최대로 일치(또는 불일치)할 때 $\tau_b$가 $\pm 1$에 도달할 수 있다. 대부분의 소프트웨어가 기본으로 $\tau_b$를 보고한다.

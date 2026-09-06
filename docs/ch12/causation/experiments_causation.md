@@ -1,188 +1,190 @@
-# Randomized Experiments and Causation
+# 무작위 실험과 인과
 
-Observational data can establish correlation but cannot, by itself, establish causation because of the ever-present threat of confounding. **Randomized experiments** solve this problem by using random assignment to break the link between the treatment and all potential confounders -- both measured and unmeasured. This section explains why randomization is the gold standard for causal inference and how randomized controlled trials (RCTs) are designed and analyzed.
+관찰자료는 상관을 확립할 수 있지만, 언제나 도사리는 교란의 위협 때문에 그 자체로는 인과를 확립하지 못한다. **무작위 실험**은 무작위 배정으로 처치와 (측정되었든 아니든) 모든 잠재적 교란요인 사이의 연결을 끊어 이 문제를 해결한다. 이 절에서는 무작위화가 왜 인과추론의 표준인지, 무작위 대조 시험(RCT)을 어떻게 설계하고 분석하는지 설명한다.
 
 ---
 
-## Why Randomization Enables Causal Claims
+## 무작위화가 인과 주장을 가능하게 하는 이유
 
-In an observational study, individuals who receive a treatment may differ systematically from those who do not. These preexisting differences (confounders) make it impossible to attribute differences in outcomes to the treatment alone.
+관찰연구에서는 처치를 받은 개인이 받지 않은 개인과 체계적으로 다를 수 있다. 이런 사전 차이(교란요인) 때문에 결과의 차이를 처치만의 탓으로 돌릴 수 없다.
 
-Randomization solves this by assigning treatment **by chance**, ensuring that, on average, the treatment and control groups are comparable on every characteristic -- observed and unobserved. Formally, randomization guarantees the **ignorability condition**:
+무작위화는 처치를 **우연에 따라** 배정하여, 평균적으로 처치군과 대조군이 관측되든 관측되지 않든 모든 특성에서 비교 가능하도록 보장한다. 형식적으로 무작위화는 **무시가능성 조건**을 보장한다:
 
 $$
 Y(0), Y(1) \perp\!\!\!\perp X
 $$
 
-where $Y(0)$ and $Y(1)$ are the potential outcomes and $X$ is the treatment indicator. Under this condition, the simple difference in group means is an unbiased estimate of the **average treatment effect** (ATE):
+여기서 $Y(0)$과 $Y(1)$은 잠재결과이고 $X$는 처치 지시변수이다. 이 조건 아래에서 집단 평균의 단순 차이가 **평균처치효과**(ATE)의 불편추정값이 된다:
 
 $$
 \text{ATE} = \mathbb{E}[Y \mid X = 1] - \mathbb{E}[Y \mid X = 0]
 $$
 
-No adjustment for confounders is needed because randomization has eliminated confounding by design.
+무작위화가 설계 단계에서 교란을 제거했으므로 교란요인에 대한 조정이 필요 없다.
 
 ---
 
-## Structure of a Randomized Controlled Trial
+## 무작위 대조 시험의 구조
 
-A typical RCT consists of the following elements:
+전형적인 RCT는 다음 요소로 이루어진다:
 
-1. **Define the population.** Specify the target population and eligibility criteria.
-2. **Recruit participants.** Obtain informed consent and enroll eligible individuals.
-3. **Random assignment.** Use a random mechanism (e.g., coin flip, random number generator) to assign each participant to treatment or control.
-4. **Administer the intervention.** The treatment group receives the intervention; the control group receives a placebo or standard care.
-5. **Measure outcomes.** Record the response variable for all participants.
-6. **Analyze.** Compare outcomes between groups, typically using a two-sample t-test, permutation test, or regression.
-
----
-
-## Key Design Features
-
-### Blinding
-
-**Blinding** prevents knowledge of group assignment from influencing the results:
-
-- **Single-blind**: participants do not know their assignment.
-- **Double-blind**: neither participants nor the researchers who measure outcomes know the assignment.
-- **Triple-blind**: participants, outcome assessors, and data analysts are all blinded.
-
-Blinding reduces **placebo effects** (participants behave differently because they believe they are treated) and **observer bias** (researchers measure or record outcomes differently based on group knowledge).
-
-### Placebo Control
-
-A **placebo** is an inert treatment that mimics the intervention in every way except the active ingredient. Comparing to a placebo, rather than no treatment, isolates the effect of the active ingredient from the effect of receiving any treatment at all.
-
-### Randomization Methods
-
-- **Simple randomization**: each participant is independently assigned with a fixed probability (e.g., 0.5 for each group). Simple but can produce unbalanced groups in small trials.
-- **Block randomization**: participants are randomized in blocks (e.g., blocks of 4) to ensure roughly equal group sizes.
-- **Stratified randomization**: randomization is performed separately within strata defined by important covariates (e.g., age, sex), ensuring balance on those variables.
+1. **모집단 정의.** 목표 모집단과 적격 기준을 정한다.
+2. **참가자 모집.** 사전 동의를 받고 적격자를 등록한다.
+3. **무작위 배정.** 무작위 기제(동전 던지기, 난수 생성기)로 각 참가자를 처치군이나 대조군에 배정한다.
+4. **개입 시행.** 처치군은 개입을 받고 대조군은 위약이나 표준 치료를 받는다.
+5. **결과 측정.** 모든 참가자의 반응변수를 기록한다.
+6. **분석.** 보통 이표본 t-검정, 순열검정, 회귀로 집단 사이 결과를 비교한다.
 
 ---
 
-## The Logic of Causal Inference from RCTs
+## 핵심 설계 요소
 
-The reasoning proceeds as follows:
+### 눈가림
 
-1. Before randomization, the treatment and control groups are (in expectation) identical on all characteristics.
-2. The only systematic difference between the groups is the treatment itself.
-3. Any difference in outcomes must therefore be caused by the treatment.
+**눈가림**은 집단 배정에 대한 지식이 결과에 영향을 주지 않게 한다:
 
-This logic depends on several assumptions:
+- **단일 눈가림**: 참가자가 자신의 배정을 모른다.
+- **이중 눈가림**: 참가자도, 결과를 측정하는 연구자도 배정을 모른다.
+- **삼중 눈가림**: 참가자, 결과 평가자, 자료 분석자 모두 눈가림된다.
 
-- **No interference**: one participant's treatment does not affect another's outcome (the Stable Unit Treatment Value Assumption, or SUTVA).
-- **Compliance**: participants actually receive the treatment they were assigned.
-- **No attrition**: participants do not drop out differentially between groups.
+눈가림은 **위약 효과**(처치받았다고 믿어 행동이 달라지는 것)와 **관찰자 편향**(집단을 알고 결과를 다르게 측정하거나 기록하는 것)을 줄인다.
 
-Violations of these assumptions weaken the causal interpretation. Intention-to-treat (ITT) analysis preserves the benefits of randomization even when compliance is imperfect, by analyzing participants according to their assigned group regardless of actual treatment received.
+### 위약 대조
+
+**위약**은 유효 성분만 빼고 모든 면에서 개입을 흉내 내는 비활성 처치이다. 무처치가 아니라 위약과 비교하면 유효 성분의 효과를 "어떤 처치든 받는다"는 효과와 분리할 수 있다.
+
+### 무작위화 방법
+
+- **단순 무작위화**: 각 참가자를 고정된 확률(예: 각 집단 0.5)로 독립적으로 배정한다. 간단하지만 작은 시험에서는 집단 크기가 불균형해질 수 있다.
+- **블록 무작위화**: 참가자를 블록 단위로(예: 4명씩) 무작위화하여 집단 크기를 대체로 같게 만든다.
+- **층화 무작위화**: 중요한 공변량(예: 나이, 성별)으로 정의된 층 안에서 따로 무작위화하여 그 변수들의 균형을 보장한다.
 
 ---
 
-## Example: Drug vs Placebo Trial
+## RCT에서 인과추론의 논리
 
-A pharmaceutical company tests a new blood pressure medication.
+추론은 다음과 같이 진행된다:
 
-- **Population**: adults aged 40-65 with mild hypertension.
-- **Design**: 200 participants randomized 1:1 to drug or placebo.
-- **Outcome**: change in systolic blood pressure after 12 weeks.
-- **Analysis**: two-sample t-test comparing mean blood pressure change.
+1. 무작위화 이전에 처치군과 대조군은 (기댓값 수준에서) 모든 특성이 동일하다.
+2. 두 집단 사이의 유일한 체계적 차이는 처치 그 자체이다.
+3. 따라서 결과의 어떤 차이든 처치 때문이어야 한다.
 
-| Group | $n$ | Mean change (mmHg) | SD |
+이 논리는 몇 가지 가정에 의존한다:
+
+- **간섭 없음**: 한 참가자의 처치가 다른 참가자의 결과에 영향을 주지 않는다(안정 단위 처치값 가정, SUTVA).
+- **순응**: 참가자가 배정받은 처치를 실제로 받는다.
+- **탈락 없음**: 집단 사이에 차등적인 중도 탈락이 없다.
+
+이 가정들이 위반되면 인과 해석이 약해진다. 배정된 대로 분석(ITT, intention-to-treat)은 실제로 받은 처치와 무관하게 배정된 집단에 따라 참가자를 분석하여, 순응이 완전하지 않아도 무작위화의 이점을 지켜 준다.
+
+---
+
+## 예제: 약 대 위약 시험
+
+어떤 제약회사가 새 혈압약을 시험한다.
+
+- **모집단**: 경증 고혈압이 있는 40–65세 성인.
+- **설계**: 참가자 200명을 약과 위약에 1:1로 무작위 배정.
+- **결과**: 12주 뒤 수축기 혈압의 변화.
+- **분석**: 평균 혈압 변화를 비교하는 이표본 t-검정.
+
+| 집단 | $n$ | 평균 변화 (mmHg) | 표준편차 |
 |:---|:---:|:---:|:---:|
-| Drug | 100 | $-12.3$ | 8.5 |
-| Placebo | 100 | $-3.1$ | 7.9 |
+| 약 | 100 | $-12.3$ | 8.5 |
+| 위약 | 100 | $-3.1$ | 7.9 |
 
-The estimated ATE is $-12.3 - (-3.1) = -9.2$ mmHg. Because assignment was randomized, this difference can be attributed to the drug rather than to confounders like age, diet, or exercise habits.
-
----
-
-## Limitations of Randomized Experiments
-
-Despite their strengths, RCTs have important limitations:
-
-1. **Ethical constraints.** Some treatments cannot be randomly assigned (e.g., smoking, poverty). It would be unethical to assign people to harmful exposures.
-
-2. **External validity.** The population enrolled in an RCT may not represent the broader population of interest. Strict eligibility criteria can limit generalizability.
-
-3. **Cost and feasibility.** Large, well-designed RCTs are expensive and time-consuming.
-
-4. **Compliance issues.** Participants may not adhere to their assigned treatment, diluting the treatment effect.
-
-5. **Hawthorne effect.** Being in a study may change participants' behavior regardless of the treatment.
-
-When RCTs are not feasible, researchers turn to observational methods with careful adjustment for confounders, natural experiments, or [instrumental variables](instrumental_variables.md).
+추정된 ATE는 $-12.3 - (-3.1) = -9.2$ mmHg이다. 배정이 무작위였으므로 이 차이는 나이, 식습관, 운동 습관 같은 교란요인이 아니라 약 때문이라고 볼 수 있다.
 
 ---
 
-## Natural Experiments
+## 무작위 실험의 한계
 
-A **natural experiment** occurs when some external event or policy creates variation in the treatment that is as-if random, even though no researcher performed the randomization. Examples include:
+강점에도 불구하고 RCT에는 중요한 한계가 있다:
 
-- **Draft lotteries**: random assignment of birth dates to military service.
-- **Geographic boundaries**: students on opposite sides of a school district line receive different educational interventions.
-- **Policy changes**: a new regulation applies to one group but not another based on an arbitrary threshold.
+1. **윤리적 제약.** 어떤 처치는 무작위로 배정할 수 없다(예: 흡연, 빈곤). 해로운 노출에 사람을 배정하는 것은 비윤리적이다.
 
-Natural experiments approximate the logic of RCTs by exploiting quasi-random variation. The causal inference is valid to the extent that the variation is truly exogenous (not driven by individual choices).
+2. **외적 타당도.** RCT에 등록된 모집단이 관심 있는 더 넓은 모집단을 대표하지 않을 수 있다. 엄격한 적격 기준은 일반화 가능성을 제한한다.
 
----
+3. **비용과 실행 가능성.** 크고 잘 설계된 RCT는 비용과 시간이 많이 든다.
 
-## Summary
+4. **순응 문제.** 참가자가 배정된 처치를 지키지 않아 처치 효과가 희석될 수 있다.
 
-Randomized experiments are the gold standard for establishing causal relationships because random assignment eliminates confounding, both measured and unmeasured. The key design elements -- randomization, blinding, and placebo control -- ensure that the only systematic difference between groups is the treatment itself. When RCTs are infeasible due to ethical, practical, or cost constraints, natural experiments and quasi-experimental designs can approximate the benefits of randomization. Understanding why randomization enables causal inference clarifies both its power and the limitations of observational studies.
+5. **호손 효과.** 연구에 참여한다는 사실만으로 처치와 무관하게 행동이 달라질 수 있다.
 
-## Exercises
-
-**Exercise 1.**
-Explain why random assignment in an experiment eliminates confounding, even from unobserved variables.
-
-??? success "Solution to Exercise 1"
-    Random assignment ensures that the treatment group and control group are, on average, identical in all characteristics -- both observed and unobserved -- before the treatment is applied. Because assignment is determined by a random mechanism (coin flip, random number generator), it is independent of all pre-treatment variables.
-
-    Any confounder $U$ (observed or not) satisfies $U \perp T$ where $T$ is the treatment indicator. This means $E[Y \mid T=1] - E[Y \mid T=0] = E[Y(1)] - E[Y(0)]$, the true average treatment effect, because there are no back-door paths from $T$ to $Y$ (the randomization "cuts" all such paths).
-
-    With large enough sample sizes, the law of large numbers ensures the groups are balanced on every variable. With small samples, imbalances can occur by chance, which is why we still use hypothesis tests and confidence intervals.
+RCT가 어려우면 교란요인을 신중하게 조정한 관찰 방법, 자연실험, [도구변수](instrumental_variables.md)로 눈을 돌린다.
 
 ---
 
-**Exercise 2.**
-A randomized experiment finds that a tutoring program increases test scores by 8 points ($p = 0.02$). A colleague argues this does not prove causation because "correlation does not imply causation." Is the colleague correct?
+## 자연실험
 
-??? success "Solution to Exercise 2"
-    The colleague is **incorrect** in this context. The statement "correlation does not imply causation" applies to observational studies where confounders may explain the association. In a properly randomized experiment, the causal interpretation is valid because:
+**자연실험**은 연구자가 무작위화하지 않았는데도 어떤 외부 사건이나 정책이 처치에 마치 무작위인 것 같은 변동을 만들 때 일어난다. 예를 들면:
 
-    1. Random assignment eliminates confounding.
-    2. The researcher controls the timing (treatment before outcome), establishing temporal precedence.
-    3. The comparison group (control) provides the counterfactual.
+- **징집 추첨**: 생일에 따라 병역이 무작위로 배정된다.
+- **지리적 경계**: 학군 경계 양쪽의 학생들이 서로 다른 교육적 개입을 받는다.
+- **정책 변화**: 임의의 문턱을 기준으로 한 집단에는 새 규제가 적용되고 다른 집단에는 적용되지 않는다.
 
-    The 8-point increase is a valid estimate of the causal effect, subject to the usual caveats of statistical inference (sampling variability, as reflected by $p = 0.02$). The main threats to causal inference in experiments are practical issues (non-compliance, attrition, spillover effects), not confounding.
+자연실험은 준무작위 변동을 활용하여 RCT의 논리를 근사한다. 그 변동이 (개인의 선택에 이끌리지 않고) 진정으로 외생적인 만큼 인과추론이 타당해진다.
 
 ---
 
-**Exercise 3.**
-Define the concepts of internal validity and external validity for a randomized experiment. Give an example where an experiment has high internal validity but questionable external validity.
+## 요약
 
-??? success "Solution to Exercise 3"
-    **Internal validity:** The extent to which the experiment correctly measures the causal effect within the study. Requires proper randomization, no attrition bias, no spillover effects, and adherence to the treatment protocol.
+무작위 실험은 무작위 배정이 측정된 교란과 측정되지 않은 교란을 모두 제거하므로 인과관계를 확립하는 표준이다. 핵심 설계 요소인 무작위화, 눈가림, 위약 대조는 집단 사이의 유일한 체계적 차이가 처치 그 자체가 되도록 보장한다. 윤리적·실무적·비용 제약으로 RCT가 어려울 때에는 자연실험과 준실험 설계가 무작위화의 이점을 근사할 수 있다. 무작위화가 왜 인과추론을 가능하게 하는지 이해하면 그 힘과 관찰연구의 한계가 함께 분명해진다.
 
-    **External validity:** The extent to which the results generalize to other populations, settings, or time periods.
+## 연습문제
 
-    **Example:** A randomized trial of a math app conducted in a single wealthy suburban school district shows a 12-point improvement in test scores (high internal validity -- proper randomization, low attrition). However, the results may not generalize to under-resourced urban schools where students have less internet access, different baseline skills, and different motivational profiles (questionable external validity).
+**연습문제 1.**
+실험에서 무작위 배정이 관측되지 않은 변수로부터의 교란까지 제거하는 이유를 설명하라.
+
+??? success "연습문제 1 풀이"
+    무작위 배정은 처치를 적용하기 전에 처치군과 대조군이 관측되든 관측되지 않든 모든 특성에서 평균적으로 동일하도록 보장한다. 배정이 무작위 기제(동전 던지기, 난수 생성기)로 결정되므로 모든 처치 전 변수와 독립이기 때문이다.
+
+    임의의 교란요인 $U$는 (관측 여부와 무관하게) $T$가 처치 지시변수일 때 $U \perp T$를 만족한다. 그러면 $T$에서 $Y$로 가는 뒷문 경로가 없으므로(무작위화가 그런 경로를 모두 "잘라낸다") $E[Y \mid T=1] - E[Y \mid T=0] = E[Y(1)] - E[Y(0)]$, 즉 참 평균처치효과가 된다.
+
+    표본이 충분히 크면 큰 수의 법칙에 의해 모든 변수에서 집단이 균형을 이룬다. 표본이 작으면 우연히 불균형이 생길 수 있으며, 그래서 여전히 가설검정과 신뢰구간을 쓴다.
 
 ---
 
-**Exercise 4.**
-In the potential outcomes framework, define the Average Treatment Effect (ATE) and explain the "fundamental problem of causal inference."
+**연습문제 2.**
+어떤 무작위 실험에서 개인교습 프로그램이 시험 점수를 8점 올린다는 결과($p = 0.02$)를 얻었다. 한 동료가 "상관은 인과를 함의하지 않는다"며 이것이 인과를 증명하지 못한다고 주장한다. 이 동료가 옳은가?
 
-??? success "Solution to Exercise 4"
-    For individual $i$, let $Y_i(1)$ be the potential outcome under treatment and $Y_i(0)$ be the potential outcome under control. The individual treatment effect is $\tau_i = Y_i(1) - Y_i(0)$.
+??? success "연습문제 2 풀이"
+    이 맥락에서 동료는 **틀렸다**. "상관은 인과를 함의하지 않는다"는 말은 교란요인이 연관을 설명할 수 있는 관찰연구에 적용된다. 제대로 무작위화된 실험에서는 인과 해석이 타당하다. 이유는:
 
-    The **Average Treatment Effect** is:
+    1. 무작위 배정이 교란을 제거한다.
+    2. 연구자가 시점을 통제하여(처치가 결과보다 앞선다) 시간적 선행이 확립된다.
+    3. 비교 집단(대조군)이 반사실을 제공한다.
+
+    8점 상승은 인과효과의 타당한 추정값이며, 통계적 추론의 통상적인 유보 조건(표집 변동, $p = 0.02$가 반영)만 따른다. 실험에서 인과추론을 위협하는 주된 요소는 교란이 아니라 실무적 문제(비순응, 탈락, 파급효과)이다.
+
+---
+
+**연습문제 3.**
+무작위 실험의 내적 타당도와 외적 타당도를 정의하라. 내적 타당도는 높지만 외적 타당도가 의심스러운 실험의 예를 들어라.
+
+??? success "연습문제 3 풀이"
+    **내적 타당도:** 연구 내부에서 인과효과를 올바르게 측정하는 정도. 적절한 무작위화, 탈락 편향 없음, 파급효과 없음, 처치 지침의 준수가 필요하다.
+
+    **외적 타당도:** 결과가 다른 모집단, 상황, 시기로 일반화되는 정도.
+
+    **예:** 부유한 교외 학군 한 곳에서 수행한 수학 앱 무작위 시험이 시험 점수 12점 향상을 보였다(적절한 무작위화와 낮은 탈락률로 내적 타당도가 높다). 그러나 인터넷 접근이 제한적이고 기초 학력과 동기 구조가 다른 자원이 부족한 도시 학교에는 결과가 일반화되지 않을 수 있다(외적 타당도가 의심스럽다).
+
+---
+
+**연습문제 4.**
+잠재결과 틀에서 평균처치효과(ATE)를 정의하고 "인과추론의 근본 문제"를 설명하라.
+
+??? success "연습문제 4 풀이"
+    개인 $i$에 대해 $Y_i(1)$을 처치 아래의 잠재결과, $Y_i(0)$을 대조 아래의 잠재결과라 하자. 개인 처치효과는 $\tau_i = Y_i(1) - Y_i(0)$이다.
+
+    **평균처치효과**는
 
     $$
     \text{ATE} = E[Y(1) - Y(0)] = E[Y(1)] - E[Y(0)]
     $$
 
-    The **fundamental problem of causal inference** is that for each individual, we observe only one potential outcome: either $Y_i(1)$ (if treated) or $Y_i(0)$ (if not treated), never both. The individual causal effect $\tau_i$ is therefore unobservable.
+    이다.
 
-    Randomization solves this at the group level: because $T \perp (Y(1), Y(0))$, we have $E[Y \mid T=1] = E[Y(1)]$ and $E[Y \mid T=0] = E[Y(0)]$, so the difference in group means estimates the ATE even though individual effects remain unknown.
+    **인과추론의 근본 문제**는 각 개인에 대해 잠재결과 중 하나만, 즉 처치를 받았으면 $Y_i(1)$을, 받지 않았으면 $Y_i(0)$을 관측할 뿐 둘 다는 결코 관측할 수 없다는 것이다. 따라서 개인 인과효과 $\tau_i$는 관측 불가능하다.
+
+    무작위화는 이를 집단 수준에서 해결한다. $T \perp (Y(1), Y(0))$이므로 $E[Y \mid T=1] = E[Y(1)]$이고 $E[Y \mid T=0] = E[Y(0)]$이 되어, 개인 효과는 알 수 없어도 집단 평균의 차이가 ATE를 추정한다.

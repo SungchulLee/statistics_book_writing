@@ -1,159 +1,159 @@
-# Lurking Variables and Common Causes
+# 잠복변수와 공통원인
 
-A **lurking variable** is a variable that is not included in the analysis but has a substantial effect on the relationship between the variables under study. Unlike a confounder that has been identified and measured, a lurking variable operates behind the scenes -- the researcher may not even be aware of its existence. The most common form of lurking variable is a **common cause** that simultaneously drives both the observed exposure and outcome, creating an association that can be misinterpreted as causal.
-
----
-
-## What Is a Lurking Variable
-
-A lurking variable is any variable that:
-
-1. Is **not measured** or **not included** in the current analysis.
-2. Is associated with both the explanatory variable $X$ and the response variable $Y$.
-3. Could explain part or all of the observed association between $X$ and $Y$.
-
-The distinction from a confounder is practical, not conceptual. A confounder is a lurking variable that has been identified and measured. A lurking variable is one that remains hidden. The statistical consequence is the same: the observed $X$-$Y$ relationship is distorted.
+**잠복변수**는 분석에 포함되지 않았지만 연구 대상 변수들의 관계에 상당한 영향을 주는 변수이다. 식별되어 측정된 교란요인과 달리 잠복변수는 무대 뒤에서 작동한다. 연구자가 그 존재조차 모를 수 있다. 가장 흔한 형태의 잠복변수는 관측된 노출과 결과를 동시에 이끌어 인과로 오해될 수 있는 연관을 만드는 **공통원인**이다.
 
 ---
 
-## The Common Cause Structure
+## 잠복변수란
 
-The most important type of lurking variable is a **common cause** -- a variable $Z$ that causally affects both $X$ and $Y$. The causal structure is:
+잠복변수는 다음과 같은 변수이다:
+
+1. 현재 분석에서 **측정되지 않았거나** **포함되지 않았다**.
+2. 설명변수 $X$와 반응변수 $Y$ 모두와 연관되어 있다.
+3. $X$와 $Y$ 사이의 관측된 연관 중 일부 또는 전부를 설명할 수 있다.
+
+교란요인과의 구별은 개념적이라기보다 실무적이다. 교란요인은 식별되어 측정된 잠복변수이고, 잠복변수는 여전히 숨어 있는 것이다. 통계적 결과는 같다. 관측된 $X$–$Y$ 관계가 왜곡된다.
+
+---
+
+## 공통원인 구조
+
+가장 중요한 유형의 잠복변수는 **공통원인**, 즉 $X$와 $Y$ 모두에 인과적으로 영향을 주는 변수 $Z$이다. 인과 구조는
 
 $$
 X \leftarrow Z \rightarrow Y
 $$
 
-Because $Z$ causes variation in both $X$ and $Y$, the two variables will be correlated even if there is no direct causal link between them. The observed correlation between $X$ and $Y$ is an artifact of their shared dependence on $Z$.
+이다. $Z$가 $X$와 $Y$의 변동을 모두 일으키므로 둘 사이에 직접적인 인과 연결이 없어도 두 변수는 상관된다. 관측된 $X$–$Y$ 상관은 $Z$에 대한 공통 의존의 산물이다.
 
-??? example "Fire damage and firefighters"
-    The number of firefighters deployed ($X$) is positively correlated with the amount of property damage ($Y$). The lurking variable is the severity of the fire ($Z$). Larger fires cause both more firefighters to be deployed and more damage. Sending more firefighters does not cause more damage -- if anything, it reduces it.
-
----
-
-## Why Lurking Variables Are Dangerous
-
-Lurking variables are particularly problematic because:
-
-1. **They are invisible in the data.** Since the variable is not measured, there is no column in the dataset to examine or control for.
-
-2. **They produce real correlations.** The association between $X$ and $Y$ is statistically genuine -- it exists in the data. The problem is not that the correlation is wrong but that its causal interpretation is wrong.
-
-3. **They cannot be controlled statistically.** You cannot include a variable in a regression if it has not been measured. Partial correlation, stratification, and regression adjustment all require the variable to be observed.
-
-4. **They can create or mask effects.** A lurking common cause can make two unrelated variables appear related (positive confounding) or make two genuinely related variables appear unrelated (negative confounding).
+??? example "화재 피해와 소방관"
+    출동한 소방관 수($X$)는 재산 피해액($Y$)과 양의 상관을 보인다. 잠복변수는 화재의 규모($Z$)이다. 큰 화재일수록 소방관도 더 많이 출동하고 피해도 크다. 소방관을 더 보낸다고 피해가 커지는 것이 아니다. 오히려 피해를 줄인다.
 
 ---
 
-## Examples of Lurking Variables
+## 잠복변수가 위험한 이유
 
-### Storks and Birth Rates
+잠복변수는 특히 다루기 까다롭다:
 
-Across European countries, the number of stork pairs ($X$) is positively correlated with birth rates ($Y$). The lurking variable is rurality ($Z$): rural areas have more storks and higher birth rates. Storks do not deliver babies.
+1. **자료에서 보이지 않는다.** 측정되지 않았으므로 살펴보거나 통제할 열 자체가 자료에 없다.
 
-### Spending and Academic Performance
+2. **실제 상관을 만든다.** $X$와 $Y$의 연관은 통계적으로 진짜이며 자료 안에 존재한다. 문제는 상관이 틀렸다는 것이 아니라 그 인과적 해석이 틀렸다는 것이다.
 
-At the school level, per-pupil spending ($X$) is sometimes negatively correlated with test scores ($Y$). A lurking variable is socioeconomic status ($Z$): wealthier districts may spend less per pupil (due to efficient administration) while having higher test scores (due to home environment advantages). The relationship between spending and performance, after controlling for socioeconomic factors, may be positive.
+3. **통계적으로 통제할 수 없다.** 측정되지 않은 변수를 회귀에 넣을 수는 없다. 부분상관, 층화, 회귀 조정 모두 그 변수가 관측되어야 가능하다.
 
-### Organic Food and Autism
-
-Sales of organic food ($X$) are correlated with autism diagnosis rates ($Y$) over time. The lurking variable is time itself ($Z$): both have increased over the past two decades for entirely unrelated reasons (health trends vs. diagnostic criteria changes).
+4. **효과를 만들 수도 가릴 수도 있다.** 잠복 공통원인은 무관한 두 변수를 관련된 것처럼 보이게 하거나(양의 교란) 실제로 관련된 두 변수를 무관해 보이게(음의 교란) 할 수 있다.
 
 ---
 
-## How to Guard Against Lurking Variables
+## 잠복변수의 예
 
-Since lurking variables are by definition unmeasured, they cannot be controlled directly. However, several strategies reduce their impact:
+### 황새와 출생률
 
-1. **Subject-matter knowledge.** Think carefully about what variables might influence both $X$ and $Y$. Draw a causal diagram and ask: are there arrows that I am missing?
+유럽 여러 나라에서 황새 쌍의 수($X$)는 출생률($Y$)과 양의 상관을 보인다. 잠복변수는 농촌성($Z$)이다. 농촌 지역일수록 황새도 많고 출생률도 높다. 황새가 아기를 데려오지는 않는다.
 
-2. **Randomized experiments.** Random assignment of $X$ breaks the association between $X$ and any lurking variable $Z$, whether measured or not. This is the primary advantage of experiments over observational studies. See [Experiments and Causation](../causation/experiments_causation.md).
+### 교육비 지출과 학업 성취
 
-3. **Sensitivity analysis.** Ask: how strong would an unmeasured confounder need to be to explain the observed association? If the association is robust to plausible confounding, the conclusion is more credible.
+학교 수준에서 학생 1인당 지출($X$)이 시험 점수($Y$)와 음의 상관을 보이는 경우가 있다. 잠복변수는 사회경제적 지위($Z$)이다. 부유한 학군은 (행정이 효율적이어서) 1인당 지출이 적으면서도 (가정 환경의 이점 덕분에) 시험 점수가 높을 수 있다. 사회경제적 요인을 통제한 뒤의 지출과 성취의 관계는 양일 수 있다.
 
-4. **Measure more variables.** The more potential confounders that are measured and controlled, the less room there is for unmeasured lurking variables to drive the results.
+### 유기농 식품과 자폐
 
-5. **Replication across settings.** If the same association appears across different populations, time periods, and contexts -- where the lurking variables would differ -- the association is more likely genuine.
+시간에 걸쳐 유기농 식품 판매량($X$)이 자폐 진단율($Y$)과 상관된다. 잠복변수는 시간 그 자체($Z$)이다. 두 변수 모두 지난 20년 동안 전혀 무관한 이유로(건강 유행 대 진단 기준 변화) 증가했다.
 
 ---
 
-## Lurking Variables vs Confounders vs Mediators
+## 잠복변수에 대비하는 방법
 
-| Concept | Measured? | Causal structure | Effect on $X$-$Y$ association |
+잠복변수는 정의상 측정되지 않았으므로 직접 통제할 수 없다. 다만 다음 전략들이 영향을 줄여 준다:
+
+1. **분야 지식.** $X$와 $Y$ 모두에 영향을 줄 만한 변수가 무엇인지 신중히 생각한다. 인과 도식을 그려 보고 빠뜨린 화살표가 없는지 묻는다.
+
+2. **무작위 실험.** $X$를 무작위로 배정하면 측정되었든 아니든 임의의 잠복변수 $Z$와 $X$의 연관이 끊어진다. 관찰연구에 대한 실험의 결정적 장점이다. [실험과 인과](../causation/experiments_causation.md)를 보라.
+
+3. **민감도 분석.** 관측된 연관을 설명하려면 측정되지 않은 교란요인이 얼마나 강해야 하는지 묻는다. 그럴듯한 정도의 교란에 연관이 견디면 결론의 신뢰도가 높아진다.
+
+4. **더 많은 변수를 측정한다.** 잠재적 교란요인을 많이 측정해 통제할수록 측정되지 않은 잠복변수가 결과를 좌우할 여지가 줄어든다.
+
+5. **여러 상황에서의 재현.** 잠복변수가 다를 법한 여러 모집단·기간·맥락에서 같은 연관이 나타나면 그 연관이 진짜일 가능성이 높다.
+
+---
+
+## 잠복변수, 교란요인, 매개자
+
+| 개념 | 측정되었나? | 인과 구조 | $X$–$Y$ 연관에 대한 효과 |
 |:---|:---:|:---:|:---|
-| Lurking variable | No | $X \leftarrow Z \rightarrow Y$ | Distorts the association (direction unknown) |
-| Confounder | Yes | $X \leftarrow Z \rightarrow Y$ | Can be controlled for |
-| Mediator | Yes | $X \rightarrow Z \rightarrow Y$ | Part of the causal pathway |
+| 잠복변수 | 아니오 | $X \leftarrow Z \rightarrow Y$ | 연관을 왜곡한다(방향은 알 수 없다) |
+| 교란요인 | 예 | $X \leftarrow Z \rightarrow Y$ | 통제할 수 있다 |
+| 매개자 | 예 | $X \rightarrow Z \rightarrow Y$ | 인과 경로의 일부이다 |
 
-A lurking variable becomes a confounder once it is identified and measured. The challenge is recognizing that it exists in the first place.
-
----
-
-## Connection to Other Sections
-
-The concept of lurking variables motivates several important topics in this chapter:
-
-- [Confounding variables](confounding_variables.md) are lurking variables that have been identified.
-- [Spurious correlations](spurious_correlations.md) are the observable consequence of lurking common causes.
-- [Directed acyclic graphs](../causation/dags.md) provide a formal framework for reasoning about lurking variables and their effects.
-- [Randomized experiments](../causation/experiments_causation.md) are the gold standard for eliminating the influence of lurking variables.
+잠복변수는 식별되어 측정되는 순간 교란요인이 된다. 어려운 점은 애초에 그것이 존재함을 알아차리는 일이다.
 
 ---
 
-## Summary
+## 다른 절과의 연결
 
-A lurking variable is an unmeasured variable that affects both the exposure and the outcome, creating a distorted association between them. The most common form is a common cause that simultaneously drives both observed variables. Because lurking variables are unmeasured, they cannot be controlled for statistically. Randomized experiments, careful subject-matter reasoning, sensitivity analysis, and replication across diverse settings are the primary defenses against lurking variable bias.
+잠복변수 개념은 이 장의 여러 주제로 이어진다:
 
-## Exercises
-
-**Exercise 1.**
-Ice cream sales and drowning deaths are positively correlated. Identify the lurking variable and explain the causal structure.
-
-??? success "Solution to Exercise 1"
-    The lurking variable is **temperature (season/weather)**. Hot weather causes both increased ice cream consumption and increased swimming activity, which leads to more drownings. The causal structure is:
-
-    Temperature $\to$ Ice cream sales, Temperature $\to$ Drownings.
-
-    There is no causal link from ice cream to drownings. The observed positive correlation is entirely spurious, driven by the common cause. Conditioning on temperature (or season) would eliminate the association between ice cream sales and drowning deaths.
+- [교란변수](confounding_variables.md)는 식별된 잠복변수이다.
+- [허위상관](spurious_correlations.md)은 잠복 공통원인이 관측 가능하게 드러난 결과이다.
+- [방향성 비순환 그래프](../causation/dags.md)는 잠복변수와 그 효과를 사고하는 형식적 틀을 제공한다.
+- [무작위 실험](../causation/experiments_causation.md)은 잠복변수의 영향을 제거하는 표준적인 방법이다.
 
 ---
 
-**Exercise 2.**
-A study finds a strong positive correlation between the number of firefighters at a fire and the amount of damage caused. Should the city reduce the number of firefighters sent to fires?
+## 요약
 
-??? success "Solution to Exercise 2"
-    No. The lurking variable is **fire severity**. Larger, more intense fires cause both more damage and the dispatch of more firefighters. The causal structure is:
+잠복변수는 노출과 결과 모두에 영향을 주어 둘 사이의 연관을 왜곡하는, 측정되지 않은 변수이다. 가장 흔한 형태는 두 관측 변수를 동시에 이끄는 공통원인이다. 측정되지 않았으므로 통계적으로 통제할 수 없다. 무작위 실험, 신중한 분야 지식의 활용, 민감도 분석, 다양한 상황에서의 재현이 잠복변수 편향에 대한 일차적 방어책이다.
 
-    Fire severity $\to$ Number of firefighters, Fire severity $\to$ Damage.
+## 연습문제
 
-    The correlation between firefighters and damage is not causal -- it is confounded by fire severity. Reducing the number of firefighters would likely increase damage, not decrease it. The correct analysis would condition on fire severity (e.g., compare damage for fires of similar size with different numbers of firefighters dispatched).
+**연습문제 1.**
+아이스크림 판매량과 익사 사망은 양의 상관을 보인다. 잠복변수를 밝히고 인과 구조를 설명하라.
 
----
+??? success "연습문제 1 풀이"
+    잠복변수는 **기온(계절/날씨)**이다. 더운 날씨가 아이스크림 소비도 늘리고 수영 활동도 늘려 익사가 많아진다. 인과 구조는
 
-**Exercise 3.**
-Define Simpson's paradox and give a concrete example where the direction of an association reverses after conditioning on a lurking variable.
+    기온 $\to$ 아이스크림 판매, 기온 $\to$ 익사
 
-??? success "Solution to Exercise 3"
-    **Simpson's paradox** occurs when the direction of an association between two variables reverses or disappears after conditioning on a third variable (a confounder).
-
-    **Example:** A hospital reports that Treatment A has a higher overall survival rate than Treatment B. However, when patients are stratified by disease severity:
-
-    - Among mild cases: Treatment B has higher survival.
-    - Among severe cases: Treatment B has higher survival.
-
-    The paradox arises because Treatment A is disproportionately given to mild cases (who have high survival regardless), while Treatment B is given to severe cases. Disease severity is the lurking variable that confounds the comparison. The correct conclusion (from the stratified analysis) is that Treatment B is superior.
+    이다. 아이스크림에서 익사로 가는 인과 연결은 없다. 관측된 양의 상관은 공통원인이 만든 전적으로 허위인 연관이다. 기온(또는 계절)으로 조건화하면 아이스크림 판매와 익사 사망의 연관이 사라진다.
 
 ---
 
-**Exercise 4.**
-A regression of salary on years of experience shows a positive coefficient. When "department" is added as a control variable, the coefficient for experience becomes negative. Explain how this is possible and which result is more trustworthy.
+**연습문제 2.**
+어떤 연구가 화재 현장의 소방관 수와 피해액 사이에 강한 양의 상관을 발견했다. 시는 화재에 보내는 소방관 수를 줄여야 하는가?
 
-??? success "Solution to Exercise 4"
-    This reversal can occur if **department** is a lurking variable that is positively correlated with both experience and salary:
+??? success "연습문제 2 풀이"
+    아니다. 잠복변수는 **화재의 심각도**이다. 크고 강한 화재일수록 피해도 크고 소방관도 더 많이 출동한다. 인과 구조는
 
-    - Experienced employees tend to be in lower-paying departments (perhaps they entered the company when those departments were growing).
-    - Within any given department, more experience is associated with lower salary (perhaps newer hires are paid market rates that have increased over time, i.e., salary compression).
+    화재 심각도 $\to$ 소방관 수, 화재 심각도 $\to$ 피해액
 
-    Without controlling for department, the positive cross-department variation masks the negative within-department pattern.
+    이다. 소방관과 피해액의 상관은 인과가 아니라 화재 심각도로 교란된 것이다. 소방관을 줄이면 피해가 줄기는커녕 늘어날 가능성이 크다. 올바른 분석은 화재 심각도로 조건화하는 것이다(예: 비슷한 규모의 화재에서 출동 소방관 수가 다른 경우의 피해액을 비교한다).
 
-    Which result is more trustworthy depends on the causal question. If department is a confounder (causes both experience and salary), conditioning on it gives a better estimate of the within-department return to experience. However, if department is a mediator (experience causes people to move to certain departments), conditioning on it removes part of the causal effect, and the unconditional estimate may be more appropriate for the total effect.
+---
+
+**연습문제 3.**
+Simpson의 역설을 정의하고, 잠복변수로 조건화한 뒤 연관의 방향이 뒤집히는 구체적인 예를 들어라.
+
+??? success "연습문제 3 풀이"
+    **Simpson의 역설**은 제3의 변수(교란요인)로 조건화한 뒤 두 변수 사이 연관의 방향이 뒤집히거나 사라질 때 일어난다.
+
+    **예:** 어떤 병원이 치료 A의 전체 생존율이 치료 B보다 높다고 보고한다. 그러나 환자를 질병 중증도로 층화하면:
+
+    - 경증 환자에서는 치료 B의 생존율이 더 높다.
+    - 중증 환자에서도 치료 B의 생존율이 더 높다.
+
+    치료 A가 (원래 생존율이 높은) 경증 환자에게 불균형하게 많이 시행되고 치료 B가 중증 환자에게 시행되었기 때문에 역설이 생긴다. 질병 중증도가 비교를 교란하는 잠복변수이다. (층화 분석에서 나오는) 올바른 결론은 치료 B가 낫다는 것이다.
+
+---
+
+**연습문제 4.**
+급여를 경력 연수에 회귀했더니 계수가 양수였다. "부서"를 통제변수로 넣자 경력의 계수가 음수가 되었다. 어떻게 이런 일이 가능하며 어느 결과가 더 믿을 만한지 설명하라.
+
+??? success "연습문제 4 풀이"
+    **부서**가 경력과 급여 모두와 연관된 잠복변수이면 이런 역전이 일어날 수 있다:
+
+    - 경력이 오래된 직원이 급여가 낮은 부서에 몰려 있을 수 있다(그 부서들이 성장하던 시기에 입사했기 때문일 수 있다).
+    - 그런데 어느 한 부서 안에서는 경력이 길수록 급여가 낮을 수 있다(최근 입사자가 그동안 오른 시장 임금을 받는 임금 압축 현상).
+
+    부서를 통제하지 않으면 부서 간 변동이 만드는 양의 관계가 부서 내의 음의 패턴을 가린다.
+
+    어느 결과가 더 믿을 만한지는 인과적 질문에 달려 있다. 부서가 교란요인(경력과 급여 모두를 일으킴)이면 그것으로 조건화한 쪽이 부서 내 경력의 수익률을 더 잘 추정한다. 그러나 부서가 매개자(경력 때문에 특정 부서로 옮기게 됨)라면 조건화가 인과효과의 일부를 제거하므로 총효과에는 조건화하지 않은 추정값이 더 적절할 수 있다.

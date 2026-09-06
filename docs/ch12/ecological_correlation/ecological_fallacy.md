@@ -1,51 +1,51 @@
-# Ecological Fallacy
+# 생태학적 오류
 
-When correlations are computed on aggregated data (averages over groups, regions, or time periods), the resulting **ecological correlations** can be dramatically different from the correlations that exist at the individual level. Drawing conclusions about individuals based on group-level correlations is known as the **ecological fallacy**. It is one of the most common and consequential errors in applied statistics.
-
----
-
-## Definition
-
-The **ecological fallacy** occurs when a statistical relationship observed between variables at an aggregate level (e.g., countries, states, schools) is incorrectly assumed to hold at the individual level.
-
-More precisely, if we observe a correlation between group-level averages $\bar{X}_g$ and $\bar{Y}_g$ across $g = 1, \ldots, G$ groups, it does not follow that the same correlation exists between $X_i$ and $Y_i$ at the individual level. The ecological correlation can be much stronger, weaker, or even opposite in sign to the individual-level correlation.
+집계된 자료(집단·지역·기간에 대한 평균)로 상관을 계산하면, 그렇게 얻은 **생태학적 상관**이 개인 수준에 존재하는 상관과 극적으로 다를 수 있다. 집단 수준의 상관에 근거해 개인에 대한 결론을 내리는 것을 **생태학적 오류**라 한다. 응용통계에서 가장 흔하고 파급력이 큰 잘못 중 하나이다.
 
 ---
 
-## Robinson's Paradox
+## 정의
 
-The classic demonstration of the ecological fallacy comes from William S. Robinson's 1950 paper. Robinson examined the relationship between the percentage of foreign-born residents and literacy rates across U.S. states.
+**생태학적 오류**는 집계 수준(예: 국가, 주, 학교)에서 변수 사이에 관측된 통계적 관계가 개인 수준에서도 성립한다고 잘못 가정할 때 일어난다.
 
-- **Ecological correlation** (state-level): $r \approx 0.53$ -- states with higher percentages of foreign-born residents tended to have *higher* literacy rates.
-- **Individual correlation**: $r \approx -0.11$ -- foreign-born individuals actually tended to have *lower* literacy rates than native-born individuals.
-
-The paradox arises because immigrants tended to settle in states with high overall literacy (e.g., New York, California), creating a positive ecological correlation. But within those states, immigrants individually tended to have lower literacy rates than the native-born population.
-
-!!! warning "Ecological correlations can reverse sign"
-    Robinson's example shows that the ecological correlation ($+0.53$) was not merely larger than the individual correlation ($-0.11$); it had the opposite sign. This is not an edge case but a systematic phenomenon that can occur whenever group composition varies.
+더 정확히 말하면, $g = 1, \ldots, G$개의 집단에 걸쳐 집단 평균 $\bar{X}_g$와 $\bar{Y}_g$ 사이의 상관을 관측했다고 해서 개인 수준에서 $X_i$와 $Y_i$ 사이에 같은 상관이 존재하는 것은 아니다. 생태학적 상관은 개인 수준 상관보다 훨씬 강하거나 약할 수 있고 부호가 반대일 수도 있다.
 
 ---
 
-## Why It Happens
+## Robinson의 역설
 
-The ecological fallacy arises from the mathematical relationship between group-level and individual-level correlations. When data are aggregated into groups, two sources of variation contribute to the ecological correlation:
+생태학적 오류의 고전적인 예는 William S. Robinson의 1950년 논문에서 나온다. Robinson은 미국의 주별로 외국 태생 거주자 비율과 문해율의 관계를 살폈다.
 
-1. **Between-group variation**: differences in group means.
-2. **Within-group variation**: differences among individuals within the same group.
+- **생태학적 상관**(주 수준): $r \approx 0.53$ — 외국 태생 비율이 높은 주일수록 문해율이 *높은* 경향이 있었다.
+- **개인 수준 상관**: $r \approx -0.11$ — 실제로는 외국 태생 개인이 본토 태생 개인보다 문해율이 *낮은* 경향이 있었다.
 
-Aggregation eliminates within-group variation, leaving only between-group variation. Since the between-group and within-group relationships can differ in magnitude and sign, the ecological correlation can diverge substantially from the individual-level correlation.
+이 역설이 생기는 것은 이민자들이 전반적으로 문해율이 높은 주(예: 뉴욕, 캘리포니아)에 정착하는 경향이 있어 양의 생태학적 상관이 만들어졌기 때문이다. 그러나 그 주들 안에서 개인 단위로는 이민자의 문해율이 본토 태생 인구보다 낮았다.
 
-Formally, the total correlation can be decomposed as a weighted combination of between-group and within-group components. The ecological correlation reflects only the between-group component, which can dominate or contradict the within-group pattern.
+!!! warning "생태학적 상관은 부호가 뒤집힐 수 있다"
+    Robinson의 예에서 생태학적 상관($+0.53$)은 개인 수준 상관($-0.11$)보다 단지 큰 것이 아니라 부호가 반대였다. 이는 예외적인 경우가 아니라 집단의 구성이 달라질 때마다 나타날 수 있는 체계적인 현상이다.
 
 ---
 
-## A Numerical Illustration
+## 왜 일어나는가
 
-Consider two groups, each with five individuals:
+생태학적 오류는 집단 수준과 개인 수준 상관 사이의 수학적 관계에서 생긴다. 자료를 집단으로 묶으면 두 가지 변동 원천이 생태학적 상관에 기여한다:
 
-**Group A:**
+1. **집단 간 변동**: 집단 평균의 차이.
+2. **집단 내 변동**: 같은 집단 안의 개인들 사이의 차이.
 
-| Individual | $X$ | $Y$ |
+집계는 집단 내 변동을 없애고 집단 간 변동만 남긴다. 집단 간 관계와 집단 내 관계는 크기와 부호가 다를 수 있으므로 생태학적 상관이 개인 수준 상관에서 크게 벗어날 수 있다.
+
+형식적으로 전체 상관은 집단 간 성분과 집단 내 성분의 가중 결합으로 분해된다. 생태학적 상관은 집단 간 성분만 반영하며, 이것이 집단 내 패턴을 압도하거나 그와 모순될 수 있다.
+
+---
+
+## 수치 예시
+
+각각 5명으로 이루어진 두 집단을 생각하자:
+
+**집단 A:**
+
+| 개인 | $X$ | $Y$ |
 |:---:|:---:|:---:|
 | 1 | 10 | 8 |
 | 2 | 12 | 6 |
@@ -53,9 +53,9 @@ Consider two groups, each with five individuals:
 | 4 | 16 | 2 |
 | 5 | 18 | 0 |
 
-**Group B:**
+**집단 B:**
 
-| Individual | $X$ | $Y$ |
+| 개인 | $X$ | $Y$ |
 |:---:|:---:|:---:|
 | 6 | 20 | 18 |
 | 7 | 22 | 16 |
@@ -63,96 +63,96 @@ Consider two groups, each with five individuals:
 | 9 | 26 | 12 |
 | 10 | 28 | 10 |
 
-Within each group, $X$ and $Y$ have a **perfect negative** correlation ($r = -1$). However, the group means are $(\bar{X}_A, \bar{Y}_A) = (14, 4)$ and $(\bar{X}_B, \bar{Y}_B) = (24, 14)$. Across the two group means, the ecological correlation is **perfectly positive** ($r = +1$): higher average $X$ goes with higher average $Y$.
+각 집단 안에서 $X$와 $Y$는 **완전한 음의** 상관($r = -1$)을 갖는다. 그러나 집단 평균은 $(\bar{X}_A, \bar{Y}_A) = (14, 4)$와 $(\bar{X}_B, \bar{Y}_B) = (24, 14)$이다. 두 집단 평균에 걸친 생태학적 상관은 **완전한 양**($r = +1$)이다. 평균 $X$가 클수록 평균 $Y$도 크다.
 
-If we only looked at the ecological data (two points: the group averages), we would conclude a strong positive relationship. The individual data tell the opposite story.
-
----
-
-## Common Settings for the Ecological Fallacy
-
-The ecological fallacy appears frequently in:
-
-- **Public health**: correlating country-level fat consumption with cancer rates does not imply that individuals who eat more fat get more cancer.
-- **Education**: correlating school-level spending with test scores does not mean that individual students benefit proportionally from spending.
-- **Political science**: correlating district-level demographics with voting patterns does not reveal individual voting behavior.
-- **Economics**: correlating national GDP with life satisfaction does not tell us whether richer individuals within a country are happier.
+생태학적 자료(집단 평균이라는 두 점)만 본다면 강한 양의 관계라고 결론지을 것이다. 개인 자료는 정반대의 이야기를 한다.
 
 ---
 
-## How to Avoid the Ecological Fallacy
+## 생태학적 오류가 흔한 상황
 
-1. **Use individual-level data** whenever possible. If the research question concerns individuals, analyze individual observations.
+생태학적 오류는 다음에서 자주 나타난다:
 
-2. **Be explicit about the level of analysis.** Clearly state whether correlations are computed at the individual, group, or ecological level.
-
-3. **Use multilevel models.** Hierarchical/multilevel regression models can simultaneously account for both within-group and between-group variation, avoiding the conflation of levels.
-
-4. **Report both levels.** When only aggregate data are available, acknowledge the limitation and avoid drawing individual-level conclusions.
-
----
-
-## Connection to Simpson's Paradox
-
-The ecological fallacy is closely related to [Simpson's paradox](simpsons_paradox.md), where a trend that appears in aggregated data reverses when the data are disaggregated by a confounding variable. Both phenomena illustrate that aggregation can distort or reverse the direction of an association. The ecological fallacy focuses specifically on the danger of inferring individual behavior from group averages, while Simpson's paradox is a broader phenomenon involving conditional versus marginal relationships.
+- **공중보건**: 국가 수준의 지방 섭취량과 암 발생률의 상관은 지방을 더 먹는 개인이 암에 더 걸린다는 뜻이 아니다.
+- **교육**: 학교 수준의 지출과 시험 점수의 상관은 개별 학생이 지출에 비례해 이득을 본다는 뜻이 아니다.
+- **정치학**: 선거구 수준의 인구 구성과 투표 패턴의 상관은 개인의 투표 행동을 드러내지 않는다.
+- **경제학**: 국가 GDP와 삶의 만족도의 상관은 한 나라 안에서 더 부유한 개인이 더 행복한지 말해 주지 않는다.
 
 ---
 
-## Summary
+## 생태학적 오류를 피하는 방법
 
-The ecological fallacy occurs when correlations observed at the group level are wrongly attributed to individuals. Robinson's paradox demonstrates that ecological correlations can even reverse sign compared to individual-level correlations. This happens because aggregation eliminates within-group variation, which may carry a different signal than between-group variation. To avoid the ecological fallacy, analyze data at the appropriate level and use multilevel models when group structure is present.
+1. 가능하면 언제나 **개인 수준 자료를 쓴다**. 연구 질문이 개인에 관한 것이라면 개인 관측값을 분석하라.
 
-## Exercises
+2. **분석 수준을 분명히 밝힌다.** 상관을 개인 수준에서 계산했는지, 집단 수준에서 계산했는지, 생태학적 수준에서 계산했는지 명시하라.
 
-**Exercise 1.**
-Define the ecological fallacy and explain why conclusions about groups cannot be directly applied to individuals.
+3. **다수준 모형을 쓴다.** 계층적/다수준 회귀모형은 집단 내 변동과 집단 간 변동을 동시에 반영하여 수준의 혼동을 피한다.
 
-??? success "Solution to Exercise 1"
-    The **ecological fallacy** is the error of inferring individual-level relationships from group-level (aggregate) data. It occurs because correlations or associations observed at the group level do not necessarily hold at the individual level.
-
-    Group-level data reflect between-group variation only, while individual behavior involves both between-group and within-group variation. The within-group relationship may differ in magnitude or even direction from the between-group relationship.
-
-    **Example:** Countries with higher average chocolate consumption have more Nobel laureates per capita (ecological correlation). Concluding that individuals who eat more chocolate are more likely to win Nobel prizes is the ecological fallacy. The country-level association may be driven by wealth (rich countries both consume more chocolate and fund more research).
+4. **두 수준을 함께 보고한다.** 집계 자료만 있을 때에는 그 한계를 인정하고 개인 수준의 결론을 내리지 말라.
 
 ---
 
-**Exercise 2.**
-Construct a numerical example where the ecological correlation is positive but the individual-level correlation is negative.
+## Simpson의 역설과의 연결
 
-??? success "Solution to Exercise 2"
-    Consider two groups:
-
-    - **Group A** (wealthy city): individuals' $X$ values average 80, $Y$ values average 90. Within the group, higher $X$ is associated with lower $Y$ (individual $r = -0.5$).
-    - **Group B** (poor city): individuals' $X$ values average 20, $Y$ values average 30. Within the group, higher $X$ is also associated with lower $Y$ (individual $r = -0.5$).
-
-    At the group level: Group A has higher $\bar{X}$ (80 vs 20) and higher $\bar{Y}$ (90 vs 30). The ecological correlation between group means is $r = +1$.
-
-    This is a Simpson's paradox structure: within each group, the relationship is negative, but the between-group trend is positive because the groups differ systematically in both variables. Analyzing only the group-level data would produce the wrong sign.
+생태학적 오류는 [Simpson의 역설](simpsons_paradox.md)과 밀접하게 관련된다. Simpson의 역설은 집계 자료에서 나타나는 경향이 교란변수로 자료를 나누면 뒤집히는 현상이다. 두 현상 모두 집계가 연관의 방향을 왜곡하거나 뒤집을 수 있음을 보여준다. 생태학적 오류는 특히 집단 평균으로부터 개인 행동을 추론하는 위험에 초점을 맞추고, Simpson의 역설은 조건부 관계와 주변 관계에 관한 더 넓은 현상이다.
 
 ---
 
-**Exercise 3.**
-A newspaper reports: "States with higher average income have lower crime rates, proving that higher income reduces crime." Identify the ecological fallacy and suggest a better analysis.
+## 요약
 
-??? success "Solution to Exercise 3"
-    The ecological fallacy is inferring that higher income *for individuals* reduces their likelihood of committing crimes, based on *state-level* aggregate data. The state-level correlation conflates multiple mechanisms:
+생태학적 오류는 집단 수준에서 관측된 상관을 개인에게 잘못 귀속시킬 때 일어난다. Robinson의 역설은 생태학적 상관이 개인 수준 상관과 부호까지 반대일 수 있음을 보여준다. 집계가 집단 간 변동과 다른 신호를 담을 수 있는 집단 내 변동을 없애 버리기 때문이다. 생태학적 오류를 피하려면 적절한 수준에서 자료를 분석하고 집단 구조가 있을 때에는 다수준 모형을 쓰라.
 
-    - States with higher average income may have better policing, education, and social services (institutional factors).
-    - The relationship between individual income and individual criminality may be different from the state-level pattern.
-    - High-income states may have high income inequality, which could increase crime even though the average is high.
+## 연습문제
 
-    **Better analysis:** Use individual-level data linking personal income to criminal behavior, controlling for confounders like education, age, neighborhood characteristics, and employment status. Panel data (tracking individuals over time) or natural experiments (e.g., lottery winners) would provide stronger causal evidence.
+**연습문제 1.**
+생태학적 오류를 정의하고, 집단에 대한 결론을 개인에게 그대로 적용할 수 없는 이유를 설명하라.
+
+??? success "연습문제 1 풀이"
+    **생태학적 오류**는 집단 수준(집계) 자료로부터 개인 수준의 관계를 추론하는 잘못이다. 집단 수준에서 관측된 상관이나 연관이 개인 수준에서 반드시 성립하지는 않기 때문에 생긴다.
+
+    집단 수준 자료는 집단 간 변동만 반영하지만 개인의 행동에는 집단 간 변동과 집단 내 변동이 모두 관여한다. 집단 내 관계는 집단 간 관계와 크기가 다를 수도, 방향까지 다를 수도 있다.
+
+    **예:** 평균 초콜릿 소비가 많은 나라일수록 인구당 노벨상 수상자가 많다(생태학적 상관). 초콜릿을 더 먹는 개인이 노벨상을 탈 가능성이 높다고 결론짓는 것이 생태학적 오류이다. 국가 수준의 연관은 부(富)에 이끌린 것일 수 있다(부유한 나라는 초콜릿도 더 소비하고 연구에도 더 많이 투자한다).
 
 ---
 
-**Exercise 4.**
-Explain the concept of the "modifiable areal unit problem" (MAUP) and how it relates to the ecological fallacy.
+**연습문제 2.**
+생태학적 상관은 양수인데 개인 수준 상관은 음수인 수치 예를 구성하라.
 
-??? success "Solution to Exercise 4"
-    The **Modifiable Areal Unit Problem** (MAUP) is the observation that statistical results based on aggregated spatial data depend on how the geographic units are defined. It has two components:
+??? success "연습문제 2 풀이"
+    두 집단을 생각하자:
 
-    1. **Scale effect:** Changing the level of aggregation (e.g., census tracts vs. counties vs. states) changes the correlation. Larger units show stronger ecological correlations because more individual-level variation is averaged away.
+    - **집단 A**(부유한 도시): 개인들의 $X$ 평균 80, $Y$ 평균 90. 집단 안에서 $X$가 클수록 $Y$가 작다(개인 수준 $r = -0.5$).
+    - **집단 B**(가난한 도시): 개인들의 $X$ 평균 20, $Y$ 평균 30. 집단 안에서도 $X$가 클수록 $Y$가 작다(개인 수준 $r = -0.5$).
 
-    2. **Zonation effect:** At the same scale, different ways of drawing boundaries produce different results. Gerrymandering is an extreme example.
+    집단 수준에서는 집단 A가 $\bar{X}$도 크고(80 대 20) $\bar{Y}$도 크다(90 대 30). 집단 평균 사이의 생태학적 상관은 $r = +1$이다.
 
-    MAUP relates to the ecological fallacy because both involve the loss of information from aggregation. The ecological fallacy is the interpretive error of treating aggregate results as individual-level truths. MAUP shows that even the aggregate results themselves are not stable -- they depend on arbitrary choices about the units of analysis. Together, they demonstrate that aggregate data are fundamentally limited for individual-level inference.
+    이는 Simpson의 역설과 같은 구조이다. 각 집단 안에서는 관계가 음수이지만, 두 변수 모두에서 집단이 체계적으로 다르기 때문에 집단 간 추세는 양수이다. 집단 수준 자료만 분석하면 부호가 틀린 결론을 얻는다.
+
+---
+
+**연습문제 3.**
+한 신문이 "평균 소득이 높은 주일수록 범죄율이 낮다. 소득이 높아지면 범죄가 줄어든다는 증거이다"라고 보도했다. 생태학적 오류를 지적하고 더 나은 분석을 제안하라.
+
+??? success "연습문제 3 풀이"
+    *주 수준*의 집계 자료에 근거해 *개인의* 소득이 높아지면 범죄를 저지를 가능성이 낮아진다고 추론하는 것이 생태학적 오류이다. 주 수준의 상관은 여러 기제를 뒤섞는다:
+
+    - 평균 소득이 높은 주는 치안, 교육, 사회복지가 더 나을 수 있다(제도적 요인).
+    - 개인 소득과 개인의 범죄 사이 관계는 주 수준 패턴과 다를 수 있다.
+    - 고소득 주는 소득 불평등도 클 수 있고, 평균이 높아도 불평등이 범죄를 늘릴 수 있다.
+
+    **더 나은 분석:** 개인 소득과 범죄 행동을 연결한 개인 수준 자료를 쓰고 학력, 나이, 거주지 특성, 고용 상태 같은 교란요인을 통제한다. 패널 자료(개인을 시간에 걸쳐 추적)나 자연실험(예: 복권 당첨자)이 더 강한 인과적 증거를 준다.
+
+---
+
+**연습문제 4.**
+"수정 가능한 공간 단위 문제(MAUP)"의 개념을 설명하고 생태학적 오류와 어떻게 관련되는지 밝혀라.
+
+??? success "연습문제 4 풀이"
+    **수정 가능한 공간 단위 문제**(MAUP)는 집계된 공간 자료에 기반한 통계 결과가 지리 단위를 어떻게 정의하느냐에 달려 있다는 관찰이다. 두 요소가 있다:
+
+    1. **축척 효과:** 집계 수준을 바꾸면(예: 인구조사 구역 대 카운티 대 주) 상관이 달라진다. 단위가 클수록 개인 수준 변동이 더 많이 평균되어 사라지므로 생태학적 상관이 강해진다.
+
+    2. **구획 효과:** 같은 축척에서도 경계를 어떻게 긋느냐에 따라 결과가 달라진다. 게리맨더링이 극단적인 예이다.
+
+    MAUP는 집계로 인한 정보 손실이라는 점에서 생태학적 오류와 관련된다. 생태학적 오류는 집계 결과를 개인 수준의 진실로 다루는 해석상의 잘못이다. MAUP는 집계 결과 자체도 안정적이지 않으며 분석 단위에 대한 임의적 선택에 좌우된다는 점을 보여준다. 둘을 합쳐 보면 집계 자료가 개인 수준 추론에 근본적으로 한계가 있음을 알 수 있다.

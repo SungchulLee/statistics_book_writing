@@ -1,43 +1,43 @@
-# Covariance from Scratch
+# 공분산 밑바닥부터 만들기
 
-## Overview
+## 개요
 
-This page builds the covariance and Pearson correlation coefficient from first principles, step by step. Using synthetic price data for two states that share a common macroeconomic trend, we compute each quantity by hand, verify against library implementations, and illustrate why correlated time series do not imply causation.
+이 페이지는 공분산과 Pearson 상관계수를 제1원리에서 출발해 단계별로 만들어 본다. 공통의 거시경제 추세를 공유하는 두 주(州)의 가격 자료를 모의로 생성한 뒤, 각 양을 손으로 계산하고 라이브러리 구현과 대조해 확인하며, 상관된 시계열이 왜 인과를 뜻하지 않는지 보인다.
 
 ---
 
-## Sample Covariance
+## 표본공분산
 
-For paired observations $(x_1, y_1), \ldots, (x_n, y_n)$, the **sample covariance** is defined as
+짝지어진 관측값 $(x_1, y_1), \ldots, (x_n, y_n)$에 대해 **표본공분산**은 다음과 같이 정의된다.
 
 $$
 \text{Cov}(X, Y) = \frac{1}{n-1}\sum_{i=1}^{n}(x_i - \bar{x})(y_i - \bar{y})
 $$
 
-where $\bar{x}$ and $\bar{y}$ are the sample means. The denominator $n - 1$ (Bessel's correction) yields an unbiased estimator of the population covariance.
+여기서 $\bar{x}$와 $\bar{y}$는 표본평균이다. 분모의 $n - 1$(Bessel 보정)은 모집단 공분산의 불편추정량을 준다.
 
-Each term $(x_i - \bar{x})(y_i - \bar{y})$ is called a **deviation product**:
+각 항 $(x_i - \bar{x})(y_i - \bar{y})$를 **편차곱**이라 한다.
 
-- **Positive** when $x_i$ and $y_i$ deviate from their means in the same direction.
-- **Negative** when they deviate in opposite directions.
+- $x_i$와 $y_i$가 각자의 평균에서 **같은 방향**으로 벗어나면 양수이다.
+- **반대 방향**으로 벗어나면 음수이다.
 
-If positive products dominate, the covariance is positive, indicating that the variables tend to move together.
+양의 곱이 우세하면 공분산이 양수가 되고, 이는 두 변수가 함께 움직이는 경향이 있음을 뜻한다.
 
 ---
 
-## Pearson Correlation from Covariance
+## 공분산에서 Pearson 상관계수로
 
-The Pearson correlation coefficient normalizes the covariance by the product of the standard deviations:
+Pearson 상관계수는 공분산을 두 표준편차의 곱으로 표준화한 것이다.
 
 $$
 r = \frac{\text{Cov}(X, Y)}{s_X \, s_Y}
 $$
 
-where $s_X = \sqrt{\frac{1}{n-1}\sum_{i=1}^n (x_i - \bar{x})^2}$ is the sample standard deviation (and similarly for $s_Y$). This normalization ensures $-1 \le r \le 1$.
+여기서 $s_X = \sqrt{\frac{1}{n-1}\sum_{i=1}^n (x_i - \bar{x})^2}$는 표본표준편차이다($s_Y$도 같다). 이 표준화 덕분에 $-1 \le r \le 1$이 보장된다.
 
 ---
 
-## Step-by-Step Implementation
+## 단계별 구현
 
 ```python
 import numpy as np
@@ -64,16 +64,16 @@ def pearson_r_step_by_step(x, y):
 
 ---
 
-## Generating the Data
+## 자료 생성
 
-We simulate weekly prices for two states (CA and NY) that share a common downward trend but have independent noise:
+공통의 하락 추세를 공유하지만 잡음은 서로 독립인 두 주(CA와 NY)의 주간 가격을 모의로 만든다.
 
 $$
 \text{CA}_t = 248 + \text{trend}_t + \varepsilon_t^{(\text{CA})}, \qquad
 \text{NY}_t = 350 + 0.8\,\text{trend}_t + \varepsilon_t^{(\text{NY})}
 $$
 
-where $\text{trend}_t$ is a linear decrease from 0 to $-12$ over 48 weeks, $\varepsilon_t^{(\text{CA})} \sim \mathcal{N}(0, 0.5^2)$, and $\varepsilon_t^{(\text{NY})} \sim \mathcal{N}(0, 0.6^2)$.
+여기서 $\text{trend}_t$는 48주에 걸쳐 0에서 $-12$까지 선형으로 감소하고, $\varepsilon_t^{(\text{CA})} \sim \mathcal{N}(0, 0.5^2)$, $\varepsilon_t^{(\text{NY})} \sim \mathcal{N}(0, 0.6^2)$이다.
 
 ```python
 np.random.seed(42)
@@ -86,7 +86,7 @@ NY = 350.0 + trend * 0.8 + np.random.normal(0, 0.6, WEEKS)
 
 ---
 
-## Computing and Verifying
+## 계산과 검증
 
 ```python
 import pandas as pd
@@ -106,13 +106,25 @@ print(f"pandas corr = {df['CA'].corr(df['NY']):.4f}")
 print(f"numpy corr  = {np.corrcoef(CA, NY)[0, 1]:.4f}")
 ```
 
-All three methods should produce identical results, confirming our from-scratch implementation.
+출력:
+
+```text
+CA mean     = 241.8974
+NY mean     = 345.1893
+Covariance  = 10.5691
+Pearson r   = 0.9753
+pandas cov  = 10.5691
+pandas corr = 0.9753
+numpy corr  = 0.9753
+```
+
+세 방법이 모두 같은 값을 내놓으므로 밑바닥부터 만든 구현이 옳음을 확인할 수 있다.
 
 ---
 
-## Visualization
+## 시각화
 
-Three panels tell the complete story:
+세 개의 패널이 이야기 전체를 들려준다.
 
 ```python
 import matplotlib.pyplot as plt
@@ -152,22 +164,22 @@ plt.show()
 
 ---
 
-## Interpretation
+## 해석
 
-The strong positive correlation between CA and NY prices ($r$ near 1) arises entirely from the shared downward trend -- the confounding variable. Neither state's price *causes* the other. This is a textbook illustration of the principle that **correlation does not imply causation**.
+CA와 NY 가격 사이의 강한 양의 상관($r = 0.975$)은 전적으로 공유된 하락 추세, 곧 교란변수에서 비롯된다. 어느 주의 가격도 다른 주의 가격을 *일으키지* 않는다. **상관은 인과를 뜻하지 않는다**는 원리의 교과서적 예시이다.
 
-The deviation product bar chart shows that nearly all products are positive (blue), which is why the covariance -- and hence $r$ -- is strongly positive. In the time series panel, both series decline together, driven by the common trend rather than by any causal link between them.
+편차곱 막대그림을 보면 48개 중 46개가 양수(파랑)이며, 그래서 공분산이 — 따라서 $r$가 — 강하게 양수가 된다. 시계열 패널에서는 두 계열이 함께 하락하는데, 이는 둘 사이의 인과 연결이 아니라 공통 추세가 이끄는 움직임이다.
 
 ---
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Compute the covariance and Pearson $r$ by hand for the dataset $(1, 2), (2, 4), (3, 5), (4, 4), (5, 5)$. Show all intermediate steps including the deviation products.
+**연습문제 1.**
+자료 $(1, 2), (2, 4), (3, 5), (4, 4), (5, 5)$에 대해 공분산과 Pearson $r$를 손으로 계산하라. 편차곱을 포함한 모든 중간 단계를 보여라.
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
 
-    The sample means are $\bar{x} = 3$ and $\bar{y} = 4$.
+    표본평균은 $\bar{x} = 3$, $\bar{y} = 4$이다.
 
     | $i$ | $x_i$ | $y_i$ | $x_i - \bar{x}$ | $y_i - \bar{y}$ | $(x_i - \bar{x})(y_i - \bar{y})$ |
     |:---:|:---:|:---:|:---:|:---:|:---:|
@@ -197,20 +209,20 @@ Compute the covariance and Pearson $r$ by hand for the dataset $(1, 2), (2, 4), 
 
 ---
 
-**Exercise 2.**
-Prove that the sample covariance $\frac{1}{n-1}\sum(x_i - \bar{x})(y_i - \bar{y})$ is an unbiased estimator of the population covariance $\text{Cov}(X, Y) = \mathbb{E}[(X - \mu_X)(Y - \mu_Y)]$.
+**연습문제 2.**
+표본공분산 $\frac{1}{n-1}\sum(x_i - \bar{x})(y_i - \bar{y})$가 모집단 공분산 $\text{Cov}(X, Y) = \mathbb{E}[(X - \mu_X)(Y - \mu_Y)]$의 불편추정량임을 증명하라.
 
-??? success "Solution to Exercise 2"
+??? success "연습문제 2 풀이"
 
-    Let $(X_1, Y_1), \ldots, (X_n, Y_n)$ be i.i.d. with $\mathbb{E}[X] = \mu_X$, $\mathbb{E}[Y] = \mu_Y$, and $\text{Cov}(X, Y) = \sigma_{XY}$.
+    $(X_1, Y_1), \ldots, (X_n, Y_n)$이 독립이고 동일한 분포를 따르며 $\mathbb{E}[X] = \mu_X$, $\mathbb{E}[Y] = \mu_Y$, $\text{Cov}(X, Y) = \sigma_{XY}$라 하자.
 
-    Expand the sum:
+    합을 전개하면
 
     $$
     \sum_{i=1}^n (X_i - \bar{X})(Y_i - \bar{Y}) = \sum_{i=1}^n X_i Y_i - n\bar{X}\bar{Y}
     $$
 
-    Taking expectations:
+    기댓값을 취하면
 
     $$
     \mathbb{E}\!\left[\sum_{i=1}^n X_i Y_i\right] = n(\sigma_{XY} + \mu_X \mu_Y)
@@ -220,34 +232,34 @@ Prove that the sample covariance $\frac{1}{n-1}\sum(x_i - \bar{x})(y_i - \bar{y}
     \mathbb{E}[n\bar{X}\bar{Y}] = n\!\left(\frac{\sigma_{XY}}{n} + \mu_X \mu_Y\right) = \sigma_{XY} + n\mu_X \mu_Y
     $$
 
-    Therefore:
+    따라서
 
     $$
     \mathbb{E}\!\left[\sum_{i=1}^n (X_i - \bar{X})(Y_i - \bar{Y})\right] = n\sigma_{XY} + n\mu_X\mu_Y - \sigma_{XY} - n\mu_X\mu_Y = (n-1)\sigma_{XY}
     $$
 
-    Dividing by $n - 1$:
+    $n - 1$로 나누면
 
     $$
     \mathbb{E}\!\left[\frac{1}{n-1}\sum_{i=1}^n (X_i - \bar{X})(Y_i - \bar{Y})\right] = \sigma_{XY}
     $$
 
-    This confirms that the sample covariance with the $n - 1$ denominator is unbiased. $\square$
+    이로써 분모가 $n - 1$인 표본공분산이 불편임이 확인된다. $\square$
 
 ---
 
-**Exercise 3.**
-Show that $\text{Cov}(X, Y) = \mathbb{E}[XY] - \mathbb{E}[X]\,\mathbb{E}[Y]$. Use this identity to prove that if $X$ and $Y$ are independent, then $\text{Cov}(X, Y) = 0$.
+**연습문제 3.**
+$\text{Cov}(X, Y) = \mathbb{E}[XY] - \mathbb{E}[X]\,\mathbb{E}[Y]$임을 보여라. 이 항등식을 써서 $X$와 $Y$가 독립이면 $\text{Cov}(X, Y) = 0$임을 증명하라.
 
-??? success "Solution to Exercise 3"
+??? success "연습문제 3 풀이"
 
-    Starting from the definition:
+    정의에서 출발한다.
 
     $$
     \text{Cov}(X, Y) = \mathbb{E}[(X - \mu_X)(Y - \mu_Y)]
     $$
 
-    Expanding:
+    전개하면
 
     $$
     = \mathbb{E}[XY - \mu_Y X - \mu_X Y + \mu_X \mu_Y]
@@ -261,20 +273,22 @@ Show that $\text{Cov}(X, Y) = \mathbb{E}[XY] - \mathbb{E}[X]\,\mathbb{E}[Y]$. Us
     = \mathbb{E}[XY] - \mu_X \mu_Y - \mu_X \mu_Y + \mu_X \mu_Y = \mathbb{E}[XY] - \mathbb{E}[X]\,\mathbb{E}[Y]
     $$
 
-    If $X \perp Y$, then $\mathbb{E}[XY] = \mathbb{E}[X]\,\mathbb{E}[Y]$ (by independence), so:
+    $X \perp Y$이면 독립성에 의해 $\mathbb{E}[XY] = \mathbb{E}[X]\,\mathbb{E}[Y]$이므로
 
     $$
     \text{Cov}(X, Y) = \mathbb{E}[X]\,\mathbb{E}[Y] - \mathbb{E}[X]\,\mathbb{E}[Y] = 0
     $$
 
-    Note: the converse is false in general. Zero covariance does not imply independence (e.g., $X \sim \mathcal{N}(0,1)$ and $Y = X^2$ have $\text{Cov}(X, Y) = 0$ but are clearly dependent). $\square$
+    주의: 역은 일반적으로 성립하지 않는다. 공분산이 0이어도 독립은 아니다(예: $X \sim \mathcal{N}(0,1)$이고 $Y = X^2$이면 $\text{Cov}(X, Y) = 0$이지만 분명히 종속이다). $\square$
 
 ---
 
-**Exercise 4.**
-Modify the simulation so that CA and NY prices have independent trends (no shared component). Recompute the covariance and $r$. How does removing the common trend affect the results?
+**연습문제 4.**
+CA와 NY 가격이 공통 성분을 갖지 않도록 모의실험을 고쳐라. 공분산과 $r$를 다시 계산하고, 공통 추세를 없앤 것이 결과를 어떻게 바꾸는지 설명하라.
 
-??? success "Solution to Exercise 4"
+??? success "연습문제 4 풀이"
+
+    먼저 흔한 오해를 짚고 넘어가자. 두 계열에 **기울기가 다른** 결정론적 선형 추세를 주는 것으로는 공통 성분이 사라지지 않는다.
 
     ```python
     import numpy as np
@@ -282,59 +296,62 @@ Modify the simulation so that CA and NY prices have independent trends (no share
     np.random.seed(42)
     WEEKS = 48
     trend_CA = np.linspace(0, -12, WEEKS)
-    trend_NY = np.linspace(0, -8, WEEKS)  # independent trend
+    trend_NY = np.linspace(0, -8, WEEKS)   # 기울기만 다른 추세
 
-    # Add independent noise to make trends truly separate
     CA = 248.0 + trend_CA + np.random.normal(0, 3, WEEKS)
     NY = 350.0 + trend_NY + np.random.normal(0, 3, WEEKS)
 
-    cov = np.cov(CA, NY)[0, 1]
-    r = np.corrcoef(CA, NY)[0, 1]
-    print(f"Covariance = {cov:.4f}")
-    print(f"Pearson r  = {r:.4f}")
+    print(f"Covariance = {np.cov(CA, NY)[0, 1]:.4f}")   # 10.5231
+    print(f"Pearson r  = {np.corrcoef(CA, NY)[0, 1]:.4f}")  # 0.5733
     ```
 
-    With larger independent noise and separate trends, the correlation drops significantly. The original high correlation was driven by the *shared* trend. When trends are independent, the only source of covariation is random noise, and the correlation is expected to be near zero (though not exactly zero in a finite sample). This further confirms that the original correlation was a confounding artifact. $\square$
+    잡음을 6배로 키웠는데도 $r = 0.573$으로 여전히 뚜렷하게 양수이다. 이유는 간단하다. 두 결정론적 직선 추세는 서로 상수배 관계이므로 **완전히 공선적**이다. 기울기가 다르다는 것은 독립이라는 뜻이 아니다. 상관이 낮아진 것은 공통 성분이 사라져서가 아니라 잡음이 커져 신호 대 잡음비가 낮아졌기 때문이다.
+
+    공통 성분을 실제로 없애려면 한 계열에서 추세 자체를 빼야 한다.
+
+    ```python
+    np.random.seed(42)
+    CA = 248.0 + np.linspace(0, -12, WEEKS) + np.random.normal(0, 0.5, WEEKS)
+    NY = 350.0 + np.random.normal(0, 0.6, WEEKS)   # 추세 없음
+
+    print(f"Covariance = {np.cov(CA, NY)[0, 1]:.4f}")   # 0.1348
+    print(f"Pearson r  = {np.corrcoef(CA, NY)[0, 1]:.4f}")  # 0.0659
+    ```
+
+    이제 $r = 0.066$으로 0에 가깝다(유한표본이므로 정확히 0은 아니다). 원래의 $r = 0.975$는 두 계열이 서로 영향을 주고받아서가 아니라 *공유된* 추세가 만들어 낸 것이었다. 이는 원래의 상관이 교란에 의한 인공물이었음을 다시 한번 확인해 준다. $\square$
 
 ---
 
-**Exercise 5.**
-Prove the bilinearity property of covariance: for constants $a, b, c, d$ and random variables $X, Y, W$,
+**연습문제 5.**
+공분산의 쌍선형성을 증명하라. 상수 $a, b, c, d$와 확률변수 $X, Y, W$에 대해
 
 $$
 \text{Cov}(aX + bY,\; cW + d) = ac\,\text{Cov}(X, W) + bc\,\text{Cov}(Y, W)
 $$
 
-??? success "Solution to Exercise 5"
+??? success "연습문제 5 풀이"
 
-    Using the identity $\text{Cov}(U, V) = \mathbb{E}[UV] - \mathbb{E}[U]\,\mathbb{E}[V]$:
+    항등식 $\text{Cov}(U, V) = \mathbb{E}[UV] - \mathbb{E}[U]\,\mathbb{E}[V]$를 쓴다.
 
     $$
     \text{Cov}(aX + bY,\; cW + d)
-    $$
-
-    $$
     = \mathbb{E}[(aX + bY)(cW + d)] - \mathbb{E}[aX + bY]\,\mathbb{E}[cW + d]
     $$
 
-    Expanding the first term:
+    첫째 항을 전개하면
 
     $$
-    = ac\,\mathbb{E}[XW] + ad\,\mathbb{E}[X] + bc\,\mathbb{E}[YW] + bd\,\mathbb{E}[Y]
+    \mathbb{E}[(aX + bY)(cW + d)] = ac\,\mathbb{E}[XW] + ad\,\mathbb{E}[X] + bc\,\mathbb{E}[YW] + bd\,\mathbb{E}[Y]
     $$
 
-    Expanding the second term:
+    둘째 항을 전개하면
 
     $$
-
-    - (a\,\mathbb{E}[X] + b\,\mathbb{E}[Y])(c\,\mathbb{E}[W] + d)
-    $$
-
-    $$
+    -(a\,\mathbb{E}[X] + b\,\mathbb{E}[Y])(c\,\mathbb{E}[W] + d)
     = -ac\,\mathbb{E}[X]\mathbb{E}[W] - ad\,\mathbb{E}[X] - bc\,\mathbb{E}[Y]\mathbb{E}[W] - bd\,\mathbb{E}[Y]
     $$
 
-    Combining:
+    둘을 합치면
 
     $$
     = ac(\mathbb{E}[XW] - \mathbb{E}[X]\mathbb{E}[W]) + bc(\mathbb{E}[YW] - \mathbb{E}[Y]\mathbb{E}[W])
@@ -344,4 +361,4 @@ $$
     = ac\,\text{Cov}(X, W) + bc\,\text{Cov}(Y, W)
     $$
 
-    Note that the constant $d$ drops out entirely, reflecting the fact that adding a constant to a random variable does not change its covariance with anything. $\square$
+    상수 $d$가 완전히 사라진다는 점에 주목하라. 확률변수에 상수를 더해도 다른 어떤 변수와의 공분산도 바뀌지 않는다는 사실을 반영한다. $\square$

@@ -1,22 +1,24 @@
-# Causal Inference Simulations
+# 인과추론 모의실험
 
-## Overview
+## 개요
 
-This page demonstrates two classic pitfalls that make correlation different from causation: confounding variables and Simpson's paradox. Through simulation we show how a hidden common cause can create a misleading association between two variables, and how the direction of a correlation can reverse when data are aggregated across subgroups.
+이 페이지에서는 상관을 인과와 다르게 만드는 두 가지 고전적 함정, 즉 교란변수와 Simpson의 역설을 보인다. 모의실험을 통해 숨은 공통원인이 두 변수 사이에 오도하는 연관을 만드는 과정과, 하위집단을 합칠 때 상관의 방향이 뒤집히는 과정을 살펴본다.
 
 ---
 
-## Confounding Variables
+## 교란변수
 
-A **confounding variable** $Z$ influences both $X$ and $Y$, creating a spurious association between them even when $X$ has no direct effect on $Y$. The directed acyclic graph (DAG) for this scenario is:
+**교란변수** $Z$는 $X$와 $Y$ 모두에 영향을 주어, $X$가 $Y$에 직접 효과가 없어도 둘 사이에 허위 연관을 만든다. 이 상황의 방향성 비순환 그래프(DAG)는
 
 $$
 X \leftarrow Z \rightarrow Y
 $$
 
-### Simulation
+이다.
 
-We generate data where $Z$ is the true common cause:
+### 모의실험
+
+$Z$가 참 공통원인인 자료를 생성한다:
 
 ```python
 import numpy as np
@@ -29,11 +31,11 @@ X = 0.6 * Z + np.random.randn(n) * 0.5
 Y = 0.8 * Z + np.random.randn(n) * 0.5
 ```
 
-Here $Y$ depends on $Z$ alone, not on $X$, yet $X$ and $Y$ will appear correlated because both are driven by $Z$.
+여기서 $Y$는 $X$가 아니라 $Z$에만 의존하지만, 둘 다 $Z$에 이끌리므로 $X$와 $Y$는 상관된 것처럼 보인다.
 
-### Partial Correlation
+### 부분상관
 
-To remove the confounding effect, we compute the **partial correlation** of $X$ and $Y$ given $Z$:
+교란 효과를 제거하기 위해 $Z$가 주어졌을 때 $X$와 $Y$의 **부분상관**을 계산한다:
 
 $$
 r_{XY \cdot Z} = \frac{r_{XY} - r_{XZ}\, r_{YZ}}{\sqrt{(1 - r_{XZ}^2)(1 - r_{YZ}^2)}}
@@ -50,21 +52,23 @@ print(f"Pearson r(X, Y)       = {r_xy:.3f}")
 print(f"Partial r(X, Y | Z)   = {r_partial:.3f}")
 ```
 
-After controlling for $Z$, the association between $X$ and $Y$ nearly vanishes, confirming that the observed correlation was entirely due to the confounder.
+$Z$를 통제하면 $X$와 $Y$의 연관이 거의 사라져, 관측된 상관이 전적으로 교란요인 때문이었음을 확인해 준다.
 
 ---
 
-## Simpson's Paradox
+## Simpson의 역설
 
-**Simpson's paradox** occurs when a trend that appears in several subgroups reverses or disappears when the subgroups are combined. Mathematically, it is possible that:
+**Simpson의 역설**은 여러 하위집단에서 나타나는 경향이 하위집단을 합치면 뒤집히거나 사라질 때 일어난다. 수학적으로
 
 $$
 r_{\text{subgroup } A} < 0, \quad r_{\text{subgroup } B} < 0, \quad \text{but} \quad r_{\text{aggregate}} > 0
 $$
 
-### Simulation
+이 가능하다.
 
-We create two subgroups with different baseline levels:
+### 모의실험
+
+기준 수준이 다른 두 하위집단을 만든다:
 
 ```python
 rng = np.random.default_rng(42)
@@ -77,7 +81,7 @@ x_b = rng.uniform(25, 50, n_b)
 y_b = -0.4 * x_b + 45 + rng.normal(0, 2, n_b)
 ```
 
-Within each subgroup, $Y$ decreases with $X$ (slope $= -0.4$). But Group B has a higher intercept and higher $X$ values, so when we pool the data the aggregate trend is positive:
+각 하위집단 안에서는 $X$가 커질수록 $Y$가 작아진다(기울기 $= -0.4$). 그러나 집단 B는 절편도 크고 $X$ 값도 크므로 자료를 합치면 전체 추세가 양이 된다:
 
 ```python
 x_all = np.concatenate([x_a, x_b])
@@ -92,7 +96,7 @@ print(f"Subgroup A r = {r_a:+.3f}")
 print(f"Subgroup B r = {r_b:+.3f}")
 ```
 
-### Visualization
+### 시각화
 
 ```python
 import matplotlib.pyplot as plt
@@ -115,22 +119,22 @@ plt.show()
 
 ---
 
-## Interpretation
+## 해석
 
-These simulations illustrate two fundamental lessons for statistical practice:
+이 모의실험들은 통계 실무에 대한 두 가지 근본적인 교훈을 보여준다:
 
-1. **Confounding.** When a hidden variable drives both $X$ and $Y$, the marginal correlation $r_{XY}$ is misleading. The partial correlation $r_{XY \cdot Z}$ removes this confounding, and in our simulation it drops to near zero, correctly reflecting the absence of a direct $X \to Y$ effect.
+1. **교란.** 숨은 변수가 $X$와 $Y$를 모두 이끌면 주변상관 $r_{XY}$가 오도한다. 부분상관 $r_{XY \cdot Z}$는 이 교란을 제거하며, 우리 모의실험에서 0에 가깝게 떨어져 직접적인 $X \to Y$ 효과가 없음을 올바르게 반영한다.
 
-2. **Simpson's paradox.** Aggregating heterogeneous subgroups can reverse the direction of an association. The positive aggregate correlation is an artifact of the different baseline levels of the groups, not a property of the within-group relationship. This is why stratified analysis and careful consideration of confounders are essential before drawing causal conclusions from observational data.
+2. **Simpson의 역설.** 이질적인 하위집단을 합치면 연관의 방향이 뒤집힐 수 있다. 양의 집계 상관은 집단마다 기준 수준이 다른 데서 생긴 인공물이지 집단 내 관계의 성질이 아니다. 그래서 관찰자료에서 인과적 결론을 내리기 전에 층화 분석과 교란요인에 대한 신중한 고려가 필수적이다.
 
 ---
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Simulate a confounding scenario with $n = 500$ where $Z \sim \mathcal{N}(0, 1)$, $X = 0.9Z + \varepsilon_X$, and $Y = 0.3Z + \varepsilon_Y$ with $\varepsilon_X, \varepsilon_Y \sim \mathcal{N}(0, 0.3^2)$. Compute both $r_{XY}$ and the partial correlation $r_{XY \cdot Z}$. How does reducing the noise variance affect the difference between the two?
+**연습문제 1.**
+$Z \sim \mathcal{N}(0, 1)$, $X = 0.9Z + \varepsilon_X$, $Y = 0.3Z + \varepsilon_Y$이고 $\varepsilon_X, \varepsilon_Y \sim \mathcal{N}(0, 0.3^2)$인 교란 상황을 $n = 500$으로 모의실험하라. $r_{XY}$와 부분상관 $r_{XY \cdot Z}$를 모두 계산하라. 잡음 분산을 줄이면 둘의 차이가 어떻게 달라지는가?
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
 
     ```python
     import numpy as np
@@ -151,14 +155,14 @@ Simulate a confounding scenario with $n = 500$ where $Z \sim \mathcal{N}(0, 1)$,
     print(f"r(X, Y | Z) = {r_partial:.4f}")
     ```
 
-    The marginal correlation $r_{XY}$ will be moderately positive because both $X$ and $Y$ share the common cause $Z$. The partial correlation $r_{XY \cdot Z}$ will be close to zero. Reducing the noise variance makes $r_{XZ}$ and $r_{YZ}$ closer to their theoretical values, which makes the confounding effect more pronounced (larger $r_{XY}$) while the partial correlation remains near zero. $\square$
+    $X$와 $Y$가 공통원인 $Z$를 공유하므로 주변상관 $r_{XY}$는 중간 정도의 양수가 된다. 부분상관 $r_{XY \cdot Z}$는 0에 가깝다. 잡음 분산을 줄이면 $r_{XZ}$와 $r_{YZ}$가 이론값에 더 가까워져 교란 효과가 더 뚜렷해지고($r_{XY}$가 커지고) 부분상관은 여전히 0 근처에 남는다. $\square$
 
 ---
 
-**Exercise 2.**
-Construct a Simpson's paradox example with three subgroups (not two). Within each subgroup, the slope of $Y$ on $X$ should be $+2$, but the aggregate slope should be negative. Plot the result.
+**연습문제 2.**
+하위집단이 (둘이 아니라) 셋인 Simpson 역설 예제를 구성하라. 각 하위집단 안에서 $X$에 대한 $Y$의 기울기가 $+2$이지만 집계 기울기는 음수여야 한다. 결과를 그려라.
 
-??? success "Solution to Exercise 2"
+??? success "연습문제 2 풀이"
 
     ```python
     import numpy as np
@@ -189,35 +193,35 @@ Construct a Simpson's paradox example with three subgroups (not two). Within eac
     plt.show()
     ```
 
-    Each group has a positive within-group slope of $+2$, but the group intercepts decrease as the group mean of $X$ increases. When pooled, the between-group trend dominates and the aggregate slope becomes negative. $\square$
+    각 집단의 집단 내 기울기는 $+2$로 양수이지만, 집단의 $X$ 평균이 커질수록 집단 절편이 작아진다. 자료를 합치면 집단 간 추세가 지배하여 집계 기울기가 음수가 된다. $\square$
 
 ---
 
-**Exercise 3.**
-Derive the formula for the partial correlation $r_{XY \cdot Z}$ starting from the residuals of the linear regressions of $X$ on $Z$ and $Y$ on $Z$.
+**연습문제 3.**
+$X$를 $Z$에, $Y$를 $Z$에 회귀한 잔차에서 출발하여 부분상관 $r_{XY \cdot Z}$의 공식을 유도하라.
 
-??? success "Solution to Exercise 3"
+??? success "연습문제 3 풀이"
 
-    Let $e_X = X - \hat{\beta}_{XZ} Z$ be the residuals from regressing $X$ on $Z$, and similarly $e_Y = Y - \hat{\beta}_{YZ} Z$. By definition, the partial correlation is:
+    $e_X = X - \hat{\beta}_{XZ} Z$를 $X$를 $Z$에 회귀한 잔차, $e_Y = Y - \hat{\beta}_{YZ} Z$를 그에 대응하는 잔차라 하자. 정의에 의해 부분상관은
 
     $$
     r_{XY \cdot Z} = r(e_X, e_Y)
     $$
 
-    Using the projection properties of OLS, $e_X$ is the component of $X$ orthogonal to $Z$, and $e_Y$ is the component of $Y$ orthogonal to $Z$. Writing $\hat{\beta}_{XZ} = r_{XZ} \cdot s_X / s_Z$ and expanding the Pearson formula on the residuals, one obtains after algebraic simplification:
+    이다. OLS의 사영 성질에 의해 $e_X$는 $X$ 중 $Z$에 직교하는 성분이고 $e_Y$는 $Y$ 중 $Z$에 직교하는 성분이다. $\hat{\beta}_{XZ} = r_{XZ} \cdot s_X / s_Z$로 쓰고 잔차에 Pearson 공식을 전개해 정리하면
 
     $$
     r_{XY \cdot Z} = \frac{r_{XY} - r_{XZ}\, r_{YZ}}{\sqrt{(1 - r_{XZ}^2)(1 - r_{YZ}^2)}}
     $$
 
-    This is the standard partial correlation formula. The numerator removes the linear association of each variable with $Z$; the denominator rescales to maintain the $[-1, 1]$ range. $\square$
+    를 얻는다. 이것이 표준 부분상관 공식이다. 분자는 각 변수와 $Z$의 선형 연관을 제거하고, 분모는 $[-1, 1]$ 범위를 유지하도록 다시 축척한다. $\square$
 
 ---
 
-**Exercise 4.**
-In the Simpson's paradox simulation, what happens to the aggregate correlation if you make the two subgroups have the same intercept but different slopes (one positive, one negative)? Simulate and explain.
+**연습문제 4.**
+Simpson 역설 모의실험에서 두 하위집단의 절편을 같게 하고 기울기만 다르게(하나는 양, 하나는 음) 하면 집계 상관은 어떻게 되는가? 모의실험하고 설명하라.
 
-??? success "Solution to Exercise 4"
+??? success "연습문제 4 풀이"
 
     ```python
     import numpy as np
@@ -243,37 +247,37 @@ In the Simpson's paradox simulation, what happens to the aggregate correlation i
     print(f"Aggregate r = {r_all:+.3f}")
     ```
 
-    When both subgroups share the same intercept and $X$ range but have opposite slopes, the aggregate correlation is approximately zero. The positive and negative relationships cancel each other out. This is not strictly Simpson's paradox (the sign does not reverse), but it demonstrates how mixing heterogeneous groups can mask real within-group effects entirely. $\square$
+    두 하위집단의 절편과 $X$ 범위가 같고 기울기의 부호만 반대이면 집계 상관은 거의 0이 된다. 양의 관계와 음의 관계가 서로 상쇄되기 때문이다. 엄밀히 말하면 (부호가 뒤집히지 않으므로) Simpson의 역설은 아니지만, 이질적인 집단을 섞으면 실제 집단 내 효과가 완전히 가려질 수 있음을 보여준다. $\square$
 
 ---
 
-**Exercise 5.**
-Prove that if $X \perp Y \mid Z$ (conditional independence given $Z$) and all three variables are jointly normally distributed, then the partial correlation $r_{XY \cdot Z} = 0$.
+**연습문제 5.**
+$X \perp Y \mid Z$($Z$가 주어졌을 때의 조건부 독립)이고 세 변수가 결합적으로 정규분포를 따르면 부분상관 $r_{XY \cdot Z} = 0$임을 증명하라.
 
-??? success "Solution to Exercise 5"
+??? success "연습문제 5 풀이"
 
-    For jointly normal random variables, the conditional distribution of $(X, Y) \mid Z$ is also bivariate normal. The conditional covariance is:
+    결합정규 확률변수에서 $(X, Y) \mid Z$의 조건부 분포도 이변량 정규이다. 조건부 공분산은
 
     $$
     \text{Cov}(X, Y \mid Z) = \sigma_{XY} - \frac{\sigma_{XZ}\, \sigma_{YZ}}{\sigma_{ZZ}}
     $$
 
-    If $X \perp Y \mid Z$, then $\text{Cov}(X, Y \mid Z) = 0$, which gives:
+    이다. $X \perp Y \mid Z$이면 $\text{Cov}(X, Y \mid Z) = 0$이므로
 
     $$
     \sigma_{XY} = \frac{\sigma_{XZ}\, \sigma_{YZ}}{\sigma_{ZZ}}
     $$
 
-    Converting to correlations by dividing by $\sigma_X \sigma_Y$:
+    이다. $\sigma_X \sigma_Y$로 나누어 상관으로 바꾸면
 
     $$
     \rho_{XY} = \rho_{XZ}\, \rho_{YZ}
     $$
 
-    Substituting into the partial correlation formula:
+    이다. 이를 부분상관 공식에 대입하면
 
     $$
     \rho_{XY \cdot Z} = \frac{\rho_{XY} - \rho_{XZ}\, \rho_{YZ}}{\sqrt{(1 - \rho_{XZ}^2)(1 - \rho_{YZ}^2)}} = \frac{\rho_{XZ}\rho_{YZ} - \rho_{XZ}\rho_{YZ}}{\sqrt{(1 - \rho_{XZ}^2)(1 - \rho_{YZ}^2)}} = 0
     $$
 
-    The converse also holds for jointly normal variables: $\rho_{XY \cdot Z} = 0$ implies $X \perp Y \mid Z$. This is a special property of the multivariate normal distribution. $\square$
+    이 된다. 결합정규 변수에서는 역도 성립한다. $\rho_{XY \cdot Z} = 0$이면 $X \perp Y \mid Z$이다. 이는 다변량 정규분포의 특별한 성질이다. $\square$

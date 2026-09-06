@@ -1,13 +1,12 @@
-# 18.6 Correlation Tests
+# 상관 검정 개관
 
-
-This section covers three widely used statistical tests for assessing the significance of the relationship between two variables: Pearson's correlation, Spearman's rank correlation, and Kendall's tau.
+이 절에서는 두 변수 사이 관계의 유의성을 평가하는 데 널리 쓰이는 세 가지 통계 검정을 다룬다: Pearson 상관, Spearman 순위상관, Kendall의 타우.
 
 ---
 
-## Setup: Shared Data Generation
+## 준비: 공통 자료 생성
 
-The following modules generate three types of data to illustrate different correlation scenarios.
+다음 모듈들은 서로 다른 상관 상황을 보이기 위해 세 가지 유형의 자료를 생성한다.
 
 ### `global_name_space.py`
 
@@ -51,19 +50,19 @@ def load_data(data_type=0):
     return data_dict
 ```
 
-The three datasets represent:
+세 자료가 나타내는 것:
 
-- **Dataset 0**: No relationship — random scatter, both Pearson and rank-based correlations should be near zero.
-- **Dataset 1**: Monotonic nonlinear — Pearson may understate the relationship since it measures linearity, but Spearman and Kendall (which measure monotonicity) should detect it.
-- **Dataset 2**: Non-monotonic (sinusoidal) — all correlation measures should be weak since the relationship is periodic, not monotonic or linear.
+- **자료 0**: 관계 없음 — 무작위 산포. Pearson과 순위 기반 상관 모두 0에 가까워야 한다.
+- **자료 1**: 단조 비선형 — Pearson은 선형성을 재므로 관계를 과소평가할 수 있지만 (단조성을 재는) Spearman과 Kendall은 이를 탐지해야 한다.
+- **자료 2**: 비단조(사인) — 관계가 주기적이고 단조도 선형도 아니므로 모든 상관 측도가 약해야 한다.
 
 ---
 
-## Pearson's Correlation Test
+## Pearson 상관 검정
 
-[Documentation: `scipy.stats.pearsonr`](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.pearsonr.html)
+[문서: `scipy.stats.pearsonr`](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.pearsonr.html)
 
-Pearson's $r$ measures the **linear** relationship between two variables. The test statistic under the null hypothesis $H_0: \rho = 0$ follows a $t$-distribution with $n-2$ degrees of freedom.
+Pearson의 $r$은 두 변수 사이의 **선형** 관계를 잰다. 귀무가설 $H_0: \rho = 0$ 아래에서 검정통계량은 자유도 $n-2$인 $t$-분포를 따른다.
 
 ```python
 import matplotlib.pyplot as plt
@@ -85,16 +84,16 @@ if __name__ == "__main__":
     main()
 ```
 
-**When to use**: When both variables are continuous and you expect a **linear** relationship. Pearson's $r$ is sensitive to outliers and assumes bivariate normality for the test's p-value to be exact.
+**언제 쓰는가**: 두 변수가 모두 연속형이고 **선형** 관계를 예상할 때. Pearson의 $r$은 이상점에 민감하며 p-값이 정확하려면 이변량 정규성을 가정한다.
 
 ---
 
-## Spearman's Rank Correlation Test
+## Spearman 순위상관 검정
 
-[Video: Spearman's Rank Correlation](https://www.youtube.com/watch?v=YpG2MlulP_o) |
-[Documentation: `scipy.stats.spearmanr`](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.spearmanr.html)
+[영상: Spearman's Rank Correlation](https://www.youtube.com/watch?v=YpG2MlulP_o) |
+[문서: `scipy.stats.spearmanr`](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.spearmanr.html)
 
-Spearman's $\rho_s$ measures the **monotonic** relationship between two variables. It is computed as Pearson's $r$ applied to the ranks of the data rather than the raw values. This makes it robust to outliers and applicable to non-linear but monotonic relationships.
+Spearman의 $\rho_s$는 두 변수 사이의 **단조** 관계를 잰다. 원자료 값이 아니라 순위에 Pearson의 $r$을 적용하여 계산한다. 그래서 이상점에 로버스트하고 비선형이지만 단조인 관계에도 적용할 수 있다.
 
 ```python
 import matplotlib.pyplot as plt
@@ -108,7 +107,7 @@ def main():
     for ax, (x, y) in zip(axes, data_dict.values()):
         ax.plot(x, y, ".k")
         coef, p_val = stats.spearmanr(x, y)
-        ax.set_title(f"Spearman's ρ: {coef:.4f}\np-value: {p_val:.4f}")
+        ax.set_title(f"Spearman rho: {coef:.4f}\np-value: {p_val:.4f}")
     plt.tight_layout()
     plt.show()
 
@@ -116,17 +115,17 @@ if __name__ == "__main__":
     main()
 ```
 
-**When to use**: When the relationship may be monotonic but not necessarily linear, or when the data contains outliers or is ordinal.
+**언제 쓰는가**: 관계가 단조일 수 있으나 반드시 선형은 아닐 때, 또는 자료에 이상점이 있거나 순서형일 때.
 
 ---
 
-## Kendall's Tau
+## Kendall의 타우
 
-[Video 1: Kendall's Tau Explained](https://www.youtube.com/watch?v=oXVxaSoY94k) |
-[Video 2: Kendall's Tau Calculation](https://www.youtube.com/watch?v=V4MgE43SrgM) |
-[Documentation: `scipy.stats.kendalltau`](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.kendalltau.html)
+[영상 1: Kendall's Tau Explained](https://www.youtube.com/watch?v=oXVxaSoY94k) |
+[영상 2: Kendall's Tau Calculation](https://www.youtube.com/watch?v=V4MgE43SrgM) |
+[문서: `scipy.stats.kendalltau`](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.kendalltau.html)
 
-Kendall's $\tau$ also measures the strength of a **monotonic** relationship, but it is based on the number of concordant and discordant pairs rather than ranks. It tends to be more robust for small sample sizes and has better statistical properties for hypothesis testing.
+Kendall의 $\tau$도 **단조** 관계의 강도를 재지만 순위가 아니라 일치쌍과 불일치쌍의 수에 기반한다. 표본이 작을 때 더 로버스트한 편이고 가설검정에 좋은 통계적 성질을 갖는다.
 
 $$
 \tau = \frac{(\text{number of concordant pairs}) - (\text{number of discordant pairs})}{\binom{n}{2}}
@@ -144,7 +143,7 @@ def main():
     for ax, (x, y) in zip(axes, data_dict.values()):
         ax.plot(x, y, ".k")
         coef, p_val = stats.kendalltau(x, y)
-        ax.set_title(f"Kendall's τ: {coef:.4f}\np-value: {p_val:.4f}")
+        ax.set_title(f"Kendall's tau: {coef:.4f}\np-value: {p_val:.4f}")
     plt.tight_layout()
     plt.show()
 
@@ -152,35 +151,35 @@ if __name__ == "__main__":
     main()
 ```
 
-**When to use**: Similar situations to Spearman's $\rho_s$, but preferred when sample sizes are small or when you want a more interpretable measure based on pairwise concordance.
+**언제 쓰는가**: Spearman의 $\rho_s$와 비슷한 상황이지만, 표본이 작거나 쌍별 일치에 기반한 더 해석하기 쉬운 측도를 원할 때 선호된다.
 
 ---
 
-## Comparison of the Three Tests
+## 세 검정의 비교
 
-| Feature | Pearson's $r$ | Spearman's $\rho_s$ | Kendall's $\tau$ |
+| 항목 | Pearson의 $r$ | Spearman의 $\rho_s$ | Kendall의 $\tau$ |
 |---------|--------------|-------------------|----------------|
-| Measures | Linear association | Monotonic association | Monotonic association |
-| Data type | Continuous | Continuous or ordinal | Continuous or ordinal |
-| Sensitivity to outliers | High | Low | Low |
-| Assumption | Bivariate normality (for exact p-value) | None (rank-based) | None (rank-based) |
-| Range | $[-1, 1]$ | $[-1, 1]$ | $[-1, 1]$ |
-| Small samples | Less reliable | Moderate | More reliable |
+| 재는 것 | 선형 연관 | 단조 연관 | 단조 연관 |
+| 자료 유형 | 연속형 | 연속형 또는 순서형 | 연속형 또는 순서형 |
+| 이상점에 대한 민감성 | 높음 | 낮음 | 낮음 |
+| 가정 | 이변량 정규성(정확한 p-값을 위해) | 없음(순위 기반) | 없음(순위 기반) |
+| 범위 | $[-1, 1]$ | $[-1, 1]$ | $[-1, 1]$ |
+| 작은 표본 | 덜 믿을 만함 | 보통 | 더 믿을 만함 |
 
 ---
 
-## Worked Example: Age and Income
+## 예제: 나이와 소득
 
-**Problem**: Test whether age and income are related using $\alpha = 0.05$.
+**문제**: $\alpha = 0.05$에서 나이와 소득이 관련되어 있는지 검정하라.
 
 ```
 age    = [18, 25, 57, 45, 26, 64, 37, 40, 24, 33]
 income = [15000, 29000, 68000, 52000, 32000, 80000, 41000, 45000, 26000, 33000]
 ```
 
-### Solution
+### 풀이
 
-All three tests yield $p \approx 0.0000$, indicating a strong, statistically significant relationship between age and income.
+세 검정 모두 $p \approx 0.0000$을 주어 나이와 소득 사이에 강하고 통계적으로 유의한 관계가 있음을 나타낸다.
 
 ```python
 import matplotlib.pyplot as plt
@@ -194,10 +193,10 @@ def main():
     print(f"Pearson's r:   coef = {coef:.4f},  p-value = {p_val:.4f}")
 
     coef, p_val = stats.spearmanr(x, y)
-    print(f"Spearman's ρ:  coef = {coef:.4f},  p-value = {p_val:.4f}")
+    print(f"Spearman rho:  coef = {coef:.4f},  p-value = {p_val:.4f}")
 
     coef, p_val = stats.kendalltau(x, y)
-    print(f"Kendall's τ:   coef = {coef:.4f},  p-value = {p_val:.4f}")
+    print(f"Kendall's tau: coef = {coef:.4f},  p-value = {p_val:.4f}")
 
     fig, ax = plt.subplots(figsize=(12, 3))
     ax.plot(x, y, "ok")
@@ -209,55 +208,56 @@ if __name__ == "__main__":
     main()
 ```
 
-**Interpretation**: Since all p-values are well below $\alpha = 0.05$, we reject $H_0: \rho = 0$ and conclude that there is a statistically significant positive relationship between age and income in this sample. Note that this does not establish a causal relationship—confounders such as experience, education, and industry could influence both variables.
-## Exercises
+**해석**: 모든 p-값이 $\alpha = 0.05$보다 훨씬 작으므로 $H_0: \rho = 0$을 기각하고 이 표본에서 나이와 소득 사이에 통계적으로 유의한 양의 관계가 있다고 결론짓는다. 다만 이것이 인과관계를 확립하지는 않는다. 경력, 학력, 업종 같은 교란요인이 두 변수 모두에 영향을 줄 수 있다.
 
-**Exercise 1.**
-For a sample of $n = 25$ observations, the Pearson correlation is $r = 0.42$. Test the null hypothesis $H_0: \rho = 0$ at $\alpha = 0.05$ using the $t$-test for correlation.
+## 연습문제
 
-??? success "Solution to Exercise 1"
-    The test statistic is:
+**연습문제 1.**
+$n = 25$인 표본에서 Pearson 상관이 $r = 0.42$이다. 상관에 대한 $t$-검정으로 $\alpha = 0.05$에서 귀무가설 $H_0: \rho = 0$을 검정하라.
+
+??? success "연습문제 1 풀이"
+    검정통계량은
 
     $$
     t = \frac{r\sqrt{n-2}}{\sqrt{1-r^2}} = \frac{0.42\sqrt{23}}{\sqrt{1-0.1764}} = \frac{0.42 \times 4.796}{\sqrt{0.8236}} = \frac{2.014}{0.9075} = 2.219
     $$
 
-    With $df = n - 2 = 23$, the critical value for a two-tailed test at $\alpha = 0.05$ is $t_{0.025, 23} \approx 2.069$.
+    이다. $df = n - 2 = 23$에서 $\alpha = 0.05$ 양측검정의 임계값은 $t_{0.025, 23} \approx 2.069$이다.
 
-    Since $|t| = 2.219 > 2.069$, we reject $H_0$ and conclude that there is a statistically significant linear relationship between the two variables at the 5% level.
+    $|t| = 2.219 > 2.069$이므로 $H_0$을 기각하고 5% 수준에서 두 변수 사이에 통계적으로 유의한 선형관계가 있다고 결론짓는다.
 
 ---
 
-**Exercise 2.**
-Explain the difference between testing $H_0: \rho = 0$ and testing $H_0: \rho = \rho_0$ for some $\rho_0 \neq 0$. Why does the second test require Fisher's $z$-transformation?
+**연습문제 2.**
+$H_0: \rho = 0$을 검정하는 것과 $\rho_0 \neq 0$인 $H_0: \rho = \rho_0$을 검정하는 것의 차이를 설명하라. 두 번째 검정에 왜 Fisher의 $z$ 변환이 필요한가?
 
-??? success "Solution to Exercise 2"
-    When $\rho = 0$, the sampling distribution of $r$ is symmetric and the $t$-statistic $r\sqrt{(n-2)/(1-r^2)}$ follows an exact $t$-distribution with $n-2$ degrees of freedom.
+??? success "연습문제 2 풀이"
+    $\rho = 0$이면 $r$의 표본분포가 대칭이고 $t$-통계량 $r\sqrt{(n-2)/(1-r^2)}$이 자유도 $n-2$인 $t$-분포를 정확히 따른다.
 
-    When $\rho \neq 0$, the sampling distribution of $r$ is **skewed** (especially for $|\rho|$ close to 1), so the $t$-test is no longer valid. Fisher's $z$-transformation:
+    $\rho \neq 0$이면 $r$의 표본분포가 (특히 $|\rho|$가 1에 가까울 때) **치우쳐** 있으므로 $t$-검정이 더 이상 타당하지 않다. Fisher의 $z$ 변환
 
     $$
     z = \frac{1}{2}\ln\frac{1+r}{1-r} = \text{arctanh}(r)
     $$
 
-    transforms $r$ to an approximately normal distribution with mean $\text{arctanh}(\rho)$ and standard error $1/\sqrt{n-3}$, enabling valid hypothesis tests and confidence intervals for any $\rho_0$.
+    은 $r$을 평균이 $\text{arctanh}(\rho)$이고 표준오차가 $1/\sqrt{n-3}$인 근사적 정규분포로 바꾸어, 임의의 $\rho_0$에 대한 타당한 가설검정과 신뢰구간을 가능하게 한다.
 
 ---
 
-**Exercise 3.**
-Two independent samples of sizes $n_1 = 40$ and $n_2 = 35$ yield Pearson correlations $r_1 = 0.55$ and $r_2 = 0.30$. Test whether the two population correlations are equal at $\alpha = 0.05$.
+**연습문제 3.**
+크기가 $n_1 = 40$, $n_2 = 35$인 두 독립 표본에서 Pearson 상관 $r_1 = 0.55$, $r_2 = 0.30$을 얻었다. $\alpha = 0.05$에서 두 모상관이 같은지 검정하라.
 
-??? success "Solution to Exercise 3"
-    Apply Fisher's $z$-transformation to each:
+??? success "연습문제 3 풀이"
+    각각에 Fisher의 $z$ 변환을 적용한다:
 
     $$
     z_1 = \text{arctanh}(0.55) = 0.6184, \quad z_2 = \text{arctanh}(0.30) = 0.3095
     $$
 
-    The test statistic for comparing two independent correlations:
+    독립인 두 상관을 비교하는 검정통계량은
 
     $$
     Z = \frac{z_1 - z_2}{\sqrt{\frac{1}{n_1-3} + \frac{1}{n_2-3}}} = \frac{0.6184 - 0.3095}{\sqrt{\frac{1}{37} + \frac{1}{32}}} = \frac{0.3089}{\sqrt{0.02703 + 0.03125}} = \frac{0.3089}{\sqrt{0.05828}} = \frac{0.3089}{0.2414} = 1.28
     $$
 
-    The critical value for a two-tailed test at $\alpha = 0.05$ is $z_{0.025} = 1.96$. Since $|Z| = 1.28 < 1.96$, we fail to reject $H_0$. There is insufficient evidence to conclude that the two population correlations differ.
+    이다. $\alpha = 0.05$ 양측검정의 임계값은 $z_{0.025} = 1.96$이다. $|Z| = 1.28 < 1.96$이므로 $H_0$을 기각하지 못한다. 두 모상관이 다르다고 결론지을 증거가 충분하지 않다.

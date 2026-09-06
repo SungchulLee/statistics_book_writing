@@ -1,38 +1,38 @@
-# Pair Plots and Scatter Matrices
+# 쌍 그림과 산점도 행렬
 
-When exploring a dataset with multiple quantitative variables, examining each pair of variables individually is essential for understanding their relationships. A **pair plot** (also called a **scatter matrix**) displays all pairwise scatter plots in a single grid, providing a comprehensive overview of the bivariate relationships in the data. This is one of the most important exploratory data analysis tools for multivariate datasets.
-
----
-
-## What Is a Pair Plot
-
-A pair plot for $p$ variables creates a $p \times p$ grid of panels:
-
-- **Off-diagonal panels**: scatter plots of each pair of variables $(X_i, X_j)$.
-- **Diagonal panels**: univariate plots (histograms, kernel density estimates, or box plots) for each variable.
-
-For $p$ variables, there are $\binom{p}{2} = p(p-1)/2$ unique pairs. The grid displays each pair twice (once in the upper triangle and once in the lower triangle, with axes transposed), so some implementations show different plot types in the upper and lower triangles.
+여러 양적 변수를 가진 자료를 탐색할 때 변수 쌍마다 개별적으로 살펴보는 일은 관계를 이해하는 데 필수적이다. **쌍 그림**(**산점도 행렬**이라고도 한다)은 모든 쌍별 산점도를 하나의 격자에 표시하여 자료의 이변량 관계를 종합적으로 보여준다. 다변량 자료의 탐색적 분석에서 가장 중요한 도구 중 하나이다.
 
 ---
 
-## Reading a Pair Plot
+## 쌍 그림이란
 
-When examining a pair plot, look for:
+변수가 $p$개일 때 쌍 그림은 $p \times p$ 격자의 패널을 만든다:
 
-1. **Direction of association**: do the points slope upward (positive) or downward (negative)?
-2. **Strength of association**: how tightly do the points cluster around a trend? Tight clustering indicates strong correlation.
-3. **Linearity**: is the trend approximately linear, or is there curvature?
-4. **Outliers**: are there points far from the main cluster?
-5. **Clusters**: do the points form distinct groups, suggesting subpopulations?
-6. **Heteroscedasticity**: does the spread of $Y$ change across the range of $X$?
+- **비대각 패널**: 각 변수 쌍 $(X_i, X_j)$의 산점도.
+- **대각 패널**: 각 변수의 일변량 그림(히스토그램, 커널밀도추정, 상자그림).
 
-The diagonal panels reveal the marginal distributions -- their shapes (symmetric, skewed, bimodal) inform the choice of correlation measure and statistical test.
+변수가 $p$개면 서로 다른 쌍은 $\binom{p}{2} = p(p-1)/2$개이다. 격자는 각 쌍을 (축을 바꾸어 위쪽 삼각형과 아래쪽 삼각형에) 두 번 표시하므로, 어떤 구현은 위·아래 삼각형에 서로 다른 종류의 그림을 넣는다.
 
 ---
 
-## Basic Pair Plot with Seaborn
+## 쌍 그림 읽기
 
-The `seaborn` library provides the `pairplot` function, which creates publication-quality pair plots with minimal code.
+쌍 그림을 살필 때 다음을 본다:
+
+1. **연관의 방향**: 점들이 오른쪽 위로 기우는가(양), 오른쪽 아래로 기우는가(음)?
+2. **연관의 강도**: 점들이 추세 주위에 얼마나 촘촘히 모여 있는가? 촘촘할수록 상관이 강하다.
+3. **선형성**: 추세가 대략 선형인가, 곡률이 있는가?
+4. **이상점**: 주된 무리에서 멀리 떨어진 점이 있는가?
+5. **군집**: 점들이 뚜렷한 무리를 이루어 하위 모집단을 시사하는가?
+6. **이분산성**: $X$의 범위에 걸쳐 $Y$의 흩어짐이 달라지는가?
+
+대각 패널은 주변분포를 드러낸다. 그 모양(대칭, 치우침, 이봉)이 상관 측도와 통계 검정의 선택에 정보를 준다.
+
+---
+
+## Seaborn으로 그리는 기본 쌍 그림
+
+`seaborn` 라이브러리의 `pairplot` 함수는 최소한의 코드로 출판 수준의 쌍 그림을 만들어 준다.
 
 ```python
 import seaborn as sns
@@ -47,19 +47,19 @@ plt.suptitle("Iris Dataset: Pairwise Relationships by Species", y=1.02)
 plt.show()
 ```
 
-In this plot:
+이 그림에서:
 
-- Each off-diagonal panel shows a scatter plot colored by species.
-- Each diagonal panel shows kernel density estimates (KDE) of the marginal distributions, separated by species.
-- The `hue` parameter colors points by a categorical variable, revealing whether relationships differ across groups.
+- 각 비대각 패널은 종에 따라 색을 입힌 산점도를 보여준다.
+- 각 대각 패널은 종별로 나눈 주변분포의 커널밀도추정(KDE)을 보여준다.
+- `hue` 인자는 범주형 변수로 점에 색을 입혀 집단마다 관계가 다른지 드러낸다.
 
 ---
 
-## Customizing Pair Plots
+## 쌍 그림 꾸미기
 
-### Selecting Variables
+### 변수 선택
 
-For datasets with many columns, plotting all pairs may produce an overwhelming grid. Select a subset of variables:
+열이 많은 자료에서 모든 쌍을 그리면 격자가 지나치게 복잡해진다. 변수의 부분집합을 고른다:
 
 ```python
 import seaborn as sns
@@ -78,9 +78,9 @@ sns.pairplot(
 plt.show()
 ```
 
-### Correlation Coefficients in the Plot
+### 그림에 상관계수 표시하기
 
-Adding numerical correlation values to each panel helps quantify what the scatter plots show visually:
+각 패널에 상관 수치를 넣으면 산점도가 시각적으로 보여주는 것을 수치로 확인할 수 있다:
 
 ```python
 import seaborn as sns
@@ -105,78 +105,78 @@ g.map_upper(annotate_corr)
 plt.show()
 ```
 
-This version displays scatter plots in the lower triangle, histograms on the diagonal, and Pearson $r$ values in the upper triangle.
+이 형태는 아래쪽 삼각형에 산점도를, 대각선에 히스토그램을, 위쪽 삼각형에 Pearson $r$ 값을 표시한다.
 
 ---
 
-## When to Use Pair Plots
+## 쌍 그림을 언제 쓰는가
 
-Pair plots are most useful when:
+쌍 그림은 다음일 때 가장 유용하다:
 
-- The number of variables is moderate ($p \le 10$). For very large $p$, the grid becomes unwieldy.
-- You are in the exploratory phase of analysis and want to survey all pairwise relationships quickly.
-- You suspect that relationships may vary across subgroups (use the `hue` parameter).
-- You want to check regression assumptions (linearity, homoscedasticity) before fitting models.
+- 변수의 수가 적당할 때($p \le 10$). $p$가 아주 크면 격자를 다루기 어려워진다.
+- 분석의 탐색 단계에서 모든 쌍별 관계를 빠르게 훑고 싶을 때.
+- 하위집단마다 관계가 다를 것 같을 때(`hue` 인자를 쓴다).
+- 모형을 적합하기 전에 회귀 가정(선형성, 등분산성)을 확인하고 싶을 때.
 
-For high-dimensional data ($p > 10$), consider:
+고차원 자료($p > 10$)에서는 다음을 고려한다:
 
-- Selecting the most important variables based on domain knowledge.
-- Using a **correlation heatmap** (see [Heatmaps](heatmaps.md)) to identify the strongest relationships, then examining those specific pairs in detail.
-- Dimensionality reduction techniques (PCA, t-SNE) for an overview.
+- 분야 지식에 근거해 가장 중요한 변수를 고른다.
+- **상관 열지도**([열지도](heatmaps.md) 참조)로 가장 강한 관계를 찾은 뒤 그 쌍들만 자세히 살핀다.
+- 개관을 위해 차원 축소 기법(PCA, t-SNE)을 쓴다.
 
 ---
 
-## Pair Plots vs Correlation Matrices
+## 쌍 그림과 상관행렬
 
-| Feature | Pair plot | Correlation matrix / heatmap |
+| 항목 | 쌍 그림 | 상관행렬/열지도 |
 |:---|:---|:---|
-| Shows nonlinear patterns | Yes | No |
-| Shows outliers | Yes | No |
-| Shows clusters | Yes | No |
-| Scales to many variables | Poorly ($p > 10$) | Well ($p > 50$) |
-| Provides a number | No (unless annotated) | Yes ($r$ for each pair) |
+| 비선형 패턴을 보여주는가 | 예 | 아니오 |
+| 이상점을 보여주는가 | 예 | 아니오 |
+| 군집을 보여주는가 | 예 | 아니오 |
+| 변수가 많을 때의 확장성 | 나쁨($p > 10$) | 좋음($p > 50$) |
+| 수치를 제공하는가 | 아니오(주석을 달지 않는 한) | 예(쌍마다 $r$) |
 
-The pair plot and correlation heatmap are complementary tools. The heatmap summarizes many relationships compactly, while the pair plot reveals the details that a single number cannot capture.
-
----
-
-## Interpretation Pitfalls
-
-!!! warning "Do not over-interpret patterns in small samples"
-    With few data points, scatter plots can show apparent patterns that are due entirely to chance. Always consider the sample size when interpreting pair plots.
-
-!!! warning "Pair plots show marginal relationships only"
-    Each panel shows the bivariate relationship between two variables, ignoring all others. A strong marginal correlation may weaken or reverse after conditioning on other variables (see [Simpson's Paradox](../ecological_correlation/simpsons_paradox.md) and [Partial Correlation](../correlation/partial.md)).
+쌍 그림과 상관 열지도는 상호보완적인 도구이다. 열지도는 많은 관계를 간결하게 요약하고, 쌍 그림은 하나의 수치가 담을 수 없는 세부를 드러낸다.
 
 ---
 
-## Summary
+## 해석의 함정
 
-Pair plots provide a comprehensive visual summary of all pairwise relationships in a multivariate dataset. They reveal the direction, strength, and shape of associations, as well as outliers and clusters. The `seaborn.pairplot` function makes them easy to create, with options for coloring by groups, customizing diagonal plots, and annotating with correlation coefficients. Pair plots are most effective for datasets with a moderate number of variables and should be paired with correlation heatmaps and formal statistical tests for a complete analysis.
+!!! warning "작은 표본의 패턴을 과잉 해석하지 말 것"
+    자료점이 적으면 순전히 우연으로 생긴 패턴이 산점도에 보일 수 있다. 쌍 그림을 해석할 때 표본크기를 항상 고려하라.
 
-## Exercises
-
-**Exercise 1.**
-Describe what a pair plot (scatter matrix) shows and explain what to look for when interpreting one with 4 variables.
-
-??? success "Solution to Exercise 1"
-    A pair plot is a grid of scatter plots showing every pairwise combination of variables. For $p = 4$ variables, it is a $4 \times 4$ grid with $\binom{4}{2} = 6$ unique scatter plots (the matrix is symmetric). The diagonal panels typically show univariate distributions (histograms or KDE plots) for each variable.
-
-    When interpreting a pair plot with 4 variables, look for:
-
-    1. **Linear vs. nonlinear relationships:** Are scatter plots approximately linear, or do they show curvature?
-    2. **Strength and direction of association:** Tight clouds indicate strong correlation; dispersed clouds indicate weak correlation.
-    3. **Outliers:** Points far from the main cloud in any panel.
-    4. **Clusters:** Groups of points that may indicate subpopulations.
-    5. **Heteroscedasticity:** Fan-shaped scatter (variance changing with the level of one variable).
-    6. **Marginal distributions:** Skewness, multimodality, or heavy tails visible in diagonal panels.
+!!! warning "쌍 그림은 주변 관계만 보여준다"
+    각 패널은 다른 변수들을 무시한 채 두 변수 사이의 이변량 관계만 보여준다. 강한 주변상관이 다른 변수로 조건화하면 약해지거나 뒤집힐 수 있다([Simpson의 역설](../ecological_correlation/simpsons_paradox.md)과 [부분상관](../correlation/partial.md) 참조).
 
 ---
 
-**Exercise 2.**
-Write Python code to create a pair plot for the Iris dataset using seaborn, colored by species.
+## 요약
 
-??? success "Solution to Exercise 2"
+쌍 그림은 다변량 자료의 모든 쌍별 관계를 종합적으로 시각 요약해 준다. 연관의 방향, 강도, 모양은 물론 이상점과 군집도 드러낸다. `seaborn.pairplot` 함수로 쉽게 만들 수 있으며 집단별 색 입히기, 대각 그림 바꾸기, 상관계수 주석 달기 같은 선택지를 제공한다. 쌍 그림은 변수 수가 적당한 자료에서 가장 효과적이며, 완결된 분석을 위해서는 상관 열지도와 형식적인 통계 검정을 함께 써야 한다.
+
+## 연습문제
+
+**연습문제 1.**
+쌍 그림(산점도 행렬)이 무엇을 보여주는지 기술하고, 변수가 4개일 때 무엇을 살펴야 하는지 설명하라.
+
+??? success "연습문제 1 풀이"
+    쌍 그림은 변수의 모든 쌍별 조합을 보여주는 산점도 격자이다. 변수가 $p = 4$개면 $4 \times 4$ 격자가 되고 서로 다른 산점도는 $\binom{4}{2} = 6$개이다(행렬이 대칭이다). 대각 패널은 보통 각 변수의 일변량 분포(히스토그램이나 KDE)를 보여준다.
+
+    변수 4개인 쌍 그림을 해석할 때 살필 것:
+
+    1. **선형 대 비선형 관계:** 산점도가 대략 선형인가, 곡률을 보이는가?
+    2. **연관의 강도와 방향:** 점구름이 촘촘하면 강한 상관, 퍼져 있으면 약한 상관이다.
+    3. **이상점:** 어떤 패널에서든 주된 구름에서 멀리 떨어진 점.
+    4. **군집:** 하위 모집단을 시사할 수 있는 점들의 무리.
+    5. **이분산성:** 부채꼴 산포(한 변수의 수준에 따라 분산이 변함).
+    6. **주변분포:** 대각 패널에서 보이는 치우침, 다봉성, 두꺼운 꼬리.
+
+---
+
+**연습문제 2.**
+seaborn으로 붓꽃 자료의 쌍 그림을 종에 따라 색을 입혀 그리는 Python 코드를 작성하라.
+
+??? success "연습문제 2 풀이"
     ```python
     import seaborn as sns
     import matplotlib.pyplot as plt
@@ -187,38 +187,38 @@ Write Python code to create a pair plot for the Iris dataset using seaborn, colo
     plt.show()
     ```
 
-    The `hue="species"` parameter colors points by species, revealing whether the pairwise relationships differ across groups. The KDE on the diagonal shows each species' distribution for each measurement. Separation between colors in the scatter panels indicates which variable pairs best discriminate between species.
+    `hue="species"` 인자가 종에 따라 점에 색을 입혀 집단마다 쌍별 관계가 다른지 드러낸다. 대각선의 KDE는 각 측정값에 대한 종별 분포를 보여준다. 산점도 패널에서 색이 잘 분리될수록 그 변수 쌍이 종을 잘 구별한다는 뜻이다.
 
 ---
 
-**Exercise 3.**
-Why can a pair plot be misleading when the number of variables $p$ is large (e.g., $p > 10$)? Suggest an alternative approach.
+**연습문제 3.**
+변수의 수 $p$가 클 때(예: $p > 10$) 쌍 그림이 왜 오도할 수 있는지 설명하고 대안을 제시하라.
 
-??? success "Solution to Exercise 3"
-    With $p > 10$, a pair plot has $p^2 > 100$ panels, making it:
+??? success "연습문제 3 풀이"
+    $p > 10$이면 쌍 그림의 패널이 $p^2 > 100$개가 되어:
 
-    1. **Visually overwhelming:** Too many panels to inspect individually. Important patterns are lost in the grid.
-    2. **Computationally expensive:** Rendering hundreds of scatter plots with thousands of points is slow.
-    3. **Statistically limited:** Pairwise scatter plots miss higher-dimensional structure (e.g., three variables may be jointly correlated in ways invisible in any pair).
+    1. **시각적으로 압도적이다:** 개별적으로 살피기에 패널이 너무 많다. 중요한 패턴이 격자 속에 묻힌다.
+    2. **계산 비용이 크다:** 수천 개의 점을 가진 산점도 수백 개를 그리는 것은 느리다.
+    3. **통계적으로 제한적이다:** 쌍별 산점도는 고차원 구조를 놓친다(예: 세 변수가 결합적으로 상관되어 있어도 어떤 쌍에서도 보이지 않을 수 있다).
 
-    **Alternatives for high-dimensional data:**
+    **고차원 자료의 대안:**
 
-    - **Correlation heatmap:** Summarizes all pairwise correlations in a single colored matrix.
-    - **PCA or t-SNE:** Reduce to 2-3 dimensions and visualize the reduced representation.
-    - **Focused pair plots:** Select the 5-6 most important variables (based on domain knowledge or correlation screening) and create a pair plot of those.
+    - **상관 열지도:** 모든 쌍별 상관을 하나의 색 행렬로 요약한다.
+    - **PCA나 t-SNE:** 2–3차원으로 줄여 축소된 표현을 시각화한다.
+    - **초점을 좁힌 쌍 그림:** (분야 지식이나 상관 선별에 근거해) 가장 중요한 변수 5–6개를 골라 쌍 그림을 그린다.
 
 ---
 
-**Exercise 4.**
-How can you use a pair plot to visually detect multicollinearity in a regression context?
+**연습문제 4.**
+회귀 맥락에서 쌍 그림으로 다중공선성을 어떻게 시각적으로 탐지할 수 있는가?
 
-??? success "Solution to Exercise 4"
-    Multicollinearity appears in a pair plot as strong linear relationships between predictor variables:
+??? success "연습문제 4 풀이"
+    다중공선성은 쌍 그림에서 설명변수들 사이의 강한 선형관계로 나타난다:
 
-    1. **Tightly clustered scatter plots:** If two predictors show a nearly perfect linear trend (points falling along a line), they are highly collinear. Including both in a regression model will inflate standard errors.
+    1. **촘촘하게 모인 산점도:** 두 설명변수가 거의 완벽한 선형 추세(점들이 직선을 따라 놓임)를 보이면 강하게 공선적이다. 둘을 모두 회귀모형에 넣으면 표준오차가 부풀려진다.
 
-    2. **Identical patterns:** If predictor $X_2$ looks like a shifted/scaled version of $X_1$ in every panel (both have similar scatter patterns with the response and with other predictors), they carry redundant information.
+    2. **동일한 패턴:** 설명변수 $X_2$가 모든 패널에서 $X_1$을 평행이동·축척한 것처럼 보이면(반응변수와도, 다른 설명변수와도 비슷한 산포를 보이면) 중복된 정보를 담고 있는 것이다.
 
-    3. **Correlation values:** Overlaying Pearson's $r$ on each panel (or using a combined pair plot with correlation coefficients in the upper triangle) immediately flags pairs with $|r| > 0.8$ or $0.9$.
+    3. **상관값:** 각 패널에 Pearson의 $r$을 겹쳐 표시하거나 위쪽 삼각형에 상관계수를 넣은 쌍 그림을 쓰면 $|r| > 0.8$이나 $0.9$인 쌍이 즉시 눈에 띈다.
 
-    To address detected multicollinearity: drop one of the correlated predictors, combine them (e.g., average or PCA), or use regularization (ridge/LASSO).
+    탐지된 다중공선성에 대처하려면 상관된 설명변수 중 하나를 빼거나, 둘을 결합하거나(예: 평균이나 PCA), 정칙화(릿지/LASSO)를 쓴다.

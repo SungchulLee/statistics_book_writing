@@ -1,36 +1,36 @@
-# Correlation Ellipse Plot
+# 상관 타원 그림
 
-## Overview
+## 개요
 
-Ellipse plots provide an alternative to color-coded heatmaps for visualizing correlation matrices. Each cell in the matrix is represented by an ellipse whose shape, orientation, and size encode the sign and magnitude of the correlation. This technique is particularly useful for grayscale publications and is accessible to color-blind readers.
+타원 그림은 상관행렬을 시각화할 때 색으로 부호화하는 열지도의 대안이 된다. 행렬의 각 칸을 타원으로 나타내고 그 모양, 방향, 크기가 상관의 부호와 크기를 부호화한다. 회색조 출판물에 특히 유용하고 색각 이상이 있는 독자도 읽을 수 있다.
 
 ---
 
-## Ellipse Encoding
+## 타원 부호화
 
-The correspondence between ellipse geometry and correlation is as follows:
+타원의 기하와 상관의 대응은 다음과 같다:
 
-| Correlation | Ellipse Shape | Rotation |
+| 상관 | 타원 모양 | 회전 |
 |:---:|:---|:---:|
-| $r = +1$ | Thin line (degenerate ellipse) | $+45°$ |
-| $0 < r < 1$ | Narrow ellipse | $+45°$ |
-| $r = 0$ | Circle | $0°$ |
-| $-1 < r < 0$ | Narrow ellipse | $-45°$ |
-| $r = -1$ | Thin line (degenerate ellipse) | $-45°$ |
+| $r = +1$ | 가는 선(퇴화한 타원) | $+45°$ |
+| $0 < r < 1$ | 좁은 타원 | $+45°$ |
+| $r = 0$ | 원 | $0°$ |
+| $-1 < r < 0$ | 좁은 타원 | $-45°$ |
+| $r = -1$ | 가는 선(퇴화한 타원) | $-45°$ |
 
-The key idea is that the **eccentricity** of the ellipse encodes $|r|$ while the **orientation** encodes the sign of $r$. A perfect circle indicates zero correlation; as $|r| \to 1$, the ellipse collapses toward a line.
+핵심 착상은 타원의 **이심률**이 $|r|$을, **방향**이 $r$의 부호를 부호화한다는 것이다. 완전한 원은 상관이 0임을 뜻하고, $|r| \to 1$이면 타원이 선으로 붕괴한다.
 
 ---
 
-## The Ellipse Construction
+## 타원의 구성
 
-For a correlation value $r_{ij}$, the ellipse parameters are:
+상관값 $r_{ij}$에 대한 타원의 모수는 다음과 같다:
 
-- **Width**: $w = 1 + \delta$ (approximately constant)
-- **Height**: $h = 1 - |r_{ij}| - \delta$ (shrinks as $|r_{ij}|$ increases)
-- **Angle**: $\theta = 45° \cdot \text{sign}(r_{ij})$
+- **너비**: $w = 1 + \delta$ (거의 일정)
+- **높이**: $h = 1 - |r_{ij}| - \delta$ ($|r_{ij}|$가 커질수록 줄어든다)
+- **각도**: $\theta = 45° \cdot \text{sign}(r_{ij})$
 
-where $\delta$ is a small constant for numerical stability. The ratio of width to height determines the eccentricity, and the rotation angle distinguishes positive from negative correlations.
+여기서 $\delta$는 수치 안정성을 위한 작은 상수이다. 너비와 높이의 비가 이심률을 정하고, 회전각이 양의 상관과 음의 상관을 구별한다.
 
 ```python
 import numpy as np
@@ -58,7 +58,7 @@ def plot_corr_ellipses(data, figsize=None, **kwargs):
         widths=w, heights=h, angles=a,
         units='x', offsets=xy,
         norm=Normalize(vmin=-1, vmax=1),
-        transOffset=ax.transData,
+        offset_transform=ax.transData,
         array=M.ravel(),
         **kwargs
     )
@@ -75,9 +75,9 @@ def plot_corr_ellipses(data, figsize=None, **kwargs):
 
 ---
 
-## Example with Synthetic Data
+## 모의 자료 예제
 
-We create five correlated variables and visualize their correlation structure using the ellipse plot:
+상관된 변수 다섯 개를 만들어 타원 그림으로 상관 구조를 시각화한다:
 
 ```python
 np.random.seed(42)
@@ -107,35 +107,35 @@ plt.show()
 
 ---
 
-## Reading the Ellipse Plot
+## 타원 그림 읽기
 
-Inspecting the output, we observe:
+출력을 살펴보면 다음을 알 수 있다:
 
-- **Tech--Finance**: a narrow ellipse tilted at $+45°$, indicating strong positive correlation ($r \approx 0.8$).
-- **Tech--Utilities**: a narrow ellipse tilted at $-45°$, indicating moderate negative correlation ($r \approx -0.6$).
-- **Commodity** row/column: nearly circular ellipses, indicating near-zero correlation with all other variables.
-- **Diagonal**: degenerate ellipses (lines at $+45°$) corresponding to $r = 1$.
-
----
-
-## Interpretation
-
-Ellipse plots offer several advantages over standard heatmaps:
-
-1. **Grayscale compatibility.** Even without color, the ellipse shape and orientation convey full information about the correlation.
-2. **Accessibility.** Color-blind readers can interpret the plot without any loss of information.
-3. **Dual encoding.** Both magnitude ($|r|$ via eccentricity) and sign ($\text{sign}(r)$ via rotation) are encoded simultaneously.
-
-The main disadvantage is that exact numerical values are harder to read compared to annotated heatmaps. For publications, it is common to present both an ellipse plot and a numerical table of correlations.
+- **Tech–Finance**: $+45°$로 기울어진 좁은 타원. 강한 양의 상관($r \approx 0.8$)을 나타낸다.
+- **Tech–Utilities**: $-45°$로 기울어진 좁은 타원. 중간 정도의 음의 상관($r \approx -0.6$)을 나타낸다.
+- **Commodity** 행/열: 거의 원에 가까운 타원. 다른 모든 변수와 상관이 0에 가깝다.
+- **대각선**: $r = 1$에 해당하는 퇴화한 타원($+45°$의 선).
 
 ---
 
-## Exercises
+## 해석
 
-**Exercise 1.**
-Create a $4 \times 4$ correlation matrix by hand with the following properties: $r_{12} = 0.9$, $r_{13} = -0.7$, $r_{14} = 0$, $r_{23} = -0.5$, $r_{24} = 0.3$, $r_{34} = -0.2$. Plot it using the ellipse function and verify visually that the ellipse shapes match your expectations.
+타원 그림은 표준 열지도에 비해 몇 가지 장점이 있다:
 
-??? success "Solution to Exercise 1"
+1. **회색조 호환성.** 색이 없어도 타원의 모양과 방향이 상관에 대한 정보를 온전히 전달한다.
+2. **접근성.** 색각 이상이 있는 독자도 정보 손실 없이 그림을 해석할 수 있다.
+3. **이중 부호화.** 크기($|r|$을 이심률로)와 부호($\text{sign}(r)$을 회전으로)를 동시에 부호화한다.
+
+주된 단점은 값이 표시된 열지도에 비해 정확한 수치를 읽기 어렵다는 점이다. 출판물에서는 타원 그림과 상관 수치표를 함께 제시하는 경우가 많다.
+
+---
+
+## 연습문제
+
+**연습문제 1.**
+$r_{12} = 0.9$, $r_{13} = -0.7$, $r_{14} = 0$, $r_{23} = -0.5$, $r_{24} = 0.3$, $r_{34} = -0.2$인 $4 \times 4$ 상관행렬을 손으로 만들어라. 타원 함수로 그리고 타원 모양이 예상과 맞는지 눈으로 확인하라.
+
+??? success "연습문제 1 풀이"
 
     ```python
     import numpy as np
@@ -158,32 +158,32 @@ Create a $4 \times 4$ correlation matrix by hand with the following properties: 
     plt.show()
     ```
 
-    The ellipse for $(A, B)$ should be very narrow at $+45°$ (strong positive). The ellipse for $(A, C)$ should be moderately narrow at $-45°$ (strong negative). The ellipse for $(A, D)$ should be nearly circular (zero correlation). $\square$
+    $(A, B)$의 타원은 $+45°$로 매우 좁아야 한다(강한 양). $(A, C)$의 타원은 $-45°$로 어느 정도 좁아야 한다(강한 음). $(A, D)$의 타원은 거의 원이어야 한다(상관 0). $\square$
 
 ---
 
-**Exercise 2.**
-Explain why the matrix $\begin{pmatrix} 1 & 0.9 \\ 0.9 & 1 \end{pmatrix}$ is a valid correlation matrix but $\begin{pmatrix} 1 & 1.2 \\ 1.2 & 1 \end{pmatrix}$ is not. State the necessary and sufficient conditions for a matrix to be a valid correlation matrix.
+**연습문제 2.**
+행렬 $\begin{pmatrix} 1 & 0.9 \\ 0.9 & 1 \end{pmatrix}$은 타당한 상관행렬이지만 $\begin{pmatrix} 1 & 1.2 \\ 1.2 & 1 \end{pmatrix}$은 그렇지 않은 이유를 설명하라. 어떤 행렬이 타당한 상관행렬이 되기 위한 필요충분조건을 진술하라.
 
-??? success "Solution to Exercise 2"
+??? success "연습문제 2 풀이"
 
-    A matrix $\mathbf{R}$ is a valid correlation matrix if and only if:
+    행렬 $\mathbf{R}$이 타당한 상관행렬일 필요충분조건은:
 
-    1. It is symmetric: $R_{ij} = R_{ji}$.
-    2. All diagonal entries equal 1: $R_{ii} = 1$.
-    3. All off-diagonal entries satisfy $|R_{ij}| \le 1$.
-    4. It is positive semi-definite: $\mathbf{v}^\top \mathbf{R}\, \mathbf{v} \ge 0$ for all $\mathbf{v}$.
+    1. 대칭이다: $R_{ij} = R_{ji}$.
+    2. 모든 대각 성분이 1이다: $R_{ii} = 1$.
+    3. 모든 비대각 성분이 $|R_{ij}| \le 1$을 만족한다.
+    4. 양반정치이다: 모든 $\mathbf{v}$에 대해 $\mathbf{v}^\top \mathbf{R}\, \mathbf{v} \ge 0$.
 
-    For the first matrix, the eigenvalues are $1 + 0.9 = 1.9$ and $1 - 0.9 = 0.1$, both non-negative, so it is valid.
+    첫 번째 행렬은 고윳값이 $1 + 0.9 = 1.9$와 $1 - 0.9 = 0.1$로 모두 음이 아니므로 타당하다.
 
-    For the second matrix, the entry $1.2$ violates condition 3 since $|1.2| > 1$. Additionally, the determinant is $1 \cdot 1 - 1.2 \cdot 1.2 = -0.44 < 0$, so the matrix has a negative eigenvalue and fails condition 4. Correlation coefficients are bounded by $[-1, 1]$ by the Cauchy--Schwarz inequality, so $r = 1.2$ is impossible. $\square$
+    두 번째 행렬은 성분 $1.2$가 $|1.2| > 1$이어서 조건 3을 위반한다. 게다가 행렬식이 $1 \cdot 1 - 1.2 \cdot 1.2 = -0.44 < 0$이므로 음의 고윳값을 가져 조건 4도 만족하지 못한다. 상관계수는 Cauchy-Schwarz 부등식에 의해 $[-1, 1]$에 갇히므로 $r = 1.2$는 불가능하다. $\square$
 
 ---
 
-**Exercise 3.**
-Modify the `plot_corr_ellipses` function to display the numerical correlation value inside each ellipse. Test on a $5 \times 5$ matrix.
+**연습문제 3.**
+각 타원 안에 상관 수치를 표시하도록 `plot_corr_ellipses` 함수를 고쳐라. $5 \times 5$ 행렬에서 시험하라.
 
-??? success "Solution to Exercise 3"
+??? success "연습문제 3 풀이"
 
     ```python
     import numpy as np
@@ -209,7 +209,7 @@ Modify the `plot_corr_ellipses` function to display the numerical correlation va
             widths=w, heights=h, angles=a,
             units='x', offsets=xy,
             norm=Normalize(vmin=-1, vmax=1),
-            transOffset=ax.transData,
+            offset_transform=ax.transData,
             array=M.ravel(), **kwargs
         )
         ax.add_collection(ec)
@@ -239,44 +239,44 @@ Modify the `plot_corr_ellipses` function to display the numerical correlation va
     plt.show()
     ```
 
-    The annotation loop iterates over all $(i, j)$ entries and places the numerical value at the center of each ellipse using `ax.text`. This combines the advantages of ellipse visualization (shape encoding) with exact numerical readability. $\square$
+    주석 루프가 모든 $(i, j)$ 성분을 돌며 `ax.text`로 각 타원의 중심에 수치를 놓는다. 타원 시각화의 장점(모양 부호화)과 정확한 수치 가독성을 함께 얻는다. $\square$
 
 ---
 
-**Exercise 4.**
-For a $2 \times 2$ correlation matrix $\mathbf{R} = \begin{pmatrix} 1 & r \\ r & 1 \end{pmatrix}$, derive the eigenvalues and eigenvectors in terms of $r$. Show that the principal axes of the concentration ellipse of a bivariate normal distribution align with the eigenvectors of $\mathbf{R}$.
+**연습문제 4.**
+$2 \times 2$ 상관행렬 $\mathbf{R} = \begin{pmatrix} 1 & r \\ r & 1 \end{pmatrix}$에 대해 $r$로 표현한 고윳값과 고유벡터를 유도하라. 이변량 정규분포 집중타원의 주축이 $\mathbf{R}$의 고유벡터와 일치함을 보여라.
 
-??? success "Solution to Exercise 4"
+??? success "연습문제 4 풀이"
 
-    The characteristic equation is:
+    특성방정식은
 
     $$
     \det(\mathbf{R} - \lambda \mathbf{I}) = (1 - \lambda)^2 - r^2 = 0
     $$
 
-    Solving: $\lambda_1 = 1 + r$ and $\lambda_2 = 1 - r$.
+    이다. 풀면 $\lambda_1 = 1 + r$, $\lambda_2 = 1 - r$이다.
 
-    For $\lambda_1 = 1 + r$: $(\mathbf{R} - \lambda_1 \mathbf{I})\mathbf{v} = 0$ gives $-r v_1 + r v_2 = 0$, so $\mathbf{v}_1 = \frac{1}{\sqrt{2}}(1, 1)^\top$.
+    $\lambda_1 = 1 + r$에 대해 $(\mathbf{R} - \lambda_1 \mathbf{I})\mathbf{v} = 0$은 $-r v_1 + r v_2 = 0$을 주므로 $\mathbf{v}_1 = \frac{1}{\sqrt{2}}(1, 1)^\top$이다.
 
-    For $\lambda_2 = 1 - r$: similarly, $\mathbf{v}_2 = \frac{1}{\sqrt{2}}(1, -1)^\top$.
+    $\lambda_2 = 1 - r$에 대해서도 마찬가지로 $\mathbf{v}_2 = \frac{1}{\sqrt{2}}(1, -1)^\top$이다.
 
-    The concentration ellipse of a bivariate normal with correlation $r$ is the set $\{(x, y) : \mathbf{z}^\top \mathbf{R}^{-1} \mathbf{z} = c\}$ for some constant $c$, where $\mathbf{z} = (x, y)^\top$. The principal axes of this ellipse are the eigenvectors of $\mathbf{R}^{-1}$ (equivalently, of $\mathbf{R}$, since they share eigenvectors). The axes point along $\frac{1}{\sqrt{2}}(1, 1)^\top$ and $\frac{1}{\sqrt{2}}(1, -1)^\top$, which are the $+45°$ and $-45°$ directions. This is why the ellipse plot uses $\pm 45°$ rotations. $\square$
+    상관이 $r$인 이변량 정규분포의 집중타원은 $\mathbf{z} = (x, y)^\top$일 때 어떤 상수 $c$에 대한 집합 $\{(x, y) : \mathbf{z}^\top \mathbf{R}^{-1} \mathbf{z} = c\}$이다. 이 타원의 주축은 $\mathbf{R}^{-1}$의 고유벡터(고유벡터를 공유하므로 $\mathbf{R}$의 고유벡터와 같다)이다. 축은 $\frac{1}{\sqrt{2}}(1, 1)^\top$과 $\frac{1}{\sqrt{2}}(1, -1)^\top$ 방향, 즉 $+45°$와 $-45°$ 방향을 가리킨다. 타원 그림이 $\pm 45°$ 회전을 쓰는 이유이다. $\square$
 
 ---
 
-**Exercise 5.**
-Given $k$ variables, the ellipse plot contains $k^2$ ellipses. How many of these are redundant (i.e., can be inferred from other ellipses)? Propose a modified version that shows only the non-redundant ellipses.
+**연습문제 5.**
+변수가 $k$개면 타원 그림에는 $k^2$개의 타원이 들어간다. 그중 몇 개가 중복인가(다른 타원으로부터 알 수 있는가)? 중복이 아닌 타원만 보이는 수정판을 제안하라.
 
-??? success "Solution to Exercise 5"
+??? success "연습문제 5 풀이"
 
-    Since the correlation matrix is symmetric ($R_{ij} = R_{ji}$), the upper and lower triangles are mirror images. The diagonal always shows $r = 1$. Therefore:
+    상관행렬이 대칭이므로($R_{ij} = R_{ji}$) 위쪽 삼각형과 아래쪽 삼각형은 거울상이다. 대각선은 언제나 $r = 1$을 보여준다. 따라서:
 
-    - Total ellipses: $k^2$
-    - Diagonal (trivial, $r = 1$): $k$
-    - Unique off-diagonal: $\frac{k(k-1)}{2}$
-    - Redundant: $k + \frac{k(k-1)}{2} = \frac{k(k+1)}{2}$
+    - 전체 타원: $k^2$
+    - 대각선(자명하게 $r = 1$): $k$
+    - 서로 다른 비대각: $\frac{k(k-1)}{2}$
+    - 중복: $k + \frac{k(k-1)}{2} = \frac{k(k+1)}{2}$
 
-    A non-redundant version shows only the $\frac{k(k-1)}{2}$ lower-triangle ellipses:
+    중복이 없는 형태는 아래쪽 삼각형의 $\frac{k(k-1)}{2}$개 타원만 보인다:
 
     ```python
     def plot_lower_triangle_ellipses(data, figsize=None, **kwargs):
@@ -309,4 +309,4 @@ Given $k$ variables, the ellipse plot contains $k^2$ ellipses. How many of these
         return ax
     ```
 
-    This reduces visual clutter and focuses on the $\binom{k}{2}$ unique correlation values. $\square$
+    시각적 혼잡이 줄고 서로 다른 $\binom{k}{2}$개의 상관값에 집중할 수 있다. $\square$

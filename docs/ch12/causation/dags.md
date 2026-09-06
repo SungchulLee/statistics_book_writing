@@ -1,74 +1,74 @@
-# Directed Acyclic Graphs
+# 방향성 비순환 그래프
 
-Throughout this chapter, we have encountered confounders, mediators, colliders, and lurking variables. **Directed acyclic graphs** (DAGs) provide a visual and mathematical framework for representing causal relationships among variables, making it possible to determine which variables to control for and which to leave alone. DAGs are the foundation of the modern graphical approach to causal inference, developed primarily by Judea Pearl.
-
----
-
-## What Is a DAG
-
-A **directed acyclic graph** is a graph consisting of:
-
-- **Nodes** (vertices): each node represents a variable.
-- **Directed edges** (arrows): an arrow from $A$ to $B$ means that $A$ is a direct cause of $B$.
-- **Acyclic**: there are no directed cycles (you cannot follow the arrows from a node back to itself).
-
-The absence of an arrow between two nodes means there is no direct causal effect between them (though there may be an indirect effect through other nodes).
+이 장에서 우리는 교란요인, 매개자, 충돌자, 잠복변수를 만나 왔다. **방향성 비순환 그래프**(DAG)는 변수들 사이의 인과관계를 나타내는 시각적·수학적 틀을 제공하여 어떤 변수를 통제하고 어떤 변수를 그대로 두어야 하는지 판정할 수 있게 해 준다. DAG는 주로 Judea Pearl이 발전시킨 현대 그래프 기반 인과추론의 토대이다.
 
 ---
 
-## Three Fundamental Structures
+## DAG란
 
-Every path in a DAG is composed of three elementary building blocks. Understanding these three structures is sufficient to determine the statistical implications of any DAG.
+**방향성 비순환 그래프**는 다음으로 이루어진 그래프이다:
 
-### 1. Chain (Mediation)
+- **노드**(꼭짓점): 각 노드는 변수를 나타낸다.
+- **방향 간선**(화살표): $A$에서 $B$로 가는 화살표는 $A$가 $B$의 직접 원인이라는 뜻이다.
+- **비순환**: 방향 순환이 없다(화살표를 따라가 자기 자신으로 돌아올 수 없다).
+
+두 노드 사이에 화살표가 없다는 것은 둘 사이에 직접적인 인과효과가 없다는 뜻이다(다른 노드를 통한 간접 효과는 있을 수 있다).
+
+---
+
+## 세 가지 기본 구조
+
+DAG의 모든 경로는 세 가지 기본 요소로 이루어진다. 이 세 구조를 이해하면 어떤 DAG의 통계적 함의든 판정할 수 있다.
+
+### 1. 사슬 (매개)
 
 $$
 A \rightarrow B \rightarrow C
 $$
 
-$B$ is a **mediator** on the causal path from $A$ to $C$. Information flows from $A$ to $C$ through $B$.
+$B$는 $A$에서 $C$로 가는 인과 경로 위의 **매개자**이다. 정보가 $B$를 통해 $A$에서 $C$로 흐른다.
 
-- **Unconditional**: $A$ and $C$ are associated.
-- **Conditioning on $B$**: blocks the path. $A$ and $C$ become conditionally independent given $B$.
+- **조건화하지 않으면**: $A$와 $C$가 연관된다.
+- **$B$로 조건화하면**: 경로가 막힌다. $B$가 주어졌을 때 $A$와 $C$가 조건부 독립이 된다.
 
-### 2. Fork (Common Cause)
+### 2. 갈래 (공통원인)
 
 $$
 A \leftarrow B \rightarrow C
 $$
 
-$B$ is a **common cause** (confounder) of $A$ and $C$. Information flows between $A$ and $C$ through their shared cause $B$.
+$B$는 $A$와 $C$의 **공통원인**(교란요인)이다. 정보가 공통원인 $B$를 통해 $A$와 $C$ 사이를 흐른다.
 
-- **Unconditional**: $A$ and $C$ are associated.
-- **Conditioning on $B$**: blocks the path. $A$ and $C$ become conditionally independent given $B$.
+- **조건화하지 않으면**: $A$와 $C$가 연관된다.
+- **$B$로 조건화하면**: 경로가 막힌다. $B$가 주어졌을 때 $A$와 $C$가 조건부 독립이 된다.
 
-### 3. Collider (Common Effect)
+### 3. 충돌자 (공통결과)
 
 $$
 A \rightarrow B \leftarrow C
 $$
 
-$B$ is a **collider** -- it is caused by both $A$ and $C$.
+$B$는 **충돌자**이다. $A$와 $C$ 모두에 의해 생긴다.
 
-- **Unconditional**: $A$ and $C$ are **not** associated (the path is blocked).
-- **Conditioning on $B$**: **opens** the path, creating a spurious association between $A$ and $C$.
+- **조건화하지 않으면**: $A$와 $C$가 연관되지 **않는다**(경로가 막혀 있다).
+- **$B$로 조건화하면**: 경로가 **열려** $A$와 $C$ 사이에 허위 연관이 생긴다.
 
-!!! warning "Conditioning on a collider creates bias"
-    Unlike chains and forks, where conditioning blocks the path, conditioning on a collider opens a previously blocked path. This is a frequent source of selection bias and is the reason why indiscriminate inclusion of variables in a regression can make estimates worse, not better.
+!!! warning "충돌자로 조건화하면 편향이 생긴다"
+    조건화가 경로를 막는 사슬·갈래와 달리, 충돌자로 조건화하면 막혀 있던 경로가 열린다. 이는 선택 편향의 흔한 원천이며, 회귀에 변수를 무분별하게 넣으면 추정이 나아지기는커녕 나빠질 수 있는 이유이다.
 
 ---
 
-## d-Separation
+## d-분리
 
-The concept of **d-separation** (directional separation) generalizes the three fundamental structures to determine whether two variables are conditionally independent given a set of conditioning variables.
+**d-분리**(방향 분리) 개념은 세 기본 구조를 일반화하여, 주어진 조건 변수 집합 아래에서 두 변수가 조건부 독립인지 판정한다.
 
-Two nodes $X$ and $Y$ are **d-separated** by a set $S$ if, for every undirected path between $X$ and $Y$:
+두 노드 $X$와 $Y$가 집합 $S$에 의해 **d-분리**된다는 것은, $X$와 $Y$ 사이의 모든 무방향 경로에 대해 다음 중 하나가 성립한다는 뜻이다:
 
-1. The path contains a chain $A \rightarrow B \rightarrow C$ or a fork $A \leftarrow B \rightarrow C$ where $B \in S$ (the path is blocked by conditioning on a non-collider), **or**
+1. 경로가 사슬 $A \rightarrow B \rightarrow C$ 또는 갈래 $A \leftarrow B \rightarrow C$를 포함하고 $B \in S$이다(충돌자가 아닌 노드로 조건화하여 경로가 막힌다). **또는**
 
-2. The path contains a collider $A \rightarrow B \leftarrow C$ where $B \notin S$ and no descendant of $B$ is in $S$ (the path is blocked because the collider is not conditioned on).
+2. 경로가 충돌자 $A \rightarrow B \leftarrow C$를 포함하고 $B \notin S$이며 $B$의 어떤 후손도 $S$에 없다(충돌자로 조건화하지 않아 경로가 막힌다).
 
-If $X$ and $Y$ are d-separated by $S$, then $X$ and $Y$ are conditionally independent given $S$ in any probability distribution compatible with the DAG:
+$X$와 $Y$가 $S$에 의해 d-분리되면, 그 DAG와 양립하는 어떤 확률분포에서도 $X$와 $Y$는 $S$가 주어졌을 때 조건부 독립이다:
 
 $$
 X \perp\!\!\!\perp Y \mid S
@@ -76,126 +76,126 @@ $$
 
 ---
 
-## The Backdoor Criterion
+## 뒷문 기준
 
-The **backdoor criterion** provides a practical rule for identifying which variables to control for when estimating the causal effect of $X$ on $Y$.
+**뒷문 기준**은 $X$가 $Y$에 미치는 인과효과를 추정할 때 어떤 변수를 통제해야 하는지 알려주는 실용적인 규칙이다.
 
-A set of variables $S$ satisfies the backdoor criterion relative to $(X, Y)$ if:
+변수 집합 $S$가 $(X, Y)$에 대해 뒷문 기준을 만족한다는 것은:
 
-1. No variable in $S$ is a descendant of $X$.
-2. $S$ blocks every path between $X$ and $Y$ that contains an arrow into $X$ (a "backdoor path").
+1. $S$의 어떤 변수도 $X$의 후손이 아니다.
+2. $S$가 $X$로 들어오는 화살표를 포함하는 $X$–$Y$ 사이의 모든 경로("뒷문 경로")를 막는다.
 
-If such a set $S$ exists, the causal effect of $X$ on $Y$ is identified by the **adjustment formula**:
+그런 집합 $S$가 존재하면 $X$가 $Y$에 미치는 인과효과가 **조정 공식**으로 식별된다:
 
 $$
 P(Y \mid \text{do}(X = x)) = \sum_s P(Y \mid X = x, S = s) \, P(S = s)
 $$
 
-The $\text{do}(\cdot)$ notation, introduced by Pearl, distinguishes interventional distributions (what happens when we set $X$ to a value) from observational distributions (what we observe when $X$ takes a value).
+Pearl이 도입한 $\text{do}(\cdot)$ 표기는 개입 분포($X$를 어떤 값으로 설정할 때 일어나는 일)와 관찰 분포($X$가 어떤 값을 가질 때 우리가 관측하는 것)를 구별한다.
 
 ---
 
-## Example: Applying the Backdoor Criterion
+## 예제: 뒷문 기준의 적용
 
-Consider the DAG:
+다음 DAG를 생각하자:
 
 $$
 Z \rightarrow X \rightarrow Y, \quad Z \rightarrow Y
 $$
 
-Here $Z$ is a confounder (it has a backdoor path $X \leftarrow Z \rightarrow Y$). To estimate the causal effect of $X$ on $Y$:
+여기서 $Z$는 교란요인이다(뒷문 경로 $X \leftarrow Z \rightarrow Y$가 있다). $X$가 $Y$에 미치는 인과효과를 추정하려면:
 
-- **Control for $Z$**: $S = \{Z\}$ satisfies the backdoor criterion because $Z$ is not a descendant of $X$ and it blocks the backdoor path.
-- **Do not control for nothing**: $S = \emptyset$ fails because the backdoor path $X \leftarrow Z \rightarrow Y$ remains open.
+- **$Z$를 통제한다**: $Z$가 $X$의 후손이 아니고 뒷문 경로를 막으므로 $S = \{Z\}$가 뒷문 기준을 만족한다.
+- **아무것도 통제하지 않으면 안 된다**: $S = \emptyset$은 뒷문 경로 $X \leftarrow Z \rightarrow Y$가 열린 채로 남아 실패한다.
 
-Now consider:
+이제 다음을 보자:
 
 $$
 X \rightarrow M \rightarrow Y, \quad X \rightarrow Y
 $$
 
-Here $M$ is a mediator. To estimate the **total** causal effect of $X$ on $Y$:
+여기서 $M$은 매개자이다. $X$가 $Y$에 미치는 **총** 인과효과를 추정하려면:
 
-- **Do not control for $M$**: there are no backdoor paths (no arrows into $X$), so $S = \emptyset$ suffices.
-- **Controlling for $M$** would block the indirect path and estimate only the direct effect, not the total effect.
-
----
-
-## Practical Steps for Using DAGs
-
-1. **Draw the DAG.** List all relevant variables and draw arrows based on subject-matter knowledge about causal relationships. This step requires domain expertise, not statistical analysis.
-
-2. **Identify the causal question.** Which effect are you estimating? The total effect of $X$ on $Y$? The direct effect?
-
-3. **Find all backdoor paths.** List all paths from $X$ to $Y$ that have an arrow pointing into $X$.
-
-4. **Apply the backdoor criterion.** Find a set $S$ that blocks all backdoor paths without including descendants of $X$ (for total effects) or colliders.
-
-5. **Adjust for $S$ in the analysis.** Include the variables in $S$ as covariates in a regression, stratification, or matching procedure.
+- **$M$을 통제하지 않는다**: ($X$로 들어오는 화살표가 없어) 뒷문 경로가 없으므로 $S = \emptyset$으로 충분하다.
+- **$M$을 통제하면** 간접 경로가 막혀 총효과가 아니라 직접효과만 추정하게 된다.
 
 ---
 
-## Common Mistakes
+## DAG를 쓰는 실무 절차
 
-| Mistake | Why it is wrong |
+1. **DAG를 그린다.** 관련 변수를 모두 나열하고 인과관계에 대한 분야 지식에 근거해 화살표를 그린다. 이 단계는 통계 분석이 아니라 도메인 전문성을 요구한다.
+
+2. **인과적 질문을 정한다.** 무엇을 추정하는가? $X$가 $Y$에 미치는 총효과? 직접효과?
+
+3. **모든 뒷문 경로를 찾는다.** $X$로 들어오는 화살표를 가진 $X$에서 $Y$로의 경로를 모두 나열한다.
+
+4. **뒷문 기준을 적용한다.** ($X$의 후손이나 충돌자를 포함하지 않으면서) 모든 뒷문 경로를 막는 집합 $S$를 찾는다.
+
+5. **분석에서 $S$를 조정한다.** 회귀, 층화, 짝짓기 절차에서 $S$의 변수들을 공변량으로 넣는다.
+
+---
+
+## 흔한 실수
+
+| 실수 | 무엇이 잘못인가 |
 |:---|:---|
-| Controlling for a mediator when estimating the total effect | Blocks part of the causal path |
-| Controlling for a collider | Opens a spurious path |
-| Controlling for a descendant of a collider | Also opens the collider path |
-| Including every available variable in the regression | May introduce collider bias or block causal paths |
+| 총효과를 추정하면서 매개자를 통제 | 인과 경로의 일부를 막는다 |
+| 충돌자를 통제 | 허위 경로를 연다 |
+| 충돌자의 후손을 통제 | 역시 충돌자 경로를 연다 |
+| 사용 가능한 모든 변수를 회귀에 넣기 | 충돌자 편향을 만들거나 인과 경로를 막을 수 있다 |
 
-The principle is that more control variables are not always better. The DAG tells you which variables to include and which to exclude.
-
----
-
-## Summary
-
-Directed acyclic graphs (DAGs) represent causal relationships using nodes (variables) and directed edges (causal arrows). The three fundamental structures -- chains, forks, and colliders -- determine how conditioning on a variable affects the flow of information between other variables. The d-separation criterion generalizes these rules to complex graphs, and the backdoor criterion identifies which variables to control for when estimating causal effects. DAGs provide a principled framework for avoiding common errors such as conditioning on colliders or blocking causal pathways, and they are essential tools for any researcher working with observational data.
-
-## Exercises
-
-**Exercise 1.**
-Draw a DAG representing the following causal structure: smoking causes lung cancer, smoking causes yellow teeth, and lung cancer does not cause yellow teeth. Identify whether yellow teeth is a confounder, mediator, or collider in the relationship between smoking and lung cancer.
-
-??? success "Solution to Exercise 1"
-    The DAG is: Smoking $\to$ Lung Cancer, Smoking $\to$ Yellow Teeth. There is no arrow between Lung Cancer and Yellow Teeth.
-
-    Yellow teeth is **neither** a confounder, mediator, nor collider for the smoking-cancer relationship. It is a separate effect of smoking (a "descendant" of smoking on a different causal path). Conditioning on yellow teeth is unnecessary and generally harmless, though it slightly reduces efficiency.
-
-    A confounder would be a common cause of both smoking and lung cancer. A mediator would lie on the causal path between them. A collider would be a common effect of both.
+통제변수가 많을수록 언제나 좋은 것은 아니라는 것이 원칙이다. 어떤 변수를 넣고 뺄지는 DAG가 알려준다.
 
 ---
 
-**Exercise 2.**
-In the DAG: $X \to Z \to Y$, explain why $Z$ is a mediator and what happens to the association between $X$ and $Y$ when you condition on $Z$.
+## 요약
 
-??? success "Solution to Exercise 2"
-    $Z$ is a **mediator** because it lies on the causal path from $X$ to $Y$. The effect of $X$ on $Y$ operates through $Z$: $X$ causes $Z$, which in turn causes $Y$.
+방향성 비순환 그래프(DAG)는 노드(변수)와 방향 간선(인과 화살표)으로 인과관계를 나타낸다. 세 가지 기본 구조인 사슬, 갈래, 충돌자가 어떤 변수로 조건화할 때 다른 변수들 사이의 정보 흐름이 어떻게 달라지는지를 결정한다. d-분리 기준은 이 규칙들을 복잡한 그래프로 일반화하고, 뒷문 기준은 인과효과를 추정할 때 어떤 변수를 통제해야 하는지 알려준다. DAG는 충돌자로 조건화하거나 인과 경로를 막는 흔한 잘못을 피하는 원리적인 틀을 제공하며, 관찰자료를 다루는 연구자에게 필수적인 도구이다.
 
-    When you condition on $Z$ (e.g., include $Z$ as a covariate in regression), you block the causal path $X \to Z \to Y$. This means the association between $X$ and $Y$ disappears (or is reduced to only the direct effect if there is also a direct arrow $X \to Y$).
+## 연습문제
 
-    This is important in practice: if you want to estimate the **total** causal effect of $X$ on $Y$, you should not condition on a mediator. If you want only the **direct** effect (not through $Z$), then conditioning on $Z$ is appropriate.
+**연습문제 1.**
+다음 인과 구조를 나타내는 DAG를 그려라: 흡연이 폐암을 일으키고, 흡연이 치아 착색을 일으키며, 폐암은 치아 착색을 일으키지 않는다. 흡연–폐암 관계에서 치아 착색이 교란요인인지, 매개자인지, 충돌자인지 밝혀라.
 
----
+??? success "연습문제 1 풀이"
+    DAG는 흡연 $\to$ 폐암, 흡연 $\to$ 치아 착색이다. 폐암과 치아 착색 사이에는 화살표가 없다.
 
-**Exercise 3.**
-Consider the DAG: $X \to Z \leftarrow Y$. Explain why $Z$ is a collider and what paradoxical effect conditioning on $Z$ has.
+    치아 착색은 흡연–폐암 관계에서 교란요인도, 매개자도, 충돌자도 **아니다**. 흡연의 또 다른 결과(다른 인과 경로 위의 "후손")일 뿐이다. 치아 착색으로 조건화하는 것은 불필요하며 대체로 해롭지도 않지만 효율은 조금 떨어뜨린다.
 
-??? success "Solution to Exercise 3"
-    $Z$ is a **collider** because two arrows point into it from $X$ and $Y$. In this structure, $X$ and $Y$ are marginally independent (no causal connection between them).
-
-    However, conditioning on the collider $Z$ creates a **spurious association** between $X$ and $Y$. This is called "collider bias" or "Berkson's paradox." Intuitively: if you know $Z$ occurred, then knowing $X$ was not the cause makes $Y$ more likely to be the cause (and vice versa), inducing a negative correlation.
-
-    **Example:** Talent ($X$) and Beauty ($Y$) may be independent in the population, but among actors ($Z = $ became an actor, which requires either talent or beauty), they appear negatively correlated. Conditioning on $Z$ opened a path that was blocked unconditionally.
+    교란요인이라면 흡연과 폐암 모두의 공통원인이어야 하고, 매개자라면 둘 사이의 인과 경로 위에 있어야 하며, 충돌자라면 둘 모두의 공통결과여야 한다.
 
 ---
 
-**Exercise 4.**
-Given the DAG: $U \to X$, $U \to Y$, $X \to Y$, where $U$ is unobserved, explain the problem of confounding and state the back-door criterion for identifying the causal effect of $X$ on $Y$.
+**연습문제 2.**
+DAG $X \to Z \to Y$에서 $Z$가 매개자인 이유와, $Z$로 조건화하면 $X$와 $Y$의 연관이 어떻게 되는지 설명하라.
 
-??? success "Solution to Exercise 4"
-    The variable $U$ is an unobserved common cause (confounder) of $X$ and $Y$. The causal path $X \to Y$ gives the true causal effect, but the back-door path $X \leftarrow U \to Y$ creates a spurious association. Without adjusting for $U$, the observed association between $X$ and $Y$ conflates the causal effect with confounding.
+??? success "연습문제 2 풀이"
+    $Z$는 $X$에서 $Y$로 가는 인과 경로 위에 있으므로 **매개자**이다. $X$의 효과는 $Z$를 통해 작동한다. $X$가 $Z$를 일으키고 $Z$가 다시 $Y$를 일으킨다.
 
-    The **back-door criterion** (Pearl, 1993) states: a set of variables $\mathbf{Z}$ is sufficient for identifying the causal effect of $X$ on $Y$ if (1) $\mathbf{Z}$ blocks every back-door path from $X$ to $Y$, and (2) no variable in $\mathbf{Z}$ is a descendant of $X$.
+    $Z$로 조건화하면(예: 회귀에 $Z$를 공변량으로 넣으면) 인과 경로 $X \to Z \to Y$가 막힌다. 그러면 $X$와 $Y$의 연관이 사라진다(직접 화살표 $X \to Y$도 있다면 직접효과만 남는다).
 
-    In this DAG, since $U$ is unobserved and no observed variable blocks the path $X \leftarrow U \to Y$, the causal effect of $X$ on $Y$ is **not identifiable** from observational data without additional assumptions (e.g., an instrumental variable).
+    실무적으로 중요하다. $X$가 $Y$에 미치는 **총** 인과효과를 추정하려면 매개자로 조건화해서는 안 된다. ($Z$를 통하지 않는) **직접**효과만 원한다면 $Z$로 조건화하는 것이 적절하다.
+
+---
+
+**연습문제 3.**
+DAG $X \to Z \leftarrow Y$를 생각하자. $Z$가 충돌자인 이유와 $Z$로 조건화할 때 생기는 역설적인 효과를 설명하라.
+
+??? success "연습문제 3 풀이"
+    $X$와 $Y$에서 화살표 두 개가 들어오므로 $Z$는 **충돌자**이다. 이 구조에서 $X$와 $Y$는 주변적으로 독립이다(둘 사이에 인과적 연결이 없다).
+
+    그러나 충돌자 $Z$로 조건화하면 $X$와 $Y$ 사이에 **허위 연관**이 생긴다. 이를 "충돌자 편향" 또는 "Berkson의 역설"이라 한다. 직관적으로, $Z$가 일어났음을 알 때 $X$가 원인이 아니었다는 것을 알면 $Y$가 원인일 가능성이 커지고(그 반대도 마찬가지), 그래서 음의 상관이 유도된다.
+
+    **예:** 인구 전체에서는 재능($X$)과 외모($Y$)가 독립일 수 있지만, 배우들($Z$ = 배우가 됨. 재능이나 외모 중 하나가 필요하다) 안에서는 음의 상관으로 보인다. $Z$로 조건화하는 것이 조건화 전에는 막혀 있던 경로를 연 것이다.
+
+---
+
+**연습문제 4.**
+$U$가 관측되지 않을 때 $U \to X$, $U \to Y$, $X \to Y$인 DAG에서 교란 문제를 설명하고 $X$가 $Y$에 미치는 인과효과를 식별하기 위한 뒷문 기준을 진술하라.
+
+??? success "연습문제 4 풀이"
+    변수 $U$는 $X$와 $Y$의 관측되지 않은 공통원인(교란요인)이다. 인과 경로 $X \to Y$가 참 인과효과를 주지만 뒷문 경로 $X \leftarrow U \to Y$가 허위 연관을 만든다. $U$를 조정하지 않으면 관측된 $X$–$Y$ 연관이 인과효과와 교란을 뒤섞는다.
+
+    **뒷문 기준**(Pearl, 1993)은 이렇게 말한다: 변수 집합 $\mathbf{Z}$가 (1) $X$에서 $Y$로 가는 모든 뒷문 경로를 막고 (2) $\mathbf{Z}$의 어떤 변수도 $X$의 후손이 아니면, $\mathbf{Z}$는 $X$가 $Y$에 미치는 인과효과를 식별하기에 충분하다.
+
+    이 DAG에서는 $U$가 관측되지 않고 경로 $X \leftarrow U \to Y$를 막는 관측 변수도 없으므로, 추가 가정(예: 도구변수) 없이는 관찰자료만으로 $X$가 $Y$에 미치는 인과효과를 **식별할 수 없다**.

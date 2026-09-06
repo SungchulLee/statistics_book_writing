@@ -1,168 +1,168 @@
-# 18.5 Causation
+# 인과 개관
 
+## 인과의 이해
 
-## Understanding Causation
+인과는 통계학, 과학, 일상적 추론의 기본 개념이다. 한 사건(원인)이 다른 사건(결과)을 직접 만들어내거나 그것에 영향을 주는 관계를 가리킨다. 상관이 관계를 시사할 수는 있지만, 인과는 한 변수의 변화가 다른 변수의 변화에 **책임이 있다**는 뜻까지 담는다는 점에서 한 걸음 더 나아간다.
 
-Causation is a fundamental concept in statistics, science, and everyday reasoning. It refers to a relationship where one event (the cause) directly produces or influences another event (the effect). While correlations can suggest a relationship, causation goes further by implying that changes in one variable are **responsible** for changes in another.
-
-Understanding causation is crucial in fields like medicine, economics, and social sciences, where the goal is often to identify and influence factors that lead to specific outcomes.
-
----
-
-## Correlation vs. Causation
-
-It is essential to distinguish between correlation and causation. While correlation indicates that two variables move together, it does not imply that one causes the other. For example, ice cream sales and drowning incidents both increase during summer, but eating ice cream does not cause drowning. This illustrates the classic principle: **correlation does not imply causation**.
-
-Causation requires more rigorous evidence. Establishing a causal relationship often involves controlled experiments, longitudinal studies, or other methods that can rule out confounding variables.
-
-### Correlation (or Association) Does Not Imply Causation
-
-See: [Correlation vs Causation in Data Science](https://sundaskhalid.medium.com/correlation-vs-causation-in-data-science-66b6cfa702f0)
-
-**Khan Academy Reference**: [Invalid Conclusions from Studies Example](https://www.khanacademy.org/math/ap-statistics/gathering-data-ap/sampling-observational-studies/v/invalid-conclusions-studies-example)
+인과를 이해하는 일은 특정 결과로 이어지는 요인을 찾아내고 그것에 개입하려는 의학, 경제학, 사회과학에서 결정적으로 중요하다.
 
 ---
 
-## Criteria for Causation
+## 상관과 인과
 
-Several criteria help determine whether a causal relationship exists between two variables:
+상관과 인과를 구별하는 일이 필수적이다. 상관은 두 변수가 함께 움직인다는 것을 나타낼 뿐 하나가 다른 하나를 일으킨다는 뜻은 아니다. 예를 들어 아이스크림 판매와 익사 사고는 여름에 함께 늘지만 아이스크림을 먹는다고 익사하지 않는다. 고전적인 원리를 잘 보여준다: **상관은 인과를 함의하지 않는다**.
 
-1. **Temporal Precedence**: The cause must occur before the effect. If a study claims that smoking causes lung cancer, smoking must precede the diagnosis of lung cancer in study participants.
+인과에는 더 엄밀한 증거가 필요하다. 인과관계를 확립하려면 대개 통제실험, 종단 연구, 그 밖에 교란변수를 배제할 수 있는 방법이 동원된다.
 
-2. **Covariation of Cause and Effect**: The cause and effect must show a consistent relationship. Changes in the cause should be associated with changes in the effect. Higher levels of physical activity should consistently be associated with lower rates of heart disease if physical activity is indeed protective.
+### 상관(또는 연관)은 인과를 함의하지 않는다
 
-3. **Elimination of Confounding Variables**: Confounding variables are external factors that can affect both the cause and the effect. Controlling for these variables is essential to establish a direct link.
+참고: [Correlation vs Causation in Data Science](https://sundaskhalid.medium.com/correlation-vs-causation-in-data-science-66b6cfa702f0)
 
-4. **Plausibility**: There should be a scientifically reasonable mechanism or explanation for the causal relationship. The causal link between smoking and lung cancer is supported by biological evidence that tobacco smoke contains carcinogens.
-
-5. **Experimental Evidence**: Controlled experiments provide the strongest evidence for causation. Randomized controlled trials (RCTs) are the gold standard in clinical research because they minimize biases and confounding factors.
+**Khan Academy 참고 자료**: [Invalid Conclusions from Studies Example](https://www.khanacademy.org/math/ap-statistics/gathering-data-ap/sampling-observational-studies/v/invalid-conclusions-studies-example)
 
 ---
 
-## Challenges in Establishing Causation
+## 인과의 기준
 
-- **Confounding Variables**: Identifying and controlling for confounders is one of the biggest challenges. Confounders can obscure the true relationship between variables, leading to incorrect conclusions.
+두 변수 사이에 인과관계가 있는지 판단하는 데 도움이 되는 기준들이 있다:
 
-- **Reverse Causality**: Sometimes the direction of causality is unclear. Poor health might lead to lower income, but lower income can also cause poor health. Establishing which factor is the cause requires careful study design.
+1. **시간적 선행**: 원인이 결과보다 먼저 일어나야 한다. 흡연이 폐암을 일으킨다고 주장하려면 연구 참가자에서 흡연이 폐암 진단보다 앞서야 한다.
 
-- **Ethical and Practical Constraints**: Conducting experiments to establish causation is often impractical or unethical. It would be unethical to expose people to harmful substances to observe the effects. In such cases, researchers rely on observational studies and sophisticated statistical methods to infer causation.
+2. **원인과 결과의 공변**: 원인과 결과가 일관된 관계를 보여야 한다. 원인의 변화가 결과의 변화와 연관되어야 한다. 신체 활동이 정말로 보호 효과가 있다면 활동량이 많을수록 심장질환 발생률이 일관되게 낮아야 한다.
 
----
+3. **교란변수의 배제**: 교란변수는 원인과 결과 모두에 영향을 줄 수 있는 외부 요인이다. 직접적인 연결을 확립하려면 이 변수들을 통제해야 한다.
 
-## Example: Smoking and Lung Cancer — A Landmark Study
+4. **개연성**: 인과관계에 대해 과학적으로 합당한 기제나 설명이 있어야 한다. 흡연과 폐암의 인과적 연결은 담배 연기에 발암물질이 들어 있다는 생물학적 증거로 뒷받침된다.
 
-The causal link between smoking and lung cancer is one of the most well-documented examples in medical research.
-
-In the 1950s, British researchers Richard Doll and Austin Bradford Hill conducted a landmark **cohort study** involving thousands of British doctors. The study followed the doctors over several years, collecting data on their smoking habits and health outcomes. The results showed that doctors who smoked had a significantly higher incidence of lung cancer compared to non-smokers.
-
-To rule out confounding variables, the researchers controlled for factors such as age, gender, and socioeconomic status. The study design ensured that smoking preceded the development of lung cancer, and consistent findings across multiple studies and populations provided strong evidence for a causal link.
-
-This research contributed to public health campaigns and policy changes aimed at reducing smoking rates, ultimately saving millions of lives.
+5. **실험적 증거**: 통제실험이 인과에 대한 가장 강한 증거를 준다. 무작위 대조 시험(RCT)은 편향과 교란요인을 최소화하므로 임상 연구의 표준이다.
 
 ---
 
-## Example: Vaccines and Disease Eradication — The Case of Polio
+## 인과 확립의 어려움
 
-Polio was once a widespread and devastating disease, causing paralysis and death in millions of people worldwide. In the mid-20th century, the introduction of the polio vaccine marked a turning point.
+- **교란변수**: 교란요인을 식별하고 통제하는 일은 가장 큰 과제 중 하나이다. 교란요인은 변수들 사이의 참 관계를 가려 잘못된 결론으로 이끌 수 있다.
 
-Public health officials conducted extensive vaccination campaigns, and the incidence of polio dropped dramatically in countries where the vaccine was administered. The causal link was established through rigorous scientific research, including **randomized controlled trials** that demonstrated vaccinated individuals were significantly less likely to contract polio compared to unvaccinated individuals.
+- **역인과**: 인과의 방향이 불분명한 경우가 있다. 건강이 나쁘면 소득이 줄 수 있지만 소득이 낮아서 건강이 나빠질 수도 있다. 어느 쪽이 원인인지 확립하려면 신중한 연구 설계가 필요하다.
 
-The success of the polio vaccine led to widespread immunization efforts, ultimately bringing the world close to eradicating the disease. This example underscores the importance of establishing causation to guide effective public health interventions.
-
----
-
-## Example: Double-Blind Tests and Drug Efficacy
-
-One of the most rigorous methods for establishing causation in medicine is the **double-blind test**. In this design, neither the participants nor the researchers know who is receiving the treatment or the placebo. This eliminates bias and ensures that observed effects can be attributed directly to the treatment.
-
-**Example**: Consider a clinical trial testing a new blood pressure drug. Participants are randomly assigned to two groups: one receives the actual drug, the other receives a placebo. After several months, the drug group shows a significant reduction in blood pressure compared to the placebo group. The double-blind design ensures that this reduction is caused by the drug, not by expectations or other confounding factors.
+- **윤리적·실무적 제약**: 인과를 확립하기 위한 실험이 비현실적이거나 비윤리적인 경우가 많다. 효과를 보려고 사람을 해로운 물질에 노출시키는 것은 비윤리적이다. 이런 경우 연구자는 관찰연구와 정교한 통계 방법으로 인과를 추론한다.
 
 ---
 
-## Example: FDA Three-Phase Drug Approval Process
+## 예제: 흡연과 폐암 — 기념비적 연구
 
-The U.S. Food and Drug Administration (FDA) uses a stringent three-phase process to establish the safety and efficacy of new drugs:
+흡연과 폐암 사이의 인과적 연결은 의학 연구에서 가장 잘 기록된 예 중 하나이다.
 
-- **Phase 1**: A small group of healthy volunteers (20–100) receives the drug to assess safety, dosage range, and side effects.
+1950년대에 영국의 연구자 Richard Doll과 Austin Bradford Hill은 수천 명의 영국 의사를 대상으로 기념비적인 **코호트 연구**를 수행했다. 이 연구는 여러 해에 걸쳐 의사들을 추적하며 흡연 습관과 건강 결과에 대한 자료를 모았다. 결과는 담배를 피우는 의사가 비흡연자보다 폐암 발생률이 유의하게 높음을 보여주었다.
 
-- **Phase 2**: Several hundred participants who have the target condition receive the drug to determine efficacy and further evaluate safety.
+교란변수를 배제하기 위해 연구자들은 나이, 성별, 사회경제적 지위 같은 요인을 통제했다. 연구 설계는 흡연이 폐암 발생보다 앞섰음을 보장했고, 여러 연구와 모집단에 걸친 일관된 결과가 인과적 연결의 강한 증거를 제공했다.
 
-- **Phase 3**: Thousands of participants provide a larger sample size to confirm efficacy, monitor side effects, and compare to existing treatments. **Randomized controlled trials** are used to minimize confounding variables and biases.
-
-**Example**: A new vaccine must pass all three phases. In Phase 3, a large-scale RCT randomly assigns participants to receive either the vaccine or a placebo. If the vaccine significantly reduces infection incidence compared to the placebo, a causal relationship is established. Only after successfully passing all three phases does the FDA approve the vaccine for public use.
+이 연구는 흡연율을 줄이려는 공중보건 캠페인과 정책 변화로 이어져 결국 수백만 명의 생명을 구했다.
 
 ---
 
-## Example: Education and Income — Longitudinal Studies
+## 예제: 백신과 질병 박멸 — 소아마비의 경우
 
-Longitudinal studies, which follow individuals over time, are essential for establishing causation in social sciences.
+소아마비는 한때 널리 퍼져 전 세계 수백만 명에게 마비와 죽음을 가져온 무서운 병이었다. 20세기 중반 소아마비 백신의 도입이 전환점이 되었다.
 
-A long-term study tracks students from various socioeconomic backgrounds over several decades, collecting data on educational attainment, job history, and income. The analysis reveals that individuals who obtain higher levels of education consistently earn more over their lifetimes.
+공중보건 당국이 대대적인 예방접종 캠페인을 벌였고, 백신을 접종한 나라에서 소아마비 발생이 극적으로 줄었다. 인과적 연결은 접종자가 미접종자보다 소아마비에 걸릴 가능성이 유의하게 낮음을 보여준 **무작위 대조 시험**을 포함한 엄밀한 과학 연구로 확립되었다.
 
-To establish causation, researchers control for confounding variables such as family background, intelligence, and early life opportunities. By showing that higher education levels lead to increased earning potential while holding these factors constant, the research provides strong evidence for a causal relationship between education and income.
-
----
-
-## Summary
-
-Understanding causation is essential for making informed decisions and advancing scientific knowledge. While correlation can suggest a relationship between variables, establishing causation requires more rigorous evidence and careful consideration of:
-
-- Confounding factors
-- Reverse causality
-- Temporal precedence
-- Experimental design
-
-By applying the criteria for causation and using appropriate research methods—including RCTs, longitudinal studies, and statistical controls—we can better understand the causes of various phenomena and develop effective interventions in health, economics, and social policy.
-## Exercises
-
-**Exercise 1.**
-A news article reports: "People who eat organic food have a 25% lower cancer rate." Evaluate this claim using Bradford Hill's criteria. Which criteria are satisfied by this observational finding alone, and which require additional evidence?
-
-??? success "Solution to Exercise 1"
-    The observational finding alone may satisfy:
-
-    - **Strength of association:** A 25% reduction is a moderately strong association.
-    - **Consistency:** This can be assessed only if multiple studies across different populations show the same result.
-
-    Criteria that require additional evidence:
-
-    - **Temporality:** The study must confirm that organic food consumption preceded the cancer diagnosis (prospective design needed).
-    - **Biological plausibility:** A mechanism must be proposed (e.g., reduced pesticide exposure).
-    - **Dose-response:** Higher organic food consumption should correspond to greater risk reduction.
-    - **Experiment:** A randomized trial would be needed to rule out confounding (organic food consumers may also exercise more, smoke less, etc.).
-
-    The observational finding alone is insufficient to establish causation.
+소아마비 백신의 성공은 광범위한 예방접종 노력으로 이어져 세계를 질병 박멸에 가깝게 만들었다. 효과적인 공중보건 개입을 이끄는 데 인과의 확립이 얼마나 중요한지 보여주는 예이다.
 
 ---
 
-**Exercise 2.**
-Explain reverse causality with an example. How does a randomized controlled trial (RCT) eliminate the possibility of reverse causation?
+## 예제: 이중 눈가림 시험과 약효
 
-??? success "Solution to Exercise 2"
-    **Reverse causality** occurs when the assumed cause is actually the effect. For example, a study finds that people who take vitamins are healthier. The assumed direction is vitamins cause health, but the reverse may be true: healthier people are more likely to take vitamins because they are more health-conscious.
+의학에서 인과를 확립하는 가장 엄밀한 방법 중 하나가 **이중 눈가림 시험**이다. 이 설계에서는 참가자도 연구자도 누가 치료를 받고 누가 위약을 받는지 모른다. 편향을 없애고 관측된 효과를 치료 덕분이라고 볼 수 있게 한다.
 
-    An **RCT** eliminates reverse causation by randomly assigning participants to treatment and control groups **before** measuring the outcome. Since the treatment is assigned by the researcher (not chosen by the participant), the outcome cannot have caused the treatment assignment. The temporal ordering is guaranteed by design.
+**예시**: 새 혈압약을 시험하는 임상시험을 생각하자. 참가자를 무작위로 두 집단에 배정하여 한쪽은 실제 약을, 다른 쪽은 위약을 받는다. 몇 달 뒤 약 집단이 위약 집단보다 혈압이 유의하게 떨어졌다. 이중 눈가림 설계 덕분에 이 감소가 기대감이나 다른 교란요인이 아니라 약 때문임을 확신할 수 있다.
 
 ---
 
-**Exercise 3.**
-A city observes that neighborhoods with more police officers have higher crime rates and considers reducing police presence. Identify the logical flaw in this reasoning and explain what type of confound is at work.
+## 예제: FDA의 3상 신약 승인 과정
 
-??? success "Solution to Exercise 3"
-    The logical flaw is **confusing correlation with causation** while ignoring a common cause. Police officers are not causing crime; rather, neighborhoods with higher crime rates receive more police officers as a response. The confounding variable is the **underlying crime level**, which causes both the increased police presence and the observed crime rate.
+미국 식품의약국(FDA)은 신약의 안전성과 효능을 확립하기 위해 엄격한 3단계 과정을 쓴다:
 
-    This is an example of **allocation bias** (or confounding by indication): the treatment (police presence) is assigned based on the very outcome it is supposed to affect (crime). Reducing police presence based on this correlation would likely increase crime, the opposite of the intended effect.
+- **1상**: 소수의 건강한 자원자(20–100명)가 약을 투여받아 안전성, 용량 범위, 부작용을 평가한다.
+
+- **2상**: 대상 질환을 가진 수백 명이 약을 투여받아 효능을 판정하고 안전성을 더 평가한다.
+
+- **3상**: 수천 명을 대상으로 표본을 키워 효능을 확인하고 부작용을 관찰하며 기존 치료와 비교한다. 교란변수와 편향을 최소화하기 위해 **무작위 대조 시험**을 쓴다.
+
+**예시**: 새 백신은 세 단계를 모두 통과해야 한다. 3상에서 대규모 RCT가 참가자를 무작위로 백신 또는 위약에 배정한다. 백신이 위약보다 감염 발생을 유의하게 줄이면 인과관계가 확립된다. 세 단계를 모두 성공적으로 통과해야만 FDA가 백신을 공공 사용으로 승인한다.
 
 ---
 
-**Exercise 4.**
-Design a study to test whether a new tutoring program causes improved test scores. Specify the treatment, control, randomization procedure, and how you would address potential confounders.
+## 예제: 학력과 소득 — 종단 연구
 
-??? success "Solution to Exercise 4"
+개인을 시간에 걸쳐 추적하는 종단 연구는 사회과학에서 인과를 확립하는 데 필수적이다.
 
-    1. **Treatment group:** Students randomly assigned to receive the tutoring program.
-    2. **Control group:** Students randomly assigned to a no-tutoring condition (or a placebo condition such as unstructured study time).
-    3. **Randomization:** Use a random number generator to assign each student to treatment or control with equal probability. Stratified randomization by baseline test scores can improve balance.
-    4. **Confounders addressed by randomization:** Socioeconomic status, prior academic performance, motivation, and parental involvement are balanced in expectation across groups.
-    5. **Measurement:** Administer the same standardized test to both groups at the end of the study period.
-    6. **Analysis:** Compare mean test scores using a two-sample $t$-test or ANOVA. The causal effect is estimated by $\bar{Y}_{\text{treatment}} - \bar{Y}_{\text{control}}$.
+어떤 장기 연구가 다양한 사회경제적 배경의 학생들을 수십 년에 걸쳐 추적하며 학력, 직업 이력, 소득 자료를 모았다. 분석 결과 학력이 높은 개인이 평생에 걸쳐 일관되게 더 많이 버는 것으로 나타났다.
+
+인과를 확립하기 위해 연구자들은 가정 배경, 지능, 유년기의 기회 같은 교란변수를 통제했다. 이런 요인들을 고정한 상태에서도 높은 학력이 소득 잠재력 증가로 이어짐을 보임으로써 학력과 소득 사이 인과관계의 강한 증거를 제공했다.
+
+---
+
+## 요약
+
+인과의 이해는 정보에 근거한 결정과 과학 지식의 진보에 필수적이다. 상관이 변수들 사이의 관계를 시사할 수는 있지만 인과를 확립하려면 더 엄밀한 증거와 다음에 대한 신중한 고려가 필요하다:
+
+- 교란요인
+- 역인과
+- 시간적 선행
+- 실험 설계
+
+인과의 기준을 적용하고 RCT, 종단 연구, 통계적 통제 등 적절한 연구 방법을 쓰면 여러 현상의 원인을 더 잘 이해하고 보건, 경제, 사회 정책에서 효과적인 개입을 개발할 수 있다.
+
+## 연습문제
+
+**연습문제 1.**
+어떤 기사가 "유기농 식품을 먹는 사람의 암 발생률이 25% 낮다"고 보도했다. Bradford Hill의 기준으로 이 주장을 평가하라. 이 관찰 결과만으로 충족되는 기준은 무엇이고 추가 증거가 필요한 기준은 무엇인가?
+
+??? success "연습문제 1 풀이"
+    관찰 결과만으로 충족될 수 있는 것:
+
+    - **연관의 강도:** 25% 감소는 중간 정도로 강한 연관이다.
+    - **일관성:** 여러 모집단의 여러 연구가 같은 결과를 보여야만 평가할 수 있다.
+
+    추가 증거가 필요한 기준:
+
+    - **시간성:** 유기농 식품 섭취가 암 진단보다 앞섰음을 확인해야 한다(전향적 설계가 필요하다).
+    - **생물학적 개연성:** 기제를 제시해야 한다(예: 농약 노출 감소).
+    - **용량–반응:** 유기농 식품을 더 많이 먹을수록 위험이 더 줄어야 한다.
+    - **실험:** 교란을 배제하려면 무작위 시험이 필요하다(유기농 식품을 먹는 사람은 운동도 더 하고 담배도 덜 피울 수 있다).
+
+    관찰 결과만으로는 인과를 확립하기에 충분하지 않다.
+
+---
+
+**연습문제 2.**
+역인과를 예를 들어 설명하라. 무작위 대조 시험(RCT)은 역인과의 가능성을 어떻게 제거하는가?
+
+??? success "연습문제 2 풀이"
+    **역인과**는 원인이라고 가정한 것이 실제로는 결과일 때 일어난다. 예를 들어 어떤 연구가 비타민을 먹는 사람이 더 건강하다고 보고한다. 가정된 방향은 비타민이 건강을 만든다는 것이지만, 반대일 수도 있다. 건강한 사람이 건강을 더 의식해서 비타민을 먹을 가능성이 높은 것이다.
+
+    **RCT**는 결과를 측정하기 **전에** 참가자를 무작위로 처치군과 대조군에 배정하여 역인과를 제거한다. 처치가 참가자의 선택이 아니라 연구자에 의해 배정되므로 결과가 처치 배정의 원인이 될 수 없다. 시간 순서가 설계로 보장된다.
+
+---
+
+**연습문제 3.**
+어떤 도시가 경찰관이 많은 동네일수록 범죄율이 높다는 것을 관측하고 경찰 배치를 줄이려 한다. 이 추론의 논리적 결함을 지적하고 어떤 종류의 교란이 작동하는지 설명하라.
+
+??? success "연습문제 3 풀이"
+    논리적 결함은 공통원인을 무시한 채 **상관과 인과를 혼동**한 것이다. 경찰관이 범죄를 일으키는 것이 아니라, 범죄율이 높은 동네에 대응으로 경찰관이 더 배치되는 것이다. 교란변수는 **바탕에 있는 범죄 수준**이며, 그것이 경찰 배치 증가와 관측된 범죄율 모두를 일으킨다.
+
+    이는 **배정 편향**(또는 적응증에 의한 교란)의 예이다. 처치(경찰 배치)가 바로 그 처치가 영향을 주려는 결과(범죄)에 근거해 배정된다. 이 상관에 근거해 경찰 배치를 줄이면 의도와 반대로 범죄가 늘어날 가능성이 크다.
+
+---
+
+**연습문제 4.**
+새 개인교습 프로그램이 시험 점수 향상을 일으키는지 검정하는 연구를 설계하라. 처치, 대조, 무작위화 절차, 잠재적 교란요인에 대한 대처를 명시하라.
+
+??? success "연습문제 4 풀이"
+
+    1. **처치군:** 개인교습 프로그램을 받도록 무작위 배정된 학생들.
+    2. **대조군:** 교습 없음(또는 구조화되지 않은 자습 시간 같은 위약 조건)에 무작위 배정된 학생들.
+    3. **무작위화:** 난수 생성기로 각 학생을 같은 확률로 처치군이나 대조군에 배정한다. 기저 시험 점수로 층화 무작위화하면 균형이 개선된다.
+    4. **무작위화로 다루어지는 교란요인:** 사회경제적 지위, 이전 학업 성취, 동기, 부모의 관여가 기댓값 수준에서 두 집단에 균형 있게 배분된다.
+    5. **측정:** 연구 기간이 끝난 뒤 두 집단에 같은 표준화 시험을 시행한다.
+    6. **분석:** 이표본 $t$-검정이나 분산분석으로 평균 점수를 비교한다. 인과효과는 $\bar{Y}_{\text{처치}} - \bar{Y}_{\text{대조}}$로 추정한다.

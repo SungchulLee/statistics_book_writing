@@ -1,46 +1,46 @@
-# Correlation Analysis Demonstrations
+# 상관 분석 시연
 
-## Overview
+## 개요
 
-This page demonstrates how to compute and compare the three most common correlation coefficients -- Pearson, Spearman, and Kendall -- on bivariate data with a known linear relationship. We verify that Spearman's rank correlation equals the Pearson correlation computed on ranks, and we visualize the data with a scatter plot and ordinary least-squares regression line.
+이 페이지에서는 선형관계가 알려진 이변량 자료에 대해 가장 흔한 세 상관계수인 Pearson, Spearman, Kendall을 계산하고 비교한다. Spearman 순위상관이 순위에 대해 계산한 Pearson 상관과 같음을 확인하고, 산점도와 보통최소제곱 회귀직선으로 자료를 시각화한다.
 
 ---
 
-## Pearson, Spearman, and Kendall Coefficients
+## Pearson, Spearman, Kendall 계수
 
-Given paired observations $(x_1, y_1), \ldots, (x_n, y_n)$, the three standard correlation measures are defined as follows.
+짝지어진 관측값 $(x_1, y_1), \ldots, (x_n, y_n)$이 주어졌을 때 세 가지 표준 상관 측도는 다음과 같이 정의된다.
 
-**Pearson's $r$** measures the strength of the *linear* relationship:
+**Pearson의 $r$**은 *선형* 관계의 강도를 잰다:
 
 $$
 r = \frac{\sum_{i=1}^{n}(x_i - \bar{x})(y_i - \bar{y})}{\sqrt{\sum_{i=1}^{n}(x_i - \bar{x})^2}\;\sqrt{\sum_{i=1}^{n}(y_i - \bar{y})^2}}
 $$
 
-**Spearman's $\rho_s$** is Pearson's $r$ applied to the ranks of $x$ and $y$:
+**Spearman의 $\rho_s$**는 $x$와 $y$의 순위에 Pearson의 $r$을 적용한 것이다:
 
 $$
 \rho_s = r(\text{rank}(x),\; \text{rank}(y))
 $$
 
-**Kendall's $\tau$** counts the proportion of concordant minus discordant pairs:
+**Kendall의 $\tau$**는 일치쌍에서 불일치쌍을 뺀 비율을 센다:
 
 $$
 \tau = \frac{(\text{concordant pairs}) - (\text{discordant pairs})}{\binom{n}{2}}
 $$
 
-All three coefficients lie in $[-1, 1]$, but they emphasize different aspects of association. Pearson captures linear relationships; Spearman and Kendall capture monotonic relationships and are more robust to outliers.
+세 계수 모두 $[-1, 1]$ 안에 있지만 연관의 서로 다른 측면을 강조한다. Pearson은 선형관계를 포착하고, Spearman과 Kendall은 단조 관계를 포착하며 이상점에 더 로버스트하다.
 
 ---
 
-## Generating Bivariate Data
+## 이변량 자료 생성
 
-We generate $n = 120$ points from a linear model with Gaussian noise:
+Gauss 잡음을 가진 선형모형에서 $n = 120$개의 점을 생성한다:
 
 $$
 y_i = 0.8\, x_i + 5 + \varepsilon_i, \qquad \varepsilon_i \sim \mathcal{N}(0, 8^2)
 $$
 
-where $x_i \sim \text{Uniform}(10, 60)$.
+여기서 $x_i \sim \text{Uniform}(10, 60)$이다.
 
 ```python
 import numpy as np
@@ -56,9 +56,9 @@ y = 0.8 * x + 5 + noise
 
 ---
 
-## Computing the Correlation Coefficients
+## 상관계수 계산
 
-SciPy provides functions for each measure, returning both the coefficient and its p-value under the null hypothesis of no association:
+SciPy는 각 측도에 대한 함수를 제공하며 계수와 함께 연관이 없다는 귀무가설 아래의 p-값을 돌려준다:
 
 ```python
 r_pearson, p_pearson = stats.pearsonr(x, y)
@@ -72,9 +72,9 @@ print(f"Kendall  tau = {r_kendall:.4f}  (p = {p_kendall:.2e})")
 
 ---
 
-## Verifying the Rank Equivalence
+## 순위 동등성 확인
 
-A useful identity: Spearman's $\rho_s$ equals the Pearson $r$ computed on the rank-transformed data. We verify this numerically:
+유용한 항등식: Spearman의 $\rho_s$는 순위 변환된 자료로 계산한 Pearson $r$과 같다. 수치로 확인해 보자:
 
 ```python
 r_rank = stats.pearsonr(stats.rankdata(x), stats.rankdata(y))[0]
@@ -85,9 +85,9 @@ print(f"Spearman rho       = {r_spearman:.4f}")
 
 ---
 
-## Scatter Plot with Regression Line
+## 회귀직선을 포함한 산점도
 
-Overlaying the ordinary least-squares (OLS) regression line on the scatter plot provides a visual check that the linear model is appropriate:
+산점도에 보통최소제곱(OLS) 회귀직선을 겹쳐 그리면 선형모형이 적절한지 시각적으로 확인할 수 있다:
 
 ```python
 import matplotlib.pyplot as plt
@@ -109,20 +109,20 @@ plt.show()
 
 ---
 
-## Interpretation
+## 해석
 
-For data generated from a linear model with moderate noise, all three coefficients are positive and highly significant. The ordering $|r| \ge |\rho_s| \ge |\tau|$ is typical: Pearson's $r$ is most powerful when the true relationship is linear, while Kendall's $\tau$ is the most conservative. Spearman's $\rho_s$ sits between the two.
+잡음이 중간 정도인 선형모형에서 생성한 자료에서는 세 계수 모두 양수이고 매우 유의하다. $|r| \ge |\rho_s| \ge |\tau|$의 순서가 전형적이다. 참 관계가 선형일 때 Pearson의 $r$이 가장 강력하고 Kendall의 $\tau$가 가장 보수적이며 Spearman의 $\rho_s$가 그 사이에 있다.
 
-When the relationship is nonlinear but monotonic, Spearman and Kendall will outperform Pearson. When the data contain outliers, rank-based measures are more robust. Always inspect a scatter plot before relying on any single correlation number.
+관계가 비선형이지만 단조이면 Spearman과 Kendall이 Pearson보다 낫다. 자료에 이상점이 있으면 순위 기반 측도가 더 로버스트하다. 어떤 상관 수치 하나에 의존하기 전에 언제나 산점도를 살펴보라.
 
 ---
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Generate $n = 200$ observations from the model $y = 3x + 2 + \varepsilon$ with $\varepsilon \sim \mathcal{N}(0, 5^2)$ and $x \sim \text{Uniform}(0, 20)$. Compute all three correlation coefficients and their p-values. Which coefficient is largest in absolute value, and why?
+**연습문제 1.**
+$x \sim \text{Uniform}(0, 20)$이고 $\varepsilon \sim \mathcal{N}(0, 5^2)$인 모형 $y = 3x + 2 + \varepsilon$에서 $n = 200$개의 관측값을 생성하라. 세 상관계수와 그 p-값을 모두 계산하라. 절댓값이 가장 큰 계수는 무엇이며 그 이유는?
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
 
     ```python
     import numpy as np
@@ -142,16 +142,16 @@ Generate $n = 200$ observations from the model $y = 3x + 2 + \varepsilon$ with $
     print(f"Kendall  tau = {r_k:.4f}, p = {p_k:.2e}")
     ```
 
-    Since the true relationship is linear, Pearson's $r$ is the most efficient estimator and will be the largest. Spearman's $\rho_s$ is close but slightly lower, and Kendall's $\tau$ is the smallest. All three are highly significant because the linear signal is strong relative to the noise. $\square$
+    참 관계가 선형이므로 Pearson의 $r$이 가장 효율적인 추정량이며 값도 가장 크다. Spearman의 $\rho_s$는 가깝지만 조금 낮고 Kendall의 $\tau$가 가장 작다. 잡음에 비해 선형 신호가 강하므로 셋 다 매우 유의하다. $\square$
 
 ---
 
-**Exercise 2.**
-Construct a dataset of $n = 100$ points where Spearman's $\rho_s > 0.9$ but Pearson's $r < 0.5$. Explain what kind of relationship produces this discrepancy.
+**연습문제 2.**
+Spearman의 $\rho_s > 0.9$이면서 Pearson의 $r < 0.5$인 $n = 100$개 자료를 구성하라. 이런 차이를 만드는 관계는 어떤 종류인지 설명하라.
 
-??? success "Solution to Exercise 2"
+??? success "연습문제 2 풀이"
 
-    A monotonic but strongly nonlinear relationship produces a high Spearman coefficient with a low Pearson coefficient. For example:
+    단조이면서 강하게 비선형인 관계가 Spearman은 높고 Pearson은 낮은 결과를 만든다. 예를 들어:
 
     ```python
     import numpy as np
@@ -167,47 +167,49 @@ Construct a dataset of $n = 100$ points where Spearman's $\rho_s > 0.9$ but Pear
     print(f"Spearman rho = {r_s:.4f}")
     ```
 
-    The exponential relationship is strongly monotonic (high $\rho_s$) but far from linear, so Pearson's $r$ is substantially lower. This illustrates that Pearson only captures linear association while Spearman captures any monotonic relationship. $\square$
+    지수 관계는 강하게 단조이지만($\rho_s$가 높다) 선형에서 멀어 Pearson의 $r$이 상당히 낮다. Pearson은 선형 연관만 포착하고 Spearman은 어떤 단조 관계든 포착함을 보여준다. $\square$
 
 ---
 
-**Exercise 3.**
-Prove that Pearson's $r$ is invariant under positive affine transformations. That is, show that for constants $a, c > 0$ and any $b, d$,
+**연습문제 3.**
+Pearson의 $r$이 양의 아핀 변환에 불변임을 증명하라. 즉 상수 $a, c > 0$과 임의의 $b, d$에 대해
 
 $$
 r(aX + b,\; cY + d) = r(X, Y)
 $$
 
-??? success "Solution to Exercise 3"
+임을 보여라.
 
-    Let $U = aX + b$ and $V = cY + d$ with $a, c > 0$. Then $\bar{U} = a\bar{X} + b$ and $\bar{V} = c\bar{Y} + d$, so $U_i - \bar{U} = a(X_i - \bar{X})$ and $V_i - \bar{V} = c(Y_i - \bar{Y})$.
+??? success "연습문제 3 풀이"
 
-    The numerator of $r(U, V)$ becomes:
+    $a, c > 0$일 때 $U = aX + b$, $V = cY + d$라 하자. 그러면 $\bar{U} = a\bar{X} + b$, $\bar{V} = c\bar{Y} + d$이므로 $U_i - \bar{U} = a(X_i - \bar{X})$, $V_i - \bar{V} = c(Y_i - \bar{Y})$이다.
+
+    $r(U, V)$의 분자는
 
     $$
     \sum_{i=1}^n (U_i - \bar{U})(V_i - \bar{V}) = ac \sum_{i=1}^n (X_i - \bar{X})(Y_i - \bar{Y})
     $$
 
-    The denominator becomes:
+    이 되고, 분모는
 
     $$
     \sqrt{\sum(U_i - \bar{U})^2}\;\sqrt{\sum(V_i - \bar{V})^2} = a\sqrt{\sum(X_i - \bar{X})^2}\;\cdot\; c\sqrt{\sum(Y_i - \bar{Y})^2}
     $$
 
-    Therefore:
+    이 된다. 따라서
 
     $$
     r(U, V) = \frac{ac \sum(X_i - \bar{X})(Y_i - \bar{Y})}{ac\sqrt{\sum(X_i - \bar{X})^2}\;\sqrt{\sum(Y_i - \bar{Y})^2}} = r(X, Y)
     $$
 
-    The positive constants $a$ and $c$ cancel in the ratio. $\square$
+    이다. 양의 상수 $a$와 $c$가 비에서 상쇄된다. $\square$
 
 ---
 
-**Exercise 4.**
-Write a Python function that takes two arrays and returns all three correlation coefficients as a dictionary. Test it on three different scenarios: (a) strong linear, (b) weak nonlinear, (c) data with outliers. Discuss which coefficient is most affected by the outliers.
+**연습문제 4.**
+두 배열을 받아 세 상관계수를 사전으로 돌려주는 Python 함수를 작성하라. (a) 강한 선형, (b) 약한 비선형, (c) 이상점이 있는 자료의 세 상황에서 시험하라. 이상점의 영향을 가장 크게 받는 계수를 논하라.
 
-??? success "Solution to Exercise 4"
+??? success "연습문제 4 풀이"
 
     ```python
     import numpy as np
@@ -240,27 +242,27 @@ Write a Python function that takes two arrays and returns all three correlation 
     print("Outliers:", all_correlations(x_c, y_c))
     ```
 
-    Pearson's $r$ is most affected by outliers because it depends on means and standard deviations, which are sensitive to extreme values. Spearman and Kendall, being rank-based, are more robust. In scenario (c), the outliers pull Pearson's $r$ toward zero (or even negative), while Spearman and Kendall remain closer to the true positive association. $\square$
+    Pearson의 $r$이 이상점의 영향을 가장 크게 받는다. 극단값에 민감한 평균과 표준편차에 의존하기 때문이다. 순위 기반인 Spearman과 Kendall은 더 로버스트하다. 상황 (c)에서 이상점이 Pearson의 $r$을 0(또는 음수) 쪽으로 끌어내리는 반면 Spearman과 Kendall은 참된 양의 연관에 더 가깝게 남는다. $\square$
 
 ---
 
-**Exercise 5.**
-Show that for a bivariate sample of size $n$, if Pearson's $r = 1$, then all points $(x_i, y_i)$ lie on a line with positive slope. Provide a formal proof.
+**연습문제 5.**
+크기 $n$인 이변량 표본에서 Pearson의 $r = 1$이면 모든 점 $(x_i, y_i)$가 기울기가 양수인 한 직선 위에 있음을 보여라. 형식적인 증명을 제시하라.
 
-??? success "Solution to Exercise 5"
+??? success "연습문제 5 풀이"
 
-    The Cauchy--Schwarz inequality states that for vectors $\mathbf{a}, \mathbf{b} \in \mathbb{R}^n$:
+    Cauchy-Schwarz 부등식은 벡터 $\mathbf{a}, \mathbf{b} \in \mathbb{R}^n$에 대해
 
     $$
     \left(\sum_{i=1}^n a_i b_i\right)^2 \le \left(\sum_{i=1}^n a_i^2\right)\left(\sum_{i=1}^n b_i^2\right)
     $$
 
-    with equality if and only if $\mathbf{a} = \lambda \mathbf{b}$ for some scalar $\lambda$.
+    이며, 등호는 어떤 스칼라 $\lambda$에 대해 $\mathbf{a} = \lambda \mathbf{b}$일 때에만 성립한다고 말한다.
 
-    Set $a_i = x_i - \bar{x}$ and $b_i = y_i - \bar{y}$. Then $r = 1$ means:
+    $a_i = x_i - \bar{x}$, $b_i = y_i - \bar{y}$라 두면 $r = 1$은
 
     $$
     \frac{\sum a_i b_i}{\sqrt{\sum a_i^2}\sqrt{\sum b_i^2}} = 1
     $$
 
-    By Cauchy--Schwarz equality, we must have $y_i - \bar{y} = \lambda(x_i - \bar{x})$ for all $i$, with some $\lambda > 0$ (positive because $r > 0$). Rearranging: $y_i = \lambda x_i + (\bar{y} - \lambda \bar{x})$. This is a line with positive slope $\lambda$. $\square$
+    을 뜻한다. Cauchy-Schwarz의 등호 조건에 의해 모든 $i$에서 $y_i - \bar{y} = \lambda(x_i - \bar{x})$이고, $r > 0$이므로 $\lambda > 0$이다. 정리하면 $y_i = \lambda x_i + (\bar{y} - \lambda \bar{x})$이며, 이는 기울기가 $\lambda > 0$인 직선이다. $\square$

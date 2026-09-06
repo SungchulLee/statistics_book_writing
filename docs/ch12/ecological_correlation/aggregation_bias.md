@@ -1,165 +1,167 @@
-# Aggregation Bias
+# 집계 편향
 
-Whenever data are summarized before analysis -- averaged over groups, binned into intervals, or collapsed across time periods -- the resulting statistics can differ systematically from those computed on the original individual-level data. This systematic distortion is called **aggregation bias**. It encompasses the ecological fallacy and Simpson's paradox as special cases, but also includes subtler effects on variances, regression slopes, and correlations that arise purely from the act of aggregation itself.
-
----
-
-## What Is Aggregation Bias
-
-Aggregation bias occurs when the statistical relationship estimated from aggregated data differs from the relationship that exists at the individual level. The bias arises because aggregation changes the structure of the data in ways that can inflate correlations, distort regression coefficients, and mask or reverse associations.
-
-The core mechanism is straightforward: averaging within groups reduces within-group variability while preserving between-group variability. Since between-group and within-group relationships can differ, the aggregate analysis captures a mixture that may not represent either component faithfully.
+분석 전에 자료를 요약하면(집단별로 평균 내거나, 구간으로 묶거나, 기간에 걸쳐 합치면) 그렇게 얻은 통계량이 원래의 개인 수준 자료에서 계산한 것과 체계적으로 달라질 수 있다. 이 체계적 왜곡을 **집계 편향**이라 한다. 생태학적 오류와 Simpson의 역설을 특수한 경우로 포함하며, 집계라는 행위 자체에서 생기는 분산·회귀 기울기·상관에 대한 더 미묘한 효과들도 아우른다.
 
 ---
 
-## How Aggregation Inflates Correlations
+## 집계 편향이란
 
-Consider $n$ individuals in $G$ groups, each of size $m$ (for simplicity, assume equal group sizes). Let $X_{gi}$ and $Y_{gi}$ denote the values for individual $i$ in group $g$. Define the group means $\bar{X}_g = \frac{1}{m}\sum_{i=1}^m X_{gi}$ and $\bar{Y}_g = \frac{1}{m}\sum_{i=1}^m Y_{gi}$.
+집계 편향은 집계된 자료로 추정한 통계적 관계가 개인 수준에 존재하는 관계와 다를 때 일어난다. 집계가 자료의 구조를 바꾸어 상관을 부풀리고, 회귀계수를 왜곡하고, 연관을 가리거나 뒤집을 수 있기 때문에 생긴다.
 
-The correlation between the group means $\bar{X}_g$ and $\bar{Y}_g$ is the **ecological correlation**. A key mathematical result is that
+핵심 기제는 간단하다. 집단 안에서 평균을 내면 집단 내 변동은 줄어들고 집단 간 변동은 유지된다. 집단 간 관계와 집단 내 관계가 다를 수 있으므로, 집계 분석은 어느 쪽도 충실히 대표하지 못하는 혼합을 포착하게 된다.
+
+---
+
+## 집계가 상관을 부풀리는 방식
+
+$G$개의 집단에 각각 크기 $m$인 개인들이 있다고 하자(단순화를 위해 집단 크기가 같다고 가정한다). $X_{gi}$와 $Y_{gi}$를 집단 $g$의 개인 $i$의 값이라 하고, 집단 평균을 $\bar{X}_g = \frac{1}{m}\sum_{i=1}^m X_{gi}$, $\bar{Y}_g = \frac{1}{m}\sum_{i=1}^m Y_{gi}$라 하자.
+
+집단 평균 $\bar{X}_g$와 $\bar{Y}_g$ 사이의 상관이 **생태학적 상관**이다. 핵심이 되는 수학적 결과는 분산의 분해이다:
 
 $$
-\text{Var}(\bar{X}_g) = \frac{\text{Var}(X)}{m} \cdot \frac{\text{Var}_B(X)}{\text{Var}(X)/m}
+\text{Var}(X) = \text{Var}_B(X) + \text{Var}_W(X), \qquad \text{Var}(\bar{X}_g) = \text{Var}_B(X) + \frac{\text{Var}_W(X)}{m}
 $$
 
-More intuitively, averaging eliminates individual-level noise, causing group means to cluster more tightly along any between-group trend line. This tighter clustering produces higher correlations.
+여기서 $\text{Var}_B$는 집단 간 성분, $\text{Var}_W$는 집단 내 성분이다. $m$이 커질수록 집단 평균의 분산에서 집단 내 잡음의 몫이 사라지고 집단 간 성분만 남는다.
 
-!!! note "Aggregation almost always increases the absolute value of the correlation"
-    When within-group and between-group relationships have the same sign, the ecological correlation is stronger than the individual-level correlation. The inflation can be dramatic: individual correlations of $r = 0.3$ routinely become ecological correlations of $r = 0.9$ or higher when averaging over large groups.
+더 직관적으로 말하면, 평균을 내면 개인 수준의 잡음이 제거되어 집단 평균들이 집단 간 추세선 주위에 더 촘촘히 모인다. 이렇게 촘촘해지면 상관이 커진다.
+
+!!! note "집계는 거의 언제나 상관의 절댓값을 키운다"
+    집단 내 관계와 집단 간 관계의 부호가 같으면 생태학적 상관이 개인 수준 상관보다 강하다. 그 부풀림은 극적일 수 있다. 큰 집단에 걸쳐 평균을 내면 개인 수준 상관 $r = 0.3$이 생태학적 상관 $r = 0.9$ 이상이 되는 일이 흔하다.
 
 ---
 
-## Effect on Regression Slopes
+## 회귀 기울기에 대한 영향
 
-Aggregation also distorts regression coefficients. If we regress $Y$ on $X$ at the individual level, the slope is
+집계는 회귀계수도 왜곡한다. 개인 수준에서 $Y$를 $X$에 회귀하면 기울기는
 
 $$
 \hat{\beta}_{\text{individual}} = \frac{\sum_{g,i}(X_{gi} - \bar{X})(Y_{gi} - \bar{Y})}{\sum_{g,i}(X_{gi} - \bar{X})^2}
 $$
 
-If we instead regress the group means $\bar{Y}_g$ on $\bar{X}_g$, the ecological slope is
+이다. 대신 집단 평균 $\bar{Y}_g$를 $\bar{X}_g$에 회귀하면 생태학적 기울기는
 
 $$
 \hat{\beta}_{\text{ecological}} = \frac{\sum_g (\bar{X}_g - \bar{\bar{X}})(\bar{Y}_g - \bar{\bar{Y}})}{\sum_g (\bar{X}_g - \bar{\bar{X}})^2}
 $$
 
-These two slopes are generally different. The ecological slope reflects only the between-group relationship, while the individual slope is a combination of between-group and within-group effects. When these components differ, the ecological slope can overestimate, underestimate, or even reverse the individual-level effect.
+이다. 두 기울기는 대체로 다르다. 생태학적 기울기는 집단 간 관계만 반영하는 반면 개인 수준 기울기는 집단 간 효과와 집단 내 효과의 결합이다. 두 성분이 다르면 생태학적 기울기가 개인 수준 효과를 과대추정하거나 과소추정하거나 심지어 뒤집을 수 있다.
 
 ---
 
-## Sources of Aggregation Bias
+## 집계 편향의 원천
 
-Several mechanisms contribute to aggregation bias:
+집계 편향에는 여러 기제가 기여한다:
 
-1. **Loss of within-group variation.** Averaging eliminates individual differences within groups, removing information that may be essential for estimating the true relationship.
+1. **집단 내 변동의 손실.** 평균을 내면 집단 안의 개인차가 사라져 참 관계를 추정하는 데 꼭 필요한 정보가 제거된다.
 
-2. **Confounding by group membership.** Groups may differ systematically in ways that are correlated with both $X$ and $Y$, introducing confounding at the aggregate level that does not exist (or is weaker) at the individual level.
+2. **집단 소속에 의한 교란.** 집단들이 $X$와 $Y$ 모두와 상관된 방식으로 체계적으로 다를 수 있어, 개인 수준에는 없거나 약한 교란이 집계 수준에서 생긴다.
 
-3. **Nonlinear effects.** When the relationship between $X$ and $Y$ is nonlinear, the average of a function is not the function of the average. Aggregation applies a linear approximation, distorting the estimated relationship.
+3. **비선형 효과.** $X$와 $Y$의 관계가 비선형이면 함수의 평균이 평균의 함수와 같지 않다. 집계는 선형 근사를 적용하여 추정된 관계를 왜곡한다.
 
-4. **Unequal group sizes.** When groups have different sizes, the aggregate analysis implicitly assigns different weights to different individuals, which can skew results.
-
----
-
-## Example: State-Level vs Individual-Level Income and Education
-
-Suppose we correlate average income and average education level across 50 U.S. states and find $r = 0.85$. This ecological correlation is much higher than the individual-level correlation (typically around $r = 0.4$) for two reasons:
-
-- Averaging over millions of people within each state eliminates individual-level noise, tightening the scatter of group means.
-- State-level differences in industry, policy, and demographics create between-state variation that aligns income and education more strongly than individual-level variation does.
-
-Concluding that education explains 72% of income variation ($r^2 = 0.72$) would be a serious overstatement of the individual-level relationship ($r^2 = 0.16$).
+4. **집단 크기의 불균형.** 집단 크기가 다르면 집계 분석이 개인마다 암묵적으로 다른 가중치를 주게 되어 결과가 치우칠 수 있다.
 
 ---
 
-## Mitigating Aggregation Bias
+## 예제: 주 수준 대 개인 수준의 소득과 학력
 
-1. **Analyze at the individual level** whenever individual data are available.
+미국 50개 주에 걸쳐 평균 소득과 평균 학력의 상관을 구했더니 $r = 0.85$가 나왔다고 하자. 이 생태학적 상관은 개인 수준 상관(대개 $r = 0.4$ 정도)보다 훨씬 높은데 이유는 두 가지이다:
 
-2. **Use multilevel models.** Hierarchical models explicitly separate within-group and between-group effects, estimating each appropriately.
+- 각 주 안에서 수백만 명에 걸쳐 평균을 내면 개인 수준 잡음이 제거되어 집단 평균의 산포가 좁아진다.
+- 산업, 정책, 인구 구성의 주별 차이가 개인 수준 변동보다 소득과 학력을 더 강하게 정렬시키는 주 간 변동을 만든다.
 
-3. **Report the level of analysis.** Always state whether statistics are computed on individual or aggregated data.
-
-4. **Avoid cross-level inference.** Do not use aggregate statistics to draw conclusions about individuals, and vice versa.
-
-5. **Check sensitivity to aggregation.** If only aggregate data are available, perform sensitivity analyses to understand how results might change at finer levels of aggregation.
+학력이 소득 변동의 72%를 설명한다($r^2 = 0.72$)고 결론짓는 것은 개인 수준 관계($r^2 = 0.16$)를 심각하게 과장하는 것이다.
 
 ---
 
-## Connection to the Ecological Fallacy and Simpson's Paradox
+## 집계 편향 줄이기
 
-Aggregation bias is the umbrella concept under which the [ecological fallacy](ecological_fallacy.md) and [Simpson's paradox](simpsons_paradox.md) fall:
+1. 개인 자료를 구할 수 있으면 언제나 **개인 수준에서 분석한다**.
 
-- The **ecological fallacy** is the specific error of applying aggregate-level correlations to individuals.
-- **Simpson's paradox** is the specific case where aggregation reverses the direction of an association.
-- **Aggregation bias** is the general phenomenon that any form of data summarization can systematically distort statistical relationships.
+2. **다수준 모형을 쓴다.** 계층 모형은 집단 내 효과와 집단 간 효과를 명시적으로 분리하여 각각을 적절히 추정한다.
 
-Understanding aggregation bias provides the unified framework for recognizing when and why summarized data can mislead.
+3. **분석 수준을 보고한다.** 통계량을 개인 자료로 계산했는지 집계 자료로 계산했는지 항상 밝힌다.
 
----
+4. **수준을 넘나드는 추론을 피한다.** 집계 통계로 개인에 대한 결론을 내리지 말고 그 반대도 마찬가지이다.
 
-## Summary
-
-Aggregation bias is the systematic distortion of statistical relationships that occurs when data are analyzed at a more aggregated level than they were generated. Averaging inflates correlations, distorts regression slopes, and can reverse associations. The bias arises from the loss of within-group variation and the potential for confounding at the group level. Individual-level analysis and multilevel models are the primary defenses against aggregation bias.
-
-## Exercises
-
-**Exercise 1.**
-A study of 100 cities finds a correlation of $r = 0.85$ between average income and average life expectancy. A study of 10,000 individuals within those cities finds $r = 0.25$. Explain the discrepancy.
-
-??? success "Solution to Exercise 1"
-    The discrepancy is due to **aggregation bias**. When data are aggregated to the city level, individual-level variability within each city is averaged out, leaving only between-city variation. Since cities with higher average incomes also tend to have higher average life expectancy (due to better infrastructure, healthcare, etc.), the city-level correlation is inflated.
-
-    At the individual level, the income-life expectancy relationship is weaker because within any given city, rich and poor individuals have more similar life expectancies than the city-level averages suggest. The within-city variation (which dilutes the correlation) is invisible in the aggregated data.
-
-    Mathematically, the ecological correlation can be decomposed: $r_{\text{eco}} \approx r_{\text{between}} \cdot w$, where $w > 1$ reflects the variance ratio between groups versus within groups.
+5. **집계에 대한 민감도를 확인한다.** 집계 자료만 있다면 더 세밀한 집계 수준에서 결과가 어떻게 달라질 수 있는지 민감도 분석을 수행한다.
 
 ---
 
-**Exercise 2.**
-Explain why aggregation always tends to inflate the absolute value of correlations (in most practical settings).
+## 생태학적 오류, Simpson의 역설과의 관계
 
-??? success "Solution to Exercise 2"
-    Aggregation (averaging within groups) removes within-group variation and retains only between-group variation. Since:
+집계 편향은 [생태학적 오류](ecological_fallacy.md)와 [Simpson의 역설](simpsons_paradox.md)을 아우르는 상위 개념이다:
+
+- **생태학적 오류**는 집계 수준의 상관을 개인에게 적용하는 구체적인 잘못이다.
+- **Simpson의 역설**은 집계가 연관의 방향을 뒤집는 구체적인 경우이다.
+- **집계 편향**은 어떤 형태의 자료 요약이든 통계적 관계를 체계적으로 왜곡할 수 있다는 일반적인 현상이다.
+
+집계 편향을 이해하면 요약된 자료가 언제 왜 오도할 수 있는지 알아보는 통일된 틀을 얻는다.
+
+---
+
+## 요약
+
+집계 편향은 자료가 생성된 수준보다 더 집계된 수준에서 분석할 때 통계적 관계가 체계적으로 왜곡되는 현상이다. 평균 내기는 상관을 부풀리고 회귀 기울기를 왜곡하며 연관을 뒤집을 수도 있다. 집단 내 변동의 손실과 집단 수준에서 생길 수 있는 교란이 그 원인이다. 개인 수준 분석과 다수준 모형이 집계 편향에 대한 일차적인 방어책이다.
+
+## 연습문제
+
+**연습문제 1.**
+도시 100곳에 대한 연구에서 평균 소득과 평균 기대수명의 상관이 $r = 0.85$였다. 그 도시들 안의 개인 10,000명에 대한 연구에서는 $r = 0.25$였다. 이 차이를 설명하라.
+
+??? success "연습문제 1 풀이"
+    **집계 편향** 때문이다. 자료를 도시 수준으로 집계하면 각 도시 안의 개인 수준 변동이 평균으로 사라지고 도시 간 변동만 남는다. 평균 소득이 높은 도시가 (더 나은 기반시설, 의료 등 덕분에) 평균 기대수명도 높은 경향이 있으므로 도시 수준 상관이 부풀려진다.
+
+    개인 수준에서는 소득–기대수명 관계가 더 약하다. 어느 한 도시 안에서는 부유한 개인과 가난한 개인의 기대수명이 도시 수준 평균이 시사하는 것보다 서로 비슷하기 때문이다. (상관을 희석하는) 도시 내 변동이 집계 자료에서는 보이지 않는다.
+
+    수학적으로는 집계 평균의 분산이 $\text{Var}_B + \text{Var}_W/m$이므로, 집단 크기 $m$이 클수록 집단 내 성분이 사라지고 집단 간 관계만 남아 상관이 커진다.
+
+---
+
+**연습문제 2.**
+(대부분의 실무 상황에서) 집계가 왜 상관의 절댓값을 키우는 경향이 있는지 설명하라.
+
+??? success "연습문제 2 풀이"
+    집계(집단 안에서 평균 내기)는 집단 내 변동을 제거하고 집단 간 변동만 남긴다.
 
     $$
     \text{Var}(X) = \text{Var}_{\text{between}}(\bar{X}_g) + E[\text{Var}_{\text{within}}(X \mid g)]
     $$
 
-    the total variance is the sum of between-group and within-group components. After aggregation, only the between-group variance remains, which is smaller.
+    이므로 전체 분산은 집단 간 성분과 집단 내 성분의 합이다. 집계 후에는 집단 간 분산만 남아 더 작아진다.
 
-    If the between-group relationship is stronger than the within-group relationship (which is typical -- group-level averages follow the trend more closely because idiosyncratic noise cancels out), then the correlation among group means exceeds the individual-level correlation.
+    집단 간 관계가 집단 내 관계보다 강하면(개별적인 잡음이 상쇄되어 집단 평균이 추세를 더 가깝게 따르므로 흔히 그렇다) 집단 평균들 사이의 상관이 개인 수준 상관을 넘어선다.
 
-    Exception: if the between-group and within-group relationships have opposite signs (Simpson's paradox), aggregation can actually reduce or reverse the correlation.
-
----
-
-**Exercise 3.**
-A marketing analyst aggregates customer data by region and finds a strong positive correlation between advertising spend and sales. Why might this overstate the individual-level effectiveness of advertising?
-
-??? success "Solution to Exercise 3"
-    Several sources of aggregation bias are at play:
-
-    1. **Confounding at the region level:** Regions with higher sales potential (larger population, higher income) naturally receive more advertising budget. The correlation reflects this resource allocation decision, not the causal effect of advertising.
-
-    2. **Loss of within-region variation:** Within each region, individual customers' exposure to advertising varies, but this variation is lost after averaging. The region-level correlation captures only the fact that high-ad regions have high sales, missing the individual-level noise.
-
-    3. **Reverse causality:** Companies may allocate more advertising to regions that already have strong sales (reward good performance), inflating the aggregated correlation.
-
-    To estimate the true individual-level effectiveness, the analyst should use individual-level data or, better yet, run a randomized experiment (A/B test) at the individual or small-group level.
+    예외: 집단 간 관계와 집단 내 관계의 부호가 반대이면(Simpson의 역설) 집계가 오히려 상관을 줄이거나 뒤집을 수 있다.
 
 ---
 
-**Exercise 4.**
-Propose a method to estimate individual-level correlations from group-level data, or explain why this is generally impossible without additional assumptions.
+**연습문제 3.**
+어떤 마케팅 분석가가 고객 자료를 지역별로 집계하여 광고비와 매출 사이에 강한 양의 상관을 발견했다. 이것이 왜 광고의 개인 수준 효과를 과장할 수 있는가?
 
-??? success "Solution to Exercise 4"
-    In general, individual-level correlations **cannot** be uniquely recovered from group-level data without additional assumptions. This is because different individual-level data structures can produce the same group-level summaries (the mapping from individual data to aggregate statistics is many-to-one).
+??? success "연습문제 3 풀이"
+    여러 집계 편향의 원천이 작동한다:
 
-    Approaches that attempt partial recovery include:
+    1. **지역 수준의 교란:** 매출 잠재력이 큰 지역(인구가 많고 소득이 높은 지역)이 자연스럽게 더 많은 광고 예산을 받는다. 상관은 광고의 인과효과가 아니라 이 자원 배분 결정을 반영한다.
 
-    1. **Ecological inference models** (King, 1997): Impose distributional assumptions on the within-group variation to bound or estimate individual-level quantities.
-    2. **Multilevel models:** If both group-level and some individual-level data are available, hierarchical models can separate between-group and within-group effects.
-    3. **External validation:** Use individual-level data from a subset of groups to calibrate the aggregation bias.
+    2. **지역 내 변동의 손실:** 각 지역 안에서 개별 고객의 광고 노출은 다르지만 평균을 내면 이 변동이 사라진다. 지역 수준 상관은 광고가 많은 지역의 매출이 높다는 사실만 포착하고 개인 수준의 잡음은 놓친다.
 
-    The safest approach is to collect individual-level data whenever the research question is about individual-level associations. No statistical method can fully overcome the information loss from aggregation.
+    3. **역인과:** 회사가 이미 매출이 좋은 지역에 (성과 보상 차원에서) 광고를 더 배정할 수 있어 집계 상관이 부풀려진다.
+
+    참된 개인 수준 효과를 추정하려면 개인 수준 자료를 쓰거나, 더 나아가 개인이나 소집단 수준에서 무작위 실험(A/B 검정)을 수행해야 한다.
+
+---
+
+**연습문제 4.**
+집단 수준 자료에서 개인 수준 상관을 추정하는 방법을 제안하거나, 추가 가정 없이는 대체로 불가능한 이유를 설명하라.
+
+??? success "연습문제 4 풀이"
+    일반적으로 추가 가정 없이는 집단 수준 자료에서 개인 수준 상관을 유일하게 복원할 수 **없다**. 서로 다른 개인 수준 자료 구조가 같은 집단 수준 요약을 낳을 수 있기 때문이다(개인 자료에서 집계 통계로 가는 대응이 다대일이다).
+
+    부분적인 복원을 시도하는 접근으로는 다음이 있다:
+
+    1. **생태학적 추론 모형**(King, 1997): 집단 내 변동에 분포 가정을 부과하여 개인 수준 양을 한정하거나 추정한다.
+    2. **다수준 모형:** 집단 수준 자료와 일부 개인 수준 자료가 함께 있으면 계층 모형으로 집단 간 효과와 집단 내 효과를 분리할 수 있다.
+    3. **외부 검증:** 일부 집단의 개인 수준 자료로 집계 편향을 보정한다.
+
+    가장 안전한 방법은 연구 질문이 개인 수준 연관에 관한 것이라면 개인 수준 자료를 수집하는 것이다. 어떤 통계 방법도 집계로 인한 정보 손실을 완전히 극복하지는 못한다.

@@ -1,88 +1,87 @@
-# 18.4 Correlation, Causation, and Confounding
+# 교란 개관: 상관, 인과, 교란
 
+## 상관과 인과
 
-## Correlation vs. Causation
+**상관**은 두 변수 사이 선형관계의 강도와 방향을 재며 상관계수($-1$에서 $1$)로 수치화한다. **인과**는 한 변수의 변화가 다른 변수의 변화를 직접 일으킨다는 뜻이다.
 
-**Correlation** measures the strength and direction of a linear relationship between two variables, quantified by the correlation coefficient ($-1$ to $1$). **Causation** implies that a change in one variable directly causes a change in another.
-
-**Key Distinction**: Correlation alone does not imply causation. Two variables might be correlated due to a direct causal relationship, a reverse causal relationship, or because of an underlying third variable influencing both.
-
----
-
-## The Role of Confounding
-
-A **confounder** is an extraneous variable that is related to both the independent variable and the dependent variable. It can create a false impression of a relationship between them, thereby misleading interpretations of causality.
-
-**Classic Example — Ice Cream and Drowning**:
-There is a correlation between ice cream sales and drowning incidents. Initially, it might seem like eating ice cream causes drowning. The true confounder is **temperature**: higher temperatures increase both ice cream sales and swimming activity, which leads to more drowning incidents. The correlation between ice cream sales and drowning is spurious, driven by the confounding effect of temperature.
-
-### Identifying and Addressing Confounding
-
-1. **Control Variables**: In statistical analyses, researchers use techniques like multiple regression to control for confounding variables and isolate the effect of the independent variable on the dependent variable.
-
-2. **Experimental Design**: Randomized controlled trials (RCTs) mitigate confounding by randomly assigning subjects to groups, balancing out confounder effects.
-
-3. **Longitudinal Studies**: Tracking variables over time helps observe how changes in one variable affect another, helping to establish causality while accounting for confounding.
+**핵심 구별**: 상관만으로는 인과를 말할 수 없다. 두 변수가 상관되는 것은 직접적인 인과관계 때문일 수도, 역방향 인과 때문일 수도, 둘 모두에 영향을 주는 바탕의 제3 변수 때문일 수도 있다.
 
 ---
 
-## Example: Education and Income
+## 교란의 역할
 
-- **Observation**: A study finds a strong correlation between higher levels of education and higher income.
-- **Initial Interpretation**: Higher education causes higher income.
-- **Confounding Factor**: **Socioeconomic background** — individuals from higher socioeconomic backgrounds may have access to better education and also tend to have higher incomes.
-- **How to Address**: Control for socioeconomic status in the analysis. Research controlling for family background shows that while education has a positive impact on income, the effect is moderated by the family's socioeconomic status.
+**교란요인**은 독립변수와 종속변수 모두와 관련된 외부 변수이다. 둘 사이에 관계가 있다는 잘못된 인상을 만들어 인과에 대한 해석을 오도할 수 있다.
 
----
+**고전적인 예 — 아이스크림과 익사**:
+아이스크림 판매량과 익사 사고 사이에는 상관이 있다. 처음에는 아이스크림을 먹으면 익사한다고 보일 수 있다. 진짜 교란요인은 **기온**이다. 기온이 높으면 아이스크림 판매도 늘고 수영 활동도 늘어 익사 사고가 많아진다. 아이스크림 판매와 익사의 상관은 기온의 교란 효과가 만든 허위상관이다.
 
-## Example: Vitamin Intake and Cancer Risk
+### 교란의 식별과 대처
 
-- **Observation**: People who take vitamin supplements have a lower risk of cancer.
-- **Initial Interpretation**: Vitamin supplements reduce cancer risk.
-- **Confounding Factor**: **Health-conscious behavior** — individuals who take vitamins are often more health-conscious overall, engaging in other healthy behaviors (exercise, balanced diet, avoiding smoking).
-- **How to Address**: Control for other health behaviors to isolate the effect of vitamin intake on cancer risk. Studies that account for overall health behaviors often find that the relationship between vitamins alone and cancer risk is not as strong as initially observed.
+1. **통제변수**: 통계 분석에서 다중회귀 같은 기법으로 교란변수를 통제하여 독립변수가 종속변수에 미치는 효과를 분리한다.
 
----
+2. **실험 설계**: 무작위 대조 시험(RCT)은 대상을 무작위로 집단에 배정하여 교란요인의 효과를 균형 있게 만들어 교란을 완화한다.
 
-## Example: Coffee Consumption and Heart Disease
-
-- **Observation**: High coffee consumption correlates with increased incidence of heart disease.
-- **Initial Interpretation**: Coffee causes heart disease.
-- **Confounding Factor**: **Smoking** — coffee drinkers may be more likely to smoke, which is a known risk factor for heart disease.
-- **How to Address**: Control for smoking in the analysis to determine whether coffee consumption independently affects heart disease risk.
+3. **종단 연구**: 변수들을 시간에 걸쳐 추적하면 한 변수의 변화가 다른 변수에 어떤 영향을 주는지 관찰할 수 있어, 교란을 고려하면서 인과를 확립하는 데 도움이 된다.
 
 ---
 
-## Example: Exercise and Weight Loss
+## 예제: 학력과 소득
 
-- **Observation**: People who exercise regularly tend to lose weight.
-- **Initial Interpretation**: Exercise causes weight loss.
-- **Confounding Factor**: **Diet** — individuals who exercise regularly might also follow healthier diets.
-- **How to Address**: Control for dietary habits (caloric intake and dietary quality). When controlled, the relationship between exercise and weight loss becomes more clearly defined, showing that both exercise and diet play significant roles.
-
----
-
-## Example: Job Performance and Salary
-
-- **Observation**: High-performing employees earn higher salaries.
-- **Initial Interpretation**: Better job performance leads to higher salaries.
-- **Confounding Factor**: **Experience and tenure** — employees with more experience may both perform better and receive higher salaries due to seniority.
-- **How to Address**: Control for years of experience and length of employment to accurately assess the direct impact of performance on salary.
+- **관측**: 어떤 연구에서 높은 학력과 높은 소득 사이에 강한 상관을 발견했다.
+- **처음의 해석**: 높은 학력이 높은 소득을 일으킨다.
+- **교란요인**: **사회경제적 배경** — 사회경제적 배경이 좋은 개인은 더 나은 교육을 받을 수 있고 소득도 높은 경향이 있다.
+- **대처 방법**: 분석에서 사회경제적 지위를 통제한다. 가정 배경을 통제한 연구들은 학력이 소득에 양의 영향을 주지만 그 효과가 가정의 사회경제적 지위에 의해 조절됨을 보여준다.
 
 ---
 
-## Example: Ice Cream Sales and Drowning Incidents
+## 예제: 비타민 섭취와 암 위험
 
-- **Observation**: There is a correlation between higher ice cream sales and increased drowning incidents.
-- **Initial Interpretation**: Eating ice cream may be associated with a higher risk of drowning.
-- **Confounding Factor**: **Temperature** — both variables increase during hot weather.
-- **How to Address**: By analyzing and controlling for temperature, the apparent correlation between ice cream sales and drowning incidents disappears, revealing that the real link is with temperature, not ice cream.
+- **관측**: 비타민 보충제를 먹는 사람의 암 위험이 낮다.
+- **처음의 해석**: 비타민 보충제가 암 위험을 줄인다.
+- **교란요인**: **건강을 의식하는 행동** — 비타민을 먹는 사람은 전반적으로 건강을 더 의식하여 다른 건강한 행동(운동, 균형 잡힌 식사, 금연)도 함께 한다.
+- **대처 방법**: 다른 건강 행동을 통제하여 비타민 섭취가 암 위험에 미치는 효과를 분리한다. 전반적인 건강 행동을 반영한 연구들은 비타민만으로는 암 위험과의 관계가 처음 관측된 만큼 강하지 않다는 결과를 흔히 얻는다.
 
 ---
 
-## Example: Housing Data
+## 예제: 커피 소비와 심장질환
 
-The California housing dataset provides a practical example of exploring correlations and potential confounding relationships.
+- **관측**: 커피를 많이 마시는 것이 심장질환 발생 증가와 상관된다.
+- **처음의 해석**: 커피가 심장질환을 일으킨다.
+- **교란요인**: **흡연** — 커피를 마시는 사람이 담배를 피울 가능성이 더 높고, 흡연은 알려진 심장질환 위험요인이다.
+- **대처 방법**: 분석에서 흡연을 통제하여 커피 소비가 독립적으로 심장질환 위험에 영향을 주는지 판정한다.
+
+---
+
+## 예제: 운동과 체중 감량
+
+- **관측**: 규칙적으로 운동하는 사람이 체중을 줄이는 경향이 있다.
+- **처음의 해석**: 운동이 체중 감량을 일으킨다.
+- **교란요인**: **식습관** — 규칙적으로 운동하는 사람이 더 건강한 식사를 할 수 있다.
+- **대처 방법**: 식습관(열량 섭취와 식단의 질)을 통제한다. 통제하면 운동과 체중 감량의 관계가 더 뚜렷해지며 운동과 식습관이 모두 중요한 역할을 함이 드러난다.
+
+---
+
+## 예제: 업무 성과와 급여
+
+- **관측**: 성과가 좋은 직원이 급여를 더 많이 받는다.
+- **처음의 해석**: 좋은 업무 성과가 높은 급여로 이어진다.
+- **교란요인**: **경력과 근속** — 경력이 많은 직원은 성과도 좋고 연공에 따라 급여도 높을 수 있다.
+- **대처 방법**: 경력 연수와 근속 기간을 통제하여 성과가 급여에 미치는 직접 효과를 정확히 평가한다.
+
+---
+
+## 예제: 아이스크림 판매와 익사 사고
+
+- **관측**: 아이스크림 판매가 많을수록 익사 사고가 늘어나는 상관이 있다.
+- **처음의 해석**: 아이스크림을 먹으면 익사 위험이 높아질 수 있다.
+- **교란요인**: **기온** — 더운 날씨에 두 변수가 모두 증가한다.
+- **대처 방법**: 기온을 분석하고 통제하면 아이스크림 판매와 익사 사고의 겉보기 상관이 사라지고, 진짜 연결은 아이스크림이 아니라 기온과의 관계임이 드러난다.
+
+---
+
+## 예제: 주택 자료
+
+캘리포니아 주택 자료는 상관과 잠재적 교란 관계를 탐색하는 실습 예제를 제공한다.
 
 ```python
 import os
@@ -136,9 +135,9 @@ if __name__ == "__main__":
     main()
 ```
 
-### Exercise 1: Calculate Correlation Coefficients
+### 실습 1: 상관계수 계산
 
-**Objective**: Calculate Pearson correlation coefficients between `median_house_value` and other variables.
+**목표**: `median_house_value`와 다른 변수들 사이의 Pearson 상관계수를 계산한다.
 
 ```python
 import pandas as pd
@@ -157,9 +156,9 @@ if __name__ == "__main__":
     calculate_correlations(df)
 ```
 
-### Exercise 2: Correlation Heatmap
+### 실습 2: 상관 열지도
 
-**Objective**: Visualize the correlations between all numerical variables.
+**목표**: 모든 수치형 변수 사이의 상관을 시각화한다.
 
 ```python
 import seaborn as sns
@@ -177,9 +176,9 @@ if __name__ == "__main__":
     plot_correlation_heatmap(df)
 ```
 
-### Exercise 3: Scatter Plot Matrix
+### 실습 3: 산점도 행렬
 
-**Objective**: Create a pair plot to visualize pairwise relationships.
+**목표**: 쌍별 관계를 시각화하는 쌍 그림을 만든다.
 
 ```python
 import seaborn as sns
@@ -196,9 +195,9 @@ if __name__ == "__main__":
     plot_scatter_matrix(df)
 ```
 
-### Exercise 4: Impact of Outliers on Correlation
+### 실습 4: 이상점이 상관에 미치는 영향
 
-**Objective**: Explore how outliers affect correlation.
+**목표**: 이상점이 상관에 어떤 영향을 주는지 살펴본다.
 
 ```python
 import pandas as pd
@@ -231,87 +230,81 @@ if __name__ == "__main__":
     add_outliers(df)
 ```
 
-### Exercise 5: Correlation vs. Causation Discussion
+### 실습 5: 상관과 인과에 대한 토론
 
-**Objective**: Discuss why a high correlation between `median_income` and `median_house_value` does not necessarily imply causation.
+**목표**: `median_income`과 `median_house_value` 사이의 높은 상관이 왜 반드시 인과를 뜻하지는 않는지 토론한다.
 
-**Discussion Points**:
+**논의할 점**:
 
-- **Confounding variables**: Location desirability, job opportunities, and educational facilities might influence both income and house values.
-- **Reverse causality**: Do higher incomes drive up house values, or do expensive areas attract higher-income residents?
-- **Third variable problem**: Regional economic development, local policies, and geographic factors can affect both variables simultaneously.
-
----
-
-## Summary
-
-Confounding variables can obscure the true nature of relationships between variables, leading to misleading conclusions about causation. By identifying and controlling for confounders, researchers can better isolate and understand the true effects of the variables of interest.
+- **교란변수**: 입지의 선호도, 일자리, 교육 시설이 소득과 주택 가격 모두에 영향을 줄 수 있다.
+- **역인과**: 소득이 높아 주택 가격이 오르는가, 아니면 비싼 지역이 고소득 거주자를 끌어들이는가?
+- **제3의 변수 문제**: 지역의 경제 발전, 지방 정책, 지리적 요인이 두 변수에 동시에 영향을 줄 수 있다.
 
 ---
 
-## Additional Exercises
+## 요약
 
-### Exercise: Identifying Confounders
-
-Present research findings with apparent correlations (e.g., screen time and sleep quality, social media usage and mental health). Identify potential confounding variables and discuss how they might be controlled.
-
-### Exercise: Designing an Experiment
-
-Given a correlation between reading books and academic performance, design an experiment to test the causal relationship, controlling for confounders such as socioeconomic status and prior academic performance.
-
-### Exercise: Analyzing Real Data
-
-Using a dataset with variables like exercise, diet, weight loss, and stress levels, perform a correlation analysis and then use multiple regression to control for potential confounders.
-## Exercises
-
-**Exercise 1.**
-A study finds that ice cream sales and drowning deaths are positively correlated ($r = 0.85$). Identify the most likely confounder and explain the mechanism by which it creates a spurious association.
-
-??? success "Solution to Exercise 1"
-    The most likely confounder is **temperature (or season)**. During summer months, higher temperatures cause both increased ice cream consumption and more people swimming (leading to more drowning deaths). The correlation between ice cream sales and drowning is **spurious** -- it arises because both variables are driven by the same underlying cause (temperature), not because one causes the other.
-
-    Formally, if $Z$ = temperature, $X$ = ice cream sales, and $Y$ = drowning deaths, then $Z \to X$ and $Z \to Y$, but there is no direct path $X \to Y$.
+교란변수는 변수들 사이 관계의 참모습을 가려 인과에 대한 잘못된 결론으로 이어질 수 있다. 교란요인을 식별하고 통제해야 관심 변수의 참 효과를 분리해 이해할 수 있다.
 
 ---
 
-**Exercise 2.**
-In a multiple regression model, adding a control variable for education reduces the coefficient of income on health outcomes from $\hat{\beta} = 0.45$ to $\hat{\beta} = 0.12$. Interpret this change in terms of confounding.
+## 추가 실습
 
-??? success "Solution to Exercise 2"
-    The large reduction (from 0.45 to 0.12) indicates that **education is a confounder** in the relationship between income and health. Education affects both income (more education leads to higher income) and health (more education leads to better health behaviors and outcomes).
+### 실습: 교란요인 찾기
 
-    The unadjusted coefficient (0.45) overestimates the direct effect of income on health because it captures both the direct effect and the indirect effect through the income-education pathway. After controlling for education, the remaining coefficient (0.12) represents a more accurate estimate of the effect of income on health that operates through channels other than education.
+겉보기 상관이 있는 연구 결과(예: 화면 사용 시간과 수면의 질, 소셜 미디어 사용과 정신 건강)를 제시하고, 잠재적 교란변수를 찾아 어떻게 통제할 수 있을지 논하라.
+
+### 실습: 실험 설계하기
+
+독서와 학업 성취 사이의 상관이 주어졌을 때, 사회경제적 지위와 이전 학업 성취 같은 교란요인을 통제하면서 인과관계를 검정할 실험을 설계하라.
+
+### 실습: 실제 자료 분석하기
+
+운동, 식습관, 체중 감량, 스트레스 수준 같은 변수가 있는 자료로 상관 분석을 수행한 뒤 다중회귀로 잠재적 교란요인을 통제하라.
+
+## 연습문제
+
+**연습문제 1.**
+어떤 연구에서 아이스크림 판매와 익사 사망이 양의 상관($r = 0.85$)을 보였다. 가장 그럴듯한 교란요인을 밝히고 그것이 허위 연관을 만드는 기제를 설명하라.
+
+??? success "연습문제 1 풀이"
+    가장 그럴듯한 교란요인은 **기온(또는 계절)**이다. 여름철에는 기온이 높아 아이스크림 소비도 늘고 수영하는 사람도 많아져 익사 사망이 늘어난다. 아이스크림 판매와 익사의 상관은 **허위**이다. 하나가 다른 하나를 일으켜서가 아니라 두 변수가 같은 바탕 원인(기온)에 이끌리기 때문에 생긴다.
+
+    형식적으로 $Z$ = 기온, $X$ = 아이스크림 판매, $Y$ = 익사 사망이라 하면 $Z \to X$이고 $Z \to Y$이지만 직접 경로 $X \to Y$는 없다.
 
 ---
 
-**Exercise 3.**
-Explain the difference between a confounding variable and a mediating variable. Why is it important to distinguish between the two when deciding which variables to include in a regression model?
+**연습문제 2.**
+다중회귀 모형에서 학력 통제변수를 추가하자 건강 결과에 대한 소득의 계수가 $\hat{\beta} = 0.45$에서 $\hat{\beta} = 0.12$로 줄었다. 이 변화를 교란의 관점에서 해석하라.
 
-??? success "Solution to Exercise 3"
-    A **confounder** is a variable that causes both the treatment and the outcome, creating a spurious association. Controlling for a confounder removes bias and reveals the true causal effect.
+??? success "연습문제 2 풀이"
+    큰 감소(0.45에서 0.12로)는 소득과 건강의 관계에서 **학력이 교란요인**임을 나타낸다. 학력은 소득에도(학력이 높으면 소득이 높다) 건강에도(학력이 높으면 건강 행동과 결과가 좋다) 영향을 준다.
 
-    A **mediator** is a variable that lies on the causal pathway between treatment and outcome ($X \to M \to Y$). Controlling for a mediator removes part of the true causal effect, leading to an underestimate of the total effect.
-
-    The distinction matters because: controlling for a confounder is **necessary** for valid causal inference, while controlling for a mediator is **harmful** if the goal is to estimate the total effect. For example, if exercise affects weight loss partly through increased metabolism ($\text{exercise} \to \text{metabolism} \to \text{weight loss}$), controlling for metabolism would remove a real causal pathway and underestimate the benefit of exercise.
+    조정하지 않은 계수(0.45)는 직접효과와 소득–학력 경로를 통한 간접효과를 함께 담고 있으므로 소득이 건강에 미치는 직접 효과를 과대추정한다. 학력을 통제한 뒤 남은 계수(0.12)는 학력이 아닌 경로로 작동하는 소득의 효과를 더 정확히 추정한 값이다.
 
 ---
 
-**Exercise 4.**
-Simpson's paradox occurs when a trend in aggregated data reverses when the data are disaggregated by a confounding variable. Construct a simple numerical example with two treatments and two subgroups where Treatment A has a higher overall success rate but Treatment B has a higher success rate within every subgroup.
+**연습문제 3.**
+교란변수와 매개변수의 차이를 설명하라. 회귀모형에 어떤 변수를 넣을지 결정할 때 둘을 구별하는 일이 왜 중요한가?
 
-??? success "Solution to Exercise 4"
-    | | Subgroup 1 (easy cases) | Subgroup 2 (hard cases) | Overall |
+??? success "연습문제 3 풀이"
+    **교란요인**은 처치와 결과 모두를 일으켜 허위 연관을 만드는 변수이다. 교란요인을 통제하면 편향이 제거되고 참 인과효과가 드러난다.
+
+    **매개자**는 처치와 결과 사이의 인과 경로 위에 있는 변수이다($X \to M \to Y$). 매개자를 통제하면 참 인과효과의 일부가 제거되어 총효과를 과소추정하게 된다.
+
+    이 구별이 중요한 이유는 이렇다. 교란요인 통제는 타당한 인과추론에 **필수적**이지만, 총효과를 추정하는 것이 목표라면 매개자 통제는 **해롭다**. 예를 들어 운동이 대사 증가를 통해 부분적으로 체중 감량에 영향을 준다면($\text{운동} \to \text{대사} \to \text{체중 감량}$), 대사를 통제하면 실제 인과 경로가 제거되어 운동의 이득을 과소추정하게 된다.
+
+---
+
+**연습문제 4.**
+Simpson의 역설은 집계 자료의 경향이 교란변수로 자료를 나누면 뒤집히는 현상이다. 처치가 둘, 하위집단이 둘일 때 치료 A의 전체 성공률이 더 높지만 모든 하위집단 안에서는 치료 B의 성공률이 더 높은 간단한 수치 예를 구성하라.
+
+??? success "연습문제 4 풀이"
+    | | 하위집단 1(쉬운 사례) | 하위집단 2(어려운 사례) | 전체 |
     |---|---|---|---|
-    | Treatment A | 90/100 (90%) | 5/10 (50%) | 95/110 (86.4%) |
-    | Treatment B | 9/10 (90%) | 50/100 (50%) | 59/110 (53.6%) |
+    | 치료 A | 87/100 (87%) | 4/10 (40%) | 91/110 (82.7%) |
+    | 치료 B | 9/10 (90%) | 55/100 (55%) | 64/110 (58.2%) |
 
-    Wait -- this gives equal rates within subgroups. Let me adjust:
+    하위집단 1에서는 B(90%) > A(87%)이고, 하위집단 2에서도 B(55%) > A(40%)이다. 그러나 전체로는 A(82.7%) > B(58.2%)이다.
 
-    | | Subgroup 1 (easy cases) | Subgroup 2 (hard cases) | Overall |
-    |---|---|---|---|
-    | Treatment A | 87/100 (87%) | 4/10 (40%) | 91/110 (82.7%) |
-    | Treatment B | 9/10 (90%) | 55/100 (55%) | 64/110 (58.2%) |
-
-    Within Subgroup 1: B (90%) > A (87%). Within Subgroup 2: B (55%) > A (40%). But overall: A (82.7%) > B (58.2%).
-
-    The paradox arises because Treatment A is disproportionately applied to easy cases (100 out of 110), inflating its overall rate. The subgroup (case difficulty) is the confounder.
+    치료 A가 쉬운 사례에 불균형하게 많이 적용되어(110건 중 100건) 전체 성공률이 부풀려졌기 때문에 역설이 생긴다. 하위집단(사례의 난이도)이 교란요인이다.

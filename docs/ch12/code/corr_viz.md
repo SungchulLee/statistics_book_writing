@@ -1,20 +1,20 @@
-# Correlation Visualization
+# 상관 시각화
 
-## Overview
+## 개요
 
-Visualizing a correlation matrix is essential for exploring multivariate datasets. This page demonstrates two standard techniques -- the correlation heatmap and the scatter matrix (pair plot) -- using Matplotlib. We simulate four variables with known correlation structure and show how these plots reveal linear dependencies at a glance.
+상관행렬의 시각화는 다변량 자료를 탐색하는 데 필수적이다. 이 페이지에서는 Matplotlib으로 두 가지 표준 기법, 즉 상관 열지도와 산점도 행렬(쌍 그림)을 보인다. 상관 구조가 알려진 네 변수를 모의생성하고 이 그림들이 선형 의존을 한눈에 어떻게 드러내는지 살펴본다.
 
 ---
 
-## Simulating Correlated Variables
+## 상관된 변수 생성하기
 
-We construct four variables with a controlled correlation structure by mixing two independent standard normal sources $z_1$ and $z_2$:
+독립인 두 표준정규 원천 $z_1$, $z_2$를 섞어 상관 구조가 통제된 네 변수를 만든다:
 
 $$
 x_1 = z_1, \quad x_2 = 0.7\, z_1 + 0.3\, z_2, \quad x_3 = -0.5\, z_1 + 0.8\, \varepsilon, \quad x_4 = \varepsilon'
 $$
 
-where $\varepsilon$ and $\varepsilon'$ are independent standard normals. By construction, $x_1$ and $x_2$ have a strong positive correlation, $x_1$ and $x_3$ have a weak negative correlation, and $x_4$ is independent of the rest.
+여기서 $\varepsilon$과 $\varepsilon'$은 독립인 표준정규이다. 구성상 $x_1$과 $x_2$는 강한 양의 상관을, $x_1$과 $x_3$은 약한 음의 상관을 가지며 $x_4$는 나머지와 독립이다.
 
 ```python
 import numpy as np
@@ -35,15 +35,15 @@ labels = ['X1', 'X2', 'X3', 'X4']
 
 ---
 
-## The Correlation Matrix
+## 상관행렬
 
-The sample correlation matrix $\mathbf{R}$ is a symmetric $k \times k$ matrix whose $(i,j)$ entry is the Pearson correlation between variables $i$ and $j$:
+표본상관행렬 $\mathbf{R}$은 $(i,j)$ 성분이 변수 $i$와 $j$ 사이의 Pearson 상관인 대칭 $k \times k$ 행렬이다:
 
 $$
 R_{ij} = \frac{\sum_{t=1}^{n}(x_{ti} - \bar{x}_i)(x_{tj} - \bar{x}_j)}{\sqrt{\sum_{t=1}^{n}(x_{ti} - \bar{x}_i)^2}\;\sqrt{\sum_{t=1}^{n}(x_{tj} - \bar{x}_j)^2}}
 $$
 
-The diagonal entries are always $R_{ii} = 1$, and the matrix is positive semi-definite.
+대각 성분은 언제나 $R_{ii} = 1$이고 이 행렬은 양반정치이다.
 
 ```python
 corr_matrix = np.corrcoef(data, rowvar=False)
@@ -51,9 +51,9 @@ corr_matrix = np.corrcoef(data, rowvar=False)
 
 ---
 
-## Correlation Heatmap
+## 상관 열지도
 
-A heatmap encodes each entry of $\mathbf{R}$ as a color on a diverging scale. Blue typically indicates negative correlation and red indicates positive correlation, with white near zero.
+열지도는 $\mathbf{R}$의 각 성분을 발산형 색 척도로 부호화한다. 보통 파랑이 음의 상관, 빨강이 양의 상관, 0 근처가 흰색이다.
 
 ```python
 import matplotlib.pyplot as plt
@@ -78,13 +78,13 @@ plt.tight_layout()
 plt.show()
 ```
 
-The heatmap makes it immediately clear that $X_1$ and $X_2$ are strongly positively correlated (deep red), $X_1$ and $X_3$ are weakly negatively correlated (light blue), and $X_4$ is essentially uncorrelated with everything.
+열지도를 보면 $X_1$과 $X_2$가 강한 양의 상관(진한 빨강), $X_1$과 $X_3$이 약한 음의 상관(연한 파랑)을 가지며 $X_4$는 사실상 어느 변수와도 무상관임이 즉시 드러난다.
 
 ---
 
-## Scatter Matrix (Pair Plot)
+## 산점도 행렬 (쌍 그림)
 
-A scatter matrix displays all pairwise scatter plots in a grid, with univariate histograms on the diagonal. This provides a complete visual summary of both marginal distributions and bivariate relationships.
+산점도 행렬은 모든 쌍별 산점도를 격자에 표시하고 대각선에는 일변량 히스토그램을 둔다. 주변분포와 이변량 관계를 완전하게 시각 요약해 준다.
 
 ```python
 fig, axes = plt.subplots(k, k, figsize=(10, 10))
@@ -109,29 +109,29 @@ plt.tight_layout()
 plt.show()
 ```
 
-The scatter matrix reveals features that the heatmap cannot: nonlinear relationships, outliers, clusters, and the shape of marginal distributions.
+산점도 행렬은 열지도가 보여주지 못하는 것들, 즉 비선형 관계, 이상점, 군집, 주변분포의 모양을 드러낸다.
 
 ---
 
-## Interpretation
+## 해석
 
-The heatmap and scatter matrix are complementary tools:
+열지도와 산점도 행렬은 상호보완적이다:
 
-- **Heatmaps** excel at summarizing many pairwise correlations in a compact format. They are ideal for high-dimensional datasets where plotting all pairwise scatter plots is impractical.
-- **Scatter matrices** provide richer information but become unwieldy when the number of variables exceeds approximately 8--10.
+- **열지도**는 많은 쌍별 상관을 간결한 형태로 요약하는 데 뛰어나다. 모든 쌍별 산점도를 그리기 어려운 고차원 자료에 이상적이다.
+- **산점도 행렬**은 더 풍부한 정보를 주지만 변수가 대략 8–10개를 넘으면 다루기 어려워진다.
 
-For a dataset with $k$ variables, there are $\binom{k}{2}$ distinct pairwise correlations. The correlation matrix is symmetric, so the heatmap is redundant across the diagonal. Some practitioners display only the lower triangle to save space.
+변수가 $k$개인 자료에서 서로 다른 쌍별 상관은 $\binom{k}{2}$개이다. 상관행렬이 대칭이므로 열지도는 대각선을 기준으로 중복된다. 공간을 아끼려고 아래쪽 삼각형만 표시하는 사람도 있다.
 
-A key caveat: the Pearson correlation heatmap captures only *linear* associations. A pair of variables can appear uncorrelated in the heatmap yet be strongly related through a nonlinear mapping. Always inspect scatter plots for important variable pairs.
+핵심 주의사항: Pearson 상관 열지도는 *선형* 연관만 포착한다. 어떤 변수 쌍이 열지도에서 무상관으로 보여도 비선형 관계로 강하게 연결되어 있을 수 있다. 중요한 변수 쌍은 언제나 산점도로 확인하라.
 
 ---
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Modify the simulation to create a fifth variable $x_5 = x_1^2 + \varepsilon$ with small noise. Compute the correlation matrix and note the Pearson correlation between $x_1$ and $x_5$. Explain why this value might be surprising given the deterministic relationship.
+**연습문제 1.**
+모의실험을 고쳐 잡음이 작은 다섯 번째 변수 $x_5 = x_1^2 + \varepsilon$을 만들어라. 상관행렬을 계산하고 $x_1$과 $x_5$의 Pearson 상관을 확인하라. 결정적 관계가 있는데도 이 값이 왜 뜻밖일 수 있는지 설명하라.
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
 
     ```python
     import numpy as np
@@ -146,14 +146,14 @@ Modify the simulation to create a fifth variable $x_5 = x_1^2 + \varepsilon$ wit
     print(f"Pearson r(x1, x5) = {r:.4f}")
     ```
 
-    The Pearson correlation between $x_1$ and $x_5 = x_1^2$ will be close to zero because the relationship is symmetric and nonlinear. Since $x_1 \sim \mathcal{N}(0, 1)$ is symmetric about zero, positive and negative deviations contribute equally, and the linear component of the relationship cancels out. The scatter plot would show a clear parabolic pattern that the heatmap completely misses. $\square$
+    관계가 대칭이고 비선형이므로 $x_1$과 $x_5 = x_1^2$의 Pearson 상관은 0에 가깝다. $x_1 \sim \mathcal{N}(0, 1)$이 0을 중심으로 대칭이어서 양의 편차와 음의 편차가 똑같이 기여하고 관계의 선형 성분이 상쇄된다. 산점도로는 뚜렷한 포물선 패턴이 보이지만 열지도는 이를 완전히 놓친다. $\square$
 
 ---
 
-**Exercise 2.**
-Write a function that takes a correlation matrix and produces a heatmap showing only the lower triangle (masking the upper triangle and diagonal). This avoids redundant information.
+**연습문제 2.**
+상관행렬을 받아 아래쪽 삼각형만 보여주는(위쪽 삼각형과 대각선을 가리는) 열지도를 그리는 함수를 작성하라. 중복 정보를 피할 수 있다.
 
-??? success "Solution to Exercise 2"
+??? success "연습문제 2 풀이"
 
     ```python
     import numpy as np
@@ -188,41 +188,43 @@ Write a function that takes a correlation matrix and produces a heatmap showing 
     lower_triangle_heatmap(corr, ['X1', 'X2', 'X3', 'X4'])
     ```
 
-    The upper triangle and diagonal are masked using `numpy.ma.array`. Since the correlation matrix is symmetric ($R_{ij} = R_{ji}$) and the diagonal is always 1, this eliminates redundant information and focuses attention on the $\binom{k}{2}$ unique correlations. $\square$
+    `numpy.ma.array`로 위쪽 삼각형과 대각선을 가린다. 상관행렬이 대칭이고($R_{ij} = R_{ji}$) 대각선이 항상 1이므로, 이렇게 하면 중복 정보를 없애고 서로 다른 $\binom{k}{2}$개의 상관에 주의를 집중할 수 있다. $\square$
 
 ---
 
-**Exercise 3.**
-For $k$ variables, how many unique off-diagonal entries does the correlation matrix have? Prove that the correlation matrix $\mathbf{R}$ is always positive semi-definite.
+**연습문제 3.**
+변수가 $k$개일 때 상관행렬의 서로 다른 비대각 성분은 몇 개인가? 상관행렬 $\mathbf{R}$이 언제나 양반정치임을 증명하라.
 
-??? success "Solution to Exercise 3"
+??? success "연습문제 3 풀이"
 
-    The correlation matrix $\mathbf{R}$ is a $k \times k$ symmetric matrix with ones on the diagonal. The number of unique off-diagonal entries is:
+    상관행렬 $\mathbf{R}$은 대각선이 1인 대칭 $k \times k$ 행렬이다. 서로 다른 비대각 성분의 수는
 
     $$
     \frac{k(k-1)}{2} = \binom{k}{2}
     $$
 
-    To show $\mathbf{R}$ is positive semi-definite, let $\mathbf{Z}$ be the $n \times k$ matrix of standardized data (each column has mean zero and unit variance). Then the sample correlation matrix is:
+    이다.
+
+    $\mathbf{R}$이 양반정치임을 보이기 위해 $\mathbf{Z}$를 표준화된 자료의 $n \times k$ 행렬(각 열의 평균이 0, 분산이 1)이라 하자. 그러면 표본상관행렬은
 
     $$
     \mathbf{R} = \frac{1}{n-1}\mathbf{Z}^\top \mathbf{Z}
     $$
 
-    For any vector $\mathbf{v} \in \mathbb{R}^k$:
+    이다. 임의의 벡터 $\mathbf{v} \in \mathbb{R}^k$에 대해
 
     $$
     \mathbf{v}^\top \mathbf{R}\, \mathbf{v} = \frac{1}{n-1}\mathbf{v}^\top \mathbf{Z}^\top \mathbf{Z}\, \mathbf{v} = \frac{1}{n-1}\|\mathbf{Z}\mathbf{v}\|^2 \ge 0
     $$
 
-    Since the quadratic form is non-negative for all $\mathbf{v}$, $\mathbf{R}$ is positive semi-definite. $\square$
+    이다. 이차형식이 모든 $\mathbf{v}$에 대해 음이 아니므로 $\mathbf{R}$은 양반정치이다. $\square$
 
 ---
 
-**Exercise 4.**
-Generate a dataset where the scatter matrix reveals a clear cluster structure (two clusters) but the correlation heatmap shows near-zero correlations. Explain why the heatmap fails here.
+**연습문제 4.**
+산점도 행렬에서는 두 군집이 뚜렷하게 보이지만 상관 열지도에서는 상관이 0에 가깝게 나오는 자료를 생성하라. 이 경우 열지도가 실패하는 이유를 설명하라.
 
-??? success "Solution to Exercise 4"
+??? success "연습문제 4 풀이"
 
     ```python
     import numpy as np
@@ -232,12 +234,12 @@ Generate a dataset where the scatter matrix reveals a clear cluster structure (t
     n = 100
     # Cluster 1: centered at (2, 2)
     c1 = np.random.normal(loc=[2, 2], scale=0.5, size=(n, 2))
-    # Cluster 2: centered at (-2, -2)
-    c2 = np.random.normal(loc=[-2, -2], scale=0.5, size=(n, 2))
+    # Cluster 2: centered at (-2, 2)
+    c2 = np.random.normal(loc=[-2, 2], scale=0.5, size=(n, 2))
     data = np.vstack([c1, c2])
 
     r = np.corrcoef(data[:, 0], data[:, 1])[0, 1]
-    print(f"Pearson r = {r:.4f}")
+    print(f"Pearson r = {r:.4f}")   # about -0.01
 
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 4))
     ax1.scatter(data[:, 0], data[:, 1], s=10, alpha=0.6)
@@ -252,31 +254,31 @@ Generate a dataset where the scatter matrix reveals a clear cluster structure (t
     plt.show()
     ```
 
-    The overall Pearson $r$ is strongly positive because the two clusters align along the positive diagonal. However, if the clusters are arranged symmetrically (e.g., at $(2, -2)$ and $(-2, 2)$), the correlation becomes strongly negative. The heatmap shows a single number per pair and cannot represent the bimodal structure. The scatter plot immediately reveals the two clusters. This illustrates that correlation summaries can obscure important distributional features. $\square$
+    두 군집이 $X_1$ 방향으로만 떨어져 있고 $X_2$의 평균은 같으므로 전체 Pearson $r$이 약 $-0.01$로 0에 가깝다. 그러나 산점도에는 뚜렷하게 분리된 두 무리가 보인다. 열지도는 쌍마다 하나의 수치만 보여주므로 이런 이봉 구조를 나타낼 수 없다. (참고로 군집 중심을 $(2,2)$와 $(-2,-2)$로 두면 같은 군집 구조에서도 $r$이 강한 양수가 된다.) 상관 요약이 중요한 분포적 특징을 가릴 수 있음을 보여준다. $\square$
 
 ---
 
-**Exercise 5.**
-Prove that for standardized variables (mean zero, unit variance), the correlation matrix equals the covariance matrix. State the conditions under which this equivalence holds.
+**연습문제 5.**
+표준화된 변수(평균 0, 분산 1)에서 상관행렬이 공분산행렬과 같음을 증명하라. 이 동등성이 성립하는 조건을 진술하라.
 
-??? success "Solution to Exercise 5"
+??? success "연습문제 5 풀이"
 
-    Let $X_1, \ldots, X_k$ be random variables. Define the standardized versions:
+    $X_1, \ldots, X_k$를 확률변수라 하고 표준화된 변수를
 
     $$
     Z_i = \frac{X_i - \mu_i}{\sigma_i}
     $$
 
-    The covariance of the standardized variables is:
+    로 정의하자. 표준화된 변수의 공분산은
 
     $$
     \text{Cov}(Z_i, Z_j) = \text{Cov}\!\left(\frac{X_i - \mu_i}{\sigma_i},\; \frac{X_j - \mu_j}{\sigma_j}\right) = \frac{\text{Cov}(X_i, X_j)}{\sigma_i \sigma_j} = \rho_{ij}
     $$
 
-    Since $\text{Var}(Z_i) = 1$ for all $i$, the covariance matrix of the standardized variables is:
+    이다. 모든 $i$에서 $\text{Var}(Z_i) = 1$이므로 표준화된 변수의 공분산행렬은
 
     $$
     \boldsymbol{\Sigma}_Z = \begin{pmatrix} 1 & \rho_{12} & \cdots & \rho_{1k} \\ \rho_{12} & 1 & \cdots & \rho_{2k} \\ \vdots & \vdots & \ddots & \vdots \\ \rho_{1k} & \rho_{2k} & \cdots & 1 \end{pmatrix} = \mathbf{R}
     $$
 
-    This is exactly the correlation matrix of the original variables. The equivalence holds whenever each variable has unit variance. The variables need not have zero mean for the covariance matrix to equal the correlation matrix -- only unit variance is required, since covariance is invariant to location shifts. $\square$
+    이며, 이는 원래 변수의 상관행렬과 정확히 같다. 이 동등성은 각 변수의 분산이 1이면 성립한다. 공분산은 위치 이동에 불변이므로 공분산행렬이 상관행렬과 같아지는 데 평균이 0일 필요는 없고 분산이 1이기만 하면 된다. $\square$

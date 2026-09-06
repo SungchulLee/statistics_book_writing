@@ -1,122 +1,122 @@
-# Spurious Correlations
+# 허위상관
 
-Two variables can exhibit a strong statistical correlation despite having no causal connection whatsoever. Such **spurious correlations** arise from confounding variables, common trends, coincidence in finite samples, or data dredging. Recognizing spurious correlations is essential for avoiding false conclusions and is at the heart of the principle that **correlation does not imply causation**.
-
----
-
-## What Makes a Correlation Spurious
-
-A correlation between $X$ and $Y$ is **spurious** when the association does not reflect a direct causal relationship in either direction. The correlation exists, but it is misleading if interpreted as evidence of a causal link. Spurious correlations arise from several distinct mechanisms.
+두 변수가 아무런 인과적 연결 없이도 강한 통계적 상관을 보일 수 있다. 이런 **허위상관**은 교란변수, 공통 추세, 유한 표본에서의 우연, 자료 채굴에서 생긴다. 허위상관을 알아보는 일은 잘못된 결론을 피하는 데 필수적이며 **상관은 인과를 함의하지 않는다**는 원리의 핵심에 있다.
 
 ---
 
-## Mechanism 1: Common Cause (Confounding)
+## 무엇이 상관을 허위로 만드는가
 
-The most frequent source of spurious correlation is a **confounding variable** $Z$ that influences both $X$ and $Y$:
+$X$와 $Y$ 사이의 연관이 어느 방향으로도 직접적인 인과관계를 반영하지 않을 때 그 상관은 **허위**이다. 상관 자체는 존재하지만 그것을 인과의 증거로 해석하면 오도된다. 허위상관은 몇 가지 서로 다른 기제에서 생긴다.
+
+---
+
+## 기제 1: 공통원인 (교란)
+
+허위상관의 가장 흔한 원천은 $X$와 $Y$ 모두에 영향을 주는 **교란변수** $Z$이다:
 
 $$
 X \leftarrow Z \rightarrow Y
 $$
 
-The correlation between $X$ and $Y$ exists only because both are driven by $Z$. Once $Z$ is controlled for, the association disappears.
+$X$와 $Y$의 상관은 둘 다 $Z$에 이끌리기 때문에만 존재한다. $Z$를 통제하면 연관이 사라진다.
 
-??? example "Ice cream and drowning"
-    Ice cream sales ($X$) and drowning incidents ($Y$) are positively correlated. The confounder is temperature ($Z$): hot weather increases both ice cream consumption and swimming activity. Ice cream does not cause drowning.
+??? example "아이스크림과 익사"
+    아이스크림 판매량($X$)과 익사 사고($Y$)는 양의 상관을 보인다. 교란요인은 기온($Z$)이다. 더운 날씨가 아이스크림 소비와 수영 활동을 모두 늘린다. 아이스크림이 익사를 일으키지는 않는다.
 
-??? example "Shoe size and reading ability"
-    Among schoolchildren, shoe size correlates positively with reading ability. The confounder is age: older children have both larger feet and better reading skills. Shoe size does not cause literacy.
-
----
-
-## Mechanism 2: Common Trends
-
-Two time series that both increase (or decrease) over time will be positively correlated, even if they are completely unrelated. This is a pervasive source of spurious correlations in observational data.
-
-Common trends arise from:
-
-- **Secular trends**: population growth, inflation, and technological change cause many time series to trend upward together.
-- **Seasonality**: any two variables with seasonal patterns will correlate if measured over the same time period.
-
-!!! warning "Trending time series produce spurious correlations"
-    The correlation between U.S. spending on science and suicides by hanging ($r \approx 0.99$ over a particular decade) is entirely spurious. Both series happen to trend upward over time. This is a statistical artifact, not a meaningful relationship.
-
-When analyzing time series, detrending or differencing the data before computing correlations can help distinguish genuine associations from artifacts of shared trends.
+??? example "신발 크기와 읽기 능력"
+    학령기 아동에서 신발 크기는 읽기 능력과 양의 상관을 보인다. 교란요인은 나이이다. 나이가 많은 아이일수록 발도 크고 읽기 능력도 좋다. 신발 크기가 문해력을 만들지는 않는다.
 
 ---
 
-## Mechanism 3: Coincidence and Data Dredging
+## 기제 2: 공통 추세
 
-With enough variables, some pairs will be strongly correlated by pure chance. If a researcher tests thousands of variable pairs and reports only the ones with high correlations, many of those will be spurious.
+시간에 따라 함께 증가(또는 감소)하는 두 시계열은 완전히 무관하더라도 양의 상관을 보인다. 관찰자료에서 허위상관이 만연하는 원천이다.
 
-This problem is exacerbated by:
+공통 추세는 다음에서 생긴다:
 
-- **Multiple comparisons**: testing many hypotheses without adjusting for multiplicity.
-- **Data dredging** (p-hacking): searching through data for any significant result.
-- **Publication bias**: journals preferentially publish surprising, positive findings.
+- **장기 추세**: 인구 증가, 물가 상승, 기술 변화 때문에 많은 시계열이 함께 상승한다.
+- **계절성**: 계절 패턴을 갖는 두 변수는 같은 기간에 측정하면 상관을 보인다.
 
-The website "Spurious Correlations" by Tyler Vigen catalogs absurd but statistically strong correlations (e.g., per capita cheese consumption and deaths by bedsheet entanglement), illustrating how easily meaningless patterns emerge from large datasets.
+!!! warning "추세가 있는 시계열은 허위상관을 낳는다"
+    미국의 과학 예산과 목맴에 의한 자살 건수의 상관(특정 10년 구간에서 $r \approx 0.99$)은 전적으로 허위이다. 두 계열 모두 시간에 따라 우연히 상승했을 뿐이다. 의미 있는 관계가 아니라 통계적 인공물이다.
+
+시계열을 분석할 때 상관을 계산하기 전에 추세를 제거하거나 차분하면 진짜 연관과 공통 추세의 인공물을 구별하는 데 도움이 된다.
 
 ---
 
-## Mechanism 4: Collider Bias (Selection Bias)
+## 기제 3: 우연과 자료 채굴
 
-A subtler form of spurious correlation arises from conditioning on a **collider** -- a variable caused by both $X$ and $Y$:
+변수가 충분히 많으면 어떤 쌍은 순전히 우연으로 강하게 상관된다. 연구자가 수천 개의 변수 쌍을 검정하고 상관이 높은 것만 보고하면 그중 많은 수가 허위일 것이다.
+
+이 문제를 키우는 것들:
+
+- **다중비교**: 다중성을 조정하지 않고 여러 가설을 검정하는 것.
+- **자료 채굴**(p-해킹): 유의한 결과를 찾아 자료를 뒤지는 것.
+- **출판 편향**: 학술지가 놀랍고 긍정적인 발견을 선호하는 것.
+
+Tyler Vigen의 "Spurious Correlations" 웹사이트는 통계적으로는 강하지만 터무니없는 상관들(예: 1인당 치즈 소비량과 침대 시트에 얽혀 사망한 건수)을 모아, 큰 자료에서 무의미한 패턴이 얼마나 쉽게 나타나는지 보여준다.
+
+---
+
+## 기제 4: 충돌자 편향 (선택 편향)
+
+더 미묘한 형태의 허위상관은 **충돌자**, 즉 $X$와 $Y$ 모두에 의해 생기는 변수로 조건화할 때 나타난다:
 
 $$
 X \rightarrow Z \leftarrow Y
 $$
 
-When we condition on $Z$ (e.g., by selecting only individuals with a particular value of $Z$), a spurious association between $X$ and $Y$ is created even if they are marginally independent.
+$Z$로 조건화하면(예: $Z$가 특정 값인 개인만 고르면) $X$와 $Y$가 주변적으로 독립이어도 둘 사이에 허위 연관이 만들어진다.
 
-??? example "Talent and attractiveness in Hollywood"
-    Among the general population, acting talent ($X$) and physical attractiveness ($Y$) may be unrelated. But among successful actors ($Z$), they appear negatively correlated: less talented actors tend to be more attractive, and vice versa. The conditioning on success (which requires either talent or attractiveness) creates a spurious negative association.
-
----
-
-## Distinguishing Spurious from Genuine Correlations
-
-No purely statistical test can determine whether a correlation is spurious. However, several strategies help:
-
-1. **Check for confounders.** Identify plausible third variables and compute [partial correlations](../correlation/partial.md). If the correlation disappears after conditioning, it was likely confounded.
-
-2. **Consider the mechanism.** Is there a plausible causal pathway? A correlation without a plausible mechanism is more likely spurious.
-
-3. **Replicate.** Does the correlation persist in independent datasets? Spurious correlations due to chance or data dredging typically do not replicate.
-
-4. **Examine temporal ordering.** If $X$ occurs after $Y$ in time, $X$ cannot cause $Y$ (though a common cause could still explain both).
-
-5. **Look for dose-response.** Does the association strengthen as $X$ increases? Dose-response relationships are more consistent with causation than spurious correlation.
-
-6. **Control for common trends.** For time series, detrend or difference the data before computing correlations.
+??? example "할리우드의 재능과 외모"
+    일반 인구에서 연기 재능($X$)과 외모($Y$)는 무관할 수 있다. 그러나 성공한 배우들($Z$) 안에서는 둘이 음의 상관으로 보인다. 재능이 덜한 배우일수록 외모가 뛰어난 경향이 있고 그 반대도 마찬가지이다. (재능이나 외모 중 하나가 필요한) 성공으로 조건화한 것이 허위의 음의 연관을 만든다.
 
 ---
 
-## Why Correlation Does Not Imply Causation
+## 허위상관과 진짜 상관 구별하기
 
-The existence of spurious correlations is the fundamental reason behind the maxim **"correlation does not imply causation."** An observed correlation between $X$ and $Y$ is consistent with multiple causal structures:
+어떤 상관이 허위인지 순수하게 통계적인 검정만으로 판정할 수는 없다. 다만 다음 전략들이 도움이 된다:
 
-- $X$ causes $Y$
-- $Y$ causes $X$
-- A common cause $Z$ drives both
-- The correlation is a statistical artifact (coincidence, data dredging, collider bias)
+1. **교란요인을 확인한다.** 그럴듯한 제3의 변수를 찾아 [부분상관](../correlation/partial.md)을 계산한다. 조건화 후 상관이 사라지면 교란되었을 가능성이 크다.
 
-Only by ruling out alternative explanations -- through randomized experiments, careful observational study design, or formal causal inference methods -- can we move from correlation to causation. See [Criteria for Causal Inference](../causation/causal_criteria.md).
+2. **기제를 고려한다.** 그럴듯한 인과 경로가 있는가? 그럴듯한 기제가 없는 상관은 허위일 가능성이 크다.
+
+3. **재현한다.** 독립적인 자료에서도 상관이 유지되는가? 우연이나 자료 채굴로 인한 허위상관은 대체로 재현되지 않는다.
+
+4. **시간 순서를 살핀다.** $X$가 $Y$보다 시간적으로 나중이면 $X$가 $Y$를 일으킬 수 없다(다만 공통원인이 둘 다 설명할 수는 있다).
+
+5. **용량–반응을 살핀다.** $X$가 커질수록 연관이 강해지는가? 용량–반응 관계는 허위상관보다 인과와 더 부합한다.
+
+6. **공통 추세를 통제한다.** 시계열에서는 상관을 계산하기 전에 추세를 제거하거나 차분한다.
 
 ---
 
-## Summary
+## 상관이 인과를 함의하지 않는 이유
 
-Spurious correlations are statistical associations that do not reflect direct causal relationships. They arise from confounding variables, shared trends, coincidence, data dredging, and collider bias. The existence of spurious correlations is the primary reason that correlation does not imply causation. Identifying and ruling out alternative explanations for an observed correlation is a necessary step before drawing causal conclusions.
+허위상관의 존재가 **"상관은 인과를 함의하지 않는다"**는 격언의 근본적인 이유이다. $X$와 $Y$ 사이에서 관측된 상관은 여러 인과 구조와 부합한다:
 
-## Exercises
+- $X$가 $Y$를 일으킨다
+- $Y$가 $X$를 일으킨다
+- 공통원인 $Z$가 둘 다 이끈다
+- 상관이 통계적 인공물이다(우연, 자료 채굴, 충돌자 편향)
 
-**Exercise 1.**
-Simulate an investment scenario to illustrate survivorship bias:
+무작위 실험, 신중한 관찰연구 설계, 형식적인 인과추론 방법으로 대안적 설명들을 배제해야만 상관에서 인과로 나아갈 수 있다. [인과 추론의 기준](../causation/causal_criteria.md)을 보라.
 
-1. Generate 1000 "companies" with random annual returns drawn from $N(0.05, 0.3)$ over 10 years
-2. A company "survives" if its cumulative return never drops below $-90\%$
-3. Compute the average annual return for survivors vs. all companies
-4. Discuss how focusing only on survivors inflates perceived returns
+---
+
+## 요약
+
+허위상관은 직접적인 인과관계를 반영하지 않는 통계적 연관이다. 교란변수, 공통 추세, 우연, 자료 채굴, 충돌자 편향에서 생긴다. 허위상관의 존재가 상관이 인과를 함의하지 않는 주된 이유이다. 인과적 결론을 내리기 전에 관측된 상관에 대한 대안적 설명을 찾아 배제하는 일이 반드시 필요하다.
+
+## 연습문제
+
+**연습문제 1.**
+생존자 편향을 보이는 투자 시나리오를 모의실험하라:
+
+1. 10년 동안 $N(0.05, 0.3)$에서 뽑은 무작위 연수익률을 갖는 "기업" 1000개를 생성한다
+2. 누적수익률이 $-90\%$ 아래로 떨어진 적이 없으면 그 기업은 "생존"한다
+3. 생존 기업의 평균 연수익률과 전체 기업의 평균 연수익률을 계산한다
+4. 생존자만 볼 때 인식되는 수익률이 어떻게 부풀려지는지 논한다
 
 ```python
 import numpy as np
@@ -128,23 +128,23 @@ n_years = 10
 # Your simulation here
 ```
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
 
-    Companies that experience a cumulative return drop below $-90\%$ are removed from the survivor set. The surviving companies are a biased sample — they include companies that happened to have favorable return sequences while excluding those that suffered catastrophic losses. The average annual return for survivors will be higher than the average for all companies because the worst performers have been removed. This is survivorship bias: analyzing only the survivors creates a spuriously positive picture of investment performance. In practice, mutual fund databases and stock indices suffer from this bias because delisted or merged funds disappear from the historical record.
+    누적수익률이 $-90\%$ 아래로 떨어진 기업은 생존 집합에서 제외된다. 살아남은 기업들은 편향된 표본이다. 수익률 흐름이 우연히 좋았던 기업은 포함되고 치명적 손실을 입은 기업은 배제되기 때문이다. 최악의 성과를 낸 기업들이 제거되므로 생존 기업의 평균 연수익률이 전체 기업의 평균보다 높다. 이것이 생존자 편향이다. 생존자만 분석하면 투자 성과에 대해 허위로 긍정적인 그림이 만들어진다. 실제로 뮤추얼펀드 데이터베이스와 주가지수도 상장폐지되거나 합병된 펀드가 과거 기록에서 사라지므로 이 편향을 안고 있다.
 
 ---
 
-**Exercise 2.**
-For each scenario below, identify the survivorship bias and explain what data is missing:
+**연습문제 2.**
+아래 각 상황에서 생존자 편향을 지적하고 어떤 자료가 빠졌는지 설명하라:
 
-1. A study finds that people who take a particular supplement live longer on average.
-2. An analysis of successful restaurants finds they all have outdoor seating.
-3. A review of top-performing mutual funds over 20 years shows consistent market-beating returns.
+1. 어떤 보충제를 먹는 사람이 평균적으로 더 오래 산다는 연구 결과.
+2. 성공한 식당들을 분석했더니 모두 야외 좌석이 있었다.
+3. 20년간 최고 성과를 낸 뮤추얼펀드를 검토했더니 꾸준히 시장을 이겼다.
 
-??? success "Solution to Exercise 2"
+??? success "연습문제 2 풀이"
 
-    1. **Supplement study**: People who take supplements may be healthier to begin with (healthy user bias). Those who became too ill to continue the supplement or died early are not included in the "supplement user" group. Missing data: people who started and stopped the supplement due to illness or death.
+    1. **보충제 연구**: 보충제를 먹는 사람은 애초에 더 건강할 수 있다(건강한 이용자 편향). 병이 심해져 복용을 중단했거나 일찍 사망한 사람은 "보충제 이용자" 집단에 들어가지 않는다. 빠진 자료: 질병이나 사망으로 복용을 시작했다 중단한 사람들.
 
-    2. **Restaurant analysis**: Only surviving (successful) restaurants are studied. Restaurants that had outdoor seating but failed are not in the dataset. Missing data: all restaurants that opened with outdoor seating but subsequently closed. The analysis cannot determine whether outdoor seating contributes to success.
+    2. **식당 분석**: 살아남은(성공한) 식당만 연구된다. 야외 좌석이 있었지만 망한 식당은 자료에 없다. 빠진 자료: 야외 좌석을 갖추고 문을 열었다가 나중에 닫은 모든 식당. 이 분석으로는 야외 좌석이 성공에 기여하는지 판정할 수 없다.
 
-    3. **Mutual funds**: Funds that performed poorly over 20 years were likely closed, merged, or renamed. Only the funds that survived (and therefore tended to perform well) remain in the database. Missing data: the full universe of funds that existed at the start of the 20-year period, including those that were subsequently liquidated.
+    3. **뮤추얼펀드**: 20년 동안 성과가 나빴던 펀드는 대개 청산되거나 합병되거나 이름이 바뀌었다. 살아남은(따라서 성과가 좋았던) 펀드만 데이터베이스에 남는다. 빠진 자료: 20년 기간의 시작 시점에 존재했던 펀드 전체, 특히 그 뒤 청산된 펀드들.

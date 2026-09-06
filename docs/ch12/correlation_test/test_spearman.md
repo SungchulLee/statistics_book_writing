@@ -1,105 +1,105 @@
-# Testing Spearman's rho
+# Spearman의 rho 검정
 
-Spearman's rank correlation $r_s$ measures the strength of a monotonic association between two variables. To determine whether the observed $r_s$ is statistically significant, we test the null hypothesis that the population Spearman correlation is zero. This section covers the hypothesis test, its null distribution, and its connection to the Pearson t-test on ranks.
+Spearman 순위상관 $r_s$는 두 변수 사이 단조 연관의 강도를 잰다. 관측된 $r_s$가 통계적으로 유의한지 판정하려면 모집단 Spearman 상관이 0이라는 귀무가설을 검정한다. 이 절에서는 가설검정, 그 귀무분포, 그리고 순위에 대한 Pearson t-검정과의 연결을 다룬다.
 
 ---
 
-## Hypotheses
+## 가설
 
-The standard test is:
+표준 검정은
 
 $$
 H_0\!: \rho_s = 0 \quad \text{vs} \quad H_1\!: \rho_s \neq 0
 $$
 
-where $\rho_s$ is the population Spearman rank correlation. The null hypothesis states that there is no monotonic association between $X$ and $Y$.
+이며 $\rho_s$는 모집단 Spearman 순위상관이다. 귀무가설은 $X$와 $Y$ 사이에 단조 연관이 없다는 것이다.
 
-One-sided alternatives ($H_1\!: \rho_s > 0$ or $H_1\!: \rho_s < 0$) are used when the direction of the monotonic relationship is specified in advance.
+단조 관계의 방향을 미리 지정한 경우에는 단측 대립가설($H_1\!: \rho_s > 0$ 또는 $H_1\!: \rho_s < 0$)을 쓴다.
 
 ---
 
-## Test Statistic: t-Approximation
+## 검정통계량: t 근사
 
-For moderate to large samples, the test statistic is
+표본이 어느 정도 크면 검정통계량은
 
 $$
 t = r_s \sqrt{\frac{n - 2}{1 - r_s^2}}
 $$
 
-Under $H_0$ (no monotonic association), this statistic follows approximately a **t-distribution with $n - 2$ degrees of freedom**. This is the same formula used for testing Pearson's $r$, applied to the rank correlation.
+이다. $H_0$(단조 연관 없음) 아래에서 이 통계량은 근사적으로 **자유도 $n - 2$인 t-분포**를 따른다. Pearson의 $r$을 검정할 때 쓰는 것과 같은 공식을 순위상관에 적용한 것이다.
 
-The approximation is the same as performing a Pearson correlation t-test on the ranks of the data. Since Spearman's $r_s$ equals Pearson's $r$ computed on the ranks, the test procedures are algebraically equivalent.
-
----
-
-## Exact Distribution for Small Samples
-
-For small sample sizes (typically $n \le 20$), the exact null distribution of $r_s$ can be computed by considering all $n!$ possible permutations of the ranks. Under $H_0$, all permutations are equally likely, so the distribution of $r_s$ can be tabulated exactly.
-
-Critical values from the exact distribution are available in tables for small $n$. Most statistical software uses the exact distribution for small samples and switches to the t-approximation for larger samples.
+이 근사는 자료의 순위에 Pearson 상관 t-검정을 수행하는 것과 같다. Spearman의 $r_s$가 순위에 대해 계산한 Pearson의 $r$과 같으므로 두 검정 절차는 대수적으로 동등하다.
 
 ---
 
-## Decision Rule
+## 작은 표본에서의 정확분포
 
-For a two-sided test at significance level $\alpha$:
+표본이 작으면(보통 $n \le 20$) 순위의 가능한 $n!$개 순열을 모두 고려하여 $H_0$ 아래 $r_s$의 정확한 귀무분포를 계산할 수 있다. $H_0$ 아래에서 모든 순열이 똑같이 그럴듯하므로 $r_s$의 분포를 정확히 표로 만들 수 있다.
 
-- Using the t-approximation: reject $H_0$ if $|t| > t_{\alpha/2, \, n-2}$
-- Using exact tables: reject $H_0$ if $|r_s|$ exceeds the critical value for the given $n$ and $\alpha$
+작은 $n$에 대한 정확분포의 임계값은 표로 제공된다. 대부분의 통계 소프트웨어는 작은 표본에는 정확분포를 쓰고 표본이 커지면 t 근사로 전환한다.
 
-The p-value is computed as
+---
+
+## 판정 규칙
+
+유의수준 $\alpha$의 양측검정에서:
+
+- t 근사를 쓰면: $|t| > t_{\alpha/2, \, n-2}$이면 $H_0$을 기각한다
+- 정확표를 쓰면: 주어진 $n$과 $\alpha$의 임계값을 $|r_s|$가 넘으면 $H_0$을 기각한다
+
+p-값은 t 근사에서
 
 $$
 p = 2 \cdot P(T_{n-2} > |t|)
 $$
 
-for the t-approximation, or from the exact permutation distribution for small samples.
+로 계산하고, 작은 표본에서는 정확 순열분포에서 계산한다.
 
 ---
 
-## Example
+## 예제
 
-A biologist ranks 12 animals by body mass ($X$) and metabolic rate ($Y$) and computes $r_s = 0.72$.
+어떤 생물학자가 동물 12마리를 체질량($X$)과 대사율($Y$)로 순위를 매겨 $r_s = 0.72$를 얻었다.
 
 $$
 t = 0.72 \sqrt{\frac{12 - 2}{1 - 0.72^2}} = 0.72 \sqrt{\frac{10}{0.4816}} = 0.72 \times 4.557 = 3.281
 $$
 
-With $n - 2 = 10$ degrees of freedom, the critical value for a two-sided test at $\alpha = 0.05$ is $t_{0.025, 10} = 2.228$. Since $|t| = 3.281 > 2.228$, we reject $H_0$ and conclude that there is a statistically significant monotonic association between body mass and metabolic rate.
+자유도 $n - 2 = 10$에서 $\alpha = 0.05$ 양측검정의 임계값은 $t_{0.025, 10} = 2.228$이다. $|t| = 3.281 > 2.228$이므로 $H_0$을 기각하고 체질량과 대사율 사이에 통계적으로 유의한 단조 연관이 있다고 결론짓는다.
 
 ---
 
-## Assumptions
+## 가정
 
-The test for Spearman's $r_s$ requires:
+Spearman의 $r_s$ 검정은 다음을 요구한다:
 
-1. **Independence**: the observations are independent pairs.
-2. **Ordinal or continuous data**: both variables must be at least ordinal (ranks must be meaningful).
-3. **No specific distributional assumption**: unlike the Pearson t-test, the Spearman test does not assume normality. It is a **distribution-free** (nonparametric) test.
+1. **독립성**: 관측값이 독립인 쌍이다.
+2. **순서형 또는 연속형 자료**: 두 변수가 적어도 순서형이어야 한다(순위가 의미를 가져야 한다).
+3. **특정 분포 가정 없음**: Pearson t-검정과 달리 Spearman 검정은 정규성을 가정하지 않는다. **분포에 의존하지 않는**(비모수) 검정이다.
 
-The distribution-free nature of Spearman's test makes it appropriate when:
+분포에 의존하지 않는다는 성질 덕분에 Spearman 검정은 다음일 때 적절하다:
 
-- The data are non-normal or skewed.
-- Outliers are present.
-- The relationship is monotonic but not linear.
+- 자료가 정규가 아니거나 치우쳐 있을 때.
+- 이상점이 있을 때.
+- 관계가 단조이지만 선형이 아닐 때.
 
 ---
 
-## Spearman vs Pearson Test: When to Choose
+## Spearman 검정과 Pearson 검정 중 무엇을 고를까
 
-| Feature | Pearson t-test | Spearman t-test |
+| 항목 | Pearson t-검정 | Spearman t-검정 |
 |:---|:---|:---|
-| Detects | Linear association | Monotonic association |
-| Distributional assumption | Bivariate normality | None (distribution-free) |
-| Robustness to outliers | Low | High |
-| Power under normality + linearity | Higher | Slightly lower |
-| Power under non-normality | Lower | Higher |
+| 탐지하는 것 | 선형 연관 | 단조 연관 |
+| 분포 가정 | 이변량 정규성 | 없음(분포에 의존하지 않음) |
+| 이상점에 대한 로버스트성 | 낮음 | 높음 |
+| 정규성+선형성 아래의 검정력 | 더 높음 | 약간 낮음 |
+| 비정규성 아래의 검정력 | 더 낮음 | 더 높음 |
 
-If the data are bivariate normal and the relationship is linear, the Pearson test has slightly more power. In all other situations, the Spearman test is at least as powerful and often more powerful.
+자료가 이변량 정규이고 관계가 선형이면 Pearson 검정의 검정력이 조금 더 높다. 그 밖의 모든 상황에서는 Spearman 검정이 적어도 같거나 더 강력한 경우가 많다.
 
 ---
 
-## Computation in Python
+## Python으로 계산하기
 
 ```python
 import numpy as np
@@ -122,75 +122,75 @@ print(f"t-statistic  = {t_stat:.4f}")
 print(f"Manual p     = {p_manual:.4f}")
 ```
 
-The `scipy.stats.spearmanr` function uses the t-approximation for larger samples and can handle tied values.
+`scipy.stats.spearmanr` 함수는 표본이 크면 t 근사를 쓰며 동점도 처리한다.
 
 ---
 
-## Summary
+## 요약
 
-The hypothesis test for Spearman's $r_s$ uses the same t-statistic formula as the Pearson test, applied to the ranks of the data. The test is distribution-free and does not require normality, making it robust to outliers and applicable to ordinal data. For small samples, exact permutation-based p-values are available. The Spearman test is preferred over the Pearson test when the data are non-normal, contain outliers, or exhibit a monotonic but nonlinear relationship.
+Spearman의 $r_s$에 대한 가설검정은 Pearson 검정과 같은 t-통계량 공식을 자료의 순위에 적용한다. 분포에 의존하지 않고 정규성을 요구하지 않으므로 이상점에 로버스트하고 순서형 자료에도 적용할 수 있다. 표본이 작으면 순열에 기반한 정확 p-값을 쓸 수 있다. 자료가 정규가 아니거나 이상점이 있거나 관계가 단조이면서 비선형일 때 Pearson 검정보다 Spearman 검정이 선호된다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Test whether Spearman's $r_s = 0.55$ from a sample of $n = 20$ is significantly different from zero at $\alpha = 0.05$.
+**연습문제 1.**
+$n = 20$인 표본에서 얻은 Spearman의 $r_s = 0.55$가 $\alpha = 0.05$에서 0과 유의하게 다른지 검정하라.
 
-??? success "Solution to Exercise 1"
-    The test statistic is:
+??? success "연습문제 1 풀이"
+    검정통계량은
 
     $$
     t = r_s \sqrt{\frac{n-2}{1-r_s^2}} = 0.55\sqrt{\frac{18}{1 - 0.3025}} = 0.55\sqrt{\frac{18}{0.6975}} = 0.55\sqrt{25.806} = 0.55 \times 5.080 = 2.794
     $$
 
-    With $df = n - 2 = 18$, the critical value $t_{0.025, 18} = 2.101$. Since $|t| = 2.794 > 2.101$, we reject $H_0$ at $\alpha = 0.05$. There is significant evidence of a monotonic association.
+    이다. $df = n - 2 = 18$에서 임계값은 $t_{0.025, 18} = 2.101$이다. $|t| = 2.794 > 2.101$이므로 $\alpha = 0.05$에서 $H_0$을 기각한다. 단조 연관의 유의한 증거가 있다.
 
 ---
 
-**Exercise 2.**
-Explain why the t-distribution approximation for Spearman's test is more accurate for large $n$. What is the exact test for small $n$?
+**연습문제 2.**
+Spearman 검정의 t-분포 근사가 $n$이 클 때 더 정확한 이유를 설명하라. 작은 $n$에 대한 정확검정은 무엇인가?
 
-??? success "Solution to Exercise 2"
-    The test statistic $t = r_s\sqrt{(n-2)/(1-r_s^2)}$ has an approximate $t_{n-2}$ distribution under $H_0$. This approximation works well for $n \geq 10$ and becomes exact in the limit.
+??? success "연습문제 2 풀이"
+    검정통계량 $t = r_s\sqrt{(n-2)/(1-r_s^2)}$은 $H_0$ 아래에서 근사적으로 $t_{n-2}$ 분포를 갖는다. 이 근사는 $n \geq 10$에서 잘 작동하고 극한에서 정확해진다.
 
-    For small $n$, the exact distribution of $r_s$ under $H_0$ is discrete (because ranks can only take integer values) and is computed by enumerating all $n!$ permutations of one rank vector. Statistical software (e.g., `scipy.stats.spearmanr`) computes exact p-values for small $n$ and switches to the t-approximation for larger samples.
+    $n$이 작으면 $H_0$ 아래 $r_s$의 정확분포가 (순위가 정수값만 가지므로) 이산이며, 한 순위 벡터의 $n!$개 순열을 모두 열거하여 계산한다. 통계 소프트웨어(예: `scipy.stats.spearmanr`)는 작은 $n$에서 정확 p-값을 계산하고 표본이 커지면 t 근사로 전환한다.
 
-    The exact test is a permutation test: it compares the observed $r_s$ to the distribution of $r_s$ values obtained from all possible permutations of the $Y$-ranks, assuming independence.
+    정확검정은 순열검정이다. 독립을 가정하고 $Y$ 순위의 가능한 모든 순열에서 얻은 $r_s$ 값의 분포와 관측된 $r_s$를 비교한다.
 
 ---
 
-**Exercise 3.**
-A dataset of 50 countries shows Spearman's $r_s = 0.72$ between GDP per capita rank and life expectancy rank. Construct an approximate 95% confidence interval for the population $\rho_s$.
+**연습문제 3.**
+50개국 자료에서 1인당 GDP 순위와 기대수명 순위 사이의 Spearman $r_s = 0.72$를 얻었다. 모집단 $\rho_s$에 대한 근사 95% 신뢰구간을 만들어라.
 
-??? success "Solution to Exercise 3"
-    Apply Fisher's z-transformation (which can also be used for Spearman's $r_s$ as an approximation):
+??? success "연습문제 3 풀이"
+    (Spearman의 $r_s$에도 근사적으로 쓸 수 있는) Fisher의 z 변환을 적용한다:
 
     $$
     z_r = \frac{1}{2}\ln\frac{1 + 0.72}{1 - 0.72} = \frac{1}{2}\ln(6.143) = \frac{1}{2}(1.815) = 0.9076
     $$
 
-    The standard error is approximately $1/\sqrt{n-3} = 1/\sqrt{47} = 0.1459$.
+    표준오차는 근사적으로 $1/\sqrt{n-3} = 1/\sqrt{47} = 0.1459$이다.
 
-    The 95% CI for $z_\rho$ is $0.9076 \pm 1.96 \times 0.1459 = (0.6216, 1.1936)$.
+    $z_\rho$에 대한 95% 신뢰구간은 $0.9076 \pm 1.96 \times 0.1459 = (0.6216, 1.1936)$이다.
 
-    Back-transforming: $r = \frac{e^{2z}-1}{e^{2z}+1}$:
+    $r = \frac{e^{2z}-1}{e^{2z}+1}$으로 역변환하면:
 
-    - Lower: $\tanh(0.6216) = 0.553$
-    - Upper: $\tanh(1.1936) = 0.832$
+    - 하한: $\tanh(0.6216) = 0.553$
+    - 상한: $\tanh(1.1936) = 0.832$
 
-    The 95% CI for $\rho_s$ is approximately $(0.55, 0.83)$.
+    $\rho_s$에 대한 95% 신뢰구간은 약 $(0.55, 0.83)$이다.
 
 ---
 
-**Exercise 4.**
-When is Spearman's test preferred over Pearson's test of correlation? List three scenarios.
+**연습문제 4.**
+Spearman 검정이 Pearson 상관 검정보다 선호되는 것은 언제인가? 세 가지 상황을 들어라.
 
-??? success "Solution to Exercise 4"
-    Spearman's test is preferred when:
+??? success "연습문제 4 풀이"
+    Spearman 검정이 선호되는 경우:
 
-    1. **The relationship is monotonic but nonlinear:** Pearson's $r$ measures only linear association and may underestimate the strength of a curved but monotonic relationship. Spearman's $r_s$ captures any monotonic pattern.
+    1. **관계가 단조이지만 비선형일 때:** Pearson의 $r$은 선형 연관만 재므로 휘어진 단조 관계의 강도를 과소평가할 수 있다. Spearman의 $r_s$는 어떤 단조 패턴이든 포착한다.
 
-    2. **The data contain outliers:** Spearman's $r_s$ is based on ranks and is therefore robust to extreme values. A single outlier can dramatically change Pearson's $r$ but barely affects $r_s$.
+    2. **자료에 이상점이 있을 때:** Spearman의 $r_s$는 순위에 기반하므로 극단값에 로버스트하다. 이상점 하나가 Pearson의 $r$을 크게 바꿀 수 있지만 $r_s$에는 거의 영향을 주지 않는다.
 
-    3. **The data are ordinal:** When measurements are on an ordinal scale (e.g., Likert ratings, rankings), the numerical values have no meaningful interval interpretation. Spearman's $r_s$ is appropriate because it uses only rank information, while Pearson's $r$ assumes interval-scale data.
+    3. **자료가 순서형일 때:** 측정이 순서 척도(예: 리커트 평정, 순위)이면 수치값에 의미 있는 간격 해석이 없다. Spearman의 $r_s$는 순위 정보만 쓰므로 적절하지만 Pearson의 $r$은 구간 척도를 가정한다.
 
-    Additionally, Spearman's test does not require the bivariate normality assumption needed for exact inference with Pearson's $r$.
+    또한 Spearman 검정은 Pearson의 $r$로 정확한 추론을 하는 데 필요한 이변량 정규성 가정을 요구하지 않는다.
