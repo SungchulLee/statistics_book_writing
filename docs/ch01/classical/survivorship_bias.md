@@ -10,9 +10,9 @@
 
 대표적인 예는 아브라함 발드의 제2차 세계대전 폭격기 손상 분석이다. 군은 귀환한 비행기에 총알 구멍이 가장 많은 곳(날개와 동체)에 장갑을 덧대자고 제안했다. 발드는 조종석이나 엔진에 피격당한 비행기는 결코 돌아오지 못했다는 점을 알아차렸다. 살아남은 표본에는 바로 그 치명적 손상이 빠져 있었던 것이다. 옳은 전략은 생존기에 구멍이 적은 부위에 장갑을 덧대는 것이었다.
 
-![Survivorship_Bias_Bomber](./img/Survivorship_Bias_Bomber.png)
+![Survivorship_Bias_Bomber](https://upload.wikimedia.org/wikipedia/commons/b/b2/Survivorship-bias.svg)
 
-*귀환한 폭격기의 피탄 분포를 나타낸 가상의 도해. 붉은 점은 총알 구멍이다. 날개와 동체에는 구멍이 빽빽하지만 엔진과 조종석 주변은 거의 비어 있다. 이 빈 곳은 그 부위가 안전하다는 뜻이 아니라, 그곳에 맞은 비행기가 표본에 들어오지 못했다는 뜻이다. 그림 출처: Martin Grandjean, McGeddon, Cameron Moll, [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Survivorship-bias.svg), [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0).*
+*귀환한 폭격기의 피탄 분포를 나타낸 가상의 도해. 붉은 점은 총알 구멍이다. 날개와 동체에는 구멍이 빽빽하지만 엔진과 조종석 주변은 거의 비어 있다. 이 빈 곳은 그 부위가 안전하다는 뜻이 아니라, 그곳에 맞은 비행기가 표본에 들어오지 못했다는 뜻이다.*
 
 !!! tip "그림을 읽는 법"
     이 그림에서 눈이 먼저 가는 것은 **붉은 점이 있는 곳**이다. 그러나 통계적으로 중요한 정보는 **점이 없는 곳**에 있다.
@@ -20,6 +20,23 @@
     관측된 자료는 $P(\text{피탄 위치} \mid \text{생존})$이다. 우리가 알고 싶은 것은 $P(\text{격추} \mid \text{피탄 위치})$이다. 두 확률이 반대 방향을 가리킨다.
 
     엔진 주변에 구멍이 없는 이유는 두 가지 중 하나이다. 엔진이 좀처럼 맞지 않거나, 엔진에 맞은 비행기가 돌아오지 못했거나. 총알이 기체 전체에 대략 고르게 쏟아진다는 점을 인정하면 두 번째 설명만 남는다.
+
+!!! note "그림 출처와 참고문헌"
+    **그림**: Martin Grandjean(벡터), McGeddon(도면), Cameron Moll(피탄 도표 착상),
+    [Survivorship-bias.svg](https://commons.wikimedia.org/wiki/File:Survivorship-bias.svg),
+    Wikimedia Commons, [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0).
+    발드의 1943년 보고서에는 그림이 실려 있지 않았다. 이 도해는 그 논증을 나중에 시각화한 것으로,
+    실제 피탄 자료의 재현이 아니라 가상의 예시이다.
+
+    **원 보고서**: Wald, A. (1943). *A Method of Estimating Plane Vulnerability Based on Damage
+    of Survivors*. Statistical Research Group, Columbia University.
+    (재간행: CRC 432, Center for Naval Analyses, 1980.)
+
+    **해설 논문**: Mangel, M., & Samaniego, F. J. (1984).
+    "Abraham Wald's Work on Aircraft Survivability."
+    *Journal of the American Statistical Association*, 79(386), 259–267.
+    발드가 실제로 푼 문제는 "어디에 장갑을 덧댈까"가 아니라, 생존기의 피탄 분포로부터
+    부위별 **격추 확률**을 추정하는 것이었다. 이 논문이 그 추정 절차를 현대적 표기로 정리한다.
 
 같은 논리가 널리 적용된다.
 
