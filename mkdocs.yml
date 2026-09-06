@@ -196,6 +196,7 @@ nav:
             - 소득 자료 표본분포 시각화: ch05/code/sampling_dist_income_visualization.md
             - 붓스트랩 표준오차: ch05/code/bootstrap_standard_error.md
             - 금융위기와 중심극한정리의 실패: ch05/code/financial_crisis_clt.md
+        - 장 연습문제: ch05/exercises/exercises.md
 
     - 6 통계적 추정:
         - 장 개요: ch06/index.md
@@ -265,6 +266,7 @@ nav:
             - 수익률 추정: ch07/code/return_estimation.md
             - 로버스트 추정량 비교: ch07/code/robust_estimators.md
             - Cauchy에서 대수의법칙의 실패: ch07/code/cauchy_lln_failure.md
+        - 장 연습문제: ch07/exercises/exercises.md
 
     - 8 신뢰구간:
         - 장 개요: ch08/index.md
@@ -345,6 +347,7 @@ nav:
             - 키/몸무게 가설검정: ch09/code/height_weight_hypothesis_test.md
             - p-해킹 시연: ch09/code/p_hacking_demo.md
             - 거짓발견율과 재표본추출 다중검정: ch09/code/fdr_resampling_demo.md
+        - 장 연습문제: ch09/exercises/exercises.md
 
     - 10 카이제곱 검정:
         - 장 개요: ch10/index.md
@@ -461,6 +464,7 @@ nav:
             - 회귀와 상관 그림: ch12/code/regression_correlation_plot.md
             - 교란과 인과 시연: ch12/code/confounding_causation_demo.md
             - 상관과 인과: ch12/code/correlation_causation.md
+        - 장 연습문제: ch12/exercises/exercises.md
 
     - 13 선형회귀:
         - 장 개요: ch13/index.md
@@ -529,6 +533,7 @@ nav:
             - 회귀 (대마초 가격과 인구통계): ch13/code/regression_weed_demographics.md
             - 최소제곱 모의실험 (몬테카를로): ch13/code/ols_simulation.md
             - 부분집합 선택과 단계적 선택: ch13/code/subset_stepwise_selection.md
+        - 장 연습문제: ch13/exercises/exercises.md
     - 14 정규성 검정:
         - 장 개요: ch14/index.md
         - 14.1 정규성 입문:
