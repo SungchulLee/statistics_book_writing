@@ -1,52 +1,54 @@
-# Effect Size and Cramér's V
+# 효과크기와 Cramér의 V
 
-## Overview
+## 개요
 
-The chi-square test statistic tells us whether there is a statistically significant association, but it does not tell us how **strong** that association is. For large samples, even trivially small deviations from independence can produce highly significant p-values. Effect size measures address this limitation by quantifying the **magnitude** of the association, independent of sample size.
+카이제곱 검정통계량은 통계적으로 유의한 연관이 있는지는 알려주지만 그 연관이 얼마나 **강한지**는 알려주지 않는다. 표본이 크면 독립으로부터의 사소한 이탈만으로도 매우 유의한 p-값이 나올 수 있다. 효과크기 측도는 표본크기와 무관하게 연관의 **크기**를 재어 이 한계를 보완한다.
 
-## Cramér's V
+## Cramér의 V
 
-**Cramér's V** is the most commonly used effect size measure for chi-square tests. It is defined as:
+**Cramér의 V**는 카이제곱 검정에서 가장 널리 쓰이는 효과크기 측도이다. 다음으로 정의한다:
 
 $$
 V = \sqrt{\frac{\chi^2}{n \cdot (q - 1)}}
 $$
 
-where:
+여기서
 
-- $\chi^2$ is the chi-square test statistic,
-- $n$ is the total sample size,
-- $q = \min(r, c)$ is the smaller of the number of rows $r$ and columns $c$.
+- $\chi^2$는 카이제곱 검정통계량,
+- $n$은 전체 표본크기,
+- $q = \min(r, c)$는 행의 수 $r$과 열의 수 $c$ 중 작은 값
 
-### Properties
+이다.
 
-- $V$ ranges from 0 to 1.
-- $V = 0$ indicates no association (complete independence).
-- $V = 1$ indicates perfect association.
-- $V$ is symmetric: it does not depend on which variable is in the rows vs. columns.
+### 성질
 
-### Interpretation Guidelines
+- $V$의 범위는 0부터 1까지이다.
+- $V = 0$은 연관이 없음(완전한 독립)을 뜻한다.
+- $V = 1$은 완전한 연관을 뜻한다.
+- $V$는 대칭이다. 어느 변수를 행에 두고 어느 변수를 열에 두는지에 의존하지 않는다.
 
-| Cramér's V   | Interpretation  |
+### 해석 지침
+
+| Cramér의 V   | 해석  |
 |:------------:|:---------------:|
-| 0.00 – 0.10  | Negligible      |
-| 0.10 – 0.30  | Small           |
-| 0.30 – 0.50  | Medium          |
-| 0.50+        | Large           |
+| 0.00 – 0.10  | 무시할 만함      |
+| 0.10 – 0.30  | 작음           |
+| 0.30 – 0.50  | 중간          |
+| 0.50 이상        | 큼           |
 
-These thresholds are approximate and context-dependent. In some fields, even a "small" effect size may be practically meaningful.
+이 문턱들은 대략적이며 맥락에 따라 달라진다. 어떤 분야에서는 "작은" 효과크기도 실질적으로 의미가 있을 수 있다.
 
-### Special Case: 2×2 Tables
+### 특수한 경우: 2×2 표
 
-For a $2 \times 2$ table, $q - 1 = 1$, so Cramér's V simplifies to:
+$2 \times 2$ 표에서는 $q - 1 = 1$이므로 Cramér의 V가 다음으로 단순해진다:
 
 $$
 V = \sqrt{\frac{\chi^2}{n}} = |\phi|
 $$
 
-where $\phi$ is the **phi coefficient**, another common measure of association for $2 \times 2$ tables.
+여기서 $\phi$는 **파이 계수**로, $2 \times 2$ 표에서 연관을 재는 또 다른 흔한 측도이다.
 
-## Python Implementation
+## Python 구현
 
 ```python
 import numpy as np
@@ -77,67 +79,67 @@ print(f"p-value: {p_value:.4f}")
 print(f"Cramér's V: {v:.4f}")
 ```
 
-## When to Use Effect Size
+## 효과크기를 언제 쓰는가
 
-- Always report effect size alongside the chi-square test result, especially for large samples.
-- Use effect size to compare the strength of associations across different studies or datasets.
-- A statistically significant result with a very small Cramér's V may not be practically important.
-- A non-significant result with a moderate Cramér's V in a small sample may warrant further investigation with a larger sample.
+- 특히 표본이 클 때에는 카이제곱 검정 결과와 함께 항상 효과크기를 보고하라.
+- 서로 다른 연구나 자료집합 사이에서 연관의 강도를 비교할 때 효과크기를 쓴다.
+- 통계적으로 유의하더라도 Cramér의 V가 아주 작으면 실질적으로는 중요하지 않을 수 있다.
+- 작은 표본에서 유의하지 않으나 Cramér의 V가 중간 정도라면 더 큰 표본으로 추가 조사를 해볼 만하다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-A chi-square test of independence on a $3 \times 2$ table with $n = 500$ observations yields $\chi^2 = 12.5$. Compute Cramér's V and classify the effect size.
+**연습문제 1.**
+$n = 500$인 $3 \times 2$ 표에 대한 카이제곱 독립성 검정에서 $\chi^2 = 12.5$를 얻었다. Cramér의 V를 계산하고 효과크기를 분류하라.
 
-??? success "Solution to Exercise 1"
-    For a $3 \times 2$ table, $\min(r-1, c-1) = \min(2, 1) = 1$.
+??? success "연습문제 1 풀이"
+    $3 \times 2$ 표에서 $\min(r-1, c-1) = \min(2, 1) = 1$이다.
 
     $$
     V = \sqrt{\frac{\chi^2}{n \cdot \min(r-1, c-1)}} = \sqrt{\frac{12.5}{500 \times 1}} = \sqrt{0.025} \approx 0.158
     $$
 
-    Using Cohen's benchmarks for $df^* = 1$: small $\approx 0.10$, medium $\approx 0.30$, large $\approx 0.50$. With $V = 0.158$, this is a **small to medium** effect size.
+    $df^* = 1$에 대한 Cohen의 기준(작음 $\approx 0.10$, 중간 $\approx 0.30$, 큼 $\approx 0.50$)에 비추면 $V = 0.158$은 **작음에서 중간 사이**의 효과크기이다.
 
 ---
 
-**Exercise 2.**
-Two studies test the same hypothesis about the association between gender and voting preference. Study A ($n = 100$) finds $\chi^2 = 4.0$ ($p = 0.046$). Study B ($n = 10{,}000$) finds $\chi^2 = 4.0$ ($p = 0.046$). Compute Cramér's V for both. What does this reveal?
+**연습문제 2.**
+두 연구가 성별과 투표 성향의 연관에 대해 같은 가설을 검정했다. 연구 A($n = 100$)는 $\chi^2 = 4.0$ ($p = 0.046$)을, 연구 B($n = 10{,}000$)도 $\chi^2 = 4.0$ ($p = 0.046$)을 얻었다. 두 연구의 Cramér의 V를 계산하라. 무엇을 알 수 있는가?
 
-??? success "Solution to Exercise 2"
-    Both are $2 \times 2$ tables, so $\min(r-1, c-1) = 1$.
+??? success "연습문제 2 풀이"
+    둘 다 $2 \times 2$ 표이므로 $\min(r-1, c-1) = 1$이다.
 
-    **Study A:** $V = \sqrt{4.0 / (100 \times 1)} = \sqrt{0.04} = 0.20$ (small-to-medium effect).
+    **연구 A:** $V = \sqrt{4.0 / (100 \times 1)} = \sqrt{0.04} = 0.20$ (작음에서 중간 사이의 효과).
 
-    **Study B:** $V = \sqrt{4.0 / (10{,}000 \times 1)} = \sqrt{0.0004} = 0.02$ (negligible effect).
+    **연구 B:** $V = \sqrt{4.0 / (10{,}000 \times 1)} = \sqrt{0.0004} = 0.02$ (무시할 만한 효과).
 
-    Despite identical $\chi^2$ values and p-values, the effect sizes are dramatically different. Study A found a meaningful association; Study B found a statistically significant but practically negligible association. This illustrates why effect size should always be reported alongside significance tests.
-
----
-
-**Exercise 3.**
-Explain why Cramér's V is preferred over the raw chi-square statistic for comparing the strength of association across different studies.
-
-??? success "Solution to Exercise 3"
-    The chi-square statistic is proportional to sample size: $\chi^2 \approx n \cdot V^2$. Doubling $n$ roughly doubles $\chi^2$ even if the strength of association remains the same. This makes $\chi^2$ unsuitable for comparing across studies with different sample sizes.
-
-    Cramér's V normalizes by $n$ and by the table dimensions, producing a value in $[0, 1]$ that is independent of sample size. A $V = 0.30$ in a study of 100 people represents the same strength of association as $V = 0.30$ in a study of 10,000 people, making cross-study comparisons meaningful.
+    $\chi^2$ 값과 p-값이 같은데도 효과크기는 극적으로 다르다. 연구 A는 의미 있는 연관을 찾았고, 연구 B는 통계적으로 유의하지만 실질적으로는 무시할 만한 연관을 찾았다. 유의성 검정과 함께 효과크기를 항상 보고해야 하는 이유를 보여준다.
 
 ---
 
-**Exercise 4.**
-For a $2 \times 2$ table, show that Cramér's V equals the absolute value of the phi coefficient $|\phi|$.
+**연습문제 3.**
+서로 다른 연구 사이에서 연관의 강도를 비교할 때 원래의 카이제곱 통계량보다 Cramér의 V가 선호되는 이유를 설명하라.
 
-??? success "Solution to Exercise 4"
-    For a $2 \times 2$ table, $\min(r-1, c-1) = \min(1, 1) = 1$. Therefore:
+??? success "연습문제 3 풀이"
+    카이제곱 통계량은 표본크기에 비례한다: $\chi^2 \approx n \cdot V^2$. 연관의 강도가 그대로여도 $n$을 두 배로 하면 $\chi^2$가 대략 두 배가 된다. 그래서 표본크기가 다른 연구들을 $\chi^2$로 비교하는 것은 적절하지 않다.
+
+    Cramér의 V는 $n$과 표의 차원으로 정규화하여 표본크기에 의존하지 않는 $[0, 1]$ 값을 준다. 100명 연구에서의 $V = 0.30$은 10,000명 연구에서의 $V = 0.30$과 같은 강도의 연관을 나타내므로 연구 사이의 비교가 의미를 갖는다.
+
+---
+
+**연습문제 4.**
+$2 \times 2$ 표에서 Cramér의 V가 파이 계수의 절댓값 $|\phi|$와 같음을 보여라.
+
+??? success "연습문제 4 풀이"
+    $2 \times 2$ 표에서는 $\min(r-1, c-1) = \min(1, 1) = 1$이다. 따라서
 
     $$
     V = \sqrt{\frac{\chi^2}{n \cdot 1}} = \sqrt{\frac{\chi^2}{n}}
     $$
 
-    The phi coefficient is defined as:
+    이다. 파이 계수는 다음으로 정의된다:
 
     $$
     \phi = \sqrt{\frac{\chi^2}{n}}
     $$
 
-    (with a sign convention for $2 \times 2$ tables). Since $V$ takes the square root and is always non-negative, $V = |\phi|$. For $2 \times 2$ tables, Cramér's V and the absolute phi coefficient are identical measures.
+    ($2 \times 2$ 표에서는 부호 규약이 따로 있다). $V$는 제곱근을 취하므로 항상 음이 아니며, 따라서 $V = |\phi|$이다. $2 \times 2$ 표에서 Cramér의 V와 파이 계수의 절댓값은 동일한 측도이다.

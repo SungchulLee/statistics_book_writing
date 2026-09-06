@@ -1,161 +1,161 @@
-# Expected Cell Counts and Validity Conditions
+# 기대 칸 도수와 타당성 조건
 
-## Overview
+## 개요
 
-The chi-square test statistic is an **approximation** based on the asymptotic behavior of the multinomial distribution. For this approximation to be reliable, certain conditions must be met. When these conditions are violated, the p-values produced by the chi-square test may be inaccurate, potentially leading to incorrect conclusions.
+카이제곱 검정통계량은 다항분포의 점근적 성질에 기반한 **근사**이다. 이 근사가 믿을 만하려면 몇 가지 조건이 충족되어야 한다. 조건이 어긋나면 카이제곱 검정이 주는 p-값이 부정확해지고 잘못된 결론으로 이어질 수 있다.
 
-## Rule of Thumb: Expected Frequency Threshold
+## 경험 법칙: 기대도수 문턱
 
-The most widely cited validity condition is:
+가장 널리 인용되는 타당성 조건은 다음과 같다:
 
-> **All expected cell frequencies should be at least 5.**
+> **모든 기대 칸 도수가 적어도 5 이상이어야 한다.**
 
-This rule of thumb ensures that the chi-square approximation to the true multinomial distribution is sufficiently accurate. The condition applies to **expected** frequencies, not observed frequencies.
+이 경험 법칙은 참 다항분포에 대한 카이제곱 근사가 충분히 정확하도록 보장한다. 이 조건은 관측도수가 아니라 **기대**도수에 적용된다.
 
-### Why Expected, Not Observed?
+### 왜 관측도수가 아니라 기대도수인가?
 
-The expected frequencies determine the shape of the sampling distribution under $H_0$. When expected counts are small, the discrete multinomial distribution is poorly approximated by the continuous chi-square distribution, leading to inflated Type I error rates.
+기대도수는 $H_0$ 아래 표본분포의 모양을 결정한다. 기대도수가 작으면 이산인 다항분포를 연속인 카이제곱 분포로 근사하기 어려워지고, 제1종 오류율이 부풀려진다.
 
-## Conditions for Each Test
+## 각 검정의 조건
 
-### Goodness-of-Fit Test
+### 적합도 검정
 
-1. **Random Sampling**: The observations must be randomly sampled from the population.
-2. **Independence**: Each observation is independent of others.
-3. **Expected Frequency**: Each category should have an expected frequency of at least 5.
-4. **Mutually Exclusive Categories**: Each observation falls into exactly one category.
+1. **무작위 표집**: 관측값을 모집단에서 무작위로 추출해야 한다.
+2. **독립성**: 각 관측값이 다른 관측값과 독립이어야 한다.
+3. **기대도수**: 각 범주의 기대도수가 적어도 5 이상이어야 한다.
+4. **상호배타적 범주**: 각 관측값이 정확히 한 범주에 속해야 한다.
 
-### Test of Independence and Homogeneity
+### 독립성 검정과 동질성 검정
 
-1. **Random Sampling**: Observations are randomly sampled (one sample for independence; separate samples for homogeneity).
-2. **Independence**: Observations are independent within and across samples.
-3. **Expected Frequency**: Each cell in the contingency table should have an expected frequency of at least 5.
-4. **Mutually Exclusive Categories**: Each observation is classified into exactly one cell.
+1. **무작위 표집**: 관측값을 무작위로 추출한다(독립성은 표본 하나, 동질성은 집단별 별도 표본).
+2. **독립성**: 표본 안에서도, 표본 사이에서도 관측값이 독립이어야 한다.
+3. **기대도수**: 분할표의 각 칸의 기대도수가 적어도 5 이상이어야 한다.
+4. **상호배타적 범주**: 각 관측값이 정확히 한 칸으로 분류되어야 한다.
 
-## What to Do When Conditions Are Violated
+## 조건이 어긋날 때의 대처
 
-### Small Expected Frequencies
+### 작은 기대도수
 
-When some expected cell counts fall below 5:
+일부 기대 칸 도수가 5 아래로 떨어질 때:
 
-1. **Combine categories**: Merge adjacent or related categories to increase expected counts. For example, combine "strongly agree" and "agree" into a single category.
+1. **범주 병합**: 인접하거나 관련된 범주를 합쳐 기대도수를 키운다. 예를 들어 "매우 그렇다"와 "그렇다"를 한 범주로 합친다.
 
-2. **Fisher's Exact Test**: For $2 \times 2$ contingency tables with small samples, Fisher's Exact Test computes the exact p-value without relying on the chi-square approximation.
+2. **Fisher의 정확검정**: 표본이 작은 $2 \times 2$ 분할표에서는 카이제곱 근사에 의존하지 않고 정확한 p-값을 계산한다.
 
-3. **Simulation-based tests**: Use Monte Carlo simulation or permutation tests to obtain p-values that do not depend on the chi-square approximation.
+3. **모의실험 기반 검정**: Monte Carlo 모의실험이나 순열검정으로 카이제곱 근사에 의존하지 않는 p-값을 얻는다.
 
-4. **Yates' continuity correction**: For $2 \times 2$ tables, apply the correction:
+4. **Yates 연속성 보정**: $2 \times 2$ 표에는 다음 보정을 적용한다:
 
 $$
 \chi^2_{\text{Yates}} = \sum \frac{(|O_{ij} - E_{ij}| - 0.5)^2}{E_{ij}}
 $$
 
-This correction reduces the chi-square statistic slightly, producing a more conservative (larger) p-value.
+이 보정은 카이제곱 통계량을 조금 줄여 더 보수적인(더 큰) p-값을 준다.
 
-### Non-Independence
+### 독립성이 성립하지 않을 때
 
-If observations are not independent (e.g., repeated measures on the same subjects), the chi-square test is not appropriate. Consider alternatives such as McNemar's test for paired categorical data.
+관측값이 독립이 아니면(예: 같은 대상을 반복 측정하면) 카이제곱 검정이 적절하지 않다. 대응된 범주형 자료에는 McNemar 검정 같은 대안을 고려한다.
 
-## Practical Guidelines
+## 실무 지침
 
-- Check expected frequencies **before** conducting the test.
-- The rule of 5 is a guideline, not a strict cutoff. Some textbooks suggest that the test is acceptable if no more than 20% of expected frequencies are below 5, and none are below 1.
-- For very large samples, the chi-square test will detect even trivially small deviations from the null hypothesis. In such cases, supplement the test with a measure of **effect size** (see Cramér's V).
-- For very small samples, prefer exact tests over asymptotic chi-square tests.
+- 검정을 수행하기 **전에** 기대도수를 확인하라.
+- 5의 법칙은 지침이지 엄격한 절단값이 아니다. 어떤 교과서는 기대도수가 5 미만인 칸이 20% 이하이고 1 미만인 칸이 없으면 검정이 받아들일 만하다고 본다.
+- 표본이 아주 크면 카이제곱 검정은 귀무가설로부터의 사소한 이탈까지 탐지한다. 이런 경우에는 **효과크기** 측도(Cramér의 V 참조)를 함께 보고하라.
+- 표본이 아주 작으면 점근적 카이제곱 검정보다 정확검정을 택하라.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Plant heights under Conditions A: $[15, 20, 25]$, B: $[10, 15, 35]$. Suitable for chi-square test?
+**연습문제 1.**
+조건 A에서 식물의 키: $[15, 20, 25]$, 조건 B: $[10, 15, 35]$. 카이제곱 검정에 적합한가?
 
-??? success "Solution to Exercise 1"
-    **No.** Chi-square requires categorical/count data; heights are continuous measurements.
+??? success "연습문제 1 풀이"
+    **아니다.** 카이제곱은 범주형/도수 자료를 요구하는데 키는 연속형 측정값이다.
 
-    For comparing continuous distributions: use $t$-test (if approximately normal) or Mann-Whitney U test (non-parametric). The chi-square test would require binning the heights into categories first, losing information.
+    연속형 분포를 비교하려면 (근사적으로 정규이면) $t$-검정을, 아니면 비모수적인 Mann-Whitney U 검정을 쓴다. 카이제곱을 쓰려면 키를 먼저 범주로 구간화해야 하는데 그 과정에서 정보를 잃는다.
 
-    Common chi-square applications: independence in contingency tables, goodness-of-fit for discrete distributions, homogeneity across populations.
-
----
-
-**Exercise 2.**
-**Expected cell count rule.** State the standard rule and what happens when violated.
-
-??? success "Solution to Exercise 2"
-    **Cochran's rule:** all expected cell counts should be $\ge 5$; ideally $\ge 80\%$ of cells.
-
-    More lenient version: at least $20\%$ of cells have expected count $\ge 5$, none $< 1$.
-
-    **When violated:** the chi-square distribution is a poor approximation. Type I error inflated.
-
-    **Remedies:**
-
-    - **Combine cells:** merge categories with low counts.
-    - **Fisher's exact test:** for $2 \times 2$ tables, gives exact p-value.
-    - **Monte Carlo simulation:** simulate null distribution.
-    - **Exact tests** for larger tables (computationally intensive).
+    카이제곱의 흔한 용도: 분할표의 독립성, 이산분포에 대한 적합도, 모집단 사이의 동질성.
 
 ---
 
-**Exercise 3.**
-**$2 \times 2$ table.** $\{\{10, 15\}, \{20, 25\}\}$. Compute expected counts. Test independence at $\alpha = 0.05$.
+**연습문제 2.**
+**기대 칸 도수 규칙.** 표준 규칙을 진술하고 어긋나면 어떻게 되는지 설명하라.
 
-??? success "Solution to Exercise 3"
-    Row totals: 25, 45. Col totals: 30, 40. Grand total: 70.
+??? success "연습문제 2 풀이"
+    **Cochran의 규칙:** 모든 기대 칸 도수가 $\ge 5$이어야 한다.
 
-    Expected: $E_{ij} = (\text{row}_i \cdot \text{col}_j)/N$.
+    좀 더 관대한 형태: 기대도수가 5 미만인 칸이 전체의 $20\%$ 이하이고 1 미만인 칸이 없으면 된다.
+
+    **어긋나면:** 카이제곱 분포가 좋은 근사가 되지 못한다. 제1종 오류가 부풀려진다.
+
+    **대처:**
+
+    - **칸 병합:** 도수가 낮은 범주를 합친다.
+    - **Fisher의 정확검정:** $2 \times 2$ 표에서 정확한 p-값을 준다.
+    - **Monte Carlo 모의실험:** 귀무분포를 모의생성한다.
+    - 더 큰 표에 대한 **정확검정**(계산 비용이 크다).
+
+---
+
+**연습문제 3.**
+**$2 \times 2$ 표.** $\{\{10, 15\}, \{20, 25\}\}$. 기대도수를 계산하고 $\alpha = 0.05$에서 독립성을 검정하라.
+
+??? success "연습문제 3 풀이"
+    행 합계: 25, 45. 열 합계: 30, 40. 총합: 70.
+
+    기대도수: $E_{ij} = (\text{row}_i \cdot \text{col}_j)/N$.
 
     $E_{11} = 25 \cdot 30/70 = 10.71$. $E_{12} = 25 \cdot 40/70 = 14.29$. $E_{21} = 45 \cdot 30/70 = 19.29$. $E_{22} = 45 \cdot 40/70 = 25.71$.
 
-    Chi-square: $\sum (O - E)^2/E = 0.067 + 0.050 + 0.037 + 0.028 = 0.182$.
+    카이제곱: $\sum (O - E)^2/E = 0.048 + 0.036 + 0.026 + 0.020 = 0.130$.
 
-    df = (2-1)(2-1) = 1. Critical $\chi^2_{1, 0.05} = 3.841$. **Fail to reject.** No evidence of dependence.
-
----
-
-**Exercise 4.**
-**Yates' continuity correction** for $2 \times 2$. When is it applied?
-
-??? success "Solution to Exercise 4"
-    Modified statistic: $\chi^2_Y = \sum (|O - E| - 0.5)^2/E$ — subtracts 0.5 from absolute deviation before squaring.
-
-    **Purpose:** discrete counts approximated by continuous chi-square. Correction shifts each |O - E| toward zero, accounting for the gap between integer counts.
-
-    **When to apply:** $2 \times 2$ tables only. Conservative — reduces Type I error but also power.
-
-    **Modern view:** Yates correction is often considered too conservative. Fisher's exact test is preferred for small $2 \times 2$ tables. Yates is a legacy correction; many statisticians omit it.
+    df $= (2-1)(2-1) = 1$. 임계값 $\chi^2_{1, 0.05} = 3.841$. **기각하지 못한다.** 종속의 증거가 없다.
 
 ---
 
-**Exercise 5.**
-**Sample size determination** for chi-square test of independence.
+**연습문제 4.**
+$2 \times 2$ 표에 대한 **Yates 연속성 보정**. 언제 적용하는가?
 
-??? success "Solution to Exercise 5"
-    Power for chi-square depends on the **effect size** $w$ (Cohen's $w$): $w = \sqrt{\sum (p_o - p_e)^2/p_e}$ summed over cells.
+??? success "연습문제 4 풀이"
+    수정된 통계량: $\chi^2_Y = \sum (|O - E| - 0.5)^2/E$. 제곱하기 전에 절대편차에서 0.5를 뺀다.
 
-    Sample size formula (approximate): $n = \lambda_{\alpha, \beta, df}/w^2$.
+    **목적:** 이산인 도수를 연속인 카이제곱으로 근사하기 때문이다. 이 보정은 각 |O − E|를 0 쪽으로 밀어 정수 도수 사이의 간격을 반영한다.
 
-    Common values from non-central chi-square tables:
+    **적용 시점:** $2 \times 2$ 표에만. 보수적이어서 제1종 오류를 줄이지만 검정력도 함께 줄인다.
 
-    - df = 1, 80% power, $\alpha = 0.05$: $\lambda \approx 7.85$.
+    **현대적 관점:** Yates 보정은 지나치게 보수적이라고 보는 경우가 많다. 작은 $2 \times 2$ 표에는 Fisher의 정확검정이 선호된다. Yates는 유산과 같은 보정이며 많은 통계학자가 생략한다.
+
+---
+
+**연습문제 5.**
+카이제곱 독립성 검정의 **표본크기 결정**.
+
+??? success "연습문제 5 풀이"
+    카이제곱의 검정력은 **효과크기** $w$(Cohen의 $w$)에 달려 있다: 칸에 걸쳐 합한 $w = \sqrt{\sum (p_o - p_e)^2/p_e}$.
+
+    표본크기 공식(근사): $n = \lambda_{\alpha, \beta, df}/w^2$.
+
+    비중심 카이제곱 표에서 자주 쓰이는 값:
+
+    - df = 1, 검정력 80%, $\alpha = 0.05$: $\lambda \approx 7.85$.
     - df = 4: $\lambda \approx 11.94$.
 
-    Small effect ($w = 0.1$): $n \approx 785$ for df = 1.
-    Medium ($w = 0.3$): $n \approx 87$.
-    Large ($w = 0.5$): $n \approx 32$.
+    작은 효과($w = 0.1$): df = 1에서 $n \approx 785$.
+    중간($w = 0.3$): $n \approx 87$.
+    큼($w = 0.5$): $n \approx 32$.
 
-    Use `statsmodels.stats.power.GofChisquarePower` or similar for precise computation.
+    정밀한 계산에는 `statsmodels.stats.power.GofChisquarePower` 등을 쓴다.
 
 ---
 
-**Exercise 6.**
-**Common misuses** of chi-square test.
+**연습문제 6.**
+카이제곱 검정의 **흔한 오용**.
 
-??? success "Solution to Exercise 6"
-    1. **Continuous data not categorized:** can't apply directly; bin first or use different test.
-    2. **Non-independent observations:** chi-square assumes independent cells. Repeated measures, paired data need McNemar's test instead.
-    3. **Small expected counts ignored:** violation of Cochran's rule → inflated Type I error.
-    4. **Multiple post-hoc cell comparisons:** without correction, false discovery inflation.
-    5. **Conclusion of "no association" from large p-value:** failing to reject ≠ proving independence. May be inadequate power.
-    6. **Effect size ignored:** highly significant $\chi^2$ with $n = 10^6$ may reflect trivial pattern.
+??? success "연습문제 6 풀이"
+    1. **범주화하지 않은 연속형 자료:** 그대로 적용할 수 없다. 먼저 구간화하거나 다른 검정을 쓴다.
+    2. **독립이 아닌 관측값:** 카이제곱은 칸들이 독립이라고 가정한다. 반복측정이나 대응 자료에는 McNemar 검정을 써야 한다.
+    3. **작은 기대도수를 무시:** Cochran의 규칙 위반 → 제1종 오류 부풀림.
+    4. **사후에 여러 칸을 비교:** 보정 없이 하면 거짓 발견이 늘어난다.
+    5. **큰 p-값에서 "연관 없음"으로 결론:** 기각하지 못한 것은 독립을 증명한 것이 아니다. 검정력이 부족했을 수 있다.
+    6. **효과크기 무시:** $n = 10^6$에서 매우 유의한 $\chi^2$가 사소한 패턴을 반영할 수도 있다.
 
-    Always: check assumptions, report effect size (Cramer's V or odds ratio), consider exact tests for small tables.
+    항상: 가정을 확인하고, 효과크기(Cramér의 V나 오즈비)를 보고하며, 작은 표에는 정확검정을 고려하라.

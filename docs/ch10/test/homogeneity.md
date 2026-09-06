@@ -1,106 +1,106 @@
-# Test of Homogeneity
+# 동질성 검정
 
-## Homogeneity Test vs Independence Test
+## 동질성 검정과 독립성 검정
 
-The **Chi-Square Test of Independence** and the **Chi-Square Test of Homogeneity** use **the exact same computational procedure** — but they **differ in purpose, experimental design, and interpretation**.
+**카이제곱 독립성 검정**과 **카이제곱 동질성 검정**은 **계산 절차가 완전히 같다**. 그러나 **목적, 실험 설계, 해석이 다르다**.
 
-### The Core Similarity
+### 공통점의 핵심
 
-Both tests use the same **χ² test statistic**:
+두 검정 모두 같은 **χ² 검정통계량**
 
 $$
 \chi^2 = \sum \frac{(O_{ij} - E_{ij})^2}{E_{ij}}
 $$
 
-and the same **sampling distribution** (χ² with $(r-1)(c-1)$ degrees of freedom).
+과 같은 **표본분포**(자유도 $(r-1)(c-1)$인 χ²)를 쓴다.
 
-The **expected counts** are computed the same way:
+**기대도수**도 같은 방식으로 계산한다:
 
 $$
 E_{ij} = \frac{(\text{row total})(\text{column total})}{\text{grand total}}
 $$
 
-So if you only looked at the calculations, you could not tell which test you were doing. The difference lies in **how the data were collected** and **what question you are answering**.
+따라서 계산만 보아서는 어느 검정을 하고 있는지 구분할 수 없다. 차이는 **자료를 어떻게 수집했는가**와 **어떤 질문에 답하는가**에 있다.
 
-### The Conceptual Difference
+### 개념적 차이
 
-| Feature               | **Test of Independence**                                                | **Test of Homogeneity**                                                                                |
-|-----------------------|-------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------|
-| **Research question** | Are two categorical variables **associated** (statistically dependent)? | Are **two or more populations** similar (homogeneous) in their distribution of a categorical variable? |
-| **Data source**       | One single random sample, classified by **two variables**.              | Multiple independent random samples, one from each population.                                         |
-| **Example question**  | Is **smoking status** related to **gender** in a population?            | Do **men, women, and teenagers** have the **same distribution** of smoking habits?                     |
-| **Sampling design**   | One sample → cross-classify by both variables.                          | Separate samples from each group (or treatment).                                                       |
-| **Interpretation**    | Tests for **association** or **independence** between two variables.    | Tests for **similarity (homogeneity)** of distributions across populations.                            |
+| 항목               | **독립성 검정**                                                | **동질성 검정**                                                                                |
+|-----------------------|-------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------|
+| **연구 질문** | 두 범주형 변수가 **연관**되어 있는가(통계적으로 종속인가)? | **둘 이상의 모집단**이 어떤 범주형 변수의 분포에서 서로 비슷한가(동질적인가)? |
+| **자료의 출처**       | 하나의 무작위 표본을 **두 변수**로 분류한다.              | 각 모집단에서 하나씩, 여러 개의 독립인 무작위 표본.                                         |
+| **예시 질문**  | 어떤 모집단에서 **흡연 여부**가 **성별**과 관련이 있는가?            | **남성, 여성, 청소년**의 흡연 습관 **분포가 같은가**?                     |
+| **표집 설계**   | 표본 하나 → 두 변수로 교차 분류.                          | 각 집단(또는 처치)에서 별도의 표본.                                                         |
+| **해석**    | 두 변수 사이의 **연관** 또는 **독립**을 검정한다.    | 모집단들에 걸친 분포의 **유사성(동질성)**을 검정한다.                            |
 
-### Example Comparison
+### 예를 통한 비교
 
-#### Independence Example
+#### 독립성 검정의 예
 
-A health researcher surveys **300 people** and records:
+보건 연구자가 **300명**을 조사하여 다음을 기록한다:
 
-- Variable 1: Smoking status (smoker/non-smoker)
-- Variable 2: Gender (male/female)
+- 변수 1: 흡연 여부(흡연자/비흡연자)
+- 변수 2: 성별(남성/여성)
 
-→ One sample, two variables. We test: "Are smoking and gender independent?"
+→ 표본 하나, 변수 둘. 검정하는 것: "흡연과 성별은 독립인가?"
 
-#### Homogeneity Example
+#### 동질성 검정의 예
 
-A different researcher surveys **100 men**, **100 women**, and **100 teenagers**, asking each whether they smoke.
+다른 연구자가 **남성 100명**, **여성 100명**, **청소년 100명**을 조사하여 각각 흡연 여부를 묻는다.
 
-→ Separate samples from each group. We test: "Are the proportions of smokers the same across the three groups?"
+→ 각 집단에서 별도의 표본. 검정하는 것: "세 집단의 흡연자 비율이 같은가?"
 
-### The Subtle Connection
+### 미묘한 연결
 
-Mathematically, both tests analyze a **contingency table** of observed counts, compare them to expected counts under $H_0$, and use the same χ² statistic.
+수학적으로 두 검정 모두 관측도수의 **분할표**를 분석하고 $H_0$ 아래의 기대도수와 비교하며 같은 χ² 통계량을 쓴다.
 
-- In the **independence test**, "rows" and "columns" represent two variables from a *single* population.
-- In the **homogeneity test**, "rows" represent different *populations* or *treatments*, while columns represent categories of one variable.
+- **독립성 검정**에서 "행"과 "열"은 *하나의* 모집단에서 나온 두 변수를 나타낸다.
+- **동질성 검정**에서 "행"은 서로 다른 *모집단* 또는 *처치*를, 열은 한 변수의 범주를 나타낸다.
 
-Under the null hypothesis:
+귀무가설 아래에서는:
 
-- **Independence test:** the two variables are independent.
-- **Homogeneity test:** all populations share the same distribution.
+- **독립성 검정:** 두 변수가 독립이다.
+- **동질성 검정:** 모든 모집단이 같은 분포를 공유한다.
 
-Those are equivalent statements when expressed probabilistically.
+확률적으로 표현하면 두 진술은 동치이다.
 
-### Summary
+### 요약
 
-| Aspect                 | **Independence Test**                  | **Homogeneity Test**                           |
+| 측면                 | **독립성 검정**                  | **동질성 검정**                           |
 |------------------------|----------------------------------------|------------------------------------------------|
-| Data collection        | One sample → two categorical variables | Two or more samples → one categorical variable |
-| Null hypothesis        | The two variables are independent      | All populations have the same distribution     |
-| Alternative hypothesis | The variables are associated           | At least one population differs                |
-| Test statistic & df    | Identical                              | Identical                                      |
-| Interpretation         | Association within a single population | Consistency across populations                 |
+| 자료 수집        | 표본 하나 → 범주형 변수 둘 | 표본 둘 이상 → 범주형 변수 하나 |
+| 귀무가설        | 두 변수가 독립이다      | 모든 모집단의 분포가 같다     |
+| 대립가설 | 두 변수가 연관되어 있다           | 적어도 한 모집단이 다르다     |
+| 검정통계량과 자유도    | 동일                              | 동일                                      |
+| 해석         | 하나의 모집단 안에서의 연관 | 모집단들 사이의 일관성                 |
 
-> **In short:** The **procedure** is the same, but the **context** differs:
-> Independence → relationship *within* one sample.
-> Homogeneity → consistency *across* multiple samples.
+> **요컨대:** **절차**는 같지만 **맥락**이 다르다.
+> 독립성 → 하나의 표본 *안에서*의 관계.
+> 동질성 → 여러 표본 *사이의* 일관성.
 
 ---
 
-## Example A: Hospital Quality
+## 예제 A: 병원의 질
 
-### Question
+### 문제
 
-For each country, we asked how people in the country feel about the hospital quality from five stars to one star. Here is the data.
+각 나라에서 사람들이 병원의 질을 별 다섯에서 별 하나까지 어떻게 평가하는지 물었다. 자료는 다음과 같다.
 
-**Observed:**
+**관측:**
 
 $$
 \begin{array}{cccc}
-\text{Hospital Quality} & \text{US} & \text{Canada} & \text{Mexico} \\ \hline
-\text{5 Star} & 541 & 75 & 231 \\
-\text{4 Star} & 498 & 71 & 213 \\
-\text{3 Star} & 779 & 96 & 321 \\
-\text{2 Star} & 282 & 50 & 345 \\
-\text{1 Star} & 65 & 19 & 120
+\text{병원의 질} & \text{US} & \text{Canada} & \text{Mexico} \\ \hline
+\text{별 5개} & 541 & 75 & 231 \\
+\text{별 4개} & 498 & 71 & 213 \\
+\text{별 3개} & 779 & 96 & 321 \\
+\text{별 2개} & 282 & 50 & 345 \\
+\text{별 1개} & 65 & 19 & 120
 \end{array}
 $$
 
-Is the hospital satisfaction level distribution homogeneous among the countries, or do some differ?
+병원 만족도 분포가 나라들 사이에서 동질적인가, 아니면 다른 나라가 있는가?
 
-### Python Implementation (Without `scipy.stats.chi2_contingency`)
+### Python 구현 (`scipy.stats.chi2_contingency` 없이)
 
 ```python
 import matplotlib.pyplot as plt
@@ -163,7 +163,7 @@ if __name__ == "__main__":
     main()
 ```
 
-### Python Implementation (With `scipy.stats.chi2_contingency`)
+### Python 구현 (`scipy.stats.chi2_contingency` 사용)
 
 ```python
 import matplotlib.pyplot as plt
@@ -212,9 +212,9 @@ if __name__ == "__main__":
     main()
 ```
 
-### Homogeneous Case Comparison
+### 동질적인 경우와의 비교
 
-To illustrate how a homogeneous distribution looks, compare the original data with a case where the distributions are similar across countries:
+동질적인 분포가 어떻게 보이는지 보이기 위해, 원자료를 나라들 사이에 분포가 비슷한 경우와 비교해 보자:
 
 ```python
 import matplotlib.pyplot as plt
@@ -246,7 +246,7 @@ if __name__ == "__main__":
     main()
 ```
 
-### Two-Country Comparison (US vs Canada)
+### 두 나라 비교 (US 대 Canada)
 
 ```python
 import matplotlib.pyplot as plt
@@ -268,25 +268,25 @@ if __name__ == "__main__":
 
 ---
 
-## Example B: Favorite Subject vs. Dominant Hand
+## 예제 B: 좋아하는 과목과 주로 쓰는 손
 
-> **Source**: [Khan Academy — Chi-Square Test Homogeneity](https://www.khanacademy.org/math/ap-statistics/chi-square-tests/chi-square-tests-two-way-tables/v/chi-square-test-homogeneity)
+> **출처**: [Khan Academy — Chi-Square Test Homogeneity](https://www.khanacademy.org/math/ap-statistics/chi-square-tests/chi-square-tests-two-way-tables/v/chi-square-test-homogeneity)
 
-We want to determine whether left-handed and right-handed individuals exhibit similar inclinations towards science, technology, engineering, mathematics, humanities, or none of the above.
+왼손잡이와 오른손잡이가 과학·기술·공학·수학, 인문학, 또는 그 어느 쪽도 아닌 것에 대해 비슷한 성향을 보이는지 판정하고자 한다.
 
-- **Null Hypothesis**: There is no difference in the distribution of subject preferences between left-handed and right-handed individuals.
-- **Alternative Hypothesis**: There is a difference in the distribution of subject preferences between left- and right-handed individuals.
+- **귀무가설**: 왼손잡이와 오른손잡이 사이에 과목 선호 분포의 차이가 없다.
+- **대립가설**: 왼손잡이와 오른손잡이 사이에 과목 선호 분포의 차이가 있다.
 
-We gather a random sample of 60 right-handed individuals and another random sample of 40 left-handed individuals:
+오른손잡이 60명과 왼손잡이 40명을 각각 무작위로 뽑았다:
 
-|            | Right | Left | Total   |
+|            | 오른손 | 왼손 | 합계   |
 |:----------:|:-----:|:----:|:-------:|
 | STEM       | 30    | 10   | **40**  |
-| Humanities | 15    | 25   | **40**  |
-| Equal      | 15    | 5    | **20**  |
-| Total      | **60**| **40** | **100** |
+| 인문학 | 15    | 25   | **40**  |
+| 같음      | 15    | 5    | **20**  |
+| 합계      | **60**| **40** | **100** |
 
-### Python Implementation
+### Python 구현
 
 ```python
 import matplotlib.pyplot as plt
@@ -336,49 +336,49 @@ if __name__ == "__main__":
     main()
 ```
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Drug A: 60/100 successes. B: 55/100. (a) Controlling confounders? (b) $z$-test. (c) $\chi^2$ test. Show equivalence.
+**연습문제 1.**
+약 A: 100명 중 60명 성공. B: 100명 중 55명 성공. (a) 교란변수를 어떻게 통제하는가? (b) $z$-검정. (c) $\chi^2$ 검정. 두 검정이 동치임을 보여라.
 
-??? success "Solution to Exercise 1"
-    (a) **Randomize** participants to A or B. Random assignment balances confounders (age, gender, severity) across groups in expectation.
+??? success "연습문제 1 풀이"
+    (a) 참가자를 A 또는 B에 **무작위 배정**한다. 무작위 배정은 교란변수(나이, 성별, 중증도)를 기댓값 수준에서 두 집단에 균형 있게 배분한다.
 
-    (b) Pooled $\hat p = 115/200 = 0.575$. $\mathrm{SE} = \sqrt{0.575 \cdot 0.425 \cdot (1/100 + 1/100)} \approx 0.0699$.
+    (b) 합동 $\hat p = 115/200 = 0.575$. $\mathrm{SE} = \sqrt{0.575 \cdot 0.425 \cdot (1/100 + 1/100)} \approx 0.0699$.
 
-    $z = (0.60 - 0.55)/0.0699 \approx 0.715$. $|z| < 1.96$. Fail to reject.
+    $z = (0.60 - 0.55)/0.0699 \approx 0.715$. $|z| < 1.96$이므로 기각하지 못한다.
 
-    (c) Expected: all cells 57.5 (success) or 42.5 (failure). $\chi^2 = 4 \cdot (2.5)^2/57.5 + 4 \cdot (2.5)^2/42.5 \approx 0.512$. $0.512 < 3.84$. Fail to reject.
+    (c) 기대도수: 성공 칸은 모두 57.5, 실패 칸은 모두 42.5. $\chi^2 = 2 \cdot (2.5)^2/57.5 + 2 \cdot (2.5)^2/42.5 \approx 0.512$. $0.512 < 3.84$이므로 기각하지 못한다.
 
-    Equivalence: $z^2 = 0.715^2 = 0.511 \approx \chi^2$. For $2 \times 2$ tables, $\chi^2$ test ≡ two-sided $z$-test for proportions.
-
----
-
-**Exercise 2.**
-**Test of homogeneity** vs independence. What's the difference?
-
-??? success "Solution to Exercise 2"
-    Both use chi-square with same statistic and df. Difference is in the **sampling design**:
-
-    **Homogeneity:** fixed margins for one variable (e.g., $n_A = n_B = 100$ pre-specified). Test whether the distribution of the other variable is the same across rows.
-
-    **Independence:** total $n$ is fixed; cell counts randomly distributed. Test whether two variables are independent.
-
-    **Same math, different interpretation.** A drug trial with pre-assigned sample sizes is homogeneity. An observational study of customer preferences is independence.
-
-    Practically: indistinguishable in computation; conceptually distinct because of design assumptions.
+    동치성: $z^2 = 0.715^2 = 0.511 \approx \chi^2$. $2 \times 2$ 표에서 $\chi^2$ 검정은 비율에 대한 양측 $z$-검정과 동치이다.
 
 ---
 
-**Exercise 3.**
-**Multi-population homogeneity.** Three drugs compared: A (60/100), B (55/100), C (45/100). Test if all three have the same success rate.
+**연습문제 2.**
+**동질성 검정**과 독립성 검정. 차이는 무엇인가?
 
-??? success "Solution to Exercise 3"
-    Table: success row = (60, 55, 45), failure row = (40, 45, 55). Total = 300; success total = 160.
+??? success "연습문제 2 풀이"
+    둘 다 같은 통계량과 같은 자유도의 카이제곱을 쓴다. 차이는 **표집 설계**에 있다:
 
-    Pooled $\hat p_{\text{success}} = 160/300 \approx 0.533$.
+    **동질성:** 한 변수의 주변합이 고정된다(예: $n_A = n_B = 100$을 미리 정한다). 다른 변수의 분포가 행들 사이에서 같은지 검정한다.
 
-    Expected per group: success 53.33, failure 46.67.
+    **독립성:** 전체 $n$만 고정되고 칸 도수는 무작위로 배분된다. 두 변수가 독립인지 검정한다.
+
+    **수식은 같고 해석이 다르다.** 표본크기를 미리 정한 약물시험은 동질성이고, 고객 선호에 대한 관찰연구는 독립성이다.
+
+    실무적으로 계산상 구분되지 않지만, 설계 가정 때문에 개념적으로는 구별된다.
+
+---
+
+**연습문제 3.**
+**여러 모집단의 동질성.** 세 약을 비교한다: A (60/100), B (55/100), C (45/100). 세 약의 성공률이 모두 같은지 검정하라.
+
+??? success "연습문제 3 풀이"
+    표: 성공 행 = (60, 55, 45), 실패 행 = (40, 45, 55). 총합 = 300, 성공 합계 = 160.
+
+    합동 $\hat p_{\text{success}} = 160/300 \approx 0.533$.
+
+    집단별 기대도수: 성공 53.33, 실패 46.67.
 
     $\chi^2 = \sum (O - E)^2/E$:
 
@@ -386,60 +386,61 @@ Drug A: 60/100 successes. B: 55/100. (a) Controlling confounders? (b) $z$-test. 
     - B: $(55-53.33)^2/53.33 + (45-46.67)^2/46.67 \approx 0.052 + 0.060 = 0.112$.
     - C: $(45-53.33)^2/53.33 + (55-46.67)^2/46.67 \approx 1.302 + 1.488 = 2.790$.
 
-    Total $\chi^2 \approx 4.69$. df = $(3-1)(2-1) = 2$. Critical $\chi^2_{2, 0.05} = 5.99$. **Fail to reject** at 5%.
+    전체 $\chi^2 \approx 4.69$. df $= (3-1)(2-1) = 2$. 임계값 $\chi^2_{2, 0.05} = 5.99$. 5% 수준에서 **기각하지 못한다**.
 
-    Although Drug C has visibly lower success rate (45% vs 60%), the test doesn't reach significance.
-
----
-
-**Exercise 4.**
-**Post-hoc analysis** after rejecting homogeneity. What's recommended?
-
-??? success "Solution to Exercise 4"
-    After omnibus chi-square rejects $H_0$, find which groups differ.
-
-    **Options:**
-
-    - **Pairwise chi-square** with Bonferroni correction: 3 groups → 3 pairwise tests at $\alpha/3$.
-    - **Adjusted residuals:** $r_{ij} = (O - E)/\sqrt{E \cdot (1 - p_i)(1 - p_j)}$. $|r| > 2$ indicates significant cell.
-    - **Z-test for two proportions** between specific groups of interest.
-
-    Important: control family-wise error or false discovery rate when making multiple comparisons.
+    약 C의 성공률이 눈에 띄게 낮지만(45% 대 60%) 검정은 유의성에 이르지 못한다.
 
 ---
 
-**Exercise 5.**
-**McNemar's test** for paired/matched binary data. Define and contrast with chi-square.
+**연습문제 4.**
+동질성을 기각한 뒤의 **사후분석**. 무엇이 권장되는가?
 
-??? success "Solution to Exercise 5"
-    Setup: same subjects measured twice (pre/post, two raters). Binary outcomes.
+??? success "연습문제 4 풀이"
+    전체 카이제곱이 $H_0$을 기각한 뒤에는 어느 집단이 다른지 찾는다.
 
-    Matched table:
-    | | After + | After - |
+    **선택지:**
+
+    - Bonferroni 보정을 적용한 **쌍별 카이제곱**: 집단이 3개면 쌍별 검정 3개를 $\alpha/3$에서 수행한다.
+    - **조정 잔차:** $r_{ij} = (O - E)/\sqrt{E \cdot (1 - p_i)(1 - p_j)}$. $|r| > 2$이면 그 칸이 유의하다.
+    - 관심 있는 특정 집단 사이의 **두 비율 z-검정**.
+
+    중요: 여러 비교를 할 때에는 가족단위 오류율이나 거짓발견율을 통제해야 한다.
+
+---
+
+**연습문제 5.**
+대응/짝지은 이진 자료에 대한 **McNemar 검정**. 정의하고 카이제곱과 대비하라.
+
+??? success "연습문제 5 풀이"
+    상황: 같은 대상을 두 번 측정한다(전/후, 평가자 두 명). 결과는 이진이다.
+
+    짝지은 표:
+
+    | | 이후 + | 이후 − |
     |---|---|---|
-    | Before + | $a$ | $b$ |
-    | Before - | $c$ | $d$ |
+    | 이전 + | $a$ | $b$ |
+    | 이전 − | $c$ | $d$ |
 
-    **McNemar's statistic:** $\chi^2 = (b - c)^2/(b + c)$. df = 1.
+    **McNemar 통계량:** $\chi^2 = (b - c)^2/(b + c)$, df = 1.
 
-    Tests whether the marginal proportions changed (e.g., "did treatment shift success rate?").
+    주변 비율이 변했는지를 검정한다(예: "처치가 성공률을 옮겼는가?").
 
-    **Contrast with chi-square:** chi-square for independence assumes independent observations. McNemar accounts for pairing — uses only the discordant pairs ($b$, $c$).
+    **카이제곱과의 대비:** 독립성 카이제곱은 관측값이 독립이라고 가정한다. McNemar는 짝지음을 반영하여 불일치 쌍($b$, $c$)만 사용한다.
 
-    Example: agree-disagree pairs in survey, before-after improvements in treatment.
+    예: 설문에서 동의–비동의로 바뀐 쌍, 처치 전후의 개선.
 
 ---
 
-**Exercise 6.**
-**Power analysis** for chi-square homogeneity.
+**연습문제 6.**
+카이제곱 동질성 검정의 **검정력 분석**.
 
-??? success "Solution to Exercise 6"
-    Effect size: $w = \sqrt{\sum (p_{ij} - p_{ij,0})^2/p_{ij,0}}$ where $p_{ij,0}$ is expected under $H_0$.
+??? success "연습문제 6 풀이"
+    효과크기: $w = \sqrt{\sum (p_{ij} - p_{ij,0})^2/p_{ij,0}}$, 여기서 $p_{ij,0}$은 $H_0$ 아래의 기대 확률이다.
 
-    Cohen's conventions: $w = 0.1$ (small), 0.3 (medium), 0.5 (large).
+    Cohen의 관례: $w = 0.1$(작음), 0.3(중간), 0.5(큼).
 
-    Required $n$ for 80% power, $\alpha = 0.05$, df = 2: $\lambda \approx 9.63$, $n = \lambda/w^2$.
+    검정력 80%, $\alpha = 0.05$, df = 2에 필요한 $n$: $\lambda \approx 9.63$, $n = \lambda/w^2$.
 
-    Small effect: $n \approx 963$. Medium: $n \approx 107$. Large: $n \approx 39$.
+    작은 효과: $n \approx 963$. 중간: $n \approx 107$. 큰 효과: $n \approx 39$.
 
-    Use `statsmodels.stats.power.GofChisquarePower` or formal computation. Sample-size planning is essential — underpowered chi-square tests are common in applied research.
+    `statsmodels.stats.power.GofChisquarePower`를 쓰거나 직접 계산한다. 표본크기 계획은 필수적이다. 응용 연구에서 검정력이 부족한 카이제곱 검정이 흔하다.

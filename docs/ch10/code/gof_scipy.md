@@ -1,25 +1,25 @@
-# Chi-Square Goodness-of-Fit (scipy)
+# 카이제곱 적합도 검정 (scipy)
 
-## Overview
+## 개요
 
-This page shows how to perform a chi-square goodness-of-fit test using the convenience function `scipy.stats.chisquare`. Rather than computing the statistic and p-value by hand, `chisquare` accepts observed and expected frequency arrays and returns both values directly. This is the recommended approach for production code once you understand the underlying mathematics.
+이 페이지에서는 편의 함수 `scipy.stats.chisquare`로 카이제곱 적합도 검정을 수행하는 방법을 보인다. 통계량과 p-값을 손으로 계산하는 대신 `chisquare`에 관측도수와 기대도수 배열을 넘기면 두 값을 바로 돌려준다. 바탕에 있는 수학을 이해한 뒤라면 실무 코드에서는 이 방식을 권한다.
 
-## Hypotheses
+## 가설
 
-- **Null Hypothesis** ($H_0$): The observed frequencies follow the specified expected distribution.
-- **Alternative Hypothesis** ($H_A$): The observed frequencies do not follow the specified expected distribution.
+- **귀무가설** ($H_0$): 관측도수가 지정된 기대분포를 따른다.
+- **대립가설** ($H_A$): 관측도수가 지정된 기대분포를 따르지 않는다.
 
-## Test Statistic
+## 검정통계량
 
-The function internally computes
+이 함수는 내부적으로
 
 $$
 \chi^2 = \sum_{i=1}^{k} \frac{(O_i - E_i)^2}{E_i}
 $$
 
-with $\text{df} = k - 1$ degrees of freedom, where $k$ is the number of categories.
+을 자유도 $\text{df} = k - 1$로 계산한다. 여기서 $k$는 범주의 개수이다.
 
-## Code
+## 코드
 
 ```python
 from scipy import stats
@@ -41,32 +41,32 @@ print(f"{chi_square_statistic = }")
 print(f"{p_value = }")
 ```
 
-**Key parameters of `stats.chisquare`:**
+**`stats.chisquare`의 주요 인자:**
 
-| Parameter | Description |
+| 인자 | 설명 |
 |-----------|-------------|
-| `f_obs` | Array of observed frequencies |
-| `f_exp` | Array of expected frequencies (must sum to same total as `f_obs`). If omitted, a uniform distribution is assumed. |
-| `ddof` | Adjustment to degrees of freedom. Default is 0, giving $\text{df} = k - 1$. If parameters were estimated from data, set `ddof` accordingly. |
+| `f_obs` | 관측도수 배열 |
+| `f_exp` | 기대도수 배열(`f_obs`와 합이 같아야 한다). 생략하면 균등분포를 가정한다. |
+| `ddof` | 자유도 조정. 기본값은 0이며 $\text{df} = k - 1$이 된다. 자료로부터 모수를 추정했다면 그에 맞게 설정한다. |
 
-**Output for this example:**
+**이 예제의 출력:**
 
 - `chi_square_statistic = 5.25`
 - `p_value = 0.07249...`
 
-## When to Omit f_exp
+## f_exp를 생략해도 되는 경우
 
-If the null hypothesis specifies a uniform distribution, you can omit `f_exp` entirely:
+귀무가설이 균등분포를 지정한다면 `f_exp`를 아예 생략해도 된다:
 
 ```python
 statistic, p = stats.chisquare(f_obs=[4, 13, 7])
 ```
 
-SciPy will automatically set each expected frequency to $n / k$ where $n$ is the total count and $k$ is the length of `f_obs`.
+SciPy가 자동으로 각 기대도수를 $n / k$로 설정한다. 여기서 $n$은 전체 도수, $k$는 `f_obs`의 길이이다.
 
-## Non-Uniform Expected Proportions
+## 균등하지 않은 기대 비율
 
-When the null hypothesis specifies unequal proportions $p_1, p_2, \ldots, p_k$, compute expected counts as $E_i = n \cdot p_i$ and pass them explicitly:
+귀무가설이 서로 다른 비율 $p_1, p_2, \ldots, p_k$를 지정하면 기대도수를 $E_i = n \cdot p_i$로 계산하여 명시적으로 넘긴다:
 
 ```python
 n = 300
@@ -75,55 +75,55 @@ expected = [n * p for p in proportions]
 stat, pval = stats.chisquare(f_obs=[130, 85, 85], f_exp=expected)
 ```
 
-## Interpretation
+## 해석
 
-For the rock-paper-scissors example, the function returns $\chi^2 = 5.25$ with $p \approx 0.0725$. At significance level $\alpha = 0.05$, we fail to reject $H_0$. There is insufficient evidence that the game outcomes deviate from an equal distribution.
+가위바위보 예제에서 이 함수는 $\chi^2 = 5.25$와 $p \approx 0.0725$를 준다. 유의수준 $\alpha = 0.05$에서 $H_0$을 기각하지 못한다. 경기 결과가 균등분포에서 벗어난다는 증거가 충분하지 않다.
 
-The `scipy.stats.chisquare` function is a thin wrapper around the manual calculation. Its main advantages are brevity and fewer opportunities for arithmetic mistakes.
+`scipy.stats.chisquare` 함수는 수동 계산을 얇게 감싼 것이다. 주된 장점은 간결함과 계산 실수의 여지가 줄어든다는 점이다.
 
-## Exercises
+## 연습문제
 
-**1.** Run `stats.chisquare` with only `f_obs=[10, 20, 30]` (no `f_exp`). What expected frequencies does SciPy assume, and what are the resulting statistic and p-value?
+**1.** `stats.chisquare`를 `f_obs=[10, 20, 30]`만 주고(`f_exp` 없이) 실행하라. SciPy는 어떤 기대도수를 가정하며, 통계량과 p-값은 얼마인가?
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
 
-    SciPy assumes a uniform distribution, so $E_i = 60/3 = 20$ for each category. The statistic is
+    SciPy는 균등분포를 가정하므로 각 범주에서 $E_i = 60/3 = 20$이다. 통계량은
 
     $$
     \chi^2 = \frac{(10-20)^2}{20} + \frac{(20-20)^2}{20} + \frac{(30-20)^2}{20} = 5 + 0 + 5 = 10.0
     $$
 
-    With $\text{df} = 2$, the p-value is $P(\chi^2_2 \ge 10) \approx 0.0067$. We would reject $H_0$ at $\alpha = 0.05$. $\square$
+    이다. $\text{df} = 2$에서 p-값은 $P(\chi^2_2 \ge 10) \approx 0.0067$이므로 $\alpha = 0.05$에서 $H_0$을 기각한다. $\square$
 
 ---
 
-**2.** A researcher fits a Poisson model to data and estimates the parameter $\lambda$ from the sample. The data has 5 categories. What value should be passed to the `ddof` parameter and why?
+**2.** 어떤 연구자가 자료에 Poisson 모형을 적합하고 표본으로부터 모수 $\lambda$를 추정했다. 자료의 범주는 5개이다. `ddof` 인자에 어떤 값을 넘겨야 하며 이유는 무엇인가?
 
-??? success "Solution to Exercise 2"
+??? success "연습문제 2 풀이"
 
-    One parameter ($\lambda$) was estimated from the data, so we lose one additional degree of freedom. Pass `ddof=1`, which makes $\text{df} = k - 1 - \text{ddof} = 5 - 1 - 1 = 3$. The `ddof` parameter accounts for parameters estimated from the data that reduce the degrees of freedom beyond the standard $k-1$ baseline. $\square$
-
----
-
-**3.** What happens if the sum of `f_exp` does not equal the sum of `f_obs`? Test this with `stats.chisquare(f_obs=[10, 20], f_exp=[5, 5])` and explain the result.
-
-??? success "Solution to Exercise 3"
-
-    SciPy will raise an error or produce a misleading result because the total expected count (10) does not match the total observed count (30). Specifically, `stats.chisquare` does **not** automatically rescale `f_exp`. Before the test is meaningful, the expected counts must sum to the same total as the observed counts. The correct call would rescale: `f_exp=[15, 15]` or use proportions multiplied by the observed total. $\square$
+    모수 하나($\lambda$)를 자료로부터 추정했으므로 자유도를 하나 더 잃는다. `ddof=1`을 넘기면 $\text{df} = k - 1 - \text{ddof} = 5 - 1 - 1 = 3$이 된다. `ddof` 인자는 자료로부터 추정한 모수가 표준 기준선 $k-1$보다 자유도를 더 줄이는 것을 반영한다. $\square$
 
 ---
 
-**4.** Show algebraically that the chi-square statistic can be rewritten as
+**3.** `f_exp`의 합이 `f_obs`의 합과 같지 않으면 어떻게 되는가? `stats.chisquare(f_obs=[10, 20], f_exp=[5, 5])`로 시험해 보고 결과를 설명하라.
+
+??? success "연습문제 3 풀이"
+
+    기대도수의 합(10)이 관측도수의 합(30)과 맞지 않으므로 SciPy는 오류를 내거나 오도하는 결과를 준다. 구체적으로 `stats.chisquare`는 `f_exp`를 자동으로 다시 축척하지 **않는다**. 검정이 의미를 가지려면 기대도수의 합이 관측도수의 합과 같아야 한다. 올바른 호출은 `f_exp=[15, 15]`처럼 다시 축척하거나, 비율에 관측 총합을 곱해서 쓰는 것이다. $\square$
+
+---
+
+**4.** 카이제곱 통계량이 다음과 같이 다시 쓰일 수 있음을 대수적으로 보여라:
 
 $$
 \chi^2 = \sum_{i=1}^{k} \frac{O_i^2}{E_i} - n
 $$
 
-where $n = \sum_{i=1}^{k} O_i = \sum_{i=1}^{k} E_i$.
+여기서 $n = \sum_{i=1}^{k} O_i = \sum_{i=1}^{k} E_i$이다.
 
-??? success "Solution to Exercise 4"
+??? success "연습문제 4 풀이"
 
-    Expand the standard formula:
+    표준 공식을 전개하면
 
     $$
     \chi^2 = \sum_{i=1}^{k} \frac{(O_i - E_i)^2}{E_i} = \sum_{i=1}^{k} \frac{O_i^2 - 2O_iE_i + E_i^2}{E_i}
@@ -133,21 +133,21 @@ where $n = \sum_{i=1}^{k} O_i = \sum_{i=1}^{k} E_i$.
     = \sum_{i=1}^{k} \frac{O_i^2}{E_i} - 2\sum_{i=1}^{k} O_i + \sum_{i=1}^{k} E_i
     $$
 
-    Since $\sum O_i = \sum E_i = n$, this simplifies to
+    이다. $\sum O_i = \sum E_i = n$이므로 이는
 
     $$
     \chi^2 = \sum_{i=1}^{k} \frac{O_i^2}{E_i} - 2n + n = \sum_{i=1}^{k} \frac{O_i^2}{E_i} - n
     $$
 
-    $\square$
+    으로 단순해진다. $\square$
 
 ---
 
-**5.** A bag is claimed to contain 50% red, 30% blue, and 20% green marbles. You draw 200 marbles (with replacement) and observe $[90, 70, 40]$. Use `stats.chisquare` to test the claim at $\alpha = 0.01$. State your conclusion.
+**5.** 어떤 주머니에 빨강 50%, 파랑 30%, 초록 20%의 구슬이 들어 있다고 한다. 구슬 200개를 (복원으로) 뽑아 $[90, 70, 40]$을 관측했다. `stats.chisquare`로 $\alpha = 0.01$에서 이 주장을 검정하고 결론을 서술하라.
 
-??? success "Solution to Exercise 5"
+??? success "연습문제 5 풀이"
 
-    Expected counts: $E = [200 \times 0.5,\; 200 \times 0.3,\; 200 \times 0.2] = [100, 60, 40]$.
+    기대도수: $E = [200 \times 0.5,\; 200 \times 0.3,\; 200 \times 0.2] = [100, 60, 40]$.
 
     ```python
     from scipy import stats
@@ -158,4 +158,4 @@ where $n = \sum_{i=1}^{k} O_i = \sum_{i=1}^{k} E_i$.
     \chi^2 = \frac{(90-100)^2}{100} + \frac{(70-60)^2}{60} + \frac{(40-40)^2}{40} = 1.0 + 1.667 + 0 = 2.667
     $$
 
-    With $\text{df} = 2$, the p-value is approximately $0.2636$. Since $p = 0.2636 > 0.01 = \alpha$, we **fail to reject** $H_0$. The data is consistent with the claimed proportions at the 1% significance level. $\square$
+    $\text{df} = 2$에서 p-값은 약 $0.2636$이다. $p = 0.2636 > 0.01 = \alpha$이므로 $H_0$을 **기각하지 못한다**. 1% 유의수준에서 자료는 주장된 비율과 부합한다. $\square$

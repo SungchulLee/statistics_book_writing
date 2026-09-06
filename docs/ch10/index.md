@@ -1,68 +1,68 @@
-# Chapter 10: Chi-Square Tests
+# 10장: 카이제곱 검정
 
-## Overview
+## 개요
 
-Chi-square tests are the primary tools for analyzing categorical data. This chapter develops the connection between the chi-square distribution and categorical frequency data, then applies it to three major tests: the goodness-of-fit test (does an observed distribution match a hypothesized one?), the test of independence (are two categorical variables associated?), and the test of homogeneity (do multiple populations share the same distribution?). Practical considerations such as expected cell count requirements and effect size measurement with Cramer's V are also covered.
-
----
-
-## Chapter Structure
-
-### 10.1 Chi-Square Distribution and Asymptotics
-
-The theoretical foundation connecting the chi-square distribution to categorical data analysis:
-
-- **Chi-Square Distribution** -- Derives the chi-square distribution as the sum of squared standard normal variables, establishes its connection to multinomial count data, and shows how the Pearson chi-square statistic arises from the normal approximation to cell counts.
-- **Degrees of Freedom and Asymptotic Theory** -- Explains how degrees of freedom are computed for goodness-of-fit tests (k minus 1), independence tests ((r minus 1) times (c minus 1)), and homogeneity tests, and discusses the asymptotic validity of the chi-square approximation.
-
-### 10.2 Chi-Square Tests for Categorical Data
-
-The three major applications of the chi-square test to categorical frequency data:
-
-- **Goodness-of-Fit Test** -- Tests whether an observed frequency distribution matches a hypothesized distribution across k categories, using a frequency table of observed versus expected counts and the Pearson chi-square statistic.
-- **Test of Independence** -- Tests whether two categorical variables are associated within a single sample, using a contingency table to compare observed cell frequencies with expected frequencies computed under the independence assumption.
-- **Test of Homogeneity** -- Tests whether multiple independent populations share the same distribution of a categorical variable, using the same chi-square computation as the independence test but with a different sampling design and interpretation.
-
-### 10.3 Practical Considerations
-
-Guidelines for ensuring the validity and interpretability of chi-square test results:
-
-- **Expected Cell Counts and Validity Conditions** -- States the rule of thumb that all expected cell frequencies should be at least 5, explains why the condition applies to expected (not observed) counts, and describes alternatives (combining categories, Fisher's exact test) when the condition is violated.
-- **Effect Size and Cramer's V** -- Introduces Cramer's V as a standardized measure of association strength, ranging from 0 (no association) to 1 (perfect association), and provides interpretation guidelines for small, medium, and large effect sizes.
-
-### 10.4 Code
-
-Complete Python implementations:
-
-- **gof_manual.py** -- Manual (step-by-step) computation of the chi-square goodness-of-fit test.
-- **gof_scipy.py** -- Goodness-of-fit test using scipy.stats.chisquare.
-- **independence_manual.py** -- Manual computation of the independence test with a visualization of observed versus expected counts.
-- **independence_template.py** -- Reusable template function for performing chi-square independence tests.
-- **homogeneity_basic.py** -- Homogeneity test using scipy.stats.chi2_contingency.
-- **homogeneity_residuals.py** -- Residual heatmap visualization for diagnosing which cells drive a significant homogeneity test result.
-- **fisher_exact.py** -- Fisher's exact test for 2x2 tables when expected counts are too small for the chi-square approximation.
-- **mcnemar_test.py** -- McNemar's test for paired binary data.
-- **cochran_q.py** -- Cochran's Q test for comparing k related binary outcomes.
-
-### 10.5 Exercises
-
-Practice problems covering goodness-of-fit tests for distributional assumptions, independence tests on contingency tables, validity condition checks, and test statistic computation.
+카이제곱 검정은 범주형 자료를 분석하는 대표적인 도구이다. 이 장에서는 카이제곱 분포와 범주형 도수 자료 사이의 연결을 세운 뒤, 이를 세 가지 주요 검정에 적용한다: 적합도 검정(관측된 분포가 가설의 분포와 맞는가?), 독립성 검정(두 범주형 변수가 관련되어 있는가?), 동질성 검정(여러 모집단이 같은 분포를 공유하는가?). 기대도수 요건이나 Cramér의 V를 이용한 효과크기 측정 같은 실무적 고려사항도 함께 다룬다.
 
 ---
 
-## Prerequisites
+## 장의 구성
 
-This chapter builds on:
+### 10.1 카이제곱 분포와 점근 이론
 
-- **Chapter 5** (Sampling Distributions) -- The chi-square distribution, its properties, and its role as a sampling distribution.
-- **Chapter 9** (Hypothesis Testing) -- The general framework of null and alternative hypotheses, test statistics, p-values, and decision rules.
+카이제곱 분포를 범주형 자료 분석에 잇는 이론적 토대:
+
+- **카이제곱 분포** --- 카이제곱 분포를 표준정규 확률변수의 제곱합으로 유도하고, 다항 도수 자료와의 연결을 확립하며, 칸 도수의 정규근사에서 Pearson 카이제곱 통계량이 어떻게 나오는지 보인다.
+- **자유도와 점근 이론** --- 적합도 검정(k − 1), 독립성 검정((r − 1)(c − 1)), 동질성 검정에서 자유도를 어떻게 계산하는지 설명하고 카이제곱 근사의 점근적 타당성을 논의한다.
+
+### 10.2 범주형 자료에 대한 카이제곱 검정
+
+카이제곱 검정을 범주형 도수 자료에 적용하는 세 가지 주요 방식:
+
+- **적합도 검정** --- 관측된 도수분포가 k개 범주에 걸쳐 가설의 분포와 맞는지를, 관측도수 대 기대도수의 도수표와 Pearson 카이제곱 통계량으로 검정한다.
+- **독립성 검정** --- 하나의 표본 안에서 두 범주형 변수가 관련되어 있는지를, 분할표를 써서 관측 칸 도수와 독립 가정 아래 계산한 기대도수를 비교하여 검정한다.
+- **동질성 검정** --- 여러 독립인 모집단이 어떤 범주형 변수에 대해 같은 분포를 공유하는지를 검정한다. 계산은 독립성 검정과 같지만 표집 설계와 해석이 다르다.
+
+### 10.3 실무적 고려사항
+
+카이제곱 검정 결과의 타당성과 해석 가능성을 확보하기 위한 지침:
+
+- **기대 칸 도수와 타당성 조건** --- 모든 기대 칸 도수가 적어도 5 이상이어야 한다는 경험 법칙을 제시하고, 이 조건이 (관측도수가 아니라) 기대도수에 적용되는 이유를 설명하며, 조건이 어긋날 때의 대안(범주 병합, Fisher의 정확검정)을 기술한다.
+- **효과크기와 Cramér의 V** --- 연관의 강도를 재는 표준화된 척도로 Cramér의 V를 소개한다. 0(연관 없음)부터 1(완전한 연관)까지의 값을 가지며, 작은·중간·큰 효과크기의 해석 지침을 제공한다.
+
+### 10.4 코드
+
+완전한 Python 구현:
+
+- **gof_manual.py** --- 카이제곱 적합도 검정의 단계별 수동 계산.
+- **gof_scipy.py** --- `scipy.stats.chisquare`를 이용한 적합도 검정.
+- **independence_manual.py** --- 독립성 검정의 수동 계산과 관측도수 대 기대도수의 시각화.
+- **independence_template.py** --- 카이제곱 독립성 검정을 수행하는 재사용 가능한 템플릿 함수.
+- **homogeneity_basic.py** --- `scipy.stats.chi2_contingency`를 이용한 동질성 검정.
+- **homogeneity_residuals.py** --- 유의한 동질성 검정 결과를 어느 칸이 이끄는지 진단하는 잔차 열지도 시각화.
+- **fisher_exact.py** --- 기대도수가 너무 작아 카이제곱 근사를 쓸 수 없는 2×2 표에 대한 Fisher의 정확검정.
+- **mcnemar_test.py** --- 대응된 이진 자료에 대한 McNemar 검정.
+- **cochran_q.py** --- 관련된 k개의 이진 결과를 비교하는 Cochran의 Q 검정.
+
+### 10.5 연습문제
+
+분포 가정에 대한 적합도 검정, 분할표에 대한 독립성 검정, 타당성 조건 확인, 검정통계량 계산을 다루는 연습문제.
 
 ---
 
-## Key Takeaways
+## 선행 지식
 
-1. The Pearson chi-square statistic measures the discrepancy between observed and expected categorical counts and follows an approximate chi-square distribution under the null hypothesis when expected counts are sufficiently large.
-2. The goodness-of-fit test assesses whether a single categorical variable follows a hypothesized distribution, while the independence and homogeneity tests assess relationships between two categorical variables under different sampling designs.
-3. The test of independence and the test of homogeneity use identical computations but differ in the research question and data collection design: one sample classified by two variables versus multiple samples compared on one variable.
-4. Validity of the chi-square approximation requires all expected cell counts to be at least 5; when this condition is violated, Fisher's exact test or category collapsing should be used instead.
-5. Statistical significance alone does not indicate practical importance; Cramer's V provides a standardized effect size that quantifies the strength of the association independent of sample size.
+이 장은 다음 내용 위에 세워진다:
+
+- **5장** (표본분포) --- 카이제곱 분포와 그 성질, 그리고 표본분포로서의 역할.
+- **9장** (가설검정) --- 귀무가설과 대립가설, 검정통계량, p-값, 판정 규칙이라는 일반적 틀.
+
+---
+
+## 핵심 요점
+
+1. Pearson 카이제곱 통계량은 관측된 범주 도수와 기대 도수 사이의 어긋남을 재며, 기대도수가 충분히 클 때 귀무가설 아래에서 근사적으로 카이제곱 분포를 따른다.
+2. 적합도 검정은 하나의 범주형 변수가 가설의 분포를 따르는지 평가하고, 독립성 검정과 동질성 검정은 서로 다른 표집 설계 아래에서 두 범주형 변수 사이의 관계를 평가한다.
+3. 독립성 검정과 동질성 검정은 계산이 완전히 같지만 연구 질문과 자료 수집 설계가 다르다. 한쪽은 두 변수로 분류된 하나의 표본이고, 다른 쪽은 하나의 변수에 대해 비교하는 여러 표본이다.
+4. 카이제곱 근사가 타당하려면 모든 기대 칸 도수가 적어도 5 이상이어야 한다. 이 조건이 어긋나면 Fisher의 정확검정을 쓰거나 범주를 병합해야 한다.
+5. 통계적 유의성만으로는 실질적 중요성을 알 수 없다. Cramér의 V는 표본크기와 무관하게 연관의 강도를 재는 표준화된 효과크기를 제공한다.

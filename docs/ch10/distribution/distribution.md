@@ -1,152 +1,153 @@
-# Chi-Square Distribution
+# 카이제곱 분포
 
-## Overview
+## 개요
 
-The **chi-square distribution** arises naturally when summing squares of independent standard normal random variables. If $Z_1, Z_2, \dots, Z_k$ are independent standard normal variables, then
+**카이제곱 분포**는 독립인 표준정규 확률변수의 제곱을 더할 때 자연스럽게 나타난다. $Z_1, Z_2, \dots, Z_k$가 독립인 표준정규 확률변수이면
 
 $$
 Q = \sum_{i=1}^{k} Z_i^2 \sim \chi^2_k
 $$
 
-follows a chi-square distribution with $k$ degrees of freedom.
+는 자유도 $k$인 카이제곱 분포를 따른다.
 
-This distribution is fundamental to several hypothesis tests for categorical data, including the **goodness-of-fit test**, the **test of independence**, and the **test of homogeneity**.
+이 분포는 범주형 자료에 대한 여러 가설검정, 즉 **적합도 검정**, **독립성 검정**, **동질성 검정**의 바탕이 된다.
 
-## Connection to Categorical Data
+## 범주형 자료와의 연결
 
-We have a categorical variable with $k$ possible outcomes.
+가능한 결과가 $k$개인 범주형 변수를 생각하자.
 
-- Observed counts: $O_1, O_2, \dots, O_k$
-- Expected counts (under $H_0$): $E_1, E_2, \dots, E_k$
+- 관측도수: $O_1, O_2, \dots, O_k$
+- 기대도수($H_0$ 아래): $E_1, E_2, \dots, E_k$
 
-Under the null hypothesis $H_0$, the probabilities are fixed at $p_1, p_2, \dots, p_k$.
-We want to see whether the deviations $O_i - E_i$ are small enough to be attributed to chance.
+귀무가설 $H_0$ 아래에서 확률은 $p_1, p_2, \dots, p_k$로 고정된다.
+우리가 알고 싶은 것은 편차 $O_i - E_i$가 우연으로 돌릴 만큼 작은지이다.
 
-## Normal Approximation to Counts
+## 도수의 정규근사
 
-If the total number of observations is $n$, then the vector of counts
+전체 관측 수가 $n$이면 도수 벡터
 
 $$
 (O_1, O_2, \dots, O_k)
 $$
 
-follows a **multinomial distribution** with parameters $n$ and $(p_1, p_2, \dots, p_k)$.
+는 모수가 $n$과 $(p_1, p_2, \dots, p_k)$인 **다항분포**를 따른다.
 
-For large $n$, by the **multivariate Central Limit Theorem**, this multinomial distribution can be approximated by a **multivariate normal distribution**:
+$n$이 크면 **다변량 중심극한정리**에 의해 이 다항분포를 **다변량 정규분포**로 근사할 수 있다:
 
 $$
 O_i \approx N(E_i, \operatorname{Var}(O_i))
 $$
 
-with:
+여기서
 
 $$
 E[O_i] = n p_i, \quad \operatorname{Var}(O_i) = n p_i (1 - p_i), \quad \operatorname{Cov}(O_i, O_j) = -n p_i p_j
 $$
 
-That negative covariance reflects the fact that the counts must sum to $n$ — if one category has more counts, others must have fewer.
+이다. 공분산이 음수인 것은 도수의 합이 $n$이어야 한다는 사실을 반영한다. 한 범주의 도수가 많아지면 다른 범주는 적어질 수밖에 없다.
 
-## Standardizing the Deviations
+## 편차의 표준화
 
-Define standardized residuals:
+표준화 잔차를 다음과 같이 정의하자:
 
 $$
 Z_i = \frac{O_i - E_i}{\sqrt{E_i}}
 $$
 
-If the categories were *independent*, each $Z_i$ would be approximately standard normal ($N(0,1)$).
-Then the sum of their squares
+범주들이 *독립*이라면 각 $Z_i$는 근사적으로 표준정규 $N(0,1)$을 따를 것이다.
+그러면 그 제곱합
 
 $$
 \sum Z_i^2 = \sum \frac{(O_i - E_i)^2}{E_i}
 $$
 
-would approximately follow a $\chi^2$ distribution with $k$ degrees of freedom.
+은 근사적으로 자유도 $k$인 $\chi^2$ 분포를 따를 것이다.
 
-## The Constraint
+## 제약
 
-Here is the key insight: because the total count $n$ is fixed,
+여기서 핵심이 되는 통찰은, 전체 도수 $n$이 고정되어 있으므로
 
 $$
 \sum_{i=1}^{k} (O_i - E_i) = 0
 $$
 
-That is a **constraint**, meaning only $k - 1$ of the $O_i - E_i$ values are free to vary. One of them is always determined by the others.
+이 성립한다는 점이다. 이것이 **제약**이며, $O_i - E_i$ 값 중 $k - 1$개만 자유롭게 변할 수 있다는 뜻이다. 나머지 하나는 언제나 다른 것들에 의해 결정된다.
 
-## The Chi-Square Test Statistic
+## 카이제곱 검정통계량
 
-Therefore, the test statistic
+따라서 검정통계량
 
 $$
 \chi^2 = \sum_{i=1}^{k} \frac{(O_i - E_i)^2}{E_i}
 $$
 
-is approximately distributed as a **chi-square with $k - 1$ degrees of freedom** because:
+은 근사적으로 **자유도 $k - 1$인 카이제곱 분포**를 따른다. 이유는 다음과 같다:
 
-- Each standardized term behaves approximately like a squared standard normal variable.
-- The sum involves $k$ such terms.
-- One degree of freedom is lost due to the constraint that total counts must add up to $n$.
+- 표준화된 각 항은 근사적으로 표준정규의 제곱처럼 행동한다.
+- 그런 항이 $k$개 더해진다.
+- 전체 도수의 합이 $n$이어야 한다는 제약 때문에 자유도 하나를 잃는다.
 
-Hence:
+그러므로:
 
 $$
 \boxed{\chi^2 \sim \chi^2_{(k-1)} \text{ approximately under } H_0.}
 $$
 
-## About the Denominator
+## 분모에 관하여
 
-### The True Standardization
+### 참된 표준화
 
-For each category $i$:
+각 범주 $i$에 대해
 
 $$
 Z_i = \frac{O_i - E_i}{\sqrt{\operatorname{Var}(O_i)}}
 $$
 
-and under the multinomial model:
+이고, 다항 모형 아래에서
 
 $$
 \operatorname{Var}(O_i) = n p_i (1 - p_i)
 $$
 
-### The Practical Approximation
+이다.
 
-In practice, when $n$ is large and each $p_i$ is small or moderate,
-$1 - p_i \approx 1$.
+### 실용적 근사
 
-That leads to the approximation:
+실제로는 $n$이 크고 각 $p_i$가 작거나 중간 정도이면 $1 - p_i \approx 1$이다.
+
+그러면 다음 근사가 성립한다:
 
 $$
 \sqrt{\operatorname{Var}(O_i)} = \sqrt{n p_i (1 - p_i)} \approx \sqrt{n p_i} = \sqrt{E_i}
 $$
 
-So the **true denominator** should be $\sqrt{n p_i (1 - p_i)}$, but because $(1 - p_i)$ is close to 1 and we want a test that sums over all categories, we simplify to $\sqrt{E_i}$.
+즉 **참된 분모**는 $\sqrt{n p_i (1 - p_i)}$여야 하지만, $(1 - p_i)$가 1에 가깝고 모든 범주에 걸쳐 합하는 검정을 원하므로 $\sqrt{E_i}$로 단순화한다.
 
-This simplification is part of what makes the test statistic
+이 단순화 덕분에 검정통계량
 
 $$
 \chi^2 = \sum_i \frac{(O_i - E_i)^2}{E_i}
 $$
 
-work so cleanly in practice.
+이 실무에서 이토록 깔끔하게 작동한다.
 
-## Historical Note
+## 역사적 각주
 
-In 1900, Pearson published a paper claiming that as $n \rightarrow \infty$
+1900년에 Pearson은 $n \rightarrow \infty$일 때
 
 $$
 \sum_{i=1}^k \frac{(O_i - E_i)^2}{E_i} \Rightarrow \chi^2_{k-1}
 $$
 
-However, there was some controversy in practical applications, and it was not settled for 20 years until Fisher's 1922 and 1924 papers.
+임을 주장하는 논문을 발표했다. 그러나 실제 적용을 두고 논란이 있었고, Fisher의 1922년과 1924년 논문이 나오기까지 20년 동안 정리되지 않았다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-A fair die is rolled 120 times, producing the following counts: 1 (18), 2 (22), 3 (17), 4 (25), 5 (19), 6 (19). Compute the chi-square test statistic. With 5 degrees of freedom, the critical value at $\alpha = 0.05$ is 11.07. Is there evidence the die is unfair?
+**연습문제 1.**
+공정한 주사위를 120번 굴려 다음 도수를 얻었다: 1 (18), 2 (22), 3 (17), 4 (25), 5 (19), 6 (19). 카이제곱 검정통계량을 계산하라. 자유도 5에서 $\alpha = 0.05$의 임계값은 11.07이다. 주사위가 공정하지 않다는 증거가 있는가?
 
-??? success "Solution to Exercise 1"
-    Under $H_0$ (fair die), each expected count is $E_i = 120/6 = 20$.
+??? success "연습문제 1 풀이"
+    $H_0$(공정한 주사위) 아래에서 각 기대도수는 $E_i = 120/6 = 20$이다.
 
     $$
     \chi^2 = \frac{(18-20)^2}{20} + \frac{(22-20)^2}{20} + \frac{(17-20)^2}{20} + \frac{(25-20)^2}{20} + \frac{(19-20)^2}{20} + \frac{(19-20)^2}{20}
@@ -156,38 +157,38 @@ A fair die is rolled 120 times, producing the following counts: 1 (18), 2 (22), 
     = \frac{4+4+9+25+1+1}{20} = \frac{44}{20} = 2.2
     $$
 
-    Since $\chi^2 = 2.2 < 11.07$, we **fail to reject** $H_0$. There is no evidence that the die is unfair.
+    $\chi^2 = 2.2 < 11.07$이므로 $H_0$을 **기각하지 못한다**. 주사위가 공정하지 않다는 증거는 없다.
 
 ---
 
-**Exercise 2.**
-Explain why the chi-square statistic uses $E_i$ in the denominator rather than $O_i$.
+**연습문제 2.**
+카이제곱 통계량이 분모에 $O_i$가 아니라 $E_i$를 쓰는 이유를 설명하라.
 
-??? success "Solution to Exercise 2"
-    The denominator $E_i$ serves as a standardization factor. Each term $(O_i - E_i)^2 / E_i$ is approximately a squared standard normal variable because:
+??? success "연습문제 2 풀이"
+    분모 $E_i$는 표준화 인자 역할을 한다. 각 항 $(O_i - E_i)^2 / E_i$가 근사적으로 표준정규의 제곱이 되는 것은 다음 때문이다:
 
     $$
     \text{Var}(O_i) \approx E_i \quad \text{(when } np_i(1-p_i) \approx np_i = E_i\text{)}
     $$
 
-    Using $E_i$ ensures that categories with larger expected counts contribute to the test statistic in proportion to the surprise of the deviation. A deviation of 5 from an expected count of 100 is much less noteworthy than a deviation of 5 from an expected count of 10, and the $E_i$ denominator appropriately downweights the former.
+    $E_i$를 쓰면 기대도수가 큰 범주가 편차의 "놀라움"에 비례해서 검정통계량에 기여하게 된다. 기대도수 100에서 5만큼 벗어난 것은 기대도수 10에서 5만큼 벗어난 것보다 훨씬 덜 주목할 만한데, 분모 $E_i$가 앞의 경우에 적절히 낮은 가중치를 준다.
 
 ---
 
-**Exercise 3.**
-The chi-square test statistic is derived as an approximation. What assumption makes the approximation $\sqrt{np_i(1-p_i)} \approx \sqrt{np_i} = \sqrt{E_i}$ valid?
+**연습문제 3.**
+카이제곱 검정통계량은 근사로 유도된다. 근사 $\sqrt{np_i(1-p_i)} \approx \sqrt{np_i} = \sqrt{E_i}$가 타당하려면 어떤 가정이 필요한가?
 
-??? success "Solution to Exercise 3"
-    The approximation requires that each $p_i$ is moderate to small, so that $1 - p_i \approx 1$. This holds when the number of categories $k$ is reasonably large and probabilities are spread out (no single category dominates). For example, if $k = 6$ and $p_i = 1/6$, then $1 - p_i = 5/6 \approx 0.83$, which is close enough to 1 for practical purposes.
+??? success "연습문제 3 풀이"
+    각 $p_i$가 중간 이하로 작아서 $1 - p_i \approx 1$이어야 한다. 범주의 개수 $k$가 어느 정도 크고 확률이 고르게 퍼져 있으면(어느 한 범주가 압도하지 않으면) 이 조건이 성립한다. 예를 들어 $k = 6$이고 $p_i = 1/6$이면 $1 - p_i = 5/6 \approx 0.83$으로, 실용적인 목적에서는 1에 충분히 가깝다.
 
-    The approximation breaks down when a category has very high probability (e.g., $p_i = 0.9$, making $1 - p_i = 0.1$ far from 1). In such cases, the actual variance $np_i(1-p_i)$ is much smaller than $np_i$, and the simple chi-square test statistic may not follow the $\chi^2$ distribution as closely.
+    어떤 범주의 확률이 아주 높으면(예: $p_i = 0.9$여서 $1 - p_i = 0.1$이면) 근사가 무너진다. 이 경우 실제 분산 $np_i(1-p_i)$가 $np_i$보다 훨씬 작아 단순한 카이제곱 검정통계량이 $\chi^2$ 분포를 그만큼 잘 따르지 않을 수 있다.
 
 ---
 
-**Exercise 4.**
-Pearson's chi-square test was published in 1900, but the correct degrees of freedom were not established until Fisher's work in 1922-1924. Explain intuitively why the degrees of freedom for a goodness-of-fit test with $k$ categories is $k - 1$, not $k$.
+**연습문제 4.**
+Pearson의 카이제곱 검정은 1900년에 발표되었지만 올바른 자유도는 1922–1924년 Fisher의 연구에 이르러서야 확립되었다. 범주가 $k$개인 적합도 검정의 자유도가 $k$가 아니라 $k - 1$인 이유를 직관적으로 설명하라.
 
-??? success "Solution to Exercise 4"
-    The degrees of freedom are $k - 1$ because the $k$ observed counts are subject to one constraint: they must sum to $n$ (the total sample size). That is, $\sum_{i=1}^k O_i = n$. This means only $k-1$ of the observed counts are free to vary independently; the last one is determined by $n - \sum_{i=1}^{k-1} O_i$.
+??? success "연습문제 4 풀이"
+    자유도가 $k - 1$인 것은 $k$개의 관측도수가 하나의 제약을 받기 때문이다. 그 합이 (전체 표본크기) $n$이어야 한다는 제약, 즉 $\sum_{i=1}^k O_i = n$이다. 따라서 관측도수 중 $k-1$개만 독립적으로 변할 수 있고 마지막 하나는 $n - \sum_{i=1}^{k-1} O_i$로 결정된다.
 
-    Similarly, the deviations $O_i - E_i$ satisfy $\sum_{i=1}^k (O_i - E_i) = 0$, so the $k$ standardized deviations are not independent. This constraint reduces the dimension of the variation from $k$ to $k-1$, which is why the limiting distribution is $\chi^2_{k-1}$ rather than $\chi^2_k$.
+    마찬가지로 편차 $O_i - E_i$는 $\sum_{i=1}^k (O_i - E_i) = 0$을 만족하므로 $k$개의 표준화된 편차는 독립이 아니다. 이 제약이 변동의 차원을 $k$에서 $k-1$로 줄이며, 극한분포가 $\chi^2_k$가 아니라 $\chi^2_{k-1}$인 이유가 된다.

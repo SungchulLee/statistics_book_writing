@@ -1,44 +1,44 @@
-# Homogeneity Residual Heatmap
+# 동질성 잔차 열지도
 
-## Overview
+## 개요
 
-After a chi-square test of homogeneity rejects the null hypothesis, a natural follow-up question is: **which cells are responsible for the departure from homogeneity?** This page demonstrates post-hoc diagnostics using standardized (Pearson) residuals, Bonferroni-corrected per-cell significance tests, and a heatmap visualization. The approach helps pinpoint which population-category combinations deviate most from the expected distribution.
+카이제곱 동질성 검정이 귀무가설을 기각한 뒤에 자연스럽게 따라오는 질문은 **어느 칸이 동질성 이탈의 원인인가?**이다. 이 페이지에서는 표준화(Pearson) 잔차, Bonferroni 보정을 적용한 칸별 유의성 검정, 그리고 열지도 시각화를 이용한 사후 진단을 보인다. 이 접근은 어떤 모집단–범주 조합이 기대 분포에서 가장 많이 벗어나는지 짚어내도록 돕는다.
 
-## Standardized Residuals
+## 표준화 잔차
 
-The **Pearson standardized residual** for cell $(i, j)$ is
+칸 $(i, j)$의 **Pearson 표준화 잔차**는
 
 $$
 R_{ij} = \frac{O_{ij} - E_{ij}}{\sqrt{E_{ij}}}
 $$
 
-Under $H_0$, each $R_{ij}$ is approximately standard normal for large samples. A residual with $|R_{ij}| > 2$ suggests that cell $(i,j)$ contributes notably to the overall chi-square statistic.
+이다. $H_0$ 아래에서 표본이 크면 각 $R_{ij}$는 근사적으로 표준정규를 따른다. $|R_{ij}| > 2$인 잔차는 그 칸이 전체 카이제곱 통계량에 뚜렷하게 기여함을 시사한다.
 
-Note that the overall chi-square statistic is simply the sum of squared residuals:
+전체 카이제곱 통계량이 잔차 제곱의 합이라는 점에 유의하라:
 
 $$
 \chi^2 = \sum_{i,j} R_{ij}^2
 $$
 
-## Per-Cell Significance with Bonferroni Correction
+## Bonferroni 보정을 적용한 칸별 유의성
 
-Each standardized residual can be treated as an approximate $z$-score. The two-sided p-value for cell $(i,j)$ is
+각 표준화 잔차를 근사적인 $z$-점수로 볼 수 있다. 칸 $(i,j)$의 양측 p-값은
 
 $$
 p_{ij} = 2\bigl[1 - \mathcal{N}(|R_{ij}|)\bigr]
 $$
 
-where $\mathcal{N}$ is the standard normal CDF. Since we test all $r \times c$ cells simultaneously, we apply a **Bonferroni correction** to control the family-wise error rate:
+이며 $\mathcal{N}$은 표준정규 누적분포함수이다. $r \times c$개의 칸을 동시에 검정하므로 가족단위 오류율을 통제하기 위해 **Bonferroni 보정**을 적용한다:
 
 $$
 p_{ij}^{\text{Bonf}} = \min\bigl(r \cdot c \cdot p_{ij},\; 1\bigr)
 $$
 
-A cell is flagged as significant if $p_{ij}^{\text{Bonf}} < \alpha$.
+$p_{ij}^{\text{Bonf}} < \alpha$이면 그 칸을 유의하다고 표시한다.
 
-## Code
+## 코드
 
-### Computing Residuals and Adjusted p-Values
+### 잔차와 조정 p-값 계산
 
 ```python
 import numpy as np
@@ -73,7 +73,7 @@ print("Bonferroni-adjusted per-cell p-values:")
 print(pvals_bonf)
 ```
 
-### Heatmap Visualization
+### 열지도 시각화
 
 ```python
 import matplotlib.pyplot as plt
@@ -96,92 +96,92 @@ plt.tight_layout()
 plt.show()
 ```
 
-Cells marked with `*` are statistically significant after Bonferroni correction. The color gradient makes it easy to spot which cells have the largest positive (over-represented) or negative (under-represented) residuals.
+`*`로 표시된 칸은 Bonferroni 보정 후에도 통계적으로 유의한 칸이다. 색의 변화 덕분에 어느 칸의 잔차가 가장 크게 양(과다 대표)이거나 음(과소 대표)인지 쉽게 알아볼 수 있다.
 
-## Interpretation
+## 해석
 
-The heatmap provides an at-a-glance summary of where the observed data diverges from the expected pattern under homogeneity. Key takeaways:
+열지도는 동질성 아래의 기대 패턴에서 관측 자료가 어디에서 갈라지는지를 한눈에 요약해 준다. 핵심은 다음과 같다:
 
-- **Positive residuals** (warm colors) indicate that a population has more observations in that category than expected.
-- **Negative residuals** (cool colors) indicate fewer observations than expected.
-- The asterisk (`*`) marks cells where the departure is statistically significant even after adjusting for multiple comparisons.
+- **양의 잔차**(따뜻한 색)는 그 모집단이 해당 범주에서 기대보다 관측값이 많음을 뜻한다.
+- **음의 잔차**(차가운 색)는 기대보다 적음을 뜻한다.
+- 별표(`*`)는 다중비교 보정 후에도 이탈이 통계적으로 유의한 칸을 표시한다.
 
-This kind of post-hoc analysis is essential because the overall chi-square test only tells us *that* the populations differ, not *how* they differ.
+전체 카이제곱 검정은 모집단들이 다르다는 사실*만* 알려줄 뿐 *어떻게* 다른지는 알려주지 않으므로, 이런 사후분석이 꼭 필요하다.
 
-## Exercises
+## 연습문제
 
-**1.** Given observed counts $O = 40$ and expected counts $E = 25$, compute the standardized residual and the unadjusted two-sided p-value.
+**1.** 관측도수 $O = 40$, 기대도수 $E = 25$일 때 표준화 잔차와 보정하지 않은 양측 p-값을 계산하라.
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
 
     $$
     R = \frac{O - E}{\sqrt{E}} = \frac{40 - 25}{\sqrt{25}} = \frac{15}{5} = 3.0
     $$
 
-    The two-sided p-value is
+    양측 p-값은
 
     $$
     p = 2[1 - \mathcal{N}(3.0)] = 2 \times 0.00135 = 0.0027
     $$
 
-    This cell shows a highly significant over-representation even before any multiple-comparison adjustment. $\square$
+    이다. 이 칸은 다중비교 보정 이전부터 매우 유의한 과다 대표를 보인다. $\square$
 
 ---
 
-**2.** A $4 \times 3$ table has 12 cells. After computing per-cell p-values, the smallest unadjusted p-value is $0.006$. Is this cell significant at $\alpha = 0.05$ after Bonferroni correction?
+**2.** $4 \times 3$ 표에는 칸이 12개 있다. 칸별 p-값을 계산했더니 가장 작은 보정 전 p-값이 $0.006$이었다. Bonferroni 보정 후 이 칸은 $\alpha = 0.05$에서 유의한가?
 
-??? success "Solution to Exercise 2"
+??? success "연습문제 2 풀이"
 
-    The Bonferroni-adjusted p-value is
+    Bonferroni 보정 p-값은
 
     $$
     p^{\text{Bonf}} = 12 \times 0.006 = 0.072
     $$
 
-    Since $0.072 > 0.05$, the cell is **not** significant after Bonferroni correction, despite having a small unadjusted p-value. This illustrates how conservative Bonferroni can be when the number of comparisons is large. $\square$
+    이다. $0.072 > 0.05$이므로 보정 전 p-값이 작았음에도 이 칸은 Bonferroni 보정 후 유의하지 **않다**. 비교 횟수가 많을 때 Bonferroni가 얼마나 보수적일 수 있는지 보여준다. $\square$
 
 ---
 
-**3.** Explain the difference between a **standardized residual** $R_{ij} = (O_{ij} - E_{ij})/\sqrt{E_{ij}}$ and an **adjusted standardized residual** $R_{ij}^{\text{adj}} = (O_{ij} - E_{ij})/\sqrt{E_{ij}(1 - R_i/n)(1 - C_j/n)}$. Which one has a distribution closer to $N(0,1)$ under $H_0$?
+**3.** **표준화 잔차** $R_{ij} = (O_{ij} - E_{ij})/\sqrt{E_{ij}}$와 **조정 표준화 잔차** $R_{ij}^{\text{adj}} = (O_{ij} - E_{ij})/\sqrt{E_{ij}(1 - R_i/n)(1 - C_j/n)}$의 차이를 설명하라. $H_0$ 아래에서 어느 쪽이 $N(0,1)$에 더 가까운 분포를 갖는가?
 
-??? success "Solution to Exercise 3"
+??? success "연습문제 3 풀이"
 
-    The Pearson standardized residual divides by $\sqrt{E_{ij}}$, which is only an approximation to the standard deviation of $O_{ij} - E_{ij}$ under $H_0$. The true variance of the residual also depends on the marginal totals through the factor $(1 - R_i/n)(1 - C_j/n)$.
+    Pearson 표준화 잔차는 $\sqrt{E_{ij}}$로 나누는데, 이는 $H_0$ 아래에서 $O_{ij} - E_{ij}$의 표준편차에 대한 근사일 뿐이다. 잔차의 참 분산은 인자 $(1 - R_i/n)(1 - C_j/n)$을 통해 주변 합계에도 의존한다.
 
-    The **adjusted standardized residual** incorporates this correction:
+    **조정 표준화 잔차**는 이 보정을 반영한다:
 
     $$
     R_{ij}^{\text{adj}} = \frac{O_{ij} - E_{ij}}{\sqrt{E_{ij}(1 - R_i/n)(1 - C_j/n)}}
     $$
 
-    Under $H_0$, $R_{ij}^{\text{adj}}$ has a distribution closer to $N(0,1)$ than the unadjusted residual. For per-cell hypothesis testing, the adjusted residual is therefore preferred, though the unadjusted version is still commonly used for exploratory heatmaps. $\square$
+    $H_0$ 아래에서 $R_{ij}^{\text{adj}}$의 분포가 보정하지 않은 잔차보다 $N(0,1)$에 더 가깝다. 따라서 칸별 가설검정에는 조정 잔차가 선호된다. 다만 탐색적인 열지도에는 보정하지 않은 형태도 여전히 흔히 쓰인다. $\square$
 
 ---
 
-**4.** Why is Bonferroni correction described as "conservative"? Name one alternative multiple-comparison method and describe how it differs.
+**4.** Bonferroni 보정을 왜 "보수적"이라고 하는가? 다중비교의 대안을 하나 들고 어떻게 다른지 설명하라.
 
-??? success "Solution to Exercise 4"
+??? success "연습문제 4 풀이"
 
-    Bonferroni correction is conservative because it controls the **family-wise error rate** (FWER) by dividing the significance level $\alpha$ equally among all comparisons, effectively using $\alpha / m$ as the threshold for each of $m$ tests. When many tests are conducted, this threshold becomes very small, making it difficult to reject any individual hypothesis even when a real effect exists (low power).
+    Bonferroni 보정은 유의수준 $\alpha$를 모든 비교에 똑같이 나누어 $m$개 검정 각각의 문턱으로 $\alpha / m$을 쓰는 방식으로 **가족단위 오류율**(FWER)을 통제한다. 검정이 많아지면 이 문턱이 아주 작아져, 참 효과가 있어도 개별 가설을 기각하기 어려워진다(검정력이 낮다).
 
-    An alternative is the **Benjamini-Hochberg (BH) procedure**, which controls the **false discovery rate** (FDR) instead of the FWER. The FDR is the expected proportion of false positives among all rejected hypotheses. The BH method ranks the p-values, then rejects all hypotheses whose p-value falls below $p_{(i)} \le (i/m)\alpha$ for a suitable cutoff $i$. This is less conservative than Bonferroni, providing more statistical power at the cost of allowing a controlled fraction of false discoveries. In `statsmodels`, it is available via `multipletests(pvals, method="fdr_bh")`. $\square$
+    대안으로 **Benjamini-Hochberg(BH) 절차**가 있다. FWER 대신 **거짓발견율**(FDR)을 통제한다. FDR은 기각된 가설 중 거짓 양성의 기대 비율이다. BH는 p-값을 정렬한 뒤 적절한 절단 지표 $i$에 대해 $p_{(i)} \le (i/m)\alpha$인 가설을 모두 기각한다. Bonferroni보다 덜 보수적이어서, 통제된 비율의 거짓 발견을 감수하는 대신 검정력을 더 얻는다. `statsmodels`에서는 `multipletests(pvals, method="fdr_bh")`로 쓸 수 있다. $\square$
 
 ---
 
-**5.** Prove that $\sum_{i,j} R_{ij}^2 = \chi^2$, i.e., the chi-square statistic equals the sum of squared standardized residuals.
+**5.** $\sum_{i,j} R_{ij}^2 = \chi^2$, 즉 카이제곱 통계량이 표준화 잔차 제곱의 합과 같음을 증명하라.
 
-??? success "Solution to Exercise 5"
+??? success "연습문제 5 풀이"
 
-    By definition, the standardized residual is $R_{ij} = (O_{ij} - E_{ij}) / \sqrt{E_{ij}}$. Squaring:
+    정의에 의해 표준화 잔차는 $R_{ij} = (O_{ij} - E_{ij}) / \sqrt{E_{ij}}$이다. 제곱하면
 
     $$
     R_{ij}^2 = \frac{(O_{ij} - E_{ij})^2}{E_{ij}}
     $$
 
-    Summing over all cells:
+    이다. 모든 칸에 대해 합하면
 
     $$
     \sum_{i=1}^{r}\sum_{j=1}^{c} R_{ij}^2 = \sum_{i=1}^{r}\sum_{j=1}^{c} \frac{(O_{ij} - E_{ij})^2}{E_{ij}} = \chi^2
     $$
 
-    This is exactly the definition of the Pearson chi-square statistic. The decomposition shows that $\chi^2$ aggregates contributions from every cell, and the heatmap of $R_{ij}$ (or $R_{ij}^2$) reveals how that aggregate is distributed across the table. $\square$
+    이 되는데, 이것이 바로 Pearson 카이제곱 통계량의 정의이다. 이 분해는 $\chi^2$가 모든 칸의 기여를 모은 값임을 보여주며, $R_{ij}$(또는 $R_{ij}^2$)의 열지도는 그 총합이 표 전체에 어떻게 흩어져 있는지 드러낸다. $\square$

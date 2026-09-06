@@ -344,28 +344,28 @@ nav:
             - p-해킹 시연: ch09/code/p_hacking_demo.md
             - 거짓발견율과 재표본추출 다중검정: ch09/code/fdr_resampling_demo.md
 
-    - 10 Chi-Square Tests:
-        - Chapter Overview: ch10/index.md
-        - 10.1 Chi-Square Distribution and Asymptotics:
-            - Chi-Square Distribution: ch10/distribution/distribution.md
-            - Degrees of Freedom and Asymptotic Theory: ch10/distribution/degrees_of_freedom.md
-        - 10.2 Chi-Square Tests for Categorical Data:
-            - Goodness-of-Fit Test: ch10/test/gof.md
-            - Test of Independence: ch10/test/independence.md
-            - Test of Homogeneity: ch10/test/homogeneity.md
-        - 10.3 Practical Considerations:
-            - Expected Cell Counts and Validity Conditions: ch10/practice/validity_conditions.md
-            - Effect Size and Cramér's V: ch10/practice/effect_size.md
-        - 10.4 Code:
-            - Chi-Square Goodness-of-Fit (Manual): ch10/code/gof_manual.md
-            - Chi-Square Goodness-of-Fit (scipy): ch10/code/gof_scipy.md
-            - Independence Test (Manual with Plot): ch10/code/independence_manual.md
-            - Independence Test Template Function: ch10/code/independence_template.md
-            - Homogeneity Test (scipy): ch10/code/homogeneity_basic.md
-            - Homogeneity Residual Heatmap: ch10/code/homogeneity_residuals.md
-            - Fisher's Exact Test (2×2): ch10/code/fisher_exact.md
-            - McNemar's Test (Paired Binary): ch10/code/mcnemar_test.md
-            - Cochran's Q Test (k Related Outcomes): ch10/code/cochran_q.md
+    - 10 카이제곱 검정:
+        - 장 개요: ch10/index.md
+        - 10.1 카이제곱 분포와 점근 이론:
+            - 카이제곱 분포: ch10/distribution/distribution.md
+            - 자유도와 점근 이론: ch10/distribution/degrees_of_freedom.md
+        - 10.2 범주형 자료에 대한 카이제곱 검정:
+            - 적합도 검정: ch10/test/gof.md
+            - 독립성 검정: ch10/test/independence.md
+            - 동질성 검정: ch10/test/homogeneity.md
+        - 10.3 실무적 고려사항:
+            - 기대 칸 도수와 타당성 조건: ch10/practice/validity_conditions.md
+            - 효과크기와 Cramér의 V: ch10/practice/effect_size.md
+        - 10.4 코드:
+            - 카이제곱 적합도 검정 (수동): ch10/code/gof_manual.md
+            - 카이제곱 적합도 검정 (scipy): ch10/code/gof_scipy.md
+            - 독립성 검정 (수동 계산과 그림): ch10/code/independence_manual.md
+            - 독립성 검정 템플릿 함수: ch10/code/independence_template.md
+            - 동질성 검정 (scipy): ch10/code/homogeneity_basic.md
+            - 동질성 잔차 열지도: ch10/code/homogeneity_residuals.md
+            - Fisher의 정확검정 (2×2): ch10/code/fisher_exact.md
+            - McNemar 검정 (대응된 이진 자료): ch10/code/mcnemar_test.md
+            - Cochran의 Q 검정 (관련된 k개의 결과): ch10/code/cochran_q.md
 
     - 11 Analysis of Variance:
         - Chapter Overview: ch11/index.md

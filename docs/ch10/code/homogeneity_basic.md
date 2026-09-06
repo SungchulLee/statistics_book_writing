@@ -1,34 +1,34 @@
-# Homogeneity Test (scipy)
+# 동질성 검정 (scipy)
 
-## Overview
+## 개요
 
-The **chi-square test of homogeneity** evaluates whether two or more populations share the same distribution across a set of categories. Although the computation is identical to the chi-square test of independence (both use `scipy.stats.chi2_contingency`), the study design and interpretation differ: rows represent independently sampled populations and we ask whether the column proportions are the same across those populations.
+**카이제곱 동질성 검정**은 둘 이상의 모집단이 여러 범주에 걸쳐 같은 분포를 공유하는지 평가한다. 계산은 카이제곱 독립성 검정과 완전히 같지만(둘 다 `scipy.stats.chi2_contingency`를 쓴다) 연구 설계와 해석이 다르다. 행은 독립적으로 추출된 모집단을 나타내고, 우리는 그 모집단들 사이에서 열의 비율이 같은지를 묻는다.
 
-## Study Design Distinction
+## 연구 설계의 구분
 
-| Aspect | Independence | Homogeneity |
+| 측면 | 독립성 | 동질성 |
 |--------|:------------|:-----------|
-| Sampling | Single sample, two variables recorded | Separate sample from each population |
-| Question | Are the two variables associated? | Do the populations have the same distribution? |
-| Table rows | Levels of variable A | Populations |
-| Table columns | Levels of variable B | Categories of the response |
+| 표집 | 표본 하나, 두 변수를 기록 | 각 모집단에서 별도의 표본 |
+| 질문 | 두 변수가 연관되어 있는가? | 모집단들의 분포가 같은가? |
+| 표의 행 | 변수 A의 수준 | 모집단 |
+| 표의 열 | 변수 B의 수준 | 반응의 범주 |
 
-Despite the different framing, the test statistic, degrees of freedom, and p-value computation are identical.
+틀은 다르지만 검정통계량, 자유도, p-값 계산은 동일하다.
 
-## Hypotheses
+## 가설
 
-- **Null Hypothesis** ($H_0$): The distribution across categories is the same for all populations.
-- **Alternative Hypothesis** ($H_A$): At least one population has a different distribution.
+- **귀무가설** ($H_0$): 범주에 걸친 분포가 모든 모집단에서 같다.
+- **대립가설** ($H_A$): 적어도 한 모집단의 분포가 다르다.
 
-## Test Statistic
+## 검정통계량
 
 $$
 \chi^2 = \sum_{i=1}^{r}\sum_{j=1}^{c} \frac{(O_{ij} - E_{ij})^2}{E_{ij}}
 $$
 
-where $E_{ij} = R_i C_j / n$ and $\text{df} = (r-1)(c-1)$.
+여기서 $E_{ij} = R_i C_j / n$이고 $\text{df} = (r-1)(c-1)$이다.
 
-## Code
+## 코드
 
 ```python
 import numpy as np
@@ -50,49 +50,49 @@ print("Expected counts under H0 (same proportions):")
 print(expected)
 ```
 
-**Key outputs:**
+**주요 출력:**
 
-- `chi2_contingency` returns four values: the test statistic, the p-value, the degrees of freedom, and the matrix of expected counts.
-- Setting `correction=False` ensures no Yates correction is applied (Yates is only relevant for $2 \times 2$ tables anyway).
+- `chi2_contingency`는 값 네 개를 돌려준다: 검정통계량, p-값, 자유도, 기대도수 행렬.
+- `correction=False`로 두면 Yates 보정이 적용되지 않는다(어차피 Yates는 $2 \times 2$ 표에만 의미가 있다).
 
-## Expected Counts Under Homogeneity
+## 동질성 아래의 기대도수
 
-Under $H_0$, each population has the same category proportions as the pooled (overall) proportions. The expected count for population $i$ in category $j$ is
+$H_0$ 아래에서 각 모집단은 합동(전체) 비율과 같은 범주 비율을 가진다. 모집단 $i$의 범주 $j$에 대한 기대도수는
 
 $$
 E_{ij} = n_i \cdot \hat{p}_j = n_i \cdot \frac{C_j}{n}
 $$
 
-where $n_i = R_i$ is the sample size for population $i$, $C_j$ is the total count in category $j$, and $n$ is the grand total. This is algebraically equivalent to $R_i C_j / n$.
+이다. 여기서 $n_i = R_i$는 모집단 $i$의 표본크기, $C_j$는 범주 $j$의 전체 도수, $n$은 총합이다. 이는 대수적으로 $R_i C_j / n$과 같다.
 
-## Interpretation
+## 해석
 
-For the example data with 3 populations and 4 categories:
+모집단 3개와 범주 4개인 예제 자료에서:
 
 - $\text{df} = (3-1)(4-1) = 6$
-- The test statistic and p-value determine whether the observed differences in category proportions across the three populations are larger than what we would expect from sampling variability alone.
+- 검정통계량과 p-값은 세 모집단 사이에서 관측된 범주 비율의 차이가 표집 변동만으로 기대되는 정도보다 큰지를 판정한다.
 
-If the p-value is less than $\alpha = 0.05$, we conclude that at least one population has a significantly different distribution of responses. The test does not tell us *which* population differs; post-hoc analysis (e.g., examining standardized residuals) is needed for that.
+p-값이 $\alpha = 0.05$보다 작으면 적어도 한 모집단의 반응 분포가 유의하게 다르다고 결론짓는다. 이 검정은 *어느* 모집단이 다른지는 알려주지 않는다. 그것을 알려면 사후분석(예: 표준화 잔차 검토)이 필요하다.
 
-## Exercises
+## 연습문제
 
-**1.** Two schools administer the same exam. The grade distributions are:
+**1.** 두 학교가 같은 시험을 치렀다. 성적 분포는 다음과 같다:
 
 $$
 \begin{array}{ccccc}
  & A & B & C & D \\
-\text{School 1} & 20 & 35 & 30 & 15 \\
-\text{School 2} & 25 & 25 & 35 & 15
+\text{학교 1} & 20 & 35 & 30 & 15 \\
+\text{학교 2} & 25 & 25 & 35 & 15
 \end{array}
 $$
 
-Compute the expected counts under $H_0$ (same grade distribution) and the chi-square statistic by hand.
+$H_0$(성적 분포가 같음) 아래의 기대도수와 카이제곱 통계량을 손으로 계산하라.
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
 
-    Row totals: $R_1 = 100$, $R_2 = 100$. Column totals: $C_A = 45$, $C_B = 60$, $C_C = 65$, $C_D = 30$. Grand total: $n = 200$.
+    행 합계: $R_1 = 100$, $R_2 = 100$. 열 합계: $C_A = 45$, $C_B = 60$, $C_C = 65$, $C_D = 30$. 총합: $n = 200$.
 
-    Since both row totals are equal, each expected count is simply $C_j / 2$:
+    두 행 합계가 같으므로 각 기대도수는 단순히 $C_j / 2$이다:
 
     $$
     E = \begin{pmatrix} 22.5 & 30 & 32.5 & 15 \\ 22.5 & 30 & 32.5 & 15 \end{pmatrix}
@@ -100,10 +100,6 @@ Compute the expected counts under $H_0$ (same grade distribution) and the chi-sq
 
     $$
     \chi^2 = \frac{(20-22.5)^2}{22.5} + \frac{(35-30)^2}{30} + \frac{(30-32.5)^2}{32.5} + \frac{(15-15)^2}{15}
-    $$
-
-    $$
-
     + \frac{(25-22.5)^2}{22.5} + \frac{(25-30)^2}{30} + \frac{(35-32.5)^2}{32.5} + \frac{(15-15)^2}{15}
     $$
 
@@ -111,37 +107,45 @@ Compute the expected counts under $H_0$ (same grade distribution) and the chi-sq
     = 0.278 + 0.833 + 0.192 + 0 + 0.278 + 0.833 + 0.192 + 0 = 2.607
     $$
 
-    With $\text{df} = (2-1)(4-1) = 3$. $\square$
+    자유도는 $\text{df} = (2-1)(4-1) = 3$이다. $\square$
 
 ---
 
-**2.** Why is `correction=False` the appropriate choice for tables larger than $2 \times 2$?
+**2.** $2 \times 2$보다 큰 표에서 `correction=False`가 적절한 선택인 이유는 무엇인가?
 
-??? success "Solution to Exercise 2"
+??? success "연습문제 2 풀이"
 
-    The Yates continuity correction was designed specifically for $2 \times 2$ tables, where the discrete distribution of the test statistic is being approximated by the continuous $\chi^2$ distribution with 1 degree of freedom. For larger tables, the discrete-to-continuous approximation is already quite good because the test statistic is a sum of many terms, and the $\chi^2$ approximation improves with more cells. Applying Yates correction to larger tables would make the test unnecessarily conservative (inflating the p-value), and `scipy.stats.chi2_contingency` only applies it to $2 \times 2$ tables even when `correction=True`. $\square$
-
----
-
-**3.** Suppose you add a fourth population whose observed counts are identical to the pooled proportions (i.e., $O_{4j} = n_4 \cdot C_j / n$ for each category $j$). How does this affect the overall test statistic? Explain.
-
-??? success "Solution to Exercise 3"
-
-    The new population contributes zero to the chi-square statistic because $O_{4j} = E_{4j}$ for every category. Each term $(O_{4j} - E_{4j})^2 / E_{4j} = 0$. The overall statistic remains the same as before (the contributions from the original three populations do not change because the expected counts for the original populations are recomputed with the new marginals, but the new population exactly follows the pooled distribution so it does not disturb the overall proportions).
-
-    More precisely, adding a population that perfectly matches the pooled proportions will slightly change the expected counts for the original populations (because $n$ and $C_j$ change), but the dominant effect is that the new rows contribute zero, and the original contributions shift only slightly. In the limiting case where $n_4$ is very small, the effect is negligible. $\square$
+    Yates 연속성 보정은 자유도 1인 연속 $\chi^2$ 분포로 이산인 검정통계량 분포를 근사하는 $2 \times 2$ 표를 위해 고안되었다. 더 큰 표에서는 검정통계량이 여러 항의 합이고 칸이 많을수록 $\chi^2$ 근사가 좋아지므로 이산–연속 근사가 이미 상당히 좋다. 더 큰 표에 Yates 보정을 적용하면 검정이 불필요하게 보수적이 되어(p-값이 부풀려져) 좋지 않다. `scipy.stats.chi2_contingency`는 `correction=True`를 주더라도 $2 \times 2$ 표에만 보정을 적용한다. $\square$
 
 ---
 
-**4.** A researcher samples 50 people from each of 5 regions and records whether they prefer Brand X or Brand Y. The contingency table is
+**3.** 관측도수가 합동 비율과 정확히 일치하는(즉 각 범주 $j$에 대해 $O_{4j} = n_4 \cdot C_j / n$인) 네 번째 모집단을 추가한다고 하자. 전체 검정통계량은 어떻게 되는가? 설명하라.
+
+??? success "연습문제 3 풀이"
+
+    검정통계량은 **정확히 그대로**이다.
+
+    새 행이 합동 비율에 비례하므로 새 열 합계는 $C_j' = C_j + n_4 C_j/n = C_j(n + n_4)/n$이고 새 총합은 $n' = n + n_4$이다. 따라서 원래 행 $i$의 기대도수는
+
+    $$
+    \frac{R_i C_j'}{n'} = \frac{R_i \cdot C_j (n+n_4)/n}{n + n_4} = \frac{R_i C_j}{n}
+    $$
+
+    으로 변하지 않는다. 새 행의 기대도수는 $n_4 C_j'/n' = n_4 C_j/n = O_{4j}$이므로 기여가 0이다.
+
+    다만 자유도는 $(r-1)(c-1)$에서 $r(c-1)$로 커지므로, 같은 통계량에 대해 p-값은 커진다. 완벽하게 "평균적인" 모집단을 하나 더 관측하는 것은 이질성의 증거를 전혀 더하지 않으면서 기준분포만 넓히는 셈이다. $\square$
+
+---
+
+**4.** 어떤 연구자가 5개 지역에서 각각 50명을 뽑아 브랜드 X와 브랜드 Y 중 무엇을 선호하는지 기록했다. 분할표는
 
 $$
 \begin{pmatrix} 30 & 20 \\ 28 & 22 \\ 35 & 15 \\ 25 & 25 \\ 32 & 18 \end{pmatrix}
 $$
 
-Use `chi2_contingency` to test homogeneity at $\alpha = 0.05$. State your conclusion.
+이다. `chi2_contingency`로 $\alpha = 0.05$에서 동질성을 검정하고 결론을 서술하라.
 
-??? success "Solution to Exercise 4"
+??? success "연습문제 4 풀이"
 
     ```python
     import numpy as np
@@ -151,14 +155,10 @@ Use `chi2_contingency` to test homogeneity at $\alpha = 0.05$. State your conclu
     chi2, p, df, expected = stats.chi2_contingency(observed, correction=False)
     ```
 
-    Row totals are all 50. Column totals: $C_1 = 150$, $C_2 = 100$. Grand total: $n = 250$. Overall proportions: $\hat{p}_1 = 0.6$, $\hat{p}_2 = 0.4$. Expected counts for each region: $(30, 20)$.
+    행 합계는 모두 50이다. 열 합계: $C_1 = 150$, $C_2 = 100$. 총합: $n = 250$. 전체 비율: $\hat{p}_1 = 0.6$, $\hat{p}_2 = 0.4$. 각 지역의 기대도수는 $(30, 20)$이다.
 
     $$
     \chi^2 = \frac{0}{30} + \frac{0}{20} + \frac{(28-30)^2}{30} + \frac{(22-20)^2}{20} + \frac{(35-30)^2}{30} + \frac{(15-20)^2}{20}
-    $$
-
-    $$
-
     + \frac{(25-30)^2}{30} + \frac{(25-20)^2}{20} + \frac{(32-30)^2}{30} + \frac{(18-20)^2}{20}
     $$
 
@@ -166,24 +166,24 @@ Use `chi2_contingency` to test homogeneity at $\alpha = 0.05$. State your conclu
     = 0 + 0 + 0.133 + 0.2 + 0.833 + 1.25 + 0.833 + 1.25 + 0.133 + 0.2 = 4.833
     $$
 
-    With $\text{df} = (5-1)(2-1) = 4$, the p-value is approximately $0.305$. Since $p > 0.05$, we **fail to reject** $H_0$. There is no significant evidence that brand preference differs across regions. $\square$
+    $\text{df} = (5-1)(2-1) = 4$에서 p-값은 약 $0.305$이다. $p > 0.05$이므로 $H_0$을 **기각하지 못한다**. 지역에 따라 브랜드 선호가 다르다는 유의한 증거가 없다. $\square$
 
 ---
 
-**5.** Prove that if all populations have exactly the same sample size $n_0$ and the same observed proportions in every category, then $\chi^2 = 0$ regardless of the number of populations or categories.
+**5.** 모든 모집단의 표본크기가 똑같이 $n_0$이고 모든 범주에서 관측 비율도 같다면, 모집단이나 범주의 개수와 무관하게 $\chi^2 = 0$임을 증명하라.
 
-??? success "Solution to Exercise 5"
+??? success "연습문제 5 풀이"
 
-    Let there be $r$ populations each of size $n_0$, so $n = r \cdot n_0$. If every population has the same counts, then $O_{ij} = O_{1j}$ for all $i$, and the column total is $C_j = r \cdot O_{1j}$. The row total is $R_i = n_0$ for all $i$. The expected count is
+    크기가 각각 $n_0$인 모집단이 $r$개 있다고 하면 $n = r \cdot n_0$이다. 모든 모집단의 도수가 같으면 모든 $i$에 대해 $O_{ij} = O_{1j}$이고 열 합계는 $C_j = r \cdot O_{1j}$이다. 행 합계는 모든 $i$에서 $R_i = n_0$이다. 기대도수는
 
     $$
     E_{ij} = \frac{R_i \cdot C_j}{n} = \frac{n_0 \cdot r \cdot O_{1j}}{r \cdot n_0} = O_{1j}
     $$
 
-    Since all rows are identical, $O_{ij} = O_{1j} = E_{ij}$ for every cell. Therefore
+    이다. 모든 행이 같으므로 모든 칸에서 $O_{ij} = O_{1j} = E_{ij}$이다. 따라서
 
     $$
     \chi^2 = \sum_{i,j} \frac{(O_{ij} - E_{ij})^2}{E_{ij}} = \sum_{i,j} \frac{0}{E_{ij}} = 0
     $$
 
-    This makes intuitive sense: if every population exhibits exactly the same distribution, there is zero evidence against homogeneity. $\square$
+    이다. 직관적으로도 자연스럽다. 모든 모집단이 정확히 같은 분포를 보인다면 동질성에 반하는 증거가 전혀 없다. $\square$

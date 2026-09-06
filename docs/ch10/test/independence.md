@@ -1,136 +1,138 @@
-# Test of Independence
+# 독립성 검정
 
-## Overview
+## 개요
 
-An **Independence Test** is a statistical technique used to determine if there is a significant relationship between two categorical variables. Essentially, it helps answer the question: "Do the occurrences of one variable affect the occurrences of another?" If the two variables are independent, changes in one variable should have no effect on the distribution of the other.
+**독립성 검정**은 두 범주형 변수 사이에 유의한 관계가 있는지 판정하는 통계 기법이다. 본질적으로 "한 변수의 발생이 다른 변수의 발생에 영향을 주는가?"라는 질문에 답하도록 돕는다. 두 변수가 독립이면 한 변수의 변화가 다른 변수의 분포에 아무런 영향을 주지 않아야 한다.
 
-## Example Scenario
+## 예시 상황
 
-For example, let's say we want to examine whether there is an association between gender (male or female) and preference for a particular type of beverage (coffee, tea, or juice). The Independence Test helps assess whether gender influences beverage preference, or whether the preferences are independent of gender.
+예를 들어 성별(남성, 여성)과 특정 음료 종류(커피, 차, 주스)에 대한 선호 사이에 연관이 있는지 살펴본다고 하자. 독립성 검정은 성별이 음료 선호에 영향을 주는지, 아니면 선호가 성별과 독립인지를 평가하도록 돕는다.
 
-## Hypotheses
+## 가설
 
-- **Null Hypothesis ($H_0$)**: The two variables are independent (i.e., there is no association between the variables).
-- **Alternative Hypothesis ($H_A$)**: The two variables are not independent (i.e., there is an association between the variables).
+- **귀무가설 ($H_0$)**: 두 변수가 독립이다(즉 변수 사이에 연관이 없다).
+- **대립가설 ($H_A$)**: 두 변수가 독립이 아니다(즉 변수 사이에 연관이 있다).
 
-## Contingency Table
+## 분할표
 
-A contingency table is a matrix format table that shows the frequency distribution of variables. For example, if you want to check if there is an association between gender (male, female) and preference for a product (like, dislike), the table might look like this:
+분할표는 변수들의 도수분포를 보여주는 행렬 형태의 표이다. 예를 들어 성별(남성, 여성)과 어떤 제품에 대한 선호(좋아함, 싫어함) 사이에 연관이 있는지 확인하려면 표는 다음과 같을 수 있다:
 
-|           | Like | Dislike | Total |
+|           | 좋아함 | 싫어함 | 합계 |
 |-----------|------|---------|-------|
-| Male      | 30   | 20      | 50    |
-| Female    | 25   | 25      | 50    |
-| **Total** | 55   | 45      | 100   |
+| 남성      | 30   | 20      | 50    |
+| 여성    | 25   | 25      | 50    |
+| **합계** | 55   | 45      | 100   |
 
-## Expected Frequencies
+## 기대도수
 
-Under the independence assumption, the expected frequency for each cell is computed as:
+독립 가정 아래에서 각 칸의 기대도수는 다음으로 계산한다:
 
 $$
 E_{ij} = \frac{\text{(Row Total for Row } i\text{)} \times \text{(Column Total for Column } j\text{)}}{\text{Grand Total}}
 $$
 
-## Test Statistic
+## 검정통계량
 
-The test statistic for the Chi-Square Test of Independence is calculated using the formula:
+카이제곱 독립성 검정의 검정통계량은 다음 공식으로 계산한다:
 
 $$
 \chi^2 = \sum_{i=1}^r \sum_{j=1}^c \frac{(O_{ij} - E_{ij})^2}{E_{ij}}
 $$
 
-where:
+여기서
 
-- $O_{ij}$ = Observed frequency in cell $ij$
-- $E_{ij}$ = Expected frequency in cell $ij$
+- $O_{ij}$ = 칸 $ij$의 관측도수
+- $E_{ij}$ = 칸 $ij$의 기대도수
 
-## Degrees of Freedom
+이다.
 
-The degrees of freedom ($\text{df}$) for the test is calculated as:
+## 자유도
+
+이 검정의 자유도($\text{df}$)는
 
 $$
 \text{df} = (r - 1) \times (c - 1)
 $$
 
-where $r$ is the number of rows and $c$ is the number of columns.
+로 계산하며, $r$은 행의 수, $c$는 열의 수이다.
 
-## Critical Region
+## 기각역
 
 $$
 \begin{array}{lll}
-\text{Null} & \text{They are independent} \\
-& \text{Observed frequencies are close to expected frequencies} \\
-& O_{ij} \approx E_{ij} \quad \Rightarrow \quad \text{statistic} \approx 0 \\
+\text{귀무} & \text{두 변수는 독립이다} \\
+& \text{관측도수가 기대도수에 가깝다} \\
+& O_{ij} \approx E_{ij} \quad \Rightarrow \quad \text{통계량} \approx 0 \\
 \\
-\text{Alternative} & \text{They are not independent} \\
-& \text{Observed frequencies are quite different from expected frequencies} \\
-& O_{ij} \not\approx E_{ij} \quad \Rightarrow \quad \text{statistic} \approx \text{large positive number}
+\text{대립} & \text{두 변수는 독립이 아니다} \\
+& \text{관측도수가 기대도수와 꽤 다르다} \\
+& O_{ij} \not\approx E_{ij} \quad \Rightarrow \quad \text{통계량} \approx \text{큰 양수}
 \end{array}
 $$
 
-## Critical Value and p-Value
+## 임계값과 p-값
 
-- **Critical Value**: The critical value is determined from the Chi-Square distribution table, based on the degrees of freedom and the chosen significance level (e.g., 0.05).
-- **p-Value**: The p-value is calculated from the Chi-Square distribution using the test statistic and degrees of freedom. It represents the probability of observing a test statistic as extreme as, or more extreme than, the one calculated under the null hypothesis.
+- **임계값**: 자유도와 선택한 유의수준(예: 0.05)에 근거하여 카이제곱 분포표에서 결정한다.
+- **p-값**: 검정통계량과 자유도를 써서 카이제곱 분포로부터 계산한다. 귀무가설 아래에서 계산된 값만큼 또는 그보다 극단적인 검정통계량을 관측할 확률을 나타낸다.
 
-## Decision Rule
+## 판정 규칙
 
-- If the test statistic exceeds the critical value, or if the p-value is less than the significance level, reject the null hypothesis. This suggests that the variables are not independent and there is an association between them.
-- If the test statistic does not exceed the critical value, or if the p-value is greater than the significance level, fail to reject the null hypothesis. This indicates that the variables are independent.
+- 검정통계량이 임계값을 넘거나 p-값이 유의수준보다 작으면 귀무가설을 기각한다. 두 변수가 독립이 아니며 서로 연관이 있음을 시사한다.
+- 검정통계량이 임계값을 넘지 않거나 p-값이 유의수준보다 크면 귀무가설을 기각하지 못한다. 두 변수가 독립임을 나타낸다.
 
-## Assumptions and Limitations
+## 가정과 한계
 
-The Chi-Square Test of Independence assumes that the observations are randomly sampled, the expected frequency in each cell is at least 5, and that the categories are mutually exclusive. If these assumptions are violated, the results may be misleading.
+카이제곱 독립성 검정은 관측값이 무작위로 추출되었고, 각 칸의 기대도수가 적어도 5 이상이며, 범주가 서로 배타적이라고 가정한다. 이 가정들이 어긋나면 결과가 오도할 수 있다.
 
-Other independence tests, like **Fisher's Exact Test**, may be preferred if sample sizes are small, as it does not rely on the large sample approximation used by the Chi-Square Test.
+표본이 작으면 **Fisher의 정확검정** 같은 다른 독립성 검정이 나을 수 있다. 카이제곱 검정이 쓰는 대표본 근사에 의존하지 않기 때문이다.
 
 ---
 
-## Example A: Gender vs Right-Handedness
+## 예제 A: 성별과 주로 쓰는 손
 
-### Question
+### 문제
 
-We randomly selected several people and recorded their sex and dominant hand. Here is the data.
+여러 사람을 무작위로 뽑아 성별과 주로 쓰는 손을 기록했다. 자료는 다음과 같다.
 
-**Observed:**
+**관측:**
 
 $$
 \begin{array}{crr|r}
- & \text{men} & \text{women} & \text{row sum} \\ \hline
-\text{right-handed} & 934 & 1{,}070 & 2{,}004 \\
-\text{left-handed} & 113 & 92 & 205 \\
-\text{ambidextrous} & 20 & 8 & 28 \\ \hline
-\text{column sum} & 1{,}067 & 1{,}170 & 2{,}237
+ & \text{남성} & \text{여성} & \text{행 합} \\ \hline
+\text{오른손잡이} & 934 & 1{,}070 & 2{,}004 \\
+\text{왼손잡이} & 113 & 92 & 205 \\
+\text{양손잡이} & 20 & 8 & 28 \\ \hline
+\text{열 합} & 1{,}067 & 1{,}170 & 2{,}237
 \end{array}
 $$
 
-Is there any relationship between sex and the dominant hand, or are these two variables independent?
+성별과 주로 쓰는 손 사이에 관계가 있는가, 아니면 두 변수는 독립인가?
 
-### Hypotheses
+### 가설
 
 $$
 \begin{array}{lll}
-\text{Null} & \text{They are independent} \\
+\text{귀무} & \text{두 변수는 독립이다} \\
 \\
-\text{Alternative} & \text{They are not independent}
+\text{대립} & \text{두 변수는 독립이 아니다}
 \end{array}
 $$
 
-### Expected Frequencies
+### 기대도수
 
-**Expected:**
+**기대:**
 
 $$
 \begin{array}{ccc|r}
- & \text{men} & \text{women} & \text{row sum} \\ \hline
-\text{right-handed} & 956 & 1{,}048 & 2{,}004 \\
-\text{left-handed} & 98 & 107 & 205 \\
-\text{ambidextrous} & 13 & 15 & 28 \\ \hline
-\text{column sum} & 1{,}067 & 1{,}170 & 2{,}237
+ & \text{남성} & \text{여성} & \text{행 합} \\ \hline
+\text{오른손잡이} & 956 & 1{,}048 & 2{,}004 \\
+\text{왼손잡이} & 98 & 107 & 205 \\
+\text{양손잡이} & 13 & 15 & 28 \\ \hline
+\text{열 합} & 1{,}067 & 1{,}170 & 2{,}237
 \end{array}
 $$
 
-**How to compute expected frequencies**: If they are independent,
+**기대도수를 계산하는 방법**: 두 변수가 독립이라면
 
 $$
 P(\text{men}) = \frac{1067}{2237}, \quad P(\text{right-handed}) = \frac{2004}{2237}
@@ -144,17 +146,17 @@ $$
 \Rightarrow \text{expected frequency}(\text{men}, \text{right-handed}) = \frac{1067}{2237} \times \frac{2004}{2237} \times 2237 \approx 956
 $$
 
-### p-value
+### p-값
 
 $$
 \text{p-value} = P\left(\sum_{i=1}^{r}\sum_{j=1}^{c}\frac{(O_{ij}-E_{ij})^2}{E_{ij}} \ge \text{statistic} \;\middle|\; H_0\right)
 $$
 
-### Conclusion
+### 결론
 
-$$\text{They are not independent.}$$
+$$\text{두 변수는 독립이 아니다.}$$
 
-### Python Implementation (Without `scipy.stats.chi2_contingency`)
+### Python 구현 (`scipy.stats.chi2_contingency` 없이)
 
 ```python
 import matplotlib.pyplot as plt
@@ -227,7 +229,7 @@ ax.spines['left'].set_position("zero")
 plt.show()
 ```
 
-### Python Implementation (With `scipy.stats.chi2_contingency`)
+### Python 구현 (`scipy.stats.chi2_contingency` 사용)
 
 ```python
 import matplotlib.pyplot as plt
@@ -279,42 +281,42 @@ plt.show()
 
 ---
 
-## Example B: Longer Hand vs. Longer Foot
+## 예제 B: 더 긴 손과 더 긴 발
 
-> **Source**: [Khan Academy — Chi-Square Test Association Independence](https://www.khanacademy.org/math/ap-statistics/chi-square-tests/chi-square-tests-two-way-tables/v/chi-square-test-association-independence)
+> **출처**: [Khan Academy — Chi-Square Test Association Independence](https://www.khanacademy.org/math/ap-statistics/chi-square-tests/chi-square-tests-two-way-tables/v/chi-square-test-association-independence)
 
-We suspect there might be a relationship between foot length and hand length. The null hypothesis assumes no association or independence between the variables. The alternative hypothesis expresses our suspicion that there is indeed an association between foot and hand lengths, suggesting that they are not independent.
+발 길이와 손 길이 사이에 관계가 있으리라 의심한다. 귀무가설은 두 변수 사이에 연관이 없다고, 즉 독립이라고 가정한다. 대립가설은 발 길이와 손 길이 사이에 실제로 연관이 있어 독립이 아니라는 우리의 의심을 표현한다.
 
-We randomly sample 100 individuals. For each individual, we determine whether their right hand is longer, their left hand is longer, or both hands are of equal length. We repeat the same process for foot length.
+100명을 무작위로 뽑는다. 각 사람에 대해 오른손이 더 긴지, 왼손이 더 긴지, 양손이 같은지를 판정한다. 발 길이에 대해서도 같은 과정을 반복한다.
 
-|                   | Right Foot Longer | Left Foot Longer | Both Feet Same |
+|                   | 오른발이 더 김 | 왼발이 더 김 | 양발이 같음 |
 |:-----------------:|:-----------------:|:----------------:|:--------------:|
-| Right Hand Longer | 11                | 3                | 8              |
-| Left Hand Longer  | 2                 | 9                | 14             |
-| Both Hands Same   | 12                | 13               | 28             |
+| 오른손이 더 김 | 11                | 3                | 8              |
+| 왼손이 더 김  | 2                 | 9                | 14             |
+| 양손이 같음   | 12                | 13               | 28             |
 
-### Solution
+### 풀이
 
-**Step 1: Hypotheses**
+**1단계: 가설**
 
-- $H_0$: Foot length and hand length are independent.
-- $H_1$: Foot length and hand length are not independent.
+- $H_0$: 발 길이와 손 길이는 독립이다.
+- $H_1$: 발 길이와 손 길이는 독립이 아니다.
 
-**Step 2: Observed Frequencies with Totals**
+**2단계: 합계를 포함한 관측도수**
 
 $$
 \begin{array}{c|c|c|c|c}
- & \text{Right Foot} & \text{Left Foot} & \text{Both Same} & \text{Row Total} \\
+ & \text{오른발} & \text{왼발} & \text{양발 같음} & \text{행 합} \\
 \hline
-\text{Right Hand} & 11 & 3 & 8 & 22 \\
-\text{Left Hand} & 2 & 9 & 14 & 25 \\
-\text{Both Same} & 12 & 13 & 28 & 53 \\
+\text{오른손} & 11 & 3 & 8 & 22 \\
+\text{왼손} & 2 & 9 & 14 & 25 \\
+\text{양손 같음} & 12 & 13 & 28 & 53 \\
 \hline
-\text{Col Total} & 25 & 25 & 50 & 100
+\text{열 합} & 25 & 25 & 50 & 100
 \end{array}
 $$
 
-**Step 3: Expected Frequencies**
+**3단계: 기대도수**
 
 $$
 E_{ij} = \frac{\text{(Row Total for Row } i\text{)} \times \text{(Column Total for Column } j\text{)}}{\text{Grand Total}}
@@ -322,35 +324,35 @@ $$
 
 $$
 \begin{array}{c|c|c|c}
- & \text{Right Foot} & \text{Left Foot} & \text{Both Same} \\
+ & \text{오른발} & \text{왼발} & \text{양발 같음} \\
 \hline
-\text{Right Hand} & 5.5 & 5.5 & 11 \\
-\text{Left Hand} & 6.25 & 6.25 & 12.5 \\
-\text{Both Same} & 13.25 & 13.25 & 26.5
+\text{오른손} & 5.5 & 5.5 & 11 \\
+\text{왼손} & 6.25 & 6.25 & 12.5 \\
+\text{양손 같음} & 13.25 & 13.25 & 26.5
 \end{array}
 $$
 
-**Step 4: Test Statistic**
+**4단계: 검정통계량**
 
-Computing each term $(O_{ij} - E_{ij})^2 / E_{ij}$ and summing:
+각 항 $(O_{ij} - E_{ij})^2 / E_{ij}$을 계산해 더하면
 
 $$
 \chi^2 \approx 5.5 + 1.136 + 0.818 + 2.89 + 1.21 + 0.18 + 0.118 + 0.005 + 0.085 \approx 11.94
 $$
 
-**Step 5: Degrees of Freedom**
+**5단계: 자유도**
 
 $$
 \text{df} = (3 - 1)(3 - 1) = 4
 $$
 
-**Step 6: p-value**
+**6단계: p-값**
 
-The p-value for $\chi^2 = 11.94$ with $\text{df} = 4$ is approximately **0.018**.
+$\text{df} = 4$에서 $\chi^2 = 11.94$의 p-값은 약 **0.018**이다.
 
-**Conclusion**: Since the p-value (0.018) is below the conventional significance level of 0.05, we reject the null hypothesis. This suggests there is evidence of an association between foot length and hand length.
+**결론**: p-값(0.018)이 통상적인 유의수준 0.05보다 작으므로 귀무가설을 기각한다. 발 길이와 손 길이 사이에 연관이 있다는 증거가 있음을 시사한다.
 
-### Python Implementation
+### Python 구현
 
 ```python
 import matplotlib.pyplot as plt
@@ -400,9 +402,9 @@ if __name__ == "__main__":
 
 ---
 
-## Example C: Detailed Expected Frequency Computation
+## 예제 C: 기대도수 계산의 상세
 
-This example demonstrates a full step-by-step expected frequency calculation for a larger contingency table.
+이 예제는 더 큰 분할표에 대해 기대도수 계산을 처음부터 끝까지 단계별로 보여준다.
 
 ```python
 """
@@ -492,25 +494,25 @@ else:
 
 ---
 
-## 4. Resampling-Based Chi-Square Test
+## 4. 재표본추출 기반 카이제곱 검정
 
-For situations with small sample sizes, low expected cell frequencies, or when you want a distribution-free approach, permutation/resampling-based chi-square tests provide an alternative to the asymptotic chi-square distribution.
+표본이 작거나 기대 칸 도수가 낮은 상황, 또는 분포에 의존하지 않는 접근을 원할 때, 순열/재표본추출 기반 카이제곱 검정은 점근적 카이제곱 분포의 대안이 된다.
 
-### Algorithm
+### 알고리즘
 
-The resampling approach tests independence by:
+재표본추출 접근은 다음과 같이 독립성을 검정한다:
 
-1. **Calculate observed chi-square statistic** from the actual contingency table
-2. **Generate expected cell probabilities** under independence
-3. **Simulate B contingency tables** by randomly allocating observations according to independence assumption
-4. **Calculate chi-square for each simulated table**
-5. **Compute p-value**: proportion of simulated chi-squares as extreme as or more extreme than observed
+1. 실제 분할표로부터 **관측된 카이제곱 통계량을 계산**한다.
+2. 독립 아래의 **기대 칸 확률을 구한다**.
+3. 독립 가정에 따라 관측값을 무작위로 배정하여 **분할표 B개를 모의생성**한다.
+4. **모의생성된 각 표에 대해 카이제곱을 계산**한다.
+5. **p-값을 계산**한다: 모의 카이제곱 중 관측값만큼 또는 그보다 극단적인 것의 비율.
 
-### Example: Headline Click Rates (A/B Testing)
+### 예제: 헤드라인 클릭률 (A/B 검정)
 
-Three headlines are tested with users; we measure whether they clicked or not. This is typical in digital marketing A/B testing.
+헤드라인 세 개를 사용자에게 보여주고 클릭 여부를 측정한다. 디지털 마케팅의 A/B 검정에서 흔한 상황이다.
 
-**Observed Data:**
+**관측 자료:**
 
 ```python
 import numpy as np
@@ -525,16 +527,16 @@ headlines = pd.DataFrame({
     'Headline': ['Headline A', 'Headline B', 'Headline C']
 })
 
-# Create contingency table
+# Create contingency table with outcomes as rows and headlines as columns
 click_rate = headlines.copy()
-clicks = click_rate.set_index('Headline')[['Click', 'No-click']]
+clicks = click_rate.set_index('Headline')[['Click', 'No-click']].T
 
 print("Observed Contingency Table:")
 print(clicks)
 print(f"\nTotal: {clicks.values.sum()}")
 ```
 
-### Resampling Approach (Without Replacement)
+### 재표본추출 접근 (비복원)
 
 ```python
 def chi2_stat(observed, expected):
@@ -586,18 +588,18 @@ p_value_resamp = sum(np.array(perm_chi2) >= chi2_obs) / len(perm_chi2)
 print(f"Resampling p-value: {p_value_resamp:.4f}")
 ```
 
-### Resampling Approach (With Replacement)
+### 재표본추출 접근 (복원)
 
-Alternatively, sample with replacement from the box:
+대신 상자에서 복원추출할 수도 있다:
 
 ```python
 def sample_with_replacement(box):
     """
-    Generate permuted contingency table by sampling with replacement.
+    Generate contingency table by sampling with replacement.
     """
-    sample_clicks = [sum(random.sample(box, 1000)),
-                     sum(random.sample(box, 1000)),
-                     sum(random.sample(box, 1000))]
+    sample_clicks = [sum(random.choices(box, k=1000)),
+                     sum(random.choices(box, k=1000)),
+                     sum(random.choices(box, k=1000))]
     sample_noclicks = [1000 - n for n in sample_clicks]
     return chi2_stat([sample_clicks, sample_noclicks], row_average.values)
 
@@ -609,7 +611,7 @@ p_value_wr = sum(np.array(perm_chi2_wr) >= chi2_obs) / len(perm_chi2_wr)
 print(f"Resampling (with replacement) p-value: {p_value_wr:.4f}")
 ```
 
-### Comparison: Resampling vs. Parametric
+### 비교: 재표본추출 대 모수적 방법
 
 ```python
 # Parametric chi-square test
@@ -621,7 +623,7 @@ print(f"Resampling (without repl): p-value: {p_value_resamp:.4f}")
 print(f"Resampling (with repl): p-value: {p_value_wr:.4f}")
 ```
 
-### Visualization
+### 시각화
 
 ```python
 import matplotlib.pyplot as plt
@@ -652,126 +654,126 @@ plt.tight_layout()
 plt.show()
 ```
 
-### Advantages of Resampling Chi-Square
+### 재표본추출 카이제곱의 장점
 
-1. **No distributional assumptions**: Does not rely on chi-square approximation
-2. **Small cell counts**: Works even when expected cell counts < 5
-3. **Exact**: p-value is exact (not approximate)
-4. **Flexible**: Can be applied to any contingency table size
+1. **분포 가정이 없다**: 카이제곱 근사에 의존하지 않는다.
+2. **작은 칸 도수**: 기대 칸 도수가 5 미만이어도 작동한다.
+3. **정확하다**: p-값이 (근사가 아니라) 정확하다.
+4. **유연하다**: 어떤 크기의 분할표에도 적용할 수 있다.
 
-### When to Use Resampling
+### 재표본추출을 쓸 때
 
-- **Small expected frequencies**: Any expected cell count < 5
-- **Small sample sizes**: n < 20-30
-- **Robustness check**: Compare against parametric chi-square
-- **Pedagogical value**: Directly tests the null hypothesis through randomization
+- **작은 기대도수**: 기대 칸 도수가 하나라도 5 미만일 때.
+- **작은 표본**: $n < 20$–30일 때.
+- **로버스트성 확인**: 모수적 카이제곱과 비교할 때.
+- **교육적 가치**: 무작위화를 통해 귀무가설을 직접 검정한다.
 
-### Computational Considerations
+### 계산상의 고려사항
 
-- Use 2,000-5,000 permutations for most applications
-- Without-replacement is more conservative; with-replacement is more liberal
-- Both approaches typically give similar p-values for moderate sample sizes
+- 대부분의 응용에서 순열 2,000–5,000회를 쓴다.
+- 비복원 방식이 더 보수적이고 복원 방식이 더 관대하다.
+- 표본크기가 어느 정도 되면 두 접근이 대체로 비슷한 p-값을 준다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Test payment method (cash/card/mobile) × day (weekend/weekday). Data: Weekend (30, 50, 20), Weekday (40, 60, 30). Test at $\alpha = 0.01$.
+**연습문제 1.**
+결제수단(현금/카드/모바일) × 요일(주말/평일)을 검정하라. 자료: 주말 (30, 50, 20), 평일 (40, 60, 30). $\alpha = 0.01$에서 검정하라.
 
-??? success "Solution to Exercise 1"
-    $H_0$: independent. Row totals: 100, 130. Col totals: 70, 110, 50. Grand: 230.
+??? success "연습문제 1 풀이"
+    $H_0$: 독립이다. 행 합계: 100, 130. 열 합계: 70, 110, 50. 총합: 230.
 
-    Expected: $E_{ij} = $ row $\times$ col / 230. E.g., $E_{11} = 100 \cdot 70/230 \approx 30.43$.
+    기대도수: $E_{ij} = $ 행합 $\times$ 열합 / 230. 예를 들어 $E_{11} = 100 \cdot 70/230 \approx 30.43$.
 
-    $\chi^2 = \sum (O - E)^2/E \approx 2.34$. df = $(2-1)(3-1) = 2$.
+    $\chi^2 = \sum (O - E)^2/E \approx 0.43$. df $= (2-1)(3-1) = 2$.
 
-    Critical $\chi^2_{2, 0.01} = 9.21$. $2.34 < 9.21$. **Fail to reject.** No evidence of association.
-
----
-
-**Exercise 2.**
-**Cramer's V** effect size: $V = \sqrt{\chi^2/(N \cdot \min(r-1, c-1))}$. Compute for Exercise 1.
-
-??? success "Solution to Exercise 2"
-    $V = \sqrt{2.34/(230 \cdot 1)} \approx \sqrt{0.0102} \approx 0.10$.
-
-    Interpretation:
-
-    - $V \le 0.1$: weak.
-    - $V \approx 0.3$: moderate.
-    - $V \ge 0.5$: strong.
-
-    $V = 0.10$ — weak (or essentially no) association. Combined with non-rejection, conclude payment method and day-of-week are essentially independent.
-
-    Useful for context: a chi-square can be "significant" with large $N$ even when $V$ is tiny (trivial effect).
+    임계값 $\chi^2_{2, 0.01} = 9.21$. $0.43 < 9.21$이므로 **기각하지 못한다**. 연관의 증거가 없다.
 
 ---
 
-**Exercise 3.**
-**Odds ratio** for $2 \times 2$ table. Define and compute for Smoker × Cancer = (50, 30) vs (10, 100).
+**연습문제 2.**
+**Cramér의 V** 효과크기: $V = \sqrt{\chi^2/(N \cdot \min(r-1, c-1))}$. 연습문제 1에 대해 계산하라.
 
-??? success "Solution to Exercise 3"
-    Table (smoker yes/no × cancer yes/no): $(50, 30) / (10, 100)$.
+??? success "연습문제 2 풀이"
+    $V = \sqrt{0.43/(230 \cdot 1)} \approx \sqrt{0.00187} \approx 0.04$.
 
-    OR = $(50 \cdot 100)/(30 \cdot 10) = 5000/300 \approx 16.7$.
+    해석:
 
-    Interpretation: odds of cancer are 16.7 times higher among smokers vs. non-smokers.
+    - $V \le 0.1$: 약함.
+    - $V \approx 0.3$: 중간.
+    - $V \ge 0.5$: 강함.
 
-    $\ln(\mathrm{OR}) = 2.81$. SE of $\ln(\mathrm{OR})$ = $\sqrt{1/50 + 1/30 + 1/10 + 1/100} \approx \sqrt{0.157} \approx 0.396$.
+    $V = 0.04$이므로 연관이 약하다(사실상 없다). 기각하지 못한 결과와 합쳐서 결제수단과 요일이 사실상 독립이라고 결론짓는다.
 
-    95% CI for $\ln(\mathrm{OR})$: $2.81 \pm 1.96 \cdot 0.396 = (2.03, 3.59)$. Exponentiate: OR CI $= (7.62, 36.2)$.
-
-    Strong association. Don't include 1 — significant.
-
----
-
-**Exercise 4.**
-**Independence in higher dimensions.** Can chi-square handle $r \times c \times s$ contingency tables?
-
-??? success "Solution to Exercise 4"
-    Yes — multi-way tables (3+ variables). df = $(r-1)(c-1)(s-1) \cdots$.
-
-    More complex hypotheses:
-
-    - **Complete independence:** all variables mutually independent.
-    - **Joint independence:** one variable independent of the joint of others.
-    - **Conditional independence:** two variables independent given the third.
-
-    Standard chi-square tests joint independence. **Log-linear models** generalize to all these patterns and provide a unified framework. Used in social-science research with many categorical variables.
+    맥락상 유용한 점: $N$이 크면 $V$가 아주 작아도(효과가 사소해도) 카이제곱이 "유의"해질 수 있다.
 
 ---
 
-**Exercise 5.**
-**Simpson's paradox** in contingency tables.
+**연습문제 3.**
+$2 \times 2$ 표에 대한 **오즈비**. 흡연 × 암 = (50, 30) 대 (10, 100)에 대해 정의하고 계산하라.
 
-??? success "Solution to Exercise 5"
-    A binary treatment-outcome association reverses when conditioning on a third variable.
+??? success "연습문제 3 풀이"
+    표(흡연 여부 × 암 여부): $(50, 30) / (10, 100)$.
 
-    **Berkeley admissions example:** overall, women were admitted at lower rate than men. Conditioned on department, women were admitted at the same or higher rate within each department. The aggregate apparent discrimination disappears once you account for department.
+    OR $= (50 \cdot 100)/(30 \cdot 10) = 5000/300 \approx 16.7$.
 
-    Why: women applied disproportionately to competitive (low-admit) departments. The marginal association reflects department choice + department admission rates, not within-department discrimination.
+    해석: 암에 걸릴 오즈가 비흡연자에 비해 흡연자에서 16.7배 높다.
 
-    **Lesson:** marginal contingency tables can mislead. Always consider whether relevant covariates should be controlled. Aggregated data hides within-group patterns.
+    $\ln(\mathrm{OR}) = 2.81$. $\ln(\mathrm{OR})$의 표준오차는 $\sqrt{1/50 + 1/30 + 1/10 + 1/100} \approx \sqrt{0.1633} \approx 0.404$.
+
+    $\ln(\mathrm{OR})$의 95% 신뢰구간: $2.81 \pm 1.96 \cdot 0.404 = (2.02, 3.61)$. 지수를 취하면 OR의 신뢰구간 $= (7.55, 36.8)$.
+
+    강한 연관이다. 1을 포함하지 않으므로 유의하다.
 
 ---
 
-**Exercise 6.**
-**Fisher's exact test** vs chi-square. When to use Fisher's?
+**연습문제 4.**
+**고차원에서의 독립성.** 카이제곱이 $r \times c \times s$ 분할표를 다룰 수 있는가?
 
-??? success "Solution to Exercise 6"
-    Fisher's exact test computes exact p-values for $2 \times 2$ contingency tables (no asymptotic approximation).
+??? success "연습문제 4 풀이"
+    그렇다. 다원표(변수 3개 이상)를 다룰 수 있다. df $= (r-1)(c-1)(s-1) \cdots$이다.
 
-    Compare with chi-square's approximate distribution.
+    가설이 더 복잡해진다:
 
-    **Use Fisher's when:**
+    - **완전 독립**: 모든 변수가 서로 독립.
+    - **결합 독립**: 한 변수가 나머지의 결합분포와 독립.
+    - **조건부 독립**: 세 번째 변수를 주었을 때 두 변수가 독립.
 
-    - Small samples (expected counts < 5).
-    - Sparse tables.
-    - When exact p-value is required.
+    표준 카이제곱은 결합 독립을 검정한다. **로그선형 모형**은 이 모든 패턴으로 일반화하며 통일된 틀을 제공한다. 범주형 변수가 많은 사회과학 연구에서 쓰인다.
 
-    **Use chi-square when:**
+---
 
-    - Large $n$ (Cochran's rule satisfied).
-    - Multi-way tables.
-    - Computational simplicity desired.
+**연습문제 5.**
+분할표에서의 **Simpson의 역설**.
 
-    Available in scipy: `scipy.stats.fisher_exact`. R: `fisher.test`. Both default to two-sided test.
+??? success "연습문제 5 풀이"
+    이진 처치–결과 사이의 연관이 세 번째 변수로 조건화하면 뒤집히는 현상이다.
+
+    **버클리 입학 예:** 전체로 보면 여성의 합격률이 남성보다 낮았다. 그러나 학과로 조건화하면 각 학과 안에서는 여성의 합격률이 같거나 더 높았다. 학과를 고려하면 집계 수준에서 보이던 차별이 사라진다.
+
+    이유: 여성이 경쟁이 심한(합격률이 낮은) 학과에 불균형하게 많이 지원했다. 주변 수준의 연관은 학과 선택과 학과별 합격률을 반영한 것이지 학과 내 차별을 반영한 것이 아니다.
+
+    **교훈:** 주변 분할표는 오도할 수 있다. 관련 공변량을 통제해야 하는지 항상 고려하라. 집계된 자료는 집단 내부의 패턴을 감춘다.
+
+---
+
+**연습문제 6.**
+**Fisher의 정확검정** 대 카이제곱. Fisher를 언제 쓰는가?
+
+??? success "연습문제 6 풀이"
+    Fisher의 정확검정은 $2 \times 2$ 분할표에 대해 (점근 근사 없이) 정확한 p-값을 계산한다.
+
+    카이제곱의 근사 분포와 대비된다.
+
+    **Fisher를 쓸 때:**
+
+    - 표본이 작을 때(기대도수 < 5).
+    - 표가 희소할 때.
+    - 정확한 p-값이 필요할 때.
+
+    **카이제곱을 쓸 때:**
+
+    - $n$이 클 때(Cochran의 규칙을 만족할 때).
+    - 다원표일 때.
+    - 계산이 간단하기를 원할 때.
+
+    scipy에서는 `scipy.stats.fisher_exact`, R에서는 `fisher.test`로 쓸 수 있다. 둘 다 기본이 양측검정이다.

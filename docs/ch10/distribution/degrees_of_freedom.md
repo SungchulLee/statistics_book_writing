@@ -1,60 +1,62 @@
-# Degrees of Freedom and Asymptotic Theory
+# 자유도와 점근 이론
 
-## Degrees of Freedom in Chi-Square Tests
+## 카이제곱 검정의 자유도
 
-The degrees of freedom determine the shape of the chi-square distribution used as the reference distribution under $H_0$. The calculation depends on which chi-square test is being performed.
+자유도는 $H_0$ 아래 기준분포로 쓰이는 카이제곱 분포의 모양을 결정한다. 계산 방식은 어떤 카이제곱 검정을 하는지에 따라 달라진다.
 
-### Goodness-of-Fit Test
+### 적합도 검정
 
-For the goodness-of-fit test with $k$ categories:
+범주가 $k$개인 적합도 검정에서는
 
 $$
 \text{df} = k - 1
 $$
 
-The single constraint arises because the observed counts must sum to the total sample size $n$:
+이다. 제약이 하나 생기는 것은 관측도수의 합이 전체 표본크기 $n$이어야 하기 때문이다:
 
 $$
 \sum_{i=1}^{k} O_i = n = \sum_{i=1}^{k} E_i
 $$
 
-This means only $k - 1$ of the deviations $O_i - E_i$ are free to vary; the last is determined by the others.
+따라서 편차 $O_i - E_i$ 중 $k - 1$개만 자유롭게 변할 수 있고 마지막 하나는 나머지로 결정된다.
 
-### Test of Independence and Homogeneity
+### 독립성 검정과 동질성 검정
 
-For an $r \times c$ contingency table:
+$r \times c$ 분할표에서는
 
 $$
 \text{df} = (r - 1) \times (c - 1)
 $$
 
-where $r$ is the number of rows and $c$ is the number of columns.
+이며, 여기서 $r$은 행의 수, $c$는 열의 수이다.
 
-The constraints are:
+제약은 다음과 같다:
 
-- Row totals must match: $r - 1$ independent constraints from rows.
-- Column totals must match: $c - 1$ independent constraints from columns.
-- One constraint is redundant (the grand total).
+- 행 합계가 일치해야 한다: 행에서 나오는 독립인 제약 $r - 1$개.
+- 열 합계가 일치해야 한다: 열에서 나오는 독립인 제약 $c - 1$개.
+- 제약 하나(총합)는 중복이다.
 
-So the total number of free cells in the table is:
+따라서 표에서 자유로운 칸의 수는
 
 $$
 rc - 1 - (r - 1) - (c - 1) = (r - 1)(c - 1)
 $$
 
-## Asymptotic Theory
+이다.
 
-### The Core Result
+## 점근 이론
 
-Under $H_0$, for large sample sizes, the chi-square test statistic
+### 핵심 결과
+
+$H_0$ 아래에서 표본크기가 크면 카이제곱 검정통계량
 
 $$
 \chi^2 = \sum \frac{(O_{ij} - E_{ij})^2}{E_{ij}}
 $$
 
-converges in distribution to a chi-square random variable with the appropriate degrees of freedom. This is an **asymptotic** result — it holds approximately for finite samples, and the approximation improves as the sample size grows.
+은 적절한 자유도의 카이제곱 확률변수로 분포수렴한다. 이는 **점근적** 결과이다. 유한 표본에서는 근사적으로 성립하며 표본크기가 커질수록 근사가 좋아진다.
 
-### Derivation Sketch for Goodness-of-Fit
+### 적합도 검정의 유도 개요
 
 $$
 \sum_{i=1}^k \frac{(O_i - E_i)^2}{E_i}
@@ -62,7 +64,7 @@ $$
 = \sum_{i=1}^k \left(\frac{\left(\sum_{j=1}^{n} X_j\right) - np_i}{\sqrt{np_i}}\right)^2
 $$
 
-Approximating the denominator:
+분모를 근사하면
 
 $$
 \approx \sum_{i=1}^k \left(\frac{\left(\sum_{j=1}^{n} X_j\right) - np_i}{\sqrt{np_i(1-p_i)}}\right)^2
@@ -70,72 +72,72 @@ $$
 = \chi^2_{k-1}
 $$
 
-The final step uses the fact that the $Z_i$ are not fully independent (they satisfy a linear constraint), reducing the effective degrees of freedom from $k$ to $k-1$.
+이다. 마지막 단계는 $Z_i$들이 완전히 독립이 아니라는(선형 제약 하나를 만족한다는) 사실을 이용하며, 이 때문에 유효 자유도가 $k$에서 $k-1$로 줄어든다.
 
-### Rate of Convergence
+### 수렴 속도
 
-The chi-square approximation improves with:
+카이제곱 근사는 다음 조건에서 좋아진다:
 
-- Larger total sample size $n$.
-- More uniform expected cell counts.
-- Fewer categories with very small expected frequencies.
+- 전체 표본크기 $n$이 클수록.
+- 기대 칸 도수가 고르게 분포할수록.
+- 기대도수가 아주 작은 범주가 적을수록.
 
-As a practical guideline, the approximation is generally reliable when all expected frequencies are at least 5.
+실무 지침으로는 모든 기대도수가 적어도 5 이상일 때 근사가 대체로 믿을 만하다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-A contingency table has 4 rows and 3 columns. How many degrees of freedom does the chi-square test of independence have? Explain the formula.
+**연습문제 1.**
+어떤 분할표가 4행 3열이다. 카이제곱 독립성 검정의 자유도는 얼마인가? 공식을 설명하라.
 
-??? success "Solution to Exercise 1"
-    The degrees of freedom are:
+??? success "연습문제 1 풀이"
+    자유도는
 
     $$
     df = (r-1)(c-1) = (4-1)(3-1) = 3 \times 2 = 6
     $$
 
-    The formula arises because the expected frequencies are computed from the marginal totals. With $r$ rows and $c$ columns, there are $r + c$ marginal totals, but they are subject to the constraint that row and column marginals both sum to $n$, giving $r + c - 1$ constraints. The number of free parameters is $(r \times c) - 1 - (r + c - 1) = rc - r - c + 1 = (r-1)(c-1)$.
+    이다. 이 공식이 나오는 것은 기대도수를 주변 합계로부터 계산하기 때문이다. $r$행 $c$열이면 주변 합계가 $r + c$개인데, 행 주변합과 열 주변합이 모두 $n$으로 합해져야 한다는 제약이 있어 제약은 $r + c - 1$개가 된다. 자유로운 모수의 수는 $(r \times c) - 1 - (r + c - 1) = rc - r - c + 1 = (r-1)(c-1)$이다.
 
 ---
 
-**Exercise 2.**
-A goodness-of-fit test for a normal distribution uses 8 bins. Two parameters ($\mu$ and $\sigma$) are estimated from the data. What are the degrees of freedom?
+**연습문제 2.**
+Normal 분포에 대한 적합도 검정에서 구간을 8개 쓰고 두 모수($\mu$와 $\sigma$)를 자료로부터 추정했다. 자유도는 얼마인가?
 
-??? success "Solution to Exercise 2"
-    For a goodness-of-fit test with $k$ bins and $p$ estimated parameters:
+??? success "연습문제 2 풀이"
+    구간이 $k$개이고 추정한 모수가 $p$개인 적합도 검정에서는
 
     $$
     df = k - 1 - p = 8 - 1 - 2 = 5
     $$
 
-    Each estimated parameter reduces the degrees of freedom by 1 because it introduces an additional constraint: the expected frequencies are computed using the estimated (not hypothesized) parameter values, which reduces the discrepancy between observed and expected.
+    이다. 추정한 모수 하나마다 자유도가 1씩 줄어드는 것은 제약이 하나씩 더 생기기 때문이다. 기대도수를 (가설로 주어진 값이 아니라) 추정된 모수값으로 계산하므로 관측과 기대 사이의 어긋남이 줄어든다.
 
 ---
 
-**Exercise 3.**
-A chi-square test has $n = 50$ observations in 10 categories with equal expected frequencies. Check whether the rule-of-thumb condition (all expected frequencies at least 5) is satisfied.
+**연습문제 3.**
+어떤 카이제곱 검정에서 관측값이 $n = 50$개이고 범주가 10개이며 기대도수가 모두 같다. 경험 법칙 조건(모든 기대도수가 적어도 5)이 만족되는지 확인하라.
 
-??? success "Solution to Exercise 3"
-    With $n = 50$ and $k = 10$ equal categories, each expected frequency is:
+??? success "연습문제 3 풀이"
+    $n = 50$이고 같은 크기의 범주가 $k = 10$개이면 각 기대도수는
 
     $$
     E_i = \frac{n}{k} = \frac{50}{10} = 5
     $$
 
-    The condition $E_i \geq 5$ is satisfied (exactly at the boundary). The chi-square approximation should be adequate, though some statisticians recommend $E_i \geq 5$ as a minimum and prefer $E_i \geq 10$ for greater reliability.
+    이다. 조건 $E_i \geq 5$가 (정확히 경계에서) 만족된다. 카이제곱 근사가 적절할 것이나, 일부 통계학자는 $E_i \geq 5$를 최소 기준으로 보고 더 안전하게는 $E_i \geq 10$을 권한다.
 
 ---
 
-**Exercise 4.**
-If one of the 10 categories in Exercise 3 had only 2 expected observations, what remedial action could be taken?
+**연습문제 4.**
+연습문제 3의 10개 범주 중 하나의 기대도수가 2뿐이라면 어떤 보완 조치를 취할 수 있는가?
 
-??? success "Solution to Exercise 4"
-    When expected frequencies are too small, common remedies include:
+??? success "연습문제 4 풀이"
+    기대도수가 너무 작을 때 흔히 쓰는 대처는 다음과 같다:
 
-    1. **Combine adjacent categories**: Merge the low-frequency category with a neighboring category to create a combined category with a larger expected count. This reduces $k$ and increases the expected frequency in the combined cell.
+    1. **인접한 범주 병합**: 도수가 낮은 범주를 이웃 범주와 합쳐 기대도수가 큰 범주를 만든다. $k$가 줄고 합쳐진 칸의 기대도수가 커진다.
 
-    2. **Use an exact test**: Fisher's exact test or a permutation test does not rely on the chi-square approximation and can handle small expected frequencies.
+    2. **정확검정 사용**: Fisher의 정확검정이나 순열검정은 카이제곱 근사에 의존하지 않으므로 작은 기대도수도 다룰 수 있다.
 
-    3. **Collect more data**: If possible, increasing $n$ proportionally increases all expected frequencies.
+    3. **자료 추가 수집**: 가능하다면 $n$을 늘리면 모든 기대도수가 비례하여 커진다.
 
-    The first option (combining categories) is most common in practice. The combined categories should be scientifically meaningful — adjacent or similar categories should be merged rather than arbitrary ones.
+    실무에서는 첫 번째 선택지(범주 병합)가 가장 흔하다. 다만 합치는 범주는 과학적으로 의미가 있어야 한다. 임의로 고르지 말고 인접하거나 성격이 비슷한 범주를 합쳐야 한다.
