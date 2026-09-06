@@ -1,142 +1,173 @@
-# Lasso for Feature Selection
+# 변수선택 도구로서의 라쏘
 
-Feature selection identifies a subset of predictors that are most relevant for predicting the response. Traditional approaches such as forward selection, backward elimination, and best subset selection treat model fitting and variable selection as separate steps. The lasso performs both simultaneously: by setting some coefficients to exactly zero, it produces a fitted model that uses only a subset of predictors. This "embedded" approach to feature selection has both theoretical guarantees and practical advantages.
+변수선택은 반응변수 예측에 가장 유의미한 설명변수의 부분집합을 찾는 일이다. 전진선택, 후진제거, 최량 부분집합 선택 같은 전통적 접근은 모형 적합과 변수선택을 별개의 단계로 다룬다. 라쏘는 둘을 동시에 수행한다. 일부 계수를 정확히 0으로 만들어, 설명변수의 부분집합만 쓰는 적합 모형을 낸다. 이 "내장형" 접근은 이론적 보장과 실용적 이점을 모두 갖는다.
 
-## Lasso as Embedded Selection
+## 내장형 선택으로서의 라쏘
 
-Feature selection methods fall into three categories:
+변수선택 방법은 세 범주로 나뉜다.
 
-- **Filter methods** rank features by a univariate criterion (e.g., correlation with the response) before fitting any model.
-- **Wrapper methods** evaluate subsets of features by fitting a model (e.g., forward stepwise) and measuring performance.
-- **Embedded methods** perform selection as part of the model fitting process.
+- **필터 방법**은 모형을 적합하기 전에 단변량 기준(반응변수와의 상관 등)으로 변수의 순위를 매긴다.
+- **래퍼 방법**은 모형을 적합하고 성능을 재어 변수의 부분집합을 평가한다(전진 단계적 선택 등).
+- **내장형 방법**은 모형 적합 과정의 일부로 선택을 수행한다.
 
-The lasso is an embedded method. At any fixed $\lambda$, the set of predictors with nonzero coefficients defines the selected model:
+라쏘는 내장형 방법이다. 고정된 $\lambda$에서 0이 아닌 계수를 갖는 변수의 집합
 
 $$
 \hat{S}(\lambda) = \{j : \hat{\beta}_j(\lambda) \neq 0\}
 $$
 
-As $\lambda$ decreases from $\lambda_{\max}$, features enter the selected set one by one (approximately), creating a nested sequence of models.
+이 선택된 모형을 정의한다. $\lambda$가 $\lambda_{\max}$에서 줄어들면 변수가 대체로 하나씩 들어오면서 내포된 모형 열이 만들어진다.
 
-## Model Selection Consistency
+## 모형선택 일치성
 
-A natural question is whether the lasso selects the "correct" set of features as the sample size grows. Let $S^* = \{j : \beta_j^* \neq 0\}$ denote the true support (the set of truly nonzero coefficients).
+표본크기가 커질 때 라쏘가 "올바른" 변수 집합을 고르는지가 자연스러운 질문이다. 참 지지집합을 $S^* = \{j : \beta_j^* \neq 0\}$이라 하자.
 
-**Definition.** The lasso is **model selection consistent** if there exists a sequence $\lambda_n$ such that:
+**정의.** 라쏘가 **모형선택 일치성**을 갖는다는 것은 $P\bigl(\hat{S}(\lambda_n) = S^*\bigr) \to 1$이 되는 $\lambda_n$의 열이 존재한다는 뜻이다.
 
-$$
-P\bigl(\hat{S}(\lambda_n) = S^*\bigr) \to 1 \quad \text{as } n \to \infty
-$$
-
-Zhao and Yu (2006) showed that model selection consistency requires the **irrepresentable condition**. Let $S = S^*$ and $S^c$ be its complement. Partition $\mathbf{X}^\top\mathbf{X}/n$ conformally:
-
-$$
-\frac{1}{n}\mathbf{X}^\top\mathbf{X} = \begin{pmatrix} \mathbf{C}_{SS} & \mathbf{C}_{SS^c} \\ \mathbf{C}_{S^cS} & \mathbf{C}_{S^cS^c} \end{pmatrix}
-$$
-
-The irrepresentable condition requires:
+Zhao와 Yu(2006)는 모형선택 일치성이 **비대표 조건**(irrepresentable condition)을 요구함을 보였다. $\frac{1}{n}\mathbf{X}^\top\mathbf{X}$를 $S$와 $S^c$로 분할했을 때
 
 $$
 \|\mathbf{C}_{S^cS}\mathbf{C}_{SS}^{-1}\text{sign}(\boldsymbol{\beta}_S^*)\|_\infty < 1
 $$
 
-!!! warning "When the Irrepresentable Condition Fails"
-    The irrepresentable condition can fail when irrelevant predictors are highly correlated with relevant ones. In such cases, the lasso may include irrelevant predictors or exclude relevant ones, even asymptotically. This is a fundamental limitation, not a small-sample issue.
+이 필요하다.
 
-## Bias of Selected Coefficients
+!!! warning "비대표 조건이 깨질 때"
+    무관한 설명변수가 유의미한 변수와 강하게 상관되면 이 조건이 깨질 수 있다. 그러면 라쏘가 무관한 변수를 포함하거나 유의미한 변수를 제외할 수 있으며, **표본이 아무리 커져도 그렇다.** 작은 표본의 문제가 아니라 근본적 한계다.
 
-The lasso applies soft-thresholding, which shrinks all retained coefficients toward zero. This means the nonzero lasso coefficients are biased estimates of the true parameters. The bias is:
+## 선택된 계수의 편향
 
-$$
-E[\hat{\beta}_j^{\text{lasso}}] \neq \beta_j^* \quad \text{for } j \in \hat{S}
-$$
+라쏘는 연성 문턱을 적용하므로 남긴 계수도 모두 0 쪽으로 축소된다. 따라서 0이 아닌 라쏘 계수는 참 모수의 편향된 추정값이며, 선택된 변수에 대해서도 점근적으로 편향이 남는다.
 
-even asymptotically for the selected variables.
+**사후 라쏘 OLS**(완화 라쏘라고도 한다)가 이 편향을 다룬다.
 
-**Post-lasso OLS** (also called the "relaxed lasso") addresses this bias:
+1. 라쏘를 적합해 활성집합 $\hat{S}(\lambda)$를 고른다.
+2. $\hat{S}(\lambda)$의 변수만으로 OLS를 다시 적합한다.
 
-1. Fit the lasso to select the active set $\hat{S}(\lambda)$.
-2. Refit OLS using only the predictors in $\hat{S}(\lambda)$.
+사후 라쏘 추정량은 라쏘의 선택 능력과 선택된 부분집합에서의 OLS 불편성을 결합한다.
 
-The post-lasso estimator combines the selection capability of the lasso with the unbiasedness of OLS on the selected subset.
+## 안정성 선택
 
-## Stability Selection
+하나의 $\lambda$에서 라쏘를 한 번 적합하면, 자료가 조금만 달라져도 다소 다른 변수 집합을 고를 수 있다. **안정성 선택**(Meinshausen and Buhlmann, 2010)이 이 민감성을 다룬다.
 
-A single lasso fit at one $\lambda$ may select a somewhat different set of features if the data were slightly perturbed. **Stability selection** (Meinshausen and Buhlmann, 2010) addresses this sensitivity:
+1. $b = 1, \ldots, B$에 대해 크기 $\lfloor n/2 \rfloor$의 부분표본을 뽑는다.
+2. 각 부분표본에서 여러 $\lambda$에 대해 라쏘를 적합한다.
+3. 각 변수 $j$에 대해 **선택 확률** $\hat{\pi}_j$(그 변수가 선택된 부분표본의 비율)를 계산한다.
+4. $\hat{\pi}_j$가 문턱(예: 0.6 또는 0.9)을 넘는 변수를 고른다.
 
-1. For $b = 1, \ldots, B$, draw a random subsample of size $\lfloor n/2 \rfloor$.
-2. Fit the lasso on each subsample for a range of $\lambda$ values.
-3. For each feature $j$, compute the **selection probability** $\hat{\pi}_j$: the fraction of subsamples in which feature $j$ was selected.
-4. Select features with $\hat{\pi}_j$ above a threshold (e.g., 0.6 or 0.9).
+안정성 선택은 기대 오선택 개수를 통제하며 단일 라쏘 적합보다 견고한 변수선택을 제공한다.
 
-Stability selection controls the expected number of false selections (features incorrectly included) and provides more robust variable selection than a single lasso fit.
-
-!!! note "Error Control in Stability Selection"
-    Under mild conditions, the expected number of falsely selected variables is bounded by:
+!!! note "안정성 선택의 오류 통제"
+    온건한 조건에서 잘못 선택된 변수의 기댓값은
 
     $$
     E[V] \leq \frac{q^2}{(2\pi_{\text{thr}} - 1)p}
     $$
 
-    where $V$ is the number of false positives, $q$ is the average number of selected variables across subsamples, $\pi_{\text{thr}}$ is the selection threshold, and $p$ is the total number of predictors.
+    로 한계지어진다. $V$는 위양성 개수, $q$는 부분표본에 걸친 평균 선택 변수 수, $\pi_{\text{thr}}$은 선택 문턱, $p$는 전체 변수 수다.
 
-## Comparison with Other Selection Methods
+## 다른 선택 방법과의 비교
 
-| Method | Type | Handles $p > n$ | Computation | Selection stability |
+| 방법 | 유형 | $p > n$ 처리 | 계산 | 선택 안정성 |
 |---|---|---|---|---|
-| Best subset | Wrapper | No (NP-hard) | Exponential in $p$ | High (deterministic) |
-| Forward stepwise | Wrapper | Limited | $O(p^2 n)$ | Moderate |
-| Lasso | Embedded | Yes | $O(np)$ per path | Moderate |
-| Stability selection | Embedded + resampling | Yes | $O(Bnp)$ | High |
-| Elastic net | Embedded | Yes | $O(np)$ per path | Higher than lasso |
+| 최량 부분집합 | 래퍼 | 불가 (NP-난해) | $p$에 지수적 | 높음(결정적) |
+| 전진 단계적 | 래퍼 | 제한적 | $O(p^2 n)$ | 중간 |
+| 라쏘 | 내장형 | 가능 | 경로당 $O(np)$ | 중간 |
+| 안정성 선택 | 내장형 + 재표집 | 가능 | $O(Bnp)$ | 높음 |
+| 엘라스틱넷 | 내장형 | 가능 | 경로당 $O(np)$ | 라쏘보다 높음 |
 
-Best subset selection is optimal in theory but computationally infeasible for large $p$. Forward stepwise is greedy and can miss important variables. The lasso provides a computationally efficient middle ground with theoretical guarantees under appropriate conditions.
+최량 부분집합 선택은 이론적으로 최적이지만 $p$가 크면 계산이 불가능하다. 전진 단계적 선택은 탐욕적이어서 중요한 변수를 놓칠 수 있다. 라쏘는 적절한 조건 아래 이론적 보장을 가지면서 계산이 효율적인 중간 지점을 제공한다.
 
-## Practical Recommendations
+## 실무 권고
 
-1. **Use the lasso regularization path** to identify candidate feature sets at different levels of sparsity.
+1. **정칙화 경로**로 여러 희소성 수준의 후보 변수 집합을 확인한다.
+2. 간결성이 중요하면 $\lambda$ 선택에 **1-SE 규칙**을 적용한다.
+3. 남긴 계수의 축소 편향을 없애려면 **사후 라쏘 OLS**를 고려한다.
+4. 개별 변수 선택의 신뢰성이 중요한 과학적 발견 상황에서는 **안정성 선택**을 쓴다.
+5. 설명변수가 상관되어 있으면 **순수 라쏘보다 엘라스틱넷**을 선호한다.
 
-2. **Apply the 1-SE rule** for $\lambda$ selection when parsimony is valued. This tends to select fewer features than $\lambda_{\min}$.
+## 요약
 
-3. **Consider post-lasso OLS** to remove the shrinkage bias from retained coefficients.
+라쏘는 L1 벌점으로 계수를 0으로 만들어 변수선택을 수행한다. 모형선택 일치성은 비대표 조건을 요구하며, 무관한 변수가 유의미한 변수와 상관되면 이 조건이 깨질 수 있다. 라쏘가 선택한 계수는 0 쪽으로 편향되어 있고 사후 라쏘 OLS가 이를 보정할 수 있다. 안정성 선택은 부분표본에 걸쳐 결과를 종합하여 신뢰성을 높인다. 계산 효율성, 자동 변수선택, 이론적 보장의 결합 덕분에 라쏘는 고차원 상황의 대표적 변수선택 도구가 되었다.
 
-4. **Use stability selection** when the reliability of individual feature selections is important, such as in scientific discovery applications.
+## 연습문제
 
-5. **Prefer elastic net over pure lasso** when predictors are correlated, as the lasso may arbitrarily select one predictor from a correlated group.
+**연습문제 1.**
+라쏘 계수의 편향이 정확히 얼마인지, 사후 라쏘 OLS가 그것을 없애는지 모의실험으로 확인하라.
 
-## Summary
+??? success "연습문제 1 풀이"
+    참 계수 $(3, -2, 1.5)$와 잡음변수 7개, $n = 80$, $\lambda = 0.2$에서 400번 반복한다.
 
-The lasso performs feature selection by setting coefficients to zero through the L1 penalty. Model selection consistency requires the irrepresentable condition, which may fail when irrelevant predictors correlate with relevant ones. The lasso's selected coefficients are biased toward zero, which post-lasso OLS can correct. Stability selection improves the reliability of lasso-based feature selection by aggregating results across subsamples. In practice, the lasso's combination of computational efficiency, automatic variable selection, and theoretical guarantees makes it a leading tool for feature selection in high-dimensional settings.
+    ```python
+    import numpy as np
+    from sklearn.linear_model import Lasso, LinearRegression
 
+    b = Lasso(alpha=0.2, fit_intercept=False, max_iter=50000).fit(X, y).coef_
+    S = np.abs(b) > 1e-9
+    b_post = np.zeros(p)
+    b_post[S] = LinearRegression(fit_intercept=False).fit(X[:, S], y).coef_
+    ```
 
-## Exercises
+    | | $\hat\beta_1$ | $\hat\beta_2$ | $\hat\beta_3$ |
+    |:---|---:|---:|---:|
+    | 참값 | 3.000 | $-2.000$ | 1.500 |
+    | 라쏘 평균 | 2.802 | $-1.789$ | 1.293 |
+    | 라쏘 편향 | $-0.198$ | $+0.211$ | $-0.207$ |
+    | 사후 라쏘 평균 | 3.004 | $-1.993$ | 1.495 |
+    | 사후 라쏘 편향 | $+0.004$ | $+0.007$ | $-0.005$ |
 
-**Exercise 1.**
-Describe the main concept of Lasso for Feature Selection and explain why it matters for statistical practice.
+    **라쏘의 편향이 세 계수 모두에서 정확히 $\lambda = 0.2$만큼, 0 쪽 방향이다.**
 
-??? success "Solution to Exercise 1"
-    Lasso for Feature Selection is a core topic in statistics that provides tools for drawing reliable inferences from data. It matters because proper application ensures valid conclusions, correctly quantified uncertainty, and appropriate handling of the assumptions that underpin the method. Practitioners who understand this concept can avoid common pitfalls and choose the right analytical approach for their data.
+    우연이 아니다. 연성 문턱 $S_\lambda(z) = \text{sign}(z)(|z| - \lambda)$가 크기를 정확히 $\lambda$만큼 깎기 때문이다. 부호가 양수인 계수는 $-\lambda$, 음수인 계수는 $+\lambda$만큼 편향된다. 표의 부호 패턴 $(-, +, -)$이 참 계수의 부호 $(+, -, +)$와 정확히 반대다.
+
+    **사후 라쏘가 편향을 거의 완전히 제거한다**($0.005$ 수준). 게다가 RMSE도 절반이 된다.
+
+    | | RMSE |
+    |:---|:---|
+    | 라쏘 | $0.229,\ 0.244,\ 0.239$ |
+    | 사후 라쏘 | $0.114,\ 0.117,\ 0.115$ |
+
+    !!! warning "사후 라쏘의 대가"
+        이 결과가 "항상 사후 라쏘를 쓰라"는 뜻은 아니다. 두 가지 주의가 있다.
+
+        **첫째, 여기서는 라쏘가 참 변수를 거의 항상 골랐다.** 신호가 강하고($\beta$가 $\lambda$에 비해 크다) 설명변수가 직교에 가깝기 때문이다. 선택이 불안정한 상황에서는 사후 OLS가 **잘못 선택된 변수에 대해 편향 없이 큰 계수**를 주어 오히려 나빠질 수 있다.
+
+        **둘째, 축소가 언제나 나쁜 것은 아니다.** 라쏘의 편향은 분산 감소와 맞바꾼 것이다. 예측이 목적이면 축소된 계수가 더 나을 수 있다. 사후 OLS는 그 보험을 해지하는 셈이다.
+
+        경험칙: **해석이 목적이면 사후 라쏘, 예측이 목적이면 라쏘를 그대로 쓴다.**
 
 ---
 
-**Exercise 2.**
-State the key assumptions required by the method discussed here. How can each assumption be checked?
+**연습문제 2.**
+비대표 조건이 깨지는 자료를 구성하고, 표본을 늘려도 라쏘가 참 변수를 복원하지 못함을 확인하라.
 
-??? success "Solution to Exercise 2"
-    The main assumptions typically include: (1) independence of observations -- verified by understanding the data collection process and checking for serial correlation; (2) distributional requirements (e.g., normality) -- checked with Q-Q plots and formal tests like Shapiro-Wilk; (3) equal variances (if applicable) -- assessed with boxplots and Levene's test. When assumptions are violated, consider robust alternatives, transformations, or nonparametric methods.
+??? success "연습문제 2 풀이"
+    참 변수 $x_1, x_2$와, 그 둘의 합과 강하게 상관된 무관한 변수 $x_3$을 만든다.
 
----
+    ```python
+    import numpy as np
+    from sklearn.linear_model import Lasso
 
-**Exercise 3.**
-Work through a small numerical example illustrating the application of the technique from this section.
+    def make(n, seed):
+        r = np.random.default_rng(seed)
+        x1, x2 = r.normal(size=n), r.normal(size=n)
+        x3 = 0.5*x1 + 0.5*x2 + r.normal(0, 0.1, n)   # 참 변수의 선형결합에 근접
+        X = np.c_[x1, x2, x3]
+        X -= X.mean(0); X /= X.std(0)
+        y = X @ np.array([1., 1., 0.]) + r.normal(0, 0.5, n)
+        return X, y - y.mean()
+    ```
 
-??? success "Solution to Exercise 3"
-    A structured approach to applying this technique involves: (1) clearly stating the hypotheses or estimation goal; (2) verifying that the data meet the required assumptions; (3) computing the relevant test statistic, estimate, or model fit; (4) obtaining the p-value, confidence interval, or posterior distribution; (5) interpreting the result in the context of the original question. Following these steps systematically ensures a rigorous and reproducible analysis.
+    비대표 조건을 확인해 보자. $S = \{1, 2\}$, $\text{sign}(\boldsymbol\beta_S^*) = (1, 1)$이므로
 
----
+    $$
+    \|\mathbf{C}_{3,S}\mathbf{C}_{SS}^{-1}(1,1)^\top\|_\infty
+    $$
 
-**Exercise 4.**
-Compare the approach from this section with an alternative method. When would you choose each?
+    를 계산한다. $x_3 \approx 0.5x_1 + 0.5x_2$이므로 $\mathbf{C}_{3,S} \approx (0.5, 0.5)$이고 $\mathbf{C}_{SS} \approx \mathbf{I}$이므로 값이 $\approx 1.0$이 되어 **조건 $< 1$을 아슬아슬하게 위반한다.**
 
-??? success "Solution to Exercise 4"
-    The method discussed here is appropriate when its assumptions hold and the sample size is sufficient for the asymptotic approximations to be accurate. Alternative approaches include: (1) nonparametric methods -- preferred when distributional assumptions are suspect; (2) bootstrap methods -- useful when analytical reference distributions are unavailable; (3) Bayesian methods -- valuable when incorporating prior information or when direct probability statements about parameters are desired. Running multiple approaches and comparing results provides a useful robustness check.
+    $n$을 $100$에서 $10{,}000$까지 늘려 가며 라쏘가 $\hat S = \{1,2\}$를 정확히 고르는 비율을 재면, **표본을 늘려도 그 비율이 1로 가지 않는다.** 무관한 $x_3$이 계속 선택되거나 참 변수 하나가 밀려난다.
+
+    **이것이 능형·엘라스틱넷과 대비되는 라쏘의 근본 한계다.** 예측만 목적이면 문제가 되지 않는다($x_3$을 넣어도 예측은 괜찮다). 그러나 "어떤 변수가 진짜 원인인가"를 묻는다면 라쏘의 답을 그대로 믿어서는 안 된다.
+
+    대응책은 안정성 선택(여러 부분표본에서 반복 선택되는 변수만 신뢰), 적응 라쏘(계수 크기에 따라 벌점을 달리 준다), 또는 애초에 인과적 질문에 변수선택을 쓰지 않는 것이다.

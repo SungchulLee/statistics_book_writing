@@ -1,54 +1,53 @@
-# Elastic Net Examples
+# 엘라스틱넷 예제
 
-## Overview
+## 개요
 
-The Elastic Net combines the $L_1$ (Lasso) and $L_2$ (Ridge) penalties into a single
-regularization framework. It inherits the sparsity-inducing property of the Lasso while
-retaining ridge regression's ability to handle groups of correlated predictors. This page
-develops the Elastic Net objective, derives its solution in the orthonormal case, and discusses
-practical guidance for choosing its two tuning parameters.
+엘라스틱넷은 $L_1$(라쏘) 벌점과 $L_2$(능형) 벌점을 하나의 정칙화 틀로 결합한다. 라쏘의
+희소성 유도 성질을 물려받으면서, 상관된 설명변수 집단을 다루는 능형회귀의 능력도 함께 갖는다.
+이 절에서는 엘라스틱넷 목적함수를 세우고 정규직교 경우의 해를 유도하며, 두 조율모수를 고르는
+실무 지침을 다룬다.
 
-## The Elastic Net Objective
+## 엘라스틱넷 목적함수
 
-Given $X \in \mathbb{R}^{n \times p}$ and $y \in \mathbb{R}^n$, the Elastic Net solves
-
-$$
-\hat{\beta}^{\text{EN}} = \arg\min_{\beta} \left\{ \frac{1}{2n}\| y - X\beta \|_2^2 + \lambda \left[ \alpha \|\beta\|_1 + \frac{1 - \alpha}{2} \|\beta\|_2^2 \right] \right\},
-$$
-
-where $\lambda \ge 0$ controls the overall regularization strength and $\alpha \in [0, 1]$
-controls the mix between the two penalties:
-
-- $\alpha = 1$: pure Lasso.
-- $\alpha = 0$: pure Ridge.
-- $0 < \alpha < 1$: Elastic Net.
-
-## Orthonormal Design Solution
-
-When $X^\top X = n I_p$, the Elastic Net estimate for the $j$-th coefficient reduces to
+$X \in \mathbb{R}^{n \times p}$와 $y \in \mathbb{R}^n$이 주어졌을 때 엘라스틱넷은
 
 $$
-\hat{\beta}_j^{\text{EN}} = \frac{1}{1 + \lambda(1 - \alpha)}\, S\!\left(\hat{\beta}_j^{\text{OLS}},\; \lambda \alpha\right),
+\hat{\beta}^{\text{EN}} = \arg\min_{\beta} \left\{ \frac{1}{2n}\| y - X\beta \|_2^2 + \lambda \left[ \alpha \|\beta\|_1 + \frac{1 - \alpha}{2} \|\beta\|_2^2 \right] \right\}
 $$
 
-where $S(\cdot, \cdot)$ is the soft-thresholding operator. This shows that the Elastic Net
-first soft-thresholds (Lasso step) and then rescales (Ridge step).
+를 푼다. 여기서 $\lambda \ge 0$은 전체 정칙화 강도를, $\alpha \in [0, 1]$은 두 벌점의 배합을
+조절한다.
 
-## Grouped Selection
+- $\alpha = 1$: 순수 라쏘.
+- $\alpha = 0$: 순수 능형회귀.
+- $0 < \alpha < 1$: 엘라스틱넷.
 
-A major advantage of the Elastic Net over the Lasso is its behavior with correlated predictors.
-When several predictors are highly correlated:
+## 정규직교 계획에서의 해
 
-- **Lasso** tends to select one and set the others to zero (unstable selection).
-- **Elastic Net** tends to select or exclude the entire group together.
+$X^\top X = n I_p$일 때 $j$번째 계수의 엘라스틱넷 추정치는
 
-This **grouping effect** is a consequence of the strictly convex $L_2$ component of the
-penalty, which was proved by Zou and Hastie (2005).
+$$
+\hat{\beta}_j^{\text{EN}} = \frac{1}{1 + \lambda(1 - \alpha)}\, S\!\left(\hat{\beta}_j^{\text{OLS}},\; \lambda \alpha\right)
+$$
 
-## Code: Basic Demonstration
+로 단순해진다. 여기서 $S(\cdot, \cdot)$는 연성 문턱 연산자다. 즉 엘라스틱넷은 먼저 연성
+문턱을 적용하고(라쏘 단계) 그다음 축소 배율을 곱한다(능형 단계).
 
-The following script generates sample data. A full implementation would extend this to fit the
-Elastic Net via coordinate descent with both penalties.
+## 집단 선택
+
+라쏘에 대한 엘라스틱넷의 큰 장점은 상관된 설명변수에서의 행동이다. 여러 설명변수가 강하게
+상관되어 있을 때,
+
+- **라쏘**는 하나만 고르고 나머지를 0으로 만드는 경향이 있다(불안정한 선택).
+- **엘라스틱넷**은 집단 전체를 함께 선택하거나 함께 배제하는 경향이 있다.
+
+이 **그룹 효과**는 벌점의 $L_2$ 성분이 강볼록하기 때문에 생기며, Zou와 Hastie(2005)가
+증명하였다.
+
+## 코드: 기본 시연
+
+다음 스크립트는 표본자료를 생성한다. 완전한 구현이라면 여기에서 두 벌점을 모두 갖는 좌표하강
+적합으로 확장하게 된다.
 
 ```python
 import numpy as np
@@ -65,118 +64,117 @@ print(f"Sample mean: {data.mean():.4f}")
 print(f"Sample std:  {data.std(ddof=1):.4f}")
 ```
 
-In practice, one would use `sklearn.linear_model.ElasticNetCV` to jointly select $\lambda$ and
-$\alpha$ via cross-validation.
+실무에서는 `sklearn.linear_model.ElasticNetCV`로 $\lambda$와 $\alpha$를 교차검증으로 함께
+고른다.
 
-## Coordinate Descent for Elastic Net
+## 엘라스틱넷의 좌표하강
 
-The update for the $j$-th coefficient in coordinate descent takes the form
+좌표하강에서 $j$번째 계수의 갱신식은
 
 $$
-\beta_j \leftarrow \frac{S\!\left(X_j^\top r_j / n,\; \lambda \alpha\right)}{1 + \lambda(1 - \alpha)},
+\beta_j \leftarrow \frac{S\!\left(X_j^\top r_j / n,\; \lambda \alpha\right)}{1 + \lambda(1 - \alpha)}
 $$
 
-where $r_j = y - X_{-j}\beta_{-j}$ is the partial residual. Compared to the Lasso update, the
-only difference is the denominator $1 + \lambda(1 - \alpha)$ from the Ridge component.
+이며, 여기서 $r_j = y - X_{-j}\beta_{-j}$는 부분잔차다. 라쏘 갱신식과 비교하면 능형 성분에서
+나온 분모 $1 + \lambda(1 - \alpha)$만이 유일한 차이다.
 
-## Choosing the Tuning Parameters
+## 조율모수의 선택
 
-The Elastic Net has two hyperparameters, $\lambda$ and $\alpha$. A common strategy:
+엘라스틱넷에는 초모수가 $\lambda$와 $\alpha$ 두 개 있다. 흔히 쓰는 전략은 다음과 같다.
 
-1. Fix a grid of $\alpha$ values (e.g., $\{0.1, 0.5, 0.7, 0.9, 0.95\}$).
-2. For each $\alpha$, use cross-validation over a grid of $\lambda$ values.
-3. Select the $(\alpha, \lambda)$ pair with the lowest CV error.
+1. $\alpha$ 값의 격자를 고정한다(예: $\{0.1, 0.5, 0.7, 0.9, 0.95\}$).
+2. 각 $\alpha$에 대해 $\lambda$ 격자 위에서 교차검증한다.
+3. CV 오차가 가장 작은 $(\alpha, \lambda)$ 쌍을 고른다.
 
-## Interpretation
+## 해석
 
-- **Sparsity + stability.** The Elastic Net achieves variable selection (some coefficients
-  exactly zero) while being more stable than the Lasso when predictors are correlated.
-- **Unique solution.** Unlike the Lasso, the Elastic Net objective is strictly convex when
-  $\alpha < 1$, so the solution is always unique.
-- **Computational cost.** Coordinate descent for the Elastic Net is essentially the same as for
-  the Lasso, with a minor modification to the denominator.
+- **희소성 + 안정성.** 엘라스틱넷은 변수선택(일부 계수가 정확히 0)을 하면서도 설명변수가
+  상관되어 있을 때 라쏘보다 안정적이다.
+- **유일한 해.** 라쏘와 달리 엘라스틱넷 목적함수는 $\alpha < 1$일 때 강볼록이므로 해가 항상
+  유일하다.
+- **계산 비용.** 엘라스틱넷의 좌표하강은 분모만 살짝 바뀔 뿐 본질적으로 라쏘와 같다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.** Starting from the Elastic Net objective, derive the coordinate descent update
-$\beta_j \leftarrow S(X_j^\top r_j / n,\, \lambda\alpha) / (1 + \lambda(1 - \alpha))$.
+**연습문제 1.** 엘라스틱넷 목적함수에서 출발하여 좌표하강 갱신식
+$\beta_j \leftarrow S(X_j^\top r_j / n,\, \lambda\alpha) / (1 + \lambda(1 - \alpha))$를
+유도하라.
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
 
-    Fix all coefficients except $\beta_j$. The objective as a function of $\beta_j$ alone is
-
-    $$
-    g(\beta_j) = \frac{1}{2n}\|r_j - X_j \beta_j\|_2^2 + \lambda\alpha |\beta_j| + \frac{\lambda(1 - \alpha)}{2}\beta_j^2,
-    $$
-
-    where $r_j = y - X_{-j}\beta_{-j}$. Expanding the quadratic and ignoring terms not
-    involving $\beta_j$:
+    $\beta_j$를 제외한 모든 계수를 고정하자. $\beta_j$만의 함수로 본 목적함수는
 
     $$
-    g(\beta_j) = \frac{1}{2}\!\left(\frac{\|X_j\|^2}{n} + \lambda(1-\alpha)\right)\beta_j^2 - \frac{X_j^\top r_j}{n}\,\beta_j + \lambda\alpha|\beta_j| + C.
+    g(\beta_j) = \frac{1}{2n}\|r_j - X_j \beta_j\|_2^2 + \lambda\alpha |\beta_j| + \frac{\lambda(1 - \alpha)}{2}\beta_j^2
     $$
 
-    Assuming standardized features with $\|X_j\|^2/n = 1$, the minimizer of a function of the
-    form $\frac{1}{2}a\, z^2 - b\, z + \lambda\alpha|z|$ with $a = 1 + \lambda(1-\alpha)$ is
+    이며, 여기서 $r_j = y - X_{-j}\beta_{-j}$이다. 이차항을 전개하고 $\beta_j$가 없는 항을
+    무시하면
 
     $$
-    \beta_j^* = \frac{S(b,\, \lambda\alpha)}{a} = \frac{S(X_j^\top r_j/n,\, \lambda\alpha)}{1 + \lambda(1-\alpha)}. \quad \square
+    g(\beta_j) = \frac{1}{2}\!\left(\frac{\|X_j\|^2}{n} + \lambda(1-\alpha)\right)\beta_j^2 - \frac{X_j^\top r_j}{n}\,\beta_j + \lambda\alpha|\beta_j| + C
     $$
+
+    를 얻는다. $\|X_j\|^2/n = 1$이 되도록 표준화되어 있다고 하면,
+    $\frac{1}{2}a\, z^2 - b\, z + \lambda\alpha|z|$ 꼴의 함수는 $a = 1 + \lambda(1-\alpha)$일 때
+
+    $$
+    \beta_j^* = \frac{S(b,\, \lambda\alpha)}{a} = \frac{S(X_j^\top r_j/n,\, \lambda\alpha)}{1 + \lambda(1-\alpha)}
+    $$
+
+    에서 최소가 된다. $\square$
 
 ---
 
-**Exercise 2.** Prove that the Elastic Net objective is strictly convex when $\alpha < 1$ and
-$\lambda > 0$, and conclude that the solution is unique.
+**연습문제 2.** $\alpha < 1$이고 $\lambda > 0$이면 엘라스틱넷 목적함수가 강볼록임을 증명하고,
+해가 유일함을 결론지어라.
 
-??? success "Solution to Exercise 2"
+??? success "연습문제 2 풀이"
 
-    The Elastic Net objective is $f(\beta) = h(\beta) + \lambda\alpha\|\beta\|_1$, where
+    엘라스틱넷 목적함수는 $f(\beta) = h(\beta) + \lambda\alpha\|\beta\|_1$이고, 여기서
 
     $$
-    h(\beta) = \frac{1}{2n}\|y - X\beta\|_2^2 + \frac{\lambda(1-\alpha)}{2}\|\beta\|_2^2.
+    h(\beta) = \frac{1}{2n}\|y - X\beta\|_2^2 + \frac{\lambda(1-\alpha)}{2}\|\beta\|_2^2
     $$
 
-    The Hessian of $h$ is $\nabla^2 h = \frac{1}{n}X^\top X + \lambda(1-\alpha)I_p$. For
-    $\alpha < 1$ and $\lambda > 0$, the term $\lambda(1-\alpha)I_p$ is positive definite, so
-    $\nabla^2 h$ is positive definite. Hence $h$ is strictly convex.
+    이다. $h$의 헤세행렬은 $\nabla^2 h = \frac{1}{n}X^\top X + \lambda(1-\alpha)I_p$이다.
+    $\alpha < 1$이고 $\lambda > 0$이면 $\lambda(1-\alpha)I_p$가 양정치이므로 $\nabla^2 h$도
+    양정치이고, 따라서 $h$는 강볼록이다.
 
-    Since $f = h + \lambda\alpha\|\cdot\|_1$ is the sum of a strictly convex function and a
-    convex function, $f$ is strictly convex. A strictly convex function has at most one
-    minimizer, and the coercivity of $f$ guarantees existence. Therefore the Elastic Net
-    solution is unique. $\square$
+    $f = h + \lambda\alpha\|\cdot\|_1$는 강볼록함수와 볼록함수의 합이므로 강볼록이다. 강볼록
+    함수는 최소점을 많아야 하나 가지며, $f$의 강제성(coercivity)이 존재성을 보장한다. 따라서
+    엘라스틱넷 해는 유일하다. $\square$
 
 ---
 
-**Exercise 3.** Consider two predictors $x_1$ and $x_2$ with correlation $\rho$ close to 1.
-Explain qualitatively why the Lasso might select only one of them while the Elastic Net tends
-to select both, and relate this to the geometry of the constraint regions.
+**연습문제 3.** 상관계수 $\rho$가 1에 가까운 두 설명변수 $x_1$, $x_2$를 생각하자. 라쏘는 왜
+둘 중 하나만 고르는 반면 엘라스틱넷은 둘 다 고르는 경향이 있는지 정성적으로 설명하고, 제약
+영역의 기하와 연결지어라.
 
-??? success "Solution to Exercise 3"
+??? success "연습문제 3 풀이"
 
-    The Lasso constraint region $\|\beta\|_1 \le t$ has corners along the coordinate axes. When
-    $x_1 \approx x_2$, the loss function contours are elongated ellipses nearly parallel to the
-    line $\beta_1 = \beta_2$. The first contact between these ellipses and the diamond-shaped
-    $L_1$ ball typically occurs at a corner, where one coefficient is zero---thus the Lasso
-    selects one but not the other.
+    라쏘의 제약영역 $\|\beta\|_1 \le t$는 좌표축 위에 뾰족한 꼭짓점을 갖는다.
+    $x_1 \approx x_2$이면 손실함수의 등고선은 직선 $\beta_1 = \beta_2$와 거의 평행한, 길게
+    늘어난 타원이 된다. 이 타원과 마름모꼴 $L_1$ 공이 처음 닿는 곳은 대개 꼭짓점이고, 그곳에서는
+    한 계수가 0이다. 그래서 라쏘는 둘 중 하나만 고른다.
 
-    The Elastic Net constraint region is a blend of the $L_1$ diamond and the $L_2$ ball. The
-    $L_2$ component rounds the corners, so the boundary near $(\beta_1, \beta_2) = (c, c)$ is
-    smooth. The elongated ellipses are more likely to make first contact along this smooth
-    boundary where both coefficients are nonzero, leading to grouped selection.
+    엘라스틱넷의 제약영역은 $L_1$ 마름모와 $L_2$ 공을 섞은 모양이다. $L_2$ 성분이 꼭짓점을
+    둥글게 만들므로 $(\beta_1, \beta_2) = (c, c)$ 부근의 경계가 매끄럽다. 길게 늘어난 타원은
+    두 계수가 모두 0이 아닌 이 매끄러운 경계에서 처음 닿을 가능성이 더 크고, 그 결과 집단
+    선택이 일어난다.
 
-    Formally, Zou and Hastie (2005) proved that if $x_i^\top x_j / n = \rho$ and both
-    $\hat{\beta}_i, \hat{\beta}_j \ne 0$, then
-    $|\hat{\beta}_i - \hat{\beta}_j| \le \frac{\|y\|_1}{\lambda(1-\alpha)n}\sqrt{2(1 - \rho)}$,
-    so the coefficients are close when the correlation is high. $\square$
+    형식적으로 Zou와 Hastie(2005)는 $x_i^\top x_j / n = \rho$이고
+    $\hat{\beta}_i, \hat{\beta}_j \ne 0$이면
+    $|\hat{\beta}_i - \hat{\beta}_j| \le \frac{\|y\|_1}{\lambda(1-\alpha)n}\sqrt{2(1 - \rho)}$
+    임을 증명하였다. 상관이 높을수록 두 계수가 가까워진다. $\square$
 
 ---
 
-**Exercise 4.** Use `ElasticNetCV` from scikit-learn to fit an Elastic Net on a synthetic
-dataset with $n = 200$, $p = 50$, and 5 true nonzero coefficients with pairwise correlation
-$\rho = 0.95$ among the first 10 predictors. Report the selected $\alpha$, $\lambda$, and the
-number of nonzero coefficients.
+**연습문제 4.** scikit-learn의 `ElasticNetCV`를 써서 $n = 200$, $p = 50$이고 참 계수 중 5개만
+0이 아니며 앞의 10개 설명변수끼리 쌍별 상관이 $\rho = 0.95$인 인공자료에 엘라스틱넷을
+적합하라. 선택된 $\alpha$, $\lambda$, 그리고 0이 아닌 계수의 개수를 보고하라.
 
-??? success "Solution to Exercise 4"
+??? success "연습문제 4 풀이"
 
     ```python
     import numpy as np
@@ -213,37 +211,45 @@ number of nonzero coefficients.
     print(f"Non-zero coefficients:     {n_nonzero}")
     ```
 
-    Typical results: $\alpha \in \{0.5, 0.7\}$, and the Elastic Net selects roughly 5--10
-    features (retaining correlated partners of the true features). $\square$
+    실행 결과는 $\alpha = 0.95$, $\lambda = 0.014625$이고 0이 아닌 계수는 **41개**다.
+    참 신호가 5개뿐인데 41개가 살아남은 것은 실수가 아니라 교차검증의 성질이다. CV는 예측오차를
+    최소화하므로 계수가 아주 작은 잡음변수를 남겨 두는 데 대한 벌칙이 거의 없고, 그 결과
+    $\lambda$가 선택 관점에서는 지나치게 작게 잡힌다. 다만 상관 블록 안(앞의 10개 변수)에서는
+    6개가 함께 선택되어 그룹 효과가 실제로 나타난다. 순수 라쏘였다면 이 블록에서 보통 한두 개만
+    남는다.
+
+    **희소성이 목표라면** CV 최소점을 그대로 쓰지 말고 1-표준오차 규칙(`cv_tuning.md` 참조),
+    사후 라쏘, 또는 안정성 선택을 함께 써야 한다. $\square$
 
 ---
 
-**Exercise 5.** Show that in the orthonormal design case ($X^\top X = nI_p$), the Elastic Net
-estimator can be written as $\hat{\beta}_j^{\text{EN}} = \frac{1}{1+\lambda(1-\alpha)}\,S(\hat{\beta}_j^{\text{OLS}},\, \lambda\alpha)$. Interpret the two operations (soft-thresholding followed by rescaling) geometrically.
+**연습문제 5.** 정규직교 계획($X^\top X = nI_p$)에서 엘라스틱넷 추정량이
+$\hat{\beta}_j^{\text{EN}} = \frac{1}{1+\lambda(1-\alpha)}\,S(\hat{\beta}_j^{\text{OLS}},\, \lambda\alpha)$
+로 쓰임을 보이고, 두 연산(연성 문턱 뒤 재척도)을 기하학적으로 해석하라.
 
-??? success "Solution to Exercise 5"
+??? success "연습문제 5 풀이"
 
-    With $X^\top X = nI_p$, the Elastic Net objective separates into $p$ independent
-    univariate problems:
+    $X^\top X = nI_p$이면 엘라스틱넷 목적함수는 $p$개의 독립된 일변량 문제로 분리된다.
 
     $$
     \min_{\beta_j} \left\{ \frac{1}{2}(\hat{\beta}_j^{\text{OLS}} - \beta_j)^2 + \lambda\alpha|\beta_j| + \frac{\lambda(1-\alpha)}{2}\beta_j^2 \right\}.
     $$
 
-    Combining the quadratic terms:
+    이차항을 합치면
 
     $$
-    \min_{\beta_j} \left\{ \frac{1 + \lambda(1-\alpha)}{2}\beta_j^2 - \hat{\beta}_j^{\text{OLS}}\beta_j + \lambda\alpha|\beta_j| \right\}.
+    \min_{\beta_j} \left\{ \frac{1 + \lambda(1-\alpha)}{2}\beta_j^2 - \hat{\beta}_j^{\text{OLS}}\beta_j + \lambda\alpha|\beta_j| \right\}
     $$
 
-    By the proximal operator result (Exercise 1), the solution is
+    이고, 연습문제 1의 근접 연산자 결과에 의해 해는
 
     $$
-    \hat{\beta}_j^{\text{EN}} = \frac{S(\hat{\beta}_j^{\text{OLS}},\, \lambda\alpha)}{1 + \lambda(1-\alpha)}.
+    \hat{\beta}_j^{\text{EN}} = \frac{S(\hat{\beta}_j^{\text{OLS}},\, \lambda\alpha)}{1 + \lambda(1-\alpha)}
     $$
 
-    **Geometric interpretation:** Soft-thresholding translates the OLS estimate toward zero and
-    clips small values to exactly zero (the Lasso step, producing sparsity). Dividing by
-    $1 + \lambda(1-\alpha)$ then uniformly scales the surviving coefficients toward zero (the
-    Ridge step, providing additional shrinkage). The two operations together give both sparsity
-    and continuous shrinkage. $\square$
+    이다.
+
+    **기하학적 해석:** 연성 문턱은 OLS 추정치를 0 쪽으로 평행이동하고 작은 값은 정확히 0으로
+    잘라 낸다(희소성을 만드는 라쏘 단계). 이어서 $1 + \lambda(1-\alpha)$로 나누는 것은 살아남은
+    계수를 0 쪽으로 균일하게 축소한다(추가 축소를 주는 능형 단계). 두 연산이 합쳐져 희소성과
+    연속적 축소를 동시에 얻는다. $\square$

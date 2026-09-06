@@ -1,117 +1,166 @@
-# Grouping Effect for Correlated Features
+# 상관된 변수에 대한 그룹 효과
 
-When two predictors are highly correlated, an ideal estimator should assign them similar coefficients, reflecting their comparable relationship to the response. Ridge regression does this naturally, but without sparsity. Lasso selects one and discards the other. The elastic net achieves both: it encourages correlated predictors to receive similar coefficients while still performing variable selection. This behavior is called the **grouping effect**, and it is one of the elastic net's most important theoretical properties.
+두 설명변수가 강하게 상관되어 있으면, 이상적인 추정량은 둘에 비슷한 계수를 부여해야 한다. 반응변수와의 관계가 비슷하기 때문이다. 능형회귀는 이를 자연스럽게 하지만 희소성이 없다. 라쏘는 하나를 고르고 다른 하나를 버린다. 엘라스틱넷은 둘 다 달성한다. 변수선택을 수행하면서 상관된 변수가 비슷한 계수를 받도록 유도한다. 이 성질을 **그룹 효과**라 하며, 엘라스틱넷의 가장 중요한 이론적 성질 중 하나다.
 
-## The Grouping Theorem
+## 그룹 정리
 
-Zou and Hastie (2005) proved a bound on how different the elastic net coefficients of two correlated predictors can be. Assume the response $\mathbf{y}$ is centered and the predictors $\mathbf{x}_1, \ldots, \mathbf{x}_p$ are standardized to have unit norm ($\|\mathbf{x}_j\| = 1$).
+Zou와 Hastie(2005)는 상관된 두 변수의 엘라스틱넷 계수가 얼마나 다를 수 있는지에 대한 한계를 증명했다. 반응변수 $\mathbf{y}$가 중심화되고 설명변수가 단위 노름($\|\mathbf{x}_j\| = 1$)으로 표준화되었다고 하자.
 
-Let $\hat{\beta}_i$ and $\hat{\beta}_j$ be two elastic net coefficients with the same sign (both positive or both negative). Define the sample correlation between the corresponding predictors as:
-
-$$
-\rho_{ij} = \mathbf{x}_i^\top\mathbf{x}_j
-$$
-
-Then the grouping theorem states:
+$\hat{\beta}_i$와 $\hat{\beta}_j$가 같은 부호를 갖고 표본상관이 $\rho_{ij} = \mathbf{x}_i^\top\mathbf{x}_j$일 때
 
 $$
 |\hat{\beta}_i - \hat{\beta}_j| \leq \frac{1}{\lambda(1-\alpha)}\sqrt{2(1 - \rho_{ij})}\,\|\mathbf{y}\|
 $$
 
-## Interpretation of the Bound
+이다.
 
-The bound reveals three key relationships:
+## 한계의 해석
 
-**Correlation effect.** When $\rho_{ij} \to 1$ (predictors become identical), the right-hand side approaches zero, forcing $\hat{\beta}_i \approx \hat{\beta}_j$. Highly correlated predictors receive nearly identical coefficients.
+**상관 효과.** $\rho_{ij} \to 1$이면(변수가 동일해지면) 우변이 0으로 가서 $\hat{\beta}_i \approx \hat{\beta}_j$가 강제된다. 강하게 상관된 변수는 거의 같은 계수를 받는다.
 
-**L2 penalty effect.** The factor $1/[\lambda(1-\alpha)]$ shows that the grouping effect strengthens as the L2 component increases (either through larger $\lambda$ or smaller $\alpha$). When $\alpha = 1$ (pure lasso), the denominator is zero and there is no grouping guarantee.
+**L2 벌점 효과.** 인자 $1/[\lambda(1-\alpha)]$는 L2 성분이 커질수록($\lambda$가 크거나 $\alpha$가 작을수록) 그룹 효과가 강해짐을 보여준다. $\alpha = 1$(순수 라쏘)이면 분모가 0이 되어 **그룹 보장이 전혀 없다.**
 
-**Scale effect.** The factor $\|\mathbf{y}\|$ provides an overall scale. For standardized data, this is $\sqrt{n \cdot \text{Var}(y)}$.
+**척도 효과.** 인자 $\|\mathbf{y}\|$가 전체 척도를 제공한다.
 
-!!! note "Same-Sign Requirement"
-    The grouping theorem applies when $\hat{\beta}_i$ and $\hat{\beta}_j$ have the same sign. If they have opposite signs, the result does not hold. In practice, when two predictors are positively correlated and both positively related to the response, they will typically receive coefficients of the same sign.
+!!! note "같은 부호 요건"
+    그룹 정리는 $\hat{\beta}_i$와 $\hat{\beta}_j$가 같은 부호일 때 적용된다. 부호가 반대이면 결과가 성립하지 않는다. 실무에서 두 변수가 양의 상관을 갖고 둘 다 반응변수와 양의 관계이면 대개 같은 부호의 계수를 받는다.
 
-## Proof Sketch
+## 증명 개요
 
-The elastic net KKT conditions for predictor $i$ (assuming $\hat{\beta}_i > 0$) are:
+$\hat{\beta}_i > 0$일 때 엘라스틱넷의 KKT 조건은
 
 $$
 -\frac{1}{n}\mathbf{x}_i^\top(\mathbf{y} - \mathbf{X}\hat{\boldsymbol{\beta}}) + \lambda\alpha + \lambda(1-\alpha)\hat{\beta}_i = 0
 $$
 
-Writing the analogous condition for predictor $j$ (also assuming $\hat{\beta}_j > 0$) and subtracting:
+이다. $j$에 대한 같은 조건을 빼면
 
 $$
 \frac{1}{n}(\mathbf{x}_i - \mathbf{x}_j)^\top(\mathbf{y} - \mathbf{X}\hat{\boldsymbol{\beta}}) = \lambda(1-\alpha)(\hat{\beta}_i - \hat{\beta}_j)
 $$
 
-Applying the Cauchy-Schwarz inequality:
+가 되고, 코시-슈바르츠 부등식을 적용하면
 
 $$
 \lambda(1-\alpha)|\hat{\beta}_i - \hat{\beta}_j| \leq \frac{1}{n}\|\mathbf{x}_i - \mathbf{x}_j\|\cdot\|\mathbf{y} - \mathbf{X}\hat{\boldsymbol{\beta}}\|
 $$
 
-Since $\|\mathbf{x}_i - \mathbf{x}_j\|^2 = 2(1 - \rho_{ij})$ (for unit-norm predictors) and $\|\mathbf{y} - \mathbf{X}\hat{\boldsymbol{\beta}}\| \leq \|\mathbf{y}\|$, the bound follows.
+이다. 단위 노름 변수에서 $\|\mathbf{x}_i - \mathbf{x}_j\|^2 = 2(1 - \rho_{ij})$이고 $\|\mathbf{y} - \mathbf{X}\hat{\boldsymbol{\beta}}\| \leq \|\mathbf{y}\|$이므로 한계가 따라 나온다.
 
-## Contrast with Lasso and Ridge
+**$\alpha = 1$에서 왜 보장이 사라지는지가 이 유도에서 보인다.** 좌변의 $\lambda(1-\alpha)$가 0이 되면 부등식이 $0 \le (\text{양수})$가 되어 $|\hat\beta_i - \hat\beta_j|$에 아무 제약도 주지 못한다.
 
-The behavior of each method on a pair of correlated predictors ($\rho_{ij}$ close to 1) illustrates the fundamental differences:
+## 라쏘·능형과의 대조
 
-| Method | Coefficients of correlated pair | Grouping effect |
+| 방법 | 상관된 쌍의 계수 | 그룹 효과 |
 |---|---|---|
-| Ridge | Both nonzero, similar magnitude | Strong (inherent in L2) |
-| Lasso | One nonzero, other zero (typically) | None |
-| Elastic net | Both nonzero, similar magnitude | Controlled by $\alpha$ |
+| 능형 | 둘 다 0이 아니고 크기가 비슷 | 강함(L2에 내재) |
+| 라쏘 | 하나만 0이 아님(대체로) | 없음 |
+| 엘라스틱넷 | 둘 다 0이 아니고 크기가 비슷 | $\alpha$로 조절 |
 
-Ridge regression naturally exhibits grouping because the L2 penalty penalizes the squared difference $(\beta_i - \beta_j)^2$ implicitly. Lasso has no grouping mechanism and treats each coefficient independently in its soft-thresholding update.
+능형회귀는 L2 벌점이 암묵적으로 제곱차 $(\beta_i - \beta_j)^2$를 벌하므로 자연스럽게 그룹 효과를 보인다. 라쏘는 연성 문턱 갱신에서 각 계수를 독립적으로 다루므로 그룹 기제가 없다.
 
-## Grouping Effect Strength and Alpha
+## $\alpha$에 따른 그룹 효과의 강도
 
-The strength of the grouping effect depends on $\alpha$:
-
-| $\alpha$ | L2 weight $(1-\alpha)$ | Grouping strength | Sparsity |
+| $\alpha$ | L2 가중 $(1-\alpha)$ | 그룹 강도 | 희소성 |
 |---|---|---|---|
-| 0 (ridge) | 1 | Strongest | None |
-| 0.1 | 0.9 | Very strong | Mild |
-| 0.5 | 0.5 | Moderate | Moderate |
-| 0.9 | 0.1 | Weak | Strong |
-| 1 (lasso) | 0 | None (no bound) | Strongest |
+| 0 (능형) | 1 | 가장 강함 | 없음 |
+| 0.1 | 0.9 | 매우 강함 | 약함 |
+| 0.5 | 0.5 | 중간 | 중간 |
+| 0.9 | 0.1 | 약함 | 강함 |
+| 1 (라쏘) | 0 | 없음(한계 없음) | 가장 강함 |
 
-Choosing $\alpha$ involves a tradeoff between grouping strength and sparsity. Applications where group structure is important (e.g., genomics, where correlated genes in a pathway should be selected together) benefit from smaller $\alpha$ values.
+$\alpha$의 선택은 그룹 강도와 희소성 사이의 절충이다. 집단 구조가 중요한 응용(경로 내 상관된 유전자들이 함께 선택되어야 하는 유전체학 등)에서는 작은 $\alpha$가 유리하다.
 
-## Practical Implications
+## 실무적 함의
 
-### Genomics and Biological Pathways
+**유전체학과 생물학적 경로.** 같은 생물학적 경로에 속한 유전자들은 흔히 상관된 발현 양상을 보인다. 엘라스틱넷의 그룹 효과는 경로 구성원을 함께 선택하여, 경로마다 대표 유전자 하나만 고르는 라쏘보다 생물학적으로 해석 가능한 결과를 준다.
 
-In gene expression studies, genes within the same biological pathway often show correlated expression patterns. The elastic net's grouping effect selects pathway members together, providing more biologically interpretable results than the lasso, which might select a single representative gene from each pathway.
+**경제학과 금융.** 경제지표(GDP 성장률, 실업률, 소비자심리지수 등)는 흔히 상관되어 있다. 엘라스틱넷은 상관된 지표에 비슷한 계수를 부여해 안정적인 예측을 낸다. 라쏘는 한 자료에서 GDP 성장률을, 다른 자료에서 실업률을 고를 수 있어 모형이 사소한 자료 변화에 민감해진다.
 
-### Economics and Finance
+**변수 공학.** 공통된 원천에서 만들어진 변수들(다항식 항, 교호작용 항, 파생 비율 등)은 본질적으로 상관되어 있다. 엘라스틱넷은 이를 무난히 다루지만 라쏘는 불규칙하게 행동할 수 있다.
 
-Economic indicators (e.g., GDP growth, unemployment rate, consumer confidence) are often correlated. The elastic net assigns similar coefficients to correlated indicators, producing stable predictions. The lasso might select GDP growth in one dataset and unemployment rate in another, making the model sensitive to minor data variations.
+!!! tip "그룹 효과 점검하기"
+    엘라스틱넷을 적합한 뒤 상관되어 있다고 알려진 변수들의 계수를 살펴본다. 크기와 부호가 비슷하면 그룹 효과가 예상대로 작동하는 것이다. 크게 다르면 $\alpha$를 낮춰 L2 성분을 강화하는 것을 고려한다.
 
-### Feature Engineering
+## 요약
 
-When features are constructed from a common source (e.g., polynomial terms, interaction terms, or derived ratios), they are inherently correlated. The elastic net handles these gracefully, while the lasso may behave erratically.
+엘라스틱넷의 그룹 효과는 강하게 상관된 변수가 비슷한 계수를 받도록 보장하며, 그 차이의 한계는 상관 강도와 L2 벌점 가중이 커질수록 작아진다. Zou-Hastie 그룹 정리로 형식화된 이 성질이 그룹 보장이 없는 라쏘와 엘라스틱넷을 구별한다. 그룹 효과는 혼합모수 $\alpha$로 조절되며, 작은 $\alpha$는 희소성을 희생하는 대신 그룹 효과를 강화한다.
 
-!!! tip "Checking for Grouping"
-    After fitting an elastic net, examine the coefficients of predictors known to be correlated. If they have similar magnitudes and signs, the grouping effect is working as expected. If they differ substantially, consider decreasing $\alpha$ to strengthen the L2 component.
+## 연습문제
 
-## Summary
+**연습문제 1.**
+엘라스틱넷의 "그룹 효과"를 설명하라. 라쏘가 강하게 상관된 설명변수에서 실패하는 이유는 무엇인가? $X_1 = X_2 + \varepsilon$($\varepsilon$은 작다)인 예에서 라쏘, 능형, 엘라스틱넷이 각각 어떻게 행동할지 서술하라.
 
-The elastic net's grouping effect ensures that highly correlated predictors receive similar coefficients, with the difference bounded by a quantity that decreases with correlation strength and L2 penalty weight. This property, formalized by the Zou-Hastie grouping theorem, distinguishes the elastic net from the lasso, which has no grouping guarantee. The grouping effect is controlled by the mixing parameter $\alpha$: smaller $\alpha$ strengthens grouping at the expense of sparsity. In applications where correlated predictors represent related concepts (biological pathways, economic indicators), the grouping effect produces more stable and interpretable models.
+??? success "연습문제 1 풀이"
+    $X_1 \approx X_2$이면 예측 $\beta_1 X_1 + \beta_2 X_2 \approx (\beta_1 + \beta_2)X_1$이 **합에만** 의존한다. 자료는 합을 잘 결정하지만 개별 배분은 거의 결정하지 못한다.
 
-## Exercises
+    이때 세 벌점이 배분을 어떻게 정하는지 보면 차이가 분명해진다. 합 $s = \beta_1 + \beta_2$가 고정되었다고 하고 벌점을 최소화하는 배분을 찾는다.
 
-**Exercise 1.**
-Explain the "grouping effect" of Elastic Net. Why does Lasso fail with highly correlated predictors? Give an example where $X_1 = X_2 + \varepsilon$ (with small $\varepsilon$) and describe what Lasso, Ridge, and Elastic Net would do.
+    | 벌점 | 최소화 문제 | 최적 배분 |
+    |:---|:---|:---|
+    | L1 | $|\beta_1| + |\beta_2|$, $\beta_1+\beta_2 = s$ | 같은 부호이면 **모든 배분이 동점** |
+    | L2 | $\beta_1^2 + \beta_2^2$, $\beta_1+\beta_2 = s$ | $\beta_1 = \beta_2 = s/2$ **유일** |
+    | L1+L2 | 위 둘의 합 | $\beta_1 = \beta_2 = s/2$ 유일 |
+
+    **핵심은 L1 벌점이 배분에 대해 평평하다는 것이다.** $\beta_1 + \beta_2 = s$이고 둘 다 양수이면 $|\beta_1|+|\beta_2| = s$로 배분과 무관하다. 벌점이 아무 선호도 주지 않으므로, 어느 배분이 선택될지는 자료의 잡음이 결정한다. 이것이 라쏘의 불안정성의 근원이다.
+
+    **L2 벌점은 엄격히 볼록하므로 유일한 최소점을 갖는다.** $\beta_1^2 + \beta_2^2$는 $\beta_1 = \beta_2$에서 최소가 되어 균등 배분을 강제한다.
+
+    수치로 확인하면 ($\rho = 0.99$, 참 계수 모두 $2.0$):
+
+    | 방법 | $\hat\beta_1$ | $\hat\beta_2$ | $\hat\beta_3$ |
+    |:---|---:|---:|---:|
+    | 라쏘 | 0.486 | 2.136 | **2.907** |
+    | 엘라스틱넷 | 1.706 | 1.727 | 1.774 |
+
+    라쏘는 6배 차이로 제멋대로 쪼개고 엘라스틱넷은 거의 균등하게 나눈다. 자세한 코드는 [정칙화 방법의 개관](../overview/overview.md) 연습문제 3에 있다.
 
 ---
 
-**Exercise 2.**
-Create a dataset where predictors come in correlated groups: $X_1, X_2, X_3$ are highly correlated ($\rho = 0.95$) and all have nonzero effects. $X_4, X_5, X_6$ are another correlated group with nonzero effects. The remaining 14 predictors are noise.
+**연습문제 2.**
+상관된 집단이 두 개 있는 자료를 만들어라. $X_1, X_2, X_3$이 강하게 상관되어 있고($\rho = 0.95$) 모두 0이 아닌 효과를 가지며, $X_4, X_5, X_6$이 또 다른 상관 집단이고, 나머지 14개는 잡음이다.
 
-(a) Fit Lasso. Does it select one predictor per group or multiple?
+**(a)** 라쏘를 적합하라. 집단마다 하나씩 고르는가, 여러 개를 고르는가?
 
-(b) Fit Elastic Net with $\alpha = 0.5$. Compare the selected features.
+**(b)** $\alpha = 0.5$인 엘라스틱넷을 적합하고 선택된 변수를 비교하라.
 
-(c) Plot the coefficient paths for both methods.
+**(c)** 두 방법의 계수 경로를 그려라.
+
+??? success "연습문제 2 풀이"
+    ```python
+    import numpy as np
+    from sklearn.linear_model import Lasso, ElasticNet, lasso_path, enet_path
+
+    def make_groups(n=100, seed=0, rho=0.95):
+        r = np.random.default_rng(seed)
+        z1, z2 = r.normal(size=n), r.normal(size=n)
+        X = r.normal(size=(n, 20))
+        for j in (0, 1, 2):
+            X[:, j] = np.sqrt(rho)*z1 + np.sqrt(1-rho)*X[:, j]
+        for j in (3, 4, 5):
+            X[:, j] = np.sqrt(rho)*z2 + np.sqrt(1-rho)*X[:, j]
+        X -= X.mean(0); X /= X.std(0)
+        beta = np.zeros(20); beta[:6] = 1.5
+        y = X @ beta + r.normal(0, 1, n)
+        return X, y - y.mean()
+    ```
+
+    **(a), (b)** 여러 난수 씨앗에 걸쳐 각 집단에서 유지된 변수 수를 세면, 벌점이 강할수록 라쏘가 집단을 쪼개는 경향이 뚜렷해진다. $\lambda$가 커질수록 라쏘가 집단당 하나로 수렴하는 반면 엘라스틱넷은 세 개를 함께 유지한다.
+
+    [정칙화 방법의 개관](../overview/overview.md) 연습문제 3의 400회 반복 결과가 이를 정량화한다.
+
+    | $\lambda$ | 라쏘: 집단 3개 모두 유지 | 엘라스틱넷: 3개 모두 유지 |
+    |---:|---:|---:|
+    | 0.3 | 86% | **100%** |
+    | 0.6 | 77% | **100%** |
+    | 1.0 | 57% | **100%** |
+
+    **(c)** `lasso_path`와 `enet_path`로 경로를 그리면 차이가 시각적으로 드러난다.
+
+    - **라쏘 경로:** 집단 내 세 계수가 서로 다른 $\lambda$에서 갈라져 나오고, 하나가 커지는 동안 다른 것이 0에 머문다. 경로가 교차하고 순서가 바뀐다.
+    - **엘라스틱넷 경로:** 집단 내 세 계수가 거의 겹쳐서 함께 움직인다. 세 곡선이 하나처럼 보인다.
+
+    이 "세 곡선이 겹치는" 그림이 그룹 효과의 가장 직관적인 표현이다.
+
+    !!! tip "실무에서 무엇을 볼 것인가"
+        정칙화 경로를 그렸을 때 **상관된 변수들의 곡선이 겹쳐 있으면** 그룹 효과가 작동하는 것이고, **번갈아 나타났다 사라지면** $\alpha$가 너무 크다는 신호다.

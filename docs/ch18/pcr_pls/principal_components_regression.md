@@ -1,324 +1,187 @@
-# Principal Components Regression (PCR)
+# 주성분회귀 (PCR)
 
 
-## Overview
+## 개요
 
-**Principal Components Regression (PCR)** combines dimensionality reduction with regression. Instead of regressing the response directly on all predictors, PCR first extracts principal components (linear combinations of predictors that capture most variance) and then regresses the response on these components.
+**주성분회귀**(PCR)는 차원축소와 회귀를 결합한다. 반응변수를 모든 설명변수에 직접 회귀시키는 대신, 먼저 주성분(분산의 대부분을 담는 설명변수의 선형결합)을 뽑고 그 성분에 반응변수를 회귀한다.
 
-PCR is particularly valuable when:
-
-- **Multicollinearity** is severe (high correlation among predictors)
-- **$p$ is large** relative to $n$ (many more predictors than observations)
-- **Interpretability** is less critical than prediction accuracy
+PCR이 특히 값진 경우는 다중공선성이 심할 때, $p$가 $n$에 비해 클 때, 그리고 해석 가능성보다 예측 정확도가 중요할 때다.
 
 ---
 
-## The PCR Algorithm
+## PCR 알고리즘
 
-### Step 1: Standardize Predictors
-
-Standardize each predictor to have mean 0 and standard deviation 1:
+### 1단계: 설명변수 표준화
 
 $$X_{\text{scaled}} = \frac{X - \mu}{\sigma}$$
 
-This is essential because PCA is sensitive to scale. Without standardization, predictors with large variances dominate the components.
+PCA가 척도에 민감하므로 필수적이다. 표준화하지 않으면 분산이 큰 변수가 성분을 지배한다.
 
-### Step 2: Compute Principal Components
+### 2단계: 주성분 계산
 
-Apply PCA to the standardized predictors $X_{\text{scaled}}$ to compute principal components:
+표준화된 설명변수에 PCA를 적용한다.
 
 $$Z_k = X_{\text{scaled}} V_k$$
 
-where:
+- $V_k$는 공분산행렬의 고유벡터(적재) 행렬이다
+- $Z_k$는 처음 $k$개 주성분의 행렬이다
+- 각 주성분은 선형결합 $Z_j = \sum_{i=1}^p v_{ij} X_i$이다
 
-- $V_k$ is the matrix of eigenvectors (loadings) of the covariance matrix
-- $Z_k$ is the matrix of the first $k$ principal components
-- Each principal component is a linear combination: $Z_j = \sum_{i=1}^p v_{ij} X_i$
-
-The components are ordered by the variance they explain:
+성분은 설명하는 분산 크기 순으로 정렬된다.
 
 $$\text{Var}(Z_1) \geq \text{Var}(Z_2) \geq \cdots \geq \text{Var}(Z_p)$$
 
-### Step 3: Regress on Principal Components
+### 3단계: 주성분에 회귀
 
-Perform standard linear regression using the first $M$ principal components as predictors:
+처음 $M$개 주성분을 설명변수로 하는 표준 선형회귀를 수행한다.
 
-$$y = \beta_0 + \beta_1 Z_1 + \beta_2 Z_2 + \cdots + \beta_M Z_M + \epsilon$$
+$$y = \beta_0 + \beta_1 Z_1 + \cdots + \beta_M Z_M + \epsilon$$
 
-where $M \leq p$ is selected by cross-validation (Step 4).
+### 4단계: 교차검증으로 $M$ 선택
 
-### Step 4: Choose M via Cross-Validation
-The number of components $M$ is a tuning parameter:
+성분 수 $M$은 조정모수다.
 
-- **Too few components** ($M$ small): Underfitting; lose information from excluded predictors
-- **Too many components** ($M$ close to $p$): Overfitting; noisy components increase variance
-- **Optimal $M^*$**: Minimizes cross-validation error
+- **너무 적으면**($M$이 작으면) 과소적합. 제외된 변수의 정보를 잃는다
+- **너무 많으면**($M$이 $p$에 가까우면) 과적합. 잡음 성분이 분산을 키운다
+- **최적 $M^*$**는 교차검증 오차를 최소화한다
 
-Use **$k$-fold cross-validation**:
+!!! danger "PCA는 겹 안에서 적합해야 한다"
+    교차검증 절차에서 PCA를 **전체 자료에 한 번** 적합한 뒤 겹을 나누면 자료 누설이 된다. 주성분이 검정 겹의 정보를 이미 담고 있기 때문이다.
 
-1. For each candidate $M \in \{1, 2, \ldots, p\}$:
-   - For each fold:
-     - Fit PCA on training fold (compute components)
-     - Fit regression on first $M$ components
-     - Predict on validation fold
-   - Compute average CV error
+    올바른 절차는 겹마다 훈련 자료로 PCA를 다시 적합하고 그 적재로 검정 겹을 변환하는 것이다. scikit-learn에서는 `Pipeline([('pca', PCA(k)), ('lr', LinearRegression())])`을 만들어 파이프라인 전체를 `cross_val_score`에 넘기면 자동으로 지켜진다.
 
-2. Select $\hat{M} = \arg\min_M \text{CV}(M)$
+    다행히 PCA는 $y$를 쓰지 않으므로 누설의 크기가 변수선택만큼 치명적이지는 않다([교차검증](../tuning/cross_validation.md) 연습문제 2 참조). 그래도 원칙을 지키는 편이 안전하다.
 
 ---
 
-## Advantages and Disadvantages
+## 장점과 단점
 
-### Advantages
+### 장점
 
-1. **Handles multicollinearity** — Uncorrelated components eliminate multicollinearity problems
-2. **Works when $p > n$** — Dimensionality reduction makes regression feasible
-3. **Automatic feature combination** — Components are data-driven linear combinations of all predictors
-4. **Computational efficiency** — Solving least squares on $M < p$ predictors is faster than alternatives
-5. **Reduces overfitting** — Using fewer components acts as implicit regularization
+1. **다중공선성 처리** — 성분이 무상관이므로 다중공선성 문제가 사라진다
+2. **$p > n$에서 작동** — 차원축소로 회귀가 가능해진다
+3. **자동 변수 결합** — 성분이 모든 설명변수의 자료 기반 선형결합이다
+4. **계산 효율** — $M < p$개 변수의 최소제곱이 더 빠르다
+5. **과적합 감소** — 성분을 적게 쓰는 것이 암묵적 정칙화로 작용한다
 
-### Disadvantages
+### 단점
 
-1. **Unsupervised dimension reduction** — PCA ignores the response $y$; components may not align with predicting $y$
-   - **Contrast with PLS**: Partial Least Squares uses the response to guide component construction
-2. **Loss of interpretability** — Components are linear combinations of original predictors; harder to interpret
-3. **Standardization required** — Must standardize predictors; predictions can be sensitive to scaling choices
-4. **Model complexity** — Must store the loading matrix $V$ to apply model to new data
-5. **Not for feature selection** — All original features may be used, even if only a few truly matter
-
----
-
-## PCR vs. Ridge Regression
-
-Both PCR and Ridge regression address multicollinearity, but differ fundamentally:
-
-| Aspect | PCR | Ridge |
-|--------|-----|-------|
-| **Approach** | Unsupervised dimension reduction (PCA) | Shrinkage of all coefficients |
-| **Components retained** | Only first $M$ components | All predictors, shrunk |
-| **Parameter** | Number of components $M$ | Regularization strength $\lambda$ |
-| **Bias-variance** | Drops components (bias), retains $M$ (variance) | Shrinks all coefficients (bias ↑, variance ↓) |
-| **When to use** | $p$ large, severe multicollinearity, $p > n$ | Moderate multicollinearity, moderate $p$ |
-
-**Key insight**: Ridge uses a continuous shrinkage mechanism, while PCR uses a discrete selection mechanism.
+1. **비지도 차원축소** — PCA가 $y$를 무시하므로 성분이 $y$ 예측과 정렬되지 않을 수 있다. PLS는 반응변수로 성분 구성을 안내한다
+2. **해석 가능성 상실** — 성분이 원 변수의 선형결합이라 해석이 어렵다
+3. **표준화 필요** — 척도 선택에 예측이 민감할 수 있다
+4. **모형 복잡도** — 새 자료에 적용하려면 적재행렬 $V$를 보관해야 한다
+5. **변수선택이 아니다** — 소수만 중요하더라도 모든 원 변수가 쓰인다
 
 ---
 
-## PCR vs. Partial Least Squares (PLS)
+## PCR과 능형회귀
 
-Both are dimensionality reduction methods for regression, but differ in how they construct components:
+| 측면 | PCR | 능형 |
+|---|---|---|
+| **접근** | 비지도 차원축소(PCA) | 모든 계수의 축소 |
+| **유지하는 것** | 처음 $M$개 성분만 | 모든 변수, 축소된 채 |
+| **모수** | 성분 수 $M$ | 정칙화 강도 $\lambda$ |
+| **편향-분산** | 성분을 버림(이산) | 모든 계수를 축소(연속) |
+| **언제 쓰는가** | $p$가 크고 다중공선성이 심하며 $p > n$ | 중간 정도의 다중공선성과 $p$ |
 
-| Aspect | PCR | PLS |
-|--------|-----|-----|
-| **Component construction** | Unsupervised (PCA): maximize variance of $X$ | Supervised: maximize covariance of $X$ and $y$ |
-| **Components aligned with** | Explaining variance in predictors | Predicting the response |
-| **Typical performance** | Depends on PCA alignment with $y$ | Often better when components should predict $y$ |
-| **Interpretability** | Same limitation: linear combinations of $X$ | Same limitation: linear combinations of $X$ |
+**핵심 통찰:** 능형은 연속적 축소를, PCR은 이산적 선택을 쓴다.
 
-In practice, PLS often outperforms PCR because it uses information about $y$ when building components.
+SVD로 보면 둘의 관계가 명확해진다. 능형은 $j$번째 성분에 인자 $d_j^2/(d_j^2+\lambda)$를 곱하고, PCR은 처음 $M$개에 $1$을, 나머지에 $0$을 곱한다. **PCR은 능형의 축소인자를 계단함수로 근사한 것**이라 볼 수 있다.
 
 ---
 
-## Mathematical Details
+## PCR과 부분최소제곱
 
-### Variance Explained
+| 측면 | PCR | PLS |
+|---|---|---|
+| **성분 구성** | 비지도: $X$의 분산 최대화 | 지도: $X$와 $y$의 공분산 최대화 |
+| **성분이 정렬되는 대상** | 설명변수의 분산 설명 | 반응변수의 예측 |
+| **전형적 성능** | PCA가 $y$와 정렬되는지에 의존 | 대개 더 낫다 |
 
-The proportion of variance explained by the first $k$ principal components is:
+실무에서 PLS가 PCR보다 나은 경우가 많은데, 성분을 만들 때 $y$의 정보를 쓰기 때문이다. 구체적 수치 비교는 [PCR과 PLS 개관](index.md) 연습문제 1에 있다.
+
+---
+
+## 수학적 세부
+
+### 설명된 분산
+
+처음 $k$개 주성분이 설명하는 분산의 비율은
 
 $$\frac{\sum_{j=1}^{k} \lambda_j}{\sum_{j=1}^{p} \lambda_j}$$
 
-where $\lambda_j$ are the eigenvalues of the covariance matrix $\text{Cov}(X_{\text{scaled}})$, ordered from largest to smallest.
+이며 $\lambda_j$는 $\text{Cov}(X_{\text{scaled}})$의 고윳값을 큰 것부터 정렬한 것이다. 스크리 그림은 고윳값(또는 누적 설명분산)을 성분 번호에 대해 그리며, "팔꿈치"가 대부분의 변동을 담는 성분 수를 시사한다.
 
-A scree plot visualizes this: it shows eigenvalues (or cumulative variance explained) vs. component number. An "elbow" indicates the number of components capturing most variation.
+### 원 척도의 회귀계수
 
-### Regression Coefficients in Original Scale
-
-PCR estimates coefficients in terms of principal components:
+PCR은 주성분에 대한 계수를 추정하므로, 원 변수의 계수로 되돌리려면
 
 $$\hat{\beta}_{\text{PCR}} = V_M \hat{\gamma}$$
 
-where:
+를 계산한다. $V_M$은 처음 $M$개 적재, $\hat\gamma$는 성분에 대한 회귀계수다.
 
-- $V_M$ is the $p \times M$ matrix of loadings for the first $M$ components
-- $\hat{\gamma}$ is the regression coefficients on the components
+## 연습문제
 
-To make predictions on new data with original features $x_{\text{new}}$:
+**연습문제 1.**
+"PCR은 능형의 축소인자를 계단함수로 근사한 것"이라는 관점을 확인하라. 두 방법의 SVD 축소인자를 비교하라.
 
-$$\hat{y}_{\text{new}} = \hat{\beta}_0 + x_{\text{new}}^T \hat{\beta}_{\text{PCR}}$$
+??? success "연습문제 1 풀이"
+    SVD $\mathbf{X} = \mathbf{U}\mathbf{D}\mathbf{V}^\top$에서 두 방법의 해를 성분별로 쓰면
 
----
+    $$
+    \hat{\boldsymbol\beta} = \sum_{j=1}^p c_j \cdot \frac{\mathbf{u}_j^\top\mathbf{y}}{d_j}\,\mathbf{v}_j
+    $$
 
-## Python Implementation
+    형태이고 축소인자 $c_j$만 다르다.
 
-### Step-by-Step Example
+    | 방법 | $c_j$ |
+    |:---|:---|
+    | OLS | $1$ (모든 $j$) |
+    | 능형 | $\dfrac{d_j^2}{d_j^2+\lambda}$ (연속, 0과 1 사이) |
+    | PCR | $\mathbf{1}(j \le M)$ (계단, 0 또는 1) |
 
-```python
-import numpy as np
-import pandas as pd
-from sklearn.preprocessing import StandardScaler
-from sklearn.decomposition import PCA
-from sklearn.linear_model import LinearRegression
-from sklearn.model_selection import cross_val_score, KFold
-import matplotlib.pyplot as plt
+    [기하적 해석](../ridge/geometry.md) 연습문제 1의 자료($\rho = 0.95$, $p = 4$, 고윳값 $186.1,\ 2.01,\ 1.74,\ 1.52$)에서 비교하면
 
-# Load data
-X = pd.DataFrame(...)  # Features
-y = pd.Series(...)     # Response
+    | 성분 | 능형 $\lambda = 10$ | PCR $M = 1$ |
+    |---:|---:|---:|
+    | 1 | 0.949 | 1 |
+    | 2 | 0.167 | 0 |
+    | 3 | 0.148 | 0 |
+    | 4 | 0.132 | 0 |
 
-# Step 1: Standardize
-scaler = StandardScaler()
-X_scaled = scaler.fit_transform(X)
+    **능형은 작은 성분을 $0.13$–$0.17$만큼 남기고 PCR은 완전히 버린다.**
 
-# Step 2: Fit PCA
-pca = PCA()
-X_pca = pca.fit_transform(X_scaled)
+    어느 쪽이 나은가는 그 성분에 신호가 있느냐에 달렸다. 신호가 조금이라도 있으면 능형의 부분적 보존이 유리하고, 순수 잡음이면 PCR의 완전 제거가 유리하다.
 
-# Check variance explained
-cumsum_var = np.cumsum(pca.explained_variance_ratio_)
-print(f"Variance explained by each component:\n{pca.explained_variance_ratio_}")
-print(f"Cumulative variance:\n{cumsum_var}")
-
-# Step 3 & 4: Choose M via cross-validation
-kfold = KFold(n_splits=10, shuffle=True, random_state=42)
-mse_scores = []
-
-for M in range(1, X_scaled.shape[1] + 1):
-    # Fit regression on first M components
-    reg = LinearRegression()
-    cv_score = cross_val_score(
-        reg, X_pca[:, :M], y,
-        cv=kfold,
-        scoring='neg_mean_squared_error'
-    )
-    mse = -cv_score.mean()
-    mse_scores.append(mse)
-    print(f"M={M:2d}: CV MSE = {mse:,.0f}")
-
-# Find optimal M
-M_opt = np.argmin(mse_scores) + 1
-print(f"\nOptimal number of components: M = {M_opt}")
-print(f"Variance explained: {cumsum_var[M_opt-1]:.4f} ({cumsum_var[M_opt-1]*100:.2f}%)")
-
-# Fit final model
-pcr_model = LinearRegression()
-pcr_model.fit(X_pca[:, :M_opt], y)
-
-# Make predictions
-y_pred = pcr_model.predict(X_pca[:, :M_opt])
-```
-
-### Visualization Example
-
-```python
-# Plot 1: Scree plot
-fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 4))
-
-# Variance explained by each component
-ax1.plot(range(1, len(pca.explained_variance_ratio_) + 1),
-         pca.explained_variance_ratio_, 'o-', linewidth=2, markersize=6)
-ax1.set_xlabel('Principal Component')
-ax1.set_ylabel('Variance Explained')
-ax1.set_title('Scree Plot')
-ax1.grid(True, alpha=0.3)
-
-# Cumulative variance
-ax2.plot(range(1, len(cumsum_var) + 1), cumsum_var, 'o-', linewidth=2, markersize=6)
-ax2.axhline(0.9, color='red', linestyle='--', label='90% threshold')
-ax2.set_xlabel('Number of Components')
-ax2.set_ylabel('Cumulative Variance Explained')
-ax2.set_title('Cumulative Variance Explained')
-ax2.legend()
-ax2.grid(True, alpha=0.3)
-
-plt.tight_layout()
-plt.show()
-
-# Plot 2: CV error vs number of components
-fig, ax = plt.subplots(figsize=(10, 6))
-ax.plot(range(1, len(mse_scores) + 1), np.sqrt(mse_scores), 'o-', linewidth=2, markersize=6)
-ax.axvline(M_opt, color='red', linestyle='--', label=f'Optimal M = {M_opt}')
-ax.set_xlabel('Number of Components (M)')
-ax.set_ylabel('CV RMSE')
-ax.set_title('Cross-Validation Error vs Number of Components')
-ax.legend()
-ax.grid(True, alpha=0.3)
-plt.tight_layout()
-plt.show()
-```
+    **일반적으로는 능형이 더 안전하다.** 성분 경계에서 갑자기 0으로 떨어지지 않으므로, $M$을 하나 잘못 고르는 데서 오는 손해가 $\lambda$를 조금 잘못 고르는 손해보다 크기 때문이다.
 
 ---
 
-## When to Use PCR
+**연습문제 2.**
+PCA를 전체 자료에 적합한 뒤 교차검증하는 것과, 겹 안에서 적합하는 것의 차이를 확인하라.
 
-PCR is a good choice when:
+??? success "연습문제 2 풀이"
+    ```python
+    import numpy as np
+    from sklearn.decomposition import PCA
+    from sklearn.linear_model import LinearRegression
+    from sklearn.pipeline import Pipeline
+    from sklearn.model_selection import KFold, cross_val_score
 
-1. **Multicollinearity is severe** — Components are uncorrelated
-2. **$p$ is very large** — Dimensionality reduction needed
-3. **$p > n$** — OLS is infeasible; PCR makes regression possible
-4. **Interpretability of original features is not critical** — Willing to work with components
-5. **Prediction accuracy is the primary goal** — Doesn't require understanding individual features
+    # 올바름: 파이프라인이 겹마다 PCA를 다시 적합한다
+    pipe = Pipeline([('pca', PCA(3)), ('lr', LinearRegression())])
+    proper = -cross_val_score(pipe, X, y, cv=KFold(5, shuffle=True, random_state=0),
+                              scoring='neg_mean_squared_error').mean()
 
-Consider alternatives if:
+    # 누설: PCA를 전체 자료에 한 번 적합한다
+    Z = PCA(3).fit_transform(X)
+    leaked = -cross_val_score(LinearRegression(), Z, y,
+                              cv=KFold(5, shuffle=True, random_state=0),
+                              scoring='neg_mean_squared_error').mean()
+    ```
 
-- **Feature selection is important** — Use Lasso or elastic net instead
-- **Interpretability is critical** — Linear regression with a subset of features may be preferable
-- **PLS might work better** — If the goal is prediction (PLS uses the response in component construction)
+    **차이가 크지 않다.** PCA가 $y$를 전혀 쓰지 않기 때문이다. 검정 겹의 $X$ 정보가 성분 방향에 반영되기는 하지만, $y$와의 관계는 여전히 훈련 겹에서만 학습된다.
 
----
+    이것이 [교차검증](../tuning/cross_validation.md) 연습문제 2의 변수선택 누설(CV 오차 $1.05$ 대 $2.27$)과 결정적으로 다른 점이다. **$y$를 사용하는 전처리만이 재앙적 누설을 일으킨다.**
 
-## Comparison with Other Methods
-
-| Method | Multicollinearity | Feature Selection | Interpretability | When to Use |
-|--------|------------------|-------------------|-----------------|-------------|
-| **OLS** | Poor | No | High | Small $p$, low correlation |
-| **Ridge** | Good | No | High | Moderate $p$, moderate correlation |
-| **Lasso** | Good | Yes | High | Feature selection important |
-| **Elastic Net** | Good | Yes | High | Balance of Ridge + Lasso |
-| **PCR** | Excellent | No | Low | Large $p$ or $p > n$ |
-| **PLS** | Excellent | No | Low | Large $p$, prediction focus |
-
----
-
-## Summary
-
-Principal Components Regression combines the unsupervised dimensionality reduction of PCA with linear regression:
-
-1. **Standardize** predictors
-2. **Extract** principal components (linear combinations of predictors)
-3. **Select** the number of components $M$ via cross-validation
-4. **Regress** response on the first $M$ components
-
-PCR effectively addresses multicollinearity and high-dimensionality, making it valuable for prediction in challenging settings where $p$ is large or correlation among predictors is severe. However, the loss of interpretability and unsupervised nature of component selection are trade-offs to consider.
-
-
-## Exercises
-
-**Exercise 1.**
-Describe the main concept of Principal Components Regression (PCR) and explain why it matters for statistical practice.
-
-??? success "Solution to Exercise 1"
-    Principal Components Regression (PCR) is a core topic in statistics that provides tools for drawing reliable inferences from data. It matters because proper application ensures valid conclusions, correctly quantified uncertainty, and appropriate handling of the assumptions that underpin the method. Practitioners who understand this concept can avoid common pitfalls and choose the right analytical approach for their data.
-
----
-
-**Exercise 2.**
-State the key assumptions required by the method discussed here. How can each assumption be checked?
-
-??? success "Solution to Exercise 2"
-    The main assumptions typically include: (1) independence of observations -- verified by understanding the data collection process and checking for serial correlation; (2) distributional requirements (e.g., normality) -- checked with Q-Q plots and formal tests like Shapiro-Wilk; (3) equal variances (if applicable) -- assessed with boxplots and Levene's test. When assumptions are violated, consider robust alternatives, transformations, or nonparametric methods.
-
----
-
-**Exercise 3.**
-Work through a small numerical example illustrating the application of the technique from this section.
-
-??? success "Solution to Exercise 3"
-    A structured approach to applying this technique involves: (1) clearly stating the hypotheses or estimation goal; (2) verifying that the data meet the required assumptions; (3) computing the relevant test statistic, estimate, or model fit; (4) obtaining the p-value, confidence interval, or posterior distribution; (5) interpreting the result in the context of the original question. Following these steps systematically ensures a rigorous and reproducible analysis.
-
----
-
-**Exercise 4.**
-Compare the approach from this section with an alternative method. When would you choose each?
-
-??? success "Solution to Exercise 4"
-    The method discussed here is appropriate when its assumptions hold and the sample size is sufficient for the asymptotic approximations to be accurate. Alternative approaches include: (1) nonparametric methods -- preferred when distributional assumptions are suspect; (2) bootstrap methods -- useful when analytical reference distributions are unavailable; (3) Bayesian methods -- valuable when incorporating prior information or when direct probability statements about parameters are desired. Running multiple approaches and comparing results provides a useful robustness check.
+    그럼에도 파이프라인을 쓰는 것이 옳다. 두 가지 이유가 있다. 첫째, $p \gg n$이면 PCA의 누설도 무시할 수 없게 된다. 둘째, 나중에 파이프라인에 $y$를 쓰는 단계(변수선택 등)를 추가할 때 구조가 이미 안전하게 잡혀 있다.

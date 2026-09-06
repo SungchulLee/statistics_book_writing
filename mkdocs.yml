@@ -717,50 +717,50 @@ nav:
             - 교차검증 방법 비교 (코드): ch17/code/cv_methods_comparison.md
         - 장 연습문제: ch17/exercises/exercises.md
 
-    - 18 Regularization Techniques:
-        - Chapter Overview: ch18/index.md
-        - 18.1 Motivation for Regularization:
-            - Overfitting and the Bias–Variance Tradeoff: ch18/motivation/overfitting.md
-            - Ill-Conditioned Design Matrices: ch18/motivation/ill_conditioning.md
-            - Multicollinearity and Regularization: ch18/motivation/multicollinearity.md
-        - 18.2 Ridge Regression:
-            - Ridge Formulation and Closed-Form Solution: ch18/ridge/formulation.md
-            - Geometric Interpretation (L2 Penalty): ch18/ridge/geometry.md
-            - Bayesian Interpretation (Gaussian Prior): ch18/ridge/bayesian.md
-            - Ridge Trace and Choosing λ: ch18/ridge/lambda_selection.md
-            - Ridge Regression Overview: ch18/ridge/ridge.md
-        - 18.3 Lasso Regression:
-            - Lasso Formulation and Sparsity: ch18/lasso/formulation.md
-            - Geometric Interpretation (L1 Penalty): ch18/lasso/geometry.md
-            - Bayesian Interpretation (Laplace Prior): ch18/lasso/bayesian.md
-            - Coordinate Descent Algorithm: ch18/lasso/coordinate_descent.md
-            - Lasso for Feature Selection: ch18/lasso/feature_selection.md
-            - Lasso Regression Overview: ch18/lasso/lasso.md
-        - 18.4 Elastic Net:
-            - Elastic Net Formulation: ch18/elastic_net/formulation.md
-            - Advantages over Pure Ridge and Lasso: ch18/elastic_net/advantages.md
-            - Grouping Effect for Correlated Features: ch18/elastic_net/grouping_effect.md
-            - Elastic Net Overview: ch18/elastic_net/elastic_net.md
-        - 18.5 Hyperparameter Tuning:
-            - Cross-Validation for λ Selection: ch18/tuning/cross_validation.md
-            - Regularization Path: ch18/tuning/regularization_path.md
-            - Information Criteria for Regularized Models: ch18/tuning/information_criteria.md
-        - 18.6 Dimensionality Reduction Methods:
-            - Principal Components and Partial Least Squares Overview: ch18/pcr_pls/index.md
-            - Principal Components Regression: ch18/pcr_pls/principal_components_regression.md
-            - Partial Least Squares: ch18/pcr_pls/partial_least_squares.md
-        - 18.7 Overview and Comparison:
-            - Ridge vs Lasso vs Elastic Net: ch18/overview/comparison.md
-            - Guidelines for Choosing a Method: ch18/overview/guidelines.md
-            - Overview: ch18/overview/overview.md
-        - 18.7 Code:
-            - Ridge Regression Examples: ch18/code/ridge_examples.md
-            - Lasso Regression Examples: ch18/code/lasso_examples.md
-            - Elastic Net Examples: ch18/code/elastic_net_examples.md
-            - Ridge, Lasso, and Elastic Net Comparison: ch18/code/reg_compare.md
-            - Cross-Validation and λ Tuning: ch18/code/cv_tuning.md
-            - Lasso Housing Regularization Path: ch18/code/lasso_housing_regularization_path.md
-            - Principal Components and Partial Least Squares Examples: ch18/code/pcr_pls_examples.md
+    - 18 정칙화 기법:
+        - 장 개요: ch18/index.md
+        - 18.1 정칙화의 동기:
+            - 과적합과 편향-분산 절충: ch18/motivation/overfitting.md
+            - 조건이 나쁜 계획행렬: ch18/motivation/ill_conditioning.md
+            - 다중공선성과 정칙화: ch18/motivation/multicollinearity.md
+        - 18.2 능형회귀:
+            - 능형 정식화와 닫힌 형태의 해: ch18/ridge/formulation.md
+            - 기하학적 해석 (L2 벌점): ch18/ridge/geometry.md
+            - 베이즈 해석 (정규 사전분포): ch18/ridge/bayesian.md
+            - 능형 자취와 λ 선택: ch18/ridge/lambda_selection.md
+            - 능형회귀 개관: ch18/ridge/ridge.md
+        - 18.3 라쏘 회귀:
+            - 라쏘 정식화와 희소성: ch18/lasso/formulation.md
+            - 기하학적 해석 (L1 벌점): ch18/lasso/geometry.md
+            - 베이즈 해석 (라플라스 사전분포): ch18/lasso/bayesian.md
+            - 좌표하강 알고리즘: ch18/lasso/coordinate_descent.md
+            - 변수선택 도구로서의 라쏘: ch18/lasso/feature_selection.md
+            - 라쏘 회귀 개관: ch18/lasso/lasso.md
+        - 18.4 엘라스틱넷:
+            - 엘라스틱넷 정식화: ch18/elastic_net/formulation.md
+            - 순수 능형회귀·라쏘에 대한 이점: ch18/elastic_net/advantages.md
+            - 상관된 변수에 대한 그룹 효과: ch18/elastic_net/grouping_effect.md
+            - 엘라스틱넷 개관: ch18/elastic_net/elastic_net.md
+        - 18.5 초모수 조율:
+            - λ 선택을 위한 교차검증: ch18/tuning/cross_validation.md
+            - 정칙화 경로: ch18/tuning/regularization_path.md
+            - 정칙화 모형의 정보기준: ch18/tuning/information_criteria.md
+        - 18.6 차원축소 방법:
+            - 주성분회귀와 부분최소제곱 개관: ch18/pcr_pls/index.md
+            - 주성분회귀: ch18/pcr_pls/principal_components_regression.md
+            - 부분최소제곱: ch18/pcr_pls/partial_least_squares.md
+        - 18.7 개관과 비교:
+            - 능형회귀 대 라쏘 대 엘라스틱넷: ch18/overview/comparison.md
+            - 방법 선택 지침: ch18/overview/guidelines.md
+            - 개관: ch18/overview/overview.md
+        - 18.8 코드:
+            - 능형회귀 예제 (코드): ch18/code/ridge_examples.md
+            - 라쏘 회귀 예제 (코드): ch18/code/lasso_examples.md
+            - 엘라스틱넷 예제 (코드): ch18/code/elastic_net_examples.md
+            - 능형회귀·라쏘·엘라스틱넷 비교 (코드): ch18/code/reg_compare.md
+            - 교차검증과 λ 조율 (코드): ch18/code/cv_tuning.md
+            - 주택가격 자료의 라쏘 정칙화 경로 (코드): ch18/code/lasso_housing_regularization_path.md
+            - 주성분회귀와 부분최소제곱 예제 (코드): ch18/code/pcr_pls_examples.md
         - 장 연습문제: ch18/exercises/exercises.md
 
     - 19 Logistic Regression:

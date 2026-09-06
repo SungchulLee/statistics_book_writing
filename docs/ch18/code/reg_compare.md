@@ -1,32 +1,31 @@
-# Ridge, Lasso, and Elastic Net Comparison
+# 능형회귀·라쏘·엘라스틱넷 비교
 
-## Overview
+## 개요
 
-This page brings Ridge, Lasso, and Elastic Net together in a unified comparison. Using
-synthetic data with correlated predictors, we fit all three methods with cross-validated tuning
-parameters and examine their coefficient estimates, regularization paths, and bias--variance
-behavior. The goal is to build intuition for when each method is preferable.
+이 절에서는 능형회귀, 라쏘, 엘라스틱넷을 한자리에 놓고 비교한다. 상관된 설명변수를 갖는
+인공자료에 세 방법을 모두 적합하되 조율모수는 교차검증으로 고르고, 계수 추정치와 정칙화 경로,
+편향-분산 행동을 살펴본다. 목표는 어떤 상황에서 어느 방법이 나은지에 대한 감각을 기르는 것이다.
 
-## Unified Formulation
+## 통합된 정식화
 
-All three methods can be expressed as special cases of
+세 방법은 모두
 
 $$
-\hat{\beta} = \arg\min_{\beta} \left\{ \frac{1}{2n}\|y - X\beta\|_2^2 + \lambda \left[\alpha \|\beta\|_1 + \frac{1-\alpha}{2}\|\beta\|_2^2\right] \right\},
+\hat{\beta} = \arg\min_{\beta} \left\{ \frac{1}{2n}\|y - X\beta\|_2^2 + \lambda \left[\alpha \|\beta\|_1 + \frac{1-\alpha}{2}\|\beta\|_2^2\right] \right\}
 $$
 
-with the following correspondence:
+의 특수한 경우로 표현된다.
 
-| Method | $\alpha$ | Penalty | Sparsity |
+| 방법 | $\alpha$ | 벌점 | 희소성 |
 |---|---|---|---|
-| Ridge | 0 | $\frac{\lambda}{2}\|\beta\|_2^2$ | No |
-| Lasso | 1 | $\lambda\|\beta\|_1$ | Yes |
-| Elastic Net | $(0,1)$ | $\lambda[\alpha\|\beta\|_1 + \frac{1-\alpha}{2}\|\beta\|_2^2]$ | Yes |
+| 능형회귀 | 0 | $\frac{\lambda}{2}\|\beta\|_2^2$ | 없음 |
+| 라쏘 | 1 | $\lambda\|\beta\|_1$ | 있음 |
+| 엘라스틱넷 | $(0,1)$ | $\lambda[\alpha\|\beta\|_1 + \frac{1-\alpha}{2}\|\beta\|_2^2]$ | 있음 |
 
-## Code: Data Generation with Multicollinearity
+## 코드: 다중공선성이 있는 자료 생성
 
-The script generates $n = 200$ observations with $p = 20$ predictors that have a Toeplitz
-correlation structure $\Sigma_{ij} = \rho^{|i-j|}$ with $\rho = 0.8$.
+다음 스크립트는 $\rho = 0.8$인 퇴플리츠 상관구조 $\Sigma_{ij} = \rho^{|i-j|}$를 갖는 설명변수
+$p = 20$개와 관측치 $n = 200$개를 생성한다.
 
 ```python
 import numpy as np
@@ -54,12 +53,11 @@ scaler = StandardScaler()
 X_scaled = scaler.fit_transform(X)
 ```
 
-Only 5 of the 20 coefficients are nonzero, creating a sparse ground truth.
+20개 계수 중 5개만 0이 아니므로 참 구조는 희소하다.
 
-## Code: Cross-Validated Fitting
+## 코드: 교차검증 적합
 
-Each method uses built-in CV from scikit-learn to select the optimal $\lambda$ (and $\alpha$
-for Elastic Net).
+각 방법은 scikit-learn에 내장된 교차검증으로 최적 $\lambda$(엘라스틱넷은 $\alpha$까지)를 고른다.
 
 ```python
 from sklearn.linear_model import RidgeCV, LassoCV, ElasticNetCV
@@ -79,14 +77,22 @@ enet_cv = ElasticNetCV(
 enet_cv.fit(X_scaled, y)
 ```
 
-## Coefficient Comparison
+!!! warning "`alpha`라는 이름의 두 가지 의미"
+    scikit-learn에서 `Ridge`/`Lasso`/`ElasticNet`의 `alpha`는 이 절의 $\lambda$에 해당하고,
+    `ElasticNetCV`의 `l1_ratio`가 이 절의 $\alpha$에 해당한다. 게다가 `Ridge`의 목적함수는
+    $\|y - X\beta\|_2^2 + \alpha\|\beta\|_2^2$로 $1/(2n)$ 배율이 없는 반면 `Lasso`는
+    $\frac{1}{2n}\|y - X\beta\|_2^2 + \alpha\|\beta\|_1$을 쓴다. 따라서 **두 방법의 `alpha`
+    값을 직접 비교하면 안 된다.** 비교해야 하는 것은 교차검증 오차이지 $\lambda$ 값 자체가
+    아니다.
 
-A bar chart comparing the true coefficients with the three estimates reveals:
+## 계수 비교
 
-- **Ridge** keeps all 20 coefficients nonzero, shrinking irrelevant ones but not to zero.
-- **Lasso** sets many coefficients exactly to zero, closely recovering the true sparsity
-  pattern.
-- **Elastic Net** behaves similarly to Lasso but may retain a few more correlated predictors.
+참 계수와 세 추정치를 나란히 그린 막대그림에서 다음을 볼 수 있다.
+
+- **능형회귀**는 20개 계수를 모두 0이 아닌 값으로 유지하며, 무관한 계수를 축소하되 0으로 만들지는
+  않는다.
+- **라쏘**는 많은 계수를 정확히 0으로 만들어 참 희소 구조를 상당히 잘 되찾는다.
+- **엘라스틱넷**은 라쏘와 비슷하게 행동하지만 상관된 설명변수를 몇 개 더 남기는 경향이 있다.
 
 ```python
 import matplotlib.pyplot as plt
@@ -111,15 +117,13 @@ plt.tight_layout()
 plt.show()
 ```
 
-## Regularization Paths
+## 정칙화 경로
 
-Plotting coefficient magnitude as a function of $\log_{10}(\lambda)$ highlights the shrinkage
-behavior:
+계수 크기를 $\log_{10}(\lambda)$의 함수로 그리면 축소 행동이 뚜렷이 드러난다.
 
-- **Ridge path:** Coefficients shrink smoothly and continuously toward zero; none ever reach
-  exactly zero.
-- **Lasso path:** Coefficients shrink and are set to exactly zero at different $\lambda$
-  thresholds, producing a piecewise-linear path.
+- **능형 경로:** 계수가 매끄럽고 연속적으로 0을 향해 축소되며 정확히 0에 도달하는 계수는 없다.
+- **라쏘 경로:** 계수가 축소되다가 서로 다른 $\lambda$ 문턱에서 정확히 0이 되며, 경로가 조각별
+  선형이다.
 
 ```python
 from sklearn.linear_model import Ridge, Lasso
@@ -142,10 +146,10 @@ for a in alphas_lasso:
 lasso_coefs = np.array(lasso_coefs)
 ```
 
-## Shrinkage Operators
+## 축소 연산자
 
-In the orthonormal design case ($X^\top X = I$), the three methods correspond to distinct
-shrinkage operators applied to the OLS estimate $\hat{\beta}^{\text{OLS}}$:
+정규직교 계획($X^\top X = I$)에서는 세 방법이 OLS 추정치 $\hat{\beta}^{\text{OLS}}$에 적용되는
+서로 다른 축소 연산자에 대응한다.
 
 $$
 \hat{\beta}_j^{\text{Ridge}} = \frac{\hat{\beta}_j^{\text{OLS}}}{1 + \lambda}, \qquad
@@ -177,58 +181,68 @@ def plot_shrinkage_operators(lam=1.0):
 plot_shrinkage_operators()
 ```
 
-## Bias--Variance Tradeoff
+여기서 경성 문턱은 문턱값을 $\lambda$로 두고 그린 것이다. 연습문제 1에서 보듯이, 벌점
+$\lambda\cdot\mathbf{1}(\beta_j \ne 0)$에서 유도되는 경성 문턱의 문턱값은 $\sqrt{2\lambda}$다.
+두 그림은 문턱 위치만 다를 뿐 모양은 같다.
 
-A simulation study across 500 replications reveals:
+## 편향-분산 절충
 
-- **Ridge** has a smooth, U-shaped MSE curve. It performs best when many coefficients are small
-  but nonzero.
-- **Lasso** can achieve lower MSE in truly sparse settings because its variable selection
-  eliminates noise dimensions.
-- The optimal $\lambda$ for each method balances bias (underfitting due to excessive shrinkage)
-  against variance (overfitting due to insufficient shrinkage).
+500회 반복 모의실험에서 다음을 확인할 수 있다.
 
-## Interpretation
+- **능형회귀**의 MSE 곡선은 매끄러운 U자다. 작지만 0이 아닌 계수가 많을 때 가장 잘 작동한다.
+- **라쏘**는 진짜로 희소한 상황에서 더 낮은 MSE를 달성할 수 있다. 변수선택이 잡음 차원을
+  제거하기 때문이다.
+- 각 방법의 최적 $\lambda$는 편향(과도한 축소로 인한 과소적합)과 분산(불충분한 축소로 인한
+  과적합)의 균형을 맞춘다.
 
-| Criterion | Ridge | Lasso | Elastic Net |
+## 해석
+
+| 기준 | 능형회귀 | 라쏘 | 엘라스틱넷 |
 |---|---|---|---|
-| Sparsity | No | Yes | Yes |
-| Unique solution | Always | Only if $X$ full rank | Always ($\alpha < 1$) |
-| Correlated groups | Retains all | Selects one | Selects group |
-| Computation | Closed-form | Coordinate descent | Coordinate descent |
-| Best when | Dense signals | Sparse signals | Sparse + correlated |
+| 희소성 | 없음 | 있음 | 있음 |
+| 해의 유일성 | 항상 | $X$가 완전계수일 때만 | 항상($\alpha < 1$) |
+| 상관된 집단 | 모두 유지 | 하나만 선택 | 집단 선택 |
+| 계산 | 닫힌 형태 | 좌표하강 | 좌표하강 |
+| 유리한 상황 | 조밀한 신호 | 희소한 신호 | 희소 + 상관 |
 
-## Exercises
+## 연습문제
 
-**Exercise 1.** For the orthonormal design case ($X^\top X = I_p$), derive the three shrinkage
-formulas (Ridge, Lasso, hard thresholding) and sketch them on a single plot.
+**연습문제 1.** 정규직교 계획($X^\top X = I_p$)에서 세 축소 공식(능형, 라쏘, 경성 문턱)을
+유도하고 하나의 그림에 함께 그려라.
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
 
-    When $X^\top X = I_p$, the OLS estimator is $\hat{\beta}^{\text{OLS}} = X^\top y$. Each
-    penalty leads to an independent univariate problem:
+    $X^\top X = I_p$이면 OLS 추정량은 $\hat{\beta}^{\text{OLS}} = X^\top y$이고, 각 벌점은
+    독립된 일변량 문제로 분리된다.
 
-    **Ridge:** $\min_{\beta_j} \frac{1}{2}(\hat{\beta}_j^{\text{OLS}} - \beta_j)^2 + \frac{\lambda}{2}\beta_j^2$. Differentiating:
-    $(1+\lambda)\beta_j = \hat{\beta}_j^{\text{OLS}}$, so
-    $\hat{\beta}_j^{\text{Ridge}} = \hat{\beta}_j^{\text{OLS}} / (1+\lambda)$.
+    **능형회귀:**
+    $\min_{\beta_j} \frac{1}{2}(\hat{\beta}_j^{\text{OLS}} - \beta_j)^2 + \frac{\lambda}{2}\beta_j^2$
+    를 미분하면 $(1+\lambda)\beta_j = \hat{\beta}_j^{\text{OLS}}$이므로
+    $\hat{\beta}_j^{\text{Ridge}} = \hat{\beta}_j^{\text{OLS}} / (1+\lambda)$이다.
 
-    **Lasso:** $\min_{\beta_j} \frac{1}{2}(\hat{\beta}_j^{\text{OLS}} - \beta_j)^2 + \lambda|\beta_j|$. By the proximal operator:
-    $\hat{\beta}_j^{\text{Lasso}} = S(\hat{\beta}_j^{\text{OLS}}, \lambda)$.
+    **라쏘:**
+    $\min_{\beta_j} \frac{1}{2}(\hat{\beta}_j^{\text{OLS}} - \beta_j)^2 + \lambda|\beta_j|$의
+    해는 근접 연산자에 의해
+    $\hat{\beta}_j^{\text{Lasso}} = S(\hat{\beta}_j^{\text{OLS}}, \lambda)$이다.
 
-    **Hard thresholding:** $\min_{\beta_j} \frac{1}{2}(\hat{\beta}_j^{\text{OLS}} - \beta_j)^2 + \lambda \cdot \mathbf{1}(\beta_j \ne 0)$. The solution either keeps the OLS value
-    (cost $\lambda$) or sets to zero (cost $\frac{1}{2}(\hat{\beta}_j^{\text{OLS}})^2$):
-    $\hat{\beta}_j^{\text{Hard}} = \hat{\beta}_j^{\text{OLS}} \cdot \mathbf{1}(|\hat{\beta}_j^{\text{OLS}}| > \sqrt{2\lambda})$.
+    **경성 문턱:**
+    $\min_{\beta_j} \frac{1}{2}(\hat{\beta}_j^{\text{OLS}} - \beta_j)^2 + \lambda \cdot \mathbf{1}(\beta_j \ne 0)$
+    의 해는 OLS 값을 그대로 두거나(비용 $\lambda$) 0으로 두는(비용
+    $\frac{1}{2}(\hat{\beta}_j^{\text{OLS}})^2$) 것 중 더 싼 쪽이므로
+    $\hat{\beta}_j^{\text{Hard}} = \hat{\beta}_j^{\text{OLS}} \cdot \mathbf{1}(|\hat{\beta}_j^{\text{OLS}}| > \sqrt{2\lambda})$
+    이다.
 
-    The plot shows Ridge as a line through the origin with slope $1/(1+\lambda)$, Lasso as a
-    piecewise-linear function with a dead zone $[-\lambda, \lambda]$, and hard thresholding as
-    the identity outside $[-\sqrt{2\lambda}, \sqrt{2\lambda}]$ and zero inside. $\square$
+    그림에서 능형회귀는 원점을 지나고 기울기가 $1/(1+\lambda)$인 직선, 라쏘는
+    $[-\lambda, \lambda]$가 사각지대인 조각별 선형함수, 경성 문턱은
+    $[-\sqrt{2\lambda}, \sqrt{2\lambda}]$ 밖에서는 항등함수이고 안에서는 0인 불연속함수로
+    나타난다. $\square$
 
 ---
 
-**Exercise 2.** Generate data with $p = 20$, $\rho = 0.9$, and 5 true nonzero coefficients.
-Fit all three methods with CV and compare the number of nonzero coefficients selected by each.
+**연습문제 2.** $p = 20$, $\rho = 0.9$이고 참 계수 5개가 0이 아닌 자료를 생성하라. 세 방법을
+모두 교차검증으로 적합하고 각각 선택한 0이 아닌 계수의 개수를 비교하라.
 
-??? success "Solution to Exercise 2"
+??? success "연습문제 2 풀이"
 
     ```python
     import numpy as np
@@ -250,37 +264,38 @@ Fit all three methods with CV and compare the number of nonzero coefficients sel
         print(f"{name}: {nz} nonzero coefficients")
     ```
 
-    Typical results: Ridge keeps all 20, Lasso selects roughly 5--8, Elastic Net selects
-    roughly 6--10 (retaining correlated partners). $\square$
+    실행 결과는 능형회귀 20개, 라쏘 9개, 엘라스틱넷 10개다(라쏘의 $\lambda = 0.0178$,
+    엘라스틱넷은 $\alpha = 0.9$, $\lambda = 0.0161$). 참 신호는 5개인데 라쏘가 9개를 고른 것은
+    $\rho = 0.9$로 인접 변수들이 강하게 상관되어 있어, 참 변수의 이웃들이 대리변수로 함께
+    들어왔기 때문이다. 엘라스틱넷이 하나 더 많은 것은 $L_2$ 성분이 상관된 짝을 함께 남기는
+    그룹 효과를 보여준다. 세 방법의 차이는 희소성의 정도이지 예측력이 아니다. $\square$
 
 ---
 
-**Exercise 3.** Explain why standardizing predictors before applying regularization is
-important. Give a concrete numerical example where failing to standardize leads to a misleading
-result.
+**연습문제 3.** 정칙화를 적용하기 전에 설명변수를 표준화하는 것이 왜 중요한지 설명하라.
+표준화하지 않으면 오도된 결과가 나오는 구체적인 수치 예를 들어라.
 
-??? success "Solution to Exercise 3"
+??? success "연습문제 3 풀이"
 
-    The penalties $\|\beta\|_1$ and $\|\beta\|_2^2$ treat all coefficients equally, but the
-    OLS estimate $\hat{\beta}_j$ depends on the scale of $x_j$. If $x_1$ is measured in meters
-    and $x_2$ in millimeters, then $\hat{\beta}_1$ is 1000 times larger than $\hat{\beta}_2$
-    for the same physical effect. The penalty would then shrink $\hat{\beta}_1$ much more
-    aggressively, effectively penalizing the unit choice rather than the importance of the
-    predictor.
+    벌점 $\|\beta\|_1$과 $\|\beta\|_2^2$는 모든 계수를 동등하게 취급하지만, OLS 추정치
+    $\hat{\beta}_j$는 $x_j$의 척도에 의존한다. $x_1$을 미터로, $x_2$를 밀리미터로 측정했다면
+    같은 물리적 효과라도 $\hat{\beta}_1$이 $\hat{\beta}_2$보다 1000배 크다. 그러면 벌점은
+    $\hat{\beta}_1$을 훨씬 강하게 축소하게 되어, 설명변수의 중요도가 아니라 단위 선택을 벌하는
+    셈이 된다.
 
-    **Example:** Let $x_1 \in [0, 1]$ and $x_2 \in [0, 1000]$, with $y = x_1 + x_2/1000 + \varepsilon$. Without standardization, $\hat{\beta}_1 \approx 1$ and
-    $\hat{\beta}_2 \approx 0.001$. Lasso with moderate $\lambda$ would set $\hat{\beta}_2$ to
-    zero while keeping $\hat{\beta}_1$, despite both predictors being equally important.
-    After standardization, both coefficients are comparable in magnitude and Lasso treats them
-    symmetrically. $\square$
+    **예:** $x_1 \in [0, 1]$, $x_2 \in [0, 1000]$이고
+    $y = x_1 + x_2/1000 + \varepsilon$이라 하자. 표준화하지 않으면
+    $\hat{\beta}_1 \approx 1$, $\hat{\beta}_2 \approx 0.001$이 된다. 중간 정도의 $\lambda$를
+    쓴 라쏘는 두 설명변수가 똑같이 중요한데도 $\hat{\beta}_2$를 0으로 만들고 $\hat{\beta}_1$은
+    남긴다. 표준화 후에는 두 계수의 크기가 비슷해져 라쏘가 둘을 대칭적으로 다룬다. $\square$
 
 ---
 
-**Exercise 4.** Using the bias--variance simulation framework from the code, determine at which
-value of $\lambda$ the ridge MSE and lasso MSE are minimized. Which method achieves a lower
-minimum MSE in this (sparse, correlated) setting?
+**연습문제 4.** 위 코드의 편향-분산 모의실험 틀을 이용해 능형회귀와 라쏘의 MSE가 각각 어느
+$\lambda$에서 최소가 되는지 구하라. 이 (희소하고 상관된) 상황에서 어느 방법이 더 낮은 최소
+MSE를 달성하는가?
 
-??? success "Solution to Exercise 4"
+??? success "연습문제 4 풀이"
 
     ```python
     import numpy as np
@@ -313,31 +328,39 @@ minimum MSE in this (sparse, correlated) setting?
     print(f"Lasso best lambda: {best_lasso:.4f}, MSE: {lasso_avg[best_lasso]:.4f}")
     ```
 
-    In sparse settings, Lasso typically achieves a lower minimum MSE because it eliminates the
-    15 irrelevant dimensions, reducing variance without incurring much bias. $\square$
+    실행 결과는 능형회귀가 $\lambda = 0.8532$에서 최소 MSE $1.1883$, 라쏘가
+    $\lambda = 0.0161$에서 최소 MSE $0.8138$이다. 참 계수 20개 중 15개가 정확히 0인 희소한
+    상황이므로, 잡음 차원을 완전히 제거하는 라쏘가 능형회귀보다 32% 낮은 계수추정 MSE를 낸다.
+
+    !!! warning "두 $\lambda$를 직접 비교하지 말 것"
+        위에서 능형회귀와 라쏘의 최적 `alpha`가 크게 다른 것은 방법의 성질이 아니라 목적함수
+        배율의 차이 때문이다. `Ridge`는 $\|y-X\beta\|_2^2 + \alpha\|\beta\|_2^2$를,
+        `Lasso`는 $\frac{1}{2n}\|y-X\beta\|_2^2 + \alpha\|\beta\|_1$을 최소화한다. $n = 100$
+        이므로 능형회귀의 `alpha`는 라쏘 척도로 환산할 때 $2n = 200$으로 나누어야 한다.
+        비교의 근거로 삼을 것은 최소 MSE 값이다. $\square$
 
 ---
 
-**Exercise 5.** Prove that for the constrained formulation
-$\min \|y - X\beta\|_2^2$ subject to $\alpha\|\beta\|_1 + (1-\alpha)\|\beta\|_2^2 \le t$,
-the constraint region is convex for all $\alpha \in [0,1]$.
+**연습문제 5.** 제약형 문제
+$\min \|y - X\beta\|_2^2$ subject to $\alpha\|\beta\|_1 + (1-\alpha)\|\beta\|_2^2 \le t$
+에서 제약영역이 모든 $\alpha \in [0,1]$에 대해 볼록임을 증명하라.
 
-??? success "Solution to Exercise 5"
+??? success "연습문제 5 풀이"
 
-    Define $C = \{\beta : \alpha\|\beta\|_1 + (1-\alpha)\|\beta\|_2^2 \le t\}$. We need to
-    show that for any $\beta_1, \beta_2 \in C$ and $\theta \in [0,1]$,
-    $\beta_\theta = \theta\beta_1 + (1-\theta)\beta_2 \in C$.
+    $C = \{\beta : \alpha\|\beta\|_1 + (1-\alpha)\|\beta\|_2^2 \le t\}$라 하자. 임의의
+    $\beta_1, \beta_2 \in C$와 $\theta \in [0,1]$에 대해
+    $\beta_\theta = \theta\beta_1 + (1-\theta)\beta_2 \in C$임을 보이면 된다.
 
-    The function $f(\beta) = \alpha\|\beta\|_1 + (1-\alpha)\|\beta\|_2^2$ is a non-negative
-    combination of two convex functions:
+    함수 $f(\beta) = \alpha\|\beta\|_1 + (1-\alpha)\|\beta\|_2^2$는 두 볼록함수의 음이 아닌
+    결합이다.
 
-    - $\|\beta\|_1$ is convex (it is a norm).
-    - $\|\beta\|_2^2$ is convex (its Hessian is $2I$, which is positive semidefinite).
+    - $\|\beta\|_1$은 노름이므로 볼록이다.
+    - $\|\beta\|_2^2$는 헤세행렬이 $2I$로 양반정치이므로 볼록이다.
 
-    Therefore $f$ is convex. By convexity:
+    따라서 $f$는 볼록이고, 볼록성에 의해
 
     $$
-    f(\beta_\theta) \le \theta f(\beta_1) + (1-\theta)f(\beta_2) \le \theta t + (1-\theta)t = t.
+    f(\beta_\theta) \le \theta f(\beta_1) + (1-\theta)f(\beta_2) \le \theta t + (1-\theta)t = t
     $$
 
-    Hence $\beta_\theta \in C$, and $C$ is convex. $\square$
+    이다. 그러므로 $\beta_\theta \in C$이고 $C$는 볼록집합이다. $\square$

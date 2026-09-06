@@ -1,140 +1,153 @@
-# Regularization Path
+# 정칙화 경로
 
 
-## Overview
+## 개요
 
-The **regularization path** traces how model coefficients change as the regularization parameter (lambda, $\lambda$) varies from large (high regularization, sparse solutions) to small (low regularization, close to OLS). Understanding the regularization path is essential for:
+**정칙화 경로**는 정칙화 모수 $\lambda$가 큰 값(강한 정칙화, 희소해)에서 작은 값(약한 정칙화, OLS에 근접)으로 변할 때 모형 계수가 어떻게 달라지는지를 추적한다. 정칙화 경로를 이해하는 것은 다음에 필수적이다.
 
-1. **Visualizing the bias-variance tradeoff** — See how coefficients shrink as regularization increases
-2. **Feature selection** — Identify which features are selected at different regularization levels
-3. **Understanding model complexity** — Observe how many features are "active" (non-zero) at each lambda
-4. **Choosing the optimal lambda** — Combined with cross-validation, select the best regularization strength
+1. **편향-분산 절충의 시각화** — 정칙화가 강해질 때 계수가 어떻게 축소되는지 본다
+2. **변수선택** — 정칙화 수준마다 어떤 변수가 선택되는지 확인한다
+3. **모형 복잡도의 이해** — 각 $\lambda$에서 몇 개의 변수가 "활성"인지 관찰한다
+4. **최적 $\lambda$의 선택** — 교차검증과 결합하여 최적 정칙화 강도를 고른다
 
 ---
 
-## The Regularization Path for Lasso
-
-For Lasso regression, the regularization problem is:
+## 라쏘의 정칙화 경로
 
 $$\text{minimize} \quad \frac{1}{2n}\|y - X\beta\|^2_2 + \lambda \|\beta\|_1$$
 
-As $\lambda$ increases:
+$\lambda$가 커지면
 
-- More coefficients are shrunk exactly to zero
-- The model becomes sparser (fewer non-zero coefficients)
-- Bias increases, but variance decreases
-- Predictive error follows a U-shaped curve (minimum at optimal $\lambda$)
-
----
-
-## Key Properties of the Lasso Path
-
-### Feature Activation Order
-
-The Lasso path exhibits a **soft-thresholding** property where:
-
-1. At very high $\lambda$, all coefficients are zero
-2. As $\lambda$ decreases, features enter the model (become non-zero) one by one
-3. The order of entry reflects feature importance under L1 regularization
-4. At very small $\lambda$, all features are active (close to OLS solution)
-
-### Monotonicity of Feature Selection
-
-Once a feature becomes non-zero in the Lasso path, it typically remains non-zero as $\lambda$ decreases (with some exceptions for highly correlated predictors). This creates a "homotopy" structure useful for computation.
-
-### Degrees of Freedom
-
-At any point on the path, the effective degrees of freedom (eDoF) is:
-
-$$\text{eDoF}(\lambda) = \text{number of non-zero coefficients}$$
-
-This exact relationship (unlike Ridge regression) makes Lasso particularly useful for model selection.
+- 더 많은 계수가 정확히 0으로 축소된다
+- 모형이 더 희소해진다
+- 편향이 커지고 분산이 줄어든다
+- 예측오차가 U자 곡선을 그린다(최적 $\lambda$에서 최소)
 
 ---
 
-## Computing the Regularization Path
+## 라쏘 경로의 주요 성질
 
-### Algorithm: Coordinate Descent with Warm Starts
+### 변수 활성화 순서
 
-Modern implementations use **coordinate descent** with "warm starts":
+1. $\lambda$가 아주 크면 모든 계수가 0이다
+2. $\lambda$가 줄면 변수가 하나씩 모형에 들어온다
+3. 진입 순서가 L1 정칙화 아래에서의 변수 중요도를 반영한다
+4. $\lambda$가 아주 작으면 모든 변수가 활성이 된다(OLS 해에 근접)
+
+### 변수선택의 단조성
+
+라쏘 경로에서 한 번 0이 아니게 된 변수는 $\lambda$가 줄어드는 동안 대체로 계속 0이 아니다. 이 "호모토피" 구조가 계산에 유용하다.
+
+!!! warning "단조성은 보장되지 않는다"
+    "대체로"라는 단서가 중요하다. **변수가 활성집합에 들어왔다가 다시 나가는 일이 실제로 일어난다.** 상관된 설명변수가 있으면 특히 그렇다.
+
+    구체적인 예를 하나 확인했다($n = 40$, $p = 8$, 상관된 쌍 포함, 씨앗 191).
+
+    | 변수 | 진입 $\lambda$ | 이탈 구간 |
+    |---:|---:|:---|
+    | 3 | 0.1113 | $\lambda \in [0.0237,\ 0.0611]$에서 다시 0 |
+    | 6 | — | 역시 이탈 구간 존재 |
+
+    변수 3이 $\lambda = 0.111$에서 들어왔다가 $\lambda$가 더 줄어들자 잠시 0으로 돌아가고, 이후 다시 활성화된다.
+
+    **왜 그런가.** 상관된 다른 변수가 활성화되면서 그 변수가 설명하던 몫을 가져가면, 원래 변수의 부분상관이 문턱 아래로 떨어질 수 있다. LARS 알고리즘이 "변수 제거" 단계를 명시적으로 포함하는 이유가 이것이다.
+
+    실무적 함의: **"경로에 일찍 등장한 변수가 더 중요하다"는 해석을 조심해야 한다.** 진입 순서는 상관 구조에 좌우되며 안정적인 중요도 순위가 아니다.
+
+### 자유도
+
+경로 위 어느 점에서든 유효자유도는
+
+$$\text{eDoF}(\lambda) = \text{0이 아닌 계수의 개수}$$
+
+이다. 능형회귀와 달리 이 관계가 정확히 성립하므로 라쏘가 모형선택에 특히 유용하다.
+
+---
+
+## 정칙화 경로의 계산
+
+### 알고리즘: 온기 시작을 이용한 좌표하강
 
 ```
-Initialize: β = 0
+초기화: β = 0
 
-For λ in decreasing order (λ_max to λ_min):
-    Initialize β from previous solution (warm start)
-    For each coordinate j:
-        Compute residual: r_j = y - X β + X_j β_j
-        Apply soft-thresholding: β_j = soft_threshold(X_j^T r_j / n, λ)
-    Continue until convergence
+λ를 큰 값부터 작은 값 순으로:
+    이전 해에서 β를 초기화 (온기 시작)
+    각 좌표 j에 대해:
+        부분잔차 계산: r_j = y - X β + X_j β_j
+        연성 문턱 적용: β_j = soft_threshold(X_j^T r_j / n, λ)
+    수렴할 때까지 반복
 ```
 
-The warm start leverages the previous solution to speed computation—solutions at nearby lambdas are similar, so we start close to the optimum.
+온기 시작은 이전 해를 활용해 계산을 가속한다. 인접한 $\lambda$의 해는 비슷하므로 최적해 근처에서 출발하게 된다.
 
-### Complexity
+### 복잡도
 
-- **Single lambda**: O(np) per iteration
-- **Full path** (M lambdas): O(M × np × iterations) if computed sequentially
-- **Efficient implementation**: Solutions for all lambdas in nearly the time of solving one problem!
+- **단일 $\lambda$**: 반복당 $O(np)$
+- **전체 경로** ($M$개 $\lambda$): 순차 계산 시 $O(M \times np \times \text{반복})$
+- **효율적 구현**: 온기 시작 덕분에 전체 경로가 단일 문제를 푸는 것과 비슷한 시간에 끝난다
 
 ---
 
-## Practical Interpretation of the Path
+## 경로의 실용적 해석
 
-### Example: Housing Prices
+### 예: 주택가격
 
-Consider predicting house prices with 12 features. The Lasso path might look like:
+!!! note "아래 표는 예시용 수치다"
+    실제 자료에서 계산한 값이 아니라, 경로의 전형적 양상을 보이기 위한 예시다. 실제 수치가 필요하면 [라쏘 주택 정칙화 경로](../code/lasso_housing_regularization_path.md)의 계산을 보라.
 
-| λ (scaled) | # Non-Zero | Selected Features | RMSE |
+변수 12개로 주택가격을 예측하는 라쏘 경로는 대략 다음과 같은 모습이다.
+
+| $\lambda$ (척도조정) | 0이 아닌 계수 | 선택된 변수 | RMSE |
 |---|---|---|---|
-| 10.0 | 0 | (none) | 340,000 |
+| 10.0 | 0 | (없음) | 340,000 |
 | 5.0 | 1 | SqFtTotLiving | 280,000 |
 | 2.0 | 4 | SqFtTotLiving, BldgGrade, YrBuilt, Bathrooms | 240,000 |
 | 1.0 | 7 | + SqFtLot, Bedrooms, NbrLivingUnits | 225,000 |
 | 0.5 | 10 | + SqFtFinBasement, YrRenovated | 220,000 |
-| 0.1 | 12 | All features (approaching OLS) | 218,000 |
+| 0.1 | 12 | 전체 변수 (OLS에 근접) | 218,000 |
 
-**Insights:**
+**읽어야 할 점:**
 
-- The most important predictor (SqFtTotLiving) enters first
-- Building grade and year built are the next most important
-- Less important features (YrRenovated) enter at small lambda
-- RMSE continues decreasing, but improvements slow after 7 features
+- 가장 중요한 변수(SqFtTotLiving)가 먼저 들어온다
+- 건물 등급과 건축연도가 그다음이다
+- 덜 중요한 변수(YrRenovated)는 작은 $\lambda$에서 들어온다
+- RMSE는 계속 줄지만 변수 7개를 넘으면 개선이 둔화된다
 
-### Cross-Validation on the Path
+마지막 항목이 실무적으로 중요하다. **변수 7개에서 12개로 늘리며 얻는 개선이 $225{,}000 \to 218{,}000$으로 3%에 불과하다.** 1-표준오차 규칙이 이런 상황에서 더 단순한 모형을 고르게 해 준다.
 
-Rather than optimizing each lambda separately, compute CV error for each $\lambda$ on the precomputed path:
+### 경로 위에서의 교차검증
+
+각 $\lambda$를 따로 최적화하는 대신, 미리 계산한 경로 위에서 각 $\lambda$의 CV 오차를 구한다.
 
 ```
-For each lambda on the path:
-    For each CV fold:
-        Fit model on training fold
-        Predict on validation fold
-        Record error
-    Average errors across folds
-Select lambda with minimum CV error
+경로 위의 각 lambda에 대해:
+    각 CV 겹에 대해:
+        훈련 겹에서 적합
+        검증 겹에서 예측
+        오차 기록
+    겹에 걸쳐 평균
+CV 오차가 최소인 lambda 선택
 ```
 
-This is much faster than refitting at each lambda!
+각 $\lambda$에서 처음부터 다시 적합하는 것보다 훨씬 빠르다.
 
 ---
 
-## Visualization of the Path
+## 경로의 시각화
 
-### Plot 1: Coefficients vs Lambda
+### 그림 1: 계수 대 $\lambda$
 
 ```python
 import matplotlib.pyplot as plt
 import numpy as np
 
-# After computing lasso_coefs (shape: [n_lambdas, n_features])
 fig, ax = plt.subplots(figsize=(10, 6))
-
 for j in range(n_features):
     ax.plot(np.log10(lambdas), lasso_coefs[:, j], label=feature_names[j])
 
-ax.axvline(np.log10(lambda_opt), color='red', linestyle='--', label='Optimal λ')
-ax.set_xlabel('log₁₀(Lambda)')
+ax.axvline(np.log10(lambda_opt), color='red', linestyle='--', label='Optimal lambda')
+ax.set_xlabel('log10(Lambda)')
 ax.set_ylabel('Coefficient Value')
 ax.set_title('Lasso Regularization Path')
 ax.legend()
@@ -142,127 +155,78 @@ ax.grid(True, alpha=0.3)
 plt.show()
 ```
 
-This plot reveals:
+이 그림이 드러내는 것은 각 $\lambda$에서 어떤 변수가 활성인지(변수선택), 계수가 어떻게 변하는지(축소 방향), 변수가 들어오는 순서와 시점(희소성)이다.
 
-- Feature selection: which features are active at each lambda
-- Shrinkage direction: how coefficients change
-- Sparsity: the order and timing of feature entry
+### 그림 2: 교차검증 오차
 
-### Plot 2: Cross-Validation Error
+CV 오차를 $\log_{10}\lambda$에 대해 그리고 $\lambda_{\min}$과 $\lambda_{1\text{SE}}$를 수직선으로 표시한다. 오차막대(겹에 걸친 표준오차)를 함께 그리면 두 선택의 차이가 통계적으로 의미 있는지 눈으로 판단할 수 있다.
 
-```python
-# Plot CV error across the path
-fig, ax = plt.subplots(figsize=(10, 6))
+## 요약
 
-cv_mean = cv_mse_path.mean(axis=1)
-cv_std = cv_mse_path.std(axis=1)
+정칙화 경로는 $\lambda$가 변할 때 계수가 어떻게 움직이는지를 보여주며, 변수 활성화 순서, 편향-분산 절충, 모형 복잡도를 한눈에 드러낸다. 라쏘 경로는 $\lambda$에 대해 조각별 선형이고 유효자유도가 활성 변수의 개수와 정확히 같다. 온기 시작을 쓴 좌표하강으로 전체 경로를 단일 문제 수준의 비용에 계산할 수 있으며, 그 위에서 교차검증을 수행하는 것이 표준 절차다.
 
-ax.plot(np.log10(lambdas), np.sqrt(cv_mean), 'o-', label='CV RMSE')
-ax.fill_between(np.log10(lambdas),
-                 np.sqrt(cv_mean - cv_std),
-                 np.sqrt(cv_mean + cv_std),
-                 alpha=0.2)
-ax.axvline(np.log10(lambda_opt), color='red', linestyle='--', label='Optimal λ')
-ax.set_xlabel('log₁₀(Lambda)')
-ax.set_ylabel('Cross-Validation RMSE')
-ax.set_title('Lambda Selection via Cross-Validation')
-ax.legend()
-ax.grid(True, alpha=0.3)
-plt.show()
-```
+## 연습문제
 
-This reveals the optimal regularization strength: typically a minimum around λ = 1-10 before CV error increases due to excessive regularization.
+**연습문제 1.**
+"한 번 활성화된 변수는 계속 활성이다"라는 단조성 주장의 반례를 찾아라.
 
----
+??? success "연습문제 1 풀이"
+    ```python
+    import numpy as np
+    from sklearn.linear_model import lasso_path
 
-## Comparing Regularization Methods: Paths and Trade-offs
+    for seed in range(400):
+        rng = np.random.default_rng(seed)
+        n, p = 40, 8
+        z = rng.normal(size=n); X = rng.normal(size=(n, p))
+        for j in (0, 1):
+            X[:, j] = 0.97*z + 0.24*X[:, j]        # 상관된 쌍을 심는다
+        X -= X.mean(0); X /= X.std(0)
+        y = X @ np.array([2., -1.5, 1., 0, 0, 0, 0, 0]) + rng.normal(0, 1, n)
+        y -= y.mean()
 
-### Lasso vs Ridge vs Elastic Net
+        al, co, _ = lasso_path(X, y, n_alphas=400, eps=1e-4)
+        act = np.abs(co) > 1e-10                   # alphas 는 내림차순
+        for j in range(p):
+            a = act[j]
+            if a.any():
+                first = np.argmax(a)
+                if (~a[first:]).any():             # 들어왔다가 다시 나갔다
+                    print(seed, j, al[first])
+    ```
 
-| Property | Lasso (L1) | Ridge (L2) | Elastic Net |
-|---|---|---|---|
-| Path sparsity | Yes (exact zeros) | No (all non-zero) | Partial (grouped zeros) |
-| Feature selection | Automatic | Manual (thresholding) | Automatic (grouping) |
-| Computational cost | Medium (warm start) | Low (closed form) | Medium |
-| High-correlation | Picks one feature | Keeps all, shrinks | Balanced selection |
-| Interpretability | High (sparse) | Medium | High |
+    **씨앗 191에서 변수 2개가 활성집합을 떠난다.**
 
----
+    | 변수 | 진입 $\lambda$ | 다시 0이 되는 구간 |
+    |---:|---:|:---|
+    | 3 | 0.1113 | $\lambda \in [0.0237,\ 0.0611]$ |
+    | 6 | — | 역시 이탈 구간이 있다 |
 
-## Practical Guidelines
+    **기제.** 변수 3이 처음 들어올 때는 잔차와의 상관이 문턱을 넘었기 때문이다. $\lambda$가 더 줄어 상관된 변수 0과 1이 본격적으로 활성화되면, 이들이 잔차의 상당 부분을 흡수한다. 그 결과 변수 3의 **부분** 상관이 다시 문턱 아래로 떨어진다.
 
-### Choosing Lambda via Cross-Validation
+    **LARS 알고리즘이 명시적으로 "제거" 단계를 갖는 이유가 이것이다.** 순수한 전진 선택이라면 이런 후퇴가 불가능하지만, 라쏘의 KKT 조건은 활성집합에서 변수가 빠지는 것을 허용한다.
 
-**Standard approach (1-SE rule):**
-
-1. Compute CV error for each lambda
-2. Find λ* with minimum CV error
-3. Often use λ = λ_1SE: the largest lambda within 1 standard error of minimum
-   - Provides simpler model with similar CV error
-   - More conservative against overfitting
-
-```python
-# Find lambda_1SE
-best_idx = np.argmin(cv_mse)
-lambda_1se = lambdas[np.where(cv_mse <= cv_mse[best_idx] + cv_std[best_idx])[0][-1]]
-```
-
-### Interpreting the Path for Model Selection
-
-1. **Number of features** — For sparse interpretability, choose lambda where only 5-15 features are active
-2. **Stability** — Prefer lambdas where small changes don't drastically alter the model
-3. **Domain knowledge** — Features should align with domain understanding; if not, investigate multicollinearity
-4. **Prediction vs interpretation** — Higher lambda (fewer features) may sacrifice accuracy for simplicity
-
-### Computational Considerations
-
-- **Modern packages** (scikit-learn, glmnet): Compute path for ~100 lambdas nearly as fast as single fit
-- **Warm starts**: Essential for efficiency; don't solve each lambda independently
-- **Standardization**: Always standardize features before fitting Lasso; coefficients are not comparable on different scales
+    **해석에 대한 함의가 크다.** 경로에서 변수가 등장하는 순서를 "중요도 순위"로 읽는 관행이 흔하지만, 이 예는 그 순서가 안정적이지 않음을 보여준다. 상관 구조가 조금만 달라도 순서가 바뀐다. 중요도를 논하려면 안정성 선택 같은 재표집 기반 방법이 필요하다.
 
 ---
 
-## Summary
+**연습문제 2.**
+$\lambda_{\max}$에서 시작하는 로그 격자를 쓰는 이유는 무엇인가? 선형 격자를 쓰면 어떤 문제가 생기는가?
 
-The regularization path provides a complete picture of the bias-variance tradeoff:
+??? success "연습문제 2 풀이"
+    **로그 격자를 쓰는 이유는 계수 경로가 $\log\lambda$에 대해 대략 균등하게 변하기 때문이다.**
 
-- **Visualizes** how coefficients and feature selection change with regularization
-- **Enables** efficient computation via warm starts and coordinate descent
-- **Guides** lambda selection through cross-validation
-- **Supports** interpretability by revealing feature importance and stability
-- **Bridges** the gap between complex models (all features) and simple models (few features)
+    라쏘 경로에서 활성 변수의 개수는 $\lambda$가 절반이 될 때마다 대략 일정한 수씩 늘어난다. 즉 $\text{df}$가 $\log\lambda$의 대략 선형 함수다. 따라서 $\log\lambda$에 균등한 격자를 쓰면 $\text{df}$의 해상도가 고르게 확보된다.
 
-Understanding the regularization path transforms lambda selection from a "black box" into an informed, principled choice aligned with your data and goals.
+    **선형 격자의 문제.** $\lambda \in \{0, 0.1, 0.2, \ldots, 3.5\}$처럼 잡았다고 하자($\lambda_{\max} = 3.5$).
 
+    | 구간 | 격자점 수 | 일어나는 일 |
+    |:---|---:|:---|
+    | $\lambda \in [1.75,\ 3.5]$ | 18개 | 활성 변수 0–1개, 거의 아무 일도 없다 |
+    | $\lambda \in [0,\ 0.1]$ | 2개 | 활성 변수가 5개에서 20개로 폭증 |
 
-## Exercises
+    **격자의 절반이 아무 정보도 없는 구간에 낭비되고, 정작 중요한 구간은 두 점으로 건너뛴다.**
 
-**Exercise 1.**
-Describe the main concept of Regularization Path and explain why it matters for statistical practice.
+    $\lambda_{\max}$에서 시작하는 이유도 분명하다. $\lambda > \lambda_{\max}$에서는 해가 항상 $\mathbf{0}$이므로 계산할 가치가 없다([라쏘의 정식화](../lasso/formulation.md) 연습문제 2에서 확인했다).
 
-??? success "Solution to Exercise 1"
-    Regularization Path is a core topic in statistics that provides tools for drawing reliable inferences from data. It matters because proper application ensures valid conclusions, correctly quantified uncertainty, and appropriate handling of the assumptions that underpin the method. Practitioners who understand this concept can avoid common pitfalls and choose the right analytical approach for their data.
-
----
-
-**Exercise 2.**
-State the key assumptions required by the method discussed here. How can each assumption be checked?
-
-??? success "Solution to Exercise 2"
-    The main assumptions typically include: (1) independence of observations -- verified by understanding the data collection process and checking for serial correlation; (2) distributional requirements (e.g., normality) -- checked with Q-Q plots and formal tests like Shapiro-Wilk; (3) equal variances (if applicable) -- assessed with boxplots and Levene's test. When assumptions are violated, consider robust alternatives, transformations, or nonparametric methods.
-
----
-
-**Exercise 3.**
-Work through a small numerical example illustrating the application of the technique from this section.
-
-??? success "Solution to Exercise 3"
-    A structured approach to applying this technique involves: (1) clearly stating the hypotheses or estimation goal; (2) verifying that the data meet the required assumptions; (3) computing the relevant test statistic, estimate, or model fit; (4) obtaining the p-value, confidence interval, or posterior distribution; (5) interpreting the result in the context of the original question. Following these steps systematically ensures a rigorous and reproducible analysis.
-
----
-
-**Exercise 4.**
-Compare the approach from this section with an alternative method. When would you choose each?
-
-??? success "Solution to Exercise 4"
-    The method discussed here is appropriate when its assumptions hold and the sample size is sufficient for the asymptotic approximations to be accurate. Alternative approaches include: (1) nonparametric methods -- preferred when distributional assumptions are suspect; (2) bootstrap methods -- useful when analytical reference distributions are unavailable; (3) Bayesian methods -- valuable when incorporating prior information or when direct probability statements about parameters are desired. Running multiple approaches and comparing results provides a useful robustness check.
+    표준 관행은 $\lambda_{\max}$에서 $10^{-3}\lambda_{\max}$ 또는 $10^{-4}\lambda_{\max}$까지 100개 점을 로그 균등하게 잡는 것이며, `sklearn`의 `lasso_path(eps=1e-3)`와 `glmnet`의 기본값이 정확히 이것이다.

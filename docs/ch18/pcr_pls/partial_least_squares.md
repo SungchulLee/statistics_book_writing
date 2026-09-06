@@ -1,333 +1,170 @@
-# Partial Least Squares (PLS)
+# 부분최소제곱 (PLS)
 
 
-## Overview
+## 개요
 
-**Partial Least Squares (PLS)** is a dimensionality reduction method that, unlike PCA (used in PCR), constructs components by considering the relationship between predictors and the response. PLS finds linear combinations of predictors that are highly correlated with the response, making it particularly useful when prediction is the goal.
+**부분최소제곱**(PLS)은 지도 차원축소 방법이다. PCR이 설명변수의 분산만 보고 성분을 만드는 것과 달리, PLS는 설명변수와 반응변수의 **공분산**을 최대화하는 성분을 만든다.
 
-### Key Distinction from PCR
+### PCR과의 결정적 차이
 
-| Aspect | PCR | PLS |
-|--------|-----|-----|
-| **Component construction** | Unsupervised: maximize variance in $X$ | Supervised: maximize covariance of $X$ with $y$ |
-| **Objective** | Explain variance in predictors | Explain variance in predictors **and** correlation with response |
-| **When it excels** | When predictor variance aligns with response | When small number of predictors drive response |
-| **Typical outcome** | Often requires many components | Often fewer components than PCR |
-
-PLS is valuable when:
-
-- **Prediction accuracy** is the primary goal
-- **Multicollinearity** among predictors is severe
-- **$p$ is large relative to $n$** ($p > n$ or $p \approx n$)
-- The response depends on a **small number of latent directions** in predictor space
+| | PCR | PLS |
+|---|---|---|
+| **성분 구성** | 비지도: $X$의 분산 최대화 | 지도: $X$와 $y$의 공분산 최대화 |
 
 ---
 
-## The PLS Algorithm
+## PLS 알고리즘
 
-### Step 1: Standardize Predictors and Response
-
-Standardize both predictors and response:
+### 1단계: 설명변수와 반응변수의 표준화
 
 $$X_{\text{scaled}} = \frac{X - \mu_X}{\sigma_X}, \quad y_{\text{centered}} = y - \bar{y}$$
 
-This ensures all variables are on comparable scales and simplifies interpretation.
+### 2단계: 잠재성분의 반복적 구성
 
-### Step 2: Construct Latent Components Iteratively
+주성분을 한꺼번에 뽑는 PCR과 달리, PLS는 $X$와 $y$의 공분산을 최대화하며 성분을 순차적으로 만든다.
 
-Unlike PCR, which extracts all principal components at once, PLS constructs components sequentially by maximizing the covariance between $X$ and $y$.
+$$T_1 = X_{\text{scaled}} w_1, \qquad
+w_1 = \arg\max_{\|w\|=1} \text{Cov}(X_{\text{scaled}} w,\; y_{\text{centered}})$$
 
-**First Component ($T_1, U_1$):**
+실제로 $w_1$은 $X_{\text{scaled}}^\top y_{\text{centered}}$에 비례한다. 즉 **각 설명변수와 반응변수의 상관에 비례하는 가중치**다.
 
-The first PLS component is the direction in $X$ space most correlated with $y$:
+이후 성분은 잔차에 대해 같은 과정을 반복한다.
 
-$$T_1 = X_{\text{scaled}} w_1$$
+1. $T_m$으로 $X$를 설명한 부분을 제거한다(수축, deflation)
+2. $T_m$으로 $y$를 설명한 부분을 제거한다
+3. 잔차 $X^{(m)}$과 $y^{(m)}$의 공분산을 최대화하는 $w_m$을 구성한다
 
-where the weight vector $w_1$ maximizes the covariance:
+이 반복적 수축이 각 성분으로 하여금 이전 성분이 설명하지 못한 $y$의 변동을 담게 한다.
 
-$$w_1 = \arg\max_w \text{Cov}(X_{\text{scaled}} w, y_{\text{centered}})$$
+### 3단계: PLS 성분에 회귀
 
-subject to $\|w_1\| = 1$ (unit norm constraint).
+$$y = \beta_0 + \beta_1 T_1 + \cdots + \beta_M T_M + \epsilon$$
 
-In practice, $w_1$ is proportional to $X_{\text{scaled}}^T y_{\text{centered}}$ (the correlation between each predictor and response).
-
-**Subsequent Components ($T_m, U_m$ for $m > 1$):**
-
-1. Regress $X$ on the current component $T_{m-1}$: compute residuals $X^{(m)} = X - \hat{X}$
-2. Regress $y$ on $T_{m-1}$: compute residuals $y^{(m)} = y - \hat{y}$
-3. Construct $w_m$ to maximize covariance between residual $X^{(m)}$ and residual $y^{(m)}$
-4. Form new component: $T_m = X^{(m)} w_m$
-
-This iterative deflation ensures components capture variance in $y$ not explained by previous components.
-
-### Step 3: Regress on PLS Components
-
-Perform regression on the first $M$ PLS components:
-
-$$y = \beta_0 + \beta_1 T_1 + \beta_2 T_2 + \cdots + \beta_M T_M + \epsilon$$
-
-### Step 4: Select Number of Components via Cross-Validation
-
-Use **$k$-fold cross-validation** to choose the optimal number of components $M$:
-
-1. For each $M \in \{1, 2, \ldots, p\}$:
-   - For each fold: fit PLS with $M$ components on training data
-   - Predict on validation fold and record error
-   - Average prediction error across folds
-
-2. Select $\hat{M} = \arg\min_M \text{CV}(M)$
+### 4단계: 교차검증으로 성분 수 선택
 
 ---
 
-## Mathematical Details
+## NIPALS 알고리즘
 
-### PLS Weight Vector
-
-The weight vector for the $m$-th component solves:
-
-$$w_m = \frac{X_{\text{residual}}^T y_{\text{residual}}}{\|X_{\text{residual}}^T y_{\text{residual}}\|}$$
-
-where the residuals are orthogonal to all previous components. This differs fundamentally from PCA, which uses the eigenvectors of the covariance matrix.
-
-### NIPALS Algorithm
-
-The **Non-linear Iterative Partial Least Squares (NIPALS)** algorithm is the standard computational approach:
+**비선형 반복 부분최소제곱**(NIPALS)이 표준 계산 방법이다.
 
 ```
-1. Initialize: X̃ = X (scaled), ỹ = y (centered)
-2. For m = 1 to M:
-   a. w_m = X̃'ỹ / ||X̃'ỹ||        (compute weight)
-   b. t_m = X̃ w_m                   (compute component)
-   c. β_m = (t_m' ỹ) / (t_m' t_m)   (regress y on t_m)
-   d. ỹ = ỹ - β_m t_m               (deflate y residuals)
-   e. p_m = X̃' t_m / (t_m' t_m)    (compute loading)
-   f. X̃ = X̃ - t_m p_m'             (deflate X residuals)
-3. β_global = [β_1, β_2, ..., β_M]
+X̃ = X_scaled,  ỹ = y_centered
+m = 1..M 에 대해:
+   a. w_m = X̃' ỹ / ||X̃' ỹ||        (가중벡터)
+   b. t_m = X̃ w_m                   (성분 점수)
+   c. β_m = t_m' ỹ / (t_m' t_m)     (회귀계수)
+   d. ỹ = ỹ - β_m t_m               (y 잔차 수축)
+   e. p_m = X̃' t_m / (t_m' t_m)     (적재)
+   f. X̃ = X̃ - t_m p_m'             (X 잔차 수축)
 ```
 
----
-
-## Advantages and Disadvantages
-
-### Advantages
-
-1. **Supervised dimensionality reduction** — Components are constructed to predict $y$, not just explain variance in $X$
-2. **Fewer components needed** — Often requires fewer components than PCR because components are selected based on predictive power
-3. **Handles high-dimensionality** — Works when $p > n$ without the need for variable selection
-4. **Handles multicollinearity** — Components are uncorrelated, eliminating multicollinearity issues
-5. **Interpretable loadings** — Component loadings show how original variables contribute
-6. **Computational efficiency** — NIPALS algorithm is iterative and computationally efficient
-
-### Disadvantages
-
-1. **Loss of interpretability** — Like PCR, components are linear combinations; harder to interpret than original variables
-2. **Standardization sensitivity** — Results sensitive to predictor scaling; standardization is essential
-3. **Limited extrapolation** — Predictions unreliable outside training data range
-4. **Model complexity** — Must store loadings and weights; not as simple as OLS
-5. **Requires tuning** — Must select optimal number of components via cross-validation
-6. **Theory less established** — Fewer asymptotic results compared to OLS or Ridge
+각 반복이 행렬-벡터 곱만 쓰므로 성분당 $O(np)$로 효율적이다.
 
 ---
 
-## PLS in Chemometrics and Beyond
+## 장점과 단점
 
-PLS originated in chemometrics (spectroscopy analysis) and is widely used when:
+### 장점
 
-- **High-dimensional spectroscopic data** with many wavelengths ($p >> n$)
-- **Batch process monitoring** with multiple sensors predicting product quality
-- **Drug discovery** with molecular descriptors predicting biological activity
-- **Marketing research** with survey responses predicting sales
+1. **지도학습** — 성분이 반응변수를 예측하도록 선택된다
+2. **적은 성분** — PCR보다 적은 성분으로 같은 성능에 도달하는 경우가 많다
+3. **고차원에 강함** — $p \gg n$에서도 잘 작동한다
+4. **$X$–$y$ 공분산 구조 반영**
+5. **실무 검증** — 화학계량학에서 수십 년간 검증되었다
+6. **계산 효율** — NIPALS가 반복적이고 효율적이다
 
-### Variants
+### 단점
 
-1. **PLS-DA (Discriminant Analysis)** — PLS for classification; constructs components that separate classes
-2. **Multi-response PLS** — Extends to multiple responses $Y$ (instead of single $y$)
-3. **Orthogonal PLS** — Constructs orthogonal components for improved interpretability
-
----
-
-## PLS vs. PCR vs. Ridge vs. Lasso
-
-| Method | Dimension Reduction | Component Selection | Use Case |
-|--------|-------------------|-------------------|----------|
-| **PCR** | Yes (unsupervised) | Top $M$ by variance | When predictor variance important |
-| **PLS** | Yes (supervised) | Top $M$ by covariance with $y$ | When prediction goal, $p >> n$ |
-| **Ridge** | No (continuous shrinkage) | All predictors, shrunk | Moderate $p$, some multicollinearity |
-| **Lasso** | No (sparse shrinkage) | Automatic feature selection | Feature selection important |
-
-**Decision rule:**
-
-- **$p$ large or $p > n$?** → PCR or PLS
-- **Multicollinearity but moderate $p$?** → Ridge
-- **Feature selection important?** → Lasso or Elastic Net
-- **Prediction focus with $p >> n$?** → PLS (usually beats PCR)
+1. **해석 가능성** — 성분이 여전히 원 변수의 선형결합이다
+2. **이론의 미비** — OLS보다 점근 결과가 적다
+3. **표준화 의존** — 표준화가 필요하고 결과에 영향을 준다
+4. **성분 수 조정 필요**
+5. **과적합이 빠르다** — $y$를 이미 썼으므로 성분을 늘릴 때 PCR보다 빨리 나빠진다
 
 ---
 
-## Python Implementation
+## PLS, PCR, 능형, 라쏘의 비교
 
-### Step-by-Step Example
-
-```python
-import numpy as np
-import pandas as pd
-from sklearn.preprocessing import StandardScaler
-from sklearn.cross_decomposition import PLSRegression
-from sklearn.model_selection import cross_val_score, KFold
-import matplotlib.pyplot as plt
-
-# Load data
-X = pd.DataFrame(...)  # Features
-y = pd.Series(...)     # Response
-
-# Step 1: Standardize
-scaler = StandardScaler()
-X_scaled = scaler.fit_transform(X)
-
-# Step 2 & 3: Cross-validation for optimal M
-kfold = KFold(n_splits=10, shuffle=True, random_state=42)
-mse_scores = []
-
-for M in range(1, X_scaled.shape[1] + 1):
-    pls = PLSRegression(n_components=M)
-    cv_score = cross_val_score(
-        pls, X_scaled, y,
-        cv=kfold,
-        scoring='neg_mean_squared_error'
-    )
-    mse = -cv_score.mean()
-    mse_scores.append(mse)
-    print(f"M={M:2d}: CV MSE = {mse:,.0f}")
-
-# Find optimal M
-M_opt = np.argmin(mse_scores) + 1
-print(f"\nOptimal number of components: M = {M_opt}")
-
-# Step 4: Fit final model
-pls_model = PLSRegression(n_components=M_opt)
-pls_model.fit(X_scaled, y)
-
-# Make predictions
-y_pred = pls_model.predict(X_scaled)
-
-# Examine loadings (importance of each predictor)
-loadings = pls_model.x_weights_  # Predictor weights
-print(f"PLS loadings (first component):\n{loadings[:, 0]}")
-```
-
-### Visualization Example
-
-```python
-# Plot: CV error vs number of components
-fig, ax = plt.subplots(figsize=(10, 6))
-ax.plot(range(1, len(mse_scores) + 1), np.sqrt(mse_scores), 'o-',
-        linewidth=2, markersize=8)
-ax.axvline(M_opt, color='red', linestyle='--', label=f'Optimal M = {M_opt}')
-ax.set_xlabel('Number of Components (M)')
-ax.set_ylabel('Cross-Validation RMSE')
-ax.set_title('PLS: Component Selection via Cross-Validation')
-ax.legend()
-ax.grid(True, alpha=0.3)
-plt.tight_layout()
-plt.show()
-
-# Scatterplot: Actual vs Predicted
-fig, ax = plt.subplots(figsize=(8, 6))
-ax.scatter(y, y_pred, alpha=0.5, s=30)
-ax.plot([y.min(), y.max()], [y.min(), y.max()], 'r--', lw=2)
-ax.set_xlabel('Actual')
-ax.set_ylabel('Predicted (PLS)')
-ax.set_title(f'PLS Model: M = {M_opt} components')
-ax.grid(True, alpha=0.3)
-plt.tight_layout()
-plt.show()
-```
+| 방법 | 접근 | $y$ 사용 | 희소성 | 주 용도 |
+|---|---|---|---|---|
+| 능형 | 계수 축소 | 아니오(벌점에서) | 없음 | 다중공선성 |
+| 라쏘 | 계수 축소 + 선택 | 아니오(벌점에서) | 있음 | 변수선택 |
+| PCR | 차원축소 | **아니오** | 없음 | $p \gg n$ |
+| PLS | 차원축소 | **예** | 없음 | $p \gg n$, 예측 |
 
 ---
 
-## When to Use PLS
+## 언제 PLS를 쓰는가
 
-**Use PLS when:**
-
-1. Prediction accuracy is the primary goal
-2. $p$ is large (high-dimensional data)
-3. $p > n$ (more predictors than observations)
-4. Multicollinearity is severe among predictors
-5. You want to avoid feature selection but maintain low complexity
-6. Data comes from physical/chemical measurements (PLS's original domain)
-
-**Consider alternatives if:**
-
-- **Interpretability critical** — Linear models may be better
-- **$p$ small and multicollinearity moderate** — Ridge or Lasso
-- **Feature selection important** — Lasso or Elastic Net
-- **Component interpretation essential** — PCA-based methods less suitable
+- 설명변수가 매우 많고 강하게 상관되어 있다(분광 자료, 센서 배열, 유전자 발현)
+- 예측 정확도가 개별 계수 해석보다 중요하다
+- $p > n$이다
+- 신호가 $X$의 주된 분산 방향에 있지 **않을** 수 있다
 
 ---
 
-## Practical Considerations
+## 실무적 고려
 
-### Preprocessing
+**전처리.** 설명변수와 반응변수를 모두 표준화한다. `sklearn.cross_decomposition.PLSRegression`은 기본적으로 `scale=True`이다.
 
-1. **Standardization is essential** — PLS is covariance-based; scale all predictors and response
-2. **Outlier detection** — Outliers can dominate covariance structure
-3. **Missing data** — Impute or remove; PLS doesn't handle missingness directly
+**초모수 조정.** 성분 수를 교차검증으로 고른다. 대개 1부터 $\min(n, p)$까지 훑는다.
 
-### Hyperparameter Tuning
+**모형 검증.** 성분 수를 CV로 골랐다면 그 CV 오차를 최종 성능으로 보고하지 말고 별도의 검정집합을 써야 한다.
 
-- **Number of components**: Always use cross-validation (default: 10-fold)
-- **Scaling**: Consider robust scaling if outliers present
-- **Centering**: Always center response and predictors
+## 요약
 
-### Model Validation
+PLS는 설명변수와 반응변수의 공분산을 최대화하는 성분을 구성하는 지도 차원축소 방법이다. 성분을 만들 때 $y$를 쓰므로 PCR보다 적은 성분으로 같은 예측 성능에 도달하는 경우가 많다. NIPALS 알고리즘이 효율적인 계산을 제공한다. 대가는 과적합이 더 빠르다는 것이며, 성분 수를 반드시 교차검증으로 정해야 한다.
 
-- **Separate test set**: Report performance on held-out test data, not CV RMSE
-- **Residual analysis**: Check for patterns indicating model misspecification
-- **Prediction intervals**: Standard errors on predictions for uncertainty quantification
+## 연습문제
 
----
+**연습문제 1.**
+PLS의 첫 가중벡터가 $X^\top y$에 비례한다는 사실을 확인하고, 그것이 무엇을 뜻하는지 설명하라.
 
-## Summary
+??? success "연습문제 1 풀이"
+    제약 $\|w\| = 1$ 아래에서 $\text{Cov}(Xw, y) \propto w^\top X^\top y$를 최대화하는 문제다. 코시-슈바르츠 부등식에 의해 최대는 $w$가 $X^\top y$와 같은 방향일 때 달성되므로
 
-Partial Least Squares is a powerful supervised dimensionality reduction technique that:
+    $$
+    w_1 = \frac{X^\top y}{\|X^\top y\|}
+    $$
 
-1. **Constructs components** that maximize covariance of predictors with response
-2. **Requires fewer components** than PCR because components are selected for prediction
-3. **Handles multicollinearity** by creating uncorrelated latent variables
-4. **Works in high-dimensional settings** ($p > n$ or $p >> n$)
-5. **Balances flexibility and interpretability** between linear models and non-parametric methods
+    이다.
 
-In practice, when the goal is **prediction in high-dimensional settings with multicollinearity**, PLS often outperforms PCR because its supervised component selection aligns better with the prediction objective. However, interpretability trade-offs remain; for transparent, actionable insights on individual predictors, regularized linear methods (Ridge, Lasso) may be preferable despite their performance disadvantages in extreme high-dimensionality.
+    ```python
+    import numpy as np
+    from sklearn.cross_decomposition import PLSRegression
+    Xc = X - X.mean(0); yc = y - y.mean()
+    pls = PLSRegression(1, scale=False).fit(Xc, yc)
+    w = (Xc.T @ yc); w /= np.linalg.norm(w)
+    print(np.abs(np.abs(pls.x_weights_[:, 0] @ w) - 1))   # 0 에 가깝다
+    ```
 
+    **해석.** $X^\top y$의 $j$번째 성분은 $\mathbf{x}_j^\top\mathbf{y}$, 즉 변수 $j$와 반응변수의 (중심화된) 내적이다. 따라서 첫 PLS 성분은 **각 변수를 $y$와의 상관 크기에 비례하는 가중치로 더한 것**이다.
 
-## Exercises
+    이것이 PCR과의 차이를 가장 선명하게 보여준다. PCA의 첫 성분은 $X^\top X$의 최대 고유벡터로 $y$가 전혀 들어가지 않는다. PLS의 첫 성분은 $X^\top y$로 $y$가 직접 들어간다.
 
-**Exercise 1.**
-Describe the main concept of Partial Least Squares (PLS) and explain why it matters for statistical practice.
-
-??? success "Solution to Exercise 1"
-    Partial Least Squares (PLS) is a core topic in statistics that provides tools for drawing reliable inferences from data. It matters because proper application ensures valid conclusions, correctly quantified uncertainty, and appropriate handling of the assumptions that underpin the method. Practitioners who understand this concept can avoid common pitfalls and choose the right analytical approach for their data.
+    **주의할 점:** 이 가중치는 **주변** 상관에 기반하므로, 다른 변수를 조건부로 한 부분상관은 반영하지 않는다. 그래서 PLS도 억제변수(suppressor) 같은 구조는 첫 성분에서 놓칠 수 있고, 그것이 성분을 여럿 쓰는 이유다.
 
 ---
 
-**Exercise 2.**
-State the key assumptions required by the method discussed here. How can each assumption be checked?
+**연습문제 2.**
+PLS의 성분 수를 늘릴 때 PCR보다 빨리 과적합하는 현상을 확인하고 그 이유를 설명하라.
 
-??? success "Solution to Exercise 2"
-    The main assumptions typically include: (1) independence of observations -- verified by understanding the data collection process and checking for serial correlation; (2) distributional requirements (e.g., normality) -- checked with Q-Q plots and formal tests like Shapiro-Wilk; (3) equal variances (if applicable) -- assessed with boxplots and Levene's test. When assumptions are violated, consider robust alternatives, transformations, or nonparametric methods.
+??? success "연습문제 2 풀이"
+    [PCR과 PLS 개관](index.md) 연습문제 1의 표를 성분 수에 따라 다시 읽으면 된다.
 
----
+    | 성분 수 | PCR $R^2$ | PLS $R^2$ |
+    |---:|---:|---:|
+    | 1 | 0.428 | 0.806 |
+    | 2 | 0.548 | **0.844** (정점) |
+    | 3 | **0.849** (정점) | 0.837 |
+    | 5 | 0.845 | 0.794 |
+    | 7 | 0.837 | **0.746** |
 
-**Exercise 3.**
-Work through a small numerical example illustrating the application of the technique from this section.
+    **PLS는 정점 이후 $0.844 \to 0.746$으로 12%p 떨어지고, PCR은 $0.849 \to 0.837$로 1%p만 떨어진다.**
 
-??? success "Solution to Exercise 3"
-    A structured approach to applying this technique involves: (1) clearly stating the hypotheses or estimation goal; (2) verifying that the data meet the required assumptions; (3) computing the relevant test statistic, estimate, or model fit; (4) obtaining the p-value, confidence interval, or posterior distribution; (5) interpreting the result in the context of the original question. Following these steps systematically ensures a rigorous and reproducible analysis.
+    **이유.** PLS의 성분은 $y$를 써서 만들어진다. 성분을 하나 추가할 때마다 $y$의 잔차와 $X$의 잔차의 공분산을 최대화하는데, 신호가 이미 소진되면 그 공분산은 **잡음에서 오는 우연한 상관**이다. 성분이 잡음에 맞춰지므로 표본외 성능이 빠르게 나빠진다.
 
----
+    PCR의 성분은 $y$를 보지 않으므로 이런 방식으로 잡음에 적합되지 않는다. 성분을 추가하면 단지 잡음 방향을 회귀에 넣는 것이고, 그 효과는 자유도 하나를 쓰는 정도로 완만하다.
 
-**Exercise 4.**
-Compare the approach from this section with an alternative method. When would you choose each?
-
-??? success "Solution to Exercise 4"
-    The method discussed here is appropriate when its assumptions hold and the sample size is sufficient for the asymptotic approximations to be accurate. Alternative approaches include: (1) nonparametric methods -- preferred when distributional assumptions are suspect; (2) bootstrap methods -- useful when analytical reference distributions are unavailable; (3) Bayesian methods -- valuable when incorporating prior information or when direct probability statements about parameters are desired. Running multiple approaches and comparing results provides a useful robustness check.
+    **실무적 함의:** PLS에서 성분 수 선택은 PCR에서보다 **더 중요하다.** 그리고 그 선택에 쓴 CV 오차를 최종 성능으로 보고하면 낙관적으로 편향된다. 별도의 검정집합이나 중첩 교차검증이 필요하다.

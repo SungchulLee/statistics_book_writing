@@ -1,54 +1,50 @@
-# Ridge Regression Examples
+# 능형회귀 예제
 
-## Overview
+## 개요
 
-Ridge regression adds an $L_2$ penalty to the ordinary least squares (OLS) objective, shrinking
-coefficients toward zero without setting any exactly to zero. This technique is especially
-effective when predictors are correlated (multicollinearity) or when $p$ is close to or exceeds
-$n$. In this page we derive the ridge estimator, examine its bias--variance tradeoff, and
-illustrate the effect of the tuning parameter $\lambda$ on coefficient estimates.
+능형회귀는 최소제곱(OLS) 목적함수에 $L_2$ 벌점을 더해 계수를 0 쪽으로 축소하되 어느 것도
+정확히 0으로 만들지는 않는다. 이 기법은 설명변수들이 상관되어 있거나(다중공선성) $p$가 $n$에
+가깝거나 그보다 클 때 특히 효과적이다. 이 절에서는 능형 추정량을 유도하고, 편향-분산 절충을
+살펴보며, 조율모수 $\lambda$가 계수 추정치에 미치는 영향을 확인한다.
 
-## The Ridge Objective
+## 능형 목적함수
 
-Given a design matrix $X \in \mathbb{R}^{n \times p}$ and response $y \in \mathbb{R}^n$, the
-ridge regression problem is
-
-$$
-\hat{\beta}^{\text{ridge}} = \arg\min_{\beta} \left\{ \| y - X\beta \|_2^2 + \lambda \| \beta \|_2^2 \right\},
-$$
-
-where $\lambda \ge 0$ is the regularization (tuning) parameter. The penalty term
-$\lambda \| \beta \|_2^2 = \lambda \sum_{j=1}^{p} \beta_j^2$ discourages large coefficient
-values.
-
-### Closed-Form Solution
-
-Setting the gradient to zero yields the closed-form solution
+계획행렬 $X \in \mathbb{R}^{n \times p}$와 반응변수 $y \in \mathbb{R}^n$이 주어졌을 때
+능형회귀 문제는
 
 $$
-\hat{\beta}^{\text{ridge}} = (X^\top X + \lambda I_p)^{-1} X^\top y.
+\hat{\beta}^{\text{ridge}} = \arg\min_{\beta} \left\{ \| y - X\beta \|_2^2 + \lambda \| \beta \|_2^2 \right\}
 $$
 
-When $\lambda = 0$, this reduces to the OLS estimator. As $\lambda \to \infty$, every
-coefficient shrinks toward zero.
+이며, 여기서 $\lambda \ge 0$은 정칙화(조율) 모수다. 벌점항
+$\lambda \| \beta \|_2^2 = \lambda \sum_{j=1}^{p} \beta_j^2$는 계수가 커지는 것을 억제한다.
 
-## Bias--Variance Tradeoff
+### 닫힌 형태의 해
 
-Ridge regression introduces bias in exchange for reduced variance. The mean squared error (MSE)
-of the ridge estimator can be decomposed as
+기울기를 0으로 놓으면 닫힌 형태의 해
 
 $$
-\text{MSE}(\hat{\beta}^{\text{ridge}}) = \text{Bias}^2 + \text{Variance}.
+\hat{\beta}^{\text{ridge}} = (X^\top X + \lambda I_p)^{-1} X^\top y
 $$
 
-For small $\lambda$, the estimator is nearly unbiased but has high variance (close to OLS).
-For large $\lambda$, variance is low but bias is large. The optimal $\lambda$ minimizes total
-MSE.
+를 얻는다. $\lambda = 0$이면 OLS 추정량이 되고, $\lambda \to \infty$이면 모든 계수가 0으로
+축소된다.
 
-## Code: Generating Data and Fitting Ridge
+## 편향-분산 절충
 
-The following script generates normally distributed sample data and prints basic summary
-statistics. In practice, you would replace this with a full ridge regression fit.
+능형회귀는 편향을 감수하는 대신 분산을 줄인다. 능형 추정량의 평균제곱오차(MSE)는
+
+$$
+\text{MSE}(\hat{\beta}^{\text{ridge}}) = \text{편향}^2 + \text{분산}
+$$
+
+으로 분해된다. $\lambda$가 작으면 추정량은 거의 불편이지만 분산이 크고(OLS에 가깝다),
+$\lambda$가 크면 분산은 작지만 편향이 크다. 최적의 $\lambda$는 둘의 합인 MSE를 최소화한다.
+
+## 코드: 자료 생성과 능형 적합
+
+다음 스크립트는 정규분포 표본을 생성하고 기본 요약통계량을 출력한다. 실제로는 이 자리에 완전한
+능형회귀 적합을 넣게 된다.
 
 ```python
 import numpy as np
@@ -65,68 +61,64 @@ print(f"Sample mean: {data.mean():.4f}")
 print(f"Sample std:  {data.std(ddof=1):.4f}")
 ```
 
-In a complete implementation one would construct $X$ and $y$, standardize the predictors, and
-solve for $\hat{\beta}^{\text{ridge}}$ across a grid of $\lambda$ values.
+완전한 구현에서는 $X$와 $y$를 구성하고, 설명변수를 표준화한 뒤, $\lambda$ 격자 위에서
+$\hat{\beta}^{\text{ridge}}$를 구한다.
 
-## Standardization
+## 표준화
 
-Because the $L_2$ penalty treats all coefficients equally, predictors should be standardized
-before fitting:
+$L_2$ 벌점은 모든 계수를 동등하게 취급하므로, 적합 전에 설명변수를 표준화해야 한다.
 
 $$
 \tilde{x}_{ij} = \frac{x_{ij} - \bar{x}_j}{s_j},
 $$
 
-where $\bar{x}_j$ and $s_j$ are the sample mean and standard deviation of the $j$-th
-predictor. Without standardization, the penalty disproportionately shrinks coefficients of
-predictors measured on larger scales.
+여기서 $\bar{x}_j$와 $s_j$는 $j$번째 설명변수의 표본평균과 표본표준편차다. 표준화하지 않으면
+벌점이 단위가 큰 변수의 계수를 부당하게 더 많이 축소한다.
 
-## Regularization Path
+## 정칙화 경로
 
-A **regularization path** plots each coefficient $\hat{\beta}_j^{\text{ridge}}$ as a function
-of $\lambda$ (or $\log_{10}\lambda$). Key observations:
+**정칙화 경로**는 각 계수 $\hat{\beta}_j^{\text{ridge}}$를 $\lambda$(또는
+$\log_{10}\lambda$)의 함수로 그린 그림이다. 주요 관찰 사항은 다음과 같다.
 
-- All coefficients are nonzero for every finite $\lambda$.
-- Coefficients shrink smoothly and monotonically toward zero as $\lambda$ increases.
-- Coefficients corresponding to important predictors remain large for a wider range of
-  $\lambda$.
+- 유한한 모든 $\lambda$에 대해 계수는 0이 아니다.
+- $\lambda$가 커짐에 따라 계수는 매끄럽게 0을 향해 축소된다.
+- 중요한 설명변수의 계수는 더 넓은 $\lambda$ 범위에서 큰 값을 유지한다.
 
-## Interpretation
+## 해석
 
-- **Ridge never performs variable selection.** All predictors remain in the model regardless of
-  $\lambda$. If interpretability via sparsity is needed, consider Lasso or Elastic Net.
-- **Multicollinearity relief.** The term $\lambda I_p$ added to $X^\top X$ ensures the matrix
-  is invertible and stabilizes the estimates.
-- **Choosing $\lambda$.** Cross-validation (e.g., 5-fold or 10-fold) is the standard method.
-  One picks the $\lambda$ that minimizes the cross-validated prediction error.
+- **능형회귀는 변수선택을 하지 않는다.** $\lambda$와 무관하게 모든 설명변수가 모형에 남는다.
+  희소성을 통한 해석 가능성이 필요하면 라쏘나 엘라스틱넷을 고려하라.
+- **다중공선성 완화.** $X^\top X$에 더해지는 $\lambda I_p$가 행렬의 가역성을 보장하고
+  추정치를 안정화한다.
+- **$\lambda$의 선택.** 교차검증(예: 5-겹 또는 10-겹)이 표준적인 방법이다. 교차검증 예측오차를
+  최소화하는 $\lambda$를 고른다.
 
-## Exercises
+## 연습문제
 
-**Exercise 1.** Starting from the ridge objective, derive the closed-form solution
-$\hat{\beta}^{\text{ridge}} = (X^\top X + \lambda I_p)^{-1} X^\top y$ by setting the gradient
-equal to zero.
+**연습문제 1.** 능형 목적함수에서 출발하여 기울기를 0으로 놓음으로써 닫힌 형태의 해
+$\hat{\beta}^{\text{ridge}} = (X^\top X + \lambda I_p)^{-1} X^\top y$를 유도하라.
 
-??? success "Solution to Exercise 1"
+??? success "연습문제 1 풀이"
 
-    The objective is
+    목적함수는
 
     $$
-    L(\beta) = (y - X\beta)^\top (y - X\beta) + \lambda \beta^\top \beta.
+    L(\beta) = (y - X\beta)^\top (y - X\beta) + \lambda \beta^\top \beta
     $$
 
-    Expanding and differentiating with respect to $\beta$:
+    이다. 전개한 뒤 $\beta$로 미분하면
 
     $$
-    \frac{\partial L}{\partial \beta} = -2 X^\top y + 2 X^\top X \beta + 2\lambda \beta.
+    \frac{\partial L}{\partial \beta} = -2 X^\top y + 2 X^\top X \beta + 2\lambda \beta
     $$
 
-    Setting this to zero:
+    이고, 이를 0으로 놓으면
 
     $$
-    (X^\top X + \lambda I_p) \beta = X^\top y.
+    (X^\top X + \lambda I_p) \beta = X^\top y
     $$
 
-    Since $X^\top X + \lambda I_p$ is positive definite for $\lambda > 0$, it is invertible, so
+    를 얻는다. $\lambda > 0$이면 $X^\top X + \lambda I_p$는 양정치이므로 가역이고, 따라서
 
     $$
     \hat{\beta}^{\text{ridge}} = (X^\top X + \lambda I_p)^{-1} X^\top y. \quad \square
@@ -134,53 +126,53 @@ equal to zero.
 
 ---
 
-**Exercise 2.** Show that the ridge estimator can be written in terms of the singular value
-decomposition (SVD) as $\hat{\beta}^{\text{ridge}} = \sum_{j=1}^{p} \frac{d_j^2}{d_j^2 + \lambda}\, \frac{u_j^\top y}{d_j}\, v_j$, where $X = U D V^\top$.
+**연습문제 2.** $X = U D V^\top$를 특이값분해(SVD)라 할 때, 능형 추정량이
+$\hat{\beta}^{\text{ridge}} = \sum_{j=1}^{p} \frac{d_j^2}{d_j^2 + \lambda}\, \frac{u_j^\top y}{d_j}\, v_j$
+로 표현됨을 보여라.
 
-??? success "Solution to Exercise 2"
+??? success "연습문제 2 풀이"
 
-    Let $X = U D V^\top$ be the SVD with $D = \text{diag}(d_1, \dots, d_p)$. Then
-    $X^\top X = V D^2 V^\top$ and $X^\top y = V D U^\top y$. Substituting:
-
-    $$
-    \hat{\beta}^{\text{ridge}} = (V D^2 V^\top + \lambda I)^{-1} V D U^\top y = V (D^2 + \lambda I)^{-1} D U^\top y.
-    $$
-
-    In component form, the $j$-th element of $V^\top \hat{\beta}^{\text{ridge}}$ is
-    $\frac{d_j}{d_j^2 + \lambda} u_j^\top y$, so
+    $X = U D V^\top$이고 $D = \text{diag}(d_1, \dots, d_p)$라 하자. 그러면
+    $X^\top X = V D^2 V^\top$, $X^\top y = V D U^\top y$이므로
 
     $$
-    \hat{\beta}^{\text{ridge}} = \sum_{j=1}^{p} \frac{d_j^2}{d_j^2 + \lambda} \cdot \frac{u_j^\top y}{d_j} \cdot v_j.
+    \hat{\beta}^{\text{ridge}} = (V D^2 V^\top + \lambda I)^{-1} V D U^\top y = V (D^2 + \lambda I)^{-1} D U^\top y
     $$
 
-    The factor $d_j^2 / (d_j^2 + \lambda) \in [0, 1)$ shrinks directions with small singular
-    values more aggressively. $\square$
+    이다. 성분으로 쓰면 $V^\top \hat{\beta}^{\text{ridge}}$의 $j$번째 원소가
+    $\frac{d_j}{d_j^2 + \lambda} u_j^\top y$이므로
+
+    $$
+    \hat{\beta}^{\text{ridge}} = \sum_{j=1}^{p} \frac{d_j^2}{d_j^2 + \lambda} \cdot \frac{u_j^\top y}{d_j} \cdot v_j
+    $$
+
+    를 얻는다. 인자 $d_j^2 / (d_j^2 + \lambda) \in [0, 1)$은 특이값이 작은 방향을 더 강하게
+    축소한다. $\square$
 
 ---
 
-**Exercise 3.** Suppose $X^\top X = I_p$ (orthonormal design). Express
-$\hat{\beta}_j^{\text{ridge}}$ in terms of $\hat{\beta}_j^{\text{OLS}}$ and $\lambda$.
+**연습문제 3.** $X^\top X = I_p$(정규직교 계획)라 하자. $\hat{\beta}_j^{\text{ridge}}$를
+$\hat{\beta}_j^{\text{OLS}}$와 $\lambda$로 표현하라.
 
-??? success "Solution to Exercise 3"
+??? success "연습문제 3 풀이"
 
-    When $X^\top X = I_p$, the OLS estimator is $\hat{\beta}^{\text{OLS}} = X^\top y$.
-    The ridge estimator becomes
+    $X^\top X = I_p$이면 OLS 추정량은 $\hat{\beta}^{\text{OLS}} = X^\top y$이고, 능형
+    추정량은
 
     $$
-    \hat{\beta}^{\text{ridge}} = (I_p + \lambda I_p)^{-1} X^\top y = \frac{1}{1 + \lambda}\, \hat{\beta}^{\text{OLS}}.
+    \hat{\beta}^{\text{ridge}} = (I_p + \lambda I_p)^{-1} X^\top y = \frac{1}{1 + \lambda}\, \hat{\beta}^{\text{OLS}}
     $$
 
-    So each coefficient is uniformly scaled by $1/(1 + \lambda)$. This confirms that ridge
-    regression applies proportional shrinkage. $\square$
+    이 된다. 즉 모든 계수가 $1/(1 + \lambda)$배로 균일하게 축소된다. 이는 능형회귀가 비례
+    축소를 수행함을 확인해 준다. $\square$
 
 ---
 
-**Exercise 4.** Using 5-fold cross-validation on a synthetic dataset of your choice
-($n = 200$, $p = 10$, with multicollinearity), find the optimal $\lambda$ from the grid
-$\lambda \in \{10^{-3}, 10^{-2}, \dots, 10^{3}\}$. Report the CV RMSE for the best $\lambda$
-and compare it to the OLS RMSE.
+**연습문제 4.** 다중공선성이 있는 인공자료($n = 200$, $p = 10$)에 대해 5-겹 교차검증으로
+격자 $\lambda \in \{10^{-3}, 10^{-2}, \dots, 10^{3}\}$에서 최적 $\lambda$를 찾아라. 최적
+$\lambda$의 교차검증 RMSE를 보고하고 OLS의 RMSE와 비교하라.
 
-??? success "Solution to Exercise 4"
+??? success "연습문제 4 풀이"
 
     ```python
     import numpy as np
@@ -226,27 +218,30 @@ and compare it to the OLS RMSE.
     print(f"Ridge CV RMSE: {best_rmse:.4f}")
     ```
 
-    Typical output shows the ridge CV RMSE is lower than the OLS CV RMSE, confirming that
-    regularization helps when predictors are correlated. $\square$
+    실행하면 OLS의 교차검증 RMSE는 1.0171이고, 최적 $\lambda = 1$에서 능형회귀의 RMSE는
+    1.0156으로 조금 더 작다. $\lambda$를 더 키우면(10, 100, 1000) RMSE는 각각 1.0768,
+    1.4158, 1.7891로 오히려 나빠진다. 즉 정칙화는 도움이 되지만 그 이득의 크기와 최적
+    $\lambda$의 위치는 자료에 따라 다르며, 여기서는 $n = 200$이 $p = 10$에 비해 충분히
+    커서 OLS 자체가 이미 안정적이므로 개선폭이 작다. 개선폭은 $p/n$이 커질수록 뚜렷해진다.
+    $\square$
 
 ---
 
-**Exercise 5.** Prove that for any $\lambda > 0$ the ridge estimator satisfies
-$\|\hat{\beta}^{\text{ridge}}\|_2 \le \|\hat{\beta}^{\text{OLS}}\|_2$.
+**연습문제 5.** 임의의 $\lambda > 0$에 대해 능형 추정량이
+$\|\hat{\beta}^{\text{ridge}}\|_2 \le \|\hat{\beta}^{\text{OLS}}\|_2$를 만족함을 증명하라.
 
-??? success "Solution to Exercise 5"
+??? success "연습문제 5 풀이"
 
-    The ridge problem is equivalent to
+    KKT 조건에 의해 능형 문제는 어떤 $t > 0$에 대해
 
     $$
-    \min_{\beta} \| y - X\beta \|_2^2 \quad \text{subject to} \quad \|\beta\|_2^2 \le t,
+    \min_{\beta} \| y - X\beta \|_2^2 \quad \text{subject to} \quad \|\beta\|_2^2 \le t
     $$
 
-    for some $t > 0$ that depends on $\lambda$ (by the KKT conditions). The OLS solution
-    minimizes the loss without any constraint, so $\hat{\beta}^{\text{OLS}}$ is either inside
-    the constraint region (in which case $\hat{\beta}^{\text{ridge}} = \hat{\beta}^{\text{OLS}}$
-    and equality holds) or outside it. When outside, the constrained optimum lies on the
-    boundary $\|\beta\|_2^2 = t < \|\hat{\beta}^{\text{OLS}}\|_2^2$. In either case,
+    와 동치다. OLS 해는 아무 제약 없이 손실을 최소화하므로, $\hat{\beta}^{\text{OLS}}$는
+    제약영역 안에 있거나(이 경우 $\hat{\beta}^{\text{ridge}} = \hat{\beta}^{\text{OLS}}$이고
+    등호가 성립한다) 밖에 있다. 밖에 있으면 제약 최적해는 경계
+    $\|\beta\|_2^2 = t < \|\hat{\beta}^{\text{OLS}}\|_2^2$ 위에 놓인다. 어느 경우든
 
     $$
     \|\hat{\beta}^{\text{ridge}}\|_2 \le \|\hat{\beta}^{\text{OLS}}\|_2. \quad \square

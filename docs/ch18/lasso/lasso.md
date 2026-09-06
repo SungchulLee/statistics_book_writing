@@ -1,159 +1,167 @@
-# Lasso Regression (L1 Regularization)
+# 라쏘 회귀 (L1 정칙화)
 
 
-## Motivation: Sparsity and Feature Selection
+## 동기: 희소성과 변수선택
 
-Ridge regression shrinks coefficients toward zero but never sets them exactly to zero. In many applications — especially when $p$ is large — we want an estimator that automatically **selects** relevant features by setting irrelevant coefficients to exactly zero.
+능형회귀는 계수를 0 쪽으로 축소하지만 결코 정확히 0으로 만들지 않는다. 많은 응용에서, 특히 $p$가 클 때 우리는 무관한 계수를 정확히 0으로 만들어 유의미한 변수를 자동으로 **선택**하는 추정량을 원한다.
 
-The **Lasso** (Least Absolute Shrinkage and Selection Operator), introduced by Tibshirani (1996), achieves both regularization and feature selection by using an L1 penalty.
+Tibshirani(1996)가 도입한 **라쏘**(Least Absolute Shrinkage and Selection Operator)는 L1 벌점을 써서 정칙화와 변수선택을 동시에 달성한다.
 
-## Lasso Formulation
+## 라쏘의 정식화
 
 $$
 \hat{\boldsymbol{\beta}}_{\text{lasso}} = \arg\min_{\boldsymbol{\beta}} \left\{ \frac{1}{2n}\|\mathbf{y} - \mathbf{X}\boldsymbol{\beta}\|^2 + \lambda \|\boldsymbol{\beta}\|_1 \right\}
 $$
 
-where $\|\boldsymbol{\beta}\|_1 = \sum_{j=1}^p |\beta_j|$ is the L1 norm.
-
-The equivalent constrained form is:
+동등한 제약 형태는
 
 $$
-\min_{\boldsymbol{\beta}} \|\mathbf{y} - \mathbf{X}\boldsymbol{\beta}\|^2 \quad \text{subject to} \quad \sum_{j=1}^p |\beta_j| \leq t
+\min_{\boldsymbol{\beta}} \|\mathbf{y} - \mathbf{X}\boldsymbol{\beta}\|^2 \quad \text{제약} \quad \sum_{j=1}^p |\beta_j| \leq t
 $$
 
-## Why L1 Produces Sparsity: Geometric Argument
+이다.
 
-The L1 constraint set is a **diamond** (in 2D) or cross-polytope (in higher dimensions). Its corners lie on the coordinate axes. Because the OLS contours are elliptical, the first contact point between the ellipse and the diamond typically occurs at a corner, where one or more coordinates are exactly zero.
+## L1이 희소성을 낳는 이유: 기하적 논증
 
-In contrast, the L2 constraint (sphere) has no corners — the contact point almost never lies on a coordinate axis.
+L1 제약집합은 2차원에서 **마름모**, 고차원에서 교차다면체다. 그 꼭짓점이 좌표축 위에 놓인다. OLS 등고선이 타원이므로 타원과 마름모의 첫 접촉이 대개 꼭짓점에서 일어나고, 그곳에서 하나 이상의 좌표가 정확히 0이다.
 
-This geometric argument explains the fundamental difference:
+반면 L2 제약(구)에는 꼭짓점이 없어 접촉점이 좌표축 위에 놓이는 일이 거의 없다.
 
-| Penalty | Constraint Shape | Corners on Axes | Exact Zeros |
+| 벌점 | 제약 모양 | 축 위의 꼭짓점 | 정확한 0 |
 |---|---|---|---|
-| L1 (Lasso) | Diamond / cross-polytope | Yes | Yes |
-| L2 (Ridge) | Sphere / hypersphere | No | No |
+| L1 (라쏘) | 마름모 / 교차다면체 | 있음 | 있음 |
+| L2 (능형) | 구 / 초구 | 없음 | 없음 |
 
-## Subdifferential and the Soft-Thresholding Operator
+자세한 논증은 [기하적 해석 (L1 벌점)](geometry.md)을 보라.
 
-Unlike the L2 penalty, the L1 norm $|\beta_j|$ is **not differentiable** at $\beta_j = 0$. We use the **subdifferential**:
+## 부분미분과 연성 문턱 연산자
+
+L1 노름 $|\beta_j|$는 $\beta_j = 0$에서 **미분 불가능**하므로 **부분미분**을 쓴다.
 
 $$
 \partial |\beta_j| = \begin{cases} \{+1\} & \beta_j > 0 \\ [-1, +1] & \beta_j = 0 \\ \{-1\} & \beta_j < 0 \end{cases}
 $$
 
-For the special case of **orthonormal design** ($\mathbf{X}^\top\mathbf{X} = n\mathbf{I}$), the Lasso solution has a closed form:
+**직교 설계**($\mathbf{X}^\top\mathbf{X} = n\mathbf{I}$)라는 특수한 경우에 라쏘 해는 닫힌 형태를 갖는다.
 
 $$
 \hat{\beta}_j^{\text{lasso}} = S_\lambda(\hat{\beta}_j^{\text{OLS}}) = \text{sign}(\hat{\beta}_j^{\text{OLS}})\max(|\hat{\beta}_j^{\text{OLS}}| - \lambda, 0)
 $$
 
-This is the **soft-thresholding** operator: coefficients within $[-\lambda, \lambda]$ are set to exactly zero, and larger coefficients are shrunk by $\lambda$.
+이것이 **연성 문턱** 연산자다. $[-\lambda, \lambda]$ 안의 계수는 정확히 0이 되고 그보다 큰 계수는 $\lambda$만큼 축소된다.
 
-Compare with ridge (orthonormal case):
+능형(직교인 경우)과 비교하면
 
 $$
 \hat{\beta}_j^{\text{ridge}} = \frac{\hat{\beta}_j^{\text{OLS}}}{1 + \lambda}
 $$
 
-Ridge applies proportional shrinkage; Lasso applies translational shrinkage with hard cutoff.
+이다. 능형은 비례 축소를, 라쏘는 잘라내기를 동반한 평행이동 축소를 적용한다.
 
-## Coordinate Descent Algorithm
+## 좌표하강 알고리즘
 
-For general (non-orthonormal) design matrices, no closed-form Lasso solution exists. The standard algorithm is **coordinate descent** (Friedman et al., 2010):
+일반적인(직교가 아닌) 계획행렬에서는 닫힌 형태 해가 없다. 표준 알고리즘은 **좌표하강**(Friedman et al., 2010)이다.
 
-**Algorithm:**
+1. $\hat{\boldsymbol{\beta}} = \mathbf{0}$으로 초기화한다.
+2. $j = 1, \ldots, p$를 순회하며 부분잔차를 계산하고 $\hat{\beta}_j \leftarrow S_\lambda\left(\frac{1}{n}\sum_i x_{ij} r_i^{(j)}\right)$로 갱신한다.
+3. 수렴할 때까지 반복한다.
 
-1. Initialize $\hat{\boldsymbol{\beta}} = \mathbf{0}$ (or OLS solution)
-2. Cycle through $j = 1, 2, \ldots, p$:
-    - Compute the partial residual: $r_i^{(j)} = y_i - \sum_{k \neq j} x_{ik}\hat{\beta}_k$
-    - Update: $\hat{\beta}_j \leftarrow S_\lambda\left(\frac{1}{n}\sum_{i=1}^n x_{ij} r_i^{(j)}\right)$
-3. Repeat until convergence
+각 좌표 갱신이 연성 문턱 형태이므로 알고리즘이 효율적이다. R의 `glmnet`과 파이썬의 `sklearn.linear_model.Lasso`가 이 알고리즘을 쓴다. 자세한 내용은 [좌표하강 알고리즘](coordinate_descent.md)을 보라.
 
-Each coordinate update has the soft-thresholding form, making the algorithm efficient. The `glmnet` package (R) and `sklearn.linear_model.Lasso` (Python) use this algorithm.
+## 라쏘 해 경로
 
-## The Lasso Solution Path
-
-As $\lambda$ varies from $\lambda_{\max}$ (where all coefficients are zero) down to 0 (OLS), coefficients enter the model one at a time. The path $\hat{\beta}_j(\lambda)$ is **piecewise linear** in $\lambda$ (the LARS result of Efron et al., 2004).
+$\lambda$가 $\lambda_{\max}$(모든 계수가 0)에서 0(OLS)까지 변하면 계수가 하나씩 모형에 들어온다. 경로 $\hat{\beta}_j(\lambda)$는 $\lambda$에 대해 **조각별 선형**이다(Efron et al., 2004의 LARS 결과).
 
 $$
-\lambda_{\max} = \frac{1}{n}\|\mathbf{X}^\top\mathbf{y}\|_\infty = \max_j \left|\frac{1}{n}\sum_{i=1}^n x_{ij}y_i\right|
+\lambda_{\max} = \frac{1}{n}\|\mathbf{X}^\top\mathbf{y}\|_\infty
 $$
 
-For $\lambda \geq \lambda_{\max}$, the Lasso solution is $\hat{\boldsymbol{\beta}} = \mathbf{0}$.
+이며 $\lambda \geq \lambda_{\max}$에서 라쏘 해는 $\hat{\boldsymbol{\beta}} = \mathbf{0}$이다.
 
-## Choosing lambda
-As with ridge, $\lambda$ is selected by **cross-validation**:
+## $\lambda$의 선택
 
-$$
-\hat{\lambda} = \arg\min_\lambda \text{CV}(\lambda)
-$$
+능형에서처럼 **교차검증**으로 고른다. 표준 관행은 $\lambda_{\max}$에서 $0.001 \cdot \lambda_{\max}$까지 로그 척도로 100개 정도의 격자를 잡아 전체 해 경로를 계산하고, 각 점에서 CV 오차를 구해 최적 $\lambda$를 고르는 것이다.
 
-The standard practice is to compute the full solution path on a grid of $\lambda$ values (typically 100 values on a log scale from $\lambda_{\max}$ to $0.001 \cdot \lambda_{\max}$), compute CV error at each, and select the optimal $\lambda$.
+## 성질
 
-## Properties
+**1. 희소성.** 일부 $\hat{\beta}_j = 0$인 희소해를 만들어 자동 변수선택이 가능하다.
 
-**1. Sparsity.** The Lasso produces sparse solutions (some $\hat{\beta}_j = 0$), enabling automatic feature selection.
+**2. 편향.** 라쏘 계수는 0 쪽으로 편향된다. 선택된 변수에 대해서도 점근적으로 편향이 사라지지 않는다.
 
-**2. Bias.** Lasso coefficients are biased toward zero (more so than ridge for retained coefficients). The bias does not vanish even asymptotically for the selected variables, though consistent model selection is possible under certain conditions.
+**3. 일치성.** **비대표 조건**(Zhao and Yu, 2006) 아래에서 라쏘는 확률 1로 올바른 변수 집합을 고른다. 이 조건이 없으면 모형선택 일치성이 깨질 수 있다.
 
-**3. Consistency.** Under the **irrepresentable condition** (Zhao and Yu, 2006), the Lasso selects the correct set of nonzero variables with probability approaching 1. Without this condition, model selection consistency can fail.
+**4. 예측.** 희소성 가정 아래에서 거의 최적인 예측오차율을 달성한다.
 
-**4. Prediction.** The Lasso achieves near-optimal prediction error rates under sparsity assumptions.
+## 한계
 
-## Limitations
+1. **집단 선택.** 강하게 상관된 설명변수에서 라쏘는 하나만 고르고 나머지를 버리는 경향이 있으며, 그 선택이 임의적이다. 능형은 모두 남기고 계수 질량을 분배한다.
+2. **$p > n$ 한계.** $p > n$일 때 라쏘는 최대 $n$개의 변수만 고를 수 있다.
+3. **선택된 계수의 편향.** 0이 아닌 계수가 체계적으로 0 쪽으로 편향된다. 사후 라쏘 OLS로 이를 줄일 수 있다.
 
-1. **Group selection.** With highly correlated predictors, Lasso tends to select one and ignore the rest (arbitrary choice). Ridge retains all and distributes the coefficient mass.
+## 베이즈 해석
 
-2. **$p > n$ limitation.** Lasso can select at most $n$ variables (when $p > n$), since the solution lies in an $n$-dimensional subspace.
-
-3. **Bias of selected coefficients.** Nonzero Lasso coefficients are systematically biased toward zero. Post-Lasso OLS (refit OLS on the Lasso-selected variables) can reduce this bias.
-
-## Bayesian Interpretation
-
-The Lasso is the MAP estimator under a **Laplace (double-exponential) prior**:
+라쏘는 **라플라스(이중지수) 사전분포** 아래의 MAP 추정량이다.
 
 $$
-\beta_j \overset{\text{iid}}{\sim} \text{Laplace}(0, 1/\lambda)
+\beta_j \overset{\text{iid}}{\sim} \text{Laplace}(0, b)
 $$
 
-The Laplace distribution has a sharp peak at zero and heavier tails than the Gaussian, which encourages exact sparsity in the MAP estimate.
+라플라스 분포는 0에서 뾰족하고 가우스보다 꼬리가 두꺼워 MAP 추정에서 정확한 희소성을 촉진한다.
 
-| Regularization | Prior | Density at 0 |
+| 정칙화 | 사전분포 | 0에서의 밀도 |
 |---|---|---|
-| Ridge (L2) | $N(0, \tau^2)$ | Smooth, finite | 
-| Lasso (L1) | Laplace$(0, b)$ | Cusp, finite |
-| Best subset | Spike-and-slab | Point mass at 0 |
+| 능형 (L2) | $N(0, \tau^2)$ | 매끄럽고 유한 |
+| 라쏘 (L1) | Laplace$(0, b)$ | 뾰족하고 유한 |
+| 최량 부분집합 | 스파이크-앤-슬랩 | 0에서 점질량 |
 
+!!! warning "척도모수를 $1/\lambda$로 쓰지 말 것"
+    간이 서술에서 흔히 $\beta_j \sim \text{Laplace}(0, 1/\lambda)$라고 쓰지만 이는 정확하지 않다. [베이즈 해석](bayesian.md)에서 유도했듯 올바른 관계는
 
-## Exercises
+    $$
+    \lambda = \frac{\sigma^2}{nb} \quad\Longleftrightarrow\quad b = \frac{\sigma^2}{n\lambda}
+    $$
 
-**Exercise 1.**
-Describe the main concept of Lasso Regression (L1 Regularization) and explain why it matters for statistical practice.
+    이다. 잡음분산 $\sigma^2$과 표본크기 $n$이 모두 들어간다. $\sigma^2 = n = 1$인 특수한 규격화에서만 $b = 1/\lambda$가 된다.
 
-??? success "Solution to Exercise 1"
-    Lasso Regression (L1 Regularization) is a core topic in statistics that provides tools for drawing reliable inferences from data. It matters because proper application ensures valid conclusions, correctly quantified uncertainty, and appropriate handling of the assumptions that underpin the method. Practitioners who understand this concept can avoid common pitfalls and choose the right analytical approach for their data.
+## 연습문제
+
+**연습문제 1.**
+직교 설계에서 라쏘와 능형의 축소 규칙이 각각 "평행이동"과 "비례"임을 수치로 확인하고, 작은 계수에 미치는 영향이 왜 크게 다른지 설명하라.
+
+??? success "연습문제 1 풀이"
+    자세한 검증은 [라쏘의 정식화와 희소성](formulation.md) 연습문제 1에 있다. 요지만 옮기면, $\mathbf{X}^\top\mathbf{X} = n\mathbf{I}$인 자료에서
+
+    | | $\hat\beta = 2.889$ | $\hat\beta = 0.086$ |
+    |:---|---:|---:|
+    | 능형 ($\times 0.980$) | 2.833 ($-2$%) | 0.085 ($-2$%) |
+    | 라쏘 ($-0.05$) | 2.839 ($-2$%) | 0.036 ($-58$%) |
+
+    **큰 계수에는 두 방법의 효과가 같지만 작은 계수에는 전혀 다르다.**
+
+    능형은 모든 계수를 같은 **비율**로 깎으므로 작은 계수의 상대적 크기가 보존된다. 라쏘는 모든 계수에서 같은 **양**을 빼므로, 그 양보다 작은 계수는 0이 되어 사라진다.
+
+    이것이 "능형은 축소만 하고 라쏘는 선택도 한다"는 말의 산술적 내용이다.
 
 ---
 
-**Exercise 2.**
-State the key assumptions required by the method discussed here. How can each assumption be checked?
+**연습문제 2.**
+라쏘의 세 가지 한계(집단 선택, $p > n$, 편향) 중 엘라스틱넷이 해결하는 것과 해결하지 못하는 것을 구분하라.
 
-??? success "Solution to Exercise 2"
-    The main assumptions typically include: (1) independence of observations -- verified by understanding the data collection process and checking for serial correlation; (2) distributional requirements (e.g., normality) -- checked with Q-Q plots and formal tests like Shapiro-Wilk; (3) equal variances (if applicable) -- assessed with boxplots and Levene's test. When assumptions are violated, consider robust alternatives, transformations, or nonparametric methods.
+??? success "연습문제 2 풀이"
+    | 한계 | 엘라스틱넷이 해결하는가 |
+    |:---|:---|
+    | 집단 선택 (상관된 변수에서 임의로 하나 선택) | **해결한다.** L2 항이 그룹 효과를 만들어 상관된 변수를 함께 유지한다. |
+    | $p > n$일 때 최대 $n$개 제한 | **해결한다.** L2 항이 목적함수를 강볼록으로 만들어 해가 유일해지고, $n$개보다 많은 변수를 선택할 수 있다. |
+    | 선택된 계수의 편향 | **해결하지 못한다.** L1 항이 여전히 연성 문턱을 적용하므로 편향이 남는다. 오히려 L2 항이 축소를 더한다. |
 
----
+    셋째 항목이 중요하다. 엘라스틱넷의 갱신식
 
-**Exercise 3.**
-Work through a small numerical example illustrating the application of the technique from this section.
+    $$
+    \hat{\beta}_j \leftarrow \frac{S_{\alpha\lambda}(z_j)}{1 + (1-\alpha)\lambda}
+    $$
 
-??? success "Solution to Exercise 3"
-    A structured approach to applying this technique involves: (1) clearly stating the hypotheses or estimation goal; (2) verifying that the data meet the required assumptions; (3) computing the relevant test statistic, estimate, or model fit; (4) obtaining the p-value, confidence interval, or posterior distribution; (5) interpreting the result in the context of the original question. Following these steps systematically ensures a rigorous and reproducible analysis.
+    을 보면 분자에서 $\alpha\lambda$만큼 깎고 분모에서 또 나눈다. **두 번 축소된다.**
 
----
+    Zou와 Hastie(2005)는 이 "이중 축소"가 예측을 해칠 수 있다고 보고, 계수에 $(1 + \lambda_2)$를 곱해 되돌리는 **보정 엘라스틱넷**(corrected elastic net)을 제안했다. sklearn의 `ElasticNet`은 이 보정을 하지 **않는다**.
 
-**Exercise 4.**
-Compare the approach from this section with an alternative method. When would you choose each?
-
-??? success "Solution to Exercise 4"
-    The method discussed here is appropriate when its assumptions hold and the sample size is sufficient for the asymptotic approximations to be accurate. Alternative approaches include: (1) nonparametric methods -- preferred when distributional assumptions are suspect; (2) bootstrap methods -- useful when analytical reference distributions are unavailable; (3) Bayesian methods -- valuable when incorporating prior information or when direct probability statements about parameters are desired. Running multiple approaches and comparing results provides a useful robustness check.
+    편향이 문제라면 엘라스틱넷으로 변수를 고른 뒤 그 변수들로 OLS를 다시 적합하는 것이 여전히 최선이다([변수선택 도구로서의 라쏘](feature_selection.md) 연습문제 1 참조).

@@ -1,116 +1,124 @@
-# Advantages over Pure Ridge and Lasso
+# 순수 능형·라쏘 대비 장점
 
-The elastic net was designed to address specific limitations of ridge regression and the lasso. Ridge regression cannot perform feature selection, and the lasso has well-known difficulties with correlated predictors and the $p > n$ setting. By combining both penalties, the elastic net overcomes these limitations while retaining the strengths of each method. This section details the specific advantages.
+엘라스틱넷은 능형회귀와 라쏘의 구체적 한계를 다루기 위해 설계되었다. 능형회귀는 변수선택을 하지 못하고, 라쏘는 상관된 설명변수와 $p > n$ 상황에서 잘 알려진 어려움을 겪는다. 두 벌점을 결합함으로써 엘라스틱넷은 각각의 강점을 유지하면서 이 한계들을 극복한다.
 
-## Overcoming the Lasso's Saturation Limit
+## 라쏘의 포화 한계 극복
 
-When $p > n$, the lasso can select **at most $n$ features**. This is because the lasso solution lies in the column space of $\mathbf{X}$, which has dimension at most $n$. If the true model involves more than $n$ relevant predictors, the lasso cannot recover all of them.
+$p > n$일 때 라쏘는 **최대 $n$개의 변수만** 고를 수 있다. 라쏘 해가 차원이 최대 $n$인 $\mathbf{X}$의 열공간에 놓이기 때문이다. 참 모형에 $n$개보다 많은 유의미한 변수가 있으면 라쏘는 그것들을 모두 복원할 수 없다.
 
-The elastic net does not have this limitation. The L2 component of the penalty ensures that the objective is strictly convex, and the elastic net can select more than $n$ features. This makes the elastic net suitable for applications such as genomics, where the number of relevant genes may exceed the sample size.
+엘라스틱넷에는 이 한계가 없다. 벌점의 L2 성분이 목적함수를 강볼록으로 만들어 $n$개보다 많은 변수를 고를 수 있다. 유의미한 유전자의 수가 표본크기를 넘을 수 있는 유전체학 같은 응용에 적합하다.
 
-| Setting | Lasso | Elastic Net |
+| 상황 | 라쏘 | 엘라스틱넷 |
 |---|---|---|
-| $p < n$ | Selects up to $p$ features | Selects up to $p$ features |
-| $p > n$ | Selects at most $n$ features | No upper limit on selected features |
-| $p \gg n$ | Severely limited | Performs well |
+| $p < n$ | 최대 $p$개 선택 | 최대 $p$개 선택 |
+| $p > n$ | 최대 $n$개 선택 | 선택 개수에 상한 없음 |
+| $p \gg n$ | 심하게 제한됨 | 잘 작동함 |
 
-## Handling Groups of Correlated Predictors
+## 상관된 설명변수 집단의 처리
 
-Consider a group of predictors that are highly correlated with each other and with the response. The lasso tends to select one predictor from the group (essentially at random) and set the rest to zero. Which predictor is selected can change with small perturbations of the data, making the lasso solution unstable.
+서로 강하게 상관되어 있고 반응변수와도 상관된 변수 집단을 생각하자. 라쏘는 집단에서 하나를 (사실상 무작위로) 고르고 나머지를 0으로 만드는 경향이 있다. 어느 것이 선택되는지가 자료의 작은 교란에 따라 바뀌므로 해가 불안정하다.
 
-Ridge regression distributes the coefficient mass evenly across the correlated group but retains all predictors, including irrelevant ones.
+능형회귀는 상관된 집단에 계수 질량을 고르게 분배하지만 무관한 변수를 포함해 모든 변수를 남긴다.
 
-The elastic net achieves a middle ground: it tends to **select or exclude correlated predictors as a group** while still maintaining sparsity. When one predictor in a correlated group is selected, the others in the group are more likely to be selected as well (the grouping effect, discussed in the next section).
+엘라스틱넷은 중간 지점을 달성한다. 희소성을 유지하면서 **상관된 변수를 집단으로 선택하거나 배제**하는 경향이 있다. 집단의 한 변수가 선택되면 같은 집단의 다른 변수도 선택될 가능성이 높아진다(그룹 효과).
 
-!!! note "Practical Consequence for Interpretation"
-    In scientific applications, knowing that an entire group of correlated variables is relevant is often more informative than knowing which single variable within the group was arbitrarily selected. The elastic net's group selection behavior produces more scientifically meaningful results.
+!!! note "해석에 대한 실무적 결과"
+    과학적 응용에서는 상관된 변수 집단 전체가 유의미하다는 사실을 아는 편이, 그 집단에서 어느 하나가 임의로 선택되었는지를 아는 것보다 유용한 경우가 많다. 엘라스틱넷의 집단 선택은 과학적으로 더 의미 있는 결과를 낸다.
 
-## Solution Uniqueness
+## 해의 유일성
 
-The pure lasso ($\alpha = 1$) has a non-unique solution when $p > n$ or when some predictors are exactly collinear. Different implementations or starting points may produce different solutions that achieve the same objective value.
+순수 라쏘($\alpha = 1$)는 $p > n$이거나 일부 변수가 정확히 선형종속일 때 해가 유일하지 않다. 구현이나 시작점이 다르면 같은 목적함숫값을 갖는 서로 다른 해가 나올 수 있다.
 
-The elastic net with any $\alpha < 1$ has a **strictly convex** objective, guaranteeing a unique solution regardless of $p$ and $n$. This uniqueness provides:
+$\alpha < 1$인 엘라스틱넷은 목적함수가 **강볼록**이므로 $p$와 $n$에 무관하게 유일한 해를 갖는다. 이 유일성이 재현성, 안정성, 경로의 연속성을 보장한다.
 
-- **Reproducibility.** The same data always produces the same solution.
-- **Stability.** Small perturbations in the data produce small changes in the solution.
-- **Path continuity.** The solution path $\hat{\boldsymbol{\beta}}(\lambda)$ is continuous in $\lambda$.
+## 예측 정확도의 개선
 
-## Improved Prediction Accuracy
+Zou와 Hastie(2005)는 모의실험으로 엘라스틱넷이 능형이나 라쏘 단독보다 나은 예측 정확도를 자주 달성함을 보였다. 특히 다음 상황에서 그렇다.
 
-Zou and Hastie (2005) showed through simulation studies that the elastic net often achieves better prediction accuracy than either ridge or lasso alone, particularly when:
+1. 참 모형의 0이 아닌 계수 개수가 중간 정도일 때.
+2. 설명변수가 집단으로 상관되어 있을 때.
+3. $p$가 $n$과 비슷하거나 더 클 때.
 
-1. The true model has a moderate number of nonzero coefficients (some but not extreme sparsity).
-2. Predictors are correlated in groups.
-3. $p$ is comparable to or larger than $n$.
+기제는 L2 성분이 추정량의 분산을 줄이고(능형처럼) L1 성분이 희소성 쪽의 적절한 귀납적 편향을 제공하는 것이다.
 
-The mechanism is that the L2 component reduces the variance of the estimator (as in ridge), while the L1 component provides the appropriate inductive bias toward sparsity.
+## 한계의 비교
 
-## Comparison of Limitations
-
-| Limitation | Ridge | Lasso | Elastic Net |
+| 한계 | 능형 | 라쏘 | 엘라스틱넷 |
 |---|---|---|---|
-| No feature selection | Yes | No | No |
-| Arbitrary selection in correlated groups | N/A | Yes | No (grouping effect) |
-| At most $n$ features when $p > n$ | N/A | Yes | No |
-| Non-unique solution ($p > n$) | No | Yes | No ($\alpha < 1$) |
-| Excessive bias on large coefficients | Moderate | High | Moderate |
-| Computationally expensive | No (closed form) | Moderate | Moderate |
+| 변수선택 불가 | 그렇다 | 아니다 | 아니다 |
+| 상관 집단에서 임의 선택 | 해당 없음 | 그렇다 | 아니다(그룹 효과) |
+| $p > n$일 때 최대 $n$개 | 해당 없음 | 그렇다 | 아니다 |
+| 해가 유일하지 않음 ($p > n$) | 아니다 | 그렇다 | 아니다 ($\alpha < 1$) |
+| 큰 계수에 과도한 편향 | 중간 | 높음 | 중간 |
+| 계산 비용 | 낮음(닫힌 형태) | 중간 | 중간 |
 
-## The Cost of Flexibility
+## 유연성의 대가
 
-The elastic net introduces an additional hyperparameter $\alpha$ that must be chosen. This increases the complexity of the model selection process:
+엘라스틱넷은 골라야 할 초모수 $\alpha$를 하나 더 들여온다. 능형이나 라쏘는 $\lambda$에 대한 1차원 탐색이면 되지만 엘라스틱넷은 $(\lambda, \alpha)$의 2차원 탐색이 된다.
 
-- **One-dimensional search** for ridge or lasso: optimize over $\lambda$ only.
-- **Two-dimensional search** for elastic net: optimize over $(\lambda, \alpha)$.
+다만 실무에서는 $\alpha$를 합리적인 값($\alpha = 0.5$ 등)에 고정하고 $\lambda$만 최적화해도 잘 작동하며, 순수 라쏘 대비 추가 계산이 거의 없다.
 
-However, in practice, fixing $\alpha$ at a reasonable value (e.g., $\alpha = 0.5$) and optimizing only over $\lambda$ often works well and adds minimal computational cost compared to the pure lasso.
+!!! tip "기본 권고"
+    능형과 라쏘 중 무엇이 적절한지 확신이 없다면 $\alpha = 0.5$의 엘라스틱넷이 안전한 기본값이다. 희소성과 안정성의 합리적 균형을 제공하며, 능형과 라쏘 중 더 나은 쪽보다 크게 나쁜 경우가 드물다.
 
-!!! tip "Default Recommendation"
-    When unsure whether ridge or lasso is more appropriate, the elastic net with $\alpha = 0.5$ is a safe default. It provides a reasonable balance of sparsity and stability, and its performance is rarely much worse than the better of ridge and lasso.
+## 순진한 엘라스틱넷과 보정 엘라스틱넷
 
-## Naive Elastic Net versus Corrected Elastic Net
-
-The original elastic net estimator suffers from a double shrinkage problem: the L1 penalty shrinks coefficients and the L2 penalty shrinks them further. Zou and Hastie (2005) proposed a correction that rescales the elastic net coefficients:
+원래의 엘라스틱넷 추정량은 이중 축소 문제를 겪는다. L1 벌점이 계수를 축소하고 L2 벌점이 다시 축소한다. Zou와 Hastie(2005)는 계수를 되돌리는 보정을 제안했다.
 
 $$
 \hat{\boldsymbol{\beta}}_{\text{corrected}} = (1 + \lambda(1-\alpha))\,\hat{\boldsymbol{\beta}}_{\text{EN}}
 $$
 
-This correction undoes the extra shrinkage from the L2 penalty, improving prediction accuracy. Most modern implementations apply this correction automatically.
+!!! danger "scikit-learn은 이 보정을 적용하지 않는다"
+    "대부분의 현대 구현이 이 보정을 자동으로 적용한다"고 서술한 자료를 종종 보지만, **scikit-learn에는 해당하지 않는다.**
 
-## Summary
+    확인은 간단하다. 보정이 적용된다면 `l1_ratio`를 0으로 보낸 엘라스틱넷은 능형회귀에 $(1+\lambda)$를 곱한 값이 되어야 한다. 실제로는 정확히 능형과 일치한다(연습문제 참조, 최대 차이 $7\times10^{-9}$).
 
-The elastic net addresses the lasso's limitation of selecting at most $n$ features when $p > n$, its instability with correlated predictors, and its non-unique solutions. It achieves group selection of correlated variables while maintaining sparsity, and its strictly convex objective ensures a unique, stable solution. These advantages come at the cost of an additional hyperparameter $\alpha$, but the improved robustness and prediction accuracy in the presence of correlated predictors typically justify the extra tuning effort.
+    따라서 sklearn의 `ElasticNet` 계수는 **순진한(보정되지 않은) 엘라스틱넷**이다. 보정이 필요하면 직접 $(1 + \lambda(1-\alpha))$를 곱해야 한다. 다만 예측만이 목적이면 $\lambda$를 교차검증으로 고르는 과정에서 이 배율이 흡수되므로 대개 문제가 되지 않는다.
 
+## 요약
 
-## Exercises
+엘라스틱넷은 $p > n$일 때 라쏘가 최대 $n$개만 고를 수 있다는 한계, 상관된 변수에서의 불안정성, 해의 비유일성을 해결한다. 희소성을 유지하면서 상관된 변수의 집단 선택을 달성하고, 강볼록 목적함수가 유일하고 안정적인 해를 보장한다. 초모수 $\alpha$가 하나 늘어나지만, 상관된 설명변수가 있을 때의 견고함과 예측 정확도 개선이 대개 그 비용을 정당화한다.
 
-**Exercise 1.**
-Describe the main concept of Advantages over Pure Ridge and Lasso and explain why it matters for statistical practice.
+## 연습문제
 
-??? success "Solution to Exercise 1"
-    Advantages over Pure Ridge and Lasso is a core topic in statistics that provides tools for drawing reliable inferences from data. It matters because proper application ensures valid conclusions, correctly quantified uncertainty, and appropriate handling of the assumptions that underpin the method. Practitioners who understand this concept can avoid common pitfalls and choose the right analytical approach for their data.
+**연습문제 1.**
+"$p > n$일 때 라쏘는 최대 $n$개"라는 한계와 엘라스틱넷이 그것을 넘는다는 주장을 수치로 확인하라.
 
----
+??? success "연습문제 1 풀이"
+    $n = 40$, $p = 200$, 참 변수 60개에서 선택 개수를 센다.
 
-**Exercise 2.**
-State the key assumptions required by the method discussed here. How can each assumption be checked?
+    | 방법 | 선택 개수 |
+    |:---|---:|
+    | 라쏘 | **39** ($= n - 1$) |
+    | 엘라스틱넷 ($\alpha = 0.5$) | 89 |
+    | 엘라스틱넷 ($\alpha = 0.1$) | 167 |
 
-??? success "Solution to Exercise 2"
-    The main assumptions typically include: (1) independence of observations -- verified by understanding the data collection process and checking for serial correlation; (2) distributional requirements (e.g., normality) -- checked with Q-Q plots and formal tests like Shapiro-Wilk; (3) equal variances (if applicable) -- assessed with boxplots and Levene's test. When assumptions are violated, consider robust alternatives, transformations, or nonparametric methods.
+    라쏘가 $n$에서 정확히 막히고 엘라스틱넷은 막히지 않는다. 자세한 코드와 논의는 [엘라스틱넷의 정식화](formulation.md) 연습문제 2에 있다.
 
----
-
-**Exercise 3.**
-Work through a small numerical example illustrating the application of the technique from this section.
-
-??? success "Solution to Exercise 3"
-    A structured approach to applying this technique involves: (1) clearly stating the hypotheses or estimation goal; (2) verifying that the data meet the required assumptions; (3) computing the relevant test statistic, estimate, or model fit; (4) obtaining the p-value, confidence interval, or posterior distribution; (5) interpreting the result in the context of the original question. Following these steps systematically ensures a rigorous and reproducible analysis.
+    **주의할 점:** 엘라스틱넷이 더 많이 고른다고 해서 더 정확한 것은 아니다. $\alpha = 0.1$의 167개는 참값 60개를 크게 넘어 잡음변수를 대량으로 포함한다. **한계를 없애는 것과 올바른 집합을 고르는 것은 다른 문제다.**
 
 ---
 
-**Exercise 4.**
-Compare the approach from this section with an alternative method. When would you choose each?
+**연습문제 2.**
+sklearn이 보정 엘라스틱넷을 적용하는지 직접 확인하라.
 
-??? success "Solution to Exercise 4"
-    The method discussed here is appropriate when its assumptions hold and the sample size is sufficient for the asymptotic approximations to be accurate. Alternative approaches include: (1) nonparametric methods -- preferred when distributional assumptions are suspect; (2) bootstrap methods -- useful when analytical reference distributions are unavailable; (3) Bayesian methods -- valuable when incorporating prior information or when direct probability statements about parameters are desired. Running multiple approaches and comparing results provides a useful robustness check.
+??? success "연습문제 2 풀이"
+    `l1_ratio`를 0에 가깝게 보내면 엘라스틱넷은 순수 능형이 된다. 보정이 적용된다면 결과가 능형에 $(1 + \lambda)$를 곱한 값이어야 한다.
+
+    ```python
+    import numpy as np
+    from sklearn.linear_model import ElasticNet, Ridge
+    n, a, l1 = 60, 0.5, 1e-8
+    be = ElasticNet(alpha=a, l1_ratio=l1, fit_intercept=False,
+                    max_iter=500000, tol=1e-14).fit(X, y).coef_
+    br = Ridge(alpha=n*a*(1-l1), fit_intercept=False).fit(X, y).coef_
+    print(np.abs(be - br).max())          # 7.3e-09
+    print(np.abs(be - (1+a)*br).max())    # 크게 0이 아님
+    ```
+
+    **차이가 $7.3\times10^{-9}$로 사실상 0이다.** 즉 sklearn의 엘라스틱넷은 보정 없이 능형과 정확히 일치한다.
+
+    보정이 적용되었다면 $\lambda = 0.5$에서 계수가 $1.5$배여야 하고 차이가 $0$이 아니어야 한다.
+
+    **결론: sklearn은 순진한 엘라스틱넷을 반환한다.** 원 논문의 보정된 추정량이 필요하면 직접 $(1 + \lambda(1-\alpha))$를 곱하라.

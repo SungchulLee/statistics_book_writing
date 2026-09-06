@@ -1,178 +1,175 @@
-# Dimensionality Reduction: PCR and PLS
+# 차원축소: PCR과 PLS
 
 
-## Overview
+## 개요
 
-When the number of predictors $p$ is large (especially when $p > n$, more predictors than observations), or when severe multicollinearity exists among predictors, coefficient shrinkage methods (Ridge, Lasso) become less efficient. **Dimensionality reduction methods** provide an alternative: instead of shrinking coefficients, they construct a smaller number of latent variables (principal components or PLS components) and regress on these.
+설명변수의 수 $p$가 크거나(특히 $p > n$), 설명변수 사이에 심한 다중공선성이 있으면 계수 축소 방법(능형, 라쏘)의 효율이 떨어진다. **차원축소 방법**은 대안을 제공한다. 계수를 축소하는 대신, 더 적은 수의 잠재변수(주성분 또는 PLS 성분)를 구성하고 그 위에서 회귀한다.
 
-## When to Use Dimensionality Reduction
+## 차원축소가 유용한 경우
 
-Dimensionality reduction is valuable when:
+1. **$p$가 매우 큼** — 관측보다 설명변수가 훨씬 많다($p > n$ 또는 $p \gg n$)
+2. **심한 다중공선성** — 설명변수가 강하게 상관되어 OLS 추정이 불안정하다
+3. **예측이 목표** — 개별 계수의 해석 가능성이 덜 중요하다
+4. **계산 효율** — 차원을 줄이면 계산 속도가 개선된다
+5. **측정에서 온 자료** — 분광법이나 센서 배열처럼 모든 차원이 잡음을 담고 있는 경우
 
-1. **$p$ is very large** — Many more predictors than observations ($p > n$ or $p >> n$)
-2. **Severe multicollinearity** — Predictors are highly correlated, making OLS estimates unstable
-3. **Prediction is the goal** — Interpretability of individual coefficients is less critical
-4. **Computational efficiency** — Reducing dimensionality improves computational speed
-5. **Data comes from measurements** — E.g., spectroscopy, sensor arrays where all dimensions capture noise
+## 두 방법
 
-## Key Methods
+### 주성분회귀 (PCR)
 
-### Principal Components Regression (PCR)
+**비지도 차원축소.** 설명변수 공간 $X$의 분산을 최대화하는 주성분을 구성한 뒤, 그 성분 위에서 반응변수를 회귀한다.
 
-### **Unsupervised dimensionality reduction**: Constructs principal components by maximizing variance in the predictor space X, then regresses the response on these components.
-### **Algorithm**:
-1. Standardize predictors
-2. Perform PCA to extract principal components
-3. Select optimal number of components via cross-validation
-4. Regress response on selected components
+**절차**
 
-### **Advantages**:
-- Eliminates multicollinearity (components are uncorrelated)
-- Handles $p > n$ settings naturally
-- Simple, well-understood method
-- PCA components have clear interpretation in terms of variance
+1. 설명변수를 표준화한다
+2. PCA로 주성분을 추출한다
+3. 교차검증으로 최적 성분 수를 고른다
+4. 선택된 성분에 반응변수를 회귀한다
 
-### **Disadvantages**:
-- Unsupervised: PCA maximizes $X$ variance, not covariance with $y$
-- May require many components to capture response variation
-- Loss of original feature interpretability
-- Components are linear combinations of all predictors
+**장점**
 
-### **When to use**: When predictor variance aligns with response variation, or as a baseline for comparison.
+- 다중공선성을 제거한다(성분들이 무상관이다)
+- $p > n$ 상황을 자연스럽게 다룬다
+- 단순하고 잘 이해된 방법이다
+- 주성분이 분산이라는 명확한 해석을 갖는다
 
----
+**단점**
 
-### Partial Least Squares (PLS)
+- 비지도이다. PCA는 $X$의 분산을 최대화하지 $y$와의 공분산을 최대화하지 않는다
+- 반응변수의 변동을 담으려면 많은 성분이 필요할 수 있다
+- 원래 변수의 해석 가능성을 잃는다
+- 성분이 모든 설명변수의 선형결합이다
 
-### **Supervised dimensionality reduction**: Constructs components by maximizing covariance between predictors and response, balancing explaining variance in X with predicting y.
-### **Algorithm**:
-1. Standardize predictors and response
-2. Iteratively construct components that maximize covariance of $X$ with $y$
-3. Select optimal number of components via cross-validation
-4. Regress response on selected components
-
-### **Advantages**:
-- Supervised: Components are chosen to predict response
-- Often requires fewer components than PCR (more efficient)
-- Excellent for high-dimensional prediction problems
-- Components respect covariance structure between $X$ and $y$
-- Originated in chemometrics; proven in practice
-
-### **Disadvantages**:
-- Components still lack direct interpretability
-- Theory less developed than OLS (fewer asymptotic results)
-- Standardization required and can affect results
-- Must tune number of components
-
-### **When to use**: When prediction accuracy is the goal and p is large; typically outperforms PCR.
----
-
-## Comparison: PCR vs PLS
-
-| Aspect | PCR | PLS |
-|--------|-----|-----|
-| **Objective** | Maximize variance in $X$ | Maximize covariance of $X$ and $y$ |
-| **Component selection** | Unsupervised | Supervised |
-| **Typical # components** | Many (to capture $y$ variation) | Fewer (aligned with $y$) |
-| **Computational complexity** | O(min(n,p)³) for PCA | O(min(n,p)²) per component |
-| **When it excels** | Variance in $X$ important | Predicting $y$ is goal |
-| **Interpretability** | Same loss as PLS | Same loss as PCR |
-
-### **Rule of thumb**: In practice, PLS often outperforms PCR because its supervised component selection aligns better with the prediction objective.
+**언제 쓰는가:** 설명변수의 분산이 반응변수의 변동과 정렬되어 있을 때, 또는 비교의 기준선으로.
 
 ---
 
-## Comparison with Shrinkage Methods
+### 부분최소제곱 (PLS)
 
-| Method | Type | Sparsity | Interpretability | High-dim Capability |
-|--------|------|----------|------------------|-------------------|
-| **Ridge** | Shrinkage | Dense | High | Good (when $p >> n$) |
-| **Lasso** | Shrinkage | Sparse | High | Good (automatic selection) |
-| **Elastic Net** | Shrinkage | Sparse | High | Good (balanced) |
-| **PCR** | Dimension reduction | N/A | Low | Excellent |
-| **PLS** | Dimension reduction | N/A | Low | Excellent |
+**지도 차원축소.** 설명변수와 반응변수의 공분산을 최대화하는 성분을 구성하여, $X$의 분산 설명과 $y$의 예측을 함께 겨냥한다.
 
-### **Decision tree**:
-- **Need feature selection?** → Lasso or Elastic Net
-- **Want all features + stability?** → Ridge
-- **$p$ very large or $p > n$?** → PCR or PLS
-- **Prediction focus, high-dimensionality?** → PLS
-- **Need interpretability?** → Ridge or Lasso
+**절차**
 
----
+1. 설명변수와 반응변수를 표준화한다
+2. $X$와 $y$의 공분산을 최대화하는 성분을 반복적으로 구성한다
+3. 교차검증으로 최적 성분 수를 고른다
+4. 선택된 성분에 반응변수를 회귀한다
 
-## Contents
+**장점**
 
-- **Principal Components Regression (PCR)** — Unsupervised approach using PCA for dimensionality reduction
-- **Partial Least Squares (PLS)** — Supervised approach maximizing covariance with response
+- 지도학습이다. 성분이 반응변수를 예측하도록 선택된다
+- PCR보다 적은 성분으로 충분한 경우가 많다
+- 고차원 예측 문제에 탁월하다
+- 화학계량학에서 출발하여 실무에서 검증되었다
 
-## Code Examples
+**단점**
 
-See `code/pcr_pls_examples.py` for:
+- 성분의 직접적 해석 가능성은 여전히 없다
+- OLS보다 이론이 덜 발달했다
+- 표준화가 필요하며 결과에 영향을 준다
+- 성분 수를 조정해야 한다
 
-- Full implementation of PCR with cross-validation
-- Full implementation of PLS with cross-validation
-- Comprehensive model comparison
-- Visualizations (scree plots, CV curves, predictions)
-- Real-world housing price prediction example
-
-## Practical Guidance
-
-### When to Use PCR or PLS
-
-### **Choose PCR/PLS if**:
-- $p > n$ (more predictors than observations)
-- Multicollinearity is severe
-- $p$ is large (50+ predictors) even if $p < n$
-- You have spectroscopic or sensor data
-- Prediction accuracy is paramount
-- Interpretability of individual coefficients is not critical
-
-### **Choose Ridge/Lasso if**:
-- Feature selection is important
-- You need to understand which predictors matter
-- $p$ is moderate (< 50) and $p < n$
-- Interpretability is crucial
-- You can afford computational cost of fitting multiple models
-
-### Cross-Validation Strategy
-
-Both PCR and PLS require selecting the number of components via cross-validation:
-
-```python
-from sklearn.model_selection import cross_val_score
-
-# Test different numbers of components
-for n_components in range(1, min(n_samples, n_predictors) + 1):
-    cv_scores = cross_val_score(model, X_scaled, y, cv=10,
-                                scoring='neg_mean_squared_error')
-    mse = -cv_scores.mean()
-```
-
-Always use a held-out test set to report final performance; don't trust CV error alone.
+**언제 쓰는가:** 예측 정확도가 목표이고 $p$가 클 때. 대개 PCR보다 낫다.
 
 ---
 
-## Further Reading
+## PCR과 PLS의 비교
 
-### Key References
-- Hastie, Tibshirani, Wainwright (2015). *Statistical Learning with Sparsity* — Chapter on dimensionality reduction
-- ISLR (2013). Chapter 6 — Linear Model Selection and Regularization
-- Geladi & Kowalski (1986). Partial least-squares regression — original chemometrics paper
+| 측면 | PCR | PLS |
+|---|---|---|
+| **목적함수** | $X$의 분산 최대화 | $X$와 $y$의 공분산 최대화 |
+| **성분 선택** | 비지도 | 지도 |
+| **필요한 성분 수** | 많음($y$의 변동을 담으려면) | 적음($y$와 정렬되어 있음) |
+| **계산 복잡도** | PCA에 $O(\min(n,p)^3)$ | 성분당 $O(\min(n,p)^2)$ |
+| **강점을 보이는 상황** | $X$의 분산이 중요할 때 | $y$의 예측이 목표일 때 |
+| **해석 가능성** | 둘 다 같은 정도로 잃는다 | 둘 다 같은 정도로 잃는다 |
 
-### Related Topics
-- **Regularization** — Ridge, Lasso, Elastic Net (shrinkage alternatives)
-- **Splines and GAMs** — Non-linear modeling with smoothness penalties (Chapter 7)
-- **Model Selection** — Cross-validation, information criteria
+!!! tip "최종 성능은 반드시 별도의 검정집합에서 보고하라"
+    성분 수를 교차검증으로 고른 뒤 같은 CV 오차를 최종 성능으로 보고하면 낙관적으로 편향된다. 성분 수 선택 자체가 자료를 사용했기 때문이다. 떼어 둔 검정집합을 따로 두어야 한다.
 
 ---
 
-## Summary
+## 더 읽을거리
 
-Dimensionality reduction methods (PCR and PLS) offer powerful alternatives to shrinkage when:
+- Hastie, Tibshirani, Wainwright (2015). *Statistical Learning with Sparsity* — 차원축소 장
+- James, Witten, Hastie, Tibshirani (2013). *An Introduction to Statistical Learning*, 6장
+- Geladi & Kowalski (1986). "Partial least-squares regression: a tutorial." *Analytica Chimica Acta* — 화학계량학의 원 논문
 
-1. **The predictor space is very high-dimensional** ($p >> n$ or $p > n$)
-2. **Multicollinearity is severe** across many predictors
-3. **Prediction accuracy** is prioritized over interpretability
+관련 주제: 정칙화(능형, 라쏘, 엘라스틱넷), 스플라인과 GAM(13장), 모형선택(교차검증, 정보기준).
 
-### **Key distinction**: PLS's supervised component construction usually outperforms PCR's unsupervised approach, making PLS the preferred choice when prediction is the goal. Choose PCR only when variance in predictor space (not covariance with response) is the primary concern.
+## 요약
+
+차원축소 방법(PCR과 PLS)은 설명변수 공간이 매우 고차원이거나, 다중공선성이 여러 변수에 걸쳐 심하거나, 해석 가능성보다 예측 정확도가 중요할 때 축소 방법의 강력한 대안이 된다.
+
+**핵심 구별:** PLS의 지도적 성분 구성이 대개 PCR의 비지도 접근보다 낫다. 예측이 목표라면 PLS가 우선 선택이며, 설명변수 공간의 분산 자체가 주된 관심사일 때만 PCR을 고른다.
+
+## 연습문제
+
+**연습문제 1.**
+"PLS가 PCR보다 적은 성분으로 충분하다"는 주장을 수치로 확인하라. 잠재요인 3개가 $p = 30$개 변수를 만들지만 그중 반응변수와 관련된 것은 2개뿐인 자료를 만들어 비교하라.
+
+??? success "연습문제 1 풀이"
+    ```python
+    import numpy as np
+    from sklearn.decomposition import PCA
+    from sklearn.cross_decomposition import PLSRegression
+    from sklearn.linear_model import LinearRegression
+    from sklearn.model_selection import KFold, cross_val_score
+
+    rng = np.random.default_rng(0)
+    n, p = 100, 30
+    Z = rng.normal(size=(n, 3))            # 잠재요인 3개
+    A = rng.normal(size=(3, p))
+    X = Z @ A + rng.normal(0, 0.5, (n, p))
+    y = Z[:, 0]*2 - Z[:, 2]*1.5 + rng.normal(0, 1, n)   # 요인 0과 2만 y에 관여
+
+    Xc, yc = X - X.mean(0), y - y.mean()
+    kf = KFold(5, shuffle=True, random_state=0)
+    for k in range(1, 8):
+        pc = PCA(k).fit_transform(Xc)
+        r2_pcr = cross_val_score(LinearRegression(), pc, yc, cv=kf, scoring='r2').mean()
+        r2_pls = cross_val_score(PLSRegression(k), Xc, yc, cv=kf, scoring='r2').mean()
+        print(k, r2_pcr, r2_pls)
+    ```
+
+    | 성분 수 | PCR 교차검증 $R^2$ | PLS 교차검증 $R^2$ |
+    |---:|---:|---:|
+    | 1 | 0.428 | **0.806** |
+    | 2 | 0.548 | **0.844** |
+    | 3 | **0.849** | 0.837 |
+    | 4 | 0.847 | 0.820 |
+    | 5 | 0.845 | 0.794 |
+    | 6 | 0.840 | 0.767 |
+    | 7 | 0.837 | 0.746 |
+
+    **PLS는 성분 2개로 $R^2 = 0.844$에 도달한다. PCR은 같은 수준에 이르려면 3개가 필요하다.**
+
+    더 극적인 것은 성분 1개일 때다. PLS $0.806$ 대 PCR $0.428$로 **거의 두 배**다.
+
+    **왜 그런가.** PCA의 첫 성분은 $X$의 분산을 최대화한다. 이 자료에서 세 잠재요인이 비슷한 크기이므로 첫 주성분은 세 요인이 섞인 방향이 되고, 그중 $y$와 무관한 요인 1도 섞여 들어간다. 반면 PLS는 $y$와의 공분산을 최대화하므로 첫 성분부터 요인 0과 2 쪽으로 정렬된다.
+
+    !!! warning "PLS의 $R^2$가 성분을 늘리면 오히려 떨어진다"
+        표에서 PLS는 성분 2개에서 정점을 찍고 이후 단조 감소한다($0.844 \to 0.746$). PCR은 3개에서 정점을 찍고 완만하게 감소한다.
+
+        PLS가 더 빨리 나빠지는 이유는 **$y$를 이미 사용해 성분을 만들기 때문이다.** 성분을 추가할수록 $y$의 잡음에 적합하게 되어 과적합이 빨라진다. 이는 PLS의 성분 수를 반드시 교차검증으로 고르고, 그 CV 오차를 최종 성능으로 보고하지 말아야 하는 이유이기도 하다.
+
+---
+
+**연습문제 2.**
+PCR이 PLS보다 나을 수 있는 상황을 구성하라.
+
+??? success "연습문제 2 풀이"
+    **$X$의 분산이 큰 방향이 곧 $y$와 관련된 방향일 때** PCR의 비지도 선택이 손해가 아니다. 그리고 $n$이 작으면 PLS가 $y$를 사용하는 것이 오히려 과적합을 부른다.
+
+    구체적으로 위 실험에서 $y$가 **첫 번째** 잠재요인에만 의존하도록 바꾸면($y = 2Z_0 + \varepsilon$) 첫 주성분이 곧 신호 방향이므로 PCR도 성분 1개로 충분해진다.
+
+    일반적인 지침은 다음과 같다.
+
+    | 상황 | 유리한 방법 |
+    |:---|:---|
+    | 신호가 $X$의 주된 분산 방향에 있다 | PCR과 PLS가 비슷하다 |
+    | 신호가 $X$의 작은 분산 방향에 숨어 있다 | **PLS**가 크게 유리 |
+    | $n$이 매우 작다 | **PCR**이 안전($y$를 쓰지 않아 과적합이 덜하다) |
+    | 성분에 물리적 의미를 부여하고 싶다 | **PCR**(분산이라는 해석이 있다) |
+
+    실무에서는 둘 다 계산하고 교차검증으로 비교하는 것이 가장 확실하다. 계산 비용이 크지 않다.

@@ -1,125 +1,140 @@
-# Elastic Net Regularization
+# 엘라스틱넷 정칙화
 
 
-## Introduction
+## 서론
 
-Elastic Net is a regularization technique that combines the strengths of both Ridge Regression and Lasso Regression. While Ridge Regression (L2 regularization) is effective at shrinking coefficients, it does not perform variable selection. Lasso Regression (L1 regularization) can set some coefficients to exactly zero for feature selection, but it can struggle with correlated variables, often selecting one and ignoring others. Elastic Net addresses these limitations by incorporating both L1 and L2 penalties into its objective function, creating a more flexible and robust regularization approach.
+엘라스틱넷은 능형회귀와 라쏘 회귀의 강점을 결합한 정칙화 기법이다. 능형회귀(L2)는 계수 축소에 효과적이지만 변수선택을 하지 못한다. 라쏘(L1)는 일부 계수를 정확히 0으로 만들어 변수선택을 할 수 있지만 상관된 변수에서 어려움을 겪으며 하나만 고르고 나머지를 무시하는 경우가 많다. 엘라스틱넷은 L1과 L2 벌점을 목적함수에 함께 넣어 이 한계들을 다루며, 더 유연하고 견고한 정칙화 접근을 제공한다.
 
-## Elastic Net Objective Function
+## 엘라스틱넷 목적함수
 
-The Elastic Net regression model introduces a penalty that is a linear combination of the Ridge and Lasso penalties:
-
-$$
-J(\mathbf{w}) = \sum_{i=1}^n \left( y_i - \mathbf{w}^T \mathbf{x}_i \right)^2 + \lambda_1 \sum_{j=1}^p |w_j| + \lambda_2 \sum_{j=1}^p w_j^2
-$$
-
-where:
-
-- $\mathbf{w}$ represents the vector of regression coefficients.
-- $\lambda_1 \geq 0$ controls the **L1 regularization** (Lasso), encouraging sparsity by shrinking some coefficients to zero.
-- $\lambda_2 \geq 0$ controls the **L2 regularization** (Ridge), shrinking coefficients without setting them to zero.
-- The first term is the sum of squared errors (SSE) as in standard linear regression.
-
-The combination of these two regularization terms allows Elastic Net to perform variable selection while also handling correlated predictors more effectively than Lasso alone.
-
-## Key Features
-
-### Combining L1 and L2 Regularization
-
-By blending L1 and L2 penalties, Elastic Net inherits the benefits of both Lasso and Ridge. It can perform feature selection (like Lasso) while also managing multicollinearity and stabilizing the solution (like Ridge).
-
-### Handling Correlated Predictors
-
-One of the challenges with Lasso is that when predictors are highly correlated, it tends to select one and ignore the others. Elastic Net alleviates this by applying the Ridge penalty, which allows for **grouped selection** of correlated predictors. As a result, Elastic Net tends to select or exclude groups of correlated variables together, leading to more stable and reliable models.
-
-### Flexibility in Regularization
-
-The relative contributions of the L1 and L2 penalties can be adjusted through the parameters $\lambda_1$ and $\lambda_2$:
-
-- If $\lambda_1 = 0$: Elastic Net reduces to **Ridge Regression**.
-- If $\lambda_2 = 0$: Elastic Net reduces to **Lasso Regression**.
-
-This flexibility allows Elastic Net to be tuned for different data structures and modeling requirements.
-
-## Solving the Elastic Net Problem
-
-Solving the Elastic Net regression problem is more computationally intensive than either Ridge or Lasso alone due to the combined regularization terms. However, **coordinate descent** — a popular optimization algorithm used for Lasso — can also be adapted to solve the Elastic Net problem efficiently.
-
-In coordinate descent, each coefficient is updated iteratively by solving a one-dimensional optimization problem while keeping the other coefficients fixed. This approach is well-suited to Elastic Net, especially when the number of predictors is large, because it breaks down the high-dimensional optimization problem into a series of simpler problems.
-
-## Choosing the Regularization Parameters
-
-Elastic Net introduces two regularization parameters, $\lambda_1$ and $\lambda_2$, that need to be carefully chosen to balance the tradeoff between bias, variance, and model complexity. These parameters are usually selected through **cross-validation**.
-
-### The Mixing Parameter Formulation
-
-In practice, a common approach is to use a single regularization parameter $\lambda$ and a mixing parameter $\alpha$:
+엘라스틱넷은 능형과 라쏘 벌점의 선형결합을 벌점으로 쓴다.
 
 $$
-J(\mathbf{w}) = \sum_{i=1}^n \left( y_i - \mathbf{w}^T \mathbf{x}_i \right)^2 + \lambda \left( \alpha \sum_{j=1}^p |w_j| + (1-\alpha) \sum_{j=1}^p w_j^2 \right)
+J(\mathbf{w}) = \sum_{i=1}^n \left( y_i - \mathbf{w}^\top \mathbf{x}_i \right)^2 + \lambda_1 \sum_{j=1}^p |w_j| + \lambda_2 \sum_{j=1}^p w_j^2
 $$
 
-where:
+- $\mathbf{w}$는 회귀계수 벡터다.
+- $\lambda_1 \geq 0$은 **L1 정칙화**(라쏘)를 조절하며 일부 계수를 0으로 만들어 희소성을 촉진한다.
+- $\lambda_2 \geq 0$은 **L2 정칙화**(능형)를 조절하며 계수를 0으로 만들지 않으면서 축소한다.
+- 첫 항은 표준 선형회귀와 같은 잔차제곱합이다.
 
-- $\alpha$ is the mixing parameter with $0 \leq \alpha \leq 1$.
-  - $\alpha = 1$ corresponds to **Lasso** (L1 regularization).
-  - $\alpha = 0$ corresponds to **Ridge** (L2 regularization).
-  - Values of $\alpha$ between 0 and 1 provide a balance between Lasso and Ridge.
+두 정칙화 항의 결합 덕분에 엘라스틱넷은 변수선택을 수행하면서 상관된 설명변수를 라쏘보다 효과적으로 다룬다.
 
-## Advantages and Limitations
+## 주요 특징
 
-### Advantages
+### L1과 L2의 결합
 
-1. **Flexibility**: Elastic Net provides a flexible framework that can be tuned to behave more like Lasso, Ridge, or a combination of both, depending on the problem at hand.
-2. **Improved prediction accuracy**: By handling correlated predictors better than Lasso, Elastic Net can lead to improved prediction accuracy in datasets where predictors are not independent.
-3. **Group selection**: Elastic Net's ability to select or exclude groups of correlated predictors makes it particularly useful in domains where variables naturally cluster, such as genomics or image processing.
+L1과 L2 벌점을 섞음으로써 엘라스틱넷은 라쏘와 능형의 이점을 모두 물려받는다. 라쏘처럼 변수선택을 하면서 능형처럼 다중공선성을 관리하고 해를 안정시킨다.
 
-### Limitations
+### 상관된 설명변수의 처리
 
-1. **Complexity in tuning parameters**: The need to tune two regularization parameters ($\lambda$ and $\alpha$) adds complexity to the model selection process, requiring careful cross-validation.
-2. **Increased computational cost**: While coordinate descent makes solving Elastic Net feasible, the inclusion of two regularization terms increases the computational cost compared to Ridge or Lasso alone.
+라쏘의 문제 중 하나는 설명변수가 강하게 상관되어 있을 때 하나를 고르고 나머지를 무시하는 경향이다. 엘라스틱넷은 능형 벌점을 적용하여 상관된 변수의 **집단 선택**을 가능하게 한다. 결과적으로 상관된 변수 집단을 함께 선택하거나 함께 배제하는 경향을 보여 더 안정적이고 신뢰할 만한 모형을 만든다.
 
-## Practical Applications
+### 정칙화의 유연성
 
-Elastic Net is widely used in fields where high-dimensional data is common and there is a need for both feature selection and regularization:
+L1과 L2 벌점의 상대적 기여는 $\lambda_1$과 $\lambda_2$로 조정된다.
 
-- **Genomics and bioinformatics**: Datasets often contain thousands of gene expression levels as predictors, many of which are correlated. Elastic Net can identify relevant gene groups associated with diseases or traits while controlling for multicollinearity.
-- **Finance**: Predictors such as different market indices, interest rates, and economic indicators are often correlated. Elastic Net can help in selecting a robust subset of these variables for predicting asset prices or risk factors.
-- **Image processing**: Features extracted from images are often high-dimensional and correlated. Elastic Net can be used to reduce dimensionality while maintaining predictive accuracy.
+- $\lambda_1 = 0$이면 **능형회귀**로 환원된다.
+- $\lambda_2 = 0$이면 **라쏘**로 환원된다.
 
-## Summary
+## 엘라스틱넷 문제의 풀이
 
-Elastic Net is a powerful and versatile regularization technique that combines the strengths of Ridge and Lasso Regression. By balancing L1 and L2 penalties, it offers a flexible approach to regularization that can handle correlated predictors and perform variable selection. While the tuning process is more complex than for Ridge or Lasso alone, its ability to improve prediction accuracy and interpretability in high-dimensional datasets makes it an invaluable tool in the machine learning and statistical modeling toolbox.
+정칙화 항이 결합되어 있어 능형이나 라쏘 단독보다 계산이 무겁다. 그러나 라쏘에 쓰이는 **좌표하강**을 엘라스틱넷에도 효율적으로 적용할 수 있다.
 
+좌표하강은 다른 계수를 고정한 채 계수 하나에 대한 1차원 최적화를 반복적으로 푼다. 고차원 최적화 문제를 단순한 문제들의 열로 분해하므로 설명변수가 많을 때 특히 적합하다. 갱신식은 [엘라스틱넷의 정식화](formulation.md)에 있다.
 
-## Exercises
+## 정칙화 모수의 선택
 
-**Exercise 1.**
-Describe the main concept of Elastic Net Regularization and explain why it matters for statistical practice.
+엘라스틱넷은 두 개의 정칙화 모수 $\lambda_1$, $\lambda_2$를 도입하며, 편향·분산·모형 복잡도의 절충을 위해 신중히 골라야 한다. 보통 **교차검증**으로 선택한다.
 
-??? success "Solution to Exercise 1"
-    Elastic Net Regularization is a core topic in statistics that provides tools for drawing reliable inferences from data. It matters because proper application ensures valid conclusions, correctly quantified uncertainty, and appropriate handling of the assumptions that underpin the method. Practitioners who understand this concept can avoid common pitfalls and choose the right analytical approach for their data.
+### 혼합모수 정식화
+
+실무에서 흔한 접근은 단일 정칙화 모수 $\lambda$와 혼합모수 $\alpha$를 쓰는 것이다.
+
+$$
+J(\mathbf{w}) = \sum_{i=1}^n \left( y_i - \mathbf{w}^\top \mathbf{x}_i \right)^2 + \lambda \left( \alpha \sum_{j=1}^p |w_j| + (1-\alpha) \sum_{j=1}^p w_j^2 \right)
+$$
+
+- $\alpha = 1$이면 **라쏘**(L1)
+- $\alpha = 0$이면 **능형**(L2)
+- 그 사이 값은 둘의 균형
+
+## 장점과 한계
+
+### 장점
+
+1. **유연성**: 문제에 따라 라쏘, 능형, 또는 그 조합처럼 행동하도록 조정할 수 있다.
+2. **예측 정확도 개선**: 상관된 설명변수를 라쏘보다 잘 다루므로, 변수들이 독립이 아닌 자료에서 예측 정확도가 개선될 수 있다.
+3. **집단 선택**: 변수가 자연스럽게 군집을 이루는 유전체학이나 영상처리 같은 분야에서 특히 유용하다.
+
+### 한계
+
+1. **조정모수의 복잡성**: $\lambda$와 $\alpha$ 두 모수를 조정해야 하므로 모형선택 과정이 복잡해지고 세심한 교차검증이 필요하다.
+2. **계산비용 증가**: 좌표하강으로 풀 수 있지만 정칙화 항이 둘이므로 능형이나 라쏘 단독보다 계산이 무겁다.
+
+## 실용적 응용
+
+- **유전체학과 생물정보학**: 수천 개의 유전자 발현 수준이 설명변수이고 상당수가 상관되어 있다. 엘라스틱넷은 다중공선성을 통제하면서 질병이나 형질과 연관된 유전자 집단을 식별할 수 있다.
+- **금융**: 여러 시장지수, 금리, 경제지표가 흔히 상관되어 있다. 자산가격이나 위험요인 예측을 위한 견고한 변수 부분집합을 고르는 데 도움이 된다.
+- **영상처리**: 영상에서 추출한 변수는 고차원이고 상관되어 있다. 예측 정확도를 유지하면서 차원을 줄이는 데 쓸 수 있다.
+
+## 요약
+
+엘라스틱넷은 능형과 라쏘의 강점을 결합한 강력하고 다재다능한 정칙화 기법이다. L1과 L2 벌점의 균형을 맞춤으로써 상관된 설명변수를 다루면서 변수선택을 수행하는 유연한 접근을 제공한다. 조정 과정이 더 복잡하지만, 고차원 자료에서 예측 정확도와 해석 가능성을 개선하는 능력 덕분에 값진 도구가 된다.
+
+## 연습문제
+
+**연습문제 1.**
+이 페이지의 목적함수와 [정식화 페이지](formulation.md)의 목적함수가 어떻게 다른지 비교하고, 배율의 차이가 실무에서 왜 문제가 되는지 설명하라.
+
+??? success "연습문제 1 풀이"
+    두 정식화를 나란히 놓는다.
+
+    | 출처 | 목적함수 |
+    |:---|:---|
+    | 이 페이지 | $\|\mathbf{y}-\mathbf{X}\mathbf{w}\|^2 + \lambda(\alpha\|\mathbf{w}\|_1 + (1-\alpha)\|\mathbf{w}\|_2^2)$ |
+    | 정식화 페이지 | $\frac{1}{2n}\|\mathbf{y}-\mathbf{X}\boldsymbol\beta\|^2 + \lambda(\alpha\|\boldsymbol\beta\|_1 + \frac{1-\alpha}{2}\|\boldsymbol\beta\|_2^2)$ |
+    | scikit-learn | 정식화 페이지와 같음(`alpha`$=\lambda$, `l1_ratio`$=\alpha$) |
+
+    **세 가지가 다르다.** 손실항의 $1/(2n)$ 유무, L2 항의 $1/2$ 유무, 그리고 그로부터 따라오는 $\lambda$의 척도다.
+
+    같은 해를 얻으려면 $\lambda$를 다음처럼 환산해야 한다.
+
+    $$
+    \lambda_{\text{이 페이지}} = 2n \cdot \lambda_{\text{sklearn}} \cdot \frac{\text{(해당 항의 계수)}}{1}
+    $$
+
+    **왜 실무에서 문제가 되는가.** 교재의 $\lambda = 1$을 그대로 `ElasticNet(alpha=1)`에 넣으면 $n = 100$일 때 벌점이 **200배 강해진다.** 모든 계수가 0이 되는 결과를 보고 "정칙화가 너무 세다"고 오해하기 쉽다.
+
+    **실무 규칙:** $\lambda$의 절대값을 문헌에서 가져오지 말고, 언제나 $\lambda_{\max}$를 기준으로 한 **상대 격자**($\lambda_{\max}$의 $10^{-3}$배에서 $1$배까지)를 쓰고 교차검증으로 고른다. 그러면 배율 규약이 무엇이든 자동으로 흡수된다.
 
 ---
 
-**Exercise 2.**
-State the key assumptions required by the method discussed here. How can each assumption be checked?
+**연습문제 2.**
+$\lambda_1, \lambda_2$ 매개화와 $\lambda, \alpha$ 매개화가 동등함을 보이고, 후자가 실무에서 선호되는 이유를 설명하라.
 
-??? success "Solution to Exercise 2"
-    The main assumptions typically include: (1) independence of observations -- verified by understanding the data collection process and checking for serial correlation; (2) distributional requirements (e.g., normality) -- checked with Q-Q plots and formal tests like Shapiro-Wilk; (3) equal variances (if applicable) -- assessed with boxplots and Levene's test. When assumptions are violated, consider robust alternatives, transformations, or nonparametric methods.
+??? success "연습문제 2 풀이"
+    $\lambda_1 = \lambda\alpha$, $\lambda_2 = \lambda(1-\alpha)$로 두면 두 벌점이 일치한다. 역방향은
 
----
+    $$
+    \lambda = \lambda_1 + \lambda_2, \qquad \alpha = \frac{\lambda_1}{\lambda_1 + \lambda_2}
+    $$
 
-**Exercise 3.**
-Work through a small numerical example illustrating the application of the technique from this section.
+    이다. 두 매개화는 $(0,\infty)^2$와 $(0,\infty)\times(0,1)$ 사이의 일대일 대응이므로 완전히 동등하다.
 
-??? success "Solution to Exercise 3"
-    A structured approach to applying this technique involves: (1) clearly stating the hypotheses or estimation goal; (2) verifying that the data meet the required assumptions; (3) computing the relevant test statistic, estimate, or model fit; (4) obtaining the p-value, confidence interval, or posterior distribution; (5) interpreting the result in the context of the original question. Following these steps systematically ensures a rigorous and reproducible analysis.
+    **그런데도 $(\lambda, \alpha)$가 선호되는 이유는 두 축이 서로 다른 일을 하기 때문이다.**
 
----
+    | 모수 | 조절하는 것 |
+    |:---|:---|
+    | $\lambda$ | 전체 정칙화 **강도** — 모형이 얼마나 단순해지는가 |
+    | $\alpha$ | 벌점의 **성격** — 희소성이냐 안정성이냐 |
 
-**Exercise 4.**
-Compare the approach from this section with an alternative method. When would you choose each?
+    $(\lambda_1, \lambda_2)$ 매개화에서는 두 모수가 강도와 성격에 **동시에** 영향을 준다. $\lambda_1$만 키우면 강도도 세지고 성격도 라쏘 쪽으로 간다. 격자탐색의 결과를 해석하기 어렵다.
 
-??? success "Solution to Exercise 4"
-    The method discussed here is appropriate when its assumptions hold and the sample size is sufficient for the asymptotic approximations to be accurate. Alternative approaches include: (1) nonparametric methods -- preferred when distributional assumptions are suspect; (2) bootstrap methods -- useful when analytical reference distributions are unavailable; (3) Bayesian methods -- valuable when incorporating prior information or when direct probability statements about parameters are desired. Running multiple approaches and comparing results provides a useful robustness check.
+    $(\lambda, \alpha)$에서는 축이 분리된다. 그래서 실무 절차가 단순해진다.
+
+    1. $\alpha$를 몇 개(예: $0.1, 0.5, 0.9, 1.0$)로 고정한다.
+    2. 각 $\alpha$에 대해 $\lambda_{\max}(\alpha)$부터 내려오는 경로를 계산한다.
+    3. 전체에서 CV 오차가 가장 낮은 $(\lambda, \alpha)$를 고른다.
+
+    2단계가 값싼 이유가 여기에 있다. $\alpha$가 고정되면 좌표하강의 온기 시작으로 전체 $\lambda$ 경로를 한 번에 계산할 수 있다. $(\lambda_1, \lambda_2)$ 격자에서는 이런 경로 구조를 쓸 수 없다.

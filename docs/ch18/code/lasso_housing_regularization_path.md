@@ -1,25 +1,28 @@
-# Lasso Housing Regularization Path
+# 주택가격 자료의 라쏘 정칙화 경로
 
-## Overview
+## 개요
 
-This page applies Lasso regression to real housing data (King County house sales), tracing the
-full regularization path from the null model ($\hat{\beta} = 0$) to the OLS solution. We use
-cross-validation to select the optimal $\lambda$, compare performance against OLS and Ridge,
-and interpret which housing features survive Lasso's variable selection.
+이 절에서는 실제 주택 자료(King County 주택 매매 자료)에 라쏘 회귀를 적용하여, 영모형
+($\hat{\beta} = 0$)에서 OLS 해까지 이어지는 정칙화 경로 전체를 추적한다. 교차검증으로 최적
+$\lambda$를 고르고, OLS 및 능형회귀와 성능을 비교하며, 라쏘의 변수선택에서 어떤 주택 특성이
+살아남는지 해석한다.
 
-## Problem Setup
+!!! note "자료 파일"
+    아래 코드는 `docs/data/house_sales.csv`(탭 구분)를 읽는다. 이 파일은 저장소에 포함되어
+    있지 않으므로, King County 주택 매매 자료를 내려받아 해당 경로에 두어야 실행된다.
 
-We model the adjusted sale price as a linear function of housing characteristics:
+## 문제 설정
+
+조정된 매매가를 주택 특성의 선형함수로 모형화한다.
 
 $$
 \text{AdjSalePrice} = \beta_0 + \beta_1 \cdot \text{SqFtTotLiving} + \beta_2 \cdot \text{SqFtLot} + \cdots + \varepsilon.
 $$
 
-The predictors include both numeric features (square footage, bathrooms, year built) and
-categorical features (property type) that are one-hot encoded. All features are standardized
-before fitting.
+설명변수에는 수치형 특성(연면적, 욕실 수, 건축연도)과 원-핫 부호화된 범주형 특성(부동산 유형)이
+모두 포함된다. 적합 전에 모든 특성을 표준화한다.
 
-## Code: Data Loading and Preparation
+## 코드: 자료 적재와 준비
 
 ```python
 import numpy as np
@@ -46,11 +49,10 @@ scaler = StandardScaler()
 X_scaled = pd.DataFrame(scaler.fit_transform(X), columns=X.columns)
 ```
 
-Standardization is essential because the $L_1$ penalty $\lambda\|\beta\|_1$ penalizes all
-coefficients equally; without it, predictors on different scales would be penalized
-disproportionately.
+$L_1$ 벌점 $\lambda\|\beta\|_1$은 모든 계수를 동등하게 벌하므로 표준화가 필수적이다. 표준화하지
+않으면 단위가 다른 변수들이 서로 다른 정도로 벌을 받게 된다.
 
-## Code: OLS Baseline
+## 코드: OLS 기준선
 
 ```python
 ols_model = LinearRegression().fit(X_scaled, y)
@@ -63,12 +65,11 @@ ols_r2 = r2_score(y, ols_pred)
 n_nonzero_ols = np.sum(np.abs(ols_model.coef_) > 1e-8)
 ```
 
-OLS retains all features with nonzero coefficients and serves as the unregularized benchmark.
+OLS는 모든 특성을 0이 아닌 계수로 유지하며, 정칙화하지 않은 기준선 역할을 한다.
 
-## Code: Regularization Path
+## 코드: 정칙화 경로
 
-We fit the Lasso over 100 logarithmically spaced $\lambda$ values and track how each
-coefficient evolves.
+로그 등간격 $\lambda$ 100개에 대해 라쏘를 적합하고 각 계수의 변화를 추적한다.
 
 ```python
 import matplotlib.pyplot as plt
@@ -85,10 +86,10 @@ lasso_coefs = np.array(lasso_coefs)
 n_features_selected = (np.abs(lasso_coefs) > 1e-8).sum(axis=1)
 ```
 
-The regularization path reveals the order in which features enter the model as $\lambda$
-decreases. Features that appear first are the strongest predictors.
+정칙화 경로는 $\lambda$가 작아짐에 따라 특성들이 어떤 순서로 모형에 들어오는지 보여준다. 먼저
+등장하는 특성일수록 강한 예측변수다.
 
-## Code: Cross-Validated Lambda Selection
+## 코드: 교차검증으로 람다 선택
 
 ```python
 lasso_cv = LassoCV(alphas=alphas, cv=5, random_state=42, max_iter=10000)
@@ -100,10 +101,9 @@ lasso_r2 = r2_score(y, lasso_pred)
 n_nonzero_lasso = np.sum(np.abs(lasso_cv.coef_) > 1e-8)
 ```
 
-The 5-fold CV procedure evaluates each $\lambda$ and selects the one with the lowest average
-MSE.
+5-겹 교차검증 절차가 각 $\lambda$를 평가하여 평균 MSE가 가장 낮은 값을 고른다.
 
-## Code: Model Comparison
+## 코드: 모형 비교
 
 ```python
 ridge_cv = RidgeCV(alphas=np.logspace(-2, 5, 100), cv=5)
@@ -114,118 +114,116 @@ ridge_rmse = np.sqrt(mean_squared_error(y, ridge_pred))
 ridge_r2 = r2_score(y, ridge_pred)
 ```
 
-## Visualizations
+## 시각화
 
-### Regularization Path Plot
+### 정칙화 경로 그림
 
-The left panel shows coefficient trajectories versus $\log_{10}(\lambda)$, with a vertical
-dashed line at the optimal $\lambda$. The right panel shows the number of active (nonzero)
-features at each $\lambda$, illustrating the model complexity--regularization tradeoff.
+왼쪽 패널은 $\log_{10}(\lambda)$에 대한 계수의 궤적을 그리고, 최적 $\lambda$ 위치에 세로
+점선을 표시한다. 오른쪽 패널은 각 $\lambda$에서 활성(0이 아닌) 특성의 개수를 보여주어 모형
+복잡도와 정칙화 사이의 절충을 드러낸다.
 
-### Cross-Validation Error Plot
+### 교차검증 오차 그림
 
-The CV RMSE curve (with $\pm 1$ standard deviation bands) is U-shaped. The minimum identifies
-the optimal $\lambda$ that balances bias and variance.
+$\pm 1$ 표준편차 띠를 곁들인 CV RMSE 곡선은 U자 모양이다. 최소점이 편향과 분산의 균형을
+맞추는 최적 $\lambda$를 알려 준다.
 
-### Model Comparison Plot
+### 모형 비교 그림
 
-Bar charts of RMSE and $R^2$ across OLS, Ridge, and Lasso show that:
+OLS, 능형회귀, 라쏘의 RMSE와 $R^2$ 막대그림에서 다음을 볼 수 있다.
 
-- All three models achieve similar $R^2$ on this dataset.
-- Lasso achieves comparable prediction accuracy with fewer features.
+- 세 모형 모두 이 자료에서는 비슷한 $R^2$를 낸다.
+- 라쏘는 더 적은 특성으로 비슷한 예측정확도를 달성한다.
 
-## Interpretation
+## 해석
 
-Key findings from the housing data analysis:
+주택 자료 분석에서 얻은 주요 결론은 다음과 같다.
 
-- **Feature selection.** Lasso selects a subset of the original features, setting the
-  coefficients of less important predictors (e.g., `YrRenovated`, `NbrLivingUnits`) to zero.
-- **Top predictors.** `BldgGrade` (building grade) and `SqFtTotLiving` (total living area)
-  typically have the largest absolute coefficients, confirming their importance in predicting
-  house prices.
-- **Ridge vs. Lasso.** Ridge retains all features with continuous shrinkage, while Lasso
-  performs automatic variable selection. On this moderately sized dataset, prediction accuracy
-  is similar.
-- **Practical benefit.** The Lasso model is more interpretable: a stakeholder can see which
-  features drive the price prediction without examining 13+ small coefficients.
+- **변수선택.** 라쏘는 원래 특성 중 일부만 선택하고, 덜 중요한 예측변수(예: `YrRenovated`,
+  `NbrLivingUnits`)의 계수를 0으로 만든다.
+- **주요 예측변수.** `BldgGrade`(건물 등급)와 `SqFtTotLiving`(총 거주면적)이 대개 절댓값이 가장
+  큰 계수를 가지며, 주택가격 예측에서의 중요성을 확인해 준다.
+- **능형회귀 대 라쏘.** 능형회귀는 모든 특성을 연속적으로 축소하여 유지하고, 라쏘는 자동으로
+  변수를 선택한다. 이 정도 크기의 자료에서는 예측정확도가 비슷하다.
+- **실무적 이점.** 라쏘 모형이 더 해석하기 좋다. 13개가 넘는 작은 계수를 일일이 들여다보지
+  않고도 어떤 특성이 가격 예측을 이끄는지 곧바로 알 수 있다.
 
-## Exercises
+!!! warning "표본 내 지표의 한계"
+    위 코드는 훈련에 쓴 자료로 RMSE와 $R^2$를 계산한다. 표본 내 지표는 낙관적으로 편향되므로
+    모형 비교의 근거로 삼기에는 부족하다. 연습문제 3에서 올바른 평가 전략을 다룬다.
 
-**Exercise 1.** Explain why the regularization path for Lasso is piecewise linear (as a
-function of $\lambda$), while the Ridge path is smooth. Hint: consider the KKT conditions for
-each method.
+## 연습문제
 
-??? success "Solution to Exercise 1"
+**연습문제 1.** 라쏘의 정칙화 경로는 왜 ($\lambda$의 함수로서) 조각별 선형인 반면 능형회귀의
+경로는 매끄러운지 설명하라. 힌트: 각 방법의 KKT 조건을 생각해 보라.
 
-    **Lasso:** The KKT (subgradient) conditions for the Lasso are
+??? success "연습문제 1 풀이"
+
+    **라쏘:** 라쏘의 KKT(하위기울기) 조건은
 
     $$
-    -\frac{1}{n}X_j^\top(y - X\hat{\beta}) + \lambda s_j = 0, \quad s_j \in \partial|\hat{\beta}_j|.
+    -\frac{1}{n}X_j^\top(y - X\hat{\beta}) + \lambda s_j = 0, \quad s_j \in \partial|\hat{\beta}_j|
     $$
 
-    For the active set $\mathcal{A} = \{j : \hat{\beta}_j \ne 0\}$, the sign $s_j = \text{sign}(\hat{\beta}_j)$ is fixed. The active coefficients then solve a linear system in
-    $\lambda$, so $\hat{\beta}_{\mathcal{A}}(\lambda)$ is linear in $\lambda$ between
-    consecutive breakpoints (where a variable enters or leaves the active set). This gives the
-    piecewise-linear structure.
+    이다. 활성집합 $\mathcal{A} = \{j : \hat{\beta}_j \ne 0\}$ 위에서는 부호
+    $s_j = \text{sign}(\hat{\beta}_j)$가 고정된다. 그러면 활성 계수들은 $\lambda$에 대한
+    선형계를 풀게 되므로, 변수가 활성집합에 들어오거나 빠지는 분기점 사이에서
+    $\hat{\beta}_{\mathcal{A}}(\lambda)$는 $\lambda$의 일차함수다. 여기서 조각별 선형 구조가
+    나온다.
 
-    **Ridge:** The closed-form solution $\hat{\beta}^{\text{ridge}} = (X^\top X + \lambda I)^{-1}X^\top y$ is a rational function of $\lambda$ (matrix inverse of a linear function of
-    $\lambda$), which is smooth (infinitely differentiable) for all $\lambda > 0$. No variables
-    are ever set to exactly zero, so there are no breakpoints. $\square$
-
----
-
-**Exercise 2.** In the housing dataset, `BldgGrade` and `SqFtTotLiving` are likely correlated.
-Discuss what would happen if you used Lasso versus Elastic Net for variable selection in the
-presence of this correlation.
-
-??? success "Solution to Exercise 2"
-
-    When `BldgGrade` and `SqFtTotLiving` are highly correlated, the Lasso solution is unstable:
-    small perturbations in the data can cause the Lasso to select one feature while dropping the
-    other. The Lasso might arbitrarily assign the entire effect to one predictor.
-
-    The Elastic Net (with $0 < \alpha < 1$) has a grouping property: if two predictors are
-    highly correlated and both truly relevant, the Elastic Net tends to either include both or
-    exclude both. The $L_2$ component ensures the solution is unique and stabilizes the
-    coefficient paths, leading to more reproducible feature selection.
-
-    In practical terms, if domain knowledge says both features matter, the Elastic Net is
-    preferable. If the goal is maximum sparsity and the two features are essentially
-    interchangeable, the Lasso's selection of one is acceptable. $\square$
+    **능형회귀:** 닫힌 형태의 해
+    $\hat{\beta}^{\text{ridge}} = (X^\top X + \lambda I)^{-1}X^\top y$는 $\lambda$의
+    일차함수인 행렬의 역행렬이므로 $\lambda$의 유리함수이고, 모든 $\lambda > 0$에서 매끄럽다
+    (무한히 미분가능하다). 어떤 변수도 정확히 0이 되지 않으므로 분기점 자체가 없다. $\square$
 
 ---
 
-**Exercise 3.** The script uses in-sample $R^2$ and RMSE for the model comparison. Explain why
-this is potentially misleading and propose a better evaluation strategy.
+**연습문제 2.** 주택 자료에서 `BldgGrade`와 `SqFtTotLiving`은 상관되어 있을 가능성이 크다. 이런
+상관이 있을 때 변수선택에 라쏘를 쓰는 경우와 엘라스틱넷을 쓰는 경우가 어떻게 다른지 논하라.
 
-??? success "Solution to Exercise 3"
+??? success "연습문제 2 풀이"
 
-    In-sample metrics evaluate the model on the same data used for training, so they are
-    optimistically biased. OLS has the most parameters and will always achieve the lowest
-    in-sample RSS (and highest in-sample $R^2$) among linear models. This makes OLS look
-    comparable to or better than regularized methods, even when it overfits.
+    `BldgGrade`와 `SqFtTotLiving`이 강하게 상관되어 있으면 라쏘 해는 불안정하다. 자료가
+    조금만 흔들려도 라쏘가 한 특성을 고르고 다른 특성을 버리는 결과가 뒤바뀔 수 있으며, 효과
+    전체를 한 예측변수에 임의로 몰아줄 수도 있다.
 
-    **Better strategy:** Use cross-validated metrics. For a fair comparison:
+    엘라스틱넷($0 < \alpha < 1$)은 그룹 성질을 갖는다. 강하게 상관된 두 예측변수가 모두 실제로
+    관련 있다면 엘라스틱넷은 둘 다 포함하거나 둘 다 배제하는 경향이 있다. $L_2$ 성분이 해의
+    유일성을 보장하고 계수 경로를 안정화하여 재현 가능한 변수선택을 낳는다.
 
-    1. Use the same $K$-fold splits for all methods.
-    2. Inside each fold, standardize using training-fold statistics only.
-    3. Report CV RMSE and CV $R^2$ (computed on held-out folds).
-
-    Alternatively, hold out a fixed test set (e.g., 20%) that is never used during model
-    selection or training. The test-set RMSE gives an unbiased estimate of generalization
-    performance.
-
-    On many datasets, regularized methods outperform OLS in CV metrics even if their in-sample
-    metrics are slightly worse. $\square$
+    실무적으로는, 두 특성이 모두 중요하다는 배경지식이 있다면 엘라스틱넷이 낫다. 최대한의
+    희소성이 목표이고 두 특성이 사실상 대체 가능하다면 라쏘가 하나만 고르는 것도 받아들일 만하다.
+    $\square$
 
 ---
 
-**Exercise 4.** Suppose you add 50 random noise features to the housing dataset (features
-drawn from $N(0,1)$ with no relation to the response). How would you expect the optimal
-$\lambda$ and the number of selected features to change for Lasso? Run the experiment and
-report your findings.
+**연습문제 3.** 위 스크립트는 모형 비교에 표본 내 $R^2$와 RMSE를 쓴다. 이것이 왜 오도할 수
+있는지 설명하고 더 나은 평가 전략을 제안하라.
 
-??? success "Solution to Exercise 4"
+??? success "연습문제 3 풀이"
+
+    표본 내 지표는 훈련에 쓴 바로 그 자료로 모형을 평가하므로 낙관적으로 편향된다. OLS는
+    모수가 가장 많아 선형모형 중 표본 내 잔차제곱합이 항상 가장 작고 표본 내 $R^2$가 가장 높다.
+    그래서 실제로는 과적합하고 있어도 정칙화 방법과 비슷하거나 더 나아 보인다.
+
+    **더 나은 전략:** 교차검증 지표를 쓴다. 공정한 비교를 위해서는,
+
+    1. 모든 방법에 같은 $K$-겹 분할을 쓴다.
+    2. 각 겹 안에서 훈련 겹의 통계량만으로 표준화한다.
+    3. 남겨 둔 겹에서 계산한 CV RMSE와 CV $R^2$를 보고한다.
+
+    또는 모형 선택과 훈련에 전혀 쓰지 않는 고정된 검정자료(예: 20%)를 떼어 둔다. 검정자료의
+    RMSE는 일반화 성능의 불편 추정치를 준다.
+
+    많은 자료에서 정칙화 방법은 표본 내 지표가 다소 나쁘더라도 CV 지표에서는 OLS를 능가한다.
+    $\square$
+
+---
+
+**연습문제 4.** 주택 자료에 $N(0,1)$에서 뽑은, 반응변수와 아무 관계 없는 잡음 특성 50개를
+추가한다고 하자. 라쏘의 최적 $\lambda$와 선택되는 특성 개수는 어떻게 바뀔 것으로 예상되는가?
+실험을 수행하고 결과를 보고하라.
+
+??? success "연습문제 4 풀이"
 
     ```python
     import numpy as np
@@ -253,37 +251,42 @@ report your findings.
     print(f"Noise features selected: {noise_selected}/50")
     ```
 
-    **Expected results:** The optimal $\lambda$ increases (more regularization needed to
-    counteract the noise dimensions). The Lasso should correctly set most or all of the 50 noise
-    features to zero, while retaining the genuinely predictive housing features. A few noise
-    features might slip through (false positives), especially if $p$ is large relative to $n$.
+    **예상 결과:** 잡음 차원을 상쇄하기 위해 더 강한 정칙화가 필요하므로 최적 $\lambda$는
+    커진다. 라쏘는 잡음 특성 50개의 대부분 또는 전부를 0으로 만들면서 실제로 예측력이 있는
+    주택 특성은 유지해야 한다. 다만 몇 개의 잡음 특성은 통과할 수 있다(위양성). 이 자료는
+    $n$이 $p$보다 훨씬 크므로 위양성이 많지는 않겠지만, $p$가 $n$에 가까워질수록 늘어난다.
     $\square$
 
 ---
 
-**Exercise 5.** Derive the relationship between the Lagrangian parameter $\lambda$ and the
-constraint bound $t$ in the equivalent constrained formulation
-$\min \|y - X\beta\|_2^2$ subject to $\|\beta\|_1 \le t$. Specifically, show that there is a
-one-to-one decreasing correspondence between $\lambda > 0$ and $t \in (0, \|\hat{\beta}^{\text{OLS}}\|_1)$.
+**연습문제 5.** 라그랑주 모수 $\lambda$와, 동치인 제약형
+$\min \|y - X\beta\|_2^2$ subject to $\|\beta\|_1 \le t$의 제약 경계 $t$ 사이의 관계를
+유도하라. 구체적으로 $\lambda > 0$과 $t \in (0, \|\hat{\beta}^{\text{OLS}}\|_1)$ 사이에 일대일
+감소 대응이 있음을 보여라.
 
-??? success "Solution to Exercise 5"
+??? success "연습문제 5 풀이"
 
-    The Lasso penalized problem and the constrained problem are related by Lagrangian duality.
-    Let $f(t) = \min_{\|\beta\|_1 \le t} \|y - X\beta\|_2^2$. Since $\|y - X\beta\|_2^2$ is
-    strictly convex in $\beta$ (assuming $X$ has full column rank) and the constraint
-    $\|\beta\|_1 \le t$ is convex, the KKT conditions guarantee that the penalized solution
-    with parameter $\lambda$ coincides with the constrained solution for some $t(\lambda)$.
+    라쏘의 벌점형 문제와 제약형 문제는 라그랑주 쌍대성으로 연결된다.
+    $f(t) = \min_{\|\beta\|_1 \le t} \|y - X\beta\|_2^2$라 하자. ($X$가 완전계수라는 가정
+    아래) $\|y - X\beta\|_2^2$는 $\beta$에 대해 강볼록이고 제약 $\|\beta\|_1 \le t$는
+    볼록이므로, KKT 조건에 의해 모수 $\lambda$의 벌점형 해는 어떤 $t(\lambda)$의 제약형 해와
+    일치한다.
 
-    By the KKT complementary slackness condition, $\lambda(\|\hat{\beta}\|_1 - t) = 0$. For
-    $\lambda > 0$, the constraint is active: $\|\hat{\beta}\|_1 = t$.
+    KKT의 상보여유 조건 $\lambda(\|\hat{\beta}\|_1 - t) = 0$에 의해, $\lambda > 0$이면 제약이
+    활성이다. 즉 $\|\hat{\beta}\|_1 = t$이다.
 
-    As $\lambda$ increases, the penalty more aggressively shrinks coefficients, so
-    $\|\hat{\beta}(\lambda)\|_1$ decreases. Since
-    $t(\lambda) = \|\hat{\beta}(\lambda)\|_1$, $t$ is a decreasing function of $\lambda$.
+    $\lambda$가 커지면 벌점이 계수를 더 강하게 축소하므로 $\|\hat{\beta}(\lambda)\|_1$은
+    감소한다. $t(\lambda) = \|\hat{\beta}(\lambda)\|_1$이므로 $t$는 $\lambda$의 감소함수다.
 
-    - At $\lambda = 0$: $t = \|\hat{\beta}^{\text{OLS}}\|_1$.
-    - As $\lambda \to \infty$: $t \to 0$.
+    - $\lambda = 0$일 때 $t = \|\hat{\beta}^{\text{OLS}}\|_1$.
+    - $\lambda \to \infty$일 때 $t \to 0$.
 
-    The correspondence is one-to-one because the Lasso path is continuous and strictly
-    decreasing in $\|\hat{\beta}\|_1$ (each coefficient magnitude is non-increasing in
-    $\lambda$, and at least one is strictly decreasing until it reaches zero). $\square$
+    대응이 일대일인 근거는 라쏘 경로가 연속이고 $\|\hat{\beta}(\lambda)\|_1$이 $\lambda$에 대해
+    (해가 0이 되기 전까지) 강감소한다는 데 있다.
+
+    !!! warning "흔한 오해"
+        $\|\hat{\beta}(\lambda)\|_1$은 $\lambda$에 대해 단조 비증가지만, **개별 계수의 절댓값은
+        단조가 아니다.** 어떤 변수가 활성집합에 새로 들어오면 다른 변수의 계수가 오히려
+        커지기도 한다. 그러므로 위 논증은 $L_1$ 노름 전체에 대해서만 성립하며, 좌표별 축소의
+        단조성을 주장해서는 안 된다.
+    $\square$
