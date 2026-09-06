@@ -1,89 +1,104 @@
-# Fligner-Killeen Test
+# Fligner-Killeen 검정
 
-The Fligner-Killeen test (1976) is the most robust of the variance homogeneity tests discussed in this chapter. It replaces the raw absolute deviations used in Levene's test with **ranks** of those deviations, and then converts the ranks into **normal scores**. By working entirely with ranks and normal scores, the test becomes nearly distribution-free, maintaining its nominal Type I error rate even under heavy-tailed or strongly skewed distributions.
+Fligner-Killeen 검정(1976)은 이 장에서 다루는 분산 동질성 검정 가운데 가장 로버스트하다. Levene 검정이 쓰는 원래의 절대편차를 그 편차들의 **순위**로 바꾸고, 다시 순위를 **정규점수**로 변환한다. 전 과정을 순위와 정규점수로만 처리하므로 검정이 거의 분포무관해지고, 꼬리가 두껍거나 강하게 치우친 분포에서도 명목 제1종 오류율을 유지한다.
 
-## Procedure
+## 절차
 
-The test proceeds in five steps:
+검정은 다섯 단계로 진행된다.
 
-**Step 1.** Compute the absolute deviations from the group medians:
+**1단계.** 집단중앙값으로부터의 절대편차를 계산한다.
 
 $$
 Z_{ij} = |X_{ij} - \tilde{X}_i|
 $$
 
-where $\tilde{X}_i$ is the median of group $i$. This is the same transformation used in the Brown-Forsythe test.
+여기서 $\tilde{X}_i$는 집단 $i$의 중앙값이다. Brown-Forsythe 검정에서 쓴 것과 같은 변환이다.
 
-**Step 2.** Rank all $N$ absolute deviations $Z_{ij}$ from smallest to largest. Let $R_{ij}$ denote the rank of $Z_{ij}$ among all $N$ values. Ties are resolved using the average rank.
+**2단계.** $N$개의 절대편차 $Z_{ij}$를 작은 것부터 큰 것까지 순위를 매긴다. $R_{ij}$를 전체 $N$개 값 중 $Z_{ij}$의 순위라 하자. 동점은 평균순위로 처리한다.
 
-**Step 3.** Convert the ranks into normal scores using the inverse normal (quantile) transformation:
+**3단계.** 역정규(분위수) 변환으로 순위를 정규점수로 바꾼다.
 
 $$
-a_{ij} = \mathcal{N}^{-1}\!\left(\frac{1 + R_{ij}/(N+1)}{2}\right)
+a_{ij} = \Phi^{-1}\!\left(\frac{1 + R_{ij}/(N+1)}{2}\right)
 $$
 
-where $\mathcal{N}^{-1}$ is the inverse of the standard normal CDF. The argument $(1 + R_{ij}/(N+1))/2$ maps the rank to a value in $(0.5, 1)$, and the inverse normal maps this to a positive score. Larger deviations receive larger normal scores.
+여기서 $\Phi^{-1}$은 표준정규 CDF의 역함수이다. 인자 $(1 + R_{ij}/(N+1))/2$는 순위를 $(0.5, 1)$ 구간의 값으로 보내고, 역정규가 이를 양의 점수로 보낸다. 편차가 클수록 큰 정규점수를 받는다.
 
-**Step 4.** Compute the group means of the normal scores:
+**4단계.** 정규점수의 집단평균을 계산한다.
 
 $$
 \bar{a}_i = \frac{1}{n_i}\sum_{j=1}^{n_i} a_{ij}, \qquad \bar{a} = \frac{1}{N}\sum_{i=1}^{k}\sum_{j=1}^{n_i} a_{ij}
 $$
 
-**Step 5.** Compute the test statistic:
+**5단계.** 검정통계량을 계산한다.
 
 $$
 \chi^2_{\text{FK}} = \frac{\sum_{i=1}^{k} n_i (\bar{a}_i - \bar{a})^2}{\frac{1}{N-1}\sum_{i=1}^{k}\sum_{j=1}^{n_i}(a_{ij} - \bar{a})^2}
 $$
 
-Under $H_0\colon \sigma_1^2 = \cdots = \sigma_k^2$, the statistic $\chi^2_{\text{FK}}$ follows approximately a chi-square distribution with $k - 1$ degrees of freedom.
+$H_0\colon \sigma_1^2 = \cdots = \sigma_k^2$ 아래에서 $\chi^2_{\text{FK}}$는 근사적으로 자유도 $k - 1$인 카이제곱분포를 따른다.
 
-## Hypotheses and Decision Rule
+## 가설과 판정규칙
 
 $$
 H_0\colon \sigma_1^2 = \sigma_2^2 = \cdots = \sigma_k^2
 $$
 
 $$
-H_1\colon \sigma_i^2 \neq \sigma_j^2 \text{ for at least one pair } i \neq j
+H_1\colon \sigma_i^2 \neq \sigma_j^2 \text{ (적어도 한 쌍의)} i \neq j
 $$
 
-Reject $H_0$ at significance level $\alpha$ if $\chi^2_{\text{FK}} > \chi^2_{1-\alpha,\, k-1}$.
+유의수준 $\alpha$에서 $\chi^2_{\text{FK}} > \chi^2_{1-\alpha,\, k-1}$이면 $H_0$을 기각한다.
 
-## Why Normal Scores Provide Robustness
+## 정규점수가 로버스트성을 주는 이유
 
-The use of ranks eliminates the influence of the actual magnitude of the deviations. An extremely large deviation receives a high rank but not an extremely large score, because the normal score function compresses the upper tail. This double layer of protection (median-based deviations followed by rank-based scores) makes the test robust to:
+순위를 쓰면 편차의 실제 크기가 미치는 영향이 사라진다. 극단적으로 큰 편차는 높은 순위를 받지만 극단적으로 큰 점수를 받지는 않는다. 정규점수 함수가 위쪽 꼬리를 압축하기 때문이다.
 
-- **Outliers:** A single extreme observation changes only one rank, with minimal effect on the overall test.
-- **Heavy tails:** Distributions like the $t_3$ or Cauchy produce occasional large deviations, but the normal score transformation bounds their influence.
-- **Skewness:** The median center and the rank transformation together neutralize the asymmetry.
+구체적으로 $N = 10$일 때 가장 큰 편차가 받는 점수는 $\Phi^{-1}((1 + 10/11)/2) = \Phi^{-1}(0.9545) = 1.691$로 유계이다. 원래 편차가 15이든 15,000이든 점수는 같다.
 
-!!! note "Comparison with Levene and Brown-Forsythe"
-    Levene's test works directly with absolute deviations from the mean. Brown-Forsythe improves robustness by using the median. Fligner-Killeen adds a third layer by converting deviations to ranks and then to normal scores. Each step trades a small amount of power under normality for greater robustness under non-normality.
+이 이중의 보호 장치(중앙값 기반 편차 + 순위 기반 점수) 덕분에 검정이 다음에 로버스트해진다.
 
-## Example
+- **이상점:** 극단 관측값 하나는 순위 하나만 바꾸므로 전체 검정에 미치는 영향이 최소이다.
+- **두꺼운 꼬리:** $t_3$나 Cauchy 같은 분포는 이따금 큰 편차를 만들지만 정규점수 변환이 그 영향을 제한한다.
+- **치우침:** 중앙값 중심과 순위 변환이 함께 비대칭을 중화한다.
 
-Consider two groups:
+!!! note "Levene, Brown-Forsythe와의 비교"
+    Levene 검정은 평균으로부터의 절대편차를 직접 쓴다. Brown-Forsythe는 중앙값을 써서 로버스트성을 높인다. Fligner-Killeen은 편차를 순위로, 다시 정규점수로 바꾸어 세 번째 보호층을 더한다. 각 단계는 정규성 아래에서 약간의 검정력을 내주고 비정규성 아래의 로버스트성을 얻는 교환이다.
 
-| Group 1 | Group 2 |
+## 예제
+
+두 집단을 생각하자.
+
+| 집단 1 | 집단 2 |
 |---|---|
 | 10, 12, 11, 13, 10 | 8, 25, 15, 30, 12 |
 
-**Step 1.** Medians: $\tilde{X}_1 = 11$, $\tilde{X}_2 = 15$.
+**1단계.** 중앙값: $\tilde{X}_1 = 11$, $\tilde{X}_2 = 15$.
 
-**Step 2.** Absolute deviations from medians:
+**2단계.** 중앙값으로부터의 절대편차:
 
-| Group 1 | Group 2 |
+| 집단 1 | 집단 2 |
 |---|---|
 | 1, 1, 0, 2, 1 | 7, 10, 0, 15, 3 |
 
-**Step 3.** Rank the 10 deviations: $\{0, 0, 1, 1, 1, 2, 3, 7, 10, 15\}$ with ranks $\{1.5, 1.5, 4, 4, 4, 6, 7, 8, 9, 10\}$ (average ranks for ties).
+**3단계.** 열 개의 편차 $\{0, 0, 1, 1, 1, 2, 3, 7, 10, 15\}$에 순위를 매긴다. 동점은 평균순위를 쓰므로 $\{1.5, 1.5, 4, 4, 4, 6, 7, 8, 9, 10\}$이다.
 
-**Step 4.** Convert ranks to normal scores using $a = \mathcal{N}^{-1}((1 + R/11)/2)$.
+**4단계.** $a = \Phi^{-1}((1 + R/11)/2)$로 순위를 정규점수로 바꾼다.
 
-**Step 5.** Compute the Fligner-Killeen statistic from the group means of the normal scores. Group 2 has larger deviations and therefore larger normal scores on average, producing a large $\chi^2_{\text{FK}}$ value.
+| 편차 | 0 | 0 | 1 | 1 | 1 | 2 | 3 | 7 | 10 | 15 |
+|---|---|---|---|---|---|---|---|---|---|---|
+| 순위 | 1.5 | 1.5 | 4 | 4 | 4 | 6 | 7 | 8 | 9 | 10 |
+| 점수 | 0.172 | 0.172 | 0.473 | 0.473 | 0.473 | 0.748 | 0.909 | 1.097 | 1.335 | 1.691 |
 
-## Python Implementation
+**5단계.** 집단별 정규점수 평균은 $\bar{a}_1 = 0.4676$, $\bar{a}_2 = 1.0406$이고 전체평균은 $\bar{a} = 0.7541$이다. 분모의 분산 추정값은 $V = 0.2524$이므로
+
+$$
+\chi^2_{\text{FK}} = \frac{5(0.4676 - 0.7541)^2 + 5(1.0406 - 0.7541)^2}{0.2524} = \frac{0.8206}{0.2524} = 3.252.
+$$
+
+$\chi^2_{0.95, 1} = 3.841$과 비교하면 $3.252 < 3.841$이므로 기각하지 못한다($p = 0.0714$).
+
+## Python 구현
 
 ```python
 import numpy as np
@@ -93,64 +108,194 @@ from scipy import stats
 group1 = [10, 12, 11, 13, 10]
 group2 = [8, 25, 15, 30, 12]
 
+print("variances:", round(np.var(group1, ddof=1), 2),
+      round(np.var(group2, ddof=1), 2))
+
 # Fligner-Killeen test
 stat, p_value = stats.fligner(group1, group2)
-print(f"Fligner-Killeen statistic: {stat:.4f}")
-print(f"P-value: {p_value:.4f}")
+print(f"Fligner-Killeen: {stat:.4f}, p = {p_value:.4f}")
 
-alpha = 0.05
-if p_value < alpha:
-    print("Reject H0: variances are significantly different.")
-else:
-    print("Fail to reject H0: no significant difference in variances.")
+# Comparison
+s_bf, p_bf = stats.levene(group1, group2, center='median')
+s_b, p_b = stats.bartlett(group1, group2)
+print(f"Brown-Forsythe:  {s_bf:.4f}, p = {p_bf:.4f}")
+print(f"Bartlett:        {s_b:.4f}, p = {p_b:.4f}")
 ```
 
-## Strengths and Limitations
+출력:
 
-**Strengths:**
+```text
+variances: 1.7 84.5
+Fligner-Killeen: 3.2515, p = 0.0714
+Brown-Forsythe:  5.1429, p = 0.0531
+Bartlett:        9.1010, p = 0.0026
+```
 
-- Most robust test for variance homogeneity among the classical methods
-- Controls Type I error rate well across a wide range of distributions
-- Particularly effective for heavy-tailed and contaminated data
-- Uses a chi-square reference distribution, which is simple and well-tabulated
+세 검정의 $p$값이 로버스트성의 순서와 정확히 반대이다. Bartlett($0.0026$) < Brown-Forsythe($0.0531$) < Fligner-Killeen($0.0714$). 로버스트할수록 이 자료에서 보수적이다.
 
-**Limitations:**
+표본분산의 비가 $84.5/1.7 = 50$배인데도 로버스트 검정들이 기각하지 못한다는 점에 주목하라. 집단 2의 산포가 대부분 극단값 두 개(8과 30)에서 오는데, 순위·중앙값 기반 검정은 그것을 "관측값 두 개가 멀다"로만 셀 뿐 "50배 멀다"로 세지 않기 때문이다. 각 집단 $n = 5$로는 관측값 두 개의 정보가 유의성에 도달하지 못한다.
 
-- Lower power than Levene's or Brown-Forsythe when data are normal or nearly normal
-- More computationally involved than other tests (though negligible with modern software)
-- Less commonly implemented in basic statistical software compared to Levene's test
+## 강점과 한계
 
-The Fligner-Killeen test is the preferred choice when the analyst suspects heavy contamination or has no confidence in the normality of the data. For routine analyses where the distribution is mildly non-normal, the Brown-Forsythe test offers a better power-robustness tradeoff.
+**강점:**
+
+- 고전적 방법 가운데 분산 동질성에 대해 가장 로버스트하다
+- 넓은 범위의 분포에서 제1종 오류율을 잘 조절한다
+- 꼬리가 두껍거나 오염된 자료에 특히 효과적이다
+- 카이제곱 기준분포를 쓰므로 단순하고 표가 잘 정비되어 있다
+
+**한계:**
+
+- 자료가 정규이거나 거의 정규일 때 Levene이나 Brown-Forsythe보다 검정력이 낮다
+- 다른 검정보다 계산이 복잡하다(현대 소프트웨어에서는 무시할 수준)
+- 기초 통계 소프트웨어에서 Levene 검정만큼 널리 구현되어 있지는 않다
+
+Fligner-Killeen 검정은 오염이 심하다고 의심되거나 자료의 정규성을 전혀 신뢰할 수 없을 때 선호되는 선택이다. 분포가 가볍게 비정규인 일상적 분석에서는 Brown-Forsythe 검정이 검정력과 로버스트성의 절충이 더 낫다.
 
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Describe the main concept of Fligner-Killeen Test and explain why it matters for statistical practice.
+**연습문제 1.**
+정규점수 변환 $a = \Phi^{-1}((1 + R/(N+1))/2)$이 왜 양수만 만들어 내며, 왜 위쪽 꼬리를 압축하는지 설명하라. $N = 100$일 때 가장 큰 점수를 계산하라.
 
-??? success "Solution to Exercise 1"
-    Fligner-Killeen Test is a core topic in statistics that provides tools for drawing reliable inferences from data. It matters because proper application ensures valid conclusions, correctly quantified uncertainty, and appropriate handling of the assumptions that underpin the method. Practitioners who understand this concept can avoid common pitfalls and choose the right analytical approach for their data.
+??? success "연습문제 1 풀이"
+    **양수인 이유.** $R$이 $1$부터 $N$까지의 순위이므로 $R/(N+1) \in (0, 1)$이다. 따라서
+
+    $$
+    \frac{1 + R/(N+1)}{2} \in \left(\frac{1}{2}, 1\right)
+    $$
+
+    이고 $\Phi^{-1}$이 $(1/2, 1)$을 $(0, \infty)$로 보내므로 모든 점수가 양수이다.
+
+    이는 의도된 설계이다. 우리가 다루는 것은 **절대편차**이므로 크기만 문제가 되고 부호는 없다. 순위가 클수록(편차가 클수록) 점수가 커진다.
+
+    변환이 정규분포의 **오른쪽 절반**을 쓰는 절반정규(half-normal) 점수라는 점도 이해에 도움이 된다. 정규성 아래에서 $|X - \mu|/\sigma$가 절반정규를 따르므로 이 점수화가 자연스럽다.
+
+    **위쪽 꼬리 압축.** 점수는 $\Phi^{-1}$의 값이므로 최대 순위 $R = N$에서
+
+    $$
+    a_{\max} = \Phi^{-1}\!\left(\frac{1 + N/(N+1)}{2}\right).
+    $$
+
+    $N = 10$이면 $\Phi^{-1}(0.9545) = 1.691$, $N = 100$이면
+
+    $$
+    \Phi^{-1}\!\left(\frac{1 + 100/101}{2}\right) = \Phi^{-1}(0.99505) = 2.579.
+    $$
+
+    ```python
+    from scipy import stats
+
+    for N in [10, 50, 100, 1000, 10000]:
+        a_max = stats.norm.ppf((1 + N / (N + 1)) / 2)
+        print(f"N = {N:>6}: max score = {a_max:.4f}")
+    ```
+
+    출력:
+
+    ```text
+    N =     10: max score = 1.6906
+    N =     50: max score = 2.3338
+    N =    100: max score = 2.5793
+    N =   1000: max score = 3.2908
+    N =  10000: max score = 3.8906
+    ```
+
+    최대 점수가 $N$에 따라 $\sqrt{2\ln N}$ 규모로 아주 느리게만 커진다. **원자료의 편차가 얼마나 크든 점수는 이 상한을 넘지 못한다.** 이것이 이상점의 영향을 원천적으로 차단하는 메커니즘이다.
+
+    반면 Bartlett 검정에서는 이상점 하나가 $S_i^2$을 통해 무제한으로 통계량을 키울 수 있다. 유계와 무계의 차이가 로버스트성의 본질이다. $\square$
 
 ---
 
-**Exercise 2.**
-State the key assumptions required by the method discussed here. How can each assumption be checked?
+**연습문제 2.**
+세 검정(Bartlett, Brown-Forsythe, Fligner-Killeen)의 크기와 검정력을 오염된 자료에서 비교하는 모의실험을 수행하라.
 
-??? success "Solution to Exercise 2"
-    The main assumptions typically include: (1) independence of observations -- verified by understanding the data collection process and checking for serial correlation; (2) distributional requirements (e.g., normality) -- checked with Q-Q plots and formal tests like Shapiro-Wilk; (3) equal variances (if applicable) -- assessed with boxplots and Levene's test. When assumptions are violated, consider robust alternatives, transformations, or nonparametric methods.
+??? success "연습문제 2 풀이"
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    rng = np.random.default_rng(9)
+    n, R, alpha = 30, 5000, 0.05
+
+    def contaminated(scale):
+        """90% N(0, scale^2) + 10% N(0, (5*scale)^2)"""
+        u = rng.random(n)
+        return np.where(u < 0.9, rng.normal(0, scale, n),
+                        rng.normal(0, 5 * scale, n))
+
+    for label, scales in [("H0 (size)", (1, 1, 1)),
+                          ("H1 (power)", (1, 1, 2))]:
+        cb = cbf = cfk = 0
+        for _ in range(R):
+            g = [contaminated(s) for s in scales]
+            cb += stats.bartlett(*g)[1] < alpha
+            cbf += stats.levene(*g, center='median')[1] < alpha
+            cfk += stats.fligner(*g)[1] < alpha
+        print(f"{label:>12}: Bartlett {cb/R:.4f}, "
+              f"BF {cbf/R:.4f}, FK {cfk/R:.4f}")
+    ```
+
+    출력:
+
+    ```text
+       H0 (size): Bartlett 0.6602, BF 0.0372, FK 0.0414
+      H1 (power): Bartlett 0.8730, BF 0.5490, FK 0.7170
+    ```
+
+    오염 정규분포는 90%가 $\mathcal{N}(0, s^2)$, 10%가 $\mathcal{N}(0, 25s^2)$인 혼합이다. 초과첨도가 크지만 **모든 집단의 오염 구조가 같으므로** 첫 줄에서는 $H_0$이 참이다.
+
+    | | Bartlett | Brown-Forsythe | Fligner-Killeen |
+    |---|---|---|---|
+    | 크기 ($H_0$) | **0.660** | 0.037 | 0.041 |
+    | 기각률 ($H_1$) | 0.873 | 0.549 | 0.717 |
+
+    - **크기($H_0$).** Bartlett의 실제 크기가 **0.660**이다. 등분산인 자료의 3분의 2에서 기각한다. 명목값의 13배로, 15.4절 표의 오염 정규 결과(0.335)보다도 훨씬 나쁘다(거기서는 오염 배수가 3이었고 여기서는 5이다). Brown-Forsythe(0.037)와 Fligner-Killeen(0.041)은 명목값 근처를 유지한다.
+    - **기각률($H_1$).** 세 검정 모두 올라간다. Bartlett이 0.873으로 가장 높지만, **크기가 0.660인 검정의 기각률 0.873은 검정력이 아니다.** 이미 등분산에서도 0.660을 기각하던 검정이 0.873으로 오른 것은 실질적 개선이 거의 없다.
+
+    - **로버스트 검정끼리의 비교가 의미 있다.** Fligner-Killeen(0.717)이 Brown-Forsythe(0.549)보다 뚜렷하게 강력하다. 두 검정 모두 크기가 0.04 근처로 통제되어 있으므로 이 비교는 공정하다. **오염이 심한 자료에서는 Fligner-Killeen이 Brown-Forsythe보다 낫다**는, 이 장의 일반적 권고와 반대되는 결과이다. 순위 변환이 오염된 관측값의 영향을 제한하면서도 산포 차이 신호는 보존하기 때문이다.
+
+    **핵심.** 크기가 통제되지 않은 검정의 검정력을 비교하는 것은 무의미하다. Bartlett의 기각률이 가장 높더라도 그것이 더 좋은 검정임을 뜻하지 않는다. 공정한 비교를 하려면 크기가 비슷한 검정끼리 비교하거나, 모의실험으로 각 검정의 임계값을 실제 크기가 0.05가 되도록 조정한 뒤 검정력을 비교해야 한다(크기 보정 검정력). $\square$
 
 ---
 
-**Exercise 3.**
-Work through a small numerical example illustrating the application of the technique from this section.
+**연습문제 3.**
+본문 예제에서 표본분산 비가 50배인데도 Fligner-Killeen이 기각하지 못했다. 이것이 이 검정의 결함인지, 아니면 올바른 동작인지 논하라.
 
-??? success "Solution to Exercise 3"
-    A structured approach to applying this technique involves: (1) clearly stating the hypotheses or estimation goal; (2) verifying that the data meet the required assumptions; (3) computing the relevant test statistic, estimate, or model fit; (4) obtaining the p-value, confidence interval, or posterior distribution; (5) interpreting the result in the context of the original question. Following these steps systematically ensures a rigorous and reproducible analysis.
+??? success "연습문제 3 풀이"
+    집단 2는 $\{8, 12, 15, 25, 30\}$이다. 중앙값 15로부터의 편차는 $\{7, 3, 0, 10, 15\}$이다.
+
+    **Fligner-Killeen이 보는 것.** 전체 10개 편차 중 집단 2가 상위 순위 $\{6, 7, 8, 9, 10\}$ 가운데 $\{7, 8, 9, 10\}$의 네 개를 차지한다(순위 6은 집단 1의 편차 2). 곧 집단 2가 큰 편차를 더 많이 갖고 있다는 **순위 정보**만 본다.
+
+    **왜 그것으로 부족한가.** $n_1 = n_2 = 5$일 때, 집단 2가 상위 순위를 독점하는 극단적 배열이 등분산 아래에서도 우연히 나올 확률이 무시할 수 없다. 순위 정보만으로는 $\binom{10}{5} = 252$가지 배열밖에 구별하지 못하므로, 가장 극단적인 배열이라도 $p$값이 $1/252 = 0.004$보다 작아질 수 없다. 여기서는 완전한 분리가 아니므로 $p = 0.071$이 나온다.
+
+    **결함인가 올바른 동작인가.** 둘 다 아니고 **의도된 교환**이다.
+
+    - 순위만 쓰기로 한 순간 크기 정보를 버렸다. 그 대가로 분포 모양에 무관한 타당성을 얻었다.
+    - 크기 정보가 진짜라면(집단 2가 정말 50배 산포가 크다면) Fligner-Killeen은 그것을 놓친다. 검정력의 손실이다.
+    - 크기 정보가 이상점 때문이라면(집단 2가 사실은 같은 산포인데 극단값 두 개가 있는 것이라면) Bartlett의 $p = 0.0026$이 거짓 경보이다.
+
+    **실무적 결론.** $n = 5$로는 어떤 검정으로도 이 질문에 답할 수 없다. 표본이 이렇게 작을 때는 형식적 검정보다 자료를 직접 보고 판단하는 편이 낫다. 집단 2의 8과 30이 타당한 관측값인지 확인하는 것이 어떤 $p$값보다 유용하다. $\square$
 
 ---
 
-**Exercise 4.**
-Compare the approach from this section with an alternative method. When would you choose each?
+**연습문제 4.**
+Fligner-Killeen 검정통계량의 분모가 $\frac{1}{N-1}\sum_{ij}(a_{ij} - \bar{a})^2$인 이유를 설명하라. 왜 집단내 변동이 아니라 전체 변동을 쓰는가?
 
-??? success "Solution to Exercise 4"
-    The method discussed here is appropriate when its assumptions hold and the sample size is sufficient for the asymptotic approximations to be accurate. Alternative approaches include: (1) nonparametric methods -- preferred when distributional assumptions are suspect; (2) bootstrap methods -- useful when analytical reference distributions are unavailable; (3) Bayesian methods -- valuable when incorporating prior information or when direct probability statements about parameters are desired. Running multiple approaches and comparing results provides a useful robustness check.
+??? success "연습문제 4 풀이"
+    Levene과 Brown-Forsythe는 분산분석의 F 통계량 형태이므로 분모에 **집단내** 평균제곱을 쓴다. Fligner-Killeen은 카이제곱 형태이므로 **전체** 분산을 쓴다. 이 차이에는 이유가 있다.
+
+    **순위 변환이 주변분포를 고정한다.** 자료가 무엇이든 $N$개 편차의 순위는 항상 $\{1, 2, \ldots, N\}$의 순열이다. 따라서 정규점수의 전체 집합 $\{a_{(1)}, \ldots, a_{(N)}\}$도 **자료와 무관하게 고정**되어 있다. 바뀌는 것은 어느 점수가 어느 집단에 배정되는가뿐이다.
+
+    이는 순열검정의 구조이다. $H_0$ 아래에서 모든 배정이 동등하게 가능하다면, $\bar{a}_i$의 분산은 유한모집단 표집 이론으로 정확히 계산된다.
+
+    $$
+    \operatorname{Var}(\bar{a}_i) = \frac{V}{n_i}\cdot\frac{N - n_i}{N - 1}, \qquad V = \frac{1}{N-1}\sum_{ij}(a_{ij} - \bar{a})^2.
+    $$
+
+    여기서 $V$가 **고정된 점수 집합의 분산**이며, 이것이 분모에 등장하는 값이다. 자료에서 추정하는 양이 아니라 알려진 상수에 가깝다.
+
+    **왜 이것이 유리한가.** 분산분석의 F 통계량은 분자와 분모가 모두 확률변수이므로 그 비가 F 분포를 따른다. Fligner-Killeen은 분모가 사실상 상수이므로 분자만 확률적이고, 분자가 근사적으로 정규인 $\bar{a}_i$들의 제곱합이므로 곧바로 카이제곱이 된다. 자유도를 추정할 필요도, F 분포를 참조할 필요도 없다.
+
+    **부수 효과.** 이 구조 덕분에 $N$이 작아도 카이제곱 근사가 비교적 정확하다. 분모의 변동에서 오는 오차가 없기 때문이다. 다만 $\bar{a}_i$의 정규근사는 여전히 필요하므로 $n_i$가 아주 작으면 정확한 순열 $p$값을 쓰는 편이 낫다. $\square$

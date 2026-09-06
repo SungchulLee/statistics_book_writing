@@ -1,110 +1,226 @@
-# Assumptions Common to Variance Tests
+# 분산 검정의 공통 가정
 
-Every variance test discussed in this chapter rests on a small set of shared assumptions. Before examining each test individually, it is worth understanding these assumptions together, because violating any one of them affects the validity of the resulting $p$-values and confidence intervals. The severity of the consequences depends on which assumption is broken and which test is used.
+이 장에서 다루는 모든 분산 검정은 몇 가지 공통 가정 위에 서 있다. 각 검정을 개별적으로 살피기 전에 이 가정들을 함께 이해해 두는 것이 좋다. 어느 하나라도 위배되면 결과인 $p$값과 신뢰구간의 타당성이 훼손되기 때문이다. 결과의 심각성은 어떤 가정이 깨졌는지, 어떤 검정을 쓰는지에 달려 있다.
 
-## Independence
+## 독립성
 
-The most fundamental requirement is that the observations within each sample are **independent**. Formally, for a sample $X_1, X_2, \ldots, X_n$, we require
+가장 근본적인 요구조건은 각 표본 안의 관측값이 **독립**이라는 것이다. 형식적으로 표본 $X_1, X_2, \ldots, X_n$에 대해
 
 $$
-\operatorname{Cov}(X_i, X_j) = 0 \quad \text{for all } i \neq j
+\operatorname{Cov}(X_i, X_j) = 0 \quad \text{(모든 } i \neq j \text{에 대해)}
 $$
 
-Independence is necessary because the sampling distribution of the sample variance $S^2$ is derived under the assumption that the squared deviations $(X_i - \bar{X})^2$ behave like independent (or nearly independent) random variables. When observations are correlated, the effective sample size is smaller than $n$, and the distribution of $(n-1)S^2/\sigma^2$ no longer follows a chi-square distribution with $n - 1$ degrees of freedom.
+독립성이 필요한 이유는 표본분산 $S^2$의 표집분포가 제곱편차 $(X_i - \bar{X})^2$이 독립인(또는 거의 독립인) 확률변수처럼 행동한다는 가정 아래에서 유도되기 때문이다. 관측값이 상관되어 있으면 실효 표본크기가 $n$보다 작아지고, $(n-1)S^2/\sigma^2$의 분포가 더 이상 자유도 $n-1$인 카이제곱분포를 따르지 않는다.
 
-**Common violations.** Time series data, clustered data (students within classrooms), and repeated measurements on the same subject all introduce dependence. When dependence is present, standard variance tests produce inflated Type I error rates because they underestimate the true uncertainty in $S^2$.
+**흔한 위반.** 시계열 자료, 군집 자료(교실 안의 학생들), 같은 대상에 대한 반복측정은 모두 종속성을 들여온다. 종속성이 있으면 표준 분산 검정은 $S^2$의 참된 불확실성을 과소평가하므로 제1종 오류율이 부풀려진다.
 
-## Normality
+## 정규성
 
-The chi-square test, F-test, and Bartlett's test all assume that the underlying population follows a normal distribution:
+카이제곱 검정, F 검정, Bartlett 검정은 모두 바탕 모집단이 정규분포를 따른다고 가정한다.
 
 $$
 X_i \sim N(\mu, \sigma^2)
 $$
 
-This assumption is needed because the exact result
+이 가정이 필요한 이유는 다음의 정확한 결과가
 
 $$
 \frac{(n-1)S^2}{\sigma^2} \sim \chi^2_{n-1}
 $$
 
-holds only when $X_1, \ldots, X_n$ are i.i.d. normal. The chi-square distribution emerges from the fact that a sum of $n - 1$ independent squared standard normal variables has a $\chi^2_{n-1}$ distribution. If the population is not normal, the distribution of $(n-1)S^2/\sigma^2$ differs from $\chi^2_{n-1}$, and the critical values used in the test are no longer correct.
+$X_1, \ldots, X_n$이 i.i.d. 정규일 때만 성립하기 때문이다. 카이제곱분포는 독립인 표준정규 제곱 $n-1$개의 합이 $\chi^2_{n-1}$을 따른다는 사실에서 나온다. 모집단이 정규가 아니면 $(n-1)S^2/\sigma^2$의 분포가 $\chi^2_{n-1}$과 달라지고 검정에 쓰인 임계값이 더 이상 옳지 않다.
 
-**Sensitivity varies by test.** The chi-square and F-tests are highly sensitive to non-normality, particularly to heavy tails and skewness. Bartlett's test is even more sensitive. The robust tests in Section 15.5 (Levene, Brown-Forsythe, Fligner-Killeen) are designed to work under much weaker distributional assumptions.
+**검정마다 민감도가 다르다.** 카이제곱 검정과 F 검정은 비정규성, 특히 두꺼운 꼬리와 치우침에 매우 민감하다. Bartlett 검정은 더욱 민감하다. 15.5절의 로버스트 검정(Levene, Brown-Forsythe, Fligner-Killeen)은 훨씬 약한 분포 가정 아래에서 작동하도록 설계되었다.
 
-!!! warning "Normality Matters More for Variance Tests Than for Mean Tests"
-    The central limit theorem ensures that $\bar{X}$ is approximately normal for moderate $n$, making $t$-tests reasonably robust to non-normality. No analogous result rescues variance tests. The distribution of $S^2$ converges to normality much more slowly, and its sensitivity to the fourth moment (kurtosis) of the population means that even moderate non-normality can distort the chi-square or F-test.
+!!! warning "분산 검정에서는 평균 검정보다 정규성이 훨씬 중요하다"
+    중심극한정리는 $n$이 어느 정도만 되어도 $\bar{X}$가 근사적으로 정규임을 보장하므로 $t$ 검정은 비정규성에 상당히 로버스트하다. 분산 검정에는 이에 상응하는 구원책이 없다. $S^2$의 분포는 정규로 훨씬 느리게 수렴하며, 모집단의 **4차 적률(첨도)**에 민감하기 때문에 중간 정도의 비정규성만으로도 카이제곱이나 F 검정이 왜곡된다.
 
-## Random Sampling
+## 확률표집
 
-The observations must be drawn as a random sample from the population of interest. Each observation $X_i$ should be identically distributed with the same variance $\sigma^2$. If the sampling mechanism introduces systematic biases (e.g., convenience sampling, voluntary response), the sample variance $S^2$ may not be a meaningful estimator of the true population variance.
+관측값은 관심 모집단에서 확률표본으로 뽑혀야 한다. 각 관측값 $X_i$는 같은 분산 $\sigma^2$을 갖는 동일한 분포를 따라야 한다. 표집 기제가 체계적 편향을 들여오면(편의표집, 자발적 응답 등) 표본분산 $S^2$이 참 모분산의 의미 있는 추정량이 되지 못할 수 있다.
 
-For multi-sample tests (the F-test, Bartlett's test, and the robust tests), an additional requirement is that the $k$ samples are drawn independently of one another:
+다표본 검정(F 검정, Bartlett 검정, 로버스트 검정들)에서는 $k$개의 표본이 서로 독립적으로 추출되어야 한다는 요구조건이 추가된다.
 
 $$
 X_{ij} \sim F_j(\mu_j, \sigma_j^2), \quad i = 1, \ldots, n_j, \quad j = 1, \ldots, k
 $$
 
-where the samples from different groups are mutually independent.
+여기서 서로 다른 집단의 표본들은 상호 독립이다.
 
-## Consequences of Violations
+## 위반의 결과
 
-The table below summarizes how each assumption violation affects the main variance tests:
+아래 표는 각 가정 위반이 주요 분산 검정에 미치는 영향을 요약한다.
 
-| Violation | Chi-square / F-test | Bartlett's test | Levene / Brown-Forsythe |
+| 위반 | 카이제곱 / F 검정 | Bartlett 검정 | Levene / Brown-Forsythe |
 |---|---|---|---|
-| Dependence | Inflated Type I error | Inflated Type I error | Inflated Type I error |
-| Non-normality (moderate) | Moderate size distortion | Severe size distortion | Mild or no distortion |
-| Non-normality (heavy tails) | Severe size distortion | Very severe distortion | Mild distortion |
-| Non-random sampling | Biased inference | Biased inference | Biased inference |
+| 종속성 | 제1종 오류 팽창 | 제1종 오류 팽창 | 제1종 오류 팽창 |
+| 비정규성 (중간) | 중간 정도의 크기 왜곡 | 심각한 크기 왜곡 | 경미하거나 없음 |
+| 비정규성 (두꺼운 꼬리) | 심각한 크기 왜곡 | 매우 심각한 왜곡 | 경미한 왜곡 |
+| 비확률표집 | 편향된 추론 | 편향된 추론 | 편향된 추론 |
 
-"Size distortion" means the actual Type I error rate differs from the nominal significance level $\alpha$. A test with nominal $\alpha = 0.05$ that rejects 15% of the time under $H_0$ has severe size distortion.
+"크기 왜곡"이란 실제 제1종 오류율이 명목 유의수준 $\alpha$와 다름을 뜻한다. 명목 $\alpha = 0.05$인 검정이 $H_0$ 아래에서 15%의 확률로 기각한다면 심각한 크기 왜곡이 있는 것이다.
 
-## Checking the Assumptions
+## 가정 확인하기
 
-Before running a variance test, the analyst should verify the assumptions using the tools from earlier chapters:
+분산 검정을 수행하기 전에 분석자는 앞의 장들에서 배운 도구로 가정을 검증해야 한다.
 
-1. **Independence.** Review the study design. If data are collected over time or within clusters, consider using a test designed for dependent data or adjusting the degrees of freedom.
-2. **Normality.** Use the graphical and formal methods from Chapter 14: Q-Q plots, the Shapiro-Wilk test, and the Anderson-Darling test. If the data are clearly non-normal, choose a robust test from Section 15.5 or a bootstrap approach from Section 15.6.
-3. **Random sampling.** Evaluate the data collection process. Non-random sampling cannot be corrected by a statistical test; it requires careful judgment about the population to which conclusions apply.
+1. **독립성.** 연구 설계를 검토한다. 자료가 시간에 걸쳐 또는 군집 안에서 수집되었다면 종속 자료를 위한 검정을 쓰거나 자유도를 조정하는 것을 고려한다.
+2. **정규성.** 14장의 시각적·형식적 방법을 쓴다. Q-Q 그림, Shapiro-Wilk 검정, Anderson-Darling 검정. 자료가 명백히 비정규이면 15.5절의 로버스트 검정이나 15.6절의 붓스트랩 접근을 고른다.
+3. **확률표집.** 자료 수집 과정을 평가한다. 비확률표집은 통계검정으로 교정할 수 없으며, 결론이 적용되는 모집단이 무엇인지에 대한 신중한 판단이 필요하다.
 
-??? example "Quick Diagnostic Checklist"
-    Before applying any variance test in this chapter, verify the following:
+??? example "빠른 진단 점검표"
+    이 장의 분산 검정을 적용하기 전에 다음을 확인하라.
 
-    - [ ] Observations within each group are independent
-    - [ ] Data collection used random sampling or a randomized experiment
-    - [ ] If using the chi-square test, F-test, or Bartlett's test: normality has been checked
-    - [ ] If normality is questionable: use Levene's, Brown-Forsythe, or Fligner-Killeen instead
+    - [ ] 각 집단 안의 관측값이 독립인가
+    - [ ] 자료 수집이 확률표집 또는 무작위 실험에 기반했는가
+    - [ ] 카이제곱, F, Bartlett 검정을 쓴다면 정규성을 확인했는가
+    - [ ] 정규성이 의심스럽다면 Levene, Brown-Forsythe, Fligner-Killeen을 대신 쓰고 있는가
 
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Describe the main concept of Assumptions Common to Variance Tests and explain why it matters for statistical practice.
+**연습문제 1.**
+$\operatorname{Var}(S^2) \approx \sigma^4(\gamma_2 + 2)/n$임을 이용하여, 정규성 아래에서 이 식이 $2\sigma^4/n$으로 환원됨을 보이고, 여러 분포에 대해 정규 대비 팽창 인자를 계산하라.
 
-??? success "Solution to Exercise 1"
-    Assumptions Common to Variance Tests is a core topic in statistics that provides tools for drawing reliable inferences from data. It matters because proper application ensures valid conclusions, correctly quantified uncertainty, and appropriate handling of the assumptions that underpin the method. Practitioners who understand this concept can avoid common pitfalls and choose the right analytical approach for their data.
+??? success "연습문제 1 풀이"
+    일반적인 결과는
+
+    $$
+    \operatorname{Var}(S^2) \approx \frac{\mu_4 - \sigma^4}{n}
+    $$
+
+    이며 $\mu_4 = \mathbb{E}[(X-\mu)^4]$은 4차 중심적률이다. 초과첨도의 정의 $\gamma_2 = \mu_4/\sigma^4 - 3$에서 $\mu_4 = \sigma^4(\gamma_2 + 3)$이므로
+
+    $$
+    \operatorname{Var}(S^2) \approx \frac{\sigma^4(\gamma_2 + 3) - \sigma^4}{n} = \frac{\sigma^4(\gamma_2 + 2)}{n}.
+    $$
+
+    정규분포는 $\gamma_2 = 0$이므로 $\operatorname{Var}(S^2) = 2\sigma^4/n$이다. 이는 $\chi^2_{n-1}$의 분산이 $2(n-1)$이라는 사실과 정확히 일치한다.
+
+    $$
+    \operatorname{Var}\!\left(\frac{(n-1)S^2}{\sigma^2}\right) = 2(n-1) \implies \operatorname{Var}(S^2) = \frac{2\sigma^4}{n-1}.
+    $$
+
+    팽창 인자는 $(\gamma_2 + 2)/2$이다.
+
+    | 분포 | $\gamma_2$ | $\operatorname{Var}(S^2)$의 정규 대비 배수 |
+    |---|---|---|
+    | $\text{Uniform}$ | $-1.2$ | 0.40 |
+    | $\mathcal{N}(\mu,\sigma^2)$ | 0 | 1.00 |
+    | $t_{10}$ | 1.0 | 1.50 |
+    | $t_6$ | 3.0 | 2.50 |
+    | $\text{Lognormal}(0,0.5)$ | 5.90 | 3.95 |
+    | $\text{Exponential}$ | 6.0 | 4.00 |
+
+    지수분포 자료에서 $S^2$의 참 분산이 정규 이론이 예측하는 것의 **네 배**이다. 그런데 카이제곱 검정은 정규 이론값을 기준분포로 쓰므로, 관측되는 $S^2$이 기준분포가 예상하는 것보다 훨씬 넓게 흩어지고 검정이 지나치게 자주 기각한다.
+
+    반대로 균등분포처럼 저첨인 자료에서는 팽창 인자가 $0.4 < 1$이므로 검정이 **보수적**이 된다. 두 방향 모두 크기 왜곡이지만 실무에서 위험한 쪽은 두꺼운 꼬리이다. $\square$
 
 ---
 
-**Exercise 2.**
-State the key assumptions required by the method discussed here. How can each assumption be checked?
+**연습문제 2.**
+1차 자기회귀 과정 $X_t = \phi X_{t-1} + \varepsilon_t$($\varepsilon_t \sim \mathcal{N}(0,1)$)에서 $n = 50$인 자료를 생성하고, 참 주변분산 $\sigma^2 = 1/(1-\phi^2)$에 대한 카이제곱 분산 검정의 경험적 크기를 $\phi \in \{0, 0.3, 0.6, 0.8\}$에 대해 추정하라.
 
-??? success "Solution to Exercise 2"
-    The main assumptions typically include: (1) independence of observations -- verified by understanding the data collection process and checking for serial correlation; (2) distributional requirements (e.g., normality) -- checked with Q-Q plots and formal tests like Shapiro-Wilk; (3) equal variances (if applicable) -- assessed with boxplots and Levene's test. When assumptions are violated, consider robust alternatives, transformations, or nonparametric methods.
+??? success "연습문제 2 풀이"
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    def ar1(phi, n, rng, burn=200):
+        e = rng.normal(0, 1, n + burn)
+        x = np.zeros(n + burn)
+        for i in range(1, n + burn):
+            x[i] = phi * x[i - 1] + e[i]
+        return x[burn:]
+
+    rng = np.random.default_rng(0)
+    R, n = 4000, 50
+
+    for phi in [0.0, 0.3, 0.6, 0.8]:
+        sigma0_sq = 1 / (1 - phi**2)      # true marginal variance
+        rej = 0
+        for _ in range(R):
+            x = ar1(phi, n, rng)
+            chi2_stat = (n - 1) * x.var(ddof=1) / sigma0_sq
+            p = 2 * min(stats.chi2.cdf(chi2_stat, n - 1),
+                        1 - stats.chi2.cdf(chi2_stat, n - 1))
+            rej += (p < 0.05)
+        print(f"phi = {phi}: empirical size = {rej / R:.4f}")
+    ```
+
+    출력:
+
+    ```text
+    phi = 0.0: empirical size = 0.0535
+    phi = 0.3: empirical size = 0.0718
+    phi = 0.6: empirical size = 0.1705
+    phi = 0.8: empirical size = 0.3818
+    ```
+
+    | $\phi$ | 경험적 크기 | 명목값의 배수 |
+    |---|---|---|
+    | 0.0 | 0.054 | 1.1 |
+    | 0.3 | 0.072 | 1.4 |
+    | 0.6 | 0.171 | 3.4 |
+    | 0.8 | 0.382 | 7.6 |
+
+    $\phi = 0$(독립)에서는 크기가 올바르다. 자기상관이 커질수록 급격히 악화되어 $\phi = 0.8$에서는 **38%의 확률로 잘못 기각한다**.
+
+    **이유.** 자기상관이 있으면 $S^2$의 실효 자유도가 $n - 1 = 49$보다 훨씬 작다. AR(1) 과정에서 표본평균의 실효 표본크기는 대략
+
+    $$
+    n_{\text{eff}} \approx n \cdot \frac{1 - \phi}{1 + \phi}
+    $$
+
+    이며 $\phi = 0.8$이면 $50 \times (0.2/1.8) = 5.6$에 불과하다. 자유도 49인 카이제곱분포는 자유도 6짜리 분포보다 훨씬 좁으므로, 실제 $S^2$의 변동을 담아내지 못하고 꼬리 밖으로 자주 벗어난다.
+
+    **중요한 대비.** 앞선 정규성 위반과 달리 **독립성 위반은 로버스트 검정으로 해결되지 않는다.** Levene이나 Brown-Forsythe도 관측값의 독립을 가정하므로 같은 문제를 겪는다. 종속 자료에는 블록 붓스트랩, HAC 표준오차, 또는 종속 구조를 명시적으로 모형화하는 접근이 필요하다. $\square$
 
 ---
 
-**Exercise 3.**
-Work through a small numerical example illustrating the application of the technique from this section.
+**연습문제 3.**
+"중심극한정리가 $t$ 검정을 구원하지만 분산 검정은 구원하지 못한다"는 경고 상자의 주장을 정량적으로 뒷받침하라. $\bar{X}$와 $S^2$의 표집분포가 정규로 수렴하는 속도를 비교하라.
 
-??? success "Solution to Exercise 3"
-    A structured approach to applying this technique involves: (1) clearly stating the hypotheses or estimation goal; (2) verifying that the data meet the required assumptions; (3) computing the relevant test statistic, estimate, or model fit; (4) obtaining the p-value, confidence interval, or posterior distribution; (5) interpreting the result in the context of the original question. Following these steps systematically ensures a rigorous and reproducible analysis.
+??? success "연습문제 3 풀이"
+    두 통계량 모두 중심극한정리의 적용을 받으므로 결국은 정규로 수렴한다. 차이는 **속도**와 **어떤 적률에 의존하는가**에 있다.
+
+    **$\bar{X}$의 경우.** Berry-Esseen 정리에 의해 정규근사의 오차는
+
+    $$
+    \sup_x \left| P\!\left(\frac{\bar{X}-\mu}{\sigma/\sqrt{n}} \leq x\right) - \Phi(x)\right| \leq \frac{C\rho}{\sigma^3\sqrt{n}}
+    $$
+
+    이며 $\rho = \mathbb{E}|X - \mu|^3$은 **3차** 절대적률이다.
+
+    **$S^2$의 경우.** 같은 형태의 한계가 성립하지만 $S^2$의 표준화에는 $\operatorname{Var}(S^2) = \sigma^4(\gamma_2+2)/n$이 들어가고, 이 정규근사의 오차는 $S^2$의 3차 적률, 곧 원자료의 **6차** 적률에 의존한다.
+
+    실무적 함의는 두 가지이다.
+
+    1. **고차 적률이 필요하다.** $\bar{X}$의 근사에는 3차 적률만 있으면 되지만 $S^2$의 근사에는 6차 적률이 필요하다. 꼬리가 두꺼운 분포에서는 6차 적률이 존재하지 않거나($t_5$처럼) 매우 커서 수렴이 극도로 느리다.
+
+    2. **가정 위반의 성격이 다르다.** $t$ 검정에서 비정규성은 $\bar{X}$의 분포 모양만 바꾸고 $\operatorname{Var}(\bar{X}) = \sigma^2/n$은 그대로이다. 반면 분산 검정에서 비정규성은 $\operatorname{Var}(S^2)$ **자체를 바꾼다**(연습문제 1의 팽창 인자). 곧 기준분포가 모양뿐 아니라 **척도**까지 틀리게 된다.
+
+    두 번째가 결정적이다. 척도가 틀린 기준분포는 $n$을 키워도 고쳐지지 않는다. $n \to \infty$에서 $\chi^2_{n-1}/(n-1) \to 1$이지만 $S^2/\sigma^2$의 변동은 $\sqrt{(\gamma_2+2)/n}$ 규모로 줄어들 뿐 비율 $(\gamma_2+2)/2$는 그대로 남는다. **표본을 아무리 키워도 카이제곱 분산 검정은 비정규 자료에서 타당해지지 않는다.** $\square$
 
 ---
 
-**Exercise 4.**
-Compare the approach from this section with an alternative method. When would you choose each?
+**연습문제 4.**
+점검표는 정규성이 의심스러우면 로버스트 검정을 쓰라고 권한다. 그런데 "정규성 검정으로 확인한 뒤 결정한다"는 절차 자체에 문제가 있다. 그 문제를 설명하고 대안을 제시하라.
 
-??? success "Solution to Exercise 4"
-    The method discussed here is appropriate when its assumptions hold and the sample size is sufficient for the asymptotic approximations to be accurate. Alternative approaches include: (1) nonparametric methods -- preferred when distributional assumptions are suspect; (2) bootstrap methods -- useful when analytical reference distributions are unavailable; (3) Bayesian methods -- valuable when incorporating prior information or when direct probability statements about parameters are desired. Running multiple approaches and comparing results provides a useful robustness check.
+??? success "연습문제 4 풀이"
+    **문제 1: 두 단계 절차의 크기 왜곡.** 같은 자료로 정규성을 검정한 뒤 그 결과에 따라 분산 검정을 고르면, 최종 검정의 선택이 자료에 의존하므로 결합된 절차의 실제 제1종 오류율이 명목값에서 벗어난다. 15.7절에서 다룰 분산분석 사전검정 문제와 같은 구조이다.
+
+    **문제 2: 검정력의 방향이 반대다.** 14장에서 보았듯 정규성 검정은 작은 표본에서 검정력이 낮다. 그런데 분산 검정이 비정규성에 가장 취약한 것도 작은 표본이다. 곧 **정규성 확인이 가장 필요한 상황에서 가장 무력하다.**
+
+    구체적으로 $n = 30$에서 Shapiro-Wilk가 $t_5$ 자료를 탐지할 검정력은 0.3 남짓이다. 70%의 경우 "정규성 이상 없음"으로 통과시키고 카이제곱 검정을 쓰게 되는데, 그 카이제곱 검정의 실제 크기는 20%가 넘는다.
+
+    **문제 3: 큰 표본에서는 반대 오류.** $n = 5000$이면 정규성 검정이 무해한 미세한 이탈까지 기각하여, 검정력이 더 높은 모수적 검정을 쓸 수 있는 상황에서도 불필요하게 로버스트 검정으로 가게 된다.
+
+    **대안.**
+
+    1. **사전검정 없이 처음부터 Brown-Forsythe를 기본값으로 쓴다.** 15.1절 개관의 모의실험에서 보았듯 정규 자료에서도 크기가 0.039로 올바르고, 검정력 손실은 크지 않다. 잃는 것보다 얻는 것이 크다.
+    2. **정규성 확인은 판정이 아니라 서술로 쓴다.** Q-Q 그림을 그리고 왜도·첨도를 보고하되, 그것으로 검정을 자동 선택하지 않는다.
+    3. **분산 자체가 관심 모수라면** 붓스트랩(15.6절)으로 분포 가정 없이 추론한다.
+
+    핵심은 **가정을 검정으로 통과시키려 하지 말고, 애초에 가정에 덜 의존하는 방법을 쓰는 것**이다. $\square$

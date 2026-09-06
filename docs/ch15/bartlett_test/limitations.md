@@ -1,88 +1,218 @@
-# Limitations Under Non-Normality
+# 비정규성 아래의 한계
 
-Bartlett's test is the most powerful test for equal variances when the data are truly normal, but it is also the most fragile when they are not. Among the variance tests in this chapter, Bartlett's test has the highest sensitivity to non-normality, exceeding even the F-test. This makes it unreliable as a routine diagnostic, particularly when normality has not been verified.
+Bartlett 검정은 자료가 정말로 정규일 때 분산 동일성에 대한 가장 강력한 검정이지만, 정규가 아닐 때는 가장 취약한 검정이기도 하다. 이 장의 분산 검정 가운데 Bartlett 검정이 비정규성에 대한 민감도가 가장 높으며 F 검정보다도 심하다. 그래서 정규성이 검증되지 않은 상황에서 일상적인 진단 도구로 쓰기에는 신뢰할 수 없다.
 
-## The Core Problem
+## 근본적인 문제
 
-Bartlett's test statistic is derived from the likelihood ratio under the assumption of normality. The chi-square approximation
+Bartlett 검정통계량은 정규성 가정 아래의 가능도비에서 유도된다. 카이제곱 근사
 
 $$
-T \stackrel{\text{approx}}{\sim} \chi^2_{k-1}
+T \stackrel{\text{근사}}{\sim} \chi^2_{k-1}
 $$
 
-depends on the fact that log sample variances are approximately normal when the underlying data are normal. For non-normal populations, the distribution of $\ln S_i^2$ deviates from normality, and the chi-square reference distribution becomes inaccurate.
+는 바탕 자료가 정규일 때 로그 표본분산이 근사적으로 정규라는 사실에 의존한다. 비정규 모집단에서는 $\ln S_i^2$의 분포가 정규에서 벗어나고 카이제곱 기준분포가 부정확해진다.
 
-The key quantity is the population kurtosis. For a distribution with excess kurtosis $\gamma_2 = \mu_4 / \sigma^4 - 3$, the variance of $\ln S^2$ is inflated relative to the normal case:
+핵심 양은 모집단의 첨도이다. 초과첨도가 $\gamma_2 = \mu_4 / \sigma^4 - 3$인 분포에서 $\ln S^2$의 분산은 정규의 경우보다 부풀려진다.
 
 $$
 \operatorname{Var}(\ln S^2) \approx \frac{2}{\nu} + \frac{\gamma_2}{\nu} + O(\nu^{-2})
 $$
 
-where $\nu = n - 1$. Under normality, $\gamma_2 = 0$ and the leading term is $2/\nu$. For heavy-tailed distributions with $\gamma_2 > 0$, the additional term $\gamma_2/\nu$ increases the variability of the log-variances, causing $T$ to be stochastically larger than the $\chi^2_{k-1}$ reference.
+여기서 $\nu = n - 1$이다. 정규성 아래에서는 $\gamma_2 = 0$이고 주항이 $2/\nu$이다. $\gamma_2 > 0$인 두꺼운 꼬리 분포에서는 추가항 $\gamma_2/\nu$가 로그분산의 변동을 키워 $T$가 $\chi^2_{k-1}$ 기준분포보다 확률적으로 커지게 만든다.
 
-## Type I Error Inflation
+## 제1종 오류 팽창
 
-Simulation studies consistently show that Bartlett's test rejects $H_0$ far too often when the data are non-normal. The following table reports actual rejection rates at nominal $\alpha = 0.05$ for $k = 3$ groups with $n_i = 20$:
+모의실험 연구는 자료가 비정규일 때 Bartlett 검정이 $H_0$을 지나치게 자주 기각함을 일관되게 보여준다. 다음 표는 $k = 3$개 집단, $n_i = 20$, 명목 $\alpha = 0.05$에서의 실제 기각률이다(반복 20,000회, 몬테카를로 오차 약 0.003).
 
-| Distribution | Excess kurtosis | Actual Type I error |
+| 분포 | 초과첨도 $\gamma_2$ | 실제 제1종 오류 |
 |---|---|---|
-| Normal | 0 | 0.050 |
-| $t_{10}$ | 1 | 0.090 |
-| $t_5$ | 6 | 0.220 |
-| Exponential | 6 | 0.200 |
-| $\chi^2_4$ | 3 | 0.140 |
-| Contaminated normal | 12 | 0.350 |
-| Uniform | $-1.2$ | 0.025 |
+| Uniform | $-1.2$ | **0.003** |
+| Normal | 0 | 0.049 |
+| $t_{10}$ | 1 | 0.109 |
+| $\chi^2_4$ | 3 | 0.232 |
+| 오염 정규 (90% $\mathcal{N}(0,1)$ + 10% $\mathcal{N}(0,9)$) | 5.3 | 0.335 |
+| $t_5$ | 6 | 0.217 |
+| Exponential | 6 | **0.383** |
 
-With heavy-tailed distributions like the contaminated normal, Bartlett's test rejects 35% of the time when the true rejection rate should be 5%. This means that a significant Bartlett result may reflect non-normality rather than unequal variances.
+지수분포 자료에서 Bartlett 검정이 **38%의 확률로 기각한다.** 참 기각률이 5%여야 하는데 그렇다. 곧 유의한 Bartlett 결과는 분산의 불균등이 아니라 비정규성을 반영하는 것일 수 있다.
 
-!!! danger "Bartlett's Test Can Be a Normality Test in Disguise"
-    When applied to non-normal data, Bartlett's test often rejects $H_0\colon \sigma_1^2 = \cdots = \sigma_k^2$ not because the variances are actually unequal, but because the distributional shape violates the normality assumption. A rejection may indicate nothing about variance heterogeneity.
+반대편 극단도 심각하다. 균등분포에서는 기각률이 $0.003$으로 명목값의 **17분의 1**이다. 검정이 사실상 무력해진다.
 
-## Comparison with the F-Test
+!!! danger "Bartlett 검정은 위장한 정규성 검정일 수 있다"
+    비정규 자료에 적용하면 Bartlett 검정은 분산이 실제로 다르기 때문이 아니라 분포의 모양이 정규성 가정을 위반하기 때문에 $H_0\colon \sigma_1^2 = \cdots = \sigma_k^2$을 기각하는 경우가 많다. 기각했다고 해서 분산의 이질성에 대해 아무것도 말해 주지 않을 수 있다.
 
-Both the F-test and Bartlett's test assume normality, but Bartlett's test is more sensitive to violations. The reason is that Bartlett's test uses the logarithm of sample variances, and the distribution of $\ln S^2$ is more sensitive to kurtosis than the distribution of $S^2$ itself. In simulations, the Type I error inflation for Bartlett's test is typically 1.5 to 2 times worse than for the F-test under the same non-normal distribution.
+### 재현 코드
 
-| Scenario ($n_i = 20$, $k = 3$) | F-test Type I error | Bartlett's Type I error |
-|---|---|---|
-| Normal | 0.050 | 0.050 |
-| $t_5$ | 0.140 | 0.220 |
-| Exponential | 0.130 | 0.200 |
+```python
+import numpy as np
+from scipy import stats
 
-## When NOT to Use Bartlett's Test
+rng = np.random.default_rng(2)
+n, k, R, alpha = 20, 3, 20000, 0.05
 
-Bartlett's test should be avoided in the following situations:
+def contaminated(m):
+    u = rng.random(m)
+    return np.where(u < 0.9, rng.normal(0, 1, m), rng.normal(0, 3, m))
 
-1. **Non-normal data.** If the Q-Q plot shows heavy tails, skewness, or outliers, Bartlett's test is unreliable. Use Levene's test or the Brown-Forsythe test instead.
-2. **Small samples.** With small $n_i$, normality cannot be reliably assessed, and the chi-square approximation is less accurate. The correction factor $C$ mitigates this but does not eliminate the problem.
-3. **Unknown distributional shape.** When the analyst has no prior knowledge about the population distribution, a robust test is the safer choice.
-4. **Preliminary test before ANOVA.** Bartlett's test is sometimes recommended as a pre-test for ANOVA homoscedasticity. However, because ANOVA data are often not perfectly normal, Levene's test is preferred as the pre-test.
+cases = [
+    ("Normal",         lambda: rng.normal(0, 1, n)),
+    ("t(10)",          lambda: rng.standard_t(10, n)),
+    ("chi2(4)",        lambda: rng.chisquare(4, n)),
+    ("t(5)",           lambda: rng.standard_t(5, n)),
+    ("Exponential",    lambda: rng.exponential(1, n)),
+    ("Contaminated N", lambda: contaminated(n)),
+    ("Uniform",        lambda: rng.uniform(0, 1, n)),
+]
 
-## When Bartlett's Test Is Appropriate
+for name, gen in cases:
+    rej = sum(stats.bartlett(*[gen() for _ in range(k)])[1] < alpha
+              for _ in range(R))
+    print(f"{name:>16}: {rej / R:.4f}")
+```
 
-Despite its limitations, Bartlett's test remains useful in specific settings:
+## F 검정과의 비교
 
-- **Data known to be normal.** When the population is known to be normal (e.g., measurement errors from calibrated instruments), Bartlett's test is the most powerful choice.
-- **Normality confirmed by formal tests.** If the Shapiro-Wilk or Anderson-Darling test fails to reject normality and the Q-Q plot looks linear, Bartlett's test is appropriate.
-- **Large, well-behaved samples.** With large sample sizes from nearly normal populations, the chi-square approximation is accurate.
+F 검정과 Bartlett 검정 모두 정규성을 가정하지만 Bartlett 쪽이 위반에 더 민감하다. Bartlett 검정이 표본분산의 **로그**를 쓰고, $\ln S^2$의 분포가 $S^2$ 자체의 분포보다 첨도에 더 민감하기 때문이다.
 
-!!! tip "Decision Rule for Practitioners"
+같은 조건($n_i = 20$)에서 두 검정을 비교하면(F 검정은 두 집단, Bartlett은 세 집단)
 
-    1. Test normality in each group (Shapiro-Wilk or Q-Q plots).
-    2. If normality holds: use Bartlett's test for maximum power.
-    3. If normality is doubtful: use the Brown-Forsythe test (Section 15.5).
-    4. If normality is clearly violated: use the Fligner-Killeen test (Section 15.5).
+| 상황 | F 검정 제1종 오류 | Bartlett 제1종 오류 | 비율 |
+|---|---|---|---|
+| Normal | 0.050 | 0.049 | 1.0 |
+| $t_{10}$ | 0.089 | 0.109 | 1.2 |
+| $\chi^2_4$ | 0.169 | 0.232 | 1.4 |
+| $t_5$ | 0.156 | 0.217 | 1.4 |
+| Exponential | 0.266 | 0.383 | 1.4 |
 
-## Historical Context
+Bartlett 검정의 제1종 오류 팽창이 같은 비정규 분포에서 F 검정보다 대체로 **1.2~1.4배** 더 심하다. (집단 수가 다르므로 엄밀한 비교는 아니지만, 방향과 크기의 감을 준다.)
 
-Bartlett published the test in 1937 as an extension of the F-test to $k > 2$ groups. For decades it was the standard test for homogeneity of variances. The recognition of its extreme sensitivity to non-normality led to the development of robust alternatives by Levene (1960), Brown and Forsythe (1974), and Fligner and Killeen (1976). Today, most statistical software defaults to Levene's test or Brown-Forsythe rather than Bartlett's test for routine use.
+## Bartlett 검정을 쓰지 말아야 할 때
 
-## Exercises
+다음 상황에서는 Bartlett 검정을 피해야 한다.
 
-**Exercise 1.**
-For two datasets that are not normally distributed, a Bartlett's test was performed, resulting in a low p-value (rejection of $H_0$: equal variances). However, a Levene's test yielded a high p-value (failure to reject $H_0$). How should these two test results be interpreted?
+1. **비정규 자료.** Q-Q 그림이 두꺼운 꼬리, 치우침, 이상점을 보이면 Bartlett 검정을 신뢰할 수 없다. Levene 검정이나 Brown-Forsythe 검정을 쓰라.
+2. **작은 표본.** $n_i$가 작으면 정규성을 신뢰성 있게 평가할 수 없고 카이제곱 근사도 덜 정확하다. 보정인자 $C$가 완화하지만 문제를 없애지는 못한다.
+3. **분포 모양을 모를 때.** 모집단 분포에 대한 사전지식이 없다면 로버스트 검정이 더 안전한 선택이다.
+4. **분산분석 전의 예비검정.** Bartlett 검정을 분산분석의 등분산성 사전검정으로 권하는 경우가 있으나, 분산분석 자료가 완벽히 정규인 경우는 드물므로 Levene 검정이 사전검정으로 더 낫다.
 
-??? success "Solution to Exercise 1"
+## Bartlett 검정이 적절한 때
 
-    - The results of Bartlett's test are **not reliable** when the assumption of normality is violated. Bartlett's test is highly sensitive to non-normality, and its rejection of the null hypothesis may be driven by the distributional shape rather than actual differences in variance.
-    - Levene's test is **less sensitive** to violations of normality, so it provides a more trustworthy result in this scenario. It is reasonable to conclude that the variances of the two datasets are equal.
+한계에도 불구하고 Bartlett 검정이 유용한 상황이 있다.
+
+- **정규성이 알려진 자료.** 모집단이 정규임을 아는 경우(보정된 계측기의 측정오차 등) Bartlett 검정이 가장 강력한 선택이다.
+- **형식적 검정으로 정규성이 확인된 경우.** Shapiro-Wilk나 Anderson-Darling 검정이 정규성을 기각하지 못하고 Q-Q 그림이 선형으로 보이면 Bartlett 검정이 적절하다.
+- **크고 잘 정돈된 표본.** 거의 정규인 모집단에서 큰 표본을 얻었다면 카이제곱 근사가 정확하다.
+
+!!! tip "실무자를 위한 판정 지침"
+
+    1. 각 집단의 정규성을 확인한다(Shapiro-Wilk 또는 Q-Q 그림).
+    2. 정규성이 성립하면 최대 검정력을 위해 Bartlett 검정을 쓴다.
+    3. 정규성이 의심스러우면 Brown-Forsythe 검정을 쓴다(15.5절).
+    4. 정규성이 명백히 위배되면 Fligner-Killeen 검정을 쓴다(15.5절).
+
+    다만 15.1절 연습문제 4에서 논한 대로 이 두 단계 절차 자체에도 문제가 있다. 정규성이 이론적으로 보장되는 상황이 아니라면 처음부터 Brown-Forsythe를 쓰는 편이 안전하다.
+
+## 역사적 맥락
+
+Bartlett은 1937년 F 검정을 $k > 2$개 집단으로 확장한 것으로서 이 검정을 발표했다. 수십 년 동안 분산의 동질성에 대한 표준 검정이었다. 비정규성에 대한 극단적 민감성이 인식되면서 Levene(1960), Brown and Forsythe(1974), Fligner and Killeen(1976)의 로버스트 대안이 개발되었다. 오늘날 대부분의 통계 소프트웨어는 일상적인 용도로 Bartlett 검정 대신 Levene 검정이나 Brown-Forsythe 검정을 기본값으로 삼는다.
+
+## 연습문제
+
+**연습문제 1.**
+정규분포를 따르지 않는 두 자료집합에 Bartlett 검정을 수행하여 낮은 $p$값(등분산 $H_0$ 기각)을 얻었다. 그러나 Levene 검정은 높은 $p$값(기각 실패)을 냈다. 이 두 결과를 어떻게 해석해야 하는가?
+
+??? success "연습문제 1 풀이"
+
+    - 정규성 가정이 위배된 상황에서 Bartlett 검정의 결과는 **신뢰할 수 없다**. Bartlett 검정은 비정규성에 매우 민감하며, 귀무가설 기각이 실제 분산 차이가 아니라 분포의 모양 때문일 수 있다.
+    - Levene 검정은 정규성 위반에 **덜 민감**하므로 이 상황에서 더 믿을 만한 결과를 준다. 두 자료집합의 분산이 같다고 결론짓는 것이 합리적이다.
+
+    본문 표의 수치가 이를 뒷받침한다. 지수분포 자료에서 Bartlett의 실제 크기는 0.383이므로, 등분산인 자료에서도 열 번 중 네 번은 기각한다. 이런 검정의 "유의한" 결과에는 정보가 거의 없다.
+
+    다만 두 검정이 어긋날 때 **자동으로 Levene을 믿는 것**도 옳지 않다. 올바른 절차는 (1) 왜 어긋나는지 자료를 살펴보고, (2) Q-Q 그림으로 정규성 이탈의 유형과 정도를 확인하고, (3) 그 진단에 근거하여 판단하는 것이다. 이탈이 실제로 심하다면 Levene을 신뢰하고, 정규성이 무난한데도 결과가 갈린다면 검정력 차이 때문일 수 있으므로 표본크기와 효과 크기를 함께 보아야 한다. $\square$
+
+---
+
+**연습문제 2.**
+$\operatorname{Var}(\ln S^2) \approx (\gamma_2 + 2)/\nu$를 델타 방법으로 유도하고, 이것이 왜 Bartlett 검정을 F 검정보다 첨도에 민감하게 만드는지 설명하라.
+
+??? success "연습문제 2 풀이"
+    **델타 방법 유도.** 15.1절에서 $\operatorname{Var}(S^2) \approx \sigma^4(\gamma_2+2)/n$이다. 함수 $g(x) = \ln x$에 델타 방법을 적용하면
+
+    $$
+    \operatorname{Var}(\ln S^2) \approx [g'(\sigma^2)]^2 \operatorname{Var}(S^2) = \frac{1}{\sigma^4}\cdot\frac{\sigma^4(\gamma_2+2)}{n} = \frac{\gamma_2+2}{n} \approx \frac{2}{\nu} + \frac{\gamma_2}{\nu}.
+    $$
+
+    **왜 Bartlett이 더 민감한가.** 결정적인 차이는 **모수 의존성이 제거되는 방식**에 있다.
+
+    - $S^2$의 분산은 $\sigma^4$에 비례한다. 곧 척도에 의존한다.
+    - $\ln S^2$의 분산은 $\sigma^2$에 **전혀 의존하지 않고** 오직 $\gamma_2$에만 의존한다.
+
+    로그 변환이 척도 정보를 지우고 모양 정보만 남기는 것이다. 이는 검정의 설계에는 유리하지만(척도 불변 통계량을 만든다), 동시에 **첨도의 영향을 순수하게 전달한다**는 뜻이기도 하다.
+
+    F 검정에서는 분자와 분모 양쪽에서 첨도의 영향이 부분적으로 상쇄된다. $S_1^2/S_2^2$의 비에서 두 표본분산이 같은 방향으로 부풀려지면 비는 덜 영향받는다. Bartlett 검정은 $k$개 로그분산의 **흩어짐**을 재므로 이런 상쇄가 일어나지 않고, 각 $\ln S_i^2$의 부풀려진 변동이 그대로 누적된다.
+
+    본문 표에서 확인되듯 그 결과 Bartlett의 크기 팽창이 F 검정보다 1.2~1.4배 크다. $\square$
+
+---
+
+**연습문제 3.**
+균등분포 자료에서 Bartlett 검정의 크기가 0.003으로 극단적으로 작다. 이 "안전해 보이는" 결과가 실무에서 왜 위험한지, 특히 분산분석 사전검정 맥락에서 설명하라.
+
+??? success "연습문제 3 풀이"
+    크기 0.003은 명목 5% 검정이 실제로는 0.3% 수준에서 작동한다는 뜻이다.
+
+    **직접적 결과: 검정력의 붕괴.** 사전검정으로서 Bartlett 검정의 임무는 등분산 가정이 깨졌을 때 그것을 알리는 것이다. 그런데 크기가 0.003이면 참 분산 차이가 상당해도 기각하지 못한다. 결국 **모든 자료에 표준 분산분석을 통과시켜 준다**.
+
+    **더 나쁜 점: 거짓 안심.** 실무자는 "Bartlett 검정을 통과했으니 등분산성이 확인되었다"고 결론짓고 표준 분산분석으로 진행한다. 그러나 실제로 분산이 다르다면 분산분석의 $F$ 검정 자체가 왜곡된다. 사전검정이 오히려 잘못된 확신을 심어 준 셈이다.
+
+    **왜 저첨 자료에서 이런 일이 일어나는가.** $\gamma_2 = -1.2$이면 $\operatorname{Var}(\ln S^2) \approx 0.8/\nu$로 정규의 $2/\nu$보다 훨씬 작다. 곧 $T$가 $\chi^2_{k-1}$보다 확률적으로 **작아진다**. 그런데 우리는 $\chi^2_{k-1}$의 상위 5% 지점을 임계값으로 쓰므로 거의 도달하지 못한다.
+
+    **실무적 함의.** 균등분포에 가까운 자료(예: 반올림된 측정값, 유계 척도의 설문 응답, 난수 생성기 출력)에서 Bartlett 검정은 사전검정으로 쓸모가 없다. 이런 상황에서도 크기가 안정적인 Brown-Forsythe(15.1절 표에서 세 분포 모두 0.039~0.042)를 쓰거나, 애초에 사전검정 없이 Welch 분산분석으로 가는 편이 낫다. $\square$
+
+---
+
+**연습문제 4.**
+"Bartlett 검정이 유의하면 비정규성 때문일 수 있다"는 경고를 실제로 확인하라. 등분산인 지수분포 세 집단에서 Bartlett이 기각한 표본들을 모아 그 표본분산의 실제 흩어짐을 조사하라.
+
+??? success "연습문제 4 풀이"
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    rng = np.random.default_rng(11)
+    n, k, R = 20, 3, 5000
+    rej_ratios, all_ratios = [], []
+
+    for _ in range(R):
+        g = [rng.exponential(1, n) for _ in range(k)]
+        v = np.array([x.var(ddof=1) for x in g])
+        ratio = v.max() / v.min()
+        all_ratios.append(ratio)
+        if stats.bartlett(*g)[1] < 0.05:
+            rej_ratios.append(ratio)
+
+    print(f"Rejection rate: {len(rej_ratios) / R:.4f}")
+    print(f"All samples   - median max/min variance ratio: "
+          f"{np.median(all_ratios):.2f}")
+    print(f"Rejected only - median max/min variance ratio: "
+          f"{np.median(rej_ratios):.2f}")
+    ```
+
+    출력:
+
+    ```text
+    Rejection rate: 0.3882
+    All samples   - median max/min variance ratio: 2.55
+    Rejected only - median max/min variance ratio: 4.25
+    ```
+
+    이 실험의 요점은 **모든 표본이 같은 분포에서 왔다**는 것이다. 참 분산은 세 집단 모두 정확히 1이므로 참 비율은 1이다.
+
+    그런데 전체 표본에서도 최대·최소 표본분산 비의 중앙값이 **2.55**이고, Bartlett이 기각한 표본만 모으면 **4.25**로 뛴다. 실무자가 기각된 표본을 보면 "분산이 네 배 차이 난다"고 결론짓기 쉽다. 그러나 참 비율은 1이며, 그 차이는 전적으로 **지수분포의 두꺼운 꼬리가 만들어 낸 표집변동**이다.
+
+    기각률도 0.388로 본문 표의 0.383과 일치한다. 등분산인 자료의 39%에서 "분산이 다르다"는 결론이 나온다.
+
+    지수분포에서 $\gamma_2 = 6$이므로 $\operatorname{Var}(S^2)$이 정규의 네 배이다. 표본분산이 그만큼 널뛰므로 등분산인데도 큰 비율이 흔하게 나타난다.
+
+    **핵심 교훈.** 유의한 Bartlett 결과를 보았을 때 물어야 할 첫 질문은 "분산이 정말 다른가?"가 아니라 **"자료가 정규인가?"**이다. 정규성을 확인하지 않은 채 Bartlett의 기각을 분산 이질성의 증거로 받아들이면, 실제로는 분포 모양에 대한 정보를 분산에 대한 정보로 오독하게 된다. $\square$

@@ -1,228 +1,302 @@
-# Advanced Methods for Variance Testing
+# 분산 검정의 고급 방법
 
 
-In modern statistics, especially when traditional parametric tests fail due to violated assumptions or limited sample sizes, advanced methods for variance testing provide more flexibility and robustness. These methods often use computational techniques such as bootstrapping, or Bayesian approaches, to make inferences when normality and homoscedasticity assumptions are violated.
+현대 통계학에서, 특히 가정 위반이나 제한된 표본크기 때문에 전통적인 모수적 검정이 실패할 때, 분산 검정의 고급 방법들이 더 큰 유연성과 로버스트성을 제공한다. 이런 방법들은 정규성과 등분산성 가정이 위배될 때 추론하기 위해 붓스트랩 같은 계산 기법이나 Bayes 접근을 활용한다.
 
-## Bootstrapping Methods for Variance Testing
+## 붓스트랩을 이용한 분산 검정
 
-**Bootstrapping** is a resampling technique that generates many simulated samples from the original data by sampling with replacement. It is especially useful when we do not wish to assume normality or when dealing with small samples. Bootstrapping provides a way to estimate the sampling distribution of a statistic, such as variance, without relying on a theoretical distribution.
+**붓스트랩**은 원자료에서 복원추출로 모의 표본을 다수 생성하는 재표집 기법이다. 정규성을 가정하고 싶지 않거나 작은 표본을 다룰 때 특히 유용하다. 붓스트랩은 이론적 분포에 기대지 않고 분산 같은 통계량의 표집분포를 추정하는 방법을 제공한다.
 
-### Steps for Bootstrapping Variance Testing
+### 붓스트랩 분산 검정의 단계
 
-1. **Resampling:** Generate a large number of new datasets by randomly sampling with replacement from the original data. Each bootstrap sample should have the same size as the original dataset.
-2. **Calculate Variance:** For each bootstrap sample, calculate the sample variance $s_i^2$.
-3. **Construct the Sampling Distribution:** The variances from the bootstrapped samples approximate the sampling distribution of the variance. This can be used to estimate confidence intervals or test hypotheses.
-4. **Hypothesis Testing:** Use the distribution of the bootstrapped variances to compare with the null hypothesis (e.g., equal variances across groups).
+1. **재표집:** 원자료에서 복원추출로 새 자료집합을 다수 생성한다. 각 붓스트랩 표본의 크기는 원자료와 같아야 한다.
+2. **분산 계산:** 각 붓스트랩 표본에서 표본분산 $s_i^2$을 계산한다.
+3. **표집분포 구성:** 붓스트랩 표본들의 분산이 분산의 표집분포를 근사한다. 이를 신뢰구간 추정이나 가설검정에 쓸 수 있다.
+4. **가설검정:** 붓스트랩 분산들의 분포를 귀무가설(집단 간 등분산 등)과 비교한다.
 
-### Hypotheses
+!!! danger "귀무가설 아래에서 재표집해야 한다"
+    4단계에서 가장 흔한 실수는 **각 집단 안에서 따로 재표집한 뒤 그 결과를 관측값과 비교**하는 것이다. 이렇게 하면 붓스트랩 분포가 귀무가설이 아니라 **관측된 값을 중심으로** 만들어지므로 검정이 성립하지 않는다.
 
-**Null Hypothesis ($H_0$):** The variances are equal across the groups:
+    예컨대 두 집단의 분산차 $s_1^2 - s_2^2$을 검정한다고 하자. 각 집단 안에서 재표집하면 붓스트랩 차이의 평균이 관측된 차이 근처가 된다. 그런데 $p = \frac{1}{B}\sum \mathbf{1}(|d_b^*| \geq |d_{\text{obs}}|)$로 계산하면, 관측값이 붓스트랩 분포의 한가운데 있으므로 $p \approx 0.5$가 나온다. 관측된 차이가 아무리 커도 마찬가지이다.
+
+    올바른 절차는 (1) 각 집단을 중심화하고, (2) 중심화된 잔차를 **합쳐서** 하나의 풀을 만들고, (3) 그 풀에서 두 붓스트랩 표본을 뽑는 것이다. 자세한 내용은 [붓스트랩 분산 검정](bootstrap_variance.md) 페이지를 보라.
+
+### 가설
+
+**귀무가설 ($H_0$):** 집단들의 분산이 모두 같다.
 
 $$
 H_0: \sigma_1^2 = \sigma_2^2 = \dots = \sigma_k^2
 $$
 
-**Alternative Hypothesis ($H_1$):** At least one group has a variance different from the others:
+**대립가설 ($H_1$):** 적어도 한 집단의 분산이 다른 집단과 다르다.
 
 $$
-H_1: \sigma_i^2 \neq \sigma_j^2 \quad \text{for at least one pair} \quad i \neq j
+H_1: \sigma_i^2 \neq \sigma_j^2 \quad \text{(적어도 한 쌍의)} \quad i \neq j
 $$
 
-### Python Implementation
+### Python 구현
 
 ```python
 import numpy as np
 
+rng = np.random.default_rng(0)
+
 # Original data samples from two groups
 sample1 = np.array([10, 12, 14, 16, 18])
-sample2 = np.array([22, 24, 26, 28, 30])
-
-# Number of bootstrap samples
-B = 1000
-bootstrapped_diffs = []
-
-# Bootstrapping process
-for _ in range(B):
-    sample1_resampled = np.random.choice(sample1, size=len(sample1), replace=True)
-    sample2_resampled = np.random.choice(sample2, size=len(sample2), replace=True)
-
-    # Calculate the variance for each resampled sample
-    var_sample1 = np.var(sample1_resampled, ddof=1)
-    var_sample2 = np.var(sample2_resampled, ddof=1)
-
-    # Store the difference in variances
-    bootstrapped_diffs.append(var_sample1 - var_sample2)
+sample2 = np.array([22, 24, 26, 30, 40])
 
 # Observed difference in variances
 observed_diff = np.var(sample1, ddof=1) - np.var(sample2, ddof=1)
 
-# Calculate p-value by comparing the observed difference to the bootstrap distribution
-p_value = np.mean(np.abs(bootstrapped_diffs) >= np.abs(observed_diff))
+# Build the null pool: centre each group, then combine
+pool = np.concatenate([sample1 - sample1.mean(),
+                       sample2 - sample2.mean()])
 
-print(f"Observed difference in variances: {observed_diff}")
-print(f"Bootstrap p-value: {p_value}")
+# Bootstrap under H0
+B = 10000
+boot_diffs = np.empty(B)
+for b in range(B):
+    r1 = rng.choice(pool, size=len(sample1), replace=True)
+    r2 = rng.choice(pool, size=len(sample2), replace=True)
+    boot_diffs[b] = np.var(r1, ddof=1) - np.var(r2, ddof=1)
+
+p_value = np.mean(np.abs(boot_diffs) >= np.abs(observed_diff))
+
+print(f"Sample variances: {np.var(sample1, ddof=1):.2f}, "
+      f"{np.var(sample2, ddof=1):.2f}")
+print(f"Observed difference in variances: {observed_diff:.2f}")
+print(f"Bootstrap p-value: {p_value:.4f}")
 ```
 
-### Interpretation
+출력:
 
-The bootstrapped distribution of the differences in variances can be used to compute a p-value. If the p-value is below a chosen threshold (e.g., $\alpha = 0.05$), we reject the null hypothesis and conclude that the variances differ between the two groups.
+```text
+Sample variances: 10.00, 50.80
+Observed difference in variances: -40.80
+Bootstrap p-value: 0.1339
+```
 
-### Advantages of Bootstrapping
+원래의 예제 자료 `sample1 = [10,12,14,16,18]`, `sample2 = [22,24,26,28,30]`은 두 집단의 표본분산이 **정확히 10으로 같아서** 검정을 시연할 수 없다. 위 코드에서는 집단 2를 `[22,24,26,30,40]`으로 바꾸어 분산 차이를 만들었다.
 
-- **Distribution-Free:** Bootstrapping does not rely on the assumption of normality, making it ideal for data that deviate from this assumption.
-- **Small Samples:** It can be applied to small datasets, where parametric tests may lack power.
-- **Flexible:** Bootstrapping can be applied to any statistic, including variance, making it highly versatile.
+### 해석
+
+붓스트랩 분산차의 분포로 $p$값을 계산할 수 있다. $p$값이 선택한 문턱(예: $\alpha = 0.05$)보다 작으면 귀무가설을 기각하고 두 집단의 분산이 다르다고 결론짓는다.
+
+여기서는 $p = 0.134$로 기각하지 못한다. 표본분산이 $10$ 대 $50.8$로 5배 차이인데도 그렇다. 각 집단 $n = 5$로는 검정력이 사실상 없기 때문이며, 15.3절 연습문제 3에서 본 결론과 일치한다($n = 5$에서 F 검정이 탐지하려면 분산비가 9.6배는 되어야 한다).
+
+### 붓스트랩의 장점
+
+- **분포무관:** 붓스트랩은 정규성 가정에 기대지 않으므로 정규성에서 벗어난 자료에 적합하다.
+- **작은 표본:** 모수적 검정의 검정력이 부족한 작은 자료집합에도 적용할 수 있다.
+- **유연성:** 분산을 포함한 어떤 통계량에도 적용할 수 있어 활용도가 높다.
+
+다만 15.6절 [붓스트랩 분산 검정](bootstrap_variance.md)의 모의실험에서 보듯, 강하게 치우친 자료에서는 붓스트랩의 크기도 다소 부풀려진다. "분포무관"이 "모든 상황에서 정확"을 뜻하지는 않는다.
 
 ---
 
-## Bayesian Methods for Variance Testing
+## Bayes 방법을 이용한 분산 검정
 
-**Bayesian methods** offer a probabilistic approach to variance testing by incorporating prior information about the variances and updating these beliefs with observed data. Instead of relying solely on the observed sample (as in classical statistics), Bayesian methods combine the data with prior distributions to yield **posterior distributions** of the variances.
+**Bayes 방법**은 분산에 대한 사전정보를 반영하고 관측 자료로 그 믿음을 갱신하는 확률적 접근을 제공한다. 고전 통계학처럼 관측 표본에만 의존하는 대신, 자료와 사전분포를 결합하여 분산의 **사후분포**를 얻는다.
 
-### Bayesian Framework for Variance Testing
+### Bayes 분산 검정의 틀
 
-In Bayesian variance testing, we estimate the posterior distribution of variances using prior beliefs and the likelihood of the data. This results in a posterior probability distribution for each variance, allowing for hypothesis testing or credible intervals for the variances.
+Bayes 분산 검정에서는 사전 믿음과 자료의 가능도를 써서 분산의 사후분포를 추정한다. 그 결과 각 분산에 대한 사후확률분포를 얻고, 이를 가설검정이나 분산의 신용구간에 쓸 수 있다.
 
-### Hypotheses
+### 가설
 
-**Null Hypothesis ($H_0$):** The variances are equal across groups:
+**귀무가설 ($H_0$):** 집단들의 분산이 모두 같다.
 
 $$
 H_0: \sigma_1^2 = \sigma_2^2 = \dots = \sigma_k^2
 $$
 
-**Alternative Hypothesis ($H_1$):** At least one group has a different variance:
+**대립가설 ($H_1$):** 적어도 한 집단의 분산이 다르다.
 
 $$
-H_1: \sigma_i^2 \neq \sigma_j^2 \quad \text{for at least one pair} \quad i \neq j
+H_1: \sigma_i^2 \neq \sigma_j^2 \quad \text{(적어도 한 쌍의)} \quad i \neq j
 $$
 
-### Bayesian Inference Process
+### Bayes 추론 과정
 
-**1. Prior Distribution:** Choose a prior distribution for the variance parameters $\sigma_i^2$. A common choice is the inverse-gamma distribution:
+**1. 사전분포:** 분산 모수 $\sigma_i^2$의 사전분포를 고른다. 흔한 선택은 역감마분포이다.
 
 $$
 \sigma_i^2 \sim \text{InverseGamma}(\alpha, \beta)
 $$
 
-**2. Likelihood:** Model the likelihood of the data given the variances. For normally distributed data:
+**2. 가능도:** 분산이 주어졌을 때 자료의 가능도를 모형화한다. 정규분포 자료에 대해
 
 $$
-X_i \sim \mathcal{N}(0, \sigma_i^2)
+X_{ij} \sim \mathcal{N}(\mu_i, \sigma_i^2)
 $$
 
-**3. Posterior Distribution:** Use Bayes' theorem to combine the prior and likelihood to obtain the posterior distribution for the variances:
+**3. 사후분포:** Bayes 정리로 사전분포와 가능도를 결합하여 분산의 사후분포를 얻는다.
 
 $$
-P(\sigma_i^2 \mid \text{data}) \propto P(\text{data} \mid \sigma_i^2) \, P(\sigma_i^2)
+P(\sigma_i^2 \mid \text{자료}) \propto P(\text{자료} \mid \sigma_i^2) \, P(\sigma_i^2)
 $$
 
-**4. Bayes Factor:** To test for equality of variances, calculate the Bayes Factor which quantifies the strength of evidence for the null hypothesis vs. the alternative:
+**4. Bayes 인자:** 등분산을 검정하려면 귀무가설과 대립가설에 대한 증거의 강도를 수량화하는 Bayes 인자를 계산한다.
 
 $$
-BF = \frac{P(\text{data} \mid H_0)}{P(\text{data} \mid H_1)}
+BF = \frac{P(\text{자료} \mid H_0)}{P(\text{자료} \mid H_1)}
 $$
 
-A Bayes Factor greater than 1 supports the null hypothesis, while a value less than 1 supports the alternative hypothesis.
+Bayes 인자가 1보다 크면 귀무가설을, 1보다 작으면 대립가설을 지지한다.
 
-### Python Implementation
+### Python 구현
 
-Using the `PyMC3` package for Bayesian inference:
+Bayes 추론에는 `pymc` 패키지를 쓴다(과거의 `pymc3`는 더 이상 유지보수되지 않으며 `pymc` 4.x 이상으로 대체되었다).
 
 ```python
-import pymc3 as pm
+import numpy as np
+import pymc as pm
 
 # Data for two groups
-sample1 = [10, 12, 14, 16, 18]
-sample2 = [22, 24, 26, 28, 30]
+sample1 = np.array([10, 12, 14, 16, 18])
+sample2 = np.array([22, 24, 26, 30, 40])
 
-# Bayesian model for variance comparison
 with pm.Model() as model:
-    # Priors for variances
-    sigma1 = pm.InverseGamma('sigma1', alpha=2, beta=1)
-    sigma2 = pm.InverseGamma('sigma2', alpha=2, beta=1)
+    # Priors for the group means (do NOT fix mu = 0)
+    mu1 = pm.Normal('mu1', mu=0, sigma=100)
+    mu2 = pm.Normal('mu2', mu=0, sigma=100)
 
-    # Likelihood based on sample data
-    obs1 = pm.Normal('obs1', mu=0, sigma=sigma1, observed=sample1)
-    obs2 = pm.Normal('obs2', mu=0, sigma=sigma2, observed=sample2)
+    # Priors for the VARIANCES (inverse-gamma), then convert to sd
+    var1 = pm.InverseGamma('var1', alpha=2, beta=1)
+    var2 = pm.InverseGamma('var2', alpha=2, beta=1)
 
-    # Sampling from the posterior
-    trace = pm.sample(2000)
+    # Likelihood: pm.Normal takes the standard deviation, not the variance
+    pm.Normal('obs1', mu=mu1, sigma=pm.math.sqrt(var1), observed=sample1)
+    pm.Normal('obs2', mu=mu2, sigma=pm.math.sqrt(var2), observed=sample2)
 
-    # Summary of the posterior
-    pm.summary(trace)
+    # Derived quantity: the variance ratio
+    pm.Deterministic('ratio', var1 / var2)
+
+    trace = pm.sample(2000, tune=1000, random_seed=42)
+
+print(pm.summary(trace, var_names=['var1', 'var2', 'ratio']))
 ```
 
-### Interpretation
+!!! warning "흔한 두 가지 모형 설정 오류"
+    **(1) 분산과 표준편차의 혼동.** `pm.Normal`의 `sigma` 인자는 **표준편차**를 받는다. 역감마 사전분포는 **분산**에 대한 켤레 사전분포이므로, 그 변수를 그대로 `sigma=`에 넘기면 안 된다. 위 코드처럼 `pm.math.sqrt()`를 취하거나, 아예 표준편차에 직접 사전분포(예: HalfNormal, HalfCauchy)를 두어야 한다.
 
-The posterior distribution provides a probability distribution for each variance. By comparing the posterior distributions, we can make probabilistic statements about whether the variances differ across the groups. The Bayes Factor provides a measure of evidence for the null hypothesis compared to the alternative — a high Bayes Factor indicates stronger support for the null hypothesis of equal variances.
+    **(2) 평균을 0으로 고정.** `mu=0`으로 두면 자료의 평균이 0이 아닐 때 모형이 심각하게 잘못 설정된다. 위 예제에서 집단 1의 평균은 14, 집단 2의 평균은 28.4이다. `mu=0`이면 모형이 이 편차를 모두 "분산"으로 설명하려 하므로 $\sigma^2$이 엄청나게 과대추정된다.
 
-### Advantages of Bayesian Methods
+    분산을 비교하려면 각 집단의 평균을 **자유모수로 두고 함께 추정**해야 한다.
 
-1. **Prior Information:** Incorporates prior knowledge or expert opinion into the analysis, which is useful in fields with well-established prior information.
-2. **Probabilistic Inference:** Provides full posterior distributions for parameters, allowing for more flexible and informative conclusions than traditional hypothesis testing.
-3. **Handling of Complex Models:** Bayesian methods can be applied to hierarchical models and other complex data structures.
+    (켤레 분석으로 충분한 경우에는 MCMC 없이 [Bayes 분산 검정](bayesian_variance.md) 페이지의 닫힌 형태 공식을 쓰는 편이 훨씬 빠르고 정확하다.)
 
----
+### 해석
 
-## When to Use Advanced Methods
+사후분포는 각 분산에 대한 확률분포를 제공한다. 사후분포를 비교하여 집단 간 분산이 다른지에 대한 확률적 진술을 할 수 있다. Bayes 인자는 귀무가설과 대립가설에 대한 증거의 척도를 제공한다. Bayes 인자가 크면 등분산 귀무가설을 더 강하게 지지한다.
 
-**Bootstrapping** and **Bayesian methods** are particularly useful in the following situations:
+실무적으로는 Bayes 인자보다 **분산비 $\sigma_1^2/\sigma_2^2$의 사후분포와 신용구간**을 보고하는 편이 낫다. Bayes 인자는 사전분포의 폭에 민감한 반면(Lindley 역설), 신용구간은 훨씬 둔감하기 때문이다.
 
-- **Small Sample Sizes:** When the sample size is small, bootstrapping provides a flexible and non-parametric alternative to traditional tests.
-- **Non-Normal Data:** When the assumption of normality is violated, bootstrapping or Bayesian methods are more reliable than parametric tests like the F-test or Bartlett's test.
-- **Incorporating Prior Knowledge:** Bayesian methods are ideal when prior knowledge about the population variances is available and can be incorporated into the analysis.
+### Bayes 방법의 장점
 
-
-## Exercises
-
-**Exercise 1.**
-Compare the likelihood ratio test, Wald test, and score test for testing hypotheses about variances. Under what conditions do they give similar results?
-
-??? success "Solution to Exercise 1"
-    All three tests are asymptotically equivalent under the null hypothesis: as $n \to \infty$, their test statistics converge to the same $\chi^2$ distribution, and their p-values agree.
-
-    In finite samples, they can differ: the likelihood ratio test is generally most reliable (invariant to parameterization), the Wald test can be unreliable when the parameter is near a boundary, and the score test only requires estimation under $H_0$.
-
-    They give similar results when: (1) the sample size is large, (2) the data are approximately normal, and (3) the true parameter is not near the boundary of the parameter space.
+1. **사전정보 활용:** 사전 지식이나 전문가 의견을 분석에 반영할 수 있어, 사전정보가 잘 확립된 분야에서 유용하다.
+2. **확률적 추론:** 모수의 완전한 사후분포를 제공하므로 전통적 가설검정보다 유연하고 정보량이 많은 결론을 낼 수 있다.
+3. **복잡한 모형 처리:** 위계모형 등 복잡한 자료 구조에도 적용할 수 있다.
 
 ---
 
-**Exercise 2.**
-Describe a scenario where advanced variance testing methods (bootstrap, Bayesian) are preferable to the classical chi-squared test.
+## 고급 방법을 언제 쓰는가
 
-??? success "Solution to Exercise 2"
-    When the data are heavily non-normal (e.g., financial returns with excess kurtosis of 5+), the chi-squared test for variance is unreliable because its derivation requires exact normality.
+**붓스트랩**과 **Bayes 방법**은 다음 상황에서 특히 유용하다.
 
-    The **bootstrap** approach resamples the data to build a reference distribution for the variance statistic without assuming normality. The **Bayesian** approach places a prior on $\sigma^2$ and computes the posterior, allowing probability statements about the variance.
+- **작은 표본크기:** 표본이 작을 때 붓스트랩이 전통적 검정에 대한 유연한 비모수 대안을 제공한다.
+- **비정규 자료:** 정규성 가정이 위배될 때 붓스트랩이나 Bayes 방법이 F 검정이나 Bartlett 검정 같은 모수적 검정보다 신뢰할 만하다.
+- **사전 지식의 반영:** 모분산에 대한 사전 지식이 있고 그것을 분석에 반영하고 싶을 때 Bayes 방법이 적합하다.
 
-    Both methods are preferred when: (1) normality is clearly violated, (2) the sample size is too small for asymptotic methods to be reliable, or (3) the analyst wants to incorporate prior information (Bayesian) or avoid distributional assumptions entirely (bootstrap).
+!!! note "고급 방법이 만능은 아니다"
+    - 붓스트랩은 **경험분포가 참 분포의 좋은 근사**라는 조건에 기댄다. $n < 10$이거나 강하게 치우친 자료에서는 이 조건이 약하다.
+    - 켤레 Bayes 분석은 **정규 가능도**를 쓰므로 비정규성에 대한 취약성이 Bartlett 검정과 같다. "Bayes이므로 로버스트하다"는 것은 오해이다.
+    - 두 방법 모두 **관측값의 독립성**은 여전히 요구한다.
+
+    비정규성이 문제라면 오히려 15.5절의 Brown-Forsythe 검정이 더 간단하고 안정적인 해결책일 때가 많다.
+
+
+## 연습문제
+
+**연습문제 1.**
+분산에 대한 가설검정에서 가능도비 검정, Wald 검정, 스코어 검정을 비교하라. 어떤 조건에서 세 검정이 비슷한 결과를 주는가?
+
+??? success "연습문제 1 풀이"
+    세 검정은 귀무가설 아래에서 점근적으로 동등하다. $n \to \infty$일 때 검정통계량이 같은 $\chi^2$ 분포로 수렴하고 $p$값이 일치한다.
+
+    유한표본에서는 다를 수 있다. 가능도비 검정이 일반적으로 가장 신뢰할 만하고(모수화에 불변), Wald 검정은 모수가 경계 근처일 때 불안정하며, 스코어 검정은 $H_0$ 아래에서의 추정만 요구한다는 장점이 있다.
+
+    **분산 검정에서의 구체적 차이.** $H_0: \sigma^2 = \sigma_0^2$에 대해 $r = \hat\sigma^2/\sigma_0^2$이라 하면
+
+    | 검정 | 통계량 |
+    |---|---|
+    | 가능도비 | $n(r - 1 - \ln r)$ |
+    | Wald | $\frac{n}{2}\left(1 - \frac{1}{r}\right)^2$ |
+    | 스코어 | $\frac{n}{2}(r - 1)^2$ |
+
+    (Wald는 $\hat\sigma^2$에서 평가한 정보를, 스코어는 $\sigma_0^2$에서 평가한 정보를 쓴다.)
+
+    세 통계량은 $r \to 1$일 때 모두 $\frac{n}{2}(r-1)^2$에 수렴하지만 $r$이 1에서 멀어지면 갈라진다. 예컨대 $r = 4$이면 가능도비 $= 1.614n$, Wald $= 0.281n$, 스코어 $= 4.500n$으로 크게 다르다. 스코어 검정이 가능도비의 세 배, Wald의 열여섯 배이다. **분산은 척도모수이므로 $r$이 1에서 멀어지기 쉽고, 그래서 세 검정의 차이가 평균 검정에서보다 두드러진다.**
+
+    비슷한 결과를 주는 조건은 (1) 표본크기가 클 때, (2) 자료가 근사적으로 정규일 때, (3) 참 모수가 모수공간의 경계 근처가 아닐 때, 그리고 (4) **관측된 비 $r$이 1에 가까울 때**이다. $\square$
 
 ---
 
-**Exercise 3.**
-The bootstrap test for equal variances resamples under the null. Describe the resampling procedure.
+**연습문제 2.**
+고전적 카이제곱 검정보다 고급 분산 검정 방법(붓스트랩, Bayes)이 선호되는 상황을 기술하라.
 
-??? success "Solution to Exercise 3"
-    Under $H_0: \sigma_1^2 = \sigma_2^2$, the two samples come from populations with equal variance. The bootstrap procedure:
+??? success "연습문제 2 풀이"
+    자료가 심하게 비정규일 때(예: 초과첨도가 5 이상인 금융 수익률) 분산에 대한 카이제곱 검정은 유도가 정확한 정규성을 요구하므로 신뢰할 수 없다. 15.2절 연습문제 2에서 보았듯 지수분포 자료에서 명목 95% 신뢰구간의 실제 포함확률이 72%까지 떨어진다.
 
-    1. Pool all observations from both groups.
-    2. For each bootstrap replicate, draw $n_1$ observations (with replacement) for group 1 and $n_2$ for group 2 from the pooled sample.
-    3. Compute the test statistic (e.g., ratio of sample variances $s_1^{*2}/s_2^{*2}$) for each bootstrap replicate.
-    4. The p-value is the proportion of bootstrap test statistics as extreme as or more extreme than the observed statistic.
+    **붓스트랩** 접근은 정규성을 가정하지 않고 자료를 재표집하여 분산 통계량의 기준분포를 만든다. **Bayes** 접근은 $\sigma^2$에 사전분포를 두고 사후분포를 계산하여 분산에 대한 확률 진술을 가능하게 한다.
 
-    By resampling from the pooled data, the null hypothesis of equal variances is enforced.
+    두 방법이 선호되는 경우는 (1) 정규성이 명백히 위배될 때, (2) 표본이 너무 작아 점근적 방법을 믿을 수 없을 때, (3) 사전정보를 반영하고 싶거나(Bayes) 분포 가정을 아예 피하고 싶을 때(붓스트랩)이다.
+
+    **단서.** 이 문장은 붓스트랩에는 잘 맞지만 **켤레 Bayes 분석에는 맞지 않는다.** 역감마-정규 켤레 모형은 정규 가능도를 쓰므로 비정규성에 취약하기가 카이제곱 검정과 같다. Bayes 방법이 비정규성 문제를 해결하려면 $t$ 가능도나 비모수 사전분포처럼 **가능도 자체를 바꾸어야** 하며, 그러면 켤레성이 깨져 MCMC가 필요하다. $\square$
 
 ---
 
-**Exercise 4.**
-In a Bayesian test for $\sigma^2$, the conjugate prior for the variance of normal data is the inverse-gamma distribution. If the prior is $\sigma^2 \sim \text{Inv-Gamma}(\alpha_0, \beta_0)$ and we observe $n$ data points, state the posterior distribution.
+**연습문제 3.**
+등분산에 대한 붓스트랩 검정은 귀무가설 아래에서 재표집한다. 그 재표집 절차를 기술하라.
 
-??? success "Solution to Exercise 4"
-    The posterior is:
+??? success "연습문제 3 풀이"
+    $H_0: \sigma_1^2 = \sigma_2^2$ 아래에서 두 표본은 분산이 같은 모집단에서 온다. 붓스트랩 절차는
+
+    1. **각 집단을 중심화한다.** $\tilde{X}_{1j} = X_{1j} - \bar{X}_1$, $\tilde{X}_{2j} = X_{2j} - \bar{X}_2$.
+    2. 중심화된 잔차를 모두 합쳐 하나의 풀을 만든다.
+    3. 각 붓스트랩 반복에서 풀에서 집단 1용 $n_1$개, 집단 2용 $n_2$개를 복원추출한다.
+    4. 각 반복에서 검정통계량(표본분산비 $s_1^{*2}/s_2^{*2}$ 등)을 계산한다.
+    5. $p$값은 관측 통계량만큼 극단적인 붓스트랩 통계량의 비율이다.
+
+    합쳐진 자료에서 재표집함으로써 등분산이라는 귀무가설이 강제된다.
+
+    !!! warning "1단계(중심화)를 빠뜨리면 안 된다"
+        중심화하지 않고 원자료를 그대로 합치면 집단 간 **평균 차이**가 풀의 분산에 섞여 들어간다.
+
+        본문 예제의 원자료 `[10,12,14,16,18]`과 `[22,24,26,28,30]`을 보자. 각 집단의 분산은 10인데, 그대로 합친 풀의 분산은 **48.9**이다. 평균 차이 12가 만들어 낸 가짜 분산이다. 중심화하면 풀의 분산이 $8.89$로 각 집단의 분산과 부합한다.
+
+        부풀려진 풀에서 재표집하면 붓스트랩 분산비의 변동이 실제보다 커지고 귀무분포가 넓어져, 검정이 지나치게 보수적이 된다. 우리가 검정하려는 것은 분산이지 평균이 아니므로 반드시 평균 차이를 제거해야 한다. $\square$
+
+---
+
+**연습문제 4.**
+$\sigma^2$에 대한 Bayes 검정에서 정규 자료 분산의 켤레 사전분포는 역감마분포이다. 사전분포가 $\sigma^2 \sim \text{Inv-Gamma}(\alpha_0, \beta_0)$이고 자료점 $n$개를 관측했을 때 사후분포를 쓰라.
+
+??? success "연습문제 4 풀이"
+    **$\mu$를 모르는 경우**(실무의 표준 상황) 사후분포는
 
     $$
-    \sigma^2 \mid \mathbf{x} \sim \text{Inv-Gamma}\!\left(\alpha_0 + \frac{n}{2},\; \beta_0 + \frac{1}{2}\sum_{i=1}^n(x_i - \bar{x})^2\right)
+    \sigma^2 \mid \mathbf{x} \sim \text{Inv-Gamma}\!\left(\alpha_0 + \frac{n-1}{2},\; \beta_0 + \frac{1}{2}\sum_{i=1}^n(x_i - \bar{x})^2\right).
     $$
 
-    The posterior incorporates both prior information ($\alpha_0, \beta_0$) and data ($n$ and the sum of squared deviations). A 95% credible interval for $\sigma^2$ is obtained from the 2.5th and 97.5th percentiles of this inverse-gamma distribution. Unlike the frequentist confidence interval, the Bayesian credible interval has a direct probability interpretation: there is a 95% posterior probability that $\sigma^2$ lies in the interval.
+    !!! warning "$\bar{x}$를 썼으면 $(n-1)/2$이다"
+        $\alpha_0 + n/2$는 $\mu$가 **알려져 있어서** $\sum(x_i - \mu)^2$을 쓸 때의 공식이다. 평균을 자료에서 추정하여 $\sum(x_i - \bar{x})^2$을 쓴다면 자유도가 하나 줄어 $\alpha_0 + (n-1)/2$가 맞다.
+
+        두 공식을 섞으면(예: $\alpha_0 + n/2$와 $\sum(x_i-\bar x)^2$) 사후분포가 자료보다 정보를 조금 더 갖고 있는 것처럼 되어, 신용구간이 실제보다 좁아진다. $n$이 작을수록 차이가 크다. [Bayes 분산 검정](bayesian_variance.md) 페이지의 연습문제 1에서 $n = 20$일 때 신용구간이 $(5.48, 20.21)$에서 $(5.27, 18.77)$로 달라지는 예를 볼 수 있다.
+
+    사후분포는 사전정보($\alpha_0, \beta_0$)와 자료($n$과 편차제곱합)를 모두 반영한다. $\sigma^2$의 95% 신용구간은 이 역감마분포의 2.5백분위수와 97.5백분위수로 얻는다.
+
+    빈도주의 신뢰구간과 달리 Bayes 신용구간은 직접적인 확률 해석을 갖는다. $\sigma^2$이 그 구간 안에 있을 사후확률이 95%이다.
+
+    **덧붙임.** 무정보 사전분포 $\alpha_0, \beta_0 \to 0$에서 이 사후분포는 $2\beta_n/\sigma^2 \sim \chi^2_{2\alpha_n}$을 만족하고, $2\alpha_n \to n-1$, $2\beta_n \to (n-1)s^2$이므로 빈도주의 추축량과 정확히 같아진다. 두 접근의 수치적 결과가 일치하는 이유이다. $\square$

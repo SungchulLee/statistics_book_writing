@@ -1,50 +1,50 @@
-# Fligner-Killeen Test (scipy)
+# Fligner-Killeen 검정 (scipy)
 
-## Overview
+## 개요
 
-The Fligner--Killeen test is a nonparametric test for the equality of variances across multiple groups. Unlike Bartlett's test (which assumes normality) and the Brown--Forsythe test (which is robust but still parametric in its $F$-distribution reference), the Fligner--Killeen test uses ranks of absolute deviations from group medians. It is among the most robust variance-homogeneity tests available and performs well under a wide range of distributional shapes.
+Fligner-Killeen 검정은 여러 집단의 분산 동일성에 대한 비모수 검정이다. 정규성을 가정하는 Bartlett 검정이나, 로버스트하지만 $F$ 분포를 기준으로 삼는다는 점에서 여전히 모수적인 Brown-Forsythe 검정과 달리, Fligner-Killeen 검정은 집단중앙값으로부터의 절대편차의 **순위**를 쓴다. 사용 가능한 분산 동질성 검정 가운데 가장 로버스트한 축에 들며 넓은 범위의 분포 모양에서 잘 작동한다.
 
 ---
 
-## Test Setup
+## 검정 설정
 
-Given $k$ independent groups with sizes $n_1, \ldots, n_k$ and total sample size $N = \sum_{i=1}^k n_i$, the hypotheses are:
+크기 $n_1, \ldots, n_k$이고 전체 표본크기가 $N = \sum_{i=1}^k n_i$인 독립 집단 $k$개가 주어졌을 때 가설은
 
 $$
-H_0 : \sigma_1^2 = \sigma_2^2 = \cdots = \sigma_k^2 \quad \text{vs} \quad H_1 : \text{not all } \sigma_i^2 \text{ are equal}
+H_0 : \sigma_1^2 = \sigma_2^2 = \cdots = \sigma_k^2 \quad \text{대} \quad H_1 : \sigma_i^2 \text{이 모두 같지는 않다}
 $$
 
-## How It Works
+## 작동 방식
 
-The Fligner--Killeen test proceeds in three steps:
+Fligner-Killeen 검정은 세 단계로 진행된다.
 
-**Step 1.** Compute absolute deviations from the group median:
+**1단계.** 집단중앙값으로부터의 절대편차를 계산한다.
 
 $$
 z_{ij} = |x_{ij} - \tilde{x}_i|
 $$
 
-**Step 2.** Rank all $N$ deviations, then transform the ranks using normal quantile scores:
+**2단계.** $N$개의 편차 전부에 순위를 매긴 뒤 정규분위수 점수로 변환한다.
 
 $$
-a_{ij} = \mathcal{N}^{-1}\!\left(\frac{1 + R_{ij}/(N+1)}{2}\right)
+a_{ij} = \Phi^{-1}\!\left(\frac{1 + R_{ij}/(N+1)}{2}\right)
 $$
 
-where $R_{ij}$ is the rank of $z_{ij}$ among all $z$-values and $\mathcal{N}^{-1}$ is the standard normal quantile function.
+여기서 $R_{ij}$는 모든 $z$ 값 가운데 $z_{ij}$의 순위이고 $\Phi^{-1}$은 표준정규 분위수함수이다.
 
-**Step 3.** Compute a chi-squared statistic from the group means of the normal scores:
+**3단계.** 정규점수의 집단평균으로 카이제곱 통계량을 계산한다.
 
 $$
 X^2 = \frac{\sum_{i=1}^{k} n_i (\bar{a}_{i\cdot} - \bar{a}_{\cdot\cdot})^2}{\hat{V}}
 $$
 
-where $\hat{V}$ is the variance of the scores. Under $H_0$, $X^2 \sim \chi^2(k-1)$ approximately.
+여기서 $\hat{V}$는 점수 전체의 분산이다. $H_0$ 아래에서 근사적으로 $X^2 \sim \chi^2(k-1)$이다.
 
 ---
 
-## Code
+## 코드
 
-SciPy provides `scipy.stats.fligner` for a direct implementation:
+SciPy는 `scipy.stats.fligner`로 직접 구현을 제공한다.
 
 ```python
 import numpy as np
@@ -58,60 +58,88 @@ X2, p = fligner(g1, g2, g3, center='median')
 print(f"Fligner-Killeen X2 = {X2:.6f}, p-value = {p:.6f}")
 ```
 
----
+출력:
 
-## Interpretation
-
-- A large $X^2$ statistic (small $p$-value) leads to rejecting $H_0$, concluding that the variances differ across groups.
-- For the three groups above, which have similar spread but different locations, the test statistic should be small and the $p$-value large.
-- The normal-score transformation in Step 2 makes the test insensitive to outliers and distributional shape. This gives the Fligner--Killeen test excellent Type I error control under non-normality.
+```text
+Fligner-Killeen X2 = 2.550715, p-value = 0.279331
+```
 
 ---
 
-## Comparison with Other Tests
+## 해석
 
-| Test | Centering | Reference distribution | Robustness |
+- $X^2$ 통계량이 크면($p$값이 작으면) $H_0$을 기각하고 집단 간 분산이 다르다고 결론짓는다.
+- 위 세 집단은 산포가 비슷하고 위치만 다르므로 검정통계량이 작고 $p$값이 크다.
+- 2단계의 정규점수 변환이 검정을 이상점과 분포 모양에 둔감하게 만든다. 그래서 Fligner-Killeen 검정은 비정규성 아래에서 뛰어난 제1종 오류 조절을 보인다.
+
+---
+
+## 다른 검정과의 비교
+
+| 검정 | 중심화 | 기준분포 | 로버스트성 |
 |---|---|---|---|
-| Bartlett | N/A (uses log variances) | $\chi^2$ | Sensitive to non-normality |
-| Levene (mean) | Group mean | $F$ | Moderate |
-| Brown--Forsythe | Group median | $F$ | Good |
-| Fligner--Killeen | Group median + normal scores | $\chi^2$ | Excellent |
+| Bartlett | 해당 없음 (로그분산 사용) | $\chi^2$ | 비정규성에 민감 |
+| Levene (평균) | 집단평균 | $F$ | 중간 |
+| Brown-Forsythe | 집단중앙값 | $F$ | 좋음 |
+| Fligner-Killeen | 집단중앙값 + 정규점수 | $\chi^2$ | 뛰어남 |
 
-The Fligner--Killeen test is the most robust but may have slightly less power than Bartlett under strict normality. For general-purpose use with unknown distributions, it is an excellent choice.
-
----
-
-## Exercises
-
-**Exercise 1.** Compute the Fligner--Killeen test statistic by hand for two groups: $\mathbf{x}_1 = (3, 7, 5)$ and $\mathbf{x}_2 = (1, 10, 6, 4)$. Show the deviations from group medians, the ranks, the normal quantile scores, and the final $X^2$.
-
-??? success "Solution to Exercise 1"
-
-    Group medians: $\tilde{x}_1 = 5$, $\tilde{x}_2 = 5$.
-
-    Absolute deviations: Group 1: $|3-5|=2$, $|7-5|=2$, $|5-5|=0$. Group 2: $|1-5|=4$, $|10-5|=5$, $|6-5|=1$, $|4-5|=1$.
-
-    Combined deviations sorted: $0, 1, 1, 2, 2, 4, 5$ with ranks (midrank for ties): $R = 1, 2.5, 2.5, 4.5, 4.5, 6, 7$.
-
-    Normal quantile scores $a = \mathcal{N}^{-1}((1 + R/8)/2)$:
-
-    - $R=1$: $\mathcal{N}^{-1}(0.5625) = 0.157$
-    - $R=2.5$: $\mathcal{N}^{-1}(0.656) = 0.402$
-    - $R=4.5$: $\mathcal{N}^{-1}(0.781) = 0.774$
-    - $R=6$: $\mathcal{N}^{-1}(0.875) = 1.150$
-    - $R=7$: $\mathcal{N}^{-1}(0.938) = 1.534$
-
-    Group 1 scores: $0.774, 0.774, 0.157$; mean $\bar{a}_1 = 0.568$.
-    Group 2 scores: $1.150, 1.534, 0.402, 0.402$; mean $\bar{a}_2 = 0.872$.
-    Overall mean: $\bar{a} = (3 \times 0.568 + 4 \times 0.872)/7 = 0.742$.
-
-    The test statistic is computed from the between-group variance of scores divided by the overall variance of scores, yielding $X^2$. With $k-1 = 1$ degree of freedom and a small $X^2$, we fail to reject equal variances. $\square$
+Fligner-Killeen 검정이 가장 로버스트하지만 엄격한 정규성 아래에서는 Bartlett보다 검정력이 약간 낮을 수 있다. 분포를 모르는 범용 상황에서는 훌륭한 선택이다.
 
 ---
 
-**Exercise 2.** Generate three groups of size 40 from a standard Cauchy distribution (extremely heavy tails, equal variances). Apply Bartlett's test, the Brown--Forsythe test, and the Fligner--Killeen test at $\alpha = 0.05$ over 2000 replications. Report the false-positive rate of each. Which test best controls the Type I error?
+## 연습문제
 
-??? success "Solution to Exercise 2"
+**연습문제 1.** 두 집단 $\mathbf{x}_1 = (3, 7, 5)$와 $\mathbf{x}_2 = (1, 10, 6, 4)$에 대해 Fligner-Killeen 검정통계량을 손으로 계산하라. 집단중앙값으로부터의 편차, 순위, 정규분위수 점수, 최종 $X^2$을 보여라.
+
+??? success "연습문제 1 풀이"
+
+    집단중앙값: $\tilde{x}_1 = 5$, $\tilde{x}_2 = 5$.
+
+    절대편차: 집단 1은 $|3-5|=2$, $|7-5|=2$, $|5-5|=0$. 집단 2는 $|1-5|=4$, $|10-5|=5$, $|6-5|=1$, $|4-5|=1$.
+
+    합친 편차를 정렬하면 $0, 1, 1, 2, 2, 4, 5$이고 (동점은 평균순위로) 순위는 $R = 1, 2.5, 2.5, 4.5, 4.5, 6, 7$이다.
+
+    정규분위수 점수 $a = \Phi^{-1}((1 + R/8)/2)$:
+
+    | $R$ | 1 | 2.5 | 4.5 | 6 | 7 |
+    |---|---|---|---|---|---|
+    | $(1+R/8)/2$ | 0.5625 | 0.6563 | 0.7813 | 0.8750 | 0.9375 |
+    | $a$ | 0.1573 | 0.4023 | 0.7764 | 1.1503 | 1.5341 |
+
+    집단 1 점수: $0.7764, 0.7764, 0.1573$, 평균 $\bar{a}_1 = 0.5701$.
+    집단 2 점수: $1.1503, 1.5341, 0.4023, 0.4023$, 평균 $\bar{a}_2 = 0.8722$.
+    전체평균: $\bar{a} = (3 \times 0.5701 + 4 \times 0.8722)/7 = 0.7427$.
+
+    점수 전체의 분산은 $\hat{V} = \frac{1}{6}\sum (a - \bar{a})^2 = 0.2282$이므로
+
+    $$
+    X^2 = \frac{3(0.5701 - 0.7427)^2 + 4(0.8722 - 0.7427)^2}{0.2282} = \frac{0.0894 + 0.0671}{0.2282} = 0.686.
+    $$
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    x1 = np.array([3, 7, 5.])
+    x2 = np.array([1, 10, 6, 4.])
+    print(stats.fligner(x1, x2, center='median'))
+    ```
+
+    출력:
+
+    ```text
+    FlignerResult(statistic=0.6859648006823972, pvalue=0.40754030224732085)
+    ```
+
+    $k-1 = 1$ 자유도에서 $X^2 = 0.686$이고 $\chi^2_{0.95,1} = 3.841$이므로 등분산을 기각하지 못한다($p = 0.408$).
+
+    표본분산이 $4$ 대 $14$로 3.5배 차이인데도 그렇다. $N = 7$에서 순위는 $\binom{7}{3} = 35$가지 배열밖에 구별하지 못하므로, 가장 극단적인 배열이라도 $p$값이 $1/35 = 0.029$보다 작아질 수 없다. $\square$
+
+---
+
+**연습문제 2.** 표준 Cauchy 분포(극단적으로 두꺼운 꼬리)에서 크기 40인 세 집단을 생성하라. Bartlett 검정, Brown-Forsythe 검정, Fligner-Killeen 검정을 $\alpha = 0.05$에서 2,000회 반복 적용하여 각각의 거짓 양성률을 보고하라. 어느 검정이 제1종 오류를 가장 잘 조절하는가?
+
+??? success "연습문제 2 풀이"
 
     ```python
     import numpy as np
@@ -135,30 +163,57 @@ The Fligner--Killeen test is the most robust but may have slightly less power th
         if p_fk < 0.05: rej["fligner"] += 1
 
     for name, count in rej.items():
-        print(f"{name:20s} FPR = {count/n_sims:.3f}")
+        print(f"{name:20s} FPR = {count/n_sims:.4f}")
     ```
 
-    Bartlett's test will have a grossly inflated false-positive rate (often 0.30+). The Brown--Forsythe test will be better but may still exceed 0.05 under Cauchy tails. The Fligner--Killeen test, thanks to its rank-based normal scores, will be closest to the nominal 0.05 level. $\square$
+    출력:
+
+    ```text
+    bartlett             FPR = 0.9530
+    brown_forsythe       FPR = 0.0215
+    fligner              FPR = 0.0435
+    ```
+
+    | 검정 | 거짓 양성률 |
+    |---|---|
+    | Bartlett | **0.953** |
+    | Brown-Forsythe | 0.022 |
+    | Fligner-Killeen | **0.044** |
+
+    **Bartlett 검정의 거짓 양성률이 $0.953$이다.** 사실상 항상 기각한다. 명목값의 19배로, 이 책 전체에서 관찰한 가장 극단적인 크기 붕괴이다.
+
+    **Fligner-Killeen이 $0.044$로 명목값에 가장 가깝다.** Brown-Forsythe도 통제되지만 $0.022$로 명목값의 절반, 곧 지나치게 보수적이다. 편차의 평균이 Cauchy의 극단값에 여전히 영향을 받아 집단내 변동이 부풀려지고, F 통계량의 분모가 커져 검정이 둔감해진 것이다. 순위 변환은 이 영향을 원천 차단한다.
+
+    !!! note "Cauchy 분포에는 분산이 없다"
+        엄밀히 말하면 Cauchy 분포는 **평균도 분산도 존재하지 않는다**. 그러므로 "$\sigma_1^2 = \sigma_2^2$"라는 귀무가설 자체가 정의되지 않는다.
+
+        이 실험에서 실제로 검정하는 것은 **세 집단이 같은 분포에서 왔는가**이다. 순위 기반 검정(Fligner-Killeen)은 애초에 적률을 쓰지 않으므로 이 상황에서도 의미 있는 검정이 되지만, 적률에 기반한 Bartlett은 존재하지 않는 양을 추정하려 하므로 완전히 무너진다.
+
+        이것이 로버스트성의 본질적 차이이다. Bartlett은 "적률이 존재하되 정규가 아닌" 상황에서 나빠지고, "적률이 존재하지 않는" 상황에서는 아예 무의미해진다. $\square$
 
 ---
 
-**Exercise 3.** Explain why the normal quantile score transformation $a = \mathcal{N}^{-1}((1 + R/(N+1))/2)$ is used rather than the raw ranks. What would happen if raw ranks were used instead?
+**연습문제 3.** 원래의 순위 대신 정규분위수 점수 변환 $a = \Phi^{-1}((1 + R/(N+1))/2)$을 쓰는 이유를 설명하라. 원래의 순위를 그대로 쓰면 어떻게 되는가?
 
-??? success "Solution to Exercise 3"
+??? success "연습문제 3 풀이"
 
-    The normal quantile scores serve two purposes:
+    정규분위수 점수는 두 가지 목적을 갖는다.
 
-    1. **Normalization**: Raw ranks are uniformly distributed, not normally distributed. The $\mathcal{N}^{-1}$ transformation converts them to approximately standard normal values, so that standard chi-squared asymptotics apply more accurately to the test statistic.
+    1. **척도의 정규화.** 원래의 순위는 균등분포를 따르지 정규분포가 아니다. $\Phi^{-1}$ 변환이 이를 근사적으로 표준정규 값으로 바꾸므로, 검정통계량에 표준 카이제곱 점근이론이 더 정확하게 적용된다.
 
-    2. **Downweighting extremes**: Raw ranks give equal spacing to all observations, meaning an extreme outlier (rank $N$) has the same "distance" from rank $N-1$ as any other adjacent pair. The normal quantile scores compress the tails: the difference between the largest and second-largest score is larger than between consecutive interior scores, but not as extreme as the actual data values might be. This provides some resistance to outliers while still preserving the ordering information.
+    2. **극단값 압축.** 원래의 순위는 모든 관측값에 같은 간격을 준다. 극단적 이상점(순위 $N$)과 순위 $N-1$ 사이의 "거리"가 다른 인접 쌍과 같다. 정규점수는 꼬리를 압축한다. 최대 점수와 두 번째 점수의 차이가 내부 인접 점수들보다는 크지만, 실제 자료값이 보일 수 있는 극단성만큼 크지는 않다. 순서 정보를 보존하면서 이상점에 대한 저항을 제공한다.
 
-    If raw ranks were used instead, the resulting test would still be nonparametric and valid, but the chi-squared approximation would be less accurate, and the test would have lower power against normal alternatives. The normal-score version is asymptotically optimal among rank-based tests when the underlying distribution is normal. $\square$
+    **원래의 순위를 쓰면.** 검정은 여전히 비모수적이고 타당하겠지만 카이제곱 근사가 부정확해지고 정규 대립가설에 대한 검정력이 낮아진다.
+
+    **더 근본적인 문제.** 15.5절 [로버스트 검정](../robust_tests/robust_tests.md) 연습문제 1에서 보았듯, 분모 $\hat V$ 없이 원래 순위를 쓴 $H = \sum_i n_i(\bar R_i - \bar R)^2$ 형태는 **척도가 $N^2$에 비례하여 커지므로 카이제곱분포를 아예 따르지 못한다.** 정규점수 변환은 이 척도 문제도 함께 해결한다(최대 점수가 $\sqrt{2\ln N}$ 규모로만 커진다).
+
+    정규점수 판은 바탕 분포가 정규일 때 순위 기반 검정 가운데 점근적으로 최적이다. $\square$
 
 ---
 
-**Exercise 4.** Apply the Fligner--Killeen test to compare the variability of monthly returns of three simulated stock portfolios. Generate 60 months of returns for each: Portfolio A from $\mathcal{N}(0.01, 0.04^2)$, Portfolio B from $\mathcal{N}(0.01, 0.06^2)$, and Portfolio C from $\mathcal{N}(0.01, 0.08^2)$. Report the test result and discuss its practical significance.
+**연습문제 4.** 모의생성한 세 주식 포트폴리오의 월별 수익률 변동성을 Fligner-Killeen 검정으로 비교하라. 각각 60개월 수익률을 생성한다. 포트폴리오 A는 $\mathcal{N}(0.01, 0.04^2)$, B는 $\mathcal{N}(0.01, 0.06^2)$, C는 $\mathcal{N}(0.01, 0.08^2)$이다. 검정 결과를 보고하고 실무적 유의성을 논하라.
 
-??? success "Solution to Exercise 4"
+??? success "연습문제 4 풀이"
 
     ```python
     import numpy as np
@@ -170,37 +225,61 @@ The Fligner--Killeen test is the most robust but may have slightly less power th
     port_c = rng.normal(0.01, 0.08, 60)
 
     X2, p = fligner(port_a, port_b, port_c, center='median')
-    print(f"Fligner-Killeen: X2 = {X2:.4f}, p = {p:.6f}")
+    print(f"Fligner-Killeen: X2 = {X2:.4f}, p = {p:.6g}")
     print(f"Sample SDs: A={port_a.std(ddof=1):.4f}, "
           f"B={port_b.std(ddof=1):.4f}, C={port_c.std(ddof=1):.4f}")
     ```
 
-    The true standard deviations (4%, 6%, 8%) represent meaningfully different risk levels. With 60 monthly observations per portfolio, the Fligner--Killeen test should reject $H_0$ of equal variances. In practice, investors care about volatility differences because they affect risk-adjusted returns. A statistically significant Fligner--Killeen result confirms that these portfolios carry genuinely different levels of risk, supporting differentiated portfolio allocation strategies. $\square$
+    출력:
+
+    ```text
+    Fligner-Killeen: X2 = 33.2275, p = 6.09168e-08
+    Sample SDs: A=0.0314, B=0.0462, C=0.0816
+    ```
+
+    $p = 6.1 \times 10^{-8}$로 등분산을 압도적으로 기각한다.
+
+    참 표준편차 4%, 6%, 8%는 의미 있게 다른 위험 수준을 나타낸다. 포트폴리오당 월별 관측값 60개면 이 차이를 탐지하기에 충분하다.
+
+    실무에서 투자자가 변동성 차이에 관심을 갖는 것은 그것이 위험조정수익률에 영향을 주기 때문이다. 통계적으로 유의한 Fligner-Killeen 결과는 이 포트폴리오들이 실제로 다른 수준의 위험을 지닌다는 것을 확인해 주며, 차별화된 자산배분 전략을 뒷받침한다.
+
+    !!! warning "표본 표준편차의 변동에 주의하라"
+        표본 표준편차가 $0.0314$, $0.0462$, $0.0816$으로 참값 $0.04$, $0.06$, $0.08$에서 꽤 벗어나 있다. 특히 포트폴리오 A는 $0.0314$로 참값보다 **21% 작다**. $n = 60$에서 표준편차의 상대 표준오차가 $1/\sqrt{2 \times 60} = 9.1\%$이므로 2.3 표준오차 아래이다. 드물지만 있을 수 있는 편차이다.
+
+        실무적 함의: 60개월 수익률로 추정한 변동성에도 상당한 불확실성이 있다. 15.2절 연습문제 1에서 보았듯 $n = 100$에서도 표준편차의 95% 신뢰구간 폭이 1.32배이다. 변동성 추정값을 소수점 두 자리까지 신뢰해서는 안 된다.
+
+        그리고 이 예제는 정규분포에서 생성했지만, 실제 월별 수익률은 꼬리가 두껍다(15.7절). 실제 자료라면 Fligner-Killeen을 쓰는 것이 더욱 정당하다. $\square$
 
 ---
 
-**Exercise 5.** Derive the asymptotic null distribution of the Fligner--Killeen test statistic. Specifically, show that under $H_0$ with equal group sizes $n$ and $k$ groups, the test statistic converges to $\chi^2(k-1)$ as $n \to \infty$.
+**연습문제 5.** Fligner-Killeen 검정통계량의 점근 귀무분포를 유도하라. 구체적으로 $H_0$ 아래에서 집단 크기가 모두 $n$이고 집단이 $k$개일 때, $n \to \infty$이면 검정통계량이 $\chi^2(k-1)$로 수렴함을 보여라.
 
-??? success "Solution to Exercise 5"
+??? success "연습문제 5 풀이"
 
-    Under $H_0$, all observations come from the same distribution, so the deviations $z_{ij} = |x_{ij} - \tilde{x}_i|$ are identically distributed across groups. The normal quantile scores $a_{ij}$ are therefore also identically distributed across groups.
+    $H_0$ 아래에서 모든 관측값이 같은 분포에서 오므로 편차 $z_{ij} = |x_{ij} - \tilde{x}_i|$가 집단에 걸쳐 동일하게 분포한다. 따라서 정규분위수 점수 $a_{ij}$도 집단에 걸쳐 동일하게 분포한다.
 
-    Let $\bar{a}_{i\cdot}$ be the mean score in group $i$ and $\bar{a}_{\cdot\cdot}$ the overall mean. Under $H_0$, $\bar{a}_{i\cdot}$ are approximately independent (for large $n$) with:
+    $\bar{a}_{i\cdot}$을 집단 $i$의 평균 점수, $\bar{a}_{\cdot\cdot}$을 전체평균이라 하자. $H_0$ 아래에서 큰 $n$에 대해 $\bar{a}_{i\cdot}$들은 근사적으로 독립이며
 
     $$
     E[\bar{a}_{i\cdot}] = \mu_a, \qquad \operatorname{Var}(\bar{a}_{i\cdot}) = \frac{\sigma_a^2}{n}
     $$
 
-    where $\mu_a$ and $\sigma_a^2$ are the mean and variance of the score distribution. The test statistic is:
+    여기서 $\mu_a$와 $\sigma_a^2$은 점수분포의 평균과 분산이다. 검정통계량은
 
     $$
     X^2 = \frac{n}{\hat{\sigma}_a^2} \sum_{i=1}^{k} (\bar{a}_{i\cdot} - \bar{a}_{\cdot\cdot})^2
     $$
 
-    By the multivariate CLT, the vector $\sqrt{n}(\bar{a}_{1\cdot} - \mu_a, \ldots, \bar{a}_{k\cdot} - \mu_a)$ converges to $\mathcal{N}(\mathbf{0}, \sigma_a^2 I_k)$. After centering at $\bar{a}_{\cdot\cdot}$, the quadratic form involves a projection onto the $(k-1)$-dimensional subspace orthogonal to the constant vector, yielding:
+    다변량 중심극한정리에 의해 벡터 $\sqrt{n}(\bar{a}_{1\cdot} - \mu_a, \ldots, \bar{a}_{k\cdot} - \mu_a)$가 $\mathcal{N}(\mathbf{0}, \sigma_a^2 I_k)$로 수렴한다. $\bar{a}_{\cdot\cdot}$을 중심으로 중심화하면 이차형식이 상수벡터에 직교하는 $(k-1)$차원 부분공간으로의 사영을 포함하게 되어
 
     $$
     X^2 \xrightarrow{d} \chi^2(k-1)
     $$
 
-    This follows from the standard result that a quadratic form in a multivariate normal vector, with an idempotent matrix of rank $k-1$, has a $\chi^2(k-1)$ distribution. $\square$
+    다변량 정규벡터의 이차형식에서 계수 $k-1$인 멱등행렬을 쓰면 $\chi^2(k-1)$ 분포를 갖는다는 표준 결과에서 따라 나온다.
+
+    **한 가지 미묘한 점: 점수분포가 자료에 의존하지 않는다.** 순위가 항상 $\{1, \ldots, N\}$의 순열이므로 점수 집합 $\{a_{(1)}, \ldots, a_{(N)}\}$은 **자료와 무관하게 고정**되어 있다. 바뀌는 것은 어느 점수가 어느 집단에 배정되는가뿐이다.
+
+    이 때문에 $\hat{\sigma}_a^2$이 사실상 알려진 상수이며, 분모의 변동에서 오는 오차가 없다. F 분포를 참조하는 Levene 계열과 달리 자유도를 추정할 필요가 없는 이유이다.
+
+    **유한표본 정확성.** 이 구조 덕분에 $N$이 작아도 근사가 비교적 정확하지만, $\bar{a}_{i\cdot}$의 정규근사는 여전히 필요하다. $n_i$가 아주 작으면(연습문제 1의 $n_1 = 3$처럼) 정확한 순열 $p$값을 쓰는 편이 낫다. $\square$

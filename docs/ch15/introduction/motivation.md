@@ -1,105 +1,187 @@
-# Why Test Variances
+# 왜 분산을 검정하는가
 
-In earlier chapters, hypothesis tests and confidence intervals focused on population means and proportions. Yet many practical questions revolve around spread rather than location. A manufacturing process that drifts in variability produces defective parts even when the average remains on target. A portfolio manager comparing two investment strategies cares as much about volatility as about expected return. This section explains why formal tests for variance are essential and previews the situations where they arise.
+앞의 장들에서 가설검정과 신뢰구간은 모평균과 모비율에 초점을 맞추었다. 그러나 실무의 여러 질문은 위치가 아니라 **산포**를 중심에 둔다. 변동성이 흔들리는 제조공정은 평균이 목표에 맞아 있어도 불량품을 만들어 낸다. 두 투자전략을 비교하는 포트폴리오 관리자는 기대수익만큼이나 변동성에 관심을 둔다. 이 절은 분산에 대한 형식적 검정이 왜 필수적인지 설명하고 그런 검정이 등장하는 상황들을 미리 살펴본다.
 
-## Variance as a Measure of Risk and Quality
+## 위험과 품질의 측도로서의 분산
 
-The population variance $\sigma^2$ quantifies how far individual observations tend to fall from the population mean $\mu$. When $\sigma^2$ is large, outcomes are unpredictable; when $\sigma^2$ is small, outcomes cluster tightly around $\mu$.
+모분산 $\sigma^2$는 개별 관측값이 모평균 $\mu$에서 얼마나 멀리 떨어지는 경향이 있는지를 수량화한다. $\sigma^2$이 크면 결과를 예측하기 어렵고, $\sigma^2$이 작으면 결과가 $\mu$ 주위에 촘촘히 모인다.
 
-In quality control, a machine filling cereal boxes should produce boxes with a target weight $\mu = 500$ grams. Even if the mean is exactly on target, excessive variability means some boxes are overfilled (wasted product) while others are underfilled (dissatisfied customers). The relevant question is not "Is the mean 500 g?" but rather "Is the variance within the specification limit $\sigma_0^2$?"
+품질관리에서 시리얼 상자를 채우는 기계는 목표 중량 $\mu = 500$그램의 상자를 만들어야 한다. 평균이 정확히 목표에 있더라도 변동성이 과도하면 어떤 상자는 과충전되고(제품 낭비) 어떤 상자는 부족하게 채워진다(고객 불만). 여기서 중요한 질문은 "평균이 500 g인가?"가 아니라 "분산이 규격 한계 $\sigma_0^2$ 안에 있는가?"이다.
 
-In finance, the variance of asset returns is a standard proxy for risk. Two portfolios with identical expected returns may differ dramatically in volatility. A formal test of
+금융에서 자산 수익률의 분산은 위험의 표준적인 대리변수이다. 기대수익이 같은 두 포트폴리오라도 변동성이 크게 다를 수 있다. 다음의 형식적 검정은
 
 $$
-H_0\colon \sigma_1^2 = \sigma_2^2 \quad \text{vs.} \quad H_1\colon \sigma_1^2 \neq \sigma_2^2
+H_0\colon \sigma_1^2 = \sigma_2^2 \quad \text{대} \quad H_1\colon \sigma_1^2 \neq \sigma_2^2
 $$
 
-provides an evidence-based answer to the question "Do these two strategies carry the same risk?"
+"이 두 전략의 위험이 같은가?"라는 질문에 증거에 기반한 답을 준다.
 
-## Variance Testing as a Prerequisite
+## 선행 확인 절차로서의 분산 검정
 
-Several widely used statistical procedures assume that population variances are equal across groups. The two-sample $t$-test with pooled variance and one-way ANOVA both require **homoscedasticity**, meaning
+널리 쓰이는 여러 통계 절차가 집단 간 모분산이 같다고 가정한다. 합동분산을 쓰는 이표본 $t$ 검정과 일원분산분석은 모두 **등분산성**을 요구한다. 곧
 
 $$
 \sigma_1^2 = \sigma_2^2 = \cdots = \sigma_k^2
 $$
 
-If this assumption is violated and the analyst proceeds anyway, the resulting $p$-values and confidence intervals can be seriously distorted. Variance tests serve as diagnostic checks before applying these procedures. Levene's test and the Brown-Forsythe test are the most common pre-tests for homoscedasticity in ANOVA.
+이 가정이 위배되었는데도 분석자가 그대로 진행하면 그 결과인 $p$값과 신뢰구간이 심각하게 왜곡될 수 있다. 분산 검정은 이런 절차를 적용하기 전의 진단 확인 역할을 한다. Levene 검정과 Brown-Forsythe 검정이 분산분석의 등분산성 사전검정으로 가장 흔히 쓰인다.
 
-## When Variance Itself Is the Parameter of Interest
+## 분산 자체가 관심 모수일 때
 
-Sometimes the research question directly targets the variance rather than using it as a nuisance parameter:
+연구 질문이 분산을 성가신 모수로 취급하지 않고 직접 겨냥하는 경우도 있다.
 
-- **Measurement precision.** A laboratory claims its assay has a standard deviation of at most 2 mg/dL. Testing $H_0\colon \sigma^2 \le 4$ against $H_1\colon \sigma^2 > 4$ evaluates that claim.
-- **Process stability.** A manufacturer monitors whether the variance in product dimensions has changed after recalibrating a machine. A before-and-after comparison of $\sigma_{\text{before}}^2$ and $\sigma_{\text{after}}^2$ quantifies the effect.
-- **Volatility comparison.** An analyst tests whether market volatility during a crisis period exceeds volatility during a calm period.
+- **측정 정밀도.** 어떤 실험실이 자사 분석법의 표준편차가 최대 2 mg/dL이라고 주장한다. $H_0\colon \sigma^2 \le 4$를 $H_1\colon \sigma^2 > 4$에 대해 검정하면 그 주장을 평가할 수 있다.
+- **공정 안정성.** 제조업체가 기계를 재보정한 뒤 제품 치수의 분산이 바뀌었는지 감시한다. $\sigma_{\text{before}}^2$과 $\sigma_{\text{after}}^2$의 전후 비교가 그 효과를 수량화한다.
+- **변동성 비교.** 분석가가 위기 기간의 시장 변동성이 안정 기간의 변동성을 넘어서는지 검정한다.
 
-In each scenario, the sample variance $S^2$ is the natural point estimator of $\sigma^2$, and the sampling distribution of $S^2$ provides the basis for formal inference.
+각 상황에서 표본분산 $S^2$이 $\sigma^2$의 자연스러운 점추정량이고, $S^2$의 표집분포가 형식적 추론의 근거를 제공한다.
 
-## Overview of Variance Tests
+## 분산 검정 개관
 
-The tests covered in this chapter fall into several categories:
+이 장에서 다루는 검정들은 몇 가지 범주로 나뉜다.
 
-| Test | Samples | Assumption | Section |
+| 검정 | 표본 수 | 가정 | 절 |
 |---|---|---|---|
-| Chi-square test | One sample | Normality | 15.2 |
-| F-test | Two samples | Normality | 15.3 |
-| Bartlett's test | $k \ge 2$ samples | Normality | 15.4 |
-| Levene's test | $k \ge 2$ samples | Mild | 15.5 |
-| Brown-Forsythe test | $k \ge 2$ samples | Mild | 15.5 |
-| Fligner-Killeen test | $k \ge 2$ samples | Minimal | 15.5 |
+| 카이제곱 검정 | 일표본 | 정규성 | 15.2 |
+| F 검정 | 이표본 | 정규성 | 15.3 |
+| Bartlett 검정 | $k \ge 2$ 표본 | 정규성 | 15.4 |
+| Levene 검정 | $k \ge 2$ 표본 | 완화됨 | 15.5 |
+| Brown-Forsythe 검정 | $k \ge 2$ 표본 | 완화됨 | 15.5 |
+| Fligner-Killeen 검정 | $k \ge 2$ 표본 | 최소 | 15.5 |
 
-The chi-square test and F-test are exact under normality but sensitive to non-normality. Bartlett's test extends the F-test to multiple groups yet shares the same sensitivity. The robust tests in Section 15.5 relax the normality requirement at the cost of slightly lower power when normality actually holds.
+카이제곱 검정과 F 검정은 정규성 아래에서 정확하지만 비정규성에 민감하다. Bartlett 검정은 F 검정을 여러 집단으로 확장하되 같은 민감성을 물려받는다. 15.5절의 로버스트 검정들은 정규성 요구를 완화하는 대신 실제로 정규성이 성립할 때 검정력이 약간 낮아진다.
 
-## Choosing the Right Test
+## 올바른 검정 고르기
 
-The choice of variance test depends on three factors:
+분산 검정의 선택은 세 요인에 달려 있다.
 
-1. **Number of groups.** One-sample problems use the chi-square test. Two-sample problems use the F-test. Multi-sample problems require Bartlett's, Levene's, or a related procedure.
-2. **Distributional assumptions.** If the data are approximately normal, the chi-square, F, or Bartlett test is appropriate and offers the highest power. If the data are skewed or heavy-tailed, a robust test such as Levene's or Brown-Forsythe should be preferred.
-3. **Purpose of the test.** If the variance test serves as a preliminary check before ANOVA, Levene's test is the standard recommendation because it balances power and robustness. If the variance itself is the scientific quantity of interest, the chi-square or F-test provides exact inference under normality.
+1. **집단의 수.** 일표본 문제에는 카이제곱 검정을 쓴다. 이표본 문제에는 F 검정을 쓴다. 다표본 문제에는 Bartlett, Levene 또는 관련 절차가 필요하다.
+2. **분포 가정.** 자료가 근사적으로 정규이면 카이제곱, F, Bartlett 검정이 적절하고 검정력이 가장 높다. 자료가 치우쳤거나 꼬리가 두꺼우면 Levene이나 Brown-Forsythe 같은 로버스트 검정을 선호해야 한다.
+3. **검정의 목적.** 분산 검정이 분산분석 전의 예비 확인이라면 검정력과 로버스트성의 균형이 좋은 Levene 검정이 표준적 권고이다. 분산 자체가 과학적 관심량이라면 정규성 아래에서 정확한 추론을 주는 카이제곱이나 F 검정이 낫다.
 
-!!! tip "Practical Guideline"
-    When in doubt about normality, default to the Brown-Forsythe test. It uses the median rather than the mean to measure deviations, making it robust to skewness and outliers while retaining reasonable power under normality.
+!!! tip "실무 지침"
+    정규성이 의심스러울 때는 Brown-Forsythe 검정을 기본값으로 삼으라. 편차를 잴 때 평균 대신 중앙값을 쓰므로 치우침과 이상점에 로버스트하면서도 정규성 아래에서 합리적인 검정력을 유지한다.
 
-## Connection to the Broader Curriculum
+## 교과과정 전체와의 연결
 
-Variance testing ties together several threads from earlier chapters:
+분산 검정은 앞의 여러 장에서 나온 흐름들을 하나로 엮는다.
 
-- **Sampling distributions** (Chapter 5): The chi-square distribution arises as the sampling distribution of $(n-1)S^2/\sigma^2$ under normality, and the F-distribution arises as a ratio of two independent chi-square variables.
-- **Hypothesis testing** (Chapter 9): The logic of null and alternative hypotheses, significance levels, and $p$-values carries over directly.
-- **ANOVA** (Chapter 11): The equal-variance assumption in ANOVA motivates the pre-tests discussed in Sections 15.4 and 15.5.
-- **Regression diagnostics** (Chapter 13): Heteroscedasticity in regression residuals is detected through variance tests such as the Breusch-Pagan test, covered in Section 15.7.
+- **표집분포**(5장): 정규성 아래에서 $(n-1)S^2/\sigma^2$의 표집분포로 카이제곱분포가 나오고, 독립인 두 카이제곱 변수의 비로 F 분포가 나온다.
+- **가설검정**(9장): 귀무가설과 대립가설, 유의수준, $p$값의 논리가 그대로 이어진다.
+- **분산분석**(11장): 분산분석의 등분산 가정이 15.4절과 15.5절에서 다루는 사전검정의 동기가 된다.
+- **회귀 진단**(13장): 회귀 잔차의 이분산은 15.7절에서 다루는 Breusch-Pagan 검정 같은 분산 검정으로 탐지한다.
 
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Describe the main concept of Why Test Variances and explain why it matters for statistical practice.
+**연습문제 1.**
+어떤 시리얼 충전기가 목표 중량 500 g으로 상자를 채운다. 품질관리 담당자가 두 기계를 비교한 결과 표본평균이 각각 500.1 g과 499.9 g으로 사실상 같았지만, 표본표준편차는 각각 2.0 g과 6.0 g이었다. 왜 평균에 대한 검정만으로는 불충분한지 설명하고, 두 기계의 실질적 차이를 서술하라.
 
-??? success "Solution to Exercise 1"
-    Why Test Variances is a core topic in statistics that provides tools for drawing reliable inferences from data. It matters because proper application ensures valid conclusions, correctly quantified uncertainty, and appropriate handling of the assumptions that underpin the method. Practitioners who understand this concept can avoid common pitfalls and choose the right analytical approach for their data.
+??? success "연습문제 1 풀이"
+    평균에 대한 $t$ 검정은 두 기계가 구별되지 않는다고 결론지을 것이다. 두 표본평균 모두 목표치 500 g에 매우 가깝기 때문이다. 그러나 이는 잘못된 안심이다.
 
----
+    상자 중량이 근사적으로 정규라고 가정하면, 규격을 $500 \pm 5$ g이라 할 때 규격을 벗어날 확률은
 
-**Exercise 2.**
-State the key assumptions required by the method discussed here. How can each assumption be checked?
+    - **기계 A** ($\sigma = 2$): $P(|Z| > 5/2) = P(|Z| > 2.5) = 0.0124$, 곧 약 **1.2%**.
+    - **기계 B** ($\sigma = 6$): $P(|Z| > 5/6) = P(|Z| > 0.833) = 0.4047$, 곧 약 **40%**.
 
-??? success "Solution to Exercise 2"
-    The main assumptions typically include: (1) independence of observations -- verified by understanding the data collection process and checking for serial correlation; (2) distributional requirements (e.g., normality) -- checked with Q-Q plots and formal tests like Shapiro-Wilk; (3) equal variances (if applicable) -- assessed with boxplots and Levene's test. When assumptions are violated, consider robust alternatives, transformations, or nonparametric methods.
+    기계 B는 상자의 5분의 2가 규격을 벗어난다. 평균이 완벽하게 목표에 맞아 있는데도 그렇다.
 
----
-
-**Exercise 3.**
-Work through a small numerical example illustrating the application of the technique from this section.
-
-??? success "Solution to Exercise 3"
-    A structured approach to applying this technique involves: (1) clearly stating the hypotheses or estimation goal; (2) verifying that the data meet the required assumptions; (3) computing the relevant test statistic, estimate, or model fit; (4) obtaining the p-value, confidence interval, or posterior distribution; (5) interpreting the result in the context of the original question. Following these steps systematically ensures a rigorous and reproducible analysis.
+    핵심은 **평균이 위치를, 분산이 신뢰성을 통제한다**는 것이다. 품질관리에서 고객이 경험하는 것은 개별 상자이지 평균이 아니므로, 분산이야말로 결정적인 모수이다. 형식적 검정으로는 $H_0: \sigma_A^2 = \sigma_B^2$에 대한 F 검정이 적절하다. $\square$
 
 ---
 
-**Exercise 4.**
-Compare the approach from this section with an alternative method. When would you choose each?
+**연습문제 2.**
+어떤 실험실이 자사 혈당 분석법의 표준편차가 최대 2 mg/dL이라고 주장한다. 독립인 측정 $n = 25$회에서 $s = 2.6$ mg/dL을 얻었다. $H_0: \sigma^2 \le 4$를 $H_1: \sigma^2 > 4$에 대해 $\alpha = 0.05$에서 검정하라.
 
-??? success "Solution to Exercise 4"
-    The method discussed here is appropriate when its assumptions hold and the sample size is sufficient for the asymptotic approximations to be accurate. Alternative approaches include: (1) nonparametric methods -- preferred when distributional assumptions are suspect; (2) bootstrap methods -- useful when analytical reference distributions are unavailable; (3) Bayesian methods -- valuable when incorporating prior information or when direct probability statements about parameters are desired. Running multiple approaches and comparing results provides a useful robustness check.
+??? success "연습문제 2 풀이"
+
+    검정통계량은
+
+    $$
+    \chi^2 = \frac{(n-1)s^2}{\sigma_0^2} = \frac{24 \times 2.6^2}{4} = \frac{24 \times 6.76}{4} = 40.56.
+    $$
+
+    귀무가설 아래에서 $\chi^2 \sim \chi^2_{24}$이다. 상단 단측 검정이므로 임계값은 $\chi^2_{0.95, 24} = 36.415$이다.
+
+    $40.56 > 36.415$이므로 $H_0$을 기각한다. $p$값은
+
+    $$
+    p = P(\chi^2_{24} \geq 40.56) = 0.0186.
+    $$
+
+    ```python
+    from scipy import stats
+
+    n, s, sigma0 = 25, 2.6, 2.0
+    chi2_stat = (n - 1) * s**2 / sigma0**2
+    p = 1 - stats.chi2.cdf(chi2_stat, n - 1)
+    crit = stats.chi2.ppf(0.95, n - 1)
+    print(f"chi2 = {chi2_stat:.4f}, critical = {crit:.4f}, p = {p:.4f}")
+    ```
+
+    **결론:** 5% 수준에서 실험실의 주장을 기각할 증거가 있다. 참 표준편차가 2 mg/dL을 넘는 것으로 보인다.
+
+    다만 $p = 0.019$가 압도적이지는 않고 $n = 25$가 작다는 점을 유념하라. 카이제곱 분산 검정은 정규성에 매우 민감하므로, 결론을 확정하기 전에 측정값의 정규성을 확인해야 한다. $\square$
+
+---
+
+**연습문제 3.**
+분산분석을 수행하기 전에 등분산성을 확인하는 관행에는 논리적 문제가 있다. 그 문제를 설명하고, 실무에서 어떻게 대응하는 것이 나은지 논하라.
+
+??? success "연습문제 3 풀이"
+    **문제: 같은 자료로 두 번 결정한다.**
+
+    "Levene 검정이 기각하지 않으면 표준 분산분석, 기각하면 Welch 분산분석"이라는 절차를 쓰면 최종 검정의 선택이 자료에 의존하게 된다. 그 결과 두 단계를 합친 절차의 실제 제1종 오류율이 명목 $\alpha$에서 벗어난다.
+
+    두 번째 문제는 **검정력의 비대칭**이다.
+
+    - 집단이 작으면 Levene 검정의 검정력이 낮아, 등분산성이 실제로 크게 위배되어도 기각하지 못하고 부적절한 표준 분산분석으로 진행하게 된다.
+    - 집단이 크면 Levene 검정의 검정력이 지나치게 높아, 실질적으로 무해한 작은 분산 차이도 기각하여 불필요하게 Welch 분산분석으로 가게 된다.
+
+    곧 사전검정이 가장 필요한 상황(작은 표본)에서 가장 도움이 안 되고, 필요 없는 상황(큰 표본)에서 가장 민감하다.
+
+    **더 나은 실무.**
+
+    1. **사전검정 없이 처음부터 Welch 분산분석을 쓴다.** 등분산일 때 검정력 손실이 미미하고(보통 몇 퍼센트) 등분산이 아닐 때는 크게 낫다. 여러 모의실험 연구가 이를 지지한다.
+    2. 분산의 동질성 자체가 과학적 관심사일 때만 형식적 분산 검정을 하고, 그 결과를 분석 방법의 선택이 아니라 **보고할 결과**로 취급한다.
+    3. 집단별 표준편차와 상자그림을 항상 함께 보고하여 독자가 스스로 판단할 수 있게 한다. $\square$
+
+---
+
+**연습문제 4.**
+어떤 분석가가 위기 기간(60거래일)의 일별 수익률 표준편차 $s_1 = 2.1\%$와 안정 기간(60거래일)의 $s_2 = 1.3\%$를 비교한다. F 검정으로 변동성이 달라졌는지 검정하고, 이 상황에서 F 검정을 쓰는 것의 위험을 논하라.
+
+??? success "연습문제 4 풀이"
+
+    검정통계량은
+
+    $$
+    F = \frac{s_1^2}{s_2^2} = \frac{0.021^2}{0.013^2} = \frac{0.000441}{0.000169} = 2.6095.
+    $$
+
+    귀무가설 아래에서 $F \sim F_{59, 59}$이다. 위기 기간의 변동성이 더 크다는 단측 대립가설에 대해
+
+    $$
+    p = P(F_{59,59} \geq 2.6095) = 1.58 \times 10^{-4}.
+    $$
+
+    ```python
+    from scipy import stats
+
+    s1, s2, n1, n2 = 0.021, 0.013, 60, 60
+    F = (s1 / s2)**2
+    p = 1 - stats.f.cdf(F, n1 - 1, n2 - 1)
+    print(f"F = {F:.4f}, p = {p:.6f}")
+    ```
+
+    명목상으로는 변동성 증가의 매우 강한 증거이다.
+
+    !!! warning "그러나 이 $p$값을 믿어서는 안 된다"
+        금융 수익률에 F 검정을 적용하는 것은 이 장에서 다루는 **가장 위험한 오용** 가운데 하나이다. 세 가지 문제가 겹친다.
+
+        1. **두꺼운 꼬리.** F 검정은 정규성에 극도로 민감하다. 일별 수익률의 초과첨도는 흔히 3에서 10 사이인데, 이런 자료에서 F 검정의 실제 제1종 오류율은 명목 5%가 아니라 20~30%에 이를 수 있다(15.3절 참조).
+        2. **독립성 위배.** 수익률 자체는 거의 무상관이지만 **제곱 수익률은 강하게 자기상관**되어 있다(변동성 군집). F 검정은 $n_1 = n_2 = 60$개의 독립 관측을 가정하지만 실효 표본크기는 훨씬 작다.
+        3. **기간을 자료를 보고 골랐다.** "위기 기간"을 변동성이 높았다는 이유로 사후적으로 정의했다면 검정이 순환논법이 된다.
+
+        **대안:** GARCH 모형으로 변동성 동학을 직접 추정하거나, 블록 붓스트랩으로 자기상관을 반영한 귀무분포를 만들거나, 최소한 Brown-Forsythe 같은 로버스트 검정을 쓴다. $\square$

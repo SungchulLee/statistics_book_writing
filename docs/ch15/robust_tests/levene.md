@@ -1,87 +1,91 @@
-# Levene's Test
+# Levene 검정
 
-The chi-square test, F-test, and Bartlett's test all assume normality and break down when the data are non-normal. Levene (1960) proposed an elegantly simple idea: instead of testing variances directly, transform the data into absolute deviations from the group mean and then apply a standard one-way ANOVA to the transformed values. This conversion turns a variance-comparison problem into a mean-comparison problem, which is far less sensitive to the shape of the underlying distribution.
+카이제곱 검정, F 검정, Bartlett 검정은 모두 정규성을 가정하며 자료가 비정규이면 무너진다. Levene(1960)은 우아하게 단순한 아이디어를 제안했다. 분산을 직접 검정하는 대신 자료를 집단평균으로부터의 절대편차로 변환한 뒤 변환된 값에 표준 일원분산분석을 적용하는 것이다. 이 변환은 분산 비교 문제를 평균 비교 문제로 바꾸며, 평균 비교는 바탕 분포의 모양에 훨씬 덜 민감하다.
 
-## The Key Idea
+## 핵심 아이디어
 
-If a group has large variance, its observations tend to be far from the group center. If a group has small variance, its observations cluster close to the center. Levene's test formalizes this intuition by defining new variables
+어떤 집단의 분산이 크면 그 관측값들이 집단 중심에서 멀리 떨어지는 경향이 있다. 분산이 작으면 중심 가까이 모인다. Levene 검정은 이 직관을 다음 새 변수로 형식화한다.
 
 $$
 Z_{ij} = |X_{ij} - \bar{X}_i|
 $$
 
-where $X_{ij}$ is the $j$-th observation in group $i$ and $\bar{X}_i$ is the mean of group $i$. The value $Z_{ij}$ measures how far each observation falls from its group mean. Groups with larger variances produce larger average $Z_{ij}$ values.
+여기서 $X_{ij}$는 집단 $i$의 $j$번째 관측값이고 $\bar{X}_i$는 집단 $i$의 평균이다. $Z_{ij}$는 각 관측값이 집단평균에서 얼마나 떨어져 있는지를 잰다. 분산이 큰 집단은 평균적으로 큰 $Z_{ij}$ 값을 만들어 낸다.
 
-Testing $H_0\colon \sigma_1^2 = \cdots = \sigma_k^2$ is then equivalent to testing whether the means of $Z_{ij}$ are equal across groups.
+따라서 $H_0\colon \sigma_1^2 = \cdots = \sigma_k^2$을 검정하는 것은 $Z_{ij}$의 평균이 집단에 걸쳐 같은지를 검정하는 것과 같아진다.
 
-## Test Statistic
+## 검정통계량
 
-Apply the standard one-way ANOVA F-statistic to the transformed values $Z_{ij}$:
+변환된 값 $Z_{ij}$에 표준 일원분산분석의 F 통계량을 적용한다.
 
 $$
 W = \frac{(N - k) \sum_{i=1}^{k} n_i (\bar{Z}_i - \bar{Z})^2}{(k - 1) \sum_{i=1}^{k} \sum_{j=1}^{n_i} (Z_{ij} - \bar{Z}_i)^2}
 $$
 
-where:
+여기서
 
-- $\bar{Z}_i = \frac{1}{n_i} \sum_{j=1}^{n_i} Z_{ij}$ is the mean of the transformed values in group $i$
-- $\bar{Z} = \frac{1}{N} \sum_{i=1}^{k} \sum_{j=1}^{n_i} Z_{ij}$ is the overall mean of all transformed values
-- $N = \sum_{i=1}^{k} n_i$ is the total sample size
-- $k$ is the number of groups
+- $\bar{Z}_i = \frac{1}{n_i} \sum_{j=1}^{n_i} Z_{ij}$는 집단 $i$의 변환값 평균
+- $\bar{Z} = \frac{1}{N} \sum_{i=1}^{k} \sum_{j=1}^{n_i} Z_{ij}$는 모든 변환값의 전체평균
+- $N = \sum_{i=1}^{k} n_i$는 전체 표본크기
+- $k$는 집단의 수
 
-Under $H_0$ and mild regularity conditions, $W$ is approximately distributed as $F_{k-1, N-k}$.
+$H_0$과 완만한 정칙조건 아래에서 $W$는 근사적으로 $F_{k-1, N-k}$를 따른다.
 
-## Hypotheses
+## 가설
 
 $$
 H_0\colon \sigma_1^2 = \sigma_2^2 = \cdots = \sigma_k^2
 $$
 
 $$
-H_1\colon \sigma_i^2 \neq \sigma_j^2 \text{ for at least one pair } i \neq j
+H_1\colon \sigma_i^2 \neq \sigma_j^2 \text{ (적어도 한 쌍의)} i \neq j
 $$
 
-Reject $H_0$ if $W > F_{1-\alpha,\, k-1,\, N-k}$.
+$W > F_{1-\alpha,\, k-1,\, N-k}$이면 $H_0$을 기각한다.
 
-## Why Levene's Test Is Robust
+## Levene 검정이 로버스트한 이유
 
-The robustness comes from two sources:
+로버스트성은 두 원천에서 나온다.
 
-1. **Absolute deviations are less sensitive to outliers than squared deviations.** The sample variance uses $(X_{ij} - \bar{X}_i)^2$, which gives extreme observations quadratic influence. Absolute deviations $|X_{ij} - \bar{X}_i|$ give them only linear influence.
+1. **절대편차는 제곱편차보다 이상점에 덜 민감하다.** 표본분산은 $(X_{ij} - \bar{X}_i)^2$을 쓰므로 극단 관측값에 이차 영향력을 준다. 절대편차 $|X_{ij} - \bar{X}_i|$는 일차 영향력만 준다.
 
-2. **The ANOVA F-test on means is robust.** By the central limit theorem, the group means $\bar{Z}_i$ become approximately normal for moderate sample sizes, even when the $Z_{ij}$ themselves are not normally distributed. The F-test for means inherits this robustness.
+2. **평균에 대한 분산분석 F 검정 자체가 로버스트하다.** 중심극한정리에 의해 $Z_{ij}$ 자체가 정규가 아니더라도 표본크기가 어느 정도면 집단평균 $\bar{Z}_i$가 근사적으로 정규가 된다. 평균에 대한 F 검정이 이 로버스트성을 물려받는다.
 
-!!! note "Original vs. Modified Levene's Test"
-    Levene's original 1960 proposal uses the group mean $\bar{X}_i$ as the center. The Brown-Forsythe modification (covered in the next section) replaces the mean with the group median, providing additional robustness to skewness and outliers. When authors refer to "Levene's test" without qualification, they sometimes mean the Brown-Forsythe version; check the documentation of the software being used.
+여기에 근본적인 차이가 하나 더 있다. 앞의 검정들이 **4차 적률**에 의존한 데 반해 Levene 검정은 $Z$의 **2차 적률**만 쓴다. 곧 원자료의 첨도가 아니라 원자료의 분산에 해당하는 정보만 필요하다. 이것이 로버스트성의 진짜 근원이다.
 
-## Example
+!!! note "원래의 Levene 검정과 수정판"
+    Levene의 1960년 원안은 집단평균 $\bar{X}_i$를 중심으로 쓴다. Brown-Forsythe 수정(다음 절에서 다룬다)은 평균을 집단중앙값으로 바꾸어 치우침과 이상점에 대한 추가 로버스트성을 제공한다.
 
-Three groups have the following observations:
+    저자들이 단서 없이 "Levene 검정"이라 할 때 Brown-Forsythe 판을 뜻하는 경우가 있으므로 쓰는 소프트웨어의 문서를 확인해야 한다. **SciPy의 `stats.levene`은 기본값이 `center='median'`, 곧 Brown-Forsythe이다.** 원래의 Levene 검정을 쓰려면 `center='mean'`을 명시해야 한다.
 
-| Group 1 | Group 2 | Group 3 |
+## 예제
+
+세 집단의 관측값이 다음과 같다.
+
+| 집단 1 | 집단 2 | 집단 3 |
 |---|---|---|
 | 10, 12, 14, 11, 13 | 20, 28, 22, 35, 25 | 15, 16, 14, 17, 15 |
 
-**Step 1.** Compute group means:
+**1단계.** 집단평균을 계산한다.
 
 - $\bar{X}_1 = 12.0$, $\bar{X}_2 = 26.0$, $\bar{X}_3 = 15.4$
 
-**Step 2.** Compute absolute deviations $Z_{ij} = |X_{ij} - \bar{X}_i|$:
+**2단계.** 절대편차 $Z_{ij} = |X_{ij} - \bar{X}_i|$를 계산한다.
 
-| Group 1 | Group 2 | Group 3 |
+| 집단 1 | 집단 2 | 집단 3 |
 |---|---|---|
 | 2, 0, 2, 1, 1 | 6, 2, 4, 9, 1 | 0.4, 0.6, 1.4, 1.6, 0.4 |
 
-**Step 3.** Compute means of transformed values:
+**3단계.** 변환값의 평균을 계산한다.
 
 - $\bar{Z}_1 = 1.20$, $\bar{Z}_2 = 4.40$, $\bar{Z}_3 = 0.88$
-- $\bar{Z} = (1.20 + 4.40 + 0.88) \times 5/15 = 2.16$ (weighted by equal group sizes)
+- $\bar{Z} = (1.20 + 4.40 + 0.88)/3 = 2.16$ (집단 크기가 같으므로 단순평균)
 
-**Step 4.** Compute the $W$ statistic using the ANOVA formula on the $Z_{ij}$ values. With $k = 3$ groups and $N = 15$ observations, $W$ follows an $F_{2, 12}$ distribution under $H_0$.
+**4단계.** $Z_{ij}$ 값에 분산분석 공식을 적용해 $W$ 통계량을 계산한다. $k = 3$개 집단, $N = 15$개 관측값이므로 $H_0$ 아래에서 $W$는 $F_{2, 12}$를 따른다.
 
-**Step 5.** Compare $W$ to the critical value $F_{0.95,\, 2,\, 12} = 3.885$. Group 2 has much larger deviations than the other groups, which will produce a large $W$ value, likely leading to rejection of $H_0$.
+**5단계.** $W$를 임계값 $F_{0.95,\, 2,\, 12} = 3.885$와 비교한다. 집단 2의 편차가 다른 집단보다 훨씬 크므로 큰 $W$ 값이 나올 것이고 $H_0$을 기각할 가능성이 높다.
 
-## Python Implementation
+## Python 구현
 
 ```python
 import numpy as np
@@ -94,81 +98,175 @@ group3 = [15, 16, 14, 17, 15]
 
 # Levene's test using the mean (original Levene)
 stat, p_value = stats.levene(group1, group2, group3, center='mean')
-print(f"Levene's W statistic: {stat:.4f}")
-print(f"P-value: {p_value:.4f}")
+print(f"Levene's W statistic (mean-centered):   {stat:.4f}, p = {p_value:.4f}")
+
+# Brown-Forsythe: SciPy's default
+stat_m, p_m = stats.levene(group1, group2, group3, center='median')
+print(f"Brown-Forsythe (median-centered):       {stat_m:.4f}, p = {p_m:.4f}")
 
 alpha = 0.05
 if p_value < alpha:
-    print("Reject H0: variances are significantly different.")
+    print("Levene (mean): reject H0 - variances differ.")
 else:
-    print("Fail to reject H0: no significant difference in variances.")
+    print("Levene (mean): fail to reject H0.")
 ```
 
-## Strengths and Limitations
+출력:
 
-**Strengths:**
+```text
+Levene's W statistic (mean-centered):   5.0152, p = 0.0261
+Brown-Forsythe (median-centered):       3.4305, p = 0.0663
+Levene (mean): reject H0 - variances differ.
+```
 
-- Robust to moderate departures from normality
-- Simple to compute (just an ANOVA on absolute deviations)
-- Available in all major statistical software packages
-- Works well for symmetric non-normal distributions
+!!! warning "중심의 선택이 결론을 바꾼다"
+    같은 자료에서 평균 중심 Levene은 $p = 0.026$으로 기각하고 중앙값 중심 Brown-Forsythe는 $p = 0.066$으로 기각하지 못한다. 5% 문턱을 사이에 두고 결론이 갈린다.
 
-**Limitations:**
+    집단 2의 관측값 $\{20, 28, 22, 35, 25\}$에서 35가 이상점처럼 작용하기 때문이다. 평균 26.0은 이 값에 끌려가지만 중앙값 25는 거의 영향받지 않는다. 그 결과 평균 기준 편차가 더 크게 나온다.
 
-- Still uses the group mean, which is sensitive to outliers and skewness. The Brown-Forsythe modification addresses this by using the median.
-- The $F$-distribution approximation is asymptotic; very small samples may show some size distortion.
-- Less powerful than Bartlett's test when the data are truly normal.
+    **어느 쪽을 보고할지는 자료를 보기 전에 정해야 한다.** 두 결과를 계산한 뒤 마음에 드는 쪽을 고르는 것은 $p$값 조작이다.
 
-## Exercises
+## 강점과 한계
 
-**Exercise 1.**
-Three different teaching methods are applied to three groups of students. After the semester, the students' scores are recorded as follows:
+**강점:**
 
-- **Group 1:** $[78, 82, 85, 90, 87]$
-- **Group 2:** $[65, 70, 72, 68, 74]$
-- **Group 3:** $[92, 88, 94, 89, 91]$
+- 중간 정도의 정규성 이탈에 로버스트하다
+- 계산이 간단하다(절대편차에 대한 분산분석일 뿐)
+- 모든 주요 통계 소프트웨어에서 제공된다
+- 대칭인 비정규 분포에서 잘 작동한다
 
-Use Levene's test to determine if the variances in the test scores are equal across the three groups.
+**한계:**
 
-??? success "Solution to Exercise 1"
+- 여전히 집단평균을 쓰므로 이상점과 치우침에 민감하다. Brown-Forsythe 수정이 중앙값을 써서 이를 해결한다.
+- $F$ 분포 근사는 점근적이다. 아주 작은 표본에서는 크기 왜곡이 나타날 수 있다.
+- 자료가 정말로 정규일 때는 Bartlett 검정보다 검정력이 낮다.
 
-    **Hypotheses:**
+## 연습문제
 
-    - Null Hypothesis ($H_0$): The variances are equal across the three groups.
-    - Alternative Hypothesis ($H_1$): At least one group has a variance that differs from the others.
+**연습문제 1.**
+세 집단의 학생에게 서로 다른 교수법을 적용했다. 학기 후 점수가 다음과 같이 기록되었다.
 
-    **Test Statistic:**
+- **집단 1:** $[78, 82, 85, 90, 87]$
+- **집단 2:** $[65, 70, 72, 68, 74]$
+- **집단 3:** $[92, 88, 94, 89, 91]$
 
-    Levene's test calculates the absolute deviations from the group medians and tests whether the variance of these deviations differs across groups.
+Levene 검정으로 세 집단의 점수 분산이 같은지 판정하라.
 
-    **Python Implementation:**
+??? success "연습문제 1 풀이"
+
+    **가설:**
+
+    - 귀무가설 ($H_0$): 세 집단의 분산이 같다.
+    - 대립가설 ($H_1$): 적어도 한 집단의 분산이 다른 집단과 다르다.
+
+    **Python 구현:**
 
     ```python
-    from scipy.stats import levene
+    import numpy as np
+    from scipy.stats import levene, bartlett
 
-    # Test scores for the three groups
     group1 = [78, 82, 85, 90, 87]
     group2 = [65, 70, 72, 68, 74]
     group3 = [92, 88, 94, 89, 91]
 
-    # Perform Levene's test
-    statistic, p_value = levene(group1, group2, group3)
+    print("variances:", [round(np.var(g, ddof=1), 2)
+                         for g in (group1, group2, group3)])
 
-    print(f"Levene's test statistic: {statistic}")
-    print(f"P-value: {p_value}")
+    s_med, p_med = levene(group1, group2, group3)                  # median
+    s_mean, p_mean = levene(group1, group2, group3, center='mean')
+    s_b, p_b = bartlett(group1, group2, group3)
+
+    print(f"Brown-Forsythe (default): W = {s_med:.4f}, p = {p_med:.4f}")
+    print(f"Levene (mean-centered):   W = {s_mean:.4f}, p = {p_mean:.4f}")
+    print(f"Bartlett:                 T = {s_b:.4f}, p = {p_b:.4f}")
     ```
 
-    **Interpretation:**
+    출력:
 
-    If the p-value is less than $0.05$, reject the null hypothesis and conclude that the variances are not equal across the groups.
+    ```text
+    variances: [21.3, 12.2, 5.7]
+    Brown-Forsythe (default): W = 0.7500, p = 0.4933
+    Levene (mean-centered):   W = 0.9837, p = 0.4022
+    Bartlett:                 T = 1.4745, p = 0.4784
+    ```
+
+    **판정.** 세 검정 모두 $p > 0.05$로 기각하지 못한다. 세 집단의 분산이 다르다고 볼 증거가 없다.
+
+    **해석.** 표본분산이 $21.3$, $12.2$, $5.7$로 최대·최소 비가 $3.7$에 이르는데도 유의하지 않다. 각 집단 $n = 5$로는 검정력이 사실상 없기 때문이다. 15.4절 연습문제 4에서 보았듯 이 정도 표본으로는 네 배 이상의 분산 차이가 있어야 탐지한다.
+
+    **결론을 어떻게 써야 하는가.** "분산이 같다"가 아니라 **"이 자료로는 분산 차이를 탐지할 수 없다"**가 옳은 서술이다. 후속 분산분석을 한다면 등분산 가정이 확인되었다고 보지 말고 Welch 분산분석을 쓰는 편이 안전하다. $\square$
 
 ---
 
-**Exercise 2.**
-Samples were drawn from two populations and analyzed. A Levene's test was performed, resulting in a high p-value (failure to reject $H_0$: equal variances). However, a t-test assuming equal variances yielded a p-value smaller than 0.001. How should these two test results be interpreted?
+**연습문제 2.**
+두 모집단에서 표본을 뽑아 분석했다. Levene 검정은 높은 $p$값(등분산 $H_0$ 기각 실패)을 냈으나, 등분산을 가정한 $t$ 검정은 $p < 0.001$을 냈다. 이 두 결과를 어떻게 해석해야 하는가?
 
-??? success "Solution to Exercise 2"
+??? success "연습문제 2 풀이"
 
-    - The Levene's test supports the assumption that the **variances are equal** across the two populations.
-    - The t-test result provides **strong evidence** that the **means** of the two populations are significantly different.
-    - These results are not contradictory — two populations can have equal variances while having very different means. The Levene's test validates the equal-variance assumption used in the t-test, which strengthens the conclusion that the observed mean difference is genuine.
+    - Levene 검정은 두 모집단의 **분산이 같다**는 가정을 뒷받침한다.
+    - $t$ 검정 결과는 두 모집단의 **평균**이 유의하게 다르다는 **강한 증거**를 제공한다.
+    - 두 결과는 모순이 아니다. 두 모집단이 같은 분산을 가지면서 평균은 크게 다를 수 있다. Levene 검정이 $t$ 검정에 쓰인 등분산 가정을 뒷받침하므로, 관찰된 평균 차이가 진짜라는 결론이 오히려 강화된다.
+
+    **분산과 평균은 서로 다른 모수이다.** 분포의 위치(평균)와 산포(분산)는 독립적으로 변할 수 있다. 예컨대 $\mathcal{N}(0, 4)$와 $\mathcal{N}(10, 4)$는 분산이 같고 평균이 크게 다르다. 검정 결과의 조합이 이 상황을 정확히 반영한다. $\square$
+
+---
+
+**연습문제 3.**
+본문 예제에서 평균 중심 Levene($p = 0.026$)과 중앙값 중심 Brown-Forsythe($p = 0.066$)의 결론이 갈렸다. 어느 쪽을 신뢰해야 하는지 판단하고, 그 판단의 근거를 제시하라.
+
+??? success "연습문제 3 풀이"
+    **자료를 먼저 살펴본다.** 집단 2는 $\{20, 22, 25, 28, 35\}$(정렬)이다. 평균은 26.0, 중앙값은 25이다. 값 35가 다음으로 큰 값 28보다 7만큼 떨어져 있어 오른쪽 꼬리가 길다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    g2 = np.array([20, 28, 22, 35, 25])
+    print(f"mean = {g2.mean()}, median = {np.median(g2)}")
+    print(f"|x - mean| = {np.abs(g2 - g2.mean())}")
+    print(f"|x - median| = {np.abs(g2 - np.median(g2))}")
+    ```
+
+    출력:
+
+    ```text
+    mean = 26.0, median = 25.0
+    |x - mean| = [6. 2. 4. 9. 1.]
+    |x - median| = [5. 3. 3. 10. 0.]
+    ```
+
+    두 편차 집합의 평균은 각각 $4.4$와 $4.2$로 크게 다르지 않다. 결론이 갈리는 것은 분자보다 **분모**(집단 안의 편차 변동) 차이 때문이다.
+
+    **어느 쪽을 신뢰할 것인가.**
+
+    - $n = 5$로 매우 작으므로 어느 검정이든 신뢰도가 낮다. $p = 0.026$과 $p = 0.066$의 차이를 실질적 차이로 읽어서는 안 된다.
+    - 원리적으로는 **Brown-Forsythe가 더 안전한 기본값**이다. 집단 2에 치우침의 징후가 있으므로 평균이 좋은 중심 측도가 아니다.
+    - 그러나 **가장 정직한 결론은 "경계선상이며 이 자료로는 판정할 수 없다"**이다.
+
+    **실무 지침.** 이런 경우 두 $p$값을 모두 보고하고, 표본크기의 한계를 명시하며, 후속 분석에서는 등분산 가정에 의존하지 않는 절차(Welch)를 쓰는 것이 옳다. 문턱을 넘은 쪽만 골라 보고하는 것이 가장 나쁜 선택이다. $\square$
+
+---
+
+**연습문제 4.**
+Levene 검정이 원자료의 4차 적률에 의존하지 않는다는 본문의 주장을 확인하라. 절대편차 $Z = |X - \mu|$의 분산이 원자료의 어떤 적률에 의존하는지 계산하라.
+
+??? success "연습문제 4 풀이"
+    $X$가 평균 $\mu$, 분산 $\sigma^2$을 갖고 $Z = |X - \mu|$라 하자.
+
+    $$
+    \operatorname{Var}(Z) = E[Z^2] - (E[Z])^2 = E[(X-\mu)^2] - (E|X-\mu|)^2 = \sigma^2 - \left(E|X-\mu|\right)^2.
+    $$
+
+    $E[Z^2] = \sigma^2$이 되는 것이 핵심이다. 절댓값의 제곱이 그냥 제곱이므로 **2차 적률만 필요하다**.
+
+    두 번째 항 $E|X-\mu|$는 평균절대편차(MAD)로, 분포의 모양에 의존하지만 어디까지나 **1차** 양이다. 정규분포에서는 $E|X-\mu| = \sigma\sqrt{2/\pi} = 0.7979\sigma$이므로
+
+    $$
+    \operatorname{Var}(Z) = \sigma^2 - \frac{2\sigma^2}{\pi} = \sigma^2\left(1 - \frac{2}{\pi}\right) = 0.3634\,\sigma^2.
+    $$
+
+    **비교.** Bartlett 검정과 F 검정은 $S^2$의 분산을 다루므로 $\operatorname{Var}(S^2) \approx \sigma^4(\gamma_2+2)/n$, 곧 **4차 적률**이 필요했다. Levene 검정은 $\bar{Z}$의 분산 $\operatorname{Var}(Z)/n$을 다루므로 **2차 적률**만 필요하다.
+
+    이것이 결정적인 차이이다. 4차 적률은 꼬리가 조금만 두꺼워져도 폭발적으로 커지고 심하면 존재하지 않지만($t_5$의 8차 적률처럼), 2차 적률은 분산이 유한한 어떤 분포에서든 존재하고 안정적이다.
+
+    **$Z$의 분포가 비정규라는 점은 문제가 되지 않는다.** $Z \geq 0$이고 오른쪽으로 치우쳐 있지만, 분산분석 F 검정이 필요로 하는 것은 $Z$ 자체의 정규성이 아니라 $\bar{Z}_i$의 근사적 정규성이며 이는 중심극한정리가 보장한다. 곧 Levene 검정은 정규성 가정을 **더 쉽게 충족되는 가정으로 바꾼** 것이다. $\square$

@@ -1,97 +1,108 @@
-# Bootstrap Variance Testing
+# 붓스트랩 분산 검정
 
-The classical tests for variance (chi-square, F-test, Bartlett's) assume normality, and even the robust tests (Levene's, Brown-Forsythe) rely on asymptotic approximations for their reference distributions. The bootstrap offers an alternative that avoids distributional assumptions entirely by estimating the null distribution of the test statistic through resampling. This approach is especially useful when the sample size is small, the distribution is unknown, or the analyst wants to avoid the assumptions built into parametric tests.
+분산에 대한 고전적 검정(카이제곱, F 검정, Bartlett)은 정규성을 가정하고, 로버스트 검정(Levene, Brown-Forsythe)조차 기준분포에 점근근사를 쓴다. 붓스트랩은 재표집으로 검정통계량의 귀무분포를 추정하여 분포 가정을 피하는 대안을 제공한다. 표본크기가 작거나 분포를 모르거나 모수적 검정에 내장된 가정을 피하고 싶을 때 특히 유용하다.
 
-## The Bootstrap Principle for Variance
+## 분산에 대한 붓스트랩 원리
 
-The core idea is straightforward: if we want to test whether two populations have the same variance, we can resample the data under the null hypothesis and compute the test statistic many times. The collection of resampled test statistics approximates the null distribution, and the observed statistic is compared against this distribution to obtain a $p$-value.
+핵심 아이디어는 단순하다. 두 모집단의 분산이 같은지 검정하려면 귀무가설 아래에서 자료를 재표집하고 검정통계량을 여러 번 계산하면 된다. 재표집된 검정통계량들의 모임이 귀무분포를 근사하고, 관측된 통계량을 이 분포와 비교하여 $p$값을 얻는다.
 
-The bootstrap does not assume any particular parametric form for the population. Instead, it treats the empirical distribution of the sample as an estimate of the true population distribution.
+붓스트랩은 모집단에 특정한 모수적 형태를 가정하지 않는다. 대신 표본의 경험분포를 참 모집단분포의 추정값으로 취급한다.
 
-## One-Sample Bootstrap Test for Variance
+## 일표본 붓스트랩 분산 검정
 
-To test $H_0\colon \sigma^2 = \sigma_0^2$ against $H_1\colon \sigma^2 \neq \sigma_0^2$:
+$H_0\colon \sigma^2 = \sigma_0^2$을 $H_1\colon \sigma^2 \neq \sigma_0^2$에 대해 검정하려면
 
-**Step 1.** Compute the observed test statistic from the original sample of size $n$:
+**1단계.** 크기 $n$인 원표본에서 관측 검정통계량을 계산한다.
 
 $$
 T_{\text{obs}} = \frac{(n-1)S^2}{\sigma_0^2}
 $$
 
-**Step 2.** Generate $B$ bootstrap samples by resampling $n$ observations with replacement from the original sample. For each bootstrap sample $b = 1, \ldots, B$, compute the bootstrap sample variance $S_b^{*2}$ and the bootstrap test statistic:
+**2단계.** 원표본에서 관측값 $n$개를 복원추출하여 붓스트랩 표본 $B$개를 생성한다. 각 붓스트랩 표본 $b = 1, \ldots, B$에 대해 붓스트랩 표본분산 $S_b^{*2}$과 붓스트랩 검정통계량을 계산한다.
 
 $$
 T_b^* = \frac{(n-1)S_b^{*2}}{S^2}
 $$
 
-The denominator uses $S^2$ (not $\sigma_0^2$) because the bootstrap samples are drawn from data that have variance $S^2$, not $\sigma_0^2$. This centers the bootstrap distribution around the null.
+분모에 $\sigma_0^2$이 아니라 $S^2$을 쓴다. 붓스트랩 표본이 분산 $\sigma_0^2$이 아니라 $S^2$을 갖는 자료에서 추출되기 때문이다. 이렇게 해야 붓스트랩 분포가 귀무가설 주위에 중심을 갖는다.
 
-**Step 3.** Compute the bootstrap $p$-value as the proportion of bootstrap statistics at least as extreme as the observed statistic:
+**3단계.** 관측 통계량만큼 극단적인 붓스트랩 통계량의 비율로 붓스트랩 $p$값을 계산한다.
 
 $$
 p = \frac{1}{B}\sum_{b=1}^{B} \mathbf{1}(|T_b^* - (n-1)| \ge |T_{\text{obs}} - (n-1)|)
 $$
 
-## Two-Sample Bootstrap Test for Equal Variances
+## 이표본 붓스트랩 등분산 검정
 
-To test $H_0\colon \sigma_1^2 = \sigma_2^2$:
+$H_0\colon \sigma_1^2 = \sigma_2^2$을 검정하려면
 
-**Step 1.** Compute the observed variance ratio:
+**1단계.** 관측 분산비를 계산한다.
 
 $$
 F_{\text{obs}} = \frac{S_1^2}{S_2^2}
 $$
 
-**Step 2.** Pool the two samples to create a combined dataset that satisfies $H_0$ (equal variances). One approach is to center each group at zero and pool:
+**2단계.** 두 표본을 합쳐 $H_0$(등분산)을 만족하는 결합 자료를 만든다. 한 가지 방법은 각 집단을 0으로 중심화한 뒤 합치는 것이다.
 
 $$
 \tilde{X}_{1j} = X_{1j} - \bar{X}_1, \qquad \tilde{X}_{2j} = X_{2j} - \bar{X}_2
 $$
 
-Then combine the centered residuals into a single pool $\{\tilde{X}_{11}, \ldots, \tilde{X}_{1n_1}, \tilde{X}_{21}, \ldots, \tilde{X}_{2n_2}\}$.
+그런 다음 중심화된 잔차를 하나의 풀 $\{\tilde{X}_{11}, \ldots, \tilde{X}_{1n_1}, \tilde{X}_{21}, \ldots, \tilde{X}_{2n_2}\}$로 합친다.
 
-**Step 3.** For each bootstrap replicate $b = 1, \ldots, B$:
+**3단계.** 각 붓스트랩 반복 $b = 1, \ldots, B$에 대해
 
-- Draw $n_1$ observations with replacement from the pool (bootstrap "group 1")
-- Draw $n_2$ observations with replacement from the pool (bootstrap "group 2")
-- Compute the bootstrap variance ratio $F_b^* = S_{1b}^{*2} / S_{2b}^{*2}$
+- 풀에서 관측값 $n_1$개를 복원추출한다(붓스트랩 "집단 1")
+- 풀에서 관측값 $n_2$개를 복원추출한다(붓스트랩 "집단 2")
+- 붓스트랩 분산비 $F_b^* = S_{1b}^{*2} / S_{2b}^{*2}$을 계산한다
 
-**Step 4.** Compute the bootstrap $p$-value:
+**4단계.** 붓스트랩 $p$값을 계산한다.
 
 $$
 p = \frac{1}{B}\sum_{b=1}^{B} \mathbf{1}\!\left(\left|\ln F_b^*\right| \ge \left|\ln F_{\text{obs}}\right|\right)
 $$
 
-Using the logarithm of the variance ratio ensures the test is symmetric: $F = 2$ and $F = 0.5$ represent the same degree of departure from equality.
+분산비의 로그를 쓰면 검정이 대칭이 된다. $F = 2$와 $F = 0.5$가 등분산에서 같은 정도로 벗어난 것으로 취급된다.
 
-!!! note "Why Pool Under the Null?"
-    By pooling the centered residuals from both groups, we create a single population from which both bootstrap samples are drawn. This enforces $\sigma_1^2 = \sigma_2^2$ in the resampling scheme, generating the null distribution of the test statistic.
+!!! note "왜 귀무가설 아래에서 합치는가"
+    두 집단의 중심화된 잔차를 합치면 두 붓스트랩 표본이 추출되는 단일 모집단이 만들어진다. 이는 재표집 체계에 $\sigma_1^2 = \sigma_2^2$을 강제하여 검정통계량의 귀무분포를 생성한다.
 
-## Multi-Sample Extension
+!!! warning "합치기가 항상 무해하지는 않다"
+    중심화된 잔차를 합치는 것은 등분산뿐 아니라 두 집단의 **분포 모양이 같다**는 것도 강제한다. 예컨대 한 집단은 대칭이고 다른 집단은 치우쳐 있다면, 합쳐진 풀은 어느 쪽도 아닌 혼합분포가 된다.
 
-For $k > 2$ groups, the bootstrap approach generalizes naturally:
+    실무에서는 대체로 문제가 되지 않지만, 모양이 크게 다르다고 의심되면 각 집단의 잔차를 그 집단 안에서만 재표집한 뒤 표준편차로 나누어 척도를 맞추는 방법(스튜던트화 붓스트랩)이 더 안전하다.
 
-1. Center each group by subtracting its group mean.
-2. Pool all centered residuals.
-3. For each bootstrap replicate, draw $n_i$ observations from the pool for each group $i$.
-4. Compute a test statistic (e.g., Bartlett's $T$ or Levene's $W$) on the bootstrap sample.
-5. Compare the observed statistic to the bootstrap distribution.
+## 다표본 확장
 
-This approach gives a bootstrap version of any classical or robust variance test, with the null distribution estimated nonparametrically.
+$k > 2$개 집단에 대해 붓스트랩 접근은 자연스럽게 일반화된다.
 
-## Advantages of the Bootstrap Approach
+1. 각 집단에서 집단평균을 빼서 중심화한다.
+2. 중심화된 잔차를 모두 합친다.
+3. 각 붓스트랩 반복에서 집단 $i$마다 풀에서 관측값 $n_i$개를 추출한다.
+4. 붓스트랩 표본에 대해 검정통계량(Bartlett의 $T$나 Levene의 $W$ 등)을 계산한다.
+5. 관측 통계량을 붓스트랩 분포와 비교한다.
 
-- **No distributional assumptions.** The bootstrap does not require normality or any other parametric form. It is valid for any continuous distribution.
-- **Exact for finite samples.** Unlike asymptotic approximations, the bootstrap directly estimates the finite-sample null distribution.
-- **Flexible.** Any test statistic can be bootstrapped, including custom statistics not covered by standard tables.
+이 접근은 어떤 고전적·로버스트 분산 검정에 대해서도 귀무분포를 비모수적으로 추정한 붓스트랩 판을 제공한다.
 
-## Limitations
+## 붓스트랩 접근의 장점
 
-- **Computational cost.** Thousands of bootstrap replicates are needed for reliable $p$-values ($B \ge 1000$ for screening, $B \ge 10000$ for publication-quality results).
-- **Discrete data.** For discrete distributions, resampling with replacement can produce bootstrap samples with unusual properties.
-- **Very small samples.** With $n < 10$, the empirical distribution is a poor approximation of the population, and bootstrap results may be unreliable.
+- **분포 가정이 없다.** 붓스트랩은 정규성이나 다른 모수적 형태를 요구하지 않는다.
+- **유한표본 분포를 직접 추정한다.** 점근근사에 의존하는 대신 재표집으로 유한표본 귀무분포의 모양을 추정한다.
+- **유연하다.** 표준 표에 없는 사용자 정의 통계량을 포함해 어떤 검정통계량이든 붓스트랩할 수 있다.
 
-## Python Implementation
+!!! warning "붓스트랩은 "정확"하지 않다"
+    붓스트랩이 유한표본에서 **정확한**(exact) 검정이라는 서술을 종종 볼 수 있으나 옳지 않다. 붓스트랩은 참 모집단분포 $F$ 대신 경험분포 $\hat{F}_n$에서 표집하므로, 얻어지는 것은 $\hat{F}_n$ 아래의 정확한 분포일 뿐 $F$ 아래의 분포가 아니다. $\hat{F}_n \to F$이므로 **일치성**은 있지만 유한표본 오차는 남는다.
+
+    아래 연습문제 3의 모의실험이 이를 확인해 준다. 정규와 $t_5$ 자료에서는 크기가 0.05에 가깝지만 강하게 치우친 지수분포에서는 0.082로 부풀려진다. 붓스트랩도 만병통치약은 아니다.
+
+## 한계
+
+- **계산 비용.** 신뢰할 만한 $p$값을 얻으려면 수천 번의 붓스트랩 반복이 필요하다(선별용 $B \ge 1000$, 출판용 $B \ge 10000$).
+- **이산 자료.** 이산분포에서는 복원추출이 이상한 성질을 갖는 붓스트랩 표본을 만들 수 있다.
+- **아주 작은 표본.** $n < 10$이면 경험분포가 모집단의 나쁜 근사이므로 붓스트랩 결과를 믿기 어렵다.
+- **치우친 자료.** 위 경고에서 보듯 강한 치우침에서는 크기가 다소 부풀려진다.
+
+## Python 구현
 
 ```python
 import numpy as np
@@ -126,51 +137,151 @@ x = np.array([10, 12, 14, 11, 13, 15, 12, 10])
 y = np.array([20, 28, 22, 35, 25, 18, 30, 22])
 
 f_stat, p_val = bootstrap_variance_test(x, y)
+print(f"Sample variances: {np.var(x, ddof=1):.3f}, {np.var(y, ddof=1):.3f}")
 print(f"Variance ratio: {f_stat:.4f}")
 print(f"Bootstrap p-value: {p_val:.4f}")
 ```
 
+출력:
 
-## Exercises
+```text
+Sample variances: 3.268, 32.286
+Variance ratio: 0.1012
+Bootstrap p-value: 0.0206
+```
 
-**Exercise 1.**
-Describe the bootstrap procedure for testing $H_0: \sigma_1^2 = \sigma_2^2$ for two independent samples.
+같은 자료에 다른 검정을 적용하면 F 검정은 $p = 0.0073$, Brown-Forsythe는 $p = 0.0272$이다. 세 검정 모두 5% 수준에서 기각하지만 $p$값이 네 배 차이 난다. 붓스트랩 결과가 두 값 사이에 놓인다는 점이 시사적이다. F 검정만큼 낙관적이지도, Brown-Forsythe만큼 보수적이지도 않다.
 
-??? success "Solution to Exercise 1"
 
-    1. Compute the observed test statistic $T_{\text{obs}} = s_1^2/s_2^2$ (or $|s_1^2 - s_2^2|$).
-    2. Pool both samples to create a combined dataset (enforcing $H_0$).
-    3. For $b = 1, \dots, B$: draw bootstrap samples of sizes $n_1$ and $n_2$ from the pooled data, compute $T_b^*$.
-    4. The p-value is the proportion of $T_b^*$ values as extreme as $T_{\text{obs}}$.
+## 연습문제
 
-    This procedure is valid without normality because the bootstrap reference distribution adapts to the actual data distribution.
+**연습문제 1.**
+독립인 두 표본에 대해 $H_0: \sigma_1^2 = \sigma_2^2$을 검정하는 붓스트랩 절차를 기술하라.
 
----
+??? success "연습문제 1 풀이"
 
-**Exercise 2.**
-Why is the bootstrap particularly useful for variance testing compared to classical methods?
+    1. 관측 검정통계량 $T_{\text{obs}} = s_1^2/s_2^2$(또는 $|s_1^2 - s_2^2|$)을 계산한다.
+    2. 두 표본을 (중심화한 뒤) 합쳐 결합 자료를 만든다($H_0$ 강제).
+    3. $b = 1, \dots, B$에 대해 합쳐진 자료에서 크기 $n_1$, $n_2$인 붓스트랩 표본을 뽑고 $T_b^*$을 계산한다.
+    4. $p$값은 $T_{\text{obs}}$만큼 극단적인 $T_b^*$ 값의 비율이다.
 
-??? success "Solution to Exercise 2"
-    Classical variance tests (chi-squared, F-test) are highly sensitive to non-normality -- even mild departures can severely distort Type I error rates. The bootstrap avoids distributional assumptions entirely, making it reliable for skewed, heavy-tailed, or otherwise non-normal data.
+    붓스트랩 기준분포가 실제 자료 분포에 적응하므로 정규성 없이도 타당하다.
 
-    Additionally, the bootstrap can test complex hypotheses about variances (ratios, functions of variances) that do not have simple classical test statistics.
-
----
-
-**Exercise 3.**
-How many bootstrap replicates $B$ are typically needed for reliable variance testing? What determines this choice?
-
-??? success "Solution to Exercise 3"
-    For hypothesis testing, $B = 1000$ is often sufficient for approximate p-values, but $B = 10{,}000$ or more is recommended for precise p-values (especially when testing at small $\alpha$ levels like 0.01).
-
-    The required $B$ depends on: (1) the desired precision of the p-value ($\text{SE}(\hat{p}) \approx \sqrt{p(1-p)/B}$), (2) the significance level (smaller $\alpha$ requires larger $B$), and (3) the test statistic's variability. For $\alpha = 0.05$, $B = 2000$ gives p-value standard error of about 0.005.
+    **중심화가 왜 필요한가.** 중심화하지 않고 원자료를 그대로 합치면 집단 간 **평균 차이**가 풀의 분산에 섞여 들어간다. 그러면 붓스트랩 표본의 분산이 실제보다 커지고 귀무분포가 오른쪽으로 이동하여 검정이 지나치게 보수적이 된다. 우리가 검정하려는 것은 분산이지 평균이 아니므로 반드시 평균 차이를 제거해야 한다. $\square$
 
 ---
 
-**Exercise 4.**
-A bootstrap test for equal variances produces a p-value of 0.047, while Levene's test gives $p = 0.12$. Discuss the possible reasons for disagreement.
+**연습문제 2.**
+고전적 방법과 비교하여 붓스트랩이 분산 검정에 특히 유용한 이유는 무엇인가?
 
-??? success "Solution to Exercise 4"
-    The tests may disagree because they test slightly different things and have different sensitivities. Levene's test is based on absolute deviations from group means/medians, while the bootstrap may use the variance ratio directly. Levene's test is designed to be robust to non-normality, but the bootstrap adapts more flexibly to the data's actual distribution.
+??? success "연습문제 2 풀이"
+    고전적 분산 검정(카이제곱, F 검정)은 비정규성에 매우 민감하다. 15.3절에서 보았듯 가벼운 이탈만으로도 제1종 오류율이 심각하게 왜곡된다($t_{10}$에서 이미 두 배). 붓스트랩은 분포 가정을 피하므로 치우쳤거나 꼬리가 두꺼운 자료에서 더 신뢰할 만하다.
 
-    Other reasons: (1) the bootstrap p-value has Monte Carlo error (run with larger $B$ to check stability), (2) the data may have features (outliers, skewness) that affect the two statistics differently, (3) the tests have different power profiles against different alternatives.
+    또한 붓스트랩은 단순한 고전적 검정통계량이 없는 복잡한 분산 가설(분산의 비, 분산의 함수)도 검정할 수 있다. 예컨대 "집단 1의 분산이 집단 2의 두 배를 넘는가"($H_0: \sigma_1^2/\sigma_2^2 \leq 2$) 같은 가설은 표준 F 검정으로 다루기 번거롭지만 붓스트랩으로는 자연스럽다.
+
+    **다만 만능은 아니다.** 붓스트랩의 타당성도 (1) 관측값의 독립성과 (2) 경험분포가 참 분포의 좋은 근사라는 조건에 기댄다. 표본이 작으면 두 번째 조건이 무너지고, 종속 자료에서는 첫 번째 조건이 무너진다(그 경우 블록 붓스트랩이 필요하다). $\square$
+
+---
+
+**연습문제 3.**
+붓스트랩 등분산 검정의 실제 크기를 모의실험으로 확인하라. 정규, $t_5$, 지수분포에서 균형 설계와 불균형 설계를 비교하라.
+
+??? success "연습문제 3 풀이"
+
+    ```python
+    import numpy as np
+
+    rng = np.random.default_rng(0)
+
+    def boot_p(x, y, B, rng):
+        n1, n2 = len(x), len(y)
+        f = np.log(np.var(x, ddof=1) / np.var(y, ddof=1))
+        pool = np.concatenate([x - np.mean(x), y - np.mean(y)])
+        b1 = rng.choice(pool, (B, n1), True)
+        b2 = rng.choice(pool, (B, n2), True)
+        fb = np.log(b1.var(axis=1, ddof=1) / b2.var(axis=1, ddof=1))
+        return (np.abs(fb) >= abs(f)).mean()
+
+    R, B = 2000, 999
+    cases = [
+        ("Normal",      lambda n: rng.normal(0, 1, n)),
+        ("t(5)",        lambda n: rng.standard_t(5, n)),
+        ("Exponential", lambda n: rng.exponential(1, n)),
+    ]
+
+    for name, gen in cases:
+        for n1, n2 in [(20, 20), (10, 40)]:
+            rej = sum(boot_p(gen(n1), gen(n2), B, rng) < 0.05 for _ in range(R))
+            print(f"{name:>12} n=({n1},{n2}): size = {rej / R:.4f}")
+    ```
+
+    출력:
+
+    ```text
+          Normal n=(20,20): size = 0.0480
+          Normal n=(10,40): size = 0.0545
+            t(5) n=(20,20): size = 0.0455
+            t(5) n=(10,40): size = 0.0520
+     Exponential n=(20,20): size = 0.0820
+     Exponential n=(10,40): size = 0.0620
+    ```
+
+    | 분포 | $n = (20,20)$ | $n = (10,40)$ |
+    |---|---|---|
+    | Normal | 0.048 | 0.055 |
+    | $t_5$ | 0.046 | 0.052 |
+    | Exponential | **0.082** | 0.062 |
+
+    **결과 해석.**
+
+    - 정규와 $t_5$에서는 크기가 0.046~0.055로 잘 통제된다. 15.3절 표에서 F 검정이 $t_5$에서 0.156이었던 것과 극명하게 대비된다. **붓스트랩이 두꺼운 꼬리 문제를 성공적으로 해결한다.**
+    - 지수분포에서는 균형 설계에서 0.082로 부풀려진다. 명목값의 1.6배이다. F 검정의 0.266보다는 훨씬 낫지만 완벽하지 않다.
+    - 불균형 설계 $(10, 40)$에서 정규·$t_5$의 크기가 약간 올라간다($0.052$~$0.055$). 작은 집단의 붓스트랩 분산 추정이 불안정하기 때문이다.
+
+    **왜 지수분포에서 나빠지는가.** 붓스트랩 표본은 원표본의 값들만 재사용하므로 원표본이 담지 못한 꼬리 영역을 재현할 수 없다. 강하게 치우친 분포에서는 $n = 20$짜리 표본이 오른쪽 꼬리를 제대로 담지 못하므로 경험분포가 참 분포를 과소대표하고, 붓스트랩 귀무분포가 실제보다 좁아진다. 그래서 관측 통계량이 상대적으로 극단적으로 보이고 기각이 늘어난다.
+
+    **개선 방법.** 스튜던트화 붓스트랩(통계량을 표준오차 추정값으로 나눈 뒤 붓스트랩)이나 BCa 방법을 쓰면 이 편향을 상당 부분 보정할 수 있다. $\square$
+
+---
+
+**연습문제 4.**
+신뢰할 만한 분산 검정을 위해 보통 몇 번의 붓스트랩 반복 $B$가 필요한가? 무엇이 이 선택을 결정하는가?
+
+??? success "연습문제 4 풀이"
+    가설검정에서 근사적 $p$값에는 $B = 1000$이면 대체로 충분하지만, 정밀한 $p$값(특히 $\alpha = 0.01$처럼 작은 유의수준에서 검정할 때)에는 $B = 10{,}000$ 이상이 권장된다.
+
+    필요한 $B$는 (1) 원하는 $p$값의 정밀도($\text{SE}(\hat{p}) \approx \sqrt{p(1-p)/B}$), (2) 유의수준(작은 $\alpha$일수록 큰 $B$ 필요), (3) 검정통계량의 변동성에 달려 있다.
+
+    | $B$ | $p = 0.05$에서 SE | 95% 오차한계 |
+    |---|---|---|
+    | 200 | 0.0154 | $\pm 0.030$ |
+    | 1,000 | 0.0069 | $\pm 0.014$ |
+    | 2,000 | 0.0049 | $\pm 0.010$ |
+    | 10,000 | 0.0022 | $\pm 0.004$ |
+    | 100,000 | 0.0007 | $\pm 0.001$ |
+
+    $\alpha = 0.05$에서 $B = 2000$이면 $p$값의 표준오차가 약 $0.005$이다.
+
+    **실무 기준.** 결정이 문턱에서 멀면 작은 $B$로 충분하다. $\hat{p} = 0.30$이면 $B = 200$이어도 결론이 바뀌지 않는다. 반면 $\hat{p}$가 $0.04$~$0.06$ 구간에 있으면 $B$를 10배로 늘려 안정성을 확인해야 한다.
+
+    **덧붙임: $p$값이 0으로 나올 때.** $B$번 모두 관측값보다 덜 극단적이면 $\hat{p} = 0$이 나오는데, 이는 "$p$가 정확히 0"이 아니라 "$p < 1/B$"라는 뜻이다. 관례적으로 $(c+1)/(B+1)$ 형태의 보정을 써서 $p = 0$을 피한다($c$는 극단적인 붓스트랩 통계량의 개수). $B = 999$이면 최소 $p$값이 $1/1000 = 0.001$이 된다. $\square$
+
+---
+
+**연습문제 5.**
+붓스트랩 등분산 검정이 $p = 0.047$을, Levene 검정이 $p = 0.12$를 냈다. 불일치의 가능한 원인을 논하라.
+
+??? success "연습문제 5 풀이"
+    두 검정은 조금씩 다른 것을 재고 민감도도 다르므로 어긋날 수 있다. Levene 검정은 집단평균(또는 중앙값)으로부터의 절대편차에 기반하는 반면, 붓스트랩은 분산비를 직접 쓸 수 있다. Levene 검정은 비정규성에 로버스트하도록 설계되었지만, 붓스트랩은 자료의 실제 분포에 더 유연하게 적응한다.
+
+    다른 원인들.
+
+    1. **몬테카를로 오차.** 붓스트랩 $p$값에는 오차가 있다. $B = 1000$이면 $p = 0.047$의 표준오차가 $0.0067$이므로 참값이 $0.034$~$0.060$ 어디든 될 수 있다. **더 큰 $B$로 다시 돌려 안정성을 확인해야 한다.**
+
+    2. **통계량의 차이.** 붓스트랩이 분산비 $S_1^2/S_2^2$을 쓰면 제곱편차 기반이므로 이상점에 민감하다. Levene은 절대편차 기반이라 덜 민감하다. 자료에 이상점이 있으면 붓스트랩 쪽이 작은 $p$값을 낼 가능성이 높다.
+
+    3. **검정력 프로파일의 차이.** 두 검정은 서로 다른 대립가설에 대해 검정력이 다르다. 한 집단만 분산이 크게 다른 경우와 여러 집단이 조금씩 다른 경우에 각각 유리한 검정이 다르다.
+
+    4. **크기의 차이.** 연습문제 3에서 보았듯 붓스트랩은 치우친 자료에서 크기가 0.082까지 부풀려질 수 있다. 자료가 치우쳐 있다면 붓스트랩의 $p = 0.047$이 과대 유의일 가능성이 있다.
+
+    **실무적 대응.** (1) $B$를 늘려 붓스트랩 $p$값을 안정시킨다. (2) 자료의 왜도와 이상점을 확인한다. (3) 두 결과를 모두 보고하고 어느 것을 사전에 지정했는지 밝힌다. (4) $p = 0.047$과 $p = 0.12$는 모두 "증거가 약하다"는 범위이므로, 어느 쪽이든 강한 결론을 내리지 않는다. $\square$

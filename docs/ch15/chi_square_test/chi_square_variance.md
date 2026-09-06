@@ -1,185 +1,235 @@
-# Chi-Square Test for Variance
+# 분산에 대한 카이제곱 검정
 
 
-The Chi-Square test for variance determines if the variance of a population differs from a specified value. It is a one-sample test, typically applied when the population variance is known or hypothesized. This test is highly sensitive to the assumption that the data follow a normal distribution, and any significant deviation from normality can lead to unreliable results.
+분산에 대한 카이제곱 검정은 모집단의 분산이 지정된 값과 다른지 판정한다. 모분산이 알려져 있거나 가설로 주어질 때 적용하는 일표본 검정이다. 이 검정은 자료가 정규분포를 따른다는 가정에 매우 민감하며, 정규성에서 크게 벗어나면 결과를 신뢰할 수 없다.
 
-## Hypotheses
+## 가설
 
-The hypotheses for the Chi-Square test for variance are formulated as follows:
+분산에 대한 카이제곱 검정의 가설은 다음과 같이 세운다.
 
-**Null Hypothesis ($H_0$):** The population variance $\sigma^2$ is equal to some specified value $\sigma_0^2$:
+**귀무가설 ($H_0$):** 모분산 $\sigma^2$이 지정된 값 $\sigma_0^2$과 같다.
 
 $$
 H_0: \sigma^2 = \sigma_0^2
 $$
 
-**Alternative Hypothesis ($H_1$):** The population variance differs from the specified value $\sigma_0^2$. This can be expressed depending on whether we are conducting a two-tailed or one-tailed test:
+**대립가설 ($H_1$):** 모분산이 지정된 값 $\sigma_0^2$과 다르다. 양측검정인지 단측검정인지에 따라 다음과 같이 표현한다.
 
-- **Two-tailed test** (variance is simply different):
+- **양측검정** (분산이 단지 다르다):
 
 $$
 H_1: \sigma^2 \neq \sigma_0^2
 $$
 
-- **One-tailed test** (variance is greater or less than the specified value):
+- **단측검정** (분산이 지정된 값보다 크거나 작다):
 
 $$
-H_1: \sigma^2 > \sigma_0^2 \quad \text{or} \quad H_1: \sigma^2 < \sigma_0^2
+H_1: \sigma^2 > \sigma_0^2 \quad \text{또는} \quad H_1: \sigma^2 < \sigma_0^2
 $$
 
-## Assumptions
+## 가정
 
-For the Chi-Square test for variance to be valid, the following assumptions must be met:
+분산에 대한 카이제곱 검정이 타당하려면 다음 가정이 충족되어야 한다.
 
-1. The data must be drawn from a **normally distributed** population. This assumption is crucial, as the test is not robust to deviations from normality.
-2. The sample must consist of **independent observations**.
-3. The variance of the population $\sigma^2$ is hypothesized to be equal to a specified value $\sigma_0^2$.
+1. 자료가 **정규분포를 따르는** 모집단에서 추출되어야 한다. 이 검정은 정규성 이탈에 로버스트하지 않으므로 이 가정이 결정적이다.
+2. 표본이 **독립인 관측값**으로 이루어져야 한다.
+3. 모분산 $\sigma^2$이 지정된 값 $\sigma_0^2$과 같다는 가설을 세운다.
 
-If these assumptions are violated, especially the assumption of normality, the test results can be misleading.
+이 가정들, 특히 정규성 가정이 위배되면 검정 결과가 오도할 수 있다.
 
-## Test Statistic
+## 검정통계량
 
-The test statistic for the Chi-Square test for variance is based on the sample variance $s^2$ and the hypothesized population variance $\sigma_0^2$:
+분산에 대한 카이제곱 검정의 검정통계량은 표본분산 $s^2$과 가설 모분산 $\sigma_0^2$에 기반한다.
 
 $$
 \frac{(n - 1) s^2}{\sigma_0^2} = \sum_{i=1}^n \left(\frac{X_i - \bar{X}}{\sigma_0}\right)^2 \sim \chi^2_{n-1}
 $$
 
-where:
+여기서
 
-- $n$ is the sample size,
-- $s^2$ is the sample variance,
-- $\sigma_0^2$ is the hypothesized population variance.
+- $n$은 표본크기,
+- $s^2$은 표본분산,
+- $\sigma_0^2$은 가설 모분산이다.
 
-The test statistic $\chi^2$ follows a chi-square distribution with $n-1$ degrees of freedom under the null hypothesis. The degrees of freedom reflect the sample size, with larger samples providing more precise estimates of variance.
+귀무가설 아래에서 검정통계량 $\chi^2$은 자유도 $n-1$인 카이제곱분포를 따른다. 자유도는 표본크기를 반영하며, 표본이 클수록 분산 추정이 정밀해진다.
 
-## Critical Region and Decision Rule
+## 기각역과 판정규칙
 
-To determine whether to reject the null hypothesis, we compare the test statistic to critical values from the chi-square distribution table, which depends on the significance level $\alpha$ and the degrees of freedom ($n - 1$).
+귀무가설을 기각할지 판정하려면 검정통계량을 카이제곱분포의 임계값과 비교한다. 임계값은 유의수준 $\alpha$와 자유도 $n-1$에 의존한다.
 
-**For a two-tailed test**, we check both the lower and upper tails of the chi-square distribution:
+**양측검정**에서는 카이제곱분포의 아래 꼬리와 위 꼬리를 모두 확인한다.
 
 $$
-\chi^2_{\text{lower}} < \chi^2 < \chi^2_{\text{upper}}
+\chi^2_{1-\alpha/2,\,n-1} < \chi^2 < \chi^2_{\alpha/2,\,n-1}
 $$
 
-If the calculated test statistic falls within this range, we fail to reject the null hypothesis. If it falls outside, we reject $H_0$.
+계산된 검정통계량이 이 범위 안에 있으면 귀무가설을 기각하지 못한다. 범위를 벗어나면 $H_0$을 기각한다.
 
-**For a one-tailed test**, we only check one end of the distribution:
+!!! warning "양측검정에서는 꼬리마다 $\alpha/2$를 써야 한다"
+    양측검정에서 흔한 실수는 양쪽 임계값을 각각 $\alpha$ 수준의 값으로 잡는 것이다. 예컨대 $\alpha = 0.05$, $\text{df} = 24$에서 $13.848$과 $36.415$를 쓰는 경우가 있는데, 이 둘은 각각 하단 5%와 상단 5% 지점이므로 합치면 **10% 검정**이 된다.
 
-- If testing $H_1: \sigma^2 > \sigma_0^2$, compare the test statistic to the upper critical value.
-- If testing $H_1: \sigma^2 < \sigma_0^2$, compare the test statistic to the lower critical value.
+    올바른 5% 양측 임계값은 각 꼬리에 2.5%씩 배분한 $12.401$과 $39.364$이다.
 
-The critical values are derived from chi-square distribution tables and depend on the desired significance level (commonly $\alpha = 0.05$).
+**단측검정**에서는 분포의 한쪽 끝만 확인한다.
 
-## Example Problem and Solution
+- $H_1: \sigma^2 > \sigma_0^2$을 검정한다면 검정통계량을 상단 임계값과 비교한다.
+- $H_1: \sigma^2 < \sigma_0^2$을 검정한다면 하단 임계값과 비교한다.
 
-**Example:** A factory claims that the variance in the weight of a product is $0.04$ grams$^2$. A sample of 25 products is taken, and the sample variance is found to be $0.05$ grams$^2$. At the 5% significance level, test whether the population variance is different from $0.04$ grams$^2$.
+임계값은 카이제곱분포표에서 얻으며 원하는 유의수준(흔히 $\alpha = 0.05$)에 의존한다.
 
-### Step-by-Step Solution
+## 예제와 풀이
 
-**Step 1 — Formulate Hypotheses:**
+**예제:** 어떤 공장이 제품 중량의 분산이 $0.04$ 그램$^2$이라고 주장한다. 제품 25개를 표본으로 뽑았더니 표본분산이 $0.05$ 그램$^2$이었다. 유의수준 5%에서 모분산이 $0.04$ 그램$^2$과 다른지 검정하라.
+
+### 단계별 풀이
+
+**1단계 — 가설 설정:**
 
 - $H_0: \sigma^2 = 0.04$
-- $H_1: \sigma^2 \neq 0.04$ (two-tailed test)
+- $H_1: \sigma^2 \neq 0.04$ (양측검정)
 
-**Step 2 — Compute the Test Statistic:**
+**2단계 — 검정통계량 계산:**
 
-- Sample size $n = 25$
-- Sample variance $s^2 = 0.05$
-- Hypothesized variance $\sigma_0^2 = 0.04$
+- 표본크기 $n = 25$
+- 표본분산 $s^2 = 0.05$
+- 가설 분산 $\sigma_0^2 = 0.04$
 
 $$
 \chi^2 = \frac{(25 - 1) \times 0.05}{0.04} = \frac{24 \times 0.05}{0.04} = 30
 $$
 
-**Step 3 — Determine Critical Values:**
+**3단계 — 임계값 결정:**
 
-For $n - 1 = 24$ degrees of freedom and $\alpha = 0.05$ (two-tailed):
+자유도 $n - 1 = 24$, $\alpha = 0.05$(양측)이므로 각 꼬리에 $0.025$씩 배분한다.
 
-- Lower critical value: $\chi^2_{\text{lower}} = 13.848$
-- Upper critical value: $\chi^2_{\text{upper}} = 36.415$
+- 하단 임계값: $\chi^2_{0.975,\,24} = 12.401$
+- 상단 임계값: $\chi^2_{0.025,\,24} = 39.364$
 
-**Step 4 — Decision Rule:**
+```python
+from scipy import stats
 
-Since the test statistic ($\chi^2 = 30$) lies between the lower and upper critical values ($13.848 < 30 < 36.415$), we fail to reject the null hypothesis.
+df, alpha = 24, 0.05
+lower = stats.chi2.ppf(alpha / 2, df)
+upper = stats.chi2.ppf(1 - alpha / 2, df)
+print(f"lower = {lower:.4f}, upper = {upper:.4f}")
+```
 
-**Step 5 — Conclusion:**
+출력:
 
-There is insufficient evidence to suggest that the population variance differs from $0.04$ grams$^2$ at the 5% significance level.
+```text
+lower = 12.4012, upper = 39.3641
+```
 
-## Confidence Interval for Variance
+**4단계 — 판정:**
 
-In addition to hypothesis testing, we can construct a confidence interval for the population variance using the chi-square distribution. The $100(1 - \alpha)\%$ confidence interval for the population variance $\sigma^2$ is:
+검정통계량 $\chi^2 = 30$이 하단과 상단 임계값 사이에 있으므로($12.401 < 30 < 39.364$) 귀무가설을 기각하지 못한다.
+
+양측 $p$값은
 
 $$
-\left( \frac{(n - 1) s^2}{\chi^2_{\text{upper}}}, \quad \frac{(n - 1) s^2}{\chi^2_{\text{lower}}} \right)
+p = 2 \min\{P(\chi^2_{24} \leq 30),\; P(\chi^2_{24} \geq 30)\} = 2 \times 0.1848 = 0.3695.
 $$
 
-where $\chi^2_{\text{upper}}$ and $\chi^2_{\text{lower}}$ are the critical values of the chi-square distribution for $n - 1$ degrees of freedom, and $s^2$ is the sample variance.
+**5단계 — 결론:**
 
-Using the previous scenario, the 95% confidence interval for the population variance is:
+유의수준 5%에서 모분산이 $0.04$ 그램$^2$과 다르다고 볼 증거가 충분하지 않다. $p = 0.37$로 문턱에서 한참 멀다.
+
+## 분산의 신뢰구간
+
+가설검정에 더해 카이제곱분포로 모분산의 신뢰구간을 구성할 수 있다. 모분산 $\sigma^2$의 $100(1 - \alpha)\%$ 신뢰구간은
 
 $$
-\left( \frac{24 \times 0.05}{36.415}, \quad \frac{24 \times 0.05}{13.848} \right) = (0.0329, \; 0.0867)
+\left( \frac{(n - 1) s^2}{\chi^2_{\alpha/2,\,n-1}}, \quad \frac{(n - 1) s^2}{\chi^2_{1-\alpha/2,\,n-1}} \right)
 $$
 
-Thus, the 95% confidence interval for the population variance is between $0.0329$ and $0.0867$ grams$^2$.
+여기서 $\chi^2_{\alpha/2,\,n-1}$과 $\chi^2_{1-\alpha/2,\,n-1}$은 자유도 $n-1$인 카이제곱분포의 상단·하단 임계값이고 $s^2$은 표본분산이다.
+
+앞의 예제에 적용하면 모분산의 95% 신뢰구간은
+
+$$
+\left( \frac{24 \times 0.05}{39.364}, \quad \frac{24 \times 0.05}{12.401} \right) = (0.0305, \; 0.0968).
+$$
+
+따라서 모분산의 95% 신뢰구간은 $0.0305$와 $0.0968$ 그램$^2$ 사이이다. 가설값 $0.04$가 이 구간에 포함되므로 앞의 검정 결과와 일관된다.
+
+표준편차의 구간은 양 끝에 제곱근을 취하면 된다.
+
+$$
+(\sqrt{0.0305},\; \sqrt{0.0968}) = (0.175,\; 0.311) \text{ 그램}.
+$$
+
+구간이 매우 넓다는 점에 주목하라. 상한이 하한의 1.8배이다. $n = 25$로는 분산을 정밀하게 추정할 수 없다는 뜻이며, 분산 추론에 큰 표본이 필요한 이유를 보여준다.
 
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-A quality control engineer measures the weights of $n = 25$ products and obtains $s^2 = 4.5$. Test $H_0: \sigma^2 = 3.0$ versus $H_a: \sigma^2 > 3.0$ at $\alpha = 0.05$.
+**연습문제 1.**
+어떤 품질관리 기술자가 제품 $n = 25$개의 중량을 측정하여 $s^2 = 4.5$를 얻었다. $\alpha = 0.05$에서 $H_0: \sigma^2 = 3.0$을 $H_a: \sigma^2 > 3.0$에 대해 검정하라.
 
-??? success "Solution to Exercise 1"
-    The test statistic is:
+??? success "연습문제 1 풀이"
+    검정통계량은
 
     $$
     \chi^2 = \frac{(n-1)s^2}{\sigma_0^2} = \frac{24 \times 4.5}{3.0} = 36.0
     $$
 
-    Under $H_0$, $\chi^2 \sim \chi^2_{24}$. The critical value $\chi^2_{0.05, 24} = 36.415$.
+    $H_0$ 아래에서 $\chi^2 \sim \chi^2_{24}$이다. 상단 단측검정이므로 임계값은 $\chi^2_{0.05, 24} = 36.415$이다.
 
-    Since $36.0 < 36.415$, we fail to reject $H_0$ at the 5% level (barely). The p-value is slightly above 0.05. The data are consistent with the specified variance, though the result is borderline.
+    $36.0 < 36.415$이므로 5% 수준에서 $H_0$을 기각하지 못한다. 아슬아슬하다. $p$값은
+
+    $$
+    p = P(\chi^2_{24} \geq 36.0) = 0.0549
+    $$
+
+    로 0.05를 간신히 넘는다. 자료가 지정된 분산과 일관되지만 결과는 경계선상이다.
+
+    이런 상황에서는 이분법적 판정에 기대기보다 신뢰구간을 함께 보고하는 편이 낫다. $\sigma^2$의 90% 하단 신뢰한계는 $24 \times 4.5/\chi^2_{0.10,24} = 108/33.196 = 3.253$이므로, 실제로는 $\sigma^2 > 3$을 시사한다. $p = 0.055$와 $p = 0.045$를 질적으로 다르게 취급해서는 안 된다. $\square$
 
 ---
 
-**Exercise 2.**
-Derive the chi-squared test statistic from the sampling distribution of $S^2$ under normality.
+**연습문제 2.**
+정규성 아래에서 $S^2$의 표집분포로부터 카이제곱 검정통계량을 유도하라.
 
-??? success "Solution to Exercise 2"
-    If $X_1, \dots, X_n \sim N(\mu, \sigma^2)$, then:
+??? success "연습문제 2 풀이"
+    $X_1, \dots, X_n \sim N(\mu, \sigma^2)$이면
 
     $$
     \frac{(n-1)S^2}{\sigma^2} = \frac{\sum_{i=1}^n (X_i - \bar{X})^2}{\sigma^2} \sim \chi^2_{n-1}
     $$
 
-    Under $H_0: \sigma^2 = \sigma_0^2$, substituting gives $\chi^2 = (n-1)S^2/\sigma_0^2 \sim \chi^2_{n-1}$. Large values of $\chi^2$ indicate $S^2 \gg \sigma_0^2$ (evidence for $\sigma^2 > \sigma_0^2$); small values indicate $S^2 \ll \sigma_0^2$. $\square$
+    이다. 자유도가 $n$이 아니라 $n-1$인 이유는 $\mu$ 대신 $\bar{X}$를 썼기 때문이다. 편차 $X_i - \bar{X}$는 제약 $\sum_i (X_i - \bar{X}) = 0$을 만족하므로 자유롭게 변할 수 있는 성분이 $n-1$개뿐이다.
+
+    $H_0: \sigma^2 = \sigma_0^2$ 아래에서 대입하면 $\chi^2 = (n-1)S^2/\sigma_0^2 \sim \chi^2_{n-1}$을 얻는다.
+
+    $\chi^2$이 크면 $S^2 \gg \sigma_0^2$을 뜻하고($\sigma^2 > \sigma_0^2$의 증거), 작으면 $S^2 \ll \sigma_0^2$을 뜻한다. $\square$
 
 ---
 
-**Exercise 3.**
-Explain why the chi-squared test for variance is much more sensitive to non-normality than the t-test for the mean.
+**연습문제 3.**
+분산에 대한 카이제곱 검정이 평균에 대한 $t$ 검정보다 비정규성에 훨씬 민감한 이유를 설명하라.
 
-??? success "Solution to Exercise 3"
-    The t-test involves $\bar{X}$, which is approximately normal by the CLT for moderate $n$, regardless of the data distribution. The chi-squared test involves $S^2 = \frac{1}{n-1}\sum(X_i - \bar{X})^2$, which uses squared deviations and is directly affected by the tail behavior of the distribution.
+??? success "연습문제 3 풀이"
+    $t$ 검정에는 $\bar{X}$가 들어가는데, 중심극한정리에 의해 자료 분포와 무관하게 $n$이 어느 정도만 되면 근사적으로 정규이다. 카이제곱 검정에는 $S^2 = \frac{1}{n-1}\sum(X_i - \bar{X})^2$이 들어가는데, 제곱편차를 쓰므로 분포의 꼬리 거동에 직접 영향을 받는다.
 
-    Heavy-tailed distributions produce occasional extreme $(X_i - \bar{X})^2$ values that inflate $S^2$. Since the chi-squared reference distribution assumes normality, these inflated values make the test statistic too large, leading to excessive rejections (inflated Type I error). The sample variance does not benefit from CLT-like protection -- its distribution converges much more slowly to normality than $\bar{X}$.
+    꼬리가 두꺼운 분포는 이따금 극단적인 $(X_i - \bar{X})^2$ 값을 만들어 $S^2$을 부풀린다. 카이제곱 기준분포는 정규성을 가정하므로 이렇게 부풀려진 값들이 검정통계량을 지나치게 크게 만들고 과도한 기각(제1종 오류 팽창)으로 이어진다.
+
+    정량적으로는 $\operatorname{Var}(S^2) \approx \sigma^4(\gamma_2+2)/n$이므로 초과첨도 $\gamma_2$가 크면 $S^2$의 변동이 정규 이론값의 $(\gamma_2+2)/2$배가 된다. $\gamma_2 = 6$인 지수분포 자료에서는 4배이다.
+
+    **결정적인 점은 이 왜곡이 표본을 키워도 사라지지 않는다는 것이다.** 팽창 인자 $(\gamma_2+2)/2$는 $n$에 의존하지 않는다. 표본분산은 $\bar{X}$가 받는 것과 같은 중심극한정리의 보호를 받지 못한다. $\square$
 
 ---
 
-**Exercise 4.**
-Construct a 95% confidence interval for $\sigma^2$ when $n = 20$ and $s^2 = 15$.
+**연습문제 4.**
+$n = 20$, $s^2 = 15$일 때 $\sigma^2$의 95% 신뢰구간을 구성하라.
 
-??? success "Solution to Exercise 4"
-    The CI is based on $(n-1)s^2/\sigma^2 \sim \chi^2_{n-1}$:
+??? success "연습문제 4 풀이"
+    신뢰구간은 $(n-1)s^2/\sigma^2 \sim \chi^2_{n-1}$에 기반한다.
 
     $$
-    \frac{(n-1)s^2}{\chi^2_{\alpha/2, n-1}} \leq \sigma^2 \leq \frac{(n-1)s^2}{\chi^2_{1-\alpha/2, n-1}}
+    \frac{(n-1)s^2}{\chi^2_{\alpha/2,\, n-1}} \leq \sigma^2 \leq \frac{(n-1)s^2}{\chi^2_{1-\alpha/2,\, n-1}}
     $$
 
-    With $n-1 = 19$, $\chi^2_{0.025, 19} = 32.852$, $\chi^2_{0.975, 19} = 8.907$:
+    $n-1 = 19$에서 $\chi^2_{0.025, 19} = 32.852$(상단), $\chi^2_{0.975, 19} = 8.907$(하단)이므로
 
     $$
     \frac{19 \times 15}{32.852} \leq \sigma^2 \leq \frac{19 \times 15}{8.907}
@@ -189,4 +239,8 @@ Construct a 95% confidence interval for $\sigma^2$ when $n = 20$ and $s^2 = 15$.
     8.67 \leq \sigma^2 \leq 32.00
     $$
 
-    The 95% CI for $\sigma^2$ is $(8.67, 32.00)$. Note the asymmetry: the upper bound is farther from $s^2 = 15$ than the lower bound, reflecting the right-skewed chi-squared distribution.
+    $\sigma^2$의 95% 신뢰구간은 $(8.67, 32.00)$이다.
+
+    **비대칭성에 주목하라.** 상한이 $s^2 = 15$에서 $17.0$만큼 떨어져 있는 반면 하한은 $6.3$만큼만 떨어져 있다. 카이제곱분포가 오른쪽으로 치우쳐 있기 때문이다. 평균에 대한 $t$ 구간처럼 점추정값을 중심으로 대칭이 아니다.
+
+    구간의 폭도 인상적이다. 상한이 하한의 $32.00/8.67 = 3.7$배이다. $n = 20$으로 분산을 추정하면 3~4배의 불확실성이 남는다는 뜻이다. 표준편차로 옮기면 $(\sqrt{8.67}, \sqrt{32.00}) = (2.94, 5.66)$으로 비율이 $1.9$배가 되어 다소 완화된다. $\square$

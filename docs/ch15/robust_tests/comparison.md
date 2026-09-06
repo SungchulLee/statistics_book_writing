@@ -1,98 +1,113 @@
-# Comparison of Robust Methods
+# 로버스트 방법의 비교
 
-The previous sections introduced several tests for homogeneity of variances, ranging from the normality-dependent Bartlett's test to the rank-based Fligner-Killeen test. Each test makes different tradeoffs between statistical power and robustness to non-normality. This section provides a unified comparison to help practitioners choose the right test for their data.
+앞의 절들은 정규성에 의존하는 Bartlett 검정부터 순위 기반 Fligner-Killeen 검정까지 분산의 동질성에 대한 여러 검정을 소개했다. 각 검정은 통계적 검정력과 비정규성에 대한 로버스트성 사이에서 서로 다른 절충을 한다. 이 절은 실무자가 자료에 맞는 검정을 고를 수 있도록 통합 비교를 제공한다.
 
-## Summary of All Variance Tests
+## 모든 분산 검정 요약
 
-| Test | Center | Transformation | Reference dist. | Normality required | Groups |
+| 검정 | 중심 | 변환 | 기준분포 | 정규성 필요 | 집단 수 |
 |---|---|---|---|---|---|
-| Chi-square | N/A | $(n-1)S^2/\sigma_0^2$ | $\chi^2_{n-1}$ | Yes | 1 |
-| F-test | N/A | $S_1^2/S_2^2$ | $F_{n_1-1, n_2-1}$ | Yes | 2 |
-| Bartlett | N/A | Log-variance ratio | $\chi^2_{k-1}$ | Yes | $k \ge 2$ |
-| Levene | Mean | $\|X_{ij} - \bar{X}_i\|$ | $F_{k-1, N-k}$ | No | $k \ge 2$ |
-| Brown-Forsythe | Median | $\|X_{ij} - \tilde{X}_i\|$ | $F_{k-1, N-k}$ | No | $k \ge 2$ |
-| Fligner-Killeen | Median | Normal scores of ranks | $\chi^2_{k-1}$ | No | $k \ge 2$ |
+| 카이제곱 | 해당 없음 | $(n-1)S^2/\sigma_0^2$ | $\chi^2_{n-1}$ | 예 | 1 |
+| F 검정 | 해당 없음 | $S_1^2/S_2^2$ | $F_{n_1-1, n_2-1}$ | 예 | 2 |
+| Bartlett | 해당 없음 | 로그분산비 | $\chi^2_{k-1}$ | 예 | $k \ge 2$ |
+| Levene | 평균 | $\|X_{ij} - \bar{X}_i\|$ | $F_{k-1, N-k}$ | 아니오 | $k \ge 2$ |
+| Brown-Forsythe | 중앙값 | $\|X_{ij} - \tilde{X}_i\|$ | $F_{k-1, N-k}$ | 아니오 | $k \ge 2$ |
+| Fligner-Killeen | 중앙값 | 순위의 정규점수 | $\chi^2_{k-1}$ | 아니오 | $k \ge 2$ |
 
-## Type I Error Control
+## 제1종 오류 조절
 
-The most important criterion for a diagnostic test is whether it maintains its advertised significance level. The following table reports simulated actual Type I error rates at nominal $\alpha = 0.05$ with $k = 3$ groups of $n_i = 20$:
+진단 검정에서 가장 중요한 기준은 표방한 유의수준을 유지하는지 여부이다. 다음 표는 $k = 3$개 집단, $n_i = 20$, 명목 $\alpha = 0.05$에서 모의실험으로 얻은 실제 제1종 오류율이다(반복 10,000회, 몬테카를로 오차 약 0.002).
 
-| Distribution | Bartlett | Levene | Brown-Forsythe | Fligner-Killeen |
+| 분포 | Bartlett | Levene | Brown-Forsythe | Fligner-Killeen |
 |---|---|---|---|---|
-| Normal | 0.050 | 0.052 | 0.050 | 0.049 |
-| $t_{10}$ | 0.090 | 0.057 | 0.053 | 0.050 |
-| $t_5$ | 0.220 | 0.068 | 0.055 | 0.051 |
-| Exponential | 0.200 | 0.072 | 0.058 | 0.052 |
-| $\chi^2_4$ | 0.140 | 0.065 | 0.056 | 0.051 |
-| Contaminated normal | 0.350 | 0.080 | 0.060 | 0.053 |
+| Normal | 0.052 | 0.058 | 0.039 | 0.036 |
+| $t_{10}$ | 0.109 | 0.057 | 0.040 | 0.037 |
+| $t_5$ | 0.218 | 0.064 | 0.041 | 0.039 |
+| $\chi^2_4$ | 0.228 | 0.123 | 0.041 | 0.055 |
+| 오염 정규 (90% $\mathcal{N}(0,1)$ + 10% $\mathcal{N}(0,9)$) | 0.338 | 0.061 | 0.035 | 0.038 |
+| Exponential | **0.390** | **0.192** | 0.048 | 0.087 |
 
-The pattern is clear:
+패턴이 명확하다.
 
-- **Bartlett's test** shows severe inflation under any non-normality.
-- **Levene's test** (mean-based) shows moderate inflation for heavy-tailed and skewed data.
-- **Brown-Forsythe** maintains near-nominal rates across all distributions.
-- **Fligner-Killeen** provides the tightest Type I error control.
+- **Bartlett 검정**은 어떤 비정규성에서든 심각한 팽창을 보인다. 지수분포에서 0.390으로 명목값의 여덟 배에 이른다.
+- **Levene 검정**(평균 기반)은 대칭인 두꺼운 꼬리에는 잘 견디지만($t_5$에서 0.064) **치우침에 약하다**. 지수분포에서 0.192, $\chi^2_4$에서 0.123이다.
+- **Brown-Forsythe**는 모든 분포에서 명목값 근처를 유지한다(0.035~0.048). 이 표에서 **유일하게 모든 행에서 통제되는 검정**이다.
+- **Fligner-Killeen**은 대부분 잘 통제되지만 강하게 치우친 분포에서는 다소 자유주의적이다($\chi^2_4$에서 0.055, 지수분포에서 0.087).
 
-## Power Comparison Under Normality
+!!! note "Levene의 취약점은 첨도가 아니라 치우침이다"
+    표를 세로로 읽으면 Levene 열이 $t_5$(첨도 6, 대칭)에서는 0.064로 무난하지만 지수분포(첨도 6, 왜도 2)에서는 0.192로 급증한다. **같은 첨도인데 결과가 세 배 다르다.**
 
-When the data are truly normal, all tests are valid, and the relevant comparison is power (the probability of detecting genuinely unequal variances). For $k = 3$ groups with $n_i = 20$, testing $H_0$ when the true variance ratio is $\sigma_{\max}^2/\sigma_{\min}^2 = 3$:
+    이는 15.5절 Brown-Forsythe 연습문제 1의 결론과 일치한다. 평균 중심화가 무너지는 것은 평균이 분포의 중심을 대표하지 못할 때, 곧 치우침이 있을 때이다.
 
-| Test | Power |
+## 정규성 아래의 검정력 비교
+
+자료가 정말로 정규일 때는 모든 검정이 타당하므로, 관심사는 검정력(참으로 다른 분산을 탐지할 확률)이다. $k = 3$개 집단, $n_i = 20$, 참 분산비 $\sigma_{\max}^2/\sigma_{\min}^2 = 3$일 때(표준편차 $1, 1, \sqrt{3}$)
+
+| 검정 | 검정력 |
 |---|---|
-| Bartlett | 0.82 |
-| Levene (mean) | 0.76 |
-| Brown-Forsythe (median) | 0.73 |
-| Fligner-Killeen | 0.70 |
+| Bartlett | 0.692 |
+| Levene (평균) | 0.628 |
+| Brown-Forsythe (중앙값) | 0.560 |
+| Fligner-Killeen | 0.497 |
 
-Under normality, Bartlett's test is the most powerful, followed by Levene's test, Brown-Forsythe, and Fligner-Killeen. The power differences are moderate (about 10--12 percentage points between the best and worst).
+정규성 아래에서 Bartlett이 가장 강력하고 Levene, Brown-Forsythe, Fligner-Killeen 순이다. 최고와 최저의 차이는 약 20퍼센트포인트로 작지 않다.
 
-## Power Comparison Under Non-Normality
+**그러나 크기 차이를 함께 보아야 한다.** 위 크기 표에서 정규 자료의 실제 크기는 Bartlett 0.052, Levene 0.058, Brown-Forsythe 0.039, Fligner-Killeen 0.036이었다. Brown-Forsythe와 Fligner-Killeen이 보수적이므로 검정력 손실의 일부는 그 보수성 때문이지 검정 자체의 열등함 때문이 아니다. 크기를 0.05로 맞추어 보정하면 격차가 줄어든다.
 
-When the data are drawn from a $t_5$ distribution (heavy-tailed) with unequal variances:
+## 비정규성 아래의 검정력 비교
 
-| Test | Actual Type I error | Power |
+같은 분산비 3, 같은 표본크기에서 자료를 $t_5$(두꺼운 꼬리)에서 뽑으면
+
+| 검정 | 실제 제1종 오류 | 기각률 ($H_1$) |
 |---|---|---|
-| Bartlett | 0.220 | 0.85 (inflated) |
-| Levene (mean) | 0.068 | 0.64 |
-| Brown-Forsythe (median) | 0.055 | 0.60 |
-| Fligner-Killeen | 0.051 | 0.57 |
+| Bartlett | 0.218 | 0.693 |
+| Levene (평균) | 0.064 | 0.508 |
+| Brown-Forsythe (중앙값) | 0.041 | 0.440 |
+| Fligner-Killeen | 0.039 | 0.406 |
 
-Bartlett's apparent high power is misleading because its Type I error rate is already inflated to 22%. A test that rejects too often under $H_0$ will also reject often under $H_1$, but for the wrong reasons. When adjusted for the actual significance level, Bartlett's effective power advantage disappears.
+Bartlett의 겉보기 높은 기각률은 오도적이다. 제1종 오류율이 이미 22%로 부풀려져 있기 때문이다. $H_0$ 아래에서 지나치게 자주 기각하는 검정은 $H_1$ 아래에서도 자주 기각하지만 잘못된 이유에서 그렇다.
 
-## Robustness Ranking
+특히 눈여겨볼 점은 **Bartlett의 기각률이 정규 자료(0.692)와 $t_5$ 자료(0.693)에서 거의 같다**는 것이다. 두꺼운 꼬리가 검정력을 떨어뜨리는 효과와 크기를 부풀리는 효과가 우연히 상쇄되었을 뿐이며, 이 값에서 "검정력이 유지된다"고 읽어서는 안 된다.
 
-From least to most robust:
+로버스트 검정들은 정규 자료에 비해 기각률이 뚜렷하게 떨어졌다(Brown-Forsythe 0.560 → 0.440). 두꺼운 꼬리가 분산 추정을 어렵게 만든 만큼 정직하게 검정력이 낮아진 것이다.
 
-1. **Bartlett's test** — requires normality; severely affected by heavy tails and skewness
-2. **Levene's test** (mean) — moderately robust; affected by skewness and outliers through the group mean
-3. **Brown-Forsythe test** (median) — highly robust; the median center resists outliers and skewness
-4. **Fligner-Killeen test** (normal scores of ranks) — most robust; nearly distribution-free
+## 로버스트성 순위
 
-## Decision Flowchart
+로버스트성이 낮은 것부터 높은 것 순으로
 
-The choice of test can be guided by the following logic:
+1. **Bartlett 검정** — 정규성이 필요하며 두꺼운 꼬리와 치우침에 심각하게 영향받는다
+2. **Levene 검정**(평균) — 중간 정도로 로버스트하지만 집단평균을 통해 치우침과 이상점의 영향을 받는다
+3. **Brown-Forsythe 검정**(중앙값) — 매우 로버스트하며 중앙값 중심이 이상점과 치우침에 저항한다
+4. **Fligner-Killeen 검정**(순위의 정규점수) — 가장 로버스트하며 거의 분포무관하다
 
-1. **Is the data confirmed normal?** (Shapiro-Wilk $p > 0.10$, Q-Q plot linear)
-    - Yes: Use **Bartlett's test** for maximum power.
-    - No or uncertain: Proceed to step 2.
+다만 위 크기 표에서 보았듯 강하게 치우친 자료에서는 Fligner-Killeen보다 Brown-Forsythe의 크기가 더 잘 통제되었다. "가장 로버스트"라는 순위가 모든 상황에서 최선의 크기 조절을 뜻하지는 않는다.
 
-2. **Is the data mildly non-normal?** (Slight skewness, no heavy tails, no outliers)
-    - Yes: Use **Levene's test** (mean-based) for good power with moderate robustness.
-    - No: Proceed to step 3.
+## 판정 흐름
 
-3. **Is the data moderately non-normal?** (Skewed, moderate outliers)
-    - Yes: Use the **Brown-Forsythe test** (median-based).
-    - No: Proceed to step 4.
+검정의 선택은 다음 논리로 안내할 수 있다.
 
-4. **Is the data severely non-normal?** (Heavy tails, strong skewness, many outliers)
-    - Yes: Use the **Fligner-Killeen test**.
+1. **자료의 정규성이 확인되었는가?** (Shapiro-Wilk $p > 0.10$, Q-Q 그림 선형)
+    - 예: 최대 검정력을 위해 **Bartlett 검정**을 쓴다.
+    - 아니오 또는 불확실: 2단계로 간다.
 
-!!! tip "Default Recommendation"
-    When in doubt, the **Brown-Forsythe test** is the safest default. It controls Type I error well across distributions and loses only a small amount of power relative to Bartlett's test when the data happen to be normal. Most statistical software implements it as `levene(..., center='median')`.
+2. **자료가 가볍게 비정규인가?** (약간의 치우침, 두꺼운 꼬리 없음, 이상점 없음)
+    - 예: 좋은 검정력과 적당한 로버스트성을 갖는 **Levene 검정**(평균 기반)을 쓴다.
+    - 아니오: 3단계로 간다.
 
-## Software Implementation
+3. **자료가 중간 정도로 비정규인가?** (치우침, 중간 정도의 이상점)
+    - 예: **Brown-Forsythe 검정**(중앙값 기반)을 쓴다.
+    - 아니오: 4단계로 간다.
 
-All four tests are available in Python through SciPy:
+4. **자료가 심하게 비정규인가?** (두꺼운 꼬리, 강한 치우침, 많은 이상점)
+    - 예: **Fligner-Killeen 검정**을 쓴다.
+
+!!! tip "기본 권고"
+    확신이 없을 때는 **Brown-Forsythe 검정**이 가장 안전한 기본값이다. 여러 분포에 걸쳐 제1종 오류를 잘 조절하며, 자료가 우연히 정규일 때 Bartlett 검정 대비 잃는 검정력이 크지 않다. 대부분의 통계 소프트웨어에서 `levene(..., center='median')`으로 구현되어 있다.
+
+    위 흐름도의 1~2단계를 자료로 판정하는 절차 자체가 15.1절 연습문제 4에서 논한 두 단계 문제를 안고 있다는 점도 유념하라. 실무에서는 분석 전에 Brown-Forsythe를 쓰기로 정해 두는 편이 낫다.
+
+## 소프트웨어 구현
+
+네 검정 모두 Python의 SciPy에서 쓸 수 있다.
 
 ```python
 from scipy import stats
@@ -120,35 +135,148 @@ print(f"Brown-Forsythe:  stat={stat_bf:.3f}, p={p_bf:.4f}")
 print(f"Fligner-Killeen: stat={stat_fk:.3f}, p={p_fk:.4f}")
 ```
 
+출력:
 
-## Exercises
+```text
+Bartlett:        stat=15.539, p=0.0004
+Levene (mean):   stat=8.202, p=0.0023
+Brown-Forsythe:  stat=6.609, p=0.0059
+Fligner-Killeen: stat=9.563, p=0.0084
+```
 
-**Exercise 1.**
-Describe the main concept of Comparison of Robust Methods and explain why it matters for statistical practice.
+네 검정 모두 강하게 기각한다. 표본분산이 $3.27$, $32.29$, $1.71$로 집단 2가 집단 3의 19배이기 때문이다. 이탈이 뚜렷하면 검정 선택이 결론을 바꾸지 않는다. **선택이 중요해지는 것은 경계선상의 사례에서다.**
 
-??? success "Solution to Exercise 1"
-    Comparison of Robust Methods is a core topic in statistics that provides tools for drawing reliable inferences from data. It matters because proper application ensures valid conclusions, correctly quantified uncertainty, and appropriate handling of the assumptions that underpin the method. Practitioners who understand this concept can avoid common pitfalls and choose the right analytical approach for their data.
+
+## 연습문제
+
+**연습문제 1.**
+크기 표에서 Levene 검정이 $t_5$(0.064)보다 지수분포(0.192)에서 훨씬 나쁘다. 두 분포의 초과첨도가 모두 6인데도 그렇다. 이 차이의 원인을 설명하라.
+
+??? success "연습문제 1 풀이"
+    두 분포의 차이는 **왜도**이다. $t_5$는 대칭($\gamma_1 = 0$)이고 지수분포는 강하게 오른쪽으로 치우쳐 있다($\gamma_1 = 2$).
+
+    Levene 검정의 첫 단계는 각 집단의 **평균**을 추정하는 것이다. 평균 $\bar{X}_i$가 참 중심 $\mu_i$에서 벗어나면 그 집단의 모든 절대편차가 오염된다.
+
+    **대칭 분포에서.** $\bar{X}_i$의 오차는 양쪽으로 대칭이고, $|X_{ij} - \bar{X}_i|$의 평균에 미치는 영향이 1차 항에서 상쇄된다. 그래서 $t_5$처럼 꼬리가 두꺼워도 크기 왜곡이 크지 않다.
+
+    **치우친 분포에서.** 지수분포의 표본평균은 그 자체가 오른쪽으로 치우쳐 있다. 게다가 15.2절 연습문제 2에서 보았듯 **$\bar{X}$와 $S^2$이 양의 상관을 갖는다.** 큰 $\bar{X}_i$가 나온 집단은 편차도 함께 크게 나온다. 이 상관이 집단마다 독립적으로 작용하므로 $\bar{Z}_i$들이 실제보다 더 흩어지고, 분산분석 F 통계량이 부풀려진다.
+
+    Brown-Forsythe가 중앙값을 쓰면 이 연결이 끊어진다. 중앙값은 치우친 분포에서도 안정적이며 $S^2$과의 상관이 훨씬 약하다. 표에서 Brown-Forsythe가 지수분포에서 0.048로 완벽히 통제되는 이유이다. $\square$
 
 ---
 
-**Exercise 2.**
-State the key assumptions required by the method discussed here. How can each assumption be checked?
+**연습문제 2.**
+Bartlett 검정의 기각률이 정규 자료(0.692)와 $t_5$ 자료(0.693)에서 거의 같다. 이것이 왜 "검정력이 유지된다"는 뜻이 아닌지 설명하고, 공정한 비교 방법을 제시하라.
 
-??? success "Solution to Exercise 2"
-    The main assumptions typically include: (1) independence of observations -- verified by understanding the data collection process and checking for serial correlation; (2) distributional requirements (e.g., normality) -- checked with Q-Q plots and formal tests like Shapiro-Wilk; (3) equal variances (if applicable) -- assessed with boxplots and Levene's test. When assumptions are violated, consider robust alternatives, transformations, or nonparametric methods.
+??? success "연습문제 2 풀이"
+    **두 효과가 상쇄되었다.**
+
+    1. **크기 팽창(위로 미는 힘).** $t_5$ 자료에서 Bartlett의 크기가 0.052에서 0.218로 뛴다. 이 팽창은 $H_1$ 아래에서도 그대로 작용하여 기각률을 올린다.
+    2. **정보의 손실(아래로 미는 힘).** 두꺼운 꼬리는 $S_i^2$의 변동을 네 배로 키우므로 참 분산 차이를 탐지하기가 실제로 더 어려워진다. 이 효과는 기각률을 내린다.
+
+    두 힘이 우연히 비슷한 크기여서 0.692와 0.693이 나왔을 뿐이다. 로버스트 검정들에서는 크기가 통제되어 있으므로 두 번째 효과만 나타나고, 정직하게 기각률이 떨어진다(Brown-Forsythe 0.560 → 0.440).
+
+    **공정한 비교: 크기 보정 검정력.**
+
+    1. 모의실험으로 $H_0$ 아래에서 각 검정통계량의 분포를 얻는다.
+    2. 그 분포의 95백분위수를 **경험적 임계값**으로 삼는다. 이렇게 하면 모든 검정의 실제 크기가 정확히 0.05가 된다.
+    3. 이 임계값으로 $H_1$ 아래의 기각률을 다시 계산한다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    rng = np.random.default_rng(31)
+    n, k, R = 20, 3, 5000
+    gen = lambda s: s * rng.standard_t(5, n)
+
+    # Step 1-2: null distribution -> empirical critical values
+    null_b = np.array([stats.bartlett(*[gen(1) for _ in range(k)])[0]
+                       for _ in range(R)])
+    crit_b = np.quantile(null_b, 0.95)
+
+    # Step 3: size-adjusted power
+    alt_b = np.array([stats.bartlett(*[gen(s) for s in (1, 1, 3**0.5)])[0]
+                      for _ in range(R)])
+    print(f"Bartlett empirical critical value: {crit_b:.4f} "
+          f"(nominal chi2_2 0.95 = {stats.chi2.ppf(0.95, 2):.4f})")
+    print(f"Size-adjusted power: {(alt_b > crit_b).mean():.4f}")
+    ```
+
+    출력:
+
+    ```text
+    Bartlett empirical critical value: 12.4652 (nominal chi2_2 0.95 = 5.9915)
+    Size-adjusted power: 0.3674
+    ```
+
+    경험적 임계값이 $12.47$로 명목값 $5.991$의 두 배가 넘는다. 이 올바른 임계값을 쓰면 Bartlett의 크기 보정 검정력은 **0.367**로, 명목 기각률 $0.693$의 절반 남짓이다.
+
+    같은 절차를 Brown-Forsythe에 적용하면 경험적 임계값 $2.82$(명목 $F_{0.95,2,57} = 3.159$보다 **작다**, 이 검정이 보수적이므로)이고 크기 보정 검정력은 **0.491**이다.
+
+    | 검정 | 명목 기각률 | 크기 보정 검정력 |
+    |---|---|---|
+    | Bartlett | 0.693 | 0.367 |
+    | Brown-Forsythe | 0.440 | **0.491** |
+
+    결과가 완전히 뒤집힌다. **$t_5$ 자료에서는 크기를 맞추고 나면 Brown-Forsythe가 Bartlett보다 오히려 강력하다.** 명목값만 보면 Bartlett이 0.693 대 0.440으로 압도하는 것처럼 보이지만, 그 우위는 전적으로 부풀려진 크기에서 온 착시였다.
+
+    이는 "Bartlett은 정규성 아래에서 가장 강력하다"는 서술의 정확한 범위를 보여준다. **정규성 아래에서만** 그렇다. 비정규 자료에서는 로버스트 검정이 크기와 검정력 양쪽에서 우월할 수 있다.
+
+    **원칙.** 검정력은 크기를 고정한 뒤에만 비교할 수 있다. 크기가 다른 두 검정의 기각률을 나란히 놓는 것은 서로 다른 유의수준의 검정을 비교하는 것과 같다. $\square$
 
 ---
 
-**Exercise 3.**
-Work through a small numerical example illustrating the application of the technique from this section.
+**연습문제 3.**
+판정 흐름도의 1단계는 "정규성이 확인되었는가"를 자료로 판정한다. 이 절차의 문제점을 지적하고, 흐름도를 어떻게 고치면 좋을지 제안하라.
 
-??? success "Solution to Exercise 3"
-    A structured approach to applying this technique involves: (1) clearly stating the hypotheses or estimation goal; (2) verifying that the data meet the required assumptions; (3) computing the relevant test statistic, estimate, or model fit; (4) obtaining the p-value, confidence interval, or posterior distribution; (5) interpreting the result in the context of the original question. Following these steps systematically ensures a rigorous and reproducible analysis.
+??? success "연습문제 3 풀이"
+    **문제 1: 두 단계 절차의 크기 왜곡.** 같은 자료로 정규성을 검정한 뒤 분산 검정을 고르면 최종 절차의 실제 유의수준이 명목값에서 벗어난다. 두 결정이 같은 자료에 의존하기 때문이다.
+
+    **문제 2: 검정력의 방향이 반대다.** 정규성 검정은 작은 표본에서 검정력이 낮다(14장). 그런데 분산 검정이 비정규성에 가장 취약한 것도 작은 표본이다. 곧 **확인이 가장 필요한 상황에서 확인이 가장 무력하다.**
+
+    구체적으로 $n = 20$인 $t_5$ 자료에서 Shapiro-Wilk의 검정력은 약 0.2에 불과하다. 80%의 경우 "정규성 이상 없음"으로 통과시켜 Bartlett을 쓰게 되는데, 그 Bartlett의 실제 크기는 0.218이다.
+
+    **문제 3: 흐름도 2~4단계가 주관적이다.** "가볍게", "중간 정도로", "심하게" 비정규를 자료로 구별하는 객관적 기준이 없다. 분석자가 원하는 결과에 맞춰 조정할 여지가 생긴다.
+
+    **개선안.**
+
+    ```text
+    1. 자료 생성 과정에서 정규성이 이론적으로 보장되는가?
+       (측정 오차 모형, 물리적 근거 등 — 자료가 아니라 지식에 근거)
+       - 예: Bartlett 검정
+       - 아니오: 2단계
+
+    2. 기본값으로 Brown-Forsythe 검정을 쓴다.
+
+    3. 진단(보고용, 검정 선택용이 아님):
+       - 집단별 표준편차와 상자그림을 항상 보고한다
+       - Q-Q 그림으로 이탈의 유형을 서술한다
+       - 오염이 심하다고 판단되면 Fligner-Killeen 결과도 함께 보고한다
+    ```
+
+    핵심 변화는 **검정 선택을 자료가 아니라 사전 지식에 근거시키는 것**이다. 자료로부터 방법을 고르는 순간 추론의 타당성이 훼손된다. $\square$
 
 ---
 
-**Exercise 4.**
-Compare the approach from this section with an alternative method. When would you choose each?
+**연습문제 4.**
+본문 소프트웨어 예제에서 네 검정이 모두 강하게 기각했다. 이렇게 결론이 일치하는 경우와 갈리는 경우 각각에서 실무자가 어떻게 행동해야 하는지 논하라.
 
-??? success "Solution to Exercise 4"
-    The method discussed here is appropriate when its assumptions hold and the sample size is sufficient for the asymptotic approximations to be accurate. Alternative approaches include: (1) nonparametric methods -- preferred when distributional assumptions are suspect; (2) bootstrap methods -- useful when analytical reference distributions are unavailable; (3) Bayesian methods -- valuable when incorporating prior information or when direct probability statements about parameters are desired. Running multiple approaches and comparing results provides a useful robustness check.
+??? success "연습문제 4 풀이"
+    **결론이 일치할 때.** 예제에서 $p$값이 $0.0004$에서 $0.0084$까지 20배 차이 나지만 모두 0.01보다 작다. 실무적 결론은 동일하다. 집단 2의 표본분산이 집단 3의 19배로 신호가 압도적이기 때문이다.
+
+    이 경우 **어느 검정을 보고하든 무방하다.** 다만 사전에 정한 하나를 보고하고, 부록에 나머지를 함께 실어 결과의 강건함을 보이는 것이 좋다.
+
+    **결론이 갈릴 때.** 이때가 진짜 문제이다. 15.5절 Levene 페이지의 예제에서 Levene $p = 0.026$과 Brown-Forsythe $p = 0.066$이 5% 문턱을 사이에 두고 갈렸다.
+
+    이런 상황의 원칙은 다음과 같다.
+
+    1. **사전에 정한 검정을 보고한다.** 자료를 본 뒤 문턱을 넘은 검정을 고르는 것은 $p$값 조작이며 가장 나쁜 대응이다.
+
+    2. **왜 갈리는지 진단한다.** 검정들의 차이는 무작위가 아니다. Bartlett만 유의하면 비정규성을 의심한다. Levene만 유의하면 치우침이나 이상점이 평균을 끌어당겼는지 본다. 로버스트 검정들이 유의한데 Bartlett이 아니면 드문 경우이며 자료를 다시 살펴야 한다.
+
+    3. **모든 결과를 보고한다.** "Brown-Forsythe $p = 0.066$(사전 지정), 참고로 Bartlett $p = 0.002$, Levene $p = 0.026$. 자료에 이상점이 있어 Brown-Forsythe를 우선한다"처럼 쓴다.
+
+    4. **이분법을 피한다.** 경계선상의 $p$값은 "증거가 약하다"는 뜻이지 "효과가 없다"거나 "있다"는 뜻이 아니다. 집단별 표준편차와 그 신뢰구간을 함께 보고하면 독자가 스스로 판단할 수 있다.
+
+    5. **후속 분석은 가정에 의존하지 않는 쪽으로.** 등분산 여부가 애매하다면 표준 분산분석 대신 Welch 분산분석을 쓴다. 그러면 애초에 이 판정이 필요 없어진다. $\square$

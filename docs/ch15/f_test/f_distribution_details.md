@@ -1,102 +1,104 @@
-# F-Distribution and Degrees of Freedom
+# F 분포와 자유도
 
-The F-distribution arises naturally when comparing the variances of two independent normal populations. It is constructed as the ratio of two independent chi-square random variables, each divided by its degrees of freedom. Understanding the F-distribution is essential because it provides the null distribution for the F-test and appears throughout ANOVA and regression analysis.
+F 분포는 독립인 두 정규 모집단의 분산을 비교할 때 자연스럽게 등장한다. 독립인 두 카이제곱 확률변수를 각자의 자유도로 나눈 것의 비로 구성된다. F 분포를 이해하는 것은 필수적이다. F 검정의 귀무분포를 제공할 뿐 아니라 분산분석과 회귀분석 전반에 등장하기 때문이다.
 
-## Definition
+## 정의
 
-Let $U \sim \chi^2_{d_1}$ and $V \sim \chi^2_{d_2}$ be independent chi-square random variables with $d_1$ and $d_2$ degrees of freedom, respectively. The random variable
+$U \sim \chi^2_{d_1}$과 $V \sim \chi^2_{d_2}$가 자유도 $d_1$, $d_2$인 독립 카이제곱 확률변수라 하자. 확률변수
 
 $$
 F = \frac{U / d_1}{V / d_2}
 $$
 
-follows an F-distribution with $d_1$ numerator degrees of freedom and $d_2$ denominator degrees of freedom, written $F \sim F_{d_1, d_2}$.
+는 분자 자유도 $d_1$, 분모 자유도 $d_2$인 F 분포를 따르며 $F \sim F_{d_1, d_2}$로 쓴다.
 
-The order of the degrees of freedom matters: $F_{d_1, d_2}$ and $F_{d_2, d_1}$ are different distributions unless $d_1 = d_2$.
+자유도의 순서가 중요하다. $d_1 = d_2$가 아닌 한 $F_{d_1, d_2}$와 $F_{d_2, d_1}$은 서로 다른 분포이다.
 
-## Connection to Sample Variances
+## 표본분산과의 연결
 
-Suppose two independent random samples are drawn from normal populations:
+정규 모집단에서 독립인 두 확률표본을 뽑았다고 하자.
 
 $$
 X_1, \ldots, X_{n_1} \sim N(\mu_1, \sigma_1^2), \qquad Y_1, \ldots, Y_{n_2} \sim N(\mu_2, \sigma_2^2)
 $$
 
-From the chi-square result for sample variances,
+표본분산에 대한 카이제곱 결과에서
 
 $$
 \frac{(n_1 - 1)S_1^2}{\sigma_1^2} \sim \chi^2_{n_1 - 1}, \qquad \frac{(n_2 - 1)S_2^2}{\sigma_2^2} \sim \chi^2_{n_2 - 1}
 $$
 
-where $S_1^2$ and $S_2^2$ are the sample variances. Because the two samples are independent, these chi-square variables are independent. Forming the ratio gives
+여기서 $S_1^2$과 $S_2^2$은 표본분산이다. 두 표본이 독립이므로 이 카이제곱 변수들도 독립이다. 비를 만들면
 
 $$
 F = \frac{S_1^2 / \sigma_1^2}{S_2^2 / \sigma_2^2} = \frac{S_1^2 \sigma_2^2}{S_2^2 \sigma_1^2} \sim F_{n_1-1,\, n_2-1}
 $$
 
-Under the null hypothesis $H_0\colon \sigma_1^2 = \sigma_2^2$, the ratio simplifies to
+귀무가설 $H_0\colon \sigma_1^2 = \sigma_2^2$ 아래에서 이 비는 다음으로 간단해진다.
 
 $$
 F = \frac{S_1^2}{S_2^2} \sim F_{n_1-1,\, n_2-1}
 $$
 
-This is the test statistic for the F-test of equal variances.
+이것이 분산 동일성에 대한 F 검정의 검정통계량이다.
 
-## Properties of the F-Distribution
+## F 분포의 성질
 
-The F-distribution with $d_1$ and $d_2$ degrees of freedom has the following properties:
+자유도 $d_1$, $d_2$인 F 분포는 다음 성질을 갖는다.
 
-- **Support:** $F > 0$ (the ratio of positive quantities is always positive)
-- **Mean:** $E[F] = \dfrac{d_2}{d_2 - 2}$ for $d_2 > 2$
-- **Variance:** $\operatorname{Var}(F) = \dfrac{2d_2^2(d_1 + d_2 - 2)}{d_1(d_2-2)^2(d_2-4)}$ for $d_2 > 4$
-- **Mode:** $\dfrac{d_1 - 2}{d_1} \cdot \dfrac{d_2}{d_2 + 2}$ for $d_1 > 2$
-- **Right-skewed:** The distribution is always positively skewed, though the skewness decreases as both degrees of freedom increase
+- **정의역:** $F > 0$ (양수의 비는 항상 양수)
+- **평균:** $d_2 > 2$일 때 $E[F] = \dfrac{d_2}{d_2 - 2}$
+- **분산:** $d_2 > 4$일 때 $\operatorname{Var}(F) = \dfrac{2d_2^2(d_1 + d_2 - 2)}{d_1(d_2-2)^2(d_2-4)}$
+- **최빈값:** $d_1 > 2$일 때 $\dfrac{d_1 - 2}{d_1} \cdot \dfrac{d_2}{d_2 + 2}$
+- **오른쪽 치우침:** 항상 양의 왜도를 가지며, 두 자유도가 모두 커지면 왜도가 줄어든다
 
-!!! note "Mean Near 1 Under the Null"
-    When $d_2$ is moderately large, $E[F] \approx 1$. This makes intuitive sense: under $H_0\colon \sigma_1^2 = \sigma_2^2$, the ratio $S_1^2/S_2^2$ should be close to 1 on average. Values of $F$ substantially larger or smaller than 1 provide evidence against equal variances.
+!!! note "귀무가설 아래에서 평균이 1 근처"
+    $d_2$가 어느 정도 크면 $E[F] \approx 1$이다. 직관적으로 타당하다. $H_0\colon \sigma_1^2 = \sigma_2^2$ 아래에서 비 $S_1^2/S_2^2$은 평균적으로 1에 가까워야 한다. $F$가 1보다 훨씬 크거나 작으면 분산이 같지 않다는 증거가 된다.
 
-## Role of the Degrees of Freedom
+    다만 평균 $d_2/(d_2-2)$가 정확히 1은 **아니다**. $d_2 = 20$이면 $E[F] = 1.111$이다. 이 위쪽 치우침은 F 분포가 비대칭이기 때문이며, 최빈값은 반대로 1보다 작다($d_1 = 15$, $d_2 = 20$에서 $0.788$).
 
-The two degrees of freedom parameters $d_1$ and $d_2$ control the shape of the F-distribution:
+## 자유도의 역할
 
-- **Numerator degrees of freedom** $d_1 = n_1 - 1$: reflects the sample size of the group whose variance appears in the numerator. Increasing $d_1$ makes the distribution more concentrated.
-- **Denominator degrees of freedom** $d_2 = n_2 - 1$: reflects the sample size of the group in the denominator. Increasing $d_2$ reduces the variance and pulls the mean closer to 1.
+두 자유도 모수 $d_1$과 $d_2$가 F 분포의 모양을 결정한다.
 
-When both $d_1$ and $d_2$ are large, the F-distribution approaches a normal distribution centered near 1.
+- **분자 자유도** $d_1 = n_1 - 1$: 분자에 분산이 오는 집단의 표본크기를 반영한다. $d_1$이 커지면 분포가 더 집중된다.
+- **분모 자유도** $d_2 = n_2 - 1$: 분모에 오는 집단의 표본크기를 반영한다. $d_2$가 커지면 분산이 줄고 평균이 1에 가까워진다.
 
-## Reciprocal Property
+$d_1$과 $d_2$가 모두 크면 F 분포가 1 근처를 중심으로 하는 정규분포에 접근한다.
 
-If $F \sim F_{d_1, d_2}$, then
+## 역수 성질
+
+$F \sim F_{d_1, d_2}$이면
 
 $$
 \frac{1}{F} \sim F_{d_2, d_1}
 $$
 
-This property is useful for computing lower-tail critical values. Instead of looking up $F_{\alpha, d_1, d_2}$ (which is not always tabulated), one can use
+이 성질은 하단 임계값을 계산하는 데 유용하다. (표에 늘 실려 있지는 않은) $F_{\alpha,\, d_1,\, d_2}$를 찾는 대신 다음을 쓸 수 있다.
 
 $$
 F_{\alpha,\, d_1,\, d_2} = \frac{1}{F_{1-\alpha,\, d_2,\, d_1}}
 $$
 
-## Relationship to Other Distributions
+## 다른 분포와의 관계
 
-The F-distribution is connected to several other distributions:
+F 분포는 여러 다른 분포와 연결된다.
 
-- **Chi-square:** If $F \sim F_{d_1, d_2}$, then $d_1 F / (d_1 F + d_2) \sim \text{Beta}(d_1/2, d_2/2)$.
-- **$t$-distribution:** If $T \sim t_\nu$, then $T^2 \sim F_{1, \nu}$. The square of a $t$-test statistic is an F-statistic with 1 numerator degree of freedom.
-- **Large-sample limit:** As $d_2 \to \infty$, $d_1 F \to \chi^2_{d_1}$. This connects the F-distribution back to the chi-square.
+- **베타분포:** $F \sim F_{d_1, d_2}$이면 $d_1 F / (d_1 F + d_2) \sim \text{Beta}(d_1/2, d_2/2)$이다.
+- **$t$ 분포:** $T \sim t_\nu$이면 $T^2 \sim F_{1, \nu}$이다. $t$ 검정통계량의 제곱은 분자 자유도가 1인 F 통계량이다.
+- **큰 표본 극한:** $d_2 \to \infty$이면 $d_1 F \to \chi^2_{d_1}$이다. F 분포를 카이제곱으로 되돌려 연결한다.
 
-## Example
+## 예제
 
-Two independent samples of sizes $n_1 = 16$ and $n_2 = 21$ are drawn from normal populations. The sample variances are $S_1^2 = 45$ and $S_2^2 = 28$. Under $H_0\colon \sigma_1^2 = \sigma_2^2$:
+정규 모집단에서 크기 $n_1 = 16$, $n_2 = 21$인 독립 표본을 뽑았다. 표본분산은 $S_1^2 = 45$, $S_2^2 = 28$이다. $H_0\colon \sigma_1^2 = \sigma_2^2$ 아래에서
 
 $$
 F = \frac{45}{28} = 1.607
 $$
 
-This statistic follows $F_{15, 20}$ under the null. The mean of $F_{15,20}$ is $20/18 \approx 1.111$. An observed value of 1.607 is above the mean but must be compared against the critical value $F_{0.025,\, 15,\, 20} = 2.573$ (two-tailed at $\alpha = 0.05$). Since $1.607 < 2.573$, we fail to reject $H_0$.
+이 통계량은 귀무가설 아래에서 $F_{15, 20}$을 따른다. $F_{15,20}$의 평균은 $20/18 \approx 1.111$이다. 관측값 1.607은 평균보다 크지만 임계값 $F_{0.975}(15, 20) = 2.573$($\alpha = 0.05$ 양측)과 비교해야 한다. $1.607 < 2.573$이므로 $H_0$을 기각하지 못한다($p = 0.318$).
 
-## Python Implementation
+## Python 구현
 
 ```python
 from scipy import stats
@@ -121,35 +123,173 @@ print(f"F-statistic: {f_stat:.3f}")
 print(f"P-value: {p_value:.4f}")
 ```
 
+출력:
 
-## Exercises
+```text
+Mean: 1.1111
+Variance: 0.3395
+Critical values: [0.363, 2.573]
+F-statistic: 1.607
+P-value: 0.3184
+```
 
-**Exercise 1.**
-Describe the main concept of F-Distribution and Degrees of Freedom and explain why it matters for statistical practice.
 
-??? success "Solution to Exercise 1"
-    F-Distribution and Degrees of Freedom is a core topic in statistics that provides tools for drawing reliable inferences from data. It matters because proper application ensures valid conclusions, correctly quantified uncertainty, and appropriate handling of the assumptions that underpin the method. Practitioners who understand this concept can avoid common pitfalls and choose the right analytical approach for their data.
+## 연습문제
+
+**연습문제 1.**
+$F \sim F_{d_1,d_2}$의 평균이 $d_2 > 2$일 때 $d_2/(d_2-2)$임을 유도하라. 왜 이 값이 $d_1$에 의존하지 않는지 설명하라.
+
+??? success "연습문제 1 풀이"
+    $F = (U/d_1)/(V/d_2)$이고 $U \sim \chi^2_{d_1}$, $V \sim \chi^2_{d_2}$가 독립이다. 독립성에 의해
+
+    $$
+    E[F] = \frac{d_2}{d_1}\, E[U]\, E\!\left[\frac{1}{V}\right].
+    $$
+
+    $E[U] = d_1$이다. 역수의 기댓값은 역카이제곱분포의 성질에서
+
+    $$
+    E\!\left[\frac{1}{V}\right] = \frac{1}{d_2 - 2} \quad (d_2 > 2).
+    $$
+
+    이를 직접 계산해 보면, $V \sim \chi^2_{d_2}$의 밀도가 $f(v) = \frac{v^{d_2/2-1}e^{-v/2}}{2^{d_2/2}\Gamma(d_2/2)}$이므로
+
+    $$
+    E\!\left[\frac{1}{V}\right] = \int_0^\infty \frac{v^{d_2/2-2}e^{-v/2}}{2^{d_2/2}\Gamma(d_2/2)}\,dv = \frac{2^{d_2/2-1}\Gamma(d_2/2-1)}{2^{d_2/2}\Gamma(d_2/2)} = \frac{1}{2}\cdot\frac{1}{d_2/2-1} = \frac{1}{d_2-2}.
+    $$
+
+    적분이 수렴하려면 $d_2/2 - 2 > -1$, 곧 $d_2 > 2$가 필요하다. 따라서
+
+    $$
+    E[F] = \frac{d_2}{d_1} \cdot d_1 \cdot \frac{1}{d_2-2} = \frac{d_2}{d_2-2}.
+    $$
+
+    **왜 $d_1$에 의존하지 않는가.** $U/d_1$의 기댓값이 $d_1$과 무관하게 항상 1이기 때문이다. 곧 분자는 어떤 자유도에서든 평균 1인 확률변수이고, 평균이 1에서 벗어나는 것은 전적으로 **분모의 역수 기댓값**에서 온다. Jensen 부등식에 의해 $E[1/W] > 1/E[W] = 1$이며($W = V/d_2$, $E[W]=1$), 그 초과분이 $d_2/(d_2-2) - 1 = 2/(d_2-2)$이다.
+
+    실무적 함의: $E[F]$가 1보다 큰 것은 분산 차이의 증거가 아니라 **비의 기댓값이 갖는 편향**이다. $d_2 = 5$이면 $E[F] = 1.67$이나 되므로 작은 표본에서 $F$ 값을 1과 비교할 때 이 점을 유념해야 한다. $\square$
 
 ---
 
-**Exercise 2.**
-State the key assumptions required by the method discussed here. How can each assumption be checked?
+**연습문제 2.**
+$T \sim t_\nu$이면 $T^2 \sim F_{1,\nu}$임을 보이고, 이 관계가 이표본 $t$ 검정과 일원분산분석의 관계에 어떻게 나타나는지 설명하라.
 
-??? success "Solution to Exercise 2"
-    The main assumptions typically include: (1) independence of observations -- verified by understanding the data collection process and checking for serial correlation; (2) distributional requirements (e.g., normality) -- checked with Q-Q plots and formal tests like Shapiro-Wilk; (3) equal variances (if applicable) -- assessed with boxplots and Levene's test. When assumptions are violated, consider robust alternatives, transformations, or nonparametric methods.
+??? success "연습문제 2 풀이"
+    **증명.** $t$ 분포의 정의에 의해
+
+    $$
+    T = \frac{Z}{\sqrt{V/\nu}}, \qquad Z \sim \mathcal{N}(0,1),\; V \sim \chi^2_\nu \text{ 독립}.
+    $$
+
+    제곱하면
+
+    $$
+    T^2 = \frac{Z^2}{V/\nu} = \frac{Z^2/1}{V/\nu}.
+    $$
+
+    $Z^2 \sim \chi^2_1$이고 $V \sim \chi^2_\nu$가 독립이므로, 이는 정확히 $F_{1,\nu}$의 정의이다.
+
+    **수치 확인.** $t_{0.975,10} = 2.2281$이고 그 제곱은 $4.9646$이다. 한편 $F_{0.95}(1,10) = 4.9646$이다. 정확히 일치한다. $t$의 **양측** 확률이 $F$의 **단측** 확률에 대응한다는 점에 주목하라. $F$가 $T^2$이므로 $T$의 양쪽 꼬리가 $F$의 오른쪽 꼬리 하나로 접힌다.
+
+    **이표본 $t$ 검정과 분산분석의 관계.** 두 집단($k=2$)에 대한 일원분산분석의 F 통계량은
+
+    $$
+    F = \frac{\text{집단간 평균제곱}}{\text{집단내 평균제곱}} \sim F_{1,\, n_1+n_2-2}
+    $$
+
+    이고, 합동분산 이표본 $t$ 검정의 통계량은 $T \sim t_{n_1+n_2-2}$이다. 두 통계량 사이에는 정확히 $F = T^2$이 성립한다.
+
+    따라서 **두 집단에 대한 분산분석과 양측 이표본 $t$ 검정은 완전히 같은 검정**이다. $p$값도 동일하다. 분산분석이 $t$ 검정을 $k > 2$로 일반화한 것이라는 서술의 정확한 의미가 이것이다. $\square$
 
 ---
 
-**Exercise 3.**
-Work through a small numerical example illustrating the application of the technique from this section.
+**연습문제 3.**
+$d_2 \to \infty$일 때 $d_1 F \to \chi^2_{d_1}$임을 보이고, $d_1 = 5$에 대해 $d_2 \in \{10, 100, 10000\}$에서 이 근사의 정확도를 수치로 확인하라.
 
-??? success "Solution to Exercise 3"
-    A structured approach to applying this technique involves: (1) clearly stating the hypotheses or estimation goal; (2) verifying that the data meet the required assumptions; (3) computing the relevant test statistic, estimate, or model fit; (4) obtaining the p-value, confidence interval, or posterior distribution; (5) interpreting the result in the context of the original question. Following these steps systematically ensures a rigorous and reproducible analysis.
+??? success "연습문제 3 풀이"
+    **증명.** $F = (U/d_1)/(V/d_2)$이므로
+
+    $$
+    d_1 F = \frac{U}{V/d_2}.
+    $$
+
+    $V \sim \chi^2_{d_2}$이므로 $E[V/d_2] = 1$이고 $\operatorname{Var}(V/d_2) = 2/d_2 \to 0$이다. 따라서 대수의 법칙에 의해 $V/d_2 \xrightarrow{p} 1$이다.
+
+    Slutsky 정리에 의해
+
+    $$
+    d_1 F = \frac{U}{V/d_2} \xrightarrow{d} \frac{U}{1} = U \sim \chi^2_{d_1}.
+    $$
+
+    **수치 확인.**
+
+    ```python
+    from scipy import stats
+
+    d1 = 5
+    print(f"chi2_5 0.95 quantile: {stats.chi2.ppf(0.95, d1):.4f}\n")
+    for d2 in [10, 100, 10000]:
+        print(f"d2 = {d2:>5}: d1 * F_0.95 = {d1 * stats.f.ppf(0.95, d1, d2):.4f}")
+    ```
+
+    출력:
+
+    ```text
+    chi2_5 0.95 quantile: 11.0705
+
+    d2 =    10: d1 * F_0.95 = 16.6292
+    d2 =   100: d1 * F_0.95 = 11.5266
+    d2 = 10000: d1 * F_0.95 = 11.0750
+    ```
+
+    | $d_2$ | $d_1 F_{0.95}$ | $\chi^2_{5,\,0.95}$ 대비 오차 |
+    |---|---|---|
+    | 10 | 16.629 | $+50\%$ |
+    | 100 | 11.527 | $+4.1\%$ |
+    | 10000 | 11.075 | $+0.04\%$ |
+
+    수렴은 하지만 **느리다**. $d_2 = 10$에서 오차가 50%에 이른다. 분모 자유도가 작을 때 분모의 변동이 F 통계량의 꼬리를 크게 부풀리기 때문이다.
+
+    **실무적 함의.** 회귀분석과 분산분석에서 F 검정 대신 카이제곱 근사(Wald 검정 등)를 쓰는 경우가 있는데, 이는 분모 자유도(잔차 자유도)가 충분히 클 때만 정당하다. 잔차 자유도가 수십 수준이면 F 분포를 그대로 쓰는 편이 훨씬 정확하다. $\square$
 
 ---
 
-**Exercise 4.**
-Compare the approach from this section with an alternative method. When would you choose each?
+**연습문제 4.**
+F 분포의 왜도가 자유도에 따라 어떻게 변하는지 조사하고, 이것이 왜 F 검정의 양측 임계값을 비대칭으로 만드는지 설명하라.
 
-??? success "Solution to Exercise 4"
-    The method discussed here is appropriate when its assumptions hold and the sample size is sufficient for the asymptotic approximations to be accurate. Alternative approaches include: (1) nonparametric methods -- preferred when distributional assumptions are suspect; (2) bootstrap methods -- useful when analytical reference distributions are unavailable; (3) Bayesian methods -- valuable when incorporating prior information or when direct probability statements about parameters are desired. Running multiple approaches and comparing results provides a useful robustness check.
+??? success "연습문제 4 풀이"
+
+    ```python
+    from scipy import stats
+
+    print(f"{'d1':>5} {'d2':>5} {'skewness':>10} {'lower':>8} {'upper':>8}")
+    for d1, d2 in [(5, 10), (15, 20), (50, 50), (200, 200)]:
+        sk = stats.f.stats(d1, d2, moments='s')
+        lo = stats.f.ppf(0.025, d1, d2)
+        up = stats.f.ppf(0.975, d1, d2)
+        print(f"{d1:>5} {d2:>5} {sk:>10.4f} {lo:>8.4f} {up:>8.4f}")
+    ```
+
+    출력:
+
+    ```text
+       d1    d2   skewness    lower    upper
+        5    10     3.8670   0.1511   4.2361
+       15    20     1.7435   0.3629   2.5731
+       50    50     0.9218   0.5708   1.7520
+      200   200     0.4326   0.7573   1.3204
+    ```
+
+    | $d_1, d_2$ | 왜도 | 하단 | 상단 | $1$과의 거리 (하 / 상) |
+    |---|---|---|---|---|
+    | 5, 10 | 3.87 | 0.151 | 4.236 | 0.85 / 3.24 |
+    | 15, 20 | 1.74 | 0.363 | 2.573 | 0.64 / 1.57 |
+    | 50, 50 | 0.92 | 0.571 | 1.752 | 0.43 / 0.75 |
+    | 200, 200 | 0.43 | 0.757 | 1.320 | 0.24 / 0.32 |
+
+    **비대칭의 근원.** F 통계량은 두 양수의 **비**이다. 비는 위쪽으로는 무한대까지 갈 수 있지만 아래쪽으로는 0에서 막혀 있다. 따라서 분포가 필연적으로 오른쪽으로 치우친다.
+
+    이 때문에 임계값이 1을 중심으로 대칭이 아니다. $d_1 = d_2 = 50$에서 하단 임계값은 1에서 $0.43$ 떨어져 있지만 상단은 $0.75$ 떨어져 있다. 상단이 거의 두 배 멀다.
+
+    **로그 척도에서는 대칭에 가깝다.** $\ln F$를 생각하면 역수 성질 $1/F \sim F_{d_2,d_1}$에 의해 $d_1 = d_2$일 때 $\ln F$의 분포가 0을 중심으로 **정확히 대칭**이다. 실제로 $d_1=d_2=50$에서 $\ln(0.5708) = -0.5607$이고 $\ln(1.7520) = +0.5607$로 크기가 정확히 같다.
+
+    이것이 분산비를 논할 때 로그 척도가 자연스러운 이유이며, Bartlett 검정이 $\ln S_i^2$의 형태를 취하는 것과 같은 배경이다. $\square$

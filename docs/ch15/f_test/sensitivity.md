@@ -1,115 +1,253 @@
-# Sensitivity to Non-Normality
+# 비정규성에 대한 민감도
 
-The F-test for comparing two variances assumes that both populations are normally distributed. Among all common statistical tests, the F-test is one of the most sensitive to violations of its distributional assumption. While $t$-tests for means are reasonably robust to moderate non-normality (thanks to the central limit theorem), no analogous protection exists for variance ratio tests. This section explains why the F-test breaks down under non-normality and summarizes the simulation evidence.
+두 분산을 비교하는 F 검정은 두 모집단이 모두 정규분포를 따른다고 가정한다. 흔히 쓰는 통계검정 가운데 F 검정은 분포 가정의 위반에 가장 민감한 축에 든다. 평균에 대한 $t$ 검정은 중심극한정리 덕분에 중간 정도의 비정규성에 상당히 로버스트하지만, 분산비 검정에는 그에 상응하는 보호장치가 없다. 이 절은 비정규성 아래에서 F 검정이 무너지는 이유를 설명하고 모의실험 증거를 요약한다.
 
-## Why the F-Test Is Sensitive
+## F 검정이 민감한 이유
 
-The F-test statistic $F = S_1^2 / S_2^2$ follows an $F_{n_1-1, n_2-1}$ distribution only when both samples come from normal populations. The exact distribution of $S^2$ depends on all moments of the underlying distribution, not just the first two. In particular, the fourth central moment (related to kurtosis) plays a critical role.
+F 검정통계량 $F = S_1^2 / S_2^2$이 $F_{n_1-1, n_2-1}$ 분포를 따르는 것은 두 표본이 모두 정규 모집단에서 왔을 때뿐이다. $S^2$의 정확한 분포는 처음 두 적률만이 아니라 바탕 분포의 모든 적률에 의존한다. 특히 (첨도와 관련된) 4차 중심적률이 결정적인 역할을 한다.
 
-For a population with kurtosis $\kappa$, the variance of the sample variance satisfies
+4차 중심적률이 $\mu_4 = E[(X - \mu)^4]$인 모집단에 대해 표본분산의 분산은
 
 $$
 \operatorname{Var}(S^2) = \frac{1}{n}\left(\mu_4 - \frac{n-3}{n-1}\sigma^4\right)
 $$
 
-where $\mu_4 = E[(X - \mu)^4]$ is the fourth central moment. For a normal distribution, $\mu_4 = 3\sigma^4$, which simplifies this expression. For a heavy-tailed distribution with excess kurtosis $\gamma_2 = \mu_4/\sigma^4 - 3 > 0$, the variance of $S^2$ is inflated, causing the actual distribution of $F$ to have heavier tails than the nominal $F_{n_1-1, n_2-1}$ distribution.
+정규분포에서는 $\mu_4 = 3\sigma^4$이므로 이 식이 $2\sigma^4/(n-1)$로 간단해진다. 초과첨도 $\gamma_2 = \mu_4/\sigma^4 - 3 > 0$인 두꺼운 꼬리 분포에서는 $S^2$의 분산이 부풀려지고, 그 결과 $F$의 실제 분포가 명목 $F_{n_1-1, n_2-1}$ 분포보다 두꺼운 꼬리를 갖게 된다.
 
-!!! warning "The Kurtosis Effect"
-    The F-test is primarily sensitive to **kurtosis** (heavy or light tails) rather than skewness. A symmetric distribution with heavy tails (such as the $t$-distribution with small degrees of freedom) can distort the F-test more severely than a moderately skewed distribution with normal-like tails.
+!!! warning "첨도 효과"
+    F 검정은 주로 **첨도**(두껍거나 얇은 꼬리)에 민감하며 치우침에는 상대적으로 덜 민감하다. 자유도가 작은 $t$ 분포처럼 대칭이면서 꼬리가 두꺼운 분포가, 꼬리는 정규에 가까우면서 중간 정도로 치우친 분포보다 F 검정을 더 심하게 왜곡할 수 있다.
 
-## Type I Error Inflation
+    다만 아래 모의실험에서 보듯 치우침도 첨도 위에 **추가로** 왜곡을 더한다. 같은 $\gamma_2 = 6$이라도 대칭인 $t_5$보다 치우친 지수분포에서 왜곡이 훨씬 크다.
 
-When the populations are non-normal, the actual Type I error rate of the F-test can differ substantially from the nominal significance level $\alpha$. The direction and magnitude of the distortion depend on the kurtosis:
+## 제1종 오류 팽창
 
-- **Heavy-tailed distributions** ($\gamma_2 > 0$, leptokurtic): The actual rejection rate exceeds $\alpha$. The F-test is liberal, rejecting too often.
-- **Light-tailed distributions** ($\gamma_2 < 0$, platykurtic): The actual rejection rate falls below $\alpha$. The F-test is conservative, rejecting too rarely.
+모집단이 비정규이면 F 검정의 실제 제1종 오류율이 명목 유의수준 $\alpha$에서 크게 벗어날 수 있다. 왜곡의 방향과 크기는 첨도에 달려 있다.
 
-The following table summarizes simulation results for the F-test at nominal $\alpha = 0.05$ with $n_1 = n_2 = 20$, testing $H_0\colon \sigma_1^2 = \sigma_2^2$ when the null is true:
+- **두꺼운 꼬리 분포** ($\gamma_2 > 0$, 고첨): 실제 기각률이 $\alpha$를 넘는다. F 검정이 자유주의적이 되어 지나치게 자주 기각한다.
+- **얇은 꼬리 분포** ($\gamma_2 < 0$, 저첨): 실제 기각률이 $\alpha$에 못 미친다. F 검정이 보수적이 되어 지나치게 드물게 기각한다.
 
-| Distribution | Excess kurtosis | Actual Type I error |
-|---|---|---|
-| Normal | 0 | 0.050 |
-| $t_5$ | 6 | 0.140 |
-| $t_{10}$ | 1 | 0.075 |
-| Exponential | 6 | 0.130 |
-| Uniform | $-1.2$ | 0.028 |
-| Laplace | 3 | 0.095 |
+다음 표는 $n_1 = n_2 = 20$, 명목 $\alpha = 0.05$에서 귀무가설 $H_0\colon \sigma_1^2 = \sigma_2^2$이 참일 때 F 검정의 모의실험 결과이다(반복 20,000회, 몬테카를로 오차 약 0.002).
 
-With $t_5$ data, the nominal 5% test rejects nearly 14% of the time under $H_0$ -- almost three times the intended rate.
+| 분포 | 초과첨도 $\gamma_2$ | 왜도 | 실제 제1종 오류 |
+|---|---|---|---|
+| Uniform | $-1.2$ | 0 | **0.005** |
+| Normal | 0 | 0 | 0.053 |
+| $\chi^2_{20}$ | 0.6 | 0.63 | 0.073 |
+| $t_{10}$ | 1 | 0 | 0.092 |
+| $\text{Gamma}(4)$ | 1.5 | 1.0 | 0.111 |
+| Laplace | 3 | 0 | 0.184 |
+| $t_5$ | 6 | 0 | 0.160 |
+| Exponential | 6 | 2.0 | **0.267** |
 
-## Simulation Evidence
+지수분포 자료에서 명목 5% 검정이 $H_0$ 아래에서 **26.7%의 확률로 기각한다.** 의도한 비율의 다섯 배가 넘는다.
 
-Extensive simulation studies (Box, 1953; Markowski and Markowski, 1990) confirm the following patterns:
+반대 방향의 왜곡도 극적이다. 균등분포에서는 기각률이 $0.005$로 명목값의 10분의 1에 불과하다. 이 경우 검정이 사실상 아무것도 탐지하지 못한다.
 
-1. **Moderate non-normality.** Even mild departures from normality (excess kurtosis of 1--2) inflate the Type I error rate noticeably.
-2. **Heavy tails dominate.** The distortion grows rapidly with kurtosis. For distributions like the $t_3$ or contaminated normal, the actual error rate can exceed 20% at a nominal 5% level.
-3. **Skewness alone is less damaging.** Skewed distributions with moderate kurtosis (e.g., a mildly skewed population with $\gamma_2 \approx 0$) cause smaller distortions than symmetric heavy-tailed distributions.
-4. **Sample size does not help much.** Unlike the $t$-test, increasing the sample size does not substantially reduce the sensitivity of the F-test to non-normality. The fundamental problem is that the distribution of $S^2$ depends on the fourth moment regardless of $n$.
+### 재현 코드
 
-## Comparison with the t-Test
+```python
+import numpy as np
+from scipy import stats
 
-The contrast with the $t$-test is instructive. For the one-sample $t$-test:
+rng = np.random.default_rng(1)
+n, R, alpha = 20, 20000, 0.05
+
+cases = [
+    ("Normal",      lambda: rng.normal(0, 1, n)),
+    ("t(10)",       lambda: rng.standard_t(10, n)),
+    ("t(5)",        lambda: rng.standard_t(5, n)),
+    ("Exponential", lambda: rng.exponential(1, n)),
+    ("Uniform",     lambda: rng.uniform(0, 1, n)),
+    ("Laplace",     lambda: rng.laplace(0, 1, n)),
+]
+
+for name, gen in cases:
+    rej = 0
+    for _ in range(R):
+        F = gen().var(ddof=1) / gen().var(ddof=1)
+        p = 2 * min(stats.f.cdf(F, n - 1, n - 1),
+                    stats.f.sf(F, n - 1, n - 1))
+        rej += (p < alpha)
+    print(f"{name:>12}: {rej / R:.4f}")
+```
+
+## 모의실험이 보여주는 패턴
+
+광범위한 모의실험 연구(Box, 1953; Markowski and Markowski, 1990)와 위 결과가 함께 확인해 주는 패턴은 다음과 같다.
+
+1. **중간 정도의 비정규성도 문제가 된다.** 초과첨도가 1~2 정도인 가벼운 이탈만으로도 제1종 오류율이 눈에 띄게 부풀려진다($\gamma_2 = 1$에서 이미 0.092로 명목값의 두 배).
+2. **첨도가 지배적 요인이다.** 왜곡은 첨도에 따라 급격히 커진다. $\gamma_2$가 0.6, 1, 1.5, 3으로 커질 때 크기가 0.073, 0.092, 0.111, 0.184로 단조증가한다.
+3. **치우침도 첨도 위에 왜곡을 더한다.** 같은 $\gamma_2 = 6$에서 대칭인 $t_5$가 0.160인 반면 치우친 지수분포는 0.267이다. 첨도가 주된 요인이라는 것은 맞지만, 치우침을 무해하다고 볼 수는 없다.
+4. **표본크기를 키우면 오히려 나빠진다.** $t$ 검정과 달리 표본크기를 늘려도 F 검정의 비정규성 민감도가 줄지 않는다. 아래에서 보듯 오히려 **악화된다**.
+
+### 표본크기의 효과
+
+$n$을 키우면서 같은 실험을 반복하면(반복 10,000회)
+
+| $n$ | Normal | $t_5$ | Exponential |
+|---|---|---|---|
+| 10 | 0.049 | 0.127 | 0.228 |
+| 20 | 0.049 | 0.168 | 0.270 |
+| 50 | 0.048 | 0.195 | 0.295 |
+| 100 | 0.054 | 0.223 | 0.308 |
+| 500 | 0.049 | 0.262 | 0.318 |
+
+정규 자료에서는 어떤 $n$에서도 0.05가 유지된다. 그러나 $t_5$에서는 크기가 $n$과 함께 **커져서** $n = 500$에서 0.262에 이른다.
+
+이유는 두 가지가 결합되어 있다. 첫째, $F$의 참 분산은 $\operatorname{Var}(S^2)$의 팽창 인자 $(\gamma_2+2)/2$만큼 명목값보다 크며 이 비율은 $n$에 의존하지 않는다. 둘째, $n$이 커지면 명목 $F$ 분포는 1 주위로 수축하지만 실제 분포는 그보다 느리게 수축한다. 그래서 상대적 불일치가 오히려 커진다.
+
+**표본을 늘리는 것은 해결책이 아니라 문제를 키운다.** 이것이 F 검정에 관해 기억해야 할 가장 중요한 사실이다.
+
+## t 검정과의 비교
+
+$t$ 검정과의 대비가 교훈적이다. 일표본 $t$ 검정은
 
 $$
 T = \frac{\bar{X} - \mu}{S / \sqrt{n}} \sim t_{n-1}
 $$
 
-The central limit theorem ensures $\bar{X}$ is approximately normal for moderate $n$, making the numerator well-behaved. The denominator $S$ converges to $\sigma$ by the law of large numbers, so the overall statistic remains approximately $t$-distributed.
+중심극한정리가 $n$이 어느 정도만 되면 $\bar{X}$를 근사적으로 정규로 만들어 주므로 분자가 잘 작동한다. 분모 $S$는 대수의 법칙에 의해 $\sigma$로 수렴하므로 전체 통계량이 근사적으로 $t$ 분포를 유지한다.
 
-For the F-test, both the numerator and denominator are sample variances. Neither benefits from a CLT-like result for moderate sample sizes. The distribution of $S^2$ is determined by the population's fourth moment, and the ratio $S_1^2/S_2^2$ inherits distortions from both.
+F 검정에서는 분자와 분모가 모두 표본분산이다. 어느 쪽도 중간 표본크기에서 중심극한정리 같은 결과의 혜택을 받지 못한다. $S^2$의 분포는 모집단의 4차 적률로 결정되고, 비 $S_1^2/S_2^2$은 양쪽 모두에서 오는 왜곡을 물려받는다.
 
-## When to Avoid the F-Test
+## F 검정을 피해야 할 때
 
-The F-test should be avoided when:
+다음 경우에는 F 검정을 피해야 한다.
 
-- A normality test (Shapiro-Wilk, Anderson-Darling, or Q-Q plot inspection) rejects normality for either sample
-- The data are known to come from a heavy-tailed distribution (financial returns, income data, survival times)
-- The data contain outliers, which inflate both the sample variance and the kurtosis
-- The sample sizes are small and normality cannot be reliably assessed
+- 정규성 검정(Shapiro-Wilk, Anderson-Darling, Q-Q 그림 검토)이 어느 한 표본에서라도 정규성을 기각할 때
+- 자료가 꼬리가 두꺼운 분포에서 온다고 알려져 있을 때(금융 수익률, 소득 자료, 생존시간)
+- 자료에 이상점이 있을 때. 이상점은 표본분산과 첨도를 동시에 부풀린다
+- 표본크기가 작아 정규성을 신뢰성 있게 평가할 수 없을 때
 
-## Recommended Alternatives
+## 권장 대안
 
-When normality is in doubt, the following tests provide better control of the Type I error rate:
+정규성이 의심스러울 때 다음 검정들이 제1종 오류율을 더 잘 조절한다.
 
-| Test | Robustness | Power under normality | Section |
+| 검정 | 로버스트성 | 정규성 아래 검정력 | 절 |
 |---|---|---|---|
-| Levene's test | Good | Slightly lower than F-test | 15.5 |
-| Brown-Forsythe test | Very good | Slightly lower than Levene's | 15.5 |
-| Fligner-Killeen test | Excellent | Lower than Levene's | 15.5 |
-| Bootstrap test | Good to excellent | Depends on implementation | 15.6 |
+| Levene 검정 | 좋음 | F 검정보다 약간 낮음 | 15.5 |
+| Brown-Forsythe 검정 | 매우 좋음 | Levene보다 약간 낮음 | 15.5 |
+| Fligner-Killeen 검정 | 뛰어남 | Levene보다 낮음 | 15.5 |
+| 붓스트랩 검정 | 좋음~뛰어남 | 구현에 따라 다름 | 15.6 |
 
-!!! tip "Practical Recommendation"
-    Unless normality has been confirmed through formal testing and graphical inspection, prefer the Brown-Forsythe test over the F-test. The Brown-Forsythe test maintains its nominal Type I error rate across a wide range of distributions while retaining reasonable power when the data happen to be normal.
+!!! tip "실무 권고"
+    형식적 검정과 시각적 검토로 정규성이 확인되지 않았다면 F 검정보다 Brown-Forsythe 검정을 선호하라. Brown-Forsythe 검정은 폭넓은 분포에서 명목 제1종 오류율을 유지하면서 자료가 실제로 정규일 때도 합리적인 검정력을 유지한다.
 
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Describe the main concept of Sensitivity to Non-Normality and explain why it matters for statistical practice.
+**연습문제 1.**
+$\operatorname{Var}(S^2) = \frac{1}{n}\left(\mu_4 - \frac{n-3}{n-1}\sigma^4\right)$가 정규분포에서 $2\sigma^4/(n-1)$로 환원됨을 보여라.
 
-??? success "Solution to Exercise 1"
-    Sensitivity to Non-Normality is a core topic in statistics that provides tools for drawing reliable inferences from data. It matters because proper application ensures valid conclusions, correctly quantified uncertainty, and appropriate handling of the assumptions that underpin the method. Practitioners who understand this concept can avoid common pitfalls and choose the right analytical approach for their data.
+??? success "연습문제 1 풀이"
+    정규분포에서 $\mu_4 = 3\sigma^4$이므로
+
+    $$
+    \operatorname{Var}(S^2) = \frac{1}{n}\left(3\sigma^4 - \frac{n-3}{n-1}\sigma^4\right) = \frac{\sigma^4}{n}\cdot\frac{3(n-1) - (n-3)}{n-1}.
+    $$
+
+    분자를 정리하면
+
+    $$
+    3(n-1) - (n-3) = 3n - 3 - n + 3 = 2n
+    $$
+
+    이므로
+
+    $$
+    \operatorname{Var}(S^2) = \frac{\sigma^4}{n}\cdot\frac{2n}{n-1} = \frac{2\sigma^4}{n-1}.
+    $$
+
+    **교차검증.** 정규성 아래에서 $(n-1)S^2/\sigma^2 \sim \chi^2_{n-1}$이고 $\operatorname{Var}(\chi^2_{n-1}) = 2(n-1)$이므로
+
+    $$
+    \frac{(n-1)^2}{\sigma^4}\operatorname{Var}(S^2) = 2(n-1) \implies \operatorname{Var}(S^2) = \frac{2\sigma^4}{n-1}.
+    $$
+
+    두 경로가 일치한다.
+
+    일반 분포에서 $\mu_4 = \sigma^4(\gamma_2+3)$을 대입하면 큰 $n$에서
+
+    $$
+    \operatorname{Var}(S^2) \approx \frac{\sigma^4(\gamma_2 + 2)}{n}
+    $$
+
+    이 되어 15.1절의 결과를 회복한다. 팽창 인자가 $(\gamma_2+2)/2$이다. $\square$
 
 ---
 
-**Exercise 2.**
-State the key assumptions required by the method discussed here. How can each assumption be checked?
+**연습문제 2.**
+본문 표에서 $t_5$($\gamma_2 = 6$, 대칭)의 크기가 0.160인 반면 지수분포($\gamma_2 = 6$, 왜도 2)는 0.267이다. 첨도가 같은데 왜 다른지 설명하라.
 
-??? success "Solution to Exercise 2"
-    The main assumptions typically include: (1) independence of observations -- verified by understanding the data collection process and checking for serial correlation; (2) distributional requirements (e.g., normality) -- checked with Q-Q plots and formal tests like Shapiro-Wilk; (3) equal variances (if applicable) -- assessed with boxplots and Levene's test. When assumptions are violated, consider robust alternatives, transformations, or nonparametric methods.
+??? success "연습문제 2 풀이"
+    첨도가 같아도 F 검정의 크기가 다른 이유는 여러 층위가 있다.
+
+    **1. 유한표본에서 표본첨도의 거동이 다르다.** $t_5$는 네 번째 적률이 존재하지만 여덟 번째 적률이 없으므로 표본첨도 $g_2$의 분산이 무한대이다. 대부분의 $t_5$ 표본은 실제로는 $\gamma_2 = 6$보다 훨씬 작은 표본첨도를 보이고, 드물게 매우 큰 값이 나온다. 곧 **전형적인 $t_5$ 표본은 이론적 첨도가 시사하는 것보다 정규에 가깝다.**
+
+    지수분포는 모든 적률이 존재하므로 표본첨도가 안정적으로 6 근처에 모인다. 그래서 왜곡이 표본마다 일관되게 나타난다.
+
+    **2. 치우침이 $\bar{X}$와 $S^2$의 상관을 만든다.** 15.2절 연습문제에서 보았듯 $\bar{X}$와 $S^2$의 독립성은 정규분포에만 특유하다. 오른쪽으로 치우친 분포에서는 두 통계량이 양의 상관을 가지며, 이 상관이 $S^2$의 표집분포를 더욱 오른쪽으로 치우치게 만든다.
+
+    **3. 지수분포는 유계이다.** $X > 0$이라는 제약이 $S^2$의 분포에 추가적인 비대칭을 들여온다.
+
+    **교훈.** "F 검정은 첨도에만 민감하다"는 서술은 1차 근사에 불과하다. 실무에서는 **왜도와 첨도를 모두 확인**해야 하며, 어느 하나라도 0에서 멀면 F 검정을 피해야 한다. $\square$
 
 ---
 
-**Exercise 3.**
-Work through a small numerical example illustrating the application of the technique from this section.
+**연습문제 3.**
+균등분포에서 F 검정의 크기가 0.005로 극단적으로 작다. 이것이 왜 "안전한" 것이 아닌지 설명하라.
 
-??? success "Solution to Exercise 3"
-    A structured approach to applying this technique involves: (1) clearly stating the hypotheses or estimation goal; (2) verifying that the data meet the required assumptions; (3) computing the relevant test statistic, estimate, or model fit; (4) obtaining the p-value, confidence interval, or posterior distribution; (5) interpreting the result in the context of the original question. Following these steps systematically ensures a rigorous and reproducible analysis.
+??? success "연습문제 3 풀이"
+    보수적인 검정은 제1종 오류 측면에서는 안전해 보인다. 명목 5%보다 훨씬 적게 잘못 기각하기 때문이다. 그러나 두 가지 이유로 문제가 있다.
+
+    **1. 검정력이 붕괴한다.** 제1종 오류와 제2종 오류는 맞바꿈 관계이다. 크기가 0.005라는 것은 검정이 실질적으로 $\alpha = 0.005$ 수준에서 작동한다는 뜻이고, 그만큼 참 분산 차이를 탐지할 능력이 떨어진다.
+
+    구체적으로 균등분포 자료에서 참 분산비가 2배여도 명목 5% F 검정이 이를 탐지할 확률은 정규 자료의 경우보다 훨씬 낮다. 실제 존재하는 차이를 놓치게 된다.
+
+    **2. 보고된 유의수준이 거짓이다.** "5% 수준에서 검정했다"고 보고하지만 실제 수준은 0.5%이다. 다른 연구와 비교하거나 메타분석에 포함할 때 오도한다. $p$값 자체도 의미가 왜곡된다.
+
+    **3. 방향을 미리 알 수 없다.** 실무에서 자료의 첨도가 양인지 음인지 확신할 수 없다면, 검정이 자유주의적일지 보수적일지도 모른다. 크기가 통제되지 않는다는 사실 자체가 문제이며, 어느 방향인지는 부차적이다.
+
+    올바른 대응은 어느 방향의 왜곡이든 피하는 것, 곧 크기가 안정적인 로버스트 검정을 쓰는 것이다. $\square$
 
 ---
 
-**Exercise 4.**
-Compare the approach from this section with an alternative method. When would you choose each?
+**연습문제 4.**
+표본크기를 키우면 F 검정의 크기 왜곡이 오히려 **커진다**는 본문의 관찰을 설명하라. 이것이 대부분의 통계적 직관과 어떻게 어긋나는가?
 
-??? success "Solution to Exercise 4"
-    The method discussed here is appropriate when its assumptions hold and the sample size is sufficient for the asymptotic approximations to be accurate. Alternative approaches include: (1) nonparametric methods -- preferred when distributional assumptions are suspect; (2) bootstrap methods -- useful when analytical reference distributions are unavailable; (3) Bayesian methods -- valuable when incorporating prior information or when direct probability statements about parameters are desired. Running multiple approaches and comparing results provides a useful robustness check.
+??? success "연습문제 4 풀이"
+    통상적인 직관은 "$n$을 키우면 점근이론이 잘 맞고 근사가 좋아진다"는 것이다. F 검정에서는 이 직관이 통하지 않는다.
+
+    **왜 그런가.** $H_0$ 아래에서 $\ln F = \ln S_1^2 - \ln S_2^2$을 생각하자. 델타 방법에 의해 큰 $n$에서
+
+    $$
+    \operatorname{Var}(\ln S_i^2) \approx \frac{\operatorname{Var}(S_i^2)}{\sigma^4} \approx \frac{\gamma_2 + 2}{n},
+    $$
+
+    이므로
+
+    $$
+    \operatorname{Var}(\ln F) \approx \frac{2(\gamma_2 + 2)}{n}.
+    $$
+
+    한편 명목 $F_{n-1,n-1}$ 분포에서는 $\operatorname{Var}(\ln F) \approx 4/n$이다($\gamma_2 = 0$ 대입).
+
+    두 값의 **비**는
+
+    $$
+    \frac{2(\gamma_2+2)/n}{4/n} = \frac{\gamma_2 + 2}{2}
+    $$
+
+    로 $n$에 전혀 의존하지 않는다. 곧 실제 산포와 명목 산포의 불일치가 $n$을 키워도 사라지지 않는다.
+
+    **그런데 왜 크기가 *커지는가*?** 두 분포 모두 $n$이 커지면 좁아지지만 비율은 고정되어 있다. 그런데 $n$이 작을 때는 두 분포 모두 넓어서 꼬리가 두툼하고 서로 상당 부분 겹친다. $n$이 커지면 명목 분포가 급격히 좁아지는데 실제 분포는 그보다 $\sqrt{(\gamma_2+2)/2}$배 넓은 상태를 유지하므로, 명목 임계값 밖으로 나가는 질량의 **비율**이 커진다.
+
+    구체적으로 $\ln F$가 근사적으로 정규라고 하면 실제 크기는
+
+    $$
+    2\Phi\!\left(-1.96\sqrt{\frac{2}{\gamma_2+2}}\right)
+    $$
+
+    로 수렴한다. $\gamma_2 = 6$이면 $2\Phi(-1.96 \times 0.5) = 2\Phi(-0.98) = 0.327$이다. 모의실험에서 $t_5$가 $n = 500$에서 0.262, 지수분포가 0.318로 이 극한값에 접근하고 있다.
+
+    **핵심 교훈.** 이는 "일치성 없는 검정"의 사례이다. 자료를 아무리 모아도 절차가 옳아지지 않는다. 잘못된 기준분포를 쓰고 있다는 근본적 문제는 표본크기로 해결되지 않으며, 오히려 큰 표본에서 잘못된 결론을 더 확신 있게 내리게 만든다. $\square$

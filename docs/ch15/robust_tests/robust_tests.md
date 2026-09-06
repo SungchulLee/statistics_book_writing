@@ -1,215 +1,362 @@
-# Robust Tests for Equality of Variances
+# 분산 동일성에 대한 로버스트 검정
 
 
-## Levene's Test and Brown–Forsythe Test
+## Levene 검정과 Brown-Forsythe 검정
 
-Levene's test (using the group mean) and the Brown–Forsythe test (using the group median) are robust statistical tests for assessing the equality of variances across multiple groups. Unlike the F-test, which is highly sensitive to departures from normality, these tests are more robust to non-normal data. The Brown–Forsythe test, which uses the median instead of the mean, is especially effective when the data contain outliers.
+Levene 검정(집단평균 사용)과 Brown-Forsythe 검정(집단중앙값 사용)은 여러 집단에 걸친 분산의 동일성을 평가하는 로버스트한 통계검정이다. 정규성 이탈에 매우 민감한 F 검정과 달리 비정규 자료에 더 로버스트하다. 평균 대신 중앙값을 쓰는 Brown-Forsythe 검정은 자료에 이상점이 있을 때 특히 효과적이다.
 
-### Hypotheses
+### 가설
 
-**Null Hypothesis ($H_0$):** The population variances are equal across the groups:
+**귀무가설 ($H_0$):** 집단들의 모분산이 모두 같다.
 
 $$
 H_0: \sigma_1^2 = \sigma_2^2 = \dots = \sigma_k^2
 $$
 
-**Alternative Hypothesis ($H_1$):** At least one group has a variance that differs from the others:
+**대립가설 ($H_1$):** 적어도 한 집단의 분산이 다른 집단과 다르다.
 
 $$
-H_1: \sigma_i^2 \neq \sigma_j^2 \quad \text{for at least one pair} \quad i \neq j
+H_1: \sigma_i^2 \neq \sigma_j^2 \quad \text{(적어도 한 쌍의)} \quad i \neq j
 $$
 
-These tests essentially evaluate whether the variances across different groups are homogeneous. If the null hypothesis is rejected, it indicates that at least one of the group variances is significantly different.
+이 검정들은 본질적으로 여러 집단의 분산이 동질적인지 평가한다. 귀무가설이 기각되면 적어도 한 집단의 분산이 유의하게 다르다는 뜻이다.
 
-### Assumptions
+### 가정
 
-1. **Independence:** The observations must be independent both within and between groups.
-2. **Random Sampling:** The data should be drawn from random samples.
+1. **독립성:** 관측값이 집단 안에서도 집단 사이에서도 독립이어야 한다.
+2. **확률표집:** 자료가 확률표본에서 나와야 한다.
 
-These tests do **not** require the assumption of normality, making them more robust than the F-test for variance comparison. They can be applied to data that deviate from normality, as long as the other assumptions are satisfied. The Brown–Forsythe test is particularly useful when the data contain outliers, as it is more robust than the F-test or Bartlett's test in such cases.
+이 검정들은 정규성 가정을 **요구하지 않으므로** 분산 비교에서 F 검정보다 로버스트하다. 다른 가정이 충족되는 한 정규성에서 벗어난 자료에도 적용할 수 있다. Brown-Forsythe 검정은 자료에 이상점이 있을 때 F 검정이나 Bartlett 검정보다 로버스트하므로 특히 유용하다.
 
-### Test Statistic
+### 검정통계량
 
-Both tests transform the data by computing the absolute deviations of each observation from the group center — the **mean** for Levene's test, or the **median** for the Brown–Forsythe test. The absolute deviations are then used to construct an ANOVA-like test statistic:
+두 검정 모두 각 관측값과 집단 중심의 절대편차를 계산하여 자료를 변환한다. 중심은 Levene 검정에서는 **평균**, Brown-Forsythe 검정에서는 **중앙값**이다. 그런 다음 절대편차로 분산분석 형태의 검정통계량을 만든다.
 
 $$
 W = \frac{(N - k)}{(k - 1)} \cdot \frac{\sum_{i=1}^{k} n_i (\bar{Z}_i - \bar{Z})^2}{\sum_{i=1}^{k} \sum_{j=1}^{n_i} (Z_{ij} - \bar{Z}_i)^2} \sim F_{k-1, \, N-k}
 $$
 
-where:
+여기서
 
-- $N$ is the total number of observations,
-- $k$ is the number of groups,
-- $n_i$ is the number of observations in group $i$,
-- $Z_{ij}$ is the absolute deviation of observation $j$ in group $i$ from the group center,
-- $\bar{Z}_i$ is the mean of the absolute deviations in group $i$,
-- $\bar{Z}$ is the overall mean of the absolute deviations across all groups.
+- $N$은 전체 관측값의 수,
+- $k$는 집단의 수,
+- $n_i$는 집단 $i$의 관측값 수,
+- $Z_{ij}$는 집단 $i$의 $j$번째 관측값과 집단 중심의 절대편차,
+- $\bar{Z}_i$는 집단 $i$의 절대편차 평균,
+- $\bar{Z}$는 모든 집단에 걸친 절대편차의 전체평균이다.
 
-The absolute deviations are computed as:
-
-$$
-Z_{ij} = |X_{ij} - \tilde{X}_i|
-$$
-
-where $X_{ij}$ is the original data point, and $\tilde{X}_i$ is the group **mean** (Levene's test) or the group **median** (Brown–Forsythe test).
-
-### Decision Rule
+절대편차는 다음과 같이 계산한다.
 
 $$
-W > F_{\text{critical}} \quad \Rightarrow \quad \text{Reject } H_0
+Z_{ij} = |X_{ij} - c_i|
 $$
 
-### Example Problem and Solution
+여기서 $X_{ij}$는 원래 자료값이고 $c_i$는 집단 **평균**(Levene 검정) 또는 집단 **중앙값**(Brown-Forsythe 검정)이다.
 
-**Example:** A researcher wants to test whether the variances in exam scores differ between three groups of students taught by different instructors. The exam scores are:
+### 판정규칙
 
-- Group 1: $65, 70, 75, 80, 85$
-- Group 2: $60, 65, 70, 75, 90$
-- Group 3: $55, 60, 65, 70, 95$
+$$
+W > F_{\text{critical}} \quad \Rightarrow \quad H_0 \text{ 기각}
+$$
 
-Test whether the variances are equal at a 5% significance level using the Brown–Forsythe test.
+### 예제와 풀이
 
-**Step 1 — Formulate Hypotheses:**
+**예제:** 어떤 연구자가 서로 다른 강사에게 배운 세 집단의 시험점수 분산이 다른지 검정하려 한다. 시험점수는 다음과 같다.
 
-- $H_0$: The variances of the exam scores are equal across the three groups.
-- $H_1$: At least one group has a significantly different variance.
+- 집단 1: $65, 70, 75, 80, 85$
+- 집단 2: $60, 65, 70, 75, 90$
+- 집단 3: $55, 60, 65, 70, 95$
 
-**Step 2 — Compute Absolute Deviations from Group Medians:**
+Brown-Forsythe 검정으로 유의수준 5%에서 분산이 같은지 검정하라.
 
-- **Group 1** (median = 75): $|65-75|=10$, $|70-75|=5$, $|75-75|=0$, $|80-75|=5$, $|85-75|=10$
-- **Group 2** (median = 70): $|60-70|=10$, $|65-70|=5$, $|70-70|=0$, $|75-70|=5$, $|90-70|=20$
-- **Group 3** (median = 65): $|55-65|=10$, $|60-65|=5$, $|65-65|=0$, $|70-65|=5$, $|95-65|=30$
+**1단계 — 가설 설정:**
 
-**Step 3 — Compute Group Means of Absolute Deviations:**
+- $H_0$: 세 집단의 시험점수 분산이 같다.
+- $H_1$: 적어도 한 집단의 분산이 유의하게 다르다.
 
-- Group 1: $(10 + 5 + 0 + 5 + 10) / 5 = 6$
-- Group 2: $(10 + 5 + 0 + 5 + 20) / 5 = 8$
-- Group 3: $(10 + 5 + 0 + 5 + 30) / 5 = 10$
+**2단계 — 집단중앙값으로부터의 절대편차 계산:**
 
-**Step 4 — Compute the Test Statistic:**
+- **집단 1** (중앙값 = 75): $|65-75|=10$, $|70-75|=5$, $|75-75|=0$, $|80-75|=5$, $|85-75|=10$
+- **집단 2** (중앙값 = 70): $|60-70|=10$, $|65-70|=5$, $|70-70|=0$, $|75-70|=5$, $|90-70|=20$
+- **집단 3** (중앙값 = 65): $|55-65|=10$, $|60-65|=5$, $|65-65|=0$, $|70-65|=5$, $|95-65|=30$
 
-Using the formula for $W$ with $N = 15$ and $k = 3$, the test statistic is computed and compared to the F-distribution with $k - 1 = 2$ and $N - k = 12$ degrees of freedom.
+**3단계 — 절대편차의 집단평균 계산:**
 
-**Step 5 — Decision Rule:**
+- 집단 1: $(10 + 5 + 0 + 5 + 10) / 5 = 6$
+- 집단 2: $(10 + 5 + 0 + 5 + 20) / 5 = 8$
+- 집단 3: $(10 + 5 + 0 + 5 + 30) / 5 = 10$
 
-If the computed $W$ exceeds the critical value from the F-distribution for $\alpha = 0.05$, reject the null hypothesis. Otherwise, fail to reject.
+**4단계 — 검정통계량 계산:**
 
-**Step 6 — Conclusion:**
+$N = 15$, $k = 3$으로 $W$ 공식을 적용하고 자유도 $k - 1 = 2$, $N - k = 12$인 F 분포와 비교한다.
 
-Based on the test result, we either conclude that the variances are equal or that there is significant evidence that at least one group's variance is different.
+**5단계 — 판정:**
+
+```python
+import numpy as np
+from scipy import stats
+
+g1 = [65, 70, 75, 80, 85]
+g2 = [60, 65, 70, 75, 90]
+g3 = [55, 60, 65, 70, 95]
+
+print("variances:", [round(np.var(g, ddof=1), 2) for g in (g1, g2, g3)])
+print(f"Brown-Forsythe:  {stats.levene(g1, g2, g3, center='median')}")
+print(f"Levene (mean):   {stats.levene(g1, g2, g3, center='mean')}")
+print(f"Fligner-Killeen: {stats.fligner(g1, g2, g3)}")
+print(f"Bartlett:        {stats.bartlett(g1, g2, g3)}")
+print(f"F critical (2, 12): {stats.f.ppf(0.95, 2, 12):.4f}")
+```
+
+출력:
+
+```text
+variances: [62.5, 132.5, 242.5]
+Brown-Forsythe:  W = 0.2824, p = 0.7589
+Levene (mean):   W = 0.5451, p = 0.5935
+Fligner-Killeen: H = 0.2408, p = 0.8866
+Bartlett:        T = 1.5647, p = 0.4573
+F critical (2, 12): 3.8853
+```
+
+**6단계 — 결론:**
+
+$W = 0.2824 < 3.8853$이므로 $H_0$을 기각하지 못한다. 네 검정 모두 같은 결론이다.
+
+!!! warning "표본분산이 4배 차이인데도 기각하지 못한다"
+    세 집단의 표본분산은 $62.5$, $132.5$, $242.5$로 최대·최소 비가 **3.9배**이다. 그런데 어떤 검정도 기각하지 못한다($p$값이 $0.46$에서 $0.89$).
+
+    각 집단 $n = 5$로는 검정력이 사실상 없기 때문이다. 15.4절 연습문제 4에서 보았듯 총 30개 관측값으로도 4배 차이를 겨우 탐지하는데, 여기는 15개뿐이다.
+
+    또 하나 눈여겨볼 점은 편차 구조이다. 세 집단 모두 편차가 $\{0, 5, 5, 10, x\}$ 형태이고 $x$만 $10, 20, 30$으로 다르다. 곧 **집단당 관측값 하나만** 산포 차이의 정보를 담고 있다. 이 정도 증거로는 어떤 검정도 유의성에 도달할 수 없다.
+
+    실무적 결론은 "분산이 같다"가 아니라 **"이 자료로는 판정할 수 없다"**이다.
 
 ---
 
-## Fligner–Killeen Test
+## Fligner-Killeen 검정
 
-The Fligner–Killeen test is a non-parametric test for comparing variances across multiple groups. Like the Brown–Forsythe test, it uses the absolute deviations from the group median as a measure of dispersion. However, instead of operating on the raw deviations, the Fligner–Killeen test transforms these deviations into **ranks** and bases its analysis on the ranked values.
+Fligner-Killeen 검정은 여러 집단의 분산을 비교하는 비모수 검정이다. Brown-Forsythe 검정처럼 집단중앙값으로부터의 절대편차를 산포의 측도로 쓴다. 그러나 원래의 편차를 그대로 쓰는 대신 **순위**로 변환하고, 다시 정규점수로 바꾸어 분석한다.
 
-### Hypotheses
+### 가설
 
-**Null Hypothesis ($H_0$):** The population variances are equal across the groups:
+**귀무가설 ($H_0$):** 집단들의 모분산이 모두 같다.
 
 $$
 H_0: \sigma_1^2 = \sigma_2^2 = \dots = \sigma_k^2
 $$
 
-**Alternative Hypothesis ($H_1$):** At least one group has a variance that differs from the others:
+**대립가설 ($H_1$):** 적어도 한 집단의 분산이 다른 집단과 다르다.
 
 $$
-H_1: \sigma_i^2 \neq \sigma_j^2 \quad \text{for at least one pair} \quad i \neq j
+H_1: \sigma_i^2 \neq \sigma_j^2 \quad \text{(적어도 한 쌍의)} \quad i \neq j
 $$
 
-### Test Statistic
+### 검정통계량
 
-**Step 1 — Compute Absolute Deviations:**
+**1단계 — 절대편차 계산:**
 
-For each observation $X_{ij}$ in group $i$, compute the absolute deviation from the group median $\tilde{X}_i$:
+집단 $i$의 각 관측값 $X_{ij}$에 대해 집단중앙값 $\tilde{X}_i$로부터의 절대편차를 계산한다.
 
 $$
 Z_{ij} = |X_{ij} - \tilde{X}_i|
 $$
 
-**Step 2 — Rank the Absolute Deviations:**
+**2단계 — 절대편차의 순위 매기기:**
 
-Rank the absolute deviations $Z_{ij}$ across all groups (pooled ranks):
+모든 집단의 절대편차 $Z_{ij}$를 합쳐서 순위를 매긴다(통합 순위).
 
 $$
 R_{ij} = \text{rank}(|X_{ij} - \tilde{X}_i|)
 $$
 
-where $R_{ij}$ represents the rank of the absolute deviation $Z_{ij}$ in the combined data.
+여기서 $R_{ij}$는 결합된 자료에서 절대편차 $Z_{ij}$의 순위이다.
 
-**Step 3 — Calculate the Test Statistic:**
+**3단계 — 정규점수로 변환:**
 
-The test statistic is computed based on the ranks $R_{ij}$, weighted by group size $n_i$. A popular version of the Fligner–Killeen test statistic is:
-
-$$
-H = \sum_{i=1}^k n_i \left( \bar{R}_i - \bar{R} \right)^2 \sim \chi^2_{k-1}
-$$
-
-where:
-
-- $k$ is the number of groups,
-- $n_i$ is the number of observations in group $i$,
-- $\bar{R}_i$ is the mean rank of the absolute deviations within group $i$:
+순위를 절반정규 점수로 바꾼다.
 
 $$
-\bar{R}_i = \frac{1}{n_i} \sum_{j=1}^{n_i} R_{ij}
+a_{ij} = \Phi^{-1}\!\left(\frac{1 + R_{ij}/(N+1)}{2}\right)
 $$
 
-- $\bar{R}$ is the overall mean rank of the absolute deviations across all groups:
+이 단계가 결정적이다. 순위를 그대로 쓰면 점수의 척도가 $N$에 의존하고, 아래 통계량이 카이제곱분포를 따르지 않는다.
+
+**4단계 — 검정통계량 계산:**
 
 $$
-\bar{R} = \frac{1}{N} \sum_{i=1}^k \sum_{j=1}^{n_i} R_{ij}
+\chi^2_{\text{FK}} = \frac{\sum_{i=1}^k n_i \left( \bar{a}_i - \bar{a} \right)^2}{V} \sim \chi^2_{k-1}
 $$
 
-where $N = \sum_{i=1}^k n_i$ is the total number of observations.
+여기서
 
-This formula measures how much the group mean ranks $\bar{R}_i$ deviate from the overall mean rank $\bar{R}$, weighted by the group sizes $n_i$.
-
-**Step 4 — Determine the Distribution:**
-
-The test statistic follows an asymptotic chi-square distribution with $k - 1$ degrees of freedom.
-
-### Assumptions
-
-1. **Independence:** Observations must be independent within and between groups.
-2. **Random Sampling:** The data should be drawn from random samples.
-
-### Decision Rule
+- $k$는 집단의 수,
+- $n_i$는 집단 $i$의 관측값 수,
+- $\bar{a}_i$는 집단 $i$의 정규점수 평균,
 
 $$
-H > \chi^2_{\text{critical}} \quad \Rightarrow \quad \text{Reject } H_0
+\bar{a}_i = \frac{1}{n_i} \sum_{j=1}^{n_i} a_{ij}
+$$
+
+- $\bar{a}$는 전체 정규점수 평균,
+
+$$
+\bar{a} = \frac{1}{N} \sum_{i=1}^k \sum_{j=1}^{n_i} a_{ij}
+$$
+
+- $V$는 정규점수 전체의 분산이다.
+
+$$
+V = \frac{1}{N-1}\sum_{i=1}^k\sum_{j=1}^{n_i}(a_{ij} - \bar{a})^2
+$$
+
+$N = \sum_{i=1}^k n_i$는 전체 관측값의 수이다.
+
+이 공식은 집단별 정규점수 평균 $\bar{a}_i$가 전체평균 $\bar{a}$에서 얼마나 벗어나는지를 집단 크기로 가중하여 재고, 점수 전체의 분산 $V$로 표준화한다.
+
+!!! warning "분모 $V$를 빠뜨리면 안 된다"
+    문헌에 따라 $H = \sum_i n_i(\bar{R}_i - \bar{R})^2$처럼 순위를 그대로 쓰고 분모를 생략한 형태가 소개되기도 하는데, 이는 **카이제곱분포를 따르지 않는다**. 순위의 척도가 $N$에 의존하므로 통계량의 크기가 표본크기에 따라 임의로 커진다.
+
+    정확한 통계량에는 (1) 정규점수 변환과 (2) 분모 $V$가 모두 필요하다. 자세한 유도는 [Fligner-Killeen 검정](fligner_killeen.md) 페이지를 보라.
+
+**5단계 — 분포 결정:**
+
+검정통계량은 자유도 $k - 1$인 카이제곱분포를 점근적으로 따른다.
+
+### 가정
+
+1. **독립성:** 관측값이 집단 안에서도 집단 사이에서도 독립이어야 한다.
+2. **확률표집:** 자료가 확률표본에서 나와야 한다.
+
+### 판정규칙
+
+$$
+\chi^2_{\text{FK}} > \chi^2_{\text{critical}} \quad \Rightarrow \quad H_0 \text{ 기각}
 $$
 
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Describe the main concept of Robust Tests for Equality of Variances and explain why it matters for statistical practice.
+**연습문제 1.**
+$H = \sum_i n_i(\bar{R}_i - \bar{R})^2$ 형태의 통계량이 왜 카이제곱분포를 따를 수 없는지 차원 분석으로 설명하라.
 
-??? success "Solution to Exercise 1"
-    Robust Tests for Equality of Variances is a core topic in statistics that provides tools for drawing reliable inferences from data. It matters because proper application ensures valid conclusions, correctly quantified uncertainty, and appropriate handling of the assumptions that underpin the method. Practitioners who understand this concept can avoid common pitfalls and choose the right analytical approach for their data.
+??? success "연습문제 1 풀이"
+    **차원(척도) 분석.** 순위 $R_{ij}$는 $1$부터 $N$까지의 값을 가지므로 $\bar{R} = (N+1)/2$이고 순위의 분산은
+
+    $$
+    \operatorname{Var}(R) = \frac{N^2 - 1}{12}
+    $$
+
+    이다. 곧 순위의 척도가 $N$에 비례한다.
+
+    $H_0$ 아래에서 $\bar{R}_i - \bar{R}$의 표준편차는 대략 $\sqrt{\operatorname{Var}(R)/n_i} \propto N/\sqrt{n_i}$이므로
+
+    $$
+    E[H] = \sum_i n_i \cdot \operatorname{Var}(\bar{R}_i) \approx (k-1)\cdot\frac{N^2-1}{12}.
+    $$
+
+    이 값이 $N^2$에 비례하여 커진다. 반면 $\chi^2_{k-1}$의 평균은 $k-1$로 **$N$과 무관한 상수**이다.
+
+    구체적으로 $k = 3$, $n_i = 20$($N = 60$)이면 $E[H] \approx 2 \times 299.92 = 599.8$인데 $\chi^2_2$의 평균은 2이다. 300배 차이이다. $N$을 두 배로 하면 이 배수가 다시 네 배가 된다.
+
+    **결론.** 분모 $V$가 정확히 이 척도 의존성을 제거한다. $V$가 점수 전체의 분산이므로 $\sum_i n_i(\bar{a}_i - \bar{a})^2 / V$는 무차원량이 되고, $H_0$ 아래에서 평균이 $k-1$이 되어 카이제곱분포와 맞는다.
+
+    정규점수 변환도 같은 역할을 한다. 순위 $R$의 범위는 $[1, N]$으로 $N$에 의존하지만 정규점수 $a$의 범위는 $[0, \Phi^{-1}(N/(2N+2)+1/2)]$로 $\sqrt{2\ln N}$ 규모로만 커진다. 두 장치가 함께 통계량을 안정시킨다. $\square$
 
 ---
 
-**Exercise 2.**
-State the key assumptions required by the method discussed here. How can each assumption be checked?
+**연습문제 2.**
+본문 예제에서 세 집단의 편차가 모두 $\{0, 5, 5, 10, x\}$ 형태이고 $x$만 다르다. 이 구조가 검정력에 어떤 영향을 주는지 설명하고, 같은 분산비를 유지하면서 검정력이 더 높아지도록 자료를 재구성하라.
 
-??? success "Solution to Exercise 2"
-    The main assumptions typically include: (1) independence of observations -- verified by understanding the data collection process and checking for serial correlation; (2) distributional requirements (e.g., normality) -- checked with Q-Q plots and formal tests like Shapiro-Wilk; (3) equal variances (if applicable) -- assessed with boxplots and Levene's test. When assumptions are violated, consider robust alternatives, transformations, or nonparametric methods.
+??? success "연습문제 2 풀이"
+    **문제의 구조.** 각 집단에서 관측값 다섯 개 중 네 개의 편차가 $\{0, 5, 5, 10\}$으로 **완전히 동일**하다. 산포 차이의 정보를 담은 것은 각 집단의 다섯 번째 관측값 하나뿐이다.
+
+    분산분석 F 통계량의 관점에서 보면
+
+    - **분자**(집단간 변동): $\bar{Z}_i$가 $6, 8, 10$으로 차이가 있다. 신호가 있다.
+    - **분모**(집단내 변동): 각 집단의 편차가 $0$에서 $30$까지 넓게 흩어져 있어 매우 크다. 잡음이 크다.
+
+    집단 3의 편차 $\{0, 5, 5, 10, 30\}$은 그 자체의 표본분산이 $137.5$나 된다. 이 큰 집단내 변동이 F 통계량의 분모를 지배하여 $W = 0.28$로 눌러 버린다.
+
+    **재구성 방법.** 같은 분산비를 유지하면서 검정력을 높이려면 **각 집단 안에서 편차가 고르게 분포하도록** 만들어야 한다. 곧 한 관측값에 산포를 몰아넣지 말고 모든 관측값에 퍼뜨린다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    # Original: spread concentrated in one observation per group
+    orig = ([65, 70, 75, 80, 85], [60, 65, 70, 75, 90], [55, 60, 65, 70, 95])
+
+    # Restructured: same variance ratio, spread distributed evenly
+    # sd ratios 1 : sqrt(2.12) : sqrt(3.88)  (matching 62.5 : 132.5 : 242.5)
+    base = np.array([-2, -1, 0, 1, 2])
+    new = tuple((75 + base * s).tolist()
+                for s in (np.sqrt(62.5 / 2.5), np.sqrt(132.5 / 2.5),
+                          np.sqrt(242.5 / 2.5)))
+
+    for label, groups in [("original", orig), ("restructured", new)]:
+        v = [round(np.var(g, ddof=1), 1) for g in groups]
+        p_bf = stats.levene(*groups, center='median')[1]
+        print(f"{label:>14}: vars = {v}, Brown-Forsythe p = {p_bf:.4f}")
+    ```
+
+    출력:
+
+    ```text
+          original: vars = [62.5, 132.5, 242.5], Brown-Forsythe p = 0.7589
+      restructured: vars = [62.5, 132.5, 242.5], Brown-Forsythe p = 0.3840
+    ```
+
+    재구성된 자료는 같은 표본분산 $62.5$, $132.5$, $242.5$를 갖지만 각 집단 안에서 편차가 $\{0, s, s, 2s, 2s\}$ 형태로 고르게 퍼져 있다. 집단내 변동이 작아지므로 F 통계량의 분모가 줄고 $W$가 $0.282$에서 $1.038$로 3.7배 커진다. $p$값도 $0.759$에서 $0.384$로 절반으로 줄었다.
+
+    (여전히 기각하지는 못한다. $n_i = 5$라는 근본적 한계는 자료 구조를 바꿔도 극복되지 않는다.)
+
+    **일반적 교훈.** 분산 검정의 검정력은 표본분산의 비만이 아니라 **그 분산이 어떻게 만들어졌는지**에도 의존한다. 이상점 하나가 만든 큰 분산은 탐지하기 어렵고, 전반적으로 넓게 퍼진 분산은 탐지하기 쉽다.
+
+    이는 로버스트 검정의 설계 의도와도 통한다. 이상점 하나가 만든 분산 차이를 "실질적 산포 차이"로 볼지 "오염"으로 볼지는 통계가 아니라 자료의 맥락이 답할 문제이다. $\square$
 
 ---
 
-**Exercise 3.**
-Work through a small numerical example illustrating the application of the technique from this section.
+**연습문제 3.**
+Levene 계열 검정이 정규성을 요구하지 않는다고 하지만, 어떤 형태의 가정은 여전히 필요하다. 어떤 가정인지 밝히고 위반 시 무슨 일이 일어나는지 설명하라.
 
-??? success "Solution to Exercise 3"
-    A structured approach to applying this technique involves: (1) clearly stating the hypotheses or estimation goal; (2) verifying that the data meet the required assumptions; (3) computing the relevant test statistic, estimate, or model fit; (4) obtaining the p-value, confidence interval, or posterior distribution; (5) interpreting the result in the context of the original question. Following these steps systematically ensures a rigorous and reproducible analysis.
+??? success "연습문제 3 풀이"
+    **여전히 필요한 가정은 세 가지이다.**
+
+    **1. 독립성.** 이 가정은 로버스트 검정도 전혀 완화하지 못한다. 15.1절 연습문제 2에서 보았듯 자기상관이 있으면 카이제곱 분산 검정의 크기가 $\phi = 0.8$에서 0.38까지 치솟았다. Levene 계열도 같은 문제를 겪는다. 절대편차의 평균에 대한 F 검정 역시 관측값의 독립을 가정하기 때문이다.
+
+    **2. 변환값 $Z_{ij}$의 집단내 분포가 같을 것.** 이것이 미묘한 지점이다. 분산분석 F 검정은 집단들의 오차분산이 같다고 가정한다. 여기서 "오차"는 $Z_{ij}$의 집단내 변동, 곧 $\operatorname{Var}(Z_i)$이다.
+
+    그런데 $\operatorname{Var}(Z_i) = \sigma_i^2(1 - 2/\pi)$(정규성 아래)이므로, $\sigma_i$가 다르면 $\operatorname{Var}(Z_i)$도 다르다. 곧 **$H_1$이 참일 때 F 검정 자체의 등분산 가정이 위배된다.**
+
+    다행히 이는 $H_0$ 아래에서는 문제가 되지 않으므로 크기는 통제된다. 다만 $H_1$ 아래에서 검정력 계산이 정확하지 않고, 극단적으로 불균형한 설계에서는 왜곡이 생길 수 있다.
+
+    **3. $\bar{Z}_i$의 근사적 정규성.** F 검정이 타당하려면 중심극한정리가 작동할 만큼 $n_i$가 커야 한다. $Z_{ij}$가 오른쪽으로 치우친 절반정규 형태이므로 $n_i$가 아주 작으면(5 이하) 근사가 나쁘다.
+
+    본문 예제의 $n_i = 5$가 그 경계에 있다. 15.5절 비교 페이지의 크기 표에서 Brown-Forsythe가 $n_i = 20$에서 0.035~0.048로 다소 보수적이었던 것도 이 근사의 잔여 오차 때문이다.
+
+    **요약.** 로버스트 검정은 **원자료의 정규성**을 요구하지 않을 뿐, 독립성과 변환 후의 정칙조건은 여전히 필요하다. "로버스트"가 "무조건 안전"을 뜻하지 않는다. $\square$
 
 ---
 
-**Exercise 4.**
-Compare the approach from this section with an alternative method. When would you choose each?
+**연습문제 4.**
+$Z_{ij} = |X_{ij} - \tilde{X}_i|$에서 중앙값 $\tilde{X}_i$가 자료에서 추정된 값인데도, 분산분석 F 검정의 자유도를 $N - k$로 그대로 쓴다. 이 자유도가 정확한지 논하라.
 
-??? success "Solution to Exercise 4"
-    The method discussed here is appropriate when its assumptions hold and the sample size is sufficient for the asymptotic approximations to be accurate. Alternative approaches include: (1) nonparametric methods -- preferred when distributional assumptions are suspect; (2) bootstrap methods -- useful when analytical reference distributions are unavailable; (3) Bayesian methods -- valuable when incorporating prior information or when direct probability statements about parameters are desired. Running multiple approaches and comparing results provides a useful robustness check.
+??? success "연습문제 4 풀이"
+    **엄밀히 말하면 정확하지 않다.**
+
+    표준 일원분산분석에서 자유도 $N - k$는 $k$개의 집단평균을 추정했기 때문에 $N$에서 $k$를 뺀 것이다. Levene 검정에서는 여기에 더해 **각 집단의 중심 $c_i$를 추정하는 데 이미 자유도를 썼다**. 곧 자료를 두 번 쓰는 셈이다.
+
+    구체적으로 Brown-Forsythe에서 $Z_{ij} = |X_{ij} - \tilde{X}_i|$를 계산할 때 중앙값 $\tilde{X}_i$를 표본에서 추정했으므로, $Z_{ij}$들은 완전히 독립이 아니다. 예컨대 $n_i$가 홀수이면 중앙값에 해당하는 관측값의 편차가 항상 정확히 0이 되어 자유로운 값이 아니다.
+
+    **왜 그래도 쓰는가.**
+
+    1. **점근적으로 무시할 만하다.** $n_i$가 크면 $\tilde{X}_i$가 참 중앙값으로 수렴하고, 추정에서 오는 종속성이 $O(1/n_i)$로 사라진다.
+
+    2. **보정이 간단하지 않다.** 정확한 유한표본 분포는 원분포에 의존하므로 닫힌 형태의 자유도 보정이 존재하지 않는다.
+
+    3. **실증적으로 잘 작동한다.** 15.5절 비교 페이지의 모의실험에서 $n_i = 20$일 때 Brown-Forsythe의 크기가 0.035~0.048로 명목값에 가까웠다. 약간 보수적인 방향의 잔여 오차가 있을 뿐이다.
+
+    **그 잔여 오차의 방향.** 정규 자료에서 Brown-Forsythe의 크기가 0.039로 명목값보다 작았다는 사실이 이 자유도 문제의 흔적이다. $Z_{ij}$들이 중앙값 추정 때문에 실제보다 덜 자유롭고, 그만큼 집단내 제곱합이 F 통계량을 억누른다.
+
+    **실무적 함의.** 이 정도 보수성은 실무에서 문제가 되지 않는다. 정확한 크기가 결정적이라면 순열검정을 쓰면 된다. 각 관측값을 집단에 무작위 재배정하여 $W$의 정확한 귀무분포를 얻을 수 있고, 그러면 자유도 문제가 원천적으로 사라진다. $\square$

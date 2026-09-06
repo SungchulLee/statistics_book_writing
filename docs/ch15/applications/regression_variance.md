@@ -1,114 +1,125 @@
-# Variance Testing in Regression
+# 회귀에서의 분산 검정
 
-Linear regression assumes that the error terms have constant variance across all levels of the predictors: $\operatorname{Var}(\varepsilon_i) = \sigma^2$ for all $i$. This assumption is called **homoscedasticity**. When it fails -- when the variance of the errors depends on the predictor values or on the fitted values -- the condition is called **heteroscedasticity**. This section covers the formal tests used to detect heteroscedasticity in regression residuals and discusses the consequences of ignoring it.
+선형회귀는 오차항이 설명변수의 모든 수준에서 일정한 분산을 갖는다고 가정한다. 곧 모든 $i$에 대해 $\operatorname{Var}(\varepsilon_i) = \sigma^2$이다. 이 가정을 **등분산성**이라 한다. 이것이 무너져 오차의 분산이 설명변수 값이나 적합값에 의존하면 **이분산**이라 부른다. 이 절은 회귀 잔차에서 이분산을 탐지하는 형식적 검정들을 다루고 이분산을 무시했을 때의 결과를 논한다.
 
-## Why Heteroscedasticity Matters
+## 이분산이 왜 문제인가
 
-In the linear regression model
+선형회귀모형
 
 $$
 Y_i = \beta_0 + \beta_1 X_{i1} + \cdots + \beta_p X_{ip} + \varepsilon_i
 $$
 
-the OLS estimator $\hat{\boldsymbol{\beta}}$ remains unbiased and consistent even under heteroscedasticity. However, two important problems arise:
+에서 OLS 추정량 $\hat{\boldsymbol{\beta}}$는 이분산 아래에서도 불편이고 일치성을 갖는다. 그러나 두 가지 중요한 문제가 생긴다.
 
-1. **Inefficiency.** OLS is no longer the best linear unbiased estimator (BLUE). Weighted least squares (WLS) or generalized least squares (GLS) can produce more efficient estimates.
-2. **Invalid inference.** The standard errors computed by OLS assume constant variance. Under heteroscedasticity, these standard errors are biased, leading to incorrect $t$-statistics, $p$-values, and confidence intervals for the regression coefficients.
+1. **비효율성.** OLS가 더 이상 최량선형불편추정량(BLUE)이 아니다. 가중최소제곱(WLS)이나 일반화최소제곱(GLS)이 더 효율적인 추정값을 낼 수 있다.
+2. **무효한 추론.** OLS가 계산하는 표준오차는 일정한 분산을 가정한다. 이분산 아래에서 이 표준오차가 편향되어 회귀계수의 $t$ 통계량, $p$값, 신뢰구간이 모두 틀리게 된다.
 
-## Visual Detection
+**두 번째가 훨씬 심각하다.** 계수 추정값 자체는 여전히 옳으므로 "얼마나 큰 효과인가"에 대한 답은 유지되지만, "그 효과가 통계적으로 유의한가"에 대한 답이 무너진다.
 
-Before applying formal tests, plot the residuals against the fitted values $\hat{Y}_i$:
+## 시각적 탐지
 
-- **Homoscedastic pattern:** The residuals form a roughly constant band around zero.
-- **Heteroscedastic pattern:** The spread of the residuals increases (or decreases) systematically with $\hat{Y}_i$. Common patterns include a "funnel" shape (spread increasing with fitted values) and a "bow-tie" shape (spread increasing then decreasing).
+형식적 검정을 적용하기 전에 잔차를 적합값 $\hat{Y}_i$에 대해 그린다.
 
-## The Breusch-Pagan Test
+- **등분산 패턴:** 잔차가 0 주위에서 대략 일정한 띠를 이룬다.
+- **이분산 패턴:** 잔차의 산포가 $\hat{Y}_i$에 따라 체계적으로 커지거나 작아진다. 흔한 패턴으로 깔때기 모양(적합값에 따라 산포 증가)과 나비넥타이 모양(산포가 커졌다가 작아짐)이 있다.
 
-The Breusch-Pagan (1979) test is the most widely used formal test for heteroscedasticity. It tests whether the squared residuals are related to the predictor variables.
+## Breusch-Pagan 검정
 
-**Procedure:**
+Breusch-Pagan(1979) 검정은 이분산에 대해 가장 널리 쓰이는 형식적 검정이다. 제곱잔차가 설명변수와 관련되어 있는지 검정한다.
 
-**Step 1.** Fit the regression model and obtain the OLS residuals $e_i = Y_i - \hat{Y}_i$.
+**절차:**
 
-**Step 2.** Regress the squared residuals $e_i^2$ on the original predictors $X_{i1}, \ldots, X_{ip}$:
+**1단계.** 회귀모형을 적합하고 OLS 잔차 $e_i = Y_i - \hat{Y}_i$를 얻는다.
+
+**2단계.** 제곱잔차 $e_i^2$을 원래의 설명변수 $X_{i1}, \ldots, X_{ip}$에 회귀시킨다.
 
 $$
 e_i^2 = \gamma_0 + \gamma_1 X_{i1} + \cdots + \gamma_p X_{ip} + u_i
 $$
 
-**Step 3.** Compute the test statistic as $n$ times the $R^2$ from this auxiliary regression:
+**3단계.** 이 보조회귀의 $R^2$에 $n$을 곱한 값을 검정통계량으로 삼는다.
 
 $$
 \text{BP} = n \cdot R^2_{\text{aux}}
 $$
 
-**Step 4.** Under $H_0\colon$ homoscedasticity, the statistic follows approximately a chi-square distribution:
+**4단계.** $H_0\colon$ 등분산 아래에서 이 통계량은 근사적으로 카이제곱분포를 따른다.
 
 $$
 \text{BP} \sim \chi^2_p
 $$
 
-where $p$ is the number of predictors in the auxiliary regression.
+여기서 $p$는 보조회귀의 설명변수 개수이다.
 
-**Hypotheses:**
-
-$$
-H_0\colon \operatorname{Var}(\varepsilon_i) = \sigma^2 \text{ (constant)}
-$$
+**가설:**
 
 $$
-H_1\colon \operatorname{Var}(\varepsilon_i) = h(X_{i1}, \ldots, X_{ip}) \text{ (depends on predictors)}
+H_0\colon \operatorname{Var}(\varepsilon_i) = \sigma^2 \text{ (일정)}
 $$
 
-Reject $H_0$ if $\text{BP} > \chi^2_{1-\alpha,\, p}$.
+$$
+H_1\colon \operatorname{Var}(\varepsilon_i) = h(X_{i1}, \ldots, X_{ip}) \text{ (설명변수에 의존)}
+$$
 
-## White's Test
+$\text{BP} > \chi^2_{1-\alpha,\, p}$이면 $H_0$을 기각한다.
 
-White (1980) proposed a more general test that does not require specifying the form of heteroscedasticity. Instead of regressing $e_i^2$ on the original predictors alone, White's test includes their squares and cross-products.
+!!! warning "원래의 Breusch-Pagan 검정은 정규성을 요구한다"
+    Breusch와 Pagan의 원래 검정통계량은 오차의 정규성을 가정하며, 이 장에서 반복해 본 대로 그 가정이 깨지면 크기가 왜곡된다.
 
-**Auxiliary regression for White's test:**
+    위에 제시한 $n \cdot R^2$ 형태는 Koenker(1981)의 **스튜던트화 판**으로, 정규성 없이도 타당하다. `statsmodels`의 `het_breuschpagan`은 두 값을 모두 반환하며(`lm` 통계량과 `fvalue`), 실무에서는 스튜던트화 판을 쓰는 것이 표준이다.
+
+## White 검정
+
+White(1980)는 이분산의 함수 형태를 지정할 필요가 없는 더 일반적인 검정을 제안했다. $e_i^2$을 원래 설명변수에만 회귀시키는 대신 그 제곱항과 교차항까지 포함한다.
+
+**White 검정의 보조회귀:**
 
 $$
 e_i^2 = \gamma_0 + \sum_{j=1}^{p}\gamma_j X_{ij} + \sum_{j=1}^{p}\gamma_{jj} X_{ij}^2 + \sum_{j<l}\gamma_{jl} X_{ij} X_{il} + u_i
 $$
 
-The test statistic is again $n \cdot R^2_{\text{aux}}$, but now with $q$ regressors (where $q$ includes all the original predictors, their squares, and cross-products):
+검정통계량은 다시 $n \cdot R^2_{\text{aux}}$이지만 이제 설명변수가 $q$개이다($q$는 원래 설명변수, 그 제곱, 교차항을 모두 포함한다).
 
 $$
 \text{W} = n \cdot R^2_{\text{aux}} \sim \chi^2_q
 $$
 
-!!! note "Breusch-Pagan vs. White"
-    The Breusch-Pagan test detects heteroscedasticity that is a **linear** function of the predictors. White's test detects heteroscedasticity of **any** functional form. White's test is more general but uses more degrees of freedom, which can reduce power when the heteroscedasticity is indeed linear.
+!!! note "Breusch-Pagan과 White"
+    Breusch-Pagan 검정은 설명변수의 **선형**함수인 이분산을 탐지한다. White 검정은 **어떤** 함수 형태의 이분산이든 탐지한다. White 검정이 더 일반적이지만 자유도를 더 쓰므로, 이분산이 실제로 선형일 때는 검정력이 떨어질 수 있다.
 
-## The Goldfeld-Quandt Test
+    설명변수가 많을 때 이 대가가 커진다. $p$개 설명변수에 대해 White 검정의 자유도는 $p(p+3)/2$로 늘어난다. $p = 10$이면 $65$개이므로 검정력이 크게 떨어진다.
 
-The Goldfeld-Quandt (1965) test is a simpler approach that splits the data into two groups based on the suspected source of heteroscedasticity and applies the F-test for equal variances.
+## Goldfeld-Quandt 검정
 
-**Procedure:**
+Goldfeld-Quandt(1965) 검정은 이분산의 원인으로 의심되는 변수에 따라 자료를 두 집단으로 나눈 뒤 등분산 F 검정을 적용하는 더 단순한 접근이다.
 
-1. Order the observations by the predictor $X$ suspected of causing heteroscedasticity.
-2. Drop the middle $c$ observations (typically $c \approx n/5$) to sharpen the contrast.
-3. Fit separate regressions to the lower and upper groups.
-4. Compute the F-statistic as the ratio of the residual sum of squares from the upper group to the lower group.
+**절차:**
 
-Under $H_0$, this ratio follows an $F$ distribution. The Goldfeld-Quandt test is intuitive but limited to heteroscedasticity related to a single predictor.
+1. 이분산을 일으킨다고 의심되는 설명변수 $X$로 관측값을 정렬한다.
+2. 대비를 뚜렷하게 하기 위해 가운데 $c$개 관측값을 제거한다(보통 $c \approx n/5$).
+3. 아래 집단과 위 집단에 각각 회귀를 적합한다.
+4. 위 집단의 잔차제곱합을 아래 집단의 잔차제곱합으로 나눈 비를 F 통계량으로 삼는다.
 
-## Consequences and Remedies
+$H_0$ 아래에서 이 비는 $F$ 분포를 따른다. Goldfeld-Quandt 검정은 직관적이지만 하나의 설명변수와 관련된 이분산에만 적용된다.
 
-When heteroscedasticity is detected:
+또한 15.3절에서 본 대로 **F 검정은 비정규성에 극도로 민감하므로** Goldfeld-Quandt 검정도 그 취약성을 물려받는다. 실무에서는 Breusch-Pagan(Koenker 판)이나 White 검정이 더 안전하다.
 
-1. **Heteroscedasticity-consistent standard errors.** Use robust standard errors (also called White standard errors or sandwich estimators) that remain valid under heteroscedasticity without changing the coefficient estimates:
+## 결과와 대책
+
+이분산이 탐지되면
+
+1. **이분산 일치 표준오차.** 계수 추정값은 바꾸지 않고 이분산 아래에서도 타당한 로버스트 표준오차(White 표준오차 또는 샌드위치 추정량)를 쓴다.
 
 $$
 \widehat{\operatorname{Var}}(\hat{\boldsymbol{\beta}}) = (\mathbf{X}'\mathbf{X})^{-1}\left(\sum_{i=1}^{n} e_i^2 \mathbf{x}_i\mathbf{x}_i'\right)(\mathbf{X}'\mathbf{X})^{-1}
 $$
 
-2. **Weighted least squares.** If the form of the heteroscedasticity is known or can be estimated (e.g., $\operatorname{Var}(\varepsilon_i) \propto X_i^2$), WLS produces more efficient estimates.
+2. **가중최소제곱.** 이분산의 형태를 알거나 추정할 수 있으면($\operatorname{Var}(\varepsilon_i) \propto X_i^2$ 등) WLS가 더 효율적인 추정값을 낸다.
 
-3. **Variance-stabilizing transformation.** Transformations such as $\ln Y$ or $\sqrt{Y}$ can sometimes stabilize the variance.
+3. **분산안정화 변환.** $\ln Y$나 $\sqrt{Y}$ 같은 변환이 분산을 안정시킬 때가 있다.
 
-## Python Implementation
+## Python 구현
 
 ```python
 import numpy as np
@@ -129,54 +140,171 @@ model = sm.OLS(Y, X_with_const).fit()
 residuals = model.resid
 
 # Breusch-Pagan test
-bp_stat, bp_p, _, _ = het_breuschpagan(residuals, X_with_const)
-print(f"Breusch-Pagan statistic: {bp_stat:.4f}")
-print(f"Breusch-Pagan p-value:   {bp_p:.4f}")
+bp_stat, bp_p, bp_f, bp_fp = het_breuschpagan(residuals, X_with_const)
+print(f"Breusch-Pagan: LM = {bp_stat:.4f}, p = {bp_p:.6f}")
 
 # White's test
-white_stat, white_p, _, _ = het_white(residuals, X_with_const)
-print(f"White statistic: {white_stat:.4f}")
-print(f"White p-value:   {white_p:.4f}")
+w_stat, w_p, w_f, w_fp = het_white(residuals, X_with_const)
+print(f"White:         LM = {w_stat:.4f}, p = {w_p:.6f}")
 
 # Robust standard errors
 robust_model = model.get_robustcov_results(cov_type='HC3')
-print(f"\nOLS std errors:    {model.bse}")
-print(f"Robust std errors: {robust_model.bse}")
+print(f"\ncoefficients:      {np.round(model.params, 4)}")
+print(f"OLS std errors:    {np.round(model.bse, 4)}")
+print(f"Robust std errors: {np.round(robust_model.bse, 4)}")
+print(f"OLS t-values:      {np.round(model.tvalues, 3)}")
+print(f"Robust t-values:   {np.round(robust_model.tvalues, 3)}")
 ```
 
-## Summary
+출력:
 
-Heteroscedasticity in regression is detected through visual inspection (residual plots) and formal tests (Breusch-Pagan, White, Goldfeld-Quandt). The Breusch-Pagan test is the standard first choice for its balance of simplicity and power. When heteroscedasticity is present, robust standard errors provide valid inference without requiring a correctly specified variance function.
+```text
+Breusch-Pagan: LM = 14.2174, p = 0.000163
+White:         LM = 14.7165, p = 0.000638
+
+coefficients:      [3.1523 1.9672]
+OLS std errors:    [1.5014 0.254 ]
+Robust std errors: [1.0664 0.2719]
+OLS t-values:      [2.1    7.746]
+Robust t-values:   [2.956 7.235]
+```
+
+두 검정 모두 이분산을 강하게 탐지한다. 자료를 $\operatorname{Var}(\varepsilon_i) \propto X_i^2$이 되도록 생성했으므로 당연한 결과이다.
+
+!!! note "로버스트 표준오차가 항상 커지는 것은 아니다"
+    흔한 오해는 "로버스트 표준오차는 OLS보다 크다"는 것이다. 위 출력에서 **절편의 표준오차는 오히려 줄었다**($1.501 \to 1.066$). 기울기의 표준오차만 커졌다($0.254 \to 0.272$).
+
+    이유는 이분산의 **패턴**에 있다. 여기서 분산이 $X$에 따라 커지므로, $X$가 작은(따라서 절편 추정에 영향력이 큰) 관측값들은 오히려 잔차가 작다. OLS는 모든 관측값이 같은 분산을 갖는다고 가정하여 이 정보를 버리므로 절편의 불확실성을 **과대추정**한다.
+
+    결과적으로 절편의 $t$ 값이 $2.10$에서 $2.96$으로 **커진다**. 로버스트 표준오차를 쓰면 유의성이 오히려 강해질 수 있다는 뜻이다. "로버스트 = 보수적"이라는 도식은 틀렸다.
+
+## 요약
+
+회귀의 이분산은 시각적 검토(잔차 그림)와 형식적 검정(Breusch-Pagan, White, Goldfeld-Quandt)으로 탐지한다. Breusch-Pagan 검정은 단순성과 검정력의 균형 덕분에 표준적인 첫 선택이다. 이분산이 있으면 로버스트 표준오차가 올바른 분산함수를 지정하지 않고도 타당한 추론을 제공한다.
 
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Describe the main concept of Variance Testing in Regression and explain why it matters for statistical practice.
+**연습문제 1.**
+$\text{BP} = n \cdot R^2_{\text{aux}}$가 왜 $\chi^2_p$을 따르는지 설명하라. 이 형태가 다른 라그랑주 승수 검정과 어떻게 연결되는가?
 
-??? success "Solution to Exercise 1"
-    Variance Testing in Regression is a core topic in statistics that provides tools for drawing reliable inferences from data. It matters because proper application ensures valid conclusions, correctly quantified uncertainty, and appropriate handling of the assumptions that underpin the method. Practitioners who understand this concept can avoid common pitfalls and choose the right analytical approach for their data.
+??? success "연습문제 1 풀이"
+    **일반적 결과.** 보조회귀 $Z_i = \gamma_0 + \boldsymbol{\gamma}'\mathbf{X}_i + u_i$에서 $H_0: \boldsymbol{\gamma} = \mathbf{0}$을 검정할 때, $n$개 관측값에 대한 라그랑주 승수(스코어) 검정통계량은
+
+    $$
+    \text{LM} = n R^2 \stackrel{d}{\to} \chi^2_p
+    $$
+
+    이다. 여기서 $R^2$은 보조회귀의 결정계수이고 $p$는 검정하는 계수의 개수이다.
+
+    **직관.** $R^2$은 $Z_i$의 변동 중 $\mathbf{X}_i$가 설명하는 비율이다. $H_0$이 참이면 $\mathbf{X}_i$가 아무것도 설명하지 못하므로 $R^2 \approx 0$이고, $nR^2$이 작다. 관계가 있으면 $R^2$이 커지고 $nR^2$도 커진다.
+
+    $n$을 곱하는 이유는 $R^2$ 자체가 표본크기와 무관한 비율이기 때문이다. 같은 $R^2 = 0.1$이라도 $n = 20$에서는 우연일 수 있지만 $n = 1000$에서는 확실한 신호이다. $nR^2$이 그 차이를 반영한다.
+
+    **다른 LM 검정과의 연결.** 같은 $nR^2$ 형태가 여러 진단검정에 등장한다.
+
+    | 검정 | 보조회귀의 종속변수 | 설명변수 |
+    |---|---|---|
+    | Breusch-Pagan | $e_i^2$ | 원래 설명변수 |
+    | White | $e_i^2$ | 설명변수 + 제곱 + 교차항 |
+    | Breusch-Godfrey (자기상관) | $e_i$ | 설명변수 + 시차잔차 $e_{i-1},\ldots$ |
+    | ARCH-LM (조건부 이분산) | $e_i^2$ | 시차 제곱잔차 |
+
+    모두 "잔차(또는 그 제곱)에 아직 설명되지 않은 구조가 남아 있는가"를 묻는 같은 질문의 변형이다. $\square$
 
 ---
 
-**Exercise 2.**
-State the key assumptions required by the method discussed here. How can each assumption be checked?
+**연습문제 2.**
+본문 예제에서 로버스트 표준오차를 쓰자 절편의 표준오차가 오히려 **줄었다**. 이 현상을 설명하고, 어떤 상황에서 로버스트 표준오차가 OLS보다 작아지는지 일반화하라.
 
-??? success "Solution to Exercise 2"
-    The main assumptions typically include: (1) independence of observations -- verified by understanding the data collection process and checking for serial correlation; (2) distributional requirements (e.g., normality) -- checked with Q-Q plots and formal tests like Shapiro-Wilk; (3) equal variances (if applicable) -- assessed with boxplots and Levene's test. When assumptions are violated, consider robust alternatives, transformations, or nonparametric methods.
+??? success "연습문제 2 풀이"
+    **관찰.** 절편은 $1.501 \to 1.066$(29% 감소), 기울기는 $0.254 \to 0.272$(7% 증가)이다.
+
+    **원인.** 샌드위치 추정량
+
+    $$
+    \widehat{\operatorname{Var}}(\hat{\boldsymbol{\beta}}) = (\mathbf{X}'\mathbf{X})^{-1}\left(\sum_i e_i^2 \mathbf{x}_i\mathbf{x}_i'\right)(\mathbf{X}'\mathbf{X})^{-1}
+    $$
+
+    은 각 관측값의 실제 잔차 크기 $e_i^2$로 가중한다. OLS는 이를 공통 $s^2$으로 대체한다.
+
+    $$
+    \widehat{\operatorname{Var}}_{\text{OLS}}(\hat{\boldsymbol{\beta}}) = s^2 (\mathbf{X}'\mathbf{X})^{-1}.
+    $$
+
+    두 값의 차이는 **$e_i^2$과 관측값의 지렛대(leverage) 사이의 상관**으로 결정된다.
+
+    - $e_i^2$이 큰 관측값이 그 계수에 대해 지렛대도 크면 → 로버스트 표준오차가 **커진다**.
+    - $e_i^2$이 큰 관측값이 그 계수에 대해 지렛대가 작으면 → 로버스트 표준오차가 **작아진다**.
+
+    **이 예에서.** $\operatorname{Var}(\varepsilon_i) \propto X_i^2$이므로 $X$가 큰 관측값의 잔차가 크다.
+
+    - **기울기**에 대해서는 $X$가 극단적인(작거나 큰) 관측값의 지렛대가 크다. $X$가 큰 쪽에서 잔차도 크므로 양의 상관이 생겨 로버스트 표준오차가 커진다.
+    - **절편**에 대해서는 $X$가 **작은** 관측값의 영향력이 크다(외삽 거리가 짧으므로). 그런데 그 관측값들의 잔차는 작다. 음의 상관이 생겨 로버스트 표준오차가 작아진다.
+
+    **일반화.** 로버스트 표준오차는 "OLS보다 보수적인 값"이 아니라 **올바른 값**이다. OLS 표준오차가 참값보다 클 수도 작을 수도 있으며, 로버스트 추정량은 어느 방향이든 바로잡는다.
+
+    실무적 함의: 이분산이 의심되면 로버스트 표준오차를 쓰되, 그것이 자동으로 "더 안전한" 결과를 준다고 기대하지 말라. 유의성이 오히려 강해질 수 있다. $\square$
 
 ---
 
-**Exercise 3.**
-Work through a small numerical example illustrating the application of the technique from this section.
+**연습문제 3.**
+설명변수가 $p$개일 때 White 검정의 자유도가 $p(p+3)/2$임을 보이고, 이것이 왜 검정력 문제를 일으키는지 논하라.
 
-??? success "Solution to Exercise 3"
-    A structured approach to applying this technique involves: (1) clearly stating the hypotheses or estimation goal; (2) verifying that the data meet the required assumptions; (3) computing the relevant test statistic, estimate, or model fit; (4) obtaining the p-value, confidence interval, or posterior distribution; (5) interpreting the result in the context of the original question. Following these steps systematically ensures a rigorous and reproducible analysis.
+??? success "연습문제 3 풀이"
+    **자유도 계산.** White 검정의 보조회귀에 들어가는 항(상수 제외)은
+
+    - 원래 설명변수: $p$개
+    - 제곱항 $X_j^2$: $p$개
+    - 교차항 $X_j X_l$ ($j < l$): $\binom{p}{2} = \frac{p(p-1)}{2}$개
+
+    합계는
+
+    $$
+    p + p + \frac{p(p-1)}{2} = 2p + \frac{p^2 - p}{2} = \frac{4p + p^2 - p}{2} = \frac{p(p+3)}{2}.
+    $$
+
+    | $p$ | 1 | 2 | 3 | 5 | 10 | 20 |
+    |---|---|---|---|---|---|---|
+    | White df | 2 | 5 | 9 | 20 | 65 | 230 |
+    | BP df | 1 | 2 | 3 | 5 | 10 | 20 |
+
+    (이진 설명변수가 있으면 $X_j^2 = X_j$이므로 그만큼 항이 줄어들고, `statsmodels`는 이런 완전공선 항을 자동으로 제거한다. 본문 예제에서 $p=1$인데 White 자유도가 2인 것이 표와 일치한다.)
+
+    **검정력 문제.** 카이제곱 검정에서 자유도가 커지면 임계값이 커진다.
+
+    $$
+    \chi^2_{0.95, 2} = 5.99, \quad \chi^2_{0.95, 20} = 31.4, \quad \chi^2_{0.95, 65} = 84.8.
+    $$
+
+    이분산의 신호가 소수의 항에만 집중되어 있다면, 나머지 무의미한 항들이 $R^2$을 거의 올리지 못하면서 임계값만 높인다. 곧 **신호를 잡음으로 희석한다.**
+
+    구체적으로 $p = 10$이면 White 검정은 65개 항을 쓴다. $n = 200$인 자료에서 65개 설명변수의 보조회귀는 그 자체로 과적합 위험이 있고, 검정력이 Breusch-Pagan(자유도 10)보다 크게 떨어진다.
+
+    **실무 지침.**
+
+    - $p$가 작고(3 이하) 이분산의 형태를 모르면 White 검정.
+    - $p$가 크거나 이분산이 특정 변수와 관련될 것으로 예상되면 Breusch-Pagan, 또는 의심되는 변수만 넣은 보조회귀.
+    - 어느 쪽이든 **탐지 여부와 무관하게 로버스트 표준오차를 기본으로 쓰는 것**이 가장 간단한 해법이다. 이분산이 없으면 로버스트 표준오차가 OLS와 거의 같으므로 잃는 것이 거의 없다. $\square$
 
 ---
 
-**Exercise 4.**
-Compare the approach from this section with an alternative method. When would you choose each?
+**연습문제 4.**
+Goldfeld-Quandt 검정에서 가운데 $c \approx n/5$개 관측값을 제거하는 이유를 설명하고, 이 절차의 한계를 논하라.
 
-??? success "Solution to Exercise 4"
-    The method discussed here is appropriate when its assumptions hold and the sample size is sufficient for the asymptotic approximations to be accurate. Alternative approaches include: (1) nonparametric methods -- preferred when distributional assumptions are suspect; (2) bootstrap methods -- useful when analytical reference distributions are unavailable; (3) Bayesian methods -- valuable when incorporating prior information or when direct probability statements about parameters are desired. Running multiple approaches and comparing results provides a useful robustness check.
+??? success "연습문제 4 풀이"
+    **왜 제거하는가.** 검정의 목적은 $X$가 작은 구간과 큰 구간에서 오차분산이 다른지 보는 것이다. 자료를 정렬하여 절반씩 나누면 두 집단의 경계 근처 관측값들은 $X$ 값이 비슷하므로 분산도 비슷하다. 이 관측값들이 두 집단의 대비를 흐린다.
+
+    가운데를 잘라내면 두 집단의 $X$ 범위가 확실히 분리되어 분산 차이가 뚜렷해진다. 검정력이 올라간다.
+
+    **$c = n/5$의 근거.** Goldfeld와 Quandt의 원논문은 모의실험으로 $c \approx n/3$까지 검토했고, 이후 문헌에서 $n/5$ 정도가 대비 강화와 표본 손실 사이의 절충으로 자리 잡았다. 너무 많이 자르면 각 집단의 자유도가 줄어 오히려 검정력이 떨어진다.
+
+    **한계.**
+
+    1. **정렬 변수를 미리 알아야 한다.** 이분산이 어느 변수와 관련되는지 모르면 쓸 수 없다. 여러 변수를 시도하면 다중검정 문제가 생긴다.
+    2. **단조 이분산만 탐지한다.** 나비넥타이 모양(가운데가 좁고 양끝이 넓은)처럼 비단조 패턴은 놓친다. 오히려 가운데를 잘라내는 것이 역효과를 낸다.
+    3. **F 검정의 정규성 민감도를 물려받는다.** 4단계에서 두 잔차제곱합의 비를 F 분포와 비교하는데, 15.3절에서 보았듯 F 검정은 비정규성에 극도로 민감하다. 오차가 두꺼운 꼬리를 가지면 크기가 심하게 부풀려진다.
+    4. **관측값을 버린다.** $n/5$를 버리는 것은 정보의 낭비이다. Breusch-Pagan은 모든 관측값을 쓴다.
+    5. **다변량으로 확장되지 않는다.** 설명변수가 여러 개일 때 하나만 골라 정렬해야 한다.
+
+    **결론.** Goldfeld-Quandt 검정은 역사적 의의와 교육적 직관은 있지만, 오늘날 실무에서는 Breusch-Pagan(Koenker 판)이나 White 검정이 거의 모든 면에서 낫다. 이분산의 원인 변수가 명확하고 관계가 단조이며 오차가 정규에 가깝다고 확신하는 특수한 경우에만 고려할 만하다. $\square$

@@ -1,112 +1,112 @@
-# Chapter 15: Variance Tests
+# 15장: 분산 검정
 
 
-## Overview
+## 개요
 
-Variance tests evaluate whether observed differences in variability across groups or populations are statistically significant. These tests are fundamental tools in statistical inference, playing a critical role in validating assumptions for other methods such as ANOVA and regression analysis. This chapter covers a comprehensive suite of variance testing methods, ranging from classical parametric approaches (chi-square, F-test, Bartlett's) through robust alternatives (Levene's, Brown-Forsythe, Fligner-Killeen) to advanced computational and Bayesian techniques.
-
----
-
-## Chapter Structure
-
-### 15.1 Introduction to Variance Testing
-
-Motivation and overview of the variance testing landscape:
-
-- **Why Test Variances** -- Explains the practical importance of variance testing for checking homoscedasticity in ANOVA, validating regression assumptions, and comparing volatility across financial instruments.
-- **Overview of Variance Tests** -- Surveys the major variance tests (chi-square, F-test, Bartlett's, Levene's, Brown-Forsythe, Fligner-Killeen), including their test statistics, distributional assumptions, and appropriate use cases.
-- **Assumptions Common to Variance Tests** -- Discusses the shared requirements of independence, random sampling, and (for parametric tests) normality, and the consequences of violating these assumptions.
-
-### 15.2 Chi-Square Test for Variance
-
-A one-sample test for whether a population variance equals a specified value:
-
-- **One-Sample Chi-Square Variance Test** -- Tests $H_0: \sigma^2 = \sigma_0^2$ using the statistic $\chi^2 = (n-1)s^2 / \sigma_0^2$, with one-tailed and two-tailed formulations and worked examples.
-- **Derivation and Distribution Theory** -- Shows how the test statistic arises from the distribution of the sample variance under normality, connecting to the chi-square distribution with $n-1$ degrees of freedom.
-- **Confidence Interval for $\sigma^2$** -- Inverts the chi-square test to construct confidence intervals for the population variance and standard deviation.
-
-### 15.3 F-Test for Comparing Two Variances
-
-A two-sample test based on the ratio of sample variances:
-
-- **Two-Sample F-Test** -- Tests $H_0: \sigma_1^2 = \sigma_2^2$ using the statistic $F = s_1^2 / s_2^2$, which follows an $F$-distribution under the null hypothesis when both populations are normal.
-- **F-Distribution and Degrees of Freedom** -- Details the properties of the $F$-distribution and how the numerator and denominator degrees of freedom are determined.
-- **Sensitivity to Non-Normality** -- Warns that the F-test is highly sensitive to departures from normality, often producing inflated Type I error rates with non-normal data.
-
-### 15.4 Bartlett's Test
-
-A multi-group parametric test for homogeneity of variances:
-
-- **Bartlett's Test for Equality of Variances** -- Tests $H_0: \sigma_1^2 = \sigma_2^2 = \cdots = \sigma_k^2$ using a pooled-variance-based statistic that follows a $\chi^2_{k-1}$ distribution under normality.
-- **Derivation and Chi-Square Approximation** -- Derives the Bartlett test statistic from the ratio of pooled to individual variances with the correction factor for small samples.
-- **Limitations Under Non-Normality** -- Emphasizes that Bartlett's test is highly sensitive to non-normality, making it unreliable when the normality assumption is questionable.
-
-### 15.5 Robust Tests
-
-Distribution-free and outlier-resistant alternatives for comparing variances:
-
-- **Levene's Test** -- Tests equality of variances by performing a one-way ANOVA on the absolute deviations of observations from their group means; robust to moderate departures from normality.
-- **Brown-Forsythe Test** -- A variant of Levene's test that uses deviations from group medians instead of means, providing additional robustness to skewed distributions and outliers.
-- **Fligner-Killeen Test** -- A non-parametric rank-based test that uses ranks of absolute deviations from group medians, offering the strongest robustness among the three methods.
-- **Comparison of Robust Methods** -- Side-by-side evaluation of Levene's, Brown-Forsythe, and Fligner-Killeen in terms of Type I error control, power, and robustness across different distribution shapes.
-
-### 15.6 Advanced Methods
-
-Computational and Bayesian approaches for variance comparison:
-
-- **Bootstrap Variance Testing** -- Uses resampling to construct a null distribution for variance ratios or differences, providing valid inference without distributional assumptions.
-- **Bayesian Variance Testing** -- Employs prior distributions on variance parameters (typically inverse-gamma) to compute posterior probabilities and Bayes factors for variance hypotheses.
-- **Likelihood Ratio Test for Variances** -- Compares the maximized likelihoods under the null and alternative hypotheses, providing an asymptotically chi-squared test statistic.
-
-### 15.7 Applications
-
-Practical use cases where variance testing is essential:
-
-- **Pre-Test for ANOVA Homoscedasticity** -- Uses Levene's or Bartlett's test to verify the equal-variance assumption before conducting ANOVA, with Welch's ANOVA as a fallback when variances differ.
-- **Variance Testing in Regression** -- Applies variance tests (e.g., Breusch-Pagan) to regression residuals to detect heteroscedasticity, with remedies including weighted least squares and robust standard errors.
-- **Financial Volatility Comparisons** -- Compares the volatility of different assets, portfolios, or time periods to assess risk differences and inform portfolio construction decisions.
-
-### 15.8 Code
-
-Complete Python implementations:
-
-- **Chi-Squared Test for Variance** -- One-sample variance test with critical values and $p$-value computation.
-- **F-Test of Equality of Variances** -- Two-sample F-test implementation with visualization of the rejection region.
-- **Bartlett's Test** -- Multi-group homogeneity test using scipy and manual computation.
-- **Levene's Test** -- Robust variance equality test with mean-based deviations.
-- **Chi-Square Distribution** -- Visualization of the chi-square distribution for different degrees of freedom.
-- **Robust Variance Tests Comparison** -- Side-by-side comparison of Levene, Brown-Forsythe, and Fligner-Killeen on the same data.
-- **F-Test Tail Region Visualization** -- Plots the F-distribution with shaded rejection regions.
-- **F-Test Normality Sensitivity and Robust Alternatives** -- Simulation showing how the F-test's Type I error inflates under non-normality, with robust alternatives performing correctly.
-- **F-Test Power Simulation** -- Monte Carlo study of F-test power as a function of variance ratio and sample size.
-- **Bartlett Test Non-Normality Sensitivity** -- Simulation demonstrating Bartlett's poor performance with skewed or heavy-tailed data.
-- **Levene Test Normal vs Skewed Simulation** -- Compares Levene's test performance across normal and non-normal distributions.
-- **Brown-Forsythe Test (scipy)** -- Implementation using scipy's median-based Levene variant.
-- **Fligner-Killeen Test (scipy)** -- Non-parametric rank-based variance test.
-- **Bootstrap Variance Test** -- Resampling-based approach for comparing variances without distributional assumptions.
-- **Bayesian Variance Test** -- Posterior inference on variance parameters using conjugate priors.
-
-### 15.9 Exercises
-
-Practice problems covering F-test computation and interpretation, Levene's test application, comparison of classical and robust test results, chi-square confidence intervals for variance, and practical decision-making when test results conflict.
+분산 검정은 집단이나 모집단 사이에서 관찰된 변동성의 차이가 통계적으로 유의한지 평가한다. 이 검정들은 통계적 추론의 기본 도구이며, 분산분석이나 회귀분석 같은 다른 방법의 가정을 검증하는 데 결정적인 역할을 한다. 이 장은 고전적 모수적 접근(카이제곱, F 검정, Bartlett 검정)에서 로버스트 대안(Levene, Brown-Forsythe, Fligner-Killeen)을 거쳐 현대적 계산 방법과 Bayes 기법에 이르는 분산 검정 방법을 폭넓게 다룬다.
 
 ---
 
-## Prerequisites
+## 장의 구성
 
-This chapter builds on:
+### 15.1 분산 검정 입문
 
-- **Chapter 5** (Sampling Distributions) -- The chi-square, $F$, and normal distributions and their roles in inference about variances.
-- **Chapter 8** (Confidence Intervals) -- Confidence interval construction, particularly intervals for $\sigma^2$ using the chi-square distribution.
-- **Chapter 9** (Hypothesis Testing) -- The general framework of null and alternative hypotheses, test statistics, $p$-values, and decision rules.
-- **Chapter 14** (Normality Tests) -- Methods for checking whether the normality assumption required by classical variance tests is satisfied.
+동기와 분산 검정 지형의 개관.
+
+- **왜 분산을 검정하는가** — 분산분석에서 등분산성을 확인하고, 회귀 가정을 검증하며, 금융 상품 간 변동성을 비교하는 데 분산 검정이 갖는 실무적 중요성을 설명한다.
+- **분산 검정 개관** — 주요 분산 검정(카이제곱, F 검정, Bartlett, Levene, Brown-Forsythe, Fligner-Killeen)의 검정통계량, 분포 가정, 적절한 사용 상황을 훑는다.
+- **분산 검정의 공통 가정** — 독립성, 확률표집, (모수적 검정의 경우) 정규성이라는 공통 요구조건과 이를 위반했을 때의 결과를 논한다.
+
+### 15.2 분산에 대한 카이제곱 검정
+
+모집단 분산이 지정된 값과 같은지 검정하는 일표본 검정.
+
+- **일표본 카이제곱 분산 검정** — 통계량 $\chi^2 = (n-1)s^2 / \sigma_0^2$으로 $H_0: \sigma^2 = \sigma_0^2$을 검정한다. 단측과 양측 형태 및 예제를 다룬다.
+- **유도와 분포이론** — 정규성 아래 표본분산의 분포에서 검정통계량이 어떻게 나오는지 보이고, 자유도 $n-1$인 카이제곱분포와 연결한다.
+- **$\sigma^2$의 신뢰구간** — 카이제곱 검정을 뒤집어 모분산과 모표준편차의 신뢰구간을 구성한다.
+
+### 15.3 두 분산 비교를 위한 F 검정
+
+표본분산의 비에 기반한 이표본 검정.
+
+- **이표본 F 검정** — 통계량 $F = s_1^2 / s_2^2$으로 $H_0: \sigma_1^2 = \sigma_2^2$을 검정한다. 두 모집단이 정규이면 귀무가설 아래에서 $F$ 분포를 따른다.
+- **F 분포와 자유도** — $F$ 분포의 성질과 분자·분모 자유도가 어떻게 정해지는지 자세히 다룬다.
+- **비정규성에 대한 민감도** — F 검정이 정규성 이탈에 매우 민감하며 비정규 자료에서 제1종 오류율을 크게 부풀리는 경우가 많음을 경고한다.
+
+### 15.4 Bartlett 검정
+
+분산의 동질성에 대한 다집단 모수적 검정.
+
+- **분산의 동일성에 대한 Bartlett 검정** — 정규성 아래에서 $\chi^2_{k-1}$ 분포를 따르는 합동분산 기반 통계량으로 $H_0: \sigma_1^2 = \sigma_2^2 = \cdots = \sigma_k^2$을 검정한다.
+- **유도와 카이제곱 근사** — 합동분산과 개별분산의 비에서 Bartlett 통계량을 유도하고 작은 표본을 위한 보정인자를 다룬다.
+- **비정규성 아래의 한계** — Bartlett 검정이 비정규성에 매우 민감하여 정규성 가정이 의심스러울 때 신뢰할 수 없음을 강조한다.
+
+### 15.5 로버스트 검정
+
+분산 비교를 위한 분포무관·이상점 저항 대안들.
+
+- **Levene 검정** — 각 관측값과 집단평균의 절대편차에 일원분산분석을 수행하여 분산의 동일성을 검정한다. 중간 정도의 정규성 이탈에 로버스트하다.
+- **Brown-Forsythe 검정** — 집단평균 대신 집단중앙값으로부터의 편차를 쓰는 Levene 검정의 변형으로, 치우친 분포와 이상점에 추가적인 로버스트성을 제공한다.
+- **Fligner-Killeen 검정** — 집단중앙값으로부터의 절대편차의 순위를 쓰는 비모수 검정으로, 세 방법 중 가장 강한 로버스트성을 제공한다.
+- **로버스트 방법의 비교** — 여러 분포 모양에 걸쳐 Levene, Brown-Forsythe, Fligner-Killeen을 제1종 오류 조절, 검정력, 로버스트성 측면에서 나란히 평가한다.
+
+### 15.6 고급 방법
+
+분산 비교를 위한 계산적·Bayes 접근.
+
+- **붓스트랩 분산 검정** — 재표집으로 분산비나 분산차의 귀무분포를 구성하여 분포 가정 없이 타당한 추론을 제공한다.
+- **Bayes 분산 검정** — 분산 모수에 사전분포(보통 역감마)를 두어 분산 가설에 대한 사후확률과 Bayes 인자를 계산한다.
+- **분산에 대한 가능도비 검정** — 귀무가설과 대립가설 아래의 최대가능도를 비교하여 점근적으로 카이제곱을 따르는 검정통계량을 제공한다.
+
+### 15.7 응용
+
+분산 검정이 필수적인 실무 사례.
+
+- **분산분석 등분산성 사전검정** — 분산분석을 수행하기 전에 Levene 검정이나 Bartlett 검정으로 등분산 가정을 확인하고, 분산이 다르면 Welch 분산분석을 대안으로 쓴다.
+- **회귀에서의 분산 검정** — 회귀 잔차에 분산 검정(예: Breusch-Pagan)을 적용하여 이분산을 탐지하고, 가중최소제곱과 로버스트 표준오차 같은 처방을 다룬다.
+- **금융 변동성 비교** — 서로 다른 자산, 포트폴리오, 기간의 변동성을 비교하여 위험 차이를 평가하고 포트폴리오 구성 결정에 활용한다.
+
+### 15.8 코드
+
+완전한 Python 구현.
+
+- **분산에 대한 카이제곱 검정** — 임계값과 $p$값 계산을 포함한 일표본 분산 검정.
+- **분산 동일성에 대한 F 검정** — 기각역 시각화를 포함한 이표본 F 검정 구현.
+- **Bartlett 검정** — scipy와 직접 계산으로 수행하는 다집단 동질성 검정.
+- **Levene 검정** — 평균 기반 편차를 쓰는 로버스트 분산 동일성 검정.
+- **카이제곱분포** — 여러 자유도에 대한 카이제곱분포 시각화.
+- **로버스트 분산 검정 비교** — 같은 자료에 대한 Levene, Brown-Forsythe, Fligner-Killeen의 나란한 비교.
+- **F 검정 꼬리 영역 시각화** — 기각역을 음영으로 표시한 F 분포 그림.
+- **F 검정의 정규성 민감도와 로버스트 대안** — 비정규성 아래에서 F 검정의 제1종 오류가 부풀려지고 로버스트 대안은 올바르게 작동함을 보이는 모의실험.
+- **F 검정 검정력 모의실험** — 분산비와 표본크기의 함수로서 F 검정 검정력에 대한 몬테카를로 연구.
+- **Bartlett 검정 비정규성 민감도** — 치우쳤거나 꼬리가 두꺼운 자료에서 Bartlett 검정의 나쁜 성능을 보이는 모의실험.
+- **Levene 검정 정규 대 치우친 분포 모의실험** — 정규분포와 비정규분포에 걸친 Levene 검정의 성능 비교.
+- **Brown-Forsythe 검정 (scipy)** — scipy의 중앙값 기반 Levene 변형을 이용한 구현.
+- **Fligner-Killeen 검정 (scipy)** — 순위 기반 비모수 분산 검정.
+- **붓스트랩 분산 검정** — 분포 가정 없이 분산을 비교하는 재표집 기반 접근.
+- **Bayes 분산 검정** — 켤레 사전분포를 이용한 분산 모수의 사후추론.
+
+### 15.9 연습문제
+
+F 검정의 계산과 해석, Levene 검정의 적용, 고전적 검정과 로버스트 검정 결과의 비교, 분산에 대한 카이제곱 신뢰구간, 검정 결과가 상충할 때의 실무적 의사결정을 다루는 연습문제.
 
 ---
 
-## Key Takeaways
+## 선행 지식
 
-1. Classical variance tests (chi-square, F-test, Bartlett's) are powerful under normality but highly sensitive to non-normal data, often producing misleading results when the normality assumption is violated.
-2. Robust alternatives (Levene's, Brown-Forsythe, Fligner-Killeen) maintain proper Type I error rates across a wider range of distributions and should be preferred when normality is uncertain.
-3. The Brown-Forsythe test (median-based Levene) offers the best balance of robustness and power for most practical applications, while Fligner-Killeen provides the strongest non-parametric guarantees.
-4. Bootstrap and Bayesian methods provide modern alternatives that avoid distributional assumptions entirely or incorporate prior information, respectively.
-5. Variance testing is not just an end in itself -- it serves as a prerequisite check for ANOVA (homoscedasticity), regression (constant error variance), and financial analysis (volatility comparison), making it an essential step in many analysis workflows.
+이 장은 다음 내용 위에 세워진다.
+
+- **5장** (표집분포) — 카이제곱, $F$, 정규분포와 분산에 관한 추론에서의 역할.
+- **8장** (신뢰구간) — 신뢰구간 구성, 특히 카이제곱분포를 이용한 $\sigma^2$의 구간.
+- **9장** (가설검정) — 귀무가설과 대립가설, 검정통계량, $p$값, 판정규칙이라는 일반적 틀.
+- **14장** (정규성 검정) — 고전적 분산 검정이 요구하는 정규성 가정이 충족되는지 확인하는 방법.
+
+---
+
+## 핵심 요약
+
+1. 고전적 분산 검정(카이제곱, F 검정, Bartlett)은 정규성 아래에서 강력하지만 비정규 자료에 매우 민감하여, 정규성 가정이 위배되면 오도하는 결과를 내기 쉽다.
+2. 로버스트 대안(Levene, Brown-Forsythe, Fligner-Killeen)은 더 넓은 범위의 분포에서 제1종 오류율을 올바르게 유지하므로 정규성이 불확실할 때 선호해야 한다.
+3. Brown-Forsythe 검정(중앙값 기반 Levene)은 대부분의 실무 응용에서 로버스트성과 검정력의 균형이 가장 좋고, Fligner-Killeen은 가장 강한 비모수적 보장을 제공한다.
+4. 붓스트랩과 Bayes 방법은 각각 분포 가정을 완전히 피하거나 사전정보를 반영하는 현대적 대안을 제공한다.
+5. 분산 검정은 그 자체가 목적이라기보다 분산분석(등분산성), 회귀(오차분산의 일정성), 금융 분석(변동성 비교)의 선행 확인 절차로서 여러 분석 흐름에서 필수적인 단계이다.

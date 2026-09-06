@@ -1,115 +1,115 @@
-# Confidence Interval for the Population Variance
+# 모분산의 신뢰구간
 
-A hypothesis test tells us whether to reject a specific value of $\sigma^2$, but a confidence interval provides a range of plausible values. The confidence interval for the population variance follows directly from the pivotal quantity derived in the previous section: $(n-1)S^2/\sigma^2 \sim \chi^2_{n-1}$ under normality. Because the chi-square distribution is right-skewed, the resulting interval is asymmetric around $S^2$.
+가설검정은 $\sigma^2$의 특정 값을 기각할지 알려주지만, 신뢰구간은 그럴듯한 값들의 범위를 제공한다. 모분산의 신뢰구간은 앞 절에서 유도한 추축량 $(n-1)S^2/\sigma^2 \sim \chi^2_{n-1}$에서 곧바로 나온다. 카이제곱분포가 오른쪽으로 치우쳐 있으므로 그 결과인 구간은 $S^2$을 중심으로 비대칭이다.
 
-## Derivation from the Pivotal Quantity
+## 추축량으로부터의 유도
 
-Starting from the distributional result
+분포이론적 결과
 
 $$
 \frac{(n-1)S^2}{\sigma^2} \sim \chi^2_{n-1}
 $$
 
-we can write a probability statement for any $0 < \alpha < 1$:
+에서 출발하면 임의의 $0 < \alpha < 1$에 대해 다음 확률 진술을 쓸 수 있다.
 
 $$
 P\!\left(\chi^2_{\alpha/2,\, n-1} \le \frac{(n-1)S^2}{\sigma^2} \le \chi^2_{1-\alpha/2,\, n-1}\right) = 1 - \alpha
 $$
 
-where $\chi^2_{\alpha/2,\, n-1}$ denotes the lower $\alpha/2$ quantile and $\chi^2_{1-\alpha/2,\, n-1}$ denotes the upper $\alpha/2$ quantile of the chi-square distribution with $n - 1$ degrees of freedom.
+여기서 $\chi^2_{\alpha/2,\, n-1}$은 자유도 $n-1$인 카이제곱분포의 하단 $\alpha/2$ 분위수, $\chi^2_{1-\alpha/2,\, n-1}$은 상단 분위수를 나타낸다.
 
-Inverting the inequality by dividing all three parts into $(n-1)S^2$ and flipping the direction gives
+세 부분으로 $(n-1)S^2$을 나누고 부등호 방향을 뒤집어 부등식을 뒤집으면
 
 $$
 P\!\left(\frac{(n-1)S^2}{\chi^2_{1-\alpha/2,\, n-1}} \le \sigma^2 \le \frac{(n-1)S^2}{\chi^2_{\alpha/2,\, n-1}}\right) = 1 - \alpha
 $$
 
-## Confidence Interval Formula
+## 신뢰구간 공식
 
-The $100(1-\alpha)\%$ confidence interval for the population variance $\sigma^2$ is
+모분산 $\sigma^2$의 $100(1-\alpha)\%$ 신뢰구간은
 
 $$
 \left(\frac{(n-1)S^2}{\chi^2_{1-\alpha/2,\, n-1}},\; \frac{(n-1)S^2}{\chi^2_{\alpha/2,\, n-1}}\right)
 $$
 
-The corresponding confidence interval for the population standard deviation $\sigma$ is obtained by taking square roots:
+모표준편차 $\sigma$의 신뢰구간은 양 끝에 제곱근을 취하여 얻는다.
 
 $$
 \left(\sqrt{\frac{(n-1)S^2}{\chi^2_{1-\alpha/2,\, n-1}}},\; \sqrt{\frac{(n-1)S^2}{\chi^2_{\alpha/2,\, n-1}}}\right)
 $$
 
-!!! note "Asymmetry of the Interval"
-    Unlike confidence intervals for the mean (which are symmetric around $\bar{X}$), confidence intervals for the variance are asymmetric around $S^2$. The upper bound extends further from $S^2$ than the lower bound does. This asymmetry reflects the right-skewed shape of the chi-square distribution.
+!!! note "구간의 비대칭성"
+    $\bar{X}$를 중심으로 대칭인 평균의 신뢰구간과 달리 분산의 신뢰구간은 $S^2$을 중심으로 비대칭이다. 상한이 하한보다 $S^2$에서 더 멀리 뻗는다. 이 비대칭성은 카이제곱분포가 오른쪽으로 치우친 모양임을 반영한다.
 
-## One-Sided Confidence Bounds
+## 단측 신뢰한계
 
-In some applications, only an upper or lower bound on $\sigma^2$ is needed.
+응용에 따라서는 $\sigma^2$의 상한이나 하한만 필요할 수 있다.
 
-**Upper confidence bound** (at level $1 - \alpha$):
+**상단 신뢰한계** (수준 $1 - \alpha$):
 
 $$
 \sigma^2 \le \frac{(n-1)S^2}{\chi^2_{\alpha,\, n-1}}
 $$
 
-**Lower confidence bound** (at level $1 - \alpha$):
+**하단 신뢰한계** (수준 $1 - \alpha$):
 
 $$
 \sigma^2 \ge \frac{(n-1)S^2}{\chi^2_{1-\alpha,\, n-1}}
 $$
 
-The upper bound is useful when the concern is that the variance is too large (e.g., quality control), while the lower bound applies when the concern is that the variance is too small (e.g., ensuring sufficient variability for a sampling plan).
+상한은 분산이 지나치게 클까 우려될 때(품질관리 등) 유용하고, 하한은 분산이 지나치게 작을까 우려될 때(표집계획에 충분한 변동성이 필요한 경우 등) 쓴다.
 
-## Example
+## 예제
 
-A random sample of $n = 25$ light bulbs from a production line has a sample variance of $S^2 = 120$ (hours$^2$). Construct a 95% confidence interval for the population variance $\sigma^2$, assuming the lifetimes are normally distributed.
+어떤 생산라인에서 전구 $n = 25$개를 확률표본으로 뽑았더니 표본분산이 $S^2 = 120$(시간$^2$)이었다. 수명이 정규분포를 따른다고 가정하고 모분산 $\sigma^2$의 95% 신뢰구간을 구성하라.
 
-**Step 1.** Identify the relevant quantities:
+**1단계.** 관련 값들을 확인한다.
 
-- $n = 25$, so $n - 1 = 24$
+- $n = 25$이므로 $n - 1 = 24$
 - $S^2 = 120$
 - $\alpha = 0.05$
 
-**Step 2.** Find the chi-square critical values for $\nu = 24$ degrees of freedom:
+**2단계.** 자유도 $\nu = 24$의 카이제곱 임계값을 찾는다.
 
 - $\chi^2_{0.025,\, 24} = 12.401$
 - $\chi^2_{0.975,\, 24} = 39.364$
 
-**Step 3.** Compute the confidence interval:
+**3단계.** 신뢰구간을 계산한다.
 
 $$
-\left(\frac{24 \times 120}{39.364},\; \frac{24 \times 120}{12.401}\right) = (73.22,\; 232.24)
+\left(\frac{24 \times 120}{39.364},\; \frac{24 \times 120}{12.401}\right) = (73.16,\; 232.24)
 $$
 
-We are 95% confident that the population variance lies between 73.22 and 232.24 hours$^2$.
+모분산이 73.16과 232.24 시간$^2$ 사이에 있다고 95% 신뢰수준에서 말할 수 있다.
 
-**Step 4.** For the standard deviation:
-
-$$
-\left(\sqrt{73.22},\; \sqrt{232.24}\right) = (8.56,\; 15.24)
-$$
-
-The 95% confidence interval for $\sigma$ is approximately $(8.56, 15.24)$ hours.
-
-## Width of the Confidence Interval
-
-The width of the confidence interval for $\sigma^2$ depends on two factors:
-
-1. **Sample size.** Larger $n$ means more degrees of freedom, which narrows the gap between the chi-square quantiles and produces a tighter interval.
-2. **Confidence level.** Higher confidence (smaller $\alpha$) widens the interval because the quantiles move further into the tails.
-
-For small samples, the interval can be very wide, reflecting substantial uncertainty about $\sigma^2$. The ratio of the upper to lower endpoint provides a useful measure:
+**4단계.** 표준편차에 대해서는
 
 $$
-\text{Width ratio} = \frac{\chi^2_{1-\alpha/2,\, n-1}}{\chi^2_{\alpha/2,\, n-1}}
+\left(\sqrt{73.16},\; \sqrt{232.24}\right) = (8.55,\; 15.24)
 $$
 
-As $n \to \infty$, this ratio approaches 1, and the interval shrinks toward the point estimate $S^2$.
+$\sigma$의 95% 신뢰구간은 근사적으로 $(8.55, 15.24)$ 시간이다.
 
-## Duality with Hypothesis Testing
+## 신뢰구간의 폭
 
-The confidence interval and the chi-square test for $\sigma^2$ are dual procedures. A value $\sigma_0^2$ lies outside the $100(1-\alpha)\%$ confidence interval if and only if the chi-square test rejects $H_0\colon \sigma^2 = \sigma_0^2$ at significance level $\alpha$.
+$\sigma^2$ 신뢰구간의 폭은 두 요인에 의존한다.
 
-## Python Implementation
+1. **표본크기.** $n$이 클수록 자유도가 커져 카이제곱 분위수 사이의 간격이 좁아지고 구간이 촘촘해진다.
+2. **신뢰수준.** 신뢰수준이 높을수록($\alpha$가 작을수록) 분위수가 꼬리 쪽으로 더 나아가므로 구간이 넓어진다.
+
+작은 표본에서는 구간이 매우 넓어져 $\sigma^2$에 대한 상당한 불확실성을 드러낸다. 상한과 하한의 비가 유용한 척도이다.
+
+$$
+\text{폭 비율} = \frac{\chi^2_{1-\alpha/2,\, n-1}}{\chi^2_{\alpha/2,\, n-1}}
+$$
+
+$n \to \infty$이면 이 비가 1로 가고 구간이 점추정값 $S^2$으로 수축한다.
+
+## 가설검정과의 쌍대성
+
+$\sigma^2$의 신뢰구간과 카이제곱 검정은 쌍대 절차이다. 값 $\sigma_0^2$이 $100(1-\alpha)\%$ 신뢰구간 밖에 있을 필요충분조건은 카이제곱 검정이 유의수준 $\alpha$에서 $H_0\colon \sigma^2 = \sigma_0^2$을 기각하는 것이다.
+
+## Python 구현
 
 ```python
 import numpy as np
@@ -137,35 +137,203 @@ print(f"95% CI for variance: ({ci_lower:.2f}, {ci_upper:.2f})")
 print(f"95% CI for std dev:  ({ci_sd_lower:.2f}, {ci_sd_upper:.2f})")
 ```
 
+출력:
 
-## Exercises
+```text
+95% CI for variance: (73.16, 232.24)
+95% CI for std dev:  (8.55, 15.24)
+```
 
-**Exercise 1.**
-Describe the main concept of Confidence Interval for the Population Variance and explain why it matters for statistical practice.
 
-??? success "Solution to Exercise 1"
-    Confidence Interval for the Population Variance is a core topic in statistics that provides tools for drawing reliable inferences from data. It matters because proper application ensures valid conclusions, correctly quantified uncertainty, and appropriate handling of the assumptions that underpin the method. Practitioners who understand this concept can avoid common pitfalls and choose the right analytical approach for their data.
+## 연습문제
+
+**연습문제 1.**
+$n \in \{10, 25, 50, 100, 500, 1000\}$에 대해 95% 신뢰구간의 폭 비율을 계산하라. 분산을 상대오차 10% 이내로 추정하려면 표본이 얼마나 커야 하는가?
+
+??? success "연습문제 1 풀이"
+
+    ```python
+    from scipy import stats
+
+    print(f"{'n':>6} {'var ratio':>10} {'sd ratio':>10}")
+    for n in [10, 25, 50, 100, 500, 1000]:
+        df = n - 1
+        r = stats.chi2.ppf(0.975, df) / stats.chi2.ppf(0.025, df)
+        print(f"{n:>6} {r:>10.3f} {r**0.5:>10.3f}")
+    ```
+
+    출력:
+
+    ```text
+         n  var ratio   sd ratio
+        10      7.044      2.654
+        25      3.174      1.782
+        50      2.225      1.492
+       100      1.751      1.323
+       500      1.282      1.132
+      1000      1.192      1.092
+    ```
+
+    수치가 인상적이다. $n = 10$에서 상한이 하한의 **7배**이다. 분산에 대해 사실상 아무것도 모른다는 뜻이다. $n = 100$에서도 1.75배이다.
+
+    비교하자면 평균의 신뢰구간 폭은 $2 \times 1.96 \times \sigma/\sqrt{n}$으로 $n = 100$이면 $\pm 0.196\sigma$에 불과하다. **분산은 평균보다 추정하기가 훨씬 어렵다.**
+
+    **10% 상대오차를 얻으려면.** 표준편차 비율이 대략 $1.1$이 되기를 원한다면 표에서 $n \approx 800$ 정도가 필요하다. 근사적으로 $\operatorname{Var}(S) \approx \sigma^2/(2n)$이므로 $S$의 변동계수는 $1/\sqrt{2n}$이고, 95% 구간의 반폭이 $1.96/\sqrt{2n} < 0.05$이려면
+
+    $$
+    n > \frac{1.96^2}{2 \times 0.05^2} = 768.
+    $$
+
+    분산 자체를 10% 이내로 추정하려면 그 네 배인 $n \approx 3000$이 필요하다. 분산의 상대오차가 표준편차 상대오차의 두 배이기 때문이다. $\square$
 
 ---
 
-**Exercise 2.**
-State the key assumptions required by the method discussed here. How can each assumption be checked?
+**연습문제 2.**
+카이제곱 신뢰구간의 실제 포함확률이 비정규 자료에서 어떻게 되는지 모의실험으로 조사하라. $n = 25$, 명목 95%로 정규, $t_5$, 균등, 지수분포를 비교하라.
 
-??? success "Solution to Exercise 2"
-    The main assumptions typically include: (1) independence of observations -- verified by understanding the data collection process and checking for serial correlation; (2) distributional requirements (e.g., normality) -- checked with Q-Q plots and formal tests like Shapiro-Wilk; (3) equal variances (if applicable) -- assessed with boxplots and Levene's test. When assumptions are violated, consider robust alternatives, transformations, or nonparametric methods.
+??? success "연습문제 2 풀이"
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    rng = np.random.default_rng(0)
+    n, df, R = 25, 24, 20000
+    lo_q = stats.chi2.ppf(0.025, df)
+    hi_q = stats.chi2.ppf(0.975, df)
+
+    cases = [
+        ("Normal",      lambda: rng.normal(0, 1, n),      1.0),
+        ("t(5)",        lambda: rng.standard_t(5, n),     5 / 3),
+        ("Uniform",     lambda: rng.uniform(0, 1, n),     1 / 12),
+        ("Exponential", lambda: rng.exponential(1, n),    1.0),
+    ]
+
+    for name, gen, true_var in cases:
+        hits = 0
+        for _ in range(R):
+            s2 = gen().var(ddof=1)
+            lo, hi = df * s2 / hi_q, df * s2 / lo_q
+            hits += (lo <= true_var <= hi)
+        print(f"{name:>12}: coverage = {hits / R:.4f}")
+    ```
+
+    출력:
+
+    ```text
+          Normal: coverage = 0.9504
+            t(5): coverage = 0.8292
+         Uniform: coverage = 0.9961
+     Exponential: coverage = 0.7218
+    ```
+
+    | 분포 | $\gamma_2$ | 실제 포함확률 |
+    |---|---|---|
+    | $\text{Uniform}$ | $-1.2$ | 0.996 |
+    | $\mathcal{N}(0,1)$ | 0 | **0.950** |
+    | $t_5$ | 6 | 0.829 |
+    | $\text{Exponential}$ | 6 | 0.722 |
+
+    정규 자료에서만 명목값 95%가 달성된다.
+
+    **지수분포에서는 포함확률이 72%에 불과하다.** 곧 "95% 신뢰구간"이라고 부르는 구간이 실제로는 네 번에 한 번 이상 참값을 놓친다. $t_5$에서도 83%로 크게 부족하다.
+
+    반대로 저첨인 균등분포에서는 99.6%로 지나치게 보수적이다. 15.1절 연습문제 1의 팽창 인자 $(\gamma_2+2)/2$가 1보다 작기 때문이다.
+
+    **실무적 결론.** 카이제곱 분산 신뢰구간은 정규성이 확립된 경우에만 써야 한다. 그렇지 않으면 붓스트랩 구간(15.6절)을 쓰라. 특히 금융 수익률이나 대기시간처럼 꼬리가 두꺼운 자료에서 이 구간을 쓰는 것은 심각한 오류이다. $\square$
 
 ---
 
-**Exercise 3.**
-Work through a small numerical example illustrating the application of the technique from this section.
+**연습문제 3.**
+어떤 제조업체가 부품 치수의 표준편차가 0.5 mm를 넘지 않아야 한다는 규격을 만족함을 보이려 한다. $n = 30$개 표본에서 $s = 0.42$ mm를 얻었다. 95% 상단 신뢰한계를 계산하고 규격 준수를 주장할 수 있는지 판단하라.
 
-??? success "Solution to Exercise 3"
-    A structured approach to applying this technique involves: (1) clearly stating the hypotheses or estimation goal; (2) verifying that the data meet the required assumptions; (3) computing the relevant test statistic, estimate, or model fit; (4) obtaining the p-value, confidence interval, or posterior distribution; (5) interpreting the result in the context of the original question. Following these steps systematically ensures a rigorous and reproducible analysis.
+??? success "연습문제 3 풀이"
+
+    95% 상단 신뢰한계는
+
+    $$
+    \sigma^2 \le \frac{(n-1)s^2}{\chi^2_{0.05,\, n-1}} = \frac{29 \times 0.42^2}{\chi^2_{0.05,\,29}}.
+    $$
+
+    $\chi^2_{0.05,29} = 17.708$(하단 5% 분위수)이므로
+
+    $$
+    \sigma^2 \le \frac{29 \times 0.1764}{17.708} = \frac{5.1156}{17.708} = 0.2889,
+    $$
+
+    $$
+    \sigma \le \sqrt{0.2889} = 0.5375 \text{ mm}.
+    $$
+
+    ```python
+    from scipy import stats
+    import numpy as np
+
+    n, s = 30, 0.42
+    ub_var = (n - 1) * s**2 / stats.chi2.ppf(0.05, n - 1)
+    print(f"95% upper bound: sigma^2 <= {ub_var:.4f}, sigma <= {np.sqrt(ub_var):.4f}")
+    ```
+
+    출력:
+
+    ```text
+    95% upper bound: sigma^2 <= 0.2889, sigma <= 0.5375
+    ```
+
+    **결론: 규격 준수를 주장할 수 없다.** 점추정값 $s = 0.42$가 규격 0.5보다 작지만, 95% 상단 신뢰한계 $0.5375$가 규격을 넘는다. 참 표준편차가 0.5 mm를 초과할 가능성을 배제할 수 없다.
+
+    필요한 표본크기를 역산해 보자. $s = 0.42$가 유지된다고 가정하면 상단 한계가 0.5 아래가 되려면
+
+    $$
+    \frac{(n-1)(0.42)^2}{\chi^2_{0.05,\,n-1}} < 0.25 \implies \frac{n-1}{\chi^2_{0.05,\,n-1}} < 1.4172.
+    $$
+
+    시행착오로 확인하면 $n = 52$에서 $51/35.600 = 1.4326$으로 아직 크고, $n = 55$에서 $54/38.116 = 1.4167 < 1.4172$가 되어 조건을 만족한다. 곧 **표본을 30개에서 55개로 늘려야** 같은 $s$ 값으로 규격 준수를 주장할 수 있다.
+
+    이는 실무에서 중요한 교훈이다. 점추정값이 규격을 만족한다고 규격 준수가 입증되는 것이 아니다. $\square$
 
 ---
 
-**Exercise 4.**
-Compare the approach from this section with an alternative method. When would you choose each?
+**연습문제 4.**
+신뢰구간과 가설검정의 쌍대성을 15.2절 예제로 확인하라. $n = 25$, $s^2 = 0.05$일 때 95% 신뢰구간을 구하고, 이 구간에 포함되지 않는 $\sigma_0^2$ 값에 대해서만 양측 카이제곱 검정이 $\alpha = 0.05$에서 기각함을 보여라.
 
-??? success "Solution to Exercise 4"
-    The method discussed here is appropriate when its assumptions hold and the sample size is sufficient for the asymptotic approximations to be accurate. Alternative approaches include: (1) nonparametric methods -- preferred when distributional assumptions are suspect; (2) bootstrap methods -- useful when analytical reference distributions are unavailable; (3) Bayesian methods -- valuable when incorporating prior information or when direct probability statements about parameters are desired. Running multiple approaches and comparing results provides a useful robustness check.
+??? success "연습문제 4 풀이"
+
+    15.2절에서 95% 신뢰구간은 $(0.0305, 0.0968)$이었다.
+
+    쌍대성을 확인하기 위해 여러 $\sigma_0^2$ 값에 대해 검정을 수행한다.
+
+    ```python
+    from scipy import stats
+
+    n, s2, df = 25, 0.05, 24
+    lo = df * s2 / stats.chi2.ppf(0.975, df)
+    hi = df * s2 / stats.chi2.ppf(0.025, df)
+    print(f"95% CI: ({lo:.5f}, {hi:.5f})\n")
+
+    for sigma0_sq in [0.025, 0.0305, 0.04, 0.07, 0.0968, 0.12]:
+        c = df * s2 / sigma0_sq
+        p = 2 * min(stats.chi2.cdf(c, df), stats.chi2.sf(c, df))
+        inside = lo <= sigma0_sq <= hi
+        print(f"sigma0^2 = {sigma0_sq:.4f}: chi2 = {c:7.3f}, "
+              f"p = {p:.4f}, in CI = {inside}")
+    ```
+
+    출력:
+
+    ```text
+    95% CI: (0.03048, 0.09677)
+
+    sigma0^2 = 0.0250: chi2 =  48.000, p = 0.0050, in CI = False
+    sigma0^2 = 0.0305: chi2 =  39.344, p = 0.0502, in CI = True
+    sigma0^2 = 0.0400: chi2 =  30.000, p = 0.3695, in CI = True
+    sigma0^2 = 0.0700: chi2 =  17.143, p = 0.3150, in CI = True
+    sigma0^2 = 0.0968: chi2 =  12.397, p = 0.0499, in CI = False
+    sigma0^2 = 0.1200: chi2 =  10.000, p = 0.0109, in CI = False
+    ```
+
+    쌍대성이 정확히 성립한다. 구간 안의 값은 모두 $p > 0.05$, 밖의 값은 모두 $p < 0.05$이다.
+
+    경계 근처의 두 값이 특히 교훈적이다. $\sigma_0^2 = 0.0305$는 하한 $0.03048$보다 아주 조금 크므로 구간 **안**이고 $p = 0.0502 > 0.05$이다. $\sigma_0^2 = 0.0968$은 상한 $0.09677$보다 아주 조금 크므로 구간 **밖**이고 $p = 0.0499 < 0.05$이다. 소수 다섯째 자리의 차이가 판정을 뒤집는다. 쌍대성이 근사가 아니라 정확한 대응관계임을 보여준다.
+
+    **개념적 의미.** 신뢰구간은 **기각되지 않는 모든 귀무가설의 집합**이다. 이 관점은 일반적으로 성립하며, 신뢰구간 하나가 무한히 많은 가설검정을 요약한다는 것을 뜻한다. 그래서 $p$값 하나보다 신뢰구간을 보고하는 편이 정보량이 많다. $\square$

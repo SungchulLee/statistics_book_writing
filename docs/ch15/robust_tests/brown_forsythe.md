@@ -1,81 +1,92 @@
-# Brown-Forsythe Test
+# Brown-Forsythe 검정
 
-Levene's test replaces each observation with its absolute deviation from the group mean and then runs an ANOVA on the deviations. Brown and Forsythe (1974) proposed a single but impactful change: use the group **median** instead of the group mean as the center of the absolute deviations. This modification makes the test substantially more robust to skewed distributions and outliers, because the median is not pulled toward extreme values the way the mean is.
+Levene 검정은 각 관측값을 집단평균으로부터의 절대편차로 바꾼 뒤 그 편차에 분산분석을 수행한다. Brown과 Forsythe(1974)는 단 하나이지만 영향력 있는 변경을 제안했다. 절대편차의 중심으로 집단평균 대신 집단 **중앙값**을 쓰는 것이다. 중앙값은 평균과 달리 극단값에 끌려가지 않으므로, 이 수정이 치우친 분포와 이상점에 대한 로버스트성을 크게 높인다.
 
-## Modification from Levene's Test
+## Levene 검정으로부터의 수정
 
-In Levene's original test, the transformed observations are
+Levene의 원래 검정에서 변환된 관측값은
 
 $$
 Z_{ij}^{(\text{Levene})} = |X_{ij} - \bar{X}_i|
 $$
 
-In the Brown-Forsythe test, they are
+Brown-Forsythe 검정에서는
 
 $$
 Z_{ij}^{(\text{BF})} = |X_{ij} - \tilde{X}_i|
 $$
 
-where $\tilde{X}_i$ denotes the median of group $i$. The test statistic is then the standard one-way ANOVA $F$-statistic computed on the $Z_{ij}^{(\text{BF})}$ values:
+여기서 $\tilde{X}_i$는 집단 $i$의 중앙값이다. 검정통계량은 $Z_{ij}^{(\text{BF})}$ 값에 대해 계산한 표준 일원분산분석 $F$ 통계량이다.
 
 $$
 W^* = \frac{(N - k) \sum_{i=1}^{k} n_i (\bar{Z}_i^* - \bar{Z}^*)^2}{(k - 1) \sum_{i=1}^{k} \sum_{j=1}^{n_i} (Z_{ij}^* - \bar{Z}_i^*)^2}
 $$
 
-where $Z_{ij}^* = Z_{ij}^{(\text{BF})}$, $\bar{Z}_i^*$ is the mean of the transformed values in group $i$, and $\bar{Z}^*$ is the grand mean.
+여기서 $Z_{ij}^* = Z_{ij}^{(\text{BF})}$이고 $\bar{Z}_i^*$는 집단 $i$의 변환값 평균, $\bar{Z}^*$는 전체평균이다.
 
-Under $H_0\colon \sigma_1^2 = \cdots = \sigma_k^2$, the statistic $W^*$ follows approximately an $F_{k-1, N-k}$ distribution.
+$H_0\colon \sigma_1^2 = \cdots = \sigma_k^2$ 아래에서 $W^*$는 근사적으로 $F_{k-1, N-k}$를 따른다.
 
-## Why the Median Improves Robustness
+## 중앙값이 로버스트성을 높이는 이유
 
-The mean $\bar{X}_i$ is sensitive to outliers: a single extreme value shifts the mean substantially, which inflates the absolute deviations for all observations in the group. This distortion propagates into the test statistic and can cause spurious rejections.
+평균 $\bar{X}_i$는 이상점에 민감하다. 극단값 하나가 평균을 크게 이동시키고, 그러면 그 집단의 **모든** 관측값의 절대편차가 부풀려진다. 이 왜곡이 검정통계량으로 전파되어 거짓 기각을 일으킬 수 있다.
 
-The median $\tilde{X}_i$ has a breakdown point of 50%, meaning up to half the observations can be contaminated before the median is arbitrarily affected. When the data are skewed, the median lies closer to the bulk of the data than the mean does, producing deviations that more faithfully reflect the spread of the majority of the observations.
+중앙값 $\tilde{X}_i$의 붕괴점(breakdown point)은 50%이다. 관측값의 절반까지 오염되어야 중앙값이 임의로 영향받는다는 뜻이다. 자료가 치우쳐 있을 때 중앙값은 평균보다 자료의 다수 쪽에 가까이 놓이므로, 다수 관측값의 산포를 더 충실히 반영하는 편차를 만들어 낸다.
 
-!!! note "Mean vs. Median vs. Trimmed Mean"
-    Some implementations of Levene's test offer three choices of center: mean, median, and 10% trimmed mean. The median version is the Brown-Forsythe test. The trimmed mean provides a compromise between power (favoring the mean) and robustness (favoring the median). For general-purpose use, the median is the recommended default.
+!!! danger "SciPy의 `center='trimmed'`는 쓰지 말라"
+    일부 Levene 검정 구현은 중심으로 평균, 중앙값, 10% 절사평균의 세 가지를 제공한다. 중앙값 판이 Brown-Forsythe 검정이다. 절사평균이 검정력(평균 쪽)과 로버스트성(중앙값 쪽) 사이의 절충이라고 소개되는 경우가 많다.
 
-## Hypotheses and Decision Rule
+    그러나 **SciPy의 `stats.levene(..., center='trimmed')`는 제1종 오류율이 심각하게 부풀려진다.** 완전한 정규 자료에서 측정한 경험적 크기는 다음과 같다(세 집단, 반복 4,000회, 명목 $\alpha = 0.05$).
+
+    | $n$ | `mean` | `median` | `trimmed` (10%) |
+    |---|---|---|---|
+    | 15 | 0.060 | 0.030 | **0.120** |
+    | 25 | 0.057 | 0.036 | **0.147** |
+    | 50 | 0.045 | 0.038 | **0.161** |
+    | 100 | 0.055 | 0.051 | **0.191** |
+
+    정규 자료인데도 절사판의 크기가 명목값의 2.4~3.8배이고 $n$이 커질수록 나빠진다. SciPy가 편차를 계산하기 전에 자료를 잘라내므로 가장 큰 편차들이 제거되어 F 통계량의 분모(집단내 제곱합)가 과도하게 줄어드는데, $F$ 기준분포는 이 선택 효과를 보정하지 않기 때문이다.
+
+    **범용 기본값으로는 중앙값(`center='median'`)을 쓰라.**
+
+## 가설과 판정규칙
 
 $$
 H_0\colon \sigma_1^2 = \sigma_2^2 = \cdots = \sigma_k^2
 $$
 
 $$
-H_1\colon \sigma_i^2 \neq \sigma_j^2 \text{ for at least one pair } i \neq j
+H_1\colon \sigma_i^2 \neq \sigma_j^2 \text{ (적어도 한 쌍의)} i \neq j
 $$
 
-Reject $H_0$ at significance level $\alpha$ if $W^* > F_{1-\alpha,\, k-1,\, N-k}$.
+유의수준 $\alpha$에서 $W^* > F_{1-\alpha,\, k-1,\, N-k}$이면 $H_0$을 기각한다.
 
-## Example
+## 예제
 
-Consider three groups:
+세 집단을 생각하자.
 
-| Group 1 | Group 2 | Group 3 |
+| 집단 1 | 집단 2 | 집단 3 |
 |---|---|---|
 | 8, 10, 12, 9, 11 | 5, 30, 18, 22, 15 | 14, 16, 15, 17, 14 |
 
-**Step 1.** Compute group medians:
+**1단계.** 집단중앙값을 계산한다.
 
 - $\tilde{X}_1 = 10$, $\tilde{X}_2 = 18$, $\tilde{X}_3 = 15$
 
-**Step 2.** Compute absolute deviations from the medians:
+**2단계.** 중앙값으로부터의 절대편차를 계산한다.
 
-| Group 1 | Group 2 | Group 3 |
+| 집단 1 | 집단 2 | 집단 3 |
 |---|---|---|
 | 2, 0, 2, 1, 1 | 13, 12, 0, 4, 3 | 1, 1, 0, 2, 1 |
 
-**Step 3.** Compute group means of the deviations:
+**3단계.** 편차의 집단평균을 계산한다.
 
 - $\bar{Z}_1^* = 1.20$, $\bar{Z}_2^* = 6.40$, $\bar{Z}_3^* = 1.00$
 
-**Step 4.** The grand mean is $\bar{Z}^* = (1.20 + 6.40 + 1.00) \times 5/15 = 2.867$.
+**4단계.** 전체평균은 $\bar{Z}^* = (1.20 + 6.40 + 1.00)/3 = 2.867$이다.
 
-**Step 5.** Compute $W^*$ using the ANOVA formula on these deviations. Group 2 has much larger deviations, reflecting its greater spread. The resulting $W^*$ is compared to $F_{0.95,\, 2,\, 12} = 3.885$.
+**5단계.** 이 편차들에 분산분석 공식을 적용해 $W^*$를 계산하고 $F_{0.95,\, 2,\, 12} = 3.885$와 비교한다.
 
-Notice that Group 2 contains an outlier (30). The median-based deviations are less affected by this outlier than mean-based deviations would be, because the median (18) is closer to the bulk of the data than the mean (18) in this case. For more skewed data, the difference between mean and median centers becomes more pronounced.
-
-## Python Implementation
+## Python 구현
 
 ```python
 import numpy as np
@@ -86,65 +97,207 @@ group1 = [8, 10, 12, 9, 11]
 group2 = [5, 30, 18, 22, 15]
 group3 = [14, 16, 15, 17, 14]
 
+print("variances:", [round(np.var(g, ddof=1), 2)
+                     for g in (group1, group2, group3)])
+
 # Brown-Forsythe test (Levene's test with center='median')
 stat, p_value = stats.levene(group1, group2, group3, center='median')
-print(f"Brown-Forsythe W* statistic: {stat:.4f}")
-print(f"P-value: {p_value:.4f}")
+print(f"Brown-Forsythe W*:      {stat:.4f}, p = {p_value:.4f}")
 
-alpha = 0.05
-if p_value < alpha:
-    print("Reject H0: variances are significantly different.")
-else:
-    print("Fail to reject H0: no significant difference in variances.")
+# Original Levene for comparison
+s_m, p_m = stats.levene(group1, group2, group3, center='mean')
+print(f"Levene (mean-centered): {s_m:.4f}, p = {p_m:.4f}")
+
+# Bartlett for comparison
+s_b, p_b = stats.bartlett(group1, group2, group3)
+print(f"Bartlett:               {s_b:.4f}, p = {p_b:.6f}")
 ```
 
-## Performance Characteristics
+출력:
 
-The Brown-Forsythe test has been studied extensively through simulation:
+```text
+variances: [2.5, 84.5, 1.7]
+Brown-Forsythe W*:      4.0754, p = 0.0446
+Levene (mean-centered): 4.0610, p = 0.0450
+Bartlett:               15.3946, p = 0.000454
+```
 
-- **Type I error control.** The actual rejection rate stays close to the nominal $\alpha$ across a wide range of distributions, including skewed and heavy-tailed populations.
-- **Power under normality.** The Brown-Forsythe test has slightly lower power than Bartlett's test or the original Levene's test when the data are truly normal. The power loss is typically small (1--3 percentage points).
-- **Power under non-normality.** The Brown-Forsythe test maintains good power for detecting variance differences even when the data are non-normal, because it does not waste power on false alarms caused by distributional shape.
+!!! note "이 예제에서는 중앙값과 평균의 차이가 없다"
+    집단 2의 중앙값과 평균이 모두 **18**로 우연히 일치한다($\{5,15,18,22,30\}$의 평균 = $90/5$ = 18). 그래서 Brown-Forsythe($4.0754$)와 Levene($4.0610$)의 결과가 사실상 같다. 이 자료는 중앙값 중심화의 이점을 보여주지 못한다. 이점이 실제로 드러나는 상황은 연습문제 2에서 다룬다.
 
-## When to Use the Brown-Forsythe Test
+    한편 **Bartlett은 $p = 0.00045$로 로버스트 검정들의 $p = 0.045$보다 100배 작다.** 집단 2의 표본분산이 $84.5$로 다른 집단의 $2.5$, $1.7$보다 30~50배나 크기 때문이다. 이렇게 이탈이 극단적일 때는 Bartlett의 높은 검정력이 드러난다. 다만 그 검정력은 정규성 가정에 기대고 있으며, 여기서 집단 2는 이상점 하나가 지배하고 있어 정규성이 의심스럽다.
 
-The Brown-Forsythe test is the recommended default for testing homogeneity of variances in most practical situations:
+## 성능 특성
 
-- As a **pre-test before ANOVA**, it provides reliable variance diagnostics regardless of the population shape.
-- When the **distribution is unknown**, it offers the best balance of robustness and power among the tests in this chapter.
-- When the **data contain outliers**, the median-based deviations prevent spurious rejections.
+Brown-Forsythe 검정은 모의실험으로 광범위하게 연구되었다.
 
-The main situation where another test is preferable is when normality has been confirmed and maximum power is desired. In that case, Bartlett's test is the most powerful option.
+- **제1종 오류 조절.** 치우쳤거나 꼬리가 두꺼운 모집단을 포함해 넓은 범위의 분포에서 실제 기각률이 명목 $\alpha$에 가깝게 유지된다.
+- **정규성 아래 검정력.** 자료가 정말로 정규일 때 Bartlett 검정이나 원래의 Levene 검정보다 검정력이 약간 낮다. 15.4절 연습문제 4의 모의실험에서 손실은 대체로 10~25%였다.
+- **비정규성 아래 검정력.** 자료가 비정규여도 분산 차이를 탐지하는 검정력이 잘 유지된다. 분포 모양이 일으키는 거짓 경보에 검정력을 낭비하지 않기 때문이다.
+
+## Brown-Forsythe 검정을 쓸 때
+
+Brown-Forsythe 검정은 대부분의 실무 상황에서 분산의 동질성을 검정하는 권장 기본값이다.
+
+- **분산분석 전의 사전검정**으로서 모집단 모양과 무관하게 신뢰할 만한 분산 진단을 제공한다.
+- **분포를 모를 때** 이 장의 검정 가운데 로버스트성과 검정력의 균형이 가장 좋다.
+- **자료에 이상점이 있을 때** 중앙값 기반 편차가 거짓 기각을 막는다.
+
+다른 검정이 더 나은 유일한 경우는 정규성이 확인되었고 최대 검정력이 필요할 때이다. 그 경우에는 Bartlett 검정이 가장 강력한 선택이다.
 
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Describe the main concept of Brown-Forsythe Test and explain why it matters for statistical practice.
+**연습문제 1.**
+Brown-Forsythe 검정의 크기가 여러 분포에서 안정적인지 모의실험으로 확인하고, 평균 중심 Levene과 비교하라.
 
-??? success "Solution to Exercise 1"
-    Brown-Forsythe Test is a core topic in statistics that provides tools for drawing reliable inferences from data. It matters because proper application ensures valid conclusions, correctly quantified uncertainty, and appropriate handling of the assumptions that underpin the method. Practitioners who understand this concept can avoid common pitfalls and choose the right analytical approach for their data.
+??? success "연습문제 1 풀이"
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    rng = np.random.default_rng(4)
+    R, n = 5000, 25
+
+    cases = [
+        ("Normal",         lambda: rng.normal(0, 1, n)),
+        ("Lognormal(0,1)", lambda: rng.lognormal(0, 1, n)),
+        ("t(3)",           lambda: rng.standard_t(3, n)),
+    ]
+
+    for name, gen in cases:
+        c_mean = c_med = 0
+        for _ in range(R):
+            g = [gen() for _ in range(3)]
+            c_mean += stats.levene(*g, center='mean')[1] < 0.05
+            c_med += stats.levene(*g, center='median')[1] < 0.05
+        print(f"{name:>16}: mean-centered {c_mean/R:.4f}, "
+              f"median-centered {c_med/R:.4f}")
+    ```
+
+    출력:
+
+    ```text
+              Normal: mean-centered 0.0594, median-centered 0.0418
+      Lognormal(0,1): mean-centered 0.2658, median-centered 0.0376
+                t(3): mean-centered 0.0666, median-centered 0.0446
+    ```
+
+    | 분포 | Levene (평균) | Brown-Forsythe (중앙값) |
+    |---|---|---|
+    | $\mathcal{N}(0,1)$ | 0.059 | 0.042 |
+    | $\text{Lognormal}(0,1)$ | **0.266** | 0.038 |
+    | $t_3$ | 0.067 | 0.045 |
+
+    **강하게 치우친 대수정규 자료에서 차이가 극적이다.** 평균 중심 Levene의 크기가 $0.266$으로 명목값의 다섯 배가 넘는 반면 Brown-Forsythe는 $0.038$로 안정적이다.
+
+    이유는 명확하다. $\text{Lognormal}(0,1)$은 왜도가 $6.185$로 극단적이라 평균이 분포의 중심을 대표하지 못한다. 표본마다 평균의 위치가 크게 흔들리고, 그 흔들림이 절대편차 전체에 전파된다.
+
+    $t_3$처럼 대칭이지만 꼬리가 두꺼운 분포에서는 두 방식의 차이가 작다($0.067$ 대 $0.045$). **평균 중심화의 문제는 첨도가 아니라 치우침에서 온다**는 점을 확인해 준다.
+
+    Brown-Forsythe가 세 분포 모두에서 $0.038$~$0.045$로 명목값보다 약간 보수적이라는 점도 눈여겨볼 만하다. 완벽하지는 않지만 왜곡의 크기가 실무적으로 무시할 수준이다. $\square$
 
 ---
 
-**Exercise 2.**
-State the key assumptions required by the method discussed here. How can each assumption be checked?
+**연습문제 2.**
+중앙값 중심화가 실제로 유리한 자료를 구성하라. 이상점 하나가 집단평균을 끌어당기는 상황에서 두 검정의 결과를 비교하라.
 
-??? success "Solution to Exercise 2"
-    The main assumptions typically include: (1) independence of observations -- verified by understanding the data collection process and checking for serial correlation; (2) distributional requirements (e.g., normality) -- checked with Q-Q plots and formal tests like Shapiro-Wilk; (3) equal variances (if applicable) -- assessed with boxplots and Levene's test. When assumptions are violated, consider robust alternatives, transformations, or nonparametric methods.
+??? success "연습문제 2 풀이"
+    본문 예제에서는 집단 2의 평균과 중앙값이 우연히 같아 차이가 드러나지 않았다. 이상점을 한쪽으로 더 밀어 보자.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    # Group 2 has one extreme outlier pulling the mean far from the bulk
+    g1 = [10, 11, 12, 13, 14, 11, 12]
+    g2 = [10, 11, 12, 13, 14, 11, 60]   # 60 is the outlier
+    g3 = [10, 11, 12, 13, 14, 11, 12]
+
+    for g in (g1, g2, g3):
+        print(f"mean = {np.mean(g):7.3f}, median = {np.median(g):5.1f}, "
+              f"var = {np.var(g, ddof=1):8.2f}")
+
+    print(f"\nLevene (mean):   p = {stats.levene(g1, g2, g3, center='mean')[1]:.4f}")
+    print(f"Brown-Forsythe:  p = {stats.levene(g1, g2, g3, center='median')[1]:.4f}")
+    print(f"Bartlett:        p = {stats.bartlett(g1, g2, g3)[1]:.4g}")
+    ```
+
+    출력:
+
+    ```text
+    mean =  11.857, median =  12.0, var =     1.81
+    mean =  18.714, median =  12.0, var =   333.24
+    mean =  11.857, median =  12.0, var =     1.81
+
+    Levene (mean):   p = 0.0224
+    Brown-Forsythe:  p = 0.3723
+    Bartlett:        p = 2.018e-09
+    ```
+
+    집단 2의 평균은 이상점 60에 끌려 $18.71$까지 올라가지만 중앙값은 $12$로 다른 두 집단과 같다.
+
+    - **평균 중심 Levene:** 집단 2의 모든 관측값이 부풀려진 평균 $18.71$에서 멀어지므로 편차가 전반적으로 커진다. 이상점 하나가 **일곱 개 편차 모두**를 오염시킨다. 그 결과 $p = 0.022$로 기각한다.
+    - **Brown-Forsythe:** 중앙값 $12$가 이상점의 영향을 받지 않으므로 정상 관측값 여섯 개의 편차는 다른 집단과 동일하고, 이상점 하나만 큰 편차 $48$을 낸다. 편차 하나만 다르므로 $p = 0.372$로 **기각하지 못한다**.
+    - **Bartlett:** $p = 2 \times 10^{-9}$로 압도적으로 기각한다. 제곱편차를 쓰므로 $48^2 = 2304$가 통계량을 지배한다.
+
+    **여기서 어느 쪽이 옳은가?** 답은 이상점 60을 어떻게 보느냐에 달려 있다.
+
+    - 60이 **자료 입력 오류**라면 집단 2의 참 산포는 다른 집단과 같으므로 Brown-Forsythe가 옳다.
+    - 60이 **진짜 관측값**이라면 집단 2는 실제로 산포가 훨씬 크므로 Bartlett이 옳다.
+
+    통계 절차만으로는 이 질문에 답할 수 없다. 이것이 Brown-Forsythe의 로버스트성이 갖는 **대가**이다. 이상점의 오염 효과를 막아 주는 대신, 이상점이 실제 산포 증가를 나타낼 때 그것을 놓칠 수 있다.
+
+    이 예에서 중앙값 중심화의 이점이 뚜렷하게 드러나는 것은 **오염의 범위**이다. 평균 중심화는 이상점 하나의 영향을 집단 전체로 퍼뜨리고, 중앙값 중심화는 이상점 자신에게 가둔다. 이 차이가 결정적으로 중요해지는 것은 연습문제 1의 대수정규 상황처럼 **모든 집단이 치우쳐 있어 모든 평균이 함께 흔들릴 때**이다. 그때 평균 중심화는 거짓 기각을 대량으로 만들어 낸다. $\square$
 
 ---
 
-**Exercise 3.**
-Work through a small numerical example illustrating the application of the technique from this section.
+**연습문제 3.**
+중앙값의 붕괴점이 50%임을 설명하고, 평균의 붕괴점과 비교하라. 이것이 Brown-Forsythe 검정의 로버스트성과 어떻게 연결되는가?
 
-??? success "Solution to Exercise 3"
-    A structured approach to applying this technique involves: (1) clearly stating the hypotheses or estimation goal; (2) verifying that the data meet the required assumptions; (3) computing the relevant test statistic, estimate, or model fit; (4) obtaining the p-value, confidence interval, or posterior distribution; (5) interpreting the result in the context of the original question. Following these steps systematically ensures a rigorous and reproducible analysis.
+??? success "연습문제 3 풀이"
+    **붕괴점의 정의.** 추정량의 붕괴점은 그 추정량을 임의로 크게(또는 작게) 만들기 위해 오염시켜야 하는 관측값의 최소 비율이다.
+
+    **평균의 붕괴점은 $1/n \to 0$이다.** $n$개 관측값 중 **단 하나**를 $\infty$로 보내면 평균도 $\infty$가 된다.
+
+    $$
+    \bar{X} = \frac{1}{n}\left(\sum_{i=1}^{n-1} X_i + X_n\right) \to \infty \quad (X_n \to \infty).
+    $$
+
+    **중앙값의 붕괴점은 50%이다.** $n$이 홀수일 때 중앙값은 $\lceil n/2 \rceil$번째 순서통계량이다. 관측값의 절반 미만을 $\infty$로 보내면 그 값들은 정렬 후 위쪽에 모이고 중앙 위치는 여전히 오염되지 않은 관측값이 차지한다. 절반 이상을 오염시켜야 중앙 위치가 오염된 값으로 넘어간다.
+
+    | 추정량 | 붕괴점 |
+    |---|---|
+    | 평균 | $1/n$ |
+    | 10% 절사평균 | 0.10 |
+    | 중앙값 | 0.50 |
+
+    **Brown-Forsythe와의 연결.** Levene 계열 검정의 첫 단계는 각 집단의 중심을 추정하는 것이다. 이 중심 추정이 오염되면 그 집단의 **모든** 절대편차가 오염되고, 검정통계량 전체가 왜곡된다.
+
+    평균을 쓰면 붕괴점이 $1/n$이므로 집단당 이상점 하나로 검정이 무너질 수 있다. 중앙값을 쓰면 집단의 절반이 오염되어야 하므로 사실상 안전하다.
+
+    **미묘한 점.** 여기서 중요한 것은 중심 추정의 로버스트성이지 검정 전체의 로버스트성이 아니다. 분산 자체를 재는 데는 여전히 절대편차의 **평균**을 쓰므로, 이상점이 자기 몫의 큰 편차로 통계량에 기여하는 것은 막지 못한다. 그것이 옳은 동작이다. 이상점은 실제로 그 집단의 산포가 크다는 정보이기 때문이다. Brown-Forsythe가 막는 것은 이상점 하나가 **다른 관측값들의 편차까지** 오염시키는 것이다. $\square$
 
 ---
 
-**Exercise 4.**
-Compare the approach from this section with an alternative method. When would you choose each?
+**연습문제 4.**
+Brown-Forsythe 검정이 항상 최선인 것은 아니다. 이 검정보다 다른 검정을 써야 하는 두 가지 구체적 상황을 제시하고 이유를 설명하라.
 
-??? success "Solution to Exercise 4"
-    The method discussed here is appropriate when its assumptions hold and the sample size is sufficient for the asymptotic approximations to be accurate. Alternative approaches include: (1) nonparametric methods -- preferred when distributional assumptions are suspect; (2) bootstrap methods -- useful when analytical reference distributions are unavailable; (3) Bayesian methods -- valuable when incorporating prior information or when direct probability statements about parameters are desired. Running multiple approaches and comparing results provides a useful robustness check.
+??? success "연습문제 4 풀이"
+
+    **상황 1: 정규성이 이론적으로 보장되고 검정력이 결정적일 때 → Bartlett.**
+
+    보정된 계측기의 반복측정처럼 오차가 정규임이 물리적으로 근거 있는 경우, 그리고 표본이 작아 검정력이 아쉬운 경우이다. 15.4절 연습문제 4에서 보았듯 정규 자료에서 Bartlett의 검정력이 Brown-Forsythe보다 12~25% 높다.
+
+    다만 "정규성이 보장된다"는 판단은 자료가 아니라 **자료 생성 과정에 대한 지식**에서 나와야 한다. 정규성 검정을 통과했다는 이유만으로는 부족하다(14장에서 보았듯 작은 표본의 정규성 검정은 검정력이 낮다).
+
+    **상황 2: 극단적으로 꼬리가 두껍거나 이산성이 강할 때 → Fligner-Killeen.**
+
+    Brown-Forsythe도 결국 절대편차의 **평균**에 대한 F 검정이므로, 편차의 분포가 극단적으로 두꺼운 꼬리를 가지면 그 평균이 불안정해진다. Fligner-Killeen 검정은 편차를 순위로 바꾸므로 원분포의 모양에 아예 의존하지 않는다.
+
+    이산 자료나 반올림이 심한 자료, 그리고 오염 비율이 높은 자료에서 Fligner-Killeen이 더 안전하다.
+
+    **상황 3(보너스): 집단 수가 2이고 분산비 자체에 관심이 있을 때 → 붓스트랩 신뢰구간.**
+
+    검정보다 추정이 목적이라면 $\sigma_1^2/\sigma_2^2$의 붓스트랩 신뢰구간(15.6절)이 훨씬 정보량이 많다. "분산이 다른가"라는 이분법적 질문보다 "얼마나 다른가"가 실무적으로 중요한 경우가 많다. $\square$

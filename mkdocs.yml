@@ -577,56 +577,56 @@ nav:
             - Shapiro-Wilk 검정력 모의실험: ch14/code/shapiro_power_sim.md
             - 금융 수익률의 Q-Q 그림 (코드): ch14/code/qq_plot_financial_returns.md
 
-    - 15 Variance Tests:
-        - Chapter Overview: ch15/index.md
-        - 15.1 Introduction to Variance Testing:
-            - Why Test Variances: ch15/introduction/motivation.md
-            - Overview of Variance Tests: ch15/introduction/introduction.md
-            - Assumptions Common to Variance Tests: ch15/introduction/common_assumptions.md
-        - 15.2 Chi-Square Test for Variance:
-            - One-Sample Chi-Square Variance Test: ch15/chi_square_test/chi_square_variance.md
-            - Derivation and Distribution Theory: ch15/chi_square_test/derivation.md
-            - Confidence Interval for σ²: ch15/chi_square_test/ci_variance.md
-        - 15.3 F-Test for Comparing Two Variances:
-            - Two-Sample F-Test: ch15/f_test/f_test_two_variances.md
-            - F-Distribution and Degrees of Freedom: ch15/f_test/f_distribution_details.md
-            - Sensitivity to Non-Normality: ch15/f_test/sensitivity.md
-        - 15.4 Bartlett's Test:
-            - Bartlett's Test for Equality of Variances: ch15/bartlett_test/bartlett_test.md
-            - Derivation and Chi-Square Approximation: ch15/bartlett_test/derivation.md
-            - Limitations Under Non-Normality: ch15/bartlett_test/limitations.md
-        - 15.5 Robust Tests:
-            - Levene's Test: ch15/robust_tests/levene.md
-            - Brown-Forsythe Test: ch15/robust_tests/brown_forsythe.md
-            - Fligner-Killeen Test: ch15/robust_tests/fligner_killeen.md
-            - Comparison of Robust Methods: ch15/robust_tests/comparison.md
-            - Robust Tests Overview: ch15/robust_tests/robust_tests.md
-        - 15.6 Advanced Methods:
-            - Bootstrap Variance Testing: ch15/advanced_methods/bootstrap_variance.md
-            - Bayesian Variance Testing: ch15/advanced_methods/bayesian_variance.md
-            - Likelihood Ratio Test for Variances: ch15/advanced_methods/likelihood_ratio.md
-            - Advanced Methods Overview: ch15/advanced_methods/advanced_methods.md
-        - 15.7 Applications:
-            - Pre-Test for Analysis of Variance Homoscedasticity: ch15/applications/anova_pretest.md
-            - Variance Testing in Regression: ch15/applications/regression_variance.md
-            - Financial Volatility Comparisons: ch15/applications/financial_volatility.md
-            - Applications Overview: ch15/applications/applications.md
-        - 15.8 Code:
-            - Chi-Squared Test for Variance: ch15/code/chi2_test_for_variance.md
-            - F-Test of Equality of Variances: ch15/code/f_test_variances.md
-            - Bartlett's Test: ch15/code/bartlett_test.md
-            - Levene's Test: ch15/code/levene_test.md
-            - Chi-Square Distribution: ch15/code/chi_square_distribution.md
-            - Robust Variance Tests Comparison: ch15/code/robust_tests_comparison.md
-            - F-Test Tail Region Visualization: ch15/code/f_test_tail_plot.md
-            - F-Test Normality Sensitivity and Robust Alternatives: ch15/code/f_test_robust_alt.md
-            - F-Test Power Simulation: ch15/code/f_test_power_sim.md
-            - Bartlett Test Non-Normality Sensitivity: ch15/code/bartlett_sensitivity.md
-            - Levene Test Normal vs Skewed Simulation: ch15/code/levene_simulation.md
-            - Brown-Forsythe Test (scipy): ch15/code/brown_forsythe.md
-            - Fligner-Killeen Test (scipy): ch15/code/fligner_killeen.md
-            - Bootstrap Variance Test: ch15/code/bootstrap_var_test.md
-            - Bayesian Variance Test: ch15/code/bayesian_var_test.md
+    - 15 분산 검정:
+        - 장 개요: ch15/index.md
+        - 15.1 분산 검정 입문:
+            - 왜 분산을 검정하는가: ch15/introduction/motivation.md
+            - 분산 검정 개관: ch15/introduction/introduction.md
+            - 분산 검정의 공통 가정: ch15/introduction/common_assumptions.md
+        - 15.2 분산에 대한 카이제곱 검정:
+            - 일표본 카이제곱 분산 검정: ch15/chi_square_test/chi_square_variance.md
+            - 유도와 분포이론: ch15/chi_square_test/derivation.md
+            - 모분산의 신뢰구간: ch15/chi_square_test/ci_variance.md
+        - 15.3 두 분산 비교를 위한 F 검정:
+            - 이표본 F 검정: ch15/f_test/f_test_two_variances.md
+            - F 분포와 자유도: ch15/f_test/f_distribution_details.md
+            - 비정규성에 대한 민감도: ch15/f_test/sensitivity.md
+        - 15.4 Bartlett 검정:
+            - 분산의 동일성에 대한 Bartlett 검정: ch15/bartlett_test/bartlett_test.md
+            - 유도와 카이제곱 근사: ch15/bartlett_test/derivation.md
+            - 비정규성 아래의 한계: ch15/bartlett_test/limitations.md
+        - 15.5 로버스트 검정:
+            - Levene 검정: ch15/robust_tests/levene.md
+            - Brown-Forsythe 검정: ch15/robust_tests/brown_forsythe.md
+            - Fligner-Killeen 검정: ch15/robust_tests/fligner_killeen.md
+            - 로버스트 방법의 비교: ch15/robust_tests/comparison.md
+            - 로버스트 검정 개관: ch15/robust_tests/robust_tests.md
+        - 15.6 고급 방법:
+            - 붓스트랩 분산 검정: ch15/advanced_methods/bootstrap_variance.md
+            - Bayes 분산 검정: ch15/advanced_methods/bayesian_variance.md
+            - 분산에 대한 가능도비 검정: ch15/advanced_methods/likelihood_ratio.md
+            - 고급 방법 개관: ch15/advanced_methods/advanced_methods.md
+        - 15.7 응용:
+            - 분산분석 등분산성 사전검정: ch15/applications/anova_pretest.md
+            - 회귀에서의 분산 검정: ch15/applications/regression_variance.md
+            - 금융 변동성 비교: ch15/applications/financial_volatility.md
+            - 회귀와 분산분석에서의 응용: ch15/applications/applications.md
+        - 15.8 코드:
+            - 분산에 대한 카이제곱 검정 (코드): ch15/code/chi2_test_for_variance.md
+            - 분산 동일성에 대한 F 검정 (코드): ch15/code/f_test_variances.md
+            - Bartlett 검정 (코드): ch15/code/bartlett_test.md
+            - Levene 검정 (코드): ch15/code/levene_test.md
+            - 카이제곱분포: ch15/code/chi_square_distribution.md
+            - 로버스트 분산 검정 비교: ch15/code/robust_tests_comparison.md
+            - F 검정 꼬리 영역 시각화: ch15/code/f_test_tail_plot.md
+            - F 검정의 정규성 민감도와 로버스트 대안: ch15/code/f_test_robust_alt.md
+            - F 검정 검정력 모의실험: ch15/code/f_test_power_sim.md
+            - Bartlett 검정 비정규성 민감도: ch15/code/bartlett_sensitivity.md
+            - Levene 검정 정규 대 치우친 분포 모의실험: ch15/code/levene_simulation.md
+            - Brown-Forsythe 검정 (scipy): ch15/code/brown_forsythe.md
+            - Fligner-Killeen 검정 (scipy): ch15/code/fligner_killeen.md
+            - 붓스트랩 분산 검정 (코드): ch15/code/bootstrap_var_test.md
+            - Bayes 분산 검정 (코드): ch15/code/bayesian_var_test.md
 
     - 16 Non-Parametric Tests:
         - Chapter Overview: ch16/index.md

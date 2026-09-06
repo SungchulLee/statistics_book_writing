@@ -1,111 +1,135 @@
-# F-Test for Comparing Two Variances
+# 두 분산 비교를 위한 F 검정
 
 
-The F-test for comparing two variances is a statistical test used to determine whether the variances of two independent samples are significantly different. It is based on the ratio of the sample variances and assumes that both samples come from normally distributed populations. The F-test is particularly useful for assessing the homogeneity of variances, which is often a critical assumption in methods such as ANOVA.
+두 분산을 비교하는 F 검정은 독립인 두 표본의 분산이 유의하게 다른지 판정하는 통계검정이다. 표본분산의 비에 기반하며 두 표본 모두 정규분포를 따르는 모집단에서 왔다고 가정한다. F 검정은 분산분석 같은 방법에서 결정적인 가정인 분산의 동질성을 평가하는 데 특히 유용하다.
 
-## Hypotheses
+## 가설
 
-**Null Hypothesis ($H_0$):** The two population variances are equal:
+**귀무가설 ($H_0$):** 두 모분산이 같다.
 
 $$
 H_0: \sigma_1^2 = \sigma_2^2
 $$
 
-**Alternative Hypothesis ($H_1$):** The two population variances are not equal:
+**대립가설 ($H_1$):** 두 모분산이 같지 않다.
 
-- **Two-tailed test** (variances are simply different):
+- **양측검정** (분산이 단지 다르다):
 
 $$
 H_1: \sigma_1^2 \neq \sigma_2^2
 $$
 
-- **One-tailed test** (one variance is greater or smaller than the other):
+- **단측검정** (한 분산이 다른 분산보다 크거나 작다):
 
 $$
-H_1: \sigma_1^2 > \sigma_2^2 \quad \text{or} \quad H_1: \sigma_1^2 < \sigma_2^2
+H_1: \sigma_1^2 > \sigma_2^2 \quad \text{또는} \quad H_1: \sigma_1^2 < \sigma_2^2
 $$
 
-The choice between one-tailed and two-tailed depends on the research question. In many applications, the two-tailed version is used when there is no prior expectation about which variance is larger.
+단측과 양측 중 어느 것을 쓸지는 연구 질문에 달려 있다. 어느 분산이 더 클지에 대한 사전 기대가 없을 때는 양측을 쓰는 경우가 많다.
 
-## Assumptions
+## 가정
 
-The F-test relies on several key assumptions:
+F 검정은 다음의 핵심 가정에 기댄다.
 
-1. **Normality:** The populations from which the samples are drawn must follow a normal distribution. The F-test is highly sensitive to deviations from normality.
-2. **Independence:** The two samples must be independent of each other.
-3. **Random Sampling:** Both samples should be random and representative of their respective populations.
+1. **정규성:** 표본이 추출된 모집단이 정규분포를 따라야 한다. F 검정은 정규성 이탈에 매우 민감하다.
+2. **독립성:** 두 표본이 서로 독립이어야 한다.
+3. **확률표집:** 두 표본 모두 각자의 모집단을 대표하는 확률표본이어야 한다.
 
-If these assumptions are violated, particularly normality, the F-test may lead to incorrect conclusions. In such cases, alternative methods like Levene's test or the Brown–Forsythe test are more appropriate.
+이 가정들, 특히 정규성이 위배되면 F 검정이 잘못된 결론으로 이어질 수 있다. 그런 경우에는 Levene 검정이나 Brown-Forsythe 검정 같은 대안이 더 적절하다.
 
-## Test Statistic
+## 검정통계량
 
-The F-test statistic is based on the ratio of the two sample variances. Given two independent samples with sample variances $s_1^2$ and $s_2^2$ from populations with variances $\sigma_1^2$ and $\sigma_2^2$, under $H_0$ with $\sigma := \sigma_1 = \sigma_2$:
+F 검정통계량은 두 표본분산의 비에 기반한다. 모분산이 $\sigma_1^2$, $\sigma_2^2$인 모집단에서 나온 독립인 두 표본의 표본분산이 $s_1^2$, $s_2^2$일 때, $\sigma := \sigma_1 = \sigma_2$인 $H_0$ 아래에서
 
 $$
 \frac{s_1^2}{s_2^2} = \frac{\dfrac{(n_1-1)s_1^2/\sigma^2}{n_1-1}}{\dfrac{(n_2-1)s_2^2/\sigma^2}{n_2-1}} = \frac{\dfrac{\chi^2_{n_1-1}}{n_1-1}}{\dfrac{\chi^2_{n_2-1}}{n_2-1}} \sim F_{n_1-1, \, n_2-1}
 $$
 
-The sample variances $s_1^2$ and $s_2^2$ are calculated as:
+표본분산은 다음과 같이 계산한다.
 
 $$
 s_1^2 = \frac{1}{n_1 - 1} \sum_{i=1}^{n_1} (X_{1i} - \bar{X}_1)^2, \qquad
 s_2^2 = \frac{1}{n_2 - 1} \sum_{i=1}^{n_2} (X_{2i} - \bar{X}_2)^2
 $$
 
-where $X_{1i}$ and $X_{2i}$ are individual observations in samples 1 and 2, $\bar{X}_1$ and $\bar{X}_2$ are the sample means, and $n_1$ and $n_2$ are the sample sizes.
+여기서 $X_{1i}$와 $X_{2i}$는 각 표본의 개별 관측값, $\bar{X}_1$과 $\bar{X}_2$는 표본평균, $n_1$과 $n_2$는 표본크기이다.
 
-The F-distribution is used to evaluate the significance of the ratio, with degrees of freedom $n_1 - 1$ and $n_2 - 1$. The F-statistic always compares the larger sample variance to the smaller one, ensuring that $F \geq 1$.
+비의 유의성은 자유도 $n_1 - 1$과 $n_2 - 1$인 F 분포로 평가한다.
 
-## Critical Region and Decision Rule
+!!! note "$F \geq 1$이 되도록 큰 분산을 분자에 두는 관례"
+    수기 계산 시대의 표는 상단 임계값만 실려 있었으므로, 항상 큰 표본분산을 분자에 두어 $F \geq 1$이 되게 하고 상단 임계값 하나만 참조하는 관례가 있었다. 이때 양측검정의 $p$값은 상단 꼬리확률의 두 배이다.
 
-To determine whether the difference between the two sample variances is statistically significant, the calculated F-statistic is compared to critical values from the F-distribution:
+    이 페이지와 아래의 Python 구현은 그 관례를 따르지 **않고** 첫 번째 집단을 분자에 고정한다. 그러면 $F < 1$일 수 있으므로 양쪽 임계값을 모두 확인해야 한다. 두 방식은 동등하지만 섞어 쓰면 안 된다. 큰 분산을 분자에 두었다면 반드시 상단 꼬리만 보고 $p$값을 두 배 해야 하고, 집단 순서를 고정했다면 양쪽 임계값을 써야 한다.
 
-- Degrees of freedom for the numerator: $df_1 = n_1 - 1$
-- Degrees of freedom for the denominator: $df_2 = n_2 - 1$
+## 기각역과 판정규칙
 
-**Two-tailed test:**
+두 표본분산의 차이가 통계적으로 유의한지 판정하려면 계산된 F 통계량을 F 분포의 임계값과 비교한다.
 
-- Reject $H_0$ if $F < F_{\text{lower}}$ or $F > F_{\text{upper}}$.
-- Fail to reject $H_0$ if $F_{\text{lower}} < F < F_{\text{upper}}$.
+- 분자 자유도: $df_1 = n_1 - 1$
+- 분모 자유도: $df_2 = n_2 - 1$
 
-**One-tailed test:**
+**양측검정:**
 
-- If testing $H_1: \sigma_1^2 > \sigma_2^2$, reject $H_0$ if $F > F_{\text{upper}}$.
-- If testing $H_1: \sigma_1^2 < \sigma_2^2$, reject $H_0$ if $F < F_{\text{lower}}$.
+- $F < F_{\alpha/2}$ 또는 $F > F_{1-\alpha/2}$이면 $H_0$을 기각한다.
+- $F_{\alpha/2} < F < F_{1-\alpha/2}$이면 $H_0$을 기각하지 못한다.
 
-## Example Problem and Solution
+**단측검정:**
 
-**Example:** A researcher wants to compare the variability in the test scores of two different student groups. Group 1 has a sample size of 15 and sample variance $s_1^2 = 25$. Group 2 has a sample size of 20 and sample variance $s_2^2 = 16$. Test whether the variances of the two groups are significantly different at the 5% significance level.
+- $H_1: \sigma_1^2 > \sigma_2^2$을 검정한다면 $F > F_{1-\alpha}$일 때 기각한다.
+- $H_1: \sigma_1^2 < \sigma_2^2$을 검정한다면 $F < F_{\alpha}$일 때 기각한다.
 
-### Step-by-Step Solution
+F 분포의 유용한 성질로 $F_{\alpha}(df_1, df_2) = 1/F_{1-\alpha}(df_2, df_1)$이 성립한다. 상단 분위수 표만 있어도 하단 분위수를 얻을 수 있다.
 
-**Step 1 — Formulate Hypotheses:**
+## 예제와 풀이
+
+**예제:** 어떤 연구자가 두 학생 집단의 시험점수 변동성을 비교하려 한다. 집단 1은 표본크기 15, 표본분산 $s_1^2 = 25$이다. 집단 2는 표본크기 20, 표본분산 $s_2^2 = 16$이다. 유의수준 5%에서 두 집단의 분산이 유의하게 다른지 검정하라.
+
+### 단계별 풀이
+
+**1단계 — 가설 설정:**
 
 - $H_0: \sigma_1^2 = \sigma_2^2$
-- $H_1: \sigma_1^2 \neq \sigma_2^2$ (two-tailed test)
+- $H_1: \sigma_1^2 \neq \sigma_2^2$ (양측검정)
 
-**Step 2 — Compute the Test Statistic:**
+**2단계 — 검정통계량 계산:**
 
 $$
 F = \frac{s_1^2}{s_2^2} = \frac{25}{16} = 1.5625
 $$
 
-**Step 3 — Determine Critical Values:**
+**3단계 — 임계값 결정:**
 
-For $df_1 = 14$ and $df_2 = 19$ degrees of freedom at $\alpha = 0.05$ (two-tailed):
+$df_1 = 14$, $df_2 = 19$, $\alpha = 0.05$(양측)일 때
 
-- Lower critical value: $F_{\text{lower}} = 0.390$
-- Upper critical value: $F_{\text{upper}} = 2.657$
+- 하단 임계값: $F_{0.025}(14, 19) = 0.3496$
+- 상단 임계값: $F_{0.975}(14, 19) = 2.6469$
 
-**Step 4 — Decision Rule:**
+```python
+from scipy.stats import f
 
-Since $F = 1.5625$ falls between the critical values ($0.390 < 1.5625 < 2.657$), we fail to reject the null hypothesis.
+df1, df2, alpha = 14, 19, 0.05
+print(f"lower = {f.ppf(alpha / 2, df1, df2):.4f}")
+print(f"upper = {f.ppf(1 - alpha / 2, df1, df2):.4f}")
+```
 
-**Step 5 — Conclusion:**
+출력:
 
-There is insufficient evidence to conclude that the variances of the two groups are significantly different at the 5% significance level.
+```text
+lower = 0.3496
+upper = 2.6469
+```
 
-## Python Implementation
+**4단계 — 판정:**
+
+$F = 1.5625$가 임계값 사이에 있으므로($0.3496 < 1.5625 < 2.6469$) 귀무가설을 기각하지 못한다.
+
+양측 $p$값은 $2 \min\{P(F_{14,19} \leq 1.5625),\, P(F_{14,19} \geq 1.5625)\} = 0.3607$이다.
+
+**5단계 — 결론:**
+
+유의수준 5%에서 두 집단의 분산이 유의하게 다르다고 결론지을 증거가 충분하지 않다. 표본분산의 비가 $25/16 = 1.56$으로 꽤 커 보이지만, 이 정도 표본크기에서는 우연으로 충분히 설명된다.
+
+## Python 구현
 
 ```python
 import numpy as np
@@ -126,79 +150,216 @@ f_statistic = var1 / var2
 df1 = len(sample1) - 1
 df2 = len(sample2) - 1
 
-# One-sided test: H1: sigma1 < sigma2
-p_value = f(df1, df2).cdf(f_statistic)
+# Two-sided p-value
+p_value = 2 * min(f.cdf(f_statistic, df1, df2),
+                  f.sf(f_statistic, df1, df2))
 
-# Display results
-print(f"F-statistic: {f_statistic}")
+print(f"Sample variances: {var1:.4f}, {var2:.4f}")
+print(f"F-statistic: {f_statistic:.4f}")
 print(f"Degrees of freedom: {df1}, {df2}")
-print(f"P-value: {p_value}")
+print(f"Two-sided p-value: {p_value:.4f}")
 
 # Interpretation
 alpha = 0.05
 if p_value < alpha:
-    print("Reject the null hypothesis: Variances are significantly different.")
+    print("Reject H0: variances are significantly different.")
 else:
-    print("Fail to reject the null hypothesis: No significant difference in variances.")
+    print("Fail to reject H0: no significant difference in variances.")
 ```
 
-## Exercises
+출력:
 
-**Exercise 1.**
-Two production lines manufacture similar products, but you suspect that the variability in product weights is different between the two lines. You are provided with the following sample data (in grams):
+```text
+Sample variances: 2.8393, 6.0000
+F-statistic: 0.4732
+Degrees of freedom: 7, 7
+Two-sided p-value: 0.3448
+Fail to reject H0: no significant difference in variances.
+```
 
-- **Production Line 1:** $[14.2, 13.8, 15.1, 14.7, 14.5, 14.6, 15.0, 14.8]$
-- **Production Line 2:** $[15.2, 14.8, 15.6, 15.0, 14.9, 15.3, 15.5, 14.9]$
+!!! warning "단측 $p$값과 양측 판정을 섞지 말라"
+    이 구현에서 $F = 0.4732 < 1$이다. 여기서 `f.cdf(f_statistic, df1, df2)`만 계산하면 하단 단측 $p$값 $0.1724$를 얻는데, 이는 $H_1: \sigma_1^2 < \sigma_2^2$에 대한 값이지 "분산이 다르다"에 대한 값이 아니다.
 
-Use the F-test to determine whether the variances of the two production lines are significantly different at the 5% significance level.
+    "분산이 유의하게 다르다"는 결론을 내리려면 반드시 양측 $p$값 $2 \times 0.1724 = 0.3448$를 써야 한다. 단측 $p$값에 양측 해석을 붙이면 제1종 오류율이 명목값의 두 배가 된다.
 
-??? success "Solution to Exercise 1"
+## 연습문제
 
-    **Hypotheses:**
+**연습문제 1.**
+두 생산라인이 비슷한 제품을 만드는데, 제품 중량의 변동성이 두 라인 사이에 다를 것으로 의심된다. 다음 표본자료(그램)가 주어졌다.
 
-    - Null Hypothesis ($H_0$): The variances are equal, i.e., $\sigma_1^2 = \sigma_2^2$.
-    - Alternative Hypothesis ($H_1$): The variances are not equal, i.e., $\sigma_1^2 \neq \sigma_2^2$.
+- **생산라인 1:** $[14.2, 13.8, 15.1, 14.7, 14.5, 14.6, 15.0, 14.8]$
+- **생산라인 2:** $[15.2, 14.8, 15.6, 15.0, 14.9, 15.3, 15.5, 14.9]$
 
-    **Test Statistic:**
+F 검정으로 유의수준 5%에서 두 생산라인의 분산이 유의하게 다른지 판정하라.
 
-    The F-statistic is calculated as the ratio of the sample variances:
+??? success "연습문제 1 풀이"
 
-    $$
-    F = \frac{s_1^2}{s_2^2}
-    $$
+    **가설:**
 
-    where $s_1^2$ and $s_2^2$ are the sample variances of the two production lines.
+    - 귀무가설 ($H_0$): 분산이 같다. 곧 $\sigma_1^2 = \sigma_2^2$.
+    - 대립가설 ($H_1$): 분산이 같지 않다. 곧 $\sigma_1^2 \neq \sigma_2^2$.
 
-    **Python Implementation:**
+    **Python 구현:**
 
     ```python
     import numpy as np
     from scipy.stats import f
 
-    # Sample data
     line1 = np.array([14.2, 13.8, 15.1, 14.7, 14.5, 14.6, 15.0, 14.8])
     line2 = np.array([15.2, 14.8, 15.6, 15.0, 14.9, 15.3, 15.5, 14.9])
 
-    # Sample variances
-    var_line1 = np.var(line1, ddof=1)
-    var_line2 = np.var(line2, ddof=1)
+    var1 = np.var(line1, ddof=1)
+    var2 = np.var(line2, ddof=1)
+    F_stat = var1 / var2
+    df1, df2 = len(line1) - 1, len(line2) - 1
 
-    # F-statistic
-    F_stat = var_line1 / var_line2
-
-    # Degrees of freedom
-    df1 = len(line1) - 1
-    df2 = len(line2) - 1
-
-    # Critical values for two-tailed test at 5% significance level
     alpha = 0.05
-    critical_value_upper = f.ppf(1 - alpha/2, df1, df2)
-    critical_value_lower = f.ppf(alpha/2, df1, df2)
+    lower = f.ppf(alpha / 2, df1, df2)
+    upper = f.ppf(1 - alpha / 2, df1, df2)
+    p = 2 * min(f.cdf(F_stat, df1, df2), f.sf(F_stat, df1, df2))
 
-    print(f"F-statistic: {F_stat}")
-    print(f"Critical values: [{critical_value_lower}, {critical_value_upper}]")
+    print(f"variances: {var1:.5f}, {var2:.5f}")
+    print(f"F = {F_stat:.4f}, df = ({df1}, {df2})")
+    print(f"critical values: [{lower:.4f}, {upper:.4f}]")
+    print(f"two-sided p = {p:.4f}")
     ```
 
-    **Interpretation:**
+    출력:
 
-    If the calculated F-statistic falls outside the critical value bounds, reject the null hypothesis. Otherwise, fail to reject the null hypothesis, indicating that the variances are not significantly different.
+    ```text
+    variances: 0.18125, 0.08857
+    F = 2.0464, df = (7, 7)
+    critical values: [0.2002, 4.9949]
+    two-sided p = 0.3655
+    ```
+
+    **판정.** $F = 2.046$이 $[0.2002,\, 4.9949]$ 안에 있으므로 $H_0$을 기각하지 못한다($p = 0.366$).
+
+    **해석.** 라인 1의 표본분산이 라인 2의 두 배가 넘는데도 유의하지 않다. 각 집단 $n = 8$이면 F 검정의 검정력이 매우 낮기 때문이다. 임계값 범위가 $0.20$에서 $4.99$까지, 곧 25배에 이른다는 사실이 이를 잘 보여준다. **분산비가 5배는 되어야 탐지할 수 있다.**
+
+    실무적 결론: 이 자료로는 두 라인의 변동성이 같다고도 다르다고도 말할 수 없다. 결론을 내리려면 표본을 크게 늘려야 한다. $\square$
+
+---
+
+**연습문제 2.**
+$F_{\alpha}(df_1, df_2) = 1/F_{1-\alpha}(df_2, df_1)$임을 증명하고, 이 관계가 왜 F 분포표를 절반으로 줄여 주는지 설명하라.
+
+??? success "연습문제 2 풀이"
+    $F \sim F_{d_1, d_2}$이면 정의상 $F = (U/d_1)/(V/d_2)$이고 $U \sim \chi^2_{d_1}$, $V \sim \chi^2_{d_2}$가 독립이다. 그러면
+
+    $$
+    \frac{1}{F} = \frac{V/d_2}{U/d_1} \sim F_{d_2, d_1}
+    $$
+
+    이다. 곧 **F 확률변수의 역수는 자유도를 뒤바꾼 F 확률변수**이다.
+
+    이제 $F_{\alpha}(d_1,d_2)$를 $P(F_{d_1,d_2} \leq F_\alpha) = \alpha$로 정의된 하단 $\alpha$ 분위수라 하자.
+
+    $$
+    \alpha = P\!\left(F_{d_1,d_2} \leq F_\alpha(d_1,d_2)\right) = P\!\left(\frac{1}{F_{d_1,d_2}} \geq \frac{1}{F_\alpha(d_1,d_2)}\right) = P\!\left(F_{d_2,d_1} \geq \frac{1}{F_\alpha(d_1,d_2)}\right).
+    $$
+
+    따라서 $1/F_\alpha(d_1,d_2)$는 $F_{d_2,d_1}$의 상단 $\alpha$ 지점, 곧 하단 $1-\alpha$ 분위수이다.
+
+    $$
+    \frac{1}{F_\alpha(d_1,d_2)} = F_{1-\alpha}(d_2,d_1) \implies F_\alpha(d_1,d_2) = \frac{1}{F_{1-\alpha}(d_2,d_1)}.
+    $$
+
+    **검증.** 앞의 예제에서 $F_{0.025}(14,19) = 0.3496$이고 $F_{0.975}(19,14) = 2.8607$이다. $1/2.8607 = 0.3496$ ✓.
+
+    **표를 절반으로 줄이는 이유.** 인쇄된 F 분포표는 보통 상단 분위수($1-\alpha = 0.95, 0.975, 0.99$)만 싣는다. 하단 분위수가 필요하면 자유도를 뒤바꾼 상단 분위수의 역수를 취하면 되기 때문이다. 표의 크기가 절반이 된다. 컴퓨터로 계산하는 오늘날에는 실용적 의미가 줄었지만, 왜 옛 교과서의 F 표에 하단 분위수가 없는지 이해하는 데 도움이 된다. $\square$
+
+---
+
+**연습문제 3.**
+$n_1 = n_2 = n$인 균형 설계에서 $\alpha = 0.05$ 양측 F 검정이 탐지할 수 있는 최소 분산비를 $n \in \{5, 10, 20, 50, 100\}$에 대해 계산하라(임계값 기준). 결과가 실무에 주는 함의를 논하라.
+
+??? success "연습문제 3 풀이"
+    양측검정의 상단 임계값 $F_{0.975}(n-1, n-1)$이 곧 "표본분산비가 이보다 커야 기각한다"는 문턱이다.
+
+    ```python
+    from scipy.stats import f
+
+    print(f"{'n':>5} {'F_upper':>10} {'sd ratio':>10}")
+    for n in [5, 10, 20, 50, 100]:
+        up = f.ppf(0.975, n - 1, n - 1)
+        print(f"{n:>5} {up:>10.3f} {up**0.5:>10.3f}")
+    ```
+
+    출력:
+
+    ```text
+        n    F_upper   sd ratio
+        5      9.605      3.099
+       10      4.026      2.006
+       20      2.526      1.589
+       50      1.762      1.327
+      100      1.486      1.219
+    ```
+
+    | $n$ | 필요한 분산비 | 필요한 표준편차비 |
+    |---|---|---|
+    | 5 | 9.6 | 3.1 |
+    | 10 | 4.0 | 2.0 |
+    | 20 | 2.5 | 1.6 |
+    | 50 | 1.8 | 1.3 |
+    | 100 | 1.5 | 1.2 |
+
+    **함의.**
+
+    1. **작은 표본에서 F 검정은 사실상 무력하다.** $n = 5$이면 표본표준편차가 3배 이상 차이 나야 기각한다. $n = 10$에서도 2배가 필요하다.
+    2. **이 표는 임계값 기준이므로 검정력 관점에서는 더 나쁘다.** 참 분산비가 정확히 임계값과 같다면 검정력은 50%에 불과하다. 80% 검정력을 얻으려면 참 비율이 이보다 훨씬 커야 한다.
+    3. **분산분석 사전검정으로서의 함의가 특히 중요하다.** 집단당 $n = 10$인 실험에서 사전검정이 기각하지 못했다고 등분산성이 확인된 것이 아니다. 분산이 3배 달라도 놓칠 가능성이 크다. 이것이 사전검정 대신 처음부터 Welch 절차를 권하는 이유 가운데 하나이다. $\square$
+
+---
+
+**연습문제 4.**
+F 검정이 두꺼운 꼬리에 얼마나 취약한지 모의실험으로 확인하라. 두 집단 모두 $n = 30$이고 분산이 같은 상황에서 정규, $t_{10}$, $t_5$, 지수분포에 대해 $\alpha = 0.05$ F 검정의 경험적 크기를 추정하라.
+
+??? success "연습문제 4 풀이"
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    rng = np.random.default_rng(0)
+    n, R, alpha = 30, 5000, 0.05
+
+    cases = [
+        ("Normal",      lambda: rng.normal(0, 1, n)),
+        ("t(10)",       lambda: rng.standard_t(10, n)),
+        ("t(5)",        lambda: rng.standard_t(5, n)),
+        ("Exponential", lambda: rng.exponential(1, n)),
+    ]
+
+    for name, gen in cases:
+        rej = 0
+        for _ in range(R):
+            F = gen().var(ddof=1) / gen().var(ddof=1)
+            p = 2 * min(stats.f.cdf(F, n - 1, n - 1),
+                        stats.f.sf(F, n - 1, n - 1))
+            rej += (p < alpha)
+        print(f"{name:>12}: empirical size = {rej / R:.4f}")
+    ```
+
+    출력:
+
+    ```text
+          Normal: empirical size = 0.0482
+           t(10): empirical size = 0.0970
+            t(5): empirical size = 0.1714
+     Exponential: empirical size = 0.2768
+    ```
+
+    | 분포 | $\gamma_2$ | 경험적 크기 | 명목값의 배수 |
+    |---|---|---|---|
+    | $\mathcal{N}(0,1)$ | 0 | 0.048 | 1.0 |
+    | $t_{10}$ | 1 | 0.097 | 2.0 |
+    | $t_5$ | 6 | 0.171 | 3.6 |
+    | $\text{Exponential}$ | 6 | 0.277 | 5.8 |
+
+    정규 자료에서만 크기가 올바르다. $t_{10}$처럼 정규에서 **아주 조금** 벗어난 분포(초과첨도 1, 육안으로는 정규와 거의 구별되지 않는다)에서도 크기가 이미 두 배로 뛴다.
+
+    지수분포에서는 27.7%이다. 명목상 5% 검정이 실제로는 여섯 번에 한 번 이상 잘못 기각한다.
+
+    **핵심 교훈.** F 검정의 문제는 극단적 비정규성이 아니라 **경미한 비정규성**에서도 이미 심각하다는 점이다. 실무 자료가 완벽히 정규인 경우는 거의 없으므로, 두 분산을 비교하는 F 검정은 사실상 쓸 곳이 매우 제한적이다. 15.5절의 로버스트 검정을 기본값으로 삼아야 한다. $\square$

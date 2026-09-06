@@ -1,105 +1,240 @@
-# Introduction to Variance Testing
+# 분산 검정 개관
 
 
-## Motivation
+## 동기
 
-Several statistical tests have been developed to assess whether the observed differences in variances across groups or populations are statistically significant. These tests evaluate whether the variability in one or more samples is higher, lower, or equal compared to others. Each test has specific assumptions about the data (e.g., normality, independence) and is suited to different types of analysis.
+집단이나 모집단 사이에서 관찰된 분산의 차이가 통계적으로 유의한지 평가하기 위해 여러 통계검정이 개발되었다. 이 검정들은 한 표본 이상의 변동성이 다른 표본에 비해 크거나 작거나 같은지를 평가한다. 각 검정은 자료에 대한 고유한 가정(정규성, 독립성 등)을 가지며 서로 다른 유형의 분석에 적합하다.
 
-## Overview of Variance Tests
+## 분산 검정 개관
 
-### Chi-Square Test for Variance
+### 분산에 대한 카이제곱 검정
 
-This test determines if the variance of a single population differs from a specified value. It assumes that the data follow a normal distribution and is highly sensitive to deviations from this assumption.
+이 검정은 한 모집단의 분산이 지정된 값과 다른지 판정한다. 자료가 정규분포를 따른다고 가정하며 이 가정의 이탈에 매우 민감하다.
 
-The test statistic for a sample of size $n$ and sample variance $s^2$ is:
+크기 $n$인 표본과 표본분산 $s^2$에 대한 검정통계량은
 
 $$
 \chi^2 = \frac{(n - 1) s^2}{\sigma_0^2}
 $$
 
-where $\sigma_0^2$ is the hypothesized population variance.
+여기서 $\sigma_0^2$은 가설로 세운 모분산이다.
 
-### F-Test
+### F 검정
 
-The F-test compares the variances of two independent samples. It tests the null hypothesis that the two population variances are equal. This test is also sensitive to the assumption of normality and requires that the two samples be independent.
+F 검정은 독립인 두 표본의 분산을 비교한다. 두 모분산이 같다는 귀무가설을 검정한다. 이 검정 역시 정규성 가정에 민감하며 두 표본이 독립일 것을 요구한다.
 
-The test statistic is the ratio of the two sample variances:
+검정통계량은 두 표본분산의 비이다.
 
 $$
 F = \frac{s_1^2}{s_2^2}
 $$
 
-where $s_1^2$ and $s_2^2$ are the sample variances of the two groups.
+여기서 $s_1^2$과 $s_2^2$은 두 집단의 표본분산이다.
 
-### Bartlett's Test
+### Bartlett 검정
 
-Bartlett's test assesses equality of variances across multiple groups under the assumption that the data are normally distributed. It is highly sensitive to violations of normality, meaning even slight deviations from normality can lead to misleading results. Despite this sensitivity, Bartlett's test is often used when normality can be reasonably assumed.
+Bartlett 검정은 자료가 정규분포를 따른다는 가정 아래에서 여러 집단에 걸친 분산의 동일성을 평가한다. 정규성 위배에 매우 민감하여 정규성에서 조금만 벗어나도 오도하는 결과가 나올 수 있다. 이런 민감성에도 불구하고 정규성을 합리적으로 가정할 수 있을 때 자주 쓰인다.
 
-The test statistic is:
+검정통계량은
 
 $$
 T = \frac{(N - k) \ln(S_p^2) - \sum_{i=1}^k (n_i - 1) \ln(S_i^2)}{1 + \frac{1}{3(k - 1)} \left( \sum_{i=1}^k \frac{1}{n_i - 1} - \frac{1}{N - k} \right)}
 $$
 
-where $N$ is the total sample size, $k$ is the number of groups, $S_p^2$ is the pooled variance, and $S_i^2$ are the sample variances.
+여기서 $N$은 전체 표본크기, $k$는 집단의 수, $S_p^2$은 합동분산, $S_i^2$은 각 집단의 표본분산이다.
 
-### Levene's Test
+### Levene 검정
 
-Levene's test is a robust alternative to the F-test for equality of variances. It is less sensitive to deviations from normality, making it more appropriate when the data are not normally distributed. Levene's test is based on the absolute deviations of each observation from the group mean.
+Levene 검정은 분산의 동일성에 대한 F 검정의 로버스트 대안이다. 정규성 이탈에 덜 민감하므로 자료가 정규분포를 따르지 않을 때 더 적절하다. 각 관측값과 집단평균의 절대편차에 기반한다.
 
-The hypotheses for Levene's test are:
+Levene 검정의 가설은
 
-- $H_0$: Population variances are equal.
-- $H_1$: Population variances are not equal.
+- $H_0$: 모분산이 모두 같다.
+- $H_1$: 모분산이 모두 같지는 않다.
 
-### Brown–Forsythe Test
+### Brown-Forsythe 검정
 
-This test is a modification of Levene's test, replacing the group mean with the group median to further reduce sensitivity to outliers. It is particularly useful when outliers are present in the data, as it provides a more robust measure of variance equality.
+이 검정은 Levene 검정의 변형으로, 집단평균 대신 집단중앙값을 써서 이상점에 대한 민감성을 더 줄인다. 자료에 이상점이 있을 때 특히 유용하며 분산 동일성에 대해 더 로버스트한 측도를 제공한다.
 
-### Fligner–Killeen Test
+### Fligner-Killeen 검정
 
-The Fligner–Killeen test is a non-parametric test based on ranks. It is highly robust and appropriate when data do not meet the assumption of normality. Like the Brown–Forsythe test, it is effective for datasets with outliers or non-normal distributions.
+Fligner-Killeen 검정은 순위에 기반한 비모수 검정이다. 매우 로버스트하며 자료가 정규성 가정을 충족하지 못할 때 적절하다. Brown-Forsythe 검정과 마찬가지로 이상점이 있거나 비정규인 자료에 효과적이다.
 
-## Choosing the Right Test
+## 올바른 검정 고르기
 
-| Test | Samples | Normality Required | Robust to Outliers | Use Case |
+| 검정 | 표본 수 | 정규성 필요 | 이상점에 로버스트 | 용도 |
 |------|---------|-------------------|-------------------|----------|
-| Chi-Square | 1 | Yes | No | Single population variance vs. hypothesized value |
-| F-Test | 2 | Yes | No | Comparing variances of two independent groups |
-| Bartlett's | $\geq 2$ | Yes | No | Multi-group variance equality (normal data) |
-| Levene's | $\geq 2$ | No | Moderate | Multi-group variance equality (general) |
-| Brown–Forsythe | $\geq 2$ | No | Yes | Multi-group variance equality (outliers present) |
-| Fligner–Killeen | $\geq 2$ | No | Yes | Non-parametric multi-group variance equality |
+| 카이제곱 | 1 | 예 | 아니오 | 단일 모분산과 가설값 비교 |
+| F 검정 | 2 | 예 | 아니오 | 독립인 두 집단의 분산 비교 |
+| Bartlett | $\geq 2$ | 예 | 아니오 | 다집단 분산 동일성 (정규 자료) |
+| Levene | $\geq 2$ | 아니오 | 중간 | 다집단 분산 동일성 (일반) |
+| Brown-Forsythe | $\geq 2$ | 아니오 | 예 | 다집단 분산 동일성 (이상점 존재) |
+| Fligner-Killeen | $\geq 2$ | 아니오 | 예 | 비모수 다집단 분산 동일성 |
 
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Describe the main concept of Introduction to Variance Testing and explain why it matters for statistical practice.
+**연습문제 1.**
+크기가 각각 $n_1 = 10$, $n_2 = 12$, $n_3 = 15$이고 표본분산이 $s_1^2 = 4.2$, $s_2^2 = 9.8$, $s_3^2 = 6.1$인 세 집단이 있다. Bartlett 통계량을 손으로 계산하고 $\alpha = 0.05$에서 판정하라.
 
-??? success "Solution to Exercise 1"
-    Introduction to Variance Testing is a core topic in statistics that provides tools for drawing reliable inferences from data. It matters because proper application ensures valid conclusions, correctly quantified uncertainty, and appropriate handling of the assumptions that underpin the method. Practitioners who understand this concept can avoid common pitfalls and choose the right analytical approach for their data.
+??? success "연습문제 1 풀이"
+
+    $N = 10 + 12 + 15 = 37$, $k = 3$이다.
+
+    **1단계: 합동분산.**
+
+    $$
+    S_p^2 = \frac{\sum (n_i - 1) S_i^2}{N - k} = \frac{9(4.2) + 11(9.8) + 14(6.1)}{34} = \frac{37.8 + 107.8 + 85.4}{34} = \frac{231.0}{34} = 6.7941.
+    $$
+
+    **2단계: 분자.**
+
+    $$
+    (N-k)\ln(S_p^2) - \sum (n_i-1)\ln(S_i^2) = 34 \ln(6.7941) - [9\ln 4.2 + 11 \ln 9.8 + 14 \ln 6.1].
+    $$
+
+    $\ln 6.7941 = 1.9160$, $\ln 4.2 = 1.4351$, $\ln 9.8 = 2.2824$, $\ln 6.1 = 1.8083$이므로
+
+    $$
+    34(1.9160) - [9(1.4351) + 11(2.2824) + 14(1.8083)] = 65.144 - [12.916 + 25.106 + 25.316] = 65.144 - 63.338 = 1.8078.
+    $$
+
+    **3단계: 보정인자.**
+
+    $$
+    C = 1 + \frac{1}{3(k-1)}\left(\sum \frac{1}{n_i - 1} - \frac{1}{N-k}\right) = 1 + \frac{1}{6}\left(\frac{1}{9} + \frac{1}{11} + \frac{1}{14} - \frac{1}{34}\right) = 1 + \frac{1}{6}(0.2443) = 1.0407.
+    $$
+
+    **4단계: 검정통계량과 판정.**
+
+    $$
+    T = \frac{1.8078}{1.0407} = 1.7373.
+    $$
+
+    $H_0$ 아래에서 $T \sim \chi^2_2$이고 임계값은 $\chi^2_{0.95,2} = 5.991$이다. $1.7373 < 5.991$이므로 **기각하지 못한다**. $p$값은 $P(\chi^2_2 \geq 1.7373) = 0.4195$이다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    n = [10, 12, 15]
+    s2 = [4.2, 9.8, 6.1]
+    N, k = sum(n), len(n)
+
+    Sp2 = sum((ni - 1) * si for ni, si in zip(n, s2)) / (N - k)
+    num = (N - k) * np.log(Sp2) - sum((ni - 1) * np.log(si)
+                                      for ni, si in zip(n, s2))
+    C = 1 + (1 / (3 * (k - 1))) * (sum(1 / (ni - 1) for ni in n) - 1 / (N - k))
+    T = num / C
+    print(f"Sp2 = {Sp2:.4f}, C = {C:.4f}, T = {T:.4f}, "
+          f"p = {1 - stats.chi2.cdf(T, k - 1):.4f}")
+    ```
+
+    표본분산의 최대·최소 비가 $9.8/4.2 = 2.33$으로 꽤 큰데도 기각하지 못했다는 점이 흥미롭다. 표본이 작으면 표본분산의 변동이 크기 때문이다. $\square$
 
 ---
 
-**Exercise 2.**
-State the key assumptions required by the method discussed here. How can each assumption be checked?
+**연습문제 2.**
+Bartlett 검정이 여러 집단에 대한 **가능도비 검정**임을 보이고, 왜 $\ln S_i^2$의 형태로 나타나는지 설명하라.
 
-??? success "Solution to Exercise 2"
-    The main assumptions typically include: (1) independence of observations -- verified by understanding the data collection process and checking for serial correlation; (2) distributional requirements (e.g., normality) -- checked with Q-Q plots and formal tests like Shapiro-Wilk; (3) equal variances (if applicable) -- assessed with boxplots and Levene's test. When assumptions are violated, consider robust alternatives, transformations, or nonparametric methods.
+??? success "연습문제 2 풀이"
+    $k$개 집단이 각각 $\mathcal{N}(\mu_i, \sigma_i^2)$을 따른다고 하자. 정규 가능도의 로그를 최대화하면 각 집단의 분산 최대가능도추정량은 $\hat{\sigma}_i^2 = \frac{1}{n_i}\sum (x_{ij} - \bar{x}_i)^2$이고, 최대화된 로그가능도는 상수를 제외하고
+
+    $$
+    \ell_{\max} = -\frac{1}{2}\sum_i n_i \ln \hat{\sigma}_i^2 - \frac{N}{2}.
+    $$
+
+    귀무가설 $\sigma_1^2 = \cdots = \sigma_k^2 = \sigma^2$ 아래에서는 공통 분산의 추정량이 합동분산 $\hat{\sigma}^2$이고
+
+    $$
+    \ell_0 = -\frac{N}{2}\ln \hat{\sigma}^2 - \frac{N}{2}.
+    $$
+
+    따라서 가능도비 통계량은
+
+    $$
+    -2\ln \Lambda = 2(\ell_{\max} - \ell_0) = N \ln \hat{\sigma}^2 - \sum_i n_i \ln \hat{\sigma}_i^2.
+    $$
+
+    Bartlett 통계량의 분자가 정확히 이 형태이다(자유도를 $n_i$ 대신 $n_i - 1$로 바꾼 불편 버전을 쓴다는 차이만 있다).
+
+    **왜 로그인가.** 정규 로그가능도가 $\sigma^2$에 $\ln \sigma^2$의 형태로 의존하기 때문이다. 분산 자체가 아니라 그 로그가 자연스러운 모수화이다. 이는 실무적으로도 뜻이 있다. 분산의 **비**가 차이보다 의미 있는 비교 대상이며, 로그가 비를 차이로 바꾼다.
+
+    **보정인자 $C$의 역할.** $-2\ln\Lambda$는 점근적으로만 $\chi^2_{k-1}$을 따른다. Bartlett은 유한표본에서 $\chi^2$ 근사가 훨씬 정확해지도록 통계량을 $C$로 나누는 보정을 고안했다. 이 아이디어는 오늘날 "Bartlett 보정"이라는 이름으로 가능도비 검정 일반에 쓰인다. $\square$
 
 ---
 
-**Exercise 3.**
-Work through a small numerical example illustrating the application of the technique from this section.
+**연습문제 3.**
+표에서 카이제곱, F, Bartlett 검정만이 "정규성 필요: 예"로 표시되어 있다. 이 세 검정이 비정규성에 특별히 취약한 공통 이유를 설명하라.
 
-??? success "Solution to Exercise 3"
-    A structured approach to applying this technique involves: (1) clearly stating the hypotheses or estimation goal; (2) verifying that the data meet the required assumptions; (3) computing the relevant test statistic, estimate, or model fit; (4) obtaining the p-value, confidence interval, or posterior distribution; (5) interpreting the result in the context of the original question. Following these steps systematically ensures a rigorous and reproducible analysis.
+??? success "연습문제 3 풀이"
+    세 검정 모두 **정규성 아래에서 표본분산의 표집분포**에 직접 의존한다.
+
+    $X_i \sim \mathcal{N}(\mu, \sigma^2)$이면
+
+    $$
+    \frac{(n-1)S^2}{\sigma^2} \sim \chi^2_{n-1}
+    $$
+
+    가 정확히 성립하고, 여기서 카이제곱 검정이 나온다. 독립인 두 카이제곱의 비에서 F 검정이 나오고, Bartlett은 이를 $k$개 집단으로 확장한 것이다.
+
+    문제는 이 관계가 **정규성에 특유하다**는 점이다. 일반적으로 $S^2$의 점근분산은
+
+    $$
+    \operatorname{Var}(S^2) \approx \frac{\mu_4 - \sigma^4}{n} = \frac{\sigma^4(\gamma_2 + 2)}{n}
+    $$
+
+    이며 $\gamma_2$는 초과첨도이다. 정규분포는 $\gamma_2 = 0$이므로 $\operatorname{Var}(S^2) = 2\sigma^4/n$이 되고 이것이 $\chi^2_{n-1}$ 근사의 근거이다.
+
+    자료의 꼬리가 두꺼우면($\gamma_2 > 0$) $S^2$의 실제 분산이 정규 이론이 예측하는 것보다 **훨씬 크다**. 예컨대 $\gamma_2 = 6$인 $t_5$ 자료에서는 4배가 된다. 그러면 검정이 정규 기준분포보다 큰 통계량 값을 자주 만들어 내고 **제1종 오류율이 폭증한다**.
+
+    반면 Levene 계열 검정은 절대편차라는 **1차 척도 측도**에 분산분석을 적용한다. 절대편차의 분포는 4차 적률에 그만큼 민감하지 않으므로 훨씬 안정적이다. Fligner-Killeen은 한 발 더 나아가 순위만 쓰므로 원분포의 모양에 아예 의존하지 않는다. $\square$
 
 ---
 
-**Exercise 4.**
-Compare the approach from this section with an alternative method. When would you choose each?
+**연습문제 4.**
+$\text{Lognormal}(0, 0.8)$에서 크기 40인 세 표본을 뽑아(모분산이 **정확히 같다**) Bartlett, Levene, Brown-Forsythe, Fligner-Killeen 검정을 모두 수행하라. 결과를 비교하고 해석하라.
 
-??? success "Solution to Exercise 4"
-    The method discussed here is appropriate when its assumptions hold and the sample size is sufficient for the asymptotic approximations to be accurate. Alternative approaches include: (1) nonparametric methods -- preferred when distributional assumptions are suspect; (2) bootstrap methods -- useful when analytical reference distributions are unavailable; (3) Bayesian methods -- valuable when incorporating prior information or when direct probability statements about parameters are desired. Running multiple approaches and comparing results provides a useful robustness check.
+??? success "연습문제 4 풀이"
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    rng = np.random.default_rng(7)
+    g = [rng.lognormal(0, 0.8, 40) for _ in range(3)]
+
+    print("sample variances:", [round(x.var(ddof=1), 3) for x in g])
+    print(f"Bartlett:        p = {stats.bartlett(*g)[1]:.4f}")
+    print(f"Levene (mean):   p = {stats.levene(*g, center='mean')[1]:.4f}")
+    print(f"Brown-Forsythe:  p = {stats.levene(*g, center='median')[1]:.4f}")
+    print(f"Fligner-Killeen: p = {stats.fligner(*g)[1]:.4f}")
+    ```
+
+    출력:
+
+    ```text
+    sample variances: [0.341, 1.019, 0.931]
+    Bartlett:        p = 0.0021
+    Levene (mean):   p = 0.0488
+    Brown-Forsythe:  p = 0.1912
+    Fligner-Killeen: p = 0.0845
+    ```
+
+    세 표본을 **동일한 분포**에서 뽑았으므로 $H_0$이 참이다. 그런데 Bartlett은 $p = 0.002$로 강하게 기각하고 Levene(평균)도 아슬아슬하게 기각한다. 둘 다 제1종 오류이다. Brown-Forsythe와 Fligner-Killeen은 올바르게 기각하지 않는다.
+
+    한 표본의 결과가 우연일 수 있으므로 2,000회 반복으로 경험적 크기를 추정하면(각 집단 $n = 40$, 세 집단, $\alpha = 0.05$)
+
+    | 자료 분포 | Bartlett | Levene(평균) | Brown-Forsythe | Fligner-Killeen |
+    |---|---|---|---|---|
+    | $\mathcal{N}(0,1)$ | 0.045 | 0.048 | 0.039 | 0.038 |
+    | $\text{Lognormal}(0, 0.8)$ | **0.620** | 0.189 | 0.039 | 0.087 |
+    | $t_5$ | **0.267** | 0.054 | 0.042 | 0.040 |
+
+    결과가 충격적이다. 대수정규 자료에서 **Bartlett 검정은 62%의 확률로 잘못 기각한다.** 명목 5%의 12배가 넘는다. $t_5$ 자료에서도 26.7%이다.
+
+    Levene(평균)은 대수정규에서 18.9%로 역시 문제가 있다. 치우친 자료에서 평균이 좋은 중심 측도가 아니기 때문이다.
+
+    **Brown-Forsythe는 세 분포 모두에서 0.039~0.042로 안정적이다.** 이것이 이 장에서 반복될 결론이며, 정규성이 의심스러울 때 Brown-Forsythe를 기본값으로 권하는 이유이다.
+
+    (Fligner-Killeen이 정규 자료에서 0.038로 다소 보수적이고 대수정규에서 0.087로 약간 자유주의적인 점도 눈여겨보라. 완벽한 검정은 없다.) $\square$

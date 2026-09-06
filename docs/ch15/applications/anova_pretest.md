@@ -1,75 +1,116 @@
-# Pre-Test for Analysis of Variance Homoscedasticity
+# 분산분석 등분산성 사전검정
 
-One-way ANOVA assumes that all $k$ groups share a common variance: $\sigma_1^2 = \sigma_2^2 = \cdots = \sigma_k^2$. When this assumption is violated, the standard ANOVA F-test can produce misleading $p$-values. A natural strategy is to test the equal-variance assumption before running the ANOVA, using one of the variance tests from this chapter. This section discusses the pre-testing workflow, the choice of pre-test, and the controversy surrounding the two-stage approach.
+일원분산분석은 $k$개 집단이 공통 분산을 갖는다고 가정한다. 곧 $\sigma_1^2 = \sigma_2^2 = \cdots = \sigma_k^2$이다. 이 가정이 위배되면 표준 분산분석 F 검정이 오도하는 $p$값을 낼 수 있다. 자연스러운 전략은 분산분석을 수행하기 전에 이 장의 분산 검정 가운데 하나로 등분산 가정을 검정하는 것이다. 이 절은 사전검정 흐름, 사전검정의 선택, 그리고 두 단계 접근을 둘러싼 논쟁을 다룬다.
 
-## The Two-Stage Workflow
+## 두 단계 흐름
 
-The traditional approach proceeds in two stages:
+전통적인 접근은 두 단계로 진행된다.
 
-**Stage 1 (Pre-test).** Apply a variance homogeneity test at some significance level $\alpha_{\text{pre}}$:
+**1단계 (사전검정).** 어떤 유의수준 $\alpha_{\text{pre}}$에서 분산 동질성 검정을 적용한다.
 
-- If the pre-test fails to reject $H_0\colon \sigma_1^2 = \cdots = \sigma_k^2$, proceed with the standard ANOVA F-test.
-- If the pre-test rejects $H_0$, use an alternative procedure that does not require equal variances, such as Welch's ANOVA.
+- 사전검정이 $H_0\colon \sigma_1^2 = \cdots = \sigma_k^2$을 기각하지 못하면 표준 분산분석 F 검정으로 진행한다.
+- 사전검정이 $H_0$을 기각하면 등분산을 요구하지 않는 대안 절차(Welch 분산분석 등)를 쓴다.
 
-**Stage 2 (Main test).** Run the ANOVA or its alternative:
+**2단계 (본 검정).** 분산분석 또는 그 대안을 수행한다.
 
-- **Standard ANOVA** uses the pooled variance $\text{MSE} = S_p^2$ in the denominator of the F-statistic and follows an $F_{k-1, N-k}$ distribution.
-- **Welch's ANOVA** does not pool the variances. Instead, it uses a weighted average of the group means and an adjusted degrees-of-freedom approximation (Welch-Satterthwaite).
+- **표준 분산분석**은 F 통계량의 분모에 합동분산 $\text{MSE} = S_p^2$을 쓰며 $F_{k-1, N-k}$ 분포를 따른다.
+- **Welch 분산분석**은 분산을 합동하지 않는다. 대신 집단평균의 가중평균과 조정된 자유도 근사(Welch-Satterthwaite)를 쓴다.
 
-## Choosing the Pre-Test
+## 사전검정 고르기
 
-The pre-test should be robust enough to produce reliable results on the same data that will enter the ANOVA. Since ANOVA data are often not perfectly normal, a normality-dependent pre-test (like Bartlett's) can reject the equal-variance hypothesis due to non-normality rather than genuine variance differences.
+사전검정은 분산분석에 들어갈 바로 그 자료에서 신뢰할 만한 결과를 낼 만큼 로버스트해야 한다. 분산분석 자료가 완벽히 정규인 경우는 드물므로, Bartlett 검정처럼 정규성에 의존하는 사전검정은 실제 분산 차이가 아니라 비정규성 때문에 등분산 가설을 기각할 수 있다.
 
-**Recommended pre-tests:**
+**권장 사전검정:**
 
-| Pre-test | When to use |
+| 사전검정 | 사용 상황 |
 |---|---|
-| Brown-Forsythe | Default choice for most situations |
-| Levene (mean) | When data are approximately symmetric |
-| Fligner-Killeen | When data are heavily non-normal |
+| Brown-Forsythe | 대부분의 상황에서 기본 선택 |
+| Levene (평균) | 자료가 근사적으로 대칭일 때 |
+| Fligner-Killeen | 자료가 심하게 비정규일 때 |
 
-!!! warning "Do Not Use Bartlett's Test as a Pre-Test"
-    Bartlett's test is too sensitive to non-normality to serve as a reliable ANOVA pre-test. If the data are non-normal, Bartlett's test may reject $H_0$ even when the variances are equal, leading the analyst to use Welch's ANOVA unnecessarily. The Brown-Forsythe test is the standard recommendation.
+!!! warning "Bartlett 검정을 사전검정으로 쓰지 말라"
+    Bartlett 검정은 비정규성에 지나치게 민감하여 신뢰할 만한 분산분석 사전검정이 되지 못한다. 자료가 비정규이면 분산이 같아도 $H_0$을 기각할 수 있고, 그러면 불필요하게 Welch 분산분석을 쓰게 된다.
 
-## The Pre-Testing Controversy
+    15.4절 표에서 보았듯 지수분포 자료에서 Bartlett의 실제 크기는 **0.390**이다. 등분산인 자료의 39%에서 "분산이 다르다"고 잘못 판정한다. Brown-Forsythe 검정이 표준적 권고이다.
 
-The two-stage approach has been criticized on several grounds:
+## 사전검정 논쟁
 
-**1. Inflated overall Type I error.** The combined procedure (pre-test followed by conditional ANOVA) does not maintain the nominal significance level $\alpha$ for the main test. The overall Type I error rate depends on the pre-test's power, the pre-test's significance level, and the degree of variance heterogeneity. Simulation studies show that the two-stage procedure can have an actual Type I error rate that differs from $\alpha$ by several percentage points.
+두 단계 접근은 여러 근거에서 비판받아 왔다.
 
-**2. Low power of the pre-test.** Variance tests have limited power to detect moderate variance differences, especially with small samples. A non-significant pre-test does not mean the variances are equal; it may simply mean the sample sizes are too small to detect the difference.
+**1. 전체 제1종 오류의 왜곡.** 결합된 절차(사전검정 후 조건부 분산분석)는 본 검정의 명목 유의수준 $\alpha$를 유지하지 못한다. 전체 제1종 오류율은 사전검정의 검정력, 사전검정의 유의수준, 분산 이질성의 정도에 의존한다.
 
-**3. Conditional bias.** The decision to use standard ANOVA or Welch's ANOVA is data-dependent. This conditioning introduces a subtle bias into the main test's operating characteristics.
+**2. 사전검정의 낮은 검정력.** 분산 검정은 중간 정도의 분산 차이를 탐지할 검정력이 제한적이며 표본이 작을수록 심하다. 사전검정이 유의하지 않다고 분산이 같은 것이 아니라, 단지 표본이 작아 차이를 탐지하지 못한 것일 수 있다.
 
-## The Modern Recommendation
+**3. 조건부 편향.** 표준 분산분석과 Welch 분산분석 중 어느 것을 쓸지가 자료에 의존한다. 이 조건화가 본 검정의 작동 특성에 미묘한 편향을 들여온다.
 
-Many statisticians now recommend bypassing the pre-test entirely and using Welch's ANOVA by default:
+### 수치로 본 논쟁
 
-- **Welch's ANOVA with equal variances.** When the variances are in fact equal, Welch's ANOVA has only slightly lower power than standard ANOVA (typically 1--2 percentage points).
-- **Welch's ANOVA with unequal variances.** When the variances are unequal, Welch's ANOVA maintains the correct Type I error rate while standard ANOVA does not.
+집단 4개, 각 $n = 15$, 평균이 모두 같은($H_0$ 참) 상황에서 세 전략의 실제 제1종 오류율을 비교했다(반복 5,000회, 명목 $\alpha = 0.05$).
 
-The small power loss under equal variances is a modest price for the protection against variance heterogeneity.
+| 표준편차 | 항상 표준 분산분석 | 항상 Welch | 두 단계 (BF 사전검정) |
+|---|---|---|---|
+| $(5,5,5,5)$ 등분산 | 0.045 | 0.045 | 0.046 |
+| $(5,5,5,10)$ | **0.063** | 0.044 | 0.057 |
+| $(2,4,6,10)$ | **0.074** | 0.046 | 0.047 |
 
-!!! tip "When to Pre-Test vs. When to Default to Welch"
+읽을 점이 세 가지이다.
 
-    - **Default to Welch's ANOVA** in routine analyses where robustness is more important than extracting every last bit of power.
-    - **Use the pre-test** when the sample sizes are large (so the pre-test has good power), normality is confirmed, and the analyst wants to maximize power by pooling variances when justified.
+1. **표준 분산분석은 분산이 다르면 크기가 부풀려진다.** $(2,4,6,10)$에서 0.074로 명목값의 1.5배이다.
+2. **Welch 분산분석은 모든 경우에 0.044~0.046으로 안정적이다.**
+3. **두 단계 절차는 중간이다.** $(5,5,5,10)$에서 0.057로 여전히 부풀려져 있다. 분산 차이가 작아 Brown-Forsythe가 자주 놓치고, 그때마다 부적절한 표준 분산분석으로 넘어가기 때문이다. 분산 차이가 큰 $(2,4,6,10)$에서는 사전검정이 잘 탐지하므로 0.047로 회복된다.
 
-## Example Workflow
+**곧 사전검정이 가장 필요한 상황(작고 애매한 분산 차이)에서 가장 도움이 되지 않는다.**
 
-A researcher compares the mean scores of $k = 4$ treatment groups, each with $n_i = 15$ observations.
+## 현대의 권고
 
-**Step 1.** Check normality within each group (Shapiro-Wilk test or Q-Q plots). Suppose all four groups pass the normality check.
+많은 통계학자가 사전검정을 아예 건너뛰고 Welch 분산분석을 기본값으로 쓰기를 권한다.
 
-**Step 2.** Run the Brown-Forsythe test for equal variances at $\alpha_{\text{pre}} = 0.05$.
+- **등분산일 때의 Welch 분산분석.** 실제로 분산이 같을 때 Welch 분산분석의 검정력은 표준 분산분석보다 조금 낮을 뿐이다.
+- **이분산일 때의 Welch 분산분석.** 분산이 다를 때 Welch 분산분석은 올바른 제1종 오류율을 유지하지만 표준 분산분석은 그러지 못한다.
 
-**Step 3.** If the Brown-Forsythe test fails to reject ($p > 0.05$): run standard one-way ANOVA. If it rejects ($p \le 0.05$): run Welch's ANOVA.
+검정력 손실의 크기를 확인해 보자. 네 집단, 각 $n = 15$, 모든 표준편차가 5인 등분산 상황에서
 
-## Python Implementation
+| 참 평균 | 표준 분산분석 검정력 | Welch 검정력 | 손실 |
+|---|---|---|---|
+| $(0,0,0,3)$ | 0.337 | 0.319 | $-1.8$%p |
+| $(0,0,0,5)$ | 0.780 | 0.754 | $-2.7$%p |
+
+등분산 아래에서 잃는 검정력이 2~3퍼센트포인트에 불과하다. 이분산에서 얻는 크기 보호(0.074 → 0.046)와 견주면 매우 작은 대가이다.
+
+!!! tip "언제 사전검정을 하고 언제 Welch를 기본값으로 하는가"
+
+    - 모든 검정력을 짜내는 것보다 로버스트성이 중요한 일상적 분석에서는 **Welch 분산분석을 기본값**으로 하라.
+    - 표본이 커서 사전검정의 검정력이 좋고, 정규성이 확인되었으며, 정당화될 때 분산을 합동하여 검정력을 최대화하고 싶을 때만 **사전검정을 쓰라**.
+
+## 예제 흐름
+
+어떤 연구자가 $k = 4$개 처치집단의 평균 점수를 비교한다. 각 집단은 $n_i = 15$개 관측값을 갖는다.
+
+**1단계.** 각 집단의 정규성을 확인한다(Shapiro-Wilk 검정 또는 Q-Q 그림). 네 집단이 모두 정규성 확인을 통과했다고 하자.
+
+**2단계.** $\alpha_{\text{pre}} = 0.05$에서 등분산에 대한 Brown-Forsythe 검정을 수행한다.
+
+**3단계.** Brown-Forsythe 검정이 기각하지 못하면($p > 0.05$) 표준 일원분산분석을, 기각하면($p \le 0.05$) Welch 분산분석을 수행한다.
+
+## Python 구현
 
 ```python
 import numpy as np
 from scipy import stats
+
+def welch_anova(groups):
+    """Welch's one-way ANOVA. Returns (F, df1, df2, p)."""
+    k = len(groups)
+    n = np.array([len(g) for g in groups])
+    m = np.array([g.mean() for g in groups])
+    v = np.array([g.var(ddof=1) for g in groups])
+    w = n / v
+    m_w = np.sum(w * m) / np.sum(w)
+    A = np.sum(w * (m - m_w) ** 2) / (k - 1)
+    lam = np.sum((1 - w / np.sum(w)) ** 2 / (n - 1)) / (k ** 2 - 1)
+    F = A / (1 + 2 * (k - 2) * lam)
+    df2 = 1 / (3 * lam)
+    return F, k - 1, df2, stats.f.sf(F, k - 1, df2)
 
 # Simulated group data
 rng = np.random.default_rng(42)
@@ -77,61 +118,197 @@ g1 = rng.normal(50, 5, size=15)
 g2 = rng.normal(55, 5, size=15)
 g3 = rng.normal(52, 5, size=15)
 g4 = rng.normal(48, 5, size=15)
+groups = [g1, g2, g3, g4]
 
 # Step 1: Brown-Forsythe pre-test
-bf_stat, bf_p = stats.levene(g1, g2, g3, g4, center='median')
-print(f"Brown-Forsythe statistic: {bf_stat:.4f}")
-print(f"Brown-Forsythe p-value:   {bf_p:.4f}")
+bf_stat, bf_p = stats.levene(*groups, center='median')
+print(f"Brown-Forsythe: W = {bf_stat:.4f}, p = {bf_p:.4f}")
 
-# Step 2: Choose ANOVA type based on pre-test
-alpha_pre = 0.05
-if bf_p > alpha_pre:
-    # Equal variances assumed
-    f_stat, p_val = stats.f_oneway(g1, g2, g3, g4)
-    print(f"\nStandard ANOVA F = {f_stat:.4f}, p = {p_val:.4f}")
-else:
-    # Unequal variances
-    # Welch's ANOVA (available in scipy as Alexander-Govern or via pingouin)
-    print("\nVariances are unequal. Use Welch's ANOVA.")
-
-# Alternative: always use Welch's ANOVA (no pre-test needed)
-# from pingouin import welch_anova
-# welch_anova(data=df, dv='score', between='group')
+# Step 2: both ANOVAs, for comparison
+f_std, p_std = stats.f_oneway(*groups)
+f_w, df1, df2, p_w = welch_anova(groups)
+print(f"Standard ANOVA: F = {f_std:.4f}, p = {p_std:.6f}")
+print(f"Welch ANOVA:    F = {f_w:.4f}, df = ({df1}, {df2:.2f}), "
+      f"p = {p_w:.6f}")
 ```
 
-## Summary
+출력:
 
-The pre-test for ANOVA homoscedasticity remains a common practice, but its limitations should be understood. The Brown-Forsythe test is the appropriate pre-test when one is used. However, the modern consensus favors defaulting to Welch's ANOVA, which performs well regardless of whether the variances are equal. The pre-test is most valuable when sample sizes are large enough to detect meaningful variance differences and when the analyst has confirmed normality.
+```text
+Brown-Forsythe: W = 0.4728, p = 0.7025
+Standard ANOVA: F = 8.1365, p = 0.000138
+Welch ANOVA:    F = 9.7514, df = (3, 30.81), p = 0.000112
+```
+
+자료를 등분산으로 생성했으므로 Brown-Forsythe가 기각하지 않고($p = 0.70$) 두 분산분석의 결과도 사실상 같다($p = 0.000138$ 대 $0.000112$). Welch의 분모 자유도가 $44$에서 $30.81$로 줄었는데도 결론이 바뀌지 않는다.
+
+## 요약
+
+분산분석 등분산성 사전검정은 여전히 흔한 관행이지만 그 한계를 이해해야 한다. 사전검정을 쓴다면 Brown-Forsythe 검정이 적절하다. 그러나 현대의 합의는 분산이 같든 다르든 잘 작동하는 Welch 분산분석을 기본값으로 삼는 쪽이다. 사전검정이 가장 가치 있는 때는 의미 있는 분산 차이를 탐지할 만큼 표본이 크고 정규성이 확인되었을 때이다.
 
 
-## Exercises
+## 연습문제
 
-**Exercise 1.**
-Describe the main concept of Pre-Test for Analysis of Variance Homoscedasticity and explain why it matters for statistical practice.
+**연습문제 1.**
+집단 4개, 각 $n = 15$, 표준편차 $(5, 5, 5, 10)$이고 평균이 모두 같은 상황에서 세 전략(항상 표준 분산분석, 항상 Welch, 두 단계)의 제1종 오류율을 모의실험으로 비교하라.
 
-??? success "Solution to Exercise 1"
-    Pre-Test for Analysis of Variance Homoscedasticity is a core topic in statistics that provides tools for drawing reliable inferences from data. It matters because proper application ensures valid conclusions, correctly quantified uncertainty, and appropriate handling of the assumptions that underpin the method. Practitioners who understand this concept can avoid common pitfalls and choose the right analytical approach for their data.
+??? success "연습문제 1 풀이"
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    def welch_p(groups):
+        k = len(groups)
+        n = np.array([len(g) for g in groups])
+        m = np.array([g.mean() for g in groups])
+        v = np.array([g.var(ddof=1) for g in groups])
+        w = n / v
+        m_w = np.sum(w * m) / np.sum(w)
+        A = np.sum(w * (m - m_w) ** 2) / (k - 1)
+        lam = np.sum((1 - w / np.sum(w)) ** 2 / (n - 1)) / (k ** 2 - 1)
+        F = A / (1 + 2 * (k - 2) * lam)
+        return stats.f.sf(F, k - 1, 1 / (3 * lam))
+
+    def sim(sds, R=5000, n=15, seed=1):
+        rng = np.random.default_rng(seed)
+        a = b = c = 0
+        for _ in range(R):
+            gs = [rng.normal(0, s, n) for s in sds]
+            p_bf = stats.levene(*gs, center='median')[1]
+            p_std = stats.f_oneway(*gs)[1]
+            p_w = welch_p(gs)
+            a += p_std < 0.05
+            b += p_w < 0.05
+            c += (p_std < 0.05) if p_bf > 0.05 else (p_w < 0.05)
+        return a / R, b / R, c / R
+
+    for sds in [(5, 5, 5, 5), (5, 5, 5, 10), (2, 4, 6, 10)]:
+        std, welch, twostage = sim(sds)
+        print(f"sd = {str(sds):>16}: standard {std:.4f}, "
+              f"Welch {welch:.4f}, two-stage {twostage:.4f}")
+    ```
+
+    출력:
+
+    ```text
+    sd =    (5, 5, 5, 5): standard 0.0452, Welch 0.0452, two-stage 0.0458
+    sd =   (5, 5, 5, 10): standard 0.0634, Welch 0.0440, two-stage 0.0568
+    sd =  (2, 4, 6, 10): standard 0.0738, Welch 0.0464, two-stage 0.0468
+    ```
+
+    **핵심 관찰: 두 단계 절차가 중간 사례에서 가장 나쁘다.**
+
+    $(5,5,5,10)$에서 두 단계 절차의 크기가 $0.057$로, 항상 Welch를 쓰는 $0.044$보다 나쁘다. 분산 차이가 중간이라 Brown-Forsythe가 자주 놓치기 때문이다.
+
+    반면 $(2,4,6,10)$처럼 차이가 크면 사전검정이 잘 탐지하여 두 단계 절차도 $0.047$로 회복된다.
+
+    **이 패턴이 사전검정 논쟁의 핵심이다.** 사전검정은 분산 차이가 명백할 때 잘 작동하지만, 그런 상황에서는 애초에 사전검정 없이도 Welch를 쓰면 된다. 사전검정이 필요한 애매한 상황에서는 검정력이 부족해 도움이 되지 않는다. $\square$
 
 ---
 
-**Exercise 2.**
-State the key assumptions required by the method discussed here. How can each assumption be checked?
+**연습문제 2.**
+등분산일 때 Welch 분산분석이 잃는 검정력을 모의실험으로 수량화하라. 그 손실이 받아들일 만한지 논하라.
 
-??? success "Solution to Exercise 2"
-    The main assumptions typically include: (1) independence of observations -- verified by understanding the data collection process and checking for serial correlation; (2) distributional requirements (e.g., normality) -- checked with Q-Q plots and formal tests like Shapiro-Wilk; (3) equal variances (if applicable) -- assessed with boxplots and Levene's test. When assumptions are violated, consider robust alternatives, transformations, or nonparametric methods.
+??? success "연습문제 2 풀이"
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    rng = np.random.default_rng(7)
+    R, n = 5000, 15
+
+    for mus in [(0, 0, 0, 3), (0, 0, 0, 5)]:
+        a = b = 0
+        for _ in range(R):
+            gs = [rng.normal(m, 5, n) for m in mus]
+            a += stats.f_oneway(*gs)[1] < 0.05
+            b += welch_p(gs) < 0.05          # welch_p from Exercise 1
+        print(f"mu = {str(mus):>14}: standard {a/R:.4f}, Welch {b/R:.4f}")
+    ```
+
+    출력:
+
+    ```text
+    mu = (0, 0, 0, 3): standard 0.3368, Welch 0.3190
+    mu = (0, 0, 0, 5): standard 0.7804, Welch 0.7536
+    ```
+
+    | 효과 크기 | 표준 | Welch | 절대 손실 | 상대 손실 |
+    |---|---|---|---|---|
+    | 평균차 3 (0.6 SD) | 0.337 | 0.319 | 1.8%p | 5.3% |
+    | 평균차 5 (1.0 SD) | 0.780 | 0.754 | 2.7%p | 3.5% |
+
+    **손실이 받아들일 만한가.** 세 관점에서 따져 보자.
+
+    1. **크기와 검정력의 교환.** 연습문제 1에서 표준 분산분석의 크기가 이분산 아래에서 0.074까지 부풀려졌다. 크기가 5%에서 7.4%로 뛰는 것은 검정력이 2%p 오르는 것과 비교할 수 없이 심각하다. 크기 왜곡은 **잘못된 발견**을 만들지만 검정력 손실은 단지 발견을 놓칠 뿐이다.
+
+    2. **보험료로서의 관점.** 등분산이 확실한 경우에만 2~3%p를 잃는다. 등분산이 확실하지 않은 대부분의 실무 상황에서는 오히려 이득이다.
+
+    3. **손실이 왜 그렇게 작은가.** Welch의 분모 자유도는 등분산일 때 $N - k$에 가깝다. 본문 예제에서 $44$ 대 $30.81$로 줄었지만, F 분포는 분모 자유도가 30을 넘으면 거의 변하지 않는다. 자유도 손실의 실질적 대가가 작은 이유이다.
+
+    **결론: 받아들일 만하다.** 다만 집단 수가 많고($k \geq 6$) 각 집단이 매우 작으면($n_i \leq 5$) Welch의 자유도 근사 자체가 불안정해질 수 있으므로, 그때는 순열검정이나 붓스트랩을 고려하는 편이 낫다. $\square$
 
 ---
 
-**Exercise 3.**
-Work through a small numerical example illustrating the application of the technique from this section.
+**연습문제 3.**
+Welch 분산분석의 검정통계량과 자유도 공식을 서술하고, 등분산일 때 표준 분산분석으로 환원되는지 확인하라.
 
-??? success "Solution to Exercise 3"
-    A structured approach to applying this technique involves: (1) clearly stating the hypotheses or estimation goal; (2) verifying that the data meet the required assumptions; (3) computing the relevant test statistic, estimate, or model fit; (4) obtaining the p-value, confidence interval, or posterior distribution; (5) interpreting the result in the context of the original question. Following these steps systematically ensures a rigorous and reproducible analysis.
+??? success "연습문제 3 풀이"
+    **Welch 통계량.** 집단 $i$의 가중치를 $w_i = n_i / s_i^2$이라 하고 가중평균을 $\bar{X}_w = \sum_i w_i \bar{X}_i / \sum_i w_i$라 하자.
+
+    $$
+    A = \frac{1}{k-1}\sum_{i=1}^k w_i (\bar{X}_i - \bar{X}_w)^2,
+    $$
+
+    $$
+    \Lambda = \frac{1}{k^2 - 1}\sum_{i=1}^k \frac{1}{n_i - 1}\left(1 - \frac{w_i}{\sum_j w_j}\right)^2,
+    $$
+
+    $$
+    F_W = \frac{A}{1 + 2(k-2)\Lambda} \;\sim\; F_{k-1,\; \nu_2}, \qquad \nu_2 = \frac{1}{3\Lambda}.
+    $$
+
+    **핵심 아이디어.** 가중치 $w_i = n_i/s_i^2$은 각 집단평균의 **정밀도의 역수**이다. 분산이 큰 집단은 평균 추정이 부정확하므로 가중치를 적게 받는다. 표준 분산분석이 모든 집단에 같은 가중치를 주는 것과 대조적이다.
+
+    **등분산일 때의 환원.** 모든 $s_i^2 = s^2$이고 모든 $n_i = n$이면 $w_i = n/s^2$으로 같아지고
+
+    - $\bar{X}_w = \bar{X}$ (단순 전체평균)
+    - $A = \frac{n}{s^2(k-1)}\sum_i(\bar{X}_i - \bar{X})^2 = \frac{\text{MSB}}{s^2}$
+    - $w_i/\sum_j w_j = 1/k$이므로 $\Lambda = \frac{1}{k^2-1}\cdot\frac{k}{n-1}\left(1-\frac{1}{k}\right)^2 = \frac{(k-1)}{k(k+1)(n-1)}$
+
+    표준 분산분석의 $F = \text{MSB}/\text{MSE}$와 비교하면 $A$가 $\text{MSB}/s^2$이고 여기서 $s^2$이 각 집단분산이므로, $s_i^2$이 모두 같으면 $s^2 = \text{MSE}$가 되어 $A = F_{\text{std}}$이다.
+
+    다만 **정확히 같지는 않다.** 보정항 $1 + 2(k-2)\Lambda > 1$이 통계량을 약간 줄이고, 자유도 $\nu_2 = 1/(3\Lambda)$이 $N-k$보다 작다. $k = 4$, $n = 15$이면
+
+    $$
+    \Lambda = \frac{3}{4 \times 5 \times 14} = 0.01071, \quad \nu_2 = \frac{1}{0.03214} = 31.1
+    $$
+
+    로 $N - k = 56$보다 작다. 이 차이가 연습문제 2에서 관찰한 2~3%p의 검정력 손실을 만든다.
+
+    (본문 예제에서 $\nu_2 = 30.81$이 나온 것은 표본분산이 정확히 같지는 않기 때문이며, 위 이론값 31.1에 가깝다.) $\square$
 
 ---
 
-**Exercise 4.**
-Compare the approach from this section with an alternative method. When would you choose each?
+**연습문제 4.**
+"사전검정이 기각하지 못했으므로 등분산성이 확인되었다"는 서술이 왜 부적절한지 설명하고, 대신 어떻게 보고해야 하는지 제시하라.
 
-??? success "Solution to Exercise 4"
-    The method discussed here is appropriate when its assumptions hold and the sample size is sufficient for the asymptotic approximations to be accurate. Alternative approaches include: (1) nonparametric methods -- preferred when distributional assumptions are suspect; (2) bootstrap methods -- useful when analytical reference distributions are unavailable; (3) Bayesian methods -- valuable when incorporating prior information or when direct probability statements about parameters are desired. Running multiple approaches and comparing results provides a useful robustness check.
+??? success "연습문제 4 풀이"
+    **부적절한 이유 1: 기각 실패는 증거가 아니다.** 가설검정에서 $H_0$을 기각하지 못한 것은 "$H_0$이 참"이 아니라 "$H_0$을 반박할 증거가 부족하다"는 뜻이다. 14장의 정규성 검정에서 반복한 논리가 그대로 적용된다.
+
+    **부적절한 이유 2: 검정력이 낮다.** 15.4절 연습문제 4에서 보았듯, 세 집단 총 30개 관측값으로는 분산이 **네 배** 달라야 탐지한다. 15.5절 예제에서는 $n_i = 5$일 때 분산비 3.9배도 놓쳤다.
+
+    구체적으로 $(5,5,5,10)$인 연습문제 1의 설정, 곧 한 집단의 분산이 다른 집단의 **네 배**인 상황에서도 Brown-Forsythe의 검정력은 절반이 채 되지 않는다(두 단계 절차의 크기가 0.057로 표준 분산분석의 0.063에 가까웠다는 사실이 이를 보여준다).
+
+    **부적절한 이유 3: 이분법이 정보를 버린다.** 사전검정의 $p$값 하나로 등분산 여부를 판정하면 집단별 분산의 실제 크기와 그 불확실성이 사라진다.
+
+    **어떻게 보고해야 하는가.**
+
+    1. **집단별 표준편차(또는 분산)와 표본크기를 표로 제시한다.** 독자가 이질성의 정도를 직접 판단할 수 있게 한다.
+    2. **상자그림을 함께 싣는다.** 분산 차이뿐 아니라 모양의 차이도 드러난다.
+    3. **사전검정 결과를 "확인"이 아니라 "관찰"로 서술한다.** "등분산성이 확인되었다" 대신 "Brown-Forsythe 검정에서 분산 이질성의 증거를 찾지 못했다($W = 0.47$, $p = 0.70$). 다만 집단당 $n = 15$로 검정력이 제한적이다"라고 쓴다.
+    4. **가능하면 판정 자체를 피한다.** Welch 분산분석을 쓰면 등분산성이 확인되었는지 여부와 무관하게 타당한 추론이 되므로, 이 문장을 쓸 필요가 없어진다.
+
+    가장 좋은 해결책은 **답하기 어려운 질문에 답하려 하지 말고 그 질문이 필요 없는 방법을 쓰는 것**이다. $\square$
