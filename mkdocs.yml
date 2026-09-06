@@ -525,57 +525,57 @@ nav:
             - 회귀 (대마초 가격과 인구통계): ch13/code/regression_weed_demographics.md
             - 최소제곱 모의실험 (몬테카를로): ch13/code/ols_simulation.md
             - 부분집합 선택과 단계적 선택: ch13/code/subset_stepwise_selection.md
-    - 14 Normality Tests:
-        - Chapter Overview: ch14/index.md
-        - 14.1 Introduction to Normality:
-            - What Is Normality and Why It Matters: ch14/introduction/normality.md
-            - Central Role in Statistical Inference: ch14/introduction/role_in_inference.md
-            - Normality in Financial Data: ch14/introduction/financial_context.md
-        - 14.2 Graphical Methods:
-            - Histogram and Density Plots: ch14/graphical_methods/histogram_density.md
-            - Quantile-Quantile Plots: ch14/graphical_methods/qq_plots.md
-            - Boxplots and Their Interpretation: ch14/graphical_methods/boxplots.md
-            - Quantile-Quantile Plots for Financial Returns: ch14/graphical_methods/qq_plots_financial.md
-        - 14.3 Descriptive Statistics as Normality Indicators:
-            - Skewness and Kurtosis: ch14/descriptive_statistics/skewness_kurtosis.md
-            - Skewtest and Kurtosistest: ch14/descriptive_statistics/skewtest_kurtosistest.md
-            - D'Agostino's K-Squared Test: ch14/descriptive_statistics/dagostino.md
-            - Jarque-Bera Test: ch14/descriptive_statistics/jarque_bera.md
-        - 14.4 Formal Tests for Normality:
-            - Kolmogorov-Smirnov and Lilliefors Tests: ch14/formal_tests/ks_lilliefors.md
-            - Anderson-Darling Test: ch14/formal_tests/anderson_darling.md
-            - Shapiro-Wilk Test: ch14/formal_tests/shapiro_wilk.md
-        - 14.5 Limitations and Pitfalls:
-            - Sample Size Effects on Power: ch14/limitations/sample_size_power.md
-            - Sensitivity vs Practical Significance: ch14/limitations/sensitivity_practical.md
-            - Choosing the Right Test: ch14/limitations/choosing_test.md
-            - Limitations Overview: ch14/limitations/limitations.md
-        - 14.6 Dealing with Non-Normal Data:
-            - Transformations to Achieve Normality: ch14/non_normal_data/transformations.md
-            - Bootstrapping as an Alternative: ch14/non_normal_data/bootstrapping.md
-            - Non-Parametric Methods: ch14/non_normal_data/nonparametric.md
-        - 14.7 Applications:
-            - Normality in t-Tests and Analysis of Variance: ch14/applications/t_tests_anova.md
-            - Normality in Regression (Residual Diagnostics): ch14/applications/regression_residuals.md
-            - Normality of Financial Returns: ch14/applications/financial_returns.md
-            - Applications Overview: ch14/applications/applications.md
-        - 14.8 Code:
-            - Graphical Normality Checks: ch14/code/graphical_checks.md
-            - Formal Normality Test Suite: ch14/code/normality_tests.md
-            - Transformation Demonstrations: ch14/code/transformations.md
-            - Quantile-Quantile Plot with Normality Tests: ch14/code/qq_plot_basic.md
-            - Quantile-Quantile Plot Confidence Band Simulation: ch14/code/qq_confidence_band.md
-            - Distribution Shapes via Boxplots: ch14/code/boxplot_shapes.md
-            - Skewness Test: ch14/code/skewtest.md
-            - Kurtosis Test: ch14/code/kurtosistest.md
-            - D'Agostino K² Test: ch14/code/dagostino_test.md
-            - Jarque-Bera Test: ch14/code/jarque_bera.md
-            - Kolmogorov-Smirnov Test: ch14/code/ks_test.md
-            - Lilliefors Test: ch14/code/lilliefors_test.md
-            - Anderson-Darling Test: ch14/code/anderson_darling.md
-            - Shapiro-Wilk Test: ch14/code/shapiro_wilk.md
-            - Shapiro-Wilk Power Simulation: ch14/code/shapiro_power_sim.md
-            - Quantile-Quantile Plot Financial Returns: ch14/code/qq_plot_financial_returns.md
+    - 14 정규성 검정:
+        - 장 개요: ch14/index.md
+        - 14.1 정규성 입문:
+            - 정규성이란 무엇이며 왜 중요한가: ch14/introduction/normality.md
+            - 통계적 추론에서의 핵심 역할: ch14/introduction/role_in_inference.md
+            - 금융 자료에서의 정규성: ch14/introduction/financial_context.md
+        - 14.2 시각적 방법:
+            - 히스토그램과 밀도 그림: ch14/graphical_methods/histogram_density.md
+            - Q-Q 그림: ch14/graphical_methods/qq_plots.md
+            - 상자그림과 그 해석: ch14/graphical_methods/boxplots.md
+            - 금융 수익률의 Q-Q 그림: ch14/graphical_methods/qq_plots_financial.md
+        - 14.3 정규성 지표로서의 기술통계량:
+            - 왜도와 첨도: ch14/descriptive_statistics/skewness_kurtosis.md
+            - 왜도 검정과 첨도 검정: ch14/descriptive_statistics/skewtest_kurtosistest.md
+            - D'Agostino K제곱 검정: ch14/descriptive_statistics/dagostino.md
+            - Jarque-Bera 검정: ch14/descriptive_statistics/jarque_bera.md
+        - 14.4 형식적 정규성 검정:
+            - Kolmogorov-Smirnov 검정과 Lilliefors 검정: ch14/formal_tests/ks_lilliefors.md
+            - Anderson-Darling 검정: ch14/formal_tests/anderson_darling.md
+            - Shapiro-Wilk 검정: ch14/formal_tests/shapiro_wilk.md
+        - 14.5 한계와 함정:
+            - 표본크기가 검정력에 미치는 영향: ch14/limitations/sample_size_power.md
+            - 민감도와 실질적 유의성: ch14/limitations/sensitivity_practical.md
+            - 올바른 검정 고르기: ch14/limitations/choosing_test.md
+            - 한계 개관: ch14/limitations/limitations.md
+        - 14.6 비정규 자료 다루기:
+            - 정규성을 위한 변환: ch14/non_normal_data/transformations.md
+            - 대안으로서의 붓스트랩: ch14/non_normal_data/bootstrapping.md
+            - 비모수 방법: ch14/non_normal_data/nonparametric.md
+        - 14.7 응용:
+            - t 검정과 분산분석에서의 정규성: ch14/applications/t_tests_anova.md
+            - 회귀에서의 정규성 (잔차 진단): ch14/applications/regression_residuals.md
+            - 금융 수익률의 정규성: ch14/applications/financial_returns.md
+            - 응용 개관: ch14/applications/applications.md
+        - 14.8 코드:
+            - 시각적 정규성 확인: ch14/code/graphical_checks.md
+            - 형식적 정규성 검정 모음: ch14/code/normality_tests.md
+            - 변환 시연: ch14/code/transformations.md
+            - Q-Q 그림과 정규성 검정: ch14/code/qq_plot_basic.md
+            - Q-Q 그림 신뢰띠 모의실험: ch14/code/qq_confidence_band.md
+            - 상자그림으로 보는 분포의 모양: ch14/code/boxplot_shapes.md
+            - 왜도 검정: ch14/code/skewtest.md
+            - 첨도 검정: ch14/code/kurtosistest.md
+            - D'Agostino K제곱 검정 (코드): ch14/code/dagostino_test.md
+            - Jarque-Bera 검정 (코드): ch14/code/jarque_bera.md
+            - Kolmogorov-Smirnov 검정: ch14/code/ks_test.md
+            - Lilliefors 검정: ch14/code/lilliefors_test.md
+            - Anderson-Darling 검정 (코드): ch14/code/anderson_darling.md
+            - Shapiro-Wilk 검정 (코드): ch14/code/shapiro_wilk.md
+            - Shapiro-Wilk 검정력 모의실험: ch14/code/shapiro_power_sim.md
+            - 금융 수익률의 Q-Q 그림 (코드): ch14/code/qq_plot_financial_returns.md
 
     - 15 Variance Tests:
         - Chapter Overview: ch15/index.md

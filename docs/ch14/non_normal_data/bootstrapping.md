@@ -1,93 +1,104 @@
-# Bootstrapping as an Alternative
+# 대안으로서의 붓스트랩
 
-## Motivation
+## 동기
 
-The earlier sections of this chapter provide tools for detecting non-normality -- Q-Q plots, the Shapiro-Wilk test, and measures of skewness and kurtosis. When these diagnostics reveal that the data deviate substantially from the normal distribution, the standard parametric methods (confidence intervals based on $t$-distributions, hypothesis tests relying on $\chi^2$ or $F$-distributions) may no longer control their stated error rates. Bootstrapping offers a way to perform inference without assuming a specific parametric form for the population distribution. Instead of deriving a sampling distribution from theoretical assumptions, the bootstrap **estimates** the sampling distribution by resampling from the observed data itself.
+이 장의 앞 절들은 비정규성을 탐지하는 도구 — Q-Q 그림, Shapiro-Wilk 검정, 왜도와 첨도 측도 — 를 제공했다. 이런 진단이 자료가 정규분포에서 크게 벗어남을 드러내면, 표준적인 모수적 방법($t$ 분포에 기초한 신뢰구간, $\chi^2$나 $F$ 분포에 기대는 가설검정)이 표방하는 오류율을 더 이상 통제하지 못할 수 있다. 붓스트랩은 모집단 분포에 특정한 모수적 형태를 가정하지 않고 추론을 수행하는 길을 제공한다. 이론적 가정에서 표집분포를 유도하는 대신, 관측된 자료 자체에서 재표본추출하여 표집분포를 **추정**한다.
 
-## The Bootstrap Principle
+## 붓스트랩의 원리
 
-The core idea behind the bootstrap is conceptually simple. In classical statistics, we imagine drawing repeated samples from the unknown population distribution $F$ to understand the variability of a statistic $T = T(X_1, X_2, \ldots, X_n)$. Since we cannot actually draw new samples from $F$, the bootstrap substitutes the empirical distribution function $\hat{F}_n$ -- which places probability $1/n$ on each observed data point -- in place of $F$.
+붓스트랩의 핵심 발상은 개념적으로 단순하다. 고전 통계학에서는 통계량 $T = T(X_1, X_2, \ldots, X_n)$의 변동을 이해하기 위해 미지의 모집단 분포 $F$에서 표본을 반복해서 뽑는다고 상상한다. 실제로 $F$에서 새 표본을 뽑을 수는 없으므로, 붓스트랩은 $F$ 자리에 경험분포함수 $\hat{F}_n$을 대신 놓는다. $\hat{F}_n$은 관측된 각 자료점에 확률 $1/n$을 부여한다.
 
-Sampling from $\hat{F}_n$ is equivalent to sampling with replacement from the observed data. Each bootstrap sample $X_1^*, X_2^*, \ldots, X_n^*$ has the same size as the original sample and is drawn with replacement, meaning some observations may appear multiple times while others may not appear at all.
+$\hat{F}_n$에서 표본을 뽑는 것은 관측 자료에서 복원추출하는 것과 같다. 각 붓스트랩 표본 $X_1^*, X_2^*, \ldots, X_n^*$은 원래 표본과 크기가 같고 복원추출로 뽑히므로, 어떤 관측값은 여러 번 나타나고 어떤 것은 아예 나타나지 않을 수 있다.
 
-### Algorithm
+### 알고리즘
 
-The **nonparametric bootstrap** proceeds as follows:
+**비모수 붓스트랩**의 절차는 다음과 같다.
 
-1. Start with the observed sample $\mathbf{x} = (x_1, x_2, \ldots, x_n)$.
-2. For $b = 1, 2, \ldots, B$:
-    - Draw a bootstrap sample $\mathbf{x}^{*b} = (x_1^{*b}, x_2^{*b}, \ldots, x_n^{*b})$ by sampling $n$ values from $\mathbf{x}$ with replacement.
-    - Compute the bootstrap replicate $\hat{\theta}^{*b} = T(\mathbf{x}^{*b})$.
-3. The collection $\{\hat{\theta}^{*1}, \hat{\theta}^{*2}, \ldots, \hat{\theta}^{*B}\}$ approximates the sampling distribution of $T$.
+1. 관측된 표본 $\mathbf{x} = (x_1, x_2, \ldots, x_n)$에서 시작한다.
+2. $b = 1, 2, \ldots, B$에 대해:
+    - $\mathbf{x}$에서 복원추출로 $n$개의 값을 뽑아 붓스트랩 표본 $\mathbf{x}^{*b} = (x_1^{*b}, x_2^{*b}, \ldots, x_n^{*b})$을 만든다.
+    - 붓스트랩 복제값 $\hat{\theta}^{*b} = T(\mathbf{x}^{*b})$을 계산한다.
+3. 모음 $\{\hat{\theta}^{*1}, \hat{\theta}^{*2}, \ldots, \hat{\theta}^{*B}\}$이 $T$의 표집분포를 근사한다.
 
-The number of bootstrap replicates $B$ is typically chosen to be at least 1000 for standard error estimation and at least 5000--10000 for confidence interval construction.
+붓스트랩 복제 횟수 $B$는 표준오차 추정에는 보통 최소 1000, 신뢰구간 구성에는 최소 5000–10000을 쓴다.
 
-## Bootstrap Confidence Intervals
+## 붓스트랩 신뢰구간
 
-### Percentile Method
+### 백분위수 방법
 
-The simplest bootstrap confidence interval takes the $\alpha/2$ and $1 - \alpha/2$ quantiles of the bootstrap distribution directly:
+가장 단순한 붓스트랩 신뢰구간은 붓스트랩 분포의 $\alpha/2$ 분위수와 $1 - \alpha/2$ 분위수를 그대로 쓴다.
 
 $$
 \text{CI}_{1-\alpha} = \left[\hat{\theta}^*_{(\alpha/2)},\; \hat{\theta}^*_{(1-\alpha/2)}\right]
 $$
 
-For a 95% confidence interval, this gives the 2.5th and 97.5th percentiles of the $B$ bootstrap replicates.
+95% 신뢰구간이면 $B$개 붓스트랩 복제값의 2.5번째와 97.5번째 백분위수이다.
 
-!!! warning "Limitations of the percentile method"
+!!! warning "백분위수 방법의 한계"
 
-    The percentile method is intuitive but can have poor coverage when the bootstrap distribution is skewed or when the statistic is biased. It is not transformation-invariant, meaning that a monotone transformation of the statistic can change the coverage probability.
+    백분위수 방법은 직관적이지만 붓스트랩 분포가 치우쳐 있거나 통계량이 편향되어 있으면 포함확률이 나쁠 수 있다. 변환에 불변이 아니어서 통계량의 단조변환이 포함확률을 바꿀 수 있다.
 
-### BCa (Bias-Corrected and Accelerated) Method
+### BCa(편향보정 가속) 방법
 
-The **BCa method** adjusts for both bias and skewness in the bootstrap distribution. It modifies the percentile endpoints using two correction factors:
+**BCa 방법**은 붓스트랩 분포의 편향과 치우침을 모두 조정한다. 두 개의 보정 인자로 백분위수 끝점을 수정한다.
 
-- **Bias correction** $\hat{z}_0$: measures how far the median of the bootstrap distribution is from the original estimate $\hat{\theta}$
-- **Acceleration** $\hat{a}$: accounts for the rate at which the standard error of $\hat{\theta}$ changes with the true parameter value
+- **편향보정** $\hat{z}_0$: 붓스트랩 분포의 중앙값이 원래 추정값 $\hat{\theta}$에서 얼마나 떨어져 있는지를 잰다
+- **가속** $\hat{a}$: 참 모수값에 따라 $\hat{\theta}$의 표준오차가 변하는 속도를 반영한다
 
-The adjusted percentiles are:
+조정된 백분위수는
 
 $$
-\alpha_1 = \mathcal{N}\!\left(\hat{z}_0 + \frac{\hat{z}_0 + z_{\alpha/2}}{1 - \hat{a}(\hat{z}_0 + z_{\alpha/2})}\right), \quad \alpha_2 = \mathcal{N}\!\left(\hat{z}_0 + \frac{\hat{z}_0 + z_{1-\alpha/2}}{1 - \hat{a}(\hat{z}_0 + z_{1-\alpha/2})}\right)
+\alpha_1 = \Phi\!\left(\hat{z}_0 + \frac{\hat{z}_0 + z_{\alpha/2}}{1 - \hat{a}(\hat{z}_0 + z_{\alpha/2})}\right), \quad \alpha_2 = \Phi\!\left(\hat{z}_0 + \frac{\hat{z}_0 + z_{1-\alpha/2}}{1 - \hat{a}(\hat{z}_0 + z_{1-\alpha/2})}\right)
 $$
 
-where $\mathcal{N}$ is the standard normal CDF and $z_{\alpha/2}$ is the standard normal quantile. When both $\hat{z}_0 = 0$ and $\hat{a} = 0$, the BCa method reduces to the percentile method. In practice, BCa intervals generally provide better coverage than the simple percentile method.
+여기서 $\Phi$는 표준정규 누적분포함수이고 $z_{\alpha/2}$는 표준정규 분위수이다. $\hat{z}_0 = 0$이고 $\hat{a} = 0$이면 BCa 방법은 백분위수 방법으로 환원된다. 실무에서 BCa 구간은 대체로 단순한 백분위수 방법보다 나은 포함확률을 제공한다.
 
-## Worked Example
+## 예제
 
-Consider the following 12 observations of annual returns (%) from a small-cap fund:
+소형주 펀드의 연간 수익률(%) 관측값 12개를 생각하자.
 
 $$
 \mathbf{x} = \{-8.2,\; 3.1,\; 15.7,\; 2.4,\; -1.5,\; 22.3,\; 6.8,\; -3.4,\; 11.2,\; 1.9,\; 18.6,\; 7.5\}
 $$
 
-The sample mean is $\bar{x} = 6.37\%$. A Q-Q plot reveals a right-skewed distribution, making the standard $t$-interval questionable. We apply the bootstrap to construct a 95% confidence interval for the population mean.
+표본평균은 $\bar{x} = 6.37\%$, 표본표준편차는 $s = 9.20$, 표본왜도는 $0.257$이다. 모집단 분포를 가정하지 않고 모평균의 95% 신뢰구간을 만들기 위해 붓스트랩을 적용한다.
 
-**Step 1.** Draw $B = 5000$ bootstrap samples of size 12 with replacement.
+**1단계.** 크기 12인 붓스트랩 표본을 복원추출로 $B = 5000$개 뽑는다.
 
-**Step 2.** Compute the mean of each bootstrap sample, producing the bootstrap distribution $\{\hat{\theta}^{*1}, \ldots, \hat{\theta}^{*5000}\}$.
+**2단계.** 각 붓스트랩 표본의 평균을 계산하여 붓스트랩 분포 $\{\hat{\theta}^{*1}, \ldots, \hat{\theta}^{*5000}\}$을 만든다.
 
-**Step 3.** Sort the bootstrap means and extract the 2.5th and 97.5th percentiles.
+**3단계.** 붓스트랩 평균들을 정렬하여 2.5번째와 97.5번째 백분위수를 뽑는다.
 
-Suppose the bootstrap procedure yields the sorted percentiles $\hat{\theta}^*_{(0.025)} = 1.85$ and $\hat{\theta}^*_{(0.975)} = 11.02$. The 95% percentile bootstrap confidence interval for the population mean return is $[1.85\%, \; 11.02\%]$.
+아래 코드(난수 씨앗 42)를 실행하면 $\hat{\theta}^*_{(0.025)} = 1.48$, $\hat{\theta}^*_{(0.975)} = 11.33$이 나온다. 모평균 수익률의 95% 백분위수 붓스트랩 신뢰구간은 $[1.48\%,\; 11.33\%]$이다.
 
-For comparison, the standard $t$-interval is $\bar{x} \pm t_{0.025, 11} \cdot s / \sqrt{12} = 6.37 \pm 2.201 \times 8.92 / 3.464 = 6.37 \pm 5.66$, giving $[0.71\%, \; 12.03\%]$. The bootstrap interval is narrower and slightly shifted, reflecting the skewness in the data that the symmetric $t$-interval cannot capture.
+비교를 위해 표준 $t$ 구간은
 
-## When the Bootstrap Works
+$$
+\bar{x} \pm t_{0.025,\,11} \cdot \frac{s}{\sqrt{12}} = 6.37 \pm 2.201 \times \frac{9.20}{3.464} = 6.37 \pm 5.85
+$$
 
-The bootstrap is a powerful tool, but it is not universally applicable. Its validity depends on several conditions:
+곧 $[0.52\%,\; 12.21\%]$이다.
 
-- **Sample representativeness.** The bootstrap resamples from the observed data, so the original sample must be representative of the population. With very small samples ($n < 15$), the empirical distribution may be a poor approximation of $F$, leading to unreliable bootstrap intervals.
+!!! note "붓스트랩 구간이 좁은 이유는 치우침 때문이 아니다"
+    붓스트랩 구간의 폭은 $9.84$, $t$ 구간의 폭은 $11.69$로 붓스트랩 쪽이 좁다. 그러나 그 이유를 "자료의 치우침을 반영했기 때문"으로 설명하는 것은 옳지 않다. 이 표본의 왜도는 $0.257$로 가볍고, 붓스트랩 평균의 분포는 왜도가 $0.07$로 사실상 대칭이다.
 
-- **Smoothness of the statistic.** The bootstrap works well for statistics that are smooth functions of the data (means, regression coefficients, correlation coefficients). For non-smooth statistics like the sample maximum, the standard nonparametric bootstrap can fail.
+    진짜 이유는 평균에 대한 백분위수 붓스트랩이 분산을 $1/n$로 나눈 **편향된** 추정값으로 잡는다는 데 있다. 붓스트랩 표준오차 $2.50$은 $s/\sqrt{n} = 2.66$이 아니라 $s_{n}/\sqrt{n} = 8.81/3.464 = 2.54$에 대응한다. 표본이 작을수록 이 차이가 커지므로, 백분위수 붓스트랩 구간은 작은 표본에서 살짝 좁아지는 경향이 있다. 그래서 $n$이 작을 때는 BCa나 붓스트랩-t 구간이 권장된다.
 
-- **Independence.** The standard bootstrap assumes that observations are independent. For time series or clustered data, the block bootstrap or cluster bootstrap must be used instead.
+## 붓스트랩이 통할 때
 
-!!! tip "Bootstrap vs. transformations vs. nonparametric tests"
+붓스트랩은 강력한 도구이지만 만능은 아니다. 그 타당성은 몇 가지 조건에 달려 있다.
 
-    When normality fails, three alternatives are available: (1) transform the data to achieve approximate normality, then apply standard methods; (2) use nonparametric tests that make no distributional assumptions; (3) use the bootstrap. Transformations preserve parametric interpretability but require finding an appropriate transformation. Nonparametric tests are robust but often limited to testing hypotheses (not constructing confidence intervals for arbitrary parameters). The bootstrap is the most flexible option, applicable to virtually any statistic, but requires moderate sample sizes and more computation.
+- **표본의 대표성.** 붓스트랩은 관측된 자료에서 재표본추출하므로 원래 표본이 모집단을 대표해야 한다. 표본이 아주 작으면($n < 15$) 경험분포가 $F$를 잘 근사하지 못해 붓스트랩 구간을 믿을 수 없다.
 
-## Python Implementation
+- **통계량의 매끄러움.** 붓스트랩은 자료의 매끄러운 함수인 통계량(평균, 회귀계수, 상관계수)에서 잘 작동한다. 표본최댓값처럼 매끄럽지 않은 통계량에서는 표준 비모수 붓스트랩이 실패할 수 있다.
+
+- **독립성.** 표준 붓스트랩은 관측값이 독립이라고 가정한다. 시계열이나 군집 자료에는 블록 붓스트랩이나 군집 붓스트랩을 써야 한다.
+
+!!! tip "붓스트랩, 변수변환, 비모수 검정의 비교"
+
+    정규성이 무너지면 세 가지 대안이 있다. (1) 자료를 변환해 근사적 정규성을 얻은 뒤 표준 방법을 적용한다. (2) 분포 가정을 두지 않는 비모수 검정을 쓴다. (3) 붓스트랩을 쓴다. 변수변환은 모수적 해석 가능성을 유지하지만 적절한 변환을 찾아야 한다. 비모수 검정은 로버스트하지만 (임의의 모수에 대한 신뢰구간 구성이 아니라) 가설검정에 국한되는 경우가 많다. 붓스트랩은 사실상 어떤 통계량에도 적용할 수 있는 가장 유연한 선택지이지만 중간 이상의 표본크기와 더 많은 계산을 요구한다.
+
+## Python 구현
 
 ```python
 """
@@ -128,56 +139,63 @@ if __name__ == "__main__":
     print(f"95% Percentile CI: [{ci_lower:.2f}%, {ci_upper:.2f}%]")
 ```
 
-The bootstrap distribution of the sample mean reflects the skewness in the original data. Because the resampling procedure makes no assumption about the population distribution, the resulting confidence interval adapts to the actual shape of the sampling distribution rather than forcing symmetry.
+출력:
 
+```text
+Sample mean: 6.37%
+Bootstrap SE: 2.50%
+95% Percentile CI: [1.48%, 11.33%]
+```
 
-## Exercises
+표본평균의 붓스트랩 분포는 재표본추출 절차가 모집단 분포에 아무 가정도 두지 않으므로, 대칭을 강요하는 대신 실제 표집분포의 모양에 적응한다.
 
-**Exercise 1.**
-Describe the nonparametric bootstrap procedure for constructing a confidence interval for the population mean without assuming normality.
+## 연습문제
 
-??? success "Solution to Exercise 1"
+**연습문제 1.**
+정규성을 가정하지 않고 모평균의 신뢰구간을 구성하는 비모수 붓스트랩 절차를 기술하라.
 
-    1. From the original sample of size $n$, draw $B$ bootstrap samples (each of size $n$, sampled with replacement).
-    2. For each bootstrap sample $b = 1, \dots, B$, compute $\bar{X}^*_b$ (the bootstrap sample mean).
-    3. Construct the confidence interval from the bootstrap distribution of $\bar{X}^*$:
-       - **Percentile method:** Use the $\alpha/2$ and $1-\alpha/2$ quantiles of the $B$ bootstrap means.
-       - **Bootstrap-t method:** Compute bootstrap t-statistics and use their quantiles.
-    4. A typical choice is $B = 10{,}000$ bootstrap replicates.
+??? success "연습문제 1 풀이"
 
-    No normality assumption is needed. The bootstrap distribution of $\bar{X}^*$ mimics the sampling distribution of $\bar{X}$, allowing valid inference even for skewed or heavy-tailed data.
+    1. 크기 $n$인 원래 표본에서 (각각 크기 $n$인) 붓스트랩 표본 $B$개를 복원추출로 뽑는다.
+    2. 각 붓스트랩 표본 $b = 1, \dots, B$에 대해 $\bar{X}^*_b$(붓스트랩 표본평균)을 계산한다.
+    3. $\bar{X}^*$의 붓스트랩 분포에서 신뢰구간을 만든다.
+       - **백분위수 방법:** $B$개 붓스트랩 평균의 $\alpha/2$와 $1-\alpha/2$ 분위수를 쓴다.
+       - **붓스트랩-t 방법:** 붓스트랩 t 통계량을 계산하고 그 분위수를 쓴다.
+    4. 흔한 선택은 $B = 10{,}000$번의 붓스트랩 복제이다.
 
----
-
-**Exercise 2.**
-When does the bootstrap fail or perform poorly? List two conditions.
-
-??? success "Solution to Exercise 2"
-
-    1. **Extreme quantiles with small $n$:** The bootstrap cannot generate values outside the range of the original sample. For estimating extreme quantiles (e.g., 99th percentile) with small $n$, the bootstrap underestimates tail variability.
-
-    2. **Dependent data:** The standard nonparametric bootstrap assumes i.i.d. observations. If data are dependent (time series, spatial data), resampling individual observations destroys the dependence structure, producing invalid results. Block bootstrap or stationary bootstrap is needed instead.
-
-    Additional cases: (3) very small $n$ (the empirical distribution is a poor approximation of the population); (4) irregular statistics (e.g., the maximum of a sample, where the bootstrap distribution does not converge properly).
+    정규성 가정이 필요 없다. $\bar{X}^*$의 붓스트랩 분포가 $\bar{X}$의 표집분포를 흉내 내므로 치우쳤거나 꼬리가 두꺼운 자료에서도 타당한 추론이 가능하다.
 
 ---
 
-**Exercise 3.**
-Compare the bootstrap confidence interval with the t-interval for the mean when data are right-skewed. Which is expected to have better coverage?
+**연습문제 2.**
+붓스트랩이 실패하거나 성능이 나쁜 경우는 언제인가? 두 조건을 들어라.
 
-??? success "Solution to Exercise 3"
-    For right-skewed data with moderate $n$, the bootstrap percentile interval is expected to have better coverage because it does not assume symmetry of the sampling distribution.
+??? success "연습문제 2 풀이"
 
-    The t-interval $\bar{X} \pm t_{\alpha/2} s/\sqrt{n}$ is symmetric around $\bar{X}$, but the true sampling distribution of $\bar{X}$ is skewed (inherited from the data). This causes the t-interval to over-cover on one side and under-cover on the other.
+    1. **작은 $n$에서의 극단 분위수:** 붓스트랩은 원래 표본의 범위를 벗어나는 값을 만들어 낼 수 없다. 작은 $n$에서 극단 분위수(예: 99번째 백분위수)를 추정하면 꼬리의 변동을 과소평가한다.
 
-    The bootstrap percentile interval captures the asymmetry naturally: if the bootstrap distribution of $\bar{X}^*$ is skewed, the resulting interval will be asymmetric, better matching the true sampling distribution. For the best performance with skewed data, the bias-corrected and accelerated (BCa) bootstrap interval is recommended.
+    2. **종속 자료:** 표준 비모수 붓스트랩은 관측값이 독립동일분포라고 가정한다. 자료가 종속이면(시계열, 공간 자료) 개별 관측값을 재표본추출하는 것이 종속 구조를 파괴하여 타당하지 않은 결과를 낸다. 블록 붓스트랩이나 정상 붓스트랩이 필요하다.
+
+    추가로: (3) $n$이 매우 작을 때(경험분포가 모집단을 잘 근사하지 못한다), (4) 불규칙한 통계량(예: 표본최댓값, 붓스트랩 분포가 제대로 수렴하지 않는다).
 
 ---
 
-**Exercise 4.**
-Write Python code to compute a 95% bootstrap confidence interval for the median of a dataset.
+**연습문제 3.**
+자료가 오른쪽으로 치우쳤을 때 평균의 붓스트랩 신뢰구간과 t 구간을 비교하라. 어느 쪽의 포함확률이 더 나을 것으로 기대되는가?
 
-??? success "Solution to Exercise 4"
+??? success "연습문제 3 풀이"
+    중간 정도의 $n$을 갖는 오른쪽 치우침 자료에서는 붓스트랩 백분위수 구간의 포함확률이 더 나을 것으로 기대된다. 표집분포의 대칭성을 가정하지 않기 때문이다.
+
+    $t$ 구간 $\bar{X} \pm t_{\alpha/2} s/\sqrt{n}$은 $\bar{X}$를 중심으로 대칭이지만, $\bar{X}$의 참 표집분포는 (자료에서 물려받아) 치우쳐 있다. 그래서 $t$ 구간은 한쪽을 과다 포함하고 다른 쪽을 과소 포함한다.
+
+    붓스트랩 백분위수 구간은 이 비대칭을 자연스럽게 포착한다. $\bar{X}^*$의 붓스트랩 분포가 치우쳐 있으면 구간도 비대칭이 되어 참 표집분포에 더 잘 맞는다. 치우친 자료에서 최선의 성능을 원한다면 편향보정 가속(BCa) 붓스트랩 구간이 권장된다.
+
+---
+
+**연습문제 4.**
+자료의 중앙값에 대한 95% 붓스트랩 신뢰구간을 계산하는 Python 코드를 작성하라.
+
+??? success "연습문제 4 풀이"
     ```python
     import numpy as np
 
@@ -196,4 +214,4 @@ Write Python code to compute a 95% bootstrap confidence interval for the median 
     print(f"95% Bootstrap CI: ({ci_lower:.3f}, {ci_upper:.3f})")
     ```
 
-    This uses the percentile method. The interval is valid without normality assumptions and works for any statistic (mean, median, correlation, etc.) by simply changing the computed statistic inside the loop.
+    백분위수 방법을 쓴 것이다. 이 구간은 정규성 가정 없이 타당하며, 반복문 안에서 계산하는 통계량만 바꾸면 어떤 통계량(평균, 중앙값, 상관 등)에도 쓸 수 있다.

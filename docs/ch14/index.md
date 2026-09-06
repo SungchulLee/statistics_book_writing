@@ -1,115 +1,114 @@
-# Chapter 14: Normality Tests
+# 14장: 정규성 검정
 
+## 개요
 
-## Overview
-
-Many statistical methods -- $t$-tests, ANOVA, linear regression, confidence intervals -- assume that data (or residuals) follow a normal distribution. Before applying these methods, practitioners need tools to check whether the normality assumption is reasonable. This chapter provides a complete toolkit for assessing normality, from visual diagnostics and descriptive statistics through formal hypothesis tests, along with strategies for dealing with data that fails the normality assumption.
-
----
-
-## Chapter Structure
-
-### 14.1 Introduction to Normality
-
-Why normality matters and where it arises in statistical practice:
-
-- **What Is Normality and Why It Matters** -- Defines the normal distribution, explains its symmetric bell-shaped density, and describes why so many statistical methods depend on it through the Central Limit Theorem.
-- **Central Role in Statistical Inference** -- Explains how normality underpins confidence intervals, hypothesis tests, and prediction intervals, and what goes wrong when the assumption is violated.
-- **Normality in Financial Data** -- Discusses why financial models (Black-Scholes, VaR, portfolio optimization) assume normality and the practical consequences when asset returns deviate from this assumption.
-
-### 14.2 Graphical Methods
-
-Visual approaches for assessing distributional shape:
-
-- **Histogram and Density Plots** -- Overlays the empirical histogram with a kernel density estimate and the theoretical normal PDF to judge whether the data's shape matches the bell curve.
-- **Q-Q Plots** -- Compares sample quantiles against theoretical normal quantiles; points falling along a straight diagonal line indicate normality, while systematic deviations reveal skewness or heavy tails.
-- **Boxplots and Their Interpretation** -- Uses the median, quartiles, and whisker symmetry of a boxplot to detect skewness and outliers that suggest departures from normality.
-- **Q-Q Plots for Financial Returns** -- Applies Q-Q plots specifically to asset return data, illustrating the characteristic heavy tails and the implications for tail risk estimation.
-
-### 14.3 Descriptive Statistics as Normality Indicators
-
-Numerical summaries that quantify departures from the normal shape:
-
-- **Skewness and Kurtosis** -- Defines sample skewness (asymmetry) and kurtosis (tail heaviness) and explains their expected values under normality (0 and 3, respectively).
-- **Skewtest and Kurtosistest** -- Formal $z$-score-based tests that evaluate whether the observed skewness or kurtosis significantly deviates from the normal distribution's theoretical values.
-- **D'Agostino's K-Squared Test** -- Combines the skewness and kurtosis $z$-scores into a single chi-squared test statistic with 2 degrees of freedom to assess overall normality.
-- **Jarque-Bera Test** -- A widely used test in econometrics that combines skewness and excess kurtosis into the statistic $JB = \frac{n}{6}(S^2 + \frac{(K-3)^2}{4})$, following a $\chi^2_2$ distribution under the null.
-
-### 14.4 Formal Tests for Normality
-
-Rigorous hypothesis tests based on the empirical distribution function or order statistics:
-
-- **Kolmogorov-Smirnov and Lilliefors Tests** -- The K-S test compares the empirical CDF to a fully specified normal CDF; the Lilliefors correction adjusts for the case where mean and variance are estimated from the data.
-- **Anderson-Darling Test** -- An enhancement of the K-S test that places greater weight on the tails of the distribution, making it especially sensitive to tail departures from normality.
-- **Shapiro-Wilk Test** -- Evaluates normality by comparing ordered sample values to their expected values under normality using optimally weighted linear combinations; widely regarded as the most powerful test for small to moderate sample sizes.
-
-### 14.5 Limitations and Pitfalls
-
-Understanding what normality tests can and cannot tell you:
-
-- **Sample Size Effects on Power** -- With small samples, tests may lack power to detect real departures; with very large samples, tests reject normality for trivially small deviations.
-- **Sensitivity vs Practical Significance** -- A statistically significant test result does not necessarily mean the departure from normality is large enough to invalidate downstream analyses.
-- **Choosing the Right Test** -- Guidance on selecting among the available tests based on sample size, the type of departure expected, and the analysis context.
-
-### 14.6 Dealing with Non-Normal Data
-
-Strategies for proceeding when the normality assumption fails:
-
-- **Transformations to Achieve Normality** -- Applies log, square root, or Box-Cox transformations to reduce skewness and bring data closer to a normal shape.
-- **Bootstrapping as an Alternative** -- Uses resampling with replacement to construct confidence intervals and perform hypothesis tests without requiring distributional assumptions.
-- **Non-Parametric Methods** -- Employs rank-based tests (Mann-Whitney U, Kruskal-Wallis, Wilcoxon signed-rank) that do not assume a specific distribution for the data.
-
-### 14.7 Applications
-
-Where normality assessment is required in practice:
-
-- **Normality in t-Tests and ANOVA** -- Explains the normality requirement for $t$-tests and ANOVA, the robustness of these methods to moderate violations, and when alternatives are needed.
-- **Normality in Regression (Residual Diagnostics)** -- Applies normality tests to regression residuals to validate the assumptions underlying confidence intervals and prediction intervals.
-- **Normality of Financial Returns** -- Examines the empirical evidence that asset returns exhibit heavy tails and excess kurtosis relative to the normal distribution, with implications for risk management.
-
-### 14.8 Code
-
-Complete Python implementations:
-
-- **Graphical Normality Checks** -- Histogram, density plot, and Q-Q plot generation for visual assessment.
-- **Formal Normality Test Suite** -- Runs Shapiro-Wilk, Anderson-Darling, K-S, and Lilliefors tests on a dataset and summarizes results.
-- **Transformation Demonstrations** -- Log, square root, and Box-Cox transformations with before-and-after normality tests.
-- **Q-Q Plot with Normality Tests** -- Combined Q-Q plot with annotated test statistics.
-- **Q-Q Plot Confidence Band Simulation** -- Simulated confidence envelopes for Q-Q plots to distinguish significant departures from sampling noise.
-- **Distribution Shapes via Boxplots** -- Side-by-side boxplots comparing normal, skewed, and heavy-tailed distributions.
-- **Skewness Test** -- Implementation and interpretation of `scipy.stats.skewtest`.
-- **Kurtosis Test** -- Implementation and interpretation of `scipy.stats.kurtosistest`.
-- **D'Agostino $K^2$ Test** -- Combined skewness-kurtosis normality test.
-- **Jarque-Bera Test** -- Step-by-step manual computation alongside the scipy implementation.
-- **Kolmogorov-Smirnov Test** -- One-sample K-S test with specified parameters.
-- **Lilliefors Test** -- K-S test corrected for estimated parameters.
-- **Anderson-Darling Test** -- Tail-weighted goodness-of-fit test.
-- **Shapiro-Wilk Test** -- The recommended test for small to moderate samples.
-- **Shapiro-Wilk Power Simulation** -- Monte Carlo simulation studying how power varies with sample size and departure type.
-- **Q-Q Plot Financial Returns** -- Q-Q analysis applied to real or simulated stock return data.
-
-### 14.9 Exercises
-
-Practice problems covering Jarque-Bera test computation, graphical normality assessment, comparison of formal tests on different distribution shapes, transformations for non-normal data, and residual normality diagnostics in regression.
+$t$ 검정, 분산분석, 선형회귀, 신뢰구간 등 많은 통계 방법은 자료(또는 잔차)가 정규분포를 따른다고 가정한다. 이런 방법을 적용하기 전에 정규성 가정이 타당한지 확인할 도구가 필요하다. 이 장은 시각적 진단과 기술통계에서 형식적 가설검정에 이르기까지 정규성을 평가하는 완결된 도구 모음과, 정규성 가정이 무너진 자료를 다루는 전략을 제공한다.
 
 ---
 
-## Prerequisites
+## 장의 구성
 
-This chapter builds on:
+### 14.1 정규성 입문
 
-- **Chapter 4** (Distributions) -- The normal distribution's properties, PDF, CDF, and its central role among continuous distributions.
-- **Chapter 2** (Descriptive Statistics) -- Histograms, boxplots, skewness, and kurtosis as summary measures of distributional shape.
-- **Chapter 9** (Hypothesis Testing) -- The framework of null and alternative hypotheses, $p$-values, significance levels, and Type I/II errors.
-- **Chapter 5** (Sampling Distributions) -- The chi-square and $t$ distributions that underlie many normality-dependent procedures.
+정규성이 왜 중요하며 통계 실무의 어디에서 등장하는가:
+
+- **정규성이란 무엇이며 왜 중요한가** — 정규분포를 정의하고 대칭인 종 모양 밀도를 설명하며, 중심극한정리를 통해 왜 그토록 많은 통계 방법이 정규성에 의존하는지 기술한다.
+- **통계적 추론에서의 중심적 역할** — 정규성이 신뢰구간, 가설검정, 예측구간을 어떻게 떠받치는지, 그리고 가정이 위배되면 무엇이 잘못되는지 설명한다.
+- **금융 자료에서의 정규성** — 금융 모형(Black-Scholes, VaR, 포트폴리오 최적화)이 왜 정규성을 가정하는지, 자산 수익률이 이 가정에서 벗어날 때 어떤 실질적 결과가 따르는지 논한다.
+
+### 14.2 시각적 방법
+
+분포의 모양을 평가하는 시각적 접근:
+
+- **히스토그램과 밀도 그림** — 경험적 히스토그램에 커널밀도추정과 이론적 정규 확률밀도함수를 겹쳐 그려 자료의 모양이 종 모양과 맞는지 판단한다.
+- **Q-Q 그림** — 표본분위수를 이론적 정규분위수와 비교한다. 점들이 직선을 따르면 정규성을, 체계적 이탈은 치우침이나 두꺼운 꼬리를 드러낸다.
+- **상자그림과 그 해석** — 상자그림의 중앙값, 사분위수, 수염의 대칭성으로 정규성에서 벗어남을 시사하는 치우침과 이상점을 탐지한다.
+- **금융 수익률의 Q-Q 그림** — 자산 수익률 자료에 Q-Q 그림을 적용하여 특징적인 두꺼운 꼬리와 꼬리 위험 추정에 미치는 함의를 보인다.
+
+### 14.3 정규성 지표로서의 기술통계
+
+정규 모양에서 벗어난 정도를 수량화하는 수치 요약:
+
+- **왜도와 첨도** — 표본왜도(비대칭)와 첨도(꼬리의 두꺼움)를 정의하고 정규성 아래에서 기대되는 값(각각 0과 3)을 설명한다.
+- **왜도 검정과 첨도 검정** — 관측된 왜도나 첨도가 정규분포의 이론값에서 유의하게 벗어나는지 평가하는 $z$ 점수 기반의 형식적 검정.
+- **D'Agostino의 $K^2$ 검정** — 왜도와 첨도의 $z$ 점수를 자유도 2인 하나의 카이제곱 검정통계량으로 결합하여 전반적 정규성을 평가한다.
+- **Jarque-Bera 검정** — 계량경제학에서 널리 쓰이는 검정으로, 왜도와 초과첨도를 통계량 $JB = \frac{n}{6}(S^2 + \frac{(K-3)^2}{4})$으로 결합하며 귀무가설 아래에서 $\chi^2_2$ 분포를 따른다.
+
+### 14.4 정규성의 형식적 검정
+
+경험분포함수나 순서통계량에 기초한 엄밀한 가설검정:
+
+- **Kolmogorov-Smirnov 검정과 Lilliefors 검정** — K-S 검정은 경험적 누적분포함수를 완전히 지정된 정규 누적분포함수와 비교한다. Lilliefors 보정은 평균과 분산을 자료에서 추정하는 경우를 위해 조정한다.
+- **Anderson-Darling 검정** — K-S 검정을 개선하여 분포의 꼬리에 더 큰 가중치를 준다. 꼬리에서의 정규성 이탈에 특히 민감하다.
+- **Shapiro-Wilk 검정** — 정렬된 표본값을 정규성 아래에서의 기댓값과 최적 가중 선형결합으로 비교하여 정규성을 평가한다. 작거나 중간 크기의 표본에서 가장 강력한 검정으로 널리 인정받는다.
+
+### 14.5 한계와 함정
+
+정규성 검정이 무엇을 말해 주고 무엇을 말해 주지 못하는가:
+
+- **표본크기가 검정력에 미치는 영향** — 표본이 작으면 실제 이탈을 탐지할 검정력이 부족하고, 표본이 아주 크면 사소한 이탈에도 정규성을 기각한다.
+- **민감도와 실질적 유의성** — 통계적으로 유의한 검정 결과가 반드시 후속 분석을 무효화할 만큼 큰 이탈을 뜻하지는 않는다.
+- **올바른 검정 고르기** — 표본크기, 예상되는 이탈의 유형, 분석 맥락에 따라 검정을 고르는 지침.
+
+### 14.6 정규가 아닌 자료 다루기
+
+정규성 가정이 무너졌을 때의 전략:
+
+- **정규성을 얻기 위한 변수변환** — 로그, 제곱근, Box-Cox 변환으로 치우침을 줄이고 자료를 정규에 가깝게 만든다.
+- **대안으로서의 붓스트랩** — 복원추출 재표본추출로 분포 가정 없이 신뢰구간을 만들고 가설검정을 수행한다.
+- **비모수 방법** — 자료에 특정 분포를 가정하지 않는 순위 기반 검정(Mann-Whitney U, Kruskal-Wallis, Wilcoxon 부호순위)을 쓴다.
+
+### 14.7 응용
+
+실무에서 정규성 평가가 필요한 곳:
+
+- **t 검정과 분산분석에서의 정규성** — $t$ 검정과 분산분석의 정규성 요건, 중간 정도의 위배에 대한 로버스트성, 대안이 필요한 시점을 설명한다.
+- **회귀에서의 정규성(잔차 진단)** — 회귀 잔차에 정규성 검정을 적용하여 신뢰구간과 예측구간의 바탕이 되는 가정을 확인한다.
+- **금융 수익률의 정규성** — 자산 수익률이 정규분포에 비해 두꺼운 꼬리와 초과첨도를 보인다는 경험적 증거와 위험 관리에 대한 함의를 살펴본다.
+
+### 14.8 코드
+
+완전한 Python 구현:
+
+- **시각적 정규성 확인** — 시각 평가를 위한 히스토그램, 밀도 그림, Q-Q 그림 생성.
+- **형식적 정규성 검정 모음** — 하나의 자료에 Shapiro-Wilk, Anderson-Darling, K-S, Lilliefors 검정을 수행하고 결과를 정리한다.
+- **변환 시연** — 로그, 제곱근, Box-Cox 변환과 변환 전후의 정규성 검정.
+- **정규성 검정을 곁들인 Q-Q 그림** — 검정통계량을 주석으로 단 Q-Q 그림.
+- **Q-Q 그림 신뢰띠 모의실험** — 표집 잡음과 유의한 이탈을 구별하기 위한 Q-Q 그림의 모의 신뢰포락선.
+- **상자그림으로 본 분포의 모양** — 정규, 치우친 분포, 두꺼운 꼬리 분포를 나란히 비교하는 상자그림.
+- **왜도 검정** — `scipy.stats.skewtest`의 구현과 해석.
+- **첨도 검정** — `scipy.stats.kurtosistest`의 구현과 해석.
+- **D'Agostino $K^2$ 검정** — 왜도와 첨도를 결합한 정규성 검정.
+- **Jarque-Bera 검정** — scipy 구현과 나란히 단계별로 직접 계산하기.
+- **Kolmogorov-Smirnov 검정** — 모수를 지정한 일표본 K-S 검정.
+- **Lilliefors 검정** — 추정된 모수를 보정한 K-S 검정.
+- **Anderson-Darling 검정** — 꼬리에 가중치를 준 적합도 검정.
+- **Shapiro-Wilk 검정** — 작거나 중간 크기의 표본에 권장되는 검정.
+- **Shapiro-Wilk 검정력 모의실험** — 표본크기와 이탈 유형에 따라 검정력이 어떻게 변하는지 살피는 몬테카를로 모의실험.
+- **금융 수익률의 Q-Q 그림** — 실제 또는 모의 주식 수익률 자료에 적용한 Q-Q 분석.
+
+### 14.9 연습문제
+
+Jarque-Bera 검정 계산, 시각적 정규성 평가, 서로 다른 분포 모양에서의 형식적 검정 비교, 정규가 아닌 자료의 변환, 회귀에서의 잔차 정규성 진단을 아우르는 연습문제.
 
 ---
 
-## Key Takeaways
+## 선행 지식
 
-1. Normality is a prerequisite for many classical statistical methods; verifying it (or understanding when violations are tolerable) is an essential part of any analysis workflow.
-2. Graphical methods (histograms, Q-Q plots, boxplots) provide intuitive first assessments, while formal tests (Shapiro-Wilk, Anderson-Darling, Jarque-Bera) offer rigorous quantitative evidence.
-3. No single normality test is universally best: Shapiro-Wilk is generally most powerful for small samples, Anderson-Darling is sensitive to tail departures, and Jarque-Bera is standard in econometrics.
-4. With very large samples, every normality test will reject -- the key question becomes whether the departure is practically significant enough to affect downstream inference.
-5. When normality fails, practitioners have three main strategies: transform the data, use resampling (bootstrapping), or switch to non-parametric methods that do not require distributional assumptions.
-6. Financial return data consistently violates normality through heavy tails and excess kurtosis, making normality testing particularly important in risk management and portfolio analysis.
+이 장은 다음 내용 위에 세워진다:
+
+- **4장**(분포) — 정규분포의 성질, 확률밀도함수, 누적분포함수, 그리고 연속분포 가운데 정규분포가 갖는 중심적 위치.
+- **2장**(기술통계) — 분포 모양의 요약 측도로서 히스토그램, 상자그림, 왜도, 첨도.
+- **9장**(가설검정) — 귀무가설과 대립가설의 틀, $p$값, 유의수준, 제1종·제2종 오류.
+- **5장**(표집분포) — 정규성에 의존하는 여러 절차의 바탕이 되는 카이제곱 분포와 $t$ 분포.
+
+---
+
+## 핵심 요약
+
+1. 정규성은 많은 고전적 통계 방법의 전제 조건이다. 이를 확인하는 일은(또는 위배를 언제 감수할 수 있는지 이해하는 일은) 모든 분석 과정의 필수 부분이다.
+2. 시각적 방법(히스토그램, Q-Q 그림, 상자그림)은 직관적인 1차 평가를 제공하고, 형식적 검정(Shapiro-Wilk, Anderson-Darling, Jarque-Bera)은 엄밀한 정량적 증거를 제공한다.
+3. 보편적으로 가장 좋은 정규성 검정은 없다. Shapiro-Wilk는 대체로 작은 표본에서 가장 강력하고, Anderson-Darling은 꼬리에서의 이탈에 민감하며, Jarque-Bera는 계량경제학의 표준이다.
+4. 표본이 아주 크면 모든 정규성 검정이 기각한다. 그때 핵심 질문은 그 이탈이 후속 추론에 영향을 줄 만큼 실질적으로 유의한가로 옮겨 간다.
+5. 정규성이 무너지면 세 가지 주된 전략이 있다. 자료를 변환하거나, 재표본추출(붓스트랩)을 쓰거나, 분포 가정을 요구하지 않는 비모수 방법으로 옮겨 가는 것이다.
+6. 금융 수익률 자료는 두꺼운 꼬리와 초과첨도를 통해 일관되게 정규성을 위배하므로, 위험 관리와 포트폴리오 분석에서 정규성 검정이 특히 중요하다.

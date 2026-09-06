@@ -1,18 +1,19 @@
-# Limitations and Pitfalls of Normality Tests
+# 정규성 검정의 한계와 함정
 
+형식적 정규성 검정은 값진 통찰을 주지만 한계가 있다. 실무에서 이 검정들은 표본크기, 검정력, 실제 자료의 분포 같은 요인에 영향을 받는다. 정규성 검정이 적절한지 판단하려면 이 함정들을 이해하는 것이 결정적이다.
 
-While formal normality tests provide valuable insights, they have limitations. In practice, these tests can be influenced by factors such as sample size, the power of the test, and the distribution of real-world data. Understanding these pitfalls is crucial for making informed decisions about the appropriateness of normality tests.
+## 표본크기에 대한 민감성
 
-## Sensitivity to Sample Size
+정규성 검정은 표본크기에 매우 민감하다. 작은 표본에서는 정규성 이탈을 탐지할 검정력이 부족하여 **제2종 오류**(귀무가설이 거짓인데 기각하지 못함)로 이어질 수 있다. 반대로 아주 큰 표본에서는 사소한 이탈만으로도 귀무가설을 기각하게 되어, 실질적으로 의미 없는 차이에 반응하게 된다.
 
-Normality tests are highly sensitive to sample size. For small samples, these tests often lack the power to detect deviations from normality, potentially leading to a **Type II error** (failing to reject the null hypothesis when it is false). On the other hand, for very large samples, even minor deviations from normality can result in rejecting the null hypothesis, leading to a **Type I error** (incorrectly rejecting the null hypothesis).
-
-- **Small samples**: May not detect actual deviations from normality.
-- **Large samples**: May detect even trivial deviations that are not practically significant.
+- **작은 표본**: 실제 정규성 이탈을 탐지하지 못할 수 있다.
+- **큰 표본**: 실질적으로 유의하지 않은 사소한 이탈까지 탐지할 수 있다.
 
 ```python
 import numpy as np
 from scipy.stats import shapiro
+
+np.random.seed(0)
 
 # Small sample size
 small_sample = np.random.normal(0, 1, 20)
@@ -25,16 +26,35 @@ stat_large, p_value_large = shapiro(large_sample)
 print(f"Shapiro-Wilk Test (large sample): p-value={p_value_large}")
 ```
 
-In this example, a small sample size may fail to detect deviations from normality, while a large sample size could reject the null hypothesis due to minor deviations.
+출력:
 
-## Power of the Tests
+```text
+Shapiro-Wilk Test (small sample): p-value=0.7136
+Shapiro-Wilk Test (large sample): p-value=0.7507
+```
 
-The **power** of a normality test refers to its ability to correctly reject the null hypothesis when the data is not normally distributed. Some tests, like the **Shapiro-Wilk test**, are more powerful than others. However, no test is perfect, and their power depends on both the sample size and the degree of deviation from normality.
+!!! warning "이 예제만으로는 '큰 표본이 기각한다'가 드러나지 않는다"
+    두 표본 모두 **정확히 정규분포**에서 생성했으므로 $n = 10{,}000$이어도 기각하지 않는 것이 옳다($p = 0.75$). 큰 표본의 과잉 검정력을 보이려면 자료가 정규에서 **조금이라도** 벗어나 있어야 한다. 예를 들어 $t_{30}$ 분포(초과첨도 0.23)에서 뽑으면
 
-In some cases, the data may be slightly skewed or kurtotic, but the test lacks sufficient power to detect the deviation, especially with small sample sizes.
+    | $n$ | 30 | 200 | 1000 | 5000 |
+    |---|---|---|---|---|
+    | Shapiro-Wilk $p$값 | 0.49 | 0.29 | 0.92 | **0.0013** |
+
+    $n = 5000$에서 비로소 기각된다. 실용적으로는 $t_{30}$과 정규를 구별할 이유가 거의 없는데도 그렇다.
+
+    또한 `scipy.stats.shapiro`는 $N > 5000$이면 "계산된 p값이 정확하지 않을 수 있다"는 경고를 낸다는 점에 유의하라.
+
+## 검정의 검정력
+
+정규성 검정의 **검정력**은 자료가 정규분포를 따르지 않을 때 귀무가설을 올바르게 기각하는 능력이다. **Shapiro-Wilk 검정** 같은 일부 검정은 다른 것들보다 강력하다. 그러나 완벽한 검정은 없으며, 검정력은 표본크기와 정규성 이탈의 정도 양쪽에 의존한다.
+
+자료가 조금 치우쳤거나 첨도가 어긋나 있어도, 특히 표본이 작으면 검정이 그 이탈을 탐지할 검정력을 갖지 못하는 경우가 있다.
 
 ```python
+import numpy as np
 from scipy.stats import skew, kurtosis, shapiro
+
+np.random.seed(0)
 
 # Generate a sample with slight skewness and kurtosis
 skewed_data = np.random.gamma(2, 2, 1000)
@@ -47,13 +67,27 @@ stat, p_value = shapiro(skewed_data)
 print(f"Shapiro-Wilk Test: p-value={p_value}")
 ```
 
-## Handling Skewed Distributions
+출력:
 
-Many real-world datasets are not normally distributed and may exhibit skewness. In such cases, normality tests may reject the null hypothesis even when the data is still suitable for many parametric tests, such as $t$-tests or ANOVA, due to their robustness to moderate deviations from normality.
+```text
+Skewness: 1.3583, Kurtosis: 2.4079
+Shapiro-Wilk Test: p-value=7.095e-25
+```
 
-Financial data, biological measurements, and income distributions often have long tails or skewness that do not strictly adhere to the normal distribution assumption, yet many parametric techniques can still be applied with reasonable confidence.
+감마(2, 2) 분포는 왜도 1.36, 초과첨도 2.41로 이탈이 상당히 크므로 $n = 1000$에서 압도적으로 기각된다.
+
+## 치우친 분포 다루기
+
+현실의 많은 자료는 정규분포를 따르지 않고 치우침을 보인다. 그런 경우 정규성 검정은 귀무가설을 기각하지만, $t$ 검정이나 분산분석 같은 여러 모수적 검정은 중간 정도의 정규성 이탈에 로버스트하므로 여전히 적용할 수 있다.
+
+금융 자료, 생물학적 측정값, 소득 분포는 흔히 긴 꼬리나 치우침을 보여 정규성 가정을 엄밀히 따르지 않지만, 많은 모수적 기법을 합리적인 신뢰 아래 여전히 적용할 수 있다.
 
 ```python
+import numpy as np
+from scipy.stats import shapiro
+
+np.random.seed(0)
+
 # Generate a sample with positive skew
 income_data = np.random.exponential(scale=50000, size=1000)
 
@@ -62,13 +96,23 @@ stat, p_value = shapiro(income_data)
 print(f"Shapiro-Wilk Test on Skewed Data: p-value={p_value}")
 ```
 
-Despite the skewness of the data, many statistical tests remain robust and reliable. Relying purely on normality tests could lead to unnecessary data transformations or rejections of valid methods.
+출력:
 
-## Practical Considerations in Real-World Data
+```text
+Shapiro-Wilk Test on Skewed Data: p-value=4.858e-33
+```
 
-In practice, real-world data rarely follows a perfect normal distribution. Formal tests can be overly strict, and minor deviations from normality do not always invalidate the use of parametric methods. Statistical methods like the **Central Limit Theorem (CLT)** can help mitigate concerns about normality for large samples by ensuring that the sampling distribution of the mean is approximately normal, even if the data itself is not.
+자료가 치우쳐 있어도 많은 통계검정은 여전히 로버스트하고 믿을 만하다. 정규성 검정에만 기대면 불필요한 자료 변환이나 타당한 방법의 배제로 이어질 수 있다.
+
+## 실제 자료에서의 실용적 고려
+
+실무에서 현실 자료가 완벽한 정규분포를 따르는 일은 거의 없다. 형식적 검정은 지나치게 엄격할 수 있으며, 정규성에서의 작은 이탈이 언제나 모수적 방법의 사용을 무효화하지는 않는다. **중심극한정리(CLT)** 같은 통계적 결과는 자료 자체가 정규가 아니어도 큰 표본에서 평균의 표집분포가 근사적으로 정규임을 보장하여 정규성에 대한 우려를 덜어 준다.
 
 ```python
+import numpy as np
+
+np.random.seed(0)
+
 # Generate a highly skewed dataset
 skewed_data = np.random.gamma(2, 2, 100)
 
@@ -80,52 +124,57 @@ std_error = np.std(skewed_data) / np.sqrt(len(skewed_data))
 print(f"Sample mean: {mean_sample}, Standard error: {std_error}")
 ```
 
-The CLT justifies using normal-based methods for large samples, even when the data itself is not normally distributed. Thus, it is important to consider the context and the goal of the analysis before strictly relying on normality tests.
+출력:
 
-## Conclusion
+```text
+Sample mean: 4.0972, Standard error: 0.2886
+```
 
-Normality tests are useful tools for assessing whether data is approximately normal, but they should not be applied blindly. Sample size, test power, and the practical relevance of normality to the analysis are critical considerations. In many cases, particularly with large sample sizes or moderately skewed data, parametric methods remain robust even when normality is not strictly met.
+CLT는 자료 자체가 정규가 아니어도 큰 표본에서 정규 기반 방법을 쓰는 것을 정당화한다. 따라서 정규성 검정에 엄격히 기대기 전에 맥락과 분석의 목적을 고려하는 것이 중요하다.
 
+## 결론
 
-## Exercises
+정규성 검정은 자료가 근사적으로 정규인지 평가하는 유용한 도구이지만 맹목적으로 적용해서는 안 된다. 표본크기, 검정력, 분석에서 정규성이 갖는 실질적 중요성이 결정적인 고려 사항이다. 특히 표본이 크거나 자료가 중간 정도로 치우친 경우에는 정규성이 엄밀하게 충족되지 않아도 모수적 방법이 여전히 로버스트하다.
 
-**Exercise 1.**
-Explain the statement: "All models are wrong, but some are useful" in the context of normality testing.
+## 연습문제
 
-??? success "Solution to Exercise 1"
-    No real dataset is exactly normally distributed. Normality is an idealized mathematical model, and normality tests with enough data will always reject. The relevant question is not "Are the data exactly normal?" (answer: never) but "Are the data sufficiently close to normal that normal-based methods give reliable results?"
+**연습문제 1.**
+"모든 모형은 틀렸지만 어떤 것은 쓸모 있다"라는 말을 정규성 검정의 맥락에서 설명하라.
 
-    This reframes normality testing from a binary decision (normal vs. non-normal) to a practical assessment of approximation quality. A formal test rejection with $n = 50{,}000$ and near-linear Q-Q plot should not prevent using normal-theory methods. The model is "wrong" but may still be "useful" for the analysis at hand.
+??? success "연습문제 1 풀이"
+    현실의 어떤 자료도 정확히 정규분포를 따르지 않는다. 정규성은 이상화된 수학적 모형이며, 자료가 충분하면 정규성 검정은 언제나 기각한다. 관련 있는 질문은 "자료가 정확히 정규인가?"(답: 결코 아니다)가 아니라 "정규 기반 방법이 믿을 만한 결과를 줄 만큼 자료가 정규에 충분히 가까운가?"이다.
 
----
-
-**Exercise 2.**
-List three pitfalls of relying solely on formal normality tests without visual inspection.
-
-??? success "Solution to Exercise 2"
-
-    1. **Overpowered tests:** Large samples reject normality for trivial departures, leading to unnecessary use of complex alternatives when normal methods would be perfectly adequate.
-    2. **Underpowered tests:** Small samples may fail to reject even severely non-normal data, giving false reassurance.
-    3. **Type of departure hidden:** A p-value says nothing about *what kind* of non-normality exists (skewness? outliers? bimodality?). Without a Q-Q plot or histogram, the researcher cannot choose an appropriate remedy.
+    이 관점은 정규성 검정을 이분법적 판정(정규 대 비정규)에서 근사 품질에 대한 실용적 평가로 다시 틀 짓는다. $n = 50{,}000$에서 형식적 검정이 기각했더라도 Q-Q 그림이 거의 선형이라면 정규론 방법을 쓰지 못할 이유가 없다. 모형은 "틀렸지만" 당면한 분석에는 여전히 "쓸모 있을" 수 있다.
 
 ---
 
-**Exercise 3.**
-A researcher tests normality on the residuals of a regression model, obtains $p = 0.48$, and writes: "The residuals are normally distributed." Critique this statement.
+**연습문제 2.**
+시각적 점검 없이 형식적 정규성 검정에만 의존할 때의 함정을 세 가지 들어라.
 
-??? success "Solution to Exercise 3"
-    The statement commits a logical error: failure to reject $H_0$ does not prove $H_0$ is true. The correct statement is: "There is no significant evidence against normality of the residuals ($p = 0.48$)."
+??? success "연습문제 2 풀이"
 
-    With moderate $n$, many non-normal distributions would also produce $p > 0.05$. The test may simply lack power to detect the true departure. Additionally, the p-value depends on sample size: the same degree of non-normality could yield $p = 0.48$ with $n = 30$ but $p = 0.001$ with $n = 3000$.
+    1. **과잉 검정력:** 큰 표본은 사소한 이탈에도 정규성을 기각하여, 정규 기반 방법으로 충분한데도 불필요하게 복잡한 대안을 쓰게 만든다.
+    2. **부족한 검정력:** 작은 표본은 심하게 비정규인 자료에도 기각하지 못해 잘못된 안심을 준다.
+    3. **이탈 유형이 감춰짐:** p값은 *어떤 종류의* 비정규성인지(치우침? 이상점? 이봉성?) 아무것도 말해 주지 않는다. Q-Q 그림이나 히스토그램 없이는 적절한 대책을 고를 수 없다.
 
 ---
 
-**Exercise 4.**
-Discuss the multiple testing issue when testing normality on residuals from 20 different regression models simultaneously.
+**연습문제 3.**
+한 연구자가 회귀모형 잔차의 정규성을 검정하여 $p = 0.48$을 얻고 "잔차가 정규분포를 따른다"라고 썼다. 이 서술을 비판하라.
 
-??? success "Solution to Exercise 4"
-    Testing normality on 20 models at $\alpha = 0.05$ per test has a family-wise error rate of $1 - 0.95^{20} \approx 0.64$. Even if all 20 models have truly normal residuals, there is a 64% chance of at least one false rejection.
+??? success "연습문제 3 풀이"
+    이 서술은 논리적 오류를 범한다. $H_0$을 기각하지 못한 것이 $H_0$이 참임을 증명하지 않는다. 올바른 서술은 "잔차의 정규성에 반하는 유의한 증거가 없다($p = 0.48$)"이다.
 
-    This is especially problematic if the researcher then applies "corrections" (transformations, nonparametric methods) only to the models that rejected normality -- the decision is data-dependent and inflates error rates.
+    $n$이 중간 정도이면 정규가 아닌 많은 분포도 $p > 0.05$를 낸다. 검정이 참된 이탈을 탐지할 검정력이 부족했을 뿐일 수 있다. 게다가 p값은 표본크기에 의존한다. 같은 정도의 비정규성이 $n = 30$에서는 $p = 0.48$을, $n = 3000$에서는 $p = 0.001$을 낼 수 있다.
 
-    Solutions: (1) apply a Bonferroni correction ($\alpha/20 = 0.0025$), (2) focus on visual Q-Q plot assessment rather than binary test outcomes, (3) use the same analysis approach (e.g., robust standard errors) for all models regardless of individual normality test results.
+---
+
+**연습문제 4.**
+서로 다른 회귀모형 20개의 잔차에 대해 동시에 정규성을 검정할 때의 다중검정 문제를 논하라.
+
+??? success "연습문제 4 풀이"
+    검정마다 $\alpha = 0.05$로 모형 20개를 검정하면 집단별 오류율이 $1 - 0.95^{20} \approx 0.64$이다. 20개 모형의 잔차가 모두 진짜 정규여도 적어도 하나를 잘못 기각할 확률이 64%이다.
+
+    연구자가 정규성을 기각한 모형에만 "보정"(변환, 비모수 방법)을 적용한다면 특히 문제가 된다. 결정이 자료에 의존하게 되어 오류율이 더욱 부풀려진다.
+
+    해법: (1) Bonferroni 보정을 적용한다($\alpha/20 = 0.0025$), (2) 이분법적 검정 결과보다 Q-Q 그림의 시각적 평가에 집중한다, (3) 개별 정규성 검정 결과와 무관하게 모든 모형에 같은 분석 방식(예: 로버스트 표준오차)을 쓴다.

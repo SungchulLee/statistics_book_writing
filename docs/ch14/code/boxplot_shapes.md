@@ -1,45 +1,45 @@
-# Distribution Shapes via Boxplots
+# 상자그림으로 보는 분포의 모양
 
-## Overview
+## 개요
 
-Boxplots summarise a distribution through its quartiles, median, and potential outliers, making them effective tools for detecting skewness and heavy tails at a glance. A symmetric, normal-like distribution produces a roughly symmetric boxplot with few outliers, while skewed or heavy-tailed distributions leave characteristic visual signatures. This page demonstrates how boxplots reveal departures from normality using lognormal (skewed) and Student-$t$ (heavy-tailed) examples.
+상자그림은 사분위수, 중앙값, 잠재적 이상점으로 분포를 요약하므로 치우침과 두꺼운 꼬리를 한눈에 탐지하는 데 효과적이다. 대칭이고 정규에 가까운 분포는 대략 대칭인 상자그림과 소수의 이상점을 만들어 내는 반면, 치우쳤거나 꼬리가 두꺼운 분포는 특징적인 시각적 흔적을 남긴다. 이 페이지는 대수정규(치우침)와 Student $t$(두꺼운 꼬리) 예를 써서 상자그림이 정규성 이탈을 어떻게 드러내는지 시연한다.
 
-## Anatomy of a Boxplot
+## 상자그림의 구조
 
-A standard boxplot displays five summary statistics and marks outliers:
+표준 상자그림은 다섯 개의 요약통계량을 표시하고 이상점을 표시한다.
 
-| Component | Definition |
+| 구성요소 | 정의 |
 |---|---|
-| Median line | $Q_2$ (50th percentile) |
-| Box edges | $Q_1$ (25th percentile) to $Q_3$ (75th percentile) |
-| Interquartile range | $\text{IQR} = Q_3 - Q_1$ |
-| Lower whisker | Smallest observation $\geq Q_1 - 1.5\,\text{IQR}$ |
-| Upper whisker | Largest observation $\leq Q_3 + 1.5\,\text{IQR}$ |
-| Outliers | Points beyond the whiskers |
+| 중앙값 선 | $Q_2$ (50백분위수) |
+| 상자의 양 끝 | $Q_1$ (25백분위수) ~ $Q_3$ (75백분위수) |
+| 사분위범위 | $\text{IQR} = Q_3 - Q_1$ |
+| 아래 수염 | $Q_1 - 1.5\,\text{IQR}$ 이상인 관측값 중 최솟값 |
+| 위 수염 | $Q_3 + 1.5\,\text{IQR}$ 이하인 관측값 중 최댓값 |
+| 이상점 | 수염 바깥의 점들 |
 
-For a normal distribution $\mathcal{N}(\mu, \sigma^2)$, the theoretical quartiles are
+정규분포 $\mathcal{N}(\mu, \sigma^2)$에서 이론적 사분위수는
 
 $$
 Q_1 = \mu - 0.6745\,\sigma, \qquad Q_3 = \mu + 0.6745\,\sigma,
 $$
 
-giving $\text{IQR} = 1.349\,\sigma$. The whisker boundaries extend to approximately $\mu \pm 2.698\,\sigma$. The probability of an observation falling beyond the whiskers under normality is approximately
+이므로 $\text{IQR} = 1.349\,\sigma$이다. 수염의 경계는 대략 $\mu \pm 2.698\,\sigma$까지 뻗는다. 정규성 아래에서 관측값이 수염 바깥에 놓일 확률은 근사적으로
 
 $$
 P(|X - \mu| > 2.698\,\sigma) \approx 0.007,
 $$
 
-so about 0.7% of observations are expected to appear as outliers.
+이므로 관측값의 약 0.7%가 이상점으로 나타날 것으로 기대된다.
 
-## Skewed Distribution: Lognormal
+## 치우친 분포: 대수정규
 
-When data come from a right-skewed distribution such as $\text{Lognormal}(0, 0.7)$, the boxplot shows:
+$\text{Lognormal}(0, 0.7)$처럼 오른쪽으로 치우친 분포에서 자료가 오면 상자그림은 다음을 보인다.
 
-- the median is closer to the lower edge of the box,
-- the upper whisker is much longer than the lower whisker, and
-- many outliers appear above the upper whisker.
+- 중앙값이 상자의 아래쪽 끝에 더 가깝고,
+- 위 수염이 아래 수염보다 훨씬 길며,
+- 위 수염 위쪽에 이상점이 많이 나타난다.
 
-### Code
+### 코드
 
 ```python
 import numpy as np
@@ -56,14 +56,16 @@ plt.tight_layout()
 plt.show()
 ```
 
-## Heavy-Tailed Distribution: Student-t
+이 표본에서는 이상점 $21$개가 모두 **위쪽**에만 나타나고 아래쪽에는 하나도 없다. 표본왜도는 $3.06$이다(이론값 $2.89$). 이상점의 완전한 한쪽 쏠림이 치우침의 뚜렷한 신호이다.
 
-A Student-$t$ distribution with low degrees of freedom (e.g., $\nu = 3$) is symmetric but has much heavier tails than the normal. The boxplot shows:
+## 꼬리가 두꺼운 분포: Student t
 
-- a roughly symmetric box (the median is centred), but
-- outliers on *both* sides, far more than the $\approx 0.7\%$ expected under normality.
+자유도가 낮은 Student $t$ 분포(예: $\nu = 3$)는 대칭이지만 정규분포보다 꼬리가 훨씬 두껍다. 상자그림은 다음을 보인다.
 
-### Code
+- 상자는 대략 대칭이지만(중앙값이 가운데에 있다),
+- 이상점이 **양쪽**에 나타나며, 정규성 아래에서 기대되는 $\approx 0.7\%$보다 훨씬 많다.
+
+### 코드
 
 ```python
 import numpy as np
@@ -80,21 +82,25 @@ plt.tight_layout()
 plt.show()
 ```
 
-## Interpretation
+이 표본에서는 이상점이 $18$개 나타난다. 정규성 아래에서 기대되는 $0.007 \times 400 = 2.8$개의 여섯 배가 넘는다. 대수정규 예와 달리 이상점이 위아래로 나뉘어 나타난다는 점이 결정적 차이이다.
 
-Boxplots provide a quick diagnostic for normality:
+## 해석
 
-- **Symmetric box + few outliers:** consistent with normality.
-- **Asymmetric box or unequal whiskers:** suggests skewness.
-- **Symmetric box + many outliers:** suggests heavy tails (leptokurtic).
+상자그림은 정규성에 대한 빠른 진단을 제공한다.
 
-While boxplots alone cannot confirm normality, they are a valuable first screening tool, especially when comparing multiple groups side by side.
+- **대칭 상자 + 소수의 이상점:** 정규성과 일관된다.
+- **비대칭 상자 또는 길이가 다른 수염:** 치우침을 시사한다.
+- **대칭 상자 + 많은 이상점:** 두꺼운 꼬리(고첨)를 시사한다.
 
-## Exercises
+핵심은 **이상점의 개수와 좌우 배분을 함께** 보는 것이다. 개수만 보면 치우침과 두꺼운 꼬리를 구별할 수 없다.
 
-**Exercise 1.** Generate $n = 500$ standard normal observations and create a boxplot. Count the number of outliers and compare with the theoretical expectation of $0.007 \times 500 \approx 3.5$.
+상자그림만으로 정규성을 확정할 수는 없지만, 특히 여러 집단을 나란히 비교할 때 가치 있는 1차 선별 도구이다.
 
-??? success "Solution to Exercise 1"
+## 연습문제
+
+**연습문제 1.** 표준정규 관측값 $n = 500$개를 생성하고 상자그림을 만들어라. 이상점의 개수를 세어 이론적 기댓값 $0.007 \times 500 \approx 3.5$와 비교하라.
+
+??? success "연습문제 1 풀이"
 
     ```python
     import numpy as np
@@ -106,7 +112,7 @@ While boxplots alone cannot confirm normality, they are a valuable first screeni
     q1, q3 = np.percentile(x, [25, 75])
     iqr = q3 - q1
     outliers = np.sum((x < q1 - 1.5 * iqr) | (x > q3 + 1.5 * iqr))
-    print(f"Outliers: {outliers} (expected ~3-4)")
+    print(f"Outliers: {outliers} (expected ~3.5)")
 
     fig, ax = plt.subplots(figsize=(5, 4))
     ax.boxplot(x, showmeans=True)
@@ -115,13 +121,23 @@ While boxplots alone cannot confirm normality, they are a valuable first screeni
     plt.show()
     ```
 
-    The observed number of outliers should be in the range of 1--7, close to the theoretical expectation of about 3.5 for $n = 500$. $\square$
+    출력:
+
+    ```text
+    Outliers: 6 (expected ~3.5)
+    ```
+
+    관측된 6개는 기댓값 3.5보다 크지만 놀랄 일이 아니다. 이 실험을 정규표본 3000개에 대해 반복하면 이상점 개수는 평균 $3.78$, 중앙값 $3$이고 5~95백분위수 범위가 $[1, 8]$이다.
+
+    평균이 이론값 3.5보다 살짝 큰 이유는 수염 경계를 이론적 사분위수가 아니라 **표본** 사분위수로 계산하기 때문이다. 표본 IQR은 변동하고, 그것이 작게 나온 표본에서는 이상점이 많이 잡힌다. 이 비대칭적 효과가 평균을 조금 위로 밀어 올린다.
+
+    실용적 함의: $n = 500$인 정규자료에서 이상점 6개는 정상 범위이다. 이상점 하나하나를 문제로 취급해서는 안 된다. $\square$
 
 ---
 
-**Exercise 2.** Create side-by-side boxplots for samples of size 400 drawn from (a) $\mathcal{N}(0,1)$, (b) $\text{Lognormal}(0, 0.5)$, and (c) $t_5$. Describe the visual differences.
+**연습문제 2.** (a) $\mathcal{N}(0,1)$, (b) $\text{Lognormal}(0, 0.5)$, (c) $t_5$에서 뽑은 크기 400인 표본들의 상자그림을 나란히 그려라. 시각적 차이를 기술하라.
 
-??? success "Solution to Exercise 2"
+??? success "연습문제 2 풀이"
 
     ```python
     import numpy as np
@@ -133,7 +149,7 @@ While boxplots alone cannot confirm normality, they are a valuable first screeni
     t5 = rng.standard_t(df=5, size=400)
 
     fig, ax = plt.subplots(figsize=(8, 4))
-    ax.boxplot([normal, lognorm, t5], labels=["N(0,1)", "Lognormal", "t(5)"],
+    ax.boxplot([normal, lognorm, t5], tick_labels=["N(0,1)", "Lognormal", "t(5)"],
                showmeans=True)
     ax.set_title("Side-by-Side Boxplots")
     ax.set_ylabel("Values")
@@ -141,15 +157,17 @@ While boxplots alone cannot confirm normality, they are a valuable first screeni
     plt.show()
     ```
 
-    The normal boxplot is symmetric with very few outliers. The lognormal boxplot has a long upper whisker and many upper outliers (right skew). The $t_5$ boxplot is symmetric but has outliers on both sides, reflecting heavier tails. $\square$
+    정규 상자그림은 대칭이고 이상점이 매우 적다. 대수정규 상자그림은 위 수염이 길고 위쪽 이상점이 많다(오른쪽 치우침). $t_5$ 상자그림은 대칭이지만 양쪽에 이상점이 있어 더 두꺼운 꼬리를 반영한다.
+
+    (참고: `matplotlib` 3.9 이후 `labels=` 인자는 `tick_labels=`로 이름이 바뀌었다. 이전 버전에서는 `labels=`를 쓴다.) $\square$
 
 ---
 
-**Exercise 3.** Derive the theoretical probability that a single observation from $\mathcal{N}(0,1)$ falls outside the whiskers of a boxplot (i.e., beyond $Q_1 - 1.5\,\text{IQR}$ or $Q_3 + 1.5\,\text{IQR}$).
+**연습문제 3.** $\mathcal{N}(0,1)$에서 나온 관측값 하나가 상자그림의 수염 바깥에 놓일(즉 $Q_1 - 1.5\,\text{IQR}$ 아래이거나 $Q_3 + 1.5\,\text{IQR}$ 위일) 이론적 확률을 유도하라.
 
-??? success "Solution to Exercise 3"
+??? success "연습문제 3 풀이"
 
-    For $X \sim \mathcal{N}(0,1)$, the theoretical quartiles are $Q_1 = \mathcal{N}^{-1}(0.25) = -0.6745$ and $Q_3 = \mathcal{N}^{-1}(0.75) = 0.6745$. Thus $\text{IQR} = 1.3490$ and the whisker limits are
+    $X \sim \mathcal{N}(0,1)$에 대해 이론적 사분위수는 $Q_1 = \Phi^{-1}(0.25) = -0.6745$, $Q_3 = \Phi^{-1}(0.75) = 0.6745$이다. 따라서 $\text{IQR} = 1.3490$이고 수염 경계는
 
     $$
     Q_1 - 1.5 \times \text{IQR} = -0.6745 - 2.0235 = -2.6980,
@@ -159,27 +177,33 @@ While boxplots alone cannot confirm normality, they are a valuable first screeni
     Q_3 + 1.5 \times \text{IQR} = 0.6745 + 2.0235 = 2.6980.
     $$
 
-    The probability of falling outside is
+    바깥에 놓일 확률은
 
     $$
-    P(|X| > 2.6980) = 2\,\mathcal{N}(-2.6980) = 2 \times 0.003488 = 0.006977 \approx 0.7\%.
+    P(|X| > 2.6980) = 2\,\Phi(-2.6980) = 2 \times 0.003488 = 0.006977 \approx 0.7\%.
     $$
 
-    $\square$
+    이 $0.7\%$가 Tukey의 $1.5 \times \text{IQR}$ 규칙이 관행이 된 이유이다. 정규자료에서 이상점을 드물게 표시하되, 아주 드물지는 않게 하는 절충점이다. $\square$
 
 ---
 
-**Exercise 4.** For a $t_\nu$ distribution, the kurtosis is $3 + 6/(\nu - 4)$ for $\nu > 4$. Use this to explain why a $t_3$ boxplot shows far more outliers than a normal boxplot.
+**연습문제 4.** $t_\nu$ 분포의 첨도는 $\nu > 4$일 때 $3 + 6/(\nu - 4)$이다. 이를 이용해 $t_3$ 상자그림에 정규 상자그림보다 훨씬 많은 이상점이 나타나는 이유를 설명하라.
 
-??? success "Solution to Exercise 4"
+??? success "연습문제 4 풀이"
 
-    The kurtosis formula $\kappa = 3 + 6/(\nu - 4)$ requires $\nu > 4$; for $\nu = 3$ the kurtosis is actually infinite (the fourth moment does not exist). This means the tails of the $t_3$ distribution decay as $|x|^{-4}$ (a power law), far more slowly than the exponential decay $e^{-x^2/2}$ of the normal distribution. Consequently, the probability of extreme values is much higher. The whisker limits computed from the sample IQR are similar to the normal case (the box is roughly the same width since the central 50% of $t_3$ is comparable to a normal), but the slow tail decay means many observations lie far beyond the whiskers, appearing as outliers. $\square$
+    첨도 공식 $\kappa = 3 + 6/(\nu - 4)$는 $\nu > 4$를 요구한다. $\nu = 3$에서는 첨도가 실제로 **무한대**이다(네 번째 적률이 존재하지 않는다).
+
+    $t_3$ 밀도의 꼬리는 $|x|^{-(\nu+1)} = |x|^{-4}$로 감쇠한다. 거듭제곱 법칙이며, 정규분포의 지수적 감쇠 $e^{-x^2/2}$보다 훨씬 느리다. 따라서 극단값이 나올 확률이 훨씬 높다.
+
+    결정적인 점은 **상자의 폭은 크게 다르지 않다**는 것이다. $t_3$의 사분위수는 $\pm 0.765$로 정규의 $\pm 0.674$와 비슷하므로, 표본 IQR로 계산한 수염 경계도 정규의 경우와 비슷하다. 그러나 꼬리 감쇠가 느리므로 그 경계를 훌쩍 넘어가는 관측값이 많아진다.
+
+    이것이 상자그림에서 두꺼운 꼬리를 알아보는 방식이다. **상자는 정상인데 이상점만 유난히 많다**. 앞의 시연에서 $t_3$ 표본 400개 중 18개가 이상점으로 잡혔다(정규라면 약 2.8개). $\square$
 
 ---
 
-**Exercise 5.** Write a function that takes a data array, creates a boxplot, and annotates it with the sample skewness and excess kurtosis. Test it on $\text{Lognormal}(0, 0.7)$ data.
+**연습문제 5.** 자료 배열을 받아 상자그림을 만들고 표본왜도와 초과첨도를 주석으로 표시하는 함수를 작성하라. $\text{Lognormal}(0, 0.7)$ 자료로 시험하라.
 
-??? success "Solution to Exercise 5"
+??? success "연습문제 5 풀이"
 
     ```python
     import numpy as np
@@ -200,10 +224,20 @@ While boxplots alone cannot confirm normality, they are a valuable first screeni
                 fontsize=10, bbox=dict(boxstyle='round', alpha=0.1))
         plt.tight_layout()
         plt.show()
+        return g1, g2
 
     rng = np.random.default_rng(42)
     x = rng.lognormal(0, 0.7, size=400)
-    annotated_boxplot(x, title="Lognormal(0, 0.7)")
+    g1, g2 = annotated_boxplot(x, title="Lognormal(0, 0.7)")
+    print(f"Skewness = {g1:.3f}, Excess kurtosis = {g2:.3f}")
     ```
 
-    The annotation will show substantial positive skewness (typically $> 1$) and positive excess kurtosis, both consistent with the asymmetric boxplot and its many upper outliers. $\square$
+    출력:
+
+    ```text
+    Skewness = 2.660, Excess kurtosis = 11.104
+    ```
+
+    주석은 큰 양의 왜도 $2.66$과 큰 양의 초과첨도 $11.10$을 보여준다. 둘 다 비대칭 상자그림 및 위쪽에 몰린 많은 이상점과 일관된다.
+
+    이론값과 비교해 보자. $\text{Lognormal}(0, \sigma^2)$의 왜도는 $(\omega + 2)\sqrt{\omega - 1}$이고 여기서 $\omega = e^{\sigma^2}$이다. $\sigma = 0.7$이면 $\omega = e^{0.49} = 1.632$이므로 왜도 $= 3.632 \times \sqrt{0.632} = 2.888$이다. 표본값 $2.66$이 이보다 작은 것은 예상된 일이다. **표본왜도는 치우친 분포에서 체계적으로 아래로 편향**되며, 특히 꼬리가 두꺼울수록 그렇다. 표본이 꼬리의 가장 극단적인 부분을 거의 담지 못하기 때문이다. $\square$

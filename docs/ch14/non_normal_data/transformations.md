@@ -1,36 +1,37 @@
-# Transformations to Achieve Normality
+# 정규성을 얻기 위한 변수변환
 
+자료가 정규성에서 크게 벗어나면 정규성 가정에 기대는 통계 방법이 더 이상 적절하지 않을 수 있다. 흔한 대응 가운데 하나는 변환을 적용해 자료를 더 정규에 가깝게 만드는 것이다.
 
-When data deviates significantly from normality, certain statistical methods that rely on normality assumptions may no longer be appropriate. One common approach is to apply a transformation to make the data more normal.
+## 흔한 변환
 
-## Common Transformations
+널리 쓰이는 변환은 다음과 같다.
 
-Popular transformations include:
-
-**Log Transformation**: Suitable for positively skewed data.
+**로그 변환**: 오른쪽으로 치우친 자료에 적합하다.
 
 $$
 X' = \log(X)
 $$
 
-**Square Root Transformation**: Also used for right-skewed data, particularly when there are small values.
+**제곱근 변환**: 역시 오른쪽으로 치우친 자료에 쓰며, 특히 작은 값이 있을 때 유용하다.
 
 $$
 X' = \sqrt{X}
 $$
 
-**Box-Cox Transformation**: A more flexible transformation that finds an optimal power parameter $\lambda$ to transform the data.
+**Box-Cox 변환**: 최적의 거듭제곱 모수 $\lambda$를 찾아 자료를 변환하는 더 유연한 변환이다.
 
 $$
 X' = \frac{X^\lambda - 1}{\lambda}, \quad \lambda \neq 0
 $$
 
-## Python Implementation
+## Python 구현
 
 ```python
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import boxcox
+
+np.random.seed(0)
 
 # Generate positively skewed data
 skewed_data = np.random.exponential(scale=2, size=1000)
@@ -55,58 +56,65 @@ axs[2].set_title(f'Box-Cox Transformed Data (λ={best_lambda:.2f})')
 plt.show()
 ```
 
-Both log and Box-Cox transformations are applied to skewed data. These transformations often make data more symmetric and closer to normality, making it suitable for parametric tests.
+로그 변환과 Box-Cox 변환을 모두 치우친 자료에 적용했다. 변환의 효과를 왜도로 확인하면
 
+| 자료 | 왜도 |
+|---|---|
+| 원자료(지수분포) | 2.0526 |
+| 로그 변환 | 0.4914 |
+| Box-Cox 변환 ($\hat\lambda = -0.41$) | **0.0747** |
 
-## Exercises
+원자료의 왜도 2.05가 로그 변환으로 0.49까지, 최대가능도로 $\lambda$를 고르는 Box-Cox 변환으로는 0.07까지 줄어든다. 이런 변환은 자료를 더 대칭적이고 정규에 가깝게 만들어 모수적 검정에 적합하게 해 준다.
 
-**Exercise 1.**
-A variable $Y$ has a right-skewed distribution with all positive values. Apply the log transformation $Y' = \log(Y)$ and explain why this often reduces skewness.
+## 연습문제
 
-??? success "Solution to Exercise 1"
-    The log function is concave: it compresses large values more than small values. For right-skewed data, the long right tail (large values) is compressed substantially while the left side (small values near zero) is stretched. This pulls the right tail inward toward the center, reducing the asymmetry.
+**연습문제 1.**
+변수 $Y$가 모두 양수이고 오른쪽으로 치우친 분포를 갖는다. 로그 변환 $Y' = \log(Y)$를 적용하고 이것이 왜 치우침을 줄이는 경우가 많은지 설명하라.
 
-    Formally, if $Y$ is log-normally distributed ($\log Y \sim N(\mu, \sigma^2)$), the log transformation produces perfectly normal data. Even for approximately log-normal data (common for incomes, stock prices, biological measurements), the log transformation substantially improves normality.
+??? success "연습문제 1 풀이"
+    로그함수는 오목하다. 큰 값을 작은 값보다 더 많이 압축한다. 오른쪽으로 치우친 자료에서는 긴 오른쪽 꼬리(큰 값)가 크게 압축되고 왼쪽(0 근처의 작은 값)은 늘어난다. 이것이 오른쪽 꼬리를 중심 쪽으로 끌어당겨 비대칭을 줄인다.
 
-    Caveat: the log transformation is undefined for $Y \leq 0$. For data with zeros, use $\log(Y + c)$ for a small constant $c$.
+    형식적으로 $Y$가 대수정규분포를 따르면($\log Y \sim N(\mu, \sigma^2)$) 로그 변환이 완벽하게 정규인 자료를 만든다. 근사적으로 대수정규인 자료(소득, 주가, 생물학적 측정값에서 흔하다)에서도 로그 변환이 정규성을 크게 개선한다.
 
----
-
-**Exercise 2.**
-The Box-Cox transformation family is $Y^{(\lambda)} = (Y^\lambda - 1)/\lambda$ for $\lambda \neq 0$ and $\log(Y)$ for $\lambda = 0$. What transformations do $\lambda = 1$, $\lambda = 0.5$, and $\lambda = -1$ correspond to?
-
-??? success "Solution to Exercise 2"
-
-    - $\lambda = 1$: $Y^{(1)} = (Y - 1)/1 = Y - 1$ (linear shift, essentially no transformation).
-    - $\lambda = 0.5$: $Y^{(0.5)} = (\sqrt{Y} - 1)/0.5 = 2(\sqrt{Y} - 1)$ (square root transformation, up to linear rescaling).
-    - $\lambda = 0$: $Y^{(0)} = \log(Y)$ (log transformation).
-    - $\lambda = -1$: $Y^{(-1)} = (1/Y - 1)/(-1) = 1 - 1/Y$ (reciprocal transformation, up to linear rescaling).
-
-    The optimal $\lambda$ is chosen by maximum likelihood: find the $\lambda$ that makes the transformed data most closely normal. This is typically done using `scipy.stats.boxcox` in Python.
+    주의: 로그 변환은 $Y \leq 0$에서 정의되지 않는다. 0이 있는 자료에는 작은 상수 $c$를 써서 $\log(Y + c)$를 쓴다.
 
 ---
 
-**Exercise 3.**
-After applying a log transformation to right-skewed data, the regression coefficients have a different interpretation. Explain how to interpret $\hat{\beta}_1$ in the model $\log(Y) = \beta_0 + \beta_1 X + \varepsilon$.
+**연습문제 2.**
+Box-Cox 변환족은 $\lambda \neq 0$일 때 $Y^{(\lambda)} = (Y^\lambda - 1)/\lambda$, $\lambda = 0$일 때 $\log(Y)$이다. $\lambda = 1$, $\lambda = 0.5$, $\lambda = -1$은 각각 어떤 변환에 해당하는가?
 
-??? success "Solution to Exercise 3"
-    In the log-linear model, exponentiating gives $Y = e^{\beta_0 + \beta_1 X + \varepsilon}$. A one-unit increase in $X$ multiplies the expected value of $Y$ by $e^{\beta_1}$:
+??? success "연습문제 2 풀이"
+
+    - $\lambda = 1$: $Y^{(1)} = (Y - 1)/1 = Y - 1$ (선형 이동, 사실상 변환 없음).
+    - $\lambda = 0.5$: $Y^{(0.5)} = (\sqrt{Y} - 1)/0.5 = 2(\sqrt{Y} - 1)$ (선형 재척도화를 제외하면 제곱근 변환).
+    - $\lambda = 0$: $Y^{(0)} = \log(Y)$ (로그 변환).
+    - $\lambda = -1$: $Y^{(-1)} = (1/Y - 1)/(-1) = 1 - 1/Y$ (선형 재척도화를 제외하면 역수 변환).
+
+    최적 $\lambda$는 최대가능도로 고른다. 변환된 자료가 가장 정규에 가까워지는 $\lambda$를 찾는 것이다. Python에서는 보통 `scipy.stats.boxcox`로 수행한다.
+
+---
+
+**연습문제 3.**
+오른쪽으로 치우친 자료에 로그 변환을 적용하면 회귀계수의 해석이 달라진다. 모형 $\log(Y) = \beta_0 + \beta_1 X + \varepsilon$에서 $\hat{\beta}_1$을 어떻게 해석하는지 설명하라.
+
+??? success "연습문제 3 풀이"
+    로그-선형 모형에서 지수를 취하면 $Y = e^{\beta_0 + \beta_1 X + \varepsilon}$이다. $X$가 한 단위 늘면 $Y$의 기댓값에 $e^{\beta_1}$이 곱해진다.
 
     $$
-    \frac{E[Y \mid X+1]}{E[Y \mid X]} \approx e^{\beta_1} \approx 1 + \beta_1 \text{ (for small } \beta_1\text{)}
+    \frac{E[Y \mid X+1]}{E[Y \mid X]} \approx e^{\beta_1} \approx 1 + \beta_1 \quad (\beta_1\text{이 작을 때})
     $$
 
-    So $\beta_1 \approx $ the proportional (percentage) change in $Y$ per unit change in $X$. For example, $\beta_1 = 0.05$ means a 1-unit increase in $X$ is associated with approximately a 5% increase in $Y$.
+    따라서 $\beta_1$은 $X$가 한 단위 변할 때 $Y$의 비례적(백분율) 변화에 가깝다. 예를 들어 $\beta_1 = 0.05$이면 $X$가 1 늘 때 $Y$가 약 5% 늘어남과 연관된다.
 
-    This multiplicative interpretation is natural for many applications (incomes, prices, biological growth).
+    이 곱셈적 해석은 소득, 가격, 생물학적 성장 같은 여러 응용에서 자연스럽다.
 
 ---
 
-**Exercise 4.**
-List two situations where transforming the data is not recommended even if normality is violated.
+**연습문제 4.**
+정규성이 위배되어도 자료 변환이 권장되지 않는 상황을 두 가지 들어라.
 
-??? success "Solution to Exercise 4"
+??? success "연습문제 4 풀이"
 
-    1. **When the original scale is scientifically meaningful:** If the research question is about differences in the original units (e.g., "Does the treatment reduce blood pressure by at least 10 mmHg?"), transforming the data changes the interpretation. A 10-unit difference on the log scale is not the same as 10 mmHg. The analyst should use methods valid on the original scale (bootstrap, robust methods).
+    1. **원래 척도가 과학적으로 의미 있을 때:** 연구 질문이 원래 단위의 차이에 관한 것이라면(예: "이 처치가 혈압을 최소 10 mmHg 낮추는가?") 자료를 변환하면 해석이 달라진다. 로그 척도의 10 차이는 10 mmHg가 아니다. 이럴 때는 원래 척도에서 타당한 방법(붓스트랩, 로버스트 방법)을 써야 한다.
 
-    2. **When the transformation creates interpretation difficulties:** Log-transforming a variable with many zeros (e.g., medical costs, insurance claims) requires ad hoc adjustments ($\log(Y+1)$), and back-transformed estimates are biased (the mean of $\log Y$ is not the log of the mean of $Y$). In these cases, a generalized linear model (Gamma GLM, Tweedie regression) is often preferable.
+    2. **변환이 해석을 어렵게 만들 때:** 0이 많은 변수(예: 의료비, 보험 청구)를 로그 변환하려면 임시방편적 조정($\log(Y+1)$)이 필요하고, 역변환한 추정값이 편향된다($\log Y$의 평균은 $Y$의 평균의 로그가 아니다). 이런 경우에는 일반화선형모형(감마 GLM, Tweedie 회귀)이 대개 더 낫다.

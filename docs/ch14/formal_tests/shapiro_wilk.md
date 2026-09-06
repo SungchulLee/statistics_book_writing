@@ -1,58 +1,61 @@
-# Shapiro-Wilk Test
+# Shapiro-Wilk 검정
 
+## 개요
 
-## Overview
+Shapiro-Wilk 검정은 자료의 정규성을 평가하는 널리 쓰이는 방법이다. 검정통계량과 그에 대응하는 $p$값을 계산하여 표본자료가 정규분포를 따르는 모집단에서 왔는지 판정한다.
 
-The Shapiro-Wilk test is a popular method for assessing the normality of a dataset. It evaluates whether the sample data comes from a normally distributed population by calculating a test statistic and corresponding $p$-value.
+### 가설
 
-### Hypotheses
+- **귀무가설** ($H_0$): 자료가 정규분포를 따른다.
+- **대립가설** ($H_1$): 자료가 정규분포를 따르지 않는다.
 
-- **Null Hypothesis** ($H_0$): The data is normally distributed.
-- **Alternative Hypothesis** ($H_1$): The data is not normally distributed.
+## 검정통계량 W의 계산
 
-## Computation of the Test Statistic W
-We compute the Shapiro-Wilk test statistic $W$ using the following steps:
+Shapiro-Wilk 검정통계량 $W$는 다음 단계로 계산한다.
 
-1. **Order the Data**: Let $X_1, X_2, \dots, X_n$ be the sample data sorted in ascending order such that $X_{(1)} \leq X_{(2)} \leq \dots \leq X_{(n)}$.
+1. **자료 정렬**: $X_1, X_2, \dots, X_n$을 오름차순으로 정렬하여 $X_{(1)} \leq X_{(2)} \leq \dots \leq X_{(n)}$을 얻는다.
 
-2. **Expected Values**: Calculate the expected values $m_i$ for a sample of size $n$ from a standard normal distribution. These values represent the means of the order statistics. Let $\mathbf{m}^T = [m_1, m_2, \dots, m_n]$ be the vector of these expected values.
+2. **기댓값**: 표준정규분포에서 크기 $n$인 표본의 순서통계량의 기댓값 $m_i$를 계산한다. 이 값들의 벡터를 $\mathbf{m}^T = [m_1, m_2, \dots, m_n]$이라 하자.
 
-3. **Covariance Matrix**: We use a covariance matrix $\Sigma$ of the order statistics from the normal distribution to generate weights $a_i$. These weights are computed to optimize the sensitivity of the test to departures from normality. The vector of weights is denoted by $\mathbf{a}^T = [a_1, a_2, \dots, a_n]$:
+3. **공분산행렬**: 정규분포 순서통계량의 공분산행렬 $\Sigma$를 이용해 가중치 $a_i$를 만든다. 이 가중치들은 정규성 이탈에 대한 검정의 민감도를 최적화하도록 계산된다. 가중치 벡터를 $\mathbf{a}^T = [a_1, a_2, \dots, a_n]$이라 하면
 
     $$
     [a_1, a_2, \dots, a_n] = \frac{[m_1, m_2, \dots, m_n]\Sigma^{-1}}{\sqrt{[m_1, m_2, \dots, m_n]\Sigma^{-1}\Sigma^{-1}[m_1, m_2, \dots, m_n]^T}}
     $$
 
-4. **Test Statistic $W$**: Then, we compute the test statistic $W$ as:
+4. **검정통계량 $W$**: 검정통계량 $W$를 다음과 같이 계산한다.
 
     $$
     W = \frac{\left( \sum_{i=1}^{n} a_i X_{(i)} \right)^2}{\sum_{i=1}^{n} (X_i - \bar{X})^2}
     $$
 
-    where
+    여기서
 
-    - $X_{(i)}$ is the $i$-th ordered data point,
-    - $a_i$ is the corresponding weight from the vector $\mathbf{a}$,
-    - $\bar{X}$ is the sample mean.
+    - $X_{(i)}$는 $i$번째로 정렬된 자료점,
+    - $a_i$는 벡터 $\mathbf{a}$의 대응하는 가중치,
+    - $\bar{X}$는 표본평균이다.
 
-    The numerator represents the squared linear combination of the ordered sample, and the denominator is the total variance of the sample data.
+    분자는 정렬된 표본의 선형결합을 제곱한 것이고 분모는 표본자료의 전체 변동이다.
 
-## Deriving the p-Value
-Once we compute the test statistic $W$, the $p$-value is obtained by comparing $W$ to the distribution of $W$ under the null hypothesis of normality. The $p$-value represents the probability of observing a test statistic as extreme as $W$ under the assumption that the null hypothesis is true.
+## p값 유도
 
-- We reject the null hypothesis if the $p$-value is small (e.g., less than $\alpha = 0.05$). This suggests the data does not follow a normal distribution.
-- If the $p$-value is large (greater than or equal to $\alpha$), we do not reject the null hypothesis.
+검정통계량 $W$를 계산한 뒤, 정규성이라는 귀무가설 아래에서의 $W$ 분포와 비교하여 $p$값을 얻는다. $p$값은 귀무가설이 참이라는 가정 아래에서 $W$만큼 극단적인 검정통계량을 관측할 확률이다.
 
-### Decision Rule
+- $p$값이 작으면(예: $\alpha = 0.05$ 미만) 귀무가설을 기각한다. 자료가 정규분포를 따르지 않음을 시사한다.
+- $p$값이 크면($\alpha$ 이상이면) 귀무가설을 기각하지 못한다.
 
-- If $p$-value $\leq \alpha$, reject $H_0$ (the data is not normally distributed).
-- If $p$-value $> \alpha$, fail to reject $H_0$ (the data is normally distributed).
+### 판정 규칙
 
-## Python Implementation
+- $p$값 $\leq \alpha$이면 $H_0$을 기각한다(자료가 정규분포를 따르지 않는다).
+- $p$값 $> \alpha$이면 $H_0$을 기각하지 못한다(자료가 정규분포를 따를 수 있다).
+
+## Python 구현
 
 ```python
 import numpy as np
 from scipy import stats
+
+np.random.seed(0)
 
 # Generate a sample dataset
 # data = np.random.normal(0, 1, 1000)
@@ -70,55 +73,64 @@ else:
     print("Fail to reject H_0: The data is normally distributed.")
 ```
 
-In summary, the Shapiro-Wilk test uses the ordered sample data and precomputed weights to compute the test statistic $W$ to determine whether the data is likely to have come from a normal distribution. It is generally considered one of the most powerful normality tests, particularly for small to moderate sample sizes.
+출력:
 
-## Exercises
+```text
+Shapiro-Wilk Test: Statistic=0.9986, p-value=0.5912
+Fail to reject H_0: The data is normally distributed.
+```
 
-**Exercise 1.**
-The Shapiro-Wilk test statistic $W$ ranges from 0 to 1. Explain what values close to 1 and values far from 1 indicate.
+$W = 0.9986$이 1에 매우 가깝고 $p = 0.591$이므로 정규성을 기각하지 못한다. 자료를 실제로 정규분포에서 생성했으므로 기대한 결과이다.
 
-??? success "Solution to Exercise 1"
-    The Shapiro-Wilk statistic $W$ measures how well the order statistics match the expected normal order statistics. $W$ close to 1 indicates the data are consistent with normality (the Q-Q plot is approximately linear). $W$ significantly less than 1 indicates departures from normality.
+정리하면, Shapiro-Wilk 검정은 정렬된 표본자료와 미리 계산된 가중치로 검정통계량 $W$를 구해 자료가 정규분포에서 왔을 가능성을 판정한다. 특히 작거나 중간 크기의 표본에서 가장 강력한 정규성 검정 가운데 하나로 평가된다.
 
-    Formally, $W = (\sum a_i x_{(i)})^2 / \sum(x_i - \bar{x})^2$, where the $a_i$ are optimal coefficients for the normal distribution. The numerator is the squared regression of the order statistics on expected normal scores; the denominator is the total variance. When data are normal, these are nearly equal, giving $W \approx 1$.
+## 연습문제
 
----
+**연습문제 1.**
+Shapiro-Wilk 검정통계량 $W$는 0과 1 사이의 값을 갖는다. 1에 가까운 값과 1에서 먼 값이 각각 무엇을 나타내는지 설명하라.
 
-**Exercise 2.**
-A Shapiro-Wilk test on $n = 25$ observations yields $W = 0.94$ with $p = 0.15$. Interpret this result.
+??? success "연습문제 1 풀이"
+    Shapiro-Wilk 통계량 $W$는 순서통계량이 기대되는 정규 순서통계량과 얼마나 잘 맞는지를 잰다. $W$가 1에 가까우면 자료가 정규성과 일관됨을(Q-Q 그림이 대략 선형임을) 나타낸다. $W$가 1보다 뚜렷이 작으면 정규성에서의 이탈을 나타낸다.
 
-??? success "Solution to Exercise 2"
-    With $W = 0.94$ and $p = 0.15 > 0.05$, we fail to reject the null hypothesis of normality. The data are consistent with having come from a normal distribution.
-
-    $W = 0.94$ is reasonably close to 1, suggesting only minor departures (if any) from normality. With $n = 25$, the test has moderate power, so large departures would likely have been detected. However, subtle non-normality might be missed.
-
-    As always, supplement with a Q-Q plot for visual assessment.
+    형식적으로 $W = (\sum a_i x_{(i)})^2 / \sum(x_i - \bar{x})^2$이며 $a_i$는 정규분포에 대한 최적 계수이다. 분자는 순서통계량을 기대 정규점수에 회귀시킨 것을 제곱한 것이고 분모는 전체 변동이다. 자료가 정규이면 이 둘이 거의 같아 $W \approx 1$이 된다.
 
 ---
 
-**Exercise 3.**
-Why is the Shapiro-Wilk test considered the most powerful normality test for small to moderate sample sizes?
+**연습문제 2.**
+관측값 $n = 25$개에 대한 Shapiro-Wilk 검정에서 $W = 0.94$, $p = 0.15$를 얻었다. 이 결과를 해석하라.
 
-??? success "Solution to Exercise 3"
-    The Shapiro-Wilk test achieves high power because:
+??? success "연습문제 2 풀이"
+    $W = 0.94$이고 $p = 0.15 > 0.05$이므로 정규성이라는 귀무가설을 기각하지 못한다. 자료가 정규분포에서 왔다고 보아도 일관된다.
 
-    1. **Uses all order statistics:** Unlike the KS test (which uses only the maximum deviation), Shapiro-Wilk uses the entire ordered sample in a linear combination, extracting maximum information.
-    2. **Optimal weights:** The coefficients $a_i$ are derived from the expected values and covariance matrix of normal order statistics, making the test statistic optimally sensitive to departures from normality.
-    3. **Correlation-based:** $W$ is essentially the squared correlation between the ordered data and the expected normal quantiles (the Q-Q correlation). This directly measures "how normal" the data look.
+    $W = 0.94$는 1에 어느 정도 가까워 정규성에서의 이탈이 (있더라도) 작음을 시사한다. $n = 25$면 검정력이 중간 정도이므로 큰 이탈이었다면 탐지되었을 것이다. 다만 미묘한 비정규성은 놓칠 수 있다.
 
-    Simulation studies consistently show Shapiro-Wilk outperforms KS, Lilliefors, and Anderson-Darling for $n < 50$, and remains competitive for larger $n$.
+    언제나 그렇듯 Q-Q 그림으로 시각적 평가를 보완하라.
 
 ---
 
-**Exercise 4.**
-Can the Shapiro-Wilk test distinguish between different types of non-normality (skewness vs. heavy tails)? How can you determine the nature of the departure?
+**연습문제 3.**
+Shapiro-Wilk 검정이 작거나 중간 크기의 표본에서 가장 강력한 정규성 검정으로 평가되는 이유는 무엇인가?
 
-??? success "Solution to Exercise 4"
-    The Shapiro-Wilk test is **omnibus**: it detects any departure from normality but does not indicate the type. A small $p$-value tells you the data are non-normal but not whether the issue is skewness, heavy tails, bimodality, or something else.
+??? success "연습문제 3 풀이"
+    Shapiro-Wilk 검정이 높은 검정력을 갖는 이유:
 
-    To determine the nature of the departure:
+    1. **모든 순서통계량을 쓴다:** (최대 편차만 쓰는) KS 검정과 달리 Shapiro-Wilk는 정렬된 표본 전체를 선형결합으로 써서 정보를 최대한 뽑아낸다.
+    2. **최적 가중치:** 계수 $a_i$가 정규 순서통계량의 기댓값과 공분산행렬에서 유도되어 검정통계량이 정규성 이탈에 최적으로 민감해진다.
+    3. **상관에 기초:** $W$는 본질적으로 정렬된 자료와 기대 정규분위수 사이의 상관(Q-Q 상관)의 제곱이다. 자료가 "얼마나 정규처럼 보이는지"를 직접 잰다.
 
-    1. **Q-Q plot:** S-shaped curves indicate heavy/light tails; asymmetric curvature indicates skewness; steps or jumps indicate discreteness or rounding.
-    2. **Skewness and kurtosis:** Compute sample skewness (asymmetry) and excess kurtosis (tail heaviness) to identify the direction.
-    3. **Separate tests:** Run `skewtest` and `kurtosistest` individually to isolate the source.
-    4. **Histogram:** Visual inspection can reveal multimodality, which moment-based diagnostics miss.
+    모의실험 연구들은 $n < 50$에서 Shapiro-Wilk가 KS, Lilliefors, Anderson-Darling을 일관되게 앞서며 더 큰 $n$에서도 경쟁력이 있음을 보여준다.
+
+---
+
+**연습문제 4.**
+Shapiro-Wilk 검정이 서로 다른 유형의 비정규성(치우침 대 두꺼운 꼬리)을 구별할 수 있는가? 이탈의 성격은 어떻게 판단하는가?
+
+??? success "연습문제 4 풀이"
+    Shapiro-Wilk 검정은 **전방위적**이다. 정규성에서의 어떤 이탈이든 탐지하지만 그 유형은 알려주지 않는다. $p$값이 작다는 것은 자료가 정규가 아니라는 뜻이지, 문제가 치우침인지 두꺼운 꼬리인지 이봉성인지 다른 무엇인지는 말해 주지 않는다.
+
+    이탈의 성격을 판단하려면
+
+    1. **Q-Q 그림:** S자 곡선은 두껍거나 얇은 꼬리를, 비대칭 곡률은 치우침을, 계단이나 도약은 이산성이나 반올림을 나타낸다.
+    2. **왜도와 첨도:** 표본왜도(비대칭)와 초과첨도(꼬리의 두꺼움)를 계산해 방향을 확인한다.
+    3. **개별 검정:** `skewtest`와 `kurtosistest`를 따로 수행해 원인을 분리한다.
+    4. **히스토그램:** 적률 기반 진단이 놓치는 다봉성을 눈으로 확인할 수 있다.

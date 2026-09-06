@@ -1,100 +1,113 @@
-# D'Agostino's K-Squared Test
+# D'Agostino의 K 제곱 검정
 
+## 개요
 
-## Overview
+**D'Agostino의 $K^2$ 검정**은 두 핵심 측도인 **왜도**와 **첨도**를 결합하여 주어진 표본이 정규분포를 따르는지 평가하는 형식적 통계검정이다. 자료 분포의 비대칭성(왜도)과 꼬리의 두꺼움(첨도)을 함께 살펴 정규성에서의 전반적 이탈을 재는 결합 검정통계량을 계산한다. 왜도와 첨도를 하나의 검정으로 함께 고려하고 싶을 때 특히 유용하다.
 
-**D'Agostino's K-squared test** is a formal statistical test used to evaluate whether a given sample follows a normal distribution by combining two key measures: **skewness** and **kurtosis**. The test examines both the asymmetry (skewness) and the "tailedness" (kurtosis) of the data distribution and computes a combined test statistic that assesses the overall deviation from normality. It is especially useful when considering skewness and kurtosis in a single test.
+### 가설
 
-### Hypotheses
+- **귀무가설** ($H_0$): 자료가 정규분포를 따른다.
+- **대립가설** ($H_1$): 자료가 정규분포를 따르지 않는다.
 
-- **Null Hypothesis** ($H_0$): The data is normally distributed.
-- **Alternative Hypothesis** ($H_1$): The data is not normally distributed.
+검정통계량은 왜도와 첨도의 z 점수를 하나의 값으로 결합한다. 이 검정통계량이 유의하고 그에 딸린 $p$값이 작으면(주어진 유의수준, 보통 0.05 미만) 귀무가설을 기각하고 자료가 정규분포를 따르지 않는다고 결론짓는다.
 
-The test statistic combines the z-scores of the skewness and kurtosis into a single value. If this test statistic is significant and the associated $p$-value is small (below a given significance level, typically 0.05), we reject the null hypothesis and conclude that the data is not normally distributed.
+## D'Agostino의 K 제곱 검정이 작동하는 방식
 
-## How D'Agostino's K-Squared Test Works
+1. **왜도 계산**: 먼저 표본의 왜도, 곧 분포의 비대칭성을 잰다. 완전한 정규분포에서 왜도는 0에 가까워야 한다.
 
-1. **Calculate Skewness**: The test first measures the sample's skewness, which refers to the asymmetry of the distribution. For a perfectly normal distribution, skewness should be close to zero.
+2. **첨도 계산**: 다음으로 첨도를 잰다. 첨도는 분포의 꼬리 두꺼움을 기술한다. 정규분포의 첨도는 3(중첨)이다.
 
-2. **Calculate Kurtosis**: Next, the test measures kurtosis. Kurtosis describes the "tailedness" of the distribution. A normal distribution has a kurtosis of 3 (mesokurtic).
-
-3. **Combine the Measures**: We compute the z-scores $Z_{\text{skewness}}$ and $Z_{\text{kurtosis}}$ of both the skewness and kurtosis, and the test statistic $K^2$ is formed by summing the squares of these z-scores:
+3. **두 측도의 결합**: 왜도와 첨도의 z 점수 $Z_{\text{skewness}}$와 $Z_{\text{kurtosis}}$를 계산하고, 이 z 점수들의 제곱을 더해 검정통계량 $K^2$을 만든다.
 
     $$
     K^2 = Z_{\text{skewness}}^2 + Z_{\text{kurtosis}}^2
     $$
 
-    This test statistic follows a chi-squared distribution with 2 degrees of freedom.
+    이 검정통계량은 자유도 2인 카이제곱분포를 따른다.
 
-4. **Compute the p-value**: Based on the value of $K^2$, the test computes a $p$-value, which tells us the probability of observing such a deviation from normality under the null hypothesis.
+4. **p값 계산**: $K^2$의 값에 근거하여 $p$값을 계산한다. 이는 귀무가설 아래에서 그만큼의 정규성 이탈을 관측할 확률을 알려준다.
 
-## How to Compute Z_skewness
-The computation of $Z_{\text{skewness}}$ involves standardizing the skewness of a sample to test whether it significantly deviates from zero under the null hypothesis of normality.
+## Z_skewness를 계산하는 법
 
-Given a sample of size $n$:
+$Z_{\text{skewness}}$의 계산은 정규성이라는 귀무가설 아래에서 표본의 왜도가 0에서 유의하게 벗어나는지 검정하기 위해 왜도를 표준화하는 과정이다.
 
-**1. Compute the sample skewness $S$:**
+크기 $n$인 표본이 주어졌을 때:
+
+**1. 표본왜도 $S$를 계산한다:**
 
 $$
 S = \frac{\frac{1}{n} \sum_{i=1}^n (x_i - \bar{x})^3}{\left(\frac{1}{n} \sum_{i=1}^n (x_i - \bar{x})^2\right)^{3/2}}
 $$
 
-where $x_i$ is the $i$-th observation, $\bar{x}$ is the sample mean, the numerator measures the third moment (asymmetry), and the denominator normalizes it to make it dimensionless.
+여기서 $x_i$는 $i$번째 관측값, $\bar{x}$는 표본평균이며, 분자는 3차 적률(비대칭)을 재고 분모는 이를 무차원으로 정규화한다.
 
-**2. Standardize $S$:**
+**2. $S$를 표준화한다:**
 
-2.1 Compute the standard error of skewness $\text{SE}_{S}$:
+2.1 왜도의 표준오차 $\text{SE}_{S}$를 계산한다.
 
 $$
 \text{SE}_{S} = \sqrt{\frac{6n (n-1)}{(n-2)(n+1)(n+3)}}
 $$
 
-2.2 Standardize $S$ to obtain $Z_{\text{skewness}}$:
+2.2 $S$를 표준화하여 $Z_{\text{skewness}}$를 얻는다.
 
 $$
 Z_{\text{skewness}} = \frac{S}{\text{SE}_{S}}
 $$
 
-**Key Notes:**
+**핵심 사항:**
 
-- $Z_{\text{skewness}}$ follows a standard normal distribution ($N(0, 1)$) under the null hypothesis of normality.
-- If $|Z_{\text{skewness}}|$ is large, it indicates significant departure from normality due to skewness.
+- $Z_{\text{skewness}}$는 정규성이라는 귀무가설 아래에서 근사적으로 표준정규분포 $N(0, 1)$를 따른다.
+- $|Z_{\text{skewness}}|$가 크면 왜도로 인한 유의한 정규성 이탈을 나타낸다.
 
-## How to Compute Z_kurtosis
-Given a sample of size $n$:
+## Z_kurtosis를 계산하는 법
 
-**1. Compute the sample kurtosis $K$:**
+크기 $n$인 표본이 주어졌을 때:
+
+**1. 표본첨도 $K$를 계산한다:**
 
 $$
 K = \frac{\frac{1}{n} \sum_{i=1}^n (x_i - \bar{x})^4}{\left(\frac{1}{n} \sum_{i=1}^n (x_i - \bar{x})^2\right)^2}
 $$
 
-where $x_i$ is the $i$-th observation, $\bar{x}$ is the sample mean, the numerator measures the fourth moment (tailedness), and the denominator normalizes it.
+여기서 $x_i$는 $i$번째 관측값, $\bar{x}$는 표본평균이며, 분자는 4차 적률(꼬리의 두꺼움)을 재고 분모는 이를 정규화한다.
 
-**2. Adjust $K$ to excess kurtosis:**
+**2. $K$를 초과첨도로 조정한다:**
 
 $$
 K_{\text{excess}} = K - 3
 $$
 
-**3. Compute the standard error of kurtosis $\text{SE}_{K}$:**
+**3. 첨도의 표준오차 $\text{SE}_{K}$를 계산한다:**
 
 $$
 \text{SE}_{K} = \sqrt{\frac{24n(n-1)^2}{(n-3)(n-2)(n+3)(n+5)}}
 $$
 
-**4. Standardize $K_{\text{excess}}$:**
+**4. $K_{\text{excess}}$를 표준화한다:**
 
 $$
 Z_{\text{kurtosis}} = \frac{K_{\text{excess}}}{\text{SE}_{K}}
 $$
 
-**Key Notes:**
+**핵심 사항:**
 
-- $Z_{\text{kurtosis}}$ follows a standard normal distribution ($N(0, 1)$) under the null hypothesis of normality.
-- If $|Z_{\text{kurtosis}}|$ is large, it indicates significant departure from normality due to kurtosis.
+- $Z_{\text{kurtosis}}$는 정규성이라는 귀무가설 아래에서 근사적으로 표준정규분포 $N(0, 1)$를 따른다.
+- $|Z_{\text{kurtosis}}|$가 크면 첨도로 인한 유의한 정규성 이탈을 나타낸다.
 
-## Python Implementation
+!!! warning "위의 단순 z 점수는 scipy가 계산하는 값과 다르다"
+    표준오차로 나누는 위의 z 점수는 $n \to \infty$일 때에만 표준정규로 수렴하는 **점근적** 근사이다. `scipy.stats.skewtest`와 `kurtosistest`는 D'Agostino와 Pearson이 제안한 추가 **정규화 변환**을 적용하여 유한표본에서 표준정규 근사를 훨씬 정확하게 만든다.
+
+    두 값의 차이는 표본이 작을수록 커진다. 같은 자료에 대해
+
+    | $n$ | 단순 $Z_{\text{skewness}}$ | scipy | 단순 $Z_{\text{kurtosis}}$ | scipy |
+    |---|---|---|---|---|
+    | 1000 | 0.4378 | 0.4402 | $-0.3026$ | $-0.1980$ |
+    | 30 | $-1.1943$ | $-1.2927$ | 0.3925 | 0.9176 |
+
+    $n = 30$에서 첨도 z 점수는 2배 이상 차이가 난다. 따라서 위 공식은 원리를 이해하는 용도로만 쓰고 실제 계산에는 `scipy.stats.normaltest`를 써야 한다.
+
+## Python 구현
 
 ```python
 import numpy as np
@@ -122,79 +135,89 @@ else:
     print("Reject H_0: The data is not normally distributed.")
 ```
 
-## Applications
+출력:
 
-D'Agostino's K-squared test is commonly used in situations where the assumption of normality is critical, such as in:
+```text
+Z_skewtest**2 + Z_kurtosistest**2 = 0.23299...
+D'Agostino's K-squared Test: Statistic=0.2330, p-value=0.8900
+Fail to reject H_0: The data is normally distributed.
+```
 
-- **Parametric statistical tests** (e.g., $t$-tests, ANOVA) that require normally distributed data.
-- **Regression analysis**, where the normality of residuals is assumed.
-- **Quality control** and **financial modeling**, where normality is often assumed in modeling and decision-making processes.
+`normaltest`의 통계량이 두 z 점수의 제곱합과 정확히 일치함을 확인할 수 있다. 이것이 $K^2 = Z_{\text{skewness}}^2 + Z_{\text{kurtosis}}^2$의 정의이다.
 
-## Limitations
+## 응용
 
-- **Sample Size Sensitivity**: Like many normality tests, D'Agostino's K-squared test is sensitive to sample size. For small sample sizes, the test might not have enough power to detect deviations from normality. For large samples, even slight deviations from normality may result in rejecting the null hypothesis.
-- **Assumes Continuous Data**: The test is designed for continuous data. Applying it to categorical or ordinal data is not appropriate.
+D'Agostino의 $K^2$ 검정은 정규성 가정이 결정적인 다음과 같은 상황에서 흔히 쓰인다.
 
-D'Agostino's K-squared test is a powerful method for checking whether data is normally distributed, accounting for skewness and kurtosis. By combining these two important aspects of distribution shape, the test provides a robust assessment of normality. However, like all normality tests, it should be used with graphical methods (e.g., Q-Q plots) and other statistical tests to understand the data's distribution comprehensively.
+- 정규분포 자료를 요구하는 **모수적 통계검정**($t$ 검정, 분산분석 등).
+- 잔차의 정규성을 가정하는 **회귀분석**.
+- 모형화와 의사결정에서 흔히 정규성을 가정하는 **품질관리**와 **금융 모형화**.
 
-## Exercises
+## 한계
 
-**Exercise 1.**
-D'Agostino's K-squared test combines tests for skewness and kurtosis. State the null hypothesis and the test statistic formula.
+- **표본크기 민감성**: 다른 많은 정규성 검정과 마찬가지로 D'Agostino의 $K^2$ 검정도 표본크기에 민감하다. 표본이 작으면 정규성 이탈을 탐지할 검정력이 부족할 수 있다. 표본이 크면 정규성에서 아주 조금만 벗어나도 귀무가설을 기각할 수 있다.
+- **연속 자료를 가정**: 이 검정은 연속 자료를 위해 설계되었다. 범주형이나 순서형 자료에 적용하는 것은 적절하지 않다.
 
-??? success "Solution to Exercise 1"
-    The null hypothesis is $H_0$: the data come from a normal distribution.
+D'Agostino의 $K^2$ 검정은 왜도와 첨도를 함께 반영하여 자료의 정규성을 확인하는 강력한 방법이다. 분포 모양의 두 중요한 측면을 결합하여 정규성을 견실하게 평가한다. 다만 모든 정규성 검정과 마찬가지로 자료의 분포를 종합적으로 이해하려면 시각적 방법(예: Q-Q 그림)과 다른 통계검정을 함께 써야 한다.
 
-    The test statistic is:
+## 연습문제
+
+**연습문제 1.**
+D'Agostino의 $K^2$ 검정은 왜도 검정과 첨도 검정을 결합한다. 귀무가설과 검정통계량의 공식을 서술하라.
+
+??? success "연습문제 1 풀이"
+    귀무가설은 $H_0$: 자료가 정규분포에서 왔다.
+
+    검정통계량은
 
     $$
     K^2 = Z_1^2 + Z_2^2
     $$
 
-    where $Z_1$ is the standardized skewness statistic (a transformation of the sample skewness $\sqrt{b_1}$) and $Z_2$ is the standardized kurtosis statistic (a transformation of the sample kurtosis $b_2$). Under $H_0$, $K^2 \sim \chi^2_2$ approximately.
+    여기서 $Z_1$은 표준화된 왜도 통계량(표본왜도 $\sqrt{b_1}$의 변환)이고 $Z_2$는 표준화된 첨도 통계량(표본첨도 $b_2$의 변환)이다. $H_0$ 아래에서 $K^2 \sim \chi^2_2$가 근사적으로 성립한다.
 
-    The test is omnibus: it detects departures from normality due to skewness, kurtosis, or both. A large $K^2$ (small p-value) indicates non-normality.
-
----
-
-**Exercise 2.**
-A sample of $n = 100$ has skewness $= 0.8$ and excess kurtosis $= 1.5$. Without computing the exact test statistic, explain qualitatively whether D'Agostino's test is likely to reject normality.
-
-??? success "Solution to Exercise 2"
-    Both values are noticeably different from their normal benchmarks (skewness $= 0$, excess kurtosis $= 0$). Skewness of 0.8 indicates moderate right-skewness, and excess kurtosis of 1.5 indicates heavier tails than normal.
-
-    With $n = 100$, the test has reasonable power to detect these departures. The skewness contribution $Z_1^2$ will be moderately large, and the kurtosis contribution $Z_2^2$ will also be positive. Since $K^2 = Z_1^2 + Z_2^2$, both components add to the test statistic, making rejection likely.
+    이 검정은 전방위적이다. 왜도, 첨도, 또는 둘 다에서 오는 정규성 이탈을 탐지한다. $K^2$가 크면(p값이 작으면) 비정규성을 나타낸다.
 
 ---
 
-**Exercise 3.**
-Compare D'Agostino's test with the Shapiro-Wilk test. What are the relative strengths of each?
+**연습문제 2.**
+$n = 100$인 표본의 왜도가 $0.8$, 초과첨도가 $1.5$이다. 정확한 검정통계량을 계산하지 않고 D'Agostino 검정이 정규성을 기각할 가능성이 높은지 정성적으로 설명하라.
 
-??? success "Solution to Exercise 3"
-    **D'Agostino's K-squared:**
+??? success "연습문제 2 풀이"
+    두 값 모두 정규분포의 기준값(왜도 $= 0$, 초과첨도 $= 0$)에서 눈에 띄게 벗어나 있다. 왜도 0.8은 중간 정도의 오른쪽 치우침을, 초과첨도 1.5는 정규보다 두꺼운 꼬리를 나타낸다.
 
-    - Strengths: Works well for moderate to large $n$ ($n \geq 20$). Provides separate insights about skewness and kurtosis. Computationally simple.
-    - Weaknesses: Less powerful than Shapiro-Wilk for small samples. May miss departures that do not affect skewness or kurtosis (e.g., bimodality with symmetric modes).
+    $n = 100$이면 이런 이탈을 탐지할 만한 검정력이 있다. 왜도의 기여 $Z_1^2$이 상당히 크고 첨도의 기여 $Z_2^2$도 양수일 것이다. $K^2 = Z_1^2 + Z_2^2$이므로 두 성분이 함께 검정통계량을 키워 기각할 가능성이 높다.
+
+---
+
+**연습문제 3.**
+D'Agostino 검정을 Shapiro-Wilk 검정과 비교하라. 각각의 상대적 강점은 무엇인가?
+
+??? success "연습문제 3 풀이"
+    **D'Agostino의 $K^2$:**
+
+    - 강점: 중간에서 큰 표본($n \geq 20$)에서 잘 작동한다. 왜도와 첨도에 대한 별도의 통찰을 준다. 계산이 간단하다.
+    - 약점: 작은 표본에서는 Shapiro-Wilk보다 검정력이 낮다. 왜도나 첨도에 영향을 주지 않는 이탈(예: 봉우리가 대칭인 이봉분포)은 놓칠 수 있다.
 
     **Shapiro-Wilk:**
 
-    - Strengths: Most powerful test for small to moderate $n$. Detects a wide range of departures including those not captured by moments alone.
-    - Weaknesses: Originally limited to $n \leq 5000$ (though modern implementations handle larger $n$). Does not distinguish between skewness and kurtosis departures.
+    - 강점: 작거나 중간 크기의 $n$에서 가장 강력한 검정이다. 적률만으로는 잡히지 않는 것을 포함해 폭넓은 이탈을 탐지한다.
+    - 약점: 본래 $n \leq 5000$으로 제한되었다(현대 구현은 더 큰 $n$도 다룬다). 왜도로 인한 이탈과 첨도로 인한 이탈을 구별해 주지 않는다.
 
 ---
 
-**Exercise 4.**
-Explain why D'Agostino's test is sometimes called a "moment-based" normality test and how this connects to the Jarque-Bera test.
+**연습문제 4.**
+D'Agostino 검정이 왜 "적률 기반" 정규성 검정이라 불리는지, 그리고 이것이 Jarque-Bera 검정과 어떻게 이어지는지 설명하라.
 
-??? success "Solution to Exercise 4"
-    D'Agostino's test is "moment-based" because it evaluates normality through the third and fourth central moments (skewness and kurtosis), which are the first moments to differ from their normal values for many alternative distributions.
+??? success "연습문제 4 풀이"
+    D'Agostino 검정이 "적률 기반"인 이유는 3차와 4차 중심적률(왜도와 첨도)을 통해 정규성을 평가하기 때문이다. 많은 대립분포에서 이 두 적률이 정규값과 가장 먼저 달라진다.
 
-    The **Jarque-Bera test** uses a similar approach:
+    **Jarque-Bera 검정**도 비슷한 접근을 쓴다.
 
     $$
     JB = \frac{n}{6}\left(S^2 + \frac{(K-3)^2}{4}\right)
     $$
 
-    where $S$ is sample skewness and $K$ is sample kurtosis. Under $H_0$, $JB \sim \chi^2_2$.
+    여기서 $S$는 표본왜도, $K$는 표본첨도이다. $H_0$ 아래에서 $JB \sim \chi^2_2$이다.
 
-    The main difference: D'Agostino's test applies normalizing transformations to the skewness and kurtosis statistics before combining them, improving the chi-squared approximation for finite samples. The Jarque-Bera test uses the raw moments, which can have poor finite-sample properties. D'Agostino's test is therefore preferred for sample sizes below 200.
+    주된 차이: D'Agostino 검정은 왜도와 첨도 통계량을 결합하기 전에 정규화 변환을 적용하여 유한표본에서 카이제곱 근사를 개선한다. Jarque-Bera 검정은 원래의 적률을 그대로 써서 유한표본 성질이 나쁠 수 있다. 따라서 표본크기가 200 아래일 때는 D'Agostino 검정이 선호된다.

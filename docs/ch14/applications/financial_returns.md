@@ -1,94 +1,109 @@
-# Normality of Financial Returns
+# 금융 수익률의 정규성
 
-## Motivation
+## 동기
 
-Financial returns are among the most heavily studied datasets in applied statistics, and the question of whether they are normally distributed has profound implications. Portfolio optimization, option pricing, and risk management all depend on assumptions about the return distribution. If returns are normal, closed-form solutions exist for many problems. If they are not, these solutions may underestimate risk and lead to poor decisions. This section examines the empirical evidence on return distributions and its consequences.
+금융 수익률은 응용통계학에서 가장 많이 연구된 자료 가운데 하나이며, 그것이 정규분포를 따르는지에 대한 질문은 깊은 함의를 갖는다. 포트폴리오 최적화, 옵션 가격결정, 위험 관리가 모두 수익률 분포에 대한 가정에 의존한다. 수익률이 정규라면 많은 문제에 닫힌 형태의 해가 존재한다. 그렇지 않다면 그 해들이 위험을 과소평가하여 나쁜 결정으로 이어질 수 있다. 이 절은 수익률 분포에 대한 경험적 증거와 그 결과를 살펴본다.
 
-## Log-Returns and the Normal Model
+## 로그수익률과 정규 모형
 
-The **log-return** (or continuously compounded return) of an asset over one period is
+한 기간 동안 자산의 **로그수익률**(연속복리 수익률)은
 
 $$
 r_t = \ln\left(\frac{P_t}{P_{t-1}}\right)
 $$
 
-where $P_t$ is the asset price at time $t$. The normal model assumes
+여기서 $P_t$는 시점 $t$의 자산 가격이다. 정규 모형은 다음을 가정한다.
 
 $$
 r_t \overset{\text{iid}}{\sim} N(\mu, \sigma^2)
 $$
 
-This model implies that multi-period returns are also normal (since sums of normals are normal), and that the price process follows a geometric Brownian motion:
+이 모형은 (정규의 합이 정규이므로) 다기간 수익률도 정규임을 뜻하며, 가격 과정이 기하 브라운 운동을 따름을 함의한다.
 
 $$
 \ln P_T - \ln P_0 = \sum_{t=1}^{T} r_t \sim N(T\mu, T\sigma^2)
 $$
 
-The normal model is mathematically convenient, but empirical data consistently violate its predictions.
+정규 모형은 수학적으로 편리하지만 경험 자료는 그 예측을 일관되게 위배한다.
 
-## Empirical Evidence Against Normality
+## 정규성에 반하는 경험적 증거
 
-### Fat Tails
+### 두꺼운 꼬리
 
-The most robust empirical finding is that financial return distributions have **fatter tails** than the normal distribution. If returns were truly normal with mean $\mu$ and standard deviation $\sigma$, then the probability of a return more than 4 standard deviations from the mean would be
+가장 견고한 경험적 발견은 금융 수익률 분포가 정규분포보다 **두꺼운 꼬리**를 갖는다는 것이다. 수익률이 정말로 평균 $\mu$, 표준편차 $\sigma$인 정규분포를 따른다면 평균에서 4 표준편차 넘게 벗어날 확률은
 
 $$
 P(|r_t - \mu| > 4\sigma) \approx 6.3 \times 10^{-5}
 $$
 
-or about once every 63 years for daily data. In practice, such events occur far more frequently. The stock market crash of October 19, 1987, saw a daily return of approximately $-22\%$, which corresponds to roughly 20 standard deviations under a normal model -- an event with essentially zero probability.
+곧 일간 자료로 약 63년에 한 번이다. 실제로 그런 사건은 훨씬 자주 일어난다. 1987년 10월 19일 주식시장 붕괴 때 일간 수익률이 약 $-22\%$였는데, 이는 정규 모형에서 대략 20 표준편차에 해당하며 사실상 확률이 0인 사건이다.
 
-The **excess kurtosis** of daily equity returns typically ranges from 3 to 50, far above the normal value of zero. This means the distribution has more mass in the tails and at the center, with less in the intermediate regions, compared to the normal.
+일간 주식 수익률의 **초과첨도**는 흔히 3에서 50 사이로, 정규분포의 0보다 훨씬 크다. 정규분포와 비교하여 꼬리와 중앙에 질량이 더 많고 그 중간 구역에는 더 적다는 뜻이다.
 
-### Negative Skewness
+### 음의 왜도
 
-Equity returns tend to exhibit **negative skewness**, meaning large negative returns are more common than large positive returns of equal magnitude. This asymmetry violates the symmetry of the normal distribution. Typical values of skewness for daily stock returns are between $-0.5$ and $-1.0$.
+주식 수익률은 **음의 왜도**를 보이는 경향이 있다. 같은 크기의 큰 양의 수익률보다 큰 음의 수익률이 더 흔하다는 뜻이다. 이 비대칭은 정규분포의 대칭성을 위배한다. 일간 주식 수익률의 전형적인 왜도 값은 $-0.5$에서 $-1.0$ 사이이다.
 
-### Volatility Clustering
+### 변동성 군집
 
-Returns exhibit **volatility clustering**: large returns (of either sign) tend to be followed by large returns, and small returns by small returns. This means that $r_t$ and $r_{t+1}$ are not independent, even though they may be approximately uncorrelated. Formally, the autocorrelation of $|r_t|$ or $r_t^2$ is significantly positive at many lags:
+수익률은 **변동성 군집**을 보인다. (부호와 무관하게) 큰 수익률 뒤에 큰 수익률이, 작은 수익률 뒤에 작은 수익률이 따라오는 경향이 있다. 곧 $r_t$와 $r_{t+1}$은 근사적으로 무상관일 수 있어도 독립은 아니다. 형식적으로 $|r_t|$나 $r_t^2$의 자기상관이 여러 시차에서 유의하게 양수이다.
 
 $$
-\text{Corr}(r_t^2, r_{t+h}^2) > 0 \quad \text{for } h = 1, 2, \ldots
+\text{Corr}(r_t^2, r_{t+h}^2) > 0 \quad (h = 1, 2, \ldots)
 $$
 
-This pattern violates the iid assumption in the normal model and motivates models such as GARCH that allow the variance to change over time.
+이 패턴은 정규 모형의 독립동일분포 가정을 위배하며, 분산이 시간에 따라 변하도록 허용하는 GARCH 같은 모형을 낳는다.
 
-### Aggregational Gaussianity
+### 집계에 따른 정규화
 
-As the return horizon increases (daily to weekly to monthly to annual), the distribution of returns becomes closer to normal. This is consistent with a version of the CLT: if daily returns are weakly dependent with finite variance, sums over longer horizons converge toward normality. However, convergence is slow, and even monthly returns often exhibit detectable excess kurtosis.
+수익률의 기간이 길어질수록(일간에서 주간, 월간, 연간으로) 수익률의 분포가 정규에 가까워진다. 이는 중심극한정리의 한 형태와 일관된다. 일간 수익률이 분산이 유한하고 약하게 종속되어 있다면 더 긴 기간의 합은 정규로 수렴한다. 다만 수렴이 느려서 월간 수익률조차 탐지 가능한 초과첨도를 보이는 일이 많다.
 
-## Implications for Value at Risk
+## 위험가치에 대한 함의
 
-**Value at Risk** (VaR) at confidence level $1 - \alpha$ is the loss threshold that is exceeded with probability $\alpha$. Under the normal model:
+신뢰수준 $1 - \alpha$의 **위험가치**(VaR)는 확률 $\alpha$로 초과되는 손실 문턱값이다. 정규 모형에서는
 
 $$
 \text{VaR}_\alpha = -(\mu + z_\alpha \sigma)
 $$
 
-where $z_\alpha$ is the $\alpha$-quantile of the standard normal. Because the normal distribution underestimates tail probabilities, this formula systematically underestimates VaR.
+여기서 $z_\alpha$는 표준정규의 $\alpha$ 분위수이다. 정규분포가 꼬리 확률을 과소평가하므로 이 공식은 VaR를 체계적으로 과소평가한다.
 
-For example, at the 1% level, the normal model gives $z_{0.01} = -2.326$, so
+예를 들어 1% 수준에서 정규 모형은 $z_{0.01} = -2.326$을 주므로
 
 $$
 \text{VaR}_{0.01} = -\mu + 2.326\,\sigma
 $$
 
-If returns actually follow a $t$-distribution with $\nu = 5$ degrees of freedom (a common empirical finding), the corresponding quantile is approximately $-3.365$ (in standardized units), which is 45% larger. The normal model would underestimate the true 1% VaR by a substantial margin.
+수익률이 실제로는 자유도 $\nu = 5$인 $t$ 분포를 따른다면(경험적으로 흔한 결과) 얼마나 달라질까?
 
-??? warning "Normal VaR Underestimates Tail Risk"
-    Using the normal distribution for VaR calculations systematically underestimates the frequency and magnitude of extreme losses. Regulatory frameworks such as Basel III require banks to account for fat tails in their risk models.
+!!! warning "분산을 맞추고 비교해야 한다"
+    $t_5$ 분포의 1% 분위수는 $-3.365$이다. 이를 $z_{0.01} = -2.326$과 곧바로 비교하여 "45% 더 크다"고 말하는 것은 **틀렸다**. $t_5$의 분산은 1이 아니라 $\nu/(\nu-2) = 5/3$이므로 표준편차가 $1.291$이다. 두 분포의 분산을 맞춘 뒤 비교해야 공정하다.
 
-## Testing Normality of Returns
+    분산을 1로 표준화한 $t_5$의 1% 분위수는 $-3.365/1.291 = -2.607$이다. 정규의 $-2.326$보다 **12% 더 극단적**이다.
 
-To test whether a return series is normally distributed, apply the standard normality tests:
+    다만 더 극단적인 수준으로 갈수록 격차가 빠르게 벌어진다.
 
-1. **Jarque-Bera test**: tests whether the skewness and kurtosis match normal values. This is the most commonly used test in finance because it directly targets the two most prominent departures.
-2. **Shapiro-Wilk test**: a general-purpose normality test with high power.
-3. **Anderson-Darling test**: particularly sensitive to tail departures, making it well-suited for financial data.
-4. **Q-Q plot**: visually reveals fat tails as upward curvature in the right tail and downward curvature in the left tail.
+    | $\alpha$ | 표준화한 $t_5$ 분위수 | 정규 $z_\alpha$ | 비 |
+    |---|---|---|---|
+    | 0.05 | $-1.561$ | $-1.645$ | 0.95 |
+    | 0.01 | $-2.607$ | $-2.326$ | **1.12** |
+    | 0.001 | $-4.565$ | $-3.090$ | **1.48** |
 
-## Python Example
+    5% 수준에서는 오히려 정규 쪽이 더 보수적이고(비 0.95), 1%에서 12%, 0.1%에서는 48% 과소평가가 된다. "정규 VaR가 꼬리 위험을 과소평가한다"는 명제는 **충분히 꼬리로 들어갔을 때** 성립하며, 그 정도는 신뢰수준에 크게 의존한다.
+
+??? warning "정규 VaR는 꼬리 위험을 과소평가한다"
+    VaR 계산에 정규분포를 쓰면 극단적 손실의 빈도와 크기를 체계적으로 과소평가하게 된다. Basel III 같은 규제 체계는 은행이 위험 모형에서 두꺼운 꼬리를 반영하도록 요구한다.
+
+## 수익률의 정규성 검정
+
+수익률 계열이 정규분포를 따르는지 검정하려면 표준적인 정규성 검정을 적용한다.
+
+1. **Jarque-Bera 검정**: 왜도와 첨도가 정규값과 맞는지 검정한다. 가장 두드러진 두 이탈을 직접 겨냥하므로 금융에서 가장 흔히 쓰인다.
+2. **Shapiro-Wilk 검정**: 검정력이 높은 범용 정규성 검정.
+3. **Anderson-Darling 검정**: 꼬리 이탈에 특히 민감하여 금융 자료에 잘 맞는다.
+4. **Q-Q 그림**: 오른쪽 꼬리가 위로, 왼쪽 꼬리가 아래로 휘는 모습으로 두꺼운 꼬리를 시각적으로 드러낸다.
+
+## Python 예제
 
 ```python
 import numpy as np
@@ -134,60 +149,83 @@ if __name__ == "__main__":
     print(f"  Ratio:         {var_empirical / var_normal:.2f}")
 ```
 
-The output demonstrates that normality tests strongly reject for the simulated return data, and the empirical VaR exceeds the normal VaR, illustrating the practical consequence of assuming normality when tails are fat.
+출력:
 
-## Summary
+```text
+Simulated daily returns (t-distribution, df=5)
+  Skewness:        1.4292
+  Excess kurtosis: 17.3412
 
-Empirical financial returns violate normality through fat tails, negative skewness, and volatility clustering. These departures are not marginal: they have direct consequences for risk measurement (VaR underestimation), option pricing (mispriced tail risk), and hypothesis testing (distorted $p$-values). The Jarque-Bera and Anderson-Darling tests are particularly well-suited for detecting these departures. Practitioners working with financial data should routinely test for normality and use models that accommodate heavy tails and time-varying volatility.
+Normality tests:
+  Shapiro-Wilk:  W = 0.9177, p = 0.0000
+  Jarque-Bera:   JB = 12870.3735, p = 0.0000
+  Anderson-Darling: A2 = 6.4988
 
-## Exercises
+1% VaR comparison:
+  Normal VaR:    0.030028
+  Empirical VaR: 0.030613
+  Ratio:         1.02
+```
 
-**Exercise 1.**
-Daily returns for a stock have sample skewness $-0.3$ and sample excess kurtosis $4.2$. Based on these descriptive statistics, would you expect a normal Q-Q plot to be linear? Explain.
+세 정규성 검정이 모두 압도적으로 기각한다(초과첨도가 17.3에 이른다).
 
-??? success "Solution to Exercise 1"
-    No. Normal data have skewness $= 0$ and excess kurtosis $= 0$. Excess kurtosis of 4.2 indicates much heavier tails than normal (leptokurtic), meaning extreme returns occur more frequently than a normal model predicts. The negative skewness of $-0.3$ indicates a slight left tail asymmetry (large negative returns are more extreme than large positive ones).
+!!! note "VaR 비가 1.02밖에 안 되는 이유"
+    이론적으로 이 자료의 참 VaR 비는 위 표의 $1.12$여야 하는데 모의실험에서는 $1.02$가 나왔다. 두 가지 이유가 있다. 첫째, 관측값 1000개에서 추정한 1% 경험분위수는 사실상 10번째로 작은 값 근처이므로 변동이 매우 크다. 둘째, 정규 VaR가 **표본** 표준편차를 쓰는데 그 표준편차가 두꺼운 꼬리 때문에 이미 부풀려져 있어 정규 VaR도 함께 커진다.
 
-    On a Q-Q plot, the heavy tails would appear as points curving away from the reference line at both ends (below the line on the left, above on the right for the positive kurtosis), and the negative skewness would make the left-tail departure more pronounced. The central portion might look approximately linear.
+    이것이 실무에서 중요한 교훈이다. 표본에서 추정한 변동성으로 정규 VaR를 계산하면 1% 수준에서는 문제가 잘 드러나지 않는다. 문제가 뚜렷해지는 것은 0.1% 같은 더 극단적인 수준이며, 하필 그때 경험분위수의 추정도 가장 불안정해진다.
 
----
+## 요약
 
-**Exercise 2.**
-Explain why the normal distribution is a poor model for daily stock returns. What stylized facts of financial returns violate normality?
+경험적 금융 수익률은 두꺼운 꼬리, 음의 왜도, 변동성 군집을 통해 정규성을 위배한다. 이 이탈은 주변적이지 않다. 위험 측정(VaR 과소평가), 옵션 가격결정(꼬리 위험의 잘못된 가격), 가설검정(왜곡된 $p$값)에 직접적인 결과를 낳는다. Jarque-Bera 검정과 Anderson-Darling 검정이 이런 이탈을 탐지하는 데 특히 알맞다. 금융 자료를 다루는 실무자는 정규성을 일상적으로 검정하고 두꺼운 꼬리와 시간에 따라 변하는 변동성을 수용하는 모형을 써야 한다.
 
-??? success "Solution to Exercise 2"
-    Key stylized facts that violate normality:
+## 연습문제
 
-    1. **Heavy tails (excess kurtosis):** Extreme returns (crashes, rallies) occur far more frequently than a normal distribution predicts. Daily returns typically have excess kurtosis of 3-10+.
-    2. **Negative skewness:** Large negative returns (crashes) tend to be more extreme than large positive returns.
-    3. **Volatility clustering:** Periods of high volatility tend to cluster together (GARCH effects), violating the i.i.d. assumption underlying the normal model.
-    4. **Time-varying parameters:** The mean and variance of returns change over time.
+**연습문제 1.**
+어떤 주식의 일간 수익률이 표본왜도 $-0.3$, 표본 초과첨도 $4.2$를 보인다. 이 기술통계에 근거할 때 정규 Q-Q 그림이 선형일 것으로 기대하는가? 설명하라.
 
-    These features mean that risk measures based on normality (e.g., VaR computed from normal quantiles) systematically underestimate tail risk.
+??? success "연습문제 1 풀이"
+    아니다. 정규 자료는 왜도 $= 0$, 초과첨도 $= 0$이다. 초과첨도 4.2는 정규보다 훨씬 두꺼운 꼬리(고첨)를 나타내며, 극단적 수익률이 정규 모형의 예측보다 자주 일어난다는 뜻이다. 왜도 $-0.3$은 약간의 왼쪽 꼬리 비대칭을 나타낸다(큰 음의 수익률이 큰 양의 수익률보다 더 극단적이다).
 
----
-
-**Exercise 3.**
-The $t$-distribution with $\nu$ degrees of freedom is sometimes used as an alternative to the normal for modeling returns. Why does it better capture heavy tails?
-
-??? success "Solution to Exercise 3"
-    The $t$-distribution has heavier tails than the normal, with the heaviness controlled by the degrees of freedom $\nu$. For small $\nu$ (e.g., 3-5), the tails are much heavier; as $\nu \to \infty$, the $t$-distribution converges to the normal.
-
-    The tail probability $P(|X| > x)$ decays polynomially ($\sim x^{-\nu}$) for the $t$-distribution versus exponentially ($\sim e^{-x^2/2}$) for the normal. This means the $t$-distribution assigns much higher probability to extreme events, better matching the observed frequency of large stock moves.
-
-    Fitting a $t$-distribution to daily returns typically yields $\hat{\nu} \approx 3\text{-}8$, producing more realistic VaR and Expected Shortfall estimates than the normal.
+    Q-Q 그림에서 두꺼운 꼬리는 양 끝에서 기준선에서 벗어나는 모습으로 나타난다(양의 첨도이므로 왼쪽은 선 아래, 오른쪽은 선 위). 음의 왜도는 왼쪽 꼬리의 이탈을 더 두드러지게 만든다. 중앙 부분은 대략 선형으로 보일 수 있다.
 
 ---
 
-**Exercise 4.**
-A risk manager uses the Jarque-Bera test on 252 daily returns and obtains $p < 0.001$. What should they conclude and what action should they take?
+**연습문제 2.**
+정규분포가 일간 주식 수익률의 나쁜 모형인 이유를 설명하라. 금융 수익률의 어떤 정형화된 사실이 정규성을 위배하는가?
 
-??? success "Solution to Exercise 4"
-    The Jarque-Bera test strongly rejects normality, confirming what is nearly universally true for daily financial returns. The conclusion is that normal-based risk models will underestimate tail risk.
+??? success "연습문제 2 풀이"
+    정규성을 위배하는 핵심적인 정형화된 사실:
 
-    Actions:
+    1. **두꺼운 꼬리(초과첨도):** 극단적 수익률(폭락, 급등)이 정규분포의 예측보다 훨씬 자주 일어난다. 일간 수익률의 초과첨도는 대개 3–10 이상이다.
+    2. **음의 왜도:** 큰 음의 수익률(폭락)이 큰 양의 수익률보다 더 극단적인 경향이 있다.
+    3. **변동성 군집:** 변동성이 높은 시기가 몰려 나타나며(GARCH 효과) 정규 모형의 바탕인 독립동일분포 가정을 위배한다.
+    4. **시간에 따라 변하는 모수:** 수익률의 평균과 분산이 시간에 따라 변한다.
 
-    1. **Use heavy-tailed distributions** (Student's $t$, generalized hyperbolic) for VaR and Expected Shortfall calculations.
-    2. **Apply historical simulation** or **filtered historical simulation** instead of parametric normal methods.
-    3. **Consider GARCH models** to account for volatility clustering (conditional normality with time-varying variance).
-    4. **Stress testing:** Supplement statistical models with scenario-based stress tests for extreme events.
+    이런 특징 때문에 정규성에 기초한 위험 측도(예: 정규분위수로 계산한 VaR)는 꼬리 위험을 체계적으로 과소평가한다.
+
+---
+
+**연습문제 3.**
+자유도 $\nu$인 $t$ 분포를 수익률 모형화에서 정규분포의 대안으로 쓰기도 한다. 두꺼운 꼬리를 더 잘 포착하는 이유는 무엇인가?
+
+??? success "연습문제 3 풀이"
+    $t$ 분포는 정규분포보다 꼬리가 두꺼우며 그 두꺼움을 자유도 $\nu$가 조절한다. $\nu$가 작으면(예: 3–5) 꼬리가 훨씬 두껍고, $\nu \to \infty$이면 $t$ 분포가 정규로 수렴한다.
+
+    꼬리 확률 $P(|X| > x)$가 $t$ 분포에서는 다항식으로($\sim x^{-\nu}$), 정규분포에서는 지수적으로($\sim e^{-x^2/2}$) 감소한다. 곧 $t$ 분포는 극단적 사건에 훨씬 높은 확률을 부여하여 큰 주가 변동이 관측되는 빈도와 더 잘 맞는다.
+
+    일간 수익률에 $t$ 분포를 적합하면 대개 $\hat{\nu} \approx 3\text{–}8$이 나오며, 정규분포보다 현실적인 VaR와 기대손실 추정을 준다.
+
+---
+
+**연습문제 4.**
+어떤 위험 관리자가 일간 수익률 252개에 Jarque-Bera 검정을 수행하여 $p < 0.001$을 얻었다. 무엇을 결론짓고 어떤 조치를 취해야 하는가?
+
+??? success "연습문제 4 풀이"
+    Jarque-Bera 검정이 정규성을 강하게 기각하며, 이는 일간 금융 수익률에서 거의 보편적으로 참인 사실을 확인해 준다. 결론은 정규 기반 위험 모형이 꼬리 위험을 과소평가하리라는 것이다.
+
+    조치:
+
+    1. VaR와 기대손실 계산에 **꼬리가 두꺼운 분포**(Student $t$, 일반화 쌍곡분포)를 쓴다.
+    2. 모수적 정규 방법 대신 **역사적 시뮬레이션**이나 **필터링된 역사적 시뮬레이션**을 적용한다.
+    3. 변동성 군집을 반영하기 위해 **GARCH 모형**을 고려한다(분산이 시간에 따라 변하는 조건부 정규성).
+    4. **스트레스 테스트:** 통계 모형을 극단적 사건에 대한 시나리오 기반 스트레스 테스트로 보완한다.

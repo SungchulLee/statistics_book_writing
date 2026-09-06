@@ -1,23 +1,22 @@
-# Q-Q Plots for Financial Data: Detecting Non-Normality in Asset Returns
+# 금융 자료의 Q-Q 그림: 자산 수익률의 비정규성 탐지
 
+## 개요
 
-## Overview
+Q-Q 그림은 자산 수익률이 정규성에서 벗어나는 정도를 진단하는 데 금융에서 특히 유용하다. 많은 금융 모형이 수익률이 정규분포를 따른다고 가정하지만, 실제 자료는 흔히 **두꺼운 꼬리**와 **치우침**을 보이며 이는 꼬리 위험의 심각한 과소평가로 이어진다. 이 절은 금융 자료의 이런 이탈을 Q-Q 그림으로 시각화하는 데 초점을 맞춘다.
 
-Q-Q plots are particularly valuable in finance for diagnosing departures from normality in asset returns. Many financial models assume returns follow a normal distribution, but empirical data often exhibit **heavy tails** and **skewness**, leading to significant underestimation of tail risk. This section focuses on using Q-Q plots to visualize these departures in financial data.
+## 금융에서 정규성이 중요한 이유
 
-## Why Normality Matters in Finance
+금융 모형은 분포 가정에 크게 기댄다.
 
-Financial models rely heavily on distributional assumptions:
+- **옵션 가격결정**(Black-Scholes)은 자산 가격이 대수정규분포를 따른다고 가정하며, 이는 로그수익률이 정규분포를 따른다는 것과 동등하다
+- **위험가치(VaR)**와 **기대손실(ES)**은 꼬리 거동에 대한 가정에 의존한다
+- **포트폴리오 최적화**는 다변량 정규성을 가정하는 분산-공분산 접근을 쓴다
 
-- **Option pricing** (Black-Scholes) assumes log-normal asset prices, equivalent to normally distributed log-returns
-- **Value at Risk (VaR)** and **Expected Shortfall (ES)** rely on tail behavior assumptions
-- **Portfolio optimization** uses variance-covariance approaches that assume multivariate normality
+실제 수익률이 정규성에서 벗어나면 이 모형들은 큰 손실의 확률을 체계적으로 과소평가하며, 특히 시장이 스트레스를 받는 시기에 그렇다.
 
-When actual returns deviate from normality, these models systematically underestimate the probability of large losses, especially during market stress periods.
+## 실제 예: Netflix(NFLX) 로그수익률
 
-## Real-World Example: Netflix (NFLX) Log-Returns
-
-Netflix stock provides an excellent case study of non-normal financial returns. The following example uses daily log-returns computed from closing prices:
+Netflix 주식은 정규가 아닌 금융 수익률의 훌륭한 사례이다. 다음 예제는 종가로 계산한 일간 로그수익률을 쓴다.
 
 ```python
 import numpy as np
@@ -47,15 +46,17 @@ plt.tight_layout()
 plt.show()
 ```
 
-## Interpreting the Q-Q Plot for Financial Data
+## 금융 자료의 Q-Q 그림 해석
 
-### Perfect Normality
-When data follow a normal distribution exactly, the Q-Q plot shows all points tightly clustered along the 45-degree reference line.
+### 완전한 정규성
 
-### Heavy Tails (The Financial Reality)
-Real stock returns exhibit **heavy tails**: both the left tail (large negative returns/losses) and right tail (large positive returns/gains) contain more observations than the normal distribution predicts.
+자료가 정확히 정규분포를 따르면 Q-Q 그림의 모든 점이 45도 기준선을 따라 촘촘히 모인다.
 
-**Visual signature:** The Q-Q plot "bends upward" in the right tail and "bends downward" in the left tail. This creates an S-shaped pattern.
+### 두꺼운 꼬리(금융의 현실)
+
+실제 주식 수익률은 **두꺼운 꼬리**를 보인다. 왼쪽 꼬리(큰 음의 수익률, 곧 손실)와 오른쪽 꼬리(큰 양의 수익률, 곧 이익) 모두 정규분포가 예측하는 것보다 많은 관측값을 담는다.
+
+**시각적 특징:** Q-Q 그림이 오른쪽 꼬리에서 "위로 휘고" 왼쪽 꼬리에서 "아래로 휜다". 그래서 S자 패턴이 만들어진다.
 
 ```python
 # Simulate heavy-tailed returns (e.g., using Student's t distribution)
@@ -94,21 +95,21 @@ plt.tight_layout()
 plt.show()
 ```
 
-## Consequences of Ignoring Non-Normality
+## 비정규성을 무시할 때의 결과
 
-### Underestimating Tail Risk
+### 꼬리 위험의 과소평가
 
-The normal distribution has a **kurtosis** of 3. Real financial returns typically have **excess kurtosis > 1**, meaning the tails are heavier than normal.
+정규분포의 **첨도**는 3이다. 실제 금융 수익률의 **초과첨도는 대체로 1보다 크다**. 곧 꼬리가 정규보다 두껍다는 뜻이다.
 
-**Example:** If the normal distribution predicts a 5% loss with 0.1% probability, actual heavy-tailed returns might exhibit this loss with 0.5% probability — a 5x underestimation!
+**예:** 정규분포가 5% 손실의 확률을 0.1%로 예측하는데 실제 두꺼운 꼬리 수익률에서는 그 손실이 0.5% 확률로 일어난다면, 5배를 과소평가한 것이다.
 
-### Implication for Risk Management
+### 위험 관리에 대한 함의
 
-- **VaR models** based on normality underestimate losses at the 99th or 99.9th percentile
-- **Hedging strategies** based on normal assumptions leave portfolios vulnerable to tail events
-- **Capital requirements** (e.g., Basel III) may be insufficient if built on normal assumptions
+- 정규성에 기초한 **VaR 모형**은 99번째나 99.9번째 백분위수에서 손실을 과소평가한다
+- 정규 가정에 기초한 **헤지 전략**은 포트폴리오를 꼬리 사건에 취약하게 남긴다
+- 정규 가정 위에 세운 **자본 요건**(예: Basel III)은 불충분할 수 있다
 
-## Practical Workflow: Diagnosing Return Distributions
+## 실전 절차: 수익률 분포 진단하기
 
 ```python
 import numpy as np
@@ -133,11 +134,15 @@ print(f"Ex. Kurtosis: {kurtosis:.4f}")
 
 # Step 3: Normality tests
 _, p_ks = stats.kstest(returns, 'norm', args=(mean_ret, std_ret))
-_, p_ad = stats.anderson(returns, dist='norm')
 _, p_jb = stats.jarque_bera(returns)
 
+# anderson() returns (statistic, critical_values, significance_level) -- no p-value
+ad_result = stats.anderson(returns, dist='norm')
+
 print(f"\nKolmogorov-Smirnov test p-value: {p_ks:.4f}")
-print(f"Jarque-Bera test p-value: {p_jb:.4f}")
+print(f"Jarque-Bera test p-value: {p_jb:.4g}")
+print(f"Anderson-Darling statistic: {ad_result.statistic:.4f}")
+print(f"  critical values (15/10/5/2.5/1%): {ad_result.critical_values}")
 
 # Step 4: Q-Q plot
 fig, ax = plt.subplots(figsize=(8, 6))
@@ -147,10 +152,33 @@ ax.spines[["top", "right"]].set_visible(False)
 plt.show()
 ```
 
-## Adjusting for Non-Normality
+!!! warning "`stats.anderson`은 p값을 돌려주지 않는다"
+    `stats.anderson`은 `(statistic, critical_values, significance_level)` 세 값을 담은 결과 객체를 돌려준다. `_, p_ad = stats.anderson(...)`처럼 두 값으로 풀면 `ValueError: too many values to unpack`이 난다. 검정통계량을 임계값과 직접 비교해야 한다.
 
-### 1. Alternative Distributions
-Instead of normal, fit Student's $t$ or Generalized Hyperbolic distributions:
+출력:
+
+```text
+Mean:     -0.0002
+Std Dev:  0.0297
+Skewness: 0.5411
+Ex. Kurtosis: 4.6396
+
+Kolmogorov-Smirnov test p-value: 0.0710
+Jarque-Bera test p-value: 9.067e-309
+Anderson-Darling statistic: 3.6529
+  critical values (15/10/5/2.5/1%): [0.574 0.654 0.785 0.916 1.089]
+```
+
+!!! note "세 검정이 엇갈리는 이유"
+    초과첨도 $4.64$로 자료가 명백히 두꺼운 꼬리를 갖는데도 K-S 검정의 $p$값은 $0.071$로 5% 수준에서 기각하지 못한다. 반면 Jarque-Bera는 $p \approx 10^{-309}$로 압도적으로 기각하고 Anderson-Darling 통계량 $3.65$도 1% 임계값 $1.089$를 크게 넘는다.
+
+    이유는 K-S 검정이 자료에서 추정한 평균과 분산을 그대로 꽂아 넣었기 때문이다. 이렇게 하면 검정이 보수적이 되어 $p$값이 지나치게 커진다. 추정된 모수를 보정한 [Lilliefors 검정](../formal_tests/ks_lilliefors.md)을 써야 한다. 또한 K-S 검정은 꼬리보다 분포의 중앙에 민감한데, 여기서 문제가 되는 것은 정확히 꼬리이다.
+
+## 비정규성에 대한 조정
+
+### 1. 대안 분포
+
+정규분포 대신 Student $t$ 분포나 일반화 쌍곡분포를 적합한다.
 
 ```python
 from scipy.stats import t as student_t
@@ -160,62 +188,65 @@ df, loc, scale = student_t.fit(returns)
 print(f"Fitted df: {df:.2f} (lower df → heavier tails)")
 ```
 
-### 2. Non-Parametric Methods
-Bootstrap and quantile-based approaches make no distributional assumptions.
+위 자료에 적용하면 추정된 자유도가 $6.68$로, 자료를 생성한 참값 6에 가깝다.
 
-### 3. Modified Risk Measures
-Use Expected Shortfall (CVaR) instead of VaR; it better captures tail behavior for non-normal distributions.
+### 2. 비모수 방법
 
-## Summary
+붓스트랩과 분위수 기반 접근은 분포 가정을 두지 않는다.
 
-- **Q-Q plots** visually compare sample quantiles to theoretical quantiles, revealing distributional shape
-- **Financial returns exhibit heavy tails**, showing an S-shaped pattern in Q-Q plots
-- **Ignoring non-normality** leads to systematic underestimation of tail risk
-- **Practical solutions**: use alternative distributions, non-parametric methods, or robust risk measures tailored to observed tail behavior
+### 3. 수정된 위험 측도
 
+VaR 대신 기대손실(CVaR)을 쓴다. 정규가 아닌 분포에서 꼬리 거동을 더 잘 포착한다.
 
-## Exercises
+## 요약
 
-**Exercise 1.**
-Daily stock returns plotted on a normal Q-Q plot show points that follow a straight line in the center but curve sharply away at both extremes. Interpret this pattern.
+- **Q-Q 그림**은 표본분위수를 이론적 분위수와 시각적으로 비교하여 분포의 모양을 드러낸다
+- **금융 수익률은 두꺼운 꼬리를 보이며** Q-Q 그림에서 S자 패턴으로 나타난다
+- **비정규성을 무시하면** 꼬리 위험을 체계적으로 과소평가하게 된다
+- **실용적 해법**: 대안 분포, 비모수 방법, 또는 관측된 꼬리 거동에 맞춘 로버스트 위험 측도를 쓴다
 
-??? success "Solution to Exercise 1"
-    This is the classic signature of **heavy tails** (leptokurtosis) in financial return data. The central returns are approximately normally distributed, but extreme returns (both large losses and large gains) are far more extreme than a normal distribution would predict.
+## 연습문제
 
-    The left tail curving below the line means large negative returns are more negative than expected; the right tail curving above the line means large positive returns are more positive than expected. This excess tail probability is why normal-based risk models (VaR, option pricing) systematically underestimate the likelihood of extreme events.
+**연습문제 1.**
+일간 주식 수익률을 정규 Q-Q 그림에 그렸더니 중앙에서는 직선을 따르지만 양극단에서 급격히 벗어난다. 이 패턴을 해석하라.
 
----
+??? success "연습문제 1 풀이"
+    금융 수익률 자료에서 **두꺼운 꼬리**(고첨)의 전형적인 특징이다. 중앙의 수익률은 근사적으로 정규분포를 따르지만, 극단적 수익률(큰 손실과 큰 이익 모두)이 정규분포의 예측보다 훨씬 극단적이다.
 
-**Exercise 2.**
-If you plot financial returns against the quantiles of a $t$-distribution with 5 degrees of freedom and the Q-Q plot appears linear, what does this suggest about the return distribution?
-
-??? success "Solution to Exercise 2"
-    A linear Q-Q plot against $t_5$ quantiles suggests the returns are well-modeled by a $t$-distribution with approximately 5 degrees of freedom. This means the returns have heavier tails than normal but not as extreme as, say, a Cauchy distribution.
-
-    The $t_5$ distribution has excess kurtosis of $6/(5-4) = 6$, meaning the data have substantially heavier tails than normal (which has excess kurtosis of 0). This is a common finding for daily equity returns, where estimated degrees of freedom typically range from 3 to 8.
+    왼쪽 꼬리가 선 아래로 휘는 것은 큰 음의 수익률이 기대보다 더 음수라는 뜻이고, 오른쪽 꼬리가 선 위로 휘는 것은 큰 양의 수익률이 기대보다 더 양수라는 뜻이다. 이 초과 꼬리 확률 때문에 정규 기반 위험 모형(VaR, 옵션 가격결정)이 극단적 사건의 가능성을 체계적으로 과소평가한다.
 
 ---
 
-**Exercise 3.**
-Explain how Q-Q plots can be used to calibrate risk models. Why is the tail region most important?
+**연습문제 2.**
+금융 수익률을 자유도 5인 $t$ 분포의 분위수에 대해 그렸더니 Q-Q 그림이 선형으로 보인다. 이는 수익률 분포에 대해 무엇을 시사하는가?
 
-??? success "Solution to Exercise 3"
-    Risk measures like Value-at-Risk (VaR) and Expected Shortfall depend on the tail of the return distribution (the 1st or 5th percentile). A Q-Q plot directly shows whether the model's tail matches the data's tail.
+??? success "연습문제 2 풀이"
+    $t_5$ 분위수에 대한 Q-Q 그림이 선형이라는 것은 수익률이 자유도 약 5인 $t$ 분포로 잘 모형화된다는 뜻이다. 곧 정규보다 꼬리가 두껍지만 Cauchy 분포만큼 극단적이지는 않다.
 
-    If the Q-Q plot is linear throughout, the model fits well and risk estimates are reliable. If the tails curve away (as they do for the normal model applied to financial returns), the model underestimates tail risk.
-
-    The tail region is most important because: (1) risk management is fundamentally about extreme events; (2) a model that fits the center well but misses the tails gives false confidence; (3) regulatory requirements (Basel accords) explicitly require accurate tail modeling.
+    $t_5$ 분포의 초과첨도는 $6/(5-4) = 6$으로, 자료가 정규(초과첨도 0)보다 상당히 두꺼운 꼬리를 가짐을 뜻한다. 일간 주식 수익률에서 흔히 발견되는 결과이며, 추정된 자유도는 대체로 3에서 8 사이이다.
 
 ---
 
-**Exercise 4.**
-Compare Q-Q plots of daily returns versus monthly returns against normal quantiles. Which is more likely to appear linear, and why?
+**연습문제 3.**
+Q-Q 그림으로 위험 모형을 보정하는 방법을 설명하라. 꼬리 영역이 왜 가장 중요한가?
 
-??? success "Solution to Exercise 4"
-    **Monthly returns** are more likely to appear approximately linear (closer to normal) because:
+??? success "연습문제 3 풀이"
+    위험가치(VaR)나 기대손실 같은 위험 측도는 수익률 분포의 꼬리(1번째나 5번째 백분위수)에 의존한다. Q-Q 그림은 모형의 꼬리가 자료의 꼬리와 맞는지를 직접 보여준다.
 
-    1. **Aggregation effect:** Monthly returns are the sum of ~21 daily returns. By the CLT, sums of i.i.d. random variables converge to normality, even if individual daily returns are non-normal.
-    2. **Reduced kurtosis:** Aggregation reduces excess kurtosis approximately by a factor of $1/\sqrt{T}$ where $T$ is the number of days.
-    3. **Less volatility clustering:** The GARCH effects that make daily returns non-normal are partially averaged out over a month.
+    Q-Q 그림이 전체적으로 선형이면 모형이 잘 맞고 위험 추정을 믿을 수 있다. 꼬리가 벗어나면(금융 수익률에 정규 모형을 적용할 때 그렇듯이) 모형이 꼬리 위험을 과소평가한다.
 
-    However, monthly returns are not perfectly normal -- they still exhibit some heavy tails and skewness, just less pronounced than daily returns. The convergence to normality is slow for heavy-tailed distributions.
+    꼬리 영역이 가장 중요한 이유: (1) 위험 관리는 근본적으로 극단적 사건에 관한 것이다. (2) 중앙은 잘 맞지만 꼬리를 놓치는 모형은 잘못된 확신을 준다. (3) 규제 요건(Basel 협약)이 정확한 꼬리 모형화를 명시적으로 요구한다.
+
+---
+
+**연습문제 4.**
+일간 수익률과 월간 수익률의 정규 Q-Q 그림을 비교하라. 어느 쪽이 선형에 가까울 가능성이 높으며 그 이유는 무엇인가?
+
+??? success "연습문제 4 풀이"
+    **월간 수익률**이 근사적으로 선형에(정규에 가깝게) 보일 가능성이 높다. 이유는
+
+    1. **집계 효과:** 월간 수익률은 약 21일치 일간 수익률의 합이다. CLT에 의해 독립동일분포 확률변수의 합은 개별 일간 수익률이 정규가 아니어도 정규로 수렴한다.
+    2. **첨도의 감소:** 독립인 확률변수 $T$개를 더하면 합의 초과첨도가 개별 값의 $1/T$이 된다. 곧 21일을 합치면 초과첨도가 대략 $1/21$로 줄어든다.
+    3. **변동성 군집의 완화:** 일간 수익률을 정규가 아니게 만드는 GARCH 효과가 한 달에 걸쳐 부분적으로 평균화된다.
+
+    다만 월간 수익률도 완벽하게 정규는 아니다. 여전히 어느 정도의 두꺼운 꼬리와 치우침을 보이며, 다만 일간보다 덜 두드러질 뿐이다. 꼬리가 두꺼운 분포에서는 정규로의 수렴이 느리다.

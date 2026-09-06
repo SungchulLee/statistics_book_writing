@@ -1,28 +1,28 @@
-# Transformation Demonstrations
+# 변환 시연
 
-## Overview
+## 개요
 
-When data are non-normal, applying a mathematical transformation can often produce a distribution closer to normality, enabling the use of standard parametric procedures. This page demonstrates three common families of transformations -- logarithmic, square-root, and Box-Cox -- explains when each is appropriate, and illustrates how to assess improvement with graphical and formal checks.
+자료가 정규분포를 따르지 않을 때 수학적 변환을 적용하면 정규성에 더 가까운 분포를 얻어 표준적인 모수적 절차를 쓸 수 있는 경우가 많다. 이 페이지는 흔히 쓰는 세 변환 계열(로그, 제곱근, Box-Cox)을 시연하고, 각각이 언제 적절한지 설명하며, 시각적·형식적 확인으로 개선 정도를 평가하는 방법을 보인다.
 
-## Why Transform
+## 왜 변환하는가
 
-Many statistical methods (e.g., $t$-tests, ANOVA, linear regression) assume normally distributed errors. When the data are right-skewed or have non-constant variance, a suitable transformation can
+많은 통계 방법($t$ 검정, 분산분석, 선형회귀 등)이 오차의 정규성을 가정한다. 자료가 오른쪽으로 치우쳐 있거나 분산이 일정하지 않을 때 적절한 변환은
 
-1. symmetrise the distribution,
-2. stabilise the variance, and
-3. improve the approximation to normality.
+1. 분포를 대칭으로 만들고,
+2. 분산을 안정시키며,
+3. 정규분포로의 근사를 개선한다.
 
-## Logarithmic Transformation
+## 로그 변환
 
-For strictly positive data with right skew, the log transform is the first tool to try. If $X > 0$, define
+양수이면서 오른쪽으로 치우친 자료에는 로그 변환이 가장 먼저 시도할 도구이다. $X > 0$일 때
 
 $$
 Y = \ln X.
 $$
 
-If $X \sim \text{Lognormal}(\mu, \sigma^2)$, then $Y \sim \mathcal{N}(\mu, \sigma^2)$ exactly. Even when the distribution is not exactly lognormal, the log transform often reduces skewness substantially.
+$X \sim \text{Lognormal}(\mu, \sigma^2)$이면 $Y \sim \mathcal{N}(\mu, \sigma^2)$가 정확히 성립한다. 분포가 정확히 대수정규가 아니더라도 로그 변환은 왜도를 크게 줄이는 경우가 많다.
 
-### Code
+### 코드
 
 ```python
 import numpy as np
@@ -45,19 +45,31 @@ print(f"Before: skewness = {stats.skew(x, bias=False):.4f}")
 print(f"After:  skewness = {stats.skew(y, bias=False):.4f}")
 ```
 
-## Square-Root Transformation
+출력:
 
-For count data or data bounded below by zero, the square-root transform
+```text
+Before: skewness = 3.5432
+After:  skewness = 0.2933
+```
+
+왜도가 $3.54$에서 $0.29$로 떨어졌다. 사실상 대칭이 되었다.
+
+## 제곱근 변환
+
+계수 자료나 아래로 0에 의해 유계인 자료에는 제곱근 변환
 
 $$
 Y = \sqrt{X}
 $$
 
-is a milder correction than the logarithm. It is frequently used for Poisson-distributed counts, where the variance equals the mean and the square root approximately stabilises the variance.
+가 로그보다 온건한 교정이다. 분산이 평균과 같은 Poisson 계수 자료에 자주 쓰이며, 제곱근이 분산을 근사적으로 안정시킨다.
 
-## Box-Cox Transformation
+!!! warning "제곱근 변환은 과교정할 수 있다"
+    Poisson 자료에서 제곱근 변환은 평균 $\lambda$가 작으면 왜도를 **음수 쪽으로 지나치게** 밀어붙인다. $\lambda = 4$일 때 원자료의 왜도는 $1/\sqrt{4} = 0.5$이지만 $\sqrt{X}$의 왜도는 $-0.636$으로 절댓값이 오히려 커진다. 연습문제 5에서 자세히 다룬다.
 
-The Box-Cox family generalises the log and power transforms through a single parameter $\lambda$:
+## Box-Cox 변환
+
+Box-Cox 계열은 로그 변환과 거듭제곱 변환을 모수 $\lambda$ 하나로 일반화한다.
 
 $$
 Y^{(\lambda)} =
@@ -67,9 +79,9 @@ Y^{(\lambda)} =
 \end{cases}
 $$
 
-The optimal $\lambda$ is chosen by maximum likelihood. SciPy provides `stats.boxcox`, which returns the transformed data and the fitted $\lambda$.
+최적 $\lambda$는 최대가능도로 고른다. SciPy의 `stats.boxcox`는 변환된 자료와 적합된 $\lambda$를 반환한다.
 
-### Code
+### 코드
 
 ```python
 import numpy as np
@@ -86,17 +98,25 @@ print(f"Before Box-Cox: skewness = {stats.skew(x, bias=False):.4f}")
 print(f"After  Box-Cox: skewness = {stats.skew(y_bc, bias=False):.4f}")
 ```
 
-When $\hat{\lambda} \approx 0$ the Box-Cox transform reduces to the log; when $\hat{\lambda} \approx 0.5$ it approximates the square root.
+출력:
 
-## Interpretation
+```text
+Optimal lambda: -0.1258
+Before Box-Cox: skewness = 3.5432
+After  Box-Cox: skewness = -0.0018
+```
 
-After transforming, always re-check normality using both graphical methods (histogram, Q-Q plot) and formal tests (Shapiro-Wilk, Anderson-Darling). A transformation that removes skewness but introduces bimodality, for instance, has not improved the situation. Additionally, remember that inference conducted on the transformed scale must be back-transformed for interpretation on the original scale.
+자료가 대수정규이므로 참 최적값은 $\lambda = 0$(로그 변환)이고, 최대가능도 추정값 $-0.126$은 표집변동 범위 안에서 이를 잘 회복한다. $\hat{\lambda} \approx 0$이면 Box-Cox는 로그로, $\hat{\lambda} \approx 0.5$이면 제곱근으로 환원된다.
 
-## Exercises
+## 해석
 
-**Exercise 1.** Generate $n = 400$ observations from a $\text{Lognormal}(0, 0.6)$ distribution. Apply the log transformation and run the Shapiro-Wilk test on both the original and transformed data. Compare the $p$-values.
+변환한 뒤에는 반드시 시각적 방법(히스토그램, Q-Q 그림)과 형식적 검정(Shapiro-Wilk, Anderson-Darling)을 모두 써서 정규성을 다시 확인하라. 예컨대 치우침은 없앴지만 이봉성을 만들어 낸 변환은 상황을 개선한 것이 아니다. 또한 변환된 척도에서 수행한 추론은 원래 척도로 해석하려면 역변환해야 한다는 점을 기억하라.
 
-??? success "Solution to Exercise 1"
+## 연습문제
+
+**연습문제 1.** $\text{Lognormal}(0, 0.6)$ 분포에서 관측값 $n = 400$개를 생성하라. 로그 변환을 적용하고 원자료와 변환 자료 모두에 Shapiro-Wilk 검정을 수행하라. $p$값을 비교하라.
+
+??? success "연습문제 1 풀이"
 
     ```python
     import numpy as np
@@ -108,17 +128,26 @@ After transforming, always re-check normality using both graphical methods (hist
     _, p_orig = stats.shapiro(x)
     _, p_log = stats.shapiro(np.log(x))
 
-    print(f"Original:    p = {p_orig:.4g}")
+    print(f"Original:        p = {p_orig:.4g}")
     print(f"Log-transformed: p = {p_log:.4g}")
     ```
 
-    The original data yield $p \approx 0$ (strong rejection), while the log-transformed data yield $p$ close to 1 (no evidence against normality). This is expected because $\ln X \sim \mathcal{N}(0, 0.36)$ exactly. $\square$
+    출력:
+
+    ```text
+    Original:        p = 2.989e-20
+    Log-transformed: p = 0.3173
+    ```
+
+    원자료는 $p \approx 3 \times 10^{-20}$으로 압도적으로 기각된다. 로그 변환 후에는 $p = 0.317$로 정규성에 반하는 증거가 없다. $\ln X \sim \mathcal{N}(0, 0.36)$이 정확히 성립하므로 당연한 결과이다.
+
+    다만 $p = 0.317$은 "정규성에 반하는 증거가 없다"는 뜻이지 "1에 가까우니 완벽히 정규"라는 뜻이 아니다. $H_0$이 참이면 $p$값은 $\text{Uniform}(0,1)$을 따르므로 0.317은 전형적인 값이다. $\square$
 
 ---
 
-**Exercise 2.** Apply the Box-Cox transformation to $n = 300$ observations from a $\text{Gamma}(2, 1)$ distribution. Report the optimal $\hat{\lambda}$ and the Shapiro-Wilk $p$-value of the transformed data.
+**연습문제 2.** $\text{Gamma}(2, 1)$ 분포에서 뽑은 관측값 $n = 300$개에 Box-Cox 변환을 적용하라. 최적 $\hat{\lambda}$와 변환 자료의 Shapiro-Wilk $p$값을 보고하라.
 
-??? success "Solution to Exercise 2"
+??? success "연습문제 2 풀이"
 
     ```python
     import numpy as np
@@ -131,44 +160,53 @@ After transforming, always re-check normality using both graphical methods (hist
     _, p_bc = stats.shapiro(y_bc)
 
     print(f"Optimal lambda: {lam:.4f}")
-    print(f"Shapiro-Wilk p-value after Box-Cox: {p_bc:.4g}")
+    print(f"Shapiro-Wilk p-value after Box-Cox: {p_bc:.4f}")
     ```
 
-    The Gamma(2,1) distribution is moderately right-skewed. The optimal $\hat{\lambda}$ is typically around 0.4--0.5, and the Shapiro-Wilk $p$-value after transformation is generally well above 0.05, indicating that the Box-Cox transformation successfully normalises the data. $\square$
+    출력:
+
+    ```text
+    Optimal lambda: 0.3637
+    Shapiro-Wilk p-value after Box-Cox: 0.7376
+    ```
+
+    Gamma(2,1)은 중간 정도로 오른쪽으로 치우쳐 있다(이론적 왜도 $2/\sqrt{2} = 1.414$). 최적 $\hat{\lambda} = 0.364$는 세제곱근($1/3$)과 제곱근($1/2$) 사이에 있고, 변환 후 Shapiro-Wilk $p$값은 $0.74$로 0.05를 크게 넘는다. Box-Cox가 자료를 성공적으로 정규화했음을 뜻한다. $\square$
 
 ---
 
-**Exercise 3.** Explain why the Box-Cox transformation requires $X > 0$. What modification can be used when the data contain zeros or negative values?
+**연습문제 3.** Box-Cox 변환이 $X > 0$을 요구하는 이유를 설명하라. 자료에 0이나 음수가 포함될 때 어떤 수정을 쓸 수 있는가?
 
-??? success "Solution to Exercise 3"
+??? success "연습문제 3 풀이"
 
-    The Box-Cox formula $Y^{(\lambda)} = (X^\lambda - 1)/\lambda$ involves raising $X$ to an arbitrary real power $\lambda$. If $X \leq 0$, then $X^\lambda$ is undefined (for non-integer $\lambda$) or can produce complex numbers. When data contain zeros or negative values, a common modification is the *shifted* Box-Cox transform: apply Box-Cox to $X + c$ where $c > 0$ is a constant chosen so that $X + c > 0$ for all observations. Alternatively, the Yeo-Johnson transformation extends Box-Cox to handle non-positive data natively by using different formulas for $X \geq 0$ and $X < 0$. $\square$
+    Box-Cox 공식 $Y^{(\lambda)} = (X^\lambda - 1)/\lambda$는 $X$를 임의의 실수 거듭제곱 $\lambda$로 올린다. $X \leq 0$이면 (정수가 아닌 $\lambda$에 대해) $X^\lambda$가 정의되지 않거나 복소수가 된다.
+
+    자료에 0이나 음수가 있을 때 흔한 수정은 **이동된** Box-Cox 변환이다. 모든 관측값에 대해 $X + c > 0$이 되도록 상수 $c > 0$을 골라 $X + c$에 Box-Cox를 적용한다. 대안으로 **Yeo-Johnson** 변환은 $X \geq 0$과 $X < 0$에 서로 다른 공식을 써서 음수 자료를 직접 다룰 수 있도록 Box-Cox를 확장한다. SciPy에서는 `stats.yeojohnson`으로 쓸 수 있다. $\square$
 
 ---
 
-**Exercise 4.** Prove that the Box-Cox transformation with $\lambda = 0$ reduces to $Y = \ln X$ by taking the limit as $\lambda \to 0$.
+**연습문제 4.** $\lambda \to 0$인 극한을 취하여 $\lambda = 0$인 Box-Cox 변환이 $Y = \ln X$로 환원됨을 증명하라.
 
-??? success "Solution to Exercise 4"
+??? success "연습문제 4 풀이"
 
-    For $\lambda \neq 0$,
+    $\lambda \neq 0$에 대해
 
     $$
     Y^{(\lambda)} = \frac{X^\lambda - 1}{\lambda} = \frac{e^{\lambda \ln X} - 1}{\lambda}.
     $$
 
-    Apply L'Hopital's rule (or expand $e^{\lambda \ln X} = 1 + \lambda \ln X + O(\lambda^2)$):
+    L'Hôpital 규칙을 적용한다(또는 $e^{\lambda \ln X} = 1 + \lambda \ln X + O(\lambda^2)$로 전개한다).
 
     $$
     \lim_{\lambda \to 0} \frac{e^{\lambda \ln X} - 1}{\lambda} = \lim_{\lambda \to 0} \frac{(\ln X)\, e^{\lambda \ln X}}{1} = \ln X.
     $$
 
-    Hence $Y^{(0)} = \ln X$. $\square$
+    따라서 $Y^{(0)} = \ln X$이다. 이 연속성 덕분에 Box-Cox 계열이 $\lambda = 0$에서 매끄럽게 이어지고, 최대가능도로 $\lambda$를 최적화할 때 로그 변환이 자연스러운 극한으로 포함된다. $\square$
 
 ---
 
-**Exercise 5.** Generate $n = 500$ Poisson($\lambda = 4$) observations. Apply the square-root transformation and compare the sample skewness before and after. Create side-by-side histograms.
+**연습문제 5.** Poisson($\lambda = 4$) 관측값 $n = 500$개를 생성하라. 제곱근 변환을 적용하고 변환 전후의 표본왜도를 비교하라. 히스토그램을 나란히 그려라.
 
-??? success "Solution to Exercise 5"
+??? success "연습문제 5 풀이"
 
     ```python
     import numpy as np
@@ -179,8 +217,9 @@ After transforming, always re-check normality using both graphical methods (hist
     x = rng.poisson(lam=4, size=500)
     y = np.sqrt(x)
 
-    print(f"Original skewness:  {stats.skew(x, bias=False):.4f}")
-    print(f"Sqrt skewness:      {stats.skew(y, bias=False):.4f}")
+    print(f"Original skewness: {stats.skew(x, bias=False):.4f}")
+    print(f"Sqrt skewness:     {stats.skew(y, bias=False):.4f}")
+    print(f"Var(sqrt(X)):      {y.var(ddof=1):.4f}")
 
     fig, axes = plt.subplots(1, 2, figsize=(12, 4))
     axes[0].hist(x, bins=range(15), density=True, alpha=0.6, edgecolor="black")
@@ -191,4 +230,25 @@ After transforming, always re-check normality using both graphical methods (hist
     plt.show()
     ```
 
-    The Poisson(4) distribution has skewness $1/\sqrt{4} = 0.5$. After the square-root transformation, the skewness drops substantially (typically below 0.15), and the histogram appears much more symmetric. The square-root transform is a variance-stabilising transformation for the Poisson family because $\text{Var}(\sqrt{X}) \approx 1/4$ regardless of $\lambda$. $\square$
+    출력:
+
+    ```text
+    Original skewness: 0.4223
+    Sqrt skewness:     -0.5880
+    Var(sqrt(X)):      0.2823
+    ```
+
+    **여기서 제곱근 변환은 실패한다.** 원자료의 왜도 $+0.42$(이론값 $1/\sqrt{4} = 0.5$)가 변환 후 $-0.59$가 되었다. 부호가 뒤집혔을 뿐 아니라 절댓값도 커졌다. 제곱근이 왼쪽 꼬리를 지나치게 압축한 **과교정**이다.
+
+    이유는 $\lambda = 4$가 작아서 $X = 0, 1$ 근처에 무시할 수 없는 확률질량이 있고, 그 구간에서 $\sqrt{\cdot}$의 기울기가 급격히 변하기 때문이다. $\lambda$가 커지면 문제가 사라진다.
+
+    | $\lambda$ | 원자료 왜도 $1/\sqrt{\lambda}$ | $\sqrt{X}$의 왜도 | $\operatorname{Var}(\sqrt{X})$ |
+    |---|---|---|---|
+    | 4 | 0.500 | $-0.636$ | 0.306 |
+    | 9 | 0.333 | $-0.218$ | 0.263 |
+    | 25 | 0.200 | $-0.107$ | 0.254 |
+    | 100 | 0.100 | $-0.051$ | 0.251 |
+
+    분산 안정화 성질 $\operatorname{Var}(\sqrt{X}) \approx 1/4$는 $\lambda$와 무관하게 잘 성립한다($\lambda = 4$에서 0.306, $\lambda = 100$에서 0.251). 곧 제곱근 변환은 **분산 안정화에는 성공하지만 작은 $\lambda$에서 대칭화에는 실패한다**. 두 목적을 혼동하지 말아야 한다.
+
+    작은 $\lambda$에서 대칭성이 필요하다면 Anscombe 변환 $2\sqrt{X + 3/8}$($\lambda = 4$에서 왜도 $-0.251$)이나 Wilson-Hilferty 계열의 $X^{2/3}$(왜도 $-0.117$)이 더 낫다. $\square$

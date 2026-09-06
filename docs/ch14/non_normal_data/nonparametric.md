@@ -1,19 +1,20 @@
-# Non-Parametric Methods
+# 비모수 방법
 
+정규가 아닌 자료를 다루는 또 하나의 전략은 **비모수 방법**을 쓰는 것이다. 이 방법들은 자료에 특정 분포를 가정하지 않으며, 자료가 순서형이거나 정규성 가정이 위배될 때 흔히 쓰인다.
 
-Another strategy for dealing with non-normal data is to use **non-parametric methods**. These methods do not assume a specific distribution for the data and are often used when data is ordinal or when normality assumptions are violated.
+## 흔한 비모수 검정
 
-## Common Non-Parametric Tests
+- **Mann-Whitney U 검정**: 독립인 두 집단을 비교하는 $t$ 검정의 비모수 대안.
+- **Kruskal-Wallis 검정**: 셋 이상의 집단을 비교하는 분산분석의 비모수 대안.
+- **Wilcoxon 부호순위 검정**: 대응하는 두 표본을 비교하는 비모수 검정.
 
-- **Mann-Whitney U Test**: A non-parametric alternative to the $t$-test for comparing two independent groups.
-- **Kruskal-Wallis Test**: A non-parametric alternative to ANOVA for comparing more than two groups.
-- **Wilcoxon Signed-Rank Test**: A non-parametric test for comparing two related samples.
-
-## Python Implementation
+## Python 구현
 
 ```python
 import numpy as np
 from scipy.stats import mannwhitneyu
+
+np.random.seed(0)
 
 # Generate two non-normal datasets
 group1 = np.random.exponential(scale=2, size=100)
@@ -31,62 +32,70 @@ else:
     print("Reject H_0: Significant difference between the groups.")
 ```
 
-Non-parametric tests offer robust alternatives when normality assumptions are violated or when dealing with ordinal data. They are widely used in situations where data distributions are unknown or non-normal.
+출력:
 
-## Summary: Dealing with Non-Normal Data
+```text
+Mann-Whitney U Test: Statistic=3411.0, p-value=0.000104
+Reject H_0: Significant difference between the groups.
+```
 
-When faced with non-normal data, several strategies can be employed:
+두 집단의 표본중앙값이 각각 $1.26$과 $2.57$로 뚜렷이 다르며, 두 자료 모두 강하게 치우친 지수분포에서 왔는데도 순위 기반 검정이 이 차이를 확실히 탐지한다.
 
-- **Transformations** can help bring the data closer to normality.
-- **Bootstrapping** provides an alternative approach that does not rely on parametric assumptions.
-- **Non-parametric methods** offer powerful alternatives to traditional parametric tests when assumptions are violated.
+비모수 검정은 정규성 가정이 위배되거나 순서형 자료를 다룰 때 로버스트한 대안을 제공한다. 자료의 분포를 모르거나 정규가 아닌 상황에서 널리 쓰인다.
 
-The choice of method depends on the degree of non-normality, the sample size, and the specific research questions being addressed. In practice, combining these approaches with graphical and formal normality assessments can lead to more reliable statistical analysis.
+## 요약: 정규가 아닌 자료 다루기
 
+정규가 아닌 자료를 만났을 때 쓸 수 있는 전략은 여러 가지이다.
 
-## Exercises
+- **변수변환**은 자료를 정규에 더 가깝게 만들어 준다.
+- **붓스트랩**은 모수적 가정에 기대지 않는 대안적 접근을 제공한다.
+- **비모수 방법**은 가정이 위배될 때 전통적 모수 검정을 대신할 강력한 대안이다.
 
-**Exercise 1.**
-Name three nonparametric tests and state the parametric test each replaces. What assumption is relaxed?
+방법의 선택은 비정규성의 정도, 표본크기, 다루는 구체적인 연구 질문에 달려 있다. 실무에서는 이 접근들을 시각적·형식적 정규성 평가와 결합할 때 더 신뢰할 만한 통계 분석에 이를 수 있다.
 
-??? success "Solution to Exercise 1"
-    | Nonparametric test | Replaces | Assumption relaxed |
+## 연습문제
+
+**연습문제 1.**
+비모수 검정 세 가지를 들고 각각이 대체하는 모수적 검정을 서술하라. 어떤 가정이 완화되는가?
+
+??? success "연습문제 1 풀이"
+    | 비모수 검정 | 대체 대상 | 완화되는 가정 |
     |---|---|---|
-    | Wilcoxon signed-rank test | One-sample t-test | Normality of data |
-    | Mann-Whitney U test | Two-sample t-test | Normality of data in both groups |
-    | Kruskal-Wallis test | One-way ANOVA | Normality within groups |
+    | Wilcoxon 부호순위 검정 | 일표본 t 검정 | 자료의 정규성 |
+    | Mann-Whitney U 검정 | 이표본 t 검정 | 두 집단 자료의 정규성 |
+    | Kruskal-Wallis 검정 | 일원배치 분산분석 | 집단 내 정규성 |
 
-    In each case, the nonparametric test does not require the data to follow a specific distribution. It works with the ranks of the data rather than the actual values, making it robust to outliers and non-normality.
-
----
-
-**Exercise 2.**
-Explain the concept of asymptotic relative efficiency (ARE). If the Wilcoxon test has ARE $= 3/\pi \approx 0.955$ relative to the t-test under normality, what does this mean?
-
-??? success "Solution to Exercise 2"
-    ARE compares the sample sizes needed by two tests to achieve the same power. An ARE of 0.955 means: under normality, the Wilcoxon test needs approximately $n/0.955 \approx 1.047n$ observations to match the t-test's power.
-
-    In other words, the Wilcoxon test loses only about 5% efficiency relative to the t-test when data are truly normal. This is a small price to pay for the robustness gained: when data are non-normal (heavy-tailed or skewed), the Wilcoxon test can be much more powerful than the t-test. For some distributions, the ARE of Wilcoxon relative to the t-test exceeds 1 (Wilcoxon is more efficient).
+    각 경우에 비모수 검정은 자료가 특정 분포를 따를 것을 요구하지 않는다. 실제 값 대신 자료의 순위를 쓰므로 이상점과 비정규성에 로버스트하다.
 
 ---
 
-**Exercise 3.**
-A dataset has values $\{1, 2, 3, 100\}$. Explain why a nonparametric test based on ranks is more appropriate than a t-test.
+**연습문제 2.**
+점근적 상대효율(ARE)의 개념을 설명하라. 정규성 아래에서 Wilcoxon 검정의 t 검정 대비 ARE가 $3/\pi \approx 0.955$라면 이는 무엇을 뜻하는가?
 
-??? success "Solution to Exercise 3"
-    The value 100 is a severe outlier relative to the other values. The t-test statistic uses the mean (heavily influenced by 100) and the standard deviation (inflated by 100), both distorted by this single observation. The resulting t-statistic and p-value are unreliable.
+??? success "연습문제 2 풀이"
+    ARE는 같은 검정력을 얻는 데 두 검정이 필요로 하는 표본크기를 비교한다. ARE가 0.955라는 것은 정규성 아래에서 Wilcoxon 검정이 t 검정의 검정력을 따라잡으려면 대략 $n/0.955 \approx 1.047n$개의 관측값이 필요하다는 뜻이다.
 
-    A rank-based test converts the data to ranks $\{1, 2, 3, 4\}$, where the outlier is simply the largest observation with rank 4. The extreme magnitude of 100 is irrelevant. This makes the test robust: replacing 100 with 10 or 10,000 would not change the ranks or the test result.
+    곧 자료가 진짜 정규일 때 Wilcoxon 검정은 t 검정에 비해 효율을 약 5%만 잃는다. 얻는 로버스트성에 비하면 작은 대가이다. 자료가 정규가 아니면(꼬리가 두껍거나 치우쳐 있으면) Wilcoxon 검정이 t 검정보다 훨씬 강력할 수 있다. 어떤 분포에서는 Wilcoxon의 t 검정 대비 ARE가 1을 넘는다(Wilcoxon이 더 효율적이다).
 
 ---
 
-**Exercise 4.**
-When are nonparametric tests not recommended, even if normality is questionable?
+**연습문제 3.**
+자료가 $\{1, 2, 3, 100\}$이다. 순위에 기초한 비모수 검정이 t 검정보다 적절한 이유를 설명하라.
 
-??? success "Solution to Exercise 4"
-    Nonparametric tests are not always preferred because:
+??? success "연습문제 3 풀이"
+    값 100은 나머지 값들에 비해 심각한 이상점이다. t 검정통계량은 (100에 크게 영향받는) 평균과 (100 때문에 부풀려진) 표준편차를 쓰므로 둘 다 이 관측값 하나에 왜곡된다. 그렇게 나온 t 통계량과 p값은 믿을 수 없다.
 
-    1. **Large sample sizes:** With large $n$, the CLT makes parametric tests approximately valid, and they are more powerful (use the actual values, not just ranks). The efficiency loss from ranks is unnecessary.
-    2. **Inference on means specifically:** Nonparametric tests (e.g., Mann-Whitney) test for stochastic dominance or median differences, not mean differences. If the research question is specifically about means, a t-test (possibly with bootstrap) is more appropriate.
-    3. **Complex designs:** For factorial ANOVA, regression, or mixed models, nonparametric alternatives are limited or less well-developed. Robust parametric methods (Welch ANOVA, sandwich standard errors) are often preferable.
-    4. **Tied data:** Rank-based tests lose power with many ties (e.g., Likert scale data with few categories).
+    순위 기반 검정은 자료를 순위 $\{1, 2, 3, 4\}$로 바꾸므로 이상점은 그저 순위 4인 가장 큰 관측값일 뿐이다. 100이라는 극단적 크기는 무관해진다. 그래서 검정이 로버스트하다. 100을 10이나 10,000으로 바꿔도 순위와 검정 결과가 달라지지 않는다.
+
+---
+
+**연습문제 4.**
+정규성이 의심스러워도 비모수 검정이 권장되지 않는 경우는 언제인가?
+
+??? success "연습문제 4 풀이"
+    비모수 검정이 언제나 선호되는 것은 아니다.
+
+    1. **표본이 클 때:** $n$이 크면 중심극한정리가 모수적 검정을 근사적으로 타당하게 만들고, 모수적 검정이 (순위가 아니라 실제 값을 쓰므로) 더 강력하다. 순위로 인한 효율 손실을 감수할 이유가 없다.
+    2. **특별히 평균에 대한 추론일 때:** 비모수 검정(예: Mann-Whitney)은 평균 차이가 아니라 확률적 우위나 중앙값 차이를 검정한다. 연구 질문이 구체적으로 평균에 관한 것이라면 (필요하면 붓스트랩을 곁들인) t 검정이 더 적절하다.
+    3. **복잡한 설계일 때:** 요인 분산분석, 회귀, 혼합모형에서는 비모수 대안이 제한적이거나 덜 발달해 있다. 로버스트한 모수적 방법(Welch 분산분석, 샌드위치 표준오차)이 대개 더 낫다.
+    4. **동점이 많을 때:** 순위 기반 검정은 동점이 많으면(예: 범주가 적은 리커트 척도 자료) 검정력을 잃는다.

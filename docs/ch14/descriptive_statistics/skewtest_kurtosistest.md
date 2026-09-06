@@ -1,34 +1,33 @@
-# Skewtest and Kurtosistest
+# 왜도 검정과 첨도 검정
 
+## 왜도 검정
 
-## Skewtest
+`scipy.stats.skewtest()`가 제공하는 **왜도 검정**은 자료의 왜도가 0에서 유의하게 벗어나는지, 곧 자료가 대칭인지 아닌지를 평가하는 형식적 통계검정이다.
 
-The **skewness test**, provided by `scipy.stats.skewtest()`, is a formal statistical test that evaluates whether the skewness of a dataset significantly deviates from zero, indicating whether the data is symmetric or not.
+### 가설
 
-### Hypotheses
+- **귀무가설** ($H_0$): 자료의 왜도가 0이다(대칭분포이다).
+- **대립가설** ($H_1$): 자료의 왜도가 0이 아니다(비대칭이다).
 
-- **Null Hypothesis** ($H_0$): The data has zero skewness (is symmetrically distributed).
-- **Alternative Hypothesis** ($H_1$): The data has non-zero skewness (is asymmetrical).
+왜도 검정은 검정통계량과 $p$값을 제공한다. $p$값이 작으면(보통 0.05 미만) 귀무가설을 기각하고 자료가 대칭분포가 아니라고 결론짓는다.
 
-The skewness test provides a test statistic and a $p$-value. If the $p$-value is small (typically less than 0.05), we reject the null hypothesis and conclude that the data is not symmetrically distributed.
+### 단계별 설명
 
-### Step-by-Step Explanation
-
-1. **Calculate the sample skewness**: We first compute the sample skewness using the formula
+1. **표본왜도 계산**: 먼저 다음 공식으로 표본왜도를 계산한다.
 
     $$
     \text{Skewness} = \frac{1}{n} \sum_{i=1}^{n} \left( \frac{x_i - \bar{x}}{\sigma} \right)^3
     $$
 
-    where $n$ is the number of data points, $x_i$ are the individual data points, $\bar{x}$ is the mean, and $\sigma$ is the standard deviation.
+    여기서 $n$은 자료점의 개수, $x_i$는 개별 자료점, $\bar{x}$는 평균, $\sigma$는 표준편차이다.
 
-2. **Compute the z-score**: The test statistic, or **z-score**, is computed by dividing the observed skewness by its standard error. The z-score tells us how far the skewness deviates from the expected value (zero for a normal distribution).
+2. **z 점수 계산**: 검정통계량인 **z 점수**는 관측된 왜도를 그 표준오차로 나누어 계산한다. z 점수는 왜도가 기댓값(정규분포에서는 0)에서 얼마나 떨어져 있는지를 알려준다.
 
-3. **Convert z-score to p-value**: We compute the p-value using the cumulative distribution function (CDF) of the standard normal distribution. We compare the z-score obtained in the previous step to the standard normal distribution to get the **two-tailed p-value**. This p-value quantifies how likely it is to observe a skewness as extreme as the observed value under the null hypothesis of zero skewness (i.e., symmetric distribution).
+3. **z 점수를 p값으로 변환**: 표준정규분포의 누적분포함수로 p값을 계산한다. 앞 단계에서 얻은 z 점수를 표준정규분포와 비교하여 **양측 p값**을 얻는다. 이 p값은 왜도가 0(대칭분포)이라는 귀무가설 아래에서 관측된 값만큼 극단적인 왜도를 볼 가능성을 수량화한다.
 
-### Applications
+### 응용
 
-The skewness test is practical when assessing whether the data can be analyzed using parametric statistical methods that assume symmetry (such as specific versions of the $t$-test or ANOVA). If we conclude that the data is skewed, it may be necessary to transform the data (e.g., using a log or Box-Cox transformation) or use non-parametric methods that do not assume symmetry.
+왜도 검정은 대칭성을 가정하는 모수적 통계 방법(특정 형태의 $t$ 검정이나 분산분석 등)으로 자료를 분석할 수 있는지 평가할 때 실용적이다. 자료가 치우쳤다고 결론지으면 자료를 변환하거나(예: 로그나 Box-Cox 변환) 대칭성을 가정하지 않는 비모수 방법을 써야 할 수 있다.
 
 ```python
 import numpy as np
@@ -56,36 +55,46 @@ else:
     print("Fail to reject H_0: The data is symmetrically distributed (no significant skewness).")
 ```
 
+출력:
+
+```text
+Skewness: 0.0339
+Skewness Test: Statistic=0.4402, p-value=0.6598
+Fail to reject H_0: The data is symmetrically distributed (no significant skewness).
+```
+
+정규 자료이므로 왜도가 $0.0339$로 0에 가깝고 $p = 0.66$으로 기각하지 못한다. 기대한 대로이다.
+
 ---
 
-## Kurtosistest
+## 첨도 검정
 
-The **kurtosis test**, provided by `scipy.stats.kurtosistest()`, is a formal statistical test that evaluates whether the excess kurtosis of a dataset significantly deviates from the kurtosis of a normal distribution.
+`scipy.stats.kurtosistest()`가 제공하는 **첨도 검정**은 자료의 초과첨도가 정규분포의 첨도에서 유의하게 벗어나는지 평가하는 형식적 통계검정이다.
 
-### Hypotheses
+### 가설
 
-- **Null Hypothesis** ($H_0$): The data has normal kurtosis.
-- **Alternative Hypothesis** ($H_1$): The data does not have normal kurtosis.
+- **귀무가설** ($H_0$): 자료의 첨도가 정규분포의 것과 같다.
+- **대립가설** ($H_1$): 자료의 첨도가 정규분포의 것과 다르다.
 
-The kurtosis test provides a test statistic and a $p$-value. If the $p$-value is small (typically less than 0.05), we reject the null hypothesis and conclude that the data does not have normal kurtosis.
+첨도 검정은 검정통계량과 $p$값을 제공한다. $p$값이 작으면(보통 0.05 미만) 귀무가설을 기각하고 자료의 첨도가 정규가 아니라고 결론짓는다.
 
-### Step-by-Step Explanation
+### 단계별 설명
 
-1. **Calculate the sample excess kurtosis**: We first compute the sample excess kurtosis using the formula
+1. **표본 초과첨도 계산**: 먼저 다음 공식으로 표본 초과첨도를 계산한다.
 
     $$
     \text{Excess Kurtosis} = \frac{1}{n} \sum_{i=1}^{n} \left( \frac{x_i - \bar{x}}{\sigma} \right)^4 - 3
     $$
 
-    where $n$ is the number of data points, $x_i$ are the individual data points, $\bar{x}$ is the mean, and $\sigma$ is the standard deviation.
+    여기서 $n$은 자료점의 개수, $x_i$는 개별 자료점, $\bar{x}$는 평균, $\sigma$는 표준편차이다.
 
-2. **Compute the z-score**: The test statistic, or **z-score**, is computed by dividing the observed excess kurtosis by its standard error. The z-score tells us how far the excess kurtosis deviates from the expected value (zero for a normal distribution).
+2. **z 점수 계산**: 검정통계량인 **z 점수**는 관측된 초과첨도를 그 표준오차로 나누어 계산한다. z 점수는 초과첨도가 기댓값(정규분포에서는 0)에서 얼마나 떨어져 있는지를 알려준다.
 
-3. **Convert z-score to p-value**: We compute the p-value using the CDF of the standard normal distribution to get the **two-tailed p-value**. This p-value quantifies how likely it is to observe an excess kurtosis as extreme as the observed value under the null hypothesis.
+3. **z 점수를 p값으로 변환**: 표준정규분포의 누적분포함수로 **양측 p값**을 계산한다. 이 p값은 귀무가설 아래에서 관측된 값만큼 극단적인 초과첨도를 볼 가능성을 수량화한다.
 
-### Applications
+### 응용
 
-We use the kurtosis test when assessing the suitability of parametric methods (such as the $t$-test or ANOVA), which assume normal kurtosis. If the kurtosis test indicates that the data has significantly heavy or light tails, transformations (e.g., log transformation or Box-Cox transformation) or non-parametric methods may be needed.
+정규 첨도를 가정하는 모수적 방법($t$ 검정, 분산분석 등)이 적절한지 평가할 때 첨도 검정을 쓴다. 첨도 검정이 자료의 꼬리가 유의하게 두껍거나 얇다고 나타내면 변환(로그나 Box-Cox 변환)이나 비모수 방법이 필요할 수 있다.
 
 ```python
 import numpy as np
@@ -113,48 +122,58 @@ else:
     print("Fail to reject H_0: The data has normal kurtosis.")
 ```
 
-## Exercises
+출력:
 
-**Exercise 1.**
-Using `scipy.stats.skewtest`, a researcher obtains a z-score of 3.2 and p-value of 0.001. Interpret this result.
+```text
+Kurtosis: -0.0468
+Kurtosis Test: Statistic=-0.1980, p-value=0.8431
+Fail to reject H_0: The data has normal kurtosis.
+```
 
-??? success "Solution to Exercise 1"
-    The skewtest tests $H_0$: the population skewness is zero (consistent with normality). The z-score of 3.2 is far from zero, and $p = 0.001$ is well below any conventional significance level.
+## 연습문제
 
-    Interpretation: there is strong evidence that the data come from a skewed (non-symmetric) distribution. The positive z-score indicates right-skewness (the right tail is heavier than the left). This is one component of non-normality; the data may require transformation or nonparametric methods.
+**연습문제 1.**
+`scipy.stats.skewtest`로 어떤 연구자가 z 점수 3.2와 p값 0.001을 얻었다. 이 결과를 해석하라.
 
----
+??? success "연습문제 1 풀이"
+    왜도 검정은 $H_0$: 모집단 왜도가 0(정규성과 일관됨)을 검정한다. z 점수 3.2는 0에서 멀고 $p = 0.001$은 어떤 관행적 유의수준보다도 훨씬 작다.
 
-**Exercise 2.**
-Explain the difference between `skewtest` and simply computing the sample skewness. Why is a formal test necessary?
-
-??? success "Solution to Exercise 2"
-    The sample skewness $g_1 = \frac{m_3}{m_2^{3/2}}$ is a point estimate that is always nonzero (even for truly normal data) due to sampling variability. Without a test, there is no way to judge whether the observed skewness is statistically significant or just sampling noise.
-
-    `skewtest` transforms $g_1$ into a z-statistic using D'Agostino's transformation, which accounts for the sampling distribution of skewness under normality. The p-value then quantifies whether the observed skewness is unlikely under the null. For example, $g_1 = 0.3$ might be significant with $n = 500$ but not with $n = 20$.
+    해석: 자료가 치우친(비대칭) 분포에서 왔다는 강한 증거가 있다. z 점수가 양수이므로 오른쪽 치우침(오른쪽 꼬리가 왼쪽보다 무겁다)을 나타낸다. 이는 비정규성의 한 요소이며, 자료에 변환이나 비모수 방법이 필요할 수 있다.
 
 ---
 
-**Exercise 3.**
-The `kurtosistest` has a minimum sample size requirement ($n \geq 20$). Explain why small samples are problematic for kurtosis estimation.
+**연습문제 2.**
+`skewtest`와 단순히 표본왜도를 계산하는 것의 차이를 설명하라. 형식적 검정이 왜 필요한가?
 
-??? success "Solution to Exercise 3"
-    Sample kurtosis involves the fourth power of deviations $(x_i - \bar{x})^4$, making it extremely sensitive to individual observations. In small samples:
+??? success "연습문제 2 풀이"
+    표본왜도 $g_1 = \frac{m_3}{m_2^{3/2}}$는 점추정값이며, 자료가 진짜 정규여도 표집변동 때문에 언제나 0이 아니다. 검정이 없으면 관측된 왜도가 통계적으로 유의한지 단순한 표집 잡음인지 판단할 길이 없다.
 
-    1. **High variance:** The sampling distribution of the kurtosis estimator is very wide, meaning the estimate is unreliable.
-    2. **Bias:** The sample kurtosis is biased in small samples, and bias-correction formulas have large uncertainty.
-    3. **Non-normality of the estimator:** The z-transformation used in `kurtosistest` assumes $n$ is large enough for the transformation to be approximately standard normal. Below $n \approx 20$, this approximation fails.
-
-    For small samples, visual methods (Q-Q plots) and the Shapiro-Wilk test are more reliable than moment-based tests.
+    `skewtest`는 D'Agostino 변환으로 $g_1$을 z 통계량으로 바꾼다. 이 변환은 정규성 아래에서 왜도의 표집분포를 반영한다. 그러면 p값이 관측된 왜도가 귀무가설 아래에서 얼마나 있을 법하지 않은지를 수량화한다. 예를 들어 $g_1 = 0.3$은 $n = 500$에서는 유의하지만 $n = 20$에서는 유의하지 않을 수 있다.
 
 ---
 
-**Exercise 4.**
-If `skewtest` gives $p = 0.15$ and `kurtosistest` gives $p = 0.03$, what can you conclude about the nature of the non-normality?
+**연습문제 3.**
+`kurtosistest`에는 최소 표본크기 요건이 있다. 작은 표본이 첨도 추정에 문제가 되는 이유를 설명하라.
 
-??? success "Solution to Exercise 4"
-    The skewtest does not reject ($p = 0.15$), suggesting the data are approximately symmetric. The kurtosistest rejects ($p = 0.03$), indicating the data have abnormal tail behavior (likely heavy or light tails).
+??? success "연습문제 3 풀이"
+    표본첨도는 편차의 4제곱 $(x_i - \bar{x})^4$을 쓰므로 개별 관측값에 극도로 민감하다. 작은 표본에서는
 
-    This pattern suggests the distribution is **symmetric but leptokurtic** (heavy-tailed) or **symmetric but platykurtic** (light-tailed). Examples include the $t$-distribution with small $\nu$ (symmetric, heavy-tailed) or the uniform distribution (symmetric, light-tailed).
+    1. **큰 분산:** 첨도 추정량의 표집분포가 매우 넓어 추정을 믿을 수 없다.
+    2. **편향:** 작은 표본에서 표본첨도가 편향되어 있고 편향 보정 공식도 불확실성이 크다.
+    3. **추정량의 비정규성:** `kurtosistest`가 쓰는 z 변환은 $n$이 근사적으로 표준정규가 될 만큼 커야 한다는 것을 가정한다. $n \approx 20$ 아래에서는 이 근사가 무너진다.
 
-    The practical implication depends on the direction: heavy tails (positive excess kurtosis) mean more outliers than expected, affecting mean-based inference. Light tails (negative excess kurtosis) are generally less problematic for standard methods.
+    scipy에서 `kurtosistest`는 $n < 20$이면 경고를 내고 $n < 5$이면 아예 오류를 낸다. 참고로 `skewtest`는 $n < 8$이면 오류를 낸다.
+
+    작은 표본에서는 적률 기반 검정보다 시각적 방법(Q-Q 그림)과 Shapiro-Wilk 검정이 더 믿을 만하다.
+
+---
+
+**연습문제 4.**
+`skewtest`가 $p = 0.15$를, `kurtosistest`가 $p = 0.03$을 준다면 비정규성의 성격에 대해 무엇을 결론지을 수 있는가?
+
+??? success "연습문제 4 풀이"
+    왜도 검정은 기각하지 않으므로($p = 0.15$) 자료가 근사적으로 대칭임을 시사한다. 첨도 검정은 기각하므로($p = 0.03$) 자료의 꼬리 거동이 비정상임을(꼬리가 두껍거나 얇음을) 나타낸다.
+
+    이 패턴은 분포가 **대칭이지만 고첨**(두꺼운 꼬리)이거나 **대칭이지만 저첨**(얇은 꼬리)임을 시사한다. 예로는 자유도가 작은 $t$ 분포(대칭, 두꺼운 꼬리)나 균등분포(대칭, 얇은 꼬리)가 있다.
+
+    실질적 함의는 방향에 달려 있다. 두꺼운 꼬리(양의 초과첨도)는 기대보다 이상점이 많다는 뜻으로 평균 기반 추론에 영향을 준다. 얇은 꼬리(음의 초과첨도)는 표준적인 방법에 대체로 덜 문제가 된다.

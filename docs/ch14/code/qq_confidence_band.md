@@ -1,36 +1,36 @@
-# Quantile-Quantile Plot Confidence Band Simulation
+# Q-Q 그림 신뢰띠 모의실험
 
-## Overview
+## 개요
 
-A bare Q-Q plot can be difficult to interpret because sampling variability causes points to scatter around the reference line even under perfect normality. Pointwise confidence bands, constructed by simulation, provide a visual envelope: points within the band are consistent with the null hypothesis of normality, while points outside suggest genuine departures. This page explains the simulation-based construction and demonstrates it on skewed data.
+맨 Q-Q 그림은 해석하기 어려울 수 있다. 완전한 정규성 아래에서도 표집변동 때문에 점들이 기준선 주위로 흩어지기 때문이다. 모의실험으로 만드는 점별 신뢰띠는 시각적 포락선을 제공한다. 띠 안의 점들은 정규성이라는 귀무가설과 일관되고, 띠 밖의 점들은 진짜 이탈을 시사한다. 이 페이지는 모의실험 기반 구성을 설명하고 치우친 자료에서 시연한다.
 
-## Construction via Parametric Bootstrap
+## 모수적 붓스트랩을 통한 구성
 
-Given an observed sample $x_1, \ldots, x_n$, the algorithm proceeds as follows.
+관측 표본 $x_1, \ldots, x_n$이 주어졌을 때 알고리즘은 다음과 같다.
 
-1. **Estimate parameters.** Compute $\hat{\mu} = \bar{x}$ and $\hat{\sigma} = s$ (sample standard deviation with Bessel correction).
+1. **모수를 추정한다.** $\hat{\mu} = \bar{x}$와 $\hat{\sigma} = s$(Bessel 보정을 한 표본표준편차)를 계산한다.
 
-2. **Compute theoretical quantiles.** Using the plotting positions $p_i = (i - 0.5)/n$ for $i = 1, \ldots, n$, set
+2. **이론적 분위수를 계산한다.** $i = 1, \ldots, n$에 대해 플로팅 위치 $p_i = (i - 0.5)/n$을 써서
 
     $$
-    q_i = \mathcal{N}^{-1}(p_i).
+    q_i = \Phi^{-1}(p_i).
     $$
 
-3. **Sort the observed data.** Let $x_{(1)} \leq x_{(2)} \leq \cdots \leq x_{(n)}$ denote the order statistics.
+3. **관측 자료를 정렬한다.** 순서통계량을 $x_{(1)} \leq x_{(2)} \leq \cdots \leq x_{(n)}$이라 하자.
 
-4. **Simulate under the null.** For $b = 1, \ldots, B$:
-    - Draw $x_1^{*(b)}, \ldots, x_n^{*(b)} \overset{\text{iid}}{\sim} \mathcal{N}(\hat{\mu}, \hat{\sigma}^2)$.
-    - Sort to obtain the simulated order statistics $x_{(1)}^{*(b)} \leq \cdots \leq x_{(n)}^{*(b)}$.
+4. **귀무가설 아래에서 모의생성한다.** $b = 1, \ldots, B$에 대해
+    - $x_1^{*(b)}, \ldots, x_n^{*(b)} \overset{\text{iid}}{\sim} \mathcal{N}(\hat{\mu}, \hat{\sigma}^2)$를 뽑는다.
+    - 정렬하여 모의 순서통계량 $x_{(1)}^{*(b)} \leq \cdots \leq x_{(n)}^{*(b)}$를 얻는다.
 
-5. **Compute the envelope.** For each rank $i$, take the 2.5th and 97.5th percentiles of $\{x_{(i)}^{*(1)}, \ldots, x_{(i)}^{*(B)}\}$:
+5. **포락선을 계산한다.** 각 순위 $i$에 대해 $\{x_{(i)}^{*(1)}, \ldots, x_{(i)}^{*(B)}\}$의 2.5백분위수와 97.5백분위수를 취한다.
 
     $$
     L_i = Q_{0.025}\bigl(x_{(i)}^{*(1)}, \ldots, x_{(i)}^{*(B)}\bigr), \qquad U_i = Q_{0.975}\bigl(x_{(i)}^{*(1)}, \ldots, x_{(i)}^{*(B)}\bigr).
     $$
 
-6. **Plot.** Display $(q_i, x_{(i)})$ as scatter points, the fitted line $y = \hat{\mu} + \hat{\sigma}\, q$, and the shaded region $[L_i, U_i]$.
+6. **그린다.** $(q_i, x_{(i)})$를 산점으로, 적합선 $y = \hat{\mu} + \hat{\sigma}\, q$를, 음영 영역 $[L_i, U_i]$를 표시한다.
 
-### Code
+### 코드
 
 ```python
 import numpy as np
@@ -72,19 +72,22 @@ x = rng.lognormal(mean=0.0, sigma=0.6, size=300)
 qq_with_band(x, B=600, seed=7)
 ```
 
-## Pointwise vs Simultaneous Bands
+## 점별 띠와 동시 띠
 
-The band described above is *pointwise*: for each individual rank $i$, there is a 95% probability that a normal order statistic falls within $[L_i, U_i]$. However, the probability that *all* $n$ points simultaneously fall within their respective intervals is less than 95%. A *simultaneous* band (analogous to a Bonferroni correction) would be wider. The pointwise band is nevertheless standard practice because it provides useful visual guidance without being overly conservative.
+위에서 설명한 띠는 *점별*(pointwise)이다. 각 개별 순위 $i$에 대해 정규 순서통계량이 $[L_i, U_i]$ 안에 들어갈 확률이 95%라는 뜻이다. 그러나 $n$개 점이 *모두* 동시에 각자의 구간 안에 들어갈 확률은 95%보다 작다. *동시*(simultaneous) 띠(Bonferroni 보정에 해당)는 더 넓을 것이다. 그럼에도 점별 띠가 표준 관행인 이유는 지나치게 보수적이지 않으면서 유용한 시각적 안내를 주기 때문이다.
 
-## Interpretation
+## 해석
 
-For the lognormal example above, the upper-tail points will escape the confidence band, curving upward beyond the shaded region. This visually confirms the right skewness that formal tests would also detect. Data drawn from a true normal distribution should have most points (roughly 95% at each rank) within the band, with occasional excursions expected by chance.
+위 대수정규 예에서는 위쪽 꼬리의 점들이 신뢰띠를 벗어나 음영 영역 위로 휘어 올라간다. 형식적 검정도 탐지했을 오른쪽 치우침을 시각적으로 확인해 준다. 진짜 정규분포에서 뽑은 자료라면 대부분의 점이 띠 안에 놓이고 가끔 우연히 벗어나는 정도이다.
 
-## Exercises
+!!! warning "\"5%씩 벗어난다\"는 계산은 성립하지 않는다"
+    각 순위가 개별적으로 5% 확률로 띠를 벗어나므로 $n = 200$이면 약 10개가 밖에 있을 것이라고 생각하기 쉽다. **틀렸다.** 실제로는 평균 약 0.7개이고, 정규표본의 약 78%에서는 벗어나는 점이 **하나도 없다**. 이유는 연습문제 1에서 다룬다.
 
-**Exercise 1.** Generate $n = 200$ standard normal observations. Produce the Q-Q plot with a 95% pointwise band using $B = 1000$ simulations. Verify that nearly all points fall within the band.
+## 연습문제
 
-??? success "Solution to Exercise 1"
+**연습문제 1.** 표준정규 관측값 $n = 200$개를 생성하라. $B = 1000$번의 모의실험으로 95% 점별 띠를 갖는 Q-Q 그림을 만들어라. 거의 모든 점이 띠 안에 들어가는지 확인하라.
+
+??? success "연습문제 1 풀이"
 
     ```python
     import numpy as np
@@ -117,13 +120,27 @@ For the lognormal example above, the upper-tail points will escape the confidenc
     plt.show()
     ```
 
-    Under normality, approximately $0.05 \times 200 = 10$ points are expected outside the band. The actual count will vary but should be in that neighbourhood. $\square$
+    출력:
+
+    ```text
+    Points outside band: 1 / 200
+    ```
+
+    **왜 10개가 아니라 1개인가?** 순진한 계산 $0.05 \times 200 = 10$은 200개 순위의 벗어남이 서로 독립이라고 가정한다. 두 가지 이유로 성립하지 않는다.
+
+    1. **순서통계량은 강하게 양의 상관을 갖는다.** $x_{(i)}$가 크면 $x_{(i+1)}$도 클 수밖에 없다. 그래서 벗어남이 흩어지지 않고 연속된 구간(run)으로 몰려서 일어난다.
+
+    2. **더 중요하게, 띠가 표본 자신의 $\hat{\mu}, \hat{\sigma}$를 중심으로 만들어진다.** 모수적 붓스트랩이 적합된 모수에 조건부로 작동하므로, 변동의 가장 큰 두 성분인 위치와 척도가 이미 제거되어 있다. 관측 순서통계량이 구성상 띠의 중심에 고정되는 것이다.
+
+    실제로 정규표본 400개에 대해 반복하면 벗어나는 점의 개수는 평균 $0.67$, **중앙값 0**이고 표본의 $77.5\%$에서 하나도 벗어나지 않는다. 다만 분포의 꼬리가 두꺼워서 드물게 20개 이상이 한꺼번에 벗어나기도 한다. 상관된 벗어남이 몰려서 나타나기 때문이다.
+
+    실무적 함의: 이 띠는 명목 95%보다 **훨씬 보수적**이다. 한 점이라도 벗어나면 주목할 만한 신호로 보아야 한다. $\square$
 
 ---
 
-**Exercise 2.** Repeat Exercise 1 with $n = 200$ observations from a $t_4$ distribution. Identify which portions of the Q-Q plot escape the band and explain why.
+**연습문제 2.** 연습문제 1을 $t_4$ 분포에서 뽑은 관측값 $n = 200$개로 반복하라. Q-Q 그림의 어느 부분이 띠를 벗어나는지 찾고 그 이유를 설명하라.
 
-??? success "Solution to Exercise 2"
+??? success "연습문제 2 풀이"
 
     ```python
     import numpy as np
@@ -153,27 +170,37 @@ For the lognormal example above, the upper-tail points will escape the confidenc
     plt.show()
     ```
 
-    The $t_4$ distribution has heavier tails than the normal. On the Q-Q plot, the lowest order statistics fall below the lower edge of the band (more negative than expected) and the highest order statistics rise above the upper edge (more positive than expected), producing the characteristic S-shape outside the envelope. $\square$
+    $t_4$ 분포는 정규분포보다 꼬리가 훨씬 두껍다. $t_\nu$의 초과첨도는 $\nu > 4$일 때 $6/(\nu - 4)$인데, $\nu = 4$에서는 이 값이 **발산**한다(네 번째 적률이 존재하지 않는다). 따라서 표본첨도가 표본마다 크게 요동하며 매우 큰 값이 자주 나온다.
+
+    Q-Q 그림에서 가장 작은 순서통계량들은 띠의 아래 경계 밑으로 떨어지고(기대보다 더 음수) 가장 큰 순서통계량들은 위 경계 위로 올라간다(기대보다 더 양수). 포락선 밖으로 튀어나가는 특징적인 S자 모양이 나타난다.
+
+    연습문제 1에서 본 대로 이 띠는 매우 보수적이므로, 양 끝에서 띠를 벗어난다는 것은 꼬리 이탈이 상당히 크다는 강한 증거이다. $\square$
 
 ---
 
-**Exercise 3.** Explain mathematically why the confidence band is wider at the tails (extreme quantiles) than near the centre.
+**연습문제 3.** 신뢰띠가 중앙 근처보다 꼬리(극단 분위수)에서 더 넓은 이유를 수학적으로 설명하라.
 
-??? success "Solution to Exercise 3"
+??? success "연습문제 3 풀이"
 
-    The variance of the $i$-th order statistic from $\mathcal{N}(\mu, \sigma^2)$ is approximately
+    $\mathcal{N}(\mu, \sigma^2)$에서 나온 $i$번째 순서통계량의 분산은 근사적으로
 
     $$
-    \text{Var}(X_{(i)}) \approx \frac{p_i(1 - p_i)}{n\, [\phi(\mathcal{N}^{-1}(p_i))]^2}\, \sigma^2,
+    \text{Var}(X_{(i)}) \approx \frac{p_i(1 - p_i)}{n\, [\phi(\Phi^{-1}(p_i))]^2}\, \sigma^2,
     $$
 
-    where $p_i = i/(n+1)$ and $\phi$ is the standard normal density. Near the centre ($p_i \approx 0.5$), $\phi(\mathcal{N}^{-1}(0.5)) = \phi(0) = 1/\sqrt{2\pi}$ is at its maximum, making the denominator large and the variance small. In the tails ($p_i$ near 0 or 1), $\phi(\mathcal{N}^{-1}(p_i))$ becomes very small (the normal density decays rapidly), so the variance grows. Consequently, the simulated order statistics have larger spread in the tails, producing a wider confidence band. $\square$
+    여기서 $p_i = i/(n+1)$이고 $\phi$는 표준정규 밀도이다.
+
+    중앙 근처($p_i \approx 0.5$)에서는 $\phi(\Phi^{-1}(0.5)) = \phi(0) = 1/\sqrt{2\pi} \approx 0.399$로 최대이므로 분모가 커서 분산이 작다. 꼬리($p_i$가 0이나 1에 가까울 때)에서는 $\phi(\Phi^{-1}(p_i))$가 매우 작아진다(정규 밀도가 빠르게 감쇠한다). 예컨대 $p_i = 0.01$이면 $\phi(-2.326) = 0.0267$로 중앙의 $1/15$에 불과하고, 제곱되어 분모에 들어가므로 분산이 크게 늘어난다.
+
+    분자 $p_i(1-p_i)$는 꼬리에서 오히려 작아지지만($0.01 \times 0.99 = 0.0099$ 대 $0.25$), 분모의 감소가 훨씬 빠르다. $p_i = 0.01$에서 비율은 $\frac{0.0099}{0.0267^2} = 13.9$이고 $p_i = 0.5$에서는 $\frac{0.25}{0.399^2} = 1.57$이므로 분산이 약 9배 크다.
+
+    결과적으로 모의 순서통계량의 산포가 꼬리에서 훨씬 커지고 신뢰띠가 나팔 모양으로 벌어진다. $\square$
 
 ---
 
-**Exercise 4.** Modify the simulation to produce a 99% pointwise band. How does the width compare to the 95% band?
+**연습문제 4.** 99% 점별 띠를 만들도록 모의실험을 수정하라. 폭이 95% 띠와 비교해 어떠한가?
 
-??? success "Solution to Exercise 4"
+??? success "연습문제 4 풀이"
 
     ```python
     import numpy as np
@@ -195,6 +222,8 @@ For the lognormal example above, the upper-tail points will escape the confidenc
     lo99 = np.percentile(sims, 0.5, axis=0)
     hi99 = np.percentile(sims, 99.5, axis=0)
 
+    print(f"Median width ratio: {np.median((hi99 - lo99) / (hi95 - lo95)):.3f}")
+
     fig, ax = plt.subplots(figsize=(7, 4))
     ax.fill_between(q, lo99, hi99, alpha=0.10, label="99% band")
     ax.fill_between(q, lo95, hi95, alpha=0.15, label="95% band")
@@ -206,12 +235,30 @@ For the lognormal example above, the upper-tail points will escape the confidenc
     plt.show()
     ```
 
-    The 99% band uses the 0.5th and 99.5th percentiles of the simulated order statistics, so it is wider than the 95% band at every rank. The ratio of widths is approximately $\mathcal{N}^{-1}(0.995)/\mathcal{N}^{-1}(0.975) \approx 2.576/1.960 \approx 1.31$, so the 99% band is roughly 31% wider. $\square$
+    출력:
+
+    ```text
+    Median width ratio: 1.305
+    ```
+
+    99% 띠는 모의 순서통계량의 0.5백분위수와 99.5백분위수를 쓰므로 모든 순위에서 95% 띠보다 넓다. 순서통계량의 분포가 근사적으로 정규이므로 폭의 비율은 대략
+
+    $$
+    \frac{\Phi^{-1}(0.995)}{\Phi^{-1}(0.975)} = \frac{2.576}{1.960} \approx 1.31
+    $$
+
+    이다. 모의실험에서 얻은 중앙값 $1.305$가 이 예측과 잘 맞는다. 곧 99% 띠는 약 31% 더 넓다. $\square$
 
 ---
 
-**Exercise 5.** Describe how to convert the pointwise band into an approximate simultaneous band using a Bonferroni correction. What confidence level should each individual interval use if the nominal overall level is 95% and $n = 100$?
+**연습문제 5.** Bonferroni 보정을 써서 점별 띠를 근사적 동시 띠로 바꾸는 방법을 기술하라. 명목 전체 수준이 95%이고 $n = 100$이면 각 개별 구간은 어떤 신뢰수준을 써야 하는가?
 
-??? success "Solution to Exercise 5"
+??? success "연습문제 5 풀이"
 
-    For a simultaneous band at overall level $1 - \alpha$, the Bonferroni correction requires each of the $n$ pointwise intervals to have level $1 - \alpha/n$. With $\alpha = 0.05$ and $n = 100$, each interval must cover probability $1 - 0.05/100 = 0.9995$. The simulation would use the $0.025\%$ and $99.975\%$ percentiles of the simulated order statistics instead of $2.5\%$ and $97.5\%$. This produces a much wider band (the normal quantile changes from $z_{0.975} = 1.96$ to $z_{0.99975} \approx 3.48$). While conservative, it guarantees that under the null hypothesis all $n$ points fall within the band with at least 95% probability simultaneously. In practice, the Bonferroni band is overly conservative for large $n$; more refined simultaneous bands (e.g., based on the Kolmogorov-Smirnov distribution) are preferred. $\square$
+    전체 수준 $1 - \alpha$의 동시 띠를 얻으려면 Bonferroni 보정에 따라 $n$개 점별 구간 각각이 수준 $1 - \alpha/n$을 가져야 한다. $\alpha = 0.05$, $n = 100$이면 각 구간이 확률 $1 - 0.05/100 = 0.9995$를 덮어야 한다.
+
+    모의실험에서는 $2.5\%$와 $97.5\%$ 대신 모의 순서통계량의 $0.025\%$와 $99.975\%$ 백분위수를 쓴다. 훨씬 넓은 띠가 만들어진다. 정규분위수가 $z_{0.975} = 1.96$에서 $z_{0.99975} \approx 3.48$로 바뀌므로 폭이 약 1.8배가 된다.
+
+    보수적이기는 하지만 귀무가설 아래에서 $n$개 점이 모두 동시에 띠 안에 있을 확률이 최소 95%임을 보장한다.
+
+    다만 실무에서 Bonferroni 띠는 큰 $n$에 대해 지나치게 보수적이다. 순서통계량이 강하게 상관되어 있어 Bonferroni가 가정하는 최악의 경우(독립)와 거리가 멀기 때문이다. 더 정교한 동시 띠(예: Kolmogorov-Smirnov 분포에 기반한 것)가 선호된다. 또한 연습문제 1에서 보았듯 모수적 붓스트랩 점별 띠 자체가 이미 상당히 보수적이므로, 실용적으로는 Bonferroni 보정 없이 쓰는 편이 낫다. $\square$

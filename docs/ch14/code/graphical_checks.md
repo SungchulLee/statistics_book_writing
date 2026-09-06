@@ -1,28 +1,28 @@
-# Graphical Normality Checks
+# 시각적 정규성 확인
 
-## Overview
+## 개요
 
-Graphical methods provide an intuitive first step in assessing whether data follow a normal distribution. Before running any formal hypothesis test, visual inspection of histograms, density overlays, and quantile-quantile (Q-Q) plots can reveal skewness, heavy tails, multimodality, and other departures from normality. These methods complement formal tests by showing *how* the data deviate, not just *whether* they deviate.
+시각적 방법은 자료가 정규분포를 따르는지 평가하는 직관적인 첫 단계를 제공한다. 형식적 가설검정을 수행하기 전에 히스토그램, 밀도 겹쳐 그리기, 분위수-분위수(Q-Q) 그림을 눈으로 살피면 치우침, 두꺼운 꼬리, 다봉성 등 정규성에서의 이탈을 드러낼 수 있다. 이 방법들은 자료가 *이탈하는지*뿐 아니라 *어떻게* 이탈하는지를 보여주어 형식적 검정을 보완한다.
 
-## Histogram with Normal Overlay
+## 정규 밀도를 겹친 히스토그램
 
-The simplest graphical check plots a histogram of the observed data and superimposes the probability density function (pdf) of a normal distribution whose mean and variance match the sample estimates.
+가장 단순한 시각적 확인은 관측 자료의 히스토그램을 그리고 평균과 분산을 표본 추정값에 맞춘 정규분포의 확률밀도함수를 겹쳐 그리는 것이다.
 
-Let $X_1, X_2, \ldots, X_n$ be an independent random sample. The sample mean and sample standard deviation are
+$X_1, X_2, \ldots, X_n$을 독립인 확률표본이라 하자. 표본평균과 표본표준편차는
 
 $$
 \bar{X} = \frac{1}{n}\sum_{i=1}^{n} X_i, \qquad S = \sqrt{\frac{1}{n-1}\sum_{i=1}^{n}(X_i - \bar{X})^2}.
 $$
 
-The fitted normal density is then
+적합된 정규 밀도는
 
 $$
 \hat{f}(x) = \frac{1}{S\sqrt{2\pi}} \exp\!\Bigl(-\frac{(x - \bar{X})^2}{2S^2}\Bigr).
 $$
 
-If the histogram bars align closely with $\hat{f}$, the data are consistent with normality.
+히스토그램 막대가 $\hat{f}$와 가깝게 맞으면 자료가 정규성과 일관된다.
 
-### Code
+### 코드
 
 ```python
 import numpy as np
@@ -47,42 +47,45 @@ plt.tight_layout()
 plt.show()
 ```
 
-## Kernel Density Estimate
+## 커널밀도추정
 
-A kernel density estimate (KDE) smooths the histogram and is useful for spotting multimodality or asymmetry. With a Gaussian kernel and bandwidth $h$, the KDE is
+커널밀도추정(KDE)은 히스토그램을 매끄럽게 만들어 다봉성이나 비대칭을 발견하는 데 유용하다. Gauss 핵과 띠너비 $h$를 쓰면 KDE는
 
 $$
 \hat{f}_h(x) = \frac{1}{nh}\sum_{i=1}^{n} \phi\!\Bigl(\frac{x - X_i}{h}\Bigr),
 $$
 
-where $\phi$ denotes the standard normal density. Overlay this with the fitted normal curve; systematic differences indicate departures from normality.
+여기서 $\phi$는 표준정규 밀도이다. 이를 적합된 정규 곡선과 겹쳐 그린다. 체계적인 차이가 보이면 정규성에서의 이탈을 나타낸다.
 
-## Q-Q Plot
+## Q-Q 그림
 
-The quantile-quantile (Q-Q) plot is the single most informative graphical normality check. For each order statistic $X_{(i)}$, compute the corresponding theoretical quantile
+분위수-분위수(Q-Q) 그림은 가장 정보량이 많은 단일 시각적 정규성 확인법이다. 각 순서통계량 $X_{(i)}$에 대해 대응하는 이론적 분위수를 계산하고
 
 $$
-q_i = \mathcal{N}^{-1}\!\Bigl(\frac{i - 0.5}{n}\Bigr),
+q_i = \Phi^{-1}\!\Bigl(\frac{i - 0.5}{n}\Bigr),
 $$
 
-and plot the pairs $(q_i,\, X_{(i)})$. Under normality the points should fall approximately on a straight line. Common departures have recognisable signatures:
+쌍 $(q_i,\, X_{(i)})$를 그린다. 정규성 아래에서는 점들이 대략 직선 위에 놓인다. 흔한 이탈에는 알아볼 수 있는 특징이 있다.
 
-| Pattern | Departure |
+| 패턴 | 이탈 |
 |---|---|
-| S-shaped curve | Heavy tails (leptokurtic) |
-| Concave arc | Right skew |
-| Convex arc | Left skew |
-| Staircase steps | Discreteness or rounding |
+| S자 곡선 | 두꺼운 꼬리(고첨) |
+| 아래로 볼록한 호(양 끝이 선 위로) | 오른쪽 치우침 |
+| 위로 볼록한 호(양 끝이 선 아래로) | 왼쪽 치우침 |
+| 계단 모양 | 이산성 또는 반올림 |
 
-## Interpretation
+!!! note "치우침의 곡률 방향"
+    오른쪽으로 치우친 자료를 $(q_i, X_{(i)})$로 그리면 곡선이 **아래로 볼록**(convex)해진다. 왼쪽 꼬리에서는 표본분위수가 기대보다 덜 음수라 선 위에 있고, 오른쪽 꼬리에서는 기대보다 더 양수라 역시 선 위에 있기 때문이다. 곧 양 끝이 모두 선 위로 올라간다. 왼쪽 치우침은 그 반대로 위로 볼록(concave)해진다.
 
-Graphical checks are subjective but invaluable. A histogram that is clearly bimodal, a KDE that reveals pronounced asymmetry, or a Q-Q plot that curves sharply at the tails all signal that formal normality tests will likely reject. Conversely, if the graphical checks look clean, a borderline $p$-value from a formal test may be less concerning. Always combine graphical and formal methods for a well-rounded assessment.
+## 해석
 
-## Exercises
+시각적 확인은 주관적이지만 매우 값지다. 뚜렷하게 이봉인 히스토그램, 두드러진 비대칭을 드러내는 KDE, 꼬리에서 급격히 휘는 Q-Q 그림은 모두 형식적 정규성 검정이 기각할 가능성이 높음을 알린다. 반대로 시각적 확인이 깨끗해 보이면 형식적 검정의 애매한 $p$값을 덜 걱정해도 된다. 균형 잡힌 평가를 위해 언제나 시각적 방법과 형식적 방법을 함께 쓰라.
 
-**Exercise 1.** Generate $n = 200$ observations from a standard normal distribution. Plot a histogram with 20 bins and overlay the fitted normal density. Comment on the fit.
+## 연습문제
 
-??? success "Solution to Exercise 1"
+**연습문제 1.** 표준정규분포에서 관측값 $n = 200$개를 생성하라. 구간 20개의 히스토그램을 그리고 적합된 정규 밀도를 겹쳐라. 적합에 대해 논평하라.
+
+??? success "연습문제 1 풀이"
 
     ```python
     import numpy as np
@@ -104,13 +107,13 @@ Graphical checks are subjective but invaluable. A histogram that is clearly bimo
     plt.show()
     ```
 
-    With $n = 200$ standard normal draws the histogram bars should closely track the bell-shaped fitted curve. Minor deviations are expected due to sampling variability. $\square$
+    표준정규 추출값 $n = 200$개이면 히스토그램 막대가 종 모양의 적합 곡선을 가깝게 따라간다. 표집변동으로 인한 작은 이탈은 예상되는 일이다. $\square$
 
 ---
 
-**Exercise 2.** Generate $n = 300$ observations from a $\text{Lognormal}(0, 0.6)$ distribution. Create a Q-Q plot against the normal distribution and describe the shape you observe.
+**연습문제 2.** $\text{Lognormal}(0, 0.6)$ 분포에서 관측값 $n = 300$개를 생성하라. 정규분포에 대한 Q-Q 그림을 만들고 관찰되는 모양을 기술하라.
 
-??? success "Solution to Exercise 2"
+??? success "연습문제 2 풀이"
 
     ```python
     import numpy as np
@@ -126,29 +129,31 @@ Graphical checks are subjective but invaluable. A histogram that is clearly bimo
     plt.show()
     ```
 
-    The Q-Q plot shows a concave (upward-bending) curve: the upper quantiles of the data exceed the theoretical normal quantiles. This is the hallmark of right skewness. The lower tail may approximately follow the line, but the upper tail departs markedly. $\square$
+    Q-Q 그림은 **아래로 볼록한**(convex, 위로 휘는) 곡선을 보인다. 자료의 위쪽 분위수가 이론적 정규분위수를 크게 넘어선다. 오른쪽 치우침의 전형적인 특징이다.
+
+    수치로 확인해 보자. $\text{Lognormal}(0, 0.6)$의 1%, 50%, 99% 분위수는 각각 $e^{0.6 \times (-2.326)} = 0.248$, $1$, $e^{0.6 \times 2.326} = 4.04$이다. 중앙값에서 아래로는 $0.752$, 위로는 $3.04$ 떨어져 있어 위쪽이 네 배 넘게 길다. 왼쪽 아래 구간의 기울기는 작고 오른쪽 위 구간의 기울기는 크므로 곡선이 아래로 볼록해진다. $\square$
 
 ---
 
-**Exercise 3.** Explain why a Q-Q plot can reveal the *type* of departure from normality (e.g., skewness versus heavy tails), whereas a single $p$-value from a formal test cannot.
+**연습문제 3.** Q-Q 그림이 정규성 이탈의 *유형*(예: 치우침 대 두꺼운 꼬리)을 드러낼 수 있는 반면 형식적 검정의 $p$값 하나로는 그럴 수 없는 이유를 설명하라.
 
-??? success "Solution to Exercise 3"
+??? success "연습문제 3 풀이"
 
-    A formal normality test produces a single test statistic and $p$-value that measure overall departure from normality. The $p$-value says nothing about *how* the distribution deviates. In contrast, a Q-Q plot displays every order statistic against its theoretical counterpart, so the analyst can see whether the deviation occurs in the tails (heavy tails produce an S-shape), in one tail only (skewness produces a concave or convex arc), or in the centre (multimodality produces steps or flat regions). This diagnostic richness is why graphical checks are recommended alongside formal tests. $\square$
-
----
-
-**Exercise 4.** For a random sample of size $n$ from a continuous distribution $F$, show that the expected value of the $i$-th order statistic's plotting position in a Q-Q plot is approximately $\mathcal{N}^{-1}\!\bigl(\frac{i - 0.5}{n}\bigr)$ under the null hypothesis that $F = \mathcal{N}$.
-
-??? success "Solution to Exercise 4"
-
-    Under $F = \mathcal{N}$ the probability integral transform gives $U_i = \mathcal{N}(X_i) \sim \text{Uniform}(0,1)$. The $i$-th order statistic of the uniform sample, $U_{(i)}$, has $\mathbb{E}[U_{(i)}] = \frac{i}{n+1}$. For large $n$ the Blom approximation replaces this with $p_i = \frac{i - 0.375}{n + 0.25} \approx \frac{i - 0.5}{n}$, which corrects for the bias of the uniform order statistics near the boundaries. Applying $\mathcal{N}^{-1}$ gives the theoretical quantile $q_i = \mathcal{N}^{-1}(p_i)$. When the data truly come from $\mathcal{N}$, the ordered sample values $X_{(i)}$ satisfy $\mathbb{E}[X_{(i)}] \approx q_i$, so the Q-Q plot is expected to lie on the identity line. $\square$
+    형식적 정규성 검정은 정규성에서의 전반적 이탈을 재는 검정통계량과 $p$값 하나를 내놓는다. $p$값은 분포가 *어떻게* 벗어나는지에 대해 아무것도 말해 주지 않는다. 반면 Q-Q 그림은 모든 순서통계량을 그에 대응하는 이론값과 나란히 보여주므로, 이탈이 꼬리에서 일어나는지(두꺼운 꼬리는 S자를 만든다), 한쪽 꼬리에서만 일어나는지(치우침은 볼록하거나 오목한 호를 만든다), 중앙에서 일어나는지(다봉성은 계단이나 평평한 구역을 만든다) 볼 수 있다. 이 진단의 풍부함 때문에 형식적 검정과 함께 시각적 확인이 권장된다. $\square$
 
 ---
 
-**Exercise 5.** Write a Python function that takes a data array and produces a side-by-side figure with (a) a histogram with normal overlay and (b) a Q-Q plot. Test it on data from a $t$-distribution with 4 degrees of freedom.
+**연습문제 4.** 연속분포 $F$에서 크기 $n$인 확률표본을 뽑았을 때, $F = \Phi$라는 귀무가설 아래에서 Q-Q 그림의 $i$번째 순서통계량 플로팅 위치의 기댓값이 근사적으로 $\Phi^{-1}\!\bigl(\frac{i - 0.5}{n}\bigr)$임을 보여라.
 
-??? success "Solution to Exercise 5"
+??? success "연습문제 4 풀이"
+
+    $F = \Phi$ 아래에서 확률적분변환에 의해 $U_i = \Phi(X_i) \sim \text{Uniform}(0,1)$이다. 균등표본의 $i$번째 순서통계량 $U_{(i)}$는 $\mathbb{E}[U_{(i)}] = \frac{i}{n+1}$을 만족한다. $n$이 크면 Blom 근사가 이를 $p_i = \frac{i - 0.375}{n + 0.25} \approx \frac{i - 0.5}{n}$으로 바꾸며, 이는 경계 근처에서 균등 순서통계량의 편향을 보정한다. 여기에 $\Phi^{-1}$을 적용하면 이론적 분위수 $q_i = \Phi^{-1}(p_i)$를 얻는다. 자료가 정말로 $\Phi$에서 왔다면 정렬된 표본값 $X_{(i)}$가 $\mathbb{E}[X_{(i)}] \approx q_i$를 만족하므로 Q-Q 그림이 항등선 위에 놓일 것으로 기대된다. $\square$
+
+---
+
+**연습문제 5.** 자료 배열을 받아 (a) 정규 밀도를 겹친 히스토그램과 (b) Q-Q 그림을 나란히 배치한 그림을 만드는 Python 함수를 작성하라. 자유도 4인 $t$ 분포 자료로 시험하라.
+
+??? success "연습문제 5 풀이"
 
     ```python
     import numpy as np
@@ -183,4 +188,4 @@ Graphical checks are subjective but invaluable. A histogram that is clearly bimo
     normality_panel(t_data)
     ```
 
-    For $t_4$ data the histogram shows heavier tails than the normal overlay (more mass beyond $\pm 3$). The Q-Q plot exhibits a characteristic S-shape: the lower-left points bend below the line and the upper-right points bend above it, confirming excess kurtosis. $\square$
+    $t_4$ 자료에서 히스토그램은 정규 곡선보다 두꺼운 꼬리를 보인다($\pm 3$ 바깥에 질량이 더 많다). Q-Q 그림은 특징적인 S자를 보인다. 왼쪽 아래 점들은 선 아래로, 오른쪽 위 점들은 선 위로 휘어 초과첨도를 확인해 준다. $\square$

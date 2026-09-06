@@ -1,42 +1,42 @@
-# Skewness Test
+# 왜도 검정
 
-## Overview
+## 개요
 
-The D'Agostino skewness test assesses whether the skewness of a dataset differs significantly from zero, the value expected under a normal distribution. It transforms the sample skewness into a $Z$-statistic that is approximately standard normal under the null hypothesis, making it a targeted test for asymmetry. This page derives the key formulas, demonstrates the test in Python, and discusses its practical use.
+D'Agostino 왜도 검정은 자료의 왜도가 정규분포에서 기대되는 값인 0과 유의하게 다른지 평가한다. 표본왜도를 귀무가설 아래에서 근사적으로 표준정규를 따르는 $Z$ 통계량으로 변환하므로, 비대칭을 겨냥한 표적 검정이 된다. 이 페이지는 핵심 공식을 유도하고, Python에서 검정을 시연하며, 실무적 사용을 논의한다.
 
-## Sample Skewness
+## 표본왜도
 
-The Fisher-Pearson coefficient of skewness (bias-corrected) for a sample $X_1, \ldots, X_n$ is
+표본 $X_1, \ldots, X_n$에 대한 Fisher-Pearson 왜도 계수(편향 보정판)는
 
 $$
 g_1 = \frac{n}{(n-1)(n-2)} \sum_{i=1}^{n} \left(\frac{X_i - \bar{X}}{S}\right)^3,
 $$
 
-where $\bar{X}$ is the sample mean and $S$ is the sample standard deviation (with Bessel correction). Under normality, $\mathbb{E}[g_1] = 0$ and
+여기서 $\bar{X}$는 표본평균, $S$는 (Bessel 보정을 한) 표본표준편차이다. 정규성 아래에서 $\mathbb{E}[g_1] = 0$이고
 
 $$
 \text{Var}(g_1) \approx \frac{6(n-2)}{(n+1)(n+3)}.
 $$
 
-## The D'Agostino Transformation
+## D'Agostino 변환
 
-Because the distribution of $g_1$ is not exactly normal even under $H_0$, D'Agostino and Pearson (1973) proposed a nonlinear transformation that maps $g_1$ to a statistic $Z_1$ that is much closer to $\mathcal{N}(0,1)$. The transformation involves computing
+$H_0$ 아래에서도 $g_1$의 분포가 정확히 정규가 아니므로, D'Agostino와 Pearson(1973)은 $g_1$을 $\mathcal{N}(0,1)$에 훨씬 가까운 통계량 $Z_1$으로 보내는 비선형 변환을 제안했다. 변환은 먼저
 
 $$
 Y = g_1 \sqrt{\frac{(n+1)(n+3)}{6(n-2)}},
 $$
 
-followed by additional adjustments for higher-order cumulants. The final $Z_1$ is approximately standard normal under $H_0: \text{skewness} = 0$.
+를 계산한 뒤 고차 누적률에 대한 추가 조정을 거친다. 최종 $Z_1$은 $H_0: \text{왜도} = 0$ 아래에서 근사적으로 표준정규이다.
 
-## Hypotheses
+## 가설
 
 $$
-H_0: \gamma_1 = 0 \quad (\text{population skewness is zero}), \qquad H_1: \gamma_1 \neq 0.
+H_0: \gamma_1 = 0 \quad (\text{모집단 왜도가 0이다}), \qquad H_1: \gamma_1 \neq 0.
 $$
 
-The two-sided $p$-value is $p = 2\,\mathcal{N}(-|Z_1|)$, where $\mathcal{N}$ is the standard normal CDF.
+양측 $p$값은 $p = 2\,\Phi(-|Z_1|)$이며 $\Phi$는 표준정규 CDF이다.
 
-### Code
+### 코드
 
 ```python
 import numpy as np
@@ -57,17 +57,28 @@ else:
     print("=> No strong evidence of non-zero skewness.")
 ```
 
-## Interpretation
+출력:
 
-For the lognormal data in the example, $g_1$ will be substantially positive (right skew), and the $p$-value will be very small, strongly rejecting the hypothesis of zero skewness. The skewness test is particularly useful when you suspect asymmetry but not necessarily other departures. It is one component of the D'Agostino $K^2$ omnibus test, which combines skewness and kurtosis tests.
+```text
+Sample size n = 300
+Sample skewness (Fisher's g1) = 2.2452
+D'Agostino skewness test: Z = 10.4038, p-value = 2.382e-25
+=> Evidence of non-zero skewness (departing from normality).
+```
 
-**Minimum sample size.** SciPy requires $n \geq 8$ for `skewtest`. The approximation improves with larger $n$; for $n < 20$ the $p$-value should be interpreted cautiously.
+## 해석
 
-## Exercises
+예제의 대수정규 자료에서 $g_1 = 2.245$로 크게 양수이고(오른쪽 치우침), $p$값이 $2.4 \times 10^{-25}$로 왜도가 0이라는 가설을 압도적으로 기각한다. 이론적 왜도는 $2.261$(연습문제 3 참조)이므로 표본값이 잘 맞는다.
 
-**Exercise 1.** Generate $n = 300$ observations from a standard normal distribution. Compute $g_1$ and the skewness test $p$-value. Do you expect to reject at $\alpha = 0.05$?
+왜도 검정은 비대칭이 의심되지만 다른 이탈은 꼭 의심되지 않을 때 특히 유용하다. 왜도 검정과 첨도 검정을 결합한 D'Agostino $K^2$ 옴니버스 검정의 한 구성요소이기도 하다.
 
-??? success "Solution to Exercise 1"
+**최소 표본크기.** SciPy의 `skewtest`는 $n \geq 8$을 요구한다. 근사는 $n$이 클수록 좋아지며, $n < 20$이면 $p$값을 조심스럽게 해석해야 한다.
+
+## 연습문제
+
+**연습문제 1.** 표준정규분포에서 관측값 $n = 300$개를 생성하라. $g_1$과 왜도 검정 $p$값을 계산하라. $\alpha = 0.05$에서 기각할 것으로 기대하는가?
+
+??? success "연습문제 1 풀이"
 
     ```python
     import numpy as np
@@ -83,13 +94,33 @@ For the lognormal data in the example, $g_1$ will be substantially positive (rig
     print(f"Z = {z:.4f}, p = {p:.4g}")
     ```
 
-    Since the data are truly normal, $g_1$ should be close to 0 and $p > 0.05$ in most realisations. We do not expect to reject, as the probability of a Type I error is only 5%. $\square$
+    출력:
+
+    ```text
+    g1 = 0.2933
+    Z = 2.0725, p = 0.03822
+    ```
+
+    !!! warning "이 표본은 제1종 오류를 보여준다"
+        자료를 정확히 표준정규에서 생성했는데도 $p = 0.038 < 0.05$이므로 **검정이 기각한다**. 이것이 바로 제1종 오류이다.
+
+    기대와 실제를 구분해야 한다. 자료가 참으로 정규이므로 우리는 기각하지 *않기를* 기대하고, 실제로 표본의 95%에서는 기각하지 않는다. 그러나 나머지 5%에서는 기각한다. 이 표본이 그 5%에 들어갔을 뿐이다.
+
+    $g_1 = 0.2933$은 절댓값으로는 작아 보이지만, $n = 300$에서 $g_1$의 표준오차가
+
+    $$
+    \sqrt{\frac{6(n-2)}{(n+1)(n+3)}} = \sqrt{\frac{6 \times 298}{301 \times 303}} = 0.1400
+    $$
+
+    에 불과하므로 $0.2933$은 2 표준오차가 넘는다. 표본이 커지면 작은 왜도도 통계적으로 유의해진다는 점을 잘 보여준다.
+
+    실무적 교훈: **$p$값 하나로 판정하지 말라.** 여기서 실질적으로 중요한 것은 $g_1 = 0.29$가 어떤 응용에서든 무시할 만한 크기라는 사실이다. 효과 크기를 함께 보고해야 하는 이유이다. $\square$
 
 ---
 
-**Exercise 2.** For $n = 200$ observations from a $\text{Uniform}(0, 1)$ distribution, compute the sample skewness and run the skewness test. The uniform distribution is symmetric but non-normal. Does the test reject?
+**연습문제 2.** $\text{Uniform}(0, 1)$ 분포에서 뽑은 관측값 $n = 200$개에 대해 표본왜도를 계산하고 왜도 검정을 수행하라. 균등분포는 대칭이지만 정규가 아니다. 검정이 기각하는가?
 
-??? success "Solution to Exercise 2"
+??? success "연습문제 2 풀이"
 
     ```python
     import numpy as np
@@ -100,36 +131,48 @@ For the lognormal data in the example, $g_1$ will be substantially positive (rig
 
     g1 = stats.skew(x, bias=False)
     z, p = stats.skewtest(x)
-    print(f"g1 = {g1:.4f}, p = {p:.4g}")
+    print(f"g1 = {g1:.4f}, Z = {z:.4f}, p = {p:.4g}")
     ```
 
-    The uniform distribution has population skewness $\gamma_1 = 0$, so the skewness test should *not* reject (large $p$-value). This illustrates a limitation: the skewness test can miss non-normal distributions that happen to be symmetric (the uniform is platykurtic but symmetric). A kurtosis test or omnibus test would detect the departure. $\square$
+    출력:
+
+    ```text
+    g1 = -0.1735, Z = -1.0217, p = 0.3069
+    ```
+
+    균등분포의 모집단 왜도는 $\gamma_1 = 0$이므로 왜도 검정은 기각하지 *않는다*($p = 0.307$).
+
+    이는 한계를 보여준다. 왜도 검정은 우연히 대칭인 비정규 분포를 놓칠 수 있다. $\text{Uniform}(0,1)$은 대칭이지만 초과첨도가 $-1.2$인 저첨분포이다. 첨도 검정이나 옴니버스 검정이었다면 이 이탈을 탐지했을 것이다.
+
+    확인해 보면 같은 자료에서 `stats.kurtosistest(x)`는 $Z = -9.78$, $p = 1.4 \times 10^{-22}$로 압도적으로 기각한다. 이탈의 유형에 맞는 검정을 골라야 한다는 교훈이다. $\square$
 
 ---
 
-**Exercise 3.** Show that for a $\text{Lognormal}(\mu, \sigma^2)$ distribution the population skewness is $(e^{\sigma^2} + 2)\sqrt{e^{\sigma^2} - 1}$. Compute the value for $\sigma = 0.6$.
+**연습문제 3.** $\text{Lognormal}(\mu, \sigma^2)$ 분포의 모집단 왜도가 $(e^{\sigma^2} + 2)\sqrt{e^{\sigma^2} - 1}$임을 보여라. $\sigma = 0.6$에 대한 값을 계산하라.
 
-??? success "Solution to Exercise 3"
+??? success "연습문제 3 풀이"
 
-    The moment-generating properties of the lognormal give $\mathbb{E}[X^k] = e^{k\mu + k^2\sigma^2/2}$. After computing the first three central moments, the skewness simplifies to
+    대수정규의 적률 성질에서 $\mathbb{E}[X^k] = e^{k\mu + k^2\sigma^2/2}$이다. 처음 세 중심적률을 계산하면 왜도가 다음으로 정리된다.
 
     $$
     \gamma_1 = (e^{\sigma^2} + 2)\sqrt{e^{\sigma^2} - 1}.
     $$
 
-    For $\sigma = 0.6$: $e^{0.36} = 1.4333$, so $e^{\sigma^2} - 1 = 0.4333$ and $\sqrt{0.4333} = 0.6583$. Then
+    왜도는 척도불변이므로 $\mu$에 의존하지 않고 $\sigma$에만 의존한다는 점에 주목하라.
+
+    $\sigma = 0.6$이면 $e^{0.36} = 1.4333$이므로 $e^{\sigma^2} - 1 = 0.4333$이고 $\sqrt{0.4333} = 0.6583$이다. 따라서
 
     $$
     \gamma_1 = (1.4333 + 2)(0.6583) = 3.4333 \times 0.6583 \approx 2.261.
     $$
 
-    This large positive skewness explains why the skewness test rejects decisively for lognormal samples. $\square$
+    이 큰 양의 왜도 때문에 대수정규 표본에서 왜도 검정이 단호하게 기각한다. 실제로 본문의 시연에서 표본값 $g_1 = 2.245$가 이 이론값에 가깝게 나왔다. $\square$
 
 ---
 
-**Exercise 4.** Run a simulation with 5,000 replicates to estimate the power of the skewness test at $\alpha = 0.05$ for $n = 100$ observations from $\text{Lognormal}(0, 0.4)$.
+**연습문제 4.** $\text{Lognormal}(0, 0.4)$에서 뽑은 관측값 $n = 100$개에 대해 $\alpha = 0.05$에서 왜도 검정의 검정력을 추정하는 모의실험을 5,000회 반복으로 수행하라.
 
-??? success "Solution to Exercise 4"
+??? success "연습문제 4 풀이"
 
     ```python
     import numpy as np
@@ -149,30 +192,46 @@ For the lognormal data in the example, $g_1$ will be substantially positive (rig
     print(f"Empirical power: {power:.4f}")
     ```
 
-    The power will typically be between 0.7 and 0.9 for this combination of sample size and alternative distribution. The lognormal with $\sigma = 0.4$ has moderate skewness ($\gamma_1 \approx 1.32$), and $n = 100$ provides reasonable power to detect it. $\square$
+    출력:
+
+    ```text
+    Empirical power: 0.9770
+    ```
+
+    검정력이 $0.977$로 매우 높다. $\sigma = 0.4$인 대수정규의 왜도는
+
+    $$
+    \gamma_1 = (e^{0.16} + 2)\sqrt{e^{0.16} - 1} = 3.1735 \times \sqrt{0.1735} = 1.322
+    $$
+
+    로 중간 정도인데, $n = 100$에서 $g_1$의 표준오차가 약 $\sqrt{6/100} = 0.245$이므로 신호 대 잡음비가 $1.322/0.245 \approx 5.4$에 이른다. 이만한 비율이면 사실상 언제나 탐지된다.
+
+    (몬테카를로 오차는 $\sqrt{0.977 \times 0.023 / 5000} = 0.0021$이다.) $\square$
 
 ---
 
-**Exercise 5.** Prove that $\text{Var}(g_1) \approx 6/n$ for large $n$, starting from the exact formula $\text{Var}(g_1) = 6(n-2)/[(n+1)(n+3)]$.
+**연습문제 5.** 정확한 공식 $\text{Var}(g_1) = 6(n-2)/[(n+1)(n+3)]$에서 출발하여 큰 $n$에 대해 $\text{Var}(g_1) \approx 6/n$임을 증명하라.
 
-??? success "Solution to Exercise 5"
+??? success "연습문제 5 풀이"
 
-    Starting from
-
-    $$
-    \text{Var}(g_1) = \frac{6(n-2)}{(n+1)(n+3)},
-    $$
-
-    divide numerator and denominator by $n^2$:
+    다음에서 출발한다.
 
     $$
-    \text{Var}(g_1) = \frac{6(1 - 2/n)}{(1 + 1/n)(1 + 3/n) \cdot n} \cdot \frac{n}{n} = \frac{6\,(1 - 2/n)}{n\,(1 + 1/n)(1 + 3/n)}.
+    \text{Var}(g_1) = \frac{6(n-2)}{(n+1)(n+3)}.
     $$
 
-    As $n \to \infty$, $(1 - 2/n) \to 1$, $(1 + 1/n) \to 1$, and $(1 + 3/n) \to 1$, giving
+    분자와 분모를 각각 $n$과 $n^2$으로 나누면
+
+    $$
+    \text{Var}(g_1) = \frac{6\,(1 - 2/n)}{n\,(1 + 1/n)(1 + 3/n)}.
+    $$
+
+    $n \to \infty$일 때 $(1 - 2/n) \to 1$, $(1 + 1/n) \to 1$, $(1 + 3/n) \to 1$이므로
 
     $$
     \text{Var}(g_1) \to \frac{6}{n}.
     $$
 
-    This shows that the standard error of $g_1$ is of order $1/\sqrt{n}$, and larger samples make it easier to detect departures from zero skewness. $\square$
+    따라서 $g_1$의 표준오차는 $\sqrt{6/n}$ 정도, 곧 $1/\sqrt{n}$ 차수이며, 표본이 클수록 0이 아닌 왜도를 탐지하기 쉬워진다.
+
+    수렴 속도를 보자. $n = 100$에서 정확한 값은 $\sqrt{6 \times 98/(101 \times 103)} = 0.2377$이고 근사값은 $\sqrt{6/100} = 0.2449$로 3% 차이이다. $n = 1000$에서는 각각 $0.07723$과 $0.07746$으로 0.3% 차이이다. $\square$

@@ -1,26 +1,25 @@
-# Skewness and Kurtosis
+# 왜도와 첨도
 
+기술통계는 분포의 모양을 수량화하고 그것이 정규분포와 얼마나 닮았는지 평가한다. 정규성을 평가하는 두 핵심 측도가 **왜도**와 **첨도**이다. 이 지표들은 각각 자료 분포의 비대칭성과 꼬리의 두꺼움을 기술한다.
 
-Descriptive statistics quantify the shape of a distribution and assess how closely it resembles a normal distribution. Two key measures for evaluating normality are **skewness** and **kurtosis**. These metrics describe the asymmetry and peakedness of the data distribution, respectively.
+## 왜도
 
-## Skewness
+**왜도**는 분포의 비대칭성을 잰다. 완전한 정규분포에서 왜도는 0이다. 양의 왜도는 오른쪽 꼬리가 길다는(자료가 오른쪽으로 치우쳤다는) 뜻이고, 음의 왜도는 왼쪽 꼬리가 길다는 뜻이다.
 
-**Skewness** measures the asymmetry of the distribution. For a perfectly normal distribution, skewness is 0. A positive skewness indicates a long right tail (data skewed to the right), while a negative skewness indicates a long left tail (data skewed to the left).
-
-The formula for skewness is:
+왜도의 공식은
 
 $$
 \text{Skewness} = \frac{1}{n} \sum_{i=1}^{n} \left( \frac{x_i - \bar{x}}{s} \right)^3
 $$
 
-where
+여기서
 
-- $n$ is the number of data points,
-- $x_i$ is each data point,
-- $\bar{x}$ is the sample mean,
-- $s$ is the sample standard deviation.
+- $n$은 자료점의 개수,
+- $x_i$는 각 자료점,
+- $\bar{x}$는 표본평균,
+- $s$는 표본표준편차이다.
 
-If the skewness is close to zero, the population distribution will likely be symmetric, indicating normality. Significant deviations from zero suggest non-normality.
+왜도가 0에 가까우면 모집단 분포가 대칭일 가능성이 높아 정규성을 시사한다. 0에서 크게 벗어나면 비정규성을 시사한다.
 
 ```python
 import numpy as np
@@ -37,25 +36,27 @@ skewness_value = stats.skew(data)
 print(f"Skewness: {skewness_value:.4f}")
 ```
 
-## Kurtosis
+이 정규 자료의 왜도는 $0.0339$로 0에 매우 가깝다. 주석 처리된 지수 자료로 바꿔 실행하면 왜도가 $2.0526$이 되어(이론값 2) 강한 오른쪽 치우침을 보여준다.
 
-**Kurtosis** describes the "tailedness" of the distribution. A normal distribution has a kurtosis value of 3 (also called **mesokurtic**). Kurtosis values above 3 indicate a distribution with heavy tails (**leptokurtic**), while values below 3 indicate lighter tails (**platykurtic**).
+## 첨도
 
-The formula for kurtosis is:
+**첨도**는 분포의 "꼬리 두꺼움"을 기술한다. 정규분포의 첨도 값은 3이다(**중첨**이라고도 한다). 첨도가 3보다 크면 꼬리가 두꺼운 분포(**고첨**)이고, 3보다 작으면 꼬리가 얇은 분포(**저첨**)이다.
+
+첨도의 공식은
 
 $$
 \text{Kurtosis} = \frac{1}{n} \sum_{i=1}^{n} \left( \frac{x_i - \bar{x}}{s} \right)^4
 $$
 
-and the formula for **excess kurtosis** is:
+**초과첨도**의 공식은
 
 $$
 \text{Excess Kurtosis} = \frac{1}{n} \sum_{i=1}^{n} \left( \frac{x_i - \bar{x}}{s} \right)^4 - 3
 $$
 
-The subtraction of 3 ensures that a normal distribution has an excess kurtosis of 0 (for easier comparison). The `scipy.stats.kurtosis` function computes this **excess kurtosis**, not the raw kurtosis.
+3을 빼면 정규분포의 초과첨도가 0이 되어 비교하기 쉬워진다. `scipy.stats.kurtosis` 함수는 원래의 첨도가 아니라 이 **초과첨도**를 계산한다.
 
-A kurtosis value (computed by `scipy.stats.kurtosis`) near zero suggests a normal distribution. Larger values indicate heavier tails, while smaller values suggest lighter tails than normal.
+(`scipy.stats.kurtosis`로 계산한) 첨도 값이 0에 가까우면 정규분포를 시사한다. 값이 크면 꼬리가 두껍고, 작으면 정규보다 꼬리가 얇다는 뜻이다.
 
 ```python
 import numpy as np
@@ -76,48 +77,70 @@ kurtosis_value = stats.kurtosis(data)
 print(f"Kurtosis: {kurtosis_value:.4}")
 ```
 
-## Exercises
+출력:
 
-**Exercise 1.**
-Compute the sample skewness and excess kurtosis for the data: $\{1, 2, 2, 3, 3, 3, 4, 4, 5, 100\}$. What does the result tell you?
+```text
+Skewness: 2.0526
+Kurtosis: 6.476
+```
 
-??? success "Solution to Exercise 1"
-    $\bar{x} = 12.7$, $n = 10$. The single outlier (100) will dominate the higher moments.
+지수분포의 이론값은 왜도 2, 초과첨도 6이며, 표본값이 그에 가깝다.
 
-    The sample skewness will be large and positive (the outlier pulls the right tail), and the excess kurtosis will be very large (the outlier creates an extreme fourth-moment contribution).
+## 연습문제
 
-    Computing: The skewness is approximately $2.87$ and the excess kurtosis is approximately $8.9$. These values indicate severe right-skewness and extremely heavy tails. A single outlier can dramatically inflate both measures, illustrating their sensitivity to extreme values.
+**연습문제 1.**
+자료 $\{1, 2, 2, 3, 3, 3, 4, 4, 5, 100\}$의 표본왜도와 초과첨도를 계산하라. 결과는 무엇을 말해 주는가?
+
+??? success "연습문제 1 풀이"
+    $\bar{x} = 12.7$, $n = 10$이다. 이상점 하나(100)가 고차 적률을 지배할 것이다.
+
+    표본왜도는 크고 양수이며(이상점이 오른쪽 꼬리를 끌어당긴다) 초과첨도도 매우 크다(이상점이 4차 적률에 극단적으로 기여한다).
+
+    `scipy.stats`로 계산하면
+
+    ```python
+    import numpy as np
+    from scipy import stats
+    d = np.array([1, 2, 2, 3, 3, 3, 4, 4, 5, 100.0])
+    print(stats.skew(d))       # 2.6596
+    print(stats.kurtosis(d))   # 5.0891
+    ```
+
+    왜도 $2.6596$, 초과첨도 $5.0891$이다. 심한 오른쪽 치우침과 매우 두꺼운 꼬리를 나타낸다. 이상점 하나가 두 측도를 극적으로 부풀릴 수 있음을 보여주며, 이 통계량들이 극단값에 얼마나 민감한지 드러낸다.
+
+    !!! note "표본왜도에는 상한이 있다"
+        관측값이 $n$개인 표본의 왜도 절댓값은 $(n-2)/\sqrt{n-1}$을 넘을 수 없다. $n = 10$이면 이 상한이 $8/3 = 2.667$이다. 여기서 얻은 $2.6596$은 그 상한에 거의 닿아 있으며, 이상점 하나가 나머지 아홉 개를 완전히 지배하고 있다는 뜻이다.
 
 ---
 
-**Exercise 2.**
-For the standard normal distribution, state the theoretical values of skewness and kurtosis (both regular and excess). Why is excess kurtosis often preferred?
+**연습문제 2.**
+표준정규분포의 왜도와 (보통의 것과 초과의) 첨도의 이론값을 서술하라. 초과첨도를 더 자주 쓰는 이유는 무엇인가?
 
-??? success "Solution to Exercise 2"
-    For $N(0,1)$: skewness $= 0$ (symmetric), kurtosis $= 3$, excess kurtosis $= 3 - 3 = 0$.
+??? success "연습문제 2 풀이"
+    $N(0,1)$에 대해: 왜도 $= 0$(대칭), 첨도 $= 3$, 초과첨도 $= 3 - 3 = 0$이다.
 
-    Excess kurtosis subtracts 3 (the normal benchmark) so that the normal distribution has excess kurtosis of zero. This makes interpretation easier: positive excess kurtosis (leptokurtic) means heavier tails than normal; negative (platykurtic) means lighter tails. Without the adjustment, a kurtosis of 4 could be misinterpreted without context.
-
----
-
-**Exercise 3.**
-The uniform distribution has excess kurtosis $= -1.2$. Explain what this means in terms of tail behavior compared to the normal.
-
-??? success "Solution to Exercise 3"
-    Negative excess kurtosis means the uniform distribution has **lighter tails** (and a flatter peak) than the normal distribution. The uniform distribution is bounded -- it has no tails at all beyond its support -- so extreme values are impossible.
-
-    Kurtosis is sometimes misinterpreted as "peakedness," but it is primarily a measure of tail heaviness. The uniform distribution has the lightest possible tails (completely bounded), which produces strongly negative excess kurtosis. Any observation from a uniform distribution lies within a fixed range, whereas normal observations can theoretically be any real number.
+    초과첨도는 정규분포의 기준값 3을 빼서 정규분포의 초과첨도가 0이 되게 한다. 그러면 해석이 쉬워진다. 양의 초과첨도(고첨)는 정규보다 두꺼운 꼬리를, 음의 값(저첨)은 얇은 꼬리를 뜻한다. 이 조정이 없으면 첨도 4가 어떤 의미인지 맥락 없이는 알기 어렵다.
 
 ---
 
-**Exercise 4.**
-A financial analyst reports that daily stock returns have excess kurtosis of 5. Interpret this in the context of risk management.
+**연습문제 3.**
+균등분포의 초과첨도는 $-1.2$이다. 정규분포와 비교한 꼬리 거동의 관점에서 이것이 무엇을 뜻하는지 설명하라.
 
-??? success "Solution to Exercise 4"
-    Excess kurtosis of 5 means the return distribution has much heavier tails than the normal distribution. Specifically, extreme returns (both large gains and large losses) occur far more frequently than a normal model would predict.
+??? success "연습문제 3 풀이"
+    음의 초과첨도는 균등분포가 정규분포보다 **얇은 꼬리**(그리고 평평한 봉우리)를 갖는다는 뜻이다. 균등분포는 유계이므로 지지집합 바깥에는 꼬리가 아예 없어 극단값이 불가능하다.
 
-    For risk management, this has critical implications:
+    첨도를 "뾰족함"으로 잘못 해석하는 일이 있지만, 첨도는 주로 꼬리의 두꺼움을 재는 측도이다. 균등분포는 (완전히 유계이므로) 가능한 가장 얇은 꼬리를 가지며, 그래서 강한 음의 초과첨도가 나온다. 균등분포의 관측값은 고정된 범위 안에 놓이지만 정규분포의 관측값은 이론적으로 어떤 실수도 될 수 있다.
 
-    - **VaR underestimation:** A normal-based 99% VaR (1% tail probability) will underestimate potential losses because the actual 1st percentile is more extreme.
-    - **More frequent tail events:** Events that a normal model considers once-in-a-century may occur once-in-a-decade with kurtosis = 8 (kurtosis + 3).
-    - **Model choice:** Use heavy-tailed distributions (Student's $t$, generalized Pareto) for risk models instead of the normal.
+---
+
+**연습문제 4.**
+한 금융 분석가가 일간 주식 수익률의 초과첨도가 5라고 보고했다. 위험 관리의 맥락에서 이를 해석하라.
+
+??? success "연습문제 4 풀이"
+    초과첨도 5는 수익률 분포의 꼬리가 정규분포보다 훨씬 두껍다는 뜻이다. 구체적으로 극단적 수익률(큰 이익과 큰 손실 모두)이 정규 모형의 예측보다 훨씬 자주 일어난다.
+
+    위험 관리에 대한 결정적 함의:
+
+    - **VaR 과소평가:** 실제 1번째 백분위수가 더 극단적이므로 정규 기반 99% VaR(1% 꼬리 확률)가 잠재 손실을 과소평가한다.
+    - **더 잦은 꼬리 사건:** 정규 모형이 100년에 한 번으로 보는 사건이 초과첨도가 5(첨도 8)인 분포에서는 10년에 한 번 일어날 수 있다.
+    - **모형 선택:** 위험 모형에 정규분포 대신 꼬리가 두꺼운 분포(Student $t$, 일반화 Pareto)를 쓴다.

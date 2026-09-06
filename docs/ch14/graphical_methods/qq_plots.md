@@ -1,11 +1,10 @@
-# Q-Q Plots (Quantile-Quantile Plots)
+# Q-Q 그림 (분위수-분위수 그림)
 
+## 개요
 
-## Overview
+**Q-Q 그림**은 자료의 분위수를 이론적 정규분포의 분위수와 비교한다. 자료가 정규분포를 따르면 Q-Q 그림의 점들이 직선 대각선을 따라 놓여야 한다. 이 선에서 벗어나면 정규성에서 이탈했음을 나타낸다.
 
-A **Q-Q plot** compares the quantiles of the dataset with the quantiles of a theoretical normal distribution. If the data is normally distributed, the points on the Q-Q plot should fall along a straight diagonal line. Deviations from this line indicate departures from normality.
-
-## Q-Q Plot with Normal Distribution
+## 정규분포와의 Q-Q 그림
 
 ```python
 import numpy as np
@@ -41,9 +40,9 @@ if __name__ == "__main__":
     plot_qq_with_custom_spines(sample_data, dist="norm")
 ```
 
-When the data is normally distributed, the points lie closely along the diagonal reference line.
+자료가 정규분포를 따를 때 점들이 대각 기준선에 가깝게 놓인다.
 
-## Q-Q Plot with Exponential Distribution
+## 지수분포와의 Q-Q 그림
 
 ```python
 import numpy as np
@@ -69,9 +68,9 @@ if __name__ == "__main__":
     plot_qq_with_custom_spines(sample_data, dist="expon")
 ```
 
-When comparing exponential data against its own theoretical distribution, the points align well. However, comparing exponential data against a normal distribution would show strong curvature, revealing the departure from normality.
+지수 자료를 자기 자신의 이론적 분포와 비교하면 점들이 잘 정렬된다. 그러나 같은 자료를 **정규분포**와 비교하면 강한 곡률이 나타나 정규성에서의 이탈이 드러난다. `dist="norm"`으로 바꿔 실행해 보면 그 차이를 바로 확인할 수 있다.
 
-## Q-Q Plot with Chi-Square Distribution
+## 카이제곱분포와의 Q-Q 그림
 
 ```python
 import numpy as np
@@ -97,55 +96,54 @@ if __name__ == "__main__":
     plot_qq_with_custom_spines(sample_data, dist="chi2", sparams=(10,))
 ```
 
-When comparing chi-square data against its own theoretical distribution (with matching degrees of freedom), the Q-Q plot shows a good fit. Comparing against a normal Q-Q plot would reveal right-skew through upward curvature in the tails.
+카이제곱 자료를 (자유도가 일치하는) 자기 자신의 이론적 분포와 비교하면 Q-Q 그림이 잘 맞는다. 정규 Q-Q 그림과 비교하면 꼬리에서 위로 휘는 모습으로 오른쪽 치우침이 드러난다.
 
+## 연습문제
 
-## Exercises
+**연습문제 1.**
+정규성 평가를 위한 Q-Q 그림의 구성을 기술하라. $x$축과 $y$축은 각각 무엇을 나타내는가?
 
-**Exercise 1.**
-Describe the construction of a Q-Q plot for assessing normality. What do the x-axis and y-axis represent?
+??? success "연습문제 1 풀이"
+    정규 Q-Q 그림을 만드는 절차:
 
-??? success "Solution to Exercise 1"
-    To construct a normal Q-Q plot:
+    1. 자료를 정렬한다: $x_{(1)} \leq x_{(2)} \leq \dots \leq x_{(n)}$.
+    2. 이론적 분위수를 계산한다: $q_i = \Phi^{-1}((i - 0.5)/n)$. 여기서 $\Phi^{-1}$은 표준정규 분위수함수이다.
+    3. 점 $(q_i, x_{(i)})$를 그린다.
 
-    1. Sort the data: $x_{(1)} \leq x_{(2)} \leq \dots \leq x_{(n)}$.
-    2. Compute theoretical quantiles: $q_i = \mathcal{N}^{-1}((i - 0.5)/n)$, where $\mathcal{N}^{-1}$ is the standard normal quantile function.
-    3. Plot the points $(q_i, x_{(i)})$.
-
-    The **x-axis** shows the theoretical normal quantiles (what the data should look like if normal). The **y-axis** shows the actual ordered data values. If the data are normal, the points fall approximately on a straight line with slope $\sigma$ and intercept $\mu$.
-
----
-
-**Exercise 2.**
-On a Q-Q plot, describe the pattern you would see for (a) right-skewed data, (b) heavy-tailed data, and (c) light-tailed data.
-
-??? success "Solution to Exercise 2"
-    **(a) Right-skewed:** The Q-Q plot curves upward at the right end (upper quantiles are larger than expected) and may curve slightly downward at the left end. The overall shape is concave-up.
-
-    **(b) Heavy-tailed (leptokurtic):** Both tails deviate from the line -- the left tail curves below the line and the right tail curves above it, forming an S-shape. Extreme values are more extreme than the normal predicts.
-
-    **(c) Light-tailed (platykurtic):** The opposite S-shape -- the left tail curves above the line and the right tail curves below it. Extreme values are less extreme than normal.
+    **$x$축**은 이론적 정규분위수(자료가 정규라면 어떤 모습이어야 하는지)를 보여준다. **$y$축**은 실제 정렬된 자료값을 보여준다. 자료가 정규이면 점들이 기울기 $\sigma$, 절편 $\mu$인 직선 위에 대략 놓인다.
 
 ---
 
-**Exercise 3.**
-A Q-Q plot shows points lying almost exactly on a line in the center but with 3 points far above the line at the upper right. What does this suggest?
+**연습문제 2.**
+Q-Q 그림에서 (a) 오른쪽으로 치우친 자료, (b) 꼬리가 두꺼운 자료, (c) 꼬리가 얇은 자료가 어떤 패턴을 보이는지 기술하라.
 
-??? success "Solution to Exercise 3"
-    The central linearity suggests the bulk of the data is approximately normal. The 3 points far above the line at the upper right are **outliers** -- they are much larger than what a normal distribution would predict.
+??? success "연습문제 2 풀이"
+    **(a) 오른쪽 치우침:** 양 끝이 모두 기준선 **위로** 올라간다. 오른쪽 꼬리에서는 표본분위수가 기대보다 크고(꼬리가 길다), 왼쪽 꼬리에서는 기대보다 덜 음수이다(꼬리가 짧다). 전체적으로 아래로 볼록한(convex) 모양이다.
 
-    This pattern is common in data with a few contaminating observations from a different process (e.g., data entry errors, measurement anomalies, or genuinely rare events from a heavy-tailed distribution).
+    **(b) 두꺼운 꼬리(고첨):** 양쪽 꼬리가 모두 선에서 벗어난다. 왼쪽 꼬리는 선 아래로, 오른쪽 꼬리는 선 위로 휘어 S자 모양을 이룬다. 극단값이 정규분포의 예측보다 더 극단적이다.
 
-    Action: investigate the outliers for data quality issues. If they are valid observations, consider robust methods (trimmed mean, M-estimators) or acknowledge that the normal model fits the core distribution but not the tails.
+    **(c) 얇은 꼬리(저첨):** 반대 방향의 S자 모양이다. 왼쪽 꼬리가 선 위로, 오른쪽 꼬리가 선 아래로 휜다. 극단값이 정규보다 덜 극단적이다.
 
 ---
 
-**Exercise 4.**
-Explain the difference between a Q-Q plot and a P-P (probability-probability) plot. When is each preferred?
+**연습문제 3.**
+어떤 Q-Q 그림에서 점들이 중앙에서는 거의 정확히 직선 위에 놓이는데 오른쪽 위에서 세 점이 선보다 훨씬 위에 있다. 이는 무엇을 시사하는가?
 
-??? success "Solution to Exercise 4"
-    A **Q-Q plot** compares quantiles: it plots ordered data against theoretical quantiles. It is sensitive to departures in the tails (tail quantiles are spread far apart on the axis).
+??? success "연습문제 3 풀이"
+    중앙의 선형성은 자료의 대부분이 근사적으로 정규임을 시사한다. 오른쪽 위에서 선보다 훨씬 위에 있는 세 점은 **이상점**이다. 정규분포가 예측하는 것보다 훨씬 큰 값들이다.
 
-    A **P-P plot** compares cumulative probabilities: it plots $F_n(x_{(i)})$ against $F_0(x_{(i)})$. Points cluster near (0,0) and (1,1), with the most resolution in the center of the distribution.
+    이 패턴은 다른 과정에서 온 소수의 오염 관측값이 섞였을 때 흔하다(자료 입력 오류, 측정 이상, 또는 꼬리가 두꺼운 분포에서 나온 진짜로 드문 사건).
 
-    **Q-Q plots are preferred** for assessing normality because tail behavior is critical for inference, and Q-Q plots magnify tail departures. **P-P plots are preferred** when the center of the distribution matters more (e.g., calibration assessment) or when comparing distributions with different tail behavior.
+    조치: 자료 품질 문제가 있는지 이상점을 조사한다. 타당한 관측값이라면 로버스트 방법(절사평균, M 추정량)을 고려하거나, 정규 모형이 분포의 중심에는 맞지만 꼬리에는 맞지 않는다는 점을 인정한다.
+
+---
+
+**연습문제 4.**
+Q-Q 그림과 P-P(확률-확률) 그림의 차이를 설명하라. 각각은 언제 선호되는가?
+
+??? success "연습문제 4 풀이"
+    **Q-Q 그림**은 분위수를 비교한다. 정렬된 자료를 이론적 분위수에 대해 그린다. 축에서 꼬리 분위수가 멀리 벌어지므로 꼬리에서의 이탈에 민감하다.
+
+    **P-P 그림**은 누적확률을 비교한다. $F_n(x_{(i)})$를 $F_0(x_{(i)})$에 대해 그린다. 점들이 (0,0)과 (1,1) 근처에 몰리며 분포 중앙에서 해상도가 가장 높다.
+
+    추론에 꼬리 거동이 결정적이고 Q-Q 그림이 꼬리의 이탈을 확대해 보여 주므로, 정규성 평가에는 **Q-Q 그림이 선호된다**. 분포의 중앙이 더 중요하거나(예: 보정 평가) 꼬리 거동이 다른 분포들을 비교할 때는 **P-P 그림이 선호된다**.

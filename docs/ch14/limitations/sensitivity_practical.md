@@ -1,66 +1,66 @@
-# Sensitivity vs Practical Significance
+# 민감도와 실질적 유의성
 
-## The Distinction
+## 구분
 
-A normality test may reject the null hypothesis and still leave the practitioner with a perfectly valid analysis. The key insight is that **statistical significance of non-normality** and **practical significance of non-normality** are different things. A statistically significant departure means that the data deviate detectably from a normal distribution. A practically significant departure means that the deviation is large enough to meaningfully affect the validity of a downstream inferential procedure such as a $t$-test, ANOVA, or confidence interval.
+정규성 검정이 귀무가설을 기각해도 분석은 완벽하게 타당할 수 있다. 핵심은 **비정규성의 통계적 유의성**과 **비정규성의 실질적 유의성**이 서로 다른 것이라는 점이다. 통계적으로 유의한 이탈은 자료가 정규분포에서 탐지 가능하게 벗어났다는 뜻이다. 실질적으로 유의한 이탈은 그 벗어남이 $t$ 검정, 분산분석, 신뢰구간 같은 후속 추론 절차의 타당성에 의미 있게 영향을 줄 만큼 크다는 뜻이다.
 
-This distinction mirrors the broader distinction between statistical and practical significance in hypothesis testing, but it carries special weight in the context of normality testing because the normality check is itself a preliminary step.
+이 구분은 가설검정에서 통계적 유의성과 실질적 유의성을 구분하는 더 넓은 논의를 그대로 반영하지만, 정규성 확인 자체가 예비 단계라는 점에서 정규성 검정의 맥락에서는 특별한 무게를 갖는다.
 
-## Robustness of Parametric Procedures
+## 모수적 절차의 로버스트성
 
-A statistical procedure is said to be **robust** to violations of an assumption if its performance (Type I error rate, coverage probability, power) remains close to the nominal values even when the assumption is violated. Different procedures have very different levels of robustness to non-normality.
+어떤 통계 절차가 가정이 위배되어도 성능(제1종 오류율, 포함확률, 검정력)이 명목값에 가깝게 유지되면 그 절차가 그 가정 위배에 **로버스트**하다고 한다. 절차마다 비정규성에 대한 로버스트성의 정도가 크게 다르다.
 
-### Tests for Means
+### 평균에 대한 검정
 
-The one-sample $t$-test is remarkably robust to non-normality, particularly for symmetric distributions. Simulation studies show that, even for samples as small as $n = 15$, the actual Type I error rate of the $t$-test remains close to $\alpha = 0.05$ when the underlying distribution is symmetric with moderate tails. The reason is that the sampling distribution of $\bar{X}$ converges to normality via the CLT, and the $t$-statistic inherits this robustness.
+일표본 $t$ 검정은 비정규성에 놀랄 만큼 로버스트하며, 특히 대칭분포에서 그렇다. 모의실험 연구에 따르면 $n = 15$처럼 작은 표본에서도 바탕 분포가 중간 정도의 꼬리를 갖는 대칭분포라면 $t$ 검정의 실제 제1종 오류율이 $\alpha = 0.05$에 가깝게 유지된다. $\bar{X}$의 표집분포가 중심극한정리를 통해 정규로 수렴하고 $t$ 통계량이 이 로버스트성을 물려받기 때문이다.
 
-For skewed distributions, the $t$-test is less robust. The actual Type I error rate can exceed $\alpha$ for small $n$ when the population is strongly skewed. However, even in this case, the distortion is typically modest (e.g., actual $\alpha$ of 0.07 when nominal $\alpha$ is 0.05) and decreases as $n$ grows.
+치우친 분포에서는 $t$ 검정이 덜 로버스트하다. 모집단이 강하게 치우쳐 있으면 작은 $n$에서 실제 제1종 오류율이 $\alpha$를 넘을 수 있다. 다만 이 경우에도 왜곡이 대체로 크지 않고(예: 명목 $\alpha$가 0.05일 때 실제 0.07) $n$이 커지면 줄어든다.
 
-### Tests for Variances
+### 분산에 대한 검정
 
-Tests involving variances are far more sensitive to non-normality. The chi-squared test for a single variance and the $F$-test for comparing two variances both rely on the assumption that
+분산에 관한 검정은 비정규성에 훨씬 민감하다. 단일 분산의 카이제곱 검정과 두 분산을 비교하는 $F$ 검정은 모두 다음 가정에 기댄다.
 
 $$
 \frac{(n-1)S^2}{\sigma^2} \sim \chi^2_{n-1}
 $$
 
-This distributional result holds exactly only under normality. When the population has heavy tails, the actual distribution of $(n-1)S^2/\sigma^2$ has heavier tails than the chi-squared, leading to substantially inflated Type I error rates. A non-normality that barely affects the $t$-test can severely distort the $F$-test.
+이 분포 결과는 정규성 아래에서만 정확히 성립한다. 모집단의 꼬리가 두꺼우면 $(n-1)S^2/\sigma^2$의 실제 분포가 카이제곱보다 두꺼운 꼬리를 갖게 되어 제1종 오류율이 크게 부풀려진다. $t$ 검정에는 거의 영향을 주지 않는 비정규성이 $F$ 검정은 심각하게 왜곡할 수 있다.
 
-??? warning "The F-Test for Variances Is Not Robust"
-    The $F$-test for comparing two population variances is one of the least robust classical procedures. Even mild non-normality can cause the actual Type I error rate to be two or three times the nominal $\alpha$. For this reason, the Levene or Brown-Forsythe test is preferred in practice.
+??? warning "분산의 F 검정은 로버스트하지 않다"
+    두 모분산을 비교하는 $F$ 검정은 고전적 절차 가운데 가장 로버스트하지 않은 축에 든다. 가벼운 비정규성만으로도 실제 제1종 오류율이 명목 $\alpha$의 두세 배가 될 수 있다. 그래서 실무에서는 Levene 검정이나 Brown-Forsythe 검정이 선호된다.
 
-### ANOVA
+### 분산분석
 
-One-way ANOVA is moderately robust to non-normality when the group sizes are equal and the distributions have similar shapes. The $F$-statistic is based on a ratio of mean squares, and the CLT helps stabilize the numerator and denominator when $n$ is not too small. Unequal group sizes combined with non-normality and heteroscedasticity create the most problematic scenario.
+일원배치 분산분석은 집단 크기가 같고 분포의 모양이 비슷하면 비정규성에 중간 정도로 로버스트하다. $F$ 통계량은 평균제곱의 비에 기초하며, $n$이 너무 작지 않으면 중심극한정리가 분자와 분모를 안정시킨다. 집단 크기가 다르고 비정규성과 이분산이 겹치는 상황이 가장 문제가 된다.
 
-## When Do Departures Matter?
+## 이탈은 언제 문제가 되는가
 
-The practical impact of non-normality depends on the combination of three factors:
+비정규성의 실질적 영향은 세 요인의 조합에 달려 있다.
 
-1. **Type of departure.** Skewness tends to be more problematic than symmetric heavy tails for mean-based tests, because skewness shifts the center of the sampling distribution. Heavy tails primarily affect variance-based procedures.
+1. **이탈의 유형.** 평균 기반 검정에서는 대칭인 두꺼운 꼬리보다 치우침이 더 문제가 된다. 치우침이 표집분포의 중심을 이동시키기 때문이다. 두꺼운 꼬리는 주로 분산 기반 절차에 영향을 준다.
 
-2. **Sample size.** The CLT provides increasing protection as $n$ grows, but the rate of convergence depends on the severity of the departure. For the $t$-test, $n \geq 30$ is often sufficient for symmetric heavy-tailed distributions, while skewed distributions may require $n \geq 100$.
+2. **표본크기.** $n$이 커질수록 중심극한정리의 보호가 커지지만, 수렴 속도는 이탈의 심각도에 달려 있다. $t$ 검정에서는 대칭인 두꺼운 꼬리 분포라면 $n \geq 30$으로 충분한 경우가 많지만, 치우친 분포는 $n \geq 100$이 필요할 수 있다.
 
-3. **The procedure being used.** The hierarchy of sensitivity, from least to most sensitive, is approximately:
+3. **쓰는 절차.** 민감도의 위계는 낮은 쪽에서 높은 쪽으로 대략 다음과 같다.
 
-    - Tests and CIs for means (most robust)
-    - ANOVA $F$-tests (moderately robust with balanced designs)
-    - Regression coefficient tests (moderately robust)
-    - Tests for variances (least robust)
+    - 평균에 대한 검정과 신뢰구간(가장 로버스트)
+    - 분산분석의 $F$ 검정(균형 설계에서 중간 정도로 로버스트)
+    - 회귀계수 검정(중간 정도로 로버스트)
+    - 분산에 대한 검정(가장 로버스트하지 않음)
 
-## A Decision Framework
+## 판단의 틀
 
-The following framework helps determine whether a detected departure from normality is practically meaningful:
+다음 틀이 탐지된 정규성 이탈이 실질적으로 의미 있는지 판단하는 데 도움이 된다.
 
-**Step 1: Identify the inferential goal.** Are you testing a mean, comparing means, testing a variance, or performing regression? The answer determines how sensitive your procedure is to non-normality.
+**1단계: 추론의 목표를 확인한다.** 평균을 검정하는가, 평균을 비교하는가, 분산을 검정하는가, 회귀를 수행하는가? 이 답이 절차가 비정규성에 얼마나 민감한지를 결정한다.
 
-**Step 2: Assess the sample size.** With large $n$, mean-based inference is protected by the CLT regardless of the test result.
+**2단계: 표본크기를 평가한다.** $n$이 크면 검정 결과와 무관하게 평균 기반 추론은 중심극한정리의 보호를 받는다.
 
-**Step 3: Characterize the departure.** Is it skewness, heavy tails, outliers, or multimodality? Each has different implications.
+**3단계: 이탈의 성격을 파악한다.** 치우침인가, 두꺼운 꼬리인가, 이상점인가, 다봉성인가? 각각 함의가 다르다.
 
-**Step 4: Evaluate the magnitude.** Excess kurtosis below 1 and absolute skewness below 0.5 are generally considered mild. Excess kurtosis above 3 or absolute skewness above 1 warrants further investigation.
+**4단계: 크기를 평가한다.** 초과첨도가 1 미만이고 왜도의 절댓값이 0.5 미만이면 대체로 가벼운 것으로 본다. 초과첨도가 3을 넘거나 왜도의 절댓값이 1을 넘으면 더 살펴볼 필요가 있다.
 
-## Python Example
+## Python 예제
 
 ```python
 import numpy as np
@@ -107,20 +107,29 @@ if __name__ == "__main__":
           f"{rejections_chi2 / n_simulations:.4f}")
 ```
 
-The simulation demonstrates that the $t$-test maintains a Type I error rate close to $\alpha = 0.05$ even with heavy-tailed $t(5)$ data, while the chi-squared variance test has a substantially inflated error rate under the same conditions.
+출력:
 
-## Summary
+```text
+Data: t-distribution with df = 5, n = 30
+Nominal alpha: 0.05
+Actual Type I error (t-test):          0.0487
+Actual Type I error (chi-squared test): 0.1713
+```
 
-Not all departures from normality are created equal. The practical significance of non-normality depends on which statistical procedure is being used, how large the sample is, and what type of departure is present. Mean-based tests are robust to a wide range of non-normal distributions, while variance-based tests are fragile. When a normality test rejects, the appropriate response is not automatically to abandon parametric methods, but rather to assess whether the specific departure matters for the specific analysis at hand.
+모의실험은 꼬리가 두꺼운 $t(5)$ 자료에서도 $t$ 검정의 제1종 오류율이 $0.0487$로 $\alpha = 0.05$에 거의 정확히 머무는 반면, 같은 조건에서 분산의 카이제곱 검정은 $0.1713$으로 명목값의 **3.4배**로 부풀려짐을 보여준다. 같은 자료, 같은 비정규성인데 한 절차는 멀쩡하고 다른 절차는 완전히 망가진다.
 
-## Exercises
+## 요약
 
-**Exercise 1.**
-A normality test was performed on a dataset, and one outlier was detected. When the outlier is included, the $p$-value is 0.01, but after removing the outlier, the $p$-value increases to 0.20. How should this be interpreted and addressed?
+정규성에서의 모든 이탈이 똑같은 무게를 갖지는 않는다. 비정규성의 실질적 유의성은 어떤 통계 절차를 쓰는지, 표본이 얼마나 큰지, 어떤 유형의 이탈인지에 달려 있다. 평균 기반 검정은 폭넓은 비정규 분포에 로버스트하지만 분산 기반 검정은 취약하다. 정규성 검정이 기각했을 때의 적절한 대응은 자동으로 모수적 방법을 버리는 것이 아니라, 그 구체적인 이탈이 당면한 구체적인 분석에 문제가 되는지 평가하는 것이다.
 
-??? success "Solution to Exercise 1"
+## 연습문제
 
-    - The remaining data, excluding the outlier, is judged to follow a normal distribution.
-    - Including the outlier indicates that the data does not follow a normal distribution, so the outlier should be investigated in detail.
-    - If the outlier is found to be contaminated or incorrectly recorded, correct the error or remove the data point and proceed with the analysis.
-    - If the outlier is neither contaminated nor incorrectly recorded, report the results both with and without the outlier if necessary.
+**연습문제 1.**
+어떤 자료에 정규성 검정을 수행했더니 이상점 하나가 발견되었다. 이상점을 포함하면 $p$값이 0.01이지만 이상점을 제거하면 $p$값이 0.20으로 올라간다. 이를 어떻게 해석하고 처리해야 하는가?
+
+??? success "연습문제 1 풀이"
+
+    - 이상점을 제외한 나머지 자료는 정규분포를 따르는 것으로 판단된다.
+    - 이상점을 포함하면 자료가 정규분포를 따르지 않는다고 나오므로 그 이상점을 자세히 조사해야 한다.
+    - 이상점이 오염되었거나 잘못 기록된 것으로 밝혀지면 오류를 고치거나 그 자료점을 제거한 뒤 분석을 진행한다.
+    - 이상점이 오염된 것도 잘못 기록된 것도 아니라면, 필요에 따라 이상점을 포함한 결과와 제외한 결과를 모두 보고한다.

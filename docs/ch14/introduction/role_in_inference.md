@@ -1,91 +1,91 @@
-# Central Role in Statistical Inference
+# 통계적 추론에서의 중심적 역할
 
-## Why Normality Matters
+## 정규성이 중요한 이유
 
-Many of the most widely used statistical procedures rely on the assumption that the data, or some function of the data, follows a normal distribution. This assumption is not a mere technicality. It directly determines whether the $p$-values, confidence intervals, and test statistics produced by these methods are valid. When normality holds, the theoretical sampling distributions that underpin classical inference are exact. When it fails, the resulting conclusions may be misleading.
+가장 널리 쓰이는 통계 절차 상당수가 자료 또는 자료의 어떤 함수가 정규분포를 따른다는 가정에 기댄다. 이 가정은 단순한 기술적 세부가 아니다. 그 방법들이 내놓는 $p$값, 신뢰구간, 검정통계량이 타당한지를 곧바로 결정한다. 정규성이 성립하면 고전적 추론을 떠받치는 이론적 표집분포가 정확하다. 정규성이 무너지면 그로부터 얻은 결론이 오도할 수 있다.
 
-Understanding where the normality assumption enters and how sensitive each procedure is to violations allows the practitioner to decide when a normality test is necessary and when the assumption can safely be relaxed.
+정규성 가정이 어디서 들어오며 각 절차가 위배에 얼마나 민감한지 이해하면, 정규성 검정이 언제 필요하고 언제 가정을 안전하게 완화할 수 있는지 판단할 수 있다.
 
-## Normality in Common Inferential Procedures
+## 흔한 추론 절차에서의 정규성
 
-### The One-Sample and Two-Sample t-Tests
+### 일표본·이표본 t 검정
 
-The one-sample $t$-test evaluates whether the population mean $\mu$ equals a hypothesized value $\mu_0$. The test statistic is
+일표본 $t$ 검정은 모평균 $\mu$가 가설값 $\mu_0$과 같은지 평가한다. 검정통계량은
 
 $$
 t = \frac{\bar{X} - \mu_0}{S / \sqrt{n}}
 $$
 
-where $\bar{X}$ is the sample mean, $S$ is the sample standard deviation, and $n$ is the sample size. Under the assumption that $X_1, X_2, \ldots, X_n \overset{\text{iid}}{\sim} N(\mu, \sigma^2)$, the statistic $t$ follows a $t$-distribution with $n - 1$ degrees of freedom exactly, for any sample size $n$.
+여기서 $\bar{X}$는 표본평균, $S$는 표본표준편차, $n$은 표본크기이다. $X_1, X_2, \ldots, X_n \overset{\text{iid}}{\sim} N(\mu, \sigma^2)$이라는 가정 아래에서 통계량 $t$는 표본크기 $n$과 무관하게 자유도 $n - 1$의 $t$ 분포를 **정확히** 따른다.
 
-The two-sample $t$-test for comparing means $\mu_1$ and $\mu_2$ similarly requires normality in both populations. When the population distributions are normal and variances are equal, the pooled test statistic
+평균 $\mu_1$과 $\mu_2$를 비교하는 이표본 $t$ 검정도 마찬가지로 두 모집단의 정규성을 요구한다. 모집단 분포가 정규이고 분산이 같으면 합동 검정통계량
 
 $$
 t = \frac{\bar{X}_1 - \bar{X}_2}{S_p \sqrt{1/n_1 + 1/n_2}}
 $$
 
-follows a $t$-distribution with $n_1 + n_2 - 2$ degrees of freedom, where $S_p$ is the pooled standard deviation.
+가 자유도 $n_1 + n_2 - 2$의 $t$ 분포를 따른다. 여기서 $S_p$는 합동 표준편차이다.
 
-### The F-Test and Analysis of Variance
+### F 검정과 분산분석
 
-In one-way ANOVA, the $F$-statistic compares the between-group variance to the within-group variance:
+일원배치 분산분석에서 $F$ 통계량은 집단 간 분산과 집단 내 분산을 비교한다.
 
 $$
 F = \frac{\text{MSB}}{\text{MSW}}
 $$
 
-where MSB is the mean square between groups and MSW is the mean square within groups. Under the null hypothesis that all group means are equal, and assuming that observations within each group are independently drawn from normal populations with equal variances, the statistic $F$ follows an $F$-distribution with $k - 1$ and $N - k$ degrees of freedom, where $k$ is the number of groups and $N$ is the total sample size.
+여기서 MSB는 집단 간 평균제곱, MSW는 집단 내 평균제곱이다. 모든 집단 평균이 같다는 귀무가설 아래에서, 그리고 각 집단의 관측값이 분산이 같은 정규 모집단에서 독립적으로 뽑혔다는 가정 아래에서, 통계량 $F$는 자유도 $k - 1$과 $N - k$의 $F$ 분포를 따른다. $k$는 집단의 개수, $N$은 전체 표본크기이다.
 
-### Confidence Intervals
+### 신뢰구간
 
-A $100(1 - \alpha)\%$ confidence interval for the population mean, when the population variance is unknown, takes the form
+모분산을 모를 때 모평균에 대한 $100(1 - \alpha)\%$ 신뢰구간은 다음 형태이다.
 
 $$
 \bar{X} \pm t_{\alpha/2,\, n-1} \cdot \frac{S}{\sqrt{n}}
 $$
 
-The coverage guarantee (that $100(1 - \alpha)\%$ of such intervals contain the true $\mu$ in repeated sampling) depends on the sampling distribution of $\bar{X}$ being normal and $S^2$ being independent of $\bar{X}$. Both properties follow from the normality of the underlying data.
+(반복표집에서 그런 구간의 $100(1 - \alpha)\%$가 참 $\mu$를 포함한다는) 포함 보장은 $\bar{X}$의 표집분포가 정규이고 $S^2$이 $\bar{X}$와 독립이라는 데 달려 있다. 두 성질 모두 바탕 자료의 정규성에서 따라 나온다.
 
-## The Central Limit Theorem as Justification
+## 정당화로서의 중심극한정리
 
-The **Central Limit Theorem (CLT)** provides an important relaxation of the strict normality requirement. It states that for independent and identically distributed random variables $X_1, X_2, \ldots, X_n$ with mean $\mu$ and finite variance $\sigma^2$,
+**중심극한정리(CLT)**는 엄격한 정규성 요건을 중요한 방식으로 완화해 준다. 평균 $\mu$, 유한 분산 $\sigma^2$을 갖는 독립동일분포 확률변수 $X_1, X_2, \ldots, X_n$에 대해
 
 $$
-\frac{\bar{X} - \mu}{\sigma / \sqrt{n}} \xrightarrow{d} N(0, 1) \quad \text{as } n \to \infty
+\frac{\bar{X} - \mu}{\sigma / \sqrt{n}} \xrightarrow{d} N(0, 1) \quad (n \to \infty)
 $$
 
-This convergence in distribution means that, for sufficiently large $n$, the sampling distribution of the standardized sample mean is approximately normal regardless of the shape of the population distribution. In practice, this justifies the use of $z$-tests and approximate $t$-tests even when the data themselves are not normally distributed, provided $n$ is large enough.
+이 분포수렴은 $n$이 충분히 크면 모집단 분포의 모양과 무관하게 표준화한 표본평균의 표집분포가 근사적으로 정규임을 뜻한다. 실무에서는 이 사실이, 자료 자체가 정규가 아니더라도 $n$이 충분히 크다면 $z$ 검정과 근사적 $t$ 검정을 쓰는 것을 정당화한다.
 
-However, the CLT comes with important caveats:
+다만 CLT에는 중요한 단서가 따른다.
 
-- **"Large enough" depends on the population shape.** For symmetric distributions close to normal, $n \geq 20$ may suffice. For heavily skewed or heavy-tailed distributions, $n$ may need to be several hundred.
-- **The CLT applies to the sample mean, not to other statistics.** Statistics such as the sample variance, median, or correlation coefficient have their own asymptotic distributions that may require normality or different conditions.
-- **Exact versus approximate inference.** When $n$ is small, the CLT approximation is unreliable, and the exact distributional results that require normality become essential.
+- **"충분히 크다"는 모집단의 모양에 달려 있다.** 정규에 가까운 대칭분포라면 $n \geq 20$으로 충분할 수 있다. 심하게 치우쳤거나 꼬리가 두꺼운 분포라면 $n$이 수백 개 필요할 수 있다.
+- **CLT는 표본평균에 적용되며 다른 통계량에는 적용되지 않는다.** 표본분산, 중앙값, 상관계수 같은 통계량은 각자의 점근분포를 가지며 정규성이나 다른 조건을 요구할 수 있다.
+- **정확한 추론과 근사적 추론.** $n$이 작으면 CLT 근사를 믿을 수 없고, 정규성을 요구하는 정확한 분포 결과가 필수적이 된다.
 
-## What Breaks When Normality Fails
+## 정규성이 무너지면 무엇이 깨지는가
 
-When the normality assumption is violated, several problems can arise:
+정규성 가정이 위배되면 여러 문제가 생길 수 있다.
 
-**Inflated Type I error rates.** If the true sampling distribution has heavier tails than the assumed $t$-distribution, the actual significance level may exceed the nominal $\alpha$. This means the test rejects the null hypothesis more often than it should.
+**제1종 오류율의 부풀림.** 참 표집분포의 꼬리가 가정한 $t$ 분포보다 두꺼우면 실제 유의수준이 명목 $\alpha$를 넘을 수 있다. 검정이 마땅한 것보다 자주 귀무가설을 기각한다는 뜻이다.
 
-**Reduced power.** If the actual distribution is skewed, the $t$-test may lose power relative to alternative procedures (such as nonparametric tests) that do not assume normality.
+**떨어진 검정력.** 실제 분포가 치우쳐 있으면 $t$ 검정은 정규성을 가정하지 않는 대안 절차(비모수 검정 등)에 비해 검정력을 잃을 수 있다.
 
-**Invalid confidence intervals.** The coverage probability of a $t$-based confidence interval may drop below $1 - \alpha$ when the data distribution is sufficiently non-normal, particularly for small samples.
+**타당하지 않은 신뢰구간.** 자료의 분포가 충분히 비정규이면 $t$ 기반 신뢰구간의 포함확률이 $1 - \alpha$ 아래로 떨어질 수 있으며, 특히 작은 표본에서 그렇다.
 
-**Sensitivity of variance-based procedures.** The $F$-test for equality of variances and the chi-squared test for a single variance are especially sensitive to non-normality. Even moderate departures can produce severely distorted $p$-values.
+**분산 기반 절차의 민감성.** 분산의 동일성에 대한 $F$ 검정과 단일 분산에 대한 카이제곱 검정은 비정규성에 특히 민감하다. 중간 정도의 이탈만으로도 $p$값이 심각하게 왜곡될 수 있다.
 
-??? warning "Variance Tests Are More Sensitive Than Mean Tests"
-    Tests involving means (such as the $t$-test) are relatively robust to mild non-normality because of the CLT. Tests involving variances (such as the $F$-test for comparing two variances or the chi-squared test for a single variance) are far more sensitive to non-normality and can produce misleading results even with moderately large samples.
+??? warning "분산 검정은 평균 검정보다 민감하다"
+    평균에 관한 검정($t$ 검정 등)은 CLT 덕분에 가벼운 비정규성에 비교적 로버스트하다. 분산에 관한 검정(두 분산을 비교하는 $F$ 검정이나 단일 분산의 카이제곱 검정)은 비정규성에 훨씬 민감하여 표본이 어느 정도 커도 오도하는 결과를 낼 수 있다.
 
-## Practical Guidance
+## 실무 지침
 
-The following guidelines help determine when normality testing is most important:
+다음 지침이 정규성 검정이 언제 가장 중요한지 판단하는 데 도움이 된다.
 
-1. **Small samples ($n < 30$)**: The CLT provides little protection. Check normality using graphical methods (Q-Q plots, histograms) and formal tests (Shapiro-Wilk) before applying parametric procedures.
-2. **Moderate samples ($30 \leq n \leq 100$)**: The CLT offers some protection for mean-based inference, but variance-based inference still requires approximate normality. Use graphical diagnostics as a quick check.
-3. **Large samples ($n > 100$)**: Mean-based inference is generally robust. However, formal normality tests become very powerful and may reject normality for trivial departures. Focus on whether the departures are practically meaningful rather than statistically significant.
+1. **작은 표본($n < 30$)**: CLT의 보호가 거의 없다. 모수적 절차를 적용하기 전에 시각적 방법(Q-Q 그림, 히스토그램)과 형식적 검정(Shapiro-Wilk)으로 정규성을 확인하라.
+2. **중간 표본($30 \leq n \leq 100$)**: 평균 기반 추론에는 CLT가 어느 정도 보호를 제공하지만 분산 기반 추론에는 여전히 근사적 정규성이 필요하다. 시각적 진단으로 빠르게 확인하라.
+3. **큰 표본($n > 100$)**: 평균 기반 추론은 대체로 로버스트하다. 다만 형식적 정규성 검정의 검정력이 매우 커져 사소한 이탈에도 정규성을 기각할 수 있다. 통계적 유의성보다 그 이탈이 실질적으로 의미 있는지에 집중하라.
 
-## Python Example
+## Python 예제
 
 ```python
 import numpy as np
@@ -124,54 +124,61 @@ if __name__ == "__main__":
     print(f"Nominal alpha:                         {alpha:.4f}")
 ```
 
-The simulation above shows that, for small $n$ and a skewed population, the actual Type I error rate of the $t$-test can deviate noticeably from the nominal $\alpha = 0.05$. With normally distributed data, the empirical rejection rate is close to 0.05 as expected.
+출력:
 
-## Summary
+```text
+Type I error rate (normal data):      0.0527
+Type I error rate (exponential data):  0.0900
+Nominal alpha:                         0.0500
+```
 
-The normality assumption enters statistical inference through the exact distributional results that underlie $t$-tests, $F$-tests, and confidence intervals. The CLT relaxes this requirement for large samples and mean-based procedures, but small-sample inference, variance-based tests, and procedures beyond the sample mean still require careful attention to normality. Testing for normality is therefore not an abstract exercise but a practical safeguard for the validity of statistical conclusions.
+위 모의실험은 $n$이 작고 모집단이 치우쳐 있을 때 $t$ 검정의 실제 제1종 오류율이 명목 $\alpha = 0.05$에서 눈에 띄게 벗어날 수 있음을 보여준다. 지수분포 자료에서 실제 기각률은 $0.090$으로 명목값의 거의 두 배이다. 정규분포 자료에서는 기대대로 경험적 기각률이 $0.053$으로 0.05에 가깝다.
 
+## 요약
 
-## Exercises
+정규성 가정은 $t$ 검정, $F$ 검정, 신뢰구간의 바탕이 되는 정확한 분포 결과를 통해 통계적 추론에 들어온다. CLT는 큰 표본과 평균 기반 절차에 대해 이 요건을 완화해 주지만, 작은 표본의 추론, 분산 기반 검정, 표본평균을 넘어서는 절차에서는 여전히 정규성에 주의해야 한다. 따라서 정규성 검정은 추상적인 연습이 아니라 통계적 결론의 타당성을 지키는 실용적 안전장치이다.
 
-**Exercise 1.**
-List three fundamental results in statistics that rely on the normal distribution. For each, state whether normality is required exactly or only approximately.
+## 연습문제
 
-??? success "Solution to Exercise 1"
+**연습문제 1.**
+정규분포에 의존하는 통계학의 기본 결과 세 가지를 들어라. 각각에 대해 정규성이 정확히 필요한지 근사적으로만 필요한지 서술하라.
 
-    1. **t-test for a mean:** Requires exact normality for the test statistic to follow a $t$-distribution with finite $n$. Approximately normal data suffice for moderate $n$ (by the CLT).
+??? success "연습문제 1 풀이"
 
-    2. **Confidence intervals for regression coefficients:** OLS estimates require normally distributed errors for exact $t$-based inference. For large $n$, asymptotic normality of the estimator suffices.
+    1. **평균에 대한 t 검정:** 유한한 $n$에서 검정통계량이 $t$ 분포를 따르려면 정확한 정규성이 필요하다. 중간 정도의 $n$에서는 (CLT에 의해) 근사적으로 정규인 자료로 충분하다.
 
-    3. **Chi-squared test for variance:** Requires exact normality ($\sum(X_i - \bar{X})^2/\sigma^2 \sim \chi^2_{n-1}$ only if $X_i$ are normal). No CLT rescue -- the chi-squared distribution of the variance estimator depends on normality even asymptotically.
+    2. **회귀계수의 신뢰구간:** 정확한 $t$ 기반 추론을 위해서는 OLS 추정이 정규분포 오차를 요구한다. $n$이 크면 추정량의 점근적 정규성으로 충분하다.
 
----
-
-**Exercise 2.**
-Explain how the Central Limit Theorem provides "approximate normality" for inference and what its limitations are.
-
-??? success "Solution to Exercise 2"
-    The CLT states $\sqrt{n}(\bar{X}_n - \mu) \xrightarrow{d} N(0, \sigma^2)$. This allows us to use normal-based inference (z-tests, confidence intervals) for the sample mean even when the data are not normally distributed, provided $n$ is "large enough."
-
-    Limitations: (1) "Large enough" depends on the underlying distribution -- symmetric distributions converge fast ($n \geq 20$), but heavily skewed or heavy-tailed distributions may need $n > 100$. (2) The CLT applies to the mean, not to other statistics (variance, quantiles, correlation) which may converge more slowly. (3) The CLT does not apply when the variance is infinite (e.g., Cauchy distribution).
+    3. **분산에 대한 카이제곱 검정:** 정확한 정규성이 필요하다($\sum(X_i - \bar{X})^2/\sigma^2 \sim \chi^2_{n-1}$은 $X_i$가 정규일 때에만 성립한다). CLT가 구해 주지 못한다. 분산 추정량의 카이제곱 분포는 점근적으로도 정규성에 의존한다.
 
 ---
 
-**Exercise 3.**
-A statistician argues that normality testing is unnecessary because "the CLT will save us." Under what conditions is this argument valid, and when does it fail?
+**연습문제 2.**
+중심극한정리가 추론을 위한 "근사적 정규성"을 어떻게 제공하며 그 한계는 무엇인지 설명하라.
 
-??? success "Solution to Exercise 3"
-    The argument is valid when: (1) the sample size is large ($n \geq 30$-$50$ for mildly non-normal data); (2) the inference concerns means or linear combinations of data; (3) the underlying distribution has finite variance.
+??? success "연습문제 2 풀이"
+    CLT는 $\sqrt{n}(\bar{X}_n - \mu) \xrightarrow{d} N(0, \sigma^2)$이라고 말한다. 이 덕분에 자료가 정규가 아니어도 $n$이 "충분히 크면" 표본평균에 대해 정규 기반 추론(z 검정, 신뢰구간)을 쓸 수 있다.
 
-    The argument fails when: (1) $n$ is small (the CLT approximation is poor); (2) the data are heavily skewed or have extreme outliers; (3) the inference involves variances, quantiles, or other non-linear statistics; (4) the distribution has infinite variance; (5) exact distributional results are needed (e.g., prediction intervals, which depend on the error distribution, not just the mean).
+    한계: (1) "충분히 크다"는 바탕 분포에 달려 있다. 대칭분포는 빠르게 수렴하지만($n \geq 20$) 심하게 치우쳤거나 꼬리가 두꺼운 분포는 $n > 100$이 필요할 수 있다. (2) CLT는 평균에 적용되며 분산, 분위수, 상관 같은 다른 통계량에는 적용되지 않고 그것들은 더 느리게 수렴할 수 있다. (3) 분산이 무한하면(예: Cauchy 분포) CLT가 적용되지 않는다.
 
 ---
 
-**Exercise 4.**
-Explain why prediction intervals require stronger normality assumptions than confidence intervals for the mean.
+**연습문제 3.**
+어떤 통계학자가 "CLT가 구해 줄 것"이므로 정규성 검정이 불필요하다고 주장한다. 이 주장은 어떤 조건에서 타당하고 언제 실패하는가?
 
-??? success "Solution to Exercise 4"
-    A **confidence interval for the mean** depends on the sampling distribution of $\bar{X}$, which is approximately normal by the CLT even for non-normal data.
+??? success "연습문제 3 풀이"
+    주장이 타당한 경우: (1) 표본크기가 크다(가벼운 비정규 자료에서 $n \geq 30$–$50$). (2) 추론의 대상이 평균이나 자료의 선형결합이다. (3) 바탕 분포의 분산이 유한하다.
 
-    A **prediction interval** for a future observation $X_{n+1}$ depends on the distribution of $X_{n+1}$ itself, not just its mean. The interval is $\bar{X} \pm t_{\alpha/2} \cdot s\sqrt{1 + 1/n}$, and its coverage probability depends on $X_{n+1}$ actually following a normal distribution.
+    주장이 실패하는 경우: (1) $n$이 작다(CLT 근사가 나쁘다). (2) 자료가 심하게 치우쳤거나 극단적 이상점이 있다. (3) 추론이 분산, 분위수, 그 밖의 비선형 통계량에 관한 것이다. (4) 분포의 분산이 무한하다. (5) 정확한 분포 결과가 필요하다(예: 평균이 아니라 오차 분포에 의존하는 예측구간).
 
-    If $X_{n+1}$ comes from a skewed or heavy-tailed distribution, the prediction interval will have incorrect coverage: too narrow for heavy tails (missing extreme values) and too wide or too narrow for skewed data (asymmetric coverage). No CLT can fix this because we are predicting a single observation, not a mean.
+---
+
+**연습문제 4.**
+예측구간이 평균의 신뢰구간보다 더 강한 정규성 가정을 요구하는 이유를 설명하라.
+
+??? success "연습문제 4 풀이"
+    **평균의 신뢰구간**은 $\bar{X}$의 표집분포에 의존하며, 자료가 정규가 아니어도 CLT에 의해 근사적으로 정규이다.
+
+    미래 관측값 $X_{n+1}$에 대한 **예측구간**은 평균이 아니라 $X_{n+1}$ 자체의 분포에 의존한다. 구간은 $\bar{X} \pm t_{\alpha/2} \cdot s\sqrt{1 + 1/n}$이며, 그 포함확률은 $X_{n+1}$이 실제로 정규분포를 따르는지에 달려 있다.
+
+    $X_{n+1}$이 치우쳤거나 꼬리가 두꺼운 분포에서 나온다면 예측구간의 포함확률이 틀리게 된다. 꼬리가 두꺼우면 지나치게 좁아 극단값을 놓치고, 치우친 자료에서는 비대칭적으로 포함되어 한쪽은 좁고 다른 쪽은 넓어진다. 평균이 아니라 관측값 하나를 예측하는 것이므로 어떤 CLT도 이를 고쳐 주지 못한다.

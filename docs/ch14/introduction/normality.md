@@ -1,119 +1,118 @@
-# Introduction to Normality
+# 정규성 입문
 
-## What Is Normality?
+## 정규성이란 무엇인가
 
-We say a dataset is **normally distributed** if it follows a bell-shaped curve known as the **normal distribution**. The normal distribution is a continuous probability distribution defined by the probability density function (PDF):
+자료가 **정규분포**라고 알려진 종 모양 곡선을 따를 때 그 자료가 **정규분포를 따른다**고 말한다. 정규분포는 다음 확률밀도함수로 정의되는 연속확률분포이다.
 
 $$
 f(x) = \frac{1}{\sigma \sqrt{2\pi}} \exp\!\left( -\frac{(x - \mu)^2}{2\sigma^2} \right)
 $$
 
-where
+여기서
 
-- $\mu$ is the mean of the distribution,
-- $\sigma > 0$ is the standard deviation,
-- $x \in \mathbb{R}$ is a variable that can take any real value.
+- $\mu$는 분포의 평균,
+- $\sigma > 0$은 표준편차,
+- $x \in \mathbb{R}$은 임의의 실수값을 취할 수 있는 변수이다.
 
-The normal distribution is symmetric around its mean $\mu$. The **empirical rule** summarizes the concentration of probability:
+정규분포는 평균 $\mu$를 중심으로 대칭이다. **경험 법칙**이 확률의 집중 정도를 요약해 준다.
 
-| Interval | Approximate probability |
+| 구간 | 근사 확률 |
 |----------|------------------------|
 | $\mu \pm \sigma$ | 68.3% |
 | $\mu \pm 2\sigma$ | 95.4% |
 | $\mu \pm 3\sigma$ | 99.7% |
 
-!!! tip "Standard Normal"
-    When $\mu = 0$ and $\sigma = 1$, we obtain the **standard normal distribution** $Z \sim N(0,1)$. Any normal variable $X \sim N(\mu, \sigma^2)$ can be standardized via $Z = (X - \mu)/\sigma$.
+!!! tip "표준정규분포"
+    $\mu = 0$, $\sigma = 1$이면 **표준정규분포** $Z \sim N(0,1)$을 얻는다. 임의의 정규변수 $X \sim N(\mu, \sigma^2)$는 $Z = (X - \mu)/\sigma$로 표준화할 수 있다.
 
-## Importance of Normality in Statistical Inference
+## 통계적 추론에서 정규성의 중요성
 
-Many statistical methods assume that the underlying data is normally distributed. Common techniques such as $t$-tests, Analysis of Variance (ANOVA), and linear regression rely on this assumption to ensure valid results. If the normality assumption is violated, these methods may produce inaccurate conclusions.
+많은 통계 방법이 바탕 자료가 정규분포를 따른다고 가정한다. $t$ 검정, 분산분석, 선형회귀 같은 흔한 기법이 타당한 결과를 위해 이 가정에 기댄다. 정규성 가정이 위배되면 이 방법들이 부정확한 결론을 낼 수 있다.
 
-The **Central Limit Theorem (CLT)** tells us that, given a sufficiently large sample size, the sampling distribution of the sample mean tends to be normal, regardless of the population distribution. Specifically, if $X_1, \ldots, X_n$ are i.i.d. with mean $\mu$ and variance $\sigma^2$, then
+**중심극한정리(CLT)**는 표본크기가 충분히 크면 모집단 분포와 무관하게 표본평균의 표집분포가 정규에 가까워진다고 말한다. 구체적으로 $X_1, \ldots, X_n$이 평균 $\mu$, 분산 $\sigma^2$인 독립동일분포를 따르면
 
 $$
-\frac{\bar{X}_n - \mu}{\sigma / \sqrt{n}} \xrightarrow{d} N(0, 1) \quad \text{as } n \to \infty
+\frac{\bar{X}_n - \mu}{\sigma / \sqrt{n}} \xrightarrow{d} N(0, 1) \quad (n \to \infty)
 $$
 
-This asymptotic normality is why normality plays such a crucial role in inferential statistics, even when the underlying population is non-normal.
+이 점근적 정규성 때문에, 바탕 모집단이 정규가 아니어도 정규성이 추론통계에서 결정적인 역할을 한다.
 
-## Situations Where Normality Is Assumed
+## 정규성을 가정하는 상황
 
-We often assume normality in the following scenarios:
+다음과 같은 상황에서 흔히 정규성을 가정한다.
 
-- **Confidence Intervals**: When constructing confidence intervals for the mean, it is assumed that the underlying data or the sample means are normally distributed.
-- **Hypothesis Testing**: Many hypothesis tests, including the $t$-test, assume normality in the population to compute $p$-values accurately.
-- **Linear Models**: Assuming that residuals are normally distributed in linear regression is critical for valid hypothesis testing and confidence intervals for the regression coefficients.
+- **신뢰구간**: 평균의 신뢰구간을 만들 때 바탕 자료 또는 표본평균이 정규분포를 따른다고 가정한다.
+- **가설검정**: $t$ 검정을 비롯한 많은 가설검정이 $p$값을 정확히 계산하기 위해 모집단의 정규성을 가정한다.
+- **선형모형**: 선형회귀에서 잔차가 정규분포를 따른다는 가정은 회귀계수의 가설검정과 신뢰구간이 타당하기 위해 결정적이다.
 
-!!! warning "Assumption vs. Requirement"
-    Normality is an assumption, not a guaranteed property of real data. Always verify normality before applying methods that depend on it. The tools for doing so---graphical methods (Q-Q plots, histograms) and formal tests (Shapiro-Wilk, Anderson-Darling)---are covered in the subsequent sections of this chapter.
+!!! warning "가정과 사실은 다르다"
+    정규성은 가정이지 실제 자료가 보장하는 성질이 아니다. 정규성에 의존하는 방법을 쓰기 전에 반드시 확인하라. 확인 도구 — 시각적 방법(Q-Q 그림, 히스토그램)과 형식적 검정(Shapiro-Wilk, Anderson-Darling) — 은 이 장의 이어지는 절들에서 다룬다.
 
-## Examples of Non-Normal Data
+## 정규가 아닌 자료의 예
 
-Not all data follows a normal distribution. Some common examples of non-normal data include:
+모든 자료가 정규분포를 따르는 것은 아니다. 정규가 아닌 자료의 흔한 예는 다음과 같다.
 
-- **Skewed Distributions**: Income data is typically right-skewed, with a long tail of high earners pulling the mean above the median.
-- **Heavy-Tailed Distributions**: Financial returns often exhibit heavier tails than the normal distribution, meaning extreme events occur more frequently than a Gaussian model would predict.
-- **Bimodal or Multimodal Distributions**: Data with more than one peak---for example, the heights of a mixed population of adult men and women---deviates significantly from normality.
-- **Bounded or Discrete Data**: Proportions, counts, and Likert-scale responses are inherently non-normal due to their restricted range or discrete nature.
+- **치우친 분포**: 소득 자료는 대체로 오른쪽으로 치우쳐 있으며, 고소득자의 긴 꼬리가 평균을 중앙값 위로 끌어올린다.
+- **두꺼운 꼬리 분포**: 금융 수익률은 흔히 정규분포보다 두꺼운 꼬리를 보이며, 극단적 사건이 정규 모형의 예측보다 자주 일어난다는 뜻이다.
+- **이봉 또는 다봉 분포**: 봉우리가 둘 이상인 자료 — 예를 들어 성인 남녀가 섞인 집단의 키 — 는 정규성에서 크게 벗어난다.
+- **유계이거나 이산인 자료**: 비율, 계수, 리커트 척도 응답은 범위가 제한되거나 이산이라는 성질 때문에 본래 정규가 아니다.
 
-Understanding when data deviates from normality is essential for choosing the appropriate statistical tools and methods for analysis.
+자료가 언제 정규성에서 벗어나는지 이해하는 일은 분석에 적절한 통계 도구와 방법을 고르는 데 필수적이다.
 
+## 연습문제
 
-## Exercises
+**연습문제 1.**
+정규분포 $N(\mu, \sigma^2)$의 확률밀도함수를 쓰고 두 모수의 역할을 밝혀라.
 
-**Exercise 1.**
-State the probability density function of the normal distribution $N(\mu, \sigma^2)$ and identify the roles of the two parameters.
-
-??? success "Solution to Exercise 1"
-    The PDF is:
+??? success "연습문제 1 풀이"
+    확률밀도함수는
 
     $$
     f(x) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\!\left(-\frac{(x-\mu)^2}{2\sigma^2}\right), \quad x \in \mathbb{R}
     $$
 
-    - $\mu$ (mean) is the center of the distribution -- it determines the location of the peak and the axis of symmetry.
-    - $\sigma^2$ (variance) controls the spread. Larger $\sigma^2$ produces a wider, flatter bell curve; smaller $\sigma^2$ produces a taller, narrower one.
-    - $\sigma$ (standard deviation) is in the same units as $x$, making it more interpretable than $\sigma^2$.
+    - $\mu$(평균)는 분포의 중심이다. 봉우리의 위치와 대칭축을 결정한다.
+    - $\sigma^2$(분산)는 산포를 조절한다. $\sigma^2$이 크면 넓고 평평한 종 모양이 되고, 작으면 높고 좁은 모양이 된다.
+    - $\sigma$(표준편차)는 $x$와 같은 단위이므로 $\sigma^2$보다 해석하기 쉽다.
 
 ---
 
-**Exercise 2.**
-State the 68-95-99.7 rule for the normal distribution and verify the 95% figure using the standard normal CDF.
+**연습문제 2.**
+정규분포의 68-95-99.7 법칙을 서술하고 표준정규 누적분포함수로 95% 값을 확인하라.
 
-??? success "Solution to Exercise 2"
-    The 68-95-99.7 rule states that for $X \sim N(\mu, \sigma^2)$:
+??? success "연습문제 2 풀이"
+    68-95-99.7 법칙은 $X \sim N(\mu, \sigma^2)$에 대해 다음을 말한다.
 
     - $P(\mu - \sigma < X < \mu + \sigma) \approx 0.683$
     - $P(\mu - 2\sigma < X < \mu + 2\sigma) \approx 0.954$
     - $P(\mu - 3\sigma < X < \mu + 3\sigma) \approx 0.997$
 
-    For the 95% figure with $Z \sim N(0,1)$: $P(-2 < Z < 2) = \mathcal{N}(2) - \mathcal{N}(-2) = 0.9772 - 0.0228 = 0.9544 \approx 95.4\%$.
+    $Z \sim N(0,1)$일 때 95% 값을 확인하면, 표준정규 누적분포함수를 $\Phi$라 할 때 $P(-2 < Z < 2) = \Phi(2) - \Phi(-2) = 0.9772 - 0.0228 = 0.9544 \approx 95.4\%$이다.
 
-    The exact 95% interval uses $z = 1.96$: $P(-1.96 < Z < 1.96) = 0.95$.
-
----
-
-**Exercise 3.**
-If $X \sim N(70, 100)$ (mean 70, variance 100), find $P(X > 85)$.
-
-??? success "Solution to Exercise 3"
-    Standardize: $Z = (X - \mu)/\sigma = (85 - 70)/10 = 1.5$.
-
-    $$
-    P(X > 85) = P(Z > 1.5) = 1 - \mathcal{N}(1.5) = 1 - 0.9332 = 0.0668
-    $$
-
-    There is approximately a 6.7% probability of exceeding 85.
+    정확히 95%가 되는 구간은 $z = 1.96$을 쓴다: $P(-1.96 < Z < 1.96) = 0.95$.
 
 ---
 
-**Exercise 4.**
-Explain why the normal distribution arises so frequently in practice, referencing the Central Limit Theorem.
+**연습문제 3.**
+$X \sim N(70, 100)$(평균 70, 분산 100)일 때 $P(X > 85)$를 구하라.
 
-??? success "Solution to Exercise 4"
-    The Central Limit Theorem (CLT) states that the sum (or average) of $n$ independent, identically distributed random variables with finite mean and variance converges in distribution to a normal distribution as $n \to \infty$, regardless of the original distribution.
+??? success "연습문제 3 풀이"
+    표준화한다: $Z = (X - \mu)/\sigma = (85 - 70)/10 = 1.5$.
 
-    Many real-world measurements are the aggregate effect of numerous small, independent factors. Height is influenced by many genes and environmental factors; measurement errors are the sum of many small instrumental imprecisions; financial returns (approximately) aggregate many independent information shocks. In each case, the CLT drives the aggregate toward normality.
+    $$
+    P(X > 85) = P(Z > 1.5) = 1 - \Phi(1.5) = 1 - 0.9332 = 0.0668
+    $$
 
-    The CLT also explains why normal-based methods (t-tests, regression) work well even for non-normal data when $n$ is large: the sampling distribution of the mean is approximately normal regardless.
+    85를 넘을 확률은 약 6.7%이다.
+
+---
+
+**연습문제 4.**
+정규분포가 실무에서 그토록 자주 나타나는 이유를 중심극한정리를 들어 설명하라.
+
+??? success "연습문제 4 풀이"
+    중심극한정리(CLT)는 평균과 분산이 유한한 독립동일분포 확률변수 $n$개의 합(또는 평균)이 원래 분포와 무관하게 $n \to \infty$일 때 정규분포로 분포수렴한다고 말한다.
+
+    현실의 많은 측정값은 수많은 작고 독립적인 요인이 합쳐진 결과이다. 키는 여러 유전자와 환경 요인의 영향을 받고, 측정오차는 작은 기기 오차들의 합이며, 금융 수익률은 (근사적으로) 여러 독립적인 정보 충격이 쌓인 것이다. 각 경우에 CLT가 합계를 정규 쪽으로 밀어붙인다.
+
+    CLT는 또한 $n$이 클 때 정규가 아닌 자료에서도 정규 기반 방법(t 검정, 회귀)이 잘 작동하는 이유를 설명해 준다. 평균의 표집분포가 어쨌든 근사적으로 정규이기 때문이다.

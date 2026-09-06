@@ -1,83 +1,83 @@
-# Normality in Financial Data
+# 금융 자료에서의 정규성
 
-## Motivation
+## 동기
 
-The normal distribution plays a central role in finance. The foundational models of portfolio theory, option pricing, and risk management all assume that asset returns are normally distributed. However, decades of empirical evidence show that real financial returns deviate from normality in systematic and consequential ways. Understanding these deviations is essential for anyone applying statistical methods to financial data.
+정규분포는 금융에서 중심적인 역할을 한다. 포트폴리오 이론, 옵션 가격결정, 위험 관리의 기초 모형들이 모두 자산 수익률이 정규분포를 따른다고 가정한다. 그러나 수십 년의 경험적 증거는 실제 금융 수익률이 체계적이고 중대한 방식으로 정규성에서 벗어난다는 것을 보여준다. 금융 자료에 통계 방법을 적용하는 사람이라면 이 이탈을 반드시 이해해야 한다.
 
-## The Normal Assumption in Finance
+## 금융에서의 정규성 가정
 
-If $R_t$ denotes the log-return of an asset at time $t$, the normal model assumes
+$R_t$를 시점 $t$에서 어떤 자산의 로그수익률이라 하면 정규 모형은 다음을 가정한다.
 
 $$
 R_t \overset{\text{iid}}{\sim} N(\mu, \sigma^2)
 $$
 
-where $\mu$ is the expected return and $\sigma$ is the volatility. Under this assumption, portfolio returns are also normal (as linear combinations of normals), and risk measures such as Value at Risk (VaR) can be computed in closed form. For example, the $\alpha$-level VaR under normality is
+여기서 $\mu$는 기대수익률, $\sigma$는 변동성이다. 이 가정 아래에서 포트폴리오 수익률도 (정규들의 선형결합이므로) 정규이고, 위험가치(VaR) 같은 위험 측도를 닫힌 형태로 계산할 수 있다. 예를 들어 정규성 아래에서 $\alpha$ 수준의 VaR는
 
 $$
 \text{VaR}_\alpha = -\left(\mu + z_\alpha \, \sigma\right)
 $$
 
-where $z_\alpha$ is the $\alpha$-quantile of the standard normal distribution.
+여기서 $z_\alpha$는 표준정규분포의 $\alpha$ 분위수이다($\alpha = 0.01$이면 $z_{0.01} = -2.326$이므로 VaR는 양수가 된다).
 
-## Stylized Facts of Financial Returns
+## 금융 수익률의 정형화된 사실
 
-Empirical studies of financial return data consistently document several departures from normality, often called **stylized facts**:
+금융 수익률 자료에 대한 경험적 연구는 정규성에서 벗어나는 몇 가지 특징을 일관되게 기록해 왔으며, 이를 흔히 **정형화된 사실**이라 부른다.
 
-### Fat Tails (Excess Kurtosis)
+### 두꺼운 꼬리(초과첨도)
 
-Financial returns exhibit heavier tails than the normal distribution. The **kurtosis** of a random variable $X$ with mean $\mu$ and standard deviation $\sigma$ is
+금융 수익률은 정규분포보다 두꺼운 꼬리를 보인다. 평균 $\mu$, 표준편차 $\sigma$인 확률변수 $X$의 **첨도**는
 
 $$
 \kappa = \frac{E\left[(X - \mu)^4\right]}{\sigma^4}
 $$
 
-For the normal distribution, $\kappa = 3$. The **excess kurtosis** is $\kappa - 3$, so a normal distribution has excess kurtosis of zero. Financial returns typically have positive excess kurtosis, meaning extreme events occur more frequently than the normal model predicts. Daily stock returns often exhibit excess kurtosis values between 3 and 50, depending on the asset and time period.
+정규분포에서는 $\kappa = 3$이다. **초과첨도**는 $\kappa - 3$이므로 정규분포의 초과첨도는 0이다. 금융 수익률은 대체로 양의 초과첨도를 가지며, 이는 극단적 사건이 정규 모형의 예측보다 자주 일어난다는 뜻이다. 일간 주식 수익률의 초과첨도는 자산과 기간에 따라 흔히 3에서 50 사이의 값을 보인다.
 
-??? warning "Underestimating Tail Risk"
-    A normal model with the same mean and variance as the actual return distribution will systematically underestimate the probability of large losses. For example, a 4-standard-deviation move occurs once every 63 years under the normal distribution but may occur several times per decade in actual financial markets.
+??? warning "꼬리 위험의 과소평가"
+    실제 수익률 분포와 평균·분산이 같은 정규 모형은 큰 손실의 확률을 체계적으로 과소평가한다. 예를 들어 4 표준편차 움직임은 정규분포 아래에서 63년에 한 번 일어나지만($P(|Z| > 4) = 6.33 \times 10^{-5}$이고 연 252 거래일이면 62.6년), 실제 금융시장에서는 10년에 몇 번씩 일어나기도 한다.
 
-### Skewness
+### 왜도
 
-The **skewness** of a distribution is
+분포의 **왜도**는
 
 $$
 \gamma = \frac{E\left[(X - \mu)^3\right]}{\sigma^3}
 $$
 
-For the normal distribution, $\gamma = 0$. Equity returns often exhibit negative skewness, meaning large losses are more frequent than large gains of the same magnitude. This asymmetry is particularly pronounced during market stress.
+정규분포에서는 $\gamma = 0$이다. 주식 수익률은 흔히 음의 왜도를 보이는데, 같은 크기의 큰 이익보다 큰 손실이 더 자주 일어난다는 뜻이다. 이 비대칭은 시장이 스트레스를 받을 때 특히 두드러진다.
 
-### Volatility Clustering
+### 변동성 군집
 
-Financial returns display **volatility clustering**: periods of high volatility tend to be followed by high volatility, and periods of low volatility by low volatility. Formally, while the returns $R_t$ may be approximately uncorrelated, the squared returns $R_t^2$ exhibit significant autocorrelation. This violates the independence assumption in the iid normal model, because the variance is not constant over time.
+금융 수익률은 **변동성 군집**을 보인다. 변동성이 높은 기간 뒤에는 높은 변동성이, 낮은 기간 뒤에는 낮은 변동성이 이어지는 경향이 있다. 형식적으로 말하면 수익률 $R_t$ 자체는 대체로 무상관인데 제곱수익률 $R_t^2$은 유의한 자기상관을 보인다. 분산이 시간에 따라 일정하지 않으므로 이는 독립동일분포 정규 모형의 독립성 가정을 위배한다.
 
-### Aggregational Gaussianity
+### 집계에 따른 정규화
 
-As the return horizon increases from daily to weekly to monthly, the distribution of returns becomes closer to normal. This is consistent with the CLT: if daily returns are weakly dependent but have finite variance, the sum over longer horizons converges toward normality. However, the convergence is slow, and even monthly returns may still show excess kurtosis.
+수익률의 기간이 일간에서 주간, 월간으로 길어질수록 수익률의 분포는 정규에 가까워진다. 이는 CLT와 일관된다. 일간 수익률이 약하게 종속되어 있지만 분산이 유한하다면 더 긴 기간의 합은 정규 쪽으로 수렴한다. 다만 수렴이 느려서 월간 수익률조차 초과첨도를 보일 수 있다.
 
-## Consequences for Statistical Inference
+## 통계적 추론에 대한 함의
 
-The non-normality of financial data has direct consequences for statistical procedures:
+금융 자료의 비정규성은 통계 절차에 직접적인 영향을 준다.
 
-**Confidence intervals for the mean return.** If returns have heavier tails than the normal distribution, $t$-based confidence intervals may understate the true uncertainty. The standard error $S / \sqrt{n}$ may be an unreliable estimate of the variability of $\bar{R}$ when extreme observations inflate $S$.
+**평균 수익률의 신뢰구간.** 수익률의 꼬리가 정규분포보다 두꺼우면 $t$ 기반 신뢰구간이 참 불확실성을 과소평가할 수 있다. 극단적 관측값이 $S$를 부풀리면 표준오차 $S / \sqrt{n}$이 $\bar{R}$의 변동을 믿을 수 없게 추정한다.
 
-**Hypothesis tests.** Tests of market efficiency, CAPM beta, or portfolio performance that rely on the normality of returns may produce distorted $p$-values. The actual size of a $t$-test can exceed the nominal $\alpha$ when the return distribution has heavy tails and $n$ is moderate.
+**가설검정.** 수익률의 정규성에 기대는 시장 효율성 검정, CAPM 베타 검정, 포트폴리오 성과 검정은 왜곡된 $p$값을 낼 수 있다. 수익률 분포의 꼬리가 두껍고 $n$이 중간 정도이면 $t$ 검정의 실제 크기가 명목 $\alpha$를 넘을 수 있다.
 
-**Risk measures.** The normal VaR formula underestimates tail risk. If the true return distribution has excess kurtosis $\kappa - 3 > 0$, the Cornish-Fisher expansion provides a correction:
+**위험 측도.** 정규 VaR 공식은 꼬리 위험을 과소평가한다. 참 수익률 분포의 초과첨도가 $\kappa - 3 > 0$이면 Cornish-Fisher 전개가 보정을 제공한다.
 
 $$
 \text{VaR}_\alpha^{\text{CF}} \approx -\left(\mu + \tilde{z}_\alpha \, \sigma\right)
 $$
 
-where
+여기서
 
 $$
 \tilde{z}_\alpha = z_\alpha + \frac{1}{6}(z_\alpha^2 - 1)\gamma + \frac{1}{24}(z_\alpha^3 - 3z_\alpha)(\kappa - 3) - \frac{1}{36}(2z_\alpha^3 - 5z_\alpha)\gamma^2
 $$
 
-and $\gamma$ is the skewness and $\kappa$ is the kurtosis of the return distribution.
+이고 $\gamma$는 왜도, $\kappa$는 수익률 분포의 첨도이다.
 
-## Python Example
+## Python 예제
 
 ```python
 import numpy as np
@@ -115,53 +115,65 @@ if __name__ == "__main__":
     print(f"  Normal:     {normal_tail:.4f}")
 ```
 
-The output shows that the empirical tail probability exceeds the normal prediction, consistent with the fat-tailed nature of financial returns.
+출력:
 
-## Summary
+```text
+Sample mean:           -0.000275
+Sample std dev:        0.012886
+Sample skewness:       0.8632
+Sample excess kurtosis: 10.4205
 
-Financial returns violate the normality assumption through excess kurtosis, negative skewness, and volatility clustering. These departures are not minor statistical curiosities; they have direct consequences for risk measurement, hypothesis testing, and confidence interval construction. When working with financial data, practitioners should test for normality, consider robust alternatives, and use risk models that account for heavy tails.
+P(|R - mean| > 3 std):
+  Empirical:  0.0090
+  Normal:     0.0027
+```
 
+경험적 꼬리 확률 $0.0090$이 정규분포의 예측 $0.0027$의 3.3배로, 금융 수익률의 두꺼운 꼬리와 일관된다. 초과첨도 $10.42$도 정규분포의 0에서 크게 벗어나 있다.
 
-## Exercises
+## 요약
 
-**Exercise 1.**
-Explain why the efficient market hypothesis (EMH) implies that stock returns should be approximately normally distributed, and why this prediction fails empirically.
+금융 수익률은 초과첨도, 음의 왜도, 변동성 군집을 통해 정규성 가정을 위배한다. 이 이탈은 사소한 통계적 호기심거리가 아니라 위험 측정, 가설검정, 신뢰구간 구성에 직접적인 영향을 준다. 금융 자료를 다룰 때는 정규성을 검정하고, 로버스트한 대안을 고려하며, 두꺼운 꼬리를 반영하는 위험 모형을 써야 한다.
 
-??? success "Solution to Exercise 1"
-    Under the EMH, prices fully reflect all available information, and price changes are driven by unpredictable new information arriving randomly. If many small, independent information shocks drive returns, the CLT suggests the aggregate return should be approximately normal.
+## 연습문제
 
-    This prediction fails empirically because: (1) information shocks are not independent -- volatility clusters (large moves follow large moves); (2) shocks are not identically distributed -- their variance changes over time; (3) some shocks are large and rare (earnings surprises, geopolitical events), violating the "many small independent" assumption. The result is heavy tails and volatility clustering, both inconsistent with the normal model.
+**연습문제 1.**
+효율적 시장 가설(EMH)이 왜 주식 수익률이 근사적으로 정규분포를 따를 것이라고 시사하는지, 그리고 이 예측이 경험적으로 왜 실패하는지 설명하라.
 
----
+??? success "연습문제 1 풀이"
+    EMH 아래에서 가격은 이용 가능한 모든 정보를 온전히 반영하며, 가격 변화는 무작위로 도착하는 예측 불가능한 새 정보가 이끈다. 작고 독립적인 정보 충격이 많이 모여 수익률을 만든다면 CLT는 총합 수익률이 근사적으로 정규일 것이라고 시사한다.
 
-**Exercise 2.**
-What is the practical consequence of assuming normality for Value-at-Risk (VaR) calculations when returns are actually heavy-tailed?
-
-??? success "Solution to Exercise 2"
-    Normal VaR at the $\alpha$ level is $\text{VaR}_\alpha = -\mu + z_\alpha \sigma$. If returns have heavier tails, the true $\alpha$-quantile is more extreme than $z_\alpha \sigma$.
-
-    Consequence: the normal VaR **underestimates** potential losses. For example, the normal 99% VaR might predict a maximum daily loss of 2.3% for a portfolio, but the actual 1% worst-case loss could be 4% or more. This leads to insufficient capital reserves, unexpected breaches of risk limits, and potential regulatory violations.
-
----
-
-**Exercise 3.**
-The log-normal distribution is often used for stock prices rather than returns. Explain the relationship between log-normal prices and normally distributed log-returns.
-
-??? success "Solution to Exercise 3"
-    If the stock price $S_t$ is log-normally distributed, then $\log(S_t/S_{t-1}) = \log S_t - \log S_{t-1}$ (the log-return) is normally distributed. Equivalently, $S_t = S_0 \exp(\sum r_i)$ where $r_i$ are log-returns.
-
-    This model (geometric Brownian motion) underlies the Black-Scholes option pricing formula. It ensures prices remain positive (a log-normal variable is always positive) while allowing returns to be negative.
-
-    The model fails for the same reasons returns are not truly normal: heavy tails, volatility clustering, and jumps. Extensions include jump-diffusion models, stochastic volatility models, and GARCH processes.
+    이 예측이 경험적으로 실패하는 이유: (1) 정보 충격이 독립이 아니다 — 변동성이 군집한다(큰 움직임 뒤에 큰 움직임이 온다). (2) 충격이 동일한 분포를 따르지 않는다 — 분산이 시간에 따라 변한다. (3) 어떤 충격은 크고 드물다(실적 서프라이즈, 지정학적 사건). 이는 "작고 독립적인 것이 많다"는 가정을 위배한다. 그 결과 두꺼운 꼬리와 변동성 군집이 나타나며 둘 다 정규 모형과 맞지 않는다.
 
 ---
 
-**Exercise 4.**
-Explain why normality is a more reasonable assumption for portfolio returns than for individual stock returns.
+**연습문제 2.**
+수익률이 실제로는 꼬리가 두꺼운데 정규성을 가정하여 위험가치(VaR)를 계산하면 어떤 실질적 결과가 따르는가?
 
-??? success "Solution to Exercise 4"
-    Portfolio returns are weighted averages of individual stock returns. By diversification (combining many weakly correlated assets), the CLT drives the portfolio return distribution toward normality. Specifically, the sum of many weakly dependent random variables with finite variance converges to normality.
+??? success "연습문제 2 풀이"
+    $\alpha$ 수준의 정규 VaR는 $\text{VaR}_\alpha = -(\mu + z_\alpha \sigma)$이며 $z_\alpha$는 표준정규의 $\alpha$ 분위수이다($\alpha = 0.01$에서 $z_{0.01} = -2.326$이므로 $\mu = 0$이면 $\text{VaR}_{0.01} = 2.326\sigma$이다). 수익률의 꼬리가 더 두꺼우면 참 $\alpha$ 분위수는 $z_\alpha \sigma$보다 극단적이다.
 
-    The convergence is faster when: (1) the portfolio contains many assets, (2) the assets are not too highly correlated, and (3) no single asset dominates the portfolio weight. Well-diversified portfolios with 30+ stocks often have return distributions that are closer to normal than individual stocks.
+    결과: 정규 VaR가 잠재적 손실을 **과소평가한다**. 예를 들어 정규 99% VaR가 어떤 포트폴리오의 일간 최대 손실을 2.3%로 예측하더라도 실제 1% 최악 손실은 4% 이상일 수 있다. 이는 자본 준비금 부족, 예기치 못한 위험 한도 초과, 규제 위반 가능성으로 이어진다.
 
-    However, during market crises, correlations spike (contagion), reducing the effective diversification and making portfolio returns more heavy-tailed than normal -- precisely when accurate risk modeling matters most.
+---
+
+**연습문제 3.**
+수익률 대신 주가에 대수정규분포를 흔히 쓴다. 대수정규 가격과 정규분포 로그수익률의 관계를 설명하라.
+
+??? success "연습문제 3 풀이"
+    주가 $S_t$가 대수정규분포를 따르면 $\log(S_t/S_{t-1}) = \log S_t - \log S_{t-1}$(로그수익률)이 정규분포를 따른다. 동등하게 $S_t = S_0 \exp(\sum r_i)$이며 $r_i$는 로그수익률이다.
+
+    이 모형(기하 브라운 운동)이 Black-Scholes 옵션 가격 공식의 바탕이다. 대수정규 변수는 항상 양수이므로 가격이 양수로 유지되면서 수익률은 음수가 될 수 있다.
+
+    이 모형은 수익률이 진짜로 정규가 아닌 것과 같은 이유로 실패한다. 두꺼운 꼬리, 변동성 군집, 점프이다. 확장 모형으로는 점프-확산 모형, 확률변동성 모형, GARCH 과정이 있다.
+
+---
+
+**연습문제 4.**
+개별 주식 수익률보다 포트폴리오 수익률에서 정규성이 더 합리적인 가정인 이유를 설명하라.
+
+??? success "연습문제 4 풀이"
+    포트폴리오 수익률은 개별 주식 수익률의 가중평균이다. 분산투자(약하게 상관된 자산을 여럿 결합)를 통해 CLT가 포트폴리오 수익률 분포를 정규 쪽으로 밀어붙인다. 구체적으로 분산이 유한하고 약하게 종속된 확률변수를 많이 더하면 정규로 수렴한다.
+
+    수렴이 빨라지는 조건: (1) 포트폴리오에 자산이 많다, (2) 자산들이 지나치게 강하게 상관되어 있지 않다, (3) 어느 한 자산이 비중을 지배하지 않는다. 주식 30개 이상으로 잘 분산된 포트폴리오는 개별 주식보다 정규에 가까운 수익률 분포를 갖는 일이 많다.
+
+    다만 시장 위기 때는 상관이 급등하여(전염) 실효 분산투자가 줄고 포트폴리오 수익률이 정규보다 꼬리가 두꺼워진다. 하필 정확한 위험 모형화가 가장 중요한 때에 그렇게 된다.

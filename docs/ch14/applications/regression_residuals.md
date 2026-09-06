@@ -1,94 +1,94 @@
-# Normality in Regression (Residual Diagnostics)
+# 회귀에서의 정규성 (잔차 진단)
 
-## What the Assumption Requires
+## 가정이 요구하는 것
 
-A common misconception is that linear regression requires the predictors or the response variable to be normally distributed. In fact, the normality assumption in regression applies to the **error terms**, not to the variables themselves. In the standard linear regression model
+흔한 오해 가운데 하나는 선형회귀가 설명변수나 반응변수의 정규분포를 요구한다는 것이다. 사실 회귀의 정규성 가정은 변수 자체가 아니라 **오차항**에 적용된다. 표준적인 선형회귀 모형
 
 $$
 Y_i = \beta_0 + \beta_1 X_{i1} + \cdots + \beta_p X_{ip} + \varepsilon_i
 $$
 
-the assumption is
+에서 가정은
 
 $$
 \varepsilon_i \overset{\text{iid}}{\sim} N(0, \sigma^2)
 $$
 
-This is equivalent to saying that, conditional on the predictors, the response is normally distributed:
+이다. 이는 설명변수를 조건으로 할 때 반응변수가 정규분포를 따른다는 말과 같다.
 
 $$
 Y_i \mid X_i \sim N(\beta_0 + \beta_1 X_{i1} + \cdots + \beta_p X_{ip},\; \sigma^2)
 $$
 
-The predictors $X_{ij}$ can have any distribution. A skewed predictor, a binary predictor, or a heavy-tailed predictor does not violate the normality assumption.
+설명변수 $X_{ij}$는 어떤 분포든 가질 수 있다. 치우친 설명변수, 이진 설명변수, 꼬리가 두꺼운 설명변수 모두 정규성 가정을 위배하지 않는다.
 
-??? warning "Normality Applies to Residuals, Not Predictors"
-    Testing normality on the predictor variables or on the unconditional distribution of $Y$ is a common but incorrect practice. The normality check must be performed on the residuals $\hat{\varepsilon}_i = Y_i - \hat{Y}_i$, which estimate the unobservable errors $\varepsilon_i$.
+??? warning "정규성은 설명변수가 아니라 잔차에 적용된다"
+    설명변수나 $Y$의 무조건 분포에 정규성을 검정하는 것은 흔하지만 잘못된 관행이다. 정규성 확인은 관측되지 않는 오차 $\varepsilon_i$를 추정하는 잔차 $\hat{\varepsilon}_i = Y_i - \hat{Y}_i$에 대해 수행해야 한다.
 
-## Why Normality Matters in Regression
+## 회귀에서 정규성이 중요한 이유
 
-The normality of errors is not needed for the OLS estimates $\hat{\beta}$ to be unbiased or consistent. The Gauss-Markov theorem guarantees that OLS is the Best Linear Unbiased Estimator (BLUE) under weaker conditions (linearity, exogeneity, homoscedasticity, no multicollinearity). Normality enters when we need:
+OLS 추정값 $\hat{\beta}$가 불편이거나 일치성을 갖는 데는 오차의 정규성이 필요하지 않다. Gauss-Markov 정리는 더 약한 조건(선형성, 외생성, 등분산성, 다중공선성 없음) 아래에서 OLS가 최소분산 선형불편추정량(BLUE)임을 보장한다. 정규성은 다음이 필요할 때 들어온다.
 
-1. **Exact $t$-tests and $F$-tests.** Under normality, the test statistic for $H_0: \beta_j = 0$,
+1. **정확한 $t$ 검정과 $F$ 검정.** 정규성 아래에서 $H_0: \beta_j = 0$의 검정통계량
 
     $$
     t_j = \frac{\hat{\beta}_j}{\text{SE}(\hat{\beta}_j)}
     $$
 
-    follows a $t$-distribution with $n - p - 1$ degrees of freedom exactly. Without normality, this distributional result is only approximate (via the CLT for large $n$).
+    는 자유도 $n - p - 1$의 $t$ 분포를 정확히 따른다. 정규성이 없으면 이 분포 결과는 (큰 $n$에서 중심극한정리를 통해) 근사적으로만 성립한다.
 
-2. **Exact confidence intervals.** The $100(1-\alpha)\%$ confidence interval
+2. **정확한 신뢰구간.** $100(1-\alpha)\%$ 신뢰구간
 
     $$
     \hat{\beta}_j \pm t_{\alpha/2,\, n-p-1} \cdot \text{SE}(\hat{\beta}_j)
     $$
 
-    has exact coverage only under normality. Without it, the coverage is approximate.
+    는 정규성 아래에서만 정확한 포함확률을 갖는다. 정규성이 없으면 포함확률이 근사적이다.
 
-3. **Prediction intervals.** The prediction interval for a new observation is
+3. **예측구간.** 새 관측값에 대한 예측구간은
 
     $$
     \hat{Y}_{\text{new}} \pm t_{\alpha/2,\, n-p-1} \cdot \hat{\sigma}\sqrt{1 + \mathbf{x}_{\text{new}}^T (\mathbf{X}^T\mathbf{X})^{-1} \mathbf{x}_{\text{new}}}
     $$
 
-    This interval relies on the normality of the errors to guarantee that the prediction error is normally distributed. Non-normal errors can cause the actual coverage to differ substantially from $1 - \alpha$.
+    이 구간은 예측오차가 정규분포를 따름을 보장하기 위해 오차의 정규성에 기댄다. 오차가 정규가 아니면 실제 포함확률이 $1 - \alpha$에서 크게 벗어날 수 있다.
 
-## Checking Normality of Residuals
+## 잔차의 정규성 확인
 
-Since the true errors $\varepsilon_i$ are unobservable, we check normality using the **residuals** $\hat{\varepsilon}_i = Y_i - \hat{Y}_i$. The standard diagnostic tools are:
+참 오차 $\varepsilon_i$는 관측할 수 없으므로 **잔차** $\hat{\varepsilon}_i = Y_i - \hat{Y}_i$로 정규성을 확인한다. 표준적인 진단 도구는 다음과 같다.
 
-### Q-Q Plot of Residuals
+### 잔차의 Q-Q 그림
 
-The Q-Q plot compares the quantiles of the residuals against the quantiles of a standard normal distribution. If the errors are normal, the points should fall approximately along a straight line. Common patterns of departure include:
+Q-Q 그림은 잔차의 분위수를 표준정규분포의 분위수와 비교한다. 오차가 정규이면 점들이 대략 직선을 따라 놓인다. 흔한 이탈 패턴은
 
-- **S-shaped curve**: indicates heavy tails (positive excess kurtosis)
-- **Upward curvature**: indicates right skewness
-- **Downward curvature at both ends**: indicates light tails (platykurtic)
+- **S자 곡선**: 두꺼운 꼬리(양의 초과첨도)를 나타낸다
+- **위로 휘는 곡률**: 오른쪽 치우침을 나타낸다
+- **양 끝이 아래로 휨**: 얇은 꼬리(저첨)를 나타낸다
 
-### Shapiro-Wilk Test on Residuals
+### 잔차에 대한 Shapiro-Wilk 검정
 
-Apply the Shapiro-Wilk test to the residuals:
+잔차에 Shapiro-Wilk 검정을 적용한다.
 
-- $H_0$: The residuals are normally distributed
-- $H_1$: The residuals are not normally distributed
+- $H_0$: 잔차가 정규분포를 따른다
+- $H_1$: 잔차가 정규분포를 따르지 않는다
 
-For large $n$, the test may reject due to trivial departures; graphical methods become more informative in such cases.
+$n$이 크면 사소한 이탈로도 기각할 수 있으므로 그런 경우에는 시각적 방법이 더 유익하다.
 
-### Histogram of Residuals
+### 잔차의 히스토그램
 
-A histogram of residuals provides a quick visual check. Look for approximate symmetry and a bell-shaped profile. Strong skewness or multiple modes are signs of non-normality.
+잔차의 히스토그램은 빠른 시각적 확인을 제공한다. 대략적인 대칭성과 종 모양 윤곽을 살핀다. 강한 치우침이나 여러 개의 봉우리는 비정규성의 신호이다.
 
-## Consequences of Non-Normal Residuals
+## 잔차가 정규가 아닐 때의 결과
 
-The impact of non-normal residuals depends on the goal of the analysis:
+정규가 아닌 잔차의 영향은 분석의 목표에 달려 있다.
 
-**Point estimation.** OLS estimates remain unbiased and consistent regardless of the error distribution, as long as the other Gauss-Markov conditions hold. Non-normality does not affect $\hat{\beta}$.
+**점추정.** 나머지 Gauss-Markov 조건이 성립하는 한 OLS 추정량은 오차 분포와 무관하게 불편이고 일치성을 갖는다. 비정규성은 $\hat{\beta}$에 영향을 주지 않는다.
 
-**Hypothesis tests and CIs.** For small $n$, non-normal errors can distort $p$-values and coverage probabilities. For large $n$, the CLT ensures that $\hat{\beta}_j$ is approximately normal, so the $t$-tests and CIs remain approximately valid.
+**가설검정과 신뢰구간.** $n$이 작으면 정규가 아닌 오차가 $p$값과 포함확률을 왜곡할 수 있다. $n$이 크면 중심극한정리가 $\hat{\beta}_j$의 근사적 정규성을 보장하므로 $t$ 검정과 신뢰구간이 근사적으로 타당하게 유지된다.
 
-**Prediction intervals.** Prediction intervals are more sensitive to non-normality than confidence intervals for $\hat{\beta}_j$, because the prediction error includes the full error term $\varepsilon_{\text{new}}$ whose distribution directly enters the interval.
+**예측구간.** 예측구간은 $\hat{\beta}_j$의 신뢰구간보다 비정규성에 더 민감하다. 예측오차가 오차항 $\varepsilon_{\text{new}}$ 전체를 포함하며 그 분포가 구간에 직접 들어오기 때문이다.
 
-## Python Example
+## Python 예제
 
 ```python
 import numpy as np
@@ -134,70 +134,87 @@ if __name__ == "__main__":
         print("\n  Evidence of non-normality in residuals.")
 ```
 
-## Remedies for Non-Normal Residuals
+출력:
 
-When residual diagnostics reveal non-normality, several approaches can help:
+```text
+Estimated coefficients: beta_0 = 2.430, beta_1 = 2.908
 
-1. **Transform the response.** A log or Box-Cox transformation of $Y$ can reduce skewness in the residuals. The transformed model is $g(Y_i) = \beta_0 + \beta_1 X_{i1} + \cdots + \varepsilon_i$.
+Residual diagnostics:
+  Shapiro-Wilk: W = 0.9846, p = 0.2984
+  Skewness:     0.2173
+  Excess kurtosis: -0.0712
 
-2. **Remove outliers.** If the non-normality is driven by a few extreme residuals, investigate whether these observations are data errors or influential points.
+  Residuals are consistent with normality.
+```
 
-3. **Use robust standard errors.** Heteroscedasticity-consistent (HC) standard errors provide valid inference without normality, at least asymptotically.
+잔차의 왜도 $0.217$과 초과첨도 $-0.071$이 모두 0에 가깝고 Shapiro-Wilk $p = 0.298$로 기각하지 못한다. 정규 오차로 자료를 생성했으므로 기대한 결과이다. 추정된 계수 $(2.430, 2.908)$이 참값 $(2.0, 3.0)$과 정확히 일치하지 않는 것은 $n = 100$에서의 표집변동일 뿐이다.
 
-4. **Use bootstrap inference.** Bootstrap confidence intervals and $p$-values do not require the normality assumption.
+## 정규가 아닌 잔차에 대한 대책
 
-5. **Use a generalized linear model.** If the response is inherently non-normal (e.g., counts, binary outcomes), a GLM with an appropriate link function is more appropriate than OLS with a transformation.
+잔차 진단이 비정규성을 드러내면 몇 가지 접근이 도움이 된다.
 
-## Summary
+1. **반응변수를 변환한다.** $Y$에 로그나 Box-Cox 변환을 적용하면 잔차의 치우침을 줄일 수 있다. 변환된 모형은 $g(Y_i) = \beta_0 + \beta_1 X_{i1} + \cdots + \varepsilon_i$이다.
 
-In linear regression, the normality assumption applies to the error terms, not to the predictors or the unconditional response. Normality is needed for exact $t$-tests, $F$-tests, and prediction intervals, but OLS point estimates remain valid without it. Diagnostics should be performed on the residuals using Q-Q plots, formal tests, and histograms. When non-normality is detected, the practical impact depends on the sample size and whether the goal is estimation, testing, or prediction.
+2. **이상점을 조사한다.** 비정규성이 몇 개의 극단적 잔차 때문이라면 그 관측값이 자료 오류인지 영향점인지 살펴본다.
 
-## Exercises
+3. **로버스트 표준오차를 쓴다.** 이분산 일치(HC) 표준오차는 적어도 점근적으로는 정규성 없이도 타당한 추론을 제공한다.
 
-**Exercise 1.**
-After fitting a linear regression, you create a Q-Q plot of the residuals and observe the points curving upward at both ends. What does this suggest about the residual distribution?
+4. **붓스트랩 추론을 쓴다.** 붓스트랩 신뢰구간과 $p$값은 정규성 가정을 요구하지 않는다.
 
-??? success "Solution to Exercise 1"
-    Points curving upward at both tails (forming an S-shape with the right tail above the line and the left tail below) indicate **heavy tails** (leptokurtosis). The residuals have more extreme values than a normal distribution predicts.
+5. **일반화선형모형을 쓴다.** 반응변수가 본래 정규가 아니라면(예: 계수, 이진 결과) 변환한 OLS보다 적절한 연결함수를 가진 GLM이 더 낫다.
 
-    This could be caused by outliers, a misspecified model (e.g., missing nonlinear terms or important predictors), or the underlying error distribution genuinely having heavier tails. The regression coefficient estimates remain unbiased (OLS does not require normality), but inference (p-values, confidence intervals) may be unreliable, especially for small samples.
+## 요약
 
----
+선형회귀에서 정규성 가정은 설명변수나 무조건 반응변수가 아니라 오차항에 적용된다. 정확한 $t$ 검정, $F$ 검정, 예측구간에는 정규성이 필요하지만, OLS 점추정값은 정규성 없이도 타당하다. 진단은 Q-Q 그림, 형식적 검정, 히스토그램으로 잔차에 대해 수행해야 한다. 비정규성이 탐지되면 그 실질적 영향은 표본크기와, 목표가 추정인지 검정인지 예측인지에 달려 있다.
 
-**Exercise 2.**
-Describe two types of residual plots used to assess normality and one used to assess homoscedasticity in linear regression.
+## 연습문제
 
-??? success "Solution to Exercise 2"
-    **Normality diagnostics:**
+**연습문제 1.**
+선형회귀를 적합한 뒤 잔차의 Q-Q 그림을 그렸더니 오른쪽 꼬리의 점들은 기준선 위로, 왼쪽 꼬리의 점들은 기준선 아래로 벗어나 S자 모양을 이룬다. 이는 잔차 분포에 대해 무엇을 시사하는가?
 
-    1. **Q-Q plot of residuals:** Plots residual quantiles against theoretical normal quantiles. Linearity indicates normality.
-    2. **Histogram of residuals:** Should be approximately bell-shaped and symmetric around zero.
+??? success "연습문제 1 풀이"
+    오른쪽 꼬리가 선 위로, 왼쪽 꼬리가 선 아래로 벗어나 S자를 이루는 것은 **두꺼운 꼬리**(고첨)를 나타낸다. 잔차에 정규분포가 예측하는 것보다 극단적인 값이 많다는 뜻이다.
 
-    **Homoscedasticity diagnostic:**
+    (양 끝이 **모두 위로** 휘는 것은 다른 패턴, 곧 오른쪽 치우침을 나타낸다는 점에 유의하라.)
 
-    1. **Residuals vs. fitted values plot:** Plot $e_i$ against $\hat{y}_i$. Under homoscedasticity, the spread should be constant (horizontal band). A funnel shape (spread increasing with $\hat{y}$) indicates heteroscedasticity.
-
----
-
-**Exercise 3.**
-A Shapiro-Wilk test on regression residuals gives $p = 0.12$ with $n = 40$. Can you conclude that the errors are normally distributed?
-
-??? success "Solution to Exercise 3"
-    No. Failing to reject the null ($p = 0.12 > 0.05$) means there is insufficient evidence to conclude the residuals are non-normal. It does not prove normality -- it may simply reflect low power (especially with $n = 40$).
-
-    The correct interpretation is: "The data are consistent with normality, but normality has not been proven." This is the classic limitation of hypothesis testing -- absence of evidence is not evidence of absence. Supplement with Q-Q plots and consider whether the sample size provides adequate power to detect the departures of concern.
+    원인으로는 이상점, 모형 오설정(비선형 항이나 중요한 설명변수의 누락), 또는 바탕 오차 분포가 실제로 두꺼운 꼬리를 갖는 경우가 있다. 회귀계수 추정값은 여전히 불편이지만(OLS는 정규성을 요구하지 않는다) 추론(p값, 신뢰구간)은 특히 작은 표본에서 믿을 수 없어질 수 있다.
 
 ---
 
-**Exercise 4.**
-When regression residuals fail a normality test, list three approaches (in order of preference) to address the issue.
+**연습문제 2.**
+선형회귀에서 정규성을 평가하는 잔차 그림 두 가지와 등분산성을 평가하는 그림 한 가지를 기술하라.
 
-??? success "Solution to Exercise 4"
+??? success "연습문제 2 풀이"
+    **정규성 진단:**
 
-    1. **Transform the response variable:** Apply a Box-Cox, log, or square root transformation to $Y$. This often normalizes residuals and stabilizes variance simultaneously. Re-fit the model and re-check residuals.
+    1. **잔차의 Q-Q 그림:** 잔차 분위수를 이론적 정규분위수에 대해 그린다. 선형이면 정규성을 나타낸다.
+    2. **잔차의 히스토그램:** 0을 중심으로 대략 종 모양이고 대칭이어야 한다.
 
-    2. **Use robust or bootstrap inference:** If the residuals are non-normal but the model structure is correct, use heteroscedasticity-consistent (HC) standard errors or bootstrap confidence intervals, which are valid without normality.
+    **등분산성 진단:**
 
-    3. **Use a generalized linear model:** If the response is inherently non-normal (e.g., counts, proportions, strictly positive), switch to an appropriate GLM (Poisson, logistic, Gamma) that models the correct distribution directly.
+    1. **잔차-적합값 그림:** $e_i$를 $\hat{y}_i$에 대해 그린다. 등분산성 아래에서는 흩어짐이 일정해야 한다(수평 띠). 깔때기 모양($\hat{y}$가 커질수록 흩어짐이 커짐)은 이분산을 나타낸다.
 
-    Additionally, check for model misspecification (missing predictors, nonlinear terms) before blaming the error distribution -- non-normal residuals often indicate a model problem rather than a distributional issue.
+---
+
+**연습문제 3.**
+$n = 40$인 회귀 잔차에 대한 Shapiro-Wilk 검정이 $p = 0.12$를 준다. 오차가 정규분포를 따른다고 결론지을 수 있는가?
+
+??? success "연습문제 3 풀이"
+    아니다. 귀무가설을 기각하지 못한 것($p = 0.12 > 0.05$)은 잔차가 정규가 아니라고 결론지을 증거가 부족하다는 뜻이다. 정규성을 증명하지는 않으며, 특히 $n = 40$에서는 검정력이 낮은 것을 반영할 뿐일 수 있다.
+
+    올바른 해석은 "자료가 정규성과 일관되지만 정규성이 증명된 것은 아니다"이다. 증거의 부재가 부재의 증거가 아니라는 가설검정의 고전적 한계이다. Q-Q 그림으로 보완하고, 관심 있는 이탈을 탐지할 만한 검정력을 표본크기가 제공하는지 고려하라.
+
+---
+
+**연습문제 4.**
+회귀 잔차가 정규성 검정을 통과하지 못했을 때 문제를 해결하는 접근 세 가지를 선호 순서대로 들어라.
+
+??? success "연습문제 4 풀이"
+
+    1. **반응변수 변환:** $Y$에 Box-Cox, 로그, 제곱근 변환을 적용한다. 잔차를 정규화하면서 동시에 분산도 안정화하는 경우가 많다. 모형을 다시 적합하고 잔차를 다시 확인한다.
+
+    2. **로버스트 추론이나 붓스트랩 추론:** 잔차가 정규가 아니지만 모형 구조가 옳다면 이분산 일치(HC) 표준오차나 붓스트랩 신뢰구간을 쓴다. 정규성 없이도 타당하다.
+
+    3. **일반화선형모형:** 반응변수가 본래 정규가 아니라면(예: 계수, 비율, 순양수) 올바른 분포를 직접 모형화하는 적절한 GLM(Poisson, 로지스틱, 감마)으로 갈아탄다.
+
+    덧붙여, 오차 분포를 탓하기 전에 모형 오설정(누락된 설명변수, 비선형 항)이 있는지 확인하라. 정규가 아닌 잔차는 분포의 문제라기보다 모형의 문제를 나타내는 경우가 많다.

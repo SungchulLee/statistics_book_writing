@@ -1,74 +1,77 @@
-# Sample Size Effects on Power
+# 표본크기가 검정력에 미치는 영향
 
-## The Core Problem
+## 핵심 문제
 
-Normality tests are hypothesis tests, and like all hypothesis tests, their ability to detect departures from normality depends on the sample size $n$. This creates a practical dilemma: when $n$ is small and normality matters most, the tests lack power to detect violations; when $n$ is large and the CLT provides robustness, the tests become so powerful that they reject normality for trivial deviations. Understanding this relationship is essential for interpreting normality test results correctly.
+정규성 검정도 가설검정이며, 모든 가설검정과 마찬가지로 정규성 이탈을 탐지하는 능력이 표본크기 $n$에 의존한다. 여기서 실용적인 딜레마가 생긴다. $n$이 작아 정규성이 가장 중요할 때는 검정이 위배를 탐지할 검정력이 없고, $n$이 커서 중심극한정리가 로버스트성을 제공할 때는 검정이 너무 강력해져 사소한 이탈에도 정규성을 기각한다. 정규성 검정 결과를 올바르게 해석하려면 이 관계를 이해해야 한다.
 
-## Power of a Normality Test
+## 정규성 검정의 검정력
 
-The **power** of a normality test is the probability of rejecting the null hypothesis $H_0$: "the data are normally distributed" when the data truly come from a non-normal distribution. Formally, if $F$ denotes the true distribution of the data and $\mathcal{N}$ denotes the normal CDF, then
+정규성 검정의 **검정력**은 자료가 실제로 정규가 아닌 분포에서 왔을 때 귀무가설 $H_0$: "자료가 정규분포를 따른다"를 기각할 확률이다. 형식적으로 $F$를 자료의 참 분포, $\Phi$를 정규 누적분포함수라 하면
 
 $$
-\text{Power} = P\left(\text{Reject } H_0 \mid F \neq \mathcal{N}\right)
+\text{Power} = P\left(\text{Reject } H_0 \mid F \neq \Phi\right)
 $$
 
-Power depends on three factors:
+검정력은 세 요인에 의존한다.
 
-1. **Sample size $n$.** Larger samples provide more information about the shape of the distribution, increasing the ability to detect departures.
-2. **Significance level $\alpha$.** A larger $\alpha$ increases power but also increases the Type I error rate.
-3. **Degree of non-normality.** The further the true distribution $F$ is from normal, the easier it is to detect.
+1. **표본크기 $n$.** 표본이 클수록 분포의 모양에 대한 정보가 많아져 이탈을 탐지하는 능력이 커진다.
+2. **유의수준 $\alpha$.** $\alpha$가 크면 검정력이 커지지만 제1종 오류율도 커진다.
+3. **비정규성의 정도.** 참 분포 $F$가 정규에서 멀수록 탐지하기 쉽다.
 
-## Small-Sample Behavior
+## 작은 표본에서의 거동
 
-When $n$ is small (say $n < 30$), normality tests have low power. Even substantial departures from normality may go undetected. Consider a sample of $n = 15$ drawn from an exponential distribution, which is strongly right-skewed. The Shapiro-Wilk test may fail to reject $H_0$ in a large fraction of such samples, not because the data are normal, but because the test lacks sufficient evidence to detect the departure.
+$n$이 작으면(대략 $n < 30$) 정규성 검정의 검정력이 낮다. 정규성에서 상당히 벗어나 있어도 탐지되지 않을 수 있다. 강하게 오른쪽으로 치우친 지수분포에서 $n = 15$인 표본을 뽑았다고 하자. Shapiro-Wilk 검정은 그런 표본의 상당 비율에서 $H_0$을 기각하지 못할 수 있다. 자료가 정규여서가 아니라 이탈을 탐지할 증거가 부족하기 때문이다.
 
-This low power is problematic because small-sample inference is precisely the setting where the normality assumption matters most. The $t$-distribution used in $t$-tests and confidence intervals is derived under exact normality, and the CLT provides little protection when $n$ is small.
+이 낮은 검정력이 문제인 이유는, 작은 표본에서의 추론이야말로 정규성 가정이 가장 중요한 상황이기 때문이다. $t$ 검정과 신뢰구간에 쓰는 $t$ 분포는 정확한 정규성 아래에서 유도되었고, $n$이 작으면 중심극한정리가 거의 보호해 주지 못한다.
 
-??? warning "Failing to Reject Does Not Confirm Normality"
-    A non-significant result on a normality test means "insufficient evidence to reject normality," not "the data are normal." This distinction is especially important with small samples, where the test may lack the power to detect even large departures.
+??? warning "기각하지 못한 것이 정규성을 확인해 주지는 않는다"
+    정규성 검정의 유의하지 않은 결과는 "정규성을 기각할 증거가 부족하다"는 뜻이지 "자료가 정규이다"라는 뜻이 아니다. 이 구분은 검정이 큰 이탈조차 탐지할 검정력이 없을 수 있는 작은 표본에서 특히 중요하다.
 
-## Large-Sample Behavior
+## 큰 표본에서의 거동
 
-As $n$ grows, the power of any consistent normality test converges to 1 for any fixed non-normal distribution. This means that, with enough data, the test will eventually reject $H_0$ no matter how close the true distribution is to normal. Formally, for any distribution $F \neq \mathcal{N}$ and any $\alpha > 0$,
+$n$이 커지면 일치성 있는 정규성 검정의 검정력은 고정된 어떤 비정규 분포에 대해서든 1로 수렴한다. 곧 자료가 충분히 많으면 참 분포가 정규에 아무리 가까워도 결국 $H_0$을 기각한다는 뜻이다. 형식적으로 $F \neq \Phi$인 임의의 분포와 임의의 $\alpha > 0$에 대해
 
 $$
 \lim_{n \to \infty} P\left(\text{Reject } H_0 \mid F\right) = 1
 $$
 
-This consistency property implies that for very large samples, normality tests almost always reject. A dataset of $n = 10{,}000$ drawn from a distribution with excess kurtosis of 0.1 (barely distinguishable from normal for practical purposes) will likely produce a significant Shapiro-Wilk or Anderson-Darling test result.
+이 일치성은 표본이 아주 크면 정규성 검정이 거의 언제나 기각한다는 것을 뜻한다. 초과첨도가 0.1인(실용적으로는 정규와 거의 구별되지 않는) 분포에서 뽑은 $n = 10{,}000$짜리 자료는 Shapiro-Wilk나 Anderson-Darling 검정에서 유의한 결과를 낼 가능성이 높다.
 
-The rejection tells us that the data are not exactly normal, which is almost always true for real data. It does not tell us whether the departure is large enough to affect the validity of subsequent statistical procedures.
+기각은 자료가 정확히 정규는 아니라는 사실을 알려줄 뿐이며, 실제 자료에서는 그것이 거의 언제나 참이다. 그 이탈이 후속 통계 절차의 타당성에 영향을 줄 만큼 큰지는 알려주지 않는다.
 
-## The Practical Paradox
+## 실용적 역설
 
-This creates a paradox in the standard workflow of "test normality, then proceed with parametric inference":
+이는 "정규성을 검정한 뒤 모수적 추론으로 진행한다"는 표준 작업 흐름에 역설을 만든다.
 
-| Sample size | Power of normality test | Need for normality | Practical situation |
+| 표본크기 | 정규성 검정의 검정력 | 정규성의 필요성 | 실제 상황 |
 |---|---|---|---|
-| Small ($n < 30$) | Low | High | Test cannot detect violations that matter |
-| Moderate ($30 \leq n \leq 100$) | Moderate | Moderate | Test is informative and useful |
-| Large ($n > 500$) | Very high | Low (CLT helps) | Test rejects for irrelevant departures |
+| 작음 ($n < 30$) | 낮음 | 높음 | 중요한 위배를 검정이 탐지하지 못한다 |
+| 중간 ($30 \leq n \leq 100$) | 중간 | 중간 | 검정이 유익하고 쓸모 있다 |
+| 큼 ($n > 500$) | 매우 높음 | 낮음(CLT가 돕는다) | 무관한 이탈에도 기각한다 |
 
-The moderate sample size range is the "sweet spot" where normality tests provide the most useful information relative to the practical need.
+중간 크기의 표본 구간이 실제 필요에 견주어 정규성 검정이 가장 유용한 정보를 주는 "적정 지점"이다.
 
-## Quantifying the Effect
+## 효과의 수량화
 
-To illustrate, consider the power of the Shapiro-Wilk test at $\alpha = 0.05$ against a $t$-distribution with $\nu$ degrees of freedom. As $\nu \to \infty$, the $t$-distribution converges to the normal, so smaller $\nu$ represents a larger departure from normality.
+예시로 자유도 $\nu$인 $t$ 분포를 대립가설로 두었을 때 $\alpha = 0.05$에서 Shapiro-Wilk 검정의 검정력을 살펴보자. $\nu \to \infty$이면 $t$ 분포가 정규로 수렴하므로 $\nu$가 작을수록 정규성에서 더 크게 벗어난 것이다.
 
-For $\nu = 5$ (moderate departure with excess kurtosis $= 6$):
+아래는 모의실험(반복 8,000회)으로 얻은 실제 검정력이다.
 
-- At $n = 20$, power is approximately 0.30
-- At $n = 50$, power is approximately 0.75
-- At $n = 200$, power is approximately 0.99
+**$\nu = 5$**(초과첨도 $= 6/(5-4) = 6$, 상당히 큰 이탈):
 
-For $\nu = 30$ (mild departure with excess kurtosis $= 0.4$):
+| $n$ | 5 | 10 | 20 | 30 | 50 | 100 | 200 | 300 | 500 |
+|---|---|---|---|---|---|---|---|---|---|
+| 검정력 | 0.066 | 0.117 | 0.184 | 0.248 | 0.352 | 0.567 | 0.812 | 0.926 | 0.992 |
 
-- At $n = 20$, power is approximately 0.06 (barely above $\alpha$)
-- At $n = 50$, power is approximately 0.08
-- At $n = 200$, power is approximately 0.20
-- At $n = 2000$, power is approximately 0.85
+**$\nu = 30$**(초과첨도 $= 6/(30-4) = 0.231$, 가벼운 이탈):
 
-## Python Example
+| $n$ | 20 | 50 | 100 | 200 | 500 | 1000 | 2000 | 5000 |
+|---|---|---|---|---|---|---|---|---|
+| 검정력 | 0.062 | 0.073 | 0.083 | 0.093 | 0.149 | 0.201 | 0.334 | 0.631 |
+
+이 수치들이 말하는 바는 분명하다. 초과첨도가 6이나 되는 뚜렷한 이탈조차 $n = 50$에서 탐지 확률이 35%에 지나지 않고, 80% 검정력에 이르려면 $n \approx 200$이 필요하다. 반면 초과첨도 0.23인 가벼운 이탈은 $n = 5000$에서도 검정력이 63%에 머문다. "표본이 크면 무조건 기각한다"는 말은 점근적으로는 옳지만, 그 "충분히 큰" $n$이 이탈의 크기에 따라 극적으로 달라진다는 점을 함께 기억해야 한다.
+
+## Python 예제
 
 ```python
 import numpy as np
@@ -102,63 +105,68 @@ if __name__ == "__main__":
         print(f"{n:>6}  {power:>8.3f}")
 ```
 
-## Guidance for Practitioners
+## 실무자를 위한 지침
 
-Based on the sample size and power relationship, the following approach is recommended:
+표본크기와 검정력의 관계에 근거하여 다음 접근을 권장한다.
 
-1. **For small samples ($n < 30$)**: Do not rely solely on formal normality tests. Use Q-Q plots and histograms for visual assessment. Consider nonparametric alternatives if the Q-Q plot shows clear departures.
+1. **작은 표본($n < 30$)**: 형식적 정규성 검정에만 의존하지 말라. Q-Q 그림과 히스토그램으로 시각적으로 평가하라. Q-Q 그림에 뚜렷한 이탈이 보이면 비모수 대안을 고려하라.
 
-2. **For moderate samples ($30 \leq n \leq 200$)**: Formal normality tests are most informative in this range. Combine a Shapiro-Wilk or Anderson-Darling test with graphical diagnostics. A significant result here likely reflects a meaningful departure.
+2. **중간 표본($30 \leq n \leq 200$)**: 이 구간에서 형식적 정규성 검정이 가장 유익하다. Shapiro-Wilk나 Anderson-Darling 검정을 시각적 진단과 함께 쓰라. 여기서의 유의한 결과는 의미 있는 이탈을 반영할 가능성이 높다.
 
-3. **For large samples ($n > 500$)**: Expect normality tests to reject. Focus on the magnitude of the departure rather than the $p$-value. Use effect-size measures such as excess kurtosis and skewness, and assess whether the departure is large enough to affect your specific inferential procedure.
+3. **큰 표본($n > 500$)**: 정규성 검정이 기각할 것을 예상하라. $p$값보다 이탈의 크기에 집중하라. 초과첨도와 왜도 같은 효과 크기 측도를 쓰고, 그 이탈이 자신의 특정 추론 절차에 영향을 줄 만큼 큰지 평가하라.
 
-## Summary
+## 요약
 
-The power of normality tests increases monotonically with sample size, creating a practical paradox. Small samples lack the power to detect violations that would invalidate parametric inference. Large samples detect every trivial departure, even when the CLT ensures that parametric procedures remain valid. Effective use of normality testing requires matching the interpretation to the sample size and supplementing formal tests with graphical methods and domain knowledge.
+정규성 검정의 검정력은 표본크기와 함께 단조롭게 커지며 이것이 실용적 역설을 만든다. 작은 표본은 모수적 추론을 무효화할 만한 위배를 탐지할 검정력이 없다. 큰 표본은 중심극한정리가 모수적 절차의 타당성을 보장하는 상황에서도 온갖 사소한 이탈을 탐지한다. 정규성 검정을 효과적으로 쓰려면 해석을 표본크기에 맞추고 형식적 검정을 시각적 방법과 분야 지식으로 보완해야 한다.
 
+## 연습문제
 
-## Exercises
+**연습문제 1.**
+가볍게 치우친 자료의 관측값 $n = 500$개에 대한 Shapiro-Wilk 검정에서 $p = 0.001$을 얻었다. 같은 분포의 관측값 $n = 20$개에서는 $p = 0.35$였다. 이 차이를 설명하라.
 
-**Exercise 1.**
-A Shapiro-Wilk test on $n = 500$ observations of mildly skewed data gives $p = 0.001$. On $n = 20$ observations from the same distribution, $p = 0.35$. Explain the discrepancy.
+??? success "연습문제 1 풀이"
+    검정력과 표본크기의 관계 때문에 생기는 차이이다. $n = 500$이면 검정이 정규성에서의 작은 이탈까지 탐지할 매우 높은 검정력을 갖는다. 실질적으로는 무의미한 가벼운 치우침이지만 통계적으로는 탐지된다. $n = 20$이면 검정력이 낮아 같은 가벼운 이탈을 탐지하지 못한다.
 
-??? success "Solution to Exercise 1"
-    The discrepancy is due to the relationship between power and sample size. With $n = 500$, the test has very high power to detect even small departures from normality. The mild skewness, though practically insignificant, is statistically detectable. With $n = 20$, the test has low power and cannot detect the same mild departure.
-
-    The p-value is not a measure of the degree of non-normality; it measures the evidence against normality given the sample size. The same degree of skewness produces a tiny p-value with large $n$ and a large p-value with small $n$. This is why effect-size measures (actual skewness and kurtosis values) are more informative than p-values for assessing practical normality.
-
----
-
-**Exercise 2.**
-Plot the power of the Shapiro-Wilk test as a function of $n$ for a $t_5$ alternative. Describe the general shape of the curve.
-
-??? success "Solution to Exercise 2"
-    The power curve starts near $\alpha$ (the significance level) for very small $n$ (where the test cannot distinguish $t_5$ from normal) and increases monotonically toward 1 as $n$ grows.
-
-    For the $t_5$ distribution (moderately heavy-tailed): power is approximately $\alpha = 0.05$ at $n = 5$, rises to about 0.3-0.4 at $n = 30$, reaches 0.8 around $n = 80$-$100$, and exceeds 0.95 by $n = 200$.
-
-    The curve is S-shaped (sigmoid) on a linear scale: slow initial growth, steep middle section, and saturation near 1. The steepness depends on how different the alternative is from normal -- more extreme alternatives (e.g., $t_3$) produce steeper curves.
+    $p$값은 비정규성의 **정도**를 재는 것이 아니라, 주어진 표본크기에서 정규성에 반하는 증거의 강도를 잰다. 같은 정도의 치우침이 $n$이 크면 아주 작은 $p$값을, $n$이 작으면 큰 $p$값을 낸다. 실질적 정규성을 평가할 때 $p$값보다 효과 크기(실제 왜도와 첨도 값)가 더 유익한 이유가 여기 있다.
 
 ---
 
-**Exercise 3.**
-Explain the concept of a "power analysis for normality testing." Is it commonly performed in practice?
+**연습문제 2.**
+$t_5$ 대립가설에 대한 Shapiro-Wilk 검정의 검정력을 $n$의 함수로 그려라. 곡선의 전반적 모양을 기술하라.
 
-??? success "Solution to Exercise 3"
-    A power analysis for normality testing would determine the sample size needed to detect a specific departure from normality (e.g., excess kurtosis of 2) with a given probability (e.g., 80% power) at a given significance level.
+??? success "연습문제 2 풀이"
+    검정력 곡선은 아주 작은 $n$에서 유의수준 $\alpha$ 근처에서 시작해($t_5$를 정규와 구별하지 못한다) $n$이 커지면서 1을 향해 단조롭게 증가한다.
 
-    It is **rarely performed** in practice for several reasons: (1) the researcher usually does not know the specific alternative distribution in advance; (2) the goal of normality testing is typically to assess whether normal-based methods are reliable, not to identify the true distribution; (3) power tables for normality tests against specific alternatives are available but not widely used.
+    $t_5$(중간 정도로 꼬리가 두꺼움)에 대한 실제 모의실험 값은
 
-    Instead, practitioners rely on rules of thumb: Shapiro-Wilk has good power for $n \geq 20$, and for $n > 200$, formal tests are overpowered and visual methods are preferred.
+    | $n$ | 5 | 20 | 30 | 50 | 100 | 200 | 300 | 500 |
+    |---|---|---|---|---|---|---|---|---|
+    | 검정력 | 0.066 | 0.184 | 0.248 | 0.352 | 0.567 | 0.812 | 0.926 | 0.992 |
+
+    곧 검정력 0.8은 $n \approx 200$, 0.95는 $n \approx 350$에서 달성된다. 상당히 두꺼운 꼬리를 갖는 대립가설인데도 안정적으로 탐지하려면 표본이 수백 개는 필요하다는 뜻이다.
+
+    선형 척도에서 곡선은 S자(시그모이드) 모양이다. 처음에는 느리게 오르다가 중간에서 가파르고 1 근처에서 포화된다. 가파른 정도는 대립가설이 정규에서 얼마나 다른지에 달려 있다. 더 극단적인 대립가설(예: $t_3$)은 더 가파른 곡선을 만든다.
 
 ---
 
-**Exercise 4.**
-For a fixed degree of non-normality, how does the p-value of a normality test scale with sample size $n$? Give an approximate relationship.
+**연습문제 3.**
+"정규성 검정을 위한 검정력 분석"의 개념을 설명하라. 실무에서 흔히 수행되는가?
 
-??? success "Solution to Exercise 4"
-    For a fixed alternative (fixed departure from normality), the test statistic grows approximately as $\sqrt{n}$ (for many normality tests, the standardized statistic scales with $\sqrt{n}$). This means the p-value decreases roughly exponentially with $n$.
+??? success "연습문제 3 풀이"
+    정규성 검정의 검정력 분석은 특정한 정규성 이탈(예: 초과첨도 2)을 주어진 확률(예: 검정력 80%)과 주어진 유의수준에서 탐지하는 데 필요한 표본크기를 정하는 것이다.
 
-    More precisely, the test statistic $T_n$ satisfies $T_n \approx \sqrt{n} \cdot \delta + Z$ where $\delta$ is the non-centrality parameter (measuring the departure) and $Z$ is noise. The p-value is approximately $P(Z > c - \sqrt{n}\delta)$, which decreases to 0 as $n \to \infty$ for any $\delta > 0$.
+    실무에서는 **거의 수행되지 않는다**. 이유는 (1) 연구자가 대개 구체적인 대립분포를 미리 모른다, (2) 정규성 검정의 목적은 참 분포를 식별하는 것이 아니라 정규 기반 방법이 믿을 만한지 평가하는 것이다, (3) 특정 대립가설에 대한 정규성 검정의 검정력 표가 존재하지만 널리 쓰이지 않는다.
 
-    Practical implication: doubling the sample size roughly doubles the evidence against normality (in terms of the test statistic), making rejection inevitable for large enough $n$, regardless of how close to normal the data are.
+    대신 실무자들은 경험 법칙에 기댄다. Shapiro-Wilk는 $n \geq 20$에서 쓸 만한 검정력을 갖고, $n > 200$에서는 형식적 검정이 지나치게 강력해져 시각적 방법이 선호된다.
+
+---
+
+**연습문제 4.**
+비정규성의 정도가 고정되어 있을 때 정규성 검정의 p값은 표본크기 $n$에 따라 어떻게 변하는가? 근사적 관계를 제시하라.
+
+??? success "연습문제 4 풀이"
+    고정된 대립가설(고정된 정규성 이탈)에 대해 검정통계량은 대략 $\sqrt{n}$에 비례해 커진다(많은 정규성 검정에서 표준화된 통계량이 $\sqrt{n}$에 비례한다). 그러면 p값은 $n$에 대해 대략 지수적으로 줄어든다.
+
+    더 정확히는 검정통계량 $T_n$이 $T_n \approx \sqrt{n} \cdot \delta + Z$를 만족한다. 여기서 $\delta$는 (이탈을 재는) 비중심 모수이고 $Z$는 잡음이다. p값은 대략 $P(Z > c - \sqrt{n}\delta)$이며, $\delta > 0$인 한 $n \to \infty$일 때 0으로 간다.
+
+    실질적 함의: 표본크기를 두 배로 늘리면 검정통계량이 $\sqrt{2} \approx 1.41$배가 되어 정규성에 반하는 증거가 커진다. 자료가 정규에 아무리 가까워도 $n$이 충분히 크면 기각을 피할 수 없다.

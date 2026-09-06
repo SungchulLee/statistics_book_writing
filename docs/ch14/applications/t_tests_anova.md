@@ -1,99 +1,99 @@
-# Normality in t-Tests and Analysis of Variance
+# t 검정과 분산분석에서의 정규성
 
-## Where the Assumption Enters
+## 가정이 들어오는 지점
 
-The $t$-test and ANOVA both require normality, but the precise form of the assumption differs between the two. In the $t$-test, we assume that the underlying population (or populations) are normally distributed. In ANOVA, the assumption is that the observations within each group are drawn from normal populations. In both cases, the normality assumption ensures that the test statistic follows its reference distribution exactly, so that $p$-values and critical values are accurate.
+$t$ 검정과 분산분석 모두 정규성을 요구하지만 가정의 정확한 형태는 둘이 다르다. $t$ 검정에서는 바탕 모집단(들)이 정규분포를 따른다고 가정한다. 분산분석에서는 각 집단 안의 관측값이 정규 모집단에서 뽑혔다고 가정한다. 두 경우 모두 정규성 가정이 검정통계량이 기준분포를 정확히 따르도록 보장하여 $p$값과 임계값이 정확해진다.
 
-Before applying these procedures, it is good practice to check normality. This section explains where the assumption enters, how to diagnose violations, and how robust each procedure is to departures.
+이 절차들을 적용하기 전에 정규성을 확인하는 것이 좋은 실무 관행이다. 이 절은 가정이 어디에서 들어오는지, 위배를 어떻게 진단하는지, 각 절차가 이탈에 얼마나 로버스트한지를 설명한다.
 
-## The One-Sample t-Test
+## 일표본 t 검정
 
-For a sample $X_1, X_2, \ldots, X_n$ from a population with mean $\mu$ and variance $\sigma^2$, the one-sample $t$-test assumes
+평균 $\mu$, 분산 $\sigma^2$인 모집단에서 뽑은 표본 $X_1, X_2, \ldots, X_n$에 대해 일표본 $t$ 검정은 다음을 가정한다.
 
 $$
 X_i \overset{\text{iid}}{\sim} N(\mu, \sigma^2)
 $$
 
-Under this assumption, the test statistic
+이 가정 아래에서 검정통계량
 
 $$
 t = \frac{\bar{X} - \mu_0}{S / \sqrt{n}}
 $$
 
-follows a $t$-distribution with $n - 1$ degrees of freedom exactly. The normality of $X_i$ guarantees two properties simultaneously: $\bar{X}$ is normally distributed, and $\bar{X}$ and $S^2$ are independent. Both are needed for the $t$-distribution to hold.
+는 자유도 $n - 1$의 $t$ 분포를 정확히 따른다. $X_i$의 정규성이 두 성질을 동시에 보장한다. $\bar{X}$가 정규분포를 따른다는 것과, $\bar{X}$와 $S^2$이 독립이라는 것이다. $t$ 분포가 성립하려면 둘 다 필요하다.
 
-## The Two-Sample t-Test
+## 이표본 t 검정
 
-The independent two-sample $t$-test assumes normality in both populations:
+독립인 이표본 $t$ 검정은 두 모집단의 정규성을 가정한다.
 
 $$
 X_{1i} \overset{\text{iid}}{\sim} N(\mu_1, \sigma^2), \quad X_{2j} \overset{\text{iid}}{\sim} N(\mu_2, \sigma^2)
 $$
 
-Under equal variances, the pooled $t$-statistic follows a $t$-distribution with $n_1 + n_2 - 2$ degrees of freedom. Welch's $t$-test relaxes the equal-variance assumption but still requires normality in each group for the approximate degrees of freedom to be valid.
+분산이 같으면 합동 $t$ 통계량이 자유도 $n_1 + n_2 - 2$의 $t$ 분포를 따른다. Welch의 $t$ 검정은 등분산 가정을 완화하지만, 근사 자유도가 타당하려면 여전히 각 집단의 정규성이 필요하다.
 
-## One-Way ANOVA
+## 일원배치 분산분석
 
-In one-way ANOVA with $k$ groups, the model is
+집단이 $k$개인 일원배치 분산분석의 모형은
 
 $$
 X_{ij} = \mu_i + \varepsilon_{ij}, \quad \varepsilon_{ij} \overset{\text{iid}}{\sim} N(0, \sigma^2)
 $$
 
-for $i = 1, \ldots, k$ and $j = 1, \ldots, n_i$. The normality assumption applies to the error terms $\varepsilon_{ij}$, which is equivalent to assuming that the observations within each group are normally distributed around the group mean. The $F$-statistic
+$i = 1, \ldots, k$이고 $j = 1, \ldots, n_i$이다. 정규성 가정은 오차항 $\varepsilon_{ij}$에 적용되며, 이는 각 집단 안의 관측값이 집단 평균 주위에서 정규분포를 따른다고 가정하는 것과 같다. $F$ 통계량
 
 $$
 F = \frac{\text{MSB}}{\text{MSW}}
 $$
 
-follows an $F$-distribution with $k - 1$ and $N - k$ degrees of freedom under $H_0$ and the normality assumption.
+는 $H_0$과 정규성 가정 아래에서 자유도 $k - 1$과 $N - k$의 $F$ 분포를 따른다.
 
-## Checking Normality in Practice
+## 실무에서의 정규성 확인
 
-### For the t-Test
+### t 검정의 경우
 
-Since the $t$-test assumes normality of the raw data (or each group's data), the check should be applied to the sample values directly:
+$t$ 검정은 원자료(또는 각 집단의 자료)의 정규성을 가정하므로 확인도 표본값에 직접 적용해야 한다.
 
-1. **Q-Q plot** of the sample values against normal quantiles.
-2. **Shapiro-Wilk test** on the sample values.
-3. **Histogram** to visually assess symmetry and tail behavior.
+1. 표본값의 정규분위수에 대한 **Q-Q 그림**.
+2. 표본값에 대한 **Shapiro-Wilk 검정**.
+3. 대칭성과 꼬리 거동을 눈으로 평가하는 **히스토그램**.
 
-### For ANOVA
+### 분산분석의 경우
 
-In ANOVA, normality is an assumption about the residuals $\hat{\varepsilon}_{ij} = X_{ij} - \bar{X}_{i\cdot}$, where $\bar{X}_{i\cdot}$ is the group mean. The diagnostic procedure is:
+분산분석에서 정규성은 잔차 $\hat{\varepsilon}_{ij} = X_{ij} - \bar{X}_{i\cdot}$에 대한 가정이다. 여기서 $\bar{X}_{i\cdot}$는 집단 평균이다. 진단 절차는
 
-1. **Compute residuals** by subtracting group means from each observation.
-2. **Q-Q plot** of the pooled residuals against normal quantiles.
-3. **Shapiro-Wilk test** on the pooled residuals.
+1. 각 관측값에서 집단 평균을 빼서 **잔차를 계산**한다.
+2. 합쳐진 잔차의 정규분위수에 대한 **Q-Q 그림**.
+3. 합쳐진 잔차에 대한 **Shapiro-Wilk 검정**.
 
-Checking residuals rather than raw data is important because the raw data are a mixture of $k$ potentially different distributions (different means), even if all groups are normal.
+원자료가 아니라 잔차를 확인하는 것이 중요하다. 모든 집단이 정규여도 원자료는 (평균이 다른) $k$개 분포의 혼합이기 때문이다.
 
-??? tip "Check Residuals, Not Raw Data, in ANOVA"
-    If the group means differ substantially, the combined raw data may appear non-normal (e.g., multimodal) even when each group is perfectly normal. Always check the residuals, which remove the group-mean differences and isolate the distributional assumption.
+??? tip "분산분석에서는 원자료가 아니라 잔차를 확인하라"
+    집단 평균이 크게 다르면 각 집단이 완벽하게 정규여도 합친 원자료는 (다봉으로 보이는 등) 정규가 아닌 것처럼 보일 수 있다. 언제나 잔차를 확인하라. 잔차는 집단 평균의 차이를 제거하여 분포 가정만 분리해 준다.
 
-## Robustness to Non-Normality
+## 비정규성에 대한 로버스트성
 
-### The t-Test
+### t 검정
 
-The one-sample and two-sample $t$-tests are robust to moderate departures from normality, especially when:
+일표본과 이표본 $t$ 검정은 다음 조건에서 중간 정도의 정규성 이탈에 로버스트하다.
 
-- The distribution is symmetric (even with heavy tails).
-- The sample size is at least $n \geq 20$ per group.
-- The departure is in the tails rather than in the form of skewness.
+- 분포가 대칭일 때(꼬리가 두꺼워도 괜찮다).
+- 집단당 표본크기가 최소 $n \geq 20$일 때.
+- 이탈이 치우침이 아니라 꼬리에서 일어날 때.
 
-For skewed populations, the $t$-test can have an inflated Type I error rate in small samples. The distortion is typically modest: an actual $\alpha$ of 0.06--0.08 when the nominal level is 0.05.
+치우친 모집단에서는 작은 표본에서 $t$ 검정의 제1종 오류율이 부풀려질 수 있다. 왜곡은 대체로 크지 않아, 명목 수준이 0.05일 때 실제로 0.06–0.08 정도이다.
 
-### ANOVA
+### 분산분석
 
-The $F$-test in ANOVA is moderately robust to non-normality when:
+분산분석의 $F$ 검정은 다음 조건에서 비정규성에 중간 정도로 로버스트하다.
 
-- Group sizes are equal (balanced design).
-- The distributions are symmetric.
-- The number of observations per group is at least 15--20.
+- 집단 크기가 같을 때(균형 설계).
+- 분포가 대칭일 때.
+- 집단당 관측값이 최소 15–20개일 때.
 
-Unbalanced designs combined with non-normality are more problematic. In such cases, the Welch ANOVA (which does not assume equal variances) combined with larger sample sizes provides better protection.
+불균형 설계와 비정규성이 겹치면 더 문제가 된다. 그런 경우 (등분산을 가정하지 않는) Welch 분산분석과 더 큰 표본크기가 더 나은 보호를 제공한다.
 
-## Python Example
+## Python 예제
 
 ```python
 import numpy as np
@@ -135,64 +135,78 @@ if __name__ == "__main__":
         print("\n  Evidence of non-normality in residuals (p <= 0.05).")
 ```
 
-## When Normality Fails
+출력:
 
-If diagnostics reveal non-normality in the $t$-test or ANOVA setting, several alternatives are available:
+```text
+Normality check on ANOVA residuals:
+  Shapiro-Wilk: W = 0.9925, p = 0.8948
 
-1. **Increase sample size.** The CLT provides asymptotic protection for mean-based tests.
-2. **Apply a transformation.** Log or square-root transformations can reduce skewness.
-3. **Use a nonparametric test.** The Wilcoxon rank-sum test replaces the two-sample $t$-test; the Kruskal-Wallis test replaces one-way ANOVA.
-4. **Use a permutation test.** Permutation-based $p$-values do not require distributional assumptions.
+One-way ANOVA:
+  F = 6.3788, p = 0.0026
 
-## Summary
+  Residuals are consistent with normality (p > 0.05).
+```
 
-The normality assumption in $t$-tests applies to the raw data, while in ANOVA it applies to the residuals. Both procedures are moderately robust to non-normality, with the $t$-test being more robust than the $F$-test. Checking normality should involve both graphical methods (Q-Q plots of residuals) and formal tests (Shapiro-Wilk). When violations are detected, the practitioner should assess whether the departure is practically significant before switching to alternative methods.
+잔차가 정규성과 잘 맞고($p = 0.895$) 분산분석은 집단 평균의 차이를 유의하게 탐지한다($p = 0.0026$, 표본평균은 각각 4.72, 5.32, 6.02). 정규성 진단은 통과하고 관심 있는 검정은 기각하는, 이상적인 상황이다.
 
-## Exercises
+## 정규성이 무너졌을 때
 
-**Exercise 1.**
-A researcher applies a t-test to a sample of $n = 12$ observations that are moderately right-skewed. Should they be concerned about the normality assumption?
+$t$ 검정이나 분산분석 상황에서 진단이 비정규성을 드러내면 몇 가지 대안이 있다.
 
-??? success "Solution to Exercise 1"
-    With $n = 12$, the CLT provides only limited protection, so moderate skewness is a concern. The t-test assumes normality for exact validity; with skewed data and small $n$, the actual Type I error rate can deviate from the nominal $\alpha$, and confidence intervals may have incorrect coverage.
+1. **표본크기를 늘린다.** 중심극한정리가 평균 기반 검정에 점근적 보호를 제공한다.
+2. **변환을 적용한다.** 로그나 제곱근 변환이 치우침을 줄일 수 있다.
+3. **비모수 검정을 쓴다.** Wilcoxon 순위합 검정이 이표본 $t$ 검정을, Kruskal-Wallis 검정이 일원배치 분산분석을 대신한다.
+4. **순열검정을 쓴다.** 순열 기반 $p$값은 분포 가정을 요구하지 않는다.
 
-    The researcher should: (1) assess the degree of skewness with a Q-Q plot, (2) consider a nonparametric alternative (Wilcoxon signed-rank test), (3) try a log transformation if the data are positive and right-skewed. If the skewness is mild, the t-test may still be approximately valid, but reporting the sensitivity analysis is good practice.
+## 요약
 
----
+$t$ 검정의 정규성 가정은 원자료에, 분산분석의 정규성 가정은 잔차에 적용된다. 두 절차 모두 비정규성에 중간 정도로 로버스트하며 $t$ 검정이 $F$ 검정보다 더 로버스트하다. 정규성 확인에는 시각적 방법(잔차의 Q-Q 그림)과 형식적 검정(Shapiro-Wilk)을 모두 써야 한다. 위배가 탐지되면 대안 방법으로 갈아타기 전에 그 이탈이 실질적으로 유의한지 먼저 평가해야 한다.
 
-**Exercise 2.**
-ANOVA is often described as "robust to non-normality." Qualify this statement: when is ANOVA robust, and when is it not?
+## 연습문제
 
-??? success "Solution to Exercise 2"
-    ANOVA is robust when: (1) sample sizes are large ($n_j \geq 20$-$30$ per group), because the CLT normalizes group means; (2) group sizes are equal (balanced design), which protects against variance heterogeneity; (3) departures from normality are moderate (mild skewness, no extreme outliers).
+**연습문제 1.**
+어떤 연구자가 중간 정도로 오른쪽으로 치우친 관측값 $n = 12$개에 t 검정을 적용한다. 정규성 가정을 걱정해야 하는가?
 
-    ANOVA is NOT robust when: (1) sample sizes are small and unequal with heterogeneous variances; (2) data are heavily skewed or have outliers in small samples; (3) the data are severely non-normal (e.g., bimodal, heavy-tailed). In these cases, the F-test's Type I error rate can be substantially inflated or deflated.
+??? success "연습문제 1 풀이"
+    $n = 12$이면 중심극한정리의 보호가 제한적이므로 중간 정도의 치우침도 걱정거리이다. t 검정은 정확한 타당성을 위해 정규성을 가정한다. 치우친 자료와 작은 $n$에서는 실제 제1종 오류율이 명목 $\alpha$에서 벗어날 수 있고 신뢰구간의 포함확률도 틀릴 수 있다.
 
----
-
-**Exercise 3.**
-Compare the Welch t-test and the Mann-Whitney U test as alternatives when normality is questionable. When is each preferred?
-
-??? success "Solution to Exercise 3"
-    **Welch t-test:** Does not assume equal variances but still assumes approximate normality (or large $n$). It tests whether the means differ. Preferred when: data are approximately normal or $n$ is large, and the research question is about means.
-
-    **Mann-Whitney U test:** A nonparametric test that does not assume normality. Under the assumption of equal shape distributions, it tests whether one group tends to have larger values (stochastic dominance). Preferred when: data are ordinal, heavily skewed, contain outliers, or $n$ is small.
-
-    Key difference: the Welch test is about means; the Mann-Whitney is about the entire distribution (or medians under symmetry). If the distributions have different shapes, the Mann-Whitney tests something other than a location shift.
+    연구자는 (1) Q-Q 그림으로 치우침의 정도를 평가하고, (2) 비모수 대안(Wilcoxon 부호순위 검정)을 고려하고, (3) 자료가 양수이고 오른쪽으로 치우쳤다면 로그 변환을 시도해야 한다. 치우침이 가벼우면 t 검정도 근사적으로 타당할 수 있지만, 민감도 분석을 함께 보고하는 것이 좋은 관행이다.
 
 ---
 
-**Exercise 4.**
-A one-way ANOVA with $k = 4$ groups and $n_j = 8$ per group rejects $H_0$ ($p = 0.02$). A Shapiro-Wilk test on the residuals gives $p = 0.04$. Should the ANOVA result be trusted?
+**연습문제 2.**
+분산분석은 흔히 "비정규성에 로버스트하다"고 기술된다. 이 서술을 한정하라. 분산분석은 언제 로버스트하고 언제 그렇지 않은가?
 
-??? success "Solution to Exercise 4"
-    The Shapiro-Wilk rejection ($p = 0.04$) raises a concern but does not invalidate the ANOVA automatically. With $n_j = 8$ (small groups), the t/F-distribution approximations are more sensitive to non-normality.
+??? success "연습문제 2 풀이"
+    분산분석이 로버스트한 경우: (1) 표본크기가 클 때(집단당 $n_j \geq 20$–$30$). 중심극한정리가 집단 평균을 정규화한다. (2) 집단 크기가 같을 때(균형 설계). 분산의 이질성에 대한 보호가 된다. (3) 정규성 이탈이 중간 정도일 때(가벼운 치우침, 극단적 이상점 없음).
 
-    Recommended actions:
+    분산분석이 로버스트하지 **않은** 경우: (1) 표본크기가 작고 불균등하며 분산이 이질적일 때, (2) 작은 표본에서 자료가 심하게 치우쳤거나 이상점이 있을 때, (3) 자료가 심하게 비정규일 때(예: 이봉, 두꺼운 꼬리). 이런 경우 F 검정의 제1종 오류율이 크게 부풀려지거나 축소될 수 있다.
 
-    1. Examine Q-Q plots and histograms of residuals to assess the degree of non-normality.
-    2. Run a nonparametric alternative (Kruskal-Wallis test) as a sensitivity check. If it also rejects, the ANOVA conclusion is supported.
-    3. If the non-normality is due to outliers, consider robust ANOVA methods or trimmed means.
-    4. Report both the ANOVA and Kruskal-Wallis results, noting the normality concern.
+---
 
-    If the Kruskal-Wallis also gives $p < 0.05$, confidence in the conclusion increases. If results diverge, the normality violation may be responsible.
+**연습문제 3.**
+정규성이 의심스러울 때의 대안으로 Welch t 검정과 Mann-Whitney U 검정을 비교하라. 각각은 언제 선호되는가?
+
+??? success "연습문제 3 풀이"
+    **Welch t 검정:** 등분산을 가정하지 않지만 여전히 근사적 정규성(또는 큰 $n$)을 가정한다. 평균이 다른지를 검정한다. 자료가 근사적으로 정규이거나 $n$이 크고 연구 질문이 평균에 관한 것일 때 선호된다.
+
+    **Mann-Whitney U 검정:** 정규성을 가정하지 않는 비모수 검정이다. 분포의 모양이 같다는 가정 아래에서 한 집단이 더 큰 값을 갖는 경향이 있는지(확률적 우위)를 검정한다. 자료가 순서형이거나 심하게 치우쳤거나 이상점이 있거나 $n$이 작을 때 선호된다.
+
+    핵심 차이: Welch 검정은 평균에 관한 것이고, Mann-Whitney는 분포 전체(대칭이면 중앙값)에 관한 것이다. 분포의 모양이 다르면 Mann-Whitney는 위치 이동이 아닌 다른 것을 검정하게 된다.
+
+---
+
+**연습문제 4.**
+집단이 $k = 4$개이고 집단당 $n_j = 8$인 일원배치 분산분석이 $H_0$을 기각했다($p = 0.02$). 잔차에 대한 Shapiro-Wilk 검정은 $p = 0.04$를 준다. 분산분석 결과를 믿어야 하는가?
+
+??? success "연습문제 4 풀이"
+    Shapiro-Wilk의 기각($p = 0.04$)은 우려를 낳지만 그 자체로 분산분석을 무효화하지는 않는다. $n_j = 8$(작은 집단)이면 t/F 분포 근사가 비정규성에 더 민감하다.
+
+    권장 조치:
+
+    1. 잔차의 Q-Q 그림과 히스토그램을 살펴 비정규성의 정도를 평가한다.
+    2. 민감도 확인으로 비모수 대안(Kruskal-Wallis 검정)을 수행한다. 그것도 기각하면 분산분석의 결론이 뒷받침된다.
+    3. 비정규성이 이상점 때문이라면 로버스트 분산분석이나 절사평균을 고려한다.
+    4. 정규성에 대한 우려를 명시하면서 분산분석과 Kruskal-Wallis 결과를 모두 보고한다.
+
+    Kruskal-Wallis도 $p < 0.05$를 준다면 결론에 대한 신뢰가 높아진다. 결과가 갈리면 정규성 위배가 원인일 수 있다.

@@ -1,13 +1,12 @@
-# Boxplots and Their Interpretation
+# 상자그림과 그 해석
 
+## 개요
 
-## Overview
+**상자그림**은 중앙값, 사분위수, 잠재적 이상점을 보여 분포를 요약한다. 정규성 검정을 위해 특별히 고안된 것은 아니지만, 정규분포 자료의 특징인 치우침 여부와 대칭성에 대한 단서를 준다.
 
-A **boxplot** summarizes the distribution by showing the median, quartiles, and potential outliers. While not explicitly designed for normality testing, boxplots can hint at skewness and whether the data is symmetric, which are characteristics of normally distributed data.
+정규분포를 따르는 자료의 상자그림은 대칭이며, (자료의 범위를 나타내는) 수염이 양쪽에서 대략 같은 길이를 갖는다.
 
-The boxplot in a normally distributed dataset will be symmetric, and the whiskers (indicating the data range) will be roughly the same length on both sides.
-
-## Box Plot with Normal Distribution
+## 정규분포의 상자그림
 
 ```python
 import numpy as np
@@ -45,9 +44,9 @@ if __name__ == "__main__":
     plot_horizontal_boxplot(sample_data)
 ```
 
-For normally distributed data, the boxplot is symmetric: the median line is centered in the box, and the whiskers extend approximately equally on both sides.
+정규분포 자료에서는 상자그림이 대칭이다. 중앙값 선이 상자 가운데에 놓이고 수염이 양쪽으로 거의 같게 뻗는다.
 
-## Box Plot with Exponential Distribution
+## 지수분포의 상자그림
 
 ```python
 import numpy as np
@@ -77,9 +76,9 @@ if __name__ == "__main__":
     plot_horizontal_boxplot(sample_data)
 ```
 
-For exponential data, the boxplot is clearly asymmetric: the right whisker extends much farther than the left, and multiple outliers appear on the right side, indicating strong positive skew.
+지수 자료에서는 상자그림이 뚜렷하게 비대칭이다. 오른쪽 수염이 왼쪽보다 훨씬 길게 뻗고 오른쪽에 이상점이 여럿 나타나 강한 양의 치우침을 나타낸다.
 
-## Box Plot with Chi-Square Distribution
+## 카이제곱분포의 상자그림
 
 ```python
 import numpy as np
@@ -109,62 +108,66 @@ if __name__ == "__main__":
     plot_horizontal_boxplot(sample_data)
 ```
 
-Chi-square data with 10 degrees of freedom shows moderate right-skew in the boxplot: the median is shifted left within the box, and the right whisker is longer than the left.
+자유도 10인 카이제곱 자료는 상자그림에서 중간 정도의 오른쪽 치우침을 보인다. 중앙값이 상자 안에서 왼쪽으로 치우쳐 있고 오른쪽 수염이 왼쪽보다 길다.
 
-## Limitations of Graphical Methods
+## 시각적 방법의 한계
 
-While graphical methods are helpful for visually assessing normality, they are subjective and rely on interpretation. Small deviations from normality might not be noticeable, and different users may interpret the same plot differently. Moreover, graphical methods are less effective for small sample sizes, where the variability in the data can obscure patterns.
+시각적 방법은 정규성을 눈으로 평가하는 데 도움이 되지만 주관적이며 해석에 의존한다. 정규성에서 조금 벗어난 것은 알아채기 어려울 수 있고, 같은 그림을 사람마다 다르게 해석할 수 있다. 게다가 표본이 작으면 자료의 변동이 패턴을 가리므로 시각적 방법의 효과가 떨어진다.
 
+## 연습문제
 
-## Exercises
+**연습문제 1.**
+어떤 상자그림에서 중앙값이 50, $Q_1$이 35, $Q_3$이 65이고 자료에 5와 120이라는 두 극단값이 있다. IQR와 1.5×IQR 규칙에 따른 수염 경계를 계산하라.
 
-**Exercise 1.**
-A boxplot shows the median at 50, Q1 at 35, Q3 at 65, and two outlier points at 5 and 120. Compute the IQR and the whisker boundaries using the 1.5*IQR rule.
+??? success "연습문제 1 풀이"
+    IQR는 $Q_3 - Q_1 = 65 - 35 = 30$이다.
 
-??? success "Solution to Exercise 1"
-    The IQR is $Q_3 - Q_1 = 65 - 35 = 30$.
+    수염 경계는
 
-    The whisker boundaries are:
+    - 아래쪽 울타리: $Q_1 - 1.5 \times \text{IQR} = 35 - 45 = -10$
+    - 위쪽 울타리: $Q_3 + 1.5 \times \text{IQR} = 65 + 45 = 110$
 
-    - Lower fence: $Q_1 - 1.5 \times \text{IQR} = 35 - 45 = -10$
-    - Upper fence: $Q_3 + 1.5 \times \text{IQR} = 65 + 45 = 110$
+    아래쪽 수염은 $-10$보다 큰 가장 작은 자료점까지 뻗는다($-10$ 자체까지가 아니다). 위쪽 수염은 110보다 작은 가장 큰 자료점까지 뻗는다.
 
-    The lower whisker extends to the smallest data point above $-10$ (not to $-10$ itself). The upper whisker extends to the largest data point below 110.
+    이제 두 극단값을 판정하면
 
-    Points at 5 (above $-10$, so within whiskers) and 120 (above 110, so marked as an outlier) are handled differently. Only 120 is an outlier by the 1.5*IQR rule. The point at 5 would be at or near the lower whisker end.
+    - $5 > -10$이므로 **이상점이 아니다**. 아래쪽 수염 끝에 놓이거나 그 근처에 있을 뿐이다.
+    - $120 > 110$이므로 **이상점이다**.
 
----
-
-**Exercise 2.**
-Compare side-by-side boxplots as a tool for comparing distributions across groups versus using ANOVA. What can boxplots show that ANOVA cannot?
-
-??? success "Solution to Exercise 2"
-    Boxplots show the full distributional shape: median, spread (IQR), symmetry, tail behavior, and outliers. ANOVA provides only a single test of whether means differ.
-
-    Boxplots can reveal: (1) differences in medians versus means, (2) unequal variances across groups (different box heights), (3) skewness (asymmetric whiskers), (4) outliers in specific groups, and (5) whether differences are practically meaningful (overlapping boxes suggest small effects).
-
-    ANOVA cannot show any of these features -- it reduces the comparison to a single p-value. The combination of boxplots (visual) and ANOVA (formal test) is ideal.
+    곧 1.5×IQR 규칙으로는 120만 이상점으로 표시된다. 눈으로 보기에 "극단적"인 값이 반드시 상자그림의 이상점 기준을 넘는 것은 아니라는 점을 보여주는 예이다.
 
 ---
 
-**Exercise 3.**
-Explain how boxplots can be used to assess the normality and homoscedasticity assumptions of ANOVA.
+**연습문제 2.**
+집단 간 분포를 비교하는 도구로서 나란히 놓은 상자그림과 분산분석을 비교하라. 상자그림이 보여줄 수 있지만 분산분석은 보여주지 못하는 것은 무엇인가?
 
-??? success "Solution to Exercise 3"
-    **Normality:** In each group's boxplot, check for symmetry. The median should be roughly centered in the box (Q1-Q3), and the whiskers should be approximately equal in length. Strongly asymmetric boxes or many outliers suggest non-normality.
+??? success "연습문제 2 풀이"
+    상자그림은 분포의 모양 전체를 보여준다. 중앙값, 산포(IQR), 대칭성, 꼬리 거동, 이상점이다. 분산분석은 평균이 다른지에 대한 검정 하나만 제공한다.
 
-    **Homoscedasticity:** Compare the box heights (IQR) across groups. If all boxes have similar heights, the variances are approximately equal. If one group's box is much taller than others, the equal-variance assumption may be violated.
+    상자그림이 드러낼 수 있는 것: (1) 중앙값과 평균의 차이, (2) 집단 간 분산의 불균등(상자 높이의 차이), (3) 치우침(비대칭 수염), (4) 특정 집단의 이상점, (5) 차이가 실질적으로 의미 있는지(상자가 겹치면 효과가 작다는 뜻).
 
-    These are quick visual checks, not formal tests, but they catch the most obvious violations before running ANOVA.
+    분산분석은 이 가운데 어느 것도 보여주지 못한다. 비교를 하나의 p값으로 압축해 버린다. 상자그림(시각)과 분산분석(형식적 검정)을 함께 쓰는 것이 이상적이다.
 
 ---
 
-**Exercise 4.**
-Why can a boxplot be misleading for bimodal distributions? What alternative plot would better reveal bimodality?
+**연습문제 3.**
+분산분석의 정규성과 등분산성 가정을 평가하는 데 상자그림을 어떻게 쓸 수 있는지 설명하라.
 
-??? success "Solution to Exercise 4"
-    A boxplot summarizes the distribution through five numbers (min, Q1, median, Q3, max) plus outliers. A bimodal distribution (two distinct clusters) might produce a boxplot that looks like a single symmetric distribution with a wide IQR, completely hiding the two modes.
+??? success "연습문제 3 풀이"
+    **정규성:** 각 집단의 상자그림에서 대칭성을 확인한다. 중앙값이 상자($Q_1$–$Q_3$) 안에서 대략 가운데에 있어야 하고 수염의 길이가 비슷해야 한다. 상자가 심하게 비대칭이거나 이상점이 많으면 비정규성을 시사한다.
 
-    For example, a mixture of $N(0,1)$ and $N(5,1)$ would show a boxplot centered around 2.5 with a large IQR, indistinguishable from a single wide distribution.
+    **등분산성:** 집단 간 상자의 높이(IQR)를 비교한다. 모든 상자의 높이가 비슷하면 분산이 대략 같다. 한 집단의 상자가 다른 집단보다 훨씬 높으면 등분산 가정이 위배되었을 수 있다.
 
-    **Better alternatives:** violin plots (overlay a KDE on the boxplot, revealing multimodality), histograms, or strip/swarm plots (showing individual data points alongside the box).
+    이는 형식적 검정이 아니라 빠른 시각적 확인이지만, 분산분석을 수행하기 전에 가장 뚜렷한 위배를 잡아낸다.
+
+---
+
+**연습문제 4.**
+이봉분포에서 상자그림이 오도할 수 있는 이유는 무엇인가? 이봉성을 더 잘 드러내는 대안 그림은 무엇인가?
+
+??? success "연습문제 4 풀이"
+    상자그림은 분포를 다섯 수치(최솟값, $Q_1$, 중앙값, $Q_3$, 최댓값)와 이상점으로 요약한다. 이봉분포(뚜렷이 구분되는 두 무리)는 IQR가 넓은 하나의 대칭분포처럼 보이는 상자그림을 만들어 두 봉우리를 완전히 감출 수 있다.
+
+    예를 들어 $N(0,1)$과 $N(5,1)$의 혼합은 2.5 근처를 중심으로 IQR가 큰 상자그림을 보여, 넓은 단봉분포 하나와 구별되지 않는다.
+
+    **더 나은 대안:** 바이올린 그림(상자그림에 KDE를 겹쳐 다봉성을 드러낸다), 히스토그램, 스트립/스웜 그림(상자와 함께 개별 자료점을 보여준다).
