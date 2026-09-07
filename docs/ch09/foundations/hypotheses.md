@@ -143,3 +143,9 @@ $$H_0: \mu = \mu_0 \quad \text{대} \quad H_a: \mu \neq \mu_0$$
     구체적인 가설에는 검정을 쓰고(규제, 과학), 불확실성을 보고할 때는 신뢰구간을 쓴다. **현대의 선호: 신뢰구간이 주, 검정이 보조.**
 
     효과크기 + 신뢰구간이 "유의하다/아니다"라는 이분법보다 정보가 풍부하다.
+
+!!! tip "더 연습하기"
+    Khan Academy의 대화형 연습 문제.
+
+    - [Writing null and alternative hypotheses (Khan Academy)](https://www.khanacademy.org/math/ap-statistics/xfb5d8e68:inference-categorical-proportions/idea-significance-tests/e/writing-null-and-alternative-hypotheses-informal)
+    - [Writing Hypotheses for a Test about a Mean (Khan Academy)](https://www.khanacademy.org/math/ap-statistics/xfb5d8e68:inference-quantitative-means/one-sample-t-test-mean/e/writing-hypotheses-one-sample-t-test-mean)

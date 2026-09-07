@@ -242,3 +242,9 @@ p-값과 미리 정한 유의수준에 따라 다음과 같이 판정한다:
     - p-값($H_0$에 반하는 증거).
 
     이 셋이 함께 있어야 이야기가 온전해진다. p-값만으로는 빈약하다.
+
+!!! tip "더 연습하기"
+    Khan Academy의 대화형 연습 문제.
+
+    - [Estimating p-values from Simulations (Khan Academy)](https://www.khanacademy.org/math/ap-statistics/xfb5d8e68:inference-categorical-proportions/idea-significance-tests/e/estimating-p-values-and-making-conclusions)
+    - [Using P-values to make conclusions (Khan Academy)](https://www.khanacademy.org/math/ap-statistics/xfb5d8e68:inference-categorical-proportions/idea-significance-tests/a/p-value-conclusions)

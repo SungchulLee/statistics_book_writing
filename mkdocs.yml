@@ -196,7 +196,6 @@ nav:
         - 5.4 시각화:
             - 표본분포 시각화: ch05/applications/sampling_dist_visualization.md
             - 소득 자료 표본분포 시각화: ch05/applications/sampling_dist_income_visualization.md
-        - 장 연습문제: ch05/exercises/exercises.md
 
     - 6 통계적 추정:
         - 장 개요: ch06/index.md
@@ -235,7 +234,6 @@ nav:
             - 최대사후확률 추정: ch06/bayesian/map_estimation.md
             - 베이즈 추정 시연: ch06/bayesian/bayesian_estimation.md
             - 베타분포 Beta(α, β) 켤레 사전분포: ch06/bayesian/bayesian_beta_conjugate.md
-        - 장 연습문제: ch06/exercises/exercises.md
 
     - 7 μ와 σ²의 추정:
         - 장 개요: ch07/index.md
@@ -264,7 +262,6 @@ nav:
             - 치우친 분포: ch07/non_normal/skewed.md
             - 수익률 추정: ch07/non_normal/return_estimation.md
             - 코시분포 Cauchy에서 큰수의 법칙의 실패: ch07/non_normal/cauchy_lln_failure.md
-        - 장 연습문제: ch07/exercises/exercises.md
 
     - 8 신뢰구간:
         - 장 개요: ch08/index.md
@@ -295,7 +292,6 @@ nav:
             - 원하는 오차한계를 위한 표본크기: ch08/sample_size/margin_of_error.md
             - 두 집단 비교를 위한 표본크기: ch08/sample_size/two_group_sample_size.md
             - 표본크기 계산: ch08/sample_size/sample_size.md
-        - 장 연습문제: ch08/exercises/exercises.md
 
     - 9 가설검정:
         - 장 개요: ch09/index.md
@@ -343,7 +339,6 @@ nav:
             - 거짓발견율 (Benjamini–Hochberg): ch09/multiple_testing/fdr.md
             - 다중검정 보정: ch09/multiple_testing/multiple_testing.md
             - 거짓발견율과 재표본추출 다중검정: ch09/multiple_testing/fdr_resampling_demo.md
-        - 장 연습문제: ch09/exercises/exercises.md
 
     - 10 카이제곱 검정:
         - 장 개요: ch10/index.md
@@ -366,7 +361,6 @@ nav:
             - 기대 칸 도수와 타당성 조건: ch10/practice/validity_conditions.md
             - 효과크기와 Cramér의 V: ch10/practice/effect_size.md
             - Fisher의 정확검정 (2×2): ch10/practice/fisher_exact.md
-        - 장 연습문제: ch10/exercises/exercises.md
 
     - 11 분산분석:
         - 장 개요: ch11/index.md
@@ -413,7 +407,6 @@ nav:
             - A/B 검정과 실험 설계: ch11/practical_applications/ab_testing.md
             - 분산분석의 금융 응용: ch11/practical_applications/finance_applications.md
             - 사례 연구: ch11/practical_applications/case_studies.md
-        - 장 연습문제: ch11/exercises/exercises.md
 
     - 12 상관과 인과:
         - 장 개요: ch12/index.md
@@ -457,7 +450,6 @@ nav:
         - 12.6 상관행렬과 시각화:
             - 상관행렬의 열지도: ch12/visualization/heatmaps.md
             - 쌍 그림과 산점도 행렬: ch12/visualization/pairplots.md
-        - 장 연습문제: ch12/exercises/exercises.md
 
     - 13 선형회귀:
         - 장 개요: ch13/index.md
@@ -525,7 +517,6 @@ nav:
             - statsmodels 최소제곱 인터페이스: ch13/package_usage/statsmodels.md
             - sklearn LinearRegression 인터페이스: ch13/package_usage/sklearn.md
             - 무엇을 언제 쓸 것인가 (비교): ch13/package_usage/comparison.md
-        - 장 연습문제: ch13/exercises/exercises.md
     - 14 정규성 검정:
         - 장 개요: ch14/index.md
         - 14.1 정규성 입문:
@@ -576,7 +567,6 @@ nav:
             - 회귀에서의 정규성 (잔차 진단): ch14/applications/regression_residuals.md
             - 금융 수익률의 정규성: ch14/applications/financial_returns.md
             - 응용 개관: ch14/applications/applications.md
-        - 장 연습문제: ch14/exercises/exercises.md
 
     - 15 분산 검정:
         - 장 개요: ch15/index.md
@@ -627,7 +617,6 @@ nav:
             - 회귀에서의 분산 검정: ch15/applications/regression_variance.md
             - 금융 변동성 비교: ch15/applications/financial_volatility.md
             - 회귀와 분산분석에서의 응용: ch15/applications/applications.md
-        - 장 연습문제: ch15/exercises/exercises.md
 
     - 16 비모수 검정:
         - 장 개요: ch16/index.md
@@ -703,7 +692,6 @@ nav:
             - 비교 개요: ch17/comparison/comparison.md
             - 재표집 방법 비교 (코드): ch17/comparison/resampling_methods.md
             - 교차검증 방법 비교 (코드): ch17/comparison/cv_methods_comparison.md
-        - 장 연습문제: ch17/exercises/exercises.md
 
     - 18 정칙화 기법:
         - 장 개요: ch18/index.md
@@ -748,7 +736,6 @@ nav:
             - 방법 선택 지침: ch18/overview/guidelines.md
             - 개관: ch18/overview/overview.md
             - 능형회귀·라쏘·엘라스틱넷 비교 (코드): ch18/overview/reg_compare.md
-        - 장 연습문제: ch18/exercises/exercises.md
 
     - 19 로지스틱 회귀:
         - 장 개요: ch19/index.md
@@ -777,7 +764,6 @@ nav:
             - 로지스틱 회귀의 L1·L2 정칙화: ch19/regularized/regularization.md
             - 벌점가능도를 통한 변수선택: ch19/regularized/feature_selection.md
             - 정칙화 로지스틱 회귀 실습 (코드): ch19/regularized/regularized_logistic.md
-        - 장 연습문제: ch19/exercises/exercises.md
 
     - 20 소프트맥스 회귀:
         - 장 개요: ch20/index.md

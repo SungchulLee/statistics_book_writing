@@ -198,3 +198,8 @@ $t$-검정은 정규성에서 벗어나도 꽤 로버스트하며, 특히 표본
     대안 — FDR(Benjamini-Hochberg): 양성으로 선언한 것 중 거짓 양성의 기대 비율을 통제한다. 덜 보수적이며 고처리량 검정의 표준이다.
 
     보정하지 않으면 다중검정 상황에서 거짓 경보가 사실상 확실하다.
+
+!!! tip "더 연습하기"
+    Khan Academy의 대화형 연습 문제.
+
+    - [Conditions for a t Test about a Mean (Khan Academy)](https://www.khanacademy.org/math/ap-statistics/xfb5d8e68:inference-quantitative-means/one-sample-t-test-mean/e/checking-conditions-one-sample-t-test-mean)
