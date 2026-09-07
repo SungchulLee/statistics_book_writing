@@ -75,9 +75,12 @@ nav:
             - 지도학습 (레이블을 이용한 예측): ch01/paradigms/supervised.md
             - 비지도학습 (패턴 발견): ch01/paradigms/unsupervised.md
             - 강화학습 (순차적 의사결정): ch01/paradigms/reinforcement.md
-        - 1.4 자료 수집의 어려움:
+        - 1.4 자료가 우리를 속이는 방식:
             - 편향과 무응답: ch01/classical/bias_nonresponse.md
             - 생존자 편향: ch01/classical/survivorship_bias.md
+            - 출판 편향과 파일서랍 문제: ch01/classical/publication_bias.md
+            - 길이 편향 표집과 검사 역설: ch01/classical/length_biased_sampling.md
+            - 알고리즘 편향과 피드백 루프: ch01/classical/algorithmic_bias.md
         - 1.5 모델 건설 방법:
             - 두 패러다임의 강점과 한계: ch01/contrast/tradeoffs.md
             - 예측 대 추론: ch01/modern/prediction_vs_inference.md
