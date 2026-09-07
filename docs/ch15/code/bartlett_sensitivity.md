@@ -101,7 +101,7 @@ False-positive rates under skewed (lognormal) data:
 
 **연습문제 1.** `skew=False`(정규 자료)로 모의실험을 실행하여 세 검정의 거짓 양성률이 모두 0.05에 가까움을 확인하라.
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
 
     ```python
     import numpy as np
@@ -144,7 +144,7 @@ False-positive rates under skewed (lognormal) data:
 
 **연습문제 2.** 대수정규 분포를 유지한 채 표본크기를 $n = 100$으로 늘려라. Bartlett 검정의 부풀려진 거짓 양성률이 개선되는가? 이유를 설명하라.
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
 
     ```python
     import numpy as np
@@ -185,7 +185,7 @@ False-positive rates under skewed (lognormal) data:
 
 **연습문제 3.** 대수정규 대신 $t(3)$ 자료를 쓰도록 모의실험을 수정하라. Bartlett 검정이 여전히 부풀려지는가? 심각도가 대수정규의 경우와 어떻게 비교되는가?
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
 
     ```python
     import numpy as np
@@ -228,7 +228,7 @@ False-positive rates under skewed (lognormal) data:
 
 **연습문제 4.** 모수 $\sigma$인 대수정규분포의 분산은 $(e^{\sigma^2} - 1)e^{2\mu + \sigma^2}$이다. 모든 집단이 같은 $\sigma$와 $\mu$를 쓰면 모분산이 같다. $\mu = 0, \sigma = 1$인 대수정규의 모분산, 왜도, 첨도를 계산하라.
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
 
     $X \sim \text{Lognormal}(\mu, \sigma^2)$이고 $\mu = 0, \sigma = 1$일 때
 
@@ -278,7 +278,7 @@ False-positive rates under skewed (lognormal) data:
 
 **연습문제 5.** 관측된 첨도에 기반하여 임계값을 조정하는 Bartlett 검정의 보정판을 제안하라. 이 접근의 실현 가능성과 한계를 논하라.
 
-??? success "연습문제 5 풀이"
+??? success "풀이"
 
     한 가지 접근은 Box(1953)의 보정으로, $\chi^2(k-1)$ 기준을 $\chi^2(k-1)/C$로 바꾼다.
 

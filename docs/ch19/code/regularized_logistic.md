@@ -184,7 +184,7 @@ $n = 200$, $p = 50$이고 처음 5개 특성만 참 계수가 0이 아닌 자료
 $C \in \{0.01, 0.1, 1.0, 10.0\}$에 대해 L1 정칙화 로지스틱 회귀를 적합하고, 각 $C$에서 0이
 아닌 추정 계수의 개수를 보고하라.
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
 
     ```python
     import numpy as np
@@ -229,7 +229,7 @@ $C \in \{0.01, 0.1, 1.0, 10.0\}$에 대해 L1 정칙화 로지스틱 회귀를 �
 능형 벌점 $\|\boldsymbol\beta\|_2^2$이 베이즈 로지스틱 회귀에서 각 $\beta_j$에 독립인
 $N(0, \sigma^2)$ 사전분포를 두는 것과 동등함을 보여라($\sigma^2 = C$).
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
 
     베이즈 로지스틱 회귀에서 사후분포는 가능도와 사전분포의 곱에 비례한다.
 
@@ -261,7 +261,7 @@ $N(0, \sigma^2)$ 사전분포를 두는 것과 동등함을 보여라($\sigma^2 
 **연습문제 3.**
 L1 벌점은 희소한 해를 만드는데 L2 벌점은 그렇지 않은 이유를 기하학적으로 설명하라.
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
 
     L1의 제약영역은 마름모(2차원에서는 집합
     $\{(\beta_1, \beta_2) : |\beta_1| + |\beta_2| \leq t\}$)로, 좌표축 위에 꼭짓점이 있다.
@@ -286,7 +286,7 @@ L1 벌점은 희소한 해를 만드는데 L2 벌점은 그렇지 않은 이유�
 연습문제 1의 자료에 `LogisticRegressionCV`를 `penalty='l1'`, `solver='saga'`, 5-겹
 교차검증으로 적용해 최적 $C$를 찾아라. 선택된 $C$와 그때의 교차검증 정확도를 보고하라.
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
 
     ```python
     from sklearn.linear_model import LogisticRegressionCV
@@ -329,7 +329,7 @@ $$
 
 이 임의의 $\alpha \in [0,1]$에 대해 $\boldsymbol\beta$의 볼록함수임을 증명하라.
 
-??? success "연습문제 5 풀이"
+??? success "풀이"
 
     $\|\boldsymbol\beta\|_1 = \sum_j |\beta_j|$와
     $\|\boldsymbol\beta\|_2^2 = \sum_j \beta_j^2$은 모두 $\boldsymbol\beta$의 볼록함수다.

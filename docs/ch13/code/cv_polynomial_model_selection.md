@@ -145,7 +145,7 @@ for i, degree in enumerate(degrees):
 
 **연습문제 1.** 모자행렬 지름길로 $n$개 모형을 다시 적합하지 않고 2차 다항회귀의 LOOCV MSE를 계산하라. 무차별 계산 결과와 일치하는지 확인하라.
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
 
     ```python
     poly = PolynomialFeatures(2)
@@ -165,7 +165,7 @@ for i, degree in enumerate(degrees):
 
 **연습문제 2.** $n$을 200에서 1000으로 늘려라. 검증집합 방법의 변동성과 LOOCV·10-겹 사이의 격차는 어떻게 달라지는가?
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
 
     $n = 1000$이면 (1) 훈련집합과 검증집합이 모두 커져 특정 분할에 대한 민감도가 줄어들므로 검증집합 방법이 더 안정된다. (2) 10-겹 교차검증의 편향(자료의 $90\%$만 훈련에 쓰는 데서 오는)이 $n$이 클 때 무시할 만해지므로 LOOCV와의 격차가 좁아진다. 두 방법이 참 검정오차에 대해 비슷한 추정값으로 수렴한다. $\square$
 
@@ -173,7 +173,7 @@ for i, degree in enumerate(degrees):
 
 **연습문제 3.** (10-겹 교차검증으로 얻은) 검정 MSE와 함께 훈련 MSE를 다항 차수의 함수로 그려라. 그림에 드러나는 편향-분산 절충을 설명하라.
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
 
     ```python
     train_mse = []
@@ -190,7 +190,7 @@ for i, degree in enumerate(degrees):
 
 **연습문제 4.** 계수 1의 갱신에 대한 Sherman-Morrison-Woodbury 공식에서 $\mathrm{CV}_{(n)} = \frac{1}{n}\sum_i \left(\frac{e_i}{1 - h_{ii}}\right)^2$을 유도하라.
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
 
     관측값 $i$를 지우는 것은 $\mathbf{X}^\top\mathbf{X}$의 계수 1 갱신과 같다. Sherman-Morrison 공식에 의해
 
@@ -204,6 +204,6 @@ for i, degree in enumerate(degrees):
 
 **연습문제 5.** $K$-겹 교차검증에서 $K$의 선택에 편향-분산 절충이 있는 이유를 설명하라. 극단인 $K = 2$와 $K = n$의 경우는 어떠한가?
 
-??? success "연습문제 5 풀이"
+??? success "풀이"
 
     $K$가 작으면(예: $K = 2$) 각 훈련집합이 자료의 $50\%$만 쓰므로 오차 추정값에 위쪽 편향이 생긴다(적은 자료로 훈련한 모형은 성능이 나쁘다). 그러나 $K$개의 추정값이 겹치지 않는 훈련집합에서 나오므로 분산은 작다. $K = n$(LOOCV)이면 각 훈련집합이 $n-1$개의 관측값을 쓰므로 편향이 최소이지만, $n$개의 훈련집합이 거의 완전히 겹쳐 추정값들이 강하게 상관되고 분산이 클 수 있다. $K = 5$나 $K = 10$이 이 양극단의 균형을 잡는다. $\square$

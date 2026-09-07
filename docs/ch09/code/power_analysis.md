@@ -110,7 +110,7 @@ plt.show()
 
 **연습문제 1.** 어떤 연구자가 $\alpha=0.01$에서 두 집단 사이의 $\delta=0.3$ 표준편차만큼의 차이를 검정력 90%로 탐지하려 한다. 집단당 몇 명이 필요한가?
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
 
     표본크기 공식을 쓴다:
 
@@ -134,7 +134,7 @@ $$
 1 - \beta = \mathcal{N}\!\left(\frac{\delta\sqrt{n}}{\sigma} - z_{\alpha/2}\right) + \mathcal{N}\!\left(-\frac{\delta\sqrt{n}}{\sigma} - z_{\alpha/2}\right).
 $$
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
 
     $H_1\colon \mu = \mu_0 + \delta$ 아래에서 검정통계량 $Z = (\bar{X}-\mu_0)/(\sigma/\sqrt{n})$은 $N(\delta\sqrt{n}/\sigma,\,1)$을 따른다. $\lambda = \delta\sqrt{n}/\sigma$라 하자. 이 검정은 $|Z| > z_{\alpha/2}$일 때 기각하므로
 
@@ -158,7 +158,7 @@ $$
 
 **연습문제 3.** 어떤 A/B 검정이 전환율 $p_1 = 0.05$와 $p_2 = 0.04$를 비교한다. $\alpha = 0.05$에서 검정력 80%를 위한 집단당 표본크기를 계산하라.
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
 
     $\bar{p} = (0.05 + 0.04)/2 = 0.045$, $z_{0.025}=1.96$, $z_{0.20}=0.842$이므로:
 
@@ -178,7 +178,7 @@ $$
 
 **연습문제 4.** Python으로 $\alpha = 0.05$에서 Cohen의 $d \in \{0.2, 0.5, 0.8\}$에 대해 일표본 t-검정의 검정력을 $n$(5부터 200까지)의 함수로 그려라. `statsmodels.stats.power.TTestPower`를 쓰라.
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
 
     ```python
     import numpy as np
@@ -208,7 +208,7 @@ $$
 
 **연습문제 5.** 유의수준 $\alpha$와 효과크기 $\delta > 0$이 고정되어 있을 때 $n \to \infty$이면 이표본 z-검정의 검정력이 1에 다가감을 증명하라.
 
-??? success "연습문제 5 풀이"
+??? success "풀이"
 
     검정력은
 

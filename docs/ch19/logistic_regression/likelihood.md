@@ -96,7 +96,7 @@ $$
 $\nabla_{\boldsymbol{\theta}}\,\ell = A^\top(\boldsymbol{\sigma} - \mathbf{y})$
 임을 유도하라. 여기서 $\boldsymbol{\sigma} = (\sigma^{(1)}, \dots, \sigma^{(n)})^\top$이다.
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
 
     한 관측치의 기여를 $\ell_i = -[y^{(i)}\log\sigma^{(i)} + (1-y^{(i)})\log(1-\sigma^{(i)})]$
     라 하고 $z^{(i)}$로 미분한다. 연쇄법칙과
@@ -132,7 +132,7 @@ $\nabla_{\boldsymbol{\theta}}\,\ell = A^\top(\boldsymbol{\sigma} - \mathbf{y})$
 $\ell$의 헤세행렬이 $H = A^\top W A$($W = \operatorname{diag}(\sigma^{(i)}(1-\sigma^{(i)}))$)
 임을 보이고, 이로부터 $\ell$이 볼록임을 결론지어라. 언제 강볼록이 되는가?
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
 
     연습문제 1에서 $\partial \ell/\partial z^{(i)} = \sigma^{(i)} - y^{(i)}$이므로 한 번 더
     미분하면 $\partial^2 \ell/\partial (z^{(i)})^2 = \sigma^{(i)}(1-\sigma^{(i)})$이다. 서로
@@ -157,7 +157,7 @@ $\ell$의 헤세행렬이 $H = A^\top W A$($W = \operatorname{diag}(\sigma^{(i)}
 절편만 있는 모형($z^{(i)} = \theta_0$)을 생각하자. MLE가 $\hat\sigma = \bar{y}$임을 보여라.
 $n = 10$이고 그중 3개가 1일 때 $\hat\theta_0$과 최소 교차엔트로피 손실을 계산하라.
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
 
     $z^{(i)} = \theta_0$이면 모든 $\sigma^{(i)}$가 같은 값 $\sigma$이다. 연습문제 1의 결과에서
     $A$가 1의 열 하나뿐이므로 기울기는
@@ -191,7 +191,7 @@ $n = 10$이고 그중 3개가 1일 때 $\hat\theta_0$과 최소 교차엔트로�
 위의 $\varepsilon$ 보정이 왜 편향을 만드는지 수치로 보이고, softplus 방식이 왜 더 나은지
 설명하라.
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
 
     $\varepsilon = 10^{-6}$일 때 항 $-\log(\sigma + \varepsilon)$을 보자.
 
@@ -224,7 +224,7 @@ $n = 10$이고 그중 3개가 1일 때 $\hat\theta_0$과 최소 교차엔트로�
 $y^{(i)}(2 A[i,:]\boldsymbol{\theta}^* ) > 0$이 되는 $\boldsymbol{\theta}^*$가 존재한다고 하자
 (양성과 음성을 오차 없이 가르는 초평면이 있다는 뜻이다). 이때 MLE가 존재하지 않음을 보여라.
 
-??? success "연습문제 5 풀이"
+??? success "풀이"
 
     분리 초평면을 주는 $\boldsymbol{\theta}^*$를 잡고 $c > 0$에 대해
     $\boldsymbol{\theta} = c\,\boldsymbol{\theta}^*$를 생각하자. 분리 가능성에 의해

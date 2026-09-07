@@ -227,7 +227,7 @@ $$
 **연습문제 1.**
 영업 전화의 성공확률이 $p = 0.1$이다. $Y$를 첫 계약까지의 전화 횟수라 하자. (a) 분포는? (b) $P(Y = 5)$, $P(Y > 10)$. (c) 8번 실패했다는 조건 아래 $P(Y > 15)$. (d) 평균과 분산.
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
     (a) $Y \sim \mathrm{Geometric}(0.1)$.
 
     (b) $P(Y = 5) = (0.9)^4 \cdot 0.1 = 0.0656$. $P(Y > 10) = (0.9)^{10} \approx 0.349$.
@@ -241,7 +241,7 @@ $$
 **연습문제 2.**
 Geometric 분포의 **무기억성** $P(Y > m + n \mid Y > m) = P(Y > n)$을 증명하라.
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
     생존함수는 $P(Y > k) = (1 - p)^k$이다.
 
     $$
@@ -257,7 +257,7 @@ Geometric 분포의 **무기억성** $P(Y > m + n \mid Y > m) = P(Y > n)$을 증
 **연습문제 3.**
 **Negative Binomial 분포.** i.i.d. Bernoulli($p$) 시행에서 $r$번째 성공까지의 시행 횟수를 $Z$라 하자. PMF, $\mathbb{E}[Z]$, $\mathrm{Var}(Z)$를 유도하라.
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
     $Z = k$이려면 처음 $k - 1$번의 시행에서 정확히 $r - 1$번 성공하고 $k$번째 시행에서 성공해야 한다:
 
     $$
@@ -277,7 +277,7 @@ Geometric 분포의 **무기억성** $P(Y > m + n \mid Y > m) = P(Y > n)$을 증
 **연습문제 4.**
 **쿠폰 수집가 문제.** $n$가지 종류의 쿠폰을 모두 모으려면 (복원추출로) 독립적인 무작위 추출을 몇 번 해야 하는가? 전체 추출 횟수 $T$에 대해 $\mathbb{E}[T]$를 구하라.
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
     분해해서 생각하자. $T_i$를 $i - 1$가지를 이미 모은 상태에서 $i$번째 *새로운* 쿠폰 종류를 얻기까지의 추출 횟수라 하자. 각 $T_i$는 성공확률 $(n - i + 1)/n$인 Geometric 분포를 따른다. $i - 1$가지를 모았다면 남은 $n - i + 1$가지 중 어느 것을 뽑아도 성공이기 때문이다.
 
     따라서 $\mathbb{E}[T_i] = n/(n - i + 1)$이다.
@@ -297,7 +297,7 @@ Geometric 분포의 **무기억성** $P(Y > m + n \mid Y > m) = P(Y > n)$을 증
 **연습문제 5.**
 **이산화된 Exponential 분포로서의 Geometric 분포.** $\Delta t$가 작을 때 $p$가 $\lambda \Delta t$에 대응하는 방식으로, Geometric 분포가 Exponential 분포의 이산시간 대응물로 나타남을 보여라.
 
-??? success "연습문제 5 풀이"
+??? success "풀이"
     비율 $\lambda$인 Poisson 과정을 시각 $\Delta t, 2\Delta t, 3\Delta t, \ldots$에서 관측한다고 하자. 각 구간 $[(k-1)\Delta t, k\Delta t]$에서 사건이 일어날 확률은 $p = 1 - e^{-\lambda \Delta t} \approx \lambda \Delta t$이며, 마지막 근사는 $\Delta t$가 작을 때 성립한다.
 
     $K$를 사건이 처음 일어난 구간의 번호라 하자. 그러면 $p = 1 - e^{-\lambda \Delta t}$인 $K \sim \mathrm{Geometric}(p)$이고, 대기 시간은 $T_{\text{disc}} = K \cdot \Delta t$이다.
@@ -313,7 +313,7 @@ Geometric 분포의 **무기억성** $P(Y > m + n \mid Y > m) = P(Y > n)$을 증
 **연습문제 6.**
 **Geometric 분포의 역변환 표본추출.** $U \sim \mathrm{Uniform}(0, 1)$이 주어졌을 때 $X \sim \mathrm{Geometric}(p)$를 생성하는 공식을 유도하라.
 
-??? success "연습문제 6 풀이"
+??? success "풀이"
     Geometric 분포의 CDF는 $k = 1, 2, \ldots$에 대해 $F(k) = 1 - (1 - p)^k$이다.
 
     역 CDF: $F(k) \ge u$일 필요충분조건은 $(1 - p)^k \le 1 - u$이고, 이는 다시 $k \ge \ln(1 - u)/\ln(1 - p)$와 동치이다.

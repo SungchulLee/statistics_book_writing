@@ -163,7 +163,7 @@ $$\bar{X} \pm t_{n-1,\alpha/2} \frac{S}{\sqrt{n}} \quad (\sigma \text{를 모르
 **연습문제 1.**
 $X_1, \ldots, X_n$이 $\mathbb{E}[X_i] = \mu$를 만족한다. $\bar X$가 불편임을 보여라. 여기에 독립성이 필요한가?
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
     선형성에 의해(독립성 불필요): $\mathbb{E}[\bar X] = (1/n)\sum \mathbb{E}[X_i] = \mu$. $\square$
 
     불편성에는 평균이 같다는 것만 필요하다. 추정량의 *분산*은 독립성에 의존하지만 *기댓값*은 그렇지 않다.
@@ -173,7 +173,7 @@ $X_1, \ldots, X_n$이 $\mathbb{E}[X_i] = \mu$를 만족한다. $\bar X$가 불�
 **연습문제 2.**
 상관된 자료: $X_i$가 공통 평균 $\mu$, 분산 $\sigma^2$, 쌍별 상관계수 $\rho$를 갖는다. (a) $\mathrm{Var}(\bar X)$를 유도하라. (b) $\bar X$는 일치하는가? (c) 헤지펀드 20개로 이루어진 펀드, 변동성 15%, $\rho = 0.4$일 때 표준오차를 구하라.
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
     (a) $\mathrm{Var}(\bar X) = (1/n^2)[n\sigma^2 + n(n-1)\rho\sigma^2] = \sigma^2[1 + (n-1)\rho]/n$.
 
     (b) $n \to \infty$일 때 $\mathrm{Var}(\bar X) \to \rho\sigma^2$(양의 극한). $\rho = 0$이 아닌 한 $\bar X$는 **일치하지 않는다**. 양의 상관은 줄일 수 없는 분산의 바닥을 만든다.
@@ -185,7 +185,7 @@ $X_1, \ldots, X_n$이 $\mathbb{E}[X_i] = \mu$를 만족한다. $\bar X$가 불�
 **연습문제 3.**
 **일치성의 정의.** 약대수의법칙과 강대수의법칙을 진술하고, 각각으로부터 $\bar X$가 $\mu$에 대해 일치함을 보여라.
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
     **일치성:** $n \to \infty$일 때 어떤 수렴 방식으로 $\hat\theta_n \to \theta$.
 
     **약일치성**(확률수렴): $\bar X \xrightarrow{P} \mu$. **WLLN**에서 따라 나온다: 평균이 유한한 i.i.d. 자료에서 $P(|\bar X - \mu| > \varepsilon) \to 0$.
@@ -199,7 +199,7 @@ $X_1, \ldots, X_n$이 $\mathbb{E}[X_i] = \mu$를 만족한다. $\bar X$가 불�
 **연습문제 4.**
 중앙값의 **편향–분산 맞바꿈.** 정규 자료에서 표본중앙값이 $\mu$에 대해 **불편**이지만 그 **평균제곱오차가 점근적으로** 표본평균의 평균제곱오차를 **초과**함을 보여라.
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
     정규분포처럼 대칭인 분포에서는 모평균 = 모중앙값이고 둘 다 $\mu$이다. 표본중앙값은 (표본분포의 대칭성에 의해) $\mu$에 대해 불편이다.
 
     표본중앙값의 점근분산은 $\pi\sigma^2/(2n)$이고 평균은 $\sigma^2/n$이다. 비는 $\pi/2 \approx 1.57$이다.
@@ -213,7 +213,7 @@ $X_1, \ldots, X_n$이 $\mathbb{E}[X_i] = \mu$를 만족한다. $\bar X$가 불�
 **연습문제 5.**
 **유한모집단 표본추출의 효과.** 크기 $N$, 평균 $\mu$인 유한모집단에서 비복원으로 $X_i$를 뽑는다. $\mathrm{Var}(\bar X)$를 유도하라.
 
-??? success "연습문제 5 풀이"
+??? success "풀이"
     $\mathrm{Var}(\bar X) = (\sigma^2/n) \cdot (N - n)/(N - 1)$.
 
     유도: 서로 다른 두 추출의 공분산은 $-\sigma^2/(N-1)$이다(비복원 추출). 모든 쌍과 개별 분산을 더하고 $n^2$으로 나눈다.
@@ -230,7 +230,7 @@ $X_1, \ldots, X_n$이 $\mathbb{E}[X_i] = \mu$를 만족한다. $\bar X$가 불�
 **연습문제 6.**
 **적률법 추정량의 편향.** $[1, \infty)$ 위의 Pareto$(\alpha)$에서 $\mathbb{E}[X] = \alpha/(\alpha - 1)$이다. 적률법: $\hat\alpha = \bar X/(\bar X - 1)$. 불편인가? 일치하는가?
 
-??? success "연습문제 6 풀이"
+??? success "풀이"
     **일치성:** 대수의법칙에 의해 $\bar X \to \mu = \alpha/(\alpha - 1)$. 따라서 $\hat\alpha \to \mu/(\mu - 1) = \alpha$. 일치한다.
 
     **불편성:** $\mathbb{E}[\hat\alpha] = \mathbb{E}[\bar X/(\bar X - 1)]$. ($g(x) = x/(x-1)$이 $x > 1$에서 볼록이므로) Jensen 부등식에 의해 $\mathbb{E}[g(\bar X)] > g(\mathbb{E}[\bar X]) = \alpha$이다. 따라서 **적률법 추정량은 위쪽으로 편향**되어 있다.

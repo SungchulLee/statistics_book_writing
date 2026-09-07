@@ -307,7 +307,7 @@ Kruskal-Wallis 검정이 유의하면, 쌍별 Mann-Whitney U 검정에 다중비
 **연습문제 1.**
 Mood 중앙값검정과 Mann-Whitney U 검정을 같은 자료에 적용하면 결과가 어떻게 다른가? 본문의 집단 A $= [50, 55, 60, 65, 70]$, 집단 B $= [45, 50, 55, 60, 65]$로 확인하고, 두 검정이 버리는 정보를 각각 설명하라.
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
     ```python
     import numpy as np
     from scipy.stats import mannwhitneyu, median_test
@@ -337,7 +337,7 @@ Mood 중앙값검정과 Mann-Whitney U 검정을 같은 자료에 적용하면 �
 **연습문제 2.**
 본문의 Mood 중앙값검정 구현은 전체 중앙값과 **정확히 같은** 관측값을 버린다. 이것이 문제가 되는 상황을 만들고, SciPy `median_test`의 `ties` 인자와 비교하라.
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
     관측값이 이산적이면 중앙값과 같은 값이 여러 개 생긴다.
 
     ```python
@@ -370,7 +370,7 @@ Mood 중앙값검정과 Mann-Whitney U 검정을 같은 자료에 적용하면 �
 **연습문제 3.**
 Kruskal-Wallis 검정이 집단 둘일 때 Mann-Whitney U 검정과 동치임을 확인하라. $H$와 $Z$ 사이에 어떤 관계가 있는가?
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
     ```python
     import numpy as np
     from scipy.stats import kruskal, mannwhitneyu, rankdata
@@ -412,7 +412,7 @@ Kruskal-Wallis 검정이 집단 둘일 때 Mann-Whitney U 검정과 동치임을
 **연습문제 4.**
 본문의 Mann-Whitney 예제에서 SciPy의 기본 $p$값($0.000440$)과 정확 $p$값($7.58 \times 10^{-5}$)이 6배 가까이 차이 난다. 왜 이렇게 큰가?
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
     자료를 다시 보자.
 
     - 집단 A: 76, 78, 82, 85, 87, 88, 89, 91, 92, 95

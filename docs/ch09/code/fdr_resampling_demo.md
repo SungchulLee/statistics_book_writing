@@ -145,7 +145,7 @@ def resampling_fdr(X_group1, X_group2, n_permutations=500):
 
 **연습문제 1.** $m$개 검정이 독립일 때 가족단위 오류율이 $\text{FWER} = 1 - (1 - \alpha)^m$을 만족함을 증명하라. 검정이 양의 상관을 가지면 어떻게 되는가?
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
 
     독립일 때 $m$개 검정이 모두 올바르게 기각하지 않을 확률은 $(1-\alpha)^m$이다. 여집합 법칙에 의해,
 
@@ -159,7 +159,7 @@ def resampling_fdr(X_group1, X_group2, n_permutations=500):
 
 **연습문제 2.** 검정 2,000개 중 참 대립가설이 200개인 모의실험에서 보정 없이 검정할 때와 Bonferroni를 적용할 때 거짓 양성 수의 기댓값을 계산하라. 모의실험 출력과 대조해 확인하라.
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
 
     $\alpha = 0.05$에서 보정 없이 검정하면 귀무가설 1,800개에서 나오는 거짓 양성의 기댓값은
 
@@ -173,7 +173,7 @@ def resampling_fdr(X_group1, X_group2, n_permutations=500):
 
 **연습문제 3.** BH 절차를 단계별로 설명하라. p-값을 정렬해 $p_{(k)}$를 $k\alpha/m$과 비교하는 것이 왜 FDR을 수준 $\alpha$로 통제하는가?
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
 
     1. $m$개 p-값을 오름차순으로 정렬한다: $p_{(1)} \leq \cdots \leq p_{(m)}$.
     2. $p_{(k)} \leq k\alpha/m$을 만족하는 가장 큰 지표 $k$를 찾는다.
@@ -191,7 +191,7 @@ def resampling_fdr(X_group1, X_group2, n_permutations=500):
 
 **연습문제 4.** 재표본추출 FDR 절차에서 순열 기반 기각 수를 순열 횟수로 나누는 이유는 무엇인가? 순열이 너무 적으면 어떻게 되는가?
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
 
     각 순열은 $H_0$ 아래 검정통계량의 실현값 하나를 준다. 문턱을 넘는 순열 통계량의 평균 개수가 거짓 발견 수의 기댓값 $E[V]$를 추정한다. `n_permutations`로 나누는 것이 개수를 이 평균으로 바꾸는 일이다:
 
@@ -205,7 +205,7 @@ def resampling_fdr(X_group1, X_group2, n_permutations=500):
 
 **연습문제 5.** $\alpha = 0.05$와 $\alpha = 0.10$에서 BH를 비교하도록 모의실험을 고쳐라. 기각 수, FDR, 검정력은 어떻게 달라지는가? 맞바꿈을 설명하라.
 
-??? success "연습문제 5 풀이"
+??? success "풀이"
 
     ```python
     for alpha in [0.05, 0.10]:

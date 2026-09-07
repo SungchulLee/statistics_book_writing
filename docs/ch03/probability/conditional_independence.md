@@ -188,7 +188,7 @@ berkson_paradox_simulation()
 **연습문제 1.**
 구름 $C$, 비 $R$, 우산 $U$에 대해 $P(C) = 0.4$, $P(R \mid C) = 0.6$, $P(R \mid C^c) = 0.1$, $P(U \mid R) = 0.9$, $P(U \mid R^c) = 0.2$이고 $U \perp\!\!\!\perp C \mid R$을 가정한다. (a) $C$와 $U$는 독립인가? (b) $C \perp\!\!\!\perp U \mid R$을 확인하라.
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
     (a) $P(R) = 0.6 \cdot 0.4 + 0.1 \cdot 0.6 = 0.30$이고 $P(U) = 0.9 \cdot 0.3 + 0.2 \cdot 0.7 = 0.41$이다.
 
     $P(U \mid C) = P(U \mid R) P(R \mid C) + P(U \mid R^c) P(R^c \mid C) = 0.9 \cdot 0.6 + 0.2 \cdot 0.4 = 0.62$이다.
@@ -208,7 +208,7 @@ berkson_paradox_simulation()
 **연습문제 2.**
 **버크슨의 역설.** $A, B$가 입원 $C$에 대한 서로 독립인 두 위험요인이라 하자. 전체적으로는 독립인데도 $C$를 조건으로 하면 $A$와 $B$가 음의 상관을 갖게 됨을 보여라.
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
     $A, B \in \{0, 1\}$이 독립인 Bernoulli($p$)이고 $A = 1$ 또는 $B = 1$이면 입원한다고 하자(즉 $C = A \cup B$).
 
     $P(A = 1 \mid C) = P(A = 1, C)/P(C) = P(A = 1)/P(C) = p/(2p - p^2)$이며, $p = 0.5$이면 $0.5/0.75 = 2/3$이다.
@@ -226,7 +226,7 @@ berkson_paradox_simulation()
 **연습문제 3.**
 **혼합분포.** 동전을 무작위로 고르는데 1번 동전은 $P(H) = 0.3$, 2번 동전은 $P(H) = 0.7$이다. 고른 동전을 두 번 던져 $X_1, X_2$를 얻는다. $X_1 \perp\!\!\!\perp X_2$는 성립하지 않지만 $X_1 \perp\!\!\!\perp X_2 \mid \text{동전}$은 성립함을 보여라.
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
     동전 선택이 주어지면 두 던지기는 조건부 독립이다(같은 동전이고, 어느 동전인지 주어지면 던지기끼리 독립이다).
 
     조건 없이는 다음과 같다.
@@ -244,7 +244,7 @@ berkson_paradox_simulation()
 **연습문제 4.**
 **마르코프 연쇄.** 마르코프 연쇄 $X_0, X_1, X_2, \ldots$는 $X_n \perp\!\!\!\perp \{X_0, \ldots, X_{n-2}\} \mid X_{n-1}$을 만족한다. 이 성질을 말로 표현하고 그것이 어떻게 다루기 쉬운 추론을 가능하게 하는지 설명하라.
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
     **마르코프 성질**(말로): 현재($X_{n-1}$)가 주어지면 미래($X_n$)는 과거($X_0, \ldots, X_{n-2}$)와 조건부 독립이다. 현재가 과거로부터 미래를 "가려낸다".
 
     **다루기 쉬운 추론:** $(X_0, \ldots, X_T)$의 결합분포가 다음과 같이 분해된다.
@@ -262,7 +262,7 @@ berkson_paradox_simulation()
 **연습문제 5.**
 **공통 원인 구조.** 세 변수 $X, Y, Z$가 "사슬" $X \to Z \to Y$을 이룬다. 분해 $P(X, Y, Z) = P(X) P(Z \mid X) P(Y \mid Z)$로부터 $X \perp\!\!\!\perp Y \mid Z$를 확인하라.
 
-??? success "연습문제 5 풀이"
+??? success "풀이"
     $P(Y \mid X, Z) = P(X, Y, Z)/P(X, Z) = P(X) P(Z \mid X) P(Y \mid Z)/(P(X) P(Z \mid X)) = P(Y \mid Z)$이다.
 
     $P(Y \mid X, Z) = P(Y \mid Z)$가 $X$에 의존하지 않으므로 $Y$는 $Z$가 주어졌을 때 $X$와 조건부 독립이다.
@@ -278,7 +278,7 @@ berkson_paradox_simulation()
 **연습문제 6.**
 **"해명" 효과.** 결과 $E$에 대해 두 원인 $A, B$가 있는 베이즈 망에서 $A$와 $B$의 사전확률이 독립이라 하자. $E$를 관측한 뒤 $A$가 일어났음을 알게 되면 $B$도 일어났을 사후확률이 *줄어든다*. $P(A) = P(B) = 0.1$, $P(E \mid A, B) = 1$, $P(E \mid A, B^c) = 0.8$, $P(E \mid A^c, B) = 0.8$, $P(E \mid A^c, B^c) = 0$으로 보여라.
 
-??? success "연습문제 6 풀이"
+??? success "풀이"
     결합확률을 계산한다.
 
     $P(A, B, E) = 0.1 \cdot 0.1 \cdot 1 = 0.01$.

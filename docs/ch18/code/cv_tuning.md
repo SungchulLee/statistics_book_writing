@@ -99,7 +99,7 @@ $$
 **연습문제 1.** 라쏘에 대해 $\lambda_{\max} = \frac{1}{n}\|X^\top y\|_\infty$를 유도하라. 즉
 $\lambda \ge \lambda_{\max}$이면 라쏘 해가 $\hat{\beta} = 0$임을 보여라.
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
 
     라쏘 목적함수는 $f(\beta) = \frac{1}{2n}\|y - X\beta\|_2^2 + \lambda\|\beta\|_1$이다.
     $\beta = 0$에서의 부분미분은
@@ -118,7 +118,7 @@ $\lambda \ge \lambda_{\max}$이면 라쏘 해가 $\hat{\beta} = 0$임을 보여�
 **연습문제 2.** 교차검증 전에 전체 자료로 설명변수를 표준화하면 왜 자료 누설이 생기는지
 설명하고, 올바른 절차를 서술하라.
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
 
     검증 겹까지 포함한 전체 자료에서 $\bar{x}_j$와 $s_j$를 계산해 표준화하면, 검증 겹의 자료가
     자기 자신에게 적용되는 변환에 영향을 미친다. 결국 모형이 훈련 과정에서 검증 겹의 정보를
@@ -144,7 +144,7 @@ $\lambda \ge \lambda_{\max}$이면 라쏘 해가 $\hat{\beta} = 0$임을 보여�
 **연습문제 3.** 1-표준오차 규칙을 구현하라. 배열 `lambdas`, `cv_mean`, `cv_se`(각 $\lambda$의
 CV MSE 평균과 표준오차)가 주어졌을 때 $\hat{\lambda}_{1\text{SE}}$를 반환하는 함수를 작성하라.
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
 
     ```python
     def one_se_rule(lambdas, cv_mean, cv_se):
@@ -178,7 +178,7 @@ CV MSE 평균과 표준오차)가 주어졌을 때 $\hat{\lambda}_{1\text{SE}}$�
 $\lambda$ 50개 위에서 라쏘의 5-겹 교차검증을 수행하라. 오차막대($\pm 1$ SE)를 포함한 CV 곡선을
 그리고 $\hat{\lambda}_{\min}$과 $\hat{\lambda}_{1\text{SE}}$를 모두 표시하라.
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
 
     ```python
     import numpy as np
@@ -238,7 +238,7 @@ $\text{CV}_{\text{LOO}} = \frac{1}{n}\sum_{i=1}^{n}\left(\frac{y_i - \hat{y}_i}{
 로 계산됨을 증명하라. 여기서 $H = X(X^\top X + \lambda I)^{-1}X^\top$는 능형 모자행렬이고
 $h_{ii}$는 그 $i$번째 대각원소다.
 
-??? success "연습문제 5 풀이"
+??? success "풀이"
 
     관측치 $i$를 제거하면 나머지 $n-1$개로 적합한 능형 모형이 예측 $\hat{y}_{(-i), i}$를 준다.
     셔먼-모리슨 공식에 의해, $X$에서 $i$번째 행과 $y$에서 $i$번째 원소를 빼고 다시 적합하는

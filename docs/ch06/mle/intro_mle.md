@@ -62,7 +62,7 @@ MLE는 모수 추정에 대한 원리적이고 범용적인 접근을 제공한�
 **연습문제 1.**
 일간 로그수익률이 $r_t \sim N(\mu, \sigma^2)$이다. $n = 252$, $\bar r = 0.0004$, $s = 0.015$일 때 (a) $\mu_{\text{ann}} = 252\mu$와 $\sigma_{\text{ann}} = \sigma\sqrt{252}$의 MLE. (b) 점근정규성을 이용한 95% 신뢰구간. (c) $\hat\mu$가 $\hat\sigma$보다 훨씬 불안정한 이유는?
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
     (a) $\hat\mu_{\text{ann}} = 252 \cdot 0.0004 = 0.1008$ (10.08%). $\hat\sigma_{\text{ann}} = 0.015 \sqrt{252} \approx 0.2381$ (23.81%).
 
     (b) $\mathrm{SE}(\hat\mu) = s/\sqrt n = 0.015/\sqrt{252} \approx 0.000945$. $\mathrm{SE}(\hat\mu_{\text{ann}}) = 252 \cdot 0.000945 \approx 0.238$. 95% 신뢰구간: $(-0.366, 0.568)$.
@@ -76,7 +76,7 @@ MLE는 모수 추정에 대한 원리적이고 범용적인 접근을 제공한�
 **연습문제 2.**
 **정규분포의 MLE 유도.** i.i.d. $X_1, \ldots, X_n \sim N(\mu, \sigma^2)$이 주어졌을 때 $\hat\mu$와 $\hat\sigma^2$을 유도하라.
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
     로그가능도: $\ell(\mu, \sigma^2) = -(n/2)\ln(2\pi\sigma^2) - (1/(2\sigma^2))\sum(X_i - \mu)^2$.
 
     $\partial\ell/\partial\mu = 0 \Rightarrow \hat\mu = \bar X$.
@@ -90,7 +90,7 @@ MLE는 모수 추정에 대한 원리적이고 범용적인 접근을 제공한�
 **연습문제 3.**
 **Bernoulli/Binomial의 MLE.** 표본이 $X \sim \mathrm{Binomial}(n, p)$이다. $\hat p_{\text{MLE}}$를 유도하라.
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
     가능도: $L(p) = \binom{n}{X} p^X (1-p)^{n-X} \propto p^X(1-p)^{n-X}$.
 
     로그가능도: $\ell(p) = X\ln p + (n-X)\ln(1-p)$.
@@ -106,7 +106,7 @@ MLE는 모수 추정에 대한 원리적이고 범용적인 접근을 제공한�
 **연습문제 4.**
 **가능도와 확률.** MLE의 용어에서 "가능도"와 "확률"을 구별하라. 가능도가 $\theta$의 함수이면서도 $\theta$에 대한 확률밀도가 아닌 이유는?
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
     **확률:** $P(X = x \mid \theta)$ — $\theta$를 고정한 $x$의 함수이다. $x$에 대해 합하거나 적분하면 1이 된다.
 
     **가능도:** $L(\theta) = P(X = x \mid \theta)$ — 수식은 같지만 *관측되어 고정된* $x$에 대해 $\theta$의 함수로 본 것이다. $\theta$에 대해 적분해도 1이 되지 않는다.
@@ -120,7 +120,7 @@ MLE는 모수 추정에 대한 원리적이고 범용적인 접근을 제공한�
 **연습문제 5.**
 **MLE의 점근정규성.** 그 결과를 서술하고 Bernoulli의 경우에 확인하라.
 
-??? success "연습문제 5 풀이"
+??? success "풀이"
     **MLE의 점근정규성:**
 
     $$
@@ -140,7 +140,7 @@ MLE는 모수 추정에 대한 원리적이고 범용적인 접근을 제공한�
 **연습문제 6.**
 **MLE가 실패하는 경우.** 다음 각각의 예를 하나씩 들라: (a) MLE가 존재하지 않는 경우; (b) MLE가 경계에 있는 경우; (c) MLE가 일치하지 않는 경우.
 
-??? success "연습문제 6 풀이"
+??? success "풀이"
     **(a) MLE가 존재하지 않는 경우:** $X \sim \mathrm{Uniform}(0, \theta)$에서 가능도는 $\theta \ge \max X_i$일 때 $1/\theta^n$이고 그 아래에서는 0이다. $\theta \to \infty$이면 $L \to 0$이고, $\theta \to \max X_i$이면 $L \to (1/\max X_i)^n$으로 *상한*에 이르지만 그 지점이 경계이다. 엄밀히 말해 내부에 최댓값이 없으며, MLE는 경계값 $\hat\theta = \max X_i$이다.
 
     **(b) MLE가 경계에 있는 경우:** 위의 균등분포 예이다. 경계에 있는 MLE는 비표준 점근분포를 가지며($N(0, 1/I)$가 아니다) 수렴 속도가 $\sqrt n$이 아니라 $n$이다.

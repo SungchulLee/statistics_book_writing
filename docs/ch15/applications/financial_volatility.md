@@ -176,7 +176,7 @@ F-test:          F = 0.3317, p = 3.783e-05 (unreliable for heavy-tailed data)
 **연습문제 1.**
 $t_5$ 수익률에서 F 검정, Brown-Forsythe, Fligner-Killeen의 경험적 크기를 모의실험으로 확인하라. 두 기간의 참 변동성은 같게 둔다.
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
 
     ```python
     import numpy as np
@@ -219,7 +219,7 @@ $t_5$ 수익률에서 F 검정, Brown-Forsythe, Fligner-Killeen의 경험적 크
 **연습문제 2.**
 변동성 군집이 있을 때 로버스트 검정도 무너짐을 모의실험으로 확인하라. GARCH(1,1) 자료로 두 인접 기간을 비교하라.
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
 
     ```python
     import numpy as np
@@ -279,7 +279,7 @@ $t_5$ 수익률에서 F 검정, Brown-Forsythe, Fligner-Killeen의 경험적 크
 **연습문제 3.**
 "일별 변동성 1.8%"를 $t_5$ 분포로 모의생성할 때 `standard_t(5) * 0.018`이 왜 틀렸는지 설명하고, 여러 자유도에 대한 보정계수를 계산하라.
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
     $t_\nu$ 분포의 표준편차는 $\nu > 2$일 때
 
     $$
@@ -325,7 +325,7 @@ $t_5$ 수익률에서 F 검정, Brown-Forsythe, Fligner-Killeen의 경험적 크
 **연습문제 4.**
 분석가가 논문에서 두 기간의 표본분산 $S_1^2 = 0.000324$, $S_2^2 = 0.000576$($n_1 = n_2 = 60$)만 보고했다. 이 정보만으로 로버스트 검정을 수행할 수 있는가? 할 수 없다면 무엇이 필요한가?
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
     **할 수 없다.**
 
     F 검정과 Bartlett 검정은 **요약통계량만으로** 계산할 수 있다. 표본분산과 표본크기만 있으면 된다.

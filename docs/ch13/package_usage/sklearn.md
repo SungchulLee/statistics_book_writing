@@ -169,7 +169,7 @@ print(f"Pipeline R-squared (test): {r2_pipeline:.4f}")
 **연습문제 1.**
 scikit-learn으로 인공자료에 선형회귀를 적합하고, 예측을 계산하며, $R^2$ 점수를 출력하는 Python 코드를 작성하라.
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
     ```python
     import numpy as np
     from sklearn.linear_model import LinearRegression
@@ -194,7 +194,7 @@ scikit-learn으로 인공자료에 선형회귀를 적합하고, 예측을 계�
 **연습문제 2.**
 `model.score()`와 예측값에서 $R^2$를 직접 계산하는 것의 차이를 설명하라. 둘은 동등한가?
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
     `model.score(X, y)`는 다음을 계산한다.
 
     $$
@@ -217,7 +217,7 @@ scikit-learn으로 인공자료에 선형회귀를 적합하고, 예측을 계�
 **연습문제 3.**
 scikit-learn의 `LinearRegression`이 계수의 p값이나 신뢰구간을 제공하지 않는 이유는 무엇인가? 어떻게 얻을 수 있는가?
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
     scikit-learn은 통계적 추론이 아니라 예측을 주된 목적으로 설계되었다. `LinearRegression`은 OLS를 기계학습 알고리즘으로 구현하며 `.fit()`, `.predict()`, `.score()`에 집중한다. 표준오차, t 통계량, p값, 신뢰구간은 계산하지 않는다.
 
     추론 통계량을 얻으려면
@@ -232,7 +232,7 @@ scikit-learn의 `LinearRegression`이 계수의 p값이나 신뢰구간을 제�
 **연습문제 4.**
 `sklearn.model_selection.cross_val_score`로 선형회귀 모형의 일반화 성능을 추정하는 방법을 기술하라.
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
     ```python
     from sklearn.linear_model import LinearRegression
     from sklearn.model_selection import cross_val_score

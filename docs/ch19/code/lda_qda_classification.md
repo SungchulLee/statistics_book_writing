@@ -241,7 +241,7 @@ QDA는 곡선을, 나이브 베이즈는 축에 정렬된 곡선을 그린다.
 사전확률이 같은($\pi_0 = \pi_1 = 0.5$) 두 범주 LDA에서, 결정경계가 두 범주 평균으로부터
 (마할라노비스 의미로) 등거리인 점들의 집합임을 보여라.
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
 
     사전확률이 같으면 $\log\pi_k$ 항이 소거된다. 결정경계는
     $\delta_0(\mathbf{x}) = \delta_1(\mathbf{x})$인 곳이다.
@@ -268,7 +268,7 @@ QDA는 곡선을, 나이브 베이즈는 축에 정렬된 곡선을 그린다.
 QDA가 LDA보다 과적합 위험이 큰 이유를 설명하고, QDA가 더 유연함에도 LDA를 선호하게 되는 상황을
 서술하라.
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
 
     QDA는 범주마다 별도의 $p \times p$ 공분산행렬을 추정하므로 공분산 구조에만
     $K \cdot p(p+1)/2$개의 모수가 필요하다. LDA는 $p(p+1)/2$개면 된다. 범주당 표본크기가
@@ -301,7 +301,7 @@ QDA가 LDA보다 과적합 위험이 큰 이유를 설명하고, QDA가 더 유�
 **연습문제 3.**
 다변량 정규밀도와 베이즈 정리에서 출발하여 QDA 판별함수 $\delta_k(\mathbf{x})$를 유도하라.
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
 
     사후확률은
 
@@ -336,7 +336,7 @@ QDA가 LDA보다 과적합 위험이 큰 이유를 설명하고, QDA가 더 유�
 위에서 생성한 공유 공분산 자료에 대해, 합동 공분산행렬·범주 평균·판별함수를 직접 계산하여
 LDA를 손으로 적합하라. 예측을 scikit-learn의 `LinearDiscriminantAnalysis`와 비교하라.
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
 
     ```python
     import numpy as np
@@ -387,7 +387,7 @@ LDA를 손으로 적합하라. 예측을 scikit-learn의 `LinearDiscriminantAnal
 범주별 공분산이 같으면($\boldsymbol\Sigma_k = \boldsymbol\Sigma$) QDA가 LDA로 환원됨을
 증명하라.
 
-??? success "연습문제 5 풀이"
+??? success "풀이"
 
     QDA 판별함수는
 

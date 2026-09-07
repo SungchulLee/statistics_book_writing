@@ -72,7 +72,7 @@ Type I error (median-centered) under lognormal: 0.0374
 
 **연습문제 1.** **평균 중심** Levene 검정의 제1종 오류도 계산하도록 모의실험을 확장하라. 대수정규 자료에서 두 중심화 방식을 비교하라.
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
 
     ```python
     import numpy as np
@@ -110,7 +110,7 @@ Type I error (median-centered) under lognormal: 0.0374
 
 **연습문제 2.** 집단 크기를 $n \in \{10, 20, 50, 100\}$으로 바꿔가며 대수정규 자료에서 중앙값 중심 Levene 검정의 제1종 오류율을 그려라. 표본이 커지면 개선되는가?
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
 
     ```python
     import numpy as np
@@ -169,7 +169,7 @@ Type I error (median-centered) under lognormal: 0.0374
 
 **연습문제 3.** $t(3)$ 분포(대칭이지만 꼬리가 두꺼움) 자료로 모의실험을 반복하라. 중앙값 중심 Levene 검정이 평균 중심 판에 비해 어떻게 작동하는가?
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
 
     ```python
     import numpy as np
@@ -214,7 +214,7 @@ Type I error (median-centered) under lognormal: 0.0374
 
 **연습문제 4.** 원자료가 비정규여도 Levene 검정통계량의 $F$ 분포 근사가 타당한 이유를 설명하라.
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
 
     Levene 검정은 원래의 $X_{ij}$가 아니라 변환된 관측값 $Z_{ij} = |X_{ij} - c_i|$에 일원분산분석 F 검정을 적용한다. $X_{ij}$가 비정규여도 중심극한정리에 의해 $n$이 어느 정도면 집단평균 $\bar{Z}_{i\cdot}$이 근사적으로 정규이고, $Z_{ij}$로 계산한 F 통계량이 근사적으로 $F(k-1, N-k)$ 분포를 따른다.
 
@@ -236,7 +236,7 @@ Type I error (median-centered) under lognormal: 0.0374
 
 **연습문제 5.** 집단 $\sigma$ 모수가 $(1.0, 1.0, 1.5)$인 대수정규 자료(분산이 실제로 다르다)에서 중앙값 중심 Levene 검정의 **검정력**을 추정하는 모의실험을 설계하라. 같은 표준편차의 정규 자료에서의 검정력과 비교하라.
 
-??? success "연습문제 5 풀이"
+??? success "풀이"
 
     ```python
     import numpy as np

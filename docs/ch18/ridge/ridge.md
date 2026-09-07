@@ -148,7 +148,7 @@ $\lambda \to 0$에서 $\text{df} \to p$(OLS), $\lambda \to \infty$에서 $\text{
 **연습문제 1.**
 능형회귀의 최적화 문제와 닫힌 형태 해를 쓰라. $\lambda$는 해에 어떤 영향을 주는가?
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
     최적화 문제는
 
     $$
@@ -168,7 +168,7 @@ $\lambda \to 0$에서 $\text{df} \to p$(OLS), $\lambda \to \infty$에서 $\text{
 **연습문제 2.**
 능형회귀가 편향되어 있음을 보이고, 편향을 $\lambda$와 참 $\boldsymbol{\beta}$로 유도하라.
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
     $$
     E[\hat{\boldsymbol{\beta}}_{\text{ridge}}] = (\mathbf{X}^\top\mathbf{X} + \lambda\mathbf{I})^{-1}\mathbf{X}^\top\mathbf{X}\boldsymbol{\beta} = \mathbf{W}\boldsymbol{\beta} \neq \boldsymbol{\beta}
     $$
@@ -188,7 +188,7 @@ $\lambda \to 0$에서 $\text{df} \to p$(OLS), $\lambda \to \infty$에서 $\text{
 **연습문제 3.**
 능형회귀가 다중공선성에 도움이 되는 이유를 설명하라. $\mathbf{X}^\top\mathbf{X} + \lambda\mathbf{I}$의 조건수는 어떻게 되는가?
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
     다중공선성은 $\mathbf{X}^\top\mathbf{X}$가 0에 가까운 고윳값을 가져 거의 특이행렬이 되고 조건수 $\kappa = d_1/d_p$가 커진다는 뜻이다.
 
     $\lambda\mathbf{I}$를 더하면 모든 고윳값이 $\lambda$만큼 이동한다. 새 조건수는
@@ -206,7 +206,7 @@ $\lambda \to 0$에서 $\text{df} \to p$(OLS), $\lambda \to \infty$에서 $\text{
 **연습문제 4.**
 표준화된 자료에 $\lambda = 1$로 능형회귀를 적합했더니 $\hat{\beta}_1 = 0.45$, $\hat{\beta}_2 = 0.38$을 얻었다. OLS는 $\hat{\beta}_1 = 1.2$, $\hat{\beta}_2 = -0.8$을 준다. 이 차이를 해석하라.
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
     OLS 추정값($1.2$와 $-0.8$)은 크기가 크고 부호가 반대인데, 이는 다중공선성의 전형적 특징이다. 설명변수가 상관되어 있어 OLS가 서로를 부분적으로 상쇄하는 불안정하고 부풀려진 계수를 낸다.
 
     능형회귀($0.45$와 $0.38$)는 두 계수를 모두 0 쪽으로 축소하고 크기를 비슷하게 만든다. $\hat{\beta}_2$의 부호가 $-0.8$에서 $+0.38$로 뒤집힌 것은, OLS의 음수 계수가 진짜 음의 관계가 아니라 선형종속의 산물이었음을 시사한다. 능형회귀는 약간의 편향을 대가로 더 안정적이고 해석 가능한 추정값을 낸다.

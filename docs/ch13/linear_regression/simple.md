@@ -743,7 +743,7 @@ plt.show()
 
 **(d)** 키가 179 cm일 때 예측 몸무게에 대한 95% 예측구간은 얼마인가?
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
 
     **(a)** 키 179 cm에 대한 몸무게 예측:
 
@@ -840,7 +840,7 @@ if __name__ == "__main__":
     main()
 ```
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
 
     ```python
     import os

@@ -193,7 +193,7 @@ $$
 **연습문제 1.**
 감마분포를 따르는 청구액 자료: 2.1, 0.8, 3.5, 1.2, 5.7, 0.4, 2.8, 1.9, 4.3, 0.6. (a) $\alpha, \beta$의 적률법 추정값. (b) scipy를 이용한 MLE. (c) 시각적 비교.
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
     (a) 표본 적률: $\bar x = 2.33$, $m_2 \approx 2.77$.
 
     $\mathbb{E}[X] = \alpha\beta$, $\mathrm{Var}(X) = \alpha\beta^2$인 Gamma$(\alpha, \beta)$에 대해:
@@ -209,7 +209,7 @@ $$
 **연습문제 2.**
 **Uniform$(a, b)$의 적률법.** $\mathbb{E}[X], \mathbb{E}[X^2]$을 사용하여 적률법 추정량을 유도하라.
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
     모집단 적률: $\mathbb{E}[X] = (a+b)/2$, $\mathrm{Var}(X) = (b-a)^2/12$. 따라서 $\mathbb{E}[X^2] = (a+b)^2/4 + (b-a)^2/12$이다.
 
     표본을 모집단과 같다고 두면 $\bar X = (a+b)/2$이고 $m_2 = (b-a)^2/12$이며, $m_2$는 ($n$을 쓴) 표본분산이다.
@@ -227,7 +227,7 @@ $$
 **연습문제 3.**
 **Beta$(\alpha, \beta)$의 적률법.** $\mathbb{E}[X], \mathrm{Var}(X)$로부터 유도하라.
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
     Beta$(\alpha, \beta)$: $\mathbb{E}[X] = \alpha/(\alpha+\beta)$, $\mathrm{Var}(X) = \alpha\beta/[(\alpha+\beta)^2(\alpha+\beta+1)]$.
 
     $m = \bar X$, $v = m_2$(표본분산)라 하고 풀면:
@@ -241,7 +241,7 @@ $$
 **연습문제 4.**
 **로그정규분포의 적률법.** $Y \sim N(\mu, \sigma^2)$일 때 $X = e^Y$가 주어졌을 때 $\mu, \sigma$의 적률법 추정량을 유도하라.
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
     $\mathbb{E}[X] = e^{\mu + \sigma^2/2}$, $\mathrm{Var}(X) = (e^{\sigma^2} - 1) e^{2\mu + \sigma^2}$.
 
     변동계수의 제곱을 계산하면 $\mathrm{CV}^2 = \mathrm{Var}(X)/(\mathbb{E}[X])^2 = e^{\sigma^2} - 1$이다.
@@ -257,7 +257,7 @@ $$
 **연습문제 5.**
 **적률법이 비효율적일 수 있는 이유.** Uniform$(0, \theta)$에서 적률법과 MLE를 비교하라.
 
-??? success "연습문제 5 풀이"
+??? success "풀이"
     적률법: $\bar X = \theta/2 \Rightarrow \hat\theta_{\text{MoM}} = 2\bar X$. $\mathrm{Var}(\hat\theta_{\text{MoM}}) = 4 \mathrm{Var}(\bar X) = 4 \theta^2/(12n) = \theta^2/(3n)$.
 
     MLE: $\hat\theta_{\text{MLE}} = X_{(n)}$. 편향 보정한 $((n+1)/n) X_{(n)}$은 $\mathrm{Var} = \theta^2/[n(n+2)]$이다.
@@ -275,7 +275,7 @@ $$
 **연습문제 6.**
 **일반화 적률법 (GMM).** 모수보다 적률 조건이 많을 때 이들을 결합하는 가중 방식을 제안하라.
 
-??? success "연습문제 6 풀이"
+??? success "풀이"
     $\theta \in \mathbb{R}^k$이고 $j = 1, \ldots, m$에 대해 $m \ge k$개의 적률 조건 $\mathbb{E}[g_j(X; \theta)] = 0$이 있다고 하자.
 
     **GMM 추정량:**

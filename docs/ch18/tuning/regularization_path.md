@@ -170,7 +170,7 @@ CV 오차를 $\log_{10}\lambda$에 대해 그리고 $\lambda_{\min}$과 $\lambda
 **연습문제 1.**
 "한 번 활성화된 변수는 계속 활성이다"라는 단조성 주장의 반례를 찾아라.
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
     ```python
     import numpy as np
     from sklearn.linear_model import lasso_path
@@ -213,7 +213,7 @@ CV 오차를 $\log_{10}\lambda$에 대해 그리고 $\lambda_{\min}$과 $\lambda
 **연습문제 2.**
 $\lambda_{\max}$에서 시작하는 로그 격자를 쓰는 이유는 무엇인가? 선형 격자를 쓰면 어떤 문제가 생기는가?
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
     **로그 격자를 쓰는 이유는 계수 경로가 $\log\lambda$에 대해 대략 균등하게 변하기 때문이다.**
 
     라쏘 경로에서 활성 변수의 개수는 $\lambda$가 절반이 될 때마다 대략 일정한 수씩 늘어난다. 즉 $\text{df}$가 $\log\lambda$의 대략 선형 함수다. 따라서 $\log\lambda$에 균등한 격자를 쓰면 $\text{df}$의 해상도가 고르게 확보된다.

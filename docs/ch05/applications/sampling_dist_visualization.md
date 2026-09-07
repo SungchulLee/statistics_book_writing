@@ -177,7 +177,7 @@ print(f"{'IQR':<20} ${np.percentile(sample_means_5, 75) - np.percentile(sample_m
 **연습문제 1.**
 모집단이 치우쳐 있고 $\mu = 50$, $\sigma = 10$이다. 표본 $n = 100$일 때 (a) $\bar X$의 표본분포의 대략적인 모양은? (b) 그 평균과 표준오차는?
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
     (a) ($n$이 크므로) 중심극한정리에 의해 모집단이 치우쳐 있어도 $\bar X$는 근사적으로 **정규**이다.
 
     (b) 평균: $\mu = 50$. 표준오차: $\sigma/\sqrt n = 10/10 = 1$.
@@ -189,7 +189,7 @@ print(f"{'IQR':<20} ${np.percentile(sample_means_5, 75) - np.percentile(sample_m
 **연습문제 2.**
 **표본크기와 수렴 속도.** 지수 모집단(왜도 2)에서 $\bar X$의 표본분포는 어느 $n$에서 "근사적으로 정규"가 되는가? Berry-Esseen을 사용하여 정당화하라.
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
     Berry-Esseen 한계: $\rho = \mathbb{E}|X - \mu|^3$일 때 $\sup_x |F_{\bar X_n}(x) - \Phi((x - \mu)/(\sigma/\sqrt n))| \le C \cdot \rho/(\sigma^3 \sqrt n)$이다.
 
     $\mathrm{Exp}(1)$에서 $\rho \approx 2.0$, $\sigma = 1$이므로 한계는 $0.5 \cdot 2 / \sqrt n = 1/\sqrt n$이다.
@@ -205,7 +205,7 @@ print(f"{'IQR':<20} ${np.percentile(sample_means_5, 75) - np.percentile(sample_m
 **연습문제 3.**
 **대안으로서의 붓스트랩.** 모집단 모양을 모르고 $n$이 중간 정도일 때 붓스트랩은 표본분포를 비모수적으로 추정해 준다. 그 절차를 서술하라.
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
     1. 미지의 모집단에서 뽑은 표본 $X_1, \ldots, X_n$이 주어진다.
     2. 각각 크기 $n$인 붓스트랩 표본을 복원추출로 $B$개 뽑는다.
     3. 각 붓스트랩 표본에 대해 $\bar X^*_b$를 계산한다.
@@ -223,7 +223,7 @@ print(f"{'IQR':<20} ${np.percentile(sample_means_5, 75) - np.percentile(sample_m
 **연습문제 4.**
 **중심극한정리 시각화.** $n = 1, 5, 30, 100$인 지수 표본에 대해 중심극한정리를 보여 주는 일련의 그림을 서술하라.
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
     각 $n$마다 $\mathrm{Exp}(1)$에서 크기 $n$인 표본을 많이(가령 $B = 10000$개) 생성하고 각각에 대해 $\bar X_n$을 계산한 뒤 히스토그램을 그린다.
 
     예상되는 양상:
@@ -242,7 +242,7 @@ print(f"{'IQR':<20} ${np.percentile(sample_means_5, 75) - np.percentile(sample_m
 **연습문제 5.**
 **모분산의 효과.** $\mu = 50$인 모집단에 대해 $\sigma = 5, 10, 50$일 때 $n = 100$에서 $\bar X$의 표본분포를 비교하라.
 
-??? success "연습문제 5 풀이"
+??? success "풀이"
     세 표본분포 모두 근사적으로 $N(\mu, \sigma^2/n) = N(50, \sigma^2/100)$이다:
 
     - $\sigma = 5$: $\bar X \approx N(50, 0.25)$, 표준편차 = 0.5.
@@ -258,7 +258,7 @@ print(f"{'IQR':<20} ${np.percentile(sample_means_5, 75) - np.percentile(sample_m
 **연습문제 6.**
 **중앙값의 표본분포.** 평균의 표본분포와 모양, 표준오차 공식, 로버스트성을 간단히 대비하라.
 
-??? success "연습문제 6 풀이"
+??? success "풀이"
     밀도가 $f$이고 중앙값이 $m$인 모집단에서 크기 $n$인 표본을 뽑을 때:
 
     - **모양:** 점근적으로 정규이다(정칙 조건 아래에서 중앙값도 자신의 중심극한정리를 갖는다).

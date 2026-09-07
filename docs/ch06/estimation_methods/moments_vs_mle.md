@@ -92,7 +92,7 @@ MLE는 강력한 **함수적 불변성**을 갖는다. $\hat{\theta}$가 $\theta
 **연습문제 1.**
 Geometric 분포: $P(X = k) = (1-p)^{k-1} p$. (a) $x_1, \ldots, x_n$에 대한 로그가능도. (b) $\hat p_{\text{MLE}}$. (c) 적률법. (d) 둘이 같은가?
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
     (a) $T = \sum x_i$일 때 $\ell(p) = \sum_i [(x_i - 1)\ln(1-p) + \ln p] = (T - n)\ln(1-p) + n\ln p$.
 
     (b) $\ell'(p) = -(T-n)/(1-p) + n/p = 0 \Rightarrow \hat p_{\text{MLE}} = n/T = 1/\bar x$.
@@ -108,7 +108,7 @@ Geometric 분포: $P(X = k) = (1-p)^{k-1} p$. (a) $x_1, \ldots, x_n$에 대한 �
 **연습문제 2.**
 **Gamma 모의실험: MLE와 적률법.** $n = 5, 10, 30, 100, 500$에서 Gamma$(2, 3)$을 모의실험하여 평균제곱오차를 비교하라.
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
     ```python
     import numpy as np
     from scipy import stats
@@ -131,7 +131,7 @@ Geometric 분포: $P(X = k) = (1-p)^{k-1} p$. (a) $x_1, \ldots, x_n$에 대한 �
 **연습문제 3.**
 **MLE가 일반적으로 적률법보다 나은 이유.** 점근 상대효율(ARE) 결과와 그 직관을 서술하라.
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
     **ARE:** $\mathrm{ARE}(\hat\theta_{\text{MoM}}, \hat\theta_{\text{MLE}}) = $ 점근분산의 비 $\le 1$이다.
 
     등호(ARE = 1)는 적률법이 우연히 MLE와 같아질 때에만 성립한다(예: Bernoulli, Poisson, Exponential에서 MLE와 적률법이 일치한다).
@@ -151,7 +151,7 @@ Geometric 분포: $P(X = k) = (1-p)^{k-1} p$. (a) $x_1, \ldots, x_n$에 대한 �
 **연습문제 4.**
 **적률법을 선호하는 경우.** MLE 대신 적률법을 고를 만한 구체적인 사례를 두 가지 들라.
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
     **사례 1: MLE를 다루기 어려울 때.** 어떤 분포(예: Cauchy, 일반화 쌍곡선, 특정 코퓰러)에서는 가능도의 최대점이 닫힌 형태로 없거나 계산 비용이 크다. 적률법은 닫힌 형태의 추정값을 빠르게 준다.
 
     **사례 2: 설정 오류에 대한 로버스트성.** 참 분포가 가정한 모형에서 약간 벗어나 있다면 적률법이 MLE보다 완만하게 나빠질 수 있다. MLE는 가정한 가능도에 "묶여" 있지만, 적률법은 모집단 적률과 표본 적률이 일치한다는 가정만 사용한다. 잘못된 가능도를 쓴 MLE는 편향이 얼마든지 커질 수 있지만, 잘못 설정된 적률법이라도 적어도 참 모집단 적률과는 맞아떨어진다.
@@ -165,7 +165,7 @@ Geometric 분포: $P(X = k) = (1-p)^{k-1} p$. (a) $x_1, \ldots, x_n$에 대한 �
 **연습문제 5.**
 **Pareto의 적률법과 MLE.** $x \ge 1$에서 $X \sim \mathrm{Pareto}(\alpha)$일 때 둘을 유도하고 점근 상대효율을 논하라.
 
-??? success "연습문제 5 풀이"
+??? success "풀이"
     $[1, \infty)$ 위의 Pareto$(\alpha)$: $f(x; \alpha) = \alpha x^{-(\alpha+1)}$이고 $\alpha > 1$에서 $\mathbb{E}[X] = \alpha/(\alpha - 1)$이다.
 
     **적률법:** $\bar X = \alpha/(\alpha - 1) \Rightarrow \hat\alpha_{\text{MoM}} = \bar X/(\bar X - 1)$.
@@ -185,7 +185,7 @@ Geometric 분포: $P(X = k) = (1-p)^{k-1} p$. (a) $x_1, \ldots, x_n$에 대한 �
 **연습문제 6.**
 **MLE의 출발값으로서의 적률법.** 반복적인 MLE 최적화의 초기값으로 $\hat\theta_{\text{MoM}}$을 쓰는 것이 왜 좋은 생각인가?
 
-??? success "연습문제 6 풀이"
+??? success "풀이"
     반복적인 MLE(Newton-Raphson, BFGS, EM)에는 출발값이 필요하다. 좋은 출발값은:
 
     1. **더 빨리 수렴한다** (최적점에 이르는 반복 횟수가 적다).

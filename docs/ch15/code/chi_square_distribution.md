@@ -93,7 +93,7 @@ plt.show()
 
 **연습문제 1.** $Q \sim \chi^2(10)$이라 하자. Python으로 $P(Q > 18.307)$과 $P(3.247 < Q < 20.483)$을 계산하라.
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
 
     ```python
     import scipy.stats as stats
@@ -122,7 +122,7 @@ plt.show()
 
 **연습문제 2.** 가법성을 증명하라. $Q_1 \sim \chi^2(d_1)$과 $Q_2 \sim \chi^2(d_2)$가 독립이면 $Q_1 + Q_2 \sim \chi^2(d_1 + d_2)$임을 보여라.
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
 
     $Q_1 = \sum_{i=1}^{d_1} Z_i^2$, $Q_2 = \sum_{j=1}^{d_2} W_j^2$로 쓰고 모든 $Z_i, W_j \overset{\text{iid}}{\sim} N(0,1)$이 독립이라 하자($Q_1$과 $Q_2$의 독립성에서 나온다). 그러면
 
@@ -152,7 +152,7 @@ plt.show()
 
 **연습문제 3.** $N(3, 4)$(곧 $\mu = 3$, $\sigma^2 = 4$)에서 $n = 50$개 표본을 뽑아 $(n-1)S^2/\sigma^2$을 계산하는 과정을 10,000회 반복하는 모의실험을 작성하라. 히스토그램을 그리고 $\chi^2(49)$ PDF를 겹쳐 이론적 결과를 확인하라.
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
 
     ```python
     import numpy as np
@@ -196,7 +196,7 @@ plt.show()
 
 **연습문제 4.** $\chi^2(d)$의 적률생성함수(MGF)를 유도하고 이를 이용해 $E[Q]$와 $\operatorname{Var}(Q)$를 구하라.
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
 
     $Z \sim N(0,1)$이면 $Z^2$의 MGF는 $t < 1/2$에 대해 $M_{Z^2}(t) = (1-2t)^{-1/2}$이다. $Q = \sum_{i=1}^d Z_i^2$이고 $Z_i$가 독립이므로
 
@@ -238,7 +238,7 @@ plt.show()
 
 **연습문제 5.** $d = 1, 5, 10, 30, 100$에 대해 공식 $\gamma_1 = \sqrt{8/d}$로 $\chi^2(d)$의 왜도를 계산하고 표본으로 수치 확인하라. $d$가 커질수록 정규근사가 개선되는 이유를 설명하라.
 
-??? success "연습문제 5 풀이"
+??? success "풀이"
 
     ```python
     import numpy as np

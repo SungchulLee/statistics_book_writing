@@ -102,7 +102,7 @@ California Housing 자료를 사용하라.
 
 **(c)** 1-표준오차 규칙으로 모형을 선택하라. 최소 CV 오차 모형과 비교하면 어떤가?
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
     ```python
     import numpy as np
     from sklearn.datasets import fetch_california_housing
@@ -140,7 +140,7 @@ California Housing 자료를 사용하라.
 **연습문제 2.**
 "흔한 함정" 다섯 가지 중 결과를 가장 심각하게 왜곡하는 것은 무엇인가? 근거를 들어 순위를 매겨라.
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
     심각도 순으로 매기면 다음과 같다.
 
     | 순위 | 함정 | 왜곡의 크기 | 근거 |

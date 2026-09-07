@@ -265,7 +265,7 @@ ci_upper = original_statistic - np.percentile(bootstrap_t_stats, 2.5) * original
 **연습문제 1.**
 소득자료 예제에서 중앙값의 붓스트랩 표준오차 $\$756$을 얻었다. 같은 자료에서 **평균**의 붓스트랩 표준오차를 계산하고, 이론값 $s/\sqrt{n}$과 비교하라. 어느 통계량의 표준오차가 더 큰가?
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
     ```python
     import numpy as np, pandas as pd
     np.random.seed(1)
@@ -303,7 +303,7 @@ ci_upper = original_statistic - np.percentile(bootstrap_t_stats, 2.5) * original
 **연습문제 2.**
 블록 붓스트랩이 필요한 이유를 보여라. AR(1) 시계열에 표준 붓스트랩을 적용하면 표준오차가 어떻게 되는가?
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
     $X_t = \phi X_{t-1} + \varepsilon_t$, $\phi = 0.8$, $\varepsilon_t \sim \mathcal{N}(0,1)$인 시계열을 생성한다. 이 과정의 정상분산은 $1/(1-\phi^2) = 2.778$이고, 표본평균의 참 분산은
 
     $$
@@ -363,7 +363,7 @@ ci_upper = original_statistic - np.percentile(bootstrap_t_stats, 2.5) * original
 **연습문제 3.**
 "극단값을 잘 추정하지 못한다"는 한계를 정량적으로 확인하라. $n = 200$인 표본에서 99번째 백분위수의 붓스트랩 신뢰구간 포함확률은 얼마인가?
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
     $\mathcal{N}(0,1)$에서 $q_{0.99} = 2.3263$이다. 중앙값 $q_{0.5} = 0$과 비교한다.
 
     ```python

@@ -274,7 +274,7 @@ plot_confusion_matrix(M_ours, class_names=iris.target_names)
 
 ---
 
-## Exercises
+## 연습문제
 
 **연습문제 1.**
 4범주 분류기가 다음 혼동행렬을 냈다.
@@ -288,7 +288,7 @@ plot_confusion_matrix(M_ours, class_names=iris.target_names)
 
 전체 정확도, 범주별 정밀도와 재현율, 거시평균 F1 점수를 손으로 계산하라.
 
-??? success "Solution to Exercise 1"
+??? success "풀이"
     전체 관측치 수는 $40+5+3+2+2+35+8+5+1+4+42+3+0+6+2+42 = 200$이다(각 행의 합이 50).
 
     **전체 정확도:**
@@ -318,7 +318,7 @@ plot_confusion_matrix(M_ours, class_names=iris.target_names)
 단일 이름표 다범주 문제에서 미시평균 정밀도 = 미시평균 재현율 = 전체 정확도임을 보여라.
 (힌트: $\sum_c \text{FP}_c$와 $\sum_c \text{FN}_c$를 $\mathbf{M}$의 비대각 원소와 연결하라.)
 
-??? success "Solution to Exercise 2"
+??? success "풀이"
     각 범주 $c$에 대해,
 
     - $\text{TP}_c = M_{cc}$
@@ -358,7 +358,7 @@ plot_confusion_matrix(M_ours, class_names=iris.target_names)
 90%를 달성한다. 이 무의미한 분류기의 거시평균 F1을 계산하고, 이 문제에서 거시 F1이 정확도보다
 나은 평가 기준인 이유를 설명하라.
 
-??? success "Solution to Exercise 3"
+??? success "풀이"
     "항상 0을 예측"하는 분류기의 혼동행렬은 다음과 같다.
 
     |  | 0으로 예측 | 1로 예측 | 2로 예측 |
@@ -397,7 +397,7 @@ plot_confusion_matrix(M_ours, class_names=iris.target_names)
 각 범주의 F1 점수를 지지도(실제 사례 수)로 가중하여 가중평균 F1을 계산하는 `weighted_f1`
 함수를 구현하라. 균형 잡힌 자료에서는 가중 F1이 거시 F1과 같아짐을 보여라.
 
-??? success "Solution to Exercise 4"
+??? success "풀이"
     ```python
     def weighted_f1(M):
         """Weighted-average F1-score."""
@@ -422,7 +422,7 @@ plot_confusion_matrix(M_ours, class_names=iris.target_names)
 $0 \leq F_{1,c} \leq 1$을 만족하며, $F_{1,c} = 1$인 것은 범주 $c$의 정밀도와 재현율이 모두
 완벽할 때 그리고 그때뿐임을 증명하라.
 
-??? success "Solution to Exercise 5"
+??? success "풀이"
     F1 점수는 정밀도와 재현율의 조화평균이다.
 
     $$

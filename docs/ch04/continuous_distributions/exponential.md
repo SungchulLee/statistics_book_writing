@@ -232,7 +232,7 @@ plt.show()
 **연습문제 1.**
 부품 수명이 $T \sim \mathrm{Exp}(0.5)$(단위: 년)이다. (a) $P(T > 3)$. (b) $P(T > 3 \mid T > 2)$. (c) 독립인 부품 두 개에 대해 $\min(T_1, T_2)$의 분포와 기댓값.
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
     (a) $P(T > 3) = e^{-1.5} \approx 0.223$.
 
     (b) 무기억성에 의해 $P(T > 3 \mid T > 2) = P(T > 1) = e^{-0.5} \approx 0.607$. 직접 계산하면 $P(T > 3)/P(T > 2) = e^{-1.5}/e^{-1} = e^{-0.5}$.
@@ -244,7 +244,7 @@ plt.show()
 **연습문제 2.**
 Exponential 분포의 **무기억성을 증명**하고, 이 성질을 갖는 연속분포가 *유일*함을 보여라.
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
     생존함수는 $\bar F(t) = e^{-\lambda t}$이다. 그러면
 
     $$
@@ -262,7 +262,7 @@ Exponential 분포의 **무기억성을 증명**하고, 이 성질을 갖는 연
 **연습문제 3.**
 $\mathrm{Exp}(\lambda)$의 **PDF, 평균, 분산을 유도하라.**
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
     PDF: CDF $F(t) = 1 - e^{-\lambda t}$를 미분하면 $t \ge 0$에 대해 $f(t) = \lambda e^{-\lambda t}$.
 
     평균: $\mathbb{E}[T] = \int_0^\infty t \lambda e^{-\lambda t} dt$. 부분적분하거나 꼬리 공식을 쓰면 $\mathbb{E}[T] = \int_0^\infty e^{-\lambda t} dt = 1/\lambda$.
@@ -278,7 +278,7 @@ $\mathrm{Exp}(\lambda)$의 **PDF, 평균, 분산을 유도하라.**
 **연습문제 4.**
 **Poisson 과정과의 연결.** 사건이 비율 $\lambda$인 Poisson 과정에서 발생할 때 $k$번째 도착 시각 $T_k$의 분포를 유도하라.
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
     $T_k = \sum_{i=1}^k X_i$이며, 여기서 $X_i$는 i.i.d. $\mathrm{Exp}(\lambda)$(도착 간 시간)이다.
 
     $k$개의 i.i.d. Exponential 확률변수의 합은 **감마(Erlang) 분포**이다:
@@ -298,7 +298,7 @@ $\mathrm{Exp}(\lambda)$의 **PDF, 평균, 분산을 유도하라.**
 **연습문제 5.**
 **최대가능도추정.** i.i.d. $T_1, \ldots, T_n \sim \mathrm{Exp}(\lambda)$가 주어졌을 때 MLE $\hat\lambda$를 유도하라.
 
-??? success "연습문제 5 풀이"
+??? success "풀이"
     가능도: $L(\lambda) = \prod_i \lambda e^{-\lambda T_i} = \lambda^n e^{-\lambda \sum T_i}$.
 
     로그가능도: $\ell(\lambda) = n \ln \lambda - \lambda \sum T_i$.
@@ -318,7 +318,7 @@ $\mathrm{Exp}(\lambda)$의 **PDF, 평균, 분산을 유도하라.**
 **연습문제 6.**
 **위험함수.** 위험률은 $h(t) = f(t)/\bar F(t)$로 정의된다. Exponential 분포의 위험률이 *상수*임을 보이고, 이것이 물리적으로 무엇을 뜻하는지 논하라.
 
-??? success "연습문제 6 풀이"
+??? success "풀이"
     $h(t) = \lambda e^{-\lambda t} / e^{-\lambda t} = \lambda$.
 
     **상수 위험률:** 순간 고장률 $h(t) = \lambda$가 $t$에 의존하지 않는다. 해석하자면, 아직 고장 나지 않은 부품이 다음 짧은 구간에서 고장 날 확률은 나이와 무관하게 언제나 같다.

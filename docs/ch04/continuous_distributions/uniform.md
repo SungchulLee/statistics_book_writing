@@ -195,7 +195,7 @@ plt.show()
 **연습문제 1.**
 $U \sim \mathrm{Uniform}(0, 1)$이고 $X = -(1/\lambda)\ln(1 - U)$이다. (a) $X$의 CDF를 구하라. (b) 그 분포를 밝혀라. (c) 역변환 방법을 설명하라. (d) $1 - U \sim \mathrm{Uniform}(0, 1)$임을 보여라.
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
     (a) $P(X \le x) = P(-(1/\lambda)\ln(1 - U) \le x) = P(U \le 1 - e^{-\lambda x}) = 1 - e^{-\lambda x}$.
 
     (b) 이는 $\mathrm{Exp}(\lambda)$의 CDF이다. 따라서 $X \sim \mathrm{Exp}(\lambda)$.
@@ -209,7 +209,7 @@ $U \sim \mathrm{Uniform}(0, 1)$이고 $X = -(1/\lambda)\ln(1 - U)$이다. (a) $X
 **연습문제 2.**
 **Uniform$(a, b)$의 평균과 분산.** PDF로부터 둘 다 유도하라.
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
     PDF: $[a, b]$ 위에서 $f(x) = 1/(b - a)$.
 
     $\mathbb{E}[X] = \int_a^b x/(b - a) dx = (b^2 - a^2)/(2(b - a)) = (a + b)/2$.
@@ -225,7 +225,7 @@ $U \sim \mathrm{Uniform}(0, 1)$이고 $X = -(1/\lambda)\ln(1 - U)$이다. (a) $X
 **연습문제 3.**
 **두 균등확률변수의 합.** $U_1, U_2 \sim \mathrm{Uniform}(0, 1)$이 독립이면 $U_1 + U_2$가 $[0, 2]$ 위의 **삼각분포**를 따름을 보여라.
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
     PDF를 합성곱한다:
 
     $$
@@ -246,7 +246,7 @@ $U \sim \mathrm{Uniform}(0, 1)$이고 $X = -(1/\lambda)\ln(1 - U)$이다. (a) $X
 **연습문제 4.**
 **균등확률변수의 순서통계량.** $U_1, \ldots, U_n$이 i.i.d. $\mathrm{Uniform}(0, 1)$일 때 $k$번째 순서통계량 $U_{(k)}$는 $\mathrm{Beta}(k, n - k + 1)$ 분포를 따른다. CDF를 유도하라.
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
     $U_{(k)} \le u$일 필요충분조건은 $U_i$들 중 적어도 $k$개가 $u$ 이하인 것이다. $u$ 이하인 $U_i$의 개수는 $\mathrm{Binomial}(n, u)$를 따른다(각각 독립적으로 확률 $u$).
 
     $$
@@ -262,7 +262,7 @@ $U \sim \mathrm{Uniform}(0, 1)$이고 $X = -(1/\lambda)\ln(1 - U)$이다. (a) $X
 **연습문제 5.**
 **최대 엔트로피 성질.** 유계 구간 $[a, b]$ 위의 모든 분포 중에서 Uniform 분포가 **미분 엔트로피**를 최대로 한다. 미분 엔트로피 공식을 쓰고 이를 확인하라.
 
-??? success "연습문제 5 풀이"
+??? success "풀이"
     미분 엔트로피: $h(X) = -\int f(x) \ln f(x) dx$.
 
     $X \sim \mathrm{Uniform}(a, b)$에 대해 $h(X) = -\int_a^b (1/(b-a)) \ln(1/(b-a)) dx = \ln(b - a)$.
@@ -280,7 +280,7 @@ $U \sim \mathrm{Uniform}(0, 1)$이고 $X = -(1/\lambda)\ln(1 - U)$이다. (a) $X
 **연습문제 6.**
 **확률적분변환.** $X$가 연속 CDF $F$를 가지면 $U = F(X) \sim \mathrm{Uniform}(0, 1)$임을 증명하라.
 
-??? success "연습문제 6 풀이"
+??? success "풀이"
     $F$의 연속성(이 덕분에 $F^{-1}$이 잘 정의되고 $F \circ F^{-1} = \mathrm{id}$이다)을 이용하면 $P(U \le u) = P(F(X) \le u) = P(X \le F^{-1}(u)) = F(F^{-1}(u)) = u$이다.
 
     따라서 $U$의 CDF는 $[0, 1]$ 위에서 $u$이며, 즉 $U \sim \mathrm{Uniform}(0, 1)$이다.

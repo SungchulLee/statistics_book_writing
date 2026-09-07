@@ -144,7 +144,7 @@ print(f"NumPy var (n-1):  {data.var(ddof=1):.3f}")
 **연습문제 1.**
 수의 리스트를 받아 `"mean"`, `"variance"`, `"n"`, `"se_mean"`(평균의 표준오차 $s / \sqrt{n}$)을 키로 갖는 사전을 반환하는 함수 `summary_stats(data)`를 NumPy를 쓰지 않고 작성하라.
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
     ```python
     from math import sqrt
 
@@ -166,7 +166,7 @@ print(f"NumPy var (n-1):  {data.var(ddof=1):.3f}")
 **연습문제 2.**
 원소별 산술 연산에서 파이썬 `list`와 NumPy `ndarray`의 차이를 설명하라. `[1, 2, 3] * 2`와 `np.array([1, 2, 3]) * 2`가 각각 무엇을 만들어내는지, 그리고 그 이유를 보여라.
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
     ```python
     import numpy as np
 
@@ -181,7 +181,7 @@ print(f"NumPy var (n-1):  {data.var(ddof=1):.3f}")
 **연습문제 3.**
 $1 \le i < j \le 5$인 모든 쌍 $(i, j)$를 하나의 표현식으로 생성하는 리스트 컴프리헨션을 작성하라. 그 개수가 $\binom{5}{2}$와 같음을 확인하라.
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
     ```python
     pairs = [(i, j) for i in range(1, 6) for j in range(i + 1, 6)]
     print(pairs)
@@ -197,7 +197,7 @@ $1 \le i < j \le 5$인 모든 쌍 $(i, j)$를 하나의 표현식으로 생성�
 **연습문제 4.**
 `if __name__ == "__main__":`이 무엇을 하는지 설명하라. 이를 빠뜨렸을 때 임포트 시 원치 않는 동작이 생기는 예를 하나 들어라.
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
     `__name__`은 모듈의 특수 속성이다. 파일이 스크립트로 실행될 때(`python myscript.py`)는 `"__main__"`과 같고, 그 밖의 경우에는 모듈의 임포트 이름(`mypackage.myscript`)과 같다.
 
     `if __name__ == "__main__":` 안의 코드는 직접 호출할 때만 실행되고 임포트 시에는 건너뛴다. 이것이 중요한 이유는 세 가지다.
@@ -226,7 +226,7 @@ $$
 
 가우스분포에서 뽑은 $10^6$개 값의 리스트에서 `sum(data)/len(data)`와 수치적으로 비교하고, 온라인 형태가 언제 더 나은지 설명하라.
 
-??? success "연습문제 5 풀이"
+??? success "풀이"
     ```python
     import numpy as np
 
@@ -252,7 +252,7 @@ $$
 **연습문제 6.**
 이름으로 접근하는 분포 매개변수를 저장할 때 (3.7 이후의) 파이썬 `dict`가 `(키, 값)` 튜플의 `list`보다 나은 이유는 무엇인가? 점근적 복잡도와 코드의 명료성 측면에서 논하라.
 
-??? success "연습문제 6 풀이"
+??? success "풀이"
     **복잡도**: 사전은 해시 테이블이다. 키에 의한 조회, 삽입, 삭제가 기대 시간 $O(1)$이다. $(k, v)$ 튜플의 리스트는 선형 탐색이 필요해 조회마다 $O(n)$이다. 항목이 몇 개뿐인 매개변수 묶음에서는 점근 복잡도보다 상수가 더 중요하지만, 자료가 커지면 원리는 그대로 적용된다.
 
     **명료성**: `params["mu"]`는 무엇을 읽는지 정확히 말해준다. `next(v for k, v in params if k == "mu")`도 같은 일을 하지만 의도를 흐리고 더 깨지기 쉽다. 이름 기반 접근은 묶음을 함수에 넘길 때 `**kwargs` 언패킹과도 깔끔하게 어울린다.

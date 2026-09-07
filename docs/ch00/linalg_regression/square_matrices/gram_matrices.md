@@ -131,7 +131,7 @@ $\mathbf{X}$가 중심화된 자료행렬(관측값에서 열 평균을 뺀 것)
 **연습문제 1.**
 $\mathbf{X} = \begin{pmatrix} 1 & 2 \\ 1 & 3 \\ 1 & 5 \end{pmatrix}$이라 하자. 그람 행렬 $\mathbf{X}^T\mathbf{X}$를 계산하고 그것이 대칭이며 양정치임을 확인하라.
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
     $$
     \mathbf{X}^T\mathbf{X} = \begin{pmatrix} 1 & 1 & 1 \\ 2 & 3 & 5 \end{pmatrix}\begin{pmatrix} 1 & 2 \\ 1 & 3 \\ 1 & 5 \end{pmatrix} = \begin{pmatrix} 3 & 10 \\ 10 & 38 \end{pmatrix}
     $$
@@ -143,7 +143,7 @@ $\mathbf{X} = \begin{pmatrix} 1 & 2 \\ 1 & 3 \\ 1 & 5 \end{pmatrix}$이라 하�
 **연습문제 2.**
 임의의 실행렬 $\mathbf{X}$에 대해 $\mathbf{X}^T\mathbf{X}$가 언제나 양반정치이고, 양정치일 필요충분조건이 $\mathbf{X}$가 완전 열계수를 갖는 것임을 증명하라.
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
     임의의 벡터 $\mathbf{v} \neq \mathbf{0}$에 대해
 
     $$
@@ -157,7 +157,7 @@ $\mathbf{X} = \begin{pmatrix} 1 & 2 \\ 1 & 3 \\ 1 & 5 \end{pmatrix}$이라 하�
 **연습문제 3.**
 $\mathbf{X}$의 열들이 거의 공선적일 때 $\mathbf{X}^T\mathbf{X}$의 조건수가 최소제곱추정값의 안정성과 어떻게 관련되는지 설명하라. 조건수를 고윳값으로 나타내면 무엇인가?
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
     $\mathbf{X}^T\mathbf{X}$의 조건수는 $\kappa = \lambda_{\max}/\lambda_{\min}$이며, 여기서 $\lambda_{\max}$와 $\lambda_{\min}$은 최대·최소 고윳값이다.
 
     열들이 거의 공선적이면 $\lambda_{\min}$이 0에 가까워져 $\kappa$가 매우 커진다. $\operatorname{Var}(\hat{\boldsymbol{\beta}}) = \sigma^2(\mathbf{X}^T\mathbf{X})^{-1}$이고 $(\mathbf{X}^T\mathbf{X})^{-1}$의 고윳값이 $1/\lambda_i$이므로, $\lambda_{\min}$이 작으면 그에 대응하는 고유벡터 방향으로 분산 $\sigma^2/\lambda_{\min}$이 커진다. 조건수가 크다는 것은 또한 $\mathbf{y}$의 작은 섭동이 $\hat{\boldsymbol{\beta}}$을 크게 변화시킨다는 뜻이며, 추정값이 수치적으로 불안정해진다.
@@ -167,7 +167,7 @@ $\mathbf{X}$의 열들이 거의 공선적일 때 $\mathbf{X}^T\mathbf{X}$의 �
 **연습문제 4.**
 표본 공분산행렬 $\mathbf{S} = \frac{1}{n-1}\mathbf{X}_c^T\mathbf{X}_c$($\mathbf{X}_c$는 평균 중심화된 자료행렬)가 양반정치임을 보여라. 어떤 조건에서 양정치가 되는가?
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
     $\mathbf{S} = \frac{1}{n-1}\mathbf{X}_c^T\mathbf{X}_c$는 그람 행렬의 양의 스칼라배이므로 양반정치성을 물려받는다.
 
     $$

@@ -95,7 +95,7 @@ $$
 **연습문제 1.**
 직교 설계($\mathbf{X}^\top\mathbf{X} = n\mathbf{I}$)에서 능형과 라쏘의 닫힌 형태 해를 유도하라. 라쏘는 정확한 0을 만들고 능형은 만들지 못하는 이유를 기하적으로 설명하라.
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
     **유도.** 직교 설계에서 목적함수가 좌표별로 분리된다. $z_j = \frac{1}{n}\mathbf{x}_j^\top\mathbf{y} = \hat\beta_j^{\text{OLS}}$라 두면 각 좌표의 문제는
 
     $$
@@ -130,7 +130,7 @@ $y = 3x_1 - 2x_2 + 0.5x_3 + \varepsilon$($\varepsilon \sim N(0,1)$)에서 $n = 1
 
 **(c)** 5-겹 교차검증으로 각 방법의 최적 $\lambda$를 고르고 검정 MSE를 보고하라.
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
     ```python
     import numpy as np
     from sklearn.linear_model import (LinearRegression, RidgeCV,

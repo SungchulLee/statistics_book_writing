@@ -79,7 +79,7 @@ $\text{Var}(\bar{X}) = \text{Var}(X_1)/n = \lambda/n$이므로 MLE가 이 한계
 **연습문제 1.**
 확률표본 $X_1, \dots, X_n \overset{\text{iid}}{\sim} \text{Poisson}(\lambda)$에 대해 $\lambda$의 MLE를 유도하라.
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
     로그가능도는:
 
     $$
@@ -99,7 +99,7 @@ $\text{Var}(\bar{X}) = \text{Var}(X_1)/n = \lambda/n$이므로 MLE가 이 한계
 **연습문제 2.**
 어떤 병원 응급실이 24시간 동안 시간당 도착 환자 수를 기록했고 총합이 168명이다. 시간당 도착률 $\lambda$의 MLE를 구하고 근사적인 95% 신뢰구간을 구성하라.
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
     $n = 24$시간이고 $\sum x_i = 168$이므로:
 
     $$
@@ -125,7 +125,7 @@ $\text{Var}(\bar{X}) = \text{Var}(X_1)/n = \lambda/n$이므로 MLE가 이 한계
 **연습문제 3.**
 MLE $\hat{\lambda} = \bar{X}$가 불편임을 보이고 그 정확한 분산을 계산하라.
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
     각 $X_i$가 $E[X_i] = \lambda$를 만족하므로:
 
     $$
@@ -147,7 +147,7 @@ MLE $\hat{\lambda} = \bar{X}$가 불편임을 보이고 그 정확한 분산을 
 **연습문제 4.**
 Poisson의 MLE $\hat{\lambda} = \bar{X}$는 (척도를 제외하면) 충분통계량이기도 하다. Rao-Blackwell 정리를 사용하여 다른 어떤 불편추정량도 더 작은 분산을 가질 수 없는 이유를 설명하라.
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
     (인수분해 정리에 의해) $\lambda$에 대한 충분통계량은 $T = \sum X_i$이다. MLE $\hat{\lambda} = T/n$은 이미 $T$의 함수이다.
 
     Rao-Blackwell 정리에 의해 $T$로 조건화한 임의의 불편추정량은 원래보다 분산이 크지 않다. $\hat{\lambda}$가 이미 $T$의 함수이므로, 다른 어떤 불편추정량을 $T$로 조건화해도 $\hat{\lambda}$보다 나아질 수 없다.

@@ -133,7 +133,7 @@ Kolmogorov-Smirnov 이표본 검정은 독립인 두 표본의 경험적 분포�
 
 **(c)** $D$가 크다는 것은 두 분포에 대해 무엇을 뜻하는가?
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
 
     **(a)** 각 표본을 정렬하고 ECDF를 계산한다(각 도약의 크기는 $1/n_i$).
 
@@ -185,7 +185,7 @@ Kolmogorov-Smirnov 이표본 검정은 독립인 두 표본의 경험적 분포�
 **연습문제 2.**
 KS 검정과 Mann-Whitney 검정의 검정력을 **위치이동**과 **척도 차이** 두 상황에서 모의실험으로 비교하라.
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
     ```python
     import numpy as np
     from scipy import stats
@@ -237,7 +237,7 @@ KS 검정과 Mann-Whitney 검정의 검정력을 **위치이동**과 **척도 �
 **연습문제 3.**
 KS 검정이 분포무관인 이유를 설명하라. 즉 $D$의 귀무분포가 왜 공통분포 $F$에 의존하지 않는가?
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
     핵심은 **확률적분변환**이다. $F$가 연속이면 $U = F(X) \sim \text{Uniform}(0,1)$이다.
 
     두 표본 $X_1, \ldots, X_{n_1}$과 $Y_1, \ldots, Y_{n_2}$가 모두 $F$에서 나왔다고 하자. 각 관측값에 $F$를 적용하면 $U_i = F(X_i)$, $V_j = F(Y_j)$가 되고, 모두 $\text{Uniform}(0,1)$이다.
@@ -279,7 +279,7 @@ KS 검정이 분포무관인 이유를 설명하라. 즉 $D$의 귀무분포가 
 **연습문제 4.**
 KS 통계량이 최댓값을 갖는 위치 $x^*$는 무엇을 알려 주는가? 두 분포가 다른 방식으로 다를 때 $x^*$가 어디에 나타나는지 확인하라.
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
     ```python
     import numpy as np
     from scipy import stats

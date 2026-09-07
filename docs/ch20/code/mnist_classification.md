@@ -308,14 +308,14 @@ plt.show()
 
 ---
 
-## Exercises
+## 연습문제
 
 **연습문제 1.**
 소프트맥스 회귀 모형은 $\mathbf{W} \in \mathbb{R}^{10 \times 784}$을 갖는다. 각 행
 $\mathbf{w}_k$는 $28 \times 28$ 이미지로 재구성할 수 있다. 가중벡터 10개를 이미지로 시각화하고
 무엇을 나타내는지 해석하라.
 
-??? success "Solution to Exercise 1"
+??? success "풀이"
     ```python
     W = model_linear.fc.weight.data.numpy()   # shape (10, 784)
 
@@ -348,7 +348,7 @@ $\mathbf{w}_k$는 $28 \times 28$ 이미지로 재구성할 수 있다. 가중벡
 세 모형 각각에 대해 표본 하나의 순전파에 필요한 부동소수점 곱셈-누산 연산(MAC)의 수를
 계산하라. 이를 이용해, CNN이 모수는 더 적은데도 표본당 계산은 왜 더 비싼지 설명하라.
 
-??? success "Solution to Exercise 2"
+??? success "풀이"
     **소프트맥스 회귀:** $\mathbf{W} \in \mathbb{R}^{10 \times 784}$인 행렬-벡터 곱
     $\mathbf{W}\mathbf{x}$ 하나에 $10 \times 784 = 7{,}840$번의 MAC이 필요하다.
 
@@ -392,7 +392,7 @@ $\mathbf{w}_k$는 $28 \times 28$ 이미지로 재구성할 수 있다. 가중벡
 뒤 드롭아웃이 있을 때와 없을 때의 훈련/검정 정확도 격차를 비교하라. 드롭아웃이 왜 정칙화로
 작동하는지 설명하라.
 
-??? success "Solution to Exercise 3"
+??? success "풀이"
     ```python
     class TwoLayerDropout(nn.Module):
         def __init__(self, hidden_size=256, p=0.5):
@@ -439,7 +439,7 @@ $\mathbf{w}_k$는 $28 \times 28$ 이미지로 재구성할 수 있다. 가중벡
 모수 개수가 $C_{\text{out}}(C_{\text{in}} k^2 + 1)$임을 증명하라. 위 CNN의 두 합성곱층에 대해
 확인하라.
 
-??? success "Solution to Exercise 4"
+??? success "풀이"
     $C_{\text{out}}$개의 필터 각각은 $C_{\text{in}}$개의 입력 채널마다 $k \times k$ 공간 커널을
     가지고, 여기에 편향 하나가 더해진다. 따라서 총 모수 개수는
 
@@ -482,7 +482,7 @@ MNIST의 소프트맥스 회귀 모형은 784차원 화소공간에서 선형 �
 속하면서 화소공간에서 유클리드 거리가 작은 두 이미지의 구체적인 예를 들고, 이것이 왜 선형
 분류기에 문제가 되는지 설명하라. 그다음 CNN이 이 한계를 어떻게 극복하는지 설명하라.
 
-??? success "Solution to Exercise 5"
+??? success "풀이"
     이미지 가운데에 가는 세로획으로 그린 숫자 "1"과, 같은 "1"을 오른쪽으로 3화소 옮긴 것을
     생각하자. 화소공간에서는 원본의 0이 아닌 화소가 모두 이동했으므로 두 이미지 사이의 유클리드
     거리가 상당히 크다.

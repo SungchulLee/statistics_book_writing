@@ -103,7 +103,7 @@ $$
 **연습문제 1.**
 등상관 행렬 $\Sigma = \rho\mathbf{1}\mathbf{1}^\top + (1-\rho)\mathbf{I}$에 대해 $\lambda$를 더하면 조건수가 얼마나 줄어드는지 계산하라. $p = 8$, $\rho = 0.99$와 $0.999$에서 $\lambda = 0.001, 0.01, 0.1, 1$을 시도하라.
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
     등상관 행렬의 고윳값은 해석적으로 알려져 있다. $1 + (p-1)\rho$가 한 개, $1 - \rho$가 $p-1$개다.
 
     ```python
@@ -149,7 +149,7 @@ $$
 **연습문제 2.**
 조건수 한계가 실제로 얼마나 빡빡한지 확인하라. $\kappa(\mathbf{X}^\top\mathbf{X}) \approx 1.7\times10^4$인 자료에서 (i) $\mathbf{y}$를 교란할 때와 (ii) $\mathbf{X}^\top\mathbf{y}$를 직접 교란할 때의 증폭을 비교하라.
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
     ```python
     import numpy as np
     from numpy.linalg import cond, svd
@@ -184,7 +184,7 @@ $$
 **연습문제 3.**
 능형 정칙화가 실제로 교란 민감도를 줄이는지 확인하라. 연습문제 2의 자료에서 $\lambda = 0, 0.01, 1$에 대해 $\mathbf{y}$ 교란에 대한 증폭을 비교하라.
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
     | $\lambda$ | 증폭 배수 (중앙값) |
     |---:|---:|
     | 0 (OLS) | 4.66 |

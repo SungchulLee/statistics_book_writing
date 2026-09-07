@@ -131,7 +131,7 @@ $$
 **연습문제 1.**
 $X_1, \ldots, X_n \sim N(\mu, \sigma^2)$이고 추정량이 $\hat\mu_w = wX_1 + (1-w)\bar X$이다. (a) 불편인가? (b) 분산을 최소화하는 $w$는? (c) $w = 0$과 $w = 1$에서의 분산은?
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
     (a) 선형성에 의해 $\mathbb{E}[\hat\mu_w] = w\mu + (1-w)\mu = \mu$이다. 모든 $w$에 대해 불편이다.
 
     (b) $\bar X_{-1}$을 ($X_1$과 독립인) $X_2, \ldots, X_n$의 평균이라 하고 $\bar X = X_1/n + (n-1)\bar X_{-1}/n$으로 쓰면:
@@ -149,7 +149,7 @@ $X_1, \ldots, X_n \sim N(\mu, \sigma^2)$이고 추정량이 $\hat\mu_w = wX_1 + 
 **연습문제 2.**
 **Cramér-Rao 하한 (CRLB).** 불편추정량에 대한 CRLB를 서술하고 증명하라.
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
     **CRLB:** $\hat\theta$가 밀도 $f(x; \theta)$에서 얻은 $n$개의 i.i.d. 관측값에 기반한 $\theta$의 불편추정량이면:
 
     $$
@@ -167,7 +167,7 @@ $X_1, \ldots, X_n \sim N(\mu, \sigma^2)$이고 추정량이 $\hat\mu_w = wX_1 + 
 **연습문제 3.**
 **정규분포 평균의 효율성.** $X \sim N(\mu, \sigma^2)$에서 $\mu$를 추정할 때 $\bar X$가 CRLB를 달성함을 보여라.
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
     정규분포 평균의 Fisher 정보량은 $I(\mu) = 1/\sigma^2$이다. CRLB는 $\mathrm{Var}(\hat\mu) \ge \sigma^2/n$이다.
 
     표본평균의 분산은 $\mathrm{Var}(\bar X) = \sigma^2/n$으로 CRLB를 정확히 달성한다.
@@ -181,7 +181,7 @@ $X_1, \ldots, X_n \sim N(\mu, \sigma^2)$이고 추정량이 $\hat\mu_w = wX_1 + 
 **연습문제 4.**
 **MLE의 점근 효율성.** MLE가 점근적으로 CRLB를 달성한다는 결과를 서술하고 설명하라.
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
     **결과:** 정칙 조건 아래에서 $\hat\theta_{\text{MLE}}$는 분산이 CRLB와 같은 **점근적 정규**이다:
 
     $$
@@ -201,7 +201,7 @@ $X_1, \ldots, X_n \sim N(\mu, \sigma^2)$이고 추정량이 $\hat\mu_w = wX_1 + 
 **연습문제 5.**
 **비효율적인 불편추정량.** $N(\mu, 1)$에서 분산이 $1/n$(CRLB)보다 큰 $\mu$의 불편추정량을 구성하라. 그런 추정량이 존재하는 이유를 설명하라.
 
-??? success "연습문제 5 풀이"
+??? success "풀이"
     예: $\hat\mu = X_1$(첫 관측값만 사용). 불편이다: $\mathbb{E}[X_1] = \mu$. 분산: $\mathrm{Var}(X_1) = 1$.
 
     $n \ge 2$이면 $\mathrm{Var}(X_1) = 1 > 1/n =$ CRLB이다. 따라서 이 추정량은 $n$배 비효율적이다.
@@ -217,7 +217,7 @@ $X_1, \ldots, X_n \sim N(\mu, \sigma^2)$이고 추정량이 $\hat\mu_w = wX_1 + 
 **연습문제 6.**
 **실제 응용에서의 맞바꿈.** 언제 불편추정량보다 편향되어 있지만 평균제곱오차가 작은 추정량(예: 능형회귀, James-Stein)을 선호하겠는가?
 
-??? success "연습문제 6 풀이"
+??? success "풀이"
     **MSE 분해:** $\mathrm{MSE}(\hat\theta) = \mathrm{Var}(\hat\theta) + [\mathrm{Bias}(\hat\theta)]^2$.
 
     불편추정량은 $\mathrm{Bias} = 0$이므로 $\mathrm{MSE} = \mathrm{Var}$이고, CRLB가 이를 아래에서 제한한다.

@@ -131,7 +131,7 @@ $$
 **연습문제 1.**
 $\mathbf{P} = \begin{pmatrix} 1 & 0 \\ 0 & 0 \end{pmatrix}$이 사영행렬임을 확인하라. 어느 부분공간 위로 사영하는가? 여집합 사영 $\mathbf{I} - \mathbf{P}$는 무엇인가?
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
     멱등성 확인:
 
     $$
@@ -151,7 +151,7 @@ $\mathbf{P} = \begin{pmatrix} 1 & 0 \\ 0 & 0 \end{pmatrix}$이 사영행렬임�
 **연습문제 2.**
 $\mathbf{P}$가 멱등이면 $\operatorname{rank}(\mathbf{P}) = \operatorname{tr}(\mathbf{P})$임을 증명하라.
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
     $\mathbf{P}$가 멱등이므로 고윳값은 0 아니면 1이다($\mathbf{P}\mathbf{v} = \lambda\mathbf{v}$이면 $\mathbf{P}^2\mathbf{v} = \lambda^2\mathbf{v} = \lambda\mathbf{v}$이므로 $\lambda^2 = \lambda$이고 $\lambda \in \{0, 1\}$이다).
 
     계수는 0이 아닌 고윳값의 개수와 같고, 이는 1인 고윳값의 개수다. 대각합은 모든 고윳값의 합인데, 나머지가 0이므로 이 또한 1인 고윳값의 개수다.
@@ -163,7 +163,7 @@ $\mathbf{P}$가 멱등이면 $\operatorname{rank}(\mathbf{P}) = \operatorname{tr
 **연습문제 3.**
 빗각(직교가 아닌) 사영행렬의 예를 들어라. 멱등이지만 대칭이 아님을 확인하라.
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
     $\mathbf{P} = \begin{pmatrix} 1 & 1 \\ 0 & 0 \end{pmatrix}$을 생각하자.
 
     멱등성:
@@ -181,7 +181,7 @@ $\mathbf{P}$가 멱등이면 $\operatorname{rank}(\mathbf{P}) = \operatorname{tr
 **연습문제 4.**
 회귀 분해 $\mathbf{y} = \mathbf{H}\mathbf{y} + (\mathbf{I} - \mathbf{H})\mathbf{y}$에서 $\mathbf{H}\mathbf{y}$와 $(\mathbf{I} - \mathbf{H})\mathbf{y}$가 직교인 이유를 설명하라. 멱등성 외에 어떤 성질이 추가로 필요한가?
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
     $\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}$와 $\mathbf{e} = (\mathbf{I} - \mathbf{H})\mathbf{y}$의 직교성에는 $\mathbf{H}$가 (멱등일 뿐 아니라) 대칭이어야 한다. 대칭성이 있으면
 
     $$

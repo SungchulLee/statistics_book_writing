@@ -93,7 +93,7 @@ $$
 $\text{softmax}(\mathbf{z} + c\mathbf{1}) = \text{softmax}(\mathbf{z})$임을 보이고, 이 성질이
 수치적 안정성에 왜 중요한지 설명하라.
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
 
     **(a)** 먼저 지수를 계산한다.
 
@@ -158,7 +158,7 @@ $$
 $\mathbf{w}_k' = \mathbf{w}_k - \mathbf{v}$, $b_k' = b_k - v_b$로 둔 모수가 같은 소프트맥스
 출력을 낸다. 이를 이용해 마지막 범주의 로짓이 항상 0이 되도록 만들어 자유 모수를 줄여라.
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
 
     **(a)** 로짓을 계산하면
 

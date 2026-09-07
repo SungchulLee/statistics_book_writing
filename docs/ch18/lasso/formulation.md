@@ -77,7 +77,7 @@ $$
 **연습문제 1.**
 직교 설계에서 라쏘가 정말 연성 문턱과 일치하는지, 능형이 비례 축소와 일치하는지 수치로 확인하라.
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
     $\mathbf{X}^\top\mathbf{X} = n\mathbf{I}$가 되도록 QR 분해로 직교 계획행렬을 만든다.
 
     ```python
@@ -123,7 +123,7 @@ $$
 **연습문제 2.**
 $\lambda_{\max} = \frac{1}{n}\|\mathbf{X}^\top\mathbf{y}\|_\infty$에서 모든 계수가 0이 된다는 주장을 확인하라.
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
     ```python
     import numpy as np
     from sklearn.linear_model import Lasso

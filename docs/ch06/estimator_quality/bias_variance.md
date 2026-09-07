@@ -168,7 +168,7 @@ $|\mu|$가 $\sigma/\sqrt{n}$에 비해 작으면 최적의 $\lambda^*$가 1보�
 **연습문제 1.**
 $\hat\theta$가 불편이고 $\mathrm{Var}(\hat\theta) = 0$이면 거의 확실하게 $\hat\theta = \theta$임을 증명하라.
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
     $\mathrm{Var}(\hat\theta) = 0 \Rightarrow \hat\theta$는 퇴화되어 있다(거의 확실하게 상수이다). 이 상수를 $c$라 하자.
 
     불편성에 의해 $\mathbb{E}[\hat\theta] = \theta$이다. 그런데 $\mathbb{E}[c] = c$이므로 $c = \theta$이다.
@@ -182,7 +182,7 @@ $\hat\theta$가 불편이고 $\mathrm{Var}(\hat\theta) = 0$이면 거의 확실�
 **연습문제 2.**
 **MSE의 편향–분산 분해.** $\mathrm{MSE}(\hat\theta) = \mathrm{Var}(\hat\theta) + [\mathrm{Bias}(\hat\theta)]^2$을 증명하라.
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
     $\mathrm{MSE}(\hat\theta) = \mathbb{E}[(\hat\theta - \theta)^2]$이다.
 
     $\mathbb{E}[\hat\theta]$를 더하고 빼면:
@@ -204,7 +204,7 @@ $\hat\theta$가 불편이고 $\mathrm{Var}(\hat\theta) = 0$이면 거의 확실�
 **연습문제 3.**
 **평균제곱오차가 더 작은 편향추정량.** $N(\mu, \sigma^2)$ 자료에 대해 $\hat\sigma^2_{\mathrm{MLE}} = (1/n)\sum(X_i - \bar X)^2$과 $s^2 = (1/(n-1))\sum(X_i - \bar X)^2$을 비교하라. 각각의 평균제곱오차를 계산하라.
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
     $s^2$은 불편이다: $\mathbb{E}[s^2] = \sigma^2$, $\mathrm{Var}(s^2) = 2\sigma^4/(n-1)$, $\mathrm{MSE} = 2\sigma^4/(n-1)$.
 
     $\hat\sigma^2_{\mathrm{MLE}} = ((n-1)/n) s^2$: $\mathbb{E}[\hat\sigma^2] = (n-1)\sigma^2/n$이므로 편향 = $-\sigma^2/n$.
@@ -222,7 +222,7 @@ $\hat\theta$가 불편이고 $\mathrm{Var}(\hat\theta) = 0$이면 거의 확실�
 **연습문제 4.**
 **점근적 불편성.** 점근적으로는 불편이지만 유한표본에서는 편향된 추정량을 정의하고 예를 들라.
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
     **점근적으로 불편:** $n \to \infty$일 때 $\mathrm{Bias}(\hat\theta_n) \to 0$이다.
 
     **예:** $N(\mu, \sigma^2)$에서 $\sigma^2$의 MLE. 편향이 $-\sigma^2/n \to 0$이다. 유한한 $n$에서는 편향되어 있지만 $n$이 크면 그 크기가 사라진다.
@@ -236,7 +236,7 @@ $\hat\theta$가 불편이고 $\mathrm{Var}(\hat\theta) = 0$이면 거의 확실�
 **연습문제 5.**
 **편향 보정.** $X \sim N(\mu, \sigma^2)$에서 $\sigma$(표준편차)의 MLE는 $\hat\sigma_{\mathrm{MLE}} = \sqrt{(1/n)\sum(X_i - \bar X)^2}$이다. $\mathbb{E}[\hat\sigma_{\mathrm{MLE}}] < \sigma$임을 보이고 편향 보정을 제시하라.
 
-??? success "연습문제 5 풀이"
+??? success "풀이"
     $\hat\sigma^2_{\mathrm{MLE}} \sim (\sigma^2/n) \chi^2_{n-1}$일 때 $\hat\sigma_{\mathrm{MLE}} = \sqrt{\hat\sigma^2_{\mathrm{MLE}}}$이다.
 
     (오목함수 $\sqrt{\cdot}$에 대한) Jensen 부등식에 의해 $\mathbb{E}[\sqrt{\hat\sigma^2_{\mathrm{MLE}}}] \le \sqrt{\mathbb{E}[\hat\sigma^2_{\mathrm{MLE}}]} = \sigma\sqrt{(n-1)/n}$이다. 퇴화된 경우가 아니면 부등호가 엄격하다.
@@ -254,7 +254,7 @@ $\hat\theta$가 불편이고 $\mathrm{Var}(\hat\theta) = 0$이면 거의 확실�
 **연습문제 6.**
 **분산과 일치성.** 편향이 0이지만 분산이 무한한 추정량의 예와, 분산은 유한하지만 일치하지 않는 추정량의 예를 각각 들라.
 
-??? success "연습문제 6 풀이"
+??? success "풀이"
     **편향 0, 분산 무한:** Cauchy 분포에서 $\hat\mu = X_1$. 평균은 정의되지 않지만 중앙값은 $\mu$이다. 더 일반적으로는 Cauchy 형태의 모형에서 얻은 MLE가 점근적으로는 불편이면서 분산이 무한할 수 있다.
 
     **분산 유한, 일치하지 않음:** i.i.d. $X_i \sim N(\theta, 1)$에서 $\theta$를 추정할 때 $\hat\theta = X_1$. 언제나 관측값 하나만 사용한다. 모든 $n$에 대해 분산이 1이고 0으로 가지 않는다. 따라서 일치하지 않는다($\hat\theta$가 $\theta$로 확률수렴하지 않는다).

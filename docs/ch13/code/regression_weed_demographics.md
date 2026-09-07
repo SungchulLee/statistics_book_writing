@@ -98,7 +98,7 @@ result['error'] = result['actual'] - result['predicted']
 
 **연습문제 1.** 모든 특성과 반응변수의 상관행렬을 계산하라. HighQ와 가장 강한 선형관계를 갖는 설명변수는 무엇인가?
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
 
     ```python
     features = ['total_population', 'per_capita_income',
@@ -113,7 +113,7 @@ result['error'] = result['actual'] - result['predicted']
 
 **연습문제 2.** 다변량 모형에 `percent_black`과 `percent_hispanic`을 추가하라. 검정 RMSE가 개선되는가? 설명변수를 더 넣는 것이 항상 도움이 되는지 논하라.
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
 
     ```python
     formula_full = ("HighQ ~ total_population + per_capita_income + "
@@ -129,7 +129,7 @@ result['error'] = result['actual'] - result['predicted']
 
 **연습문제 3.** 주 단위 분할 대신 80/20 훈련/검정 분할을 구현하라. RMSE를 원래 방식과 비교하고 장단점을 논하라.
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
 
     ```python
     from sklearn.model_selection import train_test_split
@@ -148,7 +148,7 @@ result['error'] = result['actual'] - result['predicted']
 
 **연습문제 4.** statsmodels의 $F$ 검정으로 축소모형(인구만)과 완전모형(인구 + 소득 + 백인 비율)을 비교하라. 가설을 세우고 결과를 해석하라.
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
 
     $F$ 검정은 다음을 평가한다.
 
@@ -169,6 +169,6 @@ result['error'] = result['actual'] - result['predicted']
 
 **연습문제 5.** 관찰된 인구통계 자료로 주마다 대마초 가격을 무엇이 결정하는지 인과적 결론을 내리는 데 어떤 한계가 있는지 논하라. 어떤 교란 요인이 회귀계수를 편향시킬 수 있는가?
 
-??? success "연습문제 5 풀이"
+??? success "풀이"
 
     관찰자료의 회귀계수는 인과효과가 아니라 연관을 잰다. 있을 수 있는 교란 요인으로는 (1) 주별 대마초 법제(합법화 여부가 공급과 가격에 영향을 준다), (2) 생산지나 국경과의 근접성, (3) 도시/농촌 구성(인구통계와 가격 양쪽과 상관된다), (4) 단속 강도, (5) 생활비가 있다. 이런 측정되지 않은 변수들이 설명변수(소득, 인구통계)와 반응변수(가격) 모두와 상관되어 계수를 편향시킨다. 인과 분석을 하려면 도구변수, 이중차분법, 무작위 실험 같은 방법이 필요하다. $\square$

@@ -91,7 +91,7 @@ $\alpha$의 선택은 그룹 강도와 희소성 사이의 절충이다. 집단 
 **연습문제 1.**
 엘라스틱넷의 "그룹 효과"를 설명하라. 라쏘가 강하게 상관된 설명변수에서 실패하는 이유는 무엇인가? $X_1 = X_2 + \varepsilon$($\varepsilon$은 작다)인 예에서 라쏘, 능형, 엘라스틱넷이 각각 어떻게 행동할지 서술하라.
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
     $X_1 \approx X_2$이면 예측 $\beta_1 X_1 + \beta_2 X_2 \approx (\beta_1 + \beta_2)X_1$이 **합에만** 의존한다. 자료는 합을 잘 결정하지만 개별 배분은 거의 결정하지 못한다.
 
     이때 세 벌점이 배분을 어떻게 정하는지 보면 차이가 분명해진다. 합 $s = \beta_1 + \beta_2$가 고정되었다고 하고 벌점을 최소화하는 배분을 찾는다.
@@ -126,7 +126,7 @@ $\alpha$의 선택은 그룹 강도와 희소성 사이의 절충이다. 집단 
 
 **(c)** 두 방법의 계수 경로를 그려라.
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
     ```python
     import numpy as np
     from sklearn.linear_model import Lasso, ElasticNet, lasso_path, enet_path

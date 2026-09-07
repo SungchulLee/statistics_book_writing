@@ -115,7 +115,7 @@ $$
 **연습문제 1.**
 정규분포 분산의 MLE $\hat{\sigma}^2_{\text{MLE}} = \frac{1}{n}\sum_{i=1}^n(X_i - \bar{X})^2$이 편향되어 있음을 보여라. 정확한 편향을 계산하라.
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
     $\sum_{i=1}^n(X_i - \bar{X})^2 / \sigma^2 \sim \chi^2_{n-1}$이고 그 평균은 $n - 1$이다. 따라서:
 
     $$
@@ -139,7 +139,7 @@ $$
 **연습문제 2.**
 불편추정량 $S^2 = \frac{1}{n-1}\sum(X_i - \bar{X})^2$은 편향을 바로잡는다. $n \geq 2$에서 $\text{MSE}(\hat{\sigma}^2_{\text{MLE}}) < \text{MSE}(S^2)$임을 보여, 편향된 MLE의 평균제곱오차가 실제로 더 작음을 확인하라.
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
     임의의 추정량 $\hat{\theta}$에 대해 $\text{MSE} = \text{Bias}^2 + \text{Var}$이다.
 
     $\sum(X_i - \bar{X})^2/\sigma^2 \sim \chi^2_{n-1}$의 분산이 $2(n-1)$이므로:
@@ -169,7 +169,7 @@ $$
 **연습문제 3.**
 $n = 5$, $\sigma^2 = 10$에 대해 $\hat{\sigma}^2_{\text{MLE}}$과 $S^2$의 편향, 분산, 평균제곱오차를 계산하라.
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
     $n = 5$, $\sigma^2 = 10$에서 $\hat{\sigma}^2_{\text{MLE}}$:
 
     - 편향: $-10/5 = -2.0$
@@ -189,7 +189,7 @@ $n = 5$, $\sigma^2 = 10$에 대해 $\hat{\sigma}^2_{\text{MLE}}$과 $S^2$의 편
 **연습문제 4.**
 정규분포에서 추정량 $\hat{\sigma}^2_c = \frac{1}{n+1}\sum(X_i - \bar{X})^2$은 $\hat{\sigma}^2_{\text{MLE}}$보다 평균제곱오차가 더 작다. 그 평균제곱오차를 계산하여 MLE와 비교해 확인하라.
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
     일반적인 추정량 $\hat{\sigma}^2_c = \frac{1}{c}\sum(X_i - \bar{X})^2$에서 $c = n + 1$이면:
 
     $$

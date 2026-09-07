@@ -210,7 +210,7 @@ $\lambda\cdot\mathbf{1}(\beta_j \ne 0)$에서 유도되는 경성 문턱의 문�
 **연습문제 1.** 정규직교 계획($X^\top X = I_p$)에서 세 축소 공식(능형, 라쏘, 경성 문턱)을
 유도하고 하나의 그림에 함께 그려라.
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
 
     $X^\top X = I_p$이면 OLS 추정량은 $\hat{\beta}^{\text{OLS}} = X^\top y$이고, 각 벌점은
     독립된 일변량 문제로 분리된다.
@@ -242,7 +242,7 @@ $\lambda\cdot\mathbf{1}(\beta_j \ne 0)$에서 유도되는 경성 문턱의 문�
 **연습문제 2.** $p = 20$, $\rho = 0.9$이고 참 계수 5개가 0이 아닌 자료를 생성하라. 세 방법을
 모두 교차검증으로 적합하고 각각 선택한 0이 아닌 계수의 개수를 비교하라.
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
 
     ```python
     import numpy as np
@@ -275,7 +275,7 @@ $\lambda\cdot\mathbf{1}(\beta_j \ne 0)$에서 유도되는 경성 문턱의 문�
 **연습문제 3.** 정칙화를 적용하기 전에 설명변수를 표준화하는 것이 왜 중요한지 설명하라.
 표준화하지 않으면 오도된 결과가 나오는 구체적인 수치 예를 들어라.
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
 
     벌점 $\|\beta\|_1$과 $\|\beta\|_2^2$는 모든 계수를 동등하게 취급하지만, OLS 추정치
     $\hat{\beta}_j$는 $x_j$의 척도에 의존한다. $x_1$을 미터로, $x_2$를 밀리미터로 측정했다면
@@ -295,7 +295,7 @@ $\lambda\cdot\mathbf{1}(\beta_j \ne 0)$에서 유도되는 경성 문턱의 문�
 $\lambda$에서 최소가 되는지 구하라. 이 (희소하고 상관된) 상황에서 어느 방법이 더 낮은 최소
 MSE를 달성하는가?
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
 
     ```python
     import numpy as np
@@ -345,7 +345,7 @@ MSE를 달성하는가?
 $\min \|y - X\beta\|_2^2$ subject to $\alpha\|\beta\|_1 + (1-\alpha)\|\beta\|_2^2 \le t$
 에서 제약영역이 모든 $\alpha \in [0,1]$에 대해 볼록임을 증명하라.
 
-??? success "연습문제 5 풀이"
+??? success "풀이"
 
     $C = \{\beta : \alpha\|\beta\|_1 + (1-\alpha)\|\beta\|_2^2 \le t\}$라 하자. 임의의
     $\beta_1, \beta_2 \in C$와 $\theta \in [0,1]$에 대해

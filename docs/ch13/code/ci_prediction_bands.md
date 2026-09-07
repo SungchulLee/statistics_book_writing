@@ -100,7 +100,7 @@ def confidence_intervals(x, y_hat, beta_hat, x_bar, y_bar, n, s):
 
 **연습문제 1.** $n = 100$, $\sigma = 3$인 인공자료에서 $E[y \mid x_0 = 0]$의 90% 신뢰구간을 계산하고 95% 구간과 비교하라.
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
 
     표준정규 설명변수에서 $x_0 = 0$은 대략 $\bar{x}$이다.
 
@@ -118,7 +118,7 @@ def confidence_intervals(x, y_hat, beta_hat, x_bar, y_bar, n, s):
 
 **연습문제 2.** 어떤 $x_0$에서든 예측구간이 신뢰구간보다 항상 넓은 이유를 대수적으로 설명하라.
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
 
     신뢰구간 반폭의 제곱은 다음에 비례한다.
 
@@ -138,7 +138,7 @@ def confidence_intervals(x, y_hat, beta_hat, x_bar, y_bar, n, s):
 
 **연습문제 3.** $n = 30$, $\sigma = 1$인 모형의 띠를 그리도록 코드를 고쳐라. 원래의 $n = 100$, $\sigma = 3$인 경우와 띠의 폭을 비교하면 어떠한가?
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
 
     ```python
     x30, y30 = generate_data(30, 1)
@@ -152,7 +152,7 @@ def confidence_intervals(x, y_hat, beta_hat, x_bar, y_bar, n, s):
 
 **연습문제 4.** $y_{\text{new}} = \beta_0 + \beta_1 x_0 + \varepsilon_{\text{new}}$이고 $\varepsilon_{\text{new}}$이 훈련자료와 독립일 때, 예측오차 $\hat{y}_0 - y_{\text{new}}$의 분산을 유도하라.
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
 
     예측오차는 $\hat{y}_0 - y_{\text{new}} = (\hat{y}_0 - E[y \mid x_0]) - \varepsilon_{\text{new}}$이다. $\hat{y}_0$은 훈련자료에만 의존하고 $\varepsilon_{\text{new}}$은 그와 독립이므로
 
@@ -172,7 +172,7 @@ def confidence_intervals(x, y_hat, beta_hat, x_bar, y_bar, n, s):
 
 **연습문제 5.** $x_0 = \bar{x}$에서 평균의 신뢰구간이 $\bar{y} \pm t^*_{n-2} \cdot s / \sqrt{n}$으로 간단해짐을 보여라. 입문 통계학에서 배우는 모평균의 신뢰구간과 비교하라.
 
-??? success "연습문제 5 풀이"
+??? success "풀이"
 
     $x_0 = \bar{x}$에서는 $(x_0 - \bar{x})^2/S_{xx} = 0$이므로 신뢰구간이
 

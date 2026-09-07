@@ -188,7 +188,7 @@ demonstrate_clt('exponential', sample_size=5)
 **연습문제 1.**
 어떤 기계가 $\mu = 500$ ml, $\sigma = 10$ ml로 병을 채운다(정규분포가 아니다). (a) 중심극한정리에 따른 $\bar X_{36}$의 분포는? (b) $P(\bar X_{36} > 503)$은? (c) $P(|\bar X_n - 500| < 2) \ge 0.95$가 되려면 $n$은?
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
     (a) $\bar X_{36} \approx N(500, 100/36) = N(500, 2.778)$. 표준오차 $= 10/6 \approx 1.67$.
 
     (b) $Z = (503 - 500)/(10/6) = 1.8$이므로 $P(Z > 1.8) \approx 1 - 0.9641 = 0.0359$. 약 3.6%다.
@@ -200,7 +200,7 @@ demonstrate_clt('exponential', sample_size=5)
 **연습문제 2.**
 평균 0, 분산 1이고 0의 근방에서 적률생성함수 $M(t)$가 유한한 i.i.d. $X_i$에 대해 **적률생성함수 방법으로 중심극한정리를 증명하라**. $\sqrt n \bar X_n$의 적률생성함수가 $e^{t^2/2}$로 수렴함을 보여라.
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
     표준화된 합: $Z_n = \sqrt n \bar X_n = (X_1 + \cdots + X_n)/\sqrt n$.
 
     그 적률생성함수: $M_{Z_n}(t) = \mathbb{E}[e^{t Z_n}] = \prod_i \mathbb{E}[e^{t X_i / \sqrt n}] = [M(t/\sqrt n)]^n$.
@@ -220,7 +220,7 @@ demonstrate_clt('exponential', sample_size=5)
 **연습문제 3.**
 심하게 치우친 분포에서 **중심극한정리의 느린 수렴을 보여라.** $X_i$가 평균 1인 지수분포를 따른다고 하자. $n = 30$일 때 $\bar X_n$의 왜도는 얼마인가? 정규 극한의 대칭성과 비교하라.
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
     Exponential(1)의 왜도는 2다(오른쪽으로 치우침). i.i.d. 합에서 *표준화된 합*의 왜도는 $\gamma_n = \gamma_1 / \sqrt n$으로 줄어든다.
 
     $$
@@ -238,7 +238,7 @@ demonstrate_clt('exponential', sample_size=5)
 **연습문제 4.**
 **다변량 중심극한정리.** $\mathbf X_i \in \mathbb{R}^d$가 평균 $\boldsymbol\mu$, 공분산 $\boldsymbol\Sigma$인 i.i.d.라 하자. 다변량 중심극한정리를 진술하고, 그것이 다변량 정규분포에 근거한 신뢰타원체를 왜 정당화하는지 설명하라.
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
     **다변량 중심극한정리:**
 
     $$
@@ -256,7 +256,7 @@ demonstrate_clt('exponential', sample_size=5)
 **연습문제 5.**
 **린데베르그 중심극한정리**는 동일분포가 아니어도 독립이기만 하면 되는 확률변수를 허용한다. **린데베르그 조건**을 진술하고 언제 성립하는지 설명하라.
 
-??? success "연습문제 5 풀이"
+??? success "풀이"
     $X_1, X_2, \ldots$가 독립이고(동일분포일 필요는 없다) $\mathbb{E}[X_i] = 0$, $\mathrm{Var}(X_i) = \sigma_i^2$, $s_n^2 = \sum_{i=1}^n \sigma_i^2$이라 하자. **린데베르그 조건**은 다음과 같다.
 
     $$
@@ -276,7 +276,7 @@ demonstrate_clt('exponential', sample_size=5)
 **연습문제 6.**
 중심극한정리는 **유한한 분산**을 요구한다. 그 이유와, 분산이 무한할 때(꼬리가 두꺼운 분포) 어떻게 되는지 논하라. **안정분포**와 **알파-안정 중심극한정리**를 언급하라.
 
-??? success "연습문제 6 풀이"
+??? success "풀이"
     **유한한 분산이 필수인 이유:** 표준화 $(S_n - n\mu)/\sqrt{n\sigma^2}$이 암묵적으로 $\sigma^2 < \infty$를 가정한다. 분산이 무한하면 이 표준화가 정의되지 않는다. 개별 기여의 "무시가능성"을 확립할 수 없으므로 린데베르그–펠러 틀이 무너진다.
 
     **꼬리가 두꺼운 경우의 행동:** $\alpha < 2$인 **안정분포** $S_\alpha(\sigma, \beta)$의 흡인 영역에 있는 분포는 거듭제곱 법칙 꼬리 $P(|X| > x) \sim x^{-\alpha}$를 갖는다. $\alpha \le 2$이면 분산이 무한하고 $\alpha \le 1$이면 평균이 무한하다.

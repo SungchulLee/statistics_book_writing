@@ -75,7 +75,7 @@ D'Agostino kurtosis test: Z = 2.7603, p-value = 0.005774
 
 **연습문제 1.** 표준정규 관측값 $n = 300$개를 생성하라. $g_2$와 첨도 검정 $p$값을 계산하라. $g_2$가 0에 가깝고 검정이 기각하지 않음을 확인하라.
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
 
     ```python
     import numpy as np
@@ -106,7 +106,7 @@ D'Agostino kurtosis test: Z = 2.7603, p-value = 0.005774
 
 **연습문제 2.** $\text{Uniform}(0,1)$ 분포에서 관측값 $n = 300$개를 생성하라. $g_2$를 계산하고 첨도 검정을 수행하라. 균등분포는 대칭이지만 저첨이다($\gamma_2 = -1.2$). 검정이 이를 탐지하는가?
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
 
     ```python
     import numpy as np
@@ -137,7 +137,7 @@ D'Agostino kurtosis test: Z = 2.7603, p-value = 0.005774
 
 **연습문제 3.** 정확한 공식에서 출발하여 $n \to \infty$일 때 $\text{Var}(g_2) \to 24/n$임을 유도하라.
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
 
     다음에서 출발한다.
 
@@ -159,7 +159,7 @@ D'Agostino kurtosis test: Z = 2.7603, p-value = 0.005774
 
 **연습문제 4.** 바탕 분포가 정규이더라도 이상점이 많은 자료가 $g_2 > 0$을 만들어 내는 이유를 설명하고, 첨도 검정에 대한 함의를 논하라.
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
 
     첨도 공식의 네제곱 $(X_i - \bar{X})^4$은 극단 관측값에 불균형하게 큰 영향력을 준다. $|X_i - \bar{X}|$가 큰 이상점 몇 개가 분모의 $S^4$을 부풀리는 것보다 분자를 훨씬 크게 부풀려 $g_2$를 0 위로 밀어 올린다.
 
@@ -171,7 +171,7 @@ D'Agostino kurtosis test: Z = 2.7603, p-value = 0.005774
 
 **연습문제 5.** 5,000회 반복의 몬테카를로 모의실험으로 $t_5$ 분포에서 뽑은 관측값 $n = 100$개에 대해 $\alpha = 0.05$에서 첨도 검정의 검정력을 추정하라. $t_{10}$에 대한 검정력과 비교하라.
 
-??? success "연습문제 5 풀이"
+??? success "풀이"
 
     ```python
     import numpy as np

@@ -199,7 +199,7 @@ plt.show()
 **연습문제 1.**
 급여가 $\mu = \$40{,}000$인 정규분포를 따른다. 표본 $n = 9$, $s = \$8{,}000$일 때 $P(\bar X \ge \$45{,}000)$을 계산하라.
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
     $\mathrm{SE} = s/\sqrt n = 8000/3 \approx 2667$. 검정통계량: $t = (45000 - 40000)/2667 \approx 1.875$.
 
     $t_8$ 아래에서 $P(T \ge 1.875) \approx 0.048$로 약 4.8%이다.
@@ -211,7 +211,7 @@ plt.show()
 **연습문제 2.**
 **$t$ 분포 유도.** $Z \sim N(0, 1)$과 $V \sim \chi^2_\nu$가 독립이면 $T = Z/\sqrt{V/\nu} \sim t_\nu$임을 보여라.
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
     정의에 의해 $t_\nu$는 독립인 $Z \sim N(0, 1)$과 $V \sim \chi^2_\nu$에 대한 $Z/\sqrt{V/\nu}$의 분포이다.
 
     PDF의 유도: $V = v$로 조건화한다. $V = v$가 주어지면 $T = Z/\sqrt{v/\nu}$이므로 $T \mid V \sim N(0, \nu/v)$이다. 밀도는:
@@ -233,7 +233,7 @@ plt.show()
 **연습문제 3.**
 **$t$는 정규분포에 가까워진다.** $\nu \to \infty$일 때 $t_\nu \to N(0, 1)$임을 보여라.
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
     $V \sim \chi^2_\nu$인 $t$의 정의 $T = Z/\sqrt{V/\nu}$에서 출발한다. 큰수의 법칙에 의해 $V/\nu = (1/\nu)\sum_{i=1}^\nu Z_i^2 \to 1$이 확률수렴한다. 따라서 $\sqrt{V/\nu} \to 1$이고 $T \to Z \sim N(0, 1)$이다.
 
     더 정확히는 Slutsky 정리에 의해 $T = Z/\sqrt{V/\nu} \xrightarrow{d} Z/1 = Z$이다.
@@ -245,7 +245,7 @@ plt.show()
 **연습문제 4.**
 **$z$ 대신 $t$를 쓰는 이유.** 어떤 통계학자가 $z = (\bar X - \mu_0)/(\sigma/\sqrt n)$을 계산하려다 $\sigma$를 모른다는 것을 깨닫고 $s$로 대체했다. 그 결과 $t = (\bar X - \mu_0)/(s/\sqrt n) \sim t_{n-1}$임을 보여라.
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
     귀무가설 $\mu = \mu_0$ 아래에서 $\bar X \sim N(\mu_0, \sigma^2/n)$이므로 $Z = (\bar X - \mu_0)/(\sigma/\sqrt n) \sim N(0, 1)$이다.
 
     표본분산 $s^2$을 $\sigma^2$으로 척도조정하면 카이제곱 분포를 따른다: (정규 자료에 대해) $(n-1)s^2/\sigma^2 \sim \chi^2_{n-1}$.
@@ -267,7 +267,7 @@ plt.show()
 **연습문제 5.**
 **$t$의 두꺼운 꼬리.** $t_3$에 대해 $P(|T| > 2)$와 $P(|T| > 4)$를 계산하고 정규분포와 비교하라.
 
-??? success "연습문제 5 풀이"
+??? success "풀이"
     $t_3$: $P(|T| > 2) = 2 \cdot P(T > 2)$. $t_3$ 분포표에서 $P(T > 2) \approx 0.07$이므로 $P(|T| > 2) \approx 0.14$이다.
 
     $P(|T| > 4) \approx 2 \cdot 0.014 = 0.028$.
@@ -283,7 +283,7 @@ plt.show()
 **연습문제 6.**
 **Welch의 $t$ 검정.** 분산이 다른 독립인 두 표본에 대해 Welch 검정은 $t = (\bar X_1 - \bar X_2)/\sqrt{s_1^2/n_1 + s_2^2/n_2}$를 사용하고 자유도는 Welch–Satterthwaite 공식으로 근사한다. 이 공식을 쓰고 왜 정수가 아닌지 설명하라.
 
-??? success "연습문제 6 풀이"
+??? success "풀이"
     **Welch–Satterthwaite 자유도:**
 
     $$

@@ -98,7 +98,7 @@ $\hat{\sigma}^2$은 오차분산의 추정값이다($p < n$이면 전체 OLS 모
 **연습문제 1.**
 라쏘 경로를 따라 AIC와 BIC를 계산하여 각각이 고르는 모형을 비교하라. 참 변수 5개, 잡음변수 15개, $n = 100$인 자료를 쓴다.
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
     ```python
     import numpy as np
     from sklearn.linear_model import lasso_path, LinearRegression
@@ -138,7 +138,7 @@ $\hat{\sigma}^2$은 오차분산의 추정값이다($p < n$이면 전체 OLS 모
 **연습문제 2.**
 "AIC는 LOOCV와 점근적으로 동등하다"는 주장의 의미를 정확히 서술하고, 유한표본에서 두 방법이 갈릴 수 있는 이유를 설명하라.
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
     **점근적 동등성의 정확한 의미.** 선형 평활자에서 LOOCV 오차를 1차 근사하면
 
     $$

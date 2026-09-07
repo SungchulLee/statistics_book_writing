@@ -78,7 +78,7 @@ Fligner-Killeen:                  X2=1.6063, p=0.205015
 
 **연습문제 1.** 위 코드의 두 표본에 Shapiro-Wilk 검정을 적용하라. 그 결과에 근거할 때 F 검정을 쓰는 것이 적절한가? 답을 정당화하라.
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
 
     ```python
     import numpy as np
@@ -112,7 +112,7 @@ Fligner-Killeen:                  X2=1.6063, p=0.205015
 
 **연습문제 2.** $\chi^2(3)$ 분포에서 관측값 50개, $\chi^2(5)$ 분포에서 50개를 생성하라. F 검정, Levene 검정, Fligner-Killeen 검정을 적용하고 결론을 비교하라.
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
 
     ```python
     import numpy as np
@@ -166,7 +166,7 @@ Fligner-Killeen:                  X2=1.6063, p=0.205015
 
 **연습문제 3.** Levene 검정의 `center='mean'`과 `center='median'`의 차이를 설명하라. 어떤 조건에서 이 선택이 중요해지는가?
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
 
     `center='mean'`이면 절대편차를 $Z_{ij} = |X_{ij} - \bar{X}_i|$로 계산한다. `center='median'`이면 $Z_{ij} = |X_{ij} - \tilde{X}_i|$이며 $\tilde{X}_i$는 집단중앙값이다.
 
@@ -191,7 +191,7 @@ Fligner-Killeen:                  X2=1.6063, p=0.205015
 
 **연습문제 4.** Fligner-Killeen 검정은 절대편차에 정규점수 변환을 쓴다. 이 절차를 단계별로 기술하고 왜 로버스트성을 얻는지 설명하라.
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
 
     Fligner-Killeen 절차는
 
@@ -218,7 +218,7 @@ Fligner-Killeen:                  X2=1.6063, p=0.205015
 
 **연습문제 5.** 분산분석을 수행하기 전에 등분산을 확인해야 하는 분석가를 위한 작업 흐름을 설계하라. 정규성 확인과 검정 선택의 판정 지점을 포함하라. 이 흐름을 Python 함수로 구현하라.
 
-??? success "연습문제 5 풀이"
+??? success "풀이"
 
     ```python
     import numpy as np

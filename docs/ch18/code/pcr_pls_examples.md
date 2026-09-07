@@ -176,7 +176,7 @@ ridge_rmse = np.sqrt(mean_squared_error(y, ridge_cv.predict(X_scaled)))
 
 **연습문제 1.** $M = p$개 성분을 쓰는 PCR이 OLS와 동치임을 보여라.
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
 
     주성분은 $Z = XV$이고, 여기서 $V$는 $X^\top X$의 고유벡터로 이루어진 $p \times p$
     직교행렬이다. $M = p$이면 PCR은 $Z$의 모든 열에 $y$를 회귀시킨다.
@@ -205,7 +205,7 @@ ridge_rmse = np.sqrt(mean_squared_error(y, ridge_cv.predict(X_scaled)))
 **연습문제 2.** 설명변수의 표준화가 PCR에는 필수적이지만 OLS에는 반드시 필요하지 않은 이유를
 설명하라. 표준화하지 않으면 PCR에서 무엇이 잘못되는가?
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
 
     PCA는 분산이 최대인 방향을 찾는다. 설명변수의 척도가 서로 다르면(예: 면적은 수천 단위,
     침실 수는 한 자릿수) 선행 주성분은 예측력과 무관하게 분산이 큰(척도가 큰) 변수에 지배된다.
@@ -224,7 +224,7 @@ ridge_rmse = np.sqrt(mean_squared_error(y, ridge_cv.predict(X_scaled)))
 **연습문제 3.** 주택 예제에서 최적 PCR이 $p = 9$개 중 $M = 7$개 성분을 쓴다고 하자. 이는 자료에
 대해 무엇을 말해 주는가? PLS는 더 많은 성분을 필요로 할까, 더 적은 성분을 필요로 할까?
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
 
     PCR이 9개 중 7개 성분을 필요로 한다면, 마지막 두 주성분이 $X$의 분산은 거의 설명하지
     못하면서도 $y$를 예측하는 데 유용한 정보를 담고 있다는 뜻이다. 이를 버리면 예측이 조금
@@ -241,7 +241,7 @@ ridge_rmse = np.sqrt(mean_squared_error(y, ridge_cv.predict(X_scaled)))
 **연습문제 4.** scikit-learn의 PCA를 쓰지 않고, 중심화·척도화한 계획행렬의 SVD를 이용해 PCR을
 직접 구현하라. 작은 시험자료에서 구현 결과가 scikit-learn과 일치함을 확인하라.
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
 
     ```python
     import numpy as np
@@ -296,7 +296,7 @@ ridge_rmse = np.sqrt(mean_squared_error(y, ridge_cv.predict(X_scaled)))
 **연습문제 5.** 첫 PLS 방향 $w_1$이 $\|w\| = 1$ 아래에서 $\text{Cov}(Xw, y)^2$을 최대화함을
 증명하고, 이것이 $w_1 \propto X^\top y$와 동치임을 보여라.
 
-??? success "연습문제 5 풀이"
+??? success "풀이"
 
     구하고자 하는 것은
 

@@ -168,7 +168,7 @@ $t$ 검정과 순열검정의 차이 $0.0084$ 대 $0.0122$는 표본이 작기 �
 
 **(b)** 대응 $t$ 검정 및 Wilcoxon 부호순위검정과 비교하라.
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
     ```python
     import numpy as np, itertools
     from scipy import stats
@@ -222,7 +222,7 @@ $t$ 검정과 순열검정의 차이 $0.0084$ 대 $0.0122$는 표본이 작기 �
 **연습문제 2.**
 부호 뒤집기 틀에서 평균, Wilcoxon 통계량, 부호 통계량, $20$% 절사평균을 검정통계량으로 쓸 때의 검정력을 비교하라. 정규 차이와 오염된 차이($90$%는 $N(0,1)$, $10$%는 $N(0,6^2)$)에서 $n = 15$로 모의실험하라.
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
     ```python
     import numpy as np
     from scipy import stats
@@ -272,7 +272,7 @@ $t$ 검정과 순열검정의 차이 $0.0084$ 대 $0.0122$는 표본이 작기 �
 **연습문제 3.**
 $p$값 공식의 $+1$ 보정이 실제로 필요한지 확인하라. $n = 12$의 정규 차이에 대해 $B = 199$로 부호 뒤집기 검정을 하고, 보정을 넣은 경우와 넣지 않은 경우의 제1종 오류율을 비교하라.
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
     ```python
     import numpy as np
     rng = np.random.default_rng(21)
@@ -323,7 +323,7 @@ $p$값 공식의 $+1$ 보정이 실제로 필요한지 확인하라. $n = 12$의
 **연습문제 4.**
 대칭성 가정이 깨지면 어떻게 되는가? $H_0: E[d_i] = 0$은 참이지만 차이가 오른쪽으로 치우친 경우 — $d_i \sim \text{Exp}(1) - 1$ 과 $d_i \sim \text{LogNormal}(0,1) - e^{0.5}$ — 에서 부호 뒤집기 검정과 대응 $t$ 검정의 제1종 오류율을 구하라.
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
     ```python
     import numpy as np
     from scipy import stats

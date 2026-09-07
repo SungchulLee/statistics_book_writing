@@ -89,7 +89,7 @@ $$
 **연습문제 1.**
 ($x > 0$에서 밀도가 $f(x;\lambda) = \lambda e^{-\lambda x}$인) $\text{Exp}(\lambda)$에서 얻은 i.i.d. 표본 $x_1, \dots, x_n$에 대해 $\lambda$의 MLE를 유도하라.
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
     로그가능도는:
 
     $$
@@ -109,7 +109,7 @@ $$
 **연습문제 2.**
 어떤 콜센터에 걸려 오는 전화의 도착 간 시간이 지수분포를 따른다. 도착 간 시간 50개의 표본에서 $\bar{x} = 4.2$분이었다. 비율 $\lambda$의 MLE를 구하고 점근정규성을 이용해 근사적인 95% 신뢰구간을 구성하라.
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
     MLE는 $\hat{\lambda} = 1/\bar{x} = 1/4.2 \approx 0.2381$(분당 통화 수)이다.
 
     점근분산은 $\hat{\lambda}^2/n = 0.2381^2/50 = 0.001133$이므로 $\text{SE}(\hat{\lambda}) = \sqrt{0.001133} \approx 0.03367$이다.
@@ -127,7 +127,7 @@ $$
 **연습문제 3.**
 MLE $\hat{\lambda} = 1/\bar{X}$가 유한표본에서 $\lambda$에 대해 편향되어 있음을 보여라. $n = 2$일 때의 정확한 편향을 계산하라.
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
     합 $S = \sum X_i \sim \text{Gamma}(n, \lambda)$이므로 $\bar{X} = S/n$이고 MLE는 $\hat{\lambda} = n/S$이다.
 
     Gamma$(n, \lambda)$ 분포에서 $n > 1$일 때 $E[1/S] = \lambda/(n-1)$이다(감마 확률변수의 역수에 관한 알려진 결과이다). 따라서:
@@ -149,7 +149,7 @@ MLE $\hat{\lambda} = 1/\bar{X}$가 유한표본에서 $\lambda$에 대해 편향
 **연습문제 4.**
 MLE $\hat{\lambda} = 1/\bar{X}$를 $\lambda$의 적률법 추정량과 비교하라. 둘은 같은가?
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
     Exponential 분포에서 $E[X] = 1/\lambda$이다. 적률법은 $\bar{X} = 1/\hat{\lambda}$로 두므로 $\hat{\lambda}_{\text{MOM}} = 1/\bar{X}$를 준다.
 
     이는 MLE와 동일하다. Exponential 분포가 단일모수 지수족이기 때문에 생기는 일치이다. 그런 족에서는 점수방정식 $\partial\ell/\partial\lambda = 0$과 1차 적률방정식 $\bar{X} = E_\lambda[X]$가 같은 추정량을 준다.

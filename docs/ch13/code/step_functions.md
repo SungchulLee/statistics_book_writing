@@ -96,7 +96,7 @@ poly_model = LinearRegression().fit(X_poly, df['price'])
 
 **연습문제 1.** 분위수 기반 구간($K = 5$)으로 계단함수를 적합하고 등간격 구간의 구간 평균과 비교하라. 어느 방식이 더 균일한 예측 품질을 주는가?
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
 
     ```python
     # Quantile bins
@@ -114,7 +114,7 @@ poly_model = LinearRegression().fit(X_poly, df['price'])
 
 **연습문제 2.** 구간 개수를 늘리면 훈련 $R^2$가 항상 커지거나(적어도 줄지 않고) 검정오차는 커질 수 있는 이유를 설명하라.
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
 
     구간이 하나 늘 때마다 모수도 하나 늘어난다. 구간이 많아지면 모형이 훈련자료의 더 세밀한 패턴을 맞출 수 있어 훈련 RSS가 줄고 $R^2$가 커진다. 그러나 구간이 너무 많으면(특히 관측값이 적은 구간에서) 구간 평균이 참 조건부 기댓값의 잡음 섞인 추정이 된다. 표본 밖에서는 이 잡음 섞인 추정이 예측오차를 키운다. 극단적으로 $K = n$개 구간이면 훈련자료에서 $R^2 = 1$이지만 표본 밖 성능은 형편없다. $\square$
 
@@ -122,7 +122,7 @@ poly_model = LinearRegression().fit(X_poly, df['price'])
 
 **연습문제 3.** `pd.cut` 대신 `np.digitize`로 계단함수를 구현하라. 결과가 일치하는지 확인하라.
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
 
     ```python
     bin_edges = [0, 20, 40, 60, 80, 150]
@@ -141,7 +141,7 @@ poly_model = LinearRegression().fit(X_poly, df['price'])
 
 **연습문제 4.** (모든 지시변수를 넣고 절편은 없는) 계단함수 모형에서 각 구간 계수의 OLS 추정값이 그 구간 반응변수의 표본평균과 같음을 수학적으로 보여라.
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
 
     $\mathbf{X} = [C_1 \mid C_2 \mid \cdots \mid C_K]$라 하고 $C_k$를 구간 $k$의 지시벡터라 하자. 구간이 서로 겹치지 않으므로 $\mathbf{X}^\top\mathbf{X} = \mathrm{diag}(n_1, n_2, \ldots, n_K)$이고 $\mathbf{X}^\top\mathbf{y} = (\sum_{i \in B_1} y_i, \ldots, \sum_{i \in B_K} y_i)^\top$이다. 따라서
 
@@ -155,7 +155,7 @@ poly_model = LinearRegression().fit(X_poly, df['price'])
 
 **연습문제 5.** "비싼" 주택을 예측하는 계단함수 로지스틱 회귀를, 연속형 age를 쓰는 로지스틱 회귀와 비교하라. 어느 쪽의 분류 정확도가 높으며 그 이유는 무엇인가?
 
-??? success "연습문제 5 풀이"
+??? success "풀이"
 
     ```python
     from sklearn.linear_model import LogisticRegression

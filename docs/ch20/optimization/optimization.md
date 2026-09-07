@@ -220,7 +220,7 @@ plt.show()
 $\mathbf{H}\odot(1-\mathbf{H})\odot[(\hat{\mathbf{Y}}-\mathbf{Y})\mathbf{W}^{oT}]$의 각 인자가
 왜 같은 모양이어야 하는지 설명하라.
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
 
     $n$을 배치 크기라 하고 차원을 따라가면,
 
@@ -253,7 +253,7 @@ $\mathbf{H}\odot(1-\mathbf{H})\odot[(\hat{\mathbf{Y}}-\mathbf{Y})\mathbf{W}^{oT}
 위 `softmax` 람다와 손실 계산이 수치적으로 불안정한 이유를 설명하고, 두 함수를 모두 안정적으로
 고쳐 쓰라.
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
 
     **문제.** `np.exp(z)`는 $z \gtrsim 709$에서 넘친다. 학습 초기에 가중치가 크면 로짓이 쉽게
     수백에 이르므로 `inf/inf = nan`이 된다. 또 `np.log(y_hat)`은 확률이 언더플로되어 정확히
@@ -291,7 +291,7 @@ $\mathbf{H}\odot(1-\mathbf{H})\odot[(\hat{\mathbf{Y}}-\mathbf{Y})\mathbf{W}^{oT}
 `np.random.randn(784, 100)`으로 초기화하면 은닉층 로짓의 표준편차가 얼마가 되는지 추정하고,
 그 결과가 학습에 미치는 영향을 설명하라. 올바른 척도는 무엇인가?
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
 
     **표준편차 추정.** $z^h_{i\alpha} = \sum_{j=1}^{784} x_{ij} w^h_{j\alpha} + b^h_\alpha$
     이고 가중치가 독립인 $N(0,1)$이므로
@@ -335,7 +335,7 @@ $\mathbf{H}\odot(1-\mathbf{H})\odot[(\hat{\mathbf{Y}}-\mathbf{Y})\mathbf{W}^{oT}
 `feed_forward`의 손실이 배치에 대한 **합**이라는 사실이 실효 학습률에 어떤 영향을 주는지
 설명하라. `batch_size`를 100에서 200으로 바꾸면 `lr`을 어떻게 조정해야 하는가?
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
 
     손실이 $J = \sum_{i=1}^{B} \ell_i$(합)이면 기울기도 $\nabla J = \sum_i \nabla \ell_i$로
     배치 크기 $B$에 비례한다. 따라서 갱신량
@@ -372,7 +372,7 @@ $\mathbf{H}\odot(1-\mathbf{H})\odot[(\hat{\mathbf{Y}}-\mathbf{Y})\mathbf{W}^{oT}
 $L(x) = x^2$에 대한 경사하강에서 $x_k$의 닫힌 형태를 구하라. 수렴 조건은 무엇이며,
 $\eta = 0.1$, $x_0 = 5$일 때 20단계 후의 값은?
 
-??? success "연습문제 5 풀이"
+??? success "풀이"
 
     $L'(x) = 2x$이므로 갱신식은
 

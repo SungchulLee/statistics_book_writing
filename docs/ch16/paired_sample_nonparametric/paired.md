@@ -209,7 +209,7 @@ print(f"P-value: {p_value:.6f}")          # 0.001953
 **연습문제 1.**
 교수법 예제 자료에서 네 가지 검정(대응 $t$, Wilcoxon 정확·근사, 부호검정)의 $p$값을 모두 계산하고, 왜 부호검정이 Wilcoxon과 같은 값을 내는지 설명하라.
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
     ```python
     import numpy as np
     from scipy import stats
@@ -243,7 +243,7 @@ print(f"P-value: {p_value:.6f}")          # 0.001953
 **연습문제 2.**
 $n = 10$일 때 Wilcoxon 부호순위검정의 양측 임계값이 왜 $8$인지 정확 귀무분포를 열거하여 확인하라. 이 임계값의 실제 유의수준은 얼마인가?
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
     ```python
     import numpy as np, itertools
     n = 10
@@ -274,7 +274,7 @@ $n = 10$일 때 Wilcoxon 부호순위검정의 양측 임계값이 왜 $8$인지
 **연습문제 3.**
 `p_value = 2 * binom.cdf(W, n, 0.5)`가 언제 1을 넘는가? $n = 10$에서 $W = 0, 1, \ldots, 5$에 대해 계산하고, 올바른 처리 방법을 제시하라.
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
     ```python
     from scipy.stats import binom, binomtest
     n = 10
@@ -309,7 +309,7 @@ $n = 10$일 때 Wilcoxon 부호순위검정의 양측 임계값이 왜 $8$인지
 **연습문제 4.**
 교수법 예제에서 모든 차이가 양수인 것은 우연이 아닐 수 있다. 이 자료가 실제로 정규 차이에서 나왔다면 $n = 10$에서 모두 같은 부호일 확률은 얼마인가? 관측된 차이의 분포는 무엇을 시사하는가?
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
     차이는 $d = [2, 1, 3, 5, 3, 2, 1, 2, 1, 4]$로 평균 $2.4$, 표준편차 $1.35$이다.
 
     참인 차이 분포가 $\mathcal{N}(2.4, 1.35^2)$이라면 한 관측값이 음수일 확률은

@@ -117,7 +117,7 @@ $$
 **연습문제 1.**
 정칙 조건 아래에서 MLE가 갖는 세 가지 주요 점근적 성질인 일치성, 점근정규성, 점근 효율성을 서술하라.
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
     표준적인 정칙 조건 아래에서:
 
     1. **일치성:** $n \to \infty$일 때 $\hat{\theta}_{\text{MLE}} \xrightarrow{p} \theta_0$.
@@ -133,7 +133,7 @@ $$
 **연습문제 2.**
 비율 모수가 $\lambda$인 Exponential 분포에서 MLE는 $\hat{\lambda} = 1/\bar{X}$이다. Fisher 정보량 $I(\lambda)$를 계산하고 $\hat{\lambda}$의 점근분산이 $\lambda^2/n$임을 확인하라.
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
     관측값 하나에 대한 로그가능도는 $\ell(\lambda) = \log\lambda - \lambda x$이다. 2계도함수는:
 
     $$
@@ -159,7 +159,7 @@ $$
 **연습문제 3.**
 불변성은 $\hat{\theta}$가 $\theta$의 MLE이면 임의의 함수 $g$에 대해 $g(\hat{\theta})$가 $g(\theta)$의 MLE라는 성질이다. 이를 이용하여 Exponential 분포의 평균 $1/\lambda$의 MLE를 구하라.
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
     비율 모수의 MLE는 $\hat{\lambda} = 1/\bar{X}$이다. 불변성에 의해 (모평균인) $g(\lambda) = 1/\lambda$의 MLE는:
 
     $$
@@ -173,7 +173,7 @@ $$
 **연습문제 4.**
 MLE가 점근적으로는 불편인데도 유한표본에서 편향될 수 있는 이유를 설명하라. 구체적인 예를 들라.
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
     점근적 불편성은 $n \to \infty$일 때 $E[\hat{\theta}_n] \to \theta_0$임을 뜻하지만, 고정된 $n$에 대해서는 편향 $E[\hat{\theta}_n] - \theta_0$이 0이 아닐 수 있다.
 
     **예:** 정규분포의 분산에서 MLE는 $\hat{\sigma}^2_{\text{MLE}} = \frac{1}{n}\sum(X_i - \bar{X})^2$이며 다음을 만족한다:

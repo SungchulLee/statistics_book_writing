@@ -83,7 +83,7 @@ $$
 $C = 2$인 소프트맥스 회귀가 이항 로지스틱 회귀와 동등함을 보이고, 로지스틱 모형의 계수
 $\boldsymbol\theta$가 소프트맥스의 $\mathbf{w}_0$, $\mathbf{w}_1$과 어떤 관계인지 밝혀라.
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
 
     $C = 2$인 소프트맥스에서
 
@@ -117,7 +117,7 @@ $\boldsymbol\theta$가 소프트맥스의 $\mathbf{w}_0$, $\mathbf{w}_1$과 어�
 MNIST($p = 784$, $C = 10$)에서 단층 소프트맥스 모형과 은닉 노드 100개짜리 이층 모형의 모수
 개수를 각각 세어라. 두 모형이 실제로 갖는 자유도는 얼마인가?
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
 
     **단층 모형:**
 
@@ -154,7 +154,7 @@ MNIST($p = 784$, $C = 10$)에서 단층 소프트맥스 모형과 은닉 노드 
 $\nabla_{\mathbf{W}}\mathcal{L} = \mathbf{X}^T(\hat{\mathbf{Y}} - \mathbf{Y})$
 임을 유도하라.
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
 
     관측치 $i$에 대한 손실은 $\mathcal{L}_i = -\sum_c Y_{ic}\log \hat Y_{ic}$이고
     $\hat Y_{ic} = \operatorname{softmax}(\mathbf{z}_i)_c$이다. 먼저 소프트맥스의 야코비를 구한다.
@@ -202,7 +202,7 @@ $\nabla_{\mathbf{W}}\mathcal{L} = \mathbf{X}^T(\hat{\mathbf{Y}} - \mathbf{Y})$
 은닉층의 활성함수를 제거하면(즉 $\mathbf{H} = \mathbf{Z}^h$로 두면) 이층 모형이 단층 모형과
 동등해짐을 보여라. 이것이 비선형 활성함수의 필요성에 대해 무엇을 말해 주는가?
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
 
     활성함수 없이 $\mathbf{H} = \mathbf{Z}^h = \mathbf{X}\mathbf{W}^h + \mathbf{b}^h$이면,
 
@@ -230,7 +230,7 @@ $\nabla_{\mathbf{W}}\mathcal{L} = \mathbf{X}^T(\hat{\mathbf{Y}} - \mathbf{Y})$
 MNIST 화소값을 $[0, 255]$가 아니라 $[0,1]$로 척도화하는 이유는 무엇인가? 척도화하지 않으면
 학습에 무슨 일이 일어나는가?
 
-??? success "연습문제 5 풀이"
+??? success "풀이"
 
     화소값을 그대로 두면 입력의 크기가 255배 커지고, 그에 따라 로짓과 기울기의 크기도 커진다.
     구체적으로 세 가지 문제가 생긴다.

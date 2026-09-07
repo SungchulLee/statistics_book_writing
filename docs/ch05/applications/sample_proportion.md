@@ -209,7 +209,7 @@ plt.show()
 **연습문제 1.**
 모집단의 $p = 0.60$이고 표본 $n = 100$이다. $P(\hat p > 0.65)$를 계산하라.
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
     $\mathrm{SE}(\hat p) = \sqrt{p(1-p)/n} = \sqrt{0.24/100} \approx 0.049$. $Z = (0.65 - 0.60)/0.049 \approx 1.02$.
 
     $P(\hat p > 0.65) = 1 - \Phi(1.02) \approx 0.154$로 약 15.4%이다.
@@ -221,7 +221,7 @@ plt.show()
 **연습문제 2.**
 **소표본의 문제.** 모집단의 $p = 0.30$이고 표본 $n = 10$이다. $P(\hat p > 0.35)$를 정확한 방법과 정규근사로 각각 계산하라. 여기서 정규근사가 통하는지 아니면 실패하는지 이유를 설명하라.
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
     정확한 계산: $\hat p > 0.35$ ⟺ $X \ge 4$이며 $X \sim \mathrm{Binomial}(10, 0.3)$이다.
 
     $P(X < 4) = P(X = 0,1,2,3) = 0.028 + 0.121 + 0.233 + 0.267 = 0.650$이므로 $P(X \ge 4) = 0.350$이다.
@@ -235,7 +235,7 @@ plt.show()
 **연습문제 3.**
 **$\hat p$의 불편성을 증명하고 표준오차를 구하라.** $\mathbb{E}[\hat p] = p$이고 $\mathrm{Var}(\hat p) = p(1-p)/n$임을 보여라.
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
     $X_i \sim \mathrm{Bernoulli}(p)$가 i.i.d.일 때 $X = \sum X_i$에 대해 $\hat p = X/n$이다.
 
     $\mathbb{E}[\hat p] = \mathbb{E}[X]/n = np/n = p$로 불편이다.
@@ -253,7 +253,7 @@ plt.show()
 **연습문제 4.**
 **표본크기 설계.** $p$를 모를 때 95% 신뢰수준에서 오차한계 $\pm 3$퍼센트포인트로 $p$를 추정하려면 표본크기가 얼마여야 하는가?
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
     오차한계: $\mathrm{ME} = z_{0.975} \cdot \mathrm{SE} = 1.96 \sqrt{p(1-p)/n} \le 0.03$.
 
     최악의 경우인 $p = 1/2$에서 $\mathrm{SE} = 1/(2\sqrt n)$이므로 $1.96/(2\sqrt n) \le 0.03 \Rightarrow \sqrt n \ge 1.96/0.06 \approx 32.67 \Rightarrow n \ge 1068$이다.
@@ -267,7 +267,7 @@ plt.show()
 **연습문제 5.**
 **Wilson 점수 구간.** 이항 비율에서 표준적인 Wald 신뢰구간 $\hat p \pm z \sqrt{\hat p(1-\hat p)/n}$보다 **Wilson 점수** 신뢰구간이 선호되는 이유는 무엇인가?
 
-??? success "연습문제 5 풀이"
+??? success "풀이"
     **Wald 신뢰구간의 문제:**
 
     - 특히 $p = 0$이나 $p = 1$ 근처에서 포함확률이 비대칭이다.
@@ -289,7 +289,7 @@ plt.show()
 **연습문제 6.**
 **비율의 차.** 독립인 두 표본에서 $n_1$로부터 $\hat p_1$을, $n_2$로부터 $\hat p_2$를 얻었다. $\hat p_1 - \hat p_2$의 표준오차를 유도하라.
 
-??? success "연습문제 6 풀이"
+??? success "풀이"
     독립성에 의해 $\mathrm{Var}(\hat p_1 - \hat p_2) = \mathrm{Var}(\hat p_1) + \mathrm{Var}(\hat p_2) = p_1(1-p_1)/n_1 + p_2(1-p_2)/n_2$이다.
 
     $\mathrm{SE}(\hat p_1 - \hat p_2) = \sqrt{p_1(1-p_1)/n_1 + p_2(1-p_2)/n_2}$.

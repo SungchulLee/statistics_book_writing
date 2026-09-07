@@ -110,7 +110,7 @@ Dunn 검정은 Kruskal-Wallis 결과가 유의할 때 평균순위 차이에 기
 **연습문제 1.**
 비료 예제에서 Bonferroni 보정 대신 Holm 보정과 Benjamini-Hochberg 보정을 적용하면 결과가 어떻게 달라지는가? 세 보정을 모두 계산하고 비교하라.
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
     보정하지 않은 $p$값을 작은 것부터 정렬한다. $m = 3$이다.
 
     $$
@@ -158,7 +158,7 @@ Dunn 검정은 Kruskal-Wallis 결과가 유의할 때 평균순위 차이에 기
 **연습문제 2.**
 Dunn 검정과 쌍별 Mann-Whitney 검정(Bonferroni 보정)의 결과를 비료 자료에서 비교하라. 왜 다른 값이 나오는가?
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
     ```python
     import numpy as np, itertools
     from scipy import stats
@@ -200,7 +200,7 @@ Dunn 검정과 쌍별 Mann-Whitney 검정(Bonferroni 보정)의 결과를 비료
 **연습문제 3.**
 "전체검정이 유의할 때에만 사후검정을 하라"는 규칙이 정말로 FWER을 통제하는가? $k$가 커질수록 이 두 단계 절차의 실제 오류율이 어떻게 되는지 모의실험으로 확인하라.
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
     귀무가설이 완전히 참인($k$개 집단이 모두 같은 분포) 상황에서, 어느 쌍이라도 유의하다고 선언할 확률을 센다.
 
     ```python
@@ -254,7 +254,7 @@ Dunn 검정과 쌍별 Mann-Whitney 검정(Bonferroni 보정)의 결과를 비료
 **연습문제 4.**
 Dunn 검정의 표준오차 공식 $\sigma_{ij} = \sqrt{\frac{N(N+1)}{12}(\frac{1}{n_i} + \frac{1}{n_j})}$을 유도하라.
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
     $H_0$ 아래에서 $1, \ldots, N$의 순위가 집단들에 무작위로 배정된다. 이는 크기 $N$인 유한모집단 $\{1, \ldots, N\}$에서 비복원추출하는 것과 같다.
 
     **유한모집단의 모수.** 순위 전체의 평균과 분산은

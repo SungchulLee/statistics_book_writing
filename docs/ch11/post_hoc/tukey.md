@@ -325,7 +325,7 @@ print(pairwise_tukeyhsd(endog=vc_data['len'], groups=vc_data['dose'], alpha=0.05
 **연습문제 1.**
 운동: HIIT $\bar Y = 8.8$, 근력 $6.4$, 요가 $4.4$, 각 $n = 5$, $\mathrm{MSW} = 1.43$. (a) 전체 분산분석. (b) Tukey HSD. (c) 해석.
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
     (a) $\mathrm{SSB} = 5 \cdot [(8.8-6.53)^2 + (6.4-6.53)^2 + (4.4-6.53)^2] \approx 48.53$.
 
     $\mathrm{SSW} = 17.20$. $F = (48.53/2)/(17.20/12) = 24.27/1.43 \approx 16.93$.
@@ -343,7 +343,7 @@ print(pairwise_tukeyhsd(endog=vc_data['len'], groups=vc_data['dose'], alpha=0.05
 **연습문제 2.**
 **Bonferroni 쌍별 t-검정 대신 Tukey HSD를 쓰는 이유는?**
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
     Tukey HSD는 평균의 쌍별 비교에 정확히 맞춰 보정된 **스튜던트화 범위** 분포를 쓴다.
 
     Bonferroni는 쌍별 $t$-검정에 Bonferroni 보정을 적용한다. $k = \binom{g}{2}$일 때 $\alpha/k$에서 검정한다.
@@ -360,7 +360,7 @@ print(pairwise_tukeyhsd(endog=vc_data['len'], groups=vc_data['dose'], alpha=0.05
 **연습문제 3.**
 **다른 사후검정들.** Bonferroni, Scheffé, Dunnett을 간략히 설명하라.
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
     **Bonferroni:** 각 비교를 $\alpha/k$에서 검정한다. 어떤 검정에도 쓸 수 있지만 보수적이다.
 
     **Scheffé:** 쌍별에 국한되지 않고 임의의 대비(평균의 선형결합)를 허용한다. 가장 보수적이지만 가장 일반적이다.
@@ -380,7 +380,7 @@ print(pairwise_tukeyhsd(endog=vc_data['len'], groups=vc_data['dose'], alpha=0.05
 **연습문제 4.**
 **가족단위 오류와 비교단위 오류.**
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
     **비교단위:** 개별 비교 하나의 제1종 오류율.
 
     **가족단위:** 한 가족에 속한 모든 비교 중 적어도 하나에서 오류를 범할 확률.
@@ -394,7 +394,7 @@ print(pairwise_tukeyhsd(endog=vc_data['len'], groups=vc_data['dose'], alpha=0.05
 **연습문제 5.**
 **스튜던트화 범위 분포.** 간단히 소개하라.
 
-??? success "연습문제 5 풀이"
+??? success "풀이"
     스튜던트화 범위 $q$: $H_0$ 아래에서 $(\max \bar Y_i - \min \bar Y_i)/\sqrt{\mathrm{MSW}/n}$의 분포.
 
     다음에 의존한다:
@@ -411,7 +411,7 @@ print(pairwise_tukeyhsd(endog=vc_data['len'], groups=vc_data['dose'], alpha=0.05
 **연습문제 6.**
 **불균형 설계**와 Tukey.
 
-??? success "연습문제 6 풀이"
+??? success "풀이"
     $n_i$가 서로 다르면 **Tukey-Kramer** 수정을 쓴다:
 
     $\mathrm{HSD}_{ij} = q_{\alpha} \sqrt{(\mathrm{MSW}/2)(1/n_i + 1/n_j)}$.

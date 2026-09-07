@@ -126,7 +126,7 @@ $$
 **(b)** 정규방정식을 풀어 $\hat{\boldsymbol{\beta}}$를 구하라.
 **(c)** 적합값 $\hat{\mathbf{y}} = \mathbf{X}\hat{\boldsymbol{\beta}}$와 잔차를 계산하라.
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
     (a) $\mathbf{X}^T \mathbf{X} = \begin{pmatrix} 3 & 12 \\ 12 & 56 \end{pmatrix}$, $\mathbf{X}^T \mathbf{y} = \begin{pmatrix} 27 \\ 124 \end{pmatrix}$.
 
     (b) $\det(\mathbf{X}^T \mathbf{X}) = 168 - 144 = 24$이므로
@@ -142,7 +142,7 @@ $$
 **연습문제 2.**
 대각합의 순환 성질을 증명하라: $\mathbf{A} \in \mathbb{R}^{m \times n}$, $\mathbf{B} \in \mathbb{R}^{n \times m}$에 대해 $\mathrm{tr}(\mathbf{A}\mathbf{B}) = \mathrm{tr}(\mathbf{B}\mathbf{A})$.
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
     직접 계산한다.
 
     $$
@@ -156,7 +156,7 @@ $$
 **연습문제 3.**
 $\mathbf{X} \in \mathbb{R}^{n \times p}$가 완전 열계수를 갖는다고 하자($\mathrm{rank}(\mathbf{X}) = p \le n$). $\mathbf{H} = \mathbf{X}(\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T$가 대칭이고 멱등이며 대각합이 $p$임을 증명하라.
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
     **대칭성:** $(\mathbf{X}^T \mathbf{X})^{-1}$은 대칭이므로(대칭행렬의 역행렬)
 
     $$
@@ -182,7 +182,7 @@ $\mathbf{X} \in \mathbb{R}^{n \times p}$가 완전 열계수를 갖는다고 하
 **연습문제 4.**
 $\mathbf{A} \in \mathbb{R}^{n \times n}$이 대칭이고 스펙트럼 분해가 $\mathbf{A} = \mathbf{Q} \boldsymbol{\Lambda} \mathbf{Q}^T$라 하자. $\mathrm{tr}(\mathbf{A}) = \sum_i \lambda_i$이고 $\det(\mathbf{A}) = \prod_i \lambda_i$임을 증명하라.
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
     순환 성질과 $\mathbf{Q}^T \mathbf{Q} = \mathbf{I}$를 쓰면
 
     $$
@@ -208,7 +208,7 @@ $$
 
 임을 보여라.
 
-??? success "연습문제 5 풀이"
+??? success "풀이"
     $\mathbb{E}[\mathbf{Z}] = 0$이고 $\mathrm{Cov}(\mathbf{Z}) = \boldsymbol{\Sigma}$인 $\mathbf{Z}$를 써서 $\mathbf{X} = \boldsymbol{\mu} + \mathbf{Z}$로 놓자. 전개하면($\mathbf{A}$의 대칭성을 이용한다)
 
     $$
@@ -228,7 +228,7 @@ $$
 **연습문제 6.**
 $\mathbf{X}^T \mathbf{X}$가 특이행렬이면(즉 $\mathbf{X}$가 완전 열계수를 갖지 않으면) 최소제곱추정량 $\hat{\boldsymbol{\beta}}$이 유일하게 정해지지 않는 이유를 서로 보완적인 두 방식으로 설명하라. (a) 대수적으로, (b) 기하적으로.
 
-??? success "연습문제 6 풀이"
+??? success "풀이"
     **(a) 대수적으로:** 특이성은 $\det(\mathbf{X}^T \mathbf{X}) = 0$을 뜻하므로 $(\mathbf{X}^T \mathbf{X})^{-1}$이 존재하지 않는다. 정규방정식 $\mathbf{X}^T \mathbf{X} \boldsymbol{\beta} = \mathbf{X}^T \mathbf{y}$은 (우변이 $\mathbf{X}^T \mathbf{X}$의 열공간 안에 있으므로) 해를 갖지만 무한히 많다. $\boldsymbol{\beta}^*$가 해이고 $\mathbf{v} \in \mathrm{Null}(\mathbf{X})$이면 $\mathbf{X}\mathbf{v} = \mathbf{0}$이므로 $\boldsymbol{\beta}^* + \mathbf{v}$도 이 방정식을 만족한다.
 
     **(b) 기하적으로:** $\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}$는 여전히 $\mathbf{y}$를 $\mathrm{Col}(\mathbf{X})$ 위로 직교사영한 유일한 벡터다. 그러나 $\mathbf{X}$의 열들이 선형종속이면 그 사영을 열들의 선형결합으로 나타내는 방법이 무한히 많고, 각각이 타당한 $\hat{\boldsymbol{\beta}}$을 준다. 적합값은 식별되지만 계수는 식별되지 않는다. 해결책은 종속인 열을 제거하거나, 능형회귀($\mathbf{X}^T \mathbf{X}$에 $\lambda \mathbf{I}$를 더해 가역성을 회복한다), 또는 유사역행렬(최소 노름 해를 준다)을 쓰는 것이다. $\square$

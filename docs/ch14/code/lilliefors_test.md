@@ -102,7 +102,7 @@ Lilliefors KS D = 0.1391, bootstrap p = 0.0000
 
 **연습문제 1.** 표준정규 관측값 $n = 200$개를 생성하라. 순진한 KS 검정($\hat{\mu}, \hat{\sigma}$ 추정)과 Lilliefors 붓스트랩 검정을 모두 수행하라. 두 $p$값을 비교하라.
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
 
     ```python
     import numpy as np
@@ -145,7 +145,7 @@ Lilliefors KS D = 0.1391, bootstrap p = 0.0000
 
 **연습문제 2.** $n = 100$에 대해 $\alpha = 0.05$에서 Lilliefors 붓스트랩 검정($B = 500$)의 경험적 크기를 추정하는 몬테카를로 실험을 5,000회 반복으로 수행하라. 순진한 KS 검정과 비교하라.
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
 
     ```python
     import numpy as np
@@ -195,7 +195,7 @@ Lilliefors KS D = 0.1391, bootstrap p = 0.0000
 
 **연습문제 3.** Lilliefors $p$값의 해상도가 $1/B$인 이유를 설명하라. $p = 0.04$와 $p = 0.06$을 안정적으로 구별하려면 $B$가 얼마나 커야 하는가?
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
 
     붓스트랩 $p$값은 $\hat{p} = \frac{1}{B}\sum_{b=1}^B \mathbf{1}(D_b^* \geq D_{\text{obs}})$이므로 $\{0, 1/B, 2/B, \ldots, 1\}$의 값만 가질 수 있다. 지시함수의 합이 정수이기 때문이다.
 
@@ -211,7 +211,7 @@ Lilliefors KS D = 0.1391, bootstrap p = 0.0000
 
 **연습문제 4.** 정규성 대신 지수성을 검정하도록 Lilliefors 붓스트랩을 수정하라. 알고리즘에 필요한 변경을 개략적으로 서술하라.
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
 
     변경 사항은 다음과 같다.
 
@@ -228,7 +228,7 @@ Lilliefors KS D = 0.1391, bootstrap p = 0.0000
 
 **연습문제 5.** 고정된 자료에 대해 $B \to \infty$일 때 붓스트랩 $p$값 $\hat{p}_B$가 참 $p$값으로 수렴함을 증명하라.
 
-??? success "연습문제 5 풀이"
+??? success "풀이"
 
     자료가 고정되어 있으면 $D_{\text{obs}}$는 상수이다. 각 붓스트랩 추출은 $D_b^*$를 만들어 내고, $\mathbf{1}(D_b^* \geq D_{\text{obs}})$는 성공확률
 

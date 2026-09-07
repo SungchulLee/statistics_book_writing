@@ -138,7 +138,7 @@ $\boldsymbol{\Sigma}$의 양정치성이 $|\boldsymbol{\Sigma}| > 0$을 보장�
 **연습문제 1.**
 선행 소행렬식 기준을 이용해 $\mathbf{A} = \begin{pmatrix} 4 & 2 \\ 2 & 3 \end{pmatrix}$이 양정치인지 판정하라.
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
     선행 소행렬식은 다음과 같다.
 
     - 첫 번째 선행 소행렬식: $a_{11} = 4 > 0$
@@ -151,7 +151,7 @@ $\boldsymbol{\Sigma}$의 양정치성이 $|\boldsymbol{\Sigma}| > 0$을 보장�
 **연습문제 2.**
 $\mathbf{A}$가 양정치이면 모든 대각 성분 $a_{ii} > 0$임을 증명하라.
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
     $\mathbf{e}_i$를 $i$번째 표준기저벡터라 하자($i$번째 자리가 $1$이고 나머지는 $0$). $\mathbf{e}_i \neq \mathbf{0}$이고 $\mathbf{A}$가 양정치이므로
 
     $$
@@ -165,7 +165,7 @@ $\mathbf{A}$가 양정치이면 모든 대각 성분 $a_{ii} > 0$임을 증명�
 **연습문제 3.**
 $\mathbf{A} = \begin{pmatrix} 4 & 6 \\ 6 & 13 \end{pmatrix}$의 촐레스키 분해 $\mathbf{A} = \mathbf{L}\mathbf{L}^T$를 구하라.
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
     $\mathbf{L}\mathbf{L}^T = \mathbf{A}$가 되는 하삼각행렬 $\mathbf{L} = \begin{pmatrix} l_{11} & 0 \\ l_{21} & l_{22} \end{pmatrix}$을 찾는다.
 
     $l_{11}^2 = 4$에서 $l_{11} = 2$.
@@ -185,7 +185,7 @@ $\mathbf{A} = \begin{pmatrix} 4 & 6 \\ 6 & 13 \end{pmatrix}$의 촐레스키 분
 **연습문제 4.**
 어떤 공분산행렬 $\boldsymbol{\Sigma}$의 고윳값이 $\lambda_1 = 0.01$과 $\lambda_2 = 100$이다. $\boldsymbol{\Sigma}$는 양정치인가? $\boldsymbol{\Sigma}^{-1}$을 계산할 때의 실무적 함의를 논하라.
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
     그렇다. 두 고윳값이 모두 엄격히 양수이므로 $\boldsymbol{\Sigma}$는 양정치다. 그러나 조건수가 $\kappa = \lambda_{\max}/\lambda_{\min} = 100/0.01 = 10{,}000$으로 매우 크다.
 
     실무적 함의는 다음과 같다.
@@ -199,7 +199,7 @@ $\mathbf{A} = \begin{pmatrix} 4 & 6 \\ 6 & 13 \end{pmatrix}$의 촐레스키 분
 **연습문제 5.**
 $\boldsymbol{\Sigma}$가 양정치이면 마할라노비스 거리 $d^2(\mathbf{x}) = (\mathbf{x} - \boldsymbol{\mu})^T\boldsymbol{\Sigma}^{-1}(\mathbf{x} - \boldsymbol{\mu})$이 0일 필요충분조건이 $\mathbf{x} = \boldsymbol{\mu}$임을 증명하라.
 
-??? success "연습문제 5 풀이"
+??? success "풀이"
     $\boldsymbol{\Sigma}$가 양정치이므로 $\boldsymbol{\Sigma}^{-1}$도 양정치다(그 고윳값이 $1/\lambda_i > 0$이다).
 
     $\mathbf{z} = \mathbf{x} - \boldsymbol{\mu}$로 두면 $d^2 = \mathbf{z}^T\boldsymbol{\Sigma}^{-1}\mathbf{z}$이다.

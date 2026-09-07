@@ -387,7 +387,7 @@ print(f"{p_value   = :.4f}")   # 0.0086
 **연습문제 1.**
 위 학생 자료에서 세 검정(런 검정은 제외)의 $p$값을 모두 구하고 비교하라. 부호검정, Wilcoxon(Pratt), Wilcoxon(wilcox), 대응 $t$ 검정을 각각 계산하라.
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
     ```python
     import numpy as np, scipy.stats as stats
     data = np.array([
@@ -421,7 +421,7 @@ print(f"{p_value   = :.4f}")   # 0.0086
 **연습문제 2.**
 예제 2의 수열 $(1,1,0,1,0,1,0,0,1,0,1,0,1,0,1,1,0)$은 "잘 섞인" 것처럼 보이지만 런 검정이 기각한다. 사람이 만든 무작위 수열이 왜 이런 특징을 보이는지 설명하고, 진짜 무작위 수열에서 가장 긴 런의 기대 길이를 모의실험으로 확인하라.
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
     ```python
     import numpy as np
     rng = np.random.default_rng(0)
@@ -456,7 +456,7 @@ print(f"{p_value   = :.4f}")   # 0.0086
 **연습문제 3.**
 `runs_test` 구현에서 $R = (N_+ + N_- + 1 - \sum_i x_i x_{i+1})/2$가 왜 런의 개수와 같은지 증명하라.
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
     $x_i \in \{-1, +1\}$이라 하자. 인접한 쌍에 대해
 
     $$
@@ -484,7 +484,7 @@ print(f"{p_value   = :.4f}")   # 0.0086
 **연습문제 4.**
 `zero_method`의 세 선택지(`wilcox`, `pratt`, `zsplit`)는 언제 갈라지는가? 0이 아닌 차이는 그대로 두고 0의 개수만 늘려 가며 세 방법의 $p$값을 비교하라.
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
     0이 아닌 차이를 $(3, 5, 8, 12, 15, 2, 6, -4, -9, -1)$로 고정하고 0의 개수만 바꾼다.
 
     ```python

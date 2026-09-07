@@ -109,7 +109,7 @@ $$
 **연습문제 1.**
 특성다항식이 $(\lambda - 2)^2(\lambda - 5)$이고 고윳값 $\lambda = 2$의 기하적 중복도가 1인 $3 \times 3$ 행렬의 조르당 표준형을 써라.
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
     $\lambda = 2$는 대수적 중복도가 2이지만 기하적 중복도가 1이므로 하나의 $2 \times 2$ 조르당 블록을 만든다. 고윳값 $\lambda = 5$는 대수적·기하적 중복도가 모두 1이므로 $1 \times 1$ 블록이 된다. 조르당 형은
 
     $$
@@ -123,7 +123,7 @@ $$
 **연습문제 2.**
 조르당 블록의 거듭제곱 공식을 이용해 조르당 블록 $\mathbf{J}_2(3) = \begin{pmatrix} 3 & 1 \\ 0 & 3 \end{pmatrix}$에 대해 $\mathbf{J}^3$을 계산하라.
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
     $2 \times 2$ 조르당 블록 $\mathbf{J}_2(\lambda)$에 대해 거듭제곱 공식은
 
     $$
@@ -143,7 +143,7 @@ $$
 **연습문제 3.**
 어떤 행렬이 대각화 가능할 필요충분조건이 그 조르당 형의 모든 조르당 블록이 $1 \times 1$인 것임을 증명하라.
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
     ($\Rightarrow$) $\mathbf{A}$가 대각화 가능하면 $\boldsymbol{\Lambda}$가 대각인 $\mathbf{A} = \mathbf{P}\boldsymbol{\Lambda}\mathbf{P}^{-1}$이 성립한다. 대각행렬은 각 블록이 $1 \times 1$인(초대각의 1이 없는) 조르당 형이다.
 
     ($\Leftarrow$) 모든 조르당 블록이 $1 \times 1$이면 조르당 형은 $\mathbf{J} = \operatorname{diag}(\lambda_1, \dots, \lambda_n)$으로 대각행렬이다. $\mathbf{J}$가 대각인 $\mathbf{A} = \mathbf{P}\mathbf{J}\mathbf{P}^{-1}$이므로 $\mathbf{A}$는 대각화 가능하다.
@@ -155,7 +155,7 @@ $$
 **연습문제 4.**
 고윳값이 $\lambda_1 = 1$, $\lambda_2 = 2$, $\lambda_3 = 3$(모두 서로 다름)인 $3 \times 3$ 행렬이 다른 성질과 무관하게 반드시 대각화 가능한 이유를 설명하라.
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
     서로 다른 고윳값에 대응하는 고유벡터는 언제나 일차독립이다. 이 행렬은 $3 \times 3$이고 서로 다른 고윳값을 3개 가지므로 일차독립인 고유벡터를 3개 갖는다.
 
     일차독립인 고유벡터가 $n = 3$개이므로 이들로 만든 행렬 $\mathbf{P}$는 가역이고 $\mathbf{A} = \mathbf{P}\operatorname{diag}(1, 2, 3)\mathbf{P}^{-1}$이다.
@@ -167,7 +167,7 @@ $$
 **연습문제 5.**
 VAR(1) 모형 $\mathbf{y}_t = \mathbf{A}\mathbf{y}_{t-1} + \boldsymbol{\varepsilon}_t$에서 $\mathbf{A}$의 모든 고윳값이 $|\lambda_i| < 1$을 만족하면 그 과정은 정상적이다. $\mathbf{A}$가 $2 \times 2$ 조르당 블록을 갖는 단위 고윳값($|\lambda| = 1$)을 가질 때 조르당 형이 무엇을 드러내는지 설명하라.
 
-??? success "연습문제 5 풀이"
+??? success "풀이"
     $\lambda = 1$이 $2 \times 2$ 조르당 블록을 가지면 $\mathbf{J}_2(1) = \begin{pmatrix} 1 & 1 \\ 0 & 1 \end{pmatrix}$이다. 거듭제곱 공식에 의해
 
     $$

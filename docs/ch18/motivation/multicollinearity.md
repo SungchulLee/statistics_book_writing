@@ -97,7 +97,7 @@ $$
 **연습문제 1.**
 등상관 구조 $\Sigma = \rho\mathbf{1}\mathbf{1}^\top + (1-\rho)\mathbf{I}$에서 VIF를 $\rho$의 함수로 계산하고, 경험칙 문턱 $\text{VIF} = 10$이 어떤 $\rho$에 해당하는지 구하라.
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
     등상관 행렬의 역행렬은 닫힌 형태로 알려져 있고 그 대각원소가 VIF다.
 
     ```python
@@ -126,7 +126,7 @@ $$
 **연습문제 2.**
 "OLS는 상관된 두 변수에 큰 양수와 큰 음수를 부여한다"는 주장을 확인하라. $r = 0.999$인 두 변수에서 OLS와 능형회귀의 계수를 여러 자료에 걸쳐 비교하라.
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
     ```python
     import numpy as np
     from sklearn.linear_model import Ridge, LinearRegression
@@ -163,7 +163,7 @@ $$
 **연습문제 3.**
 VIF는 쌍별 상관이 모두 낮아도 클 수 있다. 그런 자료를 구성하라.
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
     $x_3 = x_1 + x_2$ 관계를 쓰면 된다. $x_1, x_2$가 독립이면 $\text{corr}(x_1, x_3) = \text{corr}(x_2, x_3) = 1/\sqrt{2} = 0.707$로 각각 0.8 미만이다.
 
     ```python

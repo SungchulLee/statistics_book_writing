@@ -199,7 +199,7 @@ print(f"Conversion A/B test p-value: {p_value:.4f}")   # 0.6784
 
 **(c)** 이 경우를 다루려면 검정을 어떻게 수정하겠는가?
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
 
     **(a) 만족되지 않는다.**
 
@@ -292,7 +292,7 @@ print(f"Conversion A/B test p-value: {p_value:.4f}")   # 0.6784
 **연습문제 2.**
 $p$값 계산에서 `>` 대신 `>=`를 쓰고 $+1$ 보정을 더하는 것이 왜 중요한가? 이산자료에서 그 차이를 확인하라.
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
     작은 이진 자료에서 세 정의를 비교한다.
 
     ```python
@@ -342,7 +342,7 @@ $p$값 계산에서 `>` 대신 `>=`를 쓰고 $+1$ 보정을 더하는 것이 �
 **연습문제 3.**
 순열검정과 $t$ 검정의 검정력을 정규자료와 두꺼운 꼬리 자료에서 비교하라.
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
     ```python
     import numpy as np
     from scipy import stats
@@ -395,7 +395,7 @@ $p$값 계산에서 `>` 대신 `>=`를 쓰고 $+1$ 보정을 더하는 것이 �
 **연습문제 4.**
 전환율 예제에서 순열검정 대신 초기하분포의 정확 $p$값을 쓸 수 있다고 했다. 두 값이 일치하는지 확인하고, 왜 그런지 설명하라.
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
     ```python
     import numpy as np
     from scipy import stats

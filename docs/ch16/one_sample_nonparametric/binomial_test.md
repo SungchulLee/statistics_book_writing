@@ -120,7 +120,7 @@ $$
 **연습문제 1.**
 $n = 20$, $s = 10$, $p_0 = 0.70$인 예제에서 양측 $p$값을 두 가지 정의로 각각 계산하고 왜 다른지 설명하라. SciPy는 어느 쪽을 쓰는가?
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
     ```python
     from scipy import stats
     lo = stats.binom.cdf(10, 20, 0.7)     # P(S <= 10) = 0.04796
@@ -148,7 +148,7 @@ $n = 20$, $s = 10$, $p_0 = 0.70$인 예제에서 양측 $p$값을 두 가지 정
 **연습문제 2.**
 $p_0 = 0.3$일 때 정확 이항검정의 실제 크기를 $n = 20, 50, 100$에 대해 계산하라. 부호검정에서와 같은 이산성 문제가 나타나는가?
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
     ```python
     import numpy as np
     from scipy import stats
@@ -175,7 +175,7 @@ $p_0 = 0.3$일 때 정확 이항검정의 실제 크기를 $n = 20, 50, 100$에 
 **연습문제 3.**
 $n = 20$에서 Clopper-Pearson 구간, Wilson 구간, Wald 구간의 실제 포함확률을 $p = 0.1, 0.3, 0.5, 0.7, 0.9$에 대해 계산하고 비교하라.
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
     ```python
     import numpy as np
     from scipy import stats
@@ -222,7 +222,7 @@ $n = 20$에서 Clopper-Pearson 구간, Wilson 구간, Wald 구간의 실제 포�
 **연습문제 4.**
 $p_0 = 0.5$, $n = 20$에서 모든 $s = 0, \ldots, 20$에 대해 정확 $p$값, 보정 없는 정규근사 $p$값, 연속성 보정 정규근사 $p$값을 비교하라. 세 방법의 $\alpha = 0.05$ 결론이 갈리는 $s$가 있는가?
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
     ```python
     import numpy as np
     from scipy import stats

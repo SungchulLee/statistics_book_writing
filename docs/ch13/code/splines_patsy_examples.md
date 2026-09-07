@@ -103,7 +103,7 @@ cs_pred = cs_model.predict(np.asarray(cs_grid))
 
 **연습문제 1.** df를 2에서 8까지 바꿔 가며 B-스플라인을 적합하고 그 결과 곡선을 그려라. 어느 df에서 과대적합의 징후가 나타나기 시작하는가?
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
 
     ```python
     for d in range(2, 9):
@@ -121,7 +121,7 @@ cs_pred = cs_model.predict(np.asarray(cs_grid))
 
 **연습문제 2.** 매듭이 $K$개인 자연 삼차 스플라인의 자유도가 (제약 없는 삼차 스플라인의 $K + 4$가 아니라) $K$인 이유를 설명하라. "잃어버린" 4개의 자유도는 어디로 가는가?
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
 
     구간 $[a, b]$에 매듭 $\xi_1 < \cdots < \xi_K$가 있을 때(양 끝의 경계 매듭을 포함해 센다) 제약 없는 삼차 스플라인의 차원을 세어 보자. 매듭이 구간을 $K+1$개 조각으로 나누고 조각마다 삼차 다항식이므로 계수는 $4(K+1)$개이다. 각 내부 매듭에서 $f$, $f'$, $f''$의 연속성이 3개의 제약을 주므로 $3(K-2)$… 를 세는 대신, 널리 쓰이는 결과를 그대로 쓰면 **삼차 스플라인의 차원은 $K + 4$**이다.
 
@@ -146,7 +146,7 @@ cs_pred = cs_model.predict(np.asarray(cs_grid))
 
 **연습문제 3.** 자료 범위 바깥(예: age = 150이나 age = 0)에서 B-스플라인 모형과 자연 스플라인 모형의 예측을 비교하라. 어느 쪽이 더 합리적으로 외삽하는가?
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
 
     ```python
     age_extrap = np.array([0.0, 5.0, 145.0, 150.0])
@@ -177,7 +177,7 @@ cs_pred = cs_model.predict(np.asarray(cs_grid))
 
 **연습문제 4.** 적합 목적함수에 릿지 형태의 항 $\lambda \|\boldsymbol{\gamma}\|^2$을 더해 B-스플라인에 거칢 벌점을 구현하라. 이것은 평활 스플라인과 어떤 관계인가?
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
 
     ```python
     from sklearn.linear_model import Ridge
@@ -193,7 +193,7 @@ cs_pred = cs_model.predict(np.asarray(cs_grid))
 
 **연습문제 5.** 매듭이 자료점에 놓인 자연 삼차 스플라인에 대해, 평활 스플라인 추정량이 두 번 미분 가능한 모든 함수 가운데 $\sum(y_i - f(x_i))^2 + \lambda\int[f''(t)]^2\,dt$를 최소화함을 증명하라.
 
-??? success "연습문제 5 풀이"
+??? success "풀이"
 
     비모수 회귀의 고전적 결과이다. 핵심은 매듭에서 주어진 값을 보간하는 모든 함수 $g$ 가운데 자연 삼차 스플라인이 $\int [g'']^2\,dt$(거칢)를 최소화한다는 것이다. 변분법적 논증으로 보인다. $f$를 자연 삼차 스플라인이라 하고 $g = f + h$로 쓰면
 

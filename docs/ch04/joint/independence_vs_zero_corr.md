@@ -248,7 +248,7 @@ print(f"  Independent? {np.isclose(p_joint, p_prod, atol=0.005)}")
 **연습문제 1.**
 $X$가 대칭이고 $\mathbb{E}[X] = 0$, $\mathbb{E}[X^2] = 1$, $\mathbb{E}[X^3] = 0$이다. $Y = X^2$이라 하자. (a) $\mathrm{Cov}(X, Y)$. (b) $\rho(X, Y)$. (c) 둘은 독립인가?
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
     (a) $\mathrm{Cov}(X, Y) = \mathbb{E}[XY] - \mathbb{E}[X]\mathbb{E}[Y] = \mathbb{E}[X^3] - 0 = 0$.
 
     (b) $\rho(X, Y) = 0/(\sigma_X \sigma_Y) = 0$.
@@ -262,7 +262,7 @@ $X$가 대칭이고 $\mathbb{E}[X] = 0$, $\mathbb{E}[X^2] = 1$, $\mathbb{E}[X^3]
 **연습문제 2.**
 **무상관성이 독립성을 함의하는 경우.** 무상관성이 독립성을 보장하는 경우를 밝히고 증명하라.
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
     **특수한 경우:** $(X, Y)$가 **결합정규**이면 무상관성이 독립성을 함의한다.
 
     **증명:** 이변량 정규분포에 대해
@@ -286,7 +286,7 @@ $X$가 대칭이고 $\mathbb{E}[X] = 0$, $\mathbb{E}[X^2] = 1$, $\mathbb{E}[X^3]
 **연습문제 3.**
 **거리 상관계수**는 독립일 때 그리고 그때만 0이 되어 Pearson 상관계수의 한계를 보완한다. 거리 상관계수를 개념적으로 정의하고 주된 장점을 서술하라.
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
     **거리 상관계수**(Székely, Rizzo, Bakirov 2007)는 다음을 만족하는 의존성 측도이다:
 
     $$
@@ -309,7 +309,7 @@ $X$가 대칭이고 $\mathbb{E}[X] = 0$, $\mathbb{E}[X^2] = 1$, $\mathbb{E}[X^3]
 **연습문제 4.**
 **상호정보량** $I(X; Y) = \mathbb{E}\!\left[\log \frac{p(X, Y)}{p(X) p(Y)}\right]$에 대해, $I(X; Y) \ge 0$이고 $I(X; Y) = 0$일 필요충분조건이 $X \perp\!\!\!\perp Y$임을 보여라.
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
     상호정보량은 결합분포 $p(X, Y)$와 주변분포의 곱 $p(X) p(Y)$ 사이의 **Kullback-Leibler 발산**이다:
 
     $$
@@ -329,7 +329,7 @@ $X$가 대칭이고 $\mathbb{E}[X] = 0$, $\mathbb{E}[X^2] = 1$, $\mathbb{E}[X^3]
 **연습문제 5.**
 **순위 상관계수.** Spearman의 $\rho_S$는 순위들 사이의 Pearson 상관계수이다. Spearman의 $\rho_S$가 (선형 의존성만 잡는 Pearson과 달리) *단조* 의존성을 포착하며 임의의 단조변환에 불변임을 보여라.
 
-??? success "연습문제 5 풀이"
+??? success "풀이"
     각 $X_i$를 그 순위 $R_i^X$(1부터 $n$까지)로 바꾸고 $Y_i$에도 같은 작업을 한다. Spearman 상관계수는
 
     $$
@@ -349,7 +349,7 @@ $X$가 대칭이고 $\mathbb{E}[X] = 0$, $\mathbb{E}[X^2] = 1$, $\mathbb{E}[X^3]
 **연습문제 6.**
 **독립성에 대한 실용적 검정.** 표본 $(X_i, Y_i)_{i=1}^n$이 주어졌을 때 서로 보완하는 두 가지 독립성 검정을 제안하고 각각이 언제 적절한지 논하라.
 
-??? success "연습문제 6 풀이"
+??? success "풀이"
     **검정 1 — Pearson 상관 검정:** $H_0$ 아래에서(그리고 결합정규성 아래에서) 통계량 $t = \rho\sqrt{n-2}/\sqrt{1 - \rho^2}$는 $t_{n-2}$를 따른다. $|t|$가 임계값을 넘으면 기각한다.
 
     *적절한 경우:* 관계가 선형이라고 볼 만하고 자료가 근사적으로 이변량 정규일 때.

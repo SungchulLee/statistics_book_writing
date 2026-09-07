@@ -108,7 +108,7 @@ gam_py.gridsearch(X_gam, y_gam)
 
 **연습문제 1.** 선형, 다항, GAM 모형의 $R^2$와 RMSE를 비교하라. 어느 모형이 가장 좋으며 그 개선은 실질적인가?
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
 
     ```python
     from sklearn.metrics import mean_squared_error, r2_score
@@ -132,7 +132,7 @@ gam_py.gridsearch(X_gam, y_gam)
 
 **연습문제 2.** pyGAM 설정을 바꾸어 모든 설명변수에 선형항 대신 매끄러운 스플라인을 쓰도록 하라. 적합이 개선되는가? 과대적합의 위험을 논하라.
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
 
     ```python
     gam_all_smooth = LinearGAM(
@@ -149,7 +149,7 @@ gam_py.gridsearch(X_gam, y_gam)
 
 **연습문제 3.** GAM이 왜 "가법"이라 불리는지 설명하라. 가법 구조는 어떤 가정을 부과하며 언제 위배될 수 있는가?
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
 
     GAM은 반응변수가 개별 매끄러운 함수들의 합이라고 가정한다: $y = \beta_0 + f_1(x_1) + \cdots + f_p(x_p) + \varepsilon$. 곧 각 설명변수의 효과가 다른 설명변수의 값과 무관하다는 뜻이다(교호작용 없음). 예를 들어 거주 면적이 가격에 미치는 효과가 건물 등급에 따라 달라진다면(교호작용) 이 가정이 위배된다. 텐서곱 평활 같은 확장으로 교호작용을 다룰 수 있다. $\square$
 
@@ -157,7 +157,7 @@ gam_py.gridsearch(X_gam, y_gam)
 
 **연습문제 4.** 평활 모수 $\lambda$는 편향-분산 절충을 조절한다. $\lambda \to 0$과 $\lambda \to \infty$일 때 어떻게 되는지 설명하라.
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
 
     $\lambda \to 0$이면 벌점이 사라져 $f_j$가 자료를 보간한다(분산 큼, 편향 작음, 과대적합). $\lambda \to \infty$이면 벌점이 $f_j'' \equiv 0$을 강제하여 $f_j$가 선형이 된다(분산 작음, 편향 클 수 있음, 과소적합). 최적 $\lambda$는 이 양극단의 균형을 잡는다. pyGAM에서는 `gridsearch`가 일반화 교차검증(GCV)이나 비슷한 기준을 최소화하여 $\lambda$를 고른다. $\square$
 
@@ -165,7 +165,7 @@ gam_py.gridsearch(X_gam, y_gam)
 
 **연습문제 5.** B-스플라인 기저를 쓰는 단변량 GAM의 벌점최소제곱 문제를 행렬로 표현하라. $\mathbf{B}$가 기저행렬이고 $\mathbf{D}$가 벌점행렬일 때 해가 $(B^\top B + \lambda D)^{-1} B^\top y$임을 보여라.
 
-??? success "연습문제 5 풀이"
+??? success "풀이"
 
     $f(x) = \sum_{m=1}^M \gamma_m B_m(x)$라 하면 $\mathbf{f} = \mathbf{B}\boldsymbol{\gamma}$이고 $\mathbf{B}$는 $n \times M$ 기저행렬이다. 거칢 벌점은 $\int [f'']^2\,dt = \boldsymbol{\gamma}^\top\mathbf{D}\boldsymbol{\gamma}$이며 $D_{jk} = \int B_j''(t) B_k''(t)\,dt$이다. 벌점 목적함수는
 

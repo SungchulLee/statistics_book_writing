@@ -276,7 +276,7 @@ scikit-learn도 $1.0000$을 내어 두 구현이 일치한다.
 $\hat{y}_{ic} = e^{z_{ic}} / \sum_{j} e^{z_{ij}}$에서 출발하여, 관측치 $i$ 하나에 대해
 $\partial J / \partial z_{ik} = (\hat{y}_{ik} - y_{ik})/n$을 유도하라.
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
     관측치 $i$를 고정하고 명확성을 위해 $1/n$ 인자를 잠시 뺀다. 이 관측치의 손실은
 
     $$
@@ -308,7 +308,7 @@ $L_2$ 정칙화 판본의 학습 루프를 구현하라. 손실에 벌점항 $\f
 더하고 기울기를 그에 맞게 수정하라. $\lambda = 0.1$로 붓꽃 자료에서 학습하고 벌점 없는 판본과
 검정 정확도를 비교하라.
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
     정칙화 손실은
 
     $$
@@ -365,7 +365,7 @@ $\mathbf{z} = (1000, 1001, 999)^\top$에 대해 최댓값을 빼는 기법을 �
 소프트맥스를 각각 계산하여, 순진한 판본이 `nan`을 내고 안정적인 판본은 그렇지 않음을 보이는
 NumPy 실험을 작성하라.
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
     ```python
     z = np.array([[1000.0, 1001.0, 999.0]])
 
@@ -396,7 +396,7 @@ NumPy 실험을 작성하라.
 $\{\mathbf{x} : \hat{p}_j(\mathbf{x}) = \hat{p}_k(\mathbf{x})\}$가 $\mathbb{R}^d$의
 $(d-1)$차원 아핀 부분공간임을 보여라.
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
     예측확률은 $\hat{p}_c(\mathbf{x}) = \operatorname{softmax}(\mathbf{W}\mathbf{x} + \mathbf{b})_c$
     이다. $\hat{p}_j = \hat{p}_k$로 놓으면
 
@@ -435,7 +435,7 @@ $(d-1)$차원 아핀 부분공간임을 보여라.
 $\eta_0 = 1.0$으로 붓꽃 자료에서 500 에포크 학습하고, 훈련 손실 곡선을 고정 학습률 판본과
 비교하라.
 
-??? success "연습문제 5 풀이"
+??? success "풀이"
     ```python
     import matplotlib.pyplot as plt
 

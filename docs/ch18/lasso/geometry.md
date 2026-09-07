@@ -80,7 +80,7 @@ $\lambda$가 $\lambda_{\max}$에서 0으로 줄어들면 제약영역이 커진�
 **연습문제 1.**
 "경로가 $\lambda$에 대해 조각별 선형"이라는 주장을 수치로 확인하고, 꺾이는 지점이 무엇을 뜻하는지 설명하라.
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
     ```python
     import numpy as np
     from sklearn.linear_model import lasso_path
@@ -111,7 +111,7 @@ $\lambda$가 $\lambda_{\max}$에서 0으로 줄어들면 제약영역이 커진�
 **연습문제 2.**
 설명변수의 상관이 강해지면 라쏘가 꼭짓점(변수 하나)에서 접촉할 확률이 낮아진다는 주장을 확인하라.
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
     ```python
     import numpy as np
     from sklearn.linear_model import Lasso

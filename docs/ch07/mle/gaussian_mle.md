@@ -186,7 +186,7 @@ Gaussian MLE — $\hat{\mu} = \bar{X}$과 $\hat{\sigma}^2 = \frac{1}{n}\sum(X_i 
 **연습문제 1.**
 $N(\mu, \sigma^2)$에 대해 $\hat\mu_{\text{MLE}} = \bar X$와 $\hat\sigma^2_{\text{MLE}} = (1/n)\sum(X_i - \bar X)^2$을 유도하고 2계 조건을 확인하라.
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
     로그가능도: $\ell(\mu, \sigma^2) = -(n/2)\ln(2\pi\sigma^2) - (1/(2\sigma^2))\sum(x_i - \mu)^2$.
 
     $\partial\ell/\partial\mu = (1/\sigma^2)\sum(x_i - \mu) = 0 \Rightarrow \hat\mu = \bar X$.
@@ -200,7 +200,7 @@ $N(\mu, \sigma^2)$에 대해 $\hat\mu_{\text{MLE}} = \bar X$와 $\hat\sigma^2_{\
 **연습문제 2.**
 $N(\mu, \sigma^2)$의 **Fisher 정보행렬.** 비대각 성분이 0임을 보이고 $\bar X$가 CRLB를 정확히 달성함을 확인하라.
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
     $I_{\mu\mu} = n/\sigma^2$, $I_{\sigma^2 \sigma^2} = n/(2\sigma^4)$, $I_{\mu \sigma^2} = \mathbb{E}[-(X-\mu)/\sigma^4] = 0$.
 
     Fisher 정보행렬이 대각이다: $\mu$와 $\sigma^2$은 **직교 모수**이다. 하나를 추정하는 것이 다른 하나를 추정하는 점근분산에 영향을 주지 않는다.
@@ -214,7 +214,7 @@ $N(\mu, \sigma^2)$의 **Fisher 정보행렬.** 비대각 성분이 0임을 보�
 **연습문제 3.**
 **MLE의 불변성.** (a) $\sigma$, (b) $\mathrm{CV} = \sigma/\mu$, (c) 99번째 백분위수 $\mu + 2.326\sigma$의 MLE를 구하라.
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
     MLE 불변성에 의해 $\widehat{g(\theta)} = g(\hat\theta_{\text{MLE}})$:
 
     (a) $\hat\sigma = \sqrt{\hat\sigma^2_{\text{MLE}}}$.
@@ -230,7 +230,7 @@ $N(\mu, \sigma^2)$의 **Fisher 정보행렬.** 비대각 성분이 0임을 보�
 **연습문제 4.**
 **$\mu = 0$이라는 제약 아래의 MLE.** $\mu$가 0임을 알 때 $\hat\sigma^2$을 유도하라. 제약 없는 MLE와 분산을 비교하라.
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
     $\mu = 0$이면 $\hat\sigma^2_0 = (1/n) \sum X_i^2$이다. $\mathbb{E}[\hat\sigma^2_0] = (1/n) \cdot n\sigma^2 = \sigma^2$ — **불편**이다($\mu$를 추정한 것이 아니라 알고 있으므로 Bessel 수정이 필요 없다).
 
     $n\hat\sigma^2_0/\sigma^2 \sim \chi^2_n$이므로 $\mathrm{Var}(\hat\sigma^2_0) = 2\sigma^4/n$이다.
@@ -244,7 +244,7 @@ $N(\mu, \sigma^2)$의 **Fisher 정보행렬.** 비대각 성분이 0임을 보�
 **연습문제 5.**
 **모수적 VaR.** 일별 수익률 252개에서 $\hat\mu = 0.0003$, $\hat\sigma = 0.012$를 얻었다. (a) 1일 99% VaR. (b) 제곱근 규칙에 의한 10일 VaR. (c) 참 초과첨도가 3이라면 정규 VaR는 위험을 과대평가하는가, 과소평가하는가?
 
-??? success "연습문제 5 풀이"
+??? success "풀이"
     (a) $\mathrm{VaR}_{0.99}^{\text{1일}} = -(\hat\mu + z_{0.01} \hat\sigma) = -(0.0003 - 2.326 \cdot 0.012) = 0.0276$ (2.76% 손실).
 
     (b) $\mathrm{VaR}_{0.99}^{\text{10일}} = \sqrt{10} \cdot 0.0276 \approx 0.0873$ (8.73%). i.i.d.이고 추세가 0이라는 가정 아래에서 유효하다.
@@ -256,7 +256,7 @@ $N(\mu, \sigma^2)$의 **Fisher 정보행렬.** 비대각 성분이 0임을 보�
 **연습문제 6.**
 **몬테카를로 검증.** $N(5, 9)$에서 $n = 20$인 표본 10000개를 모의실험하라. $\mathbb{E}[\hat\mu], \mathbb{E}[\hat\sigma^2_{\text{MLE}}], \mathbb{E}[S^2]$을 확인하라.
 
-??? success "연습문제 6 풀이"
+??? success "풀이"
     ```python
     import numpy as np
     rng = np.random.default_rng(0)

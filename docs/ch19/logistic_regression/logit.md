@@ -201,7 +201,7 @@ $\log\frac{p}{1-p} = -2.5 + 0.8\,\text{DTI} - 0.03\,\text{Credit Score}$
 
 **(c)** Credit Score = 650인 차입자에게 연체 확률 50%를 주는 DTI는 얼마인가?
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
 
     **(a)** $\text{logit} = -2.5 + 0.8(3) - 0.03(700) = -2.5 + 2.4 - 21 = -21.1$
 

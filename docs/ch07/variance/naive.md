@@ -130,7 +130,7 @@ $$\text{Var}(\hat{\sigma}^2_\mu) = \frac{2\sigma^4}{n} < \frac{2\sigma^4}{n-1} =
 **연습문제 1.**
 $\mathbb{E}[(1/n)\sum(X_i - \bar X)^2] = (n-1)\sigma^2/n$임을 증명하라.
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
     항등식 $\sum(X_i - \bar X)^2 = \sum(X_i - \mu)^2 - n(\bar X - \mu)^2$을 쓴다.
 
     $\mathbb{E}[\sum(X_i - \mu)^2] = n\sigma^2$. $\mathbb{E}[n(\bar X - \mu)^2] = n \cdot \sigma^2/n = \sigma^2$.
@@ -144,7 +144,7 @@ $\mathbb{E}[(1/n)\sum(X_i - \bar X)^2] = (n-1)\sigma^2/n$임을 증명하라.
 **연습문제 2.**
 **평균을 아는 경우의 분산.** $\mu$가 알려져 있으면 $\hat\sigma^2 = (1/n)\sum(X_i - \mu)^2$이다. (a) 불편인가? (b) 정규성 아래에서의 분산. (c) $S^2$ 대비 효율 이득.
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
     (a) $\mathbb{E}[\hat\sigma^2] = (1/n) \cdot n\sigma^2 = \sigma^2$. **불편**이다($\mu$를 추정하느라 소모한 자유도가 없으므로 Bessel 수정이 필요 없다).
 
     (b) $n\hat\sigma^2/\sigma^2 \sim \chi^2_n$(표준정규 제곱 $n$개의 합). $\mathrm{Var}(\hat\sigma^2) = 2\sigma^4/n$.
@@ -158,7 +158,7 @@ $\mathbb{E}[(1/n)\sum(X_i - \bar X)^2] = (n-1)\sigma^2/n$임을 증명하라.
 **연습문제 3.**
 **편향은 왜 생기는가?** 직관적으로, 소박한 추정량이 $\sigma^2$을 과소추정하는 이유는?
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
     $\bar X$는 $c$에 대해 $\sum(X_i - c)^2$을 최소화한다. 따라서 항상 $\sum(X_i - \bar X)^2 \le \sum(X_i - \mu)^2$이다.
 
     기댓값을 취하면 $\mathbb{E}[\sum(X_i - \bar X)^2] \le \mathbb{E}[\sum(X_i - \mu)^2] = n\sigma^2$이다. 구체적으로는 정확히 $\sigma^2$만큼 작다($\mathbb{E}[n(\bar X - \mu)^2] = \sigma^2$).
@@ -170,7 +170,7 @@ $\mathbb{E}[(1/n)\sum(X_i - \bar X)^2] = (n-1)\sigma^2/n$임을 증명하라.
 **연습문제 4.**
 **추정량 $\hat\sigma^2_{c}$ 계열.** $c = n, n-1, n+1$에 대해 $\hat\sigma^2_c = (1/c)\sum(X_i - \bar X)^2$의 편향을 구하라.
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
     $\mathbb{E}[\sum(X_i - \bar X)^2] = (n-1)\sigma^2$을 쓰면:
 
     - $c = n$ (MLE): 편향 = $(n-1)\sigma^2/n - \sigma^2 = -\sigma^2/n$. 과소추정.
@@ -184,7 +184,7 @@ $\mathbb{E}[(1/n)\sum(X_i - \bar X)^2] = (n-1)\sigma^2/n$임을 증명하라.
 **연습문제 5.**
 **평균을 아는 표본분산이 모르는 경우보다 낫다.** 구체적으로, 이 분산추정량은 보정 없이도 불편이다. 이것이 카이제곱분포를 보존함을 보여라.
 
-??? success "연습문제 5 풀이"
+??? success "풀이"
     $\mu$를 아는 경우: $(X_i - \mu)/\sigma \sim N(0, 1)$이므로 $(X_i - \mu)^2/\sigma^2 \sim \chi^2_1$이고 $\sum(X_i - \mu)^2/\sigma^2 \sim \chi^2_n$이다.
 
     $\mu$를 추정하는 경우: $\sum(X_i - \bar X)^2/\sigma^2 \sim \chi^2_{n-1}$이다($\bar X$ 때문에 자유도 하나를 잃는다).
@@ -196,7 +196,7 @@ $\mathbb{E}[(1/n)\sum(X_i - \bar X)^2] = (n-1)\sigma^2/n$임을 증명하라.
 **연습문제 6.**
 **회귀 맥락에서의 소박한 분산.** 선형회귀가 $\mathrm{SSE}/n$이나 $\mathrm{SSE}/(n-1)$이 아니라 **잔차분산** $\hat\sigma^2 = \mathrm{SSE}/(n - p)$를 보고하는 이유는?
 
-??? success "연습문제 6 풀이"
+??? success "풀이"
     모수가 $p$개인 선형회귀는 $\mathrm{SSE} = \sum(Y_i - \hat Y_i)^2$으로부터 잔차분산을 추정한다.
 
     적합된 모수 하나마다 자유도 하나가 사라진다. (절편을 포함하여) 모수가 $p$개이면 잔차의 유효 자유도는 $n - p$이다.

@@ -73,7 +73,7 @@ $$
 **연습문제 1.**
 Bernoulli에 대한 베이즈적 추정량 $\hat\theta_B = (\sum X_i + a)/(n + a + b)$를 생각하자. (a) 편향과 분산. (b) $a = b = \sqrt n/2$일 때 편향되어 있지만 일치함을 보여라. (c) $\theta = 0.5, n = 10$에서 MLE와 평균제곱오차를 비교하라.
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
     (a) $S = \sum X_i$라 하면 $\mathbb{E}[S] = n\theta$, $\mathrm{Var}(S) = n\theta(1-\theta)$이다.
 
     $\mathbb{E}[\hat\theta_B] = (n\theta + a)/(n + a + b)$. $\mathrm{Bias}(\hat\theta_B) = (a - (a+b)\theta)/(n + a + b)$.
@@ -89,7 +89,7 @@ Bernoulli에 대한 베이즈적 추정량 $\hat\theta_B = (\sum X_i + a)/(n + a
 **연습문제 2.**
 $\mathrm{Beta}(\alpha, \beta)$ 사전분포를 쓴 $X \sim \mathrm{Binomial}(n, p)$에 대해 **MAP 추정량을 유도하라.**
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
     사후분포: $\pi(p \mid x) \propto p^x(1-p)^{n-x} \cdot p^{\alpha-1}(1-p)^{\beta-1} = p^{x+\alpha-1}(1-p)^{n-x+\beta-1}$.
 
     이는 (켤레성에 의해) $\mathrm{Beta}(x + \alpha, n - x + \beta)$이다.
@@ -111,7 +111,7 @@ $\mathrm{Beta}(\alpha, \beta)$ 사전분포를 쓴 $X \sim \mathrm{Binomial}(n, 
 **연습문제 3.**
 **MAP와 MLE.** MAP가 MLE와 같아지는 때는 언제인가? 같지 않은 때는?
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
     MAP는 $\pi(\theta \mid x) \propto L(\theta) \pi(\theta)$를 최대화하고 MLE는 $L(\theta)$만 최대화한다.
 
     **MAP = MLE**일 필요충분조건은 $\pi(\theta)$가 지지집합에서 상수인 것, 즉 평평한(비정상) 사전분포인 것이다. 달리 말하면 사전분포가 무정보인 경우이다.
@@ -127,7 +127,7 @@ $\mathrm{Beta}(\alpha, \beta)$ 사전분포를 쓴 $X \sim \mathrm{Binomial}(n, 
 **연습문제 4.**
 **켤레 사전분포.** 켤레 사전분포가 계산상 편리한 이유는 무엇인가? Beta-Bernoulli 외의 예를 하나 들라.
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
     가능도족 $L(\theta; X)$에 대한 **켤레 사전분포**란 사후분포 $\pi(\theta \mid X)$가 같은 족에 속하게 하는 사전분포 $\pi(\theta)$이다.
 
     **편리함:**
@@ -152,7 +152,7 @@ $\mathrm{Beta}(\alpha, \beta)$ 사전분포를 쓴 $X \sim \mathrm{Binomial}(n, 
 **연습문제 5.**
 **사후평균과 MAP.** $\pi(\theta \mid x) = \mathrm{Beta}(20, 5)$에 대해 둘을 모두 계산하라. 왜 서로 다를 수 있는가?
 
-??? success "연습문제 5 풀이"
+??? success "풀이"
     $\mathrm{Beta}(\alpha, \beta)$에서:
 
     - 평균: $\alpha/(\alpha + \beta) = 20/25 = 0.80$.
@@ -173,7 +173,7 @@ $\mathrm{Beta}(\alpha, \beta)$ 사전분포를 쓴 $X \sim \mathrm{Binomial}(n, 
 **연습문제 6.**
 **비정상 사전분포.** $\int \pi(\theta) d\theta = \infty$인 사전분포(예: $\mathbb{R}$ 위의 $\pi(\mu) = 1$)를 **비정상(improper)**이라 한다. 그래도 타당한 사후분포를 계산할 수 있는가? 언제 그러한가?
 
-??? success "연습문제 6 풀이"
+??? success "풀이"
     그렇다. *사후분포*가 정상(proper)이기만 하면 된다. 조건은 분자 $L(\theta) \pi(\theta)$가 $\theta$에 대해 유한한 적분을 갖는 것이다:
 
     $$

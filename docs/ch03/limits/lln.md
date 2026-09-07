@@ -86,7 +86,7 @@ plt.show()
 **연습문제 1.**
 $X_i \sim \mathrm{Uniform}(0,1)$이 i.i.d.다. (a) $\mathbb{E}[X]$, $\mathrm{Var}(X)$는? (b) $\bar X_n$에 대한 약한 큰수의 법칙을 진술하라. (c) $P(|\bar X_{100} - 1/2| \ge 0.05)$에 대한 체비쇼프 한계를 구하라. (d) $n = 10\,000$일 때의 한계를 구하라.
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
     (a) $\mathbb{E}[X] = 1/2$, $\mathrm{Var}(X) = 1/12$.
 
     (b) 모든 $\varepsilon > 0$에 대해 $n \to \infty$일 때 $P(|\bar X_n - 1/2| \ge \varepsilon) \to 0$이다.
@@ -100,7 +100,7 @@ $X_i \sim \mathrm{Uniform}(0,1)$이 i.i.d.다. (a) $\mathbb{E}[X]$, $\mathrm{Var
 **연습문제 2.**
 $\mathbb{E}[X] = \mu$이고 $\mathrm{Var}(X) = \sigma^2$이 유한한 i.i.d. $X_i$에 대해 체비쇼프 부등식으로부터 **약한 큰수의 법칙을 증명하라**.
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
     체비쇼프: $P(|\bar X_n - \mu| \ge \varepsilon) \le \mathrm{Var}(\bar X_n)/\varepsilon^2 = \sigma^2/(n\varepsilon^2)$.
 
     고정된 임의의 $\varepsilon > 0$에 대해 $n \to \infty$이면 우변이 $\to 0$이므로 $\bar X_n \to \mu$가 확률수렴한다. $\square$
@@ -112,7 +112,7 @@ $\mathbb{E}[X] = \mu$이고 $\mathrm{Var}(X) = \sigma^2$이 유한한 i.i.d. $X_
 **연습문제 3.**
 **확률수렴과 거의 확실한 수렴을 구별하라.** $X_n \to 0$이 확률수렴하지만 거의 확실하게는 수렴하지 **않는** 열을 구성하라.
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
     고전적인 "움직이는 블록" 예다. 균등측도를 갖는 $\Omega = [0, 1]$ 위에서 다음과 같이 정의한다.
 
     - $X_1 = \mathbf 1_{[0, 1]}$
@@ -131,7 +131,7 @@ $\mathbb{E}[X] = \mu$이고 $\mathrm{Var}(X) = \sigma^2$이 유한한 i.i.d. $X_
 **연습문제 4.**
 **수렴 속도.** 평균 $\mu$, 분산 $\sigma^2$인 i.i.d. $X_i$에 대해 $\sqrt n (\bar X_n - \mu) = O_P(1)$임을 보여라. 이것이 왜 거의 확실한 수렴에는 *충분히 빠르지 않은가*?
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
     중심극한정리에 의해 $\sqrt n (\bar X_n - \mu) \xrightarrow{d} N(0, \sigma^2)$이므로 이 열은 조밀(확률적으로 유계)하며, 즉 $O_P(1)$이다.
 
     $\bar X_n - \mu$에 대한 함의: 이는 $O_P(n^{-1/2})$로 $1/\sqrt n$의 속도로 줄어든다.
@@ -145,7 +145,7 @@ $\mathbb{E}[X] = \mu$이고 $\mathrm{Var}(X) = \sigma^2$이 유한한 i.i.d. $X_
 **연습문제 5.**
 **코시분포에서는 큰수의 법칙이 실패한다.** 표준 코시분포의 밀도는 $f(x) = 1/(\pi(1+x^2))$이다. $\mathbb{E}[X]$가 정의되지 않는 이유는 무엇이며, $n \to \infty$일 때 $\bar X_n$은 어떻게 되는가?
 
-??? success "연습문제 5 풀이"
+??? success "풀이"
     $\mathbb{E}[X] = \int x \, f(x) \, dx$가 정의되려면 적분이 수렴해야 한다. 코시분포에서는 $\int_0^\infty x/(1+x^2) \, dx = (1/2) \ln(1 + x^2) |_0^\infty = \infty$이다. 양의 부분과 음의 부분이 모두 발산하므로 $\mathbb{E}[X]$가 정의되지 않는다(단지 무한한 것이 아니라 형식적으로도 잘 정의되지 않는다).
 
     **$\bar X_n$의 행동:** 코시분포에서 표본평균 $\bar X_n$은 개별 $X_i$ 하나와 *같은 분포*를 갖는다. 평균에 대한 코시의 안정성 때문이다(코시 $n$개의 합은 코시의 $n$배이고 이를 $n$으로 나누면 다시 코시가 된다). 따라서 $n$이 커져도 $\bar X_n$은 집중되지 *않으며* 모든 $n$에 대해 두꺼운 꼬리를 갖는다.
@@ -157,7 +157,7 @@ $\mathbb{E}[X] = \mu$이고 $\mathrm{Var}(X) = \sigma^2$이 유한한 i.i.d. $X_
 **연습문제 6.**
 **약한 큰수의 법칙은 빈도주의 확률을 정당화한다**: $P(A) = \lim_{n \to \infty} (1/n) \sum_{i=1}^n \mathbf 1(\omega_i \in A)$. 이 극한을 정확히 진술하고, 이것이 왜 확률을 단지 계산하는 것이 아니라 *정의하는* 것인지 설명하라.
 
-??? success "연습문제 6 풀이"
+??? success "풀이"
     $\Omega$에서 뽑은 i.i.d. 표본에 대해 $X_i = \mathbf 1(\omega_i \in A)$라 하자. 그러면 $\mathbb{E}[X_i] = P(A)$이고 $\mathrm{Var}(X_i) = P(A)(1 - P(A)) < \infty$이다. 약한 큰수의 법칙에 의해
 
     $$

@@ -203,7 +203,7 @@ def partial_log_likelihood(beta, X, times, events):
 
 이 자료의 부분가능도 $PL(\beta)$를 쓰라.
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
 
     사건시간은 $t_{(1)} = 2$(대상 A)와 $t_{(2)} = 5$(대상 C)다.
 
@@ -243,7 +243,7 @@ def partial_log_likelihood(beta, X, times, events):
 
 **(b)** 5% 수준에서 유의한 공변량은 무엇인가?
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
 
     **(a)** 위험비는 다음과 같다.
 
@@ -283,7 +283,7 @@ def partial_log_likelihood(beta, X, times, events):
 
 **(b)** 대응책 두 가지를 제시하라.
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
 
     **(a)** $\ln(-\ln \hat{S}(t))$ 곡선의 교차는 처리군과 대조군의 위험비가 시간에 걸쳐
     **일정하지 않다**는 뜻이다. 비례위험 가정이 위배되었다. $t = 12$ 이전에는 한 집단의 위험이
@@ -320,7 +320,7 @@ def partial_log_likelihood(beta, X, times, events):
 
 브레슬로 추정치 $\hat{H}_0(7)$을 계산하라.
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
 
     $t_{(1)} = 3$에서 분모는
 
@@ -354,7 +354,7 @@ $$
 \frac{h(t \mid \mathbf{x}_{i_j})}{\sum_{l \in \mathcal{R}_j} h(t \mid \mathbf{x}_l)} = \frac{\exp(\boldsymbol{\beta}^\top \mathbf{x}_{i_j})}{\sum_{l \in \mathcal{R}_j} \exp(\boldsymbol{\beta}^\top \mathbf{x}_l)}
 $$
 
-??? success "연습문제 5 풀이"
+??? success "풀이"
 
     콕스 모형의 설정에 따라 시점 $t$에서 대상 $i$의 위험은
 

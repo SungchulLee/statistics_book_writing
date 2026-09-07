@@ -96,7 +96,7 @@ $$
 **연습문제 1.**
 $\lambda_{\min}$과 $\lambda_{1\text{SE}}$가 실제로 얼마나 다른지, 그리고 유효자유도로 환산하면 어떤 의미인지 확인하라. $\rho = 0.9$인 표준화된 설명변수 15개 중 4개만 참인 자료($n = 80$)에서 10-겹 교차검증을 수행하라.
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
     ```python
     import numpy as np
     from sklearn.linear_model import Ridge
@@ -137,7 +137,7 @@ $\lambda_{\min}$과 $\lambda_{1\text{SE}}$가 실제로 얼마나 다른지, 그
 **연습문제 2.**
 LOOCV의 닫힌 형태 지름길이 실제로 $n$번 재적합한 결과와 일치하는지 확인하라. 왜 능형에는 이 지름길이 있고 라쏘에는 없는가?
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
     ```python
     import numpy as np
     from sklearn.linear_model import Ridge

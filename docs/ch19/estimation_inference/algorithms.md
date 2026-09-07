@@ -200,7 +200,7 @@ $\boldsymbol{\theta}^{(t+1)} = \boldsymbol{\theta}^{(t)} + \eta\,\mathbf{s}(\bol
 $\mathbf{z}^{(t)} = \mathbf{X}\boldsymbol{\theta}^{(t)} + (\mathbf{W}^{(t)})^{-1}(\mathbf{y} - \hat{\mathbf{p}}^{(t)})$
 를 유도하라.
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
 
     표기를 줄이기 위해 위첨자 $(t)$를 생략하고 $\mathbf{W}$, $\hat{\mathbf{p}}$,
     $\boldsymbol{\theta}$로 쓴다. 뉴턴 갱신은
@@ -239,7 +239,7 @@ $\mathbf{z}^{(t)} = \mathbf{X}\boldsymbol{\theta}^{(t)} + (\mathbf{W}^{(t)})^{-1
 로지스틱 회귀에서 관측정보와 기대정보가 일치하는 이유를 설명하라. 이 성질이 성립하지 않는
 이항 모형의 예를 하나 들어라.
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
 
     관측정보는 $-\mathbf{H}(\boldsymbol{\theta})$이고 기대정보는
     $\mathcal{I}(\boldsymbol{\theta}) = \mathbb{E}[-\mathbf{H}(\boldsymbol{\theta})]$이다.
@@ -268,7 +268,7 @@ $\mathbf{z}^{(t)} = \mathbf{X}\boldsymbol{\theta}^{(t)} + (\mathbf{W}^{(t)})^{-1
 에서 출발하는 IRLS를 구현하라. 반복마다 $\lVert\boldsymbol{\theta}^{(t)} - \hat{\boldsymbol{\theta}}\rVert$
 를 기록하고 수렴이 이차적임을 확인하라.
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
 
     ```python
     import numpy as np
@@ -319,7 +319,7 @@ $\mathbf{z}^{(t)} = \mathbf{X}\boldsymbol{\theta}^{(t)} + (\mathbf{W}^{(t)})^{-1
 반복당 계산 비용을 뉴턴-랩슨과 경사하강에 대해 $n$과 $p$로 나타내라. $n = 10^6$, $p = 10^4$일 때
 어느 쪽을 쓰겠는가?
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
 
     **뉴턴-랩슨 한 반복:**
 
@@ -352,7 +352,7 @@ IRLS의 작업 반응변수 $\mathbf{z}^{(t)}$의 각 성분은 어떤 의미를
 $\hat{p}_i$가 0이나 1에 가까울 때 $z_i$에 무슨 일이 일어나는지 설명하고, 실무적 대응책을
 제시하라.
 
-??? success "연습문제 5 풀이"
+??? success "풀이"
 
     성분별로 쓰면
 

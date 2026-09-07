@@ -107,7 +107,7 @@
 **연습문제 1.**
 "능형회귀는 계수를 0으로 만들지 않는다"는 주장을 수치로 확인하라. $\lambda$를 극단적으로 키우면 어떻게 되는가?
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
     ```python
     import numpy as np
     from sklearn.linear_model import Ridge
@@ -141,7 +141,7 @@
 **연습문제 2.**
 다중공선성이 심해질수록 능형회귀의 이득이 커지는지 모의실험으로 확인하라. $\rho = 0, 0.9, 0.99$인 등상관 설명변수 10개에서 $\|\hat\beta - \beta\|^2$을 OLS와 능형회귀에 대해 비교하라.
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
     ```python
     import numpy as np
     from sklearn.linear_model import Ridge, LinearRegression
@@ -189,7 +189,7 @@
 **연습문제 3.**
 상관된 변수 집단에서 라쏘와 엘라스틱넷의 행동 차이를 확인하라. $\rho = 0.99$로 상관된 참 변수 3개와 잡음변수 17개가 있는 자료에서 두 방법의 계수를 비교하라.
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
     ```python
     import numpy as np
     from sklearn.linear_model import Lasso, ElasticNet

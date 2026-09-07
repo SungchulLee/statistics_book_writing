@@ -183,7 +183,7 @@ def convergence_rate_plot(mu=5.0, sigma=3.0, n_sim=50_000, seed=42):
 **연습문제 1.**
 기댓값의 선형성만 써서, 평균이 유한한 임의의 분포에서 $E[\bar{X}] = \mu$임을 해석적으로 증명하라.
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
     $X_1, \ldots, X_n$이 i.i.d.이고 $E[X_i] = \mu$라 하자. 그러면:
 
     $$E[\bar{X}] = E\left[\frac{1}{n}\sum_{i=1}^n X_i\right] = \frac{1}{n}\sum_{i=1}^n E[X_i] = \frac{1}{n} \cdot n\mu = \mu$$
@@ -195,7 +195,7 @@ def convergence_rate_plot(mu=5.0, sigma=3.0, n_sim=50_000, seed=42):
 **연습문제 2.**
 i.i.d. 관측값에 대해 $\text{Var}(\bar{X}) = \sigma^2/n$임을 보여라. 그다음 표준오차를 절반으로 줄이려면 왜 표본크기를 네 배로 해야 하는지 설명하라.
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
     $\text{Var}(X_i) = \sigma^2$인 i.i.d. $X_1, \ldots, X_n$에 대해:
 
     $$\text{Var}(\bar{X}) = \text{Var}\left(\frac{1}{n}\sum_{i=1}^n X_i\right) = \frac{1}{n^2}\sum_{i=1}^n \text{Var}(X_i) = \frac{1}{n^2}\cdot n\sigma^2 = \frac{\sigma^2}{n}$$
@@ -211,7 +211,7 @@ i.i.d. 관측값에 대해 $\text{Var}(\bar{X}) = \sigma^2/n$임을 보여라. �
 **연습문제 3.**
 표준편차가 $\sigma_1 = 1, \sigma_2 = 2, \sigma_3 = 5, \sigma_4 = 10, \sigma_5 = 0.5$인 출처에서 얻은 관측값 다섯 개를 생각하자. 최적 역분산 가중치와 가중평균의 분산을 계산하라. 가중하지 않은 평균의 분산과 비교하라.
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
     정규화하지 않은 가중치는 $w_i^* = 1/\sigma_i^2$이다:
 
     $$w_1^* = 1, \quad w_2^* = 0.25, \quad w_3^* = 0.04, \quad w_4^* = 0.01, \quad w_5^* = 4$$
@@ -233,7 +233,7 @@ i.i.d. 관측값에 대해 $\text{Var}(\bar{X}) = \sigma^2/n$임을 보여라. �
 **연습문제 4.**
 정규모집단에서 표본평균은 Cramer-Rao 하한 $\sigma^2/n$을 달성한다. 표본평균 대비 표본중앙값의 점근 상대효율이 $2/\pi \approx 0.637$임을 보여라.
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
     $X_i \sim N(\mu, \sigma^2)$에서 표본평균의 분산은 $\sigma^2/n$이다. 표본중앙값 $\tilde{X}$의 점근분산은:
 
     $$\text{Var}(\tilde{X}) \approx \frac{1}{4n[f(\mu)]^2}$$
@@ -253,7 +253,7 @@ i.i.d. 관측값에 대해 $\text{Var}(\bar{X}) = \sigma^2/n$임을 보여라. �
 **연습문제 5.**
 $X_1 \sim N(\mu, 1)$과 $X_2 \sim N(\mu, 9)$를 독립적으로 관측한다고 하자. 분산을 최소화하는 가중추정량 $\hat{\mu} = aX_1 + bX_2$($a + b = 1$)를 구하라. 그 분산은 얼마인가?
 
-??? success "연습문제 5 풀이"
+??? success "풀이"
     $b = 1 - a$로 두면 분산은:
 
     $$\text{Var}(\hat{\mu}) = a^2 \cdot 1 + (1-a)^2 \cdot 9 = a^2 + 9(1-a)^2$$

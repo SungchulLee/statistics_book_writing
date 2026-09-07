@@ -116,7 +116,7 @@ print(f"Optional stopping rate: {stop_rate:.4f}")
 
 **연습문제 1.** $H_0$ 아래 독립인 p-값에 대해 공식 $P(\min(p_1, \ldots, p_k) < \alpha) = 1 - (1 - \alpha)^k$을 유도하라. 어떤 가정이 결정적인가?
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
 
     $H_0$ 아래에서 각 $p_i \sim \text{Uniform}(0,1)$이다. 최솟값이 $\alpha$를 넘으려면 모든 p-값이 $\alpha$를 넘어야 한다:
 
@@ -136,7 +136,7 @@ print(f"Optional stopping rate: {stop_rate:.4f}")
 
 **연습문제 2.** $\alpha = 0.05$에서 $H_0$ 아래 "유의한" 결과를 적어도 하나 찾을 확률이 90%를 넘으려면 연구자가 독립인 결과변수를 몇 개나 두고 골라야 하는가?
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
 
     $1 - 0.95^k > 0.90$, 즉 $0.95^k < 0.10$이어야 한다. 로그를 취하면:
 
@@ -150,7 +150,7 @@ print(f"Optional stopping rate: {stop_rate:.4f}")
 
 **연습문제 3.** 연속인 검정통계량에서 $H_0$ 아래 p-값 분포가 $\text{Uniform}(0,1)$인 이유를 설명하라. 검정통계량이 이산이면 어떻게 되는가?
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
 
     $H_0$ 아래 누적분포함수가 $F_0$인 연속 검정통계량 $T$에서 p-값은 $p = 1 - F_0(T)$(양측검정이면 $2\min(F_0(T), 1-F_0(T))$)이다. $F_0$이 참 누적분포함수이면 확률적분변환에 의해 $F_0(T) \sim \text{Uniform}(0,1)$이므로 $p \sim \text{Uniform}(0,1)$이다.
 
@@ -166,7 +166,7 @@ print(f"Optional stopping rate: {stop_rate:.4f}")
 
 **연습문제 4.** 연구자가 (10개마다가 아니라) 새 관측값이 하나 생길 때마다 확인하도록 임의 중단 모의실험을 고쳐라. 거짓 양성 비율에 어떤 영향을 주는가?
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
 
     ```python
     stopped = []
@@ -192,7 +192,7 @@ print(f"Optional stopping rate: {stop_rate:.4f}")
 
 **연습문제 5.** 임의 중단에 대한 보정을 제안하라. 자료 수집 중 $K$번 엿볼 계획이라면 전체 제1종 오류율 0.05를 유지하려면 각 중간분석에서 $\alpha$를 어떻게 조정해야 하는가? (힌트: Bonferroni가 한 가지 선택지이고 알파 소비가 또 다른 선택지이다.)
 
-??? success "연습문제 5 풀이"
+??? success "풀이"
 
     **Bonferroni 접근:** 매번 엿볼 때 수준 $\alpha/K$에서 검정한다. $K = 20$번이면 각각 $\alpha = 0.05/20 = 0.0025$를 쓴다. 단순하지만 보수적이다.
 

@@ -251,7 +251,7 @@ y_test_pred = (model.predict_proba(X_test)[:, 1] >= threshold).astype(int)
 훈련표본의 양성 비율이 $\tau$이고 모집단의 실제 유병률이 $\pi$일 때, 로지스틱 회귀에서
 **기울기 계수는 편향되지 않고 절편만 이동함**을 설명하라. 절편 보정식을 유도하라.
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
 
     범주에 따라 표집률을 달리하는 것을 **결과 기반 표집**(사례-대조 표집)이라 한다.
     양성을 확률 $s_1$로, 음성을 확률 $s_0$으로 뽑았다고 하자. 표본에 포함되었다는 사건을
@@ -289,7 +289,7 @@ y_test_pred = (model.predict_proba(X_test)[:, 1] >= threshold).astype(int)
 `class_weight='balanced'`가 절편 이동과 (모형이 옳게 지정되었을 때) 동등함을 설명하라.
 따라서 AUC에는 어떤 영향을 주는가?
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
 
     양성에 $w_1$, 음성에 $w_0$의 가중치를 주는 것은 양성을 $w_1$번, 음성을 $w_0$번 복제한
     자료에 가중 없이 적합하는 것과 같다(가중 로그가능도가 정확히 같기 때문이다). 그런데 복제는
@@ -313,7 +313,7 @@ y_test_pred = (model.predict_proba(X_test)[:, 1] >= threshold).astype(int)
 유병률이 약 10%인 자료를 만들어, 조정 없는 적합·`balanced` 가중·과소표집·절편 보정의 네 가지에
 대해 AUC와 브라이어 점수를 비교하라.
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
 
     ```python
     import numpy as np
@@ -385,7 +385,7 @@ y_test_pred = (model.predict_proba(X_test)[:, 1] >= threshold).astype(int)
 **연습문제 4.**
 훈련·검정 분할 **전에** SMOTE를 적용하면 왜 자료 누설이 되는지 설명하라.
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
 
     SMOTE는 소수 범주 관측치 쌍 사이를 내삽해 새 점을 만든다. 분할 전에 적용하면, 원본 관측치
     $x_i$와 $x_j$로 만든 합성점이 훈련자료에 들어가고 $x_i$ 자체는 검정자료에 들어갈 수 있다.
@@ -413,7 +413,7 @@ y_test_pred = (model.predict_proba(X_test)[:, 1] >= threshold).astype(int)
 불균형 자료를 만나면 어떤 순서로 대응해야 하는가? "SMOTE로 균형을 맞추고 나서 학습한다"가
 좋은 기본값이 **아닌** 이유를 설명하라.
 
-??? success "연습문제 5 풀이"
+??? success "풀이"
 
     **권장 순서:**
 

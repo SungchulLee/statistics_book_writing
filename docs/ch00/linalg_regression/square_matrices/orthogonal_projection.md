@@ -182,7 +182,7 @@ $$
 **연습문제 1.**
 $\mathbf{X} = \begin{pmatrix} 1 & 1 \\ 1 & 2 \\ 1 & 3 \end{pmatrix}$이라 하자. 모자 행렬 $\mathbf{H} = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T$를 계산하고 $\operatorname{tr}(\mathbf{H}) = 2$임을 확인하라.
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
     먼저 다음을 계산한다.
 
     $$
@@ -202,7 +202,7 @@ $\mathbf{X} = \begin{pmatrix} 1 & 1 \\ 1 & 2 \\ 1 & 3 \end{pmatrix}$이라 하�
 **연습문제 2.**
 $\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}$, $\mathbf{e} = (\mathbf{I} - \mathbf{H})\mathbf{y}$일 때 피타고라스 분해 $\lVert \mathbf{y} \rVert^2 = \lVert \hat{\mathbf{y}} \rVert^2 + \lVert \mathbf{e} \rVert^2$를 증명하라.
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
     $\mathbf{y} = \hat{\mathbf{y}} + \mathbf{e}$이므로
 
     $$
@@ -222,7 +222,7 @@ $\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}$, $\mathbf{e} = (\mathbf{I} - \mathbf{H
 **연습문제 3.**
 $\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}$가 $\text{col}(\mathbf{X})$ 안에서 $\mathbf{y}$에 가장 가까운 점임을 증명하여, 모자 행렬 $\mathbf{H}$가 $\lVert \mathbf{y} - \mathbf{X}\boldsymbol{\beta} \rVert^2$을 최소화함을 보여라.
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
     $\mathbf{z} = \mathbf{X}\boldsymbol{\beta}$을 $\text{col}(\mathbf{X})$의 임의의 벡터라 하자. $\lVert \mathbf{y} - \hat{\mathbf{y}} \rVert \leq \lVert \mathbf{y} - \mathbf{z} \rVert$를 보이면 된다.
 
     $\mathbf{y} - \mathbf{z} = (\mathbf{y} - \hat{\mathbf{y}}) + (\hat{\mathbf{y}} - \mathbf{z})$로 쓰자. $\mathbf{y} - \hat{\mathbf{y}} = \mathbf{e} \in \text{col}(\mathbf{X})^\perp$이고 $\hat{\mathbf{y}} - \mathbf{z} \in \text{col}(\mathbf{X})$이므로 이 두 벡터는 직교한다. 피타고라스 정리에 의해
@@ -238,7 +238,7 @@ $\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}$가 $\text{col}(\mathbf{X})$ 안에서 
 **연습문제 4.**
 $\mathbf{y}$와 그 사영 $\hat{\mathbf{y}}$ 사이의 각이라는 관점에서 $R^2 = \lVert \hat{\mathbf{y}} \rVert^2 / \lVert \mathbf{y} \rVert^2$의 기하적 해석을 설명하라. $R^2 = 1$은 기하적으로 무엇을 뜻하는가?
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
     $\theta$를 $\mathbb{R}^n$에서 $\mathbf{y}$와 $\hat{\mathbf{y}}$ 사이의 각이라 하자. $\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}$가 $\mathbf{y}$를 $\text{col}(\mathbf{X})$ 위로 사영한 것이므로
 
     $$

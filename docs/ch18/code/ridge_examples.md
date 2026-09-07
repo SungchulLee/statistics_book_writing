@@ -98,7 +98,7 @@ $\log_{10}\lambda$)의 함수로 그린 그림이다. 주요 관찰 사항은 �
 **연습문제 1.** 능형 목적함수에서 출발하여 기울기를 0으로 놓음으로써 닫힌 형태의 해
 $\hat{\beta}^{\text{ridge}} = (X^\top X + \lambda I_p)^{-1} X^\top y$를 유도하라.
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
 
     목적함수는
 
@@ -130,7 +130,7 @@ $\hat{\beta}^{\text{ridge}} = (X^\top X + \lambda I_p)^{-1} X^\top y$를 유도�
 $\hat{\beta}^{\text{ridge}} = \sum_{j=1}^{p} \frac{d_j^2}{d_j^2 + \lambda}\, \frac{u_j^\top y}{d_j}\, v_j$
 로 표현됨을 보여라.
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
 
     $X = U D V^\top$이고 $D = \text{diag}(d_1, \dots, d_p)$라 하자. 그러면
     $X^\top X = V D^2 V^\top$, $X^\top y = V D U^\top y$이므로
@@ -154,7 +154,7 @@ $\hat{\beta}^{\text{ridge}} = \sum_{j=1}^{p} \frac{d_j^2}{d_j^2 + \lambda}\, \fr
 **연습문제 3.** $X^\top X = I_p$(정규직교 계획)라 하자. $\hat{\beta}_j^{\text{ridge}}$를
 $\hat{\beta}_j^{\text{OLS}}$와 $\lambda$로 표현하라.
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
 
     $X^\top X = I_p$이면 OLS 추정량은 $\hat{\beta}^{\text{OLS}} = X^\top y$이고, 능형
     추정량은
@@ -172,7 +172,7 @@ $\hat{\beta}_j^{\text{OLS}}$와 $\lambda$로 표현하라.
 격자 $\lambda \in \{10^{-3}, 10^{-2}, \dots, 10^{3}\}$에서 최적 $\lambda$를 찾아라. 최적
 $\lambda$의 교차검증 RMSE를 보고하고 OLS의 RMSE와 비교하라.
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
 
     ```python
     import numpy as np
@@ -230,7 +230,7 @@ $\lambda$의 교차검증 RMSE를 보고하고 OLS의 RMSE와 비교하라.
 **연습문제 5.** 임의의 $\lambda > 0$에 대해 능형 추정량이
 $\|\hat{\beta}^{\text{ridge}}\|_2 \le \|\hat{\beta}^{\text{OLS}}\|_2$를 만족함을 증명하라.
 
-??? success "연습문제 5 풀이"
+??? success "풀이"
 
     KKT 조건에 의해 능형 문제는 어떤 $t > 0$에 대해
 

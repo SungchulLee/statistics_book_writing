@@ -130,7 +130,7 @@ for step in range(p_total):
 
 **연습문제 1.** 각 단계에서 다음 설명변수를 정할 때 AIC 대신 BIC를 써서 전진 선택 절차를 수행하라. 선택되는 설명변수의 순서가 달라지는가?
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
 
     안쪽 반복문의 `score = aic(n, rss, len(cols) + 1)`을 `score = bic(n, rss, len(cols) + 1)`로 바꾼다.
 
@@ -140,7 +140,7 @@ for step in range(p_total):
 
 **연습문제 2.** 잡음 수준을 $\sigma = 2$에서 $\sigma = 5$로 키워라. 각 기준이 고르는 최적 모형 크기는 어떻게 달라지는가?
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
 
     잡음이 커지면 신호 대 잡음비가 낮아진다. 참 설명변수를 넣고 뺄 때의 RSS 차이가 전체 RSS에 비해 작아진다. AIC와 BIC가 더 적은 설명변수를 고를 수 있고(3개 대신 1–2개), 교차검증 MSE 곡선은 평평해져 최솟값이 덜 뚜렷해진다. 잡음 설명변수와 참 설명변수를 구별하기 어려워진다. $\square$
 
@@ -148,7 +148,7 @@ for step in range(p_total):
 
 **연습문제 3.** 10-겹 교차검증을 구현하여 5-겹과 비교하라. $K$의 선택에서 편향-분산 절충을 논하라.
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
 
     ```python
     cv5 = [cv_mse(np.column_stack([np.ones(n), X_raw[:, selected[:s]]]), y, folds=5)
@@ -163,7 +163,7 @@ for step in range(p_total):
 
 **연습문제 4.** Bayes 모형비교의 관점에서 BIC 벌점 $k\ln(n)$을 유도하라. 왜 벌점이 $n$에 의존하는가?
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
 
     Bayes 모형선택에서는 모수공간에 대해 적분하여 주변가능도 $p(\mathbf{y} \mid M)$을 계산한다. 이 적분에 Laplace 근사를 쓰면
 
@@ -177,7 +177,7 @@ for step in range(p_total):
 
 **연습문제 5.** 참 모형에 관련 설명변수가 3개 있다고 하자. $n \to \infty$일 때 $P(\text{BIC가 참 모형을 고른다}) \to 1$이지만 AIC는 그렇지 않음을 증명하라.
 
-??? success "연습문제 5 풀이"
+??? success "풀이"
 
     AIC에서 모수 하나를 더할 때의 벌점은 $n$과 무관하게 $2$이다. $n \to \infty$일 때 무관한 설명변수를 넣어 얻는 $n\ln(\mathrm{RSS}/n)$의 감소량은 $\chi^2_1$ 확률변수(평균 1)로 수렴하므로 2를 넘을 확률이 0이 아니다. 따라서 AIC는 점근적으로 과대적합한다.
 

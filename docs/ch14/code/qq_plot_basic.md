@@ -100,7 +100,7 @@ Shapiro-Wilk와 D'Agostino $K^2$는 강하게 기각하지만 Anderson-Darling�
 
 **연습문제 1.** 표준정규 관측값 $n = 200$개를 생성하라. Q-Q 그림을 만들고 세 검정을 모두 수행하라. 점들이 적합선 위에 놓이고 모든 $p$값이 0.05를 넘는지 확인하라.
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
 
     ```python
     import numpy as np
@@ -139,7 +139,7 @@ Shapiro-Wilk와 D'Agostino $K^2$는 강하게 기각하지만 Anderson-Darling�
 
 **연습문제 2.** 연습문제 1을 $\text{Exponential}(1)$에서 뽑은 관측값 $n = 200$개로 반복하라. Q-Q 그림의 모양을 기술하고 $p$값들을 비교하라.
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
 
     ```python
     import numpy as np
@@ -176,7 +176,7 @@ Shapiro-Wilk와 D'Agostino $K^2$는 강하게 기각하지만 Anderson-Darling�
 
 **연습문제 3.** Q-Q 그림 적합선의 기울기·절편과 정규분포의 모수 $\mu$, $\sigma$ 사이의 관계를 설명하라.
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
 
     모형 $X \sim \mathcal{N}(\mu, \sigma^2)$ 아래에서 $i$번째 순서통계량은 $\mathbb{E}[X_{(i)}] \approx \mu + \sigma\, q_i$를 만족한다. 여기서 $q_i = \Phi^{-1}((i-0.5)/n)$이다. 따라서 $X_{(i)}$를 $q_i$에 회귀시켜 얻은 적합선 $\hat{y} = a + b\, q$는 절편 $a \approx \bar{X} \approx \mu$, 기울기 $b \approx S \approx \sigma$를 갖는다.
 
@@ -186,7 +186,7 @@ Shapiro-Wilk와 D'Agostino $K^2$는 강하게 기각하지만 Anderson-Darling�
 
 **연습문제 4.** SciPy의 Anderson-Darling 검정은 $p$값을 내놓지 않고 임계값을 반환한다. $H_0$이 기각되는 가장 작은 유의수준을 찾아내는 코드를 작성하라.
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
 
     ```python
     import numpy as np
@@ -224,7 +224,7 @@ Shapiro-Wilk와 D'Agostino $K^2$는 강하게 기각하지만 Anderson-Darling�
 
 **연습문제 5.** 자료가 정확히 표준정규일 때 $n \to \infty$에 따라 Q-Q 그림의 기울기가 1로, 절편이 0으로 수렴함을 보여라.
 
-??? success "연습문제 5 풀이"
+??? success "풀이"
 
     $X_1, \ldots, X_n \overset{\text{iid}}{\sim} \mathcal{N}(0, 1)$이라 하자. $i$번째 순서통계량은
 

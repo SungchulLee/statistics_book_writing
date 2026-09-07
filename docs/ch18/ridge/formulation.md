@@ -116,7 +116,7 @@ $$
 
 **(c)** $\mathbf{X}^\top\mathbf{X}$가 특이행렬이더라도 모든 $\lambda > 0$에 대해 $\mathbf{X}^\top\mathbf{X} + \lambda\mathbf{I}$가 양정치임을 증명하라.
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
     **(a)** $\mathbf{X}^\top\mathbf{X}$가 가역이면 역행렬은 연속함수이므로 $\lambda \to 0$에서
 
     $$
@@ -154,7 +154,7 @@ $$
 
 **(c)** 라쏘에 대응하는 양은 어떻게 정의하겠는가?
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
     **(a)** $\lambda = 0$이면 각 항이 $d_j^2/d_j^2 = 1$이므로 합은 $p$이다(모든 $d_j > 0$일 때). $\lambda \to \infty$이면 각 항이 0으로 가므로 합도 0이다.
 
     **(b)** 그렇다. 각 항을 $\lambda$로 미분하면
@@ -191,7 +191,7 @@ $$
 
 **(c)** 구현이 `sklearn.linear_model.Ridge`와 일치하는지 확인하라.
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
     ```python
     import numpy as np
     from sklearn.linear_model import Ridge

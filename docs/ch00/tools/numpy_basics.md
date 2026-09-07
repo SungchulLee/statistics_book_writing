@@ -291,7 +291,7 @@ $$
 
 $\mathbf{X}^T\mathbf{X}$, $\mathbf{X}^T\mathbf{y}$, $\hat{\boldsymbol\beta}$, 그리고 잔차 벡터를 계산하라.
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
     ```python
     import numpy as np
 
@@ -317,7 +317,7 @@ $\mathbf{X}^T\mathbf{X}$, $\mathbf{X}^T\mathbf{y}$, $\hat{\boldsymbol\beta}$, �
 **연습문제 2.**
 파이썬 `for` 반복문 없이 $1000 \times 5$ 크기의 표준정규 난수 행렬을 만들고, 각 열을 표본평균 0, 표본분산 1이 되도록 표준화하라. `mean(axis=0)`과 `var(axis=0, ddof=1)`로 확인하라.
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
     ```python
     rng = np.random.default_rng(42)
     X = rng.standard_normal((1000, 5))
@@ -333,7 +333,7 @@ $\mathbf{X}^T\mathbf{X}$, $\mathbf{X}^T\mathbf{y}$, $\hat{\boldsymbol\beta}$, �
 **연습문제 3.**
 `X`의 행들 사이의 유클리드 거리로 이루어진 $n \times n$ 행렬을 반환하는 벡터화된 함수 `pairwise_distances(X)`를 작성하라. 브로드캐스팅과 `np.sqrt`만 쓰고 명시적 반복문은 쓰지 마라.
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
     ```python
     def pairwise_distances(X):
         # X has shape (n, p). diff has shape (n, n, p) after broadcasting:
@@ -355,7 +355,7 @@ $\mathbf{X}^T\mathbf{X}$, $\mathbf{X}^T\mathbf{y}$, $\hat{\boldsymbol\beta}$, �
 **연습문제 4.**
 `np.linalg.solve(A, b)`가 `np.linalg.inv(A) @ b`보다 더 정확한 결과를 주는 이유는 무엇인가? $\mathbf{A}$가 거의 특이인 예를 만들어 두 답을 비교하라.
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
     `solve`는 $\mathbf{A}$를 한 번 분해하고(부분 피벗을 쓰는 LU 분해) $\mathbf{b}$에 대해 후진 대입을 수행할 뿐, $\mathbf{A}^{-1}$을 명시적으로 만들지 않는다. 역행렬을 만들면 모든 성분에 $1/\det(\mathbf{A})$가 곱해지므로 $\det(\mathbf{A})$가 작을 때 반올림 오차가 증폭된다. 또한 역슬래시 방식의 루틴은 불필요한 $O(n^3)$ 행렬곱을 피한다.
 
     ```python
@@ -375,7 +375,7 @@ $\mathbf{X}^T\mathbf{X}$, $\mathbf{X}^T\mathbf{y}$, $\hat{\boldsymbol\beta}$, �
 **연습문제 5.**
 모양이 $(5, 1)$과 $(1, 3)$인 두 배열이 있다. 이들의 원소별 곱의 모양은 무엇인가? 모양이 $(5,)$와 $(3,)$이라면 어떻게 되는가? 연산이 되는가?
 
-??? success "연습문제 5 풀이"
+??? success "풀이"
     브로드캐스팅 규칙을 따르면, 모양을 오른쪽에 맞춰 정렬하고 크기가 1인 차원을 확장한다. $(5, 1)$과 $(1, 3)$은 $(5, 3)$으로 브로드캐스트된다. 곱하면 외적 형태의 $5 \times 3$ 행렬이 나온다.
 
     $(5,)$와 $(3,)$의 경우, 오른쪽에 맞춰 정렬하면 마지막 축의 크기가 각각 $5$와 $3$이다. 둘이 같지도 않고 어느 쪽도 1이 아니므로 브로드캐스팅이 **실패하여** `ValueError`가 난다. $5 \times 3$ 외적을 얻으려면 축을 명시적으로 끼워 넣어야 한다: `a[:, None] * b[None, :]` 또는 `np.outer(a, b)`.
@@ -385,7 +385,7 @@ $\mathbf{X}^T\mathbf{X}$, $\mathbf{X}^T\mathbf{y}$, $\hat{\boldsymbol\beta}$, �
 **연습문제 6.**
 기본값인 `np.var(x)`는 $n$으로 나누고 `np.var(x, ddof=1)`은 $n - 1$로 나눈다. `x`가 i.i.d. 표본일 때 $\mathrm{Var}(X)$의 불편추정량은 어느 쪽인가? $N(0, 1)$에서 크기 $n = 5$인 표본을 $10^4$번 뽑아 반복에 걸친 `var(ddof=0)`과 `var(ddof=1)`의 평균을 비교하여 편향을 실증적으로 보여라.
 
-??? success "연습문제 6 풀이"
+??? success "풀이"
     `ddof=1`이 불편이다. $n - 1$로 나누면 $\mathbb{E}[S^2] = \sigma^2$이다. `ddof=0`은 $\sigma^2$을 $(n-1)/n$배만큼 과소추정한다.
 
     ```python

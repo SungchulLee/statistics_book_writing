@@ -135,7 +135,7 @@ def draw_loss_and_accuracy(loss_trace, accuracy_trace):
 
 **(d)** 어느 범주의 성능이 가장 나쁜가? 혼동행렬은 흔한 오분류에 대해 무엇을 알려 주는가?
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
 
     **(a)** 전체 정확도는 옳은 예측의 비율(대각합)이다.
 
@@ -197,7 +197,7 @@ def draw_loss_and_accuracy(loss_trace, accuracy_trace):
 정밀도가 **열** 합으로, 재현율이 **행** 합으로 계산되는 이유를 혼동행렬의 정의로부터
 설명하라. 두 방향을 혼동하면 어떤 오류가 생기는가?
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
 
     행이 실제 범주, 열이 예측 범주인 규약에서,
 
@@ -222,7 +222,7 @@ def draw_loss_and_accuracy(loss_trace, accuracy_trace):
 `load_digits` 예제에서 로지스틱 회귀가 $97.2\%$의 정확도를 낸다. 같은 모형을 MNIST에 적용하면
 왜 정확도가 더 낮게 나오는가? 두 결과를 비교할 수 있는가?
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
 
     **비교할 수 없다.** 두 자료가 근본적으로 다르기 때문이다.
 

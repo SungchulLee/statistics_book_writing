@@ -118,7 +118,7 @@ $$
 **연습문제 1.**
 $\mathbf{B} = \mathbf{P}^{-1}\mathbf{A}\mathbf{P}$가 되는 가역행렬 $\mathbf{P}$를 찾아 $\mathbf{A} = \begin{pmatrix} 1 & 2 \\ 0 & 3 \end{pmatrix}$와 $\mathbf{B} = \begin{pmatrix} 3 & 0 \\ 0 & 1 \end{pmatrix}$가 닮았음을 보여라.
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
     두 행렬 모두 고윳값이 $\lambda_1 = 1$과 $\lambda_2 = 3$이다($\mathbf{B}$는 이 값들을 대각에 갖는 대각행렬이고, $\mathbf{A}$는 이 값들을 대각에 갖는 상삼각행렬이다).
 
     $\mathbf{A}$의 고유벡터는 $\lambda = 1$에 대해 $\mathbf{v}_1 = (1, 0)^T$이고, $\lambda = 3$에 대해서는 $(A - 3I)\mathbf{v} = 0$을 풀어 $\mathbf{v}_2 = (1, 1)^T$이다.
@@ -132,7 +132,7 @@ $\mathbf{B} = \mathbf{P}^{-1}\mathbf{A}\mathbf{P}$가 되는 가역행렬 $\math
 **연습문제 2.**
 닮은 행렬은 행렬식이 같고 대각합도 같음을 증명하라.
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
     $\mathbf{B} = \mathbf{P}^{-1}\mathbf{A}\mathbf{P}$이면
 
     $$
@@ -152,7 +152,7 @@ $\mathbf{B} = \mathbf{P}^{-1}\mathbf{A}\mathbf{P}$가 되는 가역행렬 $\math
 **연습문제 3.**
 고윳값, 대각합, 행렬식이 모두 같지만 닮지는 않은 두 개의 $2 \times 2$ 행렬의 예를 들어라.
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
     $\mathbf{A} = \begin{pmatrix} 2 & 0 \\ 0 & 2 \end{pmatrix}$와 $\mathbf{B} = \begin{pmatrix} 2 & 1 \\ 0 & 2 \end{pmatrix}$를 생각하자.
 
     둘 다 고윳값이 $\lambda = 2$(대수적 중복도 2)이고 $\operatorname{tr} = 4$, $\det = 4$이다.
@@ -164,7 +164,7 @@ $\mathbf{B} = \mathbf{P}^{-1}\mathbf{A}\mathbf{P}$가 되는 가역행렬 $\math
 **연습문제 4.**
 닮음 개념을 이용해, 회귀모형을 재매개변수화해도(예: 예측변수를 중심화해도) $\operatorname{tr}(\mathbf{H})$나 $\mathbf{X}^T\mathbf{X}$의 고윳값이 바뀌지 않는 이유를 설명하라.
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
     재매개변수화는 어떤 가역행렬 $\mathbf{C}$에 대해 $\mathbf{X}$를 $\mathbf{X}\mathbf{C}$로 바꾸는 것에 해당한다. 모자 행렬은 다음과 같이 변환된다.
 
     $$

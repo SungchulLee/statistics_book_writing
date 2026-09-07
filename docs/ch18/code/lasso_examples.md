@@ -173,7 +173,7 @@ print(f"Min CV MSE:               {mse_cv[best_idx]:.3f}")
 $S(\rho, \lambda) = \arg\min_{z} \left\{ \frac{1}{2}(z - \rho)^2 + \lambda |z| \right\}$
 임을 보여라.
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
 
     $g(z) = \frac{1}{2}(z - \rho)^2 + \lambda |z|$라 하고 세 경우로 나눈다.
 
@@ -197,7 +197,7 @@ $S(\rho, \lambda) = \arg\min_{z} \left\{ \frac{1}{2}(z - \rho)^2 + \lambda |z| \
 $r_j = y - X\beta + X_j \beta_j$를 계산해야 하는 이유를 설명하라. 대신 전체 잔차
 $r = y - X\beta$를 쓰면 무엇이 잘못되는가?
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
 
     $\beta_j$에 대한 좌표하강 갱신은 다른 계수를 모두 고정한 채 라쏘 목적함수를 $\beta_j$에
     대해 최소화하는 것이다. 부분잔차 $r_j$는 현재 적합에서 $j$번째 변수의 기여를 제거하므로,
@@ -213,7 +213,7 @@ $r = y - X\beta$를 쓰면 무엇이 잘못되는가?
 **연습문제 3.** `lasso_cd` 함수가 온기 시작(즉 항상 0에서 출발하는 대신 초기값 $\beta^{(0)}$을
 받도록)을 지원하도록 수정하라. 온기 시작이 정칙화 경로 계산을 왜 빠르게 하는지 설명하라.
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
 
     ```python
     def lasso_cd_warm(X, y, lam, beta_init=None, max_iter=1000, tol=1e-6):
@@ -240,7 +240,7 @@ $r = y - X\beta$를 쓰면 무엇이 잘못되는가?
 생성하라. 교차검증으로 고른 $\lambda$에서 라쏘를 적합하고, 선택된 변수 중 참양성과 위양성의
 개수를 보고하라.
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
 
     ```python
     import numpy as np
@@ -279,7 +279,7 @@ $r = y - X\beta$를 쓰면 무엇이 잘못되는가?
 **연습문제 5.** $X$의 열이 완전계수(full column rank)이면 라쏘 해가 유일하지만, $X$의 열이
 일차종속이면 유일하지 않을 수 있음을 증명하라.
 
-??? success "연습문제 5 풀이"
+??? success "풀이"
 
     라쏘 목적함수는
 

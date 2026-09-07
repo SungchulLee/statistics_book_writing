@@ -134,7 +134,7 @@ Mood 중앙값검정은 전체 중앙값 위·아래 도수의 $2 \times k$ 분�
 **연습문제 1.**
 본문의 식단 자료에 Kruskal-Wallis 검정을 적용하여 Mood 중앙값검정과 비교하라. 어느 쪽이 더 작은 $p$값을 주는가?
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
     ```python
     from scipy import stats
     A = [3.2, 4.5, 2.8, 5.1, 3.9, 4.2]
@@ -166,7 +166,7 @@ Mood 중앙값검정은 전체 중앙값 위·아래 도수의 $2 \times k$ 분�
 **연습문제 2.**
 Mood 중앙값검정의 정규분포 아래 ARE는 얼마인가? 검정력을 모의실험으로 확인하고 Kruskal-Wallis와 비교하라.
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
     Mood 중앙값검정은 각 집단에서 "전체 중앙값을 넘는 비율"을 비교하는 것이므로 본질적으로 부호검정의 다집단 확장이다. 따라서 정규분포 아래 일원분산분석 대비 ARE는 부호검정과 같은
 
     $$
@@ -211,7 +211,7 @@ Mood 중앙값검정의 정규분포 아래 ARE는 얼마인가? 검정력을 �
 **연습문제 3.**
 전체 중앙값과 **정확히 같은** 관측값을 어떻게 처리하느냐가 결과를 바꿀 수 있다. `scipy.stats.median_test`의 `ties` 인자가 제공하는 세 가지 방식을 이산자료로 비교하라.
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
     ```python
     import numpy as np
     from scipy import stats
@@ -254,7 +254,7 @@ Mood 중앙값검정의 정규분포 아래 ARE는 얼마인가? 검정력을 �
 **연습문제 4.**
 중앙값이 모두 같지만 산포가 크게 다른 세 집단에서 Mood 중앙값검정과 Kruskal-Wallis 검정의 제1종 오류율을 확인하라. 두 검정이 정말로 명목수준을 지키는가?
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
     ```python
     import numpy as np
     from scipy import stats

@@ -110,7 +110,7 @@ print("\nPivot:\n", df.pivot_table(values="value", index="group",
 **연습문제 1.**
 학생 다섯 명에 대해 `name`(문자열), `score`(정수), `passed`(불리언) 열을 갖는 `DataFrame`을 만들어라. `passed`가 `True`이고 **또한** `score`가 80보다 큰 행만 보이도록 걸러라.
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
     ```python
     import pandas as pd
     df = pd.DataFrame({
@@ -131,7 +131,7 @@ df = pd.DataFrame({"group": ["A","A","B","B","B"], "x": [1, 3, 2, 8, 5]})
 ```
 각 그룹에 대해 개수, 표본평균, 표본분산, 그리고 최댓값에서 최솟값을 뺀 값을 계산하라. 하나의 DataFrame으로 반환하라.
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
     ```python
     summary = df.groupby("group")["x"].agg(
         n="count",
@@ -148,7 +148,7 @@ df = pd.DataFrame({"group": ["A","A","B","B","B"], "x": [1, 3, 2, 8, 5]})
 **연습문제 3.**
 `df.loc[]`과 `df.iloc[]`의 차이를 설명하라. 같은 DataFrame에 대해 둘이 서로 다른 행을 반환하는 예를 제시하라.
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
     `loc`은 **이름표 기반**이다. `df.loc[0]`은 인덱스 이름표가 `0`인 행을 반환한다. `iloc`은 **정수 위치 기반**이다. `df.iloc[0]`은 인덱스 이름표와 무관하게 첫 번째 행을 반환한다.
 
     ```python
@@ -173,7 +173,7 @@ x,y,z
 5.0,10.0,7.0
 ```
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
     ```python
     from io import StringIO
     csv = """x,y,z
@@ -195,7 +195,7 @@ x,y,z
 **연습문제 5.**
 `pd.Series.var()`의 기본값은 `ddof=1`이고 NumPy의 `np.var()`는 `ddof=0`이다. 값 다섯 개짜리 Series를 만들어 두 방식으로 분산을 계산하고, 어느 쪽이 불편추정량이며 그 이유가 무엇인지 설명하라.
 
-??? success "연습문제 5 풀이"
+??? success "풀이"
     ```python
     import numpy as np
     import pandas as pd
@@ -211,7 +211,7 @@ x,y,z
 **연습문제 6.**
 두 DataFrame을 `df1.merge(df2, on="id", how="left")`로 조인한다. `how="left"`가 무엇을 하는지, 결과의 행 수를 무엇이 결정하는지, 그리고 병합 직후에 반드시 실행해야 할 진단 하나를 설명하라.
 
-??? success "연습문제 6 풀이"
+??? success "풀이"
     `how="left"`는 `df1`의 모든 행을 남기고 `id`를 기준으로 `df2`의 대응되는 열을 붙인다. `df2`에 대응이 없는 `df1`의 행은 새 열에 `NaN`이 들어간다. `df1`에 대응이 없는 `df2`의 행은 버려진다.
 
     출력 행 수가 `df1`의 행 수와 같아지는 것은 `df2`에서 `id`가 유일할 **때에 한해서**다. `df2`에서 `id`가 반복되면 `df1`의 각 행이 여러 `df2` 행과 대응되어 결과의 행 수가 `df1`보다 많아진다. 흔히 겪는 뜻밖의 일이다.

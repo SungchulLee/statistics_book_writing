@@ -115,7 +115,7 @@ python ci_mean_calc.py --csv data.csv --cl 0.99
 
 **연습문제 1.** 정규모집단에서 뽑은 관측값 $n = 16$개에서 $\bar{x} = 50$, $s = 8$을 얻었다. $\mu$의 95%와 99% $t$-신뢰구간을 계산하라. 너비는 어떻게 변하는가?
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
 
     $\text{df} = 15$일 때:
 
@@ -129,7 +129,7 @@ python ci_mean_calc.py --csv data.csv --cl 0.99
 
 **연습문제 2.** $z$-구간의 오차한계가 $n$의 감소함수임을 보이고 감소 속도를 구하라.
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
 
     오차한계는 $\text{MOE} = z_{\alpha/2} \cdot \sigma / \sqrt{n}$이다. $z_{\alpha/2}$와 $\sigma$가 상수이므로:
 
@@ -143,7 +143,7 @@ python ci_mean_calc.py --csv data.csv --cl 0.99
 
 **연습문제 3.** 어떤 연구자가 $n = 100$, $s = 10$일 때 $\mu$의 95% $t$-구간과 $z$-구간이 "사실상 같다"고 주장한다. 수치로 확인하라.
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
 
     $n = 100$이면 $\text{df} = 99$이고:
 
@@ -161,7 +161,7 @@ python ci_mean_calc.py --csv data.csv --cl 0.99
 
 **연습문제 4.** $\nu \to \infty$일 때 $t_{\alpha/2,\,\nu} \to z_{\alpha/2}$임을 증명하라.
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
 
     $T \sim t_\nu$이면 $T = Z / \sqrt{V/\nu}$이며 여기서 $Z \sim N(0,1)$과 $V \sim \chi^2_\nu$는 독립이다. 대수의법칙에 의해 $\nu \to \infty$일 때 $V/\nu \xrightarrow{P} 1$이다. 따라서 Slutsky 정리에 의해
 
@@ -181,7 +181,7 @@ python ci_mean_calc.py --csv data.csv --cl 0.99
 
 **연습문제 5.** 원자료 $\{12, 15, 14, 10, 13, 16, 11, 14, 13, 12\}$에 대해 $\mu$의 90% $t$-구간을 손으로 계산하고 코드로 확인하라.
 
-??? success "연습문제 5 풀이"
+??? success "풀이"
 
     **손으로:** $n = 10$, $\bar{x} = (12+15+14+10+13+16+11+14+13+12)/10 = 130/10 = 13.0$.
 

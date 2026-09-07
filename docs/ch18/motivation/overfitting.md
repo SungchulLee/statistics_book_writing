@@ -111,7 +111,7 @@ $$
 **연습문제 1.**
 $E[\text{Err}_{\text{train}}] = \sigma^2(1 - p/n)$과 $E[\text{Err}_{\text{test}}] = \sigma^2(1 + p/n)$을 모의실험으로 확인하라. $n = 60$, $\sigma^2 = 4$로 고정하고 $p = 3, 10, 20, 40$에 대해 계산하라.
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
     ```python
     import numpy as np
     rng = np.random.default_rng(7)
@@ -149,7 +149,7 @@ $E[\text{Err}_{\text{train}}] = \sigma^2(1 - p/n)$과 $E[\text{Err}_{\text{test}
 **연습문제 2.**
 Hoerl-Kennard 정리는 "모든 $\boldsymbol{\beta}$에 대해 능형회귀가 OLS보다 MSE가 작아지는 $\lambda > 0$이 존재한다"고 말한다. $\|\boldsymbol{\beta}\|$가 매우 클 때도 성립하는지 확인하라.
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
     직관적으로는 "$\boldsymbol{\beta}$가 0에서 멀면 0 쪽으로 축소하는 것이 손해"일 것 같다. 확인해 보자.
 
     ```python
@@ -191,7 +191,7 @@ Hoerl-Kennard 정리는 "모든 $\boldsymbol{\beta}$에 대해 능형회귀가 O
 **연습문제 3.**
 $p$가 $n$에 가까워질 때 훈련오차와 검정오차가 갈라지는 것을 하나의 자료에서 관찰하라. $p/n$이 얼마를 넘으면 위험한가?
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
     연습문제 1의 표를 비율로 다시 보면 답이 나온다.
 
     | $p/n$ | 훈련/$\sigma^2$ | 검정/$\sigma^2$ | 검정/훈련 |

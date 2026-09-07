@@ -235,7 +235,7 @@ verify_sum_of_normals()
 **연습문제 1.**
 $X \sim \mathrm{Exp}(\lambda)$이다. (a) $M_X(t)$와 그 정의역을 유도하라. (b) $\mathbb{E}[X], \mathbb{E}[X^2]$를 계산하라. (c) $\mathrm{Var}(X) = 1/\lambda^2$임을 확인하라.
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
     (a) $t < \lambda$에 대해 $M_X(t) = \int_0^\infty e^{tx} \lambda e^{-\lambda x} dx = \lambda \int_0^\infty e^{-(\lambda - t) x} dx = \lambda/(\lambda - t)$이다.
 
     (b) $M_X'(t) = \lambda/(\lambda - t)^2$이므로 $M_X'(0) = 1/\lambda = \mathbb{E}[X]$이다. $M_X''(t) = 2\lambda/(\lambda - t)^3$이므로 $M_X''(0) = 2/\lambda^2 = \mathbb{E}[X^2]$이다.
@@ -247,7 +247,7 @@ $X \sim \mathrm{Exp}(\lambda)$이다. (a) $M_X(t)$와 그 정의역을 유도하
 **연습문제 2.**
 $M_{aX + b}(t) = e^{bt} M_X(at)$를 증명하고, $X$와 $Y$가 독립일 때 $M_{X + Y}(t) = M_X(t) M_Y(t)$임을 증명하라.
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
     **선형변환:**
 
     $$
@@ -271,7 +271,7 @@ $M_{aX + b}(t) = e^{bt} M_X(at)$를 증명하고, $X$와 $Y$가 독립일 때 $M
 **연습문제 3.**
 적률생성함수 방법으로 **독립인 포아송 확률변수 합의 분포**를 유도하라. $X_i \sim \mathrm{Poisson}(\lambda_i)$이 서로 독립일 때 $\sum_i X_i$의 분포는 무엇인가?
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
     포아송의 적률생성함수는 $M_X(t) = e^{\lambda (e^t - 1)}$이다.
 
     합: $M_{\sum X_i}(t) = \prod_i M_{X_i}(t) = \prod_i e^{\lambda_i (e^t - 1)} = e^{(\sum \lambda_i)(e^t - 1)}$.
@@ -285,7 +285,7 @@ $M_{aX + b}(t) = e^{bt} M_X(at)$를 증명하고, $X$와 $Y$가 독립일 때 $M
 **연습문제 4.**
 **적률생성함수로 구하는 왜도와 첨도.** 3차 및 4차 표준화 누율(왜도와 초과첨도)이 $M_X(t)$ 자체가 아니라 $\ln M_X(t)$의 도함수에서 나옴을 보여라.
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
     **누율생성함수**는 $K_X(t) = \ln M_X(t)$이며 그 테일러 전개는
 
     $$
@@ -308,7 +308,7 @@ $M_{aX + b}(t) = e^{bt} M_X(at)$를 증명하고, $X$와 $Y$가 독립일 때 $M
 **연습문제 5.**
 **적률생성함수의 비존재.** 코시분포가 적률생성함수를 갖지 않음을 보여라. 대안인 **특성함수**는 무엇이며 왜 언제나 존재하는가?
 
-??? success "연습문제 5 풀이"
+??? success "풀이"
     코시 밀도는 $f(x) = 1/(\pi(1 + x^2))$이다.
 
     $M(t) = \int_{-\infty}^\infty e^{tx} / (\pi (1 + x^2)) dx$인데, $t \ne 0$이면 $e^{tx}$가 한쪽 방향으로 지수적으로 커져 피적분함수가 적분 가능하지 않다. 적률생성함수는 $t = 0$(자명하게 1)을 제외하면 정의되지 않는다.
@@ -324,7 +324,7 @@ $M_{aX + b}(t) = e^{bt} M_X(at)$를 증명하고, $X$와 $Y$가 독립일 때 $M
 **연습문제 6.**
 **적률생성함수가 분포를 결정한다**(유일성 정리) — 다만 0의 근방에서 존재할 때만 그렇다. 모든 차수의 적률이 일치하는 서로 다른 두 분포를 구성하라. (이것이 **적률 문제**의 실패다.)
 
-??? success "연습문제 6 풀이"
+??? success "풀이"
     $x > 0$에서 확률밀도함수가 $f_1(x) = \frac{1}{x\sqrt{2\pi}} e^{-(\ln x)^2/2}$인 **로그정규분포**와 그것을 변형한
 
     $$

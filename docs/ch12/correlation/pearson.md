@@ -166,7 +166,7 @@ data = pd.read_csv(url)
 
 전체 상관이 집단 내 상관과 다를 수 있는 이유를 논하라.
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
 
     남성과 여성에 대해 각각, 그리고 전체 자료에 대해 Pearson 상관을 계산하면 대체로 값이 다르게 나온다. 전체 자료에는 집단 간 변동이 포함되기 때문이다. 남성이 여성보다 키도 크고 몸무게도 무거운 경향이 있다면, 두 집단을 합칠 때 (집단 차이라는) 양의 공변동 원천이 하나 더 생겨 전체 상관이 집단 내 상관보다 커질 수 있다. 이는 생태학적 상관 효과의 한 예이다.
 
@@ -175,7 +175,7 @@ data = pd.read_csv(url)
 **연습문제 2.**
 $\rho \in \{-0.99, -0.8, -0.5, 0, 0.5, 0.8, 0.99\}$에 대해 이변량 정규 표본을 생성하여 한 행의 부분그림들에 표시하는 함수를 작성하라. 각 부분그림의 제목에 표본 Pearson $r$도 출력하라.
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
 
     각 $\rho$에 대해 공분산행렬 $\Sigma = \begin{pmatrix} 1 & \rho \\ \rho & 1 \end{pmatrix}$로 `numpy.random.multivariate_normal`을 쓴다. 부분그림마다 $n = 200$개를 생성하고 `numpy.corrcoef`로 Pearson $r$을 계산한 뒤 `matplotlib.pyplot.subplots(1, 7)`로 표시한다. $|\rho|$가 커질수록 산점도가 점점 좁은 타원이 되고 $\pm 0.99$에서는 거의 직선으로 붕괴한다.
 
@@ -190,6 +190,6 @@ import seaborn as sns
 anscombe = sns.load_dataset("anscombe")
 ```
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
 
     Anscombe 사중주의 네 자료 모두 Pearson $r \approx 0.816$을 준다. 그러나 산점도는 아주 다른 관계를 드러낸다. 선형 추세, 휘어진 관계, 이상점 하나가 있는 완전한 선형 추세, 그리고 극단적인 점 하나가 상관을 만들어내는 자료이다. Pearson $r$만으로는 관계를 규정하기에 부족하며 시각적 검토가 언제나 필요함을 보여준다.

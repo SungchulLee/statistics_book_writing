@@ -141,7 +141,7 @@ $$
 
 **(b)** Spearman $\rho$를 통계량으로 하는 정확 순열 $p$값을 구하고 SciPy의 점근 $p$값과 비교하라.
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
     ```python
     import numpy as np, itertools
     from scipy import stats
@@ -188,7 +188,7 @@ $$
 **연습문제 2.**
 정규성이 깨질 때 순열검정과 고전적 $t$ 검정의 제1종 오류율을 비교하라. $n = 15$에서 $X$와 $Y$를 독립으로 생성하되 주변분포를 정규, $\text{LogNormal}(0, 2^2)$, Cauchy로 바꾸어 가며 확인하라.
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
     ```python
     import numpy as np
     from scipy import stats
@@ -235,7 +235,7 @@ $$
 **연습문제 3.**
 본문에서 순열검정이 검정하는 것은 $\rho = 0$이 아니라 독립성이라고 했다. $Y = X^2 + \varepsilon$처럼 $\rho = 0$이면서 강하게 종속인 경우에 이것이 무엇을 의미하는지 확인하라. $X \sim N(0,1)$, $\varepsilon \sim N(0, 0.5^2)$, $n = 30$에서 세 통계량 — Pearson $r$, Spearman $\rho$, 그리고 $|x_i - \text{med}(x)|$와 $y$의 상관 — 을 쓰는 순열검정의 검정력을 비교하라.
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
     ```python
     import numpy as np
     from scipy import stats

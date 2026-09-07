@@ -150,7 +150,7 @@ $$\text{Var}(\bar{X}_w) = \frac{1}{\sum_{i=1}^n 1/\sigma_i^2}$$
 **연습문제 1.**
 어떤 전략의 연평균 수익률이 5%, 변동성이 18%이다. (a) 10년 자료에서의 표준오차. (b) 95% 신뢰구간이 0을 배제하기까지 필요한 햇수. (c) 월별 자료를 쓰면 도움이 되는가?
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
     (a) $\mathrm{SE} = 0.18/\sqrt{10} \approx 0.057$. 점추정값 0.05보다 크다.
 
     (b) $|\mu|/\mathrm{SE} > 1.96$이 필요하다: $\sqrt n > 1.96 \cdot 0.18/0.05 \approx 7.06 \Rightarrow n \ge 50$년.
@@ -162,7 +162,7 @@ $$\text{Var}(\bar{X}_w) = \frac{1}{\sum_{i=1}^n 1/\sigma_i^2}$$
 **연습문제 2.**
 분산이 유한한 임의의 분포에서 **$\bar X$가 $\mu$의 BLUE**(최량선형불편추정량)임을 증명하라.
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
     (불편성을 위해) $\sum w_i = 1$인 선형 불편추정량 $\hat\mu = \sum w_i X_i$를 생각하자.
 
     $\mathrm{Var}(\hat\mu) = \sum w_i^2 \sigma^2 = \sigma^2 \sum w_i^2$이고, 제약은 $\sum w_i = 1$이다.
@@ -176,7 +176,7 @@ $$\text{Var}(\bar{X}_w) = \frac{1}{\sum_{i=1}^n 1/\sigma_i^2}$$
 **연습문제 3.**
 **로버스트성의 실패.** 표본에 이상점 하나를 추가하면 $\bar X$가 얼마든지 이동함을 보여라.
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
     표본 $\{X_1, \ldots, X_n, M\}$에서 $M$이 이상점 하나라고 하자. 새 평균은 $(\sum X_i + M)/(n + 1)$이다. $M \to \infty$이면 새 평균 $\to \infty$이다.
 
     따라서 $\bar X$의 **붕괴점**은 $1/(n+1) \to 0$이다: 오염된 관측값 하나만으로도 $\bar X$를 얼마든지 멀리 옮길 수 있다. 점근 붕괴점이 0이다.
@@ -190,7 +190,7 @@ $$\text{Var}(\bar{X}_w) = \frac{1}{\sum_{i=1}^n 1/\sigma_i^2}$$
 **연습문제 4.**
 **Bessel 수정.** $S^2 = \sum(X_i - \bar X)^2/(n-1)$의 분모가 왜 $n - 1$인가?
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
     두 가지 관점이 있다:
 
     **대수적 관점:** $\sum(X_i - \bar X)^2 = \sum X_i^2 - n\bar X^2$. 기댓값을 취하면:
@@ -208,7 +208,7 @@ $$\text{Var}(\bar{X}_w) = \frac{1}{\sum_{i=1}^n 1/\sigma_i^2}$$
 **연습문제 5.**
 **종속 자료의 표본평균.** $X_1, \ldots, X_n$이 AR(1)이다: $X_t = \rho X_{t-1} + \varepsilon_t$. $\rho$, $n$, $\sigma^2_\varepsilon$으로 $\mathrm{Var}(\bar X)$를 유도하라.
 
-??? success "연습문제 5 풀이"
+??? success "풀이"
     정상 AR(1)에서 $X_t = \sum_{k=0}^\infty \rho^k \varepsilon_{t-k}$이고, $\mathrm{Var}(X_t) = \sigma^2_\varepsilon/(1 - \rho^2)$, $\mathrm{Cov}(X_s, X_t) = \rho^{|s-t|} \sigma^2_\varepsilon/(1-\rho^2)$이다.
 
     $\mathrm{Var}(\bar X) = (1/n^2)\sum_{s, t} \mathrm{Cov}(X_s, X_t)$. 계산을 정리하면:
@@ -226,7 +226,7 @@ $$\text{Var}(\bar{X}_w) = \frac{1}{\sum_{i=1}^n 1/\sigma_i^2}$$
 **연습문제 6.**
 **가중 표본평균.** 관측값의 분산이 서로 다를 때($\mathrm{Var}(X_i) = \sigma_i^2$), $w_i \propto 1/\sigma_i^2$인 역분산 가중평균 $\hat\mu = \sum w_i X_i$가 분산을 최소화한다. 최적 $w_i$를 유도하라.
 
-??? success "연습문제 6 풀이"
+??? success "풀이"
     제약: 불편성을 위해 $\sum w_i = 1$. 분산: $\mathrm{Var}(\hat\mu) = \sum w_i^2 \sigma_i^2$.
 
     $\sum w_i = 1$ 아래에서 $\sum w_i^2 \sigma_i^2$을 최소화한다. Lagrangian: $L = \sum w_i^2 \sigma_i^2 - \lambda(\sum w_i - 1)$.

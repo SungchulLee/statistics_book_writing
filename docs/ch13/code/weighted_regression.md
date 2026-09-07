@@ -104,7 +104,7 @@ WLS 추정값이 참값에 훨씬 가깝고(절편 $3.350$ 대 $4.083$, 기울�
 
 **연습문제 1.** 반대 패턴, 곧 분산이 $x$에 따라 줄어드는 자료를 생성하라(예: $\sigma_i = 10 - 0.8x_i$). OLS와 WLS를 적합하라. 계수 정확도의 관점에서 WLS가 여전히 OLS보다 나은가?
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
 
     ```python
     sigma_rev = 10 - 0.8 * x
@@ -120,7 +120,7 @@ WLS 추정값이 참값에 훨씬 가깝고(절편 $3.350$ 대 $4.083$, 기울�
 
 **연습문제 2.** 모든 $i$에 대해 가중치가 같으면($w_i = c$) WLS가 OLS로 환원됨을 보여라. 이는 두 방법의 관계에 대해 무엇을 말해 주는가?
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
 
     모든 $i$에 대해 $w_i = c$이면 $\mathbf{W} = c\mathbf{I}$이므로
 
@@ -134,7 +134,7 @@ WLS 추정값이 참값에 훨씬 가깝고(절편 $3.350$ 대 $4.083$, 기울�
 
 **연습문제 3.** 실제로는 $\sigma_i^2$을 모른다. 먼저 OLS를 적합하고, $\ln(e_i^2)$을 $x_i$에 회귀시켜 분산함수를 추정한 뒤, 추정된 가중치로 WLS를 적용하는 실행가능 WLS를 구현하라.
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
 
     ```python
     resid_ols = y - X @ beta_ols
@@ -151,7 +151,7 @@ WLS 추정값이 참값에 훨씬 가깝고(절편 $3.350$ 대 $4.083$, 기울�
 
 **연습문제 4.** 공분산 구조 $\boldsymbol{\Sigma} = \mathrm{diag}(\sigma_1^2, \ldots, \sigma_n^2)$을 알 때 $\hat{\boldsymbol{\beta}}_{\text{WLS}}$가 BLUE임을 증명하라.
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
 
     일반화 Gauss-Markov 정리에 따르면 $\mathrm{Var}(\boldsymbol{\varepsilon}) = \boldsymbol{\Sigma}$일 때 $\boldsymbol{\beta}$의 BLUE는
 
@@ -165,7 +165,7 @@ WLS 추정값이 참값에 훨씬 가깝고(절편 $3.350$ 대 $4.083$, 기울�
 
 **연습문제 5.** WLS를 OLS + 이분산 일치(HC) 표준오차(White의 로버스트 표준오차)와 비교하라. 절충 관계는 무엇인가?
 
-??? success "연습문제 5 풀이"
+??? success "풀이"
 
     HC 표준오차는 계수 추정값은 그대로 두고 OLS의 표준오차만 교정한다.
 

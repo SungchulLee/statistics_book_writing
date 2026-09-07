@@ -62,7 +62,7 @@ Laplace 분포에서는 중앙값이 표본평균의 절반에 해당하는 관�
 **연습문제 1.**
 **중앙값과 평균의 ARE.** (a) 정규 자료에서 ARE가 $2/\pi$임을 보여라. (b) $t_3$ 자료에서는 어느 쪽이 이기는가?
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
     (a) 중앙값의 점근분산은 $1/[4 f(\mu)^2 n]$이며, 여기서 $f$는 중앙값에서의 밀도이다. $N(\mu, \sigma^2)$에서 $f(\mu) = 1/(\sigma\sqrt{2\pi})$이므로 $\mathrm{AVar}(\text{중앙값}) = \pi\sigma^2/(2n)$이다. 평균은 $\sigma^2/n$. ARE = $2/\pi \approx 0.637$. 평균이 1.57배로 이긴다.
 
     (b) $t_3$에서 0에서의 밀도는 $\Gamma(2)/(\sqrt{3\pi}\Gamma(3/2)) \approx 0.368$이다. 평균의 분산은 유한하지만($\mathrm{Var}(X) = 3$이므로 $\mathrm{Var}(\bar X) = 3/n$) 크다. 중앙값의 점근분산은 $1/[4(0.368)^2 n] \approx 1.85/n$으로 훨씬 작다. **꼬리가 두꺼우면 중앙값이 크게 이긴다.**
@@ -74,7 +74,7 @@ Laplace 분포에서는 중앙값이 표본평균의 절반에 해당하는 관�
 **연습문제 2.**
 **축소추정량.** $\hat\mu_\lambda = \lambda \bar X$. (a) 평균제곱오차를 유도하라. (b) 최적 $\lambda^*$. (c) $\lambda^*$를 직접 쓸 수 없는 이유는?
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
     (a) 편향 = $(\lambda - 1)\mu$. 분산 = $\lambda^2 \sigma^2/n$. MSE = $(\lambda-1)^2 \mu^2 + \lambda^2 \sigma^2/n$.
 
     (b) $d\mathrm{MSE}/d\lambda = 2(\lambda - 1)\mu^2 + 2\lambda\sigma^2/n = 0 \Rightarrow \lambda^* = \mu^2/(\mu^2 + \sigma^2/n)$.
@@ -88,7 +88,7 @@ Laplace 분포에서는 중앙값이 표본평균의 절반에 해당하는 관�
 **연습문제 3.**
 **James-Stein 추정량.** $p \ge 3$인 $\mathbf X \sim N(\boldsymbol\mu, I_p)$에서 $\hat{\boldsymbol\mu}_{\text{JS}} = (1 - (p-2)/\|\mathbf X\|^2)\mathbf X$와 MLE를 비교하라.
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
     ```python
     import numpy as np
     rng = np.random.default_rng(0)
@@ -112,7 +112,7 @@ Laplace 분포에서는 중앙값이 표본평균의 절반에 해당하는 관�
 **연습문제 4.**
 **효율적 = CRLB 달성.** $N(\mu, \sigma^2)$에서 $\bar X$가 점근적으로만이 아니라 모든 $n$에서 효율적임(CRLB를 달성함)을 보여라.
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
     정규분포 평균의 Fisher 정보량: 관측값당 $I(\mu) = 1/\sigma^2$, 전체는 $nI(\mu) = n/\sigma^2$.
 
     CRLB: $\mathrm{Var}(\hat\mu) \ge 1/(nI(\mu)) = \sigma^2/n$.
@@ -126,7 +126,7 @@ Laplace 분포에서는 중앙값이 표본평균의 절반에 해당하는 관�
 **연습문제 5.**
 **효율성과 충분통계량.** 효율성을 충분성과 연결하라: $\bar X$는 $\mu$에 대해 충분하기 때문에 효율적이다.
 
-??? success "연습문제 5 풀이"
+??? success "풀이"
     **Rao-Blackwell 정리**에 의해, 임의의 불편추정량은 충분통계량으로 조건부기댓값을 취해 개선할 수 있다.
 
     ($\sigma^2$이 알려져 있을 때) $\bar X$는 $\mu$에 대해 충분하다: 가능도가 $L(\mu) = f(\bar X, \sigma^2/n) \cdot h(X_1, \ldots, X_n)$으로 인수분해되며 $h$는 $\mu$에 의존하지 않는다.
@@ -142,7 +142,7 @@ Laplace 분포에서는 중앙값이 표본평균의 절반에 해당하는 관�
 **연습문제 6.**
 **고차원에서의 맞바꿈.** 축소추정량이 고차원에서는 MLE를 지배하지만 저차원에서는 그렇지 않은 이유는 무엇인가?
 
-??? success "연습문제 6 풀이"
+??? success "풀이"
     $p$차원에서 MLE의 위험: $\mathrm{Risk}(\hat{\boldsymbol\mu}_{\text{MLE}}) = p\sigma^2$.
 
     JS 축소: $\mathrm{Risk}(\hat{\boldsymbol\mu}_{\text{JS}}) = p\sigma^2 - (p-2)^2 \mathbb{E}[1/\|\mathbf X\|^2]$.

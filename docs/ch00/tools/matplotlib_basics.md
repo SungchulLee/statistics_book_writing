@@ -111,7 +111,7 @@ plt.show()
 **연습문제 1.**
 객체지향 API를 사용해 표준정규 표본 500개의 히스토그램을 구간 30개로 그리는 코드를 작성하라. 축 이름표, 제목, 그리고 표본평균 위치의 수직선을 포함하라.
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
     ```python
     import numpy as np
     import matplotlib.pyplot as plt
@@ -136,7 +136,7 @@ plt.show()
 **연습문제 2.**
 두 패널짜리 그림을 만들어라. 왼쪽에는 무작위 $(x, y)$ 쌍 100개의 산점도를, 오른쪽에는 $[0, 2\pi]$ 위의 곡선 $y = \sin(x)$을 그려라. 각 패널에 제목을 달고 "value"라는 하나의 $y$축 이름표를 공유하게 하라.
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
     ```python
     import numpy as np
     import matplotlib.pyplot as plt
@@ -164,7 +164,7 @@ plt.show()
 **연습문제 3.**
 여러 패널이 있는 그림에서 `plt.plot()`보다 `ax.plot()`이 선호되는 이유는 무엇인가? pyplot 형태가 조용히 엉뚱한 subplot에 그리게 되는 구체적인 예를 하나 들어라.
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
     `plt.plot()`은 전역 상태인 "현재" Axes를 대상으로 삼는다. 그림을 두 개 만드는 노트북 셀이나 여러 subplot을 갖는 그림 하나에서는, "현재" Axes가 가장 최근에 만들어지거나 활성화된 것 — 보통은 저자가 의도한 것이 아니라 **마지막** subplot — 이 된다.
 
     ```python
@@ -180,7 +180,7 @@ plt.show()
 **연습문제 4.**
 $N(5, 4)$(평균 5, 분산 4)에서 뽑은 표본 1000개의 정규화된 히스토그램을 그리고 참된 밀도를 겹쳐 그려라. 경험적 곡선과 이론적 곡선이 일치함을 눈으로 확인하라.
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
     ```python
     import numpy as np
     import matplotlib.pyplot as plt
@@ -206,7 +206,7 @@ $N(5, 4)$(평균 5, 분산 4)에서 뽑은 표본 1000개의 정규화된 히스
 **연습문제 5.**
 잔차 그림을 만들어라. $y = 1 + 2x + \varepsilon$에서 나온 잡음 섞인 점 50개에 최소제곱 직선을 적합한 뒤, 잔차를 적합값에 대해 그리고 0에 수평 참조선을 그어라. 선형성 가정이 위배되었음을 나타내는 패턴은 무엇인가?
 
-??? success "연습문제 5 풀이"
+??? success "풀이"
     ```python
     import numpy as np
     import matplotlib.pyplot as plt
@@ -236,7 +236,7 @@ $N(5, 4)$(평균 5, 분산 4)에서 뽑은 표본 1000개의 정규화된 히스
 **연습문제 6.**
 연습문제 5의 그림을 여백 없이 200 DPI PNG로 디스크에 저장하라. `bbox_inches="tight"` 인수는 무엇을 하며 언제 중요한가?
 
-??? success "연습문제 6 풀이"
+??? success "풀이"
     ```python
     fig.savefig("residuals.png", dpi=200, bbox_inches="tight")
     ```

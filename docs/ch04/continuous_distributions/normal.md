@@ -297,7 +297,7 @@ print(samples)  # Same output every time with seed 42
 **연습문제 1.**
 점수가 $X \sim N(70, 100)$이다. (a) $P(60 < X < 80)$. (b) 90 백분위수. (c) $n = 200$명 중 85점을 넘는 학생 수의 기댓값. (d) $(X - 70)/10$의 분포.
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
     (a) 표준화하면 $P(-1 < Z < 1) = 0.8413 - 0.1587 = 0.6827$.
 
     (b) $x_{0.90} = 70 + 1.2816 \cdot 10 = 82.82$.
@@ -311,7 +311,7 @@ print(samples)  # Same output every time with seed 42
 **연습문제 2.**
 **경험적 (68-95-99.7) 규칙.** $Z \sim N(0, 1)$일 때 $k = 1, 2, 3$에 대해 $P(|Z| \le k) \approx 0.683, 0.954, 0.997$임을 보여라.
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
     표준정규분포표에서 $P(Z \le 1) = 0.8413$이므로 $P(|Z| \le 1) = 2 \cdot 0.8413 - 1 = 0.6827$.
 
     같은 방식으로 $P(|Z| \le 2) = 2 \cdot 0.9772 - 1 = 0.9545$.
@@ -331,7 +331,7 @@ print(samples)  # Same output every time with seed 42
 **연습문제 3.**
 **독립인 정규확률변수의 선형결합.** $X_1 \sim N(\mu_1, \sigma_1^2)$, $X_2 \sim N(\mu_2, \sigma_2^2)$이 독립이다. $aX_1 + bX_2 + c$의 분포를 구하라.
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
     MGF를 이용하면 $M_{aX_1 + bX_2 + c}(t) = e^{ct} M_{X_1}(at) M_{X_2}(bt) = e^{ct} \exp(a\mu_1 t + a^2\sigma_1^2 t^2/2) \exp(b\mu_2 t + b^2\sigma_2^2 t^2/2)$.
 
     $= \exp\!\left((c + a\mu_1 + b\mu_2)t + (a^2\sigma_1^2 + b^2\sigma_2^2) t^2/2\right)$.
@@ -345,7 +345,7 @@ print(samples)  # Same output every time with seed 42
 **연습문제 4.**
 **표준화**는 임의의 정규확률변수를 표준정규확률변수로 바꾼다. $X \sim N(\mu, \sigma^2)$에 대해 $\Phi^{-1}(F_X(x)) = (x - \mu)/\sigma$임을 증명하라.
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
     $X \sim N(\mu, \sigma^2)$에 대해:
 
     $F_X(x) = P(X \le x) = P((X - \mu)/\sigma \le (x - \mu)/\sigma) = \Phi((x - \mu)/\sigma)$.
@@ -359,7 +359,7 @@ print(samples)  # Same output every time with seed 42
 **연습문제 5.**
 **정규분포의 최대가능도추정.** 두 모수가 모두 미지인 i.i.d. 표본 $X_1, \ldots, X_n \sim N(\mu, \sigma^2)$이 주어졌을 때 MLE를 유도하라.
 
-??? success "연습문제 5 풀이"
+??? success "풀이"
     로그가능도:
 
     $$
@@ -377,7 +377,7 @@ print(samples)  # Same output every time with seed 42
 **연습문제 6.**
 **Q-Q 그림의 해석.** 어떤 표본을 표준정규분포에 대해 그린 Q-Q 그림에서 오른쪽 꼬리의 점들이 기준선 아래에 놓인다. 이 양상을 해석하라.
 
-??? success "연습문제 6 풀이"
+??? success "풀이"
     Q-Q 그림의 $y$축은 표본분위수이고 $x$축은 표준정규분위수이다. 기준선 $y = \mu + \sigma x$는 자료가 정규분포를 따를 때 점들이 놓일 위치를 나타낸다.
 
     **"오른쪽 꼬리에서 선 아래"**라는 것은 $x$가 큰 양수일 때(표준정규분위수가 클 때) 표본의 분위수가 선이 예측하는 값보다 *작다*는 뜻이다. 다시 말해 표본의 상단 극단값들이 정규분포에서 기대되는 것만큼 극단적이지 않으며, **오른쪽 꼬리가 정규분포보다 얇다**.

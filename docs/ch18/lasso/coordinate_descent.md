@@ -104,7 +104,7 @@ $$
 **연습문제 1.**
 좌표하강을 직접 구현하고 `sklearn.linear_model.Lasso`와 일치하는지, 몇 번의 순회로 수렴하는지 확인하라.
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
     ```python
     import numpy as np
     from sklearn.linear_model import Lasso
@@ -153,7 +153,7 @@ $$
 **연습문제 2.**
 $\|\mathbf{x}_j\|^2 = n$이라는 표준화 가정을 빼면 갱신식이 어떻게 바뀌는가?
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
     표준화하지 않으면 부분문제의 이차항 계수가 $\|\mathbf{x}_j\|^2/n$이 되어
 
     $$

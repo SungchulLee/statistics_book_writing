@@ -103,7 +103,7 @@ print(f"Breusch-Pagan p-value: {bp_pval:.4f}")
 
 **연습문제 1.** (하나 빼기 분산 추정을 쓰는) 외부 스튜던트화 잔차를 계산하여 내부 스튜던트화 잔차와 비교하라. 어떤 관측값에서 차이가 가장 큰가?
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
 
     ```python
     ext_resids = influence.resid_studentized_external
@@ -118,7 +118,7 @@ print(f"Breusch-Pagan p-value: {bp_pval:.4f}")
 
 **연습문제 2.** 모든 모자값의 합이 $k$(모수의 개수)임을 증명하라. 이는 평균 지렛대에 대해 무엇을 뜻하는가?
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
 
     모자행렬은 $\mathbf{H} = \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top$이다. $\mathbf{H}$가 멱등($\mathbf{H}^2 = \mathbf{H}$)이고 대칭이므로
 
@@ -132,7 +132,7 @@ print(f"Breusch-Pagan p-value: {bp_pval:.4f}")
 
 **연습문제 3.** $e_i^2$을 $\mathbf{X}$에 회귀시키고 $nR^2$을 계산하여 Breusch-Pagan 검정을 직접 구현하라. statsmodels 결과와 일치하는지 확인하라.
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
 
     ```python
     resid_sq = results.resid ** 2
@@ -148,7 +148,7 @@ print(f"Breusch-Pagan p-value: {bp_pval:.4f}")
 
 **연습문제 4.** 영향점을 제거하면 계수 추정값이 달라진다. 그런 관측값을 제거하는 것이 적절한 경우와 남겨 두어야 하는 경우를 논하라.
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
 
     영향점이 명백히 잘못된 값(자료 입력 실수, 측정 실패)이거나 다른 모집단에서 온 것이라면 제거가 적절하다. 특이하긴 하지만 정당한 자료점이라면 남겨야 한다. 이 경우 민감도 분석 자체가 유익한 정보를 준다. 결과가 크게 달라진다면 결론이 취약하다는 뜻이다. 제거의 대안으로는 영향점을 완전히 배제하지 않고 가중치를 낮추는 로버스트 회귀(예: Huber나 bisquare 가중)가 있다. $\square$
 
@@ -156,6 +156,6 @@ print(f"Breusch-Pagan p-value: {bp_pval:.4f}")
 
 **연습문제 5.** 참 오차가 정규분포를 따르는데도 Q-Q 그림의 꼬리가 대각선에서 자주 벗어나는 이유를 설명하라. 표본크기는 이 현상에 어떤 영향을 주는가?
 
-??? success "연습문제 5 풀이"
+??? success "풀이"
 
     Q-Q 그림에서 극단의 순서통계량(가장 작은 잔차와 가장 큰 잔차)은 표집변동이 가장 크다. 오차가 정확히 정규여도 유한표본에서는 경험분포의 꼬리가 상당히 흔들린다. 관측값이 $n$개일 때 정규표본의 범위는 대략 $2\sqrt{2\ln n}\,\sigma$이지만 실제 범위는 크게 변동한다. $n$이 커지면 (큰 수의 법칙이 경험분위수를 안정시키므로) Q-Q 그림의 꼬리가 더 안정되고, 따라서 큰 표본의 Q-Q 그림이 꼬리 거동에 대해 더 믿을 만한 증거를 준다. $\square$

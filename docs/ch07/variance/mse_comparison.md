@@ -96,7 +96,7 @@ $$
 **연습문제 1.**
 정규 자료에서 $\hat\sigma^2_c = (1/c)\sum(X_i - \bar X)^2$에 대해: (a) $\mathrm{MSE}$를 유도하라. (b) 최적 $c^*$를 구하라. (c) $n = 10$에서 확인하라.
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
     (a) $W = \sum(X_i - \bar X)^2 \sim \sigma^2 \chi^2_{n-1}$일 때: $\mathbb{E}[\hat\sigma^2_c] = (n-1)\sigma^2/c$, $\mathrm{Var}(\hat\sigma^2_c) = 2(n-1)\sigma^4/c^2$.
 
     $\mathrm{MSE}(c) = (\sigma^4/c^2)[(n-1-c)^2 + 2(n-1)]$.
@@ -110,7 +110,7 @@ $$
 **연습문제 2.**
 분산추정에서 **세 가지 분모**(n, n-1, n+1)를 **비교**하라.
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
     | 추정량 | 나누는 수 | 편향 | $\mathrm{Var}/\sigma^4$ | $\mathrm{MSE}/\sigma^4$ |
     |---|---|---|---|---|
     | $\hat\sigma^2_{\text{MLE}}$ | $n$ | $-\sigma^2/n$ | $2(n-1)/n^2$ | $(2n-1)/n^2$ |
@@ -126,7 +126,7 @@ $$
 **연습문제 3.**
 **평균제곱오차는 손실함수에 따라 달라진다.** 평균제곱오차가 표준이 된 이유는 무엇이며 어떤 대안이 있는가?
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
     MSE는 제곱오차 손실 $L(\hat\theta, \theta) = (\hat\theta - \theta)^2$이다. 널리 쓰이는 이유:
 
     - 수학적으로 다루기 쉽다(기댓값의 선형성, 편향 + 분산으로의 분해).
@@ -147,7 +147,7 @@ $$
 **연습문제 4.**
 **축소와 James-Stein.** 다변량 정규 평균의 MLE는 각 성분의 표본평균이다. James-Stein은 $p \ge 3$일 때 이것이 **허용 불가능**함을 보였다. 그 아이디어를 스케치하라.
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
     (관측값 하나로) $\mathbf X \sim N(\boldsymbol\mu, I_p)$에서 $\boldsymbol\mu \in \mathbb{R}^p$를 추정한다. MLE: $\hat{\boldsymbol\mu} = \mathbf X$. 평균제곱오차: $\mathbb{E}[\|\mathbf X - \boldsymbol\mu\|^2] = p$.
 
     **James-Stein 추정량:** $\hat{\boldsymbol\mu}_{\text{JS}} = (1 - (p-2)/\|\mathbf X\|^2) \mathbf X$ (0 쪽으로 축소).
@@ -163,7 +163,7 @@ $$
 **연습문제 5.**
 **표본크기와 평균제곱오차.** $S^2$에 대해 $n$을 네 배로 하면 $\sqrt{\mathrm{MSE}}$가 대략 절반이 됨을 보여라.
 
-??? success "연습문제 5 풀이"
+??? success "풀이"
     $\mathrm{MSE}(S^2) = 2\sigma^4/(n-1)$. 제곱근을 취하면 $\sqrt{\mathrm{MSE}} = \sigma^2 \sqrt{2/(n-1)}$.
 
     $n' = 4n$이면 $\sqrt{\mathrm{MSE}'} = \sigma^2 \sqrt{2/(4n - 1)} \approx \sigma^2 \sqrt{2/(n-1)}/2 = \sqrt{\mathrm{MSE}}/2$.
@@ -175,7 +175,7 @@ $$
 **연습문제 6.**
 **점근적 최적성.** $n \to \infty$일 때 세 추정량(분모 $n$, $n-1$, $n+1$)의 점근 평균제곱오차가 같음을 보여라.
 
-??? success "연습문제 6 풀이"
+??? success "풀이"
     세 가지 모두:
 
     - $\mathrm{MSE}(\hat\sigma^2_{\text{MLE}})/\sigma^4 = (2n-1)/n^2 \to 2/n$.

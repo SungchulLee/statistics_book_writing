@@ -164,7 +164,7 @@ plot_pmf(values, probs, "PMF: Baseball Card Packs Purchased")
 **연습문제 1.**
 이산확률변수 $X$의 확률질량함수가 $P(X=0) = 0.1$, $P(X=1) = 0.3$, $P(X=2) = c$, $P(X=3) = 0.2$다. $c$의 값을 구하고 $P(X \geq 2)$를 계산하라.
 
-??? success "연습문제 1 풀이"
+??? success "풀이"
     확률질량함수의 합이 1이어야 하므로
 
     $$
@@ -184,7 +184,7 @@ plot_pmf(values, probs, "PMF: Baseball Card Packs Purchased")
 **연습문제 2.**
 공정한 사면체 주사위(면이 1, 2, 3, 4) 두 개를 굴린다. $S$를 두 주사위의 합이라 하자. $S$의 확률질량함수를 모두 쓰고 확률의 합이 1임을 확인하라.
 
-??? success "연습문제 2 풀이"
+??? success "풀이"
     똑같이 일어날 법한 결과가 $4 \times 4 = 16$개다. 가능한 합은 2에서 8까지다.
 
     | $s$ | 결과 | $P(S = s)$ |
@@ -204,7 +204,7 @@ plot_pmf(values, probs, "PMF: Baseball Card Packs Purchased")
 **연습문제 3.**
 치우친 동전의 $P(\text{앞면}) = 0.7$이다. 이 동전을 3번 던진다. $X$를 앞면의 개수라 할 때 $X$의 확률질량함수를 쓰라.
 
-??? success "연습문제 3 풀이"
+??? success "풀이"
     각 던지기는 독립이고 $p = 0.7$(앞면), $q = 0.3$(뒷면)이다. 3번 던졌을 때 앞면의 개수는 이항분포를 따른다.
 
     $$
@@ -236,7 +236,7 @@ plot_pmf(values, probs, "PMF: Baseball Card Packs Purchased")
 **연습문제 4.**
 연속확률변수(예: 무작위로 고른 사람의 정확한 키)를 확률질량함수로 기술할 수 없는 이유를 설명하라. 연속인 경우에는 무엇이 확률질량함수를 대신하는가?
 
-??? success "연습문제 4 풀이"
+??? success "풀이"
     확률질량함수는 개별 값에 양의 확률을 부여한다. 받침의 각 값에 대해 $P(X = x) > 0$이다. 연속확률변수에서는 받침이 비가산 구간이다(예: $[150, 200]$ cm 안의 모든 실수). 개별 값마다 양의 확률을 가진다면 비가산개의 값에 대한 합(또는 적분)이 무한대로 발산하여 정규화 공리 $P(\Omega) = 1$을 위반한다.
 
     대신 연속확률변수는 **확률밀도함수** $f(x)$로 기술하며, $f(x) \geq 0$이고 $\int_{-\infty}^{\infty} f(x)\,dx = 1$이다. 확률밀도함수는 확률이 아니라 밀도를 준다. 어떤 한 값에 대해서도 $P(X = x) = 0$이지만 $P(a \leq X \leq b) = \int_a^b f(x)\,dx$가 구간에 대한 확률을 준다.
@@ -246,7 +246,7 @@ plot_pmf(values, probs, "PMF: Baseball Card Packs Purchased")
 **연습문제 5.**
 **기하분포.** $X$ = i.i.d. Bernoulli($p$)에서 첫 성공까지의 시행 횟수. 확률질량함수, $\mathbb{E}[X]$, $\mathrm{Var}(X)$를 유도하라.
 
-??? success "연습문제 5 풀이"
+??? success "풀이"
     **확률질량함수:** $X = k$이려면 실패 $k - 1$번 뒤에 성공해야 하므로 $k = 1, 2, \ldots$에 대해 $P(X = k) = (1 - p)^{k-1} p$이다.
 
     정규화: $\sum_{k=1}^\infty (1-p)^{k-1} p = p/p = 1$. ✓
@@ -262,7 +262,7 @@ plot_pmf(values, probs, "PMF: Baseball Card Packs Purchased")
 **연습문제 6.**
 **이항분포의 포아송 근사.** $np \to \lambda$가 상수인 채로 $n \to \infty$이면 Binomial$(n, p)$ → Poisson$(\lambda)$임을 보여라.
 
-??? success "연습문제 6 풀이"
+??? success "풀이"
     이항 확률질량함수에 $p = \lambda/n$을 대입한다.
 
     $$
