@@ -15,3 +15,7 @@ reviews/
 
 # Local extraction of pre-review notes; regenerate with the command in RECOVERY.md
 recovered/
+
+# Python bytecode
+__pycache__/
+*.pyc

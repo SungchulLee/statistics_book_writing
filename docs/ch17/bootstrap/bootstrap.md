@@ -131,7 +131,7 @@ $$
 !!! warning "3단계의 중심화가 핵심이다"
     $\hat{\theta}^{*(b)}$를 $\theta_0$과 직접 비교하면 안 된다. 붓스트랩 분포는 $\theta_0$이 아니라 $\hat{\theta}$ 주위에 중심을 두기 때문이다. 중심화를 빠뜨리면 귀무가설이 참일 때조차 $p$값이 언제나 1에 가까워진다.
 
-    이는 [15장](../../ch15/code/bootstrap_var_test.md)에서 본 것과 정확히 같은 함정이다.
+    이는 [15장](../../ch15/advanced_methods/bootstrap_var_test.md)에서 본 것과 정확히 같은 함정이다.
 
 ### 이표본 검정
 

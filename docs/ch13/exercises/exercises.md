@@ -237,4 +237,4 @@ print(model.predict([[8.0]]))
 
         $\bar{R}^2$(수정 $R^2$)도 복잡도에 벌점을 주지만 벌점이 약해 AIC보다 큰 모형을 고르는 경향이 있다.
 
-        가장 확실한 방법은 [교차검증](../../ch17/code/cv_methods_comparison.md)이다. AIC는 하나 남기기 교차검증의 점근적 근사로 볼 수 있다.
+        가장 확실한 방법은 [교차검증](../../ch17/comparison/cv_methods_comparison.md)이다. AIC는 하나 남기기 교차검증의 점근적 근사로 볼 수 있다.

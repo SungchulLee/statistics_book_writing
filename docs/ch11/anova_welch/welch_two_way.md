@@ -94,7 +94,7 @@ print(pg.welch_anova(dv="Growth", between="Fertilizer", data=df))
 
 !!! warning "pingouin에는 두 요인을 동시에 다루는 Welch 분산분석이 없다"
 
-    `pg.welch_anova`는 `between`에 요인 하나만 받는다. 위 코드처럼 요인별로 따로 돌리면 주효과는 볼 수 있지만 교호작용은 검정할 수 없다. 교호작용을 포함한 이분산 이원배치 분석에는 완전 요인 OLS 모형에 HC3 로버스트 공분산을 결합한 Wald F-검정을 쓴다. 자세한 내용은 [이원배치 Welch 분산분석 (로버스트 HC3)](../code/welch_twoway_robust.md) 페이지를 보라.
+    `pg.welch_anova`는 `between`에 요인 하나만 받는다. 위 코드처럼 요인별로 따로 돌리면 주효과는 볼 수 있지만 교호작용은 검정할 수 없다. 교호작용을 포함한 이분산 이원배치 분석에는 완전 요인 OLS 모형에 HC3 로버스트 공분산을 결합한 Wald F-검정을 쓴다. 자세한 내용은 [이원배치 Welch 분산분석 (로버스트 HC3)](./welch_twoway_robust.md) 페이지를 보라.
 
     또한 이 예제는 칸마다 관측값이 하나뿐이어서 칸 내 분산을 추정할 수 없다. 실제 이원배치 분석에는 칸마다 반복이 필요하다.
 
