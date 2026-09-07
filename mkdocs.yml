@@ -136,27 +136,27 @@ nav:
     - 4 분포:
         - 장 개요: ch04/index.md
         - 4.1 이산분포:
-            - Bernoulli 분포와 Binomial 분포: ch04/discrete_distributions/binomial.md
-            - Geometric 분포와 Negative Binomial 분포: ch04/discrete_distributions/geometric.md
-            - Poisson 분포: ch04/discrete_distributions/poisson.md
+            - 베르누이분포 Bernoulli(p)와 이항분포 B(n, p): ch04/discrete_distributions/binomial.md
+            - 기하분포와 음이항분포 NB(r, p): ch04/discrete_distributions/geometric.md
+            - 포아송분포 Poisson(λ): ch04/discrete_distributions/poisson.md
             - 이산분포 모음: ch04/code/discrete_distributions_suite.md
         - 4.2 연속분포:
-            - Uniform 분포: ch04/continuous_distributions/uniform.md
-            - Exponential 분포: ch04/continuous_distributions/exponential.md
-            - Normal 분포: ch04/continuous_distributions/normal.md
-            - scipy.stats로 그리는 정규 밀도함수: ch04/code/normal_pdf.md
-            - 정규 난수 생성: ch04/code/normal_rvs.md
-            - 정규 누적분포함수와 분위수: ch04/code/normal_cdf.md
-            - Student-t 밀도함수: ch04/code/t_pdf.md
-            - 카이제곱 밀도함수: ch04/code/chi_square_pdf.md
-            - F 분포 밀도함수: ch04/code/f_pdf.md
-            - 정규분포의 백분위점 함수 (분위수 함수): ch04/code/normal_ppf.md
-            - 정규분포의 생존함수: ch04/code/normal_sf.md
-            - 지수 밀도함수: ch04/code/exponential_pdf.md
-            - 균등 밀도함수: ch04/code/uniform_pdf.md
-            - 로지스틱 밀도함수 (Normal과 비교): ch04/code/logistic_pdf.md
-            - 로그정규 밀도함수: ch04/code/lognormal_pdf.md
-            - Weibull 밀도함수와 위험함수: ch04/code/weibull_pdf.md
+            - 균등분포 U(a, b): ch04/continuous_distributions/uniform.md
+            - 균등분포 밀도함수: ch04/code/uniform_pdf.md
+            - 지수분포 Exp(λ): ch04/continuous_distributions/exponential.md
+            - 지수분포 밀도함수: ch04/code/exponential_pdf.md
+            - 정규분포 N(μ, σ²): ch04/continuous_distributions/normal.md
+            - 정규분포 밀도함수 (scipy.stats): ch04/code/normal_pdf.md
+            - 정규분포 누적분포함수와 분위수: ch04/code/normal_cdf.md
+            - 정규분포 백분위점 함수 (분위수 함수): ch04/code/normal_ppf.md
+            - 정규분포 생존함수: ch04/code/normal_sf.md
+            - 정규분포 난수 생성: ch04/code/normal_rvs.md
+            - t 분포 t(ν) 밀도함수: ch04/code/t_pdf.md
+            - 카이제곱분포 χ²(k) 밀도함수: ch04/code/chi_square_pdf.md
+            - F 분포 F(d₁, d₂) 밀도함수: ch04/code/f_pdf.md
+            - 로그정규분포 LogN(μ, σ²) 밀도함수: ch04/code/lognormal_pdf.md
+            - 로지스틱분포 Logistic(μ, s) 밀도함수 (정규분포와 비교): ch04/code/logistic_pdf.md
+            - 와이불분포 Weibull(k, λ) 밀도함수와 위험함수: ch04/code/weibull_pdf.md
             - 역변환 표본추출: ch04/code/inverse_transform_sampling.md
         - 4.3 다변량 구조:
             - 결합분포: ch04/joint/joint.md
@@ -164,8 +164,8 @@ nav:
             - 공분산과 상관계수: ch04/joint/covariance_correlation.md
             - 독립성과 무상관성의 차이: ch04/joint/independence_vs_zero_corr.md
             - 이변량 정규분포: ch04/code/bivariate_normal.md
-            - 2차원 Gaussian 조건부분포: ch04/code/gaussian_2d_conditionals.md
-            - 2차원 Gaussian 고유분해: ch04/code/gaussian_2d_eigendecomposition.md
+            - 2차원 정규분포 조건부분포: ch04/code/gaussian_2d_conditionals.md
+            - 2차원 정규분포 고유분해: ch04/code/gaussian_2d_eigendecomposition.md
 
     - 5 표본분포:
         - 장 개요: ch05/index.md
@@ -174,10 +174,10 @@ nav:
             - 반복추출 개념: ch05/foundations/repeated_sampling.md
             - 금융위기와 중심극한정리의 실패: ch05/code/financial_crisis_clt.md
         - 5.2 네 가지 기본 표본분포:
-            - Normal 분포 (Z): ch05/distributions/normal.md
-            - Student t 분포: ch05/distributions/student_t.md
-            - 카이제곱 분포 (χ²): ch05/distributions/chi_square.md
-            - F 분포: ch05/distributions/f_distribution.md
+            - 정규분포 N(μ, σ²)와 표준정규 Z: ch05/distributions/normal.md
+            - t 분포 t(ν): ch05/distributions/student_t.md
+            - 카이제곱분포 χ²(k): ch05/distributions/chi_square.md
+            - F 분포 F(d₁, d₂): ch05/distributions/f_distribution.md
         - 5.3 흔히 쓰는 통계량에의 응용:
             - 평균의 표본분포: ch05/applications/sample_mean.md
             - 표준오차: ch05/applications/standard_error.md
@@ -185,11 +185,11 @@ nav:
             - 분산의 표본분포: ch05/applications/sample_variance.md
             - 두 표본평균의 차: ch05/applications/diff_means.md
             - 두 표본비율의 차: ch05/applications/diff_proportions.md
-            - X̄의 표본분포 (Uniform): ch05/code/xbar_uniform.md
-            - X̄의 표본분포 (Exponential): ch05/code/xbar_exponential.md
-            - X̄의 표본분포 (Normal): ch05/code/xbar_normal.md
-            - X̄의 표본분포 (Bernoulli): ch05/code/xbar_bernoulli.md
-            - S²의 표본분포 (Normal): ch05/code/s2_normal.md
+            - X̄의 표본분포 (균등분포): ch05/code/xbar_uniform.md
+            - X̄의 표본분포 (지수분포): ch05/code/xbar_exponential.md
+            - X̄의 표본분포 (정규분포): ch05/code/xbar_normal.md
+            - X̄의 표본분포 (베르누이분포): ch05/code/xbar_bernoulli.md
+            - S²의 표본분포 (정규분포): ch05/code/s2_normal.md
             - X̄의 표준오차: ch05/code/se_xbar.md
             - S²의 표준오차: ch05/code/se_s2.md
             - 붓스트랩 표준오차: ch05/code/bootstrap_standard_error.md
@@ -209,10 +209,10 @@ nav:
         - 6.2 최대가능도추정:
             - 가능도함수: ch06/mle/likelihood.md
             - 최대가능도추정 소개: ch06/mle/intro_mle.md
-            - Bernoulli 분포의 최대가능도: ch06/mle/mle_bernoulli.md
-            - Normal 분포의 최대가능도: ch06/mle/mle_normal.md
-            - Poisson 분포의 최대가능도: ch06/mle/mle_poisson.md
-            - Exponential 분포의 최대가능도: ch06/mle/mle_exponential.md
+            - 베르누이분포의 최대가능도: ch06/mle/mle_bernoulli.md
+            - 정규분포의 최대가능도: ch06/mle/mle_normal.md
+            - 포아송분포의 최대가능도: ch06/mle/mle_poisson.md
+            - 지수분포의 최대가능도: ch06/mle/mle_exponential.md
             - 포획–재포획법: ch06/mle/capture_recapture.md
             - 최대가능도의 점근적 성질: ch06/mle/mle_asymptotics.md
             - Fisher 정보량과 표준오차: ch06/mle/fisher_information.md
@@ -220,7 +220,7 @@ nav:
             - Fisher 정보량 계산: ch06/code/fisher_information.md
             - 포획–재포획 최대가능도: ch06/code/capture_recapture.md
             - 로그가능도 시각화: ch06/code/log_likelihood.md
-            - Geometric과 Poisson의 최대가능도: ch06/code/geometric_poisson_mle.md
+            - 기하분포와 포아송분포의 최대가능도: ch06/code/geometric_poisson_mle.md
         - 6.3 적률법:
             - 적률법의 기초: ch06/estimation_methods/moments_foundations.md
             - 흔한 분포에 대한 적률법: ch06/estimation_methods/moments_examples.md
@@ -234,7 +234,7 @@ nav:
             - 켤레 사전분포: ch06/bayesian/conjugate_priors.md
             - 최대사후확률 추정: ch06/bayesian/map_estimation.md
             - 베이즈 추정 시연: ch06/code/bayesian_estimation.md
-            - 베이즈 Beta 켤레 사전분포: ch06/code/bayesian_beta_conjugate.md
+            - 베타분포 Beta(α, β) 켤레 사전분포: ch06/code/bayesian_beta_conjugate.md
         - 장 연습문제: ch06/exercises/exercises.md
 
     - 7 μ와 σ²의 추정:
@@ -254,16 +254,16 @@ nav:
             - 로버스트 분산추정량: ch07/variance/robust_variance.md
             - 분산추정량: ch07/code/variance_estimators.md
             - Bessel 수정 시연: ch07/code/bessels_correction.md
-        - 7.3 Gaussian 최대가능도:
+        - 7.3 정규분포 최대가능도:
             - μ와 σ²의 최대가능도추정: ch07/mle/gaussian_mle.md
-            - σ²에 대한 Gaussian 최대가능도의 편향: ch07/mle/mle_bias.md
+            - σ²에 대한 정규분포 최대가능도의 편향: ch07/mle/mle_bias.md
             - 충분성과 완비성: ch07/mle/sufficiency_completeness.md
-            - Gaussian 최대가능도: ch07/code/gaussian_mle.md
+            - 정규분포 최대가능도 (코드): ch07/code/gaussian_mle.md
         - 7.4 정규성이 없을 때의 추정:
             - 꼬리가 두꺼운 분포: ch07/non_normal/heavy_tails.md
             - 치우친 분포: ch07/non_normal/skewed.md
             - 수익률 추정: ch07/code/return_estimation.md
-            - Cauchy에서 대수의법칙의 실패: ch07/code/cauchy_lln_failure.md
+            - 코시분포 Cauchy에서 큰수의 법칙의 실패: ch07/code/cauchy_lln_failure.md
         - 장 연습문제: ch07/exercises/exercises.md
 
     - 8 신뢰구간:
@@ -347,8 +347,8 @@ nav:
 
     - 10 카이제곱 검정:
         - 장 개요: ch10/index.md
-        - 10.1 카이제곱 분포와 점근 이론:
-            - 카이제곱 분포: ch10/distribution/distribution.md
+        - 10.1 카이제곱분포와 점근 이론:
+            - 카이제곱분포 χ²(k): ch10/distribution/distribution.md
             - 자유도와 점근 이론: ch10/distribution/degrees_of_freedom.md
         - 10.2 범주형 자료에 대한 카이제곱 검정:
             - 적합도 검정: ch10/test/gof.md
@@ -401,7 +401,7 @@ nav:
             - 선형성 확인: ch11/assumptions/linearity.md
             - Bartlett 검정: ch11/code/bartlett_test.md
             - 분산에 대한 카이제곱 검정: ch11/code/chi2_test_for_variance.md
-            - 카이제곱 분포: ch11/code/chi_square_distribution.md
+            - 카이제곱분포 χ²(k): ch11/code/chi_square_distribution.md
             - 등분산에 대한 F-검정: ch11/code/f_test_equality_of_variances.md
             - Levene 검정: ch11/code/levene_test.md
         - 11.6 진단:
@@ -589,10 +589,10 @@ nav:
             - 유도와 분포이론: ch15/chi_square_test/derivation.md
             - 모분산의 신뢰구간: ch15/chi_square_test/ci_variance.md
             - 분산에 대한 카이제곱 검정 (코드): ch15/code/chi2_test_for_variance.md
-            - 카이제곱분포: ch15/code/chi_square_distribution.md
+            - 카이제곱분포 χ²(k): ch15/code/chi_square_distribution.md
         - 15.3 두 분산 비교를 위한 F 검정:
             - 이표본 F 검정: ch15/f_test/f_test_two_variances.md
-            - F 분포와 자유도: ch15/f_test/f_distribution_details.md
+            - F 분포 F(d₁, d₂)와 자유도: ch15/f_test/f_distribution_details.md
             - 비정규성에 대한 민감도: ch15/f_test/sensitivity.md
             - 분산 동일성에 대한 F 검정 (코드): ch15/code/f_test_variances.md
             - F 검정 꼬리 영역 시각화: ch15/code/f_test_tail_plot.md
