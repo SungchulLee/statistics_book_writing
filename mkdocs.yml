@@ -100,14 +100,13 @@ nav:
             - 분산과 표준편차: ch02/spread/variance_std.md
             - 사분위범위와 강건 측도: ch02/spread/robust.md
             - 중앙값 절대편차: ch02/spread/median_absolute_deviation.md
+            - 기술통계 (대마 가격): ch02/code/descriptive_stats_weed_prices.md
+            - 고급 측도 (기하평균, 체비쇼프): ch02/code/descriptive_measures_advanced.md
         - 2.4 시각화:
             - 상자그림: ch02/visualization/boxplots.md
             - 바이올린 그림: ch02/visualization/violin.md
             - 집단 비교: ch02/visualization/group_comparison.md
-        - 2.5 코드:
             - 집단 비교 예제: ch02/code/group_comparison_examples.md
-            - 기술통계 (대마 가격): ch02/code/descriptive_stats_weed_prices.md
-            - 고급 측도 (기하평균, 체비쇼프): ch02/code/descriptive_measures_advanced.md
 
     - 3 확률의 기초:
         - 장 개요: ch03/index.md
@@ -131,7 +130,6 @@ nav:
             - 큰수의 법칙: ch03/limits/lln.md
             - 중심극한정리: ch03/limits/clt.md
             - 베리–에센 정리: ch03/limits/berry_esseen.md
-        - 3.6 코드:
             - 중심극한정리 다중 분포 시각화: ch03/code/clt_visualization.md
             - 도박사의 역설 (큰수의 법칙의 실패): ch03/code/gambler_paradox_lln.md
 
@@ -141,16 +139,11 @@ nav:
             - Bernoulli 분포와 Binomial 분포: ch04/discrete_distributions/binomial.md
             - Geometric 분포와 Negative Binomial 분포: ch04/discrete_distributions/geometric.md
             - Poisson 분포: ch04/discrete_distributions/poisson.md
+            - 이산분포 모음: ch04/code/discrete_distributions_suite.md
         - 4.2 연속분포:
             - Uniform 분포: ch04/continuous_distributions/uniform.md
             - Exponential 분포: ch04/continuous_distributions/exponential.md
             - Normal 분포: ch04/continuous_distributions/normal.md
-        - 4.3 다변량 구조:
-            - 결합분포: ch04/joint/joint.md
-            - 주변분포와 조건부분포: ch04/joint/marginal_conditional.md
-            - 공분산과 상관계수: ch04/joint/covariance_correlation.md
-            - 독립성과 무상관성의 차이: ch04/joint/independence_vs_zero_corr.md
-        - 4.4 코드:
             - scipy.stats로 그리는 정규 밀도함수: ch04/code/normal_pdf.md
             - 정규 난수 생성: ch04/code/normal_rvs.md
             - 정규 누적분포함수와 분위수: ch04/code/normal_cdf.md
@@ -164,17 +157,22 @@ nav:
             - 로지스틱 밀도함수 (Normal과 비교): ch04/code/logistic_pdf.md
             - 로그정규 밀도함수: ch04/code/lognormal_pdf.md
             - Weibull 밀도함수와 위험함수: ch04/code/weibull_pdf.md
-            - 이산분포 모음: ch04/code/discrete_distributions_suite.md
+            - 역변환 표본추출: ch04/code/inverse_transform_sampling.md
+        - 4.3 다변량 구조:
+            - 결합분포: ch04/joint/joint.md
+            - 주변분포와 조건부분포: ch04/joint/marginal_conditional.md
+            - 공분산과 상관계수: ch04/joint/covariance_correlation.md
+            - 독립성과 무상관성의 차이: ch04/joint/independence_vs_zero_corr.md
             - 이변량 정규분포: ch04/code/bivariate_normal.md
             - 2차원 Gaussian 조건부분포: ch04/code/gaussian_2d_conditionals.md
             - 2차원 Gaussian 고유분해: ch04/code/gaussian_2d_eigendecomposition.md
-            - 역변환 표본추출: ch04/code/inverse_transform_sampling.md
 
     - 5 표본분포:
         - 장 개요: ch05/index.md
         - 5.1 기초:
             - 확률변수로서의 통계량: ch05/foundations/statistics_as_rv.md
             - 반복추출 개념: ch05/foundations/repeated_sampling.md
+            - 금융위기와 중심극한정리의 실패: ch05/code/financial_crisis_clt.md
         - 5.2 네 가지 기본 표본분포:
             - Normal 분포 (Z): ch05/distributions/normal.md
             - Student t 분포: ch05/distributions/student_t.md
@@ -187,9 +185,6 @@ nav:
             - 분산의 표본분포: ch05/applications/sample_variance.md
             - 두 표본평균의 차: ch05/applications/diff_means.md
             - 두 표본비율의 차: ch05/applications/diff_proportions.md
-        - 5.4 시각화:
-            - 표본분포 시각화: ch05/applications/sampling_dist_visualization.md
-        - 5.5 코드:
             - X̄의 표본분포 (Uniform): ch05/code/xbar_uniform.md
             - X̄의 표본분포 (Exponential): ch05/code/xbar_exponential.md
             - X̄의 표본분포 (Normal): ch05/code/xbar_normal.md
@@ -197,9 +192,10 @@ nav:
             - S²의 표본분포 (Normal): ch05/code/s2_normal.md
             - X̄의 표준오차: ch05/code/se_xbar.md
             - S²의 표준오차: ch05/code/se_s2.md
-            - 소득 자료 표본분포 시각화: ch05/code/sampling_dist_income_visualization.md
             - 붓스트랩 표준오차: ch05/code/bootstrap_standard_error.md
-            - 금융위기와 중심극한정리의 실패: ch05/code/financial_crisis_clt.md
+        - 5.4 시각화:
+            - 표본분포 시각화: ch05/applications/sampling_dist_visualization.md
+            - 소득 자료 표본분포 시각화: ch05/code/sampling_dist_income_visualization.md
         - 장 연습문제: ch05/exercises/exercises.md
 
     - 6 통계적 추정:
@@ -220,6 +216,11 @@ nav:
             - 포획–재포획법: ch06/mle/capture_recapture.md
             - 최대가능도의 점근적 성질: ch06/mle/mle_asymptotics.md
             - Fisher 정보량과 표준오차: ch06/mle/fisher_information.md
+            - 최대가능도 최적화 예제: ch06/code/mle_optimization.md
+            - Fisher 정보량 계산: ch06/code/fisher_information.md
+            - 포획–재포획 최대가능도: ch06/code/capture_recapture.md
+            - 로그가능도 시각화: ch06/code/log_likelihood.md
+            - Geometric과 Poisson의 최대가능도: ch06/code/geometric_poisson_mle.md
         - 6.3 적률법:
             - 적률법의 기초: ch06/estimation_methods/moments_foundations.md
             - 흔한 분포에 대한 적률법: ch06/estimation_methods/moments_examples.md
@@ -227,19 +228,13 @@ nav:
             - 적률법과 최대가능도의 비교: ch06/estimation_methods/moments_vs_mle.md
             - 가능도와 추정 개관: ch06/estimation_methods/likelihood.md
             - 적률법 개관: ch06/estimation_methods/moments.md
+            - 추정 방법 비교: ch06/code/estimation_methods.md
         - 6.4 베이즈 추정:
             - 사전분포, 가능도, 사후분포: ch06/bayesian/prior_posterior.md
             - 켤레 사전분포: ch06/bayesian/conjugate_priors.md
             - 최대사후확률 추정: ch06/bayesian/map_estimation.md
-        - 6.5 코드:
-            - 추정 방법 비교: ch06/code/estimation_methods.md
-            - 최대가능도 최적화 예제: ch06/code/mle_optimization.md
-            - Fisher 정보량 계산: ch06/code/fisher_information.md
             - 베이즈 추정 시연: ch06/code/bayesian_estimation.md
-            - 포획–재포획 최대가능도: ch06/code/capture_recapture.md
-            - 로그가능도 시각화: ch06/code/log_likelihood.md
             - 베이즈 Beta 켤레 사전분포: ch06/code/bayesian_beta_conjugate.md
-            - Geometric과 Poisson의 최대가능도: ch06/code/geometric_poisson_mle.md
         - 장 연습문제: ch06/exercises/exercises.md
 
     - 7 μ와 σ²의 추정:
@@ -249,26 +244,25 @@ nav:
             - 편향과 일치성: ch07/mean/bias_consistency.md
             - 표본평균의 효율성: ch07/mean/efficiency.md
             - 절사평균과 윈저화 평균: ch07/mean/robust_means.md
+            - 표본평균의 성질: ch07/code/sample_mean_properties.md
+            - 일치성과 수렴: ch07/code/consistency_convergence.md
+            - 로버스트 추정량 비교: ch07/code/robust_estimators.md
         - 7.2 분산의 추정:
             - 소박한 분산추정량: ch07/variance/naive.md
             - Bessel 수정: ch07/variance/bessels.md
             - 분산추정량의 평균제곱오차: ch07/variance/mse_comparison.md
             - 로버스트 분산추정량: ch07/variance/robust_variance.md
+            - 분산추정량: ch07/code/variance_estimators.md
+            - Bessel 수정 시연: ch07/code/bessels_correction.md
         - 7.3 Gaussian 최대가능도:
             - μ와 σ²의 최대가능도추정: ch07/mle/gaussian_mle.md
             - σ²에 대한 Gaussian 최대가능도의 편향: ch07/mle/mle_bias.md
             - 충분성과 완비성: ch07/mle/sufficiency_completeness.md
+            - Gaussian 최대가능도: ch07/code/gaussian_mle.md
         - 7.4 정규성이 없을 때의 추정:
             - 꼬리가 두꺼운 분포: ch07/non_normal/heavy_tails.md
             - 치우친 분포: ch07/non_normal/skewed.md
-        - 7.5 코드:
-            - 표본평균의 성질: ch07/code/sample_mean_properties.md
-            - 일치성과 수렴: ch07/code/consistency_convergence.md
-            - 분산추정량: ch07/code/variance_estimators.md
-            - Bessel 수정 시연: ch07/code/bessels_correction.md
-            - Gaussian 최대가능도: ch07/code/gaussian_mle.md
             - 수익률 추정: ch07/code/return_estimation.md
-            - 로버스트 추정량 비교: ch07/code/robust_estimators.md
             - Cauchy에서 대수의법칙의 실패: ch07/code/cauchy_lln_failure.md
         - 장 연습문제: ch07/exercises/exercises.md
 
@@ -277,31 +271,30 @@ nav:
         - 8.1 기초:
             - 신뢰수준과 포함확률: ch08/foundations/coverage.md
             - 해석과 흔한 함정: ch08/foundations/interpretation.md
+            - 신뢰구간 시연: ch08/code/confidence_intervals.md
         - 8.2 일표본 구간:
             - μ의 신뢰구간: ch08/one_sample_intervals/ci_mu.md
             - p의 신뢰구간: ch08/one_sample_intervals/ci_p.md
             - σ²의 신뢰구간: ch08/one_sample_intervals/ci_sigma2.md
+            - 평균 신뢰구간의 포함확률 모의실험: ch08/code/ci_mean_sim.md
+            - 비율 신뢰구간의 포함확률 모의실험: ch08/code/ci_prop_sim.md
+            - 분산 신뢰구간의 포함확률 모의실험: ch08/code/ci_var_sim.md
+            - 일표본 평균 신뢰구간의 계산: ch08/code/ci_mean_calc.md
+            - 일표본 비율 신뢰구간의 계산: ch08/code/ci_prop_calc.md
         - 8.3 이표본 구간:
             - μ₁−μ₂의 신뢰구간: ch08/two_sample_intervals/ci_mu_diff.md
             - p₁−p₂의 신뢰구간: ch08/two_sample_intervals/ci_p_diff.md
             - σ₁²/σ₂²의 신뢰구간: ch08/two_sample_intervals/ci_variance_ratio.md
+            - 평균 차이 신뢰구간 모의실험: ch08/code/ci_diff_means_sim.md
         - 8.4 대응표본 구간:
             - μ_D (차이의 평균)의 신뢰구간: ch08/paired_sample_intervals/ci_mu_paired.md
             - 대응 설계와 독립 설계 중 무엇을 쓸 것인가: ch08/paired_sample_intervals/paired_vs_independent.md
             - 비율의 대응 구간 (McNemar): ch08/paired_sample_intervals/ci_paired_proportions.md
+            - 대응 평균 신뢰구간의 포함확률 모의실험: ch08/code/ci_paired_sim.md
         - 8.5 표본크기의 결정:
             - 원하는 오차한계를 위한 표본크기: ch08/sample_size/margin_of_error.md
             - 두 집단 비교를 위한 표본크기: ch08/sample_size/two_group_sample_size.md
-        - 8.6 코드:
-            - 신뢰구간 시연: ch08/code/confidence_intervals.md
             - 표본크기 계산: ch08/code/sample_size.md
-            - 평균 신뢰구간의 포함확률 모의실험: ch08/code/ci_mean_sim.md
-            - 비율 신뢰구간의 포함확률 모의실험: ch08/code/ci_prop_sim.md
-            - 분산 신뢰구간의 포함확률 모의실험: ch08/code/ci_var_sim.md
-            - 대응 평균 신뢰구간의 포함확률 모의실험: ch08/code/ci_paired_sim.md
-            - 평균 차이 신뢰구간 모의실험: ch08/code/ci_diff_means_sim.md
-            - 일표본 평균 신뢰구간의 계산: ch08/code/ci_mean_calc.md
-            - 일표본 비율 신뢰구간의 계산: ch08/code/ci_prop_calc.md
         - 장 연습문제: ch08/exercises/exercises.md
 
     - 9 가설검정:
@@ -310,46 +303,45 @@ nav:
             - 귀무가설과 대립가설: ch09/foundations/hypotheses.md
             - 검정통계량과 p-값: ch09/foundations/pvalues.md
             - 유의수준과 판정 규칙: ch09/foundations/significance_level.md
+            - 가설검정 시연: ch09/code/hypothesis_tests.md
+            - 동전 던지기 모의실험: ch09/code/coin_toss_simulation.md
+            - 기각역 시연: ch09/code/rejection_region_demo.md
         - 9.2 일표본 검정:
             - μ에 대한 Z-검정 (σ를 아는 경우): ch09/one_sample_tests/z_test_mean.md
             - μ에 대한 t-검정 (σ를 모르는 경우): ch09/one_sample_tests/t_test_mean.md
             - p에 대한 Z-검정 (비율): ch09/one_sample_tests/z_test_proportion.md
             - σ²에 대한 카이제곱 검정: ch09/one_sample_tests/chi2_test_variance.md
             - 일표본 검정 개관: ch09/one_sample_tests/one_sample.md
+            - 일표본 평균 검정: ch09/code/test_mean.md
+            - 일표본 비율 검정: ch09/code/test_proportion.md
+            - 일표본 분산 검정: ch09/code/test_variance.md
         - 9.3 이표본 검정:
             - μ₁−μ₂에 대한 이표본 Z-검정: ch09/two_sample_tests/z_test_two_means.md
             - 이표본 t-검정 (합동과 Welch): ch09/two_sample_tests/t_test_two_means.md
             - p₁−p₂에 대한 이표본 Z-검정: ch09/two_sample_tests/z_test_two_proportions.md
             - σ₁²/σ₂²에 대한 F-검정: ch09/two_sample_tests/f_test_two_variances.md
             - 이표본 검정 개관: ch09/two_sample_tests/two_sample.md
+            - 두 분산에 대한 F-검정: ch09/code/test_var_ratio.md
+            - 이표본 평균 검정: ch09/code/test_two_means.md
+            - 이표본 비율 검정: ch09/code/test_two_props.md
+            - 이표본 t-검정 (대마 가격): ch09/code/ttest_weed_prices.md
+            - 키/몸무게 가설검정: ch09/code/height_weight_hypothesis_test.md
         - 9.4 대응표본 검정:
             - μ_D에 대한 대응 t-검정: ch09/paired_sample_tests/paired_t_test.md
             - 대응표본과 이표본, 언제 무엇을 쓰는가: ch09/paired_sample_tests/paired_vs_two_sample.md
+            - 대응 평균 검정: ch09/code/test_paired.md
         - 9.5 오류와 검정력:
             - 제1종 오류와 제2종 오류: ch09/errors_and_power/errors.md
             - 검정력 분석: ch09/errors_and_power/power.md
             - 신뢰구간과 검정의 쌍대성: ch09/errors_and_power/duality.md
+            - 검정력 분석과 표본크기: ch09/code/power_analysis.md
+            - 제1종/제2종 오류의 시각화: ch09/code/type12_error_visualization.md
         - 9.6 다중검정:
+            - p-해킹 시연: ch09/code/p_hacking_demo.md
             - 가족단위 오류율: ch09/multiple_testing/fwer.md
             - Bonferroni와 Holm 보정: ch09/multiple_testing/bonferroni_holm.md
             - 거짓발견율 (Benjamini–Hochberg): ch09/multiple_testing/fdr.md
-        - 9.7 코드:
-            - 가설검정 시연: ch09/code/hypothesis_tests.md
-            - 검정력 분석과 표본크기: ch09/code/power_analysis.md
             - 다중검정 보정: ch09/code/multiple_testing.md
-            - 일표본 평균 검정: ch09/code/test_mean.md
-            - 일표본 비율 검정: ch09/code/test_proportion.md
-            - 일표본 분산 검정: ch09/code/test_variance.md
-            - 두 분산에 대한 F-검정: ch09/code/test_var_ratio.md
-            - 대응 평균 검정: ch09/code/test_paired.md
-            - 이표본 평균 검정: ch09/code/test_two_means.md
-            - 이표본 비율 검정: ch09/code/test_two_props.md
-            - 동전 던지기 모의실험: ch09/code/coin_toss_simulation.md
-            - 이표본 t-검정 (대마 가격): ch09/code/ttest_weed_prices.md
-            - 제1종/제2종 오류의 시각화: ch09/code/type12_error_visualization.md
-            - 기각역 시연: ch09/code/rejection_region_demo.md
-            - 키/몸무게 가설검정: ch09/code/height_weight_hypothesis_test.md
-            - p-해킹 시연: ch09/code/p_hacking_demo.md
             - 거짓발견율과 재표본추출 다중검정: ch09/code/fdr_resampling_demo.md
         - 장 연습문제: ch09/exercises/exercises.md
 
@@ -362,19 +354,18 @@ nav:
             - 적합도 검정: ch10/test/gof.md
             - 독립성 검정: ch10/test/independence.md
             - 동질성 검정: ch10/test/homogeneity.md
-        - 10.3 실무적 고려사항:
-            - 기대 칸 도수와 타당성 조건: ch10/practice/validity_conditions.md
-            - 효과크기와 Cramér의 V: ch10/practice/effect_size.md
-        - 10.4 코드:
             - 카이제곱 적합도 검정 (수동): ch10/code/gof_manual.md
             - 카이제곱 적합도 검정 (scipy): ch10/code/gof_scipy.md
             - 독립성 검정 (수동 계산과 그림): ch10/code/independence_manual.md
             - 독립성 검정 템플릿 함수: ch10/code/independence_template.md
             - 동질성 검정 (scipy): ch10/code/homogeneity_basic.md
             - 동질성 잔차 열지도: ch10/code/homogeneity_residuals.md
-            - Fisher의 정확검정 (2×2): ch10/code/fisher_exact.md
             - McNemar 검정 (대응된 이진 자료): ch10/code/mcnemar_test.md
             - Cochran의 Q 검정 (관련된 k개의 결과): ch10/code/cochran_q.md
+        - 10.3 실무적 고려사항:
+            - 기대 칸 도수와 타당성 조건: ch10/practice/validity_conditions.md
+            - 효과크기와 Cramér의 V: ch10/practice/effect_size.md
+            - Fisher의 정확검정 (2×2): ch10/code/fisher_exact.md
         - 장 연습문제: ch10/exercises/exercises.md
 
     - 11 분산분석:
@@ -382,47 +373,46 @@ nav:
         - 11.1 일원배치 분산분석:
             - 모형과 가정: ch11/anova_one_way/one_way_model.md
             - F-검정 절차: ch11/anova_one_way/f_test.md
+            - 일원배치 분산분석 파이프라인: ch11/code/oneway_pipeline.md
+            - scipy를 이용한 일원배치 분산분석과 그림: ch11/code/oneway_scipy.md
+            - 분산분석 F-통계량 모의실험: ch11/code/anova_f_simulation.md
+            - Fisher 방법을 이용한 분산분석 수동 계산: ch11/code/anova_manual_computation.md
         - 11.2 이원배치 분산분석:
             - 주효과와 블록화: ch11/anova_two_way/two_way.md
             - 교호작용 효과: ch11/anova_two_way/interaction.md
+            - 이원배치 분산분석 파이프라인: ch11/code/twoway_pipeline.md
+            - 교호작용 효과 그림: ch11/code/interaction_plot.md
         - 11.3 사후비교:
             - Tukey 정직유의차: ch11/post_hoc/tukey.md
             - Bonferroni와 Scheffé 방법: ch11/post_hoc/bonferroni_scheffe.md
             - Dunnett 검정 (대조군과의 비교): ch11/post_hoc/dunnett.md
             - Games–Howell (분산이 다를 때): ch11/post_hoc/games_howell.md
+            - 사후비교 예제: ch11/code/post_hoc_comparisons.md
         - 11.4 Welch 분산분석:
             - Welch의 일원배치 분산분석: ch11/anova_welch/welch_one_way.md
             - Welch의 이원배치 분산분석: ch11/anova_welch/welch_two_way.md
+            - Welch 분산분석의 제1종 오류와 검정력 모의실험: ch11/code/welch_simulation.md
+            - 이원배치 Welch 분산분석 (로버스트 HC3): ch11/code/welch_twoway_robust.md
         - 11.5 가정:
             - 가정 개관: ch11/assumptions/assumptions_overview.md
             - 잔차의 정규성 확인: ch11/assumptions/normality.md
             - 관측의 독립성 확인: ch11/assumptions/independence.md
             - 등분산성 확인: ch11/assumptions/homoscedasticity.md
             - 선형성 확인: ch11/assumptions/linearity.md
-        - 11.6 진단:
-            - 잔차 분석: ch11/diagnostics/residual_analysis.md
-            - 영향점: ch11/diagnostics/influential_points.md
-            - 가정 위반의 처리: ch11/diagnostics/handling_violations.md
-        - 11.7 실무 응용:
-            - A/B 검정과 실험 설계: ch11/practical_applications/ab_testing.md
-            - 분산분석의 금융 응용: ch11/practical_applications/finance_applications.md
-            - 사례 연구: ch11/practical_applications/case_studies.md
-        - 11.8 코드:
-            - 분산분석 진단: ch11/code/anova_diagnostics.md
-            - 사후비교 예제: ch11/code/post_hoc_comparisons.md
-            - 일원배치 분산분석 파이프라인: ch11/code/oneway_pipeline.md
-            - scipy를 이용한 일원배치 분산분석과 그림: ch11/code/oneway_scipy.md
-            - 이원배치 분산분석 파이프라인: ch11/code/twoway_pipeline.md
-            - 교호작용 효과 그림: ch11/code/interaction_plot.md
-            - Welch 분산분석의 제1종 오류와 검정력 모의실험: ch11/code/welch_simulation.md
-            - 이원배치 Welch 분산분석 (로버스트 HC3): ch11/code/welch_twoway_robust.md
-            - 분산분석 F-통계량 모의실험: ch11/code/anova_f_simulation.md
-            - Fisher 방법을 이용한 분산분석 수동 계산: ch11/code/anova_manual_computation.md
             - Bartlett 검정: ch11/code/bartlett_test.md
             - 분산에 대한 카이제곱 검정: ch11/code/chi2_test_for_variance.md
             - 카이제곱 분포: ch11/code/chi_square_distribution.md
             - 등분산에 대한 F-검정: ch11/code/f_test_equality_of_variances.md
             - Levene 검정: ch11/code/levene_test.md
+        - 11.6 진단:
+            - 잔차 분석: ch11/diagnostics/residual_analysis.md
+            - 영향점: ch11/diagnostics/influential_points.md
+            - 가정 위반의 처리: ch11/diagnostics/handling_violations.md
+            - 분산분석 진단: ch11/code/anova_diagnostics.md
+        - 11.7 실무 응용:
+            - A/B 검정과 실험 설계: ch11/practical_applications/ab_testing.md
+            - 분산분석의 금융 응용: ch11/practical_applications/finance_applications.md
+            - 사례 연구: ch11/practical_applications/case_studies.md
         - 장 연습문제: ch11/exercises/exercises.md
 
     - 12 상관과 인과:
@@ -434,6 +424,11 @@ nav:
             - 부분상관: ch12/correlation/partial.md
             - 점이연 상관과 파이 계수: ch12/correlation/special_cases.md
             - 상관의 이해: ch12/correlation/understanding.md
+            - 상관 분석 시연: ch12/code/correlation_analysis.md
+            - 상관 시각화: ch12/code/corr_viz.md
+            - 상관 타원 그림: ch12/code/correlation_ellipses.md
+            - 공분산 밑바닥부터 만들기: ch12/code/covariance_from_scratch.md
+            - 회귀와 상관 그림: ch12/code/regression_correlation_plot.md
         - 12.2 생태학적 상관:
             - 생태학적 오류: ch12/ecological_correlation/ecological_fallacy.md
             - Simpson의 역설: ch12/ecological_correlation/simpsons_paradox.md
@@ -444,12 +439,15 @@ nav:
             - 허위상관: ch12/confounding/spurious_correlations.md
             - 잠복변수와 공통원인: ch12/confounding/lurking_variables.md
             - 교란 개관: ch12/confounding/confounding.md
+            - 교란과 인과 시연: ch12/code/confounding_causation_demo.md
         - 12.4 인과:
             - 인과 추론의 기준: ch12/causation/causal_criteria.md
             - 무작위 실험과 인과: ch12/causation/experiments_causation.md
             - 도구변수 (입문): ch12/causation/instrumental_variables.md
             - 방향성 비순환 그래프: ch12/causation/dags.md
             - 인과 개관: ch12/causation/causation.md
+            - 인과추론 모의실험: ch12/code/causal_simulations.md
+            - 상관과 인과: ch12/code/correlation_causation.md
         - 12.5 상관 검정:
             - Pearson의 r 검정 (상관에 대한 t-검정): ch12/correlation_test/test_pearson.md
             - Spearman의 rho 검정: ch12/correlation_test/test_spearman.md
@@ -459,15 +457,6 @@ nav:
         - 12.6 상관행렬과 시각화:
             - 상관행렬의 열지도: ch12/visualization/heatmaps.md
             - 쌍 그림과 산점도 행렬: ch12/visualization/pairplots.md
-        - 12.7 코드:
-            - 상관 분석 시연: ch12/code/correlation_analysis.md
-            - 인과추론 모의실험: ch12/code/causal_simulations.md
-            - 상관 시각화: ch12/code/corr_viz.md
-            - 상관 타원 그림: ch12/code/correlation_ellipses.md
-            - 공분산 밑바닥부터 만들기: ch12/code/covariance_from_scratch.md
-            - 회귀와 상관 그림: ch12/code/regression_correlation_plot.md
-            - 교란과 인과 시연: ch12/code/confounding_causation_demo.md
-            - 상관과 인과: ch12/code/correlation_causation.md
         - 장 연습문제: ch12/exercises/exercises.md
 
     - 13 선형회귀:
@@ -475,15 +464,23 @@ nav:
         - 13.1 선형회귀:
             - 단순선형회귀: ch13/linear_regression/simple.md
             - 다중선형회귀: ch13/linear_regression/multiple.md
+            - 3차원 회귀평면: ch13/code/regression_plane_3d.md
+            - 회귀 (대마초 가격과 인구통계): ch13/code/regression_weed_demographics.md
         - 13.2 추정과 추론:
             - 최소제곱 추정: ch13/estimation_inference/least_squares.md
             - 단순 OLS 추정량의 표집분포: ch13/estimation_inference/sampling_dist_simple.md
             - 단순 OLS 추정량의 신뢰구간: ch13/estimation_inference/ci_coeff.md
             - 일반 OLS 추정량의 표집분포: ch13/estimation_inference/tests_coeff.md
+            - 기울기의 신뢰구간 (카페인 예제): ch13/code/ci_slope_example.md
+            - 신뢰띠와 예측띠: ch13/code/ci_prediction_bands.md
+            - 잔차제곱합 곡면 시각화: ch13/code/rss_surface_visualization.md
+            - 최소제곱 모의실험 (몬테카를로): ch13/code/ols_simulation.md
         - 13.3 계수 검정:
             - 회귀계수의 가설검정 (t-검정): ch13/testing_coefficients/hypothesis_tests.md
             - 계수의 p값과 신뢰구간: ch13/testing_coefficients/pvalues_ci.md
             - 유의성의 해석: ch13/testing_coefficients/significance.md
+            - OLS 회귀 출력 재현: ch13/code/ols_regression_output.md
+            - 계수 검정 예제: ch13/code/testing_coefficients.md
         - 13.4 교호작용과 다항식 확장:
             - 교호작용 항: ch13/interaction_polynomial/interaction_terms.md
             - 다항회귀: ch13/interaction_polynomial/polynomial_regression.md
@@ -497,10 +494,13 @@ nav:
             - 독립성 확인: ch13/assumptions/checking_independence.md
             - 등분산성 확인: ch13/assumptions/checking_homoscedasticity.md
             - 정규성 확인: ch13/assumptions/checking_normality.md
+            - 가중최소제곱: ch13/code/weighted_regression.md
         - 13.6 진단:
             - 잔차 분석: ch13/diagnostics/residuals.md
             - 다중공선성과 분산팽창인자: ch13/diagnostics/multicollinearity.md
             - 영향점과 지렛대 (Cook 거리, DFFITS): ch13/diagnostics/influence.md
+            - 다중회귀 진단: ch13/code/multi_reg_diag.md
+            - 회귀 진단 (주택): ch13/code/regression_diagnostics_housing.md
         - 13.7 성능 척도:
             - 결정계수와 수정 결정계수: ch13/performance/r_squared.md
             - '평균절대오차, 평균제곱오차, 제곱근평균제곱오차': ch13/performance/mae_mse_rmse.md
@@ -512,31 +512,19 @@ nav:
             - 모형선택을 위한 교차검증: ch13/model_selection/cross_validation.md
             - 단계적 선택과 최량 부분집합 선택: ch13/model_selection/stepwise_subset.md
             - AIC와 BIC 개관: ch13/model_selection/aic_bic.md
+            - 모형선택 비교: ch13/code/model_selection.md
+            - 교차검증 다항 모형선택: ch13/code/cv_polynomial_model_selection.md
+            - 부분집합 선택과 단계적 선택: ch13/code/subset_stepwise_selection.md
         - 13.9 스플라인과 일반화가법모형:
             - 스플라인과 GAM 개관: ch13/splines_gams/index.md
             - 일반화가법모형: ch13/splines_gams/generalized_additive_models.md
+            - GAM 주택 분석: ch13/code/gam_housing_analysis.md
+            - 계단함수: ch13/code/step_functions.md
+            - Patsy를 이용한 스플라인: ch13/code/splines_patsy_examples.md
         - 13.10 패키지 사용법:
             - statsmodels 최소제곱 인터페이스: ch13/package_usage/statsmodels.md
             - sklearn LinearRegression 인터페이스: ch13/package_usage/sklearn.md
             - 무엇을 언제 쓸 것인가 (비교): ch13/package_usage/comparison.md
-        - 13.11 코드:
-            - 기울기의 신뢰구간 (카페인 예제): ch13/code/ci_slope_example.md
-            - 신뢰띠와 예측띠: ch13/code/ci_prediction_bands.md
-            - OLS 회귀 출력 재현: ch13/code/ols_regression_output.md
-            - 다중회귀 진단: ch13/code/multi_reg_diag.md
-            - 계수 검정 예제: ch13/code/testing_coefficients.md
-            - 모형선택 비교: ch13/code/model_selection.md
-            - 가중최소제곱: ch13/code/weighted_regression.md
-            - GAM 주택 분석: ch13/code/gam_housing_analysis.md
-            - 회귀 진단 (주택): ch13/code/regression_diagnostics_housing.md
-            - 잔차제곱합 곡면 시각화: ch13/code/rss_surface_visualization.md
-            - 3차원 회귀평면: ch13/code/regression_plane_3d.md
-            - 교차검증 다항 모형선택: ch13/code/cv_polynomial_model_selection.md
-            - 계단함수: ch13/code/step_functions.md
-            - Patsy를 이용한 스플라인: ch13/code/splines_patsy_examples.md
-            - 회귀 (대마초 가격과 인구통계): ch13/code/regression_weed_demographics.md
-            - 최소제곱 모의실험 (몬테카를로): ch13/code/ols_simulation.md
-            - 부분집합 선택과 단계적 선택: ch13/code/subset_stepwise_selection.md
         - 장 연습문제: ch13/exercises/exercises.md
     - 14 정규성 검정:
         - 장 개요: ch14/index.md
@@ -549,46 +537,45 @@ nav:
             - Q-Q 그림: ch14/graphical_methods/qq_plots.md
             - 상자그림과 그 해석: ch14/graphical_methods/boxplots.md
             - 금융 수익률의 Q-Q 그림: ch14/graphical_methods/qq_plots_financial.md
+            - 시각적 정규성 확인: ch14/code/graphical_checks.md
+            - Q-Q 그림과 정규성 검정: ch14/code/qq_plot_basic.md
+            - Q-Q 그림 신뢰띠 모의실험: ch14/code/qq_confidence_band.md
+            - 상자그림으로 보는 분포의 모양: ch14/code/boxplot_shapes.md
+            - 금융 수익률의 Q-Q 그림 (코드): ch14/code/qq_plot_financial_returns.md
         - 14.3 정규성 지표로서의 기술통계량:
             - 왜도와 첨도: ch14/descriptive_statistics/skewness_kurtosis.md
             - 왜도 검정과 첨도 검정: ch14/descriptive_statistics/skewtest_kurtosistest.md
             - D'Agostino K제곱 검정: ch14/descriptive_statistics/dagostino.md
             - Jarque-Bera 검정: ch14/descriptive_statistics/jarque_bera.md
+            - 왜도 검정: ch14/code/skewtest.md
+            - 첨도 검정: ch14/code/kurtosistest.md
+            - D'Agostino K제곱 검정 (코드): ch14/code/dagostino_test.md
+            - Jarque-Bera 검정 (코드): ch14/code/jarque_bera.md
         - 14.4 형식적 정규성 검정:
             - Kolmogorov-Smirnov 검정과 Lilliefors 검정: ch14/formal_tests/ks_lilliefors.md
             - Anderson-Darling 검정: ch14/formal_tests/anderson_darling.md
             - Shapiro-Wilk 검정: ch14/formal_tests/shapiro_wilk.md
+            - 형식적 정규성 검정 모음: ch14/code/normality_tests.md
+            - Kolmogorov-Smirnov 검정: ch14/code/ks_test.md
+            - Lilliefors 검정: ch14/code/lilliefors_test.md
+            - Anderson-Darling 검정 (코드): ch14/code/anderson_darling.md
+            - Shapiro-Wilk 검정 (코드): ch14/code/shapiro_wilk.md
         - 14.5 한계와 함정:
             - 표본크기가 검정력에 미치는 영향: ch14/limitations/sample_size_power.md
             - 민감도와 실질적 유의성: ch14/limitations/sensitivity_practical.md
             - 올바른 검정 고르기: ch14/limitations/choosing_test.md
             - 한계 개관: ch14/limitations/limitations.md
+            - Shapiro-Wilk 검정력 모의실험: ch14/code/shapiro_power_sim.md
         - 14.6 비정규 자료 다루기:
             - 정규성을 위한 변환: ch14/non_normal_data/transformations.md
             - 대안으로서의 붓스트랩: ch14/non_normal_data/bootstrapping.md
             - 비모수 방법: ch14/non_normal_data/nonparametric.md
+            - 변환 시연: ch14/code/transformations.md
         - 14.7 응용:
             - t 검정과 분산분석에서의 정규성: ch14/applications/t_tests_anova.md
             - 회귀에서의 정규성 (잔차 진단): ch14/applications/regression_residuals.md
             - 금융 수익률의 정규성: ch14/applications/financial_returns.md
             - 응용 개관: ch14/applications/applications.md
-        - 14.8 코드:
-            - 시각적 정규성 확인: ch14/code/graphical_checks.md
-            - 형식적 정규성 검정 모음: ch14/code/normality_tests.md
-            - 변환 시연: ch14/code/transformations.md
-            - Q-Q 그림과 정규성 검정: ch14/code/qq_plot_basic.md
-            - Q-Q 그림 신뢰띠 모의실험: ch14/code/qq_confidence_band.md
-            - 상자그림으로 보는 분포의 모양: ch14/code/boxplot_shapes.md
-            - 왜도 검정: ch14/code/skewtest.md
-            - 첨도 검정: ch14/code/kurtosistest.md
-            - D'Agostino K제곱 검정 (코드): ch14/code/dagostino_test.md
-            - Jarque-Bera 검정 (코드): ch14/code/jarque_bera.md
-            - Kolmogorov-Smirnov 검정: ch14/code/ks_test.md
-            - Lilliefors 검정: ch14/code/lilliefors_test.md
-            - Anderson-Darling 검정 (코드): ch14/code/anderson_darling.md
-            - Shapiro-Wilk 검정 (코드): ch14/code/shapiro_wilk.md
-            - Shapiro-Wilk 검정력 모의실험: ch14/code/shapiro_power_sim.md
-            - 금융 수익률의 Q-Q 그림 (코드): ch14/code/qq_plot_financial_returns.md
         - 장 연습문제: ch14/exercises/exercises.md
 
     - 15 분산 검정:
@@ -601,46 +588,45 @@ nav:
             - 일표본 카이제곱 분산 검정: ch15/chi_square_test/chi_square_variance.md
             - 유도와 분포이론: ch15/chi_square_test/derivation.md
             - 모분산의 신뢰구간: ch15/chi_square_test/ci_variance.md
+            - 분산에 대한 카이제곱 검정 (코드): ch15/code/chi2_test_for_variance.md
+            - 카이제곱분포: ch15/code/chi_square_distribution.md
         - 15.3 두 분산 비교를 위한 F 검정:
             - 이표본 F 검정: ch15/f_test/f_test_two_variances.md
             - F 분포와 자유도: ch15/f_test/f_distribution_details.md
             - 비정규성에 대한 민감도: ch15/f_test/sensitivity.md
+            - 분산 동일성에 대한 F 검정 (코드): ch15/code/f_test_variances.md
+            - F 검정 꼬리 영역 시각화: ch15/code/f_test_tail_plot.md
+            - F 검정의 정규성 민감도와 로버스트 대안: ch15/code/f_test_robust_alt.md
+            - F 검정 검정력 모의실험: ch15/code/f_test_power_sim.md
         - 15.4 Bartlett 검정:
             - 분산의 동일성에 대한 Bartlett 검정: ch15/bartlett_test/bartlett_test.md
             - 유도와 카이제곱 근사: ch15/bartlett_test/derivation.md
             - 비정규성 아래의 한계: ch15/bartlett_test/limitations.md
+            - Bartlett 검정 (코드): ch15/code/bartlett_test.md
+            - Bartlett 검정 비정규성 민감도: ch15/code/bartlett_sensitivity.md
         - 15.5 로버스트 검정:
             - Levene 검정: ch15/robust_tests/levene.md
             - Brown-Forsythe 검정: ch15/robust_tests/brown_forsythe.md
             - Fligner-Killeen 검정: ch15/robust_tests/fligner_killeen.md
             - 로버스트 방법의 비교: ch15/robust_tests/comparison.md
             - 로버스트 검정 개관: ch15/robust_tests/robust_tests.md
+            - Levene 검정 (코드): ch15/code/levene_test.md
+            - 로버스트 분산 검정 비교: ch15/code/robust_tests_comparison.md
+            - Levene 검정 정규 대 치우친 분포 모의실험: ch15/code/levene_simulation.md
+            - Brown-Forsythe 검정 (scipy): ch15/code/brown_forsythe.md
+            - Fligner-Killeen 검정 (scipy): ch15/code/fligner_killeen.md
         - 15.6 고급 방법:
             - 붓스트랩 분산 검정: ch15/advanced_methods/bootstrap_variance.md
             - Bayes 분산 검정: ch15/advanced_methods/bayesian_variance.md
             - 분산에 대한 가능도비 검정: ch15/advanced_methods/likelihood_ratio.md
             - 고급 방법 개관: ch15/advanced_methods/advanced_methods.md
+            - 붓스트랩 분산 검정 (코드): ch15/code/bootstrap_var_test.md
+            - Bayes 분산 검정 (코드): ch15/code/bayesian_var_test.md
         - 15.7 응용:
             - 분산분석 등분산성 사전검정: ch15/applications/anova_pretest.md
             - 회귀에서의 분산 검정: ch15/applications/regression_variance.md
             - 금융 변동성 비교: ch15/applications/financial_volatility.md
             - 회귀와 분산분석에서의 응용: ch15/applications/applications.md
-        - 15.8 코드:
-            - 분산에 대한 카이제곱 검정 (코드): ch15/code/chi2_test_for_variance.md
-            - 분산 동일성에 대한 F 검정 (코드): ch15/code/f_test_variances.md
-            - Bartlett 검정 (코드): ch15/code/bartlett_test.md
-            - Levene 검정 (코드): ch15/code/levene_test.md
-            - 카이제곱분포: ch15/code/chi_square_distribution.md
-            - 로버스트 분산 검정 비교: ch15/code/robust_tests_comparison.md
-            - F 검정 꼬리 영역 시각화: ch15/code/f_test_tail_plot.md
-            - F 검정의 정규성 민감도와 로버스트 대안: ch15/code/f_test_robust_alt.md
-            - F 검정 검정력 모의실험: ch15/code/f_test_power_sim.md
-            - Bartlett 검정 비정규성 민감도: ch15/code/bartlett_sensitivity.md
-            - Levene 검정 정규 대 치우친 분포 모의실험: ch15/code/levene_simulation.md
-            - Brown-Forsythe 검정 (scipy): ch15/code/brown_forsythe.md
-            - Fligner-Killeen 검정 (scipy): ch15/code/fligner_killeen.md
-            - 붓스트랩 분산 검정 (코드): ch15/code/bootstrap_var_test.md
-            - Bayes 분산 검정 (코드): ch15/code/bayesian_var_test.md
         - 장 연습문제: ch15/exercises/exercises.md
 
     - 16 비모수 검정:
@@ -649,12 +635,16 @@ nav:
             - 비모수 검정을 언제, 왜 쓰는가: ch16/foundations/motivation.md
             - 순위와 순위변환: ch16/foundations/ranks.md
             - 모수적 검정과의 검정력 비교: ch16/foundations/power_comparison.md
+            - 비모수 검정 모음: ch16/code/nonparametric_suite.md
         - 16.2 일표본 비모수 검정:
             - 무작위성에 대한 런 검정: ch16/one_sample_nonparametric/runs_test.md
             - 부호검정: ch16/one_sample_nonparametric/sign_test.md
             - Wilcoxon 부호순위검정: ch16/one_sample_nonparametric/wilcoxon_signed_rank.md
             - 이항검정: ch16/one_sample_nonparametric/binomial_test.md
             - 일표본 검정 개관: ch16/one_sample_nonparametric/one_sample.md
+            - 런 검정 (코드): ch16/code/runs_test.md
+            - 부호검정 (코드): ch16/code/sign_test.md
+            - Wilcoxon 검정 (코드): ch16/code/wilcoxon_tests.md
         - 16.3 대응표본 비모수 검정:
             - 대응 부호검정: ch16/paired_sample_nonparametric/paired_sign.md
             - 대응자료에 대한 Wilcoxon 부호순위검정: ch16/paired_sample_nonparametric/paired_wilcoxon.md
@@ -665,6 +655,7 @@ nav:
             - Mann-Whitney U 검정: ch16/two_sample_nonparametric/mann_whitney.md
             - Kolmogorov-Smirnov 이표본 검정: ch16/two_sample_nonparametric/ks_two_sample.md
             - 이표본 검정 개관: ch16/two_sample_nonparametric/two_sample.md
+            - 이표본 및 다집단 검정 (코드): ch16/code/two_sample_tests.md
         - 16.5 다집단 비모수 검정:
             - Kruskal-Wallis 검정: ch16/multi_group_nonparametric/kruskal_wallis.md
             - Friedman 검정 (반복측정): ch16/multi_group_nonparametric/friedman.md
@@ -673,12 +664,6 @@ nav:
         - 16.6 비모수 상관:
             - Spearman의 ρ (재론): ch16/correlation/spearman.md
             - Kendall의 τ (재론): ch16/correlation/kendall.md
-        - 16.7 코드:
-            - 런 검정 (코드): ch16/code/runs_test.md
-            - 부호검정 (코드): ch16/code/sign_test.md
-            - Wilcoxon 검정 (코드): ch16/code/wilcoxon_tests.md
-            - 이표본 및 다집단 검정 (코드): ch16/code/two_sample_tests.md
-            - 비모수 검정 모음: ch16/code/nonparametric_suite.md
 
     - 17 재표집 방법:
         - 장 개요: ch17/index.md
@@ -694,30 +679,29 @@ nav:
             - 붓스트랩-t 방법: ch17/bootstrap_ci/bootstrap_t.md
             - 신뢰수준의 시각화: ch17/bootstrap_ci/visualization_confidence_levels.md
             - 붓스트랩 신뢰구간 방법의 비교: ch17/bootstrap_ci/comparison.md
+            - 붓스트랩 신뢰구간 방법 (코드): ch17/code/bootstrap_ci.md
+            - 붓스트랩 신뢰구간 시각화 (코드): ch17/code/bootstrap_ci_visualization.md
+            - 중앙값의 붓스트랩 (코드): ch17/code/bootstrap_median.md
         - 17.3 붓스트랩 가설검정:
             - 단일 평균에 대한 붓스트랩 검정: ch17/bootstrap_testing/single_mean.md
             - 두 평균에 대한 붓스트랩 검정: ch17/bootstrap_testing/two_means.md
             - 상관에 대한 붓스트랩 검정: ch17/bootstrap_testing/correlation.md
+            - 붓스트랩 가설검정 (코드): ch17/code/bootstrap_tests.md
         - 17.4 순열검정:
             - 순열검정의 기초: ch17/permutation/foundations.md
             - 이표본 위치에 대한 순열검정: ch17/permutation/two_sample.md
             - 상관에 대한 순열검정: ch17/permutation/correlation.md
             - 대응자료에 대한 순열검정: ch17/permutation/paired.md
             - 순열검정 개요: ch17/permutation/permutation.md
+            - 순열검정 시연 (코드): ch17/code/permutation_tests.md
+            - A/B 검정 순열검정 (코드): ch17/code/ab_testing_permutation.md
+            - 재표집 (신발 판매 A/B 검정) (코드): ch17/code/resampling_shoe_sales.md
         - 17.5 비교와 실무 지침:
             - 붓스트랩과 순열검정의 비교: ch17/comparison/bootstrap_vs_permutation.md
             - 재표집 횟수와 수렴: ch17/comparison/convergence.md
             - 재표집이 실패할 때: ch17/comparison/limitations.md
             - 비교 개요: ch17/comparison/comparison.md
-        - 17.6 코드:
-            - 붓스트랩 신뢰구간 방법 (코드): ch17/code/bootstrap_ci.md
-            - 붓스트랩 가설검정 (코드): ch17/code/bootstrap_tests.md
-            - 순열검정 시연 (코드): ch17/code/permutation_tests.md
             - 재표집 방법 비교 (코드): ch17/code/resampling_methods.md
-            - A/B 검정 순열검정 (코드): ch17/code/ab_testing_permutation.md
-            - 붓스트랩 신뢰구간 시각화 (코드): ch17/code/bootstrap_ci_visualization.md
-            - 중앙값의 붓스트랩 (코드): ch17/code/bootstrap_median.md
-            - 재표집 (신발 판매 A/B 검정) (코드): ch17/code/resampling_shoe_sales.md
             - 교차검증 방법 비교 (코드): ch17/code/cv_methods_comparison.md
         - 장 연습문제: ch17/exercises/exercises.md
 
@@ -733,6 +717,7 @@ nav:
             - 베이즈 해석 (정규 사전분포): ch18/ridge/bayesian.md
             - 능형 자취와 λ 선택: ch18/ridge/lambda_selection.md
             - 능형회귀 개관: ch18/ridge/ridge.md
+            - 능형회귀 예제 (코드): ch18/code/ridge_examples.md
         - 18.3 라쏘 회귀:
             - 라쏘 정식화와 희소성: ch18/lasso/formulation.md
             - 기하학적 해석 (L1 벌점): ch18/lasso/geometry.md
@@ -740,31 +725,29 @@ nav:
             - 좌표하강 알고리즘: ch18/lasso/coordinate_descent.md
             - 변수선택 도구로서의 라쏘: ch18/lasso/feature_selection.md
             - 라쏘 회귀 개관: ch18/lasso/lasso.md
+            - 라쏘 회귀 예제 (코드): ch18/code/lasso_examples.md
+            - 주택가격 자료의 라쏘 정칙화 경로 (코드): ch18/code/lasso_housing_regularization_path.md
         - 18.4 엘라스틱넷:
             - 엘라스틱넷 정식화: ch18/elastic_net/formulation.md
             - 순수 능형회귀·라쏘에 대한 이점: ch18/elastic_net/advantages.md
             - 상관된 변수에 대한 그룹 효과: ch18/elastic_net/grouping_effect.md
             - 엘라스틱넷 개관: ch18/elastic_net/elastic_net.md
+            - 엘라스틱넷 예제 (코드): ch18/code/elastic_net_examples.md
         - 18.5 초모수 조율:
             - λ 선택을 위한 교차검증: ch18/tuning/cross_validation.md
             - 정칙화 경로: ch18/tuning/regularization_path.md
             - 정칙화 모형의 정보기준: ch18/tuning/information_criteria.md
+            - 교차검증과 λ 조율 (코드): ch18/code/cv_tuning.md
         - 18.6 차원축소 방법:
             - 주성분회귀와 부분최소제곱 개관: ch18/pcr_pls/index.md
             - 주성분회귀: ch18/pcr_pls/principal_components_regression.md
             - 부분최소제곱: ch18/pcr_pls/partial_least_squares.md
+            - 주성분회귀와 부분최소제곱 예제 (코드): ch18/code/pcr_pls_examples.md
         - 18.7 개관과 비교:
             - 능형회귀 대 라쏘 대 엘라스틱넷: ch18/overview/comparison.md
             - 방법 선택 지침: ch18/overview/guidelines.md
             - 개관: ch18/overview/overview.md
-        - 18.8 코드:
-            - 능형회귀 예제 (코드): ch18/code/ridge_examples.md
-            - 라쏘 회귀 예제 (코드): ch18/code/lasso_examples.md
-            - 엘라스틱넷 예제 (코드): ch18/code/elastic_net_examples.md
             - 능형회귀·라쏘·엘라스틱넷 비교 (코드): ch18/code/reg_compare.md
-            - 교차검증과 λ 조율 (코드): ch18/code/cv_tuning.md
-            - 주택가격 자료의 라쏘 정칙화 경로 (코드): ch18/code/lasso_housing_regularization_path.md
-            - 주성분회귀와 부분최소제곱 예제 (코드): ch18/code/pcr_pls_examples.md
         - 장 연습문제: ch18/exercises/exercises.md
 
     - 19 로지스틱 회귀:
@@ -773,6 +756,8 @@ nav:
             - 로짓 연결과 오즈: ch19/logistic_regression/logit.md
             - 오즈비와 계수 해석: ch19/logistic_regression/odds_ratios.md
             - 로지스틱 회귀의 가능도: ch19/logistic_regression/likelihood.md
+            - 로지스틱 회귀 실습 (코드): ch19/code/logistic_regression.md
+            - 로지스틱 회귀와 선형회귀의 비교 (코드): ch19/code/logistic_vs_linear_visualization.md
         - 19.2 추정과 추론:
             - 최대가능도 추정: ch19/estimation_inference/mle.md
             - 뉴턴-랩슨과 반복재가중최소제곱: ch19/estimation_inference/algorithms.md
@@ -786,15 +771,12 @@ nav:
             - 보정과 브라이어 점수: ch19/evaluation/calibration.md
             - 불균형 자료 다루기: ch19/evaluation/imbalanced_data.md
             - 분류 지표 개관: ch19/evaluation/metrics.md
+            - ROC 곡선과 평가지표 구현 (코드): ch19/code/evaluation_metrics.md
+            - 선형판별분석과 이차판별분석 (로지스틱 회귀와 비교): ch19/code/lda_qda_classification.md
         - 19.4 정칙화 로지스틱 회귀:
             - 로지스틱 회귀의 L1·L2 정칙화: ch19/regularized/regularization.md
             - 벌점가능도를 통한 변수선택: ch19/regularized/feature_selection.md
-        - 19.5 코드:
-            - 로지스틱 회귀 실습 (코드): ch19/code/logistic_regression.md
-            - ROC 곡선과 평가지표 구현 (코드): ch19/code/evaluation_metrics.md
             - 정칙화 로지스틱 회귀 실습 (코드): ch19/code/regularized_logistic.md
-            - 로지스틱 회귀와 선형회귀의 비교 (코드): ch19/code/logistic_vs_linear_visualization.md
-            - 선형판별분석과 이차판별분석 (코드): ch19/code/lda_qda_classification.md
         - 장 연습문제: ch19/exercises/exercises.md
 
     - 20 소프트맥스 회귀:
@@ -807,18 +789,17 @@ nav:
             - 교차엔트로피 손실: ch20/optimization/cross_entropy.md
             - 기울기 기반 최적화: ch20/optimization/optimization.md
             - 소프트맥스의 정칙화: ch20/optimization/regularization.md
+            - 소프트맥스 회귀 구현 (코드): ch20/code/softmax_implementation.md
         - 20.3 모형 평가와 사례연구:
             - 다범주 지표 (정확도, 혼동행렬): ch20/case_studies/metrics.md
             - 거시·미시·가중 평균: ch20/case_studies/averaging.md
             - MNIST 사례연구: ch20/case_studies/mnist.md
+            - 다범주 평가지표 구현 (코드): ch20/code/multiclass_metrics.md
+            - MNIST 분류 (코드): ch20/code/mnist_classification.md
         - 20.4 일대다와 일대일 전략:
             - 일대다(OvR) 접근: ch20/strategies/ovr.md
             - 일대일(OvO) 접근: ch20/strategies/ovo.md
             - 소프트맥스와의 비교: ch20/strategies/comparison.md
-        - 20.5 코드:
-            - 소프트맥스 회귀 구현 (코드): ch20/code/softmax_implementation.md
-            - 다범주 평가지표 구현 (코드): ch20/code/multiclass_metrics.md
-            - MNIST 분류 (코드): ch20/code/mnist_classification.md
 
     - 21 생존 모형:
         - 장 개요: ch21/index.md
@@ -832,28 +813,32 @@ nav:
             - 넬슨-알렌 누적위험: ch21/nonparametric/nelson_aalen.md
             - 로그순위 검정: ch21/nonparametric/log_rank_test.md
             - 생존곡선의 신뢰구간: ch21/nonparametric/survival_ci.md
+            - 카플란-마이어 생존곡선과 로그순위 검정 (코드): ch21/code/kaplan_meier.md
         - 21.3 모수적 생존 모형:
             - 지수 모형 (상수 위험): ch21/parametric/exponential.md
             - 와이불 모형 (단조 위험): ch21/parametric/weibull.md
             - 로그정규 모형과 로그로지스틱 모형: ch21/parametric/lognormal_loglogistic.md
             - 절단자료의 최대가능도: ch21/parametric/mle_censored.md
+            - 모수적 생존 모형 (코드): ch21/code/parametric_models.md
         - 21.4 콕스 비례위험 모형:
             - 부분가능도와 콕스 모형: ch21/cox/partial_likelihood.md
             - 위험비 해석: ch21/cox/hazard_ratios.md
             - 비례위험 가정: ch21/cox/ph_assumption.md
             - 모형 진단 (쇤펠트 잔차): ch21/cox/diagnostics.md
+            - 콕스 비례위험 (코드): ch21/code/cox_model.md
         - 21.5 모형 비교와 선택:
             - 비모수 대 모수 대 준모수: ch21/comparison/model_comparison.md
             - AIC와 일치도 지수: ch21/comparison/model_selection.md
-        - 21.6 코드:
-            - 카플란-마이어 생존곡선과 로그순위 검정 (코드): ch21/code/kaplan_meier.md
-            - 모수적 생존 모형 (코드): ch21/code/parametric_models.md
-            - 콕스 비례위험 (코드): ch21/code/cox_model.md
             - 생존 모형 비교 (코드): ch21/code/model_comparison.md
 
-    - 보너스 장:
-        - 코드:
-            - 카플란-마이어 구현 (코드): ch_bonus/code/kaplan_meier.md
+
+# ch_bonus/code/kaplan_meier.md 는 ch21/code/kaplan_meier.md 와 같은 내용의 다른
+# 판본이라 목차에서 제외한다. 파일은 저장소에 그대로 남아 있으므로, 둘을 비교해
+# 합치거나 되살리려면 아래 한 줄을 지우고 nav에 다시 넣으면 된다.
+exclude_docs: |
+  ch_bonus/*
+  *_score.md
+  *_v[0-9]*.md
 
 plugins:
     - search
