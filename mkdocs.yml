@@ -76,7 +76,6 @@ nav:
             - 비지도학습 (패턴 발견): ch01/paradigms/unsupervised.md
             - 강화학습 (순차적 의사결정): ch01/paradigms/reinforcement.md
         - 1.4 자료 수집의 어려움:
-            - 무작위화와 눈가림: ch01/classical/randomization_blinding.md
             - 편향과 무응답: ch01/classical/bias_nonresponse.md
             - 생존자 편향: ch01/classical/survivorship_bias.md
         - 1.5 모델 건설 방법:
