@@ -53,6 +53,14 @@ print(M)
 #  [1 0 2]]
 ```
 
+출력:
+
+```
+[[2 1 0]
+ [0 2 1]
+ [1 0 2]]
+```
+
 ---
 
 ## 전체 정확도
@@ -70,6 +78,12 @@ def accuracy(M):
 
 print(f"Accuracy: {accuracy(M):.4f}")
 # Accuracy: 0.6667
+```
+
+출력:
+
+```
+Accuracy: 0.6667
 ```
 
 ---
@@ -124,6 +138,14 @@ for c in range(3):
     print(f"Class {c}: Prec={prec[c]:.3f}  Rec={rec[c]:.3f}  F1={f1[c]:.3f}")
 ```
 
+출력:
+
+```
+Class 0: Prec=0.667  Rec=0.667  F1=0.667
+Class 1: Prec=0.667  Rec=0.667  F1=0.667
+Class 2: Prec=0.667  Rec=0.667  F1=0.667
+```
+
 ---
 
 ## 거시평균과 미시평균
@@ -170,6 +192,13 @@ print(f"Macro F1: {macro_f1(M):.4f}")
 print(f"Micro F1: {micro_f1(M):.4f}")
 ```
 
+출력:
+
+```
+Macro F1: 0.6667
+Micro F1: 0.6667
+```
+
 ---
 
 ## scikit-learn과의 검증
@@ -204,6 +233,34 @@ print("\nscikit-learn classification report:")
 print(classification_report(y_test, y_pred, digits=4))
 print(f"Our Macro F1:  {macro_f1(M_ours):.4f}")
 print(f"Our Micro F1:  {micro_f1(M_ours):.4f}")
+```
+
+출력:
+
+```
+Our confusion matrix:
+[[19  0  0]
+ [ 0 13  0]
+ [ 0  0 13]]
+
+scikit-learn confusion matrix:
+[[19  0  0]
+ [ 0 13  0]
+ [ 0  0 13]]
+
+scikit-learn classification report:
+              precision    recall  f1-score   support
+
+           0     1.0000    1.0000    1.0000        19
+           1     1.0000    1.0000    1.0000        13
+           2     1.0000    1.0000    1.0000        13
+
+    accuracy                         1.0000        45
+   macro avg     1.0000    1.0000    1.0000        45
+weighted avg     1.0000    1.0000    1.0000        45
+
+Our Macro F1:  1.0000
+Our Micro F1:  1.0000
 ```
 
 실행하면 이 분할에서는 검정자료 45개를 모두 옳게 분류하여 혼동행렬이 완전한 대각행렬
@@ -255,6 +312,8 @@ def plot_confusion_matrix(M, class_names=None):
 
 plot_confusion_matrix(M_ours, class_names=iris.target_names)
 ```
+
+![혼동행렬](./img/multiclass_metrics_228.png)
 
 ---
 

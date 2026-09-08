@@ -49,6 +49,12 @@ print(softmax(z))
 # [[0.7054  0.2595  0.0351]]
 ```
 
+출력:
+
+```
+[[0.70538451 0.25949646 0.03511903]]
+```
+
 ---
 
 ## 교차엔트로피 손실
@@ -209,6 +215,12 @@ for epoch in range(epochs):
 print(f"Final training loss: {loss_history[-1]:.4f}")
 ```
 
+출력:
+
+```
+Final training loss: 0.1326
+```
+
 최종 훈련 손실은 $0.1326$이다.
 
 ---
@@ -223,6 +235,12 @@ Y_hat_test = softmax(Z_test)
 y_pred = np.argmax(Y_hat_test, axis=1)
 accuracy = np.mean(y_pred == y_test)
 print(f"Test accuracy: {accuracy:.4f}")
+```
+
+출력:
+
+```
+Test accuracy: 1.0000
 ```
 
 이 분할에서 검정 정확도는 $1.0000$이다. 검정자료가 45개뿐이고 붓꽃 자료의 세 품종이 잘
@@ -242,6 +260,12 @@ from sklearn.linear_model import LogisticRegression
 clf = LogisticRegression(solver='lbfgs', max_iter=1000)
 clf.fit(X_train, y_train)
 print(f"scikit-learn accuracy: {clf.score(X_test, y_test):.4f}")
+```
+
+출력:
+
+```
+scikit-learn accuracy: 1.0000
 ```
 
 scikit-learn도 $1.0000$을 내어 두 구현이 일치한다.
@@ -342,6 +366,12 @@ $L_2$ 정칙화 판본의 학습 루프를 구현하라. 손실에 벌점항 $\f
     print(f"Regularized accuracy: {np.mean(y_pred_reg == y_test):.4f}")
     ```
 
+    출력:
+
+    ```
+    Regularized accuracy: 0.8889
+    ```
+
     **결과: 정칙화 정확도는 $0.8889$로, 벌점 없는 $1.0000$보다 오히려 나쁘다.**
 
     이는 정칙화가 언제나 도움이 된다는 통념에 대한 좋은 반례다. 붓꽃 자료는 $n = 105$,
@@ -378,6 +408,13 @@ NumPy 실험을 작성하라.
     # Stable softmax (max subtraction)
     print("Stable:", softmax(z))
     # Output: [[0.2447  0.6652  0.0900]]
+    ```
+
+    출력:
+
+    ```
+    Naive: [[nan nan nan]]
+    Stable: [[0.24472847 0.66524096 0.09003057]]
     ```
 
     순진한 판본은 $e^{1001}$이 float64의 최댓값($\approx 1.8 \times 10^{308}$)을 넘어 넘친다.
@@ -480,6 +517,8 @@ $\eta_0 = 1.0$으로 붓꽃 자료에서 500 에포크 학습하고, 훈련 손�
     plt.tight_layout()
     plt.show()
     ```
+
+    ![학습률 스케줄에 따른 훈련 손실](./img/softmax_implementation_439.png)
 
     일정을 적용한 판본은 후반 에포크에서 더 매끄럽게 수렴하는 경향이 있다. 학습률을 크게
     고정하면 손실이 최소점 근처에서 정착하지 못하고 진동할 수 있다. 감쇠 일정은 시간이

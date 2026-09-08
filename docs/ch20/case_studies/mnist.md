@@ -18,10 +18,17 @@ from torchvision import transforms
 import matplotlib.pyplot as plt
 
 transform = transforms.ToTensor()
+train_dataset = torchvision.datasets.MNIST(
+    root='./data', train=True, download=True, transform=transform)
 test_dataset = torchvision.datasets.MNIST(
     root='./data', train=False, download=True, transform=transform)
+
+train_loader = torch.utils.data.DataLoader(
+    train_dataset, batch_size=64, shuffle=True)
 test_loader = torch.utils.data.DataLoader(
     test_dataset, batch_size=64, shuffle=True)
+
+print(f"train {len(train_dataset)}, test {len(test_dataset)}")
 
 images, labels = next(iter(test_loader))
 img_grid = torchvision.utils.make_grid(images, nrow=8, padding=2)
@@ -31,6 +38,14 @@ plt.imshow(img_grid.permute(1, 2, 0), cmap='gray')
 plt.axis('off')
 plt.show()
 ```
+
+출력:
+
+```
+train 60000, test 10000
+```
+
+![MNIST 표본 이미지](./img/mnist_14.png)
 
 ---
 
@@ -51,9 +66,15 @@ class SimpleMNIST(nn.Module):
     def forward(self, x):
         return self.fc(x.view(x.size(0), -1))
 
+torch.manual_seed(0)
 model = SimpleMNIST()
 criterion = nn.CrossEntropyLoss()
 optimizer = optim.SGD(model.parameters(), lr=0.1)
+
+# 학습 전후를 비교하기 위해 고정된 묶음과 학습 전 모형을 따로 보관해 둔다
+import copy
+fixed_images, fixed_labels = next(iter(test_loader))
+model_untrained = copy.deepcopy(model)
 
 for epoch in range(1, 6):
     model.train()
@@ -63,6 +84,28 @@ for epoch in range(1, 6):
         loss.backward()
         optimizer.step()
     print(f"Epoch {epoch}, Loss: {loss.item():.4f}")
+
+model_trained = model
+
+model.eval()
+correct = total = 0
+with torch.no_grad():
+    for images, labels in test_loader:
+        _, pred = torch.max(model(images), 1)
+        correct += (pred == labels).sum().item()
+        total += labels.size(0)
+print(f"Test accuracy: {100 * correct / total:.2f}%")
+```
+
+출력:
+
+```
+Epoch 1, Loss: 0.2995
+Epoch 2, Loss: 0.3877
+Epoch 3, Loss: 0.3358
+Epoch 4, Loss: 0.2993
+Epoch 5, Loss: 0.3032
+Test accuracy: 92.03%
 ```
 
 **전형적인 검정 정확도: 약 92%.**
@@ -107,6 +150,12 @@ with torch.no_grad():
 show_images(fixed_images, fixed_labels, preds, "After Training")
 ```
 
+![학습 전 예측](./img/mnist_111_0.png)
+
+![학습 후 예측](./img/mnist_111_1.png)
+
+학습 전에는 예측이 사실상 무작위지만, 다섯 세대만 지나도 대부분의 숫자를 맞힌다.
+
 ---
 
 ## 4  간단한 CNN
@@ -139,6 +188,16 @@ for epoch in range(1, 6):
         loss.backward()
         optimizer.step()
     print(f"Epoch {epoch}, Loss: {loss.item():.4f}")
+```
+
+출력:
+
+```
+Epoch 1, Loss: 0.0546
+Epoch 2, Loss: 0.0084
+Epoch 3, Loss: 0.1543
+Epoch 4, Loss: 0.1759
+Epoch 5, Loss: 0.0320
 ```
 
 **전형적인 검정 정확도: 약 98--99%.**
@@ -209,10 +268,26 @@ def compute_accuracy(model, loader, classes, device='cpu'):
 ### 저장과 적재
 
 ```python
+from pathlib import Path
+
+Path('./model').mkdir(exist_ok=True)
 torch.save(model.state_dict(), './model/model.pth')
 
-model = Net()
-model.load_state_dict(torch.load('./model/model.pth'))
+# 적재할 때는 저장할 때와 같은 구조의 모형을 먼저 만들어야 한다
+reloaded = SimpleCNN()   # 이 시점의 model은 CNN이다
+reloaded.load_state_dict(torch.load('./model/model.pth', weights_only=True))
+reloaded.eval()
+
+# 같은 입력에 같은 출력을 내는지 확인한다
+with torch.no_grad():
+    same = torch.allclose(model(fixed_images), reloaded(fixed_images))
+print("적재한 모형이 원본과 동일한가:", same)
+```
+
+출력:
+
+```
+적재한 모형이 원본과 동일한가: True
 ```
 
 ---
@@ -354,7 +429,22 @@ MNIST 방식의 분류
     마지막 줄에서
 
     ```python
-    print(f'  {c}: {100 * class_correct[c] / class_total[c]:.1f}%')
+    # 어떤 범주가 검정자료에 하나도 없으면 class_total[c] == 0이 된다
+    classes = ['0', '1', '2']
+    class_correct = {'0': 8, '1': 5, '2': 0}
+    class_total = {'0': 10, '1': 7, '2': 0}
+
+    c = '2'
+    try:
+        print(f'  {c}: {100 * class_correct[c] / class_total[c]:.1f}%')
+    except ZeroDivisionError as e:
+        print("ZeroDivisionError:", e)
+    ```
+
+    출력:
+
+    ```
+    ZeroDivisionError: division by zero
     ```
 
     를 실행할 때 `class_total[c]`가 0이면 **`ZeroDivisionError`**가 난다.
@@ -374,6 +464,14 @@ MNIST 방식의 분류
             print(f'  {c}: n/a (no test examples)')
         else:
             print(f'  {c}: {100 * class_correct[c] / class_total[c]:.1f}%')
+    ```
+
+    출력:
+
+    ```
+    0: 80.0%
+      1: 71.4%
+      2: n/a (no test examples)
     ```
 
     한 가지 더 있다. `class_correct[classes[lbl]]`에서 `lbl`은 텐서이므로 `classes[lbl]`이

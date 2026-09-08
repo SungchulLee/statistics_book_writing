@@ -121,10 +121,27 @@ scikit-learn은 `OneVsOneClassifier` 래퍼를 제공한다.
 ```python
 from sklearn.linear_model import LogisticRegression
 from sklearn.multiclass import OneVsOneClassifier
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
 
-model = OneVsOneClassifier(LogisticRegression())
+X, y = load_iris(return_X_y=True)
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.3, random_state=0, stratify=y)
+
+model = OneVsOneClassifier(LogisticRegression(max_iter=1000))
 model.fit(X_train, y_train)
 y_pred = model.predict(X_test)
+
+# C = 3이므로 이항 분류기는 C(C-1)/2 = 3개다
+print(f"이항 분류기 개수: {len(model.estimators_)}")
+print(f"검정 정확도: {(y_pred == y_test).mean():.4f}")
+```
+
+출력:
+
+```
+이항 분류기 개수: 3
+검정 정확도: 1.0000
 ```
 
 SVM에서는 OvO가 `SVC`의 기본 동작이므로 별도의 래퍼가 필요 없다.

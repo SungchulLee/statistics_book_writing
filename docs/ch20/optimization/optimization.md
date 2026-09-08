@@ -173,17 +173,33 @@ def run_train_loop(x_train, y_train, y_train_cls,
 ### 자료 적재
 
 ```python
-import tensorflow as tf
+import numpy as np
+import torchvision
 
 def load_data():
-    (x_train, y_train_cls), (x_test, y_test_cls) = (
-        tf.keras.datasets.mnist.load_data())
-    x_train = x_train.reshape(-1, 784).astype(np.float32) / 255.0
-    x_test  = x_test.reshape(-1, 784).astype(np.float32) / 255.0
+    """MNIST를 (n, 784) 실수 배열과 원-핫 이름표로 돌려준다."""
+    tr = torchvision.datasets.MNIST(root='./data', train=True, download=True)
+    te = torchvision.datasets.MNIST(root='./data', train=False, download=True)
+
+    x_train = tr.data.numpy().reshape(-1, 784).astype(np.float32) / 255.0
+    x_test = te.data.numpy().reshape(-1, 784).astype(np.float32) / 255.0
+    y_train_cls = tr.targets.numpy()
+    y_test_cls = te.targets.numpy()
+
     y_train = np.eye(10)[y_train_cls].astype(np.float32)
-    y_test  = np.eye(10)[y_test_cls].astype(np.float32)
+    y_test = np.eye(10)[y_test_cls].astype(np.float32)
     return (x_train, y_train, y_train_cls.astype(np.int32),
             x_test,  y_test,  y_test_cls.astype(np.int32))
+
+
+x_train, y_train, y_train_cls, x_test, y_test, y_test_cls = load_data()
+print(x_train.shape, y_train.shape, x_test.shape)
+```
+
+출력:
+
+```
+(60000, 784) (60000, 10) (10000, 784)
 ```
 
 ## 경사하강의 시각화
@@ -211,6 +227,8 @@ plt.title('Gradient Descent on L(x) = x²')
 plt.grid(True)
 plt.show()
 ```
+
+![경사하강의 자취](./img/optimization_203.png)
 
 
 ## 연습문제
@@ -263,6 +281,8 @@ $\mathbf{H}\odot(1-\mathbf{H})\odot[(\hat{\mathbf{Y}}-\mathbf{Y})\mathbf{W}^{oT}
     **수정.**
 
     ```python
+    import numpy as np
+
     def softmax(z):
         z = z - np.max(z, axis=1, keepdims=True)
         e = np.exp(z)
@@ -272,9 +292,29 @@ $\mathbf{H}\odot(1-\mathbf{H})\odot[(\hat{\mathbf{Y}}-\mathbf{Y})\mathbf{W}^{oT}
         z = z - np.max(z, axis=1, keepdims=True)
         return z - np.log(np.sum(np.exp(z), axis=1, keepdims=True))
 
+    # 로짓이 큰 경우: 순진한 방법은 넘치고 안정한 방법은 견딘다
+    z_o = np.array([[800.0, 0.0, -800.0]])
+    y = np.array([[0.0, 0.0, 1.0]])
+
+    with np.errstate(over="ignore", invalid="ignore", divide="ignore"):
+        naive = np.exp(z_o) / np.exp(z_o).sum(axis=1, keepdims=True)
+        print("naive softmax     :", naive)
+        print("naive loss        :", -(y * np.log(naive)).sum())
+
     # in feed_forward: compute the loss from logits, not from probabilities
     loss = -(y * log_softmax(z_o)).sum()
     y_hat = softmax(z_o)          # still needed for the gradient
+    print("stable softmax    :", y_hat)
+    print("stable loss       :", loss)
+    ```
+
+    출력:
+
+    ```
+    naive softmax     : [[nan  0.  0.]]
+    naive loss        : nan
+    stable softmax    : [[1. 0. 0.]]
+    stable loss       : 1600.0
     ```
 
     핵심은 손실을 **확률이 아니라 로짓에서** 계산하는 것이다. `softmax`를 먼저 계산하고
@@ -355,8 +395,20 @@ $\mathbf{H}\odot(1-\mathbf{H})\odot[(\hat{\mathbf{Y}}-\mathbf{Y})\mathbf{W}^{oT}
     **더 나은 관행:** 손실을 평균으로 정의한다.
 
     ```python
+    x = np.zeros((100, 784))       # 배치 크기 100을 가정
+    z_o = np.zeros((100, 10))
+    y = np.eye(10)[np.zeros(100, dtype=int)]
+
+    loss_sum = -(y * log_softmax(z_o)).sum()
     loss = -(y * log_softmax(z_o)).sum() / x.shape[0]
     # and divide every gradient by x.shape[0] as well
+    print(f"합 기준 손실: {loss_sum:.4f},  평균 기준 손실: {loss:.4f}")
+    ```
+
+    출력:
+
+    ```
+    합 기준 손실: 230.2585,  평균 기준 손실: 2.3026
     ```
 
     그러면 학습률이 배치 크기와 분리되어 배치 크기를 바꿔도 학습률을 다시 조율할 필요가 없다.

@@ -117,11 +117,27 @@ $$
 ```python
 from sklearn.linear_model import LogisticRegression
 from sklearn.multiclass import OneVsRestClassifier
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+
+X, y = load_iris(return_X_y=True)
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.3, random_state=0, stratify=y)
 
 # Explicit OVR with logistic regression
-model = OneVsRestClassifier(LogisticRegression())
+model = OneVsRestClassifier(LogisticRegression(max_iter=1000))
 model.fit(X_train, y_train)
 y_pred = model.predict(X_test)
+
+print(f"이항 분류기 개수: {len(model.estimators_)}")
+print(f"검정 정확도: {(y_pred == y_test).mean():.4f}")
+```
+
+출력:
+
+```
+이항 분류기 개수: 3
+검정 정확도: 0.9333
 ```
 
 !!! warning "`LogisticRegression`의 기본값은 OvR이 아니다"

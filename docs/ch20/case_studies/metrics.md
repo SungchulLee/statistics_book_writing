@@ -60,6 +60,38 @@ print(cm)
 print(classification_report(y_test, y_pred))
 ```
 
+출력:
+
+```
+Test accuracy: 0.9722
+[[42  0  0  0  1  0  0  0  0  0]
+ [ 0 34  0  0  1  0  0  0  0  0]
+ [ 0  0 36  0  0  0  0  0  0  0]
+ [ 0  0  0 40  0  0  0  0  1  0]
+ [ 0  0  0  0 38  0  0  0  0  0]
+ [ 0  1  0  1  0 28  0  0  0  0]
+ [ 0  0  0  0  0  0 37  0  0  0]
+ [ 0  0  0  0  1  1  0 35  0  0]
+ [ 0  0  0  0  0  2  0  0 27  0]
+ [ 0  0  0  0  0  1  0  0  0 33]]
+              precision    recall  f1-score   support
+
+           0       1.00      0.98      0.99        43
+           1       0.97      0.97      0.97        35
+           2       1.00      1.00      1.00        36
+           3       0.98      0.98      0.98        41
+           4       0.93      1.00      0.96        38
+           5       0.88      0.93      0.90        30
+           6       1.00      1.00      1.00        37
+           7       1.00      0.95      0.97        37
+           8       0.96      0.93      0.95        29
+           9       1.00      0.97      0.99        34
+
+    accuracy                           0.97       360
+   macro avg       0.97      0.97      0.97       360
+weighted avg       0.97      0.97      0.97       360
+```
+
 검정 정확도는 $0.9722$다. 혼동행렬을 보면 오류가 매우 드물게 흩어져 있고, 가장 흔한 오류는
 8을 5로 예측한 2건, 그다음이 각각 1건인 $0 \to 4$, $1 \to 4$, $3 \to 8$, $5 \to 1$ 등이다.
 
@@ -75,22 +107,34 @@ print(classification_report(y_test, y_pred))
 있다.
 
 ```python
+import numpy as np
 import matplotlib.pyplot as plt
 
-def draw_10_wrong_preds(x_test, y_test_cls, y_pred_cls):
-    _, axes = plt.subplots(1, 10, figsize=(12, 3))
-    idx = 0
-    for ax in axes:
-        while y_test_cls[idx] == y_pred_cls[idx]:
-            idx += 1
-        ax.imshow(x_test[idx].reshape((28, 28)), cmap='binary')
+def draw_10_wrong_preds(x_test, y_test_cls, y_pred_cls, shape=(28, 28), k=10):
+    """틀리게 예측한 사례를 앞에서부터 k개 보인다."""
+    wrong = np.flatnonzero(y_test_cls != y_pred_cls)[:k]
+    _, axes = plt.subplots(1, len(wrong), figsize=(1.2 * len(wrong), 2))
+    for ax, idx in zip(np.atleast_1d(axes), wrong):
+        ax.imshow(x_test[idx].reshape(shape), cmap='binary')
         ax.set_title(f'True: {y_test_cls[idx]}\nPred: {y_pred_cls[idx]}',
-                     fontsize=10)
+                     fontsize=9)
         ax.axis('off')
-        idx += 1
     plt.tight_layout()
     plt.show()
+
+
+# load_digits는 8x8 이미지이므로 shape을 맞춰 준다
+print(f"틀린 예측 {int((y_test != y_pred).sum())}건 / {len(y_test)}건")
+draw_10_wrong_preds(x_test, y_test, y_pred, shape=(8, 8))
 ```
+
+출력:
+
+```
+틀린 예측 10건 / 360건
+```
+
+![잘못 분류된 숫자 이미지](./img/metrics_109.png)
 
 !!! warning "이 함수는 MNIST 전용이며 두 가지 결함이 있다"
     1. `reshape((28, 28))`이 하드코딩되어 있어 위의 `load_digits` 자료($8 \times 8$)에는

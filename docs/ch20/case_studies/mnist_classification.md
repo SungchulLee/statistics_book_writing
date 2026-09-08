@@ -38,6 +38,14 @@ print(f"Test samples:     {len(test_dataset)}")
 print(f"Image shape:      {train_dataset[0][0].shape}")
 ```
 
+출력:
+
+```
+Training samples: 60000
+Test samples:     10000
+Image shape:      torch.Size([1, 28, 28])
+```
+
 ---
 
 ## 표본 이미지 시각화
@@ -54,6 +62,8 @@ plt.axis('off')
 plt.title("Sample MNIST Images")
 plt.show()
 ```
+
+![MNIST 표본 이미지](./img/mnist_classification_47.png)
 
 ---
 
@@ -120,6 +130,16 @@ model_linear = SoftmaxRegression()
 loss_linear = train_model(model_linear, train_loader, epochs=5, lr=0.1)
 ```
 
+출력:
+
+```
+Epoch 1/5, Loss: 0.4777
+Epoch 2/5, Loss: 0.3369
+Epoch 3/5, Loss: 0.3147
+Epoch 4/5, Loss: 0.3025
+Epoch 5/5, Loss: 0.2948
+```
+
 ---
 
 ## 평가
@@ -152,6 +172,22 @@ def evaluate(model, test_loader):
 acc_linear = evaluate(model_linear, test_loader)
 ```
 
+출력:
+
+```
+Overall accuracy: 92.15%
+  Digit 0: 97.8%
+  Digit 1: 97.6%
+  Digit 2: 89.1%
+  Digit 3: 92.4%
+  Digit 4: 93.3%
+  Digit 5: 84.0%
+  Digit 6: 95.8%
+  Digit 7: 91.1%
+  Digit 8: 89.0%
+  Digit 9: 90.2%
+```
+
 **전형적인 결과: 검정 정확도 약 92%.**
 
 ---
@@ -181,6 +217,27 @@ loss_twolayer = train_model(model_twolayer, train_loader, epochs=5, lr=0.1)
 acc_twolayer = evaluate(model_twolayer, test_loader)
 ```
 
+출력:
+
+```
+Epoch 1/5, Loss: 0.4360
+Epoch 2/5, Loss: 0.2200
+Epoch 3/5, Loss: 0.1632
+Epoch 4/5, Loss: 0.1293
+Epoch 5/5, Loss: 0.1068
+Overall accuracy: 96.86%
+  Digit 0: 98.9%
+  Digit 1: 98.9%
+  Digit 2: 96.9%
+  Digit 3: 97.1%
+  Digit 4: 98.0%
+  Digit 5: 96.5%
+  Digit 6: 96.9%
+  Digit 7: 96.8%
+  Digit 8: 94.0%
+  Digit 9: 94.4%
+```
+
 **전형적인 결과: 검정 정확도 약 97%.** 은닉층이 원시 화소값보다 판별력이 높은 획의 양상과
 곡선을 학습한다.
 
@@ -208,6 +265,27 @@ class SimpleCNN(nn.Module):
 model_cnn = SimpleCNN()
 loss_cnn = train_model(model_cnn, train_loader, epochs=5, lr=0.01)
 acc_cnn = evaluate(model_cnn, test_loader)
+```
+
+출력:
+
+```
+Epoch 1/5, Loss: 0.7957
+Epoch 2/5, Loss: 0.2581
+Epoch 3/5, Loss: 0.1857
+Epoch 4/5, Loss: 0.1472
+Epoch 5/5, Loss: 0.1233
+Overall accuracy: 96.80%
+  Digit 0: 97.9%
+  Digit 1: 99.0%
+  Digit 2: 97.5%
+  Digit 3: 97.5%
+  Digit 4: 97.6%
+  Digit 5: 97.3%
+  Digit 6: 99.0%
+  Digit 7: 96.5%
+  Digit 8: 91.3%
+  Digit 9: 94.3%
 ```
 
 **전형적인 결과: 검정 정확도 약 98--99%.** 합성곱층은 위치와 무관하게 국소 양상(모서리, 꼭짓점,
@@ -251,6 +329,8 @@ plt.tight_layout()
 plt.show()
 ```
 
+![훈련 손실 비교](./img/mnist_classification_241.png)
+
 ---
 
 ## 혼동행렬 시각화
@@ -286,6 +366,8 @@ ax.set_title("CNN Confusion Matrix on MNIST")
 plt.tight_layout()
 plt.show()
 ```
+
+![CNN의 혼동행렬](./img/mnist_classification_260.png)
 
 흔한 혼동으로는 4와 9(둘 다 오른쪽에 세로획이 있다), 3과 5(위쪽 곡선이 비슷하다)가 있다.
 
@@ -328,6 +410,8 @@ $\mathbf{w}_k$는 $28 \times 28$ 이미지로 재구성할 수 있다. 가중벡
     plt.tight_layout()
     plt.show()
     ```
+
+    ![학습된 가중치 템플릿](./img/mnist_classification_319.png)
 
     각 가중치 이미지 $\mathbf{w}_k$는 숫자 $k$에 대한 **주형(template)** 역할을 한다. 로짓
     $z_k = \mathbf{w}_k^\top \mathbf{x} + b_k$는 주형과 입력 이미지의 내적이다. 양수(빨강)
@@ -412,6 +496,32 @@ $\mathbf{w}_k$는 $28 \times 28$ 이미지로 재구성할 수 있다. 가중벡
     acc_drop = evaluate(model_drop, test_loader)
     ```
 
+    출력:
+
+    ```
+    Epoch 1/10, Loss: 0.4943
+    Epoch 2/10, Loss: 0.2539
+    Epoch 3/10, Loss: 0.2002
+    Epoch 4/10, Loss: 0.1715
+    Epoch 5/10, Loss: 0.1518
+    Epoch 6/10, Loss: 0.1373
+    Epoch 7/10, Loss: 0.1257
+    Epoch 8/10, Loss: 0.1152
+    Epoch 9/10, Loss: 0.1113
+    Epoch 10/10, Loss: 0.1035
+    Overall accuracy: 97.63%
+      Digit 0: 98.6%
+      Digit 1: 99.0%
+      Digit 2: 98.3%
+      Digit 3: 98.3%
+      Digit 4: 96.4%
+      Digit 5: 97.1%
+      Digit 6: 97.5%
+      Digit 7: 97.0%
+      Digit 8: 96.9%
+      Digit 9: 96.9%
+    ```
+
     드롭아웃이 없으면 이층 신경망이 훈련 정확도 약 99%, 검정 정확도 약 97%를 내어 2%포인트의
     격차가 생긴다. 드롭아웃을 넣으면 훈련 정확도가 낮아지지만(약 97%) 검정 정확도는 비슷하거나
     조금 좋아져 격차가 줄어든다.
@@ -471,6 +581,12 @@ $\mathbf{w}_k$는 $28 \times 28$ 이미지로 재구성할 수 있다. 가중벡
     ```python
     total = sum(p.numel() for p in model_cnn.parameters())
     print(f"Total CNN parameters: {total}")
+    ```
+
+    출력:
+
+    ```
+    Total CNN parameters: 20490
     ```
 
     $\square$

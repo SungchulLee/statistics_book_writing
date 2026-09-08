@@ -20,5 +20,12 @@ recovered/
 __pycache__/
 *.pyc
 
-# 예제 코드가 실행 중에 내려받는 자료 (ch12, ch13의 housing 자료)
+# 예제 코드가 실행 중에 내려받는 자료
+# (ch12·ch13의 housing 자료, ch20·ch_bonus의 MNIST)
 datasets/
+data/
+model/
+
+# ch00 matplotlib 예제가 savefig로 만드는 파일
+/figure.png
+/residuals.png
