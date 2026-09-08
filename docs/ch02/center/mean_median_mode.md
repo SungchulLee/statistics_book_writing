@@ -51,8 +51,11 @@ loans_data = pd.read_csv(url)
 mean_income = loans_data['x'].mean()
 
 fig, ax = plt.subplots(figsize=(12, 3))
+# density=True 라서 y축이 밀도다. 소득 자료의 밀도는 1e-5 규모이므로
+# 아래 세로선의 높이 1.6e-5 도 그 눈금에 맞춘 값이다.
 ax.hist(loans_data['x'], bins=20, density=True, alpha=0.3,
         color='blue', edgecolor='black')
+# 평균 위치에 세로선을 긋는다. (x, x)와 (0, 높이)를 이어 그린 것이다.
 ax.plot([mean_income, mean_income], [0, 1.6e-5], '--c',
         alpha=0.7, label="Mean")
 ax.legend()
@@ -93,6 +96,9 @@ import matplotlib.pyplot as plt
 url = 'https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists/master/data/loans_income.csv'
 loans_data = pd.read_csv(url)
 
+# 같은 자료에 평균과 중앙값을 함께 표시한다.
+# 오른쪽으로 치우친 분포에서는 평균이 중앙값보다 오른쪽에 놓인다.
+# 긴 오른쪽 꼬리가 평균만 끌어당기기 때문이다.
 mean_income = loans_data['x'].mean()
 median_income = loans_data['x'].median()
 
@@ -110,6 +116,18 @@ ax.set_ylabel("Density")
 ax.spines['top'].set_visible(False)
 ax.spines['right'].set_visible(False)
 plt.show()
+
+print(f"평균   {mean_income:>9,.0f}")
+print(f"중앙값 {median_income:>9,.0f}")
+print(f"차이   {mean_income - median_income:>9,.0f}  (양수 = 오른쪽 치우침)")
+```
+
+출력:
+
+```
+평균      68,761
+중앙값    62,000
+차이       6,761  (양수 = 오른쪽 치우침)
 ```
 
 ![Histogram of Income Data with Mean and Median](./img/mean_median_mode_87.png)
@@ -127,6 +145,7 @@ url = 'https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-sc
 loans_data = pd.read_csv(url)
 income_data = loans_data['x'].values
 
+# --- 1부: 원자료 ---
 mean_income = income_data.mean()
 median_income = np.median(income_data)
 
@@ -149,7 +168,9 @@ for ax in (hist_ax, box_ax):
 
 plt.show()
 
-# Now add outliers
+# --- 2부: 이상치를 넣는다 ---
+# 5만 개 자료에 2천만 달러짜리 20개를 더한다. 전체의 0.04%에 불과하다.
+# 그런데도 평균은 크게 밀리고 중앙값은 사실상 그대로다.
 outliers = np.array([20_000_000] * 20)
 data_with_outliers = np.concatenate((income_data, outliers))
 
@@ -174,6 +195,21 @@ for ax in (hist_ax, box_ax):
     ax.spines['right'].set_visible(False)
 
 plt.show()
+
+# 이상치 20개(전체의 0.04%)가 두 측도를 각각 얼마나 움직였는가
+print(f"{'':10}{'원자료':>14}{'이상치 추가 후':>18}{'변화율':>10}")
+print(f"{'평균':10}{mean_income:>14,.0f}{mean_outliers:>18,.0f}"
+      f"{(mean_outliers/mean_income - 1):>9.1%}")
+print(f"{'중앙값':10}{median_income:>14,.0f}{median_outliers:>18,.0f}"
+      f"{(median_outliers/median_income - 1):>9.1%}")
+```
+
+출력:
+
+```
+                     원자료          이상치 추가 후       변화율
+평균                68,761            76,730    11.6%
+중앙값               62,000            62,000     0.0%
 ```
 
 ![Original Income Data](./img/mean_median_mode_117_0.png)

@@ -32,29 +32,36 @@ $$
 import numpy as np
 from scipy import stats
 
+# 6년치 연간 수익률. 큰 이익과 큰 손실이 섞여 있다.
 returns = np.array([0.36, 0.23, -0.48, -0.30, 0.15, 0.31])
 
+# 산술평균: 수익률을 그냥 더해서 나눈다.
 arith_mean = np.mean(returns)
+
+# 기하평균: 수익률이 아니라 "성장배수" (1+r)의 기하평균을 낸 뒤 1을 뺀다.
+# 복리는 곱셈으로 쌓이므로 곱셈의 평균인 기하평균이 맞는 요약이다.
 geo_mean = stats.mstats.gmean(1 + returns) - 1
 
 print(f"Arithmetic mean: {arith_mean:.4f}  ({arith_mean*100:.2f}%)")
 print(f"Geometric  mean: {geo_mean:.4f}  ({geo_mean*100:.2f}%)")
-print(f"Compound value of \$1: \${np.prod(1 + returns):.4f}")
-print(f"Using geo mean:       \${(1 + geo_mean)**len(returns):.4f}")
+# 6년을 실제로 곱해 나갔을 때 1달러가 얼마가 되는지
+print(f"Compound value of 1 USD: {np.prod(1 + returns):.4f}")
+# 기하평균을 6번 복리로 굴려도 같은 값이 나온다. 이것이 기하평균의 정의다.
+print(f"Using geo mean:          {(1 + geo_mean)**len(returns):.4f}")
 ```
 
-### 출력
+출력:
 
 ```
 Arithmetic mean: 0.0450  (4.50%)
-Geometric  mean: -0.0139  (-1.39%)
-Compound value of $1: $0.9196
-Using geo mean:       $0.9196
+Geometric  mean: -0.0143  (-1.43%)
+Compound value of 1 USD: 0.9173
+Using geo mean:          0.9173
 ```
 
 ### 해석
 
-산술평균은 평균 수익률이 4.50%로 양수라고 말하지만, 실제로 투자한 \$1은 \$0.92로 줄어든다. 기하평균은 복리 수익률이 $-1.39\%$로 음수임을 올바르게 보고한다. 이 불일치는 산술평균이 복리의 비대칭성을 무시하기 때문에 생긴다. 50% 손실을 회복하려면 50%가 아니라 100%의 이익이 필요하다.
+산술평균은 평균 수익률이 4.50%로 양수라고 말하지만, 실제로 투자한 \$1은 \$0.92로 줄어든다. 기하평균은 복리 수익률이 $-1.43\%$로 음수임을 올바르게 보고한다. 이 불일치는 산술평균이 복리의 비대칭성을 무시하기 때문에 생긴다. 50% 손실을 회복하려면 50%가 아니라 100%의 이익이 필요하다.
 
 !!! warning "흔한 실수"
     복리 성장을 요약할 때 산술평균을 쓰지 마라. 곱셈적 과정에 대한 유일하게 올바른 요약은 기하평균이다.

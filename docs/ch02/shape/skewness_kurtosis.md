@@ -24,18 +24,36 @@ import numpy as np
 import scipy.stats as stats
 
 def generate_and_plot_mixed_distribution(seed: int = 0):
+    """중심은 같고 퍼짐만 다른 정규분포 셋을 섞는다.
+
+    loc(중심)은 모두 0으로 두고 scale(표준편차)만 1, 2, 4로 키운다.
+    좌우가 똑같이 늘어나므로 **대칭이면서 꼬리만 두꺼운** 분포가 된다.
+    즉 왜도는 0 근처, 첨도는 정규분포보다 크게 나온다.
+    """
     np.random.seed(seed)
-    main_data = stats.norm().rvs(1_000)
-    minor_1 = stats.norm(scale=2).rvs(200)
-    minor_2 = stats.norm(scale=4).rvs(100)
+    main_data = stats.norm().rvs(1_000)             # 본체 1000개, 표준편차 1
+    minor_1 = stats.norm(scale=2).rvs(200)          # 조금 넓게 200개
+    minor_2 = stats.norm(scale=4).rvs(100)          # 아주 넓게 100개
     combined = np.concatenate((main_data, minor_1, minor_2))
 
     fig, ax = plt.subplots(figsize=(12, 3))
     ax.hist(combined, bins=30)
     plt.show()
 
+    # 눈으로 본 것을 숫자로 확인한다.
+    # fisher=True(기본)이면 정규분포의 첨도가 0이 되도록 3을 뺀 초과첨도다.
+    print(f"왜도 {stats.skew(combined):+.3f}  (0에 가까움 = 대칭)")
+    print(f"첨도 {stats.kurtosis(combined):+.3f}  (0보다 큼 = 정규분포보다 꼬리가 두껍다)")
+
 if __name__ == "__main__":
     generate_and_plot_mixed_distribution()
+```
+
+출력:
+
+```
+왜도 -0.008  (0에 가까움 = 대칭)
+첨도 +7.150  (0보다 큼 = 정규분포보다 꼬리가 두껍다)
 ```
 
 ![왜도와 첨도](./img/skewness_kurtosis_21.png)
@@ -52,18 +70,34 @@ import scipy.stats as stats
 import matplotlib.pyplot as plt
 
 def generate_and_plot_right_skewed_distribution(seed: int = 0):
+    """중심을 오른쪽으로만 옮긴 덩어리를 덧붙인다.
+
+    앞 예제와 달리 scale이 아니라 loc를 바꾼다.
+    0, +2, +4 로 오른쪽에만 덩어리를 놓으므로 오른쪽 꼬리가 길어진다.
+    """
     np.random.seed(seed)
-    main_data = stats.norm().rvs(1_000)
-    right_1 = stats.norm(loc=2).rvs(200)
-    right_2 = stats.norm(loc=4).rvs(100)
+    main_data = stats.norm().rvs(1_000)             # 본체는 0 중심
+    right_1 = stats.norm(loc=2).rvs(200)            # 오른쪽 어깨
+    right_2 = stats.norm(loc=4).rvs(100)            # 오른쪽 꼬리
     combined = np.concatenate((main_data, right_1, right_2))
 
     fig, ax = plt.subplots(figsize=(12, 3))
     ax.hist(combined, bins=30)
     plt.show()
 
+    # 오른쪽 치우침의 두 가지 신호를 확인한다
+    print(f"왜도 {stats.skew(combined):+.3f}  (양수 = 오른쪽 치우침)")
+    print(f"평균 {combined.mean():+.3f} > 중앙값 {np.median(combined):+.3f}")
+
 if __name__ == "__main__":
     generate_and_plot_right_skewed_distribution()
+```
+
+출력:
+
+```
+왜도 +0.848  (양수 = 오른쪽 치우침)
+평균 +0.595 > 중앙값 +0.314
 ```
 
 ![왜도와 첨도](./img/skewness_kurtosis_47.png)
@@ -76,18 +110,30 @@ import scipy.stats as stats
 import matplotlib.pyplot as plt
 
 def generate_and_plot_left_skewed_distribution(seed: int = 0):
+    """앞 함수의 부호만 뒤집었다. loc가 -2, -4 로 왼쪽에 놓인다."""
     np.random.seed(seed)
     main_data = stats.norm().rvs(1_000)
-    left_1 = stats.norm(loc=-2).rvs(200)
-    left_2 = stats.norm(loc=-4).rvs(100)
+    left_1 = stats.norm(loc=-2).rvs(200)            # 왼쪽 어깨
+    left_2 = stats.norm(loc=-4).rvs(100)            # 왼쪽 꼬리
     combined = np.concatenate((main_data, left_1, left_2))
 
     fig, ax = plt.subplots(figsize=(12, 3))
     ax.hist(combined, bins=30)
     plt.show()
 
+    # 부호가 정확히 반대로 나온다
+    print(f"왜도 {stats.skew(combined):+.3f}  (음수 = 왼쪽 치우침)")
+    print(f"평균 {combined.mean():+.3f} < 중앙값 {np.median(combined):+.3f}")
+
 if __name__ == "__main__":
     generate_and_plot_left_skewed_distribution()
+```
+
+출력:
+
+```
+왜도 -0.853  (음수 = 왼쪽 치우침)
+평균 -0.636 < 중앙값 -0.396
 ```
 
 ![왜도와 첨도](./img/skewness_kurtosis_69.png)
@@ -116,6 +162,12 @@ import numpy as np
 import scipy.stats as stats
 
 def generate_and_plot_histogram_and_box_plot_mixed_distribution(seed: int = 0):
+    """같은 자료를 히스토그램과 상자그림으로 나란히 본다.
+
+    자료는 첫 예제와 같은 대칭·두꺼운꼬리 혼합분포다.
+    두 그림을 위아래로 붙여 x축을 눈으로 맞추면,
+    히스토그램의 꼬리가 상자그림에서 어떻게 "이상치 점"으로 바뀌는지 보인다.
+    """
     np.random.seed(seed)
     main_data = stats.norm().rvs(1_000)
     minor_1 = stats.norm(scale=2).rvs(200)
@@ -125,13 +177,29 @@ def generate_and_plot_histogram_and_box_plot_mixed_distribution(seed: int = 0):
     fig, (ax_hist, ax_box) = plt.subplots(2, 1, figsize=(12, 6))
     ax_hist.hist(combined, density=True, bins=30)
     ax_hist.set_title('Histogram of Combined Data (Density)')
-    ax_box.boxplot(combined, vert=False)
+    ax_box.boxplot(combined, vert=False)          # vert=False 로 눕혀 위 그림과 축을 맞춘다
     ax_box.set_title('Boxplot of Combined Data')
     plt.tight_layout()
     plt.show()
 
+    # 상자그림이 이상치로 찍는 점이 몇 개인지 세어 본다.
+    # 꼬리가 두꺼우면 1.5*IQR 울타리 밖의 점이 많아진다.
+    q1, q3 = np.percentile(combined, [25, 75])
+    iqr = q3 - q1
+    out = ((combined < q1 - 1.5*iqr) | (combined > q3 + 1.5*iqr)).sum()
+    print(f"IQR = {iqr:.3f},  울타리 밖 점 {out}개 / {len(combined)}개 "
+          f"({out/len(combined):.1%})")
+    print("정규분포라면 약 0.7% 이므로, 이보다 많으면 꼬리가 두꺼운 것이다.")
+
 if __name__ == "__main__":
     generate_and_plot_histogram_and_box_plot_mixed_distribution()
+```
+
+출력:
+
+```
+IQR = 1.565,  울타리 밖 점 63개 / 1300개 (4.8%)
+정규분포라면 약 0.7% 이므로, 이보다 많으면 꼬리가 두꺼운 것이다.
 ```
 
 ![Histogram of Combined Data (Density)](./img/skewness_kurtosis_107.png)
@@ -214,12 +282,23 @@ import matplotlib.pyplot as plt
 from scipy import stats
 
 def generate_samples(main_size, right_size, left_size):
-    main_sample = np.random.normal(0, 1, main_size)
-    right_sample = np.random.normal(2, 1, right_size)
-    left_sample = np.random.normal(-2, 1, left_size)
+    """왼쪽·오른쪽 덩어리의 **개수 차이**로 치우침을 만든다.
+
+    right_size > left_size 이면 오른쪽이 무거워져 양의 왜도가 되고,
+    두 값이 같으면 대칭이 된다. 아래 main()에서 개수를 바꿔 가며
+    왜도가 어떻게 움직이는지 확인할 수 있다.
+    """
+    main_sample = np.random.normal(0, 1, main_size)      # 중앙 덩어리
+    right_sample = np.random.normal(2, 1, right_size)    # 오른쪽 덩어리
+    left_sample = np.random.normal(-2, 1, left_size)     # 왼쪽 덩어리
     return np.concatenate([main_sample, right_sample, left_sample])
 
 def calculate_statistics(data):
+    """평균, 표준편차, 왜도를 구한다.
+
+    여기서는 n으로 나누는 모집단 표준편차를 쓴다(정규 밀도를 겹쳐 그리기 위함).
+    표본표준편차가 필요하면 n-1로 나눠야 한다.
+    """
     n = data.shape[0]
     mean = data.sum() / n
     std_dev = np.sqrt(np.sum((data - mean) ** 2) / n)
@@ -227,6 +306,11 @@ def calculate_statistics(data):
     return mean, std_dev, skewness
 
 def plot_distribution_with_normal_fit(data, mean, std_dev, skewness, title):
+    """히스토그램 위에 같은 평균·표준편차의 정규분포를 겹쳐 그린다.
+
+    두 곡선이 어긋나는 방식이 곧 왜도(또는 첨도)의 시각적 정체다.
+    치우친 자료에서는 정규곡선이 봉우리를 지나치고 꼬리 쪽에서 벌어진다.
+    """
     fig, ax = plt.subplots(figsize=(12, 3))
     _, bins, _ = ax.hist(data, density=True, bins=100, label="Samples")
     normal_pdf = stats.norm(loc=mean, scale=std_dev).pdf(bins)
@@ -256,11 +340,27 @@ def main():
 
     plot_distribution_with_normal_fit(samples, mean, std_dev, skewness, title)
 
+    print(f"{title}")
+    print(f"  평균   {mean:+.4f}")
+    print(f"  표준편차 {std_dev:.4f}")
+    print(f"  왜도   {skewness:+.4f}")
+    print(f"  중앙값 {np.median(samples):+.4f}  (대칭이면 평균과 같아진다)")
+
 if __name__ == "__main__":
     main()
 ```
 
-![{title}\nSkewness = {skewness:.4f}](./img/skewness_kurtosis_199.png)
+출력:
+
+```
+Symmetric Distribution
+  평균   -0.0093
+  표준편차 1.5661
+  왜도   +0.0456
+  중앙값 -0.0273  (대칭이면 평균과 같아진다)
+```
+
+![왜도 모의실험: 정규분포 적합과의 비교](./img/skewness_kurtosis_199.png)
 
 ---
 
@@ -292,16 +392,26 @@ import matplotlib.pyplot as plt
 from scipy import stats
 
 def generate_samples(main_size, peak_size):
-    main_sample = np.random.normal(0, 1, main_size)
-    peak_sample = np.random.normal(0, 0.2, peak_size)
+    """중앙에 아주 좁은(표준편차 0.2) 덩어리를 얹어 봉우리를 뾰족하게 만든다.
+
+    중심은 둘 다 0이므로 대칭은 유지되고, 봉우리만 솟는다.
+    이것이 급첨(leptokurtic) 분포를 만드는 가장 간단한 방법이다.
+    """
+    main_sample = np.random.normal(0, 1, main_size)      # 넓은 본체
+    peak_sample = np.random.normal(0, 0.2, peak_size)    # 좁고 뾰족한 봉우리
     return np.concatenate([main_sample, peak_sample])
 
 def calculate_statistics(data):
+    """첨도를 정의 그대로 계산한다.
+
+    표준화한 값의 네제곱 평균이 첨도다. 네제곱이므로 중심에서 멀리 떨어진
+    값이 압도적으로 큰 기여를 한다. 첨도가 사실상 "꼬리의 무게"를 재는 이유다.
+    """
     mean = np.mean(data)
     std_dev = np.std(data)
     skewness = stats.describe(data).skewness
     kurtosis = np.mean(((data - mean) / std_dev) ** 4)
-    excess_kurtosis = kurtosis - 3
+    excess_kurtosis = kurtosis - 3     # 정규분포의 첨도 3을 빼면 초과첨도
     return mean, std_dev, skewness, kurtosis, excess_kurtosis
 
 def plot_distribution_with_normal_fit(data, mean, std_dev, excess_kurtosis, title):
@@ -333,11 +443,25 @@ def main():
 
     plot_distribution_with_normal_fit(data, mean, std_dev, excess_kurtosis, title)
 
+    print(f"{title}")
+    print(f"  왜도       {skewness:+.4f}  (좌우 대칭이므로 0 근처)")
+    print(f"  첨도       {kurtosis:.4f}")
+    print(f"  초과첨도   {excess_kurtosis:+.4f}  (정규분포는 0)")
+
 if __name__ == "__main__":
     main()
 ```
 
-![{title}\nExcess Kurtosis = {excess_kurtosis:.4f}](./img/skewness_kurtosis_275.png)
+출력:
+
+```
+Leptokurtic Distribution
+  왜도       +0.0231  (좌우 대칭이므로 0 근처)
+  첨도       3.1053
+  초과첨도   +0.1053  (정규분포는 0)
+```
+
+![첨도 모의실험: 정규분포 적합과의 비교](./img/skewness_kurtosis_275.png)
 
 ### 파이썬에서 첨도 계산하기
 
@@ -347,19 +471,26 @@ SciPy는 초과첨도를 직접 계산해 주는 편리한 함수를 제공한�
 from scipy import stats
 import numpy as np
 
-data = np.random.normal(0, 1, 10000)
+np.random.seed(0)                       # 시드를 고정해야 아래 출력이 재현된다
+data = np.random.normal(0, 1, 10000)    # 정규분포이므로 초과첨도의 참값은 0
 
-# All three return excess kurtosis (kurtosis - 3)
+# 두 함수 모두 "초과첨도"(첨도 - 3)를 돌려준다.
+# 즉 정규분포에서 0이 나오도록 이미 3을 빼 놓았다.
+# 3을 빼지 않은 값이 필요하면 fisher=False 를 준다.
 print(stats.kurtosis(data))
 print(stats.describe(data).kurtosis)
+print(stats.kurtosis(data, fisher=False), "  <- 3을 빼지 않은 값")
 ```
 
 출력:
 
 ```
-0.05060312259460087
-0.05060312259460087
+-0.03095451095565238
+-0.03095451095565238
+2.9690454890443476   <- 3을 빼지 않은 값
 ```
+
+표본이 10,000개인데도 참값 0에서 눈에 띄게 벗어난다. **첨도는 네제곱을 쓰기 때문에 추정이 매우 불안정하다.** 표본이 작으면 훨씬 크게 흔들리므로, 첨도 하나만 보고 꼬리의 두께를 단정해서는 안 된다.
 
 ---
 

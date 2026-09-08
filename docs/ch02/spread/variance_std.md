@@ -107,6 +107,13 @@ sample_std = sample_data.std(ddof=1)
 print(f"Sample Standard Deviation (ddof=1): {sample_std}")
 ```
 
+출력:
+
+```
+Population Standard Deviation (ddof=0): 1.0408329997330663
+Sample Standard Deviation (ddof=1): 1.140175425099138
+```
+
 ### 응용
 
 표준편차는 여러 분야에서 쓰인다. 금융 수익률의 변동성 평가, 과학적 측정의 퍼짐 측정, 제조 일관성 평가 등이다. 정규분포에서는 자료의 약 68%가 평균에서 표준편차 1배 안에, 95%가 2배 안에, 99.7%가 3배 안에 들어간다(경험 규칙).

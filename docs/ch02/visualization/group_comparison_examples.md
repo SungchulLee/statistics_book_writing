@@ -155,8 +155,12 @@ for zip_code in zip_codes:
 
 housing = pd.DataFrame(data_list)
 
-print((housing.groupby('ZipCode')['TaxAssessedValue']
-       .agg(['count', 'mean', 'median', 'std']) / 1000).round(1))
+# 우편번호별 요약. 금액만 천 달러 단위로 바꾸고 count는 개수 그대로 둔다.
+# 표 전체를 1000으로 나누면 count(150)까지 0.15가 되어 버리므로 열을 나누어 처리한다.
+summary = (housing.groupby('ZipCode')['TaxAssessedValue']
+           .agg(['count', 'mean', 'median', 'std']))
+summary[['mean', 'median', 'std']] = (summary[['mean', 'median', 'std']] / 1000).round(1)
+print(summary)
 
 fig, ax = plt.subplots(figsize=(8, 5))
 housing.boxplot(by='ZipCode', column='TaxAssessedValue', ax=ax)
@@ -218,6 +222,7 @@ for grade in grades:
 
 loans = pd.DataFrame(data_list)
 
+# 등급별 요약. 여기서는 count를 뽑지 않으므로 표 전체를 나눠도 안전하다.
 print((loans.groupby('grade')['income']
        .agg(['mean', 'median', 'std']) / 1000).round(1))
 

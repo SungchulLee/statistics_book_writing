@@ -28,14 +28,21 @@ import pandas as pd
 url = 'https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists/master/data/loans_income.csv'
 loans_data = pd.read_csv(url)
 
+# 범위 = 최댓값 - 최솟값. 자료 전체에서 딱 두 점만 쓴다.
 data_range = loans_data['x'].max() - loans_data['x'].min()
 print(f"{data_range = }")
+
+# 그 두 점이 무엇인지도 함께 보자. 범위가 왜 취약한지 바로 드러난다.
+print(f"최솟값 {loans_data['x'].min():,}  최댓값 {loans_data['x'].max():,}")
+print(f"관측값 {len(loans_data):,}개 중 단 2개가 이 값을 정한다")
 ```
 
 출력:
 
 ```
 data_range = 195000
+최솟값 4,000  최댓값 199,000
+관측값 50,000개 중 단 2개가 이 값을 정한다
 ```
 
 ### 한계
@@ -69,6 +76,9 @@ from scipy import stats
 url = 'https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists/master/data/loans_income.csv'
 df = pd.read_csv(url)
 
+# 같은 자료를 두 짝의 측도로 요약한다.
+#   비강건한 짝: 평균 ± 표준편차   (모든 관측값을 다 쓴다)
+#   강건한 짝  : 중앙값, Q1, Q3    (순위만 쓴다)
 mean_income = df['x'].mean()
 median_income = df['x'].median()
 std_dev = df['x'].std()
@@ -78,7 +88,9 @@ iqr = stats.iqr(df['x'])
 
 fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(12, 4))
 
-# Mean ± Std Dev
+# 왼쪽: 평균 ± 표준편차.
+# 소득은 오른쪽으로 치우쳐 있어 평균이 봉우리보다 오른쪽에 놓이고,
+# "평균 - 표준편차"가 자료가 별로 없는 곳을 가리킨다.
 ax1.hist(df['x'], bins=30, density=True, alpha=0.3, color='skyblue')
 ax1.axvline(mean_income, color='blue', linestyle='--', label='mean')
 ax1.axvline(mean_income - std_dev, color='red', linestyle='--', label='mean - std')
@@ -86,7 +98,8 @@ ax1.axvline(mean_income + std_dev, color='red', linestyle='--', label='mean + st
 ax1.legend()
 ax1.set_title("Mean and Std Dev")
 
-# Median and Quartiles
+# 가운데: 중앙값과 사분위수.
+# Q1과 Q3 사이가 정확히 자료의 가운데 50%이며, 치우침에 흔들리지 않는다.
 ax2.hist(df['x'], bins=30, density=True, alpha=0.3, color='skyblue')
 ax2.axvline(median_income, color='blue', linestyle='--', label='median')
 ax2.axvline(q1, color='red', linestyle='--', label='Q1')
@@ -94,12 +107,27 @@ ax2.axvline(q3, color='red', linestyle='--', label='Q3')
 ax2.legend()
 ax2.set_title("Median and Quartiles")
 
-# Boxplot
+# 오른쪽: 같은 사분위수를 상자그림으로 옮긴 것
 ax3.boxplot(df['x'], vert=True, patch_artist=True)
 ax3.set_title("Boxplot")
 
 plt.tight_layout()
 plt.show()
+
+# 두 짝의 숫자를 나란히 찍어 비교한다
+print(f"평균   {mean_income:>9,.0f}   표준편차 {std_dev:>9,.0f}")
+print(f"중앙값 {median_income:>9,.0f}   IQR      {iqr:>9,.0f}")
+print(f"평균 - 표준편차 = {mean_income - std_dev:>9,.0f}   "
+      f"(최솟값 {df['x'].min():,}보다 큰가? "
+      f"{'예' if mean_income - std_dev > df['x'].min() else '아니오'})")
+```
+
+출력:
+
+```
+평균      68,761   표준편차    32,872
+중앙값    62,000   IQR         40,000
+평균 - 표준편차 =    35,888   (최솟값 4,000보다 큰가? 예)
 ```
 
 ![Mean and Std Dev](./img/robust_63.png)
@@ -112,13 +140,17 @@ import pandas as pd
 url = 'https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists/master/data/loans_income.csv'
 df = pd.read_csv(url)
 
-q1 = df['x'].quantile(0.25)
-q2 = df['x'].median()
-q3 = df['x'].quantile(0.75)
+# quantile(p)는 자료의 p 비율이 그 아래에 놓이는 값을 돌려준다.
+q1 = df['x'].quantile(0.25)      # 아래에서 25%
+q2 = df['x'].median()            # 아래에서 50% = 중앙값
+q3 = df['x'].quantile(0.75)      # 아래에서 75%
 
 print(f"{q1 = }")
-print(f"{q2 = }")  # Median
+print(f"{q2 = }")  # 중앙값
 print(f"{q3 = }")
+
+# IQR은 Q3 - Q1. 자료의 가운데 절반이 차지하는 폭이다.
+print(f"IQR = {q3 - q1:,.0f}")
 ```
 
 출력:
@@ -127,6 +159,7 @@ print(f"{q3 = }")
 q1 = 45000.0
 q2 = 62000.0
 q3 = 85000.0
+IQR = 40,000
 ```
 
 ---
