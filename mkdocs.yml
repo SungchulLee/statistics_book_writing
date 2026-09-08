@@ -103,10 +103,21 @@ nav:
             - 기술통계 (대마 가격): ch02/spread/descriptive_stats_weed_prices.md
             - 고급 측도 (기하평균, 체비쇼프): ch02/spread/descriptive_measures_advanced.md
         - 2.4 시각화:
+            - 막대그림: ch02/visualization/bar_charts.md
+            - 원그래프: ch02/visualization/pie_charts.md
+            - 파레토 그림: ch02/visualization/pareto.md
+            - 모자이크 그림과 도수분포표: ch02/visualization/mosaic.md
+            - 점그림과 줄기잎그림: ch02/visualization/dot_stem.md
             - 상자그림: ch02/visualization/boxplots.md
             - 바이올린 그림: ch02/visualization/violin.md
-            - 집단 비교: ch02/visualization/group_comparison.md
             - 집단 비교 예제: ch02/visualization/group_comparison_examples.md
+            - 스트립 그림과 스웜 그림: ch02/visualization/strip_swarm.md
+            - 산점도: ch02/visualization/scatter.md
+            - 육각형 구간 그림과 2차원 히스토그램: ch02/visualization/hexbin.md
+            - 쌍그림: ch02/visualization/pair_plots.md
+            - 선그림: ch02/visualization/line_plots.md
+            - 계단 그림과 면적 그림: ch02/visualization/step_area.md
+            - 오차막대 그림: ch02/visualization/error_bars.md
 
     - 3 확률의 기초:
         - 장 개요: ch03/index.md
