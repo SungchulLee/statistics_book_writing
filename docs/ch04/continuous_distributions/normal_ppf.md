@@ -47,6 +47,8 @@ plt.tight_layout()
 plt.show()
 ```
 
+![정규분포의 백분위점 함수 (분위수 함수)](./img/normal_ppf_17.png)
+
 ---
 
 ## 표준정규분포의 흔한 분위수

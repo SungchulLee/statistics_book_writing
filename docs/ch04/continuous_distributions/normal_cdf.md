@@ -57,6 +57,8 @@ plt.tight_layout()
 plt.show()
 ```
 
+![정규 누적분포함수와 분위수](./img/normal_cdf_19.png)
+
 ---
 
 ## 표준정규분포의 주요 CDF 값

@@ -278,6 +278,8 @@ sample_data = np.random.normal(loc=0, scale=1, size=1000)
 plot_qq(sample_data, dist="norm")
 ```
 
+![Q-Q Plot](./img/ecdf_262.png)
+
 ### 지수분포에 대한 Q-Q 그림
 
 ```python
@@ -286,6 +288,8 @@ sample_data = np.random.exponential(scale=1, size=1000)
 plot_qq(sample_data, dist="expon")
 ```
 
+![지수분포에 대한 Q-Q 그림](./img/ecdf_285.png)
+
 ### 카이제곱분포에 대한 Q-Q 그림
 
 ```python
@@ -293,6 +297,8 @@ np.random.seed(0)
 sample_data = np.random.chisquare(df=10, size=1000)
 plot_qq(sample_data, dist="chi2", sparams=(10,))
 ```
+
+![카이제곱분포에 대한 Q-Q 그림](./img/ecdf_293.png)
 
 ### 진단적 활용: 카이제곱 자료를 정규 Q-Q 그림에 그리기
 

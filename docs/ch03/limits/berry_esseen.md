@@ -222,6 +222,8 @@ def convergence_rate_comparison():
 convergence_rate_comparison()
 ```
 
+![Convergence Rate to Normal: Berry–Esseen Bounds](./img/berry_esseen_187.png)
+
 ## 3. 두 정리의 역할 분담
 
 베리–에센 정리는 중심극한정리를 대체하지 않는다. 중심극한정리가 하지 못하는 말을 대신할 뿐이다.

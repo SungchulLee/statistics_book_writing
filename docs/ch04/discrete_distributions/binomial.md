@@ -169,6 +169,8 @@ ax.legend()
 plt.show()
 ```
 
+![Bernoulli 분포와 Binomial 분포](./img/binomial_151.png)
+
 ### 표본추출과 검증
 
 ```python

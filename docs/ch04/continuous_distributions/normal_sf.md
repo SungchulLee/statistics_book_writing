@@ -49,6 +49,8 @@ plt.tight_layout()
 plt.show()
 ```
 
+![정규분포의 생존함수](./img/normal_sf_17.png)
+
 ---
 
 ## 생존함수를 쓰는 이유
