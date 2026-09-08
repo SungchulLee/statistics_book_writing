@@ -124,6 +124,16 @@ def bijection_N_to_Z(n):
 print([bijection_N_to_Z(n) for n in range(1, 11)])
 ```
 
+출력:
+
+```
+(A ∪ B)^c = {8, 9, 10}
+A^c ∩ B^c = {8, 9, 10}
+Equal: True
+P(A) estimate: 0.506 (true 1/2 since |A|=5 of 10)
+[0, 1, -1, 2, -2, 3, -3, 4, -4, 5]
+```
+
 ## 연습문제
 
 **연습문제 1.**

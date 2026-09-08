@@ -113,6 +113,19 @@ reconstruction = eigvecs @ np.diag(eigvals) @ eigvecs.T
 print(f"Spectral reconstruction matches X'X: {np.allclose(reconstruction, X.T @ X)}")
 ```
 
+출력:
+
+```
+True beta: [ 2.  -1.   0.5]
+OLS beta:  [ 1.9711 -0.95    0.4159]
+Symmetric:  True
+Idempotent: True
+tr(H) = 3.0  (should equal p = 3)
+Eigenvalues: [20.34 38.64 51.  ]
+Condition number: 2.51
+Spectral reconstruction matches X'X: True
+```
+
 ## 연습문제
 
 **연습문제 1.**

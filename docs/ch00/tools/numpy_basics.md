@@ -31,6 +31,15 @@ M = np.array([[1, 2, 3],
 print(M.shape)    # (2, 3)
 ```
 
+출력:
+
+```
+[1 2 3 4 5]
+(5,)
+int64
+(2, 3)
+```
+
 ### 내장 생성자로
 
 ```python
@@ -111,6 +120,14 @@ print(a[mask])    # [4 5 9]
 print(a[(a > 2) & (a < 6)])    # [3 4 5]
 ```
 
+출력:
+
+```
+[False False  True False  True  True]
+[4 5 9]
+[3 4 5]
+```
+
 불리언 인덱싱은 반복문 없이 자료를 걸러내는 자연스러운 방법이다.
 
 ## 벡터화 연산
@@ -147,6 +164,18 @@ np_arr ** 2
 print(f"NumPy array: {time.perf_counter() - t0:.4f} s")
 ```
 
+출력(예시):
+
+```
+Python list: 0.0883 s
+NumPy array: 0.0013 s
+```
+
+!!! note "이 숫자는 실행할 때마다 달라진다"
+    시간 측정이므로 기계, 부하, 파이썬 버전에 따라 값이 바뀐다. 절대적인 초 단위가
+    아니라 **두 값의 비**를 보라. 이 책을 쓰며 여러 번 실행한 결과 비는 대략
+    30배에서 70배 사이였다.
+
 배열 연산에서 NumPy는 보통 **10–100배 빠르다**. 안쪽 반복문이 C로 되어 있고 자료가 연속으로 저장되어 SIMD 명령과 캐시 친화적 접근이 가능하기 때문이다.
 
 ## 브로드캐스팅
@@ -170,6 +199,14 @@ print(col + row)
 #  [13 23 33]]
 ```
 
+출력:
+
+```
+[[11 21 31]
+ [12 22 32]
+ [13 23 33]]
+```
+
 ### 통계적 응용: 표준화
 
 ```python
@@ -179,6 +216,13 @@ X = rng.standard_normal((100, 5))            # (n=100) × (p=5)
 X_std = (X - X.mean(axis=0)) / X.std(axis=0, ddof=1)
 print(X_std.mean(axis=0).round(8))           # ≈ zeros
 print(X_std.std(axis=0, ddof=1).round(8))    # ≈ ones
+```
+
+출력:
+
+```
+[-0.  0. -0. -0. -0.]
+[1. 1. 1. 1. 1.]
 ```
 
 브로드캐스팅이 없다면 열마다 반복문을 돌려야 한다. 브로드캐스팅이 있으면 "각 열을 중심화한 뒤 그 표준편차로 나눈다"는 통계적 아이디어가 코드로 그대로 옮겨진다.
@@ -253,6 +297,12 @@ beta_hat = np.linalg.solve(X.T @ X, X.T @ y)
 print(beta_hat.round(3))     # ≈ [2., -1., 0.5, 3.]
 ```
 
+출력:
+
+```
+[ 1.95  -0.918  0.427  3.029]
+```
+
 `np.linalg.inv(X.T @ X) @ X.T @ y`보다 `np.linalg.solve(X.T @ X, X.T @ y)`를 쓰라. 역행렬을 만드는 것보다 방정식을 푸는 편이 수치적으로 더 안정적이고 빠르다. 더 나은 선택은 `np.linalg.lstsq(X, y, rcond=None)`으로, 계수가 부족한 $\mathbf{X}$도 특이값분해로 처리한다.
 
 ## 모양 바꾸기와 쌓기
@@ -310,6 +360,17 @@ $\mathbf{X}^T\mathbf{X}$, $\mathbf{X}^T\mathbf{y}$, $\hat{\boldsymbol\beta}$, �
     print("residuals =", resid)
     ```
 
+    출력:
+
+    ```
+    X^T X =
+    [[ 3 12]
+     [12 56]]
+    X^T y = [ 27 124]
+    beta_hat = [1. 2.]
+    residuals = [0. 0. 0.]
+    ```
+
     기대되는 결과: $\hat{\boldsymbol\beta} = (1, 2)^T$이고 잔차는 모두 0이다(세 점이 완전히 한 직선 위에 있다).
 
 ---
@@ -324,6 +385,13 @@ $\mathbf{X}^T\mathbf{X}$, $\mathbf{X}^T\mathbf{y}$, $\hat{\boldsymbol\beta}$, �
     X_std = (X - X.mean(axis=0)) / X.std(axis=0, ddof=1)
     print(X_std.mean(axis=0).round(8))           # ≈ zeros
     print(X_std.var(axis=0, ddof=1).round(8))    # ≈ ones
+    ```
+
+    출력:
+
+    ```
+    [-0.  0.  0. -0. -0.]
+    [1. 1. 1. 1. 1.]
     ```
 
     브로드캐스팅이 열 평균의 행벡터(모양 `(5,)`)를 `X`(모양 `(1000, 5)`)에서 빼고, 마찬가지로 열 표준편차의 행벡터로 나눈다.
@@ -348,6 +416,14 @@ $\mathbf{X}^T\mathbf{X}$, $\mathbf{X}^T\mathbf{y}$, $\hat{\boldsymbol\beta}$, �
     #  [10.  5.  0.]]
     ```
 
+    출력:
+
+    ```
+    [[ 0.  5. 10.]
+     [ 5.  0.  5.]
+     [10.  5.  0.]]
+    ```
+
     두 번의 브로드캐스트 단계가 크기 1인 차원을 끼워 넣어 각 행을 다른 모든 행과 짝지어 준다. 결과는 대각이 0인 대칭행렬이다.
 
 ---
@@ -366,6 +442,13 @@ $\mathbf{X}^T\mathbf{X}$, $\mathbf{X}^T\mathbf{y}$, $\hat{\boldsymbol\beta}$, �
     x_inv = np.linalg.inv(A) @ b
     print("solve:", x_solve)
     print("inv:  ", x_inv)
+    ```
+
+    출력:
+
+    ```
+    solve: [1. 1.]
+    inv:   [1. 1.]
     ```
 
     둘 다 $(1, 1)^T$에 가까워야 하지만 `inv` 쪽 오차가 눈에 띄게 크다. 진짜로 특이인 행렬에서는 `solve`가 예외를 일으키는 반면 `inv`는 쓰레기 값을 돌려줄 수 있다.
@@ -393,6 +476,13 @@ $\mathbf{X}^T\mathbf{X}$, $\mathbf{X}^T\mathbf{y}$, $\hat{\boldsymbol\beta}$, �
     samples = rng.standard_normal((10_000, 5))
     print("Mean of var(ddof=0):", samples.var(axis=1, ddof=0).mean())  # ≈ 0.80
     print("Mean of var(ddof=1):", samples.var(axis=1, ddof=1).mean())  # ≈ 1.00
+    ```
+
+    출력:
+
+    ```
+    Mean of var(ddof=0): 0.8003156389266377
+    Mean of var(ddof=1): 1.000394548658297
     ```
 
     $n = 5$일 때 모분산 방식의 분모는 평균적으로 $\approx 4/5 = 0.8$을 내놓는데, 이는 예측된 편향 계수와 정확히 일치한다. 베셀 보정을 적용한 쪽은 예상대로 $1.0$ 근처를 맴돈다. 이 편향은 $n$이 작을 때 가장 중요하며, $n$이 수천이면 차이는 무시할 만하다.

@@ -66,10 +66,26 @@ fig.savefig("figure.png", dpi=150, bbox_inches="tight")
 DataFrame은 Matplotlib을 감싼 자체 그림 메서드를 갖고 있다.
 
 ```python
-df["x"].plot.hist(bins=30)
-df.plot.scatter(x="x", y="y", ax=ax)
-df.boxplot(column="value", by="group", ax=ax)
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+rng = np.random.default_rng(0)
+df = pd.DataFrame({"x": rng.normal(0, 1, 200),
+                   "y": rng.normal(0, 1, 200),
+                   "group": rng.choice(["A", "B"], 200)})
+df["value"] = df["x"] * 2 + rng.normal(0, 1, 200)
+
+fig, axes = plt.subplots(1, 3, figsize=(13, 3.5))
+df["x"].plot.hist(bins=30, ax=axes[0], title="hist")
+df.plot.scatter(x="x", y="y", ax=axes[1], title="scatter")
+df.boxplot(column="value", by="group", ax=axes[2])
+plt.suptitle("")            # boxplot이 붙이는 자동 제목을 지운다
+plt.tight_layout()
+plt.show()
 ```
+
+![pandas의 그림 메서드 세 가지](./img/matplotlib_basics_68.png)
 
 빠르게 탐색할 때 편리하다. 최종 그림에서는 Matplotlib을 직접 호출하는 편이 더 세밀하게 제어할 수 있다.
 
@@ -104,6 +120,8 @@ fig.tight_layout()
 plt.show()
 ```
 
+![히스토그램과 Q-Q 그림](./img/matplotlib_basics_92.png)
+
 히스토그램은 적합도를 눈으로 확인하게 해주고, Q-Q 그림은 직선에서 벗어나는 정도를 보여줌으로써 분석적으로 확인하게 해준다. 통계적인 그림은 이 둘 중 하나 없이는 완성되는 일이 드물다.
 
 ## 연습문제
@@ -128,6 +146,8 @@ plt.show()
     ax.legend()
     plt.show()
     ```
+
+    ![표준정규 표본 500개](./img/matplotlib_basics_129.png)
 
     `axvline`은 고정된 $x$ 좌표에 수직 참조선을 그리며, 평균·중앙값·임계값을 표시할 때 유용하다.
 
@@ -156,6 +176,8 @@ plt.show()
     fig.tight_layout()
     plt.show()
     ```
+
+    ![무작위 산점도와 사인곡선](./img/matplotlib_basics_154.png)
 
     `sharey=True`는 두 y축을 묶고, `fig.supylabel`은 그림 전체에 걸치는 하나의 y축 이름표를 추가한다.
 
@@ -199,6 +221,8 @@ $N(5, 4)$(평균 5, 분산 4)에서 뽑은 표본 1000개의 정규화된 히스
     plt.show()
     ```
 
+    ![히스토그램과 참 밀도곡선](./img/matplotlib_basics_198.png)
+
     `density=True`는 막대 전체 넓이가 1이 되도록 히스토그램을 다시 크기 조정하여 확률밀도함수와 직접 비교할 수 있게 한다. 막대의 너비는 `bins`가 결정한다. 구간이 너무 적으면 구조를 감추고, 너무 많으면 없는 구조를 만들어낸다.
 
 ---
@@ -228,6 +252,8 @@ $N(5, 4)$(평균 5, 분산 4)에서 뽑은 표본 1000개의 정규화된 히스
     ax.set_title("Residuals vs. fitted")
     plt.show()
     ```
+
+    ![잔차 대 적합값 그림](./img/matplotlib_basics_224.png)
 
     제대로 지정된 선형모형은 뚜렷한 추세 없이 0 주위에 무작위로 흩어진 잔차를 만든다. 잔차 대 적합값 그림에서 **휘어진**(U자나 아치 모양) 패턴은 빠진 비선형 항을 알리는 신호이고, **깔때기** 모양은 분산이 일정하지 않음(이분산성)을 알리는 신호다. 제13장에서 이 진단들을 형식적으로 전개한다.
 

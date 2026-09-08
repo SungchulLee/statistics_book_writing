@@ -13,15 +13,49 @@ pandas는 구조화된 자료를 불러오고, 정제하고, 변환하고, 요�
 ### 불러오기와 살펴보기
 
 ```python
+import numpy as np
 import pandas as pd
 
-df = pd.read_csv("data.csv")
-df.head()        # first 5 rows
-df.tail()        # last 5 rows
-df.shape         # (n_rows, n_cols)
-df.dtypes        # type of each column
-df.info()        # dtypes, non-null counts, memory usage
-df.describe()    # numeric summary: count, mean, std, min, quartiles, max
+# 실제 작업에서는 df = pd.read_csv("data.csv")로 파일을 읽는다.
+# 여기서는 결과를 바로 볼 수 있도록 작은 표를 직접 만든다.
+rng = np.random.default_rng(0)
+n = 12
+demo = pd.DataFrame({
+    "treatment": rng.choice(["control", "drug"], size=n),
+    "x": rng.normal(10, 2, size=n).round(2),
+    "outcome": rng.normal(50, 8, size=n).round(1),
+})
+demo.loc[[2, 7], "x"] = np.nan        # 결측값 두 개를 일부러 넣는다
+
+print(demo.head())        # first 5 rows
+print(demo.shape)         # (n_rows, n_cols)
+print(demo.dtypes)        # type of each column
+print(demo.describe().round(2))   # count, mean, std, min, quartiles, max
+```
+
+출력:
+
+```
+treatment      x  outcome
+0      drug  12.61     53.3
+1      drug  11.89     58.3
+2      drug    NaN     49.0
+3   control   7.47     60.9
+4   control   8.75     44.7
+(12, 3)
+treatment     object
+x            float64
+outcome      float64
+dtype: object
+           x  outcome
+count  10.00    12.00
+mean    9.05    50.98
+std     2.13     5.90
+min     5.35    42.60
+25%     7.77    45.90
+50%     8.83    51.30
+75%     9.90    54.28
+max    12.61    60.90
 ```
 
 `read_csv`는 `parse_dates`, `dtype`, `na_values`, `usecols`, `chunksize`를 받는다. 자료 품질 문제는 대부분 나중이 아니라 불러오는 시점에 처리하는 것이 가장 좋다.
@@ -42,10 +76,24 @@ df.describe()    # numeric summary: count, mean, std, min, quartiles, max
 ### 결측값 정제
 
 ```python
-df.isna().sum()             # count of missing per column
-df.dropna()                 # drop rows with any NaN
-df.dropna(subset=["x"])     # drop rows with NaN in 'x' only
-df.fillna(df.median(numeric_only=True))   # impute with column median
+print(demo.isna().sum())              # count of missing per column
+print(len(demo.dropna()))             # drop rows with any NaN
+print(len(demo.dropna(subset=["x"]))) # drop rows with NaN in 'x' only
+
+filled = demo.fillna(demo.median(numeric_only=True))   # impute with median
+print(filled["x"].isna().sum(), filled["x"].median())
+```
+
+출력:
+
+```
+treatment    0
+x            2
+outcome      0
+dtype: int64
+10
+10
+0 8.83
 ```
 
 "옳은" 대체 전략이란 없다. 무엇을 고를지(삭제, 평균, 중앙값, 모형 기반, 다중대체)는 결측 기제에 달려 있다. pandas는 도구를 줄 뿐 결정은 사용자에게 맡긴다.
@@ -55,7 +103,16 @@ df.fillna(df.median(numeric_only=True))   # impute with column median
 pandas에서 가장 강력한 하나의 패턴이다.
 
 ```python
-df.groupby("treatment")["outcome"].agg(["count", "mean", "std"])
+print(demo.groupby("treatment")["outcome"].agg(["count", "mean", "std"]).round(2))
+```
+
+출력:
+
+```
+count   mean   std
+treatment                    
+control        6  51.75  6.69
+drug           6  50.22  5.52
 ```
 
 `groupby`는 `"treatment"`의 서로 다른 값에 따라 자료를 분할하고, 각 그룹 안에서 `"outcome"`에 지정된 집계를 적용한 뒤, 결과를 깔끔한 DataFrame으로 결합한다. 탐색적 분석과 확증적 분석의 일꾼이다. 여러 키(`groupby(["a", "b"])`)와 사용자 정의 집계(`agg(my_func)`)로 이 패턴을 일반화할 수 있다.
@@ -105,6 +162,30 @@ print("\nPivot:\n", df.pivot_table(values="value", index="group",
                                    columns="score_q", aggfunc="mean").round(1))
 ```
 
+출력:
+
+```
+count   mean    std
+group                     
+A         58  50.17  10.20
+B         72  49.72   9.83
+C         70  49.24   9.98
+
+Values > 60: 31 / 200
+
+Correlation:
+        value  score
+value  1.000 -0.111
+score -0.111  1.000
+
+Pivot:
+ score_q    Q1    Q2    Q3    Q4
+group                          
+A        55.4  50.1  48.6  46.9
+B        50.5  53.6  48.0  48.0
+C        48.8  48.0  50.1  50.0
+```
+
 ## 연습문제
 
 **연습문제 1.**
@@ -119,6 +200,15 @@ print("\nPivot:\n", df.pivot_table(values="value", index="group",
         "passed": [True, False, True, False, True],
     })
     print(df[df["passed"] & (df["score"] > 80)])
+    ```
+
+    출력:
+
+    ```
+    name  score  passed
+    0  Alice     92    True
+    2  Carol     88    True
+    4    Eve     95    True
     ```
     피연산자가 파이썬 스칼라가 아니라 pandas 불리언 Series이므로 `and`가 아니라 비트 연산자 `&`를 써야 한다. 각 비교식은 괄호로 묶어라. 연산자 우선순위상 `&`가 `>`보다 높기 때문이다.
 
@@ -141,6 +231,15 @@ df = pd.DataFrame({"group": ["A","A","B","B","B"], "x": [1, 3, 2, 8, 5]})
     )
     print(summary)
     ```
+
+    출력:
+
+    ```
+    n  mean  var  range
+    group                     
+    A      2   2.0  2.0      2
+    B      3   5.0  9.0      6
+    ```
     `agg`는 출력 열 이름을 문자열 집계 이름이나 호출 가능 객체에 대응시키는 키워드 인수를 받는다. 람다를 쓰면 이름 있는 함수를 따로 정의하지 않고 "범위"를 하나의 표현식으로 나타낼 수 있다.
 
 ---
@@ -155,6 +254,15 @@ df = pd.DataFrame({"group": ["A","A","B","B","B"], "x": [1, 3, 2, 8, 5]})
     df = pd.DataFrame({"A": [10, 20, 30]}, index=[2, 0, 1])
     print(df.loc[0])    # row labeled 0   → A = 20
     print(df.iloc[0])   # row at position 0 → A = 10
+    ```
+
+    출력:
+
+    ```
+    A    20
+    Name: 0, dtype: int64
+    A    10
+    Name: 2, dtype: int64
     ```
 
     인덱스가 (기본값인) `RangeIndex(0, n)`이고 행 순서가 바뀌지 않았다면 둘은 일치한다. `df.sort_values()`, `df.set_index()`, 불리언 필터링을 거치고 나면 둘이 갈라지며, 이 둘을 조용히 혼동하는 것이 흔한 버그의 원천이다.
@@ -188,6 +296,15 @@ x,y,z
     print(df.corr().round(3))
     ```
 
+    출력:
+
+    ```
+    x      y      z
+    x  1.000  0.906  1.000
+    y  0.906  1.000  0.906
+    z  1.000  0.906  1.000
+    ```
+
     중앙값 대체는 평균 대체보다 이상치에 강건하지만, 결측이 정보를 담고 있을 때는 여전히 분산과 상관을 왜곡한다. 실제 분석에서는 모형 기반 대체나 다중대체가 낫다. 제12장을 보라.
 
 ---
@@ -202,6 +319,13 @@ x,y,z
     s = pd.Series([2, 4, 4, 4, 5])
     print("pandas s.var()  :", s.var())            # ddof=1, divides by n-1=4
     print("numpy  np.var() :", np.var(s.values))   # ddof=0, divides by n=5
+    ```
+
+    출력:
+
+    ```
+    pandas s.var()  : 1.2
+    numpy  np.var() : 0.96
     ```
 
     `ddof=1`이면 $S^2 = \frac{1}{n-1}\sum(x_i - \bar x)^2$이 불편이다: $\mathbb{E}[S^2] = \sigma^2$. `ddof=0`이면 $\tilde S^2 = \frac{1}{n}\sum(x_i - \bar x)^2$인데, 이는 정규 자료에 대한 **최대가능도** 분산이지만 $(n-1)/n$배만큼 아래로 편향된다. 두 라이브러리의 기본값이 서로 반대라는 점은 늘 혼란의 원천이므로, 어느 쪽이 쓰이고 있는지 항상 확인하라.
@@ -219,9 +343,30 @@ x,y,z
     병합 직후 실행할 진단:
 
     ```python
+    import pandas as pd
+
+    df1 = pd.DataFrame({"id": [1, 2, 3, 4], "x": [10, 20, 30, 40]})
+    df2 = pd.DataFrame({"id": [2, 3, 5], "y": ["b", "c", "e"]})
+
     assert df2["id"].is_unique, "right-side join key not unique — row count will inflate"
     merged = df1.merge(df2, on="id", how="left", indicator=True)
+    print(merged)
     print(merged["_merge"].value_counts())   # left_only / both / right_only
+    ```
+
+    출력:
+
+    ```
+    id   x    y     _merge
+    0   1  10  NaN  left_only
+    1   2  20    b       both
+    2   3  30    c       both
+    3   4  40  NaN  left_only
+    _merge
+    left_only     2
+    both          2
+    right_only    0
+    Name: count, dtype: int64
     ```
 
     `indicator=True` 플래그는 각 행이 어디서 왔는지 알려주는 `_merge` 열을 추가하여, 조용히 실패한 조인을 드러낸다.
