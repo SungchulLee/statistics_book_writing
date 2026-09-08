@@ -143,6 +143,18 @@ def backward_stepwise(X, y):
         print(f"{method_name}: k={opt_k}, features={res[opt_k]['features']}")
     ```
 
+출력:
+
+```
+Best: k=4, features=(0, 1, 2, 3)
+Fwd: k=4, features=(0, 2, 1, 3)
+Bwd: k=4, features=(0, 1, 2, 3)
+```
+
+최적 부분집합, 전진선택, 후진제거가 모두 같은 변수 집합 $\{0,1,2,3\}$을 골랐다. 전진선택은 넣는 **순서**만 다르다.
+
+세 방법이 언제나 일치하지는 않는다. 최적 부분집합은 $2^p$개를 모두 보지만 단계적 방법은 탐욕적이라, 변수들이 서로 얽혀 있으면 갈릴 수 있다.
+
     세 방법 모두 $k = 4$에서 특성 $\{x_1, x_2, x_3, x_4\}$를 고르며 검증 RSS 곡선도 동일하다.
 
     | $k$ | 1 | 2 | 3 | **4** | 5 | 6 | 7 | 8 |
@@ -198,6 +210,14 @@ def backward_stepwise(X, y):
     opt_k_aic = np.argmin(aic_vals) + 1
     print(f"Optimal k (AIC): {opt_k_aic}")
     ```
+
+출력:
+
+```
+Optimal k (AIC): 4
+```
+
+AIC 기준으로 변수 4개짜리 모형이 뽑혔다. 참 모형이 변수 4개였으므로 옳은 선택이다.
 
     출력:
 

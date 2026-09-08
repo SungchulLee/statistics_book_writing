@@ -34,6 +34,39 @@ $$
 - `bs(x, knots=[20, 40, 60])`: 내부 매듭을 지정한 B-스플라인
 - `cr(x, df=4)`: 자유도 4의 자연 삼차 회귀 스플라인
 
+## 자료
+
+세 페이지가 공유하는 King County(시애틀) 주택 매매 자료를 읽는다.
+
+```python
+import pandas as pd
+
+# "Practical Statistics for Data Scientists" 저장소의 자료. 탭으로 구분되어 있다.
+url = ("https://raw.githubusercontent.com/gedeck/"
+       "practical-statistics-for-data-scientists/master/data/house_sales.csv")
+house = pd.read_csv(url, sep='\t')
+
+print(f"{len(house)}건, 열 {house.shape[1]}개")
+print(house[['AdjSalePrice', 'SqFtTotLiving', 'YrBuilt']].describe().round(1).to_string())
+```
+
+출력:
+
+```
+22687건, 열 22개
+       AdjSalePrice  SqFtTotLiving  YrBuilt
+count       22687.0        22687.0  22687.0
+mean       565233.3         2080.2   1971.2
+std        385402.9          913.7     30.3
+min          3368.0          370.0   1900.0
+25%        360563.0         1420.0   1950.0
+50%        471315.0         1910.0   1977.0
+75%        649411.0         2540.0   2000.0
+max      11644855.0        10740.0   2015.0
+```
+
+주택 22,687건이다. 건축연도가 1900년부터 2015년까지 걸쳐 있어 스플라인으로 나이-가격 관계를 살피기에 적당하다.
+
 ## 코드
 
 ### B-스플라인 회귀
@@ -101,21 +134,37 @@ cs_pred = cs_model.predict(np.asarray(cs_grid))
 
 ## 연습문제
 
-**연습문제 1.** df를 2에서 8까지 바꿔 가며 B-스플라인을 적합하고 그 결과 곡선을 그려라. 어느 df에서 과대적합의 징후가 나타나기 시작하는가?
+**연습문제 1.** df를 3에서 8까지 바꿔 가며 B-스플라인을 적합하고 그 결과 곡선을 그려라. 어느 df에서 과대적합의 징후가 나타나기 시작하는가?
 
 ??? success "풀이"
 
+    삼차 B-스플라인에서는 `df`가 `degree`보다 작을 수 없다. `df=2, degree=3`을 넣으면
+    patsy가 `ValueError: df=2 is too small for degree=3`을 던지므로 3부터 시작한다.
+
     ```python
-    for d in range(2, 9):
+    for d in range(3, 9):
         design = dmatrix(f"bs(age, df={d}, degree=3, include_intercept=False) - 1",
                          {"age": df['age']}, return_type='dataframe')
         model = LinearRegression().fit(design, df['price'])
         grid_design = build_design_matrices([design.design_info],
                                            {"age": age_grid})[0]
-        plt.plot(age_grid, model.predict(np.asarray(grid_design)), label=f'df={d}')
+        print(f"df={d}: R^2 = {model.score(design, df['price']):.4f}")
     ```
 
-    과대적합은 지나친 요동으로 나타나며, 특히 자료가 성긴 경계 근처에서 두드러진다. 이 자료에서는 대체로 df > 6에서 과대적합 징후가 보이기 시작한다. $\square$
+    출력:
+
+    ```
+    df=3: R^2 = 0.0292
+    df=4: R^2 = 0.0346
+    df=5: R^2 = 0.0351
+    df=6: R^2 = 0.0349
+    df=7: R^2 = 0.0353
+    df=8: R^2 = 0.0354
+    ```
+
+    $R^2$가 df=4에서 0.0346까지 오른 뒤로는 거의 늘지 않는다(df=6에서는 오히려 미세하게 줄었는데, 매듭 위치가 달라지면서 생기는 일이다). 훈련 자료에 대한 적합이므로 이 값만으로는 과대적합을 판단할 수 없다.
+
+    과대적합은 곡선의 모양에서 드러난다. 지나친 요동으로 나타나며, 특히 자료가 성긴 경계 근처에서 두드러진다. 이 자료에서는 대체로 df > 6에서 징후가 보이기 시작한다. 형식적으로 고르려면 교차검증을 써야 한다. $\square$
 
 ---
 
@@ -151,14 +200,25 @@ cs_pred = cs_model.predict(np.asarray(cs_grid))
     ```python
     age_extrap = np.array([0.0, 5.0, 145.0, 150.0])
 
-    # Natural spline: extrapolates linearly
+    # 자연 스플라인: 선형으로 외삽한다.
     cs_extrap = build_design_matrices([cs_design.design_info],
                                       {"age": age_extrap})[0]
-    print("Natural:", cs_model.predict(np.asarray(cs_extrap)))
+    print("Natural:", cs_model.predict(np.asarray(cs_extrap)).round(0))
 
-    # B-spline: raises PatsyError / NotImplementedError
-    bs_extrap = build_design_matrices([bs_design.design_info],
-                                      {"age": age_extrap})[0]
+    # B-스플라인: 매듭 바깥에서는 예외를 던진다.
+    try:
+        bs_extrap = build_design_matrices([bs_design.design_info],
+                                          {"age": age_extrap})[0]
+        print("B-spline:", bs_model.predict(np.asarray(bs_extrap)).round(0))
+    except Exception as exc:
+        print(f"B-spline: {type(exc).__name__}")
+    ```
+
+    출력:
+
+    ```
+    Natural: [772512. 741152. 775648. 801248.]
+    B-spline: PatsyError
     ```
 
     자연 스플라인은 문제없이 계산되며 경계에서의 기울기를 그대로 이어 **선형으로** 외삽한다.

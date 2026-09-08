@@ -64,6 +64,52 @@ $\beta_3 > 0$이면 잠을 더 잘수록 공부의 이득이 커진다. $\beta_3
 
 ---
 
+## 예제 자료
+
+두 예제에서 쓸 자료를 먼저 읽는다. ISLR 교재의 Advertising과 Credit이다.
+
+```python
+import pandas as pd
+
+# Advertising: 광고비(TV, Radio, Newspaper)와 매출(Sales), 200개 시장
+advertising = pd.read_csv("https://www.statlearning.com/s/Advertising.csv",
+                          index_col=0)
+advertising = advertising.rename(columns={"radio": "Radio",
+                                          "newspaper": "Newspaper",
+                                          "sales": "Sales"})
+
+# Credit: 신용카드 잔액(Balance)과 소득(Income), 학생 여부(Student), 400명
+credit = pd.read_csv("https://raw.githubusercontent.com/vincentarelbundock/"
+                     "Rdatasets/master/csv/ISLR/Credit.csv", index_col=0)
+
+print(advertising[["TV", "Radio", "Sales"]].describe().round(2).to_string())
+print()
+print(credit.groupby("Student")[["Income", "Balance"]].mean().round(2).to_string())
+```
+
+출력:
+
+```
+           TV   Radio   Sales
+count  200.00  200.00  200.00
+mean   147.04   23.26   14.02
+std     85.85   14.85    5.22
+min      0.70    0.00    1.60
+25%     74.38    9.98   10.38
+50%    149.75   22.90   12.90
+75%    218.82   36.52   17.40
+max    296.40   49.60   27.00
+
+         Income  Balance
+Student                 
+No        44.99   480.37
+Yes       47.29   876.82
+```
+
+Advertising은 시장 200곳의 광고비와 매출, Credit은 400명의 소득과 잔액이다.
+
+Credit 자료에서 학생의 평균 잔액이 877달러로 비학생의 480달러보다 훨씬 높은데 소득은 비슷하다는 점을 눈여겨보라. 아래 교호작용 모형이 이 차이를 어떻게 나누는지 볼 것이다.
+
 ## 예제 2: 마케팅 효과 (TV와 Radio)
 
 광고 분석의 고전적 예는 TV와 Radio 광고 지출이 매출에 미치는 영향이다. 주효과만 있는 모형은 각 매체가 독립적인 효과를 갖는다고 가정한다.
@@ -91,8 +137,30 @@ import statsmodels.formula.api as smf
 # Using formula syntax (R-like)
 # The * operator includes main effects and the interaction
 model = smf.ols('Sales ~ TV * Radio', data=advertising).fit()
-print(model.summary())
+# summary()는 실행 날짜와 시각을 함께 찍으므로 계수 표만 인쇄한다.
+print(model.summary().tables[1])
+print(f"R^2 = {model.rsquared:.4f}")
 ```
+
+출력:
+
+```
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+Intercept      6.7502      0.248     27.233      0.000       6.261       7.239
+TV             0.0191      0.002     12.699      0.000       0.016       0.022
+Radio          0.0289      0.009      3.241      0.001       0.011       0.046
+TV:Radio       0.0011   5.24e-05     20.727      0.000       0.001       0.001
+==============================================================================
+R^2 = 0.9678
+```
+
+교호작용 항 `TV:Radio`의 계수가 0.0011이고 $t = 20.7$로 압도적으로 유의하다. TV와 라디오 광고 사이에 상승효과가 있다는 뜻이다.
+
+크기를 가늠해 보자. 라디오에 0을 쓸 때 TV 1단위의 효과는 0.0191이지만, 라디오에 30을 쓰면 $0.0191 + 0.0011 \times 30 = 0.052$로 2.7배가 된다. **교호작용이 있으면 주효과를 단독으로 해석할 수 없다**는 말의 뜻이 이것이다.
+
+$R^2$도 0.968로, 교호작용 없는 모형(0.897)보다 크게 높다.
 
 !!! warning "`statsmodels.api`에는 소문자 `ols`가 없다"
     식 인터페이스는 `statsmodels.formula.api`(관례적으로 `smf`)에 있다. `statsmodels.api`(관례적으로 `sm`)에는 배열을 받는 대문자 `sm.OLS`만 있으므로 `sm.ols(...)`를 호출하면 `AttributeError`가 난다.
@@ -122,8 +190,29 @@ $$
 # statsmodels automatically encodes categorical variables
 model = smf.ols('Balance ~ Income + C(Student) + Income:C(Student)',
                 data=credit).fit()
-print(model.summary())
+print(model.summary().tables[1])
+print(f"R^2 = {model.rsquared:.4f}")
 ```
+
+출력:
+
+```
+============================================================================================
+                               coef    std err          t      P>|t|      [0.025      0.975]
+--------------------------------------------------------------------------------------------
+Intercept                  200.6232     33.698      5.953      0.000     134.373     266.873
+C(Student)[T.Yes]          476.6758    104.351      4.568      0.000     271.524     681.827
+Income                       6.2182      0.592     10.502      0.000       5.054       7.382
+Income:C(Student)[T.Yes]    -1.9992      1.731     -1.155      0.249      -5.403       1.404
+============================================================================================
+R^2 = 0.2799
+```
+
+교호작용 항의 계수가 $-2.00$이지만 $p = 0.249$로 유의하지 않다. 소득이 잔액에 미치는 효과가 학생과 비학생에서 다르다는 증거가 약하다는 뜻이다.
+
+주효과는 강하다. 학생이라는 것만으로 잔액이 평균 477달러 높고(`C(Student)[T.Yes]`), 소득이 1(천 달러) 늘 때마다 6.22달러 는다.
+
+`C(Student)[T.Yes]`라는 이름은 patsy가 No를 기준(reference)으로 삼았다는 뜻이다. 기준 수준이 무엇인지 확인하지 않으면 계수의 부호를 거꾸로 읽게 된다.
 
 이런 교호작용을 시각화하면 흔히 기울기가 다른 두 회귀직선(집단마다 하나씩)이 나타나며, Income이 Balance에 미치는 차별적 효과를 보여준다.
 

@@ -2,6 +2,42 @@
 
 선형성은 종속변수와 각 독립변수 사이에 직선 관계가 있다고 상정하는 선형회귀의 기초 가정이다. 이 가정이 성립하는지 확인하는 일은 회귀모형의 타당성에 결정적이다. 변수들 사이의 관계가 선형이 아니면 모형이 편향된 추정을 내놓아 나쁜 예측과 잘못된 추론을 낳는다. 이 절은 선형회귀에서 선형성을 평가하는 여러 방법을 살펴본다.
 
+## 설정
+
+이 페이지의 진단은 모두 아래 자료와 모형 하나를 놓고 수행한다.
+
+```python
+import numpy as np
+import pandas as pd
+import statsmodels.api as sm
+
+rng = np.random.default_rng(7)
+n = 120
+
+# X는 균등, Y는 X에 선형으로 의존하되 오차의 분산이 X와 함께 커진다.
+# 이렇게 두면 선형성은 성립하고 등분산성만 깨져, 각 진단이 무엇을
+# 잡아내고 무엇을 놓치는지 구분해 볼 수 있다.
+X = rng.uniform(0, 10, n)
+Y = 2.0 + 1.5 * X + rng.normal(0, 0.5 + 0.35 * X, n)
+
+df = pd.DataFrame({"X": X, "Y": Y})
+model = sm.OLS(Y, sm.add_constant(X)).fit()
+residuals = model.resid
+fitted = model.fittedvalues
+
+print(f"beta_hat = {model.params.round(4)}")
+print(f"R^2 = {model.rsquared:.4f}")
+```
+
+출력:
+
+```
+beta_hat = [1.5933 1.5317]
+R^2 = 0.7813
+```
+
+기울기 추정값 1.53이 참값 1.5에 가깝다. 이분산이 있어도 OLS 추정값 자체는 불편이며, 흔들리는 것은 표준오차다.
+
 ## 1. 산점도를 이용한 시각적 점검
 
 **산점도**는 선형성을 확인하는 가장 간단하고 직관적인 방법이다. 각 독립변수를 종속변수에 대해 그려 관계가 직선처럼 보이는지 눈으로 확인할 수 있다.
@@ -24,6 +60,10 @@ plt.ylabel('Dependent Variable')
 plt.title('Scatterplot of Y vs X')
 plt.show()
 ```
+
+![Y 대 X 산점도](./img/checking_linearity_53.png)
+
+점들이 직선 주위에 모여 있어 선형 관계로 보인다. 오른쪽으로 갈수록 퍼짐이 커지는 것도 그림에서 이미 보인다.
 
 **해석:**
 
@@ -59,6 +99,10 @@ plt.axhline(y=0, color='red', linestyle='--')
 plt.show()
 ```
 
+![잔차 대 적합값](./img/checking_linearity_81.png)
+
+잔차가 0을 중심으로 무작위로 흩어져 있고 휘어진 패턴이 없다. 다만 오른쪽으로 갈수록 퍼짐이 커지는 것이 보이는데, 이것은 선형성이 아니라 **등분산성**의 문제다. 같은 그림이 두 가정을 동시에 진단한다는 점이 중요하다.
+
 **해석:**
 
 - **무작위 흩어짐:** 잔차가 뚜렷한 패턴 없이 0 주위에 무작위로 흩어져 있으면 선형성 가정이 충족되었을 가능성이 높다.
@@ -92,12 +136,16 @@ from statsmodels.graphics.regressionplots import plot_ccpr
 import matplotlib.pyplot as plt
 
 # Fit the full model first; exog_idx selects the predictor to examine
-results = sm.OLS(y, sm.add_constant(X)).fit()
+results = sm.OLS(Y, sm.add_constant(X)).fit()
 
 fig, ax = plt.subplots(figsize=(8, 6))
 plot_ccpr(results, exog_idx=1, ax=ax)
 plt.show()
 ```
+
+![성분+잔차 그림](./img/checking_linearity_125.png)
+
+부분잔차가 직선을 따라 놓이면 그 설명변수에 대한 선형성이 뒷받침된다.
 
 !!! note "`plot_ccpr`와 `plot_partregress`는 다르다"
     성분+잔차(부분잔차) 그림은 `plot_ccpr`이다. 이름이 비슷한 `plot_partregress`는 **부분회귀 그림**(추가변수 그림)으로, $Y$를 나머지 설명변수에 회귀시킨 잔차를 $X_j$를 나머지 설명변수에 회귀시킨 잔차에 대해 그린 것이다. 둘 다 유용하지만 서로 다른 그림이며, `plot_partregress`의 인자 이름도 `exog`가 아니라 `exog_i`이다.
@@ -139,11 +187,32 @@ $$
 import numpy as np
 import statsmodels.api as sm
 
-# Assuming X is the independent variable and Y is the dependent variable
 X_poly = np.column_stack((X, X**2))
-model = sm.OLS(Y, sm.add_constant(X_poly)).fit()
-print(model.summary())
+model_quad = sm.OLS(Y, sm.add_constant(X_poly)).fit()
+
+# summary()는 실행 날짜와 시각을 함께 찍으므로 계수 표만 인쇄한다.
+print(model_quad.summary().tables[1])
+print(f"R^2: 선형 {model.rsquared:.4f}  →  이차 {model_quad.rsquared:.4f}")
+print(f"AIC: 선형 {model.aic:.2f}  →  이차 {model_quad.aic:.2f}")
 ```
+
+출력:
+
+```
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+const          2.2252      0.628      3.545      0.001       0.982       3.468
+x1             1.1466      0.289      3.971      0.000       0.575       1.718
+x2             0.0388      0.028      1.380      0.170      -0.017       0.094
+==============================================================================
+R^2: 선형 0.7813  →  이차 0.7848
+AIC: 선형 549.02  →  이차 549.08
+```
+
+이차 항을 넣어도 $R^2$가 0.7813에서 0.7848로 거의 오르지 않고, AIC는 549.02에서 549.08로 오히려 나빠진다. $x^2$의 계수도 $p = 0.170$으로 유의하지 않다.
+
+선형성 가정이 맞다는 뜻이다. 자료를 실제로 선형 관계로 만들었으니 기대한 결과이며, 이 진단이 거짓 양성을 내지 않는다는 확인이기도 하다.
 
 **해석:**
 

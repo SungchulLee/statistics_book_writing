@@ -37,6 +37,27 @@ $$
 
 $y$의 $x_j$에 대한 **부분의존**은 함수 $f_j(x_j)$이며, 다른 설명변수에 대해 평균을 낸 뒤 설명변수 $j$가 반응변수에 미치는 주변 효과를 보여준다.
 
+## 자료
+
+```python
+import pandas as pd
+
+url = ("https://raw.githubusercontent.com/gedeck/"
+       "practical-statistics-for-data-scientists/master/data/house_sales.csv")
+house = pd.read_csv(url, sep='\t')
+house_98105 = house.loc[house['ZipCode'] == 98105, :]
+
+print(f"98105 지역 {len(house_98105)}건")
+```
+
+출력:
+
+```
+98105 지역 313건
+```
+
+98105 지역 313건이다. 아래에서 선형, 다항, 스플라인, GAM을 같은 자료에 적용해 비교한다.
+
 ## 코드
 
 ### 선형 모형과 다항 모형
@@ -123,6 +144,18 @@ gam_py.gridsearch(X_gam, y_gam)
         r2 = r2_score(y_gam, pred)
         print(f"{name}: R2={r2:.4f}, RMSE={rmse:.0f}")
     ```
+
+출력:
+
+```
+Linear: R2=0.7954, RMSE=176775
+Polynomial: R2=0.8058, RMSE=172241
+GAM (pyGAM): R2=0.8117, RMSE=169580
+```
+
+선형 $R^2 = 0.795$, 다항 0.806, GAM 0.812로 조금씩 나아진다. RMSE로는 176,775달러에서 169,580달러로 4% 줄었다.
+
+개선폭이 크지 않다는 점이 오히려 유익한 결론이다. 이 자료에서 주택 가격과 설명변수의 관계는 대체로 선형에 가깝고, 비선형 모형이 가져오는 이득이 제한적이다. **더 유연한 모형이 언제나 크게 낫지는 않다.**
 
     GAM은 선형 모형보다 대체로 완만하게 개선되며 다항 모형과는 비슷한 성능을 보인다. 개선의 폭은 참 관계가 얼마나 비선형인가에 달려 있다.
 

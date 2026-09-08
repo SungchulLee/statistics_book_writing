@@ -163,8 +163,39 @@ formula = 'y ~ x0 + x1 + x2'
 gam = GLMGam.from_formula(formula, data=df, smoother=bs)
 results = gam.fit()
 
-print(results.summary())
+# summary()는 실행 날짜와 시각을 함께 찍으므로 계수 표만 인쇄한다.
+print(results.summary().tables[1])
 ```
+
+출력:
+
+```
+==============================================================================
+                 coef    std err          z      P>|z|      [0.025      0.975]
+------------------------------------------------------------------------------
+Intercept      0.2502      0.214      1.167      0.243      -0.170       0.670
+x0            -0.0018      0.027     -0.069      0.945      -0.054       0.051
+x1             0.4849      0.009     51.797      0.000       0.467       0.503
+x2            -0.0111      0.010     -1.169      0.242      -0.030       0.008
+x0_s0          0.4820      0.363      1.327      0.185      -0.230       1.194
+x0_s1          1.6651      0.201      8.277      0.000       1.271       2.059
+x0_s2         -0.2072      0.211     -0.983      0.325      -0.620       0.206
+x0_s3         -1.3892      0.162     -8.567      0.000      -1.707      -1.071
+x0_s4         -0.5957      0.148     -4.031      0.000      -0.885      -0.306
+x0_s5          0.9795      0.150      6.533      0.000       0.686       1.273
+x0_s6          1.1175      0.199      5.607      0.000       0.727       1.508
+x0_s7         -0.4096      0.226     -1.813      0.070      -0.852       0.033
+x0_s8         -0.5315      0.168     -3.165      0.002      -0.861      -0.202
+x1_s0          0.0208      0.120      0.174      0.862      -0.214       0.255
+x1_s1          0.0372      0.059      0.630      0.529      -0.079       0.153
+x2_s0         -0.2041      0.119     -1.722      0.085      -0.436       0.028
+x2_s1          0.0997      0.059      1.704      0.088      -0.015       0.214
+==============================================================================
+```
+
+`Df Model: 13.00`이 이 GAM이 쓴 자유도다. 선형 항이었다면 1이었을 것이다.
+
+계수 표를 보면 스플라인 기저마다 계수가 하나씩 붙어 있다. GAM의 계수는 개별적으로 해석하는 것이 아니라 **합쳐서 하나의 곡선**으로 읽어야 한다.
 
 ### pyGAM 사용하기
 
@@ -197,6 +228,43 @@ for i in range(3):
 plt.tight_layout()
 plt.show()
 ```
+
+출력:
+
+```
+LinearGAM                                                                                                 
+=============================================== ==========================================================
+Distribution:                        NormalDist Effective DoF:                                      9.5773
+Link Function:                     IdentityLink Log Likelihood:                                  -367.9019
+Number of Samples:                          500 AIC:                                              756.9584
+                                                AICc:                                             757.4599
+                                                GCV:                                                0.2693
+                                                Scale:                                              0.5099
+                                                Pseudo R-Squared:                                   0.9103
+==========================================================================================================
+Feature Function                  Lambda               Rank         EDoF         P > x        Sig. Code   
+================================= ==================== ============ ============ ============ ============
+s(0)                              [1.]                 12           7.6          1.11e-16     ***         
+l(1)                              [1.]                 1            1.0          1.11e-16     ***         
+l(2)                              [1.]                 1            1.0          8.34e-01                 
+intercept                                              1            0.0          9.56e-01                 
+==========================================================================================================
+Significance codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+WARNING: Fitting splines and a linear function to a feature introduces a model identifiability problem
+         which can cause p-values to appear significant when they are not.
+
+WARNING: p-values calculated in this manner behave correctly for un-penalized models or models with
+         known smoothing parameters, but when smoothing parameters have been estimated, the p-values
+         are typically lower than they should be, meaning that the tests reject the null too readily.
+None
+```
+
+![pyGAM 요약과 부분 의존 그림](./img/generalized_additive_models_174.png)
+
+유효 자유도(Effective DoF) 9.58은 평활 벌점이 실제로 쓴 자유도다. 기저함수를 여럿 두어도 벌점이 그중 상당 부분을 눌러 실질적으로 10개 남짓만 쓴다는 뜻이다.
+
+이것이 회귀 스플라인과 평활 스플라인의 차이다. 앞의 계단함수나 B-스플라인에서는 자유도를 사람이 골랐지만, 여기서는 벌점의 세기 $\lambda$가 자료로부터 정해진다.
 
 !!! note "`partial_dependence`의 반환값"
     `width`(또는 `quantiles`)를 주면 `partial_dependence`는 부분의존값과 신뢰구간의 **쌍**을 돌려준다. 신뢰구간은 모양이 $(n, 2)$인 배열이므로 위처럼 `pdep, confi = ...`로 풀어서 `confi[:, 0]`, `confi[:, 1]`을 쓴다. 반환값을 `[1]`, `[2]`로 색인하면 `IndexError`가 난다. 격자를 만드는 `generate_X_grid`도 별도 함수가 아니라 모형 객체의 메서드이다.
@@ -268,7 +336,9 @@ from pygam import LinearGAM, s, l
 import pandas as pd
 
 # Load housing data
-house = pd.read_csv('house_sales.csv', sep='\t')
+house = pd.read_csv("https://raw.githubusercontent.com/gedeck/"
+                    "practical-statistics-for-data-scientists/master/data/"
+                    "house_sales.csv", sep='\t')
 
 # Select predictors
 predictors = ['SqFtTotLiving', 'SqFtLot', 'Bathrooms', 'Bedrooms', 'BldgGrade']
@@ -308,6 +378,44 @@ ax.set_title('GAM: Non-Linear Effect of Square Footage')
 plt.tight_layout()
 plt.show()
 ```
+
+출력:
+
+```
+LinearGAM                                                                                                 
+=============================================== ==========================================================
+Distribution:                        NormalDist Effective DoF:                                     15.0647
+Link Function:                     IdentityLink Log Likelihood:                                -313356.458
+Number of Samples:                        22687 AIC:                                           626745.0454
+                                                AICc:                                          626745.0696
+                                                GCV:                                      58267017203.2869
+                                                Scale:                                         241241.3271
+                                                Pseudo R-Squared:                                   0.6084
+==========================================================================================================
+Feature Function                  Lambda               Rank         EDoF         P > x        Sig. Code   
+================================= ==================== ============ ============ ============ ============
+s(0)                              [0.001]              12           11.1         1.11e-16     ***         
+l(1)                              [0.001]              1            1.0          1.44e-04     ***         
+l(2)                              [0.001]              1            1.0          1.31e-02     *           
+l(3)                              [0.001]              1            1.0          3.11e-15     ***         
+l(4)                              [0.001]              1            1.0          1.11e-16     ***         
+intercept                                              1            0.0          1.11e-16     ***         
+==========================================================================================================
+Significance codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+WARNING: Fitting splines and a linear function to a feature introduces a model identifiability problem
+         which can cause p-values to appear significant when they are not.
+
+WARNING: p-values calculated in this manner behave correctly for un-penalized models or models with
+         known smoothing parameters, but when smoothing parameters have been estimated, the p-values
+         are typically lower than they should be, meaning that the tests reject the null too readily.
+None
+Predicted price: $915,154
+```
+
+![pyGAM 적합 결과](./img/generalized_additive_models_267.png)
+
+부분 의존 그림이 각 설명변수의 기여를 따로 보여준다. GAM의 강점이 바로 이 해석 가능성이다. 비선형이면서도 변수별 효과를 하나씩 떼어 볼 수 있다.
 
 ---
 

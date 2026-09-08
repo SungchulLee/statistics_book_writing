@@ -28,6 +28,39 @@ $$
 - **분위수 구간**(`pd.qcut`): 각 구간이 대략 같은 개수의 관측값을 담는다
 - **분야 지식**: 의미 있는 문턱에 절단점을 둔다
 
+## 자료
+
+세 페이지가 공유하는 King County(시애틀) 주택 매매 자료를 읽는다.
+
+```python
+import pandas as pd
+
+# "Practical Statistics for Data Scientists" 저장소의 자료. 탭으로 구분되어 있다.
+url = ("https://raw.githubusercontent.com/gedeck/"
+       "practical-statistics-for-data-scientists/master/data/house_sales.csv")
+house = pd.read_csv(url, sep='\t')
+
+print(f"{len(house)}건, 열 {house.shape[1]}개")
+print(house[['AdjSalePrice', 'SqFtTotLiving', 'YrBuilt']].describe().round(1).to_string())
+```
+
+출력:
+
+```
+22687건, 열 22개
+       AdjSalePrice  SqFtTotLiving  YrBuilt
+count       22687.0        22687.0  22687.0
+mean       565233.3         2080.2   1971.2
+std        385402.9          913.7     30.3
+min          3368.0          370.0   1900.0
+25%        360563.0         1420.0   1950.0
+50%        471315.0         1910.0   1977.0
+75%        649411.0         2540.0   2000.0
+max      11644855.0        10740.0   2015.0
+```
+
+22,687건이다. 가격이 3,368달러에서 1,164만 달러까지 퍼져 있어 오른쪽으로 크게 치우친 자료다.
+
 ## 코드
 
 ### pd.cut으로 계단함수 만들기
@@ -53,7 +86,28 @@ df_dummies = pd.get_dummies(df['age_bin'], drop_first=False)
 X_step = df_dummies.values
 step_model = LinearRegression()
 step_model.fit(X_step, df['price'])
+
+# 절편 없이 적합하면 각 계수가 곧 그 구간의 평균이 된다.
+step_model_nc = LinearRegression(fit_intercept=False).fit(X_step, df['price'])
+for interval, coef in zip(df_dummies.columns, step_model_nc.coef_):
+    print(f"{str(interval):<18} 평균 가격 = {coef:>10,.0f}")
+print(f"R^2 = {r2_score(df['price'], step_model.predict(X_step)):.4f}")
 ```
+
+출력:
+
+```
+(-0.001, 20.0]     평균 가격 =    642,643
+(20.0, 40.0]       평균 가격 =    621,917
+(40.0, 60.0]       평균 가격 =    490,326
+(60.0, 80.0]       평균 가격 =    482,741
+(80.0, 150.0]      평균 가격 =    571,694
+R^2 = 0.0283
+```
+
+구간별 평균 가격이 나이에 따라 단조롭지 않다. 20년 미만이 64만, 60~80년이 48만으로 가장 낮고, 80년이 넘으면 57만으로 다시 오른다.
+
+**계단함수의 값어치가 여기 있다.** 선형 모형이라면 "나이가 들수록 싸진다" 같은 단조 관계만 잡아낼 수 있지만, 계단함수는 U자 모양을 그대로 담는다. 물론 $R^2 = 0.028$로 설명력 자체는 낮다.
 
 !!! note "지시변수를 모두 넣으면 설계행렬의 계수가 부족해진다"
     `drop_first=False`로 만든 $K$개의 지시변수는 합이 1이므로 절편과 완전 공선이다. `LinearRegression`은 내부적으로 최소제곱 최소노름 해를 쓰므로 **예측값 자체는 정확하지만** 개별 계수를 해석할 수는 없다. 계수를 해석하려면 `drop_first=True`로 기준 구간을 하나 두거나, 절편 없이(`fit_intercept=False`) $K$개 지시변수만 쓰면 된다. 뒤쪽 방식에서는 각 계수가 그 구간의 평균이 된다(연습문제 4 참조).
@@ -70,7 +124,25 @@ for n_bins in [3, 4, 5, 6, 8, 10]:
     r2 = r2_score(df['price'], pred)
     rmse = np.sqrt(mean_squared_error(df['price'], pred))
     results.append({'n_bins': n_bins, 'R2': r2, 'RMSE': rmse})
+
+print(pd.DataFrame(results).round(4).to_string(index=False))
 ```
+
+출력:
+
+```
+ n_bins     R2        RMSE
+      3 0.0226 381016.7261
+      4 0.0239 380754.8087
+      5 0.0286 379852.0395
+      6 0.0327 379038.4143
+      8 0.0332 378949.6438
+     10 0.0334 378904.4326
+```
+
+구간을 3개에서 10개로 늘려도 $R^2$가 0.023에서 0.033으로 밖에 오르지 않는다.
+
+구간을 늘리면 모수가 늘어 훈련 자료에 대한 적합은 반드시 좋아진다. 그런데도 이만큼밖에 오르지 않는다는 것은 주택 나이 하나로 가격을 설명하는 데 한계가 있다는 뜻이다.
 
 ### 다른 방법과의 비교
 
@@ -160,15 +232,32 @@ poly_model = LinearRegression().fit(X_poly, df['price'])
     ```python
     from sklearn.linear_model import LogisticRegression
 
-    # Continuous predictor
+    # "비싼" 주택을 중앙값 위로 정의한다.
+    df = pd.DataFrame({'age': 2024 - house['YrBuilt'].values,
+                       'price': house['AdjSalePrice'].values})
+    df['expensive'] = (df['price'] > df['price'].median()).astype(int)
+
+    # 연속형 설명변수
     logit_cont = LogisticRegression().fit(df[['age']], df['expensive'])
     acc_cont = logit_cont.score(df[['age']], df['expensive'])
 
-    # Step function predictor
+    # 계단함수 설명변수
     X_class = pd.get_dummies(pd.cut(df['age'], bins=5), drop_first=True).values
     logit_step = LogisticRegression().fit(X_class, df['expensive'])
     acc_step = logit_step.score(X_class, df['expensive'])
+
+    print(f"연속형 정확도: {acc_cont:.4f}")
+    print(f"계단함수 정확도: {acc_step:.4f}")
     ```
+
+출력:
+
+```
+연속형 정확도: 0.5614
+계단함수 정확도: 0.5818
+```
+
+계단함수 쪽이 정확도 0.582로 연속형의 0.561보다 조금 낫다. 주택 나이와 가격의 관계가 단조가 아니기 때문이다. 위 구간별 평균에서 보았듯 40~80년 된 집이 가장 싸고, 새 집과 아주 오래된 집이 비싸다.
 
     참 로그오즈가 age에 대해 대략 선형이면 연속형 모형이 더 적은 모수로 비슷하거나 더 나은 성능을 낼 수 있다. 로그오즈가 급격히 변한다면(예: 60년이 넘은 집은 비쌀 가능성이 훨씬 낮다면) 계단함수가 이를 더 잘 포착한다. 상대적 성능은 참 관계가 어떤 모양인지에 달려 있다.
 

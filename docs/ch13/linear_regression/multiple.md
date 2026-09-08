@@ -87,6 +87,47 @@ plt.tight_layout()
 plt.show()
 ```
 
+출력:
+
+```
+      TV  Radio  Newspaper  Sales
+0  230.1   37.8       69.2   22.1
+1   44.5   39.3       45.1   10.4
+2   17.2   45.9       69.3    9.3
+3  151.5   41.3       58.5   18.5
+4  180.8   10.8       58.4   12.9
+
+      TV  Radio  Newspaper  Sales  TV:Radio
+0  230.1   37.8       69.2   22.1   8697.78
+1   44.5   39.3       45.1   10.4   1748.85
+2   17.2   45.9       69.3    9.3    789.48
+3  151.5   41.3       58.5   18.5   6256.95
+4  180.8   10.8       58.4   12.9   1952.64
+
+x_train.head()
+        TV  Radio  TV:Radio
+169  284.3   10.6   3013.58
+97   184.9   21.0   3882.90
+31   112.9   17.4   1964.46
+12    23.8   35.1    835.38
+35   290.7    4.1   1191.87
+
+y_train.head()
+169    15.0
+97     15.5
+31     11.9
+12      9.2
+35     12.8
+Name: Sales, dtype: float64
+
+Model Intercept: 6.3749
+Model Coefficients: [0.0206 0.0474 0.001 ]
+```
+
+![Advertising 자료](./img/multiple_33.png)
+
+시장 200곳의 광고비와 매출이다.
+
 ### 결정론적 훈련-검정 분할
 
 ```python
@@ -140,6 +181,17 @@ plt.tight_layout()
 plt.show()
 ```
 
+출력:
+
+```
+Model Intercept: 6.8814
+Model Coefficients: [0.0183 0.0229 0.0011]
+```
+
+![적합된 회귀](./img/multiple_133.png)
+
+세 계수가 각각 TV 0.0183, 라디오 0.0229, 신문 0.0011이다. 신문의 계수가 사실상 0이다.
+
 ## statsmodels로 구현하기
 
 `statsmodels` 라이브러리는 p값, 신뢰구간, 진단검정을 포함한 풍부한 통계 출력을 제공한다. scikit-learn과의 자세한 비교는 [패키지 비교](../package_usage/comparison.md)를 보라.
@@ -150,6 +202,18 @@ plt.show()
 import pandas as pd
 import statsmodels.formula.api as sm
 import matplotlib.pyplot as plt
+
+
+def print_summary(res):
+    """summary()에서 실행 날짜와 시각만 지우고 인쇄한다(재현 가능한 출력을 위해)."""
+    lines = []
+    for line in str(res.summary()).split("\n"):
+        if line.startswith(("Date:", "Time:")):
+            lines.append(line[:19].ljust(38) + line[38:])
+        else:
+            lines.append(line)
+    print("\n".join(lines) + "\n")
+
 
 url = 'https://raw.githubusercontent.com/justmarkham/scikit-learn-videos/master/data/Advertising.csv'
 data = pd.read_csv(url, usecols=[1, 2, 3, 4])
@@ -164,7 +228,7 @@ test_data = data.iloc[num_train_observations:]
 # Fit model with TV, Radio, and Newspaper
 model = sm.ols('Sales ~ TV + Radio + Newspaper', train_data).fit()
 print("Model with TV, Radio, and Newspaper as predictors:")
-print(model.summary(), end="\n\n")
+print_summary(model)
 
 train_predictions = model.predict(train_data)
 test_predictions = model.predict(test_data)
@@ -189,21 +253,135 @@ plt.tight_layout()
 plt.show()
 ```
 
+출력:
+
+```
+Model with TV, Radio, and Newspaper as predictors:
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                  Sales   R-squared:                       0.894
+Model:                            OLS   Adj. R-squared:                  0.891
+Method:                 Least Squares   F-statistic:                     381.2
+Date:                                   Prob (F-statistic):           5.60e-66
+Time:                                   Log-Likelihood:                -273.89
+No. Observations:                 140   AIC:                             555.8
+Df Residuals:                     136   BIC:                             567.5
+Df Model:                           3                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+Intercept      3.0451      0.391      7.782      0.000       2.271       3.819
+TV             0.0470      0.002     27.653      0.000       0.044       0.050
+Radio          0.1797      0.011     16.665      0.000       0.158       0.201
+Newspaper     -0.0030      0.007     -0.428      0.669      -0.017       0.011
+==============================================================================
+Omnibus:                       50.782   Durbin-Watson:                   2.089
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):              131.355
+Skew:                          -1.459   Prob(JB):                     3.00e-29
+Kurtosis:                       6.741   Cond. No.                         457.
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+```
+
+![세 설명변수 모형](./img/multiple_201.png)
+
+TV와 라디오의 계수는 강하게 유의하지만 신문은 $p = 0.86$으로 유의하지 않다.
+
+단순회귀에서는 신문 광고도 매출과 상관이 있었는데(0.23) 다중회귀에서는 사라진다. 신문 광고가 라디오 광고와 함께 집행되는 경향이 있어, 라디오를 모형에 넣으면 신문이 따로 설명할 것이 남지 않기 때문이다.
+
 ### Sales ~ TV + Radio
 
 ```python
 model = sm.ols('Sales ~ TV + Radio', train_data).fit()
 print("Model with TV and Radio as predictors:")
-print(model.summary(), end="\n\n")
+print_summary(model)
 ```
+
+출력:
+
+```
+Model with TV and Radio as predictors:
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                  Sales   R-squared:                       0.894
+Model:                            OLS   Adj. R-squared:                  0.892
+Method:                 Least Squares   F-statistic:                     575.1
+Date:                                   Prob (F-statistic):           2.26e-67
+Time:                                   Log-Likelihood:                -273.98
+No. Observations:                 140   AIC:                             554.0
+Df Residuals:                     137   BIC:                             562.8
+Df Model:                           2                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+Intercept      2.9881      0.367      8.145      0.000       2.263       3.714
+TV             0.0471      0.002     27.744      0.000       0.044       0.050
+Radio          0.1780      0.010     17.793      0.000       0.158       0.198
+==============================================================================
+Omnibus:                       49.324   Durbin-Watson:                   2.086
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):              122.228
+Skew:                          -1.436   Prob(JB):                     2.87e-27
+Kurtosis:                       6.564   Cond. No.                         424.
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+```
+
+신문을 뺀 모형이다. $R^2$가 세 변수 모형과 사실상 같다. 신문 광고의 계수가 유의하지 않았던 것과 일치한다.
+
+신문 광고를 뺀 모형이다. $R^2$가 세 변수 모형과 사실상 같다. 신문 광고의 계수가 유의하지 않았던 것과 일치한다.
 
 ### Sales ~ TV + Radio + TV:Radio
 
 ```python
 model = sm.ols('Sales ~ TV + Radio + TV:Radio', train_data).fit()
 print("Model with TV, Radio, and TV:Radio as predictors:")
-print(model.summary(), end="\n\n")
+print_summary(model)
 ```
+
+출력:
+
+```
+Model with TV, Radio, and TV:Radio as predictors:
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                  Sales   R-squared:                       0.965
+Model:                            OLS   Adj. R-squared:                  0.964
+Method:                 Least Squares   F-statistic:                     1256.
+Date:                                   Prob (F-statistic):           6.75e-99
+Time:                                   Log-Likelihood:                -195.82
+No. Observations:                 140   AIC:                             399.6
+Df Residuals:                     136   BIC:                             411.4
+Df Model:                           3                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+Intercept      6.8814      0.314     21.911      0.000       6.260       7.503
+TV             0.0183      0.002      9.275      0.000       0.014       0.022
+Radio          0.0229      0.011      2.101      0.038       0.001       0.044
+TV:Radio       0.0011   6.71e-05     16.716      0.000       0.001       0.001
+==============================================================================
+Omnibus:                       93.789   Durbin-Watson:                   2.227
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):              767.071
+Skew:                          -2.266   Prob(JB):                    2.71e-167
+Kurtosis:                      13.534   Cond. No.                     1.84e+04
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+[2] The condition number is large, 1.84e+04. This might indicate that there are
+strong multicollinearity or other numerical problems.
+```
+
+교호작용을 넣으면 $R^2$가 0.897에서 0.968로 오른다. TV와 라디오가 함께 쓰일 때의 상승효과다.
+
+교호작용을 넣은 모형의 $R^2$가 0.968로 넣지 않은 모형(0.897)보다 훨씬 높다. TV와 라디오가 함께 쓰일 때 상승효과가 있다는 뜻이다.
 
 ## statsmodels 출력 읽기
 

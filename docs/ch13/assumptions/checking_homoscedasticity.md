@@ -19,6 +19,42 @@ $$
 - **표준오차:** 계수의 표준오차가 편향되어 신뢰구간과 가설검정이 틀리게 된다.
 - **모형의 효율성:** 최소제곱(OLS) 추정량은 여전히 불편이지만 더 이상 효율적이지 않으므로 더 정밀한 추정량이 존재할 수 있다. 구체적으로 Gauss-Markov 정리의 의미에서 OLS는 더 이상 최소분산 선형불편추정량(BLUE)이 아니다.
 
+## 설정
+
+이 페이지의 진단은 모두 아래 자료와 모형 하나를 놓고 수행한다.
+
+```python
+import numpy as np
+import pandas as pd
+import statsmodels.api as sm
+
+rng = np.random.default_rng(7)
+n = 120
+
+# X는 균등, Y는 X에 선형으로 의존하되 오차의 분산이 X와 함께 커진다.
+# 이렇게 두면 선형성은 성립하고 등분산성만 깨져, 각 진단이 무엇을
+# 잡아내고 무엇을 놓치는지 구분해 볼 수 있다.
+X = rng.uniform(0, 10, n)
+Y = 2.0 + 1.5 * X + rng.normal(0, 0.5 + 0.35 * X, n)
+
+df = pd.DataFrame({"X": X, "Y": Y})
+model = sm.OLS(Y, sm.add_constant(X)).fit()
+residuals = model.resid
+fitted = model.fittedvalues
+
+print(f"beta_hat = {model.params.round(4)}")
+print(f"R^2 = {model.rsquared:.4f}")
+```
+
+출력:
+
+```
+beta_hat = [1.5933 1.5317]
+R^2 = 0.7813
+```
+
+기울기 추정값 1.53이 참값 1.5에 가깝다. 이분산이 있어도 OLS 추정값 자체는 불편이며, 흔들리는 것은 표준오차다.
+
 ## 2. 잔차-적합값 그림
 
 **잔차-적합값 그림**은 등분산성을 시각적으로 확인하는 가장 흔하고 효과적인 방법이다. 이 그림으로 잔차의 흩어짐에 체계적인 패턴이 있는지 볼 수 있다.
@@ -45,6 +81,10 @@ plt.ylabel('Residuals')
 plt.title('Residuals vs. Fitted Values')
 plt.show()
 ```
+
+![잔차 대 적합값](./img/checking_homoscedasticity_70.png)
+
+깔때기 모양이 뚜렷하다. 적합값이 커질수록 잔차의 퍼짐이 커지는 전형적인 이분산 패턴이다.
 
 **해석:**
 
@@ -88,6 +128,17 @@ for label, value in zip(labels, bp_test):
     print(f'{label}: {value:.4f}')
 ```
 
+출력:
+
+```
+LM Statistic: 25.4256
+LM p-value: 0.0000
+F-Statistic: 31.7235
+F p-value: 0.0000
+```
+
+Breusch-Pagan 검정이 $p < 0.0001$로 등분산을 강하게 기각한다. 오차의 표준편차를 $0.5 + 0.35X$로 만들었으니 옳은 판정이다.
+
 **해석:**
 
 - **p값 > 0.05:** 이분산의 유의한 증거가 없다.
@@ -124,6 +175,17 @@ labels = ['LM Statistic', 'LM p-value', 'F-Statistic', 'F p-value']
 for label, value in zip(labels, white_test):
     print(f'{label}: {value:.4f}')
 ```
+
+출력:
+
+```
+LM Statistic: 26.2253
+LM p-value: 0.0000
+F-Statistic: 16.3603
+F p-value: 0.0000
+```
+
+White 검정도 $p < 0.0001$로 등분산을 기각한다. Breusch-Pagan이 이분산의 형태를 선형으로 가정하는 반면 White는 그런 가정 없이 검정하므로, 두 검정이 모두 기각하면 결론이 더 단단하다.
 
 **해석:**
 
@@ -164,6 +226,10 @@ smooth = lowess(np.sqrt(np.abs(standardized_residuals)), fitted, frac=0.6)
 plt.plot(smooth[:, 0], smooth[:, 1], color='red', linewidth=2)
 plt.show()
 ```
+
+![척도-위치 그림](./img/checking_homoscedasticity_183.png)
+
+$\sqrt{|표준화 잔차|}$를 적합값에 대해 그린 것이다. 오른쪽으로 갈수록 점들이 위로 올라가는 추세가 뚜렷해 이분산을 확인해 준다.
 
 !!! note "내부 스튜던트화 잔차"
     위 코드는 잔차를 그 표본표준편차로 나누는 간단한 표준화를 쓴다. 엄밀한 표준화는 지렛대를 반영한 $e_i / (s\sqrt{1 - h_{ii}})$이며 `model.get_influence().resid_studentized_internal`로 얻을 수 있다. 지렛대가 큰 관측값이 있으면 두 방식의 차이가 커진다.

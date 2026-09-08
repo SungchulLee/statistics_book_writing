@@ -98,6 +98,17 @@ var_names = ["Intercept", "TV", "Radio", "Newspaper"]
 regression_table(beta_hat, s, cov_matrix, n, k, var_names)
 ```
 
+출력:
+
+```
+Intercept   coef=3.0451  SE=0.391  t=7.782  p=0.000  CI=(2.271, 3.819)
+TV          coef=0.0470  SE=0.002  t=27.653  p=0.000  CI=(0.044, 0.050)
+Radio       coef=0.1797  SE=0.011  t=16.665  p=0.000  CI=(0.158, 0.201)
+Newspaper   coef=-0.0030  SE=0.007  t=-0.428  p=0.669  CI=(-0.017, 0.011)
+```
+
+요약표의 각 열을 따로 꺼내 인쇄했다. 계수, 표준오차, $t$, p-값, 신뢰구간이 어떻게 맞물리는지 한 줄로 볼 수 있다.
+
 출력($n = 140$, $k = 4$):
 
 ```text
@@ -129,6 +140,14 @@ Newspaper   coef=-0.0030 SE=0.007  t=-0.428  p=0.669  CI=(-0.017, 0.011)
     print(np.allclose(lhs, rhs))  # True
     ```
 
+    출력:
+
+    ```
+    True
+    ```
+
+    `True`가 나온다. 요약표의 $t$ 값이 계수를 표준오차로 나눈 것과 정확히 같다는 확인이다.
+
     구성상 $\hat{\boldsymbol{\beta}} = (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{y}$의 양변에 왼쪽에서 $\mathbf{X}^\top\mathbf{X}$를 곱하면 $\mathbf{X}^\top\mathbf{X}\hat{\boldsymbol{\beta}} = \mathbf{X}^\top\mathbf{y}$가 된다. $\square$
 
 ---
@@ -145,6 +164,14 @@ Newspaper   coef=-0.0030 SE=0.007  t=-0.428  p=0.669  CI=(-0.017, 0.011)
     adj_R2 = 1 - (1 - R2) * (n - 1) / (n - k)
     print(f"R^2 = {R2:.4f}, Adjusted R^2 = {adj_R2:.4f}")
     ```
+
+    출력:
+
+    ```
+    R^2 = 0.8937, Adjusted R^2 = 0.8914
+    ```
+
+    $R^2 = 0.894$, 조정 $R^2 = 0.891$이다. 조정 $R^2$가 조금 작은 것은 설명변수 개수에 대한 벌점 때문이며, 변수를 늘려도 적합이 그만큼 좋아지지 않으면 조정 $R^2$는 오히려 떨어진다.
 
     이 자료에서는 $R^2 = 0.8938$, 수정 $R^2 = 0.8915$가 나온다.
 

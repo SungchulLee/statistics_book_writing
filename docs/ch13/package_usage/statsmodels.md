@@ -26,8 +26,63 @@ X_with_const = sm.add_constant(X)
 model = sm.OLS(y, X_with_const)
 results = model.fit()
 
-print(results.summary())
+def print_summary(res):
+    """summary()에서 실행 날짜와 시각만 지우고 인쇄한다.
+
+    statsmodels의 summary()는 표 머리에 Date와 Time을 함께 찍는다.
+    그대로 두면 실행할 때마다 출력이 달라져 문서에 싣기 어렵다.
+    같은 줄에 있는 다른 값(Prob (F-statistic), Log-Likelihood)은 남긴다.
+    """
+    lines = []
+    for line in str(res.summary()).split("\n"):
+        if line.startswith(("Date:", "Time:")):
+            label, rest = line[:19], line[19:]
+            lines.append(label.ljust(19) + " " * 19 + rest[19:])
+        else:
+            lines.append(line)
+    print("\n".join(lines))
+
+print_summary(results)
 ```
+
+출력:
+
+```
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                      y   R-squared:                       0.971
+Model:                            OLS   Adj. R-squared:                  0.970
+Method:                 Least Squares   F-statistic:                     1603.
+Date:                                   Prob (F-statistic):           4.97e-75
+Time:                                   Log-Likelihood:                -77.799
+No. Observations:                 100   AIC:                             161.6
+Df Residuals:                      97   BIC:                             169.4
+Df Model:                           2                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+const          2.0464      0.054     37.884      0.000       1.939       2.154
+x1             3.0954      0.063     49.281      0.000       2.971       3.220
+x2             1.4139      0.054     26.258      0.000       1.307       1.521
+==============================================================================
+Omnibus:                        4.136   Durbin-Watson:                   2.212
+Prob(Omnibus):                  0.126   Jarque-Bera (JB):                3.956
+Skew:                           0.266   Prob(JB):                        0.138
+Kurtosis:                       3.817   Cond. No.                         1.23
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+```
+
+요약표를 세 부분으로 나눠 읽는다.
+
+- **위 블록**: 모형 수준의 적합도. $R^2 = 0.971$, $F = 1603$, AIC/BIC.
+- **가운데 블록**: 계수별 추정값, 표준오차, $t$, p-값, 신뢰구간. 참값이 절편 2.0, 기울기 3.0과 1.5인데 추정값이 2.046, 3.095, 1.414로 잘 맞는다.
+- **아래 블록**: 잔차 진단. Durbin-Watson 2.21은 자기상관 없음을, Jarque-Bera $p = 0.138$은 정규성 이탈의 증거 없음을 뜻한다.
+
+`Cond. No.` 1.23도 눈여겨보라. 설명변수를 독립으로 만들었으므로 다중공선성이 없다. 이 값이 30을 넘으면 공선성을 의심한다.
 
 `sm.add_constant(X)` 함수는 설명변수 행렬 앞에 1로 채운 열을 붙인다. 이는 모형 $Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \varepsilon$의 절편항 $\beta_0$에 대응한다.
 
@@ -90,8 +145,43 @@ df = pd.DataFrame({
 
 # Fit using formula API
 results_formula = smf.ols('y ~ x1 + x2', data=df).fit()
-print(results_formula.summary())
+print_summary(results_formula)
 ```
+
+출력:
+
+```
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                      y   R-squared:                       0.971
+Model:                            OLS   Adj. R-squared:                  0.970
+Method:                 Least Squares   F-statistic:                     1603.
+Date:                                   Prob (F-statistic):           4.97e-75
+Time:                                   Log-Likelihood:                -77.799
+No. Observations:                 100   AIC:                             161.6
+Df Residuals:                      97   BIC:                             169.4
+Df Model:                           2                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+Intercept      2.0464      0.054     37.884      0.000       1.939       2.154
+x1             3.0954      0.063     49.281      0.000       2.971       3.220
+x2             1.4139      0.054     26.258      0.000       1.307       1.521
+==============================================================================
+Omnibus:                        4.136   Durbin-Watson:                   2.212
+Prob(Omnibus):                  0.126   Jarque-Bera (JB):                3.956
+Skew:                           0.266   Prob(JB):                        0.138
+Kurtosis:                       3.817   Cond. No.                         1.23
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+```
+
+식 API가 앞의 배열 API와 **완전히 같은 결과**를 준다. 계수 이름이 `const, x1, x2`에서 `Intercept, x1, x2`로 바뀐 것뿐이다.
+
+식 API는 절편을 자동으로 넣어 준다. 배열 API에서 `add_constant`를 빠뜨리는 실수를 막아 준다는 점이 실용적인 장점이다.
 
 식 `'y ~ x1 + x2'`는 모형 $y = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \varepsilon$을 지정한다. 절편은 기본으로 포함된다. 없애려면 `'y ~ x1 + x2 - 1'`을 쓴다.
 
@@ -141,6 +231,24 @@ print("AIC:", results.aic)
 print("BIC:", results.bic)
 ```
 
+출력:
+
+```
+Coefficients: [2.04639669 3.09536017 1.41392895]
+Standard errors: [0.05401682 0.06281005 0.05384654]
+P-values: [6.18804800e-60 1.81607514e-70 7.11568582e-46]
+95% CI:
+ [[1.93918825 2.15360513]
+ [2.9706996  3.22002073]
+ [1.30705847 1.52079942]]
+R-squared: 0.9706252436321817
+Adjusted R-squared: 0.9700195785524329
+AIC: 161.5973963941535
+BIC: 169.41290695211777
+```
+
+`params`, `bse`, `pvalues`, `conf_int()`로 요약표의 각 열을 배열로 꺼낼 수 있다. 보고서를 자동 생성하거나 여러 모형을 비교할 때 이 접근이 필요하다.
+
 ---
 
 ## 5. 진단 메서드
@@ -169,6 +277,17 @@ for i in range(1, X_with_const.shape[1]):
     vif = variance_inflation_factor(X_with_const, i)
     print(f"VIF for variable {i}: {vif:.2f}")
 ```
+
+출력:
+
+```
+Breusch-Pagan p-value: 0.7942
+Jarque-Bera p-value: 0.1383
+VIF for variable 1: 1.00
+VIF for variable 2: 1.00
+```
+
+Breusch-Pagan과 Jarque-Bera 모두 기각하지 못하고 VIF도 1.00이다. 자료를 가정에 맞게 만들었으니 당연한 결과이며, 진단 도구가 제대로 작동한다는 확인이기도 하다.
 
 !!! note "VIF 반복문에서 상수 열은 건너뛴다"
     `X_with_const`의 0번 열은 절편을 위한 상수이다. 여기에 `variance_inflation_factor`를 호출해도 오류는 나지 않지만 그 값에는 아무 의미가 없다. 위 코드처럼 `range(1, ...)`로 시작해 실제 설명변수만 다루어야 한다.

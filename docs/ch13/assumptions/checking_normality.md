@@ -18,6 +18,42 @@ $$
 - **예측구간:** 새 관측값에 대한 예측구간이 타당하려면 정규성이 필요하다.
 - **작은 표본:** 큰 표본에서는 오차가 정규가 아니어도 중심극한정리가 검정통계량의 점근적 정규성을 보장한다. 작은 표본($n < 30$)에서는 정규성 가정이 결정적이 된다.
 
+## 설정
+
+이 페이지의 진단은 모두 아래 자료와 모형 하나를 놓고 수행한다.
+
+```python
+import numpy as np
+import pandas as pd
+import statsmodels.api as sm
+
+rng = np.random.default_rng(7)
+n = 120
+
+# X는 균등, Y는 X에 선형으로 의존하되 오차의 분산이 X와 함께 커진다.
+# 이렇게 두면 선형성은 성립하고 등분산성만 깨져, 각 진단이 무엇을
+# 잡아내고 무엇을 놓치는지 구분해 볼 수 있다.
+X = rng.uniform(0, 10, n)
+Y = 2.0 + 1.5 * X + rng.normal(0, 0.5 + 0.35 * X, n)
+
+df = pd.DataFrame({"X": X, "Y": Y})
+model = sm.OLS(Y, sm.add_constant(X)).fit()
+residuals = model.resid
+fitted = model.fittedvalues
+
+print(f"beta_hat = {model.params.round(4)}")
+print(f"R^2 = {model.rsquared:.4f}")
+```
+
+출력:
+
+```
+beta_hat = [1.5933 1.5317]
+R^2 = 0.7813
+```
+
+기울기 추정값 1.53이 참값 1.5에 가깝다. 이분산이 있어도 OLS 추정값 자체는 불편이며, 흔들리는 것은 표준오차다.
+
 ## 2. 잔차의 히스토그램
 
 정규성을 평가하는 가장 간단한 방법 하나는 **잔차의 히스토그램**을 그리는 것이다. 이 시각적 점검으로 잔차가 대략 정규분포를 따르는지 판단할 수 있다.
@@ -52,6 +88,10 @@ ax.set_title('Histogram of Residuals with Normal Overlay')
 ax.legend()
 plt.show()
 ```
+
+![잔차의 Q-Q 그림](./img/checking_normality_69.png)
+
+점들이 기준선을 잘 따른다. 양 끝에서 조금 벗어나지만 $n = 120$에서 이 정도는 흔한 흔들림이다.
 
 **해석:**
 
@@ -89,6 +129,10 @@ stats.probplot(residuals, dist="norm", plot=ax)
 ax.set_title('Q-Q Plot of Residuals')
 plt.show()
 ```
+
+![잔차의 히스토그램](./img/checking_normality_116.png)
+
+종 모양에 가깝다. 관측값 120개를 구간에 나누어 담았으므로 요철은 표집 변동으로 보아야 한다.
 
 **해석:**
 
@@ -146,6 +190,16 @@ else:
     print('Significant evidence of non-normality (reject H0)')
 ```
 
+출력:
+
+```
+Shapiro-Wilk statistic: 0.9836
+Shapiro-Wilk p-value: 0.1524
+No significant evidence of non-normality (fail to reject H0)
+```
+
+Shapiro-Wilk가 $p = 0.15$로 정규성을 기각하지 못한다. 오차를 정규분포에서 만들었으니 옳은 판정이다. 분산이 $X$에 따라 달라도 각 오차는 여전히 정규라는 점에 주의하라. 이분산과 비정규성은 별개의 문제다.
+
 **해석:**
 
 - **p값 > 0.05:** 비정규성의 유의한 증거가 없다. 잔차를 정규분포를 따르는 것으로 볼 수 있다.
@@ -191,6 +245,20 @@ for i in range(len(result.critical_values)):
     print(f'At {sig_level}% significance: Critical value = {crit_value:.4f} → {status}')
 ```
 
+출력:
+
+```
+Anderson-Darling statistic: 0.9338
+
+At 15.0% significance: Critical value = 0.5580 → REJECT
+At 10.0% significance: Critical value = 0.6360 → REJECT
+At 5.0% significance: Critical value = 0.7630 → REJECT
+At 2.5% significance: Critical value = 0.8900 → REJECT
+At 1.0% significance: Critical value = 1.0590 → Fail to reject
+```
+
+Anderson-Darling은 유의수준 15%와 10%에서는 기각하고 5% 이하에서는 기각하지 못한다. 꼬리에 더 민감한 검정이라 Shapiro-Wilk보다 이 자료를 엄하게 본다.
+
 **해석:**
 
 - 검정통계량이 주어진 유의수준의 임계값보다 **작으면** $H_0$을 기각하지 못한다. 잔차가 정규성과 일치한다.
@@ -234,6 +302,19 @@ print(f'Jarque-Bera p-value: {jb_pvalue:.4f}')
 print(f'Skewness: {skew:.4f}')
 print(f'Kurtosis: {kurtosis:.4f}')
 ```
+
+출력:
+
+```
+Jarque-Bera statistic: 1.6167
+Jarque-Bera p-value: 0.4456
+Skewness: -0.0508
+Kurtosis: 3.5595
+```
+
+Jarque-Bera도 $p = 0.45$로 기각하지 못한다. 왜도 $-0.05$는 0에 가깝고 첨도 3.56은 정규분포의 3보다 조금 크다.
+
+세 검정(Shapiro-Wilk, Anderson-Darling, Jarque-Bera)이 서로 다른 결론을 낸다는 점이 이 페이지의 교훈이다. 어느 통계량에 민감한지가 다르기 때문이며, 형식적 검정 하나에 의존하지 말고 Q-Q 그림과 함께 보아야 한다.
 
 **해석:**
 

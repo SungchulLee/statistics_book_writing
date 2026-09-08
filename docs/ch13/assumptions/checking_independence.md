@@ -25,6 +25,42 @@ $$
 - **자기상관:** 잔차가 시간이나 순서에 걸쳐 상관될 때이며 시계열 자료에서 흔히 보인다. 양의 자기상관은 시점 $t$의 양의 잔차 뒤에 시점 $t+1$의 양의 잔차가 따라오는 경향을 뜻한다.
 - **군집 오차:** 특정 집단이나 군집 안의 관측값이 다른 집단의 관측값보다 서로 더 비슷할 때이다.
 
+## 설정
+
+이 페이지의 진단은 모두 아래 자료와 모형 하나를 놓고 수행한다.
+
+```python
+import numpy as np
+import pandas as pd
+import statsmodels.api as sm
+
+rng = np.random.default_rng(7)
+n = 120
+
+# X는 균등, Y는 X에 선형으로 의존하되 오차의 분산이 X와 함께 커진다.
+# 이렇게 두면 선형성은 성립하고 등분산성만 깨져, 각 진단이 무엇을
+# 잡아내고 무엇을 놓치는지 구분해 볼 수 있다.
+X = rng.uniform(0, 10, n)
+Y = 2.0 + 1.5 * X + rng.normal(0, 0.5 + 0.35 * X, n)
+
+df = pd.DataFrame({"X": X, "Y": Y})
+model = sm.OLS(Y, sm.add_constant(X)).fit()
+residuals = model.resid
+fitted = model.fittedvalues
+
+print(f"beta_hat = {model.params.round(4)}")
+print(f"R^2 = {model.rsquared:.4f}")
+```
+
+출력:
+
+```
+beta_hat = [1.5933 1.5317]
+R^2 = 0.7813
+```
+
+기울기 추정값 1.53이 참값 1.5에 가깝다. 이분산이 있어도 OLS 추정값 자체는 불편이며, 흔들리는 것은 표준오차다.
+
 ## 2. 자기상관을 위한 Durbin-Watson 검정
 
 **Durbin-Watson(DW) 검정**은 회귀모형 잔차의 1차 자기상관 유무를 탐지하는 데 널리 쓰이는 통계검정이다. 시계열 자료에서 특히 유용하다.
@@ -72,6 +108,16 @@ dw_stat = durbin_watson(model.resid)
 print(f'Durbin-Watson statistic: {dw_stat}')
 ```
 
+출력:
+
+```
+Durbin-Watson statistic: 2.16161645652481
+```
+
+$d = 2.16$으로 2에 가까워 자기상관의 증거가 없다. 관측값을 서로 독립으로 생성했으니 옳은 판정이다.
+
+다만 여기서 "순서"는 자료를 만든 순서일 뿐이다. 실제 연구에서는 측정 시각이나 공간 위치처럼 의미 있는 순서로 정렬해야 이 진단이 뜻을 갖는다.
+
 **해석 지침:**
 
 | DW 값 | 해석 |
@@ -102,6 +148,10 @@ plt.title('Residuals vs. Time/Order')
 plt.axhline(y=0, color='red', linestyle='--')
 plt.show()
 ```
+
+![순서에 대한 잔차](./img/checking_independence_130.png)
+
+잔차가 0을 중심으로 무작위로 흩어져 있고 추세나 주기가 없다.
 
 **해석:**
 
@@ -150,6 +200,15 @@ bg_test = acorr_breusch_godfrey(model, nlags=2)
 print(f'Breusch-Godfrey LM statistic: {bg_test[0]}')
 print(f'Breusch-Godfrey p-value: {bg_test[1]}')
 ```
+
+출력:
+
+```
+Breusch-Godfrey LM statistic: 1.584101499228634
+Breusch-Godfrey p-value: 0.4529150269303661
+```
+
+Breusch-Godfrey 검정도 $p = 0.45$로 자기상관의 증거를 찾지 못한다. Durbin-Watson이 1차 자기상관만 보는 반면 이 검정은 더 높은 차수까지 볼 수 있다는 점이 다르다.
 
 **해석:**
 

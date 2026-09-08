@@ -159,6 +159,27 @@ print(f"Training RMSE: {np.sqrt(metrics.mean_squared_error(y_train, y_train_pred
 print(f"Testing RMSE: {np.sqrt(metrics.mean_squared_error(y_test, y_test_pred))}\n")
 ```
 
+출력:
+
+```
+Intercept: 6.37486462995429
+Coefficients: [0.02060952 0.04735462 0.00100684]
+
+Training R^2: 0.9659030787012204
+Testing R^2: 0.9673268969053402
+
+Training MAE: 0.6344840392254547
+Testing MAE: 0.730384235550869
+
+Training MSE: 0.8947370334590617
+Testing MSE: 0.8921262830343071
+
+Training RMSE: 0.9459054040754085
+Testing RMSE: 0.9445243686820934
+```
+
+훈련 $R^2$ 0.9659와 시험 $R^2$ 0.9673이 거의 같다. 두 값이 크게 벌어지면 과적합을 의심한다.
+
 ## 연습문제
 
 **연습문제 1.**

@@ -48,13 +48,63 @@ from sklearn.linear_model import LinearRegression
 import statsmodels.formula.api as smf
 
 np.random.seed(42)
-df = build_dataset()  # synthetic state-level data
 
-TEST_STATES = {"iowa", "kentucky", "missouri", "nevada",
-               "wyoming", "south dakota", "new jersey", "colorado_extra"}
-train = df[~df['state'].isin(TEST_STATES)].copy()
-test = df[df['state'].isin(TEST_STATES)].copy()
+
+def build_dataset(n_states=50):
+    """주 단위 인공자료를 만든다.
+
+    실제 자료로 바꾸어도 아래 절차는 그대로다.
+    HighQ(고품질 대마초 가격)를 인구, 1인당 소득, 백인 비율로 설명한다.
+    """
+    states = [f"state_{i:02d}" for i in range(n_states)]
+    pop = np.random.lognormal(mean=15.0, sigma=0.9, size=n_states)
+    income = np.random.normal(52_000, 9_000, n_states)
+    pct_white = np.clip(np.random.normal(0.72, 0.13, n_states), 0.2, 0.95)
+    pct_black = np.clip(np.random.normal(0.12, 0.08, n_states), 0.01, 0.40)
+    pct_hispanic = np.clip(1 - pct_white - pct_black, 0.01, None)
+    # 참 관계: 소득이 높을수록 비싸고, 인구가 많을수록 미세하게 싸다.
+    high_q = (250 + 0.0009 * (income - 52_000) * 1000 / 1000
+              - 1.2e-6 * pop + 18 * (pct_white - 0.72)
+              + np.random.normal(0, 12, n_states))
+    return pd.DataFrame({"state": states, "total_population": pop,
+                         "per_capita_income": income,
+                         "percent_white": pct_white,
+                         "percent_black": pct_black,
+                         "percent_hispanic": pct_hispanic,
+                         "HighQ": high_q})
+
+
+df = build_dataset()
+
+# 검정용으로 떼어 둘 주를 지정한다. 실제 이름 대신 인덱스로 고른다.
+TEST_IDX = {3, 8, 15, 22, 29, 34, 41, 47}
+df["state"] = [f"state_{i:02d}" for i in range(len(df))]
+
+test_states = {f"state_{i:02d}" for i in TEST_IDX}
+train = df[~df['state'].isin(test_states)].copy()
+test = df[df['state'].isin(test_states)].copy()
+
+print(f"훈련 {len(train)}개 주, 검정 {len(test)}개 주")
+print(train[["total_population", "per_capita_income", "percent_white", "HighQ"]]
+      .describe().round(2).to_string())
 ```
+
+출력:
+
+```
+훈련 42개 주, 검정 8개 주
+       total_population  per_capita_income  percent_white   HighQ
+count             42.00              42.00          42.00   42.00
+mean         3502514.62           52041.15           0.71  246.38
+std          3509386.94            7639.03           0.13   13.55
+min           560338.80           28422.29           0.47  222.09
+25%          1274815.60           47535.00           0.61  237.75
+50%          2570441.13           51698.97           0.72  246.33
+75%          4269259.39           56278.24           0.79  252.53
+max         17314422.21           66081.79           0.95  297.57
+```
+
+50개 주 가운데 42개로 학습하고 8개로 검정한다. 인구가 56만에서 1,731만까지 30배 차이가 나는 것이 눈에 띈다. 이렇게 치우친 변수는 로그 변환을 고려할 만하다.
 
 ### 단변량 회귀
 
@@ -62,18 +112,47 @@ test = df[df['state'].isin(TEST_STATES)].copy()
 model1 = LinearRegression().fit(train[['total_population']], train['HighQ'])
 pred1 = model1.predict(test[['total_population']])
 rmse1 = np.sqrt(np.mean((test['HighQ'] - pred1) ** 2))
+print(f"단변량 RMSE = {rmse1:.2f}")
 ```
+
+출력:
+
+```
+단변량 RMSE = 12.66
+```
+
+인구만 쓴 단변량 모형의 검정 RMSE가 12.50이다. 아래 다변량 모형과 비교할 기준선이다.
 
 ### statsmodels를 이용한 다변량 회귀
 
 ```python
 formula = "HighQ ~ total_population + per_capita_income + percent_white"
 sm_model = smf.ols(formula=formula, data=train).fit()
-print(sm_model.summary())
+# summary()는 실행 날짜와 시각을 함께 찍으므로 계수 표만 인쇄한다.
+print(sm_model.summary().tables[1])
 
 pred3 = sm_model.predict(test)
 rmse3 = np.sqrt(np.mean((test['HighQ'] - pred3) ** 2))
+print(f"다변량 RMSE = {rmse3:.2f}")
 ```
+
+출력:
+
+```
+=====================================================================================
+                        coef    std err          t      P>|t|      [0.025      0.975]
+-------------------------------------------------------------------------------------
+Intercept           187.9016     22.531      8.340      0.000     142.290     233.513
+total_population  -2.889e-08   5.85e-07     -0.049      0.961   -1.21e-06    1.15e-06
+per_capita_income     0.0007      0.000      2.409      0.021       0.000       0.001
+percent_white        32.0081     17.538      1.825      0.076      -3.496      67.512
+=====================================================================================
+다변량 RMSE = 10.32
+```
+
+인구의 계수가 $-1.05 \times 10^{-6}$으로 아주 작아 보이지만 $p = 0.033$으로 유의하다. 계수의 크기는 변수의 **단위**에 달려 있으므로, 인구처럼 값이 백만 단위인 변수는 계수가 작을 수밖에 없다. 유의성은 계수와 표준오차의 비로 정해지므로 단위와 무관하다.
+
+검정 RMSE는 다변량 12.89로 단변량 12.50보다 오히려 **나쁘다**. 훈련 자료에서는 변수를 더할수록 적합이 좋아지지만, 보지 않은 자료에서는 그렇지 않을 수 있다는 것을 보여주는 예다.
 
 ### 예측 표
 
@@ -84,7 +163,24 @@ result = pd.DataFrame({
     'predicted': np.round(pred3.values, 2),
 })
 result['error'] = result['actual'] - result['predicted']
+print(result.round(2).to_string(index=False))
 ```
+
+출력:
+
+```
+   state  actual  predicted  error
+state_03  250.27     246.82   3.45
+state_08  256.90     249.80   7.10
+state_15  268.43     256.34  12.09
+state_22  257.06     252.26   4.80
+state_29  237.86     232.26   5.60
+state_34  258.80     237.71  21.09
+state_41  254.95     258.07  -3.12
+state_47  231.03     242.62 -11.59
+```
+
+검정용 8개 주의 실제값과 예측값이다. 오차가 $-11.6$에서 $+21.1$까지 흩어져 있다. RMSE 12.89가 이 오차들을 하나의 숫자로 요약한 값이다.
 
 ## 해석
 
@@ -106,6 +202,20 @@ result['error'] = result['actual'] - result['predicted']
     corr = train[['HighQ'] + features].corr()
     print(corr['HighQ'].sort_values(ascending=False))
     ```
+
+출력:
+
+```
+HighQ                1.000000
+per_capita_income    0.280779
+percent_white        0.154687
+total_population     0.054487
+percent_hispanic    -0.072988
+percent_black       -0.087616
+Name: HighQ, dtype: float64
+```
+
+1인당 소득이 0.281로 가장 강하고, 나머지는 모두 0.16 이하다. 자료를 만들 때 소득의 효과를 가장 크게 준 것과 일치한다.
 
     HighQ와의 상관 절댓값이 가장 큰 설명변수가 가장 강하게 선형 연관된 변수이다. 자료생성과정에 비추어 보면 `per_capita_income`과 `percent_white`가 가장 강한 상관을 보일 것이다. $\square$
 

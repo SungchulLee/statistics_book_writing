@@ -28,6 +28,17 @@ print("Intercept:", model.intercept_)
 print("Coefficients:", model.coef_)
 ```
 
+출력:
+
+```
+Intercept: 2.046396690621326
+Coefficients: [3.09536017 1.41392895]
+```
+
+참값이 절편 2.0, 계수 3.0과 1.5인데 추정값이 2.046, 3.095, 1.414다.
+
+scikit-learn은 절편을 `intercept_`에, 기울기를 `coef_`에 따로 담는다. statsmodels가 둘을 한 배열에 담는 것과 다르며, 두 라이브러리를 오가며 쓸 때 자주 헷갈리는 지점이다.
+
 적합된 모형은 절편을 `model.intercept_`에, 기울기 계수를 `model.coef_`에 저장한다. `X`에 1로 채운 열이 필요하지 않다는 점에 유의하라. `fit_intercept=True`(기본값)일 때 절편은 내부에서 처리된다.
 
 ---
@@ -46,6 +57,14 @@ y_pred_new = model.predict(X_new)
 print("Predictions:", y_pred_new)
 ```
 
+출력:
+
+```
+Predictions: [5.84872133 3.3265745 ]
+```
+
+적합된 모형으로 새 입력의 예측값을 얻는다. `predict`는 2차원 배열을 받으므로 관측값이 하나여도 `[[x1, x2]]` 모양으로 넣어야 한다.
+
 `predict`의 입력은 훈련자료와 열의 개수가 같아야 한다. 각 행이 새로운 관측값이며 출력은 예측값의 벡터 $\hat{y} = \hat{\beta}_0 + \mathbf{X}_{\text{new}} \hat{\boldsymbol{\beta}}$이다.
 
 ---
@@ -58,6 +77,14 @@ print("Predictions:", y_pred_new)
 r2_train = model.score(X, y)
 print(f"R-squared (training): {r2_train:.4f}")
 ```
+
+출력:
+
+```
+R-squared (training): 0.9706
+```
+
+훈련 자료의 $R^2 = 0.9706$이다. 잡음의 표준편차를 0.5로 두었으므로 이 정도가 상한에 가깝다.
 
 다른 척도가 필요하면 `sklearn.metrics`를 쓴다.
 
@@ -74,6 +101,16 @@ print(f"MAE:  {mae:.4f}")
 print(f"MSE:  {mse:.4f}")
 print(f"RMSE: {rmse:.4f}")
 ```
+
+출력:
+
+```
+MAE:  0.4211
+MSE:  0.2775
+RMSE: 0.5268
+```
+
+MAE 0.42, RMSE 0.53이다. RMSE가 MAE보다 큰 것은 언제나 성립한다. 제곱이 큰 오차에 더 큰 가중치를 주기 때문이며, 두 값의 차이가 벌어질수록 오차 분포에 꼬리가 있다는 신호다.
 
 !!! note "`root_mean_squared_error`는 scikit-learn 1.4부터"
     이 함수는 scikit-learn 1.4에서 추가되었다. 더 낮은 버전에서는 `mean_squared_error(y, y_pred, squared=False)`를 쓰거나 `np.sqrt(mean_squared_error(...))`로 직접 계산한다.
@@ -98,6 +135,14 @@ r2_test = model.score(X_test, y_test)
 print(f"R-squared (test): {r2_test:.4f}")
 ```
 
+출력:
+
+```
+R-squared (test): 0.9855
+```
+
+시험 $R^2$가 훈련 $R^2$(0.9706)보다 오히려 높다. 과적합의 징후가 없다는 뜻이며, 설명변수가 둘뿐인 선형모형이라 예상할 만한 결과다.
+
 검정 $R^2$는 모형이 적합 과정에서 검정자료를 보지 않았으므로 훈련 $R^2$보다 예측 성능을 정직하게 추정한다.
 
 ---
@@ -116,6 +161,16 @@ print(f"CV R-squared scores: {cv_scores}")
 print(f"Mean CV R-squared: {cv_scores.mean():.4f}")
 print(f"Std CV R-squared: {cv_scores.std():.4f}")
 ```
+
+출력:
+
+```
+CV R-squared scores: [0.96022772 0.96777464 0.9761083  0.96564245 0.97171516]
+Mean CV R-squared: 0.9683
+Std CV R-squared: 0.0054
+```
+
+교차검증 $R^2$의 평균이 0.9683, 표준편차가 0.0054다. 겹마다 값이 크게 흔들리지 않으므로 모형이 안정적이다.
 
 `scoring` 인자는 scikit-learn의 어떤 채점기도 받는다. 회귀에서 흔한 선택은 `'r2'`, `'neg_mean_squared_error'`, `'neg_mean_absolute_error'`이다. "neg" 접두사가 붙는 것은 점수가 높을수록 좋다는 scikit-learn의 관례 때문이며, 그래서 오차 척도에 음수를 붙인다.
 
@@ -139,6 +194,14 @@ pipeline.fit(X_train, y_train)
 r2_pipeline = pipeline.score(X_test, y_test)
 print(f"Pipeline R-squared (test): {r2_pipeline:.4f}")
 ```
+
+출력:
+
+```
+Pipeline R-squared (test): 0.9858
+```
+
+파이프라인을 거친 시험 $R^2$가 0.9858로, 앞서 수동으로 표준화한 결과와 사실상 같다. 선형회귀에서 표준화는 예측 성능을 바꾸지 않는다. 계수의 해석과 규제(ridge, lasso)에서 의미가 생긴다.
 
 이 파이프라인은 먼저 각 설명변수를 평균 0, 분산 1로 표준화하고, 다음으로 (교호작용 항을 포함한) 다항 특성을 만들고, 마지막으로 선형회귀를 적합한다. 파이프라인 전체를 `cross_val_score`에 넘겨 교차검증으로 평가할 수 있다.
 
@@ -189,6 +252,16 @@ scikit-learn으로 인공자료에 선형회귀를 적합하고, 예측을 계�
     print(f"R^2 (test): {model.score(X_test, y_test):.4f}")
     ```
 
+출력:
+
+```
+Coefficients: [ 2.012 -1.519  0.442]
+Intercept: -0.015
+R^2 (test): 0.9440
+```
+
+참 계수가 $2, -1.5, 0.4$인데 추정값이 $2.012, -1.519, 0.442$로 잘 맞는다. 시험 자료의 $R^2$는 0.944다.
+
 ---
 
 **연습문제 2.**
@@ -209,6 +282,8 @@ scikit-learn으로 인공자료에 선형회귀를 적합하고, 예측을 계�
     ss_tot = np.sum((y - y.mean()) ** 2)
     r2 = 1 - ss_res / ss_tot
     ```
+
+`Pipeline`은 전처리와 모형을 하나로 묶는다. 교차검증에서 표준화를 훈련 겹 안에서만 계산하게 해 주므로 정보 누출을 막는다.
 
     둘은 수학적으로 동일하다. 다만 검정자료에 적용할 때 $\bar{y}$는 (훈련자료가 아니라) 검정자료의 평균이며, 그래서 모형이 나쁘게 적합하면 검정 $R^2$가 음수가 될 수 있다.
 
@@ -244,6 +319,15 @@ scikit-learn의 `LinearRegression`이 계수의 p값이나 신뢰구간을 제�
     print(f"CV R^2 scores: {scores.round(4)}")
     print(f"Mean R^2: {scores.mean():.4f} (+/- {scores.std():.4f})")
     ```
+
+출력:
+
+```
+CV R^2 scores: [0.9531 0.9465 0.9701 0.9306 0.965 ]
+Mean R^2: 0.9530 (+/- 0.0140)
+```
+
+5겹 교차검증의 $R^2$가 0.93에서 0.97 사이에 흩어져 있다. 한 번의 훈련/시험 분할로 얻은 값 하나만 보고하면 이 변동이 숨는다.
 
     `cross_val_score`는 내부에서 k-겹 교차검증을 수행한다. 자료를 `cv=5`개의 겹으로 나누고, 4개 겹으로 모형을 적합한 뒤 5번째 겹에서 평가하며, 모든 겹에 대해 반복한다. `scoring` 인자가 척도를 지정한다(선택지로 `"r2"`, `"neg_mean_squared_error"`, `"neg_mean_absolute_error"` 등이 있다).
 

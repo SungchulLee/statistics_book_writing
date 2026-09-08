@@ -105,11 +105,36 @@ def confidence_intervals(x, y_hat, beta_hat, x_bar, y_bar, n, s):
     표준정규 설명변수에서 $x_0 = 0$은 대략 $\bar{x}$이다.
 
     ```python
-    t_90 = stats.t(n - 2).ppf(0.95)  # ~1.66
-    t_95 = stats.t(n - 2).ppf(0.975) # ~1.98
+    import numpy as np
+    from scipy import stats
+
+    n, s = 100, 3.0
+    t_90 = stats.t(n - 2).ppf(0.95)
+    t_95 = stats.t(n - 2).ppf(0.975)
 
     margin_90 = t_90 * s * np.sqrt(1 / n)
     margin_95 = t_95 * s * np.sqrt(1 / n)
+    print(f"t_90 = {t_90:.4f}, margin_90 = {margin_90:.4f}")
+    print(f"t_95 = {t_95:.4f}, margin_95 = {margin_95:.4f}")
+    print(f"ratio = {margin_90 / margin_95:.4f}")
+    ```
+
+출력:
+
+```
+t_90 = 1.6606, margin_90 = 0.4982
+t_95 = 1.9845, margin_95 = 0.5953
+ratio = 0.8368
+```
+
+90% 구간이 95% 구간의 0.837배로 좁다. 이 비는 $t$ 임계값의 비 $1.6606/1.9845$와 정확히 같다. 신뢰수준만 바꾸면 구간의 **폭만** 비례해서 달라진다.
+
+    출력:
+
+    ```
+    t_90 = 1.6606, margin_90 = 0.4982
+    t_95 = 1.9845, margin_95 = 0.5953
+    ratio = 0.8368
     ```
 
     90% 구간은 비 $t_{0.95}/t_{0.975} \approx 1.66/1.98 \approx 0.84$만큼 좁다. $\square$

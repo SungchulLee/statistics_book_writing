@@ -85,6 +85,10 @@ plt.tight_layout()
 plt.show()
 ```
 
+![회귀평면](./img/regression_plane_3d_62.png)
+
+설명변수가 둘이면 회귀직선이 아니라 회귀**평면**이 된다. 점들이 평면 위아래로 흩어진 거리가 잔차다.
+
 ## 해석
 
 - **회귀평면**: 색칠된 곡면은 TV와 Radio 지출의 모든 조합에 대한 모형의 예측을 나타낸다. 평면의 기울기 방향이 계수들의 상대적 크기를 반영한다.
@@ -117,6 +121,16 @@ plt.show()
     print(f"Sklearn R2: {R2_sklearn:.4f}")
     print(f"Match: {np.isclose(R2_manual, R2_sklearn)}")
     ```
+
+출력:
+
+```
+Manual R2: 0.9054
+Sklearn R2: 0.9054
+Match: True
+```
+
+직접 계산한 $R^2$와 sklearn의 값이 정확히 같다. $R^2 = 1 - \text{RSS}/\text{TSS}$라는 정의를 확인한 셈이다.
 
     정의상 두 값은 동일하다. $\square$
 

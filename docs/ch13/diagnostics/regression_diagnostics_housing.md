@@ -43,6 +43,40 @@ $$
 
 $H_0$(등분산) 아래에서 이 보조회귀의 검정통계량 $nR^2$은 $\chi^2_p$를 따른다.
 
+## 자료
+
+King County(시애틀) 주택 매매 자료에서 우편번호 98105 지역만 골라 쓴다.
+
+```python
+import pandas as pd
+
+# "Practical Statistics for Data Scientists" 저장소의 자료. 탭으로 구분되어 있다.
+url = ("https://raw.githubusercontent.com/gedeck/"
+       "practical-statistics-for-data-scientists/master/data/house_sales.csv")
+house = pd.read_csv(url, sep='\t')
+house_98105 = house.loc[house['ZipCode'] == 98105, :]
+
+print(f"전체 {len(house)}건 중 98105 지역 {len(house_98105)}건")
+print(house_98105[['AdjSalePrice', 'SqFtTotLiving', 'Bedrooms']].describe().round(1).to_string())
+```
+
+출력:
+
+```
+전체 22687건 중 98105 지역 313건
+       AdjSalePrice  SqFtTotLiving  Bedrooms
+count         313.0          313.0     313.0
+mean       756277.3         2069.9       3.4
+std        391463.3          905.4       1.1
+min        119748.0          490.0       1.0
+25%        521101.0         1410.0       3.0
+50%        630041.0         1850.0       3.0
+75%        851954.0         2570.0       4.0
+max       3013254.0         5570.0       9.0
+```
+
+98105 지역 313건이다. 가격이 12만에서 301만 달러까지 25배 차이가 나고 표준편차가 평균의 절반이 넘는다. 이렇게 퍼진 자료에서는 이분산과 영향점이 함께 나타나기 쉽다.
+
 ## 코드
 
 ### 기준 모형과 영향 진단
@@ -63,7 +97,34 @@ influence = OLSInfluence(results)
 studentized_resids = influence.resid_studentized_internal
 hat_values = influence.hat_matrix_diag
 cooks_dist, _ = influence.cooks_distance
+
+print(results.summary().tables[1])
+print(f"n = {len(y)}, 문턱 4/n = {4/len(y):.4f}")
+print(f"Cook 거리 최댓값 = {cooks_dist.max():.4f} (관측 {cooks_dist.argmax()})")
+print(f"문턱을 넘는 관측값 수 = {(cooks_dist > 4/len(y)).sum()}")
 ```
+
+출력:
+
+```
+=================================================================================
+                    coef    std err          t      P>|t|      [0.025      0.975]
+---------------------------------------------------------------------------------
+SqFtTotLiving   209.6023     24.408      8.587      0.000     161.574     257.631
+SqFtLot          38.9333      5.330      7.305      0.000      28.445      49.421
+Bathrooms      2282.2641      2e+04      0.114      0.909    -3.7e+04    4.16e+04
+Bedrooms      -2.632e+04   1.29e+04     -2.043      0.042   -5.17e+04    -973.867
+BldgGrade        1.3e+05   1.52e+04      8.533      0.000       1e+05     1.6e+05
+const         -7.725e+05   9.83e+04     -7.861      0.000   -9.66e+05   -5.79e+05
+=================================================================================
+n = 313, 문턱 4/n = 0.0128
+Cook 거리 최댓값 = 0.5608 (관측 152)
+문턱을 넘는 관측값 수 = 20
+```
+
+계수를 보면 거주면적 1제곱피트당 210달러, 건물 등급 한 단계당 13만 달러다. 침실 수의 계수가 **음수**($-26{,}320$)인 것이 눈에 띄는데, 면적을 고정한 채 침실을 늘리면 방이 작아지므로 값이 떨어진다는 뜻이다. 다중회귀 계수를 "다른 변수를 고정한 채"로 읽어야 하는 이유다.
+
+Cook 거리가 문턱 0.0128을 넘는 관측값이 20개이고, 그중 152번이 0.5608로 압도적이다.
 
 ### 영향점 제거의 효과
 
@@ -80,7 +141,29 @@ comparison = pd.DataFrame({
     'Original': results.params,
     'Filtered': results_filtered.params,
 })
+print(comparison.round(2).to_string())
+print(f"\n제거된 관측값: {(~mask_keep).sum()}건")
+print(f"R^2: {results.rsquared:.4f} -> {results_filtered.rsquared:.4f}")
 ```
+
+출력:
+
+```
+                Original   Filtered
+SqFtTotLiving     209.60     201.83
+SqFtLot            38.93      42.59
+Bathrooms        2282.26    1664.95
+Bedrooms       -26320.27  -23734.89
+BldgGrade      130000.10  111175.45
+const         -772549.86 -644099.89
+
+제거된 관측값: 20건
+R^2: 0.7954 -> 0.8415
+```
+
+영향점 20건을 빼면 $R^2$가 0.795에서 0.842로 오르고 계수도 눈에 띄게 움직인다. BldgGrade의 계수가 13.0만에서 11.1만으로 14% 줄었다.
+
+이만큼 움직인다는 것 자체가 보고해야 할 사실이다. 그렇다고 20건을 그냥 버려서는 안 된다. Cook 거리가 큰 관측값은 자료 오류일 수도, 정말로 특이한 거래(예: 재건축 예정 부지)일 수도 있으므로 개별적으로 확인해야 한다.
 
 ### 이분산 검정
 
@@ -90,6 +173,14 @@ from statsmodels.stats.diagnostic import het_breuschpagan
 bp_stat, bp_pval, _, _ = het_breuschpagan(results.resid, X)
 print(f"Breusch-Pagan p-value: {bp_pval:.4f}")
 ```
+
+출력:
+
+```
+Breusch-Pagan p-value: 0.0000
+```
+
+$p < 0.0001$로 등분산을 강하게 기각한다. 주택 가격 자료에서 흔한 일이다. 비싼 집일수록 가격의 변동폭도 커지기 때문이며, 로그 변환이나 로버스트 표준오차가 표준적인 처방이다.
 
 ## 해석
 

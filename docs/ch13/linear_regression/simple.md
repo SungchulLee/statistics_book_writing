@@ -35,8 +35,12 @@ import numpy as np
 import pandas as pd
 
 # Load dataset from URL
-data_url = "https://raw.githubusercontent.com/beccadsouza/Machine-Learning-Python/master/Datasets/height-weight.csv"
-dataframe = pd.read_csv(data_url)
+# openintro의 bdims 자료: 성인 507명의 신체 치수.
+# hgt(cm), wgt(kg), sex(1 = 남성, 0 = 여성) 열을 쓴다.
+data_url = ("https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/"
+            "master/csv/openintro/bdims.csv")
+dataframe = pd.read_csv(data_url).rename(columns={"hgt": "Height", "wgt": "Weight"})
+dataframe["Gender"] = dataframe["sex"].map({1: "Male", 0: "Female"})
 
 # Filter for male entries and select only the first 300 rows
 male_height_weight_data = dataframe[dataframe.Gender == "Male"].loc[:300, ["Height", "Weight"]]
@@ -64,6 +68,10 @@ ax.legend()
 plt.show()
 ```
 
+![키와 몸무게 산점도](./img/simple_32.png)
+
+키가 큰 사람일수록 몸무게가 더 나가는 경향이 보인다. 다만 점들이 넓게 흩어져 있어 관계가 결정론적이지는 않다.
+
 ### 평균점
 
 **평균점** $(\bar{x}, \bar{y})$는 산점도의 중심이다. 모든 회귀직선은 이 점을 지난다.
@@ -73,8 +81,12 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-data_url = "https://raw.githubusercontent.com/beccadsouza/Machine-Learning-Python/master/Datasets/height-weight.csv"
-dataframe = pd.read_csv(data_url)
+# openintro의 bdims 자료: 성인 507명의 신체 치수.
+# hgt(cm), wgt(kg), sex(1 = 남성, 0 = 여성) 열을 쓴다.
+data_url = ("https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/"
+            "master/csv/openintro/bdims.csv")
+dataframe = pd.read_csv(data_url).rename(columns={"hgt": "Height", "wgt": "Weight"})
+dataframe["Gender"] = dataframe["sex"].map({1: "Male", 0: "Female"})
 
 male_height_weight_data = dataframe[dataframe.Gender == "Male"].loc[:300, ["Height", "Weight"]]
 
@@ -96,6 +108,10 @@ ax.legend()
 plt.show()
 ```
 
+![평균점](./img/simple_75.png)
+
+가로 평균과 세로 평균이 만나는 점이다. 모든 회귀직선은 반드시 이 점을 지난다.
+
 ### 표준편차 띠
 
 **2 SD 띠**는 구간 $[\bar{x} - 2\sigma_x,\; \bar{x} + 2\sigma_x]$ 또는 $[\bar{y} - 2\sigma_y,\; \bar{y} + 2\sigma_y]$를 표시한다. (정규성 아래에서) 자료의 약 95%가 이 띠 안에 들어온다.
@@ -111,8 +127,12 @@ def add_vertical_reference_line(axis, x_position, y_min, y_max, line_style, line
     """Draws a vertical reference line on the given axis."""
     axis.plot([x_position, x_position], [y_min, y_max], linestyle=line_style, color=line_color, label=line_label)
 
-data_url = "https://raw.githubusercontent.com/beccadsouza/Machine-Learning-Python/master/Datasets/height-weight.csv"
-data = pd.read_csv(data_url)
+# openintro의 bdims 자료: 성인 507명의 신체 치수.
+# hgt(cm), wgt(kg), sex(1 = 남성, 0 = 여성) 열을 쓴다.
+data_url = ("https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/"
+            "master/csv/openintro/bdims.csv")
+data = pd.read_csv(data_url).rename(columns={"hgt": "Height", "wgt": "Weight"})
+data["Gender"] = data["sex"].map({1: "Male", 0: "Female"})
 
 male_height_weight_data = data[data.Gender == "Male"].loc[:300, ["Height", "Weight"]]
 
@@ -141,6 +161,10 @@ axis.legend()
 plt.show()
 ```
 
+![2 SD x-띠](./img/simple_113.png)
+
+키 평균에서 $\pm 2$ 표준편차 구간을 표시한 것이다.
+
 #### 2 SD y-띠(몸무게)
 
 ```python
@@ -152,8 +176,12 @@ def add_horizontal_reference_line(axis, y_position, x_min, x_max, line_style, li
     """Draws a horizontal reference line on the given axis."""
     axis.plot([x_min, x_max], [y_position, y_position], linestyle=line_style, color=line_color, label=line_label)
 
-data_url = "https://raw.githubusercontent.com/beccadsouza/Machine-Learning-Python/master/Datasets/height-weight.csv"
-data = pd.read_csv(data_url)
+# openintro의 bdims 자료: 성인 507명의 신체 치수.
+# hgt(cm), wgt(kg), sex(1 = 남성, 0 = 여성) 열을 쓴다.
+data_url = ("https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/"
+            "master/csv/openintro/bdims.csv")
+data = pd.read_csv(data_url).rename(columns={"hgt": "Height", "wgt": "Weight"})
+data["Gender"] = data["sex"].map({1: "Male", 0: "Female"})
 
 male_height_weight_data = data[data.Gender == "Male"].loc[:300, ["Height", "Weight"]]
 
@@ -182,6 +210,10 @@ axis.legend()
 plt.show()
 ```
 
+![2 SD y-띠](./img/simple_158.png)
+
+몸무게 평균에서 $\pm 2$ 표준편차 구간이다. 자료가 정규에 가까우면 이 띠 안에 약 95%가 들어간다.
+
 ### SD 직선
 
 **SD 직선**은 평균점을 지나며 기울기가 $\pm \sigma_y / \sigma_x$인 직선이다. 두 변수 모두에서 평균으로부터 같은 표준편차 배수만큼 떨어진 점들을 잇는다. 상관이 양수이면 양의 SD 직선이, 음수이면 음의 SD 직선이 의미를 갖는다.
@@ -194,8 +226,12 @@ plt.show()
 import matplotlib.pyplot as plt
 import pandas as pd
 
-data_url = "https://raw.githubusercontent.com/beccadsouza/Machine-Learning-Python/master/Datasets/height-weight.csv"
-data = pd.read_csv(data_url)
+# openintro의 bdims 자료: 성인 507명의 신체 치수.
+# hgt(cm), wgt(kg), sex(1 = 남성, 0 = 여성) 열을 쓴다.
+data_url = ("https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/"
+            "master/csv/openintro/bdims.csv")
+data = pd.read_csv(data_url).rename(columns={"hgt": "Height", "wgt": "Weight"})
+data["Gender"] = data["sex"].map({1: "Male", 0: "Female"})
 
 male_height_weight_data = data[data.Gender == "Male"].loc[:300, ["Height", "Weight"]]
 
@@ -237,6 +273,10 @@ axis.legend(fontsize=15)
 plt.show()
 ```
 
+![양의 SD 직선](./img/simple_209.png)
+
+SD 직선은 평균점을 지나고 기울기가 $s_y/s_x$인 직선이다. 삼각형이 "$x$가 1 SD 늘면 $y$도 1 SD 는다"를 나타낸다.
+
 #### 음의 SD 직선
 
 음의 SD 직선은 기울기가 $-\sigma_y / \sigma_x$이다. 키가 $\sigma_x$만큼 늘어날 때마다 몸무게가 $\sigma_y$만큼 *줄어든다*.
@@ -245,8 +285,12 @@ plt.show()
 import matplotlib.pyplot as plt
 import pandas as pd
 
-data_url = "https://raw.githubusercontent.com/beccadsouza/Machine-Learning-Python/master/Datasets/height-weight.csv"
-data = pd.read_csv(data_url)
+# openintro의 bdims 자료: 성인 507명의 신체 치수.
+# hgt(cm), wgt(kg), sex(1 = 남성, 0 = 여성) 열을 쓴다.
+data_url = ("https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/"
+            "master/csv/openintro/bdims.csv")
+data = pd.read_csv(data_url).rename(columns={"hgt": "Height", "wgt": "Weight"})
+data["Gender"] = data["sex"].map({1: "Male", 0: "Female"})
 
 male_height_weight_data = data[data.Gender == "Male"].loc[:300, ["Height", "Weight"]]
 
@@ -287,6 +331,10 @@ axis.legend(fontsize=15)
 plt.show()
 ```
 
+![음의 SD 직선](./img/simple_264.png)
+
+상관이 음일 때의 SD 직선이다. 기울기의 부호만 바뀔 뿐 구조는 같다.
+
 ### 회귀직선과 SD 직선
 
 **회귀직선**의 기울기는 $r \cdot \sigma_y / \sigma_x$로, SD 직선의 기울기에 상관계수 $r$를 곱한 것이다. $|r| \leq 1$이므로 회귀직선은 항상 SD 직선보다 완만하거나 같다. 이 완만해짐이 곧 **회귀 효과**이며, 예측값이 평균 쪽으로 되돌아간다는 뜻이다.
@@ -296,8 +344,12 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-data_url = "https://raw.githubusercontent.com/beccadsouza/Machine-Learning-Python/master/Datasets/height-weight.csv"
-data = pd.read_csv(data_url)
+# openintro의 bdims 자료: 성인 507명의 신체 치수.
+# hgt(cm), wgt(kg), sex(1 = 남성, 0 = 여성) 열을 쓴다.
+data_url = ("https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/"
+            "master/csv/openintro/bdims.csv")
+data = pd.read_csv(data_url).rename(columns={"hgt": "Height", "wgt": "Weight"})
+data["Gender"] = data["sex"].map({1: "Male", 0: "Female"})
 
 male_data = data[data.Gender == "Male"].loc[:300, ["Height", "Weight"]]
 
@@ -338,6 +390,10 @@ axis.legend(fontsize=15)
 plt.show()
 ```
 
+![회귀직선과 SD 직선](./img/simple_318.png)
+
+SD 직선의 기울기는 $s_y/s_x$이고 회귀직선의 기울기는 $r \cdot s_y/s_x$다. $|r| < 1$이므로 회귀직선이 언제나 SD 직선보다 완만하다. 이것이 평균으로의 회귀 현상이다.
+
 ---
 
 ## 2. 두 개의 회귀직선
@@ -356,8 +412,12 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-data_url = "https://raw.githubusercontent.com/beccadsouza/Machine-Learning-Python/master/Datasets/height-weight.csv"
-data = pd.read_csv(data_url)
+# openintro의 bdims 자료: 성인 507명의 신체 치수.
+# hgt(cm), wgt(kg), sex(1 = 남성, 0 = 여성) 열을 쓴다.
+data_url = ("https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/"
+            "master/csv/openintro/bdims.csv")
+data = pd.read_csv(data_url).rename(columns={"hgt": "Height", "wgt": "Weight"})
+data["Gender"] = data["sex"].map({1: "Male", 0: "Female"})
 
 male_height_weight_data = data[data.Gender == "Male"].loc[:300, ["Height", "Weight"]]
 
@@ -417,6 +477,12 @@ axis.spines['right'].set_visible(False)
 plt.show()
 ```
 
+![두 회귀직선](./img/simple_382.png)
+
+$Y$의 $X$에 대한 회귀와 $X$의 $Y$에 대한 회귀가 서로 다른 직선이다. 두 직선은 평균점에서 만나며, SD 직선이 그 사이에 놓인다.
+
+$|r| < 1$이면 두 직선이 갈라지고 $|r| = 1$이면 하나로 겹친다.
+
 ### 세로 띠로 본 $Y$의 $X$에 대한 회귀
 
 (키 값을 고정한) 좁은 세로 띠를 골라 그 안의 평균 몸무게를 살펴보면, 회귀직선이 조건부 평균을 예측한다는 사실이 드러난다.
@@ -426,8 +492,12 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-data_url = "https://raw.githubusercontent.com/beccadsouza/Machine-Learning-Python/master/Datasets/height-weight.csv"
-data = pd.read_csv(data_url)
+# openintro의 bdims 자료: 성인 507명의 신체 치수.
+# hgt(cm), wgt(kg), sex(1 = 남성, 0 = 여성) 열을 쓴다.
+data_url = ("https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/"
+            "master/csv/openintro/bdims.csv")
+data = pd.read_csv(data_url).rename(columns={"hgt": "Height", "wgt": "Weight"})
+data["Gender"] = data["sex"].map({1: "Male", 0: "Female"})
 
 male_data = data[data.Gender == "Male"].loc[:300, ["Height", "Weight"]]
 
@@ -475,6 +545,10 @@ axis.legend(fontsize=15)
 plt.show()
 ```
 
+![세로 띠로 본 Y의 X에 대한 회귀](./img/simple_456.png)
+
+키 구간마다 몸무게의 평균을 찍어 이으면 회귀직선에 가까워진다. 회귀직선이 "각 $x$에서의 조건부 평균"이라는 정의를 그림으로 보여준다.
+
 ### 가로 띠로 본 $X$의 $Y$에 대한 회귀
 
 마찬가지로 몸무게 값을 고정한 가로 띠는 키의 조건부 평균을 보여준다.
@@ -484,8 +558,12 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-data_url = "https://raw.githubusercontent.com/beccadsouza/Machine-Learning-Python/master/Datasets/height-weight.csv"
-data = pd.read_csv(data_url)
+# openintro의 bdims 자료: 성인 507명의 신체 치수.
+# hgt(cm), wgt(kg), sex(1 = 남성, 0 = 여성) 열을 쓴다.
+data_url = ("https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/"
+            "master/csv/openintro/bdims.csv")
+data = pd.read_csv(data_url).rename(columns={"hgt": "Height", "wgt": "Weight"})
+data["Gender"] = data["sex"].map({1: "Male", 0: "Female"})
 
 male_height_weight_data = data[data.Gender == "Male"].loc[:300, ["Height", "Weight"]]
 
@@ -533,6 +611,10 @@ axis.spines['top'].set_visible(False)
 axis.spines['right'].set_visible(False)
 plt.show()
 ```
+
+![가로 띠로 본 X의 Y에 대한 회귀](./img/simple_518.png)
+
+몸무게 구간마다 키의 평균을 찍으면 $X$를 $Y$에 회귀시킨 직선이 나온다. 앞의 세로 띠 그림과 나란히 놓으면 두 회귀직선이 왜 다른지 눈으로 보인다.
 
 ---
 
@@ -661,6 +743,9 @@ plt.tight_layout()
 plt.show()
 ```
 
+!!! note "실행할 때마다 결과가 달라진다"
+    이 블록은 `yfinance`로 **실행 시점의** 시장 자료를 내려받는다. 기간이 바뀌면 추정된 베타도 달라지므로 고정된 출력이나 그림을 싣지 않는다. 직접 실행해 얻은 값으로 읽으면 된다.
+
 !!! note "결과는 실행 시점에 따라 달라진다"
     `yfinance`는 실시간 시장 자료를 내려받으므로 추정된 베타와 알파는 코드를 실행하는 날짜에 따라 달라진다. 여기서 중요한 것은 특정 수치가 아니라 절차이다.
 
@@ -723,6 +808,9 @@ axes[1, 1].set_title(f"{ticker_wmt} Daily Returns Histogram")
 plt.tight_layout()
 plt.show()
 ```
+
+!!! note "실행할 때마다 결과가 달라진다"
+    이 블록은 `yfinance`로 **실행 시점의** 시장 자료를 내려받는다. 기간이 바뀌면 추정된 베타도 달라지므로 고정된 출력이나 그림을 싣지 않는다. 직접 실행해 얻은 값으로 읽으면 된다.
 
 ## 연습문제
 
@@ -889,5 +977,21 @@ if __name__ == "__main__":
     if __name__ == "__main__":
         main()
     ```
+
+출력:
+
+```
+(a)
+(b)
+379436.37031843845
+```
+
+![주택 자료의 회귀직선](./img/simple_927.png)
+
+잔차제곱합이 379,436이다. 이 값 자체보다 중요한 것은 그것이 **최소**라는 사실이다. 다른 어떤 직선을 골라도 이보다 큰 값이 나온다.
+
+![회귀직선과 잔차](./img/simple_885.png)
+
+(a)와 (b)를 각각 계산하고 잔차제곱합 379,436을 얻는다.
 
     (b)에서 적합된 직선은 `median_house_value = 45085.58 + 41793.85 * median_income`이므로 `median_income = 8`에서의 예측값은 379,436달러이다. 다만 이 자료의 `median_house_value`는 500,001에서 절단되어 있고(전체의 4.7%가 이 값이다) 그 때문에 고소득 구간에서 직선이 체계적으로 어긋난다는 점에 유의하라.

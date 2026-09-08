@@ -42,6 +42,41 @@ Python에는 회귀 모형화를 위한 주요 라이브러리가 둘 있다. **
 
 ---
 
+## 예제 자료
+
+두 라이브러리를 같은 자료에 적용해 비교한다. Boston 주택 자료에서 방 개수(RM),
+저소득층 비율(LSTAT), 학생-교사 비율(PTRATIO)로 주택 중앙값(PRICE)을 설명한다.
+
+```python
+import pandas as pd
+
+# MASS 패키지의 Boston 자료 (Rdatasets 미러). sklearn에서는 1.2판에 제거되었다.
+url = ("https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/"
+       "master/csv/MASS/Boston.csv")
+boston = pd.read_csv(url)
+df = boston.rename(columns={"rm": "RM", "lstat": "LSTAT",
+                            "ptratio": "PTRATIO", "medv": "PRICE"})
+df = df[["RM", "LSTAT", "PTRATIO", "PRICE"]]
+
+print(df.describe().round(3).to_string())
+```
+
+출력:
+
+```
+            RM    LSTAT  PTRATIO    PRICE
+count  506.000  506.000  506.000  506.000
+mean     6.285   12.653   18.456   22.533
+std      0.703    7.141    2.165    9.197
+min      3.561    1.730   12.600    5.000
+25%      5.885    6.950   17.400   17.025
+50%      6.208   11.360   19.050   21.200
+75%      6.624   16.955   20.200   25.000
+max      8.780   37.970   22.000   50.000
+```
+
+---
+
 ## 나란히 놓고 보기
 
 ### statsmodels
@@ -53,8 +88,19 @@ import pandas as pd
 X = sm.add_constant(df[['RM', 'LSTAT', 'PTRATIO']])
 y = df['PRICE']
 
+def print_summary(res):
+    """summary()에서 실행 날짜와 시각만 지우고 인쇄한다(재현 가능한 출력을 위해)."""
+    lines = []
+    for line in str(res.summary()).split("\n"):
+        if line.startswith(("Date:", "Time:")):
+            lines.append(line[:19].ljust(38) + line[38:])
+        else:
+            lines.append(line)
+    print("\n".join(lines))
+
+
 model = sm.OLS(y, X).fit()
-print(model.summary())
+print_summary(model)
 
 # Access specific results
 print(f"R²: {model.rsquared:.4f}")
@@ -64,6 +110,56 @@ print(f"BIC: {model.bic:.2f}")
 print(model.pvalues)
 print(model.conf_int())
 ```
+
+출력:
+
+```
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                  PRICE   R-squared:                       0.679
+Model:                            OLS   Adj. R-squared:                  0.677
+Method:                 Least Squares   F-statistic:                     353.3
+Date:                                   Prob (F-statistic):          2.69e-123
+Time:                                   Log-Likelihood:                -1553.0
+No. Observations:                 506   AIC:                             3114.
+Df Residuals:                     502   BIC:                             3131.
+Df Model:                           3                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+const         18.5671      3.913      4.745      0.000      10.879      26.255
+RM             4.5154      0.426     10.603      0.000       3.679       5.352
+LSTAT         -0.5718      0.042    -13.540      0.000      -0.655      -0.489
+PTRATIO       -0.9307      0.118     -7.911      0.000      -1.162      -0.700
+==============================================================================
+Omnibus:                      202.072   Durbin-Watson:                   0.901
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):             1022.153
+Skew:                           1.700   Prob(JB):                    1.10e-222
+Kurtosis:                       9.076   Cond. No.                         402.
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+R²: 0.6786
+Adj. R²: 0.6767
+AIC: 3114.10
+BIC: 3131.00
+const      2.725808e-06
+RM         7.734793e-24
+LSTAT      7.944208e-36
+PTRATIO    1.644660e-14
+dtype: float64
+                 0          1
+const    10.878841  26.255382
+RM        3.678711   5.352131
+LSTAT    -0.654775  -0.488836
+PTRATIO  -1.161877  -0.699568
+```
+
+$R^2 = 0.679$이고 세 계수 모두 $p < 10^{-13}$로 강하게 유의하다. 방이 하나 늘면 가격이 4.5(천 달러) 오르고, 저소득층 비율이 1%p 늘면 0.57 내린다.
+
+아래 진단 블록이 문제를 알려 준다. Durbin-Watson 0.901은 잔차에 강한 양의 자기상관이 있다는 뜻이고, Jarque-Bera $p \approx 10^{-222}$는 정규성이 심하게 깨졌다는 뜻이다. 공간자료라 이웃한 관측값끼리 닮았기 때문이며, 계수 추정값은 여전히 불편이지만 **p-값과 신뢰구간은 믿기 어렵다**.
 
 ### sklearn
 
@@ -90,6 +186,20 @@ cv_scores = cross_val_score(model, X, y, cv=5, scoring='r2')
 print(f"CV R² (mean ± std): {cv_scores.mean():.4f} ± {cv_scores.std():.4f}")
 ```
 
+출력:
+
+```
+R²: 0.6786
+RMSE: 5.2087
+Coefficients: [ 4.51542094 -0.57180569 -0.93072256]
+Intercept: 18.5671
+CV R² (mean ± std): 0.4300 ± 0.2997
+```
+
+sklearn이 statsmodels와 **같은 계수**를 준다(4.5154, $-0.5718$, $-0.9307$). 같은 최소제곱 문제를 푸니 당연한 일이다.
+
+다른 것은 무엇을 덤으로 주느냐다. statsmodels는 p-값과 신뢰구간을, sklearn은 교차검증 점수를 쉽게 준다. 훈련 $R^2$가 0.679인데 교차검증 $R^2$가 그보다 낮게 나오는 것도 눈여겨보라. 훈련 자료에서 잰 성능은 언제나 낙관적이다.
+
 ---
 
 ## 둘을 함께 쓰기
@@ -107,7 +217,7 @@ from statsmodels.stats.outliers_influence import variance_inflation_factor
 
 X_sm = sm.add_constant(df[['RM', 'LSTAT', 'PTRATIO']])
 model_sm = sm.OLS(df['PRICE'], X_sm).fit()
-print(model_sm.summary())
+print_summary(model_sm)
 
 # Check VIF (skip column 0: the constant)
 vif = pd.DataFrame({
@@ -131,6 +241,45 @@ X_sk = df[['RM', 'LSTAT', 'PTRATIO']]
 cv_scores = cross_val_score(pipe, X_sk, df['PRICE'], cv=5, scoring='r2')
 print(f"Ridge CV R²: {cv_scores.mean():.4f} ± {cv_scores.std():.4f}")
 ```
+
+출력:
+
+```
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                  PRICE   R-squared:                       0.679
+Model:                            OLS   Adj. R-squared:                  0.677
+Method:                 Least Squares   F-statistic:                     353.3
+Date:                                   Prob (F-statistic):          2.69e-123
+Time:                                   Log-Likelihood:                -1553.0
+No. Observations:                 506   AIC:                             3114.
+Df Residuals:                     502   BIC:                             3131.
+Df Model:                           3                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+const         18.5671      3.913      4.745      0.000      10.879      26.255
+RM             4.5154      0.426     10.603      0.000       3.679       5.352
+LSTAT         -0.5718      0.042    -13.540      0.000      -0.655      -0.489
+PTRATIO       -0.9307      0.118     -7.911      0.000      -1.162      -0.700
+==============================================================================
+Omnibus:                      202.072   Durbin-Watson:                   0.901
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):             1022.153
+Skew:                           1.700   Prob(JB):                    1.10e-222
+Kurtosis:                       9.076   Cond. No.                         402.
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+   Feature       VIF
+0       RM  1.653419
+1    LSTAT  1.679425
+2  PTRATIO  1.198101
+Ridge CV R²: 0.4304 ± 0.2994
+```
+
+두 라이브러리를 이어 쓰는 전형적인 흐름이다. statsmodels로 계수의 유의성과 VIF를 확인하고, sklearn으로 교차검증 성능을 잰다.
 
 !!! note "VIF 계산에서 상수 열 제외하기"
     `sm.add_constant`가 만든 0번 열은 절편을 위한 상수이므로 그에 대한 VIF는 의미가 없다. 위 코드처럼 `range(1, ...)`로 실제 설명변수만 계산해야 한다.

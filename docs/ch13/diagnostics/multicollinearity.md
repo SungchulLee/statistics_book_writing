@@ -53,6 +53,18 @@ for i in range(len(corr_matrix.columns)):
 
 출력:
 
+```
+High Correlations (|r| > 0.7):
+  AveRooms <-> AveBedrms: 0.848
+  Latitude <-> Longitude: -0.925
+```
+
+![상관 열지도](./img/multicollinearity_22.png)
+
+AveRooms와 AveBedrms가 0.848, Latitude와 Longitude가 $-0.925$로 강하게 상관되어 있다. 상관행렬은 **쌍별** 관계만 보므로, 셋 이상이 얽힌 공선성은 VIF로 확인해야 한다.
+
+출력:
+
 ```text
 High Correlations (|r| > 0.7):
   AveRooms <-> AveBedrms: 0.848
@@ -101,6 +113,19 @@ vif_data['VIF'] = [variance_inflation_factor(X.values, i+1) for i in range(X.sha
 print(vif_data)
 ```
 
+출력:
+
+```
+     Feature       VIF
+0     MedInc  1.269059
+1   AveRooms  1.248489
+2   AveOccup  1.000990
+3   Latitude  8.184505
+4  Longitude  7.977739
+```
+
+Latitude와 Longitude의 VIF가 8을 넘는다. 캘리포니아의 지리적 모양 때문에 위도와 경도가 강하게 상관되어 있다.
+
 #### VIF를 직접 계산하기
 
 VIF가 어떻게 계산되는지 이해하면 더 깊은 통찰을 얻을 수 있다.
@@ -144,6 +169,21 @@ for j, target_feature in enumerate(features):
 
 print("=" * 60)
 ```
+
+출력:
+
+```
+Manual VIF Calculation:
+============================================================
+MedInc      :  R² = 0.2120,  VIF =    1.27
+AveRooms    :  R² = 0.1990,  VIF =    1.25
+AveOccup    :  R² = 0.0010,  VIF =    1.00
+Latitude    :  R² = 0.8778,  VIF =    8.18
+Longitude   :  R² = 0.8747,  VIF =    7.98
+============================================================
+```
+
+VIF를 직접 계산해 확인했다. $\text{VIF}_j = 1/(1 - R_j^2)$이므로, 해당 변수를 나머지 변수들에 회귀시킨 $R_j^2$만 알면 된다.
 
 **출력**:
 
@@ -207,6 +247,15 @@ lasso.fit(X, y)
 print(lasso.coef_)
 ```
 
+출력:
+
+```
+[ 0.35902368  0.01500534 -0.00336581 -0.4979378  -0.51160538]
+[ 0.37150935 -0.         -0.00281434 -0.18079981 -0.1744082 ]
+```
+
+OLS 계수와 릿지 계수를 비교한 것이다. 공선성이 있으면 OLS 계수가 크게 흔들리는 반면 릿지는 0 쪽으로 줄여 안정시킨다.
+
 ### 방법 4: 주성분분석(PCA)
 
 상관된 설명변수를 서로 무상관인 주성분으로 변환한다.
@@ -223,6 +272,14 @@ model_pca = LinearRegression()
 model_pca.fit(X_pca, y)
 print(f"Explained variance ratio: {pca.explained_variance_ratio_}")
 ```
+
+출력:
+
+```
+Explained variance ratio: [0.85492016 0.06636584 0.05359929]
+```
+
+주성분 셋이 분산의 85.5%, 6.6%, 5.4%를 설명한다. 첫 성분에 집중되어 있다는 것이 원래 변수들이 서로 강하게 얽혀 있다는 신호다.
 
 ---
 

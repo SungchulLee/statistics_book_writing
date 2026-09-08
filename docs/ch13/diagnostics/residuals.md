@@ -86,6 +86,10 @@ plt.tight_layout()
 plt.show()
 ```
 
+![가정이 성립할 때의 잔차](./img/residuals_48.png)
+
+0을 중심으로 고르게 흩어진 띠. 이것이 기준선이며, 아래 그림들과 비교해 읽는다.
+
 #### 그림 해석
 
 1. **무작위 흩어짐**: 잔차가 0 주위에 무작위로 흩어져 있으면 선형성 가정이 성립함을 시사한다.
@@ -140,6 +144,10 @@ model, y_pred = perform_regression(x, y)
 plot_regression_and_residuals(x, y, y_pred)
 ```
 
+![이분산에서의 잔차](./img/residuals_99.png)
+
+오른쪽으로 갈수록 퍼지는 깔때기 모양이다.
+
 ### 나쁜 경우: 다항 자료에 선형모형
 
 자료가 다항 관계를 갖는데 선형모형만 적합하면 잔차에 뚜렷한 곡선 패턴이 나타난다. 선형성이 위배되었다는 신호이다.
@@ -158,6 +166,10 @@ x, y = generate_data(d=2)
 model, y_pred = perform_regression(x, y)
 plot_regression_and_residuals(x, y, y_pred)
 ```
+
+![이차 관계에서의 잔차](./img/residuals_147.png)
+
+잔차가 U자를 그린다. 모형이 선형인데 자료가 곡선이면 이런 패턴이 나온다.
 
 #### 선형 대 이차 잔차 비교
 
@@ -233,6 +245,22 @@ print(f"Quadratic Model RSS: {np.sum(residuals_quad**2):.2f}")
 
 출력:
 
+```
+Model Comparison:
+Linear Model R²:    0.0830
+Quadratic Model R²: 0.9534
+Linear Model RSS:    1530.56
+Quadratic Model RSS: 77.72
+```
+
+![그림](./img/residuals_166.png)
+
+이차 모형의 $R^2$가 0.083에서 0.953으로 뛴다. 선형 모형의 잔차 그림에 뚜렷한 곡선이 보였던 이유가 이것이다.
+
+$R^2 = 0.083$이라는 값 자체보다, **잔차 그림이 그 원인을 알려 준다**는 점이 중요하다. 결정계수는 "얼마나 못 맞히는가"만 말하고 "왜 못 맞히는가"는 말하지 않는다.
+
+출력:
+
 ```text
 Model Comparison:
 Linear Model R²:    0.0830
@@ -259,6 +287,10 @@ x, y = generate_data(d=2)
 model, y_pred = perform_regression(x, y, d=2)
 plot_regression_and_residuals(x, y, y_pred)
 ```
+
+![표준화 잔차](./img/residuals_250.png)
+
+표준편차 단위로 바꾸면 $\pm 2$, $\pm 3$ 기준선과 곧바로 비교할 수 있다.
 
 !!! tip "참고"
     [Transforming nonlinear data (Khan Academy)](https://www.khanacademy.org/math/ap-statistics/bivariate-data-ap/assessing-fit-least-squares-regression/v/transforming-nonlinear-data)
@@ -313,6 +345,10 @@ ax2.set_ylabel(r'$\sqrt{|\text{Standardized Residuals}|}$')
 plt.tight_layout()
 plt.show()
 ```
+
+![잔차 진단 종합](./img/residuals_270.png)
+
+네 그림을 함께 보면 어느 가정이 어디서 깨지는지 한눈에 들어온다.
 
 ### 왜 제곱근을 쓰는가
 

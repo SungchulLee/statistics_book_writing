@@ -150,6 +150,17 @@ $$
 
     출력:
 
+    ```
+    df = 102.0000
+    statistic = 0.6295
+    p_value   = 0.5304
+    We choose H_0, or using statistician's jargon, fail to reject H_0
+    ```
+
+    $p = 0.530$으로 기각하지 못한다. 자유도 102는 합동 $t$-검정의 $n_1 + n_2 - 2$다.
+
+    출력:
+
     ```text
     df = 102.0000
     statistic = 0.6295
@@ -206,6 +217,17 @@ $$
     if __name__ == "__main__":
         main()
     ```
+
+    출력:
+
+    ```
+    df = 135.8395
+    statistic = 3.0572
+    p_value   = 0.0027
+    We choose H_1, or using statistician's jargon, reject H_0
+    ```
+
+    $p = 0.0027$로 기각한다. 자유도가 135.8로 정수가 아닌 것은 Welch 자유도이기 때문이다.
 
     출력:
 
@@ -276,6 +298,17 @@ $$
 
     출력:
 
+    ```
+    df = 208.0000
+    statistic = -1.6454
+    p_value   = 0.1014
+    We choose H_0, or using statistician's jargon, fail to reject H_0
+    ```
+
+    $p = 0.101$로 5% 수준에서는 기각하지 못한다. 경계에 가까운 값이므로 "차이가 없다"가 아니라 "이 표본으로는 판단하기 어렵다"로 읽어야 한다.
+
+    출력:
+
     ```text
     df = 208.0000
     statistic = -1.6454
@@ -332,6 +365,17 @@ Julie는 새로 나온 전기차 두 모델 A와 B가 완전 충전 후 얼마�
     if __name__ == "__main__":
         main()
     ```
+
+    출력:
+
+    ```
+    df = 7.2688
+    statistic = -0.9678
+    p_value   = 0.3642
+    We choose H_0, or using statistician's jargon, fail to reject H_0
+    ```
+
+    $p = 0.364$로 기각하지 못한다. 표본이 작아 자유도가 7.27밖에 안 되는 것이 결정적이다.
 
     출력:
 

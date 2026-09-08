@@ -101,6 +101,16 @@ for j in range(len(beta_true)):
           f"MC mean={mc_mean[j]:.4f}, MC std={mc_std[j]:.4f}")
 ```
 
+출력:
+
+```
+beta_0: true=2, MC mean=2.0009, MC std=0.1414
+beta_1: true=3, MC mean=3.0019, MC std=0.1425
+beta_2: true=-1, MC mean=-0.9994, MC std=0.1442
+```
+
+Monte Carlo 평균이 참값 $(2, 3, -1)$에 소수점 셋째 자리까지 맞는다. OLS가 불편추정량이라는 것을 모의실험으로 확인한 셈이다.
+
 $n = 200$, $\sigma = 2$일 때 몬테카를로 표준편차는 세 계수 모두 $0.15$ 근처가 되며, 이는 이론값 $\sigma/\sqrt{n} = 2/\sqrt{200} = 0.1414$와 잘 맞는다(설명변수가 표준정규이므로 $(\mathbf{X}^\top\mathbf{X})^{-1}$의 대각원소가 대략 $1/n$이다).
 
 ## 해석
@@ -128,6 +138,19 @@ $n = 200$, $\sigma = 2$일 때 몬테카를로 표준편차는 세 계수 모두
     print("tr(M):", np.trace(M))  # should be 47
     ```
 
+출력:
+
+```
+P idempotent: True
+M idempotent: True
+P symmetric: True
+M symmetric: True
+tr(P): 3.000000000000001
+tr(M): 46.99999999999999
+```
+
+사영행렬 $P$와 잔차행렬 $M$이 멱등이고 대칭임을 수치로 확인했다. 대각합도 $\text{tr}(P) = 3$(모수 개수), $\text{tr}(M) = 47$($n - p$)로 이론과 맞는다. 잔차의 자유도가 $n - p$인 이유가 바로 이것이다.
+
     모든 확인을 통과한다. $\mathbf{P}^2 = \mathbf{P}$, $\mathbf{M}^2 = \mathbf{M}$이고 둘 다 대칭이며 $\operatorname{tr}(\mathbf{P}) = k = 3$, $\operatorname{tr}(\mathbf{M}) = n - k = 47$이다. $\square$
 
 ---
@@ -154,6 +177,14 @@ $n = 200$, $\sigma = 2$일 때 몬테카를로 표준편차는 세 계수 모두
                 coverage[j] += 1
     print("Coverage:", coverage / 5000)  # should be ~0.95
     ```
+
+출력:
+
+```
+Coverage: [0.952  0.9482 0.951 ]
+```
+
+세 계수의 95% 신뢰구간 포함확률이 각각 0.952, 0.948, 0.951로 명목값과 맞는다. 가정이 성립하면 OLS의 구간이 약속한 대로 작동한다는 확인이다.
 
     경험적 포함확률은 각 계수에 대해 대략 0.95가 되어 이론을 확인해 준다. $\square$
 
