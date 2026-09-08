@@ -60,12 +60,13 @@ fig, ax = plt.subplots(figsize=(12, 5))
 ax.plot(x, y_null, "b-", lw=2, label="Null distribution")
 ax.plot(x, y_alt, "r-", lw=2, label="Alternative distribution")
 
-# Type I error: null distribution beyond critical value
+# 제1종 오류: 귀무분포에서 임계값 오른쪽. H0가 참인데 기각하는 경우다.
 mask_t1 = x >= z_crit
 ax.fill_between(x[mask_t1], y_null[mask_t1], alpha=0.4, color="blue",
                 label="Type I error (alpha)")
 
-# Type II error: alternative distribution below critical value
+# 제2종 오류: 대립분포에서 임계값 왼쪽. H1이 참인데 기각하지 못하는 경우다.
+# 두 오류가 **다른 곡선** 아래에서 재어진다는 점이 이 그림의 요점이다.
 mask_t2 = x <= z_crit
 ax.fill_between(x[mask_t2], y_alt[mask_t2], alpha=0.3, color="red",
                 label="Type II error (beta)")
@@ -79,15 +80,37 @@ plt.tight_layout()
 plt.show()
 ```
 
+![제1종 오류와 제2종 오류](./img/type12_error_visualization_44.png)
+
+같은 세로 점선(임계값 1.645)이 두 곡선을 각각 자른다. 파란 곡선에서 오른쪽으로 잘린 조각이 $\alpha$, 빨간 곡선에서 왼쪽으로 잘린 조각이 $\beta$다.
+
+점선을 오른쪽으로 옮기면 파란 조각이 줄고 빨간 조각이 는다. 하나를 줄이면 다른 하나가 커지는 이 맞바꿈은 임계값 하나로 두 오류를 동시에 통제할 수 없다는 뜻이다. 둘 다 줄이는 방법은 하나뿐이다. 표본을 키워 두 곡선을 좁게 만드는 것이다.
+
 ### 분리 정도에 따른 검정력 계산
 
 ```python
 for sep in [1, 2, 3, 4, 5]:
     z_c = stats.norm.ppf(0.95)
+    # loc=sep은 "대립분포에서 재라"는 뜻이다. 임계값 z_c 자체는 sep과 무관하다.
+    # H0 아래에서 정해지는 값이기 때문이다.
     power = 1 - stats.norm.cdf(z_c, loc=sep)
     beta = 1 - power
     print(f"Separation = {sep}: beta = {beta:.4f}, Power = {power:.4f}")
 ```
+
+출력:
+
+```
+Separation = 1: beta = 0.7405, Power = 0.2595
+Separation = 2: beta = 0.3612, Power = 0.6388
+Separation = 3: beta = 0.0877, Power = 0.9123
+Separation = 4: beta = 0.0093, Power = 0.9907
+Separation = 5: beta = 0.0004, Power = 0.9996
+```
+
+검정력이 선형으로 오르지 않는다. 분리가 1에서 2로 갈 때 0.26에서 0.64로 크게 뛰지만, 4에서 5로 갈 때는 0.991에서 0.9996으로 거의 움직이지 않는다. 정규분포의 꼬리가 지수적으로 얇아지기 때문이다.
+
+분리가 1일 때 검정력이 0.26이라는 것도 새겨 둘 만하다. 효과가 표준오차만큼 있어도 네 번 중 세 번은 놓친다. "효과가 있으면 검정이 잡아낼 것"이라는 기대는 대체로 근거가 없다.
 
 ## 해석
 

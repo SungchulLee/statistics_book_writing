@@ -31,9 +31,21 @@ PROB_HEAD_FAIR = 0.5
 NUM_SIMULATIONS = 100_000
 
 def single_experiment(n_tosses=TOTAL_TOSSES, p=PROB_HEAD_FAIR):
-    """Simulate one round of n_tosses fair-coin flips; return head count."""
+    """공정한 동전을 n_tosses번 던진 한 판을 흉내 내고 앞면 횟수를 돌려준다."""
+    # 0/1을 30개 뽑아 더할 필요가 없다. 앞면 횟수의 분포가 곧 Bin(30, 0.5)다.
     return np.random.binomial(n_tosses, p)
+
+# H0가 참일 때 한 판을 돌리면 무엇이 나오는지 몇 번 본다.
+print([single_experiment() for _ in range(10)])
 ```
+
+출력:
+
+```
+[14, 20, 17, 16, 12, 12, 11, 18, 16, 17]
+```
+
+공정한 동전에서 앞면은 15 언저리를 오간다. 관측된 24가 이 범위에서 얼마나 떨어져 있는지가 이 검정의 전부다.
 
 ### 반복 모의실험
 
@@ -41,8 +53,11 @@ def single_experiment(n_tosses=TOTAL_TOSSES, p=PROB_HEAD_FAIR):
 def simulate_coin_tosses(n_simulations=NUM_SIMULATIONS,
                          n_tosses=TOTAL_TOSSES,
                          p=PROB_HEAD_FAIR):
-    """Repeat the experiment n_simulations times. Returns array of head counts."""
+    """실험을 n_simulations번 반복하고 앞면 횟수 배열을 돌려준다."""
     return np.random.binomial(n_tosses, p, size=n_simulations)
+
+# 여기서 세는 것은 "H0가 참일 때 관측값만큼 극단적인 일이 얼마나 자주 일어나는가"다.
+# 그것이 p-값의 정의다. 이항분포 공식을 몰라도 이 논리는 그대로 성립한다.
 
 head_counts = simulate_coin_tosses()
 extreme = np.sum(head_counts >= OBSERVED_HEADS)
@@ -52,14 +67,33 @@ print(f"Times with >= {OBSERVED_HEADS} heads: {extreme:,}")
 print(f"Percentage: {pct:.4f}%")
 ```
 
+출력:
+
+```
+Times with >= 24 heads: 71
+Percentage: 0.0710%
+```
+
+10만 번 중 71번이다. 모의실험 p-값은 0.00071이 된다.
+
 ### 정확한 값과의 비교
 
 ```python
 from scipy.stats import binom
 
+# P(X >= 24) = 1 - P(X <= 23) 이다. cdf에 24가 아니라 **23**을 넣어야 한다.
+# 이산분포에서 부등호를 하나 어긋나게 쓰는 것이 가장 흔한 실수다.
 p_exact = 1 - binom.cdf(OBSERVED_HEADS - 1, TOTAL_TOSSES, PROB_HEAD_FAIR)
 print(f"Exact binomial P(X >= {OBSERVED_HEADS}): {p_exact:.6f}")
 ```
+
+출력:
+
+```
+Exact binomial P(X >= 24): 0.000715
+```
+
+모의실험의 0.00071과 정확한 값 0.000715가 소수점 넷째 자리까지 맞는다. 모의실험 p-값의 표준오차가 $\sqrt{0.0007 \times 0.9993/100000} \approx 0.000084$이므로 이 정도 일치는 기대할 만하다(연습문제 3).
 
 ### 시각화
 
@@ -80,6 +114,10 @@ plt.tight_layout()
 plt.show()
 ```
 
+![Coin Toss Simulation (100,000 runs)](./img/coin_toss_simulation_100.png)
+
+히스토그램이 15를 중심으로 모여 있고 빨간 선이 그은 24는 오른쪽 꼬리 저 끝에 있다. 막대 높이가 눈에 보이지 않을 만큼 낮은 영역이다. p-값이란 결국 이 빨간 선 오른쪽에 있는 막대들의 넓이 비율이다.
+
 ### 해석
 
 100,000번의 모의실험에서 앞면이 24번 이상 나온 비율은 5%를 크게 밑돈다. 정확한 이항 p-값은 $P(X \geq 24 \mid n=30, p=0.5) \approx 0.0007$이다. 어떤 합리적인 유의수준보다도 훨씬 작으므로 $H_0$을 기각하고 이 동전이 앞면 쪽으로 치우쳐 있다고 결론짓는다.
@@ -97,7 +135,15 @@ plt.show()
     print(f"Two-sided simulated p-value: {p_two_sided:.4f}")
     ```
 
-    대칭성에 의해 $P(X \leq 6) = P(X \geq 24)$이므로 양측 p-값은 약 $2 \times 0.0007 = 0.0014$이다. 모의실험도 이에 가까운 값을 준다. $\square$
+    출력:
+
+    ```
+    Two-sided simulated p-value: 0.0014
+    ```
+
+    $p = 0.5$에서 이항분포가 15를 중심으로 대칭이므로 $P(X \leq 6) = P(X \geq 24)$이고, 따라서 양측 p-값은 단측의 정확히 두 배인 $2 \times 0.000715 = 0.00143$이다. 모의실험이 0.0014를 주어 이를 재현한다.
+
+    대칭은 $p_0 = 0.5$이기 때문에 성립한다. $p_0$이 0.5가 아니면 이항분포가 치우쳐서 "양쪽 꼬리를 어떻게 자를 것인가"가 그 자체로 골칫거리가 된다. $\square$
 
 ---
 

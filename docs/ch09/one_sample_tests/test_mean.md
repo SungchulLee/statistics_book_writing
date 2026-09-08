@@ -31,14 +31,18 @@ from scipy.stats import t as tdist, norm
 
 def test_mean_one_sample(xbar, n, mu0=0.0, sd=None, known_sigma=None,
                          alt="two-sided", alpha=0.05):
-    """
-    If known_sigma is given -> z-test, else t-test using sample sd.
-    Returns (stat, pvalue, reject_bool, label).
+    """known_sigma를 주면 z-검정, 아니면 표본 sd로 t-검정.
+
+    원자료가 아니라 요약통계량(xbar, n, sd)만 받는다.
+    검정에 필요한 것이 그것뿐이기 때문이다.
+    돌려주는 값은 (통계량, p-값, 기각 여부, 이름)이다.
     """
     if known_sigma is not None:
         se = known_sigma / math.sqrt(n)
         z = (xbar - mu0) / se
         if alt == "two-sided":
+            # 작은 쪽 꼬리를 골라 두 배 한다. z의 부호를 따지지 않아도 되고
+            # 어느 쪽으로 치우쳐도 같은 식이 쓰인다.
             p = 2 * min(norm.cdf(z), 1 - norm.cdf(z))
         elif alt == "less":
             p = norm.cdf(z)
@@ -49,7 +53,7 @@ def test_mean_one_sample(xbar, n, mu0=0.0, sd=None, known_sigma=None,
     if sd is None:
         raise ValueError("Provide sd for t-test or known_sigma for z-test.")
     se = sd / math.sqrt(n)
-    df = n - 1
+    df = n - 1               # sd를 자료에서 추정했으므로 자유도 하나를 잃는다
     t = (xbar - mu0) / se
     if alt == "two-sided":
         p = 2 * min(tdist.cdf(t, df), 1 - tdist.cdf(t, df))
@@ -67,7 +71,22 @@ stat, p, reject, label = test_mean_one_sample(
     xbar=3.2, n=25, mu0=3.0, sd=1.1, alt="greater"
 )
 print(label, "stat:", stat, "p:", p, "reject:", reject)
+
+# 같은 자료를 sigma=1.1을 안다고 가정하고 z-검정으로도 해 본다.
+stat_z, p_z, reject_z, label_z = test_mean_one_sample(
+    xbar=3.2, n=25, mu0=3.0, known_sigma=1.1, alt="greater"
+)
+print(label_z, "stat:", stat_z, "p:", p_z, "reject:", reject_z)
 ```
+
+출력:
+
+```
+t-test (df=24) stat: 0.9090909090909097 p: 0.18617076763866547 reject: False
+z-test stat: 0.9090909090909097 p: 0.18165107044344886 reject: False
+```
+
+통계량은 같고 p-값만 다르다. 산포로 넣은 숫자가 1.1로 같으니 분자와 분모가 같을 수밖에 없고, 달라지는 것은 그 통계량을 어느 분포에 견주느냐뿐이다. $t_{24}$가 정규분포보다 꼬리가 두꺼워 같은 통계량에 더 큰 p-값을 준다. $\sigma$를 모른다는 사실의 값이 여기서는 0.0045만큼이다.
 
 ### 해석
 

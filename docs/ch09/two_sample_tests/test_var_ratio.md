@@ -28,10 +28,16 @@ from scipy.stats import f
 
 def test_ratio_two_variances(n1, s1, n2, s2, theta0=1.0,
                               alt="two-sided", alpha=0.05):
+    """H0: sigma1^2 / sigma2^2 = theta0. **정규모집단**을 가정한다.
+
+    F-검정은 정규성에서 벗어나는 데 특히 약하다. 꼬리가 조금만 두꺼워도
+    제1종 오류율이 크게 부풀기 때문에, 실무에서 등분산 사전검정으로 쓰는 것은
+    권장되지 않는다(그냥 Welch를 쓰는 편이 낫다).
+    s1, s2에는 ddof=1로 계산한 표본표준편차를 넣는다.
     """
-    H0: sigma1^2 / sigma2^2 = theta0 (Normal populations).
-    Provide s1, s2 = sample std (ddof=1). Returns (F, p, reject).
-    """
+    # 자유도의 **순서**가 중요하다. 분자 쪽이 df1이다.
+    # s1과 s2를 바꿔 넣으면 자유도도 함께 바꿔야 하며, 그러지 않으면
+    # 오류 없이 조용히 틀린 p-값이 나온다.
     df1, df2 = n1 - 1, n2 - 1
     F_stat = (s1 ** 2 / s2 ** 2) / theta0
     if alt == "two-sided":
@@ -51,7 +57,25 @@ F_stat, p, reject = test_ratio_two_variances(
     n1=15, s1=1.3, n2=12, s2=0.9, theta0=1.0, alt="greater"
 )
 print("F:", F_stat, "p:", p, "reject:", reject)
+
+# 두 집단의 역할을 바꾸면 F는 역수가 되고 대립가설의 방향도 뒤집힌다.
+# 제대로 바꾸면 p-값은 같아야 한다.
+F2, p2, reject2 = test_ratio_two_variances(
+    n1=12, s1=0.9, n2=15, s2=1.3, theta0=1.0, alt="less"
+)
+print("F:", F2, "p:", p2, "reject:", reject2)
 ```
+
+출력:
+
+```
+F: 2.0864197530864197 p: 0.11291422151817565 reject: False
+F: 0.47928994082840237 p: 0.11291422151817561 reject: False
+```
+
+표준편차가 1.3과 0.9로 1.4배 차이, 분산으로는 두 배가 넘는데도 기각하지 못한다. $n = 15$와 $12$로는 분산비를 가려낼 힘이 없다.
+
+두 번째 줄은 집단의 순서를 바꾼 것으로, $F$가 정확히 역수($1/2.086 = 0.479$)가 되고 p-값도 (부동소수점 끝자리를 빼면) 같다. 순서를 바꿀 때 자유도와 대립가설의 방향까지 함께 바꿔야 이렇게 일치한다.
 
 ### 해석
 

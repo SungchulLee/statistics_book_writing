@@ -31,14 +31,18 @@ $$
 from scipy.stats import chi2
 
 def test_variance_one_sample(n, s2, sigma0, alt="two-sided", alpha=0.05):
-    """
-    H0: sigma^2 = sigma0^2 (Normal population assumed).
-    Provide s2 = sample variance (ddof=1).
-    Returns (chi2_stat, pvalue, reject_bool).
+    """H0: sigma^2 = sigma0^2. **정규모집단**을 가정한다.
+
+    이 가정은 형식적인 단서가 아니다. 평균 검정과 달리 여기서는
+    중심극한정리가 도와주지 않아서 n을 키워도 비정규성이 상쇄되지 않는다.
+    s2에는 ddof=1로 계산한 표본분산을 넣는다.
     """
     df = n - 1
     chi2_stat = df * s2 / (sigma0 ** 2)
     if alt == "two-sided":
+        # 카이제곱분포는 비대칭이라 "양쪽 꼬리"를 나누는 방식이 여럿이다.
+        # 여기서는 작은 쪽 꼬리를 두 배 하는 관례를 따랐다. 간단하고
+        # 신뢰구간과 어긋나지 않지만, 확률이 반씩 나뉘지는 않는다.
         p = 2 * min(chi2.cdf(chi2_stat, df), 1 - chi2.cdf(chi2_stat, df))
     elif alt == "less":
         p = chi2.cdf(chi2_stat, df)
@@ -54,7 +58,23 @@ stat, p, reject = test_variance_one_sample(
     n=12, s2=2.1**2, sigma0=2.0, alt="greater"
 )
 print("chi2:", stat, "p:", p, "reject:", reject)
+
+# 표본분산은 그대로 두고 표본크기만 키우면 어떻게 되는지 본다.
+for n in [12, 50, 200]:
+    st, pv, rj = test_variance_one_sample(n=n, s2=2.1**2, sigma0=2.0, alt="greater")
+    print(f"n={n:>4}: chi2={st:8.2f}  p={pv:.4f}  reject={rj}")
 ```
+
+출력:
+
+```
+chi2: 12.127500000000001 p: 0.35413619761553705 reject: False
+n=  12: chi2=   12.13  p=0.3541  reject=False
+n=  50: chi2=   54.02  p=0.2885  reject=False
+n= 200: chi2=  219.40  p=0.1532  reject=False
+```
+
+표준편차가 2.0이 아니라 2.1이라는 같은 증거를 놓고도 $n = 12$에서는 $p = 0.35$, $n = 200$에서도 $p = 0.15$다. 분산에서 5% 차이를 잡아내려면 이보다도 훨씬 큰 표본이 필요하다. 분산은 평균보다 추정하기 어렵고, 그래서 검정하기도 어렵다.
 
 ### 해석
 

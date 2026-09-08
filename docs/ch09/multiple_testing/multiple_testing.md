@@ -62,15 +62,26 @@ print(f"Sample mean: {data.mean():.4f}")
 print(f"Sample std:  {data.std(ddof=1):.4f}")
 ```
 
+출력:
+
+```
+Sample size: 100
+Sample mean: -0.1038
+Sample std:  0.9082
+```
+
+아래 예제에서 쓸 시드를 여기서 고정한다.
+
 ### `statsmodels`로 보정 적용하기
 
 ```python
 from statsmodels.stats.multitest import multipletests
 
-# Suppose we have m p-values from m independent tests
+# 독립인 검정 m개에서 p-값 m개를 얻었다고 하자.
+# H0가 참이면 p-값은 [0,1] 균등분포를 따른다. 이것이 p-값의 정의에서 곧바로 나온다.
 m = 50
 p_values = np.random.uniform(0, 1, m)
-# Inject some true signals
+# 앞의 5개는 진짜 신호로 바꾼다. 즉 참 상황은 "45개는 귀무, 5개는 대립"이다.
 p_values[:5] = np.random.uniform(0, 0.005, 5)
 
 # Bonferroni
@@ -82,12 +93,31 @@ _, p_holm, _, _ = multipletests(p_values, method="holm")
 # Benjamini-Hochberg
 _, p_bh, _, _ = multipletests(p_values, method="fdr_bh")
 
+# multipletests는 문턱을 낮추는 대신 **p-값을 키워** 돌려준다.
+# 그래서 보정 후에도 비교 대상은 여전히 alpha다.
 alpha = 0.05
 print(f"Rejections (uncorrected): {np.sum(p_values < alpha)}")
 print(f"Rejections (Bonferroni):  {np.sum(p_bonf < alpha)}")
 print(f"Rejections (Holm):        {np.sum(p_holm < alpha)}")
 print(f"Rejections (BH):          {np.sum(p_bh < alpha)}")
 ```
+
+출력:
+
+```
+Rejections (uncorrected): 8
+Rejections (Bonferroni):  1
+Rejections (Holm):        1
+Rejections (BH):          5
+```
+
+참 신호가 5개인 상황에서 각 방법이 어떻게 다른지 한눈에 보인다.
+
+- **보정 없음**은 8개를 기각한다. 신호 5개에 거짓 양성 3개가 섞였다. 귀무가 참인 45개 중 5%인 약 2.25개가 우연히 걸리리라 예상되고, 실제로 3개가 걸렸다.
+- **Bonferroni**와 **Holm**은 1개만 기각한다. 거짓 양성은 없지만 진짜 신호 5개 중 4개를 놓쳤다. 문턱이 $0.05/50 = 0.001$까지 내려간 대가다.
+- **BH**는 정확히 5개를 기각한다. 이 예에서는 진짜 신호 5개와 정확히 일치한다.
+
+Bonferroni가 "안전하다"는 것은 거짓 양성을 막는다는 뜻일 뿐, 놓치는 것에 대해서는 아무 보호도 해 주지 않는다. 검정이 수천 개인 유전체 연구 같은 상황에서 BH를 기본으로 쓰는 이유가 여기 있다.
 
 ### 해석
 

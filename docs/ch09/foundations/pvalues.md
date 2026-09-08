@@ -200,11 +200,19 @@ p-값과 미리 정한 유의수준에 따라 다음과 같이 판정한다:
     p0, n, x_obs = 0.06, 25, 5
     n_sim = 10_000
     samples = rng.binomial(n, p0, size=n_sim)
+    # p-값의 정의를 그대로 코드로 옮긴 것이다.
+    # "H0가 참일 때 관측값 이상이 나오는 비율"을 세면 된다.
     p_value = (samples >= x_obs).mean()
     print(f"Simulated p-value: {p_value:.4f}")
     ```
 
-    예상: 정확한 이항 계산과 일치하는 $p \approx 0.015$.
+    출력:
+
+    ```
+    Simulated p-value: 0.0158
+    ```
+
+    정확한 이항 계산은 $P(X \ge 5 \mid n = 25,\, p = 0.06) = 0.01505$이다. 모의실험이 0.0158을 주었고, 이 추정값의 표준오차가 $\sqrt{0.015 \times 0.985/10000} \approx 0.0012$이므로 차이는 오차 범위 안이다.
 
     **모의실험의 장점:**
 

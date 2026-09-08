@@ -35,30 +35,51 @@ import numpy as np
 from scipy import stats
 
 def power_ttest(n, delta, sigma=1.0, alpha=0.05):
-    """Compute power of a two-sided two-sample t-test."""
+    """양측 이표본 t-검정의 검정력 (정규근사)."""
+    # 두 집단의 차이라 분산이 두 번 들어간다. 그래서 sqrt(2/n)이다.
     se = sigma * np.sqrt(2 / n)
     z_crit = stats.norm.ppf(1 - alpha / 2)
     z_effect = delta / se
+    # 두 꼬리를 모두 세는 것이 정확하다. 두 번째 항은 참 효과가 양수인데도
+    # 통계량이 반대쪽 꼬리로 넘어가 기각되는 경우이며, 보통 무시할 만큼 작다.
     power = (1 - stats.norm.cdf(z_crit - z_effect)
              + stats.norm.cdf(-z_crit - z_effect))
     return power
+
+for n in [20, 50, 100]:
+    print(f"n={n:>4} per group: power = {power_ttest(n, delta=0.5):.4f}")
 ```
+
+출력:
+
+```
+n=  20 per group: power = 0.3526
+n=  50 per group: power = 0.7054
+n= 100 per group: power = 0.9424
+```
+
+$d = 0.5$에서 집단당 20명이면 검정력이 0.35에 불과하다. 실제로 효과가 있어도 세 번 중 두 번은 놓친다. 이 값이 정규근사라 $t$-분포를 쓰는 statsmodels의 결과보다 조금 낙관적이라는 점도 염두에 두라. 실제 검정력은 이보다 약간 낮다.
 
 ### 필요한 표본크기
 
 ```python
 def sample_size_ttest(delta, sigma=1.0, alpha=0.05, power=0.80):
-    """Compute minimum n per group for a two-sample t-test."""
+    """이표본 t-검정의 집단당 최소 표본크기."""
     z_alpha = stats.norm.ppf(1 - alpha / 2)
     z_beta = stats.norm.ppf(power)
+    # 앞의 계수 2가 "두 집단"의 대가다. 일표본 공식과 여기서 갈린다.
     n = 2 * ((z_alpha + z_beta) * sigma / delta) ** 2
     return int(np.ceil(n))
 
 def sample_size_proportion(p1, p2, alpha=0.05, power=0.80):
-    """Compute minimum n per group for a two-proportion z-test."""
+    """이표본 비율검정의 집단당 최소 표본크기."""
     p_bar = (p1 + p2) / 2
     z_alpha = stats.norm.ppf(1 - alpha / 2)
     z_beta = stats.norm.ppf(power)
+    # 두 항의 제곱근 안이 서로 다르다는 점이 핵심이다.
+    #   z_alpha 쪽: H0("두 비율이 같다") 아래의 분산이므로 합동비율 p_bar를 쓴다.
+    #   z_beta  쪽: H1 아래의 분산이므로 p1과 p2를 각각 쓴다.
+    # 검정력 계산은 두 가설 아래의 분포를 동시에 다루므로 이렇게 섞인다.
     numer = (z_alpha * np.sqrt(2 * p_bar * (1 - p_bar))
              + z_beta * np.sqrt(p1 * (1 - p1) + p2 * (1 - p2))) ** 2
     n = numer / (p1 - p2) ** 2
@@ -68,16 +89,25 @@ def sample_size_proportion(p1, p2, alpha=0.05, power=0.80):
 ### 계산 예시
 
 ```python
-# Two-sample t-test: medium effect size (Cohen's d = 0.5)
+# 이표본 t-검정: 중간 크기 효과 (Cohen's d = 0.5)
 delta = 0.5
 n_req = sample_size_ttest(delta, sigma=1.0, alpha=0.05, power=0.80)
-print(f"Required n per group: {n_req}")  # ~64
+print(f"Required n per group: {n_req}")
 
-# Proportion test (A/B test)
+# 비율 검정 (A/B 검정): 전환율 1.10% -> 1.21%, 즉 10% 상대 개선
 p1, p2 = 0.0121, 0.011
 n_prop = sample_size_proportion(p1, p2, alpha=0.05, power=0.80)
 print(f"Required n per group: {n_prop:,}")
 ```
+
+출력:
+
+```
+Required n per group: 63
+Required n per group: 148,111
+```
+
+두 줄의 차이가 2,000배가 넘는다. 비율 쪽이 이렇게 커지는 이유는 두 가지가 겹쳐서다. 절대차가 0.0011로 아주 작고, 기저율 1.1%가 낮아 신호 대비 잡음이 나쁘다. 전환율을 10% 상대 개선하는 실험을 하려면 집단당 15만 명, 합쳐서 30만 명의 방문자가 필요하다는 뜻이다.
 
 ### 검정력 곡선
 
@@ -98,6 +128,12 @@ ax.legend()
 plt.tight_layout()
 plt.show()
 ```
+
+![Power Curves for Two-Sample t-Test](./img/power_analysis_114.png)
+
+세 곡선이 회색 기준선(검정력 0.80)을 지나는 지점이 각 효과크기에 필요한 표본크기다. $d = 0.8$은 26 언저리에서, $d = 0.5$는 63에서, $d = 0.2$는 그래프 오른쪽 끝 근처인 393에서 지난다.
+
+곡선의 모양도 읽어 둘 만하다. 검정력 0.9를 넘어서면 곡선이 거의 평평해진다. 그 구간에서는 표본을 더 모아도 얻는 것이 거의 없다. 반대로 $d = 0.2$ 곡선의 왼쪽 절반처럼 가파른 구간에서는 표본을 조금만 늘려도 검정력이 크게 오른다.
 
 ### 해석
 
@@ -202,7 +238,11 @@ $$
     plt.show()
     ```
 
-    그림을 보면 효과크기가 클수록 필요한 피험자가 적고, 곡선이 S자 모양으로 목표 검정력에 이르는 표본크기 근처에서 가파르게 올라간다. $\square$
+    ![Power Curves (One-Sample t-Test)](./img/power_analysis_219.png)
+
+    효과크기가 클수록 필요한 피험자가 적고, 곡선이 S자 모양으로 올라간다. 가파른 구간과 평평한 구간의 경계가 대략 검정력 0.9 근처다.
+
+    앞의 이표본 곡선과 비교해 보라. 같은 $d$에서 일표본 쪽이 훨씬 왼쪽에 있다. $d = 0.5$에 일표본은 34명, 이표본은 집단당 64명(합계 128명)이 필요하다. 대응설계로 이표본 문제를 일표본 문제로 바꿀 수 있다면 그만큼 큰 이득이다. $\square$
 
 ---
 

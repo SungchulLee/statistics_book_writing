@@ -42,12 +42,22 @@ n_f, n_s = 100, 100
 x_bar_f, x_bar_s = 1.85, 1.65
 s_f, s_s = 1.3, 1.2
 
+# n이 각각 100이라 크므로 sigma 자리에 표본표준편차를 넣고 z를 쓴다.
 statistic = (x_bar_f - x_bar_s) / np.sqrt(s_f**2/n_f + s_s**2/n_s)
 p_value = stats.norm().sf(abs(statistic)) * 2
 
 print(f"statistic : {statistic:.4f}")
 print(f"p value   : {p_value:.4f}")
 ```
+
+출력:
+
+```
+statistic : 1.1305
+p value   : 0.2583
+```
+
+출생아 수 평균이 1.85와 1.65로 0.2 차이지만 개인차(표준편차 1.3, 1.2)가 커서 기각하지 못한다.
 
 ---
 
@@ -106,10 +116,12 @@ X_1_bar, X_2_bar = 1.3, 1.6
 s_1, s_2 = 0.5, 0.3
 n_1, n_2 = 22, 24
 
-# Welch's approach (unequal variances)
+# 표준편차가 0.5와 0.3으로 다르므로 합동하지 않고 Welch를 쓴다.
 statistic = (X_1_bar - X_2_bar) / np.sqrt(s_1**2 / n_1 + s_2**2 / n_2)
 
-# Welch-Satterthwaite degrees of freedom
+# Welch-Satterthwaite 자유도.
+# 분모에 n_i가 아니라 **n_i - 1**이 들어간다는 점에 주의하라.
+# n으로 잘못 쓰면 자유도가 부풀어 기각하기 쉬워진다.
 top = (s_1**2 / n_1 + s_2**2 / n_2)**2
 bottom = (s_1**2 / n_1)**2 / (n_1 - 1) + (s_2**2 / n_2)**2 / (n_2 - 1)
 df = top / bottom
@@ -126,6 +138,17 @@ else:
     print("Fail to reject H_0")
 ```
 
+출력:
+
+```
+df = 33.7874
+statistic = -2.4403
+p_value   = 0.0201
+Reject H_0
+```
+
+자유도가 33.79로 정수가 아니다. Welch 자유도는 근사값이라 정수일 이유가 없다. 합동 검정이었다면 $n_1 + n_2 - 2 = 44$였을 것이고, 분산이 달라 정보량을 보수적으로 잡은 결과가 이 차이다.
+
 #### 예제: 출생아 수 (France 대 Switzerland)
 
 | | France | Switzerland |
@@ -141,6 +164,8 @@ X_1_bar, X_2_bar = 1.85, 1.65
 s_1, s_2 = 1.3, 1.2
 n_1, n_2 = 100, 100
 
+# 합동분산은 두 표본분산을 자유도로 가중평균한 것이다.
+# 여기서는 n이 같아 단순 평균과 같아진다.
 s_p_square = ((n_1 - 1) * s_1**2 + (n_2 - 1) * s_2**2) / (n_1 + n_2 - 2)
 statistic = (X_1_bar - X_2_bar) / np.sqrt(s_p_square / n_1 + s_p_square / n_2)
 df = n_1 + n_2 - 2
@@ -150,6 +175,16 @@ print(f"{df = :.4f}")
 print(f"{statistic = :.4f}")
 print(f"{p_value   = :.4f}")
 ```
+
+출력:
+
+```
+df = 198.0000
+statistic = 1.1305
+p_value   = 0.2596
+```
+
+같은 자료의 앞선 $z$-검정과 통계량이 1.1305로 정확히 같고 p-값만 0.2583에서 0.2596으로 바뀌었다. 자유도 198이면 $t$가 정규분포와 거의 구별되지 않기 때문이다.
 
 #### 예제: 두 품종의 배 (Bosc와 Anjou)
 
@@ -191,6 +226,7 @@ team_a = [120, 118, 125, 130, 115, 122, 121, 119, 117, 123, 124, 126, 127, 118, 
 team_b = [135, 132, 137, 140, 136, 130, 134, 138, 139, 133, 131, 142, 141,
            129, 128, 135, 137, 136, 134, 132]
 
+# 표본크기가 15와 20으로 다르다. 이런 상황이 Welch를 쓸 이유다.
 stat, p_value = ttest_ind(team_a, team_b, equal_var=False)
 print(f"Test Statistic: {stat:.4f}")
 print(f"P-value: {p_value:.4f}")
@@ -201,6 +237,16 @@ if p_value < alpha:
 else:
     print("Fail to reject H0.")
 ```
+
+출력:
+
+```
+Test Statistic: -9.4407
+P-value: 0.0000
+Reject H0: The means are significantly different.
+```
+
+두 팀의 평균이 121.4와 135.0으로 13.6 차이인데 팀 안의 산포는 표준편차 4 남짓이라 $t$가 $-9.44$까지 간다. 집단 간 차이가 집단 안 산포보다 훨씬 크면 표본이 작아도 분명하게 갈린다.
 
 ### 표준 이표본 t-검정과의 비교
 
@@ -253,6 +299,8 @@ positive_A, positive_B = 58, 52
 n_A, n_B = 100, 100
 p_hat_A, p_hat_B = positive_A / n_A, positive_B / n_B
 
+# H0가 "두 비율이 같다"이므로 그 공통값을 전체를 합쳐 추정한다.
+# 신뢰구간을 만들 때는 이렇게 합동하지 않는다. 목적이 다르기 때문이다.
 p_pooled = (positive_A + positive_B) / (n_A + n_B)
 statistic = (p_hat_A - p_hat_B) / (np.sqrt(p_pooled * (1 - p_pooled)) * np.sqrt(1/n_A + 1/n_B))
 p_value = stats.norm().sf(abs(statistic)) * 2
@@ -266,6 +314,16 @@ if p_value <= alpha:
 else:
     print("Fail to reject H_0")
 ```
+
+출력:
+
+```
+statistic = 0.8528
+p_value = 0.3938
+Fail to reject H_0
+```
+
+지지율이 58%와 52%로 6%p 차이인데도 기각하지 못한다. 지구당 100명으로는 이 정도 차이를 가려낼 수 없다. 비율의 차이를 검정하려면 평균의 차이보다 훨씬 큰 표본이 필요하다.
 
 #### 예제: Derrick의 지지율
 
@@ -292,6 +350,7 @@ p_hat_2000, p_hat_2015 = positive_2000 / n_2000, positive_2015 / n_2015
 
 p_pooled = (positive_2000 + positive_2015) / (n_2000 + n_2015)
 statistic = (p_hat_2000 - p_hat_2015) / (np.sqrt(p_pooled * (1 - p_pooled)) * np.sqrt(1/n_2000 + 1/n_2015))
+# H1이 p_2000 < p_2015 이므로 왼쪽 꼬리를 센다.
 p_value = stats.norm().cdf(statistic)
 
 print(f"{statistic = :.4f}")
@@ -304,6 +363,18 @@ else:
     print("Fail to reject H_0")
 ```
 
+출력:
+
+```
+statistic = -1.6137
+p_value = 0.0533
+Fail to reject H_0
+```
+
+$p = 0.0533$으로 0.05를 아슬아슬하게 넘겨 기각하지 못한다. 유병률이 33%에서 38%로 5%p 늘었지만 표본 1,000명으로는 부족하다.
+
+이런 경계 사례를 "효과가 없다"로 읽으면 안 된다. 0.0533과 0.0467 사이에 실질적인 차이는 없다. 기각 여부라는 이분법 대신 신뢰구간과 효과크기를 함께 보고하는 편이 낫다.
+
 #### 예제: 고양이 질병
 
 수의사들이 수컷 고양이 259마리 중 24마리, 암컷 241마리 중 14마리가 이환된 자료로 $H_0: p_{\text{male}} = p_{\text{female}}$ 대 $H_1: p_{\text{male}} > p_{\text{female}}$을 검정한다.
@@ -315,11 +386,20 @@ p_hat_male, p_hat_female = positive_male / n_male, positive_female / n_female
 
 p_pooled = (positive_male + positive_female) / (n_male + n_female)
 statistic = (p_hat_male - p_hat_female) / (np.sqrt(p_pooled * (1 - p_pooled)) * np.sqrt(1/n_male + 1/n_female))
-p_value = stats.norm().sf(statistic)
+p_value = stats.norm().sf(statistic)      # H1: p_male > p_female 이므로 오른쪽 꼬리
 
 print(f"{statistic = :.4f}")
 print(f"{p_value = :.4f}")
 ```
+
+출력:
+
+```
+statistic = 1.4577
+p_value = 0.0725
+```
+
+이환율이 9.3%와 5.8%로 수컷 쪽이 1.6배 높지만 $p = 0.0725$로 기각하지 못한다. 이환된 개체가 24마리와 14마리뿐이라, 500마리를 조사했어도 비교의 정밀도를 좌우하는 것은 전체 개체 수가 아니라 이 사건 수다.
 
 #### 예제: 대면 수업과 온라인 수업
 

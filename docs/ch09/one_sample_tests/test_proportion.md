@@ -29,15 +29,19 @@ import math
 
 def test_prop_one_sample(k, n, p0=0.5, method="wald",
                          alt="two-sided", alpha=0.05):
-    """
-    method='wald' (normal approx) or 'exact' (binomial).
-    Returns (stat_or_None, pvalue, reject_bool, label).
+    """method='wald'(정규근사) 또는 'exact'(이항).
+
+    정확검정에는 검정통계량이 따로 없다. 이항분포에서 꼬리확률을
+    바로 더하므로 표준화할 대상이 없기 때문이다. 그래서 None을 돌려준다.
     """
     phat = k / n
     if method == "exact":
         p = binomtest(k, n, p0, alternative=alt).pvalue
         return None, p, (p < alpha), "exact binomial"
 
+    # 표준오차에 phat이 아니라 **p0**을 넣는다.
+    # H0가 참이라는 가정 아래의 확률을 재는 것이 검정이기 때문이다.
+    # 신뢰구간에서는 phat을 넣었다. 목적이 다르면 대입하는 값도 다르다.
     se0 = math.sqrt(p0 * (1 - p0) / n)
     z = (phat - p0) / se0
     if alt == "two-sided":
@@ -56,7 +60,24 @@ stat, p, reject, label = test_prop_one_sample(
     k=12, n=50, p0=0.2, method="wald", alt="two-sided"
 )
 print(label, "stat:", stat, "p:", p, "reject:", reject)
+
+# 같은 자료의 정확한 이항검정
+stat_e, p_e, reject_e, label_e = test_prop_one_sample(
+    k=12, n=50, p0=0.2, method="exact", alt="two-sided"
+)
+print(label_e, "stat:", stat_e, "p:", p_e, "reject:", reject_e)
 ```
+
+출력:
+
+```
+wald z-test stat: 0.7071067811865471 p: 0.4795001221869537 reject: False
+exact binomial stat: None p: 0.47974220659401984 reject: False
+```
+
+두 p-값이 0.4795와 0.4797로 거의 같다. $n p_0 = 10$과 $n(1-p_0) = 40$으로 정규근사의 경험칙을 만족하기 때문이다.
+
+이 일치를 일반적인 것으로 받아들이면 곤란하다. $k = 2$, $n = 10$, $p_0 = 0.5$처럼 표본이 작고 비율이 극단적인 경우로 바꿔 보면 Wald가 0.0578, 정확검정이 0.1094로 두 배 가까이 벌어진다. 5% 기준을 놓고 결론이 갈리는 자리다. 이항분포를 직접 쓸 수 있을 때는 정확검정 쪽이 안전하다.
 
 ### 해석
 

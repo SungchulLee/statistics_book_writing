@@ -18,22 +18,41 @@ $$
 import numpy as np
 from scipy import stats
 
-# Factory claims mean weight is 500g
+# 공장은 평균 무게가 500g이라고 주장한다.
 data = np.array([498, 495, 502, 497, 501, 499, 496, 503, 494, 500,
                  497, 502, 496, 501, 498, 499, 495, 503, 497, 500])
 mu_0 = 500
 alpha = 0.05
 
-# t-test (sigma unknown)
+# scipy의 ttest_1samp는 기본이 **양측**이고 p-값도 양측이다.
 t_stat, p_value = stats.ttest_1samp(data, mu_0)
 print(f"t = {t_stat:.4f}, p-value = {p_value:.4f}")
 print(f"Decision: {'Reject H0' if p_value < alpha else 'Fail to reject H0'}")
 ```
 
+출력:
+
+```
+t = -2.1739, p-value = 0.0426
+Decision: Reject H0
+```
+
+표본평균은 498.65로 주장값 500에서 1.35g 모자란다. 자료의 산포에 비하면 우연으로 보기 어려운 차이라 5% 수준에서 기각한다.
+
 **단측** 검정 $H_1\colon \mu < \mu_0$에서는 검정통계량이 대립가설 방향에 있을 때 양측 p-값을 2로 나눈다:
 
 ```python
+# 통계량이 대립가설 쪽(여기서는 음수)이면 양측 p-값을 반으로 나눈다.
+# 반대쪽이면 1에서 그 절반을 빼야 한다. 이 두 번째 경우를 빠뜨리면
+# 방향이 반대인 자료에 대해 0에 가까운 p-값을 보고하게 된다.
 p_one_sided = p_value / 2 if t_stat < 0 else 1 - p_value / 2
+print(f"one-sided p (H1: mu < 500) = {p_one_sided:.4f}")
+```
+
+출력:
+
+```
+one-sided p (H1: mu < 500) = 0.0213
 ```
 
 ### 직접 계산
@@ -43,8 +62,19 @@ n = len(data)
 xbar = data.mean()
 s = data.std(ddof=1)
 t_manual = (xbar - mu_0) / (s / np.sqrt(n))
+# 양측 p-값은 "관측된 것만큼 극단적인" 확률이므로 한쪽 꼬리를 두 배 한다.
+# -abs(t)를 넣어 왼쪽 꼬리를 재면 t의 부호와 무관하게 같은 식이 쓰인다.
 p_manual = 2 * stats.t.cdf(-abs(t_manual), df=n - 1)
+print(f"t = {t_manual:.4f}, p = {p_manual:.4f}")
 ```
+
+출력:
+
+```
+t = -2.1739, p = 0.0426
+```
+
+scipy가 돌려준 값과 소수점 아래까지 같다.
 
 ## 비율에 대한 일표본 검정
 
@@ -57,16 +87,31 @@ $$
 ```python
 from statsmodels.stats.proportion import proportions_ztest
 
-x, n = 12, 200  # 12 defectives in 200
+x, n = 12, 200  # 200개 중 불량 12개
 p_0 = 0.05
 p_hat = x / n
 
+# 표준오차에 p_hat이 아니라 **p_0**을 넣는다.
+# 검정은 "H0가 참이라면"이라는 가정 아래에서의 확률을 재기 때문이다.
+# 신뢰구간에서 p_hat을 넣었던 것과 여기서 갈린다.
 z_stat = (p_hat - p_0) / np.sqrt(p_0 * (1 - p_0) / n)
 p_value = 2 * stats.norm.sf(abs(z_stat))
+print(f"수동:        z = {z_stat:.4f}, p = {p_value:.4f}")
 
-# Or using statsmodels
+# statsmodels는 기본적으로 p_hat 기반 표준오차를 쓴다(prop_var로 바꿀 수 있다).
+# 그래서 같은 자료에서도 z가 조금 다르게 나온다.
 z_sm, p_sm = proportions_ztest(x, n, value=p_0)
+print(f"statsmodels: z = {z_sm:.4f}, p = {p_sm:.4f}")
 ```
+
+출력:
+
+```
+수동:        z = 0.6489, p = 0.5164
+statsmodels: z = 0.5955, p = 0.5515
+```
+
+두 결과가 다르다는 점이 중요하다. `proportions_ztest`는 표준오차를 $\hat p$로 계산하는 반면 위의 수동 계산은 $p_0$을 쓴다. 어느 쪽도 틀린 것은 아니지만, 교과서의 공식은 대개 $p_0$ 쪽이다. 어느 규약을 쓰는지 모르고 결과만 옮기면 보고한 z가 재현되지 않는다.
 
 ## 이표본 t-검정
 
@@ -82,12 +127,22 @@ $$
 drug_a = np.array([5.2, 4.8, 6.1, 5.5, 4.9, 5.7, 5.3, 6.0, 5.1, 5.4])
 drug_b = np.array([4.1, 3.8, 4.5, 4.2, 3.9, 4.6, 4.0, 4.3, 3.7, 4.4])
 
-# Welch's t-test (default: unequal variances)
+# scipy의 기본값은 equal_var=True(합동)이다. Welch를 쓰려면 명시해야 한다.
+# 기본값을 그대로 두고 "Welch를 썼다"고 적는 실수가 흔하다.
 t_welch, p_welch = stats.ttest_ind(drug_a, drug_b, equal_var=False)
-
-# Pooled t-test (equal variances assumed)
 t_pooled, p_pooled = stats.ttest_ind(drug_a, drug_b, equal_var=True)
+print(f"Welch:  t = {t_welch:.4f}, p = {p_welch:.6f}")
+print(f"Pooled: t = {t_pooled:.4f}, p = {p_pooled:.6f}")
 ```
+
+출력:
+
+```
+Welch:  t = 7.4628, p = 0.000001
+Pooled: t = 7.4628, p = 0.000001
+```
+
+$n_1 = n_2$이고 두 표본의 분산이 비슷하면 두 방법이 사실상 같은 답을 준다. 통계량은 아예 같고 자유도만 18과 17.8로 조금 다르다. 표본크기가 다르고 분산도 다를 때 비로소 둘이 갈라진다.
 
 ## 대응 t-검정
 
@@ -102,11 +157,29 @@ before = np.array([145, 150, 138, 155, 142, 148, 136, 152, 140, 146])
 after  = np.array([138, 142, 130, 148, 135, 140, 132, 145, 134, 139])
 
 t_stat, p_value = stats.ttest_rel(after, before)
+print(f"ttest_rel:   t = {t_stat:.4f}, p = {p_value:.8f}")
 
-# Equivalent to one-sample t-test on the differences
+# 대응검정은 차이에 대한 일표본 검정과 **같은 것**이다. 별개의 방법이 아니다.
 diff = after - before
 t_stat2, p_value2 = stats.ttest_1samp(diff, 0)
+print(f"ttest_1samp: t = {t_stat2:.4f}, p = {p_value2:.8f}")
+
+# 짝을 무시하고 독립 이표본으로 다루면 어떻게 되는지 비교해 본다.
+t_ind, p_ind = stats.ttest_ind(after, before)
+print(f"ttest_ind:   t = {t_ind:.4f}, p = {p_ind:.8f}")
 ```
+
+출력:
+
+```
+ttest_rel:   t = -18.2253, p = 0.00000002
+ttest_1samp: t = -18.2253, p = 0.00000002
+ttest_ind:   t = -2.5841, p = 0.01871524
+```
+
+앞의 두 줄이 완전히 같다. 대응 $t$-검정은 별개의 방법이 아니라 차이에 대한 일표본 검정 그 자체다.
+
+세 번째 줄이 이 예제의 핵심이다. 같은 자료를 짝만 무시하고 분석하면 $t$가 $-18.2$에서 $-2.6$으로, $p$가 $2 \times 10^{-8}$에서 0.019로 뛴다. 사람마다 혈압 수준이 136에서 155까지 흩어져 있어 그 개인차가 처리 효과를 덮어 버리기 때문이다. 여기서는 두 검정 모두 5% 수준에서 기각하지만, 효과가 조금만 작았다면 짝을 무시한 쪽은 놓쳤을 것이다.
 
 ## 검정력 분석
 
@@ -119,17 +192,30 @@ $$
 ```python
 from statsmodels.stats.power import TTestPower, TTestIndPower
 
-# One-sample: detect a 5-point difference with sigma=15
+# 일표본: sigma=15에서 5점 차이를 탐지하려 한다.
+# 검정력 계산에 들어가는 것은 delta도 sigma도 아니고 그 비(효과크기)뿐이다.
 analysis = TTestPower()
 effect_size = 5 / 15  # Cohen's d
 n_needed = analysis.solve_power(effect_size=effect_size, alpha=0.05,
                                  power=0.80, alternative='two-sided')
+print(f"one-sample n = {n_needed:.1f}")
 
-# Two-sample: medium effect size
+# 이표본: 중간 크기 효과(d=0.5). ratio는 두 집단 크기의 비이고
+# 돌려주는 n_each는 **집단당** 표본크기다. 전체가 아니다.
 analysis2 = TTestIndPower()
 n_each = analysis2.solve_power(effect_size=0.5, alpha=0.05, power=0.80,
                                 ratio=1.0, alternative='two-sided')
+print(f"two-sample n per group = {n_each:.1f}")
 ```
+
+출력:
+
+```
+one-sample n = 72.6
+two-sample n per group = 63.8
+```
+
+올림하면 일표본은 73개, 이표본은 집단당 64개(합계 128개)다. 효과크기가 0.33에서 0.5로 **커졌는데도** 전체 표본이 더 필요하다. 이표본 문제에서는 평균을 두 개 추정해야 해서 차이의 표준오차가 그만큼 커지기 때문이다.
 
 ## 신뢰구간과 검정의 쌍대성
 
@@ -145,14 +231,35 @@ alpha = 0.05
 t_c = stats.t.ppf(1 - alpha / 2, df=n - 1)
 me = t_c * s / np.sqrt(n)
 ci = (xbar - me, xbar + me)
+print(f"95% CI = ({ci[0]:.4f}, {ci[1]:.4f})\n")
 
-# Test various mu_0 values
+# 여러 mu_0에 대해 검정을 반복하며 "기각 여부"와 "구간 포함 여부"를 나란히 본다.
+# 두 열이 언제나 정확히 반대여야 한다. 그것이 쌍대성이다.
+print(f"{'mu0':>5} {'p-value':>9} {'reject':>7} {'in CI':>6}")
 for mu0 in [48, 49, 50, 51, 52, 53]:
     t_stat, p_val = stats.ttest_1samp(data, mu0)
     in_ci = ci[0] <= mu0 <= ci[1]
     reject = p_val < alpha
-    # reject <=> mu0 NOT in CI
+    print(f"{mu0:>5} {p_val:>9.4f} {str(reject):>7} {str(in_ci):>6}")
 ```
+
+출력:
+
+```
+95% CI = (48.3341, 52.6659)
+
+  mu0   p-value  reject  in CI
+   48    0.0282    True  False
+   49    0.1516   False   True
+   50    0.6141   False   True
+   51    0.6141   False   True
+   52    0.1516   False   True
+   53    0.0282    True  False
+```
+
+`reject` 열과 `in CI` 열이 여섯 줄 모두에서 정확히 반대다. 신뢰구간 $(48.33, 52.67)$ 밖에 있는 48과 53만 기각된다.
+
+p-값이 구간의 중심 $\bar x = 50.5$를 기준으로 대칭인 것도 눈여겨볼 만하다. 49와 52가 둘 다 0.1516, 48과 53이 둘 다 0.0282다. 두 값이 $\bar x$에서 같은 거리에 있기 때문이다. 신뢰구간은 이런 검정들을 $\mu_0$에 대해 전부 돌려 놓고 기각되지 않는 값만 모아 놓은 것과 같다.
 
 ### 해석
 

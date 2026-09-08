@@ -39,18 +39,23 @@ from scipy.stats import t as tdist
 
 def test_diff_two_means(n1, m1, s1, n2, m2, s2, method="welch",
                         delta0=0.0, alt="two-sided", alpha=0.05):
-    """
-    H0: mu1 - mu2 = delta0.
-    method='welch' (default) or 'pooled'.
-    Returns (t, df, p, reject).
+    """H0: mu1 - mu2 = delta0.
+
+    delta0을 0이 아닌 값으로 둘 수 있게 해 두었다.
+    "차이가 있는가"가 아니라 "차이가 5 이상인가"를 묻는 동등성·비열등성
+    검정에서 이 자리가 쓰인다.
+    method='welch'(기본) 또는 'pooled'. 돌려주는 값은 (t, df, p, 기각 여부).
     """
     diff_hat = m1 - m2
     if method == "welch":
+        # 두 분산을 따로 둔 채 더한다. 합동하지 않는다.
         se = math.sqrt(s1**2 / n1 + s2**2 / n2)
         num = (s1**2 / n1 + s2**2 / n2) ** 2
         den = (s1**2 / n1)**2 / (n1 - 1) + (s2**2 / n2)**2 / (n2 - 1)
         df = num / den
     else:
+        # 합동: 두 분산이 같다고 보고 자유도로 가중평균한다.
+        # 이 가정이 틀리면 표준오차가 편향되고 t가 t분포를 따르지 않는다.
         df = n1 + n2 - 2
         sp2 = ((n1 - 1) * s1**2 + (n2 - 1) * s2**2) / df
         se = math.sqrt(sp2 * (1 / n1 + 1 / n2))
@@ -73,7 +78,25 @@ t, df, p, reject = test_diff_two_means(
     method="welch", alt="greater"
 )
 print("t:", t, "df:", df, "p:", p, "reject:", reject)
+
+# 같은 자료를 합동 t로도 해 본다. 자유도가 어떻게 달라지는지 보라.
+t_p, df_p, p_p, reject_p = test_diff_two_means(
+    n1=12, m1=0.0, s1=1.0, n2=10, m2=0.5, s2=1.5,
+    method="pooled", alt="greater"
+)
+print("t:", t_p, "df:", df_p, "p:", p_p, "reject:", reject_p)
 ```
+
+출력:
+
+```
+t: -0.9004503377814964 df: 15.195761856710394 p: 0.8090351110315042 reject: False
+t: -0.9341987329938274 df: 20 p: 0.8193278973550725 reject: False
+```
+
+Welch 자유도가 15.20으로 합동의 20보다 작다. 분산이 1.0과 1.5로 다르고 표본크기도 12와 10으로 달라서 생기는 차이다. 정보량을 더 보수적으로 잡는 쪽이 Welch다.
+
+p-값이 0.81로 1에 가깝다는 점도 읽어 두라. 자료가 대립가설과 **반대** 방향이기 때문이다. 단측검정에서 이런 p-값이 나오면 "증거가 약하다"가 아니라 "방향이 반대다"라는 뜻이다.
 
 ### 해석
 

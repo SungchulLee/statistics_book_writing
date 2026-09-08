@@ -36,18 +36,22 @@ from scipy.stats import norm
 
 def test_diff_two_props(k1, n1, k2, n2, delta0=0.0,
                         method="pooled", alt="two-sided", alpha=0.05):
-    """
-    H0: p1 - p2 = delta0.
-    When delta0=0 and method='pooled', uses pooled SE.
-    Returns (z, p, reject, label).
+    """H0: p1 - p2 = delta0.
+
+    delta0=0이고 method='pooled'이면 합동 표준오차를 쓴다.
+    돌려주는 값은 (z, p, 기각 여부, 이름).
     """
     p1, p2 = k1 / n1, k2 / n2
     d_hat = p1 - p2
     if delta0 == 0.0 and method == "pooled":
+        # H0가 "두 비율이 같다"이면 그 공통값의 최선의 추정은 전체를 합친 비율이다.
+        # 검정은 H0 아래의 분포를 쓰므로 여기서 합동하는 것이 옳다.
         p_pool = (k1 + k2) / (n1 + n2)
         se = math.sqrt(p_pool * (1 - p_pool) * (1 / n1 + 1 / n2))
         label = "pooled z-test"
     else:
+        # delta0이 0이 아니면 "두 비율이 같다"는 가정이 없으므로 합동할 수 없다.
+        # 신뢰구간에서 쓰는 것과 같은 표준오차다.
         se = math.sqrt(p1 * (1 - p1) / n1 + p2 * (1 - p2) / n2)
         label = "wald z-test"
 
@@ -68,7 +72,24 @@ z, p, reject, label = test_diff_two_props(
     k1=30, n1=80, k2=18, n2=60, delta0=0.0, method="pooled"
 )
 print(label, "z:", z, "p:", p, "reject:", reject)
+
+# 같은 자료를 합동하지 않은 Wald 표준오차로 계산하면 어떻게 다른가?
+z2, p2, reject2, label2 = test_diff_two_props(
+    k1=30, n1=80, k2=18, n2=60, delta0=0.0, method="wald"
+)
+print(label2, "z:", z2, "p:", p2, "reject:", reject2)
 ```
+
+출력:
+
+```
+pooled z-test z: 0.9251909321159419 p: 0.3548665994806586 reject: False
+wald z-test z: 0.9353331581027243 p: 0.3496166322568355 reject: False
+```
+
+$\hat p_1 = 0.375$, $\hat p_2 = 0.30$으로 7.5%p 차이지만 표본이 80명과 60명뿐이라 기각하지 못한다.
+
+두 방식의 z가 0.925와 0.935로 비슷하다. 두 비율이 0.375와 0.30으로 그리 멀지 않아 합동비율 0.343이 양쪽 모두를 그런대로 대신하기 때문이다. 두 비율이 크게 다르면 이 차이가 커진다. 신뢰구간을 만들 때는 합동하지 않은 쪽을 써야 하며, 그래서 "검정은 기각하지 않았는데 신뢰구간은 0을 아슬아슬하게 벗어난다" 같은 어긋남이 생길 수 있다.
 
 ### 해석
 

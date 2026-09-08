@@ -3,7 +3,7 @@
 !!! note "Welch 자유도 공식에 관한 정정"
     원 강의노트의 여러 코드 조각이 Welch-Satterthwaite 자유도를 다음처럼 계산했다.
 
-    ```python
+    ```
     bottom = (s_1**2/n_1)**2 / n_1 + (s_2**2/n_2)**2 / n_2      # 잘못됨
     ```
 
@@ -14,7 +14,32 @@
               {\frac{(s_1^2/n_1)^2}{n_1-1}+\frac{(s_2^2/n_2)^2}{n_2-1}}
     $$
 
-    표본이 크면 차이가 작지만($n_1=65$, $n_2=75$에서 $137.77$ 대 $135.84$), 작으면 무시할 수 없다. 아래 연습문제 4(전기차, $n_1=n_2=5$)에서는 $9.09$ 대 $7.27$로 **자유도가 25% 부풀려진다.** 이 책의 풀이는 모두 올바른 공식을 쓴다.
+    차이가 얼마나 되는지 두 경우로 확인해 보자.
+
+    ```python
+    def welch_df(s1, n1, s2, n2, wrong=False):
+        a, b = s1**2 / n1, s2**2 / n2
+        d1, d2 = (n1, n2) if wrong else (n1 - 1, n2 - 1)
+        return (a + b) ** 2 / (a**2 / d1 + b**2 / d2)
+
+    for label, (s1, n1, s2, n2) in [
+        ("큰 표본  (n=65, 75)", (18.2, 65, 23.9, 75)),
+        ("작은 표본 (n=5, 5)",  (5.4, 5, 7.5, 5)),
+    ]:
+        wrong = welch_df(s1, n1, s2, n2, wrong=True)
+        right = welch_df(s1, n1, s2, n2)
+        print(f"{label}: 잘못된 식 {wrong:7.2f}  올바른 식 {right:7.2f}  "
+              f"({100*(wrong/right - 1):+.1f}%)")
+    ```
+
+    출력:
+
+    ```
+    큰 표본  (n=65, 75): 잘못된 식  137.77  올바른 식  135.84  (+1.4%)
+    작은 표본 (n=5, 5): 잘못된 식    9.09  올바른 식    7.27  (+25.0%)
+    ```
+
+    표본이 크면 1.4% 차이에 그치지만, 아래 연습문제 4(전기차, $n_1 = n_2 = 5$)에서는 **자유도가 25% 부풀려진다.** 자유도가 부풀면 임계값이 작아져 기각하기 쉬워지므로, 작은 표본에서는 제1종 오류율이 명목값을 넘게 된다. 이 책의 풀이는 모두 올바른 공식을 쓴다.
 
 ## 개요
 
@@ -86,11 +111,11 @@ $$d = \frac{\bar{X}_1 - \bar{X}_2}{S_p}$$
 import numpy as np
 from scipy import stats
 
-# Session times in seconds
+# 체류시간(초)
 page_a = np.array([185, 188, 142, 160, 161, 157, 182, 181, 159, 167])
 page_b = np.array([173, 181, 182, 170, 169, 177, 168, 183, 169, 164])
 
-# Welch's t-test (default: equal_var=False)
+# scipy의 기본값은 equal_var=True(합동)이다. Welch를 쓰려면 반드시 명시해야 한다.
 t_stat, p_value = stats.ttest_ind(page_a, page_b, equal_var=False)
 
 print(f"Page A: mean = {page_a.mean():.2f}, std = {page_a.std(ddof=1):.2f}")
@@ -106,9 +131,26 @@ print(f"p-value (one-sided): {p_one_sided:.4f}")
 pooled_std = np.sqrt(((len(page_a) - 1) * page_a.std(ddof=1)**2 +
                        (len(page_b) - 1) * page_b.std(ddof=1)**2) /
                       (len(page_a) + len(page_b) - 2))
+# 효과크기는 표본크기와 무관하다. t는 n이 커지면 함께 커지지만 d는 그렇지 않다.
+# 그래서 "유의한가"와 "쓸모 있을 만큼 큰가"를 따로 말할 수 있다.
 cohens_d = (page_b.mean() - page_a.mean()) / pooled_std
 print(f"Cohen's d: {cohens_d:.3f}")
 ```
+
+출력:
+
+```
+Page A: mean = 168.20, std = 15.08
+Page B: mean = 173.60, std = 6.70
+t-statistic: -1.0350
+p-value (two-sided): 0.3204
+p-value (one-sided): 0.1602
+Cohen's d: 0.463
+```
+
+$p = 0.32$로 기각하지 못하지만 Cohen의 $d = 0.46$은 "작은~중간" 효과다. 효과가 없다는 뜻이 아니라 집단당 10명으로는 이 정도 효과를 가려낼 수 없다는 뜻이다. $d = 0.46$을 검정력 80%로 탐지하려면 집단당 75명 남짓이 필요하다.
+
+두 집단의 표준편차가 15.08과 6.70으로 두 배 넘게 차이 난다는 점도 눈여겨보라. 합동 $t$-검정이 가정하는 등분산과는 거리가 멀어서, 여기서 Welch를 쓴 것은 형식이 아니라 필요다.
 
 ## Python 구현
 
@@ -117,29 +159,59 @@ print(f"Cohen's d: {cohens_d:.3f}")
 ```python
 from scipy import stats
 
-# Welch's t-test (recommended)
-t_stat, p_value = stats.ttest_ind(group1, group2, equal_var=False)
+group1, group2 = page_a, page_b          # 위 예제의 자료를 그대로 쓴다
 
-# Pooled t-test
-t_stat, p_value = stats.ttest_ind(group1, group2, equal_var=True)
+# Welch t-검정 (권장). 등분산을 가정하지 않는다.
+t_welch, p_welch = stats.ttest_ind(group1, group2, equal_var=False)
 
-# One-sided tests
-if t_stat > 0:
-    p_one_sided = p_value / 2  # Upper tail
+# 합동 t-검정. 등분산을 가정한다.
+t_pooled, p_pooled = stats.ttest_ind(group1, group2, equal_var=True)
+
+print(f"Welch : t = {t_welch:.4f}, p = {p_welch:.4f}")
+print(f"Pooled: t = {t_pooled:.4f}, p = {p_pooled:.4f}")
+
+# 단측 p-값. 통계량의 부호에 따라 처리가 달라진다.
+if t_welch > 0:
+    p_one_sided = p_welch / 2
 else:
-    p_one_sided = 1 - p_value / 2  # Lower tail
+    p_one_sided = 1 - p_welch / 2
+print(f"one-sided (H1: mu1 > mu2): p = {p_one_sided:.4f}")
 ```
+
+출력:
+
+```
+Welch : t = -1.0350, p = 0.3204
+Pooled: t = -1.0350, p = 0.3144
+one-sided (H1: mu1 > mu2): p = 0.8398
+```
+
+$n_1 = n_2$이면 두 방법의 **통계량이 정확히 같다**. 표본크기가 같을 때 합동 표준오차와 Welch 표준오차가 대수적으로 일치하기 때문이다. 달라지는 것은 자유도뿐이고(18 대 12.42), 그래서 p-값만 조금 다르다.
+
+단측 p-값이 0.84로 나온 것도 읽어 둘 만하다. $t$가 음수인데 $H_1$을 $\mu_1 > \mu_2$로 잡았으니 자료가 대립가설과 반대 방향이고, 그럴 때 단측 p-값은 0.5보다 커진다.
+
+분산이 이렇게 다른데도 두 검정이 비슷한 답을 주는 것은 표본크기가 같기 때문이다. $n$까지 달랐다면 합동 검정이 크게 어긋났을 것이다.
 
 ### statsmodels 사용
 
 ```python
 import statsmodels.api as sm
 
-# Welch's t-test with more details
+# statsmodels는 자유도까지 함께 돌려준다. scipy는 그렇지 않다.
+# 결과를 보고할 때 자유도를 함께 적어야 하므로 이 점이 편하다.
 t_stat, p_value, df = sm.stats.ttest_ind(group1, group2,
                                          usevar='unequal',
                                          alternative='two-sided')
+print(f"t = {t_stat:.4f}, p = {p_value:.4f}, df = {df:.4f}")
 ```
+
+출력:
+
+```
+t = -1.0350, p = 0.3204, df = 12.4246
+```
+
+Welch 자유도가 12.42다. $n_1 + n_2 - 2 = 18$보다 눈에 띄게 작다. 한쪽 분산이 다른 쪽의 다섯 배라 실효 정보량이 그만큼 줄어든 것이다.
 
 ## 가정
 

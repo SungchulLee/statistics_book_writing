@@ -177,6 +177,8 @@ def two_proportion_z_test(x1, n1, x2, n2, alternative="two-sided"):
     """
     p1_hat = x1 / n1
     p2_hat = x2 / n2
+    # H0가 "두 비율이 같다"이므로 그 공통값을 전체를 합쳐 추정한다.
+    # 신뢰구간을 만들 때는 합동하지 않는다. 목적이 다르기 때문이다.
     p_hat = (x1 + x2) / (n1 + n2)
 
     se = np.sqrt(p_hat * (1 - p_hat) * (1 / n1 + 1 / n2))
@@ -194,10 +196,25 @@ def two_proportion_z_test(x1, n1, x2, n2, alternative="two-sided"):
     return z_stat, p_value
 
 
-# Example: A/B test
+# 예제: A/B 검정
 z, p = two_proportion_z_test(45, 500, 58, 480, alternative="two-sided")
 print(f"z = {z:.3f}, p-value = {p:.3f}")
+
+# 같은 전환율 차이를 표본만 열 배로 늘려 다시 검정한다.
+z10, p10 = two_proportion_z_test(450, 5000, 580, 4800, alternative="two-sided")
+print(f"z = {z10:.3f}, p-value = {p10:.5f}")
 ```
+
+출력:
+
+```
+z = -1.573, p-value = 0.116
+z = -4.975, p-value = 0.00000
+```
+
+전환율 9.0%와 12.1%로 3.1%p 차이인데, 방문자 1,000명 남짓으로는 기각하지 못한다. 같은 차이를 10,000명으로 보면 $p$가 $10^{-6}$ 수준까지 떨어진다.
+
+A/B 검정에서 표본크기 계획이 왜 중요한지 보여주는 예다. 실험을 너무 일찍 멈추면 실재하는 3%p 개선을 "차이 없음"으로 결론짓게 된다.
 
 ## 신뢰구간과의 관계
 

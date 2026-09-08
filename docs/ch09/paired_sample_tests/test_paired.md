@@ -27,12 +27,12 @@ from scipy.stats import t as tdist
 
 def test_paired_mean(n, dbar, sd_d, mu_d0=0.0,
                      alt="two-sided", alpha=0.05):
+    """대응 t-검정. 차이 D = X - Y에 대한 일표본 검정과 같다.
+
+    받는 것은 짝의 개수 n, 차이의 평균, 차이의 표준편차뿐이다.
+    두 집단의 산포나 상관을 따로 알 필요가 없다. 짝을 지으며 이미 흡수했기 때문이다.
     """
-    Paired t-test: differences D = X - Y.
-    Supply n, mean(D), sd(D).
-    Returns (t, p, reject).
-    """
-    df = n - 1
+    df = n - 1               # 짝의 개수 - 1. 관측값 2n개가 아니다.
     se = sd_d / math.sqrt(n)
     t = (dbar - mu_d0) / se
     if alt == "two-sided":
@@ -51,7 +51,24 @@ t_stat, p, reject = test_paired_mean(
     n=12, dbar=0.4, sd_d=1.1, mu_d0=0.0, alt="less"
 )
 print("t:", t_stat, "p:", p, "reject:", reject)
+
+# 방향을 맞춰 다시. 관측된 차이가 양수이니 H1도 "크다" 쪽이어야 한다.
+t2, p2, reject2 = test_paired_mean(
+    n=12, dbar=0.4, sd_d=1.1, mu_d0=0.0, alt="greater"
+)
+print("t:", t2, "p:", p2, "reject:", reject2)
 ```
+
+출력:
+
+```
+t: 1.259673314595547 p: 0.8830709099776419 reject: False
+t: 1.259673314595547 p: 0.11692909002235807 reject: False
+```
+
+첫 줄의 $p = 0.883$은 "증거가 아주 약하다"가 아니라 **자료가 대립가설과 반대 방향**이라는 뜻이다. $\bar D = 0.4 > 0$인데 $H_1\colon \mu_D < 0$을 검정했으니 그럴 수밖에 없다. 단측검정에서 p-값이 0.5를 넘으면 언제나 이 상황이다.
+
+방향을 맞춘 둘째 줄도 $p = 0.117$로 기각하지 못한다. 12쌍으로는 표준편차 1.1 대비 0.4의 차이를 가려낼 수 없다.
 
 ### 해석
 

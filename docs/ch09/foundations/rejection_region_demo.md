@@ -36,13 +36,28 @@ s = data.std(ddof=1)
 se = s / np.sqrt(n)
 
 alpha = 0.05
+# 양측이므로 alpha를 두 꼬리에 반씩 나눈다. ppf에 1 - alpha/2를 넣는 이유다.
 t_crit = stats.t.ppf(1 - alpha / 2, df)
 t_stat = (xbar - mu0) / se
 
 print(f"x-bar = {xbar:.2f}, SE = {se:.2f}")
 print(f"t-stat = {t_stat:.4f}, t-crit = +/-{t_crit:.4f}")
+# 기각역을 t 척도가 아니라 cm 척도로도 적어 둔다.
+# 실무자에게는 "표본평균이 171.04 아래면 기각"이 t보다 읽기 쉽다.
 print(f"Rejection boundaries: {mu0 - t_crit*se:.2f} and {mu0 + t_crit*se:.2f}")
 ```
+
+출력:
+
+```
+x-bar = 169.98, SE = 0.49
+t-stat = -4.1314, t-crit = +/-1.9695
+Rejection boundaries: 171.04 and 172.96
+```
+
+자료를 평균 170에서 만들었으니 $H_0\colon \mu = 172$는 실제로 거짓이고, 검정이 그것을 잡아냈다($|t| = 4.13 > 1.97$).
+
+주목할 것은 기각역의 좁기다. $n = 250$이라 표준오차가 0.49 cm밖에 안 되고, 그래서 표본평균이 172에서 1 cm만 벗어나도 기각된다. 표본이 크면 실질적으로 사소한 차이도 통계적으로 유의해진다.
 
 ### 시각화
 
@@ -65,6 +80,12 @@ ax.legend()
 plt.tight_layout()
 plt.show()
 ```
+
+![기각역과 검정통계량](./img/rejection_region_demo_51.png)
+
+파란 점선이 관측된 $t = -4.13$이고 붉게 칠한 양쪽 꼬리가 기각역이다. 점선이 왼쪽 기각역 안에 확실히 들어가 있다.
+
+이 그림은 $t$ 척도라 자유도만 알면 자료와 무관하게 언제나 같은 모양이다. 자료가 하는 일은 파란 점선을 어디에 놓을지 정하는 것뿐이다.
 
 ## 단측검정
 
@@ -92,16 +113,24 @@ alpha = 0.05
 x = np.linspace(-5, 5, 300)
 y = stats.t.pdf(x, df)
 
-# Left-tailed critical value
+# 단측이므로 alpha를 나누지 않는다. 꼬리 하나에 5%를 통째로 준다.
 t_lo = stats.t.ppf(alpha, df)
 print(f"Left-tailed critical value: {t_lo:.4f}")
 
-# Right-tailed critical value
 t_hi = stats.t.ppf(1 - alpha, df)
 print(f"Right-tailed critical value: {t_hi:.4f}")
 ```
 
-$t$-분포의 대칭성에 의해 $t_{\alpha,\,\text{df}} = -t_{1-\alpha,\,\text{df}}$임에 유의하라.
+출력:
+
+```
+Left-tailed critical value: -1.6602
+Right-tailed critical value: 1.6602
+```
+
+$t$-분포의 대칭성에 의해 $t_{\alpha,\,\text{df}} = -t_{1-\alpha,\,\text{df}}$이다.
+
+같은 자유도의 양측 임계값 $t_{0.025,\,100} = 1.9840$과 비교해 보라. 단측검정의 임계값 1.6602가 더 안쪽에 있어 넘기 쉽다. 이것이 단측검정의 검정력 이득이고, 그 대가는 반대 방향의 효과를 아예 보지 못한다는 것이다.
 
 ## 해석
 

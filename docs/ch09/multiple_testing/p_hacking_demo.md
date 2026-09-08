@@ -29,9 +29,19 @@ for i in range(n_experiments):
     b = np.random.normal(0, 1, n_per_group)
     _, pvals[i] = stats.ttest_ind(a, b)
 
+# 두 집단 모두 같은 N(0,1)에서 뽑았으니 H0가 참인 상황이다.
+# 그런데도 5%는 기각된다. 그것이 alpha의 정의다.
 false_pos_rate = np.mean(pvals < 0.05)
 print(f"False positive rate: {false_pos_rate:.4f}  (expected: 0.05)")
 ```
+
+출력:
+
+```
+False positive rate: 0.0508  (expected: 0.05)
+```
+
+10,000번 중 508번이 "유의하다"고 나왔다. 정직하게 한 번만 검정하면 거짓 양성은 정확히 명목 수준에 머문다. 아래에서 무너지는 것은 이 전제다.
 
 p-값의 히스토그램은 사실상 평평하여 $H_0$ 아래의 균등성을 확인해 준다.
 
@@ -66,9 +76,22 @@ for i in range(1000):
         ps.append(p)
     min_pvals[i] = min(ps)
 
+# 20개를 검정하고 그중 **가장 작은** p-값만 보고하는 상황을 흉내 낸다.
 phack_rate = np.mean(min_pvals < 0.05)
 print(f"Cherry-pick rate: {phack_rate:.4f}  (theoretical: 0.6415)")
 ```
+
+출력:
+
+```
+Cherry-pick rate: 0.6580  (theoretical: 0.6415)
+```
+
+거짓 양성 비율이 5%에서 66%로 뛴다. 실제로 아무 효과도 없는데 세 번에 두 번은 "유의한 결과"를 손에 쥔다는 뜻이다.
+
+모의실험이 1,000회뿐이라 표준오차가 1.5%p 정도이므로 0.658은 이론값 0.6415와 어긋나지 않는다.
+
+여기서 결정적인 것은 20개를 검정했다는 사실 자체가 아니라 **그중 하나만 보고한다는 점**이다. 20개를 모두 보고하고 보정했다면 문제가 없다.
 
 ## 임의 중단
 
@@ -94,9 +117,21 @@ for _ in range(n_experiments):
     else:
         stopped_pvals.append(p)
 
+# for-else 구문이다. break 없이 반복이 끝나면 else가 실행된다.
+# 즉 20번을 다 엿봐도 유의하지 않았던 경우에는 마지막 p-값을 기록한다.
 stop_rate = np.mean(np.array(stopped_pvals) < 0.05)
 print(f"Optional stopping rate: {stop_rate:.4f}")
 ```
+
+출력:
+
+```
+Optional stopping rate: 0.2380
+```
+
+역시 두 집단이 같은 분포에서 나온 자료인데 24%가 "유의하다"고 나온다. 각각의 검정은 완전히 정당했고 어떤 자료도 버리지 않았다는 점이 이 예제를 불편하게 만든다. 문제는 오직 **언제 멈출지를 자료를 보고 정했다**는 데 있다.
+
+임상시험에서 중간분석을 할 때 알파 소비 함수 같은 형식적 절차를 반드시 쓰는 이유가 이것이다.
 
 (200개까지 10개마다 확인하여) 최대 20번 엿보면 거짓 양성 비율이 20%를 넘을 수 있다.
 
@@ -186,7 +221,15 @@ print(f"Optional stopping rate: {stop_rate:.4f}")
     print(f"Rate with every-observation peeking: {rate:.4f}")
     ```
 
-    관측값마다 확인하면 엿보는 횟수가 최대가 되어 거짓 양성 비율도 가장 높아진다. 비율이 30% 이상까지 갈 수 있어 명목 5%를 크게 웃돈다. 임의 중단의 최악의 경우이다. $\square$
+    출력:
+
+    ```
+    Rate with every-observation peeking: 0.4350
+    ```
+
+    관측값마다 확인하면 엿보기 횟수가 최대가 되어 거짓 양성 비율도 가장 높아진다. 10개마다 엿보던 24%가 매 관측값마다 엿보자 **44%**로 오른다. 명목 5%의 아홉 배다.
+
+    이론적으로는 표본을 무한정 늘릴 수 있다면 이 비율이 1에 다가간다. 계속 엿보다 보면 언젠가는 $p < 0.05$인 순간이 반드시 오기 때문이다. 여기서 44%에 그친 것은 200개에서 멈추기 때문이다. $\square$
 
 ---
 

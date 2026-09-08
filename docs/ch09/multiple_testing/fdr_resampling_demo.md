@@ -60,6 +60,16 @@ for a in alphas:
     print(f"alpha={a}, m=100: FWER={1 - (1-a)**100:.4f}")
 ```
 
+출력:
+
+```
+alpha=0.05, m=100: FWER=0.9941
+alpha=0.01, m=100: FWER=0.6340
+alpha=0.001, m=100: FWER=0.0952
+```
+
+검정 100개를 $\alpha = 0.05$로 하면 거짓 양성이 하나도 없을 확률이 0.6%에 불과하다. $\alpha$를 0.001까지 낮춰야 FWER이 10% 아래로 내려온다. 이것이 Bonferroni가 하는 일이고, 동시에 Bonferroni가 검정력을 잃는 이유이기도 하다.
+
 ### 보정을 적용한 다중검정 모의실험
 
 ```python
@@ -75,9 +85,11 @@ effect_size = 0.5
 
 p_values = np.zeros(n_tests)
 truth = np.zeros(n_tests, dtype=int)
-truth[:n_true_alt] = 1
+truth[:n_true_alt] = 1      # 앞의 200개만 참 신호, 나머지 1800개는 귀무
 
 for i in range(n_tests):
+    # 모의실험이라 정답을 알고 있다. 그래서 TP와 FP를 직접 셀 수 있다.
+    # 실제 자료에서는 이 정보가 없으므로 FDR을 추정해야 한다.
     mu = effect_size if i < n_true_alt else 0.0
     data = np.random.normal(mu, 1.0, n_obs)
     _, p_values[i] = stats.ttest_1samp(data, 0)
@@ -96,6 +108,22 @@ for name, adj_p in [("Bonferroni", p_bonf), ("Holm", p_holm), ("BH", p_bh)]:
     power = tp / np.sum(truth == 1)
     print(f"{name:12s}: TP={tp}, FP={fp}, FDR={fdr:.3f}, Power={power:.3f}")
 ```
+
+출력:
+
+```
+Bonferroni  : TP=28, FP=1, FDR=0.034, Power=0.140
+Holm        : TP=28, FP=1, FDR=0.034, Power=0.140
+BH          : TP=133, FP=9, FDR=0.063, Power=0.665
+```
+
+BH가 참 신호 200개 중 133개를 찾아내는 동안 Bonferroni는 28개만 찾는다. 검정력이 0.14 대 0.67로 다섯 배 가까이 차이가 난다.
+
+그 대가는 거짓 양성 9개다. 기각한 142개 중 6.3%가 헛것이라는 뜻이며, 목표로 삼은 $\alpha = 0.05$ 근처다(BH는 FDR의 **기댓값**을 통제하므로 한 번의 실현에서는 이보다 크거나 작을 수 있다).
+
+거짓 양성 9개를 받아들이고 진짜 신호 105개를 더 얻는 거래다. 후속 실험으로 검증할 후보를 추리는 상황이라면 분명히 남는 장사다. 반면 규제 승인처럼 거짓 양성 하나가 치명적인 상황이라면 Bonferroni가 맞다.
+
+Holm이 Bonferroni와 결과가 같다는 점도 눈에 띈다. Holm은 이론적으로 언제나 Bonferroni 이상으로 강력하지만, 신호가 아주 강한 몇 개뿐일 때는 실질적인 차이가 나타나지 않는다.
 
 ### 재표본추출 기반 FDR 추정
 
@@ -121,15 +149,19 @@ def resampling_fdr(X_group1, X_group2, n_permutations=500):
                 X_combined[idx[n1:], j]
             ).statistic
 
-    # Estimate FDR at each threshold
+    # 문턱마다 FDR을 추정한다.
     Rs, FDRs = [], []
     for thresh in np.sort(np.abs(t_obs)):
-        R = np.sum(np.abs(t_obs) >= thresh)
+        R = np.sum(np.abs(t_obs) >= thresh)       # 실제 기각 수
+        # 순열 자료에서 문턱을 넘은 총 개수를 순열 횟수로 나눈다.
+        # 이것이 "H0가 참일 때 기대되는 기각 수", 즉 E[V]의 추정이다.
         V = np.sum(np.abs(t_perm) >= thresh) / n_permutations
         Rs.append(R)
         FDRs.append(V / max(R, 1))
     return np.array(Rs), np.array(FDRs)
 ```
+
+t-분포도 정규성 가정도 쓰지 않는다는 것이 이 방법의 요점이다. 귀무분포를 자료 자체에서 만들어 내므로, 검정통계량의 분포를 모르거나 특징이 서로 상관되어 있을 때도 쓸 수 있다.
 
 이 알고리즘은 각 문턱을 넘는 순열 검정통계량의 개수를 세어 관측된 기각 수로 나누며, 가능한 모든 절단값에서 FDR 추정값을 준다.
 
@@ -219,4 +251,15 @@ def resampling_fdr(X_group1, X_group2, n_permutations=500):
               f"FDR={fdr:.3f}, Power={power:.3f}")
     ```
 
-    $\alpha$를 0.05에서 0.10으로 올리면 BH 문턱이 높아져 더 많은 가설이 기각된다. 검정력이 커지지만(참 효과를 더 많이 탐지하지만) FDR도 함께 올라간다(발견 중 잘못된 것의 비율이 커진다). 맞바꿈은 발견율과 신뢰성 사이에 있다: $\alpha$가 높으면 더 많은 효과를 찾지만 잘못된 단서도 늘어난다. $\square$
+    출력:
+
+    ```
+    alpha=0.05: Rejections=142, FDR=0.063, Power=0.665
+    alpha=0.1: Rejections=179, FDR=0.128, Power=0.780
+    ```
+
+    $\alpha$를 두 배로 올리면 기각이 142개에서 179개로 늘고 검정력이 0.665에서 0.780으로 오른다. 대신 FDR이 0.063에서 0.128로 함께 오른다.
+
+    늘어난 기각 37개의 내역을 보면 참 신호가 23개, 거짓 양성이 14개다. 즉 문턱을 늦출수록 새로 걸리는 것 중 헛것의 비율이 높아진다. 신호가 강한 것부터 먼저 걸리기 때문이다.
+
+    맞바꿈은 발견율과 신뢰성 사이에 있다. 후속 검증이 싸다면 $\alpha = 0.10$이, 비싸다면 0.05나 그보다 낮은 값이 맞다. $\square$

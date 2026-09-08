@@ -67,19 +67,19 @@ $0 \in (-0.04, 0.14)$이므로 $H_0$을 **기각하지 못한다**. 합격률에
 import numpy as np
 from scipy import stats
 
-# Sample data
 x_bar = 52
 mu_0 = 50
 sigma = 10
 n = 25
 alpha = 0.05
 
-# Hypothesis test approach
+# 검정: mu_0를 중심에 놓고 x_bar가 얼마나 떨어져 있는지 잰다.
 z = (x_bar - mu_0) / (sigma / np.sqrt(n))
 p_value = 2 * stats.norm.sf(abs(z))
 reject_test = p_value <= alpha
 
-# Confidence interval approach
+# 신뢰구간: x_bar를 중심에 놓고 mu_0가 안에 들어오는지 본다.
+# 기준점만 바꿔 같은 부등식을 두 번 쓰는 셈이라 결론이 어긋날 수 없다.
 z_crit = stats.norm.ppf(1 - alpha / 2)
 ci_lower = x_bar - z_crit * sigma / np.sqrt(n)
 ci_upper = x_bar + z_crit * sigma / np.sqrt(n)
@@ -89,6 +89,18 @@ print(f"Test: z = {z:.4f}, p-value = {p_value:.4f}, Reject = {reject_test}")
 print(f"CI: ({ci_lower:.4f}, {ci_upper:.4f}), mu_0 outside CI = {reject_ci}")
 print(f"Both methods agree: {reject_test == reject_ci}")
 ```
+
+출력:
+
+```
+Test: z = 1.0000, p-value = 0.3173, Reject = False
+CI: (48.0801, 55.9199), mu_0 outside CI = False
+Both methods agree: True
+```
+
+두 접근이 같은 결론에 이른다. $z = 1$은 임계값 1.96에 못 미치고, 같은 이유로 $\mu_0 = 50$이 구간 $(48.08, 55.92)$ 안에 있다.
+
+여기서 구간이 검정보다 하나 더 말해 준다는 점을 짚어 둘 만하다. 검정은 "50을 배제할 수 없다"까지만 말하지만, 구간은 48.08에서 55.92까지가 모두 배제되지 않는다고 말한다. 기각하지 못했다는 결과를 "차이가 없다"로 읽으면 안 되는 이유가 이것이다. 자료는 $\mu = 55$ 역시 배제하지 못한다.
 
 ## 핵심 요약
 

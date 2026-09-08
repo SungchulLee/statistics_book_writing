@@ -158,6 +158,8 @@ def two_sample_z_test(x_bar, y_bar, sigma1, sigma2, n1, n2,
     p_value : float
         P-value.
     """
+    # sigma를 알고 있으므로 표본에서 추정하지 않는다.
+    # 그래서 자유도라는 개념이 없고 표준정규를 그대로 쓴다.
     se = np.sqrt(sigma1**2 / n1 + sigma2**2 / n2)
     z_stat = ((x_bar - y_bar) - delta0) / se
 
@@ -173,10 +175,25 @@ def two_sample_z_test(x_bar, y_bar, sigma1, sigma2, n1, n2,
     return z_stat, p_value
 
 
-# Example: District A vs District B
+# 예제: A 학군 대 B 학군
 z, p = two_sample_z_test(78, 74, 12, 15, 50, 60, alternative="two-sided")
 print(f"z = {z:.3f}, p-value = {p:.3f}")
+
+# 같은 차이 4점을 표본크기만 네 배로 늘려 다시 검정해 본다.
+z4, p4 = two_sample_z_test(78, 74, 12, 15, 200, 240, alternative="two-sided")
+print(f"z = {z4:.3f}, p-value = {p4:.3f}")
 ```
+
+출력:
+
+```
+z = 1.553, p-value = 0.120
+z = 3.107, p-value = 0.002
+```
+
+같은 4점 차이가 표본을 네 배로 늘리자 $p = 0.120$에서 $p = 0.002$로 바뀐다. $z$는 정확히 $\sqrt{4} = 2$배가 되었다. 표준오차가 $1/\sqrt{n}$로 줄기 때문이다.
+
+p-값이 말해 주는 것은 효과의 크기가 아니라 "이 표본크기에서 이만한 차이를 우연으로 보기 어려운가"라는 점을 잘 보여준다. 두 경우의 효과크기는 완전히 같다.
 
 ## 이표본 t-검정과의 관계
 

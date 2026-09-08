@@ -177,15 +177,41 @@ def benjamini_hochberg(p_values, alpha=0.05):
     rejected = np.zeros(m, dtype=bool)
     rejected[order[:k]] = True
 
-    # Adjusted p-values (processed from largest to smallest)
+    # 보정 p-값. 큰 것에서 작은 쪽으로 훑으며 단조성을 강제한다.
+    # 이 되짚기가 없으면 원래 p-값의 순서가 뒤집히는 일이 생겨
+    # "더 작은 p-값이 더 큰 보정 p-값을 갖는" 이상한 결과가 나온다.
     adjusted_sorted = np.minimum(1, sorted_p * m / np.arange(1, m + 1))
     for i in range(m - 2, -1, -1):
         adjusted_sorted[i] = min(adjusted_sorted[i], adjusted_sorted[i + 1])
     adjusted = np.empty(m)
-    adjusted[order] = adjusted_sorted
+    adjusted[order] = adjusted_sorted      # 원래 순서로 되돌린다
 
     return rejected, adjusted
+
+
+# 아래 연습문제 1의 p-값으로 확인한다.
+pvals = np.array([0.001, 0.008, 0.039, 0.041, 0.23, 0.76])
+rej, adj = benjamini_hochberg(pvals, alpha=0.10)
+print("rejected:", rej)
+print("adjusted:", np.round(adj, 4))
+
+# statsmodels와 대조
+from statsmodels.stats.multitest import multipletests
+rej_sm, adj_sm, _, _ = multipletests(pvals, alpha=0.10, method="fdr_bh")
+print("statsmodels adjusted:", np.round(adj_sm, 4))
 ```
+
+출력:
+
+```
+rejected: [ True  True  True  True False False]
+adjusted: [0.006  0.024  0.0615 0.0615 0.276  0.76  ]
+statsmodels adjusted: [0.006  0.024  0.0615 0.0615 0.276  0.76  ]
+```
+
+앞의 네 개가 기각된다. Bonferroni였다면 문턱이 $0.10/6 = 0.0167$이라 처음 두 개만 기각되었을 것이다.
+
+보정 p-값에서 셋째와 넷째가 0.0615로 같아진 것이 위에서 말한 단조성 강제의 결과다. 곧이곧대로 계산하면 셋째가 $0.039 \times 6/3 = 0.078$, 넷째가 $0.041 \times 6/4 = 0.0615$로 원래 p-값의 순서와 어긋난다. 뒤에서부터 훑으며 최솟값을 취해 셋째를 0.0615로 끌어내린다.
 
 ## 다른 주제와의 연결
 
