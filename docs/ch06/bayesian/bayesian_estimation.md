@@ -90,6 +90,18 @@ def demo_beta_binomial():
 demo_beta_binomial()
 ```
 
+출력:
+
+```
+Prior:     Beta(2, 2)
+Data:      32 successes in 50 trials
+Posterior: Beta(34, 20)
+MAP        = 0.6346
+Post. mean = 0.6296
+MLE        = 0.6400
+95% CI:    [0.4980, 0.7521]
+```
+
 !!! note "가상 자료로서의 사전분포"
     Beta$(\alpha_0, \beta_0)$ 사전분포는 실제 자료를 보기 전에 이미 $\alpha_0 - 1$번의 성공과 $\beta_0 - 1$번의 실패를 관측한 것처럼 작동한다. $\alpha_0 = \beta_0 = 2$이면 사전분포가 총 2개의 "가상 관측값"에 해당하는 기여를 한다.
 
@@ -149,6 +161,15 @@ def demo_normal_normal():
 demo_normal_normal()
 ```
 
+출력:
+
+```
+Prior:      N(0, 10^2)
+Data:       n=25, x_bar=4.929
+Posterior:  N(4.921, 0.400^2)
+95% credible interval: [4.138, 5.705]
+```
+
 ## 자료에 따른 사후분포의 변화
 
 $n$이 커질수록 사후평균은 MLE로 수렴하고 사후분산은 0으로 줄어든다. 사전분포는 무의미해진다:
@@ -183,6 +204,12 @@ $$
     from scipy.stats import beta
     ci = (beta.ppf(0.025, 8, 4), beta.ppf(0.975, 8, 4))
     print(f"95% CI: [{ci[0]:.4f}, {ci[1]:.4f}]")
+    ```
+
+    출력:
+
+    ```
+    95% CI: [0.3903, 0.8907]
     ```
 
     결과는 약 $[0.3834, 0.9029]$이다. $\square$

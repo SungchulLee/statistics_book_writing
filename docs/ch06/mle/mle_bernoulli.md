@@ -180,6 +180,16 @@ ax.set_ylabel("Log-likelihood")
 plt.show()
 ```
 
+출력:
+
+```
+MLE index: 74
+MLE probability (p): 0.7425
+Max log-likelihood: -57.3074
+```
+
+![Bernoulli 분포의 MLE](./img/mle_bernoulli_70.png)
+
 ## 연습문제
 
 **연습문제 1.**

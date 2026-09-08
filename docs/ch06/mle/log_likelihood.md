@@ -103,6 +103,15 @@ print(f"Grid-search MLE: p_hat = {mle_p:.4f}")
 print(f"Max log-likelihood: {log_liks[idx]:.4f}")
 ```
 
+출력:
+
+```
+Observed: 67 heads out of 100 flips
+MLE: p_hat = 0.6700
+Grid-search MLE: p_hat = 0.6699
+Max log-likelihood: -63.4179
+```
+
 !!! note "로그가능도의 모양"
     Bernoulli 로그가능도는 $(0, 1)$에서 $p$에 대해 오목한 함수이므로 유일한 전역 최댓값이 보장된다. 이 오목성은 모든 $p \in (0, 1)$에서 $\ell''(p) < 0$이라는 사실에서 따라 나온다.
 
@@ -129,6 +138,12 @@ idx = np.argmax(ll_vec)
 print(f"Vectorized MLE: p = {ps[idx]:.4f}")
 ```
 
+출력:
+
+```
+Vectorized MLE: p = 0.6699
+```
+
 ## 가능도와 로그가능도의 비교
 
 로그변환이 왜 필수적인지 보이기 위해 원래 가능도 값을 살펴보자:
@@ -142,11 +157,24 @@ k = coins.sum()
 n = len(coins)
 
 p = 0.7
+# 가능도를 곱으로 그대로 계산하면 100개의 작은 수를 곱하게 되어
+# 값이 1e-28 까지 내려간다. n이 1000쯤 되면 아예 0으로 언더플로된다.
 raw_likelihood = p**k * (1-p)**(n-k)
+
+# 로그를 취하면 곱이 합이 되어 이 문제가 사라진다.
+# log는 단조증가 함수이므로 **최대가 되는 지점은 바뀌지 않는다.**
+# 로그가능도를 쓰는 이유가 이 두 가지다: 수치 안정성과 미분의 편리함.
 log_likelihood = k * np.log(p) + (n-k) * np.log(1-p)
 
 print(f"Raw likelihood at p=0.7: {raw_likelihood:.2e}")
 print(f"Log-likelihood at p=0.7: {log_likelihood:.4f}")
+```
+
+출력:
+
+```
+Raw likelihood at p=0.7: 2.33e-28
+Log-likelihood at p=0.7: -63.6283
 ```
 
 원래 가능도는 천문학적으로 작은 수인 반면 로그가능도는 다루기 좋은 음수이다.

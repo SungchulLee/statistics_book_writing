@@ -93,6 +93,14 @@ print(f"MLE of N: {mle_n}")
 print(f"Lincoln-Petersen estimate: {c * r // t}")
 ```
 
+출력:
+
+```
+Capture: 10 tagged, Recapture: 10 caught, 3 tagged
+MLE of N: 33
+Lincoln-Petersen estimate: 33
+```
+
 ## 예제
 
 어떤 야생동물 생물학자가 새 $c = 5$마리를 잡아 표지하고 놓아 준 뒤, 나중에 $r = 6$마리를 재포획했더니 그중 $t = 2$마리가 표지되어 있었다고 하자.
@@ -102,6 +110,13 @@ c, r, t = 5, 6, 2
 mle_n, probs = capture_recapture_mle(c, r, t)
 print(f"MLE of N: {mle_n}")
 print(f"Lincoln-Petersen: {c * r // t}")
+```
+
+출력:
+
+```
+MLE of N: 14
+Lincoln-Petersen: 15
 ```
 
 Lincoln-Petersen 추정값은 $\hat{N} = \lfloor 5 \times 6 / 2 \rfloor = 15$이다.
@@ -131,7 +146,12 @@ Lincoln-Petersen 추정값은 $\hat{N} = \lfloor 5 \times 6 / 2 \rfloor = 15$이
 from scipy import special
 
 def sensitivity_analysis():
-    """Show how MLE changes with different values of t."""
+    """재포획된 표지 개체 수 t 를 바꿔 가며 MLE가 어떻게 변하는지 본다.
+
+    t가 작을수록(표지가 거의 안 잡힐수록) 추정 개체수가 커진다.
+    t = 1 처럼 극단적인 경우 추정값이 100을 넘고 매우 불안정해지는데,
+    포획-재포획 조사에서 재포획 표본을 충분히 크게 잡아야 하는 이유다.
+    """
     c, r = 10, 10
     print(f"c = {c}, r = {r}")
     print(f"{'t':>4} {'MLE':>6} {'cr/t':>8}")
@@ -146,6 +166,24 @@ def sensitivity_analysis():
         print(f"{t:>4} {mle_n:>6} {c*r/t:>8.1f}")
 
 sensitivity_analysis()
+```
+
+출력:
+
+```
+c = 10, r = 10
+   t    MLE     cr/t
+--------------------
+   1     99    100.0
+   2     49     50.0
+   3     33     33.3
+   4     24     25.0
+   5     19     20.0
+   6     16     16.7
+   7     14     14.3
+   8     12     12.5
+   9     11     11.1
+  10     10     10.0
 ```
 
 ## 해석
@@ -171,6 +209,12 @@ sensitivity_analysis()
              for n in range(n_min, 500)]
     mle_idx = max(range(len(probs)), key=lambda i: probs[i])
     print(f"MLE: N = {mle_idx + n_min}")
+    ```
+
+    출력:
+
+    ```
+    MLE: N = 100
     ```
 
     두 방법 모두 $\hat{N} = 100$을 준다. $\square$

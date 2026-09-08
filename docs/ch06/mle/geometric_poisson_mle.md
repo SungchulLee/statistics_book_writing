@@ -73,6 +73,15 @@ def geometric_mle_demo(n_train=1000, n_test=1000, p_true=0.12):
 geometric_mle_demo()
 ```
 
+출력:
+
+```
+True p = 0.120
+MLE p_hat = 0.1220
+Test RMSE -- parametric: 0.00996
+Test RMSE -- nonparametric: 0.01164
+```
+
 ### 로그가능도 곡면
 
 로그가능도는 $p$에 대해 오목한 함수이며 유일한 전역 최댓값이 있음을 확인해 준다:
@@ -80,13 +89,22 @@ geometric_mle_demo()
 ```python
 import matplotlib.pyplot as plt
 
+# numpy의 geometric은 "첫 성공까지의 시행 수"(1부터)를 준다.
+# 여기서 쓰는 판본은 "첫 성공 이전의 실패 수"(0부터)이므로 1을 뺀다.
+# 성공확률을 1 - 0.12 로 준 것은, 이 절의 theta 가 numpy의 p와
+# 서로 여집합 관계이기 때문이다(theta = 실패확률).
 train = np.random.geometric(1 - 0.12, 1000) - 1
+
+# 로그가능도 l(theta) = (실패 총횟수) log(theta) + (시행 수) log(1-theta).
+# 관측이 1000개인데 계산에 들어가는 것은 이 두 숫자뿐이다.
+# 이런 요약값을 충분통계량이라고 한다.
 n_success = train.sum()
 n_fail = len(train)
 
 theta_grid = np.linspace(0.01, 0.99, 200)
 ll = n_success * np.log(theta_grid) + n_fail * np.log(1 - theta_grid)
 
+# 미분해서 0으로 두면 나오는 닫힌 해. 격자 탐색의 봉우리와 일치해야 한다.
 p_hat = train.mean() / (1 + train.mean())
 
 plt.plot(theta_grid, ll, "k-", lw=2)
@@ -98,6 +116,8 @@ plt.title("Geometric: Log-Likelihood Surface")
 plt.legend()
 plt.show()
 ```
+
+![Geometric: Log-Likelihood Surface](./img/geometric_poisson_mle_80.png)
 
 ## Poisson 분포의 MLE
 
@@ -164,24 +184,42 @@ def poisson_mle_demo(n_train=200, n_test=200, lam_true=4.5):
     print(f"Test RMSE -- parametric: {err_param:.5f}")
     print(f"Test RMSE -- nonparametric: {err_nonparam:.5f}")
 
-poisson_mle_demo()
+    # 아래 그림에서 다시 쓰도록 계산 결과를 돌려준다
+    return k_vals, pmf_param, pmf_train, pmf_test
+
+k_vals, pmf_param, pmf_train, pmf_test = poisson_mle_demo()
+```
+
+출력:
+
+```
+True lambda = 4.50
+MLE lambda_hat = 4.4800
+Test RMSE -- parametric: 0.01882
+Test RMSE -- nonparametric: 0.03342
 ```
 
 ### 모수적 적합과 비모수적 적합의 비교
 
 ```python
-poi = poisson_mle_demo.__code__  # (see full script for plotting code)
+import matplotlib.pyplot as plt
 
+# 위 함수가 돌려준 값을 그대로 쓴다.
 fig, axes = plt.subplots(1, 2, figsize=(12, 5))
 
-# Train fit
+# 왼쪽: 훈련자료에 대한 적합.
+# 막대(모수적 MLE)와 점(경험적 PMF)이 잘 겹친다. 같은 자료로 맞췄으니 당연하다.
 axes[0].bar(k_vals, pmf_param, color="white", edgecolor="black",
             lw=1.5, label="Parametric (MLE)")
 axes[0].plot(k_vals, pmf_train, "ko", ms=5, label="Empirical (train)")
 axes[0].set_title("Poisson: Train Fit")
 axes[0].legend()
 
-# Test fit
+# 오른쪽: **보지 않은** 시험자료에 대한 적합. 여기가 진짜 시험이다.
+# 막대는 왼쪽과 똑같다(모형은 훈련자료로만 맞췄으므로).
+# 빨간 점만 새 자료로 바뀌었는데도 막대를 잘 따라간다.
+# 반면 경험적 PMF는 훈련자료의 우연한 들쭉날쭉함까지 외웠기 때문에
+# 새 자료에서는 오차가 더 크다. 위 출력의 RMSE 두 값이 그 차이다.
 axes[1].bar(k_vals, pmf_param, color="white", edgecolor="black",
             lw=1.5, label="Parametric (MLE)")
 axes[1].plot(k_vals, pmf_test, "ro", ms=5, label="Empirical (test)")
@@ -191,6 +229,8 @@ axes[1].legend()
 plt.tight_layout()
 plt.show()
 ```
+
+![Poisson: Train Fit](./img/geometric_poisson_mle_195.png)
 
 ## 해석
 

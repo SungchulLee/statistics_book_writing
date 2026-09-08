@@ -41,10 +41,33 @@ import numpy as np
 from scipy.stats import beta
 
 def bayesian_update(a_prior, b_prior, k, n):
-    """Compute posterior Beta parameters after observing k/n."""
-    a_post = a_prior + k
-    b_post = b_prior + n - k
+    """n번 중 k번 성공을 관측한 뒤의 사후 베타 모수를 구한다.
+
+    베타분포가 이항 가능도의 **켤레사전분포**라서 이렇게 단순해진다.
+    사후 = 가능도 x 사전 을 전개하면 지수가 그냥 더해지므로,
+    적분을 하나도 하지 않고 모수 덧셈만으로 사후분포가 나온다.
+
+    a는 "성공 횟수", b는 "실패 횟수"처럼 읽으면 된다.
+    Beta(2, 3)을 사전분포로 쓴다는 것은 "성공 1번, 실패 2번을
+    미리 본 셈 친다"는 뜻이다(균등분포 Beta(1,1)이 기준점).
+    """
+    a_post = a_prior + k          # 성공 횟수를 더한다
+    b_post = b_prior + n - k      # 실패 횟수를 더한다
     return a_post, b_post
+
+
+# 균등한 사전분포 Beta(1,1)에서 출발해 10번 중 7번 성공을 보면?
+a, b = bayesian_update(1, 1, k=7, n=10)
+print(f"사후분포 Beta({a}, {b})")
+# 베타분포의 평균은 a/(a+b) 다. MLE 0.7 보다 살짝 0.5 쪽으로 당겨진다.
+print(f"사후평균 {a/(a+b):.4f}   (MLE = {7/10:.4f})")
+```
+
+출력:
+
+```
+사후분포 Beta(8, 4)
+사후평균 0.6667   (MLE = 0.7000)
 ```
 
 ## 사전분포에 따른 민감도 분석
@@ -55,6 +78,12 @@ def bayesian_update(a_prior, b_prior, k, n):
 n = 581
 k = 281
 
+# 사전분포 여섯 개. a + b 가 곧 "가상의 표본 크기"라고 읽으면 된다.
+#   (1,1)     : 가상표본 2. 사실상 아무 정보도 넣지 않는다(균등).
+#   (5,5)     : 가상표본 10. 자료 581에 비해 미미하다.
+#   (50,50)   : 가상표본 100. 자료의 6분의 1쯤 되는 무게.
+#   (2,8),(8,2): 크기는 작지만 한쪽으로 치우친 사전분포.
+#   (100,100) : 가상표본 200. 자료의 3분의 1이라 결과를 눈에 띄게 당긴다.
 priors = [
     (1, 1, "Uniform (a=1, b=1)"),
     (5, 5, "Weakly informative (a=5, b=5)"),
@@ -66,10 +95,25 @@ priors = [
 
 for a, b, label in priors:
     a_post, b_post = bayesian_update(a, b, k, n)
+    # 베타분포의 평균은 a/(a+b) 다.
+    # 자료 n=581 이 사전분포보다 훨씬 무거우면 사후평균이 MLE(0.4836)에 붙는다.
     post_mean = a_post / (a_post + b_post)
+    # 사후확률 P(p < 0.5). 베이즈 방법에서는 이것을 그대로 "후보가 과반에
+    # 못 미칠 확률"이라고 읽을 수 있다. 빈도주의 p-값과 해석이 다른 지점이다.
     p_less_half = beta.cdf(0.5, a_post, b_post)
     print(f"{label:<35s}  a_post={a_post:>4d}  b_post={b_post:>4d}  "
           f"mean={post_mean:.4f}  P(p<0.5)={p_less_half:.4f}")
+```
+
+출력:
+
+```
+Uniform (a=1, b=1)                   a_post= 282  b_post= 301  mean=0.4837  P(p<0.5)=0.7845
+Weakly informative (a=5, b=5)        a_post= 286  b_post= 305  mean=0.4839  P(p<0.5)=0.7829
+Moderate prior centered at 0.5       a_post= 331  b_post= 350  mean=0.4860  P(p<0.5)=0.7669
+Prior skewed toward low p            a_post= 283  b_post= 308  mean=0.4788  P(p<0.5)=0.8483
+Prior skewed toward high p           a_post= 289  b_post= 302  mean=0.4890  P(p<0.5)=0.7037
+Strong prior at 0.5                  a_post= 381  b_post= 400  mean=0.4878  P(p<0.5)=0.7518
 ```
 
 ## 사전분포에서 사후분포로의 갱신 시각화
@@ -91,11 +135,16 @@ for idx, (a, b, label) in enumerate(priors):
     ax.plot(theta, beta.pdf(theta, a_post, b_post), "r-", lw=2.5,
             label="Posterior")
 
+    # 사후분포의 0.5 왼쪽을 칠한다. 그 넓이가 곧 P(p < 0.5) 다.
+    # 베이즈에서는 모수 자체가 확률변수이므로 이런 진술이 가능하다.
     mask = theta <= 0.5
     ax.fill_between(theta[mask],
                     beta.pdf(theta[mask], a_post, b_post),
                     alpha=0.2, color="blue",
                     label=f"P(p<0.5) = {p_less_half:.3f}")
+    # MLE를 세로선으로 표시한다. 사후분포(빨강)의 봉우리가 이 선에서
+    # 얼마나 벗어나는지가 곧 사전분포가 결과를 당긴 정도다.
+    # 마지막 패널(강한 사전분포)에서 가장 크게 벌어진다.
     ax.axvline(k / n, color="green", linestyle=":", lw=1.5,
                label=f"MLE = {k/n:.3f}")
     ax.set_title(label)
@@ -107,6 +156,8 @@ for idx, (a, b, label) in enumerate(priors):
 plt.tight_layout()
 plt.show()
 ```
+
+![베이즈 Beta 켤레 사전분포](./img/bayesian_beta_conjugate_79.png)
 
 ## 해석
 

@@ -33,8 +33,16 @@ import numpy as np
 from scipy import stats
 
 def grid_search_normal_mean(data, mu_grid):
-    """Evaluate the log-likelihood of Normal(mu, sigma^2) over a grid of mu values."""
-    sigma_hat = data.std(ddof=0)
+    """mu 후보를 격자로 늘어놓고 로그가능도가 가장 큰 것을 고른다.
+
+    가장 단순하고 가장 확실한 방법이다. 미분도 초기값도 필요 없고
+    국소 최적에 갇히지도 않는다. 대신 격자 간격보다 정밀할 수 없고,
+    모수가 d개면 격자점이 (격자 수)^d 로 폭발해 d가 3~4만 넘어도 못 쓴다.
+    """
+    sigma_hat = data.std(ddof=0)     # ddof=0 이 MLE 판본이다(n으로 나눔)
+
+    # logpdf 를 더한다. pdf를 곱한 뒤 로그를 취하면 언더플로가 나므로
+    # 처음부터 로그로 계산해 더하는 것이 정석이다.
     log_liks = np.array([
         np.sum(stats.norm.logpdf(data, loc=mu, scale=sigma_hat))
         for mu in mu_grid
@@ -49,6 +57,13 @@ mu_grid = np.linspace(3.0, 7.0, 500)
 mu_hat, log_liks = grid_search_normal_mean(data, mu_grid)
 print(f"Grid search MLE: mu_hat = {mu_hat:.4f}")
 print(f"Closed-form MLE: mu_hat = {data.mean():.4f}")
+```
+
+출력:
+
+```
+Grid search MLE: mu_hat = 4.8998
+Closed-form MLE: mu_hat = 4.8995
 ```
 
 ## 기울기 기반 최적화
@@ -76,23 +91,33 @@ import numpy as np
 from scipy import optimize
 
 def mle_normal_numerical(data):
-    """Find Normal MLE via numerical optimization with reparameterization."""
+    """재매개변수화를 써서 정규분포의 MLE를 수치적으로 찾는다."""
     def neg_log_lik(params):
+        # sigma^2 을 직접 다루지 않고 log(sigma^2) 을 최적화한다.
+        # 이유: sigma^2 > 0 이라는 제약을 최적화기에 알려 주기 어려운데,
+        #       log를 쓰면 log_sigma2 가 어떤 실수든 exp를 거치며 자동으로 양수가 된다.
+        #       제약 없는 최적화 문제로 바뀌므로 Nelder-Mead 같은 단순한 방법도 쓸 수 있다.
         mu, log_sigma2 = params
         sigma2 = np.exp(log_sigma2)
         n = len(data)
+        # 음의 로그가능도. 최소화하는 것이 가능도를 최대화하는 것과 같다.
         return 0.5 * n * np.log(2 * np.pi * sigma2) + np.sum((data - mu) ** 2) / (2 * sigma2)
 
-    # Try multiple starting points
+    # 출발점을 여러 개 시도한다.
+    # 정규분포의 로그가능도는 볼록해서 사실 한 번이면 충분하지만,
+    # 봉우리가 여럿인 문제에서는 이렇게 여러 곳에서 출발해
+    # 가장 좋은 것을 골라야 국소 최적에 갇히지 않는다.
+    # (numpy 배열에는 .median() 이 없으므로 np.median 을 쓴다.)
     best_result = None
-    for mu0 in [0, data.mean(), data.median()]:
+    for mu0 in [0, data.mean(), np.median(data)]:
         for ls0 in [0, np.log(data.var())]:
             result = optimize.minimize(neg_log_lik, x0=[mu0, ls0], method="Nelder-Mead")
+            # result.fun 이 그 출발점에서 도달한 최솟값이다
             if best_result is None or result.fun < best_result.fun:
                 best_result = result
 
     mu_hat = best_result.x[0]
-    sigma2_hat = np.exp(best_result.x[1])
+    sigma2_hat = np.exp(best_result.x[1])    # log에서 되돌린다
     return mu_hat, sigma2_hat
 
 rng = np.random.default_rng(42)
@@ -100,6 +125,13 @@ data = rng.normal(5.0, 2.0, 100)
 mu_hat, sigma2_hat = mle_normal_numerical(data)
 print(f"Numerical MLE: mu = {mu_hat:.4f}, sigma^2 = {sigma2_hat:.4f}")
 print(f"Closed-form:   mu = {data.mean():.4f}, sigma^2 = {np.mean((data - data.mean())**2):.4f}")
+```
+
+출력:
+
+```
+Numerical MLE: mu = 4.8995, sigma^2 = 2.3888
+Closed-form:   mu = 4.8995, sigma^2 = 2.3888
 ```
 
 ## Newton-Raphson 방법
@@ -154,6 +186,14 @@ for i, x0 in enumerate(starts):
           f"mu2={result.x[2]:.3f}, nll={result.fun:.2f}")
 ```
 
+출력:
+
+```
+Start 1: pi=0.374, mu1=0.154, mu2=3.900, nll=402.58
+Start 2: pi=0.626, mu1=3.900, mu2=0.154, nll=402.58
+Start 3: pi=0.374, mu1=0.154, mu2=3.899, nll=402.58
+```
+
 ## 해석
 
 - **격자탐색**은 저차원 문제에서 믿을 만하며 가능도 곡면을 직접 시각화해 준다.
@@ -185,6 +225,13 @@ for i, x0 in enumerate(starts):
     lam_hat_exact = 1 / data.mean()
     print(f"Grid MLE:    {lam_hat_grid:.4f}")
     print(f"Analytic MLE: {lam_hat_exact:.4f}")
+    ```
+
+    출력:
+
+    ```
+    Grid MLE:    0.6003
+    Analytic MLE: 0.5982
     ```
 
     두 값이 거의 일치해야 한다. $\square$
@@ -267,6 +314,31 @@ for i, x0 in enumerate(starts):
         fisher_info = n / (p_fs * (1 - p_fs))
         p_fs = p_fs + score / fisher_info
         print(f"FS  iter {i+1}: p = {p_fs:.8f}")
+    ```
+
+    출력:
+
+    ```
+    NR  iter 1: p = 0.36000000
+    NR  iter 2: p = 0.36000000
+    NR  iter 3: p = 0.36000000
+    NR  iter 4: p = 0.36000000
+    NR  iter 5: p = 0.36000000
+    NR  iter 6: p = 0.36000000
+    NR  iter 7: p = 0.36000000
+    NR  iter 8: p = 0.36000000
+    NR  iter 9: p = 0.36000000
+    NR  iter 10: p = 0.36000000
+    FS  iter 1: p = 0.36000000
+    FS  iter 2: p = 0.36000000
+    FS  iter 3: p = 0.36000000
+    FS  iter 4: p = 0.36000000
+    FS  iter 5: p = 0.36000000
+    FS  iter 6: p = 0.36000000
+    FS  iter 7: p = 0.36000000
+    FS  iter 8: p = 0.36000000
+    FS  iter 9: p = 0.36000000
+    FS  iter 10: p = 0.36000000
     ```
 
     둘 다 $\hat{p} = x_{\text{sum}}/n$으로 수렴한다. Bernoulli에서는 관측 정보량과 기대 정보량이 밀접하게 연결되어 있어 수렴 속도가 거의 같다. 일반적으로는 관측 Hessian의 조건수가 나쁠 때 Fisher 점수법이 더 안정적일 수 있다. $\square$

@@ -119,7 +119,9 @@ def fisher_information_numerical(dist_name="norm", true_params=None,
 
     theta = true_params[param_name]
 
-    # Finite-difference approximation to the score
+    # 점수함수 = 로그밀도를 모수로 미분한 것.
+    # 해석적으로 미분하는 대신 중심차분으로 근사한다.
+    # 그래서 이 코드는 분포가 무엇이든 그대로 쓸 수 있다.
     params_plus = {**true_params, param_name: theta + delta}
     params_minus = {**true_params, param_name: theta - delta}
 
@@ -127,6 +129,12 @@ def fisher_information_numerical(dist_name="norm", true_params=None,
     logf_minus = dist.logpdf(data, **params_minus)
     score = (logf_plus - logf_minus) / (2 * delta)
 
+    # 피셔정보는 점수함수의 **분산**이다.
+    # 참 모수에서 점수의 기댓값이 0이므로 분산 = 2차 적률이 되고,
+    # 그래서 var를 그대로 쓰면 된다.
+    #
+    # 직관: 점수가 크게 흔들린다는 것은 모수를 조금만 바꿔도 가능도가
+    # 크게 변한다는 뜻이고, 그만큼 자료가 모수를 잘 짚어낸다는 뜻이다.
     I_numerical = np.var(score)
     return I_numerical
 
@@ -136,6 +144,14 @@ I_theory = 1 / 2**2
 print(f"Normal mean Fisher information:")
 print(f"  Numerical:   I(mu) = {I_num:.6f}")
 print(f"  Theoretical: I(mu) = {I_theory:.6f}")
+```
+
+출력:
+
+```
+Normal mean Fisher information:
+  Numerical:   I(mu) = 0.251855
+  Theoretical: I(mu) = 0.250000
 ```
 
 ## Cramér-Rao 한계 확인
@@ -157,12 +173,25 @@ def verify_crlb(mu_true=5.0, sigma=2.0, n=50, n_sim=20_000):
     print(f"Var(X_bar)       = {empirical_var:.6f}")
     print(f"Ratio            = {empirical_var / crlb:.4f}")
 
-    # Compare with median (does not achieve CRLB)
+    # 비교: 중앙값은 하한을 달성하지 못한다.
+    # 정규모집단에서 중앙값의 점근 효율은 2/pi ≈ 0.637 이다.
+    # 즉 같은 정밀도를 얻으려면 표본이 약 1.57배 더 필요하다.
     medians = np.array([np.median(rng.normal(mu_true, sigma, n)) for _ in range(n_sim)])
     print(f"\nVar(median) = {medians.var():.6f}")
     print(f"Efficiency of median = {crlb / medians.var():.4f}")
 
 verify_crlb()
+```
+
+출력:
+
+```
+CRLB = sigma^2/n = 0.080000
+Var(X_bar)       = 0.078777
+Ratio            = 0.9847
+
+Var(median) = 0.121813
+Efficiency of median = 0.6567
 ```
 
 !!! note "중앙값의 효율"
@@ -249,6 +278,13 @@ $$
     crlb = 1 / (n * I_alpha)
     print(f"Trigamma(alpha=3) = {I_alpha:.6f}")
     print(f"CRLB for alpha:     {crlb:.6f}")
+    ```
+
+    출력:
+
+    ```
+    Trigamma(alpha=3) = 0.394934
+    CRLB for alpha:     0.025321
     ```
 
     trigamma 함수 값이 $\psi_1(3) \approx 0.3949$이므로 CRLB는 약 $1/(100 \times 0.3949) \approx 0.0253$이다. 관측값 100개로는 $\alpha$의 어떤 불편추정량도 분산이 약 0.025보다 작을 수 없다는 뜻이다. $\square$

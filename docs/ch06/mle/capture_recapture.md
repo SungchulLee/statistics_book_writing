@@ -203,6 +203,14 @@ prob_list, mle_n = capture_recapture(c, r, t)
 draw(prob_list, mle_n, c, r, t)
 ```
 
+출력:
+
+```
+MLE n: 14
+```
+
+![Capture-Recapture MLE for Population Size](./img/capture_recapture_124.png)
+
 ## 연습문제
 
 **연습문제 1.**

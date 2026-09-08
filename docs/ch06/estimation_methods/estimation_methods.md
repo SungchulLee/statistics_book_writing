@@ -51,15 +51,25 @@ def compare_variance_estimators(mu=5, sigma2=4, n=10, n_sim=50_000):
     rng = np.random.default_rng(42)
 
     results = {}
+    # 크기 n인 표본을 5만 개 만든다. 행 하나가 표본 하나다.
     samples = rng.normal(mu, sigma, (n_sim, n))
+
+    # 제곱합 SS = sum (x_i - x_bar)^2 을 표본마다 구한다.
+    # keepdims=True 로 (n_sim, 1) 모양을 유지해야 브로드캐스팅으로 빼진다.
+    # 세 추정량은 이 SS 를 **무엇으로 나누는가**만 다르다.
     ss = np.sum((samples - samples.mean(axis=1, keepdims=True)) ** 2, axis=1)
 
     estimators = {
+        # n으로 나눔: 최대가능도추정량. 아래로 편향된다(과소추정).
         "MLE (n)":      ss / n,
+        # n-1로 나눔: 베셀 보정. 편향이 정확히 0이 된다.
         "Bessel (n-1)": ss / (n - 1),
+        # n+1로 나눔: 편향은 더 커지지만 분산이 더 줄어 MSE가 최소가 된다.
         "MSE-opt (n+1)": ss / (n + 1),
     }
 
+    # 아래 세 값이 MSE = 편향^2 + 분산 을 이룬다.
+    # "불편이 언제나 최선은 아니다"가 이 표의 요점이다.
     for name, vals in estimators.items():
         bias = vals.mean() - sigma2
         var = vals.var()
@@ -70,6 +80,14 @@ def compare_variance_estimators(mu=5, sigma2=4, n=10, n_sim=50_000):
     return results
 
 compare_variance_estimators()
+```
+
+출력:
+
+```
+MLE (n)             bias=-0.3949  var=2.9106  MSE=3.0665
+Bessel (n-1)        bias=+0.0057  var=3.5933  MSE=3.5934
+MSE-opt (n+1)       bias=-0.7226  var=2.4054  MSE=2.9276
 ```
 
 !!! note "핵심 관찰"
@@ -94,17 +112,38 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 def shrinkage_mse(mu_true=3, sigma2=4, n=20):
+    """축소추정량 lambda * x_bar 의 MSE를 lambda의 함수로 본다.
+
+    lambda = 1 이면 보통의 표본평균(불편),
+    lambda < 1 이면 추정값을 0 쪽으로 끌어당긴다(편향되지만 분산이 준다).
+    """
     lambdas = np.linspace(0.01, 1.5, 200)
+
+    # MSE = 편향^2 + 분산.  E[lambda * x_bar] = lambda * mu 이므로
+    #   편향 = (lambda - 1) * mu
+    #   분산 = lambda^2 * sigma^2/n
     bias_sq = (lambdas - 1) ** 2 * mu_true ** 2
     variance = lambdas ** 2 * sigma2 / n
     mse = bias_sq + variance
 
+    # MSE를 lambda에 대해 미분해 0으로 두면 이 값이 나온다.
+    # 분모가 분자보다 크므로 언제나 lambda* < 1 이다.
+    # 즉 **불편추정량(lambda=1)은 결코 MSE 최소가 아니다.**
+    # 다만 이 최적값은 미지의 mu에 의존하므로 실제로 쓸 수는 없다.
     lambda_opt = mu_true ** 2 / (mu_true ** 2 + sigma2 / n)
     print(f"Optimal lambda = {lambda_opt:.4f}")
     print(f"MSE at lambda=1 (unbiased): {sigma2 / n:.4f}")
     print(f"MSE at lambda*:             {lambda_opt**2 * sigma2/n + (1 - lambda_opt)**2 * mu_true**2:.4f}")
 
 shrinkage_mse()
+```
+
+출력:
+
+```
+Optimal lambda = 0.9783
+MSE at lambda=1 (unbiased): 0.2000
+MSE at lambda*:             0.1957
 ```
 
 ## Normal 분포의 MLE
@@ -151,6 +190,14 @@ def mle_normal_demo(n=100):
 mle_normal_demo()
 ```
 
+출력:
+
+```
+True:        mu = 5.0000, sigma^2 = 4.0000
+Closed-form: mu = 4.8995, sigma^2 = 2.3888
+Numerical:   mu = 4.8995, sigma^2 = 2.3889
+```
+
 ## Gamma 분포에서 MLE와 적률법
 
 $E[X] = \alpha\beta$이고 $\text{Var}(X) = \alpha\beta^2$인 $X \sim \text{Gamma}(\alpha, \beta)$에 대해 적률법 추정량은:
@@ -172,12 +219,17 @@ def mle_vs_mom_gamma(alpha_true=3, beta_true=2, n=200, n_sim=5000):
     for _ in range(n_sim):
         data = rng.gamma(alpha_true, beta_true, n)
 
-        # Method of Moments
+        # 적률법: 표본의 1차·2차 적률을 이론값과 맞춘다.
+        # E[X] = a*b, Var(X) = a*b^2 이므로 a = E[X]^2 / Var(X) 다.
+        # 닫힌 식이라 계산이 즉시 끝나는 것이 장점이다.
         m1 = data.mean()
         v = data.var(ddof=0)
         mom_alpha.append(m1 ** 2 / v)
 
-        # MLE (scipy)
+        # MLE: 감마분포는 닫힌 해가 없어 scipy가 수치적으로 푼다.
+        # floc=0 은 위치모수를 0으로 **고정**한다는 뜻이다.
+        # 이것을 빼면 scipy가 위치까지 추정해 모수가 셋이 되고,
+        # 적률법과 같은 조건이 아니게 되어 비교가 성립하지 않는다.
         a_mle, _, _ = stats.gamma.fit(data, floc=0)
         mle_alpha.append(a_mle)
 
@@ -190,6 +242,13 @@ def mle_vs_mom_gamma(alpha_true=3, beta_true=2, n=200, n_sim=5000):
         print(f"{name}: bias={bias:+.4f}, MSE={mse:.6f}")
 
 mle_vs_mom_gamma()
+```
+
+출력:
+
+```
+MLE: bias=+0.0399, MSE=0.088900
+MoM: bias=+0.0616, MSE=0.129929
 ```
 
 !!! success "평균제곱오차에서 MLE의 승리"
@@ -211,8 +270,17 @@ import numpy as np
 def cramer_rao_demo(n=50, n_sim=20_000):
     rng = np.random.default_rng(42)
     mu_true, sigma = 5.0, 2.0
+    # 정규분포 평균에 대한 크라메르-라오 하한
     crlb = sigma ** 2 / n
 
+    # 같은 모수를 추정하는 두 불편추정량을 비교한다.
+    #   표본평균  : 하한을 달성한다 (비율 ≈ 1.00). 효율적이다.
+    #   표본중앙값: 하한보다 분산이 크다 (비율 ≈ 1.52). 정보를 버린 셈이다.
+    # 정규모집단에서 중앙값의 점근 상대효율은 2/pi ≈ 0.637 이고,
+    # 그 역수 pi/2 ≈ 1.571 이 아래 비율과 맞아떨어진다.
+    #
+    # 그렇다고 중앙값이 나쁜 것은 아니다. 이상치가 섞이면 순위가 뒤바뀐다.
+    # 효율성은 **모형이 맞다는 전제 아래에서의** 성적이다.
     means = np.array([rng.normal(mu_true, sigma, n).mean() for _ in range(n_sim)])
     medians = np.array([np.median(rng.normal(mu_true, sigma, n)) for _ in range(n_sim)])
 
@@ -221,6 +289,14 @@ def cramer_rao_demo(n=50, n_sim=20_000):
     print(f"Var(median)      = {medians.var():.6f}  (ratio to CRLB: {medians.var()/crlb:.4f})")
 
 cramer_rao_demo()
+```
+
+출력:
+
+```
+CRLB = sigma^2/n = 0.080000
+Var(X_bar)       = 0.078777  (ratio to CRLB: 0.9847)
+Var(median)      = 0.121813  (ratio to CRLB: 1.5227)
 ```
 
 ## 해석
@@ -279,18 +355,33 @@ cramer_rao_demo()
 
     for _ in range(n_sim):
         data = rng.beta(a_true, b_true, n)
+
+        # 적률법: 베타분포의 평균과 분산을 표본값과 맞추어 푼다.
+        #   E[X] = a/(a+b),  Var(X) = ab / [(a+b)^2 (a+b+1)]
+        # 이를 a, b에 대해 풀면 공통 인자 [E(1-E)/V - 1] 이 나오고
+        #   a = E * common,  b = (1-E) * common
         m1 = data.mean()
         m2 = np.mean(data ** 2)
         v = m2 - m1 ** 2
         common = m1 * (1 - m1) / v - 1
         mom_a.append(m1 * common)
 
+        # MLE. floc=0, fscale=1 로 지지구간을 [0,1]에 고정한다.
+        # 베타분포의 표준 정의가 [0,1] 위이므로 이것이 맞는 설정이며,
+        # 고정하지 않으면 scipy가 구간의 양 끝까지 추정하려 든다.
         a_mle, b_mle, _, _ = stats.beta.fit(data, floc=0, fscale=1)
         mle_a.append(a_mle)
 
     mle_a, mom_a = np.array(mle_a), np.array(mom_a)
     print(f"MLE: MSE = {np.mean((mle_a - a_true)**2):.6f}")
     print(f"MoM: MSE = {np.mean((mom_a - a_true)**2):.6f}")
+    ```
+
+    출력:
+
+    ```
+    MLE: MSE = 0.183749
+    MoM: MSE = 0.213541
     ```
 
     대체로 MLE의 평균제곱오차가 더 작으며, 이는 점근 효율성과 일관된다. $\square$
@@ -320,13 +411,27 @@ cramer_rao_demo()
 
     rng = np.random.default_rng(42)
     p, n, n_sim = 0.3, 100, 100_000
+    # 크기 100짜리 표본의 표본비율을 10만 번 만든다.
+    # binomial(n, p)가 성공 횟수를 주므로 n으로 나누면 비율이 된다.
     p_hats = np.array([rng.binomial(n, p) / n for _ in range(n_sim)])
 
+    # 크라메르-라오 하한. 불편추정량이 가질 수 있는 분산의 이론적 최솟값이다.
+    # 베르누이의 피셔정보가 I(p) = 1/[p(1-p)] 이므로 1/[n I(p)] = p(1-p)/n.
+    # 아래 비율이 1.00 에 가까우면 표본비율이 이 한계를 **달성**한다는 뜻이며,
+    # 그런 추정량을 효율적(efficient)이라고 부른다.
     crlb = p * (1 - p) / n
     empirical_var = p_hats.var()
     print(f"CRLB = p(1-p)/n = {crlb:.6f}")
     print(f"Var(p_hat)      = {empirical_var:.6f}")
     print(f"Ratio           = {empirical_var / crlb:.4f}")
+    ```
+
+    출력:
+
+    ```
+    CRLB = p(1-p)/n = 0.002100
+    Var(p_hat)      = 0.002103
+    Ratio           = 1.0016
     ```
 
     비가 1.0에 매우 가깝게 나와 $\hat{p}$가 CRLB를 달성하는 효율적 추정량임을 확인해 준다. $\square$
