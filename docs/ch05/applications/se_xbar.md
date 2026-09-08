@@ -48,13 +48,17 @@ import numpy as np
 
 np.random.seed(0)
 
-# Simulate 10,000 sample means
+# 크기 5짜리 균등표본 U(0,1)을 1만 번 뽑아 그때마다 표본평균을 기록한다.
 X_bar = []
 for _ in range(10_000):
     x = np.random.uniform(size=(5,))
     X_bar.append(x.mean())
 
-# Compute empirical statistics
+# 1만 개 표본평균의 평균과 표준편차.
+#   평균     -> 참 평균 0.5 에 가까워야 한다
+#   표준편차 -> 이것이 표준오차다. 이론값은 sigma/sqrt(n) 이며
+#              U(0,1)의 sigma = 1/sqrt(12) 이므로
+#              (1/sqrt(12))/sqrt(5) = 0.1291 이 나와야 한다.
 average = np.array(X_bar).mean()
 standard_error = np.array(X_bar).std()
 
@@ -73,6 +77,15 @@ ax.vlines(average - standard_error, ymin=0, ymax=5,
 ax.legend()
 plt.show()
 ```
+
+출력:
+
+```
+Estimated Mean of X_bar:  0.4981
+Standard Error of X_bar:  0.1287
+```
+
+![Sampling Distribution of X-bar](./img/se_xbar_45.png)
 
 ### 예상 출력
 
@@ -191,6 +204,13 @@ $n = 5$인 Uniform(0, 1)에 대해:
 
     print(f"Theoretical SE: {theoretical_se:.4f}")
     print(f"Empirical SE:   {empirical_se:.4f}")
+    ```
+
+    출력:
+
+    ```
+    Theoretical SE: 0.4472
+    Empirical SE:   0.4446
     ```
 
     이론적 표준오차는 $1/\sqrt{5} \approx 0.4472$이고 경험적 표준오차가 이 값에 매우 가깝게 나온다.

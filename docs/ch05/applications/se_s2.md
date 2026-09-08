@@ -58,12 +58,18 @@ import numpy as np
 
 np.random.seed(0)
 
+# 크기 5짜리 균등표본을 1만 번 뽑아 그때마다 S^2 을 기록한다.
 S_square = []
 for _ in range(10_000):
     x = np.random.uniform(size=(5,))
-    sigma = x.std(ddof=1)
+    sigma = x.std(ddof=1)     # ddof=1 이라야 표본표준편차다
     S_square.append(sigma ** 2)
 
+# 1만 개 S^2 값의 **평균**과 **표준편차**를 낸다.
+#   평균  -> S^2 의 중심. 참 분산 1/12 ≈ 0.0833 에 가까워야 한다(불편성).
+#   표준편차 -> 그것이 곧 S^2 의 **표준오차**다.
+# 표준오차란 "통계량의 표집분포의 표준편차"이므로,
+# 통계량 값을 잔뜩 모아 그 표준편차를 재면 그것이 표준오차다.
 average = np.array(S_square).mean()
 standard_error = np.array(S_square).std()
 
@@ -74,6 +80,8 @@ print(f"Standard Error of S^2:   {standard_error:.4f}")
 fig, ax = plt.subplots(figsize=(12, 3))
 ax.set_title("Sampling Distribution of S^2")
 ax.hist(S_square, bins=100, density=True, alpha=0.3)
+# 평균과 평균 ± 1 표준오차를 세로선으로 표시한다.
+# S^2 의 분포는 오른쪽으로 치우쳐 있어 이 구간이 대칭이 아님에 주의하라.
 ax.vlines(average, ymin=0, ymax=12, color="k", lw=5, label="Mean")
 ax.vlines(average + standard_error, ymin=0, ymax=12,
           color="k", ls="--", label="Mean +/- SE")
@@ -82,6 +90,15 @@ ax.vlines(average - standard_error, ymin=0, ymax=12,
 ax.legend()
 plt.show()
 ```
+
+출력:
+
+```
+Estimated Mean of S^2:   0.0838
+Standard Error of S^2:   0.0425
+```
+
+![Sampling Distribution of S^2](./img/se_s2_55.png)
 
 ### 예상 출력
 
@@ -183,9 +200,27 @@ $n = 5$인 Uniform(0, 1)에 대해:
     import numpy as np
     np.random.seed(0)
 
+    # 크기 5짜리 지수분포 표본에서 S^2 을 1만 번 계산한다.
+    # ddof=1 이 표본분산(n-1로 나눔)을 뜻한다.
     S_square = [np.random.exponential(size=5).var(ddof=1) for _ in range(10_000)]
     empirical_se = np.std(S_square)
+
+    # 이론값 Var(S^2) = (1/n)(mu4 - (n-3)/(n-1) * sigma^4)
+    # Exp(1)에서 sigma^2 = 1, mu4 = 9 이므로 (1/5)(9 - 2/4) = 1.7
+    theoretical_se = np.sqrt(1.7)
+    print(f"경험적 SE = {empirical_se:.4f}")
+    print(f"이론적 SE = {theoretical_se:.4f}")
     ```
+
+    출력:
+
+    ```
+    경험적 SE = 1.3237
+    이론적 SE = 1.3038
+    ```
+
+    n = 5로 아주 작은데도 두 값이 잘 맞는다. 다만 4차 적률이 들어가는 공식이라
+    수렴이 느리므로, 표본이 작으면 이 정도(1.5%) 차이는 정상이다.
 
     $\sigma^2 = 1$, $\mu_4 = 9$, $n = 5$로 이론값을 계산하면:
 

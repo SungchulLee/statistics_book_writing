@@ -90,21 +90,26 @@ from scipy import stats
 
 np.random.seed(42)
 
-n = 100
-p = 2 / 3
+n = 100          # 대출 100건
+p = 2 / 3        # 각 건의 부도확률
 n_sims = 500_000
 
-# Independent defaults
+# 경우 1: 부도가 서로 독립. 이항분포 그대로다.
 d_indep = np.random.binomial(n, p, size=n_sims)
 
-# Dependent defaults (shared risk factor)
+# 경우 2: 공통 위험요인이 있다.
+# 매 시나리오마다 부도확률 theta 를 먼저 뽑고, 그 theta로 100건을 던진다.
+# Beta(2,1)의 평균이 2/3 이므로 **평균 부도확률은 경우 1과 완전히 같다.**
+# 달라지는 것은 오직 "모든 대출이 같은 theta를 공유한다"는 점뿐이다.
 thetas = np.random.beta(2, 1, size=n_sims)
 d_dep = np.array([np.random.binomial(n, th) for th in thetas])
 
-# Tail probabilities
+# 꼬리 확률을 세 방법으로 비교한다.
+# 평균은 셋 다 같은데 꼬리는 전혀 다르다는 것이 이 예제의 요점이다.
 threshold = 90
 p_indep = np.mean(d_indep > threshold)
 p_dep = np.mean(d_dep > threshold)
+# 중심극한정리에 기댄 정규근사. 위기 이전 모형이 쓰던 방식이다.
 p_gauss = 1 - stats.norm.cdf(threshold, n * p, np.sqrt(n * p * (1 - p)))
 
 print(f"P(D > {threshold}):")
@@ -113,12 +118,23 @@ print(f"  Gaussian approx: {p_gauss:.6f}")
 print(f"  Dependent:       {p_dep:.6f}")
 ```
 
+출력:
+
+```
+P(D > 90):
+  Independent:     0.000000
+  Gaussian approx: 0.000000
+  Dependent:       0.187854
+```
+
 ## 시각화
 
 ```python
 fig, axes = plt.subplots(1, 3, figsize=(18, 5))
 
-# Panel 1: Full distributions
+# 왼쪽: 세 분포 전체.
+# 가운데(평균 근처)에서는 셋이 거의 겹쳐 보인다.
+# 그래서 평균만 보고 모형을 고르면 차이를 알아채지 못한다.
 ax = axes[0]
 bins = np.arange(-0.5, n + 1.5, 1)
 ax.hist(d_dep, bins=bins, density=True, alpha=0.5, color="tomato",
@@ -134,7 +150,10 @@ ax.set_ylabel("Probability")
 ax.set_title("Default Distributions")
 ax.legend()
 
-# Panel 2: Tail zoom
+# 가운데: 꼬리만 확대(80건 이상).
+# 여기서 세 분포가 완전히 갈라진다. 독립 가정과 정규근사는 사실상 0을 주고,
+# 종속 모형만 무시할 수 없는 확률을 준다.
+# **위험은 언제나 꼬리에 있다.**
 ax = axes[1]
 tail = range(80, n + 1)
 mc_tail = [np.mean(d_dep == d) for d in tail]
@@ -145,7 +164,10 @@ ax.set_xlabel("Number of defaults")
 ax.set_title("Tail Risk (d >= 80)")
 ax.legend()
 
-# Panel 3: Beta prior
+# 오른쪽: 공통 위험요인 theta의 분포.
+# 이 분포가 넓다는 것이 종속성의 정체다.
+# theta가 우연히 0.95쯤 나오는 시나리오에서는 100건이 거의 다 부도난다.
+# 독립 모형에는 그런 시나리오 자체가 존재하지 않는다.
 ax = axes[2]
 theta_grid = np.linspace(0, 1, 300)
 ax.plot(theta_grid, stats.beta.pdf(theta_grid, 2, 1), lw=2.5,
@@ -159,6 +181,8 @@ ax.legend()
 plt.tight_layout()
 plt.show()
 ```
+
+![Default Distributions](./img/financial_crisis_clt_118.png)
 
 ## 해석
 

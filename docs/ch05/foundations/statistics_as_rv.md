@@ -86,9 +86,14 @@ np.random.seed(0)
 num_samples = 50
 
 def main():
+    # 모집단: 0부터 32까지 번호가 붙은 공 33개.
+    # 개수가 홀수이므로 참 중앙값이 정확히 16으로 딱 떨어진다.
     balls = np.arange(33)
     print(f"Population median: {np.median(balls)}")
 
+    # 크기 5짜리 표본을 50번 뽑아 그때마다 표본중앙값을 기록한다.
+    # 표본이 달라지면 중앙값도 달라진다는 것,
+    # 즉 **통계량이 확률변수라는 것**이 이 예제의 전부다.
     data = []
     for _ in range(num_samples):
         sample = np.random.choice(balls, size=5, replace=False)
@@ -96,14 +101,17 @@ def main():
 
     print(f"Mean of sample medians: {np.mean(data):.2f}")
 
-    # Count frequencies
+    # 값마다 몇 번 나왔는지 센다. 표본이 50개뿐이라 히스토그램보다
+    # 점그림이 낫다(2.4절에서 본 대로 자료가 적을 때의 선택이다).
     data_dict = {}
     for num in data:
         data_dict[num] = data_dict.get(num, 0) + 1
 
     fig, ax = plt.subplots(figsize=(12, 3))
+    # 같은 값을 세로로 쌓아 점그림을 만든다
     for num, freq in data_dict.items():
         ax.plot([num] * freq, range(1, freq + 1), 'ok')
+    # 참 중앙값 16. 점들이 이 선 주위에 흩어지는지 확인한다.
     ax.plot([16, 16], [0, 5], "--r", alpha=0.3, label="True median")
     ax.legend()
     ax.set_title('Simulation-Based Distribution of Sample Median')
@@ -117,6 +125,15 @@ def main():
 if __name__ == "__main__":
     main()
 ```
+
+출력:
+
+```
+Population median: 16.0
+Mean of sample medians: 16.44
+```
+
+![Simulation-Based Distribution of Sample Median](./img/statistics_as_rv_81.png)
 
 **결론.** 표본중앙값의 표본분포는 근사적으로 대칭이고 참 중앙값 16을 중심으로 하며, 이는 표본중앙값이 모집단 중앙값의 불편추정량임을 시사한다.
 
@@ -197,17 +214,24 @@ np.random.seed(1)
 p_true = 0.7
 n_samples = 100
 
-# Simulate coin flips
+# 참 p = 0.7 인 동전을 100번 던진다. 물론 실제로는 이 값을 모른다.
 coins = np.random.binomial(n=1, p=p_true, size=n_samples)
 
-# Compute log-likelihood over a grid of p values
+# p의 후보를 0.01부터 0.99까지 100개 늘어놓고 각각의 로그가능도를 잰다.
+# 가능도는 "이 p라면 관측된 자료가 나올 확률이 얼마인가"이고,
+# 각 던짐이 독립이므로 확률을 모두 곱해야 한다.
+# 곱을 그대로 다루면 100번 곱하는 사이 값이 0으로 언더플로되므로
+# 로그를 취해 **합**으로 바꾼다. 이것이 로그가능도를 쓰는 실용적 이유다.
+#   앞면(coins=1)이면 log(p), 뒷면(coins=0)이면 log(1-p) 를 더한다.
 ps = np.linspace(0.01, 0.99, 100)
 log_likelihoods = np.array([
     np.sum(coins * np.log(p) + (1 - coins) * np.log(1 - p))
     for p in ps
 ])
 
-# Find MLE
+# 최대가능도추정: 가능도를 가장 크게 만드는 p를 고른다.
+# 로그는 단조증가 함수이므로 로그가능도를 최대화하는 것과 결과가 같다.
+# 여기서는 격자에서 찾지만, 해석적으로 풀면 p-hat = 표본비율이 나온다.
 idx = np.argmax(log_likelihoods)
 mle_p = ps[idx]
 
@@ -221,6 +245,8 @@ ax.spines['top'].set_visible(False)
 ax.spines['right'].set_visible(False)
 plt.show()
 ```
+
+![확률변수로서의 통계량](./img/statistics_as_rv_192.png)
 
 ### 포획–재포획의 MLE
 
@@ -254,16 +280,32 @@ import matplotlib.pyplot as plt
 from scipy import special
 
 def prob(n, c, r, t):
-    """Hypergeometric probability for capture-recapture."""
+    """포획-재포획의 초기하확률.
+
+    n: 전체 개체수(우리가 추정하려는 미지수)
+    c: 1차에서 잡아 표시한 수
+    r: 2차에서 잡은 수
+    t: 2차에서 잡힌 것 중 표시가 있던 수
+
+    2차 표본 r마리를 고르는 모든 방법 중,
+    표시된 것 t마리와 안 된 것 r-t마리를 고르는 방법의 비율이다.
+    """
     return special.comb(n - c, r - t) * special.comb(c, t) / special.comb(n, r)
 
 def capture_recapture(c=50, r=40, t=10):
+    # 가능한 최소 개체수. 표시된 50마리와 2차에서 새로 잡힌 30마리는
+    # 서로 다른 개체이므로 최소 50 + 40 - 10 = 80마리는 있어야 한다.
     min_n = c + r - t
     ns = range(min_n, 10 * min_n)
+
+    # n을 바꿔 가며 가능도를 계산한다.
+    # **n은 모수이지 확률변수가 아니다.** 자료 (c, r, t)는 고정해 두고
+    # "어떤 n이 이 자료를 가장 그럴듯하게 만드는가"를 묻는 것이다.
     probs = [prob(n, c, r, t) for n in ns]
 
     mle_idx = probs.index(max(probs))
     mle_n = mle_idx + min_n
+    # 직관적인 답 c*r/t = 50*40/10 = 200 과 비교해 보라.
     print(f"MLE of N: {mle_n}")
     return list(ns), probs, mle_n
 
@@ -278,6 +320,14 @@ ax.set_title('Capture–Recapture: Likelihood vs Population Size')
 ax.legend()
 plt.show()
 ```
+
+출력:
+
+```
+MLE of N: 199
+```
+
+![Capture–Recapture: Likelihood vs Population Size](./img/statistics_as_rv_278.png)
 
 ## 요약
 

@@ -89,6 +89,12 @@ from scipy import stats
 print(f"P(p_hat > 0.65) = {stats.norm.sf(1.02):.4f}")
 ```
 
+출력:
+
+```
+P(p_hat > 0.65) = 0.1539
+```
+
 ### 예제 2: 소표본 — 정확값과 근사값
 
 **문제.** 어떤 도시에서 30%가 대중교통을 선호한다. $n = 10$일 때 $P(\hat{p} > 0.35)$를 구하라.
@@ -139,6 +145,13 @@ approx = stats.norm.sf(0.345)
 print(f"Normal approx: {approx:.4f}")
 ```
 
+출력:
+
+```
+Exact: 0.3504
+Normal approx: 0.3650
+```
+
 ## 두 비율의 차
 
 비율이 $p_1$과 $p_2$인 두 모집단에서 독립인 표본을 뽑으면:
@@ -162,17 +175,24 @@ from scipy import stats
 
 np.random.seed(1)
 
+# 모집단은 0과 1 두 값뿐인 베르누이다. binom(n=1)이 곧 베르누이다.
 population = stats.binom(n=1, p=0.4).rvs(100_000)
 sample_size = 1_000
 n_samples = 10_000
 
+# 0/1 자료의 평균이 곧 비율이다. 그래서 p-hat 은 특별한 통계량이 아니라
+# **표본평균의 한 경우**이며, 중심극한정리가 그대로 적용된다.
 sample_proportions = [
     np.mean(np.random.choice(population, size=sample_size, replace=False))
     for _ in range(n_samples)
 ]
 
+# 이 그림의 요점은 위아래의 **모양 차이**다.
+# 모집단은 막대 두 개뿐인 가장 극단적인 비정규 분포인데,
+# 표본비율의 표집분포는 매끄러운 종 모양이 된다.
 fig, (ax0, ax1) = plt.subplots(2, 1, figsize=(12, 6))
 
+# bins=3 인 이유: 값이 0과 1뿐이라 구간을 잘게 나눌 필요가 없다.
 ax0.hist(population, bins=3, density=True, alpha=0.5)
 ax0.set_title('Population Distribution (Bernoulli, p = 0.4)', fontsize=16)
 

@@ -55,7 +55,8 @@ n_population = 10_000
 # Generate a large population from Uniform(0, 1)
 population = np.random.uniform(size=(n_population,))
 
-# Draw a single sample
+# 표본을 딱 하나 뽑는다. 현실에서 우리가 실제로 갖게 되는 것이 이것뿐이다.
+# 아래 가운데 패널에 점 몇 개로 그려진다.
 single_sample = np.random.choice(population, size=sample_size, replace=False)
 
 # Simulate the sampling distribution of X-bar
@@ -65,6 +66,11 @@ sample_means = [
 ]
 
 # Plot
+# 세 패널을 sharex=True 로 묶는 것이 이 그림의 핵심 장치다.
+# 가로 눈금이 같아야 세 분포의 **퍼짐**을 직접 견줄 수 있다.
+#   위   모집단      : 가장 넓다
+#   가운데 표본 하나  : 모집단에서 뽑은 점 몇 개
+#   아래  표집분포    : 눈에 띄게 좁다. 이 좁아짐이 sigma/sqrt(n) 이다.
 fig, (ax0, ax1, ax2) = plt.subplots(3, 1, figsize=(12, 8), sharex=True)
 
 ax0.hist(population, bins=np.linspace(0, 1, 100))
@@ -79,6 +85,8 @@ ax2.set_title("Sampling Distribution of X-bar")
 plt.tight_layout()
 plt.show()
 ```
+
+![Population Distribution](./img/xbar_uniform_45.png)
 
 ## 해석
 
@@ -185,6 +193,13 @@ $n$이 커질수록 이 표준오차가 줄어들고 표본분포는 $\mu$ 주�
     empirical_se = np.std(sample_means)
     print(f"Theoretical SE: {1 / np.sqrt(600):.4f}")
     print(f"Empirical SE:   {empirical_se:.4f}")
+    ```
+
+    출력:
+
+    ```
+    Theoretical SE: 0.0408
+    Empirical SE:   0.0407
     ```
 
     경험적 표준오차가 0.0408에 가깝게 나와 이론적 공식을 확인해 준다. $\square$

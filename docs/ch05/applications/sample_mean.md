@@ -91,6 +91,12 @@ from scipy import stats
 print(f"P(X_bar > 155) = {stats.norm.sf(1.25):.4f}")
 ```
 
+출력:
+
+```
+P(X_bar > 155) = 0.1056
+```
+
 ### 예제 2: 수면 시간
 
 **문제.** 평균 수면 시간이 7시간이고 $\sigma = 1.5$이다. $n = 49$일 때 $P(6.8 < \bar{X} < 7.2)$를 구하라.
@@ -115,6 +121,12 @@ from scipy import stats
 print(f"P(6.8 < X_bar < 7.2) = {stats.norm.cdf(0.93) - stats.norm.cdf(-0.93):.4f}")
 ```
 
+출력:
+
+```
+P(6.8 < X_bar < 7.2) = 0.6476
+```
+
 ### 예제 3: 체중 (소표본, 정규모집단)
 
 **문제.** 체중이 $N(70, 10^2)$이다. $n = 5$일 때 $P(\bar{X} > 72)$를 구하라.
@@ -133,6 +145,12 @@ $$
 ```python
 from scipy import stats
 print(f"P(X_bar > 72) = {stats.norm.sf(0.447):.4f}")
+```
+
+출력:
+
+```
+P(X_bar > 72) = 0.3274
 ```
 
 ### 예제 4: 물 부족
@@ -176,6 +194,12 @@ from scipy import stats
 print(f"P(X_bar > 2100) = {stats.norm.sf(2):.4f}")
 ```
 
+출력:
+
+```
+P(X_bar > 2100) = 0.0228
+```
+
 ## 두 평균의 표본분포
 
 ### 분산을 알거나 표본이 큰 경우
@@ -217,6 +241,12 @@ prob = stats.norm.sf(z_upper) + stats.norm.cdf(z_lower)
 print(f"P(|X_bar_A - X_bar_B| > 6) = {prob:.4f}")
 ```
 
+출력:
+
+```
+P(|X_bar_A - X_bar_B| > 6) = 0.1030
+```
+
 ## 표본크기가 표준오차에 미치는 영향
 
 | $n$ | SE ($\sigma = 50$일 때) |
@@ -236,15 +266,26 @@ from scipy import stats
 
 np.random.seed(1)
 
+# 1단계: 모집단을 만든다. 10만 개면 사실상 무한 모집단으로 취급할 수 있다.
 population = stats.norm().rvs(100_000)
-sample_size = 10
-n_samples = 10_000
+sample_size = 10       # 표본 하나의 크기
+n_samples = 10_000     # 표본을 몇 번 되풀이해 뽑을 것인가
 
+# 2단계: 표본을 1만 번 뽑고 그때마다 표본평균을 기록한다.
+# replace=False 는 비복원추출. 모집단이 10만이고 표본이 10이라
+# 복원이든 비복원이든 결과에 거의 차이가 없다.
+#
+# 현실에서는 표본을 한 번만 뽑으므로 표본평균도 하나뿐이다.
+# 이 반복은 "만약 다시 뽑는다면 얼마가 나올까"를 눈으로 보기 위한 장치이며,
+# 그렇게 만들어진 분포가 곧 **표집분포**다.
 sample_means = [
     np.mean(np.random.choice(population, size=sample_size, replace=False))
     for _ in range(n_samples)
 ]
 
+# 위아래 두 패널로 나눈다. 위는 모집단, 아래는 통계량의 표집분포다.
+# 둘의 **가로 눈금이 다르다**는 점에 주의하라.
+# 표집분포가 훨씬 좁으므로 같은 축에 그리면 한 점처럼 보인다.
 fig, (ax0, ax1) = plt.subplots(2, 1, figsize=(12, 6))
 
 ax0.hist(population, bins=100, density=True, alpha=0.5)

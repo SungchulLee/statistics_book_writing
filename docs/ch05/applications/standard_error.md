@@ -110,13 +110,19 @@ import numpy as np
 np.random.seed(0)
 
 def main():
+    # 크기 5짜리 균등표본을 1만 번 뽑아 표본평균을 모은다.
     X_bar = []
     for _ in range(10_000):
         x = np.random.uniform(size=(5,))
         x_bar = x.mean()
         X_bar.append(x_bar)
 
-    average = np.array(X_bar).mean()  # very good estimate of mu
+    # 표준오차의 정의를 그대로 실행한 것이 아래 두 줄이다.
+    #   average        = 표집분포의 중심 (참 mu = 0.5 의 좋은 추정)
+    #   standard_error = 표집분포의 **표준편차**
+    # 즉 표준오차는 새로운 개념이 아니라, 통계량의 분포에 대한 표준편차다.
+    # 현실에서는 표본이 하나뿐이라 이렇게 구할 수 없어 공식 s/sqrt(n) 을 쓴다.
+    average = np.array(X_bar).mean()
     standard_error = np.array(X_bar).std()
 
     print(f'(Estimated) Mean of X_bar : {average:.4}')
@@ -131,6 +137,8 @@ def main():
     ax.vlines(average + standard_error, ymin=0, ymax=5, alpha=0.7, color='k', ls='--')
     ax.vlines(average - standard_error, ymin=0, ymax=5, alpha=0.7, color='k', ls='--')
 
+    # 평균에서 +1 표준오차까지를 양방향 화살표로 표시해
+    # "표준오차 = 이만큼의 폭"임을 그림에서 직접 보여 준다.
     arrowprops = dict(arrowstyle='<->', color='k', linewidth=3, mutation_scale=20)
     ax.annotate(text='',
                 xy=(average, 5),
@@ -153,17 +161,34 @@ if __name__ == "__main__":
     main()
 ```
 
+출력:
+
+```
+(Estimated) Mean of X_bar : 0.4981
+Standard Error   of X_bar : 0.1287
+```
+
+![Sampling Distribution of X_bar](./img/standard_error_106.png)
+
+## 같은 코드를 파일 둘로 나눈다면
+
+위 예제는 한 덩어리로 실행하는 형태였다. 실제 프로젝트에서는 설정과 본문을 파일로 나누는 편이 낫다. 아래 두 블록은 **두 개의 `.py` 파일**을 각각 적은 것이므로, 문서에서 이어 붙여 실행할 수는 없다. 같은 디렉터리에 저장한 뒤 `python standard_error_of_x_bar.py --seed 7` 처럼 실행한다.
+
 ### 모듈 버전: `global_name_space.py`
 
 ```python
 import argparse
 import numpy as np
 
-parser = argparse.ArgumentParser(description='PyTorch MNIST Example')
+# 이 파일은 여러 스크립트가 공유하는 설정을 한곳에 모아 두는 용도다.
+# 다른 모듈에서 `from global_name_space import ARGS` 로 가져다 쓴다.
+parser = argparse.ArgumentParser(description='Standard error simulation')
 parser.add_argument('--seed', type=int, default=1, metavar='S',
                     help='random seed (default: 1)')
 ARGS = parser.parse_args()
 
+# 시드를 여기서 한 번만 고정하면 이 설정을 가져다 쓰는 모든 스크립트가
+# 같은 난수열을 쓰게 되어 결과가 재현된다.
 np.random.seed(ARGS.seed)
 ```
 
@@ -197,6 +222,8 @@ def main():
     ax.vlines(average + standard_error, ymin=0, ymax=5, alpha=0.7, color='k', ls='--')
     ax.vlines(average - standard_error, ymin=0, ymax=5, alpha=0.7, color='k', ls='--')
 
+    # 평균에서 +1 표준오차까지를 양방향 화살표로 표시해
+    # "표준오차 = 이만큼의 폭"임을 그림에서 직접 보여 준다.
     arrowprops = dict(arrowstyle='<->', color='k', linewidth=3, mutation_scale=20)
     ax.annotate(text='',
                 xy=(average, 5),
@@ -251,6 +278,8 @@ def main():
     ax.vlines(average + standard_error, ymin=0, ymax=12, alpha=0.7, color='k', ls='--')
     ax.vlines(average - standard_error, ymin=0, ymax=12, alpha=0.7, color='k', ls='--')
 
+    # 평균에서 +1 표준오차까지를 양방향 화살표로 표시해
+    # "표준오차 = 이만큼의 폭"임을 그림에서 직접 보여 준다.
     arrowprops = dict(arrowstyle='<->', color='k', linewidth=3, mutation_scale=20)
     ax.annotate(text='',
                 xy=(average, 12),

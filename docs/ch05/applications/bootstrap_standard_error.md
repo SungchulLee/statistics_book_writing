@@ -62,12 +62,18 @@ data = np.array([
 ])
 
 n = len(data)
-n_boot = 10_000
+n_boot = 10_000     # 붓스트랩 재표본 개수
 
-# Classical SE
+# 고전적 표준오차. s/sqrt(n) 이라는 **공식**에 의존한다.
 se_classical = data.std(ddof=1) / np.sqrt(n)
 
-# Bootstrap SE (standard approach)
+# 붓스트랩 표준오차. 공식 대신 **재표본추출**로 구한다.
+# 핵심은 replace=True 다. 원자료에서 크기 n짜리를 복원추출하므로
+# 같은 값이 여러 번 뽑히거나 아예 안 뽑히기도 한다.
+# 그 우연이 만들어 내는 표본평균의 흩어짐이 곧 표준오차의 추정이다.
+#
+# 발상은 이렇다. 우리는 모집단에서 표본을 다시 뽑을 수 없다.
+# 그래서 **표본을 모집단인 셈 치고** 거기서 다시 뽑는다.
 boot_means = np.array([
     np.random.choice(data, size=n, replace=True).mean()
     for _ in range(n_boot)
@@ -86,12 +92,23 @@ print(f"Bootstrap SE:       {se_bootstrap:.4f}")
 print(f"Squared-error SE:   {se_squared_error:.4f}")
 ```
 
+출력:
+
+```
+Classical SE:       0.1854
+Bootstrap SE:       0.1834
+Squared-error SE:   0.1810
+```
+
 ## 시각화
 
 ```python
 fig, axes = plt.subplots(1, 2, figsize=(12, 4.5))
 
-# Left panel: bootstrap distribution
+# 왼쪽: 붓스트랩 분포.
+# 이 히스토그램의 **표준편차**가 곧 붓스트랩 표준오차다.
+# 표집분포를 모의실험으로 만든 것과 모양이 같지만,
+# 모집단이 아니라 표본에서 뽑았다는 점이 다르다.
 ax = axes[0]
 ax.hist(boot_means, bins=40, edgecolor="white", alpha=0.7)
 ax.axvline(data.mean(), color="red", linestyle="--",
@@ -101,7 +118,10 @@ ax.set_ylabel("Frequency")
 ax.set_title(f"Bootstrap Distribution (SE = {se_bootstrap:.3f})")
 ax.legend()
 
-# Right panel: SE vs. sample size
+# 오른쪽: 표본 크기에 따른 SE의 변화.
+# data[:k] 로 앞에서부터 k개만 써서 SE를 계산한다.
+# 1/sqrt(k) 로 줄어들므로 곡선이 완만해진다.
+# SE를 절반으로 줄이려면 표본을 네 배로 늘려야 한다는 뜻이다.
 ax = axes[1]
 sizes = np.arange(5, n + 1)
 se_vals = [data[:k].std(ddof=1) / np.sqrt(k) for k in sizes]
@@ -113,6 +133,8 @@ ax.set_title("Standard Error Decreases with n")
 plt.tight_layout()
 plt.show()
 ```
+
+![Standard Error Decreases with n](./img/bootstrap_standard_error_91.png)
 
 ## 해석
 
@@ -212,12 +234,23 @@ plt.show()
                      242.27, 242.15, 242.04, 241.93, 241.81, 241.70,
                      241.59])
 
+    # 평균 대신 중앙값을 계산한다. 바뀐 것은 np.mean -> np.median 뿐이다.
+    # 이것이 붓스트랩의 가장 큰 장점이다.
+    # 중앙값의 표준오차에는 s/sqrt(n) 같은 간단한 공식이 없다.
+    # (있긴 하지만 모집단 밀도를 알아야 해서 실무에서 쓸 수 없다.)
+    # 붓스트랩은 통계량이 무엇이든 같은 절차로 답을 준다.
     boot_medians = np.array([
         np.median(np.random.choice(data, size=len(data), replace=True))
         for _ in range(10_000)
     ])
     se_median = boot_medians.std(ddof=1)
     print(f"Bootstrap SE of the median: {se_median:.4f}")
+    ```
+
+    출력:
+
+    ```
+    Bootstrap SE of the median: 0.3071
     ```
 
     중앙값에 붓스트랩이 특히 유용한 이유는:

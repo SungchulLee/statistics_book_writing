@@ -63,9 +63,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import chi2
 
-x = np.linspace(0, 20, 500)
+x = np.linspace(0, 20, 500)      # 카이제곱은 x > 0 에서만 정의된다
 fig, ax = plt.subplots(figsize=(12, 5))
 
+# 자유도를 1에서 10까지 바꿔 가며 겹쳐 그린다.
+# 자유도 = 더한 제곱의 개수이므로 평균이 곧 df, 분산은 2*df 다.
+#   df = 1, 2 : 0에서 무한대로 치솟는다(최빈값이 0)
+#   df >= 3   : 봉우리가 생기고 최빈값이 df - 2 에 놓인다
+#   df가 커질수록 오른쪽으로 이동하며 대칭인 종 모양에 가까워진다
 for df in range(1, 11):
     ax.plot(x, chi2.pdf(x, df), label=f'df = {df}', alpha=0.7)
 
@@ -76,6 +81,8 @@ ax.legend(title='df')
 ax.grid(True, alpha=0.3)
 plt.show()
 ```
+
+![Chi-Square PDF for Various Degrees of Freedom](./img/chi_square_61.png)
 
 ---
 
@@ -89,6 +96,8 @@ from scipy.stats import chi2
 x = np.linspace(0, 20, 500)
 fig, ax = plt.subplots(figsize=(12, 5))
 
+# 같은 자유도들의 CDF. 자유도가 클수록 곡선이 오른쪽으로 밀린다.
+# 가설검정에서 임계값을 읽을 때 쓰는 것이 바로 이 곡선이다.
 for df in range(1, 11):
     ax.plot(x, chi2.cdf(x, df), label=f'df = {df}', alpha=0.7)
 
@@ -99,6 +108,8 @@ ax.legend(title='df')
 ax.grid(True, alpha=0.3)
 plt.show()
 ```
+
+![Chi-Square CDF](./img/chi_square_84.png)
 
 ---
 
@@ -115,6 +126,13 @@ chi2_99 = stats.chi2(df).ppf(0.99)
 print(f"99th percentile of χ²(10): {chi2_99:.4f}")
 ```
 
+출력:
+
+```
+97.5th percentile of χ²(10): 20.4832
+99th percentile of χ²(10): 23.2093
+```
+
 ---
 
 ## 확률표본
@@ -128,6 +146,7 @@ from scipy import stats
 
 np.random.seed(0)
 df = 5
+# 방법 1: scipy의 카이제곱 생성기를 그대로 쓴다.
 data = stats.chi2(df).rvs(10_000)
 
 fig, ax = plt.subplots(figsize=(12, 3))
@@ -136,6 +155,8 @@ ax.plot(bins, stats.chi2(df).pdf(bins), '--r', lw=3, label='χ² PDF')
 ax.legend()
 plt.show()
 ```
+
+![카이제곱 분포 (chi-squared)](./img/chi_square_124.png)
 
 ### 정의로부터의 표본추출 (정규확률변수의 제곱합)
 
@@ -146,6 +167,11 @@ from scipy import stats
 
 np.random.seed(0)
 df = 5
+# 방법 2: 정의를 그대로 실행한다.
+# 표준정규 5개를 뽑아 제곱해 더하기를 1만 번 되풀이한다.
+#   rvs((5, 10000)) 이 (5, 10000) 배열을 주고
+#   axis=0 으로 더하면 열마다(= 시행마다) 5개의 제곱합이 나온다.
+# 앞의 그림과 겹쳐 보면 두 방법이 같은 분포를 낸다는 것이 확인된다.
 data = np.sum(stats.norm().rvs((df, 10_000))**2, axis=0)
 
 fig, ax = plt.subplots(figsize=(12, 3))
@@ -154,6 +180,8 @@ ax.plot(bins, stats.chi2(df).pdf(bins), '--r', lw=3, label='χ² PDF')
 ax.legend()
 plt.show()
 ```
+
+![카이제곱 분포 (chi-squared)](./img/chi_square_142.png)
 
 ---
 
@@ -182,8 +210,13 @@ import numpy as np
 import scipy.stats as stats
 
 n, n_sim, mu, sigma = 10, 10_000, 1, 2
+# 크기 10짜리 정규 표본을 1만 개 만든다. 행 하나가 표본 하나다.
 samples = stats.norm(loc=mu, scale=sigma).rvs(size=(n_sim, n))
-s = samples.std(axis=1, ddof=1)
+s = samples.std(axis=1, ddof=1)      # 행마다 표본표준편차(n-1로 나눔)
+
+# 이 통계량이 정확히 chi^2(n-1) 을 따른다는 것이 정리의 내용이다.
+# mu = 1 을 썼지만 결과는 mu에 의존하지 않는다.
+# S^2 이 편차만 쓰므로 위치가 상쇄되기 때문이다.
 data = (n - 1) * s**2 / sigma**2
 
 fig, ax = plt.subplots(figsize=(12, 3))
@@ -195,6 +228,8 @@ ax.spines[['top', 'right']].set_visible(False)
 plt.show()
 ```
 
+![(n-1)S²/σ² from Normal Population → χ² Exact](./img/chi_square_179.png)
+
 ### 모의실험: 정규가 아닌 모집단
 
 ```python
@@ -203,9 +238,16 @@ import numpy as np
 import scipy.stats as stats
 
 n, n_sim = 10, 10_000
-samples = stats.expon().rvs(size=(n_sim, n))  # Exponential, not normal
+# 앞 모의실험과 **한 곳만** 다르다. 모집단을 정규에서 지수로 바꿨다.
+# 나머지 코드는 그대로다.
+samples = stats.expon().rvs(size=(n_sim, n))
 s = samples.std(axis=1, ddof=1)
-data = (n - 1) * s**2  # σ² = 1 for Exp(1)
+# Exp(1)의 분산이 1이므로 sigma^2으로 나눌 필요가 없다.
+data = (n - 1) * s**2
+
+# 지수분포는 오른쪽으로 크게 치우쳐 4차 적률이 크다.
+# 그 결과 S^2 의 분포가 카이제곱보다 훨씬 무거운 꼬리를 갖게 되어
+# 아래 그림에서 히스토그램이 빨간 곡선 밖으로 크게 벗어난다.
 
 fig, ax = plt.subplots(figsize=(12, 3))
 _, bins, _ = ax.hist(data, bins=100, density=True, alpha=0.7)

@@ -63,16 +63,21 @@ import matplotlib.pyplot as plt
 from scipy import stats
 
 np.random.seed(0)
-d1, d2 = 5, 10
+d1, d2 = 5, 10      # 분자 자유도, 분모 자유도
+# 방법 1: scipy의 F 생성기를 그대로 쓴다.
 data = stats.f(d1, d2).rvs(10_000)
 
 fig, ax = plt.subplots(figsize=(12, 3))
+# F 분포는 오른쪽 꼬리가 길어 값이 수십까지 나온다.
+# 구간을 [0, 5]로 고정해 봉우리 부분을 제대로 보이게 한다.
 bins = np.linspace(0, 5, 100)
 ax.hist(data, bins=bins, density=True, alpha=0.7, label='F Samples')
 ax.plot(bins, stats.f(d1, d2).pdf(bins), '--r', lw=3, label=f'F({d1},{d2}) PDF')
 ax.legend()
 plt.show()
 ```
+
+![F 분포](./img/f_distribution_60.png)
 
 ### 정의로부터의 표본추출 (카이제곱의 비)
 
@@ -84,6 +89,12 @@ from scipy import stats
 np.random.seed(0)
 d1, d2, n = 5, 10, 10_000
 
+# 방법 2: 정의를 그대로 실행한다.
+# F = (chi2_{d1}/d1) / (chi2_{d2}/d2).
+# 각 카이제곱을 **자기 자유도로 나눈다**는 점이 핵심이다.
+# 그래야 두 값의 기댓값이 모두 1이 되어 비율이 1 근처에 놓인다.
+# 이것이 분산분석에서 "두 분산추정값의 비"가 F를 따르는 이유다.
+# 두 카이제곱은 서로 독립이어야 하므로 따로 rvs를 호출한다.
 f_data = (stats.chi2(d1).rvs(n) / d1) / (stats.chi2(d2).rvs(n) / d2)
 
 fig, ax = plt.subplots(figsize=(12, 3))
@@ -93,6 +104,8 @@ ax.plot(bins, stats.f(d1, d2).pdf(bins), '--r', lw=3, label=f'F({d1},{d2}) PDF')
 ax.legend()
 plt.show()
 ```
+
+![F 분포](./img/f_distribution_79.png)
 
 ---
 
@@ -158,6 +171,12 @@ from scipy import stats
 # 95th percentile of F(5, 20)
 f_95 = stats.f(5, 20).ppf(0.95)
 print(f"F_0.95(5, 20) = {f_95:.4f}")
+```
+
+출력:
+
+```
+F_0.95(5, 20) = 2.7109
 ```
 
 ---

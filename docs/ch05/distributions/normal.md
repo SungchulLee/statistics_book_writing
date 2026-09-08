@@ -115,6 +115,14 @@ for alpha in [0.10, 0.05, 0.01]:
     print(f"Confidence {1-alpha:.0%}: z* = {z:.3f}")
 ```
 
+출력:
+
+```
+Confidence 90%: z* = 1.645
+Confidence 95%: z* = 1.960
+Confidence 99%: z* = 2.576
+```
+
 ## 다른 분포와의 관계
 
 표준정규분포는 다른 표본분포들의 기본 구성요소이다:

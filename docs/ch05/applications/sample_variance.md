@@ -124,6 +124,12 @@ p_value = stats.chi2(df=9).sf(chi2_stat)
 print(f"P(S^2 > 30) = {p_value:.4f}")
 ```
 
+출력:
+
+```
+P(S^2 > 30) = 0.2897
+```
+
 ### 예제 3: 정규성 가정 없이
 
 **문제.** 분산이 25인 모집단에서 $n = 10$인 표본을 뽑는다(정규성은 가정하지 않는다). $P(S^2 > 30)$에 관해 무엇을 말할 수 있는가?
@@ -164,11 +170,20 @@ population = stats.norm().rvs(100_000)
 sample_size = 10
 n_samples = 10_000
 
+# 표본평균 대신 표본분산을 기록한다. ddof=1 이 n-1로 나누는 표본분산이다.
+# 아래 그림에서 두 가지를 확인하라.
+#   중심: 참 분산 1 근처에 놓인다 (S^2 은 불편추정량이다)
+#   모양: 대칭이 아니라 **오른쪽으로 치우쳐 있다**.
+#         분산은 음수가 될 수 없어 왼쪽이 0에서 막히기 때문이다.
+#         표본평균의 표집분포가 대칭인 것과 대비된다.
 sample_vars = [
     np.var(np.random.choice(population, size=sample_size, replace=False), ddof=1)
     for _ in range(n_samples)
 ]
 
+# 위아래 두 패널로 나눈다. 위는 모집단, 아래는 통계량의 표집분포다.
+# 둘의 **가로 눈금이 다르다**는 점에 주의하라.
+# 표집분포가 훨씬 좁으므로 같은 축에 그리면 한 점처럼 보인다.
 fig, (ax0, ax1) = plt.subplots(2, 1, figsize=(12, 6))
 
 ax0.hist(population, bins=100, density=True, alpha=0.5)
@@ -184,6 +199,8 @@ for ax in (ax0, ax1):
 plt.tight_layout()
 plt.show()
 ```
+
+![Population Distribution (Normal)](./img/sample_variance_156.png)
 
 ### 소득 (치우친) 모집단
 
@@ -205,6 +222,9 @@ sample_vars = [
     for _ in range(n_samples)
 ]
 
+# 위아래 두 패널로 나눈다. 위는 모집단, 아래는 통계량의 표집분포다.
+# 둘의 **가로 눈금이 다르다**는 점에 주의하라.
+# 표집분포가 훨씬 좁으므로 같은 축에 그리면 한 점처럼 보인다.
 fig, (ax0, ax1) = plt.subplots(2, 1, figsize=(12, 6))
 
 ax0.hist(population, bins=100, density=True, alpha=0.5)

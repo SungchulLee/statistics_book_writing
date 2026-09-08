@@ -77,6 +77,21 @@ plt.tight_layout()
 plt.show()
 ```
 
+출력:
+
+```
+Summary of the three distributions:
+                                     count  ...            max
+type                                        ...               
+Population Sample\n(n=1000)           1000  ...  324271.663355
+Sampling Distribution\n(Mean of 20)   1000  ...  105206.385852
+Sampling Distribution\n(Mean of 5)    1000  ...  167118.641562
+
+[3 rows x 5 columns]
+```
+
+![표본분포 시각화: 표본크기의 효과](./img/sampling_dist_visualization_21.png)
+
 ## 시각화 해석
 
 ### 모집단 표본 (위 패널)
@@ -117,7 +132,9 @@ $$SE(\bar{X}) = \frac{\sigma}{\sqrt{n}}$$
 $n=20$의 표준오차는 $n=5$의 대략 절반이며, 그만큼 추정이 정밀해진다.
 
 ```python
-# Verify standard error relationship
+# 1/sqrt(n) 법칙을 숫자로 확인한다.
+# n을 5에서 20으로 **네 배** 늘리면 표준오차는 sqrt(4) = 2배 줄어야 한다.
+# 아래 마지막 줄의 비율이 정확히 2.00 으로 나오는지 보라.
 pop_std = loans_income.std()
 se_5 = pop_std / np.sqrt(5)
 se_20 = pop_std / np.sqrt(20)
@@ -126,6 +143,15 @@ print(f"Population standard deviation: ${pop_std:,.0f}")
 print(f"SE for n=5:  ${se_5:,.0f}")
 print(f"SE for n=20: ${se_20:,.0f}")
 print(f"Ratio SE(5)/SE(20): {se_5/se_20:.2f}")
+```
+
+출력:
+
+```
+Population standard deviation: $49,047
+SE for n=5:  $21,934
+SE for n=20: $10,967
+Ratio SE(5)/SE(20): 2.00
 ```
 
 ### 정규성으로의 수렴
@@ -144,10 +170,15 @@ print(f"Ratio SE(5)/SE(20): {se_5/se_20:.2f}")
 import numpy as np
 import pandas as pd
 
-# Quantify the effect
+# 앞 절의 그림을 숫자로 옮긴다.
 np.random.seed(1)
+# 소득처럼 오른쪽으로 크게 치우친 모집단을 만든다(지수분포 + 하한 2만).
 loans_income = np.random.exponential(scale=50000, size=10000) + 20000
 
+# 같은 모집단에서 n=5 와 n=20 으로 각각 1000개의 표본평균을 만든다.
+# 아래 표에서 두 열을 비교하면 두 가지가 보인다.
+#   Mean은 거의 같다  -> 표본 크기는 **중심**을 바꾸지 않는다(불편성)
+#   Std Dev와 IQR은 절반쯤으로 준다 -> 표본 크기는 **퍼짐**을 줄인다
 sample_means_5 = np.array([np.mean(np.random.choice(loans_income, 5)) for _ in range(1000)])
 sample_means_20 = np.array([np.mean(np.random.choice(loans_income, 20)) for _ in range(1000)])
 
@@ -159,6 +190,19 @@ print(f"{'Std Dev':<20} ${sample_means_5.std():>18,.0f} ${sample_means_20.std():
 print(f"{'25th percentile':<20} ${np.percentile(sample_means_5, 25):>18,.0f} ${np.percentile(sample_means_20, 25):>18,.0f}")
 print(f"{'75th percentile':<20} ${np.percentile(sample_means_5, 75):>18,.0f} ${np.percentile(sample_means_20, 75):>18,.0f}")
 print(f"{'IQR':<20} ${np.percentile(sample_means_5, 75) - np.percentile(sample_means_5, 25):>18,.0f} ${np.percentile(sample_means_20, 75) - np.percentile(sample_means_20, 25):>18,.0f}")
+```
+
+출력:
+
+```
+Sampling Distribution Comparison:
+Statistic            n=5                  n=20                
+------------------------------------------------------------
+Mean                 $            69,810 $            69,693
+Std Dev              $            22,985 $            11,097
+25th percentile      $            52,963 $            61,815
+75th percentile      $            82,813 $            76,721
+IQR                  $            29,850 $            14,907
 ```
 
 ## 요약

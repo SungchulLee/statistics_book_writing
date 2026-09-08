@@ -50,7 +50,8 @@ n_population = 10_000
 # Generate a large population from Exp(1)
 population = np.random.exponential(size=(n_population,))
 
-# Draw a single sample
+# 표본을 딱 하나 뽑는다. 현실에서 우리가 실제로 갖게 되는 것이 이것뿐이다.
+# 아래 가운데 패널에 점 몇 개로 그려진다.
 single_sample = np.random.choice(population, size=sample_size, replace=False)
 
 # Simulate the sampling distribution of X-bar
@@ -60,6 +61,11 @@ sample_means = [
 ]
 
 # Plot
+# 세 패널을 sharex=True 로 묶는 것이 이 그림의 핵심 장치다.
+# 가로 눈금이 같아야 세 분포의 **퍼짐**을 직접 견줄 수 있다.
+#   위   모집단      : 가장 넓다
+#   가운데 표본 하나  : 모집단에서 뽑은 점 몇 개
+#   아래  표집분포    : 눈에 띄게 좁다. 이 좁아짐이 sigma/sqrt(n) 이다.
 fig, (ax0, ax1, ax2) = plt.subplots(3, 1, figsize=(12, 8), sharex=True)
 
 _, bins, _ = ax0.hist(population, bins=100)
@@ -74,6 +80,8 @@ ax2.set_title("Sampling Distribution of X-bar")
 plt.tight_layout()
 plt.show()
 ```
+
+![Population Distribution (Exponential)](./img/xbar_exponential_40.png)
 
 ## 해석
 
@@ -148,6 +156,13 @@ plt.show()
     print(f"Normal approximation: {p_normal:.6f}")
     ```
 
+    출력:
+
+    ```
+    Exact (Gamma):       0.029253
+    Normal approximation: 0.012674
+    ```
+
     정확한 값은 약 0.0293이고 정규근사는 약 0.0127이다. $n = 5$는 중심극한정리가 Exponential 분포의 치우침을 온전히 보정하기에 너무 작아, 정규근사가 오른쪽 꼬리 확률을 크게 과소추정한다. $\square$
 
 ---
@@ -205,5 +220,7 @@ plt.show()
     ax.set_title("Sampling Distribution of X-bar, n=50")
     plt.show()
     ```
+
+    ![Sampling Distribution of X-bar, n=50](./img/xbar_exponential_185.png)
 
     $n = 50$에서는 표본평균의 히스토그램이 거의 대칭이고 $N(1, 1/50)$ 밀도를 바짝 따라간다. $\bar{X}$의 왜도가 $2/\sqrt{50} \approx 0.28$로 충분히 작아 정규근사가 아주 잘 맞는다. $\square$

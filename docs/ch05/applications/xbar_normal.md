@@ -48,7 +48,8 @@ n_population = 10_000
 # Generate a large population from N(0, 1)
 population = np.random.normal(loc=0, scale=1, size=n_population)
 
-# Draw a single sample
+# 표본을 딱 하나 뽑는다. 현실에서 우리가 실제로 갖게 되는 것이 이것뿐이다.
+# 아래 가운데 패널에 점 몇 개로 그려진다.
 single_sample = np.random.choice(population, size=sample_size, replace=False)
 
 # Simulate the sampling distribution of X-bar
@@ -58,6 +59,11 @@ sample_means = [
 ]
 
 # Plot
+# 세 패널을 sharex=True 로 묶는 것이 이 그림의 핵심 장치다.
+# 가로 눈금이 같아야 세 분포의 **퍼짐**을 직접 견줄 수 있다.
+#   위   모집단      : 가장 넓다
+#   가운데 표본 하나  : 모집단에서 뽑은 점 몇 개
+#   아래  표집분포    : 눈에 띄게 좁다. 이 좁아짐이 sigma/sqrt(n) 이다.
 fig, (ax0, ax1, ax2) = plt.subplots(3, 1, figsize=(12, 8), sharex=True)
 
 ax0.hist(population, bins=100, edgecolor="white")
@@ -231,5 +237,14 @@ $$
     ax.set_title("Sampling Distribution of X-bar (n = 100)")
     plt.show()
     ```
+
+    출력:
+
+    ```
+    Theoretical SE: 0.1000
+    Empirical SE:   0.0993
+    ```
+
+    ![Sampling Distribution of X-bar (n = 100)](./img/xbar_normal_206.png)
 
     경험적 표준오차가 0.1에 가깝게 나오고 히스토그램이 $N(0, 0.01)$ 밀도와 사실상 완벽하게 일치하여 정확한 정규성 결과를 확인해 준다. $\square$

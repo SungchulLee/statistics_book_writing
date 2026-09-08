@@ -66,11 +66,15 @@ import scipy.stats as stats
 fig, (ax_full, ax_tail) = plt.subplots(1, 2, figsize=(12, 3))
 x = np.linspace(-4, 4, 200)
 
+# 왼쪽: 전체 모습. 두 곡선이 거의 겹쳐 보인다.
 ax_full.plot(x, stats.norm().pdf(x), label='Normal')
 ax_full.plot(x, stats.t(df=10).pdf(x), label='t(10)')
 ax_full.set_title('Full PDF')
 ax_full.legend()
 
+# 오른쪽: 꼬리만 확대. x[-50:] 은 x 배열의 마지막 50개, 즉 오른쪽 끝이다.
+# 전체 그림에서는 밀도가 너무 작아 안 보이던 차이가 여기서 드러난다.
+# **꼬리는 언제나 확대해서 봐야 한다.** 검정에서 문제가 되는 곳이 바로 꼬리다.
 ax_tail.plot(x[-50:], stats.norm().pdf(x[-50:]), label='Normal')
 ax_tail.plot(x[-50:], stats.t(df=10).pdf(x[-50:]), label='t(10)')
 ax_tail.set_title('Right Tail (zoomed)')
@@ -79,6 +83,8 @@ ax_tail.legend()
 plt.tight_layout()
 plt.show()
 ```
+
+![Full PDF](./img/student_t_61.png)
 
 ### 정규분포로의 수렴
 
@@ -90,13 +96,18 @@ import scipy.stats as stats
 fig, ax = plt.subplots(figsize=(12, 3))
 x = np.linspace(-3, 3, 200)
 
+# 자유도를 키우면 t가 정규분포로 수렴한다.
+# df=1 은 코시분포로 평균조차 없고, df=2 부터 평균이 생기며,
+# df>2 라야 분산 df/(df-2) 가 존재한다. df=20 이면 이미 정규와 거의 같다.
 for df in [1, 2, 5, 10, 20]:
     ax.plot(x, stats.t(df).pdf(x), label=f'df={df}')
-ax.plot(x, stats.norm().pdf(x), 'r--', lw=2, label='Normal')
+ax.plot(x, stats.norm().pdf(x), 'r--', lw=2, label='Normal')     # 극한
 ax.legend()
 ax.set_title('t-Distribution Converges to Normal as df Increases')
 plt.show()
 ```
+
+![t-Distribution Converges to Normal as df Increases](./img/student_t_85.png)
 
 ---
 
@@ -124,9 +135,15 @@ np.random.seed(0)
 n, mu, sigma = 10, 0, 10
 n_sim = 10_000
 
+# (n, n_sim) 배열이므로 **열 하나가 표본 하나**다. axis=0 으로 집계한다.
 samples = np.random.normal(mu, sigma, (n, n_sim))
 x_bar = samples.mean(axis=0)
 s = samples.std(axis=0, ddof=1)
+
+# t 통계량. 분모에 참 sigma(=10)가 아니라 **표본표준편차 s** 를 넣는 것이 요점이다.
+# sigma를 썼다면 이 값은 정확히 N(0,1)을 따랐을 것이다.
+# s를 쓰면 분모 자체가 흔들리므로 분포가 넓어지고 꼬리가 두꺼워진다.
+# 그 넓어진 정도를 정확히 기술하는 것이 t(n-1) 이다.
 t_stats = (x_bar - mu) / (s / np.sqrt(n))
 
 fig, ax = plt.subplots(figsize=(12, 3))
@@ -137,6 +154,8 @@ ax.legend()
 ax.spines[['top', 'right']].set_visible(False)
 plt.show()
 ```
+
+![Student t 분포](./img/student_t_118.png)
 
 ---
 
@@ -176,14 +195,20 @@ df = 5
 data = stats.t(df).rvs(10_000)
 
 fig, ax = plt.subplots(figsize=(12, 3))
+# 구간을 [-5, 5]로 고정한다. t(5)는 꼬리가 두꺼워 표본에 |x| > 20 인 값도 나오는데,
+# 자동 구간에 맡기면 그 이상치 때문에 가운데가 한두 칸으로 뭉개진다.
 bins = np.linspace(-5, 5, 101)
 ax.hist(data, bins=bins, density=True, histtype='step', label='t Samples')
 ax.plot(bins, stats.t(df).pdf(bins), '--b', lw=2, label='t PDF')
+# 같은 표본의 평균·표준편차로 맞춘 정규분포를 함께 그린다.
+# 가운데는 잘 맞지만 꼬리에서 벌어지는 것이 요점이다.
 ax.plot(bins, stats.norm(data.mean(), data.std()).pdf(bins),
         '--r', lw=2, label='Normal Approx')
 ax.legend()
 plt.show()
 ```
+
+![Student t 분포](./img/student_t_169.png)
 
 ---
 

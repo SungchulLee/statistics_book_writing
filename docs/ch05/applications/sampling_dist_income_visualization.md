@@ -87,6 +87,8 @@ plt.tight_layout()
 plt.show()
 ```
 
+![소득 자료 표본분포 시각화](./img/sampling_dist_income_visualization_46.png)
+
 ## 표준오차 검증
 
 이론적 공식 $\text{SE} = \sigma / \sqrt{n}$을 모의실험한 표본분포의 경험적 표준편차와 비교하여 확인할 수 있다.
@@ -100,6 +102,15 @@ print(f"Population std:          ${pop_std:,.0f}")
 print(f"Theoretical SE (n=5):    ${se_5_theory:,.0f}")
 print(f"Theoretical SE (n=20):   ${se_20_theory:,.0f}")
 print(f"Ratio SE(5)/SE(20):      {se_5_theory / se_20_theory:.2f}")
+```
+
+출력:
+
+```
+Population std:          $49,047
+Theoretical SE (n=5):    $21,934
+Theoretical SE (n=20):   $10,967
+Ratio SE(5)/SE(20):      2.00
 ```
 
 비가 2.0에 가깝게 나와 제곱근 법칙을 확인해 준다.

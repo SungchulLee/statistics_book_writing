@@ -69,7 +69,10 @@ n_population = 10_000
 n_sample = 100
 n_sim = 1_000
 
-# Build populations from different distributions
+# 모집단 넷을 준비한다. 정규 하나와 정규가 아닌 셋이다.
+# 카이제곱 결과는 정규모집단에서만 정확하므로,
+# 나머지 셋에서 어긋나는 모습을 보는 것이 이 그림의 목적이다.
+# random_state를 각각 다르게 주어 네 모집단이 서로 무관하게 만든다.
 populations = {
     "Normal(0,1)":  stats.norm().rvs(n_population, random_state=1),
     "Exp(1)":       stats.expon().rvs(n_population, random_state=2),
@@ -91,7 +94,13 @@ for ax, (name, population) in zip(axes, populations.items()):
                          alpha=0.5, edgecolor="white",
                          label=r"simulated $S^2$")
 
-    # Theoretical chi-squared density scaled to S^2 units
+    # 이론적 카이제곱 밀도를 S^2 의 눈금으로 옮겨 그린다.
+    # 정리는 (n-1)S^2/sigma^2 ~ chi^2(n-1) 이므로
+    # S^2 = (sigma^2/(n-1)) * chi^2 = X/c  (단, c = (n-1)/sigma^2) 이다.
+    #
+    # 변수변환 Y = X/c 의 밀도는 f_Y(y) = f_X(cy) * c 다.
+    # 마지막에 곱하는 c 가 그 야코비안이며, 이것을 빠뜨리면
+    # 곡선의 넓이가 1이 되지 않아 히스토그램과 눈금이 어긋난다.
     df = n_sample - 1
     sigma2 = population.var()
     c = df / sigma2
@@ -108,6 +117,8 @@ axes[-1].legend(fontsize=8)
 plt.tight_layout()
 plt.show()
 ```
+
+![S-squared의 표본분포 (Normal)](./img/s2_normal_61.png)
 
 ## 해석
 
@@ -137,6 +148,12 @@ plt.show()
     from scipy import stats
     p = 1 - stats.chi2.cdf(13.5, df=9)
     print(f"P(S^2 > 6) = {p:.4f}")
+    ```
+
+    출력:
+
+    ```
+    P(S^2 > 6) = 0.1413
     ```
 
     결과는 $P(\chi^2(9) > 13.5) \approx 0.1415$이다. $\square$
@@ -245,8 +262,26 @@ plt.show()
 
     ```python
     from scipy import stats
-    lower_chi2 = stats.chi2.ppf(0.025, df=24)  # approximately 12.40
-    upper_chi2 = stats.chi2.ppf(0.975, df=24)  # approximately 39.36
+
+    # 자유도 24인 카이제곱 분포의 양쪽 2.5% 지점.
+    # 정규분포와 달리 두 값이 0을 중심으로 대칭이 아니다.
+    lower_chi2 = stats.chi2.ppf(0.025, df=24)
+    upper_chi2 = stats.chi2.ppf(0.975, df=24)
+    print(f"chi2_0.025(24) = {lower_chi2:.4f}")
+    print(f"chi2_0.975(24) = {upper_chi2:.4f}")
+
+    # 신뢰구간. 큰 분위수가 **아래쪽** 한계를 만든다는 점에 주의하라.
+    # sigma^2 이 분모에 있으므로 부등식을 뒤집으면 순서가 바뀐다.
+    S2, n = 12, 25
+    print(f"95% CI = ({(n-1)*S2/upper_chi2:.2f}, {(n-1)*S2/lower_chi2:.2f})")
+    ```
+
+    출력:
+
+    ```
+    chi2_0.025(24) = 12.4012
+    chi2_0.975(24) = 39.3641
+    95% CI = (7.32, 23.22)
     ```
 
     $$
@@ -254,7 +289,7 @@ plt.show()
     $$
 
     $$
-    7.32 \le \sigma^2 \le 23.23
+    7.32 \le \sigma^2 \le 23.22
     $$
 
-    $\sigma^2$에 대한 95% 신뢰구간은 약 $(7.32, 23.23)$이다. 카이제곱 분포가 치우쳐 있으므로 이 구간이 $S^2 = 12$를 중심으로 대칭이 아님에 유의하라. $\square$
+    $\sigma^2$에 대한 95% 신뢰구간은 약 $(7.32, 23.22)$이다. 카이제곱 분포가 치우쳐 있으므로 이 구간이 $S^2 = 12$를 중심으로 대칭이 아님에 유의하라. $\square$

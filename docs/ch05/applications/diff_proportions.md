@@ -107,11 +107,18 @@ $$
 import numpy as np
 from scipy import stats
 
-p1_hat, p2_hat = 0.60, 0.45
+p1_hat, p2_hat = 0.60, 0.45      # 두 집단의 표본비율
 n1, n2 = 200, 200
 
 diff = p1_hat - p2_hat
+
+# 두 비율 차이의 표준오차.
+# 두 표본이 **독립**이므로 분산이 더해진다: Var(A - B) = Var(A) + Var(B).
+# 뺄셈인데도 더하는 이유가 이것이다. 부호는 분산에 영향을 주지 않는다.
+# (표준오차는 더하면 안 된다. 분산을 더한 뒤 제곱근을 취해야 한다.)
 se = np.sqrt(p1_hat * (1 - p1_hat) / n1 + p2_hat * (1 - p2_hat) / n2)
+
+# 95% 신뢰구간의 임계값. 양쪽에 2.5%씩 남기므로 ppf(0.975) = 1.96 이다.
 z_star = stats.norm.ppf(0.975)
 
 ci_lower = diff - z_star * se
@@ -119,6 +126,14 @@ ci_upper = diff + z_star * se
 print(f"Difference: {diff:.2f}")
 print(f"SE: {se:.4f}")
 print(f"95% CI: ({ci_lower:.3f}, {ci_upper:.3f})")
+```
+
+출력:
+
+```
+Difference: 0.15
+SE: 0.0494
+95% CI: (0.053, 0.247)
 ```
 
 신뢰구간이 0을 포함하지 않으므로 두 군의 치료 반응률이 다르다는 통계적으로 유의한 증거가 있다.

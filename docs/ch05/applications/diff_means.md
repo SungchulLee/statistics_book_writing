@@ -154,6 +154,12 @@ prob = stats.norm.sf(z_upper) + stats.norm.cdf(z_lower)
 print(f"P(|X_bar_A - X_bar_B| > 6) = {prob:.4f}")
 ```
 
+출력:
+
+```
+P(|X_bar_A - X_bar_B| > 6) = 0.1030
+```
+
 ## 예: 차의 표준오차
 
 **문제.** 모집단 A: $\mu_A = 100$, $\sigma_A = 15$, $n_A = 36$. 모집단 B: $\mu_B = 110$, $\sigma_B = 20$, $n_B = 49$. $\text{SE}(\bar{X}_A - \bar{X}_B)$를 구하라.

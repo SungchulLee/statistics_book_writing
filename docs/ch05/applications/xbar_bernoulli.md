@@ -67,11 +67,13 @@ p_values = [0.4, 0.5, 0.6, 0.7]
 
 fig, axes = plt.subplots(1, len(p_values), figsize=(14, 3.5))
 
+# p를 0.4에서 0.7까지 바꿔 가며 네 패널을 그린다.
+# 모집단은 0과 1뿐인 가장 비정규적인 분포인데도
+# 표본비율의 표집분포는 어느 p에서나 종 모양이 된다.
 for ax, p in zip(axes, p_values):
-    # Create a Bernoulli population
     population = stats.binom(n=1, p=p).rvs(n_population, random_state=1)
 
-    # Simulate sampling distribution of p-hat
+    # 0/1 자료의 평균이 곧 비율이므로 p-hat 은 표본평균의 한 경우다.
     p_hat_sims = np.array([
         np.random.choice(population, size=n_sample, replace=False).mean()
         for _ in range(n_sim)
@@ -82,7 +84,10 @@ for ax, p in zip(axes, p_values):
                          alpha=0.5, edgecolor="white",
                          label=r"simulated $\hat{p}$")
 
-    # Normal approximation overlay
+    # 정규근사를 겹쳐 그린다.
+    # 베르누이의 분산이 p(1-p) 이므로 표준오차는 sqrt(p(1-p)/n) 이다.
+    # 이 값은 p = 0.5 에서 최대가 되고 0이나 1에 가까울수록 작아진다.
+    # 네 패널의 폭이 조금씩 다른 이유가 그것이다.
     se = np.sqrt(p * (1 - p) / n_sample)
     x_grid = np.linspace(bins[0], bins[-1], 200)
     pdf = stats.norm(loc=p, scale=se).pdf(x_grid)
