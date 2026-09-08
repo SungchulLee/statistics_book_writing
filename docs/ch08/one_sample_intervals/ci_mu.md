@@ -51,22 +51,28 @@ $$
 import scipy.stats as stats
 import numpy as np
 
-# Given data
+# 주어진 자료
 n = 40
 sample_mean = 85
-sigma = 12  # known population standard deviation
+sigma = 12          # 알고 있는 모표준편차
 confidence_level = 0.95
 
-# Critical value
+# 임계값. 0.95가 아니라 1 - 0.05/2 = 0.975를 넣는다.
+# 양쪽 꼬리에 alpha/2씩 나눠 주기 때문이다.
 z_critical = stats.norm.ppf(1 - (1 - confidence_level) / 2)
 
-# Standard error and margin of error
+# 표준오차는 자료의 산포가 아니라 **표본평균**의 산포다. sqrt(n)으로 나눈다.
 standard_error = sigma / np.sqrt(n)
 margin_of_error = z_critical * standard_error
 
-# Confidence interval
 confidence_interval = (sample_mean - margin_of_error, sample_mean + margin_of_error)
 print(f"{confidence_interval = }")
+```
+
+출력:
+
+```
+confidence_interval = (81.28122980617263, 88.71877019382737)
 ```
 
 ---
@@ -110,24 +116,31 @@ $$
 import scipy.stats as stats
 import numpy as np
 
-# Given data
+# 주어진 자료
 n = 25
 sample_mean = 50
-sample_std = 8  # sample standard deviation
+sample_std = 8      # 모표준편차가 아니라 자료에서 얻은 표본표준편차
 confidence_level = 0.95
 
-# Critical value from the t-distribution
+# 앞의 z-구간과 달라지는 곳은 여기 한 줄뿐이다.
+# 자유도가 n-1인 것은 편차를 참 평균이 아니라 x_bar에서 쟀기 때문이다.
 degrees_of_freedom = n - 1
 t_critical = stats.t.ppf(1 - (1 - confidence_level) / 2, degrees_of_freedom)
 
-# Standard error and margin of error
 standard_error = sample_std / np.sqrt(n)
 margin_of_error = t_critical * standard_error
 
-# Confidence interval
 confidence_interval = (sample_mean - margin_of_error, sample_mean + margin_of_error)
 print(f"{confidence_interval = }")
 ```
+
+출력:
+
+```
+confidence_interval = (46.697762301395166, 53.302237698604834)
+```
+
+$t_{0.025,\,24} = 2.0639$로 $z_{0.025} = 1.9600$보다 5.3% 크다. 같은 $\bar x$와 같은 산포에서 구간이 그만큼 넓어지며, 이것이 $\sigma$를 모른다는 사실의 값이다.
 
 ---
 
@@ -175,11 +188,19 @@ s = 6
 confidence_level = 0.95
 alpha = 1 - confidence_level
 
+# n = 100 >= 30 이므로 s를 sigma처럼 쓰고 z를 쓴다.
+# 이 표본크기에서 t를 써도 임계값이 1.984로 1.960과 1% 남짓 차이다.
 z_star = stats.norm().ppf(1 - alpha / 2)
 standard_error = s / np.sqrt(n)
 margin_of_error = z_star * standard_error
 
 print(f"{confidence_level:.0%} confidence interval: {x_bar} ± {margin_of_error:.2f}")
+```
+
+출력:
+
+```
+95% confidence interval: 175 ± 1.18
 ```
 
 ### 예제 3: 표본크기의 결정 (천문학자)
@@ -227,9 +248,18 @@ alpha = 1 - confidence_level
 n = 15
 df = n - 1
 
+# 98% 구간이므로 한쪽 꼬리에 1%씩 남긴다. 즉 왼쪽 누적확률 0.99 지점.
 t_star = stats.t(df=df).ppf(1 - alpha / 2)
 print(f"{t_star = :.4f}")
 ```
+
+출력:
+
+```
+t_star = 2.6245
+```
+
+같은 98%라도 정규분포라면 $z = 2.3263$이다. 자유도가 14밖에 안 되어 꼬리가 두껍기 때문에 임계값이 13% 커졌다.
 
 ### 예제 6: 도장 두께
 

@@ -33,14 +33,24 @@ covers = 0
 for _ in range(n_simulations):
     sample = np.random.normal(mu, sigma, n)
     xbar = sample.mean()
+    # sigma를 알고 있으므로 오차한계는 표본과 무관한 **상수**다.
+    # 구간의 너비는 매번 같고 중심 xbar만 움직인다.
     me = z * sigma / np.sqrt(n)
     lower, upper = xbar - me, xbar + me
+    # mu는 고정이고 lower/upper가 흔들린다. 확률이 붙는 쪽은 끝점이다.
     if lower <= mu <= upper:
         covers += 1
 
 print(f"Coverage: {covers}/{n_simulations} = {covers/n_simulations:.3f}")
-# ≈ 0.950
 ```
+
+출력:
+
+```
+Coverage: 951/1000 = 0.951
+```
+
+1000번 중 951번이 참값 $\mu = 50$을 담았다. 어느 한 구간을 놓고 "$\mu$가 여기 있을 확률"을 말한 것이 아니라, **같은 절차를 반복했을 때의 성공 비율**을 센 것이다. 이것이 신뢰수준의 뜻이다.
 
 ## 흔한 오해
 

@@ -33,7 +33,11 @@ import csv
 import numpy as np
 
 def load_data(csv_path):
-    """Read a single column of numeric values from a CSV file."""
+    """CSV에서 수치값을 모두 읽어 1차원 배열로 돌려준다.
+
+    행 하나에 값이 하나든 여럿이든 상관없이 모두 같은 표본으로 본다.
+    빈 칸을 건너뛰는 것은 CSV 끝의 빈 줄이나 후행 쉼표 때문이다.
+    """
     arr = []
     with open(csv_path, "r", newline="") as f:
         reader = csv.reader(f)
@@ -43,8 +47,26 @@ def load_data(csv_path):
                 if item:
                     arr.append(float(item))
     if len(arr) == 0:
+        # 빈 배열을 그냥 돌려주면 평균이 nan이 되어 원인을 찾기 어렵다.
+        # 읽는 쪽에서 바로 알아채도록 여기서 끊는다.
         raise ValueError("No numeric values found in CSV.")
     return np.array(arr, dtype=float)
+
+
+# 임시 파일로 동작을 확인한다. 값 배치가 달라도 결과는 같다.
+import tempfile, os
+with tempfile.TemporaryDirectory() as d:
+    path = os.path.join(d, "data.csv")
+    with open(path, "w") as f:
+        f.write("12\n15\n14\n\n10,13,16\n")     # 한 줄에 하나, 빈 줄, 한 줄에 셋
+    x = load_data(path)
+print(x, x.mean())
+```
+
+출력:
+
+```
+[12. 15. 14. 10. 13. 16.] 13.333333333333334
 ```
 
 ### 신뢰구간의 계산
@@ -54,17 +76,18 @@ import math
 from scipy.stats import norm, t
 
 def ci_mean(n, xbar, s=None, known_sigma=None, method="t", cl=0.95):
-    """
-    Compute a one-sample CI for the population mean.
+    """모평균에 대한 일표본 신뢰구간.
 
-    Parameters
-    ----------
-    n : int            - sample size
-    xbar : float       - sample mean
-    s : float or None  - sample standard deviation (required for t-interval)
-    known_sigma : float or None - known population sigma (required for z-interval)
-    method : str       - 't' or 'z'
-    cl : float         - confidence level (default 0.95)
+    원자료가 아니라 **요약통계량만** 받는다. 신뢰구간을 만드는 데
+    필요한 것은 n, xbar, 그리고 산포 하나뿐이기 때문이다.
+    논문에 실린 표만 있어도 구간을 다시 만들 수 있다는 뜻이다.
+
+    n : 표본크기
+    xbar : 표본평균
+    s : 표본표준편차 (t-구간에 필요)
+    known_sigma : 알고 있는 모표준편차 (z-구간에 필요)
+    method : 't' 또는 'z'
+    cl : 신뢰수준 (기본 0.95)
     """
     alpha = 1 - cl
 
@@ -74,20 +97,31 @@ def ci_mean(n, xbar, s=None, known_sigma=None, method="t", cl=0.95):
         moe = z_star * se
     else:
         se = s / math.sqrt(n)
-        df = n - 1
+        df = n - 1                              # xbar를 쓰느라 하나를 잃는다
         t_star = t.ppf(1 - alpha / 2, df=df)
         moe = t_star * se
 
+    # 두 갈래가 다른 것은 임계값과 산포뿐이다.
+    # 구조는 언제나 "추정값 ± 임계값 × 표준오차"로 같다.
     return xbar - moe, xbar + moe
 
-# Example: t-interval from summary statistics
+# 요약통계량에서 바로 t-구간
 lo, hi = ci_mean(n=25, xbar=3.2, s=1.1, method="t", cl=0.95)
 print(f"95% t-interval: ({lo:.4f}, {hi:.4f})")
 
-# Example: z-interval with known sigma
+# sigma를 아는 경우의 z-구간. 비교를 위해 s보다 작은 sigma=1.0을 넣었다.
 lo, hi = ci_mean(n=25, xbar=3.2, known_sigma=1.0, method="z", cl=0.95)
 print(f"95% z-interval: ({lo:.4f}, {hi:.4f})")
 ```
+
+출력:
+
+```
+95% t-interval: (2.7459, 3.6541)
+95% z-interval: (2.8080, 3.5920)
+```
+
+두 구간의 너비 차이($\pm 0.454$ 대 $\pm 0.392$)는 두 원인이 겹친 결과다. 임계값이 $t_{0.025,\,24} = 2.064$ 대 $z_{0.025} = 1.960$으로 다르고, 산포도 $s = 1.1$ 대 $\sigma = 1.0$으로 다르다. 임계값만 놓고 보면 차이는 5% 남짓이다.
 
 ### 명령줄 사용법
 
@@ -209,10 +243,15 @@ python ci_mean_calc.py --csv data.csv --cl 0.99
     data = np.array([12, 15, 14, 10, 13, 16, 11, 14, 13, 12])
     n = len(data)
     xbar, s = data.mean(), data.std(ddof=1)
-    t_crit = t.ppf(0.95, df=n-1)
+    t_crit = t.ppf(0.95, df=n-1)     # 90% 구간이므로 한쪽 꼬리에 5%
     moe = t_crit * s / np.sqrt(n)
     print(f"({xbar - moe:.2f}, {xbar + moe:.2f})")
-    # Output: (11.94, 14.06)
+    ```
+
+    출력:
+
+    ```
+    (11.94, 14.06)
     ```
 
     $\square$

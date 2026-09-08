@@ -48,20 +48,31 @@ $$
 import numpy as np
 import scipy.stats as stats
 
+# 대응자료는 짝마다 차이를 먼저 만들고 나면
+# 그 뒤로는 **일표본** 문제와 완전히 같아진다.
+# 두 집단의 분산이나 상관을 따로 다룰 필요가 없다.
 differences = np.array([5, 3, 4, -2, 0, 6, -1, 2, 3, 4])
-n = len(differences)
+n = len(differences)          # 관측값 20개가 아니라 짝 10개다
 confidence_level = 0.95
 
 mean_diff = np.mean(differences)
 std_diff = np.std(differences, ddof=1)
 standard_error = std_diff / np.sqrt(n)
 
-t_critical = stats.t.ppf(1 - (1 - confidence_level) / 2, n - 1)
+t_critical = stats.t.ppf(1 - (1 - confidence_level) / 2, n - 1)   # df = 짝의 개수 - 1
 margin_of_error = t_critical * standard_error
 
 confidence_interval = (mean_diff - margin_of_error, mean_diff + margin_of_error)
 print(f"{confidence_interval = }")
 ```
+
+출력:
+
+```
+confidence_interval = (0.5163777394551403, 4.28362226054486)
+```
+
+구간이 0을 담지 않으므로 치료 전후에 차이가 있다는 증거가 된다.
 
 ---
 
@@ -147,9 +158,20 @@ alpha = 1 - confidence_level
 t_critical = stats.t(df).ppf(1 - alpha / 2)
 margin_of_error = t_critical * standard_error
 
+# 같은 구간을 두 가지 방식으로 적었다.
+# 양끝을 적는 쪽은 결론을 읽기 좋고, 중심 ± 오차한계는 정밀도를 읽기 좋다.
 print(f"95% CI: ({mean_diff - margin_of_error:.2f}, {mean_diff + margin_of_error:.2f})")
 print(f"95% CI: {mean_diff:.2f} ± {margin_of_error:.2f}")
 ```
+
+출력:
+
+```
+95% CI: (4.76, 8.84)
+95% CI: 6.80 ± 2.04
+```
+
+참가자가 다섯 명뿐인데도 구간이 0에서 멀찍이 떨어져 있다. 사람마다 손가락 튕기는 속도 자체는 크게 다르지만(37회에서 44회) **같은 사람 안에서의 차이**는 5에서 9로 훨씬 고르기 때문이다. 대응설계가 버는 것이 바로 이 부분이다.
 
 ### 예제 3: 두 시계 (네 단계)
 
@@ -195,6 +217,12 @@ margin_of_error = t_star * s / np.sqrt(n)
 print(f"{confidence_level:.0%} CI: {d_bar:.4f} ± {margin_of_error:.4f}")
 ```
 
+출력:
+
+```
+95% CI: -0.0600 ± 0.2575
+```
+
 **4단계: 구간 해석.** 95% 신뢰수준에서 두 시계가 보고한 거리의 평균 차이는 구간 $(-0.32, 0.20)$ km 안에 있을 것으로 본다. 구간이 0을 포함하므로 시계 A와 B가 보고한 거리 사이에 유의한 차이는 없다.
 
 ---
@@ -211,7 +239,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import t, norm
 
-rng_seed = None
+rng_seed = 42        # 아래 그림을 재현하려면 고정한다
 n_simulations = 100
 n = 12
 mu_x, mu_y = 0.5, 0.0
@@ -284,6 +312,20 @@ def main():
 if __name__ == "__main__":
     main()
 ```
+
+![100 Paired t CIs for μ_D | n=12, ρ=0.60, CL=95%](./img/ci_mu_paired_232.png)
+
+포함확률 95.0%로 명목값과 맞는다.
+
+이 모의실험에서 짝 안의 상관을 $\rho = 0.6$으로 준 것이 핵심이다. 차이의 표준편차는
+
+$$
+\sigma_D = \sqrt{\sigma_X^2 + \sigma_Y^2 - 2\rho\sigma_X\sigma_Y} = \sqrt{1 + 1.44 - 1.44} = 1.00
+$$
+
+인데, 같은 자료를 짝을 무시하고 독립 이표본으로 다뤘다면 $\sqrt{\sigma_X^2 + \sigma_Y^2} = 1.562$가 된다. 상관을 살린 덕분에 구간이 **1.56배 좁아진다**. 짝지을 수 있는 자료를 짝짓지 않는 것은 자료를 절반 버리는 것과 비슷한 손해다.
+
+$\rho$를 0으로 바꿔 다시 돌려 보면 이 이득이 사라지고, 음수로 주면 오히려 손해가 된다는 것도 확인할 수 있다.
 
 ---
 

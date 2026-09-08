@@ -63,7 +63,7 @@ import csv
 import numpy as np
 
 def load_data(csv_path):
-    """Read 0/1 values from a CSV file for proportion estimation."""
+    """비율 추정을 위해 CSV에서 0/1 값을 읽는다."""
     arr = []
     with open(csv_path, "r", newline="") as f:
         reader = csv.reader(f)
@@ -72,12 +72,31 @@ def load_data(csv_path):
                 item = item.strip()
                 if item:
                     v = float(item)
+                    # 0과 1 외의 값이 섞이면 여기서 끊는다.
+                    # 그냥 두면 sum()이 성공 횟수가 아니게 되어
+                    # p_hat이 1을 넘는 식으로 조용히 망가진다.
                     if v not in (0, 1):
                         raise ValueError("CSV must contain only 0/1 values.")
                     arr.append(v)
     if len(arr) == 0:
         raise ValueError("No values found in CSV.")
     return np.array(arr, dtype=float)
+
+
+# 임시 파일로 확인한다. 성공 횟수 k와 표본크기 n만 있으면 구간을 만들 수 있다.
+import tempfile, os
+with tempfile.TemporaryDirectory() as d:
+    path = os.path.join(d, "bernoulli.csv")
+    with open(path, "w") as f:
+        f.write("1,0,0,1,0\n1,0,0,0,0\n")
+    y = load_data(path)
+print(f"n = {len(y)}, k = {int(y.sum())}, p_hat = {y.mean()}")
+```
+
+출력:
+
+```
+n = 10, k = 3, p_hat = 0.3
 ```
 
 ### 신뢰구간의 계산
@@ -87,15 +106,15 @@ import math
 from scipy.stats import norm, beta
 
 def ci_proportion(k, n, method="wilson", cl=0.95):
-    """
-    Compute a one-sample CI for a population proportion.
+    """모비율에 대한 일표본 신뢰구간. 네 가지 방법을 한 함수에 모았다.
 
-    Parameters
-    ----------
-    k : int        - number of successes
-    n : int        - sample size
-    method : str   - 'wald', 'wilson', 'ac', or 'cp'
-    cl : float     - confidence level (default 0.95)
+    기본값이 wald가 아니라 wilson인 것에 주의하라.
+    Wald는 교과서에 먼저 나오지만 실무 기본값으로 삼을 만한 방법이 아니다.
+
+    k : 성공 횟수
+    n : 표본크기
+    method : 'wald', 'wilson', 'ac', 'cp'
+    cl : 신뢰수준 (기본 0.95)
     """
     alpha = 1 - cl
     z = norm.ppf(1 - alpha / 2)
@@ -117,21 +136,34 @@ def ci_proportion(k, n, method="wilson", cl=0.95):
         lo = p_tilde - z * se_tilde
         hi = p_tilde + z * se_tilde
     else:  # cp (Clopper-Pearson)
+        # 정규근사를 아예 쓰지 않고 이항분포를 직접 뒤집는다.
+        # Beta가 나오는 것은 이항 꼬리확률과 Beta 누적분포가 같은 식이기 때문이다.
+        # k=0이나 k=n이면 한쪽 Beta의 모수가 0이 되어 정의되지 않으므로 관례를 따른다.
         lo = 0.0 if k == 0 else beta.ppf(alpha / 2, k, n - k + 1)
         hi = 1.0 if k == n else beta.ppf(1 - alpha / 2, k + 1, n - k)
 
+    # Wald는 끝점이 [0,1]을 벗어날 수 있다. 나머지 셋은 그럴 일이 없다.
     lo = max(0.0, lo)
     hi = min(1.0, hi)
     return lo, hi
 
-# Example: Wilson interval for 12 successes in 50 trials
+# 50번 중 12번 성공에 대한 95% Wilson 구간
 lo, hi = ci_proportion(k=12, n=50, method="wilson", cl=0.95)
 print(f"95% Wilson CI: ({lo:.4f}, {hi:.4f})")
 
-# Example: Clopper-Pearson interval at 99% confidence
+# 같은 자료의 99% Clopper-Pearson 구간
 lo, hi = ci_proportion(k=12, n=50, method="cp", cl=0.99)
 print(f"99% Clopper-Pearson CI: ({lo:.4f}, {hi:.4f})")
 ```
+
+출력:
+
+```
+95% Wilson CI: (0.1430, 0.3741)
+99% Clopper-Pearson CI: (0.1056, 0.4255)
+```
+
+두 구간의 신뢰수준이 다르므로 너비를 곧바로 비교할 수는 없다. 같은 95%로 맞추면 Wilson이 $(0.1430, 0.3741)$, Clopper–Pearson이 $(0.1306, 0.3817)$로 후자가 약 9% 넓다. 이것이 "모든 $p$에서 95% 아래로 내려가지 않는다"는 보장의 값이다.
 
 ### 명령줄 사용법
 

@@ -40,18 +40,29 @@ $$
 import numpy as np
 import scipy.stats as stats
 
-n = 200          # sample size
-x = 120          # number of successes
+n = 200          # 표본크기
+x = 120          # 성공 횟수
 confidence_level = 0.95
 
 p_hat = x / n
 z_critical = stats.norm.ppf(1 - (1 - confidence_level) / 2)
+# 평균의 구간과 달리 여기서는 산포를 따로 추정하지 않는다.
+# Bernoulli 분포에서는 분산 p(1-p)가 평균 p에 딸려 오기 때문이다.
+# 그래서 p_hat 하나로 중심과 너비가 모두 정해진다.
 standard_error = np.sqrt((p_hat * (1 - p_hat)) / n)
 margin_of_error = z_critical * standard_error
 confidence_interval = (p_hat - margin_of_error, p_hat + margin_of_error)
 
 print(f"{confidence_interval = }")
 ```
+
+출력:
+
+```
+confidence_interval = (0.5321048559554297, 0.6678951440445703)
+```
+
+타당성 조건 $n\hat p = 120 \ge 10$과 $n(1-\hat p) = 80 \ge 10$을 넉넉히 만족하므로 Wald 구간을 써도 되는 경우다.
 
 ---
 
@@ -162,14 +173,24 @@ z_star = stats.norm().ppf(1 - alpha / 2)
 margin_of_error_max = 0.02
 p_max = 0.5
 
+# p를 모르는 채로 표본크기를 정해야 하므로 최악을 가정한다.
+# p(1-p)는 p=0.5에서 최대(0.25)이니, 이 n이면 참 p가 무엇이든 안전하다.
 n = 1
 while True:
     n += 1
     me = z_star * np.sqrt(p_max * (1 - p_max) / n)
     if me <= margin_of_error_max:
         break
-print(f"{n = }")  # n = 2401
+print(f"{n = }")
 ```
+
+출력:
+
+```
+n = 2401
+```
+
+공식으로 계산하면 $n = (z_{0.025}/2E)^2 = 2400.91$이고 올림하여 2401이다($z = 1.96$으로 반올림해 쓰면 정확히 2401이 된다). 참 비율이 0.5에서 멀면 이만큼 필요하지 않다. 사전 정보로 $p \approx 0.1$을 쓸 수 있다면 같은 오차한계에 865개면 된다.
 
 ### 예제 3: 여성 아티스트의 노래 (99% 신뢰구간)
 
@@ -189,10 +210,17 @@ n = 50
 z_star = stats.norm().ppf(1 - alpha / 2)
 margin_of_error = z_star * np.sqrt(p_hat * (1 - p_hat) / n)
 print(f"{p_hat} ± {margin_of_error:.3f}")
-# 0.4 ± 0.178
+```
+
+출력:
+
+```
+0.4 ± 0.178
 ```
 
 99% 신뢰구간은 대략 $(0.222, 0.578)$이다.
+
+여기서 한 가지 짚어 둘 것이 있다. 500곡 중 50곡을 뽑았으므로 $n/N = 0.1$이고, i.i.d. 근사가 아슬아슬한 경계에 있다. 유한모집단 수정을 넣으면 $\sqrt{(500-50)/499} = 0.950$이 곱해져 오차한계가 0.178에서 0.169로 줄어든다.
 
 ---
 

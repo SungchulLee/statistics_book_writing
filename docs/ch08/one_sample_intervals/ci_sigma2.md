@@ -58,30 +58,41 @@ $$
 import numpy as np
 from scipy.stats import chi2
 
-# Given data
 n = 12
-sigma = 2.0       # true population std dev (for simulation)
-alpha = 0.05       # significance level
+sigma = 2.0        # 참 모표준편차 (모의실험용이므로 답을 알고 있다)
+alpha = 0.05
 
-# Simulate a sample
 rng = np.random.default_rng(42)
 x = rng.normal(loc=0, scale=sigma, size=n)
 
-# Sample variance
+# ddof=1이 필수다. 베셀 보정을 빼면 s²이 아래로 편향되어
+# 구간 전체가 왼쪽으로 밀린다.
 s2 = x.var(ddof=1)
 df = n - 1
 
-# Chi-square critical values
 chi2_lo = chi2(df=df).ppf(alpha / 2.0)
 chi2_hi = chi2(df=df).ppf(1 - alpha / 2.0)
 
-# Confidence interval for σ²
+# 큰 임계값이 아래끝의 분모로 간다.
+# (n-1)s²/σ² 이 두 임계값 사이에 있다는 부등식을 σ²에 대해 풀면
+# σ²이 분모로 내려가 대소가 뒤집히기 때문이다.
 ci_lower = df * s2 / chi2_hi
 ci_upper = df * s2 / chi2_lo
 
 print(f"95% CI for σ²: ({ci_lower:.4f}, {ci_upper:.4f})")
 print(f"95% CI for σ:  ({np.sqrt(ci_lower):.4f}, {np.sqrt(ci_upper):.4f})")
 ```
+
+출력:
+
+```
+95% CI for σ²: (1.8443, 10.5947)
+95% CI for σ:  (1.3580, 3.2549)
+```
+
+참값 $\sigma^2 = 4$가 구간 안에 있지만 구간이 대단히 넓다. 위끝이 아래끝의 5.7배이며, $s^2 = 3.68$을 중심으로 대칭도 아니다. 카이제곱분포가 오른쪽으로 늘어져 있는 탓이다. $\sigma$의 척도에서는 제곱근을 취한 만큼 비대칭이 완화되어 $(1.36, 3.25)$가 된다.
+
+$n = 12$로 분산을 추정한다는 것이 이 정도로 막연한 일이다. 같은 표본크기에서 평균의 구간은 이보다 훨씬 단단하다.
 
 ---
 
@@ -99,13 +110,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import chi2
 
-rng_seed = None
+rng_seed = 42        # 아래 그림을 재현하려면 고정한다
 n_simulations = 100
 n_samples = 12
 mu = 0.0
 sigma = 2.0
 alpha = 0.05
-report_sigma_not_sigma2 = False  # if True, show CI for σ instead of σ²
+report_sigma_not_sigma2 = False  # True로 두면 σ² 대신 σ의 구간을 그린다
 
 
 def main():
@@ -161,6 +172,12 @@ def main():
 if __name__ == "__main__":
     main()
 ```
+
+![100 Chi-square CIs | n=12, df=11, CL=95%](./img/ci_sigma2_103.png)
+
+포함확률은 95.0%로 명목값과 정확히 맞는다. 근사가 아니라 정확한 분포 결과이므로 정규자료에서는 $n$이 작아도 어긋나지 않는다.
+
+그림에서 눈여겨볼 것은 구간의 **모양**이다. 점(=$s^2$)이 구간 한가운데가 아니라 왼쪽으로 치우쳐 있고, 오른쪽 꼬리가 길다. 실패한 다섯 중 셋은 구간이 통째로 참값 오른쪽에 있고 둘은 왼쪽에 있는데, 오른쪽으로 빠진 구간들은 길이가 20을 넘도록 길다. $s^2$이 우연히 크게 나오면 구간의 아래끝도 함께 밀려 올라가면서 폭까지 커지기 때문이다.
 
 ## 연습문제
 

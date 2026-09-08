@@ -59,7 +59,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import t, norm
 
+np.random.seed(42)          # 아래 출력과 그림을 재현하려면 고정한다
+
 n_simulations = 100
+# 표본크기도 분산도 서로 다르게 잡았다. 이런 설정에서 합동 t가 무너지고
+# Welch가 버티는지 보려는 것이다.
 n1, n2 = 12, 10
 mu1, mu2 = 0.0, 0.5
 sigma1, sigma2 = 1.0, 1.5
@@ -105,6 +109,14 @@ coverage_pct = 100.0 * covered.mean()
 print(f"{method} coverage: {coverage_pct:.1f}%")
 ```
 
+출력:
+
+```
+welch coverage: 97.0%
+```
+
+같은 자료에 `method`만 바꾸면 합동 $t$ 95%, $z$-known 94%, $z$-plugin 93%가 나온다. 다만 100회짜리 모의실험의 표준오차가 2.2%p나 되므로 이 차이를 방법의 우열로 읽으면 안 된다. 방법 사이의 진짜 차이를 보려면 아래 연습문제 3처럼 10,000회가 필요하다.
+
 ### 구간의 시각화
 
 ```python
@@ -122,6 +134,12 @@ ax.set_xlabel("Difference of means")
 plt.tight_layout()
 plt.show()
 ```
+
+![100 welch CIs | n1=12, n2=10, CL=95%](./img/ci_diff_means_sim_114.png)
+
+참값은 $\mu_1 - \mu_2 = -0.5$(세로 점선)이다. 구간의 폭이 1.56에서 4.02까지 두 배 넘게 널을 뛰는데, $s_1$과 $s_2$ 두 개가 동시에 흔들리는 데다 $n_2 = 10$으로 작아 그 흔들림이 크기 때문이다.
+
+100개 중 **89개가 0을 담고 있다**는 점도 눈여겨볼 만하다. 참 차이가 분명히 존재하는데도($-0.5$) 표본이 작아 "차이가 없다"는 값을 열에 아홉은 배제하지 못한다. 9장의 용어로 말하면 검정력이 낮은 상황이다. 구간이 참값을 잘 담는 것과 유용한 결론을 주는 것은 별개다.
 
 ## 해석
 
@@ -254,7 +272,16 @@ plt.show()
     print(f"Pooled: {100*pooled_cov/n_sim:.1f}%")
     ```
 
-    전형적인 결과: Welch $\approx$ 95.0%, 합동 $\approx$ 93–94%. 합동 구간은 등분산을 가정하지만 실제로는 $\sigma_2 / \sigma_1 = 3$이므로 포함확률이 부족하다. 분산비가 더 극단적이거나 표본크기가 다르면 왜곡이 커진다. $\square$
+    출력:
+
+    ```
+    Welch: 95.0%
+    Pooled: 94.3%
+    ```
+
+    Welch는 명목값에 정확히 맞고 합동은 0.7%p 부족하다. 합동 구간이 등분산을 가정하는데 실제로는 $\sigma_2/\sigma_1 = 3$이기 때문이다.
+
+    차이가 이 정도로 작은 것은 $n_1 = n_2$이기 때문이다. 표본크기가 같으면 $s_p^2$의 가중치가 반반이어서 $\bar X_1 - \bar X_2$의 참 분산 $\sigma_1^2/n + \sigma_2^2/n$을 우연히 잘 맞힌다. 표본크기까지 어긋나면 왜곡이 훨씬 커진다. 연습문제 5가 그 방향을 다룬다. $\square$
 
 ---
 

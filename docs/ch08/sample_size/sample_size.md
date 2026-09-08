@@ -54,15 +54,20 @@ from scipy import stats
 
 np.random.seed(42)
 
-# --- Sample size for estimating a mean ---
-sigma_est = 15  # planning estimate of sigma
+# --- 평균 추정을 위한 표본크기 ---
+# 자료를 모으기 전이라 s가 없으므로 t가 아니라 z를 쓴다.
+# sigma도 모르니 계획용 추정값을 넣는다. 이 값이 틀리면 계산 전체가 틀어지므로
+# 표본크기 계산에서 가장 약한 고리는 언제나 sigma의 사전 추정이다.
+sigma_est = 15
 for E in [1, 2, 3, 5]:
     for conf in [0.90, 0.95, 0.99]:
         z = stats.norm.ppf(1 - (1 - conf) / 2)
         n_needed = int(np.ceil((z * sigma_est / E) ** 2))
         print(f"  E=+/-{E}, {conf*100:.0f}% conf -> n = {n_needed}")
 
-# --- Sample size for estimating a proportion (conservative p=0.5) ---
+# --- 비율 추정을 위한 표본크기 (보수적으로 p=0.5) ---
+# p(1-p)가 p=0.5에서 최대 0.25이므로 sqrt(0.25) = 1/2이 되어
+# 공식에 2E가 나타난다. 참 p가 무엇이든 안전한 크기다.
 print("\nSample size for proportion (conservative p=0.5):")
 for E in [0.01, 0.03, 0.05]:
     for conf in [0.95, 0.99]:
@@ -70,6 +75,33 @@ for E in [0.01, 0.03, 0.05]:
         n_needed = int(np.ceil((z / (2 * E)) ** 2))
         print(f"  E=+/-{E}, {conf*100:.0f}% conf -> n = {n_needed}")
 ```
+
+출력:
+
+```
+  E=+/-1, 90% conf -> n = 609
+  E=+/-1, 95% conf -> n = 865
+  E=+/-1, 99% conf -> n = 1493
+  E=+/-2, 90% conf -> n = 153
+  E=+/-2, 95% conf -> n = 217
+  E=+/-2, 99% conf -> n = 374
+  E=+/-3, 90% conf -> n = 68
+  E=+/-3, 95% conf -> n = 97
+  E=+/-3, 99% conf -> n = 166
+  E=+/-5, 90% conf -> n = 25
+  E=+/-5, 95% conf -> n = 35
+  E=+/-5, 99% conf -> n = 60
+
+Sample size for proportion (conservative p=0.5):
+  E=+/-0.01, 95% conf -> n = 9604
+  E=+/-0.01, 99% conf -> n = 16588
+  E=+/-0.03, 95% conf -> n = 1068
+  E=+/-0.03, 99% conf -> n = 1844
+  E=+/-0.05, 95% conf -> n = 385
+  E=+/-0.05, 99% conf -> n = 664
+```
+
+비율 쪽 표를 보면 여론조사가 왜 대개 표본 1,000명 남짓인지 알 수 있다. 95% 신뢰수준에서 오차한계 $\pm 3$%p를 맞추는 데 1,068명이 필요하고, 이를 $\pm 1$%p로 조이려면 9,604명이 필요하다. 아홉 배의 비용으로 정밀도를 세 배 얻는 셈이다.
 
 ## 해석
 

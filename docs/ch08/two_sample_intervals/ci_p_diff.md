@@ -26,8 +26,21 @@ $$
 | 방법 | 설명 | 언제 쓰는가 |
 |---|---|---|
 | **Wald** | $\Delta \pm z \cdot \text{SE}$ | $n$이 크고 0이나 1에 가깝지 않을 때 |
-| **Newcombe (Wilson 기반)** | 집단마다 Wilson 신뢰구간을 구한 뒤 결합: $[L_1 - U_2,\; U_1 - L_2]$ | **권장되는 기본값** |
-| **Clopper–Pearson 결합** | 집단마다 정확한 신뢰구간을 구한 뒤 결합 | $n$이 작을 때, 규제 상황 |
+| **Newcombe (Wilson 기반)** | 집단마다 Wilson 신뢰구간 $[L_i, U_i]$를 구한 뒤 제곱합으로 결합 | **권장되는 기본값** |
+| **Clopper–Pearson 결합** | 집단마다 정확한 신뢰구간을 구한 뒤 양끝을 빼서 결합 | $n$이 작을 때, 규제 상황 |
+
+#### Newcombe 구간의 결합 방식
+
+집단별 Wilson 구간을 $[L_1, U_1]$과 $[L_2, U_2]$라 할 때 Newcombe 구간은
+
+$$
+\left(
+(\hat p_1 - \hat p_2) - \sqrt{(\hat p_1 - L_1)^2 + (U_2 - \hat p_2)^2},\;\;
+(\hat p_1 - \hat p_2) + \sqrt{(U_1 - \hat p_1)^2 + (\hat p_2 - L_2)^2}
+\right)
+$$
+
+이다. 여기서 **제곱합**을 쓰는 것이 핵심이다. $[L_1 - U_2,\; U_1 - L_2]$처럼 양끝을 그대로 빼면 두 집단이 동시에 최악으로 어긋나는 상황을 가정하는 셈이 되어 구간이 지나치게 넓어진다. 두 표본이 독립이므로 오차는 함께 커지는 것이 아니라 피타고라스식으로 합쳐진다.
 
 ### Python 코드
 
@@ -42,12 +55,21 @@ confidence_level = 0.95
 p1 = x1 / n1
 p2 = x2 / n2
 
+# 두 표본이 독립이므로 분산이 더해진다.
+# 여기서는 두 비율을 **따로** 추정해 넣는다. 검정에서 쓰는 합동비율은
+# "두 비율이 같다"는 귀무가설 아래의 계산이라 신뢰구간에는 맞지 않는다.
 standard_error = np.sqrt((p1 * (1 - p1) / n1) + (p2 * (1 - p2) / n2))
 z_critical = stats.norm.ppf(1 - (1 - confidence_level) / 2)
 margin_of_error = z_critical * standard_error
 
 confidence_interval = ((p1 - p2) - margin_of_error, (p1 - p2) + margin_of_error)
 print(f"{confidence_interval = }")
+```
+
+출력:
+
+```
+confidence_interval = (-0.011897024279429055, 0.171897024279429)
 ```
 
 ---
@@ -103,12 +125,22 @@ p_2_hat = 77 / n_2
 
 confidence_level = 0.90
 alpha = 1 - confidence_level
+# 앞에서는 ppf(1 - alpha/2)를 썼고 여기서는 -ppf(alpha/2)를 썼다.
+# 표준정규가 0을 중심으로 대칭이라 두 값이 같다.
 z_star = -stats.norm().ppf(alpha / 2)
 margin_of_error = z_star * np.sqrt(
     p_1_hat * (1 - p_1_hat) / n_1 + p_2_hat * (1 - p_2_hat) / n_2
 )
 print(f"90% CI: {p_1_hat - p_2_hat:.4f} ± {margin_of_error:.4f}")
 ```
+
+출력:
+
+```
+90% CI: -0.1000 ± 0.1018
+```
+
+$\hat p_N = 0.450$, $\hat p_S = 0.550$으로 차이가 정확히 $-0.10$이다. 90% 구간은 $(-0.202, 0.002)$로 0을 아슬아슬하게 담는다. 표본 260개로는 10%p 차이도 잡아내기 어렵다는 뜻이다. 비율의 차이는 평균의 차이보다 훨씬 큰 표본을 요구한다.
 
 ---
 
@@ -124,7 +156,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import norm, beta
 
-rng_seed = None
+rng_seed = 42        # 아래 그림을 재현하려면 고정한다
 n_simulations = 100
 n1, n2 = 50, 40
 p1_true, p2_true = 0.60, 0.50
@@ -152,6 +184,7 @@ def main():
             se = np.sqrt(p1hat * (1 - p1hat) / n1 + p2hat * (1 - p2hat) / n2)
             lo, hi = centers[i] - z * se, centers[i] + z * se
         elif method == "newcombe":
+            # 집단마다 Wilson 구간을 구한다.
             denom1 = 1 + z**2 / n1
             center1 = (p1hat + z**2 / (2 * n1)) / denom1
             half1 = z * np.sqrt(p1hat * (1 - p1hat) / n1 + z**2 / (4 * n1**2)) / denom1
@@ -160,7 +193,11 @@ def main():
             center2 = (p2hat + z**2 / (2 * n2)) / denom2
             half2 = z * np.sqrt(p2hat * (1 - p2hat) / n2 + z**2 / (4 * n2**2)) / denom2
             L2, U2 = center2 - half2, center2 + half2
-            lo, hi = L1 - U2, U1 - L2
+            # 두 구간을 **제곱합**으로 합친다. L1 - U2 처럼 양끝을 그냥 빼면
+            # 두 집단이 동시에 최악으로 어긋나는 경우를 가정하는 셈이라
+            # 구간이 지나치게 넓어진다(아래 설명 참조).
+            lo = (p1hat - p2hat) - np.sqrt((p1hat - L1)**2 + (U2 - p2hat)**2)
+            hi = (p1hat - p2hat) + np.sqrt((U1 - p1hat)**2 + (p2hat - L2)**2)
         elif method == "cp":
             L1 = 0.0 if k1 == 0 else beta.ppf(alpha / 2.0, k1, n1 - k1 + 1)
             U1 = 1.0 if k1 == n1 else beta.ppf(1 - alpha / 2.0, k1 + 1, n1 - k1)
@@ -195,6 +232,14 @@ def main():
 if __name__ == "__main__":
     main()
 ```
+
+![100 Δ=p1−p2 CIs (Newcombe) | n1=50, n2=40, CL=95%](./img/ci_p_diff_149.png)
+
+100회 중 실패 1회다. 100회짜리 모의실험으로는 방법을 가릴 수 없으니 반복을 20,000회로 늘려 실제 포함확률을 재면 Newcombe 94.8%, Wald 94.4%가 나온다. 둘 다 명목값을 조금 밑돌지만 Newcombe가 낫다.
+
+여기서 양끝을 그냥 빼는 결합, 즉 $[L_1 - U_2,\; U_1 - L_2]$을 쓰면 어떻게 되는지 비교해 볼 만하다. 같은 조건에서 포함확률이 **99.5%**로 뛰고 구간의 평균 너비가 0.391에서 0.552로 41% 늘어난다. 명목보다 높은 포함확률은 공짜가 아니다. 그만큼 결론이 무뎌진다.
+
+또 하나 눈에 띄는 것은 100개 중 81개가 0을 담고 있다는 점이다. 참 차이가 0.10인데 $n_1 = 50$, $n_2 = 40$으로는 다섯 번에 네 번 "차이가 없을 수도 있다"고 말하게 된다.
 
 ---
 

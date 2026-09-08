@@ -64,25 +64,34 @@ mean1, mean2 = 100, 90
 s1, s2 = 15, 20
 confidence_level = 0.95
 
-# Standard error
+# 두 표본이 독립이므로 분산이 더해진다.
+# 표준편차가 아니라 **분산**을 더한 뒤 제곱근이라는 점에 주의.
 standard_error = np.sqrt((s1**2 / n1) + (s2**2 / n2))
 
-# Welch-Satterthwaite degrees of freedom
+# Welch-Satterthwaite 자유도. 정수가 아니어도 scipy는 받아 준다.
+# 두 표본의 정보량을 하나로 합치는 근사이며, 한쪽 분산이 압도하면
+# 그쪽 표본의 자유도 쪽으로 끌려간다.
 df = ((s1**2 / n1) + (s2**2 / n2))**2 / (
     ((s1**2 / n1)**2 / (n1 - 1)) + ((s2**2 / n2)**2 / (n2 - 1))
 )
 
-# Critical value and margin of error
 t_critical = stats.t.ppf(1 - (1 - confidence_level) / 2, df)
 margin_of_error = t_critical * standard_error
 
-# Confidence interval
 confidence_interval = (
     (mean1 - mean2) - margin_of_error,
     (mean1 - mean2) + margin_of_error,
 )
 print(f"{confidence_interval = }")
 ```
+
+출력:
+
+```
+confidence_interval = (0.22892977648461788, 19.77107022351538)
+```
+
+구간이 0을 아슬아슬하게 벗어난다. 점추정값은 차이가 10이라고 말하지만, 구간은 0.23만큼 작을 수도 19.77만큼 클 수도 있다고 말한다. "차이가 있다"까지는 말할 수 있어도 "얼마나 있다"는 거의 말하지 못하는 자료다.
 
 ---
 
@@ -130,7 +139,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import t, norm
 
-rng_seed = None
+rng_seed = 42        # 아래 그림을 재현하려면 고정한다
 n_simulations = 100
 n1, n2 = 12, 10
 mu1, mu2 = 0.0, 0.5
@@ -201,6 +210,10 @@ def main():
 if __name__ == "__main__":
     main()
 ```
+
+![100 Two-Sample Mean CIs (welch) | n1=12, n2=10, CL=95%](./img/ci_mu_diff_123.png)
+
+포함확률 97.0%로 명목값을 달성한다(100회 모의실험의 표준오차가 2.2%p이므로 95%와 구별되지 않는다). `method`를 `"pooled"`나 `"z_plugin"`으로 바꿔 같은 자료에 다시 돌려 보면 방법마다 어디서 무너지는지 볼 수 있다.
 
 ---
 

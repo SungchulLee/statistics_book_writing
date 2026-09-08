@@ -59,12 +59,16 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import norm, beta
 
+np.random.seed(42)          # 아래 출력과 그림을 재현하려면 고정한다
+
 n_simulations = 100
 n = 20
 p_true = 0.20
 alpha = 0.05
 method = "wilson"  # 'wald' | 'wilson' | 'ac' | 'cp'
 
+# 표본을 만들 필요가 없다. 필요한 것은 성공 횟수 k 하나뿐이므로
+# 0/1을 n개 뽑는 대신 이항분포에서 k를 바로 뽑는다.
 k = np.random.binomial(n=n, p=p_true, size=n_simulations)
 phat = k / n
 z = norm.ppf(1 - alpha / 2)
@@ -99,6 +103,14 @@ coverage_pct = 100.0 * covered.mean()
 print(f"{method} coverage: {coverage_pct:.1f}%")
 ```
 
+출력:
+
+```
+wilson coverage: 96.0%
+```
+
+같은 자료(같은 시드)에 `method`만 바꿔 세어 보면 Wald 91.0%, Agresti–Coull 96.0%, Clopper–Pearson 99.0%가 된다. Wald만 명목값 아래로 내려가고, Clopper–Pearson은 보수적인 만큼 위로 넘친다.
+
 ### 구간의 시각화
 
 ```python
@@ -116,6 +128,14 @@ plt.tight_layout()
 plt.show()
 ```
 
+![100 WILSON CIs | n=20, p=0.2, CL=95%](./img/ci_prop_sim_108.png)
+
+구간이 몇 가지 위치에만 나타나는 것은 $k$가 정수여서 $\hat p$가 $0, 0.05, 0.10, \ldots$ 스물한 가지 값밖에 갖지 못하기 때문이다. 같은 $k$가 나온 표본들은 완전히 같은 구간을 만든다.
+
+Wald가 91%로 떨어지는 이유는 $k$별로 따져 보면 분명하다. 이 100개 표본 중 $k = 1$인 것이 8개인데, 그 경우 Wald 구간은 $(0, 0.146)$으로 참값 0.2에 닿지 못한다. 반면 Wilson 구간은 중심이 0.5 쪽으로 당겨져 $(0.009, 0.236)$이 되어 참값을 담는다. 여기에 $k = 0$인 표본 하나를 더해 Wald는 9번 실패한다. $k = 0$에서는 Wald 구간이 $\hat p = 0$ 때문에 표준오차가 0이 되어 점 하나로 무너진다.
+
+Wilson의 실패 4번은 $k = 0$ 하나와 $k = 8$ 셋이다. 즉 두 방법의 차이는 "$\hat p$가 작은 쪽에서 구간이 0 쪽으로 쏠리는가"에서 갈린다.
+
 ## 해석
 
 - **Wald** 구간은 $n$이 작거나 $p$가 경계 0 또는 1에 가까우면 포함확률이 극적으로 낮아질 수 있다. 흔한 경험칙은 $n\hat{p} \ge 10$이고 $n(1-\hat{p}) \ge 10$일 것을 요구하지만 이것만으로 늘 충분하지는 않다.
@@ -129,7 +149,35 @@ plt.show()
 
 ??? success "풀이"
 
-    $p_{\text{true}} = 0.05$, $n = 20$이면 $np = 1.0$으로 경험칙 $np \ge 10$을 위반한다. 많은 표본에서 성공이 $k = 0$이나 $k = 1$이 되어 $\hat{p}$가 0 근처가 되는데, 이때 Wald 표준오차가 거의 0으로 무너진다. 그 결과 구간이 극도로 좁아지거나(0에서 퇴화하거나) 하여 포함확률이 대략 70–80%로 떨어진다. $\hat{p}$의 분포가 심하게 치우쳐 있으면 이항분포에 대한 정규근사에 기대는 Wald 구간이 실패한다. $\square$
+    $p_{\text{true}} = 0.05$, $n = 20$이면 $np = 1.0$으로 경험칙 $np \ge 10$을 크게 위반한다. 모의실험을 돌리면 포함확률이 약 **64%**로 나온다.
+
+    이 경우는 모의실험 없이 정확히 계산할 수도 있다. $k$가 취할 수 있는 값이 21가지뿐이므로 각 $k$에 대해 구간이 0.05를 담는지 확인하고 이항확률로 가중하면 된다.
+
+    ```python
+    import numpy as np
+    from scipy.stats import norm, binom
+
+    n, p, alpha = 20, 0.05, 0.05
+    z = norm.ppf(1 - alpha / 2)
+    coverage = 0.0
+    for k in range(n + 1):
+        phat = k / n
+        se = np.sqrt(phat * (1 - phat) / n)
+        lo, hi = max(0.0, phat - z * se), min(1.0, phat + z * se)
+        if lo <= p <= hi:
+            coverage += binom.pmf(k, n, p)
+    print(f"exact Wald coverage: {100 * coverage:.1f}%")
+    ```
+
+    출력:
+
+    ```
+    exact Wald coverage: 63.9%
+    ```
+
+    실패는 거의 전부 $k = 0$에서 온다. $P(k = 0) = 0.95^{20} = 0.358$인데, 이때 $\hat p = 0$이라 표준오차가 0이 되어 구간이 $[0, 0]$ 한 점으로 무너진다. 세 번에 한 번 이상 "불량률은 정확히 0이다"라고 말하는 셈이다. $1 - 0.358 = 0.642$가 위에서 얻은 0.639와 거의 같다는 점이 이를 확인해 준다.
+
+    Wilson이나 Clopper–Pearson으로 바꾸면 $k = 0$일 때도 위쪽으로 폭이 있는 구간이 나오므로 이 실패 방식이 사라진다. $\square$
 
 ---
 

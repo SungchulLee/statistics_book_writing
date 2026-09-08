@@ -48,7 +48,7 @@ from scipy.stats import f
 n1, n2 = 15, 12
 alpha = 0.05
 
-# Simulate samples
+# 참 분산비는 1/1.5² = 0.444다. 답을 알고 있는 상태에서 구간을 본다.
 rng = np.random.default_rng(42)
 x = rng.normal(loc=0, scale=1.0, size=n1)
 y = rng.normal(loc=0, scale=1.5, size=n2)
@@ -57,15 +57,27 @@ s1_sq = x.var(ddof=1)
 s2_sq = y.var(ddof=1)
 rhat = s1_sq / s2_sq
 
+# F분포는 두 자유도의 **순서**가 중요하다. dfn이 분자, dfd가 분모다.
+# 두 표본의 크기가 다르므로 여기서 뒤바꾸면 조용히 틀린 답이 나온다.
 df1, df2 = n1 - 1, n2 - 1
 F_lo = f(dfn=df1, dfd=df2).ppf(alpha / 2.0)
 F_hi = f(dfn=df1, dfd=df2).ppf(1 - alpha / 2.0)
 
+# 여기서도 큰 임계값이 아래끝의 분모로 간다.
+# (s1²/s2²)/(σ1²/σ2²) ~ F 를 σ1²/σ2² 에 대해 풀면 대소가 뒤집히기 때문이다.
 ci_lower = rhat / F_hi
 ci_upper = rhat / F_lo
 
 print(f"95% CI for σ₁²/σ₂²: ({ci_lower:.4f}, {ci_upper:.4f})")
 ```
+
+출력:
+
+```
+95% CI for σ₁²/σ₂²: (0.2396, 2.4903)
+```
+
+참값 0.444를 담기는 하지만 위끝이 아래끝의 열 배다. 구간이 1을 넉넉히 담고 있으므로 "두 분산이 같다"는 가설조차 배제하지 못한다. 실제로는 $\sigma_2$가 $\sigma_1$의 1.5배인데도 그렇다. 분산 하나를 추정하는 것도 어려운데 그 비를 추정하는 일은 훨씬 더 어렵다.
 
 ---
 
@@ -81,7 +93,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import f
 
-rng_seed = None
+rng_seed = 42        # 아래 그림을 재현하려면 고정한다
 n_simulations = 100
 n1, n2 = 15, 12
 mu1, mu2 = 0.0, 0.0
@@ -139,6 +151,14 @@ def main():
 if __name__ == "__main__":
     main()
 ```
+
+![100 F-intervals for σ₁²/σ₂² | n1=15, n2=12, CL=95%](./img/ci_variance_ratio_74.png)
+
+포함확률 97.0%로 명목값을 달성한다. 그런데 구간의 모양이 눈에 띈다. 대부분은 0 근처에서 2 언저리까지 뻗지만, 하나는 오른쪽 끝이 14를 넘는다. 그 표본에서 우연히 $s_1^2/s_2^2$이 크게 나오자 구간이 통째로 오른쪽으로 밀리며 길이까지 폭발한 것이다.
+
+$\theta$의 척도가 비율이라 이런 일이 생긴다. 아래쪽으로는 0이라는 벽이 있어 눌리고 위쪽으로는 열려 있다. $\log \theta$로 보면 훨씬 대칭적인 그림이 된다.
+
+100개 중 74개가 1을 담고 있다. 참 비율이 0.444, 즉 표준편차로 1.5배 차이인데도 $n_1 = 15$, $n_2 = 12$로는 네 번 중 세 번 등분산을 배제하지 못한다. **등분산 검정으로 Welch를 쓸지 합동 $t$를 쓸지 정하려는 시도가 위험한 이유**가 여기 있다. 검정이 등분산을 기각하지 못했다는 것은 분산이 같다는 뜻이 아니라 표본이 작다는 뜻일 때가 많다.
 
 ---
 

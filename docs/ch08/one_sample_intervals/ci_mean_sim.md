@@ -52,13 +52,17 @@ import matplotlib.pyplot as plt
 from scipy.stats import norm, t
 
 def finite_population_correction(n, N):
-    """Return FPC factor if N is provided; else 1.0."""
+    """유한모집단 수정 인자. N을 주지 않으면 1.0(수정 없음)."""
     if N is None:
         return 1.0
     return float(np.sqrt((N - n) / (N - 1)))
 
 def compute_intervals(xbar, s, n, alpha, method, sigma_known=None, N=None):
-    """Compute CI lower/upper for z_known, z_plugin, or t method."""
+    """z_known, z_plugin, t 세 방법의 구간 끝점을 한꺼번에 계산한다.
+
+    xbar와 s가 배열이면 구간도 배열로 나온다.
+    모의실험에서 표본 만 개를 한 번에 처리하려고 이렇게 짰다.
+    """
     fpc = finite_population_correction(n, N)
     if method == "z_known":
         z_star = norm.ppf(1 - alpha / 2)
@@ -73,12 +77,15 @@ def compute_intervals(xbar, s, n, alpha, method, sigma_known=None, N=None):
         t_star = t.ppf(1 - alpha / 2, df=df)
         se = (s / np.sqrt(n)) * fpc
         moe = t_star * se
+    # z_plugin과 t의 차이는 임계값 한 자리뿐이다. 표준오차는 완전히 같다.
     return xbar - moe, xbar + moe
 
-# Simulation parameters
+# 모의실험 설정. 그림으로 보기 좋게 100회만 돌린다.
+# (포함확률을 정확히 재려면 아래 연습문제처럼 10,000회가 필요하다.)
 rng = np.random.default_rng(42)
 n_sim, n, mu, sigma, alpha = 100, 10, 0.0, 1.0, 0.05
 
+# 행 하나가 표본 하나. axis=1로 요약하면 표본별 통계량이 한 번에 나온다.
 X = rng.normal(loc=mu, scale=sigma, size=(n_sim, n))
 xbar = X.mean(axis=1)
 s = X.std(axis=1, ddof=1)
@@ -89,6 +96,14 @@ coverage_pct = 100.0 * covered.mean()
 
 print(f"t-interval coverage: {coverage_pct:.1f}%")
 ```
+
+출력:
+
+```
+t-interval coverage: 96.0%
+```
+
+100회만 돌렸으므로 이 값 자체의 표준오차가 $\sqrt{0.95 \times 0.05/100} \approx 2.2$%p다. 96.0%는 95%와 구별되지 않는다.
 
 ### 구간의 시각화
 
@@ -107,6 +122,12 @@ ax.set_xlabel("Mean value")
 plt.tight_layout()
 plt.show()
 ```
+
+![100 t CIs | n=10, CL=95%](./img/ci_mean_sim_95.png)
+
+가로선 하나가 표본 하나의 신뢰구간이고 세로 점선이 참값 $\mu = 0$이다. 놓친 넷만 빨간색이다.
+
+너비가 제각각인 것이 $t$-구간의 특징이다. 너비는 $s$에 비례하는데 $n = 10$에서 $s$는 표본마다 크게 흔들린다. 실패한 구간들을 보면 $\bar x$가 0에서 멀리 떨어져 있을 뿐 아니라 그 표본의 $s$가 그 거리를 덮을 만큼 크지 않았던 경우들이다.
 
 ## 해석
 
@@ -134,7 +155,23 @@ plt.show()
         print(f"{method}: {100*cov:.1f}%")
     ```
 
-    전형적인 출력: **z_known** $\approx$ 95.0%, **z_plugin** $\approx$ 92%, **t** $\approx$ 95.0%. $z$-known과 $t$ 구간만 명목 95%를 달성한다. $n = 5$에서는 $s$의 변동이 크므로 대입한 $z$는 포함확률이 부족하다. $\square$
+    출력:
+
+    ```
+    z_known: 94.9%
+    z_plugin: 87.8%
+    t: 94.7%
+    ```
+
+    $z$-known과 $t$ 구간만 명목 95%를 달성한다(모의실험 오차 약 0.2%p). 대입한 $z$-구간은 87.8%로 7%p 넘게 부족하다.
+
+    이 값은 우연이 아니라 정확히 계산할 수 있다. $(\bar X - \mu)/(s/\sqrt n) \sim t_4$이므로 대입한 $z$-구간의 포함확률은
+
+    $$
+    P(|t_4| \le 1.96) = 2 F_{t_4}(1.96) - 1 = 0.8784
+    $$
+
+    이고, 모의실험의 87.8%가 이 값을 재현한 것이다. $n = 5$에서 $s$의 변동이 워낙 커서 정규 임계값으로는 감당이 안 된다. $\square$
 
 ---
 
@@ -192,7 +229,15 @@ plt.show()
     print(f"Coverage: {100 * covers / n_sim:.1f}%")
     ```
 
-    전형적인 결과: 포함확률 $\approx$ 91–93%로 95%보다 낮다. 지수분포는 오른쪽으로 크게 치우쳐 있어 $n = 10$에서는 중심극한정리 근사가 아직 충분하지 않다. $n = 30$이면 포함확률이 $\approx$ 94%로 개선되고 $n = 100$이면 95%에 가까워진다. $\square$
+    출력:
+
+    ```
+    Coverage: 89.9%
+    ```
+
+    95%에 한참 못 미친다. 지수분포는 오른쪽으로 크게 치우쳐 있어 $n = 10$에서는 중심극한정리 근사가 아직 멀었다. 같은 코드에서 $n$만 바꾸면 30일 때 92.2%, 100일 때 94.3%로 천천히 올라온다. 정규자료에서는 $n = 5$에서도 $t$-구간이 정확했다는 점과 대비된다. $t$-구간이 지켜 주는 것은 $\sigma$를 모른다는 사실이지 **정규성이 아니다**.
+
+    실패가 양쪽에 고르게 퍼지지도 않는다. 같은 모의실험에서 실패 1009번 중 972번이 구간이 통째로 참값 **왼쪽**에 놓인 경우이고, 오른쪽은 37번뿐이다. 지수분포에서는 큰 값이 드물게 나오므로 대부분의 표본에서 $\bar x$가 참 평균을 밑돌고, 드물게 큰 값이 걸린 표본에서는 $s$까지 함께 커져 구간이 넓어지는 탓에 오른쪽 실패는 잘 생기지 않는다. 명목 95%를 "양쪽에 2.5%씩"이라고 읽으면 곤란한 상황이다. $\square$
 
 ---
 

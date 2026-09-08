@@ -61,13 +61,15 @@ rho = 0.6
 alpha = 0.05
 method = "t"  # 't' | 'z_known' | 'z_plugin'
 
-rng = np.random.default_rng(None)
+rng = np.random.default_rng(42)      # 아래 출력과 그림을 재현하려면 고정한다
 
 delta_true = mu_x - mu_y
 var_d_true = sigma_x**2 + sigma_y**2 - 2 * rho * sigma_x * sigma_y
 sigma_d_true = np.sqrt(var_d_true)
 
-# Build covariance matrix and Cholesky factor
+# 상관이 있는 짝 (X, Y)를 만들어야 하므로 공분산행렬을 세우고
+# Cholesky 분해 L을 쓴다. 독립인 표준정규 z에 L을 곱하면
+# 공분산이 Sigma인 자료가 된다. Cov(Lz) = L L^T = Sigma 이기 때문이다.
 cov = rho * sigma_x * sigma_y
 Sigma = np.array([[sigma_x**2, cov], [cov, sigma_y**2]])
 L = np.linalg.cholesky(Sigma)
@@ -105,6 +107,12 @@ coverage_pct = 100.0 * covered.mean()
 print(f"Paired {method} coverage: {coverage_pct:.1f}%")
 ```
 
+출력:
+
+```
+Paired t coverage: 95.0%
+```
+
 ### 구간의 시각화
 
 ```python
@@ -122,6 +130,12 @@ ax.set_xlabel("Mean difference")
 plt.tight_layout()
 plt.show()
 ```
+
+![100 Paired t CIs | n=12, rho=0.6, CL=95%](./img/ci_paired_sim_110.png)
+
+여기 쓰인 설정에서 $\sigma_D = \sqrt{1 + 1.44 - 1.44} = 1.00$이다. $\rho = 0.6$이라는 상관 덕분에 $\sigma_X^2 + \sigma_Y^2$의 상당 부분이 상쇄되었다. 같은 자료를 짝을 무시하고 다뤘다면 산포가 1.562가 되어 구간이 1.56배 넓어졌을 것이다.
+
+`rho`를 0.0이나 $-0.3$으로 바꿔 다시 돌려 보면 구간이 눈에 띄게 넓어진다. 포함확률은 그대로 95% 근처를 유지한다. 상관은 구간의 **정확성**이 아니라 **정밀도**를 바꾼다.
 
 ## 해석
 
