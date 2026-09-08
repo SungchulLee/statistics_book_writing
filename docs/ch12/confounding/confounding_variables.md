@@ -159,7 +159,26 @@ def fetch_housing_data():
 def load_housing_data():
     return pd.read_csv(os.path.join(HOUSING_PATH, "housing.csv"))
 
-# Your analysis here
+fetch_housing_data()
+df = load_housing_data()
+
+# numeric_only=True가 없으면 문자열 열(ocean_proximity) 때문에 예외가 난다.
+corr = df.corr(numeric_only=True)["median_house_value"].sort_values(ascending=False)
+print(corr.round(4).to_string())
+```
+
+출력:
+
+```
+median_house_value    1.0000
+median_income         0.6881
+total_rooms           0.1342
+housing_median_age    0.1056
+households            0.0658
+total_bedrooms        0.0497
+population           -0.0246
+longitude            -0.0460
+latitude             -0.1442
 ```
 
 ??? success "풀이"

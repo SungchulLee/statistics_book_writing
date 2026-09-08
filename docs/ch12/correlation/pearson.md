@@ -133,10 +133,27 @@ corr_matrix = np.corrcoef(x, y)
 r_numpy = corr_matrix[0, 1]
 print(f"NumPy r = {r_numpy:.4f}")
 
-# Method 2: SciPy (also returns the p-value)
+# 방법 2: SciPy (p-값도 함께 돌려준다)
 r_scipy, p_value = stats.pearsonr(x, y)
 print(f"SciPy r = {r_scipy:.4f}, p-value = {p_value:.6f}")
+
+# 이상점 하나를 더하면 어떻게 되는지 본다.
+x2 = np.append(x, 10)
+y2 = np.append(y, -5)
+print(f"이상점 추가 후 r = {np.corrcoef(x2, y2)[0, 1]:.4f}")
 ```
+
+출력:
+
+```
+NumPy r = 0.9996
+SciPy r = 0.9996, p-value = 0.000000
+이상점 추가 후 r = 0.4180
+```
+
+`np.corrcoef`와 `stats.pearsonr`가 같은 $r$을 준다. 앞의 것은 상관행렬을, 뒤의 것은 p-값을 함께 준다는 차이뿐이다.
+
+마지막 줄이 이상점의 위력이다. $r = 0.9996$이 점 하나를 더하자 0.4180으로 떨어졌다. 관측값 11개 중 하나가 상관계수를 절반 넘게 깎아냈다.
 
 `scipy.stats.pearsonr` 함수는 표본상관과 함께 귀무가설 $H_0\!: \rho = 0$에 대한 양측 p-값을 돌려준다. 이 가설검정의 자세한 내용은 [Pearson의 r 검정](../correlation_test/test_pearson.md)을 보라.
 
@@ -158,17 +175,33 @@ Pearson 상관계수 $r$은 두 변수 사이 선형관계의 강도와 방향�
 ```python
 import pandas as pd
 
-url = "https://raw.githubusercontent.com/beccadsouza/Machine-Learning-Python/master/Datasets/height-weight.csv"
-data = pd.read_csv(url)
+# openintro의 bdims 자료: 성인 507명의 신체 치수.
+# hgt(cm), wgt(kg), sex(1 = 남성, 0 = 여성) 열을 쓴다.
+url = ("https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/"
+       "master/csv/openintro/bdims.csv")
+data = pd.read_csv(url).rename(columns={"hgt": "Height", "wgt": "Weight"})
+data["Gender"] = data["sex"].map({1: "Male", 0: "Female"})
 
-# Your code here
+for label, subset in [("Male", data[data.Gender == "Male"]),
+                      ("Female", data[data.Gender == "Female"]),
+                      ("All", data)]:
+    r = subset["Height"].corr(subset["Weight"])
+    print(f"{label:<7} n = {len(subset):>3}   r = {r:.4f}")
+```
+
+출력:
+
+```
+Male    n = 247   r = 0.5347
+Female  n = 260   r = 0.4311
+All     n = 507   r = 0.7173
 ```
 
 전체 상관이 집단 내 상관과 다를 수 있는 이유를 논하라.
 
 ??? success "풀이"
 
-    남성과 여성에 대해 각각, 그리고 전체 자료에 대해 Pearson 상관을 계산하면 대체로 값이 다르게 나온다. 전체 자료에는 집단 간 변동이 포함되기 때문이다. 남성이 여성보다 키도 크고 몸무게도 무거운 경향이 있다면, 두 집단을 합칠 때 (집단 차이라는) 양의 공변동 원천이 하나 더 생겨 전체 상관이 집단 내 상관보다 커질 수 있다. 이는 생태학적 상관 효과의 한 예이다.
+    남성 0.535, 여성 0.431인데 둘을 합치면 0.717로 오히려 **커진다**. 전체 자료에는 집단 간 변동이 포함되기 때문이다. 남성이 여성보다 키도 크고 몸무게도 무거운 경향이 있다면, 두 집단을 합칠 때 (집단 차이라는) 양의 공변동 원천이 하나 더 생겨 전체 상관이 집단 내 상관보다 커질 수 있다. 이는 생태학적 상관 효과의 한 예이다.
 
 ---
 
@@ -185,10 +218,25 @@ $\rho \in \{-0.99, -0.8, -0.5, 0, 0.5, 0.8, 0.99\}$에 대해 이변량 정규 �
 `scipy`를 쓰거나 직접 Anscombe의 사중주를 재현하라. 네 자료 각각에 대해 Pearson $r$을 계산하고, 산점도 패턴이 아주 다른데도 값이 거의 같음을 확인하라.
 
 ```python
-# Hint: Anscombe's quartet is available in seaborn
 import seaborn as sns
+
 anscombe = sns.load_dataset("anscombe")
+for name, grp in anscombe.groupby("dataset"):
+    r = grp["x"].corr(grp["y"])
+    print(f"{name}: n = {len(grp)}, mean(x) = {grp.x.mean():.2f}, "
+          f"mean(y) = {grp.y.mean():.2f}, r = {r:.4f}")
 ```
+
+출력:
+
+```
+I: n = 11, mean(x) = 9.00, mean(y) = 7.50, r = 0.8164
+II: n = 11, mean(x) = 9.00, mean(y) = 7.50, r = 0.8162
+III: n = 11, mean(x) = 9.00, mean(y) = 7.50, r = 0.8163
+IV: n = 11, mean(x) = 9.00, mean(y) = 7.50, r = 0.8165
+```
+
+네 자료의 평균도, 상관도 소수점 셋째 자리까지 같다. 그런데 산점도를 그려 보면 완전히 다른 자료다.
 
 ??? success "풀이"
 

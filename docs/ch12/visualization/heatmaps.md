@@ -19,8 +19,11 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 
 # Load S&P 500 data with ETF symbols
-sp500_sym = pd.read_csv('sp500_sectors.csv')
-sp500_px = pd.read_csv('sp500_data.csv.gz', index_col=0)
+# 자료는 "Practical Statistics for Data Scientists" 저장소에서 바로 읽는다.
+SP500 = ("https://raw.githubusercontent.com/gedeck/"
+         "practical-statistics-for-data-scientists/master/data/")
+sp500_sym = pd.read_csv(SP500 + 'sp500_sectors.csv')
+sp500_px = pd.read_csv(SP500 + 'sp500_data.csv.gz', index_col=0)
 
 # Filter for ETFs only (major exchanges), from July 2012 onward
 etfs = sp500_px.loc[sp500_px.index > '2012-07-01',
@@ -41,6 +44,12 @@ ax.set_title('Correlation Heatmap: S&P 500 ETFs (2012-2015)')
 plt.tight_layout()
 plt.show()
 ```
+
+![S&P 500 ETF 상관 열지도](./img/heatmaps_15.png)
+
+대각선이 가장 진한 빨강(1.0)이고 행렬이 대각선에 대해 대칭이다.
+
+대부분의 칸이 붉은 계열이라는 점이 포트폴리오 관점에서 중요하다. 섹터 ETF들이 서로 양의 상관을 갖고 함께 움직이므로 분산 효과가 생각만큼 크지 않다.
 
 ### 열지도 해석하기
 
@@ -67,8 +76,11 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 
 # Load and filter data (same as above)
-sp500_sym = pd.read_csv('sp500_sectors.csv')
-sp500_px = pd.read_csv('sp500_data.csv.gz', index_col=0)
+# 자료는 "Practical Statistics for Data Scientists" 저장소에서 바로 읽는다.
+SP500 = ("https://raw.githubusercontent.com/gedeck/"
+         "practical-statistics-for-data-scientists/master/data/")
+sp500_sym = pd.read_csv(SP500 + 'sp500_sectors.csv')
+sp500_px = pd.read_csv(SP500 + 'sp500_data.csv.gz', index_col=0)
 etfs = sp500_px.loc[sp500_px.index > '2012-07-01',
                     sp500_sym[sp500_sym['sector'] == 'etf']['symbol']]
 
@@ -88,6 +100,10 @@ ax.set_title('Annotated Correlation Heatmap: S&P 500 ETFs')
 plt.tight_layout()
 plt.show()
 ```
+
+![값을 표시한 열지도](./img/heatmaps_67.png)
+
+칸마다 숫자를 적으면 정확한 값을 읽을 수 있다. 변수가 10개를 넘으면 글씨가 겹치기 시작하므로 그때는 색만 쓰는 편이 낫다.
 
 값을 표시하면 특정 상관 쌍을 쉽게 확인할 수 있다:
 
@@ -125,6 +141,10 @@ plt.tight_layout()
 plt.show()
 ```
 
+![군집화한 열지도](./img/heatmaps_113.png)
+
+행과 열을 상관 구조에 따라 재정렬하면 함께 움직이는 변수들이 대각선 근처에 블록으로 모인다. 같은 자료인데도 구조가 훨씬 잘 보인다.
+
 군집화는 강하게 상관된 변수들이 붙어 있도록 행과 열을 재정렬하여 상관행렬의 블록 구조를 드러낸다.
 
 ### 2. 부분집합 선택
@@ -142,6 +162,10 @@ ax.set_title('Sector ETF Correlations')
 plt.tight_layout()
 plt.show()
 ```
+
+![부분집합 열지도](./img/heatmaps_140.png)
+
+변수를 추려 내면 각 칸이 커져 값을 읽기 쉬워진다. 변수가 20개를 넘으면 전체 행렬보다 이런 부분집합이 실용적이다.
 
 ---
 
@@ -167,6 +191,10 @@ ax.set_title('Correlation Heatmap (Grayscale)')
 plt.tight_layout()
 plt.show()
 ```
+
+![회색조 열지도](./img/heatmaps_158.png)
+
+색맹 독자나 흑백 인쇄를 고려하면 명도만으로 구분되는 회색조가 안전하다. 다만 부호를 구분하기 어려워지므로 값을 함께 적어 주는 편이 좋다.
 
 ---
 

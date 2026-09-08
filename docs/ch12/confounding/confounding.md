@@ -135,6 +135,10 @@ if __name__ == "__main__":
     main()
 ```
 
+![주택 자료의 산점도](./img/confounding_86.png)
+
+세 산점도 중 첫 번째(소득 대 집값)만 뚜렷한 양의 관계를 보인다. 오른쪽 위 모서리에 값이 잘린 자국이 보이는데, 집값이 500,001달러에서 절단된 자료이기 때문이다.
+
 ### 실습 1: 상관계수 계산
 
 **목표**: `median_house_value`와 다른 변수들 사이의 Pearson 상관계수를 계산한다.
@@ -156,6 +160,16 @@ if __name__ == "__main__":
     calculate_correlations(df)
 ```
 
+출력:
+
+```
+Correlation (Median Income vs House Value):      0.6881
+Correlation (Population vs House Value):         -0.0246
+Correlation (Housing Median Age vs House Value): 0.1056
+```
+
+소득과 집값의 상관은 0.69로 뚜렷하지만 인구수나 주택 연령은 집값과 사실상 무상관이다. 상관행렬을 보면 어느 변수부터 들여다볼지 정할 수 있다.
+
 ### 실습 2: 상관 열지도
 
 **목표**: 모든 수치형 변수 사이의 상관을 시각화한다.
@@ -165,7 +179,9 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 
 def plot_correlation_heatmap(df):
-    corr_matrix = df.corr()
+    # numeric_only=True가 없으면 문자열 열(ocean_proximity) 때문에 예외가 난다.
+    # pandas 2부터 비수치 열을 조용히 건너뛰지 않는다.
+    corr_matrix = df.corr(numeric_only=True)
     plt.figure(figsize=(10, 8))
     sns.heatmap(corr_matrix, annot=True, cmap="coolwarm", fmt=".2f")
     plt.title("Correlation Matrix of Housing Data")
@@ -175,6 +191,10 @@ if __name__ == "__main__":
     df = load_housing_data()
     plot_correlation_heatmap(df)
 ```
+
+![주택 자료의 상관행렬 열지도](./img/confounding_163.png)
+
+median_income과 median_house_value 사이의 0.69가 가장 두드러진다. 나머지 변수들은 집값과 거의 무상관이다.
 
 ### 실습 3: 산점도 행렬
 
@@ -194,6 +214,10 @@ if __name__ == "__main__":
     df = load_housing_data()
     plot_scatter_matrix(df)
 ```
+
+![산점도 행렬](./img/confounding_185.png)
+
+변수 쌍마다 산점도를 그려 어떤 관계가 선형이고 어떤 것이 아닌지 확인한다.
 
 ### 실습 4: 이상점이 상관에 미치는 영향
 
@@ -229,6 +253,17 @@ if __name__ == "__main__":
     df = load_housing_data()
     add_outliers(df)
 ```
+
+출력:
+
+```
+Original Correlation: 0.6881
+New Correlation with Outliers: 0.6901
+```
+
+![이상점을 추가한 산점도](./img/confounding_204.png)
+
+이상점 몇 개를 더해도 상관이 0.6881에서 0.6901로 거의 변하지 않는다. $n = 20{,}640$이라 몇 점의 영향이 묽어지기 때문이다. 이상점의 위력은 표본크기에 반비례한다.
 
 ### 실습 5: 상관과 인과에 대한 토론
 

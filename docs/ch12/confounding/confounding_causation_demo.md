@@ -33,9 +33,24 @@ def simulate_confounded_data(n=500, rho_tc=0.8):
     tc = np.random.multivariate_normal(mean, cov, n)
     t = tc[:, 0]
     c = tc[:, 1]
+    # Y는 오직 C에만 의존한다. T가 Y에 미치는 참 효과는 정확히 0이다.
     y = c + np.random.normal(0, 1, n)
     return t, c, y
+
+
+t, c, y = simulate_confounded_data()
+print(f"corr(T, C) = {np.corrcoef(t, c)[0, 1]:.4f}")
+print(f"corr(T, Y) = {np.corrcoef(t, y)[0, 1]:.4f}   (참 인과효과는 0)")
 ```
+
+출력:
+
+```
+corr(T, C) = 0.7908
+corr(T, Y) = 0.5282   (참 인과효과는 0)
+```
+
+$T$와 $Y$의 상관이 0.53이나 되지만 $T$는 $Y$에 아무 영향도 주지 않는다. 오직 $C$를 공유할 뿐이다.
 
 ### 짧은 회귀와 긴 회귀
 
@@ -66,14 +81,20 @@ def compute_regressions(t, c, y):
         "long_beta_T": beta[1],
         "long_beta_C": beta[2],
     }
+
+
+res = compute_regressions(t, c, y)
+print(f"short_slope  = {res['short_slope']:>8.4f}   (p = {res['short_p']:.1e})")
+print(f"long_beta_T  = {res['long_beta_T']:>8.4f}")
+print(f"long_beta_C  = {res['long_beta_C']:>8.4f}")
 ```
 
-$\rho_{TC} = 0.8$, $n = 500$일 때의 결과:
+출력:
 
-```text
-short_slope  =  0.7772   (p = 2.8e-37)
-long_beta_T  = -0.1000
-long_beta_C  =  1.0915
+```
+short_slope  =   0.7772   (p = 2.8e-37)
+long_beta_T  =  -0.1000
+long_beta_C  =   1.0915
 ```
 
 $T$에 아무런 인과효과가 없는데도 짧은 회귀는 $\beta_T^{\text{short}} = 0.777$이라는 압도적으로 유의한 기울기를 내놓는다. 긴 회귀는 $\beta_T^{\text{long}} \approx 0$을 올바르게 추정한다.
@@ -94,6 +115,13 @@ $$
 t_resid = t - stats.linregress(c, t).slope * c
 y_resid = y - stats.linregress(c, y).slope * c
 slope_partial = stats.linregress(t_resid, y_resid).slope
+print(f"slope_partial = {slope_partial:.4f}")
+```
+
+출력:
+
+```
+slope_partial = -0.1000
 ```
 
 이렇게 얻은 `slope_partial`은 $-0.1000$으로 긴 회귀의 $\beta_T^{\text{long}}$과 소수점 넷째 자리까지 일치한다. **Frisch-Waugh-Lovell 정리**가 작동하는 모습이다. 긴 회귀에서 $T$의 계수는 $e_Y$를 $e_T$에 회귀시킨 기울기와 같다.
@@ -246,6 +274,22 @@ $\rho_{TC} \in \{-0.9, -0.5, 0, 0.5, 0.9\}$, $n = 500$으로 교란된 회귀를
     plt.show()
     ```
 
+출력:
+
+```
+rho=-0.9: short=-0.877, long_T=0.131
+rho=-0.5: short=-0.444, long_T=0.056
+rho=+0.0: short=-0.021, long_T=0.008
+rho=+0.5: short=0.454, long_T=-0.065
+rho=+0.9: short=0.885, long_T=-0.140
+```
+
+![교란의 방향과 크기](./img/confounding_causation_demo_245.png)
+
+$\rho_{TC}$가 $-0.9$에서 $+0.9$로 갈수록 짧은 회귀의 기울기가 $-0.88$에서 $+0.89$까지 움직인다. 참 효과는 언제나 0인데도 그렇다.
+
+교란의 **방향**은 $\rho_{TC}$의 부호가 정한다. 교란변수가 있다는 사실만으로는 편향이 어느 쪽인지 알 수 없고, 그 상관의 부호를 알아야 한다.
+
     출력:
 
     ```text
@@ -278,6 +322,14 @@ Simpson의 역설 시연에서 처치 배정이 중증도와 독립이라면(즉
     ate_naive = y[treatment == 1].mean() - y[treatment == 0].mean()
     print(f"Naive ATE = {ate_naive:.2f} (true = 5)")   # 4.86
     ```
+
+출력:
+
+```
+Naive ATE = 4.86 (true = 5)
+```
+
+무작위 배정이면 교란이 없으므로 순진한 추정값도 참값 5에 가깝다.
 
     처치가 무작위화되면(교란변수와 독립이면) 소박한 ATE는 참 ATE의 불편추정량이 된다. 이 모의실험에서 $4.86$으로 참값 $5$에 가깝게 나온다. 처치군과 대조군의 중증도 분포가 같으므로 교란이 없다. 무작위대조시험이 인과추론의 표준으로 여겨지는 이유가 바로 이것이다. $\square$
 
@@ -317,6 +369,19 @@ Simpson의 역설 예제를 중증도 세 수준(경증, 중등증, 중증)으�
     print(f"Adjusted ATE: {ate_adjusted:.2f}")
     print(f"True effect:  5.00")
     ```
+
+출력:
+
+```
+ATE (severity=0): 4.51
+ATE (severity=1): 4.17
+ATE (severity=2): 5.60
+Naive ATE:    -7.28
+Adjusted ATE: 4.76
+True effect:  5.00
+```
+
+중증도를 통제하면 처치효과 추정값이 참값 5에 가까워진다. 통제하지 않은 순진한 추정값은 $-7.28$로 부호마저 반대다.
 
     출력:
 

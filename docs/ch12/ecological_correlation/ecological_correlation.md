@@ -64,12 +64,25 @@ def main():
     prob_male_admitted = (df.n_male * df.p_male).sum() / df.n_male.sum()
     prob_female_admitted = (df.n_female * df.p_female).sum() / df.n_female.sum()
 
-    print(f"Overall male admission rate:   {prob_male_admitted:.2%}")   # ~44%
-    print(f"Overall female admission rate: {prob_female_admitted:.2%}") # ~30%
+    # 학과별 합격률을 지원자 수로 가중평균한다.
+    # 단순평균이 아니라 가중평균인 것이 이 예제의 핵심이다.
+    print(f"Overall male admission rate:   {prob_male_admitted:.2%}")
+    print(f"Overall female admission rate: {prob_female_admitted:.2%}")
 
 if __name__ == "__main__":
     main()
 ```
+
+출력:
+
+```
+Overall male admission rate:   44.52%
+Overall female admission rate: 30.33%
+```
+
+전체로 보면 남성 44.5%, 여성 30.3%로 14%p 차이다. 그런데 위 표를 학과별로 보면 여섯 학과 중 네 곳에서 **여성의 합격률이 더 높다**.
+
+모순이 아니라 가중치의 문제다. 여성 지원자는 합격률이 낮은 학과(C, E, F)에 몰려 있고 남성은 합격률이 높은 학과(A, B)에 몰려 있다. 집단 수준의 비율이 개인 수준의 관계를 뒤집어 보여주는 것이며, 이것이 Simpson의 역설이자 생태학적 오류의 대표적인 예다.
 
 이 여섯 전공을 합친 수준에서는 남성의 합격률이 훨씬 높아 보인다(44% 대 30%). 그러나 학과별로 살펴보면 대부분의 학과에서 여성이 같거나 더 높은 비율로 합격했다. 여성이 전체 합격률이 낮은 경쟁적인 학과(C, D, E, F)에 불균형하게 많이 지원했기 때문에 역설이 생긴다.
 

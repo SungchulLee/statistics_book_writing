@@ -70,6 +70,16 @@ print(f"Spearman rho = {r_spearman:.4f}  (p = {p_spearman:.2e})")
 print(f"Kendall  tau = {r_kendall:.4f}  (p = {p_kendall:.2e})")
 ```
 
+출력:
+
+```
+Pearson  r = 0.8221  (p = 1.21e-30)
+Spearman rho = 0.8363  (p = 1.38e-32)
+Kendall  tau = 0.6420  (p = 2.54e-25)
+```
+
+세 계수가 0.82, 0.84, 0.64로 다르다. Kendall이 유독 작은 것은 척도가 달라서이며, 강도가 약하다는 뜻이 아니다.
+
 ---
 
 ## 순위 동등성 확인
@@ -82,6 +92,15 @@ print(f"Pearson r on ranks = {r_rank:.4f}")
 print(f"Spearman rho       = {r_spearman:.4f}")
 # These two values should match.
 ```
+
+출력:
+
+```
+Pearson r on ranks = 0.8363
+Spearman rho       = 0.8363
+```
+
+순위로 바꾼 뒤 계산한 Pearson 상관이 Spearman과 정확히 같다. Spearman은 별개의 공식이 아니라 **순위에 적용한 Pearson**이라는 정의를 수치로 확인한 것이다.
 
 ---
 
@@ -106,6 +125,10 @@ ax.legend()
 plt.tight_layout()
 plt.show()
 ```
+
+![세 상관계수의 비교](./img/correlation_analysis_92.png)
+
+산점도에 세 계수를 함께 적어 두면 어떤 모양에서 값이 갈리는지 볼 수 있다.
 
 ---
 
@@ -142,6 +165,16 @@ $x \sim \text{Uniform}(0, 20)$이고 $\varepsilon \sim \mathcal{N}(0, 5^2)$인 �
     print(f"Kendall  tau = {r_k:.4f}, p = {p_k:.2e}")
     ```
 
+출력:
+
+```
+Pearson  r = 0.9601, p = 1.42e-111
+Spearman rho = 0.9593, p = 1.14e-110
+Kendall  tau = 0.8227, p = 4.63e-67
+```
+
+$n$이 크면 p-값이 $10^{-100}$ 수준까지 내려간다. 이런 숫자는 "관계가 강하다"가 아니라 "우연으로 보기 어렵다"는 뜻일 뿐이며, 강도는 $r$ 자체로 읽어야 한다.
+
     참 관계가 선형이므로 Pearson의 $r$이 가장 효율적인 추정량이며 값도 가장 크다. Spearman의 $\rho_s$는 가깝지만 조금 낮고 Kendall의 $\tau$가 가장 작다. 잡음에 비해 선형 신호가 강하므로 셋 다 매우 유의하다. $\square$
 
 ---
@@ -166,6 +199,15 @@ Spearman의 $\rho_s > 0.9$이면서 Pearson의 $r < 0.5$인 $n = 100$개 자료�
     print(f"Pearson r = {r_p:.4f}")
     print(f"Spearman rho = {r_s:.4f}")
     ```
+
+출력:
+
+```
+Pearson r = 0.8556
+Spearman rho = 0.9821
+```
+
+Pearson 0.856과 Spearman 0.982의 차이가 이 예제의 요점이다. 관계가 단조이지만 곡선이면 순위 기반 계수가 더 큰 값을 준다.
 
     지수 관계는 강하게 단조이지만($\rho_s$가 높다) 선형에서 멀어 Pearson의 $r$이 상당히 낮다. Pearson은 선형 연관만 포착하고 Spearman은 어떤 단조 관계든 포착함을 보여준다. $\square$
 
@@ -241,6 +283,16 @@ $$
     y_c[:3] = [-6, 6, -7]
     print("Outliers:", all_correlations(x_c, y_c))
     ```
+
+출력:
+
+```
+Linear: {'pearson': 0.9654943669720492, 'spearman': 0.9640324032403239, 'kendall': 0.8408080808080809}
+Quadratic: {'pearson': -0.28540752875587533, 'spearman': -0.15697569756975696, 'kendall': -0.09292929292929294}
+Outliers: {'pearson': -0.1603686865830897, 'spearman': 0.7779657965796579, 'kendall': 0.6993939393939395}
+```
+
+네 자료의 결과를 나란히 놓으면 세 계수의 성격이 갈린다. 선형 자료에서는 셋이 모두 0.84~0.97로 비슷하지만, 이차 관계에서는 Pearson이 $-0.29$, Kendall이 $-0.09$로 크게 벌어진다. 어느 쪽도 "관계가 없다"는 뜻이 아니라 **어느 계수도 U자 관계를 재도록 만들어지지 않았다**는 뜻이다.
 
     Pearson의 $r$이 이상점의 영향을 가장 크게 받는다. 극단값에 민감한 평균과 표준편차에 의존하기 때문이다. 순위 기반인 Spearman과 Kendall은 더 로버스트하다. 상황 (c)에서 이상점이 Pearson의 $r$을 0(또는 음수) 쪽으로 끌어내리는 반면 Spearman과 Kendall은 참된 양의 연관에 더 가깝게 남는다. $\square$
 

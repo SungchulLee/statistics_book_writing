@@ -66,6 +66,10 @@ if __name__ == "__main__":
     plot_correlations()
 ```
 
+![양의 상관](./img/understanding_25.png)
+
+두 변수가 함께 커진다. 점들이 왼쪽 아래에서 오른쪽 위로 향하는 띠를 이룬다.
+
 ---
 
 ## 음의 상관 시각화
@@ -103,6 +107,10 @@ def plot_negative_correlations():
 if __name__ == "__main__":
     plot_negative_correlations()
 ```
+
+![음의 상관](./img/understanding_75.png)
+
+한 변수가 커지면 다른 변수가 작아진다. 띠의 방향만 반대일 뿐 구조는 같다.
 
 ---
 
@@ -142,6 +150,12 @@ def plot_all_correlations():
 if __name__ == "__main__":
     plot_all_correlations()
 ```
+
+![상관의 전체 스펙트럼](./img/understanding_113.png)
+
+$r$이 $-1$에서 $+1$로 갈수록 구름이 좁은 타원으로 조여든다. $r = 0$ 근처에서는 방향을 알아볼 수 없는 둥근 구름이고, $|r|$이 커질수록 직선에 가까워진다.
+
+$r$의 부호는 기울기의 방향을, 크기는 흩어짐의 정도를 나타낸다는 것이 이 그림 하나에 담겨 있다.
 
 ---
 
@@ -216,8 +230,12 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 def plot_height_weight_scatter():
-    url = "https://raw.githubusercontent.com/beccadsouza/Machine-Learning-Python/master/Datasets/height-weight.csv"
-    data = pd.read_csv(url)
+    # openintro의 bdims 자료: 성인 507명의 신체 치수.
+    # hgt(cm), wgt(kg), sex(1 = 남성, 0 = 여성) 열을 쓴다.
+    url = ("https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/"
+           "master/csv/openintro/bdims.csv")
+    data = pd.read_csv(url).rename(columns={"hgt": "Height", "wgt": "Weight"})
+    data["Gender"] = data["sex"].map({1: "Male", 0: "Female"})
     filtered = data[data.Gender == "Male"][:300]
 
     fig, ax = plt.subplots(figsize=(10, 10))
@@ -232,6 +250,10 @@ if __name__ == "__main__":
     plot_height_weight_scatter()
 ```
 
+![남성의 키와 몸무게](./img/understanding_214.png)
+
+남성 300명의 키와 몸무게다. 오른쪽 위로 향하는 관계가 보이지만 점들이 꽤 넓게 흩어져 있다. 뒤에서 계산하면 $r = 0.53$이다.
+
 ### 실습 1: 여성에 대한 산점도
 
 **목표**: 코드를 고쳐 여성만 걸러 키 대 몸무게를 그린다.
@@ -241,8 +263,12 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 def plot_height_weight_scatter_for_women():
-    url = "https://raw.githubusercontent.com/beccadsouza/Machine-Learning-Python/master/Datasets/height-weight.csv"
-    data = pd.read_csv(url)
+    # openintro의 bdims 자료: 성인 507명의 신체 치수.
+    # hgt(cm), wgt(kg), sex(1 = 남성, 0 = 여성) 열을 쓴다.
+    url = ("https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/"
+           "master/csv/openintro/bdims.csv")
+    data = pd.read_csv(url).rename(columns={"hgt": "Height", "wgt": "Weight"})
+    data["Gender"] = data["sex"].map({1: "Male", 0: "Female"})
     filtered = data[data.Gender == "Female"][:300]
 
     fig, ax = plt.subplots(figsize=(10, 10))
@@ -257,6 +283,10 @@ if __name__ == "__main__":
     plot_height_weight_scatter_for_women()
 ```
 
+![여성의 키와 몸무게](./img/understanding_243.png)
+
+여성만 보면 모양이 비슷하되 위치가 왼쪽 아래로 옮겨간다. 키도 몸무게도 남성보다 작기 때문이다.
+
 ### 실습 2: 전체에 대한 산점도
 
 **목표**: 남성과 여성을 다른 색으로 구분한 산점도를 만든다.
@@ -266,8 +296,12 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 def plot_height_weight_scatter_for_all():
-    url = "https://raw.githubusercontent.com/beccadsouza/Machine-Learning-Python/master/Datasets/height-weight.csv"
-    data = pd.read_csv(url)
+    # openintro의 bdims 자료: 성인 507명의 신체 치수.
+    # hgt(cm), wgt(kg), sex(1 = 남성, 0 = 여성) 열을 쓴다.
+    url = ("https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/"
+           "master/csv/openintro/bdims.csv")
+    data = pd.read_csv(url).rename(columns={"hgt": "Height", "wgt": "Weight"})
+    data["Gender"] = data["sex"].map({1: "Male", 0: "Female"})
     subset = data[:300]
     males = subset[subset.Gender == "Male"]
     females = subset[subset.Gender == "Female"]
@@ -286,6 +320,12 @@ if __name__ == "__main__":
     plot_height_weight_scatter_for_all()
 ```
 
+![전체의 키와 몸무게](./img/understanding_272.png)
+
+두 집단을 합치면 점들이 하나의 더 긴 띠를 이룬다. 각 집단 안의 흩어짐은 그대로인데 두 구름이 대각선 방향으로 나란히 놓여 전체 띠가 더 길고 좁아 보인다.
+
+이것이 다음 실습에서 확인할 현상의 그림이다.
+
 ### 실습 3: 성별을 섞은 자료 분석
 
 **목표**: 남성과 여성 자료를 합치면 관측되는 선형관계가 왜 약해질 수 있는지 살펴본다.
@@ -293,8 +333,12 @@ if __name__ == "__main__":
 ```python
 import pandas as pd
 
-url = "https://raw.githubusercontent.com/beccadsouza/Machine-Learning-Python/master/Datasets/height-weight.csv"
-data = pd.read_csv(url)
+# openintro의 bdims 자료: 성인 507명의 신체 치수.
+# hgt(cm), wgt(kg), sex(1 = 남성, 0 = 여성) 열을 쓴다.
+url = ("https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/"
+       "master/csv/openintro/bdims.csv")
+data = pd.read_csv(url).rename(columns={"hgt": "Height", "wgt": "Weight"})
+data["Gender"] = data["sex"].map({1: "Male", 0: "Female"})
 
 males = data[data.Gender == "Male"]
 females = data[data.Gender == "Female"]
@@ -308,6 +352,20 @@ print(f"Correlation for Females:       {female_corr:.4f}")
 print(f"Correlation for Combined Data: {combined_corr:.4f}")
 ```
 
+출력:
+
+```
+Correlation for Males:         0.5347
+Correlation for Females:       0.4311
+Correlation for Combined Data: 0.7173
+```
+
+집단 안에서는 0.53과 0.43인데 둘을 합치면 0.72로 **커진다**.
+
+앞의 산점도 세 장이 이유를 보여준다. 남성 구름과 여성 구름이 각각은 넓게 퍼져 있지만, 두 구름의 중심이 대각선 방향으로 떨어져 있어 합치면 그 배치 자체가 새로운 양의 공변동을 만든다. 상관이 집단 **안**의 관계가 아니라 집단 **간** 차이를 재고 있는 셈이다.
+
+이것이 생태학적 상관의 전형적인 모습이며, 12.5절에서 다시 다룬다. 이 절의 제목이 "관계가 왜 **약해질** 수 있는지"인데 여기서는 오히려 강해졌다는 점도 짚어 둘 만하다. 합칠 때 상관이 커질지 작아질지는 두 구름의 중심이 어느 방향으로 떨어져 있느냐에 달려 있다.
+
 **논의할 점**: 남성과 여성이 서로 구별되는 군집을 이루므로 집단 내 상관이 전체 상관과 다를 수 있다. 전체 상관은 집단 내 관계와 집단 간 분리를 함께 반영하며, 그 결과 전체 연관이 강해질 수도 약해질 수도 있다.
 
 ### 실습 4: 회귀직선을 포함한 산점도
@@ -320,8 +378,12 @@ import pandas as pd
 from sklearn.linear_model import LinearRegression
 
 def plot_scatter_with_regression():
-    url = "https://raw.githubusercontent.com/beccadsouza/Machine-Learning-Python/master/Datasets/height-weight.csv"
-    data = pd.read_csv(url)
+    # openintro의 bdims 자료: 성인 507명의 신체 치수.
+    # hgt(cm), wgt(kg), sex(1 = 남성, 0 = 여성) 열을 쓴다.
+    url = ("https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/"
+           "master/csv/openintro/bdims.csv")
+    data = pd.read_csv(url).rename(columns={"hgt": "Height", "wgt": "Weight"})
+    data["Gender"] = data["sex"].map({1: "Male", 0: "Female"})
     subset = data[:300]
 
     X = subset[['Height']].values
@@ -345,6 +407,10 @@ def plot_scatter_with_regression():
 if __name__ == "__main__":
     plot_scatter_with_regression()
 ```
+
+![회귀직선을 포함한 산점도](./img/understanding_361.png)
+
+회귀직선을 얹으면 상관의 방향과 강도를 눈으로 가늠하기 쉬워진다. 다만 직선의 **기울기**는 상관계수가 아니다. 기울기는 두 변수의 단위와 산포에 의존하고, 상관계수는 그것을 표준화해 없앤 값이다.
 
 ---
 

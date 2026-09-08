@@ -50,6 +50,16 @@ for name, x, y in datasets:
 
 출력:
 
+```
+Linear                    r=0.8724  rho_s=0.8686  tau=0.6853
+Monotonic Nonlinear       r=0.8676  rho_s=0.9032  tau=0.7402
+Quadratic (r ~ 0)         r=0.1014  rho_s=-0.0229  tau=-0.0376
+```
+
+네 자료에서 세 계수를 비교한다. 선형과 단조 자료에서는 셋이 비슷하지만, 이차 관계와 이상점이 있는 자료에서는 크게 갈린다. 어느 계수를 쓰느냐가 결론을 바꿀 수 있다.
+
+출력:
+
 ```text
 Linear                    r=0.8724  rho_s=0.8686  tau=0.6853
 Monotonic Nonlinear       r=0.8676  rho_s=0.9032  tau=0.7402
@@ -100,6 +110,14 @@ fisher_z_ci(x, y)
 
 출력:
 
+```
+r = 0.6110, 95% CI for rho: (0.4519, 0.7324)
+```
+
+$r = 0.611$의 95% 신뢰구간이 $(0.452, 0.732)$다. 구간이 $r$을 중심으로 대칭이 아닌 것은 Fisher $z$ 척도에서 만든 뒤 되돌렸기 때문이다.
+
+출력:
+
 ```text
 r = 0.6110, 95% CI for rho: (0.4519, 0.7324)
 ```
@@ -140,6 +158,16 @@ print(f"Overall slope: {m_all:.2f} (positive)")
 print(f"Within-group slope: -0.5 (negative)")
 print(f"Overall r = {r_overall:.4f}")
 ```
+
+출력:
+
+```
+Overall slope: 6.50 (positive)
+Within-group slope: -0.5 (negative)
+Overall r = 0.8593
+```
+
+전체 기울기는 $+6.5$인데 집단 안에서는 $-0.5$다. 집계 수준의 관계가 개체 수준의 관계와 반대일 수 있다.
 
 출력:
 
@@ -186,6 +214,15 @@ print(f"r(X,Y | Z) = {r_xy_z:.4f}  (nearly vanishes)")
 
 출력:
 
+```
+r(X, Y)    = 0.5699  (appears significant)
+r(X,Y | Z) = -0.0201  (nearly vanishes)
+```
+
+$Z$를 통제하면 상관 0.57이 $-0.02$로 사라진다.
+
+출력:
+
 ```text
 r(X, Y)    = 0.5699  (appears significant)
 r(X,Y | Z) = -0.0201  (nearly vanishes)
@@ -224,6 +261,18 @@ spurious_correlations_demo()
 
 출력:
 
+```
+Pairs tested: 4950
+Significant at 0.05: 240 (4.8%)
+Expected false positives: 248
+```
+
+무관한 변수 100개에서 4,950쌍을 검정하니 240쌍이 유의하게 나왔다. 기댓값 248개와 거의 같다.
+
+$\alpha = 0.05$가 약속하는 것이 정확히 이것이다. 귀무가설이 참이어도 20번에 한 번은 기각한다.
+
+출력:
+
 ```text
 Pairs tested: 4950
 Significant at 0.05: 240 (4.8%)
@@ -255,6 +304,15 @@ def compare_two_correlations(r1, n1, r2, n2, alpha=0.05):
 
 compare_two_correlations(r1=0.72, n1=100, r2=0.65, n2=120)
 ```
+
+출력:
+
+```
+r1=0.7200 (n=100), r2=0.6500 (n=120)
+z = 0.9638, p = 0.3351
+```
+
+$r_1 = 0.72$와 $r_2 = 0.65$의 차이가 $p = 0.335$로 유의하지 않다. 상관계수 두 개를 비교하려면 각각을 추정할 때보다 훨씬 큰 표본이 필요하다.
 
 출력:
 
@@ -303,6 +361,16 @@ $p = 0.335$이므로 두 상관이 다르다는 증거가 없다. $0.72$와 $0.6
     print(f"Kendall    = {r_k:.4f}")   # 0.0851
     ```
 
+출력:
+
+```
+Pearson r  = 0.0580
+Spearman   = 0.1024
+Kendall    = 0.0851
+```
+
+세 계수 모두 0.06~0.10으로 0에 가깝다. 관계가 없어서가 아니라 그 관계가 **단조가 아니기** 때문이다. 세 계수 어느 것도 U자 관계를 잡아내도록 만들어지지 않았다.
+
     $\cos$ 함수는 $[-\pi, \pi]$에서 원점에 대해 **우함수**이다. $[-\pi, 0]$에서 증가하고 $[0, \pi]$에서 감소하므로, 두 구간의 단조 성분이 정확히 상쇄된다. 실제로 $x$가 이 구간에서 균등분포이면
 
     $$
@@ -333,6 +401,14 @@ $p = 0.335$이므로 두 상관이 다르다는 증거가 없다. $0.72$와 $0.6
     hi = np.tanh(z + z_crit * se)
     print(f"99% CI: ({lo:.4f}, {hi:.4f})")
     ```
+
+출력:
+
+```
+99% CI: (0.1085, 0.6965)
+```
+
+99% 구간이 $(0.109, 0.697)$로 대단히 넓다. 표본이 작으면 상관계수의 불확실성이 이만큼 크다는 것을 구간이 보여준다. 점추정값만 보고하면 이 폭이 숨는다.
 
     99% 신뢰구간은 약 $(0.109, 0.697)$이다. 폭이 $0.59$에 이를 만큼 매우 넓다. 참 $\rho$는 약한 양의 상관부터 강한 양의 상관까지 어디든 될 수 있다. 관측값이 $n = 50$뿐일 때 $0.45$라는 점추정값은 결코 정밀하지 않으며, 구간 없이 점추정값만 보고하는 것은 오도하는 일이다. $\square$
 
@@ -367,6 +443,16 @@ $p = 0.335$이므로 두 상관이 다르다는 증거가 없다. $0.72$와 $0.6
     print(f"Group 2 slope: {m2:.3f}")
     print(f"Overall slope: {m_all:.3f}")
     ```
+
+출력:
+
+```
+Group 1 slope: -1.130
+Group 2 slope: -1.119
+Overall slope: 1.531
+```
+
+집단별 기울기가 $-1.13$과 $-1.12$로 둘 다 음인데 전체 기울기는 $+1.53$이다. 부호가 뒤집혔다.
 
     출력:
 
@@ -439,6 +525,19 @@ $$
     print(f"Bonferroni threshold: {bonf_threshold:.2e}")
     print(f"Significant after Bonferroni: {n_sig_bonf}")
     ```
+
+출력:
+
+```
+Total pairs: 19900
+Significant at 0.05: 961
+Bonferroni threshold: 2.51e-06
+Significant after Bonferroni: 0
+```
+
+20,000쌍을 검정하면 5% 수준에서 961개가 유의하게 나온다. 모든 변수를 독립으로 만들었으므로 전부 거짓 양성이다.
+
+Bonferroni 문턱 $2.5 \times 10^{-6}$을 적용하면 살아남는 것이 하나도 없다. 변수가 많은 자료에서 "유의한 상관을 찾았다"는 말이 왜 그 자체로는 아무 의미가 없는지 보여준다.
 
     출력:
 

@@ -50,6 +50,8 @@ def covariance_step_by_step(x, y):
     y_mean = y.mean()
     x_dev = x - x_mean
     y_dev = y - y_mean
+    # n이 아니라 n-1로 나눈다. 베셀 보정이며, 분산에서와 같은 이유다.
+    # 편차를 참 평균이 아니라 표본평균에서 쟀기 때문에 자유도 하나를 잃는다.
     cov = np.sum(x_dev * y_dev) / (n - 1)
     return cov, x_dev, y_dev
 
@@ -57,6 +59,8 @@ def covariance_step_by_step(x, y):
 def pearson_r_step_by_step(x, y):
     """Compute Pearson r from first principles."""
     cov, _, _ = covariance_step_by_step(x, y)
+    # ddof=1로 맞춰야 한다. 공분산이 n-1로 나눈 값이므로
+    # 표준편차도 같은 규약을 써야 두 n-1이 약분되어 r이 척도와 무관해진다.
     sx = x.std(ddof=1)
     sy = y.std(ddof=1)
     return cov / (sx * sy)
@@ -105,6 +109,22 @@ print(f"pandas cov  = {df['CA'].cov(df['NY']):.4f}")
 print(f"pandas corr = {df['CA'].corr(df['NY']):.4f}")
 print(f"numpy corr  = {np.corrcoef(CA, NY)[0, 1]:.4f}")
 ```
+
+출력:
+
+```
+CA mean     = 241.8974
+NY mean     = 345.1893
+Covariance  = 10.5691
+Pearson r   = 0.9753
+pandas cov  = 10.5691
+pandas corr = 0.9753
+numpy corr  = 0.9753
+```
+
+직접 구현한 값이 pandas, numpy와 소수점 넷째 자리까지 같다.
+
+공분산 10.57이라는 숫자만으로는 관계가 강한지 알 수 없다는 점도 짚어 두자. 단위가 (달러 x 달러)라 자료의 척도에 따라 얼마든지 커지거나 작아진다. 같은 자료를 센트로 바꾸면 공분산이 10,000배가 되지만 $r$은 0.9753 그대로다.
 
 출력:
 
@@ -161,6 +181,10 @@ axes[2].legend()
 plt.tight_layout()
 plt.show()
 ```
+
+![공분산의 시각적 분해](./img/covariance_from_scratch_129.png)
+
+세 번째 그림에서 두 계열이 나란히 내려가는 것이 보인다. 이 공통 추세가 곧 상관의 원천이다.
 
 ---
 
@@ -301,8 +325,15 @@ CA와 NY 가격이 공통 성분을 갖지 않도록 모의실험을 고쳐라. 
     CA = 248.0 + trend_CA + np.random.normal(0, 3, WEEKS)
     NY = 350.0 + trend_NY + np.random.normal(0, 3, WEEKS)
 
-    print(f"Covariance = {np.cov(CA, NY)[0, 1]:.4f}")   # 10.5231
-    print(f"Pearson r  = {np.corrcoef(CA, NY)[0, 1]:.4f}")  # 0.5733
+    print(f"Covariance = {np.cov(CA, NY)[0, 1]:.4f}")
+    print(f"Pearson r  = {np.corrcoef(CA, NY)[0, 1]:.4f}")
+    ```
+
+    출력:
+
+    ```
+    Covariance = 10.5231
+    Pearson r  = 0.5733
     ```
 
     잡음을 6배로 키웠는데도 $r = 0.573$으로 여전히 뚜렷하게 양수이다. 이유는 간단하다. 두 결정론적 직선 추세는 서로 상수배 관계이므로 **완전히 공선적**이다. 기울기가 다르다는 것은 독립이라는 뜻이 아니다. 상관이 낮아진 것은 공통 성분이 사라져서가 아니라 잡음이 커져 신호 대 잡음비가 낮아졌기 때문이다.
@@ -314,8 +345,15 @@ CA와 NY 가격이 공통 성분을 갖지 않도록 모의실험을 고쳐라. 
     CA = 248.0 + np.linspace(0, -12, WEEKS) + np.random.normal(0, 0.5, WEEKS)
     NY = 350.0 + np.random.normal(0, 0.6, WEEKS)   # 추세 없음
 
-    print(f"Covariance = {np.cov(CA, NY)[0, 1]:.4f}")   # 0.1348
-    print(f"Pearson r  = {np.corrcoef(CA, NY)[0, 1]:.4f}")  # 0.0659
+    print(f"Covariance = {np.cov(CA, NY)[0, 1]:.4f}")
+    print(f"Pearson r  = {np.corrcoef(CA, NY)[0, 1]:.4f}")
+    ```
+
+    출력:
+
+    ```
+    Covariance = 0.1348
+    Pearson r  = 0.0659
     ```
 
     이제 $r = 0.066$으로 0에 가깝다(유한표본이므로 정확히 0은 아니다). 원래의 $r = 0.975$는 두 계열이 서로 영향을 주고받아서가 아니라 *공유된* 추세가 만들어 낸 것이었다. 이는 원래의 상관이 교란에 의한 인공물이었음을 다시 한번 확인해 준다. $\square$

@@ -125,8 +125,27 @@ np.random.seed(42)
 n_companies = 1000
 n_years = 10
 
-# Your simulation here
+# 기업마다 연수익률을 독립으로 뽑는다. 참 평균은 모두 8%로 같다.
+returns = np.random.normal(0.08, 0.40, size=(n_companies, n_years))
+cumulative = np.cumprod(1 + returns, axis=1)
+
+# 누적수익이 한 번이라도 -90% 아래로 떨어지면 상장폐지로 본다.
+survived = (cumulative > 0.10).all(axis=1)
+
+print(f"생존 기업 수: {survived.sum()} / {n_companies}")
+print(f"전체 평균 연수익률: {returns.mean():.4f}")
+print(f"생존 기업 평균 연수익률: {returns[survived].mean():.4f}")
 ```
+
+출력:
+
+```
+생존 기업 수: 867 / 1000
+전체 평균 연수익률: 0.0791
+생존 기업 평균 연수익률: 0.1039
+```
+
+표본 전체의 평균이 7.91%인데 생존 기업만 보면 10.39%다. 2.5%p가 순전히 생존자 편향에서 나온 허상이다. 1,000곳 중 133곳이 사라졌을 뿐인데 평균이 이만큼 부풀려진다.
 
 ??? success "풀이"
 

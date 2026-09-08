@@ -131,6 +131,17 @@ r_p, p_p = stats.pearsonr(x, y)
 print(f"Pearson  r   = {r_p:.4f}, p-value = {p_p:.6f}")
 ```
 
+출력:
+
+```
+Spearman r_s = 1.0000, p-value = 0.000000
+Pearson  r   = 0.7758, p-value = 0.023636
+```
+
+$y = e^x$은 완전한 **단조** 관계지만 선형은 아니다. Spearman은 순위만 보므로 정확히 1.0을 주고, Pearson은 곡률 때문에 0.776에 그친다.
+
+이것이 두 계수의 차이를 가장 선명하게 보여주는 예다. "관계가 있는가"를 묻는다면 Spearman이, "직선 관계가 있는가"를 묻는다면 Pearson이 맞는 도구다.
+
 `scipy.stats.spearmanr` 함수는 중간순위를 써서 동점을 자동으로 처리한다. 가설검정의 자세한 내용은 [Spearman의 rho 검정](../correlation_test/test_spearman.md)을 보라.
 
 ---

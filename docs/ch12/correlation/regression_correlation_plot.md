@@ -92,6 +92,10 @@ plt.tight_layout()
 plt.show()
 ```
 
+![산점도와 회귀직선](./img/regression_correlation_plot_71.png)
+
+직선은 조건부 평균을, 점들의 흩어짐은 그 주위의 산포를 나타낸다.
+
 ---
 
 ## 기울기를 바꿀 때(잡음 고정)
@@ -170,6 +174,15 @@ $\text{SNR} \to \infty$이면 $r^2 \to 1$이고, $\text{SNR} \to 0$이면 $r^2 \
     print(f"Simulated r = {np.corrcoef(x, y)[0, 1]:.4f}")   # 0.9935
     print("Theoretical rho = 0.9933")
     ```
+
+출력:
+
+```
+Simulated r = 0.9935
+Theoretical rho = 0.9933
+```
+
+모의실험으로 얻은 표본상관이 이론값과 소수점 셋째 자리까지 맞는다.
 
     모의값 $0.9935$는 이론값 $0.9933$과 거의 일치한다. $\square$
 
@@ -261,6 +274,10 @@ $\sigma_X$와 $\sigma$가 고정되어 있을 때 $r^2 = 0.5$가 되는(즉 신�
     plt.tight_layout()
     plt.show()
     ```
+
+![회귀직선과 상관](./img/regression_correlation_plot_239.png)
+
+회귀직선의 기울기와 상관계수는 다른 양이다. 두 변수를 표준화하면 기울기가 곧 $r$이 된다.
 
     표본 $r$(괄호 안은 $\sigma_X = 49/\sqrt{12} \approx 14.15$로 계산한 이론값):
 

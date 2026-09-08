@@ -17,7 +17,10 @@ import numpy as np
 parser = argparse.ArgumentParser(description='Correlation Test Examples')
 parser.add_argument('--seed', type=int, default=1, metavar='S',
                     help='random seed (default: 1)')
-ARGS = parser.parse_args()
+# parse_args()가 아니라 parse_known_args()를 쓴다.
+# 노트북이나 REPL에서는 sys.argv에 다른 인자가 들어 있어 parse_args()가
+# SystemExit을 던지며 커널을 멈춰 세운다.
+ARGS, _ = parser.parse_known_args()
 
 np.random.seed(ARGS.seed)
 ARGS.size = 1000
@@ -27,7 +30,9 @@ ARGS.size = 1000
 
 ```python
 import numpy as np
-from global_name_space import ARGS
+
+# 위의 global_name_space.py를 파일로 저장했다면 다음 한 줄로 대신할 수 있다.
+#   from global_name_space import ARGS
 
 def load_data(data_type=0):
     data_dict = {}
@@ -67,7 +72,9 @@ Pearson의 $r$은 두 변수 사이의 **선형** 관계를 잰다. 귀무가설
 ```python
 import matplotlib.pyplot as plt
 import scipy.stats as stats
-from load_data import load_data
+
+# 위의 load_data.py를 파일로 저장했다면 다음 한 줄로 대신할 수 있다.
+#   from load_data import load_data
 
 def main():
     data_dict = load_data()
@@ -84,6 +91,10 @@ if __name__ == "__main__":
     main()
 ```
 
+![Pearson 상관: 세 자료](./img/correlation_tests_72.png)
+
+왼쪽부터 무관계, 단조 관계, 사인 관계다. Pearson은 가운데에서만 큰 값을 준다. 오른쪽 사인 자료는 눈으로는 뚜렷한 구조가 있지만 $r$이 0 근처다.
+
 **언제 쓰는가**: 두 변수가 모두 연속형이고 **선형** 관계를 예상할 때. Pearson의 $r$은 이상점에 민감하며 p-값이 정확하려면 이변량 정규성을 가정한다.
 
 ---
@@ -98,7 +109,9 @@ Spearman의 $\rho_s$는 두 변수 사이의 **단조** 관계를 잰다. 원자
 ```python
 import matplotlib.pyplot as plt
 import scipy.stats as stats
-from load_data import load_data
+
+# 위의 load_data.py를 파일로 저장했다면 다음 한 줄로 대신할 수 있다.
+#   from load_data import load_data
 
 def main():
     data_dict = load_data()
@@ -114,6 +127,10 @@ def main():
 if __name__ == "__main__":
     main()
 ```
+
+![Spearman 순위상관: 세 자료](./img/correlation_tests_105.png)
+
+단조 자료에서 Spearman이 Pearson보다 높은 값을 준다. 사인 자료에서는 둘 다 0 근처인데, 관계가 단조가 아니어서 순위로 바꾸는 것도 도움이 되지 않기 때문이다.
 
 **언제 쓰는가**: 관계가 단조일 수 있으나 반드시 선형은 아닐 때, 또는 자료에 이상점이 있거나 순서형일 때.
 
@@ -134,7 +151,9 @@ $$
 ```python
 import matplotlib.pyplot as plt
 import scipy.stats as stats
-from load_data import load_data
+
+# 위의 load_data.py를 파일로 저장했다면 다음 한 줄로 대신할 수 있다.
+#   from load_data import load_data
 
 def main():
     data_dict = load_data()
@@ -150,6 +169,10 @@ def main():
 if __name__ == "__main__":
     main()
 ```
+
+![Kendall의 타우: 세 자료](./img/correlation_tests_143.png)
+
+Kendall의 $\tau$는 세 자료 모두에서 Spearman과 같은 방향을 가리키되 절댓값이 작다. 척도가 다르기 때문이며, 두 계수를 직접 비교하면 안 된다.
 
 **언제 쓰는가**: Spearman의 $\rho_s$와 비슷한 상황이지만, 표본이 작거나 쌍별 일치에 기반한 더 해석하기 쉬운 측도를 원할 때 선호된다.
 
@@ -207,6 +230,18 @@ def main():
 if __name__ == "__main__":
     main()
 ```
+
+출력:
+
+```
+Pearson's r:   coef = 0.9923,  p-value = 0.0000
+Spearman rho:  coef = 1.0000,  p-value = 0.0000
+Kendall's tau: coef = 1.0000,  p-value = 0.0000
+```
+
+![세 검정의 비교](./img/correlation_tests_195.png)
+
+지수 관계라 단조이지만 선형은 아니다. 순위만 보는 Spearman과 Kendall이 정확히 1.0을 주는 반면 Pearson은 0.9923에 그친다.
 
 **해석**: 모든 p-값이 $\alpha = 0.05$보다 훨씬 작으므로 $H_0: \rho = 0$을 기각하고 이 표본에서 나이와 소득 사이에 통계적으로 유의한 양의 관계가 있다고 결론짓는다. 다만 이것이 인과관계를 확립하지는 않는다. 경력, 학력, 업종 같은 교란요인이 두 변수 모두에 영향을 줄 수 있다.
 
