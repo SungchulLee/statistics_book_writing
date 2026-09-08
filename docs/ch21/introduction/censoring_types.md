@@ -178,6 +178,14 @@ $$
     print(f"fraction excluded       : {(T <= a).mean():.3f}")
     ```
 
+    출력:
+
+    ```
+    true mean lifetime      : 20.053
+    naive mean of observed  : 30.019
+    fraction excluded       : 0.392
+    ```
+
     지수분포의 무기억성에 의해 $T \mid T > 10$은 $10 + \text{Exp}(20)$이므로 관측된 평균이
     약 $30$, 참 평균 $20$보다 $50\%$ 높다. 즉 좌측 절단을 무시하면 **생존시간을
     과대추정**한다.

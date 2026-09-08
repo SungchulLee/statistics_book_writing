@@ -200,6 +200,14 @@ $\hat{S}(36) = 0.90$이 주어졌다.
     print(f"complete cases only (12m)  : {(T[followup == 12] <= 12).mean():.4f}")
     ```
 
+    출력:
+
+    ```
+    true 12-month default prob : 0.1000
+    naive estimate             : 0.0748
+    complete cases only (12m)  : 0.0990
+    ```
+
     | 방법 | 추정치 |
     |---|---|
     | 참 12개월 부도확률 | $0.1000$ |

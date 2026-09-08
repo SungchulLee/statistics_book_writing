@@ -166,6 +166,15 @@ $$
     print(f"(b) drop censored  : {t[d == 1].mean():.4f}")
     ```
 
+    출력:
+
+    ```
+    true mean       : 10.0350
+    censoring rate  : 0.504
+    (a) censored=event : 4.9800
+    (b) drop censored  : 4.9735
+    ```
+
     | 방법 | 추정치 |
     |---|---|
     | 참값 | $10.035$ |
@@ -280,6 +289,13 @@ $$
     truth = np.mean(np.minimum(T, tmax))
     print(f"true restricted mean : {truth:.4f}")
     print(f"KM restricted mean   : {km_area(t, d, tmax):.4f}")
+    ```
+
+    출력:
+
+    ```
+    true restricted mean : 10.9753
+    KM restricted mean   : 12.3421
     ```
 
     **예상되는 결과와 그 이유.** 여기서는 위험이 큰(=$Z$가 큰) 대상이 사건과 절단을 모두 일찍

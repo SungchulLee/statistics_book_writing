@@ -199,7 +199,21 @@ def main():
     # Log-rank test
     chi2, p = logrank_test(times_1, censored_1, times_2, censored_2)
     print(f"Log-Rank Test:  chi2 = {chi2:.4f},  p = {p:.4f}")
+
+
+if __name__ == "__main__":
+    main()
 ```
+
+출력:
+
+```
+Log-Rank Test:  chi2 = 12.6889,  p = 0.0004
+```
+
+![두 집단의 카플란-마이어 생존곡선](./img/kaplan_meier_168.png)
+
+두 곡선이 뚜렷이 갈리고 로그순위 검정도 $p = 0.0004$로 유의하다. 평균 생존이 20과 12로 다른 두 지수분포에서 뽑았으므로 옳은 판정이다.
 
 집단 1은 $\text{Exp}(\lambda = 1/20)$에서, 집단 2는 $\text{Exp}(\lambda = 1/12)$에서
 뽑았고 각 집단에 약 20%의 무작위 절단이 있다. 곡선의 시각적 분리와 로그순위 p-값을 함께 보면
@@ -316,6 +330,11 @@ def main():
     **(a)** `event` 지시자(1 = 사건, 0 = 절단)를 쓰면 다음과 같다.
 
     ```python
+    import numpy as np
+
+    times = np.array([5, 8, 8, 12, 15, 20, 22, 30], dtype=float)
+    event = np.array([1, 1, 0, 1, 0, 1, 0, 1])   # 1 = 사건, 0 = 절단
+
     event_times = times[event == 1]
     unique_events = np.unique(event_times)
 
@@ -324,6 +343,22 @@ def main():
         n_at_risk = np.sum(times >= t_j)
         d_j = np.sum((times == t_j) & (event == 1))
         s *= (n_at_risk - d_j) / n_at_risk
+        print(f"t = {t_j:5.1f}  n = {n_at_risk}  d = {d_j}  S = {s:.4f}")
+
+    # 같은 자료를 앞의 관례(1 = 절단)로 넘겨도 결과가 같다
+    t_plot, s_plot = kaplan_meier(times, 1 - event)
+    print("final S:", s, "vs", s_plot[-1])
+    ```
+
+    출력:
+
+    ```
+    t =   5.0  n = 8  d = 1  S = 0.8750
+    t =   8.0  n = 7  d = 1  S = 0.7500
+    t =  12.0  n = 5  d = 1  S = 0.6000
+    t =  20.0  n = 3  d = 1  S = 0.4000
+    t =  30.0  n = 1  d = 1  S = 0.0000
+    final S: 0.0 vs 0.0
     ```
 
     바뀌는 것은 `censored == 0`을 `event == 1`로 대체하는 것뿐이다.

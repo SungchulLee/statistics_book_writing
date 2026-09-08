@@ -250,11 +250,42 @@ $$
     **실무 절차.**
 
     ```python
-    # lifelines
+    import numpy as np
+    import pandas as pd
     from lifelines import CoxPHFitter
-    cph = CoxPHFitter().fit(df.drop(columns=['age']), 't', 'event')
-    m_res = cph.compute_residuals(df.drop(columns=['age']), 'martingale')
-    # then plot m_res against df['age'] with a LOESS smoother
+
+    # 참 관계가 로그인 자료: 로그위험이 ln(age)에 비례한다
+    rng = np.random.default_rng(0)
+    n = 400
+    age = rng.uniform(20, 80, n)
+    sex = rng.integers(0, 2, n)
+    lp = 1.2 * np.log(age) + 0.4 * sex
+    t_event = rng.exponential(1 / np.exp(lp - lp.mean()))
+    t_cens = rng.exponential(2.0, n)
+    df = pd.DataFrame({"t": np.minimum(t_event, t_cens),
+                       "event": (t_event <= t_cens).astype(int),
+                       "age": age, "sex": sex})
+
+    # age를 뺀 축소모형의 마팅게일 잔차를 age에 대해 본다
+    reduced = df.drop(columns=["age"])
+    cph = CoxPHFitter().fit(reduced, "t", "event")
+    m_res = cph.compute_residuals(reduced, "martingale")["martingale"]
+
+    # LOESS 대신 age를 5분위로 나눈 평균 잔차로 함수 형태를 살펴본다
+    bins = pd.qcut(df["age"], 5)
+    print(m_res.groupby(bins, observed=True).mean().round(4))
+    ```
+
+    출력:
+
+    ```
+    age
+    (20.017, 31.968]   -0.5488
+    (31.968, 46.139]   -0.0580
+    (46.139, 58.91]     0.0856
+    (58.91, 69.604]     0.3066
+    (69.604, 79.833]    0.2146
+    Name: martingale, dtype: float64
     ```
 
     평활 곡선이 대략 직선이면 $x_k$를 선형으로 넣어도 좋다. 로그 모양이면 $\ln x_k$를,
