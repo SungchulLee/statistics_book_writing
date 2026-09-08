@@ -123,16 +123,20 @@ stat, pval = stats.levene(x, y, center='mean')
     A = np.array([3, 7, 8, 5, 6])
     B = np.array([12, 14, 11, 19, 15])
     print(f"variances: {np.var(A, ddof=1):.2f}, {np.var(B, ddof=1):.2f}")
-    print(f"Levene (mean):   {stats.levene(A, B, center='mean')}")
-    print(f"Levene (median): {stats.levene(A, B, center='median')}")
+    mean_res = stats.levene(A, B, center='mean')
+    med_res = stats.levene(A, B, center='median')
+    print(f"Levene (mean):   W = {mean_res.statistic:.4f}, "
+          f"p = {mean_res.pvalue:.4f}")
+    print(f"Levene (median): W = {med_res.statistic:.4f}, "
+          f"p = {med_res.pvalue:.4f}")
     ```
 
     출력:
 
     ```text
     variances: 3.70, 9.70
-    Levene (mean):   LeveneResult(statistic=0.7055, pvalue=0.4253)
-    Levene (median): LeveneResult(statistic=0.6400, pvalue=0.4468)
+    Levene (mean):   W = 0.7055, p = 0.4253
+    Levene (median): W = 0.6400, p = 0.4468
     ```
 
     손 계산과 SciPy가 정확히 일치한다. $F(1, 8)$에서 $p = 0.425$로 크므로 등분산을 기각하지 못한다.
@@ -229,6 +233,12 @@ stat, pval = stats.levene(x, y, center='mean')
     ZA = np.abs(A - A.mean()); ZB = np.abs(B - B.mean())
     t, p = stats.ttest_ind(ZA, ZB)
     print(f"t = {t:.4f}, t^2 = {t**2:.4f}, p = {p:.4f}")
+    ```
+
+    출력:
+
+    ```
+    t = -0.8399, t^2 = 0.7055, p = 0.4253
     ```
 
     $t^2 = 0.7055$이고 $p = 0.4253$으로 Levene의 결과와 정확히 일치한다.

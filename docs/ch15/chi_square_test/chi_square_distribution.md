@@ -58,6 +58,8 @@ plt.tight_layout()
 plt.show()
 ```
 
+![자유도 5인 카이제곱 분포의 PDF와 CDF](./img/chi_square_distribution_44.png)
+
 ### 표집과 정규분포로부터의 구성
 
 다음 코드는 $\chi^2(d)$에서 직접 표집한 결과와 표준정규 제곱 $d$개의 합을 비교하여 정의를 확인한다.
@@ -85,6 +87,8 @@ for ax, data, title in [
 plt.tight_layout()
 plt.show()
 ```
+
+![직접 표집과 $Z^2$ 합 구성의 비교](./img/chi_square_distribution_65.png)
 
 ## 해석
 
@@ -187,6 +191,17 @@ plt.show()
     plt.tight_layout()
     plt.show()
     ```
+
+    출력:
+
+    ```
+    simulated mean = 49.090 (theory: 49)
+    simulated var  = 97.480 (theory: 98)
+    ```
+
+    ![표본분산의 카이제곱 분포 확인](./img/chi_square_distribution_160.png)
+
+    모의실험 평균 $49.09$와 분산 $97.48$이 이론값 $49$, $98$과 잘 맞는다. $(n-1)S^2/\sigma^2 \sim \chi^2(n-1)$이 성립함을 수치로 확인한 것이다.
 
     히스토그램이 $\chi^2(49)$ 곡선과 잘 맞는다. 모의실험 평균이 $49.09$(이론값 $49$), 분산이 $97.48$(이론값 $98$)로 이론과 부합한다.
 

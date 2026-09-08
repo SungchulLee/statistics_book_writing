@@ -153,9 +153,9 @@ $\operatorname{Var}(S^2) \approx \sigma^4(\gamma_2 + 2)/n$임을 이용하여, �
 
     ```text
     phi = 0.0: empirical size = 0.0535
-    phi = 0.3: empirical size = 0.0718
+    phi = 0.3: empirical size = 0.0717
     phi = 0.6: empirical size = 0.1705
-    phi = 0.8: empirical size = 0.3818
+    phi = 0.8: empirical size = 0.3817
     ```
 
     | $\phi$ | 경험적 크기 | 명목값의 배수 |

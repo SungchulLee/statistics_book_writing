@@ -178,6 +178,13 @@ with pm.Model() as model:
 print(pm.summary(trace, var_names=['var1', 'var2', 'ratio']))
 ```
 
+!!! note "이 블록은 별도 설치가 필요하고 실행할 때마다 결과가 조금씩 달라진다"
+    `pymc`는 이 책의 다른 예제에 쓰이지 않으므로 기본 환경에 들어 있지 않다. `pip install pymc`로 설치해야 한다(설치하면 `numpy`·`scipy`가 함께 올라가므로 별도 가상환경을 권한다).
+
+    또한 `pm.sample`은 MCMC 표집이므로 `random_seed`를 고정해도 `pymc`·`pytensor` 버전이나 실행 환경(체인 수, 코어 수)이 다르면 사후요약의 소수점 아래 자리가 달라진다. 그래서 여기에는 고정된 출력을 싣지 않았다. 아래에서 확인해야 할 것은 정확한 숫자가 아니라 `ratio`의 사후분포가 1을 포함하는지 여부이다.
+
+    켤레 사전분포를 쓰면 표집 없이 닫힌 형태로 같은 질문에 답할 수 있다. 15.6절 [Bayes 분산 검정](bayesian_variance.md)을 보라.
+
 !!! warning "흔한 두 가지 모형 설정 오류"
     **(1) 분산과 표준편차의 혼동.** `pm.Normal`의 `sigma` 인자는 **표준편차**를 받는다. 역감마 사전분포는 **분산**에 대한 켤레 사전분포이므로, 그 변수를 그대로 `sigma=`에 넘기면 안 된다. 위 코드처럼 `pm.math.sqrt()`를 취하거나, 아예 표준편차에 직접 사전분포(예: HalfNormal, HalfCauchy)를 두어야 한다.
 

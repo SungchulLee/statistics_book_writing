@@ -23,7 +23,6 @@ from scipy.stats import levene
 
 rng = np.random.default_rng(0)
 
-
 def simulate_once(n=20, dist="normal"):
     """Generate 3 groups from the specified distribution."""
     if dist == "normal":
@@ -36,7 +35,6 @@ def simulate_once(n=20, dist="normal"):
         g3 = rng.lognormal(0, 1.0, size=n)
     _, p = levene(g1, g2, g3, center='median')
     return p
-
 
 alpha = 0.05
 n_sims = 5000
@@ -152,6 +150,8 @@ Type I error (median-centered) under lognormal: 0.0374
     n=  50: Type I error = 0.0420
     n= 100: Type I error = 0.0462
     ```
+
+    ![표본크기에 따른 제1종 오류율](./img/levene_simulation_115.png)
 
     | $n$ | 10 | 20 | 50 | 100 |
     |---|---|---|---|---|

@@ -192,9 +192,9 @@ Welch ANOVA:    F = 9.7514, df = (3, 30.81), p = 0.000112
     출력:
 
     ```text
-    sd =    (5, 5, 5, 5): standard 0.0452, Welch 0.0452, two-stage 0.0458
-    sd =   (5, 5, 5, 10): standard 0.0634, Welch 0.0440, two-stage 0.0568
-    sd =  (2, 4, 6, 10): standard 0.0738, Welch 0.0464, two-stage 0.0468
+    sd =     (5, 5, 5, 5): standard 0.0452, Welch 0.0452, two-stage 0.0458
+    sd =    (5, 5, 5, 10): standard 0.0634, Welch 0.0440, two-stage 0.0568
+    sd =    (2, 4, 6, 10): standard 0.0738, Welch 0.0464, two-stage 0.0468
     ```
 
     **핵심 관찰: 두 단계 절차가 중간 사례에서 가장 나쁘다.**
@@ -231,8 +231,8 @@ Welch ANOVA:    F = 9.7514, df = (3, 30.81), p = 0.000112
     출력:
 
     ```text
-    mu = (0, 0, 0, 3): standard 0.3368, Welch 0.3190
-    mu = (0, 0, 0, 5): standard 0.7804, Welch 0.7536
+    mu =   (0, 0, 0, 3): standard 0.3368, Welch 0.3190
+    mu =   (0, 0, 0, 5): standard 0.7804, Welch 0.7536
     ```
 
     | 효과 크기 | 표준 | Welch | 절대 손실 | 상대 손실 |

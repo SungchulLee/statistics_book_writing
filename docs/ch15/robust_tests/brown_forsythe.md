@@ -179,9 +179,9 @@ Brown-Forsythe 검정의 크기가 여러 분포에서 안정적인지 모의실
     출력:
 
     ```text
-              Normal: mean-centered 0.0594, median-centered 0.0418
+              Normal: mean-centered 0.0592, median-centered 0.0418
       Lognormal(0,1): mean-centered 0.2658, median-centered 0.0376
-                t(3): mean-centered 0.0666, median-centered 0.0446
+                t(3): mean-centered 0.0622, median-centered 0.0402
     ```
 
     | 분포 | Levene (평균) | Brown-Forsythe (중앙값) |

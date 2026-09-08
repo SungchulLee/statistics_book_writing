@@ -160,12 +160,12 @@ print(f"Robust t-values:   {np.round(robust_model.tvalues, 3)}")
 
 ```text
 Breusch-Pagan: LM = 14.2174, p = 0.000163
-White:         LM = 14.7165, p = 0.000638
+White:         LM = 14.7165, p = 0.000637
 
 coefficients:      [3.1523 1.9672]
 OLS std errors:    [1.5014 0.254 ]
 Robust std errors: [1.0664 0.2719]
-OLS t-values:      [2.1    7.746]
+OLS t-values:      [2.1   7.746]
 Robust t-values:   [2.956 7.235]
 ```
 

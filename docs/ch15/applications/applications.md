@@ -161,10 +161,33 @@ Levene 검정이 이분산을 시사하면 집단 간 등분산을 가정하지 
     다음 코드가 Welch 분산분석으로 소개되는 경우가 있으나 **틀렸다**.
 
     ```python
+    import numpy as np
+    import pandas as pd
+    import statsmodels.api as sm
+
+    # 집단마다 분산이 다른 자료 (표준편차 1, 2, 4)
+    rng = np.random.default_rng(0)
+    data = pd.DataFrame({
+        "Score": np.concatenate([rng.normal(10, 1, 20),
+                                 rng.normal(12, 2, 20),
+                                 rng.normal(14, 4, 20)]),
+        "Group": np.repeat(["A", "B", "C"], 20),
+    })
+
     # NOT Welch's ANOVA
     model = sm.formula.ols('Score ~ Group', data=data).fit()
-    sm.stats.anova_lm(model, typ=2, robust='hc3')
+    print(sm.stats.anova_lm(model, typ=2, robust='hc3'))
     ```
+
+    출력:
+
+    ```
+                  sum_sq    df          F        PR(>F)
+    Group     424.427668   2.0  30.736759  8.794817e-10
+    Residual  393.541447  57.0        NaN           NaN
+    ```
+
+    표가 나오기는 하지만 이것은 Welch 분산분석이 아니다. 분모 자유도가 $57 = N - k$ 그대로이고, Welch라면 등분산이 깨진 만큼 자유도가 줄어들어야 한다.
 
     이것은 OLS 적합에 이분산 일치 공분산 행렬(HC3)을 적용한 **Wald 형태의 분산분석표**이다. Welch 분산분석과 다음 점에서 다르다.
 
@@ -203,6 +226,15 @@ print(f"Welch ANOVA: F = {F:.4f}, df = ({df1}, {df2:.2f}), p = {p:.6f}")
 # Classical one-way ANOVA for comparison
 print(f"Classical ANOVA: {stats.f_oneway(*groups)}")
 ```
+
+출력:
+
+```
+Welch ANOVA: F = 78.0000, df = (2, 4.00), p = 0.000625
+Classical ANOVA: F_onewayResult(statistic=91.0, pvalue=3.2507247912312294e-05)
+```
+
+이 자료에서는 세 집단의 표본분산이 모두 4로 같아 Welch $F = 78.0$, 고전적 $F = 91.0$이다. 등분산일 때도 두 값이 다른 것은 Welch가 분모 자유도를 $4.00$으로 줄이기 때문이다. 표본이 작을수록 이 보정의 대가가 크다.
 
 **해석:**
 
@@ -299,20 +331,22 @@ Welch 분산분석은 집단 간 등분산을 가정하지 않고 집단평균�
     g3 = [32, 37, 42, 47, 52]      # d = 5, var = 62.5
 
     print("variances:", [round(np.var(g, ddof=1), 2) for g in (g1, g2, g3)])
-    print(f"Levene (median): {levene(g1, g2, g3)}")
-    print(f"Levene (mean):   {levene(g1, g2, g3, center='mean')}")
-    print(f"Bartlett:        {bartlett(g1, g2, g3)}")
-    print(f"Fligner-Killeen: {fligner(g1, g2, g3)}")
+    # 이름있는 튜플을 그대로 찍으면 유효숫자가 너무 많다. 자리수를 맞춰 출력한다.
+    for name, res in [("Levene (median)", levene(g1, g2, g3)),
+                      ("Levene (mean)  ", levene(g1, g2, g3, center='mean')),
+                      ("Bartlett       ", bartlett(g1, g2, g3)),
+                      ("Fligner-Killeen", fligner(g1, g2, g3))]:
+        print(f"{name}: stat = {res.statistic:.4f}, p = {res.pvalue:.4f}")
     ```
 
     출력:
 
     ```text
     variances: [10.0, 22.5, 62.5]
-    Levene (median): LeveneResult(statistic=1.8947, pvalue=0.1927)
-    Levene (mean):   LeveneResult(statistic=1.8947, pvalue=0.1927)
-    Bartlett:        BartlettResult(statistic=2.9323, pvalue=0.2308)
-    Fligner-Killeen: FlignerResult(statistic=3.5932, pvalue=0.1659)
+    Levene (median): stat = 1.8947, p = 0.1927
+    Levene (mean)  : stat = 1.8947, p = 0.1927
+    Bartlett       : stat = 2.9323, p = 0.2308
+    Fligner-Killeen: stat = 3.5932, p = 0.1659
     ```
 
     이제 검정통계량이 0이 아니고 $p$값도 1이 아니다. 다만 **어느 검정도 기각하지 못한다**($p$값이 0.17~0.23).
@@ -354,8 +388,7 @@ Welch 분산분석은 집단 간 등분산을 가정하지 않고 집단평균�
                   sum_sq   df          F    PR(>F)
     Group     485.333333  2.0  60.666667  0.000105
     Residual   24.000000  6.0        NaN       NaN
-
-    F_onewayResult(statistic=91.0, pvalue=3.250724791231229e-05)
+    F_onewayResult(statistic=91.0, pvalue=3.2507247912312294e-05)
     ```
 
     고전 분산분석의 $F = 91.0$이고 HC3 판은 $F = 60.67$이다. HC3 쪽이 더 보수적이다.

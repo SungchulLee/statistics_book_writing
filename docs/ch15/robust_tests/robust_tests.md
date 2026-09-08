@@ -101,10 +101,16 @@ g2 = [60, 65, 70, 75, 90]
 g3 = [55, 60, 65, 70, 95]
 
 print("variances:", [round(np.var(g, ddof=1), 2) for g in (g1, g2, g3)])
-print(f"Brown-Forsythe:  {stats.levene(g1, g2, g3, center='median')}")
-print(f"Levene (mean):   {stats.levene(g1, g2, g3, center='mean')}")
-print(f"Fligner-Killeen: {stats.fligner(g1, g2, g3)}")
-print(f"Bartlett:        {stats.bartlett(g1, g2, g3)}")
+# 결과는 이름있는 튜플이다. 그대로 출력하면 유효숫자가 너무 많으므로
+# 통계량과 p값을 꺼내 자리수를 맞춰 찍는다.
+bf = stats.levene(g1, g2, g3, center='median')
+lv = stats.levene(g1, g2, g3, center='mean')
+fk = stats.fligner(g1, g2, g3)
+bt = stats.bartlett(g1, g2, g3)
+print(f"Brown-Forsythe:  W = {bf.statistic:.4f}, p = {bf.pvalue:.4f}")
+print(f"Levene (mean):   W = {lv.statistic:.4f}, p = {lv.pvalue:.4f}")
+print(f"Fligner-Killeen: H = {fk.statistic:.4f}, p = {fk.pvalue:.4f}")
+print(f"Bartlett:        T = {bt.statistic:.4f}, p = {bt.pvalue:.4f}")
 print(f"F critical (2, 12): {stats.f.ppf(0.95, 2, 12):.4f}")
 ```
 

@@ -265,16 +265,16 @@ Bootstrap p-value: 0.1892
     print(f"Bootstrap false positive rate: {rej_boot/n_sims:.4f}")
     ```
 
-    출력(대략):
+    출력:
 
     ```text
-    F-test false positive rate:    0.2715
-    Bootstrap false positive rate: 0.0915
+    F-test false positive rate:    0.2695
+    Bootstrap false positive rate: 0.0890
     ```
 
-    $F$ 검정의 거짓 양성률이 $0.272$로 명목값의 **다섯 배**이다. 지수분포가 정규성을 심하게 위반하기 때문이다.
+    $F$ 검정의 거짓 양성률이 $0.270$으로 명목값의 **다섯 배**이다. 지수분포가 정규성을 심하게 위반하기 때문이다.
 
-    붓스트랩 검정은 $0.092$로 훨씬 낫지만 **여전히 명목값의 두 배**이다. 어떤 특정한 분포 형태도 가정하지 않지만, 경험분포가 참 분포의 근사라는 가정은 여전히 필요하다. $n = 20$짜리 지수 표본은 오른쪽 꼬리를 제대로 담지 못한다.
+    붓스트랩 검정은 $0.089$로 훨씬 낫지만 **여전히 명목값의 두 배**이다. 어떤 특정한 분포 형태도 가정하지 않지만, 경험분포가 참 분포의 근사라는 가정은 여전히 필요하다. $n = 20$짜리 지수 표본은 오른쪽 꼬리를 제대로 담지 못한다.
 
     **비교 기준을 하나 더 두자.** 같은 조건에서 Brown-Forsythe 검정의 크기는 $0.048$이다(15.8절 [로버스트 분산 검정 비교](../robust_tests/robust_tests_comparison.md)). **치우친 자료에서는 붓스트랩보다 Brown-Forsythe가 낫다.**
 

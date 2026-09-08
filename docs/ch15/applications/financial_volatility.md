@@ -93,11 +93,11 @@ $r_t^2$의 자기상관은 이 장의 모든 분산 검정이 요구하는 독�
 
     | 검정 | $t_5$ 독립 자료 | GARCH 자료 |
     |---|---|---|
-    | F 검정 | 0.195 | **0.339** |
-    | Brown-Forsythe | 0.044 | **0.302** |
-    | Fligner-Killeen | 0.045 | **0.291** |
+    | F 검정 | 0.195 | **0.331** |
+    | Brown-Forsythe | 0.044 | **0.297** |
+    | Fligner-Killeen | 0.045 | **0.287** |
 
-    독립인 두꺼운 꼬리 자료에서는 로버스트 검정이 크기를 완벽히 통제했지만(0.044, 0.045), **변동성 군집이 있으면 세 검정 모두 0.29~0.34로 무너진다.**
+    독립인 두꺼운 꼬리 자료에서는 로버스트 검정이 크기를 완벽히 통제했지만(0.044, 0.045), **변동성 군집이 있으면 세 검정 모두 0.29~0.33으로 무너진다.**
 
     이유는 명확하다. 로버스트 검정은 **분포 모양**에 대한 가정을 완화할 뿐 **독립성** 가정은 그대로 요구한다. 15.1절 연습문제 2에서 자기상관에 대해 확인한 것과 같은 결론이다.
 
@@ -154,7 +154,7 @@ print(f"F-test:          F = {f_stat:.4f}, p = {f_p:.4g} "
 sample sd: 0.01504, 0.02611
 Brown-Forsythe:  W = 5.4046, p = 0.0218
 Fligner-Killeen: H = 3.2325, p = 0.0722
-F-test:          F = 0.3317, p = 3.783e-05 (unreliable for heavy-tailed data)
+F-test:          F = 0.3317, p = 3.791e-05 (unreliable for heavy-tailed data)
 ```
 
 !!! warning "`standard_t(df)*scale`의 표준편차는 `scale`이 아니다"
@@ -255,16 +255,16 @@ $t_5$ 수익률에서 F 검정, Brown-Forsythe, Fligner-Killeen의 경험적 크
     출력:
 
     ```text
-    F-test:          0.3394
-    Brown-Forsythe:  0.3016
-    Fligner-Killeen: 0.2912
+    F-test:          0.3312
+    Brown-Forsythe:  0.2968
+    Fligner-Killeen: 0.2868
     ```
 
     | 검정 | $t_5$ 독립 (연습문제 1) | GARCH |
     |---|---|---|
-    | F 검정 | 0.195 | 0.339 |
-    | Brown-Forsythe | 0.044 | **0.302** |
-    | Fligner-Killeen | 0.045 | **0.291** |
+    | F 검정 | 0.195 | 0.331 |
+    | Brown-Forsythe | 0.044 | **0.297** |
+    | Fligner-Killeen | 0.045 | **0.287** |
 
     **결과가 충격적이다.** 독립인 두꺼운 꼬리 자료에서 완벽하게 작동하던 로버스트 검정들이 변동성 군집 앞에서는 F 검정과 거의 같은 수준으로 무너진다. 세 검정 모두 세 번에 한 번꼴로 잘못 기각한다.
 
@@ -315,8 +315,26 @@ $t_5$ 수익률에서 F 검정, Brown-Forsythe, Fligner-Killeen의 경험적 크
     **올바른 방법.** 목표 표준편차 $\sigma$를 얻으려면
 
     ```python
-    r = rng.standard_t(nu, n) * sigma / np.sqrt(nu / (nu - 2))
+    rng = np.random.default_rng(0)
+    nu, n, sigma = 5, 100_000, 0.018
+
+    naive = rng.standard_t(nu, n) * sigma
+    correct = rng.standard_t(nu, n) * sigma / np.sqrt(nu / (nu - 2))
+
+    print(f"target sd:  {sigma:.5f}")
+    print(f"naive sd:   {naive.std(ddof=1):.5f}")
+    print(f"correct sd: {correct.std(ddof=1):.5f}")
     ```
+
+    출력:
+
+    ```
+    target sd:  0.01800
+    naive sd:   0.02316
+    correct sd: 0.01805
+    ```
+
+    순진한 방법은 표준편차가 $0.0232$로 목표보다 29% 크지만, $\sqrt{\nu/(\nu-2)}$로 나누면 $0.0181$로 목표에 맞는다.
 
     **왜 중요한가.** 검정통계량은 분산의 **비**에 의존하므로 두 집단에 같은 척도 오차가 있으면 $p$값은 바뀌지 않는다. 그러나 (1) "변동성 1.8%"라는 서술이 자료와 어긋나고, (2) VaR나 절대적 위험 수준을 계산하면 결과가 틀리며, (3) 다른 분포에서 생성한 자료와 비교할 때 공정하지 않다. $\square$
 

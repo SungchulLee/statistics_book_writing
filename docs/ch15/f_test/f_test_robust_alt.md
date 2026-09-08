@@ -143,7 +143,7 @@ Fligner-Killeen:                  X2=1.6063, p=0.205015
 
     ```text
     sample variances: 2.207, 10.648 (true: 6, 10)
-    F-test:          F=0.207, p=1.673e-07
+    F-test:          F=0.207, p=1.681e-07
     Levene (mean):   W=17.140, p=7.358e-05
     Brown-Forsythe:  W=12.596, p=0.0005955
     Fligner-Killeen: X2=11.175, p=0.0008291

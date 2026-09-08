@@ -272,7 +272,7 @@ Bartlett 보정이 실제로 유한표본 크기를 개선하는지 모의실험
     ```text
     Correction factor C = 1.1111
     Uncorrected size: 0.0672
-    Corrected size:   0.0504
+    Corrected size:   0.0505
     ```
 
     보정하지 않은 통계량의 크기가 $0.067$로 명목값보다 34% 크다. 보정 후에는 $0.050$으로 명목값과 사실상 일치한다(몬테카를로 표준오차 0.0015).
