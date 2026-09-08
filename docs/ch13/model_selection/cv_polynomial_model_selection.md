@@ -159,16 +159,16 @@ for i, degree in enumerate(degrees):
     print(f"LOOCV (brute):    {loocv_mse[1]:.4f}")
     ```
 
-출력:
+    출력:
 
-```
-LOOCV (shortcut): 3.8318
-LOOCV (brute):    3.8318
-```
+    ```
+    LOOCV (shortcut): 3.8318
+    LOOCV (brute):    3.8318
+    ```
 
-지름길 공식으로 계산한 LOOCV와 $n$번 적합해 얻은 값이 소수점 넷째 자리까지 같다.
+    지름길 공식으로 계산한 LOOCV와 $n$번 적합해 얻은 값이 소수점 넷째 자리까지 같다.
 
-선형모형에서는 관측값을 하나씩 빼고 다시 적합할 필요가 없다. $\text{LOOCV} = \frac{1}{n}\sum \left(\frac{e_i}{1 - h_{ii}}\right)^2$로 **한 번의 적합**에서 얻을 수 있으며, 지렛값 $h_{ii}$가 그 역할을 한다.
+    선형모형에서는 관측값을 하나씩 빼고 다시 적합할 필요가 없다. $\text{LOOCV} = \frac{1}{n}\sum \left(\frac{e_i}{1 - h_{ii}}\right)^2$로 **한 번의 적합**에서 얻을 수 있으며, 지렛값 $h_{ii}$가 그 역할을 한다.
 
     두 값 모두 $3.8318$로 일치한다. 지름길 공식이 선형모형에서 하나 빼기 재적합과 대수적으로 동등하기 때문이다. $\square$
 

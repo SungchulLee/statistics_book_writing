@@ -203,19 +203,19 @@ state_47  231.03     242.62 -11.59
     print(corr['HighQ'].sort_values(ascending=False))
     ```
 
-출력:
+    출력:
 
-```
-HighQ                1.000000
-per_capita_income    0.280779
-percent_white        0.154687
-total_population     0.054487
-percent_hispanic    -0.072988
-percent_black       -0.087616
-Name: HighQ, dtype: float64
-```
+    ```
+    HighQ                1.000000
+    per_capita_income    0.280779
+    percent_white        0.154687
+    total_population     0.054487
+    percent_hispanic    -0.072988
+    percent_black       -0.087616
+    Name: HighQ, dtype: float64
+    ```
 
-1인당 소득이 0.281로 가장 강하고, 나머지는 모두 0.16 이하다. 자료를 만들 때 소득의 효과를 가장 크게 준 것과 일치한다.
+    1인당 소득이 0.281로 가장 강하고, 나머지는 모두 0.16 이하다. 자료를 만들 때 소득의 효과를 가장 크게 준 것과 일치한다.
 
     HighQ와의 상관 절댓값이 가장 큰 설명변수가 가장 강하게 선형 연관된 변수이다. 자료생성과정에 비추어 보면 `per_capita_income`과 `percent_white`가 가장 강한 상관을 보일 것이다. $\square$
 

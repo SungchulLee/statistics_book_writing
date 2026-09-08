@@ -42,7 +42,6 @@ $$
 ```python
 import numpy as np
 
-
 def covariance_step_by_step(x, y):
     """Compute sample covariance and return intermediate deviations."""
     n = len(x)
@@ -54,7 +53,6 @@ def covariance_step_by_step(x, y):
     # 편차를 참 평균이 아니라 표본평균에서 쟀기 때문에 자유도 하나를 잃는다.
     cov = np.sum(x_dev * y_dev) / (n - 1)
     return cov, x_dev, y_dev
-
 
 def pearson_r_step_by_step(x, y):
     """Compute Pearson r from first principles."""
@@ -109,22 +107,6 @@ print(f"pandas cov  = {df['CA'].cov(df['NY']):.4f}")
 print(f"pandas corr = {df['CA'].corr(df['NY']):.4f}")
 print(f"numpy corr  = {np.corrcoef(CA, NY)[0, 1]:.4f}")
 ```
-
-출력:
-
-```
-CA mean     = 241.8974
-NY mean     = 345.1893
-Covariance  = 10.5691
-Pearson r   = 0.9753
-pandas cov  = 10.5691
-pandas corr = 0.9753
-numpy corr  = 0.9753
-```
-
-직접 구현한 값이 pandas, numpy와 소수점 넷째 자리까지 같다.
-
-공분산 10.57이라는 숫자만으로는 관계가 강한지 알 수 없다는 점도 짚어 두자. 단위가 (달러 x 달러)라 자료의 척도에 따라 얼마든지 커지거나 작아진다. 같은 자료를 센트로 바꾸면 공분산이 10,000배가 되지만 $r$은 0.9753 그대로다.
 
 출력:
 

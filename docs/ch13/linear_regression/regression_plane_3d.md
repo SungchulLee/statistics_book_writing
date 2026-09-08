@@ -122,15 +122,15 @@ plt.show()
     print(f"Match: {np.isclose(R2_manual, R2_sklearn)}")
     ```
 
-출력:
+    출력:
 
-```
-Manual R2: 0.9054
-Sklearn R2: 0.9054
-Match: True
-```
+    ```
+    Manual R2: 0.9054
+    Sklearn R2: 0.9054
+    Match: True
+    ```
 
-직접 계산한 $R^2$와 sklearn의 값이 정확히 같다. $R^2 = 1 - \text{RSS}/\text{TSS}$라는 정의를 확인한 셈이다.
+    직접 계산한 $R^2$와 sklearn의 값이 정확히 같다. $R^2 = 1 - \text{RSS}/\text{TSS}$라는 정의를 확인한 셈이다.
 
     정의상 두 값은 동일하다. $\square$
 

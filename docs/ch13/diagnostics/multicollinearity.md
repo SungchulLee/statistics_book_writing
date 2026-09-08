@@ -63,14 +63,6 @@ High Correlations (|r| > 0.7):
 
 AveRooms와 AveBedrms가 0.848, Latitude와 Longitude가 $-0.925$로 강하게 상관되어 있다. 상관행렬은 **쌍별** 관계만 보므로, 셋 이상이 얽힌 공선성은 VIF로 확인해야 한다.
 
-출력:
-
-```text
-High Correlations (|r| > 0.7):
-  AveRooms <-> AveBedrms: 0.848
-  Latitude <-> Longitude: -0.925
-```
-
 **한계**: 쌍별 상관은 두 변수 사이의 관계만 포착한다. 변수 셋 이상이 얽혀 있으면 쌍별 상관이 크지 않아도 다중공선성이 존재할 수 있다. 이런 이유로 두 변수 사이의 단순 상관을 뜻하는 **공선성**과 여러 변수가 얽힌 **다중공선성**을 구분한다.
 
 ---

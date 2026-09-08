@@ -88,15 +88,6 @@ print(vif_data)
 
 세 변수의 VIF가 모두 1.1 근처다. 서로 거의 독립이므로 다중공선성 걱정이 없다.
 
-출력:
-
-```text
-    Feature   VIF
-0    MedInc  1.120
-1  AveRooms  1.120
-2  AveOccup  1.000
-```
-
 세 설명변수 모두 VIF가 1에 가까워 다중공선성 문제가 없다. 이 모형의 $R^2$는 $0.4808$이다.
 
 ### 잔차 분석
@@ -144,17 +135,6 @@ for name, feats in feature_sets.items():
 
 출력:
 
-```
-Model 1: AIC=51249.3, BIC=51265.2, R2=0.4734
-Model 2: AIC=51016.2, BIC=51040.1, R2=0.4794
-Model 3: AIC=50962.2, BIC=50994.0, R2=0.4808
-Model 4: AIC=45265.5, BIC=45337.0, R2=0.6062
-```
-
-설명변수를 늘릴수록 $R^2$는 반드시 오르지만 AIC와 BIC는 그렇지 않다. 여기서는 셋 다 모형 3이 가장 낫다고 말한다.
-
-출력:
-
 ```text
 Model 1: AIC=51249.3, BIC=51265.2, R2=0.4734
 Model 2: AIC=51016.2, BIC=51040.1, R2=0.4794
@@ -186,21 +166,6 @@ Model 4: AIC=45265.5, BIC=45337.0, R2=0.6062
         vif = variance_inflation_factor(X_full.values, i)
         print(f"{col}: VIF = {vif:.2f}")
     ```
-
-출력:
-
-```
-MedInc: VIF = 2.50
-HouseAge: VIF = 1.24
-AveRooms: VIF = 8.34
-AveBedrms: VIF = 6.99
-Population: VIF = 1.14
-AveOccup: VIF = 1.01
-Latitude: VIF = 9.30
-Longitude: VIF = 8.96
-```
-
-AveRooms의 VIF가 8.34, AveBedrms가 6.99로 높다. 방 개수와 침실 개수가 서로 강하게 얽혀 있기 때문이며, 두 계수를 따로 해석하기 어렵다는 뜻이다.
 
     출력:
 
@@ -234,9 +199,9 @@ AveRooms의 VIF가 8.34, AveBedrms가 6.99로 높다. 방 개수와 침실 개�
     sm.qqplot(model_log.resid, line='45')
     ```
 
-![영향 진단 그림](./img/multi_reg_diag_190.png)
+    ![영향 진단 그림](./img/multi_reg_diag_190.png)
 
-지렛값과 잔차를 함께 보면 어느 관측값이 영향력이 큰지 가려낼 수 있다.
+    지렛값과 잔차를 함께 보면 어느 관측값이 영향력이 큰지 가려낼 수 있다.
 
     집값이 오른쪽으로 치우쳐 있으므로 로그 변환 모형의 잔차가 정규에 훨씬 가까워진다. 수치로 확인하면
 
@@ -266,14 +231,14 @@ AveRooms의 VIF가 8.34, AveBedrms가 6.99로 높다. 방 개수와 침실 개�
     print(f"Cleaned R2:  {model_clean.rsquared:.4f}")
     ```
 
-출력:
+    출력:
 
-```
-Original R2: 0.4808
-Cleaned R2:  0.5784
-```
+    ```
+    Original R2: 0.4808
+    Cleaned R2:  0.5784
+    ```
 
-영향점을 제거하니 $R^2$가 0.481에서 0.578로 오른다. 이 정도 변화는 결과를 보고할 때 반드시 함께 밝혀야 한다.
+    영향점을 제거하니 $R^2$가 0.481에서 0.578로 오른다. 이 정도 변화는 결과를 보고할 때 반드시 함께 밝혀야 한다.
 
     20,640개 가운데 470개(2.3%)가 제거되고 $R^2$는 $0.4808$에서 $0.5784$로 오른다. 계수도 크게 달라진다.
 
@@ -323,15 +288,6 @@ Cleaned R2:  0.5784
     print(f"Base AIC: {model.aic:.1f}")
     print(f"Extended AIC: {model_ext.aic:.1f}")
     ```
-
-출력:
-
-```
-Base AIC: 50962.2
-Extended AIC: 50767.5
-```
-
-설명변수를 더하면 AIC가 50962에서 50768로 내려간다. 적합이 좋아진 만큼 벌점을 치르고도 남았다는 뜻이다.
 
     출력:
 

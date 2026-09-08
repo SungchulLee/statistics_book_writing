@@ -138,16 +138,6 @@ for i, name in enumerate(["Intercept", "Study Hours", "Sleep Hours"]):
 
 출력:
 
-```
-Intercept: coef=4.8212, p=1.754e-15 (Significant), 95% CI=(3.8122, 5.8303)
-Study Hours: coef=2.4317, p=2.171e-58 (Significant), 95% CI=(2.2992, 2.5641)
-Sleep Hours: coef=-1.3202, p=3.633e-28 (Significant), 95% CI=(-1.4883, -1.1521)
-```
-
-계수마다 추정값, p-값, 신뢰구간을 나란히 놓았다. p-값이 0.05보다 작다는 것과 95% 신뢰구간이 0을 담지 않는다는 것이 언제나 같은 말이라는 점을 표에서 확인할 수 있다.
-
-출력:
-
 ```text
 Intercept: coef=4.8212, p=1.754e-15 (Significant), 95% CI=(3.8122, 5.8303)
 Study Hours: coef=2.4317, p=2.171e-58 (Significant), 95% CI=(2.2992, 2.5641)
@@ -178,15 +168,15 @@ Sleep Hours: coef=-1.3202, p=3.633e-28 (Significant), 95% CI=(-1.4883, -1.1521)
     print(f"Match: {np.isclose(t_manual, t_auto)}")
     ```
 
-출력:
+    출력:
 
-```
-Manual t: 36.4271
-Auto t:   36.4271
-Match: True
-```
+    ```
+    Manual t: 36.4271
+    Auto t:   36.4271
+    Match: True
+    ```
 
-손으로 계산한 $t = \hat\beta/\text{SE}$가 statsmodels의 값과 정확히 같다.
+    손으로 계산한 $t = \hat\beta/\text{SE}$가 statsmodels의 값과 정확히 같다.
 
     요약표가 $t_j = \hat{\beta}_j / \mathrm{SE}(\hat{\beta}_j)$를 그대로 계산하는 것이므로 두 값은 동일하다. $\square$
 
