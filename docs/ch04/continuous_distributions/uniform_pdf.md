@@ -28,12 +28,18 @@ import matplotlib.pyplot as plt
 import numpy as np
 import scipy.stats as stats
 
+# 구간 [a, b]를 셋 준비한다. 폭이 1, 4, 4로 다르다.
 intervals = [(0, 1), (-2, 2), (1, 5)]
 x = np.linspace(-3, 6, 500)
 
 fig, ax = plt.subplots(figsize=(12, 4))
 for a, b in intervals:
+    # scipy의 균등분포 매개변수화에 주의하라.
+    # loc = 시작점 a, scale = **폭** (b가 아니라 b - a) 이다.
+    # stats.uniform(1, 5) 는 [1, 5]가 아니라 [1, 6]을 뜻한다.
     rv = stats.uniform(loc=a, scale=b - a)
+    # 밀도는 구간 안에서 1/(b-a)로 일정하고 밖에서는 0이다.
+    # 폭이 좁을수록 높이가 높아진다. 전체 넓이가 언제나 1이어야 하기 때문이다.
     ax.plot(x, rv.pdf(x), label=f'Uniform({a}, {b})')
 ax.set_xlabel('x')
 ax.set_ylabel('f(x)')
@@ -43,6 +49,8 @@ ax.set_ylim(bottom=-0.05)
 plt.tight_layout()
 plt.show()
 ```
+
+![Uniform Distribution — PDF](./img/uniform_pdf_26.png)
 
 전체 넓이가 1이어야 하므로 구간이 넓어질수록 직사각형은 (더 넓어지는 대신) 더 낮아진다.
 

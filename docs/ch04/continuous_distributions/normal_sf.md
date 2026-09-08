@@ -23,12 +23,18 @@ mu, sigma = 0, 1
 dist = stats.norm(loc=mu, scale=sigma)
 
 x = np.linspace(mu - 3 * sigma, mu + 3 * sigma, 400)
+# 생존함수 SF(x) = P(X > x) = 1 - CDF(x).
+# 수학적으로는 CDF의 여집합일 뿐이지만, 계산 방식이 다르다.
+# scipy는 sf를 1-cdf로 계산하지 않고 꼬리를 직접 적분하므로
+# 아주 작은 확률에서도 정밀도를 잃지 않는다(아래 절 참고).
 cdf = dist.cdf(x)
 sf = dist.sf(x)
 
 fig, ax = plt.subplots(figsize=(12, 3))
 ax.plot(x, cdf, lw=2, label='CDF  P(X ≤ x)')
 ax.plot(x, sf, lw=2, label='SF   P(X > x)')
+# 두 곡선이 만나는 지점을 표시한다.
+# 대칭분포에서는 평균에서 CDF = SF = 0.5 로 교차한다.
 ax.axvline(0, ls=':', color='gray', alpha=0.6)
 ax.axhline(0.5, ls=':', color='gray', alpha=0.6)
 ax.annotate("CDF + SF = 1", xy=(1.2, 0.5), fontsize=12,
@@ -50,12 +56,38 @@ plt.show()
 상단꼬리 확률이 극단적으로 작을 때 $1 - F(x)$를 직접 계산하면 $F(x)$가 1에 매우 가까워 부동소수점 상쇄가 일어날 수 있다. 전용 메서드 `sf()`는 꼬리 확률을 직접 계산하여 이 문제를 피한다.
 
 ```python
-# Poor: floating-point cancellation
-p_bad = 1 - stats.norm.cdf(8)    # may give 0.0
+from scipy import stats
 
-# Good: numerically stable
-p_good = stats.norm.sf(8)         # gives ~6.22e-16
+# 꼬리 확률을 두 가지 방법으로 구해 비교한다.
+#   나쁜 방법: 1 - CDF.  CDF가 1에 아주 가까우면 뺄셈에서 유효숫자가 날아간다(상쇄).
+#   좋은 방법: SF.       꼬리를 직접 계산하므로 상쇄가 일어나지 않는다.
+for x in (6, 8, 10, 12):
+    bad = 1 - stats.norm.cdf(x)
+    good = stats.norm.sf(x)
+    print(f"x={x:>3}:  1-cdf = {bad:.6e}   sf = {good:.6e}")
 ```
+
+출력:
+
+```
+x=  6:  1-cdf = 9.865877e-10   sf = 9.865876e-10
+x=  8:  1-cdf = 6.661338e-16   sf = 6.220961e-16
+x= 10:  1-cdf = 0.000000e+00   sf = 7.619853e-24
+x= 12:  1-cdf = 0.000000e+00   sf = 1.776482e-33
+```
+
+세 단계로 나빠지는 것이 보인다.
+
+- **$x = 6$**: 아직 괜찮다. 마지막 자리만 다르다.
+- **$x = 8$**: 유효숫자가 이미 두 자리 넘게 어긋났다($6.661$ 대 $6.221$).
+- **$x \ge 10$**: `1 - cdf`가 **정확히 0**이 된다. 확률이 0이 아닌데 0이라고 답하는 것이다.
+
+원인은 배정밀도 부동소수점이 1 근처에서 약 $10^{-16}$ 간격으로만 값을 구별할 수 있다는 데 있다. $\Phi(10) = 1 - 7.6 \times 10^{-24}$은 그 간격보다 훨씬 1에 가까우므로 **컴퓨터 안에서는 그냥 1로 저장된다.** 1에서 1을 빼면 0이다.
+
+!!! danger "꼬리 확률에는 언제나 `sf`를 써라"
+    $p$-값 계산이 대표적이다. $p$-값은 본질적으로 꼬리 확률이므로 `1 - cdf`로 구하면 아주 작은 $p$-값이 0으로 보고된다. 유전체학처럼 $p < 10^{-20}$을 다루는 분야에서는 치명적이다.
+
+    같은 이유로 로그가 필요하면 `np.log(sf(x))`가 아니라 **`logsf(x)`** 를 쓴다. `sf`조차 언더플로로 0이 되는 극단적인 영역에서도 로그값은 정상적으로 나온다.
 
 ---
 

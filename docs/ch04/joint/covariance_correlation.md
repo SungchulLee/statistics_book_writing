@@ -183,8 +183,14 @@ import numpy as np
 np.random.seed(42)
 n = 10_000
 X = np.random.normal(0, 1, n)
+# Y = 0.7X + 잡음.  Var(Y) = 0.7^2 * 1 + 0.5^2 = 0.74 이므로
+# Cov(X,Y) = 0.7 이고 Corr = 0.7 / sqrt(1 * 0.74) ≈ 0.814 로 예측된다.
 Y = 0.7 * X + np.random.normal(0, 0.5, n)
 
+# np.cov / np.corrcoef 는 스칼라가 아니라 **행렬**을 돌려준다.
+#   대각원소  = 각 변수의 분산 (상관행렬에서는 항상 1)
+#   비대각원소 = 두 변수 사이의 공분산(또는 상관)
+# 그래서 [0,1] 로 꺼내야 우리가 원하는 값이 나온다.
 cov_matrix = np.cov(X, Y)
 corr_matrix = np.corrcoef(X, Y)
 
@@ -192,6 +198,21 @@ print(f"Cov(X,Y) = {cov_matrix[0,1]:.4f}")
 print(f"Corr(X,Y) = {corr_matrix[0,1]:.4f}")
 print(f"\nCovariance matrix:\n{cov_matrix}")
 print(f"\nCorrelation matrix:\n{corr_matrix}")
+```
+
+출력:
+
+```
+Cov(X,Y) = 0.7006
+Corr(X,Y) = 0.8127
+
+Covariance matrix:
+[[1.00693675 0.70055986]
+ [0.70055986 0.73789018]]
+
+Correlation matrix:
+[[1.         0.81273374]
+ [0.81273374 1.        ]]
 ```
 
 ### 여러 상관계수 시각화
@@ -205,10 +226,14 @@ n = 500
 fig, axes = plt.subplots(1, 4, figsize=(14, 3))
 
 for ax, rho in zip(axes, [-0.9, -0.3, 0.3, 0.9]):
+    # 분산을 둘 다 1로 두면 공분산행렬의 비대각원소가 곧 상관계수가 된다.
+    # 상관 = 공분산 / (sd_X * sd_Y) 인데 분모가 1이기 때문이다.
     cov = [[1, rho], [rho, 1]]
     data = np.random.multivariate_normal([0, 0], cov, n)
     ax.scatter(data[:, 0], data[:, 1], s=5, alpha=0.5)
     ax.set_title(f'ρ = {rho}')
+    # set_aspect('equal') 이 중요하다. 가로세로 비가 다르면
+    # 같은 rho라도 점구름이 더 납작하거나 둥글게 보여 오해를 부른다.
     ax.set_aspect('equal')
     ax.set_xlim(-4, 4)
     ax.set_ylim(-4, 4)
@@ -218,6 +243,8 @@ plt.tight_layout()
 plt.show()
 ```
 
+![공분산과 상관계수](./img/covariance_correlation_199.png)
+
 ### 상관계수 열지도
 
 ```python
@@ -226,12 +253,20 @@ import matplotlib.pyplot as plt
 
 np.random.seed(42)
 n = 5000
+# 변수 넷을 사슬처럼 엮는다.
+#   X1 : 독립
+#   X2 : X1에 의존
+#   X3 : X1과 X2 모두에 의존
+#   X4 : 아무것과도 무관 (대조군)
+# 열지도에서 X4의 행/열만 0에 가깝게 나오는지 확인해 보라.
 X1 = np.random.normal(0, 1, n)
 X2 = 0.5 * X1 + np.random.normal(0, 1, n)
 X3 = -0.3 * X1 + 0.6 * X2 + np.random.normal(0, 1, n)
 X4 = np.random.normal(0, 1, n)
 
 data = np.column_stack([X1, X2, X3, X4])
+# rowvar=False: 열이 변수이고 행이 관측이라는 뜻.
+# numpy의 기본값은 반대(rowvar=True)라서 빠뜨리면 5000x5000 행렬이 나온다.
 corr = np.corrcoef(data, rowvar=False)
 
 fig, ax = plt.subplots(figsize=(5, 4))
@@ -248,29 +283,45 @@ fig.colorbar(im, ax=ax)
 plt.show()
 ```
 
+![공분산과 상관계수](./img/covariance_correlation_223.png)
+
 ### 결합 PMF로부터 공분산 구하기
 
 ```python
 import numpy as np
 
-# Joint PMF table
+# 결합 PMF 표. pmf[i, j] = P(X = x_vals[i], Y = y_vals[j]) 이고 합이 1이다.
 pmf = np.array([[0.2, 0.1],
                 [0.3, 0.4]])
 x_vals = np.array([0, 1])
 y_vals = np.array([0, 1])
 
+# 브로드캐스팅으로 표 전체를 한 번에 가중합한다.
+#   x_vals[:, None] 은 세로 벡터 (행 방향으로 퍼진다)  -> X의 값
+#   y_vals[None, :] 은 가로 벡터 (열 방향으로 퍼진다)  -> Y의 값
+# 이렇게 하면 이중 반복문 없이 sum(x * P(x,y)) 를 그대로 쓸 수 있다.
 E_X = np.sum(x_vals[:, None] * pmf)
 E_Y = np.sum(y_vals[None, :] * pmf)
 E_XY = np.sum(x_vals[:, None] * y_vals[None, :] * pmf)
 
+# Cov(X,Y) = E[XY] - E[X]E[Y]
 cov_XY = E_XY - E_X * E_Y
 var_X = np.sum(x_vals[:, None]**2 * pmf) - E_X**2
 var_Y = np.sum(y_vals[None, :]**2 * pmf) - E_Y**2
+# 상관계수는 공분산을 두 표준편차로 나눈 것. 단위가 없어져 [-1, 1]에 들어간다.
 corr_XY = cov_XY / np.sqrt(var_X * var_Y)
 
 print(f"E[X] = {E_X:.4f}, E[Y] = {E_Y:.4f}, E[XY] = {E_XY:.4f}")
 print(f"Cov(X,Y) = {cov_XY:.4f}")
 print(f"Corr(X,Y) = {corr_XY:.4f}")
+```
+
+출력:
+
+```
+E[X] = 0.7000, E[Y] = 0.5000, E[XY] = 0.4000
+Cov(X,Y) = 0.0500
+Corr(X,Y) = 0.2182
 ```
 
 ---

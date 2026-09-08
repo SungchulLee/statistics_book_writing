@@ -134,16 +134,22 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy import stats
 
-lam = 2.0
-x = np.linspace(0, 4, 200)
+lam = 2.0                      # 비율모수. 단위 시간당 평균 2회 발생.
+x = np.linspace(0, 4, 200)     # 지수분포는 x >= 0 에서만 정의된다
 
 fig, ax = plt.subplots(figsize=(12, 3))
+# scipy는 rate가 아니라 scale = 1/rate 를 받는다. 이 책에서 반복되는 함정이다.
+# PDF는 x=0 에서 lam(=2)으로 시작해 단조 감소한다.
+#   -> 지수분포에서 가장 있을 법한 대기시간은 **0에 가까운 값**이다.
+# CDF는 0에서 1로 오르며 1 - e^{-lam x} 다.
 ax.plot(x, stats.expon(scale=1/lam).pdf(x), label='PDF')
 ax.plot(x, stats.expon(scale=1/lam).cdf(x), label='CDF')
 ax.spines[['top', 'right']].set_visible(False)
 ax.legend()
 plt.show()
 ```
+
+![Exponential 분포](./img/exponential_132.png)
 
 ### 비율에 따른 비교
 
@@ -153,6 +159,9 @@ import numpy as np
 from scipy import stats
 
 fig, ax = plt.subplots(figsize=(12, 3))
+# lam 하나가 모든 것을 정한다. 평균 = 표준편차 = 1/lam 이다.
+# lam이 커질수록 시작 높이가 높아지고 더 빨리 0으로 떨어진다.
+# 네 곡선 모두 x=0 에서의 높이가 정확히 lam 이라는 점을 확인해 보라.
 for lam in [0.5, 1.0, 2.0, 5.0]:
     x = np.linspace(0, 6, 200)
     ax.plot(x, stats.expon(scale=1/lam).pdf(x), label=f'λ={lam}')
@@ -161,6 +170,8 @@ ax.set_xlabel('x')
 ax.legend()
 plt.show()
 ```
+
+![Exponential 분포](./img/exponential_150.png)
 
 ### 표본추출과 검증
 
@@ -172,9 +183,19 @@ np.random.seed(42)
 lam = 3.0
 samples = stats.expon(scale=1/lam).rvs(100_000)
 
+# 지수분포의 특징: 평균과 **표준편차**가 같다(둘 다 1/lam).
+# 분산은 1/lam^2 이므로 평균과 다르다. 포아송(평균 = 분산)과 헷갈리기 쉽다.
 print(f"Theoretical mean: {1/lam:.4f},  Sample mean: {samples.mean():.4f}")
 print(f"Theoretical var:  {1/lam**2:.4f},  Sample var:  {samples.var():.4f}")
 print(f"Mean ≈ SD: {np.isclose(samples.mean(), samples.std(), atol=0.01)}")
+```
+
+출력:
+
+```
+Theoretical mean: 0.3333,  Sample mean: 0.3320
+Theoretical var:  0.1111,  Sample var:  0.1096
+Mean ≈ SD: True
 ```
 
 ### 무기억성 확인하기
@@ -188,10 +209,23 @@ lam = 2.0
 samples = stats.expon(scale=1/lam).rvs(1_000_000)
 
 s = 0.5
+# 무기억성: P(X > s+t | X > s) = P(X > t).
+# "이미 0.5만큼 기다렸다"는 사실이 앞으로의 대기시간에 아무 정보도 주지 않는다.
+# 연속분포 중에서 이 성질을 갖는 것은 **지수분포뿐이다.**
+# (이산분포에서는 기하분포가 유일하다.)
 for t in [0.25, 0.5, 1.0]:
+    # samples > s 로 "0.5를 넘긴 표본만" 골라 조건을 건다
     conditional = np.mean(samples[samples > s] > s + t)
     unconditional = np.mean(samples > t)
     print(f"P(X>{s}+{t}|X>{s}) = {conditional:.4f},  P(X>{t}) = {unconditional:.4f}")
+```
+
+출력:
+
+```
+P(X>0.5+0.25|X>0.5) = 0.6066,  P(X>0.25) = 0.6068
+P(X>0.5+0.5|X>0.5) = 0.3681,  P(X>0.5) = 0.3682
+P(X>0.5+1.0|X>0.5) = 0.1360,  P(X>1.0) = 0.1355
 ```
 
 ### Poisson 과정 모의실험
@@ -202,20 +236,26 @@ import matplotlib.pyplot as plt
 from scipy import stats
 
 np.random.seed(42)
-lam = 3.0  # events per unit time
+lam = 3.0        # 단위 시간당 평균 3회 발생
 n_events = 50
 
-# Generate inter-arrival times
+# 포아송 과정을 만드는 가장 쉬운 방법: 사건 **사이의 간격**을 지수분포에서 뽑고
+# 누적합을 취해 도착 시각으로 바꾼다.
+# 지수 간격 <-> 포아송 계수는 같은 과정의 두 얼굴이다.
 inter_arrivals = stats.expon(scale=1/lam).rvs(n_events)
 arrival_times = np.cumsum(inter_arrivals)
 
 fig, ax = plt.subplots(figsize=(12, 3))
+# 계수과정 N(t)는 사건이 일어날 때만 1씩 뛰는 계단함수다.
+# where='post' 로 "그 시각에 뛰어오른 뒤 다음까지 유지"를 나타낸다.
 ax.step(arrival_times, range(1, n_events + 1), where='post', lw=1.5)
 ax.set_xlabel('Time')
 ax.set_ylabel('Cumulative events')
 ax.spines[['top', 'right']].set_visible(False)
 plt.show()
 ```
+
+![Exponential 분포](./img/exponential_199.png)
 
 ---
 

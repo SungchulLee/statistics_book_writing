@@ -32,14 +32,16 @@ import numpy as np
 import matplotlib.pyplot as plt
 import scipy.stats as stats
 
-nu = 5       # degrees of freedom
+nu = 5       # 자유도. 작을수록 꼬리가 두껍고, 커지면 정규분포로 간다.
 mu = 0
 sigma = 1
 
 t_dist = stats.t(df=nu, loc=mu, scale=sigma)
 n_dist = stats.norm(loc=mu, scale=sigma)
 
-# Quantile-based x-range for robust plotting
+# x 범위를 t 분포의 분위수로 잡는다.
+# t는 꼬리가 두꺼우므로 정규분포 기준으로 범위를 잡으면 꼬리가 잘린다.
+# 여기서 보려는 것이 바로 그 꼬리이므로 t 쪽에 맞춰야 한다.
 x = np.linspace(t_dist.ppf(1e-4), t_dist.ppf(1 - 1e-4), 600)
 
 fig, ax = plt.subplots(figsize=(12, 3))
@@ -53,6 +55,8 @@ ax.grid(True, linestyle=":")
 plt.tight_layout()
 plt.show()
 ```
+
+![Student](./img/t_pdf_30.png)
 
 그림을 보면 $t$ 분포는 정규분포보다 꼬리에 확률이 더 많고 중앙에 더 적으며, $\nu$가 작아질수록 차이가 뚜렷해진다.
 
@@ -114,5 +118,7 @@ SciPy를 사용하여 $\nu = 1, 5, 30, \infty$인 $t$ 분포 PDF를 같은 축�
     ax.plot(x, stats.norm.pdf(x), '--', label="N(0,1)")
     ax.legend()
     ```
+
+    ![Student-t 밀도함수](./img/t_pdf_109.png)
 
     $\nu = 1$(Cauchy)에서는 꼬리가 극도로 두껍다. $\nu = 5$에서는 종 모양이 눈에 띄게 나타나지만 여전히 더 퍼져 있다. $\nu = 30$에서는 $t$ 곡선과 정규 곡선을 거의 구별할 수 없다. 수렴 $t_\nu \to N(0,1)$은 단조적이다. $\nu$가 커질 때마다 꼬리가 정규분포에 더 가까워진다.

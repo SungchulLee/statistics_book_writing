@@ -157,16 +157,23 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy import stats
 
-mu, sigma = 0, 1
+mu, sigma = 0, 1                  # 표준정규분포
+# 평균에서 좌우 3 표준편차. 확률의 99.7%가 이 안에 있다.
 x = np.linspace(mu - 3*sigma, mu + 3*sigma, 200)
 
 fig, ax = plt.subplots(figsize=(12, 3))
+# 두 함수를 같은 축에 겹쳐 관계를 본다.
+#   PDF는 평균에서 가장 높고 좌우로 떨어진다.
+#   CDF는 0에서 1로 단조 증가하며, PDF가 가장 높은 곳에서 가장 가파르다.
+# CDF의 기울기가 곧 PDF이기 때문이다.
 ax.plot(x, stats.norm(mu, sigma).pdf(x), label='PDF')
 ax.plot(x, stats.norm(mu, sigma).cdf(x), label='CDF')
 ax.spines[['top', 'right']].set_visible(False)
 ax.legend()
 plt.show()
 ```
+
+![Normal 분포](./img/normal_155.png)
 
 ### 표본추출과 추정된 PDF
 
@@ -176,15 +183,20 @@ import matplotlib.pyplot as plt
 from scipy import stats
 
 np.random.seed(0)
-data = stats.norm(loc=0, scale=1).rvs(10_000)
+data = stats.norm(loc=0, scale=1).rvs(10_000)     # 참 모수는 (0, 1)
 
 fig, ax = plt.subplots(figsize=(12, 3))
+# density=True 로 넓이를 1로 맞춰야 밀도곡선과 같은 눈금에 놓인다
 _, bins, _ = ax.hist(data, bins=100, density=True, color='blue', alpha=0.7, label="Samples")
+# 참 모수 (0, 1)이 아니라 **표본에서 추정한** 평균과 표준편차로 곡선을 그린다.
+# 실제 분석에서는 참값을 모르기 때문이다.
 ax.plot(bins, stats.norm(data.mean(), data.std()).pdf(bins),
         '--r', lw=3, label="Estimated Normal PDF")
 ax.legend()
 plt.show()
 ```
+
+![Normal 분포](./img/normal_173.png)
 
 ### 68–95–99.7 규칙 확인
 
@@ -202,6 +214,14 @@ n3 = len(df.x[(mean - 3*std < df.x) & (df.x < mean + 3*std)])
 print(f"Within 1σ: {n1/n*100:.2f}%")   # ≈ 68%
 print(f"Within 2σ: {n2/n*100:.2f}%")   # ≈ 95%
 print(f"Within 3σ: {n3/n*100:.2f}%")   # ≈ 99.7%
+```
+
+출력:
+
+```
+Within 1σ: 72.69%
+Within 2σ: 95.00%
+Within 3σ: 98.66%
 ```
 
 ---
@@ -255,6 +275,14 @@ z1, z2 = -2.1, 1.2
 print(f"P({z1} ≤ Z ≤ {z2}) = {stats.norm().cdf(z2) - stats.norm().cdf(z1):.4f}")
 ```
 
+출력:
+
+```
+P(Z ≤ -1.2) = 0.1151
+P(Z ≥ 1.2) = 0.1151
+P(-2.1 ≤ Z ≤ 1.2) = 0.8671
+```
+
 ---
 
 ## 왜 정규분포인가?
@@ -280,6 +308,13 @@ import scipy.stats as stats
 np.random.seed(42)
 samples = stats.norm.rvs(size=10)
 print(samples)  # Same output every time with seed 42
+```
+
+출력:
+
+```
+[ 0.49671415 -0.1382643   0.64768854  1.52302986 -0.23415337 -0.23413696
+  1.57921282  0.76743473 -0.46947439  0.54256004]
 ```
 
 ---

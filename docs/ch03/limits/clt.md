@@ -62,21 +62,26 @@ import numpy as np
 from scipy import stats
 
 def demonstrate_clt(distribution_type, sample_size, n_simulations=10_000):
-    """Demonstrate CLT convergence for a given distribution."""
+    """모집단이 무엇이든 표본평균이 정규분포로 간다는 것을 보인다."""
     np.random.seed(0)
 
+    # (sample_size, n_simulations) 모양으로 한 번에 뽑고 axis=0으로 평균 낸다.
+    # 즉 "크기 n인 표본을 1만 번 뽑아 각각의 평균을 구한 것"이 한 줄에 들어 있다.
     if distribution_type == 'uniform':
         data = np.mean(stats.uniform().rvs((sample_size, n_simulations)), axis=0)
-        label = 'Uniform(0,1)'
+        label = 'Uniform(0,1)'      # 평평한 분포. 종 모양과 전혀 다르다.
     elif distribution_type == 'exponential':
         data = np.mean(stats.expon().rvs((sample_size, n_simulations)), axis=0)
-        label = 'Exponential(1)'
+        label = 'Exponential(1)'    # 오른쪽으로 심하게 치우친 분포
 
+    # 1만 개의 표본평균에서 잰 중심과 퍼짐
     mu, sigma = data.mean(), data.std()
 
     fig, ax = plt.subplots(figsize=(12, 3))
     _, bins, _ = ax.hist(data, bins=100, density=True, alpha=0.3, color='blue',
                          label=f'Sample Means (n={sample_size})')
+    # 같은 평균·표준편차의 정규분포를 겹친다.
+    # 이 곡선이 히스토그램에 얼마나 붙는지가 중심극한정리의 성적표다.
     ax.plot(bins, stats.norm(mu, sigma).pdf(bins), '--r', lw=2, label='Normal PDF')
     ax.set_title(f'CLT: Sample Means from {label}')
     ax.spines[['top', 'right']].set_visible(False)

@@ -67,12 +67,19 @@ import numpy as np
 from scipy import stats
 
 def berry_esseen_bound(sigma, rho, n, C=0.4748):
-    """Compute the Berry-Esseen upper bound."""
+    """베리-에센 상계를 계산한다.
+
+        |F_n(x) - Phi(x)|  <=  C * rho / (sigma^3 * sqrt(n))
+
+    이 값은 **모든 x에 대해 한꺼번에** 성립하는 오차 상한이다.
+    중심극한정리가 "n이 크면 정규분포에 가까워진다"고만 말하는 데 비해,
+    베리-에센은 "얼마나 가까운가"를 수치로 준다.
+    """
     return C * rho / (sigma**3 * np.sqrt(n))
 
-# Bernoulli(0.5)
-sigma_b = np.sqrt(0.25)
-rho_b = 0.125
+# 베르누이(0.5): 대칭이라 정규근사가 빠르다
+sigma_b = np.sqrt(0.25)     # 표준편차 0.5
+rho_b = 0.125               # E|X - mu|^3 = 0.5^3 = 0.125
 print("=== Bernoulli(0.5) ===")
 for n in [10, 30, 100, 1000]:
     bound = berry_esseen_bound(sigma_b, rho_b, n)
@@ -80,13 +87,30 @@ for n in [10, 30, 100, 1000]:
 
 print()
 
-# Exponential(1)
+# 지수분포(1): 오른쪽으로 크게 치우쳐 정규근사가 훨씬 느리다.
+# rho/sigma^3 이 2.368 대 0.125 로 19배쯤 크므로 상계도 그만큼 커진다.
 sigma_e = 1.0
 rho_e = 2.368
 print("=== Exponential(1) ===")
 for n in [10, 30, 100, 1000]:
     bound = berry_esseen_bound(sigma_e, rho_e, n)
     print(f"n = {n:5d}: Berry–Esseen bound = {bound:.4f}")
+```
+
+출력:
+
+```
+=== Bernoulli(0.5) ===
+n =    10: Berry–Esseen bound = 0.1501
+n =    30: Berry–Esseen bound = 0.0867
+n =   100: Berry–Esseen bound = 0.0475
+n =  1000: Berry–Esseen bound = 0.0150
+
+=== Exponential(1) ===
+n =    10: Berry–Esseen bound = 0.3555
+n =    30: Berry–Esseen bound = 0.2053
+n =   100: Berry–Esseen bound = 0.1124
+n =  1000: Berry–Esseen bound = 0.0356
 ```
 
 !!! note "$n \ge 30$ 관례의 정체"
@@ -104,10 +128,14 @@ import matplotlib.pyplot as plt
 from scipy import stats
 
 def berry_esseen_visualization(dist_name, rvs_fn, mu, sigma, rho, sample_sizes):
-    """Compare the actual CDF error with the Berry-Esseen bound."""
+    """실제 오차와 베리-에센 상계를 나란히 그린다.
+
+    상계는 "이보다 나쁘지는 않다"는 보장일 뿐이므로,
+    실제 오차가 상계보다 훨씬 작게 나오는 것이 정상이다.
+    """
     C = 0.4748
-    x_grid = np.linspace(-4, 4, 1000)
-    n_sim = 50_000
+    x_grid = np.linspace(-4, 4, 1000)     # 오차를 재는 x 격자
+    n_sim = 50_000                        # 표본평균을 5만 번 만든다
 
     fig, axes = plt.subplots(1, len(sample_sizes), figsize=(12, 3),
                              sharey=True)
@@ -115,16 +143,19 @@ def berry_esseen_visualization(dist_name, rvs_fn, mu, sigma, rho, sample_sizes):
 
     for ax, n in zip(axes, sample_sizes):
         np.random.seed(42)
-        # Simulate standardized sample means
+        # 크기 n인 표본을 5만 개 만들어 각각의 평균을 낸다
         samples = rvs_fn(size=(n_sim, n))
         x_bar = samples.mean(axis=1)
+
+        # 표준화: (X-bar - mu) / (sigma/sqrt(n)).
+        # 중심극한정리는 이 z가 N(0,1)로 간다고 말한다.
         z = (x_bar - mu) / (sigma / np.sqrt(n))
 
-        # Empirical CDF vs normal CDF
+        # 경험적 CDF와 표준정규 CDF의 차이를 x마다 잰다
         ecdf = np.array([np.mean(z <= x) for x in x_grid])
         ncdf = stats.norm.cdf(x_grid)
         actual_error = np.abs(ecdf - ncdf)
-        max_error = actual_error.max()
+        max_error = actual_error.max()      # 베리-에센이 상한을 주는 대상
 
         bound = C * rho / (sigma**3 * np.sqrt(n))
 
@@ -149,6 +180,8 @@ berry_esseen_visualization(
 )
 ```
 
+![베리–에센 정리](./img/berry_esseen_101.png)
+
 세 분포의 상한을 $n$의 함수로 겹쳐 그리면 순서가 분명해진다.
 
 ```python
@@ -156,10 +189,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 def convergence_rate_comparison():
-    """Compare convergence rates for different distributions."""
-    C = 0.4748
+    """분포마다 정규근사가 얼마나 빨리 좋아지는지 비교한다."""
+    C = 0.4748           # 베리-에센 상수의 현재까지 알려진 최선의 값(셰바초바 2011)
     ns = np.arange(5, 501)
 
+    # 각 분포에 필요한 것은 두 값뿐이다.
+    #   sigma: 표준편차
+    #   rho  : 세 번째 절대적률 E|X - mu|^3
+    # rho/sigma^3 이 클수록(= 비대칭하거나 꼬리가 무거울수록) 수렴이 느리다.
     distributions = {
         'Bernoulli(0.5)': {'sigma': np.sqrt(0.25), 'rho': 0.125},
         'Uniform(0,1)':   {'sigma': 1/np.sqrt(12), 'rho': 1/32},
@@ -168,6 +205,9 @@ def convergence_rate_comparison():
 
     fig, ax = plt.subplots(figsize=(12, 4))
     for name, params in distributions.items():
+        # 베리-에센 상계: |F_n(x) - Phi(x)| <= C * rho / (sigma^3 * sqrt(n))
+        # n 의존성이 1/sqrt(n) 뿐이라는 점이 핵심이다.
+        # 오차를 절반으로 줄이려면 표본을 네 배로 늘려야 한다.
         bounds = C * params['rho'] / (params['sigma']**3 * np.sqrt(ns))
         ax.plot(ns, bounds, label=name, lw=2)
 

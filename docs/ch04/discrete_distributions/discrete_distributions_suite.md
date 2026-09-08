@@ -21,13 +21,24 @@ import numpy as np
 from scipy import stats
 import matplotlib.pyplot as plt
 
-n, p = 50, 0.3
-k_vals = np.arange(0, n + 1)
+n, p = 50, 0.3                 # 시행 50번, 각 시행의 성공확률 0.3
+k_vals = np.arange(0, n + 1)   # 가능한 성공 횟수 0~50
 pmf = stats.binom.pmf(k_vals, n, p)
 
+# pmf 는 "정확히" 그 값일 확률, cdf 는 "이하"일 확률이다.
+# 이산분포에서 이 구분이 특히 중요하다. P(X <= 12) 에는 12가 포함된다.
 print(f"P(X = 14) = {stats.binom.pmf(14, n, p):.4f}")
 print(f"P(X <= 12) = {stats.binom.cdf(12, n, p):.4f}")
+# 평균 np = 15, 분산 np(1-p) = 10.5
 print(f"E[X] = {n*p:.1f}, Var(X) = {n*p*(1-p):.2f}")
+```
+
+출력:
+
+```
+P(X = 14) = 0.1189
+P(X <= 12) = 0.2229
+E[X] = 15.0, Var(X) = 10.50
 ```
 
 ---
@@ -48,6 +59,13 @@ print(f"P(X = 2) = {stats.poisson.pmf(2, lam):.4f}")
 print(f"P(X > 2) = {1 - stats.poisson.cdf(2, lam):.4f}")
 ```
 
+출력:
+
+```
+P(X = 2) = 0.2169
+P(X > 2) = 0.1205
+```
+
 ---
 
 ## 3. Geometric 분포
@@ -64,6 +82,13 @@ $$
 p = 0.3
 print(f"P(5 failures before 1st success) = {(1-p)**5 * p:.4f}")
 print(f"E[failures] = {(1-p)/p:.2f}")
+```
+
+출력:
+
+```
+P(5 failures before 1st success) = 0.0504
+E[failures] = 2.33
 ```
 
 ---
@@ -88,11 +113,24 @@ print(f"P(X = 2) = {p2:.4f}  (manual = {p2_manual:.4f})")
 print(f"E[X] = {n*K/N:.2f}")
 ```
 
+출력:
+
+```
+P(X = 2) = 0.2073  (manual = 0.2073)
+E[X] = 1.00
+```
+
 ---
 
 ## 시각화
 
 ```python
+# 네 이산분포를 2x2 격자에 나란히 놓는다.
+# 서로 어떻게 다른지가 아니라 **무엇을 세는지가** 다르다는 데 주목하라.
+#   Binomial      : 시행 수를 정해 놓고 성공 횟수를 센다 (복원추출)
+#   Poisson       : 정해진 구간에서 사건 발생 횟수를 센다 (상한 없음)
+#   Geometric     : 첫 성공까지 걸린 시행 수를 센다
+#   Hypergeometric: 유한 모집단에서 비복원추출했을 때의 성공 횟수
 fig, axes = plt.subplots(2, 2, figsize=(14, 10))
 
 axes[0, 0].bar(k_vals, pmf, color="steelblue", edgecolor="white", alpha=0.8)
@@ -108,12 +146,17 @@ axes[0, 1].set_title(f"Poisson(λ={lam})")
 axes[0, 1].set_xlabel("k")
 
 gk = np.arange(0, 20)
+# gk + 1 을 넣는 이유: scipy의 geom은 시행 번호(1부터)를 받는데
+# 여기서는 실패 횟수(0부터)를 가로축으로 쓰고 싶기 때문이다.
 axes[1, 0].bar(gk, stats.geom.pmf(gk + 1, 0.3), color="coral",
                edgecolor="white", alpha=0.8)
 axes[1, 0].set_title("Geometric(p=0.3)")
 axes[1, 0].set_xlabel("k (failures)")
 
 hk = np.arange(0, n + 1)
+# 초기하분포: 전체 N개 중 성공이 K개일 때, n개를 **비복원**으로 뽑아
+# 성공이 몇 개 나오는가. 뽑을 때마다 남은 구성이 바뀌므로 시행이 독립이 아니다.
+# 그 점이 이항분포와의 유일하면서도 결정적인 차이다.
 axes[1, 1].bar(hk, stats.hypergeom.pmf(hk, N, K, n), color="mediumpurple",
                edgecolor="white", alpha=0.8)
 axes[1, 1].set_title("Hypergeometric(N=100, K=20, n=5)")
@@ -122,6 +165,8 @@ axes[1, 1].set_xlabel("k (defectives)")
 plt.tight_layout()
 plt.show()
 ```
+
+![Binomial(n=50, p=0.3)](./img/discrete_distributions_suite_95.png)
 
 ---
 

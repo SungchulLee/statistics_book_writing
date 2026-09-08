@@ -28,12 +28,17 @@ import matplotlib.pyplot as plt
 import numpy as np
 import scipy.stats as stats
 
+# 비율모수 lambda 를 셋 준비한다. lambda 가 클수록 사건이 자주 일어난다.
 lambdas = [0.5, 1.0, 2.0]
 x = np.linspace(0, 6, 300)
 
 fig, ax = plt.subplots(figsize=(12, 4))
 for lam in lambdas:
+    # scipy는 비율(rate) lambda 가 아니라 **척도(scale) = 1/lambda** 를 받는다.
+    # scale이 곧 평균이다. lambda=2 이면 평균 대기시간이 0.5다.
     rv = stats.expon(scale=1 / lam)
+    # 밀도는 x=0에서 lambda 로 시작해 지수적으로 떨어진다.
+    # lambda 가 클수록 시작점이 높고 더 가파르게 준다.
     ax.plot(x, rv.pdf(x), label=rf'$\lambda={lam}$')
 ax.set_xlabel('x')
 ax.set_ylabel('f(x)')
@@ -42,6 +47,8 @@ ax.legend()
 plt.tight_layout()
 plt.show()
 ```
+
+![Exponential Distribution — PDF](./img/exponential_pdf_26.png)
 
 $\lambda$가 클수록 사건이 더 자주 일어나므로 분포가 0 근처에 더 몰린다.
 

@@ -20,16 +20,22 @@ import numpy as np
 import scipy.stats as stats
 
 mu, sigma = 0, 1
-prob = 0.975
+prob = 0.975      # 95% 신뢰구간의 한쪽 끝. 양쪽 꼬리에 2.5%씩 남긴다.
 
 dist = stats.norm(loc=mu, scale=sigma)
 x = np.linspace(mu - 3 * sigma, mu + 3 * sigma, 1000)
 pdf = dist.pdf(x)
+
+# ppf는 CDF의 역함수다. "누적확률이 이만큼 되는 지점은 어디인가"에 답한다.
+#   cdf: 값 -> 확률
+#   ppf: 확률 -> 값
+# ppf(0.975)가 그 유명한 1.96 이며, 신뢰구간 공식의 z값이 여기서 나온다.
 z = dist.ppf(prob)
 
 fig, ax = plt.subplots(figsize=(12, 3))
 ax.plot(x, pdf, color='b', lw=2, label='PDF')
-ax.plot([z, z], [0, dist.pdf(z)], color='k', lw=3)
+ax.plot([z, z], [0, dist.pdf(z)], color='k', lw=3)   # 경계선
+# 왼쪽 97.5%를 칠한다. 칠해진 넓이가 곧 확률이라는 점이 요점이다.
 ax.fill_between(x[x <= z], pdf[x <= z], 0,
                 interpolate=True, color='r', alpha=0.25,
                 label=f"P(X ≤ {z:.2f}) = {prob}")

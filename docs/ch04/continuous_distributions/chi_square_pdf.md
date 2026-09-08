@@ -34,15 +34,19 @@ import numpy as np
 import matplotlib.pyplot as plt
 import scipy.stats as stats
 
-k = 5
+k = 5                      # 자유도. 표준정규 k개를 제곱해 더한 것의 분포다.
 chi2 = stats.chi2(df=k)
 
-# Quantile-based x-range
+# x 범위를 분위수로 정한다. 눈대중으로 (0, 20) 같은 범위를 쓰면
+# 자유도가 바뀔 때마다 그림이 잘리거나 남는다.
+# ppf(1e-6)부터 ppf(1-1e-6)까지 잡으면 어떤 k에서도 꼬리까지 알맞게 담긴다.
 x = np.linspace(chi2.ppf(1e-6), chi2.ppf(1 - 1e-6), 600)
 y = chi2.pdf(x)
 
 fig, ax = plt.subplots(figsize=(12, 3))
 ax.plot(x, y, lw=2, label=f"χ² PDF (k={k})")
+# 평균은 정확히 k, 최빈값은 k-2 (k >= 2일 때).
+# 둘이 다르다는 것이 곧 이 분포가 오른쪽으로 치우쳐 있다는 뜻이다.
 ax.axvline(k, linestyle='--', alpha=0.8, label=f"mean = {k}")
 ax.axvline(max(k - 2, 0), linestyle=':', alpha=0.8, label=f"mode = {max(k-2, 0)}")
 ax.set_title("Chi-square Distribution — PDF")
@@ -53,6 +57,8 @@ ax.grid(True, linestyle=":")
 plt.tight_layout()
 plt.show()
 ```
+
+![Chi-square Distribution — PDF](./img/chi_square_pdf_32.png)
 
 ---
 

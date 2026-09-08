@@ -36,10 +36,20 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 def bivariate_normal_pdf(X, Y, inv_Sigma, det_Sigma):
+    """평균이 0인 이변량 정규분포의 밀도를 정의대로 계산한다.
+
+    지수의 어깨에 있는 것이 이차형식 z' Sigma^{-1} z 이고,
+    이를 전개하면 아래처럼 X^2, XY, Y^2 항이 나온다.
+    분모의 sqrt(det Sigma) 는 전체 적분을 1로 만드는 정규화 상수다.
+    """
     return (np.exp(-(inv_Sigma[0,0]*X**2 + 2*inv_Sigma[0,1]*X*Y
                      + inv_Sigma[1,1]*Y**2) / 2)
             / (2 * np.pi * np.sqrt(det_Sigma)))
 
+# 공분산행렬 셋. 고유분해가 무엇을 알려 주는지 비교하기 위한 것이다.
+#   1) 비대각이 0이 아님  -> 타원이 45도로 기운다. 고유벡터도 기운다.
+#   2) 대각행렬          -> 타원이 축에 나란하다. 고유벡터가 곧 좌표축이다.
+#   3) 비대각도 있고 분산도 다름 -> 기울기와 늘어남이 함께 나타난다.
 configs = [
     {"label": "Σ = [[0.5, 0.3], [0.3, 0.5]]",
      "Sigma": np.array([[0.5, 0.3], [0.3, 0.5]])},
@@ -58,11 +68,18 @@ for i, cfg in enumerate(configs):
     Sigma = cfg["Sigma"]
     inv_Sigma = np.linalg.inv(Sigma)
     det_Sigma = np.linalg.det(Sigma)
+
+    # eigh 는 **대칭행렬 전용** 고유분해다. 공분산행렬은 언제나 대칭이므로
+    # 일반용 eig 보다 빠르고 수치적으로 안정하며, 고윳값이 실수로 나온다.
+    # 결과의 기하학적 의미:
+    #   고유벡터 = 타원의 주축 방향
+    #   고윳값   = 그 방향의 분산. sqrt(고윳값)이 그 축의 반지름이다.
     eigenvalues, eigenvectors = np.linalg.eigh(Sigma)
 
     Z = bivariate_normal_pdf(X, Y, inv_Sigma, det_Sigma)
 
-    # Sort descending
+    # eigh는 고윳값을 오름차순으로 준다. 큰 것(장축)이 먼저 오도록 뒤집는다.
+    # eigenvectors는 **열**이 고유벡터이므로 [:, idx] 로 열을 재배열한다.
     idx = eigenvalues.argsort()[::-1]
     eigenvalues = eigenvalues[idx]
     eigenvectors = eigenvectors[:, idx]
@@ -89,6 +106,8 @@ for i, cfg in enumerate(configs):
 plt.tight_layout()
 plt.show()
 ```
+
+![Contour + Eigenvectors](./img/gaussian_2d_eigendecomposition_34.png)
 
 ---
 

@@ -35,8 +35,13 @@ import numpy as np
 from scipy import stats
 
 x = np.linspace(0.01, 3.0, 500)
-lam = 1.0
+lam = 1.0        # 척도모수. 시간의 단위를 정할 뿐 모양은 바꾸지 않는다.
 
+# 형상모수 k가 이 분포의 성격을 전부 결정한다.
+# 아래 세 번째 패널(위험함수)을 보면 그 뜻이 분명해진다.
+#   k < 1 : 위험률이 시간에 따라 **감소** — 초기 불량. 살아남을수록 안전해진다.
+#   k = 1 : 위험률이 **일정** — 지수분포와 같아진다. 무기억성.
+#   k > 1 : 위험률이 시간에 따라 **증가** — 마모. 오래될수록 위험해진다.
 params = [
     (0.5, "k=0.5 (decreasing hazard)"),
     (1.0, "k=1.0 (exponential)"),
@@ -47,6 +52,13 @@ params = [
 fig, axes = plt.subplots(1, 3, figsize=(15, 4.5))
 
 for k, desc in params:
+    # 세 함수를 정의대로 직접 계산한다(scipy를 쓰지 않고).
+    #   pdf : 밀도함수
+    #   sf  : 생존함수 S(t) = P(T > t) = exp(-(t/lam)^k)
+    #   haz : 위험함수 h(t) = pdf/sf.  "여기까지 살아남았다는 조건 하에
+    #         지금 당장 고장 날 순간적인 비율"이다.
+    # 바일불에서는 pdf/sf 를 계산하면 지수항이 정확히 약분되어
+    # 아래처럼 아주 단순한 멱함수만 남는다. 이것이 이 분포가 널리 쓰이는 이유다.
     pdf = (k / lam) * (x / lam) ** (k - 1) * np.exp(-(x / lam) ** k)
     sf = np.exp(-(x / lam) ** k)
     haz = (k / lam) * (x / lam) ** (k - 1)
@@ -69,6 +81,8 @@ for ax in axes:
 plt.tight_layout()
 plt.show()
 ```
+
+![Weibull PDF](./img/weibull_pdf_32.png)
 
 ---
 

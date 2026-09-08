@@ -32,10 +32,22 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 def bivariate_gaussian_pdf(x, y, rho):
+    """표준화된 이변량 정규분포의 밀도. 두 주변분포가 모두 N(0,1)이고
+    상관계수만 rho 인 경우다."""
     return (np.exp(-(x**2 - 2*rho*x*y + y**2) / (2*(1 - rho**2)))
             / (2 * np.pi * np.sqrt(1 - rho**2)))
 
+
 def conditional_pdf(x0, y, rho):
+    """X = x0 으로 조건을 걸었을 때 Y의 분포.
+
+    이변량 정규분포의 핵심 성질 두 가지가 여기 들어 있다.
+      1. 조건부분포도 **정규분포**다. (다른 분포에서는 일반적으로 성립하지 않는다.)
+      2. 조건부 평균은 x0에 **선형**으로 의존한다: mu = rho * x0.
+         이것이 선형회귀가 왜 정규분포 가정과 잘 맞는지의 뿌리다.
+      3. 조건부 분산 1 - rho^2 은 **x0에 의존하지 않는다.**
+         어디를 잘라도 폭이 같다는 뜻이며, 회귀의 등분산 가정에 대응한다.
+    """
     sigma_cond = np.sqrt(1 - rho**2)
     mu_cond = rho * x0
     return (1 / (np.sqrt(2*np.pi) * sigma_cond)

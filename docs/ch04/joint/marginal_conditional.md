@@ -171,21 +171,37 @@ pmf = np.array([
     [0.05, 0.10, 0.10]
 ])
 
-# Marginals
+# 주변분포: 관심 없는 변수를 **합해서 지운다**.
+#   axis=1 로 더하면 Y가 사라져 P(X=x)만 남는다.
+#   axis=0 로 더하면 X가 사라져 P(Y=y)만 남는다.
 p_X = pmf.sum(axis=1)
 p_Y = pmf.sum(axis=0)
 print("Marginal of X:", p_X)
 print("Marginal of Y:", p_Y)
 
-# Conditional P(Y | X=1)
+# 조건부분포: X=1 인 **행 하나만** 떼어 낸 뒤 그 행의 합으로 나눈다.
+# 나누는 이유는 떼어 낸 행의 합이 P(X=1)이라 1이 아니기 때문이다.
+# 확률로 쓰려면 합이 1이 되게 다시 정규화해야 한다.
+# 이것이 P(Y|X) = P(X,Y)/P(X) 를 표에서 실행한 것이다.
 x_val = 1
 cond_Y_given_X1 = pmf[x_val, :] / p_X[x_val]
 print(f"\nP(Y|X={x_val}):", cond_Y_given_X1)
 
-# Conditional expectation E[Y | X=1]
+# 조건부기댓값은 조건부분포로 가중평균한 것이다.
+# 주변분포가 아니라 **조건부분포**로 가중해야 한다는 점이 요점이다.
 y_vals = np.array([0, 1, 2])
 E_Y_given_X1 = np.sum(y_vals * cond_Y_given_X1)
 print(f"E[Y|X={x_val}] = {E_Y_given_X1:.4f}")
+```
+
+출력:
+
+```
+Marginal of X: [0.3  0.45 0.25]
+Marginal of Y: [0.25 0.5  0.25]
+
+P(Y|X=1): [0.22222222 0.55555556 0.22222222]
+E[Y|X=1] = 1.0000
 ```
 
 ### 적분을 통한 연속형 주변분포
@@ -216,6 +232,12 @@ E_Y, _ = integrate.quad(lambda x: E_Y_given_X(x) * marginal_X(x), 0, 1)
 print(f"E[Y] via Law of Total Expectation: {E_Y:.4f}")  # Should be 2/3
 ```
 
+출력:
+
+```
+E[Y] via Law of Total Expectation: 0.6667
+```
+
 ### 조건부분포 시각화
 
 ```python
@@ -225,14 +247,19 @@ from scipy import stats
 
 np.random.seed(42)
 mean = [0, 0]
-cov = [[1, 0.8], [0.8, 1]]
+cov = [[1, 0.8], [0.8, 1]]      # 상관 0.8
 samples = np.random.multivariate_normal(mean, cov, 100_000)
 
 fig, ax = plt.subplots(figsize=(12, 3))
 
-# Conditional distribution of Y given X ≈ 1
+# 연속변수에서는 P(X = 1)이 0이므로 "정확히 X=1"로 조건을 걸 수 없다.
+# 대신 얇은 띠 |X - x0| < 0.1 안에 든 표본만 골라 근사한다.
+# 띠가 좁을수록 참 조건부분포에 가깝지만 표본 수가 줄어 잡음이 커진다.
 for x_cond in [-1, 0, 1]:
     mask = np.abs(samples[:, 0] - x_cond) < 0.1
+    # 이론이 예측하는 바를 그림에서 확인하라.
+    #   중심: rho * x0 = 0.8 * x0  ->  -0.8, 0, +0.8 로 이동한다
+    #   폭  : sqrt(1 - rho^2) = 0.6  ->  세 히스토그램의 폭이 **모두 같다**
     ax.hist(samples[mask, 1], bins=50, density=True, alpha=0.4,
             label=f'Y | X≈{x_cond}')
 
@@ -241,6 +268,8 @@ ax.set_xlabel('Y')
 ax.legend()
 plt.show()
 ```
+
+![주변분포와 조건부분포](./img/marginal_conditional_221.png)
 
 ---
 

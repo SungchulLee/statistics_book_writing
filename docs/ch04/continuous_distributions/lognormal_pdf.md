@@ -29,13 +29,20 @@ import matplotlib.pyplot as plt
 import numpy as np
 import scipy.stats as stats
 
+# 로그정규분포: log(X)가 N(mu, sigma^2)을 따르는 분포다.
+# mu와 sigma는 **로그를 취한 뒤의** 평균과 표준편차이지 X 자체의 것이 아니다.
 mu = 0
 sigmas = [0.5, 1.0, 1.5, 2.0]
-x = np.linspace(0.001, 8, 500)
+x = np.linspace(0.001, 8, 500)     # X > 0 이므로 0에서 시작한다
 
 fig, ax = plt.subplots(figsize=(12, 4))
 for sigma in sigmas:
+    # scipy의 매개변수화가 특히 헷갈리는 분포다.
+    #   s     = 로그 척도의 표준편차 sigma
+    #   scale = exp(mu)
+    # 즉 loc가 아니라 scale에 exp(mu)를 넣어야 한다.
     rv = stats.lognorm(s=sigma, scale=np.exp(mu))
+    # sigma가 커질수록 봉우리가 0쪽으로 밀리고 오른쪽 꼬리가 길어진다.
     ax.plot(x, rv.pdf(x), label=rf'$\sigma={sigma}$')
 ax.set_xlabel('x')
 ax.set_ylabel('f(x)')
@@ -45,6 +52,8 @@ ax.set_ylim(bottom=-0.02)
 plt.tight_layout()
 plt.show()
 ```
+
+![Log-Normal Distribution — PDF ($\mu=0$, varying $\sigma$)](./img/lognormal_pdf_27.png)
 
 $\sigma$가 커질수록 분포가 오른쪽으로 더 치우치고 최빈값은 0 쪽으로 이동한다.
 

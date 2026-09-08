@@ -43,11 +43,17 @@ np.random.seed(42)
 n = 10_000
 lam = 1.0
 
+# 역변환 표집의 전부가 이 두 줄이다.
+#   1단계: 균등난수 U를 뽑는다.
+#   2단계: 목표 분포의 CDF 역함수 F^{-1} 을 U에 적용한다.
+# 지수분포는 F(x) = 1 - e^{-lam x} 이므로 F^{-1}(u) = -ln(1-u)/lam 이다.
 u = np.random.uniform(0, 1, n)
 x_exp = -np.log(1 - u) / lam
 
+# 세 패널로 과정을 분해해 보여 준다.
 fig, axes = plt.subplots(1, 3, figsize=(15, 4))
 
+# 왼쪽: 출발점. 완전히 평평한 균등분포다.
 axes[0].hist(u, bins=50, density=True, color="lightgray", edgecolor="black")
 axes[0].set_title("Step 1: U ~ Uniform(0,1)")
 
@@ -58,6 +64,11 @@ axes[1].plot(t, stats.expon.pdf(t, scale=1/lam), "r-", lw=2.5, label="Exp PDF")
 axes[1].set_title("Step 2: X = -ln(1-U)/λ")
 axes[1].legend()
 
+# 오른쪽: 변환 함수 자체를 그린다.
+# 이 곡선의 **기울기**가 왜 평평한 입력이 치우친 출력이 되는지 설명한다.
+# u가 1에 가까워질수록 곡선이 가팔라져, 좁은 u 구간이 넓은 x 구간으로 늘어난다.
+# 늘어난 구간에서는 밀도가 낮아지므로 오른쪽 꼬리가 얇아지는 것이다.
+# 0과 1은 각각 -inf, +inf 로 발산하므로 격자에서 살짝 안쪽으로 잡는다.
 u_grid = np.linspace(0.001, 0.999, 300)
 axes[2].plot(u_grid, -np.log(1 - u_grid) / lam, "b-", lw=2)
 axes[2].set_title("Inverse CDF: F⁻¹(u)")
@@ -67,6 +78,8 @@ axes[2].set_ylabel("x")
 plt.tight_layout()
 plt.show()
 ```
+
+![Step 1: U ~ Uniform(0,1)](./img/inverse_transform_sampling_37.png)
 
 ---
 
@@ -79,10 +92,17 @@ F^{-1}(u) = \tan\!\left(\pi\!\left(u - \frac{1}{2}\right)\right)
 $$
 
 ```python
+# 코시분포의 CDF는 F(x) = 1/2 + arctan(x)/pi 이므로
+# 그 역함수는 F^{-1}(u) = tan(pi*(u - 1/2)) 이다.
 u = np.random.uniform(0, 1, n)
 x_cauchy = np.tan(np.pi * (u - 0.5))
 
 fig, ax = plt.subplots(figsize=(10, 4))
+# 코시분포는 꼬리가 너무 무거워 평균조차 존재하지 않는다.
+# 1만 개를 뽑으면 수백, 수천 단위의 값이 나오므로 그대로 그리면
+# 히스토그램이 한 칸에 뭉쳐 아무것도 안 보인다.
+# 그래서 [-20, 20]으로 잘라 **가운데 부분만** 그린다.
+# 자른 값들은 양 끝 막대에 쌓이므로 그 두 막대는 해석하지 말아야 한다.
 x_clipped = np.clip(x_cauchy, -20, 20)
 ax.hist(x_clipped, bins=80, density=True, color="coral",
         edgecolor="white", alpha=0.7, label="Transformed")
@@ -169,9 +189,26 @@ Rayleigh 분포는 $x \ge 0$에 대해 CDF가 $F(x) = 1 - e^{-x^2/(2\sigma^2)}$�
     코드:
 
     ```python
+    import numpy as np
+
+    np.random.seed(0)
     sigma = 1.0
     u = np.random.uniform(0, 1, 10000)
+    # 레일리 분포의 CDF는 F(x) = 1 - exp(-x^2 / (2 sigma^2)) 이므로
+    # 이를 x에 대해 풀면 F^{-1}(u) = sigma * sqrt(-2 ln(1-u)) 다.
     x = sigma * np.sqrt(-2 * np.log(1 - u))
+
+    # 레일리 분포의 평균은 sigma*sqrt(pi/2) ≈ 1.2533,
+    # 분산은 (4-pi)/2 * sigma^2 ≈ 0.4292 다.
+    print(f"표본평균 {x.mean():.4f}  (이론 {sigma*np.sqrt(np.pi/2):.4f})")
+    print(f"표본분산 {x.var():.4f}  (이론 {(4-np.pi)/2*sigma**2:.4f})")
+    ```
+
+    출력:
+
+    ```
+    표본평균 1.2453  (이론 1.2533)
+    표본분산 0.4306  (이론 0.4292)
     ```
 
     이는 Box-Muller 변환의 한 성분과 밀접하게 관련된다. $R = \sqrt{-2\ln U}$가 Rayleigh 분포를 따른다.

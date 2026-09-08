@@ -127,10 +127,14 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy import stats
 
-n, p = 10, 0.6
-x = np.arange(0, n + 1)
+n, p = 10, 0.6                # 시행 10번, 각 시행의 성공확률 0.6
+x = np.arange(0, n + 1)       # 가능한 성공 횟수 0~10
 
 fig, ax = plt.subplots(figsize=(12, 3))
+# 같은 k에 대해 PMF와 CDF 막대를 좌우로 조금씩 밀어 나란히 놓는다.
+#   PMF: "정확히 k번 성공할 확률"        -> 봉우리 모양
+#   CDF: "k번 이하로 성공할 확률"        -> 단조 증가해 1에 도달
+# CDF 막대는 PMF 막대를 왼쪽부터 누적한 값이다.
 ax.bar(x - 0.15, stats.binom(n, p).pmf(x), width=0.3, label='PMF', alpha=0.7)
 ax.bar(x + 0.15, stats.binom(n, p).cdf(x), width=0.3, label='CDF', alpha=0.7)
 ax.set_xlabel('k')
@@ -140,6 +144,8 @@ ax.legend()
 plt.show()
 ```
 
+![Bernoulli 분포와 Binomial 분포](./img/binomial_125.png)
+
 ### 모수에 따른 비교
 
 ```python
@@ -148,8 +154,14 @@ import numpy as np
 from scipy import stats
 
 fig, ax = plt.subplots(figsize=(12, 3))
+# 두 모수가 각각 무엇을 바꾸는지 나누어 본다.
+#   (10, 0.5) -> (20, 0.5): n만 바뀐다. 봉우리가 오른쪽으로 가고 넓어진다.
+#   (20, 0.5) -> (20, 0.7): p만 바뀐다. 봉우리가 오른쪽으로 가고 좁아진다.
+# p가 0.5에서 멀어지면 분산 np(1-p)가 줄어들기 때문이다.
 for n, p in [(10, 0.5), (20, 0.5), (20, 0.7)]:
     x = np.arange(0, n + 1)
+    # 이산분포이므로 원래는 막대가 맞지만, 여러 개를 겹쳐 비교할 때는
+    # 점을 이어 그리는 편이 읽기 쉽다. 선 자체에 의미는 없다.
     ax.plot(x, stats.binom(n, p).pmf(x), 'o-', label=f'n={n}, p={p}', markersize=4)
 ax.spines[['top', 'right']].set_visible(False)
 ax.set_xlabel('k')
@@ -171,6 +183,13 @@ print(f"Theoretical mean: {n*p:.4f},  Sample mean: {samples.mean():.4f}")
 print(f"Theoretical var:  {n*p*(1-p):.4f},  Sample var:  {samples.var():.4f}")
 ```
 
+출력:
+
+```
+Theoretical mean: 6.0000,  Sample mean: 6.0030
+Theoretical var:  2.4000,  Sample var:  2.3861
+```
+
 ---
 
 ## Binomial 분포의 정규근사
@@ -189,17 +208,22 @@ import numpy as np
 from scipy import stats
 
 n, p = 50, 0.4
-x_disc = np.arange(0, n + 1)
-x_cont = np.linspace(0, n, 200)
+# np = 20, n(1-p) = 30. 둘 다 5를 넉넉히 넘으므로 정규근사 조건을 만족한다.
+x_disc = np.arange(0, n + 1)      # 이항분포는 정수에서만 값을 갖는다
+x_cont = np.linspace(0, n, 200)   # 정규분포는 연속이므로 촘촘한 격자가 필요하다
 
 fig, ax = plt.subplots(figsize=(12, 3))
 ax.bar(x_disc, stats.binom(n, p).pmf(x_disc), alpha=0.5, label='Binomial PMF')
+# 평균 np, 분산 np(1-p)를 그대로 맞춘 정규분포를 겹친다.
+# scipy의 norm은 표준편차를 받으므로 분산에 제곱근을 씌워 넣는다.
 ax.plot(x_cont, stats.norm(n*p, np.sqrt(n*p*(1-p))).pdf(x_cont),
         'r-', lw=2, label='Normal approx.')
 ax.spines[['top', 'right']].set_visible(False)
 ax.legend()
 plt.show()
 ```
+
+![Bernoulli 분포와 Binomial 분포](./img/binomial_186.png)
 
 ---
 

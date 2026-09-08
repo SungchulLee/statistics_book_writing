@@ -126,7 +126,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy import stats
 
-lam = 5
+lam = 5            # 단위 시간(구간)당 평균 발생 횟수
+# 포아송은 0, 1, 2, ... 로 상한이 없다. 20에서 자른 것은 그 너머의 확률이
+# 무시할 만큼 작기 때문이다(lam=5에서 P(X >= 20)은 1e-6 수준).
 x = np.arange(0, 20)
 
 fig, ax = plt.subplots(figsize=(12, 3))
@@ -139,6 +141,8 @@ ax.legend()
 plt.show()
 ```
 
+![Poisson 분포](./img/poisson_124.png)
+
 ### 비율에 따른 비교
 
 ```python
@@ -147,6 +151,10 @@ import numpy as np
 from scipy import stats
 
 fig, ax = plt.subplots(figsize=(12, 3))
+# lam 하나가 중심과 퍼짐을 동시에 결정한다.
+# 포아송은 평균 = 분산 = lam 이라 모수가 하나뿐이기 때문이다.
+# lam이 커질수록 봉우리가 오른쪽으로 가면서 동시에 넓어지고,
+# 모양도 점점 대칭인 종 모양(정규분포)에 가까워진다.
 for lam in [1, 4, 10]:
     x = np.arange(0, 25)
     ax.plot(x, stats.poisson(lam).pmf(x), 'o-', label=f'λ={lam}', markersize=4)
@@ -155,6 +163,8 @@ ax.set_xlabel('k')
 ax.legend()
 plt.show()
 ```
+
+![Poisson 분포](./img/poisson_144.png)
 
 ### Binomial 극한으로서의 Poisson 분포
 
@@ -168,12 +178,22 @@ x = np.arange(0, 20)
 
 fig, ax = plt.subplots(figsize=(12, 3))
 ax.bar(x, stats.poisson(lam).pmf(x), alpha=0.5, label='Poisson(λ=5)')
+
+# 포아송은 이항분포의 극한이다.
+# n을 키우면서 p = lam/n 으로 줄여 **곱 np = lam 을 고정**하면
+# 이항분포가 포아송으로 수렴한다.
+#   n=20  -> p=0.250
+#   n=50  -> p=0.100
+#   n=200 -> p=0.025
+# "시행이 아주 많고 각각의 성공확률이 아주 작은" 상황이 포아송의 정체다.
 for n in [20, 50, 200]:
     ax.plot(x, stats.binom(n, lam/n).pmf(x), 'o-', label=f'Binom(n={n}, p={lam/n:.3f})', markersize=4)
 ax.spines[['top', 'right']].set_visible(False)
 ax.legend()
 plt.show()
 ```
+
+![Poisson 분포](./img/poisson_161.png)
 
 ### 표본추출과 평균–분산 점검
 
@@ -185,9 +205,21 @@ np.random.seed(42)
 lam = 7
 samples = stats.poisson(lam).rvs(100_000)
 
+# 포아송의 특징: 평균과 분산이 **같다**.
+# 실제 계수 자료에서 표본분산이 표본평균보다 뚜렷이 크면
+# 포아송 가정이 깨졌다는 신호이며(과산포), 음이항분포 등을 고려해야 한다.
+
 print(f"Theoretical mean: {lam},  Sample mean: {samples.mean():.4f}")
 print(f"Theoretical var:  {lam},  Sample var:  {samples.var():.4f}")
 print(f"Mean ≈ Var: {np.isclose(samples.mean(), samples.var(), atol=0.1)}")
+```
+
+출력:
+
+```
+Theoretical mean: 7,  Sample mean: 7.0065
+Theoretical var:  7,  Sample var:  7.0213
+Mean ≈ Var: True
 ```
 
 ---

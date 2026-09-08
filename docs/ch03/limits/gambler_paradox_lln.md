@@ -35,17 +35,41 @@ import matplotlib.pyplot as plt
 np.random.seed(42)
 
 def st_petersburg_sample_means(n_max=10_000, tries=100, n_grid=200):
-    """Each round: first heads on flip k → win 2^k. E[X] = infinity."""
+    """상트페테르부르크 게임: 처음 앞면이 k번째에 나오면 2^k 을 받는다.
+
+    상금이 2^k 이고 그 확률이 (1/2)^k 이므로 각 항의 기여가 1이고,
+    항이 무한히 많아 E[X] = 1 + 1 + 1 + ... = 무한대다.
+    기댓값이 없으므로 대수의 법칙이 성립하지 않는다.
+    """
+    # 표본 크기를 로그 눈금으로 200개 잡는다(10부터 n_max까지).
+    # 로그 눈금이라야 "n이 10배가 될 때마다" 무슨 일이 생기는지 보인다.
     n_vals = np.unique(np.logspace(1, np.log10(n_max), n_grid).astype(int))
     results = []
     for n in n_vals:
+        # 기하분포: 처음 성공(앞면)까지의 시행 횟수 k
         flips = np.random.geometric(0.5, size=(n, tries))
-        winnings = 2.0 ** flips
+        winnings = 2.0 ** flips              # 상금
+        # 같은 n에 대해 tries(=100)번 독립적으로 되풀이해 표본평균을 낸다.
+        # 100개의 평균이 얼마나 흩어지는지가 이 그림의 핵심이다.
         means = winnings.mean(axis=0)
         results.append((n, means))
     return results
 
 infinite_results = st_petersburg_sample_means()
+
+# n이 커져도 표본평균이 한 값으로 모이지 않는다는 것을 숫자로 확인한다.
+for n, means in [infinite_results[0], infinite_results[len(infinite_results)//2],
+                 infinite_results[-1]]:
+    print(f"n = {n:>6,}: 표본평균 100개의 중앙값 {np.median(means):8.1f}, "
+          f"최댓값 {means.max():10.1f}")
+```
+
+출력:
+
+```
+n =     10: 표본평균 100개의 중앙값      5.8, 최댓값      415.4
+n =    396: 표본평균 100개의 중앙값     10.2, 최댓값     1340.6
+n = 10,000: 표본평균 100개의 중앙값     16.9, 최댓값      223.0
 ```
 
 ## 2. 상한 하나가 모든 것을 바꾼다
@@ -64,17 +88,37 @@ $$
 
 ```python
 def bounded_game_sample_means(n_max=10_000, tries=100, n_grid=200):
-    """Same game but capped at 2^10 = 1024. E[X] is now finite."""
+    """같은 게임이되 상금을 2^10 = 1024 로 잘라 낸다.
+
+    이 한 줄의 차이로 E[X]가 유한해지고, 대수의 법칙이 되살아난다.
+    상금이 유계이면 기댓값이 반드시 존재하기 때문이다.
+    """
     n_vals = np.unique(np.logspace(1, np.log10(n_max), n_grid).astype(int))
     results = []
     for n in n_vals:
         flips = np.random.geometric(0.5, size=(n, tries))
+        # 위 함수와 다른 곳은 이 minimum 한 군데뿐이다
         winnings = np.minimum(2.0 ** flips, 1024.0)
         means = winnings.mean(axis=0)
         results.append((n, means))
     return results
 
 bounded_results = bounded_game_sample_means()
+
+# 이번에는 n이 커질수록 100개의 표본평균이 한 값으로 모여든다.
+# 흩어짐(표준편차)이 줄어드는지 보라.
+for n, means in [bounded_results[0], bounded_results[len(bounded_results)//2],
+                 bounded_results[-1]]:
+    print(f"n = {n:>6,}: 표본평균 100개의 중앙값 {np.median(means):7.2f}, "
+          f"표준편차 {means.std():7.2f}")
+```
+
+출력:
+
+```
+n =     10: 표본평균 100개의 중앙값    5.50, 표준편차   17.34
+n =    396: 표본평균 100개의 중앙값   10.50, 표준편차    2.61
+n = 10,000: 표본평균 100개의 중앙값   11.01, 표준편차    0.59
 ```
 
 두 게임을 나란히 그리면 차이가 분명하다.
@@ -82,18 +126,26 @@ bounded_results = bounded_game_sample_means()
 ```python
 fig, axes = plt.subplots(1, 2, figsize=(14, 5))
 
-# Panel 1: infinite mean — divergence
+# 왼쪽 패널: 기댓값이 무한한 게임 — 발산
 ax = axes[0]
 for n, means in infinite_results:
+    # 각 n마다 100개의 표본평균을 세로로 흩뿌린다.
+    # n이 커져도 이 흩어짐이 좁아지지 않는 것이 핵심이다.
+    # 세로축도 로그(loglog)로 두어야 큰 값들이 화면에 들어온다.
     ax.loglog(n * np.ones(len(means)), means, ".", color="black", ms=2, alpha=0.5)
 ax.set_xlabel("n (number of rounds)")
 ax.set_ylabel("Sample mean of winnings")
 ax.set_title("St. Petersburg Game (E[X] = ∞)\nSample mean does NOT converge")
 
-# Panel 2: finite mean — convergence
+# 오른쪽 패널: 기댓값이 유한한 게임 — 수렴
 ax = axes[1]
 for n, means in bounded_results:
+    # 이쪽은 세로축을 로그로 하지 않는다(semilogx). 값이 좁은 범위에 모이기 때문이다.
+    # n이 커질수록 점들이 깔때기처럼 한 선으로 좁아진다. 이것이 큰수의 법칙이다.
     ax.semilogx(n * np.ones(len(means)), means, ".", color="steelblue", ms=2, alpha=0.5)
+
+# 이론적 기댓값. 상금이 2^10 에서 잘리므로
+#   E[X] = (k=1..10 각각 1씩) + 1024 * P(k > 10) = 10 + 1 = 11
 true_mean = 11.0
 ax.axhline(true_mean, color="red", linestyle="--", lw=2,
            label=f"E[X] = {true_mean:.1f}")
@@ -105,6 +157,8 @@ ax.legend()
 plt.tight_layout()
 plt.show()
 ```
+
+![도박사의 역설: 큰수의 법칙이 실패할 때](./img/gambler_paradox_lln_82.png)
 
 **왼쪽(무한한 평균).** 표본평균의 구름이 $n$이 커져도 좁아지지 **않는다.** 로그–로그 척도에서 오히려 계속 퍼진다. $n = 10{,}000$에서도 실행마다 평균이 크게 다르다. 표본평균이 일치추정량이 아니라는 뜻이다.
 

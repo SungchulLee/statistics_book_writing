@@ -61,15 +61,18 @@ import matplotlib.pyplot as plt
 import numpy as np
 import scipy.stats as stats
 
+# 왼쪽에 PDF, 오른쪽에 CDF, 가운데에는 둘의 관계를 나타내는 화살표를 놓는다.
 fig, (ax_pdf, ax_arrow, ax_cdf) = plt.subplots(1, 3, figsize=(12, 3))
 
 x = np.linspace(-3, 3, 100)
 
-# PDF
+# 왼쪽: 확률밀도함수. 각 점에서 확률이 얼마나 빽빽한지를 나타낸다.
 ax_pdf.set_title("PDF", fontsize=16)
 ax_pdf.plot(x, stats.norm().pdf(x))
 
-# Arrows showing relationship
+# 가운데: 두 함수를 잇는 연산.
+#   PDF -> CDF 는 적분 (왼쪽에서 여기까지의 넓이를 쌓는다)
+#   CDF -> PDF 는 미분 (누적이 늘어나는 속도가 곧 밀도다)
 ax_arrow.arrow(0.1, 0.6, 0.8, 0, width=0.05, length_includes_head=True)
 ax_arrow.arrow(0.9, 0.4, -0.8, 0, width=0.05, length_includes_head=True)
 ax_arrow.annotate("Integrate", (0.38, 0.75), fontsize=14)
@@ -89,6 +92,8 @@ plt.tight_layout()
 plt.show()
 ```
 
+![PDF](./img/pmf_pdf_cdf_59.png)
+
 두 그림의 관계를 눈으로 확인하라. 밀도가 가장 높은 0 부근에서 누적분포함수의 기울기가 가장 가파르다. 밀도가 0에 가까운 양 끝에서는 누적분포함수가 거의 평평하다.
 
 **예: 정규분포에서 구간의 확률.** $X \sim N(50, 10^2)$일 때 $P(40 \le X \le 60)$은 $F(60) - F(40)$이다.
@@ -105,6 +110,13 @@ print(f"P(40 ≤ X ≤ 60) = {prob * 100:.2f}%")
 # P(X ≤ 55)
 prob_55 = stats.norm(mean, std_dev).cdf(55)
 print(f"P(X ≤ 55) = {prob_55 * 100:.2f}%")
+```
+
+출력:
+
+```
+P(40 ≤ X ≤ 60) = 68.27%
+P(X ≤ 55) = 69.15%
 ```
 
 ## 3. 누적분포함수를 뒤집으면 분위수가 나온다
@@ -133,6 +145,13 @@ z_975 = stats.norm(0, 1).ppf(0.975)
 print(f"97.5th percentile of N(0,1): {z_975:.4f}")
 ```
 
+출력:
+
+```
+95th percentile of N(0,1): 1.6449
+97.5th percentile of N(0,1): 1.9600
+```
+
 $1.96$이라는 익숙한 수가 여기서 나온다. 8장의 95% 신뢰구간에 등장하는 그 값이다.
 
 ```python
@@ -144,13 +163,16 @@ fig, ax = plt.subplots(figsize=(12, 3))
 ax.set_xlim(-3, 3)
 ax.set_ylim(-0.2, 1.1)
 
-# CDF curve
+# CDF 곡선
 x = np.linspace(-3, 3, 100)
 ax.plot(x, stats.norm().cdf(x), label='CDF')
 
-# PPF demonstration at 0.975
+# CDF와 PPF는 서로 역함수다.
+#   CDF: 값 z 를 넣으면 누적확률 u 가 나온다      (가로 -> 세로)
+#   PPF: 누적확률 u 를 넣으면 값 z 가 나온다      (세로 -> 가로)
+# 아래 두 점이 같은 (z, u) 쌍을 축마다 표시한 것이다.
 u = 0.975
-z = stats.norm().ppf(u)
+z = stats.norm().ppf(u)      # 표준정규분포의 97.5 백분위수. 그 유명한 1.96이다.
 
 ax.plot(0, u, 'or', markersize=8)
 ax.plot(z, 0, 'or', markersize=8)
@@ -165,6 +187,8 @@ ax.spines['bottom'].set_position('zero')
 ax.legend(fontsize=14)
 plt.show()
 ```
+
+![확률질량함수, 확률밀도함수, 누적분포함수](./img/pmf_pdf_cdf_138.png)
 
 세로축에서 출발해 곡선을 만나 가로축으로 내려오는 것이 분위수함수, 그 반대가 누적분포함수다.
 
@@ -185,16 +209,24 @@ plt.show()
 import scipy.stats as stats
 import matplotlib.pyplot as plt
 
+# 역변환 표집: 균등난수만 있으면 어떤 분포든 만들어 낼 수 있다.
+# 1단계 — 0과 1 사이 균등난수를 뽑는다. 이것이 "누적확률"에 해당한다.
 u = stats.uniform().rvs(10_000)
+
+# 2단계 — 그 누적확률에 대응하는 값을 PPF로 되찾는다.
+# U ~ Uniform(0,1) 이면 F^{-1}(U) 는 정확히 F를 분포함수로 갖는다.
 z = stats.norm().ppf(u)
 
 plt.figure(figsize=(12, 3))
 plt.hist(z, bins=100, density=True, alpha=0.7, label='Inverse Transform Samples')
 x = np.linspace(-4, 4, 200)
+# 만들어 낸 표본의 히스토그램이 참 정규 밀도와 겹치는지 확인한다
 plt.plot(x, stats.norm().pdf(x), 'r--', lw=2, label='N(0,1) PDF')
 plt.legend()
 plt.show()
 ```
+
+![확률질량함수, 확률밀도함수, 누적분포함수](./img/pmf_pdf_cdf_184.png)
 
 **자료에서 추정하기.** 실무에서는 참 분포를 모르므로 자료에서 추정한다. 히스토그램이 확률밀도함수의 추정값이고, 경험적 누적분포함수가 누적분포함수의 추정값이다. 2장의 탐색적 자료분석에서 다시 만난다.
 
@@ -204,18 +236,20 @@ import numpy as np
 import scipy.stats as stats
 
 np.random.seed(42)
-data = stats.norm.rvs(size=200)
+data = stats.norm.rvs(size=200)      # 표준정규에서 200개
 
 fig, ax = plt.subplots(figsize=(12, 4))
 
-# Empirical PDF (histogram)
+# 경험적 PDF: 히스토그램이 밀도함수의 표본 버전이다
 counts, bin_edges, _ = ax.hist(data, bins=20, density=True, alpha=0.6, label="Empirical PDF")
 
-# Empirical CDF
+# 경험적 CDF: 히스토그램의 도수를 왼쪽부터 누적하면 된다.
+# "PDF를 적분하면 CDF"라는 관계를 이산 버전으로 실행한 것이다.
 empirical_cdf = np.cumsum(counts) / np.sum(counts)
+# 계단으로 그린다. 경험적 분포함수는 본래 계단함수이기 때문이다.
 ax.step(bin_edges[1:], empirical_cdf, where='mid', label="Empirical CDF", lw=2)
 
-# Theoretical CDF
+# 이론적 CDF를 겹쳐 표본이 모집단을 얼마나 잘 따라가는지 본다
 ax.plot(bin_edges, stats.norm.cdf(bin_edges), 'r', lw=2, label="Theoretical CDF")
 
 ax.legend()

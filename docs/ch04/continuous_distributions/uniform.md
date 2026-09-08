@@ -128,15 +128,21 @@ import numpy as np
 from scipy import stats
 
 a, b = 2, 8
+# 구간 바깥까지 그려야 "밖에서는 0"이라는 사실이 그림에 드러난다
 x = np.linspace(a - 1, b + 1, 300)
 
 fig, ax = plt.subplots(figsize=(12, 3))
+# scale은 폭 b-a 이지 b가 아니다(loc=2, scale=6 이 [2, 8]을 뜻한다).
+# PDF는 구간 안에서 1/(b-a) = 1/6 로 평평하다.
+# CDF는 그 평평한 값을 적분한 것이므로 **기울기 1/6 의 직선**이 된다.
 ax.plot(x, stats.uniform(loc=a, scale=b-a).pdf(x), label='PDF', lw=2)
 ax.plot(x, stats.uniform(loc=a, scale=b-a).cdf(x), label='CDF', lw=2)
 ax.spines[['top', 'right']].set_visible(False)
 ax.legend()
 plt.show()
 ```
+
+![Uniform 분포](./img/uniform_125.png)
 
 ### 표본추출과 히스토그램
 
@@ -150,6 +156,8 @@ a, b = 2, 8
 samples = stats.uniform(loc=a, scale=b-a).rvs(50_000)
 
 fig, ax = plt.subplots(figsize=(12, 3))
+# 5만 개를 60개 구간에 넣으면 구간마다 평균 833개다.
+# 막대 높이가 들쭉날쭉한 것은 잡음이며, 표본을 늘리면 평평해진다.
 ax.hist(samples, bins=60, density=True, alpha=0.7, label='Samples')
 x = np.linspace(a - 1, b + 1, 300)
 ax.plot(x, stats.uniform(loc=a, scale=b-a).pdf(x), 'r-', lw=2, label='PDF')
@@ -157,6 +165,8 @@ ax.spines[['top', 'right']].set_visible(False)
 ax.legend()
 plt.show()
 ```
+
+![Uniform 분포](./img/uniform_143.png)
 
 ### 역변환 표본추출
 
@@ -167,10 +177,14 @@ from scipy import stats
 
 np.random.seed(42)
 
-# Generate exponential samples via inverse transform
+# 균등난수로 지수분포 표본을 만든다(역변환 표집).
+# 지수분포의 CDF는 F(x) = 1 - e^{-lam x} 이므로 이를 x에 대해 풀면
+#   u = 1 - e^{-lam x}  ->  x = -ln(1-u) / lam
+# 이 역함수가 아래 한 줄이다. 균등난수만 있으면 어떤 분포든 만들 수 있다는
+# 사실이 몬테카를로 방법의 출발점이다.
 u = np.random.uniform(0, 1, 50_000)
 lam = 2.0
-x_exp = -np.log(1 - u) / lam  # F_inv(u) for Exponential(lambda)
+x_exp = -np.log(1 - u) / lam
 
 fig, ax = plt.subplots(figsize=(12, 3))
 ax.hist(x_exp, bins=100, density=True, alpha=0.7, label='Inverse transform samples')
@@ -180,6 +194,8 @@ ax.spines[['top', 'right']].set_visible(False)
 ax.legend()
 plt.show()
 ```
+
+![Uniform 분포](./img/uniform_163.png)
 
 ---
 

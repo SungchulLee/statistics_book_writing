@@ -61,6 +61,13 @@ rolls = np.random.randint(1, 7, size=100_000)
 print(f"Simulated mean = {rolls.mean():.4f}")
 ```
 
+출력:
+
+```
+E[fair die] = 3.5000
+Simulated mean = 3.5031
+```
+
 ## 2. 함수의 기댓값은 분포를 몰라도 된다
 
 $X$의 분포는 아는데 $X^2$이나 $e^X$의 기댓값이 필요한 경우가 자주 있다. 원칙대로라면 $Y = g(X)$의 분포를 먼저 유도해야 하는데, 그 과정이 대개 번거롭다. 다행히 건너뛸 수 있다.
@@ -138,19 +145,26 @@ $$
 import numpy as np
 
 def coupon_collector_simulation(n_coupons, n_trials=10_000):
-    """Simulate the coupon collector problem."""
+    """쿠폰 수집가 문제: n종을 모두 모으려면 몇 개를 사야 하는가."""
     np.random.seed(42)
     totals = []
     for _ in range(n_trials):
-        collected = set()
+        collected = set()      # set이라 중복은 저절로 걸러진다
         count = 0
+        # 종류를 다 모을 때까지 무작위로 하나씩 뽑는다
         while len(collected) < n_coupons:
             collected.add(np.random.randint(0, n_coupons))
             count += 1
         totals.append(count)
 
     simulated = np.mean(totals)
-    H_n = sum(1/k for k in range(1, n_coupons + 1))
+
+    # 이론값 유도: 이미 k종을 모았을 때 새 종이 나올 확률은 (n-k)/n 이므로
+    # 새 종 하나를 더 얻기까지 기대 횟수는 n/(n-k) 다.
+    # 이를 k = 0..n-1 로 모두 더하면
+    #   n/n + n/(n-1) + ... + n/1 = n * (1 + 1/2 + ... + 1/n) = n * H_n
+    # 기댓값의 선형성 덕분에 각 단계가 독립이 아니어도 그냥 더할 수 있다.
+    H_n = sum(1/k for k in range(1, n_coupons + 1))      # 조화수 H_n
     theoretical = n_coupons * H_n
 
     print(f"n = {n_coupons}")
@@ -160,6 +174,14 @@ def coupon_collector_simulation(n_coupons, n_trials=10_000):
 coupon_collector_simulation(50)
 ```
 
+출력:
+
+```
+n = 50
+Simulated E[T] = 225.5
+Theoretical E[T] = n·Hₙ = 225.0
+```
+
 종속인 변수에서도 선형성이 성립함을 직접 확인해 보자. $Y = X^2$은 $X$에 완전히 종속이다.
 
 ```python
@@ -167,11 +189,17 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 def linearity_demonstration():
-    """Demonstrate linearity of expectation with dependent variables."""
+    """종속인 두 변수에서도 기댓값의 선형성이 성립함을 확인한다.
+
+    E[X + Y] = E[X] + E[Y] 는 X와 Y가 **독립이 아니어도** 성립한다.
+    독립이 필요한 것은 곱의 기댓값 E[XY] = E[X]E[Y] 이나
+    분산의 덧셈 Var(X+Y) = Var(X) + Var(Y) 쪽이다.
+    이 구분이 확률론에서 가장 자주 헷갈리는 지점 중 하나다.
+    """
     np.random.seed(42)
     n_sim = 100_000
 
-    # X ~ Uniform(0,1), Y = X^2 (clearly dependent on X)
+    # X ~ Uniform(0,1), Y = X^2. X를 알면 Y가 완전히 결정되므로 극단적으로 종속이다.
     X = np.random.rand(n_sim)
     Y = X ** 2
 
@@ -182,6 +210,16 @@ def linearity_demonstration():
     print(f"E[X] + E[Y] = {X.mean() + Y.mean():.4f}")
 
 linearity_demonstration()
+```
+
+출력:
+
+```
+X and Y = X² are dependent, but linearity still holds:
+E[X] = 0.4995 (theoretical: 0.5)
+E[Y] = 0.3326 (theoretical: 0.3333)
+E[X + Y] = 0.8321
+E[X] + E[Y] = 0.8321
 ```
 
 ## 연습문제

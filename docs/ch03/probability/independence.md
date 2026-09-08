@@ -55,11 +55,18 @@ import numpy as np
 from itertools import product
 
 def check_independence(sample_space, prob, event_A, event_B, labels=("A", "B")):
-    """Check whether two events are independent."""
+    """두 사건이 독립인지 정의대로 확인한다.
+
+    prob 는 {결과: 확률} 사전이고, 사건은 결과들의 집합이다.
+    사건의 확률 = 그 사건에 속한 결과들의 확률의 합.
+    """
     p_A = sum(prob[s] for s in event_A)
     p_B = sum(prob[s] for s in event_B)
+    # event_A & event_B 는 집합의 교집합, 즉 두 사건이 동시에 일어난 결과들이다
     p_AB = sum(prob[s] for s in event_A & event_B)
 
+    # 독립의 정의: P(A ∩ B) = P(A)P(B).
+    # 부동소수점 비교이므로 == 대신 isclose 를 쓴다.
     independent = np.isclose(p_AB, p_A * p_B)
 
     print(f"P({labels[0]}) = {p_A:.4f}")
@@ -68,18 +75,38 @@ def check_independence(sample_space, prob, event_A, event_B, labels=("A", "B")):
     print(f"P({labels[0]}) × P({labels[1]}) = {p_A * p_B:.4f}")
     print(f"Independent: {independent}\n")
 
-# Die roll example
+# 예 1: 주사위 한 번. "짝수"와 "3 이하"는 독립인가?
+# 얼핏 무관해 보이지만 확인해 봐야 안다.
+#   P(짝수) = 3/6, P(3 이하) = 3/6, P(둘 다) = P({2}) = 1/6
+#   1/6 vs (1/2)(1/2) = 1/4  ->  다르므로 종속이다.
 outcomes = {i: 1/6 for i in range(1, 7)}
-A = {2, 4, 6}       # even
-B = {1, 2, 3}       # ≤ 3
+A = {2, 4, 6}       # 짝수
+B = {1, 2, 3}       # 3 이하
 check_independence(outcomes, outcomes, A, B, ("Even", "≤3"))
 
-# Two coin flips
+# 예 2: 동전 두 번. 첫 번째가 앞면인 사건과 두 번째가 앞면인 사건.
+# product로 표본공간 HH, HT, TH, TT 를 만들고 각각 확률 1/4을 준다.
 flips = list(product(['H', 'T'], repeat=2))
 prob = {f: 0.25 for f in flips}
 A = {f for f in flips if f[0] == 'H'}
 B = {f for f in flips if f[1] == 'H'}
 check_independence(flips, prob, A, B, ("1st=H", "2nd=H"))
+```
+
+출력:
+
+```
+P(Even) = 0.5000
+P(≤3) = 0.5000
+P(Even ∩ ≤3) = 0.1667
+P(Even) × P(≤3) = 0.2500
+Independent: False
+
+P(1st=H) = 0.5000
+P(2nd=H) = 0.5000
+P(1st=H ∩ 2nd=H) = 0.2500
+P(1st=H) × P(2nd=H) = 0.2500
+Independent: True
 ```
 
 ## 2. 독립과 배반은 정반대다
@@ -141,20 +168,34 @@ $$
 import numpy as np
 
 def simulate_independence(n_simulations=200_000):
-    """Verify independence of coin flips by simulation."""
+    """동전 두 번 던지기가 독립임을 세어서 확인한다."""
     np.random.seed(42)
-    flip1 = np.random.randint(0, 2, size=n_simulations)  # 0=T, 1=H
+    flip1 = np.random.randint(0, 2, size=n_simulations)  # 0=뒷면, 1=앞면
     flip2 = np.random.randint(0, 2, size=n_simulations)
 
+    # 0/1 배열의 평균이 곧 "1이 나온 비율" = P(앞면) 이다
     p_A = flip1.mean()
     p_B = flip2.mean()
+
+    # 둘 다 앞면인 비율. 이것이 결합확률 P(A ∩ B) 다.
     p_AB = ((flip1 == 1) & (flip2 == 1)).mean()
+
+    # 독립의 정의는 P(A ∩ B) = P(A)P(B) 다.
+    # 아래 출력에서 마지막 두 줄이 같은 값인지 보면 된다.
 
     print(f"P(H₁) = {p_A:.4f},  P(H₂) = {p_B:.4f}")
     print(f"P(H₁ ∩ H₂) = {p_AB:.4f}")
     print(f"P(H₁) × P(H₂) = {p_A * p_B:.4f}")
 
 simulate_independence()
+```
+
+출력:
+
+```
+P(H₁) = 0.4996,  P(H₂) = 0.5013
+P(H₁ ∩ H₂) = 0.2505
+P(H₁) × P(H₂) = 0.2505
 ```
 
 ## 연습문제

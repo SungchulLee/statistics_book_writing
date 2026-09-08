@@ -78,22 +78,50 @@ $$
 
 ```python
 import numpy as np
-from scipy.misc import derivative
 
 def mgf_normal(t, mu, sigma2):
-    """MGF of Normal(mu, sigma2)."""
+    """정규분포 N(mu, sigma2)의 적률생성함수.
+
+        M(t) = exp(mu*t + sigma2*t^2/2)
+    """
     return np.exp(mu * t + sigma2 * t**2 / 2)
 
-# Extract moments via numerical differentiation
-mu, sigma2 = 3.0, 4.0
 
-E_X = derivative(lambda t: mgf_normal(t, mu, sigma2), 0, n=1, dx=1e-6)
-E_X2 = derivative(lambda t: mgf_normal(t, mu, sigma2), 0, n=2, dx=1e-6)
+def d1(f, x, h=1e-4):
+    """중심차분으로 1계 도함수를 근사한다:  (f(x+h) - f(x-h)) / (2h)"""
+    return (f(x + h) - f(x - h)) / (2 * h)
+
+
+def d2(f, x, h=1e-3):
+    """중심차분으로 2계 도함수를 근사한다:  (f(x+h) - 2f(x) + f(x-h)) / h^2
+
+    h를 1계보다 크게 잡은 이유가 있다. 2계 차분은 h^2 으로 나누므로
+    h가 너무 작으면 분자의 반올림 오차가 크게 증폭된다.
+    """
+    return (f(x + h) - 2 * f(x) + f(x - h)) / h**2
+
+
+# "적률생성함수"라는 이름 그대로, t=0 에서 k번 미분하면 k번째 적률이 나온다.
+#   M'(0)  = E[X]
+#   M''(0) = E[X^2]
+mu, sigma2 = 3.0, 4.0
+M = lambda t: mgf_normal(t, mu, sigma2)
+
+E_X = d1(M, 0.0)
+E_X2 = d2(M, 0.0)
 Var_X = E_X2 - E_X**2
 
 print(f"E[X] = {E_X:.4f} (theoretical: {mu})")
 print(f"E[X²] = {E_X2:.4f} (theoretical: {sigma2 + mu**2})")
 print(f"Var(X) = {Var_X:.4f} (theoretical: {sigma2})")
+```
+
+출력:
+
+```
+E[X] = 3.0000 (theoretical: 3.0)
+E[X²] = 13.0000 (theoretical: 13.0)
+Var(X) = 4.0000 (theoretical: 4.0)
 ```
 
 ## 2. 적률생성함수가 같으면 분포가 같다
@@ -176,23 +204,30 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 def plot_mgf_comparison():
-    """Plot MGFs of several distributions."""
+    """분포 넷의 적률생성함수를 한 그림에 겹쳐 그린다.
+
+    네 곡선이 모두 t=0 에서 1을 지난다는 점에 주목하라.
+    M(0) = E[e^0] = E[1] = 1 이므로 어떤 분포든 반드시 그렇다.
+    그리고 t=0 에서의 기울기가 곧 그 분포의 평균이다.
+    """
     t = np.linspace(-1.5, 1.5, 300)
 
     fig, ax = plt.subplots(figsize=(12, 4))
 
-    # Normal(0, 1)
+    # 정규분포 N(0,1):  M(t) = exp(t^2/2). 모든 t에서 유한하다.
     ax.plot(t, np.exp(t**2 / 2), label='N(0, 1)', lw=2)
 
-    # Exponential(1)
+    # 지수분포 Exp(1):  M(t) = 1/(1-t).  t < 1 에서만 존재한다.
+    # 꼬리가 지수적으로 감소하는 속도보다 e^{tx} 가 빨리 커지면 적분이 발산하기 때문이다.
+    # 그래서 t >= 1 인 부분을 아예 잘라 내고 그린다.
     t_exp = t[t < 1]
     ax.plot(t_exp, 1 / (1 - t_exp), label='Exp(1)', lw=2)
 
-    # Poisson(3)
+    # 포아송(3):  M(t) = exp(lambda*(e^t - 1))
     lam = 3
     ax.plot(t, np.exp(lam * (np.exp(t) - 1)), label='Poisson(3)', lw=2)
 
-    # Bernoulli(0.5)
+    # 베르누이(0.5):  M(t) = 1 - p + p*e^t.  값이 둘뿐이라 가장 단순한 형태다.
     p = 0.5
     ax.plot(t, 1 - p + p * np.exp(t), label='Bernoulli(0.5)', lw=2)
 
@@ -208,13 +243,20 @@ def plot_mgf_comparison():
 plot_mgf_comparison()
 ```
 
+![Moment Generating Functions](./img/mgf_174.png)
+
 모든 곡선이 $t = 0$에서 값 1을 지난다는 점에 주목하라. $M_X(0) = E[e^0] = 1$이므로 언제나 그렇다. 그 점에서의 기울기가 평균이다.
 
 ```python
 import numpy as np
 
 def verify_sum_of_normals(n_simulations=100_000):
-    """Verify that sum of independent normals is normal via simulation."""
+    """독립인 정규분포의 합이 다시 정규분포임을 모의실험으로 확인한다.
+
+    적률생성함수로 증명한 결과를 눈으로 확인하는 것이다.
+    MGF가 곱해지면 지수의 어깨가 더해지므로
+    평균은 mu1+mu2, 분산은 sigma1^2+sigma2^2 이 된다.
+    """
     np.random.seed(42)
     mu1, sigma1 = 2, 3
     mu2, sigma2 = 5, 4
@@ -223,10 +265,20 @@ def verify_sum_of_normals(n_simulations=100_000):
     X2 = np.random.normal(mu2, sigma2, n_simulations)
     S = X1 + X2
 
+    # 분산은 더해지지만 **표준편차는 더해지지 않는다**는 점에 주의하라.
+    # sqrt(3^2 + 4^2) = 5 이지 3 + 4 = 7 이 아니다.
+
     print(f"E[X1+X2] = {S.mean():.4f} (theoretical: {mu1 + mu2})")
     print(f"Var(X1+X2) = {S.var():.4f} (theoretical: {sigma1**2 + sigma2**2})")
 
 verify_sum_of_normals()
+```
+
+출력:
+
+```
+E[X1+X2] = 7.0068 (theoretical: 7)
+Var(X1+X2) = 25.1339 (theoretical: 25)
 ```
 
 ## 연습문제

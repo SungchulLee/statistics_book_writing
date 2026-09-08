@@ -64,13 +64,18 @@ import matplotlib.pyplot as plt
 
 np.random.seed(42)
 
-# Simulate die rolls and track the running average
+# 주사위를 1만 번 굴리고 "여태까지의 평균"을 매 시점 기록한다.
 n_rolls = 10_000
 rolls = np.random.randint(1, 7, size=n_rolls)
+
+# cumsum(누적합)을 1, 2, 3, ... 로 나누면 각 시점까지의 평균이 된다.
+# running_avg[k] = 처음 k+1번의 평균
+# 반복문 없이 한 줄로 1만 개의 평균을 얻는 요령이다.
 running_avg = np.cumsum(rolls) / np.arange(1, n_rolls + 1)
 
 fig, ax = plt.subplots(figsize=(12, 4))
 ax.plot(running_avg, alpha=0.8, label='Running Average')
+# 참 기댓값 (1+2+3+4+5+6)/6 = 3.5. 큰수의 법칙은 곡선이 이 선에 붙는다고 말한다.
 ax.axhline(y=3.5, color='r', linestyle='--', label='E[X] = 3.5')
 ax.set_xlabel('Number of Rolls')
 ax.set_ylabel('Sample Mean')
@@ -79,6 +84,8 @@ ax.legend()
 ax.spines[['top', 'right']].set_visible(False)
 plt.show()
 ```
+
+![Law of Large Numbers: Fair Die](./img/lln_61.png)
 
 초반에는 크게 출렁이다가 점차 3.5에 붙는다. 출렁임의 폭이 $1/\sqrt n$으로 줄어드는 것이 눈에 보인다.
 

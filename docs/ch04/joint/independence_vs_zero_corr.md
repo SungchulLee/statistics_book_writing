@@ -157,11 +157,15 @@ import matplotlib.pyplot as plt
 np.random.seed(42)
 n = 100_000
 X = np.random.normal(0, 1, n)
-Y = X**2
+Y = X**2        # X만 알면 Y가 완전히 결정된다. 이보다 강한 종속은 없다.
 
+# 그런데 상관계수는 0이 나온다.
+# Cov(X, X^2) = E[X^3] - E[X]E[X^2] 인데, X가 0을 중심으로 대칭이면
+# E[X] = 0 이고 E[X^3] = 0 이므로 공분산이 정확히 0이다.
+# 상관은 **직선 관계만** 재기 때문에 포물선 관계를 전혀 보지 못한다.
 corr = np.corrcoef(X, Y)[0, 1]
-print(f"Correlation(X, X²) = {corr:.6f}")   # ≈ 0 (uncorrelated)
-print(f"But Y is completely determined by X!")  # dependent
+print(f"Correlation(X, X²) = {corr:.6f}")
+print(f"But Y is completely determined by X!")
 
 fig, ax = plt.subplots(figsize=(6, 4))
 ax.scatter(X[:2000], Y[:2000], s=2, alpha=0.3)
@@ -172,7 +176,18 @@ ax.spines[['top', 'right']].set_visible(False)
 plt.show()
 ```
 
+출력:
+
+```
+Correlation(X, X²) = 0.000122
+But Y is completely determined by X!
+```
+
+![독립성과 무상관성의 차이](./img/independence_vs_zero_corr_153.png)
+
 ### 독립성 검정: 결합분포와 주변분포의 곱 비교
+
+독립의 정의는 **모든** 사건 쌍에 대해 $P(A \cap B) = P(A)P(B)$가 성립하는 것이다. 따라서 사건을 하나 골라 확인하는 것으로는 독립을 증명할 수 없고, **반례를 하나 찾으면 종속을 증명할 수 있다.**
 
 ```python
 import numpy as np
@@ -182,16 +197,37 @@ n = 100_000
 X = np.random.normal(0, 1, n)
 Y = X**2
 
-# If independent: P(X>0, Y>1) = P(X>0) * P(Y>1)
-p_joint = np.mean((X > 0) & (Y > 1))
-p_x = np.mean(X > 0)
-p_y = np.mean(Y > 1)
 
-print(f"P(X>0, Y>1) = {p_joint:.4f}")
-print(f"P(X>0) × P(Y>1) = {p_x * p_y:.4f}")
-print(f"Equal? {np.isclose(p_joint, p_x * p_y, atol=0.01)}")
-print("→ Joint ≠ product of marginals → NOT independent")
+def check(name, A, B):
+    """P(A ∩ B) 와 P(A)P(B) 를 비교한다. 다르면 독립이 아니다."""
+    p_joint = np.mean(A & B)
+    p_prod = np.mean(A) * np.mean(B)
+    same = np.isclose(p_joint, p_prod, atol=0.01)
+    print(f"{name}\n  P(A∩B) = {p_joint:.4f},  P(A)P(B) = {p_prod:.4f}"
+          f"  ->  {'같다' if same else '다르다'}")
+
+
+# 사건을 잘못 고르면 종속인데도 통과한다.
+# X>0 과 X^2>1 은 X의 대칭성 때문에 우연히 곱셈 규칙을 만족한다.
+check("A: X>0,      B: Y>1", X > 0, Y > 1)
+
+# 반례를 제대로 고르면 곧바로 드러난다.
+# |X| < 0.5 이면 Y = X^2 < 0.25 이므로 Y > 1 일 수가 없다. 결합확률이 0이다.
+check("A: |X|<0.5,  B: Y>1", np.abs(X) < 0.5, Y > 1)
 ```
+
+출력:
+
+```
+A: X>0,      B: Y>1
+  P(A∩B) = 0.1599,  P(A)P(B) = 0.1596  ->  같다
+A: |X|<0.5,  B: Y>1
+  P(A∩B) = 0.0000,  P(A)P(B) = 0.1218  ->  다르다
+```
+
+**첫 번째 쌍이 통과했다고 독립인 것이 아니다.** 두 번째 쌍이 곱셈 규칙을 깨뜨리므로 $X$와 $Y$는 독립이 아니다. 반례 하나면 충분하다.
+
+이것이 상관계수만 보는 것의 위험과 같은 구조다. 상관은 사실상 "한 가지 방식으로만" 관계를 확인하는 것이고, 위의 첫 번째 검사도 한 가지 사건 쌍만 확인한 것이다. 어느 쪽이든 **통과했다는 사실은 아무것도 보장하지 않는다.**
 
 ### 결합정규일 때: 무상관 ↔ 독립
 
@@ -202,12 +238,15 @@ import matplotlib.pyplot as plt
 np.random.seed(42)
 n = 100_000
 
-# Correlated normals
+# 결합정규분포에서는 앞의 반례가 통하지 않는다.
+# 이 경우에만 "무상관 = 독립"이 성립하기 때문이다.
+# 주의: 두 변수가 **각각** 정규분포인 것으로는 부족하고,
+#       둘의 **결합분포**가 정규여야 한다.
 rho = 0.8
 cov = [[1, rho], [rho, 1]]
 corr_data = np.random.multivariate_normal([0, 0], cov, n)
 
-# Uncorrelated normals (independent)
+# rho = 0 인 결합정규. 무상관이면서 동시에 독립이다.
 indep_data = np.random.multivariate_normal([0, 0], [[1, 0], [0, 1]], n)
 
 fig, axes = plt.subplots(1, 2, figsize=(12, 4))
@@ -232,6 +271,16 @@ print(f"Jointly normal, ρ=0:")
 print(f"  P(X>1,Y>1) = {p_joint:.4f}, P(X>1)P(Y>1) = {p_prod:.4f}")
 print(f"  Independent? {np.isclose(p_joint, p_prod, atol=0.005)}")
 ```
+
+출력:
+
+```
+Jointly normal, ρ=0:
+  P(X>1,Y>1) = 0.0255, P(X>1)P(Y>1) = 0.0253
+  Independent? True
+```
+
+![독립성과 무상관성의 차이](./img/independence_vs_zero_corr_198.png)
 
 ---
 

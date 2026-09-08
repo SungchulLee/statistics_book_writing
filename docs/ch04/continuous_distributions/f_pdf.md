@@ -30,14 +30,19 @@ import numpy as np
 import matplotlib.pyplot as plt
 import scipy.stats as stats
 
+# F 분포는 자유도가 둘이다. 두 카이제곱을 각자의 자유도로 나눈 뒤의 비율이다.
+#   dfn = 분자 자유도, dfd = 분모 자유도
 d1, d2 = 5, 12
 f_dist = stats.f(dfn=d1, dfd=d2)
 
 x = np.linspace(f_dist.ppf(1e-6), f_dist.ppf(1 - 1e-6), 600)
 y = f_dist.pdf(x)
 
+# 평균은 분모 자유도만으로 정해지며 d2 > 2 일 때만 존재한다.
+# d2가 작으면 꼬리가 매우 무거워 평균이 아예 없다.
 mean = d2 / (d2 - 2)
 mode = ((d1 - 2) / d1) * (d2 / (d2 + 2))
+# 평균이 최빈값보다 오른쪽에 있다 -> 오른쪽으로 치우친 분포다.
 
 fig, ax = plt.subplots(figsize=(12, 3))
 ax.plot(x, y, lw=2, label=f"F PDF (d1={d1}, d2={d2})")
@@ -51,6 +56,8 @@ ax.grid(True, linestyle=":")
 plt.tight_layout()
 plt.show()
 ```
+
+![F Distribution — PDF](./img/f_pdf_28.png)
 
 ---
 

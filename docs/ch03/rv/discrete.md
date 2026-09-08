@@ -114,8 +114,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 def plot_pmf(values, probabilities, title="PMF"):
-    """Plot the probability mass function."""
+    """확률질량함수를 막대그림으로 그린다.
+
+    이산확률변수에서는 각 값에 확률이 "덩어리"로 붙어 있으므로
+    막대의 높이가 곧 그 값이 나올 확률이다.
+    (연속확률변수의 밀도함수와 달리 높이를 그대로 확률로 읽을 수 있다.)
+    """
     fig, ax = plt.subplots(figsize=(12, 3))
+    # width=0.4 로 막대 사이를 띄운다. 값 사이에 아무것도 없음을 나타내기 위함이다.
     ax.bar(values, probabilities, width=0.4, alpha=0.7, edgecolor='black')
     ax.set_xlabel('x')
     ax.set_ylabel('P(X = x)')
@@ -125,23 +131,32 @@ def plot_pmf(values, probabilities, title="PMF"):
     plt.tight_layout()
     plt.show()
 
-# Fair die PMF
+# 예 1: 공정한 주사위. 여섯 값의 확률이 모두 같은 균등 PMF다.
 values = [1, 2, 3, 4, 5, 6]
 probs = [1/6] * 6
 plot_pmf(values, probs, "PMF of a Fair Die")
 
-# Coin flip PMF (3 flips, counting heads)
+# 예 2: 동전 3번 던져 앞면의 개수. 이항분포 B(3, 0.5)다.
+# P(X=k) = C(3,k) * 0.5^k * 0.5^(3-k). 가운데(1, 2)가 높은 대칭 모양이 된다.
 from math import comb
 n = 3
 values = list(range(n + 1))
 probs = [comb(n, k) * (0.5**k) * (0.5**(n-k)) for k in values]
 plot_pmf(values, probs, "PMF: Number of Heads in 3 Coin Flips")
 
-# Baseball cards PMF
+# 예 3: 원하는 카드가 나올 때까지 산 팩 수. 균등하지도 대칭이지도 않다.
+# 확률의 합이 0.2+0.16+0.128+0.512 = 1 이 되는지 확인해 보라.
+# PMF가 되려면 (i) 모든 값이 0 이상, (ii) 합이 정확히 1 이어야 한다.
 values = [1, 2, 3, 4]
 probs = [0.2, 0.16, 0.128, 0.512]
 plot_pmf(values, probs, "PMF: Baseball Card Packs Purchased")
 ```
+
+![이산확률변수](./img/discrete_112_0.png)
+
+![이산확률변수](./img/discrete_112_1.png)
+
+![이산확률변수](./img/discrete_112_2.png)
 
 막대의 높이가 곧 벽돌의 무게다. 세 그림 모두 막대 높이의 합이 1이다.
 

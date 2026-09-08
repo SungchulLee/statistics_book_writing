@@ -116,21 +116,36 @@ $$
 import numpy as np
 
 def bayes_theorem(prior, likelihood, evidence):
-    """Apply Bayes' theorem."""
+    """베이즈 정리:  사후 = (가능도 x 사전) / 증거
+
+    P(H|E) = P(E|H) P(H) / P(E)
+    """
     posterior = (likelihood * prior) / evidence
     return posterior
 
-# Medical diagnosis example
-prior_disease = 0.01
-sensitivity = 0.95
-specificity = 0.90
-false_positive_rate = 1 - specificity
+# 의학 진단 예제
+prior_disease = 0.01         # 사전확률 P(질병) = 유병률 1%
+sensitivity = 0.95           # 가능도 P(양성|질병) = 95%
+specificity = 0.90           # 특이도 P(음성|건강) = 90%
+false_positive_rate = 1 - specificity     # P(양성|건강) = 10%
 
+# 분모(증거) P(양성)은 전확률의 법칙으로 구한다.
+# 두 경로 — 질병이면서 양성, 건강하면서 양성 — 를 더한다.
 p_positive = sensitivity * prior_disease + false_positive_rate * (1 - prior_disease)
+
+# 이 분모가 베이즈 정리의 핵심이다. 건강한 사람이 99%나 되므로
+# 위양성 10%가 만들어 내는 양성자 수가 진짜 환자보다 훨씬 많아진다.
 posterior = bayes_theorem(prior_disease, sensitivity, p_positive)
 
 print(f"P(disease | positive) = {posterior:.4f}")
 print(f"Despite a 95% sensitive test, only {posterior*100:.1f}% of positives truly have the disease.")
+```
+
+출력:
+
+```
+P(disease | positive) = 0.0876
+Despite a 95% sensitive test, only 8.8% of positives truly have the disease.
 ```
 
 ```python
@@ -138,14 +153,21 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 def bayes_update_visualization():
-    """Visualize how the posterior changes with prevalence."""
-    prevalences = np.linspace(0.001, 0.5, 200)
-    sensitivity = 0.95
+    """검사 성능은 그대로 두고 **유병률만** 바꿔 가며 사후확률을 그린다.
+
+    "같은 검사, 같은 양성 결과인데 사후확률이 왜 달라지는가"에 답하는 그림이다.
+    답은 분모에 있다. 유병률이 낮을수록 건강한 사람이 만들어 내는
+    위양성이 분모를 지배해 사후확률을 끌어내린다.
+    """
+    prevalences = np.linspace(0.001, 0.5, 200)   # 0.1%부터 50%까지
+    sensitivity = 0.95      # 검사 성능은 끝까지 고정
     specificity = 0.90
 
     posteriors = []
     for prev in prevalences:
+        # 분모: 전확률의 법칙
         p_pos = sensitivity * prev + (1 - specificity) * (1 - prev)
+        # 분자: 질병이면서 양성
         post = (sensitivity * prev) / p_pos
         posteriors.append(post)
 
@@ -154,6 +176,7 @@ def bayes_update_visualization():
     ax.set_xlabel('Prevalence (%)')
     ax.set_ylabel('P(Disease | Positive) (%)')
     ax.set_title("Bayes' Theorem: Posterior vs. Prevalence")
+    # 50% 기준선. 이 선을 넘어야 "양성이면 아플 가능성이 더 크다"고 말할 수 있다.
     ax.axhline(y=50, color='r', linestyle='--', alpha=0.5, label='50% threshold')
     ax.legend()
     ax.spines[['top', 'right']].set_visible(False)
@@ -162,6 +185,8 @@ def bayes_update_visualization():
 
 bayes_update_visualization()
 ```
+
+![Bayes](./img/bayes_136.png)
 
 곡선이 처음에 가파르게 오르는 것에 주목하라. 사후확률이 50%를 넘으려면 유병률이 상당히 높아야 한다. 검사 성능을 올리는 것보다 **검사 대상을 좁히는 것**이 효과적인 이유다.
 

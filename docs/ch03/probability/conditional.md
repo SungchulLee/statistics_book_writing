@@ -40,22 +40,37 @@ $$
 import numpy as np
 
 def conditional_probability_simulation(n_simulations=100_000):
-    """Simulate conditional probability with two dice."""
+    """주사위 두 개로 조건부확률을 모의실험한다.
+
+    조건부확률을 계산하는 대신 **직접 세어 본다.**
+    P(A|B) = (A와 B가 모두 일어난 횟수) / (B가 일어난 횟수)
+    라는 정의를 그대로 코드로 옮긴 것이다.
+    """
     np.random.seed(42)
 
+    # randint(1, 7)은 1 이상 7 미만, 즉 1~6을 뽑는다
     die1 = np.random.randint(1, 7, size=n_simulations)
     die2 = np.random.randint(1, 7, size=n_simulations)
     total = die1 + die2
 
-    # P(sum=8 | die1=3)
-    mask_B = die1 == 3
-    mask_A_and_B = (die1 == 3) & (total == 8)
+    # 여기가 조건부확률의 핵심이다. 표본공간을 "첫 주사위가 3인 시행"으로 좁힌다.
+    mask_B = die1 == 3                            # 조건 B가 성립한 시행들
+    mask_A_and_B = (die1 == 3) & (total == 8)     # 그중 A도 성립한 시행들
 
+    # 전체 10만이 아니라 **좁혀진 표본공간의 크기**로 나눈다.
+    # 이 한 줄이 P(A|B) = P(A∩B)/P(B) 를 실행한 것이다.
     p_conditional = mask_A_and_B.sum() / mask_B.sum()
     print(f"Simulated P(sum=8 | die1=3) = {p_conditional:.4f}")
     print(f"Theoretical P(sum=8 | die1=3) = {1/6:.4f}")
 
 conditional_probability_simulation()
+```
+
+출력:
+
+```
+Simulated P(sum=8 | die1=3) = 0.1705
+Theoretical P(sum=8 | die1=3) = 0.1667
 ```
 
 코드가 하는 일이 정의 그대로임에 주목하라. `mask_B`로 표본공간을 좁히고, 그 안에서 $A$가 일어난 비율을 센다.
@@ -135,25 +150,41 @@ $$
 import numpy as np
 
 def medical_test_simulation(n_people=1_000_000):
-    """Simulate the medical testing example using total probability."""
+    """전확률의 법칙을 100만 명 모의실험으로 확인한다."""
     np.random.seed(42)
 
-    prevalence = 0.01
-    sensitivity = 0.95
-    false_positive_rate = 0.10
+    prevalence = 0.01            # 유병률 P(질병) = 1%
+    sensitivity = 0.95           # 민감도 P(양성|질병) = 95%
+    false_positive_rate = 0.10   # 위양성률 P(양성|건강) = 10%
 
+    # 1단계: 100만 명 각자가 질병을 가졌는지 정한다(확률 1%)
     has_disease = np.random.rand(n_people) < prevalence
+
+    # 2단계: 검사 결과를 정한다. 여기서 확률이 사람에 따라 달라진다.
+    # np.where(조건, 참일 때, 거짓일 때) 로 두 경우를 한 번에 처리한다.
+    #   질병이 있으면 95% 확률로 양성
+    #   건강하면    10% 확률로 양성
     test_positive = np.where(
         has_disease,
         np.random.rand(n_people) < sensitivity,
         np.random.rand(n_people) < false_positive_rate
     )
 
+    # 전체 양성률. 전확률의 법칙이 예측하는 값과 맞는지 아래에서 비교한다.
+    #   P(양성) = P(양성|질병)P(질병) + P(양성|건강)P(건강)
+    #           = 0.95*0.01 + 0.10*0.99 = 0.1085
     p_positive = test_positive.mean()
     print(f"Simulated P(positive) = {p_positive:.4f}")
     print(f"Theoretical P(positive) = {0.1085:.4f}")
 
 medical_test_simulation()
+```
+
+출력:
+
+```
+Simulated P(positive) = 0.1085
+Theoretical P(positive) = 0.1085
 ```
 
 ## 연습문제

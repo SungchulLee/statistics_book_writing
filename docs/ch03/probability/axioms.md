@@ -74,6 +74,19 @@ loaded_die = [0.1, 0.1, 0.1, 0.1, 0.1, 0.5]
 verify_axioms(loaded_die)
 ```
 
+출력:
+
+```
+All axioms satisfied!
+  Total probability: 1.0000
+  Min probability:   0.1667
+  Max probability:   0.1667
+All axioms satisfied!
+  Total probability: 1.0000
+  Min probability:   0.1000
+  Max probability:   0.5000
+```
+
 찌그러진 주사위도 공리를 만족한다는 점에 주목하라. 공리는 확률이 **공정할 것**을 요구하지 않는다.
 
 ## 2. 세 줄에서 나머지가 따라 나온다

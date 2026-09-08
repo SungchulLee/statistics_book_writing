@@ -37,12 +37,36 @@ np.random.seed(42)
 N_REPS = 2000
 
 def sample_means(dist_rvs, sample_sizes, n_reps=N_REPS):
-    """For each sample size, draw n_reps samples and return their means."""
+    """표본 크기마다 n_reps개의 표본을 뽑아 각 표본평균을 모아 돌려준다.
+
+    dist_rvs 는 "크기 n을 받아 표본을 돌려주는 함수"다.
+    이렇게 함수를 인자로 받아 두면 균등·베르누이·감마 등
+    어떤 모집단에도 같은 코드를 쓸 수 있다.
+
+    돌려주는 results[n] 이 X-bar_n 의 표본분포 근사(2000개)다.
+    """
     results = {}
     for n in sample_sizes:
         means = np.array([dist_rvs(n).mean() for _ in range(n_reps)])
         results[n] = means
     return results
+
+
+# 균등분포 U(0,1)로 시험해 본다. 모평균 0.5, 모분산 1/12.
+# 중심극한정리는 X-bar_n 의 표준편차가 sigma/sqrt(n) 이라고 예측한다.
+demo = sample_means(lambda n: np.random.uniform(0, 1, n), [2, 10, 100])
+sigma = (1 / 12) ** 0.5
+for n, means in demo.items():
+    print(f"n = {n:>3}: 평균 {means.mean():.4f}  "
+          f"표준편차 {means.std():.4f}  (이론 {sigma / n**0.5:.4f})")
+```
+
+출력:
+
+```
+n =   2: 평균 0.4975  표준편차 0.2050  (이론 0.2041)
+n =  10: 평균 0.5022  표준편차 0.0911  (이론 0.0913)
+n = 100: 평균 0.5002  표준편차 0.0288  (이론 0.0289)
 ```
 
 `results[n]`의 각 항목이 $\bar X_n$의 한 실현값이다. 2000개를 그리면 표본분포의 근사가 된다.
@@ -58,6 +82,12 @@ $n$이 커질수록 $\bar X_n$의 표본분포는 모집단의 모양(평평함,
 ```python
 sample_sizes = [2, 10, 100]
 
+# 모양이 서로 전혀 다른 모집단 셋을 준비한다.
+# 각 항목은 표본을 뽑는 함수(rvs)와 모집단 밀도를 그릴 정보를 담는다.
+#   Uniform: 평평하다        (봉우리가 없음)
+#   Beta   : 왼쪽으로 치우침  (유계)
+#   Gamma  : 오른쪽으로 치우침 (유계가 아님)
+# 세 모집단이 이렇게 다른데도 표본평균은 모두 종 모양으로 간다는 것이 요점이다.
 distributions = {
     "Uniform(2, 8)": {
         "rvs": lambda n: np.random.uniform(2, 8, n),
@@ -80,13 +110,16 @@ distributions = {
 }
 
 n_dists = len(distributions)
+# 격자 구성: 열 = 모집단, 행 = (모집단 자체, n=2, n=10, n=100)
+# 세로로 내려가며 읽으면 "n이 커질수록 어떻게 변하는가"가 보이고,
+# 가로로 읽으면 "모집단이 달라도 결과가 같은가"가 보인다.
 n_rows = 1 + len(sample_sizes)
 fig, axes = plt.subplots(n_rows, n_dists, figsize=(6 * n_dists, 4 * n_rows))
 
 for col, (name, d) in enumerate(distributions.items()):
     c = d["color"]
 
-    # Row 0: population PDF
+    # 0행: 모집단의 밀도함수. 셋이 얼마나 다른지 먼저 확인한다.
     ax = axes[0, col]
     ax.plot(d["pop_x"], d["pop_pdf"](d["pop_x"]), lw=3, color=c)
     ax.fill_between(d["pop_x"], d["pop_pdf"](d["pop_x"]), alpha=0.3, color=c)
@@ -94,7 +127,8 @@ for col, (name, d) in enumerate(distributions.items()):
     if col == 0:
         ax.set_ylabel("Population PDF", fontsize=11)
 
-    # Rows 1–3: sampling distributions of the mean
+    # 1~3행: 표본평균의 표집분포.
+    # 앞서 정의한 sample_means 로 각 n마다 2000개의 표본평균을 얻는다.
     means_dict = sample_means(d["rvs"], sample_sizes)
     for row, n in enumerate(sample_sizes, start=1):
         ax = axes[row, col]
@@ -109,6 +143,8 @@ plt.suptitle("Central Limit Theorem: Sampling Distribution of x̄",
 plt.tight_layout()
 plt.show()
 ```
+
+![Central Limit Theorem: Sampling Distribution of x̄](./img/clt_visualization_58.png)
 
 그림은 $4 \times 3$ 격자다. 맨 윗줄이 모집단, 나머지 세 줄이 $n = 2, 10, 100$의 표본분포다. 줄을 따라 내려가며 읽으면 수렴이 보인다.
 

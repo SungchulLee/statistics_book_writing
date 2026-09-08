@@ -80,6 +80,16 @@ print(f"\nEvent (2 heads): {event_2_heads}")
 print(f"P(2 heads) = {len(event_2_heads)}/{len(sample_space)} = {len(event_2_heads)/len(sample_space):.4f}")
 ```
 
+출력:
+
+```
+Sample space size: 8
+Sample space: [('H', 'H', 'H'), ('H', 'H', 'T'), ('H', 'T', 'H'), ('H', 'T', 'T'), ('T', 'H', 'H'), ('T', 'H', 'T'), ('T', 'T', 'H'), ('T', 'T', 'T')]
+
+Event (2 heads): [('H', 'H', 'T'), ('H', 'T', 'H'), ('T', 'H', 'H')]
+P(2 heads) = 3/8 = 0.3750
+```
+
 코드가 하는 일이 정확히 정리 2다. 표본공간을 만들고, 사건에 해당하는 결과를 고르고, 개수를 센다.
 
 ## 3. 표본공간의 크기가 확률의 성격을 바꾼다

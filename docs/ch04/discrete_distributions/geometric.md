@@ -134,9 +134,14 @@ import numpy as np
 from scipy import stats
 
 p = 0.3
+# x가 1부터 시작한다는 점에 주의하라.
+# scipy의 geom은 "**첫 성공이 나온 시행 번호**"를 세는 판본이라 최솟값이 1이다.
+# (첫 성공 **이전의 실패 횟수**를 세는 판본은 0부터 시작한다. 교재마다 다르다.)
 x = np.arange(1, 20)
 
 fig, ax = plt.subplots(figsize=(12, 3))
+# PMF가 단조 감소한다. 성공은 빠를수록 확률이 높다.
+# k번째에 처음 성공하려면 k-1번 연속 실패해야 하므로 (1-p)^(k-1) * p 다.
 ax.bar(x - 0.15, stats.geom(p).pmf(x), width=0.3, label='PMF', alpha=0.7)
 ax.bar(x + 0.15, stats.geom(p).cdf(x), width=0.3, label='CDF', alpha=0.7)
 ax.set_xlabel('k (number of trials)')
@@ -146,6 +151,8 @@ ax.legend()
 plt.show()
 ```
 
+![Geometric 분포와 Negative Binomial 분포](./img/geometric_131.png)
+
 ### Negative Binomial 분포
 
 ```python
@@ -153,17 +160,24 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy import stats
 
-# scipy parameterizes by number of failures: nbinom(r, p) gives P(Y=k) for k failures
+# scipy의 음이항분포는 **실패 횟수**를 세는 판본이다.
+# nbinom(r, p).pmf(k) = "r번째 성공이 나오기까지 실패가 k번 일어날 확률"
+# 따라서 총 시행 횟수는 k + r 이고, x가 0부터 시작한다.
+# 기하분포는 r = 1 인 특수한 경우다.
 r, p = 5, 0.4
 x = np.arange(0, 30)
 
 fig, ax = plt.subplots(figsize=(12, 3))
+# 기하분포와 달리 봉우리가 생긴다. 실패가 너무 적어도(운이 좋아도)
+# 너무 많아도 확률이 낮기 때문이다.
 ax.bar(x, stats.nbinom(r, p).pmf(x), alpha=0.7, label=f'NegBin(r={r}, p={p})')
 ax.set_xlabel('k (number of failures before r-th success)')
 ax.spines[['top', 'right']].set_visible(False)
 ax.legend()
 plt.show()
 ```
+
+![Geometric 분포와 Negative Binomial 분포](./img/geometric_151.png)
 
 ### 무기억성 확인하기
 
@@ -176,11 +190,23 @@ p = 0.3
 samples = stats.geom(p).rvs(1_000_000)
 
 s = 3
-# P(X > s + t | X > s) vs P(X > t)
+# 무기억성: P(X > s + t | X > s) = P(X > t)
+# "이미 3번 실패했다"는 사실이 앞으로 몇 번 더 걸릴지에 아무 정보도 주지 않는다.
+# 동전은 자기가 이미 몇 번 뒷면이 나왔는지 기억하지 못한다.
 for t in [1, 3, 5]:
+    # samples[samples > s] 로 "3번 넘게 걸린 시행들"만 골라 낸다(조건 걸기).
+    # 그 안에서 s+t 를 넘는 비율이 조건부확률이다.
     conditional = np.mean(samples[samples > s] > s + t)
     unconditional = np.mean(samples > t)
     print(f"P(X>{s}+{t}|X>{s}) = {conditional:.4f},  P(X>{t}) = {unconditional:.4f}")
+```
+
+출력:
+
+```
+P(X>3+1|X>3) = 0.6996,  P(X>1) = 0.7005
+P(X>3+3|X>3) = 0.3430,  P(X>3) = 0.3433
+P(X>3+5|X>3) = 0.1690,  P(X>5) = 0.1681
 ```
 
 ### 모수에 따른 비교
@@ -191,6 +217,8 @@ import numpy as np
 from scipy import stats
 
 fig, ax = plt.subplots(figsize=(12, 3))
+# p가 클수록 첫 성공이 빨리 오므로 확률이 앞쪽에 몰리고 더 가파르게 떨어진다.
+# 평균은 1/p 이므로 p=0.2면 평균 5번, p=0.6이면 평균 1.67번이다.
 for p in [0.2, 0.4, 0.6]:
     x = np.arange(1, 25)
     ax.plot(x, stats.geom(p).pmf(x), 'o-', label=f'Geometric(p={p})', markersize=4)
@@ -199,6 +227,8 @@ ax.set_xlabel('k')
 ax.legend()
 plt.show()
 ```
+
+![Geometric 분포와 Negative Binomial 분포](./img/geometric_188.png)
 
 ---
 

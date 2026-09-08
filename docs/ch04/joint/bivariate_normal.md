@@ -32,6 +32,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import multivariate_normal
 
+# 공분산행렬 [[var_X, cov], [cov, var_Y]] 를 네 가지로 바꿔 가며 본다.
+# 분산이 4일 때 rho = cov/4 이므로 cov = 2.8 이면 rho = 0.7 이다.
+#   1) 비대각이 0     -> 독립. 등고선이 원이 된다.
+#   2) 비대각이 양수  -> 등고선이 우상향 타원으로 기운다.
+#   3) 비대각이 음수  -> 좌상향으로 기운다.
+#   4) 대각이 서로 다름 -> 기울지는 않지만 세로로 늘어난 타원이 된다.
+# 4번이 중요하다. **타원이 늘어난 것과 기운 것은 다른 이야기다.**
 configs = [
     {"label": "Independent (ρ=0)", "mu": [0, 0], "cov": [[4, 0], [0, 4]]},
     {"label": "Positive corr (ρ=0.7)", "mu": [0, 0], "cov": [[4, 2.8], [2.8, 4]]},
@@ -40,13 +47,17 @@ configs = [
 ]
 
 x = np.linspace(-10, 10, 200)
+# meshgrid: 1차원 격자 두 개를 2차원 좌표판으로 펼친다.
+# X[i,j], Y[i,j] 가 (i,j) 칸의 좌표가 된다.
 X, Y = np.meshgrid(x, x)
 
 fig = plt.figure(figsize=(18, 12))
 for i, cfg in enumerate(configs):
+    # dstack으로 (X, Y)를 마지막 축에 쌓아 (200, 200, 2) 모양을 만든다.
+    # scipy의 다변량 pdf는 "마지막 축이 좌표"인 배열을 받는다.
     pos = np.dstack((X, Y))
     rv = multivariate_normal(mean=cfg["mu"], cov=cfg["cov"])
-    Z = rv.pdf(pos)
+    Z = rv.pdf(pos)      # 각 격자점에서의 밀도. (200, 200) 모양
 
     # 3D surface
     ax = fig.add_subplot(2, 4, i + 1, projection="3d")
@@ -64,6 +75,8 @@ plt.suptitle("Bivariate Normal: 3D Surface (top) and Contour (bottom)")
 plt.tight_layout()
 plt.show()
 ```
+
+![Bivariate Normal: 3D Surface (top) and Contour (bottom)](./img/bivariate_normal_30.png)
 
 ---
 

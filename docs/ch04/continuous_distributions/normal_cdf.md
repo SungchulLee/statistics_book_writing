@@ -30,13 +30,17 @@ y_pdf = dist.pdf(x)
 
 fig, ax_cdf = plt.subplots(figsize=(12, 3))
 
-# CDF on left axis
+# CDF는 왼쪽 축(0~1). PDF는 오른쪽 축(밀도).
+# 두 함수의 눈금 규모가 달라 한 축에 그리면 한쪽이 납작해지므로 축을 나눈다.
+# 이 절에서는 두 축의 관계가 고정되어 있어(CDF는 PDF의 적분) 안전한 사용이다.
 ax_cdf.plot(x, y_cdf, lw=2, label="CDF P(X ≤ x)")
 ax_cdf.set_xlabel("x")
 ax_cdf.set_ylabel("P(X ≤ x)")
 ax_cdf.set_ylim(-0.02, 1.02)
 
-# Reference points
+# 기준점 세 개를 표시한다: 평균에서 -1, 0, +1 표준편차.
+# CDF 값이 각각 약 0.159, 0.500, 0.841 이 나온다.
+# 0.841 - 0.159 = 0.682 가 곧 "68% 규칙"이다.
 for xv in [mu - sigma, mu, mu + sigma]:
     yv = dist.cdf(xv)
     ax_cdf.axvline(xv, linestyle='--', color='gray', alpha=0.7)

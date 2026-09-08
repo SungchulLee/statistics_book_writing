@@ -162,7 +162,7 @@ $$
 import numpy as np
 import pandas as pd
 
-# Joint PMF as a 2D array
+# 결합 PMF를 2차원 배열로 적는다. pmf[i, j] = P(X=i, Y=j) 이고 전체 합이 1이다.
 pmf = np.array([
     [0.10, 0.15, 0.05],
     [0.10, 0.25, 0.10],
@@ -170,9 +170,24 @@ pmf = np.array([
 ])
 
 df = pd.DataFrame(pmf, index=['X=0', 'X=1', 'X=2'], columns=['Y=0', 'Y=1', 'Y=2'])
+
+# 주변분포는 표의 "가장자리(margin)"에 놓인다. 이름의 유래가 그것이다.
+#   행 방향으로 더하면(axis=1) Y를 지워 P(X=x)가 남고,
+#   열 방향으로 더하면(axis=0) X를 지워 P(Y=y)가 남는다.
+# 이것이 주변화 p(x) = sum_y p(x,y) 를 표에서 실행한 것이다.
 df['P(X=x)'] = pmf.sum(axis=1)
-df.loc['P(Y=y)'] = pmf.sum(axis=0).tolist() + [1.0]
+df.loc['P(Y=y)'] = pmf.sum(axis=0).tolist() + [1.0]   # 맨 끝 1.0은 전체 합
 print(df)
+```
+
+출력:
+
+```
+         Y=0   Y=1   Y=2  P(X=x)
+X=0     0.10  0.15  0.05    0.30
+X=1     0.10  0.25  0.10    0.45
+X=2     0.05  0.10  0.10    0.25
+P(Y=y)  0.25  0.50  0.25    1.00
 ```
 
 ### 연속 결합 PDF 시각화
@@ -185,7 +200,10 @@ x = np.linspace(0, 1, 200)
 y = np.linspace(0, 1, 200)
 X, Y = np.meshgrid(x, y)
 
-# f(x,y) = 6(1-y) for 0 <= x <= y <= 1
+# 이 결합밀도는 삼각형 영역 0 <= x <= y <= 1 위에서만 0이 아니다.
+# where로 그 조건을 걸어 바깥을 0으로 만든다.
+# **정의역이 사각형이 아니라는 점이 핵심이다.** X의 범위가 Y에 달려 있으므로
+# 두 변수는 종속이며, 결합밀도를 주변밀도의 곱으로 쪼갤 수 없다.
 Z = np.where(X <= Y, 6 * (1 - Y), 0)
 
 fig, ax = plt.subplots(figsize=(6, 5))
@@ -197,6 +215,8 @@ ax.set_title('Joint PDF: f(x,y) = 6(1-y)')
 plt.show()
 ```
 
+![Joint PDF: f(x,y) = 6(1-y)](./img/joint_180.png)
+
 ### 이변량 정규분포 표본추출
 
 ```python
@@ -205,17 +225,23 @@ import matplotlib.pyplot as plt
 
 np.random.seed(42)
 mean = [0, 0]
+# 분산이 둘 다 1이므로 비대각원소 0.7이 곧 상관계수다.
 cov = [[1, 0.7], [0.7, 1]]
+# 5000개의 (x, y) 쌍을 뽑는다. 결과는 (5000, 2) 모양이다.
 samples = np.random.multivariate_normal(mean, cov, 5000)
 
 fig, ax = plt.subplots(figsize=(6, 5))
+# alpha를 낮춰 겹침을 푼다. 5000개를 그대로 찍으면 가운데가 뭉개진다.
 ax.scatter(samples[:, 0], samples[:, 1], alpha=0.2, s=5)
 ax.set_xlabel('X')
 ax.set_ylabel('Y')
+# 가로세로 비를 맞춰야 타원의 기울기를 정직하게 볼 수 있다
 ax.set_aspect('equal')
 ax.spines[['top', 'right']].set_visible(False)
 plt.show()
 ```
+
+![결합분포](./img/joint_202.png)
 
 ---
 

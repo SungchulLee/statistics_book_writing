@@ -27,11 +27,16 @@ import matplotlib.pyplot as plt
 import numpy as np
 import scipy.stats as stats
 
-mu, s = 0, 1
+mu, s = 0, 1        # 위치모수와 척도모수. s는 표준편차가 아니다.
 x = np.linspace(-8, 8, 400)
 
 rv_logistic = stats.logistic(loc=mu, scale=s)
-sigma = s * np.pi / np.sqrt(3)  # matching variance
+
+# 두 분포를 공정하게 비교하려면 **분산을 맞춰야** 한다.
+# 로지스틱 분포의 분산은 s^2 * pi^2 / 3 이므로 표준편차는 s*pi/sqrt(3) ≈ 1.81s.
+# 이 값을 정규분포의 sigma로 주면 두 곡선이 같은 퍼짐을 갖는다.
+# 그래야 남는 차이가 오직 "꼬리의 두께"가 된다.
+sigma = s * np.pi / np.sqrt(3)
 rv_normal = stats.norm(loc=mu, scale=sigma)
 
 fig, ax = plt.subplots(figsize=(12, 4))
@@ -44,6 +49,8 @@ ax.legend()
 plt.tight_layout()
 plt.show()
 ```
+
+![Logistic vs Normal Distribution — PDF](./img/logistic_pdf_25.png)
 
 로지스틱 곡선은 분산을 맞춘 정규분포보다 중앙에서 약간 낮고 꼬리에서 더 높다.
 
