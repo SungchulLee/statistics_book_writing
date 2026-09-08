@@ -155,6 +155,12 @@ def confidence_intervals(bootstrap_dist, confidence_levels=(90, 95, 99)):
     # 0.1336   0.1772
     ```
 
+    출력:
+
+    ```
+    0.13363960248123452 0.1772453850905516
+    ```
+
     **붓스트랩 값 $0.1336$이 이론값 $0.1772$보다 $25$% 작다.** 이것이 몬테카를로 오차 때문일까?
 
     아니다. $B = 5000$의 몬테카를로 오차는 $\widehat{\text{SE}}/\sqrt{2B} = 0.0013$으로 무시할 수준이다. 차이의 원인은 **자료 자체**이다.
@@ -199,6 +205,12 @@ def confidence_intervals(bootstrap_dist, confidence_levels=(90, 95, 99)):
     se_median = bootstrap_median(data, 5000, rng).std(ddof=1)
     print(se_mean, se_median, (se_median / se_mean) ** 2)
     # 0.0624  0.0996  2.548
+    ```
+
+    출력:
+
+    ```
+    0.06251581245127882 0.09945858528131833 2.531073726287425
     ```
 
     **단일 표본에서 분산비가 $2.548$로 이론값 $1.571$과 크게 다르다.**

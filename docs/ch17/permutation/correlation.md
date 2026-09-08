@@ -97,6 +97,14 @@ print(f"permutation p = {p:.5f}")          # 0.0001
 print(stats.pearsonr(temp, sales))         # p = 7.4e-06
 ```
 
+출력:
+
+```
+r = 0.8268
+permutation p = 0.00010
+PearsonRResult(statistic=0.8267919627184452, pvalue=6.976166744153747e-06)
+```
+
 $B = 9{,}999$개의 순열 중 $|r^*| \ge 0.8268$인 것이 **하나도 없어** $p = 1/10000 = 0.0001$이다. 이는 이 $B$에서 얻을 수 있는 최소값이며, 참 $p$값이 이보다 작다는 것만 알려준다.
 
 고전적 $t$ 검정은 $t = 0.8268\sqrt{18/(1-0.8268^2)} = 6.236$과 $t_{18}$ 분포로부터 $p = 7.4 \times 10^{-6}$을 준다. 두 접근이 같은 결론에 이르지만, 순열검정은 정규성을 가정하지 않는다.
@@ -161,6 +169,15 @@ $$
     rss = np.array([stats.spearmanr(x, y[list(p)]).statistic
                     for p in itertools.permutations(range(6))])
     print((np.abs(rss) >= abs(sp.statistic) - 1e-12).mean())          # 0.01667
+    ```
+
+    출력:
+
+    ```
+    0.9243 0.0084
+    720 0.006944444444444444
+    0.9429 0.0048
+    0.016666666666666666
     ```
 
     | 통계량 | 관측값 | 정확 순열 $p$ | 점근 $p$ | 비 |

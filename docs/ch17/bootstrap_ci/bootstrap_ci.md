@@ -122,9 +122,21 @@ lo_p, hi_p, boots = bootstrap_percentile_ci(data, np.mean, rng=rng)
 lo_b, hi_b = bootstrap_basic_ci(data, np.mean, boots)
 lo_bca, hi_bca, z0, a = bootstrap_bca_ci(data, np.mean, boots)
 print(z0, a)                # -0.0266  0.0126
+
+for name, (lo, hi) in [("백분위수", (lo_p, hi_p)), ("기본", (lo_b, hi_b)),
+                       ("BCa", (lo_bca, hi_bca))]:
+    print(f"{name:>5}: [{lo:.4f}, {hi:.4f}]  폭 {hi - lo:.4f}")
 ```
 
 출력:
+
+```
+3.425
+-0.026573386823392654 0.012573560456423716
+ 백분위수: [3.0375, 3.8250]  폭 0.7875
+   기본: [3.0250, 3.8125]  폭 0.7875
+  BCa: [3.0375, 3.8250]  폭 0.7875
+```
 
 | 방법 | 하한 | 상한 | 폭 |
 |---|---|---|---|
@@ -159,6 +171,12 @@ print(z0, a)                # -0.0266  0.0126
     lo_p, hi_p, boots = bootstrap_percentile_ci(data, np.mean, rng=rng)
     lo_b, hi_b = bootstrap_basic_ci(data, np.mean, boots)
     lo_bca, hi_bca, z0, a = bootstrap_bca_ci(data, np.mean, boots)
+    ```
+
+    출력:
+
+    ```
+    1.1844536180110892
     ```
 
     | 방법 | 구간 | 폭 |

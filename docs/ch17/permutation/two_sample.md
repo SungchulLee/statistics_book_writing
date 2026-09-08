@@ -53,6 +53,14 @@ print(f"Page B: mean = {page_b.mean():.2f}")    # 173.60
 print(f"Observed |difference|: {obs_diff:.2f}") # 5.40
 ```
 
+출력:
+
+```
+Page A: mean = 168.20
+Page B: mean = 173.60
+Observed |difference|: 5.40
+```
+
 ### 순열검정
 
 ```python
@@ -93,6 +101,13 @@ print(f"Permutation test p-value: {p_val:.4f}")
 print(f"Conclusion: {'Reject H0' if p_val < 0.05 else 'Fail to reject H0'}")
 ```
 
+출력:
+
+```
+Permutation test p-value: 0.3307
+Conclusion: Fail to reject H0
+```
+
 !!! warning "합친 배열을 제자리에서 섞지 말 것"
     `np.random.shuffle(pooled)`처럼 **제자리 섞기**를 쓰면 `pooled`가 매 반복마다 바뀐다. 이 코드처럼 순열 결과를 새 배열로 받으면(`rng.permutation`) 원본이 보존되어 디버깅이 쉽다.
 
@@ -124,6 +139,8 @@ ax.spines['right'].set_visible(False)
 plt.tight_layout()
 plt.show()
 ```
+
+![이표본 순열검정의 귀무분포](./img/two_sample_103.png)
 
 ## 예제: A/B 전환율 검정
 
@@ -160,6 +177,15 @@ p_value_ab = ((np.abs(perm_diffs) >= abs(obs_diff_rates)).sum() + 1) / (B + 1)
 print(f"A/B test p-value: {p_value_ab:.4f}")   # 0.68
 ```
 
+출력:
+
+```
+Control conversion rate:   0.0084
+Treatment conversion rate: 0.0081
+Observed difference: -0.000368
+A/B test p-value: 0.6785
+```
+
 !!! tip "이진 자료에서는 재표집이 필요 없다"
     이 상황의 순열분포는 **초기하분포**로 정확히 알려져 있다. 즉 이 순열검정은 Fisher 정확검정과 같은 것이며, `stats.fisher_exact`가 근사 없이 $p = 0.6811$을 곧바로 준다. 자세한 계산은 [기초](foundations.md) 연습문제 4에 있다.
 
@@ -191,6 +217,13 @@ from scipy import stats
 t_stat, p_ttest = stats.ttest_ind(page_a, page_b, equal_var=False)
 print(f"Welch's t-test p-value: {p_ttest:.4f}")
 print(f"Permutation test p-value: {p_val:.4f}")
+```
+
+출력:
+
+```
+Welch's t-test p-value: 0.3204
+Permutation test p-value: 0.3307
 ```
 
 ## 장점
@@ -279,6 +312,16 @@ $$
     print(stats.ttest_ind(A, B, equal_var=False))
     ```
 
+    출력:
+
+    ```
+    2.6625 2.75
+    perms: 12870
+    mean  : 0.002641802641802642
+    median: 0.003108003108003108
+    TtestResult(statistic=3.837370691851344, pvalue=0.0022024857203016353, df=12.494270083405828)
+    ```
+
     **(a)–(c) 결과**
 
     | 검정 | 통계량 | $p$값 |
@@ -331,6 +374,14 @@ $$
         ps = np.array(ps)
         print(Bp, round(ps.mean(), 5), round(ps.std(), 5),
               round((ps < 0.05).mean(), 3))
+    ```
+
+    출력:
+
+    ```
+    200 0.00789 0.00401 1.0
+    1000 0.00363 0.00155 1.0
+    10000 0.00274 0.00051 1.0
     ```
 
     | $B$ | $\hat{p}$ 평균 | $\hat{p}$ 표준편차 | 최소 가능 $p$값 | $\hat{p} < 0.05$ 비율 |
@@ -399,6 +450,15 @@ $$
     for name, gen in [("normal", norm), ("contaminated", contam)]:
         for sh in (0.0, 1.0):
             print(name, sh, power(gen, sh))
+    ```
+
+    출력:
+
+    ```
+    normal 0.0 {'mean': 0.041, 'median': 0.055, 'trim': 0.045, 'welch': 0.039}
+    normal 1.0 {'mean': 0.866, 'median': 0.789, 'trim': 0.838, 'welch': 0.87}
+    contaminated 0.0 {'mean': 0.056, 'median': 0.056, 'trim': 0.048, 'welch': 0.042}
+    contaminated 1.0 {'mean': 0.47, 'median': 0.664, 'trim': 0.712, 'welch': 0.464}
     ```
 
     **제1종 오류율 (이동 = 0)**

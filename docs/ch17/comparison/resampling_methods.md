@@ -192,8 +192,34 @@ def bootstrap_vs_permutation_comparison(x, y, B=9999, rng=None):
 ??? success "풀이"
 
     ```python
+    import numpy as np
+    from scipy import stats
+
+    def cover(n, M=3000, B=2000, scale=3.0, seed=0):
+        """Exp(scale) 모집단에서 세 붓스트랩 구간의 경험적 포함확률."""
+        rng = np.random.default_rng(seed)
+        z = stats.norm.ppf(0.975)
+        hits = {"normal": 0, "percentile": 0, "basic": 0}
+        for _ in range(M):
+            x = rng.exponential(scale, n)
+            th = x.mean()
+            boot = x[rng.integers(0, n, (B, n))].mean(axis=1)
+            se = boot.std(ddof=1)
+            lo, hi = np.percentile(boot, [2.5, 97.5])
+            hits["normal"] += th - z*se <= scale <= th + z*se
+            hits["percentile"] += lo <= scale <= hi
+            hits["basic"] += 2*th - hi <= scale <= 2*th - lo
+        return {k: round(v / M, 4) for k, v in hits.items()}
+
     for n in (30, 100):
         print(n, cover(n, M=3000, B=2000, scale=3.0))
+    ```
+
+    출력:
+
+    ```
+    30 {'normal': 0.91, 'percentile': 0.913, 'basic': 0.9007}
+    100 {'normal': 0.9387, 'percentile': 0.9383, 'basic': 0.934}
     ```
 
     | 방법 | $n = 30$ | $n = 100$ | 개선 |
@@ -294,6 +320,14 @@ def bootstrap_vs_permutation_comparison(x, y, B=9999, rng=None):
     t_perm = (S * d).mean(axis=1)
     count = (np.abs(t_perm) >= abs(d.mean()) - 1e-12).sum()
     print(count, len(t_perm), count / len(t_perm))    # 2  1024  0.001953
+    ```
+
+    출력:
+
+    ```
+    [6 4 4 4 5 3 5 3 6 5]
+    4.5
+    2 1024 0.001953125
     ```
 
     | 검정 | $p$값 |

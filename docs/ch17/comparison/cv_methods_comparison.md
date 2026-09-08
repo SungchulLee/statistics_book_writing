@@ -102,6 +102,18 @@ print(f"Best degree (LOOCV): {int(np.argmin(loocv_mses)) + 1}, "
       f"time: {time.time() - t0:.2f}s")
 ```
 
+출력(시간은 예시):
+
+```
+Best degree (LOOCV): 6, time: 1.97s
+```
+
+!!! note "시간은 실행할 때마다 달라진다"
+    `time.time()`으로 잰 값이므로 기계와 부하에 따라 바뀐다(같은 기계에서도
+    $0.8$초에서 $2$초까지 관측되었다). 뒤에서 $K$겹 교차검증과 비교할 때
+    중요한 것은 절대 시간이 아니라 **LOOCV가 훨씬 오래 걸린다**는 사실이다.
+    고른 차수 6은 자료가 고정되어 있으므로 실행과 무관하게 같다.
+
 ---
 
 ## 방법 3: $k$-겹 교차검증
@@ -125,6 +137,13 @@ for k in (5, 10):
                              scoring="neg_mean_squared_error").mean()
             for d in degrees]
     print(f"Best degree ({k}-fold): {int(np.argmin(mses)) + 1}")
+```
+
+출력:
+
+```
+Best degree (5-fold): 6
+Best degree (10-fold): 6
 ```
 
 ---
@@ -334,6 +353,14 @@ $$
     plt.title("Repeated 10-fold CV")
     plt.show()
     ```
+
+    출력:
+
+    ```
+    Best degree (repeated 10-fold): 5
+    ```
+
+    ![교차검증 방법의 비교](./img/cv_methods_comparison_312.png)
 
     반복 $k$-겹 교차검증은 여러 무작위 분할에 대해 평균내어 MSE 추정값의 분산을 줄인다. 오차막대는 반복 간 변동을 보여준다. 단일 10-겹 실행에 비해 평균 곡선이 매끄럽고 선택된 차수가 더 신뢰할 만하다.
 

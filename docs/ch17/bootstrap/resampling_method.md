@@ -69,6 +69,15 @@ print(f"  Standard error of median:        ${bootstrap_std:,.0f}")    # $756
 print(f"  Bias of median estimator:        ${bias:,.0f}")             # $37
 ```
 
+출력:
+
+```
+Original sample median: $54,971
+  Mean of bootstrap distribution:  $55,008
+  Standard error of median:        $756
+  Bias of median estimator:        $37
+```
+
 !!! warning "NumPy 배열에는 `.median()` 메서드가 없다"
     `np.random.exponential(...)`은 `ndarray`를 반환하는데 `ndarray`에는 `.median()` 메서드가 없다. `pd.Series`로 감싸거나 `np.median(...)` 함수를 써야 한다. 이런 종류의 오류는 조용히 잘못된 값을 내지 않고 `AttributeError`로 즉시 드러나므로 그나마 다행이다.
 
@@ -92,6 +101,8 @@ ax.grid(True, alpha=0.3, axis='y')
 plt.tight_layout()
 plt.show()
 ```
+
+![표본중앙값의 붓스트랩 분포](./img/resampling_method_77.png)
 
 ## 붓스트랩 결과의 해석
 
@@ -194,6 +205,15 @@ for B in [100, 500, 1000, 5000]:
 # B =  5000: SE = $   765.2
 ```
 
+출력:
+
+```
+B =   100: SE = $   696.8
+B =   500: SE = $   760.6
+B =  1000: SE = $   741.7
+B =  5000: SE = $   759.5
+```
+
 $B = 100$과 $B = 5000$의 차이가 8%에 불과하다. 표준오차만 필요하다면 $B$를 크게 할 이유가 별로 없다.
 
 ### 계산비용
@@ -240,10 +260,38 @@ def block_bootstrap(data, block_size, n_bootstrap, rng=None):
 일부 통계량에서 더 정확한 신뢰구간을 준다.
 
 ```python
+import numpy as np
+
+rng = np.random.default_rng(0)
+data = rng.exponential(2.0, 40)          # 치우친 자료
+n, B = len(data), 2000
+
+original_statistic = data.mean()
+original_se = data.std(ddof=1) / np.sqrt(n)
+
+# 각 붓스트랩 표본에서 통계량과 그 표준오차를 함께 계산한다
+idx = rng.integers(0, n, (B, n))
+resamples = data[idx]
+bootstrap_statistics = resamples.mean(axis=1)
+bootstrap_ses = resamples.std(axis=1, ddof=1) / np.sqrt(n)
+
 # Compute t-statistics and use t-quantiles instead of percentile quantiles
 bootstrap_t_stats = (bootstrap_statistics - original_statistic) / bootstrap_ses
 ci_lower = original_statistic - np.percentile(bootstrap_t_stats, 97.5) * original_se
 ci_upper = original_statistic - np.percentile(bootstrap_t_stats, 2.5) * original_se
+
+print(f"theta_hat = {original_statistic:.4f}")
+print(f"bootstrap-t CI = ({ci_lower:.4f}, {ci_upper:.4f})")
+print("percentile  CI = ({:.4f}, {:.4f})".format(
+    *np.percentile(bootstrap_statistics, [2.5, 97.5])))
+```
+
+출력:
+
+```
+theta_hat = 2.3157
+bootstrap-t CI = (1.6976, 3.3636)
+percentile  CI = (1.6498, 3.0813)
 ```
 
 분위수의 순서가 뒤바뀐 것처럼 보이는데 이는 실수가 아니다. $t^* = (\hat\theta^* - \hat\theta)/\widehat{\text{SE}}^*$의 **상위** 분위수가 신뢰구간의 **하한**에 대응한다. 자세한 내용은 [붓스트랩-t 방법](../bootstrap_ci/bootstrap_t.md)에서 다룬다.
@@ -279,6 +327,14 @@ ci_upper = original_statistic - np.percentile(bootstrap_t_stats, 2.5) * original
     print("평균  붓스트랩 SE:", round(boot_mean.std(ddof=1), 1))
     print("이론값 s/sqrt(n)  :", round(x.std(ddof=1) / np.sqrt(5000), 1))
     print("중앙값 붓스트랩 SE:", round(boot_med.std(ddof=1), 1))
+    ```
+
+    출력:
+
+    ```
+    평균  붓스트랩 SE: 681.9
+    이론값 s/sqrt(n)  : 690.9
+    중앙값 붓스트랩 SE: 755.0
     ```
 
     | 통계량 | 붓스트랩 SE | 이론값 |
@@ -344,6 +400,16 @@ ci_upper = original_statistic - np.percentile(bootstrap_t_stats, 2.5) * original
         print(f"블록 L={L:2d}  :", round(block_se(x, L, B), 4))
     ```
 
+    출력:
+
+    ```
+    참 SE       : 0.2229
+    표준 붓스트랩: 0.0742
+    블록 L= 5  : 0.1421
+    블록 L=20  : 0.1996
+    블록 L=50  : 0.1882
+    ```
+
     | 방법 | $\widehat{\text{SE}}(\bar{X})$ | 참값 대비 |
     |:---|---:|---:|
     | 참 SE | 0.2225 | --- |
@@ -383,6 +449,14 @@ ci_upper = original_statistic - np.percentile(bootstrap_t_stats, 2.5) * original
         print(p, round(cov / M, 3))
     ```
 
+    출력:
+
+    ```
+    50 0.942
+    90 0.942
+    99 0.857
+    ```
+
     | 백분위수 | 참값 | 붓스트랩 신뢰구간 포함확률 |
     |---:|---:|---:|
     | 50 (중앙값) | 0.000 | 0.942 |
@@ -397,6 +471,12 @@ ci_upper = original_statistic - np.percentile(bootstrap_t_stats, 2.5) * original
     x = rng.normal(0, 1, 200)
     q = np.percentile(x[rng.integers(0, 200, (5000, 200))], 99, axis=1)
     print(len(np.unique(np.round(q, 6))))   # 60  ← 5000개 복제값이 60가지 값만 갖는다
+    ```
+
+    출력:
+
+    ```
+    60
     ```
 
     $5000$개의 붓스트랩 복제값이 서로 다른 값을 $60$가지밖에 갖지 못한다. 중앙값이라면 수천 가지가 나온다. 이 정도 이산성에서 $2.5$와 $97.5$ 백분위수를 안정적으로 뽑기는 어렵다.

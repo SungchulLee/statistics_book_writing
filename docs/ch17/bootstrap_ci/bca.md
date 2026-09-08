@@ -123,6 +123,13 @@ for z in (-1.959964, 1.959964):
 #  2.8091  0.9975
 ```
 
+출력:
+
+```
+-1.2415 0.1072
+2.8091 0.9975
+```
+
 BCa 구간은 표준적인 2.5와 97.5 백분위수 대신 붓스트랩 분포의 **10.7과 99.75 백분위수**를 쓴다. 두 절단점이 모두 위로 이동했으며, 이는 양의 편향보정과 양의 가속을 함께 반영한 것이다. 오른쪽으로 치우친 $s^2$의 분포에 맞게 구간이 위쪽으로 늘어난다.
 
 ## 요약
@@ -162,6 +169,20 @@ BCa 방법은 두 보정계수로 분위수 절단점을 조정하여 백분위�
             zl = -1.959964
             v = z0 + (z0 + zl) / (1 - a * (z0 + zl))
             print(f"z0={z0:.1f} a={a:.2f} -> alpha1={norm.cdf(v):.4f}")
+    ```
+
+    출력:
+
+    ```
+    z0=0.0 a=0.00 -> alpha1=0.0250
+    z0=0.0 a=0.05 -> alpha1=0.0371
+    z0=0.0 a=0.15 -> alpha1=0.0649
+    z0=0.1 a=0.00 -> alpha1=0.0392
+    z0=0.1 a=0.05 -> alpha1=0.0546
+    z0=0.1 a=0.15 -> alpha1=0.0878
+    z0=0.3 a=0.00 -> alpha1=0.0869
+    z0=0.3 a=0.05 -> alpha1=0.1088
+    z0=0.3 a=0.15 -> alpha1=0.1517
     ```
 
     | $\hat z_0$ | $\hat a$ | $\alpha_1$ | 백분위수 대비 |
@@ -214,6 +235,14 @@ BCa가 백분위수보다 실제로 나은지 모의실험으로 확인하라. $
         print(n, round(cp/M, 3), round(cb/M, 3))
     ```
 
+    출력:
+
+    ```
+    20 0.686 0.756
+    50 0.82 0.852
+    200 0.892 0.904
+    ```
+
     | $n$ | 백분위수 | BCa | 개선폭 |
     |---:|---:|---:|---:|
     | 20 | 0.686 | 0.756 | $+0.070$ |
@@ -245,6 +274,12 @@ BCa의 가속 $\hat{a}$는 잭나이프로 추정한다. 잭나이프가 실패�
     print(len(np.unique(np.round(jk, 10))))    # 3
     ```
 
+    출력:
+
+    ```
+    3
+    ```
+
     이 세 값 중 두 개는 $n$번의 제거 중 각각 $(n-1)/2$번씩 나타나고 나머지 하나는 한 번만
     나타난다. 그 결과 잭나이프 분포가 **거의 완벽하게 대칭**이 되고, 3차 적률이 $0$에 가까워진다.
 
@@ -264,6 +299,13 @@ BCa의 가속 $\hat{a}$는 잭나이프로 추정한다. 잭나이프가 실패�
     a_mean = acc(lambda n: rng2.exponential(1, n), np.mean)
     print("median: %.5f +- %.5f" % (a_med.mean(), a_med.std()))
     print("mean  : %.5f +- %.5f" % (a_mean.mean(), a_mean.std()))
+    ```
+
+    출력:
+
+    ```
+    median: 0.00001 +- 0.00089
+    mean  : 0.04130 +- 0.01584
     ```
 
     $\text{Exp}(1)$ 자료, $n = 41$:
@@ -304,9 +346,11 @@ BCa 구간의 변환 불변성을 수치로 확인하라. $\hat z_0$과 $\hat a$
     n = 40
     x = rng.exponential(1, n)
 
-    def bca(x, stat, B=20000, alpha=0.05):
+    # 두 호출이 같은 재표본을 쓰도록 인덱스를 미리 뽑아 공유한다
+    idx = rng.integers(0, n, (20000, n))
+
+    def bca(x, stat, idx, alpha=0.05):
         n = len(x); th = stat(x)
-        idx = rng.integers(0, n, (B, n))
         bs = np.array([stat(x[i]) for i in idx])
         z0 = stats.norm.ppf((bs < th).mean())
         jk = np.array([stat(np.delete(x, i)) for i in range(n)])
@@ -317,14 +361,21 @@ BCa 구간의 변환 불변성을 수치로 확인하라. $\hat z_0$과 $\hat a$
         a2 = stats.norm.cdf(z0 + (z0+zu)/(1 - a*(z0+zu)))
         return np.percentile(bs, [100*a1, 100*a2]), z0, a
 
-    ci1, z01, a1_ = bca(x, np.mean)                    # 평균
-    ci2, z02, a2_ = bca(x, lambda v: np.log(v.mean())) # 로그 평균
+    ci1, z01, a1_ = bca(x, np.mean, idx)                    # 평균
+    ci2, z02, a2_ = bca(x, lambda v: np.log(v.mean()), idx) # 로그 평균
     print(np.round(ci1, 6), round(z01, 4), round(a1_, 4))
     print(np.round(np.exp(ci2), 6), round(z02, 4), round(a2_, 4))
     ```
 
+    출력:
+
+    ```
+    [0.624251 1.161511] 0.0392 0.0421
+    [0.624594 1.164064] 0.0392 0.044
+    ```
+
     두 호출이 같은 붓스트랩 재표본을 쓰도록 인덱스를 미리 뽑아 공유해야 비교가 공정하다.
-    아래 결과는 그렇게 계산한 것이다.
+    위 코드가 `idx`를 공유하는 이유이며, 아래 표는 그 출력이다.
 
     | 대상 | 구간 | $\hat z_0$ | $\hat a$ |
     |:---|:---|---:|---:|
@@ -345,12 +396,27 @@ BCa 구간의 변환 불변성을 수치로 확인하라. $\hat z_0$과 $\hat a$
     **기본 구간과 비교하면 차이가 확연하다.**
 
     ```python
+    # 위와 같은 자료·같은 난수열로 평균의 붓스트랩 복제값을 만든다
+    rng = np.random.default_rng(6)
+    n = 40
+    x = rng.exponential(1, n)
+    th = x.mean()
+    idx = rng.integers(0, n, (20000, n))
+    bs = x[idx].mean(axis=1)
+
     # 같은 붓스트랩 복제값으로 기본 구간을 두 척도에서 만든다
     lo, hi = np.percentile(bs, [2.5, 97.5])
-    print(np.round([2*th - hi, 2*th - lo], 5))            # [0.56742 1.08876]
+    print(np.round([2*th - hi, 2*th - lo], 5))            # 원척도
     llo, lhi = np.percentile(np.log(bs), [2.5, 97.5])
     lth = np.log(th)
-    print(np.round(np.exp([2*lth - lhi, 2*lth - llo]), 5)) # [0.63586 1.18821]
+    print(np.round(np.exp([2*lth - lhi, 2*lth - llo]), 5)) # 로그척도 후 되돌림
+    ```
+
+    출력:
+
+    ```
+    [0.56742 1.08876]
+    [0.63586 1.18821]
     ```
 
     기본 구간은 하한이 $0.567$과 $0.636$으로 **12% 차이** 난다. BCa의 $0.2\%$와 비교하면 두 자릿수 차이이다. 어느 척도에서 반사하느냐가 결과를 크게 바꾸기 때문이다.

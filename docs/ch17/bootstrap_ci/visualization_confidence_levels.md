@@ -61,6 +61,16 @@ print("95% CI: [${:,.0f}, ${:,.0f}]".format(ci_95_lower, ci_95_upper))
 print(f"Mean of bootstrap means: ${bootstrap_means.mean():,.0f}")   # $68,444
 ```
 
+출력:
+
+```
+Original sample size: 20
+Original sample mean: $67,846
+90% CI: [$49,742, $90,491]
+95% CI: [$47,026, $95,545]
+Mean of bootstrap means: $68,444
+```
+
 참고로 이 모의 모집단의 참 평균은 $\$70{,}122$이다. 두 구간 모두 참값을 포함한다.
 
 시각화는 다음과 같이 한다.
@@ -112,6 +122,8 @@ plt.tight_layout()
 plt.show()
 ```
 
+![신뢰수준에 따른 붓스트랩 신뢰구간](./img/visualization_confidence_levels_68.png)
+
 ## 시각화에서 얻는 핵심 통찰
 
 ### 1. 신뢰수준과 구간 폭
@@ -153,6 +165,12 @@ for sim in range(n_simulations):
 
 print(f"Coverage across {n_simulations} simulations: {100*np.mean(ci_covers):.1f}%")
 # Coverage across 2000 simulations: 90.6%
+```
+
+출력:
+
+```
+Coverage across 2000 simulations: 90.9%
 ```
 
 !!! warning "$n = 20$에서 실제 포함확률은 95%가 아니다"
@@ -245,6 +263,14 @@ ci_bca = result.confidence_interval
         print(f"{lvl:.0%}: [{lo:.3f}, {hi:.3f}]  폭 {hi-lo:.3f}")
     ```
 
+    출력:
+
+    ```
+    90%: [96.570, 104.157]  폭 7.587
+    95%: [95.837, 104.895]  폭 9.058
+    99%: [94.350, 106.417]  폭 12.067
+    ```
+
     | 신뢰수준 | 구간 폭 | 95% 대비 | 이론값 $z_{1-\alpha/2}/z_{0.975}$ |
     |:---|---:|---:|---:|
     | 90% | 7.587 | $0.838$ | $0.839$ |
@@ -291,6 +317,15 @@ ci_bca = result.confidence_interval
 
     for n in (20, 50, 100, 400):
         print(n, coverage(n, np.mean, tm), coverage(n, np.median, tmed))
+    ```
+
+    출력:
+
+    ```
+    20 0.892 0.93
+    50 0.933 0.941
+    100 0.932 0.944
+    400 0.945 0.945
     ```
 
     | $n$ | 평균의 포함확률 | 중앙값의 포함확률 |
@@ -358,6 +393,13 @@ ci_bca = result.confidence_interval
     print(np.round(stats.t.interval(0.95, n-1, x.mean(), se), 3))
     ```
 
+    출력:
+
+    ```
+    [ 91.124 103.381]
+    [ 91.124 103.381]
+    ```
+
     두 구간이 **수치적으로 같다**. 이것이 혼동의 근원이다.
 
     !!! warning "수치가 같다고 해석이 같은 것은 아니다"
@@ -398,6 +440,15 @@ ci_bca = result.confidence_interval
         r = bootstrap((x,), np.mean, n_resamples=20000, method=m, random_state=0)
         print(f"{m:11s}:", np.round([r.confidence_interval.low,
                                      r.confidence_interval.high], 0))
+    ```
+
+    출력:
+
+    ```
+    percentile: [45433. 82402.]
+    BCa       : [47963. 86984.]
+    percentile : [45796. 82555.]
+    basic      : [42773. 79533.]
     ```
 
     | 방법 | 구간 | 폭 |

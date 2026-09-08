@@ -119,6 +119,12 @@ print(page_a.mean(), page_b.mean(), diff, p)
 # 116.80  139.14  -22.34  0.0006
 ```
 
+출력:
+
+```
+116.80039289004895 139.1365870469421 -22.336194156893157 0.0006
+```
+
 Welch $t$ 검정은 $p = 0.0003$을 준다. 두 방법 모두 $15$단위 이동을 확실히 탐지한다.
 
 ### 다집단: 네 개의 처치군
@@ -132,6 +138,12 @@ print([round(g.mean(), 2) for g in groups], var_obs, p_multi)
 # [159.29, 172.22, 160.02, 175.48]  51.759  0.0140
 ```
 
+출력:
+
+```
+[159.29, 172.22, 160.02, 175.48] 51.75863218978212 0.014
+```
+
 일원분산분석은 $F = 3.715$, $p = 0.0135$를 준다. 순열검정의 $0.0140$과 사실상 같다.
 
 ### 비율: 전환율
@@ -141,6 +153,12 @@ print([round(g.mean(), 2) for g in groups], var_obs, p_multi)
 ```python
 diff_ab, p_ab, perms_ab = perm_test_proportion(23739, 200, 22588, 182, rng=rng)
 print(diff_ab)      # 0.000368
+```
+
+출력:
+
+```
+0.0003675791182059275
 ```
 
 전환율 차이 $0.0368$%p는 유의하지 않다. Fisher 정확검정이 $p = 0.6811$, 카이제곱 검정이 $p = 0.6996$을 준다.
@@ -176,6 +194,8 @@ print(diff_ab)      # 0.000368
     plt.title('Distribution of p-values under H0')
     plt.show()
     ```
+
+    ![귀무가설 아래 p값의 분포](./img/permutation_tests_162.png)
 
     귀무가설 아래에서 $p$값은 $\text{Uniform}(0, 1)$ 분포를 따른다. 히스토그램은 $[0, 1]$ 구간에서 대략 평평해야 한다. $H_0$ 아래에서 관측된 검정통계량은 순열분포에서 뽑은 또 하나의 값에 불과하므로, 그것이 순열값들의 임의의 비율 $\alpha$를 넘을 확률이 정확히 $\alpha$이기 때문이다. $\square$
 
@@ -282,6 +302,8 @@ print(diff_ab)      # 0.000368
     plt.show()
     ```
 
+    ![순열분포와 관측값](./img/permutation_tests_263.png)
+
     정규밀도가 히스토그램과 잘 맞아, 표본이 클 때 순열분포가 근사적으로 정규임을 확인한다. 표본비율의 차이에 적용된 중심극한정리의 결과이다. $\square$
 
     **정확한 이론값과 비교할 수 있다.** 순열분포는 초기하분포에서 정확히 유도된다([기초](./foundations.md) 연습문제 4). 처치군의 전환 수를 $X$라 하면 $X \sim \text{Hypergeometric}(46327, 382, 22588)$이고
@@ -332,6 +354,14 @@ print(diff_ab)      # 0.000368
     print(stats.ttest_rel(after, before))       # t = 11.5,  p = 0.00033
     print(stats.wilcoxon(np.array(after) - np.array(before), method='exact'))
     # W = 0.0,  p = 0.0625
+    ```
+
+    출력:
+
+    ```
+    (4.6, 2, 32, 0.0625)
+    TtestResult(statistic=11.5, pvalue=0.00032642125636699325, df=4)
+    WilcoxonResult(statistic=0.0, pvalue=0.0625)
     ```
 
     차이는 $d = (6, 4, 4, 4, 5)$이고 평균은 $4.6$이다.

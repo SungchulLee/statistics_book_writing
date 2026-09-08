@@ -116,6 +116,14 @@ se_med, bias, boot_med = bootstrap_se_median(income, rng=rng)
 print(np.median(income), se_med, bias)   # 31508  1912  269
 ```
 
+출력:
+
+```
+8.178614426992942 0.0031996800319968005
+4.150721066684774 0.051794820517948204
+31508.06500959787 1912.1800372703474 269.241019752415
+```
+
 | 검정 | 결과 | 비교 대상 |
 |:---|:---|:---|
 | 일표본 ($H_0: \mu = 5$) | $\bar{x} = 8.179$, $p = 0.0032$ | $t$ 검정 $p = 0.0033$ |
@@ -145,6 +153,12 @@ print(np.median(income), se_med, bias)   # 31508  1912  269
 
     _, p0, _ = bootstrap_mean_test(data, mu_0=0.0, rng=rng)
     _, p05, _ = bootstrap_mean_test(data, mu_0=0.5, rng=rng)
+    ```
+
+    출력:
+
+    ```
+    -0.041112513627908596 1.1751281074452444
     ```
 
     | 가설 | 붓스트랩 $p$값 | $t$ 검정 $p$값 |
@@ -240,6 +254,12 @@ print(np.median(income), se_med, bias)   # 31508  1912  269
     boot_means = data[rng.integers(0, 200, (10_000, 200))].mean(axis=1)
     se_mean_boot = boot_means.std(ddof=1)
     se_med, _, _ = bootstrap_se_median(data, rng=rng)
+    ```
+
+    출력:
+
+    ```
+    1.9888641137690775 1.7679603646706958
     ```
 
     | 양 | 값 |

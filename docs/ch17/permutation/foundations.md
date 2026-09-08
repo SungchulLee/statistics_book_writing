@@ -62,6 +62,14 @@ print(f"Page B mean: {mean_b:.2f} seconds")        # 173.60
 print(f"Observed difference: {observed_diff:.2f}") # 5.40
 ```
 
+출력:
+
+```
+Page A mean: 168.20 seconds
+Page B mean: 173.60 seconds
+Observed difference: 5.40
+```
+
 ### 순열검정 구현
 
 ```python
@@ -91,6 +99,12 @@ perm_diffs = [perm_fun(session_times.Time, nA, nB) for _ in range(1000)]
 
 p_value = np.mean(np.abs(perm_diffs) >= np.abs(observed_diff))
 print(f"Permutation test p-value: {p_value:.4f}")   # 0.3310
+```
+
+출력:
+
+```
+Permutation test p-value: 0.3310
 ```
 
 비교를 위해 이표본 $t$ 검정은 $p = 0.3144$를 준다. 두 값이 가깝고 어느 쪽이든 $H_0$을 기각하지 않는다.
@@ -139,6 +153,13 @@ p_value = np.mean(np.abs(perm_diffs) >= abs(obs_diff))
 print(f"Conversion A/B test p-value: {p_value:.4f}")   # 0.6784
 ```
 
+출력:
+
+```
+-0.000368
+Conversion A/B test p-value: 0.6784
+```
+
 관측된 차이가 $-0.000368$로 처리군의 전환율이 오히려 낮지만, $p = 0.678$로 우연으로 충분히 설명된다. 카이제곱 검정도 $p = 0.6996$으로 같은 결론을 준다.
 
 !!! tip "큰 자료에서는 벡터화가 필수이다"
@@ -151,6 +172,12 @@ print(f"Conversion A/B test p-value: {p_value:.4f}")   # 0.6784
     # 처리군의 전환 수는 Hypergeometric(N, K, n) 을 따른다
     N, K, n = total, c_control + c_treat, n_treat
     print(stats.hypergeom.sf(c_treat - 1, N, K, n))   # 정확 단측 p
+    ```
+
+    출력:
+
+    ```
+    0.6873316526622711
     ```
 
 ## 장점과 단점
@@ -247,6 +274,14 @@ print(f"Conversion A/B test p-value: {p_value:.4f}")   # 0.6784
         print(m, n, size(m, n, 1, 3), size(m, n, 1, 3, studentized=True))
     ```
 
+    출력:
+
+    ```
+    20 20 0.058 0.059
+    10 30 0.004 0.038
+    30 10 0.196 0.052
+    ```
+
     $\sigma_1 = 1$, $\sigma_2 = 3$일 때 제1종 오류율:
 
     | $m$ | $n$ | 평균차 통계량 | 스튜던트화 통계량 |
@@ -316,6 +351,14 @@ $p$값 계산에서 `>` 대신 `>=`를 쓰고 $+1$ 보정을 더하는 것이 �
     print("p (>=)  =", round((np.abs(diffs) >= abs(obs)).mean(), 5))
     ```
 
+    출력:
+
+    ```
+    총 순열 수: 924
+    p (>)   = 0.01515
+    p (>=)  = 0.24242
+    ```
+
     | 정의 | $p$값 |
     |:---|---:|
     | $\#\{\lvert d^*\rvert > \lvert d_{\text{obs}}\rvert\} / N$ | 0.01515 |
@@ -371,6 +414,17 @@ $p$값 계산에서 `>` 대신 `>=`를 쓰고 $+1$ 보정을 더하는 것이 �
             print(name, sh, compare(gen, sh))
     ```
 
+    출력:
+
+    ```
+    normal 0.0 (0.045, 0.041)
+    normal 0.6 (0.463, 0.447)
+    normal 1.0 (0.869, 0.864)
+    t(3) 0.0 (0.047, 0.043)
+    t(3) 0.6 (0.543, 0.545)
+    t(3) 1.0 (0.884, 0.889)
+    ```
+
     | 분포 | 이동 | $t$ 검정 | 순열검정 |
     |:---|---:|---:|---:|
     | Normal | 0.0 (크기) | 0.049 | 0.048 |
@@ -422,6 +476,12 @@ $p$값 계산에서 `>` 대신 `>=`를 쓰고 $+1$ 보정을 더하는 것이 �
     p_fisher = stats.fisher_exact([[c_treat, n_treat - c_treat],
                                    [c_control, n_control - c_control]])[1]
     print(round(p_mc, 4), round(p_exact, 4), round(p_fisher, 4))
+    ```
+
+    출력:
+
+    ```
+    0.6813 0.6999 0.6811
     ```
 
     | 방법 | $p$값 |

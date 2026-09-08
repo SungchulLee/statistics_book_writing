@@ -116,6 +116,15 @@ print(stats.ttest_1samp(d, 0))               # t = -3.204, p = 0.00839
 print(stats.wilcoxon(d))                     # W = 8.0,   p = 0.012207
 ```
 
+출력:
+
+```
+-4.25 4.595
+50 4096 0.01220703125
+TtestResult(statistic=-3.2040407749287168, pvalue=0.008394085815475436, df=11)
+WilcoxonResult(statistic=8.0, pvalue=0.01220703125)
+```
+
 $4{,}096$가지 중 $50$가지가 $|\bar{d}^*| \ge 4.25$를 만족하므로
 
 $$
@@ -187,6 +196,17 @@ $t$ 검정과 순열검정의 차이 $0.0084$ 대 $0.0122$는 표본이 작기 �
     print(stats.ttest_rel(after, before))
     print(stats.wilcoxon(d, method='exact'))
     print(stats.binomtest((d > 0).sum(), 8, 0.5).pvalue)
+    ```
+
+    출력:
+
+    ```
+    [-8 -4 -4 -8  2 -9 -3 -5]
+    -4.875 3.5632
+    4 256 0.015625
+    TtestResult(statistic=-3.8697136256193168, pvalue=0.006133954352036696, df=7)
+    WilcoxonResult(statistic=1.0, pvalue=0.015625)
+    0.0703125
     ```
 
     **(a)** 차이는 $(-8, -4, -4, -8, 2, -9, -3, -5)$이고 $\bar{d} = -4.875$이다. $256$가지 부호 배정 중 $|\bar{d}^*| \ge 4.875$를 만족하는 것은 **$4$가지**이므로
@@ -292,6 +312,12 @@ $p$값 공식의 $+1$ 보정이 실제로 필요한지 확인하라. $n = 12$의
         a += signflip_p(d, plus1=True) < 0.05
         b += signflip_p(d, plus1=False) < 0.05
     print(a/M, b/M)
+    ```
+
+    출력:
+
+    ```
+    0.04575 0.05075
     ```
 
     | $p$값 정의 | 제1종 오류율 |

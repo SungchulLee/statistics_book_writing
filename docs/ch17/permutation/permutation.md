@@ -118,6 +118,15 @@ ax.set_title('Permutation Test Distribution')
 plt.show()
 ```
 
+출력:
+
+```
+Observed Difference in Means: 3.00
+P-value: 0.0418
+```
+
+![순열검정의 귀무분포](./img/permutation_62.png)
+
 **출력 예:**
 
 ```
@@ -169,6 +178,13 @@ print(f"Observed Correlation: {observed_corr:.4f}")   # 0.9524
 print(f"Permutation P-value: {p_value:.4f}")          # 0.0011
 ```
 
+출력:
+
+```
+Observed Correlation: 0.9524
+Permutation P-value: 0.0013
+```
+
 $n = 8$이므로 $8! = 40{,}320$가지 순열을 모두 열거할 수 있고, 정확 $p$값은 $0.001141$이다.
 
 ---
@@ -204,6 +220,13 @@ after = [72, 69, 78, 85, 75, 76, 70, 79, 74, 80]
 p_value, obs_diff = paired_permutation_test(before, after)
 print(f"Observed Mean Difference: {obs_diff:.2f}")   # 2.40
 print(f"P-value: {p_value:.4f}")                     # 0.002
+```
+
+출력:
+
+```
+Observed Mean Difference: 2.40
+P-value: 0.0020
 ```
 
 $2^{10} = 1{,}024$가지 부호 배정을 모두 열거하면 정확 $p$값은 $2/1024 = 0.001953$이다. 이는 이 자료에서 가능한 **최소 $p$값**이다. 열 개의 차이가 모두 양수이므로, 관측된 배정과 그 전부를 뒤집은 배정만이 $|\bar{d}^*| \ge 2.4$를 만족한다.
@@ -289,6 +312,16 @@ $2^{10} = 1{,}024$가지 부호 배정을 모두 열거하면 정확 $p$값은 $
     print((np.abs(m) >= abs(dd.mean()) - 1e-12).sum(),
           (np.abs(m) >= abs(dd.mean()) - 1e-12).mean())
     print(stats.ttest_rel(after, before))
+    ```
+
+    출력:
+
+    ```
+    252 10 0.03968253968253968
+    TtestResult(statistic=3.0, pvalue=0.017071681233782634, df=8.0)
+    0.001140873015873016 0.0002604000243872564
+    2 0.001953125
+    TtestResult(statistic=5.622255427989818, pvalue=0.0003248947130212966, df=9)
     ```
 
     | 예제 | 순열 수 | 관측 통계량 | 정확 순열 $p$ | 모수적 $p$ |

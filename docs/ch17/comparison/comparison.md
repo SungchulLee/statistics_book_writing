@@ -73,6 +73,12 @@ print(f"Bootstrap 95% CI for mean difference: ({ci[0]:.2f}, {ci[1]:.2f})")
 # (1.20, 4.80)
 ```
 
+출력:
+
+```
+Bootstrap 95% CI for mean difference: (1.20, 4.80)
+```
+
 ### 순열 접근
 
 1. 두 집단을 하나의 자료로 합친다.
@@ -95,6 +101,12 @@ perm_diffs = np.array([
 ])
 p_value = (np.abs(perm_diffs) >= abs(observed_diff) - 1e-12).mean()
 print(f"Exact permutation p-value: {p_value:.4f}")   # 0.0397
+```
+
+출력:
+
+```
+Exact permutation p-value: 0.0397
 ```
 
 !!! danger "이 예제에서 두 방법이 심각하게 어긋난다"
@@ -186,6 +198,12 @@ print(f"Exact permutation p-value: {p_value:.4f}")   # 0.0397
     grid = np.arange(-2, 8.001, 0.05)
     acc = [g for g in grid if perm_p(g) > 0.05]
     print(min(acc), max(acc))       # 0.50  5.50
+    ```
+
+    출력:
+
+    ```
+    0.5000000000000022 5.500000000000007
     ```
 
     | 방법 | $95$% 구간 | 폭 |

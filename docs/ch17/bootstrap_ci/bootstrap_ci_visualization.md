@@ -31,6 +31,12 @@ rng = np.random.default_rng(303)
 sample = rng.choice(population, size=20, replace=False)
 ```
 
+출력:
+
+```
+69525.69401218835 54541.90941528454
+```
+
 ## 붓스트랩 표집분포
 
 크기 $n$인 표본에서 **복원추출**로 $B$개의 붓스트랩 재표본을 만들고 각각의 평균을 계산한다.
@@ -155,6 +161,15 @@ def simulate_coverage(population, true_mean, n=20, B=1000, N=2000, rng=None):
             widths.append(hi - lo)
         w = np.mean(widths)
         print(f"n={n:3d}  mean width = {w:,.0f}   width*sqrt(n) = {w*np.sqrt(n):,.0f}")
+    ```
+
+    출력:
+
+    ```
+    n= 20  mean width = 40,078   width*sqrt(n) = 179,233
+    n= 50  mean width = 26,088   width*sqrt(n) = 184,469
+    n=100  mean width = 18,908   width*sqrt(n) = 189,081
+    n=200  mean width = 13,472   width*sqrt(n) = 190,526
     ```
 
     | $n$ | 평균 폭 | 폭 $\times \sqrt{n}$ |

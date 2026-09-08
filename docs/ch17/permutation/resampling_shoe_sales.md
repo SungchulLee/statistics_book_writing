@@ -37,6 +37,14 @@ print(f"After  mean: {AFTER.mean():.2f}")    # 26.00
 print(f"Difference:  {AFTER.mean() - BEFORE.mean():.2f}")   # 2.25
 ```
 
+출력:
+
+```
+Before mean: 23.75
+After  mean: 26.00
+Difference:  2.25
+```
+
 !!! warning "이 자료는 사실 대응자료이다"
     같은 $12$주를 전후로 측정했으므로 주별로 짝지어져 있다. 아래의 비대응 순열검정은 이 구조를 무시한다.
 
@@ -205,6 +213,14 @@ def bootstrap_ci(before, after, n_boot=100_000, ci=95, rng=None):
     print(p_one, p_two)                # 0.06543  0.13086
     ```
 
+    출력:
+
+    ```
+    [ 8  7  0  0 -3 10 -2  4 -4 -1  4  4]
+    2.25 4.575130400526108
+    0.0654296875 0.130859375
+    ```
+
     | 검정 | 단측 $p$ | 양측 $p$ |
     |:---|---:|---:|
     | 비대응 순열 | 0.153 | 0.308 |
@@ -249,6 +265,13 @@ $$
 
     print(f"Percentile: [{q_lo:.2f}, {q_hi:.2f}]")
     print(f"Basic:      [{2*theta_hat - q_hi:.2f}, {2*theta_hat - q_lo:.2f}]")
+    ```
+
+    출력:
+
+    ```
+    Percentile: [-1.83, 6.00]
+    Basic:      [-1.50, 6.33]
     ```
 
     | 방법 | $95$% 구간 | 폭 | 중심 |
