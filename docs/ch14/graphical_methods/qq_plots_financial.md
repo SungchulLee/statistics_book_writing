@@ -158,29 +158,6 @@ plt.show()
 
 출력:
 
-```
-Mean:     -0.0002
-Std Dev:  0.0297
-Skewness: 0.5411
-Ex. Kurtosis: 4.6396
-
-Kolmogorov-Smirnov test p-value: 0.0710
-Jarque-Bera test p-value: 9.067e-309
-Anderson-Darling statistic: 3.6529
-  critical values (15/10/5/2.5/1%): [0.574 0.654 0.785 0.916 1.089]
-```
-
-세 검정의 판정이 갈린다. Kolmogorov-Smirnov는 $p = 0.071$로 5% 수준에서 기각하지 못하지만, Jarque-Bera는 $10^{-309}$ 수준으로, Anderson-Darling은 통계량 $3.65$가 1% 임계값 $1.089$를 크게 넘어 압도적으로 기각한다.
-
-**KS 검정은 꼬리에 둔감하다.** 경험분포함수의 최대 편차를 보는데 그 최대값은 대개 분포의 가운데에서 나타나기 때문이다. 초과첨도 $4.64$가 말해 주는 두꺼운 꼬리를 KS는 거의 잡아내지 못한다. 왜도와 첨도를 직접 보는 Jarque-Bera, 꼬리에 가중치를 주는 Anderson-Darling이 이 자료에 맞는 도구다.
-
-![수익률의 정규성 진단 패널](./img/qq_plots_financial_114.png)
-
-!!! warning "`stats.anderson`은 p값을 돌려주지 않는다"
-    `stats.anderson`은 `(statistic, critical_values, significance_level)` 세 값을 담은 결과 객체를 돌려준다. `_, p_ad = stats.anderson(...)`처럼 두 값으로 풀면 `ValueError: too many values to unpack`이 난다. 검정통계량을 임계값과 직접 비교해야 한다.
-
-출력:
-
 ```text
 Mean:     -0.0002
 Std Dev:  0.0297
@@ -192,6 +169,11 @@ Jarque-Bera test p-value: 9.067e-309
 Anderson-Darling statistic: 3.6529
   critical values (15/10/5/2.5/1%): [0.574 0.654 0.785 0.916 1.089]
 ```
+
+![수익률의 정규성 진단 패널](./img/qq_plots_financial_114.png)
+
+!!! warning "`stats.anderson`은 p값을 돌려주지 않는다"
+    `stats.anderson`은 `(statistic, critical_values, significance_level)` 세 값을 담은 결과 객체를 돌려준다. `_, p_ad = stats.anderson(...)`처럼 두 값으로 풀면 `ValueError: too many values to unpack`이 난다. 검정통계량을 임계값과 직접 비교해야 한다.
 
 !!! note "세 검정이 엇갈리는 이유"
     초과첨도 $4.64$로 자료가 명백히 두꺼운 꼬리를 갖는데도 K-S 검정의 $p$값은 $0.071$로 5% 수준에서 기각하지 못한다. 반면 Jarque-Bera는 $p \approx 10^{-309}$로 압도적으로 기각하고 Anderson-Darling 통계량 $3.65$도 1% 임계값 $1.089$를 크게 넘는다.
