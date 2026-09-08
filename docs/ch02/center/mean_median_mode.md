@@ -64,6 +64,8 @@ ax.spines['right'].set_visible(False)
 plt.show()
 ```
 
+![Histogram of Income Data with Mean Indicator](./img/mean_median_mode_44.png)
+
 ---
 
 ## 2. 중앙값
@@ -109,6 +111,8 @@ ax.spines['top'].set_visible(False)
 ax.spines['right'].set_visible(False)
 plt.show()
 ```
+
+![Histogram of Income Data with Mean and Median](./img/mean_median_mode_87.png)
 
 ### 중앙값은 이상치에 강건하다
 
@@ -172,6 +176,10 @@ for ax in (hist_ax, box_ax):
 plt.show()
 ```
 
+![Original Income Data](./img/mean_median_mode_117_0.png)
+
+![Original Income Data](./img/mean_median_mode_117_1.png)
+
 이상치를 넣으면 평균은 극적으로 이동하지만 중앙값은 거의 변하지 않는다.
 
 ### 중앙값이 선호되는 실제 사례
@@ -207,7 +215,9 @@ import pandas as pd
 from scipy.stats import trim_mean
 
 # Load state data
-state = pd.read_csv('state.csv')
+# 미국 50개 주의 인구와 살인율. 오른쪽으로 크게 치우친 전형적인 자료다.
+url = ('https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists/master/data/state.csv')
+state = pd.read_csv(url)
 
 # Regular mean (sensitive to outliers like California)
 mean_pop = state['Population'].mean()
@@ -261,7 +271,9 @@ $$
 import pandas as pd
 import numpy as np
 
-state = pd.read_csv('state.csv')
+# 미국 50개 주의 인구와 살인율. 오른쪽으로 크게 치우친 전형적인 자료다.
+url = ('https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists/master/data/state.csv')
+state = pd.read_csv(url)
 
 # Unweighted mean murder rate
 unweighted_mean = state['Murder.Rate'].mean()
@@ -286,21 +298,34 @@ Weighted Mean Murder Rate: 4.446
 
 ```python
 import pandas as pd
-import wquantiles
 
-state = pd.read_csv('state.csv')
+# 미국 50개 주의 인구와 살인율. 오른쪽으로 크게 치우친 전형적인 자료다.
+url = ('https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists/master/data/state.csv')
+state = pd.read_csv(url)
 
-# Unweighted median
+# 가중하지 않은 중앙값: 주를 크기와 상관없이 한 표씩 센다.
+# 즉 캘리포니아(3900만 명)와 와이오밍(56만 명)이 같은 무게를 갖는다.
 unweighted_median = state['Murder.Rate'].median()
 print(f"Unweighted Median: {unweighted_median:.1f}")
 
-# Weighted median (weighted by population)
-weighted_median = wquantiles.median(state['Murder.Rate'],
-                                    weights=state['Population'])
-print(f"Weighted Median: {weighted_median:.1f}")
+
+def weighted_median(values, weights):
+    """누적 가중치가 전체의 절반에 도달하는 값을 찾는다.
+
+    가중중앙값의 정의 그대로다. 외부 패키지 없이 세 줄로 구현된다.
+    """
+    d = pd.DataFrame({"v": values, "w": weights}).sort_values("v")
+    cum = d["w"].cumsum() / d["w"].sum()      # 누적 가중치 비율
+    return d.loc[cum >= 0.5, "v"].iloc[0]     # 0.5를 처음 넘는 값
+
+# 인구로 가중한 중앙값: 사람 한 명씩을 세는 것과 같다.
+# "미국의 중앙값 시민이 사는 주의 살인율"이라고 읽으면 된다.
+wm = weighted_median(state['Murder.Rate'], state['Population'])
+print(f"Weighted Median: {wm:.1f}")
 ```
 
-**출력:**
+출력:
+
 ```
 Unweighted Median: 4.0
 Weighted Median: 4.4
@@ -332,6 +357,12 @@ mode = statistics.mode(data)
 print(f"{mode = }")  # mode = 2
 ```
 
+출력:
+
+```
+mode = 2
+```
+
 최빈값이 여럿인 자료의 경우:
 
 ```python
@@ -343,6 +374,13 @@ print(f"{mode = }")  # Returns the first mode encountered
 
 modes = statistics.multimode(data)
 print(f"{modes = }")  # Returns all modes: [2, 3]
+```
+
+출력:
+
+```
+mode = 2
+modes = [2, 3]
 ```
 
 ---

@@ -52,7 +52,21 @@ $$
 
 ```python
 def mean_from_scratch(data):
+    """모든 값을 더해 개수로 나눈다. 정의 그대로다."""
     return np.sum(data) / len(data)
+
+
+# 직접 구현한 값과 pandas의 값을 대조한다.
+# 이 대조를 절마다 되풀이하는 것이 이 페이지의 요점이다.
+print(f"직접 구현: {mean_from_scratch(CA_PRICES):.4f}")
+print(f"pandas   : {pd.Series(CA_PRICES).mean():.4f}")
+```
+
+출력:
+
+```
+직접 구현: 242.3102
+pandas   : 242.3102
 ```
 
 ---
@@ -71,12 +85,24 @@ $$
 
 ```python
 def median_from_scratch(data):
-    sorted_data = np.sort(data)
+    """정렬한 뒤 가운데 값을 고른다."""
+    sorted_data = np.sort(data)          # 중앙값은 순서에만 의존하므로 정렬이 먼저다
     n = len(sorted_data)
     mid = n // 2
     if n % 2 == 1:
-        return sorted_data[mid]
+        return sorted_data[mid]          # 홀수: 가운데 하나
+    # 짝수: 가운데 두 값의 평균. 48개이므로 이 가지를 탄다.
     return (sorted_data[mid - 1] + sorted_data[mid]) / 2
+
+print(f"직접 구현: {median_from_scratch(CA_PRICES):.4f}")
+print(f"pandas   : {pd.Series(CA_PRICES).median():.4f}")
+```
+
+출력:
+
+```
+직접 구현: 242.0150
+pandas   : 242.0150
 ```
 
 ---
@@ -87,9 +113,23 @@ def median_from_scratch(data):
 
 ```python
 def mode_from_scratch(data, decimals=1):
+    """가장 자주 나오는 값. 연속 자료이므로 먼저 반올림해 묶는다."""
     rounded = np.round(data, decimals)
+    # unique가 값과 그 개수를 함께 돌려준다
     values, counts = np.unique(rounded, return_counts=True)
-    return values[np.argmax(counts)]
+    return values[np.argmax(counts)]     # 개수가 가장 큰 값
+
+# 반올림 정밀도를 바꾸면 답이 달라진다는 점을 직접 확인해 보자
+for d in (0, 1, 2):
+    print(f"decimals={d}: 최빈값 = {mode_from_scratch(CA_PRICES, d)}")
+```
+
+출력:
+
+```
+decimals=0: 최빈값 = 237.0
+decimals=1: 최빈값 = 248.6
+decimals=2: 최빈값 = 236.56
 ```
 
 !!! note "연속 자료의 최빈값"
@@ -113,11 +153,35 @@ $$
 
 ```python
 def variance_from_scratch(data):
+    """평균에서의 편차를 제곱해 더하고 n-1로 나눈다."""
     m = mean_from_scratch(data)
+    # n이 아니라 n-1로 나누는 것이 베셀 보정이다.
+    # 편차를 "참 평균"이 아니라 "표본평균"에서 재기 때문에
+    # 제곱합이 체계적으로 작아지는데, 그것을 되돌리는 보정이다.
     return np.sum((data - m) ** 2) / (len(data) - 1)
 
 def std_from_scratch(data):
+    """표준편차는 분산의 제곱근. 단위가 원자료와 같아진다."""
     return np.sqrt(variance_from_scratch(data))
+
+# pandas의 var()/std()도 기본값이 ddof=1, 즉 n-1로 나눈다.
+print(f"분산   직접 {variance_from_scratch(CA_PRICES):.4f} | "
+      f"pandas {pd.Series(CA_PRICES).var():.4f}")
+print(f"표준편차 직접 {std_from_scratch(CA_PRICES):.4f} | "
+      f"pandas {pd.Series(CA_PRICES).std():.4f}")
+
+# numpy는 기본이 ddof=0(n으로 나눔)이라 값이 다르다. 흔한 함정이다.
+print(f"numpy 기본(ddof=0): {np.var(CA_PRICES):.4f}  <- 다르다")
+print(f"numpy ddof=1      : {np.var(CA_PRICES, ddof=1):.4f}")
+```
+
+출력:
+
+```
+분산   직접 13.7559 | pandas 13.7559
+표준편차 직접 3.7089 | pandas 3.7089
+numpy 기본(ddof=0): 13.4693  <- 다르다
+numpy ddof=1      : 13.7559
 ```
 
 ---
@@ -138,12 +202,35 @@ $$
 
 ```python
 def covariance_from_scratch(x, y):
+    """두 변수의 편차를 곱해 더하고 n-1로 나눈다.
+
+    분산이 (x-mx)를 제곱한 것이라면, 공분산은 그 제곱을 (x-mx)(y-my)로
+    바꾼 것이다. 즉 Cov(X, X) = Var(X)다.
+    """
     n = len(x)
     mx, my = mean_from_scratch(x), mean_from_scratch(y)
     return np.sum((x - mx) * (y - my)) / (n - 1)
 
 def correlation_from_scratch(x, y):
+    """공분산을 각자의 표준편차로 나누어 [-1, 1]로 표준화한다."""
     return covariance_from_scratch(x, y) / (std_from_scratch(x) * std_from_scratch(y))
+
+print(f"공분산 직접 {covariance_from_scratch(CA_PRICES, NY_PRICES):.4f} | "
+      f"pandas {pd.Series(CA_PRICES).cov(pd.Series(NY_PRICES)):.4f}")
+print(f"상관   직접 {correlation_from_scratch(CA_PRICES, NY_PRICES):.4f} | "
+      f"pandas {pd.Series(CA_PRICES).corr(pd.Series(NY_PRICES)):.4f}")
+
+# Cov(X, X) = Var(X) 임을 확인해 본다
+print(f"Cov(CA, CA) = {covariance_from_scratch(CA_PRICES, CA_PRICES):.4f}"
+      f"  =  Var(CA) = {variance_from_scratch(CA_PRICES):.4f}")
+```
+
+출력:
+
+```
+공분산 직접 13.1002 | pandas 13.1002
+상관   직접 0.9970 | pandas 0.9970
+Cov(CA, CA) = 13.7559  =  Var(CA) = 13.7559
 ```
 
 ---
@@ -154,26 +241,55 @@ def correlation_from_scratch(x, y):
 
 ```python
 data = CA_PRICES
-m   = mean_from_scratch(data)     # 242.2177
-med = median_from_scratch(data)   # 241.7600
-mod = mode_from_scratch(data)     # rounding-dependent
-var = variance_from_scratch(data) # 12.8310
-sd  = std_from_scratch(data)      #  3.5821
-
 s = pd.Series(data)
-# s.mean(), s.median(), s.var(), s.std() match the above
+
+# 뒤의 시각화에서 쓰려고 평균과 중앙값을 이름에 담아 둔다
+m   = mean_from_scratch(data)
+med = median_from_scratch(data)
+
+# 직접 구현한 함수와 pandas 메서드를 한 줄씩 나란히 찍는다.
+# 마지막 열의 차이가 0에 가까우면 구현이 맞은 것이다.
+# 정확히 0이 아니라 1e-15 수준으로 남는 것은 부동소수점 반올림 때문이며,
+# 계산 순서가 달라서 생기는 정상적인 오차다.
+checks = [
+    ("mean",   m,                           s.mean()),
+    ("median", med,                          s.median()),
+    ("var",    variance_from_scratch(data), s.var()),
+    ("std",    std_from_scratch(data),      s.std()),
+]
+
+print(f"{'stat':<8}{'from scratch':>14}{'pandas':>14}{'diff':>12}")
+for name, mine, theirs in checks:
+    print(f"{name:<8}{mine:>14.6f}{theirs:>14.6f}{mine - theirs:>12.2e}")
+
+# 두 지역 사이의 관계
+cov  = covariance_from_scratch(CA_PRICES, NY_PRICES)
+corr = correlation_from_scratch(CA_PRICES, NY_PRICES)
+print(f"\n공분산 = {cov:.4f}")
+print(f"상관   = {corr:.4f}")
 ```
 
-CA 대 NY의 경우:
+출력:
 
-```python
-cov  = covariance_from_scratch(CA_PRICES, NY_PRICES)   # 11.7610
-corr = correlation_from_scratch(CA_PRICES, NY_PRICES)   #  0.9998
+```
+stat      from scratch        pandas        diff
+mean        242.310208    242.310208    0.00e+00
+median      242.015000    242.015000    0.00e+00
+var          13.755900     13.755900   -5.33e-15
+std           3.708895      3.708895   -8.88e-16
+
+공분산 = 13.1002
+상관   = 0.9970
 ```
 
-거의 완벽한 상관($r \approx 1$)은 두 계열이 같은 기간에 비슷하게 꾸준한 하락 추세를 따랐음을 반영한다.
+`diff` 열이 전부 $10^{-15}$ 이하다. 직접 구현한 정의가 pandas와 같은 답을 낸다는 뜻이다. 정확히 0이 아닌 것은 덧셈의 순서가 달라 생기는 부동소수점 반올림이며, 이 정도 크기는 정상이다.
 
----
+상관이 $r = 0.9970$으로 1에 매우 가깝다. 두 계열이 같은 기간에 비슷하게 꾸준한 하락 추세를 따랐기 때문이다.
+
+!!! warning "$r$이 1에 가깝다고 두 지역이 서로 영향을 준 것은 아니다"
+    두 계열 모두 **시간에 따라 단조 감소**한다. 시간이라는 공통 추세가 두 변수를 함께 끌어내리므로 상관이 저절로 커진다. 1장에서 본 교란과 같은 구조다.
+
+    시계열끼리의 상관은 이런 **허위상관(spurious correlation)** 에 특히 취약하다. 우상향하는 두 계열은 서로 아무 관계가 없어도 $r \approx 1$이 나온다. 관계를 보려면 가격 자체가 아니라 **차분**(전월 대비 변화)의 상관을 봐야 한다.
 
 ## 8. 시각화
 
@@ -202,6 +318,8 @@ axes[2].set_title(f"CA vs NY  (r = {corr:.3f})")
 plt.tight_layout()
 plt.show()
 ```
+
+![CA HighQ Price Distribution](./img/descriptive_stats_weed_prices_180.png)
 
 왼쪽 패널은 대체로 균등한 분포를 보여준다(가격이 꾸준히 하락하므로 각 가격 수준을 대략 한 번씩 지난다). 오른쪽 패널의 촘촘한 선형 산점이 거의 완벽한 상관을 확인해 준다.
 

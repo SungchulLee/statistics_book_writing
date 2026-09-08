@@ -61,6 +61,8 @@ def corr_text(x, y, **kwargs):
 g.map_upper(corr_text)
 ```
 
+![PairGrid로 삼각형마다 다른 그림 채우기](./img/pair_plots_44.png)
+
 ## 3. 집단별로 색을 입힌다
 
 `hue` 인자를 주면 범주형 변수에 따라 점의 색이 갈린다. 쌍그림의 가장 유용한 쓰임이다.
@@ -69,6 +71,8 @@ g.map_upper(corr_text)
 sns.pairplot(df[["Survived", "Age", "Fare", "Sex"]], hue="Sex",
              diag_kind="kde", plot_kws={"s": 12, "alpha": .5})
 ```
+
+![성별로 색을 입힌 쌍그림](./img/pair_plots_68.png)
 
 이렇게 하면 모든 산점도에서 두 집단이 색으로 나뉘고, 대각선에는 집단별 밀도곡선이 겹쳐 그려진다. **어느 변수 쌍에서 두 집단이 갈라지는지**가 한눈에 보인다. 분류 문제에서 어떤 변수가 유용할지 가늠하는 표준적인 첫 단계다.
 

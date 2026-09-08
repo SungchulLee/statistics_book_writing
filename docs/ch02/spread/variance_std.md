@@ -52,6 +52,13 @@ sample_variance = sample_data.var(ddof=1)
 print(f"Sample Variance (ddof=1): {sample_variance}")
 ```
 
+출력:
+
+```
+Population Variance (ddof=0): 1.0833333333333333
+Sample Variance (ddof=1): 1.3
+```
+
 ### 해석
 
 분산이 132.5라는 것은 시험 점수가 평균으로부터 평균적으로 132.5 단위의 제곱거리만큼 흩어져 있다는 뜻이다. 분산은 제곱된 단위로 표현되므로 직접 해석하기 어려울 수 있으며, 그래서 표준편차가 흔히 선호된다.

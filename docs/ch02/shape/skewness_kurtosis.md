@@ -38,6 +38,8 @@ if __name__ == "__main__":
     generate_and_plot_mixed_distribution()
 ```
 
+![왜도와 첨도](./img/skewness_kurtosis_21.png)
+
 ### 치우친 분포
 
 **치우친(skewed)** 분포는 자료가 한쪽으로 더 길게 뻗는다.
@@ -64,6 +66,8 @@ if __name__ == "__main__":
     generate_and_plot_right_skewed_distribution()
 ```
 
+![왜도와 첨도](./img/skewness_kurtosis_47.png)
+
 **왼쪽 치우침(음의 왜도):** 꼬리가 왼쪽으로 뻗는다. 평균 < 중앙값 < 최빈값. 예: 은퇴 연령.
 
 ```python
@@ -85,6 +89,8 @@ def generate_and_plot_left_skewed_distribution(seed: int = 0):
 if __name__ == "__main__":
     generate_and_plot_left_skewed_distribution()
 ```
+
+![왜도와 첨도](./img/skewness_kurtosis_69.png)
 
 ---
 
@@ -128,6 +134,8 @@ if __name__ == "__main__":
     generate_and_plot_histogram_and_box_plot_mixed_distribution()
 ```
 
+![Histogram of Combined Data (Density)](./img/skewness_kurtosis_107.png)
+
 ### 상자그림: 오른쪽으로 치우친 분포
 
 ```python
@@ -154,6 +162,8 @@ if __name__ == "__main__":
     generate_and_plot_histogram_and_box_plot_right_skewed()
 ```
 
+![Histogram of Combined Data (Density)](./img/skewness_kurtosis_133.png)
+
 ### 상자그림: 왼쪽으로 치우친 분포
 
 ```python
@@ -179,6 +189,8 @@ def generate_and_plot_histogram_and_box_plot_left_skewed(seed: int = 0):
 if __name__ == "__main__":
     generate_and_plot_histogram_and_box_plot_left_skewed()
 ```
+
+![Histogram of Combined Data (Density)](./img/skewness_kurtosis_159.png)
 
 ---
 
@@ -247,6 +259,8 @@ def main():
 if __name__ == "__main__":
     main()
 ```
+
+![{title}\nSkewness = {skewness:.4f}](./img/skewness_kurtosis_199.png)
 
 ---
 
@@ -323,6 +337,8 @@ if __name__ == "__main__":
     main()
 ```
 
+![{title}\nExcess Kurtosis = {excess_kurtosis:.4f}](./img/skewness_kurtosis_275.png)
+
 ### 파이썬에서 첨도 계산하기
 
 SciPy는 초과첨도를 직접 계산해 주는 편리한 함수를 제공한다.
@@ -336,6 +352,13 @@ data = np.random.normal(0, 1, 10000)
 # All three return excess kurtosis (kurtosis - 3)
 print(stats.kurtosis(data))
 print(stats.describe(data).kurtosis)
+```
+
+출력:
+
+```
+0.05060312259460087
+0.05060312259460087
 ```
 
 ---

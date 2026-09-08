@@ -23,11 +23,31 @@ url = "https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic
 df = pd.read_csv(url, index_col='PassengerId')
 
 fig, ax = plt.subplots(figsize=(5, 3))
+
+# kind='box'로 pandas Series에서 곧바로 상자그림을 그린다.
+# vert=False는 눕혀 그린다는 뜻. 눕히면 축 이름이 길어도 읽기 편하다.
+# 결측값(Age가 비어 있는 177명)은 pandas가 알아서 제외한다.
 df['Age'].plot(kind='box', ax=ax, vert=False)
+
 ax.set_title("Horizontal Boxplot of Passenger Ages on Titanic")
 ax.set_xlabel("Age")
+# 상자와 수염 자체에 눈이 가도록 불필요한 테두리를 지운다
 ax.spines[["top", "left", "right"]].set_visible(False)
 plt.show()
+
+# 그림에 그려진 다섯 숫자를 그대로 확인해 본다
+print(df['Age'].describe()[['min', '25%', '50%', '75%', 'max']].round(2))
+```
+
+출력:
+
+```
+min     0.42
+25%    20.12
+50%    28.00
+75%    38.00
+max    80.00
+Name: Age, dtype: float64
 ```
 
 ![Horizontal_Boxplot_of_Passenger_Ages_on_Titanic](./img/Horizontal_Boxplot_of_Passenger_Ages_on_Titanic.png)
@@ -56,21 +76,44 @@ import numpy as np
 import scipy.stats as stats
 
 np.random.seed(0)
+
+# 오른쪽으로 치우친 자료를 만드는 요령:
+# 중심이 다른 정규분포 셋을 개수를 줄여 가며 겹친다.
+#   0 부근에 1000개  (본체)
+#   2 부근에  200개  (오른쪽 어깨)
+#   4 부근에  100개  (오른쪽 꼬리)
+# 왼쪽에는 대응하는 덩어리가 없으므로 분포가 오른쪽으로 길어진다.
 main_data = stats.norm().rvs(1_000)
 right_1 = stats.norm(loc=2).rvs(200)
 right_2 = stats.norm(loc=4).rvs(100)
 combined = np.concatenate((main_data, right_1, right_2))
 
+# 같은 자료를 위아래로 나란히 놓아 두 그림을 대응시킨다
 fig, (ax_hist, ax_box) = plt.subplots(2, 1, figsize=(12, 6))
 
+# 위: 히스토그램. 분포의 모양이 그대로 보인다.
 ax_hist.hist(combined, density=True, bins=30)
 ax_hist.set_title('Histogram of Right-Skewed Data')
 
+# 아래: 같은 자료의 상자그림. 다섯 숫자로 압축된 모습이다.
 ax_box.boxplot(combined, vert=False)
 ax_box.set_title('Boxplot of Right-Skewed Data')
 
 plt.tight_layout()
 plt.show()
+
+# 치우침이 숫자로도 드러나는지 확인한다.
+# 오른쪽으로 치우치면 평균 > 중앙값 이고, Q3-Q2 가 Q2-Q1 보다 크다.
+q1, q2, q3 = np.percentile(combined, [25, 50, 75])
+print(f"평균 {combined.mean():.3f}  중앙값 {q2:.3f}")
+print(f"Q2-Q1 = {q2-q1:.3f}   Q3-Q2 = {q3-q2:.3f}  (오른쪽이 길다)")
+```
+
+출력:
+
+```
+평균 0.595  중앙값 0.314
+Q2-Q1 = 0.794   Q3-Q2 = 1.098  (오른쪽이 길다)
 ```
 
 ![Right_Skewed_Data](./img/Right_Skewed_Data.png)
@@ -83,20 +126,47 @@ plt.show()
 import numpy as np
 import matplotlib.pyplot as plt
 
+# 표본 크기를 10^4, 5*10^4, 10^5 로 늘려 가며 얻은 몬테카를로 추정 오차.
+# 표본이 커질수록 오차가 0 주위로 좁아지는 것을 보이려고,
+# 같은 모양의 자료에 0.5, 0.25를 곱해 퍼짐을 줄였다.
 data_a = np.array([1, 2, 0, 0, 0, 1, 3, 1, 2, 1, 2, 4, 5, -1, -2, 0, 8])
 data_b = np.array([1, 2, 0, 0, 0, 1, 3, 1, 2, 1, 2, 4, 5, -1, -2, 0, -8]) * 0.5
 data_c = np.array([1, 2, 0, 0, 0, 1, 3, 1, 2, 1, 2, 4, 5, -1, -2, 0, 10, -7]) * 0.25
 
 fig, ax = plt.subplots()
-ax.boxplot([data_a, data_b, data_c],
-           tick_labels=["$10^4$", "$5 \\cdot 10^4$", "$10^5$"])
+
+# 리스트를 넘기면 상자를 나란히 그린다. 이것이 상자그림의 가장 큰 쓸모다.
+ax.boxplot([data_a, data_b, data_c])
+
+# 각 상자 아래에 이름을 붙인다.
+# boxplot에 직접 주는 인자는 matplotlib 버전에 따라 이름이 다르다
+# (3.9 미만은 labels=, 3.9 이상은 tick_labels=). 아래처럼 축에 직접 주면
+# 버전에 상관없이 동작한다.
+ax.set_xticklabels(["$10^4$", "$5 \\cdot 10^4$", "$10^5$"])
+
+# 비교 기준선. 이론값(FIM Delta = 1)을 가로선으로 깔아 두면
+# 각 상자가 그 선을 얼마나 감싸는지 눈으로 볼 수 있다.
 ax.plot([0, 1, 2, 3, 4], [1, 1, 1, 1, 1],
         label="FIM Delta", linestyle="--", color="r", alpha=0.7)
+
 ax.legend()
-ax.set_ylim(-10.0, 10.0)
+ax.set_ylim(-10.0, 10.0)      # 세 상자를 같은 눈금에 두어야 비교가 성립한다
 ax.set_xlabel('Number of Samples')
 ax.set_ylabel('MC Delta')
 plt.show()
+
+# 퍼짐이 실제로 줄어드는지 IQR로 확인한다
+for name, d in [("10^4", data_a), ("5*10^4", data_b), ("10^5", data_c)]:
+    q1, q3 = np.percentile(d, [25, 75])
+    print(f"{name:>7}: 중앙값 {np.median(d):6.2f}  IQR {q3-q1:.2f}")
+```
+
+출력:
+
+```
+   10^4: 중앙값   1.00  IQR 2.00
+ 5*10^4: 중앙값   0.50  IQR 1.00
+   10^5: 중앙값   0.25  IQR 0.50
 ```
 
 ![Comparative_Box_Plots](./img/Comparative_Box_Plots.png)

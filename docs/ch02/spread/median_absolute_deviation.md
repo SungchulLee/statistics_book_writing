@@ -39,7 +39,9 @@ import pandas as pd
 from statsmodels import robust
 
 # Load state data
-state = pd.read_csv('state.csv')
+# 미국 50개 주의 인구와 살인율. 오른쪽으로 크게 치우친 전형적인 자료다.
+url = ('https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists/master/data/state.csv')
+state = pd.read_csv(url)
 
 # Standard deviation (sensitive to outliers)
 std_dev = state['Population'].std()
@@ -78,7 +80,9 @@ import numpy as np
 from statsmodels import robust
 
 # Original state population data
-state = pd.read_csv('state.csv')
+# 미국 50개 주의 인구와 살인율. 오른쪽으로 크게 치우친 전형적인 자료다.
+url = ('https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists/master/data/state.csv')
+state = pd.read_csv(url)
 original_std = state['Population'].std()
 original_mad = robust.scale.mad(state['Population'])
 
@@ -94,6 +98,14 @@ outlier_mad = robust.scale.mad(population_with_outliers)
 print("Impact of Outliers:")
 print(f"  Std Dev: {original_std:,.0f} → {outlier_std:,.0f} ({100 * (outlier_std - original_std) / original_std:.1f}% increase)")
 print(f"  MAD:     {original_mad:,.0f} → {outlier_mad:,.0f} ({100 * (outlier_mad - original_mad) / original_mad:.1f}% increase)")
+```
+
+출력:
+
+```
+Impact of Outliers:
+  Std Dev: 6,848,235 → 24,537,372 (258.3% increase)
+  MAD:     3,849,876 → 4,273,462 (11.0% increase)
 ```
 
 극단적인 이상치 두 개를 추가하면 표준편차는 극적으로 커지지만 MAD는 거의 변하지 않는다. 이것이 MAD의 강건성을 보여준다.
@@ -150,6 +162,13 @@ print(f"MAD (standardized): {robust.scale.mad(returns):.4f}")
 # The crash day (-0.50) inflates std dev much more than MAD
 ```
 
+출력:
+
+```
+Standard Deviation: 0.1407
+MAD (standardized): 0.0222
+```
+
 폭락한 하루(-0.50)가 표준편차를 크게 키워 전형적인 일간 변동성을 과장할 수 있다. MAD는 일상적인 변동에 대해 더 선명한 그림을 준다.
 
 ---
@@ -167,6 +186,12 @@ mad = robust.scale.mad(data)
 print(f"MAD: {mad:.2f}")
 ```
 
+출력:
+
+```
+MAD: 2.22
+```
+
 ### 직접 계산
 
 ```python
@@ -179,6 +204,12 @@ abs_dev = abs(data - median)
 mad = abs_dev.median()
 mad_standardized = mad / 0.6744897501960817  # Standardize for normal data
 print(f"MAD (standardized): {mad_standardized:.2f}")
+```
+
+출력:
+
+```
+MAD (standardized): 2.22
 ```
 
 ---

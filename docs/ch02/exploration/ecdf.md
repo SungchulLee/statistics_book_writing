@@ -28,20 +28,44 @@ import numpy as np
 import scipy.stats as stats
 
 np.random.seed(1)
-x = 4 + np.random.normal(0, 1.5, 100)
+x = 4 + np.random.normal(0, 1.5, 100)     # 평균 4, 표준편차 1.5의 정규 표본 100개
 
+# 표본에서 모수를 추정한다. 참값(4, 1.5)이 아니라 자료에서 잰 값을 쓴다.
 loc = x.mean()
 scale = x.std()
 
+# 이론적 CDF는 x가 정렬되어 있어야 선으로 이어 그릴 수 있다
 x.sort()
 cdf = stats.norm(loc=loc, scale=scale).cdf(x)
 
 fig, ax = plt.subplots(figsize=(12, 3))
+
+# ax.ecdf 가 경험적 누적분포함수를 그린다.
+# 자료점마다 1/n 씩 올라가는 계단함수이며, 여기서는 n=100 이라 계단이 촘촘해
+# 매끄러운 곡선처럼 보인다.
 ax.ecdf(x, ls="-", c="r", label="Empirical CDF")
+
+# 같은 자료에 적합한 정규분포의 이론적 CDF를 겹친다.
+# 두 곡선의 벌어짐이 곧 "정규분포 가정이 얼마나 맞는가"이다.
 ax.plot(x, cdf, "-b", label="Theoretical CDF")
 ax.legend()
 plt.show()
+
+# 두 곡선의 최대 수직거리가 콜모고로프-스미르노프 통계량 D 다.
+# 이 눈대중을 형식적 검정으로 만든 것이 KS 검정이다.
+D, pval = stats.kstest(x, stats.norm(loc=loc, scale=scale).cdf)
+print(f"최대 수직거리 D = {D:.4f}")
+print(f"KS 검정 p값     = {pval:.4f}")
 ```
+
+출력:
+
+```
+최대 수직거리 D = 0.0438
+KS 검정 p값     = 0.9863
+```
+
+![경험적 누적분포함수와 분위수](./img/ecdf_25.png)
 
 경험적 곡선과 이론적 곡선이 가깝게 겹치면 모수 모형이 잘 맞는 것이다. 체계적으로 벗어나면 왜도, 두꺼운 꼬리, 또는 다봉성을 나타낸다.
 
@@ -52,20 +76,39 @@ import matplotlib.pyplot as plt
 import numpy as np
 import scipy.stats as stats
 
-loc = 1
-scale = 2
+loc = 1        # 평균
+scale = 2      # 표준편차
 normal = stats.norm(loc=loc, scale=scale)
 
+# 평균에서 좌우 3 표준편차까지를 촘촘히 훑는다.
+# 정규분포는 이 범위에 확률의 99.7%가 들어 있다.
 x = np.linspace(loc - 3 * scale, loc + 3 * scale, 1_000)
-pdf = normal.pdf(x)
-cdf = normal.cdf(x)
+pdf = normal.pdf(x)     # 밀도함수: 각 점에서의 "빽빽함"
+cdf = normal.cdf(x)     # 분포함수: 그 점까지 누적된 확률
 
 fig, ax = plt.subplots(figsize=(12, 3))
 ax.plot(x, pdf, "-b", label="PDF")
 ax.plot(x, cdf, "-r", label="CDF")
 ax.legend()
 plt.show()
+
+# 두 함수의 관계를 숫자로 확인한다.
+#   CDF는 PDF를 적분한 것이므로 평균에서 정확히 0.5,
+#   PDF가 최대인 곳(평균)에서 CDF의 기울기가 가장 가파르다.
+print(f"CDF(평균)     = {normal.cdf(loc):.4f}")
+print(f"PDF 최댓값    = {pdf.max():.4f}  (x = {x[pdf.argmax()]:.2f})")
+print(f"P(|X-mu|<3s)  = {normal.cdf(loc+3*scale) - normal.cdf(loc-3*scale):.4f}")
 ```
+
+출력:
+
+```
+CDF(평균)     = 0.5000
+PDF 최댓값    = 0.1995  (x = 0.99)
+P(|X-mu|<3s)  = 0.9973
+```
+
+![경험적 누적분포함수와 분위수](./img/ecdf_50.png)
 
 확률밀도함수는 밀도가 어디에 몰려 있는지 보여주고, 누적분포함수는 누적 확률을 보여준다. 둘을 함께 보면 분포의 완전한 그림이 나온다.
 
@@ -123,6 +166,14 @@ print(f"{np.percentile(df.x.values, 75) = }")
 print(f"{stats.scoreatpercentile(df.x.values, 75) = }")
 ```
 
+출력:
+
+```
+df.x.quantile(0.75) = 12.0
+np.percentile(df.x.values, 75) = 12.0
+stats.scoreatpercentile(df.x.values, 75) = 12.0
+```
+
 ## 예: 스타벅스 음료의 당 함량
 
 영양학자들이 스타벅스 음료 32종의 당 함량(그램)을 측정했다. 누적상대도수 그래프를 이용하면 다음과 같다.
@@ -131,17 +182,35 @@ print(f"{stats.scoreatpercentile(df.x.values, 75) = }")
 import numpy as np
 import matplotlib.pyplot as plt
 
+# 당 함량을 5g 간격으로 끊고, 각 지점까지 누적된 비율을 기록한 자료다.
+# y가 단조 증가하고 마지막이 1.0으로 끝나는 것이 누적상대도수의 성질이다.
 x = np.arange(0, 55, 5)
 y = [0, 0.1, 0.1, 0.2, 0.3, 0.5, 0.6, 0.6, 0.8, 0.9, 1.0]
 
 fig, ax = plt.subplots(figsize=(12, 3))
-ax.plot(x, y, '-o')
+ax.plot(x, y, '-o')                          # 점을 찍고 이어 그린다
 ax.set_xlabel("Sugar Content (g)")
 ax.set_ylabel("Cumulative Relative Frequency")
+# y 눈금을 0.1 간격으로 촘촘히 두어야 백분위수를 눈으로 읽을 수 있다
 ax.set_yticks(np.arange(0, 1.1, 0.1))
-ax.grid()
+ax.grid()                                    # 격자가 있어야 가로세로로 읽어 나가기 쉽다
 plt.show()
+
+# 그림에서 눈으로 읽는 값을 코드로도 구해 본다.
+# 누적비율 y에서 가로로 이동해 곡선을 만나는 x가 그 백분위수다.
+for p_ in (0.25, 0.50, 0.75):
+    print(f"P{int(p_*100)} = {np.interp(p_, y, x):.1f} g")
 ```
+
+출력:
+
+```
+P25 = 17.5 g
+P50 = 25.0 g
+P75 = 38.8 g
+```
+
+![경험적 누적분포함수와 분위수](./img/ecdf_138.png)
 
 **질문과 답:**
 
@@ -172,6 +241,16 @@ fig, ax = plt.subplots(figsize=(2, 3))
 ax.boxplot(data)
 ax.set_title("Boxplot of Data")
 plt.show()
+```
+
+출력:
+
+```
+Min    : -2
+Q1     : 0.0
+Median : 1.0
+Q3     : 2.0
+Max    : 8
 ```
 
 ## Q-Q 그림: 분위수 대 분위수 비교
@@ -224,6 +303,8 @@ np.random.seed(0)
 sample_data = np.random.chisquare(df=10, size=1000)
 plot_qq(sample_data, dist="norm")  # Systematic departure from the line
 ```
+
+![경험적 누적분포함수와 분위수](./img/ecdf_240.png)
 
 ## 요약
 

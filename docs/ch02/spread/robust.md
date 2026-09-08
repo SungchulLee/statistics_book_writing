@@ -32,6 +32,12 @@ data_range = loans_data['x'].max() - loans_data['x'].min()
 print(f"{data_range = }")
 ```
 
+출력:
+
+```
+data_range = 195000
+```
+
 ### 한계
 
 범위는 전적으로 가장 극단적인 두 값에만 의존하므로 이상치에 매우 민감하다. 그 두 극단 사이에서 자료가 어떻게 분포하는지에 대해서는 아무 정보도 주지 않는다.
@@ -96,6 +102,8 @@ plt.tight_layout()
 plt.show()
 ```
 
+![Mean and Std Dev](./img/robust_63.png)
+
 ### 사분위수 계산하기
 
 ```python
@@ -111,6 +119,14 @@ q3 = df['x'].quantile(0.75)
 print(f"{q1 = }")
 print(f"{q2 = }")  # Median
 print(f"{q3 = }")
+```
+
+출력:
+
+```
+q1 = 45000.0
+q2 = 62000.0
+q3 = 85000.0
 ```
 
 ---

@@ -116,6 +116,8 @@ plt.tight_layout()
 plt.show()
 ```
 
+![Chebyshev](./img/descriptive_measures_advanced_97.png)
+
 ### 해석
 
 체비쇼프의 한계는 **보수적**이다. 정규분포에서는 자료의 95%가 표준편차 2배 안에 있어 체비쇼프가 보장하는 75%를 훨씬 웃돈다. 이 한계의 힘은 보편성에 있다. 심하게 치우쳤거나 다봉인 분포를 포함해, 분산이 유한한 어떤 분포에도 적용된다.
@@ -166,6 +168,14 @@ print(f"Mean of biased (ddof=0):      {biased_vars.mean():.4f}")
 print(f"Mean of unbiased (ddof=1):    {unbiased_vars.mean():.4f}")
 ```
 
+출력:
+
+```
+Population variance:          95.7905
+Mean of biased (ddof=0):      94.9057
+Mean of unbiased (ddof=1):    95.8643
+```
+
 ### 시각화
 
 ```python
@@ -180,6 +190,8 @@ ax.legend(fontsize=8)
 plt.tight_layout()
 plt.show()
 ```
+
+![Population vs Sample Variance](./img/descriptive_measures_advanced_179.png)
 
 ### 해석
 

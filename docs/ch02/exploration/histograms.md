@@ -19,19 +19,41 @@ import matplotlib.pyplot as plt
 import scipy.stats as stats
 import numpy as np
 
+np.random.seed(0)      # scipy의 rvs 도 numpy의 전역 난수를 쓴다.
+                       # 시드를 고정해야 아래 출력이 재현된다.
+
 samples = 10_000
-x = stats.norm(loc=5, scale=10).rvs(samples)
+x = stats.norm(loc=5, scale=10).rvs(samples)     # 평균 5, 표준편차 10의 정규분포
 
 fig, ax = plt.subplots(figsize=(12, 3))
+
+# density=True 로 넓이의 합이 1이 되게 정규화한다.
+# 이렇게 해야 확률밀도함수와 같은 눈금 위에 놓여 겹쳐 그릴 수 있다.
+# hist는 (도수, 구간경계, 막대객체)를 돌려주므로 가운데만 받아 둔다.
 _, bins, _ = ax.hist(x, bins=100, density=True)
 
+# 표본에서 추정한 모수로 정규 밀도함수를 만든다.
+# 참값(5, 10)이 아니라 표본에서 잰 값을 쓴다는 점이 중요하다.
+# 실제 분석에서는 참값을 모르기 때문이다.
 x_mean = x.mean()
 x_std = x.std(ddof=1)
 pdf = stats.norm(loc=x_mean, scale=x_std).pdf(bins)
 
-ax.plot(bins, pdf, 'r-', linewidth=2)
+ax.plot(bins, pdf, 'r-', linewidth=2)          # 적합된 밀도곡선을 겹쳐 그린다
 plt.show()
+
+print(f"표본평균   {x_mean:.3f}  (참값 5)")
+print(f"표본표준편차 {x_std:.3f}  (참값 10)")
 ```
+
+출력:
+
+```
+표본평균   4.816  (참값 5)
+표본표준편차 9.876  (참값 10)
+```
+
+![히스토그램과 밀도 그림](./img/histograms_17.png)
 
 **핵심 사항:**
 
@@ -49,9 +71,15 @@ import pandas as pd
 from scipy import stats
 
 def plot_loan_income_distribution():
+    """대출 신청자 소득의 히스토그램에 정규분포를 겹쳐 그린다.
+
+    앞 예제와 코드 구조는 같지만 결론이 정반대다.
+    앞에서는 곡선이 히스토그램에 잘 맞았고, 여기서는 맞지 않는다.
+    """
     url = 'https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists/master/data/loans_income.csv'
     df = pd.read_csv(url)
 
+    # 소득의 평균과 표준편차. 이 둘만으로 정규분포가 결정된다.
     mean_income = df['x'].mean()
     std_dev_income = df['x'].std()
 
@@ -59,6 +87,8 @@ def plot_loan_income_distribution():
     _, bins, _ = ax.hist(df['x'], bins=30, density=True,
                          color='skyblue', label='Income histogram')
 
+    # 같은 평균·표준편차를 갖는 정규분포를 겹쳐 그린다.
+    # 두 곡선이 어긋나는 방식이 곧 "자료가 정규분포와 어떻게 다른가"를 말해 준다.
     norm_pdf = stats.norm(loc=mean_income, scale=std_dev_income).pdf(bins)
     ax.plot(bins, norm_pdf, "--r", label='Normal distribution')
 
@@ -70,9 +100,25 @@ def plot_loan_income_distribution():
     ax.legend()
     plt.show()
 
+    # 치우침을 숫자로 확인한다.
+    # 오른쪽으로 치우치면 평균이 중앙값보다 크고 왜도가 양수다.
+    print(f"평균   {mean_income:,.0f}")
+    print(f"중앙값 {df['x'].median():,.0f}")
+    print(f"왜도   {stats.skew(df['x']):.3f}  (0이면 대칭)")
+
 if __name__ == "__main__":
     plot_loan_income_distribution()
 ```
+
+출력:
+
+```
+평균   68,761
+중앙값 62,000
+왜도   1.049  (0이면 대칭)
+```
+
+![Loan Income Distribution with Normal Fit](./img/histograms_46.png)
 
 히스토그램과 정규곡선이 어긋나는 모습이 오른쪽 치우침을 드러낸다. 고소득자의 긴 꼬리가 적합된 정규분포를 오른쪽으로 끌어당긴다.
 
@@ -117,6 +163,8 @@ plt.tight_layout()
 plt.show()
 ```
 
+![히스토그램과 밀도 그림](./img/histograms_83.png)
+
 ## 범주형에 가까운 자료의 히스토그램: 타이타닉
 
 범주형 변수와 수치형 변수가 섞인 자료에서도 히스토그램은 각 열의 분포를 시각화하는 데 도움이 된다.
@@ -128,15 +176,36 @@ import pandas as pd
 url = "https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv"
 df = pd.read_csv(url, index_col='PassengerId')
 
+# 다섯 변수를 한 줄에 나란히 그린다.
+# 자료를 처음 받았을 때 모든 변수를 한눈에 훑는 표준적인 방법이다.
 fig, axes = plt.subplots(1, 5, figsize=(12, 3))
 titles = ("Sex", "Survived", "Age", "Pclass", "Age")
 
 for ax, title in zip(axes, titles):
+    # 변수 유형이 섞여 있다는 점에 주목하라.
+    #   Sex      문자열 범주형 -> 히스토그램이 사실상 막대그림이 된다
+    #   Survived 0/1 이진형    -> 막대 두 개
+    #   Pclass   1/2/3 순서형  -> 막대 세 개
+    #   Age      연속형        -> 진짜 히스토그램
+    # 범주형에 히스토그램을 쓰는 것은 원칙적으로 맞지 않지만,
+    # 탐색 단계에서 빠르게 훑을 때는 흔히 이렇게 한다.
     ax.hist(df[title], density=True, edgecolor='black', alpha=0.7)
     ax.set_title(title)
 
 plt.tight_layout()
 plt.show()
+
+print(df[["Sex", "Survived", "Age", "Pclass"]].dtypes)
+```
+
+출력:
+
+```
+Sex          object
+Survived      int64
+Age         float64
+Pclass        int64
+dtype: object
 ```
 
 ## 사용자화한 히스토그램: 도수분포표에서 밀도 히스토그램으로
@@ -194,6 +263,8 @@ def main():
 if __name__ == "__main__":
     main()
 ```
+
+![히스토그램과 밀도 그림](./img/histograms_164.png)
 
 ## 구간 개수 정하기
 

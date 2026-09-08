@@ -85,6 +85,16 @@ ax.set_title("Boxplot of Data")
 plt.show()
 ```
 
+출력:
+
+```
+Min    : -2
+Q1     : 0.0
+Median : 1.0
+Q3     : 2.0
+Max    : 8
+```
+
 ### 비교 상자그림
 
 상자그림은 집단이나 조건에 걸쳐 분포를 비교할 때 특히 효과적이다.
@@ -108,6 +118,8 @@ ax.set_xlabel('Number of Samples')
 ax.set_ylabel('MC Delta')
 plt.show()
 ```
+
+![이상치와 지렛대점](./img/outliers_102.png)
 
 ---
 
