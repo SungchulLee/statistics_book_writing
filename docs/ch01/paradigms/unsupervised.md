@@ -23,20 +23,37 @@ import numpy as np
 
 np.random.seed(42)
 
-# Simulate 3 clusters
+# === 자료 생성: 군집 3개 ===
+# 각 중심 주위에 100개씩 뿌려 총 300개를 만든다.
+# 어느 점이 어느 군집에서 나왔는지는 우리가 알지만, **알고리즘에게는 주지 않는다.**
+# 정답 레이블이 없다는 것이 비지도학습의 정의다.
 centers = np.array([[20, 5], [50, 30], [80, 15]])
 data = np.vstack([
     np.random.normal(loc=c, scale=[8, 4], size=(100, 2))
     for c in centers
 ])
 
-# Simple K-Means implementation
+# === K-평균 직접 구현 ===
 k = 3
+
+# 초기화: 자료점 중 k개를 무작위로 골라 첫 중심으로 삼는다.
+# K-평균은 초기값에 민감해서, 실무에서는 여러 번 돌려 가장 좋은 것을 고른다.
 centroids = data[np.random.choice(len(data), k, replace=False)]
+
 for iteration in range(20):
+    # (1) 배정 단계: 각 점을 가장 가까운 중심에 붙인다.
+    #     data[:, None]은 (300, 1, 2), centroids[None, :]은 (1, 3, 2) 모양이라
+    #     브로드캐스팅으로 (300, 3, 2)가 되고, axis=2로 노름을 내면
+    #     dists[i, j] = i번 점과 j번 중심 사이의 거리가 된다.
     dists = np.linalg.norm(data[:, None] - centroids[None, :], axis=2)
     labels = dists.argmin(axis=1)
+
+    # (2) 갱신 단계: 각 군집에 속한 점들의 평균을 새 중심으로 삼는다.
     new_centroids = np.array([data[labels == j].mean(axis=0) for j in range(k)])
+
+    # (3) 수렴 판정: 중심이 더 이상 움직이지 않으면 끝난다.
+    #     두 단계 모두 군집내 제곱합을 줄이기만 하므로 반드시 수렴한다.
+    #     다만 전역 최소가 아니라 국소 최소일 수 있다.
     if np.allclose(centroids, new_centroids):
         break
     centroids = new_centroids
@@ -46,6 +63,15 @@ for j in range(k):
     print(f"Cluster {j}: n={len(cluster)}, "
           f"center=({cluster.mean(0)[0]:.1f}, {cluster.mean(0)[1]:.1f})")
 print(f"Converged in {iteration + 1} iterations")
+```
+
+출력:
+
+```
+Cluster 0: n=101, center=(19.1, 5.3)
+Cluster 1: n=95, center=(50.6, 30.5)
+Cluster 2: n=104, center=(79.2, 14.9)
+Converged in 8 iterations
 ```
 
 ## 연습문제

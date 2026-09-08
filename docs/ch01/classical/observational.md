@@ -101,7 +101,7 @@
 ## 예제
 
 ```python
-"""Demonstrate confounding by age in an observational dataset."""
+"""관찰연구에서 나이가 교란요인으로 작동하는 모습."""
 
 import numpy as np
 from scipy import stats
@@ -109,27 +109,49 @@ from scipy import stats
 rng = np.random.default_rng(42)
 n = 500
 
-# === Confounder: age ===
+# === 교란요인: 나이 ===
+# 20세부터 70세까지 고르게 퍼져 있다고 두자.
 age = rng.uniform(20, 70, n)
 
-# Older people exercise less AND have higher blood pressure
+# 나이가 두 변수 모두에 화살표를 쏜다 — 이것이 교란의 정의다.
+#   운동량: 나이가 많을수록 줄어든다  (계수 -0.1)
+#   혈압:   나이가 많을수록 올라간다  (계수 +0.5)
+# 그리고 운동은 혈압을 실제로 **낮춘다** (계수 -0.3). 이것이 참 인과효과다.
 exercise = 10 - 0.1 * age + rng.normal(0, 1, n)
 bp = 80 + 0.5 * age - 0.3 * exercise + rng.normal(0, 5, n)
 
-# === Naive correlation ignoring age ===
+# === 나이를 무시한 순진한 상관 ===
+# 젊은 사람은 많이 운동하고 혈압이 낮다. 나이 든 사람은 반대다.
+# 나이를 빼놓고 보면 이 두 무리가 만들어 낸 가짜 패턴만 보인다.
 r_naive, _ = stats.pearsonr(exercise, bp)
 print(f"Naive correlation (exercise, BP): r = {r_naive:+.3f}")
 print("  (appears exercise *raises* BP — wrong sign! age confounds)")
 
-# === Partial correlation controlling for age ===
+# === 나이를 통제한 편상관 ===
 def residualize(y, x):
-    b = np.polyfit(x, y, 1)
-    return y - np.polyval(b, x)
+    """y에서 x로 설명되는 부분을 빼고 남은 잔차를 돌려준다.
 
+    y를 x에 단순회귀시킨 뒤 예측값을 빼는 것이다.
+    남은 잔차는 "x의 영향을 제거한 y"라고 읽을 수 있다.
+    """
+    b = np.polyfit(x, y, 1)          # y = b[0]*x + b[1] 로 직선 적합
+    return y - np.polyval(b, x)      # 실제값 - 예측값 = 잔차
+
+# 운동과 혈압에서 각각 나이의 영향을 뺀 뒤 상관을 낸다.
+# 이것이 "나이가 같은 사람들끼리 비교하면 어떤가"라는 물음에 해당한다.
 r_partial, _ = stats.pearsonr(residualize(exercise, age),
                               residualize(bp, age))
 print(f"Partial correlation (controlling age): r = {r_partial:+.3f}")
 print("  (correct negative sign emerges)")
+```
+
+출력:
+
+```
+Naive correlation (exercise, BP): r = -0.705
+  (appears exercise *raises* BP — wrong sign! age confounds)
+Partial correlation (controlling age): r = -0.086
+  (correct negative sign emerges)
 ```
 
 ## 연습문제

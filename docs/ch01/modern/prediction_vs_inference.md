@@ -61,7 +61,7 @@ $$
 ## 예제
 
 ```python
-"""Same data, two different analytical goals."""
+"""같은 자료, 서로 다른 두 목표."""
 
 import numpy as np
 
@@ -69,26 +69,53 @@ rng = np.random.default_rng(42)
 n = 300
 x1 = rng.standard_normal(n)
 x2 = rng.standard_normal(n)
-x3 = 0.8 * x1 + rng.normal(0, 0.5, n)  # correlated with x1
-y = 3 * x1 - 2 * x2 + rng.standard_normal(n)  # x3 has no causal effect
 
-X = np.column_stack([np.ones(n), x1, x2, x3])
+# x3는 x1과 상관이 높지만(상관 약 0.85) y에는 아무 인과효과가 없다.
+# 예측에는 도움이 되는데 해석하면 틀리는, 함정 변수다.
+x3 = 0.8 * x1 + rng.normal(0, 0.5, n)
 
-# === Inference: estimate coefficients with standard errors ===
+# 참 구조: y = 3*x1 - 2*x2 + 잡음.  x3는 들어 있지 않다.
+y = 3 * x1 - 2 * x2 + rng.standard_normal(n)
+
+X = np.column_stack([np.ones(n), x1, x2, x3])   # 절편 + 설명변수 3개
+
+# === 목표 1: 추론 — 각 계수가 얼마이고 얼마나 믿을 만한가 ===
+# 정규방정식 (X'X)b = X'y 를 풀어 최소제곱 추정량을 얻는다.
 beta = np.linalg.solve(X.T @ X, X.T @ y)
 y_hat = X @ beta
+
+# 잔차분산 s^2. 자유도는 n - (계수 개수) = 300 - 4.
 s2 = ((y - y_hat) ** 2).sum() / (n - 4)
+
+# 계수의 표준오차는 s^2 * (X'X)^{-1} 의 대각원소의 제곱근이다.
 se = np.sqrt(s2 * np.diag(np.linalg.inv(X.T @ X)))
+
+# t = beta / SE. 대략 |t| > 2 면 그 계수가 0이라고 보기 어렵다.
+# 참 구조에 없는 x3의 t가 작게 나오는지 확인해 보라.
 print("Inference:")
 for name, b, s in zip(["intercept", "x1", "x2", "x3"], beta, se):
     print(f"  {name:>10s}: beta = {b:+.3f}, SE = {s:.3f}, t = {b/s:+.2f}")
 
-# === Prediction: out-of-sample MSE ===
+# === 목표 2: 예측 — 새 자료에서 얼마나 잘 맞히는가 ===
+# 300개 중 200개로 학습하고 나머지 100개로 평가한다.
+# 표준오차도 t값도 계산하지 않는다. 관심은 오직 하나, 시험오차다.
 train_idx = rng.choice(n, 200, replace=False)
 test_idx = np.setdiff1d(np.arange(n), train_idx)
 b_train = np.linalg.solve(X[train_idx].T @ X[train_idx], X[train_idx].T @ y[train_idx])
 mse_test = ((y[test_idx] - X[test_idx] @ b_train) ** 2).mean()
 print(f"\nPrediction: test MSE = {mse_test:.3f}")
+```
+
+출력:
+
+```
+Inference:
+   intercept: beta = +0.044, SE = 0.057, t = +0.78
+          x1: beta = +3.008, SE = 0.105, t = +28.54
+          x2: beta = -2.101, SE = 0.056, t = -37.41
+          x3: beta = +0.031, SE = 0.113, t = +0.28
+
+Prediction: test MSE = 0.942
 ```
 
 여기서 $x_3$은 $x_1$과 상관되어 있지만 $y$에 인과효과가 없다는 점에 주목하라. 추론 표에서 $x_3$의 계수는 0에 가깝고 표준오차는 넓게 나타난다($x_1$ 너머의 신호를 더하지 않음을 올바르게 짚어낸다). 예측 모형은 $x_3$을 빼면 약간 나빠지겠지만(중복된 정보를 조금 담고 있으므로), *인과적* 결론은 달라지지 않는다.

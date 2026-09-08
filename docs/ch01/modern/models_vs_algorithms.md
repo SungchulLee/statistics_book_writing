@@ -28,15 +28,21 @@ import numpy as np
 np.random.seed(42)
 n = 200
 x = np.random.uniform(0, 10, n)
+
+# 참 자료생성과정: 이차식이다. 우리는 이것을 알지만 모형은 모른다.
 y = 3 + 2 * x - 0.1 * x**2 + np.random.normal(0, 2, n)
 
-# Statistical model: linear regression (interpretable)
+# === 모형 1: 단순 선형회귀 (해석하기 쉬운 통계 모형) ===
+# 설계행렬 X = [1, x]. 첫 열의 1은 절편에 대응한다.
+# 참 구조는 이차인데 직선으로 맞추므로 **편향**이 생긴다.
 X_lin = np.column_stack([np.ones(n), x])
-beta_lin = np.linalg.lstsq(X_lin, y, rcond=None)[0]
+beta_lin = np.linalg.lstsq(X_lin, y, rcond=None)[0]   # 최소제곱해
 y_pred_lin = X_lin @ beta_lin
 mse_lin = np.mean((y - y_pred_lin)**2)
 
-# More flexible model: polynomial regression
+# === 모형 2: 이차 다항회귀 (더 유연한 모형) ===
+# 설계행렬에 x^2 열을 더한다. 참 구조를 담을 수 있게 된다.
+# 여전히 "선형"모형이라는 점에 주의하라. 계수에 대해 선형이면 선형모형이다.
 X_poly = np.column_stack([np.ones(n), x, x**2])
 beta_poly = np.linalg.lstsq(X_poly, y, rcond=None)[0]
 y_pred_poly = X_poly @ beta_poly
@@ -45,6 +51,14 @@ mse_poly = np.mean((y - y_pred_poly)**2)
 print(f"Linear model MSE:     {mse_lin:.3f}  (coeffs: {beta_lin.round(3)})")
 print(f"Polynomial model MSE: {mse_poly:.3f}  (coeffs: {beta_poly.round(3)})")
 print(f"True: y = 3 + 2x - 0.1x^2 + noise")
+```
+
+출력:
+
+```
+Linear model MSE:     4.069  (coeffs: [4.81  0.991])
+Polynomial model MSE: 3.718  (coeffs: [ 3.504  1.802 -0.082])
+True: y = 3 + 2x - 0.1x^2 + noise
 ```
 
 ## 연습문제

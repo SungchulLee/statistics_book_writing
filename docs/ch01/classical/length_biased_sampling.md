@@ -125,26 +125,35 @@ $$
 버스 간격의 변동이 커질수록 승객이 겪는 대기시간이 어떻게 늘어나는지를, 시뮬레이션과 이론값을 나란히 놓고 확인한다.
 
 ```python
-"""Inspection paradox: the interval you land in is longer than average."""
+"""검사 역설: 내가 도착한 간격은 평균보다 길다."""
 
 import numpy as np
 
 rng = np.random.default_rng(1)
-mean_gap = 10.0        # minutes between buses, on average
+mean_gap = 10.0        # 버스 사이 평균 간격(분)
 n_buses = 200_000
 n_riders = 200_000
 
 
 def simulate(gaps, label):
-    """Drop riders at uniform random times and measure their gap and wait."""
+    """승객을 아무 때나 정류장에 떨어뜨리고, 그가 겪는 간격과 대기시간을 잰다."""
+    # 간격들을 누적하면 각 버스의 도착 시각이 된다
     arrivals = np.cumsum(gaps)
     horizon = arrivals[-1]
+
+    # 여기가 길이 편향이 생기는 지점이다.
+    # 승객을 **시간축 위에** 고르게 뿌린다(간격 위에 고르게가 아니다).
+    # 긴 간격일수록 시간축에서 차지하는 폭이 넓으므로 더 많은 승객이 그 안에 떨어진다.
     riders = rng.uniform(0, horizon, n_riders)
 
-    idx = np.searchsorted(arrivals, riders)          # which gap each rider is in
-    observed_gap = gaps[idx]
-    wait = arrivals[idx] - riders
+    # 각 승객이 어느 간격에 속하는지 이진탐색으로 찾는다
+    idx = np.searchsorted(arrivals, riders)
+    observed_gap = gaps[idx]                 # 승객이 겪은 간격
+    wait = arrivals[idx] - riders            # 다음 버스까지 기다린 시간
 
+    # 이론값: E[관측 간격] = E[간격] * (1 + CV^2)
+    #   CV = 변동계수 = 표준편차 / 평균
+    # 간격이 일정하면 CV=0이라 편향이 없고, 들쭉날쭉할수록 편향이 커진다.
     cv2 = gaps.var() / gaps.mean() ** 2
     print(f"{label}")
     print(f"  gap mean (bus company) : {gaps.mean():5.2f} min")
@@ -153,11 +162,26 @@ def simulate(gaps, label):
     print(f"  mean wait              : {wait.mean():5.2f} min")
 
 
-# === Perfectly regular timetable: sigma = 0 ===
+# === 경우 1: 정확히 10분마다. 표준편차 0이므로 CV = 0 ===
+# 편향이 전혀 없다. 버스회사의 평균과 승객이 겪는 평균이 같다.
 simulate(np.full(n_buses, mean_gap), "Every 10 minutes exactly")
 
-# === Poisson arrivals: sigma = mean, so CV = 1 ===
+# === 경우 2: 지수분포 간격(포아송 도착). 표준편차 = 평균이므로 CV = 1 ===
+# 이론값이 10 * (1 + 1) = 20분. 승객이 겪는 간격이 두 배가 된다.
 simulate(rng.exponential(mean_gap, n_buses), "Exponential gaps (Poisson buses)")
+```
+
+출력:
+
+```
+Every 10 minutes exactly
+  gap mean (bus company) : 10.00 min
+  gap seen by riders     : 10.00 min (theory: 10.00)
+  mean wait              :  5.00 min
+Exponential gaps (Poisson buses)
+  gap mean (bus company) :  9.98 min
+  gap seen by riders     : 19.87 min (theory: 19.89)
+  mean wait              :  9.96 min
 ```
 
 두 노선 모두 "평균 배차 10분"이다. 승객이 겪는 것은 5분과 10분으로 두 배 차이가 난다. 차이를 만드는 것은 평균이 아니라 **분산**이다.

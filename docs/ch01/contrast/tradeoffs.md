@@ -46,7 +46,7 @@
 ## 예제
 
 ```python
-"""Classical A/B test (inference) vs. modern prediction on the same setup."""
+"""같은 도구(선형모형)로 목표가 다른 두 일을 해 본다: 추론 대 예측."""
 
 import numpy as np
 from scipy import stats
@@ -55,23 +55,47 @@ rng = np.random.default_rng(42)
 n = 500
 true_effect = 2.0
 
-# === Classical A/B test ===
+# === 고전적 A/B 검정 — 목표는 "효과가 있는가"를 판정하는 것 ===
+# 처리를 무작위로 배정한다. 배정이 결과와 무관하므로 인과 해석이 가능하다.
 group = rng.choice([0, 1], size=n)
 outcome = 10 + true_effect * group + rng.normal(0, 5, n)
+
+# 관심사는 계수 하나(효과의 크기)와 그것에 대한 불확실성(p값)이다.
+# 예측 정확도는 아예 재지도 않는다. 잡음이 커서 개별 예측은 형편없다.
 t_stat, p_val = stats.ttest_ind(outcome[group == 1], outcome[group == 0])
 print("=== Classical A/B test ===")
 print(f"Estimated effect: {outcome[group == 1].mean() - outcome[group == 0].mean():+.2f} "
       f"(true {true_effect})")
 print(f"p = {p_val:.4f}")
 
-# === Modern prediction from observational features ===
+# === 현대적 예측 — 목표는 "새 자료에서 얼마나 잘 맞히는가" ===
+# 설명변수 3개짜리 회귀. 계수의 의미나 유의성에는 관심이 없다.
 X = rng.standard_normal((n, 3))
 y = 2 * X[:, 0] - X[:, 1] + 0.5 * X[:, 2] + rng.standard_normal(n)
+
+# 자료를 훈련용과 시험용으로 반씩 나눈다.
+# 이 분할이 예측 패러다임의 핵심이다. 모형이 **보지 않은** 자료로 평가해야
+# 외운 것인지 배운 것인지 구별할 수 있다.
 train, test = np.arange(n // 2), np.arange(n // 2, n)
+
+# 훈련자료로만 계수를 구한다(최소제곱)
 beta_train = np.linalg.lstsq(X[train], y[train], rcond=None)[0]
+
+# 시험자료에서 평균제곱오차를 잰다. 이것이 성적표다.
 mse_test = np.mean((y[test] - X[test] @ beta_train) ** 2)
 print("\n=== Modern prediction ===")
 print(f"Test MSE = {mse_test:.3f}")
+```
+
+출력:
+
+```
+=== Classical A/B test ===
+Estimated effect: +2.35 (true 2.0)
+p = 0.0000
+
+=== Modern prediction ===
+Test MSE = 1.017
 ```
 
 ## 연습문제

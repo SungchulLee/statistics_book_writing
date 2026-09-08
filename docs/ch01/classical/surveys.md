@@ -66,14 +66,19 @@ SRS에서 $\mathrm{SE}(\bar y) = \sigma/\sqrt{n}$이다. $n$을 네 배로 하�
 ## 예제
 
 ```python
-"""Compare simple random and stratified sampling on a synthetic population."""
+"""단순무작위추출과 층화추출을 인공 모집단에서 비교한다."""
 
 import numpy as np
 import pandas as pd
 
 rng = np.random.default_rng(42)
 
-# === Population with two strata ===
+# === 두 층으로 이루어진 모집단 ===
+# 젊은 층 70%, 나이 든 층 30%. 두 층의 소득 분포가 뚜렷이 다르다.
+#   Young: 평균 4만, 표준편차 1만
+#   Old:   평균 7만, 표준편차 1.5만
+# 층 안에서는 비교적 고르고 층 사이에서 크게 갈리는 이 구조가
+# 층화추출이 이득을 보는 전형적인 상황이다.
 n_pop = 10_000
 stratum = rng.choice(["Young", "Old"], size=n_pop, p=[0.7, 0.3])
 income = np.where(
@@ -82,12 +87,16 @@ income = np.where(
     rng.normal(70_000, 15_000, n_pop),
 )
 pop = pd.DataFrame({"stratum": stratum, "income": income})
-true_mean = pop["income"].mean()
+true_mean = pop["income"].mean()      # 추정하려는 참값
 
-# === SRS of size 200 ===
+# === 방법 1: 단순무작위추출(SRS) 200명 ===
+# 층을 무시하고 1만 명 중 200명을 그냥 뽑는다.
+# 표본에 우연히 노년층이 많이(또는 적게) 들어올 수 있고, 그 우연이 추정값을 흔든다.
 srs = pop.sample(200, random_state=1)
 
-# === Stratified sample (proportional) ===
+# === 방법 2: 비례 층화추출 200명 ===
+# 각 층에서 그 층의 모집단 비율만큼 뽑는다: Young 140명, Old 60명.
+# 층의 구성비를 표본에서 고정해 버리므로 "우연히 치우칠" 여지가 사라진다.
 strat = pop.groupby("stratum", group_keys=False).apply(
     lambda x: x.sample(int(round(200 * len(x) / n_pop)), random_state=1)
 )
@@ -95,6 +104,14 @@ strat = pop.groupby("stratum", group_keys=False).apply(
 print(f"True mean:        ${true_mean:,.0f}")
 print(f"SRS estimate:     ${srs['income'].mean():,.0f}")
 print(f"Stratified est.:  ${strat['income'].mean():,.0f}")
+```
+
+출력:
+
+```
+True mean:        $49,092
+SRS estimate:     $49,455
+Stratified est.:  $48,375
 ```
 
 ## 연습문제

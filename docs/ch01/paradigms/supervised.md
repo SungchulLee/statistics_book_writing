@@ -64,31 +64,60 @@ from scipy.special import expit  # logistic function
 np.random.seed(42)
 n = 1000
 
-# Simulate binary classification: loan default
+# === 자료 생성: 대출 연체를 맞히는 이진 분류 문제 ===
+# 설명변수 둘을 만든다.
+#   income  연소득(천 달러). clip(10)으로 하한을 둔다
+#   dti     소득 대비 부채 비율(debt-to-income). 0.01~1.0으로 자른다
 income = np.random.normal(60, 20, n).clip(10)
 dti = np.random.normal(0.3, 0.15, n).clip(0.01, 1.0)
+
+# 참 구조를 로그오즈로 적는다.
+#   소득이 낮을수록(50 - income이 클수록) 연체 확률이 오르고
+#   부채비율이 높을수록(dti - 0.3이 클수록) 크게 오른다
 log_odds = -3 + 0.01 * (50 - income) + 5 * (dti - 0.3)
+
+# expit(z) = 1/(1+e^{-z}). 로그오즈를 0~1 사이 확률로 바꾼다.
 prob = expit(log_odds)
+
+# 각자 자기 확률로 동전을 던져 실제 연체 여부(정답 레이블)를 정한다
 default = np.random.binomial(1, prob)
 
-# Train/test split
+# === 훈련/시험 분할 ===
+# 앞 700개로 배우고 뒤 300개로 평가한다.
+# 지도학습의 성적은 반드시 **보지 않은 자료**에서 재야 한다.
 train, test = np.arange(700), np.arange(700, n)
-X = np.column_stack([np.ones(n), income, dti])
+X = np.column_stack([np.ones(n), income, dti])   # 절편 열을 앞에 붙인다
 
-# Fit logistic regression by minimizing negative log-likelihood
+# === 적합: 음의 로그가능도를 최소화한다 ===
 def neg_log_lik(beta):
+    """로지스틱 회귀의 음의 로그가능도.
+
+    한 관측의 로그가능도는  y*z - log(1 + e^z)  이다 (z는 로그오즈).
+    log1p(exp(z))는 log(1+exp(z))를 수치적으로 안정하게 계산한다.
+    최소제곱과 달리 닫힌 해가 없어 수치 최적화가 필요하다.
+    """
     z = X[train] @ beta
     return -np.sum(default[train] * z - np.log1p(np.exp(z)))
 
+# BFGS: 기울기를 근사해 내려가는 준뉴턴법
 result = minimize(neg_log_lik, np.zeros(3), method="BFGS")
 beta_hat = result.x
 
-probs_test = expit(X[test] @ beta_hat)
-preds = (probs_test > 0.5).astype(int)
+# === 평가: 시험자료에서의 정확도 ===
+probs_test = expit(X[test] @ beta_hat)   # 예측 확률
+preds = (probs_test > 0.5).astype(int)   # 0.5를 문턱으로 0/1 판정
 accuracy = np.mean(preds == default[test])
 print(f"Test accuracy:        {accuracy:.3f}")
 print(f"Default rate (test):  {default[test].mean():.3f}")
 print(f"Coefficients:         {beta_hat.round(4)}")
+```
+
+출력:
+
+```
+Test accuracy:        0.957
+Default rate (test):  0.043
+Coefficients:         [-3.6561 -0.0273  6.0932]
 ```
 
 클래스가 불균형할 때 정확도만 보면 오도된다. 대출의 10%만 부도가 난다면 "부도 없음"이라고만 답하는 모형도 정확도가 90%가 될 수 있다. 실제 평가에는 정밀도, 재현율, ROC-AUC, 또는 거짓양성과 거짓음성의 비대칭적 비용을 반영한 비용가중 손실이 필요하다.

@@ -132,38 +132,44 @@ $t = 120$의 지도에서 문을 통과하는 순간을 생각해 보자. 그 �
 - **에이전트 B** ($x_t = $ 누적 지도): 본 것을 지도에 쌓고, 가장 가까운 "더럽다고 아는 칸 또는 미지의 칸"으로 최단 경로를 따라간다.
 
 ```python
-"""Observation is not state: a vacuum robot with a short-range radar."""
+"""관측은 상태가 아니다: 근거리 레이더를 단 로봇 청소기."""
 
 import numpy as np
 from collections import deque
 
-H, W = 11, 21          # room size
-RADAR = 2              # the robot only sees cells this close
-MAX_STEPS = 4000
+H, W = 11, 21          # 방의 크기 (세로 11칸, 가로 21칸)
+RADAR = 2              # 로봇은 자기 주변 2칸까지만 볼 수 있다
+MAX_STEPS = 4000       # 이 걸음 수를 넘으면 실패로 친다
 MOVES = {"up": (-1, 0), "down": (1, 0), "left": (0, -1), "right": (0, 1)}
-STEP_OF = {v: k for k, v in MOVES.items()}
+STEP_OF = {v: k for k, v in MOVES.items()}      # 변위 -> 행동 이름 (역방향 표)
 
 
-# === Two rooms joined by a single doorway ===
+# === 문 하나로 이어진 두 개의 방 ===
 def make_room():
+    """가장자리는 벽, 가운데 칸막이에 문이 하나 뚫린 방을 만든다."""
     wall = np.zeros((H, W), dtype=bool)
-    wall[0, :] = wall[-1, :] = wall[:, 0] = wall[:, -1] = True
-    wall[:, 10] = True                       # partition
-    wall[5, 10] = False                      # doorway
+    wall[0, :] = wall[-1, :] = wall[:, 0] = wall[:, -1] = True   # 바깥 테두리
+    wall[:, 10] = True                       # 가운데 칸막이
+    wall[5, 10] = False                      # 문 한 칸
+    # 이 구조가 중요하다. 문을 찾아 통과해야만 오른쪽 방을 청소할 수 있다.
     return wall
 
 
 def visible(pos):
+    """현재 위치에서 레이더에 잡히는 칸들의 목록. 이것이 관측 o_t 다."""
     r, c = pos
     return [(i, j) for i in range(r - RADAR, r + RADAR + 1)
                    for j in range(c - RADAR, c + RADAR + 1)
                    if 0 <= i < H and 0 <= j < W]
 
 
-# === Agent A: state = the current radar reading, with no memory ===
+# === 에이전트 A: 상태 = 지금 이 순간의 레이더 화면. 기억이 없다 ===
 def agent_observation(pos, dirty, known, known_dirty, rng):
+    """s_t = o_t 로 두는 정책. 보이는 것에만 반응한다."""
+    # 레이더 안에 더러운 칸이 있는가?
     seen = [cell for cell in visible(pos) if dirty[cell]]
     if seen:
+        # 있으면 그중 가장 가까운 칸(맨해튼 거리) 쪽으로 한 걸음 간다
         tr, tc = min(seen, key=lambda t: abs(t[0] - pos[0]) + abs(t[1] - pos[1]))
         options = []
         if tr < pos[0]: options.append("up")
@@ -172,53 +178,78 @@ def agent_observation(pos, dirty, known, known_dirty, rng):
         if tc > pos[1]: options.append("right")
         if options:
             return options[rng.integers(len(options))]
-    return list(MOVES)[rng.integers(4)]      # nothing dirty in sight: wander
+    # 보이는 범위에 더러운 칸이 없으면 무작위로 헤맨다.
+    # 어디를 이미 청소했는지 기억하지 못하므로 이것 말고는 할 수 있는 게 없다.
+    return list(MOVES)[rng.integers(4)]
 
 
-# === Agent B: state = the map accumulated so far ===
+# === 에이전트 B: 상태 = 지금까지 쌓아 올린 지도 ===
 def agent_map(pos, dirty, known, known_dirty, rng):
-    """Walk to the nearest cell that is known-dirty or still unexplored."""
+    """더럽다고 아는 칸 또는 아직 안 가 본 칸 중 가장 가까운 곳으로 간다.
+
+    너비우선탐색(BFS)으로 최단 경로를 찾는다.
+    핵심은 탐색이 실제 방이 아니라 **로봇이 가진 지도(known)** 위에서 이뤄진다는 것이다.
+    즉 이 정책은 자기가 아는 만큼만 계획할 수 있다.
+    """
     parent, queue, goal = {pos: None}, deque([pos]), None
     while queue:
         cur = queue.popleft()
+        # 목표 조건: 더러운 것으로 기록된 칸이거나(known_dirty),
+        #            아직 한 번도 관측하지 못한 칸이다(known == 0).
+        # 둘째 조건이 탐험을 만들어 낸다. 미지의 영역이 곧 목표가 되기 때문이다.
         if cur != pos and (known_dirty[cur] or known[cur] == 0):
             goal = cur
             break
         for dr, dc in MOVES.values():
             nxt = (cur[0] + dr, cur[1] + dc)
             if (0 <= nxt[0] < H and 0 <= nxt[1] < W
-                    and nxt not in parent and known[nxt] != 2):
+                    and nxt not in parent and known[nxt] != 2):   # 벽으로 아는 칸은 지나가지 않는다
                 parent[nxt] = cur
                 queue.append(nxt)
     if goal is None:
-        return list(MOVES)[rng.integers(4)]
+        return list(MOVES)[rng.integers(4)]     # 갈 곳이 없으면(있을 수 없지만) 무작위
+
+    # 찾은 목표에서 부모를 거슬러 올라가 "첫 걸음"이 무엇이었는지 알아낸다
     cur = goal
-    while parent[cur] != pos:                # back out the first step
+    while parent[cur] != pos:
         cur = parent[cur]
     return STEP_OF[(cur[0] - pos[0], cur[1] - pos[1])]
 
 
-# === One episode: clean until the room is done or time runs out ===
+# === 한 번의 에피소드: 방을 다 치우거나 시간이 다할 때까지 ===
 def run(agent, seed):
     rng = np.random.default_rng(seed)
     wall = make_room()
-    dirty = ~wall.copy()
+    dirty = ~wall.copy()          # 벽이 아닌 모든 칸이 처음엔 더럽다
     total = dirty.sum()
-    pos = (1, 1)
-    known = np.zeros((H, W), np.int8)        # 0 unknown, 1 free, 2 wall
+    pos = (1, 1)                  # 왼쪽 위 구석에서 출발
+
+    # 로봇이 **자기 머릿속에** 들고 있는 지도. 이것이 상태 x_t 다.
+    #   known:       0 = 모름, 1 = 빈 칸, 2 = 벽
+    #   known_dirty: 더럽다고 기록해 둔 칸
+    # 처음에는 전부 0, 즉 아무것도 모르는 채로 시작한다.
+    known = np.zeros((H, W), np.int8)
     known_dirty = np.zeros((H, W), bool)
 
     for step in range(1, MAX_STEPS + 1):
-        dirty[pos] = False                                   # clean underfoot
-        for cell in visible(pos):                            # o_t arrives
-            known[cell] = 2 if wall[cell] else 1             # x <- f(x, a, o)
+        dirty[pos] = False                                   # 발밑을 청소한다
+
+        # 상태 갱신 x_{t+1} = f(x_t, a_t, o_{t+1}).
+        # 새 관측이 들어오면 지도를 덮어쓴다. 이 한 줄이 A와 B를 가르는 전부다.
+        for cell in visible(pos):                            # o_t 가 도착
+            known[cell] = 2 if wall[cell] else 1
             known_dirty[cell] = dirty[cell]
+
         if not dirty.any():
-            return step, 1.0
+            return step, 1.0                                 # 방을 다 치웠다
+
+        # 정책이 행동 a_t 를 고르고, 벽이 아니면 이동한다
         dr, dc = MOVES[agent(pos, dirty, known, known_dirty, rng)]
         nxt = (pos[0] + dr, pos[1] + dc)
         if not wall[nxt]:
             pos = nxt
+
+    # 시간이 다했다. 얼마나 치웠는지(청소율)를 함께 돌려준다.
     return MAX_STEPS, 1 - dirty.sum() / total
 
 
@@ -231,6 +262,13 @@ for label, agent in [("s = o  (radar only) ", agent_observation),
     median = np.median(steps[finished]) if finished.any() else float("nan")
     print(f"{label}: finished {finished.mean():4.0%} of runs | "
           f"median steps {median:6.0f} | mean coverage {coverage.mean():6.1%}")
+```
+
+출력:
+
+```
+s = o  (radar only) : finished  27% of runs | median steps    342 | mean coverage  83.8%
+x = accumulated map : finished 100% of runs | median steps    171 | mean coverage 100.0%
 ```
 
 난수 시드 30개에 대한 결과다.
@@ -339,6 +377,15 @@ print("Estimated values:", np.round(Q, 2))
 print("True means:      ", true_means)
 print(f"Average reward:   {np.mean(rewards):.2f}")
 print(f"Best arm chosen:  {np.argmax(N)} (pulled {int(N[np.argmax(N)])} times)")
+```
+
+출력:
+
+```
+Estimated values: [0.83 1.41 2.04 1.14 0.61]
+True means:       [1.0, 1.5, 2.0, 1.2, 0.8]
+Average reward:   1.93
+Best arm chosen:  2 (pulled 903 times)
 ```
 
 ## 핵심 요약

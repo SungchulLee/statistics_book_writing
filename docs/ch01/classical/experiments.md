@@ -192,13 +192,19 @@ from scipy import stats
 
 np.random.seed(42)
 n_per_group = 100
-true_effect = 5.0
+true_effect = 5.0        # 우리가 심어 놓은 참 처리효과. 실제로는 알 수 없는 값이다
 
-# Simulate a randomized experiment
+# 무작위 배정된 실험을 모의생성한다.
+# 두 집단을 같은 분포에서 뽑되 처리군에만 true_effect 만큼을 더한다.
+# 이것이 곧 "무작위 배정"의 수학적 의미다.
+# 배정이 결과와 무관하므로 두 집단은 처리 여부를 빼면 통계적으로 동일하다.
 control = np.random.normal(50, 10, n_per_group)
 treatment = np.random.normal(50 + true_effect, 10, n_per_group)
 
+# 독립표본 t 검정: 두 집단의 평균이 같다는 귀무가설을 검정한다
 t_stat, p_value = stats.ttest_ind(treatment, control)
+
+# 처리효과의 추정값. 무작위 배정 덕분에 이 단순한 차이가 곧 인과효과의 추정이 된다.
 diff = treatment.mean() - control.mean()
 print(f"Control mean:   {control.mean():.2f}")
 print(f"Treatment mean: {treatment.mean():.2f}")
@@ -207,32 +213,63 @@ print(f"t-statistic:    {t_stat:.3f}")
 print(f"p-value:        {p_value:.4f}")
 ```
 
+출력:
+
+```
+Control mean:   48.96
+Treatment mean: 55.22
+Difference:     6.26 (true effect = 5.0)
+t-statistic:    4.755
+p-value:        0.0000
+```
+
 같은 참 효과를 두고 무작위 배정과 비무작위(교란된) 배정을 나란히 돌려 보면, 배정 방식 하나가 추정값을 어떻게 바꾸는지 보인다.
 
 ```python
-"""Randomized vs. confounded assignment under the same true effect."""
+"""참 효과는 같은데 배정 방식만 다르게 두 번 돌려 본다."""
 
 import numpy as np
 from scipy import stats
 
 rng = np.random.default_rng(42)
 n = 200
-treatment_effect = 3.0
+treatment_effect = 3.0     # 두 경우 모두 참 효과는 +3.0으로 같다
 
-# === Properly randomized trial ===
+# === 경우 1: 제대로 무작위 배정한 실험 ===
+# 배정이 환자의 어떤 특성과도 무관하다.
+# 따라서 두 집단은 처리 여부를 빼면 평균적으로 동일하고,
+# 단순한 평균 차이가 곧 인과효과의 불편추정이 된다.
 control = rng.normal(50, 8, n)
 treatment = rng.normal(50 + treatment_effect, 8, n)
 t_stat, p_val = stats.ttest_ind(treatment, control)
 print(f"[Randomized] estimated effect = {treatment.mean() - control.mean():+.2f} "
       f"(true = {treatment_effect}), p = {p_val:.4f}")
 
-# === Confounded (non-random) assignment ===
+# === 경우 2: 교란된(무작위가 아닌) 배정 ===
+# 중증도라는 교란요인을 넣는다. 0(가벼움)에서 10(심각함)까지.
 severity = rng.uniform(0, 10, 2 * n)
-prob_treat = 1 / (1 + np.exp(-(severity - 5)))  # sicker -> more likely treated
+
+# 의사가 중증 환자에게 처리를 더 많이 준다 — 현실에서 자연스러운 행동이다.
+# 로지스틱 함수라 중증도 5를 기준으로 처리 확률이 50%를 넘어간다.
+prob_treat = 1 / (1 + np.exp(-(severity - 5)))
 assigned = rng.binomial(1, prob_treat).astype(bool)
+
+# 결과는 두 힘이 겹쳐 결정된다.
+#   -2 * severity      중증일수록 결과가 나쁘다 (교란요인의 직접 효과)
+#   +3 * assigned      처리가 결과를 좋게 한다  (우리가 알고 싶은 참 효과)
 outcome = 50 - 2 * severity + treatment_effect * assigned + rng.normal(0, 5, 2 * n)
+
+# 이제 무작위 실험에서 하던 대로 단순 평균 차이를 내 본다.
+# 처리군에 중증 환자가 몰려 있으므로 이 값은 인과효과가 아니다.
 est = outcome[assigned].mean() - outcome[~assigned].mean()
 print(f"[Confounded] estimated effect = {est:+.2f}  (severity confounds)")
+```
+
+출력:
+
+```
+[Randomized] estimated effect = +3.40 (true = 3.0), p = 0.0000
+[Confounded] estimated effect = -5.06  (severity confounds)
 ```
 
 ## 연습문제

@@ -112,27 +112,39 @@ import numpy as np
 
 rng = np.random.default_rng(7)
 
-TRUE_RATE = np.array([0.10, 0.10])   # identical true crime rate in both districts
-PATROL_TOTAL = 100                   # officers to allocate each round
-POPULATION = 1000                    # people per district
+TRUE_RATE = np.array([0.10, 0.10])   # 두 지역의 참 범죄율. 완전히 같다
+PATROL_TOTAL = 100                   # 매 회차에 배분할 순찰 인력
+POPULATION = 1000                    # 지역당 인구
 ROUNDS = 30
 
 
 def simulate(explore):
-    """Send patrol to the hotspot; `explore` is the fraction assigned at random."""
-    records = np.array([102.0, 100.0])      # history starts just 2% apart
+    """검거 기록이 많은 쪽에 순찰을 보낸다. explore는 무작위로 배정하는 비율."""
+    # 출발점: 기록이 딱 2% 차이 난다. 우연히 생긴 차이일 뿐 실체가 없다.
+    records = np.array([102.0, 100.0])
     arrests = np.zeros(2)
     patrol_days = np.zeros(2)
 
     for _ in range(ROUNDS):
+        # (1) 모형의 예측: 기록이 많은 쪽을 "우범지역"으로 지목한다.
+        #     지역을 식별하는 변수는 어디에도 쓰이지 않는다. 오직 과거 기록뿐이다.
         hotspot = np.where(records == records.max(), 1.0, 0.0)
+
+        # (2) 배분: (1-explore)만큼은 우범지역에, explore만큼은 두 지역에 반씩.
+        #     explore=0 이면 순찰이 전부 한쪽으로 쏠린다.
         share = (1 - explore) * hotspot / hotspot.sum() + explore * 0.5
         patrol = PATROL_TOTAL * share
 
+        # (3) 현실: 두 지역에서 같은 비율(10%)로 범죄가 일어난다.
         crimes = rng.binomial(POPULATION, TRUE_RATE)
+
+        # (4) 관측: 그중 순찰을 보낸 만큼만 검거된다.
+        #     순찰이 0인 지역에서는 범죄가 일어나도 단 한 건도 기록되지 않는다.
         caught = rng.binomial(crimes, patrol / PATROL_TOTAL)
 
-        records = records + caught          # today's arrests become tomorrow's data
+        # (5) 되먹임: 오늘의 검거가 내일의 학습자료가 된다.
+        #     여기서 고리가 닫힌다. 순찰 -> 검거 -> 기록 -> 순찰.
+        records = records + caught
         arrests += caught
         patrol_days += patrol
 
@@ -141,7 +153,14 @@ def simulate(explore):
 
 for explore in (0.0, 0.2):
     records, arrests, patrol_days = simulate(explore)
+
+    # 모형이 보는 신호: 검거 "건수"의 지역별 비중.
+    # 순찰량에 비례해 부풀려지므로 편향되어 있다.
     count_share = 100 * records / records.sum()
+
+    # 편향 없는 신호: 순찰 하루당 검거 건수.
+    # 순찰량으로 나누었으므로 순찰 배분의 영향이 지워진다.
+    # 다만 순찰이 0이면 0으로 나눌 수 없어 nan이 된다 — 이 nan이 요점이다.
     rate = np.divide(arrests, patrol_days, out=np.full(2, np.nan),
                      where=patrol_days > 0)
 
@@ -153,6 +172,20 @@ for explore in (0.0, 0.2):
     print(f"  arrests per patrol   : {rate_txt[0]} / {rate_txt[1]}"
           "    <- the unbiased signal")
     print()
+```
+
+출력:
+
+```
+exploration = 0%
+  patrol days      A/B :    3000 / 0
+  arrest counts    A/B :   96.9% / 3.1%    <- what the model sees
+  arrests per patrol   : 1.003 /   ?      <- the unbiased signal
+
+exploration = 20%
+  patrol days      A/B :    2700 / 300
+  arrest counts    A/B :   87.8% / 12.2%    <- what the model sees
+  arrests per patrol   : 0.991 / 0.950    <- the unbiased signal
 ```
 
 출력이 세 가지를 한꺼번에 보여 준다.

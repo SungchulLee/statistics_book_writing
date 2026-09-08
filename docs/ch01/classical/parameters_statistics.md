@@ -72,35 +72,43 @@ $$
 ## 파이썬 예제
 
 ```python
-"""Illustrate the sampling distribution of the mean."""
+"""표본평균의 표집분포를 눈으로 확인한다."""
 
 import numpy as np
 import matplotlib.pyplot as plt
 
 rng = np.random.default_rng(0)
 
-# === True population parameters ===
+# === 모수: 우리가 알아내려는 대상 ===
+# 현실에서는 이 두 값을 절대 알 수 없다. 모의실험이므로 답을 미리 정해 둔다.
 mu_true = 100
 sigma_true = 15
 population = rng.normal(mu_true, sigma_true, size=500_000)
 
-# === Repeated sampling: compute sample means ===
-n = 50
-num_samples = 5_000
+# === 표본을 5000번 되풀이해 뽑고, 그때마다 표본평균을 기록한다 ===
+# 이것이 이 예제의 핵심이다. 현실에서는 표본을 한 번만 뽑으므로
+# 표본평균도 하나뿐이다. 여기서는 "만약 다시 뽑는다면 얼마가 나올까"를
+# 5000번 되풀이해 그 분포를 직접 만들어 본다.
+n = 50                # 표본 하나의 크기
+num_samples = 5_000   # 되풀이 횟수
 sample_means = np.array([
     rng.choice(population, n, replace=False).mean()
     for _ in range(num_samples)
 ])
 
-# === The sampling distribution of x-bar ===
+# === 표집분포에서 두 가지를 확인한다 ===
+#   (1) 중심: 표본평균들의 평균이 참 mu와 같은가?  -> 불편성
+#   (2) 퍼짐: 그 표준편차가 이론값 sigma/sqrt(n)과 맞는가? -> 표준오차 공식
 print(f"True μ:                {mu_true}")
 print(f"Mean of sample means:  {sample_means.mean():.3f}")
 print(f"Theoretical SE:        {sigma_true / np.sqrt(n):.3f}")
 print(f"Observed SE:           {sample_means.std(ddof=1):.3f}")
 
+# 5000개의 표본평균을 히스토그램으로 그린다.
+# 모집단이 정규분포이므로 표집분포도 정규분포이며, 참 mu를 중심으로 대칭이다.
 fig, ax = plt.subplots(figsize=(8, 3))
 ax.hist(sample_means, bins=40, density=True, alpha=0.7, edgecolor="black")
-ax.axvline(mu_true, color="red", lw=2, label=fr"$\mu = {mu_true}$")
+ax.axvline(mu_true, color="red", lw=2, label=fr"$\mu = {mu_true}$")   # 참값 표시
 ax.set_xlabel("Sample mean")
 ax.set_ylabel("Density")
 ax.set_title(rf"Sampling distribution of $\bar{{x}}$ (n={n})")
@@ -108,6 +116,24 @@ ax.legend()
 fig.tight_layout()
 plt.show()
 ```
+
+출력:
+
+```
+True μ:                100
+Mean of sample means:  99.969
+Theoretical SE:        2.121
+Observed SE:           2.097
+```
+
+![표본평균의 표집분포](./img/sampling_distribution_mean.png)
+
+숫자와 그림이 같은 말을 한다.
+
+- **중심.** 표본평균들의 평균이 99.969로 참값 100과 사실상 같다. 히스토그램의 봉우리도 빨간 선(참 $\mu$) 위에 놓여 있다. 표본평균이 $\mu$의 **불편추정량**이라는 뜻이다.
+- **퍼짐.** 이론값 $\sigma/\sqrt{n} = 15/\sqrt{50} = 2.121$과 관측값 2.097이 거의 맞는다.
+
+주목할 것은 **모집단의 표준편차가 15인데 표본평균들의 표준편차는 2.1**이라는 점이다. 개별 관측값보다 표본평균이 일곱 배쯤 덜 흔들린다. 이 축소가 $1/\sqrt{n}$ 배이며, 통계적 추론이 가능한 이유 자체다.
 
 ## 핵심 요약
 

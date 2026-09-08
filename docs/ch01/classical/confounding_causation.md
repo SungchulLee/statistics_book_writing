@@ -131,7 +131,7 @@ $Z$가 존재하는데 고려되지 않으면, 관측된 $X$와 $Y$의 연관성
 ## 예제
 
 ```python
-"""Simpson's paradox: confounding by department in admissions."""
+"""심슨의 역설: 학과가 교란요인일 때 공부시간과 성적의 상관이 뒤집힌다."""
 
 import numpy as np
 import pandas as pd
@@ -139,22 +139,47 @@ import pandas as pd
 rng = np.random.default_rng(42)
 n = 500
 
+# 교란요인: 학과. 학생은 A와 B에 절반씩 속한다.
 dept = rng.choice(["A", "B"], size=n, p=[0.5, 0.5])
-# Dept A: harder grading, attracts more studious applicants
+
+# 학과가 공부시간에 영향을 준다.
+#   A학과 학생은 평균 8시간, B학과 학생은 평균 4시간 공부한다.
 study_hours = np.where(dept == "A",
                        rng.normal(8, 1, n),
                        rng.normal(4, 1, n))
+
+# 학과가 성적에도 영향을 준다 — 이것이 교란의 핵심이다.
+#   A학과는 채점이 박해서 기본점이 50, B학과는 후해서 70에서 출발한다.
+#   반면 기울기는 두 학과 모두 +3으로 같다.
+#   즉 "공부시간이 1시간 늘면 성적이 3점 오른다"가 참인 인과효과다.
 grade = np.where(dept == "A",
                  50 + 3 * study_hours + rng.normal(0, 5, n),
                  70 + 3 * study_hours + rng.normal(0, 5, n))
 
+# 정리하면 이런 구조다.
+#   공부시간  <---  학과(교란요인)  --->  성적
+#         \___________ +3 ____________/
+# 학과가 두 화살표를 모두 쏘고 있으므로, 학과를 무시하면 상관이 오염된다.
 df = pd.DataFrame({"dept": dept, "study_hours": study_hours, "grade": grade})
 
+# 학과를 무시하고 전체에서 상관을 낸다 -> 음수가 나온다(!)
+# 많이 공부한 A학과 학생들의 성적이 채점이 박해서 낮게 나오기 때문이다.
 print(f"Overall correlation (hours, grade): {df['study_hours'].corr(df['grade']):+.3f}")
+
+# 학과별로 나누어 다시 낸다 -> 두 학과 모두 양수가 나온다.
+# 이것이 심슨의 역설이다. 부분에서의 방향과 전체에서의 방향이 반대다.
 for d in ["A", "B"]:
     sub = df[df["dept"] == d]
     print(f"  Dept {d}: corr = {sub['study_hours'].corr(sub['grade']):+.3f}, "
           f"mean grade = {sub['grade'].mean():.1f}")
+```
+
+출력:
+
+```
+Overall correlation (hours, grade): -0.349
+  Dept A: corr = +0.416, mean grade = 72.9
+  Dept B: corr = +0.549, mean grade = 82.0
 ```
 
 학과 내부의 상관은 인과관계가 시사하는 대로 양수다(더 공부하면 → 성적이 높다). 반면 전체 상관은 약해진다(더 극단적인 설정에서는 뒤집힐 수도 있다). 성적을 짜게 주는 학과가 공부량은 더 많으면서 *동시에* 성적은 더 낮기 때문인데, 이것이 바로 심슨의 역설을 만드는 학과라는 교란요인이다.

@@ -177,26 +177,44 @@
 ## 예제
 
 ```python
-"""Nonresponse correlated with the outcome distorts the estimate."""
+"""응답 여부가 결과와 상관되면 추정값이 왜곡된다."""
 
 import numpy as np
 
 rng = np.random.default_rng(42)
 n_pop = 10_000
 
-# True satisfaction (Gaussian, mean 5.5)
+# 1단계: 모집단 전체의 참 만족도. 평균 5.5의 정규분포를 1~10점으로 자른다.
+# 이 값은 우리가 모의실험에서만 알 수 있다. 현실에서는 관측되지 않는다.
 satisfaction = np.clip(rng.normal(5.5, 2.0, n_pop), 1, 10)
 
-# Response probability increases with satisfaction
+# 2단계: 무응답 편향의 핵심 — 응답 확률이 만족도에 따라 달라진다.
+#   만족도 1점: 0.1 + 0.08*0  = 10% 응답
+#   만족도 10점: 0.1 + 0.08*9 = 82% 응답
+# 만족한 사람일수록 설문에 답할 확률이 높다. 실제 고객 설문에서 흔한 양상이다.
 response_prob = 0.1 + 0.08 * (satisfaction - 1)
+
+# 각자 자기 확률로 동전을 던져 응답 여부를 정한다
 responded = rng.binomial(1, response_prob).astype(bool)
 
+# 3단계: 진실과 우리가 보게 될 값을 비교한다.
+#   true_mean   모집단 전체의 평균 (알 수 없는 참값)
+#   biased_mean 응답자만의 평균   (설문 보고서에 실릴 값)
 true_mean = satisfaction.mean()
 biased_mean = satisfaction[responded].mean()
 print(f"True population mean:    {true_mean:.2f}")
 print(f"Biased survey mean:      {biased_mean:.2f}")
 print(f"Bias (overestimate):     {biased_mean - true_mean:+.2f}")
 print(f"Response rate:           {responded.mean():.1%}")
+```
+
+출력:
+
+```
+True population mean:    5.48
+Biased survey mean:      6.13
+Bias (overestimate):     +0.65
+Response rate:           45.7%
 ```
 
 더 만족한 고객이 더 많이 응답하기 때문에 보고된 평균이 참된 만족도를 과대평가한다. 응답 기제를 모형화하지 않고서는 줄일 수 없는 편향이다.

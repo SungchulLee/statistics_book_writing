@@ -81,30 +81,40 @@
 효과가 실제로 있지만 작은 경우에도, 유의한 연구만 출판되면 문헌의 효과크기가 어떻게 부풀려지는지를 보여 준다.
 
 ```python
-"""Winner's curse: only significant studies get published."""
+"""승자의 저주: 유의한 연구만 출판되면 문헌의 효과크기가 부풀려진다."""
 
 import numpy as np
 from scipy import stats
 
 rng = np.random.default_rng(0)
 n_studies = 2000
-n_per_group = 25          # small, underpowered studies
-true_effect = 0.3         # Cohen's d — real but modest
+n_per_group = 25          # 집단당 25명 — 작고 검정력이 낮은 연구
+true_effect = 0.3         # 코헨의 d. 실재하지만 크지 않은 효과
 
-# === Run many independent studies ===
+# === 독립적인 연구 2000개를 돌린다 ===
+# 중요한 전제: 2000개 모두 참 효과 0.3인 같은 현상을 연구한다.
+# 즉 연구자들의 실력도, 현상도 모두 같다. 다른 것은 우연뿐이다.
 effects, pvals = [], []
 for _ in range(n_studies):
     control = rng.normal(0, 1, n_per_group)
     treated = rng.normal(true_effect, 1, n_per_group)
     t_stat, p = stats.ttest_ind(treated, control)
+
+    # 코헨의 d = (평균 차이) / (합동표준편차)
+    # 단위에 의존하지 않는 표준화된 효과크기라 연구끼리 비교할 수 있다.
     pooled_sd = np.sqrt((control.var(ddof=1) + treated.var(ddof=1)) / 2)
     effects.append((treated.mean() - control.mean()) / pooled_sd)
     pvals.append(p)
 
 effects, pvals = np.array(effects), np.array(pvals)
+
+# === 출판 필터 ===
+# p < 0.05 인 연구만 학술지에 실린다고 두자.
+# 검정력이 낮으므로, 통과하려면 우연히 효과가 크게 나와야 한다.
+# 다시 말해 **필터가 효과크기가 큰 표본을 골라낸다.** 이것이 승자의 저주다.
 published = pvals < 0.05
 
-# === What the drawer holds vs. what the literature shows ===
+# === 서랍 속에 남은 것과 문헌에 보이는 것을 비교한다 ===
 print(f"True effect                : {true_effect:.2f}")
 print(f"All studies,      mean d   : {effects.mean():.2f}  (n = {n_studies})")
 print(f"Published only,   mean d   : {effects[published].mean():.2f}  "
@@ -112,6 +122,16 @@ print(f"Published only,   mean d   : {effects[published].mean():.2f}  "
 print(f"Inflation                  : "
       f"{100 * (effects[published].mean() / true_effect - 1):.0f}%")
 print(f"Studies in the file drawer : {(~published).sum()}")
+```
+
+출력:
+
+```
+True effect                : 0.30
+All studies,      mean d   : 0.32  (n = 2000)
+Published only,   mean d   : 0.72  (n = 381)
+Inflation                  : 141%
+Studies in the file drawer : 1619
 ```
 
 모든 연구를 합치면 참값을 되찾지만, 유의한 것만 모으면 효과가 크게 부풀려진다. 부정직한 연구자도, 잘못된 통계도 없다. 걸러 내는 규칙 하나만으로 충분하다.

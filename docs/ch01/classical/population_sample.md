@@ -52,20 +52,40 @@ $$
 ## 예제
 
 ```python
-"""Sampling error decreases with sqrt(n)."""
+"""표본오차는 sqrt(n)에 반비례해 줄어든다."""
 
 import numpy as np
 
 rng = np.random.default_rng(42)
 
+# 1단계: 모집단을 만든다.
+# 실제 상황에서는 이 10만 명을 전부 조사할 수 없다는 것이 출발점이다.
+# 여기서는 모의실험이므로 참값(mu=170, sigma=10)을 우리가 알고 있고,
+# 표본에서 계산한 값이 그 참값에 얼마나 가까운지 확인할 수 있다.
 mu_true, sigma_true = 170, 10
 population = rng.normal(mu_true, sigma_true, size=100_000)
 
+# 2단계: 표본 크기를 10배씩 키워 가며 표본을 뽑고, 세 가지를 비교한다.
+#   x_bar        표본평균. 참값 170에 얼마나 가까운가
+#   empirical SE 표본에서 계산한 표준오차 = s / sqrt(n)
+#   theoretical  이론값 = sigma / sqrt(n). 모표준편차를 알 때의 값
+# 둘째와 셋째가 가까울수록 "표본으로 정밀도를 추정하는 일"이 잘 되고 있는 것이다.
 for n in [10, 100, 1_000, 10_000]:
+    # replace=False: 같은 사람을 두 번 뽑지 않는 비복원추출
     sample = rng.choice(population, size=n, replace=False)
     print(f"n = {n:>5d}: x_bar = {sample.mean():.3f}, "
+          # ddof=1: 표본표준편차(n-1로 나눔). 모표준편차의 불편추정에 쓴다
           f"empirical SE = {sample.std(ddof=1)/np.sqrt(n):.3f}, "
           f"theoretical = {sigma_true/np.sqrt(n):.3f}")
+```
+
+출력:
+
+```
+n =    10: x_bar = 170.932, empirical SE = 4.005, theoretical = 3.162
+n =   100: x_bar = 169.997, empirical SE = 0.972, theoretical = 1.000
+n =  1000: x_bar = 170.301, empirical SE = 0.322, theoretical = 0.316
+n = 10000: x_bar = 169.902, empirical SE = 0.100, theoretical = 0.100
 ```
 
 $n$이 100배가 될 때마다 표준오차는 대략 10분의 1로 떨어진다 — $\sqrt{n}$ 법칙이 작동하는 모습이다.

@@ -88,13 +88,24 @@ np.random.seed(42)
 n_funds = 1000
 years = 10
 
-# Simulate annual returns for hedge funds (many fail and close)
+# 1단계: 펀드 1000개의 연간 수익률을 10년치 모의생성한다.
+# 평균 5%, 표준편차 15%. 결과는 (1000, 10) 모양의 행렬이다.
+# 중요한 점: 모든 펀드가 완전히 같은 분포에서 나온다.
+#            즉 실력 차이는 없고 운의 차이만 있다.
 returns = np.random.normal(0.05, 0.15, (n_funds, years))
+
+# 누적 성장배수. cumprod가 (1+r)을 해마다 곱해 나간다.
+# cumulative[i, t] = i번 펀드의 t년째까지의 누적 배수
 cumulative = np.cumprod(1 + returns, axis=1)
 
-# Fund "dies" if cumulative return falls below 0.5 (50% drawdown)
+# 2단계: 폐쇄 규칙. 한 번이라도 누적 배수가 0.5 아래로 떨어지면 청산된다.
+# all(axis=1)은 "10년 내내 0.5를 넘겼는가"를 묻는다.
 survived = np.all(cumulative > 0.5, axis=1)
 
+# 3단계: 두 가지 평균을 비교한다.
+#   all_final       1000개 전부의 10년차 최종 배수 (진실)
+#   survivor_final  살아남은 펀드만의 최종 배수  (자료로 남는 것)
+# 실무에서 데이터베이스에 남아 있는 것은 둘째뿐이다. 청산된 펀드는 목록에서 사라진다.
 all_final = cumulative[:, -1]
 survivor_final = all_final[survived]
 
@@ -103,6 +114,16 @@ print(f"Survivors: {survived.sum()}")
 print(f"Mean final value (all funds):      {all_final.mean():.3f}")
 print(f"Mean final value (survivors only): {survivor_final.mean():.3f}")
 print(f"Survivorship bias: {survivor_final.mean() - all_final.mean():+.3f}")
+```
+
+출력:
+
+```
+Total funds: 1000
+Survivors: 966
+Mean final value (all funds):      1.618
+Mean final value (survivors only): 1.657
+Survivorship bias: +0.039
 ```
 
 ## 연습문제
