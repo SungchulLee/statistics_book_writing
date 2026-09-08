@@ -168,6 +168,11 @@ PCA를 전체 자료에 적합한 뒤 교차검증하는 것과, 겹 안에서 �
     from sklearn.pipeline import Pipeline
     from sklearn.model_selection import KFold, cross_val_score
 
+    rng = np.random.default_rng(0)
+    n, p = 100, 8
+    X = rng.normal(0, 1, (n, p))
+    y = X @ np.array([2., -1., 0.5, 0, 0, 0, 0, 0]) + rng.normal(0, 1, n)
+
     # 올바름: 파이프라인이 겹마다 PCA를 다시 적합한다
     pipe = Pipeline([('pca', PCA(3)), ('lr', LinearRegression())])
     proper = -cross_val_score(pipe, X, y, cv=KFold(5, shuffle=True, random_state=0),
@@ -178,6 +183,16 @@ PCA를 전체 자료에 적합한 뒤 교차검증하는 것과, 겹 안에서 �
     leaked = -cross_val_score(LinearRegression(), Z, y,
                               cv=KFold(5, shuffle=True, random_state=0),
                               scoring='neg_mean_squared_error').mean()
+
+    print(f"파이프라인(올바름): {proper:.4f}")
+    print(f"전체 적합(누설)   : {leaked:.4f}")
+    ```
+
+    출력:
+
+    ```
+    파이프라인(올바름): 3.8218
+    전체 적합(누설)   : 3.8103
     ```
 
     **차이가 크지 않다.** PCA가 $y$를 전혀 쓰지 않기 때문이다. 검정 겹의 $X$ 정보가 성분 방향에 반영되기는 하지만, $y$와의 관계는 여전히 훈련 겹에서만 학습된다.

@@ -133,6 +133,15 @@ $\lambda_{\max} = \frac{1}{n}\|\mathbf{X}^\top\mathbf{y}\|_\infty$에서 모든 
         print(f, (np.abs(b) > 1e-10).sum())
     ```
 
+    출력:
+
+    ```
+    1.0 0
+    0.99 1
+    0.5 1
+    0.1 3
+    ```
+
     표준화된 설명변수 15개, $n = 80$인 자료에서 $\lambda_{\max} = 3.5230$이다.
 
     | $\lambda / \lambda_{\max}$ | $\lambda$ | 0이 아닌 계수의 수 |

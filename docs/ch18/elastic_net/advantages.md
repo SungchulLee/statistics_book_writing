@@ -109,15 +109,30 @@ sklearn이 보정 엘라스틱넷을 적용하는지 직접 확인하라.
     ```python
     import numpy as np
     from sklearn.linear_model import ElasticNet, Ridge
-    n, a, l1 = 60, 0.5, 1e-8
+
+    rng = np.random.default_rng(0)
+    n, p = 60, 8
+    X = rng.normal(0, 1, (n, p))
+    X = (X - X.mean(0)) / X.std(0)          # 표준화
+    y = X @ np.array([2., -1., 0.5, 0, 0, 0, 0, 0]) + rng.normal(0, 1, n)
+    y = y - y.mean()
+
+    a, l1 = 0.5, 1e-8
     be = ElasticNet(alpha=a, l1_ratio=l1, fit_intercept=False,
                     max_iter=500000, tol=1e-14).fit(X, y).coef_
     br = Ridge(alpha=n*a*(1-l1), fit_intercept=False).fit(X, y).coef_
-    print(np.abs(be - br).max())          # 7.3e-09
-    print(np.abs(be - (1+a)*br).max())    # 크게 0이 아님
+    print(f"{np.abs(be - br).max():.2e}")        # 사실상 0
+    print(f"{np.abs(be - (1+a)*br).max():.4f}")  # 크게 0이 아님
     ```
 
-    **차이가 $7.3\times10^{-9}$로 사실상 0이다.** 즉 sklearn의 엘라스틱넷은 보정 없이 능형과 정확히 일치한다.
+    출력:
+
+    ```
+    5.58e-09
+    0.6645
+    ```
+
+    **차이가 $5.6\times10^{-9}$로 사실상 0이다.** 즉 sklearn의 엘라스틱넷은 보정 없이 능형과 정확히 일치한다.
 
     보정이 적용되었다면 $\lambda = 0.5$에서 계수가 $1.5$배여야 하고 차이가 $0$이 아니어야 한다.
 

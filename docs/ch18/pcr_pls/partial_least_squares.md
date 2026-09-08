@@ -133,10 +133,22 @@ PLS의 첫 가중벡터가 $X^\top y$에 비례한다는 사실을 확인하고,
     ```python
     import numpy as np
     from sklearn.cross_decomposition import PLSRegression
+
+    rng = np.random.default_rng(0)
+    n, p = 100, 8
+    X = rng.normal(0, 1, (n, p))
+    y = X @ np.array([2., -1., 0.5, 0, 0, 0, 0, 0]) + rng.normal(0, 1, n)
+
     Xc = X - X.mean(0); yc = y - y.mean()
     pls = PLSRegression(1, scale=False).fit(Xc, yc)
     w = (Xc.T @ yc); w /= np.linalg.norm(w)
-    print(np.abs(np.abs(pls.x_weights_[:, 0] @ w) - 1))   # 0 에 가깝다
+    print(f"{np.abs(np.abs(pls.x_weights_[:, 0] @ w) - 1):.2e}")   # 0 에 가깝다
+    ```
+
+    출력:
+
+    ```
+    6.66e-16
     ```
 
     **해석.** $X^\top y$의 $j$번째 성분은 $\mathbf{x}_j^\top\mathbf{y}$, 즉 변수 $j$와 반응변수의 (중심화된) 내적이다. 따라서 첫 PLS 성분은 **각 변수를 $y$와의 상관 크기에 비례하는 가중치로 더한 것**이다.

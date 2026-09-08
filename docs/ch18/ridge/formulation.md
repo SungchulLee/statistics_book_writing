@@ -226,6 +226,13 @@ $$
     print("LOOCV 최적 lambda =", lams[int(np.argmin(errs))])
     ```
 
+    출력:
+
+    ```
+    일치 확인
+    LOOCV 최적 lambda = 1.0811807510766078
+    ```
+
     **(c) 주의할 점.** sklearn의 `Ridge(alpha=lam)`은 목적함수를
 
     $$

@@ -152,6 +152,14 @@ print(f"Non-zero coefficients:    {n_nonzero}  (true: 3)")
 print(f"Min CV MSE:               {mse_cv[best_idx]:.3f}")
 ```
 
+출력:
+
+```
+Best lambda (5-fold CV):  0.2212
+Non-zero coefficients:    3  (true: 3)
+Min CV MSE:               4.774
+```
+
 실행하면 $\hat{\lambda} = 0.2212$, 0이 아닌 계수 3개(참값도 3개), 최소 CV MSE $4.774$를 얻는다.
 추정된 계수는 $(3.546,\, -2.912,\, 1.643,\, 0, \dots, 0)$으로, 참값 $(4, -3, 2, 0, \dots, 0)$을
 모두 0 쪽으로 축소한 값이다. 이 축소 편향이 라쏘가 분산을 줄이는 대가로 치르는 비용이다.
@@ -265,6 +273,13 @@ $r = y - X\beta$를 쓰면 무엇이 잘못되는가?
     fp = np.sum(selected & ~true_support)
     print(f"True positives:  {tp}/5")
     print(f"False positives: {fp}")
+    ```
+
+    출력:
+
+    ```
+    True positives:  5/5
+    False positives: 11
     ```
 
     실행 결과는 $\hat{\lambda} = 0.2807$에서 참양성 5/5, 위양성 11개(선택된 변수 총 16개)다.

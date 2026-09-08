@@ -63,6 +63,14 @@ print(f"Sample mean: {data.mean():.4f}")
 print(f"Sample std:  {data.std(ddof=1):.4f}")
 ```
 
+출력:
+
+```
+Sample size: 100
+Sample mean: -0.1038
+Sample std:  0.9082
+```
+
 완전한 구현에서는 자료를 겹으로 나누고, $\lambda$ 격자 위를 순회하며, 각 (겹, $\lambda$) 조합의
 MSE를 기록한다.
 
@@ -128,13 +136,30 @@ $\lambda \ge \lambda_{\max}$이면 라쏘 해가 $\hat{\beta} = 0$임을 보여�
     남겨 둔 겹에 적용한다.
 
     ```python
-    for k in range(K):
+    import numpy as np
+    from sklearn.model_selection import KFold
+
+    rng = np.random.default_rng(0)
+    X = rng.normal(5, 3, (100, 4))          # 평균과 척도가 0/1이 아닌 자료
+    y = X @ np.array([1.0, -1.0, 0.5, 0.0]) + rng.normal(0, 1, 100)
+
+    for k, (train_idx, val_idx) in enumerate(KFold(5).split(X)):
         X_train, X_val = X[train_idx], X[val_idx]
         mu = X_train.mean(axis=0)
         sigma = X_train.std(axis=0)
         X_train_s = (X_train - mu) / sigma
         X_val_s = (X_val - mu) / sigma
         # fit on X_train_s, evaluate on X_val_s
+        if k == 0:
+            print("훈련 겹 평균:", np.round(X_train_s.mean(axis=0), 4))
+            print("검증 겹 평균:", np.round(X_val_s.mean(axis=0), 4))
+    ```
+
+    출력:
+
+    ```
+    훈련 겹 평균: [-0.  0. -0. -0.]
+    검증 겹 평균: [-0.1022  0.1113  0.5175  0.243 ]
     ```
 
     이렇게 하면 검증 겹이 진정으로 미관측 상태로 남는다. $\square$
@@ -222,6 +247,8 @@ $\lambda$ 50개 위에서 라쏘의 5-겹 교차검증을 수행하라. 오차�
     plt.legend()
     plt.show()
     ```
+
+    ![교차검증 오차 곡선](./img/cv_tuning_193.png)
 
     실행하면 $\hat{\lambda}_{\min} = 0.0518$에서 CV MSE는 $1.0154$(SE $= 0.0611$)이고,
     1SE 규칙은 $\hat{\lambda}_{1\text{SE}} = 0.1099$를 고르며 그때 CV MSE는 $1.0637$이다.

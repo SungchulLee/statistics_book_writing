@@ -61,6 +61,14 @@ print(f"Sample mean: {data.mean():.4f}")
 print(f"Sample std:  {data.std(ddof=1):.4f}")
 ```
 
+출력:
+
+```
+Sample size: 100
+Sample mean: -0.1038
+Sample std:  0.9082
+```
+
 완전한 구현에서는 $X$와 $y$를 구성하고, 설명변수를 표준화한 뒤, $\lambda$ 격자 위에서
 $\hat{\beta}^{\text{ridge}}$를 구한다.
 
@@ -216,6 +224,14 @@ $\lambda$의 교차검증 RMSE를 보고하고 OLS의 RMSE와 비교하라.
     print(f"OLS CV RMSE:  {ols_rmse:.4f}")
     print(f"Best lambda:  {best_lam}")
     print(f"Ridge CV RMSE: {best_rmse:.4f}")
+    ```
+
+    출력:
+
+    ```
+    OLS CV RMSE:  1.0171
+    Best lambda:  1.0
+    Ridge CV RMSE: 1.0156
     ```
 
     실행하면 OLS의 교차검증 RMSE는 1.0171이고, 최적 $\lambda = 1$에서 능형회귀의 RMSE는

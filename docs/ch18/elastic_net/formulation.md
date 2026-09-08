@@ -92,14 +92,28 @@ scikit-learn의 `alpha`와 `l1_ratio`가 이 페이지의 $\lambda$, $\alpha$와
     ```python
     import numpy as np
     from sklearn.linear_model import ElasticNet, Ridge
-    n, a, l1 = 60, 0.5, 1e-8
+
+    rng = np.random.default_rng(0)
+    n, p = 60, 8
+    X = rng.normal(0, 1, (n, p))
+    X = (X - X.mean(0)) / X.std(0)          # 표준화
+    y = X @ np.array([2., -1., 0.5, 0, 0, 0, 0, 0]) + rng.normal(0, 1, n)
+    y = y - y.mean()
+
+    a, l1 = 0.5, 1e-8
     be = ElasticNet(alpha=a, l1_ratio=l1, fit_intercept=False,
                     max_iter=500000, tol=1e-14).fit(X, y).coef_
     br = Ridge(alpha=n*a*(1-l1), fit_intercept=False).fit(X, y).coef_
-    print(np.abs(be - br).max())      # 7.3e-09
+    print(f"{np.abs(be - br).max():.2e}")
     ```
 
-    **최대 차이가 $7.3\times10^{-9}$로 사실상 일치한다.** 배율 관계가 정확함이 확인된다.
+    출력:
+
+    ```
+    5.58e-09
+    ```
+
+    **최대 차이가 $5.6\times10^{-9}$로 사실상 일치한다.** 배율 관계가 정확함이 확인된다.
 
     실무적 함의: **`Ridge(alpha=1)`과 `Lasso(alpha=1)`의 벌점 강도는 전혀 다르다.** 두 방법을 같은 격자에서 비교하려면 배율 $n$을 반드시 고려해야 한다.
 

@@ -102,30 +102,60 @@ $$
     import numpy as np
     from sklearn.linear_model import Lasso, LinearRegression
 
-    b = Lasso(alpha=0.2, fit_intercept=False, max_iter=50000).fit(X, y).coef_
-    S = np.abs(b) > 1e-9
-    b_post = np.zeros(p)
-    b_post[S] = LinearRegression(fit_intercept=False).fit(X[:, S], y).coef_
+    rng = np.random.default_rng(0)
+    n, p, lam, R = 80, 10, 0.2, 400
+    beta = np.array([3.0, -2.0, 1.5] + [0.0] * 7)
+
+    las, post = [], []
+    for _ in range(R):
+        X = rng.normal(0, 1, (n, p))
+        y = X @ beta + rng.normal(0, 1, n)
+
+        b = Lasso(alpha=lam, fit_intercept=False, max_iter=50000).fit(X, y).coef_
+        S = np.abs(b) > 1e-9                      # 라쏘가 고른 변수
+        b_post = np.zeros(p)
+        b_post[S] = LinearRegression(fit_intercept=False).fit(X[:, S], y).coef_
+
+        las.append(b); post.append(b_post)
+
+    las, post = np.array(las), np.array(post)
+    print("라쏘 평균     :", np.round(las[:, :3].mean(0), 3))
+    print("라쏘 편향     :", np.round(las[:, :3].mean(0) - beta[:3], 3))
+    print("사후 라쏘 평균:", np.round(post[:, :3].mean(0), 3))
+    print("사후 라쏘 편향:", np.round(post[:, :3].mean(0) - beta[:3], 3))
+    print("라쏘 RMSE     :", np.round(np.sqrt(((las[:, :3] - beta[:3])**2).mean(0)), 3))
+    print("사후 RMSE     :", np.round(np.sqrt(((post[:, :3] - beta[:3])**2).mean(0)), 3))
+    ```
+
+    출력:
+
+    ```
+    라쏘 평균     : [ 2.791 -1.779  1.285]
+    라쏘 편향     : [-0.209  0.221 -0.215]
+    사후 라쏘 평균: [ 2.995 -1.988  1.492]
+    사후 라쏘 편향: [-0.005  0.012 -0.008]
+    라쏘 RMSE     : [0.244 0.255 0.247]
+    사후 RMSE     : [0.118 0.114 0.116]
     ```
 
     | | $\hat\beta_1$ | $\hat\beta_2$ | $\hat\beta_3$ |
     |:---|---:|---:|---:|
     | 참값 | 3.000 | $-2.000$ | 1.500 |
-    | 라쏘 평균 | 2.802 | $-1.789$ | 1.293 |
-    | 라쏘 편향 | $-0.198$ | $+0.211$ | $-0.207$ |
-    | 사후 라쏘 평균 | 3.004 | $-1.993$ | 1.495 |
-    | 사후 라쏘 편향 | $+0.004$ | $+0.007$ | $-0.005$ |
+    | 라쏘 평균 | 2.791 | $-1.779$ | 1.285 |
+    | 라쏘 편향 | $-0.209$ | $+0.221$ | $-0.215$ |
+    | 사후 라쏘 평균 | 2.995 | $-1.988$ | 1.492 |
+    | 사후 라쏘 편향 | $-0.005$ | $+0.012$ | $-0.008$ |
 
     **라쏘의 편향이 세 계수 모두에서 정확히 $\lambda = 0.2$만큼, 0 쪽 방향이다.**
 
     우연이 아니다. 연성 문턱 $S_\lambda(z) = \text{sign}(z)(|z| - \lambda)$가 크기를 정확히 $\lambda$만큼 깎기 때문이다. 부호가 양수인 계수는 $-\lambda$, 음수인 계수는 $+\lambda$만큼 편향된다. 표의 부호 패턴 $(-, +, -)$이 참 계수의 부호 $(+, -, +)$와 정확히 반대다.
 
-    **사후 라쏘가 편향을 거의 완전히 제거한다**($0.005$ 수준). 게다가 RMSE도 절반이 된다.
+    **사후 라쏘가 편향을 거의 완전히 제거한다**($0.01$ 수준). 게다가 RMSE도 절반이 된다.
 
     | | RMSE |
     |:---|:---|
-    | 라쏘 | $0.229,\ 0.244,\ 0.239$ |
-    | 사후 라쏘 | $0.114,\ 0.117,\ 0.115$ |
+    | 라쏘 | $0.244,\ 0.255,\ 0.247$ |
+    | 사후 라쏘 | $0.118,\ 0.114,\ 0.116$ |
 
     !!! warning "사후 라쏘의 대가"
         이 결과가 "항상 사후 라쏘를 쓰라"는 뜻은 아니다. 두 가지 주의가 있다.

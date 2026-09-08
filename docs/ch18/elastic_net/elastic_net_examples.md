@@ -64,6 +64,14 @@ print(f"Sample mean: {data.mean():.4f}")
 print(f"Sample std:  {data.std(ddof=1):.4f}")
 ```
 
+출력:
+
+```
+Sample size: 100
+Sample mean: -0.1038
+Sample std:  0.9082
+```
+
 실무에서는 `sklearn.linear_model.ElasticNetCV`로 $\lambda$와 $\alpha$를 교차검증으로 함께
 고른다.
 
@@ -209,6 +217,14 @@ $\beta_j \leftarrow S(X_j^\top r_j / n,\, \lambda\alpha) / (1 + \lambda(1 - \alp
     print(f"Selected alpha (l1_ratio): {enet_cv.l1_ratio_}")
     print(f"Selected lambda:           {enet_cv.alpha_:.6f}")
     print(f"Non-zero coefficients:     {n_nonzero}")
+    ```
+
+    출력:
+
+    ```
+    Selected alpha (l1_ratio): 0.95
+    Selected lambda:           0.014625
+    Non-zero coefficients:     41
     ```
 
     실행 결과는 $\alpha = 0.95$, $\lambda = 0.014625$이고 0이 아닌 계수는 **41개**다.

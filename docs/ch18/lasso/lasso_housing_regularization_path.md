@@ -8,8 +8,9 @@ $\lambda$를 고르고, OLS 및 능형회귀와 성능을 비교하며, 라쏘�
 살아남는지 해석한다.
 
 !!! note "자료 파일"
-    아래 코드는 `docs/data/house_sales.csv`(탭 구분)를 읽는다. 이 파일은 저장소에 포함되어
-    있지 않으므로, King County 주택 매매 자료를 내려받아 해당 경로에 두어야 실행된다.
+    아래 코드는 King County 주택 매매 자료(탭 구분 CSV)를 인터넷에서 직접 읽는다.
+    13장의 주택 자료 예제와 같은 파일이므로 별도로 내려받아 둘 필요는 없지만,
+    실행하려면 네트워크 연결이 필요하다.
 
 ## 문제 설정
 
@@ -27,12 +28,12 @@ $$
 ```python
 import numpy as np
 import pandas as pd
-from pathlib import Path
 from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LinearRegression, Lasso, LassoCV, Ridge, RidgeCV
 
-DATA = Path(__file__).parent.parent.parent / 'data'
-house = pd.read_csv(DATA / 'house_sales.csv', sep='\t')
+url = ("https://raw.githubusercontent.com/gedeck/"
+       "practical-statistics-for-data-scientists/master/data/house_sales.csv")
+house = pd.read_csv(url, sep='\t')
 
 predictors = [
     'SqFtTotLiving', 'SqFtLot', 'Bathrooms', 'Bedrooms',
@@ -249,6 +250,14 @@ OLS, 능형회귀, 라쏘의 RMSE와 $R^2$ 막대그림에서 다음을 볼 수 
     print(f"Optimal lambda: {lasso_aug.alpha_:.4f}")
     print(f"Total nonzero:  {n_nz}")
     print(f"Noise features selected: {noise_selected}/50")
+    ```
+
+    출력:
+
+    ```
+    Optimal lambda: 1890.0223
+    Total nonzero:  19
+    Noise features selected: 11/50
     ```
 
     **예상 결과:** 잡음 차원을 상쇄하기 위해 더 강한 정칙화가 필요하므로 최적 $\lambda$는

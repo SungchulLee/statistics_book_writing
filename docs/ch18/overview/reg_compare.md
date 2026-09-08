@@ -117,6 +117,8 @@ plt.tight_layout()
 plt.show()
 ```
 
+![정칙화 방법의 계수 비교](./img/reg_compare_97.png)
+
 ## 정칙화 경로
 
 계수 크기를 $\log_{10}(\lambda)$의 함수로 그리면 축소 행동이 뚜렷이 드러난다.
@@ -180,6 +182,8 @@ def plot_shrinkage_operators(lam=1.0):
 
 plot_shrinkage_operators()
 ```
+
+![직교설계에서의 축소 연산자](./img/reg_compare_160.png)
 
 여기서 경성 문턱은 문턱값을 $\lambda$로 두고 그린 것이다. 연습문제 1에서 보듯이, 벌점
 $\lambda\cdot\mathbf{1}(\beta_j \ne 0)$에서 유도되는 경성 문턱의 문턱값은 $\sqrt{2\lambda}$다.
@@ -264,6 +268,14 @@ $\lambda\cdot\mathbf{1}(\beta_j \ne 0)$에서 유도되는 경성 문턱의 문�
         print(f"{name}: {nz} nonzero coefficients")
     ```
 
+    출력:
+
+    ```
+    Ridge: 20 nonzero coefficients
+    Lasso: 9 nonzero coefficients
+    Elastic Net: 10 nonzero coefficients
+    ```
+
     실행 결과는 능형회귀 20개, 라쏘 9개, 엘라스틱넷 10개다(라쏘의 $\lambda = 0.0178$,
     엘라스틱넷은 $\alpha = 0.9$, $\lambda = 0.0161$). 참 신호는 5개인데 라쏘가 9개를 고른 것은
     $\rho = 0.9$로 인접 변수들이 강하게 상관되어 있어, 참 변수의 이웃들이 대리변수로 함께
@@ -326,6 +338,13 @@ MSE를 달성하는가?
     best_lasso = min(lasso_avg, key=lasso_avg.get)
     print(f"Ridge best lambda: {best_ridge:.4f}, MSE: {ridge_avg[best_ridge]:.4f}")
     print(f"Lasso best lambda: {best_lasso:.4f}, MSE: {lasso_avg[best_lasso]:.4f}")
+    ```
+
+    출력:
+
+    ```
+    Ridge best lambda: 0.8532, MSE: 1.1883
+    Lasso best lambda: 0.0161, MSE: 0.8138
     ```
 
     실행 결과는 능형회귀가 $\lambda = 0.8532$에서 최소 MSE $1.1883$, 라쏘가

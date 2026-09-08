@@ -62,13 +62,13 @@ PLS는 다음과 같은 상황에서 PCR을 능가하는 경향이 있다.
 ```python
 import numpy as np
 import pandas as pd
-from pathlib import Path
 from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error, r2_score
 
-DATA = Path(__file__).parent.parent.parent / 'data'
-house = pd.read_csv(DATA / 'house_sales.csv', sep='\t')
+url = ("https://raw.githubusercontent.com/gedeck/"
+       "practical-statistics-for-data-scientists/master/data/house_sales.csv")
+house = pd.read_csv(url, sep='\t')
 
 numeric_features = [
     'SqFtTotLiving', 'SqFtLot', 'Bathrooms', 'Bedrooms',
@@ -274,6 +274,12 @@ ridge_rmse = np.sqrt(mean_squared_error(y, ridge_cv.predict(X_scaled)))
     y_pred_sk = reg.predict(Z_sk)
 
     print(f"Max prediction difference: {np.max(np.abs(y_pred_manual - y_pred_sk)):.2e}")
+    ```
+
+    출력:
+
+    ```
+    Max prediction difference: 9.77e-15
     ```
 
     실행하면 최대 예측 차이는 $9.8 \times 10^{-15}$로 기계 엡실론 수준이며, 두 구현이 동치임을

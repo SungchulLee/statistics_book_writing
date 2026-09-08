@@ -126,19 +126,34 @@ $p(\mathbf{y})$를 $\sigma^2$과 $\tau^2$에 대해 최대화하면 자료 기�
 
     ```python
     import numpy as np
+
+    rng = np.random.default_rng(0)
+    n, p, rho, sig = 50, 4, 0.95, 1.0
+    Sigma = rho * np.ones((p, p)) + (1 - rho) * np.eye(p)   # 등상관
+    X = rng.multivariate_normal(np.zeros(p), Sigma, n)
+    y = X @ np.array([1.0, 1.0, 1.0, 1.0]) + rng.normal(0, sig, n)
+
     A = X.T @ X
     for lam in (0, 1, 10):
         C = np.linalg.inv(A + lam*np.eye(p))      # sigma^2 = 1
-        print(lam, np.sqrt(np.diag(C)))
+        print(lam, np.round(np.sqrt(np.diag(C)), 3))
+    ```
+
+    출력:
+
+    ```
+    0 [0.662 0.652 0.514 0.539]
+    1 [0.525 0.518 0.442 0.457]
+    10 [0.256 0.252 0.246 0.247]
     ```
 
     | $\lambda$ | $\text{sd}(\hat\beta_1)$ | $\text{sd}(\hat\beta_2)$ | $\text{sd}(\hat\beta_3)$ | $\text{sd}(\hat\beta_4)$ |
     |---:|---:|---:|---:|---:|
-    | 0 (OLS) | 0.656 | 0.663 | 0.666 | 0.650 |
-    | 1 | 0.526 | 0.523 | 0.530 | 0.519 |
-    | 10 | **0.257** | 0.252 | 0.258 | 0.254 |
+    | 0 (OLS) | 0.662 | 0.652 | 0.514 | 0.539 |
+    | 1 | 0.525 | 0.518 | 0.442 | 0.457 |
+    | 10 | **0.256** | 0.252 | 0.246 | 0.247 |
 
-    $\lambda = 10$에서 표준편차가 OLS의 **약 39%**로 줄어든다.
+    $\lambda = 10$에서 표준편차가 OLS의 **약 39~48%**로 줄어든다.
 
     **그러나 이것을 "능형이 더 정확하다"로 읽으면 안 된다.** 두 가지를 구별해야 한다.
 
@@ -174,6 +189,13 @@ $p(\mathbf{y})$를 $\sigma^2$과 $\tau^2$에 대해 최대화하면 자료 기�
 
     rc = RidgeCV(alphas=np.logspace(-3, 4, 200), fit_intercept=False).fit(X, y)
     print("RidgeCV (LOOCV) lambda =", rc.alpha_)
+    ```
+
+    출력:
+
+    ```
+    empirical Bayes lambda = 0.6956992093360705
+    RidgeCV (LOOCV) lambda = 5.353566677410725
     ```
 
     | 방법 | $\lambda$ |
