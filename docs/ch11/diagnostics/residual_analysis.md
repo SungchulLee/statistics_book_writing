@@ -10,6 +10,52 @@ $$
 
 여기서 $Y_{ij}$는 집단 $i$의 $j$번째 관측값이고 $\bar{Y}_{i\cdot}$는 집단 $i$의 평균이다. 모형이 올바르게 설정되었다면 잔차는 0 주위에 무작위로 분포하며 분산이 일정하고 체계적인 패턴이 없어야 한다.
 
+## 설정
+
+```python
+import numpy as np
+import pandas as pd
+from statsmodels.formula.api import ols
+
+# 이 페이지의 진단은 모두 아래 모형 하나를 놓고 수행한다.
+# 집단마다 표준편차를 1.0, 1.3, 1.6으로 다르게 주었고,
+# 집단 C에 이상점을 하나 심어 두었다.
+rng = np.random.default_rng(42)
+n = 20
+response = np.concatenate([
+    rng.normal(10.0, 1.0, n),
+    rng.normal(10.8, 1.3, n),
+    rng.normal(12.0, 1.6, n),
+])
+response[-1] = 20.0                     # 마지막 관측값을 이상점으로 만든다
+data = pd.DataFrame({
+    "group": np.repeat(["A", "B", "C"], n),
+    "response": response,
+})
+group1 = data.loc[data["group"] == "A", "response"]
+group2 = data.loc[data["group"] == "B", "response"]
+group3 = data.loc[data["group"] == "C", "response"]
+
+model = ols("response ~ C(group)", data=data).fit()
+
+print(data.groupby("group").response.agg(["count", "mean", "std"]).round(3))
+print(f"\nF = {model.fvalue:.4f}, p = {model.f_pvalue:.4f}")
+```
+
+출력:
+
+```
+       count    mean    std
+group                      
+A         20   9.967  0.870
+B         20  10.942  1.034
+C         20  12.513  2.077
+
+F = 16.1314, p = 0.0000
+```
+
+이상점 하나가 집단 C의 표준편차를 1.15에서 2.08로 키웠다. 아래 진단들이 이것을 잡아내는지 보라.
+
 ## 잔차 대 적합값 그림
 
 가장 유익한 진단 그림은 잔차를 적합값에 대해 그린 것이다. 일원배치 분산분석에서 적합값은 곧 집단 평균이므로, 각 집단 평균 위치에 잔차가 수직 띠로 나타난다.
@@ -24,6 +70,12 @@ plt.ylabel("Residuals")
 plt.title("Residuals vs. Fitted Values")
 plt.show()
 ```
+
+![잔차 대 적합값](./img/residual_analysis_63.png)
+
+세로 띠가 셋 있고, 그것이 집단 셋이다. 회귀분석의 잔차 그림처럼 연속적으로 퍼지지 않는 것은 적합값이 집단평균 세 개뿐이기 때문이다.
+
+오른쪽 띠(집단 C)가 다른 둘보다 위아래로 넓고, 그 위에 7 남짓 떨어진 점 하나가 홀로 있다. 심어 둔 이상점이다.
 
 ### 패턴 알아보기
 
@@ -67,6 +119,12 @@ plt.title("Standardized Residuals vs. Fitted Values")
 plt.show()
 ```
 
+![표준화 잔차](./img/residual_analysis_100.png)
+
+세로축이 표준편차 단위로 바뀌어 회색 기준선($\pm 2$)과 곧바로 비교할 수 있다. 이상점 하나가 4를 훌쩍 넘고, 나머지는 대부분 $\pm 2$ 안에 있다.
+
+원래 잔차 그림과 모양이 거의 같아 보이지만 척도가 다르다. 표준화는 지렛값 $h_{ii}$도 함께 반영하므로, 설계가 불균형이면 두 그림의 모양이 눈에 띄게 달라진다.
+
 $|r_i| > 2$인 관측값은 자세히 살펴볼 만하고, $|r_i| > 3$인 관측값은 이상점의 유력한 후보이다.
 
 ## 척도-위치 그림
@@ -80,6 +138,12 @@ plt.ylabel(r"$\sqrt{|\mathrm{Standardized\ Residuals}|}$")
 plt.title("Scale-Location Plot")
 plt.show()
 ```
+
+![척도-위치 그림](./img/residual_analysis_122.png)
+
+세로축이 $\sqrt{|r_i|}$라 부호가 사라지고 **크기만** 남는다. 그래서 "어느 쪽으로 벗어났는가"가 아니라 "얼마나 퍼져 있는가"에 집중할 수 있다.
+
+세 띠의 높이를 비교하면 오른쪽 띠가 조금 더 위로 퍼져 있고 이상점이 2를 넘는다. 등분산이라면 세 띠의 평균 높이가 비슷해야 한다.
 
 ## 요약
 

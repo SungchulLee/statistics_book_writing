@@ -8,6 +8,46 @@
 - p-값이 부정확해지고 제1종 또는 제2종 오류의 위험이 커진다.
 - 분산의 불균형이 표본크기의 불균형과 겹치면 왜곡이 특히 심해진다.
 
+## 설정
+
+```python
+import numpy as np
+import pandas as pd
+from statsmodels.formula.api import ols
+
+# 이 페이지의 모든 진단은 아래 모형 하나를 놓고 수행한다.
+# 집단마다 표준편차를 1.0, 1.3, 1.6으로 다르게 주어 진단이 무엇을 잡아내는지
+# (그리고 무엇을 못 잡아내는지) 볼 수 있게 했다.
+rng = np.random.default_rng(42)
+n = 20
+data = pd.DataFrame({
+    "group": np.repeat(["A", "B", "C"], n),
+    "response": np.concatenate([
+        rng.normal(10.0, 1.0, n),
+        rng.normal(10.8, 1.3, n),
+        rng.normal(12.0, 1.6, n),
+    ]),
+})
+model = ols("response ~ C(group)", data=data).fit()
+
+print(data.groupby("group").response.agg(["count", "mean", "std"]).round(3))
+print(f"\nF = {model.fvalue:.4f}, p = {model.f_pvalue:.4f}")
+```
+
+출력:
+
+```
+       count    mean    std
+group                      
+A         20   9.967  0.870
+B         20  10.942  1.034
+C         20  12.191  1.145
+
+F = 23.7708, p = 0.0000
+```
+
+표본표준편차가 0.87, 1.03, 1.15로 나왔다. 참값이 1.0, 1.3, 1.6이었는데도 추정값이 이만큼 눌린 것은 집단당 20개로는 표준편차를 정확히 추정하기 어렵기 때문이다. 이 점이 아래 등분산 검정의 결과를 읽을 때 중요하다.
+
 ## 확인 방법
 
 ### Levene 검정
@@ -23,9 +63,21 @@ group1 = data[data['group'] == 'A']['response']
 group2 = data[data['group'] == 'B']['response']
 group3 = data[data['group'] == 'C']['response']
 
+# scipy의 기본값은 center='median'(Brown-Forsythe 변형)이다.
+# 원래의 Levene(1960)은 평균을 쓰지만 이상점에 약해 기본값이 중앙값으로 바뀌었다.
 stat, p_value = levene(group1, group2, group3)
 print(f"Levene's Test: F = {stat:.4f}, p-value = {p_value:.4f}")
 ```
+
+출력:
+
+```
+Levene's Test: F = 0.4091, p-value = 0.6662
+```
+
+$p = 0.67$로 등분산을 기각하지 못한다. 그런데 이 자료는 표준편차를 1.0, 1.3, 1.6으로 **실제로 다르게** 만든 것이다.
+
+검정이 틀린 것이 아니라 검정력이 부족한 것이다. 집단당 20개로는 1.6배의 표준편차 차이도 잡아내지 못한다. 등분산 검정이 기각하지 않았다는 사실을 "분산이 같다"는 근거로 삼으면 안 되는 이유가 여기 있다.
 
 결과가 유의하면($p < 0.05$) 등분산 가정이 어긋났음을 나타낸다. Levene 검정과 관련된 로버스트 분산 검정의 자세한 내용은 [로버스트 분산 검정](../../ch15/robust_tests/levene.md)을 보라.
 
@@ -39,6 +91,14 @@ from scipy.stats import bartlett
 stat, p_value = bartlett(group1, group2, group3)
 print(f"Bartlett's Test: chi2 = {stat:.4f}, p-value = {p_value:.4f}")
 ```
+
+출력:
+
+```
+Bartlett's Test: chi2 = 1.3880, p-value = 0.4996
+```
+
+Bartlett도 기각하지 못한다. 자료가 정규분포에서 나왔으므로 Bartlett이 Levene보다 유리한 상황인데도 그렇다. 표본크기가 문제다.
 
 Bartlett 검정의 전체 논의는 [Bartlett 검정](../../ch15/bartlett_test/bartlett_test.md)을 보라.
 
@@ -76,6 +136,8 @@ $$
 ```python
 import matplotlib.pyplot as plt
 
+# 일원배치 분산분석에서 적합값은 집단평균뿐이므로 세로줄이 집단 수만큼만 생긴다.
+# 회귀분석의 잔차 그림처럼 연속적으로 퍼지지 않는다.
 plt.scatter(model.fittedvalues, model.resid, alpha=0.6)
 plt.axhline(y=0, color='r', linestyle='--')
 plt.xlabel("Fitted Values")
@@ -83,6 +145,12 @@ plt.ylabel("Residuals")
 plt.title("Residuals vs. Fitted Values")
 plt.show()
 ```
+
+![잔차 대 적합값](./img/homoscedasticity_116.png)
+
+세로줄 세 개가 각 집단이다. 오른쪽 줄(집단 C)이 왼쪽 줄(집단 A)보다 위아래로 넓게 퍼져 있다. 형식적 검정이 놓친 분산 차이가 그림에서는 보인다.
+
+이것이 진단 그림을 검정과 함께 보아야 하는 이유다. 검정은 "이 크기의 표본으로 확신할 수 있는가"를 답하지만, 그림은 "실제로 어떤 모양인가"를 보여준다.
 
 살펴볼 것:
 

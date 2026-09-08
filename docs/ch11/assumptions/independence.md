@@ -10,6 +10,46 @@
 - F-통계량이 부풀려진다.
 - 제1종 오류율이 극적으로 커진다.
 
+## 설정
+
+```python
+import numpy as np
+import pandas as pd
+from statsmodels.formula.api import ols
+
+# 이 페이지의 모든 진단은 아래 모형 하나를 놓고 수행한다.
+# 집단마다 표준편차를 1.0, 1.3, 1.6으로 다르게 주어 진단이 무엇을 잡아내는지
+# (그리고 무엇을 못 잡아내는지) 볼 수 있게 했다.
+rng = np.random.default_rng(42)
+n = 20
+data = pd.DataFrame({
+    "group": np.repeat(["A", "B", "C"], n),
+    "response": np.concatenate([
+        rng.normal(10.0, 1.0, n),
+        rng.normal(10.8, 1.3, n),
+        rng.normal(12.0, 1.6, n),
+    ]),
+})
+model = ols("response ~ C(group)", data=data).fit()
+
+print(data.groupby("group").response.agg(["count", "mean", "std"]).round(3))
+print(f"\nF = {model.fvalue:.4f}, p = {model.f_pvalue:.4f}")
+```
+
+출력:
+
+```
+       count    mean    std
+group                      
+A         20   9.967  0.870
+B         20  10.942  1.034
+C         20  12.191  1.145
+
+F = 23.7708, p = 0.0000
+```
+
+표본표준편차가 0.87, 1.03, 1.15로 나왔다. 참값이 1.0, 1.3, 1.6이었는데도 추정값이 이만큼 눌린 것은 집단당 20개로는 표준편차를 정확히 추정하기 어렵기 때문이다. 이 점이 아래 등분산 검정의 결과를 읽을 때 중요하다.
+
 ## 확인 방법
 
 ### 연구 설계 검토
@@ -43,9 +83,20 @@ $$
 ```python
 from statsmodels.stats.stattools import durbin_watson
 
+# durbin_watson은 잔차를 **주어진 순서 그대로** 본다.
+# 그래서 자료가 수집 순서대로 정렬되어 있어야 의미가 있다.
+# 집단별로 정렬된 자료에 그냥 적용하면 집단 효과를 자기상관으로 오인할 수 있다.
 dw_stat = durbin_watson(model.resid)
 print(f"Durbin-Watson Statistic: {dw_stat:.4f}")
 ```
+
+출력:
+
+```
+Durbin-Watson Statistic: 2.1101
+```
+
+$d = 2.11$로 2에 가까워 자기상관의 증거가 없다. 자료를 서로 독립으로 생성했으니 기대한 결과다.
 
 ### 순서에 대한 잔차 그림
 
@@ -61,6 +112,12 @@ plt.ylabel("Residuals")
 plt.title("Residuals vs. Observation Order")
 plt.show()
 ```
+
+![순서에 대한 잔차](./img/independence_94.png)
+
+점들이 0을 중심으로 고르게 흩어져 있고 추세도 주기도 보이지 않는다.
+
+다만 이 그림에는 한계가 있다. 가로축이 실제 수집 순서가 아니라 자료프레임의 행 번호(집단 A 20개, B 20개, C 20개 순)이기 때문이다. 실제 연구에서는 측정 시각이나 실험 순서를 따로 기록해 두어야 이 진단이 의미를 갖는다. **독립성은 자료를 들여다봐서 확인하는 것이 아니라 설계로 확보하는 것이다.**
 
 살펴볼 것:
 

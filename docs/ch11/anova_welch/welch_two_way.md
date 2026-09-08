@@ -72,19 +72,19 @@ data = {
 }
 df = pd.DataFrame(data)
 
-# pingouin's welch_anova handles one factor at a time
+# welch_anova는 between에 요인을 **하나만** 받는다. 그래서 따로 두 번 돌린다.
+# 이렇게 하면 각 주효과는 다른 요인을 무시한 채 계산되며, 교호작용은 볼 수 없다.
 print(pg.welch_anova(dv="Growth", between="Temperature", data=df))
 print(pg.welch_anova(dv="Growth", between="Fertilizer", data=df))
 ```
 
-**출력:**
+출력:
 
 ```
-        Source  ddof1  ddof2      F   p-unc
-0  Temperature    2.0  3.819  5.174  0.0818
-
-       Source  ddof1  ddof2      F   p-unc
-0  Fertilizer    2.0  3.915  1.466  0.3347
+        Source  ddof1     ddof2         F     p_unc       np2
+0  Temperature      2  3.819209  5.173804  0.081821  0.645833
+       Source  ddof1     ddof2         F     p_unc       np2
+0  Fertilizer      2  3.915497  1.466347  0.334719  0.333333
 ```
 
 **해석:**
@@ -103,14 +103,31 @@ print(pg.welch_anova(dv="Growth", between="Fertilizer", data=df))
 주효과가 유의하면 어느 수준이 다른지 찾기 위해 **Games-Howell** 같은 사후검정을 쓴다:
 
 ```python
-# Perform Games-Howell post hoc test for Temperature
+# Temperature에 대한 Games-Howell 사후검정
 post_hoc_temp = pg.pairwise_gameshowell(dv="Growth", between="Temperature", data=df)
-print(post_hoc_temp)
+print(post_hoc_temp.round(4).to_string(index=False))
 
-# Perform Games-Howell post hoc test for Fertilizer
+# Fertilizer에 대한 Games-Howell 사후검정
 post_hoc_fert = pg.pairwise_gameshowell(dv="Growth", between="Fertilizer", data=df)
-print(post_hoc_fert)
+print(post_hoc_fert.round(4).to_string(index=False))
 ```
+
+출력:
+
+```
+   A      B  mean_A  mean_B    diff     se       T     df   pval  hedges
+High    Low 13.6667 11.3333  2.3333 1.2472  1.8708 4.0000 0.2604  1.2220
+High Medium 13.6667 15.0000 -1.3333 1.0541 -1.2649 3.4483 0.4915 -0.8262
+ Low Medium 11.3333 15.0000 -3.6667 1.0541 -3.4785 3.4483 0.0660 -2.2722
+A B  mean_A  mean_B    diff     se       T     df   pval  hedges
+A B 12.0000 14.6667 -2.6667 1.4530 -1.8353 3.7409 0.2767 -1.1988
+A C 12.0000 13.3333 -1.3333 1.6667 -0.8000 3.9936 0.7230 -0.5226
+B C 14.6667 13.3333  1.3333 1.4907  0.8944 3.6697 0.6740  0.5842
+```
+
+어느 쌍도 유의하지 않다. 주효과 검정이 애초에 유의하지 않았으니 당연한 결과다.
+
+효과크기 `hedges`가 $-2.3$에서 $1.2$까지로 상당히 큰데도 p-값이 크다는 점이 이 예제의 교훈이다. 칸마다 관측값이 하나뿐이라 자유도가 3~4에 불과하고, 그러면 아무리 큰 효과라도 유의성에 이르기 어렵다. **효과크기가 크다는 것과 통계적으로 유의하다는 것은 별개다.**
 
 ## 7. 장점
 

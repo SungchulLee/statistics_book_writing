@@ -192,6 +192,19 @@ statistic, p_value = perform_anova(data_ctrl, data_trt1, data_trt2)
 plot_data(data_ctrl, data_trt1, data_trt2, df1, df2, statistic, p_value)
 ```
 
+출력:
+
+```
+
+ANOVA Results:
+F-Statistic = 4.8461
+P-Value = 0.0159
+```
+
+![상자그림과 F-분포](./img/f_test_132.png)
+
+왼쪽 상자그림에서 세 집단이 서로 겹치고, 오른쪽 F-분포에서 관측값 4.85 오른쪽의 붉은 넓이가 p-값 1.59%다.
+
 ### B. Statsmodels
 
 #### statsmodels.formula.api.ols와 statsmodels.stats.anova.anova_lm
@@ -255,6 +268,20 @@ df, (data_ctrl, data_trt1, data_trt2), df1, df2 = load_data()
 statistic, p_value = perform_anova(df)
 plot_data(data_ctrl, data_trt1, data_trt2, df1, df2, statistic, p_value)
 ```
+
+출력:
+
+```
+
+ANOVA Results:
+             df    sum_sq   mean_sq         F   PR(>F)
+C(group)   2.0   3.76634  1.883170  4.846088  0.01591
+Residual  27.0  10.49209  0.388596       NaN      NaN
+```
+
+![상자그림과 F-분포](./img/f_test_199.png)
+
+`f_oneway`가 F와 p 두 값만 주는 데 비해 `anova_lm`은 제곱합과 자유도까지 담은 분산분석표를 준다. F와 p는 앞과 정확히 같다.
 
 ## 3. 예제: 음료 종류에 따른 반응시간
 
@@ -422,6 +449,15 @@ print(f"F-statistic: {f_statistic:.2f}")
 print(f"P-value: {p_value:.4f}")
 ```
 
+출력:
+
+```
+F-statistic: 4.86
+P-value: 0.0284
+```
+
+손계산의 4.88과 미세하게 다른 것은 위에서 중간값을 반올림했기 때문이다. 정확한 값은 4.86이다.
+
 ```python
 import numpy as np
 import matplotlib.pyplot as plt
@@ -467,6 +503,17 @@ ax.set_ylabel('Probability Density')
 ax.set_title('F-distribution with Highlighted p-value Region')
 plt.show()
 ```
+
+출력:
+
+```
+f_statistic = 4.8800
+p_value = 0.0281
+```
+
+![F-분포와 p-값 영역](./img/f_test_425.png)
+
+붉게 칠한 오른쪽 꼬리가 p-값 2.81%다. 반올림한 4.88을 넣었으므로 앞의 정확한 계산이 준 0.0284와 미세하게 다르다.
 
 ---
 
@@ -567,6 +614,20 @@ plt.tight_layout()
 plt.show()
 ```
 
+출력:
+
+```
+Observed variance of means: 14.92
+Permutation test p-value: 0.3673
+Conclusion: Fail to reject H0
+```
+
+![순열분포](./img/f_test_504.png)
+
+빨간 선(관측 분산 14.92)이 순열분포의 한가운데쯤에 있다. 네 페이지의 체류시간 평균이 서로 다르다는 증거가 없다.
+
+여기서 순열이 하는 일을 다시 새겨 두자. 페이지 표시를 무작위로 뒤섞는 것은 "페이지가 아무 영향도 주지 않는" 세상을 만드는 일이고, 그 세상에서 평균들이 이만큼 흩어지는 일이 얼마나 흔한지를 세는 것이 p-값이다. $F$-분포도 정규성도 쓰지 않는다.
+
 ### 접근 2: F-통계량을 이용한 순열검정
 
 분산 기반 접근이 직관적이기는 하지만, 모수적 분산분석과 더 직접 비교하려면 F-통계량을 검정통계량으로 쓸 수도 있다.
@@ -625,6 +686,17 @@ print(f"Observed F: {obs_f:.4f}")
 print(f"p-value: {p_val_f:.4f}")
 ```
 
+출력:
+
+```
+
+F-statistic based permutation test:
+Observed F: 1.1161
+p-value: 0.3550
+```
+
+앞의 분산 기반 순열검정이 준 0.3673과 가깝다. 두 검정통계량이 다르지만 같은 정보를 다르게 요약할 뿐이기 때문이다. 실제로 집단 크기가 모두 같으면 집단평균의 분산과 $F$는 단조 관계라 순위가 같고, 순열 p-값도 모의실험 오차 범위에서 일치한다.
+
 ### 비교: 순열검정 대 모수적 분산분석
 
 모수적 가정이 성립하면 두 접근이 비슷한 결과를 준다:
@@ -643,6 +715,22 @@ print(f"p-value: {p_param:.4f}")
 print(f"\nPermutation ANOVA (variance-based):")
 print(f"p-value: {p_val:.4f}")
 ```
+
+출력:
+
+```
+
+Parametric ANOVA:
+F-statistic: 1.1161
+p-value: 0.3718
+
+Permutation ANOVA (variance-based):
+p-value: 0.3673
+```
+
+모수적 분산분석의 0.3718과 순열검정의 0.3673이 거의 같다. 자료가 정규성에서 크게 벗어나지 않으면 두 방법이 같은 답을 준다는 뜻이다.
+
+순열검정의 값어치는 이렇게 가정이 성립할 때가 아니라 깨질 때 드러난다. 그리고 여기처럼 두 방법이 일치하는 것을 확인하는 일 자체가 모수적 가정에 대한 하나의 점검이 된다.
 
 ### 순열 분산분석의 장점
 

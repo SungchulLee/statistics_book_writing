@@ -4,6 +4,52 @@
 
 진단 결과 분산분석의 가정이 하나 이상 어긋난 것으로 드러나면, 타당한 결론을 얻기 위해 시정 조치를 취해야 한다. 적절한 대응은 위반의 성격과 심각성에 따라 달라진다. 이 절은 위반 유형별로 대처하는 체계적인 지침을 제공한다.
 
+## 설정
+
+```python
+import numpy as np
+import pandas as pd
+from statsmodels.formula.api import ols
+
+# 이 페이지의 진단은 모두 아래 모형 하나를 놓고 수행한다.
+# 집단마다 표준편차를 1.0, 1.3, 1.6으로 다르게 주었고,
+# 집단 C에 이상점을 하나 심어 두었다.
+rng = np.random.default_rng(42)
+n = 20
+response = np.concatenate([
+    rng.normal(10.0, 1.0, n),
+    rng.normal(10.8, 1.3, n),
+    rng.normal(12.0, 1.6, n),
+])
+response[-1] = 20.0                     # 마지막 관측값을 이상점으로 만든다
+data = pd.DataFrame({
+    "group": np.repeat(["A", "B", "C"], n),
+    "response": response,
+})
+group1 = data.loc[data["group"] == "A", "response"]
+group2 = data.loc[data["group"] == "B", "response"]
+group3 = data.loc[data["group"] == "C", "response"]
+
+model = ols("response ~ C(group)", data=data).fit()
+
+print(data.groupby("group").response.agg(["count", "mean", "std"]).round(3))
+print(f"\nF = {model.fvalue:.4f}, p = {model.f_pvalue:.4f}")
+```
+
+출력:
+
+```
+       count    mean    std
+group                      
+A         20   9.967  0.870
+B         20  10.942  1.034
+C         20  12.513  2.077
+
+F = 16.1314, p = 0.0000
+```
+
+이상점 하나가 집단 C의 표준편차를 1.15에서 2.08로 키웠다. 아래 진단들이 이것을 잡아내는지 보라.
+
 ## 단계별 접근
 
 1. **원인 파악:** 앞 절들에서 설명한 진단 도구로 어느 가정이 어느 정도로 어긋났는지 판정한다.
@@ -24,6 +70,14 @@ stat, p_value = kruskal(group1, group2, group3)
 print(f"Kruskal-Wallis: H = {stat:.4f}, p-value = {p_value:.4f}")
 ```
 
+출력:
+
+```
+Kruskal-Wallis: H = 26.0698, p-value = 0.0000
+```
+
+이상점이 있는 자료인데도 강하게 기각한다. Kruskal-Wallis는 값 자체가 아니라 **순위**를 쓰므로, 20.0이라는 이상점이 "가장 큰 값"이라는 정보로만 쓰이고 그 크기는 결과에 영향을 주지 않는다.
+
 Kruskal-Wallis 검정은 이상점이나 치우친 분포에 덜 민감하지만, 분포의 모양이 같고 위치만 다르다고 가정한다. 자세한 내용은 [Kruskal-Wallis 검정](../../ch16/multi_group_nonparametric/kruskal_wallis.md)을 보라.
 
 ## 자료 변환
@@ -42,7 +96,20 @@ $$
 import numpy as np
 
 data['log_response'] = np.log(data['response'])
+print(data.groupby('group').log_response.agg(['mean', 'std']).round(4))
 ```
+
+출력:
+
+```
+         mean     std
+group                
+A      2.2955  0.0900
+B      2.3886  0.0918
+C      2.5159  0.1460
+```
+
+로그를 취하니 집단별 표준편차가 0.090, 0.092, 0.146으로 좁혀졌다. 원래 척도에서는 0.87, 1.03, 2.08이었다. 분산이 평균과 함께 커지는 자료에서 로그 변환이 등분산성을 회복시키는 전형적인 모습이다.
 
 ### 제곱근 변환
 
@@ -54,7 +121,20 @@ $$
 
 ```python
 data['sqrt_response'] = np.sqrt(data['response'])
+print(data.groupby('group').sqrt_response.agg(['mean', 'std']).round(4))
 ```
+
+출력:
+
+```
+         mean     std
+group                
+A      3.1541  0.1398
+B      3.3045  0.1538
+C      3.5274  0.2735
+```
+
+제곱근 변환은 로그보다 약하게 작용한다. 표준편차가 0.140, 0.154, 0.274로 여전히 두 배 가까이 벌어져 있다. 변환의 세기는 로그 > 제곱근 순이며, 자료의 치우침 정도에 맞춰 골라야 한다.
 
 ### Box-Cox 변환
 
@@ -67,9 +147,20 @@ $$
 ```python
 from scipy.stats import boxcox
 
+# boxcox는 양수 자료만 받는다. 0이나 음수가 있으면 상수를 더해야 한다.
 transformed_data, best_lambda = boxcox(data['response'])
 print(f"Optimal lambda = {best_lambda:.4f}")
 ```
+
+출력:
+
+```
+Optimal lambda = -1.5414
+```
+
+$\lambda = -1.54$는 로그 변환($\lambda = 0$)보다도 훨씬 강한 변환을 뜻한다. 이상점 하나를 끌어내리기 위해 Box-Cox가 이렇게 극단적인 $\lambda$를 고른 것이다.
+
+이 값을 그대로 받아들이기 전에 멈춰야 한다. $\lambda = -1.54$로 변환한 값은 $-1/Y^{1.54}$에 가까워 해석이 거의 불가능하다. **변환이 이상점 하나에 끌려가고 있다면, 그 이상점을 먼저 조사하는 것이 순서다.**
 
 !!! note "변환 후의 해석"
     자료를 변환하면 분산분석은 원래 평균이 아니라 변환된 평균에 관한 가설을 검정한다. 결과를 해석하고 보고할 때 주의하라. 가능하면 추정값을 역변환하고, 어떤 척도에서 분석했는지 분명히 밝혀야 한다.
@@ -89,6 +180,15 @@ welch_result = pg.welch_anova(dv='response', between='group', data=data)
 print(welch_result)
 ```
 
+출력:
+
+```
+  Source  ddof1      ddof2          F     p_unc       np2
+0  group      2  35.386613  14.579033  0.000024  0.361436
+```
+
+표준 분산분석의 $F = 16.13$과 견주면 Welch는 14.58로 조금 작고, 분모 자유도도 57에서 35.4로 줄었다. 집단 C의 분산이 크다는 사실을 반영해 정보량을 보수적으로 잡은 결과다.
+
 전체 논의는 [Welch의 일원배치 분산분석](../anova_welch/welch_one_way.md)을 보라.
 
 ### 로버스트 추정량
@@ -100,8 +200,29 @@ import statsmodels.api as sm
 
 rlm_model = sm.RLM.from_formula('response ~ group', data=data, M=sm.robust.norms.HuberT())
 result = rlm_model.fit()
-print(result.summary())
+# summary()는 실행 날짜와 시각을 함께 찍으므로 계수 표만 뽑아 본다.
+print(result.params.round(4))
+print()
+print(result.bse.round(4))
 ```
+
+출력:
+
+```
+Intercept     9.9880
+group[T.B]    0.8953
+group[T.C]    2.2366
+dtype: float64
+
+Intercept     0.2267
+group[T.B]    0.3206
+group[T.C]    0.3206
+dtype: float64
+```
+
+OLS로 적합하면 집단 C의 계수가 2.546인데 로버스트 추정은 2.237을 준다. Huber 손실이 이상점의 가중치를 낮춰 집단 C의 평균이 그 한 점에 덜 끌려간 것이다.
+
+표준오차도 눈여겨보라. 로버스트 추정의 0.321은 OLS의 0.452보다 작다. 이상점을 통제하면 추정이 오히려 정밀해진다.
 
 ## 순열검정
 
@@ -137,6 +258,14 @@ for _ in range(n_permutations):
 p_value = np.mean(np.array(perm_f_stats) >= observed_f)
 print(f"Permutation test p-value: {p_value:.4f}")
 ```
+
+출력:
+
+```
+Permutation test p-value: 0.0000
+```
+
+10,000번의 순열 중 관측된 $F$ 이상이 나온 경우가 한 번도 없었다. 이때 p-값을 0으로 보고하면 안 된다. 순열검정으로 말할 수 있는 것은 $p < 1/10000$까지이며, 보수적으로는 $(0 + 1)/(10000 + 1) \approx 0.0001$로 보고하는 관례를 쓴다.
 
 자세한 내용은 [순열검정](../../ch17/permutation/foundations.md)을 보라.
 

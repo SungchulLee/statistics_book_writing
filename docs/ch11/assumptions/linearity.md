@@ -12,6 +12,53 @@ $$
 
 선형성 가정은 연속형 독립변수와 종속변수의 관계가 각 집단 안에서 선형이라는 것이다. 비선형 관계는 잔차에 체계적인 패턴을 남기고 모형 오설정으로 이어질 수 있다.
 
+## 설정
+
+```python
+import numpy as np
+import pandas as pd
+from statsmodels.formula.api import ols
+
+# 이 페이지의 모든 진단은 아래 모형 하나를 놓고 수행한다.
+# 집단마다 표준편차를 1.0, 1.3, 1.6으로 다르게 주어 진단이 무엇을 잡아내는지
+# (그리고 무엇을 못 잡아내는지) 볼 수 있게 했다.
+rng = np.random.default_rng(42)
+n = 20
+data = pd.DataFrame({
+    "group": np.repeat(["A", "B", "C"], n),
+    "response": np.concatenate([
+        rng.normal(10.0, 1.0, n),
+        rng.normal(10.8, 1.3, n),
+        rng.normal(12.0, 1.6, n),
+    ]),
+})
+# 선형성은 연속형 공변량이 있을 때 비로소 문제가 된다.
+# 그래서 이 페이지에서는 공변량을 하나 넣은 공분산분석 모형을 쓴다.
+data["covariate"] = rng.uniform(0, 10, 3 * n)
+data["response"] = data["response"] + 0.4 * data["covariate"]
+
+model = ols("response ~ C(group) + covariate", data=data).fit()
+
+print(data.groupby("group").response.agg(["count", "mean", "std"]).round(3))
+print(f"\nF = {model.fvalue:.4f}, p = {model.f_pvalue:.4f}")
+print(f"covariate 계수 = {model.params['covariate']:.4f}")
+```
+
+출력:
+
+```
+       count    mean    std
+group                      
+A         20  11.820  1.205
+B         20  12.679  1.243
+C         20  14.351  1.513
+
+F = 35.4445, p = 0.0000
+covariate 계수 = 0.3275
+```
+
+공변량을 더한 만큼 집단평균이 위로 올라갔고 산포도 커졌다. 공변량의 계수 추정값 0.3275는 참값 0.4를 향하지만 관측값 60개로는 이 정도 오차가 남는다.
+
 ## 확인 방법
 
 ### 산점도
@@ -26,6 +73,12 @@ sns.scatterplot(data=data, x='covariate', y='response', hue='group', alpha=0.6)
 plt.title("Response vs. Covariate by Group")
 plt.show()
 ```
+
+![집단별 반응 대 공변량](./img/linearity_67.png)
+
+세 집단 모두 공변량이 커질수록 반응이 대체로 커진다. 자료를 만들 때 기울기 0.4의 선형 관계를 넣었으므로 기대한 모습이며, 휘어짐이 보이지 않는다.
+
+집단별 기울기가 비슷해 보인다는 점도 중요하다. 공분산분석은 기울기가 집단마다 같다고 가정한다(평행성 가정). 기울기가 눈에 띄게 다르면 공변량과 집단의 교호작용 항을 넣어야 한다.
 
 살펴볼 것:
 
@@ -46,6 +99,10 @@ plt.ylabel("Residuals")
 plt.title("Residuals vs. Fitted Values")
 plt.show()
 ```
+
+![잔차 대 적합값](./img/linearity_85.png)
+
+앞의 등분산성 페이지와 달리 적합값이 연속적으로 퍼져 있다. 모형에 연속형 공변량이 들어갔기 때문이다. 잔차가 0 주위에 무작위로 흩어져 있고 휘어진 패턴이 없으므로 선형성 가정이 무너진 흔적은 없다.
 
 - **무작위한 흩어짐:** 선형성이 만족된다.
 - **곡률:** 휘어진 패턴은 다항 항이나 비선형 모형이 필요함을 시사한다.

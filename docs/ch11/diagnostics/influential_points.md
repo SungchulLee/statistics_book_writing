@@ -4,6 +4,52 @@
 
 분산분석에서 어떤 자료점은 결과에 지나치게 큰 영향을 주어 결론을 왜곡할 수 있다. 이런 영향점은 이상점(특이한 반응값)일 수도 있고 지렛점(특이한 설명변수값)일 수도 있으며, 추정된 집단 평균과 분산, 전체 F-통계량에 상당한 영향을 줄 수 있다. 이런 점들을 찾아 다루는 일은 분산분석 결과의 로버스트성을 확보하는 데 결정적이다.
 
+## 설정
+
+```python
+import numpy as np
+import pandas as pd
+from statsmodels.formula.api import ols
+
+# 이 페이지의 진단은 모두 아래 모형 하나를 놓고 수행한다.
+# 집단마다 표준편차를 1.0, 1.3, 1.6으로 다르게 주었고,
+# 집단 C에 이상점을 하나 심어 두었다.
+rng = np.random.default_rng(42)
+n = 20
+response = np.concatenate([
+    rng.normal(10.0, 1.0, n),
+    rng.normal(10.8, 1.3, n),
+    rng.normal(12.0, 1.6, n),
+])
+response[-1] = 20.0                     # 마지막 관측값을 이상점으로 만든다
+data = pd.DataFrame({
+    "group": np.repeat(["A", "B", "C"], n),
+    "response": response,
+})
+group1 = data.loc[data["group"] == "A", "response"]
+group2 = data.loc[data["group"] == "B", "response"]
+group3 = data.loc[data["group"] == "C", "response"]
+
+model = ols("response ~ C(group)", data=data).fit()
+
+print(data.groupby("group").response.agg(["count", "mean", "std"]).round(3))
+print(f"\nF = {model.fvalue:.4f}, p = {model.f_pvalue:.4f}")
+```
+
+출력:
+
+```
+       count    mean    std
+group                      
+A         20   9.967  0.870
+B         20  10.942  1.034
+C         20  12.513  2.077
+
+F = 16.1314, p = 0.0000
+```
+
+이상점 하나가 집단 C의 표준편차를 1.15에서 2.08로 키웠다. 아래 진단들이 이것을 잡아내는지 보라.
+
 ## Cook의 거리
 
 Cook의 거리는 각 관측값의 잔차와 지렛값을 결합하여 적합된 모형에 대한 전체적인 영향을 평가한다. 관측값 $i$를 제거했을 때 적합값이 얼마나 변하는지를 잰다:
@@ -28,7 +74,25 @@ plt.title("Cook's Distance")
 plt.axhline(y=4/len(cooks_d), color='r', linestyle='--', label=f'Threshold = {4/len(cooks_d):.3f}')
 plt.legend()
 plt.show()
+
+print(f"threshold = {4/len(cooks_d):.4f}")
+print(f"max Cook's D = {cooks_d.max():.4f} at obs {cooks_d.argmax()}")
+print(f"flagged = {np.where(cooks_d > 4/len(cooks_d))[0]}")
 ```
+
+출력:
+
+```
+threshold = 0.0667
+max Cook's D = 0.5058 at obs 59
+flagged = [52 59]
+```
+
+![Cook의 거리](./img/influential_points_63.png)
+
+막대 하나가 압도적으로 높다. 마지막 관측값(59번)의 Cook 거리 0.506은 문턱 0.067의 여덟 배에 가깝다. 52번도 문턱을 넘지만 값이 훨씬 작다.
+
+문턱 $4/n$은 넉넉하게 잡은 기준이라 이렇게 몇 개가 걸리는 것이 보통이다. 걸린 점을 모두 문제 삼는 것이 아니라, **다른 점들과 얼마나 벌어져 있는지**를 보는 것이 요령이다.
 
 영향점을 찾는 데 흔히 쓰는 문턱:
 
@@ -57,7 +121,21 @@ plt.ylabel("Studentized Residuals")
 plt.title("Leverage vs. Studentized Residuals")
 plt.axhline(y=0, color='r', linestyle='--')
 plt.show()
+
+print(f"leverage: min = {leverage.min():.4f}, max = {leverage.max():.4f}")
 ```
+
+출력:
+
+```
+leverage: min = 0.0500, max = 0.0500
+```
+
+![지렛값 대 스튜던트화 잔차](./img/influential_points_97.png)
+
+지렛값이 60개 모두 정확히 0.05다. 균형 설계라 모든 집단의 크기가 $n_i = 20$이고 $h_{ii} = 1/20 = 0.05$이기 때문이다.
+
+그래서 그림의 점들이 하나의 세로선 위에 늘어선다. **균형 잡힌 일원배치 분산분석에서 지렛값은 영향점을 가려내는 데 아무 역할도 하지 못한다.** 영향의 차이는 오직 잔차에서 온다. 지렛값이 의미를 갖는 것은 집단 크기가 다르거나 연속형 설명변수가 있을 때다.
 
 ## DFFITS
 
@@ -94,14 +172,33 @@ $$
 import statsmodels.api as sm
 from statsmodels.formula.api import ols
 
-# Fit model
 model = ols('response ~ group', data=data).fit()
 
-# Influence diagnostics
 influence = model.get_influence()
+# summary_frame은 진단량을 한 표에 모아 준다.
 summary = influence.summary_frame()
 print(summary[['hat_diag', 'cooks_d', 'dffits', 'student_resid']].describe())
 ```
+
+출력:
+
+```
+           hat_diag    cooks_d     dffits  student_resid
+count  6.000000e+01  60.000000  60.000000      60.000000
+mean   5.000000e-02   0.017544   0.008298       0.036170
+std    5.411161e-17   0.065539   0.281456       1.226837
+min    5.000000e-02   0.000002  -0.481894      -2.100527
+25%    5.000000e-02   0.001276  -0.139287      -0.607140
+50%    5.000000e-02   0.005002  -0.015728      -0.068558
+75%    5.000000e-02   0.012359   0.097065       0.423097
+max    5.000000e-02   0.505775   1.736734       7.570250
+```
+
+세 가지를 읽을 수 있다.
+
+- `hat_diag`의 표준편차가 $5 \times 10^{-17}$이다. 사실상 0이며, 균형 설계에서 지렛값이 모두 같다는 것을 부동소수점 오차 수준까지 확인해 준다.
+- `student_resid`의 최댓값이 7.57이다. 나머지가 $\pm 2.1$ 안에 있는데 이 하나만 7을 넘는다. 외부 스튜던트화 잔차는 해당 관측값을 빼고 적합한 모형에서 계산하므로, 이상점 자신이 자기 잔차를 줄이는 효과가 제거되어 이렇게 큰 값이 나온다.
+- `cooks_d`의 4분위수는 모두 0.013 아래인데 최댓값만 0.506이다. 분포의 꼬리가 얼마나 극단적인지 보여준다.
 
 ## 연습문제
 

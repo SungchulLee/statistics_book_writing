@@ -72,6 +72,10 @@ ax.set_title(f"PDF and CDF of chi-squared({df})")
 plt.show()
 ```
 
+![카이제곱 분포의 pdf와 cdf](./img/chi_square_distribution_57.png)
+
+자유도 5에서 확률밀도함수의 최빈값이 $d - 2 = 3$에 있고 오른쪽으로 길게 늘어져 있다. 누적분포함수는 15 근처에서 이미 1에 가까워진다.
+
 $d$가 작으면 확률밀도함수가 오른쪽으로 치우치고 최빈값이 0 근처에 있다. $d$가 커지면 분포가 더 대칭적이 되고 오른쪽으로 이동한다.
 
 ## 정규 제곱합으로부터의 구성
@@ -84,13 +88,29 @@ $d$가 작으면 확률밀도함수가 오른쪽으로 치우치고 최빈값이
 ```python
 df, seed = 5, 1
 data_direct = stats.chi2(df=df).rvs(10_000, random_state=seed)
+# 표준정규를 df개 제곱해서 더한다. 이것이 카이제곱분포의 정의다.
+# axis=0으로 합해야 열마다(표본마다) 제곱합이 하나씩 나온다.
 data_from_norm = np.sum(
     stats.norm().rvs(size=(df, 10_000), random_state=seed) ** 2,
     axis=0
 )
+
+for name, d in [("직접 표집", data_direct), ("제곱합 구성", data_from_norm)]:
+    print(f"{name:<12} mean={d.mean():.4f}  var={d.var(ddof=1):.4f}")
+print(f"{'이론값':<12} mean={df:.4f}  var={2*df:.4f}")
 ```
 
-두 표본의 히스토그램을 이론적 확률밀도함수 위에 겹쳐 그리면 서로 일치하여 정의 $\sum Z_i^2 \sim \chi^2(d)$를 확인해 준다.
+출력:
+
+```
+직접 표집        mean=4.9953  var=10.0317
+제곱합 구성       mean=5.0068  var=9.9999
+이론값          mean=5.0000  var=10.0000
+```
+
+두 방식 모두 이론값 $E[\chi^2_d] = d = 5$와 $\text{Var}(\chi^2_d) = 2d = 10$을 재현한다. 정의 $\sum Z_i^2 \sim \chi^2(d)$가 수치로 확인된 셈이다.
+
+두 표본이 서로 정확히 같지는 않다는 점에 주의하라. `random_state`가 같아도 뽑는 난수의 **개수와 용도**가 다르기 때문이다. 직접 표집은 10,000개를 뽑고, 제곱합 구성은 50,000개를 뽑아 다섯 개씩 묶는다.
 
 ## 해석
 

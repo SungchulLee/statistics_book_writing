@@ -45,7 +45,19 @@ def simulate_once(null=True):
     df = pd.DataFrame(rows)
 
     aov = pg.welch_anova(dv="Values", between="Group", data=df)
-    return float(aov["p-unc"].iloc[0])
+    # pingouin 0.6부터 열 이름이 "p-unc"에서 "p_unc"로 바뀌었다.
+    # 두 이름을 모두 받아들여 버전에 무관하게 동작하도록 한다.
+    col = "p_unc" if "p_unc" in aov.columns else "p-unc"
+    return float(aov[col].iloc[0])
+
+# 한 번 돌려 형태를 확인한다.
+print(f"single run p-value (null) = {simulate_once(null=True):.4f}")
+```
+
+출력:
+
+```
+single run p-value (null) = 0.4545
 ```
 
 ## 모의실험 실행
@@ -64,6 +76,17 @@ type1, power = run(n_sims=300, alpha=0.05)
 print(f"Estimated Type I error: {type1:.3f}")
 print(f"Estimated Power:        {power:.3f}")
 ```
+
+출력:
+
+```
+Estimated Type I error: 0.047
+Estimated Power:        0.100
+```
+
+제1종 오류가 0.047로 명목 0.05와 어긋나지 않는다(모의실험 표준오차 0.013). 분산비가 6배나 되고 표본크기도 10, 18, 7로 제각각인데도 Welch가 오류율을 지켜 낸다.
+
+검정력 0.100은 처참하다. $G_3$을 2만큼 올렸지만 그 집단의 표준편차가 6이고 표본이 7개뿐이라 신호가 잡음에 묻힌다. **오류율을 지키는 것과 효과를 찾아내는 것은 다른 문제다.**
 
 ## 핵심 값
 

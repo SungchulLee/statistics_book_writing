@@ -4,6 +4,52 @@
 
 분산분석의 결과를 믿기 전에 몇 가지 핵심 가정을 확인해야 한다: 잔차의 정규성, 등분산성(집단 사이의 분산이 같음), 관측의 독립성, 그리고 영향점의 부재. 이 페이지는 완전한 진단 흐름을 따라가며 각 확인을 형식적 검정과 진단 그림으로 보이고, 가정이 어긋났을 때의 처방을 논한다.
 
+## 설정
+
+```python
+import numpy as np
+import pandas as pd
+from statsmodels.formula.api import ols
+
+# 이 페이지의 진단은 모두 아래 모형 하나를 놓고 수행한다.
+# 집단마다 표준편차를 1.0, 1.3, 1.6으로 다르게 주었고,
+# 집단 C에 이상점을 하나 심어 두었다.
+rng = np.random.default_rng(42)
+n = 20
+response = np.concatenate([
+    rng.normal(10.0, 1.0, n),
+    rng.normal(10.8, 1.3, n),
+    rng.normal(12.0, 1.6, n),
+])
+response[-1] = 20.0                     # 마지막 관측값을 이상점으로 만든다
+data = pd.DataFrame({
+    "group": np.repeat(["A", "B", "C"], n),
+    "response": response,
+})
+group1 = data.loc[data["group"] == "A", "response"]
+group2 = data.loc[data["group"] == "B", "response"]
+group3 = data.loc[data["group"] == "C", "response"]
+
+model = ols("response ~ C(group)", data=data).fit()
+
+print(data.groupby("group").response.agg(["count", "mean", "std"]).round(3))
+print(f"\nF = {model.fvalue:.4f}, p = {model.f_pvalue:.4f}")
+```
+
+출력:
+
+```
+       count    mean    std
+group                      
+A         20   9.967  0.870
+B         20  10.942  1.034
+C         20  12.513  2.077
+
+F = 16.1314, p = 0.0000
+```
+
+이상점 하나가 집단 C의 표준편차를 1.15에서 2.08로 키웠다. 아래 진단들이 이것을 잡아내는지 보라.
+
 ## 진단 작업 흐름
 
 전형적인 분산분석 진단 파이프라인은 적합된 모형 $y_{ij} = \mu + \alpha_i + \varepsilon_{ij}$의 잔차에 적용되는 네 단계로 이루어진다.
@@ -31,8 +77,21 @@ import statsmodels.api as sm
 
 resid = model.resid
 stat, p_value = shapiro(resid)
+print(f"Shapiro-Wilk: W = {stat:.4f}, p = {p_value:.4f}")
 sm.qqplot(resid, line='s')
 ```
+
+출력:
+
+```
+Shapiro-Wilk: W = 0.8116, p = 0.0000
+```
+
+![잔차의 Q-Q 그림](./img/anova_diagnostics_74.png)
+
+$p < 0.0001$로 정규성을 강하게 기각한다. Q-Q 그림의 오른쪽 끝에 크게 벗어난 점 하나가 보이는데, 설정에서 심어 둔 이상점이다.
+
+**검정이 잡아낸 것은 "잔차가 정규가 아니다"이지만 실제 원인은 관측값 하나다.** 형식적 검정만 보면 분포 전체를 의심하게 되고, 그림을 함께 보아야 원인이 한 점이라는 것을 알 수 있다.
 
 Shapiro-Wilk의 $p$-값이 작거나(예: $p < 0.05$) Q-Q 그림에 체계적인 곡률이 보이면 정규성이 의심스럽다. 처방으로는 자료 변환(로그, 제곱근)이나 Kruskal-Wallis 같은 비모수 검정으로의 전환이 있다.
 
@@ -54,7 +113,20 @@ from scipy.stats import levene, bartlett
 groups = [data[data['group'] == g]['response'].values for g in data['group'].unique()]
 stat_lev, p_lev = levene(*groups)
 stat_bart, p_bart = bartlett(*groups)
+print(f"Levene:   W = {stat_lev:.4f}, p = {p_lev:.4f}")
+print(f"Bartlett: chi2 = {stat_bart:.4f}, p = {p_bart:.4f}")
 ```
+
+출력:
+
+```
+Levene:   W = 1.1666, p = 0.3188
+Bartlett: chi2 = 16.6837, p = 0.0002
+```
+
+두 검정의 결론이 갈린다. Bartlett은 $p = 0.0002$로 등분산을 강하게 기각하고, Levene은 $p = 0.32$로 기각하지 못한다.
+
+이것이 두 검정의 성격 차이를 보여주는 전형적인 예다. Bartlett은 정규성을 전제하므로 이상점 하나에 크게 흔들린다. Levene은 중앙값으로부터의 절대편차를 쓰므로 그 한 점에 덜 끌려간다. **자료에 이상점이 있을 때 Bartlett의 기각은 분산 차이의 증거가 아니라 이상점의 증거일 수 있다.**
 
 등분산성이 기각되면 Welch 분산분석이나 이분산에 로버스트한 접근(HC3 공분산)을 써야 한다.
 
@@ -72,7 +144,16 @@ $$
 from statsmodels.stats.stattools import durbin_watson
 
 dw = durbin_watson(model.resid)
+print(f"Durbin-Watson: {dw:.4f}")
 ```
+
+출력:
+
+```
+Durbin-Watson: 1.7586
+```
+
+1.76으로 경험칙의 범위 $(1.5, 2.5)$ 안에 있어 자기상관의 증거가 없다. 다만 여기서 "순서"는 자료프레임의 행 번호일 뿐이므로, 이 값이 의미를 가지려면 자료가 실제 수집 순서대로 정렬되어 있어야 한다.
 
 잔차 대 적합값 산점도에는 알아볼 만한 패턴이 없어야 한다.
 
@@ -90,7 +171,23 @@ $$
 influence = model.get_influence()
 cooks_d = influence.cooks_distance[0]
 threshold = 4 / len(cooks_d)
+flagged = np.where(cooks_d > threshold)[0]
+print(f"threshold = {threshold:.4f}")
+print(f"flagged observations = {flagged}")
+print(f"max Cook's D = {cooks_d.max():.4f} (obs {cooks_d.argmax()})")
 ```
+
+출력:
+
+```
+threshold = 0.0667
+flagged observations = [52 59]
+max Cook's D = 0.5058 (obs 59)
+```
+
+문턱을 넘는 관측값이 둘이고, 그중 압도적인 것이 마지막 관측값(59번)이다. Cook 거리 0.506은 문턱 0.067의 여덟 배에 가깝고 두 번째로 큰 값과도 크게 벌어져 있다. 설정에서 20.0으로 바꿔 심어 둔 바로 그 점이다.
+
+Cook의 거리는 정규성 검정이나 등분산 검정과 달리 **어느 관측값이** 문제인지 짚어 준다. 진단의 순서를 이렇게 잡으면 좋다. 먼저 영향점을 찾고, 그것을 제거했을 때 결론이 바뀌는지 확인한 뒤, 남은 문제를 분포 가정의 문제로 다룬다.
 
 ## 전부 합치기
 
@@ -121,7 +218,21 @@ def run_full_diagnostics(data, response_col, group_col):
     axes[1, 1].axhline(y=4 / len(cooks_d), color='r', linestyle='--')
     plt.tight_layout()
     plt.show()
+
+run_full_diagnostics(data, "response", "C(group)")
 ```
+
+출력:
+
+```
+              sum_sq    df          F    PR(>F)
+C(group)   66.024886   2.0  16.131362  0.000003
+Residual  116.649122  57.0        NaN       NaN
+```
+
+![분산분석 진단 패널](./img/anova_diagnostics_196.png)
+
+네 그림을 한자리에 놓으면 이야기가 분명해진다. Q-Q 그림의 오른쪽 끝, 히스토그램의 오른쪽 꼬리, 잔차 그림의 위쪽 외딴 점, Cook 거리의 마지막 막대가 모두 **같은 관측값 하나**를 가리킨다.
 
 ## 해석
 

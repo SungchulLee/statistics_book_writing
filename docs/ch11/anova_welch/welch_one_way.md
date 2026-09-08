@@ -89,32 +89,45 @@ data = {
 }
 df = pd.DataFrame(data)
 
-# Perform Welch's ANOVA
+# Welch 분산분석 수행. scipy에는 없고 pingouin에 있다.
 anova_results = pg.welch_anova(dv="Values", between="Group", data=df)
 
-# Display the results
 print(anova_results)
 ```
 
 출력:
 
 ```
-   Source  ddof1  ddof2       F     p-unc
-0   Group    2.0  4.143  84.416  0.000439
+  Source  ddof1     ddof2          F     p_unc       np2
+0  Group      2  4.142737  84.415503  0.000439  0.953739
 ```
 
 - $F$: 검정통계량.
-- $p$: $H_0$을 기각할지 판단하는 p-값.
+- $p$(`p_unc`): $H_0$을 기각할지 판단하는 p-값. pingouin 0.6부터 열 이름이 `p-unc`에서 `p_unc`로 바뀌었다.
+- `ddof2`가 4.14로 정수가 아니다. Welch-Satterthwaite 자유도라서 그렇다. 표준 분산분석이었다면 $N - k = 7$이었을 텐데, 분산이 다르다는 사실이 실효 자유도를 그만큼 깎아냈다.
 
 ### 사후검정
 
 Welch 분산분석이 유의한 차이를 찾으면, 등분산이나 동일 표본크기를 가정하지 않는 **Games-Howell 검정** 같은 사후검정을 쓴다:
 
 ```python
-# Perform Games-Howell post hoc test
+# Games-Howell 사후검정. Tukey HSD와 달리 쌍마다 자유도를 따로 계산한다.
 post_hoc = pg.pairwise_gameshowell(dv="Values", between="Group", data=df)
-print(post_hoc)
+print(post_hoc.round(4).to_string(index=False))
 ```
+
+출력:
+
+```
+A B  mean_A  mean_B     diff     se        T     df   pval  hedges
+A B 13.0000 21.3333  -8.3333 1.3333  -6.2500 2.8764 0.0188 -4.0825
+A C 13.0000 32.0000 -19.0000 1.4142 -13.4350 4.0755 0.0004 -7.6277
+B C 21.3333 32.0000 -10.6667 1.7638  -6.0474 4.9154 0.0044 -3.7514
+```
+
+세 쌍이 모두 유의하다. `df` 열이 쌍마다 2.88, 4.08, 4.92로 다르다는 점이 Games-Howell의 특징이다. Tukey HSD라면 세 비교 모두 같은 자유도 $N - k = 7$을 썼을 것이다.
+
+`hedges` 열은 효과크기(Hedges의 $g$)다. $-4$에서 $-7.6$이라는 값은 통상적인 기준의 "큼"($0.8$)을 한참 넘는다. 집단 간 차이가 집단 내 산포보다 훨씬 크다는 뜻이며, 관측값이 10개뿐인데도 $p$가 이렇게 작은 이유이기도 하다.
 
 ## 8. 장점
 

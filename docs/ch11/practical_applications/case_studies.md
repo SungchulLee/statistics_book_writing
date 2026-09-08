@@ -24,6 +24,16 @@ anova_table = sm.stats.anova_lm(model, typ=2)
 print(anova_table)
 ```
 
+출력:
+
+```
+           sum_sq    df          F        PR(>F)
+species   10.6276   1.0  31.687502  1.724856e-07
+Residual  32.8680  98.0        NaN           NaN
+```
+
+$F = 31.7$, $p = 1.7 \times 10^{-7}$로 두 종의 꽃받침 길이가 다르다는 결론이 압도적이다. 집단당 50개씩이라 검정력이 넉넉하다.
+
 ### 2단계: 정규성 확인
 
 ```python
@@ -40,6 +50,16 @@ stat, p_value = shapiro(model.resid)
 print(f"Shapiro-Wilk Test: W = {stat:.4f}, p-value = {p_value:.4f}")
 ```
 
+출력:
+
+```
+Shapiro-Wilk Test: W = 0.9831, p-value = 0.2285
+```
+
+![잔차의 Q-Q 그림](./img/case_studies_29.png)
+
+$p = 0.23$으로 정규성에 반하는 증거가 없고, Q-Q 그림의 점들도 기준선을 잘 따른다.
+
 ### 3단계: 등분산성 확인
 
 ```python
@@ -51,6 +71,14 @@ stat, p_value = levene(group1, group2)
 print(f"Levene's Test: F = {stat:.4f}, p-value = {p_value:.4f}")
 ```
 
+출력:
+
+```
+Levene's Test: F = 1.0245, p-value = 0.3139
+```
+
+$p = 0.31$로 등분산도 기각되지 않는다. 두 가정이 모두 무난하므로 표준 분산분석 결과를 그대로 쓸 수 있다.
+
 ### 4단계: 독립성 확인 (잔차 그림)
 
 ```python
@@ -61,6 +89,10 @@ plt.ylabel('Residuals')
 plt.title('Residuals vs. Fitted Values')
 plt.show()
 ```
+
+![잔차 대 적합값](./img/case_studies_56.png)
+
+세로 띠가 둘이고 각 띠의 높이가 비슷하다. 등분산 가정이 무난하다는 Levene 검정의 결론과 일치한다.
 
 ### 해석
 
@@ -90,6 +122,18 @@ model = ols('productivity ~ environment', data=data).fit()
 anova_table = sm.stats.anova_lm(model, typ=2)
 print(anova_table)
 ```
+
+출력:
+
+```
+             sum_sq    df         F    PR(>F)
+environment   130.0   2.0  0.768019  0.485443
+Residual     1015.6  12.0       NaN       NaN
+```
+
+$F = 0.77$, $p = 0.49$로 기각하지 못한다. 세 형태의 생산성 평균이 다르다는 증거가 없다.
+
+다만 집단당 5명뿐이라 검정력이 거의 없다시피 하다는 점을 함께 보아야 한다. 잔차 자유도가 12에 불과하므로 이 결과를 "차이가 없다"로 읽으면 안 된다.
 
 ### 2단계: 가정 확인
 
@@ -121,6 +165,17 @@ plt.title('Residuals vs. Fitted Values')
 plt.show()
 ```
 
+출력:
+
+```
+Shapiro-Wilk Test: p-value = 0.7449
+Levene's Test: p-value = 0.7631
+```
+
+![잔차의 Q-Q 그림과 잔차 그림](./img/case_studies_96.png)
+
+두 검정 모두 기각하지 못한다($p = 0.74$, $p = 0.76$). 그러나 $n = 15$에서 이 검정들의 검정력은 매우 낮아, "가정이 확인되었다"기보다 "확인할 수 없었다"에 가깝다.
+
 ### 작은 표본에 대한 주의
 
 집단당 관측값이 5개뿐이면 Shapiro-Wilk 검정의 검정력이 낮고 Q-Q 그림도 그다지 유익하지 않을 수 있다. 이런 경우 분산분석은 모집단이 정규라는 가정에 크게 의존하므로 비모수 검정을 함께 수행하는 편이 신중하다.
@@ -151,6 +206,16 @@ anova_table = sm.stats.anova_lm(model, typ=2)
 print(anova_table)
 ```
 
+출력:
+
+```
+          sum_sq    df         F    PR(>F)
+location  0.2655   3.0  0.456186  0.716615
+Residual  3.1040  16.0       NaN       NaN
+```
+
+$F = 0.46$, $p = 0.72$로 네 매장의 만족도에 차이가 없다. 집단 간 제곱합 0.27이 잔차 제곱합 3.10에 비해 아주 작다.
+
 ### 2단계: 가정 확인
 
 ```python
@@ -179,6 +244,17 @@ plt.title('Residuals vs. Fitted Values')
 plt.show()
 ```
 
+출력:
+
+```
+Shapiro-Wilk Test: p-value = 0.5488
+Levene's Test: p-value = 0.9343
+```
+
+![잔차의 Q-Q 그림과 잔차 그림](./img/case_studies_156.png)
+
+가정 위반의 증거가 없다.
+
 ### 3단계: 사후분석
 
 분산분석이 유의한 차이를 드러내고 가정도 충족되면 사후 쌍별 비교를 수행한다:
@@ -189,6 +265,26 @@ from statsmodels.stats.multicomp import pairwise_tukeyhsd
 tukey = pairwise_tukeyhsd(data['satisfaction'], data['location'], alpha=0.05)
 print(tukey)
 ```
+
+출력:
+
+```
+Multiple Comparison of Means - Tukey HSD, FWER=0.05
+=================================================
+group1 group2 meandiff p-adj  lower  upper reject
+-------------------------------------------------
+     A      B     -0.3  0.708 -1.097 0.497  False
+     A      C    -0.24 0.8243 -1.037 0.557  False
+     A      D    -0.12 0.9723 -0.917 0.677  False
+     B      C     0.06 0.9963 -0.737 0.857  False
+     B      D     0.18 0.9154 -0.617 0.977  False
+     C      D     0.12 0.9723 -0.677 0.917  False
+-------------------------------------------------
+```
+
+여섯 비교 중 유의한 것이 하나도 없다. 전역 분산분석이 기각하지 못했으니 당연한 결과다.
+
+실은 이 단계를 밟지 말았어야 한다. **전역 검정이 기각하지 못했으면 사후검정으로 넘어가지 않는 것이 원칙이다.** 그러지 않으면 다중비교 통제가 무너진다. 여기서는 절차를 보여주기 위해 실행했을 뿐이다.
 
 Tukey의 HSD에 대한 자세한 내용은 [Tukey HSD](../post_hoc/tukey.md)를 보라.
 

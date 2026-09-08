@@ -34,22 +34,55 @@ def manual_anova(groups):
     N = len(all_data)
     k = len(groups)
 
+    # SST: 집단평균이 전체평균에서 얼마나 떨어져 있는가. n_i로 가중한다.
+    # 큰 집단의 평균이 어긋나는 것이 더 무겁게 세어져야 하기 때문이다.
     SST = sum(len(g) * (g.mean() - grand_mean) ** 2
               for g in groups.values())
+    # SSE: 각 관측값이 **자기 집단의** 평균에서 얼마나 떨어져 있는가.
     SSE = sum(np.sum((g - g.mean()) ** 2)
               for g in groups.values())
 
     MST = SST / (k - 1)
     MSE = SSE / (N - k)
-    F = MST / MSE
+    F = MST / MSE                    # 신호 대 잡음
     p_value = 1 - stats.f.cdf(F, k - 1, N - k)
     return SST, SSE, MST, MSE, F, p_value
+
+
+# R의 PlantGrowth 자료 (대조군과 두 처리, 각 10개)
+groups = {
+    "ctrl": np.array([4.17, 5.58, 5.18, 6.11, 4.50, 4.61, 5.17, 4.53, 5.33, 5.14]),
+    "trt1": np.array([4.81, 4.17, 4.41, 3.59, 5.87, 3.83, 6.03, 4.89, 4.32, 4.69]),
+    "trt2": np.array([6.31, 5.12, 5.54, 5.50, 5.37, 5.29, 4.92, 6.15, 5.80, 5.26]),
+}
+
+SST, SSE, MST, MSE, F, p = manual_anova(groups)
+print(f"SST = {SST:.4f}, SSE = {SSE:.4f}")
+print(f"MST = {MST:.4f}, MSE = {MSE:.4f}")
+print(f"F   = {F:.4f}, p = {p:.4f}")
 ```
+
+출력:
+
+```
+SST = 3.7663, SSE = 10.4921
+MST = 1.8832, MSE = 0.3886
+F   = 4.8461, p = 0.0159
+```
+
+SSE가 SST의 세 배 가까이 크지만 자유도로 나누고 나면(2 대 27) MST가 MSE의 다섯 배가 된다. 분산분석에서 제곱합 자체가 아니라 **자유도로 나눈 평균제곱**을 비교하는 이유다.
 
 scipy로 확인하는 것은 한 줄이면 된다:
 
 ```python
 F_scipy, p_scipy = stats.f_oneway(*groups.values())
+print(f"scipy: F = {F_scipy:.4f}, p = {p_scipy:.4f}")
+```
+
+출력:
+
+```
+scipy: F = 4.8461, p = 0.0159
 ```
 
 두 방식이 동일한 $F$와 $p$-값을 주어 수동 계산이 맞음을 확인해 준다.
@@ -81,19 +114,37 @@ def fisher_lsd(groups, MSE, alpha=0.05):
                         "diff": diff, "LSD": lsd_val,
                         "significant": diff > lsd_val})
     return results
+
+
+for r in fisher_lsd(groups, MSE):
+    print(f"{r['pair']:<14} diff = {r['diff']:.4f}  LSD = {r['LSD']:.4f}  {r['significant']}")
 ```
+
+출력:
+
+```
+ctrl vs trt1   diff = 0.3710  LSD = 0.5720  False
+ctrl vs trt2   diff = 0.4940  LSD = 0.5720  False
+trt1 vs trt2   diff = 0.8650  LSD = 0.5720  True
+```
+
+전역 검정은 $p = 0.0159$로 기각했는데 쌍별로 보면 trt1 대 trt2 하나만 유의하다. 대조군은 두 처리 어느 쪽과도 유의하게 다르지 않다. 두 처리가 대조군을 사이에 두고 반대 방향으로 벌어져 있어, 서로 간의 차이가 각각과 대조군의 차이보다 큰 것이다.
+
+집단 크기가 모두 10으로 같아 LSD 문턱도 0.5720 하나로 같다. 크기가 다르면 쌍마다 문턱이 달라진다.
 
 ## 해석
 
-함께 제공되는 스크립트에서 모의생성한 키 자료 세 집단(네덜란드 $\mu = 183$, 일본 $\mu = 172$, 덴마크 $\mu = 181$, 각각 $n = 30$)은 큰 F-통계량과 $p \approx 0$을 주어 $H_0$을 단호히 기각한다.
+위 PlantGrowth 자료에서 전역 F-검정은 $F = 4.85$, $p = 0.0159$로 $\alpha = 0.05$에서 $H_0$을 기각한다. 세 집단의 평균이 모두 같지는 않다는 뜻이다.
 
-이어지는 Fisher LSD는 대체로 다음을 찾아낸다:
+이어지는 Fisher LSD는 다음을 찾아낸다:
 
-- **네덜란드 대 일본:** 유의함(평균 차이가 큼).
-- **네덜란드 대 덴마크:** 유의하지 않음(평균이 비슷함).
-- **일본 대 덴마크:** 유의함(평균 차이가 큼).
+- **ctrl 대 trt1:** 유의하지 않음(차이 0.371 < LSD 0.572).
+- **ctrl 대 trt2:** 유의하지 않음(차이 0.494 < LSD 0.572).
+- **trt1 대 trt2:** 유의함(차이 0.865 > LSD 0.572).
 
 흔한 패턴을 잘 보여준다. 전역 분산분석은 기각하지만 모든 쌍별 비교가 유의하지는 않다. 어느 집단이 전체 효과를 이끄는지 알려면 사후 방법이 꼭 필요하다.
+
+한 가지 덧붙이면, Fisher LSD는 보정을 하지 않으므로 여기서 유의하다고 나온 trt1 대 trt2도 Tukey HSD로 다시 보면 $p_{\text{adj}} = 0.012$로 유의성이 약해진다(같은 자료를 다룬 [분산분석 파이프라인](oneway_pipeline.md) 참조). 집단이 셋일 때는 차이가 크지 않지만 집단이 많아지면 벌어진다(연습문제 2).
 
 ## 연습문제
 

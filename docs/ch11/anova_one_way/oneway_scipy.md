@@ -22,10 +22,26 @@ url = ('https://raw.githubusercontent.com/vincentarelbundock/'
        'Rdatasets/master/csv/datasets/PlantGrowth.csv')
 df = pd.read_csv(url, usecols=[1, 2])
 g = df.groupby('group')
+# f_oneway는 집단을 **별도의 배열**로 받는다. 긴 형식 데이터프레임을 그대로
+# 넘길 수 없어서 이렇게 쪼개야 한다. statsmodels의 ols 방식은 그 반대다.
 ctrl = g.get_group('ctrl').weight.values
 trt1 = g.get_group('trt1').weight.values
 trt2 = g.get_group('trt2').weight.values
+
+print(df.groupby('group').weight.agg(['count', 'mean', 'std']).round(4))
 ```
+
+출력:
+
+```
+       count   mean     std
+group                      
+ctrl      10  5.032  0.5831
+trt1      10  4.661  0.7937
+trt2      10  5.526  0.4426
+```
+
+집단당 10개씩 균형 설계다. 표본표준편차가 0.44에서 0.79까지 1.8배 차이 나는데, 이 정도는 등분산 가정을 크게 흔들지 않는다(자세한 확인은 Levene 검정 페이지 참조).
 
 ## 분산분석 수행
 
@@ -38,6 +54,12 @@ $$
 ```python
 F, p = stats.f_oneway(ctrl, trt1, trt2)
 print(f"F = {F:.4f}, p = {p:.4f}")
+```
+
+출력:
+
+```
+F = 4.8461, p = 0.0159
 ```
 
 $H_0: \mu_{\text{ctrl}} = \mu_{\text{trt1}} = \mu_{\text{trt2}}$ 아래에서 통계량은 $F \sim F_{2,27}$이다.
@@ -58,6 +80,10 @@ plt.tight_layout()
 plt.show()
 ```
 
+![집단별 상자그림](./img/oneway_scipy_49.png)
+
+세 상자가 서로 겹친다. trt2가 가장 높고 trt1이 가장 낮지만 상자들이 나란히 놓일 만큼 가깝다. $p = 0.016$이 "압도적"이 아니라 "그럭저럭 유의한" 정도인 이유가 그림에 그대로 나타난다.
+
 ## 시각화: 관측된 꼬리를 표시한 F-분포
 
 $F_{2,27}$의 밀도함수를 그리고 관측된 $F$-통계량 너머의 넓이를 색칠하면 $p$-값을 기하적으로 해석할 수 있다. 그 넓이는 $H_0$ 아래에서 그만큼 또는 그보다 극단적인 $F$ 값을 관측할 확률이다.
@@ -77,6 +103,10 @@ ax.legend()
 plt.tight_layout()
 plt.show()
 ```
+
+![F-분포와 관측된 꼬리](./img/oneway_scipy_65.png)
+
+칠해진 꼬리의 넓이가 p-값 0.0159다. $F_{2,27}$ 분포가 1 근처에 몰려 있으므로($H_0$ 아래에서 $F$의 기댓값은 $df_2/(df_2-2) = 1.08$) 관측값 4.85는 오른쪽으로 꽤 나간 값이다.
 
 색칠된 넓이는
 

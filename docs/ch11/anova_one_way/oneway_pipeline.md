@@ -23,9 +23,20 @@ url = ('https://raw.githubusercontent.com/vincentarelbundock/'
        'Rdatasets/master/csv/datasets/PlantGrowth.csv')
 df = pd.read_csv(url, usecols=[1, 2])
 
+# C()로 감싸지 않으면 group을 숫자처럼 취급해 회귀직선을 적합해 버린다.
+# 문자열 열이면 statsmodels가 알아서 범주형으로 보지만, 수준이 0/1/2 같은
+# 숫자로 코딩되어 있으면 조용히 틀린 모형이 된다. 습관적으로 감싸는 편이 안전하다.
 model = ols('weight ~ C(group)', data=df).fit()
 aov = anova_lm(model)
 print(aov)
+```
+
+출력:
+
+```
+            df    sum_sq   mean_sq         F   PR(>F)
+C(group)   2.0   3.76634  1.883170  4.846088  0.01591
+Residual  27.0  10.49209  0.388596       NaN      NaN
 ```
 
 분산분석표는 집단 간 제곱합($SSB$), 집단 내 제곱합($SSW$), $F$-통계량, $p$-값을 보고한다. $p < \alpha$이면 $H_0$을 기각한다.
@@ -47,7 +58,22 @@ tukey = pairwise_tukeyhsd(endog=df['weight'], groups=df['group'], alpha=0.05)
 print(tukey)
 ```
 
-출력은 평균 차이, 신뢰구간, 각 쌍이 유의하게 다른지를 보여준다.
+출력:
+
+```
+Multiple Comparison of Means - Tukey HSD, FWER=0.05
+===================================================
+group1 group2 meandiff p-adj   lower  upper  reject
+---------------------------------------------------
+  ctrl   trt1   -0.371 0.3909 -1.0622 0.3202  False
+  ctrl   trt2    0.494  0.198 -0.1972 1.1852  False
+  trt1   trt2    0.865  0.012  0.1738 1.5562   True
+---------------------------------------------------
+```
+
+세 비교 중 trt1 대 trt2 하나만 유의하다. 대조군은 두 처리 어느 쪽과도 유의하게 다르지 않다. 두 처리가 대조군을 사이에 두고 반대 방향으로 벌어져 있어서, 서로 간의 차이(0.865)가 각각과 대조군의 차이(0.371, 0.494)보다 크기 때문이다.
+
+`reject` 열은 신뢰구간이 0을 담는지와 정확히 맞물린다. trt1 대 trt2의 구간 $(0.174, 1.556)$만 0을 담지 않는다.
 
 ## 3단계: Bonferroni 보정을 적용한 쌍별 Welch t-검정
 
@@ -71,10 +97,24 @@ for g1, g2 in combinations(groups, 2):
     p_raw.append(p)
     labels.append(f"{g1} vs {g2}")
 
+# Bonferroni는 문턱을 낮추는 대신 p-값에 m을 곱해 돌려준다.
+# 그래서 보정 후에도 비교 대상은 여전히 alpha다.
 _, p_bonf, _, _ = multipletests(p_raw, alpha=0.05, method='bonferroni')
 for lbl, p, pb in zip(labels, p_raw, p_bonf):
     print(f"{lbl:<12}  p = {p:.4f}   p_bonf = {pb:.4f}")
 ```
+
+출력:
+
+```
+ctrl vs trt1  p = 0.2504   p_bonf = 0.7511
+ctrl vs trt2  p = 0.0479   p_bonf = 0.1437
+trt1 vs trt2  p = 0.0093   p_bonf = 0.0279
+```
+
+Tukey와 결론은 같지만(trt1 대 trt2만 유의) 보정 p-값은 0.0279로 Tukey의 0.012보다 크다. Bonferroni가 더 보수적이기 때문이다.
+
+ctrl 대 trt2를 보라. 보정 전 $p = 0.0479$로 유의했던 것이 보정 후 0.1437이 된다. 비교를 세 번 한다는 사실이 이만큼의 대가를 요구한다.
 
 ## 4단계: 시각화
 
@@ -92,6 +132,10 @@ plt.title('PlantGrowth weights by group')
 plt.tight_layout()
 plt.show()
 ```
+
+![집단별 상자그림](./img/oneway_pipeline_83.png)
+
+trt1의 상자가 가장 낮고 넓으며, trt2가 가장 높고 좁다. 두 상자가 겹치는 부분이 거의 없다는 것이 Tukey 검정이 이 쌍만 잡아낸 이유다. ctrl의 상자는 두 처리 사이에 걸쳐 있어 어느 쪽과도 뚜렷이 갈리지 않는다.
 
 ## 해석
 

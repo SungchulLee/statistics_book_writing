@@ -36,29 +36,48 @@ $$
 import pandas as pd
 from statsmodels.formula.api import ols
 
+# 칸마다 반복이 **둘 이상** 있어야 한다. 칸당 하나뿐이면 3x3 설계에서
+# 모수 9개로 관측값 9개를 완전히 맞혀 버려 잔차 자유도가 0이 되고,
+# 지렛값 h_ii가 1이 되어 HC3의 1/(1-h_ii)^2 이 발산한다.
 data = {
-    "Temperature": ["High"]*3 + ["Low"]*3 + ["Medium"]*3,
-    "Fertilizer":  ["A","B","C","A","B","C","A","B","C"],
-    "Growth":      [12, 15, 14, 10, 13, 11, 14, 16, 15],
+    "Temperature": ["High"]*6 + ["Low"]*6 + ["Medium"]*6,
+    "Fertilizer":  ["A", "A", "B", "B", "C", "C"] * 3,
+    "Growth":      [12, 13, 15, 18, 14, 15,
+                    10,  9, 13, 12, 11, 13,
+                    14, 16, 16, 21, 15, 17],
 }
 df = pd.DataFrame(data)
 
 model = ols("Growth ~ C(Temperature) * C(Fertilizer)", data=df).fit()
 rob = model.get_robustcov_results(cov_type="HC3")
 
-# Test main effect of Temperature
+# Temperature의 주효과 검정.
+# ":"가 든 이름을 빼야 한다. 교호작용 항의 이름도 "C(Temperature)["로 시작하므로
+# 그냥 startswith만 쓰면 교호작용까지 함께 검정해 자유도가 2가 아니라 6이 된다.
 pnames = model.params.index.tolist()
-temp_params = [p for p in pnames if p.startswith("C(Temperature)[")]
+temp_params = [p for p in pnames
+               if p.startswith("C(Temperature)[") and ":" not in p]
 constraint = ", ".join([f"{t} = 0" for t in temp_params])
 print("Main effect: Temperature")
 print(rob.f_test(constraint))
 
-# Test interaction
+# 교호작용 검정
 inter_params = [p for p in pnames if ":" in p]
 constraint_inter = ", ".join([f"{t} = 0" for t in inter_params])
 print("Interaction: Temperature x Fertilizer")
 print(rob.f_test(constraint_inter))
 ```
+
+출력:
+
+```
+Main effect: Temperature
+<F test: F=8.055555555555552, p=0.009878581991016048, df_denom=9, df_num=2>
+Interaction: Temperature x Fertilizer
+<F test: F=0.15370680044593157, p=0.956506962060376, df_denom=9, df_num=4>
+```
+
+주효과는 유의하고($p = 0.0099$) 교호작용은 아니다($p = 0.957$). 분자 자유도가 각각 2와 4로, 수준 수에서 계산한 $a - 1 = 2$와 $(a-1)(b-1) = 4$에 맞는다. 이 자유도를 확인하는 것이 제약을 제대로 걸었는지 점검하는 가장 쉬운 방법이다.
 
 ## 표준 분산분석과의 비교
 
@@ -70,13 +89,27 @@ import statsmodels.api as sm
 print(sm.stats.anova_lm(model, typ=2))
 ```
 
+출력:
+
+```
+                                 sum_sq   df      F    PR(>F)
+C(Temperature)                81.444444  2.0  14.66  0.001475
+C(Fertilizer)                 36.777778  2.0   6.62  0.017060
+C(Temperature):C(Fertilizer)   2.555556  4.0   0.23  0.914666
+Residual                      25.000000  9.0    NaN       NaN
+```
+
+표준 분산분석은 Temperature의 $F$를 14.66으로, HC3 Wald 검정은 8.06으로 준다. 두 값이 이만큼 다른 것은 분산이 칸마다 다르다는 신호다. 실제로 이 자료에서 B 비료의 칸들이 다른 칸보다 흩어져 있다.
+
+방향도 눈여겨보라. 로버스트 검정이 더 **작은** $F$를 준다. 표준 검정이 표준오차를 과소평가해 효과를 부풀리고 있었다는 뜻이다.
+
 분산이 같으면 HC3 Wald 검정과 표준 분산분석이 비슷한 결과를 준다. 두 결과가 어긋난다면 이분산이 표준 검정에 영향을 주고 있다는 뜻이다.
 
 ## 해석
 
 - **HC3 대 HC0:** HC3는 각 제곱 잔차를 (HC0처럼 그대로 두지 않고) $(1 - h_{ii})^2$으로 나눈다. 지렛값이 큰 점의 잔차가 작아지는 경향을 이 상향 조정이 보정하여 소표본에서 포함확률을 개선한다.
 - **언제 이 접근을 쓰는가:** 형식적 검정(Levene, Bartlett)이나 시각적 검토(잔차 그림)가 분산이 다름을 시사할 때마다 표준 $F$-검정보다 HC3 기반 Wald 검정이 낫다.
-- **한계:** 칸 크기가 아주 작으면(위 예제처럼 칸당 $n = 1$이면) 개별 지렛값 $h_{ii}$가 1에 가까워질 수 있어 HC3 추정량이 제대로 작동하지 않을 수 있다. 칸 크기가 클수록 로버스트 추정량의 신뢰성이 높아진다.
+- **한계:** 칸 크기가 아주 작으면 개별 지렛값 $h_{ii}$가 1에 가까워져 HC3 추정량이 불안정해진다. 극단적으로 칸당 $n = 1$이면 포화모형이 되어 $h_{ii} = 1$, 잔차 0이 되고 HC3의 $1/(1-h_{ii})^2$이 발산해 계산 자체가 불가능하다. 위 예제에서 칸마다 반복을 둘씩 둔 이유가 이것이다. 칸 크기가 클수록 로버스트 추정량의 신뢰성이 높아진다.
 
 ## 연습문제
 

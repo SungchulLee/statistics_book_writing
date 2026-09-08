@@ -43,10 +43,24 @@ $$
 `scipy.stats.levene`에서는 `center` 인자로 이를 정한다. 기본값은 Brown-Forsythe 변형인 `'median'`이다:
 
 ```python
+import scipy.stats as stats
 from scipy.stats import levene
 
+# 표준편차가 1.0과 1.5로 다른 두 집단
+group1 = stats.norm(0, 1.0).rvs(50, random_state=0)
+group2 = stats.norm(0, 1.5).rvs(50, random_state=1)
+
 stat, pval = levene(group1, group2, center='median')
+print(f"F = {stat:.4f}, p = {pval:.4f}")
 ```
+
+출력:
+
+```
+F = 2.8007, p = 0.0974
+```
+
+표준편차가 1.5배 차이 나는데도 집단당 50개로는 5% 수준에서 기각하지 못한다. 등분산 검정의 검정력은 대체로 낮다.
 
 ## 예제
 
@@ -65,7 +79,19 @@ for scale in [1.00, 1.05, 1.10, 1.15, 1.20]:
     print(f"sigma_y={scale:.2f}: F={stat:.2f}, p={pval:.3f}")
 ```
 
-출력은 다음과 같다:
+출력:
+
+```
+sigma_y=1.00: F=0.00, p=1.000
+sigma_y=1.05: F=0.20, p=0.652
+sigma_y=1.10: F=0.78, p=0.379
+sigma_y=1.15: F=1.67, p=0.198
+sigma_y=1.20: F=2.82, p=0.095
+```
+
+$\sigma_Y = 1.00$에서 $F$가 정확히 0으로 나온 것은 우연이 아니다. `random_state`를 같게 두었으므로 $x$와 $y$가 평균만 1만큼 다른 **완전히 같은** 난수열이고, Levene 검정은 중앙값으로부터의 절대편차를 보므로 두 집단의 편차가 한 치도 다르지 않다.
+
+표로 정리하면:
 
 | $\sigma_Y$ | $W$ | p-값 |
 |---|---|---|

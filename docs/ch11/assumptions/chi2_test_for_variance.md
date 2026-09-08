@@ -64,15 +64,34 @@ def chi2_test_for_variance(data, sigma2_0=1.0):
 예제는 $\sigma_Y \in \{1.00, 1.05, 1.10, 1.15, 1.20\}$에 대해 $N(1, \sigma_Y^2)$에서 표본을 생성하고 $H_0: \sigma^2 = 1$을 검정한다:
 
 ```python
+seed = 1
 x = stats.norm(loc=0, scale=1).rvs(100, random_state=seed)
 
 for scale in [1.00, 1.05, 1.10, 1.15, 1.20]:
+    # random_state를 고정했으므로 scale만 바뀐 **같은** 난수열이 쓰인다.
+    # 표본마다 새로 뽑았다면 표집 변동이 섞여 scale의 효과만 보기 어렵다.
     y = stats.norm(loc=1, scale=scale).rvs(100, random_state=seed)
     stat, pval = chi2_test_for_variance(y, sigma2_0=1.0)
-    print(f"sigma={scale:.2f}: p={pval:.3f}")
+    print(f"sigma={scale:.2f}: s2={np.var(y, ddof=1):.3f} T={stat:.2f} p={pval:.3f}")
 ```
 
-`seed = 1`일 때 출력은 다음과 같다:
+출력:
+
+```
+sigma=1.00: s2=0.791 T=78.35 p=0.125
+sigma=1.05: s2=0.873 T=86.38 p=0.373
+sigma=1.10: s2=0.958 T=94.80 p=0.799
+sigma=1.15: s2=1.047 T=103.62 p=0.711
+sigma=1.20: s2=1.140 T=112.82 p=0.324
+```
+
+p-값이 단조롭지 않다는 점이 눈에 띈다. $\sigma_Y$가 1.00일 때 $p = 0.125$로 가장 작고, 1.10에서 0.799로 가장 크다.
+
+이유는 $s^2$의 값에 있다. 같은 난수열을 쓰므로 $\sigma_Y$가 커지면 $s^2$이 0.791에서 1.140까지 단조롭게 커지는데, $H_0$이 $\sigma^2 = 1$이므로 $s^2$이 1에서 **얼마나 멀리 떨어져 있는가**가 p-값을 정한다. $\sigma_Y = 1.00$의 표본이 우연히 $s^2 = 0.791$로 작게 나와 오히려 1에서 가장 멀었고, $\sigma_Y = 1.10$의 표본이 $s^2 = 0.958$로 1에 가장 가까웠다.
+
+이 표는 그래서 검정력에 대한 표가 아니라 **표본 하나의 변덕에 대한 표**다. 검정력을 재려면 각 $\sigma_Y$마다 표본을 여러 번 뽑아 기각률을 세어야 한다.
+
+`seed = 1`일 때의 값을 표로 정리하면 다음과 같다:
 
 | $\sigma_Y$ | $S^2$ | $T$ | p-값 |
 |---|---|---|---|

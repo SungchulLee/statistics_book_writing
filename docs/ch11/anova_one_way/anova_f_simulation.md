@@ -44,9 +44,13 @@ $$
 import numpy as np
 from scipy import stats
 
+np.random.seed(42)      # 아래 출력을 재현하려면 고정한다
+
 def simulate_f(mu, sigma, sizes, n_sim=1000):
+    """지정한 평균/표준편차/크기로 집단을 만들고 F-검정을 n_sim번 반복한다."""
     F_vals, p_vals = [], []
     for _ in range(n_sim):
+        # 집단마다 평균도 표준편차도 크기도 다를 수 있게 zip으로 묶는다.
         groups = [stats.norm.rvs(m, s, n)
                   for m, s, n in zip(mu, sigma, sizes)]
         F, p = stats.f_oneway(*groups)
@@ -58,11 +62,41 @@ def simulate_f(mu, sigma, sizes, n_sim=1000):
 각 시나리오마다 임계값과 경험적 기각률을 계산한다:
 
 ```python
-df1 = 2                          # k - 1
-df2 = sum(sizes) - 3             # N - k
-F_crit = stats.f.ppf(0.95, df1, df2)
-reject_pct = np.mean(F_vals > F_crit) * 100
+scenarios = [
+    ("큰 분리, 등분산",        (3, 6, 9),       (6, 6, 6),      (10, 20, 30)),
+    ("아주 작은 분리, 등분산", (3, 3.1, 2.9),   (6, 6, 6),      (10, 20, 30)),
+    ("중간 분리, 큰 분산, n=10",  (3, 5, 6),    (10, 10, 10),   (10, 10, 10)),
+    ("중간 분리, 큰 분산, n=5000",(3, 5, 6),    (10, 10, 10),   (5000, 5000, 5000)),
+    ("분리 없음, 등분산",      (3, 3, 3),       (1, 1, 1),      (10, 20, 30)),
+]
+
+print(f"{'시나리오':<26} {'F_crit':>7} {'기각률':>8}")
+for name, mu, sigma, sizes in scenarios:
+    F_vals, p_vals = simulate_f(mu, sigma, sizes, n_sim=1000)
+    df1 = len(mu) - 1                # k - 1
+    df2 = sum(sizes) - len(mu)       # N - k
+    # 임계값은 자유도만으로 정해진다. 자료와 무관하다.
+    F_crit = stats.f.ppf(0.95, df1, df2)
+    reject_pct = np.mean(F_vals > F_crit) * 100
+    print(f"{name:<26} {F_crit:>7.3f} {reject_pct:>7.1f}%")
 ```
+
+출력:
+
+```
+시나리오                        F_crit      기각률
+큰 분리, 등분산                    3.159    68.1%
+아주 작은 분리, 등분산                3.159     4.9%
+중간 분리, 큰 분산, n=10            3.354     7.1%
+중간 분리, 큰 분산, n=5000          2.996   100.0%
+분리 없음, 등분산                   3.159     4.8%
+```
+
+평균이 모두 같은 마지막 시나리오에서 기각률 4.8%는 명목 5%와 어긋나지 않는다(모의실험 오차 0.7%p). 검정이 올바르게 보정되어 있다는 뜻이다.
+
+셋째와 넷째 줄을 비교하면 표본크기의 힘이 드러난다. 평균과 분산이 완전히 같은데 집단당 10명에서는 검정력이 7.1%, 5,000명에서는 100%다. 검정력은 효과크기가 아니라 효과크기와 표본크기의 조합에서 나온다.
+
+둘째 줄의 4.9%도 눈여겨보라. 평균이 3, 3.1, 2.9로 **실제로 다르지만** 차이가 표준편차 6에 비해 너무 작아 귀무 시나리오와 구별되지 않는다.
 
 ## 해석
 

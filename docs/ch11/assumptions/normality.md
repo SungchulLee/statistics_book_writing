@@ -6,6 +6,46 @@
 
 정규성 가정은 표본이 작을 때 특히 중요하다. 표본이 크면(집단당 $n \geq 30$) 중심극한정리가 완만한 이탈에 대해 로버스트성을 제공한다. 바탕 분포가 무엇이든 집단 평균의 표본분포가 근사적으로 정규가 되기 때문이다.
 
+## 설정
+
+```python
+import numpy as np
+import pandas as pd
+from statsmodels.formula.api import ols
+
+# 이 페이지의 모든 진단은 아래 모형 하나를 놓고 수행한다.
+# 집단마다 표준편차를 1.0, 1.3, 1.6으로 다르게 주어 진단이 무엇을 잡아내는지
+# (그리고 무엇을 못 잡아내는지) 볼 수 있게 했다.
+rng = np.random.default_rng(42)
+n = 20
+data = pd.DataFrame({
+    "group": np.repeat(["A", "B", "C"], n),
+    "response": np.concatenate([
+        rng.normal(10.0, 1.0, n),
+        rng.normal(10.8, 1.3, n),
+        rng.normal(12.0, 1.6, n),
+    ]),
+})
+model = ols("response ~ C(group)", data=data).fit()
+
+print(data.groupby("group").response.agg(["count", "mean", "std"]).round(3))
+print(f"\nF = {model.fvalue:.4f}, p = {model.f_pvalue:.4f}")
+```
+
+출력:
+
+```
+       count    mean    std
+group                      
+A         20   9.967  0.870
+B         20  10.942  1.034
+C         20  12.191  1.145
+
+F = 23.7708, p = 0.0000
+```
+
+표본표준편차가 0.87, 1.03, 1.15로 나왔다. 참값이 1.0, 1.3, 1.6이었는데도 추정값이 이만큼 눌린 것은 집단당 20개로는 표준편차를 정확히 추정하기 어렵기 때문이다. 이 점이 아래 등분산 검정의 결과를 읽을 때 중요하다.
+
 ## 확인 방법
 
 ### Q-Q 그림 (분위수-분위수 그림)
@@ -20,10 +60,16 @@ Q-Q 그림은 관측된 잔차의 분위수를 정규분포의 이론적 분위�
 import statsmodels.api as sm
 import matplotlib.pyplot as plt
 
+# line='s'는 표본의 평균과 표준편차로 정한 기준선이다.
+# line='45'(y=x)는 잔차가 표준화되어 있을 때만 맞으므로 여기서는 쓰지 않는다.
 sm.qqplot(model.resid, line='s')
 plt.title("Q-Q Plot of Residuals")
 plt.show()
 ```
+
+![잔차의 Q-Q 그림](./img/normality_59.png)
+
+점들이 기준선을 잘 따른다. 양쪽 꼬리에서 한두 점이 살짝 벗어나지만 $n = 60$에서 이 정도는 표집 변동으로 볼 만하다.
 
 ### Shapiro-Wilk 검정
 
@@ -38,9 +84,19 @@ $$
 ```python
 from scipy.stats import shapiro
 
+# 잔차 전체를 한 번에 넣는다. 집단별로 따로 검정하면 다중검정 문제가 생기고,
+# 분산분석이 요구하는 것도 "각 집단의 잔차"가 아니라 하나의 오차 분포다.
 stat, p_value = shapiro(model.resid)
 print(f"Shapiro-Wilk Test: W = {stat:.4f}, p-value = {p_value:.4f}")
 ```
+
+출력:
+
+```
+Shapiro-Wilk Test: W = 0.9870, p-value = 0.7711
+```
+
+$p = 0.77$로 정규성에 반하는 증거가 없다. 자료를 실제로 정규분포에서 만들었으니 당연한 결과이며, 검정이 제대로 작동한다는 확인이기도 하다.
 
 !!! warning "표본크기에 대한 민감성"
     Shapiro-Wilk 검정은 표본이 크면 지나치게 민감해져 사소한 이탈까지 통계적으로 유의하다고 표시할 수 있다. 반대로 표본이 작으면 의미 있는 이탈을 탐지할 검정력이 부족할 수 있다. 형식적 검정은 언제나 시각적 검토(Q-Q 그림, 히스토그램)와 함께 쓰라.
@@ -58,6 +114,10 @@ plt.ylabel("Density")
 plt.title("Histogram of Residuals")
 plt.show()
 ```
+
+![잔차의 히스토그램](./img/normality_92.png)
+
+관측값 60개를 20개 구간에 나누어 담았으니 구간당 평균 3개다. 이 정도면 히스토그램이 울퉁불퉁해 보이는 것이 당연하며, 그 요철을 분포의 특징으로 읽으면 안 된다. 표본이 작을 때 정규성 판단에는 Q-Q 그림이 히스토그램보다 낫다.
 
 살펴볼 것:
 
