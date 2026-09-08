@@ -55,6 +55,12 @@ print(f"Linear predictions range: "
       f"[{y_pred_linear.min():.3f}, {y_pred_linear.max():.3f}]")
 ```
 
+출력:
+
+```
+Linear predictions range: [-0.102, 1.107]
+```
+
 적합 결과는 $\hat{y} = -0.1079 + 0.000491 \cdot \text{Balance}$이고, 예측 범위는
 $[-0.102,\ 1.107]$이다. 즉 관측된 잔액 범위 안에서도 예측값이 음수가 되거나 1을 넘는다.
 $X_{\text{test}}$ 격자점의 **17.7%**가 $[0,1]$ 밖에 놓인다.
@@ -76,6 +82,12 @@ y_pred_logistic = logistic_model.predict_proba(X_test)[:, 1]
 
 print(f"Logistic predictions range: "
       f"[{y_pred_logistic.min():.3f}, {y_pred_logistic.max():.3f}]")
+```
+
+출력:
+
+```
+Logistic predictions range: [0.019, 0.981]
 ```
 
 적합 결과는 $\hat\beta_0 = -3.9790$, $\hat\beta_1 = 0.003212$로 참값
@@ -127,6 +139,8 @@ plt.tight_layout()
 plt.show()
 ```
 
+![이항 자료에 대한 선형회귀와 로지스틱 회귀](./img/logistic_vs_linear_visualization_93.png)
+
 ## 오즈비 해석
 
 로지스틱 모형은 오즈비를 통해 해석 가능한 요약을 준다. Balance가 한 단위 늘면 연체 오즈에
@@ -141,6 +155,13 @@ odds_ratio = np.exp(logistic_model.coef_[0][0])
 print(f"Odds ratio per $1 increase: {odds_ratio:.4f}")
 print(f"Percentage increase in odds per $100: "
       f"{(np.exp(100 * logistic_model.coef_[0][0]) - 1) * 100:.2f}%")
+```
+
+출력:
+
+```
+Odds ratio per $1 increase: 1.0032
+Percentage increase in odds per $100: 37.88%
 ```
 
 \$1당 오즈비는 $1.0032$로 거의 1에 가까워 실감이 나지 않는다. \$100 단위로 보면 오즈가

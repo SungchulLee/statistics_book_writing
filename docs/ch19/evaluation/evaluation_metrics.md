@@ -162,6 +162,12 @@ area = auc_trapezoid(fpr, tpr)
 print(f"AUC = {area:.4f}")
 ```
 
+출력:
+
+```
+AUC = 0.7935
+```
+
 이 구현은 AUC $= 0.7935$를 주는데, `sklearn.metrics.roc_auc_score`는 $0.7931$을 준다.
 
 !!! note "미세한 차이는 동점 때문이다"
@@ -212,6 +218,8 @@ axes[2].set_title('ROC Curve'); axes[2].legend(fontsize=9)
 plt.tight_layout()
 plt.show()
 ```
+
+![혼동행렬·점수분포·ROC 곡선](./img/evaluation_metrics_183.png)
 
 ## 해석
 

@@ -142,6 +142,22 @@ for scenario_name, (X, y) in [
         print(f"  {name:15s}: 10-fold CV accuracy = {cv_acc:.4f}")
 ```
 
+출력:
+
+```
+--- Shared Cov ---
+  LDA            : 10-fold CV accuracy = 0.8825
+  QDA            : 10-fold CV accuracy = 0.8825
+  Naive Bayes    : 10-fold CV accuracy = 0.8800
+  Logistic Reg   : 10-fold CV accuracy = 0.8850
+
+--- Diff Cov ---
+  LDA            : 10-fold CV accuracy = 0.8575
+  QDA            : 10-fold CV accuracy = 0.8575
+  Naive Bayes    : 10-fold CV accuracy = 0.8475
+  Logistic Reg   : 10-fold CV accuracy = 0.8600
+```
+
 실행 결과는 다음과 같다.
 
 | 분류기 | 시나리오 A(공유 공분산) | 시나리오 B(다른 공분산) |
@@ -195,6 +211,8 @@ plt.suptitle("Generative Classifiers: Decision Boundaries", fontsize=13)
 plt.tight_layout()
 plt.show()
 ```
+
+![생성적 분류기의 결정경계](./img/lda_qda_classification_156.png)
 
 그림에서 확인할 것은 정확도 숫자가 아니라 **경계의 모양**이다. LDA와 로지스틱 회귀는 직선을,
 QDA는 곡선을, 나이브 베이즈는 축에 정렬된 곡선을 그린다.
@@ -365,6 +383,12 @@ LDA를 손으로 적합하라. 예측을 scikit-learn의 `LinearDiscriminantAnal
     y_sklearn = lda.predict(X)
     agreement = np.mean(y_manual == y_sklearn)
     print(f"Agreement with sklearn: {agreement:.4f}")
+    ```
+
+    출력:
+
+    ```
+    Agreement with sklearn: 1.0000
     ```
 
     일치도는 $1.0000$, 즉 400개 관측치 전부에서 예측이 같다.

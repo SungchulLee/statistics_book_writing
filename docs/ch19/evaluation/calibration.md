@@ -167,6 +167,14 @@ $\text{BS} = \text{REL} - \text{RES} + \text{UNC}$가 성립함을 보여라.
     print(f"REL - RES + UNC = {REL - RES + UNC:.5f}")
     ```
 
+    출력:
+
+    ```
+    BS  = 0.16570
+    REL = 0.00062  RES = 0.08492  UNC = 0.25000
+    REL - RES + UNC = 0.16570
+    ```
+
     | 양 | 값 |
     |---|---|
     | $\bar{y}$ | $0.4980$ |

@@ -190,6 +190,39 @@ $$
 - **이상거래 탐지:** 높은 정밀도(고객을 번거롭게 하지 않음), 중간 정도의 재현율
 - **대출 승인:** 높은 정밀도(연체를 피함), 낮은 재현율(우량 차입자 일부는 놓침)
 
+## 설정
+
+아래 예제는 모두 같은 자료를 쓴다. 양성(연체) 비율이 약 19%인 자료를 만들고
+훈련자료로 로지스틱 회귀를 적합해 검정자료의 예측확률 `y_prob`을 얻는다.
+
+```python
+import numpy as np
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import train_test_split
+
+rng = np.random.default_rng(0)
+n = 4000
+X = rng.normal(0, 1, size=(n, 3))
+logit = -2.0 - 1.1 * X[:, 0] + 0.9 * X[:, 1] - 0.5 * X[:, 2]
+y = (rng.random(n) < 1 / (1 + np.exp(-logit))).astype(int)
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.25, random_state=0, stratify=y)
+
+model = LogisticRegression().fit(X_train, y_train)
+y_prob = model.predict_proba(X_test)[:, 1]
+
+print(f"검정자료 양성 비율 = {y_test.mean():.3f}")
+print(f"예측확률 범위 = [{y_prob.min():.3f}, {y_prob.max():.3f}]")
+```
+
+출력:
+
+```
+검정자료 양성 비율 = 0.181
+예측확률 범위 = [0.002, 0.978]
+```
+
 ## 구현
 
 ### 파이썬 예제
@@ -213,9 +246,20 @@ for t in thresholds:
           f"Recall={recall:.3f}, F1={f1:.3f}")
 ```
 
+출력:
+
+```
+Threshold 0.2: Precision=0.384, Recall=0.702, F1=0.496
+Threshold 0.3: Precision=0.500, Recall=0.547, F1=0.522
+Threshold 0.5: Precision=0.709, Recall=0.309, F1=0.431
+Threshold 0.7: Precision=0.889, Recall=0.088, F1=0.161
+Threshold 0.8: Precision=0.900, Recall=0.050, F1=0.094
+```
+
 ### ROC 곡선과 유든의 J
 
 ```python
+import numpy as np
 from sklearn.metrics import roc_curve, roc_auc_score
 
 # Compute ROC curve
@@ -226,7 +270,15 @@ j_scores = tpr - fpr
 optimal_idx = np.argmax(j_scores)
 optimal_threshold = thresholds[optimal_idx]
 
+print(f"AUC: {roc_auc_score(y_test, y_prob):.4f}")
 print(f"Optimal threshold (Youden's J): {optimal_threshold:.3f}")
+```
+
+출력:
+
+```
+AUC: 0.8163
+Optimal threshold (Youden's J): 0.176
 ```
 
 ## 문턱 조율의 주요 성질

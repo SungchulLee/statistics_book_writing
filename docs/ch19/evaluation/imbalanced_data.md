@@ -19,6 +19,46 @@
 불균형 자료로 학습하면 모형은 경험분포로부터 범주 확률을 배운다. 훈련자료의 유병률이 목표
 모집단과 다르면 소수 범주에 대한 예측확률의 보정이 무너진다.
 
+## 설정
+
+아래 코드는 모두 같은 자료를 쓴다. 연체율이 약 19%인 대출자료를 만들고
+훈련·검증·검정으로 나눈다.
+
+```python
+import numpy as np
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import train_test_split
+
+rng = np.random.default_rng(0)
+n = 4000
+
+# 신용점수·부채비율·소득이 연체 위험을 결정한다
+score = rng.normal(0, 1, n)
+dti = rng.normal(0, 1, n)
+income = rng.normal(0, 1, n)
+X = np.column_stack([score, dti, income])
+
+# 절편 -2.0이 연체율을 약 19%로 맞춘다
+logit = -2.0 - 1.1 * score + 0.9 * dti - 0.5 * income
+p_default = 1 / (1 + np.exp(-logit))
+y = (rng.random(n) < p_default).astype(int)   # 1 = 연체, 0 = 상환
+
+X_tmp, X_test, y_tmp, y_test = train_test_split(
+    X, y, test_size=0.25, random_state=0, stratify=y)
+X_train, X_val, y_train, y_val = train_test_split(
+    X_tmp, y_tmp, test_size=0.25, random_state=0, stratify=y_tmp)
+
+print(f"n = {n}, 연체율 = {y.mean():.3f}")
+print(f"train {len(y_train)}, val {len(y_val)}, test {len(y_test)}")
+```
+
+출력:
+
+```
+n = 4000, 연체율 = 0.191
+train 2250, val 750, test 1000
+```
+
 ## 전략 1: 가중을 통한 조정
 
 한 가지 접근은 학습 시 **소수 범주 오류의 비용(가중치)을 키우는** 것이다.
@@ -42,12 +82,15 @@ $$
 
 ### 예: 대출 자료
 
-연체율 18.9%, 상환율 81.1%인 자료에서,
+연체율 18.9%, 상환율 81.1%인 어떤 대출자료에서 보고된 결과는 다음과 같다.
 
 | 가중 없음 | 가중 적용 |
 |---|---|
 | 연체로 예측: 0.98% | 연체로 예측: 61.8% |
 | 실제 유병률의 20분의 1 수준 | 실제 유병률에 훨씬 가까움 |
+
+가중이 양성 예측 비율을 얼마나 끌어올리는지는 자료마다 다르지만 방향은 같다.
+아래 코드는 위 **설정**의 자료(연체율 19.1%)로 같은 현상을 확인한다.
 
 ### 구현
 
@@ -59,9 +102,20 @@ from sklearn.linear_model import LogisticRegression
 # Option 1: Automatic balance
 model = LogisticRegression(class_weight='balanced')
 
-# Option 2: Custom weights
-weights = [1.0 if y == 'paid_off' else 5.3 for y in y_train]
+# Option 2: Custom weights (1 = 연체이므로 소수 범주에 5.3배 가중)
+weights = [5.3 if yi == 1 else 1.0 for yi in y_train]
 model.fit(X_train, y_train, sample_weight=weights)
+
+print("가중 없음 예측 연체율:",
+      LogisticRegression().fit(X_train, y_train).predict(X_val).mean().round(4))
+print("가중 적용 예측 연체율:", model.predict(X_val).mean().round(4))
+```
+
+출력:
+
+```
+가중 없음 예측 연체율: 0.096
+가중 적용 예측 연체율: 0.776
 ```
 
 **장점:**
@@ -134,11 +188,21 @@ Oversampled: 81,105 paid off + 81,105 default (via replication)
 ```python
 from imblearn.over_sampling import SMOTE
 
-X_resampled, y_resampled = SMOTE().fit_resample(X_train, y_train)
+X_resampled, y_resampled = SMOTE(random_state=0).fit_resample(X_train, y_train)
 # Result: 50-50 split of defaults and paid-offs (synthetic defaults added)
 
 model = LogisticRegression()
 model.fit(X_resampled, y_resampled)
+
+print(f"원자료:   n = {len(y_train)}, 연체율 = {y_train.mean():.3f}")
+print(f"SMOTE 후: n = {len(y_resampled)}, 연체율 = {y_resampled.mean():.3f}")
+```
+
+출력:
+
+```
+원자료:   n = 2250, 연체율 = 0.191
+SMOTE 후: n = 3642, 연체율 = 0.500
 ```
 
 **장점:**
@@ -165,10 +229,20 @@ model.fit(X_resampled, y_resampled)
 from imblearn.over_sampling import BorderlineSMOTE, ADASYN
 
 # BorderlineSMOTE
-X_resampled, y_resampled = BorderlineSMOTE().fit_resample(X_train, y_train)
+X_bl, y_bl = BorderlineSMOTE(random_state=0).fit_resample(X_train, y_train)
 
 # ADASYN
-X_resampled, y_resampled = ADASYN().fit_resample(X_train, y_train)
+X_ad, y_ad = ADASYN(random_state=0).fit_resample(X_train, y_train)
+
+print(f"BorderlineSMOTE: n = {len(y_bl)}, 연체율 = {y_bl.mean():.3f}")
+print(f"ADASYN:          n = {len(y_ad)}, 연체율 = {y_ad.mean():.3f}")
+```
+
+출력:
+
+```
+BorderlineSMOTE: n = 3642, 연체율 = 0.500
+ADASYN:          n = 3635, 연체율 = 0.499
 ```
 
 ## 전략 4: 문턱 조정
@@ -237,6 +311,13 @@ threshold = c_fp / (c_fp + c_fn)
 
 # Step 4: evaluate once on the test set
 y_test_pred = (model.predict_proba(X_test)[:, 1] >= threshold).astype(int)
+```
+
+출력:
+
+```
+AUC  : 0.8369258418681812
+Brier: 0.111258445223284
 ```
 
 ## 핵심 요약
@@ -353,6 +434,15 @@ y_test_pred = (model.predict_proba(X_test)[:, 1] >= threshold).astype(int)
     tau, pi = 0.5, ytr.mean()
     b0_corr = mu.intercept_[0] - np.log(((1 - pi) / pi) * (tau / (1 - tau)))
     report("corrected", b0_corr, mu.coef_[0][0])
+    ```
+
+    출력:
+
+    ```
+    plain      b0=-3.0714 b1=1.5111 AUC=0.8295 Brier=0.07247 mean_p=0.0910
+    balanced   b0=-0.8018 b1=1.5079 AUC=0.8295 Brier=0.16354 mean_p=0.3589
+    under      b0=-0.7882 b1=1.4686 AUC=0.8295 Brier=0.16282 mean_p=0.3596
+    corrected  b0=-3.0598 b1=1.4686 AUC=0.8295 Brier=0.07258 mean_p=0.0892
     ```
 
     훈련자료의 유병률은 $0.0961$이고 결과는 다음과 같다.

@@ -70,6 +70,15 @@ y_prob = model.predict_proba(X_test)[:, 1]
 y_pred = model.predict(X_test)
 ```
 
+출력:
+
+```
+Intercept: -2.9986
+Coefficient (hours): 0.7099
+Train accuracy: 0.805
+Test accuracy:  0.833
+```
+
 출력은 절편 $-2.9986$, 기울기 $0.7099$, 훈련 정확도 $0.805$, 검정 정확도 $0.833$이다.
 
 ## statsmodels로 추론하기
@@ -84,7 +93,38 @@ from scipy import stats
 X_sm = sm.add_constant(hours_studied)
 logit_model = sm.Logit(y, X_sm)
 result = logit_model.fit(disp=0)
-print(result.summary())
+def print_summary(res):
+    """summary()의 Date/Time 칸은 실행할 때마다 달라지므로 비우고 출력한다."""
+    lines = []
+    for line in str(res.summary()).split("\n"):
+        if line.startswith(("Date:", "Time:")):
+            lines.append(line[:19].ljust(38) + line[38:])
+        else:
+            lines.append(line)
+    print("\n".join(lines))
+
+
+print_summary(result)
+```
+
+출력:
+
+```
+Logit Regression Results                           
+==============================================================================
+Dep. Variable:                      y   No. Observations:                  300
+Model:                          Logit   Df Residuals:                      298
+Method:                           MLE   Df Model:                            1
+Date:                                   Pseudo R-squ.:                  0.3820
+Time:                                   Log-Likelihood:                -123.42
+converged:                       True   LL-Null:                       -199.70
+Covariance Type:            nonrobust   LLR p-value:                 4.760e-35
+==============================================================================
+                 coef    std err          z      P>|z|      [0.025      0.975]
+------------------------------------------------------------------------------
+const         -3.2519      0.408     -7.979      0.000      -4.051      -2.453
+x1             0.7572      0.083      9.130      0.000       0.595       0.920
+==============================================================================
 ```
 
 !!! warning "두 결과를 나란히 비교하기 전에"
@@ -121,6 +161,16 @@ print("95% CI for Odds Ratios:")
 print(np.exp(result.conf_int()))
 ```
 
+출력:
+
+```
+Odds Ratios:
+[0.0387011  2.13232758]
+95% CI for Odds Ratios:
+[[0.01740966 0.08603126]
+ [1.81241582 2.50870736]]
+```
+
 전체 자료 적합에서 $\hat\beta_1 = 0.7572$이므로 오즈비는 $e^{0.7572} = 2.1323$이고 95%
 신뢰구간은 $(1.8124,\ 2.5087)$이다. 즉 공부 시간 한 시간마다 합격 오즈가 약 두 배가 된다.
 구간이 1을 포함하지 않으므로 효과는 유의하다.
@@ -139,6 +189,12 @@ null_model = sm.Logit(y, sm.add_constant(np.ones(n))).fit(disp=0)
 lr_stat = -2 * (null_model.llf - result.llf)
 lr_pvalue = stats.chi2.sf(lr_stat, df=1)
 print(f"Likelihood Ratio Test: chi2 = {lr_stat:.4f}, p = {lr_pvalue:.6f}")
+```
+
+출력:
+
+```
+Likelihood Ratio Test: chi2 = 152.5683, p = 0.000000
 ```
 
 결과는 $\Lambda = 152.57$, $p = 4.8 \times 10^{-35}$로 영가설을 압도적으로 기각한다.
@@ -179,6 +235,27 @@ print(f"F1 Score:  {f1_score(y_test, y_pred):.3f}")
 print(classification_report(y_test, y_pred))
 ```
 
+출력:
+
+```
+Confusion Matrix:
+[[30  7]
+ [ 8 45]]
+TN=30, FP=7, FN=8, TP=45
+Accuracy:  0.833
+Precision: 0.865
+Recall:    0.849
+F1 Score:  0.857
+              precision    recall  f1-score   support
+
+           0       0.79      0.81      0.80        37
+           1       0.87      0.85      0.86        53
+
+    accuracy                           0.83        90
+   macro avg       0.83      0.83      0.83        90
+weighted avg       0.83      0.83      0.83        90
+```
+
 검정자료 90건에서 TN $= 30$, FP $= 7$, FN $= 8$, TP $= 45$이고, 정확도 $0.833$,
 정밀도 $0.865$, 재현율 $0.849$, $F_1 = 0.857$이다.
 
@@ -196,6 +273,12 @@ from sklearn.metrics import roc_curve, roc_auc_score
 fpr, tpr, thresholds = roc_curve(y_test, y_prob)
 auc = roc_auc_score(y_test, y_prob)
 print(f"AUC = {auc:.4f}")
+```
+
+출력:
+
+```
+AUC = 0.9001
 ```
 
 AUC $= 0.9001$로, 설명변수가 단 하나인 모형치고는 매우 좋은 판별력이다.
@@ -217,6 +300,12 @@ ap = average_precision_score(y_test, y_prob)
 print(f"Average Precision = {ap:.4f}")
 ```
 
+출력:
+
+```
+Average Precision = 0.9272
+```
+
 AP $= 0.9272$이다. 이 자료는 검정자료의 양성 비율이 $53/90 = 0.589$로 오히려 양성이 다수이므로,
 AP의 무작위 기준선도 $0.589$로 높다는 점을 함께 보아야 한다.
 
@@ -233,6 +322,13 @@ print(f"Optimal threshold (Youden's J): {optimal_threshold:.3f}")
 print(f"  TPR = {tpr[optimal_idx]:.3f}, FPR = {fpr[optimal_idx]:.3f}")
 ```
 
+출력:
+
+```
+Optimal threshold (Youden's J): 0.716
+  TPR = 0.811, FPR = 0.054
+```
+
 유든의 J가 고른 문턱은 $0.716$이고 그때 TPR $= 0.811$, FPR $= 0.054$다.
 
 아래 코드는 문턱에 따라 정확도, 정밀도, 재현율, $F_1$이 어떻게 변하는지 보여준다.
@@ -246,6 +342,16 @@ for threshold in [0.3, 0.4, 0.5, 0.6, 0.7]:
     f1 = f1_score(y_test, y_pred_t, zero_division=0)
     print(f"tau={threshold:.1f}  Acc={acc:.3f}  Prec={prec:.3f}  "
           f"Rec={rec:.3f}  F1={f1:.3f}")
+```
+
+출력:
+
+```
+tau=0.3  Acc=0.744  Prec=0.721  Rec=0.925  F1=0.810
+tau=0.4  Acc=0.756  Prec=0.763  Rec=0.849  F1=0.804
+tau=0.5  Acc=0.833  Prec=0.865  Rec=0.849  F1=0.857
+tau=0.6  Acc=0.844  Prec=0.898  Rec=0.830  F1=0.863
+tau=0.7  Acc=0.856  Prec=0.935  Rec=0.811  F1=0.869
 ```
 
 | $\tau$ | 정확도 | 정밀도 | 재현율 | $F_1$ |
@@ -292,6 +398,14 @@ $\log\frac{p}{1-p} = -1 + 0.5\,x_1 - 0.3\,x_2$로부터 생성하라. scikit-lea
     print(f"Intercept: {model.intercept_[0]:.4f} (true: -1)")
     print(f"Coef x1:   {model.coef_[0][0]:.4f} (true: 0.5)")
     print(f"Coef x2:   {model.coef_[0][1]:.4f} (true: -0.3)")
+    ```
+
+    출력:
+
+    ```
+    Intercept: -0.7256 (true: -1)
+    Coef x1:   0.4547 (true: 0.5)
+    Coef x2:   -0.0607 (true: -0.3)
     ```
 
     (표준오차와 신뢰구간은 같은 자료에 `sm.Logit`을 적합해 얻은 값이다. sklearn은 이를

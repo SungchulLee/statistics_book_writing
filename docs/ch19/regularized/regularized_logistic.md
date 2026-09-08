@@ -58,6 +58,13 @@ ridge_model.fit(X, y)
 print("Ridge coefficients:", np.round(ridge_model.coef_[0], 3))
 ```
 
+출력:
+
+```
+Ridge coefficients: [ 1.346 -1.162  0.955 -0.593 -0.031 -0.187 -0.009 -0.243  0.359  0.041
+ -0.176  0.021  0.069  0.145  0.398  0.04   0.047  0.095 -0.046 -0.166]
+```
+
 앞 다섯 개 계수는 $(1.346,\ -1.162,\ 0.955,\ -0.593,\ -0.031)$이다. 참값
 $(1.5, -1.0, 0.8, -0.5, 0.3)$과 비교하면 강한 신호 네 개는 잘 잡아냈지만 가장 약한 신호
 $0.3$은 부호까지 틀렸다. 잡음변수 15개의 계수는 절댓값이 최대 $0.398$로, 0이 아니지만 작다.
@@ -83,6 +90,14 @@ print("Lasso coefficients:", np.round(lasso_model.coef_[0], 3))
 print(f"Non-zero coefficients: {np.sum(lasso_model.coef_[0] != 0)} / {p}")
 ```
 
+출력:
+
+```
+Lasso coefficients: [ 1.34  -1.146  0.94  -0.579  0.    -0.158  0.    -0.211  0.344  0.028
+ -0.134  0.     0.023  0.092  0.37   0.006  0.007  0.055 -0.003 -0.127]
+Non-zero coefficients: 17 / 20
+```
+
 앞 다섯 개는 $(1.340,\ -1.146,\ 0.940,\ -0.579,\ 0)$으로, 가장 약한 신호가 정확히 0이 되었다.
 전체로는 20개 중 **17개**가 0이 아니다. 즉 $C = 1.0$에서는 아직 벌점이 약해 잡음변수 대부분이
 살아남는다.
@@ -106,6 +121,13 @@ enet_model = LogisticRegression(penalty='elasticnet', C=1.0,
                                  max_iter=5000)
 enet_model.fit(X, y)
 print("Elastic Net coefficients:", np.round(enet_model.coef_[0], 3))
+```
+
+출력:
+
+```
+Elastic Net coefficients: [ 1.342 -1.153  0.947 -0.585 -0.012 -0.172  0.    -0.229  0.351  0.035
+ -0.154  0.006  0.046  0.118  0.385  0.022  0.027  0.074 -0.026 -0.146]
 ```
 
 앞 다섯 개는 $(1.342,\ -1.153,\ 0.947,\ -0.585,\ -0.012)$이고 0이 아닌 계수는 19개다. 예상대로
@@ -143,6 +165,8 @@ plt.tight_layout()
 plt.show()
 ```
 
+![릿지 로지스틱 회귀의 계수 경로](./img/regularized_logistic_119.png)
+
 ## 교차검증으로 C 조율하기
 
 scikit-learn은 $C$ 격자 위에서 교차검증을 수행하는 `LogisticRegressionCV`를 제공한다.
@@ -157,6 +181,13 @@ model_cv = LogisticRegressionCV(
 model_cv.fit(X, y)
 print(f"Best C: {model_cv.C_[0]:.4f}")
 print(f"Best CV accuracy: {model_cv.scores_[1].mean(axis=0).max():.4f}")
+```
+
+출력:
+
+```
+Best C: 1.6238
+Best CV accuracy: 0.7450
 ```
 
 결과는 최적 $C = 1.6238$, 교차검증 정확도 $0.7450$이다.
@@ -205,6 +236,15 @@ $C \in \{0.01, 0.1, 1.0, 10.0\}$에 대해 L1 정칙화 로지스틱 회귀를 �
         model.fit(X, y)
         nnz = np.sum(model.coef_[0] != 0)
         print(f"C = {C:5.2f}: {nnz} non-zero coefficients out of {p}")
+    ```
+
+    출력:
+
+    ```
+    C =  0.01: 0 non-zero coefficients out of 50
+    C =  0.10: 4 non-zero coefficients out of 50
+    C =  1.00: 36 non-zero coefficients out of 50
+    C = 10.00: 48 non-zero coefficients out of 50
     ```
 
     | $C$ | 0이 아닌 계수 | 그중 참 신호 | 그중 잡음 |
@@ -303,6 +343,14 @@ L1 벌점은 희소한 해를 만드는데 L2 벌점은 그렇지 않은 이유�
     print(f"Best CV accuracy: {best_acc:.4f}")
     print(f"Non-zero coefficients: "
           f"{np.sum(model_cv.coef_[0] != 0)} / {p}")
+    ```
+
+    출력:
+
+    ```
+    Best C: 0.0886
+    Best CV accuracy: 0.8000
+    Non-zero coefficients: 4 / 50
     ```
 
     선택된 $C = 0.0886$, 교차검증 정확도 $0.8000$, 0이 아닌 계수는 **4개**이고 모두 참

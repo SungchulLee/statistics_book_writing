@@ -96,15 +96,63 @@ import numpy as np
 import statsmodels.api as sm
 from scipy import stats
 
+# 설명변수 셋 중 마지막 하나는 반응변수와 무관하게 만든다
+rng = np.random.default_rng(0)
+n = 500
+X = rng.normal(0, 1, size=(n, 3))
+logit = -0.5 + 1.2 * X[:, 0] - 0.8 * X[:, 1] + 0.0 * X[:, 2]
+y = (rng.random(n) < 1 / (1 + np.exp(-logit))).astype(int)
+
 # Fit full model
 X_full = sm.add_constant(X)
 model_full = sm.Logit(y, X_full).fit(disp=0)
-print(model_full.summary())  # Wald z-statistics shown by default
+
+
+def print_summary(res):
+    """summary()의 Date/Time 칸은 실행할 때마다 달라지므로 비우고 출력한다."""
+    lines = []
+    for line in str(res.summary()).split("\n"):
+        if line.startswith(("Date:", "Time:")):
+            lines.append(line[:19].ljust(38) + line[38:])
+        else:
+            lines.append(line)
+    print("\n".join(lines))
+
+
+print_summary(model_full)  # Wald z-statistics shown by default
 
 # LRT: compare full vs restricted (drop last feature)
 model_restricted = sm.Logit(y, X_full[:, :-1]).fit(disp=0)
 lr_stat = -2 * (model_restricted.llf - model_full.llf)
 p_value = stats.chi2.sf(lr_stat, df=1)
+
+wald_z = model_full.tvalues[-1]
+print(f"Wald z = {wald_z:.4f}, z^2 = {wald_z**2:.4f}, p = {model_full.pvalues[-1]:.4f}")
+print(f"LRT  = {lr_stat:.4f}, p = {p_value:.4f}")
+```
+
+출력:
+
+```
+Logit Regression Results                           
+==============================================================================
+Dep. Variable:                      y   No. Observations:                  500
+Model:                          Logit   Df Residuals:                      496
+Method:                           MLE   Df Model:                            3
+Date:                                   Pseudo R-squ.:                  0.2078
+Time:                                   Log-Likelihood:                -269.48
+converged:                       True   LL-Null:                       -340.15
+Covariance Type:            nonrobust   LLR p-value:                 1.943e-30
+==============================================================================
+                 coef    std err          z      P>|z|      [0.025      0.975]
+------------------------------------------------------------------------------
+const         -0.2445      0.105     -2.329      0.020      -0.450      -0.039
+x1             1.2057      0.137      8.776      0.000       0.936       1.475
+x2            -0.7111      0.118     -6.016      0.000      -0.943      -0.479
+x3            -0.1287      0.103     -1.249      0.212      -0.331       0.073
+==============================================================================
+Wald z = -1.2493, z^2 = 1.5608, p = 0.2115
+LRT  = 1.5719, p = 0.2099
 ```
 
 
@@ -166,6 +214,14 @@ $W_j^2$와 LRT 통계량 $\Lambda$가 점근적으로 동등함을 보여라. �
         print(f"c={c}: beta={m.params[1]:.3f} se={m.bse[1]:.3f} "
               f"z={m.tvalues[1]:.3f} wald_p={m.pvalues[1]:.3g} "
               f"LR={lr:.2f} LR_p={stats.chi2.sf(lr, 1):.3g}")
+    ```
+
+    출력:
+
+    ```
+    c=1.0: beta=0.966 se=0.285 z=3.393 wald_p=0.000692 LR=14.16 LR_p=0.000168
+    c=3.0: beta=3.033 se=0.635 z=4.780 wald_p=1.75e-06 LR=58.06 LR_p=2.54e-14
+    c=6.0: beta=6.780 se=1.654 z=4.100 wald_p=4.13e-05 LR=90.22 LR_p=2.13e-21
     ```
 
     | $c$ | $\hat\beta_1$ | $\operatorname{se}$ | 왈드 $z$ | 왈드 p-값 | $\Lambda$ | LRT p-값 |
