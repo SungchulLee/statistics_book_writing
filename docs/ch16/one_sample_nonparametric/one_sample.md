@@ -113,6 +113,13 @@ print(f"{statistic = :.4f}")   # -3.7335
 print(f"{p_value   = :.4f}")   # 0.0002 → 무작위성 기각
 ```
 
+출력:
+
+```
+statistic = -3.7335
+p_value   = 0.0002
+```
+
 이 수열은 런이 2개뿐이다(1의 덩어리 하나, 0의 덩어리 하나). $N_+ = 6$, $N_- = 11$이므로 무작위성 아래 기댓값은 $\mu_R = 2(6)(11)/17 + 1 = 8.76$이고, 관측값 $2$는 이보다 훨씬 적다.
 
 **예제 2 --- 지나치게 교대하는 자료 (역시 무작위가 아님):**
@@ -122,6 +129,13 @@ data = np.array([1, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0])
 statistic, p_value = runs_test(data * 2 - 1)
 print(f"{statistic = :.4f}")   # +2.2775
 print(f"{p_value   = :.4f}")   # 0.0228 → 무작위성 기각
+```
+
+출력:
+
+```
+statistic = 2.2775
+p_value   = 0.0228
 ```
 
 !!! warning "'잘 섞인' 것처럼 보인다고 무작위인 것은 아니다"
@@ -135,6 +149,13 @@ data = np.random.binomial(n=1, p=0.4, size=200)
 statistic, p_value = runs_test(data * 2 - 1)
 print(f"{statistic = :.4f}")   # +1.3294
 print(f"{p_value   = :.4f}")   # 0.1837 → 무작위성을 기각하지 못함
+```
+
+출력:
+
+```
+statistic = 1.3294
+p_value   = 0.1837
 ```
 
 이 자료는 진짜로 독립이므로 기각하지 않는 것이 옳다.
@@ -276,6 +297,13 @@ print(f"{z       = :.4f}")   # 2.3094
 print(f"{p_value = :.4f}")   # 0.0209
 ```
 
+출력:
+
+```
+z       = 2.3094
+p_value = 0.0209
+```
+
 ### 언제 쓰는가
 
 부호검정은 변화의 방향만 중요하거나(또는 방향만 측정 가능하거나) 차이를 양수·음수·동점으로만 분류할 수 있을 때 적절하다. 차이의 크기도 의미가 있다면 **Wilcoxon 부호순위검정**(16.2.3절)이 대체로 검정력이 더 높다.
@@ -364,6 +392,13 @@ print(f"{statistic = }")   # 11.0  (= W^-)
 print(f"{p_value   = :.4f}")   # 0.0086
 ```
 
+출력:
+
+```
+statistic = 11.0
+p_value   = 0.0086
+```
+
 !!! warning "`mode=` 는 더 이상 쓰이지 않는다"
     옛 SciPy 코드는 `mode="approx"`를 썼지만 이 인자는 `method=`로 바뀌었다. 옛 이름은 SciPy 1.9에서 폐기되었고 이후 제거되었다.
 
@@ -402,6 +437,15 @@ print(f"{p_value   = :.4f}")   # 0.0086
     print(stats.ttest_1samp(d, 0).pvalue)
     ```
 
+    출력:
+
+    ```
+    0.03857421875
+    0.008560915878575636
+    0.007579201614253502
+    0.003815602209766083
+    ```
+
     | 검정 | $p$값 (양측) |
     |:---|---:|
     | 부호검정 (정확) | $0.0386$ |
@@ -436,6 +480,15 @@ print(f"{p_value   = :.4f}")   # 0.0086
     for n in (17, 50, 100, 200):
         m = [max_run(rng.integers(0, 2, n)) for _ in range(20000)]
         print(n, np.mean(m), np.percentile(m, [5, 95]))
+    ```
+
+    출력:
+
+    ```
+    17 4.41955 [3. 7.]
+    50 5.9724 [4. 9.]
+    100 6.97655 [ 5. 10.]
+    200 7.98065 [ 6. 11.]
     ```
 
     | $n$ | 최장 런의 평균 | 5--95 백분위 |
@@ -496,6 +549,16 @@ print(f"{p_value   = :.4f}")   # 0.0086
               round(stats.wilcoxon(d, zero_method='wilcox', method='approx').pvalue, 4),
               round(stats.wilcoxon(d, zero_method='pratt',  method='approx').pvalue, 4),
               round(stats.wilcoxon(d, zero_method='zsplit', method='approx').pvalue, 4))
+    ```
+
+    출력:
+
+    ```
+    0 0.1394 0.1394 0.1394
+    10 0.1394 0.1663 0.1912
+    20 0.1394 0.1792 0.245
+    30 0.1394 0.1859 0.2908
+    40 0.1394 0.1899 0.3297
     ```
 
     | 0의 개수 | 전체 $n$ | wilcox | pratt | zsplit |

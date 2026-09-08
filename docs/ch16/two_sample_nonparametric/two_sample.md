@@ -99,6 +99,18 @@ else:
     print("Fail to reject H0.")
 ```
 
+출력:
+
+```
+U statistic: 97.0
+P-value: 0.000440
+7.577561757128321e-05
+Mean rank Group A: 15.2
+Mean rank Group B: 5.8
+Reject H0: Significant difference between groups.
+Group A tends to have larger values.
+```
+
 !!! warning "`argsort(argsort(x))`는 동점을 처리하지 못한다"
     순위를 구할 때 `np.argsort(np.argsort(x)) + 1`을 쓰는 코드를 흔히 본다. 동점이 없으면 맞지만, 동점이 있으면 **중간순위 대신 임의의 순서**를 배정한다.
 
@@ -108,6 +120,13 @@ else:
     x = np.array([3, 1, 3, 2])
     print(np.argsort(np.argsort(x)) + 1)   # [3 1 4 2]  ← 두 3에 3과 4를 배정
     print(rankdata(x))                     # [3.5 1.  3.5 2. ]  ← 올바른 중간순위
+    ```
+
+    출력:
+
+    ```
+    [3 1 4 2]
+    [3.5 1.  3.5 2. ]
     ```
 
     항상 `scipy.stats.rankdata`를 쓴다.
@@ -208,6 +227,16 @@ for corr in (True, False):
 print(f"Contingency Table:\n{table}")
 ```
 
+출력:
+
+```
+correction=True: chi2=0.0000, p=1.0000
+correction=False: chi2=0.4000, p=0.5271
+Contingency Table:
+[[3 2]
+ [2 3]]
+```
+
 **출력:**
 
 ```
@@ -278,6 +307,14 @@ else:
     print("Fail to reject H0.")
 ```
 
+출력:
+
+```
+H statistic: 9.4136
+P-value: 0.0090
+Reject H0: At least one group differs significantly.
+```
+
 ### 사후검정
 
 Kruskal-Wallis 검정이 유의하면, 쌍별 Mann-Whitney U 검정에 다중비교 보정(예: Bonferroni 보정)을 적용하여 구체적으로 어느 집단이 다른지 판정한다.
@@ -314,6 +351,14 @@ Mood 중앙값검정과 Mann-Whitney U 검정을 같은 자료에 적용하면 �
     a = np.array([50, 55, 60, 65, 70]); b = np.array([45, 50, 55, 60, 65])
     print(mannwhitneyu(a, b, method='exact'))    # U=17.0, p=0.4206
     print(median_test(a, b))                     # stat=0.0, p=1.0
+    ```
+
+    출력:
+
+    ```
+    MannwhitneyuResult(statistic=17.0, pvalue=0.42063492063492064)
+    MedianTestResult(statistic=0.0, pvalue=1.0, median=57.5, table=array([[3, 2],
+           [2, 3]]))
     ```
 
     | 검정 | 통계량 | $p$값 |
@@ -353,6 +398,21 @@ Mood 중앙값검정과 Mann-Whitney U 검정을 같은 자료에 적용하면 �
         print(r.table)
     ```
 
+    출력:
+
+    ```
+    3.0
+    below 1.7778 0.1824
+    [[3 0]
+     [3 6]]
+    above 0.6 0.4386
+    [[6 4]
+     [0 2]]
+    ignore 1.7014 0.1921
+    [[3 0]
+     [0 2]]
+    ```
+
     | `ties` | 처리 방식 | 분할표 | $\chi^2$ | $p$ |
     |:---|:---|:---|---:|---:|
     | `"below"` (기본값) | 중앙값과 같은 값을 "아래"로 | $\begin{smallmatrix}3&0\\3&6\end{smallmatrix}$ | 1.778 | 0.182 |
@@ -385,6 +445,13 @@ Kruskal-Wallis 검정이 집단 둘일 때 Mann-Whitney U 검정과 동치임을
     Z = (r.statistic - mu) / sd
     print(H, Z**2, H - Z**2)        # 6.4052  6.4052  ~0
     print(pH, r.pvalue)             # 0.01138  0.01138
+    ```
+
+    출력:
+
+    ```
+    6.405228758169926 6.405228758169934 -7.993605777301127e-15
+    0.011378476531193307 0.01137847653119324
     ```
 
     **$H = Z^2$이고 두 $p$값이 정확히 같다.**
@@ -432,6 +499,14 @@ Kruskal-Wallis 검정이 집단 둘일 때 Mann-Whitney U 검정과 동치임을
                        use_continuity=True).pvalue)           # 4.3964e-04
     print(mannwhitneyu(ga, gb, method='asymptotic',
                        use_continuity=False).pvalue)          # 3.8106e-04
+    ```
+
+    출력:
+
+    ```
+    7.577561757128321e-05
+    0.00043963875262656465
+    0.00038105845205068555
     ```
 
     | 방법 | $p$값 |

@@ -136,6 +136,14 @@ else:
     print("Fail to reject the null hypothesis: No significant improvement in scores.")
 ```
 
+출력:
+
+```
+Test Statistic: 0.0
+P-value: 0.001953125
+Reject the null hypothesis: Significant improvement in scores.
+```
+
 ---
 
 ## 대응 부호검정
@@ -166,6 +174,13 @@ p_value = min(1.0, 2 * binom.cdf(W, n, 0.5))  # Two-tailed
 
 print(f"n+ = {n_plus}, n- = {n_minus}")   # n+ = 10, n- = 0
 print(f"P-value: {p_value:.6f}")          # 0.001953
+```
+
+출력:
+
+```
+n+ = 10, n- = 0
+P-value: 0.001953
 ```
 
 !!! warning "$2 \times$ 규칙은 1을 넘을 수 있다"
@@ -223,6 +238,15 @@ print(f"P-value: {p_value:.6f}")          # 0.001953
     print(stats.binomtest(10, 10).pvalue)                           # 0.001953
     ```
 
+    출력:
+
+    ```
+    0.0003248947130212966
+    0.001953125
+    0.004808563078561356
+    0.001953125
+    ```
+
     | 검정 | 양측 $p$값 |
     |:---|---:|
     | 대응 $t$ | $0.000325$ |
@@ -254,6 +278,17 @@ $n = 10$일 때 Wilcoxon 부호순위검정의 양측 임계값이 왜 $8$인지
         print(c, (T <= c).mean())
     ```
 
+    출력:
+
+    ```
+    6 0.02734375
+    7 0.037109375
+    8 0.048828125
+    9 0.064453125
+    10 0.083984375
+    11 0.10546875
+    ```
+
     | 임계값 $c$ | $P(T \le c)$ |
     |---:|---:|
     | 6 | 0.0273 |
@@ -281,6 +316,17 @@ $n = 10$일 때 Wilcoxon 부호순위검정의 양측 임계값이 왜 $8$인지
     for W in range(6):
         naive = 2 * binom.cdf(W, n, 0.5)
         print(W, round(naive, 4), round(binomtest(W, n, 0.5).pvalue, 4))
+    ```
+
+    출력:
+
+    ```
+    0 0.002 0.002
+    1 0.0215 0.0215
+    2 0.1094 0.1094
+    3 0.3438 0.3438
+    4 0.7539 0.7539
+    5 1.2461 1.0
     ```
 
     | $W = \min(n_+, n_-)$ | $2 \times P(S \le W)$ | `binomtest` |
@@ -327,6 +373,13 @@ $n = 10$일 때 Wilcoxon 부호순위검정의 양측 임계값이 왜 $8$인지
     print(d.mean(), d.std(ddof=1))                          # 2.4, 1.3499
     p_neg = stats.norm.cdf(0, d.mean(), d.std(ddof=1))
     print(p_neg, (1 - p_neg) ** 10)                         # 0.0377, 0.681
+    ```
+
+    출력:
+
+    ```
+    2.4 1.3498971154211057
+    0.037709049885978514 0.680869711192701
     ```
 
     그러나 자료 자체를 보면 다른 문제가 보인다. 차이의 값이 $\{1, 2, 3, 4, 5\}$ 다섯 가지뿐이고 모두 정수이다. 시험 점수가 정수라 차이도 정수인 것은 자연스럽지만, 이 정도 이산성에서는 **동점이 많이 생겨** 순위 기반 검정의 정확 귀무분포가 엄밀하게는 성립하지 않는다.

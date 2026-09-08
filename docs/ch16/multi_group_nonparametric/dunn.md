@@ -139,6 +139,14 @@ Dunn 검정은 Kruskal-Wallis 결과가 유의할 때 평균순위 차이에 기
         print(m, multipletests(p, method=m)[1].round(5))
     ```
 
+    출력:
+
+    ```
+    bonferroni [0.00181 0.183   0.3594 ]
+    holm [0.00181 0.122   0.122  ]
+    fdr_bh [0.00181 0.0915  0.1198 ]
+    ```
+
     | 쌍 | 원 $p$ | Bonferroni | Holm | BH (FDR) |
     |:---|---:|---:|---:|---:|
     | B 대 C | $0.000604$ | $0.00181$ | $0.00181$ | $0.00181$ |
@@ -172,6 +180,14 @@ Dunn 검정과 쌍별 Mann-Whitney 검정(Bonferroni 보정)의 결과를 비료
     print(pairs)
     print(np.round(pv, 5))
     print(np.round(multipletests(pv, method='bonferroni')[1], 4))
+    ```
+
+    출력:
+
+    ```
+    [('A', 'B'), ('A', 'C'), ('B', 'C')]
+    [0.00794 0.03175 0.00794]
+    [0.0238 0.0952 0.0238]
     ```
 
     | 쌍 | 원 MWU $p$ | Dunn (Bonferroni) | 쌍별 MWU (Bonferroni) |
@@ -231,6 +247,14 @@ Dunn 검정과 쌍별 Mann-Whitney 검정(Bonferroni 보정)의 결과를 비료
             unrestricted += any_sig
             gated += any_sig and (stats.kruskal(*gs).pvalue < 0.05)
         print(k, gated / B, unrestricted / B)
+    ```
+
+    출력:
+
+    ```
+    3 0.03333333333333333 0.034666666666666665
+    5 0.034 0.04
+    8 0.02266666666666667 0.03333333333333333
     ```
 
     | $k$ | 전체검정 통과 후 (게이트) | 게이트 없이 |
@@ -312,6 +336,12 @@ Dunn 검정의 표준오차 공식 $\sigma_{ij} = \sqrt{\frac{N(N+1)}{12}(\frac{
         perm = rng.permutation(ranks)
         d.append(perm[:ni].mean() - perm[ni:ni + nj].mean())
     print(np.var(d), N * (N + 1) / 12 * (1 / ni + 1 / nj))   # 8.049, 8.0
+    ```
+
+    출력:
+
+    ```
+    8.049307944999 8.0
     ```
 
     모의실험 분산 $8.049$가 공식값 $8.0$과 일치한다.

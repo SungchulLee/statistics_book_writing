@@ -62,6 +62,12 @@ print(f"W = {statistic}, p = {p_value:.4f}")
 # W = 11.0, p = 0.0086
 ```
 
+출력:
+
+```
+W = 11.0, p = 0.0086
+```
+
 !!! warning "`mode=`가 아니라 `method=`이다"
     SciPy 1.9에서 `wilcoxon`의 `mode` 인자가 `method`로 이름이 바뀌었고 옛 이름은
     이후 제거되었다. 또 반환되는 `statistic`은 $W^+$가 아니라
@@ -102,6 +108,12 @@ b = [8, 10, 14, 19, 21, 24]
 statistic, p_value = stats.ranksums(a, b, alternative="two-sided")
 print(f"Z = {statistic:.4f}, p = {p_value:.4f}")
 # Z = 0.7303, p = 0.4652
+```
+
+출력:
+
+```
+Z = 0.7303, p = 0.4652
 ```
 
 !!! danger "대응자료에 순위합검정을 쓰지 말 것"
@@ -188,6 +200,13 @@ $D = (4, -1, 7, 3, -2, 5)$이다. 부호순위통계량 $W^+$를 손으로 계�
     # 0.078125
     ```
 
+    출력:
+
+    ```
+    WilcoxonResult(statistic=3.0, pvalue=0.15625)
+    0.078125
+    ```
+
     손계산과 SciPy가 정확히 일치한다. $n' = 6$에서 도달 가능한 최소 양측 $p$값이
     $2/64 = 0.03125$이므로, 이 자료는 강한 양의 이동을 보이면서도
     $\alpha = 0.05$에 이르지 못한다. $\square$
@@ -237,6 +256,13 @@ $\alpha = 0.05$에서 Wilcoxon 순위합검정을 파이썬으로 수행하라.
     # RanksumsResult(statistic=0.7303, pvalue=0.4652)
     print(stats.mannwhitneyu(a, b, method='exact'))
     # MannwhitneyuResult(statistic=19.0, pvalue=0.5368)
+    ```
+
+    출력:
+
+    ```
+    RanksumsResult(statistic=0.7302967433402214, pvalue=0.4652088184521418)
+    MannwhitneyuResult(statistic=19.0, pvalue=0.5367965367965368)
     ```
 
     11개 값을 합쳐 순위를 매기면 $8(1), 10(2), 12(3), 14(4), 15(5), 18(6),
@@ -338,11 +364,20 @@ $\min(W^+, W^-)$임을 확인하고, `alternative`를 바꾸면 무엇이 달라
 
     출력:
 
+    ```
+    W+ = 18.0  W- = 3.0
+    two-sided 3.0 0.15625
+    greater 18.0 0.07812
+    less 18.0 0.95312
+    ```
+
+    출력:
+
     | `alternative` | `statistic` | $p$값 |
     |:---|---:|---:|
     | `"two-sided"` | $3.0$ | $0.15625$ |
-    | `"greater"` | $18.0$ | $0.07813$ |
-    | `"less"` | $18.0$ | $0.95313$ |
+    | `"greater"` | $18.0$ | $0.07812$ |
+    | `"less"` | $18.0$ | $0.95312$ |
 
     반환되는 `statistic`이 `alternative`에 따라 **달라진다**.
 

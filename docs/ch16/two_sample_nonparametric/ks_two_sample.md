@@ -85,6 +85,13 @@ print(stats.ks_2samp(A, B, method='exact').pvalue)   # 0.873016
 print(stats.ks_2samp(A, B, method='asymp').pvalue)   # 0.820000
 ```
 
+출력:
+
+```
+0.873015873015873
+0.82
+```
+
 정확 $p$값은 $0.873$, 점근 $p$값은 $0.820$이다.
 
 $\alpha = 0.05$에서 $H_0$을 기각하지 못한다. 두 공정의 지름 분포에 유의한 차이가 나타나지 않는다.
@@ -178,6 +185,13 @@ Kolmogorov-Smirnov 이표본 검정은 독립인 두 표본의 경험적 분포�
     print(stats.mannwhitneyu(c1, c2, method='exact').pvalue)   # 0.2468
     ```
 
+    출력:
+
+    ```
+    KstestResult(statistic=0.43333333333333335, pvalue=0.5909090909090909, statistic_location=78, statistic_sign=1)
+    0.24675324675324672
+    ```
+
     정확 $p$값은 $0.591$이다. Mann-Whitney의 $0.247$과 비교하면 두 배가 넘는데, 이 자료의 차이가 주로 위치이동이라 순위 기반 검정이 더 효율적으로 잡아내기 때문이다.
 
 ---
@@ -205,6 +219,16 @@ KS 검정과 Mann-Whitney 검정의 검정력을 **위치이동**과 **척도 �
         print("shift", d, rates(lambda: (rng.normal(0, 1, n), rng.normal(d, 1, n))))
     for s in (1.0, 2.0, 3.0):
         print("scale", s, rates(lambda: (rng.normal(0, 1, n), rng.normal(0, s, n))))
+    ```
+
+    출력:
+
+    ```
+    shift 0.0 (0.039, 0.047)
+    shift 0.8 (0.614, 0.757)
+    scale 1.0 (0.037, 0.047)
+    scale 2.0 (0.153, 0.058)
+    scale 3.0 (0.414, 0.069)
     ```
 
     **위치이동** ($n = 25$씩, $\alpha = 0.05$):
@@ -268,6 +292,15 @@ KS 검정이 분포무관인 이유를 설명하라. 즉 $D$의 귀무분포가 
         print(name, round(np.mean(D), 4), round(np.std(D), 4))
     ```
 
+    출력:
+
+    ```
+    normal 0.2086 0.0667
+    exp 0.2075 0.0663
+    cauchy 0.2086 0.0676
+    unif 0.2079 0.0667
+    ```
+
     출력은 네 분포 모두 평균 약 $0.208$, 표준편차 약 $0.067$로 사실상 동일하다(normal 0.2086, exp 0.2075, cauchy 0.2086, uniform 0.2079).
 
     이것이 KS 검정의 근본적 장점이다. 모집단 분포를 몰라도, 심지어 Cauchy처럼 평균이 존재하지 않아도 정확한 $p$값을 계산할 수 있다.
@@ -294,6 +327,14 @@ KS 통계량이 최댓값을 갖는 위치 $x^*$는 무엇을 알려 주는가? 
     for name, (x, y) in cases.items():
         r = stats.ks_2samp(x, y)
         print(name, round(r.statistic, 3), round(r.statistic_location, 3))
+    ```
+
+    출력:
+
+    ```
+    위치이동 0.478 0.217
+    척도차이 0.22 -1.57
+    오른쪽 꼬리 0.078 1.199
     ```
 
     | 상황 | $D$ | $x^*$ (최대 간격 위치) |
