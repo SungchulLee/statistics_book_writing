@@ -116,8 +116,8 @@ else:
 출력:
 
 ```text
-JB = 0.2822004...
-Jarque-Bera Test: Statistic=0.2822004..., p-value=0.8684023...
+JB = 0.28220016508625234
+Jarque-Bera Test: Statistic=0.28220016508625234, p-value=0.8684023954281485
 Fail to reject H_0: The data is normally distributed.
 ```
 

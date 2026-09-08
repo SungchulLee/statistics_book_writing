@@ -29,8 +29,8 @@ print(f"Shapiro-Wilk Test (large sample): p-value={p_value_large}")
 출력:
 
 ```text
-Shapiro-Wilk Test (small sample): p-value=0.7136
-Shapiro-Wilk Test (large sample): p-value=0.7507
+Shapiro-Wilk Test (small sample): p-value=0.7136380887419513
+Shapiro-Wilk Test (large sample): p-value=0.7506816458200554
 ```
 
 !!! warning "이 예제만으로는 '큰 표본이 기각한다'가 드러나지 않는다"
@@ -70,8 +70,8 @@ print(f"Shapiro-Wilk Test: p-value={p_value}")
 출력:
 
 ```text
-Skewness: 1.3583, Kurtosis: 2.4079
-Shapiro-Wilk Test: p-value=7.095e-25
+Skewness: 1.358332294792333, Kurtosis: 2.4079180806130145
+Shapiro-Wilk Test: p-value=7.094914686692259e-25
 ```
 
 감마(2, 2) 분포는 왜도 1.36, 초과첨도 2.41로 이탈이 상당히 크므로 $n = 1000$에서 압도적으로 기각된다.
@@ -99,7 +99,7 @@ print(f"Shapiro-Wilk Test on Skewed Data: p-value={p_value}")
 출력:
 
 ```text
-Shapiro-Wilk Test on Skewed Data: p-value=4.858e-33
+Shapiro-Wilk Test on Skewed Data: p-value=4.8578866080562626e-33
 ```
 
 자료가 치우쳐 있어도 많은 통계검정은 여전히 로버스트하고 믿을 만하다. 정규성 검정에만 기대면 불필요한 자료 변환이나 타당한 방법의 배제로 이어질 수 있다.
@@ -127,7 +127,7 @@ print(f"Sample mean: {mean_sample}, Standard error: {std_error}")
 출력:
 
 ```text
-Sample mean: 4.0972, Standard error: 0.2886
+Sample mean: 4.097224928182177, Standard error: 0.2886128975105421
 ```
 
 CLT는 자료 자체가 정규가 아니어도 큰 표본에서 정규 기반 방법을 쓰는 것을 정당화한다. 따라서 정규성 검정에 엄격히 기대기 전에 맥락과 분석의 목적을 고려하는 것이 중요하다.

@@ -40,7 +40,7 @@ for name, r in [("Normal", normal_returns), ("Heavy-tailed", heavy_returns)]:
 출력:
 
 ```text
-Normal:       mean=0.001176, std=0.014823, skew=0.0329, excess_kurt=0.0513, JB p=0.7486
+Normal: mean=0.001176, std=0.014823, skew=0.0329, excess_kurt=0.0513, JB p=0.7486
 Heavy-tailed: mean=-0.000555, std=0.018552, skew=0.2201, excess_kurt=2.4735, JB p=6.062e-115
 ```
 
@@ -83,6 +83,8 @@ axes[1].grid(True, alpha=0.3)
 plt.tight_layout()
 plt.show()
 ```
+
+![정규 자료와 두꺼운 꼬리 자료의 Q-Q 비교](./img/qq_plot_financial_returns_64.png)
 
 **정규 수익률:** 점들이 대각선을 따라 놓여 분포 가정을 확인해 준다.
 
@@ -161,7 +163,7 @@ Q-Q 그림은 금융 수익률 자료에 대해 단연 가장 중요한 진단 �
 
     ```text
     Normal: skew=0.0329, kurt=0.0544, JB p=0.7486
-    t(6):   skew=0.2203, kurt=2.4827, JB p=6.062e-115
+    t(6): skew=0.2203, kurt=2.4827, JB p=6.062e-115
     ```
 
     정규 수익률은 $g_1 = 0.033$, $g_2 = 0.054$로 모두 0에 가깝고 JB $p = 0.749$로 유의하지 않다. 정규성 가정이 잘 성립한다.
@@ -309,7 +311,7 @@ Q-Q 그림은 금융 수익률 자료에 대해 단연 가장 중요한 진단 �
     t(5) sd:                      1.2910
     t(5) quantile (standardised): -2.6065
     Normal quantile:              -2.3263
-    Raw ratio:                    1.4465
+    Raw ratio:                    1.4464
     Standardised ratio:           1.1204
     ```
 

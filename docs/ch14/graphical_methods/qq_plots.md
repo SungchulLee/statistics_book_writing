@@ -40,6 +40,8 @@ if __name__ == "__main__":
     plot_qq_with_custom_spines(sample_data, dist="norm")
 ```
 
+![정규 자료의 Q-Q 그림](./img/qq_plots_9.png)
+
 자료가 정규분포를 따를 때 점들이 대각 기준선에 가깝게 놓인다.
 
 ## 지수분포와의 Q-Q 그림
@@ -68,6 +70,8 @@ if __name__ == "__main__":
     plot_qq_with_custom_spines(sample_data, dist="expon")
 ```
 
+![지수분포 자료의 Q-Q 그림 (지수분포 기준)](./img/qq_plots_47.png)
+
 지수 자료를 자기 자신의 이론적 분포와 비교하면 점들이 잘 정렬된다. 그러나 같은 자료를 **정규분포**와 비교하면 강한 곡률이 나타나 정규성에서의 이탈이 드러난다. `dist="norm"`으로 바꿔 실행해 보면 그 차이를 바로 확인할 수 있다.
 
 ## 카이제곱분포와의 Q-Q 그림
@@ -95,6 +99,8 @@ if __name__ == "__main__":
     sample_data = np.random.chisquare(df=10, size=1000)
     plot_qq_with_custom_spines(sample_data, dist="chi2", sparams=(10,))
 ```
+
+![카이제곱 자료의 Q-Q 그림 (카이제곱 기준)](./img/qq_plots_75.png)
 
 카이제곱 자료를 (자유도가 일치하는) 자기 자신의 이론적 분포와 비교하면 Q-Q 그림이 잘 맞는다. 정규 Q-Q 그림과 비교하면 꼬리에서 위로 휘는 모습으로 오른쪽 치우침이 드러난다.
 

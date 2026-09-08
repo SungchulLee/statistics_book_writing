@@ -35,7 +35,7 @@ else:
 출력:
 
 ```text
-Mann-Whitney U Test: Statistic=3411.0, p-value=0.000104
+Mann-Whitney U Test: Statistic=3411.0, p-value=0.00010388964489703351
 Reject H_0: Significant difference between the groups.
 ```
 

@@ -75,10 +75,12 @@ D'Agostino K^2:   K2 = 17.1070, p = 0.0001929
 Anderson-Darling: A^2 = 0.6894
   Critical 15%: 0.5650 -> reject if A^2 > crit
   Critical 10%: 0.6440 -> reject if A^2 > crit
-  Critical 5%:  0.7720 -> reject if A^2 > crit
-  Critical 2%:  0.9010 -> reject if A^2 > crit
-  Critical 1%:  1.0710 -> reject if A^2 > crit
+  Critical 5%: 0.7720 -> reject if A^2 > crit
+  Critical 2%: 0.9010 -> reject if A^2 > crit
+  Critical 1%: 1.0710 -> reject if A^2 > crit
 ```
+
+![자료의 Q-Q 그림](./img/qq_plot_basic_35.png)
 
 ## 해석
 
@@ -133,6 +135,8 @@ Shapiro-Wilk와 D'Agostino $K^2$는 강하게 기각하지만 Anderson-Darling�
     Anderson-Darling: A^2 = 0.1342
     ```
 
+    ![정규 자료의 Q-Q 그림](./img/qq_plot_basic_105.png)
+
     Q-Q 그림은 점들이 대각선에 바짝 붙어 있음을 보인다. 두 $p$값 모두 0.05를 크게 넘고, $A^2 = 0.134$는 가장 느슨한 15% 임계값 $0.565$보다도 훨씬 작다. 표준정규 자료가 모든 정규성 확인을 통과함을 확인해 준다. $\square$
 
 ---
@@ -167,6 +171,8 @@ Shapiro-Wilk와 D'Agostino $K^2$는 강하게 기각하지만 Anderson-Darling�
     Shapiro-Wilk: p = 4.113e-14
     D'Agostino:   p = 5.462e-14
     ```
+
+    ![지수분포 자료의 Q-Q 그림](./img/qq_plot_basic_144.png)
 
     Q-Q 그림은 강한 **아래로 볼록한**(convex, 위로 휘는) 패턴을 보인다. 지수분포가 심하게 오른쪽으로 치우쳐 있기 때문이다(이론적 왜도 2). 왼쪽 꼬리는 0에서 잘려 짧고 오른쪽 꼬리는 길게 늘어지므로, 양 끝이 모두 적합선 위로 올라간다.
 

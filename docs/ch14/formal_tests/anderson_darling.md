@@ -75,7 +75,7 @@ for significance_level, critical_value in zip(result.significance_level, result.
 출력:
 
 ```text
-Anderson-Darling Test: Statistic=0.24321824...
+Anderson-Darling Test: Statistic=0.24321791746319832
 At 15.0% significance level: Fail to reject H_0. The data is normally distributed.
 At 10.0% significance level: Fail to reject H_0. The data is normally distributed.
 At 5.0% significance level: Fail to reject H_0. The data is normally distributed.
@@ -114,6 +114,14 @@ statistic, p_value = normal_ad(data)
 print(f"Anderson-Darling Test: Statistic={statistic}, p-value={p_value}")
 ```
 
+출력:
+
+```
+Anderson-Darling Test: Statistic=0.2432179174634257, p-value=0.7659878263029309
+```
+
+`scipy.stats.anderson`이 준 통계량 $0.2432$와 같은 값에 근사 $p$값 $0.766$이 붙었다. 앞의 임계값 비교에서 1% 수준까지 모두 기각하지 못한 결과와 일치한다.
+
 **선택지 2: 임계값으로 해석하기**
 
 추가 라이브러리 없이 대략적인 근사를 원한다면 검정통계량과 제공된 임계값의 비교로 $p$값의 범위를 해석할 수 있다.
@@ -148,7 +156,7 @@ else:
 출력:
 
 ```text
-Anderson-Darling Test: Statistic=0.24321824..., p-value=0.76598...
+Anderson-Darling Test: Statistic=0.243217917463312, p-value=0.7659878263032931
 Fail to reject H_0: The data is normally distributed.
 ```
 

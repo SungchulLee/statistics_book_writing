@@ -80,7 +80,7 @@ else:
 출력:
 
 ```text
-Kolmogorov-Smirnov Test: Statistic=0.019034, p-value=0.854773
+Kolmogorov-Smirnov Test: Statistic=0.01903411267034605, p-value=0.8547733408587939
 Fail to reject H_0: The data is normally distributed.
 ```
 
@@ -147,8 +147,8 @@ else:
 출력:
 
 ```text
-Kolmogorov-Smirnov Test: Statistic=0.019034, p-value=0.854773
-Lilliefors Test: Statistic=0.019125, p-value=0.581816
+Kolmogorov-Smirnov Test: Statistic=0.01903411267034605, p-value=0.8547733408587939
+Lilliefors Test: Statistic=0.019125294462402076, p-value=0.5818164701330186
 Fail to reject H_0: The data is normally distributed.
 ```
 

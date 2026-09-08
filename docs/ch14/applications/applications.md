@@ -42,7 +42,7 @@ else:
 출력:
 
 ```text
-Two-sample t-test: p-value=0.09856088...
+Two-sample t-test: p-value=0.09856078338184512
 ```
 
 두 집단의 Shapiro-Wilk $p$값은 각각 $0.877$과 $0.837$로 정규성 확인을 통과하며, 이어진 $t$ 검정의 $p$값은 $0.0986$이다. 참 평균 차이가 0.5인데도 집단당 50개로는 5% 수준에서 기각하지 못한다는 점이 흥미롭다. 검정력의 문제이다.
@@ -95,9 +95,11 @@ else:
 출력:
 
 ```text
-Shapiro-Wilk Test on Residuals: p-value=0.11416...
+Shapiro-Wilk Test on Residuals: p-value=0.11418410564039025
 Residuals are normally distributed.
 ```
+
+![잔차의 히스토그램](./img/applications_59.png)
 
 (엄밀히 말하면 "잔차가 정규분포를 따른다"가 아니라 "잔차가 정규성과 일관된다"가 옳은 표현이다. 기각하지 못한 것이 정규성을 증명하지는 않는다.)
 
@@ -135,7 +137,7 @@ else:
 출력:
 
 ```text
-ANOVA test: p-value=0.03998...
+ANOVA test: p-value=0.039981492411499175
 ```
 
 세 집단의 Shapiro-Wilk $p$값은 각각 $0.525$, $0.909$, $0.720$으로 모두 정규성 확인을 통과하고, 분산분석은 $p = 0.040$으로 5% 수준에서 집단 평균의 차이를 탐지한다.

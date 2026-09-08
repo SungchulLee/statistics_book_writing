@@ -138,8 +138,8 @@ else:
 출력:
 
 ```text
-Z_skewtest**2 + Z_kurtosistest**2 = 0.23299...
-D'Agostino's K-squared Test: Statistic=0.2330, p-value=0.8900
+Z_skewtest**2 + Z_kurtosistest**2 = 0.2329889638562599
+D'Agostino's K-squared Test: Statistic=0.2329889638562599, p-value=0.8900350082402695
 Fail to reject H_0: The data is normally distributed.
 ```
 

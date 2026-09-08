@@ -56,6 +56,8 @@ plt.tight_layout()
 plt.show()
 ```
 
+![치우친 분포(대수정규)의 상자그림](./img/boxplot_shapes_44.png)
+
 이 표본에서는 이상점 $21$개가 모두 **위쪽**에만 나타나고 아래쪽에는 하나도 없다. 표본왜도는 $3.06$이다(이론값 $2.89$). 이상점의 완전한 한쪽 쏠림이 치우침의 뚜렷한 신호이다.
 
 ## 꼬리가 두꺼운 분포: Student t
@@ -81,6 +83,8 @@ ax.set_ylabel("Values")
 plt.tight_layout()
 plt.show()
 ```
+
+![두꺼운 꼬리 분포($t_3$)의 상자그림](./img/boxplot_shapes_70.png)
 
 이 표본에서는 이상점이 $18$개 나타난다. 정규성 아래에서 기대되는 $0.007 \times 400 = 2.8$개의 여섯 배가 넘는다. 대수정규 예와 달리 이상점이 위아래로 나뉘어 나타난다는 점이 결정적 차이이다.
 
@@ -127,6 +131,8 @@ plt.show()
     Outliers: 6 (expected ~3.5)
     ```
 
+    ![정규 자료의 상자그림 ($n = 500$)](./img/boxplot_shapes_105.png)
+
     관측된 6개는 기댓값 3.5보다 크지만 놀랄 일이 아니다. 이 실험을 정규표본 3000개에 대해 반복하면 이상점 개수는 평균 $3.78$, 중앙값 $3$이고 5~95백분위수 범위가 $[1, 8]$이다.
 
     평균이 이론값 3.5보다 살짝 큰 이유는 수염 경계를 이론적 사분위수가 아니라 **표본** 사분위수로 계산하기 때문이다. 표본 IQR은 변동하고, 그것이 작게 나온 표본에서는 이상점이 많이 잡힌다. 이 비대칭적 효과가 평균을 조금 위로 밀어 올린다.
@@ -149,17 +155,21 @@ plt.show()
     t5 = rng.standard_t(df=5, size=400)
 
     fig, ax = plt.subplots(figsize=(8, 4))
-    ax.boxplot([normal, lognorm, t5], tick_labels=["N(0,1)", "Lognormal", "t(5)"],
-               showmeans=True)
+    # 상자 이름을 boxplot에 직접 주는 인자는 matplotlib 버전에 따라 다르다
+    # (3.9 미만은 labels=, 3.9 이상은 tick_labels=). 축에 직접 주면 버전과 무관하다.
+    ax.boxplot([normal, lognorm, t5], showmeans=True)
+    ax.set_xticklabels(["N(0,1)", "Lognormal", "t(5)"])
     ax.set_title("Side-by-Side Boxplots")
     ax.set_ylabel("Values")
     plt.tight_layout()
     plt.show()
     ```
 
+    ![세 분포의 상자그림 비교](./img/boxplot_shapes_142.png)
+
     정규 상자그림은 대칭이고 이상점이 매우 적다. 대수정규 상자그림은 위 수염이 길고 위쪽 이상점이 많다(오른쪽 치우침). $t_5$ 상자그림은 대칭이지만 양쪽에 이상점이 있어 더 두꺼운 꼬리를 반영한다.
 
-    (참고: `matplotlib` 3.9 이후 `labels=` 인자는 `tick_labels=`로 이름이 바뀌었다. 이전 버전에서는 `labels=`를 쓴다.) $\square$
+    (참고: 상자 이름을 `boxplot`에 직접 주는 인자는 `matplotlib` 3.9에서 `labels=`가 `tick_labels=`로 바뀌었다. 위처럼 `ax.set_xticklabels`를 쓰면 버전에 상관없이 작동한다.) $\square$
 
 ---
 
@@ -237,6 +247,8 @@ plt.show()
     ```text
     Skewness = 2.660, Excess kurtosis = 11.104
     ```
+
+    ![왜도와 첨도를 표시한 상자그림](./img/boxplot_shapes_210.png)
 
     주석은 큰 양의 왜도 $2.66$과 큰 양의 초과첨도 $11.10$을 보여준다. 둘 다 비대칭 상자그림 및 위쪽에 몰린 많은 이상점과 일관된다.
 
