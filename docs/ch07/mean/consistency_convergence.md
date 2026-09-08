@@ -30,12 +30,19 @@ def consistency_visualization(seed=42):
 
     fig, axes = plt.subplots(2, 2, figsize=(14, 10))
     for ax, (name, (sampler, true_mu)) in zip(axes.flat, distributions.items()):
+        # 같은 분포에서 20개의 **경로**를 그린다.
+        # 큰수의 법칙은 "평균이 참값에 가까워진다"가 아니라
+        # "거의 모든 경로가 참값으로 수렴한다"를 말하므로,
+        # 한 경로가 아니라 여러 경로를 겹쳐 그려야 그 뜻이 드러난다.
         for _ in range(n_runs):
             data = sampler()
+            # cumsum을 1, 2, 3, ... 으로 나누면 각 시점까지의 평균이 된다
             running_mean = np.cumsum(data) / np.arange(1, N + 1)
             ax.plot(running_mean, alpha=0.2, linewidth=0.5)
         ax.axhline(true_mu, color='red', linestyle='--', linewidth=2,
                    label=f'μ = {true_mu}')
+        # 가로축을 로그로 둔다. n=1..100 구간의 극심한 흔들림과
+        # n=1000 이후의 안정을 한 화면에 담으려면 로그가 필요하다.
         ax.set_xscale('log')
         ax.set_xlabel('n')
         ax.set_ylabel('X̄ₙ')
@@ -43,7 +50,10 @@ def consistency_visualization(seed=42):
         ax.legend()
     plt.tight_layout()
     plt.show()
+consistency_visualization()
 ```
+
+![일치성과 수렴](./img/consistency_convergence_15.png)
 
 !!! tip "그림에서 보이는 양상"
     모집단 분포와 무관하게, $n$이 커지면 20개의 표본경로가 모두 빨간 점선($\mu$)으로 수렴한다. 강대수의법칙이 작동하는 모습이다.
@@ -73,12 +83,19 @@ def clt_demonstration(seed=42):
     sample_sizes = [2, 5, 30]
     fig, axes = plt.subplots(len(populations), len(sample_sizes), figsize=(15, 12))
 
+    # 행 = 모집단(넷), 열 = 표본 크기(2, 5, 30).
+    # 가로로 읽으면 "n이 커지면 종 모양이 된다",
+    # 세로로 읽으면 "모집단이 달라도 결과가 같다"가 보인다.
+    # 다만 치우침이 심한 모집단일수록 정규가 되는 데 더 큰 n이 필요하다.
+    # 베르누이(0.3) 행에서 n=2, 5 가 여전히 이산적인 것이 그 예다.
     for i, (pop_name, (sampler, mu, sigma2)) in enumerate(populations.items()):
         for j, n in enumerate(sample_sizes):
             x_bars = np.array([sampler(n).mean() for _ in range(n_sim)])
             ax = axes[i, j]
             ax.hist(x_bars, bins=60, density=True, alpha=0.6, color='steelblue')
             x = np.linspace(x_bars.min(), x_bars.max(), 200)
+            # 참 모수로 계산한 이론적 표준오차. 표본에서 추정한 값이 아니다.
+            # 붉은 곡선이 히스토그램과 얼마나 맞는지가 곧 근사의 품질이다.
             se = np.sqrt(sigma2 / n)
             ax.plot(x, stats.norm.pdf(x, mu, se), 'r-', linewidth=2)
             if i == 0:
@@ -88,7 +105,10 @@ def clt_demonstration(seed=42):
     plt.suptitle('Central Limit Theorem')
     plt.tight_layout()
     plt.show()
+clt_demonstration()
 ```
+
+![Central Limit Theorem](./img/consistency_convergence_60.png)
 
 !!! note "정규성으로의 수렴 속도"
     대칭인 분포(Normal, Uniform)는 정규성에 빨리 도달한다. 치우친 분포(Exponential, $p$가 0.5에서 먼 Bernoulli)는 더 큰 $n$이 필요하다. $n = 30$쯤이면 대부분의 분포에서 정규근사가 충분하다.
@@ -131,7 +151,10 @@ def cauchy_failure(seed=42):
     plt.suptitle('Consistency Failure: Cauchy (E[|X|] = ∞)')
     plt.tight_layout()
     plt.show()
+cauchy_failure()
 ```
+
+![Normal: Converges](./img/consistency_convergence_106.png)
 
 !!! warning "대수의법칙에는 유한한 평균이 필요하다"
     Cauchy의 표본평균은 $n$이 아무리 커도 불규칙하게 떠돈다. 그러나 표본 **중앙값**은 유한한 평균을 요구하지 않으므로 Cauchy 위치모수에 대해 일치한다.
@@ -164,6 +187,19 @@ def autocorrelation_effect(n=100, n_sim=30_000, seed=42):
         var_iid = sigma**2 / n
         ratio = var_emp / var_iid
         print(f"ρ={rho:>5.2f}  Var(X̄)={var_emp:.6f}  σ²/n={var_iid:.6f}  Ratio={ratio:.2f}")
+autocorrelation_effect()
+```
+
+출력:
+
+```
+ρ=-0.50  Var(X̄)=0.003387  σ²/n=0.010000  Ratio=0.34
+ρ=-0.20  Var(X̄)=0.006796  σ²/n=0.010000  Ratio=0.68
+ρ= 0.00  Var(X̄)=0.010030  σ²/n=0.010000  Ratio=1.00
+ρ= 0.20  Var(X̄)=0.015012  σ²/n=0.010000  Ratio=1.50
+ρ= 0.50  Var(X̄)=0.029373  σ²/n=0.010000  Ratio=2.94
+ρ= 0.80  Var(X̄)=0.086491  σ²/n=0.010000  Ratio=8.65
+ρ= 0.95  Var(X̄)=0.311792  σ²/n=0.010000  Ratio=31.18
 ```
 
 !!! danger "금융 시계열"
@@ -188,6 +224,15 @@ def estimation_horizon_analysis(seed=42):
     for target in [0.80, 0.90, 0.95]:
         idx = np.argmax(np.array(prob_detect) >= target)
         print(f"  {target*100:.0f}% power: ~{years[idx]} years of data needed")
+estimation_horizon_analysis()
+```
+
+출력:
+
+```
+  80% power: ~32 years of data needed
+  90% power: ~73 years of data needed
+  95% power: ~1 years of data needed
 ```
 
 ## 해석

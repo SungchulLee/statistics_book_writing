@@ -270,6 +270,14 @@ $N(\mu, \sigma^2)$의 **Fisher 정보행렬.** 비대각 성분이 0임을 보�
     print(f"E[S^2]      = {s2.mean():.4f}       (true {var})")
     ```
 
+    출력:
+
+    ```
+    E[mu_hat]   = 5.0004   (true 5.0)
+    E[sig2_MLE] = 8.5701 (true 8.5500)
+    E[S^2]      = 9.0212       (true 9.0)
+    ```
+
     예상 결과:
 
     - $\mathbb{E}[\bar X] \approx 5.00$ (불편).

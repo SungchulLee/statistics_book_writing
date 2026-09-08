@@ -43,6 +43,14 @@ def mle_analytical_vs_numerical(seed=42):
 
     print(f"Analytical: mu={mu_mle:.6f}, sigma²={sigma2_mle:.6f}")
     print(f"Numerical:  mu={mu_num:.6f}, sigma²={s2_num:.6f}")
+mle_analytical_vs_numerical()
+```
+
+출력:
+
+```
+Analytical: mu=5.182422, sigma²=2.313780
+Numerical:  mu=5.182447, sigma²=2.313763
 ```
 
 !!! tip "일치"
@@ -100,7 +108,10 @@ def loglikelihood_surface(seed=42):
 
     plt.tight_layout()
     plt.show()
+loglikelihood_surface()
 ```
+
+![Log-Likelihood Contours](./img/gaussian_mle_code_56.png)
 
 ## 유한표본 편향
 
@@ -123,6 +134,19 @@ def finite_sample_bias(n_sim=200_000, seed=42):
         s2_ub  = np.var(samp, axis=1, ddof=1)
         print(f"n={n:>4}  E[sigma²_MLE]={s2_mle.mean():.4f}  "
               f"E[S²]={s2_ub.mean():.4f}  Bias(MLE)={s2_mle.mean()-sigma2:.4f}")
+finite_sample_bias()
+```
+
+출력:
+
+```
+n=   3  E[sigma²_MLE]=6.0004  E[S²]=9.0006  Bias(MLE)=-2.9996
+n=   5  E[sigma²_MLE]=7.1938  E[S²]=8.9922  Bias(MLE)=-1.8062
+n=  10  E[sigma²_MLE]=8.0936  E[S²]=8.9929  Bias(MLE)=-0.9064
+n=  20  E[sigma²_MLE]=8.5449  E[S²]=8.9947  Bias(MLE)=-0.4551
+n=  50  E[sigma²_MLE]=8.8173  E[S²]=8.9972  Bias(MLE)=-0.1827
+n= 100  E[sigma²_MLE]=8.9087  E[S²]=8.9987  Bias(MLE)=-0.0913
+n= 500  E[sigma²_MLE]=8.9833  E[S²]=9.0013  Bias(MLE)=-0.0167
 ```
 
 ## Fisher 정보량과 Cramer-Rao 하한
@@ -153,6 +177,25 @@ def fisher_information_crlb(sigma=3.0, n_sim=100_000, seed=42):
         s2_h = np.array([np.var(rng.normal(5, sigma, n)) for _ in range(n_sim)])
         print(f"  n={n:>4}  Var(sigma²_hat)={s2_h.var():.6f}  "
               f"CRLB={2*sigma**4/n:.6f}  Ratio={s2_h.var()/(2*sigma**4/n):.4f}")
+fisher_information_crlb()
+```
+
+출력:
+
+```
+For mu: CRLB = sigma²/n
+  n=  10  Var(mu_hat)=0.894429  CRLB=0.900000  Ratio=0.9938
+  n=  25  Var(mu_hat)=0.359987  CRLB=0.360000  Ratio=1.0000
+  n=  50  Var(mu_hat)=0.180438  CRLB=0.180000  Ratio=1.0024
+  n= 100  Var(mu_hat)=0.090185  CRLB=0.090000  Ratio=1.0021
+  n= 500  Var(mu_hat)=0.018067  CRLB=0.018000  Ratio=1.0037
+
+For sigma²: CRLB = 2*sigma⁴/n
+  n=  10  Var(sigma²_hat)=14.492807  CRLB=16.200000  Ratio=0.8946
+  n=  25  Var(sigma²_hat)=6.193428  CRLB=6.480000  Ratio=0.9558
+  n=  50  Var(sigma²_hat)=3.207101  CRLB=3.240000  Ratio=0.9898
+  n= 100  Var(sigma²_hat)=1.601462  CRLB=1.620000  Ratio=0.9886
+  n= 500  Var(sigma²_hat)=0.321909  CRLB=0.324000  Ratio=0.9935
 ```
 
 !!! info "효율성"
@@ -198,6 +241,15 @@ def confidence_interval_coverage(seed=42):
     print(f"z-interval (mu, sigma known):  {z_ok/n_sim:.1%} (target: {1-alpha:.1%})")
     print(f"t-interval (mu, sigma unknown): {t_ok/n_sim:.1%} (target: {1-alpha:.1%})")
     print(f"chi²-interval (sigma²):        {chi_ok/n_sim:.1%} (target: {1-alpha:.1%})")
+confidence_interval_coverage()
+```
+
+출력:
+
+```
+z-interval (mu, sigma known):  95.0% (target: 95.0%)
+t-interval (mu, sigma unknown): 95.1% (target: 95.0%)
+chi²-interval (sigma²):        95.0% (target: 95.0%)
 ```
 
 !!! success "포함확률이 맞는다"
@@ -229,6 +281,16 @@ def var_estimation_finance(seed=42):
         v_h = -np.percentile(returns, alpha * 100)
         print(f"alpha={alpha:.3f}  Parametric VaR={v_p*100:.3f}%  "
               f"Historical VaR={v_h*100:.3f}%  Ratio={v_h/v_p:.3f}")
+var_estimation_finance()
+```
+
+출력:
+
+```
+alpha=0.010  Parametric VaR=3.039%  Historical VaR=3.748%  Ratio=1.233
+alpha=0.025  Parametric VaR=2.557%  Historical VaR=3.182%  Ratio=1.244
+alpha=0.050  Parametric VaR=2.143%  Historical VaR=2.186%  Ratio=1.020
+alpha=0.100  Parametric VaR=1.665%  Historical VaR=1.536%  Ratio=0.923
 ```
 
 !!! warning "모형 위험"

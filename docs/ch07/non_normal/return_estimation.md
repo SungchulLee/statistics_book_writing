@@ -29,6 +29,18 @@ def expected_return_precision(seed=42):
         hi = mu_annual + 1.96 * se
         print(f"T={T:>4} years  SE={se*100:.2f}%  "
               f"95% CI=[{lo*100:.2f}%, {hi*100:.2f}%]  Width={2*1.96*se*100:.2f}%")
+expected_return_precision()
+```
+
+출력:
+
+```
+T=   5 years  SE=8.94%  95% CI=[-9.53%, 25.53%]  Width=35.06%
+T=  10 years  SE=6.32%  95% CI=[-4.40%, 20.40%]  Width=24.79%
+T=  20 years  SE=4.47%  95% CI=[-0.77%, 16.77%]  Width=17.53%
+T=  30 years  SE=3.65%  95% CI=[0.84%, 15.16%]  Width=14.31%
+T=  50 years  SE=2.83%  95% CI=[2.46%, 13.54%]  Width=11.09%
+T= 100 years  SE=2.00%  95% CI=[4.08%, 11.92%]  Width=7.84%
 ```
 
 !!! danger "근본적인 문제"
@@ -58,7 +70,10 @@ def return_precision_simulation(seed=42):
     plt.suptitle('Distribution of Expected Return Estimates')
     plt.tight_layout()
     plt.show()
+return_precision_simulation()
 ```
+
+![Distribution of Expected Return Estimates](./img/return_estimation_40.png)
 
 ## Sharpe 비율의 불확실성
 
@@ -87,6 +102,17 @@ def sharpe_ratio_uncertainty(seed=42):
         sr_ests = np.array(sr_ests)
         print(f"T={T:>3} years  E[SR]={sr_ests.mean():.3f}  "
               f"SD(SR)={sr_ests.std():.3f}  P(SR<0)={( sr_ests < 0).mean():.1%}")
+sharpe_ratio_uncertainty()
+```
+
+출력:
+
+```
+T=  3 years  E[SR]=0.518  SD(SR)=0.604  P(SR<0)=19.1%
+T=  5 years  E[SR]=0.514  SD(SR)=0.461  P(SR<0)=12.9%
+T= 10 years  E[SR]=0.507  SD(SR)=0.323  P(SR<0)=5.7%
+T= 20 years  E[SR]=0.501  SD(SR)=0.226  P(SR<0)=1.2%
+T= 50 years  E[SR]=0.502  SD(SR)=0.143  P(SR<0)=0.0%
 ```
 
 !!! note "펀드 평가에 대한 함의"
@@ -130,7 +156,10 @@ def realized_volatility_windows(seed=42):
     ax.legend()
     plt.tight_layout()
     plt.show()
+realized_volatility_windows()
 ```
+
+![Realized Volatility: Window Size Comparison](./img/return_estimation_128.png)
 
 !!! info "실무 지침"
     유일하게 "옳은" 구간은 없다. 실무자들은 단기 위험관리에는 21일(월간) 구간을, 전략적 자산배분에는 252일(연간) 구간을 흔히 쓴다. 더 정교한 접근(지수가중, GARCH 모형)은 이 맞바꿈을 더 명시적으로 다룬다.
@@ -154,6 +183,17 @@ def annualization_conventions():
     print(f"  mu_annual   = {mu_d*252*100:.2f}%")
     print(f"  sigma_annual = {sigma_d*np.sqrt(252)*100:.2f}%")
     print(f"  SR_annual   = {mu_d/sigma_d*np.sqrt(252):.3f}")
+annualization_conventions()
+```
+
+출력:
+
+```
+Daily: mu = 0.0300%, sigma = 1.2000%
+Annualized (252 trading days):
+  mu_annual   = 7.56%
+  sigma_annual = 19.05%
+  SR_annual   = 0.397
 ```
 
 !!! warning "i.i.d. 가정"

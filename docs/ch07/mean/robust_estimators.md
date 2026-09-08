@@ -18,12 +18,30 @@ $$\bar{X}_\alpha = \frac{1}{n - 2k}\sum_{i=k+1}^{n-k} X_{(i)}$$
 import numpy as np
 
 def trimmed_mean(data, proportion=0.1):
-    x = np.sort(data)
+    """양쪽 꼬리에서 proportion 비율씩 잘라 내고 평균을 낸다."""
+    x = np.sort(data)              # 잘라 내려면 먼저 정렬해야 한다
     n = len(x)
-    k = int(np.floor(n * proportion))
+    k = int(np.floor(n * proportion))   # 각 꼬리에서 버릴 개수
     if k == 0:
-        return x.mean()
-    return x[k:-k].mean()
+        return x.mean()            # 표본이 작아 버릴 것이 없으면 그냥 평균
+    return x[k:-k].mean()          # 앞뒤 k개를 빼고 평균
+
+
+# 이상치 하나가 들어 있는 자료로 확인한다.
+data = np.array([1, 2, 3, 4, 5, 6, 7, 8, 9, 1000.0])
+print(f"평균         {data.mean():9.2f}   <- 이상치 하나에 끌려간다")
+print(f"10% 절단평균 {trimmed_mean(data, 0.1):9.2f}")
+print(f"20% 절단평균 {trimmed_mean(data, 0.2):9.2f}")
+print(f"중앙값       {np.median(data):9.2f}   <- 100% 절단평균인 셈")
+```
+
+출력:
+
+```
+평균            104.50   <- 이상치 하나에 끌려간다
+10% 절단평균      5.50
+20% 절단평균      5.50
+중앙값            5.50   <- 100% 절단평균인 셈
 ```
 
 ### 가중평균과 가중중앙값
@@ -39,12 +57,27 @@ def weighted_mean(data, weights):
     return np.sum(data * weights) / np.sum(weights)
 
 def weighted_median(data, weights):
-    order = np.argsort(data)
+    """누적 가중치가 절반에 도달하는 값을 찾는다."""
+    order = np.argsort(data)            # 값의 크기 순으로 정렬한 순서
     sorted_data = data[order]
-    sorted_w = weights[order]
-    cum_w = np.cumsum(sorted_w) / np.sum(sorted_w)
-    idx = np.searchsorted(cum_w, 0.5)
+    sorted_w = weights[order]           # 가중치도 같은 순서로 따라간다
+    cum_w = np.cumsum(sorted_w) / np.sum(sorted_w)   # 누적 가중치 비율
+    idx = np.searchsorted(cum_w, 0.5)   # 0.5를 처음 넘는 위치
     return sorted_data[idx]
+
+
+# 마지막 관측값이 이상치이고 가중치도 큰 경우.
+data = np.array([1.0, 2.0, 3.0, 4.0, 100.0])
+weights = np.array([1.0, 1.0, 1.0, 1.0, 3.0])
+print(f"가중평균   {weighted_mean(data, weights):8.2f}   <- 이상치에 끌려간다")
+print(f"가중중앙값 {weighted_median(data, weights):8.2f}   <- 버틴다")
+```
+
+출력:
+
+```
+가중평균      44.29   <- 이상치에 끌려간다
+가중중앙값     4.00   <- 버틴다
 ```
 
 ## 척도추정량
@@ -59,8 +92,27 @@ $$\text{MAD} = \text{median}(|X_i - \text{median}(X)|)$$
 
 ```python
 def mad(data):
+    """중앙값 절대편차. 편차를 제곱하지 않고 중앙값을 취한다."""
     med = np.median(data)
     return np.median(np.abs(data - med))
+
+
+# 정규자료와 그 자료에 이상치 하나를 더한 것을 비교한다.
+rng = np.random.default_rng(0)
+clean = rng.normal(0, 1, 100)
+dirty = np.append(clean, 50.0)     # 이상치 하나만 추가
+
+for name, d in [("깨끗한 자료", clean), ("이상치 1개 추가", dirty)]:
+    # 1.4826을 곱하면 정규분포에서 sigma의 일치추정량이 된다
+    print(f"{name:16} 표준편차 {d.std(ddof=1):6.3f}   "
+          f"1.4826*MAD {1.4826 * mad(d):6.3f}")
+```
+
+출력:
+
+```
+깨끗한 자료           표준편차  0.967   1.4826*MAD  1.049
+이상치 1개 추가        표준편차  5.059   1.4826*MAD  1.063
 ```
 
 ### 사분위수범위
@@ -94,6 +146,29 @@ for label, data in [("Clean", clean), ("Contaminated", contaminated)]:
     print(f"  Std dev          = {data.std(ddof=1):.2f}")
     print(f"  IQR              = {np.percentile(data, 75) - np.percentile(data, 25):.2f}")
     print(f"  MAD              = {mad(data):.2f}")
+```
+
+출력:
+
+```
+
+Clean data (n = 100):
+  Mean             = 48.96
+  Median           = 48.73
+  Trimmed mean 10% = 49.11
+  Trimmed mean 20% = 49.13
+  Std dev          = 9.08
+  IQR              = 10.07
+  MAD              = 4.96
+
+Contaminated data (n = 105):
+  Mean             = 51.39
+  Median           = 48.84
+  Trimmed mean 10% = 49.24
+  Trimmed mean 20% = 49.28
+  Std dev          = 43.36
+  IQR              = 11.15
+  MAD              = 5.61
 ```
 
 !!! note "이상점의 영향"
@@ -141,6 +216,8 @@ ax2.legend()
 plt.tight_layout()
 plt.show()
 ```
+
+![Location Estimators vs Outlier Count](./img/robust_estimators_181.png)
 
 ## 붕괴점
 

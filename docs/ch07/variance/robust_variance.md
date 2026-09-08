@@ -115,6 +115,12 @@ $$
     print(f"MSE: sample={err_s/R:.1f}, LW={err_lw/R:.1f}, shrinkage={np.mean(shr):.2f}")
     ```
 
+    출력:
+
+    ```
+    MSE: sample=16.2, LW=8.9, shrinkage=0.45
+    ```
+
     예상 결과: LW의 평균제곱오차가 대략 40–60% 낮고, $p/n = 0.5$에서 축소 강도는 $\sim 0.3$이다. $p/n$이 클수록 축소가 강해진다. 고차원 영역($p \approx n$)에서는 표본공분산이 특이행렬이 되는데, LW는 역행렬 존재성과 더 나은 평균제곱오차를 함께 준다.
 
 ---

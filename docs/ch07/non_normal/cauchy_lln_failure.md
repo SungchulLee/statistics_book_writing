@@ -31,6 +31,11 @@ import matplotlib.pyplot as plt
 np.random.seed(42)
 
 def sample_mean_trajectories(dist, n_max=10_000, n_tries=20):
+    """누적 표본평균의 경로를 n_tries개 만든다.
+
+    코시분포는 평균이 존재하지 않으므로 큰수의 법칙이 성립하지 않는다.
+    경로가 수렴하지 않고 계속 튀는 모습을 정규분포와 나란히 놓고 본다.
+    """
     trajectories = []
     for _ in range(n_tries):
         if dist == "cauchy":
@@ -51,6 +56,9 @@ fig, axes = plt.subplots(1, 2, figsize=(14, 5))
 
 ax = axes[0]
 for traj in cauchy_traj:
+    # [-50, 50]으로 잘라 낸다. 코시 경로는 수백, 수천까지 튀어 올라
+    # 그대로 그리면 나머지가 한 줄로 뭉개진다.
+    # **잘라 냈다는 것 자체가 코시분포의 성질을 말해 준다.**
     clipped = np.clip(traj, -50, 50)
     ax.semilogx(ns, clipped, lw=0.7, alpha=0.6)
 ax.axhline(0, color="red", linestyle="--", lw=2)
@@ -69,6 +77,8 @@ ax.set_ylim(-1, 1)
 plt.tight_layout()
 plt.show()
 ```
+
+![Cauchy: Sample Mean Trajectories](./img/cauchy_lln_failure_27.png)
 
 !!! note "수렴과 비수렴"
     정규분포(오른쪽 그림)에서는 $n$이 커지면 20개 궤적이 모두 눈에 띄게 0으로 수렴한다. Cauchy(왼쪽 그림)에서는 궤적이 계속 불규칙하게 떠돈다 — $n$이 커진 뒤에도 이따금 나타나는 극단 관측값이 누적평균을 "초기화"해 버린다.
@@ -109,6 +119,8 @@ plt.tight_layout()
 plt.show()
 ```
 
+![Cauchy에서 대수의법칙의 실패](./img/cauchy_lln_failure_80.png)
+
 !!! warning "Cauchy 분포는 집중되지 않는다"
     $n = 10{,}000$에서 정규 표본평균의 분포는 0에 뾰족하게 모여들지만(표준편차 $= 0.01$), Cauchy 표본평균의 분포는 $n = 100$일 때와 사실상 똑같아 보인다. Cauchy 자료를 더 많이 평균해도 도움이 되지 않는다.
 
@@ -124,6 +136,8 @@ ax.set_title("Cauchy vs Normal Q-Q Plot")
 plt.tight_layout()
 plt.show()
 ```
+
+![Cauchy vs Normal Q-Q Plot](./img/cauchy_lln_failure_119.png)
 
 특유의 S자(또는 하키스틱) 모양은 Cauchy가 정규분포보다 훨씬 극단적인 값을 만들어낸다는 것을 보여준다.
 

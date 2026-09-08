@@ -33,6 +33,18 @@ def verify_unbiasedness(mu=10.0, sigma=3.0, n=20, n_sim=100_000, seed=42):
         estimates = np.array([sampler().mean() for _ in range(n_sim)])
         bias = estimates.mean() - true_mu
         print(f"{name:<22} True μ={true_mu:.4f}  E[X̄]={estimates.mean():.4f}  Bias={bias:.6f}")
+verify_unbiasedness()
+```
+
+출력:
+
+```
+Normal(10.0, 3.0²)     True μ=10.0000  E[X̄]=10.0017  Bias=0.001681
+Exp(λ=0.5)             True μ=2.0000  E[X̄]=1.9992  Bias=-0.000795
+Poisson(3.7)           True μ=3.7000  E[X̄]=3.7002  Bias=0.000242
+Uniform(2, 8)          True μ=5.0000  E[X̄]=4.9996  Bias=-0.000395
+Bernoulli(0.4)         True μ=0.4000  E[X̄]=0.4009  Bias=0.000895
+Chi²(df=5)             True μ=5.0000  E[X̄]=5.0006  Bias=0.000617
 ```
 
 !!! tip "핵심"
@@ -65,6 +77,18 @@ def verify_variance_and_mse(mu=10.0, sigma=3.0, n_sim=100_000, seed=42):
 
         print(f"n={n:>4}  Var(X̄)={var_xbar:.6f}  σ²/n={theory_var:.6f}  "
               f"MSE={mse:.6f}  SE={se:.6f}  σ/√n={theory_se:.6f}")
+verify_variance_and_mse()
+```
+
+출력:
+
+```
+n=   5  Var(X̄)=1.807662  σ²/n=1.800000  MSE=1.807665  SE=1.344493  σ/√n=1.341641
+n=  10  Var(X̄)=0.892618  σ²/n=0.900000  MSE=0.892629  SE=0.944785  σ/√n=0.948683
+n=  25  Var(X̄)=0.361480  σ²/n=0.360000  MSE=0.361485  SE=0.601232  σ/√n=0.600000
+n=  50  Var(X̄)=0.180013  σ²/n=0.180000  MSE=0.180013  SE=0.424279  σ/√n=0.424264
+n= 100  Var(X̄)=0.090037  σ²/n=0.090000  MSE=0.090038  SE=0.300062  σ/√n=0.300000
+n= 500  Var(X̄)=0.018063  σ²/n=0.018000  MSE=0.018063  SE=0.134397  σ/√n=0.134164
 ```
 
 ## 효율 비교
@@ -105,6 +129,30 @@ def efficiency_comparison(n=30, n_sim=50_000, seed=42):
             mse = np.mean(np.array(vals)**2)
             re  = mse_mean / mse
             print(f"  {name:<12} MSE={mse:.6f}  Rel.Eff.={re:.4f}")
+efficiency_comparison()
+```
+
+출력:
+
+```
+
+Normal(0,1):
+  Mean         MSE=0.032864  Rel.Eff.=1.0000
+  Median       MSE=0.049651  Rel.Eff.=0.6619
+  Trim10%      MSE=0.034776  Rel.Eff.=0.9450
+  Trim20%      MSE=0.037534  Rel.Eff.=0.8756
+
+t(df=3):
+  Mean         MSE=0.099094  Rel.Eff.=1.0000
+  Median       MSE=0.060253  Rel.Eff.=1.6446
+  Trim10%      MSE=0.054848  Rel.Eff.=1.8067
+  Trim20%      MSE=0.051286  Rel.Eff.=1.9322
+
+Contaminated Normal:
+  Mean         MSE=0.363803  Rel.Eff.=1.0000
+  Median       MSE=0.061236  Rel.Eff.=5.9410
+  Trim10%      MSE=0.057499  Rel.Eff.=6.3272
+  Trim20%      MSE=0.049119  Rel.Eff.=7.4065
 ```
 
 !!! note "평균이 지는 경우"
@@ -138,6 +186,15 @@ def weighted_mean_demo(mu=5.0, n_sim=50_000, seed=42):
     print(f"Unweighted:  Var={unweighted.var():.6f}  MSE={np.mean((unweighted-mu)**2):.6f}")
     print(f"IV-Weighted: Var={weighted.var():.6f}  MSE={np.mean((weighted-mu)**2):.6f}")
     print(f"Variance reduction: {(1 - weighted.var()/unweighted.var())*100:.1f}%")
+weighted_mean_demo()
+```
+
+출력:
+
+```
+Unweighted:  Var=5.182967  MSE=5.183045
+IV-Weighted: Var=0.190153  MSE=0.190153
+Variance reduction: 96.3%
 ```
 
 ## 표준오차의 수렴 속도
@@ -168,7 +225,10 @@ def convergence_rate_plot(mu=5.0, sigma=3.0, n_sim=50_000, seed=42):
     ax.grid(True, alpha=0.3, which='both')
     plt.tight_layout()
     plt.show()
+convergence_rate_plot()
 ```
+
+![Convergence Rate of Sample Mean](./img/sample_mean_properties_151.png)
 
 ## 해석
 

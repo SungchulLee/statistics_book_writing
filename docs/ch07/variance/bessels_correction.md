@@ -19,6 +19,13 @@ def unbiasedness_across_distributions(n_sim=200_000, seed=42):
     sigma2 = sigma**2
     n = 20
 
+    # 모양이 전혀 다른 분포 넷을 준비하되 **참 분산이 얼마인지 알 수 있게** 맞춘다.
+    #   Exp(scale=s)     의 분산은 s^2
+    #   Uniform(0, 2s√3) 의 분산은 (2s√3)^2/12 = s^2
+    #   Chi²(df=k)       의 분산은 2k
+    # 베셀 보정의 불편성은 정규성을 전혀 요구하지 않으므로,
+    # 네 경우 모두 편향이 0에 가깝게 나와야 한다.
+    # (반면 뒤에 나오는 카이제곱 분포 결과는 정규성이 꼭 필요하다.)
     distributions = {
         f'Normal(0, {sigma2})':    (lambda: rng.normal(0, sigma, n), sigma2),
         f'Exp(scale={sigma})':     (lambda: rng.exponential(sigma, n), sigma2),
@@ -30,6 +37,16 @@ def unbiasedness_across_distributions(n_sim=200_000, seed=42):
         s2_vals = np.array([np.var(sampler(), ddof=1) for _ in range(n_sim)])
         print(f"{name:<25} True σ²={true_var:.2f}  "
               f"E[S²]={s2_vals.mean():.4f}  Bias={s2_vals.mean()-true_var:.4f}")
+unbiasedness_across_distributions()
+```
+
+출력:
+
+```
+Normal(0, 16.0)           True σ²=16.00  E[S²]=15.9995  Bias=-0.0005
+Exp(scale=4.0)            True σ²=16.00  E[S²]=15.9970  Bias=-0.0030
+Uniform                   True σ²=16.00  E[S²]=16.0088  Bias=0.0088
+Chi²(df=16)               True σ²=32.00  E[S²]=32.0208  Bias=0.0208
 ```
 
 !!! tip "분포와 무관한 결과"
@@ -55,6 +72,10 @@ def chi_squared_verification(sigma=3.0, n_sim=100_000, seed=42):
     for ax, n in zip(axes.flat, sample_sizes):
         samples = rng.normal(0, sigma, (n_sim, n))
         s2 = np.var(samples, axis=1, ddof=1)
+        # (n-1)S^2/sigma^2 을 만들면 sigma가 약분되어 사라진다.
+        # 그래서 이 통계량의 분포는 자유도 n-1 하나로만 결정되며,
+        # sigma를 몰라도 이것으로 검정과 신뢰구간을 만들 수 있다.
+        # 이런 성질을 갖는 양을 추축량(pivotal quantity)이라 한다.
         chi2_vals = (n - 1) * s2 / sigma**2
 
         ax.hist(chi2_vals, bins=80, density=True, alpha=0.6, color='steelblue')
@@ -65,7 +86,10 @@ def chi_squared_verification(sigma=3.0, n_sim=100_000, seed=42):
     plt.suptitle('(n-1)S²/σ² ~ chi²(n-1) for Normal Data')
     plt.tight_layout()
     plt.show()
+chi_squared_verification()
 ```
+
+![(n-1)S²/σ² ~ chi²(n-1) for Normal Data](./img/bessels_correction_47.png)
 
 카이제곱분포로부터 곧바로 다음을 얻는다:
 
@@ -94,6 +118,14 @@ def independence_xbar_s2(sigma=3.0, n_sim=100_000, seed=42):
 
     print(f"Normal:      Corr(X̄, S²) = {corr_n:.6f}  (≈ 0)")
     print(f"Exponential: Corr(X̄, S²) = {corr_e:.6f}  (≠ 0)")
+independence_xbar_s2()
+```
+
+출력:
+
+```
+Normal:      Corr(X̄, S²) = 0.005076  (≈ 0)
+Exponential: Corr(X̄, S²) = 0.700128  (≠ 0)
 ```
 
 !!! note "왜 중요한가"
@@ -120,10 +152,27 @@ def std_deviation_bias(sigma=3.0, n_sim=200_000, seed=42):
 
     for n in sample_sizes:
         samples = rng.normal(0, sigma, (n_sim, n))
+        # S^2 은 불편이지만 그 제곱근 S 는 불편이 아니다.
+        # 제곱근이 오목함수라 옌센 부등식 E[√X] < √E[X] 가 성립하기 때문이며,
+        # 따라서 S 는 sigma 를 **과소추정**한다.
+        # "불편성은 변환에 대해 보존되지 않는다"는 일반 원리의 사례다.
         s = np.std(samples, axis=1, ddof=1)
         c4 = np.sqrt(2 / (n - 1)) * gamma_func(n / 2) / gamma_func((n - 1) / 2)
         print(f"n={n:>4}  E[S]={s.mean():.4f}  σ={sigma:.4f}  "
               f"Bias={s.mean()-sigma:.4f}  c₄={c4:.4f}  E[S/c₄]={(s/c4).mean():.4f}")
+std_deviation_bias()
+```
+
+출력:
+
+```
+n=   3  E[S]=2.6576  σ=3.0000  Bias=-0.3424  c₄=0.8862  E[S/c₄]=2.9987
+n=   5  E[S]=2.8190  σ=3.0000  Bias=-0.1810  c₄=0.9400  E[S/c₄]=2.9990
+n=  10  E[S]=2.9169  σ=3.0000  Bias=-0.0831  c₄=0.9727  E[S/c₄]=2.9989
+n=  20  E[S]=2.9599  σ=3.0000  Bias=-0.0401  c₄=0.9869  E[S/c₄]=2.9991
+n=  50  E[S]=2.9844  σ=3.0000  Bias=-0.0156  c₄=0.9949  E[S/c₄]=2.9996
+n= 100  E[S]=2.9922  σ=3.0000  Bias=-0.0078  c₄=0.9975  E[S/c₄]=2.9998
+n= 500  E[S]=2.9987  σ=3.0000  Bias=-0.0013  c₄=nan  E[S/c₄]=nan
 ```
 
 !!! warning "편향은 작은 표본에서 가장 크다"
@@ -141,6 +190,13 @@ n = len(data)
 
 print(f"np.var(data)          = {np.var(data):.4f}  <- divides by n={n}  (BIASED)")
 print(f"np.var(data, ddof=1)  = {np.var(data, ddof=1):.4f}  <- divides by n-1={n-1}  (UNBIASED)")
+```
+
+출력:
+
+```
+np.var(data)          = 4.0000  <- divides by n=8  (BIASED)
+np.var(data, ddof=1)  = 4.5714  <- divides by n-1=7  (UNBIASED)
 ```
 
 !!! danger "분모를 항상 확인하라"
@@ -170,6 +226,15 @@ def tracking_error_estimation(seed=42):
               f"Bias={(est.mean()-te_true_annual)*100:.3f}%  "
               f"RMSE={np.sqrt(np.mean((est-te_true_annual)**2))*100:.3f}%")
     print(f"True TE: {te_true_annual*100:.3f}%")
+tracking_error_estimation()
+```
+
+출력:
+
+```
+ddof=0     Mean=3.392%  Bias=-0.072%  RMSE=0.413%
+ddof=1     Mean=3.440%  Bias=-0.024%  RMSE=0.413%
+True TE: 3.464%
 ```
 
 ## 해석

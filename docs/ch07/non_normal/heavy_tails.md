@@ -120,6 +120,18 @@ print("Heavy-Tailed (t) Distribution:")
 print(f"  Excess Kurtosis: {stats.kurtosis(heavy_tailed_returns):.2f}")
 ```
 
+출력:
+
+```
+Normal Distribution:
+  Excess Kurtosis: 0.04
+
+Heavy-Tailed (t) Distribution:
+  Excess Kurtosis: 1.78
+```
+
+![Normal Distribution](./img/heavy_tails_67.png)
+
 ## 평균의 로버스트한 대안
 
 꼬리가 두꺼운 자료에서는 다음 대안을 고려하라.
@@ -142,6 +154,12 @@ se_median = np.std(bootstrap_medians)
 print(f"Median: {original_median:.4f} ± {se_median:.4f}")
 ```
 
+출력:
+
+```
+Median: 0.2379 ± 0.1549
+```
+
 ### 2. 절사평균
 평균을 계산하기 전에 양쪽 꼬리에서 일정 비율을 제거한다:
 
@@ -150,36 +168,84 @@ $$\bar{X}_{\text{trim}, \alpha} = \frac{1}{n(1-2\alpha)} \sum_{i=\lceil n\alpha 
 여기서 $X_{(i)}$는 순서통계량이고 $\alpha$는 절사비율이다(예: 10%이면 0.1).
 
 ```python
+import numpy as np
+from scipy import stats
 from scipy.stats import trim_mean
 
-data = stats.t.rvs(df=5, size=100)
-mean_trim10 = trim_mean(data, 0.1)  # 10% trimmed mean
+np.random.seed(42)
+data = stats.t.rvs(df=5, size=100)      # 자유도 5의 t분포. 꼬리가 두껍다.
+
+# proportiontocut=0.1 은 **양쪽 각각** 10%를 잘라 낸다는 뜻이다.
+# 즉 전체의 20%가 버려지고 가운데 80%만 평균에 들어간다.
+mean_trim10 = trim_mean(data, 0.1)
+print(f"표본평균     {np.mean(data):7.4f}")
+print(f"10% 절단평균 {mean_trim10:7.4f}")
+```
+
+출력:
+
+```
+표본평균      0.0299
+10% 절단평균 -0.1366
 ```
 
 ### 3. 윈저화 평균
 극단값을 버리는 대신 $\alpha$-분위수로 대체한다:
 
 ```python
+import numpy as np
+from scipy import stats
+
 def winsorize_mean(data, alpha=0.1):
-    """Compute mean after Winsorizing tails."""
+    """꼬리를 잘라 내는 대신 분위수 값으로 **바꿔치기**한 뒤 평균을 낸다.
+
+    절단평균과의 차이는 표본 크기다.
+    절단은 관측값을 버려 n이 줄지만, 윈저화는 값만 바꾸고 개수는 그대로 둔다.
+    "극단값도 방향 정보는 담고 있다"고 볼 때 윈저화가 낫다.
+    """
     lower = np.quantile(data, alpha)
     upper = np.quantile(data, 1 - alpha)
-    winsorized = np.clip(data, lower, upper)
+    winsorized = np.clip(data, lower, upper)   # 범위 밖 값을 경계로 눌러 준다
     return np.mean(winsorized)
 
+np.random.seed(42)
 data = stats.t.rvs(df=5, size=100)
-mean_wins = winsorize_mean(data, alpha=0.1)
+print(f"표본평균       {np.mean(data):7.4f}")
+print(f"윈저화 평균    {winsorize_mean(data, alpha=0.1):7.4f}")
+```
+
+출력:
+
+```
+표본평균        0.0299
+윈저화 평균    -0.1292
 ```
 
 ### 4. M-추정량 (Huber 추정량)
 작은 오차에서는 이차식, 큰 오차에서는 절댓값으로 넘어가는 손실함수를 써서 극단값의 가중치를 매끄럽게 낮춘다:
 
 ```python
-from scipy.stats import huber
+import numpy as np
+from scipy import stats
+# Huber 추정량은 scipy가 아니라 statsmodels에 있다.
+from statsmodels.robust.scale import huber
 
+np.random.seed(42)
 data = stats.t.rvs(df=5, size=100)
-result = huber(0.1, data)  # Tuning parameter 0.1
-print(f"Huber M-estimate: {result.estimate:.4f}")
+
+# 위치와 척도를 **동시에** 반복 추정해 돌려준다.
+# 조율모수 t의 기본값은 1.5이며, 이는 표준화 잔차가 1.5를 넘는 관측값부터
+# 가중치를 낮추기 시작한다는 뜻이다. 작을수록 로버스트하지만 효율이 떨어진다.
+loc, scale = huber(data)
+print(f"Huber 위치추정: {loc:.4f}")
+print(f"Huber 척도추정: {scale:.4f}")
+```
+
+출력:
+
+```
+Huber 위치추정: -0.1366
+Huber 척도추정: 1.0812
 ```
 
 ## 추정량의 비교
@@ -187,17 +253,33 @@ print(f"Huber M-estimate: {result.estimate:.4f}")
 ```python
 import numpy as np
 from scipy import stats
-from scipy.stats import trim_mean, huber
+from scipy.stats import trim_mean
+from statsmodels.robust.scale import huber
 
 np.random.seed(42)
+# 자유도 5의 t분포. 평균은 0이지만 꼬리가 정규분포보다 훨씬 두껍다.
 data = stats.t.rvs(df=5, loc=0, scale=1, size=500)
 
+# 다섯 추정량 모두 같은 모수(위치 0)를 겨냥한다.
+# n = 500 으로 넉넉하므로 다섯 값이 모두 0 근처에 모인다.
+# 이들의 차이는 한 번의 값이 아니라 **되풀이했을 때의 흩어짐**에서 드러난다.
 print("Estimator Comparison (Population mean = 0):")
 print(f"  Sample mean:         {np.mean(data):7.4f}")
 print(f"  Median:              {np.median(data):7.4f}")
 print(f"  10% Trimmed mean:    {trim_mean(data, 0.1):7.4f}")
 print(f"  Winsorized mean:     {winsorize_mean(data, 0.1):7.4f}")
-print(f"  Huber's estimator:   {huber(0.1, data).estimate:7.4f}")
+print(f"  Huber's estimator:   {huber(data)[0]:7.4f}")
+```
+
+출력:
+
+```
+Estimator Comparison (Population mean = 0):
+  Sample mean:         -0.0009
+  Median:               0.0058
+  10% Trimmed mean:    -0.0406
+  Winsorized mean:     -0.0318
+  Huber's estimator:   -0.0369
 ```
 
 ## 요약

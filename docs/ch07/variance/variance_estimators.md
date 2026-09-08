@@ -28,16 +28,34 @@ $$E[\tilde{S}^2] = \frac{n-1}{n}\sigma^2 \implies \text{Bias} = -\frac{\sigma^2}
 import numpy as np
 
 def bias_verification(sigma=3.0, n_sim=200_000, seed=42):
+    """n으로 나누는 추정량의 편향이 정확히 -sigma^2/n 임을 확인한다."""
     rng = np.random.default_rng(seed)
     sigma2 = sigma**2
     sample_sizes = [3, 5, 10, 20, 50, 100, 500]
 
     for n in sample_sizes:
         samples = rng.normal(0, sigma, (n_sim, n))
+        # ddof=0 이 n으로 나누는 판본이다(numpy 기본값이자 MLE).
+        # 편차를 참 평균이 아니라 표본평균에서 재기 때문에
+        # 제곱합이 체계적으로 작아지고, 그만큼 아래로 편향된다.
+        # 그 크기가 정확히 sigma^2/n 이라는 것이 아래 출력의 요점이다.
         s_tilde2 = np.var(samples, axis=1, ddof=0)
         print(f"n={n:>4}  E[S̃²]={s_tilde2.mean():.4f}  "
               f"(n-1)/n·σ²={(n-1)/n*sigma2:.4f}  "
               f"Bias={s_tilde2.mean()-sigma2:.4f}  -σ²/n={-sigma2/n:.4f}")
+bias_verification()
+```
+
+출력:
+
+```
+n=   3  E[S̃²]=6.0004  (n-1)/n·σ²=6.0000  Bias=-2.9996  -σ²/n=-3.0000
+n=   5  E[S̃²]=7.1938  (n-1)/n·σ²=7.2000  Bias=-1.8062  -σ²/n=-1.8000
+n=  10  E[S̃²]=8.0936  (n-1)/n·σ²=8.1000  Bias=-0.9064  -σ²/n=-0.9000
+n=  20  E[S̃²]=8.5449  (n-1)/n·σ²=8.5500  Bias=-0.4551  -σ²/n=-0.4500
+n=  50  E[S̃²]=8.8173  (n-1)/n·σ²=8.8200  Bias=-0.1827  -σ²/n=-0.1800
+n= 100  E[S̃²]=8.9087  (n-1)/n·σ²=8.9100  Bias=-0.0913  -σ²/n=-0.0900
+n= 500  E[S̃²]=8.9833  (n-1)/n·σ²=8.9820  Bias=-0.0167  -σ²/n=-0.0180
 ```
 
 !!! note "편향은 n이 커지면 줄어든다"
@@ -56,6 +74,12 @@ def three_estimators_mse(sigma=3.0, n_sim=100_000, seed=42):
 
     fig, ax = plt.subplots(figsize=(10, 6))
     ns = np.arange(3, 101)
+    # 정규모집단에서 세 추정량의 MSE를 닫힌 식으로 그린다.
+    # 나누는 수만 다른 세 추정량인데 MSE 순서가 뚜렷하다.
+    #   1/(n+1) < 1/n < 1/(n-1)
+    # 즉 **불편추정량(베셀)이 MSE로는 셋 중 가장 나쁘다.**
+    # 편향을 0으로 만드는 대가로 분산을 더 키웠기 때문이다.
+    # n이 커지면 셋의 차이가 사라진다(모두 2*sigma^4/n 으로 수렴).
     ax.plot(ns, (2*ns-1)/ns**2 * sigma4, 'b-', lw=2, label='1/n (naive / MLE)')
     ax.plot(ns, 2/(ns-1) * sigma4, 'r-', lw=2, label="1/(n-1) (Bessel's)")
     ax.plot(ns, (2*(ns-1)+4)/(ns+1)**2 * sigma4, 'g-', lw=2, label='1/(n+1) (MSE-optimal)')
@@ -66,7 +90,10 @@ def three_estimators_mse(sigma=3.0, n_sim=100_000, seed=42):
     ax.grid(True, alpha=0.3)
     plt.tight_layout()
     plt.show()
+three_estimators_mse()
 ```
+
+![MSE of Variance Estimators (Normal Population)](./img/variance_estimators_51.png)
 
 !!! info "편향–분산 맞바꿈"
     평균제곱오차 최적 추정량은 편향되어 있음에도 모든 $n$에서 평균제곱오차가 가장 작다. 편향–분산 맞바꿈을 깔끔하게 보여주는 예이다: 때로는 작은 편향을 받아들이는 편이 전체 추정오차를 줄인다.
@@ -81,13 +108,23 @@ $$\sum_{i=1}^n (X_i - \bar{X}) = 0$$
 
 ```python
 def degrees_of_freedom_intuition(seed=42):
+    """자유도가 왜 n이 아니라 n-1인지를 표본 하나로 눈에 보이게 한다."""
     rng = np.random.default_rng(seed)
-    mu, sigma, n = 5.0, 2.0, 5
+    mu, sigma, n = 5.0, 2.0, 5      # n=5로 작게 잡아 다섯 줄을 다 볼 수 있게 한다
     sample = rng.normal(mu, sigma, n)
     x_bar = sample.mean()
 
+    # 같은 자료에 대해 두 가지 편차를 계산한다.
+    #   dev_xbar: 표본평균에서 잰 편차. 합이 **반드시 0**이다.
+    #             다섯 개 중 넷을 알면 나머지 하나가 자동으로 정해지므로
+    #             자유롭게 움직일 수 있는 것은 4개(= n-1)뿐이다.
+    #   dev_mu  : 참 평균에서 잰 편차. 합이 0일 이유가 없다.
     dev_xbar = sample - x_bar
     dev_mu   = sample - mu
+
+    # 아래 출력에서 SS(X̄) < SS(μ) 이고 그 차이가 정확히 n(X̄-μ)^2 이다.
+    # 표본평균이 자기 자료에 "가장 가까운" 점이라 제곱합을 최소로 만들기 때문이며,
+    # 이 체계적 축소를 되돌리는 것이 n-1로 나누는 일이다.
 
     for i in range(n):
         print(f"  X_{i+1}={sample[i]:.3f}  "
@@ -98,6 +135,23 @@ def degrees_of_freedom_intuition(seed=42):
     print(f"  SS(X̄) = {np.sum(dev_xbar**2):.3f}")
     print(f"  SS(μ)  = {np.sum(dev_mu**2):.3f}")
     print(f"  Difference = n·(X̄−μ)² = {n*(x_bar-mu)**2:.3f}")
+degrees_of_freedom_intuition()
+```
+
+출력:
+
+```
+  X_1=5.609  X_i-X̄=1.008  X_i-μ=0.609
+  X_2=2.920  X_i-X̄=-1.682  X_i-μ=-2.080
+  X_3=6.501  X_i-X̄=1.899  X_i-μ=1.501
+  X_4=6.881  X_i-X̄=2.279  X_i-μ=1.881
+  X_5=1.098  X_i-X̄=-3.504  X_i-μ=-3.902
+
+  Sum(X_i - X̄) = -0.000000  (always 0)
+  Sum(X_i - μ)  = -1.991  (not 0)
+  SS(X̄) = 24.923
+  SS(μ)  = 25.715
+  Difference = n·(X̄−μ)² = 0.792
 ```
 
 두 제곱합을 잇는 핵심 항등식은:
@@ -122,12 +176,26 @@ def known_vs_unknown_mean(sigma=3.0, n_sim=100_000, seed=42):
 
     for n in sample_sizes:
         samples = rng.normal(mu, sigma, (n_sim, n))
+        # mu를 아는 경우: 참 평균에서 편차를 재므로 자유도를 잃지 않는다.
+        # n으로 나눠도 불편이며 분산이 더 작다.
         est_known   = np.mean((samples - mu)**2, axis=1)
+        # mu를 모르는 경우: 표본평균으로 대신한다(여기서는 n으로 나눈 판본).
         est_unknown = np.var(samples, axis=1, ddof=0)
         mse_k = np.mean((est_known - sigma2)**2)
         mse_u = np.mean((est_unknown - sigma2)**2)
         print(f"n={n:>4}  MSE(known μ)={mse_k:.4f}  "
               f"MSE(unknown)={mse_u:.4f}  Ratio={mse_u/mse_k:.3f}")
+known_vs_unknown_mean()
+```
+
+출력:
+
+```
+n=   5  MSE(known μ)=32.7043  MSE(unknown)=29.3561  Ratio=0.898
+n=  10  MSE(known μ)=16.2469  MSE(unknown)=15.4447  Ratio=0.951
+n=  25  MSE(known μ)=6.4207  MSE(unknown)=6.3067  Ratio=0.982
+n=  50  MSE(known μ)=3.2328  MSE(unknown)=3.2001  Ratio=0.990
+n= 100  MSE(known μ)=1.6033  MSE(unknown)=1.5968  Ratio=0.996
 ```
 
 ## 금융 응용: 변동성 추정
@@ -144,15 +212,33 @@ def volatility_estimation_finance(seed=42):
 
     windows = [5, 10, 21, 63, 126, 252]
 
+    # 관측 창을 5일부터 252일(1년)까지 바꿔 가며 본다.
     for w in windows:
         vol_n, vol_n1 = [], []
         for _ in range(n_sim):
             r = rng.normal(daily_mu, daily_vol, w)
+            # 일간 분산에 252를 곱해 연율화한 뒤 제곱근을 취한다.
+            # 분산이 시간에 비례한다는 가정(독립 수익률)에서 나오는 관행이다.
             vol_n.append(np.sqrt(np.var(r, ddof=0) * 252))
             vol_n1.append(np.sqrt(np.var(r, ddof=1) * 252))
+        # 창이 짧을수록 두 분모의 차이가 커진다.
+        # w=5 면 n과 n-1 의 비가 5/4 라 변동성 추정이 10% 넘게 갈린다.
+        # 반면 w=252 면 무시할 만하다.
         print(f"Window={w:>4}  Vol(1/n)={np.mean(vol_n)*100:.2f}%  "
               f"Vol(1/(n-1))={np.mean(vol_n1)*100:.2f}%  "
               f"Diff={(np.mean(vol_n1)-np.mean(vol_n))/np.mean(vol_n)*100:.2f}%")
+volatility_estimation_finance()
+```
+
+출력:
+
+```
+Window=   5  Vol(1/n)=16.89%  Vol(1/(n-1))=18.88%  Diff=11.80%
+Window=  10  Vol(1/n)=18.43%  Vol(1/(n-1))=19.43%  Diff=5.41%
+Window=  21  Vol(1/n)=19.28%  Vol(1/(n-1))=19.76%  Diff=2.47%
+Window=  63  Vol(1/n)=19.75%  Vol(1/(n-1))=19.91%  Diff=0.80%
+Window= 126  Vol(1/n)=19.87%  Vol(1/(n-1))=19.95%  Diff=0.40%
+Window= 252  Vol(1/n)=19.94%  Vol(1/(n-1))=19.98%  Diff=0.20%
 ```
 
 !!! warning "짧은 구간은 차이를 키운다"
