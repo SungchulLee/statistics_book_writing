@@ -1,111 +1,146 @@
 # 조건부 독립
 
-## 개요
+앞 절의 독립은 "$B$를 알아도 $A$에 대한 믿음이 바뀌지 않는다"였다. 그런데 현실에서 우리는 보통 **여러 가지를 동시에** 알고 있다. 그러면 자연스러운 물음이 생긴다. $C$를 이미 알고 있는 상태에서 $B$를 추가로 알면 $A$에 대해 더 알게 되는 것이 있는가?
 
-**조건부 독립**은 조건이 되는 사건을 도입하여 독립 개념을 확장한다. 두 사건이 전체적으로는 종속이면서 추가 정보로 조건을 걸면 독립이 될 수도 있고, 그 반대일 수도 있다. 이 개념은 그래프 모형, 베이즈 망, 인과적 추론의 핵심이다.
+없다면 $A$와 $B$는 **$C$가 주어졌을 때 조건부 독립**이다. 기호로는 $A \perp\!\!\!\perp B \mid C$로 쓴다.
 
----
+이 개념이 중요한 것은 놀라운 사실 하나 때문이다. **독립과 조건부 독립 사이에는 어느 방향으로도 논리적 함의가 없다.** 독립이던 두 사건이 조건을 걸면 종속이 되기도 하고, 종속이던 두 사건이 조건을 걸면 독립이 되기도 한다.
 
-## 정의
+이 절은 세 개의 정리로 이루어진다. 조건부 독립의 정의(정리 1), 독립이 조건부 독립을 함의하지 않는다는 것(정리 2), 그리고 그 역도 성립하지 않는다는 것(정리 3)이다.
 
-사건 $A$와 $B$가 사건 $C$($P(C) > 0$)가 주어졌을 때 **조건부 독립**이라는 것은
+## 1. 이미 알고 있는 것 위에서의 독립
+
+정의는 앞 절의 독립에 "모든 확률을 $C$로 조건 건 채로"라는 단서를 붙인 것이다.
+
+### 정리 1. 조건부 독립의 정의 — 조건을 건 세계 안에서의 곱
+
+$P(C) > 0$일 때, 사건 $A$와 $B$가 $C$가 주어졌을 때 **조건부 독립**이라는 것은
 
 $$
-P(A \cap B \mid C) = P(A \mid C) \cdot P(B \mid C)
+P(A \cap B \mid C) = P(A \mid C)\,P(B \mid C)
 $$
 
-를 뜻한다. 동등하게, $P(B \cap C) > 0$이면
+를 뜻한다. $P(B \cap C) > 0$이면 이는
 
 $$
 P(A \mid B \cap C) = P(A \mid C)
 $$
 
-이다.
+와 동등하며, 이 형태가 뜻을 더 잘 드러낸다. **$C$를 이미 알고 있다면 $B$는 $A$에 대해 새로운 정보를 주지 않는다.**
 
-**해석:** $C$가 일어났음을 알고 나면, $B$가 일어났다는 사실을 추가로 알아도 $A$에 대해 더 알게 되는 것이 없다.
+앞 절에서 $P(\cdot \mid C)$가 그 자체로 확률측도임을 확인했다(3.1의 연습문제). 그래서 조건부 독립은 "$C$로 좁혀진 세계 안에서의 보통의 독립"일 뿐이며, 독립의 모든 성질이 그대로 성립한다.
 
-조건부 독립을 $A \perp\!\!\!\perp B \mid C$로 표기한다.
+**예: 같은 시험을 치르는 두 학생.** 학생 $A$와 $B$가 같은 시험을 친다. $C$ = "시험이 쉬웠다"라 하자.
 
----
-
-## 독립은 조건부 독립을 함의하지 않는다
-
-두 사건이 (조건 없이) 독립이면서 조건을 건 뒤에는 종속이 될 수 있다. 이를 **버크슨의 역설** 또는 **해명 효과(explaining away)** 라 한다.
-
-### 예: 하나의 결과를 낳는 두 원인
-
-화재경보기($C$)가 화재($A$)나 탄 토스트($B$) 중 하나로 울릴 수 있다고 하자. 두 원인은 독립이다.
+시험 난이도를 알고 나면 $A$의 합격 여부는 $B$에 대해 거의 아무것도 말해 주지 않는다. 둘의 실력은 별개이기 때문이다. 그러나 난이도를 **모르는** 상태라면 $A$가 합격했다는 소식은 시험이 쉬웠을 가능성을 높이고, 따라서 $B$의 합격 가능성도 높인다.
 
 $$
-P(A \cap B) = P(A) \cdot P(B)
+A_{\text{합격}} \perp\!\!\!\perp B_{\text{합격}} \mid C
+\qquad\text{이지만}\qquad
+A_{\text{합격}} \not\perp\!\!\!\perp B_{\text{합격}}
 $$
 
-그러나 경보가 울렸다는 조건($C$)에서 화재가 없음을 알게 되면 탄 토스트일 가능성이 높아진다.
+## 2. 독립이던 것이 조건을 걸면 종속이 된다
+
+두 사건이 독립이라고 해서 조건을 건 뒤에도 독립일 이유는 없다. 특히 조건이 되는 사건이 **두 사건의 공통 결과**일 때 반드시 종속이 생긴다.
+
+### 정리 2. 해명 효과 — 공통 결과로 조건을 걸면 원인들이 얽힌다
+
+$A$와 $B$가 독립인 두 원인이고 $C$가 그 공통 결과라 하자. 그러면 일반적으로
+
+$$
+A \perp\!\!\!\perp B
+\qquad\text{이지만}\qquad
+A \not\perp\!\!\!\perp B \mid C
+$$
+
+이다. 이를 **해명 효과(explaining away)** 또는 **버크슨의 역설**이라 한다.
+
+**예: 화재경보기.** 경보($C$)는 화재($A$) 때문에 울릴 수도 있고 탄 토스트($B$) 때문에 울릴 수도 있다. 두 원인은 서로 무관하다.
+
+$$
+P(A \cap B) = P(A)\,P(B)
+$$
+
+그런데 경보가 울렸다는 사실을 알고 나면 사정이 달라진다. 원인 중 하나가 아니라는 것을 알면 다른 하나일 가능성이 올라간다.
 
 $$
 P(B \mid A^c \cap C) > P(B \mid C)
 $$
 
-따라서 $A \perp\!\!\!\perp B$이지만 $A \not\perp\!\!\!\perp B \mid C$이다.
+화재가 아니라는 말을 듣는 순간 토스트 쪽으로 무게가 쏠린다. 한 원인이 결과를 "해명해 버리면" 다른 원인이 필요 없어지는 것이다.
 
----
+```python
+import numpy as np
 
-## 조건부 독립은 독립을 함의하지 않는다
+def berkson_paradox_simulation(n_simulations=200_000):
+    """Demonstrate Berkson's paradox: independent events become
+    dependent after conditioning on a shared effect."""
+    np.random.seed(42)
 
-역으로, $C$가 주어졌을 때 조건부 독립이면서 조건 없이는 독립이 아닐 수 있다.
+    # A = fire (rare), B = burnt toast (common), C = alarm
+    p_fire = 0.01
+    p_toast = 0.10
 
-### 예: 혼합에서 뽑기
+    fire = np.random.rand(n_simulations) < p_fire
+    toast = np.random.rand(n_simulations) < p_toast
+    alarm = fire | toast  # alarm if either occurs
 
-동전을 무작위로 고른다. 1번 동전은 $P(\text{H}) = 0.3$, 2번 동전은 $P(\text{H}) = 0.7$이다. $C$가 어느 동전을 골랐는지를 나타내고 $A$와 $B$가 두 번 던진 결과라 하자.
+    # Unconditional independence
+    p_fire_given_toast = fire[toast].mean()
+    print(f"P(fire) = {fire.mean():.4f}")
+    print(f"P(fire | toast) = {p_fire_given_toast:.4f}")
+    print(f"Unconditionally independent: {abs(fire.mean() - p_fire_given_toast) < 0.005}\n")
 
-동전($C$)이 주어지면 두 던지기는 독립이다.
+    # Conditional on alarm: explaining away
+    p_fire_given_alarm = fire[alarm].mean()
+    p_fire_given_alarm_no_toast = fire[alarm & ~toast].mean()
+    print(f"P(fire | alarm) = {p_fire_given_alarm:.4f}")
+    print(f"P(fire | alarm, no toast) = {p_fire_given_alarm_no_toast:.4f}")
+    print(f"Conditionally dependent (explaining away): "
+          f"{abs(p_fire_given_alarm - p_fire_given_alarm_no_toast) > 0.01}")
+
+berkson_paradox_simulation()
+```
+
+!!! warning "이것이 1장의 길이 편향·충돌변수와 같은 구조다"
+    해명 효과는 확률의 퍼즐로 끝나지 않는다. 12장에서 **충돌변수(collider)** 라 부르는 것이 정확히 이 구조이며, 회귀에 변수를 무분별하게 넣으면 추정이 나아지기는커녕 나빠지는 이유가 여기에 있다.
+
+    실제 사례도 많다. 병원 입원 환자만 조사하면 서로 무관한 두 질병이 음의 상관을 보인다(입원이 공통 결과다). 명문대 합격생만 보면 성적과 특기가 음의 상관을 보인다(합격이 공통 결과다).
+
+    **규칙:** 공통 원인은 통제해야 하고, 공통 결과는 통제하면 안 된다. 12장의 방향성 비순환 그래프가 이 규칙을 형식화한다.
+
+**예: 합이 알려진 주사위.** 극단적인 경우도 있다. 공정한 주사위 두 개에서 $A$ = "1번이 4", $B$ = "2번이 3"이라 하면 이 둘은 독립이다. 그런데 $C$ = "합이 7"로 조건을 걸면
 
 $$
-P(A \cap B \mid C) = P(A \mid C) \cdot P(B \mid C)
+P(A \mid C) = \tfrac{1}{6}, \quad P(B \mid C) = \tfrac{1}{6}, \quad P(A \cap B \mid C) = \tfrac{1}{6}
 $$
 
-그러나 동전을 모르면 두 던지기는 종속이다. 첫 던지기가 앞면이면 앞면 쪽으로 치우친 동전이 선택되었을 가능성이 높아지고, 그러면 두 번째 던지기가 앞면일 확률도 높아진다.
+이고 $\tfrac{1}{6} \neq \tfrac{1}{36}$이다. 합이 7인 세계에서는 1번이 4이면 2번이 3임이 **확정된다**. 독립이 완전한 종속으로 뒤집혔다.
 
----
+## 3. 종속이던 것이 조건을 걸면 독립이 된다
 
-## 예제
+반대 방향도 성립한다. 이쪽은 오히려 통계 모형에서 훨씬 흔하게 쓰이는 구조다.
 
-### 예: 같은 시험을 치르는 학생들
+### 정리 3. 혼합과 조건부 독립 — 숨은 공통 원인이 종속을 만든다
 
-두 학생 $A$와 $B$가 같은 시험을 친다. $A_{\text{pass}}$와 $B_{\text{pass}}$를 각자 합격하는 사건이라 하고, $C$ = "시험이 쉬웠다"라 하자.
-
-$C$가 주어지면 학생 $A$의 합격 여부는 학생 $B$에 대해 정보를 거의 주지 않는다(둘의 능력은 별개다). 그러나 조건 없이는, $A$가 합격했음을 알면 시험이 쉬웠을 가능성이 높아지고, 그러면 $B$의 합격 가능성도 높아진다.
+관측들이 어떤 숨은 변수 $C$를 공유하면, $C$를 모르는 상태에서는 서로 종속이지만 $C$를 알고 나면 독립이 된다.
 
 $$
-A_{\text{pass}} \perp\!\!\!\perp B_{\text{pass}} \mid C \quad \text{but} \quad A_{\text{pass}} \not\perp\!\!\!\perp B_{\text{pass}}
+A \not\perp\!\!\!\perp B
+\qquad\text{이지만}\qquad
+A \perp\!\!\!\perp B \mid C
 $$
 
-### 예: 합이 알려진 주사위
+**예: 어느 동전인지 모르는 두 번의 던지기.** 동전을 무작위로 하나 고른다. 1번 동전은 $P(H) = 0.3$, 2번 동전은 $P(H) = 0.7$이다. $C$를 "어느 동전을 골랐는가", $A$와 $B$를 두 번의 던지기 결과라 하자.
 
-공정한 주사위 두 개를 굴린다. $A$ = "1번 주사위가 4", $B$ = "2번 주사위가 3"이라 하자. 이들은 독립이다. 그러나 $C$ = "합이 7"로 조건을 걸면
+동전이 정해지고 나면 두 던지기는 명백히 독립이다.
 
 $$
-P(A \mid C) = \frac{1}{6}, \quad P(B \mid C) = \frac{1}{6}, \quad P(A \cap B \mid C) = \frac{1}{6}
+P(A \cap B \mid C) = P(A \mid C)\,P(B \mid C)
 $$
 
-이다. 여기서 $P(A \cap B \mid C) = 1/6 \neq (1/6)(1/6)$이므로 $A$와 $B$는 $C$가 주어졌을 때 조건부 독립이 **아니다**. 사실 1번 주사위가 4이고 합이 7이면 2번 주사위가 3임이 확실히 결정된다.
-
----
-
-## 관계 요약
-
-| 상황 | $A \perp\!\!\!\perp B$ | $A \perp\!\!\!\perp B \mid C$ |
-|:---|:---:|:---:|
-| 독립이고 조건을 걸어도 독립 | ✓ | ✓ |
-| 독립이지만 조건을 걸면 종속 (버크슨) | ✓ | ✗ |
-| 종속이지만 조건을 걸면 독립 | ✗ | ✓ |
-| 종속이고 조건을 걸어도 종속 | ✗ | ✗ |
-
-네 가지 상황이 모두 가능하다. 독립과 조건부 독립 사이에는 어느 방향으로도 **논리적 함의가 없다**.
-
----
-
-## 파이썬으로 살펴보기
+그러나 어느 동전인지 모르면 두 던지기는 **종속이다**. 첫 던지기가 앞면이면 앞면이 잘 나오는 동전일 가능성이 높아지고, 그러면 두 번째도 앞면일 확률이 올라간다. 첫 던지기가 두 번째에 대해 정보를 주는 것이다.
 
 ```python
 import numpy as np
@@ -141,47 +176,16 @@ def mixture_coin_simulation(n_simulations=200_000):
 mixture_coin_simulation()
 ```
 
-```python
-import numpy as np
+이 구조가 통계 모형의 표준 골격이다. **"모수 $\theta$가 주어지면 관측들은 i.i.d.이다"** 라는 문장이 바로 $X_i \perp\!\!\!\perp X_j \mid \theta$를 말하고 있다. $\theta$를 모르는 우리에게 관측들은 종속으로 보이며, 그 종속성이 바로 자료가 $\theta$에 대해 알려 주는 정보다.
 
-def berkson_paradox_simulation(n_simulations=200_000):
-    """Demonstrate Berkson's paradox: independent events become
-    dependent after conditioning on a shared effect."""
-    np.random.seed(42)
+**네 가지 조합이 모두 가능하다.**
 
-    # A = fire (rare), B = burnt toast (common), C = alarm
-    p_fire = 0.01
-    p_toast = 0.10
-
-    fire = np.random.rand(n_simulations) < p_fire
-    toast = np.random.rand(n_simulations) < p_toast
-    alarm = fire | toast  # alarm if either occurs
-
-    # Unconditional independence
-    p_fire_given_toast = fire[toast].mean()
-    print(f"P(fire) = {fire.mean():.4f}")
-    print(f"P(fire | toast) = {p_fire_given_toast:.4f}")
-    print(f"Unconditionally independent: {abs(fire.mean() - p_fire_given_toast) < 0.005}\n")
-
-    # Conditional on alarm: explaining away
-    p_fire_given_alarm = fire[alarm].mean()
-    p_fire_given_alarm_no_toast = fire[alarm & ~toast].mean()
-    print(f"P(fire | alarm) = {p_fire_given_alarm:.4f}")
-    print(f"P(fire | alarm, no toast) = {p_fire_given_alarm_no_toast:.4f}")
-    print(f"Conditionally dependent (explaining away): "
-          f"{abs(p_fire_given_alarm - p_fire_given_alarm_no_toast) > 0.01}")
-
-berkson_paradox_simulation()
-```
-
----
-
-## 핵심 요약
-
-- 조건부 독립은 $C$를 알고 나면 $A$와 $B$가 서로에 대해 아무 정보도 담지 않는다는 뜻이다.
-- 독립은 조건부 독립을 함의하지 **않으며** 그 역도 마찬가지다.
-- 버크슨의 역설은 공통 결과로 조건을 걸면 그 독립적인 원인들 사이에 종속성이 생김을 보여준다.
-- 조건부 독립은 베이즈 망과 마르코프 모형 뒤에 놓인 구조적 가정이다.
+| 상황 | $A \perp\!\!\!\perp B$ | $A \perp\!\!\!\perp B \mid C$ |
+|:---|:---:|:---:|
+| 독립이고 조건을 걸어도 독립 | ✓ | ✓ |
+| 독립이지만 조건을 걸면 종속 (해명 효과) | ✓ | ✗ |
+| 종속이지만 조건을 걸면 독립 (혼합) | ✗ | ✓ |
+| 종속이고 조건을 걸어도 종속 | ✗ | ✗ |
 
 ## 연습문제
 
@@ -297,3 +301,23 @@ berkson_paradox_simulation()
     따라서 결과를 관측한 뒤 $A$도 일어났음을 알게 되면 $B$의 확률이 53%에서 12%로 *떨어진다*. 관측된 결과가 $A$에 의해 "해명된" 것이다. $A$가 $E$를 일으켰음을 알고 나면 대안 원인 $B$의 가능성이 낮아진다.
 
     **현실 사례:** 경보가 울렸을 때 처음에는 도둑이나 지진을 의심한다. 라디오에서 방금 지진이 났다는 소식을 들으면 경보가 설명되고 도둑 가설의 가능성이 낮아진다. 이것이 베이즈적 추론에서 "경쟁하는 설명"의 형식적 기제다.
+
+## 정리하며
+
+이 절의 결론은 짧고 강하다. **독립과 조건부 독립 사이에는 어느 방향으로도 함의가 없다.**
+
+- **정리 1**은 조건부 독립을 정의했다. $C$로 좁혀진 세계 안에서의 보통의 독립이다.
+- **정리 2**는 독립이 조건부 독립을 함의하지 않음을 보였다. 공통 결과로 조건을 걸면 무관하던 원인들이 얽힌다(해명 효과).
+- **정리 3**은 그 역도 성립하지 않음을 보였다. 숨은 공통 원인을 알고 나면 종속이 사라진다(혼합).
+
+두 방향이 실무에서 갖는 의미는 정반대다.
+
+**정리 3은 통계 모형을 세우는 방식이다.** "모수 $\theta$가 주어지면 관측은 i.i.d."라는 문장이 6장 이후 거의 모든 모형의 출발점이며, 이 책이 표본을 다루는 방식 전체가 여기에 기대고 있다.
+
+**정리 2는 분석을 망치는 방식이다.** 공통 결과로 조건을 걸면 없던 상관이 생긴다. 12장의 충돌변수, 1장의 생존자 편향과 길이 편향이 모두 이 구조이며, "변수를 많이 넣을수록 좋다"는 흔한 직관이 왜 틀리는지를 설명한다.
+
+**규칙 한 줄:** 공통 **원인**은 통제하고, 공통 **결과**는 통제하지 않는다.
+
+여기까지가 사건의 확률이다. 지금까지 우리는 "짝수가 나온다", "경보가 울린다"처럼 일어나거나 일어나지 않는 대상을 다루었다. 그런데 대부분의 실제 문제에서 관심사는 참·거짓이 아니라 **수**다. 주사위의 눈, 대기 시간, 수익률처럼.
+
+다음 절부터 확률을 **수 위에서** 다루기 시작한다. 그 다리를 놓는 것이 **확률변수**다.
