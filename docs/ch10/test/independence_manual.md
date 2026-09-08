@@ -48,11 +48,34 @@ import numpy as np
 from scipy import stats
 
 def compute_expected(observed_counts: np.ndarray) -> np.ndarray:
+    """독립이라는 가정 아래의 기대도수. E_ij = (행합 x 열합) / 전체."""
+    # 이 공식이 곧 독립의 정의다. P(A and B) = P(A)P(B)의 양변에 n을 곱하면
+    # n * (행합/n) * (열합/n) = 행합 * 열합 / n 이 된다.
     row_totals = observed_counts.sum(axis=1, keepdims=True)
     col_totals = observed_counts.sum(axis=0, keepdims=True)
     total = observed_counts.sum()
     return (row_totals @ col_totals) / total
+
+
+# 확인: 기대도수의 행합과 열합은 관측도수의 것과 정확히 같아야 한다.
+demo = np.array([[934., 1070.], [113., 92.], [20., 8.]])
+E = compute_expected(demo)
+print(np.round(E, 2))
+print("행합 일치:", np.allclose(E.sum(axis=1), demo.sum(axis=1)))
+print("열합 일치:", np.allclose(E.sum(axis=0), demo.sum(axis=0)))
 ```
+
+출력:
+
+```
+[[ 955.86 1048.14]
+ [  97.78  107.22]
+ [  13.36   14.64]]
+행합 일치: True
+열합 일치: True
+```
+
+주변 합계가 보존된다는 것이 자유도가 $rc$가 아니라 $(r-1)(c-1)$인 이유다. 행합과 열합이 고정되면 $3 \times 2$ 표에서 자유롭게 정할 수 있는 칸은 2개뿐이다.
 
 `keepdims=True` 인자는 2차원 모양을 유지하여 행렬 곱 `row_totals @ col_totals`이 $r \times c$ 기대도수 행렬로 올바르게 계산되도록 한다.
 
@@ -67,11 +90,20 @@ expected_counts = compute_expected(observed_counts)
 df = (observed_counts.shape[0] - 1) * (observed_counts.shape[1] - 1)
 
 chi2 = np.sum((observed_counts - expected_counts)**2 / expected_counts)
-p_value = stats.chi2(df).sf(chi2)
+p_value = stats.chi2(df).sf(chi2)      # 언제나 우측검정
 
 print(f"chi_squared_statistic = {chi2:.2f}")
 print(f"p_value = {p_value:.2%}")
 ```
+
+출력:
+
+```
+chi_squared_statistic = 11.81
+p_value = 0.27%
+```
+
+`scipy.stats.chi2_contingency`에 같은 표를 넣어도 같은 값이 나온다. 다만 그 함수는 $2 \times 2$ 표에 한해 Yates 연속성 보정을 기본으로 적용하므로, 이 $3 \times 2$ 표에서만 결과가 일치한다.
 
 ### 시각화
 
@@ -106,6 +138,10 @@ ax.spines["left"].set_position("zero")
 plt.tight_layout()
 plt.show()
 ```
+
+![카이제곱 분포와 p-값](./img/independence_manual_78.png)
+
+칠해진 오른쪽 꼬리가 p-값 0.27%다. 자유도 2인 카이제곱분포에서 11.81은 오른쪽으로 한참 벗어난 값이다.
 
 ## 해석
 

@@ -59,17 +59,19 @@ $$
 import numpy as np
 from scipy import stats
 
-# 2x2 contingency table
-#               Success   Failure
-# Treatment        1         5
-# Control          8         2
+# 2x2 분할표
+#               성공   실패
+# 처치군          1      5
+# 대조군          8      2
+# 기대도수가 5에 못 미치는 칸이 있어 카이제곱 근사를 쓸 수 없는 상황이다.
 observed = np.array([[1, 5],
                      [8, 2]])
 
 print("Observed contingency table:")
 print(observed)
 
-# Fisher's exact test
+# Fisher의 정확검정. 근사가 전혀 없고 초기하분포로 확률을 직접 더한다.
+# 주변 합계를 고정한 채 가능한 표들을 모두 나열할 수 있기 때문에 가능한 일이다.
 odds_ratio, p_value = stats.fisher_exact(observed)
 
 print(f"Odds ratio : {odds_ratio:.4f}")
@@ -81,10 +83,18 @@ else:
     print("Fail to reject H0: no significant association (alpha = 0.05).")
 ```
 
-**출력:**
+출력:
 
-- 오즈비: $\text{OR} = (1 \times 2) / (5 \times 8) = 0.05$
-- p-값은 초기하분포로 정확히 계산되며 약 $0.0350$이다.
+```
+Observed contingency table:
+[[1 5]
+ [8 2]]
+Odds ratio : 0.0500
+p-value    : 0.0350
+Reject H0: significant association (alpha = 0.05).
+```
+
+오즈비 $\text{OR} = (1 \times 2)/(5 \times 8) = 0.05$이고, p-값은 초기하분포로 정확히 계산되어 0.0350이다. 전체가 16명뿐인데도 유의하다.
 
 ## 해석
 
@@ -107,6 +117,13 @@ Fisher의 정확검정은 집단별 표본이 아주 작을 수 있는 의학·�
 
     ```python
     odds_ratio, p_value = stats.fisher_exact([[3, 1], [1, 3]])
+    print(f"OR = {odds_ratio:.4f}, p = {p_value:.4f}")
+    ```
+
+    출력:
+
+    ```
+    OR = 9.0000, p = 0.4857
     ```
 
     양측 정확 p-값은 약 $0.486$이다. $p > 0.05$이므로 $H_0$을 **기각하지 못한다**. 오즈비가 커 보이지만 표본크기($n = 8$)가 너무 작아 유의성에 이르지 못한다. $\square$

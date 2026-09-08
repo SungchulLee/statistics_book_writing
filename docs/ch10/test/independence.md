@@ -164,18 +164,15 @@ import numpy as np
 from scipy import stats
 
 def compute_expected(observed_counts):
-    """
-    Computes the expected frequency table based on observed counts for a chi-squared test.
+    """관측도수로부터 독립 아래의 기대도수를 계산한다.
 
-    Parameters:
-    observed_counts (numpy array): 2D array of observed counts in contingency table format.
-
-    Returns:
-    numpy array: 2D array of expected counts based on the marginal probabilities.
+    독립의 정의 P(A and B) = P(A)P(B)를 그대로 옮긴 것이다.
+    주변 확률의 곱으로 결합 확률을 만들고 전체 개수를 곱한다.
     """
     row_totals = observed_counts.sum(axis=1)
     col_totals = observed_counts.sum(axis=0)
 
+    # reshape로 (r,1)과 (1,c)를 만들면 브로드캐스팅으로 (r,c) 곱이 나온다.
     row_pmf = row_totals.reshape((-1, 1)) / row_totals.sum()
     col_pmf = col_totals.reshape((1, -1)) / col_totals.sum()
 
@@ -229,6 +226,15 @@ ax.spines['left'].set_position("zero")
 plt.show()
 ```
 
+출력:
+
+```
+chi_squared_statistic = 11.81
+p_value = 0.27%
+```
+
+![카이제곱 분포와 p-값](./img/independence_161.png)
+
 ### Python 구현 (`scipy.stats.chi2_contingency` 사용)
 
 ```python
@@ -239,7 +245,8 @@ from scipy import stats
 # Observed counts in a contingency table format
 observed_counts = np.array([[934, 1070], [113, 92], [20, 8]])
 
-# Perform chi-squared test of independence
+# chi2_contingency는 2x2 표에 한해 Yates 연속성 보정을 **기본으로 적용한다**.
+# 여기는 3x2라 보정이 없으므로 위의 수동 계산과 정확히 같은 값이 나온다.
 chi_squared_statistic, p_value, degrees_of_freedom, expected_counts = stats.chi2_contingency(observed_counts)
 
 # Print the chi-squared statistic and p-value
@@ -278,6 +285,24 @@ ax.spines['left'].set_position("zero")
 
 plt.show()
 ```
+
+출력:
+
+```
+chi_squared_statistic = 11.81
+p_value = 0.27%
+
+expected_counts
+[[ 955.86410371 1048.13589629]
+ [  97.78050961  107.21949039]
+ [  13.35538668   14.64461332]]
+```
+
+![카이제곱 분포와 p-값](./img/independence_234.png)
+
+수동 계산과 통계량이 소수점 둘째 자리까지 같다. `chi2_contingency`는 같은 식을 감싼 것이며, 덤으로 기대도수까지 돌려준다.
+
+기대도수의 마지막 행이 13.4와 14.6으로 5는 넘지만 넉넉하지는 않다. 카이제곱 근사가 아슬아슬하게 통하는 경계다.
 
 ---
 
@@ -400,6 +425,19 @@ if __name__ == "__main__":
     main()
 ```
 
+출력:
+
+```
+statistic = 11.94
+p_value   = 1.78%
+```
+
+![카이제곱 분포와 p-값](./img/independence_357.png)
+
+손으로 계산한 $\chi^2 = 11.94$와 정확히 같고, p-값도 앞에서 어림한 0.018과 맞는다.
+
+기대도수 중 가장 작은 값이 5.5로 경험칙 $E_{ij} \ge 5$를 겨우 만족한다는 점은 짚어 두어야 한다. 관측값이 100개뿐이고 칸이 9개라 칸당 평균 11개에 불과하다. 이보다 표가 크거나 자료가 적으면 카이제곱 근사 대신 Fisher의 정확검정이나 몬테카를로 방법을 고려해야 한다.
+
 ---
 
 ## 예제 C: 기대도수 계산의 상세
@@ -492,6 +530,78 @@ else:
     print("We do not have enough evidence to reject the null hypothesis that X and Y are independent.")
 ```
 
+출력:
+
+```
+======================================================================
+OBSERVED FREQUENCIES
+======================================================================
+            Col 1  Col 2  Col 3  Col 4  Col 5  Row Total
+Row 1 (20)     10     20     30     40     20        120
+Row 2 (30)      5     15     40     50     10        120
+Row 3 (40)     10     10     20     30     19         89
+
+Column Totals: [ 25  45  90 120  49]
+Grand Total: 329
+
+======================================================================
+EXPECTED FREQUENCIES
+======================================================================
+Formula: E_ij = (Row_i_total × Column_j_total) / Grand_total
+
+               Col 1      Col 2      Col 3      Col 4      Col 5  Row Total
+Row 1 (20)  9.118541  16.413374  32.826748  43.768997  17.872340      120.0
+Row 2 (30)  9.118541  16.413374  32.826748  43.768997  17.872340      120.0
+Row 3 (40)  6.762918  12.173252  24.346505  32.462006  13.255319       89.0
+
+Column Totals: [ 25.  45.  90. 120.  49.]
+Grand Total: 328.99999999999994
+
+======================================================================
+DETAILED EXPECTED FREQUENCY CALCULATIONS
+======================================================================
+
+Row 1 (Row Total = 120):
+  E[1,1] = (120 × 25) / 329 = 3000 / 329 = 9.1185
+  E[1,2] = (120 × 45) / 329 = 5400 / 329 = 16.4134
+  E[1,3] = (120 × 90) / 329 = 10800 / 329 = 32.8267
+  E[1,4] = (120 × 120) / 329 = 14400 / 329 = 43.7690
+  E[1,5] = (120 × 49) / 329 = 5880 / 329 = 17.8723
+
+Row 2 (Row Total = 120):
+  E[2,1] = (120 × 25) / 329 = 3000 / 329 = 9.1185
+  E[2,2] = (120 × 45) / 329 = 5400 / 329 = 16.4134
+  E[2,3] = (120 × 90) / 329 = 10800 / 329 = 32.8267
+  E[2,4] = (120 × 120) / 329 = 14400 / 329 = 43.7690
+  E[2,5] = (120 × 49) / 329 = 5880 / 329 = 17.8723
+
+Row 3 (Row Total = 89):
+  E[3,1] = (89 × 25) / 329 = 2225 / 329 = 6.7629
+  E[3,2] = (89 × 45) / 329 = 4005 / 329 = 12.1733
+  E[3,3] = (89 × 90) / 329 = 8010 / 329 = 24.3465
+  E[3,4] = (89 × 120) / 329 = 10680 / 329 = 32.4620
+  E[3,5] = (89 × 49) / 329 = 4361 / 329 = 13.2553
+
+======================================================================
+CHI-SQUARE CONTRIBUTIONS
+======================================================================
+Formula: (Observed - Expected)² / Expected
+
+               Col 1     Col 2     Col 3     Col 4     Col 5
+Row 1 (20)  0.085208  0.783744  0.243414  0.324553  0.253293
+Row 2 (30)  1.860208  0.121707  1.567488  0.887053  3.467579
+Row 3 (40)  1.549435  0.387984  0.775968  0.186725  2.489669
+
+Chi-square statistic: 14.9840
+Degrees of freedom: 8
+p_value = 0.0595
+We do not have enough evidence to reject the null hypothesis that X and Y are independent.
+```
+
+칸별 기여를 인쇄하면 통계량이 어디서 나왔는지 보인다. 전체 14.98 중 3.47이 (행 2, 열 5) 한 칸에서, 2.49가 (행 3, 열 5)에서 나온다. 두 칸을 합치면 전체의 40%다.
+
+$p = 0.0595$로 5% 기준을 아슬아슬하게 넘어 기각하지 못한다. 자유도가 8이라 통계량 14.98이 그리 크지 않은 것으로 취급된다는 점도 눈여겨보라. 자유도가 2였다면 같은 통계량의 p-값이 0.0006이었을 것이다. **칸이 많은 표는 그만큼 우연한 어긋남도 많아진다.**
+
 ---
 
 ## 4. 재표본추출 기반 카이제곱 검정
@@ -527,7 +637,7 @@ headlines = pd.DataFrame({
     'Headline': ['Headline A', 'Headline B', 'Headline C']
 })
 
-# Create contingency table with outcomes as rows and headlines as columns
+# 결과를 행, 헤드라인을 열로 놓은 분할표를 만든다.
 click_rate = headlines.copy()
 clicks = click_rate.set_index('Headline')[['Click', 'No-click']].T
 
@@ -535,6 +645,19 @@ print("Observed Contingency Table:")
 print(clicks)
 print(f"\nTotal: {clicks.values.sum()}")
 ```
+
+출력:
+
+```
+Observed Contingency Table:
+Headline  Headline A  Headline B  Headline C
+Click             14           8          12
+No-click         986         992         988
+
+Total: 3000
+```
+
+클릭률이 1.4%, 0.8%, 1.2%다. 헤드라인마다 1,000명씩 보았으므로 집단 크기는 같다. 클릭 수가 한 자릿수에 가까워 이런 상황에서 카이제곱 근사가 잘 통하는지 자체가 물음이 된다. 재표본추출로 확인하려는 이유다.
 
 ### 재표본추출 접근 (비복원)
 
@@ -580,13 +703,22 @@ def perm_fun_chisq(box):
 # Create box: 1 for each click, 0 for each non-click
 box = [1] * 34 + [0] * 2966
 
-# Run permutation test
+# 순열검정 실행
 random.seed(42)
 perm_chi2 = [perm_fun_chisq(box) for _ in range(2000)]
 
 p_value_resamp = sum(np.array(perm_chi2) >= chi2_obs) / len(perm_chi2)
 print(f"Resampling p-value: {p_value_resamp:.4f}")
 ```
+
+출력:
+
+```
+Observed chi-square: 1.6659
+Resampling p-value: 0.4750
+```
+
+상자에 클릭 34개와 비클릭 2,966개를 넣고 뒤섞은 뒤 1,000명씩 세 묶음으로 나눈다. 이것이 "헤드라인이 아무 영향도 주지 않는" 세상이며, 그 세상에서 카이제곱이 관측값 1.67 이상으로 나오는 비율이 곧 p-값이다.
 
 ### 재표본추출 접근 (복원)
 
@@ -603,13 +735,21 @@ def sample_with_replacement(box):
     sample_noclicks = [1000 - n for n in sample_clicks]
     return chi2_stat([sample_clicks, sample_noclicks], row_average.values)
 
-# Run with-replacement resampling
+# 복원추출 방식으로 실행
 random.seed(42)
 perm_chi2_wr = [sample_with_replacement(box) for _ in range(2000)]
 
 p_value_wr = sum(np.array(perm_chi2_wr) >= chi2_obs) / len(perm_chi2_wr)
 print(f"Resampling (with replacement) p-value: {p_value_wr:.4f}")
 ```
+
+출력:
+
+```
+Resampling (with replacement) p-value: 0.6745
+```
+
+비복원의 0.475보다 눈에 띄게 크다. 복원추출에서는 전체 클릭 수가 34로 고정되지 않고 그 자체로 흔들리기 때문에 귀무분포가 더 퍼지고, 같은 관측값이 덜 극단적으로 보인다. 어느 쪽이 맞는가는 무엇을 고정된 것으로 볼지에 달려 있다. 전체 클릭 수를 주어진 것으로 본다면 비복원이 맞다.
 
 ### 비교: 재표본추출 대 모수적 방법
 
@@ -622,6 +762,20 @@ print(f"Parametric chi-square: {chi2_param:.4f}, p-value: {p_param:.4f}")
 print(f"Resampling (without repl): p-value: {p_value_resamp:.4f}")
 print(f"Resampling (with repl): p-value: {p_value_wr:.4f}")
 ```
+
+출력:
+
+```
+
+Comparison:
+Parametric chi-square: 1.6659, p-value: 0.4348
+Resampling (without repl): p-value: 0.4750
+Resampling (with repl): p-value: 0.6745
+```
+
+세 방법 모두 기각하지 못한다는 결론은 같지만 p-값은 0.43에서 0.67까지 벌어진다. 클릭 수가 10 안팎으로 작아 카이제곱 근사가 낙관적인 쪽으로 기울고, 비복원 재표본추출이 그보다 조금 보수적인 값을 준다.
+
+세 헤드라인의 클릭률 차이(1.4% 대 0.8%)를 이 표본으로는 가려낼 수 없다는 것이 결론이다. 이런 크기의 차이를 잡으려면 앞 장의 검정력 계산이 말해 주듯 집단당 수천 명이 필요하다.
 
 ### 시각화
 
@@ -653,6 +807,12 @@ ax2.spines['right'].set_visible(False)
 plt.tight_layout()
 plt.show()
 ```
+
+![재표본추출 분포](./img/independence_628.png)
+
+두 히스토그램 모두 오른쪽으로 길게 늘어진 모양이고 빨간 선(관측값 1.67)이 분포의 한가운데쯤에 있다. 관측된 표가 "우연히 나올 법한" 범위 안에 있다는 뜻이다.
+
+왼쪽(비복원)이 오른쪽(복원)보다 좁다는 것도 보인다. 전체 클릭 수를 34로 고정하면 그만큼 변동이 줄기 때문이며, 이것이 두 p-값 차이의 이유다.
 
 ### 재표본추출 카이제곱의 장점
 

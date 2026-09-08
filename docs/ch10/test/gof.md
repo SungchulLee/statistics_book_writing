@@ -253,6 +253,15 @@ ax.spines['left'].set_position("zero")
 plt.show()
 ```
 
+출력:
+
+```
+Chi-square Statistic = 5.2500
+p-value = 0.0724
+```
+
+![카이제곱 분포와 p-값](./img/gof_199.png)
+
 ### Python 구현 (`scipy.stats.chisquare` 사용)
 
 ```python
@@ -272,6 +281,15 @@ chi_square_statistic, p_value = stats.chisquare(f_obs=observed_frequencies, f_ex
 print(f"{chi_square_statistic = }")
 print(f"{p_value = }")
 ```
+
+출력:
+
+```
+chi_square_statistic = 5.25
+p_value = 0.07243975703425146
+```
+
+수동 계산과 정확히 같다.
 
 ---
 
@@ -308,10 +326,8 @@ def main():
     p_hat = 17 / 60
     n = 60
 
-    # z test statistic
+    # 눈 3 하나만 놓고 보는 일표본 비율 z-검정
     statistic = (p_hat - p_0) / np.sqrt(p_0 * (1 - p_0) / n)
-
-    # two-sided test
     p_value = stats.norm().sf(abs(statistic)) * 2
 
     print(f"{statistic = :.02f}")
@@ -319,6 +335,13 @@ def main():
 
 if __name__ == "__main__":
     main()
+```
+
+출력:
+
+```
+statistic = 2.42
+p_value   = 1.53%
 ```
 
 이것이 주사위가 조작되었다는 충분한 증거일까?
@@ -343,11 +366,19 @@ import numpy as np
 def main():
     observed = np.array([5, 7, 17, 14, 8, 9])
     expected = np.array([10] * 6)
+    # 여섯 눈의 어긋남을 **한 숫자로 모은다**.
+    # 눈 하나만 보던 앞의 검정과 여기서 갈린다.
     statistic = np.sum((observed - expected)**2 / expected)
     print(f'{statistic = }')
 
 if __name__ == "__main__":
     main()
+```
+
+출력:
+
+```
+statistic = 10.4
 ```
 
 ### 기각역
@@ -446,6 +477,19 @@ if __name__ == "__main__":
     main()
 ```
 
+출력:
+
+```
+statistic = 10.40
+p_value    = 6.47%
+```
+
+![카이제곱 분포와 p-값](./img/gof_400.png)
+
+$p = 0.0647$로 5% 수준에서 기각하지 못한다. 눈 3만 따로 보았을 때의 $p = 0.0153$과 대조된다. 눈 하나를 골라 검정하면 유의하고, 여섯 눈을 함께 보면 유의하지 않다.
+
+어느 쪽이 옳은가? 여섯 눈을 함께 보는 쪽이다. "눈 3이 많이 나왔다"는 것은 자료를 보고 고른 사실이며, 그 고르는 행위가 이미 여섯 번의 검정을 한 것과 같기 때문이다. 앞 장의 p-해킹과 같은 문제다.
+
 ### Python 구현 (`scipy.stats.chisquare` 사용)
 
 ```python
@@ -495,6 +539,17 @@ def main():
 if __name__ == "__main__":
     main()
 ```
+
+출력:
+
+```
+statistic = 10.40
+p_value    = 6.47%
+```
+
+![카이제곱 분포와 p-값](./img/gof_451.png)
+
+`chisquare`가 수동 계산과 같은 값을 준다.
 
 ## 연습문제
 

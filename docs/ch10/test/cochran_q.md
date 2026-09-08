@@ -38,27 +38,22 @@ import numpy as np
 from scipy import stats
 
 def cochran_q(data):
-    """
-    Perform Cochran's Q test.
+    """Cochran의 Q 검정.
 
-    Parameters
-    ----------
-    data : array-like, shape (n_subjects, k_conditions)
-        Binary (0/1) matrix. Each row is a subject,
-        each column a condition/task.
-
-    Returns
-    -------
-    Q       : float   Cochran's Q statistic
-    p_value : float   p-value from chi-square(k-1) approximation
+    data : (피험자 수, 조건 수) 모양의 0/1 행렬.
+           행 하나가 피험자, 열 하나가 조건이다.
+    돌려주는 값은 (Q 통계량, chi2(k-1) 근사 p-값).
     """
     data = np.asarray(data, dtype=float)
     n, k = data.shape
 
-    T_j = data.sum(axis=0)          # column totals
-    L_i = data.sum(axis=1)          # row totals
+    T_j = data.sum(axis=0)          # 조건별 성공 수
+    L_i = data.sum(axis=1)          # 피험자별 성공 수
     grand_T = T_j.sum()
 
+    # 분자는 조건 사이의 변동, 분모는 피험자 안의 변동을 잰다.
+    # L_i가 0이거나 k인 피험자, 즉 전부 성공하거나 전부 실패한 피험자는
+    # 분모에 아무 기여도 하지 않는다. 조건 간 비교에 정보가 없기 때문이다.
     numerator = (k - 1) * (k * np.sum(T_j**2) - grand_T**2)
     denominator = k * grand_T - np.sum(L_i**2)
 
@@ -70,7 +65,7 @@ def cochran_q(data):
 ### 검정 실행
 
 ```python
-# 12 subjects rated on 3 tasks (pass=1, fail=0)
+# 피험자 12명이 과제 3개를 수행한 결과 (성공=1, 실패=0)
 tasks = np.array([
     [0, 1, 0],
     [1, 1, 0],
@@ -96,6 +91,16 @@ if p < 0.05:
 else:
     print("Fail to reject H0: no significant difference.")
 ```
+
+출력:
+
+```
+Cochran's Q = 8.6667
+p-value     = 0.0131
+Reject H0: success rates differ across tasks.
+```
+
+피험자가 12명뿐인데도 기각된다. 같은 사람이 세 과제를 모두 수행하므로 개인차가 상쇄되기 때문이며, 대응설계가 버는 것이 여기서도 같다.
 
 **예제 자료 요약:**
 

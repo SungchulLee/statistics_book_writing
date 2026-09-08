@@ -34,11 +34,13 @@ $$
 import numpy as np
 from scipy import stats
 
-# 3 populations (rows), 4 categories (columns)
+# 모집단 3개(행), 범주 4개(열)
+# 동질성 검정과 독립성 검정은 **계산이 완전히 같다**. 다른 것은 표집 설계뿐이다.
+# 여기서는 모집단마다 표본을 따로 뽑았으므로 행 합계가 설계자에 의해 고정되어 있다.
 observed = np.array([
-    [25, 30, 20, 25],   # Population 1
-    [18, 22, 35, 25],   # Population 2
-    [30, 25, 15, 30],   # Population 3
+    [25, 30, 20, 25],   # 모집단 1
+    [18, 22, 35, 25],   # 모집단 2
+    [30, 25, 15, 30],   # 모집단 3
 ], dtype=float)
 
 chi2, p, df, expected = stats.chi2_contingency(observed, correction=False)
@@ -49,6 +51,22 @@ print()
 print("Expected counts under H0 (same proportions):")
 print(expected)
 ```
+
+출력:
+
+```
+=== Chi-square Test of Homogeneity (scipy) ===
+chi2 = 14.1697, df = 6, p = 0.027796
+
+Expected counts under H0 (same proportions):
+[[24.33333333 25.66666667 23.33333333 26.66666667]
+ [24.33333333 25.66666667 23.33333333 26.66666667]
+ [24.33333333 25.66666667 23.33333333 26.66666667]]
+```
+
+세 행의 기대도수가 완전히 같다. 세 모집단의 표본크기가 모두 100으로 같고 $H_0$이 "분포가 같다"이므로 그럴 수밖에 없다.
+
+$p = 0.0278$로 기각한다. 가장 크게 어긋난 곳은 모집단 2의 범주 3으로, 기대 23.3에 대해 35가 관측되었다.
 
 **주요 출력:**
 
@@ -153,6 +171,13 @@ $$
 
     observed = np.array([[30,20],[28,22],[35,15],[25,25],[32,18]], dtype=float)
     chi2, p, df, expected = stats.chi2_contingency(observed, correction=False)
+    print(f"chi2 = {chi2:.4f}, p = {p:.4f}, df = {df}")
+    ```
+
+    출력:
+
+    ```
+    chi2 = 4.8333, p = 0.3048, df = 4
     ```
 
     행 합계는 모두 50이다. 열 합계: $C_1 = 150$, $C_2 = 100$. 총합: $n = 250$. 전체 비율: $\hat{p}_1 = 0.6$, $\hat{p}_2 = 0.4$. 각 지역의 기대도수는 $(30, 20)$이다.

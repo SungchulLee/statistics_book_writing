@@ -24,22 +24,30 @@ $$
 ```python
 from scipy import stats
 
-# Observed frequencies for each outcome: Win, Loss, Tie
+# 결과별 관측도수: 승, 패, 무
 observed_frequencies = [4, 13, 7]
 
-# Expected frequencies assuming an even distribution
+# H0(균등분포) 아래의 기대도수.
+# f_exp의 합은 f_obs의 합과 같아야 한다. 다르면 scipy가 오류를 낸다.
 total_games = sum(observed_frequencies)
 expected_frequencies = [total_games / 3] * 3
 
-# Perform the chi-square goodness-of-fit test
 chi_square_statistic, p_value = stats.chisquare(
     f_obs=observed_frequencies, f_exp=expected_frequencies
 )
 
-# Output results
 print(f"{chi_square_statistic = }")
 print(f"{p_value = }")
 ```
+
+출력:
+
+```
+chi_square_statistic = 5.25
+p_value = 0.07243975703425146
+```
+
+수동 계산 페이지의 결과와 정확히 같다. `chisquare`는 같은 식을 감싼 것일 뿐이다.
 
 **`stats.chisquare`의 주요 인자:**
 
@@ -60,9 +68,16 @@ print(f"{p_value = }")
 
 ```python
 statistic, p = stats.chisquare(f_obs=[4, 13, 7])
+print(f"{statistic = }, {p = }")
 ```
 
-SciPy가 자동으로 각 기대도수를 $n / k$로 설정한다. 여기서 $n$은 전체 도수, $k$는 `f_obs`의 길이이다.
+출력:
+
+```
+statistic = 5.25, p = 0.07243975703425146
+```
+
+SciPy가 자동으로 각 기대도수를 $n / k$로 설정한다. 여기서 $n$은 전체 도수, $k$는 `f_obs`의 길이이다. 앞의 결과와 완전히 같다.
 
 ## 균등하지 않은 기대 비율
 
@@ -71,9 +86,20 @@ SciPy가 자동으로 각 기대도수를 $n / k$로 설정한다. 여기서 $n$
 ```python
 n = 300
 proportions = [0.4, 0.3, 0.3]
+# 비율이 아니라 **도수**를 넘겨야 한다. 비율 [0.4, 0.3, 0.3]을 그대로 넣으면
+# 합이 f_obs의 합과 달라 오류가 나거나, 운이 나쁘면 엉뚱한 값이 나온다.
 expected = [n * p for p in proportions]
 stat, pval = stats.chisquare(f_obs=[130, 85, 85], f_exp=expected)
+print(f"{stat = :.4f}, {pval = :.4f}")
 ```
+
+출력:
+
+```
+stat = 1.3889, pval = 0.4994
+```
+
+관측 비율이 43.3%, 28.3%, 28.3%로 가설의 40%, 30%, 30%에 가까워 기각하지 못한다($p = 0.50$).
 
 ## 해석
 
@@ -152,6 +178,13 @@ $$
     ```python
     from scipy import stats
     stat, p = stats.chisquare(f_obs=[90, 70, 40], f_exp=[100, 60, 40])
+    print(f"{stat = :.4f}, {p = :.4f}")
+    ```
+
+    출력:
+
+    ```
+    stat = 2.6667, p = 0.2636
     ```
 
     $$

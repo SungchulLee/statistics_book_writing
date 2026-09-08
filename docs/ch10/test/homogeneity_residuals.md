@@ -56,10 +56,11 @@ col_tot = observed.sum(axis=0, keepdims=True)
 tot = observed.sum()
 expected = (row_tot @ col_tot) / tot
 
-# Standardized residuals (Pearson)
+# Pearson 표준화 잔차. 제곱해서 모두 더하면 카이제곱 통계량이 된다.
+# 분모가 sqrt(E)인 것은 H0 아래에서 각 칸 도수의 분산이 근사적으로 E이기 때문이다.
 resid = (observed - expected) / np.sqrt(expected)
 
-# Per-cell z-tests (approximate), two-sided
+# 칸마다 z-검정을 하는 셈이라 다중검정 문제가 생긴다. 그래서 아래에서 보정한다.
 z = resid.ravel()
 pvals = 2 * (1 - stats.norm.cdf(np.abs(z)))
 reject, pvals_bonf, _, _ = multipletests(pvals, method="bonferroni")
@@ -72,6 +73,26 @@ print()
 print("Bonferroni-adjusted per-cell p-values:")
 print(pvals_bonf)
 ```
+
+출력:
+
+```
+Standardized residuals:
+[[ 0.13514748  0.8553372  -0.69006556 -0.32274861]
+ [-1.28390102 -0.72374686  2.41522946 -0.32274861]
+ [ 1.14875354 -0.13159034 -1.7251639   0.64549722]]
+
+Bonferroni-adjusted per-cell p-values:
+[[1.        1.        1.        1.       ]
+ [1.        1.        0.1887036 1.       ]
+ [1.        1.        1.        1.       ]]
+```
+
+전체 검정은 $p = 0.028$로 기각했는데(앞 페이지) 칸별로 보면 Bonferroni 보정 후 유의한 칸이 하나도 없다. 가장 큰 잔차인 2.415(모집단 2, 범주 3)조차 보정 후 $p = 0.189$다.
+
+이런 어긋남은 흔하다. 전체 검정은 12개 칸의 어긋남을 **모아서** 보고, 칸별 검정은 12번의 검정에 대한 대가를 각각 치른다. 전체 검정이 유의한데 어느 칸도 유의하지 않은 것은 모순이 아니라, 증거가 한 칸에 몰려 있지 않고 흩어져 있다는 뜻이다.
+
+여기서 Bonferroni는 상당히 보수적이기도 하다. 잔차들은 서로 독립이 아니라 주변 합계 제약으로 묶여 있으므로(제곱합이 카이제곱 통계량으로 고정된다) 12로 곱하는 것은 필요 이상이다.
 
 ### 열지도 시각화
 
@@ -88,6 +109,7 @@ plt.colorbar(im, ax=ax, shrink=0.8)
 # Annotate significant cells after Bonferroni
 for i in range(observed.shape[0]):
     for j in range(observed.shape[1]):
+        # 보정 후 유의한 칸에만 별표를 붙인다. 이 예제에서는 하나도 없다.
         mark = "*" if reject[i, j] else ""
         ax.text(j, i, f"{resid[i, j]:.2f}{mark}",
                 ha="center", va="center", fontsize=10)
@@ -95,6 +117,10 @@ for i in range(observed.shape[0]):
 plt.tight_layout()
 plt.show()
 ```
+
+![표준화 잔차 열지도](./img/homogeneity_residuals_78.png)
+
+색으로 어느 칸이 기대보다 많고 적은지 한눈에 보인다. 모집단 2의 범주 3이 가장 밝고(+2.42), 모집단 3의 범주 3이 가장 어둡다(−1.73). 즉 범주 3의 선호가 모집단에 따라 갈리는 것이 이 표의 주된 구조다.
 
 `*`로 표시된 칸은 Bonferroni 보정 후에도 통계적으로 유의한 칸이다. 색의 변화 덕분에 어느 칸의 잔차가 가장 크게 양(과다 대표)이거나 음(과소 대표)인지 쉽게 알아볼 수 있다.
 

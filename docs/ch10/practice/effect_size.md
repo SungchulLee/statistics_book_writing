@@ -55,22 +55,21 @@ import numpy as np
 from scipy import stats
 
 def cramers_v(observed):
-    """
-    Compute Cramér's V for a contingency table.
+    """분할표의 Cramér V를 계산한다.
 
-    Parameters:
-    observed (numpy array): 2D array of observed counts.
-
-    Returns:
-    float: Cramér's V statistic.
+    V는 카이제곱을 표본크기로 나눠 정규화한 것이라 0과 1 사이에 놓인다.
+    카이제곱 통계량 자체는 n에 비례해 커지므로 연구 사이 비교에 쓸 수 없지만
+    V는 쓸 수 있다는 것이 요점이다.
     """
     chi2, p_value, df, expected = stats.chi2_contingency(observed)
     n = observed.sum()
+    # q는 행 수와 열 수 중 작은 것에서 1을 뺀 값이다.
+    # 카이제곱의 최댓값이 n*q라서 이것으로 나누면 상한이 1이 된다.
     q = min(observed.shape) - 1
     v = np.sqrt(chi2 / (n * q))
     return v, chi2, p_value
 
-# Example: Gender vs Handedness
+# 예제: 성별과 손잡이
 observed = np.array([[934, 1070], [113, 92], [20, 8]])
 v, chi2, p_value = cramers_v(observed)
 
@@ -78,6 +77,18 @@ print(f"Chi-square statistic: {chi2:.4f}")
 print(f"p-value: {p_value:.4f}")
 print(f"Cramér's V: {v:.4f}")
 ```
+
+출력:
+
+```
+Chi-square statistic: 11.8061
+p-value: 0.0027
+Cramér's V: 0.0726
+```
+
+$p = 0.0027$로 강하게 기각되지만 Cramér의 V는 0.073에 불과하다. Cohen의 기준으로 "작음"인 0.10에도 못 미친다.
+
+$n = 2237$이라 아주 약한 연관도 통계적으로는 또렷하게 잡히기 때문이다. **p-값은 효과의 크기가 아니라 증거의 강도를 잰다.** 표가 큰 자료에서 카이제곱 검정 결과만 보고하고 효과크기를 빼면 독자가 오해하기 쉽다.
 
 ## 효과크기를 언제 쓰는가
 

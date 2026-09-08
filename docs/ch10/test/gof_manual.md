@@ -34,20 +34,31 @@ import matplotlib.pyplot as plt
 import numpy as np
 import scipy.stats as stats
 
-# Observed data and expected mean-based values
 observed_counts = np.array([4, 13, 7])
+# H0가 균등분포이므로 기대도수는 모두 n/k, 즉 관측도수의 평균과 같다.
 expected_counts = np.ones(3) * observed_counts.mean()
-degrees_of_freedom = observed_counts.shape[0] - 1
+degrees_of_freedom = observed_counts.shape[0] - 1   # 총합이 고정이라 하나를 잃는다
 
-# Chi-square test statistic and p-value calculation
+# 분모가 관측도수가 아니라 **기대도수**인 것에 주의하라.
+# H0 아래에서 각 칸 도수의 분산이 근사적으로 E_i이기 때문이다(연습문제 4).
 chi_square_statistic = np.sum(
     (observed_counts - expected_counts) ** 2 / expected_counts
 )
+# 카이제곱 적합도 검정은 언제나 우측검정이므로 sf(위쪽 꼬리)를 쓴다.
 p_value = stats.chi2(degrees_of_freedom).sf(chi_square_statistic)
 
 print(f"Chi-square Statistic = {chi_square_statistic:.4f}")
 print(f"p-value = {p_value:.4f}")
 ```
+
+출력:
+
+```
+Chi-square Statistic = 5.2500
+p-value = 0.0724
+```
+
+기대도수가 모두 8로 5를 넘으므로 카이제곱 근사를 써도 되는 상황이다.
 
 **단계별 설명:**
 
@@ -100,6 +111,8 @@ ax.spines["left"].set_position("zero")
 plt.tight_layout()
 plt.show()
 ```
+
+![카이제곱 분포와 p-값](./img/gof_manual_66.png)
 
 색칠된 오른쪽 꼬리는 $H_0$ 아래에서 $5.25$만큼 또는 그보다 극단적인 $\chi^2$ 값을 관측할 확률을 나타낸다.
 

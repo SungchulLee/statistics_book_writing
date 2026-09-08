@@ -75,9 +75,13 @@ def mcnemar_test(table):
     p_value   : float   Two-sided p-value from chi-square(1)
     """
     table = np.asarray(table)
+    # 대각선의 a와 d는 아예 쓰이지 않는다.
+    # 두 시점에서 상태가 **바뀐** 쌍만이 변화의 증거이기 때문이다.
+    # 그래서 표본이 500쌍이어도 실제 정보량은 b + c에 달려 있다.
     b = table[0, 1]
     c = table[1, 0]
-    # Continuity-corrected McNemar statistic
+    # 연속성 보정: |b - c|에서 1을 뺀다.
+    # 이산인 이항분포를 연속인 카이제곱으로 근사하는 데서 오는 편향을 줄인다.
     chi2 = (abs(b - c) - 1) ** 2 / (b + c)
     p_value = stats.chi2(1).sf(chi2)
     return chi2, p_value
@@ -102,6 +106,14 @@ if p < 0.05:
     print("Reject H0: significant change after treatment (alpha = 0.05).")
 else:
     print("Fail to reject H0: no significant change (alpha = 0.05).")
+```
+
+출력:
+
+```
+McNemar chi2 = 20.6722
+p-value      = 5.4501e-06
+Reject H0: significant change after treatment (alpha = 0.05).
 ```
 
 **이 예제의 주요 값:**
@@ -185,11 +197,22 @@ $$
 
     ```python
     from scipy import stats
+
+    b, c = 121, 59            # 위 예제의 불일치 쌍
     n_discordant = b + c
     p_exact = stats.binomtest(b, n_discordant, 0.5).pvalue
+    print(f"exact p = {p_exact:.4e}")
+    ```
+
+    출력:
+
+    ```
+    exact p = 4.4344e-06
     ```
 
     (예전 이름인 `stats.binom_test`는 최신 SciPy에서 제거되었다.)
+
+    연속성 보정을 적용한 근사가 준 $5.45 \times 10^{-6}$과 정확검정의 $4.43 \times 10^{-6}$이 같은 자릿수다. 불일치 쌍이 180개나 되어 근사가 잘 통하는 상황이다.
 
     이 정확 이항검정은 분포에 대한 근사를 전혀 쓰지 않아 어떤 표본크기에서도 타당하다. 불일치 쌍의 수가 적을 때 권장되는 접근이다. $\square$
 

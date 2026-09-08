@@ -36,24 +36,30 @@ import numpy as np
 from scipy import stats
 
 def chi2_independence(observed: np.ndarray, correction: bool = False):
-    """Run chi-square test of independence.
+    """카이제곱 독립성 검정.
 
-    Parameters
-    ----------
-    observed : np.ndarray
-        2D contingency table of observed counts.
-    correction : bool
-        Yates' continuity correction (only applied to 2x2).
-        Default False.
-
-    Returns
-    -------
-    chi2, p, df, expected : tuple
-        Test statistic, p-value, degrees of freedom,
-        and expected counts.
+    correction의 기본값을 **False**로 두었다는 점에 주의하라.
+    scipy의 기본값은 True이며, 2x2 표에 Yates 연속성 보정을 자동으로 적용한다.
+    모르고 쓰면 작은 2x2 표에서 통계량이 조용히 줄어들어 결론이 달라질 수 있다.
+    돌려주는 값은 (통계량, p-값, 자유도, 기대도수).
     """
     return stats.chi2_contingency(observed, correction=correction)
+
+
+# 기본값의 차이를 눈으로 확인한다.
+tab = np.array([[10, 5], [3, 12]], dtype=float)
+print("correction=False:", round(chi2_independence(tab, False)[0], 4))
+print("correction=True :", round(chi2_independence(tab, True)[0], 4))
 ```
+
+출력:
+
+```
+correction=False: 6.6516
+correction=True : 4.8869
+```
+
+같은 표에서 통계량이 6.65와 4.89로 달라진다. p-값으로는 0.0099와 0.0270이라 5% 기준에서는 둘 다 기각이지만, 1% 기준에서는 결론이 갈린다.
 
 ### 사용 예
 
@@ -66,10 +72,16 @@ print(f"chi2 = {chi2:.3f}, p = {p:.4f}, df = {df}")
 print("expected:\n", exp)
 ```
 
-**출력:**
+출력:
 
-- $\chi^2 \approx 10.358$, $p \approx 0.0056$, $\text{df} = 2$
-- 기대도수는 주변 합계로부터 자동으로 계산된다.
+```
+chi2 = 10.358, p = 0.0056, df = 2
+expected:
+ [[21.91304348 23.47826087 14.60869565]
+ [20.08695652 21.52173913 13.39130435]]
+```
+
+자유도가 $(2-1)(3-1) = 2$이고, 기대도수는 주변 합계로부터 자동으로 계산된다.
 
 ## 템플릿을 언제 어떻게 쓰는가
 
@@ -104,7 +116,13 @@ $$
     chi2, p, df, exp = chi2_independence(
         np.array([[50, 50], [50, 50]], dtype=float)
     )
-    # chi2 = 0.0, p = 1.0, df = 1
+    print(f"chi2 = {chi2}, p = {p}, df = {df}")
+    ```
+
+    출력:
+
+    ```
+    chi2 = 0.0, p = 1.0, df = 1
     ```
 
     $\square$
@@ -149,9 +167,21 @@ $$
     observed = np.array([[30, 20, 10],
                          [12, 25, 18]], dtype=float)
     _, _, _, expected = chi2_independence(observed)
+    # 표준화 잔차. 제곱해서 모두 더하면 카이제곱 통계량이 된다.
     residuals = (observed - expected) / np.sqrt(expected)
     print(residuals)
+    print("제곱합 =", round((residuals**2).sum(), 3))
     ```
+
+    출력:
+
+    ```
+    [[ 1.72756246 -0.71784254 -1.20579175]
+     [-1.80438014  0.74976208  1.25940841]]
+    제곱합 = 10.358
+    ```
+
+    제곱합이 앞에서 얻은 카이제곱 통계량 10.358과 정확히 같다. 잔차는 통계량을 칸별로 쪼갠 것이다.
 
     표준화 잔차는
 
@@ -199,6 +229,13 @@ $$
     table = np.array([[45, 30, 25],
                       [35, 40, 25]], dtype=float)
     chi2, p, df, exp = chi2_independence(table, correction=False)
+    print(f"chi2 = {chi2:.4f}, p = {p:.4f}, df = {df}")
+    ```
+
+    출력:
+
+    ```
+    chi2 = 2.6786, p = 0.2620, df = 2
     ```
 
     행 합계: $R_1 = 100$, $R_2 = 100$. 열 합계: $C_1 = 80$, $C_2 = 70$, $C_3 = 50$. 총합: $n = 200$.
