@@ -26,13 +26,16 @@ np.random.seed(42)
 airlines = ['American', 'Delta', 'Southwest', 'United']
 n_obs = 100
 
-data_list = []
+# 감마분포는 0 이상이고 오른쪽으로 치우쳐 있어 지연율 모형에 적합하다.
+# (shape, scale)로 모양과 척도를 따로 정한다. 평균은 shape x scale이다.
 params = {
-    'American':  (2, 3),      # shape, scale — more frequent delays
-    'Delta':     (1.5, 2.5),  # moderate
-    'Southwest': (1.2, 2),    # fewer delays
-    'United':    (1.8, 3.2),  # high variability
+    'American':  (2,   3),    # 평균 6.0 — 지연이 잦은 편
+    'Delta':     (1.5, 2.5),  # 평균 3.75 — 중간
+    'Southwest': (1.2, 2),    # 평균 2.4 — 지연이 적음
+    'United':    (1.8, 3.2),  # 평균 5.76 — American과 비슷하나 퍼짐이 크다
 }
+
+data_list = []
 for airline in airlines:
     shape, scale = params[airline]
     delays = np.random.gamma(shape=shape, scale=scale, size=n_obs)
@@ -40,20 +43,43 @@ for airline in airlines:
         data_list.append({'airline': airline, 'pct_carrier_delay': delay})
 
 airline_stats = pd.DataFrame(data_list)
+
+# 그림을 그리기 전에 숫자로 확인한다
+print(airline_stats.groupby('airline')['pct_carrier_delay']
+      .agg(['count', 'mean', 'median', 'std', 'max']).round(2))
 ```
+
+출력:
+
+```
+           count  mean  median   std    max
+airline
+American     100  5.76    5.09  3.68  21.89
+Delta        100  3.77    3.08  2.82  14.69
+Southwest    100  2.31    1.67  2.08   9.07
+United       100  6.18    5.09  4.92  24.20
+```
+
+**American과 United의 중앙값이 5.09로 완전히 같다.** 그런데 표준편차는 3.68과 4.92로 3분의 1 이상 차이 나고, 최댓값도 21.89와 24.20으로 다르다. 이 쌍이 다음 두 그림에서 어떻게 보이는지가 이 예제의 핵심이다.
 
 ### 상자그림으로 보기
 
 ```python
 fig, ax = plt.subplots(figsize=(8, 5))
+
+# by=     이 열의 값으로 집단을 나눈다
+# column= 분포를 볼 열
 airline_stats.boxplot(by='airline', column='pct_carrier_delay', ax=ax)
+
 ax.set_xlabel('Airline')
 ax.set_ylabel('Daily % of Delayed Flights')
 ax.set_title('Airline Delay Comparison: Boxplots')
-plt.suptitle('')
+plt.suptitle('')      # pandas가 자동으로 붙이는 제목을 지운다
 plt.tight_layout()
 plt.show()
 ```
+
+![항공사별 지연 상자그림](./img/gce_airline_box.png)
 
 상자그림 읽기:
 
@@ -66,14 +92,20 @@ plt.show()
 
 ```python
 fig, ax = plt.subplots(figsize=(8, 5))
+
+# inner='quartile' 로 바이올린 안에 사분위수 선을 그려 넣으면
+# 상자그림의 정보를 잃지 않으면서 밀도까지 함께 볼 수 있다.
 sns.violinplot(data=airline_stats, x='airline', y='pct_carrier_delay',
                ax=ax, inner='quartile', color='lightblue')
+
 ax.set_xlabel('Airline')
 ax.set_ylabel('Daily % of Delayed Flights')
 ax.set_title('Airline Delay Comparison: Violin Plots')
 plt.tight_layout()
 plt.show()
 ```
+
+![항공사별 지연 바이올린 그림](./img/gce_airline_violin.png)
 
 바이올린 그림 읽기:
 
@@ -84,7 +116,16 @@ plt.show()
 
 ### 해석
 
-항공사끼리 비교하면 위치와 퍼짐 모두에서 차이가 드러난다. 중앙값이 높고 상자가 넓은 항공사는 체계적으로 지연이 더 심하다. 바이올린 그림은 뉘앙스를 더한다. 두 항공사의 중앙값이 비슷해도 모양이 매우 다를 수 있는데, 상자그림만으로는 이를 볼 수 없다.
+세 항공사의 순서는 두 그림에서 똑같이 읽힌다. Southwest가 가장 낮고, Delta가 중간이며, American과 United가 높다.
+
+**흥미로운 것은 American과 United의 비교다.** 앞의 출력에서 두 항공사의 중앙값이 5.09로 완전히 같았다.
+
+- **상자그림**에서 두 중앙값 선의 높이가 같다. 상자의 폭이 United 쪽이 조금 넓지만 한눈에 들어올 만큼은 아니다.
+- **바이올린 그림**에서는 United의 몸통이 위로 길게 늘어져 있어, 지연이 큰 날이 American보다 잦다는 사실이 곧바로 보인다.
+
+숫자로도 확인된다. 표준편차가 3.68 대 4.92이고 최댓값이 21.89 대 24.20이다. **"평균 지연이 비슷한 두 항공사"라도 승객이 겪는 위험은 다르다.** 어쩌다 한 번의 큰 지연이 더 잦기 때문이다.
+
+이것이 바이올린 그림을 함께 그리는 이유다. 중앙값이 같다는 사실은 두 분포가 같다는 뜻이 아니다.
 
 ---
 
@@ -103,13 +144,19 @@ n_homes = 150
 
 data_list = []
 for zip_code in zip_codes:
+    # 두 우편번호는 30만 달러대, 나머지 둘은 45만 달러대로 설정한다
     base_price = 300_000 if zip_code in [98105, 98108] else 450_000
     prices = np.random.normal(base_price, 100_000, n_homes)
+    # 음수나 비현실적인 값이 나오지 않도록 아래위를 잘라 낸다.
+    # 정규분포는 양쪽으로 무한히 뻗으므로 가격 자료에는 이 처리가 필요하다.
     prices = np.clip(prices, 50_000, 2_000_000)
     for price in prices:
         data_list.append({'ZipCode': str(zip_code), 'TaxAssessedValue': price})
 
 housing = pd.DataFrame(data_list)
+
+print((housing.groupby('ZipCode')['TaxAssessedValue']
+       .agg(['count', 'mean', 'median', 'std']) / 1000).round(1))
 
 fig, ax = plt.subplots(figsize=(8, 5))
 housing.boxplot(by='ZipCode', column='TaxAssessedValue', ax=ax)
@@ -121,9 +168,26 @@ plt.tight_layout()
 plt.show()
 ```
 
+출력(단위: 천 달러, `count`는 그대로 채 수):
+
+```
+         count   mean  median    std
+ZipCode
+98105      150  288.9   290.9   93.9
+98108      150  290.8   287.2   93.2
+98126      150  459.3   464.0  101.9
+98188      150  455.8   454.0  109.4
+```
+
+![우편번호별 주택 가치 상자그림](./img/gce_housing_box.png)
+
 ### 해석
 
-기준 가격이 높은 우편번호는 상자가 위쪽으로 이동해 나타난다. 상자의 폭이 비슷하면 변동성이 비슷하다는 뜻이다. 비싼 동네의 이상치는 고급 부동산을 나타낼 수 있는데, 이들이 평균을 부풀리면서도 중앙값은 비교적 안정적으로 남겨 둔다.
+네 우편번호가 **두 무리로 갈린다.** 98105·98108이 29만 달러 언저리, 98126·98188이 46만 달러 언저리다. 상자그림에서 두 쌍의 상자가 뚜렷이 다른 높이에 놓인다.
+
+**퍼짐은 네 곳이 거의 같다.** 표준편차가 93~109천 달러로 비슷하고, 상자의 세로 길이도 눈에 띄게 다르지 않다. 자료를 만들 때 모든 우편번호에 같은 표준편차 10만 달러를 준 결과이며, 그림이 그 설정을 정확히 되비추고 있다.
+
+**평균과 중앙값이 거의 같다는 점도 눈여겨볼 만하다.** 정규분포에서 뽑았으니 대칭이고, 따라서 두 값이 일치한다. 실제 주택 가격 자료라면 고가 주택 때문에 오른쪽으로 치우쳐 평균이 중앙값보다 크게 나오는 것이 보통이다. 모의자료의 한계다.
 
 ---
 
@@ -142,15 +206,20 @@ n_per_grade = 100
 
 data_list = []
 for grade in grades:
-    grade_idx = ord(grade) - ord('A')
+    grade_idx = ord(grade) - ord('A')          # A=0, B=1, ... G=6
+    # 등급이 낮아질수록 평균 소득은 내려가고(-8천/등급)
+    # 퍼짐은 커진다(+5천/등급). 두 변화를 동시에 준 것이 이 예제의 요점이다.
     base_income = 80_000 - grade_idx * 8_000
-    income_std = 15_000 + grade_idx * 5_000
+    income_std  = 15_000 + grade_idx * 5_000
     incomes = np.random.normal(base_income, income_std, n_per_grade)
     incomes = np.clip(incomes, 10_000, 200_000)
     for income in incomes:
         data_list.append({'grade': grade, 'income': income})
 
 loans = pd.DataFrame(data_list)
+
+print((loans.groupby('grade')['income']
+       .agg(['mean', 'median', 'std']) / 1000).round(1))
 
 fig, ax = plt.subplots(figsize=(10, 5))
 sns.violinplot(data=loans, x='grade', y='income', ax=ax, color='lightgreen')
@@ -161,11 +230,34 @@ plt.tight_layout()
 plt.show()
 ```
 
+출력(단위: 천 달러):
+
+```
+       mean  median   std
+grade
+A      82.2    81.2  13.9
+B      69.8    69.5  21.9
+C      67.5    68.8  24.7
+D      52.5    52.1  29.2
+E      53.5    49.1  32.6
+F      43.1    38.2  32.4
+G      36.2    23.9  32.2
+```
+
+![신용등급별 소득 바이올린 그림](./img/gce_loans_violin.png)
+
 ### 해석
 
-- **A등급** 차입자는 소득이 높고 더 집중되어 있어 부도 위험이 낮다.
-- **G등급** 차입자는 소득이 낮고 더 넓게 퍼져 있어 부도 위험이 높다.
-- 바이올린 모양이 A에서 G로 갈수록 점점 넓어져 소득의 불확실성이 커짐을 보여준다.
+- **A등급**은 평균 82천 달러에 표준편차 13.9천 달러로 좁게 모여 있다. 바이올린이 가늘고 길쭉하다.
+- **G등급**은 평균 36천 달러에 표준편차 32.2천 달러로 두 배 이상 퍼져 있다. 바이올린이 뭉툭하게 넓다.
+- A에서 G로 갈수록 **중심은 내려가고 폭은 넓어진다.** 소득이 낮아질 뿐 아니라 예측하기도 어려워진다는 뜻이며, 대부자에게는 두 가지 모두 위험 요인이다.
+
+!!! note "G등급에서 평균과 중앙값이 크게 갈린다"
+    G등급의 평균은 36.2, 중앙값은 23.9로 12천 달러 넘게 차이 난다. 다른 등급에서는 둘이 거의 같았다.
+
+    원인은 코드의 `np.clip(incomes, 10_000, 200_000)`이다. G등급은 평균 32천에 표준편차 32.2천이라 음수 소득이 대량으로 나오는데, 그것들이 모두 하한 10천에 몰려 쌓인다. 그 결과 분포가 왼쪽 끝에 뭉치고 오른쪽으로 길게 늘어져 **오른쪽으로 치우친 모양**이 된다.
+
+    바이올린 그림의 맨 아래가 뭉툭하게 잘려 있는 것이 그 흔적이다. 이 모형이 낮은 등급에서는 현실적이지 않다는 신호이며, 실제라면 로그정규분포처럼 애초에 음수가 나오지 않는 분포를 쓰는 편이 낫다.
 
 ---
 

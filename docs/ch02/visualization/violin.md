@@ -14,32 +14,62 @@
 
 ## 기본 바이올린 그림
 
+상자그림이 무엇을 놓치는지 보려면, **요약통계량은 거의 같은데 모양은 전혀 다른** 두 자료를 나란히 놓으면 된다.
+
 ```python
 import matplotlib.pyplot as plt
 import numpy as np
 
 np.random.seed(0)
 
-# Create a bimodal distribution that a box plot would obscure
+# --- 자료 1: 봉우리가 둘인 분포 -------------------------------------
+# 0 근처 500개와 5 근처 500개를 이어 붙인다.
+# 두 무리의 한가운데인 2.5 부근에는 자료가 거의 없다.
 data_1 = np.concatenate([np.random.normal(0, 1, 500),
-                          np.random.normal(5, 1, 500)])
+                         np.random.normal(5, 1, 500)])
+
+# --- 자료 2: 봉우리가 하나인 분포 -----------------------------------
+# 평균과 퍼짐을 자료 1과 비슷하게 맞춘다. 요약통계량으로는
+# 두 자료를 구별하기 어렵게 만드는 것이 목적이다.
 data_2 = np.random.normal(2.5, 2, 1000)
+
+# 요약통계량을 먼저 확인한다. 상자그림이 그리는 것이 바로 이 수들이다.
+for name, d in [("data_1 (이봉)", data_1), ("data_2 (단봉)", data_2)]:
+    q1, q3 = np.percentile(d, [25, 75])
+    print(f"{name}: 평균 {d.mean():.2f}, 중앙값 {np.median(d):.2f}, "
+          f"표준편차 {d.std():.2f}, IQR [{q1:.2f}, {q3:.2f}]")
 
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 4))
 
-# Violin plot reveals bimodality
+# --- 왼쪽: 바이올린 그림 --------------------------------------------
+# 좌우로 펼쳐진 폭이 그 높이에서의 커널밀도추정값이다.
+# showmeans / showmedians 로 평균선과 중앙값선을 함께 표시한다.
 ax1.violinplot([data_1, data_2], showmeans=True, showmedians=True)
 ax1.set_title("Violin Plot")
 ax1.set_xticks([1, 2])
 ax1.set_xticklabels(["Bimodal", "Unimodal"])
 
-# Box plot hides the bimodality
+# --- 오른쪽: 같은 자료의 상자그림 -----------------------------------
+# 다섯 수치 요약과 이상치만 그린다. 밀도 정보는 버려진다.
 ax2.boxplot([data_1, data_2], labels=["Bimodal", "Unimodal"])
 ax2.set_title("Box Plot")
 
 plt.tight_layout()
 plt.show()
 ```
+
+출력:
+
+```
+data_1 (이봉): 평균 2.45, 중앙값 2.40, 표준편차 2.67, IQR [-0.05, 4.93]
+data_2 (단봉): 평균 2.53, 중앙값 2.55, 표준편차 1.94, IQR [1.19, 3.75]
+```
+
+![바이올린 그림과 상자그림의 비교](./img/violin_vs_box_bimodal.png)
+
+**중앙값이 2.40과 2.55로 거의 같다.** 상자그림(오른쪽)만 보면 두 자료가 비슷한 분포처럼 보인다. 그런데 바이올린 그림(왼쪽)을 보면 왼쪽 자료가 **가운데가 잘록한 두 덩어리**임이 한눈에 드러난다.
+
+이 차이가 중요한 이유는 실질적이다. 왼쪽 자료에서 "평균 근처인 2.5"는 가장 흔한 값이 아니라 **가장 드문 값**이다. 상자그림은 이 사실을 전혀 알려 주지 않는다.
 
 ## Seaborn으로 그리는 바이올린 그림
 
@@ -53,14 +83,49 @@ import matplotlib.pyplot as plt
 url = "https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv"
 df = pd.read_csv(url)
 
+# 그림에 앞서 숫자로 먼저 확인한다. Age에 결측이 있어 count가 891보다 작다.
+print(df.groupby(["Pclass", "Sex"])["Age"]
+        .agg(["count", "median", "mean"]).round(1))
+
 fig, ax = plt.subplots(figsize=(10, 4))
+
+# x   : 바이올린을 나눌 기준 (객실 등급 1, 2, 3)
+# y   : 분포를 볼 값 (나이)
+# hue : 색으로 구분할 두 번째 범주 (성별)
+# split=True : 두 색을 하나의 바이올린 좌우에 붙여 그린다.
+#              범주가 정확히 둘일 때만 쓸 수 있고, 같은 등급 안에서
+#              남녀를 곧바로 견주어 볼 수 있게 해 준다.
 sns.violinplot(data=df, x="Pclass", y="Age", hue="Sex",
                split=True, ax=ax)
 ax.set_title("Age Distribution by Class and Sex (Titanic)")
 plt.show()
 ```
 
-`split=True` 옵션은 두 색상 범주를 각 바이올린의 반대편에 배치하여 등급마다 직접적인 시각적 비교를 가능하게 한다.
+출력:
+
+```
+               count  median  mean
+Pclass Sex
+1      female     85    35.0  34.6
+       male      101    40.0  41.3
+2      female     74    28.0  28.7
+       male       99    30.0  30.7
+3      female    102    21.5  21.8
+       male      253    25.0  26.5
+```
+
+![객실 등급과 성별에 따른 나이 분포](./img/violin_titanic_split.png)
+
+`split=True`가 두 색을 하나의 바이올린 좌우에 붙여 놓아, 등급마다 남녀를 곧바로 견줄 수 있다.
+
+그림에서 읽히는 것이 표보다 많다.
+
+- **등급이 낮아질수록 젊어진다.** 중앙값이 1등급 35–40세, 2등급 28–30세, 3등급 21.5–25세로 내려간다.
+- **3등급에 어린이가 몰려 있다.** 아래쪽 0–10세 구간이 3등급에서만 불룩하다. 표의 중앙값과 평균만으로는 보이지 않는 특징이다.
+- **1등급은 퍼짐이 넓다.** 위로 70대까지 이어지는 반면 3등급은 60대에서 거의 끊긴다.
+- **모든 등급에서 남성이 조금 더 나이가 많다.** 다만 그 차이는 등급 간 차이보다 훨씬 작다.
+
+세 번째 항목이 바이올린 그림의 값어치를 잘 보여 준다. 3등급의 어린이 무리는 분포에 **작은 두 번째 봉우리**를 만드는데, 상자그림이라면 그저 아래쪽 수염이 길어질 뿐이라 놓치기 쉽다.
 
 ## 바이올린 그림을 쓸 때
 
