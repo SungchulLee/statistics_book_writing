@@ -102,7 +102,7 @@ def main():
     print(f"Mean of sample medians: {np.mean(data):.2f}")
 
     # 값마다 몇 번 나왔는지 센다. 표본이 50개뿐이라 히스토그램보다
-    # 점그림이 낫다(2.4절에서 본 대로 자료가 적을 때의 선택이다).
+    # 점그림이 낫다(2.5절에서 본 대로 자료가 적을 때의 선택이다).
     data_dict = {}
     for num in data:
         data_dict[num] = data_dict.get(num, 0) + 1
