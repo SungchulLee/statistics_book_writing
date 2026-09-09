@@ -98,21 +98,29 @@ t0 = time.time()
 loocv_mses = [-cross_val_score(poly_pipeline(d), X, y, cv=LeaveOneOut(),
                                scoring="neg_mean_squared_error").mean()
               for d in degrees]
-print(f"Best degree (LOOCV): {int(np.argmin(loocv_mses)) + 1}, "
-      f"time: {time.time() - t0:.2f}s")
+elapsed = time.time() - t0        # 아래 주의 참조: 출력에는 싣지 않는다
+
+print(f"Best degree (LOOCV): {int(np.argmin(loocv_mses)) + 1}")
 ```
 
-출력(시간은 예시):
+출력:
 
 ```
-Best degree (LOOCV): 6, time: 1.97s
+Best degree (LOOCV): 6
 ```
 
-!!! note "시간은 실행할 때마다 달라진다"
-    `time.time()`으로 잰 값이므로 기계와 부하에 따라 바뀐다(같은 기계에서도
-    $0.8$초에서 $2$초까지 관측되었다). 뒤에서 $K$겹 교차검증과 비교할 때
-    중요한 것은 절대 시간이 아니라 **LOOCV가 훨씬 오래 걸린다**는 사실이다.
-    고른 차수 6은 자료가 고정되어 있으므로 실행과 무관하게 같다.
+!!! note "소요 시간을 출력에 싣지 않은 이유"
+    LOOCV의 요점 가운데 하나는 **비싸다**는 것이므로 시간을 재는 것 자체는
+    의미가 있다. 다만 `time.time()`이 재는 값은 기계와 그때의 부하에 따라
+    달라져 재현되지 않는다(같은 기계에서도 $0.8$초에서 $2$초까지 관측되었다).
+
+    그래서 시간은 `elapsed`에 담아 두기만 하고 출력에서는 뺐다. 이렇게 하면
+    이 블록의 출력이 **언제 실행해도 같아진다**. 자료와 분할이 고정되어 있으므로
+    고른 차수 $6$은 실행과 무관하게 재현된다.
+
+    비용의 크기는 직접 재어 보라. 이 자료($n = 100$, 차수 후보 $8$개)에서
+    LOOCV는 아래 $K$겹보다 대략 $10$배 이상 오래 걸린다. $n$이 커지면
+    LOOCV의 적합 횟수가 $n$에 비례해 늘어나므로 격차는 더 벌어진다.
 
 ---
 

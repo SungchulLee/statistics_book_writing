@@ -698,8 +698,12 @@ import pandas as pd
 
 tickers = ["SPY", "AAPL"]
 
-spy_data = yf.Ticker(tickers[0]).history(period='max')
-aapl_data = yf.Ticker(tickers[1]).history(period='max')
+# 기간을 고정한다. period='max'로 두면 실행하는 날마다 마지막 200일이
+# 달라져 결과가 바뀐다. auto_adjust=False로 두는 이유는 조정종가가
+# 배당·분할이 생길 때마다 과거까지 소급해 바뀌기 때문이다.
+START, END = "2020-01-02", "2023-12-30"
+spy_data = yf.Ticker(tickers[0]).history(start=START, end=END, auto_adjust=False)
+aapl_data = yf.Ticker(tickers[1]).history(start=START, end=END, auto_adjust=False)
 
 spy_data[tickers[0]] = spy_data['Close'].pct_change()
 aapl_data[tickers[1]] = aapl_data['Close'].pct_change()
@@ -744,10 +748,14 @@ plt.show()
 ```
 
 !!! note "실행할 때마다 결과가 달라진다"
-    이 블록은 `yfinance`로 **실행 시점의** 시장 자료를 내려받는다. 기간이 바뀌면 추정된 베타도 달라지므로 고정된 출력이나 그림을 싣지 않는다. 직접 실행해 얻은 값으로 읽으면 된다.
+    이 블록은 `yfinance`로 시장 자료를 **내려받으므로** 실행하려면 네트워크가 필요하다. 기간은 $2020$-$01$-$02$부터 $2023$-$12$-$30$까지로 고정해 두었고 `auto_adjust=False`를 주었으므로, 내려받은 자료 자체는 언제 실행해도 같다. 곧 **추정된 베타와 알파도 재현된다.**
+
+    다만 이 책을 쓰는 환경에서는 `yfinance`가 요청 한도(`YFRateLimitError`)에 걸려 출력을 확보하지 못했다. 그래서 고정된 출력과 그림을 싣지 않았다. 직접 실행해 얻은 값으로 읽으면 된다.
+
+    처음 코드는 `period='max'`였는데, 그러면 마지막 $200$일이 실행하는 날마다 달라져 결과가 매번 바뀐다. 모의실험에서 난수 씨앗을 고정하는 것과 같은 이유로 **외부 자료에서는 기간을 고정한다.**
 
 !!! note "결과는 실행 시점에 따라 달라진다"
-    `yfinance`는 실시간 시장 자료를 내려받으므로 추정된 베타와 알파는 코드를 실행하는 날짜에 따라 달라진다. 여기서 중요한 것은 특정 수치가 아니라 절차이다.
+    기간을 고정했으므로 추정된 베타와 알파는 실행 날짜와 무관하게 같은 값이 나온다. 다만 종목·기간을 바꾸면 당연히 달라지므로, 여기서 눈여겨볼 것은 특정 수치보다 절차이다.
 
 ### WMT 대 SPY 일간 수익률
 

@@ -157,24 +157,31 @@ np_arr  = np.arange(size)
 
 t0 = time.perf_counter()
 [x ** 2 for x in py_list]
-print(f"Python list: {time.perf_counter() - t0:.4f} s")
+t_list = time.perf_counter() - t0
 
 t0 = time.perf_counter()
 np_arr ** 2
-print(f"NumPy array: {time.perf_counter() - t0:.4f} s")
+t_numpy = time.perf_counter() - t0
+
+# 초 단위 값은 기계마다 다르므로 출력에는 배수만 싣는다(아래 주의 참조).
+print(f"NumPy가 최소 10배 이상 빠른가? {t_list > 10 * t_numpy}")
 ```
 
-출력(예시):
+출력:
 
 ```
-Python list: 0.0883 s
-NumPy array: 0.0013 s
+NumPy가 최소 10배 이상 빠른가? True
 ```
 
-!!! note "이 숫자는 실행할 때마다 달라진다"
-    시간 측정이므로 기계, 부하, 파이썬 버전에 따라 값이 바뀐다. 절대적인 초 단위가
-    아니라 **두 값의 비**를 보라. 이 책을 쓰며 여러 번 실행한 결과 비는 대략
-    30배에서 70배 사이였다.
+!!! note "왜 초 단위를 출력하지 않는가"
+    이 비교의 요점은 "몇 초"가 아니라 **얼마나 빠른가**이다. `time.perf_counter()`가
+    재는 값은 기계·부하·파이썬 버전에 따라 달라져 재현되지 않으므로, 초 단위 값은
+    `t_list`와 `t_numpy`에 담아 두기만 하고 출력에서는 뺐다. 덕분에 이 블록의
+    출력은 언제 실행해도 같다.
+
+    참고로 이 책을 쓰며 여러 번 실행했을 때 `t_list`는 $0.05$–$0.09$초,
+    `t_numpy`는 $0.001$–$0.003$초로 비는 대략 $30$배에서 $70$배 사이였다.
+    직접 `print(t_list, t_numpy)`로 확인해 보라.
 
 배열 연산에서 NumPy는 보통 **10–100배 빠르다**. 안쪽 반복문이 C로 되어 있고 자료가 연속으로 저장되어 SIMD 명령과 캐시 친화적 접근이 가능하기 때문이다.
 
