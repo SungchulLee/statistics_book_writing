@@ -244,3 +244,170 @@ $\mathbf{z} \sim N(\boldsymbol{\mu}, \boldsymbol{\Sigma})$이고 $\mathbf{A}$가
     이다.
 
     **F-검정 검정력에서의 역할:** $H_1: \boldsymbol{\beta} \ne \mathbf{0}$ 아래에서 F 분자의 $\chi^2$이 $\delta = \boldsymbol{\beta}^T\mathbf{X}^T\mathbf{X}\boldsymbol{\beta}/\sigma^2$인 비중심 분포가 된다. $\delta$가 클수록(귀무가설에서 멀수록) F-통계량의 분포가 큰 값 쪽으로 이동하여 기각 확률이 높아진다. 즉 검정력이 커진다. 이것이 표본 크기를 계획할 때 검정력 계산기에 넣는 공식이다.
+
+---
+
+**연습문제 7.**
+크레이그 정리($\mathbf{A}\mathbf{B} = \mathbf{O}$이면 두 이차형식이 독립)를 모의실험으로 확인하라. $\mathbf{A}\mathbf{B} \neq \mathbf{O}$인 경우와 대비하라.
+
+??? success "풀이"
+    ```python
+    import numpy as np
+
+    rng = np.random.default_rng(0)
+    n, B = 6, 300_000
+    Z = rng.normal(size=(B, n))                 # z ~ N(0, I)
+
+    A = np.diag([1., 1., 0., 0., 0., 0.])       # 좌표 1,2 를 본다
+    Bm = np.diag([0., 0., 1., 1., 1., 0.])      # 좌표 3,4,5 를 본다 (겹치지 않음)
+    C = np.diag([1., 1., 1., 0., 0., 0.])       # 좌표 1,2,3 (A 와 겹친다)
+
+    q = lambda M: np.einsum('bi,ij,bj->b', Z, M, Z)
+    qa, qb, qc = q(A), q(Bm), q(C)
+
+    print("A B = O 인가:", np.allclose(A @ Bm, 0),
+          "  corr(q_A, q_B) =", round(np.corrcoef(qa, qb)[0, 1], 5))
+    print("A C = O 인가:", np.allclose(A @ C, 0),
+          "  corr(q_A, q_C) =", round(np.corrcoef(qa, qc)[0, 1], 5))
+    ```
+
+    출력:
+
+    ```
+    A B = O 인가: True   corr(q_A, q_B) = 0.00164
+    A C = O 인가: False   corr(q_A, q_C) = 0.81566
+    ```
+
+    $\mathbf{A}\mathbf{B} = \mathbf{O}$일 때 상관이 $0.002$로 사실상 0이고, 겹치는 $\mathbf{C}$에서는 $0.816$으로 강하게 상관된다.
+
+    **왜 그런가.** 대각행렬 예에서는 직관이 명확하다. $\mathbf{A}\mathbf{B} = \mathbf{O}$은 두 이차형식이 **서로 다른 좌표만** 쓴다는 뜻이고, 정규분포에서 서로 다른 좌표는 독립이다. 일반적인 경우에도 두 행렬을 동시에 대각화하면 같은 구조가 드러난다.
+
+    이것이 분산분석에서 제곱합들이 독립인 근거다. 서로 직교하는 부분공간으로의 사영은 곱이 $\mathbf{O}$이므로 독립이고, 그래서 카이제곱의 비가 $F$ 분포가 된다. $\square$
+
+---
+
+**연습문제 8.**
+$\mathbf{z} \sim N(\mathbf{0}, \mathbf{I}_n)$이고 $\mathbf{A}$가 대칭이면 $\operatorname{Var}(\mathbf{z}^T\mathbf{A}\mathbf{z}) = 2\operatorname{tr}(\mathbf{A}^2)$임을 확인하라. $\mathbf{A}$가 멱등일 때 이것이 카이제곱의 분산과 맞음을 보여라.
+
+??? success "풀이"
+    ```python
+    import numpy as np
+
+    rng = np.random.default_rng(0)
+    n, B = 6, 300_000
+    Z = rng.normal(size=(B, n))
+
+    M = np.diag([1., 1., 1., 1., 1., 1.]).copy()
+    M[0, 0], M[1, 1] = 2., 3.
+    M[0, 1] = M[1, 0] = 1.                      # 대칭이지만 멱등은 아님
+
+    q = np.einsum('bi,ij,bj->b', Z, M, Z)
+    print(f"E  모의 {q.mean():.4f}   tr(M)      {np.trace(M):.4f}")
+    print(f"Var 모의 {q.var():.4f}   2 tr(M^2)  {2*np.trace(M @ M):.4f}")
+    ```
+
+    출력:
+
+    ```
+    E  모의 8.9960   tr(M)      9.0000
+    Var 모의 38.0284   2 tr(M^2)  38.0000
+    ```
+
+    평균이 $\operatorname{tr}(\mathbf{M})$, 분산이 $2\operatorname{tr}(\mathbf{M}^2)$과 맞는다.
+
+    **멱등인 경우.** $\mathbf{A}^2 = \mathbf{A}$이므로
+
+    $$
+    \operatorname{Var}(\mathbf{z}^T\mathbf{A}\mathbf{z}) = 2\operatorname{tr}(\mathbf{A}^2) = 2\operatorname{tr}(\mathbf{A}) = 2r
+    $$
+
+    로 $\chi^2_r$의 분산과 정확히 일치한다. 평균도 $\operatorname{tr}(\mathbf{A}) = r$이다.
+
+    **거꾸로 읽으면 유용하다.** 이차형식이 카이제곱이 **아닌** 경우에도 평균과 분산은 이 공식으로 계산된다. 그래서 근사적으로 $\chi^2$에 맞추는 새터스웨이트 근사가 가능하다. 자유도를 $\nu = 2(\operatorname{tr}\mathbf{A})^2/\operatorname{tr}(\mathbf{A}^2)$로 잡으면 평균과 분산이 맞아떨어진다. 웰치 $t$ 검정의 자유도가 정수가 아닌 이유가 여기에 있다. $\square$
+
+---
+
+**연습문제 9.**
+공분산이 $\boldsymbol{\Sigma} \neq \sigma^2\mathbf{I}$인 일반적인 경우에는 $\mathbf{z}^T\mathbf{A}\mathbf{z} \sim \chi^2_r$일 필요충분조건이 $\mathbf{A}\boldsymbol{\Sigma}$가 멱등인 것이다. 마할라노비스 이차형식으로 확인하라.
+
+??? success "풀이"
+    $\mathbf{A} = \boldsymbol{\Sigma}^{-1}$로 두면 $\mathbf{A}\boldsymbol{\Sigma} = \mathbf{I}$로 멱등이고 계수가 $p$이므로 $\mathbf{z}^T\boldsymbol{\Sigma}^{-1}\mathbf{z} \sim \chi^2_p$여야 한다.
+
+    ```python
+    import numpy as np
+
+    rng = np.random.default_rng(0)
+    Sigma = np.array([[2., 0.5], [0.5, 1.]])
+    Sinv = np.linalg.inv(Sigma)
+
+    Z = rng.normal(size=(300_000, 2)) @ np.linalg.cholesky(Sigma).T   # z ~ N(0, Sigma)
+    q = np.einsum('bi,ij,bj->b', Z, Sinv, Z)
+
+    print("A Sigma 가 멱등인가:", np.allclose((Sinv @ Sigma) @ (Sinv @ Sigma), Sinv @ Sigma))
+    print(f"평균 모의 {q.mean():.4f}   chi2_2 이론 2")
+    print(f"분산 모의 {q.var():.4f}   chi2_2 이론 4")
+    ```
+
+    출력:
+
+    ```
+    A Sigma 가 멱등인가: True
+    평균 모의 2.0044   chi2_2 이론 2
+    분산 모의 4.0198   chi2_2 이론 4
+    ```
+
+    평균 $2$, 분산 $4$로 $\chi^2_2$와 맞는다.
+
+    **이것이 마할라노비스 거리의 근거다.** $(\mathbf{x}-\boldsymbol{\mu})^T\boldsymbol{\Sigma}^{-1}(\mathbf{x}-\boldsymbol{\mu}) \sim \chi^2_p$이므로, 이 값이 $\chi^2_p$의 상위 백분위수를 넘는 점을 다변량 이상치로 판정할 수 있다. $\boldsymbol{\Sigma}^{-1}$로 가중하는 것은 백색화($\boldsymbol{\Sigma}^{-1/2}$를 곱하는 것)와 같고, 백색화 뒤에는 표준정규가 되어 제곱합이 카이제곱이 된다. $\square$
+
+---
+
+**연습문제 10.**
+회귀에서 $F = \dfrac{\text{SSR}/p'}{\text{SSE}/(n-p)}$가 두 이차형식의 비임을 이용해, $H_0$ 아래에서 실제로 $F_{p', n-p}$ 분포를 따름을 모의실험으로 확인하라.
+
+??? success "풀이"
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    rng = np.random.default_rng(1)
+    n, p = 20, 3                       # 절편 + 설명변수 2개
+    X = np.column_stack([np.ones(n), rng.normal(size=(n, p - 1))])
+    H = X @ np.linalg.inv(X.T @ X) @ X.T
+    P1 = np.ones((n, n)) / n           # 절편만 있는 모형의 사영
+    A = H - P1                         # 회귀 부분, 계수 p-1 = 2
+    M = np.eye(n) - H                  # 잔차 부분, 계수 n-p = 17
+
+    print("A M = O 인가:", np.allclose(A @ M, 0), "  (독립성 조건)")
+    print("계수:", np.linalg.matrix_rank(A), np.linalg.matrix_rank(M))
+
+    B = 200_000
+    Y = rng.normal(size=(B, n))        # H0: beta = 0 (절편만), sigma = 1
+    ssr = np.einsum('bi,ij,bj->b', Y, A, Y)
+    sse = np.einsum('bi,ij,bj->b', Y, M, Y)
+    F = (ssr / 2) / (sse / 17)
+
+    print(f"\n평균 모의 {F.mean():.4f}   이론 {17/(17-2):.4f}")
+    for q in (0.5, 0.9, 0.95, 0.99):
+        print(f"  q={q:<5} 모의 {np.quantile(F, q):7.4f}   F(2,17) {stats.f.ppf(q, 2, 17):7.4f}")
+    ```
+
+    출력:
+
+    ```
+    A M = O 인가: True   (독립성 조건)
+    계수: 2 17
+
+    평균 모의 1.1353   이론 1.1333
+      q=0.5   모의  0.7235   F(2,17)  0.7222
+      q=0.9   모의  2.6458   F(2,17)  2.6446
+      q=0.95  모의  3.6142   F(2,17)  3.5915
+      q=0.99  모의  6.1267   F(2,17)  6.1121
+    ```
+
+    분위수가 $F_{2,17}$과 잘 맞는다.
+
+    **이 한 문제에 이 절의 내용이 모두 들어 있다.** $\mathbf{A}$와 $\mathbf{M}$이 대칭 멱등이라 각 이차형식이 카이제곱이 되고(계수 $2$와 $17$), $\mathbf{A}\mathbf{M} = \mathbf{O}$이라 크레이그 정리에 의해 둘이 독립이며, 독립인 두 카이제곱을 자유도로 나눈 비가 $F$ 분포의 정의다.
+
+    $F$ 검정이 성립하려면 세 가지가 모두 필요하다는 점에 유의하라. 정규성(카이제곱이 되려면), 멱등성(자유도가 정수가 되려면), 직교성(독립이 되려면). 하나라도 깨지면 $F$ 분포는 근사에 지나지 않는다. $\square$
+

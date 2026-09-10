@@ -251,3 +251,170 @@ $$
     고윳값: $\lambda_1 = 2$(고유벡터 $(1,0,0)^T$), $\lambda_2 = 2$(고유벡터 $(0,1,1)^T/\sqrt{2}$), $\lambda_3 = 0$(고유벡터 $(0,1,-1)^T/\sqrt{2}$).
 
     고윳값 $2$는 중복도가 2이고 고유공간은 $\operatorname{span}\{(1,0,0)^T, (0,1,1)^T\}$이다. 이 두 벡터는 이미 직교하므로(그람–슈미트가 필요 없다) 정규화하면 정규직교기저를 얻는다. 세 번째 고유벡터와 함께 쌓으면 스펙트럼 정리가 약속한 직교행렬 $\mathbf{Q}$가 만들어진다.
+
+---
+
+**연습문제 7.**
+임의의 정사각행렬 $\mathbf{A}$는 대칭부분과 반대칭부분의 합으로 유일하게 분해된다. 이차형식 $\mathbf{x}^T\mathbf{A}\mathbf{x}$가 **대칭부분에만** 의존함을 보여라.
+
+??? success "풀이"
+    분해는
+
+    $$
+    \mathbf{A} = \underbrace{\tfrac{1}{2}(\mathbf{A}+\mathbf{A}^T)}_{\mathbf{S},\ \text{대칭}} + \underbrace{\tfrac{1}{2}(\mathbf{A}-\mathbf{A}^T)}_{\mathbf{K},\ \text{반대칭}}
+    $$
+
+    이다($\mathbf{S}^T = \mathbf{S}$, $\mathbf{K}^T = -\mathbf{K}$는 직접 확인된다).
+
+    반대칭부분의 이차형식은 언제나 0이다. $\mathbf{x}^T\mathbf{K}\mathbf{x}$는 스칼라이므로 전치해도 같은데,
+
+    $$
+    \mathbf{x}^T\mathbf{K}\mathbf{x} = (\mathbf{x}^T\mathbf{K}\mathbf{x})^T = \mathbf{x}^T\mathbf{K}^T\mathbf{x} = -\mathbf{x}^T\mathbf{K}\mathbf{x}
+    $$
+
+    이므로 자기 자신의 음수와 같아 $0$이다. 따라서 $\mathbf{x}^T\mathbf{A}\mathbf{x} = \mathbf{x}^T\mathbf{S}\mathbf{x}$다.
+
+    ```python
+    import numpy as np
+
+    A = np.array([[2., 3.], [1., 4.]])          # 대칭이 아님
+    S = (A + A.T) / 2
+    K = (A - A.T) / 2
+    x = np.array([1., 2.])
+
+    print("A = S + K 인가:", np.allclose(A, S + K))
+    print("S 대칭:", np.allclose(S, S.T), "  K 반대칭:", np.allclose(K, -K.T))
+    print(f"x'Ax = {x @ A @ x},  x'Sx = {x @ S @ x},  x'Kx = {x @ K @ x:.12f}")
+    ```
+
+    출력:
+
+    ```
+    A = S + K 인가: True
+    S 대칭: True   K 반대칭: True
+    x'Ax = 26.0,  x'Sx = 26.0,  x'Kx = 0.000000000000
+    ```
+
+    **왜 중요한가.** 이차형식으로 나타나는 양(분산, 마할라노비스 거리, 제곱합)을 다룰 때 **행렬을 대칭으로 가정해도 일반성을 잃지 않는다.** 비대칭 부분은 어차피 보이지 않기 때문이다. 통계 문헌이 이차형식의 행렬을 늘 대칭으로 두는 이유다. $\square$
+
+---
+
+**연습문제 8.**
+공분산행렬 $\boldsymbol{\Sigma}$에 대해 $\max_{\lVert\mathbf{v}\rVert=1}\operatorname{Var}(\mathbf{v}^T\mathbf{X}) = \lambda_{\max}$이고 최댓값을 주는 방향이 대응하는 고유벡터임을 확인하라. 이것이 주성분분석과 어떻게 연결되는가?
+
+??? success "풀이"
+    $\operatorname{Var}(\mathbf{v}^T\mathbf{X}) = \mathbf{v}^T\boldsymbol{\Sigma}\mathbf{v}$이므로 이는 레일리 몫(연습문제 4)의 최대화 문제이고, 최댓값은 $\lambda_{\max}$, 최대점은 그 고유벡터다.
+
+    ```python
+    import numpy as np
+
+    Sigma = np.array([[4., 2., 0.],
+                      [2., 3., 1.],
+                      [0., 1., 2.]])
+    lam, Q = np.linalg.eigh(Sigma)
+
+    rng = np.random.default_rng(0)
+    best, arg = -np.inf, None
+    for _ in range(200_000):                      # 단위구에서 무작위 탐색
+        v = rng.normal(size=3)
+        v /= np.linalg.norm(v)
+        val = v @ Sigma @ v
+        if val > best:
+            best, arg = val, v
+
+    print(f"무작위 탐색 최댓값: {best:.6f}")
+    print(f"lambda_max        : {lam.max():.6f}")
+    print("최대 고유벡터와의 |내적|:",
+          round(abs(arg @ Q[:, np.argmax(lam)]), 4), "(1 에 가까울수록 같은 방향)")
+    ```
+
+    출력:
+
+    ```
+    무작위 탐색 최댓값: 5.668956
+    lambda_max        : 5.669079
+    최대 고유벡터와의 |내적|: 1.0 (1 에 가까울수록 같은 방향)
+    ```
+
+    무작위 탐색으로 얻은 최댓값이 $\lambda_{\max}$에 거의 닿고, 그 방향이 최대 고유벡터와 거의 평행하다.
+
+    **PCA와의 연결.** 제1주성분은 정확히 "분산을 최대로 하는 단위 방향"으로 정의된다. 스펙트럼 정리가 그 답이 $\lambda_{\max}$의 고유벡터임을 알려 준다. 제2주성분은 첫 방향과 직교하는 것들 중 분산을 최대로 하는 방향이고, 그 답은 두 번째 고유벡터다. **주성분 전체가 스펙트럼 분해에서 한꺼번에 나온다.** $\square$
+
+---
+
+**연습문제 9.**
+대칭행렬 $\mathbf{A}$에 대해 $\lVert\mathbf{A}\rVert_F^2 = \sum_i \lambda_i^2$이고 스펙트럼 노름이 $\max_i|\lambda_i|$임을 보여라.
+
+??? success "풀이"
+    **프로베니우스 노름.** 스펙트럼 분해 $\mathbf{A} = \mathbf{Q}\boldsymbol{\Lambda}\mathbf{Q}^T$에서 $\mathbf{A}^T\mathbf{A} = \mathbf{A}^2 = \mathbf{Q}\boldsymbol{\Lambda}^2\mathbf{Q}^T$이므로
+
+    $$
+    \lVert\mathbf{A}\rVert_F^2 = \operatorname{tr}(\mathbf{A}^T\mathbf{A}) = \operatorname{tr}(\boldsymbol{\Lambda}^2) = \sum_i \lambda_i^2
+    $$
+
+    이다(대각합이 닮음 불변량임을 썼다).
+
+    **스펙트럼 노름.** $\lVert\mathbf{A}\rVert_2 = \max_{\lVert\mathbf{x}\rVert=1}\lVert\mathbf{A}\mathbf{x}\rVert$인데, $\mathbf{y} = \mathbf{Q}^T\mathbf{x}$로 두면 $\lVert\mathbf{A}\mathbf{x}\rVert^2 = \sum_i\lambda_i^2 y_i^2$이고 $\sum y_i^2 = 1$이므로 최댓값은 $\max_i \lambda_i^2$이다. 제곱근을 취하면 $\max_i|\lambda_i|$다.
+
+    ```python
+    import numpy as np
+
+    A = np.array([[4., 2., 0.], [2., 3., 1.], [0., 1., 2.]])
+    lam = np.linalg.eigvalsh(A)
+
+    print("||A||_F^2      =", round((A ** 2).sum(), 6))
+    print("sum lambda_i^2 =", round((lam ** 2).sum(), 6))
+    print("스펙트럼 노름  =", round(np.linalg.norm(A, 2), 6))
+    print("max |lambda_i| =", round(np.abs(lam).max(), 6))
+    ```
+
+    출력:
+
+    ```
+    ||A||_F^2      = 39.0
+    sum lambda_i^2 = 39.0
+    스펙트럼 노름  = 5.669079
+    max |lambda_i| = 5.669079
+    ```
+
+    두 노름은 서로 다른 것을 잰다. 프로베니우스 노름은 **모든** 고윳값을 합치고, 스펙트럼 노름은 **가장 큰 하나만** 본다. 공분산행렬이라면 전자는 총분산에 대응하고 후자는 제1주성분의 분산에 대응한다. $\square$
+
+---
+
+**연습문제 10.**
+두 대칭행렬이 교환할 필요충분조건은 공통의 고유기저를 갖는 것이다(동시 대각화). 수치로 확인하고, 이것이 통계에서 왜 중요한지 설명하라.
+
+??? success "풀이"
+    ($\Leftarrow$) 같은 $\mathbf{Q}$로 $\mathbf{A} = \mathbf{Q}\boldsymbol{\Lambda}_1\mathbf{Q}^T$, $\mathbf{B} = \mathbf{Q}\boldsymbol{\Lambda}_2\mathbf{Q}^T$이면 대각행렬끼리 교환하므로
+
+    $$
+    \mathbf{A}\mathbf{B} = \mathbf{Q}\boldsymbol{\Lambda}_1\boldsymbol{\Lambda}_2\mathbf{Q}^T
+    = \mathbf{Q}\boldsymbol{\Lambda}_2\boldsymbol{\Lambda}_1\mathbf{Q}^T = \mathbf{B}\mathbf{A}
+    $$
+
+    이다. 역방향은 $\mathbf{A}$의 각 고유공간이 $\mathbf{B}$에 의해 불변임을 보인 뒤 그 안에서 $\mathbf{B}$를 대각화하면 된다.
+
+    ```python
+    import numpy as np
+
+    A = np.array([[4., 2., 0.], [2., 3., 1.], [0., 1., 2.]])
+    lam, Q = np.linalg.eigh(A)
+
+    B = Q @ np.diag([1., 5., 9.]) @ Q.T          # 일부러 같은 고유기저로 만든다
+    C = np.array([[1., 1., 0.], [1., 2., 0.], [0., 0., 3.]])   # 관계 없는 대칭행렬
+
+    print("A 와 B 가 교환하는가:", np.allclose(A @ B, B @ A))
+    print("A 와 C 가 교환하는가:", np.allclose(A @ C, C @ A))
+    ```
+
+    출력:
+
+    ```
+    A 와 B 가 교환하는가: True
+    A 와 C 가 교환하는가: False
+    ```
+
+    **통계적 의미.** $\mathbf{y} \sim N(\mathbf{0}, \sigma^2\mathbf{I})$일 때 두 이차형식 $\mathbf{y}^T\mathbf{A}\mathbf{y}$와 $\mathbf{y}^T\mathbf{B}\mathbf{y}$가 **독립일 필요충분조건은 $\mathbf{A}\mathbf{B} = \mathbf{O}$**이다(크레이그 정리). 특히 $\mathbf{A}$, $\mathbf{B}$가 사영이면 $\mathbf{A}\mathbf{B} = \mathbf{O}$은 두 부분공간이 직교한다는 뜻이다.
+
+    분산분석에서 집단 간 제곱합과 집단 내 제곱합이 독립인 것이 바로 이 조건 덕분이고, 그래서 두 카이제곱의 비가 $F$ 분포를 따른다. **교환성과 직교성이 분포 이론의 독립성으로 번역되는 자리다.** $\square$
+
