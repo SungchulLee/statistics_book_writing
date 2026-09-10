@@ -268,3 +268,239 @@ $N(5, 4)$(평균 5, 분산 4)에서 뽑은 표본 1000개의 정규화된 히스
     ```
 
     `dpi=200`은 래스터화 해상도를 조절한다. `bbox_inches="tight"`는 가장자리의 빈 여백을 제외하도록 그림의 경계 상자를 다시 계산한다. 그림을 다른 문서(LaTeX, 워드, 슬라이드)에 끼워 넣을 때 가장 중요하다. 이 옵션이 없으면 savefig가 쓰이지 않은 공간까지 포함한 캔버스 전체를 저장하여, 삽입된 이미지에 보기 싫은 흰 테두리가 생긴다. `dpi=200, bbox_inches="tight"` 조합이 이 책에 실리는 그림의 권장 기본값이다.
+
+---
+
+**연습문제 7.**
+`scipy.stats.probplot`을 쓰지 말고 Q–Q 그림을 직접 만들어라. 정규표본과 $t(3)$ 표본에 대해 각각 그리고, 두 그림이 어떻게 다른지 설명하라.
+
+??? success "풀이"
+    Q–Q 그림은 표본의 순서통계량을 이론분포의 대응 분위수에 대해 그린다. $i$번째로 작은 값의 짝이 되는 이론 분위수는 $\Phi^{-1}\!\left(\frac{i - 0.5}{n}\right)$이다($0$과 $1$을 피하려고 $0.5$를 뺀다).
+
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from scipy import stats
+
+    rng = np.random.default_rng(0)
+    n = 300
+    samples = {"정규 N(0,1)": rng.standard_normal(n),
+               "t(3) — 두꺼운 꼬리": rng.standard_t(3, n)}
+
+    probs = (np.arange(1, n + 1) - 0.5) / n        # 플로팅 위치
+    theory = stats.norm.ppf(probs)                 # 이론 분위수
+
+    fig, axes = plt.subplots(1, 2, figsize=(10, 4.5))
+    for ax, (name, data) in zip(axes, samples.items()):
+        ax.scatter(theory, np.sort(data), s=12, alpha=0.7)
+        lo, hi = theory.min(), theory.max()
+        ax.plot([lo, hi], [lo, hi], "r--", lw=1.5, label="기준선 y = x")
+        ax.set_xlabel("이론 분위수")
+        ax.set_ylabel("표본 분위수")
+        ax.set_title(name)
+        ax.legend()
+    fig.tight_layout()
+    plt.show()
+
+    for name, data in samples.items():
+        z = (data - data.mean()) / data.std(ddof=1)
+        print(f"{name:>18}: 첨도 {stats.kurtosis(data):>6.2f}   "
+              f"|z| > 3 인 관측 {np.sum(np.abs(z) > 3):>2}개")
+    ```
+
+    출력:
+
+    ```
+    정규 N(0,1): 첨도   0.03   |z| > 3 인 관측  2개
+         t(3) — 두꺼운 꼬리: 첨도   3.42   |z| > 3 인 관측  5개
+    ```
+
+    ![정규표본과 t(3) 표본의 Q–Q 그림](./img/matplotlib_basics_280.png)
+
+    **읽는 법.** 점들이 직선 위에 놓이면 표본이 이론분포와 맞는다. 왼쪽 정규표본은 가운데가 거의 완벽하고 양 끝만 조금 흔들리는데, 극단 순서통계량의 분산이 크기 때문에 정상이다.
+
+    오른쪽 $t(3)$은 **$S$자를 뒤집은 모양**이다. 왼쪽 끝이 기준선 아래로 처지고 오른쪽 끝이 위로 치솟는다. 이것이 **두꺼운 꼬리**의 서명이다. 표본의 극단값이 정규분포가 예측하는 것보다 훨씬 크다.
+
+    반대로 양 끝이 안쪽으로 휘면 꼬리가 얇은 것이고, 한쪽만 휘면 비대칭이다.
+
+    **왜 히스토그램보다 나은가.** 히스토그램은 구간 개수에 민감하고 꼬리에서 관측이 몇 개뿐이라 거의 보이지 않는다. Q–Q 그림은 모든 관측을 하나씩 쓰고 꼬리를 그림의 양 끝에 펼쳐 놓는다. **정규성 판단은 대부분 꼬리에서 갈리므로** 이 차이가 결정적이다. $\square$
+
+---
+
+**연습문제 8.**
+로그 눈금을 언제 써야 하는가? 멱법칙 자료를 선형 눈금, 반로그, 양로그 눈금으로 각각 그려 비교하라.
+
+??? success "풀이"
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    x = np.linspace(1, 100, 500)
+    power = 3 * x ** 2.0          # 멱법칙  y = a x^b
+    expo = 2 * np.exp(0.05 * x)   # 지수     y = a e^{bx}
+
+    fig, axes = plt.subplots(1, 3, figsize=(13, 4))
+    for ax, scale, title in zip(
+            axes, ["linear", "semilogy", "loglog"],
+            ["선형 — 둘 다 그냥 휘었다", "반로그 — 지수가 직선", "양로그 — 멱법칙이 직선"]):
+        ax.plot(x, power, label="멱법칙 $3x^2$")
+        ax.plot(x, expo, label="지수 $2e^{0.05x}$")
+        if scale in ("semilogy", "loglog"):
+            ax.set_yscale("log")
+        if scale == "loglog":
+            ax.set_xscale("log")
+        ax.set_title(title, fontsize=10)
+        ax.set_xlabel("x")
+        ax.legend(fontsize=8)
+    fig.tight_layout()
+    plt.show()
+
+    # 직선이 된 눈금에서 기울기가 지수를 준다
+    slope_ll = np.polyfit(np.log(x), np.log(power), 1)[0]
+    slope_sl = np.polyfit(x, np.log(expo), 1)[0]
+    print(f"양로그에서 멱법칙의 기울기: {slope_ll:.4f}   (참값 2)")
+    print(f"반로그에서 지수의 기울기:   {slope_sl:.4f}   (참값 0.05)")
+    ```
+
+    출력:
+
+    ```
+    양로그에서 멱법칙의 기울기: 2.0000   (참값 2)
+    반로그에서 지수의 기울기:   0.0500   (참값 0.05)
+    ```
+
+    ![선형·반로그·양로그 눈금 비교](./img/matplotlib_basics_332.png)
+
+    **규칙.**
+
+    | 형태 | 직선이 되는 눈금 | 기울기의 뜻 |
+    |---|---|---|
+    | $y = ae^{bx}$ | 반로그($y$만 로그) | $b$ |
+    | $y = ax^{b}$ | 양로그(둘 다 로그) | $b$ |
+
+    $\log y = \log a + b\log x$와 $\log y = \log a + bx$를 각각 보면 바로 나온다. 어느 눈금에서 직선이 되는지가 곧 **어떤 모형인지를 알려 주는 진단**이다.
+
+    **통계에서 쓰는 곳.**
+
+    - 오른쪽으로 심하게 치우친 자료(소득, 도시 인구, 파일 크기)는 로그 눈금에서 대칭에 가까워진다. 로그변환을 하는 근거가 여기 있다.
+    - 생존분석에서 로그 눈금의 생존곡선이 직선이면 지수분포를 뜻한다.
+    - $p$값이나 우도비처럼 자릿수가 여러 개에 걸치는 값은 로그 눈금이 사실상 필수다.
+
+    **주의.** 로그 눈금은 $0$이나 음수를 표현할 수 없다. 자료에 $0$이 있으면 `symlog` 눈금을 쓰거나, $\log(x + 1)$처럼 옮겨서 변환하되 그 사실을 반드시 밝혀야 한다. 로그 눈금은 큰 값 쪽의 차이를 시각적으로 압축하므로, 눈금 표시를 분명히 하지 않으면 오해를 부른다. $\square$
+
+---
+
+**연습문제 9.**
+축을 어떻게 잡느냐에 따라 같은 자료가 전혀 다른 이야기를 하게 만들 수 있다. 막대그래프의 $y$축을 잘라낸 그림과 $0$에서 시작한 그림을 나란히 그리고, 어느 쪽이 정직한지 논하라.
+
+??? success "풀이"
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    groups = ["A", "B", "C", "D"]
+    values = np.array([97.2, 98.1, 97.6, 98.4])
+
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 4))
+
+    ax1.bar(groups, values, color="steelblue")
+    ax1.set_ylim(97, 98.6)                     # 잘라낸 축
+    ax1.set_title("잘라낸 y축 — '엄청난 차이!'", fontsize=10)
+    ax1.set_ylabel("점수")
+
+    ax2.bar(groups, values, color="steelblue")
+    ax2.set_ylim(0, 100)                       # 0 에서 시작
+    ax2.set_title("0 에서 시작 — 실제로는 거의 같다", fontsize=10)
+    ax2.set_ylabel("점수")
+
+    fig.tight_layout()
+    plt.show()
+
+    print(f"값의 범위: {values.min()} ~ {values.max()}  (차이 {values.ptp():.1f})")
+    print(f"전체 대비 상대적 차이: {values.ptp() / values.mean() * 100:.2f}%")
+    ```
+
+    출력:
+
+    ```
+    값의 범위: 97.2 ~ 98.4  (차이 1.2)
+    전체 대비 상대적 차이: 1.23%
+    ```
+
+    ![잘라낸 y축과 0에서 시작한 y축](./img/matplotlib_basics_393.png)
+
+    왼쪽 그림에서 D는 A의 두 배쯤 되어 보인다. 실제 차이는 $1.2$점, 상대적으로 $1.23\%$다.
+
+    **왜 막대그래프는 $0$에서 시작해야 하는가.** 막대는 **길이**로 양을 나타낸다. 길이의 비가 곧 값의 비로 읽히므로, 축을 자르면 그 비가 거짓이 된다. 이것이 자료 시각화에서 가장 흔한 왜곡이다.
+
+    **꺾은선그래프는 다르다.** 선은 길이가 아니라 **기울기와 변화**를 나타내므로 $0$을 포함할 의무가 없다. 체온의 하루 변화를 $0°C$부터 그리면 오히려 정보가 사라진다. 축을 자르는 것 자체가 죄가 아니라, **부호화 방식과 맞지 않게 자르는 것**이 죄다.
+
+    | 그림 | $0$을 포함해야 하는가 | 이유 |
+    |---|---|---|
+    | 막대그래프 | 그렇다 | 길이가 값에 비례해야 한다 |
+    | 꺾은선그래프 | 아니다 | 변화를 보는 것이 목적이다 |
+    | 산점도 | 아니다 | 위치가 값을 나타낸다 |
+
+    작은 차이를 정직하게 강조하고 싶다면, 축을 자르는 대신 **차이 자체를 그려라**(기준 대비 편차) 또는 신뢰구간을 함께 표시해 그 차이가 잡음보다 큰지 보여 주어라. $\square$
+
+---
+
+**연습문제 10.**
+관측이 수만 개인 산점도는 점이 겹쳐 쌓여 밀도를 볼 수 없다. 이 **과대plotting** 문제를 세 가지 방법으로 해결하고, 색지도 선택이 왜 중요한지 설명하라.
+
+??? success "풀이"
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    rng = np.random.default_rng(0)
+    n = 50_000
+    x = rng.normal(0, 1, n)
+    y = 0.7 * x + rng.normal(0, 0.7, n)        # 상관 있는 두 변수
+
+    fig, axes = plt.subplots(1, 4, figsize=(15, 3.8))
+
+    axes[0].scatter(x, y, s=8)
+    axes[0].set_title("그냥 산점도 — 뭉개진다", fontsize=9)
+
+    axes[1].scatter(x, y, s=4, alpha=0.02)
+    axes[1].set_title("alpha=0.02 — 밀도가 보인다", fontsize=9)
+
+    hb = axes[2].hexbin(x, y, gridsize=45, cmap="viridis")
+    axes[2].set_title("hexbin — 밀도를 센다", fontsize=9)
+    fig.colorbar(hb, ax=axes[2], label="개수")
+
+    axes[3].hist2d(x, y, bins=60, cmap="viridis")
+    axes[3].set_title("hist2d — 사각 격자", fontsize=9)
+
+    for ax in axes:
+        ax.set_xlabel("x")
+    axes[0].set_ylabel("y")
+    fig.tight_layout()
+    plt.show()
+
+    print(f"관측 {n:,}개,  상관계수 {np.corrcoef(x, y)[0, 1]:.4f}")
+    ```
+
+    출력:
+
+    ```
+    관측 50,000개,  상관계수 0.7087
+    ```
+
+    ![과대plotting 해결 방법 네 가지](./img/matplotlib_basics_446.png)
+
+    **세 가지 처방.**
+
+    - `alpha`를 아주 작게: 겹친 곳이 진해져 밀도가 명암으로 드러난다. 구현이 가장 쉽지만 값을 읽을 수는 없다.
+    - `hexbin`: 평면을 육각형으로 나누어 개수를 센다. 육각형은 사각형보다 원에 가까워 격자 방향의 인공적 무늬가 덜 생긴다.
+    - `hist2d`: 사각 격자. 개념이 단순하고 2차원 히스토그램과 그대로 대응된다.
+
+    개수를 실제로 읽어야 하면 `hexbin`이나 `hist2d`에 색막대를 붙이는 쪽이 옳다. `alpha`는 인상만 준다.
+
+    **색지도가 왜 중요한가.** 개수 같은 순차형 값에는 **지각적으로 균등한** 색지도를 써야 한다. `viridis`, `magma`, `cividis`가 여기 해당한다. 값이 같은 폭으로 변할 때 사람이 느끼는 색 변화도 같은 폭이라는 뜻이다.
+
+    옛 기본값 `jet`(무지개)은 이 성질이 없다. 청록과 노랑 근처에서 급격히 변해 **없는 경계를 만들어 내고**, 초록 영역에서는 거의 변하지 않아 **있는 구조를 감춘다.** 흑백으로 인쇄하면 순서가 뒤죽박죽이 되고, 적록 색맹인 사람에게는 읽히지 않는다.
+
+    기준값을 중심으로 양쪽으로 벌어지는 값(상관계수, 잔차, 온도 편차)에는 `RdBu`나 `coolwarm` 같은 **발산형** 색지도를 쓰고, 반드시 중심을 $0$에 맞춘다(`vmin=-m, vmax=m`). 그러지 않으면 색의 중립점이 엉뚱한 값에 놓여 그림이 거짓말을 한다. $\square$
+
