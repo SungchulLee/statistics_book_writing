@@ -37,7 +37,7 @@ $$
 
 ## 기본 카이제곱 정리
 
-!!! tip "정리 — 멱등행렬을 갖는 이차형식"
+!!! info "정리 — 멱등행렬을 갖는 이차형식"
     $\mathbf{z} \sim N(\mathbf{0}, \mathbf{I}_n)$이고 $\mathbf{A} \in \mathbb{R}^{n \times n}$이 계수 $r$인 대칭 멱등행렬이라 하자. 그러면
 
     $$
@@ -58,14 +58,14 @@ $$
 
 멱등 조건은 충분할 뿐 아니라, (척도를 제외하면) 카이제곱분포를 얻기 위해 필요하기도 하다.
 
-!!! tip "정리 — 코크런 조건"
+!!! info "정리 — 코크런 조건"
     $\mathbf{z} \sim N(\mathbf{0}, \sigma^2\mathbf{I}_n)$이고 $\mathbf{A}$가 대칭인 $n \times n$ 행렬이라 하자. $\mathbf{z}^T\mathbf{A}\mathbf{z}/\sigma^2 \sim \chi^2_r$일 필요충분조건은 $\mathbf{A}$가 $\operatorname{rank}(\mathbf{A}) = r$인 멱등행렬인 것이다.
 
 **증명 개요(필요성).** $\mathbf{z}^T\mathbf{A}\mathbf{z}/\sigma^2 \sim \chi^2_r$이면 적률생성함수가 $\chi^2_r$의 것과 일치해야 한다. $\mathbf{z}^T\mathbf{A}\mathbf{z}/\sigma^2$의 적률생성함수는 $\prod_{i=1}^n(1 - 2\lambda_i t)^{-1/2}$이고 $\chi^2_r$의 것은 $(1 - 2t)^{-r/2}$이다. 이 둘이 같으려면 정확히 $r$개의 고윳값이 1이고 나머지가 0이어야 하며, 이는 $\mathbf{A}$가 계수 $r$인 멱등행렬이라는 뜻이다. $\square$
 
 ## 이차형식의 독립성
 
-!!! tip "정리 — 크레이그 정리"
+!!! info "정리 — 크레이그 정리"
     $\mathbf{z} \sim N(\mathbf{0}, \sigma^2\mathbf{I}_n)$이고 $\mathbf{A}$와 $\mathbf{B}$가 대칭인 $n \times n$ 행렬이라 하자. 이차형식 $\mathbf{z}^T\mathbf{A}\mathbf{z}$와 $\mathbf{z}^T\mathbf{B}\mathbf{z}$가 **독립**일 필요충분조건은
 
     $$
@@ -80,7 +80,7 @@ $$
 
 코크런 정리는 카이제곱 결과와 독립성 결과를 제곱합 분해에 관한 하나의 강력한 진술로 결합한다.
 
-!!! tip "정리 — 코크런 정리"
+!!! info "정리 — 코크런 정리"
     $\mathbf{z} \sim N(\mathbf{0}, \sigma^2\mathbf{I}_n)$이고
 
     $$

@@ -17,7 +17,7 @@
 
 ## 대칭성과 양반정치성
 
-!!! tip "정리 — 그람 행렬은 대칭 양반정치다"
+!!! info "정리 — 그람 행렬은 대칭 양반정치다"
     임의의 행렬 $\mathbf{X} \in \mathbb{R}^{n \times p}$에 대해 그람 행렬 $\mathbf{G} = \mathbf{X}^T\mathbf{X}$는
 
     1. **대칭이다**: $\mathbf{G}^T = (\mathbf{X}^T\mathbf{X})^T = \mathbf{X}^T\mathbf{X} = \mathbf{G}$
@@ -33,7 +33,7 @@ $$
 
 ## 그람 행렬이 언제 양정치인가
 
-!!! tip "정리 — 그람 행렬의 양정치성"
+!!! info "정리 — 그람 행렬의 양정치성"
     그람 행렬 $\mathbf{G} = \mathbf{X}^T\mathbf{X}$가 양정치일 필요충분조건은 $\mathbf{X}$가 완전 열계수를 갖는 것이다(즉 $\operatorname{rank}(\mathbf{X}) = p$).
 
 **증명.** 위 계산에서 $\mathbf{y}^T\mathbf{G}\mathbf{y} = \lVert\mathbf{X}\mathbf{y}\rVert^2$이다. 이것이 모든 $\mathbf{y} \neq \mathbf{0}$에 대해 엄격히 양수일 필요충분조건은 모든 $\mathbf{y} \neq \mathbf{0}$에 대해 $\mathbf{X}\mathbf{y} \neq \mathbf{0}$인 것이고, 이는 $\ker(\mathbf{X}) = \{\mathbf{0}\}$, 즉 $\mathbf{X}$가 완전 열계수를 갖는 것과 동치다. $\square$

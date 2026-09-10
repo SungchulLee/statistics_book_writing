@@ -20,7 +20,7 @@
 
 ## 공간의 분해
 
-!!! tip "정리 — 직합 분해"
+!!! info "정리 — 직합 분해"
     $\mathbf{P}$가 사영이면 $\mathbb{R}^n = \operatorname{col}(\mathbf{P}) \oplus \ker(\mathbf{P})$이고, 모든 $\mathbf{x} \in \mathbb{R}^n$에 대해
 
     $$
@@ -107,7 +107,7 @@ $$
 
 ## 유일성
 
-!!! tip "정리 — 사영의 유일성"
+!!! info "정리 — 사영의 유일성"
     직합 분해 $\mathbb{R}^n = \mathcal{V} \oplus \mathcal{W}$가 주어지면 $\operatorname{col}(\mathbf{P}) = \mathcal{V}$이고 $\ker(\mathbf{P}) = \mathcal{W}$인 사영 $\mathbf{P}$가 유일하게 존재한다.
 
 이는 목표 부분공간 $\mathcal{V}$만 지정해서는 사영이 유일하게 결정되지 않음을 뜻한다. 눌러 없애는 방향 $\mathcal{W}$도 함께 지정해야 한다. $\mathcal{W} = \mathcal{V}^\perp$일 때 그 사영은 직교사영이 되고, 이 특수한 경우에는 $\mathcal{V}$만으로 사영이 결정된다.

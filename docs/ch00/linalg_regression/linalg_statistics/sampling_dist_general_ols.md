@@ -31,7 +31,7 @@ $$
 
 ## 최소제곱추정량의 표본분포
 
-!!! tip "정리 — 최소제곱추정량의 분포"
+!!! info "정리 — 최소제곱추정량의 분포"
     정규오차를 갖는 일반 선형모형 아래에서
 
     $$
@@ -88,7 +88,7 @@ $\mathbf{M}\mathbf{X} = \mathbf{0}$이므로 $\mathbf{e}$의 평균은 $\boldsym
 
 ## 잔차제곱합의 분포
 
-!!! tip "정리 — SSE의 카이제곱분포"
+!!! info "정리 — SSE의 카이제곱분포"
     잔차제곱합
 
     $$
@@ -121,7 +121,7 @@ $$
 
 ## 추정량과 SSE의 독립성
 
-!!! tip "정리 — 독립성"
+!!! info "정리 — 독립성"
     $\hat{\boldsymbol{\beta}}$과 $\text{SSE}$는 독립이다.
 
 **증명.** $\hat{\boldsymbol{\beta}} = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}$이 $\mathbf{y}$의 선형함수이고 $\text{SSE} = \mathbf{y}^T\mathbf{M}\mathbf{y}$이 이차형식이므로, 선형 부분과 이차 부분이 서로 직교하는 사영에 관여한다는 사실에서 독립성이 따라온다. 형식적으로는
@@ -136,7 +136,7 @@ $$
 
 $\hat{\beta}_j$의 정규분포, $\text{SSE}/\sigma^2$의 카이제곱분포, 그리고 이 둘의 독립성을 결합하면 t-분포가 나온다.
 
-!!! tip "정리 — 계수 검정을 위한 t-분포"
+!!! info "정리 — 계수 검정을 위한 t-분포"
     각 $j = 1, \dots, p$에 대해
 
     $$
@@ -151,7 +151,7 @@ $\hat{\beta}_j$의 정규분포, $\text{SSE}/\sigma^2$의 카이제곱분포, �
 
 계수의 부분집합이 동시에 0인지 검정하려면, 계수 $q$인 $q \times p$ 행렬 $\mathbf{C}$에 대해 $H_0: \mathbf{C}\boldsymbol{\beta} = \mathbf{0}$을 검정하는 것을 생각한다.
 
-!!! tip "정리 — 선형가설에 대한 F-분포"
+!!! info "정리 — 선형가설에 대한 F-분포"
     $H_0: \mathbf{C}\boldsymbol{\beta} = \mathbf{0}$ 아래에서
 
     $$
@@ -174,7 +174,7 @@ $$
 
 정규성을 가정하지 않아도 최소제곱추정량은 최적성을 갖는다.
 
-!!! tip "정리 — 가우스–마르코프"
+!!! info "정리 — 가우스–마르코프"
     가정 $E[\boldsymbol{\varepsilon}] = \mathbf{0}$과 $\operatorname{Var}(\boldsymbol{\varepsilon}) = \sigma^2\mathbf{I}_n$ 아래에서(정규성은 필요 없다) 최소제곱추정량 $\hat{\boldsymbol{\beta}}$은 **최량선형불편추정량(BLUE)** 이다. 즉 $\boldsymbol{\beta}$의 모든 선형불편추정량 가운데 최소제곱추정량이 (행렬 순서의 의미에서) 가장 작은 분산을 갖는다.
 
 **증명 개요.** $\tilde{\boldsymbol{\beta}} = \mathbf{A}\mathbf{y}$을 임의의 선형불편추정량이라 하자. 불편성은 $\mathbf{A}\mathbf{X} = \mathbf{I}_p$를 요구한다. $\mathbf{D}\mathbf{X} = \mathbf{0}$인 $\mathbf{D}$에 대해 $\mathbf{A} = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T + \mathbf{D}$로 쓰면

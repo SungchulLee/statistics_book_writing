@@ -20,7 +20,7 @@ $$
 
 ## 정규모집단에 대한 정확한 결과
 
-!!! abstract "정리"
+!!! info "정리"
     $X_1, \ldots, X_n \overset{\text{iid}}{\sim} N(\mu, \sigma^2)$이면:
 
     $$

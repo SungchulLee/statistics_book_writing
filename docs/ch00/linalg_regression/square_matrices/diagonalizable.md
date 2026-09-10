@@ -17,7 +17,7 @@ $\mathbf{P}$의 열은 $\mathbf{A}$의 고유벡터이고, $\boldsymbol{\Lambda}
 
 ## 언제 행렬이 대각화 가능한가
 
-!!! tip "정리 — 대각화 가능성의 판정"
+!!! info "정리 — 대각화 가능성의 판정"
     행렬 $\mathbf{A} \in \mathbb{R}^{n \times n}$이 대각화 가능할 필요충분조건은 일차독립인 고유벡터를 $n$개 갖는 것이다.
 
 **증명 개요.** $\mathbf{A}$가 일차독립인 고유벡터 $\mathbf{v}_1, \dots, \mathbf{v}_n$을 가지면 이들을 $\mathbf{P}$의 열로 놓는다. 그러면 $\mathbf{P}$는 (열들이 일차독립이므로) 가역이고, 고윳값 관계에 의해

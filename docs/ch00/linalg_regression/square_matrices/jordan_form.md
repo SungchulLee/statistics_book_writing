@@ -17,7 +17,7 @@ $1 \times 1$ 조르당 블록 $\mathbf{J}_1(\lambda) = (\lambda)$는 단순한 �
 
 ## 조르당 표준형 정리
 
-!!! tip "정리 — 조르당 표준형"
+!!! info "정리 — 조르당 표준형"
     모든 정사각행렬 $\mathbf{A} \in \mathbb{R}^{n \times n}$(또는 $\mathbb{C}^{n \times n}$)은 **조르당 행렬**
 
     $$

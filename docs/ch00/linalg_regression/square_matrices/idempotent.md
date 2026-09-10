@@ -17,7 +17,7 @@
 
 ## 멱등행렬의 고윳값
 
-!!! tip "정리 — 고윳값은 0 또는 1"
+!!! info "정리 — 고윳값은 0 또는 1"
     $\mathbf{A}$가 멱등이고 $\lambda$가 $\mathbf{A}$의 고윳값이면 $\lambda \in \{0, 1\}$이다.
 
 **증명.** $\mathbf{v} \ne \mathbf{0}$에 대해 $\mathbf{A}\mathbf{v} = \lambda\mathbf{v}$라 하자. 그러면
@@ -30,7 +30,7 @@ $$
 
 ## 대각합은 계수와 같다
 
-!!! tip "정리 — 멱등행렬의 대각합–계수 항등식"
+!!! info "정리 — 멱등행렬의 대각합–계수 항등식"
     $\mathbf{A} \in \mathbb{R}^{n \times n}$이 멱등이면
 
     $$

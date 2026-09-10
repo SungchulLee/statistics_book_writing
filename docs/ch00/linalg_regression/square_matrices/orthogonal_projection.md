@@ -17,7 +17,7 @@
 
 직교사영을 규정하는 기하적 성질은 가장 가까운 점 문제를 푼다는 것이다.
 
-!!! tip "정리 — 최선근사"
+!!! info "정리 — 최선근사"
     $\mathbf{P}$가 부분공간 $\mathcal{V} \subseteq \mathbb{R}^n$ 위로의 직교사영이라 하자. 임의의 $\mathbf{x} \in \mathbb{R}^n$에 대해 벡터 $\mathbf{P}\mathbf{x}$는 $\mathbf{x}$까지의 거리를 최소화하는 $\mathcal{V}$의 유일한 원소다.
 
     $$
@@ -42,7 +42,7 @@ $$
 
 ## 열공간 위로의 직교사영 공식
 
-!!! tip "정리 — 사영 공식"
+!!! info "정리 — 사영 공식"
     $\mathbf{X} \in \mathbb{R}^{n \times p}$가 완전 열계수를 갖는다고 하자($\operatorname{rank}(\mathbf{X}) = p$). $\operatorname{col}(\mathbf{X})$ 위로의 직교사영은
 
     $$
