@@ -441,24 +441,36 @@ $\mathbf{X}^T\mathbf{X}$, $\mathbf{X}^T\mathbf{y}$, $\hat{\boldsymbol\beta}$, �
 ??? success "풀이"
     `solve`는 $\mathbf{A}$를 한 번 분해하고(부분 피벗을 쓰는 LU 분해) $\mathbf{b}$에 대해 후진 대입을 수행할 뿐, $\mathbf{A}^{-1}$을 명시적으로 만들지 않는다. 역행렬을 만들면 모든 성분에 $1/\det(\mathbf{A})$가 곱해지므로 $\det(\mathbf{A})$가 작을 때 반올림 오차가 증폭된다. 또한 역슬래시 방식의 루틴은 불필요한 $O(n^3)$ 행렬곱을 피한다.
 
-    ```python
-    A = np.array([[1.0, 1.0], [1.0, 1.0 + 1e-12]])  # near-singular
-    b = np.array([2.0, 2.0 + 1e-12])
+    차이를 보려면 정말로 조건이 나쁜 행렬이 필요하다. 힐베르트 행렬 $H_{ij} = 1/(i+j-1)$이 표준적인 예다.
 
-    x_solve = np.linalg.solve(A, b)
-    x_inv = np.linalg.inv(A) @ b
-    print("solve:", x_solve)
-    print("inv:  ", x_inv)
+    ```python
+    import numpy as np
+    from scipy.linalg import hilbert
+
+    for n in (10, 12, 14):
+        A = hilbert(n)
+        x_true = np.ones(n)
+        b = A @ x_true                       # 정답이 (1,...,1) 이 되도록 만든다
+
+        err_solve = np.abs(np.linalg.solve(A, b) - x_true).max()
+        err_inv = np.abs(np.linalg.inv(A) @ b - x_true).max()
+        print(f"n={n:>3}  조건수 {np.linalg.cond(A):.2e}   "
+              f"solve 오차 {err_solve:.3e}   inv 오차 {err_inv:.3e}")
     ```
 
     출력:
 
     ```
-    solve: [1. 1.]
-    inv:   [1. 1.]
+    n= 10  조건수 1.60e+13   solve 오차 4.556e-04   inv 오차 2.376e-02
+    n= 12  조건수 1.64e+16   solve 오차 3.233e-01   inv 오차 1.800e+01
+    n= 14  조건수 2.43e+17   solve 오차 2.472e+01   inv 오차 5.714e+03
     ```
 
-    둘 다 $(1, 1)^T$에 가까워야 하지만 `inv` 쪽 오차가 눈에 띄게 크다. 진짜로 특이인 행렬에서는 `solve`가 예외를 일으키는 반면 `inv`는 쓰레기 값을 돌려줄 수 있다.
+    $n = 12$에서 `inv` 쪽 오차가 `solve`의 약 $56$배다. $n = 14$에 이르면 두 방법 모두 답을 잃지만, 그때도 `inv`가 두 자릿수 더 나쁘다.
+
+    조건수가 $10^{16}$을 넘으면 배정밀도의 상대정밀도($\approx 2\times10^{-16}$)를 다 써 버린 것이라 **어떤 알고리즘도 정확한 답을 줄 수 없다.** 이럴 때는 알고리즘을 바꾸는 대신 문제를 바꾸어야 한다. 회귀라면 변수를 중심화·척도화하거나, 능형 벌점을 넣거나, `np.linalg.lstsq`의 SVD 기반 절단을 쓰는 것이다.
+
+    진짜로 특이인 행렬에서는 `solve`가 `LinAlgError` 를 일으켜 문제를 알려 주는 반면, `inv`는 경고만 내거나 쓰레기 값을 조용히 돌려줄 수 있다. **실패가 드러나는 쪽이 낫다.**
 
 ---
 
@@ -493,3 +505,214 @@ $\mathbf{X}^T\mathbf{X}$, $\mathbf{X}^T\mathbf{y}$, $\hat{\boldsymbol\beta}$, �
     ```
 
     $n = 5$일 때 모분산 방식의 분모는 평균적으로 $\approx 4/5 = 0.8$을 내놓는데, 이는 예측된 편향 계수와 정확히 일치한다. 베셀 보정을 적용한 쪽은 예상대로 $1.0$ 근처를 맴돈다. 이 편향은 $n$이 작을 때 가장 중요하며, $n$이 수천이면 차이는 무시할 만하다.
+
+---
+
+**연습문제 7.**
+NumPy에서 어떤 연산은 **뷰(view)** 를, 어떤 연산은 **복사본(copy)** 을 돌려준다. 슬라이싱과 팬시 인덱싱이 어느 쪽인지 확인하고, 이 차이가 만들어 내는 버그를 보여라. 어느 쪽인지 확실히 알아내는 방법은 무엇인가?
+
+??? success "풀이"
+    ```python
+    import numpy as np
+
+    a = np.arange(10)
+    b = a[2:5]                 # 슬라이싱 → 뷰
+    b[0] = 999
+    print("슬라이스 수정 후 원본:", a)
+
+    c = np.arange(10)
+    d = c[[2, 3, 4]]           # 팬시 인덱싱 → 복사본
+    d[0] = 999
+    print("팬시 수정 후 원본:  ", c)
+
+    e = np.arange(6).reshape(2, 3)
+    print(f"\ne[0:1] 은 뷰인가? {e[0:1].base is not None}")
+    print(f"e[[0]] 은 복사본인가? {e[[0]].base is None}")
+    ```
+
+    출력:
+
+    ```
+    슬라이스 수정 후 원본: [  0   1 999   3   4   5   6   7   8   9]
+    팬시 수정 후 원본:   [0 1 2 3 4 5 6 7 8 9]
+
+    e[0:1] 은 뷰인가? True
+    e[[0]] 은 복사본인가? True
+    ```
+
+    **규칙.** 기본 슬라이싱(`a[2:5]`, `a[::2]`, `a.T`, `a.reshape(...)`)은 같은 메모리를 가리키는 뷰를 준다. 팬시 인덱싱(정수 배열이나 불리언 마스크)은 언제나 새 메모리를 할당한다.
+
+    `.base` 속성이 판정 도구다. 뷰이면 원본 배열을 가리키고, 복사본이면 `None`이다.
+
+    **어떤 버그가 생기는가.** 자료의 일부를 떼어 전처리한다고 하자.
+
+    ```python
+    import numpy as np
+
+    data = np.arange(10.0)
+    train = data[:7]           # 뷰!
+    train -= train.mean()      # 제자리 연산이 원본까지 바꾼다
+    print("원본이 오염되었다:", data)
+    ```
+
+    출력:
+
+    ```
+    원본이 오염되었다: [-3. -2. -1.  0.  1.  2.  3.  7.  8.  9.]
+    ```
+
+    `train -= ...`은 **제자리(in-place)** 연산이라 뷰가 가리키는 원본 메모리를 직접 고친다. 뒤에서 `data`로 검정 자료를 만들면 이미 오염된 값을 쓰게 되며, 오류 없이 조용히 틀린 결과가 나오므로 찾기가 어렵다.
+
+    안전하게 쓰려면 의도를 명시하라. 원본을 지키려면 `train = data[:7].copy()`, 뷰를 쓸 때는 `train = train - train.mean()`처럼 새 배열을 만드는 형태로 쓴다. 뷰 자체는 결함이 아니라 큰 배열을 복사 없이 다루게 해 주는 기능이다. 위험한 것은 **뷰와 제자리 연산의 조합**이다. $\square$
+
+---
+
+**연습문제 8.**
+불리언 마스킹과 팬시 인덱싱으로 (a) 조건부 평균, (b) `np.where`를 이용한 절단, (c) 반복문 없는 부트스트랩을 구현하라. 부트스트랩 표준오차를 이론값 $s/\sqrt{n}$과 비교하라.
+
+??? success "풀이"
+    ```python
+    import numpy as np
+
+    rng = np.random.default_rng(1)
+    data = rng.gamma(2, 2, size=200)
+
+    # (a) 불리언 마스킹
+    mask = data > 6
+    print(f"6 초과 개수 {mask.sum()},  그 조건부 평균 {data[mask].mean():.4f}")
+
+    # (b) np.where 로 절단(winsorize)
+    print(f"6 에서 자른 뒤 평균 {np.where(data > 6, 6, data).mean():.4f}"
+          f"   (원래 평균 {data.mean():.4f})")
+
+    # (c) 부트스트랩: (B, n) 인덱스 행렬을 한 번에 만든다
+    B, n = 10_000, len(data)
+    idx = rng.integers(0, n, size=(B, n))
+    boot = data[idx].mean(axis=1)               # 팬시 인덱싱이 (B, n) 배열을 만든다
+
+    print(f"\n부트스트랩 SE  {boot.std(ddof=1):.4f}")
+    print(f"이론 SE s/sqrt(n) {data.std(ddof=1) / np.sqrt(n):.4f}")
+    print(f"95% 백분위수 신뢰구간 {np.percentile(boot, [2.5, 97.5]).round(4)}")
+    ```
+
+    출력:
+
+    ```
+    6 초과 개수 28,  그 조건부 평균 8.2255
+    6 에서 자른 뒤 평균 3.4430   (원래 평균 3.7545)
+
+    부트스트랩 SE  0.1774
+    이론 SE s/sqrt(n) 0.1760
+    95% 백분위수 신뢰구간 [3.4231 4.1138]
+    ```
+
+    부트스트랩 표준오차 $0.1774$가 이론값 $0.1760$과 잘 맞는다. 감마분포는 오른쪽으로 치우쳐 있지만 $n = 200$이면 중심극한정리가 이미 충분히 작동한다.
+
+    **핵심 기법은 (c)다.** `rng.integers(0, n, size=(B, n))`이 $B$번의 복원추출을 한꺼번에 만들고, `data[idx]`가 팬시 인덱싱으로 $(B, n)$ 배열을 채운 뒤 `axis=1` 평균이 $B$개의 통계량을 한 번에 준다. 파이썬 반복문이 하나도 없다.
+
+    **메모리에 주의하라.** 이 방식은 $B \times n \times 8$바이트를 쓴다. 여기서는 $16$ MB로 괜찮지만 $n = 10^5$, $B = 10^4$이면 $8$ GB가 되어 터진다. 그럴 때는 부트스트랩을 덩어리로 나누어 돌린다.
+
+    (b)의 절단이 평균을 $3.755$에서 $3.443$으로 끌어내린 것도 눈여겨보라. 오른쪽 꼬리를 자르면 치우친 분포의 평균이 눈에 띄게 내려간다. $\square$
+
+---
+
+**연습문제 9.**
+분산을 계산하는 두 공식
+
+$$
+\text{(A)}\;\; \frac{1}{n}\sum x_i^2 - \bar{x}^2,
+\qquad
+\text{(B)}\;\; \frac{1}{n}\sum (x_i - \bar{x})^2
+$$
+
+은 수학적으로 같지만 부동소수점에서는 같지 않다. 자료에 큰 상수를 더해 가며 두 방법을 비교하고, 무슨 일이 일어나는지 설명하라.
+
+??? success "풀이"
+    ```python
+    import numpy as np
+
+    rng = np.random.default_rng(0)
+    for offset in (0, 1e6, 1e8, 1e9):
+        x = rng.normal(0, 1, 10_000) + offset
+        naive = (x ** 2).mean() - x.mean() ** 2        # (A)
+        two_pass = ((x - x.mean()) ** 2).mean()        # (B)
+        print(f"offset {offset:>8.0e}:  (A) {naive:>18.10f}   (B) {two_pass:.10f}")
+    ```
+
+    출력:
+
+    ```
+    offset    0e+00:  (A)       0.9961574236   (B) 0.9961574236
+    offset    1e+06:  (A)       0.9877929688   (B) 0.9880233132
+    offset    1e+08:  (A)      -4.0000000000   (B) 0.9983070355
+    offset    1e+09:  (A)     128.0000000000   (B) 1.0323651510
+    ```
+
+    자료를 평행이동해도 분산은 변하지 않아야 하는데, (A)는 무너진다. offset이 $10^8$일 때 **분산이 $-4$로 음수가 나오고**, $10^9$에서는 $128$이 된다. (B)는 내내 $1$ 근처를 지킨다.
+
+    **원인은 상쇄(catastrophic cancellation)다.** offset이 $10^8$일 때
+
+    $$
+    \frac{1}{n}\sum x_i^2 \approx 10^{16}, \qquad \bar{x}^2 \approx 10^{16}
+    $$
+
+    이고 두 값의 차이는 $1$ 정도다. 배정밀도는 유효숫자를 약 $16$자리 갖는데, $10^{16}$ 크기의 수에서 마지막 유효숫자가 이미 $1$ 단위다. 즉 **답 전체가 반올림 오차 안에 잠긴다.** 크기가 거의 같은 두 큰 수를 뺄 때마다 일어나는 일이며, 유효숫자가 한꺼번에 날아간다.
+
+    (B)는 먼저 빼기 때문에 $x_i - \bar{x}$가 $O(1)$이고, 제곱과 합산이 모두 작은 수 위에서 이루어진다.
+
+    **실무 지침.**
+
+    - 분산·공분산·회귀는 **언제나 중심화한 뒤** 계산하라. `np.var`는 내부적으로 (B)를 쓰므로 그냥 쓰면 된다.
+    - 직접 구현할 일이 있으면 웰포드 알고리즘을 쓰라. 한 번만 훑으면서도 수치적으로 안정하다.
+    - 이 문제는 자료의 **변동 대비 평균이 클 때**(연도, 타임스탬프, 큰 화폐 단위) 실제로 나타난다. 회귀에서 예측변수를 중심화하라는 조언은 해석의 편의만이 아니라 수치적 필요이기도 하다. $\square$
+
+---
+
+**연습문제 10.**
+`np.einsum`을 이용해 중간 행렬 전체를 만들지 않고 (a) 마할라노비스 거리와 (b) 모자 행렬의 대각 성분 $h_{ii}$를 계산하라. 왜 이것이 중요한가?
+
+??? success "풀이"
+    두 양 모두 큰 행렬의 **대각 성분만** 필요로 한다. 행렬 전체를 만들었다가 대각만 꺼내는 것은 $n^2$개를 계산해 $n$개만 쓰는 낭비다.
+
+    ```python
+    import numpy as np
+
+    rng = np.random.default_rng(1)
+    n, p = 100, 4
+    X = rng.normal(size=(n, p))
+
+    # (a) 마할라노비스 거리
+    mu, S = X.mean(0), np.cov(X.T)
+    Si = np.linalg.inv(S)
+    d_einsum = np.einsum('ij,jk,ik->i', X - mu, Si, X - mu)
+    d_loop = np.array([(x - mu) @ Si @ (x - mu) for x in X])
+    print(f"(a) 반복문과 일치: {np.allclose(d_einsum, d_loop)},  평균 {d_einsum.mean():.4f}  (≈ p = {p})")
+
+    # (b) 지렛값
+    XtXi = np.linalg.inv(X.T @ X)
+    h_einsum = np.einsum('ij,jk,ik->i', X, XtXi, X)
+    H = X @ XtXi @ X.T
+    print(f"(b) diag(H) 와 일치: {np.allclose(h_einsum, np.diag(H))},  합 {h_einsum.sum():.6f}  (= p)")
+    ```
+
+    출력:
+
+    ```
+    (a) 반복문과 일치: True,  평균 3.9600  (≈ p = 4)
+    (b) diag(H) 와 일치: True,  합 4.000000  (= p)
+    ```
+
+    **첨자 표기를 읽는 법.** `'ij,jk,ik->i'`는 $\sum_j \sum_k A_{ij} B_{jk} A_{ik}$를 뜻한다. 출력에 $i$만 남았으므로 관측마다 스칼라 하나가 나온다. $i$가 세 인자에 모두 나타나면서 출력에도 있다는 것이 "각 행을 자기 자신과만 짝지어라"라는 지시이며, 이것이 비대각 성분을 아예 계산하지 않게 해 준다.
+
+    마할라노비스 거리의 평균이 $p$에 가까운 것은 우연이 아니다. 표본공분산으로 표준화했으므로 $\mathbb{E}[(\mathbf{x}-\boldsymbol{\mu})^T\mathbf{S}^{-1}(\mathbf{x}-\boldsymbol{\mu})] \approx p$이다. 지렛값의 합이 정확히 $p$인 것과 같은 종류의 항등식이다.
+
+    **왜 중요한가: 메모리다.** $n = 5000$이면 모자 행렬은
+
+    $$
+    5000^2 \times 8\ \text{바이트} = 200\ \text{MB}
+    $$
+
+    인데 정작 필요한 대각 성분은 $40$ KB다. $n = 10^5$이면 $80$ GB가 되어 아예 불가능하다. `einsum`은 대각 성분만 직접 계산하므로 메모리가 $O(n)$이다.
+
+    회귀 진단에서 $h_{ii}$는 늘 필요한 값이므로($\mathrm{Var}(e_i) = \sigma^2(1-h_{ii})$, 쿡의 거리, 하나 빼기 잔차) 큰 자료에서 이 계산법을 아는 것이 실제로 도움이 된다. $\square$
+
