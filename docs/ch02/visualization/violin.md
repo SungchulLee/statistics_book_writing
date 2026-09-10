@@ -245,3 +245,257 @@ Pclass Sex
     - **모양 정보가 중요할 때만 쓰라.** 중앙값과 IQR만 흥미롭다면 상자그림으로 충분하다. 청중이 다봉성, 왜도, 모양의 차이를 봐야 하는 경우를 위해 바이올린을 아껴 두라.
 
     목표는 이것이다. 바이올린은 인지 부담을 늘리지 않으면서 정보를 *더해야* 한다. 청중에게 이름표가 달린 막대그래프가 더 도움이 된다면 그쪽을 쓰라.
+
+---
+
+**연습문제 7.**
+바이올린 그림은 KDE를 그린 것이므로 **KDE의 약점을 그대로 물려받는다.** 표본이 작을 때 바이올린이 없는 구조를 만들어 내는 것을 확인하라.
+
+??? success "풀이"
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from scipy.stats import gaussian_kde
+
+    rng = np.random.default_rng(0)
+
+    def n_modes(x):
+        g = np.linspace(x.min() - 1, x.max() + 1, 600)
+        d = gaussian_kde(x)(g)
+        return sum(1 for i in range(1, len(d) - 1) if d[i] > d[i - 1] and d[i] > d[i + 1])
+
+    print("완전히 단봉인 N(0,1) 자료에서 KDE 가 봉우리 2개 이상을 보일 확률")
+    for n in (8, 15, 30, 100):
+        print(f"  n={n:>4}: {np.mean([n_modes(rng.normal(0, 1, n)) >= 2 for _ in range(2000)]):.4f}")
+
+    samples = [rng.normal(0, 1, 8) for _ in range(4)]
+    fig, axes = plt.subplots(1, 2, figsize=(11, 4), sharey=True)
+    axes[0].violinplot(samples, showmedians=True)
+    axes[0].set_title("바이올린 (n=8 씩) — 넷이 달라 보인다", fontsize=10)
+    for i, s in enumerate(samples):
+        axes[1].scatter(np.full(len(s), i + 1), s, s=30, alpha=0.8)
+    axes[1].set_title("원자료 — 같은 모집단에서 8개씩", fontsize=10)
+    for ax in axes:
+        ax.set_xticks([1, 2, 3, 4])
+        ax.set_xticklabels([f"표본 {i+1}" for i in range(4)])
+    fig.tight_layout()
+    plt.show()
+    ```
+
+    출력:
+
+    ```
+    완전히 단봉인 N(0,1) 자료에서 KDE 가 봉우리 2개 이상을 보일 확률
+      n=   8: 0.1385
+      n=  15: 0.1640
+      n=  30: 0.1650
+      n= 100: 0.1790
+    ```
+
+    ![작은 표본에서 바이올린이 만들어 내는 가짜 구조](./img/violin_255.png)
+
+    **단봉 자료인데도 $14$–$18\%$의 확률로 봉우리가 둘 이상 보인다.** 그리고 $n$이 커져도 나아지지 않는데, 앞 절 봉우리 문서 연습문제 8에서 본 대로 기본 대역폭이 $n$과 함께 좁아지기 때문이다.
+
+    그림에서 네 표본은 **같은 모집단 $N(0,1)$에서 $8$개씩** 뽑은 것이다. 바이올린은 각기 다른 모양을 보여 주지만 오른쪽 원자료를 보면 그저 점 여덟 개씩이다. **바이올린의 굴곡은 자료가 아니라 평활의 산물이다.**
+
+    **실무 지침.**
+
+    - **집단당 $n$이 $20$ 미만이면 바이올린을 쓰지 마라.** 점 흩뿌리기나 벌떼그림이 정직하다.
+    - **$n$이 $20$–$50$이면 바이올린에 점을 겹쳐 그려라.** 독자가 굴곡의 근거를 직접 볼 수 있다.
+    - **어떤 경우에도 $n$을 표시하라.** 상자그림에서와 같은 조언이다(상자그림 문서 연습문제 10).
+
+    **바이올린이 상자그림보다 나은 점과 나쁜 점이 같은 뿌리에서 나온다.** 더 많은 것을 보여 주지만, 그중 일부는 자료에 없는 것이다. $\square$
+
+---
+
+**연습문제 8.**
+연습문제 2의 대역폭 효과를 그림으로 확인하라. 같은 자료에 대역폭만 바꾸면 바이올린이 어떻게 달라지는가?
+
+??? success "풀이"
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from scipy.stats import gaussian_kde
+
+    rng = np.random.default_rng(1)
+    x = np.concatenate([rng.normal(-2, 0.7, 150), rng.normal(2, 0.7, 150)])
+    grid = np.linspace(-6, 6, 800)
+
+    bandwidths = [0.08, 0.2, "scott", 0.8]
+    fig, axes = plt.subplots(1, 4, figsize=(14, 3.6), sharey=True)
+    for ax, bw in zip(axes, bandwidths):
+        kde = gaussian_kde(x, bw_method=bw)
+        d = kde(grid)
+        ax.fill_betweenx(grid, -d, d, alpha=0.6)
+        peaks = sum(1 for i in range(1, len(d) - 1) if d[i] > d[i - 1] and d[i] > d[i + 1])
+        label = f"h={bw}" if bw != "scott" else f"scott (h={kde.factor * x.std(ddof=1):.3f})"
+        ax.set_title(f"{label}\n봉우리 {peaks}개", fontsize=9)
+        ax.set_xticks([])
+    axes[0].set_ylabel("값")
+    fig.tight_layout()
+    plt.show()
+
+    for bw in bandwidths:
+        kde = gaussian_kde(x, bw_method=bw)
+        d = kde(grid)
+        peaks = sum(1 for i in range(1, len(d) - 1) if d[i] > d[i - 1] and d[i] > d[i + 1])
+        print(f"대역폭 {str(bw):>7}: 봉우리 {peaks}개")
+    ```
+
+    출력:
+
+    ```
+    대역폭    0.08: 봉우리 5개
+    대역폭     0.2: 봉우리 2개
+    대역폭   scott: 봉우리 2개
+    대역폭     0.8: 봉우리 2개
+    ```
+
+    ![대역폭에 따른 바이올린의 변화](./img/violin_313.png)
+
+    **같은 자료가 대역폭에 따라 전혀 다른 이야기를 한다.** 참 분포는 봉우리가 둘인 혼합인데, 너무 좁으면 여러 개의 가짜 봉우리가, 너무 넓으면 하나로 뭉개진 봉우리가 나온다.
+
+    | 대역폭 | 결과 |
+    |---|---|
+    | $h = 0.08$ (과소평활) | 잡음이 봉우리로 보인다 |
+    | $h = 0.2$ | 참 구조가 드러난다 |
+    | 스콧 (자동) | 대개 적절하다 |
+    | $h = 0.8$ (과대평활) | 두 봉우리가 하나로 합쳐진다 |
+
+    **이것이 히스토그램의 구간 개수 문제와 정확히 같다**(히스토그램 문서 연습문제 9). 편향–분산 맞바꿈이며, 좁으면 분산이 크고 넓으면 편향이 크다. 최적 대역폭도 마찬가지로 $n^{-1/5}$에 비례한다(히스토그램의 $n^{-1/3}$과 다른 것은 커널이 더 매끄럽기 때문이다).
+
+    **주의할 점.** 히스토그램은 구간 개수를 명시적으로 고르므로 독자가 그 선택을 인지한다. **바이올린 그림은 대역폭이 숨어 있어 독자가 자의적 선택이 있었다는 사실조차 모른다.** `seaborn.violinplot` 의 `bw_adjust` 기본값이 무엇인지 아는 독자는 드물다.
+
+    **권고.** 결론이 바이올린의 모양에 의존한다면 **여러 대역폭으로 그려 보고, 모든 설정에서 나타나는 특징만 이야기하라.** 그리고 그림 설명에 대역폭 설정을 적어 두어라. $\square$
+
+---
+
+**연습문제 9.**
+연습문제 4의 경계 인공물을 실제로 만들어 보고, 두 가지 교정법을 비교하라.
+
+??? success "풀이"
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from scipy.stats import gaussian_kde
+
+    rng = np.random.default_rng(2)
+    x = rng.exponential(1.0, 800)                  # 반드시 0 이상인 자료
+    grid = np.linspace(-1.5, 6, 900)
+
+    naive = gaussian_kde(x)(grid)
+    log_kde = gaussian_kde(np.log(x))
+    pos = grid > 0
+    transformed = np.zeros_like(grid)
+    transformed[pos] = log_kde(np.log(grid[pos])) / grid[pos]
+
+    print(f"단순 KDE 가 x<0 에 배정한 질량 {np.trapz(naive[grid < 0], grid[grid < 0]):.4f}")
+    print(f"x=0.05 에서: 단순 {gaussian_kde(x)(0.05)[0]:.4f}   "
+          f"로그변환 {transformed[np.argmin(np.abs(grid - 0.05))]:.4f}   "
+          f"참값 {np.exp(-0.05):.4f}")
+
+    fig, axes = plt.subplots(1, 3, figsize=(13, 4), sharey=True)
+    for ax, (d, title) in zip(axes, [
+            (naive, "단순 KDE — 0 아래로 새어 나간다"),
+            (np.where(grid >= 0, naive, 0), "단순히 잘라 내기 — 편향은 남는다"),
+            (transformed, "로그변환 후 되돌리기")]):
+        ax.fill_betweenx(grid, -d, d, alpha=0.6)
+        ax.axhline(0, color="red", ls="--", lw=1.2)
+        ax.set_title(title, fontsize=9)
+        ax.set_xticks([])
+    axes[0].set_ylabel("값")
+    fig.tight_layout()
+    plt.show()
+    ```
+
+    출력:
+
+    ```
+    단순 KDE 가 x<0 에 배정한 질량 0.0790
+    x=0.05 에서: 단순 0.5156   로그변환 0.8476   참값 0.9512
+    ```
+
+    ![경계 인공물과 두 가지 교정법](./img/violin_373.png)
+
+    **단순 KDE는 존재할 수 없는 $x < 0$ 영역에 확률질량을 배정한다.** 그리고 그만큼 $x = 0$ 근처의 밀도가 깎여, 참값 $0.951$인 지점을 훨씬 낮게 추정한다.
+
+    **두 교정법이 하는 일이 다르다.**
+
+    - **잘라 내기**(`seaborn` 의 `cut=0`, `clip=`)는 **곡선을 보기 좋게 자를 뿐**이다. 경계 안쪽의 밀도가 낮게 추정된 것은 그대로 남는다. 히스토그램 문서 연습문제 8에서 이미 지적한 점이다.
+    - **로그변환 후 되돌리기**는 실제로 편향을 고친다. $\log$ 척도에서는 경계가 $-\infty$로 밀려나 커널이 새어 나갈 곳이 없다.
+
+    **어느 것을 쓰는가.**
+
+    | 상황 | 권장 |
+    |---|---|
+    | 양수 자료, 경계 근처에 질량이 많다 | 로그변환 (또는 반사법) |
+    | 경계는 있으나 그 근처에 자료가 거의 없다 | 잘라 내기로 충분 |
+    | 비율 $[0,1]$ 자료 | 로짓 변환 |
+    | 정확한 밀도가 필요 없고 비교만 한다 | 잘라 내기 + 주석 |
+
+    **가장 중요한 실무 조언.** 바이올린이 **물리적으로 불가능한 값까지 뻗어 있으면** 독자가 그것을 자료로 오해한다. "응답 시간이 음수인 사람이 있나?"라는 질문을 받게 되며, 그 순간 그림의 신뢰도가 무너진다. **최소한 잘라 내기라도 반드시 적용하라.** $\square$
+
+---
+
+**연습문제 10.**
+바이올린 그림이 **적극적으로 나쁜** 경우가 있다. 이산 자료나 값의 종류가 적은 자료에 바이올린을 쓰면 어떻게 되는가?
+
+??? success "풀이"
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from scipy.stats import gaussian_kde
+
+    rng = np.random.default_rng(0)
+    likert = rng.choice([1, 2, 3, 4, 5], 3000, p=[.05, .15, .40, .30, .10]).astype(float)
+    grid = np.linspace(-1, 7, 800)
+    d = gaussian_kde(likert)(grid)
+
+    print(f"실제 분포: {np.round([np.mean(likert == k) for k in range(1, 6)], 3)}")
+    print(f"KDE 가 1 미만에 배정한 질량 {np.trapz(d[grid < 1], grid[grid < 1]):.4f}")
+    print(f"KDE 가 5 초과에 배정한 질량 {np.trapz(d[grid > 5], grid[grid > 5]):.4f}")
+    print(f"KDE 봉우리 개수 {sum(1 for i in range(1, len(d) - 1) if d[i] > d[i-1] and d[i] > d[i+1])}")
+
+    fig, axes = plt.subplots(1, 2, figsize=(11, 4))
+    axes[0].fill_betweenx(grid, -d, d, alpha=0.6)
+    axes[0].set_title("바이올린 — 있지도 않은 0.5 나 5.5 를 그린다", fontsize=10)
+    axes[0].set_xticks([])
+    levels, counts = np.unique(likert, return_counts=True)
+    axes[1].bar(levels, counts / counts.sum(), width=0.6)
+    axes[1].set_title("막대그래프 — 자료 그대로", fontsize=10)
+    axes[1].set_xlabel("응답")
+    fig.tight_layout()
+    plt.show()
+    ```
+
+    출력:
+
+    ```
+    실제 분포: [0.053 0.156 0.398 0.295 0.098]
+    KDE 가 1 미만에 배정한 질량 0.0259
+    KDE 가 5 초과에 배정한 질량 0.0474
+    KDE 봉우리 개수 5
+    ```
+
+    ![이산 자료에 바이올린을 쓰면 안 되는 이유](./img/violin_438.png)
+
+    **KDE가 $1$ 미만에 $2.3\%$, $5$ 초과에 $4.9\%$의 질량을 배정한다.** 응답이 $1$부터 $5$까지의 정수뿐인데 그렇다. 그림은 "$0.5$점을 준 사람"과 "$5.5$점을 준 사람"이 있는 것처럼 보인다.
+
+    봉우리도 $5$개로 나오는데, 이는 다섯 개의 이산 수준을 각각 봉우리로 그린 것이다. **"분포에 봉우리가 다섯 개"라는 해석은 완전히 잘못된 것이다.**
+
+    **바이올린을 쓰지 말아야 할 경우.**
+
+    | 자료 | 왜 나쁜가 | 대안 |
+    |---|---|---|
+    | 리커트·순서형 | 없는 중간값을 그린다 | 막대그래프, 누적 막대 |
+    | 계수(작은 값) | 정수 사이를 메운다 | 막대그래프 |
+    | 집단당 $n < 20$ | 없는 구조를 만든다 (연습문제 7) | 점 흩뿌리기 |
+    | 값의 종류가 몇 개뿐 | 봉우리가 값의 개수를 반영 | 도수표 |
+    | 경계가 있고 질량이 몰림 | 불가능한 값을 그린다 (연습문제 9) | 변환 후 그리기 |
+
+    **KDE의 전제를 기억하라.** 커널밀도추정은 **연속인 밀도가 존재한다**고 가정한다. 이산 자료에는 밀도가 없고 확률질량함수가 있을 뿐이다. 없는 것을 추정하려 하면 그림이 거짓말을 한다.
+
+    **바이올린이 빛나는 경우는 그 반대 조건이다.** 연속 자료, 집단당 관측이 충분히 많고, 경계가 문제되지 않으며, 분포의 **모양**이 실제로 비교의 대상일 때다. 그런 상황에서는 상자그림보다 훨씬 많은 정보를 준다(연습문제 1, 상자그림 문서 연습문제 7).
+
+    **도구를 고르는 순서.** 먼저 **자료가 어떤 종류인지**(2장 첫 절의 자료형 분류) 확인하고, 그 다음에 그림을 고른다. 그림을 먼저 고르고 자료를 끼워 맞추면 이런 일이 생긴다. $\square$
+
