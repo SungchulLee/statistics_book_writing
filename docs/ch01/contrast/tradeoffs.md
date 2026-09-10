@@ -181,3 +181,279 @@ Test MSE = 1.017
     대응책으로는 **가족단위 오류율 통제**(본페로니: $\alpha$를 검정 수로 나눔), **거짓발견율 통제**(벤자미니–호크버그: 양성으로 선언된 것 중 거짓의 비율을 통제), 표준 관행으로서의 **더 엄격한 기준**(예: 확증 검정에 $\alpha = 0.005$), 그리고 **사전 판단**이 있다. 사전확률이 낮은 변경(효과가 작고 사업적 가치가 낮은 것)은 사전확률이 높은 변경보다 더 강한 증거를 요구해야 한다.
 
     더 깊은 교훈은 이것이다. 고전적 방법은 사전에 지정된 소수의 질문을 위해 설계되었지, 같은 자료를 산업 규모로 심문하기 위해 설계되지 않았다. 대규모에서 순진하게 적용하면 오류율이 소리 없이 부풀어 오른다.
+
+---
+
+**연습문제 7.**
+연습문제 3의 "표본 내 $R^2$을 믿을 수 없다"를 그림으로 확인하라. 모형 복잡도를 키워 가며 훈련 오차와 시험 오차를 비교하라.
+
+??? success "풀이"
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    rng = np.random.default_rng(0)
+    n = 60
+    x = np.sort(rng.uniform(-1, 1, n))
+    y = np.sin(3 * x) + rng.normal(0, 0.3, n)
+    xt = np.sort(rng.uniform(-1, 1, 2000))
+    yt = np.sin(3 * xt) + rng.normal(0, 0.3, 2000)
+
+    degrees = [1, 3, 5, 9, 15, 25]
+    train_mse, test_mse = [], []
+    print(f"{'다항식 차수':>11}{'훈련 MSE':>11}{'시험 MSE':>11}")
+    for d in degrees:
+        c = np.polyfit(x, y, d)
+        train_mse.append(np.mean((np.polyval(c, x) - y) ** 2))
+        test_mse.append(np.mean((np.polyval(c, xt) - yt) ** 2))
+        print(f"{d:>11}{train_mse[-1]:>11.4f}{test_mse[-1]:>11.4f}")
+
+    fig, axes = plt.subplots(1, 2, figsize=(11, 4))
+    axes[0].plot(degrees, train_mse, "o-", label="훈련 MSE")
+    axes[0].plot(degrees, test_mse, "s-", label="시험 MSE")
+    axes[0].axhline(0.09, color="gray", ls=":", label="잡음 하한 $\\sigma^2$")
+    axes[0].set_xlabel("다항식 차수 (복잡도)")
+    axes[0].set_ylabel("평균제곱오차")
+    axes[0].set_title("훈련은 계속 내려가고 시험은 U자를 그린다", fontsize=10)
+    axes[0].legend(fontsize=8)
+
+    grid = np.linspace(-1, 1, 400)
+    for d, style in [(3, "-"), (25, "--")]:
+        axes[1].plot(grid, np.polyval(np.polyfit(x, y, d), grid), style, label=f"차수 {d}")
+    axes[1].scatter(x, y, s=18, color="black", alpha=0.6, label="자료")
+    axes[1].plot(grid, np.sin(3 * grid), color="red", lw=1.5, label="참 함수")
+    axes[1].set_ylim(-2, 2)
+    axes[1].set_title("차수 25 는 잡음까지 따라간다", fontsize=10)
+    axes[1].legend(fontsize=8)
+    fig.tight_layout()
+    plt.show()
+    ```
+
+    출력:
+
+    ```
+    다항식 차수     훈련 MSE     시험 MSE
+              1     0.2318     0.2715
+              3     0.0958     0.0979
+              5     0.0837     0.0996
+              9     0.0793     0.1025
+             15     0.0744     0.1076
+             25     0.0526     0.2551
+    ```
+
+    ![복잡도에 따른 훈련 오차와 시험 오차](./img/tradeoffs_191.png)
+
+    **훈련 MSE는 $0.232 \to 0.053$으로 단조 감소한다.** 매개변수를 늘리면 적합은 반드시 좋아진다(0장 선형대수 연습문제 9에서 본 $R^2$의 단조성과 같은 이야기다). 그러나 **시험 MSE는 U자를 그린다.** 차수 $3$에서 최소 $0.098$이고, 차수 $25$에서는 $0.255$로 차수 $1$보다도 나쁘다.
+
+    | 차수 | 훈련 | 시험 | 상태 |
+    |---|---|---|---|
+    | $1$ | $0.232$ | $0.272$ | 과소적합(편향) |
+    | $3$ | $0.096$ | $0.098$ | **적정** |
+    | $25$ | $0.053$ | $0.255$ | 과대적합(분산) |
+
+    차수 $3$에서 훈련과 시험이 거의 같다는 점($0.096$ 대 $0.098$)이 좋은 신호다. **둘의 격차가 곧 과대적합의 크기다.**
+
+    **왜 이것이 두 패러다임의 분기점인가.** 고전 통계는 모형이 참이라는 전제에서 계수의 불확실성을 말한다. 현대적 예측은 모형이 참인지 묻지 않고 **보지 않은 자료에서의 손실**만 본다. 그래서 표본 밖 평가가 현대 패러다임의 유일한 심판이 된다.
+
+    표본 내 $R^2$이나 유의성으로 유연한 모형을 평가하는 것은 시험문제를 미리 보고 채점하는 것과 같다. $\square$
+
+---
+
+**연습문제 8.**
+연습문제 6의 A/B 테스트 공장을 실제로 돌려 보라. 보정하지 않을 때, 본페로니로 보정할 때, **거짓발견율(FDR)** 을 통제할 때가 각각 어떻게 다른가?
+
+??? success "풀이"
+    ```python
+    import numpy as np
+    from scipy import stats
+    from statsmodels.stats.multitest import multipletests
+
+    rng = np.random.default_rng(0)
+    K, n = 1000, 2000
+    true_effect = np.zeros(K)
+    true_effect[:50] = 0.15                 # 1000건 중 50건만 진짜 효과가 있다
+
+    pvals = np.empty(K)
+    for i in range(K):
+        a = rng.normal(0, 1, n)
+        b = rng.normal(true_effect[i], 1, n)
+        pvals[i] = stats.ttest_ind(b, a)[1]
+
+    is_null = true_effect == 0
+    for label, sel in [
+            ("보정 없음", pvals < 0.05),
+            ("본페로니", multipletests(pvals, method="bonferroni")[0]),
+            ("BH (FDR 0.05)", multipletests(pvals, method="fdr_bh")[0])]:
+        n_sig = sel.sum()
+        n_false = np.sum(sel & is_null)
+        fdr = n_false / max(n_sig, 1)
+        print(f"{label:>14}: 유의 {n_sig:>3}건   거짓 {n_false:>2}건   "
+              f"실제 거짓발견율 {fdr:.3f}   참 효과 검출 {np.sum(sel & ~is_null):>2}/50")
+    ```
+
+    출력:
+
+    ```
+    보정 없음: 유의 105건   거짓 55건   실제 거짓발견율 0.524   참 효과 검출 50/50
+              본페로니: 유의  37건   거짓  0건   실제 거짓발견율 0.000   참 효과 검출 37/50
+     BH (FDR 0.05): 유의  50건   거짓  3건   실제 거짓발견율 0.060   참 효과 검출 47/50
+    ```
+
+    | 방법 | 유의 | 거짓 | 거짓발견율 | 참 효과 검출 |
+    |---|---|---|---|---|
+    | 보정 없음 | $105$ | $55$ | $0.524$ | $50/50$ |
+    | 본페로니 | $37$ | $0$ | $0.000$ | $37/50$ |
+    | BH | $50$ | $3$ | $0.060$ | $47/50$ |
+
+    **보정하지 않으면 "승리" 두 건 중 한 건이 순전한 잡음이다.** 연습문제 6이 계산한 대로 $950 \times 0.05 \approx 48$건의 거짓양성이 기대되고 실제로 $55$건이 나왔다. 제품팀은 이 중 절반을 실제로 배포하게 된다.
+
+    **본페로니는 지나치게 엄격하다.** 거짓을 하나도 허용하지 않는 대신 참 효과 $50$건 중 $13$건을 놓친다. 가족단위 오류율(하나라도 틀릴 확률)을 통제하는 것이 목표라 검정 수가 많아질수록 문턱이 가혹해진다.
+
+    **BH는 이 맥락에 정확히 맞는다.** 거짓발견율, 곧 **"내가 채택한 것 중 틀린 것의 비율"** 을 통제한다. 결과적으로 $50$건을 채택해 그중 $3$건만 틀렸고(목표 $0.05$ 근처인 $0.060$) 참 효과의 $94\%$를 잡았다.
+
+    BH가 목표 $0.05$를 조금 넘은 것은 우연 변동이다. FDR 통제는 **반복에 걸친 기댓값** 보장이지 매번 지켜지는 상한이 아니다.
+
+    **왜 산업 규모에서 FDR인가.** 연 $1000$건의 실험에서 목표는 "단 하나의 실수도 없게"가 아니라 **"배포한 것들이 대체로 진짜이게"** 다. 실수 하나의 비용이 크지 않고 기회를 놓치는 비용이 크다면 FDR이 맞는 기준이다.
+
+    반대로 규제 승인이나 안전성 판단처럼 **단 한 건의 거짓양성이 치명적인** 맥락에서는 본페로니 계열의 엄격한 통제가 맞다. **어느 오류율을 통제할지는 통계가 아니라 맥락이 정한다.** $\square$
+
+---
+
+**연습문제 9.**
+본문이 소개한 **이중 기계학습**을 구현하라. 유연한 방법을 순진하게 끼워 넣으면 왜 실패하며, 직교화와 교차적합이 무엇을 고치는가?
+
+??? success "풀이"
+    부분선형모형 $Y = \tau D + g(X) + \varepsilon$, $D = m(X) + \eta$에서 $\tau$를 추정한다. $g$와 $m$은 복잡해서 기계학습이 필요하지만, 우리가 원하는 것은 $\tau$ 하나다.
+
+    ```python
+    import numpy as np
+    from sklearn.ensemble import RandomForestRegressor
+    from sklearn.linear_model import LinearRegression
+    from sklearn.model_selection import KFold
+
+    rng = np.random.default_rng(0)
+    n, p, tau = 2000, 10, 1.0
+    rf = lambda: RandomForestRegressor(n_estimators=60, random_state=0, n_jobs=-1)
+
+    naive, plugin, dml = [], [], []
+    for _ in range(200):
+        X = rng.normal(0, 1, (n, p))
+        g = np.sin(X[:, 0]) + 0.5 * X[:, 1] ** 2 + X[:, 2]
+        D = 0.8 * np.tanh(X[:, 0]) + 0.5 * X[:, 1] + rng.normal(0, 1, n)
+        Y = tau * D + g + rng.normal(0, 1, n)
+
+        naive.append(LinearRegression().fit(D.reshape(-1, 1), Y).coef_[0])
+
+        # 순진한 플러그인: 같은 자료로 g 를 적합해 빼기
+        gm = rf().fit(X, Y)
+        plugin.append(LinearRegression().fit(
+            D.reshape(-1, 1), Y - gm.predict(X)).coef_[0])
+
+        # DML: 양쪽을 직교화하고 교차적합한다
+        Yr, Dr = np.empty(n), np.empty(n)
+        for tr, te in KFold(5, shuffle=True, random_state=0).split(X):
+            Yr[te] = Y[te] - rf().fit(X[tr], Y[tr]).predict(X[te])
+            Dr[te] = D[te] - rf().fit(X[tr], D[tr]).predict(X[te])
+        dml.append((Dr @ Yr) / (Dr @ Dr))
+
+    for label, v in [("보정 없는 OLS", naive), ("순진한 플러그인", plugin),
+                     ("DML (직교화 + 교차적합)", dml)]:
+        v = np.array(v)
+        print(f"{label:>22}: 평균 {v.mean():.4f}   편향 {v.mean() - tau:+.4f}"
+              f"   표준편차 {v.std():.4f}")
+    ```
+
+    출력:
+
+    ```
+    보정 없는 OLS: 평균 1.2173   편향 +0.2173   표준편차 0.0303
+                  순진한 플러그인: 평균 0.2514   편향 -0.7486   표준편차 0.0089
+          DML (직교화 + 교차적합): 평균 0.9608   편향 -0.0392   표준편차 0.0269
+    ```
+
+    | 방법 | 편향 |
+    |---|---|
+    | 보정 없는 OLS | $+0.217$ |
+    | 순진한 플러그인 | $\mathbf{-0.749}$ |
+    | DML | $-0.039$ |
+
+    **순진한 플러그인이 보정하지 않은 것보다 훨씬 나쁘다.** 이것이 핵심이다.
+
+    **왜 실패하는가.** 두 가지 문제가 겹친다.
+
+    - **정칙화 편향.** 랜덤포레스트는 예측을 잘하려고 $D$가 설명해야 할 변동까지 $\hat g(X)$로 흡수한다. $X$가 $D$를 예측하기 때문이다. 그 결과 $Y - \hat g(X)$에는 $\tau D$의 상당 부분이 이미 빠져 있다.
+    - **과대적합 편향.** 같은 자료로 $\hat g$를 적합하고 잔차를 쓰면 잔차가 자료에 의존하게 되어 편향이 생긴다.
+
+    **두 가지 처방이 각각을 고친다.**
+
+    - **직교화**: $Y$만이 아니라 $D$도 $X$에 대해 잔차화한 뒤 $\tilde{Y}$를 $\tilde{D}$에 회귀한다. 이렇게 만든 추정방정식은 $g$와 $m$의 추정오차에 대해 **1차적으로 둔감**하다(네이만 직교성). 방해모수를 조금 틀려도 $\tau$는 거의 흔들리지 않는다.
+    - **교차적합**: 잔차를 계산할 관측은 그 모형의 학습에 쓰지 않는다. 앞 절의 표본 밖 평가와 같은 착상이다.
+
+    **남은 $-0.039$의 편향**은 랜덤포레스트 자체의 유한표본 편향에서 온다. DML의 이론적 보장은 방해모수 추정이 $n^{-1/4}$보다 빠르게 수렴할 때 성립하는 점근적 결과이며, 유한표본에서는 이런 잔여 편향이 남는다.
+
+    **이것이 혼합 접근의 전형이다.** 예측에는 현대적 도구를 쓰되, 인과 추정량은 고전적 추론이 요구하는 성질(불편성, 타당한 신뢰구간)을 갖도록 **설계해서** 만든다. $\square$
+
+---
+
+**연습문제 10.**
+본문의 실패 유형 중 "현대적 망치로 고전적 못 치기"를 수치로 보여라. **변수 중요도가 인과효과가 아님**을 극단적인 예로 확인하라.
+
+??? success "풀이"
+    ```python
+    import numpy as np
+    from sklearn.ensemble import RandomForestRegressor
+
+    rng = np.random.default_rng(1)
+    n = 20_000
+
+    X1 = rng.normal(0, 1, n)                 # 참 원인
+    U = rng.normal(0, 1, n)                  # 측정되지 않은 교란요인
+    X3 = U + rng.normal(0, 0.3, n)           # 교란요인의 대리
+    Y = 2.0 * X1 + 1.5 * U + rng.normal(0, 1, n)
+    X2 = Y + rng.normal(0, 0.5, n)           # Y 의 결과 — 인과효과는 정확히 0
+
+    F = np.column_stack([X1, X2, X3])
+    rf = RandomForestRegressor(n_estimators=200, random_state=0, n_jobs=-1).fit(F, Y)
+
+    names = ["X1  참 원인 (효과 2.0)", "X2  Y 의 결과 (효과 0)", "X3  교란 대리 (효과 0)"]
+    print("랜덤포레스트 변수 중요도")
+    for name, imp in sorted(zip(names, rf.feature_importances_), key=lambda z: -z[1]):
+        print(f"  {name:<26} {imp:.4f}")
+    print(f"\n모형 결정계수 {rf.score(F, Y):.4f}   ← 예측은 거의 완벽하다")
+    ```
+
+    출력:
+
+    ```
+    랜덤포레스트 변수 중요도
+      X2  Y 의 결과 (효과 0)          0.9763
+      X1  참 원인 (효과 2.0)          0.0120
+      X3  교란 대리 (효과 0)           0.0117
+
+    모형 결정계수 0.9956   ← 예측은 거의 완벽하다
+    ```
+
+    **결과가 완전히 뒤집혀 있다.**
+
+    | 변수 | 참 인과효과 | 변수 중요도 |
+    |---|---|---|
+    | X2 (Y의 결과) | $\mathbf{0}$ | $\mathbf{0.976}$ |
+    | X1 (참 원인) | $\mathbf{2.0}$ | $0.012$ |
+    | X3 (교란 대리) | $0$ | $0.012$ |
+
+    인과효과가 **정확히 $0$인** 변수가 중요도의 $98\%$를 차지하고, 유일한 참 원인은 $1\%$에 그친다. 그런데 모형의 $R^2$는 $0.996$이다.
+
+    **왜 이런 일이 벌어지는가.** $X2$는 $Y$의 잡음 섞인 복사본이므로 $Y$를 예측하는 데 압도적으로 유용하다. **예측력과 인과효과는 서로 다른 것을 재는 양이다.**
+
+    - 변수 중요도는 "이 변수를 알면 $Y$를 얼마나 잘 맞히는가"를 잰다.
+    - 인과효과는 "이 변수를 **바꾸면** $Y$가 얼마나 변하는가"를 잰다.
+
+    $X2$에 개입해 값을 올려도 $Y$는 꿈쩍하지 않는다. $X2$는 $Y$의 하류에 있기 때문이다. 온도계 눈금을 손으로 올린다고 방이 더워지지 않는 것과 같다.
+
+    **SHAP도 마찬가지다.** SHAP 값은 "모형이 왜 그렇게 예측했는가"를 설명할 뿐 "세계가 어떻게 작동하는가"를 설명하지 않는다. 모형이 허위 상관에 의존하고 있다면 SHAP는 그 허위 상관을 충실히 보여 준다.
+
+    !!! danger "이 오류가 실제로 비싼 이유"
+        예측 모형의 변수 중요도를 보고 **정책을 바꾸는 것**이 문제다. "이탈 예측 모형에서 고객센터 문의 횟수가 가장 중요하다"에서 "문의를 줄이면 이탈이 준다"로 넘어가는 순간 $X2$의 함정에 빠진다. 문의는 이탈의 **원인이 아니라 전조**일 수 있다.
+
+        예측에 쓸 모형과 개입에 쓸 모형은 다르다. 개입을 정당화하려면 무작위화나 이 절에서 본 식별 전략이 필요하며, 아무리 정확한 예측 모형도 그 자리를 대신하지 못한다. $\square$
+
