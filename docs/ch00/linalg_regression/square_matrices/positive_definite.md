@@ -207,3 +207,240 @@ $\boldsymbol{\Sigma}$가 양정치이면 마할라노비스 거리 $d^2(\mathbf{
     $\boldsymbol{\Sigma}^{-1}$의 양정치성에 의해 모든 $\mathbf{z}$에 대해 $\mathbf{z}^T\boldsymbol{\Sigma}^{-1}\mathbf{z} \geq 0$이고, 등호는 $\mathbf{z} = \mathbf{0}$일 때에 한해 성립한다.
 
     따라서 $d^2 = 0$일 필요충분조건은 $\mathbf{x} - \boldsymbol{\mu} = \mathbf{0}$, 즉 $\mathbf{x} = \boldsymbol{\mu}$이다. 이는 마할라노비스 거리가 (정치성을 만족하는) 제대로 된 거리에 준하는 측도임을 확인해 준다. $\square$
+
+---
+
+**연습문제 6.**
+$\mathbf{A}$가 양정치이면 $\mathbf{A}^{-1}$도 양정치임을 보여라. 또 $\mathbf{A}^{1/2}$(제곱근 행렬)이 존재함을 보여라.
+
+??? success "풀이"
+    **역행렬.** $\mathbf{A}$가 양정치이면 가역이다. 임의의 $\mathbf{x} \neq \mathbf{0}$에 대해 $\mathbf{y} = \mathbf{A}^{-1}\mathbf{x}$로 두면 $\mathbf{y} \neq \mathbf{0}$이고
+
+    $$
+    \mathbf{x}^T\mathbf{A}^{-1}\mathbf{x} = (\mathbf{A}\mathbf{y})^T\mathbf{A}^{-1}(\mathbf{A}\mathbf{y}) = \mathbf{y}^T\mathbf{A}\mathbf{y} > 0
+    $$
+
+    이다($\mathbf{A}$의 대칭성을 썼다). 고윳값으로 보면 더 분명하다. $\mathbf{A}$의 고윳값이 $\lambda_i > 0$이면 $\mathbf{A}^{-1}$의 고윳값은 $1/\lambda_i > 0$이다.
+
+    **제곱근.** 스펙트럼 분해 $\mathbf{A} = \mathbf{Q}\boldsymbol{\Lambda}\mathbf{Q}^T$에서 모든 $\lambda_i > 0$이므로 $\sqrt{\lambda_i}$가 실수로 정의된다.
+
+    $$
+    \mathbf{A}^{1/2} = \mathbf{Q}\boldsymbol{\Lambda}^{1/2}\mathbf{Q}^T,
+    \qquad \boldsymbol{\Lambda}^{1/2} = \operatorname{diag}(\sqrt{\lambda_1}, \dots, \sqrt{\lambda_p})
+    $$
+
+    로 두면 $(\mathbf{A}^{1/2})^2 = \mathbf{Q}\boldsymbol{\Lambda}\mathbf{Q}^T = \mathbf{A}$이고, $\mathbf{A}^{1/2}$ 자신도 대칭 양정치다.
+
+    ```python
+    import numpy as np
+
+    A = np.array([[4., 2.], [2., 3.]])
+    lam, Q = np.linalg.eigh(A)
+
+    A_half = Q @ np.diag(np.sqrt(lam)) @ Q.T
+    print("A^(1/2) =\n", A_half.round(6))
+    print("제곱하면 A 인가:", np.allclose(A_half @ A_half, A))
+    print("A^-1 의 고윳값:", np.linalg.eigvalsh(np.linalg.inv(A)).round(6))
+    ```
+
+    출력:
+
+    ```
+    A^(1/2) =
+     [[1.919366 0.562169]
+     [0.562169 1.638281]]
+    제곱하면 A 인가: True
+    A^-1 의 고윳값: [0.179806 0.695194]
+    ```
+
+    제곱근 행렬은 **백색화**에 쓰인다. $\mathbf{X} \sim (\boldsymbol{\mu}, \boldsymbol{\Sigma})$일 때 $\boldsymbol{\Sigma}^{-1/2}(\mathbf{X}-\boldsymbol{\mu})$의 공분산은 $\mathbf{I}$가 된다. 마할라노비스 거리가 이 변환 뒤의 유클리드 거리와 같다는 것도 여기서 나온다. $\square$
+
+---
+
+**연습문제 7.**
+$\mathbf{A}$, $\mathbf{B}$가 양정치이면 $\mathbf{A} + \mathbf{B}$도 양정치임을 보여라. 그렇다면 곱 $\mathbf{A}\mathbf{B}$는 어떠한가?
+
+??? success "풀이"
+    **합.** 임의의 $\mathbf{x} \neq \mathbf{0}$에 대해
+
+    $$
+    \mathbf{x}^T(\mathbf{A}+\mathbf{B})\mathbf{x} = \underbrace{\mathbf{x}^T\mathbf{A}\mathbf{x}}_{>0} + \underbrace{\mathbf{x}^T\mathbf{B}\mathbf{x}}_{>0} > 0
+    $$
+
+    이고 $(\mathbf{A}+\mathbf{B})^T = \mathbf{A}+\mathbf{B}$이므로 양정치다. 같은 논법으로 양정치 + 양반정치도 양정치다.
+
+    **곱은 그렇지 않다.** 문제는 $\mathbf{A}\mathbf{B}$가 **대칭이 아닐 수 있다**는 데 있다. 양정치성은 대칭행렬에 대해 정의되므로 곱은 애초에 후보가 되지 못한다.
+
+    ```python
+    import numpy as np
+
+    A = np.array([[2., 1.], [1., 2.]])
+    B = np.array([[3., -1.], [-1., 1.]])
+    AB = A @ B
+
+    print("A, B 양정치:", np.linalg.eigvalsh(A).min() > 0, np.linalg.eigvalsh(B).min() > 0)
+    print("A+B 의 고윳값:", np.linalg.eigvalsh(A + B).round(4))
+    print("\nAB =\n", AB)
+    print("AB 가 대칭인가:", np.allclose(AB, AB.T))
+    print("AB 의 고윳값:", np.linalg.eigvals(AB).round(4))
+    ```
+
+    출력:
+
+    ```
+    A, B 양정치: True True
+    A+B 의 고윳값: [3. 5.]
+
+    AB =
+     [[ 5. -1.]
+     [ 1.  1.]]
+    AB 가 대칭인가: False
+    AB 의 고윳값: [4.7321 1.2679]
+    ```
+
+    다만 곱의 고윳값은 모두 양수다. $\mathbf{A}\mathbf{B}$가 $\mathbf{A}^{1/2}\mathbf{B}\mathbf{A}^{1/2}$(대칭 양정치)와 닮았기 때문이다. **고윳값은 양수지만 대칭이 아니므로 양정치행렬은 아니다.** $\square$
+
+---
+
+**연습문제 8.**
+세 변수의 상관계수가 모두 $\rho$로 같다고 하자. 이 행렬이 올바른 상관행렬이 되기 위한 $\rho$의 범위를 구하라. $\rho = -0.8$은 가능한가?
+
+??? success "풀이"
+    상관행렬은 반드시 **양반정치**여야 한다. 등상관행렬 $\mathbf{R} = (1-\rho)\mathbf{I} + \rho\mathbf{J}$의 고윳값은 잘 알려져 있다.
+
+    - $1 + (p-1)\rho$ (중복도 1, 고유벡터 $\mathbf{1}$)
+    - $1 - \rho$ (중복도 $p-1$)
+
+    $p = 3$이면 고윳값이 $1 + 2\rho$와 $1 - \rho$(중복도 2)다. 둘 다 음이 아니려면
+
+    $$
+    1 + 2\rho \ge 0 \;\text{ 그리고 }\; 1 - \rho \ge 0
+    \quad\Longrightarrow\quad -\tfrac{1}{2} \le \rho \le 1
+    $$
+
+    이다. 따라서 **$\rho = -0.8$은 불가능하다.**
+
+    ```python
+    import numpy as np
+
+    for rho in (-0.8, -0.6, -0.5, 0.5, 0.9):
+        R = np.full((3, 3), rho)
+        np.fill_diagonal(R, 1.)
+        ev = np.linalg.eigvalsh(R)
+        print(f"rho={rho:>5}:  최소 고윳값 {ev.min():+.4f}   "
+              f"{'유효' if ev.min() >= -1e-12 else '유효하지 않음'}")
+    ```
+
+    출력:
+
+    ```
+    rho= -0.8:  최소 고윳값 -0.6000   유효하지 않음
+    rho= -0.6:  최소 고윳값 -0.2000   유효하지 않음
+    rho= -0.5:  최소 고윳값 -0.0000   유효
+    rho=  0.5:  최소 고윳값 +0.5000   유효
+    rho=  0.9:  최소 고윳값 +0.1000   유효
+    ```
+
+    **직관.** 셋이 서로 강하게 음의 상관을 갖는 것은 불가능하다. $X_1$이 $X_2$와 반대로 움직이고 $X_2$가 $X_3$과 반대로 움직이면, $X_1$과 $X_3$은 오히려 **같이** 움직이는 경향이 생긴다. 변수가 많아질수록 제약은 더 강해져 하한이 $-1/(p-1)$이 된다.
+
+    **실무적 함의.** 전문가에게 상관계수를 개별적으로 물어 행렬을 채우면 양반정치가 깨지기 쉽다. 그런 행렬로는 모의실험도 마할라노비스 거리 계산도 할 수 없다. 가장 가까운 양반정치행렬로 보정하는 절차가 따로 필요한 이유다. $\square$
+
+---
+
+**연습문제 9.**
+촐레스키 분해 $\boldsymbol{\Sigma} = \mathbf{L}\mathbf{L}^T$를 이용해 공분산이 $\boldsymbol{\Sigma}$인 확률벡터를 생성하는 방법을 설명하고 수치로 확인하라.
+
+??? success "풀이"
+    $\mathbf{Z} \sim (\mathbf{0}, \mathbf{I})$이고 $\mathbf{X} = \mathbf{L}\mathbf{Z}$로 두면
+
+    $$
+    \operatorname{Var}(\mathbf{X}) = \mathbf{L}\operatorname{Var}(\mathbf{Z})\mathbf{L}^T = \mathbf{L}\mathbf{I}\mathbf{L}^T = \mathbf{L}\mathbf{L}^T = \boldsymbol{\Sigma}
+    $$
+
+    이다. 평균을 $\boldsymbol{\mu}$로 옮기려면 $\mathbf{X} = \boldsymbol{\mu} + \mathbf{L}\mathbf{Z}$로 두면 된다.
+
+    ```python
+    import numpy as np
+
+    Sigma = np.array([[4., 2.], [2., 3.]])
+    L = np.linalg.cholesky(Sigma)
+
+    rng = np.random.default_rng(0)
+    Z = rng.normal(size=(200_000, 2))
+    X = Z @ L.T                       # 행 벡터 규약이라 L^T 를 곱한다
+
+    print("L =\n", L.round(6))
+    print("\n목표 Sigma =\n", Sigma)
+    print("모의실험 공분산 =\n", np.cov(X, rowvar=False).round(3))
+    ```
+
+    출력:
+
+    ```
+    L =
+     [[2.       0.      ]
+     [1.       1.414214]]
+
+    목표 Sigma =
+     [[4. 2.]
+     [2. 3.]]
+    모의실험 공분산 =
+     [[4.013 1.996]
+     [1.996 2.997]]
+    ```
+
+    표본공분산이 목표와 소수점 둘째 자리까지 맞는다.
+
+    **왜 촐레스키인가.** $\boldsymbol{\Sigma}^{1/2}$(연습문제 6)을 써도 되지만, 촐레스키는 고윳값 분해보다 약 두 배 빠르고 삼각행렬이라 곱셈도 싸다. 양정치성이 보장될 때 표준적인 선택이다.
+
+    또한 촐레스키는 **양정치성 판정**에도 쓰인다. `np.linalg.cholesky`는 행렬이 양정치가 아니면 예외를 던지므로, 고윳값을 다 구하는 것보다 빠른 검사가 된다. $\square$
+
+---
+
+**연습문제 10.**
+$\mathbf{X}$가 완전 열계수를 갖지 않아 $\mathbf{X}^T\mathbf{X}$가 특이행렬일 때, $\lambda > 0$에 대해 $\mathbf{X}^T\mathbf{X} + \lambda\mathbf{I}$는 언제나 양정치임을 보여라.
+
+??? success "풀이"
+    임의의 $\mathbf{v} \neq \mathbf{0}$에 대해
+
+    $$
+    \mathbf{v}^T(\mathbf{X}^T\mathbf{X} + \lambda\mathbf{I})\mathbf{v}
+    = \underbrace{\lVert\mathbf{X}\mathbf{v}\rVert^2}_{\ge 0} + \lambda\underbrace{\lVert\mathbf{v}\rVert^2}_{>0}
+    > 0
+    $$
+
+    이다. 첫 항이 0이 되더라도($\mathbf{v} \in \ker(\mathbf{X})$) 둘째 항이 엄격히 양수이므로 전체가 양수다. 고윳값으로 보면 $\mathbf{X}^T\mathbf{X}$의 고윳값 $\lambda_i \ge 0$이 모두 $\lambda_i + \lambda > 0$으로 밀려 올라간다.
+
+    ```python
+    import numpy as np
+
+    X = np.array([[1., 2.], [2., 4.], [3., 6.]])     # 두 열이 공선 (계수 1)
+    G = X.T @ X
+    print("rank(X) =", np.linalg.matrix_rank(X))
+    print("X^T X 의 고윳값:", np.linalg.eigvalsh(G).round(6))
+
+    for lam in (0., 0.5, 2.):
+        ev = np.linalg.eigvalsh(G + lam * np.eye(2))
+        print(f"lambda={lam}: 최소 고윳값 = {ev.min():.6f}")
+    ```
+
+    출력:
+
+    ```
+    rank(X) = 1
+    X^T X 의 고윳값: [-0. 70.]
+    lambda=0.0: 최소 고윳값 = -0.000000
+    lambda=0.5: 최소 고윳값 = 0.500000
+    lambda=2.0: 최소 고윳값 = 2.000000
+    ```
+
+    $\mathbf{X}^T\mathbf{X}$의 최소 고윳값이 0이라 역행렬이 없지만, $\lambda$를 더하면 곧바로 양정치가 되어 역행렬이 존재한다.
+
+    **이것이 능형회귀가 언제나 풀리는 이유다.** 보통최소제곱은 $p > n$이거나 예측변수가 완전히 공선이면 해가 유일하지 않지만,
+
+    $$
+    \hat{\boldsymbol{\beta}}_{\text{ridge}} = (\mathbf{X}^T\mathbf{X} + \lambda\mathbf{I})^{-1}\mathbf{X}^T\mathbf{y}
+    $$
+
+    는 임의의 $\lambda > 0$에서 언제나 존재하고 유일하다. 능형회귀가 원래 다중공선성을 다루려고 고안된 것도 이 때문이다(18장). $\square$
+

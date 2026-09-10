@@ -199,3 +199,225 @@ $\boldsymbol{\Sigma}$가 고윳값 $\lambda_1 = 5$, $\lambda_2 = 2$를 갖는 $2
     스펙트럼 정리는 모든 실대칭행렬이 (중복도를 세어) $n$개의 실수 고윳값과 $n$개의 정규직교 고유벡터를 온전히 가짐을 보장한다. 구체적으로, 서로 다른 고윳값에 대응하는 고유벡터는 직교하고, 중복 고윳값의 경우 그 고유공간을 그람–슈미트로 정규직교화할 수 있다. 이 고유벡터들을 $\mathbf{Q}$의 열로 배열하면 직교행렬($\mathbf{Q}^T\mathbf{Q} = \mathbf{I}$)이 되므로 $\mathbf{A} = \mathbf{Q}\boldsymbol{\Lambda}\mathbf{Q}^T$이다.
 
     공분산행렬 $\boldsymbol{\Sigma}$에 대해 이 스펙트럼 분해가 주성분분석(PCA)의 토대다. 고유벡터가 주성분 방향을 주고, 고윳값이 각 성분이 설명하는 분산을 주며, $\mathbf{Q}$의 직교성은 주성분들이 서로 무상관임을 뜻한다. 이 분해는 계산도 단순하게 만든다: $\boldsymbol{\Sigma}^{-1} = \mathbf{Q}\boldsymbol{\Lambda}^{-1}\mathbf{Q}^T$이고 $\boldsymbol{\Sigma}^{1/2} = \mathbf{Q}\boldsymbol{\Lambda}^{1/2}\mathbf{Q}^T$이다.
+
+---
+
+**연습문제 6.**
+대각화 가능성의 판정 기준은 "모든 고윳값에서 기하적 중복도 $=$ 대수적 중복도"이다. 두 중복도를 정의하고, 서로 다른 예를 하나씩 들어라.
+
+??? success "풀이"
+    고윳값 $\lambda$에 대해
+
+    - **대수적 중복도**: 특성다항식에서 인수 $(\lambda - \lambda_0)$가 나타나는 차수
+    - **기하적 중복도**: 고유공간의 차원 $\dim\ker(\mathbf{A} - \lambda_0\mathbf{I})$
+
+    언제나 (기하적) $\le$ (대수적)이며, **모든** 고윳값에서 등호가 성립할 때에 한해 대각화 가능하다. 고유벡터를 충분히 모아야 기저를 만들 수 있기 때문이다.
+
+    **두 중복도가 같은 예:** $\mathbf{I}_2$는 $\lambda = 1$의 대수적 중복도가 2이고, $\ker(\mathbf{I}-\mathbf{I}) = \mathbb{R}^2$이므로 기하적 중복도도 2다. 이미 대각행렬이다.
+
+    **다른 예:** $\mathbf{B} = \begin{pmatrix} 2 & 1 \\ 0 & 2 \end{pmatrix}$는 $\lambda = 2$의 대수적 중복도가 2이지만
+
+    $$
+    \mathbf{B} - 2\mathbf{I} = \begin{pmatrix} 0 & 1 \\ 0 & 0 \end{pmatrix}
+    $$
+
+    의 영공간이 $\operatorname{span}\{(1,0)^T\}$로 1차원이다. 기하적 중복도가 1이라 대각화할 수 없다.
+
+    ```python
+    import numpy as np
+
+    for name, M in [("I", np.eye(2)),
+                    ("Jordan", np.array([[2., 1.], [0., 2.]]))]:
+        w = np.linalg.eigvals(M)
+        geo = M.shape[0] - np.linalg.matrix_rank(M - w[0] * np.eye(2))
+        print(f"{name:>7}: 고윳값 {w.round(4)}, 기하적 중복도 = {geo}")
+    ```
+
+    출력:
+
+    ```
+    I: 고윳값 [1. 1.], 기하적 중복도 = 2
+     Jordan: 고윳값 [2. 2.], 기하적 중복도 = 1
+    ```
+
+    **고윳값이 서로 다르면** 각 고유공간이 최소 1차원이고 합이 $n$이어야 하므로 자동으로 모두 1차원이 되어 대각화가 보장된다. 이것이 본문의 충분조건이다. 다만 **필요조건은 아니다.** $\mathbf{I}$가 반례다. $\square$
+
+---
+
+**연습문제 7.**
+대칭이 아니면서 대각화 가능한 행렬의 고유벡터는 일반적으로 직교하지 않는다. $\mathbf{A} = \begin{pmatrix} 4 & 1 \\ 0 & 3 \end{pmatrix}$로 확인하고, 대칭행렬과 대비하라.
+
+??? success "풀이"
+    ```python
+    import numpy as np
+
+    A = np.array([[4., 1.], [0., 3.]])          # 대칭이 아니지만 고윳값이 서로 다름
+    w, V = np.linalg.eig(A)
+    print("A 의 고윳값:", w.round(4))
+    print("고유벡터(열):\n", V.round(4))
+    print("두 고유벡터의 내적:", round(float(V[:, 0] @ V[:, 1]), 4))
+
+    S = np.array([[4., 1.], [1., 3.]])          # 대칭
+    w2, V2 = np.linalg.eigh(S)
+    print("\nS 의 고윳값:", w2.round(4))
+    print("두 고유벡터의 내적:", round(float(V2[:, 0] @ V2[:, 1]), 12))
+    ```
+
+    출력:
+
+    ```
+    A 의 고윳값: [4. 3.]
+    고유벡터(열):
+     [[ 1.     -0.7071]
+     [ 0.      0.7071]]
+    두 고유벡터의 내적: -0.7071
+
+    S 의 고윳값: [2.382 4.618]
+    두 고유벡터의 내적: -0.0
+    ```
+
+    비대칭 행렬의 두 고유벡터는 내적이 $-0.707$로 직교하지 않는다. 대각화는 되지만 $\mathbf{P}$가 직교행렬이 아니어서 $\mathbf{P}^{-1} \neq \mathbf{P}^T$다. 대칭행렬에서는 내적이 정확히 0이다.
+
+    **통계에서 왜 중요한가.** 공분산행렬이 대칭이므로 주성분들이 서로 **직교**한다. 직교성 덕분에 (1) 총분산이 성분별로 깔끔하게 쪼개지고, (2) 좌표변환이 회전이어서 거리가 보존되며, (3) $\mathbf{P}^{-1}$을 계산할 필요 없이 전치만 쓰면 되어 수치적으로 안정하다. 비대칭 행렬을 대각화할 때는 이 세 가지를 모두 잃는다. $\square$
+
+---
+
+**연습문제 8.**
+대각화를 이용해 마르코프 연쇄의 극한 분포를 구하라. 전이행렬이 $\mathbf{P} = \begin{pmatrix} 0.9 & 0.1 \\ 0.2 & 0.8 \end{pmatrix}$일 때 $\mathbf{P}^n$의 극한은 무엇인가?
+
+??? success "풀이"
+    $\mathbf{P} = \mathbf{V}\boldsymbol{\Lambda}\mathbf{V}^{-1}$이면 $\mathbf{P}^n = \mathbf{V}\boldsymbol{\Lambda}^n\mathbf{V}^{-1}$이므로 **고윳값의 거듭제곱만 보면 된다.**
+
+    특성다항식은 $\lambda^2 - 1.7\lambda + 0.7 = (\lambda - 1)(\lambda - 0.7)$이므로 고윳값은 $1$과 $0.7$이다. 확률행렬은 행의 합이 1이므로 $\mathbf{P}\mathbf{1} = \mathbf{1}$, 곧 언제나 $\lambda = 1$을 갖는다.
+
+    $n \to \infty$이면 $1^n = 1$은 남고 $0.7^n \to 0$이다. 따라서 $\boldsymbol{\Lambda}^n \to \operatorname{diag}(1, 0)$이고 $\mathbf{P}^n$은 $\lambda = 1$의 고유벡터가 만드는 계수 1 행렬로 수렴한다.
+
+    ```python
+    import numpy as np
+
+    P = np.array([[0.9, 0.1], [0.2, 0.8]])
+    print("고윳값:", np.linalg.eigvals(P).round(6))
+
+    for n in (1, 5, 20, 50):
+        print(f"P^{n:<3} =\n", np.linalg.matrix_power(P, n).round(6))
+    ```
+
+    출력:
+
+    ```
+    고윳값: [1.  0.7]
+    P^1   =
+     [[0.9 0.1]
+     [0.2 0.8]]
+    P^5   =
+     [[0.72269 0.27731]
+     [0.55462 0.44538]]
+    P^20  =
+     [[0.666933 0.333067]
+     [0.666135 0.333865]]
+    P^50  =
+     [[0.666667 0.333333]
+     [0.666667 0.333333]]
+    ```
+
+    $\mathbf{P}^{50}$의 두 행이 모두 $(2/3, 1/3)$로 같아진다. **출발 상태와 무관하게 같은 분포로 수렴한다**는 뜻이며, 이 $\boldsymbol{\pi} = (2/3, 1/3)$이 정상분포다.
+
+    수렴 속도는 **두 번째로 큰 고윳값**이 정한다. 여기서는 $0.7$이므로 오차가 매 단계 $0.7$배로 줄어든다. 이 값을 **스펙트럼 간격**이라 하며, MCMC의 수렴 속도를 지배하는 양이기도 하다. $\square$
+
+---
+
+**연습문제 9.**
+공분산행렬의 스펙트럼 분해 $\boldsymbol{\Sigma} = \mathbf{Q}\boldsymbol{\Lambda}\mathbf{Q}^T$를 이용해 **백색화** 변환 $\mathbf{W} = \boldsymbol{\Lambda}^{-1/2}\mathbf{Q}^T$를 만들고, $\operatorname{Var}(\mathbf{W}\mathbf{X}) = \mathbf{I}$임을 확인하라.
+
+??? success "풀이"
+    $\operatorname{Var}(\mathbf{X}) = \boldsymbol{\Sigma}$이면
+
+    $$
+    \operatorname{Var}(\mathbf{W}\mathbf{X}) = \mathbf{W}\boldsymbol{\Sigma}\mathbf{W}^T
+    = \boldsymbol{\Lambda}^{-1/2}\mathbf{Q}^T(\mathbf{Q}\boldsymbol{\Lambda}\mathbf{Q}^T)\mathbf{Q}\boldsymbol{\Lambda}^{-1/2}
+    = \boldsymbol{\Lambda}^{-1/2}\boldsymbol{\Lambda}\boldsymbol{\Lambda}^{-1/2} = \mathbf{I}
+    $$
+
+    이다($\mathbf{Q}^T\mathbf{Q} = \mathbf{I}$를 두 번 썼다).
+
+    ```python
+    import numpy as np
+
+    Sigma = np.array([[4., 2.], [2., 3.]])
+    lam, Q = np.linalg.eigh(Sigma)
+    W = np.diag(lam ** -0.5) @ Q.T
+
+    rng = np.random.default_rng(0)
+    X = rng.normal(size=(200_000, 2)) @ np.linalg.cholesky(Sigma).T
+    Xw = X @ W.T
+
+    print("변환 전 공분산:\n", np.cov(X, rowvar=False).round(3))
+    print("백색화 후 공분산:\n", np.cov(Xw, rowvar=False).round(3))
+    ```
+
+    출력:
+
+    ```
+    변환 전 공분산:
+     [[4.013 1.996]
+     [1.996 2.997]]
+    백색화 후 공분산:
+     [[ 1.005 -0.003]
+     [-0.003  1.001]]
+    ```
+
+    백색화 후 공분산이 단위행렬에 가깝다.
+
+    변환은 두 단계로 읽힌다. $\mathbf{Q}^T$가 주축에 맞추어 **회전**하고, $\boldsymbol{\Lambda}^{-1/2}$이 각 축을 표준편차로 나누어 **척도를 맞춘다.**
+
+    백색화가 쓰이는 곳은 많다. 마할라노비스 거리는 백색화 후의 유클리드 거리이고, 일반화최소제곱은 오차를 백색화한 뒤 보통최소제곱을 적용하는 것이며, 여러 기계학습 방법이 전처리로 이 변환을 쓴다.
+
+    **주의.** 백색화 행렬은 유일하지 않다. 임의의 직교행렬 $\mathbf{U}$에 대해 $\mathbf{U}\mathbf{W}$도 백색화한다. 위의 것은 PCA 백색화이고, 대칭인 $\boldsymbol{\Sigma}^{-1/2}$을 쓰는 ZCA 백색화도 흔하다. $\square$
+
+---
+
+**연습문제 10.**
+$\mathbf{A}$가 대각화 가능하고 고윳값이 모두 $|\lambda_i| < 1$이면 $\mathbf{A}^n \to \mathbf{O}$임을 보여라. 고윳값 중 하나라도 $|\lambda| > 1$이면 어떻게 되는가?
+
+??? success "풀이"
+    $\mathbf{A}^n = \mathbf{P}\boldsymbol{\Lambda}^n\mathbf{P}^{-1}$이고 $\boldsymbol{\Lambda}^n = \operatorname{diag}(\lambda_1^n, \dots, \lambda_p^n)$이다. 모든 $|\lambda_i| < 1$이면 $\lambda_i^n \to 0$이므로 $\boldsymbol{\Lambda}^n \to \mathbf{O}$이고, 따라서
+
+    $$
+    \mathbf{A}^n = \mathbf{P}\boldsymbol{\Lambda}^n\mathbf{P}^{-1} \to \mathbf{P}\mathbf{O}\mathbf{P}^{-1} = \mathbf{O}
+    $$
+
+    이다. 반대로 어떤 $|\lambda_j| > 1$이면 그 방향의 성분이 $|\lambda_j|^n$으로 **발산**한다. 초기벡터가 그 고유벡터 성분을 조금이라도 가지고 있으면 폭발한다.
+
+    ```python
+    import numpy as np
+
+    A = np.array([[0.6, 0.3], [0.1, 0.5]])
+    print("고윳값:", np.linalg.eigvals(A).round(4), " 최대 절댓값:",
+          round(np.abs(np.linalg.eigvals(A)).max(), 4))
+    for n in (5, 20, 60):
+        print(f"  ||A^{n}|| = {np.linalg.norm(np.linalg.matrix_power(A, n)):.3e}")
+
+    B = np.array([[1.2, 0.0], [0.0, 0.5]])
+    print("\nB 의 최대 |고윳값|:", round(np.abs(np.linalg.eigvals(B)).max(), 4))
+    for n in (5, 20, 60):
+        print(f"  ||B^{n}|| = {np.linalg.norm(np.linalg.matrix_power(B, n)):.3e}")
+    ```
+
+    출력:
+
+    ```
+    고윳값: [0.7303 0.3697]  최대 절댓값: 0.7303
+      ||A^5|| = 2.358e-01
+      ||A^20|| = 2.128e-03
+      ||A^60|| = 7.371e-09
+
+    B 의 최대 |고윳값|: 1.2
+      ||B^5|| = 2.489e+00
+      ||B^20|| = 3.834e+01
+      ||B^60|| = 5.635e+04
+    ```
+
+    **스펙트럼 반지름** $\rho(\mathbf{A}) = \max_i|\lambda_i|$이 $1$보다 작은지가 안정성을 가른다.
+
+    통계에서 이 조건이 등장하는 대표적인 곳이 **시계열의 정상성**이다. AR($p$) 과정을 벡터 형태로 쓰면 계수행렬의 스펙트럼 반지름이 1보다 작을 때에 한해 정상 과정이 된다. AR(1) $X_t = \phi X_{t-1} + \varepsilon_t$에서 $|\phi| < 1$이라는 익숙한 조건이 그 특수한 경우다. $\square$
+
