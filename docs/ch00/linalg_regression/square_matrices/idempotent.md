@@ -226,3 +226,168 @@ $\mathbf{A}, \mathbf{B}$가 $\mathbb{R}^{n \times n}$의 대칭 멱등행렬이�
     **계수:** 대각합–계수 항등식에 의해 $\operatorname{rank}(\mathbf{A} + \mathbf{B}) = \operatorname{tr}(\mathbf{A} + \mathbf{B}) = \operatorname{tr}(\mathbf{A}) + \operatorname{tr}(\mathbf{B}) = \operatorname{rank}(\mathbf{A}) + \operatorname{rank}(\mathbf{B})$이다. $\square$
 
     통계적 쓰임: 서로 직교하는 사영행렬 $\mathbf{P}_i$로 이루어진 분산분석 분해 $\mathbf{y} = \mathbf{P}_1\mathbf{y} + \mathbf{P}_2\mathbf{y} + \cdots$에서, 이 연습문제가 계수(따라서 $\chi^2$ 자유도)의 합이 $n$이 됨을 보장한다.
+
+---
+
+**연습문제 7.**
+$\mathbf{A}$가 멱등이면서 **가역**이면 $\mathbf{A} = \mathbf{I}$임을 증명하라. 이로부터 $\mathbf{I}$가 아닌 멱등행렬은 모두 특이행렬임을 밝혀라.
+
+??? success "풀이"
+    $\mathbf{A}^2 = \mathbf{A}$의 양변에 왼쪽에서 $\mathbf{A}^{-1}$을 곱하면
+
+    $$
+    \mathbf{A}^{-1}\mathbf{A}^2 = \mathbf{A}^{-1}\mathbf{A}
+    \quad\Longrightarrow\quad \mathbf{A} = \mathbf{I}
+    $$
+
+    이다. 대우를 취하면 $\mathbf{A} \neq \mathbf{I}$인 멱등행렬은 가역이 아니다.
+
+    고윳값으로 봐도 같다. 멱등행렬의 고윳값은 0 또는 1인데, 가역이려면 0인 고윳값이 없어야 하므로 모든 고윳값이 1이다. 멱등행렬은 대각화 가능하므로($\mathbf{A} = \mathbf{P}\mathbf{I}\mathbf{P}^{-1} = \mathbf{I}$) 결론이 따라 나온다.
+
+    **회귀에서의 의미.** 모자 행렬 $\mathbf{H}$는 $p < n$이면 언제나 특이행렬이다. $\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}$에서 $\mathbf{y}$를 되돌릴 수 없다는 뜻이며, 당연하다. 사영은 $n-p$차원만큼의 정보(잔차)를 버리기 때문이다. $\mathbf{H} = \mathbf{I}$가 되는 것은 $p = n$일 때뿐이고, 그때는 모형이 자료를 완벽히 적합해 잔차가 0이 된다. $\square$
+
+---
+
+**연습문제 8.**
+멱등행렬의 행렬식은 0 또는 1임을 보이고, $\det(\mathbf{A}) = 1$인 경우가 $\mathbf{A} = \mathbf{I}$뿐임을 밝혀라.
+
+??? success "풀이"
+    $\mathbf{A}^2 = \mathbf{A}$의 양변에 행렬식을 취하면
+
+    $$
+    \det(\mathbf{A})^2 = \det(\mathbf{A})
+    \quad\Longrightarrow\quad \det(\mathbf{A})\bigl(\det(\mathbf{A})-1\bigr) = 0
+    $$
+
+    이므로 $\det(\mathbf{A}) \in \{0, 1\}$이다.
+
+    행렬식은 고윳값의 곱이고 고윳값이 0 또는 1이므로, $\det(\mathbf{A}) = 1$이려면 **0인 고윳값이 하나도 없어야** 한다. 곧 계수가 $n$이라 가역이고, 연습문제 7에 의해 $\mathbf{A} = \mathbf{I}$다.
+
+    ```python
+    import numpy as np
+
+    H = np.array([[0.5, 0.5], [0.5, 0.5]])       # 멱등, 계수 1
+    print("H 가 멱등인가:", np.allclose(H @ H, H))
+    print("det(H) =", round(np.linalg.det(H), 12), " rank =", np.linalg.matrix_rank(H))
+    print("고윳값:", np.linalg.eigvalsh(H).round(6))
+    print("det(I) =", round(np.linalg.det(np.eye(2)), 6))
+    ```
+
+    출력:
+
+    ```
+    H 가 멱등인가: True
+    det(H) = 0.0  rank = 1
+    고윳값: [0. 1.]
+    det(I) = 1.0
+    ```
+
+    계수가 $r < n$인 멱등행렬은 고윳값 0을 갖고, 행렬식이 0이다. **회귀의 모자 행렬은 $p < n$인 한 언제나 $\det(\mathbf{H}) = 0$이다.** $\square$
+
+---
+
+**연습문제 9.**
+일원분산분석의 제곱합 분해는 항등행렬을 서로 직교하는 멱등행렬 셋으로 쪼개는 것과 같다. $n = 9$이고 크기가 $3, 4, 2$인 세 집단이 있을 때 이를 수치로 확인하라.
+
+??? success "풀이"
+    집단 지시행렬을 $\mathbf{G}$라 하고 집단평균 사영을 $\mathbf{P}_{\text{grp}} = \mathbf{G}(\mathbf{G}^T\mathbf{G})^{-1}\mathbf{G}^T$라 하자. 다음 셋으로 나눈다.
+
+    $$
+    \mathbf{P}_1 = \tfrac{1}{n}\mathbf{J}, \qquad
+    \mathbf{P}_2 = \mathbf{P}_{\text{grp}} - \mathbf{P}_1, \qquad
+    \mathbf{P}_3 = \mathbf{I} - \mathbf{P}_{\text{grp}}
+    $$
+
+    각각 전체평균, 집단 간, 집단 내에 대응한다.
+
+    ```python
+    import numpy as np
+
+    groups = [0, 0, 0, 1, 1, 1, 1, 2, 2]
+    n, k = len(groups), 3
+    G = np.zeros((n, k))
+    for i, g in enumerate(groups):
+        G[i, g] = 1
+
+    P_grp = G @ np.linalg.inv(G.T @ G) @ G.T
+    P1 = np.ones((n, n)) / n
+    P2 = P_grp - P1
+    P3 = np.eye(n) - P_grp
+
+    for name, P in (("P1(전체평균)", P1), ("P2(집단 간)", P2), ("P3(집단 내)", P3)):
+        print(f"{name}: 멱등 {np.allclose(P@P, P)}, 대칭 {np.allclose(P, P.T)}, "
+              f"계수 {np.linalg.matrix_rank(P)}, tr {np.trace(P):.1f}")
+
+    print("\n합이 I 인가:", np.allclose(P1 + P2 + P3, np.eye(n)))
+    print("서로 직교인가:", np.allclose(P1 @ P2, 0),
+          np.allclose(P1 @ P3, 0), np.allclose(P2 @ P3, 0))
+    ```
+
+    출력:
+
+    ```
+    P1(전체평균): 멱등 True, 대칭 True, 계수 1, tr 1.0
+    P2(집단 간): 멱등 True, 대칭 True, 계수 2, tr 2.0
+    P3(집단 내): 멱등 True, 대칭 True, 계수 6, tr 6.0
+
+    합이 I 인가: True
+    서로 직교인가: True True True
+    ```
+
+    세 행렬이 모두 대칭 멱등이고, 계수가 $1, 2, 6$으로 합이 $9 = n$이며, 서로의 곱이 영행렬이다.
+
+    이 계수들이 그대로 **자유도**다. 집단 간 $k-1 = 2$, 집단 내 $n-k = 6$. 분산분석표의 자유도가 어디서 오는지가 여기서 드러난다. 연습문제 6의 결과에 의해 계수가 더해지고, 직교성 덕분에 (정규성 아래에서) 제곱합들이 독립인 카이제곱이 되어 $F$ 검정이 성립한다. $\square$
+
+---
+
+**연습문제 10.**
+$\mathbf{y} \sim N(\mathbf{0}, \sigma^2\mathbf{I})$이고 $\mathbf{A}$가 계수 $r$인 대칭 멱등행렬이면 $\mathbf{y}^T\mathbf{A}\mathbf{y}/\sigma^2 \sim \chi^2_r$이다. 앞 문제의 $\mathbf{P}_3$으로 모의실험하여 확인하라.
+
+??? success "풀이"
+    ```python
+    import numpy as np
+
+    groups = [0, 0, 0, 1, 1, 1, 1, 2, 2]
+    n, k = len(groups), 3
+    G = np.zeros((n, k))
+    for i, g in enumerate(groups):
+        G[i, g] = 1
+    P3 = np.eye(n) - G @ np.linalg.inv(G.T @ G) @ G.T
+    r = np.linalg.matrix_rank(P3)
+
+    rng = np.random.default_rng(0)
+    Y = rng.normal(size=(200_000, n))                  # sigma = 1
+    q = np.einsum('bi,ij,bj->b', Y, P3, Y)             # y' P3 y
+
+    print(f"계수 r = {r}")
+    print(f"평균  모의 {q.mean():.4f}   chi2_{r} 이론 {r}")
+    print(f"분산  모의 {q.var():.4f}   chi2_{r} 이론 {2*r}")
+    for p in (0.25, 0.5, 0.75, 0.95):
+        from scipy import stats
+        print(f"  q={p:<5} 모의 {np.quantile(q, p):7.4f}   이론 {stats.chi2.ppf(p, r):7.4f}")
+    ```
+
+    출력:
+
+    ```
+    계수 r = 6
+    평균  모의 5.9999   chi2_6 이론 6
+    분산  모의 12.0741   chi2_6 이론 12
+      q=0.25  모의  3.4559   이론  3.4546
+      q=0.5   모의  5.3474   이론  5.3481
+      q=0.75  모의  7.8321   이론  7.8408
+      q=0.95  모의 12.5891   이론 12.5916
+    ```
+
+    평균이 $6$, 분산이 $12$로 $\chi^2_6$과 맞고 분위수도 일치한다.
+
+    **왜 성립하는가.** $\mathbf{A}$가 대칭 멱등이고 계수가 $r$이면 $\mathbf{A} = \mathbf{Q}\operatorname{diag}(\mathbf{I}_r, \mathbf{O})\mathbf{Q}^T$로 쓸 수 있다. $\mathbf{z} = \mathbf{Q}^T\mathbf{y}$로 두면 $\mathbf{z}$도 $N(\mathbf{0}, \sigma^2\mathbf{I})$이고
+
+    $$
+    \mathbf{y}^T\mathbf{A}\mathbf{y} = \mathbf{z}^T\operatorname{diag}(\mathbf{I}_r, \mathbf{O})\mathbf{z} = \sum_{i=1}^{r} z_i^2
+    $$
+
+    로 **독립인 표준정규 제곱 $r$개의 합**이 된다. 이것이 카이제곱의 정의다.
+
+    이 사실이 회귀와 분산분석 전체를 떠받친다. $\text{SSE}/\sigma^2 = \mathbf{y}^T(\mathbf{I}-\mathbf{H})\mathbf{y}/\sigma^2 \sim \chi^2_{n-p}$인 것도 $\mathbf{I}-\mathbf{H}$가 계수 $n-p$인 대칭 멱등행렬이기 때문이다. $\square$
+

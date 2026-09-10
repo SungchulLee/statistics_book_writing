@@ -177,3 +177,217 @@ VAR(1) 모형 $\mathbf{y}_t = \mathbf{A}\mathbf{y}_{t-1} + \boldsymbol{\varepsil
     이다. 비대각 성분이 $k$에 따라 선형으로 증가하므로 충격반응이 감쇠하지 않고 한없이 커진다. 이 과정은 일정한 수준이 아니라 선형(다항식) 추세를 보인다.
 
     이에 비해 $1 \times 1$ 블록을 갖는 단위 고윳값은 $\lambda^k = 1$이 되어 결정론적 추세 없는 단위근(확률보행) 행동을 만든다. 이렇게 조르당 형은 서로 다른 유형의 비정상성 — 단위근(확률보행)과 결정론적 추세 — 을 구별해 준다.
+
+---
+
+**연습문제 6.**
+고윳값 $\lambda$에 대한 조르당 블록의 **개수**는 기하적 중복도와 같고, 블록의 **크기**는 $\operatorname{rank}(\mathbf{A}-\lambda\mathbf{I})^j$가 더 이상 줄지 않을 때까지의 변화로 알 수 있다. 본문의 $\mathbf{A} = \begin{pmatrix} 3 & 1 & 0 \\ 0 & 3 & 0 \\ 0 & 0 & 5 \end{pmatrix}$로 확인하라.
+
+??? success "풀이"
+    블록 개수가 기하적 중복도인 이유는 간단하다. 각 조르당 블록은 보통의 고유벡터를 **정확히 하나씩** 기여하므로(사슬의 첫 벡터), 블록의 개수가 곧 일차독립인 고유벡터의 개수다.
+
+    크기는 계수의 변화로 읽는다. $\lambda$에 대한 크기 $\ge j$인 블록의 개수는
+
+    $$
+    \operatorname{rank}(\mathbf{A}-\lambda\mathbf{I})^{j-1} - \operatorname{rank}(\mathbf{A}-\lambda\mathbf{I})^{j}
+    $$
+
+    이다.
+
+    ```python
+    import numpy as np
+
+    A = np.array([[3., 1., 0.],
+                  [0., 3., 0.],
+                  [0., 0., 5.]])
+    N = A - 3 * np.eye(3)
+
+    ranks = [np.linalg.matrix_rank(np.linalg.matrix_power(N, j)) for j in range(4)]
+    print("rank (A-3I)^j, j=0..3:", ranks)
+    for j in range(1, 4):
+        print(f"  크기 >= {j} 인 블록 개수 = {ranks[j-1] - ranks[j]}")
+    ```
+
+    출력:
+
+    ```
+    rank (A-3I)^j, j=0..3: [3, 2, 1, 1]
+      크기 >= 1 인 블록 개수 = 1
+      크기 >= 2 인 블록 개수 = 1
+      크기 >= 3 인 블록 개수 = 0
+    ```
+
+    $\operatorname{rank}$가 $3 \to 2 \to 1 \to 1$로 변한다. 크기 $\ge 1$인 블록이 $3-2=1$개, 크기 $\ge 2$인 블록이 $2-1=1$개, 크기 $\ge 3$인 블록이 $1-1=0$개다. 곧 $\lambda = 3$에 대해 **크기 2짜리 블록 하나**가 있다.
+
+    이 계수 계산은 조르당 형을 직접 구하지 않고도 블록 구조를 알아내는 표준적인 방법이다. $\square$
+
+---
+
+**연습문제 7.**
+$\mathbf{N} = \mathbf{J}_k(\lambda) - \lambda\mathbf{I}$가 **멱영행렬**임을 보여라. 곧 $\mathbf{N}^k = \mathbf{O}$이고 $\mathbf{N}^{k-1} \neq \mathbf{O}$이다.
+
+??? success "풀이"
+    $\mathbf{N}$은 초대각만 1이고 나머지가 0인 행렬이다. 이 행렬은 기저벡터를 한 칸씩 **밀어내는** 사상이다.
+
+    $$
+    \mathbf{N}\mathbf{e}_1 = \mathbf{0}, \quad \mathbf{N}\mathbf{e}_2 = \mathbf{e}_1, \quad \dots, \quad \mathbf{N}\mathbf{e}_k = \mathbf{e}_{k-1}
+    $$
+
+    따라서 $\mathbf{N}^j\mathbf{e}_i = \mathbf{e}_{i-j}$($i > j$일 때)이고 $i \le j$이면 $\mathbf{0}$이다. $j = k$이면 모든 기저벡터가 $\mathbf{0}$으로 가므로 $\mathbf{N}^k = \mathbf{O}$이고, $j = k-1$이면 $\mathbf{N}^{k-1}\mathbf{e}_k = \mathbf{e}_1 \neq \mathbf{0}$이다.
+
+    ```python
+    import numpy as np
+
+    k = 4
+    N = np.diag(np.ones(k - 1), 1)          # 초대각만 1
+    for j in range(1, k + 1):
+        M = np.linalg.matrix_power(N, j)
+        print(f"N^{j} 이 영행렬인가: {np.allclose(M, 0)}   (0 아닌 성분 {int((M!=0).sum())}개)")
+    ```
+
+    출력:
+
+    ```
+    N^1 이 영행렬인가: False   (0 아닌 성분 3개)
+    N^2 이 영행렬인가: False   (0 아닌 성분 2개)
+    N^3 이 영행렬인가: False   (0 아닌 성분 1개)
+    N^4 이 영행렬인가: True   (0 아닌 성분 0개)
+    ```
+
+    $\mathbf{N}^4$에서 처음으로 영행렬이 된다.
+
+    **왜 중요한가.** 조르당 블록은 $\mathbf{J}_k(\lambda) = \lambda\mathbf{I} + \mathbf{N}$으로 **대각 부분과 멱영 부분의 합**으로 쪼개지고, 두 부분이 교환한다. 그래서 이항정리를 쓸 수 있다.
+
+    $$
+    \mathbf{J}_k(\lambda)^m = (\lambda\mathbf{I}+\mathbf{N})^m = \sum_{j=0}^{k-1}\binom{m}{j}\lambda^{m-j}\mathbf{N}^j
+    $$
+
+    $\mathbf{N}^k = \mathbf{O}$이라 합이 $j = k-1$에서 끊긴다. 본문의 거듭제곱 공식이 바로 이것이다. $\square$
+
+---
+
+**연습문제 8.**
+$\mathbf{A} = \begin{pmatrix} 2 & 1 & 0 \\ 0 & 2 & 0 \\ 0 & 0 & 2 \end{pmatrix}$와 $\mathbf{B} = 2\mathbf{I}_3$은 특성다항식이 같다. 두 행렬이 닮지 않았음을 **최소다항식**으로 구별하라.
+
+??? success "풀이"
+    두 행렬 모두 특성다항식이 $(\lambda-2)^3$이므로 특성다항식만으로는 구별되지 않는다. 최소다항식은 각 고윳값에 대해 **가장 큰 조르당 블록의 크기**를 지수로 갖는다.
+
+    ```python
+    import numpy as np
+
+    A = np.array([[2., 1., 0.], [0., 2., 0.], [0., 0., 2.]])
+    B = 2 * np.eye(3)
+
+    for name, M in (("A", A), ("B", B)):
+        N = M - 2 * np.eye(3)
+        k = 1
+        while not np.allclose(np.linalg.matrix_power(N, k), 0):
+            k += 1
+        print(f"{name}: (M - 2I)^{k} = O  ->  최소다항식 (x-2)^{k}")
+        print(f"   기하적 중복도 = {3 - np.linalg.matrix_rank(N)}")
+    ```
+
+    출력:
+
+    ```
+    A: (M - 2I)^2 = O  ->  최소다항식 (x-2)^2
+       기하적 중복도 = 2
+    B: (M - 2I)^1 = O  ->  최소다항식 (x-2)^1
+       기하적 중복도 = 3
+    ```
+
+    $\mathbf{A}$는 $(\lambda-2)^2$, $\mathbf{B}$는 $(\lambda-2)^1$이다. 최소다항식이 다르므로 두 행렬은 닮지 않았다(최소다항식은 닮음 불변량이다).
+
+    조르당 형으로 보면 명백하다. $\mathbf{A}$는 블록이 $\{2, 1\}$ 크기로 둘이고 $\mathbf{B}$는 $\{1,1,1\}$로 셋이다. 기하적 중복도가 각각 2와 3으로 다르다.
+
+    **교훈.** 대각합·행렬식·특성다항식이 모두 같아도 닮았다는 보장은 없다. 닮음류를 완전히 결정하는 것은 **조르당 구조**다. $\square$
+
+---
+
+**연습문제 9.**
+조르당 블록의 행렬 지수함수 $e^{\mathbf{J}_2(\lambda)}$를 구하고, 미분방정식 $\mathbf{y}' = \mathbf{A}\mathbf{y}$의 해가 대각화 불가능한 경우에 어떤 모양이 되는지 설명하라.
+
+??? success "풀이"
+    $\mathbf{J}_2(\lambda) = \lambda\mathbf{I} + \mathbf{N}$이고 두 항이 교환하며 $\mathbf{N}^2 = \mathbf{O}$이므로
+
+    $$
+    e^{\mathbf{J}_2(\lambda)t} = e^{\lambda t}e^{\mathbf{N}t}
+    = e^{\lambda t}(\mathbf{I} + t\mathbf{N})
+    = e^{\lambda t}\begin{pmatrix} 1 & t \\ 0 & 1 \end{pmatrix}
+    $$
+
+    이다($e^{\mathbf{N}t}$의 급수가 두 항에서 끊긴다).
+
+    ```python
+    import numpy as np
+    from scipy.linalg import expm
+
+    J = np.array([[2., 1.], [0., 2.]])
+    print("expm(J) =\n", expm(J).round(6))
+    print("e^2 =", round(np.exp(2), 6), "  t=1 이므로 (1,2) 성분도 e^2")
+    ```
+
+    출력:
+
+    ```
+    expm(J) =
+     [[7.389056 7.389056]
+     [0.       7.389056]]
+    e^2 = 7.389056   t=1 이므로 (1,2) 성분도 e^2
+    ```
+
+    **미분방정식에서의 의미.** 해는 $\mathbf{y}(t) = e^{\mathbf{A}t}\mathbf{y}(0)$이다. 대각화 가능하면 성분이 모두 $e^{\lambda_i t}$의 결합이지만, 크기 $k$인 조르당 블록이 있으면
+
+    $$
+    t^{j}e^{\lambda t}, \qquad j = 0, 1, \dots, k-1
+    $$
+
+    꼴의 항이 나타난다. **다항식이 지수함수에 곱해진다.**
+
+    물리적으로는 임계감쇠(critically damped) 진동이 이런 모양이다. $\lambda$가 중근일 때 해가 $e^{\lambda t}$와 $te^{\lambda t}$의 결합이 되는 것이 바로 조르당 블록 때문이다. $\square$
+
+---
+
+**연습문제 10.**
+$\mathbf{C} = \begin{pmatrix} 5 & 1 \\ -1 & 3 \end{pmatrix}$의 조르당 형과 조르당 사슬(일반화 고유벡터)을 구하라.
+
+??? success "풀이"
+    **고윳값.** $\det(\mathbf{C}-\lambda\mathbf{I}) = (5-\lambda)(3-\lambda)+1 = \lambda^2-8\lambda+16 = (\lambda-4)^2$이므로 $\lambda = 4$가 중근이다.
+
+    **기하적 중복도.** $\mathbf{C}-4\mathbf{I} = \begin{pmatrix} 1 & 1 \\ -1 & -1 \end{pmatrix}$의 계수가 1이므로 고유공간이 1차원이다. 대수적 중복도 2보다 작으므로 **대각화 불가능**이고 조르당 형은 $\mathbf{J}_2(4)$다.
+
+    **사슬.** 먼저 보통의 고유벡터 $\mathbf{v}_1$을 구한다. $(\mathbf{C}-4\mathbf{I})\mathbf{v} = \mathbf{0}$에서 $v_1 + v_2 = 0$이므로 $\mathbf{v}_1 = (1,-1)^T$로 잡는다. 다음으로 $(\mathbf{C}-4\mathbf{I})\mathbf{v}_2 = \mathbf{v}_1$을 푼다.
+
+    $$
+    \begin{pmatrix} 1 & 1 \\ -1 & -1 \end{pmatrix}\mathbf{v}_2 = \begin{pmatrix} 1 \\ -1 \end{pmatrix}
+    \;\Longrightarrow\; v_{21}+v_{22} = 1
+    $$
+
+    이므로 예컨대 $\mathbf{v}_2 = (1, 0)^T$다. $\mathbf{P} = (\mathbf{v}_1 \mid \mathbf{v}_2)$로 두면 $\mathbf{P}^{-1}\mathbf{C}\mathbf{P} = \mathbf{J}_2(4)$다.
+
+    ```python
+    import sympy as sp
+
+    C = sp.Matrix([[5, 1], [-1, 3]])
+    x = sp.symbols('lambda')
+    print("특성다항식:", sp.factor(C.charpoly(x).as_expr()))
+
+    P, J = C.jordan_form()
+    print("J =", J.tolist())
+    print("P =", P.tolist())
+    print("P J P^-1 = C 인가:", sp.simplify(P * J * P.inv() - C) == sp.zeros(2, 2))
+    ```
+
+    출력:
+
+    ```
+    특성다항식: (lambda - 4)**2
+    J = [[4, 1], [0, 4]]
+    P = [[1, 1], [-1, 0]]
+    P J P^-1 = C 인가: True
+    ```
+
+    `sympy`가 돌려준 $\mathbf{P}$는 위에서 손으로 고른 것과 열이 다를 수 있다. 사슬의 두 번째 벡터는 $\mathbf{v}_1$의 상수배만큼 자유롭기 때문이며, 어느 쪽을 골라도 같은 $\mathbf{J}$를 준다.
+
+    **주의.** 조르당 형은 수치적으로 **불안정**하다. 성분을 아주 조금만 흔들어도 중근이 서로 다른 두 근으로 갈라져 대각화 가능해진다. 그래서 실제 계산에서는 조르당 형 대신 슈어 분해나 특이값분해를 쓴다. 조르당 형은 이론을 설명하는 도구다. $\square$
+
