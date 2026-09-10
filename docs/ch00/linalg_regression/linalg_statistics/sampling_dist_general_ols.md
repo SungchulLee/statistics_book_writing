@@ -283,3 +283,228 @@ $\mathbf{M} = \mathbf{I} - \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T$�
     핵심적인 기하적 성질은 모자 행렬 $\mathbf{H}$와 잔차생성행렬 $\mathbf{M} = \mathbf{I} - \mathbf{H}$가 서로 직교하는 부분공간 위로 사영한다는 점이다. 구체적으로 $\hat{\boldsymbol{\beta}}$은 $\mathbf{y}$에 오직 $\mathbf{H}\mathbf{y}$($\mathbf{X}$의 열공간 위로의 사영)를 통해서만 의존하고, $\text{SSE} = \mathbf{y}^T\mathbf{M}\mathbf{y}$은 오직 $\mathbf{M}\mathbf{y}$(직교여공간 위로의 사영)를 통해서만 의존한다.
 
     $\mathbf{H}\mathbf{M} = \mathbf{0}$이므로 벡터 $\mathbf{H}\mathbf{y}$와 $\mathbf{M}\mathbf{y}$는 무상관이다. 정규성 가정 아래에서 무상관인 정규확률벡터는 독립이다. 이 직교 분해가 t-통계량과 F-통계량이 앞서 진술한 분포를 갖는 기하적 이유다.
+
+---
+
+**연습문제 6.**
+가우스–마르코프 정리를 증명하라. 임의의 선형 불편추정량 $\tilde{\boldsymbol{\beta}} = \mathbf{C}\mathbf{y}$에 대해 $\operatorname{Var}(\tilde{\boldsymbol{\beta}}) - \operatorname{Var}(\hat{\boldsymbol{\beta}})$이 양반정치임을 보여라.
+
+??? success "풀이"
+    $\mathbf{C} = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T + \mathbf{D}$로 쓰자. 불편성은 모든 $\boldsymbol{\beta}$에 대해
+
+    $$
+    E[\tilde{\boldsymbol{\beta}}] = \mathbf{C}\mathbf{X}\boldsymbol{\beta} = \boldsymbol{\beta}
+    \quad\Longrightarrow\quad \mathbf{C}\mathbf{X} = \mathbf{I}
+    \quad\Longrightarrow\quad \mathbf{D}\mathbf{X} = \mathbf{O}
+    $$
+
+    을 요구한다. 분산은
+
+    $$
+    \operatorname{Var}(\tilde{\boldsymbol{\beta}}) = \sigma^2\mathbf{C}\mathbf{C}^T
+    = \sigma^2\left[(\mathbf{X}^T\mathbf{X})^{-1} + \mathbf{D}\mathbf{D}^T\right]
+    $$
+
+    이다. 교차항이 사라지는 것이 핵심인데, $\mathbf{D}\mathbf{X} = \mathbf{O}$이므로
+
+    $$
+    (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{D}^T = (\mathbf{X}^T\mathbf{X})^{-1}(\mathbf{D}\mathbf{X})^T = \mathbf{O}
+    $$
+
+    이기 때문이다. 따라서
+
+    $$
+    \operatorname{Var}(\tilde{\boldsymbol{\beta}}) - \operatorname{Var}(\hat{\boldsymbol{\beta}}) = \sigma^2\mathbf{D}\mathbf{D}^T \succeq 0
+    $$
+
+    이다. 특히 임의의 $\mathbf{c}$에 대해 $\operatorname{Var}(\mathbf{c}^T\tilde{\boldsymbol{\beta}}) \ge \operatorname{Var}(\mathbf{c}^T\hat{\boldsymbol{\beta}})$이므로 최소제곱추정량이 **최량선형불편추정량(BLUE)**이다.
+
+    등호는 $\mathbf{D} = \mathbf{O}$, 곧 $\tilde{\boldsymbol{\beta}} = \hat{\boldsymbol{\beta}}$일 때만 성립한다.
+
+    **가정에 주의하라.** 이 증명은 정규성을 쓰지 않지만 $\operatorname{Var}(\boldsymbol{\varepsilon}) = \sigma^2\mathbf{I}$는 반드시 쓴다. 등분산이 깨지면 최소제곱은 여전히 불편이지만 더 이상 최량이 아니다(연습문제 10). $\square$
+
+---
+
+**연습문제 7.**
+$\hat{\boldsymbol{\beta}} \sim N(\boldsymbol{\beta}, \sigma^2(\mathbf{X}^T\mathbf{X})^{-1})$을 모의실험으로 확인하라. 공분산행렬 전체를 이론값과 비교하라.
+
+??? success "풀이"
+    ```python
+    import numpy as np
+
+    rng = np.random.default_rng(0)
+    n, p, sig = 30, 3, 2.0
+    X = np.column_stack([np.ones(n), rng.normal(size=(n, p - 1))])
+    beta = np.array([1., 2., -1.])
+    XtXi = np.linalg.inv(X.T @ X)
+
+    B = 200_000
+    Y = X @ beta + rng.normal(0, sig, size=(B, n))
+    bhat = Y @ X @ XtXi
+
+    print("평균 모의:", bhat.mean(axis=0).round(4), "  참값:", beta)
+    print("\n공분산 모의:\n", np.cov(bhat.T).round(4))
+    print("이론 sigma^2 (X'X)^-1:\n", (sig**2 * XtXi).round(4))
+    ```
+
+    출력:
+
+    ```
+    평균 모의: [ 0.9998  1.9991 -1.0002]   참값: [ 1.  2. -1.]
+
+    공분산 모의:
+     [[ 0.164   0.0536 -0.0876]
+     [ 0.0536  0.1971 -0.1124]
+     [-0.0876 -0.1124  0.2714]]
+    이론 sigma^2 (X'X)^-1:
+     [[ 0.1629  0.0532 -0.0863]
+     [ 0.0532  0.1963 -0.1122]
+     [-0.0863 -0.1122  0.2705]]
+    ```
+
+    대각 성분(각 계수의 분산)뿐 아니라 **비대각 성분(계수 사이의 공분산)까지** 이론값과 맞는다.
+
+    비대각 성분이 0이 아니라는 점이 중요하다. 계수 추정값들은 서로 **상관되어** 있으며, 그래서 계수를 하나씩 따로 검정하는 것과 여러 개를 한꺼번에 검정하는 것($F$ 검정)이 다른 결론을 낼 수 있다. 예측변수들이 직교하면 비대각 성분이 0이 되어 이 문제가 사라진다. $\square$
+
+---
+
+**연습문제 8.**
+새로운 점 $\mathbf{x}_0$에서 평균반응의 분산이 $\sigma^2\mathbf{x}_0^T(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{x}_0$임을 보이고 수치로 확인하라. 예측구간과 신뢰구간의 차이는 무엇인가?
+
+??? success "풀이"
+    $\hat{\mu}_0 = \mathbf{x}_0^T\hat{\boldsymbol{\beta}}$이므로
+
+    $$
+    \operatorname{Var}(\hat{\mu}_0) = \mathbf{x}_0^T\operatorname{Var}(\hat{\boldsymbol{\beta}})\mathbf{x}_0
+    = \sigma^2\mathbf{x}_0^T(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{x}_0
+    $$
+
+    이다.
+
+    ```python
+    import numpy as np
+
+    rng = np.random.default_rng(0)
+    n, p, sig = 30, 3, 2.0
+    X = np.column_stack([np.ones(n), rng.normal(size=(n, p - 1))])
+    beta = np.array([1., 2., -1.])
+    XtXi = np.linalg.inv(X.T @ X)
+    x0 = np.array([1., 0.5, -0.3])
+
+    Y = X @ beta + rng.normal(0, sig, size=(200_000, n))
+    bhat = Y @ X @ XtXi
+    mu0 = bhat @ x0
+
+    print(f"Var(mu0) 모의 {mu0.var():.5f}   이론 {sig**2 * x0 @ XtXi @ x0:.5f}")
+    print(f"새 관측 예측오차 분산 이론 {sig**2 * (1 + x0 @ XtXi @ x0):.5f}")
+    ```
+
+    출력:
+
+    ```
+    Var(mu0) 모의 0.37766   이론 0.37503
+    새 관측 예측오차 분산 이론 4.37503
+    ```
+
+    **두 구간의 차이.** 신뢰구간은 $\hat{\mu}_0$이 참 평균 $\mathbf{x}_0^T\boldsymbol{\beta}$를 얼마나 정확히 맞추는지를 말하고, 예측구간은 새 관측값 $y_0$ 자체가 어디에 떨어질지를 말한다. 후자는 오차항 $\varepsilon_0$의 변동이 더해져
+
+    $$
+    \operatorname{Var}(y_0 - \hat{\mu}_0) = \sigma^2\left(1 + \mathbf{x}_0^T(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{x}_0\right)
+    $$
+
+    이 된다. 자료를 아무리 모아도 괄호 안의 $1$은 사라지지 않는다. $\square$
+
+---
+
+**연습문제 9.**
+반응변수와 아무 관계 없는 예측변수를 추가하면 $R^2$은 반드시 커지지만 계수 추정의 분산도 커진다. 모의실험으로 확인하고, 수정 $R^2$이 왜 필요한지 설명하라.
+
+??? success "풀이"
+    ```python
+    import numpy as np
+
+    rng = np.random.default_rng(2)
+    n = 30
+    x1 = rng.normal(size=n)
+    y = 1. + 2. * x1 + rng.normal(0, 1., n)
+
+    def fit(X):
+        b = np.linalg.lstsq(X, y, rcond=None)[0]
+        e = y - X @ b
+        sse = e @ e
+        sst = ((y - y.mean()) ** 2).sum()
+        r2 = 1 - sse / sst
+        adj = 1 - (sse / (len(y) - X.shape[1])) / (sst / (len(y) - 1))
+        return r2, adj, np.linalg.inv(X.T @ X)[1, 1]
+
+    X1 = np.column_stack([np.ones(n), x1])
+    for k in (0, 1, 5, 10):
+        noise = rng.normal(size=(n, k))
+        X = np.column_stack([X1, noise]) if k else X1
+        r2, adj, v = fit(X)
+        print(f"잡음변수 {k:>2}개:  R^2 = {r2:.4f}   수정 R^2 = {adj:.4f}   "
+              f"Var(b1) 인자 = {v:.4f}")
+    ```
+
+    출력:
+
+    ```
+    잡음변수  0개:  R^2 = 0.8446   수정 R^2 = 0.8390   Var(b1) 인자 = 0.0331
+    잡음변수  1개:  R^2 = 0.8451   수정 R^2 = 0.8336   Var(b1) 인자 = 0.0337
+    잡음변수  5개:  R^2 = 0.8674   수정 R^2 = 0.8328   Var(b1) 인자 = 0.0471
+    잡음변수 10개:  R^2 = 0.9025   수정 R^2 = 0.8429   Var(b1) 인자 = 0.0726
+    ```
+
+    잡음변수를 넣을수록 $R^2$은 $0.845 \to 0.903$으로 단조증가하지만, 수정 $R^2$은 $0.839$에서 시작해 오르지 못하고 $\hat\beta_1$의 분산 인자는 $0.033 \to 0.073$으로 두 배 넘게 커진다.
+
+    (수정 $R^2$은 단조롭게 움직이지 않는다. 여기서도 잡음 $10$개일 때 $0.843$으로 조금 올랐다. 우연히 반응변수와 상관된 잡음변수가 섞이면 생기는 일이며, 그래서 수정 $R^2$ 하나만으로 변수를 고르는 것도 위험하다.)
+
+    **왜 $R^2$이 반드시 커지는가.** 변수를 추가하면 열공간이 넓어지므로 사영이 $\mathbf{y}$에 더 가까워질 수밖에 없다. $\text{SSE}$는 절대 늘지 않는다. 따라서 $R^2$은 **모형 선택 기준이 될 수 없다.**
+
+    수정 $R^2$은 $\text{SSE}$를 자유도 $n-p$로 나누어, 변수를 넣어 얻는 적합의 개선이 잃는 자유도만큼의 값어치가 있는지를 따진다. 같은 동기에서 AIC와 BIC가 나온다. $\square$
+
+---
+
+**연습문제 10.**
+$\operatorname{Var}(\boldsymbol{\varepsilon}) = \sigma^2\mathbf{V}$($\mathbf{V} \neq \mathbf{I}$)이면 최소제곱은 여전히 불편이지만 최량이 아니다. 일반화최소제곱 $\hat{\boldsymbol{\beta}}_{\text{GLS}} = (\mathbf{X}^T\mathbf{V}^{-1}\mathbf{X})^{-1}\mathbf{X}^T\mathbf{V}^{-1}\mathbf{y}$와 비교하라.
+
+??? success "풀이"
+    **불편성은 유지된다.** $E[\hat{\boldsymbol{\beta}}] = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}\boldsymbol{\beta} = \boldsymbol{\beta}$는 오차의 공분산 구조와 무관하다.
+
+    **효율은 잃는다.** 분산이 $\sigma^2(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{V}\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}$이 되어 GLS의 $\sigma^2(\mathbf{X}^T\mathbf{V}^{-1}\mathbf{X})^{-1}$보다 크다.
+
+    ```python
+    import numpy as np
+
+    rng = np.random.default_rng(0)
+    n, p, sig = 30, 3, 2.0
+    X = np.column_stack([np.ones(n), rng.normal(size=(n, p - 1))])
+    beta = np.array([1., 2., -1.])
+
+    w = np.linspace(1, 5, n)                    # 분산이 5배까지 커진다
+    V = np.diag(w)
+    Vinv = np.linalg.inv(V)
+
+    B = 200_000
+    Y = X @ beta + rng.normal(size=(B, n)) * np.sqrt(w) * sig
+
+    b_ols = Y @ X @ np.linalg.inv(X.T @ X)
+    b_gls = (Y @ Vinv @ X) @ np.linalg.inv(X.T @ Vinv @ X)
+
+    print("OLS 평균:", b_ols.mean(0).round(4), " 분산:", b_ols.var(0).round(5))
+    print("GLS 평균:", b_gls.mean(0).round(4), " 분산:", b_gls.var(0).round(5))
+    ```
+
+    출력:
+
+    ```
+    OLS 평균: [ 0.9997  1.9983 -1.0009]  분산: [0.48438 0.62429 0.89718]
+    GLS 평균: [ 0.9996  1.9988 -0.9999]  분산: [0.38248 0.51366 0.77013]
+    ```
+
+    두 추정량 모두 평균이 참값 $(1, 2, -1)$에 맞아 불편이지만, GLS의 분산이 세 계수 모두에서 작다(첫 계수에서 $0.484 \to 0.382$로 약 $21\%$ 줄어든다).
+
+    **GLS가 하는 일.** $\mathbf{V}^{-1}$로 가중하는 것은 오차를 백색화한 뒤 보통최소제곱을 적용하는 것과 같다. 분산이 작은 관측값에 더 큰 비중을 주는 것이다.
+
+    실무에서는 $\mathbf{V}$를 모르는 경우가 많다. 그래서 (1) $\mathbf{V}$를 추정해 쓰는 실행가능 GLS, 또는 (2) 계수는 최소제곱으로 두고 표준오차만 고치는 로버스트(샌드위치) 표준오차를 쓴다. 15장에서 다룬다. $\square$
+
