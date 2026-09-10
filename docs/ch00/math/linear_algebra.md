@@ -245,3 +245,247 @@ $\mathbf{X}^T \mathbf{X}$가 특이행렬이면(즉 $\mathbf{X}$가 완전 열�
     **(a) 대수적으로:** 특이성은 $\det(\mathbf{X}^T \mathbf{X}) = 0$을 뜻하므로 $(\mathbf{X}^T \mathbf{X})^{-1}$이 존재하지 않는다. 정규방정식 $\mathbf{X}^T \mathbf{X} \boldsymbol{\beta} = \mathbf{X}^T \mathbf{y}$은 (우변이 $\mathbf{X}^T \mathbf{X}$의 열공간 안에 있으므로) 해를 갖지만 무한히 많다. $\boldsymbol{\beta}^*$가 해이고 $\mathbf{v} \in \mathrm{Null}(\mathbf{X})$이면 $\mathbf{X}\mathbf{v} = \mathbf{0}$이므로 $\boldsymbol{\beta}^* + \mathbf{v}$도 이 방정식을 만족한다.
 
     **(b) 기하적으로:** $\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}$는 여전히 $\mathbf{y}$를 $\mathrm{Col}(\mathbf{X})$ 위로 직교사영한 유일한 벡터다. 그러나 $\mathbf{X}$의 열들이 선형종속이면 그 사영을 열들의 선형결합으로 나타내는 방법이 무한히 많고, 각각이 타당한 $\hat{\boldsymbol{\beta}}$을 준다. 적합값은 식별되지만 계수는 식별되지 않는다. 해결책은 종속인 열을 제거하거나, 능형회귀($\mathbf{X}^T \mathbf{X}$에 $\lambda \mathbf{I}$를 더해 가역성을 회복한다), 또는 유사역행렬(최소 노름 해를 준다)을 쓰는 것이다. $\square$
+
+---
+
+**연습문제 7.**
+계획행렬
+
+$$
+\mathbf{X} = \begin{pmatrix} 1 & 2 & 3 \\ 1 & 3 & 4 \\ 1 & 4 & 5 \\ 1 & 5 & 6 \end{pmatrix}
+$$
+
+에 대해 네 가지 기본 부분공간의 차원을 구하고, 계수–퇴화차수 정리와 $\mathrm{Col}(\mathbf{X}^T) \perp \mathrm{Null}(\mathbf{X})$을 확인하라. 이 자료로 회귀를 돌리면 어떤 일이 일어나는가?
+
+??? success "풀이"
+    셋째 열이 첫째와 둘째 열의 합이므로 $\mathrm{rank}(\mathbf{X}) = 2$이다.
+
+    | 부분공간 | 차원 | 사는 곳 |
+    |---|---|---|
+    | $\mathrm{Col}(\mathbf{X})$ | $2$ | $\mathbb{R}^4$ |
+    | $\mathrm{Null}(\mathbf{X})$ | $3 - 2 = 1$ | $\mathbb{R}^3$ |
+    | $\mathrm{Col}(\mathbf{X}^T)$ (행공간) | $2$ | $\mathbb{R}^3$ |
+    | $\mathrm{Null}(\mathbf{X}^T)$ | $4 - 2 = 2$ | $\mathbb{R}^4$ |
+
+    ```python
+    import numpy as np
+
+    X = np.array([[1., 2., 3.],
+                  [1., 3., 4.],
+                  [1., 4., 5.],
+                  [1., 5., 6.]])          # 3열 = 1열 + 2열
+
+    r = np.linalg.matrix_rank(X)
+    U, s, Vt = np.linalg.svd(X)
+    print(f"rank = {r},  특잇값 = {s.round(6)}")
+
+    null_basis = Vt[r:]                    # 0 특잇값에 딸린 오른쪽 특이벡터
+    row_basis = Vt[:r]
+    print(f"영공간 기저: {null_basis.round(4)}")
+    print(f"X v = {(X @ null_basis.T).ravel().round(12)}")
+    print(f"rank + nullity = {r} + {null_basis.shape[0]} = {r + null_basis.shape[0]} = 열 개수")
+    print(f"행공간 ⟂ 영공간: {np.allclose(row_basis @ null_basis.T, 0)}")
+    ```
+
+    출력:
+
+    ```
+    rank = 2,  특잇값 = [11.982576  0.646436  0.      ]
+    영공간 기저: [[-0.5774 -0.5774  0.5774]]
+    X v = [0. 0. 0. 0.]
+    rank + nullity = 2 + 1 = 3 = 열 개수
+    행공간 ⟂ 영공간: True
+    ```
+
+    세 번째 특잇값이 정확히 $0$이라는 것이 계수 결손의 신호다. 영공간 기저 $\propto (1, 1, -1)$은 "첫째 열 더하기 둘째 열 빼기 셋째 열 = 0"이라는 종속관계를 그대로 읽어 준다.
+
+    **회귀를 돌리면.** $\mathbf{X}^T\mathbf{X}$가 특이행렬이라 $\hat{\boldsymbol{\beta}}$이 유일하지 않다(연습문제 6). $\boldsymbol{\beta}^*$가 해이면 임의의 $c$에 대해 $\boldsymbol{\beta}^* + c(1,1,-1)^T$도 해이며, 넷 모두 **똑같은 적합값**을 준다. `np.linalg.lstsq`는 오류를 내지 않고 최소 노름 해 하나를 조용히 돌려주므로 더 위험하다. 계수의 부호나 크기를 해석하려 들면 아무 의미 없는 수를 해석하게 된다.
+
+    실무에서 이 상황은 완전한 다중공선성으로 나타난다. 가장 흔한 원인은 범주형 변수를 원-핫 인코딩하면서 기준 범주를 빼지 않은 것이다(더미변수 함정). $\square$
+
+---
+
+**연습문제 8.**
+$\mathrm{Cov}(\mathbf{A}\mathbf{X}) = \mathbf{A}\,\mathrm{Cov}(\mathbf{X})\,\mathbf{A}^T$를 증명하고, 이로부터 공분산행렬이 항상 양반정치임을 보여라. 세 자산 포트폴리오에 적용해 분산투자 효과를 확인하라.
+
+??? success "풀이"
+    $\boldsymbol{\mu} = \mathbb{E}[\mathbf{X}]$라 하면 $\mathbb{E}[\mathbf{A}\mathbf{X}] = \mathbf{A}\boldsymbol{\mu}$이므로
+
+    $$
+    \mathrm{Cov}(\mathbf{A}\mathbf{X}) = \mathbb{E}\!\left[\mathbf{A}(\mathbf{X}-\boldsymbol{\mu})(\mathbf{X}-\boldsymbol{\mu})^T\mathbf{A}^T\right]
+    = \mathbf{A}\,\mathbb{E}\!\left[(\mathbf{X}-\boldsymbol{\mu})(\mathbf{X}-\boldsymbol{\mu})^T\right]\mathbf{A}^T
+    = \mathbf{A}\boldsymbol{\Sigma}\mathbf{A}^T
+    $$
+
+    이다. $\mathbf{A}$가 상수라 기댓값 밖으로 빠져나온 것이 전부다.
+
+    **양반정치성.** $\mathbf{A}$ 자리에 행벡터 $\mathbf{c}^T$를 넣으면 좌변이 스칼라 확률변수의 분산이므로
+
+    $$
+    \mathbf{c}^T\boldsymbol{\Sigma}\mathbf{c} = \operatorname{Var}(\mathbf{c}^T\mathbf{X}) \ge 0
+    $$
+
+    이고, 이것이 모든 $\mathbf{c}$에 대해 성립한다. 즉 **공분산행렬의 양반정치성은 "분산은 음수가 될 수 없다"를 행렬로 옮겨 적은 것일 뿐이다.** 등호는 $\mathbf{c}^T\mathbf{X}$가 상수일 때, 곧 변수들 사이에 완전한 선형관계가 있을 때만 성립한다. $\square$
+
+    ```python
+    import numpy as np
+
+    Sigma = np.array([[0.04,  0.006,  0.000],
+                      [0.006, 0.09,  -0.012],
+                      [0.000, -0.012, 0.16]])
+
+    w = np.full(3, 1 / 3)
+    print(f"개별 표준편차:        {np.sqrt(np.diag(Sigma)).round(3)}")
+    print(f"개별 표준편차의 평균: {np.sqrt(np.diag(Sigma)).mean():.4f}")
+    print(f"동일가중 포트폴리오:   분산 {w @ Sigma @ w:.6f}, 표준편차 {np.sqrt(w @ Sigma @ w):.4f}")
+
+    Si = np.linalg.inv(Sigma)
+    one = np.ones(3)
+    w_mv = Si @ one / (one @ Si @ one)          # 최소분산 포트폴리오
+    print(f"\n최소분산 가중치: {w_mv.round(4)}")
+    print(f"최소분산 표준편차: {np.sqrt(w_mv @ Sigma @ w_mv):.4f}")
+    ```
+
+    출력:
+
+    ```
+    개별 표준편차:        [0.2 0.3 0.4]
+    개별 표준편차의 평균: 0.3000
+    동일가중 포트폴리오:   분산 0.030889, 표준편차 0.1758
+
+    최소분산 가중치: [0.5721 0.2561 0.1718]
+    최소분산 표준편차: 0.1563
+    ```
+
+    동일가중 포트폴리오의 표준편차 $0.1758$은 개별 표준편차의 평균 $0.3$보다 훨씬 작다. **이것이 분산투자다.** 비대각 성분이 작거나 음수라서 $\mathbf{w}^T\boldsymbol{\Sigma}\mathbf{w}$가 대각 성분의 가중평균보다 작아지는 것이다.
+
+    최소분산 포트폴리오는 여기서 더 나아가 $0.1563$까지 낮추는데, 변동성이 가장 낮은 첫 자산에 가장 큰 비중($0.57$)을 준다. 상관이 완전하다면($\rho = 1$) 비대각 성분이 커져 이런 이득이 사라진다. 위기 때 상관이 $1$로 몰리면서 분산투자 효과가 증발하는 현상이 바로 이 계산에 들어 있다.
+
+---
+
+**연습문제 9.**
+행렬 미적분으로 정규방정식을 유도하라. 필요한 기울기 규칙 $\nabla_{\mathbf{x}}(\mathbf{a}^T\mathbf{x}) = \mathbf{a}$와 $\nabla_{\mathbf{x}}(\mathbf{x}^T\mathbf{A}\mathbf{x}) = 2\mathbf{A}\mathbf{x}$($\mathbf{A}$ 대칭)를 먼저 증명하고, 헤세행렬을 확인해 얻은 점이 정말 최소점임을 보여라.
+
+??? success "풀이"
+    **기울기 규칙.** $\mathbf{a}^T\mathbf{x} = \sum_j a_j x_j$이므로 $\partial/\partial x_k = a_k$, 곧 $\nabla = \mathbf{a}$이다. 이차형식은 $\mathbf{x}^T\mathbf{A}\mathbf{x} = \sum_{i,j}a_{ij}x_ix_j$이므로
+
+    $$
+    \frac{\partial}{\partial x_k} = \sum_j a_{kj}x_j + \sum_i a_{ik}x_i = [\mathbf{A}\mathbf{x}]_k + [\mathbf{A}^T\mathbf{x}]_k
+    $$
+
+    이고, $\mathbf{A}$가 대칭이면 $2\mathbf{A}\mathbf{x}$가 된다.
+
+    **유도.** 목적함수를 전개하면
+
+    $$
+    S(\boldsymbol{\beta}) = \|\mathbf{y}-\mathbf{X}\boldsymbol{\beta}\|^2
+    = \mathbf{y}^T\mathbf{y} - 2\boldsymbol{\beta}^T\mathbf{X}^T\mathbf{y} + \boldsymbol{\beta}^T\mathbf{X}^T\mathbf{X}\boldsymbol{\beta}
+    $$
+
+    이다($\mathbf{y}^T\mathbf{X}\boldsymbol{\beta}$가 스칼라라 전치와 같으므로 두 교차항이 합쳐졌다). 위의 두 규칙을 쓰면
+
+    $$
+    \nabla S = -2\mathbf{X}^T\mathbf{y} + 2\mathbf{X}^T\mathbf{X}\boldsymbol{\beta} = \mathbf{0}
+    \quad\Longrightarrow\quad
+    \mathbf{X}^T\mathbf{X}\boldsymbol{\beta} = \mathbf{X}^T\mathbf{y}
+    $$
+
+    **최소점 확인.** 헤세행렬은 $\nabla^2 S = 2\mathbf{X}^T\mathbf{X}$이고, 임의의 $\mathbf{v} \ne \mathbf{0}$에 대해
+
+    $$
+    \mathbf{v}^T(\mathbf{X}^T\mathbf{X})\mathbf{v} = \|\mathbf{X}\mathbf{v}\|^2 \ge 0
+    $$
+
+    이다. $\mathbf{X}$가 완전 열계수이면 $\mathbf{X}\mathbf{v} \ne \mathbf{0}$이라 엄격한 양정치가 되어 $S$가 순볼록이고, 정류점은 유일한 전역 최소점이다. $\square$
+
+    ```python
+    import numpy as np
+
+    rng = np.random.default_rng(1)
+    n, p = 40, 3
+    X = np.column_stack([np.ones(n), rng.normal(size=(n, p - 1))])
+    y = X @ np.array([1., 2., -1.]) + rng.normal(size=n)
+
+    beta = np.array([0.3, -0.7, 1.1])          # 아무 점에서나
+    S = lambda b: ((y - X @ b) ** 2).sum()
+
+    grad_analytic = -2 * X.T @ y + 2 * X.T @ X @ beta
+    h = 1e-6
+    grad_numeric = np.array([(S(beta + h * e) - S(beta - h * e)) / (2 * h)
+                             for e in np.eye(p)])
+    print("해석적 기울기:", grad_analytic.round(6))
+    print("수치적 기울기:", grad_numeric.round(6))
+
+    hess = 2 * X.T @ X
+    print(f"\n헤세행렬 고윳값: {np.linalg.eigvalsh(hess).round(3)}  (모두 > 0)")
+    print(f"정류점 = OLS 해: "
+          f"{np.allclose(np.linalg.solve(X.T @ X, X.T @ y), np.linalg.lstsq(X, y, rcond=None)[0])}")
+    ```
+
+    출력:
+
+    ```
+    해석적 기울기: [ -69.943347 -130.877197   77.167931]
+    수치적 기울기: [ -69.943347 -130.877197   77.167931]
+
+    헤세행렬 고윳값: [44.717 64.702 84.593]  (모두 > 0)
+    정류점 = OLS 해: True
+    ```
+
+    수치미분이 해석적 기울기와 소수점 여섯째 자리까지 맞는다. 새 손실함수를 유도했을 때 이런 대조는 언제나 해 볼 만한 값싼 점검이다.
+
+---
+
+**연습문제 10.**
+**(하나 빼기 항등식)** 관측 $i$를 빼고 적합한 회귀의 예측오차가
+
+$$
+y_i - \mathbf{x}_i^T\hat{\boldsymbol{\beta}}_{(i)} = \frac{e_i}{1 - h_{ii}}
+$$
+
+임이 알려져 있다. 여기서 $e_i$는 통상 잔차이고 $h_{ii}$는 지렛값이다. 이 공식을 수치로 확인하고, $h_{ii}$가 $1$에 가까우면 어떤 일이 벌어지는지 설명하라.
+
+??? success "풀이"
+    ```python
+    import numpy as np
+
+    rng = np.random.default_rng(7)
+    n, p = 12, 3
+    X = np.column_stack([np.ones(n), rng.normal(size=(n, p - 1))])
+    y = rng.normal(size=n)
+
+    XtXi = np.linalg.inv(X.T @ X)
+    H = X @ XtXi @ X.T
+    e = y - X @ (XtXi @ X.T @ y)
+    h = np.diag(H)
+
+    loo = np.empty(n)                       # 무식하게: n 번 다시 적합
+    for i in range(n):
+        keep = np.ones(n, bool)
+        keep[i] = False
+        loo[i] = y[i] - X[i] @ np.linalg.lstsq(X[keep], y[keep], rcond=None)[0]
+
+    print(f"공식과 실제 재적합의 최대 차이: {np.abs(loo - e / (1 - h)).max():.2e}")
+    print(f"지렛값 합 = {h.sum():.4f}  (= p = {p})")
+    print(f"\nSSE   = {(e ** 2).sum():.4f}   (같은 자료로 평가)")
+    print(f"PRESS = {(loo ** 2).sum():.4f}   (빼놓은 자료로 평가)")
+    ```
+
+    출력:
+
+    ```
+    공식과 실제 재적합의 최대 차이: 4.55e-15
+    지렛값 합 = 3.0000  (= p = 3)
+
+    SSE   = 7.3015   (같은 자료로 평가)
+    PRESS = 13.1653   (빼놓은 자료로 평가)
+    ```
+
+    **왜 중요한가.** $n$번 다시 적합하는 대신 **한 번의 적합에서 나온 $e_i$와 $h_{ii}$만으로** 하나 빼기 교차검증을 끝낼 수 있다. 회귀에서 LOOCV가 사실상 공짜인 이유다.
+
+    **$h_{ii} \to 1$일 때.** 분모가 $0$으로 가면서 예측오차가 폭발한다. 뜻은 이렇다. 관측 $i$가 계획공간에서 워낙 외따로 떨어져 있어 그 점을 빼면 **그 위치를 짚어 줄 다른 관측이 없다.** 실제로 $h_{ii} = 1$이면 회귀선이 그 점을 정확히 통과해 $e_i = 0$이 되고, 모형은 그 점에 대해 아무것도 검증하지 못한다.
+
+    이 때문에 $h_{ii} > 2p/n$인 관측을 높은 지렛점으로 보아 따로 살핀다. 쿡의 거리도 $e_i$와 $h_{ii}$를 같은 방식으로 결합해 만든다.
+
+    위 출력에서 PRESS가 SSE의 두 배쯤 된다는 점도 눈여겨보라. 같은 자료로 적합하고 같은 자료로 평가하면 성능이 낙관적으로 나온다는 사실이 한 줄로 드러난다. $\square$
+
