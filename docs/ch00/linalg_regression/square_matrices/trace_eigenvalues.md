@@ -232,3 +232,250 @@ $\mathbf{z} \sim N(\mathbf{0}, \mathbf{I}_n)$이고 $\mathbf{A}$가 계수 $r$�
     $$
 
     이다. 이 결과가 $\text{SSE}/\sigma^2 \sim \chi^2_{n-p}$인 이유를 설명해 준다. 잔차생성행렬 $\mathbf{M} = \mathbf{I} - \mathbf{H}$의 계수가 $n - p$이므로 $E[\text{SSE}/\sigma^2] = \operatorname{tr}(\mathbf{M}) = n - p$이고, 이는 $\chi^2_{n-p}$ 분포의 평균과 일치한다.
+
+---
+
+**연습문제 5.**
+대각합이 선형임을 보여라: $\operatorname{tr}(a\mathbf{A} + b\mathbf{B}) = a\operatorname{tr}(\mathbf{A}) + b\operatorname{tr}(\mathbf{B})$. 그러나 곱에 대해서는 $\operatorname{tr}(\mathbf{A}\mathbf{B}) \neq \operatorname{tr}(\mathbf{A})\operatorname{tr}(\mathbf{B})$임을 반례로 보여라.
+
+??? success "풀이"
+    **선형성.** 대각 성분끼리의 덧셈이므로
+
+    $$
+    \operatorname{tr}(a\mathbf{A} + b\mathbf{B}) = \sum_i (a a_{ii} + b b_{ii})
+    = a\sum_i a_{ii} + b\sum_i b_{ii}
+    = a\operatorname{tr}(\mathbf{A}) + b\operatorname{tr}(\mathbf{B})
+    $$
+
+    이다.
+
+    **곱은 그렇지 않다.** 가장 간단한 반례는 $\mathbf{A} = \mathbf{B} = \mathbf{I}_2$다. $\operatorname{tr}(\mathbf{A}\mathbf{B}) = \operatorname{tr}(\mathbf{I}_2) = 2$이지만 $\operatorname{tr}(\mathbf{A})\operatorname{tr}(\mathbf{B}) = 2 \times 2 = 4$다. 아래 코드는 또 다른 반례를 보여 준다($5$ 대 $0$).
+
+    ```python
+    import numpy as np
+
+    A = np.array([[1., 2.], [3., 4.]])
+    B = np.array([[0., 1.], [1., 0.]])
+
+    print("tr(2A + 3B) =", np.trace(2*A + 3*B),
+          " 2tr(A)+3tr(B) =", 2*np.trace(A) + 3*np.trace(B))
+    print("tr(AB) =", np.trace(A @ B),
+          " tr(A)tr(B) =", np.trace(A) * np.trace(B))
+    ```
+
+    출력:
+
+    ```
+    tr(2A + 3B) = 10.0  2tr(A)+3tr(B) = 10.0
+    tr(AB) = 5.0  tr(A)tr(B) = 0.0
+    ```
+
+    대각합은 **덧셈에 대해서는** 잘 행동하지만 곱에 대해서는 그렇지 않다. 곱에서 성립하는 것은 순환 성질 $\operatorname{tr}(\mathbf{A}\mathbf{B}) = \operatorname{tr}(\mathbf{B}\mathbf{A})$뿐이다. 참고로 행렬식은 정반대다. $\det(\mathbf{A}\mathbf{B}) = \det(\mathbf{A})\det(\mathbf{B})$는 성립하지만 $\det(\mathbf{A}+\mathbf{B})$에는 간단한 공식이 없다. $\square$
+
+---
+
+**연습문제 6.**
+$\operatorname{tr}(\mathbf{A}^T\mathbf{A}) = \sum_{i,j} a_{ij}^2 = \lVert\mathbf{A}\rVert_F^2$임을 보이고, 이것이 특이값의 제곱합과 같음을 확인하라.
+
+??? success "풀이"
+    $\mathbf{A}^T\mathbf{A}$의 $(j,j)$ 성분은 $\sum_i a_{ij}^2$, 곧 $j$번째 열의 제곱합이다. 대각합은 이를 모든 열에 대해 더한 것이므로
+
+    $$
+    \operatorname{tr}(\mathbf{A}^T\mathbf{A}) = \sum_j \sum_i a_{ij}^2 = \lVert\mathbf{A}\rVert_F^2
+    $$
+
+    이다. 한편 $\mathbf{A}^T\mathbf{A}$의 고윳값은 특이값의 제곱 $\sigma_i^2$이고 대각합은 고윳값의 합이므로
+
+    $$
+    \lVert\mathbf{A}\rVert_F^2 = \sum_i \sigma_i^2
+    $$
+
+    이다.
+
+    ```python
+    import numpy as np
+
+    rng = np.random.default_rng(0)
+    A = rng.normal(size=(4, 4))
+    sv = np.linalg.svd(A, compute_uv=False)
+
+    print("tr(A^T A)   =", round(np.trace(A.T @ A), 6))
+    print("성분 제곱합 =", round((A ** 2).sum(), 6))
+    print("특이값 제곱합 =", round((sv ** 2).sum(), 6))
+    ```
+
+    출력:
+
+    ```
+    tr(A^T A)   = 13.498337
+    성분 제곱합 = 13.498337
+    특이값 제곱합 = 13.498337
+    ```
+
+    **통계적 의미.** $\mathbf{A}$가 중심화된 자료행렬이면 $\operatorname{tr}(\mathbf{A}^T\mathbf{A})$는 총제곱합이고, 특이값 제곱은 각 주성분이 설명하는 몫이다. "첫 $k$개 성분이 설명하는 비율"이 $\sum_{i \le k}\sigma_i^2 / \sum_i \sigma_i^2$인 것이 이 등식에서 나온다. $\square$
+
+---
+
+**연습문제 7.**
+$E[\mathbf{z}] = \boldsymbol{\mu}$, $\operatorname{Var}(\mathbf{z}) = \boldsymbol{\Sigma}$인 일반적인 경우에 $E[\mathbf{z}^T\mathbf{A}\mathbf{z}] = \operatorname{tr}(\mathbf{A}\boldsymbol{\Sigma}) + \boldsymbol{\mu}^T\mathbf{A}\boldsymbol{\mu}$임을 유도하라.
+
+??? success "풀이"
+    스칼라는 자기 자신의 대각합과 같다는 점($\mathbf{z}^T\mathbf{A}\mathbf{z} = \operatorname{tr}(\mathbf{z}^T\mathbf{A}\mathbf{z})$)에서 출발해 순환 성질을 쓴다.
+
+    $$
+    \mathbf{z}^T\mathbf{A}\mathbf{z} = \operatorname{tr}(\mathbf{z}^T\mathbf{A}\mathbf{z}) = \operatorname{tr}(\mathbf{A}\mathbf{z}\mathbf{z}^T)
+    $$
+
+    대각합과 기댓값은 모두 선형이므로 순서를 바꿀 수 있다.
+
+    $$
+    E[\mathbf{z}^T\mathbf{A}\mathbf{z}] = \operatorname{tr}\!\left(\mathbf{A}\,E[\mathbf{z}\mathbf{z}^T]\right)
+    $$
+
+    여기서 $E[\mathbf{z}\mathbf{z}^T] = \operatorname{Var}(\mathbf{z}) + E[\mathbf{z}]E[\mathbf{z}]^T = \boldsymbol{\Sigma} + \boldsymbol{\mu}\boldsymbol{\mu}^T$이므로
+
+    $$
+    E[\mathbf{z}^T\mathbf{A}\mathbf{z}]
+    = \operatorname{tr}(\mathbf{A}\boldsymbol{\Sigma}) + \operatorname{tr}(\mathbf{A}\boldsymbol{\mu}\boldsymbol{\mu}^T)
+    = \operatorname{tr}(\mathbf{A}\boldsymbol{\Sigma}) + \boldsymbol{\mu}^T\mathbf{A}\boldsymbol{\mu}
+    $$
+
+    이다(마지막에서 다시 순환 성질을 썼다).
+
+    $\boldsymbol{\Sigma} = \mathbf{I}$로 두면 본문의 공식이 된다. **이 유도에서 정규성은 전혀 쓰이지 않았다.** 평균과 공분산만 있으면 성립한다. $\square$
+
+---
+
+**연습문제 8.**
+$\mathbf{Y} = \mathbf{A}\mathbf{X}$일 때 $\operatorname{tr}(\operatorname{Var}(\mathbf{Y}))$를 $\mathbf{A}$와 $\boldsymbol{\Sigma} = \operatorname{Var}(\mathbf{X})$로 나타내라. $\mathbf{A}$가 직교행렬이면 어떻게 되는가?
+
+??? success "풀이"
+    $\operatorname{Var}(\mathbf{Y}) = \mathbf{A}\boldsymbol{\Sigma}\mathbf{A}^T$이므로 순환 성질에 의해
+
+    $$
+    \operatorname{tr}(\operatorname{Var}(\mathbf{Y})) = \operatorname{tr}(\mathbf{A}\boldsymbol{\Sigma}\mathbf{A}^T) = \operatorname{tr}(\boldsymbol{\Sigma}\mathbf{A}^T\mathbf{A})
+    $$
+
+    이다. $\mathbf{A}$가 직교행렬이면 $\mathbf{A}^T\mathbf{A} = \mathbf{I}$이므로
+
+    $$
+    \operatorname{tr}(\operatorname{Var}(\mathbf{Y})) = \operatorname{tr}(\boldsymbol{\Sigma})
+    $$
+
+    로 **총분산이 보존된다.**
+
+    ```python
+    import numpy as np
+
+    rng = np.random.default_rng(0)
+    Sigma = np.array([[4., 1., 0.], [1., 3., 1.], [0., 1., 2.]])
+
+    Q, _ = np.linalg.qr(rng.normal(size=(3, 3)))     # 직교행렬
+    S = np.diag([2., 1., 0.5])                        # 직교가 아닌 대각 척도변환
+
+    print("tr(Sigma)        =", round(np.trace(Sigma), 6))
+    print("직교 Q 로 변환   =", round(np.trace(Q @ Sigma @ Q.T), 6))
+    print("척도 S 로 변환   =", round(np.trace(S @ Sigma @ S.T), 6))
+    ```
+
+    출력:
+
+    ```
+    tr(Sigma)        = 9.0
+    직교 Q 로 변환   = 9.0
+    척도 S 로 변환   = 19.5
+    ```
+
+    **회전은 총분산을 보존하지만 척도변환은 그렇지 않다.** PCA가 회전만 하는 이유가 여기에 있다. 분산의 총량은 그대로 두고 축 사이의 배분만 바꾼다. 반대로 변수를 표준화하는 것은 척도변환이므로 총분산이 바뀐다(표준화하면 $\operatorname{tr} = p$가 된다). 공분산행렬로 PCA를 하는 것과 상관행렬로 하는 것이 다른 결과를 주는 이유다. $\square$
+
+---
+
+**연습문제 9.**
+실행렬의 고윳값은 복소수일 수 있다. 그런데도 $\operatorname{tr}(\mathbf{A}) = \sum_i \lambda_i$와 $\det(\mathbf{A}) = \prod_i \lambda_i$가 실수로 나오는 이유를 설명하고, 회전행렬로 확인하라.
+
+??? success "풀이"
+    실계수 특성다항식의 복소근은 **켤레쌍으로 나타난다.** $\lambda = a + bi$가 근이면 $\bar{\lambda} = a - bi$도 근이다. 켤레쌍끼리 더하고 곱하면
+
+    $$
+    \lambda + \bar{\lambda} = 2a \in \mathbb{R}, \qquad
+    \lambda\bar{\lambda} = a^2 + b^2 \in \mathbb{R}
+    $$
+
+    로 허수부가 상쇄된다. 따라서 전체 합과 곱이 실수다.
+
+    ```python
+    import numpy as np
+
+    R = np.array([[0., -1.], [1., 0.]])       # 90도 회전
+    ev = np.linalg.eigvals(R)
+
+    print("고윳값:", ev)
+    print("합    :", ev.sum().real, " tr(R) =", np.trace(R))
+    print("곱    :", np.prod(ev).real, " det(R) =", round(np.linalg.det(R), 6))
+    ```
+
+    출력:
+
+    ```
+    고윳값: [0.+1.j 0.-1.j]
+    합    : 0.0  tr(R) = 0.0
+    곱    : 1.0  det(R) = 1.0
+    ```
+
+    $90^\circ$ 회전행렬은 고윳값이 $\pm i$로 순허수다. 실벡터 중 방향이 보존되는 것이 하나도 없으므로 당연하다. 그럼에도 합은 $0 = \operatorname{tr}(\mathbf{R})$, 곱은 $1 = \det(\mathbf{R})$로 실수다.
+
+    **대칭행렬에서는 이런 일이 없다.** 스펙트럼 정리가 고윳값이 모두 실수임을 보장한다. 통계에서 다루는 공분산행렬과 사영행렬이 모두 대칭이므로, 실무에서 복소 고윳값을 만날 일은 드물다. $\square$
+
+---
+
+**연습문제 10.**
+능형회귀의 모자 행렬은 $\mathbf{H}_\lambda = \mathbf{X}(\mathbf{X}^T\mathbf{X} + \lambda\mathbf{I})^{-1}\mathbf{X}^T$이다. $\operatorname{tr}(\mathbf{H}_\lambda) = \sum_j \frac{d_j^2}{d_j^2 + \lambda}$($d_j$는 $\mathbf{X}$의 특이값)임을 보이고, 이 값이 $\lambda$에 따라 어떻게 변하는지 확인하라.
+
+??? success "풀이"
+    특이값분해 $\mathbf{X} = \mathbf{U}\mathbf{D}\mathbf{V}^T$를 넣으면 $\mathbf{X}^T\mathbf{X} = \mathbf{V}\mathbf{D}^2\mathbf{V}^T$이고 $\mathbf{V}^T\mathbf{V} = \mathbf{I}$이므로
+
+    $$
+    \mathbf{X}^T\mathbf{X} + \lambda\mathbf{I} = \mathbf{V}(\mathbf{D}^2 + \lambda\mathbf{I})\mathbf{V}^T
+    $$
+
+    이다. 따라서
+
+    $$
+    \mathbf{H}_\lambda = \mathbf{U}\mathbf{D}\mathbf{V}^T\mathbf{V}(\mathbf{D}^2+\lambda\mathbf{I})^{-1}\mathbf{V}^T\mathbf{V}\mathbf{D}\mathbf{U}^T
+    = \mathbf{U}\mathbf{D}(\mathbf{D}^2+\lambda\mathbf{I})^{-1}\mathbf{D}\mathbf{U}^T
+    $$
+
+    이고, 순환 성질과 $\mathbf{U}^T\mathbf{U} = \mathbf{I}$에서
+
+    $$
+    \operatorname{tr}(\mathbf{H}_\lambda) = \operatorname{tr}\!\left(\mathbf{D}^2(\mathbf{D}^2+\lambda\mathbf{I})^{-1}\right) = \sum_j \frac{d_j^2}{d_j^2+\lambda}
+    $$
+
+    를 얻는다.
+
+    ```python
+    import numpy as np
+
+    rng = np.random.default_rng(0)
+    X = rng.normal(size=(50, 5))
+    d = np.linalg.svd(X, compute_uv=False)
+
+    for lam in (0., 1., 10., 100.):
+        H = X @ np.linalg.inv(X.T @ X + lam * np.eye(5)) @ X.T
+        print(f"lambda={lam:>6}:  tr(H) = {np.trace(H):7.4f}"
+              f"   sum d^2/(d^2+lambda) = {np.sum(d**2/(d**2+lam)):7.4f}")
+    ```
+
+    출력:
+
+    ```
+    lambda=   0.0:  tr(H) =  5.0000   sum d^2/(d^2+lambda) =  5.0000
+    lambda=   1.0:  tr(H) =  4.8942   sum d^2/(d^2+lambda) =  4.8942
+    lambda=  10.0:  tr(H) =  4.1267   sum d^2/(d^2+lambda) =  4.1267
+    lambda= 100.0:  tr(H) =  1.6690   sum d^2/(d^2+lambda) =  1.6690
+    ```
+
+    $\lambda = 0$이면 $\operatorname{tr} = p = 5$로 보통최소제곱과 같고, $\lambda$가 커질수록 값이 줄어 $\lambda \to \infty$에서 0으로 간다.
+
+    이 값을 **실효 자유도**라 부른다. 능형회귀는 모수를 $5$개 그대로 두지만 벌점이 각 방향을 $d_j^2/(d_j^2+\lambda)$만큼 축소하므로, 모형이 실제로 쓰는 자유도는 그보다 작다. 특이값이 작은 방향(공선성이 심한 방향)일수록 더 강하게 축소된다는 점도 식에서 바로 읽힌다. 18장에서 이 양이 모형 선택 기준에 쓰인다. $\square$
+

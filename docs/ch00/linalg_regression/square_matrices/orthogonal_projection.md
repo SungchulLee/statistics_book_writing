@@ -248,3 +248,231 @@ $\mathbf{y}$와 그 사영 $\hat{\mathbf{y}}$ 사이의 각이라는 관점에�
     이다. 따라서 $R^2 = \cos^2\theta$이다. 즉 반응벡터와 그것을 모형 부분공간 위로 사영한 벡터 사이 각의 코사인의 제곱이다.
 
     $R^2 = 1$은 $\cos^2\theta = 1$, 즉 $\theta = 0$을 뜻하므로 반응벡터 $\mathbf{y}$가 정확히 $\text{col}(\mathbf{X})$ 안에 놓인다. 기하적으로 자료가 잔차 없이 모형에 완벽히 들어맞는다는 뜻이다.
+
+---
+
+**연습문제 5.**
+영이 아닌 벡터 $\mathbf{a}$ 하나가 펼치는 직선 위로의 직교사영이 $\mathbf{P} = \dfrac{\mathbf{a}\mathbf{a}^T}{\mathbf{a}^T\mathbf{a}}$임을 보이고, 이것이 절편 없는 단순회귀와 어떻게 연결되는지 설명하라.
+
+??? success "풀이"
+    사영 공식 $\mathbf{P}_{\mathbf{X}} = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T$에서 $\mathbf{X} = \mathbf{a}$($n \times 1$)로 두면 $\mathbf{X}^T\mathbf{X} = \mathbf{a}^T\mathbf{a}$가 스칼라이므로 역행렬이 곧 역수다.
+
+    $$
+    \mathbf{P} = \mathbf{a}\,(\mathbf{a}^T\mathbf{a})^{-1}\mathbf{a}^T = \frac{\mathbf{a}\mathbf{a}^T}{\mathbf{a}^T\mathbf{a}}
+    $$
+
+    멱등성은 $\mathbf{P}^2 = \dfrac{\mathbf{a}(\mathbf{a}^T\mathbf{a})\mathbf{a}^T}{(\mathbf{a}^T\mathbf{a})^2} = \mathbf{P}$, 대칭성은 $(\mathbf{a}\mathbf{a}^T)^T = \mathbf{a}\mathbf{a}^T$에서 나온다. 계수가 1이므로 $\operatorname{tr}(\mathbf{P}) = 1$이다.
+
+    $\mathbf{P}\mathbf{y} = \mathbf{a}\dfrac{\mathbf{a}^T\mathbf{y}}{\mathbf{a}^T\mathbf{a}}$로 쓰면 계수가 바로 읽힌다.
+
+    $$
+    \hat{\beta} = \frac{\mathbf{a}^T\mathbf{y}}{\mathbf{a}^T\mathbf{a}} = \frac{\sum_i a_i y_i}{\sum_i a_i^2}
+    $$
+
+    이것이 **절편 없는 단순회귀** $y_i = \beta a_i + \varepsilon_i$의 최소제곱추정량이다.
+
+    ```python
+    import numpy as np
+
+    a = np.array([1., 2., 2.])
+    y = np.array([3., 1., 4.])
+
+    P = np.outer(a, a) / (a @ a)
+    print("P =\n", P.round(4))
+    print("멱등:", np.allclose(P @ P, P), " 대칭:", np.allclose(P, P.T),
+          " tr:", round(np.trace(P), 6))
+    print("beta_hat =", round(a @ y / (a @ a), 6))
+    print("P y =", (P @ y).round(6), " = beta_hat * a =", (a @ y / (a @ a) * a).round(6))
+    ```
+
+    출력:
+
+    ```
+    P =
+     [[0.1111 0.2222 0.2222]
+     [0.2222 0.4444 0.4444]
+     [0.2222 0.4444 0.4444]]
+    멱등: True  대칭: True  tr: 1.0
+    beta_hat = 1.444444
+    P y = [1.444444 2.888889 2.888889]  = beta_hat * a = [1.444444 2.888889 2.888889]
+    ```
+
+    벡터 하나 위로의 사영은 앞으로 계속 쓰인다. 중심화행렬의 여집합 $\frac{1}{n}\mathbf{J}$가 $\mathbf{1}$ 위로의 사영이고, 그람–슈미트의 각 단계도 이 형태다. $\square$
+
+---
+
+**연습문제 6.**
+모자 행렬의 대각 성분 $h_{ii}$를 **지렛대**라 한다. $0 \le h_{ii} \le 1$이고 $\sum_i h_{ii} = p$임을 보여라. $h_{ii} = 1$이면 무엇을 뜻하는가?
+
+??? success "풀이"
+    $\mathbf{H}$가 대칭 멱등이므로 $\mathbf{H} = \mathbf{H}^2 = \mathbf{H}^T\mathbf{H}$이고, 따라서
+
+    $$
+    h_{ii} = [\mathbf{H}^T\mathbf{H}]_{ii} = \sum_j h_{ji}^2 = h_{ii}^2 + \sum_{j \neq i} h_{ji}^2
+    $$
+
+    이다. 오른쪽의 합이 음이 아니므로 $h_{ii} \ge h_{ii}^2$, 곧 $h_{ii}(1 - h_{ii}) \ge 0$이고 $0 \le h_{ii} \le 1$이다. 합은 $\sum_i h_{ii} = \operatorname{tr}(\mathbf{H}) = p$다.
+
+    **$h_{ii} = 1$인 경우.** 위 식에서 $j \neq i$인 모든 $h_{ji} = 0$이어야 한다. 그러면 $\hat{y}_i = \sum_j h_{ij}y_j = y_i$이므로 **그 관측값은 정확히 맞춰진다.** 잔차가 항상 0이고, 그 점은 회귀선을 자기 쪽으로 완전히 끌어당긴다.
+
+    ```python
+    import numpy as np
+
+    rng = np.random.default_rng(0)
+    n = 40
+    X = np.column_stack([np.ones(n), rng.normal(size=n), rng.normal(size=n)])
+    H = X @ np.linalg.inv(X.T @ X) @ X.T
+    h = np.diag(H)
+
+    print(f"지렛대 최소 {h.min():.4f}, 최대 {h.max():.4f}")
+    print(f"합 = {h.sum():.6f}  (= p = {X.shape[1]})")
+    print(f"평균 = {h.mean():.4f}  (= p/n = {X.shape[1]/n:.4f})")
+    ```
+
+    출력:
+
+    ```
+    지렛대 최소 0.0285, 최대 0.2371
+    합 = 3.000000  (= p = 3)
+    평균 = 0.0750  (= p/n = 0.0750)
+    ```
+
+    지렛대의 평균이 $p/n$이므로 **$2p/n$을 넘는 점을 주의해서 보라**는 실무 규칙이 여기서 나온다. 2장의 이상치·지렛대점 논의와 이어진다. $\square$
+
+---
+
+**연습문제 7.**
+$\operatorname{col}(\mathbf{X}_1) \subseteq \operatorname{col}(\mathbf{X}_2)$이고 각각의 사영을 $\mathbf{H}_1$, $\mathbf{H}_2$라 하자. $\mathbf{H}_2\mathbf{H}_1 = \mathbf{H}_1\mathbf{H}_2 = \mathbf{H}_1$임을 보여라.
+
+??? success "풀이"
+    임의의 $\mathbf{x}$에 대해 $\mathbf{H}_1\mathbf{x} \in \operatorname{col}(\mathbf{X}_1) \subseteq \operatorname{col}(\mathbf{X}_2)$이다. 사영은 자기 치역의 벡터를 그대로 두므로 $\mathbf{H}_2(\mathbf{H}_1\mathbf{x}) = \mathbf{H}_1\mathbf{x}$이고, 따라서 $\mathbf{H}_2\mathbf{H}_1 = \mathbf{H}_1$이다.
+
+    두 행렬 모두 대칭이므로 전치를 취하면
+
+    $$
+    \mathbf{H}_1 = \mathbf{H}_1^T = (\mathbf{H}_2\mathbf{H}_1)^T = \mathbf{H}_1^T\mathbf{H}_2^T = \mathbf{H}_1\mathbf{H}_2
+    $$
+
+    이다.
+
+    **F 검정의 근거.** 이 성질에서 $\mathbf{H}_2 - \mathbf{H}_1$도 사영임이 따라 나온다.
+
+    $$
+    (\mathbf{H}_2 - \mathbf{H}_1)^2 = \mathbf{H}_2 - \mathbf{H}_2\mathbf{H}_1 - \mathbf{H}_1\mathbf{H}_2 + \mathbf{H}_1 = \mathbf{H}_2 - \mathbf{H}_1
+    $$
+
+    게다가 $(\mathbf{H}_2 - \mathbf{H}_1)(\mathbf{I} - \mathbf{H}_2) = \mathbf{O}$이므로 두 사영이 직교한다. 그래서 큰 모형과 작은 모형의 제곱합 차이 $\lVert(\mathbf{H}_2 - \mathbf{H}_1)\mathbf{y}\rVert^2$과 잔차제곱합 $\lVert(\mathbf{I}-\mathbf{H}_2)\mathbf{y}\rVert^2$이 (정규성 아래에서) 독립인 카이제곱이 되고, 그 비가 $F$ 분포를 따른다. **내포모형 F 검정의 기하가 바로 이것이다.** $\square$
+
+---
+
+**연습문제 8.**
+부분공간 $\mathcal{V}$가 주어지면 그 위로의 직교사영행렬은 **유일**함을 보여라.
+
+??? success "풀이"
+    $\mathbf{P}_1$과 $\mathbf{P}_2$가 모두 $\mathcal{V}$ 위로의 직교사영이라 하자. 연습문제 7의 논법을 양방향으로 쓴다. 두 치역이 같으므로 $\mathbf{P}_2\mathbf{P}_1 = \mathbf{P}_1$이고 $\mathbf{P}_1\mathbf{P}_2 = \mathbf{P}_2$다.
+
+    대칭성에서
+
+    $$
+    \mathbf{P}_1 = (\mathbf{P}_2\mathbf{P}_1)^T = \mathbf{P}_1^T\mathbf{P}_2^T = \mathbf{P}_1\mathbf{P}_2 = \mathbf{P}_2
+    $$
+
+    이므로 둘은 같다.
+
+    **왜 중요한가.** 사영 공식 $\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T$은 겉보기에 $\mathbf{X}$에 의존하지만, 실제로는 **$\operatorname{col}(\mathbf{X})$에만 의존한다.** 같은 열공간을 주는 다른 계획행렬(예: 예측변수를 재척도화하거나 선형결합한 것)을 써도 모자 행렬은 똑같다. 회귀에서 적합값 $\hat{\mathbf{y}}$과 $R^2$이 모수화 방식에 영향받지 않는 이유가 이것이다. 반면 계수 $\hat{\boldsymbol{\beta}}$은 모수화에 따라 달라진다.
+
+    빗각 사영에서는 이 유일성이 성립하지 않는다. 치역이 같아도 눌러 없애는 방향이 다르면 다른 사영이다. $\square$
+
+---
+
+**연습문제 9.**
+$\mathbf{M}_1 = \mathbf{I} - \mathbf{H}_1$을 $\mathbf{X}_1$에 대한 잔차생성행렬이라 하자. $\mathbf{y}$를 $[\mathbf{X}_1, \mathbf{x}_2]$에 회귀했을 때 $\mathbf{x}_2$의 계수가, $\mathbf{M}_1\mathbf{y}$를 $\mathbf{M}_1\mathbf{x}_2$에 회귀한 계수와 같음을 수치로 확인하라.
+
+??? success "풀이"
+    이것이 **Frisch–Waugh–Lovell 정리**다. 다중회귀의 한 계수는 "다른 변수들의 영향을 걷어낸 뒤"의 단순회귀 계수와 같다.
+
+    ```python
+    import numpy as np
+
+    rng = np.random.default_rng(0)
+    n = 40
+    x1 = np.ones(n)
+    x2 = rng.normal(size=n)
+    x3 = 0.5 * x2 + rng.normal(size=n)          # x2 와 상관된 변수
+    y = 1 + 2 * x2 - 1.5 * x3 + rng.normal(size=n)
+
+    # (1) 전체 다중회귀
+    X = np.column_stack([x1, x2, x3])
+    beta_full = np.linalg.lstsq(X, y, rcond=None)[0]
+
+    # (2) x1, x2 의 영향을 걷어낸 뒤 단순회귀
+    X1 = np.column_stack([x1, x2])
+    M1 = np.eye(n) - X1 @ np.linalg.inv(X1.T @ X1) @ X1.T
+    y_res, x3_res = M1 @ y, M1 @ x3
+    beta_fwl = (x3_res @ y_res) / (x3_res @ x3_res)
+
+    print("다중회귀의 x3 계수 :", round(beta_full[2], 8))
+    print("FWL 로 구한 계수   :", round(beta_fwl, 8))
+    ```
+
+    출력:
+
+    ```
+    다중회귀의 x3 계수 : -1.44939995
+    FWL 로 구한 계수   : -1.44939995
+    ```
+
+    두 값이 소수점 여덟째 자리까지 같다.
+
+    **해석적 의미가 크다.** 다중회귀의 계수 $\hat\beta_3$은 "$x_3$이 한 단위 늘 때 $y$의 변화"가 아니라 "**다른 변수로 설명되지 않는 부분의** $x_3$이 한 단위 늘 때, **다른 변수로 설명되지 않는 부분의** $y$의 변화"다. 이것이 다중회귀 계수를 "다른 변수를 통제했을 때의 효과"로 읽는 근거이며, 13장 편회귀그림의 바탕이기도 하다. $\square$
+
+---
+
+**연습문제 10.**
+계획행렬 하나를 잡아 $\mathbf{H}$의 성질(대칭·멱등·대각합), $\hat{\mathbf{y}} \perp \mathbf{e}$, 피타고라스 분해, 그리고 $R^2 = \cos^2\theta$(연습문제 4)를 모두 수치로 확인하라.
+
+??? success "풀이"
+    ```python
+    import numpy as np
+
+    rng = np.random.default_rng(1)
+    n, p = 30, 3
+    X = np.column_stack([np.ones(n), rng.normal(size=(n, p - 1))])
+    y = X @ np.array([1., 2., -1.]) + rng.normal(size=n)
+
+    H = X @ np.linalg.inv(X.T @ X) @ X.T
+    y_hat = H @ y
+    e = y - y_hat
+
+    print("대칭   :", np.allclose(H, H.T))
+    print("멱등   :", np.allclose(H @ H, H))
+    print("tr(H)  :", round(np.trace(H), 6), " (= p =", p, ")")
+    print("y_hat . e :", round(float(y_hat @ e), 12), " (직교)")
+
+    print("\n||y||^2          =", round(y @ y, 6))
+    print("||y_hat||^2 + ||e||^2 =", round(y_hat @ y_hat + e @ e, 6))
+
+    cos2 = (y_hat @ y_hat) / (y @ y)
+    print("\ncos^2(theta) =", round(cos2, 6))
+    print("R^2 (원점 기준) =", round((y_hat @ y_hat) / (y @ y), 6))
+    ```
+
+    출력:
+
+    ```
+    대칭   : True
+    멱등   : True
+    tr(H)  : 3.0  (= p = 3 )
+    y_hat . e : -0.0  (직교)
+
+    ||y||^2          = 158.337856
+    ||y_hat||^2 + ||e||^2 = 158.337856
+
+    cos^2(theta) = 0.885583
+    R^2 (원점 기준) = 0.885583
+    ```
+
+    네 성질이 모두 확인된다. 잔차와 적합값의 내적은 반올림 오차 수준에서 0이다.
+
+    **주의.** 여기서 계산한 $R^2 = \lVert\hat{\mathbf{y}}\rVert^2/\lVert\mathbf{y}\rVert^2$은 **원점을 기준으로 한** 값이다. 보고되는 통상의 $R^2$은 평균을 빼고 계산한 $1 - \lVert\mathbf{e}\rVert^2/\lVert\mathbf{y} - \bar{y}\mathbf{1}\rVert^2$이며, 이는 $\mathbf{1}$ 위로의 사영을 먼저 걷어낸 뒤 같은 논리를 적용한 것이다. 절편이 있는 모형에서 두 값이 다르다는 점에 유의하라. $\square$
+
