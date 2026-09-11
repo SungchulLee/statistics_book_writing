@@ -44,9 +44,10 @@ $$
 I_n(\theta) = n \cdot I(\theta)
 $$
 
-## 예제
 
-### Bernoulli 분포
+<div class="exbox" markdown>
+
+### 보기 1. Bernoulli 분포 { .ex }
 
 $X \sim \text{Bernoulli}(p)$이면 $x \in \{0, 1\}$에서 $f(x; p) = p^x (1-p)^{1-x}$이다. 관측값 하나에 대한 로그가능도는
 
@@ -68,7 +69,11 @@ $$
 
 Fisher 정보량은 $p$가 0이나 1에 가까울 때 가장 크고(그때 관측값 하나가 $p$에 관해 가장 많은 정보를 준다) $p = 1/2$에서 가장 작다.
 
-### Normal 분포 (평균)
+</div>
+
+<div class="exbox" markdown>
+
+### 보기 2. Normal 분포 (평균) { .ex }
 
 $\sigma^2$이 알려진 $X \sim N(\mu, \sigma^2)$이라 하자. 관측값 하나에 대한 로그가능도는
 
@@ -90,7 +95,11 @@ $$
 
 잡음 $\sigma^2$이 작아질수록 Fisher 정보량이 커지며, 이는 직관과 맞아떨어진다. 잡음이 적은 자료가 평균에 관해 더 많은 정보를 담는다.
 
-### Poisson 분포
+</div>
+
+<div class="exbox" markdown>
+
+### 보기 3. Poisson 분포 { .ex }
 
 $X \sim \text{Poisson}(\lambda)$이면 $f(x; \lambda) = e^{-\lambda}\lambda^x / x!$이다. 로그가능도는
 
@@ -109,6 +118,8 @@ $E[X] = \lambda$이므로:
 $$
 I(\lambda) = \frac{1}{\lambda}
 $$
+
+</div>
 
 ## Fisher 정보량으로부터의 표준오차
 

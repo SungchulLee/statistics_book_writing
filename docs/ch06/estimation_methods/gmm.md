@@ -108,7 +108,9 @@ $$
 
 ($\chi^2(r-p)$의 임계값에 비해) $J$가 크면 적률 조건들이 서로 모순됨을, 즉 모형이 잘못 설정되었음을 시사한다.
 
-## 예제: 적률 세 개를 쓴 정규분포
+<div class="exbox" markdown>
+
+### 보기 1. 적률 세 개를 쓴 정규분포 { .ex }
 
 $X_1, \ldots, X_n \stackrel{\text{i.i.d.}}{\sim} N(\mu, \sigma^2)$이고 적률 조건 세 개($r = 3 > p = 2$)로 $\theta = (\mu, \sigma^2)^\top$을 추정한다고 하자:
 
@@ -126,6 +128,8 @@ $$
 
 ??? example "정확식별일 때 GMM은 적률법으로 환원된다"
     $r = p$이면 적률 조건 $\bar{g}_n(\theta) = \mathbf{0}$을 대개 정확히 풀 수 있고 가중행렬 $\mathbf{W}$는 무의미해진다(양의 정부호인 어떤 $\mathbf{W}$도 같은 해를 준다). 이 경우 GMM은 표준 적률법으로 환원된다. 예를 들어 두 조건 $E[X - \mu] = 0$과 $E[(X - \mu)^2 - \sigma^2] = 0$으로 $(\mu, \sigma^2)$을 추정하면 $\mathbf{W}$와 무관하게 $\hat{\mu} = \bar{X}$, $\hat{\sigma}^2 = \frac{1}{n}\sum(X_i - \bar{X})^2$을 얻는다.
+
+</div>
 
 ## 다른 추정 방법과의 연결
 

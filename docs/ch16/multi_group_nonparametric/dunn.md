@@ -51,7 +51,9 @@ $$
 !!! tip "Holm 대 Bonferroni"
     Holm 단계적 하강 절차는 유의수준 $\alpha$에서 FWER을 통제하면서도 Bonferroni 보정보다 균일하게 더 강력하다. Bonferroni 보정이 특별히 요구되는 경우가 아니라면 Holm을 쓰는 편이 낫다.
 
-## 예제
+<div class="exbox" markdown>
+
+### 보기 1. 비료 자료의 Dunn 사후검정 { .ex }
 
 [Kruskal-Wallis](kruskal_wallis.md) 절의 비료 예제를 이어 보자. Kruskal-Wallis 검정이 $H = 11.816$, $p = 0.0027$로 $H_0$을 기각했다. 세 집단은 다음과 같았다.
 
@@ -87,6 +89,8 @@ Kruskal-Wallis의 기각은 주로 비료 B와 비료 C의 큰 차이가 이끌�
     비료 A와 C가 모두 $10$을 포함하므로 크기 2인 동점 집단이 하나 있다. 동점 보정을 적용하면 표준오차가 $2.8284$에서 $2.8259$로 미세하게 줄어들고 보정된 $p$값은 $0.182$, $0.358$, $0.00179$가 된다. 결론은 바뀌지 않는다.
 
     동점 비율이 높으면 보정이 훨씬 중요해진다. `scikit-posthocs`의 `posthoc_dunn`은 동점 보정을 자동으로 적용한다.
+
+</div>
 
 ## 절차 요약
 
