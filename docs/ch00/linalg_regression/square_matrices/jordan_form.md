@@ -106,8 +106,12 @@ $$
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 특성다항식이 $(\lambda - 2)^2(\lambda - 5)$이고 고윳값 $\lambda = 2$의 기하적 중복도가 1인 $3 \times 3$ 행렬의 조르당 표준형을 써라.
+
+</div>
 
 ??? success "풀이"
     $\lambda = 2$는 대수적 중복도가 2이지만 기하적 중복도가 1이므로 하나의 $2 \times 2$ 조르당 블록을 만든다. 고윳값 $\lambda = 5$는 대수적·기하적 중복도가 모두 1이므로 $1 \times 1$ 블록이 된다. 조르당 형은
@@ -118,10 +122,12 @@ $$
 
     이다. $(1,2)$ 자리의 초대각 1이 부족분을 나타낸다. $\lambda = 2$에 대해 고유벡터가 하나 모자란 것이다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 조르당 블록의 거듭제곱 공식을 이용해 조르당 블록 $\mathbf{J}_2(3) = \begin{pmatrix} 3 & 1 \\ 0 & 3 \end{pmatrix}$에 대해 $\mathbf{J}^3$을 계산하라.
+
+</div>
 
 ??? success "풀이"
     $2 \times 2$ 조르당 블록 $\mathbf{J}_2(\lambda)$에 대해 거듭제곱 공식은
@@ -138,10 +144,12 @@ $$
 
     직접 곱해서 확인할 수 있다. $\mathbf{J}^2 = \begin{pmatrix} 9 & 6 \\ 0 & 9 \end{pmatrix}$이고, 그다음 $\mathbf{J}^3 = \mathbf{J}^2 \cdot \mathbf{J} = \begin{pmatrix} 27 & 27 \\ 0 & 27 \end{pmatrix}$이다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 어떤 행렬이 대각화 가능할 필요충분조건이 그 조르당 형의 모든 조르당 블록이 $1 \times 1$인 것임을 증명하라.
+
+</div>
 
 ??? success "풀이"
     ($\Rightarrow$) $\mathbf{A}$가 대각화 가능하면 $\boldsymbol{\Lambda}$가 대각인 $\mathbf{A} = \mathbf{P}\boldsymbol{\Lambda}\mathbf{P}^{-1}$이 성립한다. 대각행렬은 각 블록이 $1 \times 1$인(초대각의 1이 없는) 조르당 형이다.
@@ -150,10 +158,12 @@ $$
 
     조르당 블록이 모두 $1 \times 1$인 것은 정확히 모든 고윳값에서 기하적 중복도가 대수적 중복도와 같을 때다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 고윳값이 $\lambda_1 = 1$, $\lambda_2 = 2$, $\lambda_3 = 3$(모두 서로 다름)인 $3 \times 3$ 행렬이 다른 성질과 무관하게 반드시 대각화 가능한 이유를 설명하라.
+
+</div>
 
 ??? success "풀이"
     서로 다른 고윳값에 대응하는 고유벡터는 언제나 일차독립이다. 이 행렬은 $3 \times 3$이고 서로 다른 고윳값을 3개 가지므로 일차독립인 고유벡터를 3개 갖는다.
@@ -162,10 +172,12 @@ $$
 
     동등하게, 각 고윳값의 대수적 중복도가 1이므로 기하적 중복도도 1이다(기하적 중복도는 언제나 1 이상이고 대수적 중복도 이하이므로). 따라서 모든 조르당 블록이 $1 \times 1$이고 이 행렬은 대각화 가능하다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.**
 VAR(1) 모형 $\mathbf{y}_t = \mathbf{A}\mathbf{y}_{t-1} + \boldsymbol{\varepsilon}_t$에서 $\mathbf{A}$의 모든 고윳값이 $|\lambda_i| < 1$을 만족하면 그 과정은 정상적이다. $\mathbf{A}$가 $2 \times 2$ 조르당 블록을 갖는 단위 고윳값($|\lambda| = 1$)을 가질 때 조르당 형이 무엇을 드러내는지 설명하라.
+
+</div>
 
 ??? success "풀이"
     $\lambda = 1$이 $2 \times 2$ 조르당 블록을 가지면 $\mathbf{J}_2(1) = \begin{pmatrix} 1 & 1 \\ 0 & 1 \end{pmatrix}$이다. 거듭제곱 공식에 의해
@@ -178,10 +190,12 @@ VAR(1) 모형 $\mathbf{y}_t = \mathbf{A}\mathbf{y}_{t-1} + \boldsymbol{\varepsil
 
     이에 비해 $1 \times 1$ 블록을 갖는 단위 고윳값은 $\lambda^k = 1$이 되어 결정론적 추세 없는 단위근(확률보행) 행동을 만든다. 이렇게 조르당 형은 서로 다른 유형의 비정상성 — 단위근(확률보행)과 결정론적 추세 — 을 구별해 준다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 6.**
 고윳값 $\lambda$에 대한 조르당 블록의 **개수**는 기하적 중복도와 같고, 블록의 **크기**는 $\operatorname{rank}(\mathbf{A}-\lambda\mathbf{I})^j$가 더 이상 줄지 않을 때까지의 변화로 알 수 있다. 본문의 $\mathbf{A} = \begin{pmatrix} 3 & 1 & 0 \\ 0 & 3 & 0 \\ 0 & 0 & 5 \end{pmatrix}$로 확인하라.
+
+</div>
 
 ??? success "풀이"
     블록 개수가 기하적 중복도인 이유는 간단하다. 각 조르당 블록은 보통의 고유벡터를 **정확히 하나씩** 기여하므로(사슬의 첫 벡터), 블록의 개수가 곧 일차독립인 고유벡터의 개수다.
@@ -221,10 +235,12 @@ VAR(1) 모형 $\mathbf{y}_t = \mathbf{A}\mathbf{y}_{t-1} + \boldsymbol{\varepsil
 
     이 계수 계산은 조르당 형을 직접 구하지 않고도 블록 구조를 알아내는 표준적인 방법이다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 7.**
 $\mathbf{N} = \mathbf{J}_k(\lambda) - \lambda\mathbf{I}$가 **멱영행렬**임을 보여라. 곧 $\mathbf{N}^k = \mathbf{O}$이고 $\mathbf{N}^{k-1} \neq \mathbf{O}$이다.
+
+</div>
 
 ??? success "풀이"
     $\mathbf{N}$은 초대각만 1이고 나머지가 0인 행렬이다. 이 행렬은 기저벡터를 한 칸씩 **밀어내는** 사상이다.
@@ -264,10 +280,12 @@ $\mathbf{N} = \mathbf{J}_k(\lambda) - \lambda\mathbf{I}$가 **멱영행렬**임�
 
     $\mathbf{N}^k = \mathbf{O}$이라 합이 $j = k-1$에서 끊긴다. 본문의 거듭제곱 공식이 바로 이것이다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 8.**
 $\mathbf{A} = \begin{pmatrix} 2 & 1 & 0 \\ 0 & 2 & 0 \\ 0 & 0 & 2 \end{pmatrix}$와 $\mathbf{B} = 2\mathbf{I}_3$은 특성다항식이 같다. 두 행렬이 닮지 않았음을 **최소다항식**으로 구별하라.
+
+</div>
 
 ??? success "풀이"
     두 행렬 모두 특성다항식이 $(\lambda-2)^3$이므로 특성다항식만으로는 구별되지 않는다. 최소다항식은 각 고윳값에 대해 **가장 큰 조르당 블록의 크기**를 지수로 갖는다.
@@ -302,10 +320,12 @@ $\mathbf{A} = \begin{pmatrix} 2 & 1 & 0 \\ 0 & 2 & 0 \\ 0 & 0 & 2 \end{pmatrix}$
 
     **교훈.** 대각합·행렬식·특성다항식이 모두 같아도 닮았다는 보장은 없다. 닮음류를 완전히 결정하는 것은 **조르당 구조**다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 9.**
 조르당 블록의 행렬 지수함수 $e^{\mathbf{J}_2(\lambda)}$를 구하고, 미분방정식 $\mathbf{y}' = \mathbf{A}\mathbf{y}$의 해가 대각화 불가능한 경우에 어떤 모양이 되는지 설명하라.
+
+</div>
 
 ??? success "풀이"
     $\mathbf{J}_2(\lambda) = \lambda\mathbf{I} + \mathbf{N}$이고 두 항이 교환하며 $\mathbf{N}^2 = \mathbf{O}$이므로
@@ -346,10 +366,12 @@ $\mathbf{A} = \begin{pmatrix} 2 & 1 & 0 \\ 0 & 2 & 0 \\ 0 & 0 & 2 \end{pmatrix}$
 
     물리적으로는 임계감쇠(critically damped) 진동이 이런 모양이다. $\lambda$가 중근일 때 해가 $e^{\lambda t}$와 $te^{\lambda t}$의 결합이 되는 것이 바로 조르당 블록 때문이다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 10.**
 $\mathbf{C} = \begin{pmatrix} 5 & 1 \\ -1 & 3 \end{pmatrix}$의 조르당 형과 조르당 사슬(일반화 고유벡터)을 구하라.
+
+</div>
 
 ??? success "풀이"
     **고윳값.** $\det(\mathbf{C}-\lambda\mathbf{I}) = (5-\lambda)(3-\lambda)+1 = \lambda^2-8\lambda+16 = (\lambda-4)^2$이므로 $\lambda = 4$가 중근이다.

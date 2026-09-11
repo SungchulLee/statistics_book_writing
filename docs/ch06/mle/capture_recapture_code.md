@@ -195,7 +195,11 @@ c = 10, r = 10
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.** 어떤 해양생물학자가 물고기 $c = 20$마리에 표지를 붙여 놓아 주었다. 나중에 $r = 25$마리를 표본으로 잡았더니 $t = 5$마리가 표지되어 있었다. 격자탐색과 Lincoln-Petersen 공식 두 가지로 전체 개체수의 MLE를 계산하라.
+
+</div>
 
 ??? success "풀이"
     Lincoln-Petersen: $\hat{N} = \lfloor cr/t \rfloor = \lfloor 20 \times 25/5 \rfloor = 100$.
@@ -219,9 +223,11 @@ c = 10, r = 10
 
     두 방법 모두 $\hat{N} = 100$을 준다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.** $N$을 연속으로 다룰 때 Lincoln-Petersen 추정량 $\hat{N} = cr/t$가 초기하 가능도를 최대화하는 값임을 보여라. (힌트: $L(N)/L(N-1) > 1$일 필요충분조건이 $N < cr/t$임을 보여라.)
+
+</div>
 
 ??? success "풀이"
     가능도비는:
@@ -240,9 +246,11 @@ c = 10, r = 10
 
     따라서 $L(N)$은 $N < cr/t$에서 증가하고 $N > cr/t$에서 감소하므로, ($N$이 정수여야 하므로) 최댓값이 $N = \lfloor cr/t \rfloor$에 있음이 확인된다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.** Chapman의 보정 추정량은 $\hat{N}_C = (c+1)(r+1)/(t+1) - 1$이다. $c = 10, r = 10, t = 3$에 대해 $\hat{N}_C$를 계산하고 MLE와 비교하라. 이 보정이 유용한 이유는 무엇인가?
+
+</div>
 
 ??? success "풀이"
     Chapman 추정값: $\hat{N}_C = (11)(11)/4 - 1 = 121/4 - 1 = 30.25 - 1 = 29.25$.
@@ -251,9 +259,11 @@ c = 10, r = 10
 
     Chapman 추정량이 더 작은 이유는 Lincoln-Petersen 추정량의 양의 편향을 보정하기 때문이다. 이 편향은 $1/T$가 볼록하므로 Jensen 부등식에 의해 $E[cr/T] > cr/E[T]$이기 때문에 생긴다. Chapman의 보정은 이 편향을 대략 제거하며, $r$과 $c$에 비해 $t$가 작을 때 특히 유용하다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.** 재포획에서 표지된 개체가 하나도 없으면($t = 0$) MLE가 존재하지 않는 이유를 설명하라. 이는 포획–재포획 연구의 설계에 무엇을 함의하는가?
+
+</div>
 
 ??? success "풀이"
     $t = 0$일 때 가능도함수는:
@@ -270,9 +280,11 @@ c = 10, r = 10
     - 충분히 많은 수 $r$을 재포획한다.
     - $P(T > 0)$이 높아지도록 곱 $cr/N$이 충분히 커야 한다. 경험 법칙으로 $cr \gg N$이거나 적어도 $cr/N > 5$여야 표지된 개체를 재포획할 확률이 웬만큼 확보된다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.** 델타 방법으로 Lincoln-Petersen 추정량 $\hat{N} = cr/T$의 분산을 유도하라. 초기하분포의 분산은 $\text{Var}(T) = r \cdot \frac{c}{N} \cdot \frac{N-c}{N} \cdot \frac{N-r}{N-1}$이다.
+
+</div>
 
 ??? success "풀이"
     $g(T) = cr/T$로 두어 $\hat{N} = g(T)$라 하자. 델타 방법에 의해:

@@ -244,7 +244,11 @@ plt.show()
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.** 적률법의 관점에서 Geometric 분포의 MLE를 직접 유도하라. 이 분포에서 MLE와 적률법 추정량이 일치함을 보여라.
+
+</div>
 
 ??? success "풀이"
     ($P(X = k) = (1-p)p^k$인) $\text{Geometric}(p)$의 평균은:
@@ -265,9 +269,11 @@ plt.show()
 
     이는 로그가능도를 최대화하여 얻은 $\hat{p}_{\text{MLE}} = \bar{x}/(1 + \bar{x})$와 동일하다. 단일모수 지수족 분포에서 MLE는 언제나 충분통계량의 함수이며, 적률방정식이 그 통계량만 포함하면 MLE와 적률법이 일치한다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.** Poisson의 MLE에서 $\hat{\lambda} = \bar{x}$가 임계점일 뿐 아니라 전역 최댓값임을 2계도함수 조건으로 확인하라.
+
+</div>
 
 ??? success "풀이"
     로그가능도는:
@@ -292,9 +298,11 @@ plt.show()
 
     $\sum x_i \geq 0$이고 $\lambda > 0$이므로 모든 $\lambda > 0$에서 $d^2\ell/d\lambda^2 \leq 0$이다. $\sum x_i > 0$이면 부등호가 엄격하므로 $\hat{\lambda} = \bar{x}$가 전역 최댓값임이 확인된다. (모든 관측값이 0이면 $\hat{\lambda} = 0$이며 이는 경계에서의 최댓값이다.) $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.** Poisson 분포에서 i.i.d.로 $n = 500$개를 관측했고 표본평균이 $\bar{x} = 3.2$이다. Fisher 정보량을 사용하여 $\lambda$에 대한 근사적인 95% 신뢰구간을 구성하라.
+
+</div>
 
 ??? success "풀이"
     Poisson 관측값 하나에 대한 Fisher 정보량은:
@@ -323,9 +331,11 @@ plt.show()
 
     $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.** 모형이 올바르게 설정되었을 때 비모수적 (경험 PMF) 추정량이 불편인데도 모수적 MLE보다 검정 자료의 RMSE가 큰 이유를 설명하라. 편향–분산 맞바꿈은 어떤 역할을 하는가?
+
+</div>
 
 ??? success "풀이"
     경험 PMF는 각 확률 $P(X = k)$를 비율 $\hat{p}_k = n_k / n$으로 따로따로 추정한다. 각 $\hat{p}_k$는 불편이고 분산은:
@@ -346,9 +356,11 @@ plt.show()
 
     모형이 잘못 설정되면 모수적 추정량에 사라지지 않는 편향이 생기고, 그때는 비모수적 추정량이 이길 수 있다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.** Geometric 분포에서 나왔다고 믿는 다음 자료를 관측했다고 하자: $x = (0, 2, 1, 0, 3, 1, 0, 0, 1, 2)$. MLE $\hat{p}$를 계산하라. 그다음 $\hat{p}$, $p = 0.3$, $p = 0.7$에서 로그가능도를 계산하여 MLE가 가장 높은 로그가능도를 주는지 확인하라.
+
+</div>
 
 ??? success "풀이"
     자료는 $x = (0, 2, 1, 0, 3, 1, 0, 0, 1, 2)$이고 $n = 10$, $\sum x_i = 10$이다.

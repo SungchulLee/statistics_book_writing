@@ -140,9 +140,13 @@ $\lambda$가 줄어들면서 각 계수가 곡선을 그린다. L2 경로는 매
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 L2 벌점이 정규 사전분포 $\theta_j \sim \mathcal{N}(0, 1/\lambda)$의 MAP 추정에 대응함을
 유도하라. L1 벌점의 경우 라플라스 척도모수는 얼마인가?
+
+</div>
 
 ??? success "풀이"
 
@@ -180,10 +184,12 @@ L2 벌점이 정규 사전분포 $\theta_j \sim \mathcal{N}(0, 1/\lambda)$의 MA
     두 경우 모두 $\lambda \to 0$이면 사전분포가 평평해져 MLE로 돌아가고, $\lambda \to \infty$
     이면 사전분포가 0에 집중되어 모든 계수가 0이 된다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 왜 절편에는 벌점을 주지 않는가? 절편에도 벌점을 주면 무슨 일이 일어나는가?
+
+</div>
 
 ??? success "풀이"
 
@@ -216,11 +222,13 @@ L2 벌점이 정규 사전분포 $\theta_j \sim \mathcal{N}(0, 1/\lambda)$의 MA
     수렴하지만 `liblinear`는 절편까지 0으로 눌러 모든 예측확률을 $0.5$로 만든다. L1 벌점을
     쓸 때 `liblinear`를 고르는 경우가 많으므로 특히 주의해야 한다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 scikit-learn의 $C$와 이 절의 $\lambda$ 사이의 관계를 유도하라. $n$이 커지면 같은 $C$가
 정칙화의 강도 면에서 어떻게 달라지는가?
+
+</div>
 
 ??? success "풀이"
 
@@ -253,10 +261,12 @@ scikit-learn의 $C$와 이 절의 $\lambda$ 사이의 관계를 유도하라. $n
     `glmnet`은 손실을 평균으로 쓰므로 이 문제가 없다. 두 도구의 $\lambda$를 비교할 때는
     $n$ 배율을 반드시 맞춰야 한다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 L2 벌점 로지스틱 회귀에서는 자료가 완전히 분리 가능해도 해가 존재하고 유일함을 보여라.
+
+</div>
 
 ??? success "풀이"
 
@@ -284,11 +294,13 @@ L2 벌점 로지스틱 회귀에서는 자료가 완전히 분리 가능해도 �
     가깝거나 범주형 변수의 수준이 세분화되어 있으면 흔히 발생한다. 작은 $\lambda$ 하나만 넣어도
     문제가 사라진다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.**
 로지스틱 라쏘 경로가 조각별 선형이 **아님**을 수치로 확인하라. 활성집합이 변하지 않는
 $\lambda$ 구간에서 계수의 증분이 일정한지 살펴보라.
+
+</div>
 
 ??? success "풀이"
 

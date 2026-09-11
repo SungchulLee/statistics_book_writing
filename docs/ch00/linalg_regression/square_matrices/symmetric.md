@@ -144,8 +144,12 @@ $\boldsymbol{\beta} \sim N(\hat{\boldsymbol{\beta}}, \boldsymbol{\Sigma})$일 �
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 $\mathbf{A} = \begin{pmatrix} 2 & 1 \\ 1 & 2 \end{pmatrix}$의 고윳값, 고유벡터, 스펙트럼 분해를 구하라. $\boldsymbol{\Sigma} = \mathbf{Q}\boldsymbol{\Lambda}\mathbf{Q}^T$를 수치적으로 확인하라.
+
+</div>
 
 ??? success "풀이"
     특성방정식: $(2 - \lambda)^2 - 1 = \lambda^2 - 4\lambda + 3 = (\lambda - 1)(\lambda - 3) = 0$. 고윳값은 $\lambda_1 = 1, \lambda_2 = 3$이다.
@@ -157,10 +161,12 @@ $\mathbf{A} = \begin{pmatrix} 2 & 1 \\ 1 & 2 \end{pmatrix}$의 고윳값, 고유
     \mathbf{A} = \frac{1}{2}\begin{pmatrix} 1 & 1 \\ -1 & 1 \end{pmatrix}\begin{pmatrix} 1 & 0 \\ 0 & 3 \end{pmatrix}\begin{pmatrix} 1 & -1 \\ 1 & 1 \end{pmatrix}
     $$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 대칭행렬 $\mathbf{A}$에 대해 서로 다른 고윳값에 대응하는 고유벡터가 직교함을 증명하라.
+
+</div>
 
 ??? success "풀이"
     $\alpha \ne \beta$에 대해 $\mathbf{A}\mathbf{u} = \alpha\mathbf{u}$, $\mathbf{A}\mathbf{v} = \beta\mathbf{v}$라 하자. $\mathbf{u}^T\mathbf{A}\mathbf{v}$를 두 가지 방식으로 계산한다.
@@ -170,10 +176,12 @@ $\mathbf{A} = \begin{pmatrix} 2 & 1 \\ 1 & 2 \end{pmatrix}$의 고윳값, 고유
 
     따라서 $\alpha\, \mathbf{u}^T\mathbf{v} = \beta\, \mathbf{u}^T\mathbf{v}$, 즉 $(\alpha - \beta)\mathbf{u}^T\mathbf{v} = 0$이다. $\alpha \ne \beta$이므로 $\mathbf{u}^T\mathbf{v} = 0$이다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 $\mathbf{A}$가 스펙트럼 분해 $\mathbf{A} = \sum_i \lambda_i \mathbf{q}_i \mathbf{q}_i^T$를 갖는 대칭행렬이라 하자. $\mathbf{A}^2 = \sum_i \lambda_i^2 \mathbf{q}_i \mathbf{q}_i^T$임을 보이고, 이것이 왜 "$\mathbf{A}$가 멱등일 필요충분조건은 모든 고윳값이 0 또는 1인 것"임을 확인해 주는지 설명하라.
+
+</div>
 
 ??? success "풀이"
     정규직교성 $\mathbf{q}_i^T \mathbf{q}_j = \delta_{ij}$를 쓰면
@@ -184,7 +192,7 @@ $\mathbf{A}$가 스펙트럼 분해 $\mathbf{A} = \sum_i \lambda_i \mathbf{q}_i 
 
     이다. $\mathbf{A}$가 멱등일 필요충분조건은 $\mathbf{A}^2 = \mathbf{A}$, 즉 모든 $i$에 대해 $\lambda_i^2 = \lambda_i$인 것이다. 동등하게 $\lambda_i \in \{0, 1\}$이다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 **레일리 몫.** $\mathbf{A}$가 최소·최대 고윳값이 $\lambda_\min, \lambda_\max$인 대칭행렬이라 하자. 모든 0이 아닌 $\mathbf{x} \in \mathbb{R}^n$에 대해
@@ -194,6 +202,8 @@ $$
 $$
 
 임을 증명하라.
+
+</div>
 
 ??? success "풀이"
     $\mathbf{x}$를 고유기저로 전개한다: $c_i = \mathbf{q}_i^T \mathbf{x}$에 대해 $\mathbf{x} = \sum_i c_i \mathbf{q}_i$. 정규직교성을 쓰면
@@ -210,10 +220,12 @@ $$
 
     $\lambda_\min$에서 등호는 $\mathbf{x}$가 $\lambda_\min$의 고유벡터일 때 성립하고 $\lambda_\max$도 마찬가지다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.**
 모든 대칭 양반정치행렬 $\mathbf{A}$가 $\mathbf{A}^{1/2} \mathbf{A}^{1/2} = \mathbf{A}$를 만족하는 유일한 대칭 양반정치 제곱근 $\mathbf{A}^{1/2}$을 가짐을 보여라.
+
+</div>
 
 ??? success "풀이"
     **존재성:** $\lambda_i \ge 0$인 스펙트럼 분해 $\mathbf{A} = \mathbf{Q}\boldsymbol{\Lambda}\mathbf{Q}^T$로부터
@@ -228,10 +240,12 @@ $$
 
     통계적 쓰임: **마할라노비스 백색화 변환** $\mathbf{Z} = \boldsymbol{\Sigma}^{-1/2}(\mathbf{X} - \boldsymbol{\mu})$는 $\boldsymbol{\Sigma}^{-1/2}$이 존재할 때 공분산이 단위행렬인 벡터를 만들어낸다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 6.**
 대칭이 아니면서도 대각화 가능한 행렬의 예를 하나 들어라(즉 대칭성은 대각화 가능성의 충분조건이지 필요조건은 아니다). 그리고 *중복* 고윳값의 고유벡터에 그람–슈미트를 적용해 명시적인 정규직교기저를 얻는 대칭행렬의 예도 하나 들어라.
+
+</div>
 
 ??? success "풀이"
     **대칭이 아니지만 대각화 가능:**
@@ -252,10 +266,12 @@ $$
 
     고윳값 $2$는 중복도가 2이고 고유공간은 $\operatorname{span}\{(1,0,0)^T, (0,1,1)^T\}$이다. 이 두 벡터는 이미 직교하므로(그람–슈미트가 필요 없다) 정규화하면 정규직교기저를 얻는다. 세 번째 고유벡터와 함께 쌓으면 스펙트럼 정리가 약속한 직교행렬 $\mathbf{Q}$가 만들어진다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 7.**
 임의의 정사각행렬 $\mathbf{A}$는 대칭부분과 반대칭부분의 합으로 유일하게 분해된다. 이차형식 $\mathbf{x}^T\mathbf{A}\mathbf{x}$가 **대칭부분에만** 의존함을 보여라.
+
+</div>
 
 ??? success "풀이"
     분해는
@@ -297,10 +313,12 @@ $$
 
     **왜 중요한가.** 이차형식으로 나타나는 양(분산, 마할라노비스 거리, 제곱합)을 다룰 때 **행렬을 대칭으로 가정해도 일반성을 잃지 않는다.** 비대칭 부분은 어차피 보이지 않기 때문이다. 통계 문헌이 이차형식의 행렬을 늘 대칭으로 두는 이유다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 8.**
 공분산행렬 $\boldsymbol{\Sigma}$에 대해 $\max_{\lVert\mathbf{v}\rVert=1}\operatorname{Var}(\mathbf{v}^T\mathbf{X}) = \lambda_{\max}$이고 최댓값을 주는 방향이 대응하는 고유벡터임을 확인하라. 이것이 주성분분석과 어떻게 연결되는가?
+
+</div>
 
 ??? success "풀이"
     $\operatorname{Var}(\mathbf{v}^T\mathbf{X}) = \mathbf{v}^T\boldsymbol{\Sigma}\mathbf{v}$이므로 이는 레일리 몫(연습문제 4)의 최대화 문제이고, 최댓값은 $\lambda_{\max}$, 최대점은 그 고유벡터다.
@@ -340,10 +358,12 @@ $$
 
     **PCA와의 연결.** 제1주성분은 정확히 "분산을 최대로 하는 단위 방향"으로 정의된다. 스펙트럼 정리가 그 답이 $\lambda_{\max}$의 고유벡터임을 알려 준다. 제2주성분은 첫 방향과 직교하는 것들 중 분산을 최대로 하는 방향이고, 그 답은 두 번째 고유벡터다. **주성분 전체가 스펙트럼 분해에서 한꺼번에 나온다.** $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 9.**
 대칭행렬 $\mathbf{A}$에 대해 $\lVert\mathbf{A}\rVert_F^2 = \sum_i \lambda_i^2$이고 스펙트럼 노름이 $\max_i|\lambda_i|$임을 보여라.
+
+</div>
 
 ??? success "풀이"
     **프로베니우스 노름.** 스펙트럼 분해 $\mathbf{A} = \mathbf{Q}\boldsymbol{\Lambda}\mathbf{Q}^T$에서 $\mathbf{A}^T\mathbf{A} = \mathbf{A}^2 = \mathbf{Q}\boldsymbol{\Lambda}^2\mathbf{Q}^T$이므로
@@ -379,10 +399,12 @@ $$
 
     두 노름은 서로 다른 것을 잰다. 프로베니우스 노름은 **모든** 고윳값을 합치고, 스펙트럼 노름은 **가장 큰 하나만** 본다. 공분산행렬이라면 전자는 총분산에 대응하고 후자는 제1주성분의 분산에 대응한다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 10.**
 두 대칭행렬이 교환할 필요충분조건은 공통의 고유기저를 갖는 것이다(동시 대각화). 수치로 확인하고, 이것이 통계에서 왜 중요한지 설명하라.
+
+</div>
 
 ??? success "풀이"
     ($\Leftarrow$) 같은 $\mathbf{Q}$로 $\mathbf{A} = \mathbf{Q}\boldsymbol{\Lambda}_1\mathbf{Q}^T$, $\mathbf{B} = \mathbf{Q}\boldsymbol{\Lambda}_2\mathbf{Q}^T$이면 대각행렬끼리 교환하므로

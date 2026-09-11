@@ -102,7 +102,11 @@ WLS 추정값이 참값에 훨씬 가깝고(절편 $3.350$ 대 $4.083$, 기울�
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.** 반대 패턴, 곧 분산이 $x$에 따라 줄어드는 자료를 생성하라(예: $\sigma_i = 10 - 0.8x_i$). OLS와 WLS를 적합하라. 계수 정확도의 관점에서 WLS가 여전히 OLS보다 나은가?
+
+</div>
 
 ??? success "풀이"
 
@@ -116,9 +120,11 @@ WLS 추정값이 참값에 훨씬 가깝고(절편 $3.350$ 대 $4.083$, 기울�
 
     그렇다. 이분산이 존재하는 한 방향과 무관하게 WLS가 OLS보다 낫다. WLS는 올바른 가중치를 쓰므로 이분산 오차로 일반화된 Gauss-Markov 정리 아래에서 최소분산 선형불편추정량(BLUE)이 된다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.** 모든 $i$에 대해 가중치가 같으면($w_i = c$) WLS가 OLS로 환원됨을 보여라. 이는 두 방법의 관계에 대해 무엇을 말해 주는가?
+
+</div>
 
 ??? success "풀이"
 
@@ -130,9 +136,11 @@ WLS 추정값이 참값에 훨씬 가깝고(절편 $3.350$ 대 $4.083$, 기울�
 
     OLS는 모든 관측값에 같은 가중치를 주는 WLS의 특수한 경우이며, 등분산 가정이 성립할 때 적절하다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.** 실제로는 $\sigma_i^2$을 모른다. 먼저 OLS를 적합하고, $\ln(e_i^2)$을 $x_i$에 회귀시켜 분산함수를 추정한 뒤, 추정된 가중치로 WLS를 적용하는 실행가능 WLS를 구현하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -147,9 +155,11 @@ WLS 추정값이 참값에 훨씬 가깝고(절편 $3.350$ 대 $4.083$, 기울�
 
     실행가능 WLS는 알려진 가중치 대신 추정된 가중치를 쓴다. 추정량은 일치성과 점근적 효율성을 갖지만, 가중치를 아는 WLS에 비해 작은 표본에서는 효율이 떨어질 수 있다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.** 공분산 구조 $\boldsymbol{\Sigma} = \mathrm{diag}(\sigma_1^2, \ldots, \sigma_n^2)$을 알 때 $\hat{\boldsymbol{\beta}}_{\text{WLS}}$가 BLUE임을 증명하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -161,9 +171,11 @@ WLS 추정값이 참값에 훨씬 가깝고(절편 $3.350$ 대 $4.083$, 기울�
 
     $\boldsymbol{\Sigma}$가 대각행렬이면 $\boldsymbol{\Sigma}^{-1} = \mathrm{diag}(1/\sigma_1^2, \ldots, 1/\sigma_n^2) = \mathbf{W}$이다. 따라서 $\hat{\boldsymbol{\beta}}_{\text{GLS}} = \hat{\boldsymbol{\beta}}_{\text{WLS}}$이다. "최선"이란 모든 선형불편추정량 가운데 분산이 가장 작다는 뜻으로, 임의의 선형불편 $\tilde{\boldsymbol{\beta}}$와 임의의 방향 $\mathbf{a}$에 대해 $\mathrm{Var}(\mathbf{a}^\top\hat{\boldsymbol{\beta}}_{\text{WLS}}) \leq \mathrm{Var}(\mathbf{a}^\top\tilde{\boldsymbol{\beta}})$이다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.** WLS를 OLS + 이분산 일치(HC) 표준오차(White의 로버스트 표준오차)와 비교하라. 절충 관계는 무엇인가?
+
+</div>
 
 ??? success "풀이"
 

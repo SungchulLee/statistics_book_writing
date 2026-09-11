@@ -234,8 +234,12 @@ Mean ≈ Var: True
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 콜센터에 분당 4건의 전화가 걸려 온다. (a) $N$의 분포는? (b) $P(N = 0)$, $P(N \ge 6)$. (c) $P(2\text{분 동안 10건 초과})$. (d) $P(N \ge 8)$의 정규근사.
+
+</div>
 
 ??? success "풀이"
     (a) $N \sim \mathrm{Poisson}(4)$.
@@ -246,10 +250,12 @@ Mean ≈ Var: True
 
     (d) 정규근사: $\mu = 4$, $\sigma = 2$. 연속성 수정을 적용하면 $P(N \ge 8) \approx P(Z \ge (7.5 - 4)/2) = P(Z \ge 1.75) = 0.040$. 정확한 값은 $0.051$이다. $\lambda = 4$에서는 분포가 아직 오른쪽으로 치우쳐 있어 근사가 거칠다. $\lambda \ge 30$이면 정확도가 크게 좋아진다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 Poisson 근사: 500쪽의 책에서 각 쪽이 독립적으로 확률 $p = 0.004$로 오탈자를 포함한다. (a) 정확한 분포는? (b) Poisson 근사의 모수는? (c) Poisson 근사로 $P(X = 0)$, $P(X = 1)$, $P(X \ge 4)$를 구하라.
+
+</div>
 
 ??? success "풀이"
     (a) $X \sim \mathrm{Binomial}(500, 0.004)$.
@@ -260,10 +266,12 @@ Poisson 근사: 500쪽의 책에서 각 쪽이 독립적으로 확률 $p = 0.004
 
     정확한 Binomial 계산은 $P(X = 2) \approx 0.272$를 주는데 Poisson 근사는 $0.271$이다. 소수점 셋째 자리까지 일치하며, 이 영역에서 Poisson 근사가 매우 잘 작동함을 보여 준다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 **도착 간 시간의 무기억성.** 사건이 비율 $\lambda$인 Poisson 과정에 따라 발생하면 도착 간 시간이 비율 $\lambda$인 Exponential 분포를 따름을 증명하라.
+
+</div>
 
 ??? success "풀이"
     첫 사건이 일어나는 시각을 $T_1$이라 하자. 사건 $\{T_1 > t\}$는 "$[0, t]$에서 사건이 없다"와 동치이며, 그 확률은 $P(N(t) = 0) = e^{-\lambda t}$이다.
@@ -274,10 +282,12 @@ Poisson 근사: 500쪽의 책에서 각 쪽이 독립적으로 확률 $p = 0.004
 
     이 연결 덕분에 Poisson 과정은 "완전히 무작위한" 사건 발생, 즉 과거의 기억 없이 일정한 비율로 도착하는 사건에 대한 표준 모형이 된다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 **합과 중첩.** 비율이 $\lambda_1, \lambda_2$인 독립 Poisson 과정을 중첩한다. 합쳐진 과정이 비율 $\lambda_1 + \lambda_2$인 Poisson 과정임을 보여라.
+
+</div>
 
 ??? success "풀이"
     $N_1(t), N_2(t)$를 독립인 Poisson 과정이라 하자. 합쳐진 계수는 $N(t) = N_1(t) + N_2(t)$이다.
@@ -290,10 +300,12 @@ Poisson 근사: 500쪽의 책에서 각 쪽이 독립적으로 확률 $p = 0.004
 
     **응용:** 어떤 상점의 고객 도착이 두 유형(온라인과 방문)으로 나뉘고 각각이 Poisson이면, 전체 도착은 두 비율을 합한 Poisson 과정을 이룬다. 이는 여러 Poisson 원천을 하나의 모형으로 합치는 것을 정당화한다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.**
 Poisson 분포에서 **분산이 평균과 같음**을 보여라. $X \sim \mathrm{Poisson}(\lambda)$에 대해 PMF로부터 직접 $\mathbb{E}[X], \mathbb{E}[X^2]$를 계산하라.
+
+</div>
 
 ??? success "풀이"
     **평균:**
@@ -312,10 +324,12 @@ Poisson 분포에서 **분산이 평균과 같음**을 보여라. $X \sim \mathr
 
     **구별되는 특징:** 평균 = 분산은 Poisson 분포의 표식이다. 실제 계수 자료에서 분산이 평균보다 크게 나타나면(**과대산포**) Poisson 모형은 부적절하며, 보통 Negative Binomial 모형을 대신 사용한다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 6.**
 **Poisson 가정에 대한 검정.** 계수 표본 $X_1, \ldots, X_n$이 주어졌을 때, 표본분산과 표본평균의 비를 이용한 간단한 **산포 검정**을 제안하라.
+
+</div>
 
 ??? success "풀이"
     $H_0$ 아래에서 $X_i$는 i.i.d. $\mathrm{Poisson}(\lambda)$이고 $\mathrm{Var}(X) = \lambda = \mathbb{E}[X]$이므로, **산포비** $D = s^2/\bar X$는 1에 가까워야 한다.

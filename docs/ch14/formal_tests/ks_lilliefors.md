@@ -179,8 +179,12 @@ Fail to reject H_0: The data is normally distributed.
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 Kolmogorov-Smirnov 검정과 Lilliefors 검정의 차이를 설명하라. KS 대신 Lilliefors를 반드시 써야 하는 경우는 언제인가?
+
+</div>
 
 ??? success "풀이"
     **Kolmogorov-Smirnov 검정**은 경험적 CDF를 완전히 지정된 이론적 CDF(모든 모수를 앎)와 비교한다. 예를 들어 자료가 정확히 $N(0, 1)$에서 왔는지 검정하는 경우이다.
@@ -189,20 +193,24 @@ Kolmogorov-Smirnov 검정과 Lilliefors 검정의 차이를 설명하라. KS 대
 
     검정 대상과 같은 자료에서 모수를 추정하는 경우에는 반드시 KS가 아니라 Lilliefors를 써야 한다. 추정된 모수로 KS 임계값을 쓰는 것은 타당하지 않다. 모수를 추정하면 경험적 CDF가 이론적 CDF에 더 가까워지므로(적합이 최적화되므로) KS의 $p$값이 지나치게 커지고(보수적이 되고) 검정력을 잃는다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 KS 검정통계량은 $D_n = \sup_x |F_n(x) - F_0(x)|$이다. 이것이 기하학적으로 무엇을 재는지 설명하라.
+
+</div>
 
 ??? success "풀이"
     $D_n$은 모든 $x$에 걸쳐 경험적 CDF(계단함수)와 이론적 CDF(매끄러운 곡선)의 최대 수직 거리이다. 기하학적으로는 두 곡선 사이의 가장 큰 틈이다.
 
     자료가 $F_0$에서 왔다면 Glivenko-Cantelli 정리에 의해 경험적 CDF가 이론적 CDF를 가깝게 따라가므로 $D_n$이 작아야 한다. $D_n$이 크다는 것은 분포의 어느 지점에서 관측 자료가 이론적 분포의 예측에서 크게 벗어난다는 뜻이다. 어떤 구역에 관측값이 너무 많거나 너무 적다는 것이다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 비정규성 탐지에서 KS/Lilliefors 검정이 Shapiro-Wilk나 Anderson-Darling 검정보다 대체로 검정력이 낮은 이유는 무엇인가?
+
+</div>
 
 ??? success "풀이"
     KS 검정은 최대 편차 $D_n$만 쓴다. 이는 최악의 불일치를 하나의 수치로 요약한 것이며 두 가지 단점이 있다.
@@ -213,10 +221,12 @@ KS 검정통계량은 $D_n = \sup_x |F_n(x) - F_0(x)|$이다. 이것이 기하�
 
     KS 검정은 (임의의 분포에 대한) 일반적 적합도 검정으로 설계되었지 정규성 전용이 아니다. Shapiro-Wilk 같은 특화된 검정은 정규분포의 구조를 활용한다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 관측값 $n = 30$개에 대한 Lilliefors 검정에서 $D_n = 0.14$를 얻었다. $\alpha = 0.05$의 임계값은 $0.161$이다. 결론은 무엇인가?
+
+</div>
 
 ??? success "풀이"
     $D_n = 0.14 < 0.161$이므로 $\alpha = 0.05$에서 $H_0$을 기각하지 못한다. Lilliefors 검정에 따르면 자료가 정규성과 일관된다.

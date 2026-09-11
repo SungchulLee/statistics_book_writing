@@ -103,8 +103,12 @@ $\log_{10}\lambda$)의 함수로 그린 그림이다. 주요 관찰 사항은 �
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.** 능형 목적함수에서 출발하여 기울기를 0으로 놓음으로써 닫힌 형태의 해
 $\hat{\beta}^{\text{ridge}} = (X^\top X + \lambda I_p)^{-1} X^\top y$를 유도하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -132,11 +136,13 @@ $\hat{\beta}^{\text{ridge}} = (X^\top X + \lambda I_p)^{-1} X^\top y$를 유도�
     \hat{\beta}^{\text{ridge}} = (X^\top X + \lambda I_p)^{-1} X^\top y. \quad \square
     $$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.** $X = U D V^\top$를 특이값분해(SVD)라 할 때, 능형 추정량이
 $\hat{\beta}^{\text{ridge}} = \sum_{j=1}^{p} \frac{d_j^2}{d_j^2 + \lambda}\, \frac{u_j^\top y}{d_j}\, v_j$
 로 표현됨을 보여라.
+
+</div>
 
 ??? success "풀이"
 
@@ -157,10 +163,12 @@ $\hat{\beta}^{\text{ridge}} = \sum_{j=1}^{p} \frac{d_j^2}{d_j^2 + \lambda}\, \fr
     를 얻는다. 인자 $d_j^2 / (d_j^2 + \lambda) \in [0, 1)$은 특이값이 작은 방향을 더 강하게
     축소한다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.** $X^\top X = I_p$(정규직교 계획)라 하자. $\hat{\beta}_j^{\text{ridge}}$를
 $\hat{\beta}_j^{\text{OLS}}$와 $\lambda$로 표현하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -174,11 +182,13 @@ $\hat{\beta}_j^{\text{OLS}}$와 $\lambda$로 표현하라.
     이 된다. 즉 모든 계수가 $1/(1 + \lambda)$배로 균일하게 축소된다. 이는 능형회귀가 비례
     축소를 수행함을 확인해 준다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.** 다중공선성이 있는 인공자료($n = 200$, $p = 10$)에 대해 5-겹 교차검증으로
 격자 $\lambda \in \{10^{-3}, 10^{-2}, \dots, 10^{3}\}$에서 최적 $\lambda$를 찾아라. 최적
 $\lambda$의 교차검증 RMSE를 보고하고 OLS의 RMSE와 비교하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -241,10 +251,12 @@ $\lambda$의 교차검증 RMSE를 보고하고 OLS의 RMSE와 비교하라.
     커서 OLS 자체가 이미 안정적이므로 개선폭이 작다. 개선폭은 $p/n$이 커질수록 뚜렷해진다.
     $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.** 임의의 $\lambda > 0$에 대해 능형 추정량이
 $\|\hat{\beta}^{\text{ridge}}\|_2 \le \|\hat{\beta}^{\text{OLS}}\|_2$를 만족함을 증명하라.
+
+</div>
 
 ??? success "풀이"
 

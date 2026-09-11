@@ -86,8 +86,12 @@ $$
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 ($x > 0$에서 밀도가 $f(x;\lambda) = \lambda e^{-\lambda x}$인) $\text{Exp}(\lambda)$에서 얻은 i.i.d. 표본 $x_1, \dots, x_n$에 대해 $\lambda$의 MLE를 유도하라.
+
+</div>
 
 ??? success "풀이"
     로그가능도는:
@@ -104,10 +108,12 @@ $$
 
     2계도함수가 $-n/\lambda^2 < 0$이므로 최댓값임이 확인된다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 어떤 콜센터에 걸려 오는 전화의 도착 간 시간이 지수분포를 따른다. 도착 간 시간 50개의 표본에서 $\bar{x} = 4.2$분이었다. 비율 $\lambda$의 MLE를 구하고 점근정규성을 이용해 근사적인 95% 신뢰구간을 구성하라.
+
+</div>
 
 ??? success "풀이"
     MLE는 $\hat{\lambda} = 1/\bar{x} = 1/4.2 \approx 0.2381$(분당 통화 수)이다.
@@ -122,10 +128,12 @@ $$
 
     평균 도착 간 시간 $1/\lambda$로 나타내면 MLE는 4.2분이고, 불변성에 의해 $1/\lambda$의 구간은 근사적으로 $(1/0.304, 1/0.172) = (3.29, 5.81)$분이다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 MLE $\hat{\lambda} = 1/\bar{X}$가 유한표본에서 $\lambda$에 대해 편향되어 있음을 보여라. $n = 2$일 때의 정확한 편향을 계산하라.
+
+</div>
 
 ??? success "풀이"
     합 $S = \sum X_i \sim \text{Gamma}(n, \lambda)$이므로 $\bar{X} = S/n$이고 MLE는 $\hat{\lambda} = n/S$이다.
@@ -144,10 +152,12 @@ MLE $\hat{\lambda} = 1/\bar{X}$가 유한표본에서 $\lambda$에 대해 편향
 
     $n = 2$일 때 $\text{Bias} = \lambda/(2-1) = \lambda$이다. MLE는 $\lambda$를 $n/(n-1)$배만큼 과대추정한다. 편향 보정된 추정량은 $\tilde{\lambda} = (n-1)/\sum X_i$이다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 MLE $\hat{\lambda} = 1/\bar{X}$를 $\lambda$의 적률법 추정량과 비교하라. 둘은 같은가?
+
+</div>
 
 ??? success "풀이"
     Exponential 분포에서 $E[X] = 1/\lambda$이다. 적률법은 $\bar{X} = 1/\hat{\lambda}$로 두므로 $\hat{\lambda}_{\text{MOM}} = 1/\bar{X}$를 준다.

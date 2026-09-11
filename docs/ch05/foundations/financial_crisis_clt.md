@@ -199,7 +199,11 @@ plt.show()
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.** 독립 모형과 의존 모형 각각에 대해 $E[D]$와 $\text{Var}(D)$를 계산하라.
+
+</div>
 
 ??? success "풀이"
     **독립 모형**: $D \sim \text{Binomial}(100, 2/3)$.
@@ -236,9 +240,11 @@ plt.show()
 
     평균은 같은데도 의존 모형의 분산이 독립 모형보다 **25배 크다**($572$ 대 $22$). $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.** $\theta \sim \text{Beta}(2, 1)$에 대해 주변 PMF $P(D = d) = 2(d+1) / [(n+1)(n+2)]$를 유도하라.
+
+</div>
 
 ??? success "풀이"
     $$
@@ -261,9 +267,11 @@ plt.show()
 
     확인해 보면 $\sum_{d=0}^n \frac{2(d+1)}{(n+1)(n+2)} = \frac{2}{(n+1)(n+2)} \cdot \sum_{d=0}^n (d+1) = \frac{2}{(n+1)(n+2)} \cdot \frac{(n+1)(n+2)}{2} = 1$이다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.** 임의의 두 차입자의 부도 사이의 주변 공분산이 $i \ne j$에 대해 $\text{Cov}(X_i, X_j) = \text{Var}(\theta)$임을 보여라. $\theta \sim \text{Beta}(2, 1)$에 대해 이를 계산하라.
+
+</div>
 
 ??? success "풀이"
     $i \ne j$에 대해:
@@ -292,9 +300,11 @@ plt.show()
 
     이 양의 공분산이 두꺼운 꼬리의 원천이다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.** 대신 $\theta \sim \text{Beta}(20, 10)$이라면(여전히 $E[\theta] = 2/3$이지만 변동성이 훨씬 작다) $\text{Var}(\theta)$와 $\text{Var}(D)$를 다시 계산하라. 공통 위험 요인의 변동성을 줄이면 꼬리 위험은 어떻게 되는가?
+
+</div>
 
 ??? success "풀이"
     $\theta \sim \text{Beta}(20, 10)$에서 $\alpha = 20$, $\beta = 10$이다.
@@ -319,9 +329,11 @@ plt.show()
 
     $\theta$의 변동성이 작아지면 (여전히 독립인 경우보다는 크지만) 꼬리 위험이 크게 줄어든다. $\text{Beta}(20, 10)$ 분포는 $\theta$를 $2/3$ 근처에 모으므로 극단적인 시나리오($\theta > 0.9$)가 매우 드물어진다. 이 모형은 독립인 경우($\text{Var}(\theta) = 0$)와 의존성이 강한 $\text{Beta}(2, 1)$ 사이를 잇는다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.** 2008년 이전 신용평가사들이 사용한 Gaussian 코퓰러 모형이 왜 실패했는지 쉬운 말로 설명하라. 어떤 가정이 가장 결정적으로 위배되었는가?
+
+</div>
 
 ??? success "풀이"
     Gaussian 코퓰러 모형은 차입자의 부도가 개별 요인에 의해 결정되고 상관은 약할 뿐이라고 가정하며, 이를 다변량 정규 의존 구조로 모형화했다. 이 틀에서는 다변량 정규분포의 꼬리가 (지수적으로 감소하여) 가볍기 때문에 많은 부도가 동시에 일어날 확률(꼬리 사건)이 무시할 만했다.

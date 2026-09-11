@@ -160,18 +160,24 @@ $$\bar{X} \pm t_{n-1,\alpha/2} \frac{S}{\sqrt{n}} \quad (\sigma \text{를 모르
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 $X_1, \ldots, X_n$이 $\mathbb{E}[X_i] = \mu$를 만족한다. $\bar X$가 불편임을 보여라. 여기에 독립성이 필요한가?
+
+</div>
 
 ??? success "풀이"
     선형성에 의해(독립성 불필요): $\mathbb{E}[\bar X] = (1/n)\sum \mathbb{E}[X_i] = \mu$. $\square$
 
     불편성에는 평균이 같다는 것만 필요하다. 추정량의 *분산*은 독립성에 의존하지만 *기댓값*은 그렇지 않다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 상관된 자료: $X_i$가 공통 평균 $\mu$, 분산 $\sigma^2$, 쌍별 상관계수 $\rho$를 갖는다. (a) $\mathrm{Var}(\bar X)$를 유도하라. (b) $\bar X$는 일치하는가? (c) 헤지펀드 20개로 이루어진 펀드, 변동성 15%, $\rho = 0.4$일 때 표준오차를 구하라.
+
+</div>
 
 ??? success "풀이"
     (a) $\mathrm{Var}(\bar X) = (1/n^2)[n\sigma^2 + n(n-1)\rho\sigma^2] = \sigma^2[1 + (n-1)\rho]/n$.
@@ -180,10 +186,12 @@ $X_1, \ldots, X_n$이 $\mathbb{E}[X_i] = \mu$를 만족한다. $\bar X$가 불�
 
     (c) $\mathrm{Var}(\bar X) = 0.15^2 \cdot 8.6/20 = 0.00968$. $\mathrm{SE} \approx 0.098$ (9.8%). 유효 독립 표본크기가 $\approx 2.4$ — 상관이 높아 펀드 20개에서 얻는 이득이 거의 없다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 **일치성의 정의.** 약대수의법칙과 강대수의법칙을 진술하고, 각각으로부터 $\bar X$가 $\mu$에 대해 일치함을 보여라.
+
+</div>
 
 ??? success "풀이"
     **일치성:** $n \to \infty$일 때 어떤 수렴 방식으로 $\hat\theta_n \to \theta$.
@@ -194,10 +202,12 @@ $X_1, \ldots, X_n$이 $\mathbb{E}[X_i] = \mu$를 만족한다. $\bar X$가 불�
 
     증명 개요(Chebyshev를 통한 WLLN): 분산 $\sigma^2$이 유한하면 $P(|\bar X - \mu| > \varepsilon) \le \mathrm{Var}(\bar X)/\varepsilon^2 = \sigma^2/(n\varepsilon^2) \to 0$. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 중앙값의 **편향–분산 맞바꿈.** 정규 자료에서 표본중앙값이 $\mu$에 대해 **불편**이지만 그 **평균제곱오차가 점근적으로** 표본평균의 평균제곱오차를 **초과**함을 보여라.
+
+</div>
 
 ??? success "풀이"
     정규분포처럼 대칭인 분포에서는 모평균 = 모중앙값이고 둘 다 $\mu$이다. 표본중앙값은 (표본분포의 대칭성에 의해) $\mu$에 대해 불편이다.
@@ -208,10 +218,12 @@ $X_1, \ldots, X_n$이 $\mathbb{E}[X_i] = \mu$를 만족한다. $\bar X$가 불�
 
     대칭이 아닌 분포에서는 모평균 $\ne$ 모중앙값이므로 둘은 서로 다른 양을 겨냥한다. 서로를 비교하지 말고 각자의 목표와 비교해야 한다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.**
 **유한모집단 표본추출의 효과.** 크기 $N$, 평균 $\mu$인 유한모집단에서 비복원으로 $X_i$를 뽑는다. $\mathrm{Var}(\bar X)$를 유도하라.
+
+</div>
 
 ??? success "풀이"
     $\mathrm{Var}(\bar X) = (\sigma^2/n) \cdot (N - n)/(N - 1)$.
@@ -225,10 +237,12 @@ $X_1, \ldots, X_n$이 $\mathbb{E}[X_i] = \mu$를 만족한다. $\bar X$가 불�
 
     $n/N < 5\%$이면 흔히 무시한다. 감사, 재검표, 소규모 모집단 조사에서는 중요하다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 6.**
 **적률법 추정량의 편향.** $[1, \infty)$ 위의 Pareto$(\alpha)$에서 $\mathbb{E}[X] = \alpha/(\alpha - 1)$이다. 적률법: $\hat\alpha = \bar X/(\bar X - 1)$. 불편인가? 일치하는가?
+
+</div>
 
 ??? success "풀이"
     **일치성:** 대수의법칙에 의해 $\bar X \to \mu = \alpha/(\alpha - 1)$. 따라서 $\hat\alpha \to \mu/(\mu - 1) = \alpha$. 일치한다.

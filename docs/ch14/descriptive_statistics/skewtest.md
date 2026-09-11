@@ -76,7 +76,11 @@ D'Agostino skewness test: Z = 10.4038, p-value = 2.382e-25
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.** 표준정규분포에서 관측값 $n = 300$개를 생성하라. $g_1$과 왜도 검정 $p$값을 계산하라. $\alpha = 0.05$에서 기각할 것으로 기대하는가?
+
+</div>
 
 ??? success "풀이"
 
@@ -116,9 +120,11 @@ D'Agostino skewness test: Z = 10.4038, p-value = 2.382e-25
 
     실무적 교훈: **$p$값 하나로 판정하지 말라.** 여기서 실질적으로 중요한 것은 $g_1 = 0.29$가 어떤 응용에서든 무시할 만한 크기라는 사실이다. 효과 크기를 함께 보고해야 하는 이유이다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.** $\text{Uniform}(0, 1)$ 분포에서 뽑은 관측값 $n = 200$개에 대해 표본왜도를 계산하고 왜도 검정을 수행하라. 균등분포는 대칭이지만 정규가 아니다. 검정이 기각하는가?
+
+</div>
 
 ??? success "풀이"
 
@@ -146,9 +152,11 @@ D'Agostino skewness test: Z = 10.4038, p-value = 2.382e-25
 
     확인해 보면 같은 자료에서 `stats.kurtosistest(x)`는 $Z = -9.78$, $p = 1.4 \times 10^{-22}$로 압도적으로 기각한다. 이탈의 유형에 맞는 검정을 골라야 한다는 교훈이다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.** $\text{Lognormal}(\mu, \sigma^2)$ 분포의 모집단 왜도가 $(e^{\sigma^2} + 2)\sqrt{e^{\sigma^2} - 1}$임을 보여라. $\sigma = 0.6$에 대한 값을 계산하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -168,9 +176,11 @@ D'Agostino skewness test: Z = 10.4038, p-value = 2.382e-25
 
     이 큰 양의 왜도 때문에 대수정규 표본에서 왜도 검정이 단호하게 기각한다. 실제로 본문의 시연에서 표본값 $g_1 = 2.245$가 이 이론값에 가깝게 나왔다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.** $\text{Lognormal}(0, 0.4)$에서 뽑은 관측값 $n = 100$개에 대해 $\alpha = 0.05$에서 왜도 검정의 검정력을 추정하는 모의실험을 5,000회 반복으로 수행하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -208,9 +218,11 @@ D'Agostino skewness test: Z = 10.4038, p-value = 2.382e-25
 
     (몬테카를로 오차는 $\sqrt{0.977 \times 0.023 / 5000} = 0.0021$이다.) $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.** 정확한 공식 $\text{Var}(g_1) = 6(n-2)/[(n+1)(n+3)]$에서 출발하여 큰 $n$에 대해 $\text{Var}(g_1) \approx 6/n$임을 증명하라.
+
+</div>
 
 ??? success "풀이"
 

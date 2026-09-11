@@ -147,7 +147,11 @@ python ci_mean_calc.py --csv data.csv --cl 0.99
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.** 정규모집단에서 뽑은 관측값 $n = 16$개에서 $\bar{x} = 50$, $s = 8$을 얻었다. $\mu$의 95%와 99% $t$-신뢰구간을 계산하라. 너비는 어떻게 변하는가?
+
+</div>
 
 ??? success "풀이"
 
@@ -159,9 +163,11 @@ python ci_mean_calc.py --csv data.csv --cl 0.99
 
     99% 구간은 95% 구간의 $11.788/8.524 = 1.38$배 넓다. 더 높은 확신을 위해서는 더 넓은 범위의 그럴듯한 값을 받아들여야 한다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.** $z$-구간의 오차한계가 $n$의 감소함수임을 보이고 감소 속도를 구하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -173,9 +179,11 @@ python ci_mean_calc.py --csv data.csv --cl 0.99
 
     따라서 오차한계는 $n$에 대해 순감소한다. 감소 속도는 $O(n^{-1/2})$이다: $n$을 두 배로 하면 오차한계가 $1/\sqrt{2} \approx 0.707$배가 되어 약 29% 줄어든다. 오차한계를 절반으로 줄이려면 표본크기를 네 배로 해야 한다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.** 어떤 연구자가 $n = 100$, $s = 10$일 때 $\mu$의 95% $t$-구간과 $z$-구간이 "사실상 같다"고 주장한다. 수치로 확인하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -191,9 +199,11 @@ python ci_mean_calc.py --csv data.csv --cl 0.99
 
     차이는 $1.984 - 1.960 = 0.024$로 $z$-오차한계의 1.3% 미만이다. 표본평균이 예컨대 50이라면 $z$-구간은 $(48.040, 51.960)$, $t$-구간은 $(48.016, 51.984)$이다. 연구자의 주장이 옳다: 양쪽 끝에서 0.024 단위만 다르다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.** $\nu \to \infty$일 때 $t_{\alpha/2,\,\nu} \to z_{\alpha/2}$임을 증명하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -211,9 +221,11 @@ python ci_mean_calc.py --csv data.csv --cl 0.99
 
     $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.** 원자료 $\{12, 15, 14, 10, 13, 16, 11, 14, 13, 12\}$에 대해 $\mu$의 90% $t$-구간을 손으로 계산하고 코드로 확인하라.
+
+</div>
 
 ??? success "풀이"
 

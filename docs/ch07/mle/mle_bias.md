@@ -112,8 +112,12 @@ $$
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 정규분포 분산의 MLE $\hat{\sigma}^2_{\text{MLE}} = \frac{1}{n}\sum_{i=1}^n(X_i - \bar{X})^2$이 편향되어 있음을 보여라. 정확한 편향을 계산하라.
+
+</div>
 
 ??? success "풀이"
     $\sum_{i=1}^n(X_i - \bar{X})^2 / \sigma^2 \sim \chi^2_{n-1}$이고 그 평균은 $n - 1$이다. 따라서:
@@ -134,10 +138,12 @@ $$
 
     MLE는 평균적으로 $\sigma^2$을 과소추정한다. 편향은 $n \to \infty$일 때 사라지지만 작은 $n$에서는 눈에 띈다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 불편추정량 $S^2 = \frac{1}{n-1}\sum(X_i - \bar{X})^2$은 편향을 바로잡는다. $n \geq 2$에서 $\text{MSE}(\hat{\sigma}^2_{\text{MLE}}) < \text{MSE}(S^2)$임을 보여, 편향된 MLE의 평균제곱오차가 실제로 더 작음을 확인하라.
+
+</div>
 
 ??? success "풀이"
     임의의 추정량 $\hat{\theta}$에 대해 $\text{MSE} = \text{Bias}^2 + \text{Var}$이다.
@@ -164,10 +170,12 @@ $$
 
     비교하면 $\frac{2n-1}{n^2} < \frac{2}{n-1}$은 $(2n-1)(n-1) < 2n^2$, 즉 $2n^2 - 3n + 1 < 2n^2$, 즉 $-3n + 1 < 0$으로 정리되며 모든 $n \geq 1$에서 성립한다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 $n = 5$, $\sigma^2 = 10$에 대해 $\hat{\sigma}^2_{\text{MLE}}$과 $S^2$의 편향, 분산, 평균제곱오차를 계산하라.
+
+</div>
 
 ??? success "풀이"
     $n = 5$, $\sigma^2 = 10$에서 $\hat{\sigma}^2_{\text{MLE}}$:
@@ -184,10 +192,12 @@ $n = 5$, $\sigma^2 = 10$에 대해 $\hat{\sigma}^2_{\text{MLE}}$과 $S^2$의 편
 
     MLE의 평균제곱오차는 36으로, 불편추정량 $S^2$의 50보다 28% 작다. 여기서는 편향–분산 맞바꿈이 편향추정량에 유리하다: 분산 감소(50에서 32로)가 도입된 편향을 충분히 보상한다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 정규분포에서 추정량 $\hat{\sigma}^2_c = \frac{1}{n+1}\sum(X_i - \bar{X})^2$은 $\hat{\sigma}^2_{\text{MLE}}$보다 평균제곱오차가 더 작다. 그 평균제곱오차를 계산하여 MLE와 비교해 확인하라.
+
+</div>
 
 ??? success "풀이"
     일반적인 추정량 $\hat{\sigma}^2_c = \frac{1}{c}\sum(X_i - \bar{X})^2$에서 $c = n + 1$이면:

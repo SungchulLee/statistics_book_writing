@@ -98,7 +98,11 @@ def confidence_intervals(x, y_hat, beta_hat, x_bar, y_bar, n, s):
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.** $n = 100$, $\sigma = 3$인 인공자료에서 $E[y \mid x_0 = 0]$의 90% 신뢰구간을 계산하고 95% 구간과 비교하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -129,9 +133,11 @@ def confidence_intervals(x, y_hat, beta_hat, x_bar, y_bar, n, s):
 
     90% 구간이 95% 구간의 0.837배로 좁다. 이 비는 $t$ 임계값의 비 $t_{0.95}/t_{0.975} = 1.6606/1.9845$와 정확히 같다. 신뢰수준만 바꾸면 구간의 **폭만** 비례해서 달라진다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.** 어떤 $x_0$에서든 예측구간이 신뢰구간보다 항상 넓은 이유를 대수적으로 설명하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -149,9 +155,11 @@ def confidence_intervals(x, y_hat, beta_hat, x_bar, y_bar, n, s):
 
     예측구간에는 $1$이라는 항이 더 붙는다(표준화한 뒤 $\mathrm{Var}(\varepsilon_{\text{new}})/s^2 = 1$에 해당한다). 따라서 제곱근 안의 값이 예측구간에서 항상 더 크다. 임계값과 $s$가 같으므로 예측구간이 언제나 더 넓다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.** $n = 30$, $\sigma = 1$인 모형의 띠를 그리도록 코드를 고쳐라. 원래의 $n = 100$, $\sigma = 3$인 경우와 띠의 폭을 비교하면 어떠한가?
+
+</div>
 
 ??? success "풀이"
 
@@ -163,9 +171,11 @@ def confidence_intervals(x, y_hat, beta_hat, x_bar, y_bar, n, s):
 
     신뢰구간의 폭은 $s/\sqrt{n}$에 의존한다. $n=30$, $\sigma=1$이면 $s \approx 1$이고 $s/\sqrt{30} \approx 0.18$인 반면, 원래는 $s \approx 3$이고 $s/\sqrt{100} = 0.3$이었다. 새 신뢰구간이 더 좁다. 예측구간의 폭은 $s$가 지배하므로 $\sigma=1$일 때의 예측구간은 $\sigma=3$일 때보다 훨씬 좁다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.** $y_{\text{new}} = \beta_0 + \beta_1 x_0 + \varepsilon_{\text{new}}$이고 $\varepsilon_{\text{new}}$이 훈련자료와 독립일 때, 예측오차 $\hat{y}_0 - y_{\text{new}}$의 분산을 유도하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -183,9 +193,11 @@ def confidence_intervals(x, y_hat, beta_hat, x_bar, y_bar, n, s):
 
     이것이 ($\sigma$를 $s$로 바꾸면) 예측구간 공식의 제곱근 안 표현과 정확히 일치한다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.** $x_0 = \bar{x}$에서 평균의 신뢰구간이 $\bar{y} \pm t^*_{n-2} \cdot s / \sqrt{n}$으로 간단해짐을 보여라. 입문 통계학에서 배우는 모평균의 신뢰구간과 비교하라.
+
+</div>
 
 ??? success "풀이"
 

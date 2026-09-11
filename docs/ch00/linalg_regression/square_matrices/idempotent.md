@@ -123,8 +123,12 @@ $$
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 $\mathbf{A}$가 멱등이라 하자. $\mathbf{x} \in \operatorname{Col}(\mathbf{A})$일 필요충분조건이 $\mathbf{A}\mathbf{x} = \mathbf{x}$임을 증명하라.
+
+</div>
 
 ??? success "풀이"
     ($\Rightarrow$) $\mathbf{x} \in \operatorname{Col}(\mathbf{A})$이면 $\mathbf{x} = \mathbf{A}\mathbf{y}$로 쓸 수 있다. 그러면 $\mathbf{A}\mathbf{x} = \mathbf{A}^2 \mathbf{y} = \mathbf{A}\mathbf{y} = \mathbf{x}$이다.
@@ -133,10 +137,12 @@ $\mathbf{A}$가 멱등이라 하자. $\mathbf{x} \in \operatorname{Col}(\mathbf{
 
     따름: 열공간은 고윳값 1의 고유공간과 일치하고 영공간은 고윳값 0의 고유공간과 일치한다. 이 둘은 $\mathbb{R}^n$의 서로 보완적인 부분공간이다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 $\mathbf{A}$가 멱등이면 $\mathbf{I} - \mathbf{A}$도 멱등임을 증명하라. $\operatorname{rank}(\mathbf{I} - \mathbf{A})$를 $\operatorname{rank}(\mathbf{A})$로 나타내면 무엇인가?
+
+</div>
 
 ??? success "풀이"
     직접 계산하면
@@ -147,10 +153,12 @@ $\mathbf{A}$가 멱등이면 $\mathbf{I} - \mathbf{A}$도 멱등임을 증명하
 
     이다. 대각합–계수 항등식에 의해 $\operatorname{rank}(\mathbf{I} - \mathbf{A}) = \operatorname{tr}(\mathbf{I} - \mathbf{A}) = n - \operatorname{tr}(\mathbf{A}) = n - \operatorname{rank}(\mathbf{A})$이다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 모든 멱등행렬이 대각화 가능함을 증명하라. 대칭이 아닌 멱등행렬의 예를 하나 들어라.
+
+</div>
 
 ??? success "풀이"
     멱등행렬 $\mathbf{A}$의 최소다항식은 $\lambda^2 - \lambda = \lambda(\lambda - 1)$을 나누는데, 이는 서로 다른 일차인수로 인수분해된다. 어떤 행렬이 대각화 가능할 필요충분조건은 그 최소다항식이 서로 다른 일차인수로 쪼개지는 것이다. 따라서 $\mathbf{A}$는 대각화 가능하다.
@@ -163,10 +171,12 @@ $\mathbf{A}$가 멱등이면 $\mathbf{I} - \mathbf{A}$도 멱등임을 증명하
 
     고윳값: 고유벡터 $(1, 0)^T$에 대응하는 $1$과 고유벡터 $(-1, 1)^T$에 대응하는 $0$. 이 행렬은 직선 $y = -x$ 방향을 따라 $x$축 위로 사영한다. **빗각**(직교가 아닌) 사영이다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 완전 열계수를 갖는 $\mathbf{X} \in \mathbb{R}^{n \times p}$에 대한 모자 행렬 $\mathbf{H} = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T$가 대칭이고 멱등이며 $\operatorname{tr}(\mathbf{H}) = p$임을 증명하라.
+
+</div>
 
 ??? success "풀이"
     **대칭성:** $\mathbf{X}^T\mathbf{X}$가 대칭이므로 그 역행렬도 대칭이다. 따라서
@@ -189,10 +199,12 @@ $\mathbf{A}$가 멱등이면 $\mathbf{I} - \mathbf{A}$도 멱등임을 증명하
 
     $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.**
 $\mathbf{M} = \mathbf{I} - \mathbf{H}$에 대해 $\mathbf{H}\mathbf{X} = \mathbf{X}$이고 $\mathbf{M}\mathbf{X} = \mathbf{0}$임을 보여라. 각 진술을 기하적으로 해석하라.
+
+</div>
 
 ??? success "풀이"
     직접 계산하면
@@ -207,10 +219,12 @@ $\mathbf{M} = \mathbf{I} - \mathbf{H}$에 대해 $\mathbf{H}\mathbf{X} = \mathbf
 
     **$\mathbf{M}\mathbf{X} = \mathbf{0}$의 기하적 의미:** 잔차는 $\mathbf{X}$의 열공간에 직교한다. 이것이 바로 최소제곱을 정의하는 정규방정식 조건 $\mathbf{X}^T \mathbf{e} = \mathbf{0}$이다. 적합값이 $\mathbf{X}$에 담긴 선형 신호를 모두 포착하므로, 잔차에는 $\mathbf{X}$의 어떤 열로도 설명할 수 있는 것이 남아 있지 않다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 6.**
 $\mathbf{A}, \mathbf{B}$가 $\mathbb{R}^{n \times n}$의 대칭 멱등행렬이고 $\mathbf{A}\mathbf{B} = \mathbf{0}$이라 하자. $\mathbf{A} + \mathbf{B}$도 대칭 멱등이고 $\operatorname{rank}(\mathbf{A} + \mathbf{B}) = \operatorname{rank}(\mathbf{A}) + \operatorname{rank}(\mathbf{B})$임을 증명하라. (이것이 분산분석에서 $\chi^2$ 통계량을 분해하는 코크런 정리의 토대다.)
+
+</div>
 
 ??? success "풀이"
     **대칭성:** $(\mathbf{A} + \mathbf{B})^T = \mathbf{A}^T + \mathbf{B}^T = \mathbf{A} + \mathbf{B}$.
@@ -227,10 +241,12 @@ $\mathbf{A}, \mathbf{B}$가 $\mathbb{R}^{n \times n}$의 대칭 멱등행렬이�
 
     통계적 쓰임: 서로 직교하는 사영행렬 $\mathbf{P}_i$로 이루어진 분산분석 분해 $\mathbf{y} = \mathbf{P}_1\mathbf{y} + \mathbf{P}_2\mathbf{y} + \cdots$에서, 이 연습문제가 계수(따라서 $\chi^2$ 자유도)의 합이 $n$이 됨을 보장한다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 7.**
 $\mathbf{A}$가 멱등이면서 **가역**이면 $\mathbf{A} = \mathbf{I}$임을 증명하라. 이로부터 $\mathbf{I}$가 아닌 멱등행렬은 모두 특이행렬임을 밝혀라.
+
+</div>
 
 ??? success "풀이"
     $\mathbf{A}^2 = \mathbf{A}$의 양변에 왼쪽에서 $\mathbf{A}^{-1}$을 곱하면
@@ -246,10 +262,12 @@ $\mathbf{A}$가 멱등이면서 **가역**이면 $\mathbf{A} = \mathbf{I}$임을
 
     **회귀에서의 의미.** 모자 행렬 $\mathbf{H}$는 $p < n$이면 언제나 특이행렬이다. $\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}$에서 $\mathbf{y}$를 되돌릴 수 없다는 뜻이며, 당연하다. 사영은 $n-p$차원만큼의 정보(잔차)를 버리기 때문이다. $\mathbf{H} = \mathbf{I}$가 되는 것은 $p = n$일 때뿐이고, 그때는 모형이 자료를 완벽히 적합해 잔차가 0이 된다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 8.**
 멱등행렬의 행렬식은 0 또는 1임을 보이고, $\det(\mathbf{A}) = 1$인 경우가 $\mathbf{A} = \mathbf{I}$뿐임을 밝혀라.
+
+</div>
 
 ??? success "풀이"
     $\mathbf{A}^2 = \mathbf{A}$의 양변에 행렬식을 취하면
@@ -284,10 +302,12 @@ $\mathbf{A}$가 멱등이면서 **가역**이면 $\mathbf{A} = \mathbf{I}$임을
 
     계수가 $r < n$인 멱등행렬은 고윳값 0을 갖고, 행렬식이 0이다. **회귀의 모자 행렬은 $p < n$인 한 언제나 $\det(\mathbf{H}) = 0$이다.** $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 9.**
 일원분산분석의 제곱합 분해는 항등행렬을 서로 직교하는 멱등행렬 셋으로 쪼개는 것과 같다. $n = 9$이고 크기가 $3, 4, 2$인 세 집단이 있을 때 이를 수치로 확인하라.
+
+</div>
 
 ??? success "풀이"
     집단 지시행렬을 $\mathbf{G}$라 하고 집단평균 사영을 $\mathbf{P}_{\text{grp}} = \mathbf{G}(\mathbf{G}^T\mathbf{G})^{-1}\mathbf{G}^T$라 하자. 다음 셋으로 나눈다.
@@ -338,10 +358,12 @@ $\mathbf{A}$가 멱등이면서 **가역**이면 $\mathbf{A} = \mathbf{I}$임을
 
     이 계수들이 그대로 **자유도**다. 집단 간 $k-1 = 2$, 집단 내 $n-k = 6$. 분산분석표의 자유도가 어디서 오는지가 여기서 드러난다. 연습문제 6의 결과에 의해 계수가 더해지고, 직교성 덕분에 (정규성 아래에서) 제곱합들이 독립인 카이제곱이 되어 $F$ 검정이 성립한다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 10.**
 $\mathbf{y} \sim N(\mathbf{0}, \sigma^2\mathbf{I})$이고 $\mathbf{A}$가 계수 $r$인 대칭 멱등행렬이면 $\mathbf{y}^T\mathbf{A}\mathbf{y}/\sigma^2 \sim \chi^2_r$이다. 앞 문제의 $\mathbf{P}_3$으로 모의실험하여 확인하라.
+
+</div>
 
 ??? success "풀이"
     ```python

@@ -115,8 +115,12 @@ $$
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 $\mathbf{B} = \mathbf{P}^{-1}\mathbf{A}\mathbf{P}$가 되는 가역행렬 $\mathbf{P}$를 찾아 $\mathbf{A} = \begin{pmatrix} 1 & 2 \\ 0 & 3 \end{pmatrix}$와 $\mathbf{B} = \begin{pmatrix} 3 & 0 \\ 0 & 1 \end{pmatrix}$가 닮았음을 보여라.
+
+</div>
 
 ??? success "풀이"
     두 행렬 모두 고윳값이 $\lambda_1 = 1$과 $\lambda_2 = 3$이다($\mathbf{B}$는 이 값들을 대각에 갖는 대각행렬이고, $\mathbf{A}$는 이 값들을 대각에 갖는 상삼각행렬이다).
@@ -127,10 +131,12 @@ $\mathbf{B} = \mathbf{P}^{-1}\mathbf{A}\mathbf{P}$가 되는 가역행렬 $\math
 
     확인: $\mathbf{P}^{-1}\mathbf{A}\mathbf{P} = \begin{pmatrix} 0 & 1 \\ 1 & -1 \end{pmatrix}\begin{pmatrix} 1 & 2 \\ 0 & 3 \end{pmatrix}\begin{pmatrix} 1 & 1 \\ 1 & 0 \end{pmatrix} = \begin{pmatrix} 3 & 0 \\ 0 & 1 \end{pmatrix} = \mathbf{B}$.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 닮은 행렬은 행렬식이 같고 대각합도 같음을 증명하라.
+
+</div>
 
 ??? success "풀이"
     $\mathbf{B} = \mathbf{P}^{-1}\mathbf{A}\mathbf{P}$이면
@@ -147,10 +153,12 @@ $\mathbf{B} = \mathbf{P}^{-1}\mathbf{A}\mathbf{P}$가 되는 가역행렬 $\math
 
     이다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 고윳값, 대각합, 행렬식이 모두 같지만 닮지는 않은 두 개의 $2 \times 2$ 행렬의 예를 들어라.
+
+</div>
 
 ??? success "풀이"
     $\mathbf{A} = \begin{pmatrix} 2 & 0 \\ 0 & 2 \end{pmatrix}$와 $\mathbf{B} = \begin{pmatrix} 2 & 1 \\ 0 & 2 \end{pmatrix}$를 생각하자.
@@ -159,10 +167,12 @@ $\mathbf{B} = \mathbf{P}^{-1}\mathbf{A}\mathbf{P}$가 되는 가역행렬 $\math
 
     그러나 $\mathbf{A} = 2\mathbf{I}$는 모든 행렬과 교환되므로 임의의 가역 $\mathbf{P}$에 대해 $\mathbf{P}^{-1}\mathbf{A}\mathbf{P} = \mathbf{P}^{-1}(2\mathbf{I})\mathbf{P} = 2\mathbf{I} = \mathbf{A}$이다. $\mathbf{B} \neq \mathbf{A}$이므로 어떤 닮음변환도 $\mathbf{A}$를 $\mathbf{B}$로 바꿀 수 없다. 차이는 $\mathbf{A}$가 대각화 가능한 반면(기하적 중복도 2) $\mathbf{B}$는 그렇지 않다는 데 있다(기하적 중복도 1).
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 닮음 개념을 이용해, 회귀모형을 재매개변수화해도(예: 예측변수를 중심화해도) $\operatorname{tr}(\mathbf{H})$나 $\mathbf{X}^T\mathbf{X}$의 고윳값이 바뀌지 않는 이유를 설명하라.
+
+</div>
 
 ??? success "풀이"
     재매개변수화는 어떤 가역행렬 $\mathbf{C}$에 대해 $\mathbf{X}$를 $\mathbf{X}\mathbf{C}$로 바꾸는 것에 해당한다. 모자 행렬은 다음과 같이 변환된다.
@@ -173,10 +183,12 @@ $\mathbf{B} = \mathbf{P}^{-1}\mathbf{A}\mathbf{P}$가 되는 가역행렬 $\math
 
     모자 행렬은 대각합만이 아니라 완전히 불변이다. 그람 행렬 $\mathbf{X}^T\mathbf{X}$와 $\mathbf{C}^T\mathbf{X}^T\mathbf{X}\mathbf{C}$는 합동변환으로 연결된다. ($\mathbf{C}$가 직교행렬이 아닌 한) 표준적인 닮음은 아니지만 핵심 성질을 공유한다. 계수가 같고 적합값이 동일하다. $\operatorname{tr}(\mathbf{H}) = p$의 불변성은 재매개변수화로 모수의 개수가 바뀌지 않는다는 사실을 반영한다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.**
 $\mathbf{B} = \mathbf{P}^{-1}\mathbf{A}\mathbf{P}$이면 모든 자연수 $k$에 대해 $\mathbf{B}^k = \mathbf{P}^{-1}\mathbf{A}^k\mathbf{P}$임을 보여라. 이를 이용해 본문의 $\mathbf{A} = \begin{pmatrix} 4 & 1 \\ 2 & 3 \end{pmatrix}$에 대해 $\mathbf{A}^{10}$을 구하라.
+
+</div>
 
 ??? success "풀이"
     가운데의 $\mathbf{P}\mathbf{P}^{-1} = \mathbf{I}$가 차례로 소거된다.
@@ -213,10 +225,12 @@ $\mathbf{B} = \mathbf{P}^{-1}\mathbf{A}\mathbf{P}$이면 모든 자연수 $k$에
 
     직접 $10$번 곱한 결과와 대각화를 거친 결과가 같다. 행렬이 커지고 $k$가 커질수록 이 차이가 결정적이 된다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 6.**
 다항식 $f(x) = c_0 + c_1 x + \cdots + c_m x^m$에 대해, $\mathbf{A}$와 $\mathbf{B}$가 닮았으면 $f(\mathbf{A})$와 $f(\mathbf{B})$도 같은 $\mathbf{P}$로 닮았음을 보여라.
+
+</div>
 
 ??? success "풀이"
     연습문제 5에서 $\mathbf{B}^k = \mathbf{P}^{-1}\mathbf{A}^k\mathbf{P}$이고, $k = 0$일 때도 $\mathbf{B}^0 = \mathbf{I} = \mathbf{P}^{-1}\mathbf{I}\mathbf{P}$로 성립한다. 따라서
@@ -234,10 +248,12 @@ $\mathbf{B} = \mathbf{P}^{-1}\mathbf{A}\mathbf{P}$이면 모든 자연수 $k$에
 
     이 성질은 다항식을 넘어 수렴하는 멱급수에도 그대로 확장된다. 예컨대 행렬 지수함수는 $e^{\mathbf{B}} = \mathbf{P}^{-1}e^{\mathbf{A}}\mathbf{P}$를 만족한다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 7.**
 대칭행렬이 대칭이 아닌 행렬과 닮을 수 있음을 구체적인 예로 보여라.
+
+</div>
 
 ??? success "풀이"
     $\mathbf{A} = \begin{pmatrix} 1 & 0 \\ 0 & 2 \end{pmatrix}$(대칭)과 $\mathbf{P} = \begin{pmatrix} 1 & 1 \\ 0 & 1 \end{pmatrix}$(직교가 **아닌** 가역행렬)을 잡으면
@@ -278,10 +294,12 @@ $\mathbf{B} = \mathbf{P}^{-1}\mathbf{A}\mathbf{P}$이면 모든 자연수 $k$에
 
     **대칭성은 닮음 불변량이 아니다.** 기저를 직교가 아닌 방향으로 비틀면 대칭성이 깨진다. 반면 고윳값은 그대로다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 8.**
 $\mathbf{Q}$가 직교행렬이고 $\mathbf{A}$가 대칭이면 $\mathbf{Q}^T\mathbf{A}\mathbf{Q}$도 대칭임을 보여라. 연습문제 7과 견주어 무엇이 달라졌는지 설명하라.
+
+</div>
 
 ??? success "풀이"
     $\mathbf{Q}$가 직교이므로 $\mathbf{Q}^{-1} = \mathbf{Q}^T$이고, 따라서 $\mathbf{Q}^T\mathbf{A}\mathbf{Q}$는 닮음변환이다. 전치를 취하면
@@ -296,10 +314,12 @@ $\mathbf{Q}$가 직교행렬이고 $\mathbf{A}$가 대칭이면 $\mathbf{Q}^T\ma
 
     이것이 **직교닮음**을 따로 구분하는 이유다. 스펙트럼 정리가 대칭행렬에 대해 $\mathbf{A} = \mathbf{Q}\boldsymbol{\Lambda}\mathbf{Q}^T$를 보장할 때, 대각화가 하필 직교행렬로 이루어진다는 점이 결정적이다. 그 덕분에 공분산행렬을 대각화해도 대칭성과 양정치성이 함께 보존된다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 9.**
 무작위로 뽑은 가역행렬 $\mathbf{P}$로 닮음변환을 만들어, 성분은 완전히 달라지지만 고윳값·대각합·행렬식·계수는 보존됨을 수치로 확인하라.
+
+</div>
 
 ??? success "풀이"
     ```python
@@ -350,10 +370,12 @@ $\mathbf{Q}$가 직교행렬이고 $\mathbf{A}$가 대칭이면 $\mathbf{Q}^T\ma
 
     수치적으로 한 가지 주의할 점이 있다. $\mathbf{P}$가 특이행렬에 가까우면 $\mathbf{P}^{-1}$의 성분이 커져 반올림 오차가 증폭된다. 그래서 실무에서는 **직교행렬**을 기저변환에 쓴다. $\mathbf{Q}^{-1} = \mathbf{Q}^T$이므로 역행렬을 계산할 필요조차 없고 수치적으로도 안정하다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 10.**
 주성분분석은 공분산행렬 $\boldsymbol{\Sigma}$를 직교행렬 $\mathbf{Q}$로 대각화한다: $\boldsymbol{\Lambda} = \mathbf{Q}^T\boldsymbol{\Sigma}\mathbf{Q}$. 이때 **총분산**이 보존되는 이유를 닮음 불변량으로 설명하고 수치로 확인하라.
+
+</div>
 
 ??? success "풀이"
     총분산은 각 변수의 분산을 모두 더한 값, 곧 $\operatorname{tr}(\boldsymbol{\Sigma})$로 정의된다. $\boldsymbol{\Lambda}$는 $\boldsymbol{\Sigma}$와 닮았고 대각합은 닮음 불변량이므로

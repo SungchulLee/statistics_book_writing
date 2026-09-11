@@ -147,8 +147,12 @@ $$\text{Var}(\bar{X}_w) = \frac{1}{\sum_{i=1}^n 1/\sigma_i^2}$$
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 어떤 전략의 연평균 수익률이 5%, 변동성이 18%이다. (a) 10년 자료에서의 표준오차. (b) 95% 신뢰구간이 0을 배제하기까지 필요한 햇수. (c) 월별 자료를 쓰면 도움이 되는가?
+
+</div>
 
 ??? success "풀이"
     (a) $\mathrm{SE} = 0.18/\sqrt{10} \approx 0.057$. 점추정값 0.05보다 크다.
@@ -157,10 +161,12 @@ $$\text{Var}(\bar{X}_w) = \frac{1}{\sum_{i=1}^n 1/\sigma_i^2}$$
 
     (c) i.i.d. 가정 아래에서 월별 자료로 바꾸면 평균도 ($1/12$배로) 분산도 ($1/12$배로) 함께 축소된다. $t$-통계량은 그대로다 — 같은 달력 구간 안에서 더 자주 표본을 뽑아도 도움이 되지 않는다. 금융의 "추세 추정 문제"는 근본적으로 자료의 밀도가 아니라 *시간 범위*의 문제이다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 분산이 유한한 임의의 분포에서 **$\bar X$가 $\mu$의 BLUE**(최량선형불편추정량)임을 증명하라.
+
+</div>
 
 ??? success "풀이"
     (불편성을 위해) $\sum w_i = 1$인 선형 불편추정량 $\hat\mu = \sum w_i X_i$를 생각하자.
@@ -171,10 +177,12 @@ $$\text{Var}(\bar{X}_w) = \frac{1}{\sum_{i=1}^n 1/\sigma_i^2}$$
 
     분산이 유한한 i.i.d. 표본에서 $\bar X$는 분포의 모양과 무관하게 BLUE이다. 정규성 아래에서는 $\bar X$가 UMVUE이기도 하다(선형에 한하지 않고 *모든* 불편추정량 중에서 균일하게 분산이 최소).
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 **로버스트성의 실패.** 표본에 이상점 하나를 추가하면 $\bar X$가 얼마든지 이동함을 보여라.
+
+</div>
 
 ??? success "풀이"
     표본 $\{X_1, \ldots, X_n, M\}$에서 $M$이 이상점 하나라고 하자. 새 평균은 $(\sum X_i + M)/(n + 1)$이다. $M \to \infty$이면 새 평균 $\to \infty$이다.
@@ -185,10 +193,12 @@ $$\text{Var}(\bar{X}_w) = \frac{1}{\sum_{i=1}^n 1/\sigma_i^2}$$
 
     이상점이 있을 수 있는 실제 자료에서는 $\bar X$보다 로버스트한 위치추정량(중앙값, 절사평균, M-추정량)을 택하라.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 **Bessel 수정.** $S^2 = \sum(X_i - \bar X)^2/(n-1)$의 분모가 왜 $n - 1$인가?
+
+</div>
 
 ??? success "풀이"
     두 가지 관점이 있다:
@@ -203,10 +213,12 @@ $$\text{Var}(\bar{X}_w) = \frac{1}{\sum_{i=1}^n 1/\sigma_i^2}$$
 
     $\mu$가 알려져 있으면(예: 중심화된 자료) $\sum X_i^2/n$을 쓴다 — 소모된 자유도가 없으므로 수정도 없다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.**
 **종속 자료의 표본평균.** $X_1, \ldots, X_n$이 AR(1)이다: $X_t = \rho X_{t-1} + \varepsilon_t$. $\rho$, $n$, $\sigma^2_\varepsilon$으로 $\mathrm{Var}(\bar X)$를 유도하라.
+
+</div>
 
 ??? success "풀이"
     정상 AR(1)에서 $X_t = \sum_{k=0}^\infty \rho^k \varepsilon_{t-k}$이고, $\mathrm{Var}(X_t) = \sigma^2_\varepsilon/(1 - \rho^2)$, $\mathrm{Cov}(X_s, X_t) = \rho^{|s-t|} \sigma^2_\varepsilon/(1-\rho^2)$이다.
@@ -221,10 +233,12 @@ $$\text{Var}(\bar{X}_w) = \frac{1}{\sum_{i=1}^n 1/\sigma_i^2}$$
 
     이는 시계열 분석에서 결정적이다: 자기상관된 자료에 대해 $\mathrm{SE} = \sigma/\sqrt n$을 소박하게 계산하면 불확실성을 과소평가한다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 6.**
 **가중 표본평균.** 관측값의 분산이 서로 다를 때($\mathrm{Var}(X_i) = \sigma_i^2$), $w_i \propto 1/\sigma_i^2$인 역분산 가중평균 $\hat\mu = \sum w_i X_i$가 분산을 최소화한다. 최적 $w_i$를 유도하라.
+
+</div>
 
 ??? success "풀이"
     제약: 불편성을 위해 $\sum w_i = 1$. 분산: $\mathrm{Var}(\hat\mu) = \sum w_i^2 \sigma_i^2$.

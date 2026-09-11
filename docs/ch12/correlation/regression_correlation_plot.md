@@ -149,8 +149,12 @@ $\text{SNR} \to \infty$이면 $r^2 \to 1$이고, $\text{SNR} \to 0$이면 $r^2 \
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 모집단 상관 공식을 써서 $\beta_2 = 3$, $\sigma = 10$, $X \sim \text{Uniform}(1, 100)$일 때의 이론값 $\rho_{XY}$를 계산하라. 모의값과 비교하라. (힌트: $X \sim \text{Uniform}(a,b)$이면 $\text{Var}(X) = (b-a)^2/12$이다.)
+
+</div>
 
 ??? success "풀이"
 
@@ -186,10 +190,12 @@ $\text{SNR} \to \infty$이면 $r^2 \to 1$이고, $\text{SNR} \to 0$이면 $r^2 \
 
     모의값 $0.9935$는 이론값 $0.9933$과 거의 일치한다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 $X \perp \varepsilon$인 $Y = \beta_1 + \beta_2 X + \varepsilon$에 대해, 공분산과 분산의 정의에서 출발하여 $\rho_{XY} = \frac{\beta_2 \sigma_X}{\sqrt{\beta_2^2 \sigma_X^2 + \sigma^2}}$를 유도하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -213,10 +219,12 @@ $X \perp \varepsilon$인 $Y = \beta_1 + \beta_2 X + \varepsilon$에 대해, 공�
 
     $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 $\sigma_X$와 $\sigma$가 고정되어 있을 때 $r^2 = 0.5$가 되는(즉 신호가 분산의 정확히 절반을 설명하는) $\beta_2$를 구하라. 답을 $\sigma_X$와 $\sigma$로 표현하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -242,10 +250,12 @@ $\sigma_X$와 $\sigma$가 고정되어 있을 때 $r^2 = 0.5$가 되는(즉 신�
 
     기울기가 오차 표준편차와 설명변수 표준편차의 비와 같을 때 $Y$의 분산의 정확히 절반이 $X$로 설명된다. 신호와 잡음이 똑같이 기여하는 "손익분기점"이다. 앞 절의 설정에서는 $\sigma_X \approx 28.6$이므로 $\sigma = 1$일 때 손익분기 기울기는 $\beta_2 \approx 0.035$에 불과하다. $\beta_2 = 0.05$에서 이미 $r = 0.82$가 나온 이유가 여기 있다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 행은 서로 다른 기울기($\beta_2 \in \{0.5, 2, 5\}$), 열은 서로 다른 잡음 수준($\sigma \in \{1, 5, 20\}$)에 대응하는 $3 \times 3$ 패널 그림을 만들어라. 각 패널에 표본 $r$를 주석으로 달고 그 패턴을 논하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -289,10 +299,12 @@ $\sigma_X$와 $\sigma$가 고정되어 있을 때 $r^2 = 0.5$가 되는(즉 신�
 
     패턴은 신호 대 잡음비를 따른다. 행을 내려갈수록(기울기가 커질수록) $|r|$가 커지고, 열을 오른쪽으로 갈수록(잡음이 커질수록) $|r|$가 작아진다. 왼쪽 아래 칸(큰 기울기, 작은 잡음)은 $r = 1.000$으로 사실상 완전한 상관이다. 반대편인 오른쪽 위 칸(작은 기울기, 큰 잡음)은 $r = 0.324$로 가장 작지만 그래도 0은 아니다. $\beta_2 = 0.5$, $\sigma = 20$에서 $\text{SNR} = 0.25 \times 200.1 / 400 = 0.125$이고, 따라서 $r^2 = 0.125/1.125 = 0.111$, $|r| \approx 0.33$이다. 표의 아홉 칸 전부가 공식 하나로 예측된다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.**
 $\text{SNR} = \beta_2^2 \sigma_X^2 / \sigma^2$일 때 $r^2 = \frac{\text{SNR}}{1 + \text{SNR}}$임을 증명하라. 이어서 $\text{SNR} = \frac{r^2}{1 - r^2}$임을 보이고 이 역관계를 해석하라.
+
+</div>
 
 ??? success "풀이"
 

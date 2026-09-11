@@ -123,6 +123,8 @@ $n$이 매우 작으면(예: $n < 10$) 경험분포 $\hat{F}_n$이 $F$의 거친
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 $X_t = 0.7 X_{t-1} + \varepsilon_t$, $\varepsilon_t \sim N(0, 1)$인 AR(1) 과정을 $n = 200$으로 모의생성하라.
 
@@ -131,6 +133,8 @@ $X_t = 0.7 X_{t-1} + \varepsilon_t$, $\varepsilon_t \sim N(0, 1)$인 AR(1) 과�
 **(b)** 블록 길이 $\ell = 5, 10, 20, 40$인 **이동 블록 붓스트랩**을 적용하라.
 
 **(c)** 두 접근의 폭과 포함확률을 비교하고, iid 붓스트랩이 종속자료에서 실패하는 이유를 설명하라.
+
+</div>
 
 ??? success "풀이"
     ```python
@@ -194,10 +198,12 @@ $X_t = 0.7 X_{t-1} + \varepsilon_t$, $\varepsilon_t \sim N(0, 1)$인 AR(1) 과�
         3. 시계열 모형(ARMA 등)을 적합하고 **잔차를 붓스트랩**하거나, 블록 붓스트랩을 여러 $\ell$로 실행해 결과의 민감도를 본다.
         4. 어떤 방법을 쓰든 $n = 200$ 정도로는 강한 종속성 아래에서 정확한 추론이 어렵다는 것을 인정한다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 $X_1, \ldots, X_n \sim \text{Uniform}(0, 1)$에서 $\theta = 1$의 신뢰구간을 추축량 $n(\theta - X_{(n)})$으로 만들 때, 완전 붓스트랩·$m$-out-of-$n$ 붓스트랩·모수적 붓스트랩의 포함확률을 비교하라. $n = 50$과 $n = 200$에서 $m = \lfloor\sqrt{n}\rfloor$과 $m = \lfloor n^{2/3}\rceil$을 시도하라.
+
+</div>
 
 ??? success "풀이"
     ```python
@@ -244,10 +250,12 @@ $X_1, \ldots, X_n \sim \text{Uniform}(0, 1)$에서 $\theta = 1$의 신뢰구간�
 
     다만 이는 **분포를 안다는 대가**를 치른 것이다. 균등분포가 아니라 다른 분포였다면 이 방법은 틀린 답을 준다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 무한분산에서 붓스트랩 표준오차가 "크게 요동친다"는 것이 정확히 무엇을 뜻하는가? Cauchy 자료($n = 100$)에서 평균과 중앙값의 붓스트랩 표준오차를, 서로 다른 세 자료에 대해 각각 $200$번씩 계산하여 확인하라.
+
+</div>
 
 ??? success "풀이"
     ```python

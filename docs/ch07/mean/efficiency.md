@@ -59,8 +59,12 @@ Laplace 분포에서는 중앙값이 표본평균의 절반에 해당하는 관�
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 **중앙값과 평균의 ARE.** (a) 정규 자료에서 ARE가 $2/\pi$임을 보여라. (b) $t_3$ 자료에서는 어느 쪽이 이기는가?
+
+</div>
 
 ??? success "풀이"
     (a) 중앙값의 점근분산은 $1/[4 f(\mu)^2 n]$이며, 여기서 $f$는 중앙값에서의 밀도이다. $N(\mu, \sigma^2)$에서 $f(\mu) = 1/(\sigma\sqrt{2\pi})$이므로 $\mathrm{AVar}(\text{중앙값}) = \pi\sigma^2/(2n)$이다. 평균은 $\sigma^2/n$. ARE = $2/\pi \approx 0.637$. 평균이 1.57배로 이긴다.
@@ -69,10 +73,12 @@ Laplace 분포에서는 중앙값이 표본평균의 절반에 해당하는 관�
 
     모의실험이 이를 확인해 준다: 정규에서는 평균의 분산 $\approx 1/n$ 대 중앙값 $\approx \pi/(2n)$. $t_3$에서는 평균의 분산 $3/n$이 중앙값의 $1.85/n$보다 크며, 자유도가 2에 가까워질수록 격차가 벌어진다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 **축소추정량.** $\hat\mu_\lambda = \lambda \bar X$. (a) 평균제곱오차를 유도하라. (b) 최적 $\lambda^*$. (c) $\lambda^*$를 직접 쓸 수 없는 이유는?
+
+</div>
 
 ??? success "풀이"
     (a) 편향 = $(\lambda - 1)\mu$. 분산 = $\lambda^2 \sigma^2/n$. MSE = $(\lambda-1)^2 \mu^2 + \lambda^2 \sigma^2/n$.
@@ -83,10 +89,12 @@ Laplace 분포에서는 중앙값이 표본평균의 절반에 해당하는 관�
 
     (c) $\lambda^*$가 미지의 $\mu$에 의존한다. 대입한 $\hat\lambda$는 그 자체의 변동성을 갖는다. James-Stein 추정량이 이를 다룬다: 표본자료를 적응적으로 사용하는 경험적 Bayes 축소인자로, $p \ge 3$에서 MLE를 지배한다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 **James-Stein 추정량.** $p \ge 3$인 $\mathbf X \sim N(\boldsymbol\mu, I_p)$에서 $\hat{\boldsymbol\mu}_{\text{JS}} = (1 - (p-2)/\|\mathbf X\|^2)\mathbf X$와 MLE를 비교하라.
+
+</div>
 
 ??? success "풀이"
     ```python
@@ -113,10 +121,12 @@ Laplace 분포에서는 중앙값이 표본평균의 절반에 해당하는 관�
 
     실무적 영향: 현대 축소법(능형회귀, 계층적 Bayes, 라소)의 토대이다. 성분 $\mu_i$들이 서로 무관해도 함께 축소하면 전체 평균제곱오차가 개선된다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 **효율적 = CRLB 달성.** $N(\mu, \sigma^2)$에서 $\bar X$가 점근적으로만이 아니라 모든 $n$에서 효율적임(CRLB를 달성함)을 보여라.
+
+</div>
 
 ??? success "풀이"
     정규분포 평균의 Fisher 정보량: 관측값당 $I(\mu) = 1/\sigma^2$, 전체는 $nI(\mu) = n/\sigma^2$.
@@ -127,10 +137,12 @@ Laplace 분포에서는 중앙값이 표본평균의 절반에 해당하는 관�
 
     CRLB의 등호는 드물다 — 보통 MLE는 점근적으로만 CRLB에 도달한다. 정규분포 평균의 $\bar X$는 임의의 $n$에서 정확히 효율적인 몇 안 되는 사례이다. 점수함수 $\partial \log f/\partial\mu = (X - \mu)/\sigma^2$가 $X$에 대해 선형이어서, (CRLB 유도의 바탕이 되는) Cauchy-Schwarz 부등식이 등호로 성립하기 때문이다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.**
 **효율성과 충분통계량.** 효율성을 충분성과 연결하라: $\bar X$는 $\mu$에 대해 충분하기 때문에 효율적이다.
+
+</div>
 
 ??? success "풀이"
     **Rao-Blackwell 정리**에 의해, 임의의 불편추정량은 충분통계량으로 조건부기댓값을 취해 개선할 수 있다.
@@ -143,10 +155,12 @@ Laplace 분포에서는 중앙값이 표본평균의 절반에 해당하는 관�
 
     ($X_1$ 같은) 비효율적 추정량은 표본 전체를 쓰지 않아 정보를 버린다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 6.**
 **고차원에서의 맞바꿈.** 축소추정량이 고차원에서는 MLE를 지배하지만 저차원에서는 그렇지 않은 이유는 무엇인가?
+
+</div>
 
 ??? success "풀이"
     $p$차원에서 MLE의 위험: $\mathrm{Risk}(\hat{\boldsymbol\mu}_{\text{MLE}}) = p\sigma^2$.

@@ -134,8 +134,12 @@ Cauchy 예는 역변환 표본추출이 유한한 평균조차 없는 두꺼운 
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 $\text{Uniform}(a, b)$ 분포의 역 CDF를 유도하고 역변환 공식을 쓰라.
+
+</div>
 
 ??? success "풀이"
     CDF는 $F(x) = (x - a)/(b - a)$이다. $u = F(x)$로 두고 풀면:
@@ -146,20 +150,24 @@ $\text{Uniform}(a, b)$ 분포의 역 CDF를 유도하고 역변환 공식을 쓰
 
     따라서 $U \sim \text{Uniform}(0,1)$이면 $X = a + (b-a)U \sim \text{Uniform}(a, b)$이다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 역변환 표본추출로 $\text{Bernoulli}(p)$ 분포에서 표본을 생성하라. 같은 착상이 임의의 이산분포로 어떻게 확장되는지 설명하라.
+
+</div>
 
 ??? success "풀이"
     $U \sim \text{Uniform}(0,1)$을 생성한다. $U \le p$이면 $X = 1$로, 그렇지 않으면 $X = 0$으로 둔다.
 
     값이 $x_1, x_2, \ldots$이고 확률이 $p_1, p_2, \ldots$인 일반적인 이산분포에서는 누적확률 $c_k = \sum_{i=1}^k p_i$를 계산한다. $U \le c_k$를 만족하는 가장 작은 첨자 $k$에 대해 $X = x_k$로 둔다. 이는 $[0,1]$을 길이 $p_k$인 구간들로 나누고 각 구간을 $x_k$에 대응시키는 것이다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 역변환 결과를 증명하라. $U \sim \text{Uniform}(0,1)$이고 $F$가 연속이고 순증가하는 CDF이면 $F^{-1}(U) \sim F$이다.
+
+</div>
 
 ??? success "풀이"
     임의의 $x \in \mathbb{R}$에 대해:
@@ -176,10 +184,12 @@ $\text{Uniform}(a, b)$ 분포의 역 CDF를 유도하고 역변환 공식을 쓰
 
     따라서 $P(F^{-1}(U) \le x) = F(x)$이고, 이는 $F^{-1}(U)$의 CDF가 $F$임을 뜻한다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 Rayleigh 분포는 $x \ge 0$에 대해 CDF가 $F(x) = 1 - e^{-x^2/(2\sigma^2)}$이다. 역 CDF를 유도하고 역변환 표본추출로 Rayleigh 표본을 생성하는 코드를 작성하라.
+
+</div>
 
 ??? success "풀이"
     $u = 1 - e^{-x^2/(2\sigma^2)}$의 역함수를 구하면:
@@ -215,10 +225,12 @@ Rayleigh 분포는 $x \ge 0$에 대해 CDF가 $F(x) = 1 - e^{-x^2/(2\sigma^2)}$�
 
     이는 Box-Muller 변환의 한 성분과 밀접하게 관련된다. $R = \sqrt{-2\ln U}$가 Rayleigh 분포를 따른다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.**
 모든 역변환 공식에서 $U$를 $1 - U$로 바꾸어도 출력의 분포가 달라지지 않는 이유를 설명하라. 실무에서 이것이 왜 유용한가?
+
+</div>
 
 ??? success "풀이"
     $U \sim \text{Uniform}(0,1)$이면 $1 - U$도 $\text{Uniform}(0,1)$이다(균등분포는 0.5를 중심으로 대칭이다). 따라서 $F^{-1}(U)$에서 $U$를 $1 - U$로 바꾸어도 같은 분포가 나온다.

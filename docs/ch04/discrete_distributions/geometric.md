@@ -254,8 +254,12 @@ $$
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 영업 전화의 성공확률이 $p = 0.1$이다. $Y$를 첫 계약까지의 전화 횟수라 하자. (a) 분포는? (b) $P(Y = 5)$, $P(Y > 10)$. (c) 8번 실패했다는 조건 아래 $P(Y > 15)$. (d) 평균과 분산.
+
+</div>
 
 ??? success "풀이"
     (a) $Y \sim \mathrm{Geometric}(0.1)$.
@@ -266,10 +270,12 @@ $$
 
     (d) $\mathbb{E}[Y] = 1/p = 10$. $\mathrm{Var}(Y) = (1-p)/p^2 = 0.9/0.01 = 90$.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 Geometric 분포의 **무기억성** $P(Y > m + n \mid Y > m) = P(Y > n)$을 증명하라.
+
+</div>
 
 ??? success "풀이"
     생존함수는 $P(Y > k) = (1 - p)^k$이다.
@@ -282,10 +288,12 @@ Geometric 분포의 **무기억성** $P(Y > m + n \mid Y > m) = P(Y > n)$을 증
 
     Geometric 분포는 무기억성을 갖는 **유일한** 이산분포이다. 무기억성을 갖는 유일한 연속분포인 Exponential 분포와 함께, 이 두 분포는 "완전히 무작위한" 대기 시간을 모형화한다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 **Negative Binomial 분포.** i.i.d. Bernoulli($p$) 시행에서 $r$번째 성공까지의 시행 횟수를 $Z$라 하자. PMF, $\mathbb{E}[Z]$, $\mathrm{Var}(Z)$를 유도하라.
+
+</div>
 
 ??? success "풀이"
     $Z = k$이려면 처음 $k - 1$번의 시행에서 정확히 $r - 1$번 성공하고 $k$번째 시행에서 성공해야 한다:
@@ -302,10 +310,12 @@ Geometric 분포의 **무기억성** $P(Y > m + n \mid Y > m) = P(Y > n)$을 증
 
     $r = 1$이면 Geometric 분포로 환원된다. Negative Binomial 분포는 Geometric 분포를 여러 번의 성공으로 일반화하며, 과대산포된 계수 자료의 모형에 바탕이 된다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 **쿠폰 수집가 문제.** $n$가지 종류의 쿠폰을 모두 모으려면 (복원추출로) 독립적인 무작위 추출을 몇 번 해야 하는가? 전체 추출 횟수 $T$에 대해 $\mathbb{E}[T]$를 구하라.
+
+</div>
 
 ??? success "풀이"
     분해해서 생각하자. $T_i$를 $i - 1$가지를 이미 모은 상태에서 $i$번째 *새로운* 쿠폰 종류를 얻기까지의 추출 횟수라 하자. 각 $T_i$는 성공확률 $(n - i + 1)/n$인 Geometric 분포를 따른다. $i - 1$가지를 모았다면 남은 $n - i + 1$가지 중 어느 것을 뽑아도 성공이기 때문이다.
@@ -322,10 +332,12 @@ Geometric 분포의 **무기억성** $P(Y > m + n \mid Y > m) = P(Y > n)$을 증
 
     Geometric 분포는 이 고전적 문제와 이와 유사한 여러 순차 탐색 문제의 기본 구성요소이다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.**
 **이산화된 Exponential 분포로서의 Geometric 분포.** $\Delta t$가 작을 때 $p$가 $\lambda \Delta t$에 대응하는 방식으로, Geometric 분포가 Exponential 분포의 이산시간 대응물로 나타남을 보여라.
+
+</div>
 
 ??? success "풀이"
     비율 $\lambda$인 Poisson 과정을 시각 $\Delta t, 2\Delta t, 3\Delta t, \ldots$에서 관측한다고 하자. 각 구간 $[(k-1)\Delta t, k\Delta t]$에서 사건이 일어날 확률은 $p = 1 - e^{-\lambda \Delta t} \approx \lambda \Delta t$이며, 마지막 근사는 $\Delta t$가 작을 때 성립한다.
@@ -338,10 +350,12 @@ Geometric 분포의 **무기억성** $P(Y > m + n \mid Y > m) = P(Y > n)$을 증
 
     연속 극한에서 Exponential 분포가 복원된다. Geometric 분포는 이산시간 도착 과정이고, Exponential 분포는 그 연속시간 대응물이다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 6.**
 **Geometric 분포의 역변환 표본추출.** $U \sim \mathrm{Uniform}(0, 1)$이 주어졌을 때 $X \sim \mathrm{Geometric}(p)$를 생성하는 공식을 유도하라.
+
+</div>
 
 ??? success "풀이"
     Geometric 분포의 CDF는 $k = 1, 2, \ldots$에 대해 $F(k) = 1 - (1 - p)^k$이다.

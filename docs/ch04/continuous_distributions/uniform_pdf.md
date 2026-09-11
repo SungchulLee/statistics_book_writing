@@ -58,8 +58,12 @@ plt.show()
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 직접 적분하여 $X \sim \text{Uniform}(a, b)$의 평균과 분산을 유도하라.
+
+</div>
 
 ??? success "풀이"
     **평균:**
@@ -80,10 +84,12 @@ plt.show()
     \text{Var}(X) = E[X^2] - (E[X])^2 = \frac{a^2+ab+b^2}{3} - \frac{(a+b)^2}{4} = \frac{(b-a)^2}{12}
     $$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 $U \sim \text{Uniform}(0,1)$이면 $X = a + (b-a)U \sim \text{Uniform}(a,b)$임을 보여라.
+
+</div>
 
 ??? success "풀이"
     $a \le x \le b$에서 $X$의 CDF는:
@@ -94,18 +100,22 @@ $U \sim \text{Uniform}(0,1)$이면 $X = a + (b-a)U \sim \text{Uniform}(a,b)$임�
 
     이는 $\text{Uniform}(a, b)$의 CDF이다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 균등분포는 $[a, b]$ 위의 최대 엔트로피 분포이다. 이것이 무슨 뜻인지 밝히고 직관적으로 왜 타당한지 설명하라.
 
+</div>
+
 ??? success "풀이"
     $[a, b]$를 지지집합으로 하는 모든 연속분포 중에서 균등분포가 미분 엔트로피 $h(X) = \ln(b - a)$를 최대로 한다. 최대 엔트로피란 최대 불확실성을 뜻한다. 값의 범위는 알지만 값이 어디에 놓일지에 대해서는 그 외에 아무것도 모르는 상태이다. 직관적으로, 균등하지 않은 밀도라면 어떤 부분 영역에 확률을 몰아 준다는 뜻이고, 이는 지지집합 외에 분포에 대해 더 많이 안다는 것을 함의한다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 $X \sim \text{Uniform}(0, 1)$일 때 $Y = -\ln(X)$의 분포를 구하고 어떤 분포인지 밝혀라.
+
+</div>
 
 ??? success "풀이"
     $y > 0$에 대해:

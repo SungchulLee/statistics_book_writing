@@ -310,7 +310,11 @@ Var(median)      = 0.121813  (ratio to CRLB: 1.5227)
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.** $X_1, \ldots, X_n \overset{\text{iid}}{\sim} \text{Exp}(\lambda)$에 대해 $\lambda$의 적률법 추정량과 MLE를 유도하라. 둘은 같은가?
+
+</div>
 
 ??? success "풀이"
     Exponential 분포는 $E[X] = 1/\lambda$이므로 적률법은 $\bar{X} = 1/\hat{\lambda}$로 두어 $\hat{\lambda}_{\text{MoM}} = 1/\bar{X}$를 준다.
@@ -319,9 +323,11 @@ Var(median)      = 0.121813  (ratio to CRLB: 1.5227)
 
     Exponential 분포에서 두 추정량은 동일하다. 모수가 하나이고 그것이 하나의 적률로 결정되기 때문이다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.** 정규모집단에서 $\hat{\sigma}^2_c = \frac{1}{c}\sum_{i=1}^n(X_i - \bar{X})^2$ 계열 중 평균제곱오차가 최적인 추정량이 $c^* = n+1$임을 보여라.
+
+</div>
 
 ??? success "풀이"
     $Q = \sum(X_i - \bar{X})^2$이라 하자. $X_i \sim N(\mu, \sigma^2)$에서 $Q/\sigma^2 \sim \chi^2_{n-1}$이므로 $E[Q] = (n-1)\sigma^2$이고 $\text{Var}(Q) = 2(n-1)\sigma^4$이다.
@@ -340,9 +346,11 @@ Var(median)      = 0.121813  (ratio to CRLB: 1.5227)
 
     정리하면 $-4(n-1)/c^3 + 2(n-1)(c - n + 1)/c^3 = 0$이므로 $2(c - n + 1) = 4$, 즉 $c = n + 1$이다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.** $\alpha = 2, \beta = 5$인 Beta 분포 $\text{Beta}(\alpha, \beta)$에서 표본크기 $n = 50$으로 MLE와 적률법을 비교하는 Monte Carlo 모의실험을 수행하라. $\alpha$를 추정할 때 어느 방법의 평균제곱오차가 더 작은가?
+
+</div>
 
 ??? success "풀이"
     ```python
@@ -386,9 +394,11 @@ Var(median)      = 0.121813  (ratio to CRLB: 1.5227)
 
     대체로 MLE의 평균제곱오차가 더 작으며, 이는 점근 효율성과 일관된다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.** MLE가 재모수화에 불변임을 증명하라. 즉 $\hat{\theta}$가 $\theta$의 MLE이면 임의의 함수 $g$에 대해 $g(\hat{\theta})$가 $g(\theta)$의 MLE임을 보여라.
+
+</div>
 
 ??? success "풀이"
     $g$가 일대일 함수일 때 $\eta = g(\theta)$라 하자(일반적인 경우는 유도가능도로 확장된다). $\eta$의 함수로 본 가능도는:
@@ -401,9 +411,11 @@ Var(median)      = 0.121813  (ratio to CRLB: 1.5227)
 
     일대일이 아닐 수도 있는 일반적인 $g$에 대해서는 $\hat{\eta} = \sup_{\{\theta: g(\theta) = \eta\}} L(\theta)$로 정의하고 그 최대점을 취하면, 구성상 그것이 $g(\hat{\theta})$와 같다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.** Bernoulli 모수 $p$의 Fisher 정보량은 $I(p) = 1/[p(1-p)]$이다. $p = 0.3$, $n = 100$일 때 표본비율 $\hat{p} = \bar{X}$의 분산이 Cramér-Rao 한계 $1/[nI(p)]$를 달성함을 수치적으로 확인하라.
+
+</div>
 
 ??? success "풀이"
     ```python

@@ -190,6 +190,8 @@ def partial_log_likelihood(beta, X, times, events):
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 부분가능도 구성
 
@@ -202,6 +204,8 @@ def partial_log_likelihood(beta, X, times, events):
 | C | 5 | 1 | 0.8 |
 
 이 자료의 부분가능도 $PL(\beta)$를 쓰라.
+
+</div>
 
 ??? success "풀이"
 
@@ -226,7 +230,7 @@ def partial_log_likelihood(beta, X, times, events):
     PL(\beta) = \frac{\exp(0.5\beta)}{\exp(0.5\beta) + \exp(1.2\beta) + \exp(0.8\beta)}
     $$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 위험비의 해석
@@ -242,6 +246,8 @@ def partial_log_likelihood(beta, X, times, events):
 **(a)** 각 공변량의 위험비를 계산하고 해석하라.
 
 **(b)** 5% 수준에서 유의한 공변량은 무엇인가?
+
+</div>
 
 ??? success "풀이"
 
@@ -271,7 +277,7 @@ def partial_log_likelihood(beta, X, times, events):
         효과가 없다는 뜻이 아니다. 담보 대출의 표본이 적었을 가능성이 크며, 자료를 더 모으면
         유의해질 수 있다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 비례위험 점검
@@ -282,6 +288,8 @@ def partial_log_likelihood(beta, X, times, events):
 **(a)** 이 교차는 비례위험 가정에 대해 무엇을 함의하는가?
 
 **(b)** 대응책 두 가지를 제시하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -306,7 +314,7 @@ def partial_log_likelihood(beta, X, times, events):
         대상**을 나누는 것이다. 시간을 나누는 것은 층화가 아니라 위의 2번, 곧 구간을 나눈
         분석이다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 브레슬로 추정량
@@ -319,6 +327,8 @@ def partial_log_likelihood(beta, X, times, events):
 | 7 | 1 | B, C | 0, 0.5 |
 
 브레슬로 추정치 $\hat{H}_0(7)$을 계산하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -342,7 +352,7 @@ def partial_log_likelihood(beta, X, times, events):
     \hat{H}_0(7) = 0.269 + 0.450 = 0.719
     $$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.**
 기저위험이 소거되는 이유
@@ -353,6 +363,8 @@ def partial_log_likelihood(beta, X, times, events):
 $$
 \frac{h(t \mid \mathbf{x}_{i_j})}{\sum_{l \in \mathcal{R}_j} h(t \mid \mathbf{x}_l)} = \frac{\exp(\boldsymbol{\beta}^\top \mathbf{x}_{i_j})}{\sum_{l \in \mathcal{R}_j} \exp(\boldsymbol{\beta}^\top \mathbf{x}_l)}
 $$
+
+</div>
 
 ??? success "풀이"
 

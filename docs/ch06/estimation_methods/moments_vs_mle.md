@@ -89,8 +89,12 @@ MLE는 강력한 **함수적 불변성**을 갖는다. $\hat{\theta}$가 $\theta
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 Geometric 분포: $P(X = k) = (1-p)^{k-1} p$. (a) $x_1, \ldots, x_n$에 대한 로그가능도. (b) $\hat p_{\text{MLE}}$. (c) 적률법. (d) 둘이 같은가?
+
+</div>
 
 ??? success "풀이"
     (a) $T = \sum x_i$일 때 $\ell(p) = \sum_i [(x_i - 1)\ln(1-p) + \ln p] = (T - n)\ln(1-p) + n\ln p$.
@@ -103,10 +107,12 @@ Geometric 분포: $P(X = k) = (1-p)^{k-1} p$. (a) $x_1, \ldots, x_n$에 대한 �
 
     이런 일은 모수 $\theta$가 1차 적률과 일대일로 대응하고 고차 적률 제약이 없을 때마다 일어난다. "단일모수이면서 평균으로 결정되는" 분포 대부분(Bernoulli, Poisson, Exponential, Geometric)에서 MLE = 적률법이다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 **Gamma 모의실험: MLE와 적률법.** $n = 5, 10, 30, 100, 500$에서 Gamma$(2, 3)$을 모의실험하여 평균제곱오차를 비교하라.
+
+</div>
 
 ??? success "풀이"
     ```python
@@ -140,10 +146,12 @@ Geometric 분포: $P(X = k) = (1-p)^{k-1} p$. (a) $x_1, \ldots, x_n$에 대한 �
 
     예상되는 결과: 모든 $n$에서 MLE의 평균제곱오차가 더 작고, $n$이 작을수록 격차가 크다. 둘 다 $1/n$의 비율로 줄어든다. MLE는 점근적으로 효율적이고 적률법은 일치하지만 효율적이지는 않다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 **MLE가 일반적으로 적률법보다 나은 이유.** 점근 상대효율(ARE) 결과와 그 직관을 서술하라.
+
+</div>
 
 ??? success "풀이"
     **ARE:** $\mathrm{ARE}(\hat\theta_{\text{MoM}}, \hat\theta_{\text{MLE}}) = $ 점근분산의 비 $\le 1$이다.
@@ -160,10 +168,12 @@ Geometric 분포: $P(X = k) = (1-p)^{k-1} p$. (a) $x_1, \ldots, x_n$에 대한 �
     - MLE를 다루기 어려운 분포.
     - 로버스트성 고려(적률법이 모형 설정 오류에 덜 민감할 수 있다).
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 **적률법을 선호하는 경우.** MLE 대신 적률법을 고를 만한 구체적인 사례를 두 가지 들라.
+
+</div>
 
 ??? success "풀이"
     **사례 1: MLE를 다루기 어려울 때.** 어떤 분포(예: Cauchy, 일반화 쌍곡선, 특정 코퓰러)에서는 가능도의 최대점이 닫힌 형태로 없거나 계산 비용이 크다. 적률법은 닫힌 형태의 추정값을 빠르게 준다.
@@ -174,10 +184,12 @@ Geometric 분포: $P(X = k) = (1-p)^{k-1} p$. (a) $x_1, \ldots, x_n$에 대한 �
 
     이런 사례들 때문에 점근적 비효율성에도 불구하고 적률법이 계속 쓰인다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.**
 **Pareto의 적률법과 MLE.** $x \ge 1$에서 $X \sim \mathrm{Pareto}(\alpha)$일 때 둘을 유도하고 점근 상대효율을 논하라.
+
+</div>
 
 ??? success "풀이"
     $[1, \infty)$ 위의 Pareto$(\alpha)$: $f(x; \alpha) = \alpha x^{-(\alpha+1)}$이고 $\alpha > 1$에서 $\mathbb{E}[X] = \alpha/(\alpha - 1)$이다.
@@ -194,10 +206,12 @@ Geometric 분포: $P(X = k) = (1-p)^{k-1} p$. (a) $x_1, \ldots, x_n$에 대한 �
 
     **함의:** 꼬리가 두꺼운 분포에서는 MLE가 필수적이다. 적률법은 정의되지 않을 수도 있다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 6.**
 **MLE의 출발값으로서의 적률법.** 반복적인 MLE 최적화의 초기값으로 $\hat\theta_{\text{MoM}}$을 쓰는 것이 왜 좋은 생각인가?
+
+</div>
 
 ??? success "풀이"
     반복적인 MLE(Newton-Raphson, BFGS, EM)에는 출발값이 필요하다. 좋은 출발값은:

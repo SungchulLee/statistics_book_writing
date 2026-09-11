@@ -70,8 +70,12 @@ $$
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 Bernoulli에 대한 베이즈적 추정량 $\hat\theta_B = (\sum X_i + a)/(n + a + b)$를 생각하자. (a) 편향과 분산. (b) $a = b = \sqrt n/2$일 때 편향되어 있지만 일치함을 보여라. (c) $\theta = 0.5, n = 10$에서 MLE와 평균제곱오차를 비교하라.
+
+</div>
 
 ??? success "풀이"
     (a) $S = \sum X_i$라 하면 $\mathbb{E}[S] = n\theta$, $\mathrm{Var}(S) = n\theta(1-\theta)$이다.
@@ -84,10 +88,12 @@ Bernoulli에 대한 베이즈적 추정량 $\hat\theta_B = (\sum X_i + a)/(n + a
 
     (c) $\theta = 0.5, n = 10$에서 편향은 0이다(사전분포의 중심이 $0.5$이고 실제 $\theta$도 그 값이다). $\mathrm{Var}(\hat\theta_B) \approx 0.0144$이고 MLE는 $\mathrm{Var}(\hat p) = 0.025$이다. $\theta = 0.5$에서 베이즈 추정량의 평균제곱오차가 더 작다. 사전분포 쪽으로의 축소가 다른 곳에서의 편향을 대가로 분산을 줄인다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 $\mathrm{Beta}(\alpha, \beta)$ 사전분포를 쓴 $X \sim \mathrm{Binomial}(n, p)$에 대해 **MAP 추정량을 유도하라.**
+
+</div>
 
 ??? success "풀이"
     사후분포: $\pi(p \mid x) \propto p^x(1-p)^{n-x} \cdot p^{\alpha-1}(1-p)^{\beta-1} = p^{x+\alpha-1}(1-p)^{n-x+\beta-1}$.
@@ -106,10 +112,12 @@ $\mathrm{Beta}(\alpha, \beta)$ 사전분포를 쓴 $X \sim \mathrm{Binomial}(n, 
 
     MAP 점추정량은 사후평균과 다르다: $\hat p_{\mathrm{Bayes,mean}} = (x + \alpha)/(n + \alpha + \beta)$. 대칭 손실(제곱오차)에는 평균이, 0-1 손실에는 최빈값이 선호된다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 **MAP와 MLE.** MAP가 MLE와 같아지는 때는 언제인가? 같지 않은 때는?
+
+</div>
 
 ??? success "풀이"
     MAP는 $\pi(\theta \mid x) \propto L(\theta) \pi(\theta)$를 최대화하고 MLE는 $L(\theta)$만 최대화한다.
@@ -122,10 +130,12 @@ $\mathrm{Beta}(\alpha, \beta)$ 사전분포를 쓴 $X \sim \mathrm{Binomial}(n, 
 
     **실용적 활용:** $n$이 매우 작거나 관측된 계수가 극단적일 때 약한 정보의 사전분포를 쓴 MAP가 MLE보다 안정적이다. 예를 들어 $n$번 던져 앞면이 $X = 0$번 나왔을 때 $p$의 MLE는 $\hat p = 0$인데(정확히 0일 수는 없다), Beta(1.5, 1.5)를 쓴 MAP는 $\hat p = 0.5/(n + 1)$로 작지만 0이 아니다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 **켤레 사전분포.** 켤레 사전분포가 계산상 편리한 이유는 무엇인가? Beta-Bernoulli 외의 예를 하나 들라.
+
+</div>
 
 ??? success "풀이"
     가능도족 $L(\theta; X)$에 대한 **켤레 사전분포**란 사후분포 $\pi(\theta \mid X)$가 같은 족에 속하게 하는 사전분포 $\pi(\theta)$이다.
@@ -147,10 +157,12 @@ $\mathrm{Beta}(\alpha, \beta)$ 사전분포를 쓴 $X \sim \mathrm{Binomial}(n, 
 
     **현대적 단서:** MCMC와 HMC를 쓸 수 있게 되면서 켤레성은 더 이상 필수가 아니다. 임의의 사전분포와 가능도를 쓰고 사후분포를 수치적으로 표본추출할 수 있다. 켤레성은 교육적으로 다루기 쉽다는 점과 기준선 역할로서 여전히 가치가 있다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.**
 **사후평균과 MAP.** $\pi(\theta \mid x) = \mathrm{Beta}(20, 5)$에 대해 둘을 모두 계산하라. 왜 서로 다를 수 있는가?
+
+</div>
 
 ??? success "풀이"
     $\mathrm{Beta}(\alpha, \beta)$에서:
@@ -168,10 +180,12 @@ $\mathrm{Beta}(\alpha, \beta)$ 사전분포를 쓴 $X \sim \mathrm{Binomial}(n, 
 
     손실함수에 맞추어 점추정량을 고르면 된다. 실무에서는 어떤 점 요약보다 사후 **분포** 자체가 더 많은 정보를 담으므로, 가능하면 사후분포 전체를 보고해야 한다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 6.**
 **비정상 사전분포.** $\int \pi(\theta) d\theta = \infty$인 사전분포(예: $\mathbb{R}$ 위의 $\pi(\mu) = 1$)를 **비정상(improper)**이라 한다. 그래도 타당한 사후분포를 계산할 수 있는가? 언제 그러한가?
+
+</div>
 
 ??? success "풀이"
     그렇다. *사후분포*가 정상(proper)이기만 하면 된다. 조건은 분자 $L(\theta) \pi(\theta)$가 $\theta$에 대해 유한한 적분을 갖는 것이다:

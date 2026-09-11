@@ -183,8 +183,12 @@ Gaussian MLE — $\hat{\mu} = \bar{X}$과 $\hat{\sigma}^2 = \frac{1}{n}\sum(X_i 
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 $N(\mu, \sigma^2)$에 대해 $\hat\mu_{\text{MLE}} = \bar X$와 $\hat\sigma^2_{\text{MLE}} = (1/n)\sum(X_i - \bar X)^2$을 유도하고 2계 조건을 확인하라.
+
+</div>
 
 ??? success "풀이"
     로그가능도: $\ell(\mu, \sigma^2) = -(n/2)\ln(2\pi\sigma^2) - (1/(2\sigma^2))\sum(x_i - \mu)^2$.
@@ -195,10 +199,12 @@ $N(\mu, \sigma^2)$에 대해 $\hat\mu_{\text{MLE}} = \bar X$와 $\hat\sigma^2_{\
 
     **Hessian:** MLE에서 $\partial^2\ell/\partial\mu^2 = -n/\sigma^2 < 0$, $\partial^2\ell/\partial(\sigma^2)^2 = -n/(2\sigma^4) < 0$이고, 혼합편도함수는 기댓값이 0이다. 음정부호이므로 최댓값임이 확인된다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 $N(\mu, \sigma^2)$의 **Fisher 정보행렬.** 비대각 성분이 0임을 보이고 $\bar X$가 CRLB를 정확히 달성함을 확인하라.
+
+</div>
 
 ??? success "풀이"
     $I_{\mu\mu} = n/\sigma^2$, $I_{\sigma^2 \sigma^2} = n/(2\sigma^4)$, $I_{\mu \sigma^2} = \mathbb{E}[-(X-\mu)/\sigma^4] = 0$.
@@ -209,10 +215,12 @@ $N(\mu, \sigma^2)$의 **Fisher 정보행렬.** 비대각 성분이 0임을 보�
 
     $\sigma^2$의 경우: $\mathrm{Var}(\hat\sigma^2_{\text{MLE}}) = 2(n-1)\sigma^4/n^2$, CRLB $= 2\sigma^4/n$. CRLB보다 약간 위이며 점근적으로 효율적이다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 **MLE의 불변성.** (a) $\sigma$, (b) $\mathrm{CV} = \sigma/\mu$, (c) 99번째 백분위수 $\mu + 2.326\sigma$의 MLE를 구하라.
+
+</div>
 
 ??? success "풀이"
     MLE 불변성에 의해 $\widehat{g(\theta)} = g(\hat\theta_{\text{MLE}})$:
@@ -225,10 +233,12 @@ $N(\mu, \sigma^2)$의 **Fisher 정보행렬.** 비대각 성분이 0임을 보�
 
     **주의:** 불변성은 MLE 점추정값은 보존하지만 불편성은 보존하지 않는다. $\hat\sigma$은 편향되어 있으며(오목함수 $\sqrt{\cdot}$에 대한 Jensen 부등식), $c_4$ 상수로 편향을 보정할 수 있다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 **$\mu = 0$이라는 제약 아래의 MLE.** $\mu$가 0임을 알 때 $\hat\sigma^2$을 유도하라. 제약 없는 MLE와 분산을 비교하라.
+
+</div>
 
 ??? success "풀이"
     $\mu = 0$이면 $\hat\sigma^2_0 = (1/n) \sum X_i^2$이다. $\mathbb{E}[\hat\sigma^2_0] = (1/n) \cdot n\sigma^2 = \sigma^2$ — **불편**이다($\mu$를 추정한 것이 아니라 알고 있으므로 Bessel 수정이 필요 없다).
@@ -239,10 +249,12 @@ $N(\mu, \sigma^2)$의 **Fisher 정보행렬.** 비대각 성분이 0임을 보�
 
     제약 있는 추정량은 (자유도가 하나 더 많아) 분산이 약간 크지만 불편이다. $\mu$를 추정하는 "대가"는 자유도 $-1$이다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.**
 **모수적 VaR.** 일별 수익률 252개에서 $\hat\mu = 0.0003$, $\hat\sigma = 0.012$를 얻었다. (a) 1일 99% VaR. (b) 제곱근 규칙에 의한 10일 VaR. (c) 참 초과첨도가 3이라면 정규 VaR는 위험을 과대평가하는가, 과소평가하는가?
+
+</div>
 
 ??? success "풀이"
     (a) $\mathrm{VaR}_{0.99}^{\text{1일}} = -(\hat\mu + z_{0.01} \hat\sigma) = -(0.0003 - 2.326 \cdot 0.012) = 0.0276$ (2.76% 손실).
@@ -251,10 +263,12 @@ $N(\mu, \sigma^2)$의 **Fisher 정보행렬.** 비대각 성분이 0임을 보�
 
     (c) 두꺼운 꼬리(초과첨도 3 > 0)는 참 99번째 백분위수 손실이 정규 예측보다 *크다*는 뜻이다. 정규 VaR는 실제 위험을 **과소평가**한다. 보수적인 실무: 위험관리에는 $t$-분포 기반 VaR나 경험적 분위수를 쓰라.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 6.**
 **몬테카를로 검증.** $N(5, 9)$에서 $n = 20$인 표본 10000개를 모의실험하라. $\mathbb{E}[\hat\mu], \mathbb{E}[\hat\sigma^2_{\text{MLE}}], \mathbb{E}[S^2]$을 확인하라.
+
+</div>
 
 ??? success "풀이"
     ```python

@@ -149,8 +149,12 @@ $$
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 Pareto 분포: $x \ge 1$에서 $f(x; \alpha) = \alpha x^{-(\alpha+1)}$이다. (a) $\hat\alpha_{\text{MLE}}$를 유도하라. (b) $\mathbb{E}[X] = \alpha/(\alpha-1)$을 이용한 적률법. (c) Fisher 정보량과 CRLB. (d) MLE는 효율적인가?
+
+</div>
 
 ??? success "풀이"
     (a) $\ell(\alpha) = n\ln\alpha - (\alpha + 1)\sum \ln x_i$. $\ell'(\alpha) = n/\alpha - \sum\ln x_i = 0 \Rightarrow \hat\alpha_{\text{MLE}} = n/\sum \ln x_i$.
@@ -161,10 +165,12 @@ Pareto 분포: $x \ge 1$에서 $f(x; \alpha) = \alpha x^{-(\alpha+1)}$이다. (a
 
     (d) $Y = \ln X \sim \mathrm{Exp}(\alpha)$이므로 $\sum \ln X_i \sim \mathrm{Gamma}(n, 1/\alpha)$이고 $\hat\alpha_{\text{MLE}} = n/\sum \ln X_i$는 $\mathbb{E}[\hat\alpha_{\text{MLE}}] = n\alpha/(n-1)$을 만족한다(위쪽으로 편향). 편향 보정한 $\tilde\alpha = (n-1)/n \cdot \hat\alpha_{\text{MLE}}$가 점근적으로 CRLB를 달성한다. MLE는 점근적으로 효율적이다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 Poisson$(\lambda)$: $f(x; \lambda) = \lambda^x e^{-\lambda}/x!$. (a) $I(\lambda)$를 계산하라. (b) CRLB. (c) $\bar X$가 효율적임을 보여라. (d) $g(\lambda) = e^{-\lambda}$에 대한 CRLB.
+
+</div>
 
 ??? success "풀이"
     (a) $\ln f = x\ln\lambda - \lambda - \ln x!$. $\partial^2/\partial\lambda^2 = -x/\lambda^2$. $I(\lambda) = \mathbb{E}[X]/\lambda^2 = 1/\lambda$.
@@ -175,10 +181,12 @@ Poisson$(\lambda)$: $f(x; \lambda) = \lambda^x e^{-\lambda}/x!$. (a) $I(\lambda)
 
     (d) 델타 방법에 의한 CRLB: $\mathrm{Var}(\widehat{g}) \ge [g'(\lambda)]^2/(n I(\lambda)) = e^{-2\lambda} \cdot \lambda/n = \lambda e^{-2\lambda}/n$.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 **Fisher 정보량을 정의하고** 두 정의의 동등성 $I(\theta) = \mathbb{E}[(\partial \log f/\partial\theta)^2] = -\mathbb{E}[\partial^2 \log f/\partial\theta^2]$을 증명하라.
+
+</div>
 
 ??? success "풀이"
     **정의 1 (점수의 분산):** $I(\theta) = \mathbb{E}[(\partial \log f/\partial\theta)^2]$.
@@ -195,10 +203,12 @@ Poisson$(\lambda)$: $f(x; \lambda) = \lambda^x e^{-\lambda}/x!$. (a) $I(\lambda)
 
     두 정의는 계산상 서로 바꿔 쓸 수 있으므로, 주어진 가능도에서 더 쉬운 쪽을 택하면 된다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 **Fisher 정보량의 가법성.** i.i.d. 자료에서 $I$가 관측값 하나당 Fisher 정보량일 때 $I_n(\theta) = n I(\theta)$이다. 이를 증명하고 해석하라.
+
+</div>
 
 ??? success "풀이"
     결합 로그가능도: $\log L(\theta) = \sum_i \log f(X_i; \theta)$.
@@ -211,10 +221,12 @@ Poisson$(\lambda)$: $f(x; \lambda) = \lambda^x e^{-\lambda}/x!$. (a) $I(\lambda)
 
     **해석:** 정보는 표본크기에 선형으로 쌓인다. $n$을 두 배로 하면 Fisher 정보량이 두 배가 되고 CRLB가 절반이 되며 MLE의 점근분산이 좁아진다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.**
 **정보량과 재모수화.** 미분가능한 $g$에 대해 $\eta = g(\theta)$일 때 $I(\eta) = I(\theta)/[g'(\theta)]^2$임을 보여라.
+
+</div>
 
 ??? success "풀이"
     연쇄법칙에 의해 $\partial \log f/\partial\eta = (\partial \log f/\partial\theta) \cdot (\partial\theta/\partial\eta) = (\partial \log f/\partial\theta)/g'(\theta)$이다.
@@ -225,10 +237,12 @@ Poisson$(\lambda)$: $f(x; \lambda) = \lambda^x e^{-\lambda}/x!$. (a) $I(\lambda)
 
     **함의:** Fisher 정보량은 **모수화에 의존한다**. 재모수화하면 정보량의 크기가 달라진다. 이것이 Jeffreys 사전분포 $\pi(\theta) \propto \sqrt{I(\theta)}$가 매력적인 이유 중 하나이다. (평평한 사전분포와 달리) 재모수화에 불변이기 때문이다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 6.**
 **관측 정보량과 기대 정보량.** 둘을 정의하라. 언제 같고 언제 다른가?
+
+</div>
 
 ??? success "풀이"
     **기대 (Fisher) 정보량:** $I(\theta) = -\mathbb{E}_\theta[\partial^2 \log f/\partial\theta^2]$. 참 분포 아래에서 기댓값을 취한다.

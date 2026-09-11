@@ -122,8 +122,12 @@ $$\hat{\beta}_{\text{PCR}} = V_M \hat{\gamma}$$
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 "PCR은 능형의 축소인자를 계단함수로 근사한 것"이라는 관점을 확인하라. 두 방법의 SVD 축소인자를 비교하라.
+
+</div>
 
 ??? success "풀이"
     SVD $\mathbf{X} = \mathbf{U}\mathbf{D}\mathbf{V}^\top$에서 두 방법의 해를 성분별로 쓰면
@@ -155,10 +159,12 @@ $$\hat{\beta}_{\text{PCR}} = V_M \hat{\gamma}$$
 
     **일반적으로는 능형이 더 안전하다.** 성분 경계에서 갑자기 0으로 떨어지지 않으므로, $M$을 하나 잘못 고르는 데서 오는 손해가 $\lambda$를 조금 잘못 고르는 손해보다 크기 때문이다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 PCA를 전체 자료에 적합한 뒤 교차검증하는 것과, 겹 안에서 적합하는 것의 차이를 확인하라.
+
+</div>
 
 ??? success "풀이"
     ```python

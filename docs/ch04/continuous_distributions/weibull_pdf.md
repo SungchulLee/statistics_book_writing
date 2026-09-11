@@ -88,8 +88,12 @@ plt.show()
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 $k = 1$인 Weibull 분포가 비율 $1/\lambda$인 Exponential 분포로 환원됨을 보여라.
+
+</div>
 
 ??? success "풀이"
     $k = 1$로 두면:
@@ -100,10 +104,12 @@ $k = 1$인 Weibull 분포가 비율 $1/\lambda$인 Exponential 분포로 환원�
 
     이는 평균이 $\lambda$인 $\text{Exponential}(\text{rate} = 1/\lambda)$의 PDF이다. 위험률은 $h(x) = 1/\lambda$로 상수가 되며, 이는 무기억성과 일관된다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 Weibull 분포의 CDF와 중앙값을 유도하라.
+
+</div>
 
 ??? success "풀이"
     **CDF:**
@@ -118,10 +124,12 @@ Weibull 분포의 CDF와 중앙값을 유도하라.
     \exp\!\left(-\left(\frac{m}{\lambda}\right)^k\right) = 0.5 \implies \left(\frac{m}{\lambda}\right)^k = \ln 2 \implies m = \lambda(\ln 2)^{1/k}
     $$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 어떤 부품의 수명이 $k = 2$, $\lambda = 1000$시간인 Weibull 분포를 따른다. 500시간을 넘겨 생존할 확률은? 1500시간은?
+
+</div>
 
 ??? success "풀이"
     $$
@@ -134,10 +142,12 @@ Weibull 분포의 CDF와 중앙값을 유도하라.
 
     이 부품이 500시간을 견딜 확률은 77.9%이지만 1500시간을 견딜 확률은 10.5%에 불과하다. 위험률이 증가하므로($k = 2 > 1$) 부품이 나이를 먹을수록 고장이 더 잘 난다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 더 유연한 분포들이 있는데도 Weibull 분포가 신뢰성 공학에서 널리 쓰이는 이유를 설명하라.
+
+</div>
 
 ??? success "풀이"
     Weibull 분포가 널리 쓰이는 데에는 몇 가지 실용적인 장점이 있다:

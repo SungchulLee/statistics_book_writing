@@ -91,10 +91,14 @@ $$
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 교차엔트로피 손실의 기울기가
 $\nabla_{\boldsymbol{\theta}}\,\ell = A^\top(\boldsymbol{\sigma} - \mathbf{y})$
 임을 유도하라. 여기서 $\boldsymbol{\sigma} = (\sigma^{(1)}, \dots, \sigma^{(n)})^\top$이다.
+
+</div>
 
 ??? success "풀이"
 
@@ -126,11 +130,13 @@ $\nabla_{\boldsymbol{\theta}}\,\ell = A^\top(\boldsymbol{\sigma} - \mathbf{y})$
     인상적이다. 차이는 $\boldsymbol{\sigma}$가 $\boldsymbol{\theta}$의 비선형함수라는 것이며,
     바로 그 때문에 닫힌 형태의 해가 없다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 $\ell$의 헤세행렬이 $H = A^\top W A$($W = \operatorname{diag}(\sigma^{(i)}(1-\sigma^{(i)}))$)
 임을 보이고, 이로부터 $\ell$이 볼록임을 결론지어라. 언제 강볼록이 되는가?
+
+</div>
 
 ??? success "풀이"
 
@@ -151,11 +157,13 @@ $\ell$의 헤세행렬이 $H = A^\top W A$($W = \operatorname{diag}(\sigma^{(i)}
     이야기다. 자료가 완전히 분리 가능하면 $\|\boldsymbol{\theta}\|\to\infty$에 따라
     $w_i \to 0$이 되어 $H \to 0$이고, 하한은 도달되지 않는다(연습문제 5). $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 절편만 있는 모형($z^{(i)} = \theta_0$)을 생각하자. MLE가 $\hat\sigma = \bar{y}$임을 보여라.
 $n = 10$이고 그중 3개가 1일 때 $\hat\theta_0$과 최소 교차엔트로피 손실을 계산하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -185,11 +193,13 @@ $n = 10$이고 그중 3개가 1일 때 $\hat\theta_0$과 최소 교차엔트로�
     $\ell_{\min} = n\,H(\bar{y})$이다. 즉 설명변수가 없는 모형의 손실은 결과 자체의 엔트로피이며,
     이것이 모든 로지스틱 모형이 넘어서야 할 기준선(영이탈도)이다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 위의 $\varepsilon$ 보정이 왜 편향을 만드는지 수치로 보이고, softplus 방식이 왜 더 나은지
 설명하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -217,12 +227,14 @@ $n = 10$이고 그중 3개가 1일 때 $\hat\theta_0$과 최소 교차엔트로�
     (`np.logaddexp(0, 800)`). 근사가 전혀 개입하지 않으므로 목적함수가 왜곡되지 않는다.
     $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.**
 자료가 **완전히 분리 가능**하다고 하자. 즉 모든 $i$에 대해
 $y^{(i)}(2 A[i,:]\boldsymbol{\theta}^* ) > 0$이 되는 $\boldsymbol{\theta}^*$가 존재한다고 하자
 (양성과 음성을 오차 없이 가르는 초평면이 있다는 뜻이다). 이때 MLE가 존재하지 않음을 보여라.
+
+</div>
 
 ??? success "풀이"
 

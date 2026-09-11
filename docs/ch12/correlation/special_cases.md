@@ -185,8 +185,12 @@ Phi coefficient  = 0.3015
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 성별(0 = 여성, 1 = 남성)과 시험 점수 사이의 점이연 상관을 계산하라. 자료는 여성 $\{78, 82, 85, 88\}$, 남성 $\{90, 92, 88, 95\}$이다.
+
+</div>
 
 ??? success "풀이"
     $X$ = 성별(0/1), $Y$ = 점수라 하자. 여성 평균 $\bar{Y}_0 = 83.25$, 남성 평균 $\bar{Y}_1 = 91.25$, 전체 평균 $\bar{Y} = 87.25$, $n_0 = n_1 = 4$, $n = 8$이다.
@@ -209,10 +213,12 @@ Phi coefficient  = 0.3015
 
     `scipy.stats.pointbiserialr`가 주는 값과 일치한다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 점이연 상관이 이진 변수와 연속형 변수 사이의 Pearson 상관과 동등함을 보여라.
+
+</div>
 
 ??? success "풀이"
     $X \in \{0, 1\}$이고 $P(X = 1) = p = n_1/n$이라 하자. Pearson 상관은
@@ -229,7 +235,7 @@ Phi coefficient  = 0.3015
 
     가 된다. $\sum_{i \in \text{group 1}}(Y_i - \bar{Y}) = n_1(\bar{Y}_1 - \bar{Y})$이고 집단 0도 마찬가지이므로 이는 $n \cdot p(1-p)(\bar{Y}_1 - \bar{Y}_0)$으로 단순해진다. 분모에는 $\sqrt{n \cdot p(1-p) \cdot \sum(Y_i - \bar{Y})^2}$이 들어가고, 그 비가 점이연 공식을 준다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 다음 $2 \times 2$ 표에 대해 파이 계수를 계산하라:
@@ -238,6 +244,8 @@ Phi coefficient  = 0.3015
 |---|---|---|
 | 공부함 | 40 | 10 |
 | 공부 안 함 | 20 | 30 |
+
+</div>
 
 ??? success "풀이"
     칸이 $a, b, c, d$인 $2 \times 2$ 표에서 $a = 40, b = 10, c = 20, d = 30$이다.
@@ -252,10 +260,12 @@ Phi coefficient  = 0.3015
 
     파이 계수 0.41은 공부와 합격 사이에 중간 정도의 양의 연관이 있음을 나타낸다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 $2 \times 2$ 표에서 파이 계수와 카이제곱 검정통계량의 관계를 설명하라. 하나로부터 다른 하나를 어떻게 얻는가?
+
+</div>
 
 ??? success "풀이"
     파이 계수와 카이제곱 통계량은 직접 관련된다:

@@ -84,8 +84,12 @@ $$
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 이 페이지의 목적함수와 [정식화 페이지](formulation.md)의 목적함수가 어떻게 다른지 비교하고, 배율의 차이가 실무에서 왜 문제가 되는지 설명하라.
+
+</div>
 
 ??? success "풀이"
     두 정식화를 나란히 놓는다.
@@ -108,10 +112,12 @@ $$
 
     **실무 규칙:** $\lambda$의 절대값을 문헌에서 가져오지 말고, 언제나 $\lambda_{\max}$를 기준으로 한 **상대 격자**($\lambda_{\max}$의 $10^{-3}$배에서 $1$배까지)를 쓰고 교차검증으로 고른다. 그러면 배율 규약이 무엇이든 자동으로 흡수된다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 $\lambda_1, \lambda_2$ 매개화와 $\lambda, \alpha$ 매개화가 동등함을 보이고, 후자가 실무에서 선호되는 이유를 설명하라.
+
+</div>
 
 ??? success "풀이"
     $\lambda_1 = \lambda\alpha$, $\lambda_2 = \lambda(1-\alpha)$로 두면 두 벌점이 일치한다. 역방향은

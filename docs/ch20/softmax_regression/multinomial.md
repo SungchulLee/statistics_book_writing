@@ -79,9 +79,13 @@ $$
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 $C = 2$인 소프트맥스 회귀가 이항 로지스틱 회귀와 동등함을 보이고, 로지스틱 모형의 계수
 $\boldsymbol\theta$가 소프트맥스의 $\mathbf{w}_0$, $\mathbf{w}_1$과 어떤 관계인지 밝혀라.
+
+</div>
 
 ??? success "풀이"
 
@@ -111,11 +115,13 @@ $\boldsymbol\theta$가 소프트맥스의 $\mathbf{w}_0$, $\mathbf{w}_1$과 어�
     변하지 않으므로 예측이 같기 때문이다. 이것이 소프트맥스 모수화의 중복이며, 일반적인 $C$에
     대해서는 자유도가 $C$가 아니라 $C-1$임을 뜻한다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 MNIST($p = 784$, $C = 10$)에서 단층 소프트맥스 모형과 은닉 노드 100개짜리 이층 모형의 모수
 개수를 각각 세어라. 두 모형이 실제로 갖는 자유도는 얼마인가?
+
+</div>
 
 ??? success "풀이"
 
@@ -147,12 +153,14 @@ MNIST($p = 784$, $C = 10$)에서 단층 소프트맥스 모형과 은닉 노드 
     MNIST의 훈련표본이 60,000개이므로, 단층 모형은 모수당 관측치가 약 8개인 반면 이층 모형은
     1개도 되지 않는다. 이것이 이층 모형에 정칙화나 조기 종료가 특히 필요한 이유다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 단층 소프트맥스 모형에서 교차엔트로피 손실의 $\mathbf{W}$에 대한 기울기가
 $\nabla_{\mathbf{W}}\mathcal{L} = \mathbf{X}^T(\hat{\mathbf{Y}} - \mathbf{Y})$
 임을 유도하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -196,11 +204,13 @@ $\nabla_{\mathbf{W}}\mathcal{L} = \mathbf{X}^T(\hat{\mathbf{Y}} - \mathbf{Y})$
     귀결이며, 19장에서 로지스틱 회귀의 기울기가 $A^T(\boldsymbol\sigma - \mathbf{y})$였던
     것과 같은 이유다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 은닉층의 활성함수를 제거하면(즉 $\mathbf{H} = \mathbf{Z}^h$로 두면) 이층 모형이 단층 모형과
 동등해짐을 보여라. 이것이 비선형 활성함수의 필요성에 대해 무엇을 말해 주는가?
+
+</div>
 
 ??? success "풀이"
 
@@ -224,11 +234,13 @@ $\nabla_{\mathbf{W}}\mathcal{L} = \mathbf{X}^T(\hat{\mathbf{Y}} - \mathbf{Y})$
     오히려 단층 모형보다 **제약이 생긴다.** 이 경우 활성함수 없는 이층 모형은 저계수
     제약을 건 소프트맥스 회귀와 같다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.**
 MNIST 화소값을 $[0, 255]$가 아니라 $[0,1]$로 척도화하는 이유는 무엇인가? 척도화하지 않으면
 학습에 무슨 일이 일어나는가?
+
+</div>
 
 ??? success "풀이"
 

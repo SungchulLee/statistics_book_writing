@@ -73,8 +73,12 @@ $$
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 scikit-learn의 `alpha`와 `l1_ratio`가 이 페이지의 $\lambda$, $\alpha$와 어떻게 대응하는지 확인하고, `l1_ratio`를 0에 보내면 정말 능형회귀와 일치하는지 검증하라.
+
+</div>
 
 ??? success "풀이"
     scikit-learn의 `ElasticNet` 목적함수는
@@ -117,10 +121,12 @@ scikit-learn의 `alpha`와 `l1_ratio`가 이 페이지의 $\lambda$, $\alpha$와
 
     실무적 함의: **`Ridge(alpha=1)`과 `Lasso(alpha=1)`의 벌점 강도는 전혀 다르다.** 두 방법을 같은 격자에서 비교하려면 배율 $n$을 반드시 고려해야 한다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 $\alpha < 1$이면 $p > n$에서도 해가 유일하다는 강볼록성 주장이 실제 선택 개수에 어떻게 나타나는지 확인하라.
+
+</div>
 
 ??? success "풀이"
     $n = 40$, $p = 200$, 참 변수 60개인 자료에서 세 방법을 비교한다.

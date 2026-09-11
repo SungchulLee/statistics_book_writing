@@ -163,8 +163,12 @@ $$
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 $\mathbf{A} = \begin{pmatrix} 3 & 1 \\ 1 & 3 \end{pmatrix}$이라 하자. $\operatorname{tr}(\mathbf{A})$를 계산하고 그것이 고윳값의 합과 같음을 확인하라.
+
+</div>
 
 ??? success "풀이"
     대각합은 $\operatorname{tr}(\mathbf{A}) = 3 + 3 = 6$이다.
@@ -173,10 +177,12 @@ $\mathbf{A} = \begin{pmatrix} 3 & 1 \\ 1 & 3 \end{pmatrix}$이라 하자. $\oper
 
     고윳값의 합: $4 + 2 = 6 = \operatorname{tr}(\mathbf{A})$. 또한 $\det(\mathbf{A}) = 9 - 1 = 8 = 4 \times 2 = \lambda_1 \lambda_2$이다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 순환 성질을 이용해 임의의 행렬 $\mathbf{A}$($m \times n$)와 $\mathbf{B}$($n \times m$)에 대해 $\operatorname{tr}(\mathbf{A}\mathbf{B}) = \operatorname{tr}(\mathbf{B}\mathbf{A})$임을 증명하라.
+
+</div>
 
 ??? success "풀이"
     $\mathbf{A}\mathbf{B}$의 $(i,i)$ 성분은 $\sum_{k=1}^n a_{ik} b_{ki}$이므로
@@ -199,10 +205,12 @@ $\mathbf{A} = \begin{pmatrix} 3 & 1 \\ 1 & 3 \end{pmatrix}$이라 하자. $\oper
 
     이다. 참고로 $\mathbf{A}\mathbf{B}$는 $m \times m$이고 $\mathbf{B}\mathbf{A}$는 $n \times n$이다. 크기는 다를 수 있지만 대각합은 언제나 같다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 순환 성질을 이용해, 모자 행렬 $\mathbf{H} = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T$의 대각합이 (절편을 포함한) 예측변수의 개수 $p$와 같음을 보여라.
+
+</div>
 
 ??? success "풀이"
     인자를 묶어 순환 성질을 적용한다.
@@ -213,10 +221,12 @@ $\mathbf{A} = \begin{pmatrix} 3 & 1 \\ 1 & 3 \end{pmatrix}$이라 하자. $\oper
 
     순환 재배열이 $\mathbf{X}^T$를 오른쪽에서 왼쪽으로 옮겨 $p \times p$ 단위행렬을 만들어낸다. 이 결과는 $n$이나 $\mathbf{X}$의 구체적인 성분과 무관하게 성립한다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 $\mathbf{z} \sim N(\mathbf{0}, \mathbf{I}_n)$이고 $\mathbf{A}$가 계수 $r$인 대칭 멱등행렬이라 하자. 항등식 $E[\mathbf{z}^T\mathbf{A}\mathbf{z}] = \operatorname{tr}(\mathbf{A})$를 이용해 $E[\mathbf{z}^T\mathbf{A}\mathbf{z}] = r$임을 보여라.
+
+</div>
 
 ??? success "풀이"
     $\mathbf{z} \sim N(\mathbf{0}, \mathbf{I}_n)$이므로 $\boldsymbol{\mu} = \mathbf{0}$이고, 항등식에 의해
@@ -233,10 +243,12 @@ $\mathbf{z} \sim N(\mathbf{0}, \mathbf{I}_n)$이고 $\mathbf{A}$가 계수 $r$�
 
     이다. 이 결과가 $\text{SSE}/\sigma^2 \sim \chi^2_{n-p}$인 이유를 설명해 준다. 잔차생성행렬 $\mathbf{M} = \mathbf{I} - \mathbf{H}$의 계수가 $n - p$이므로 $E[\text{SSE}/\sigma^2] = \operatorname{tr}(\mathbf{M}) = n - p$이고, 이는 $\chi^2_{n-p}$ 분포의 평균과 일치한다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.**
 대각합이 선형임을 보여라: $\operatorname{tr}(a\mathbf{A} + b\mathbf{B}) = a\operatorname{tr}(\mathbf{A}) + b\operatorname{tr}(\mathbf{B})$. 그러나 곱에 대해서는 $\operatorname{tr}(\mathbf{A}\mathbf{B}) \neq \operatorname{tr}(\mathbf{A})\operatorname{tr}(\mathbf{B})$임을 반례로 보여라.
+
+</div>
 
 ??? success "풀이"
     **선형성.** 대각 성분끼리의 덧셈이므로
@@ -272,10 +284,12 @@ $\mathbf{z} \sim N(\mathbf{0}, \mathbf{I}_n)$이고 $\mathbf{A}$가 계수 $r$�
 
     대각합은 **덧셈에 대해서는** 잘 행동하지만 곱에 대해서는 그렇지 않다. 곱에서 성립하는 것은 순환 성질 $\operatorname{tr}(\mathbf{A}\mathbf{B}) = \operatorname{tr}(\mathbf{B}\mathbf{A})$뿐이다. 참고로 행렬식은 정반대다. $\det(\mathbf{A}\mathbf{B}) = \det(\mathbf{A})\det(\mathbf{B})$는 성립하지만 $\det(\mathbf{A}+\mathbf{B})$에는 간단한 공식이 없다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 6.**
 $\operatorname{tr}(\mathbf{A}^T\mathbf{A}) = \sum_{i,j} a_{ij}^2 = \lVert\mathbf{A}\rVert_F^2$임을 보이고, 이것이 특이값의 제곱합과 같음을 확인하라.
+
+</div>
 
 ??? success "풀이"
     $\mathbf{A}^T\mathbf{A}$의 $(j,j)$ 성분은 $\sum_i a_{ij}^2$, 곧 $j$번째 열의 제곱합이다. 대각합은 이를 모든 열에 대해 더한 것이므로
@@ -314,10 +328,12 @@ $\operatorname{tr}(\mathbf{A}^T\mathbf{A}) = \sum_{i,j} a_{ij}^2 = \lVert\mathbf
 
     **통계적 의미.** $\mathbf{A}$가 중심화된 자료행렬이면 $\operatorname{tr}(\mathbf{A}^T\mathbf{A})$는 총제곱합이고, 특이값 제곱은 각 주성분이 설명하는 몫이다. "첫 $k$개 성분이 설명하는 비율"이 $\sum_{i \le k}\sigma_i^2 / \sum_i \sigma_i^2$인 것이 이 등식에서 나온다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 7.**
 $E[\mathbf{z}] = \boldsymbol{\mu}$, $\operatorname{Var}(\mathbf{z}) = \boldsymbol{\Sigma}$인 일반적인 경우에 $E[\mathbf{z}^T\mathbf{A}\mathbf{z}] = \operatorname{tr}(\mathbf{A}\boldsymbol{\Sigma}) + \boldsymbol{\mu}^T\mathbf{A}\boldsymbol{\mu}$임을 유도하라.
+
+</div>
 
 ??? success "풀이"
     스칼라는 자기 자신의 대각합과 같다는 점($\mathbf{z}^T\mathbf{A}\mathbf{z} = \operatorname{tr}(\mathbf{z}^T\mathbf{A}\mathbf{z})$)에서 출발해 순환 성질을 쓴다.
@@ -344,10 +360,12 @@ $E[\mathbf{z}] = \boldsymbol{\mu}$, $\operatorname{Var}(\mathbf{z}) = \boldsymbo
 
     $\boldsymbol{\Sigma} = \mathbf{I}$로 두면 본문의 공식이 된다. **이 유도에서 정규성은 전혀 쓰이지 않았다.** 평균과 공분산만 있으면 성립한다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 8.**
 $\mathbf{Y} = \mathbf{A}\mathbf{X}$일 때 $\operatorname{tr}(\operatorname{Var}(\mathbf{Y}))$를 $\mathbf{A}$와 $\boldsymbol{\Sigma} = \operatorname{Var}(\mathbf{X})$로 나타내라. $\mathbf{A}$가 직교행렬이면 어떻게 되는가?
+
+</div>
 
 ??? success "풀이"
     $\operatorname{Var}(\mathbf{Y}) = \mathbf{A}\boldsymbol{\Sigma}\mathbf{A}^T$이므로 순환 성질에 의해
@@ -388,10 +406,12 @@ $\mathbf{Y} = \mathbf{A}\mathbf{X}$일 때 $\operatorname{tr}(\operatorname{Var}
 
     **회전은 총분산을 보존하지만 척도변환은 그렇지 않다.** PCA가 회전만 하는 이유가 여기에 있다. 분산의 총량은 그대로 두고 축 사이의 배분만 바꾼다. 반대로 변수를 표준화하는 것은 척도변환이므로 총분산이 바뀐다(표준화하면 $\operatorname{tr} = p$가 된다). 공분산행렬로 PCA를 하는 것과 상관행렬로 하는 것이 다른 결과를 주는 이유다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 9.**
 실행렬의 고윳값은 복소수일 수 있다. 그런데도 $\operatorname{tr}(\mathbf{A}) = \sum_i \lambda_i$와 $\det(\mathbf{A}) = \prod_i \lambda_i$가 실수로 나오는 이유를 설명하고, 회전행렬로 확인하라.
+
+</div>
 
 ??? success "풀이"
     실계수 특성다항식의 복소근은 **켤레쌍으로 나타난다.** $\lambda = a + bi$가 근이면 $\bar{\lambda} = a - bi$도 근이다. 켤레쌍끼리 더하고 곱하면
@@ -426,10 +446,12 @@ $\mathbf{Y} = \mathbf{A}\mathbf{X}$일 때 $\operatorname{tr}(\operatorname{Var}
 
     **대칭행렬에서는 이런 일이 없다.** 스펙트럼 정리가 고윳값이 모두 실수임을 보장한다. 통계에서 다루는 공분산행렬과 사영행렬이 모두 대칭이므로, 실무에서 복소 고윳값을 만날 일은 드물다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 10.**
 능형회귀의 모자 행렬은 $\mathbf{H}_\lambda = \mathbf{X}(\mathbf{X}^T\mathbf{X} + \lambda\mathbf{I})^{-1}\mathbf{X}^T$이다. $\operatorname{tr}(\mathbf{H}_\lambda) = \sum_j \frac{d_j^2}{d_j^2 + \lambda}$($d_j$는 $\mathbf{X}$의 특이값)임을 보이고, 이 값이 $\lambda$에 따라 어떻게 변하는지 확인하라.
+
+</div>
 
 ??? success "풀이"
     특이값분해 $\mathbf{X} = \mathbf{U}\mathbf{D}\mathbf{V}^T$를 넣으면 $\mathbf{X}^T\mathbf{X} = \mathbf{V}\mathbf{D}^2\mathbf{V}^T$이고 $\mathbf{V}^T\mathbf{V} = \mathbf{I}$이므로

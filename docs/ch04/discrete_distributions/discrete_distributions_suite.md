@@ -172,8 +172,12 @@ plt.show()
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 $np = \lambda$를 고정한 채 $n \to \infty$, $p \to 0$일 때 Poisson 분포가 Binomial 분포의 극한임을 보여라.
+
+</div>
 
 ??? success "풀이"
     $p = \lambda/n$인 $P(X = k) = \binom{n}{k}p^k(1-p)^{n-k}$에서 출발한다:
@@ -190,10 +194,12 @@ $np = \lambda$를 고정한 채 $n \to \infty$, $p \to 0$일 때 Poisson 분포�
 
     이것이 Poisson PMF이다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 품질 검사원이 100개(불량 20개)로 이루어진 한 배치에서 5개를 뽑는다. Hypergeometric 분포(정확)와 Binomial 분포(근사)로 $P(X = 2)$를 각각 구해 비교하라. Binomial 근사는 언제 좋은가?
+
+</div>
 
 ??? success "풀이"
     **Hypergeometric:** $P(X=2) = \binom{20}{2}\binom{80}{3}/\binom{100}{5} \approx 0.2075$.
@@ -202,10 +208,12 @@ $np = \lambda$를 고정한 채 $n \to \infty$, $p \to 0$일 때 Poisson 분포�
 
     $n/N = 5/100 = 5\%$로 작기 때문에 근사가 가깝다. 경험 법칙으로, 표본이 모집단의 5–10%보다 작으면 Binomial 분포가 Hypergeometric 분포를 잘 근사한다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 Geometric 분포가 무기억성을 가짐을 증명하라: $P(X > s + t \mid X > s) = P(X > t)$.
+
+</div>
 
 ??? success "풀이"
     여기서 $X$는 첫 성공 이전의 실패 횟수를 센다(0부터 시작). 그러면 $P(X \ge k) = (1-p)^k$이다. 따라서:
@@ -216,10 +224,12 @@ Geometric 분포가 무기억성을 가짐을 증명하라: $P(X > s + t \mid X 
 
     $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 Hypergeometric 분포의 기댓값은 $E[X] = nK/N$이다. 이 결과를 유도하라.
+
+</div>
 
 ??? success "풀이"
     $i$번째로 뽑은 물건이 불량이면 $X_i = 1$로 두고 $X = \sum_{i=1}^n X_i$로 쓰자. 대칭성에 의해 각 $i$에 대해 $P(X_i = 1) = K/N$이다(뽑힌 물건이 $N$개 중 어느 것일 확률이 모두 같다). 기댓값의 선형성에 의해:

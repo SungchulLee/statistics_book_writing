@@ -58,8 +58,12 @@ plt.show()
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 로지스틱 CDF $F(x) = 1/(1 + e^{-(x-\mu)/s})$가 로지스틱 PDF의 부정적분임을 보여라.
+
+</div>
 
 ??? success "풀이"
     $F(x) = (1 + e^{-(x-\mu)/s})^{-1}$을 미분하면:
@@ -70,26 +74,32 @@ plt.show()
 
     따라서 $F'(x) = f(x)$가 확인된다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 로지스틱 분산 $s^2\pi^2/3$을 계산하고, 같은 척도 모수 $\sigma = s$를 갖는 정규분포의 분산보다 큼을 확인하라.
 
+</div>
+
 ??? success "풀이"
     척도가 $s$인 Logistic 분포의 분산은 $s^2\pi^2/3 \approx 3.29 s^2$이다. $\sigma = s$인 정규분포의 분산은 $s^2$이다. 따라서 로지스틱 분산이 $\pi^2/3 \approx 3.29$배 크며, 이는 꼬리가 더 두껍다는 사실과 일관된다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 Logistic 분포는 로지스틱 회귀에서 핵심적인 역할을 한다. CDF $F(x) = 1/(1 + e^{-x})$가 선형 예측자를 확률로 옮기는 연결함수 역할을 어떻게 하는지 설명하라.
 
+</div>
+
 ??? success "풀이"
     로지스틱 회귀 모형은 $P(Y = 1 \mid \mathbf{x}) = \sigma(\mathbf{x}^\top\boldsymbol{\beta})$로 설정되며, $\sigma(z) = 1/(1+e^{-z})$가 로지스틱 CDF이다. 선형 예측자 $z = \mathbf{x}^\top\boldsymbol{\beta}$는 $(-\infty, \infty)$의 어떤 값이든 취할 수 있고, 로지스틱 함수가 이를 $(0, 1)$로 옮겨 유효한 확률을 만들어 준다. 그 역함수 $z = \ln(p/(1-p))$(로그 오즈 또는 로짓)가 확률 척도를 선형 척도로 이어 준다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 표준 Logistic 분포($\mu=0, s=1$)와 분산을 맞춘 정규분포에서 꼬리 확률 $P(|X| > 3)$을 비교하라. 어느 쪽의 꼬리 확률이 더 큰가?
+
+</div>
 
 ??? success "풀이"
     **Logistic:** $P(|X| > 3) = 2 \cdot S(3) = 2/(1 + e^3) \approx 2 \times 0.0474 = 0.0949$.

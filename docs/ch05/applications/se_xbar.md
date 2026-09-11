@@ -116,7 +116,11 @@ $n = 5$인 Uniform(0, 1)에 대해:
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.** 어떤 모집단의 $\sigma = 10$이다. $n = 25$, $n = 100$, $n = 400$에서 $\bar{X}$의 표준오차를 계산하고 "네 배 규칙"을 확인하라.
+
+</div>
 
 ??? success "풀이"
     $$
@@ -133,9 +137,11 @@ $n = 5$인 Uniform(0, 1)에 대해:
 
     $n$이 4배가 될 때마다 표준오차가 절반이 된다: $2.0 \to 1.0 \to 0.5$. 네 배 규칙이 확인된다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.** 어떤 연구자가 $\bar{X}$의 표준오차를 최대 0.5로 만들고자 한다. 모표준편차는 $\sigma \approx 8$로 추정된다. 최소 표본크기는 얼마인가?
+
+</div>
 
 ??? success "풀이"
     다음이 필요하다:
@@ -146,9 +152,11 @@ $n = 5$인 Uniform(0, 1)에 대해:
 
     최소 표본크기 $n = 256$이 필요하다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.** $n \ge 1$에서 $\text{SE}(\bar{X})$가 $n$의 감소함수이자 볼록함수임을 증명하라. 볼록성은 표본크기를 늘릴 때의 한계 이득에 관해 무엇을 함의하는가?
+
+</div>
 
 ??? success "풀이"
     $n > 0$에서 $f(n) = \sigma / \sqrt{n} = \sigma \cdot n^{-1/2}$이라 하자.
@@ -169,9 +177,11 @@ $n = 5$인 Uniform(0, 1)에 대해:
 
     따라서 $f$는 순볼록이다. 볼록성은 $n$이 커질수록 표준오차의 감소 속도가 느려짐을 뜻한다. 실용적으로 말하면, 관측값을 하나 더 얻을 때마다 표준오차가 줄어드는 폭이 직전보다 작아진다. 표본크기를 늘리는 데에는 한계 수확 체감이 있다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.** 추정 표준오차 $\widehat{\text{SE}} = s / \sqrt{n}$를 사용할 때, 모집단이 정규이면 $(\bar{X} - \mu) / \widehat{\text{SE}}$가 자유도 $n - 1$인 $t$ 분포를 따름을 보여라.
+
+</div>
 
 ??? success "풀이"
     $X_1, \ldots, X_n \overset{\text{iid}}{\sim} N(\mu, \sigma^2)$에 대해 다음을 떠올리자:
@@ -188,9 +198,11 @@ $n = 5$인 Uniform(0, 1)에 대해:
 
     $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.** 모의실험을 Uniform(0, 1) 대신 Exponential(1) 모집단으로 바꾸어라. 이론적 표준오차 $(\sigma/\sqrt{n} = 1/\sqrt{5})$와 경험적 표준오차를 비교하라. 공식 $\text{SE} = \sigma/\sqrt{n}$은 정규가 아닌 모집단에서도 여전히 타당한가?
+
+</div>
 
 ??? success "풀이"
     ```python

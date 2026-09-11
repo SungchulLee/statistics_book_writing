@@ -68,8 +68,12 @@ $$
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 Exponential 분포의 무기억성을 증명하라.
+
+</div>
 
 ??? success "풀이"
     생존함수는 $S(x) = e^{-\lambda x}$이다. 그러면:
@@ -80,10 +84,12 @@ Exponential 분포의 무기억성을 증명하라.
 
     $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 고객 도착이 시간당 $\lambda = 3$인 Poisson 과정을 따를 때, 다음 고객을 30분 넘게 기다릴 확률은 얼마인가?
+
+</div>
 
 ??? success "풀이"
     도착 간 시간은 (시간 단위로) $X \sim \text{Exp}(\lambda = 3)$이다. 30분은 $t = 0.5$시간이다.
@@ -92,20 +98,24 @@ Exponential 분포의 무기억성을 증명하라.
     P(X > 0.5) = e^{-3 \times 0.5} = e^{-1.5} \approx 0.2231
     $$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 Exponential 분포가 무기억성을 갖는 유일한 연속분포임을 보여라.
+
+</div>
 
 ??? success "풀이"
     모든 $s, t \ge 0$에 대해 $P(X > s + t) = P(X > s) \cdot P(X > t)$라 하자. $g(t) = P(X > t)$로 두면 $g(0) = 1$이고 $g$는 감소하며 $g(s+t) = g(s)g(t)$이다.
 
     $g(0) = 1$인 함수방정식 $g(s+t) = g(s)g(t)$의 연속인 해는 어떤 $\lambda > 0$에 대한 $g(t) = e^{-\lambda t}$뿐이다. 이는 Exponential 분포의 생존함수이다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 PDF로부터 Exponential 분포의 CDF, 중앙값, 평균을 유도하라.
+
+</div>
 
 ??? success "풀이"
     **CDF:**

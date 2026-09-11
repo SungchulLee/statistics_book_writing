@@ -229,8 +229,12 @@ Pipeline R-squared (test): 0.9858
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 scikit-learn으로 인공자료에 선형회귀를 적합하고, 예측을 계산하며, $R^2$ 점수를 출력하는 Python 코드를 작성하라.
+
+</div>
 
 ??? success "풀이"
     ```python
@@ -262,10 +266,12 @@ scikit-learn으로 인공자료에 선형회귀를 적합하고, 예측을 계�
 
     참 계수가 $2, -1.5, 0.4$인데 추정값이 $2.012, -1.519, 0.442$로 잘 맞는다. 시험 자료의 $R^2$는 0.944다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 `model.score()`와 예측값에서 $R^2$를 직접 계산하는 것의 차이를 설명하라. 둘은 동등한가?
+
+</div>
 
 ??? success "풀이"
     `model.score(X, y)`는 다음을 계산한다.
@@ -287,10 +293,12 @@ scikit-learn으로 인공자료에 선형회귀를 적합하고, 예측을 계�
 
     둘은 수학적으로 동일하다. 다만 검정자료에 적용할 때 $\bar{y}$는 (훈련자료가 아니라) 검정자료의 평균이며, 그래서 모형이 나쁘게 적합하면 검정 $R^2$가 음수가 될 수 있다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 scikit-learn의 `LinearRegression`이 계수의 p값이나 신뢰구간을 제공하지 않는 이유는 무엇인가? 어떻게 얻을 수 있는가?
+
+</div>
 
 ??? success "풀이"
     scikit-learn은 통계적 추론이 아니라 예측을 주된 목적으로 설계되었다. `LinearRegression`은 OLS를 기계학습 알고리즘으로 구현하며 `.fit()`, `.predict()`, `.score()`에 집중한다. 표준오차, t 통계량, p값, 신뢰구간은 계산하지 않는다.
@@ -302,10 +310,12 @@ scikit-learn의 `LinearRegression`이 계수의 p값이나 신뢰구간을 제�
 
     예측 중심(sklearn)과 추론 중심(statsmodels) 도구가 나뉘어 있는 것은 모형과 알고리즘의 구분을 반영한다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 `sklearn.model_selection.cross_val_score`로 선형회귀 모형의 일반화 성능을 추정하는 방법을 기술하라.
+
+</div>
 
 ??? success "풀이"
     ```python

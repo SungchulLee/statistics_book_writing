@@ -53,8 +53,12 @@ $x_0$을 중심으로 폭이 $\Delta x$인 구간에 대해, 그 구간에 들�
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 $N(0, 1)$에서 100개, 1000개, 10000개의 표본을 생성하고 히스토그램을 같은 그림에 겹쳐 그려라. 표본크기가 커질수록 적합이 어떻게 좋아지는지 서술하라.
+
+</div>
 
 ??? success "풀이"
     ```python
@@ -75,10 +79,12 @@ $N(0, 1)$에서 100개, 1000개, 10000개의 표본을 생성하고 히스토그
 
     $n = 100$에서는 히스토그램이 들쭉날쭉하고 눈에 띄게 벗어난다. $n = 1000$에서는 종 모양을 알아볼 수 있지만 여전히 울퉁불퉁하다. $n = 10000$에서는 히스토그램이 PDF를 바짝 따라간다. 수렴 속도는 대략 $O(1/\sqrt{n})$이다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 $X \sim N(\mu, \sigma^2)$에서 $n$개의 표본 $X_1, \ldots, X_n$을 뽑을 때 $E[\bar{X}]$와 $\text{Var}(\bar{X})$는 무엇인가? 크기 $n = 50$인 표본평균을 10000개 생성하여 수치적으로 확인하라.
+
+</div>
 
 ??? success "풀이"
     $E[\bar{X}] = \mu$이고 $\text{Var}(\bar{X}) = \sigma^2/n$이다.
@@ -100,15 +106,17 @@ $X \sim N(\mu, \sigma^2)$에서 $n$개의 표본 $X_1, \ldots, X_n$을 뽑을 �
     Var(X_bar) ≈ 0.1816  (theory: 0.1800)
     ```
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 `stats.norm.rvs(size=n)`과 `np.random.normal(0, 1, n)`의 차이를 설명하라. 어느 쪽을 언제 선호하겠는가?
 
+</div>
+
 ??? success "풀이"
     둘 다 표준정규 난수를 생성한다. `np.random.normal`은 NumPy의 난수 생성기를 직접 호출하므로 단순한 경우 약간 더 빠르다. `stats.norm.rvs`는 고정된 분포 인터페이스를 사용하여 더 유연하다. 분포 객체를 한 번 만들어 두고 같은 객체에 `.rvs()`, `.pdf()`, `.cdf()` 등을 호출할 수 있다. 같은 분포에 여러 메서드가 필요하면 SciPy 인터페이스를, 촘촘한 반복문에서 속도를 최대로 내려면 NumPy 직접 호출을 사용하라.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 Box-Muller 변환으로 균등확률변수로부터 표준정규 표본을 생성하라. 변환은 다음과 같다. $U_1, U_2 \sim \text{Uniform}(0,1)$이 독립일 때,
@@ -118,6 +126,8 @@ Z_1 = \sqrt{-2\ln U_1}\,\cos(2\pi U_2), \qquad Z_2 = \sqrt{-2\ln U_1}\,\sin(2\pi
 $$
 
 $Z_1$과 $Z_2$가 근사적으로 $N(0,1)$임을 확인하라.
+
+</div>
 
 ??? success "풀이"
     ```python

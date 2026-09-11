@@ -188,7 +188,11 @@ Log-likelihood at p=0.7: -63.6283
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.** $k = 14$번 성공한 $n = 20$번의 Bernoulli 시행에 대해 $p = 0.5, 0.6, 0.7, 0.8$에서 로그가능도를 계산하라. 어느 값의 로그가능도가 가장 높은가? MLE와 어떻게 비교되는가?
+
+</div>
 
 ??? success "풀이"
     $\ell(p) = 14\log p + 6\log(1-p)$를 사용하여 계산하면:
@@ -200,9 +204,11 @@ Log-likelihood at p=0.7: -63.6283
 
     로그가능도가 가장 높은 것은 $p = 0.7$이며, 이것이 MLE $\hat{p} = 14/20 = 0.7$이다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.** Bernoulli 모형의 로그가능도가 $p$에 대해 오목함을 보여라. 오목성이 임의의 임계점이 전역 최댓값임을 보장하는 이유는 무엇인가?
+
+</div>
 
 ??? success "풀이"
     로그가능도의 2계도함수는:
@@ -215,9 +221,11 @@ Log-likelihood at p=0.7: -63.6283
 
     2계도함수가 엄격하게 음수인 함수는 순오목이다. 구간에서 순오목인 함수에서는 임의의 임계점($\ell'(p) = 0$인 점)이 반드시 전역 최댓값이다. 오목성은 함수가 어디서나 아래로 휜다는 뜻이기 때문이다. 다른 국소 최댓값이나 안장점은 존재할 수 없다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.** 수치 계산에서 $L(\theta)$ 대신 $\log L(\theta)$를 쓰는 것이 왜 필수적인지 설명하라. 컴퓨터에서 $L(\theta)$가 0으로 언더플로되는 구체적인 예를 들라.
+
+</div>
 
 ??? success "풀이"
     IEEE 754 배정밀도 부동소수점의 최소 양수는 약 $5 \times 10^{-324}$이다. i.i.d. Bernoulli$(0.5)$ 관측값 $n = 1000$개를 생각하자. $p = 0.5$에서 가능도는:
@@ -230,9 +238,11 @@ Log-likelihood at p=0.7: -63.6283
 
     로그가능도는 이를 피한다: $\ell(0.5) = -1100 \ln 2 \approx -762.5$로 완벽하게 표현 가능한 수이다. $n = 10^6$에서도 로그가능도는 수치적으로 안정하다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.** $n$개의 관측값을 갖는 Poisson 분포에 대해 로그가능도 $\ell(\lambda)$를 쓰고 MLE를 유도하라. $\ell''(\hat{\lambda}) < 0$임을 확인하라.
+
+</div>
 
 ??? success "풀이"
     Poisson PMF는 $f(x; \lambda) = e^{-\lambda}\lambda^x/x!$이므로:
@@ -249,9 +259,11 @@ Log-likelihood at p=0.7: -63.6283
 
     로그가능도가 오목하고 MLE가 최댓값임이 확인된다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.** 관측 Fisher 정보량은 $\hat{I}(\theta) = -\ell''(\hat{\theta})$이다. Bernoulli 모형에서 MLE에서의 관측 정보량이 $n/[\hat{p}(1-\hat{p})]$과 같음을 보여라. 이를 사용하여 $n = 100$, $k = 72$일 때 $p$에 대한 근사적인 95% 신뢰구간을 구성하라.
+
+</div>
 
 ??? success "풀이"
     연습문제 2에서 $\ell''(p) = -k/p^2 - (n-k)/(1-p)^2$이다.

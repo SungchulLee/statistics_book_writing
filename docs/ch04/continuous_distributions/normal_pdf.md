@@ -59,8 +59,12 @@ plt.show()
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 $X \sim N(1, 4)$에 대해 평균에서의 밀도 $f(1)$을 손으로 계산하라.
+
+</div>
 
 ??? success "풀이"
     $\mu = 1$이고 $\sigma^2 = 4$($\sigma = 2$)이므로:
@@ -69,10 +73,12 @@ $X \sim N(1, 4)$에 대해 평균에서의 밀도 $f(1)$을 손으로 계산하�
     f(1) = \frac{1}{2\sqrt{2\pi}} \exp(0) = \frac{1}{2\sqrt{2\pi}} \approx 0.1995
     $$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 정규 PDF의 적분이 1임을 보여라. (힌트: $I = \int_{-\infty}^{\infty} e^{-x^2/2}\,dx$에 대해 $I^2$을 극좌표에서 계산하라.)
+
+</div>
 
 ??? success "풀이"
     $I = \int_{-\infty}^{\infty} e^{-x^2/2}\,dx$라 하자. 그러면:
@@ -89,10 +95,12 @@ $X \sim N(1, 4)$에 대해 평균에서의 밀도 $f(1)$을 손으로 계산하�
 
     따라서 $I = \sqrt{2\pi}$이고 $\frac{1}{\sigma\sqrt{2\pi}}\int_{-\infty}^{\infty} e^{-(x-\mu)^2/(2\sigma^2)}\,dx = 1$이다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 정규 PDF의 변곡점을 유도하라. 어떤 $x$ 값에서 곡률의 부호가 바뀌는가?
+
+</div>
 
 ??? success "풀이"
     변곡점은 $f''(x) = 0$인 곳에서 생긴다. 계산하면:
@@ -113,10 +121,12 @@ $X \sim N(1, 4)$에 대해 평균에서의 밀도 $f(1)$을 손으로 계산하�
 
     변곡점은 $x = \mu - \sigma$와 $x = \mu + \sigma$에 있으며, 평균에서 정확히 표준편차 하나만큼 떨어진 위치이다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 SciPy를 사용하여 표준정규분포에 대해 68–95–99.7 규칙을 수치적으로 확인하라.
+
+</div>
 
 ??? success "풀이"
     ```python

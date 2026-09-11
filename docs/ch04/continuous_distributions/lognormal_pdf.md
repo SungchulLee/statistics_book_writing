@@ -61,8 +61,12 @@ $\sigma$가 커질수록 분포가 오른쪽으로 더 치우치고 최빈값은
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 $X \sim N(\mu, \sigma^2)$일 때 정규분포의 적률생성함수를 사용하여 $Y = e^X$의 $E[Y]$를 유도하라.
+
+</div>
 
 ??? success "풀이"
     $X \sim N(\mu, \sigma^2)$의 MGF는 $M_X(t) = E[e^{tX}] = e^{\mu t + \sigma^2 t^2/2}$이다.
@@ -73,10 +77,12 @@ $X \sim N(\mu, \sigma^2)$일 때 정규분포의 적률생성함수를 사용하
     E[Y] = E[e^X] = M_X(1) = e^{\mu + \sigma^2/2}
     $$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 Log-Normal 분포의 중앙값이 $e^\mu$이며, 임의의 $\sigma > 0$에 대해 평균 $e^{\mu + \sigma^2/2}$보다 작음을 보여라.
+
+</div>
 
 ??? success "풀이"
     중앙값 $m$은 $P(Y \le m) = 0.5$를 만족한다:
@@ -89,10 +95,12 @@ Log-Normal 분포의 중앙값이 $e^\mu$이며, 임의의 $\sigma > 0$에 대�
 
     $\sigma^2/2 > 0$이므로 $e^{\mu + \sigma^2/2} > e^\mu$이며, 평균 > 중앙값임이 확인된다. 이는 오른쪽으로 치우침을 반영한다. 두꺼운 오른쪽 꼬리가 평균을 위로 끌어올린다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 주식 수익률이 (연율화된) $\mu = 0.05$, $\sigma = 0.2$인 Log-Normal 분포를 따른다면, 주가가 가치의 20% 넘게 하락할 확률은 얼마인가?
+
+</div>
 
 ??? success "풀이"
     20% 손실은 $Y < 0.8$을 뜻한다(주가가 초기 가치의 80%보다 낮다):
@@ -103,10 +111,12 @@ Log-Normal 분포의 중앙값이 $e^\mu$이며, 임의의 $\sigma > 0$에 대�
 
     20% 넘게 손실을 볼 확률은 약 8.6%이다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 독립인 Log-Normal 확률변수들의 곱이 다시 Log-Normal임을 증명하라.
+
+</div>
 
 ??? success "풀이"
     $X_1 \sim N(\mu_1, \sigma_1^2)$과 $X_2 \sim N(\mu_2, \sigma_2^2)$이 독립일 때 $Y_1 = e^{X_1}$, $Y_2 = e^{X_2}$라 하자. 그러면:

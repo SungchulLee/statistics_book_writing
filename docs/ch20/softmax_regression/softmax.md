@@ -75,6 +75,8 @@ def softmax(z):
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 소프트맥스 함수 계산
 
@@ -92,6 +94,8 @@ $$
 **(c)** 소프트맥스가 평행이동 불변임을 보여라. 즉 임의의 상수 $c$에 대해
 $\text{softmax}(\mathbf{z} + c\mathbf{1}) = \text{softmax}(\mathbf{z})$임을 보이고, 이 성질이
 수치적 안정성에 왜 중요한지 설명하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -129,7 +133,7 @@ $\text{softmax}(\mathbf{z} + c\mathbf{1}) = \text{softmax}(\mathbf{z})$임을 �
     $c = -\max_k z_k$로 두면 가장 큰 지수가 $e^0 = 1$이 되어 로짓이 커도 수치적 오버플로를
     막을 수 있다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 소프트맥스 회귀의 가중행렬
@@ -157,6 +161,8 @@ $$
 **(c)** 이 모형은 모수화가 중복되어 있다. 임의의 벡터 $\mathbf{v}$와 스칼라 $v_b$에 대해
 $\mathbf{w}_k' = \mathbf{w}_k - \mathbf{v}$, $b_k' = b_k - v_b$로 둔 모수가 같은 소프트맥스
 출력을 낸다. 이를 이용해 마지막 범주의 로짓이 항상 0이 되도록 만들어 자유 모수를 줄여라.
+
+</div>
 
 ??? success "풀이"
 

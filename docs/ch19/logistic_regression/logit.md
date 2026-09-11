@@ -189,6 +189,8 @@ Multivariate Model (Balance + Student):
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 대출 연체($Y = 1$)에 대한 로지스틱 회귀 모형이 다음과 같다.
 $\log\frac{p}{1-p} = -2.5 + 0.8\,\text{DTI} - 0.03\,\text{Credit Score}$
@@ -200,6 +202,8 @@ $\log\frac{p}{1-p} = -2.5 + 0.8\,\text{DTI} - 0.03\,\text{Credit Score}$
 **(b)** DTI의 계수 0.8을 오즈비로 해석하라.
 
 **(c)** Credit Score = 650인 차입자에게 연체 확률 50%를 주는 DTI는 얼마인가?
+
+</div>
 
 ??? success "풀이"
 

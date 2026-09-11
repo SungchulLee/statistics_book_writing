@@ -63,8 +63,12 @@ $$
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 Beta 분포는 Binomial 가능도의 켤레 사전분포이다. 사전분포가 $\text{Beta}(2, 5)$이고 10번의 시행에서 3번 성공을 관측했을 때 사후분포와 사후평균을 구하라.
+
+</div>
 
 ??? success "풀이"
     $\text{Beta}(\alpha, \beta)$ 사전분포와 $n$번의 시행에서 $k$번 성공했을 때 사후분포는 $\text{Beta}(\alpha + k, \beta + n - k)$이다.
@@ -83,10 +87,12 @@ Beta 분포는 Binomial 가능도의 켤레 사전분포이다. 사전분포가 
 
     이는 사전평균 $2/7 \approx 0.286$과 표본비율 $3/10 = 0.3$ 사이의 절충이다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 Gamma 분포가 Poisson 가능도의 켤레 사전분포임을 보여라. $X_1, \dots, X_n \overset{\text{iid}}{\sim} \text{Poisson}(\lambda)$이고 $\lambda \sim \text{Gamma}(\alpha, \beta)$일 때 $\lambda$의 사후분포를 유도하라.
+
+</div>
 
 ??? success "풀이"
     $n$개 관측값에 대한 Poisson 가능도는:
@@ -109,10 +115,12 @@ Gamma 분포가 Poisson 가능도의 켤레 사전분포임을 보여라. $X_1, 
 
     이는 $\text{Gamma}(\alpha + \sum x_i, \beta + n)$ 분포의 핵이며 켤레성이 확인된다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 사전분포가 "무정보"이거나 "약한 정보"라는 것이 무슨 뜻인지 설명하라. $\sigma^2$이 알려진 정규분포의 평균 $\mu$에 대해 약한 정보의 켤레 사전분포 예를 들라.
+
+</div>
 
 ??? success "풀이"
     **무정보**(또는 "막연한") 사전분포는 사전 지식을 최소로 담아 자료가 사후분포를 지배하도록 하려는 것이다. **약한 정보**의 사전분포는 특정 값을 강하게 선호하지 않으면서 모수를 합리적인 범위로 제약한다.
@@ -121,10 +129,12 @@ Gamma 분포가 Poisson 가능도의 켤레 사전분포임을 보여라. $X_1, 
 
     $\tau \to \infty$인 극한에서는 비정상(improper) 평평한 사전분포 $\pi(\mu) \propto 1$을 얻으며 이는 무정보이다. 그러면 사후평균이 MLE $\bar{x}$와 같아진다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 켤레 Normal-Gamma 사전분포를 쓰면 정규분포의 평균과 정밀도 $(\mu, \tau)$에 대한 사후분포도 Normal-Gamma이다. 켤레 사전분포가 계산상 편리한 이유를 직관적으로 서술하고 한계를 하나 들라.
+
+</div>
 
 ??? success "풀이"
     **편리함:** 켤레 사전분포가 계산상 편리한 이유는 사후분포가 사전분포와 같은 분포족에 속하고 모수만 바뀌기 때문이다. 이는 다음을 뜻한다:

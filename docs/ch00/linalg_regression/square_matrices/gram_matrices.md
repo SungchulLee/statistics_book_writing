@@ -128,8 +128,12 @@ $\mathbf{X}$가 중심화된 자료행렬(관측값에서 열 평균을 뺀 것)
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 $\mathbf{X} = \begin{pmatrix} 1 & 2 \\ 1 & 3 \\ 1 & 5 \end{pmatrix}$이라 하자. 그람 행렬 $\mathbf{X}^T\mathbf{X}$를 계산하고 그것이 대칭이며 양정치임을 확인하라.
+
+</div>
 
 ??? success "풀이"
     $$
@@ -138,10 +142,12 @@ $\mathbf{X} = \begin{pmatrix} 1 & 2 \\ 1 & 3 \\ 1 & 5 \end{pmatrix}$이라 하�
 
     대칭성은 $(\mathbf{X}^T\mathbf{X})^T = \mathbf{X}^T\mathbf{X}$로부터 곧바로 따라온다. 양정치성의 경우 선행 소행렬식이 $3 > 0$이고 $\det = 3 \times 38 - 10^2 = 114 - 100 = 14 > 0$이므로 $\mathbf{X}^T\mathbf{X}$는 양정치다. 동등하게 $\mathbf{X}$의 계수가 2이므로(두 열이 일차독립이므로) $\mathbf{X}^T\mathbf{X}$가 양정치다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 임의의 실행렬 $\mathbf{X}$에 대해 $\mathbf{X}^T\mathbf{X}$가 언제나 양반정치이고, 양정치일 필요충분조건이 $\mathbf{X}$가 완전 열계수를 갖는 것임을 증명하라.
+
+</div>
 
 ??? success "풀이"
     임의의 벡터 $\mathbf{v} \neq \mathbf{0}$에 대해
@@ -152,20 +158,24 @@ $\mathbf{X} = \begin{pmatrix} 1 & 2 \\ 1 & 3 \\ 1 & 5 \end{pmatrix}$이라 하�
 
     이다. 이것이 0일 필요충분조건은 $\mathbf{X}\mathbf{v} = \mathbf{0}$, 즉 $\mathbf{v} \in \ker(\mathbf{X})$인 것이다. $\mathbf{X}$가 완전 열계수를 가지면 $\ker(\mathbf{X}) = \{\mathbf{0}\}$이므로 모든 $\mathbf{v} \neq \mathbf{0}$에 대해 $\mathbf{v}^T(\mathbf{X}^T\mathbf{X})\mathbf{v} > 0$이고 이것이 양정치성이다. 역으로 $\mathbf{X}$가 완전 열계수를 갖지 않으면 $\mathbf{X}\mathbf{v} = \mathbf{0}$인 $\mathbf{v} \neq \mathbf{0}$이 존재하여 이차형식이 0이 된다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 $\mathbf{X}$의 열들이 거의 공선적일 때 $\mathbf{X}^T\mathbf{X}$의 조건수가 최소제곱추정값의 안정성과 어떻게 관련되는지 설명하라. 조건수를 고윳값으로 나타내면 무엇인가?
+
+</div>
 
 ??? success "풀이"
     $\mathbf{X}^T\mathbf{X}$의 조건수는 $\kappa = \lambda_{\max}/\lambda_{\min}$이며, 여기서 $\lambda_{\max}$와 $\lambda_{\min}$은 최대·최소 고윳값이다.
 
     열들이 거의 공선적이면 $\lambda_{\min}$이 0에 가까워져 $\kappa$가 매우 커진다. $\operatorname{Var}(\hat{\boldsymbol{\beta}}) = \sigma^2(\mathbf{X}^T\mathbf{X})^{-1}$이고 $(\mathbf{X}^T\mathbf{X})^{-1}$의 고윳값이 $1/\lambda_i$이므로, $\lambda_{\min}$이 작으면 그에 대응하는 고유벡터 방향으로 분산 $\sigma^2/\lambda_{\min}$이 커진다. 조건수가 크다는 것은 또한 $\mathbf{y}$의 작은 섭동이 $\hat{\boldsymbol{\beta}}$을 크게 변화시킨다는 뜻이며, 추정값이 수치적으로 불안정해진다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 표본 공분산행렬 $\mathbf{S} = \frac{1}{n-1}\mathbf{X}_c^T\mathbf{X}_c$($\mathbf{X}_c$는 평균 중심화된 자료행렬)가 양반정치임을 보여라. 어떤 조건에서 양정치가 되는가?
+
+</div>
 
 ??? success "풀이"
     $\mathbf{S} = \frac{1}{n-1}\mathbf{X}_c^T\mathbf{X}_c$는 그람 행렬의 양의 스칼라배이므로 양반정치성을 물려받는다.
@@ -176,10 +186,12 @@ $\mathbf{X}$의 열들이 거의 공선적일 때 $\mathbf{X}^T\mathbf{X}$의 �
 
     $\mathbf{S}$가 양정치일 필요충분조건은 $\mathbf{X}_c$가 완전 열계수를 갖는 것이며, 이를 위해서는 $n - 1 \geq p$가 필요하다(중심화가 계수를 많아야 1만큼 줄이기 때문이다). 실무적으로는 표본 공분산행렬이 가역이려면 변수보다 관측값이 많아야 한다는($n > p$) 뜻이다. $p > n$이면 $\mathbf{S}$가 특이행렬이 되어 정칙화나 차원축소 같은 기법이 필요하다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.**
 $\mathbf{X}$의 열들이 서로 직교하면 그람 행렬이 대각행렬이 됨을 보이고, 이때 최소제곱추정량이 $\hat{\beta}_j = \mathbf{v}_j^T\mathbf{y}/\lVert\mathbf{v}_j\rVert^2$로 분리되는 이유를 설명하라.
+
+</div>
 
 ??? success "풀이"
     $[\mathbf{G}]_{ij} = \mathbf{v}_i^T\mathbf{v}_j$인데 $i \neq j$이면 직교성에 의해 $\mathbf{v}_i^T\mathbf{v}_j = 0$이다. 따라서 비대각 성분이 모두 0이고
@@ -224,10 +236,12 @@ $\mathbf{X}$의 열들이 서로 직교하면 그람 행렬이 대각행렬이 �
 
     **통계적 의미가 크다.** 예측변수가 직교하면 한 변수를 모형에 넣거나 빼도 다른 변수의 계수가 **전혀 변하지 않는다.** 실험계획에서 직교설계를 선호하는 이유이며, 관측자료에서 계수가 모형 설정에 따라 요동치는 이유이기도 하다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 6.**
 $\mathbf{X}^T\mathbf{X}$($p \times p$)와 $\mathbf{X}\mathbf{X}^T$($n \times n$)가 0이 아닌 고윳값을 공유함을 보이고, 수치로 확인하라. $p \gg n$일 때 어느 쪽으로 계산해야 하는가?
+
+</div>
 
 ??? success "풀이"
     $\mathbf{X}^T\mathbf{X}\mathbf{v} = \lambda\mathbf{v}$이고 $\lambda \neq 0$이라 하자. 양변에 왼쪽에서 $\mathbf{X}$를 곱하면
@@ -264,10 +278,12 @@ $\mathbf{X}^T\mathbf{X}$($p \times p$)와 $\mathbf{X}\mathbf{X}^T$($n \times n$)
 
     **$p \gg n$이면 $n \times n$인 $\mathbf{X}\mathbf{X}^T$로 계산해야 한다.** 유전체 자료처럼 $p$가 수만이고 $n$이 수백인 상황에서 $p \times p$ 행렬은 다루기 어렵지만 $n \times n$은 작다. 두 행렬이 같은 정보를 담고 있으므로 손해가 없다. 이것이 **커널 트릭**의 대수적 근거다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 7.**
 $\mathbf{X} \in \mathbb{R}^{n \times p}$의 열이 만드는 평행육면체의 $p$차원 부피 $V$에 대해 $\det(\mathbf{X}^T\mathbf{X}) = V^2$이 성립한다. 이 사실을 이용해 그람 행렬의 행렬식이 0이 되는 기하적 의미를 설명하라.
+
+</div>
 
 ??? success "풀이"
     $\det(\mathbf{X}^T\mathbf{X})$를 **그람 행렬식**이라 하며 열들이 펼치는 평행육면체 부피의 제곱과 같다.
@@ -302,10 +318,12 @@ $\mathbf{X} \in \mathbb{R}^{n \times p}$의 열이 만드는 평행육면체의 
 
     부피가 0은 아니지만 매우 작은 경우가 곧 **다중공선성**이다. 해가 존재하기는 하지만 납작한 평행육면체 위에서 결정되므로 불안정하다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 8.**
 $\mathbf{X}$의 각 열을 평균 0, 길이 1로 표준화한 행렬을 $\mathbf{Z}$라 하자. $\mathbf{Z}^T\mathbf{Z}$가 무엇이 되는지 밝히고, 그람 행렬과 상관행렬의 관계를 설명하라.
+
+</div>
 
 ??? success "풀이"
     열 $j$를 중심화한 뒤 그 노름으로 나누면 $\mathbf{z}_j = (\mathbf{v}_j - \bar{v}_j\mathbf{1}) / \lVert \mathbf{v}_j - \bar{v}_j\mathbf{1} \rVert$이다. 그러면
@@ -356,10 +374,12 @@ $\mathbf{X}$의 각 열을 평균 0, 길이 1로 표준화한 행렬을 $\mathbf
 
     상관행렬이 언제나 양반정치인 이유도 여기서 나온다. **상관행렬 역시 그람 행렬이기 때문이다.** $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 9.**
 기존 예측변수와 거의 같은 열을 하나 추가하면 조건수와 $\operatorname{Var}(\hat{\boldsymbol{\beta}})$가 어떻게 변하는지 수치로 보여라.
+
+</div>
 
 ??? success "풀이"
     $\mathbf{x}_3 = \mathbf{x}_1 + \varepsilon \cdot (\text{잡음})$으로 두고 $\varepsilon$을 줄여 가며 관찰한다.
@@ -396,10 +416,12 @@ $\mathbf{X}$의 각 열을 평균 0, 길이 1로 표준화한 행렬을 $\mathbf
 
     자료가 늘어난 것이 아니라 **거의 같은 정보를 두 번 넣은 것**이므로 추정이 불안정해지는 것이 당연하다. 18장의 능형회귀는 $\mathbf{G} + \lambda\mathbf{I}$로 최소고윳값을 끌어올려 이 문제를 완화한다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 10.**
 임의의 실행렬 $\mathbf{X}$에 대해 $\operatorname{rank}(\mathbf{X}^T\mathbf{X}) = \operatorname{rank}(\mathbf{X})$임을 증명하라.
+
+</div>
 
 ??? success "풀이"
     두 행렬의 **영공간이 같음**을 보이면 충분하다. 계수-퇴화차수 정리에 의해 영공간의 차원이 같으면 계수도 같기 때문이다(두 행렬 모두 열의 개수가 $p$로 같다).

@@ -177,9 +177,13 @@ Min CV MSE:               4.774
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.** $S(\rho, \lambda)$가 $\lambda |\cdot|$의 근접 연산자임을 손으로 확인하라. 즉
 $S(\rho, \lambda) = \arg\min_{z} \left\{ \frac{1}{2}(z - \rho)^2 + \lambda |z| \right\}$
 임을 보여라.
+
+</div>
 
 ??? success "풀이"
 
@@ -199,11 +203,13 @@ $S(\rho, \lambda) = \arg\min_{z} \left\{ \frac{1}{2}(z - \rho)^2 + \lambda |z| \
     셋을 합치면 $z^* = \text{sign}(\rho)\max(|\rho| - \lambda, 0) = S(\rho, \lambda)$이다.
     $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.** 좌표하강 알고리즘에서 $\beta_j$를 갱신하기 전에 부분잔차
 $r_j = y - X\beta + X_j \beta_j$를 계산해야 하는 이유를 설명하라. 대신 전체 잔차
 $r = y - X\beta$를 쓰면 무엇이 잘못되는가?
+
+</div>
 
 ??? success "풀이"
 
@@ -216,10 +222,12 @@ $r = y - X\beta$를 쓰면 무엇이 잘못되는가?
     $X_j^\top(y - X_{-j}\beta_{-j})/n$이 아니라 $X_j^\top(y - X\beta)/n$이 되고, 반복열은 라쏘
     해로 수렴하지 않는다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.** `lasso_cd` 함수가 온기 시작(즉 항상 0에서 출발하는 대신 초기값 $\beta^{(0)}$을
 받도록)을 지원하도록 수정하라. 온기 시작이 정칙화 경로 계산을 왜 빠르게 하는지 설명하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -242,11 +250,13 @@ $r = y - X\beta$를 쓰면 무엇이 잘못되는가?
     $\lambda_k$에서의 해는 $\lambda_{k+1}$에서의 해와 가깝다. 직전 해를 초기값으로 쓰면 좌표하강
     반복 횟수가 수백에서 몇 회로 줄어드는 것이 보통이다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.** 관측치보다 설명변수가 많은 자료($n = 100$, $p = 200$)에서 계수 5개만 0이 아니게
 생성하라. 교차검증으로 고른 $\lambda$에서 라쏘를 적합하고, 선택된 변수 중 참양성과 위양성의
 개수를 보고하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -289,10 +299,12 @@ $r = y - X\beta$를 쓰면 무엇이 잘못되는가?
     지지집합을 정확히 복원하려면 더 큰 $\lambda$(1-표준오차 규칙)나 사후 라쏘, 안정성 선택
     같은 추가 절차가 필요하다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.** $X$의 열이 완전계수(full column rank)이면 라쏘 해가 유일하지만, $X$의 열이
 일차종속이면 유일하지 않을 수 있음을 증명하라.
+
+</div>
 
 ??? success "풀이"
 

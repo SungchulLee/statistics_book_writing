@@ -124,8 +124,12 @@ Actual Type I error (chi-squared test): 0.1713
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 어떤 자료에 정규성 검정을 수행했더니 이상점 하나가 발견되었다. 이상점을 포함하면 $p$값이 0.01이지만 이상점을 제거하면 $p$값이 0.20으로 올라간다. 이를 어떻게 해석하고 처리해야 하는가?
+
+</div>
 
 ??? success "풀이"
 

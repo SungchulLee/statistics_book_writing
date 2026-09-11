@@ -305,8 +305,12 @@ $$
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 $\sum_{i=1}^n (y_i - \beta_0 - \beta_1 x_i)^2$을 최소화하여 단순선형회귀의 OLS 추정량 $\hat{\beta}_1 = \sum(x_i - \bar{x})(y_i - \bar{y}) / \sum(x_i - \bar{x})^2$을 유도하라.
+
+</div>
 
 ??? success "풀이"
     $S(\beta_0, \beta_1) = \sum_{i=1}^n (y_i - \beta_0 - \beta_1 x_i)^2$이라 하자. 편미분을 취해 0으로 두면
@@ -337,10 +341,12 @@ $\sum_{i=1}^n (y_i - \beta_0 - \beta_1 x_i)^2$을 최소화하여 단순선형�
 
     $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 OLS 잔차의 합이 0임을 보여라. 곧 $e_i = y_i - \hat{y}_i$일 때 $\sum_{i=1}^n e_i = 0$이다.
+
+</div>
 
 ??? success "풀이"
     첫 번째 정규방정식($\partial S / \partial \beta_0 = 0$)에서
@@ -353,10 +359,12 @@ OLS 잔차의 합이 0임을 보여라. 곧 $e_i = y_i - \hat{y}_i$일 때 $\sum
 
     이 결과는 절편항이 있는 모든 회귀모형에서 성립한다. 반대로 절편을 강제로 0으로 둔 모형에서는 성립하지 않는다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 최소제곱 해가 설계행렬 $X$의 열공간에서 무엇을 뜻하는지 기하학적으로 설명하라. 적합값 $\hat{Y}$와 잔차 $e$의 관계는 무엇인가?
+
+</div>
 
 ??? success "풀이"
     적합값 $\hat{Y} = X\hat{\beta} = X(X^TX)^{-1}X^TY = HY$는 $Y$를 $X$의 열공간 위로 **직교사영**한 것이다. 잔차벡터 $e = Y - \hat{Y} = (I - H)Y$는 열공간과 직교한다.

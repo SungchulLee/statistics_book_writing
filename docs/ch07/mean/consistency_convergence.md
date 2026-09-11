@@ -245,8 +245,12 @@ estimation_horizon_analysis()
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 약대수의법칙(WLLN)을 진술하고 강대수의법칙(SLLN)과 어떻게 다른지 설명하라. 각각에 필요한 최소한의 적률 조건은 무엇인가?
+
+</div>
 
 ??? success "풀이"
     **WLLN:** $E[X_i] = \mu$이고 $\text{Var}(X_i) = \sigma^2 < \infty$인 i.i.d. $X_1, X_2, \ldots$에 대해:
@@ -263,10 +267,12 @@ estimation_horizon_analysis()
 
     SLLN이 더 강하다: 거의 확실한 수렴은 확률수렴을 함의하지만 역은 성립하지 않는다. SLLN에는 $E[|X|] < \infty$만 필요한 반면, Chebyshev 부등식을 통한 WLLN의 간단한 증명에는 유한한 분산이 필요하다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 i.i.d. Cauchy 확률변수의 $\bar{X}_n$이 Cauchy 관측값 하나와 같은 분포를 가짐을 보여라. (힌트: 특성함수를 쓰라.)
+
+</div>
 
 ??? success "풀이"
     표준 Cauchy 확률변수의 특성함수는 $\varphi_X(t) = e^{-|t|}$이다.
@@ -283,10 +289,12 @@ i.i.d. Cauchy 확률변수의 $\bar{X}_n$이 Cauchy 관측값 하나와 같은 �
 
     즉 표본평균이 관측값 하나보다 조금도 더 집중되어 있지 않다 — 평균을 내는 일이 무의미하다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 $|\rho| < 1$이고 $\epsilon_t \sim N(0, \sigma_\epsilon^2)$인 AR(1) 과정 $X_t = \rho X_{t-1} + \epsilon_t$에서 $\bar{X}_n$의 분산을 유도하고, 큰 $n$에서 $\frac{\sigma^2}{n}\cdot\frac{1+\rho}{1-\rho}$($\sigma^2 = \sigma_\epsilon^2/(1-\rho^2)$)에 근사함을 보여라.
+
+</div>
 
 ??? success "풀이"
     정상 분산은 $\gamma_0 = \text{Var}(X_t) = \sigma_\epsilon^2/(1-\rho^2)$이다. 시차 $h$에서의 자기공분산은 $\gamma_h = \gamma_0 \rho^{|h|}$이다.
@@ -303,10 +311,12 @@ $|\rho| < 1$이고 $\epsilon_t \sim N(0, \sigma_\epsilon^2)$인 AR(1) 과정 $X_
 
     $\rho = 0.8$이면 팽창인자가 $1.8/0.2 = 9$이므로 유효표본크기는 $n/9$에 불과하다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 어떤 펀드의 참 연간 기대초과수익률이 3%, 연간 변동성이 20%이다. 표본평균 초과수익률이 양수일 확률이 90%를 넘으려면 몇 년치 자료가 필요한가?
+
+</div>
 
 ??? success "풀이"
     $\mu = 0.03$, $\sigma = 0.20$인 $\bar{X}_T \sim N(\mu, \sigma^2/T)$에서 $P(\bar{X}_T > 0) \geq 0.90$이 필요하다.
@@ -319,10 +329,12 @@ $|\rho| < 1$이고 $\epsilon_t \sim N(0, \sigma_\epsilon^2)$인 AR(1) 과정 $X_
 
     따라서 약 **74년**치 자료가 필요하다. 금융에서 운용자의 실력과 운을 구분하는 일이 왜 그토록 어려운지를 극명하게 보여준다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.**
 중심극한정리가 Cauchy 분포에 적용되지 않는 이유를 설명하라. 그렇다면 Cauchy 표본평균에는 아무런 극한정리도 적용되지 않는가?
+
+</div>
 
 ??? success "풀이"
     중심극한정리는 $\text{Var}(X) < \infty$를 요구한다. Cauchy 분포는 분산이 유한하지 않으므로(사실 평균도 유한하지 않다) 중심극한정리가 적용되지 않는다.

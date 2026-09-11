@@ -238,8 +238,12 @@ plt.show()
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 10개의 제품이 각각 독립적으로 확률 $p = 0.15$로 불량이다. (a) 불량품 개수 $X$의 분포는? (b) $P(X = 2)$. (c) $P(X \ge 3)$. (d) 평균과 분산.
+
+</div>
 
 ??? success "풀이"
     (a) $X \sim \mathrm{Binomial}(10, 0.15)$.
@@ -250,10 +254,12 @@ plt.show()
 
     (d) $\mathbb{E}[X] = np = 1.5$. $\mathrm{Var}(X) = np(1-p) = 10 \cdot 0.15 \cdot 0.85 = 1.275$.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 $Y \sim \mathrm{Binomial}(n, p)$에 대해 $X_i \sim \mathrm{Bernoulli}(p)$인 지시함수 표현 $Y = \sum_{i=1}^n X_i$를 사용하여 **$\mathbb{E}[Y] = np$와 $\mathrm{Var}(Y) = np(1-p)$를 증명하라.**
+
+</div>
 
 ??? success "풀이"
     **평균.** 기댓값의 선형성에 의해:
@@ -270,10 +276,12 @@ $Y \sim \mathrm{Binomial}(n, p)$에 대해 $X_i \sim \mathrm{Bernoulli}(p)$인 �
 
     지시함수의 합으로 나타내는 표현이 가장 깔끔한 유도이다. PMF로부터 직접 계산해도 되지만 흡수 항등식 $k\binom{n}{k} = n\binom{n-1}{k-1}$이 필요하다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 **독립인 두 Binomial 확률변수의 합.** $X \sim \mathrm{Binomial}(n_1, p)$와 $Y \sim \mathrm{Binomial}(n_2, p)$가 독립이라 하자. $X + Y \sim \mathrm{Binomial}(n_1 + n_2, p)$임을 보여라.
+
+</div>
 
 ??? success "풀이"
     각 Binomial 확률변수는 그 자체가 i.i.d. Bernoulli($p$) 시행의 합이다. $X$는 $n_1$개의 Bernoulli($p$)의 합이고, $Y$는 $n_2$개의 합이다. $X$와 $Y$가 독립이라는 것은 두 그룹에 속한 Bernoulli 확률변수들이 서로 독립임을 뜻한다.
@@ -284,10 +292,12 @@ $Y \sim \mathrm{Binomial}(n, p)$에 대해 $X_i \sim \mathrm{Bernoulli}(p)$인 �
 
     **주의:** *$p$가 공통이라는 점*이 본질적이다. $p$가 다르면 합은 Binomial이 아니다(Poisson-binomial 분포를 따른다).
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 **연속성 수정을 적용한 정규근사.** Binomial(100, 0.4)에 대해 연속성 수정을 적용한 경우와 적용하지 않은 경우 각각 정규근사로 $P(35 \le Y \le 45)$를 구하라. 정확한 Binomial 값(0.7287)과 비교하라.
+
+</div>
 
 ??? success "풀이"
     $\mu = 40$, $\sigma = \sqrt{100 \cdot 0.4 \cdot 0.6} = \sqrt{24} \approx 4.899$.
@@ -310,10 +320,12 @@ $Y \sim \mathrm{Binomial}(n, p)$에 대해 $X_i \sim \mathrm{Bernoulli}(p)$인 �
 
     이산분포를 연속분포로 근사할 때는 항상 연속성 수정을 사용하라.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.**
 **Bernoulli 분산은 $p = 1/2$에서 최대가 된다.** 이를 해석적으로 증명하고 신뢰구간 계산에서 갖는 실용적 의미를 설명하라.
+
+</div>
 
 ??? success "풀이"
     $\mathrm{Var}(X) = p(1 - p)$를 $p$에 대해 미분하면:
@@ -328,10 +340,12 @@ $Y \sim \mathrm{Binomial}(n, p)$에 대해 $X_i \sim \mathrm{Bernoulli}(p)$인 �
 
     오차한계를 $\le 0.03$으로 두면 $n \ge 1/(0.03)^2 \approx 1111$이 되는데, 이것이 전국 여론조사에서 "n ≈ 1000" 규칙이 나온 배경이다. 실제 $p$는 대개 0.5에서 떨어져 있으므로 이 보수적 한계는 다소 느슨하지만, $p$가 무엇이든 통하는 표본크기 추정치를 제공한다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 6.**
 **역문제: 표본으로부터 $p$ 구하기.** $n = 100$번의 시행에서 $Y = 35$번의 성공을 관측했다. 두 가지 방법으로 $p$에 대한 근사 95% 신뢰구간을 구성하라: (a) **Wald** ($\hat p \pm 1.96 \sqrt{\hat p(1 - \hat p)/n}$); (b) **Wilson 점수 구간**. 둘을 비교하라.
+
+</div>
 
 ??? success "풀이"
     $\hat p = 35/100 = 0.35$.

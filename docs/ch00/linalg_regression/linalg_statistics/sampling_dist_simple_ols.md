@@ -188,8 +188,12 @@ $n = 5$개의 자료점에서 $\bar{x} = 3$, $S_{xx} = 10$, $\hat{\beta}_1 = 2.5
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 자료점이 $n = 10$개이고 $\bar{x} = 4$, $S_{xx} = 20$, $\hat{\beta}_1 = 3.0$, $\text{SSE} = 16$인 단순선형회귀에서 기울기 $\beta_1$에 대한 95% 신뢰구간을 구성하라.
+
+</div>
 
 ??? success "풀이"
     먼저 추정 분산을 계산한다.
@@ -212,10 +216,12 @@ $n = 5$개의 자료점에서 $\bar{x} = 3$, $S_{xx} = 10$, $\hat{\beta}_1 = 2.5
 
     이다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 $c_i = (x_i - \bar{x})/S_{xx}$에 대해 $\hat{\beta}_1 = \sum_{i=1}^n c_i Y_i$임을 증명하고, 이를 이용해 $\operatorname{Var}(\hat{\beta}_1) = \sigma^2 / S_{xx}$을 유도하라.
+
+</div>
 
 ??? success "풀이"
     최소제곱 기울기 추정량은
@@ -234,20 +240,24 @@ $c_i = (x_i - \bar{x})/S_{xx}$에 대해 $\hat{\beta}_1 = \sum_{i=1}^n c_i Y_i$�
 
     이다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 $\text{SSE}/\sigma^2 \sim \chi^2_{n-2}$의 자유도가 왜 $n$이 아니라 $n - 2$인지 설명하라.
+
+</div>
 
 ??? success "풀이"
     잔차제곱합은 ($\sigma^2$으로 나눈 뒤) 모자 행렬 $\mathbf{H}$에 대해 $\text{SSE} = \mathbf{Y}^T(\mathbf{I} - \mathbf{H})\mathbf{Y}/\sigma^2$로 쓸 수 있다. 행렬 $\mathbf{I} - \mathbf{H}$는 계수가 $n - 2$인 멱등행렬이다(단순회귀에서는 절편과 기울기에 대응하여 $\text{rank}(\mathbf{H}) = 2$이므로).
 
     멱등행렬의 계수가 결과로 나오는 카이제곱분포의 자유도와 같다. 직관적으로는, $\mathbf{Y}$에 $n$개의 독립적인 정보 조각이 있는 상태에서 출발하지만 두 모수 $\beta_0$과 $\beta_1$을 적합하는 데 자유도 2를 "써버려" $\sigma^2$을 추정할 자유도로 $n - 2$가 남는다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 $\hat{\beta}_0$과 $\hat{\beta}_1$이 상관되어 있음을 보이고 $\operatorname{Cov}(\hat{\beta}_0, \hat{\beta}_1) = -\bar{x}\,\sigma^2/S_{xx}$을 유도하라.
+
+</div>
 
 ??? success "풀이"
     $\hat{\beta}_0 = \bar{Y} - \hat{\beta}_1 \bar{x}$이므로
@@ -270,10 +280,12 @@ $\hat{\beta}_0$과 $\hat{\beta}_1$이 상관되어 있음을 보이고 $\operato
 
     이다. $\bar{x} > 0$일 때 두 추정량은 음의 상관을 갖는다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.**
 $\operatorname{Cov}(\hat{\beta}_0, \hat{\beta}_1) = -\dfrac{\sigma^2 \bar{x}}{S_{xx}}$임을 보여라. 두 추정량이 무상관이 되는 조건은 무엇인가?
+
+</div>
 
 ??? success "풀이"
     $\hat{\beta}_0 = \bar{Y} - \hat{\beta}_1\bar{x}$이고 본문에서 $\operatorname{Cov}(\bar{Y}, \hat{\beta}_1) = 0$임을 보였으므로
@@ -321,7 +333,7 @@ $\operatorname{Cov}(\hat{\beta}_0, \hat{\beta}_1) = -\dfrac{\sigma^2 \bar{x}}{S_
 
     중심화하면 공분산이 0에 가까워진다. **예측변수를 중심화하는 실무 관행의 한 가지 근거**가 이것이다. 절편과 기울기의 추정이 서로 얽히지 않는다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 6.**
 $x = x_0$에서의 평균반응 추정량 $\hat{\mu}_0 = \hat{\beta}_0 + \hat{\beta}_1 x_0$의 분산이
@@ -331,6 +343,8 @@ $$
 $$
 
 임을 보여라. 이 분산은 어디서 최소가 되는가?
+
+</div>
 
 ??? success "풀이"
     $\hat{\mu}_0 = \bar{Y} + \hat{\beta}_1(x_0 - \bar{x})$로 다시 쓰는 것이 요령이다($\hat{\beta}_0 = \bar{Y} - \hat{\beta}_1\bar{x}$를 대입하면 된다). $\bar{Y}$와 $\hat{\beta}_1$이 무상관이므로
@@ -352,10 +366,12 @@ $$
 
     괄호 안의 $1$이 결정적이다. $n \to \infty$이면 신뢰구간의 폭은 0으로 가지만 예측구간의 폭은 $2z_{\alpha/2}\sigma$로 남는다. **자료를 아무리 모아도 개별 관측의 무작위성은 사라지지 않는다.** $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 7.**
 $\hat{\beta}_1 \sim N(\beta_1, \sigma^2/S_{xx})$를 모의실험으로 확인하라.
+
+</div>
 
 ??? success "풀이"
     ```python
@@ -398,10 +414,12 @@ $\hat{\beta}_1 \sim N(\beta_1, \sigma^2/S_{xx})$를 모의실험으로 확인하
 
     **왜 정확히 정규인가.** $\hat{\beta}_1 = \sum_i c_i Y_i$가 독립 정규확률변수의 **선형결합**이기 때문이다. 중심극한정리에 기댄 근사가 아니라 $n$이 작아도 정확히 성립한다. 여기서도 $n = 8$뿐이다. 다만 이는 오차가 정규일 때의 이야기이며, 오차가 정규가 아니면 $\hat{\beta}_1$의 정규성은 $n$이 커질 때의 근사로만 성립한다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 8.**
 잔차가 만족하는 두 제약 $\sum_i e_i = 0$과 $\sum_i x_i e_i = 0$을 유도하고, 이것이 자유도가 $n - 2$인 이유와 어떻게 연결되는지 설명하라.
+
+</div>
 
 ??? success "풀이"
     두 제약은 최소제곱의 **정규방정식** 그 자체다. $\sum_i (Y_i - \beta_0 - \beta_1 x_i)^2$을 $\beta_0$과 $\beta_1$로 각각 편미분해 0으로 두면
@@ -446,10 +464,12 @@ $\hat{\beta}_1 \sim N(\beta_1, \sigma^2/S_{xx})$를 모의실험으로 확인하
 
     예측변수가 $p$개인 다중회귀에서는 제약이 $p$개(절편 포함)가 되어 자유도가 $n - p$다. $\operatorname{tr}(\mathbf{I} - \mathbf{H}) = n - p$가 같은 사실의 행렬 표현이다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 9.**
 $(n-2)s^2/\sigma^2 \sim \chi^2_{n-2}$이고 이것이 $\hat{\beta}_1$과 독립임을 모의실험으로 확인하라. 이 두 사실이 왜 t-통계량에 필요한가?
+
+</div>
 
 ??? success "풀이"
     ```python
@@ -493,10 +513,12 @@ $(n-2)s^2/\sigma^2 \sim \chi^2_{n-2}$이고 이것이 $\hat{\beta}_1$과 독립�
 
     독립성은 기하에서 나온다. $\hat{\boldsymbol{\beta}}$은 $\operatorname{col}(\mathbf{X})$ 안의 사영으로 결정되고 $s^2$은 그 직교여공간의 잔차로 결정되는데, 정규분포에서 직교하는 성분은 독립이기 때문이다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 10.**
 $\operatorname{Var}(\hat{\beta}_1) = \sigma^2/S_{xx}$이므로 $x$를 넓게 퍼뜨릴수록 기울기를 정밀하게 추정한다. 예산이 $n = 10$으로 고정되어 있고 $x \in [0, 10]$에서 고를 수 있다면 어떻게 배치해야 하는가? 그 설계의 위험은 무엇인가?
+
+</div>
 
 ??? success "풀이"
     $S_{xx} = \sum_i (x_i - \bar{x})^2$을 최대화하려면 자료를 양 끝으로 몰아야 한다. $x = 0$에 5개, $x = 10$에 5개를 두면 $S_{xx} = 10 \times 5^2 = 250$으로 최댓값이다.

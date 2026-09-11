@@ -162,8 +162,12 @@ plot_pmf(values, probs, "PMF: Baseball Card Packs Purchased")
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 이산확률변수 $X$의 확률질량함수가 $P(X=0) = 0.1$, $P(X=1) = 0.3$, $P(X=2) = c$, $P(X=3) = 0.2$다. $c$의 값을 구하고 $P(X \geq 2)$를 계산하라.
+
+</div>
 
 ??? success "풀이"
     확률질량함수의 합이 1이어야 하므로
@@ -180,10 +184,12 @@ plot_pmf(values, probs, "PMF: Baseball Card Packs Purchased")
 
     이다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 공정한 사면체 주사위(면이 1, 2, 3, 4) 두 개를 굴린다. $S$를 두 주사위의 합이라 하자. $S$의 확률질량함수를 모두 쓰고 확률의 합이 1임을 확인하라.
+
+</div>
 
 ??? success "풀이"
     똑같이 일어날 법한 결과가 $4 \times 4 = 16$개다. 가능한 합은 2에서 8까지다.
@@ -200,10 +206,12 @@ plot_pmf(values, probs, "PMF: Baseball Card Packs Purchased")
 
     확인: $1 + 2 + 3 + 4 + 3 + 2 + 1 = 16$이므로 $\sum P(S=s) = 16/16 = 1$이다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 치우친 동전의 $P(\text{앞면}) = 0.7$이다. 이 동전을 3번 던진다. $X$를 앞면의 개수라 할 때 $X$의 확률질량함수를 쓰라.
+
+</div>
 
 ??? success "풀이"
     각 던지기는 독립이고 $p = 0.7$(앞면), $q = 0.3$(뒷면)이다. 3번 던졌을 때 앞면의 개수는 이항분포를 따른다.
@@ -232,20 +240,24 @@ plot_pmf(values, probs, "PMF: Baseball Card Packs Purchased")
 
     이다. 확인: $0.027 + 0.189 + 0.441 + 0.343 = 1.000$. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 연속확률변수(예: 무작위로 고른 사람의 정확한 키)를 확률질량함수로 기술할 수 없는 이유를 설명하라. 연속인 경우에는 무엇이 확률질량함수를 대신하는가?
+
+</div>
 
 ??? success "풀이"
     확률질량함수는 개별 값에 양의 확률을 부여한다. 받침의 각 값에 대해 $P(X = x) > 0$이다. 연속확률변수에서는 받침이 비가산 구간이다(예: $[150, 200]$ cm 안의 모든 실수). 개별 값마다 양의 확률을 가진다면 비가산개의 값에 대한 합(또는 적분)이 무한대로 발산하여 정규화 공리 $P(\Omega) = 1$을 위반한다.
 
     대신 연속확률변수는 **확률밀도함수** $f(x)$로 기술하며, $f(x) \geq 0$이고 $\int_{-\infty}^{\infty} f(x)\,dx = 1$이다. 확률밀도함수는 확률이 아니라 밀도를 준다. 어떤 한 값에 대해서도 $P(X = x) = 0$이지만 $P(a \leq X \leq b) = \int_a^b f(x)\,dx$가 구간에 대한 확률을 준다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.**
 **기하분포.** $X$ = i.i.d. Bernoulli($p$)에서 첫 성공까지의 시행 횟수. 확률질량함수, $\mathbb{E}[X]$, $\mathrm{Var}(X)$를 유도하라.
+
+</div>
 
 ??? success "풀이"
     **확률질량함수:** $X = k$이려면 실패 $k - 1$번 뒤에 성공해야 하므로 $k = 1, 2, \ldots$에 대해 $P(X = k) = (1 - p)^{k-1} p$이다.
@@ -258,10 +270,12 @@ plot_pmf(values, probs, "PMF: Baseball Card Packs Purchased")
 
     $p = 0.5$이면 평균 2회, 분산 2, 표준편차 $\sqrt 2$다. 기하분포는 지수분포의 이산판이며 무기억 성질을 물려받는다: $P(X > m + n \mid X > m) = P(X > n)$.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 6.**
 **이항분포의 포아송 근사.** $np \to \lambda$가 상수인 채로 $n \to \infty$이면 Binomial$(n, p)$ → Poisson$(\lambda)$임을 보여라.
+
+</div>
 
 ??? success "풀이"
     이항 확률질량함수에 $p = \lambda/n$을 대입한다.
@@ -282,10 +296,12 @@ plot_pmf(values, probs, "PMF: Baseball Card Packs Purchased")
 
     어림법칙: $n \ge 20$, $p \le 0.05$, $np \le 10$일 때 포아송이 잘 맞는다. 그렇지 않으면 이항을 쓰거나, $np \ge 10$이면 정규근사를 쓴다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 7.**
 연습문제 $5$의 기하분포를 일반화하라. **음이항분포**의 확률질량함수와 적률을 유도하고 확인하라.
+
+</div>
 
 ??? success "풀이"
     $X$를 "$r$번째 성공까지의 시행 횟수"라 하자. $X = k$이려면 앞의 $k-1$번 중 정확히 $r-1$번 성공하고 $k$번째가 성공이어야 하므로
@@ -337,10 +353,12 @@ plot_pmf(values, probs, "PMF: Baseball Card Packs Purchased")
 
     **실무 진단.** 계수 자료에서 표본분산이 표본평균보다 뚜렷이 크면 포아송 대신 음이항을 쓴다. 반대로 분산이 **작으면**(과소산포) 이항이나 다른 모형이 필요하다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 8.**
 **포아송 분포와 지수분포는 같은 과정의 두 얼굴이다.** 그 관계를 진술하고 수치로 확인하라.
+
+</div>
 
 ??? success "풀이"
     **포아송 과정**을 사건 간격이 i.i.d. $\text{Exp}(\lambda)$인 과정으로 정의하면, 길이 $t$인 구간의 사건 수가 $\text{Poisson}(\lambda t)$를 따른다.
@@ -406,10 +424,12 @@ plot_pmf(values, probs, "PMF: Baseball Card Packs Purchased")
 
     **어디에 쓰이는가.** 대기행렬의 도착, 방사성 붕괴, 콜센터 문의, 웹 요청, 보험 청구가 모두 포아송 과정으로 근사된다. **드문 사건이 독립적으로 일어날 때 나타나는 보편적인 구조**이며, 연습문제 6의 이항–포아송 극한이 그 근거를 준다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 9.**
 연습문제 $6$이 이항의 극한을 다루었다면, 이항 자체가 **근사인 경우**도 있다. **초기하분포**를 유도하고 언제 이항으로 근사할 수 있는지 밝혀라.
+
+</div>
 
 ??? success "풀이"
     크기 $N$인 모집단에 성공이 $K$개 있고 $n$개를 **비복원**으로 뽑을 때, 성공 수 $X$는
@@ -476,10 +496,12 @@ plot_pmf(values, probs, "PMF: Baseball Card Packs Purchased")
 
     화살표는 한 방향이다. 초기하 $\to$ 이항 $\to$ 포아송으로 근사가 이어지며, 각 단계에서 가정이 하나씩 단순해진다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 10.**
 계수 자료가 포아송을 따르는지 **어떻게 확인하는가**? 과산포와 영과잉을 진단하라.
+
+</div>
 
 ??? success "풀이"
     ```python

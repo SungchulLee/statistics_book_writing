@@ -120,8 +120,12 @@ print(f"{'이론값':<12} mean={df:.4f}  var={2*df:.4f}")
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 위 성질 표를 써서 $Q \sim \chi^2(10)$의 $E[Q]$와 $\text{Var}(Q)$를 계산하고, $Z \sim N(0,1)$에 대한 $E[Z^2]$과 $\text{Var}(Z^2)$으로 확인하라.
+
+</div>
 
 ??? success "풀이"
     표에서 $E[Q] = d = 10$, $\text{Var}(Q) = 2d = 20$이다.
@@ -134,10 +138,12 @@ print(f"{'이론값':<12} mean={df:.4f}  var={2*df:.4f}")
 
     이다. 두 방식이 일치한다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 $Z \sim N(0,1)$에 대한 $Z^2$의 적률생성함수에서 시작하여 $\chi^2(d)$의 적률생성함수가 $t < 1/2$에서 $M_Q(t) = (1 - 2t)^{-d/2}$임을 보여라.
+
+</div>
 
 ??? success "풀이"
     $Z \sim N(0,1)$에서 $Z^2$의 적률생성함수는
@@ -156,10 +162,12 @@ $Z \sim N(0,1)$에 대한 $Z^2$의 적률생성함수에서 시작하여 $\chi^2
 
     ($t < 1/2$). $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 $Q_1 \sim \chi^2(3)$과 $Q_2 \sim \chi^2(7)$이 독립일 때 $Q_1 + Q_2$의 분포를 구하고 $P(Q_1 + Q_2 > 18.31)$을 계산하라.
+
+</div>
 
 ??? success "풀이"
     가법성에 의해 $Q_1 + Q_2 \sim \chi^2(3 + 7) = \chi^2(10)$이다.
@@ -172,10 +180,12 @@ $Q_1 \sim \chi^2(3)$과 $Q_2 \sim \chi^2(7)$이 독립일 때 $Q_1 + Q_2$의 분
 
     이다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 자유도 $d = 2$인 카이제곱 분포가 지수분포인 이유를 설명하라. 비율 모수를 밝혀라.
+
+</div>
 
 ??? success "풀이"
     확률밀도함수에 $d = 2$를 넣으면
@@ -186,10 +196,12 @@ $Q_1 \sim \chi^2(3)$과 $Q_2 \sim \chi^2(7)$이 독립일 때 $Q_1 + Q_2$의 분
 
     이다. 이는 정확히 $\text{Exponential}(\lambda = 1/2)$ 분포(동등하게 평균이 2인 지수분포)의 확률밀도함수이다. 놀랄 일은 아니다. $\chi^2(d)$는 $\text{Gamma}(d/2, 1/2)$의 특수한 경우이고 $\text{Gamma}(1, \lambda) = \text{Exponential}(\lambda)$이기 때문이다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.**
 어떤 연구자가 정규근사 $(Q - d)/\sqrt{2d} \approx N(0,1)$을 써서 $\chi^2(50)$의 상위 5% 임계값을 구하려 한다. 근사 임계값을 계산하고 정확한 값 67.50과 비교하라.
+
+</div>
 
 ??? success "풀이"
     $d = 50$과 $z_{0.95} = 1.645$로 근사하면

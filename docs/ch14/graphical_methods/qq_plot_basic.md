@@ -100,7 +100,11 @@ Shapiro-Wilk와 D'Agostino $K^2$는 강하게 기각하지만 Anderson-Darling�
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.** 표준정규 관측값 $n = 200$개를 생성하라. Q-Q 그림을 만들고 세 검정을 모두 수행하라. 점들이 적합선 위에 놓이고 모든 $p$값이 0.05를 넘는지 확인하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -139,9 +143,11 @@ Shapiro-Wilk와 D'Agostino $K^2$는 강하게 기각하지만 Anderson-Darling�
 
     Q-Q 그림은 점들이 대각선에 바짝 붙어 있음을 보인다. 두 $p$값 모두 0.05를 크게 넘고, $A^2 = 0.134$는 가장 느슨한 15% 임계값 $0.565$보다도 훨씬 작다. 표준정규 자료가 모든 정규성 확인을 통과함을 확인해 준다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.** 연습문제 1을 $\text{Exponential}(1)$에서 뽑은 관측값 $n = 200$개로 반복하라. Q-Q 그림의 모양을 기술하고 $p$값들을 비교하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -178,9 +184,11 @@ Shapiro-Wilk와 D'Agostino $K^2$는 강하게 기각하지만 Anderson-Darling�
 
     두 $p$값 모두 사실상 0으로 정규성을 강하게 기각한다. 두 검정의 $p$값 크기가 거의 같다는 점도 눈에 띈다. 이탈이 압도적으로 크면 어느 검정을 쓰든 결론이 같다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.** Q-Q 그림 적합선의 기울기·절편과 정규분포의 모수 $\mu$, $\sigma$ 사이의 관계를 설명하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -188,9 +196,11 @@ Shapiro-Wilk와 D'Agostino $K^2$는 강하게 기각하지만 Anderson-Darling�
 
     곧 **절편이 평균을, 기울기가 표준편차를 추정한다**. 자료가 정말로 정규이면 이 추정값은 표본평균 및 표본표준편차와 일치한다. 실용적으로도 유용한 결과이다. Q-Q 그림의 기울기가 1보다 훨씬 크면 자료의 산포가 기준분포보다 크다는 뜻이다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.** SciPy의 Anderson-Darling 검정은 $p$값을 내놓지 않고 임계값을 반환한다. $H_0$이 기각되는 가장 작은 유의수준을 찾아내는 코드를 작성하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -226,9 +236,11 @@ Shapiro-Wilk와 D'Agostino $K^2$는 강하게 기각하지만 Anderson-Darling�
 
     이 두꺼운 꼬리 혼합자료에서는 $A^2 = 0.689$가 15%와 10% 임계값($0.565$, $0.644$)만 넘고 5% 임계값 $0.772$는 넘지 못한다. 곧 **Anderson-Darling으로는 10% 수준에서만 기각할 수 있다**. 같은 자료에서 Shapiro-Wilk가 $p = 0.00045$를 내는 것과 대비된다. 유의수준을 5%로 정해 두었다면 Anderson-Darling만으로는 이 비정규성을 놓쳤을 것이다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.** 자료가 정확히 표준정규일 때 $n \to \infty$에 따라 Q-Q 그림의 기울기가 1로, 절편이 0으로 수렴함을 보여라.
+
+</div>
 
 ??? success "풀이"
 

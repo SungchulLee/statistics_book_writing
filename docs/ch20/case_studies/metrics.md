@@ -160,6 +160,8 @@ def draw_loss_and_accuracy(loss_trace, accuracy_trace):
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 혼동행렬과 범주별 지표
 
@@ -178,6 +180,8 @@ def draw_loss_and_accuracy(loss_trace, accuracy_trace):
 **(c)** 거시평균과 미시평균 F1 점수를 계산하라.
 
 **(d)** 어느 범주의 성능이 가장 나쁜가? 혼동행렬은 흔한 오분류에 대해 무엇을 알려 주는가?
+
+</div>
 
 ??? success "풀이"
 
@@ -235,11 +239,13 @@ def draw_loss_and_accuracy(loss_trace, accuracy_trace):
     5개를 C에게 잃는다. 가장 흔한 오류는 실제 A를 B로 예측한 5건과 실제 B를 C로 예측한 5건이다.
     B와 그 이웃 범주 사이의 결정경계를 다듬을 여지가 있음을 시사한다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 정밀도가 **열** 합으로, 재현율이 **행** 합으로 계산되는 이유를 혼동행렬의 정의로부터
 설명하라. 두 방향을 혼동하면 어떤 오류가 생기는가?
+
+</div>
 
 ??? success "풀이"
 
@@ -260,11 +266,13 @@ def draw_loss_and_accuracy(loss_trace, accuracy_trace):
     행 합이 각 범주의 실제 개수와 같으면 행 = 실제다. 이 절의 [혼동행렬](../../ch19/evaluation/confusion_matrix.md)
     페이지에서 다룬 2×2 표에서도 같은 확인이 필요하다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 `load_digits` 예제에서 로지스틱 회귀가 $97.2\%$의 정확도를 낸다. 같은 모형을 MNIST에 적용하면
 왜 정확도가 더 낮게 나오는가? 두 결과를 비교할 수 있는가?
+
+</div>
 
 ??? success "풀이"
 

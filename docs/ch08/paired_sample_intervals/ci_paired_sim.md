@@ -146,7 +146,11 @@ plt.show()
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.** 환자 10명의 혈압을 투약 전후로 측정했다. 차이 $D_i$(투약 전 빼기 투약 후)는 5, 3, 8, 2, 6, 4, 7, 1, 5, 3이다. $\mu_D$의 95% $t$-구간을 구성하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -168,9 +172,11 @@ plt.show()
 
     $\mu_D$의 95% 신뢰구간은 $(2.81, 5.99)$이다. 구간 전체가 양수이므로 이 약이 혈압을 낮추는 것으로 보인다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.** 대응 관측값에 대해 공식 $\sigma_D^2 = \sigma_X^2 + \sigma_Y^2 - 2\rho\,\sigma_X\sigma_Y$를 유도하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -188,9 +194,11 @@ plt.show()
 
     를 얻는다. $\rho > 0$이면 빼지는 항 $2\rho\,\sigma_X\sigma_Y > 0$ 덕분에 $D$의 분산이, $X$와 $Y$가 독립일 때 나올 값인 $\sigma_X^2 + \sigma_Y^2$보다 작아진다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.** $\sigma_X = \sigma_Y = \sigma$이고 $\rho = 0.8$이라 하자. $n$쌍인 대응 설계에서 $\bar{D}$의 표준오차와, 집단당 관측값이 $n$개인 독립 이표본 설계에서 $\bar{X} - \bar{Y}$의 표준오차를 비교하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -208,9 +216,11 @@ plt.show()
 
     비는 $\text{SE}_{\text{paired}}/\text{SE}_{\text{indep}} = \sqrt{0.4}/\sqrt{2} = \sqrt{0.2} \approx 0.447$이다. 대응 설계가 표준오차를 절반 넘게 줄여 훨씬 좁은 신뢰구간을 준다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.** 어떤 $\rho$ 값에서 대응 설계가 독립 설계보다 나을 것이 없어지는가? $\rho < 0$이면 어떻게 되는가?
+
+</div>
 
 ??? success "풀이"
 
@@ -224,9 +234,11 @@ plt.show()
 
     $\rho < 0$이면 $2(1-\rho) > 2$이므로 $\text{SE}_{\text{paired}} > \text{SE}_{\text{indep}}$이다. 음의 짝 내 상관은 오히려 차이의 분산을 **키워** 대응 설계를 독립 설계보다 **못하게** 만든다. 실무에서 흔치는 않지만, 예컨대 짝지은 피험자들이 반대 방향으로 반응하는 경향이 있다면 생길 수 있다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.** 어떤 연구가 대응 관측값 $n = 15$쌍을 쓴다. 표본 평균 차이는 $\bar{D} = 2.3$, $S_D = 4.1$이다. 95% 신뢰구간에 0이 들어 있는지 확인하여 5% 수준에서 $\mu_D = 0$을 검정하라.
+
+</div>
 
 ??? success "풀이"
 

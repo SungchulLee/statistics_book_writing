@@ -49,8 +49,12 @@ $$
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 자료 $\mathbf{x}$가 주어졌을 때 모수 $\theta$에 대한 베이즈 정리를 서술하라. 각 구성 요소(사전분포, 가능도, 사후분포, 주변가능도)를 찾아 이름을 붙여라.
+
+</div>
 
 ??? success "풀이"
     베이즈 정리는 다음과 같다:
@@ -64,10 +68,12 @@ $$
     - **주변가능도** $m(\mathbf{x}) = \int L(\mathbf{x} \mid \theta)\pi(\theta)\,d\theta$: 사후분포의 적분이 1이 되게 하는 정규화 상수이다.
     - **사후분포** $\pi(\theta \mid \mathbf{x})$: 자료를 관측한 뒤의 갱신된 $\theta$의 분포이다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 동전의 앞면 확률에 대한 사전분포가 $p \sim \text{Uniform}(0, 1)$이라 하자. 동전을 한 번 던져 앞면을 관측했다. 사후분포 $\pi(p \mid H)$를 계산하라.
+
+</div>
 
 ??? success "풀이"
     사전분포는 $p \in (0, 1)$에서 $\pi(p) = 1$이다($\text{Beta}(1, 1)$과 같다). 앞면 한 번에 대한 가능도는 $L(H \mid p) = p$이다.
@@ -80,10 +86,12 @@ $$
 
     이는 $\text{Beta}(2, 1)$의 밀도이다. 사후평균은 $E[p \mid H] = 2/3$으로 사전평균 $1/2$에서 위로 이동했으며, 앞면을 관측했다는 증거를 반영한다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 사후최빈값(MAP 추정값)과 MLE의 관계를 설명하라. 어떤 조건에서 MAP 추정값이 MLE와 같아지는가?
+
+</div>
 
 ??? success "풀이"
     **MAP(최대사후확률)** 추정값은 사후분포를 최대화한다:
@@ -96,10 +104,12 @@ $$
 
     사전분포가 평평하면(균등/무정보), 즉 $\pi(\theta) \propto c$(상수)이면 $\log \pi(\theta)$가 최적화에 영향을 주지 않는 상수가 되므로 MAP가 MLE와 같아진다. 또한 $n \to \infty$일 때 큰 표본에서는 가능도가 사전분포를 압도하므로 MAP가 MLE에 가까워진다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 사전분포 $\pi(\theta)$가 $\theta = 0$에 확률 0.7을, $\theta = 1$에 0.3을 부여한다. 가능도는 $P(X = 1 \mid \theta = 0) = 0.2$, $P(X = 1 \mid \theta = 1) = 0.9$를 만족한다. $X = 1$을 관측한 뒤 사후확률 $P(\theta = 0 \mid X = 1)$과 $P(\theta = 1 \mid X = 1)$을 계산하라.
+
+</div>
 
 ??? success "풀이"
     이산 $\theta$에 대한 베이즈 정리에 의해:

@@ -93,8 +93,12 @@ $$
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 정규 자료에서 $\hat\sigma^2_c = (1/c)\sum(X_i - \bar X)^2$에 대해: (a) $\mathrm{MSE}$를 유도하라. (b) 최적 $c^*$를 구하라. (c) $n = 10$에서 확인하라.
+
+</div>
 
 ??? success "풀이"
     (a) $W = \sum(X_i - \bar X)^2 \sim \sigma^2 \chi^2_{n-1}$일 때: $\mathbb{E}[\hat\sigma^2_c] = (n-1)\sigma^2/c$, $\mathrm{Var}(\hat\sigma^2_c) = 2(n-1)\sigma^4/c^2$.
@@ -105,10 +109,12 @@ $$
 
     (c) $n = 10$, $\sigma = 1$: $\mathrm{MSE}(9) \approx 0.222$, $\mathrm{MSE}(10) = 0.190$, $\mathrm{MSE}(11) \approx 0.182$. $c^* = 11$이 이긴다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 분산추정에서 **세 가지 분모**(n, n-1, n+1)를 **비교**하라.
+
+</div>
 
 ??? success "풀이"
     | 추정량 | 나누는 수 | 편향 | $\mathrm{Var}/\sigma^4$ | $\mathrm{MSE}/\sigma^4$ |
@@ -121,10 +127,12 @@ $$
 
     평균제곱오차에서 이기는데도 $n+1$ 분모가 거의 쓰이지 않는 이유는 $S^2$의 해석이 더 깔끔하고(불편) 적당한 $n$에서는 평균제곱오차 차이가 작기 때문이다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 **평균제곱오차는 손실함수에 따라 달라진다.** 평균제곱오차가 표준이 된 이유는 무엇이며 어떤 대안이 있는가?
+
+</div>
 
 ??? success "풀이"
     MSE는 제곱오차 손실 $L(\hat\theta, \theta) = (\hat\theta - \theta)^2$이다. 널리 쓰이는 이유:
@@ -142,10 +150,12 @@ $$
 
     손실의 선택은 어떤 종류의 오차에 벌점을 줄지를 반영한다. MSE는 *기본값*이지만 언제나 *옳은* 선택은 아니다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 **축소와 James-Stein.** 다변량 정규 평균의 MLE는 각 성분의 표본평균이다. James-Stein은 $p \ge 3$일 때 이것이 **허용 불가능**함을 보였다. 그 아이디어를 스케치하라.
+
+</div>
 
 ??? success "풀이"
     (관측값 하나로) $\mathbf X \sim N(\boldsymbol\mu, I_p)$에서 $\boldsymbol\mu \in \mathbb{R}^p$를 추정한다. MLE: $\hat{\boldsymbol\mu} = \mathbf X$. 평균제곱오차: $\mathbb{E}[\|\mathbf X - \boldsymbol\mu\|^2] = p$.
@@ -158,10 +168,12 @@ $$
 
     현대 통계학: 고차원 문제에서 축소추정량(능형, 라소, James-Stein)이 평균제곱오차 기준으로 MLE를 일상적으로 이긴다. 경험적 Bayes와 계층 모형이 이를 형식화한다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.**
 **표본크기와 평균제곱오차.** $S^2$에 대해 $n$을 네 배로 하면 $\sqrt{\mathrm{MSE}}$가 대략 절반이 됨을 보여라.
+
+</div>
 
 ??? success "풀이"
     $\mathrm{MSE}(S^2) = 2\sigma^4/(n-1)$. 제곱근을 취하면 $\sqrt{\mathrm{MSE}} = \sigma^2 \sqrt{2/(n-1)}$.
@@ -170,10 +182,12 @@ $$
 
     $n$이 네 배가 되면 절반이 된다. $\bar X$에서와 같은 $\sqrt n$ 축척이며, 여기서는 분산추정의 RMSE에 적용된 것이다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 6.**
 **점근적 최적성.** $n \to \infty$일 때 세 추정량(분모 $n$, $n-1$, $n+1$)의 점근 평균제곱오차가 같음을 보여라.
+
+</div>
 
 ??? success "풀이"
     세 가지 모두:

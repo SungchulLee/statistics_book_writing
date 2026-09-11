@@ -295,10 +295,14 @@ scikit-learn도 $1.0000$을 내어 두 구현이 일치한다.
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 교차엔트로피 손실 $J = -\frac{1}{n}\sum_i \sum_c y_{ic}\log\hat{y}_{ic}$과 소프트맥스 정의
 $\hat{y}_{ic} = e^{z_{ic}} / \sum_{j} e^{z_{ij}}$에서 출발하여, 관측치 $i$ 하나에 대해
 $\partial J / \partial z_{ik} = (\hat{y}_{ik} - y_{ik})/n$을 유도하라.
+
+</div>
 
 ??? success "풀이"
     관측치 $i$를 고정하고 명확성을 위해 $1/n$ 인자를 잠시 뺀다. 이 관측치의 손실은
@@ -325,12 +329,14 @@ $\partial J / \partial z_{ik} = (\hat{y}_{ik} - y_{ik})/n$을 유도하라.
     이다. 여기서 $\sum_c y_{ic} = 1$(원-핫)을 썼다. $1/n$ 인자를 포함하면
     $\partial J / \partial z_{ik} = (\hat{y}_{ik} - y_{ik})/n$이다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 $L_2$ 정칙화 판본의 학습 루프를 구현하라. 손실에 벌점항 $\frac{\lambda}{2}\|\mathbf{W}\|_F^2$을
 더하고 기울기를 그에 맞게 수정하라. $\lambda = 0.1$로 붓꽃 자료에서 학습하고 벌점 없는 판본과
 검정 정확도를 비교하라.
+
+</div>
 
 ??? success "풀이"
     정칙화 손실은
@@ -386,7 +392,7 @@ $L_2$ 정칙화 판본의 학습 루프를 구현하라. 손실에 벌점항 $\f
     기대로 임의의 값을 쓰면 이렇게 성능이 떨어진다. 정칙화의 이득은 $d$가 $n$에 비해 크거나
     특성에 잡음이 많을 때 나타난다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 소프트맥스는 평행이동 불변이다:
@@ -394,6 +400,8 @@ $\operatorname{softmax}(\mathbf{z} + c\mathbf{1}) = \operatorname{softmax}(\math
 $\mathbf{z} = (1000, 1001, 999)^\top$에 대해 최댓값을 빼는 기법을 쓴 경우와 쓰지 않은 경우의
 소프트맥스를 각각 계산하여, 순진한 판본이 `nan`을 내고 안정적인 판본은 그렇지 않음을 보이는
 NumPy 실험을 작성하라.
+
+</div>
 
 ??? success "풀이"
     ```python
@@ -426,12 +434,14 @@ NumPy 실험을 작성하라.
     NumPy는 예외를 던지지 않고 경고만 내므로, 경고를 무시하도록 설정된 환경에서는 이 오류가
     조용히 지나갈 수 있다는 점에 유의하라.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 소프트맥스 회귀에서 범주 $j$와 $k$ 사이의 결정경계가 초평면임을 증명하라. 즉 집합
 $\{\mathbf{x} : \hat{p}_j(\mathbf{x}) = \hat{p}_k(\mathbf{x})\}$가 $\mathbb{R}^d$의
 $(d-1)$차원 아핀 부분공간임을 보여라.
+
+</div>
 
 ??? success "풀이"
     예측확률은 $\hat{p}_c(\mathbf{x}) = \operatorname{softmax}(\mathbf{W}\mathbf{x} + \mathbf{b})_c$
@@ -465,12 +475,14 @@ $(d-1)$차원 아핀 부분공간임을 보여라.
     그 부분은 경계가 아니다. 그래서 소프트맥스의 결정영역은 초평면들이 잘라 만드는 **볼록
     다면체**가 되고, 두 범주 사이의 실제 경계는 초평면의 다면체 조각이다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.**
 50 에포크마다 학습률에 감쇠인자 $\gamma = 0.95$를 곱하는 학습률 일정을 구현하라. 초기 학습률
 $\eta_0 = 1.0$으로 붓꽃 자료에서 500 에포크 학습하고, 훈련 손실 곡선을 고정 학습률 판본과
 비교하라.
+
+</div>
 
 ??? success "풀이"
     ```python

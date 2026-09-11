@@ -289,8 +289,12 @@ MLE는 강력하지만 중요한 한계가 있다:
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 PDF가 $f(x;\lambda) = \lambda e^{-\lambda x}$인 Exponential$(\lambda)$ 분포에서 얻은 확률표본 $x_1, \ldots, x_n$에 대해 로그가능도함수를 쓰고 MLE $\hat{\lambda}$를 구하라.
+
+</div>
 
 ??? success "풀이"
     가능도는:
@@ -313,10 +317,12 @@ PDF가 $f(x;\lambda) = \lambda e^{-\lambda x}$인 Exponential$(\lambda)$ 분포�
 
     2계도함수가 $-n/\lambda^2 < 0$이므로 최댓값이다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 MLE의 불변성을 사용하여, Exponential$(\lambda)$ 분포에서 $\hat{\lambda} = 1/\bar{x}$가 MLE일 때 평균 $\mu = 1/\lambda$의 MLE는 무엇인가?
+
+</div>
 
 ??? success "풀이"
     불변성에 의해 임의의 함수 $g(\theta)$의 MLE는 $g(\hat{\theta})$이다. $\mu = 1/\lambda = g(\lambda)$이므로:
@@ -327,10 +333,12 @@ MLE의 불변성을 사용하여, Exponential$(\lambda)$ 분포에서 $\hat{\lam
 
     모평균의 MLE는 단순히 표본평균이며 직관적이다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 Exponential$(\lambda)$ 분포의 관측값 하나에 대한 Fisher 정보량 $I(\lambda)$를 계산하라. MLE $\hat{\lambda}$의 점근분산은 무엇인가?
+
+</div>
 
 ??? success "풀이"
     관측값 하나에 대한 로그가능도는 $\ell(\lambda) = \log \lambda - \lambda x$이다. 2계도함수는:
@@ -351,10 +359,12 @@ Exponential$(\lambda)$ 분포의 관측값 하나에 대한 Fisher 정보량 $I(
     \text{Var}(\hat{\lambda}) \approx \frac{1}{n I(\lambda)} = \frac{\lambda^2}{n}
     $$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 정규분포의 분산추정량을 예로 들어 MLE가 유한표본에서 편향될 수 있는 이유를 설명하라.
+
+</div>
 
 ??? success "풀이"
     $N(\mu, \sigma^2)$에서 뽑은 확률표본에 대해 $\sigma^2$의 MLE는:

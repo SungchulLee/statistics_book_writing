@@ -146,8 +146,12 @@ $$
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 $\text{Uniform}(0, \theta)$에서 얻은 표본에 대해 $\theta$의 적률법 추정량을 유도하라.
+
+</div>
 
 ??? success "풀이"
     1차 모집단 적률은:
@@ -164,10 +168,12 @@ $\text{Uniform}(0, \theta)$에서 얻은 표본에 대해 $\theta$의 적률법 
 
     예를 들어 표본에서 $\bar{X} = 3.5$이면 $\hat{\theta}_{\text{MOM}} = 7.0$이다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 $E[X] = \alpha/\beta$이고 $\text{Var}(X) = \alpha/\beta^2$인 $\text{Gamma}(\alpha, \beta)$에서 얻은 표본에 대해 처음 두 적률을 사용하여 $\alpha$와 $\beta$의 적률법 추정량을 유도하라.
+
+</div>
 
 ??? success "풀이"
     처음 두 모집단 적률은:
@@ -188,10 +194,12 @@ $E[X] = \alpha/\beta$이고 $\text{Var}(X) = \alpha/\beta^2$인 $\text{Gamma}(\a
     \hat{\beta}_{\text{MOM}} = \frac{\hat{\alpha}}{\bar{X}} = \frac{\bar{X}}{S^2}
     $$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 Bernoulli 분포의 모수 $p$에 대해 적률법 추정량과 MLE를 비교하라. 둘은 같은가? 그 이유를 설명하라.
+
+</div>
 
 ??? success "풀이"
     두 추정량 모두 $\hat{p} = \bar{X}$(표본비율)을 주므로 Bernoulli 분포에서는 동일하다.
@@ -202,10 +210,12 @@ Bernoulli 분포의 모수 $p$에 대해 적률법 추정량과 MLE를 비교하
 
     이는 우연이 아니다. 단일모수 지수족에서 MLE는 언제나 충분통계량 $\sum X_i$의 함수이고, 1차 적률에 기반한 적률법 추정량도 $\sum X_i$의 함수이다. 적률방정식과 점수방정식의 해가 같으면 두 추정량이 일치한다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 적률법 추정량이 일치하지 않는 예를 들라. 적률방정식에 어떤 조건이 있어야 일치성이 보장되는가?
+
+</div>
 
 ??? success "풀이"
     적률법 추정량은 모집단 적률에서 모수로 가는 함수가 연속이고 적률방정식의 해가 유일할 때 일치한다. 일치성은 큰수의 법칙($\bar{X}^k \xrightarrow{p} E[X^k]$)과 연속사상정리를 결합하면 따라 나온다.

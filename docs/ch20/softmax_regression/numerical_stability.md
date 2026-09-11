@@ -134,6 +134,8 @@ $$
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 수치적 안정성과 로그-합-지수
 
@@ -152,6 +154,8 @@ $$
 $$
 
 을 유도하고, 우변이 왜 수치적으로 안정한지 설명하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -196,11 +200,13 @@ $$
     뿐이다). (3) 따라서 로그 안의 합이 최소 1이므로 $\log$ 값이 0 이상이고, 최종 결과
     $m + (\text{0 이상})$이 잘 정의된다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 $\operatorname{LSE}(\mathbf{z})$의 기울기가 $\operatorname{softmax}(\mathbf{z})$임을 보여라.
 이 사실이 왜 유용한가?
+
+</div>
 
 ??? success "풀이"
 
@@ -229,11 +235,13 @@ $\operatorname{LSE}(\mathbf{z})$의 기울기가 $\operatorname{softmax}(\mathbf
        "soft max"라는 이름이 여기에서 온다. 엄밀히 말해 소프트맥스 함수는 최댓값이 아니라
        **arg max의 매끄러운 근사**이고, LSE가 최댓값의 매끄러운 근사다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 $\max(0, z) + \log(1 + e^{-|z|}) = \log(1 + e^z)$임을 $z > 0$과 $z \le 0$ 두 경우로 나누어
 증명하라. $z = 1000$에서 두 식을 각각 계산해 비교하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -260,11 +268,13 @@ $\max(0, z) + \log(1 + e^{-|z|}) = \log(1 + e^z)$임을 $z > 0$과 $z \le 0$ 두
     참값은 $\log(1+e^{1000}) = 1000 + \log(1+e^{-1000}) \approx 1000$이므로 안정적인 식이
     정확하다. NumPy에서는 `np.logaddexp(0, z)`가 정확히 이 계산을 수행한다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 로짓이 $\mathbf{z} = (-1000, -1001, -999)$처럼 **모두 매우 작은** 경우에도 최댓값을 빼는 것이
 올바르게 작동하는지 확인하라. 최솟값을 빼면 어떻게 되는가?
+
+</div>
 
 ??? success "풀이"
 
@@ -283,11 +293,13 @@ $\max(0, z) + \log(1 + e^{-|z|}) = \log(1 + e^z)$임을 $z > 0$과 $z \le 0$ 두
     정의상 최댓값보다 $700$ 이상 작아 상대 기여가 $e^{-700} \approx 10^{-304}$이므로 무해하다.
     $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.**
 어떤 구현이 `p = softmax(z)`를 계산한 뒤 `loss = -np.log(p[y])`로 손실을 구한다. 이 구현이
 실패하는 구체적인 상황을 제시하고, 왜 융합 연산이 필요한지 설명하라.
+
+</div>
 
 ??? success "풀이"
 

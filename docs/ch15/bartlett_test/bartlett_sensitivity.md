@@ -99,7 +99,11 @@ False-positive rates under skewed (lognormal) data:
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.** `skew=False`(정규 자료)로 모의실험을 실행하여 세 검정의 거짓 양성률이 모두 0.05에 가까움을 확인하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -140,9 +144,11 @@ False-positive rates under skewed (lognormal) data:
 
     **대조가 뚜렷하다.** 정규 자료에서 Bartlett의 크기는 $0.051$로 완벽하지만 대수정규 자료에서는 $0.675$이다. **가정이 성립할 때 가장 좋고 깨질 때 가장 나쁜 것**이 이 검정의 특징이다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.** 대수정규 분포를 유지한 채 표본크기를 $n = 100$으로 늘려라. Bartlett 검정의 부풀려진 거짓 양성률이 개선되는가? 이유를 설명하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -181,9 +187,11 @@ False-positive rates under skewed (lognormal) data:
 
     15.3절 연습문제 4의 유도로 설명하면, 실제 $\operatorname{Var}(\ln S^2)$와 명목값의 비율 $(\gamma_2+2)/2$가 $n$에 의존하지 않는다. $n$이 커지면 명목 분포는 좁아지는데 실제 분포는 같은 비율로 넓은 상태를 유지하므로 불일치의 상대적 크기가 커진다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.** 대수정규 대신 $t(3)$ 자료를 쓰도록 모의실험을 수정하라. Bartlett 검정이 여전히 부풀려지는가? 심각도가 대수정규의 경우와 어떻게 비교되는가?
+
+</div>
 
 ??? success "풀이"
 
@@ -224,9 +232,11 @@ False-positive rates under skewed (lognormal) data:
 
     대수정규는 **치우침** 문제가 있고 $t(3)$은 **첨도** 문제가 있다. 둘 다 Bartlett의 정규성 가정을 위반하지만 방식이 다르며, 실무에서는 치우침이 더 큰 위협임을 보여준다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.** 모수 $\sigma$인 대수정규분포의 분산은 $(e^{\sigma^2} - 1)e^{2\mu + \sigma^2}$이다. 모든 집단이 같은 $\sigma$와 $\mu$를 쓰면 모분산이 같다. $\mu = 0, \sigma = 1$인 대수정규의 모분산, 왜도, 첨도를 계산하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -274,9 +284,11 @@ False-positive rates under skewed (lognormal) data:
 
     $\sigma$가 0.25에서 1.5로 여섯 배가 될 때 $\gamma_2$가 만 배 가까이 커진다. $\gamma_2$의 지배항이 $e^{4\sigma^2}$이라 $\sigma^2$에 지수적으로 반응하기 때문이다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.** 관측된 첨도에 기반하여 임계값을 조정하는 Bartlett 검정의 보정판을 제안하라. 이 접근의 실현 가능성과 한계를 논하라.
+
+</div>
 
 ??? success "풀이"
 

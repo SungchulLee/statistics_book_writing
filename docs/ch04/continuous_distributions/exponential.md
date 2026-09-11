@@ -269,8 +269,12 @@ plt.show()
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 부품 수명이 $T \sim \mathrm{Exp}(0.5)$(단위: 년)이다. (a) $P(T > 3)$. (b) $P(T > 3 \mid T > 2)$. (c) 독립인 부품 두 개에 대해 $\min(T_1, T_2)$의 분포와 기댓값.
+
+</div>
 
 ??? success "풀이"
     (a) $P(T > 3) = e^{-1.5} \approx 0.223$.
@@ -279,10 +283,12 @@ plt.show()
 
     (c) $\min(T_1, T_2) \sim \mathrm{Exp}(\lambda_1 + \lambda_2) = \mathrm{Exp}(1.0)$. $\mathbb{E}[\min] = 1$년(부품 하나일 때의 절반).
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 Exponential 분포의 **무기억성을 증명**하고, 이 성질을 갖는 연속분포가 *유일*함을 보여라.
+
+</div>
 
 ??? success "풀이"
     생존함수는 $\bar F(t) = e^{-\lambda t}$이다. 그러면
@@ -297,10 +303,12 @@ Exponential 분포의 **무기억성을 증명**하고, 이 성질을 갖는 연
 
     따라서 Exponential 분포는 무기억성을 갖는 유일한 연속분포이며, 이는 Geometric 분포가 유일한 이산 무기억 분포인 것과 정확히 대응된다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 $\mathrm{Exp}(\lambda)$의 **PDF, 평균, 분산을 유도하라.**
+
+</div>
 
 ??? success "풀이"
     PDF: CDF $F(t) = 1 - e^{-\lambda t}$를 미분하면 $t \ge 0$에 대해 $f(t) = \lambda e^{-\lambda t}$.
@@ -313,10 +321,12 @@ $\mathrm{Exp}(\lambda)$의 **PDF, 평균, 분산을 유도하라.**
 
     참고: 평균과 표준편차가 모두 $1/\lambda$인 것이 Exponential 분포의 두드러진 특징이다. 변동계수 CV = 1이다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 **Poisson 과정과의 연결.** 사건이 비율 $\lambda$인 Poisson 과정에서 발생할 때 $k$번째 도착 시각 $T_k$의 분포를 유도하라.
+
+</div>
 
 ??? success "풀이"
     $T_k = \sum_{i=1}^k X_i$이며, 여기서 $X_i$는 i.i.d. $\mathrm{Exp}(\lambda)$(도착 간 시간)이다.
@@ -333,10 +343,12 @@ $\mathrm{Exp}(\lambda)$의 **PDF, 평균, 분산을 유도하라.**
 
     이는 Exponential 도착 간 시간과 Poisson 계수를 잇는 근본적인 연결이며, 대기행렬과 신뢰성 분석에서 재생이론의 토대가 된다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.**
 **최대가능도추정.** i.i.d. $T_1, \ldots, T_n \sim \mathrm{Exp}(\lambda)$가 주어졌을 때 MLE $\hat\lambda$를 유도하라.
+
+</div>
 
 ??? success "풀이"
     가능도: $L(\lambda) = \prod_i \lambda e^{-\lambda T_i} = \lambda^n e^{-\lambda \sum T_i}$.
@@ -353,10 +365,12 @@ $\mathrm{Exp}(\lambda)$의 **PDF, 평균, 분산을 유도하라.**
 
     표본평균의 역수는 여러 분포에서 비율 모수를 추정하는 표준적인 추정량이다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 6.**
 **위험함수.** 위험률은 $h(t) = f(t)/\bar F(t)$로 정의된다. Exponential 분포의 위험률이 *상수*임을 보이고, 이것이 물리적으로 무엇을 뜻하는지 논하라.
+
+</div>
 
 ??? success "풀이"
     $h(t) = \lambda e^{-\lambda t} / e^{-\lambda t} = \lambda$.

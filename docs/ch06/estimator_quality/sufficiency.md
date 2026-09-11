@@ -47,8 +47,12 @@ Rao–Blackwell 정리는 충분통계량으로 조건화함으로써 불편추�
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 인수분해 정리를 사용하여 $\text{Poisson}(\theta)$에서 뽑은 확률표본 $X_1, \dots, X_n$에 대해 $\theta$의 충분통계량을 구하라.
+
+</div>
 
 ??? success "풀이"
     결합 PMF는:
@@ -65,10 +69,12 @@ Rao–Blackwell 정리는 충분통계량으로 조건화함으로써 불편추�
 
     따라서 $T = \sum_{i=1}^n X_i$가 $\theta$에 대해 충분하다. $\bar{X} = T/n$은 $T$의 일대일 함수이므로 마찬가지로 충분하다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 순서통계량 $(X_{(1)}, X_{(2)}, \dots, X_{(n)})$이 분포족과 무관하게 언제나 임의의 모수에 대해 충분함을 증명하라. 이것이 왜 "자명하게" 충분한 통계량인가?
+
+</div>
 
 ??? success "풀이"
     표본의 결합밀도는 다음과 같이 쓸 수 있다:
@@ -81,10 +87,12 @@ Rao–Blackwell 정리는 충분통계량으로 조건화함으로써 불편추�
 
     이것이 "자명하게" 충분한 이유는 순서통계량이 표본의 거의 모든 정보를 그대로 지니기 때문이다. 버리는 것은 어느 관측값이 먼저 왔는지라는 표지뿐이다. 유용한 충분통계량이라면 자료를 더 많이 축약해야 한다. **최소충분성** 개념이 이를 형식화한다. $\theta$에 관한 정보를 잃지 않으면서 최대로 압축하는, 가장 거친 충분통계량이다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 두 모수가 모두 미지인 $N(\mu, \sigma^2)$에서 뽑은 확률표본에 대해 $(\sum X_i, \sum X_i^2)$이 $(\mu, \sigma^2)$에 대해 결합충분임을 보여라.
+
+</div>
 
 ??? success "풀이"
     결합밀도는:
@@ -107,10 +115,12 @@ Rao–Blackwell 정리는 충분통계량으로 조건화함으로써 불편추�
 
     전체 표현이 $\mathbf{x}$에 오직 $\sum x_i$와 $\sum x_i^2$을 통해서만 의존한다. 인수분해 정리에 의해 $T(\mathbf{x}) = (\sum X_i, \sum X_i^2)$이 $(\mu, \sigma^2)$에 대해 충분하다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 Rao-Blackwell 정리를 서술하고 그 실용적 의의를 설명하라. $\hat{\theta}$가 불편추정량이고 $T$가 충분통계량일 때 $\tilde{\theta} = E[\hat{\theta} \mid T]$는 $\hat{\theta}$와 어떻게 비교되는가?
+
+</div>
 
 ??? success "풀이"
     **Rao-Blackwell 정리:** $\hat{\theta}$가 $\theta$의 임의의 불편추정량이고 $T$가 충분통계량이면 $\tilde{\theta} = E[\hat{\theta} \mid T]$도 불편이며 다음을 만족한다:

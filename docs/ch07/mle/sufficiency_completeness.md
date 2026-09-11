@@ -79,8 +79,12 @@ $$
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 $\text{Bernoulli}(p)$에서 뽑은 확률표본에 대해 $T = \sum X_i$가 완비충분통계량임을 보여라.
+
+</div>
 
 ??? success "풀이"
     **충분성:** 결합 PMF는 $p^{\sum x_i}(1-p)^{n - \sum x_i}$로, $\mathbf{x}$에 오직 $T = \sum x_i$를 통해서만 의존한다. 인수분해 정리에 의해 $T$는 충분하다.
@@ -93,10 +97,12 @@ $\text{Bernoulli}(p)$에서 뽑은 확률표본에 대해 $T = \sum X_i$가 완�
 
     $r = p/(1-p) \in (0, \infty)$로 두면 이는 항등적으로 0인 $r$에 대한 $n$차 다항식이다. 모든 곳에서 0인 다항식은 계수가 모두 0이므로 모든 $t$에 대해 $g(t)\binom{n}{t} = 0$이고, 따라서 모든 $t$에 대해 $g(t) = 0$이다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 Lehmann-Scheffé 정리를 진술하고, 이를 이용해 Bernoulli 표본에서 $p(1-p)$의 UMVUE를 구하라.
+
+</div>
 
 ??? success "풀이"
     **Lehmann-Scheffé 정리:** $T$가 완비충분통계량이고 $h(T)$가 $\tau(\theta)$의 불편추정량이면 $h(T)$는 $\tau(\theta)$의 유일한 UMVUE이다.
@@ -115,10 +121,12 @@ Lehmann-Scheffé 정리를 진술하고, 이를 이용해 Bernoulli 표본에서
 
     $T$가 완비충분이고 $h(T)$가 $p(1-p)$에 대해 불편이므로 Lehmann-Scheffé 정리에 의해 이것이 UMVUE이다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 완비성과, 충분통계량에 기반한 불편추정량의 유일성 사이의 관계를 설명하라.
+
+</div>
 
 ??? success "풀이"
     충분통계량 $T$가 완비라는 것은 기댓값이 항등적으로 0인 자명하지 않은 $T$의 함수가 없다는 뜻이다: 모든 $\theta$에 대해 $E[g(T)] = 0$이면 $g(T) = 0$ a.s.이다.
@@ -127,10 +135,12 @@ Lehmann-Scheffé 정리를 진술하고, 이를 이용해 Bernoulli 표본에서
 
     완비성이 없으면 $T$의 불편인 함수가 여럿 존재할 수 있고, Rao-Blackwell 정리만으로는 유일한 최량 추정량이 보장되지 않는다. 완비성이 이 틈을 메워 (존재한다면) UMVUE를 유일하게 만든다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 Uniform$(0, \theta)$에서 $T = X_{(n)} = \max(X_1, \dots, X_n)$이 완비충분통계량임을 보여라. 그다음 Uniform$(\theta, \theta + 1)$에서 충분하지만 완비가 아닌 통계량의 예를 찾아라.
+
+</div>
 
 ??? success "풀이"
     **Uniform$(0, \theta)$:** $T = X_{(n)}$의 밀도는 $0 < t < \theta$에서 $f_T(t) = nt^{n-1}/\theta^n$이다. 결합밀도가 $\theta^{-n}\mathbf{1}\{X_{(n)} \le \theta\}$이므로 인수분해 정리에 의해 $T$는 충분하다.

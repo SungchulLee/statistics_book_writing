@@ -132,6 +132,8 @@ sin(n) / n^2 (O(1/n^2)): -0.00039723142555579834
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 $\varepsilon$–$N$ 정의로부터 직접
 
@@ -140,6 +142,8 @@ $$
 $$
 
 임을 증명하라.
+
+</div>
 
 ??? success "풀이"
     계산하면
@@ -156,11 +160,13 @@ $$
 
     이다. 따라서 $|a_n - 3| < \varepsilon$이다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 **(a)** $\sum_{k=0}^\infty r^k$이 $|r| < 1$일 때에 한해 수렴함을 보이고 그 합을 구하라.
 **(b)** (a)를 이용해 $\displaystyle\sum_{k=1}^\infty \frac{3}{4^k}$을 계산하라.
+
+</div>
 
 ??? success "풀이"
     (a) 부분합은
@@ -177,10 +183,12 @@ $$
     \sum_{k=1}^\infty \frac{3}{4^k} = 3 \sum_{k=1}^\infty \left(\tfrac{1}{4}\right)^{\!k} = 3 \cdot \frac{1/4}{1 - 1/4} = 3 \cdot \tfrac{1}{3} = 1
     $$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 고정된 모든 $x \in \mathbb{R}$에 대해 $n \to \infty$일 때 $(1 + x/n)^n \to e^x$임을 보여라.
+
+</div>
 
 ??? success "풀이"
     로그를 취한다. 고정된 $x$와, $x/n$이 $\ln(1 + \cdot)$의 정의역에 들어갈 만큼 큰 $n$에 대해,
@@ -197,10 +205,12 @@ $$
 
     이다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 조임 정리를 증명하라: 충분히 큰 모든 $n$에 대해 $a_n \le b_n \le c_n$이고 $a_n, c_n \to L$이면 $b_n \to L$이다.
+
+</div>
 
 ??? success "풀이"
     $\varepsilon > 0$이라 하자. $n > N_1 \Rightarrow |a_n - L| < \varepsilon$인 $N_1$과 $n > N_2 \Rightarrow |c_n - L| < \varepsilon$인 $N_2$를 고른다. $a_n \le b_n \le c_n$이 성립하기 시작하는 경계를 $N_3$이라 하고 $N = \max(N_1, N_2, N_3)$으로 두자.
@@ -213,7 +223,7 @@ $$
 
     이므로 $|b_n - L| < \varepsilon$이다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.**
 테일러 전개를 이용해, $X \sim \mathrm{Bernoulli}(p)$이고 표본평균이 $\bar{X}_n$일 때 분산안정화 변환 $g(p) = 2\arcsin(\sqrt{p})$가
@@ -223,6 +233,8 @@ $$
 $$
 
 을 만족함을 보여라. 따라서 $g(\bar{X}_n)$은 $p$와 무관하게 근사적으로 일정한 분산 $1/n$을 갖는다.
+
+</div>
 
 ??? success "풀이"
     중심극한정리에 의해 $\sqrt{n}(\bar{X}_n - p) \xrightarrow{d} N(0, p(1 - p))$이다. 델타 방법을 쓰면
@@ -239,10 +251,12 @@ $$
 
     이다. 따라서 모든 $p \in (0, 1)$에 대해 $[g'(p)]^2 \cdot p(1-p) = 1$이므로 극한은 $N(0, 1)$이다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 6.**
 큰-O가 대칭이 아님을 보여라. 즉 $f(n) = O(g(n))$이지만 $g(n) \ne O(f(n))$인 수열을 제시하라. 그다음 "$f \asymp g$"($f = O(g)$ **그리고** $g = O(f)$를 뜻함)로 정의되는 자연스러운 동치관계를 진술하고, $f \asymp g$이지만 $f \not\sim g$인 두 수열의 예를 들어라.
+
+</div>
 
 ??? success "풀이"
     **비대칭 예:** $f(n) = 1$, $g(n) = n$. 그러면 $f(n) = O(g(n))$이지만($C = 1$로 두면 된다) $g(n)/f(n) = n \to \infty$이므로 $g(n) \ne O(f(n))$이다.
@@ -251,10 +265,12 @@ $$
 
     **$f \asymp g$이지만 $f \not\sim g$:** $f(n) = n$, $g(n) = 2n$을 잡자. $c_1 = 1/2$, $c_2 = 2$가 통하므로 $f \asymp g$이다. 그러나 $f(n)/g(n) = 1/2 \ne 1$이므로 점근적으로 동치는 아니다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 7.**
 **(체사로 평균)** $a_n \to L$이면 산술평균 $\bar{a}_n = \frac{1}{n}\sum_{k=1}^n a_k$도 $L$로 수렴함을 증명하라. 역은 성립하지 않음을 반례로 보여라.
+
+</div>
 
 ??? success "풀이"
     $\varepsilon > 0$이라 하자. $n > N_1$이면 $|a_n - L| < \varepsilon/2$인 $N_1$을 고른다. $n > N_1$에 대해
@@ -288,7 +304,7 @@ $$
 
     $a_n = 1/n$일 때 체사로 평균은 $\approx (\ln n)/n$이라 $0$으로 가되 **원래 수열보다 훨씬 느리다**($10^{-5}$ 대 $1.2 \times 10^{-4}$). 평균을 취하는 것은 수렴을 안정시키지만 빠르게 하지는 않는다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 8.**
 **(2차 델타 방법)** $g'(\theta) = 0$이면 1차 델타 방법은 퇴화한 극한 $N(0,0)$을 준다. 이때
@@ -298,6 +314,8 @@ n\left(g(\bar{X}_n) - g(\theta)\right) \xrightarrow{d} \tfrac{1}{2} g''(\theta)\
 $$
 
 임을 보이고, $X_i \sim \mathrm{Bernoulli}(1/2)$, $g(p) = p(1-p)$로 확인하라.
+
+</div>
 
 ??? success "풀이"
     $\theta$ 주위에서 2차까지 전개하면 $g'(\theta) = 0$이므로 1차항이 사라지고
@@ -347,10 +365,12 @@ $$
 
     이론 분위수에서 확률이 뒤집혀 있는($0.95 \to 0.05$) 이유는 $g''< 0$이라 $-1/4$을 곱하면서 부호가 바뀌기 때문이다. 극한분포 전체가 음수 쪽에 있는데, 이는 $p = 1/2$가 $p(1-p)$의 **최댓값**이라 어떤 추정값을 넣어도 $0.25$를 넘을 수 없기 때문이다. 표본분산의 편향과 같은 종류의 현상이다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 9.**
 **(스털링 근사)** $n! \sim \sqrt{2\pi n}\,(n/e)^n$을 이용해 중심이항계수의 점근식 $\binom{2n}{n} \sim 4^n/\sqrt{\pi n}$을 유도하고, 수치로 확인하라. 이 결과가 확률적으로 뜻하는 바는 무엇인가?
+
+</div>
 
 ??? success "풀이"
     스털링 근사를 세 번 쓰면
@@ -412,7 +432,7 @@ $$
 
     큰 계승을 다룰 때는 위 코드처럼 **로그 공간에서 계산하라.** $4^{1000}$은 배정밀도 부동소수점에서 넘침을 일으키지만 `math.lgamma`는 아무 문제가 없다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 10.**
 다음 점근 표기 규칙을 증명하라.
@@ -422,6 +442,8 @@ $$
 **(c)** $f_n = O(n^{-1/2})$이면 $f_n^2 = O(n^{-1})$
 
 그다음, 통계에서 흔한 세 속도 $n^{-1/2}$, $n^{-1}$, $1/\log n$을 수치로 비교하고 그 뜻을 해석하라.
+
+</div>
 
 ??? success "풀이"
     **(a)** $|f_n| \le C_1|a_n|$, $|g_n| \le C_2|b_n|$이 $n > N$에서 성립한다고 하자. $m_n = \max(|a_n|, |b_n|)$이라 두면

@@ -255,8 +255,12 @@ Window= 252  Vol(1/n)=19.94%  Vol(1/(n-1))=19.98%  Diff=0.20%
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 항등식 $\sum(X_i - \bar{X})^2 = \sum(X_i - \mu)^2 - n(\bar{X} - \mu)^2$을 써서 $\tilde{S}^2 = \frac{1}{n}\sum_{i=1}^n(X_i - \bar{X})^2$에 대해 $E[\tilde{S}^2] = \frac{n-1}{n}\sigma^2$임을 증명하라.
+
+</div>
 
 ??? success "풀이"
     항등식에서 출발한다:
@@ -273,10 +277,12 @@ Window= 252  Vol(1/n)=19.94%  Vol(1/(n-1))=19.98%  Diff=0.20%
 
     편향은 $E[\tilde{S}^2] - \sigma^2 = -\sigma^2/n$이다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 $(n-1)S^2/\sigma^2 \sim \chi^2_{n-1}$이라는 사실을 이용하여, 정규 자료에서 Bessel 수정 추정량 $S^2 = \frac{1}{n-1}\sum(X_i - \bar{X})^2$의 평균제곱오차를 계산하라.
+
+</div>
 
 ??? success "풀이"
     $Q = (n-1)S^2/\sigma^2 \sim \chi^2_{n-1}$이라 하자. 그러면 $S^2 = Q\sigma^2/(n-1)$이다.
@@ -287,10 +293,12 @@ $(n-1)S^2/\sigma^2 \sim \chi^2_{n-1}$이라는 사실을 이용하여, 정규 �
 
     여기서 $k = n - 1$인 $\text{Var}(\chi^2_k) = 2k$를 썼다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 $d > 0$에 대해 $\text{MSE}(\text{SS}/d)$를 최소화하여, 정규성 아래에서 $\sigma^2$ 추정의 평균제곱오차 최적 분모가 $n + 1$임을 보여라.
+
+</div>
 
 ??? success "풀이"
     추정량을 $\hat{\sigma}^2 = \text{SS}/d$라 하자. 여기서 $\text{SS} = \sum(X_i - \bar{X})^2$이고 $\text{SS}/\sigma^2 \sim \chi^2_{n-1}$이다.
@@ -315,10 +323,12 @@ $d > 0$에 대해 $\text{MSE}(\text{SS}/d)$를 최소화하여, 정규성 아래
 
     $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 어떤 포트폴리오 매니저가 거래일 21일(한 달)치 수익률로 일별 변동성을 추정한다. 참 일별 변동성이 1.26%라면 $1/n$과 $1/(n-1)$ 분모 각각으로 얻는 연율화 변동성 추정값의 기댓값을 계산하라. 어느 쪽이 참 연율화 변동성 20%에 더 가까운가?
+
+</div>
 
 ??? success "풀이"
     참 일별 변동성: $\sigma_d = 0.0126$. 참 연율화 변동성: $\sigma_a = 0.0126 \times \sqrt{252} \approx 0.20$ (20%).
@@ -335,10 +345,12 @@ $d > 0$에 대해 $\text{MSE}(\text{SS}/d)$를 최소화하여, 정규성 아래
 
     따라서 ($\sigma^2$이 아니라) $\sigma$에 대해서는 어느 추정량도 불편이 아니다. 그래도 $1/(n-1)$ 추정량이 참값에 더 가깝다. $S$의 편향은 카이제곱분포에서 나오는 $c_4$ 인자로 보정할 수 있다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.**
 참 평균 $\mu$를 알면 분산추정의 평균제곱오차가 줄어드는 이유를 설명하라. $n = 5$에서 개선 정도를 정량화하라.
+
+</div>
 
 ??? success "풀이"
     $\mu$를 알면 $\hat{\sigma}^2 = \frac{1}{n}\sum(X_i - \mu)^2$을 쓰는데, 이는 불편이며:

@@ -255,9 +255,13 @@ QDA는 곡선을, 나이브 베이즈는 축에 정렬된 곡선을 그린다.
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 사전확률이 같은($\pi_0 = \pi_1 = 0.5$) 두 범주 LDA에서, 결정경계가 두 범주 평균으로부터
 (마할라노비스 의미로) 등거리인 점들의 집합임을 보여라.
+
+</div>
 
 ??? success "풀이"
 
@@ -280,11 +284,13 @@ QDA는 곡선을, 나이브 베이즈는 축에 정렬된 곡선을 그린다.
     $\boldsymbol\Sigma^{-1}(\boldsymbol\mu_0 - \boldsymbol\mu_1)$인 초평면을 정의한다. 이
     초평면 위의 점들은 두 평균으로부터 마할라노비스 거리가 같다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 QDA가 LDA보다 과적합 위험이 큰 이유를 설명하고, QDA가 더 유연함에도 LDA를 선호하게 되는 상황을
 서술하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -314,10 +320,12 @@ QDA가 LDA보다 과적합 위험이 큰 이유를 설명하고, QDA가 더 유�
         `LinearDiscriminantAnalysis(solver='lsqr', shrinkage='auto')`가 관련된 축소를
         제공한다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 다변량 정규밀도와 베이즈 정리에서 출발하여 QDA 판별함수 $\delta_k(\mathbf{x})$를 유도하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -348,11 +356,13 @@ QDA가 LDA보다 과적합 위험이 큰 이유를 설명하고, QDA가 더 유�
     를 얻는다. 범주별 $\boldsymbol\Sigma_k^{-1}$에서 나오는 $\mathbf{x}$의 이차항이 QDA라는
     이름과 곡선 결정경계의 근원이다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 위에서 생성한 공유 공분산 자료에 대해, 합동 공분산행렬·범주 평균·판별함수를 직접 계산하여
 LDA를 손으로 적합하라. 예측을 scikit-learn의 `LinearDiscriminantAnalysis`와 비교하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -405,11 +415,13 @@ LDA를 손으로 적합하라. 예측을 scikit-learn의 `LinearDiscriminantAnal
 
     $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.**
 범주별 공분산이 같으면($\boldsymbol\Sigma_k = \boldsymbol\Sigma$) QDA가 LDA로 환원됨을
 증명하라.
+
+</div>
 
 ??? success "풀이"
 

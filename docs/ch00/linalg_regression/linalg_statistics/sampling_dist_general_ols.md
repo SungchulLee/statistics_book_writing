@@ -202,8 +202,12 @@ $$
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 관측값이 $n = 30$개, (절편을 포함해) 모수가 $p = 4$개이고 $\text{SSE} = 52$인 다중회귀 모형 $\mathbf{y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon}$을 생각하자. $s^2$을 계산하고 개별 계수 검정에 쓰이는 t-통계량의 자유도를 구하라.
+
+</div>
 
 ??? success "풀이"
     불편 분산추정량은
@@ -216,10 +220,12 @@ $$
 
     개별 계수에 대한 t-통계량은 각자의 귀무가설 아래에서 $t_{n-p} = t_{26}$ 분포를 따른다. 각 t-통계량의 자유도는 $26$이다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 $\mathbf{M} = \mathbf{I} - \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T$일 때 최소제곱 잔차벡터 $\mathbf{e} = \mathbf{M}\mathbf{y}$이 $\mathbf{X}^T\mathbf{e} = \mathbf{0}$을 만족함을 증명하라.
+
+</div>
 
 ??? success "풀이"
     직접 계산한다.
@@ -234,10 +240,12 @@ $\mathbf{M} = \mathbf{I} - \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T$�
 
     이는 잔차가 $\mathbf{X}$의 모든 열에 직교함을 보여주며, 이것이 정규방정식의 행렬 형태다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 예측변수가 $p = 3$개인(절편을 더해 $p = 4$인) 모형에서 일반 F-검정으로 $H_0: \beta_2 = \beta_3 = 0$을 검정하려 한다. $H_0$ 아래에서 F-통계량의 분포를 진술하고, $q$를 밝히며, 이 맥락에서 "제약된" SSE와 "제약 없는" SSE가 무엇을 뜻하는지 설명하라.
+
+</div>
 
 ??? success "풀이"
     제약이 $q = 2$개다(두 계수를 0으로 둔다). F-통계량은
@@ -248,10 +256,12 @@ $\mathbf{M} = \mathbf{I} - \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T$�
 
     이다. 여기서 $\text{SSE}_R$은 $X_2$와 $X_3$을 제외한(절편과 $X_1$만 적합한) 제약 모형의 잔차제곱합이고, $\text{SSE}_U$는 네 모수를 모두 갖는 완전(제약 없는) 모형의 잔차제곱합이다. F-통계량은 $X_2$와 $X_3$을 포함해서 줄어든 SSE가 잡음 수준 $s^2 = \text{SSE}_U/(n-4)$에 비해 충분히 큰지를 잰다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 (정규성 없이) 가우스–마르코프 가정 아래에서 $\operatorname{Var}(\hat{\boldsymbol{\beta}}) = \sigma^2(\mathbf{X}^T\mathbf{X})^{-1}$임을 보여라. (힌트: $\hat{\boldsymbol{\beta}} = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}$에 $\mathbf{y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon}$을 대입하라.)
+
+</div>
 
 ??? success "풀이"
     $\mathbf{y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon}$을 대입하면
@@ -274,20 +284,24 @@ $\mathbf{M} = \mathbf{I} - \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T$�
 
     이다. 정규성 가정은 전혀 필요하지 않았고 $E[\boldsymbol{\varepsilon}] = \mathbf{0}$과 $\operatorname{Var}(\boldsymbol{\varepsilon}) = \sigma^2\mathbf{I}$만 썼다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.**
 오차가 정규일 때 $\hat{\boldsymbol{\beta}}$과 $\text{SSE}$가 왜 독립인지 개념적으로 설명하라. 이를 가능하게 하는 모자 행렬의 기하적 성질은 무엇인가?
+
+</div>
 
 ??? success "풀이"
     핵심적인 기하적 성질은 모자 행렬 $\mathbf{H}$와 잔차생성행렬 $\mathbf{M} = \mathbf{I} - \mathbf{H}$가 서로 직교하는 부분공간 위로 사영한다는 점이다. 구체적으로 $\hat{\boldsymbol{\beta}}$은 $\mathbf{y}$에 오직 $\mathbf{H}\mathbf{y}$($\mathbf{X}$의 열공간 위로의 사영)를 통해서만 의존하고, $\text{SSE} = \mathbf{y}^T\mathbf{M}\mathbf{y}$은 오직 $\mathbf{M}\mathbf{y}$(직교여공간 위로의 사영)를 통해서만 의존한다.
 
     $\mathbf{H}\mathbf{M} = \mathbf{0}$이므로 벡터 $\mathbf{H}\mathbf{y}$와 $\mathbf{M}\mathbf{y}$는 무상관이다. 정규성 가정 아래에서 무상관인 정규확률벡터는 독립이다. 이 직교 분해가 t-통계량과 F-통계량이 앞서 진술한 분포를 갖는 기하적 이유다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 6.**
 가우스–마르코프 정리를 증명하라. 임의의 선형 불편추정량 $\tilde{\boldsymbol{\beta}} = \mathbf{C}\mathbf{y}$에 대해 $\operatorname{Var}(\tilde{\boldsymbol{\beta}}) - \operatorname{Var}(\hat{\boldsymbol{\beta}})$이 양반정치임을 보여라.
+
+</div>
 
 ??? success "풀이"
     $\mathbf{C} = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T + \mathbf{D}$로 쓰자. 불편성은 모든 $\boldsymbol{\beta}$에 대해
@@ -323,10 +337,12 @@ $\mathbf{M} = \mathbf{I} - \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T$�
 
     **가정에 주의하라.** 이 증명은 정규성을 쓰지 않지만 $\operatorname{Var}(\boldsymbol{\varepsilon}) = \sigma^2\mathbf{I}$는 반드시 쓴다. 등분산이 깨지면 최소제곱은 여전히 불편이지만 더 이상 최량이 아니다(연습문제 10). $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 7.**
 $\hat{\boldsymbol{\beta}} \sim N(\boldsymbol{\beta}, \sigma^2(\mathbf{X}^T\mathbf{X})^{-1})$을 모의실험으로 확인하라. 공분산행렬 전체를 이론값과 비교하라.
+
+</div>
 
 ??? success "풀이"
     ```python
@@ -366,10 +382,12 @@ $\hat{\boldsymbol{\beta}} \sim N(\boldsymbol{\beta}, \sigma^2(\mathbf{X}^T\mathb
 
     비대각 성분이 0이 아니라는 점이 중요하다. 계수 추정값들은 서로 **상관되어** 있으며, 그래서 계수를 하나씩 따로 검정하는 것과 여러 개를 한꺼번에 검정하는 것($F$ 검정)이 다른 결론을 낼 수 있다. 예측변수들이 직교하면 비대각 성분이 0이 되어 이 문제가 사라진다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 8.**
 새로운 점 $\mathbf{x}_0$에서 평균반응의 분산이 $\sigma^2\mathbf{x}_0^T(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{x}_0$임을 보이고 수치로 확인하라. 예측구간과 신뢰구간의 차이는 무엇인가?
+
+</div>
 
 ??? success "풀이"
     $\hat{\mu}_0 = \mathbf{x}_0^T\hat{\boldsymbol{\beta}}$이므로
@@ -414,10 +432,12 @@ $\hat{\boldsymbol{\beta}} \sim N(\boldsymbol{\beta}, \sigma^2(\mathbf{X}^T\mathb
 
     이 된다. 자료를 아무리 모아도 괄호 안의 $1$은 사라지지 않는다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 9.**
 반응변수와 아무 관계 없는 예측변수를 추가하면 $R^2$은 반드시 커지지만 계수 추정의 분산도 커진다. 모의실험으로 확인하고, 수정 $R^2$이 왜 필요한지 설명하라.
+
+</div>
 
 ??? success "풀이"
     ```python
@@ -463,10 +483,12 @@ $\hat{\boldsymbol{\beta}} \sim N(\boldsymbol{\beta}, \sigma^2(\mathbf{X}^T\mathb
 
     수정 $R^2$은 $\text{SSE}$를 자유도 $n-p$로 나누어, 변수를 넣어 얻는 적합의 개선이 잃는 자유도만큼의 값어치가 있는지를 따진다. 같은 동기에서 AIC와 BIC가 나온다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 10.**
 $\operatorname{Var}(\boldsymbol{\varepsilon}) = \sigma^2\mathbf{V}$($\mathbf{V} \neq \mathbf{I}$)이면 최소제곱은 여전히 불편이지만 최량이 아니다. 일반화최소제곱 $\hat{\boldsymbol{\beta}}_{\text{GLS}} = (\mathbf{X}^T\mathbf{V}^{-1}\mathbf{X})^{-1}\mathbf{X}^T\mathbf{V}^{-1}\mathbf{y}$와 비교하라.
+
+</div>
 
 ??? success "풀이"
     **불편성은 유지된다.** $E[\hat{\boldsymbol{\beta}}] = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}\boldsymbol{\beta} = \boldsymbol{\beta}$는 오차의 공분산 구조와 무관하다.

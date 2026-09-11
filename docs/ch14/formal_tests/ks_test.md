@@ -82,7 +82,11 @@ KS 검정은 *일치성*(consistent)을 갖는 검정이다. $n \to \infty$이�
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.** $\mathcal{N}(0,1)$에서 관측값 $n = 300$개를 생성하라. $\mathcal{N}(0,1)$과 $\mathcal{N}(0.5, 1)$에 대해 각각 KS 검정을 수행하라. $p$값을 비교하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -113,9 +117,11 @@ KS 검정은 *일치성*(consistent)을 갖는 검정이다. $n \to \infty$이�
 
     **위치 이동은 KS 검정이 잘 잡는다.** 다음 연습문제들에서 볼 꼬리 이탈과 대조된다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.** Lilliefors 문제를 시연하라. $\mathcal{N}(0,1)$에서 관측값 $n = 200$개를 생성하고 $\hat{\mu}$, $\hat{\sigma}$를 추정한 뒤 $\mathcal{N}(\hat{\mu}, \hat{\sigma}^2)$에 대해 KS 검정을 수행하라. $p$값을 믿을 수 있는가?
+
+</div>
 
 ??? success "풀이"
 
@@ -152,9 +158,11 @@ KS 검정은 *일치성*(consistent)을 갖는 검정이다. $n \to \infty$이�
 
     이 정도로 극단적인 과소기각은 검정을 사실상 무용하게 만든다. 크기가 0.0002인 검정은 참된 이탈이 있어도 거의 탐지하지 못한다. 타당한 추론을 하려면 반드시 Lilliefors 보정이 필요하다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.** 순서통계량으로부터 $D_n$을 계산하는 공식을 유도하라. $n$개의 값 $X_{(1)}, \ldots, X_{(n)}$만 확인하면 충분함을 보여라.
+
+</div>
 
 ??? success "풀이"
 
@@ -171,9 +179,11 @@ KS 검정은 *일치성*(consistent)을 갖는 검정이다. $n \to \infty$이�
 
     $n$개의 순서통계량만 평가하면 충분하다. 무한한 실직선 위의 상한을 유한한 최댓값 계산으로 바꿔주는 결과이며, KS 검정을 실용적으로 만드는 핵심이다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.** $n = 200$이고 대립가설이 $t_5$일 때($\mathcal{N}(0,1)$에 대해 검정) $\alpha = 0.05$에서 KS 검정의 검정력을 추정하는 몬테카를로 모의실험을 수행하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -230,9 +240,11 @@ KS 검정은 *일치성*(consistent)을 갖는 검정이다. $n \to \infty$이�
 
     꼬리에 가중을 주는 Anderson-Darling과 순서통계량의 상관구조를 활용하는 Shapiro-Wilk가 이런 상황에서 압도적으로 낫다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.** 일차원의 경우에 대해 Glivenko-Cantelli 정리를 서술하고 증명하라(증명의 개요면 충분하다).
+
+</div>
 
 ??? success "풀이"
 

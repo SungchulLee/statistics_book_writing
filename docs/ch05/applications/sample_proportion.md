@@ -226,8 +226,12 @@ plt.show()
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 모집단의 $p = 0.60$이고 표본 $n = 100$이다. $P(\hat p > 0.65)$를 계산하라.
+
+</div>
 
 ??? success "풀이"
     $\mathrm{SE}(\hat p) = \sqrt{p(1-p)/n} = \sqrt{0.24/100} \approx 0.049$. $Z = (0.65 - 0.60)/0.049 \approx 1.02$.
@@ -236,10 +240,12 @@ plt.show()
 
     조건: $np = 60 \ge 10$이고 $n(1-p) = 40 \ge 10$이므로 정규근사가 타당하다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 **소표본의 문제.** 모집단의 $p = 0.30$이고 표본 $n = 10$이다. $P(\hat p > 0.35)$를 정확한 방법과 정규근사로 각각 계산하라. 여기서 정규근사가 통하는지 아니면 실패하는지 이유를 설명하라.
+
+</div>
 
 ??? success "풀이"
     정확한 계산: $\hat p > 0.35$ ⟺ $X \ge 4$이며 $X \sim \mathrm{Binomial}(10, 0.3)$이다.
@@ -250,10 +256,12 @@ plt.show()
 
     차이: 정확값 0.350 대 정규근사 0.365로 약 1.5퍼센트포인트 차이가 난다. ($p = 0.3$에서 binomial이 그리 심하게 치우쳐 있지 않아) 정규근사가 그런대로 통하지만, $np = 3$이 작아 통상적인 경험 법칙($np \ge 10$)을 위반한다. 정확도를 높이려면 연속성 수정을 적용하거나 정확한 binomial을 사용하라.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 **$\hat p$의 불편성을 증명하고 표준오차를 구하라.** $\mathbb{E}[\hat p] = p$이고 $\mathrm{Var}(\hat p) = p(1-p)/n$임을 보여라.
+
+</div>
 
 ??? success "풀이"
     $X_i \sim \mathrm{Bernoulli}(p)$가 i.i.d.일 때 $X = \sum X_i$에 대해 $\hat p = X/n$이다.
@@ -268,10 +276,12 @@ plt.show()
 
     표준오차는 $p = 1/2$에서 최대가 된다(최악의 경우). $p = 1/2$일 때 $\mathrm{SE} = 1/(2\sqrt n)$이다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 **표본크기 설계.** $p$를 모를 때 95% 신뢰수준에서 오차한계 $\pm 3$퍼센트포인트로 $p$를 추정하려면 표본크기가 얼마여야 하는가?
+
+</div>
 
 ??? success "풀이"
     오차한계: $\mathrm{ME} = z_{0.975} \cdot \mathrm{SE} = 1.96 \sqrt{p(1-p)/n} \le 0.03$.
@@ -282,10 +292,12 @@ plt.show()
 
     $p$가 0.5에서 멀다고 짐작되면(가령 $p \approx 0.1$) $p(1-p)$가 0.25 대신 0.09가 되어 $n \approx 0.09 \cdot 1068/0.25 \approx 385$면 충분하다. $p$의 대략적인 값을 알면 필요한 $n$이 줄어든다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.**
 **Wilson 점수 구간.** 이항 비율에서 표준적인 Wald 신뢰구간 $\hat p \pm z \sqrt{\hat p(1-\hat p)/n}$보다 **Wilson 점수** 신뢰구간이 선호되는 이유는 무엇인가?
+
+</div>
 
 ??? success "풀이"
     **Wald 신뢰구간의 문제:**
@@ -304,10 +316,12 @@ plt.show()
 
     **장점:** 항상 $[0, 1]$ 안에 머물고, 경계 근처에서 포함확률이 훨씬 좋으며, 현대적 관행에서 권장된다(R의 `prop.test`, Python의 `statsmodels.stats.proportion.proportion_confint(method="wilson")`).
 
----
+<div class="drillbox" markdown>
 
 **연습문제 6.**
 **비율의 차.** 독립인 두 표본에서 $n_1$로부터 $\hat p_1$을, $n_2$로부터 $\hat p_2$를 얻었다. $\hat p_1 - \hat p_2$의 표준오차를 유도하라.
+
+</div>
 
 ??? success "풀이"
     독립성에 의해 $\mathrm{Var}(\hat p_1 - \hat p_2) = \mathrm{Var}(\hat p_1) + \mathrm{Var}(\hat p_2) = p_1(1-p_1)/n_1 + p_2(1-p_2)/n_2$이다.

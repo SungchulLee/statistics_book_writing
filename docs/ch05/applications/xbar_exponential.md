@@ -97,7 +97,11 @@ plt.show()
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.** $t < \lambda$에서 적률생성함수가 $M_X(t) = \lambda / (\lambda - t)$임을 사용하여 $X \sim \text{Exp}(\lambda)$의 평균과 분산을 유도하라.
+
+</div>
 
 ??? success "풀이"
     적률생성함수는 $t < \lambda$에서 $M_X(t) = \frac{\lambda}{\lambda - t}$이다.
@@ -122,9 +126,11 @@ plt.show()
 
     $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.** $X_1, \ldots, X_n \overset{\text{iid}}{\sim} \text{Exp}(\lambda)$이면 $S_n = \sum_{i=1}^n X_i \sim \text{Gamma}(n, \lambda)$임을 보여라.
+
+</div>
 
 ??? success "풀이"
     $X_i \sim \text{Exp}(\lambda)$의 MGF는 $M_{X_i}(t) = \frac{\lambda}{\lambda - t}$이다.
@@ -137,9 +143,11 @@ plt.show()
 
     이는 $\text{Gamma}(n, \lambda)$ 분포(형상 $n$, 비율 $\lambda$)의 MGF이다. MGF가 분포를 유일하게 결정하므로 $S_n \sim \text{Gamma}(n, \lambda)$이다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.** $n = 5$, $\lambda = 1$일 때 감마분포를 사용하여 정확한 확률 $P(\bar{X} > 2)$를 계산하고 정규근사와 비교하라.
+
+</div>
 
 ??? success "풀이"
     $S_5 \sim \text{Gamma}(5, 1)$일 때 $\bar{X} = S_5 / 5$이므로 $P(\bar{X} > 2) = P(S_5 > 10)$이다.
@@ -165,9 +173,11 @@ plt.show()
 
     정확한 값은 약 0.0293이고 정규근사는 약 0.0127이다. $n = 5$는 중심극한정리가 Exponential 분포의 치우침을 온전히 보정하기에 너무 작아, 정규근사가 오른쪽 꼬리 확률을 크게 과소추정한다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.** Exponential 분포의 왜도는 $\gamma_1 = 2$이다. $\bar{X}$의 왜도가 $\gamma_1(\bar{X}) = 2/\sqrt{n}$임을 보여라. 표본크기가 얼마일 때 $\bar{X}$의 왜도가 0.5 아래로 떨어지는가?
+
+</div>
 
 ??? success "풀이"
     왜도가 $\gamma_1$인 i.i.d. 확률변수에 대해 $\bar{X} = \frac{1}{n}\sum X_i$의 왜도는:
@@ -192,9 +202,11 @@ plt.show()
 
     따라서 왜도가 0.5 아래로 떨어지려면 $n \ge 17$이 필요하다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.** 모의실험을 $n = 5$ 대신 $n = 50$으로 반복하라. 표본평균의 히스토그램 위에 정규 밀도 $N(1, 1/50)$을 겹쳐 그리고 적합 정도를 정성적으로 서술하라.
+
+</div>
 
 ??? success "풀이"
     ```python

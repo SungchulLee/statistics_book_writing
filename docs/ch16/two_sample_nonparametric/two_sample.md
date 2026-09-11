@@ -341,8 +341,12 @@ Kruskal-Wallis 검정이 유의하면, 쌍별 Mann-Whitney U 검정에 다중비
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 Mood 중앙값검정과 Mann-Whitney U 검정을 같은 자료에 적용하면 결과가 어떻게 다른가? 본문의 집단 A $= [50, 55, 60, 65, 70]$, 집단 B $= [45, 50, 55, 60, 65]$로 확인하고, 두 검정이 버리는 정보를 각각 설명하라.
+
+</div>
 
 ??? success "풀이"
     ```python
@@ -377,10 +381,12 @@ Mood 중앙값검정과 Mann-Whitney U 검정을 같은 자료에 적용하면 �
 
     **그렇다면 Mood 중앙값검정을 언제 쓰는가?** 두 경우이다. (1) 분포의 **모양이 크게 다를** 때. Mann-Whitney는 모양이 다르면 중앙값이 같아도 기각할 수 있지만, Mood 검정은 중앙값만 본다. (2) 자료가 심하게 절단·중도절단되어 순위조차 신뢰할 수 없을 때.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 본문의 Mood 중앙값검정 구현은 전체 중앙값과 **정확히 같은** 관측값을 버린다. 이것이 문제가 되는 상황을 만들고, SciPy `median_test`의 `ties` 인자와 비교하라.
+
+</div>
 
 ??? success "풀이"
     관측값이 이산적이면 중앙값과 같은 값이 여러 개 생긴다.
@@ -425,10 +431,12 @@ Mood 중앙값검정과 Mann-Whitney U 검정을 같은 자료에 적용하면 �
 
     **권고:** 동점이 많은 이산자료에는 Mood 중앙값검정을 쓰지 말라. 결론이 임의의 처리 규칙에 좌우된다. 이런 자료에는 순위 기반 검정(중간순위로 동점을 원칙적으로 처리한다)이나 정확 순열검정이 낫다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 Kruskal-Wallis 검정이 집단 둘일 때 Mann-Whitney U 검정과 동치임을 확인하라. $H$와 $Z$ 사이에 어떤 관계가 있는가?
+
+</div>
 
 ??? success "풀이"
     ```python
@@ -474,10 +482,12 @@ Kruskal-Wallis 검정이 집단 둘일 때 Mann-Whitney U 검정과 동치임을
 
     다만 두 검정이 완전히 같은 것은 아니다. Kruskal-Wallis는 언제나 **양측**이며 $\chi^2$ 근사만 쓴다. Mann-Whitney는 단측검정과 정확 $p$값을 지원한다. 집단이 둘이면 Mann-Whitney를 쓰는 편이 낫다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 본문의 Mann-Whitney 예제에서 SciPy의 기본 $p$값($0.000440$)과 정확 $p$값($7.58 \times 10^{-5}$)이 6배 가까이 차이 난다. 왜 이렇게 큰가?
+
+</div>
 
 ??? success "풀이"
     자료를 다시 보자.

@@ -176,8 +176,12 @@ Fail to reject H_0: The data is normally distributed.
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 Anderson-Darling 검정은 Kolmogorov-Smirnov 검정보다 분포의 꼬리에 더 큰 가중치를 준다. 가중함수가 어떻게 이를 달성하는지 설명하라.
+
+</div>
 
 ??? success "풀이"
     Anderson-Darling 통계량은
@@ -190,20 +194,24 @@ Anderson-Darling 검정은 Kolmogorov-Smirnov 검정보다 분포의 꼬리에 �
 
     가중함수 $w(x) = 1/[F(x)(1-F(x))]$는 ($F(x)$가 0이나 1에 가까운) 꼬리에서 크고 중앙에서 작다. 그래서 Anderson-Darling 검정이 (분포의 모든 부분에 같은 가중치를 주는) KS 검정보다 꼬리 이탈에 더 민감해지고, 꼬리가 두껍거나 얇은 대립가설을 더 잘 탐지한다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 관측값 50개에 대한 Anderson-Darling 검정에서 $A^2 = 0.85$를 얻었다. 임계값이 $0.631$(10%), $0.752$(5%), $1.035$(1%)일 때 $\alpha = 0.05$에서의 결론을 정하라.
+
+</div>
 
 ??? success "풀이"
     $A^2 = 0.85 > 0.752$(5% 임계값)이므로 유의수준 5%에서 $H_0$(정규성)을 기각한다. 다만 $A^2 = 0.85 < 1.035$(1% 임계값)이므로 1% 수준에서는 기각하지 않는다.
 
     결론: 5% 수준에서 비정규성의 증거가 있다($0.01 < p < 0.05$). 이탈의 성격을 파악하려면 시각적 점검(Q-Q 그림)을 함께 해야 한다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 정규성 이탈 탐지에서 Anderson-Darling, Shapiro-Wilk, Kolmogorov-Smirnov 검정의 검정력을 비교하라.
+
+</div>
 
 ??? success "풀이"
     모의실험 연구는 대체로 다음을 보여준다.
@@ -214,10 +222,12 @@ Anderson-Darling 검정은 Kolmogorov-Smirnov 검정보다 분포의 꼬리에 �
 
     권장: Shapiro-Wilk를 주 검정으로 쓰고, (특히 $n$이 클 때) Anderson-Darling을 대안으로 쓰며, KS는 완전히 지정된 분포와 비교할 때에만 쓴다(복합 정규성 검정에는 쓰지 않는다).
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 Anderson-Darling 검정은 정규분포가 아닌 분포(지수, Weibull 등)에도 적용할 수 있다. 일반 원리를 설명하라.
+
+</div>
 
 ??? success "풀이"
     Anderson-Darling 검정은 일반적인 적합도 검정이다. 경험적 CDF를 임의로 지정한 이론적 CDF $F_0(x)$와 비교한다. 정규성 검정에서는 추정된 모수로 $F_0 = \Phi((x-\hat{\mu})/\hat{\sigma})$를 쓴다.

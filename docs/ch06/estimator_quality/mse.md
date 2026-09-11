@@ -184,8 +184,12 @@ $$\text{Var}(\hat{\theta}) \geq \frac{1}{I(\theta)}$$
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 $X_i \sim \mathrm{Uniform}(0, \theta)$가 i.i.d.이다. 두 추정량 $\hat\theta_1 = 2\bar X$와 $\hat\theta_2 = ((n+1)/n) X_{(n)}$을 생각하자. (a) 둘 다 불편인가? (b) 분산은? (c) 어느 쪽이 평균제곱오차가 더 작은가?
+
+</div>
 
 ??? success "풀이"
     (a) $\mathbb{E}[X] = \theta/2$이므로 $\mathbb{E}[\hat\theta_1] = \theta$이다.
@@ -202,10 +206,12 @@ $X_i \sim \mathrm{Uniform}(0, \theta)$가 i.i.d.이다. 두 추정량 $\hat\thet
 
     **모든 $n \ge 2$에서 $\hat\theta_2$의 평균제곱오차가 더 작으며, 수렴 속도도 (초)선형으로 더 빠르다.** 주목할 만한 예이다. (최댓값에 기반한) MLE 계열 추정량이 $\sqrt n$ 일치가 아니라 $n$ 일치이다. 균등분포의 끝점을 다룰 때는 표본 극단값이 표본평균보다 훨씬 많은 정보를 담는다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 **$S^2$의 평균제곱오차 최적 척도.** $X_i \sim N(\mu, \sigma^2)$에서 $c \sum(X_i - \bar X)^2$ 형태의 $\sigma^2$ 추정량 중 평균제곱오차를 최소화하는 $c$를 구하라.
+
+</div>
 
 ??? success "풀이"
     $T = \sum(X_i - \bar X)^2$이라 하자. 그러면 $T \sim \sigma^2 \chi^2_{n-1}$이므로 $\mathbb{E}[T] = (n-1)\sigma^2$, $\mathrm{Var}(T) = 2(n-1)\sigma^4$이다.
@@ -224,10 +230,12 @@ $X_i \sim \mathrm{Uniform}(0, \theta)$가 i.i.d.이다. 두 추정량 $\hat\thet
 
     "불편"인 $s^2$의 해석이 더 깔끔하기 때문에 실무에서 잘 쓰이지는 않는다. 다만 평균제곱오차가 최적인 추정량이 MLE와도 불편추정량과도 다를 수 있음을 보여 준다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 **편향추정량의 평균제곱오차.** $\hat\theta$가 편향되어 있고 $\mathbb{E}[\hat\theta] = \theta + b/n$, $\mathrm{Var}(\hat\theta) = v/n$이다. 평균제곱오차와 그 점근 거동을 구하라.
+
+</div>
 
 ??? success "풀이"
     $\mathrm{MSE} = \mathrm{Var} + \mathrm{Bias}^2 = v/n + b^2/n^2$.
@@ -240,10 +248,12 @@ $X_i \sim \mathrm{Uniform}(0, \theta)$가 i.i.d.이다. 두 추정량 $\hat\thet
 
     $O(1)$ 편향(상수 추정량 $\hat\theta = c$처럼)을 갖는 추정량은 일치하지 않는다. 평균제곱오차의 편향 항이 줄지 않기 때문이다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 **Cramér-Rao와 평균제곱오차.** 불편추정량에서는 MSE = 분산이고 CRLB가 분산 $\ge 1/(n I(\theta))$를 준다. 편향추정량에 대응하는 결과를 서술하라.
+
+</div>
 
 ??? success "풀이"
     **편향추정량의 CRLB:** 편향 여부와 무관하게 임의의 추정량 $\hat\theta$에 대해:
@@ -262,10 +272,12 @@ $X_i \sim \mathrm{Uniform}(0, \theta)$가 i.i.d.이다. 두 추정량 $\hat\thet
 
     실용적 의미: 축소추정량(ridge, James-Stein)은 분산을 줄이려고 일부러 편향을 들여와 평균제곱오차를 불편추정량의 CRLB 아래로 낮춘다. 불편추정량에서는 증명 가능하게 불가능한 일이지만 편향추정량에서는 흔한 일이다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.**
 **실용적인 축소 예제.** $n$명을 조사한 여론조사에서 $\hat p = X/n$을 얻었다. 어떤 목표값 $p_0$(예: 0.5)에 대해 축소추정량 $\hat p_{\text{shr}} = w \hat p + (1 - w) p_0$을 생각하자. (참 $p$가 $p_0$과 같다고 가정하고) 최적의 $w$를 구하라.
+
+</div>
 
 ??? success "풀이"
     참 $p = p_0$이면 $\hat p_{\text{shr}}$의 편향은 $w p_0 + (1 - w) p_0 - p_0 = 0$이다. 분산은 $w^2 \mathrm{Var}(\hat p) = w^2 p_0(1 - p_0)/n$이다.
@@ -280,10 +292,12 @@ $X_i \sim \mathrm{Uniform}(0, \theta)$가 i.i.d.이다. 두 추정량 $\hat\thet
 
     이것이 **경험적 베이즈** 축소추정량이다. 선거 여론조사 통합, 작은 실험이 많은 A/B 테스트, James-Stein 계열의 다변량 축소에 쓰인다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 6.**
 **모집단 분포에 따른 $\bar X$의 평균제곱오차.** 다음 각 경우에 $\mu$의 추정량으로서 $\bar X$의 평균제곱오차를 계산하라: (a) $N(\mu, \sigma^2)$; (b) $\mathrm{Exp}(1/\mu)$; (c) 2차 적률이 무한한 모집단.
+
+</div>
 
 ??? success "풀이"
     (a) 정규분포: $\mathrm{MSE}(\bar X) = \mathrm{Var}(\bar X) = \sigma^2/n$ (불편). CRLB를 달성하며 UMVUE이다.

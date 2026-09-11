@@ -122,7 +122,11 @@ $n = 200$, $\sigma = 2$일 때 몬테카를로 표준편차는 세 계수 모두
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.** 특정한 $\mathbf{X}$ 실현값에 대해 $\mathbf{P}$와 $\mathbf{M}$이 멱등이고 대칭임을 수치적으로 확인하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -153,9 +157,11 @@ $n = 200$, $\sigma = 2$일 때 몬테카를로 표준편차는 세 계수 모두
 
     모든 확인을 통과한다. $\mathbf{P}^2 = \mathbf{P}$, $\mathbf{M}^2 = \mathbf{M}$이고 둘 다 대칭이며 $\operatorname{tr}(\mathbf{P}) = k = 3$, $\operatorname{tr}(\mathbf{M}) = n - k = 47$이다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.** 95% 신뢰구간 $\hat{\beta}_j \pm t^*_{n-k,0.025} \cdot \mathrm{SE}(\hat{\beta}_j)$의 포함확률을 추정하도록 몬테카를로를 고쳐라. 95%에 가까운가?
+
+</div>
 
 ??? success "풀이"
 
@@ -188,9 +194,11 @@ $n = 200$, $\sigma = 2$일 때 몬테카를로 표준편차는 세 계수 모두
 
     경험적 포함확률은 각 계수에 대해 대략 0.95가 되어 이론을 확인해 준다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.** $\mathbf{P}\mathbf{M} = \mathbf{0}$임을 보이고 기하학적으로 해석하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -202,9 +210,11 @@ $n = 200$, $\sigma = 2$일 때 몬테카를로 표준편차는 세 계수 모두
 
     기하학적으로 $\mathbf{P}$는 $\mathrm{col}(\mathbf{X})$ 위로, $\mathbf{M}$은 $\mathrm{col}(\mathbf{X})^\perp$ 위로 사영한다. 두 부분공간이 직교하므로 한쪽으로 사영한 뒤 다른 쪽으로 사영하면 영벡터가 된다. 이것이 $\hat{\mathbf{y}}$와 $\mathbf{e}$가 직교하는 이유이다: $\hat{\mathbf{y}}^\top\mathbf{e} = (\mathbf{P}\mathbf{y})^\top(\mathbf{M}\mathbf{y}) = \mathbf{y}^\top\mathbf{P}\mathbf{M}\mathbf{y} = 0$. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.** $n = 200$을 유지한 채 $\sigma$를 2에서 10으로 키워라. 몬테카를로 표준편차와 $R^2$의 분포는 어떻게 달라지는가?
+
+</div>
 
 ??? success "풀이"
 
@@ -217,9 +227,11 @@ $n = 200$, $\sigma = 2$일 때 몬테카를로 표준편차는 세 계수 모두
 
     곧 TSS는 $\sigma^2$의 비인 25배가 아니라 약 7.9배 늘어난다. 신호 성분 10이 $\sigma$와 함께 커지지 않기 때문이다. 모의실험에서 평균 $R^2$은 $0.718$에서 $0.103$으로 떨어져 이 계산과 맞는다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.** $\mathbf{M}$의 대각합을 이용해 $E[s^2] = \sigma^2$임을 증명하라.
+
+</div>
 
 ??? success "풀이"
 

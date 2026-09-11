@@ -240,8 +240,12 @@ convergence_rate_plot()
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 기댓값의 선형성만 써서, 평균이 유한한 임의의 분포에서 $E[\bar{X}] = \mu$임을 해석적으로 증명하라.
+
+</div>
 
 ??? success "풀이"
     $X_1, \ldots, X_n$이 i.i.d.이고 $E[X_i] = \mu$라 하자. 그러면:
@@ -250,10 +254,12 @@ convergence_rate_plot()
 
     첫 등호는 $\bar{X}$의 정의, 둘째는 기댓값의 선형성, 셋째는 모든 $i$에 대해 $E[X_i] = \mu$라는 사실을 쓴다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 i.i.d. 관측값에 대해 $\text{Var}(\bar{X}) = \sigma^2/n$임을 보여라. 그다음 표준오차를 절반으로 줄이려면 왜 표본크기를 네 배로 해야 하는지 설명하라.
+
+</div>
 
 ??? success "풀이"
     $\text{Var}(X_i) = \sigma^2$인 i.i.d. $X_1, \ldots, X_n$에 대해:
@@ -266,10 +272,12 @@ i.i.d. 관측값에 대해 $\text{Var}(\bar{X}) = \sigma^2/n$임을 보여라. �
 
     $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 표준편차가 $\sigma_1 = 1, \sigma_2 = 2, \sigma_3 = 5, \sigma_4 = 10, \sigma_5 = 0.5$인 출처에서 얻은 관측값 다섯 개를 생각하자. 최적 역분산 가중치와 가중평균의 분산을 계산하라. 가중하지 않은 평균의 분산과 비교하라.
+
+</div>
 
 ??? success "풀이"
     정규화하지 않은 가중치는 $w_i^* = 1/\sigma_i^2$이다:
@@ -288,10 +296,12 @@ i.i.d. 관측값에 대해 $\text{Var}(\bar{X}) = \sigma^2/n$임을 보여라. �
 
     역분산 가중평균의 분산이 약 $5.21/0.189 \approx 27.6$배 작다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 정규모집단에서 표본평균은 Cramer-Rao 하한 $\sigma^2/n$을 달성한다. 표본평균 대비 표본중앙값의 점근 상대효율이 $2/\pi \approx 0.637$임을 보여라.
+
+</div>
 
 ??? success "풀이"
     $X_i \sim N(\mu, \sigma^2)$에서 표본평균의 분산은 $\sigma^2/n$이다. 표본중앙값 $\tilde{X}$의 점근분산은:
@@ -308,10 +318,12 @@ i.i.d. 관측값에 대해 $\text{Var}(\bar{X}) = \sigma^2/n$임을 보여라. �
 
     모집단이 실제로 정규일 때 중앙값은 평균에 비해 자료의 약 36%를 "낭비"한다는 뜻이다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.**
 $X_1 \sim N(\mu, 1)$과 $X_2 \sim N(\mu, 9)$를 독립적으로 관측한다고 하자. 분산을 최소화하는 가중추정량 $\hat{\mu} = aX_1 + bX_2$($a + b = 1$)를 구하라. 그 분산은 얼마인가?
+
+</div>
 
 ??? success "풀이"
     $b = 1 - a$로 두면 분산은:

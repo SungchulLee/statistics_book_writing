@@ -195,10 +195,14 @@ $\boldsymbol{\theta}^{(t+1)} = \boldsymbol{\theta}^{(t)} + \eta\,\mathbf{s}(\bol
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 뉴턴-랩슨 갱신식으로부터 IRLS의 작업 반응변수
 $\mathbf{z}^{(t)} = \mathbf{X}\boldsymbol{\theta}^{(t)} + (\mathbf{W}^{(t)})^{-1}(\mathbf{y} - \hat{\mathbf{p}}^{(t)})$
 를 유도하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -233,11 +237,13 @@ $\mathbf{z}^{(t)} = \mathbf{X}\boldsymbol{\theta}^{(t)} + (\mathbf{W}^{(t)})^{-1
     성립한다. $\hat{p}_i$가 0이나 1에 수치적으로 도달하면 $\mathbf{W}^{-1}$이 발산하며, 이것이
     분리가 있을 때 IRLS 구현이 깨지는 지점이다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 로지스틱 회귀에서 관측정보와 기대정보가 일치하는 이유를 설명하라. 이 성질이 성립하지 않는
 이항 모형의 예를 하나 들어라.
+
+</div>
 
 ??? success "풀이"
 
@@ -261,12 +267,14 @@ $\mathbf{z}^{(t)} = \mathbf{X}\boldsymbol{\theta}^{(t)} + (\mathbf{W}^{(t)})^{-1
     피셔 점수법이 더 안정적인 경우가 많다. 기대정보는 항상 양반정치이지만 관측정보는 최적점에서
     멀리 떨어진 곳에서 그렇지 않을 수 있기 때문이다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 설명변수 $x = (1,2,3,4,5,6)$과 반응변수 $y = (0,0,1,0,1,1)$에 대해 $\boldsymbol{\theta}^{(0)} = \mathbf{0}$
 에서 출발하는 IRLS를 구현하라. 반복마다 $\lVert\boldsymbol{\theta}^{(t)} - \hat{\boldsymbol{\theta}}\rVert$
 를 기록하고 수렴이 이차적임을 확인하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -329,11 +337,13 @@ $\mathbf{z}^{(t)} = \mathbf{X}\boldsymbol{\theta}^{(t)} + (\mathbf{W}^{(t)})^{-1
     $4(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T(\mathbf{y} - \tfrac12\mathbf{1})$로 환원된다.
     $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 반복당 계산 비용을 뉴턴-랩슨과 경사하강에 대해 $n$과 $p$로 나타내라. $n = 10^6$, $p = 10^4$일 때
 어느 쪽을 쓰겠는가?
+
+</div>
 
 ??? success "풀이"
 
@@ -361,12 +371,14 @@ $\mathbf{z}^{(t)} = \mathbf{X}\boldsymbol{\theta}^{(t)} + (\mathbf{W}^{(t)})^{-1
     $O(np + mp)$다. scikit-learn의 `LogisticRegression`이 기본 해법기로 L-BFGS를 쓰는 이유가
     바로 이것이다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.**
 IRLS의 작업 반응변수 $\mathbf{z}^{(t)}$의 각 성분은 어떤 의미를 갖는가?
 $\hat{p}_i$가 0이나 1에 가까울 때 $z_i$에 무슨 일이 일어나는지 설명하고, 실무적 대응책을
 제시하라.
+
+</div>
 
 ??? success "풀이"
 

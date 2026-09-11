@@ -127,8 +127,12 @@ $$\text{Var}(\hat{\sigma}^2_\mu) = \frac{2\sigma^4}{n} < \frac{2\sigma^4}{n-1} =
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 $\mathbb{E}[(1/n)\sum(X_i - \bar X)^2] = (n-1)\sigma^2/n$임을 증명하라.
+
+</div>
 
 ??? success "풀이"
     항등식 $\sum(X_i - \bar X)^2 = \sum(X_i - \mu)^2 - n(\bar X - \mu)^2$을 쓴다.
@@ -139,10 +143,12 @@ $\mathbb{E}[(1/n)\sum(X_i - \bar X)^2] = (n-1)\sigma^2/n$임을 증명하라.
 
     소박한 추정량은 $\sigma^2/n$만큼 아래로 편향된다. Bessel 수정은 $n/(n-1)$을 곱해 이를 바로잡는다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 **평균을 아는 경우의 분산.** $\mu$가 알려져 있으면 $\hat\sigma^2 = (1/n)\sum(X_i - \mu)^2$이다. (a) 불편인가? (b) 정규성 아래에서의 분산. (c) $S^2$ 대비 효율 이득.
+
+</div>
 
 ??? success "풀이"
     (a) $\mathbb{E}[\hat\sigma^2] = (1/n) \cdot n\sigma^2 = \sigma^2$. **불편**이다($\mu$를 추정하느라 소모한 자유도가 없으므로 Bessel 수정이 필요 없다).
@@ -153,10 +159,12 @@ $\mathbb{E}[(1/n)\sum(X_i - \bar X)^2] = (n-1)\sigma^2/n$임을 증명하라.
 
     $n = 10$이면 이득이 10%이다($\mu$를 아는 것이 관측값 약 1개의 가치가 있다). $n = 100$이면 1%로 무시할 만하다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 **편향은 왜 생기는가?** 직관적으로, 소박한 추정량이 $\sigma^2$을 과소추정하는 이유는?
+
+</div>
 
 ??? success "풀이"
     $\bar X$는 $c$에 대해 $\sum(X_i - c)^2$을 최소화한다. 따라서 항상 $\sum(X_i - \bar X)^2 \le \sum(X_i - \mu)^2$이다.
@@ -165,10 +173,12 @@ $\mathbb{E}[(1/n)\sum(X_i - \bar X)^2] = (n-1)\sigma^2/n$임을 증명하라.
 
     **개념적으로:** $\bar X$를 자료에 맞추었기 때문에 잔차 $(X_i - \bar X)$는 "참값으로부터의 편차보다 작다" — $\bar X$가 표본에 적응했기 때문이다. 이는 통계학 전반에서 자유도 보정을 낳는 것과 같은 "이중 계산" 문제이다(회귀의 $R^2$, AIC 벌점 등).
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 **추정량 $\hat\sigma^2_{c}$ 계열.** $c = n, n-1, n+1$에 대해 $\hat\sigma^2_c = (1/c)\sum(X_i - \bar X)^2$의 편향을 구하라.
+
+</div>
 
 ??? success "풀이"
     $\mathbb{E}[\sum(X_i - \bar X)^2] = (n-1)\sigma^2$을 쓰면:
@@ -179,10 +189,12 @@ $\mathbb{E}[(1/n)\sum(X_i - \bar X)^2] = (n-1)\sigma^2/n$임을 증명하라.
 
     맞바꿈: 나누는 수가 작을수록 편향은 작아지지만 분산은 커진다. 나누는 수가 클수록 편향은 커지지만 분산은 작아진다(더 강한 축소).
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.**
 **평균을 아는 표본분산이 모르는 경우보다 낫다.** 구체적으로, 이 분산추정량은 보정 없이도 불편이다. 이것이 카이제곱분포를 보존함을 보여라.
+
+</div>
 
 ??? success "풀이"
     $\mu$를 아는 경우: $(X_i - \mu)/\sigma \sim N(0, 1)$이므로 $(X_i - \mu)^2/\sigma^2 \sim \chi^2_1$이고 $\sum(X_i - \mu)^2/\sigma^2 \sim \chi^2_n$이다.
@@ -191,10 +203,12 @@ $\mathbb{E}[(1/n)\sum(X_i - \bar X)^2] = (n-1)\sigma^2/n$임을 증명하라.
 
     자유도 하나의 차이가 Bessel 수정에 담겨 있다. 더 깊은 이유는 $\bar X$로부터의 잔차가 합이 0이라는 제약을 받아 자유도 하나가 사라지기 때문이다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 6.**
 **회귀 맥락에서의 소박한 분산.** 선형회귀가 $\mathrm{SSE}/n$이나 $\mathrm{SSE}/(n-1)$이 아니라 **잔차분산** $\hat\sigma^2 = \mathrm{SSE}/(n - p)$를 보고하는 이유는?
+
+</div>
 
 ??? success "풀이"
     모수가 $p$개인 선형회귀는 $\mathrm{SSE} = \sum(Y_i - \hat Y_i)^2$으로부터 잔차분산을 추정한다.

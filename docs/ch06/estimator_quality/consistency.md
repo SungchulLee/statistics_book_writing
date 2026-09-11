@@ -54,8 +54,12 @@ $$
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 $\text{Var}(X) = \sigma^2 < \infty$를 가정하고 Chebyshev 부등식을 사용하여 표본평균 $\bar{X}_n$이 $\mu = E[X]$의 일치추정량임을 증명하라.
+
+</div>
 
 ??? success "풀이"
     Chebyshev 부등식에 의해 임의의 $\varepsilon > 0$에 대해:
@@ -72,20 +76,24 @@ $\text{Var}(X) = \sigma^2 < \infty$를 가정하고 Chebyshev 부등식을 사�
 
     따라서 $\bar{X}_n \xrightarrow{p} \mu$이며, 이것이 일치성의 정의이다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 대칭분포에서는 표본중앙값도 모평균의 일치추정량이다. 왜 $\mu$로 수렴하는지 직관적으로 설명하고, 표본평균에 비해 표본중앙값이 갖는 장점을 하나 서술하라.
+
+</div>
 
 ??? success "풀이"
     대칭분포에서는 모평균과 모집단 중앙값이 일치한다. 표본중앙값은 Glivenko-Cantelli 정리에 의해 모집단 중앙값으로 수렴한다(경험 CDF가 참 CDF로 균등수렴하므로 분위수도 수렴한다). 대칭분포에서는 모집단 중앙값이 $\mu$와 같으므로 표본중앙값은 $\mu$에 대해 일치한다.
 
     **중앙값의 장점:** 이상점에 로버스트하다. 꼬리가 두꺼운 분포(예: Cauchy)에서는 표본평균의 변동이 매우 커지고 일치하지조차 않을 수 있지만(Cauchy 분포에는 유한한 평균이 없다) 표본중앙값은 여전히 일치하고 안정적이다. 분산이 유한한 분포에서도 중앙값은 영향함수가 유계여서 극단 관측값 하나가 추정값을 크게 바꾸지 못한다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 $\hat{\theta}_n$이 $\theta$의 일치추정량이고 $g$가 연속함수이면 $g(\hat{\theta}_n)$이 $g(\theta)$의 일치추정량임을 보여라. 어떤 정리를 사용하는지 밝혀라.
+
+</div>
 
 ??? success "풀이"
     이는 **연속사상정리**이다. $\hat{\theta}_n \xrightarrow{p} \theta$이고 $g$가 $\theta$에서 연속이면 $g(\hat{\theta}_n) \xrightarrow{p} g(\theta)$이다.
@@ -98,10 +106,12 @@ $\hat{\theta}_n$이 $\theta$의 일치추정량이고 $g$가 연속함수이면 
 
     따라서 표본표준편차는 $\sigma$의 일치추정량이다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 추정량 $\hat{\theta}_n$의 점근정규성을 정의하라. $\hat{\theta}_n$이 MLE이고 정칙 조건이 성립할 때 $\sqrt{n}(\hat{\theta}_n - \theta_0)$의 점근분포를 서술하라.
+
+</div>
 
 ??? success "풀이"
     추정량 $\hat{\theta}_n$이 다음을 만족하면 **점근적으로 정규**이다:

@@ -315,9 +315,13 @@ $$\hat{y} = \begin{cases} 1 & \text{if } P_{\text{LDA}}(Y=1|\mathbf{x}) \geq 0.5
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 위 대출 예제에서 세 문턱 각각의 F1 점수와 유든의 J를 계산하라. 어느 문턱이 각 기준에서
 최적인가?
+
+</div>
 
 ??? success "풀이"
 
@@ -333,11 +337,13 @@ $$\hat{y} = \begin{cases} 1 & \text{if } P_{\text{LDA}}(Y=1|\mathbf{x}) \geq 0.5
     두 오류에 암묵적으로 비슷한 무게를 준다. 비용을 명시하지 않으면 결국 기본 문턱 근처가
     선택된다. 연습문제 2에서 보듯 비용을 넣으면 답이 완전히 달라진다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 놓친 연체의 비용이 \$1,000, 허위경보의 비용이 \$50이라 하자. 세 문턱의 총비용을 계산하고
 최적 문턱 $t^*$와 비교하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -359,10 +365,12 @@ $$\hat{y} = \begin{cases} 1 & \text{if } P_{\text{LDA}}(Y=1|\mathbf{x}) \geq 0.5
     전혀 없다. 기대비용을 직접 최소화하라. 대리지표는 비용을 모를 때 쓰는 임시방편이다.
     $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 문턱을 조율해도 AUC가 변하지 않는 이유를 설명하라. 그렇다면 문턱 조율은 무엇을 개선하는가?
+
+</div>
 
 ??? success "풀이"
 
@@ -384,11 +392,13 @@ $$\hat{y} = \begin{cases} 1 & \text{if } P_{\text{LDA}}(Y=1|\mathbf{x}) \geq 0.5
     잘못 잡힌 문제이고 재학습 없이 즉시 고칠 수 있다. **먼저 AUC를 보고, 그다음 문턱을 보라.**
     $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 어떤 분석가가 검정자료에서 $F_1$을 최대화하는 문턱을 찾은 뒤, 같은 검정자료에서 그 $F_1$을
 모형 성능으로 보고했다. 무엇이 잘못되었는가?
+
+</div>
 
 ??? success "풀이"
 
@@ -409,10 +419,12 @@ $$\hat{y} = \begin{cases} 1 & \text{if } P_{\text{LDA}}(Y=1|\mathbf{x}) \geq 0.5
     안에서 문턱을 고른다. 문턱 선택이 반드시 **바깥 루프 안쪽**에서 일어나야 한다는 점이
     핵심이다. 전체 자료로 문턱을 한 번 고른 뒤 교차검증하면 자료 누설이 된다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.**
 문턱을 낮추는 것과 학습 시 양성 범주에 가중치를 주는 것(`class_weight`)은 어떻게 다른가?
+
+</div>
 
 ??? success "풀이"
 

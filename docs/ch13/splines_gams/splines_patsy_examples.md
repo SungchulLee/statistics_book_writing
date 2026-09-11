@@ -134,7 +134,11 @@ cs_pred = cs_model.predict(np.asarray(cs_grid))
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.** df를 3에서 8까지 바꿔 가며 B-스플라인을 적합하고 그 결과 곡선을 그려라. 어느 df에서 과대적합의 징후가 나타나기 시작하는가?
+
+</div>
 
 ??? success "풀이"
 
@@ -166,9 +170,11 @@ cs_pred = cs_model.predict(np.asarray(cs_grid))
 
     과대적합은 곡선의 모양에서 드러난다. 지나친 요동으로 나타나며, 특히 자료가 성긴 경계 근처에서 두드러진다. 이 자료에서는 대체로 df > 6에서 징후가 보이기 시작한다. 형식적으로 고르려면 교차검증을 써야 한다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.** 매듭이 $K$개인 자연 삼차 스플라인의 자유도가 (제약 없는 삼차 스플라인의 $K + 4$가 아니라) $K$인 이유를 설명하라. "잃어버린" 4개의 자유도는 어디로 가는가?
+
+</div>
 
 ??? success "풀이"
 
@@ -191,9 +197,11 @@ cs_pred = cs_model.predict(np.asarray(cs_grid))
     !!! note "df 세는 방식의 차이"
         절편을 df에 포함하느냐에 따라 문헌마다 숫자가 하나씩 달라진다. patsy의 `cr(x, df=4)`나 R의 `ns(x, df=4)`는 절편을 뺀 기저 열 4개를 돌려주므로, 모형 절편을 더하면 전체 차원이 5가 된다. 어떤 규약을 쓰든 **자연 스플라인이 같은 매듭의 삼차 스플라인보다 정확히 4만큼 작다**는 점은 변하지 않는다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.** 자료 범위 바깥(예: age = 150이나 age = 0)에서 B-스플라인 모형과 자연 스플라인 모형의 예측을 비교하라. 어느 쪽이 더 합리적으로 외삽하는가?
+
+</div>
 
 ??? success "풀이"
 
@@ -233,9 +241,11 @@ cs_pred = cs_model.predict(np.asarray(cs_grid))
 
     이 오류 자체가 답이다. B-스플라인 기저는 최외곽 매듭 바깥에서 정의되지 않으므로 patsy는 추측해서 값을 만들어 내는 대신 거부한다. 설령 삼차식을 그대로 연장하도록 구현했더라도 그 외삽값은 극단적이고 비현실적이었을 것이다. 자료 범위를 벗어나 예측해야 한다면 자연 스플라인을 써야 한다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.** 적합 목적함수에 릿지 형태의 항 $\lambda \|\boldsymbol{\gamma}\|^2$을 더해 B-스플라인에 거칢 벌점을 구현하라. 이것은 평활 스플라인과 어떤 관계인가?
+
+</div>
 
 ??? success "풀이"
 
@@ -249,9 +259,11 @@ cs_pred = cs_model.predict(np.asarray(cs_grid))
 
     $\lambda\|\boldsymbol{\gamma}\|^2$을 더하면 기저 계수가 0 쪽으로 축소되어 곡선이 매끄러워진다. 이는 2계 도함수에 벌점을 주는 평활 스플라인의 벌점 $\lambda\int [f'']^2$에 대한 근사이다. 정확한 평활 스플라인은 $D_{jk} = \int B_j''(t)B_k''(t)\,dt$인 벌점행렬 $\mathbf{D}$를 쓰지만, $\lambda\mathbf{I}$(릿지)가 더 간단한 근사를 제공한다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.** 매듭이 자료점에 놓인 자연 삼차 스플라인에 대해, 평활 스플라인 추정량이 두 번 미분 가능한 모든 함수 가운데 $\sum(y_i - f(x_i))^2 + \lambda\int[f''(t)]^2\,dt$를 최소화함을 증명하라.
+
+</div>
 
 ??? success "풀이"
 

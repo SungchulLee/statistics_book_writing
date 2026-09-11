@@ -93,18 +93,24 @@ plt.show()
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 $\boldsymbol{\Sigma} = \begin{pmatrix}4&2.8\\2.8&4\end{pmatrix}$인 이변량 정규분포의 상관계수 $\rho$를 계산하라.
+
+</div>
 
 ??? success "풀이"
     $$
     \rho = \frac{\text{Cov}(X_1, X_2)}{\sigma_1 \sigma_2} = \frac{2.8}{\sqrt{4}\sqrt{4}} = \frac{2.8}{4} = 0.7
     $$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 이변량 정규분포에서 무상관성이 독립성을 함의함을 보여라.
+
+</div>
 
 ??? success "풀이"
     $\rho = 0$이면 공분산행렬이 대각행렬 $\boldsymbol{\Sigma} = \text{diag}(\sigma_1^2, \sigma_2^2)$이다. 그러면:
@@ -120,10 +126,12 @@ $\boldsymbol{\Sigma} = \begin{pmatrix}4&2.8\\2.8&4\end{pmatrix}$인 이변량 �
 
     $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 $\boldsymbol{\Sigma} = \begin{pmatrix}4&2.8\\2.8&4\end{pmatrix}$의 고윳값과 고유벡터를 계산하고 등고선 타원의 방향을 서술하라.
+
+</div>
 
 ??? success "풀이"
     특성방정식은 $(4-\lambda)^2 - 2.8^2 = 0$이다:
@@ -143,10 +151,12 @@ $\boldsymbol{\Sigma} = \begin{pmatrix}4&2.8\\2.8&4\end{pmatrix}$의 고윳값과
 
     타원의 장축은 $(1,1)$ 방향이고 반길이가 $\sqrt{6.8} \approx 2.61$이며, 단축은 $(1,-1)$ 방향이고 반길이가 $\sqrt{1.2} \approx 1.10$이다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 이변량 정규 $(\boldsymbol{\mu}, \boldsymbol{\Sigma})$에서 $X_1$의 주변분포가 $N(\mu_1, \sigma_1^2)$임을 증명하라.
+
+</div>
 
 ??? success "풀이"
     결합밀도에서 $X_2$를 적분해 없앤다. 지수부를 $(x_1, x_2)$의 이차형식으로 쓰고 $x_2$에 대해 완전제곱식을 만든다. $x_2$에 대한 적분은 Gaussian 적분이므로 상수가 되어 다음이 남는다:

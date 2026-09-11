@@ -166,7 +166,11 @@ poly_model = LinearRegression().fit(X_poly, df['price'])
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.** 분위수 기반 구간($K = 5$)으로 계단함수를 적합하고 등간격 구간의 구간 평균과 비교하라. 어느 방식이 더 균일한 예측 품질을 주는가?
+
+</div>
 
 ??? success "풀이"
 
@@ -182,17 +186,21 @@ poly_model = LinearRegression().fit(X_poly, df['price'])
 
     분위수 구간은 각 구간의 관측값 개수를 대략 같게 만들어 구간 평균의 표준오차를 더 균일하게 한다. 등간격 구간은 극단 구간(예: 아주 오래된 집)에 관측값이 아주 적어 그 구간의 추정을 믿을 수 없게 될 수 있다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.** 구간 개수를 늘리면 훈련 $R^2$가 항상 커지거나(적어도 줄지 않고) 검정오차는 커질 수 있는 이유를 설명하라.
+
+</div>
 
 ??? success "풀이"
 
     구간이 하나 늘 때마다 모수도 하나 늘어난다. 구간이 많아지면 모형이 훈련자료의 더 세밀한 패턴을 맞출 수 있어 훈련 RSS가 줄고 $R^2$가 커진다. 그러나 구간이 너무 많으면(특히 관측값이 적은 구간에서) 구간 평균이 참 조건부 기댓값의 잡음 섞인 추정이 된다. 표본 밖에서는 이 잡음 섞인 추정이 예측오차를 키운다. 극단적으로 $K = n$개 구간이면 훈련자료에서 $R^2 = 1$이지만 표본 밖 성능은 형편없다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.** `pd.cut` 대신 `np.digitize`로 계단함수를 구현하라. 결과가 일치하는지 확인하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -209,9 +217,11 @@ poly_model = LinearRegression().fit(X_poly, df['price'])
 
     두 방법이 같은 지시행렬을 만들므로 예측값이 일치한다. 다만 경계값 처리가 미묘하게 다르다. `np.digitize`는 기본적으로 왼쪽이 닫힌 구간 $[c_{k-1}, c_k)$을 쓰고 `pd.cut`은 오른쪽이 닫힌 구간 $(c_{k-1}, c_k]$을 쓴다. 절단점과 정확히 같은 값이 자료에 있다면 두 방법의 배정이 달라진다. `pd.cut`과 맞추려면 `np.digitize(..., right=True)`를 쓴다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.** (모든 지시변수를 넣고 절편은 없는) 계단함수 모형에서 각 구간 계수의 OLS 추정값이 그 구간 반응변수의 표본평균과 같음을 수학적으로 보여라.
+
+</div>
 
 ??? success "풀이"
 
@@ -223,9 +233,11 @@ poly_model = LinearRegression().fit(X_poly, df['price'])
 
     각 계수가 그 구간 안의 표본평균이다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.** "비싼" 주택을 예측하는 계단함수 로지스틱 회귀를, 연속형 age를 쓰는 로지스틱 회귀와 비교하라. 어느 쪽의 분류 정확도가 높으며 그 이유는 무엇인가?
+
+</div>
 
 ??? success "풀이"
 

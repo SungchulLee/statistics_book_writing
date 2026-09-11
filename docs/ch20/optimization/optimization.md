@@ -233,10 +233,14 @@ plt.show()
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 역전파에 등장하는 여섯 개의 행렬곱이 차원상 모두 맞는지 확인하라. 특히
 $\mathbf{H}\odot(1-\mathbf{H})\odot[(\hat{\mathbf{Y}}-\mathbf{Y})\mathbf{W}^{oT}]$의 각 인자가
 왜 같은 모양이어야 하는지 설명하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -265,11 +269,13 @@ $\mathbf{H}\odot(1-\mathbf{H})\odot[(\hat{\mathbf{Y}}-\mathbf{Y})\mathbf{W}^{oT}
     아니고, 원칙적으로는 성분별 곱으로 처리할 수 없다. 그럼에도 출력층 기울기가 단순한
     $\hat{\mathbf{Y}}-\mathbf{Y}$가 되는 것은 교차엔트로피와의 소거 덕분이다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 위 `softmax` 람다와 손실 계산이 수치적으로 불안정한 이유를 설명하고, 두 함수를 모두 안정적으로
 고쳐 쓰라.
+
+</div>
 
 ??? success "풀이"
 
@@ -325,11 +331,13 @@ $\mathbf{H}\odot(1-\mathbf{H})\odot[(\hat{\mathbf{Y}}-\mathbf{Y})\mathbf{W}^{oT}
     $\hat{\mathbf{Y}}-\mathbf{Y}$로 $[-1, 1]$에 갇혀 있어 확률이 언더플로되어도 안전하다.
     문제가 되는 것은 오직 손실값의 보고다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 `np.random.randn(784, 100)`으로 초기화하면 은닉층 로짓의 표준편차가 얼마가 되는지 추정하고,
 그 결과가 학습에 미치는 영향을 설명하라. 올바른 척도는 무엇인가?
+
+</div>
 
 ??? success "풀이"
 
@@ -369,11 +377,13 @@ $\mathbf{H}\odot(1-\mathbf{H})\odot[(\hat{\mathbf{Y}}-\mathbf{Y})\mathbf{W}^{oT}
     편향도 마찬가지다. `np.random.randn(1, 100)`으로 초기화할 이유가 없다. 0으로 두는 것이
     표준이다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 `feed_forward`의 손실이 배치에 대한 **합**이라는 사실이 실효 학습률에 어떤 영향을 주는지
 설명하라. `batch_size`를 100에서 200으로 바꾸면 `lr`을 어떻게 조정해야 하는가?
+
+</div>
 
 ??? success "풀이"
 
@@ -418,11 +428,13 @@ $\mathbf{H}\odot(1-\mathbf{H})\odot[(\hat{\mathbf{Y}}-\mathbf{Y})\mathbf{W}^{oT}
     큰 배치 학습에서 널리 쓰이는 경험칙이 "$B$를 $k$배 키우면 $\eta$도 $k$배" 또는
     "$\sqrt{k}$배"인데, 이는 위의 척도 문제와는 별개의, 잡음에 관한 이야기다.) $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.**
 $L(x) = x^2$에 대한 경사하강에서 $x_k$의 닫힌 형태를 구하라. 수렴 조건은 무엇이며,
 $\eta = 0.1$, $x_0 = 5$일 때 20단계 후의 값은?
+
+</div>
 
 ??? success "풀이"
 

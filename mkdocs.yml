@@ -1,6 +1,7 @@
 site_name: Introductory Statisitcs
 theme:
     name: material
+    language: ko
     favicon: assets/favicon.ico
 
 markdown_extensions:

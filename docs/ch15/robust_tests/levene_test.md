@@ -93,7 +93,11 @@ stat, pval = stats.levene(x, y, center='mean')
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.** 두 집단의 자료가 다음과 같다. 집단 A = $\{3, 7, 8, 5, 6\}$, 집단 B = $\{12, 14, 11, 19, 15\}$. 평균 중심화로 Levene 검정통계량 $W$를 손으로 계산하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -143,9 +147,11 @@ stat, pval = stats.levene(x, y, center='mean')
 
     **표본분산이 $3.70$ 대 $9.70$으로 2.6배 차이인데도 유의하지 않다.** 15.3절 연습문제 3에 따르면 $n = 5$에서 F 검정이 탐지하려면 9.6배가 필요하고, 로버스트 검정은 그보다도 검정력이 낮다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.** 절대편차 $|X_{ij} - \bar{X}_i|$에 분산분석을 적용하는 것이 왜 분산의 동일성을 검정하는 것인지 직관적으로 설명하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -163,9 +169,11 @@ stat, pval = stats.levene(x, y, center='mean')
 
     절대편차는 15.5절 [Levene 검정](./levene.md) 연습문제 4에서 보았듯 $E[Z^2] = \sigma^2$이므로 **2차 적률만** 필요하다. 이것이 로버스트성의 근원이다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.** $\text{Exp}(1)$에서 뽑은 자료에 대해 Levene 검정(평균 중심)과 Brown-Forsythe(중앙값 중심)의 제1종 오류율을 비교하는 모의실험을 작성하라. $k = 3$개 집단, $n = 20$, $\alpha = 0.05$를 쓴다.
+
+</div>
 
 ??? success "풀이"
 
@@ -207,9 +215,11 @@ stat, pval = stats.levene(x, y, center='mean')
 
     **주의: 이것은 첨도의 문제가 아니다.** 15.5절 비교 페이지의 표에서 확인했듯, 같은 첨도($\gamma_2 = 6$)를 갖는 대칭인 $t_5$에서는 평균 중심 Levene의 크기가 0.064로 무난하다. 문제는 오직 **치우침**에서 온다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.** 정규성 아래에서 크기가 같은 두 집단에 대해 Levene 검정(평균 중심)이 절대편차에 대한 이표본 $t$ 검정과 동등함을 증명하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -245,9 +255,11 @@ stat, pval = stats.levene(x, y, center='mean')
 
     **한 가지 유보.** 이 동등성은 $t$ 검정이 **합동분산**을 쓸 때만 성립한다. Welch $t$ 검정을 쓰면 자유도가 달라져 $p$값이 조금 다르다. 그리고 $Z_{ij}$의 집단내 분산이 실제로 다를 수 있으므로(집단분산이 다르면 $\operatorname{Var}(Z_i)$도 다르다), Welch 판을 쓰는 것이 이론적으로 더 정당할 수 있다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.** 어떤 연구자에게 표본크기 25, 30, 28, 22인 처치집단 넷이 있다. Levene 검정을 수행하여 $W = 3.12$, $p = 0.028$을 얻었다. 일원분산분석을 계획하고 있다. 이 결과를 두고 취할 수 있는 두 가지 행동 방향을 기술하고 각각의 절충을 설명하라.
+
+</div>
 
 ??? success "풀이"
 

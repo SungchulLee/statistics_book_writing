@@ -189,7 +189,11 @@ python ci_prop_calc.py --k 12 --n 50 --method wilson --cl 0.99
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.** 품질관리 표본에서 200개 중 8개가 불량이다. 불량률 $p$의 95% Wald와 Wilson 신뢰구간을 계산하라. 차이를 논하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -201,9 +205,11 @@ python ci_prop_calc.py --k 12 --n 50 --method wilson --cl 0.99
 
     Wilson 구간은 오른쪽으로 옮겨져 있고(중심 0.049 대 0.040) 약간 더 넓다. $n\hat{p} = 8 < 10$이므로 Wald 구간의 바탕인 정규근사가 아슬아슬하며, Wilson 구간이 더 믿을 만한 포함확률을 준다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.** $\hat{p} = 0$이거나 $\hat{p} = 1$일 때 Wald 구간의 너비가 0임을 보이고 왜 문제인지 설명하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -217,9 +223,11 @@ python ci_prop_calc.py --k 12 --n 50 --method wilson --cl 0.99
 
     이것이 문제인 이유는 $n$번 시행에서 성공을 $k = 0$번 관측했다고 해서 $p = 0$이 확실한 것은 아니기 때문이다. 예를 들어 $p = 0.01$이고 $n = 50$이면 $k = 0$을 관측할 확률이 $(1 - 0.01)^{50} \approx 0.605$로 결코 무시할 수 없다. 0에서 퇴화한 구간은 $p$의 어떤 양수 값도 담지 못하므로 포함확률이 명목 수준보다 크게 떨어진다. Wilson과 Clopper–Pearson 방법은 $k = 0$이나 $k = n$일 때도 너비가 양수인 구간을 만들어 이 퇴화를 피한다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.** 어떤 조사에서 응답자 1000명 중 540명이 어떤 정책을 지지한다. 네 가지 방법(Wald, Wilson, Agresti–Coull, Clopper–Pearson)으로 95% 신뢰구간을 계산하고 너비를 비교하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -235,9 +243,11 @@ python ci_prop_calc.py --k 12 --n 50 --method wilson --cl 0.99
 
     $n = 1000$이고 $\hat{p}$가 $0.5$ 근처이므로 네 방법이 거의 같은 구간을 준다. Clopper–Pearson이 조금 더 넓다(0.0625 대 나머지 약 0.0617). $n$이 크고 $p$가 경계에서 멀면 방법의 선택이 거의 중요하지 않다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.** 어떤 임상시험에서 환자 30명 중 중대한 이상반응이 0건이다. Clopper–Pearson 방법으로 $p$의 단측 95% 상한을 계산하고 "3의 법칙" 근사를 진술하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -257,9 +267,11 @@ python ci_prop_calc.py --k 12 --n 50 --method wilson --cl 0.99
 
     **3의 법칙**은 빠른 근사를 준다: $k = 0$일 때 95% 단측 상한은 대략 $3/n$이다. 여기서는 $3/30 = 0.10$으로 정확한 값 0.0951에 가깝다. 3의 법칙은 근사 $1 - \alpha^{1/n} \approx -\ln(\alpha)/n$과 $-\ln(0.05) \approx 3$이라는 사실에서 나온다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.** 95% 수준에서 $k = 7$, $n = 25$일 때 Wilson과 Agresti–Coull 구간이 거의 같음을 수치로 확인하고, 왜 가깝지만 정확히 같지는 않은지 대수적으로 설명하라.
+
+</div>
 
 ??? success "풀이"
 

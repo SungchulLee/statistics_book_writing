@@ -128,8 +128,12 @@ $$
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 $X_1, \ldots, X_n \sim N(\mu, \sigma^2)$이고 추정량이 $\hat\mu_w = wX_1 + (1-w)\bar X$이다. (a) 불편인가? (b) 분산을 최소화하는 $w$는? (c) $w = 0$과 $w = 1$에서의 분산은?
+
+</div>
 
 ??? success "풀이"
     (a) 선형성에 의해 $\mathbb{E}[\hat\mu_w] = w\mu + (1-w)\mu = \mu$이다. 모든 $w$에 대해 불편이다.
@@ -144,10 +148,12 @@ $X_1, \ldots, X_n \sim N(\mu, \sigma^2)$이고 추정량이 $\hat\mu_w = wX_1 + 
 
     표본평균이 관측값 하나에 의존하는 것보다 $n$배 효율적이다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 **Cramér-Rao 하한 (CRLB).** 불편추정량에 대한 CRLB를 서술하고 증명하라.
+
+</div>
 
 ??? success "풀이"
     **CRLB:** $\hat\theta$가 밀도 $f(x; \theta)$에서 얻은 $n$개의 i.i.d. 관측값에 기반한 $\theta$의 불편추정량이면:
@@ -162,10 +168,12 @@ $X_1, \ldots, X_n \sim N(\mu, \sigma^2)$이고 추정량이 $\hat\mu_w = wX_1 + 
 
     등호는 $\hat\theta$가 점수함수의 선형함수일 때, 즉 추정량이 **효율적**일 때에만 성립한다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 **정규분포 평균의 효율성.** $X \sim N(\mu, \sigma^2)$에서 $\mu$를 추정할 때 $\bar X$가 CRLB를 달성함을 보여라.
+
+</div>
 
 ??? success "풀이"
     정규분포 평균의 Fisher 정보량은 $I(\mu) = 1/\sigma^2$이다. CRLB는 $\mathrm{Var}(\hat\mu) \ge \sigma^2/n$이다.
@@ -176,10 +184,12 @@ $X_1, \ldots, X_n \sim N(\mu, \sigma^2)$이고 추정량이 $\hat\mu_w = wX_1 + 
 
     이는 강한 최적성 결과이다. $\bar X$는 단지 일치하고 불편인 데 그치지 않고, 정규 모형 아래에서 *최선의* 추정량이다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 **MLE의 점근 효율성.** MLE가 점근적으로 CRLB를 달성한다는 결과를 서술하고 설명하라.
+
+</div>
 
 ??? success "풀이"
     **결과:** 정칙 조건 아래에서 $\hat\theta_{\text{MLE}}$는 분산이 CRLB와 같은 **점근적 정규**이다:
@@ -196,10 +206,12 @@ $X_1, \ldots, X_n \sim N(\mu, \sigma^2)$이고 추정량이 $\hat\mu_w = wX_1 + 
 
     소표본에서는 다른 추정량(적률법, 편향 보정된 MLE, James-Stein 계열의 축소)이 MLE를 능가할 수 있다. $n$이 크면 MLE가 사실상 최적이다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.**
 **비효율적인 불편추정량.** $N(\mu, 1)$에서 분산이 $1/n$(CRLB)보다 큰 $\mu$의 불편추정량을 구성하라. 그런 추정량이 존재하는 이유를 설명하라.
+
+</div>
 
 ??? success "풀이"
     예: $\hat\mu = X_1$(첫 관측값만 사용). 불편이다: $\mathbb{E}[X_1] = \mu$. 분산: $\mathrm{Var}(X_1) = 1$.
@@ -212,10 +224,12 @@ $X_1, \ldots, X_n \sim N(\mu, \sigma^2)$이고 추정량이 $\hat\mu_w = wX_1 + 
 
     **효율**은 불편추정량의 분산이 CRLB에 얼마나 가까운지를 잰다. $\bar X$의 효율은 1이고(CRLB 달성), 크기 $n$인 정규 표본에서 $X_1$의 효율은 $1/n$이다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 6.**
 **실제 응용에서의 맞바꿈.** 언제 불편추정량보다 편향되어 있지만 평균제곱오차가 작은 추정량(예: 능형회귀, James-Stein)을 선호하겠는가?
+
+</div>
 
 ??? success "풀이"
     **MSE 분해:** $\mathrm{MSE}(\hat\theta) = \mathrm{Var}(\hat\theta) + [\mathrm{Bias}(\hat\theta)]^2$.

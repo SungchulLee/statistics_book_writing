@@ -166,8 +166,12 @@ plt.show()
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 분산분석 잔차: A $s^2 \approx 1.37$, B $s^2 \approx 13.46$, C $s^2 \approx 0.10$. (a) 분산이 대략 같은가? (b) Levene 검정의 결과는? (c) 대안 검정은? (d) 분산이 작은 집단의 $n$도 작을 때의 영향은?
+
+</div>
 
 ??? success "풀이"
     (a) **아니다.** 비가 대략 130:14:1로 크게 다르다.
@@ -180,10 +184,12 @@ plt.show()
 
     "균형 설계"(모든 $n$이 같음)는 이 편향을 대칭으로 만들어 이분산으로부터 어느 정도 보호해 준다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 **등분산 검정들.** Bartlett, Levene, Brown-Forsythe를 비교하라.
+
+</div>
 
 ??? success "풀이"
     **Bartlett:** 정규성 아래의 가능도비 검정. 정규 자료에서 검정력이 높지만 비정규성에 매우 민감하다.
@@ -194,10 +200,12 @@ plt.show()
 
     권고: 자료가 분명히 정규이면 Bartlett, 그렇지 않으면 Brown-Forsythe. Levene은 흔한 중간 지점이다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 **분산 안정화 변환.** 로그와 제곱근 변환을 논하라.
+
+</div>
 
 ??? success "풀이"
     분산이 평균에 따라 커질 때 쓴다.
@@ -210,10 +218,12 @@ plt.show()
 
     분산분석 전에 변환을 적용하고 변환된 자료로 분석한다. 계수는 변환된 척도에서 해석한다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 **Welch 분산분석.** 간략히 설명하고 표준 분산분석과 대비하라.
+
+</div>
 
 ??? success "풀이"
     **표준 분산분석:** 등분산을 가정한다. 모든 집단 내 분산을 합동한다.
@@ -228,10 +238,12 @@ plt.show()
 
     Python에서는 `pingouin.welch_anova`로 쓸 수 있다(`scipy.stats.f_oneway`에는 Welch 형태의 옵션이 없다).
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.**
 등분산성 진단으로서의 **잔차 그림**.
+
+</div>
 
 ??? success "풀이"
     잔차를 적합값에 대해(회귀에서는 설명변수에 대해) 그린다.
@@ -246,10 +258,12 @@ plt.show()
 
     시각적 진단은 빠르고 유익하다. 형식적 검정(Levene, 회귀에서는 Breusch-Pagan)이 이를 보완한다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 6.**
 **표본크기 불균형**과 이분산. 균형 설계가 선호되는 이유는?
+
+</div>
 
 ??? success "풀이"
     $n_i$가 다르고 $\sigma_i^2$도 다르면 F-통계량의 명목 분포가 틀릴 수 있다:

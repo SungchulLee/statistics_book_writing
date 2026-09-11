@@ -96,8 +96,12 @@ $$
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 $\sigma^2$이 알려진 표본 $x_1, \ldots, x_n \sim N(\mu, \sigma^2)$에서 로그가능도를 $\mu$에 대해 미분하여 $\mu$의 MLE를 유도하라.
+
+</div>
 
 ??? success "풀이"
     로그가능도는:
@@ -120,10 +124,12 @@ $\sigma^2$이 알려진 표본 $x_1, \ldots, x_n \sim N(\mu, \sigma^2)$에서 �
 
     2계도함수가 $-n/\sigma^2 < 0$이므로 최댓값임이 확인된다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 MLE $\hat{\sigma}^2 = \frac{1}{n}\sum(x_i - \bar{x})^2$이 편향되어 있음을 보이고 $E[\hat{\sigma}^2]$을 계산하라.
+
+</div>
 
 ??? success "풀이"
     $S^2$을 $E[S^2] = \sigma^2$인 불편 표본분산이라 하면 $\sum(X_i - \bar{X})^2 = (n-1)S^2$이다. 따라서:
@@ -134,10 +140,12 @@ MLE $\hat{\sigma}^2 = \frac{1}{n}\sum(x_i - \bar{x})^2$이 편향되어 있음�
 
     편향은 $E[\hat{\sigma}^2] - \sigma^2 = -\sigma^2/n$이다. MLE는 참 분산을 과소추정한다. 이 때문에 불편추정량으로 $S^2 = \frac{1}{n-1}\sum(X_i - \bar{X})^2$을 쓰게 된다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 정규 로그가능도를 $\mu$에 대해 최대화하는 것과 잔차제곱합을 최소화하는 것 사이의 연결을 설명하라. 정규가 아닌 분포에서는 이 연결이 왜 깨지는가?
+
+</div>
 
 ??? success "풀이"
     정규분포에서 ($\sigma^2$을 고정한) $\mu$에 대한 로그가능도는:
@@ -150,10 +158,12 @@ MLE $\hat{\sigma}^2 = \frac{1}{n}\sum(x_i - \bar{x})^2$이 편향되어 있음�
 
     정규가 아닌 분포에서는 로그가능도가 $(x_i - \mu)$의 다른 함수를 포함한다. 예를 들어 Laplace 분포에서는 $\ell(\mu) \propto -\sum |x_i - \mu|$이므로 MLE가 절대편차의 합을 최소화하며 평균이 아니라 중앙값을 준다. 최소제곱과의 연결은 정규분포의 이차 지수부에 특유한 것이다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 정규분포에서 얻은 관측값 5개가 3, 5, 7, 9, 11이다. $\mu$와 $\sigma^2$의 MLE를 모두 계산하라.
+
+</div>
 
 ??? success "풀이"
     $\mu$의 MLE는 표본평균이다:

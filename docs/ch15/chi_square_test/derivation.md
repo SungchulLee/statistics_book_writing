@@ -148,6 +148,8 @@ Fail to reject H0: insufficient evidence of a difference.
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 유도의 출발점이 되는 항등식
 
@@ -156,6 +158,8 @@ $$
 $$
 
 을 증명하라.
+
+</div>
 
 ??? success "풀이"
     $X_i - \mu = (X_i - \bar{X}) + (\bar{X} - \mu)$로 쓰고 제곱하여 합한다.
@@ -180,10 +184,12 @@ $$
 
     부수적 결과로 $\mu \neq \bar{X}$인 한 $\sum_i (X_i - \bar{X})^2 < \sum_i (X_i - \mu)^2$이다. 표본평균으로 계산한 제곱합이 참 평균으로 계산한 것보다 항상 작으며, 이것이 $n$이 아니라 $n-1$로 나누어 편향을 보정하는 이유이다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 정규 자료에서 $\bar{X}$와 $S^2$이 독립임을 보여라. 이 독립성이 정규분포에만 특유한 성질임을 설명하라.
+
+</div>
 
 ??? success "풀이"
     **정규성 아래의 증명 개요.** $Z_i = (X_i - \mu)/\sigma$라 하고 벡터 $\mathbf{Z} = (Z_1,\ldots,Z_n)^T \sim \mathcal{N}(\mathbf{0}, I_n)$을 생각한다. 첫 행이 $\frac{1}{\sqrt{n}}(1,1,\ldots,1)$인 직교행렬 $Q$를 잡고 $\mathbf{Y} = Q\mathbf{Z}$라 하자.
@@ -202,10 +208,12 @@ $$
 
     **실무적 함의.** 비정규 자료에서는 $\bar{X}$와 $S^2$이 상관되어 있다. 예컨대 오른쪽으로 치우친 분포에서는 큰 $\bar{X}$가 큰 $S^2$과 함께 나타나는 경향이 있다. 이 상관이 $t$ 통계량의 분포를 왜곡하는 한 원인이며, 분산 검정에서는 카이제곱 근사를 무너뜨린다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 $\chi^2_\nu$의 왜도가 $\sqrt{8/\nu}$임을 이용하여, 왜 $\sigma^2$의 신뢰구간이 비대칭이며 $\nu$가 커질수록 대칭에 가까워지는지 설명하라. $\nu = 5, 20, 50, 200$에서 정규근사와 Wilson-Hilferty 근사의 정확도를 비교하라.
+
+</div>
 
 ??? success "풀이"
     **비대칭성의 근원.** $\chi^2_\nu$의 왜도는 $\sqrt{8/\nu}$이다.
@@ -250,10 +258,12 @@ $\chi^2_\nu$의 왜도가 $\sqrt{8/\nu}$임을 이용하여, 왜 $\sigma^2$의 �
 
     Wilson-Hilferty 근사는 $\nu = 5$에서 이미 소수 둘째 자리까지 맞고 $\nu \geq 20$에서는 사실상 정확하다. $(\chi^2_\nu/\nu)^{1/3}$이 거의 정규라는 사실에 기반하며, 세제곱근 변환이 치우침을 제거한다. Box-Cox 계열의 변환이 왜 유용한지를 보여주는 좋은 예이다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 Cochran 정리 없이도 $\sum(X_i - \bar{X})^2/\sigma^2$의 **평균**은 $n-1$임을 정규성 가정 없이 보일 수 있다. 이를 증명하고, 왜 평균만으로는 카이제곱 검정을 정당화할 수 없는지 설명하라.
+
+</div>
 
 ??? success "풀이"
     **평균의 계산(정규성 불필요).** $X_i$가 i.i.d.이고 $\mathbb{E}[X_i] = \mu$, $\operatorname{Var}(X_i) = \sigma^2$이라고만 가정하자. 연습문제 1의 항등식에 기댓값을 취하면

@@ -98,8 +98,12 @@ Bonferroni에서는 모든 가설이 문턱 $\alpha/m$을 마주한다. Holm에�
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 어떤 연구자가 가설검정 5개를 수행하여 p-값 0.008, 0.025, 0.040, 0.060, 0.120을 얻었다. $\alpha = 0.05$에서 Bonferroni 보정을 적용하고 어느 가설이 기각되는지 말하라.
+
+</div>
 
 ??? success "풀이"
     Bonferroni 보정 문턱은 $\alpha/m = 0.05/5 = 0.01$이다.
@@ -116,10 +120,12 @@ Bonferroni에서는 모든 가설이 문턱 $\alpha/m$을 마주한다. Holm에�
 
     검정 1만 기각된다. Bonferroni는 보수적이다: 보정하지 않은 수준에서는 유의한 $p = 0.025$의 검정 2가 기각되지 않는다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 연습문제 1과 같은 p-값에 $\alpha = 0.05$에서 Holm(단계적 하강) 절차를 적용하라. 결과를 Bonferroni와 비교하라.
+
+</div>
 
 ??? success "풀이"
     p-값을 정렬한다: $p_{(1)} = 0.008, p_{(2)} = 0.025, p_{(3)} = 0.040, p_{(4)} = 0.060, p_{(5)} = 0.120$.
@@ -135,10 +141,12 @@ Bonferroni에서는 모든 가설이 문턱 $\alpha/m$을 마주한다. Holm에�
 
     결과: 이 경우에는 Bonferroni와 마찬가지로 검정 1만 기각된다. 그러나 Holm은 Bonferroni보다 균일하게 더 강력하며(결코 더 적게 기각하지 않으며), p-값 배열이 다르면 더 많이 기각할 수 있다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 Bonferroni 보정이 가족단위 오류율(FWER)을 수준 $\alpha$로 통제함을 증명하라. 합집합 한계를 쓰라.
+
+</div>
 
 ??? success "풀이"
     $\mathcal{H}_0$을 참인 귀무가설의 집합이라 하고 $|\mathcal{H}_0| = m_0 \leq m$이라 하자. FWER은:
@@ -151,10 +159,12 @@ Bonferroni 보정이 가족단위 오류율(FWER)을 수준 $\alpha$로 통제�
 
     이 증명은 검정의 종속 구조에 대해 아무 가정도 하지 않는다. 그래서 Bonferroni가 임의의 종속성에서 타당하지만 보수적일 수 있는 것이다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 참인 귀무가설의 수 $m_0$이 $m$보다 훨씬 작을 때, 또는 검정이 양의 상관을 가질 때 Bonferroni가 보수적인(FWER $\ll \alpha$인) 이유를 설명하라.
+
+</div>
 
 ??? success "풀이"
     **$m_0 \ll m$일 때:** 증명에서 $m_0 \leq m$을 썼으므로 실제 FWER은 최대 $m_0 \alpha/m$이다. 1000개 귀무가설 중 10개만 참이면($m_0 = 10$) 참 FWER은 최대 $10 \times 0.05/1000 = 0.0005$로 명목 $\alpha = 0.05$보다 훨씬 낮다. Bonferroni 문턱은 최악의 경우($m_0 = m$)에 맞추어져 있다.

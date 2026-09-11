@@ -116,7 +116,11 @@ After  Box-Cox: skewness = -0.0018
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.** $\text{Lognormal}(0, 0.6)$ 분포에서 관측값 $n = 400$개를 생성하라. 로그 변환을 적용하고 원자료와 변환 자료 모두에 Shapiro-Wilk 검정을 수행하라. $p$값을 비교하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -145,9 +149,11 @@ After  Box-Cox: skewness = -0.0018
 
     다만 $p = 0.317$은 "정규성에 반하는 증거가 없다"는 뜻이지 "1에 가까우니 완벽히 정규"라는 뜻이 아니다. $H_0$이 참이면 $p$값은 $\text{Uniform}(0,1)$을 따르므로 0.317은 전형적인 값이다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.** $\text{Gamma}(2, 1)$ 분포에서 뽑은 관측값 $n = 300$개에 Box-Cox 변환을 적용하라. 최적 $\hat{\lambda}$와 변환 자료의 Shapiro-Wilk $p$값을 보고하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -174,9 +180,11 @@ After  Box-Cox: skewness = -0.0018
 
     Gamma(2,1)은 중간 정도로 오른쪽으로 치우쳐 있다(이론적 왜도 $2/\sqrt{2} = 1.414$). 최적 $\hat{\lambda} = 0.364$는 세제곱근($1/3$)과 제곱근($1/2$) 사이에 있고, 변환 후 Shapiro-Wilk $p$값은 $0.74$로 0.05를 크게 넘는다. Box-Cox가 자료를 성공적으로 정규화했음을 뜻한다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.** Box-Cox 변환이 $X > 0$을 요구하는 이유를 설명하라. 자료에 0이나 음수가 포함될 때 어떤 수정을 쓸 수 있는가?
+
+</div>
 
 ??? success "풀이"
 
@@ -184,9 +192,11 @@ After  Box-Cox: skewness = -0.0018
 
     자료에 0이나 음수가 있을 때 흔한 수정은 **이동된** Box-Cox 변환이다. 모든 관측값에 대해 $X + c > 0$이 되도록 상수 $c > 0$을 골라 $X + c$에 Box-Cox를 적용한다. 대안으로 **Yeo-Johnson** 변환은 $X \geq 0$과 $X < 0$에 서로 다른 공식을 써서 음수 자료를 직접 다룰 수 있도록 Box-Cox를 확장한다. SciPy에서는 `stats.yeojohnson`으로 쓸 수 있다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.** $\lambda \to 0$인 극한을 취하여 $\lambda = 0$인 Box-Cox 변환이 $Y = \ln X$로 환원됨을 증명하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -204,9 +214,11 @@ After  Box-Cox: skewness = -0.0018
 
     따라서 $Y^{(0)} = \ln X$이다. 이 연속성 덕분에 Box-Cox 계열이 $\lambda = 0$에서 매끄럽게 이어지고, 최대가능도로 $\lambda$를 최적화할 때 로그 변환이 자연스러운 극한으로 포함된다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.** Poisson($\lambda = 4$) 관측값 $n = 500$개를 생성하라. 제곱근 변환을 적용하고 변환 전후의 표본왜도를 비교하라. 히스토그램을 나란히 그려라.
+
+</div>
 
 ??? success "풀이"
 

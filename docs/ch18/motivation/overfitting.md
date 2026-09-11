@@ -108,8 +108,12 @@ $$
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 $E[\text{Err}_{\text{train}}] = \sigma^2(1 - p/n)$과 $E[\text{Err}_{\text{test}}] = \sigma^2(1 + p/n)$을 모의실험으로 확인하라. $n = 60$, $\sigma^2 = 4$로 고정하고 $p = 3, 10, 20, 40$에 대해 계산하라.
+
+</div>
 
 ??? success "풀이"
     ```python
@@ -153,10 +157,12 @@ $E[\text{Err}_{\text{train}}] = \sigma^2(1 - p/n)$과 $E[\text{Err}_{\text{test}
 
     **둘째, 격차가 정확히 $2\sigma^2 p/n$이다.** $p = 40$에서 $2 \times 4 \times 40/60 = 5.33$이고 실측 격차가 $5.32$다. 이 관계가 $C_p$와 AIC의 벌점항 $2p\hat\sigma^2$의 유래다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 Hoerl-Kennard 정리는 "모든 $\boldsymbol{\beta}$에 대해 능형회귀가 OLS보다 MSE가 작아지는 $\lambda > 0$이 존재한다"고 말한다. $\|\boldsymbol{\beta}\|$가 매우 클 때도 성립하는지 확인하라.
+
+</div>
 
 ??? success "풀이"
     직관적으로는 "$\boldsymbol{\beta}$가 0에서 멀면 0 쪽으로 축소하는 것이 손해"일 것 같다. 확인해 보자.
@@ -195,10 +201,12 @@ Hoerl-Kennard 정리는 "모든 $\boldsymbol{\beta}$에 대해 능형회귀가 O
 
     실무적 함의: **$\lambda$를 자료에서 고를 수만 있다면 정칙화가 손해를 볼 이유가 없다.** 위험은 $\lambda$를 잘못 고르는 데 있고, 그래서 교차검증이 필요하다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 $p$가 $n$에 가까워질 때 훈련오차와 검정오차가 갈라지는 것을 하나의 자료에서 관찰하라. $p/n$이 얼마를 넘으면 위험한가?
+
+</div>
 
 ??? success "풀이"
     연습문제 1의 표를 비율로 다시 보면 답이 나온다.

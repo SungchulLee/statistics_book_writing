@@ -104,9 +104,13 @@ $$
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.** 엘라스틱넷 목적함수에서 출발하여 좌표하강 갱신식
 $\beta_j \leftarrow S(X_j^\top r_j / n,\, \lambda\alpha) / (1 + \lambda(1 - \alpha))$를
 유도하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -132,10 +136,12 @@ $\beta_j \leftarrow S(X_j^\top r_j / n,\, \lambda\alpha) / (1 + \lambda(1 - \alp
 
     에서 최소가 된다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.** $\alpha < 1$이고 $\lambda > 0$이면 엘라스틱넷 목적함수가 강볼록임을 증명하고,
 해가 유일함을 결론지어라.
+
+</div>
 
 ??? success "풀이"
 
@@ -153,11 +159,13 @@ $\beta_j \leftarrow S(X_j^\top r_j / n,\, \lambda\alpha) / (1 + \lambda(1 - \alp
     함수는 최소점을 많아야 하나 가지며, $f$의 강제성(coercivity)이 존재성을 보장한다. 따라서
     엘라스틱넷 해는 유일하다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.** 상관계수 $\rho$가 1에 가까운 두 설명변수 $x_1$, $x_2$를 생각하자. 라쏘는 왜
 둘 중 하나만 고르는 반면 엘라스틱넷은 둘 다 고르는 경향이 있는지 정성적으로 설명하고, 제약
 영역의 기하와 연결지어라.
+
+</div>
 
 ??? success "풀이"
 
@@ -176,11 +184,13 @@ $\beta_j \leftarrow S(X_j^\top r_j / n,\, \lambda\alpha) / (1 + \lambda(1 - \alp
     $|\hat{\beta}_i - \hat{\beta}_j| \le \frac{\|y\|_1}{\lambda(1-\alpha)n}\sqrt{2(1 - \rho)}$
     임을 증명하였다. 상관이 높을수록 두 계수가 가까워진다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.** scikit-learn의 `ElasticNetCV`를 써서 $n = 200$, $p = 50$이고 참 계수 중 5개만
 0이 아니며 앞의 10개 설명변수끼리 쌍별 상관이 $\rho = 0.95$인 인공자료에 엘라스틱넷을
 적합하라. 선택된 $\alpha$, $\lambda$, 그리고 0이 아닌 계수의 개수를 보고하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -237,11 +247,13 @@ $\beta_j \leftarrow S(X_j^\top r_j / n,\, \lambda\alpha) / (1 + \lambda(1 - \alp
     **희소성이 목표라면** CV 최소점을 그대로 쓰지 말고 1-표준오차 규칙(`cv_tuning.md` 참조),
     사후 라쏘, 또는 안정성 선택을 함께 써야 한다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.** 정규직교 계획($X^\top X = nI_p$)에서 엘라스틱넷 추정량이
 $\hat{\beta}_j^{\text{EN}} = \frac{1}{1+\lambda(1-\alpha)}\,S(\hat{\beta}_j^{\text{OLS}},\, \lambda\alpha)$
 로 쓰임을 보이고, 두 연산(연성 문턱 뒤 재척도)을 기하학적으로 해석하라.
+
+</div>
 
 ??? success "풀이"
 

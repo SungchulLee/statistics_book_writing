@@ -145,8 +145,12 @@ $\lambda \to 0$에서 $\text{df} \to p$(OLS), $\lambda \to \infty$에서 $\text{
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 능형회귀의 최적화 문제와 닫힌 형태 해를 쓰라. $\lambda$는 해에 어떤 영향을 주는가?
+
+</div>
 
 ??? success "풀이"
     최적화 문제는
@@ -163,10 +167,12 @@ $\lambda \to 0$에서 $\text{df} \to p$(OLS), $\lambda \to \infty$에서 $\text{
 
     이다. $\lambda \to 0$이면 $\hat{\boldsymbol{\beta}}_{\text{ridge}} \to \hat{\boldsymbol{\beta}}_{\text{OLS}}$, $\lambda \to \infty$이면 $\hat{\boldsymbol{\beta}}_{\text{ridge}} \to \mathbf{0}$이다. $\lambda$가 편향-분산 절충을 조절하며, 클수록 편향이 커지고 분산이 줄어든다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 능형회귀가 편향되어 있음을 보이고, 편향을 $\lambda$와 참 $\boldsymbol{\beta}$로 유도하라.
+
+</div>
 
 ??? success "풀이"
     $$
@@ -183,10 +189,12 @@ $\lambda \to 0$에서 $\text{df} \to p$(OLS), $\lambda \to \infty$에서 $\text{
 
     **편향의 방향이 $-\boldsymbol{\beta}$ 쪽이라는 점에 주목하라.** 즉 편향은 언제나 계수를 0 쪽으로 당긴다. $\boldsymbol{\beta}$가 클수록 편향도 크며, 이것이 참 계수가 큰 상황에서 $\lambda$를 작게 잡아야 하는 이유다([과적합과 편향-분산 절충](../motivation/overfitting.md) 연습문제 2 참조).
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 능형회귀가 다중공선성에 도움이 되는 이유를 설명하라. $\mathbf{X}^\top\mathbf{X} + \lambda\mathbf{I}$의 조건수는 어떻게 되는가?
+
+</div>
 
 ??? success "풀이"
     다중공선성은 $\mathbf{X}^\top\mathbf{X}$가 0에 가까운 고윳값을 가져 거의 특이행렬이 되고 조건수 $\kappa = d_1/d_p$가 커진다는 뜻이다.
@@ -201,10 +209,12 @@ $\lambda \to 0$에서 $\text{df} \to p$(OLS), $\lambda \to \infty$에서 $\text{
 
     구체적인 수치는 [불량조건 계획행렬](../motivation/ill_conditioning.md) 연습문제 1에 있다. $\rho = 0.999$인 등상관 구조에서 $\lambda = 1$이 조건수를 $7993 \to 8.98$로 890배 줄인다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 표준화된 자료에 $\lambda = 1$로 능형회귀를 적합했더니 $\hat{\beta}_1 = 0.45$, $\hat{\beta}_2 = 0.38$을 얻었다. OLS는 $\hat{\beta}_1 = 1.2$, $\hat{\beta}_2 = -0.8$을 준다. 이 차이를 해석하라.
+
+</div>
 
 ??? success "풀이"
     OLS 추정값($1.2$와 $-0.8$)은 크기가 크고 부호가 반대인데, 이는 다중공선성의 전형적 특징이다. 설명변수가 상관되어 있어 OLS가 서로를 부분적으로 상쇄하는 불안정하고 부풀려진 계수를 낸다.

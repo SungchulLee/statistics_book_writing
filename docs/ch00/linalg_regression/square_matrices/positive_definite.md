@@ -135,8 +135,12 @@ $\boldsymbol{\Sigma}$의 양정치성이 $|\boldsymbol{\Sigma}| > 0$을 보장�
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 선행 소행렬식 기준을 이용해 $\mathbf{A} = \begin{pmatrix} 4 & 2 \\ 2 & 3 \end{pmatrix}$이 양정치인지 판정하라.
+
+</div>
 
 ??? success "풀이"
     선행 소행렬식은 다음과 같다.
@@ -146,10 +150,12 @@ $\boldsymbol{\Sigma}$의 양정치성이 $|\boldsymbol{\Sigma}| > 0$을 보장�
 
     모든 선행 소행렬식이 엄격히 양수이므로 $\mathbf{A}$는 양정치다. 동등하게 고윳값은 $\lambda = \frac{7 \pm \sqrt{49 - 32}}{2} = \frac{7 \pm \sqrt{17}}{2}$이며 둘 다 양수다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 $\mathbf{A}$가 양정치이면 모든 대각 성분 $a_{ii} > 0$임을 증명하라.
+
+</div>
 
 ??? success "풀이"
     $\mathbf{e}_i$를 $i$번째 표준기저벡터라 하자($i$번째 자리가 $1$이고 나머지는 $0$). $\mathbf{e}_i \neq \mathbf{0}$이고 $\mathbf{A}$가 양정치이므로
@@ -160,10 +166,12 @@ $\mathbf{A}$가 양정치이면 모든 대각 성분 $a_{ii} > 0$임을 증명�
 
     이다. 그런데 $\mathbf{e}_i^T \mathbf{A} \mathbf{e}_i = a_{ii}$이므로 모든 $i$에 대해 $a_{ii} > 0$이다. 역은 성립하지 않음에 유의하라. 대각 성분이 양수라고 양정치성이 보장되지는 않는다(예를 들어 $\begin{pmatrix} 1 & 2 \\ 2 & 1 \end{pmatrix}$은 대각 성분이 양수지만 고윳값이 $3$과 $-1$이다). $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 $\mathbf{A} = \begin{pmatrix} 4 & 6 \\ 6 & 13 \end{pmatrix}$의 촐레스키 분해 $\mathbf{A} = \mathbf{L}\mathbf{L}^T$를 구하라.
+
+</div>
 
 ??? success "풀이"
     $\mathbf{L}\mathbf{L}^T = \mathbf{A}$가 되는 하삼각행렬 $\mathbf{L} = \begin{pmatrix} l_{11} & 0 \\ l_{21} & l_{22} \end{pmatrix}$을 찾는다.
@@ -180,10 +188,12 @@ $\mathbf{A} = \begin{pmatrix} 4 & 6 \\ 6 & 13 \end{pmatrix}$의 촐레스키 분
 
     확인: $\mathbf{L}\mathbf{L}^T = \begin{pmatrix} 4 & 6 \\ 6 & 13 \end{pmatrix} = \mathbf{A}$.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 어떤 공분산행렬 $\boldsymbol{\Sigma}$의 고윳값이 $\lambda_1 = 0.01$과 $\lambda_2 = 100$이다. $\boldsymbol{\Sigma}$는 양정치인가? $\boldsymbol{\Sigma}^{-1}$을 계산할 때의 실무적 함의를 논하라.
+
+</div>
 
 ??? success "풀이"
     그렇다. 두 고윳값이 모두 엄격히 양수이므로 $\boldsymbol{\Sigma}$는 양정치다. 그러나 조건수가 $\kappa = \lambda_{\max}/\lambda_{\min} = 100/0.01 = 10{,}000$으로 매우 크다.
@@ -194,10 +204,12 @@ $\mathbf{A} = \begin{pmatrix} 4 & 6 \\ 6 & 13 \end{pmatrix}$의 촐레스키 분
     - **거의 특이:** 가장 작은 고윳값 방향으로 자료가 거의 공선적이며, 이는 두 변수가 거의 완벽하게 상관되어 있다는 뜻이다.
     - **대응책:** 명시적인 역행렬 대신 촐레스키 분해를 쓰거나, 정칙화(능형회귀)를 적용하거나, 적절한 경우 유사역행렬을 쓴다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.**
 $\boldsymbol{\Sigma}$가 양정치이면 마할라노비스 거리 $d^2(\mathbf{x}) = (\mathbf{x} - \boldsymbol{\mu})^T\boldsymbol{\Sigma}^{-1}(\mathbf{x} - \boldsymbol{\mu})$이 0일 필요충분조건이 $\mathbf{x} = \boldsymbol{\mu}$임을 증명하라.
+
+</div>
 
 ??? success "풀이"
     $\boldsymbol{\Sigma}$가 양정치이므로 $\boldsymbol{\Sigma}^{-1}$도 양정치다(그 고윳값이 $1/\lambda_i > 0$이다).
@@ -208,10 +220,12 @@ $\boldsymbol{\Sigma}$가 양정치이면 마할라노비스 거리 $d^2(\mathbf{
 
     따라서 $d^2 = 0$일 필요충분조건은 $\mathbf{x} - \boldsymbol{\mu} = \mathbf{0}$, 즉 $\mathbf{x} = \boldsymbol{\mu}$이다. 이는 마할라노비스 거리가 (정치성을 만족하는) 제대로 된 거리에 준하는 측도임을 확인해 준다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 6.**
 $\mathbf{A}$가 양정치이면 $\mathbf{A}^{-1}$도 양정치임을 보여라. 또 $\mathbf{A}^{1/2}$(제곱근 행렬)이 존재함을 보여라.
+
+</div>
 
 ??? success "풀이"
     **역행렬.** $\mathbf{A}$가 양정치이면 가역이다. 임의의 $\mathbf{x} \neq \mathbf{0}$에 대해 $\mathbf{y} = \mathbf{A}^{-1}\mathbf{x}$로 두면 $\mathbf{y} \neq \mathbf{0}$이고
@@ -255,10 +269,12 @@ $\mathbf{A}$가 양정치이면 $\mathbf{A}^{-1}$도 양정치임을 보여라. 
 
     제곱근 행렬은 **백색화**에 쓰인다. $\mathbf{X} \sim (\boldsymbol{\mu}, \boldsymbol{\Sigma})$일 때 $\boldsymbol{\Sigma}^{-1/2}(\mathbf{X}-\boldsymbol{\mu})$의 공분산은 $\mathbf{I}$가 된다. 마할라노비스 거리가 이 변환 뒤의 유클리드 거리와 같다는 것도 여기서 나온다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 7.**
 $\mathbf{A}$, $\mathbf{B}$가 양정치이면 $\mathbf{A} + \mathbf{B}$도 양정치임을 보여라. 그렇다면 곱 $\mathbf{A}\mathbf{B}$는 어떠한가?
+
+</div>
 
 ??? success "풀이"
     **합.** 임의의 $\mathbf{x} \neq \mathbf{0}$에 대해
@@ -300,10 +316,12 @@ $\mathbf{A}$, $\mathbf{B}$가 양정치이면 $\mathbf{A} + \mathbf{B}$도 양�
 
     다만 곱의 고윳값은 모두 양수다. $\mathbf{A}\mathbf{B}$가 $\mathbf{A}^{1/2}\mathbf{B}\mathbf{A}^{1/2}$(대칭 양정치)와 닮았기 때문이다. **고윳값은 양수지만 대칭이 아니므로 양정치행렬은 아니다.** $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 8.**
 세 변수의 상관계수가 모두 $\rho$로 같다고 하자. 이 행렬이 올바른 상관행렬이 되기 위한 $\rho$의 범위를 구하라. $\rho = -0.8$은 가능한가?
+
+</div>
 
 ??? success "풀이"
     상관행렬은 반드시 **양반정치**여야 한다. 등상관행렬 $\mathbf{R} = (1-\rho)\mathbf{I} + \rho\mathbf{J}$의 고윳값은 잘 알려져 있다.
@@ -345,10 +363,12 @@ $\mathbf{A}$, $\mathbf{B}$가 양정치이면 $\mathbf{A} + \mathbf{B}$도 양�
 
     **실무적 함의.** 전문가에게 상관계수를 개별적으로 물어 행렬을 채우면 양반정치가 깨지기 쉽다. 그런 행렬로는 모의실험도 마할라노비스 거리 계산도 할 수 없다. 가장 가까운 양반정치행렬로 보정하는 절차가 따로 필요한 이유다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 9.**
 촐레스키 분해 $\boldsymbol{\Sigma} = \mathbf{L}\mathbf{L}^T$를 이용해 공분산이 $\boldsymbol{\Sigma}$인 확률벡터를 생성하는 방법을 설명하고 수치로 확인하라.
+
+</div>
 
 ??? success "풀이"
     $\mathbf{Z} \sim (\mathbf{0}, \mathbf{I})$이고 $\mathbf{X} = \mathbf{L}\mathbf{Z}$로 두면
@@ -395,10 +415,12 @@ $\mathbf{A}$, $\mathbf{B}$가 양정치이면 $\mathbf{A} + \mathbf{B}$도 양�
 
     또한 촐레스키는 **양정치성 판정**에도 쓰인다. `np.linalg.cholesky`는 행렬이 양정치가 아니면 예외를 던지므로, 고윳값을 다 구하는 것보다 빠른 검사가 된다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 10.**
 $\mathbf{X}$가 완전 열계수를 갖지 않아 $\mathbf{X}^T\mathbf{X}$가 특이행렬일 때, $\lambda > 0$에 대해 $\mathbf{X}^T\mathbf{X} + \lambda\mathbf{I}$는 언제나 양정치임을 보여라.
+
+</div>
 
 ??? success "풀이"
     임의의 $\mathbf{v} \neq \mathbf{0}$에 대해

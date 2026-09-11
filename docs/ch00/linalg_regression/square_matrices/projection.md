@@ -128,8 +128,12 @@ $$
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 $\mathbf{P} = \begin{pmatrix} 1 & 0 \\ 0 & 0 \end{pmatrix}$이 사영행렬임을 확인하라. 어느 부분공간 위로 사영하는가? 여집합 사영 $\mathbf{I} - \mathbf{P}$는 무엇인가?
+
+</div>
 
 ??? success "풀이"
     멱등성 확인:
@@ -146,10 +150,12 @@ $\mathbf{P} = \begin{pmatrix} 1 & 0 \\ 0 & 0 \end{pmatrix}$이 사영행렬임�
 
     이며 $x_2$축 위로 사영한다. $\mathbf{P}$는 대칭이기도 하므로 이것은 직교사영이다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 $\mathbf{P}$가 멱등이면 $\operatorname{rank}(\mathbf{P}) = \operatorname{tr}(\mathbf{P})$임을 증명하라.
+
+</div>
 
 ??? success "풀이"
     $\mathbf{P}$가 멱등이므로 고윳값은 0 아니면 1이다($\mathbf{P}\mathbf{v} = \lambda\mathbf{v}$이면 $\mathbf{P}^2\mathbf{v} = \lambda^2\mathbf{v} = \lambda\mathbf{v}$이므로 $\lambda^2 = \lambda$이고 $\lambda \in \{0, 1\}$이다).
@@ -158,10 +164,12 @@ $\mathbf{P}$가 멱등이면 $\operatorname{rank}(\mathbf{P}) = \operatorname{tr
 
     따라서 $\operatorname{rank}(\mathbf{P}) = \operatorname{tr}(\mathbf{P})$이다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 빗각(직교가 아닌) 사영행렬의 예를 들어라. 멱등이지만 대칭이 아님을 확인하라.
+
+</div>
 
 ??? success "풀이"
     $\mathbf{P} = \begin{pmatrix} 1 & 1 \\ 0 & 0 \end{pmatrix}$을 생각하자.
@@ -176,10 +184,12 @@ $\mathbf{P}$가 멱등이면 $\operatorname{rank}(\mathbf{P}) = \operatorname{tr
 
     이 행렬은 $(1, 0)^T + \ker(\mathbf{P}) = (1, 0)^T + \text{span}\{(-1, 1)^T\}$ 방향을 따라 $\text{span}\{(1, 0)^T\}$ 위로 사영한다. 사영 방향이 목표 부분공간에 대해 빗각이다(수직이 아니다).
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 회귀 분해 $\mathbf{y} = \mathbf{H}\mathbf{y} + (\mathbf{I} - \mathbf{H})\mathbf{y}$에서 $\mathbf{H}\mathbf{y}$와 $(\mathbf{I} - \mathbf{H})\mathbf{y}$가 직교인 이유를 설명하라. 멱등성 외에 어떤 성질이 추가로 필요한가?
+
+</div>
 
 ??? success "풀이"
     $\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}$와 $\mathbf{e} = (\mathbf{I} - \mathbf{H})\mathbf{y}$의 직교성에는 $\mathbf{H}$가 (멱등일 뿐 아니라) 대칭이어야 한다. 대칭성이 있으면
@@ -190,10 +200,12 @@ $\mathbf{P}$가 멱등이면 $\operatorname{rank}(\mathbf{P}) = \operatorname{tr
 
     이다. $\mathbf{H}$가 멱등이지만 대칭이 아니라면(빗각 사영이라면) 분해 $\mathbf{y} = \mathbf{H}\mathbf{y} + (\mathbf{I} - \mathbf{H})\mathbf{y}$는 여전히 성립하지만 두 성분이 직교하지는 않는다. 최소제곱의 모자 행렬은 멱등이면서 대칭이며, 그 덕분에 제곱합 분해와 피타고라스 정리가 작동한다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.**
 $\mathcal{V} = \operatorname{col}(\mathbf{V})$ 위로, $\mathcal{W}$ 방향을 따라 사영하는 행렬을 만드는 일반 공식은 $\mathbf{P} = \mathbf{V}(\mathbf{U}^T\mathbf{V})^{-1}\mathbf{U}^T$이다. 여기서 $\mathbf{U}$의 열들은 $\mathcal{W}$의 직교여공간을 편다. 이 $\mathbf{P}$가 사영임을 보이고, 본문의 빗각 사영 예를 이 공식으로 재현하라.
+
+</div>
 
 ??? success "풀이"
     **멱등성.** 가운데에서 $\mathbf{U}^T\mathbf{V}$와 그 역행렬이 상쇄된다.
@@ -235,10 +247,12 @@ $\mathcal{V} = \operatorname{col}(\mathbf{V})$ 위로, $\mathcal{W}$ 방향을 �
 
     **직교사영은 특수한 경우다.** $\mathcal{W} = \mathcal{V}^\perp$로 두면 $\mathbf{U} = \mathbf{V}$가 되어 $\mathbf{P} = \mathbf{V}(\mathbf{V}^T\mathbf{V})^{-1}\mathbf{V}^T$, 곧 모자 행렬의 꼴이 된다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 6.**
 모든 사영행렬은 대각화 가능하며, 적당한 기저에서 $\operatorname{diag}(1, \dots, 1, 0, \dots, 0)$과 닮았음을 보여라($1$이 $r = \operatorname{rank}(\mathbf{P})$개).
+
+</div>
 
 ??? success "풀이"
     본문의 직합 분해에서 $\mathbb{R}^n = \operatorname{col}(\mathbf{P}) \oplus \ker(\mathbf{P})$이다.
@@ -258,10 +272,12 @@ $\mathcal{V} = \operatorname{col}(\mathbf{V})$ 위로, $\mathcal{W}$ 방향을 �
 
     **주의.** 사영은 **언제나** 대각화 가능하다. 빗각 사영도 그렇다. 빗각 사영에서 부족한 것은 대각화 가능성이 아니라 **고유벡터들의 직교성**이다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 7.**
 $\operatorname{col}(\mathbf{I} - \mathbf{P}) = \ker(\mathbf{P})$이고 $\ker(\mathbf{I} - \mathbf{P}) = \operatorname{col}(\mathbf{P})$임을 보여라. 이로부터 $\operatorname{rank}(\mathbf{P}) + \operatorname{rank}(\mathbf{I} - \mathbf{P}) = n$을 유도하라.
+
+</div>
 
 ??? success "풀이"
     **$\operatorname{col}(\mathbf{I} - \mathbf{P}) \subseteq \ker(\mathbf{P})$:** $\mathbf{P}(\mathbf{I} - \mathbf{P})\mathbf{x} = (\mathbf{P} - \mathbf{P}^2)\mathbf{x} = \mathbf{0}$이다.
@@ -298,10 +314,12 @@ $\operatorname{col}(\mathbf{I} - \mathbf{P}) = \ker(\mathbf{P})$이고 $\ker(\ma
 
     **회귀에서의 의미.** $\operatorname{rank}(\mathbf{H}) = p$이고 $\operatorname{rank}(\mathbf{I} - \mathbf{H}) = n - p$인데, 이 $n - p$가 바로 **잔차의 자유도**다. $s^2 = \lVert\mathbf{e}\rVert^2/(n-p)$에서 $n-p$로 나누는 이유가 여기에 있다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 8.**
 $\mathbf{P}_1$과 $\mathbf{P}_2$가 사영일 때 $\mathbf{P}_1 + \mathbf{P}_2$가 사영이 될 필요충분조건이 $\mathbf{P}_1\mathbf{P}_2 = \mathbf{P}_2\mathbf{P}_1 = \mathbf{O}$임을 보여라.
+
+</div>
 
 ??? success "풀이"
     전개하면
@@ -343,10 +361,12 @@ $\mathbf{P}_1$과 $\mathbf{P}_2$가 사영일 때 $\mathbf{P}_1 + \mathbf{P}_2$�
 
     이 성질이 분산분석의 제곱합 분해를 떠받친다. 총제곱합이 여러 성분으로 **깔끔하게 쪼개지려면** 대응하는 사영들이 서로 직교해야 한다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 9.**
 중심화행렬 $\mathbf{C} = \mathbf{I} - \frac{1}{n}\mathbf{J}$($\mathbf{J}$는 모든 성분이 1인 $n \times n$ 행렬)가 직교사영임을 보이고, 무엇 위로 사영하는지 밝혀라. $\operatorname{tr}(\mathbf{C})$는 얼마인가?
+
+</div>
 
 ??? success "풀이"
     $\mathbf{J} = \mathbf{1}\mathbf{1}^T$이고 $\mathbf{1}^T\mathbf{1} = n$이므로 $\mathbf{J}^2 = \mathbf{1}(\mathbf{1}^T\mathbf{1})\mathbf{1}^T = n\mathbf{J}$이다. 따라서
@@ -388,10 +408,12 @@ $\mathbf{P}_1$과 $\mathbf{P}_2$가 사영일 때 $\mathbf{P}_1 + \mathbf{P}_2$�
 
     **자유도의 기원.** $\operatorname{tr}(\mathbf{C}) = n - 1$이 표본분산에서 $n-1$로 나누는 이유의 기하적 설명이다. 중심화된 잔차 벡터는 $n$차원이 아니라 $n-1$차원 부분공간에 놓인다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 10.**
 빗각 사영은 거리를 최소화하지 않는다. 본문의 $\mathbf{P} = \begin{pmatrix} 1 & -1 \\ 0 & 0 \end{pmatrix}$과 같은 부분공간 위로의 직교사영을 $\mathbf{x} = (0, 1)^T$에 적용해 $\lVert\mathbf{x} - \mathbf{P}\mathbf{x}\rVert$를 비교하라.
+
+</div>
 
 ??? success "풀이"
     두 사영 모두 치역이 $\operatorname{span}\{(1,0)^T\}$로 같지만 눌러 없애는 방향이 다르다.

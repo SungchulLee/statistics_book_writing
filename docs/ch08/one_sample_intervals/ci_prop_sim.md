@@ -145,7 +145,11 @@ Wilson의 실패 4번은 $k = 0$ 하나와 $k = 8$ 셋이다. 즉 두 방법의 
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.** $n = 20$, $p_{\text{true}} = 0.05$, $n_{\text{sim}} = 10{,}000$으로 Wald 구간의 모의실험을 돌려라. 경험적 포함확률을 보고하고 95%에서 벗어나는 이유를 설명하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -179,9 +183,11 @@ Wilson의 실패 4번은 $k = 0$ 하나와 $k = 8$ 셋이다. 즉 두 방법의 
 
     Wilson이나 Clopper–Pearson으로 바꾸면 $k = 0$일 때도 위쪽으로 폭이 있는 구간이 나오므로 이 실패 방식이 사라진다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.** $Z = (\hat{p} - p)/\sqrt{p(1-p)/n}$일 때 부등식 $|Z| \le z_{\alpha/2}$에서 출발하여 Wilson score 구간을 유도하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -219,9 +225,11 @@ Wilson의 실패 4번은 $k = 0$ 하나와 $k = 8$ 셋이다. 즉 두 방법의 
 
     이며 이것이 정리되어 Wilson 구간의 끝점이 된다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.** 95% 수준의 Agresti–Coull 구간이 자료에 가상의 성공 약 2개와 가상의 실패 약 2개를 더하는 것임을 보여라.
+
+</div>
 
 ??? success "풀이"
 
@@ -233,9 +241,11 @@ Wilson의 실패 4번은 $k = 0$ 하나와 $k = 8$ 셋이다. 즉 두 방법의 
 
     따라서 가상의 성공과 실패를 각각 약 2개씩 더하는 셈이고, 보정된 표본크기는 $\tilde{n} = n + z^2 \approx n + 4$이다. 이 "성공 2개와 실패 2개를 더하기" 규칙 때문에 Agresti–Coull 방법을 "plus-four" 구간이라고 부르기도 한다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.** 어떤 의학 연구에서 환자 200명 중 3명에게 이상반응이 관찰되었다. Wald, Wilson, Clopper–Pearson 95% 구간을 계산하고 차이를 논하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -249,9 +259,11 @@ Wilson의 실패 4번은 $k = 0$ 하나와 $k = 8$ 셋이다. 즉 두 방법의 
 
     Wald 구간은 (비율에서는 불가능한) 음수를 포함하며 더 좁다. Wilson과 Clopper–Pearson은 서로 비슷하고 더 합리적인 구간을 준다. Clopper–Pearson의 하한이 약간 더 작은데, 이는 그 보수성을 반영한다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.** Clopper–Pearson 구간의 포함확률이 모든 $p \in (0,1)$에서 적어도 $(1-\alpha)$임을 증명하라.
+
+</div>
 
 ??? success "풀이"
 

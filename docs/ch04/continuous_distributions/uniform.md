@@ -208,8 +208,12 @@ plt.show()
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 $U \sim \mathrm{Uniform}(0, 1)$이고 $X = -(1/\lambda)\ln(1 - U)$이다. (a) $X$의 CDF를 구하라. (b) 그 분포를 밝혀라. (c) 역변환 방법을 설명하라. (d) $1 - U \sim \mathrm{Uniform}(0, 1)$임을 보여라.
+
+</div>
 
 ??? success "풀이"
     (a) $P(X \le x) = P(-(1/\lambda)\ln(1 - U) \le x) = P(U \le 1 - e^{-\lambda x}) = 1 - e^{-\lambda x}$.
@@ -220,10 +224,12 @@ $U \sim \mathrm{Uniform}(0, 1)$이고 $X = -(1/\lambda)\ln(1 - U)$이다. (a) $X
 
     (d) $P(1 - U \le t) = P(U \ge 1 - t) = 1 - (1 - t) = t$. 따라서 $1 - U \sim \mathrm{Uniform}(0, 1)$이다. 그러므로 더 간단한 공식 $X = -(1/\lambda) \ln U$도 동등하다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 **Uniform$(a, b)$의 평균과 분산.** PDF로부터 둘 다 유도하라.
+
+</div>
 
 ??? success "풀이"
     PDF: $[a, b]$ 위에서 $f(x) = 1/(b - a)$.
@@ -236,10 +242,12 @@ $U \sim \mathrm{Uniform}(0, 1)$이고 $X = -(1/\lambda)\ln(1 - U)$이다. (a) $X
 
     **표준적인 경우:** Uniform(0, 1)의 평균은 1/2, 분산은 1/12이다. Uniform(-1, 1)의 평균은 0, 분산은 1/3이다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 **두 균등확률변수의 합.** $U_1, U_2 \sim \mathrm{Uniform}(0, 1)$이 독립이면 $U_1 + U_2$가 $[0, 2]$ 위의 **삼각분포**를 따름을 보여라.
+
+</div>
 
 ??? success "풀이"
     PDF를 합성곱한다:
@@ -257,10 +265,12 @@ $U \sim \mathrm{Uniform}(0, 1)$이고 $X = -(1/\lambda)\ln(1 - U)$이다. (a) $X
 
     균등확률변수의 합에 대한 중심극한정리는 6개 이상만 더해도 근사적으로 정규분포가 됨을 알려 준다. 수렴이 빠른 것이다. 이는 정규난수 생성을 위한 Marsaglia-Bray 알고리즘의 바탕이 된다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 **균등확률변수의 순서통계량.** $U_1, \ldots, U_n$이 i.i.d. $\mathrm{Uniform}(0, 1)$일 때 $k$번째 순서통계량 $U_{(k)}$는 $\mathrm{Beta}(k, n - k + 1)$ 분포를 따른다. CDF를 유도하라.
+
+</div>
 
 ??? success "풀이"
     $U_{(k)} \le u$일 필요충분조건은 $U_i$들 중 적어도 $k$개가 $u$ 이하인 것이다. $u$ 이하인 $U_i$의 개수는 $\mathrm{Binomial}(n, u)$를 따른다(각각 독립적으로 확률 $u$).
@@ -273,10 +283,12 @@ $U \sim \mathrm{Uniform}(0, 1)$이고 $X = -(1/\lambda)\ln(1 - U)$이다. (a) $X
 
     베타분포의 잘 알려진 평균 공식에 의해 $\mathbb{E}[U_{(k)}] = k/(n + 1)$이다. 기대 순서통계량은 $[0, 1]$을 $n + 1$개의 동일한 조각으로 나누며, 이것이 Q-Q 그림에서 쓰는 **작도 위치**가 된다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.**
 **최대 엔트로피 성질.** 유계 구간 $[a, b]$ 위의 모든 분포 중에서 Uniform 분포가 **미분 엔트로피**를 최대로 한다. 미분 엔트로피 공식을 쓰고 이를 확인하라.
+
+</div>
 
 ??? success "풀이"
     미분 엔트로피: $h(X) = -\int f(x) \ln f(x) dx$.
@@ -291,10 +303,12 @@ $U \sim \mathrm{Uniform}(0, 1)$이고 $X = -(1/\lambda)\ln(1 - U)$이다. (a) $X
 
     **해석:** 지지집합 외에 아무 정보가 없을 때 Uniform 분포는 "가장 정보가 적은" 분포로, 모든 곳에 동일한 질량을 부여한다. 이 때문에 유계 모수에 대한 무정보 베이즈 분석에서 자연스러운 사전분포가 된다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 6.**
 **확률적분변환.** $X$가 연속 CDF $F$를 가지면 $U = F(X) \sim \mathrm{Uniform}(0, 1)$임을 증명하라.
+
+</div>
 
 ??? success "풀이"
     $F$의 연속성(이 덕분에 $F^{-1}$이 잘 정의되고 $F \circ F^{-1} = \mathrm{id}$이다)을 이용하면 $P(U \le u) = P(F(X) \le u) = P(X \le F^{-1}(u)) = F(F^{-1}(u)) = u$이다.

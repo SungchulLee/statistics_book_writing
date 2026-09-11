@@ -100,7 +100,11 @@ Lilliefors KS D = 0.1391, bootstrap p = 0.0000
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.** 표준정규 관측값 $n = 200$개를 생성하라. 순진한 KS 검정($\hat{\mu}, \hat{\sigma}$ 추정)과 Lilliefors 붓스트랩 검정을 모두 수행하라. 두 $p$값을 비교하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -141,9 +145,11 @@ Lilliefors KS D = 0.1391, bootstrap p = 0.0000
 
     이 표본에서는 둘 다 0.05를 크게 넘어 결론이 같다. 편향의 방향을 보여줄 뿐 실질적 차이는 없다. 편향의 실제 규모는 $p$값이 아니라 검정의 크기를 보아야 드러난다(연습문제 2). $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.** $n = 100$에 대해 $\alpha = 0.05$에서 Lilliefors 붓스트랩 검정($B = 500$)의 경험적 크기를 추정하는 몬테카를로 실험을 5,000회 반복으로 수행하라. 순진한 KS 검정과 비교하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -191,9 +197,11 @@ Lilliefors KS D = 0.1391, bootstrap p = 0.0000
 
     실무적 결론: **모수를 추정한 뒤 표준 KS 검정을 쓰는 것은 검정을 하지 않는 것과 거의 같다.** 반드시 Lilliefors 보정을 쓰거나 Shapiro-Wilk / Anderson-Darling 같은 다른 검정을 쓰라. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.** Lilliefors $p$값의 해상도가 $1/B$인 이유를 설명하라. $p = 0.04$와 $p = 0.06$을 안정적으로 구별하려면 $B$가 얼마나 커야 하는가?
+
+</div>
 
 ??? success "풀이"
 
@@ -207,9 +215,11 @@ Lilliefors KS D = 0.1391, bootstrap p = 0.0000
 
     실무에서는 5% 문턱 근처의 신뢰할 만한 추론을 위해 $B \geq 2000$이 합리적인 최솟값이다. 문턱에서 더 멀리 떨어진 결정만 필요하다면 $B = 500$으로도 충분하다(연습문제 2에서 그렇게 썼다). $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.** 정규성 대신 지수성을 검정하도록 Lilliefors 붓스트랩을 수정하라. 알고리즘에 필요한 변경을 개략적으로 서술하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -224,9 +234,11 @@ Lilliefors KS D = 0.1391, bootstrap p = 0.0000
 
     한 가지 편리한 점이 있다. 정규의 경우와 마찬가지로 지수의 경우에도 $D$의 귀무분포가 **모수에 의존하지 않는다**. 지수족이 척도족이고 $\hat{\lambda}$가 척도동변 추정량이기 때문이다. 따라서 $\hat{\lambda} = 1$로 두고 임계값 표를 한 번만 만들어 두면 모든 자료에 재사용할 수 있다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.** 고정된 자료에 대해 $B \to \infty$일 때 붓스트랩 $p$값 $\hat{p}_B$가 참 $p$값으로 수렴함을 증명하라.
+
+</div>
 
 ??? success "풀이"
 

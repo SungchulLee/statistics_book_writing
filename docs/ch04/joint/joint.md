@@ -255,8 +255,12 @@ plt.show()
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 결합 PMF가 $p(0,0)=0.10, p(0,1)=0.15, p(0,2)=0.05, p(1,0)=0.10, p(1,1)=0.20, p(1,2)=0.10, p(2,0)=0.05, p(2,1)=0.10, p(2,2)=0.15$이다. (a) 올바른 PMF인가? (b) 주변분포. (c) $\mathbb{E}[X], \mathbb{E}[Y], \mathbb{E}[XY]$. (d) $\mathrm{Cov}, \rho$. (e) 독립인가?
+
+</div>
 
 ??? success "풀이"
     (a) 합 = 1이고 모두 음이 아니다 ✓.
@@ -269,10 +273,12 @@ plt.show()
 
     (e) 독립이 아니다: $p(0,0) = 0.10 \ne p_X(0) p_Y(0) = 0.075$.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 **결합 CDF.** 결합 PDF가 $f(x, y)$인 연속확률변수 $(X, Y)$에 대해 결합 CDF를 $F(x, y) = P(X \le x, Y \le y)$로 정의한다. $f$를 $F$로 표현하라.
+
+</div>
 
 ??? success "풀이"
     결합 CDF는 왼쪽 아래 사분면에서 결합 PDF를 적분한 것이다:
@@ -291,10 +297,12 @@ plt.show()
 
     결합 CDF의 성질: 두 인수 각각에 대해 비감소이고, $F(-\infty, y) = F(x, -\infty) = 0$, $F(\infty, \infty) = 1$이며, 주변분포는 $F_X(x) = F(x, \infty)$와 $F_Y(y) = F(\infty, y)$로 되찾는다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 **조건부분포로부터 결합분포 구하기.** $f_{X|Y}(x \mid y) = (1/y) \mathbf 1\{0 \le x \le y\}$($[0, y]$ 위의 균등분포)이고 $y \ge 0$에 대해 $f_Y(y) = e^{-y}$이다. 결합분포와 $X$의 주변분포를 구하라.
+
+</div>
 
 ??? success "풀이"
     결합분포: $f_{X, Y}(x, y) = f_{X|Y}(x|y) f_Y(y) = (1/y) e^{-y} \mathbf 1\{0 \le x \le y\}$.
@@ -309,10 +317,12 @@ plt.show()
 
     **교훈:** 주변분포가 복잡하더라도 조건부 구조는 단순할 수 있다. 이러한 인수분해 관점이 계층적 베이즈 모형의 토대이다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 **독립인 정규확률변수의 합과 차.** $X_1, X_2 \sim N(\mu, \sigma^2)$가 i.i.d.이다. $X_1 + X_2$와 $X_1 - X_2$가 독립임을 보여라.
+
+</div>
 
 ??? success "풀이"
     둘 다 정규확률변수의 선형결합이므로 정규분포를 따른다. 공분산을 계산하면:
@@ -327,10 +337,12 @@ plt.show()
 
     **정규분포의 특별한 성질:** 이는 정규성이 선형적 독립성을 보존하는 방식을 보여 주는 예이다. 표본평균 $\bar X$와 편차 $X_i - \bar X$는 무상관이고, 결합정규이므로 독립이다. 이 사실이 Student $t$ 분포 유도의 바탕이 된다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.**
 **다항분포.** Binomial 분포를 $k$개의 범주로 일반화한다. $n$번의 시행에서 각 시행이 독립적으로 확률 $p_j$로 결과 $j$를 내고 $\sum_j p_j = 1$이다. $X_j$를 결과 $j$의 횟수라 할 때 결합 PMF를 유도하라.
+
+</div>
 
 ??? success "풀이"
     특정한 결과 열 하나가 나올 확률은 $\prod_j p_j^{X_j}$이다. 계수 벡터 $(X_1, \ldots, X_k)$를 주는 열의 개수는 다항계수 $\binom{n}{X_1, X_2, \ldots, X_k} = n!/(X_1! X_2! \cdots X_k!)$이다.
@@ -347,10 +359,12 @@ plt.show()
 
     $i \ne j$일 때 $X_i, X_j$ 사이의 **공분산**은 $\mathrm{Cov}(X_i, X_j) = -np_i p_j$이다. 음수인 이유는 한 계수가 늘어나면 제약 $\sum = n$ 때문에 다른 계수가 줄어들어야 하기 때문이다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 6.**
 **이변량 정규분포.** 평균이 $\mu_X, \mu_Y$, 분산이 $\sigma_X^2, \sigma_Y^2$, 상관계수가 $\rho$인 이변량 정규 $(X, Y)$의 결합 PDF 공식을 쓰라. 조건부분포는 무엇인가?
+
+</div>
 
 ??? success "풀이"
     PDF:

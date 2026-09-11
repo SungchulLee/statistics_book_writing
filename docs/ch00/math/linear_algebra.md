@@ -128,6 +128,8 @@ Spectral reconstruction matches X'X: True
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 다음 계획행렬에 대해
 
@@ -138,6 +140,8 @@ $$
 **(a)** $\mathbf{X}^T \mathbf{X}$와 $\mathbf{X}^T \mathbf{y}$를 계산하라.
 **(b)** 정규방정식을 풀어 $\hat{\boldsymbol{\beta}}$를 구하라.
 **(c)** 적합값 $\hat{\mathbf{y}} = \mathbf{X}\hat{\boldsymbol{\beta}}$와 잔차를 계산하라.
+
+</div>
 
 ??? success "풀이"
     (a) $\mathbf{X}^T \mathbf{X} = \begin{pmatrix} 3 & 12 \\ 12 & 56 \end{pmatrix}$, $\mathbf{X}^T \mathbf{y} = \begin{pmatrix} 27 \\ 124 \end{pmatrix}$.
@@ -150,10 +154,12 @@ $$
 
     (c) $\hat{\mathbf{y}} = (5, 9, 13)^T = \mathbf{y}$이고 잔차는 모두 0이다. 세 점이 한 직선 위에 있으므로 적합이 정확하다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 대각합의 순환 성질을 증명하라: $\mathbf{A} \in \mathbb{R}^{m \times n}$, $\mathbf{B} \in \mathbb{R}^{n \times m}$에 대해 $\mathrm{tr}(\mathbf{A}\mathbf{B}) = \mathrm{tr}(\mathbf{B}\mathbf{A})$.
+
+</div>
 
 ??? success "풀이"
     직접 계산한다.
@@ -164,10 +170,12 @@ $$
 
     순서를 바꾸는 데에는 합이 유한하다는 사실만 쓰였다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 $\mathbf{X} \in \mathbb{R}^{n \times p}$가 완전 열계수를 갖는다고 하자($\mathrm{rank}(\mathbf{X}) = p \le n$). $\mathbf{H} = \mathbf{X}(\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T$가 대칭이고 멱등이며 대각합이 $p$임을 증명하라.
+
+</div>
 
 ??? success "풀이"
     **대칭성:** $(\mathbf{X}^T \mathbf{X})^{-1}$은 대칭이므로(대칭행렬의 역행렬)
@@ -190,10 +198,12 @@ $\mathbf{X} \in \mathbb{R}^{n \times p}$가 완전 열계수를 갖는다고 하
 
     $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 $\mathbf{A} \in \mathbb{R}^{n \times n}$이 대칭이고 스펙트럼 분해가 $\mathbf{A} = \mathbf{Q} \boldsymbol{\Lambda} \mathbf{Q}^T$라 하자. $\mathrm{tr}(\mathbf{A}) = \sum_i \lambda_i$이고 $\det(\mathbf{A}) = \prod_i \lambda_i$임을 증명하라.
+
+</div>
 
 ??? success "풀이"
     순환 성질과 $\mathbf{Q}^T \mathbf{Q} = \mathbf{I}$를 쓰면
@@ -210,7 +220,7 @@ $\mathbf{A} \in \mathbb{R}^{n \times n}$이 대칭이고 스펙트럼 분해가 
 
     이다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.**
 $\mathbf{X}$가 평균 $\boldsymbol{\mu}$, 공분산 $\boldsymbol{\Sigma}$인 확률벡터라 하자. 대칭행렬 $\mathbf{A}$에 대해
@@ -220,6 +230,8 @@ $$
 $$
 
 임을 보여라.
+
+</div>
 
 ??? success "풀이"
     $\mathbb{E}[\mathbf{Z}] = 0$이고 $\mathrm{Cov}(\mathbf{Z}) = \boldsymbol{\Sigma}$인 $\mathbf{Z}$를 써서 $\mathbf{X} = \boldsymbol{\mu} + \mathbf{Z}$로 놓자. 전개하면($\mathbf{A}$의 대칭성을 이용한다)
@@ -236,17 +248,19 @@ $$
 
     이다. 여기에 결정론적인 항을 더하면 결과를 얻는다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 6.**
 $\mathbf{X}^T \mathbf{X}$가 특이행렬이면(즉 $\mathbf{X}$가 완전 열계수를 갖지 않으면) 최소제곱추정량 $\hat{\boldsymbol{\beta}}$이 유일하게 정해지지 않는 이유를 서로 보완적인 두 방식으로 설명하라. (a) 대수적으로, (b) 기하적으로.
+
+</div>
 
 ??? success "풀이"
     **(a) 대수적으로:** 특이성은 $\det(\mathbf{X}^T \mathbf{X}) = 0$을 뜻하므로 $(\mathbf{X}^T \mathbf{X})^{-1}$이 존재하지 않는다. 정규방정식 $\mathbf{X}^T \mathbf{X} \boldsymbol{\beta} = \mathbf{X}^T \mathbf{y}$은 (우변이 $\mathbf{X}^T \mathbf{X}$의 열공간 안에 있으므로) 해를 갖지만 무한히 많다. $\boldsymbol{\beta}^*$가 해이고 $\mathbf{v} \in \mathrm{Null}(\mathbf{X})$이면 $\mathbf{X}\mathbf{v} = \mathbf{0}$이므로 $\boldsymbol{\beta}^* + \mathbf{v}$도 이 방정식을 만족한다.
 
     **(b) 기하적으로:** $\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}$는 여전히 $\mathbf{y}$를 $\mathrm{Col}(\mathbf{X})$ 위로 직교사영한 유일한 벡터다. 그러나 $\mathbf{X}$의 열들이 선형종속이면 그 사영을 열들의 선형결합으로 나타내는 방법이 무한히 많고, 각각이 타당한 $\hat{\boldsymbol{\beta}}$을 준다. 적합값은 식별되지만 계수는 식별되지 않는다. 해결책은 종속인 열을 제거하거나, 능형회귀($\mathbf{X}^T \mathbf{X}$에 $\lambda \mathbf{I}$를 더해 가역성을 회복한다), 또는 유사역행렬(최소 노름 해를 준다)을 쓰는 것이다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 7.**
 계획행렬
@@ -256,6 +270,8 @@ $$
 $$
 
 에 대해 네 가지 기본 부분공간의 차원을 구하고, 계수–퇴화차수 정리와 $\mathrm{Col}(\mathbf{X}^T) \perp \mathrm{Null}(\mathbf{X})$을 확인하라. 이 자료로 회귀를 돌리면 어떤 일이 일어나는가?
+
+</div>
 
 ??? success "풀이"
     셋째 열이 첫째와 둘째 열의 합이므로 $\mathrm{rank}(\mathbf{X}) = 2$이다.
@@ -303,10 +319,12 @@ $$
 
     실무에서 이 상황은 완전한 다중공선성으로 나타난다. 가장 흔한 원인은 범주형 변수를 원-핫 인코딩하면서 기준 범주를 빼지 않은 것이다(더미변수 함정). $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 8.**
 $\mathrm{Cov}(\mathbf{A}\mathbf{X}) = \mathbf{A}\,\mathrm{Cov}(\mathbf{X})\,\mathbf{A}^T$를 증명하고, 이로부터 공분산행렬이 항상 양반정치임을 보여라. 세 자산 포트폴리오에 적용해 분산투자 효과를 확인하라.
+
+</div>
 
 ??? success "풀이"
     $\boldsymbol{\mu} = \mathbb{E}[\mathbf{X}]$라 하면 $\mathbb{E}[\mathbf{A}\mathbf{X}] = \mathbf{A}\boldsymbol{\mu}$이므로
@@ -361,10 +379,12 @@ $\mathrm{Cov}(\mathbf{A}\mathbf{X}) = \mathbf{A}\,\mathrm{Cov}(\mathbf{X})\,\mat
 
     최소분산 포트폴리오는 여기서 더 나아가 $0.1563$까지 낮추는데, 변동성이 가장 낮은 첫 자산에 가장 큰 비중($0.57$)을 준다. 상관이 완전하다면($\rho = 1$) 비대각 성분이 커져 이런 이득이 사라진다. 위기 때 상관이 $1$로 몰리면서 분산투자 효과가 증발하는 현상이 바로 이 계산에 들어 있다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 9.**
 행렬 미적분으로 정규방정식을 유도하라. 필요한 기울기 규칙 $\nabla_{\mathbf{x}}(\mathbf{a}^T\mathbf{x}) = \mathbf{a}$와 $\nabla_{\mathbf{x}}(\mathbf{x}^T\mathbf{A}\mathbf{x}) = 2\mathbf{A}\mathbf{x}$($\mathbf{A}$ 대칭)를 먼저 증명하고, 헤세행렬을 확인해 얻은 점이 정말 최소점임을 보여라.
+
+</div>
 
 ??? success "풀이"
     **기울기 규칙.** $\mathbf{a}^T\mathbf{x} = \sum_j a_j x_j$이므로 $\partial/\partial x_k = a_k$, 곧 $\nabla = \mathbf{a}$이다. 이차형식은 $\mathbf{x}^T\mathbf{A}\mathbf{x} = \sum_{i,j}a_{ij}x_ix_j$이므로
@@ -434,7 +454,7 @@ $\mathrm{Cov}(\mathbf{A}\mathbf{X}) = \mathbf{A}\,\mathrm{Cov}(\mathbf{X})\,\mat
 
     수치미분이 해석적 기울기와 소수점 여섯째 자리까지 맞는다. 새 손실함수를 유도했을 때 이런 대조는 언제나 해 볼 만한 값싼 점검이다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 10.**
 **(하나 빼기 항등식)** 관측 $i$를 빼고 적합한 회귀의 예측오차가
@@ -444,6 +464,8 @@ y_i - \mathbf{x}_i^T\hat{\boldsymbol{\beta}}_{(i)} = \frac{e_i}{1 - h_{ii}}
 $$
 
 임이 알려져 있다. 여기서 $e_i$는 통상 잔차이고 $h_{ii}$는 지렛값이다. 이 공식을 수치로 확인하고, $h_{ii}$가 $1$에 가까우면 어떤 일이 벌어지는지 설명하라.
+
+</div>
 
 ??? success "풀이"
     ```python

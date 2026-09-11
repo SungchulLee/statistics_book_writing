@@ -114,8 +114,12 @@ $$
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 정칙 조건 아래에서 MLE가 갖는 세 가지 주요 점근적 성질인 일치성, 점근정규성, 점근 효율성을 서술하라.
+
+</div>
 
 ??? success "풀이"
     표준적인 정칙 조건 아래에서:
@@ -128,10 +132,12 @@ $$
 
     이 성질들 덕분에 MLE는 대표본 모수적 추정의 기본 선택이 된다. 다만 소표본에서는 MLE가 편향되거나 다른 추정량보다 효율이 낮을 수 있다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 비율 모수가 $\lambda$인 Exponential 분포에서 MLE는 $\hat{\lambda} = 1/\bar{X}$이다. Fisher 정보량 $I(\lambda)$를 계산하고 $\hat{\lambda}$의 점근분산이 $\lambda^2/n$임을 확인하라.
+
+</div>
 
 ??? success "풀이"
     관측값 하나에 대한 로그가능도는 $\ell(\lambda) = \log\lambda - \lambda x$이다. 2계도함수는:
@@ -154,10 +160,12 @@ $$
 
     따라서 $n$이 크면 $\hat{\lambda} \approx N(\lambda, \lambda^2/n)$이고 표준오차는 $\text{SE}(\hat{\lambda}) \approx \lambda/\sqrt{n}$이다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 불변성은 $\hat{\theta}$가 $\theta$의 MLE이면 임의의 함수 $g$에 대해 $g(\hat{\theta})$가 $g(\theta)$의 MLE라는 성질이다. 이를 이용하여 Exponential 분포의 평균 $1/\lambda$의 MLE를 구하라.
+
+</div>
 
 ??? success "풀이"
     비율 모수의 MLE는 $\hat{\lambda} = 1/\bar{X}$이다. 불변성에 의해 (모평균인) $g(\lambda) = 1/\lambda$의 MLE는:
@@ -168,10 +176,12 @@ $$
 
     Exponential 분포 평균의 MLE가 표본평균이라는 직관적인 결과가 확인된다. 불변성은 MLE를 처음부터 다시 유도하지 않고도 비선형 변환을 포함한 임의의 변환에 대해 작동하므로 강력하다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 MLE가 점근적으로는 불편인데도 유한표본에서 편향될 수 있는 이유를 설명하라. 구체적인 예를 들라.
+
+</div>
 
 ??? success "풀이"
     점근적 불편성은 $n \to \infty$일 때 $E[\hat{\theta}_n] \to \theta_0$임을 뜻하지만, 고정된 $n$에 대해서는 편향 $E[\hat{\theta}_n] - \theta_0$이 0이 아닐 수 있다.

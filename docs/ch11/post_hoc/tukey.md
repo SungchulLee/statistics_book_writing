@@ -506,8 +506,12 @@ group1 group2 meandiff p-adj  lower   upper  reject
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 운동: HIIT $\bar Y = 8.8$, 근력 $6.4$, 요가 $4.4$, 각 $n = 5$, $\mathrm{MSW} = 1.43$. (a) 전체 분산분석. (b) Tukey HSD. (c) 해석.
+
+</div>
 
 ??? success "풀이"
     (a) $\mathrm{SSB} = 5 \cdot [(8.8-6.53)^2 + (6.4-6.53)^2 + (4.4-6.53)^2] \approx 48.53$.
@@ -522,10 +526,12 @@ group1 group2 meandiff p-adj  lower   upper  reject
 
     (c) HIIT는 다른 두 방식보다 유의하게 낫다. 근력 대 요가는 유의하지 않아 둘을 구별할 수 없다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 **Bonferroni 쌍별 t-검정 대신 Tukey HSD를 쓰는 이유는?**
+
+</div>
 
 ??? success "풀이"
     Tukey HSD는 평균의 쌍별 비교에 정확히 맞춰 보정된 **스튜던트화 범위** 분포를 쓴다.
@@ -539,10 +545,12 @@ group1 group2 meandiff p-adj  lower   upper  reject
 
     균형 잡힌 일원배치 분산분석의 쌍별 비교에는 Tukey가 표준이다. 복잡한 대비나 혼합 설계에는 Bonferroni나 Scheffé 방법이 필요할 수 있다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 **다른 사후검정들.** Bonferroni, Scheffé, Dunnett을 간략히 설명하라.
+
+</div>
 
 ??? success "풀이"
     **Bonferroni:** 각 비교를 $\alpha/k$에서 검정한다. 어떤 검정에도 쓸 수 있지만 보수적이다.
@@ -559,10 +567,12 @@ group1 group2 meandiff p-adj  lower   upper  reject
     - 모든 집단 대 대조군: Dunnett.
     - 임의의 선형 대비: Scheffé.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 **가족단위 오류와 비교단위 오류.**
+
+</div>
 
 ??? success "풀이"
     **비교단위:** 개별 비교 하나의 제1종 오류율.
@@ -573,10 +583,12 @@ group1 group2 meandiff p-adj  lower   upper  reject
 
     대안: **거짓발견율(FDR)**은 유의하다고 선언한 것 중 거짓 기각의 기대 비율을 통제한다. 덜 보수적이어서 비교가 아주 많을 때(예: 유전체학) 유용하다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.**
 **스튜던트화 범위 분포.** 간단히 소개하라.
+
+</div>
 
 ??? success "풀이"
     스튜던트화 범위 $q$: $H_0$ 아래에서 $(\max \bar Y_i - \min \bar Y_i)/\sqrt{\mathrm{MSW}/n}$의 분포.
@@ -590,10 +602,12 @@ group1 group2 meandiff p-adj  lower   upper  reject
 
     Tukey HSD와의 연결: HSD $= q_{\alpha} \sqrt{\mathrm{MSW}/n}$. 각 쌍별 차이를 HSD와 비교한다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 6.**
 **불균형 설계**와 Tukey.
+
+</div>
 
 ??? success "풀이"
     $n_i$가 서로 다르면 **Tukey-Kramer** 수정을 쓴다:

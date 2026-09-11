@@ -77,8 +77,12 @@ plt.show()
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 $X \sim N(0, 1)$에 대해 CDF를 사용하여 $P(-1.96 \le X \le 1.96)$을 계산하라.
+
+</div>
 
 ??? success "풀이"
     $$
@@ -87,10 +91,12 @@ $X \sim N(0, 1)$에 대해 CDF를 사용하여 $P(-1.96 \le X \le 1.96)$을 계�
 
     이것이 95% 신뢰구간의 근거이다. 표준정규분포의 가운데 95%가 $\pm 1.96$ 사이에 놓인다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 표준정규 CDF의 대칭성 $\mathcal{N}(-x) = 1 - \mathcal{N}(x)$를 증명하라.
+
+</div>
 
 ??? success "풀이"
     표준정규 PDF는 $\varphi(-t) = \varphi(t)$를 만족한다(0을 중심으로 대칭). 그러면:
@@ -107,10 +113,12 @@ $X \sim N(0, 1)$에 대해 CDF를 사용하여 $P(-1.96 \le X \le 1.96)$을 계�
 
     $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 $X \sim N(5, 9)$일 때 표준화하여 $P(X > 8)$을 구하라.
+
+</div>
 
 ??? success "풀이"
     표준화하면 $Z = (X - 5)/3$이다. 그러면:
@@ -119,10 +127,12 @@ $X \sim N(5, 9)$일 때 표준화하여 $P(X > 8)$을 구하라.
     P(X > 8) = P\!\left(Z > \frac{8-5}{3}\right) = P(Z > 1) = 1 - \mathcal{N}(1) \approx 1 - 0.8413 = 0.1587
     $$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 미적분학의 기본정리를 사용하여 $F'(x) = f(x)$(CDF의 도함수가 PDF임)를 보여라. 이것이 그래프에서 무엇을 뜻하는지 설명하라.
+
+</div>
 
 ??? success "풀이"
     정의에 의해 $F(x) = \int_{-\infty}^x f(t)\,dt$이다. 미적분학의 기본정리에 의해:

@@ -199,8 +199,12 @@ $$
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 고전적 가정 아래에서 단순선형회귀의 $\hat{\beta}_1$의 표집분포를 서술하라. 이 분포는 어떤 모수에 의존하는가?
+
+</div>
 
 ??? success "풀이"
     고전적 가정($\varepsilon_i \sim N(0, \sigma^2)$, 독립) 아래에서
@@ -211,10 +215,12 @@ $$
 
     이 분포는 참 기울기 $\beta_1$, 오차분산 $\sigma^2$, 설명변수 값들의 산포 $\sum(x_i - \bar{x})^2$에 의존한다. $X$의 산포가 클수록, 오차분산이 작을수록 추정이 정밀해진다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 단순선형회귀에서 $\hat{\sigma}^2 = \text{SSE}/(n-2)$가 $\sigma^2$의 불편추정량인 반면 $\text{SSE}/n$은 편향되는 이유를 설명하라.
+
+</div>
 
 ??? success "풀이"
     잔차 $e_i = Y_i - \hat{Y}_i$는 (정규방정식에서 오는) 두 개의 선형 제약을 받으므로 자유롭게 변할 수 있는 것은 $n - 2$개뿐이다. 따라서 $\text{SSE}/\sigma^2 \sim \chi^2_{n-2}$이고
@@ -225,10 +231,12 @@ $$
 
     대신 $n$으로 나누면 $E[\text{SSE}/n] = (n-2)\sigma^2/n < \sigma^2$이 되어 $\sigma^2$을 과소추정한다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 어떤 연구자가 기울기를 높은 정밀도로 추정하려 한다. $\text{Var}(\hat{\beta}_1)$의 공식에 근거하여 표준오차를 줄이는 실용적인 전략 두 가지를 제시하라.
+
+</div>
 
 ??? success "풀이"
     $\text{Var}(\hat{\beta}_1) = \sigma^2 / \sum(x_i - \bar{x})^2$에서

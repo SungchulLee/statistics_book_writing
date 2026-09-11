@@ -116,8 +116,12 @@ $$
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 행렬 $\mathbf{A} = \begin{pmatrix} 4 & 1 \\ 0 & 3 \end{pmatrix}$의 고윳값과 고유벡터, 그리고 행렬 $\mathbf{P}$와 $\boldsymbol{\Lambda}$를 구해 대각화하라.
+
+</div>
 
 ??? success "풀이"
     특성다항식은 $\det(\mathbf{A} - \lambda\mathbf{I}) = (4-\lambda)(3-\lambda) = 0$이므로 고윳값은 $\lambda_1 = 4$와 $\lambda_2 = 3$이다.
@@ -132,10 +136,12 @@ $$
     \mathbf{P} = \begin{pmatrix} 1 & -1 \\ 0 & 1 \end{pmatrix}, \quad \boldsymbol{\Lambda} = \begin{pmatrix} 4 & 0 \\ 0 & 3 \end{pmatrix}, \quad \mathbf{A} = \mathbf{P}\boldsymbol{\Lambda}\mathbf{P}^{-1}
     $$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 $\mathbf{A}$가 $\mathbf{A} = \mathbf{P}\boldsymbol{\Lambda}\mathbf{P}^{-1}$로 대각화 가능하면 임의의 양의 정수 $k$에 대해 $\mathbf{A}^k = \mathbf{P}\boldsymbol{\Lambda}^k\mathbf{P}^{-1}$임을 증명하라.
+
+</div>
 
 ??? success "풀이"
     귀납법으로 진행한다. 기저 단계 $k = 1$은 정의에 의해 성립한다.
@@ -148,10 +154,12 @@ $\mathbf{A}$가 $\mathbf{A} = \mathbf{P}\boldsymbol{\Lambda}\mathbf{P}^{-1}$로 
 
     이다. 핵심은 $\mathbf{P}^{-1}\mathbf{P} = \mathbf{I}$로 상쇄되는 것이다. $\boldsymbol{\Lambda}^k = \operatorname{diag}(\lambda_1^k, \dots, \lambda_n^k)$이므로 행렬의 거듭제곱 계산이 고윳값의 스칼라 거듭제곱 계산으로 환원된다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 $\boldsymbol{\Sigma}$가 고윳값 $\lambda_1 = 5$, $\lambda_2 = 2$를 갖는 $2 \times 2$ 공분산행렬이라 하자. $\boldsymbol{\Sigma}$를 명시적으로 계산하지 않고 $\operatorname{tr}(\boldsymbol{\Sigma})$, $\det(\boldsymbol{\Sigma})$, 그리고 $\boldsymbol{\Sigma}^{-1}$의 고윳값을 구하라.
+
+</div>
 
 ??? success "풀이"
     대각합은 고윳값의 합이므로
@@ -172,10 +180,12 @@ $\boldsymbol{\Sigma}$가 고윳값 $\lambda_1 = 5$, $\lambda_2 = 2$를 갖는 $2
     \lambda_1(\boldsymbol{\Sigma}^{-1}) = \frac{1}{5} = 0.2, \quad \lambda_2(\boldsymbol{\Sigma}^{-1}) = \frac{1}{2} = 0.5
     $$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 대각화 가능하지 않은 $2 \times 2$ 실행렬의 예를 들어라. 일차독립인 고유벡터가 두 개보다 적음을 보여 대각화할 수 없음을 증명하라.
+
+</div>
 
 ??? success "풀이"
     $\mathbf{A} = \begin{pmatrix} 2 & 1 \\ 0 & 2 \end{pmatrix}$를 생각하자. 특성다항식은 $(2 - \lambda)^2 = 0$이므로 $\lambda = 2$가 유일한 고윳값이다(대수적 중복도 2).
@@ -190,20 +200,24 @@ $\boldsymbol{\Sigma}$가 고윳값 $\lambda_1 = 5$, $\lambda_2 = 2$를 갖는 $2
 
     $\mathbf{P}$를 만들려면 일차독립인 고유벡터가 2개 필요한데 1개뿐이므로 이 행렬은 대각화 가능하지 않다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.**
 모든 실대칭행렬이 대각화 가능한 이유와, 대각화하는 행렬을 직교행렬로 고를 수 있는 이유를 설명하라. 이 성질이 공분산행렬에 왜 중요한가?
+
+</div>
 
 ??? success "풀이"
     스펙트럼 정리는 모든 실대칭행렬이 (중복도를 세어) $n$개의 실수 고윳값과 $n$개의 정규직교 고유벡터를 온전히 가짐을 보장한다. 구체적으로, 서로 다른 고윳값에 대응하는 고유벡터는 직교하고, 중복 고윳값의 경우 그 고유공간을 그람–슈미트로 정규직교화할 수 있다. 이 고유벡터들을 $\mathbf{Q}$의 열로 배열하면 직교행렬($\mathbf{Q}^T\mathbf{Q} = \mathbf{I}$)이 되므로 $\mathbf{A} = \mathbf{Q}\boldsymbol{\Lambda}\mathbf{Q}^T$이다.
 
     공분산행렬 $\boldsymbol{\Sigma}$에 대해 이 스펙트럼 분해가 주성분분석(PCA)의 토대다. 고유벡터가 주성분 방향을 주고, 고윳값이 각 성분이 설명하는 분산을 주며, $\mathbf{Q}$의 직교성은 주성분들이 서로 무상관임을 뜻한다. 이 분해는 계산도 단순하게 만든다: $\boldsymbol{\Sigma}^{-1} = \mathbf{Q}\boldsymbol{\Lambda}^{-1}\mathbf{Q}^T$이고 $\boldsymbol{\Sigma}^{1/2} = \mathbf{Q}\boldsymbol{\Lambda}^{1/2}\mathbf{Q}^T$이다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 6.**
 대각화 가능성의 판정 기준은 "모든 고윳값에서 기하적 중복도 $=$ 대수적 중복도"이다. 두 중복도를 정의하고, 서로 다른 예를 하나씩 들어라.
+
+</div>
 
 ??? success "풀이"
     고윳값 $\lambda$에 대해
@@ -242,10 +256,12 @@ $\boldsymbol{\Sigma}$가 고윳값 $\lambda_1 = 5$, $\lambda_2 = 2$를 갖는 $2
 
     **고윳값이 서로 다르면** 각 고유공간이 최소 1차원이고 합이 $n$이어야 하므로 자동으로 모두 1차원이 되어 대각화가 보장된다. 이것이 본문의 충분조건이다. 다만 **필요조건은 아니다.** $\mathbf{I}$가 반례다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 7.**
 대칭이 아니면서 대각화 가능한 행렬의 고유벡터는 일반적으로 직교하지 않는다. $\mathbf{A} = \begin{pmatrix} 4 & 1 \\ 0 & 3 \end{pmatrix}$로 확인하고, 대칭행렬과 대비하라.
+
+</div>
 
 ??? success "풀이"
     ```python
@@ -280,10 +296,12 @@ $\boldsymbol{\Sigma}$가 고윳값 $\lambda_1 = 5$, $\lambda_2 = 2$를 갖는 $2
 
     **통계에서 왜 중요한가.** 공분산행렬이 대칭이므로 주성분들이 서로 **직교**한다. 직교성 덕분에 (1) 총분산이 성분별로 깔끔하게 쪼개지고, (2) 좌표변환이 회전이어서 거리가 보존되며, (3) $\mathbf{P}^{-1}$을 계산할 필요 없이 전치만 쓰면 되어 수치적으로 안정하다. 비대칭 행렬을 대각화할 때는 이 세 가지를 모두 잃는다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 8.**
 대각화를 이용해 마르코프 연쇄의 극한 분포를 구하라. 전이행렬이 $\mathbf{P} = \begin{pmatrix} 0.9 & 0.1 \\ 0.2 & 0.8 \end{pmatrix}$일 때 $\mathbf{P}^n$의 극한은 무엇인가?
+
+</div>
 
 ??? success "풀이"
     $\mathbf{P} = \mathbf{V}\boldsymbol{\Lambda}\mathbf{V}^{-1}$이면 $\mathbf{P}^n = \mathbf{V}\boldsymbol{\Lambda}^n\mathbf{V}^{-1}$이므로 **고윳값의 거듭제곱만 보면 된다.**
@@ -324,10 +342,12 @@ $\boldsymbol{\Sigma}$가 고윳값 $\lambda_1 = 5$, $\lambda_2 = 2$를 갖는 $2
 
     수렴 속도는 **두 번째로 큰 고윳값**이 정한다. 여기서는 $0.7$이므로 오차가 매 단계 $0.7$배로 줄어든다. 이 값을 **스펙트럼 간격**이라 하며, MCMC의 수렴 속도를 지배하는 양이기도 하다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 9.**
 공분산행렬의 스펙트럼 분해 $\boldsymbol{\Sigma} = \mathbf{Q}\boldsymbol{\Lambda}\mathbf{Q}^T$를 이용해 **백색화** 변환 $\mathbf{W} = \boldsymbol{\Lambda}^{-1/2}\mathbf{Q}^T$를 만들고, $\operatorname{Var}(\mathbf{W}\mathbf{X}) = \mathbf{I}$임을 확인하라.
+
+</div>
 
 ??? success "풀이"
     $\operatorname{Var}(\mathbf{X}) = \boldsymbol{\Sigma}$이면
@@ -374,10 +394,12 @@ $\boldsymbol{\Sigma}$가 고윳값 $\lambda_1 = 5$, $\lambda_2 = 2$를 갖는 $2
 
     **주의.** 백색화 행렬은 유일하지 않다. 임의의 직교행렬 $\mathbf{U}$에 대해 $\mathbf{U}\mathbf{W}$도 백색화한다. 위의 것은 PCA 백색화이고, 대칭인 $\boldsymbol{\Sigma}^{-1/2}$을 쓰는 ZCA 백색화도 흔하다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 10.**
 $\mathbf{A}$가 대각화 가능하고 고윳값이 모두 $|\lambda_i| < 1$이면 $\mathbf{A}^n \to \mathbf{O}$임을 보여라. 고윳값 중 하나라도 $|\lambda| > 1$이면 어떻게 되는가?
+
+</div>
 
 ??? success "풀이"
     $\mathbf{A}^n = \mathbf{P}\boldsymbol{\Lambda}^n\mathbf{P}^{-1}$이고 $\boldsymbol{\Lambda}^n = \operatorname{diag}(\lambda_1^n, \dots, \lambda_p^n)$이다. 모든 $|\lambda_i| < 1$이면 $\lambda_i^n \to 0$이므로 $\boldsymbol{\Lambda}^n \to \mathbf{O}$이고, 따라서

@@ -59,8 +59,12 @@ MLE는 모수 추정에 대한 원리적이고 범용적인 접근을 제공한�
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 일간 로그수익률이 $r_t \sim N(\mu, \sigma^2)$이다. $n = 252$, $\bar r = 0.0004$, $s = 0.015$일 때 (a) $\mu_{\text{ann}} = 252\mu$와 $\sigma_{\text{ann}} = \sigma\sqrt{252}$의 MLE. (b) 점근정규성을 이용한 95% 신뢰구간. (c) $\hat\mu$가 $\hat\sigma$보다 훨씬 불안정한 이유는?
+
+</div>
 
 ??? success "풀이"
     (a) $\hat\mu_{\text{ann}} = 252 \cdot 0.0004 = 0.1008$ (10.08%). $\hat\sigma_{\text{ann}} = 0.015 \sqrt{252} \approx 0.2381$ (23.81%).
@@ -71,10 +75,12 @@ MLE는 모수 추정에 대한 원리적이고 범용적인 접근을 제공한�
 
     (c) $\hat\mu_{\text{ann}}$의 표준오차 ≈ 0.238로 점추정값 0.101보다 *크다*. 신뢰구간이 $-37\%$에서 $+57\%$까지 걸쳐 있다. 변동성의 신뢰구간은 (24% 주위로 대략 ±2%포인트로) 좁다. **1년 시계에서 추세는 절망적으로 불안정하지만 변동성은 잘 추정된다.** 미래 수익률을 예측하는 데 과거 표본평균에 의존하는 것은 금융에서 고전적인 함정이다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 **정규분포의 MLE 유도.** i.i.d. $X_1, \ldots, X_n \sim N(\mu, \sigma^2)$이 주어졌을 때 $\hat\mu$와 $\hat\sigma^2$을 유도하라.
+
+</div>
 
 ??? success "풀이"
     로그가능도: $\ell(\mu, \sigma^2) = -(n/2)\ln(2\pi\sigma^2) - (1/(2\sigma^2))\sum(X_i - \mu)^2$.
@@ -85,10 +91,12 @@ MLE는 모수 추정에 대한 원리적이고 범용적인 접근을 제공한�
 
     MLE가 $n - 1$이 아니라 $n$으로 나눔에 유의하라. 편향되어 있다($\mathbb{E}[\hat\sigma^2] = (n-1)\sigma^2/n$). 불편추정을 하려면 Bessel 수정을 사용한다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 **Bernoulli/Binomial의 MLE.** 표본이 $X \sim \mathrm{Binomial}(n, p)$이다. $\hat p_{\text{MLE}}$를 유도하라.
+
+</div>
 
 ??? success "풀이"
     가능도: $L(p) = \binom{n}{X} p^X (1-p)^{n-X} \propto p^X(1-p)^{n-X}$.
@@ -101,10 +109,12 @@ MLE는 모수 추정에 대한 원리적이고 범용적인 접근을 제공한�
 
     MLE는 표본비율이다. 불편이다: $\mathbb{E}[\hat p] = p$.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 **가능도와 확률.** MLE의 용어에서 "가능도"와 "확률"을 구별하라. 가능도가 $\theta$의 함수이면서도 $\theta$에 대한 확률밀도가 아닌 이유는?
+
+</div>
 
 ??? success "풀이"
     **확률:** $P(X = x \mid \theta)$ — $\theta$를 고정한 $x$의 함수이다. $x$에 대해 합하거나 적분하면 1이 된다.
@@ -115,10 +125,12 @@ MLE는 모수 추정에 대한 원리적이고 범용적인 접근을 제공한�
 
     베이즈 추론에서는 $\theta$가 확률변수가 되고 *사후분포* $\pi(\theta \mid x) \propto L(\theta) \pi(\theta)$를 계산하는데, 이것은 $\theta$에 대한 밀도가 **맞다**. 가능도 자체는 그대로이고 달라지는 것은 틀이다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.**
 **MLE의 점근정규성.** 그 결과를 서술하고 Bernoulli의 경우에 확인하라.
+
+</div>
 
 ??? success "풀이"
     **MLE의 점근정규성:**
@@ -135,10 +147,12 @@ MLE는 모수 추정에 대한 원리적이고 범용적인 접근을 제공한�
 
     함의: MLE는 점근적으로 **Cramér-Rao 하한**을 달성하며 점근적으로 효율적이다. 어떤 불편추정량도 이보다 작은 점근분산을 가질 수 없다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 6.**
 **MLE가 실패하는 경우.** 다음 각각의 예를 하나씩 들라: (a) MLE가 존재하지 않는 경우; (b) MLE가 경계에 있는 경우; (c) MLE가 일치하지 않는 경우.
+
+</div>
 
 ??? success "풀이"
     **(a) MLE가 존재하지 않는 경우:** $X \sim \mathrm{Uniform}(0, \theta)$에서 가능도는 $\theta \ge \max X_i$일 때 $1/\theta^n$이고 그 아래에서는 0이다. $\theta \to \infty$이면 $L \to 0$이고, $\theta \to \max X_i$이면 $L \to (1/\max X_i)^n$으로 *상한*에 이르지만 그 지점이 경계이다. 엄밀히 말해 내부에 최댓값이 없으며, MLE는 경계값 $\hat\theta = \max X_i$이다.

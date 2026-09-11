@@ -106,7 +106,11 @@ $(\beta_0, \beta_1)$ 평면 위의 RSS 곡면이다. 그릇 모양이라는 것�
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.** $\partial \mathrm{RSS}/\partial \beta_0$과 $\partial \mathrm{RSS}/\partial \beta_1$을 계산해 0으로 두어, OLS 해에서 RSS의 기울기가 0임을 해석적으로 확인하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -120,25 +124,31 @@ $(\beta_0, \beta_1)$ 평면 위의 RSS 곡면이다. 그릇 모양이라는 것�
 
     이것이 정규방정식 $\mathbf{X}^\top\mathbf{X}\hat{\boldsymbol{\beta}} = \mathbf{X}^\top\mathbf{y}$이며, OLS 해에서 기울기가 0임을 확인해 준다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.** $x_i$가 모두 같지 않을 때 헤세 행렬 $\mathbf{H} = 2\mathbf{X}^\top\mathbf{X}$가 양의 정부호임을 보여라. 모두 같으면 어떻게 되는가?
+
+</div>
 
 ??? success "풀이"
 
     헤세 행렬은 $\mathbf{X} = [\mathbf{1} \mid \mathbf{x}]$일 때 $2\mathbf{X}^\top\mathbf{X}$이다. 이는 $\mathbf{X}$가 완전 열계수 2를 가질 때에만 양의 정부호이다. 모든 $x_i$가 같으면 $\mathbf{X}$의 둘째 열이 첫째 열의 상수배이므로 $\mathbf{X}$의 계수가 1이 되고 $\mathbf{X}^\top\mathbf{X}$가 특이행렬이 된다. RSS 곡면은 퇴화하여 최솟값이 한 점이 아니라 직선 위에 놓이며, 이는 $\beta_0$과 $\beta_1$을 따로 식별할 수 없음을 반영한다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.** 잡음 수준을 높인($\sigma = 10$) 자료를 생성해 곡면을 다시 그려라. $\sigma = 2$일 때와 모양이 어떻게 달라지는가?
+
+</div>
 
 ??? success "풀이"
 
     잡음이 커지면 RSS의 최솟값이 커지지만(그릇이 위로 올라간다) 곡면의 모양과 최솟값의 위치는 질적으로 비슷하다. RSS 값이 전반적으로 커지므로 등고선이 퍼진다. OLS 추정값은 여전히 최솟값에 있지만 표준오차가 커지며, 이는 전체 RSS에 견주었을 때 최솟값 주변의 "골짜기"가 더 넓고 얕아진다는 뜻이다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.** 경사하강법을 구현하여 RSS 곡면의 최솟값을 찾아라. 학습률에 따라 필요한 반복 횟수를 비교하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -188,9 +198,11 @@ $(\beta_0, \beta_1)$ 평면 위의 RSS 곡면이다. 그릇 모양이라는 것�
 
     표준화한 경우 헤세 행렬이 $2\mathbf{I}$이므로 $\eta = 0.5$가 정확히 한 걸음에 최솟값에 도달하는 이상적인 학습률이다($\eta = 1/\lambda$). 그보다 작으면 반복이 늘고, $\eta > 2/\lambda = 1$이면 발산한다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.** $\bar{x} = 0$(중심화된 설명변수)일 때 등고선 타원이 좌표축과 나란하고 $\bar{x} \neq 0$일 때 기울어지는 이유를 설명하라.
+
+</div>
 
 ??? success "풀이"
 

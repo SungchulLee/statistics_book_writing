@@ -143,7 +143,11 @@ for i, degree in enumerate(degrees):
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.** 모자행렬 지름길로 $n$개 모형을 다시 적합하지 않고 2차 다항회귀의 LOOCV MSE를 계산하라. 무차별 계산 결과와 일치하는지 확인하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -172,17 +176,21 @@ for i, degree in enumerate(degrees):
 
     두 값 모두 $3.8318$로 일치한다. 지름길 공식이 선형모형에서 하나 빼기 재적합과 대수적으로 동등하기 때문이다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.** $n$을 200에서 1000으로 늘려라. 검증집합 방법의 변동성과 LOOCV·10-겹 사이의 격차는 어떻게 달라지는가?
+
+</div>
 
 ??? success "풀이"
 
     $n = 1000$이면 (1) 훈련집합과 검증집합이 모두 커져 특정 분할에 대한 민감도가 줄어들므로 검증집합 방법이 더 안정된다. (2) 10-겹 교차검증의 편향(자료의 $90\%$만 훈련에 쓰는 데서 오는)이 $n$이 클 때 무시할 만해지므로 LOOCV와의 격차가 좁아진다. 두 방법이 참 검정오차에 대해 비슷한 추정값으로 수렴한다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.** (10-겹 교차검증으로 얻은) 검정 MSE와 함께 훈련 MSE를 다항 차수의 함수로 그려라. 그림에 드러나는 편향-분산 절충을 설명하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -197,9 +205,11 @@ for i, degree in enumerate(degrees):
 
     훈련 MSE는 차수에 따라 단조롭게 감소한다(모수가 많아지면 훈련자료를 언제나 더 잘 맞춘다). 검정 MSE는 처음에 감소했다가(편향 감소) 이후 증가한다(분산 증가). 최적 차수는 검정 MSE가 최소가 되는 지점이다. 이 U자 모양의 검정오차 곡선이 편향-분산 절충의 상징적인 모습이다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.** 계수 1의 갱신에 대한 Sherman-Morrison-Woodbury 공식에서 $\mathrm{CV}_{(n)} = \frac{1}{n}\sum_i \left(\frac{e_i}{1 - h_{ii}}\right)^2$을 유도하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -211,9 +221,11 @@ for i, degree in enumerate(degrees):
 
     정리하면 관측값 $i$의 하나 빼기 예측오차가 $y_i - \hat{y}_i^{(-i)} = e_i/(1 - h_{ii})$로 간단해지고 공식이 나온다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.** $K$-겹 교차검증에서 $K$의 선택에 편향-분산 절충이 있는 이유를 설명하라. 극단인 $K = 2$와 $K = n$의 경우는 어떠한가?
+
+</div>
 
 ??? success "풀이"
 

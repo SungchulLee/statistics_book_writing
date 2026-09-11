@@ -192,8 +192,12 @@ Max log-likelihood: -57.3074
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 동전을 20번 던져 앞면 13번, 뒷면 7번이 나왔다. 로그가능도함수를 쓰고 MLE $\hat{p}$를 해석적으로 구하라.
+
+</div>
 
 ??? success "풀이"
     $n = 20$번 중 $k = 13$번이 앞면이라 하자. 로그가능도는:
@@ -214,10 +218,12 @@ Max log-likelihood: -57.3074
 
     2계도함수가 $-13/p^2 - 7/(1-p)^2 < 0$이므로 최댓값임이 확인된다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 Bernoulli의 MLE에서 표본크기나 관측된 자료와 무관하게 언제나 $\hat{p} = \bar{x}$(표본비율)이 MLE임을 보여라.
+
+</div>
 
 ??? success "풀이"
     $k = \sum x_i$번 성공한 $n$번의 독립 Bernoulli 시행에 대해 로그가능도는:
@@ -238,10 +244,12 @@ Bernoulli의 MLE에서 표본크기나 관측된 자료와 무관하게 언제�
 
     이는 $0 \leq k \leq n$인 임의의 $k$와 $n$에 대해 성립한다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 Bernoulli 관측값 하나에 대한 Fisher 정보량을 계산하고 $\hat{p}$의 점근분산을 유도하라.
+
+</div>
 
 ??? success "풀이"
     Bernoulli$(p)$ 관측값 하나에 대해 로그가능도는 $\ell(p) = x\log p + (1-x)\log(1-p)$이다. 2계도함수는:
@@ -264,10 +272,12 @@ Bernoulli 관측값 하나에 대한 Fisher 정보량을 계산하고 $\hat{p}$�
 
     표본비율의 분산에 대한 익숙한 공식이다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 10번 던져 앞면이 0번 나오면 MLE는 $\hat{p} = 0$을 준다. 이것이 왜 문제인지 설명하고 대안적인 접근을 하나 서술하라.
+
+</div>
 
 ??? success "풀이"
     MLE $\hat{p} = 0$은 이 동전에서 앞면이 결코 나올 수 없다는 뜻인데, 관측값 10개만으로 내리기에는 극단적인 결론이다. 문제는 특히 소표본에서 MLE가 비합리적인 경계값 추정치를 낼 수 있다는 것이다.

@@ -131,7 +131,11 @@ plt.show()
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.** $X_1, \ldots, X_{10} \overset{\text{iid}}{\sim} N(0, 4)$일 때 $P(S^2 > 6)$을 구하라.
+
+</div>
 
 ??? success "풀이"
     여기서 $\sigma^2 = 4$, $n = 10$이므로 $\frac{(n-1)S^2}{\sigma^2} = \frac{9S^2}{4} \sim \chi^2(9)$이다.
@@ -158,9 +162,11 @@ plt.show()
 
     결과는 $P(\chi^2(9) > 13.5) \approx 0.1415$이다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.** (정규분포뿐 아니라) 임의의 모집단에 대해 $E[S^2] = \sigma^2$임을 증명하라.
+
+</div>
 
 ??? success "풀이"
     정의에서 출발한다:
@@ -199,9 +205,11 @@ plt.show()
 
     $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.** $\text{Var}(\chi^2(k)) = 2k$라는 사실을 사용하여 모집단이 정규일 때 $\text{Var}(S^2) = 2\sigma^4/(n-1)$임을 보여라.
+
+</div>
 
 ??? success "풀이"
     정리에 의해 $\frac{(n-1)S^2}{\sigma^2} \sim \chi^2(n-1)$이다.
@@ -214,9 +222,11 @@ plt.show()
 
     $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.** $\lambda = 1$인 Exponential 모집단의 첨도는 $\kappa = 9$이다. $n = 100$에서 이론적 $\text{Var}(S^2)$을 계산하고 (정규이론 값인) $2\sigma^4/(n-1)$과 비교하라.
+
+</div>
 
 ??? success "풀이"
     $\text{Exp}(1)$에서 $\sigma^2 = 1$, $\kappa = 9$이다.
@@ -241,9 +251,11 @@ plt.show()
 
     Exponential 모집단에서 $S^2$의 분산이 정규이론 값보다 약 4배 크다. Exponential 분포의 두꺼운 꼬리(초과첨도 $= 6$) 때문에 $S^2$의 변동성이 커지기 때문이다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.** 카이제곱 분포를 사용하여 $\sigma^2$에 대한 95% 신뢰구간을 구성하라. 정규모집단에서 $n = 25$개의 관측값으로 $S^2 = 12$를 얻었다고 하자.
+
+</div>
 
 ??? success "풀이"
     $(n-1)S^2/\sigma^2 \sim \chi^2(n-1)$이므로:

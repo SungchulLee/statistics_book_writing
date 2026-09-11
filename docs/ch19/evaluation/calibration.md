@@ -140,9 +140,13 @@ $$
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 위 예제의 표로 브라이어 점수 분해를 수치로 확인하라. 세 성분을 각각 계산하고
 $\text{BS} = \text{REL} - \text{RES} + \text{UNC}$가 성립함을 보여라.
+
+</div>
 
 ??? success "풀이"
 
@@ -196,11 +200,13 @@ $\text{BS} = \text{REL} - \text{RES} + \text{UNC}$가 성립함을 보여라.
     이 양은 $\text{UNC} - \text{RES} = 0.25 - 0.08492 = 0.16508$이므로,
     $\text{BS} = \text{REL} + 0.16508$이라고 써야 옳다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 언제나 상수 $\hat p_i = \bar y$를 예측하는 모형의 브라이어 점수를 구하라. 분해의 관점에서
 이 결과를 설명하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -228,11 +234,13 @@ $\text{BS} = \text{REL} - \text{RES} + \text{UNC}$가 성립함을 보여라.
     알아야만 판단할 수 있다. AUC와 달리 브라이어 점수는 자료 사이에 직접 비교할 수 없다.
     $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 어떤 모형의 모든 예측확률을 절반으로 줄였다고 하자($\hat p_i \to \hat p_i / 2$).
 AUC, 브라이어 점수, 신뢰도 성분은 각각 어떻게 변하는가?
+
+</div>
 
 ??? success "풀이"
 
@@ -255,10 +263,12 @@ AUC, 브라이어 점수, 신뢰도 성분은 각각 어떻게 변하는가?
     **AUC를 건드리지 않고** 신뢰도만 고친다. 순위가 좋은데 확률이 어긋난 모형이라면 재보정으로
     거의 공짜로 개선할 수 있다. 순위 자체가 나쁘면 재보정으로는 아무것도 얻지 못한다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 위 예제 표에 호스머-레메쇼 검정을 적용하라. 결론은 무엇인가?
+
+</div>
 
 ??? success "풀이"
 
@@ -290,10 +300,12 @@ AUC, 브라이어 점수, 신뢰도 성분은 각각 어떻게 변하는가?
 
     $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.**
 플랫 척도화와 등위회귀를 비교하라. 각각 언제 실패하는가?
+
+</div>
 
 ??? success "풀이"
 

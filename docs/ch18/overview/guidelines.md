@@ -93,6 +93,8 @@
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 California Housing 자료를 사용하라.
 
@@ -101,6 +103,8 @@ California Housing 자료를 사용하라.
 **(b)** 정칙화 경로를 그려라. 라쏘에서 계수가 0이 되는 $\lambda$ 값은 얼마인가?
 
 **(c)** 1-표준오차 규칙으로 모형을 선택하라. 최소 CV 오차 모형과 비교하면 어떤가?
+
+</div>
 
 ??? success "풀이"
     ```python
@@ -144,10 +148,12 @@ California Housing 자료를 사용하라.
 
     **(c)** $\lambda_{1\text{SE}}$가 $\lambda_{\min}$보다 큰 $\lambda$를 고르므로 더 적은 변수를 남긴다. 다만 이 자료에서는 변수가 8개뿐이라 차이가 크지 않다. 1-SE 규칙의 효과는 $p$가 클 때 뚜렷하다([$\lambda$ 선택을 위한 교차검증](../tuning/cross_validation.md) 연습문제 1에서 $p = 20$일 때 12개에서 9개로 줄어드는 것을 보았다).
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 "흔한 함정" 다섯 가지 중 결과를 가장 심각하게 왜곡하는 것은 무엇인가? 근거를 들어 순위를 매겨라.
+
+</div>
 
 ??? success "풀이"
     심각도 순으로 매기면 다음과 같다.

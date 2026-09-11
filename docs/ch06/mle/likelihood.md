@@ -90,8 +90,12 @@ $$
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 $\mu$와 $\sigma^2$이 모두 미지일 때 $N(\mu, \sigma^2)$ 분포에서 얻은 독립인 관측값 $x_1, \dots, x_n$에 대한 가능도함수와 로그가능도함수를 쓰라.
+
+</div>
 
 ??? success "풀이"
     가능도는:
@@ -106,10 +110,12 @@ $\mu$와 $\sigma^2$이 모두 미지일 때 $N(\mu, \sigma^2)$ 분포에서 얻�
     \ell(\mu, \sigma^2) = -\frac{n}{2}\log(2\pi) - \frac{n}{2}\log(\sigma^2) - \frac{1}{2\sigma^2}\sum_{i=1}^n(x_i - \mu)^2
     $$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 가능도함수 $L(\theta; \mathbf{x})$와 확률함수 $P(\mathbf{x}; \theta)$의 차이를 설명하라. 가능도가 $\theta$에 대한 확률분포가 아닌 이유는 무엇인가?
+
+</div>
 
 ??? success "풀이"
     **확률함수** $P(\mathbf{x}; \theta)$는 $\theta$를 고정하고 $\mathbf{x}$를 변수로 다룬다. $\theta$가 고정되면 가능한 모든 자료 결과에 대해 합(또는 적분)이 1이 된다.
@@ -118,10 +124,12 @@ $\mu$와 $\sigma^2$이 모두 미지일 때 $N(\mu, \sigma^2)$ 분포에서 얻�
 
     가능도가 $\theta$에 대한 확률분포가 아닌 이유는 모수공간에서 적분해도 1이 되지 않기 때문이다. 실제로 $\int L(\theta; \mathbf{x})\,d\theta$는 임의의 양수일 수도(심지어 무한일 수도) 있다. $\theta$에 대한 제대로 된 분포를 얻으려면 사전분포를 곱하고 정규화해야 하며(베이즈 접근), 그 결과가 사후분포이다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 $\text{Poisson}(\lambda)$ 분포에서 얻은 크기 $n = 3$인 표본에서 관측값이 $x_1 = 2, x_2 = 5, x_3 = 3$이다. $\lambda = 3$과 $\lambda = 4$에서 가능도와 로그가능도를 계산하라. 어느 값이 더 그럴듯한가?
+
+</div>
 
 ??? success "풀이"
     Poisson 가능도는 $L(\lambda) = \prod_{i=1}^n \frac{\lambda^{x_i} e^{-\lambda}}{x_i!}$이다.
@@ -138,10 +146,12 @@ $\text{Poisson}(\lambda)$ 분포에서 얻은 크기 $n = 3$인 표본에서 관
 
     $\ell(3) > \ell(4)$이므로 $\lambda = 3$이 더 그럴듯하다. 참고로 MLE는 $\hat{\lambda} = \bar{x} = 10/3 \approx 3.33$이다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 로그가능도를 최대화하는 것이 가능도를 최대화하는 것과 동등한 이유를 설명하라. 로그가능도로 작업할 때의 실용적 장점을 하나 서술하라.
+
+</div>
 
 ??? success "풀이"
     로그가 순증가함수이므로 $L(\theta_1) > L(\theta_2)$일 필요충분조건은 $\ell(\theta_1) > \ell(\theta_2)$이다. 따라서 $L$을 최대화하는 $\theta$가 $\ell$도 최대화하며 그 역도 성립한다.

@@ -107,6 +107,8 @@ $$
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 능형 추정량 $\hat{\boldsymbol{\beta}}_{\text{ridge}} = (\mathbf{X}^\top\mathbf{X} + \lambda\mathbf{I})^{-1}\mathbf{X}^\top\mathbf{y}$를 생각하자.
 
@@ -115,6 +117,8 @@ $$
 **(b)** $\lambda \to \infty$일 때 $\hat{\boldsymbol{\beta}}_{\text{ridge}} \to \mathbf{0}$임을 보여라.
 
 **(c)** $\mathbf{X}^\top\mathbf{X}$가 특이행렬이더라도 모든 $\lambda > 0$에 대해 $\mathbf{X}^\top\mathbf{X} + \lambda\mathbf{I}$가 양정치임을 증명하라.
+
+</div>
 
 ??? success "풀이"
     **(a)** $\mathbf{X}^\top\mathbf{X}$가 가역이면 역행렬은 연속함수이므로 $\lambda \to 0$에서
@@ -143,7 +147,7 @@ $$
 
     **이것이 $p > n$에서도 능형회귀가 작동하는 이유다.** $\mathbf{X}^\top\mathbf{X}$의 계수는 최대 $n$이므로 $p > n$이면 반드시 특이행렬이지만, $\lambda\mathbf{I}$가 영공간을 메운다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 능형회귀의 유효자유도는 $\text{df}(\lambda) = \sum_{j=1}^p \frac{d_j^2}{d_j^2 + \lambda}$이며 $d_j$는 $\mathbf{X}$의 특이값이다.
@@ -153,6 +157,8 @@ $$
 **(b)** $\text{df}(\lambda)$는 $\lambda$에 대해 단조감소하는가?
 
 **(c)** 라쏘에 대응하는 양은 어떻게 정의하겠는가?
+
+</div>
 
 ??? success "풀이"
     **(a)** $\lambda = 0$이면 각 항이 $d_j^2/d_j^2 = 1$이므로 합은 $p$이다(모든 $d_j > 0$일 때). $\lambda \to \infty$이면 각 항이 0으로 가므로 합도 0이다.
@@ -180,7 +186,7 @@ $$
 
         능형과 대조적이다. 능형은 모든 변수를 남기지만 $\text{df}(\lambda) < p$이고, 라쏘는 일부만 남기지만 남긴 개수가 곧 자유도다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 능형회귀를 sklearn 없이 **직접 구현**하라.
@@ -190,6 +196,8 @@ $$
 **(b)** 사영행렬 지름길을 이용해 하나 남기기 교차검증을 구현하라.
 
 **(c)** 구현이 `sklearn.linear_model.Ridge`와 일치하는지 확인하라.
+
+</div>
 
 ??? success "풀이"
     ```python

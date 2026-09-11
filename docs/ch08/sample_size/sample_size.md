@@ -111,7 +111,11 @@ Sample size for proportion (conservative p=0.5):
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.** 어떤 엔지니어가 케이블의 평균 인장강도를 95% 신뢰수준에서 $\pm 5$ MPa 이내로 추정해야 한다. 예비조사에서 $\sigma \approx 20$ MPa로 나타났다. 필요한 표본크기는?
+
+</div>
 
 ??? success "풀이"
 
@@ -126,9 +130,11 @@ Sample size for proportion (conservative p=0.5):
 
     적어도 관측값 62개가 필요하다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.** 어떤 조사자가 99% 신뢰수준에서 후보 지지율을 $\pm 3$ 퍼센트포인트 이내로 추정하려 한다. 보수적인 접근으로 필요한 표본크기를 구하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -143,9 +149,11 @@ Sample size for proportion (conservative p=0.5):
 
     조사자에게 적어도 응답자 1844명이 필요하다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.** 모든 $p \in [0,1]$에 대해 $p(1-p) \le 1/4$임을 보이고, 비율에서 $p = 0.5$가 가장 보수적인(가장 큰) 표본크기를 주는 이유를 설명하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -157,9 +165,11 @@ Sample size for proportion (conservative p=0.5):
 
     표본크기 공식은 $n = z_{\alpha/2}^2 \, p(1-p) / E^2$이다. $p(1-p)$가 분자에 있으므로 $p = 1/2$에서의 최댓값이 가장 큰 $n$을 주며, 참 $p$가 무엇이든 충분한 정밀도를 보장한다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.** 처음에는 오차한계 $\pm 4$로 계획했다가 나중에 $\pm 2$가 필요하다고 결정했다면 필요한 표본크기는 몇 배가 되는가? 이 관계를 일반적으로 증명하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -177,9 +187,11 @@ Sample size for proportion (conservative p=0.5):
 
     $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.** 어떤 연구자가 계획용 추정값 $p_0 = 0.30$을 갖고 있으며 오차한계 $\pm 0.04$인 $p$의 95% 신뢰구간을 원한다. 계획용 추정값 공식과 보수적인 공식의 표본크기를 비교하라. 관측값을 몇 개나 아끼는가?
+
+</div>
 
 ??? success "풀이"
 

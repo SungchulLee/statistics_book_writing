@@ -129,8 +129,12 @@ $$
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 $\mathbf{Z} \sim N(\mathbf{0}, \mathbf{I}_n)$이고 $\mathbf{P}$가 $\operatorname{rank}(\mathbf{P}) = r$인 대칭 멱등행렬이라 하자. $\mathbf{Z}^T \mathbf{P} \mathbf{Z}$의 분포를 진술하고 이를 적용하라. 관측값이 $n = 20$인 단순선형회귀에서 $\mathbf{e} = (\mathbf{I} - \mathbf{H})\mathbf{y}$일 때 $\mathbf{e}^T \mathbf{e}/\sigma^2$의 분포를 구하라.
+
+</div>
 
 ??? success "풀이"
     기본 카이제곱 정리에 의해 $\mathbf{Z}^T \mathbf{P} \mathbf{Z} \sim \chi^2_r$이다.
@@ -143,7 +147,7 @@ $\mathbf{Z} \sim N(\mathbf{0}, \mathbf{I}_n)$이고 $\mathbf{P}$가 $\operatorna
 
     이며, 여기서 $\mathbf{z} = \boldsymbol{\varepsilon}/\sigma \sim N(\mathbf{0}, \mathbf{I}_n)$이다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 $\mathbf{z} \sim N(\mathbf{0}, \mathbf{I}_n)$이고 $\mathbf{A}$가 고윳값 $\lambda_1, \ldots, \lambda_n$을 갖는 대칭행렬일 때, $\mathbf{z}^T\mathbf{A}\mathbf{z}$의 적률생성함수가 0의 어떤 근방에서
@@ -153,6 +157,8 @@ M(t) = \prod_{i=1}^n (1 - 2\lambda_i t)^{-1/2}
 $$
 
 임을 보여라. 이를 이용해 $\mathbf{A}$가 계수 $r$인 멱등행렬일 때 적률생성함수가 $(1 - 2t)^{-r/2}$으로 환원됨을 확인하라.
+
+</div>
 
 ??? success "풀이"
     $\mathbf{A} = \mathbf{Q}\boldsymbol{\Lambda}\mathbf{Q}^T$로 대각화한다. $\mathbf{w} = \mathbf{Q}^T\mathbf{z} \sim N(\mathbf{0}, \mathbf{I}_n)$으로 두면
@@ -171,10 +177,12 @@ $$
 
     $\mathbf{A}$가 멱등이고 고윳값 중 $r$개가 1, 나머지가 0이면 1인 고윳값만 기여하므로 $M(t) = (1 - 2t)^{-r/2}$, 즉 $\chi^2_r$의 적률생성함수가 된다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 $\mathbf{y} \sim N(\mathbf{X}\boldsymbol{\beta}, \sigma^2\mathbf{I}_n)$이라 하자. $H_0: \boldsymbol{\beta} = \mathbf{0}$ 아래에서 회귀제곱합이 $\mathrm{SSR}/\sigma^2 = \mathbf{y}^T\mathbf{H}\mathbf{y}/\sigma^2 \sim \chi^2_p$이고 $\mathrm{SSE}/\sigma^2 \sim \chi^2_{n-p}$과 독립임을 보여라.
+
+</div>
 
 ??? success "풀이"
     $H_0$ 아래에서 $\mathbf{y} = \boldsymbol{\varepsilon} \sim N(\mathbf{0}, \sigma^2\mathbf{I}_n)$이다. $\mathbf{z} = \mathbf{y}/\sigma$로 두면 $\mathrm{SSR}/\sigma^2 = \mathbf{z}^T\mathbf{H}\mathbf{z}$이고 $\mathbf{H}$는 계수 $p$인 대칭 멱등행렬이므로 $\chi^2_p$를 따른다.
@@ -185,10 +193,12 @@ $\mathbf{y} \sim N(\mathbf{X}\boldsymbol{\beta}, \sigma^2\mathbf{I}_n)$이라 �
 
     이것이 바로 전체 F-검정의 설정이다. $H_0$ 아래에서 $F = (\mathrm{SSR}/p)/(\mathrm{SSE}/(n-p)) \sim F_{p, n-p}$이다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 흔한 분산분석 분해는 $\mathbf{y}^T\mathbf{y}$를 두 개의 이차형식으로 쪼갠다. $\mathbf{A}_1 = \mathbf{H}$, $\mathbf{A}_2 = \mathbf{I} - \mathbf{H}$로 두자. 코크런 정리가 적용됨을 확인하고, 각 조각의 카이제곱분포와 독립성을 결론지어라.
+
+</div>
 
 ??? success "풀이"
     분해는 $\mathbf{y}^T\mathbf{y} = \mathbf{y}^T\mathbf{H}\mathbf{y} + \mathbf{y}^T(\mathbf{I} - \mathbf{H})\mathbf{y}$이다.
@@ -201,10 +211,12 @@ $\mathbf{y} \sim N(\mathbf{X}\boldsymbol{\beta}, \sigma^2\mathbf{I}_n)$이라 �
 
     결론($\mathbf{y} \sim N(\mathbf{0}, \sigma^2\mathbf{I})$ 아래에서): $\mathbf{y}^T\mathbf{H}\mathbf{y}/\sigma^2 \sim \chi^2_p$이고 $\mathbf{y}^T(\mathbf{I} - \mathbf{H})\mathbf{y}/\sigma^2 \sim \chi^2_{n-p}$이며 둘은 독립이다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.**
 $\mathbf{z} \sim N(\boldsymbol{\mu}, \boldsymbol{\Sigma})$이고 $\mathbf{A}$가 대칭일 때 이차형식 $\mathbf{z}^T\mathbf{A}\mathbf{z}$의 **기댓값**을 계산하라. 그런 다음 $\boldsymbol{\Sigma} = \sigma^2\mathbf{I}$인 경우로 특수화하여 $\mathbb{E}[\mathbf{z}^T\mathbf{A}\mathbf{z}] = \sigma^2 \operatorname{tr}(\mathbf{A}) + \boldsymbol{\mu}^T\mathbf{A}\boldsymbol{\mu}$임을 보여라.
+
+</div>
 
 ??? success "풀이"
     $\mathbf{w} \sim N(\mathbf{0}, \boldsymbol{\Sigma})$에 대해 $\mathbf{z} = \boldsymbol{\mu} + \mathbf{w}$로 쓴다. 전개하면($\mathbf{A}$의 대칭성을 쓴다)
@@ -223,10 +235,12 @@ $\mathbf{z} \sim N(\boldsymbol{\mu}, \boldsymbol{\Sigma})$이고 $\mathbf{A}$가
 
     통계적 쓰임: $\boldsymbol{\varepsilon} \sim N(\mathbf{0}, \sigma^2\mathbf{I})$인 $\mathbf{y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon}$ 아래에서 $\mathbf{M}\mathbf{X}\boldsymbol{\beta} = \mathbf{0}$이므로 $\mathbb{E}[\mathrm{SSE}] = \sigma^2 \operatorname{tr}(\mathbf{M}) = \sigma^2(n - p)$이다. $n - p$로 나누면 불편인 $\hat{\sigma}^2$을 얻는다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 6.**
 대립가설 아래에서 $\boldsymbol{\mu} \ne \mathbf{0}$인 $\mathbf{z} \sim N(\boldsymbol{\mu}, \mathbf{I}_n)$이고 $\mathbf{A}$가 계수 $r$인 대칭 멱등행렬이면, 이차형식 $\mathbf{z}^T\mathbf{A}\mathbf{z}$는 **비중심** 카이제곱분포 $\chi^2_r(\delta)$를 따른다. 비중심 모수 $\delta$를 찾고 F-검정의 검정력 계산에서 그 역할을 설명하라.
+
+</div>
 
 ??? success "풀이"
     $\mathbf{w} \sim N(\mathbf{0}, \mathbf{I}_n)$에 대해 $\mathbf{z} = \boldsymbol{\mu} + \mathbf{w}$로 분해한다. $\mathbf{A} = \mathbf{Q}\operatorname{diag}(\mathbf{1}_r, \mathbf{0}_{n-r})\mathbf{Q}^T$로 대각화하고 $\tilde{\boldsymbol{\mu}} = \mathbf{Q}^T \boldsymbol{\mu}$, $\tilde{\mathbf{w}} = \mathbf{Q}^T \mathbf{w}$로 두면
@@ -245,10 +259,12 @@ $\mathbf{z} \sim N(\boldsymbol{\mu}, \boldsymbol{\Sigma})$이고 $\mathbf{A}$가
 
     **F-검정 검정력에서의 역할:** $H_1: \boldsymbol{\beta} \ne \mathbf{0}$ 아래에서 F 분자의 $\chi^2$이 $\delta = \boldsymbol{\beta}^T\mathbf{X}^T\mathbf{X}\boldsymbol{\beta}/\sigma^2$인 비중심 분포가 된다. $\delta$가 클수록(귀무가설에서 멀수록) F-통계량의 분포가 큰 값 쪽으로 이동하여 기각 확률이 높아진다. 즉 검정력이 커진다. 이것이 표본 크기를 계획할 때 검정력 계산기에 넣는 공식이다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 7.**
 크레이그 정리($\mathbf{A}\mathbf{B} = \mathbf{O}$이면 두 이차형식이 독립)를 모의실험으로 확인하라. $\mathbf{A}\mathbf{B} \neq \mathbf{O}$인 경우와 대비하라.
+
+</div>
 
 ??? success "풀이"
     ```python
@@ -284,10 +300,12 @@ $\mathbf{z} \sim N(\boldsymbol{\mu}, \boldsymbol{\Sigma})$이고 $\mathbf{A}$가
 
     이것이 분산분석에서 제곱합들이 독립인 근거다. 서로 직교하는 부분공간으로의 사영은 곱이 $\mathbf{O}$이므로 독립이고, 그래서 카이제곱의 비가 $F$ 분포가 된다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 8.**
 $\mathbf{z} \sim N(\mathbf{0}, \mathbf{I}_n)$이고 $\mathbf{A}$가 대칭이면 $\operatorname{Var}(\mathbf{z}^T\mathbf{A}\mathbf{z}) = 2\operatorname{tr}(\mathbf{A}^2)$임을 확인하라. $\mathbf{A}$가 멱등일 때 이것이 카이제곱의 분산과 맞음을 보여라.
+
+</div>
 
 ??? success "풀이"
     ```python
@@ -325,10 +343,12 @@ $\mathbf{z} \sim N(\mathbf{0}, \mathbf{I}_n)$이고 $\mathbf{A}$가 대칭이면
 
     **거꾸로 읽으면 유용하다.** 이차형식이 카이제곱이 **아닌** 경우에도 평균과 분산은 이 공식으로 계산된다. 그래서 근사적으로 $\chi^2$에 맞추는 새터스웨이트 근사가 가능하다. 자유도를 $\nu = 2(\operatorname{tr}\mathbf{A})^2/\operatorname{tr}(\mathbf{A}^2)$로 잡으면 평균과 분산이 맞아떨어진다. 웰치 $t$ 검정의 자유도가 정수가 아닌 이유가 여기에 있다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 9.**
 공분산이 $\boldsymbol{\Sigma} \neq \sigma^2\mathbf{I}$인 일반적인 경우에는 $\mathbf{z}^T\mathbf{A}\mathbf{z} \sim \chi^2_r$일 필요충분조건이 $\mathbf{A}\boldsymbol{\Sigma}$가 멱등인 것이다. 마할라노비스 이차형식으로 확인하라.
+
+</div>
 
 ??? success "풀이"
     $\mathbf{A} = \boldsymbol{\Sigma}^{-1}$로 두면 $\mathbf{A}\boldsymbol{\Sigma} = \mathbf{I}$로 멱등이고 계수가 $p$이므로 $\mathbf{z}^T\boldsymbol{\Sigma}^{-1}\mathbf{z} \sim \chi^2_p$여야 한다.
@@ -360,10 +380,12 @@ $\mathbf{z} \sim N(\mathbf{0}, \mathbf{I}_n)$이고 $\mathbf{A}$가 대칭이면
 
     **이것이 마할라노비스 거리의 근거다.** $(\mathbf{x}-\boldsymbol{\mu})^T\boldsymbol{\Sigma}^{-1}(\mathbf{x}-\boldsymbol{\mu}) \sim \chi^2_p$이므로, 이 값이 $\chi^2_p$의 상위 백분위수를 넘는 점을 다변량 이상치로 판정할 수 있다. $\boldsymbol{\Sigma}^{-1}$로 가중하는 것은 백색화($\boldsymbol{\Sigma}^{-1/2}$를 곱하는 것)와 같고, 백색화 뒤에는 표준정규가 되어 제곱합이 카이제곱이 된다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 10.**
 회귀에서 $F = \dfrac{\text{SSR}/p'}{\text{SSE}/(n-p)}$가 두 이차형식의 비임을 이용해, $H_0$ 아래에서 실제로 $F_{p', n-p}$ 분포를 따름을 모의실험으로 확인하라.
+
+</div>
 
 ??? success "풀이"
     ```python

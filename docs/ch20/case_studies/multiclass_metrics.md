@@ -335,6 +335,8 @@ plot_confusion_matrix(M_ours, class_names=iris.target_names)
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 4범주 분류기가 다음 혼동행렬을 냈다.
 
@@ -346,6 +348,8 @@ plot_confusion_matrix(M_ours, class_names=iris.target_names)
 | **실제 3** | 0 | 6 | 2 | 42 |
 
 전체 정확도, 범주별 정밀도와 재현율, 거시평균 F1 점수를 손으로 계산하라.
+
+</div>
 
 ??? success "풀이"
     전체 관측치 수는 $40+5+3+2+2+35+8+5+1+4+42+3+0+6+2+42 = 200$이다(각 행의 합이 50).
@@ -371,11 +375,13 @@ plot_confusion_matrix(M_ours, class_names=iris.target_names)
     F_1^{\text{macro}} = \frac{0.860 + 0.700 + 0.800 + 0.824}{4} = \frac{3.184}{4} = 0.796
     $$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 단일 이름표 다범주 문제에서 미시평균 정밀도 = 미시평균 재현율 = 전체 정확도임을 보여라.
 (힌트: $\sum_c \text{FP}_c$와 $\sum_c \text{FN}_c$를 $\mathbf{M}$의 비대각 원소와 연결하라.)
+
+</div>
 
 ??? success "풀이"
     각 범주 $c$에 대해,
@@ -409,13 +415,15 @@ plot_confusion_matrix(M_ours, class_names=iris.target_names)
     재현율에도 같은 계산이 적용된다. 미시 정밀도와 미시 재현율이 같으므로 미시 F1도 정확도와
     같다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 어떤 의학적 선별검사가 환자를 건강(0), 질환 A(1), 질환 B(2)의 세 범주로 분류한다. 환자
 1000명 중 건강 900명, 질환 A 70명, 질환 B 30명이다. 언제나 "건강"을 예측하는 분류기는 정확도
 90%를 달성한다. 이 무의미한 분류기의 거시평균 F1을 계산하고, 이 문제에서 거시 F1이 정확도보다
 나은 평가 기준인 이유를 설명하라.
+
+</div>
 
 ??? success "풀이"
     "항상 0을 예측"하는 분류기의 혼동행렬은 다음과 같다.
@@ -450,11 +458,13 @@ plot_confusion_matrix(M_ours, class_names=iris.target_names)
         기본값은 0이며, 이 예에서는 그것이 옳은 선택이다. 예측을 아예 하지 않은 범주를
         평균에서 빼 주면 아무것도 예측하지 않는 분류기가 가장 좋아 보이게 되기 때문이다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 각 범주의 F1 점수를 지지도(실제 사례 수)로 가중하여 가중평균 F1을 계산하는 `weighted_f1`
 함수를 구현하라. 균형 잡힌 자료에서는 가중 F1이 거시 F1과 같아짐을 보여라.
+
+</div>
 
 ??? success "풀이"
     ```python
@@ -474,12 +484,14 @@ plot_confusion_matrix(M_ours, class_names=iris.target_names)
 
     가중치 $s/Cs = 1/C$가 균일해져 비가중 평균으로 환원된다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.**
 임의의 혼동행렬 $\mathbf{M}$과 임의의 범주 $c$에 대해 F1 점수가
 $0 \leq F_{1,c} \leq 1$을 만족하며, $F_{1,c} = 1$인 것은 범주 $c$의 정밀도와 재현율이 모두
 완벽할 때 그리고 그때뿐임을 증명하라.
+
+</div>
 
 ??? success "풀이"
     F1 점수는 정밀도와 재현율의 조화평균이다.

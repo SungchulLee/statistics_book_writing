@@ -110,9 +110,13 @@ z, p = runs_test(data * 2 - 1)
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.** 동전을 20번 던져 수열
 HHHHTTTTHHHHTTTTTTHH를 얻었다. 각 H를 $+1$, 각 T를 $-1$로 부호화하고 런의 개수
 $R$을 센 뒤 $\mu_R$과 $\sigma_R$을 손으로 계산하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -132,10 +136,12 @@ $R$을 센 뒤 $\mu_R$과 $\sigma_R$을 손으로 계산하라.
     따라서 $Z = (5 - 11)/2.176 \approx -2.757$이고 $p = 0.0058$로 뭉침의 강한 증거가 된다.
     $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.** 각 $x_i \in \{-1, +1\}$일 때
 $R = \dfrac{N_+ + N_- + 1 - \sum_{i=1}^{N-1} x_i\,x_{i+1}}{2}$임을 증명하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -153,10 +159,12 @@ $R = \dfrac{N_+ + N_- + 1 - \sum_{i=1}^{N-1} x_i\,x_{i+1}}{2}$임을 증명하�
 
     $N = N_+ + N_-$이므로 결과가 따라 나온다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.** 위 "지나치게 교대하는 수열" 예제의 자료로 런 검정 통계량과 $p$값을
 파이썬에서 계산하라. $\alpha = 0.05$에서 귀무가설이 기각되는지 확인하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -190,10 +198,12 @@ $R = \dfrac{N_+ + N_- + 1 - \sum_{i=1}^{N-1} x_i\,x_{i+1}}{2}$임을 증명하�
     $p = 0.0228 < 0.05$이므로 $\alpha = 0.05$에서 **귀무가설을 기각한다**. 런이 $14$개로
     기댓값 $9.47$보다 유의하게 많아 과잉 교대의 증거가 된다. $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.** 수열이 이진이 아니면 왜 런 검정이 부적절한지 설명하라. 연속 수열을
 검정에 적합한 이진 수열로 바꾸는 흔한 방법 하나를 기술하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -206,10 +216,12 @@ $R = \dfrac{N_+ + N_- + 1 - \sum_{i=1}^{N-1} x_i\,x_{i+1}}{2}$임을 증명하�
     한쪽에 배정한다). 이렇게 얻은 이진 수열에 Wald--Wolfowitz 절차를 적용한다.
     $\square$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 5.** 수열의 모든 순열에 걸친 세기 논증으로
 $\operatorname{E}[R] = \mu_R = \dfrac{2\,N_+\,N_-}{N} + 1$임을 보여라.
+
+</div>
 
 ??? success "풀이"
 
@@ -245,10 +257,12 @@ $\operatorname{E}[R] = \mu_R = \dfrac{2\,N_+\,N_-}{N} + 1$임을 보여라.
         관측값 $x_{i+1}$을 공유하기 때문이다. 이 공분산을 모두 더하면 본문의
         $\sigma_R^2 = (\mu_R-1)(\mu_R-2)/(N-1)$이 나온다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 6.** 런 검정의 실제 제1종 오류율을 확인하라. $N$이 작을 때 정규근사가
 얼마나 정확한가?
+
+</div>
 
 ??? success "풀이"
 

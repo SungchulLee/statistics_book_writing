@@ -296,8 +296,12 @@ SMM은 가능도를 다루기 어려운 복잡한 금융 모형(예: 행위자 �
 
 ## 연습문제
 
+<div class="drillbox" markdown>
+
 **연습문제 1.**
 Uniform$(0, \theta)$ 분포에서 얻은 확률표본의 표본평균이 $\bar{x} = 3.5$이다. 적률법 추정량 $\hat{\theta}$를 구하라.
+
+</div>
 
 ??? success "풀이"
     Uniform$(0, \theta)$의 1차 모집단 적률은:
@@ -312,10 +316,12 @@ Uniform$(0, \theta)$ 분포에서 얻은 확률표본의 표본평균이 $\bar{x
     \frac{\theta}{2} = \bar{x} = 3.5 \implies \hat{\theta} = 2\bar{x} = 7.0
     $$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 2.**
 평균이 $\alpha\beta$이고 분산이 $\alpha\beta^2$인 Gamma$(\alpha, \beta)$ 분포에 대해 $\bar{x}$와 $s^2$으로 $\alpha$와 $\beta$의 적률법 추정량을 유도하라.
+
+</div>
 
 ??? success "풀이"
     모집단 적률을 표본 적률과 같다고 두면:
@@ -336,10 +342,12 @@ Uniform$(0, \theta)$ 분포에서 얻은 확률표본의 표본평균이 $\bar{x
     \hat{\alpha} = \frac{\bar{x}}{\hat{\beta}} = \frac{\bar{x}^2}{s^2}
     $$
 
----
+<div class="drillbox" markdown>
 
 **연습문제 3.**
 정규분포 분산의 적률법 추정량은 $\hat{\sigma}^2_{\text{MoM}} = \frac{1}{n}\sum(X_i - \bar{X})^2$이고 불편추정량은 $n-1$로 나눈다. 적률법 추정량이 편향되어 있음을 보이고 그 편향을 계산하라.
+
+</div>
 
 ??? success "풀이"
     적률법 추정량의 기댓값은:
@@ -356,10 +364,12 @@ Uniform$(0, \theta)$ 분포에서 얻은 확률표본의 표본평균이 $\bar{x
 
     적률법 추정량은 참 분산을 $\sigma^2/n$만큼 과소추정한다. 이 편향은 $n \to \infty$일 때 사라지므로 추정량은 점근적으로 불편이다.
 
----
+<div class="drillbox" markdown>
 
 **연습문제 4.**
 적률법과 최대가능도추정을 비교하라. 어떤 상황에서 MLE보다 적률법을 선호하겠는가?
+
+</div>
 
 ??? success "풀이"
     **적률법을 선호할 때:**
