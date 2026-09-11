@@ -10,7 +10,9 @@
 
 큰수의 법칙의 뿌리는 이미 3.4절에 있다. 표본평균의 분산이 $n$에 반비례한다는 사실이다.
 
-### 정리 1. 표본평균의 분산 — 표본이 커지면 퍼짐이 0으로 간다
+<div class="thmbox" markdown>
+
+### 정리 1. 표본평균의 분산 — 표본이 커지면 퍼짐이 0으로 간다 { .thm }
 
 평균 $\mu$, 분산 $\sigma^2$인 i.i.d. 확률변수 $X_1, \ldots, X_n$에 대해
 
@@ -20,17 +22,23 @@ $$
 
 이다. 따라서 $n \to \infty$일 때 $\text{Var}(\bar X) \to 0$이다.
 
-증명은 앞 절의 결과를 그대로 쓴 것이다. 기댓값은 선형성(3.4절 정리 3)에서, 분산은 독립이면 합의 분산이 분산의 합이라는 성질(3.4절 정리 3)에서 나온다.
+</div>
 
-$$
-\text{Var}(\bar X) = \frac{1}{n^2}\text{Var}\!\left(\sum_i X_i\right) = \frac{1}{n^2}\cdot n\sigma^2 = \frac{\sigma^2}{n}
-$$
+??? proof "증명"
 
-여기에 체비쇼프 부등식을 적용하면 큰수의 법칙이 거의 곧바로 나온다.
+    앞 절의 결과를 그대로 쓴 것이다. 기댓값은 선형성(3.4절 정리 3)에서, 분산은 독립이면 합의 분산이 분산의 합이라는 성질(3.4절 정리 3)에서 나온다.
 
-$$
-P\big(|\bar X - \mu| \ge \varepsilon\big) \le \frac{\text{Var}(\bar X)}{\varepsilon^2} = \frac{\sigma^2}{n\varepsilon^2} \longrightarrow 0
-$$
+    $$
+    \text{Var}(\bar X) = \frac{1}{n^2}\text{Var}\!\left(\sum_i X_i\right) = \frac{1}{n^2}\cdot n\sigma^2 = \frac{\sigma^2}{n}
+    $$
+
+    여기에 체비쇼프 부등식을 적용하면 큰수의 법칙이 거의 곧바로 나온다.
+
+    $$
+    P\big(|\bar X - \mu| \ge \varepsilon\big) \le \frac{\text{Var}(\bar X)}{\varepsilon^2} = \frac{\sigma^2}{n\varepsilon^2} \longrightarrow 0
+    $$
+
+    $\square$
 
 **중심은 그대로이고 퍼짐만 줄어든다.** 이것이 큰수의 법칙의 전부이며, 나머지는 "수렴"의 뜻을 얼마나 강하게 요구하느냐의 문제다.
 
@@ -38,7 +46,9 @@ $$
 
 수렴을 말하는 첫 번째 방식은 각 $n$에서 "크게 벗어날 확률"을 재는 것이다.
 
-### 정리 2. 약한 큰수의 법칙 — 확률수렴
+<div class="thmbox" markdown>
+
+### 정리 2. 약한 큰수의 법칙 — 확률수렴 { .thm }
 
 평균 $\mu$가 유한한 i.i.d. 확률변수 $X_1, X_2, \ldots$에 대해 표본평균은 $\mu$로 **확률수렴**한다.
 
@@ -53,6 +63,8 @@ P\!\left(\left|\frac{S_n}{n} - \mu\right| > \varepsilon\right) \longrightarrow 0
 $$
 
 이다.
+
+</div>
 
 읽는 법이 중요하다. "$n$을 충분히 크게 잡으면 표본평균이 $\mu$에서 $\varepsilon$ 이상 벗어날 확률을 원하는 만큼 작게 만들 수 있다"는 뜻이다. 확률이 작아진다는 것이지 **0이 된다는 것은 아니다.**
 
@@ -106,7 +118,9 @@ plt.show()
 
 약한 법칙은 각 $n$마다 확률을 재는 진술이다. 더 강하게 말할 수도 있다. 하나의 실험을 무한히 이어 갈 때 그 **수열 자체가** 수렴하는가?
 
-### 정리 3. 강한 큰수의 법칙 — 거의 확실한 수렴
+<div class="thmbox" markdown>
+
+### 정리 3. 강한 큰수의 법칙 — 거의 확실한 수렴 { .thm }
 
 같은 조건에서 표본평균은 $\mu$로 **거의 확실하게** 수렴한다.
 
@@ -121,6 +135,8 @@ P\!\left(\omega \in \Omega : \frac{S_n(\omega)}{n} \to \mu\right) = 1
 $$
 
 이다.
+
+</div>
 
 **두 법칙의 차이.** 약한 법칙은 "각 $n$에서 벗어나 있을 확률이 작다"고 말한다. 표본경로가 이따금 크게 벗어났다가 돌아오기를 무한히 반복해도 약한 법칙과 모순되지 않는다.
 
