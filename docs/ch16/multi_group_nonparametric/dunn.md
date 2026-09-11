@@ -100,11 +100,6 @@ Kruskal-Wallis의 기각은 주로 비료 B와 비료 C의 큰 차이가 이끌�
 
 또 다른 사후 전략은 Bonferroni 보정을 적용한 쌍별 Mann-Whitney $U$ 검정이다. 핵심 차이는 Dunn 검정이 Kruskal-Wallis 분석의 *합친* 순위를 쓰는 반면, 쌍별 Mann-Whitney는 각 쌍에 대해 관측값의 순위를 다시 매긴다는 점이다. Dunn 검정이 더 흔히 쓰이는 것은 전체검정에 쓰인 전역 순위와 일관되기 때문이다.
 
-## 요약
-
-Dunn 검정은 Kruskal-Wallis 결과가 유의할 때 평균순위 차이에 기반한 $z$ 통계량으로 쌍별 비교를 수행한다. 다중검정 보정(Bonferroni, Holm, Benjamini-Hochberg)이 $\binom{k}{2}$개 비교 전체의 오류율을 통제한다. Kruskal-Wallis 검정과 같은 합친 순위를 쓰므로 전체검정과 사후분석 사이의 일관성이 보장된다.
-
-
 ## 연습문제
 
 <div class="drillbox" markdown>
@@ -357,3 +352,9 @@ Dunn 검정의 표준오차 공식 $\sigma_{ij} = \sqrt{\frac{N(N+1)}{12}(\frac{
     모의실험 분산 $8.049$가 공식값 $8.0$과 일치한다.
 
     유도에서 공분산 항이 결정적이다. 이를 빠뜨리고 두 집단이 독립이라고 가정하면 분산이 $\frac{N+1}{12}(\frac{N-n_i}{n_i} + \frac{N-n_j}{n_j}) = 5.33$으로 나와 $33\%$ 과소평가된다. 그러면 $z$가 부풀려져 검정이 지나치게 많이 기각하게 된다.
+
+---
+
+## 정리하며
+
+Dunn 검정은 Kruskal-Wallis 결과가 유의할 때 평균순위 차이에 기반한 $z$ 통계량으로 쌍별 비교를 수행한다. 다중검정 보정(Bonferroni, Holm, Benjamini-Hochberg)이 $\binom{k}{2}$개 비교 전체의 오류율을 통제한다. Kruskal-Wallis 검정과 같은 합친 순위를 쓰므로 전체검정과 사후분석 사이의 일관성이 보장된다.

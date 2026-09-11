@@ -257,14 +257,6 @@ $$
 
 ---
 
-## 핵심 요약
-
-- Geometric 분포는 첫 성공까지의 대기 시간을 모형화하며, 무기억성을 갖는 유일한 이산분포이다.
-- Negative Binomial 분포는 Geometric 분포를 일반화하여 $r$번째 성공까지의 시행 횟수를 센다.
-- 두 분포 모두 독립 Bernoulli 시행의 열에서 나온다.
-- Geometric 분포의 평균 $1/p$는 직관적으로 해석된다. 성공확률이 낮을수록 기대 대기 시간이 길어진다.
-- Geometric 분포는 Exponential 분포의 이산형 대응물로, 무기억성을 공유한다.
-
 ## 연습문제
 
 <div class="drillbox" markdown>
@@ -390,3 +382,13 @@ Geometric 분포의 **무기억성** $P(Y > m + n \mid Y > m) = P(Y > n)$을 증
     이 방법은 닫힌 형태로 효율적이며, 첫 성공까지 개별 Bernoulli 시행을 하나씩 모사하는 방식을 대체한다. 후자는 $p$가 작을 때 느려질 수 있다.
 
     **Python:** `np.ceil(np.log(np.random.rand()) / np.log(1 - p)).astype(int)`.
+
+---
+
+## 정리하며
+
+- Geometric 분포는 첫 성공까지의 대기 시간을 모형화하며, 무기억성을 갖는 유일한 이산분포이다.
+- Negative Binomial 분포는 Geometric 분포를 일반화하여 $r$번째 성공까지의 시행 횟수를 센다.
+- 두 분포 모두 독립 Bernoulli 시행의 열에서 나온다.
+- Geometric 분포의 평균 $1/p$는 직관적으로 해석된다. 성공확률이 낮을수록 기대 대기 시간이 길어진다.
+- Geometric 분포는 Exponential 분포의 이산형 대응물로, 무기억성을 공유한다.

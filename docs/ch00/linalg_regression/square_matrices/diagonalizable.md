@@ -117,10 +117,6 @@ $$
 
 - **행렬의 역.** $\boldsymbol{\Sigma} = \mathbf{Q}\boldsymbol{\Lambda}\mathbf{Q}^T$가 양정치일 때 $\boldsymbol{\Sigma}^{-1} = \mathbf{Q}\boldsymbol{\Lambda}^{-1}\mathbf{Q}^T = \mathbf{Q}\operatorname{diag}(1/\lambda_1, \dots, 1/\lambda_n)\mathbf{Q}^T$이며, 이는 계산 효율이 좋고 수치적으로도 안정적이다.
 
-## 요약
-
-행렬이 일차독립인 고유벡터를 $n$개 온전히 가질 때 대각화 가능하며, 그때 분해 $\mathbf{A} = \mathbf{P}\boldsymbol{\Lambda}\mathbf{P}^{-1}$이 성립한다. 이 분해는 행렬 연산을 고윳값에 대한 스칼라 연산으로 환원한다. 모든 공분산행렬을 포함한 대칭행렬은 언제나 대각화 가능하며, 그래서 고유분해가 통계 이론의 기본 도구가 된다. 대각화되지 않는 행렬에는 다음에 다룰 조르당 표준형이 필요하다.
-
 ## 연습문제
 
 <div class="drillbox" markdown>
@@ -450,3 +446,8 @@ $\mathbf{A}$가 대각화 가능하고 고윳값이 모두 $|\lambda_i| < 1$이�
 
     통계에서 이 조건이 등장하는 대표적인 곳이 **시계열의 정상성**이다. AR($p$) 과정을 벡터 형태로 쓰면 계수행렬의 스펙트럼 반지름이 1보다 작을 때에 한해 정상 과정이 된다. AR(1) $X_t = \phi X_{t-1} + \varepsilon_t$에서 $|\phi| < 1$이라는 익숙한 조건이 그 특수한 경우다. $\square$
 
+---
+
+## 정리하며
+
+행렬이 일차독립인 고유벡터를 $n$개 온전히 가질 때 대각화 가능하며, 그때 분해 $\mathbf{A} = \mathbf{P}\boldsymbol{\Lambda}\mathbf{P}^{-1}$이 성립한다. 이 분해는 행렬 연산을 고윳값에 대한 스칼라 연산으로 환원한다. 모든 공분산행렬을 포함한 대칭행렬은 언제나 대각화 가능하며, 그래서 고유분해가 통계 이론의 기본 도구가 된다. 대각화되지 않는 행렬에는 다음에 다룰 조르당 표준형이 필요하다.

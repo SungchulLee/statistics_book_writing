@@ -101,10 +101,6 @@ $$
 | 자유도 | $p$ | $\text{df}(\lambda) < p$ |
 | 변수선택 | 없음 | 없음 |
 
-## 요약
-
-능형회귀는 OLS 목적함수에 벌점 $\lambda\|\boldsymbol{\beta}\|_2^2$을 더해 닫힌 형태 해 $\hat{\boldsymbol{\beta}}_{\text{ridge}} = (\mathbf{X}^\top\mathbf{X} + \lambda\mathbf{I})^{-1}\mathbf{X}^\top\mathbf{y}$를 얻는다. 이 해는 $\lambda > 0$에서 언제나 존재하고 유일하다. SVD의 관점에서 능형은 가장 불안정한 계수 방향을 겨냥한 차등 축소를 적용하여, 편향을 들여오는 대가로 분산을 줄인다. 유효자유도는 $\lambda$와 함께 감소하는 연속적 복잡도 척도를 제공한다.
-
 ## 연습문제
 
 <div class="drillbox" markdown>
@@ -258,3 +254,9 @@ $$
     $$
 
     따라서 $n$번 재적합할 필요 없이 **한 번의 적합**으로 LOOCV 오차 전체를 얻는다. 이것이 `RidgeCV`가 매우 빠른 이유이며, 라쏘에는 이런 지름길이 없다(라쏘는 선형 평활자가 아니다).
+
+---
+
+## 정리하며
+
+능형회귀는 OLS 목적함수에 벌점 $\lambda\|\boldsymbol{\beta}\|_2^2$을 더해 닫힌 형태 해 $\hat{\boldsymbol{\beta}}_{\text{ridge}} = (\mathbf{X}^\top\mathbf{X} + \lambda\mathbf{I})^{-1}\mathbf{X}^\top\mathbf{y}$를 얻는다. 이 해는 $\lambda > 0$에서 언제나 존재하고 유일하다. SVD의 관점에서 능형은 가장 불안정한 계수 방향을 겨냥한 차등 축소를 적용하여, 편향을 들여오는 대가로 분산을 줄인다. 유효자유도는 $\lambda$와 함께 감소하는 연속적 복잡도 척도를 제공한다.

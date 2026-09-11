@@ -145,10 +145,6 @@ $\mathbf{X}^T \mathbf{X}$는 대칭이다. 그 고윳값이 최소제곱해의 �
 
 $\boldsymbol{\beta} \sim N(\hat{\boldsymbol{\beta}}, \boldsymbol{\Sigma})$일 때 수준집합 $\{\boldsymbol{\beta} : (\boldsymbol{\beta} - \hat{\boldsymbol{\beta}})^T \boldsymbol{\Sigma}^{-1} (\boldsymbol{\beta} - \hat{\boldsymbol{\beta}}) \le c\}$은 타원체이며, 그 축은 $\boldsymbol{\Sigma}$의 고유벡터 방향을 향하고 길이는 $\sqrt{\lambda_i}$에 비례한다.
 
-## 요약
-
-대칭행렬은 실수 고윳값과 직교하는 고유벡터를 가지며 직교대각화 $\mathbf{A} = \mathbf{Q}\boldsymbol{\Lambda}\mathbf{Q}^T$를 허용한다. 이 구조는 $\mathbf{A}$의 거듭제곱, 역행렬, 함수를 고윳값에 대한 스칼라 연산으로 환원한다. 공분산행렬, 그람 행렬, 사영행렬이 모두 대칭이므로, 스펙트럼 정리는 주성분분석과 이차형식과 회귀 이론의 일꾼이 된다.
-
 ## 연습문제
 
 <div class="drillbox" markdown>
@@ -447,3 +443,8 @@ $$
 
     분산분석에서 집단 간 제곱합과 집단 내 제곱합이 독립인 것이 바로 이 조건 덕분이고, 그래서 두 카이제곱의 비가 $F$ 분포를 따른다. **교환성과 직교성이 분포 이론의 독립성으로 번역되는 자리다.** $\square$
 
+---
+
+## 정리하며
+
+대칭행렬은 실수 고윳값과 직교하는 고유벡터를 가지며 직교대각화 $\mathbf{A} = \mathbf{Q}\boldsymbol{\Lambda}\mathbf{Q}^T$를 허용한다. 이 구조는 $\mathbf{A}$의 거듭제곱, 역행렬, 함수를 고윳값에 대한 스칼라 연산으로 환원한다. 공분산행렬, 그람 행렬, 사영행렬이 모두 대칭이므로, 스펙트럼 정리는 주성분분석과 이차형식과 회귀 이론의 일꾼이 된다.

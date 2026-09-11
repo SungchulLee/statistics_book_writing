@@ -123,15 +123,6 @@ $$
 로 환원된다. 이 항등식은 지수 $-|z| \le 0$을 유지하여 오버플로를 막는다. 수치 라이브러리에서
 **softplus** 함수의 표준 구현이다.
 
-## 요약
-
-| 문제 | 순진한 접근 | 안정적인 접근 |
-|---|---|---|
-| 소프트맥스 오버플로 | 큰 $z_j$에 대한 $e^{z_j}$ | 먼저 $c = \max z_j$를 뺀다 |
-| log-softmax 언더플로 | $p_k \approx 0$일 때 $\log(0)$ | LSE로 로그 공간에서 계산 |
-| 교차엔트로피 손실 | 소프트맥스 후 로그 | 융합 `cross_entropy_with_logits` 사용 |
-| softplus($C = 2$) | $\log(1 + e^z)$가 넘침 | $\max(0,z) + \log(1 + e^{-|z|})$ |
-
 ## 연습문제
 
 <div class="drillbox" markdown>
@@ -331,3 +322,14 @@ $\max(0, z) + \log(1 + e^{-|z|}) = \log(1 + e^z)$임을 $z > 0$과 $z \le 0$ 두
     `softmax_cross_entropy_with_logits`, scikit-learn 내부의 `log_logistic`이 모두 이렇게
     구현되어 있다. **모형의 출력층에 소프트맥스를 넣고 손실에 다시 로그를 취하는 것은 흔하지만
     잘못된 패턴이다.** 모형은 로짓을 내보내고, 손실함수가 로짓을 받도록 하라. $\square$
+
+---
+
+## 정리하며
+
+| 문제 | 순진한 접근 | 안정적인 접근 |
+|---|---|---|
+| 소프트맥스 오버플로 | 큰 $z_j$에 대한 $e^{z_j}$ | 먼저 $c = \max z_j$를 뺀다 |
+| log-softmax 언더플로 | $p_k \approx 0$일 때 $\log(0)$ | LSE로 로그 공간에서 계산 |
+| 교차엔트로피 손실 | 소프트맥스 후 로그 | 융합 `cross_entropy_with_logits` 사용 |
+| softplus($C = 2$) | $\log(1 + e^z)$가 넘침 | $\max(0,z) + \log(1 + e^{-|z|})$ |

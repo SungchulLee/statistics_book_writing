@@ -187,10 +187,6 @@ $$
 
 여기서 SST는 총제곱합, SSR은 회귀제곱합, SSE는 오차제곱합이다. 그러면 $R^2$ 계수는 $R^2 = \text{SSR}/\text{SST} = \lVert\hat{\mathbf{y}}\rVert^2 / \lVert\mathbf{y}\rVert^2$이며, 이는 $\mathbf{y}$와 $\hat{\mathbf{y}}$ 사이 각의 코사인의 제곱, 즉 모형이 얼마나 잘 맞는지에 대한 기하적 측도다.
 
-## 요약
-
-직교사영행렬은 벡터를 부분공간 안에서 가장 가까운 점으로 보내는 대칭 멱등행렬이다. 공식 $\mathbf{P}_{\mathbf{X}} = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T$이 회귀의 모자 행렬이고, 여집합 사영 $\mathbf{I} - \mathbf{P}_{\mathbf{X}}$이 잔차를 만들어낸다. 적합값과 잔차의 직교성이 제곱합의 피타고라스 분해를 낳으며, 이것이 분산분석과 $R^2$의 기하학적 토대다.
-
 ## 연습문제
 
 <div class="drillbox" markdown>
@@ -512,3 +508,8 @@ $\mathbf{M}_1 = \mathbf{I} - \mathbf{H}_1$을 $\mathbf{X}_1$에 대한 잔차생
 
     **주의.** 여기서 계산한 $R^2 = \lVert\hat{\mathbf{y}}\rVert^2/\lVert\mathbf{y}\rVert^2$은 **원점을 기준으로 한** 값이다. 보고되는 통상의 $R^2$은 평균을 빼고 계산한 $1 - \lVert\mathbf{e}\rVert^2/\lVert\mathbf{y} - \bar{y}\mathbf{1}\rVert^2$이며, 이는 $\mathbf{1}$ 위로의 사영을 먼저 걷어낸 뒤 같은 논리를 적용한 것이다. 절편이 있는 모형에서 두 값이 다르다는 점에 유의하라. $\square$
 
+---
+
+## 정리하며
+
+직교사영행렬은 벡터를 부분공간 안에서 가장 가까운 점으로 보내는 대칭 멱등행렬이다. 공식 $\mathbf{P}_{\mathbf{X}} = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T$이 회귀의 모자 행렬이고, 여집합 사영 $\mathbf{I} - \mathbf{P}_{\mathbf{X}}$이 잔차를 만들어낸다. 적합값과 잔차의 직교성이 제곱합의 피타고라스 분해를 낳으며, 이것이 분산분석과 $R^2$의 기하학적 토대다.

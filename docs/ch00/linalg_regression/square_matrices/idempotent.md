@@ -131,10 +131,6 @@ $$
 
 를 얻는다. 이 제곱합 항등식의 자유도는 $\operatorname{tr}(\mathbf{H}) = p$와 $\operatorname{tr}(\mathbf{M}) = n - p$이고, 합하면 $n$이다.
 
-## 요약
-
-멱등행렬은 $\mathbf{A}^2 = \mathbf{A}$를 만족하고, 고윳값이 $\{0, 1\}$로 제한되며, $\operatorname{tr}(\mathbf{A}) = \operatorname{rank}(\mathbf{A})$를 따른다. 여집합 $\mathbf{I} - \mathbf{A}$도 멱등이다. 회귀에서 모자 행렬과 잔차생성행렬이 모두 멱등이며, 그 대각합이 F-검정, t-검정, 신뢰구간에 쓰이는 자유도를 곧바로 준다.
-
 ## 연습문제
 
 <div class="drillbox" markdown>
@@ -427,3 +423,8 @@ $\mathbf{y} \sim N(\mathbf{0}, \sigma^2\mathbf{I})$이고 $\mathbf{A}$가 계수
 
     이 사실이 회귀와 분산분석 전체를 떠받친다. $\text{SSE}/\sigma^2 = \mathbf{y}^T(\mathbf{I}-\mathbf{H})\mathbf{y}/\sigma^2 \sim \chi^2_{n-p}$인 것도 $\mathbf{I}-\mathbf{H}$가 계수 $n-p$인 대칭 멱등행렬이기 때문이다. $\square$
 
+---
+
+## 정리하며
+
+멱등행렬은 $\mathbf{A}^2 = \mathbf{A}$를 만족하고, 고윳값이 $\{0, 1\}$로 제한되며, $\operatorname{tr}(\mathbf{A}) = \operatorname{rank}(\mathbf{A})$를 따른다. 여집합 $\mathbf{I} - \mathbf{A}$도 멱등이다. 회귀에서 모자 행렬과 잔차생성행렬이 모두 멱등이며, 그 대각합이 F-검정, t-검정, 신뢰구간에 쓰이는 자유도를 곧바로 준다.
