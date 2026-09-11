@@ -31,38 +31,44 @@ $$
 
 ## 최소제곱추정량의 표본분포
 
-!!! info "정리 — 최소제곱추정량의 분포"
-    정규오차를 갖는 일반 선형모형 아래에서
+<div class="thmbox" markdown>
+
+### 정리 1. 최소제곱추정량의 분포 { .thm }
+
+정규오차를 갖는 일반 선형모형 아래에서
+
+$$
+\hat{\boldsymbol{\beta}} \sim N\!\left(\boldsymbol{\beta},\; \sigma^2(\mathbf{X}^T\mathbf{X})^{-1}\right)
+$$
+
+</div>
+
+??? proof "증명"
+
+
+    *선형성:* $\hat{\boldsymbol{\beta}} = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}$은 $\mathbf{y}$의 선형변환이다.
+
+    *평균:*
 
     $$
-    \hat{\boldsymbol{\beta}} \sim N\!\left(\boldsymbol{\beta},\; \sigma^2(\mathbf{X}^T\mathbf{X})^{-1}\right)
+    E[\hat{\boldsymbol{\beta}}] = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T E[\mathbf{y}] = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}\boldsymbol{\beta} = \boldsymbol{\beta}
     $$
 
-**증명.**
+    따라서 $\hat{\boldsymbol{\beta}}$은 **불편**이다.
 
-*선형성:* $\hat{\boldsymbol{\beta}} = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}$은 $\mathbf{y}$의 선형변환이다.
+    *공분산행렬:*
 
-*평균:*
+    $$
+    \operatorname{Var}(\hat{\boldsymbol{\beta}}) = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T \operatorname{Var}(\mathbf{y})\, \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}
+    $$
 
-$$
-E[\hat{\boldsymbol{\beta}}] = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T E[\mathbf{y}] = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}\boldsymbol{\beta} = \boldsymbol{\beta}
-$$
+    $$
+    = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T (\sigma^2\mathbf{I}_n)\, \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1} = \sigma^2(\mathbf{X}^T\mathbf{X})^{-1}
+    $$
 
-따라서 $\hat{\boldsymbol{\beta}}$은 **불편**이다.
+    *정규성:* 다변량 정규벡터의 선형변환은 다변량 정규분포를 따른다. $\square$
 
-*공분산행렬:*
-
-$$
-\operatorname{Var}(\hat{\boldsymbol{\beta}}) = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T \operatorname{Var}(\mathbf{y})\, \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}
-$$
-
-$$
-= (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T (\sigma^2\mathbf{I}_n)\, \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1} = \sigma^2(\mathbf{X}^T\mathbf{X})^{-1}
-$$
-
-*정규성:* 다변량 정규벡터의 선형변환은 다변량 정규분포를 따른다. $\square$
-
-$j$번째 계수의 분산은 $\operatorname{Var}(\hat{\beta}_j) = \sigma^2[(\mathbf{X}^T\mathbf{X})^{-1}]_{jj}$이다.
+    $j$번째 계수의 분산은 $\operatorname{Var}(\hat{\beta}_j) = \sigma^2[(\mathbf{X}^T\mathbf{X})^{-1}]_{jj}$이다.
 
 ## 적합값과 잔차
 
@@ -88,77 +94,105 @@ $\mathbf{M}\mathbf{X} = \mathbf{0}$이므로 $\mathbf{e}$의 평균은 $\boldsym
 
 ## 잔차제곱합의 분포
 
-!!! info "정리 — SSE의 카이제곱분포"
-    잔차제곱합
+<div class="thmbox" markdown>
 
-    $$
-    \text{SSE} = \mathbf{e}^T\mathbf{e} = \mathbf{y}^T\mathbf{M}\mathbf{y}
-    $$
+### 정리 2. SSE의 카이제곱분포 { .thm }
 
-    은
-
-    $$
-    \frac{\text{SSE}}{\sigma^2} \sim \chi^2_{n-p}
-    $$
-
-    를 만족한다.
-
-**증명.** $\mathbf{y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon}$으로 쓰자. $\mathbf{M}\mathbf{X} = \mathbf{0}$이므로
+잔차제곱합
 
 $$
-\text{SSE} = \boldsymbol{\varepsilon}^T\mathbf{M}\boldsymbol{\varepsilon}
+\text{SSE} = \mathbf{e}^T\mathbf{e} = \mathbf{y}^T\mathbf{M}\mathbf{y}
 $$
 
-이다. $\mathbf{z} = \boldsymbol{\varepsilon}/\sigma \sim N(\mathbf{0}, \mathbf{I}_n)$으로 두면 $\text{SSE}/\sigma^2 = \mathbf{z}^T\mathbf{M}\mathbf{z}$이다. $\mathbf{M}$이 $\operatorname{rank}(\mathbf{M}) = n - p$인 대칭 멱등행렬이므로 기본 카이제곱 정리에 의해 $\mathbf{z}^T\mathbf{M}\mathbf{z} \sim \chi^2_{n-p}$이다. $\square$
-
-따라서 $\sigma^2$의 불편추정량은
+은
 
 $$
-s^2 = \frac{\text{SSE}}{n - p}
+\frac{\text{SSE}}{\sigma^2} \sim \chi^2_{n-p}
 $$
 
-이다.
+를 만족한다.
+
+</div>
+
+??? proof "증명"
+
+    $\mathbf{y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon}$으로 쓰자. $\mathbf{M}\mathbf{X} = \mathbf{0}$이므로
+
+    $$
+    \text{SSE} = \boldsymbol{\varepsilon}^T\mathbf{M}\boldsymbol{\varepsilon}
+    $$
+
+    이다. $\mathbf{z} = \boldsymbol{\varepsilon}/\sigma \sim N(\mathbf{0}, \mathbf{I}_n)$으로 두면 $\text{SSE}/\sigma^2 = \mathbf{z}^T\mathbf{M}\mathbf{z}$이다. $\mathbf{M}$이 $\operatorname{rank}(\mathbf{M}) = n - p$인 대칭 멱등행렬이므로 기본 카이제곱 정리에 의해 $\mathbf{z}^T\mathbf{M}\mathbf{z} \sim \chi^2_{n-p}$이다. $\square$
+
+    따라서 $\sigma^2$의 불편추정량은
+
+    $$
+    s^2 = \frac{\text{SSE}}{n - p}
+    $$
+
+    이다.
 
 ## 추정량과 SSE의 독립성
 
-!!! info "정리 — 독립성"
-    $\hat{\boldsymbol{\beta}}$과 $\text{SSE}$는 독립이다.
+<div class="thmbox" markdown>
 
-**증명.** $\hat{\boldsymbol{\beta}} = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}$이 $\mathbf{y}$의 선형함수이고 $\text{SSE} = \mathbf{y}^T\mathbf{M}\mathbf{y}$이 이차형식이므로, 선형 부분과 이차 부분이 서로 직교하는 사영에 관여한다는 사실에서 독립성이 따라온다. 형식적으로는
+### 정리 3. 독립성 { .thm }
 
-$$
-\operatorname{Cov}(\hat{\boldsymbol{\beta}}, \mathbf{e}) = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\operatorname{Var}(\mathbf{y})\mathbf{M} = \sigma^2(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{M} = \mathbf{0}
-$$
+$\hat{\boldsymbol{\beta}}$과 $\text{SSE}$는 독립이다.
 
-인데, $\mathbf{X}^T\mathbf{M} = \mathbf{X}^T(\mathbf{I} - \mathbf{H}) = \mathbf{X}^T - \mathbf{X}^T = \mathbf{0}$이기 때문이다. 결합 정규성 아래에서 공분산이 0이면 독립이다. $\square$
+</div>
+
+??? proof "증명"
+
+    $\hat{\boldsymbol{\beta}} = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}$이 $\mathbf{y}$의 선형함수이고 $\text{SSE} = \mathbf{y}^T\mathbf{M}\mathbf{y}$이 이차형식이므로, 선형 부분과 이차 부분이 서로 직교하는 사영에 관여한다는 사실에서 독립성이 따라온다. 형식적으로는
+
+    $$
+    \operatorname{Cov}(\hat{\boldsymbol{\beta}}, \mathbf{e}) = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\operatorname{Var}(\mathbf{y})\mathbf{M} = \sigma^2(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{M} = \mathbf{0}
+    $$
+
+    인데, $\mathbf{X}^T\mathbf{M} = \mathbf{X}^T(\mathbf{I} - \mathbf{H}) = \mathbf{X}^T - \mathbf{X}^T = \mathbf{0}$이기 때문이다. 결합 정규성 아래에서 공분산이 0이면 독립이다. $\square$
 
 ## 개별 계수에 대한 t-통계량
 
 $\hat{\beta}_j$의 정규분포, $\text{SSE}/\sigma^2$의 카이제곱분포, 그리고 이 둘의 독립성을 결합하면 t-분포가 나온다.
 
-!!! info "정리 — 계수 검정을 위한 t-분포"
-    각 $j = 1, \dots, p$에 대해
+<div class="thmbox" markdown>
 
-    $$
-    T_j = \frac{\hat{\beta}_j - \beta_j}{\text{SE}(\hat{\beta}_j)} \sim t_{n-p}
-    $$
+### 정리 4. 계수 검정을 위한 t-분포 { .thm }
 
-    이며, 여기서 $\text{SE}(\hat{\beta}_j) = s\sqrt{[(\mathbf{X}^T\mathbf{X})^{-1}]_{jj}}$이다.
+각 $j = 1, \dots, p$에 대해
 
-**증명 개요.** 표준화된 추정량 $(\hat{\beta}_j - \beta_j)/(\sigma\sqrt{[(\mathbf{X}^T\mathbf{X})^{-1}]_{jj}}) \sim N(0,1)$이다. $\sigma$를 $s = \sqrt{\text{SSE}/(n-p)}$로 바꾸면 분모에 $\sqrt{\chi^2_{n-p}/(n-p)}$가 들어간 비가 만들어진다. (위 독립성 정리에 의한) 분자와 분모의 독립성이 $t_{n-p}$ 분포를 준다. $\square$
+$$
+T_j = \frac{\hat{\beta}_j - \beta_j}{\text{SE}(\hat{\beta}_j)} \sim t_{n-p}
+$$
+
+이며, 여기서 $\text{SE}(\hat{\beta}_j) = s\sqrt{[(\mathbf{X}^T\mathbf{X})^{-1}]_{jj}}$이다.
+
+</div>
+
+??? proof "증명 개요"
+
+    표준화된 추정량 $(\hat{\beta}_j - \beta_j)/(\sigma\sqrt{[(\mathbf{X}^T\mathbf{X})^{-1}]_{jj}}) \sim N(0,1)$이다. $\sigma$를 $s = \sqrt{\text{SSE}/(n-p)}$로 바꾸면 분모에 $\sqrt{\chi^2_{n-p}/(n-p)}$가 들어간 비가 만들어진다. (위 독립성 정리에 의한) 분자와 분모의 독립성이 $t_{n-p}$ 분포를 준다. $\square$
 
 ## 여러 계수를 검정하는 F-통계량
 
 계수의 부분집합이 동시에 0인지 검정하려면, 계수 $q$인 $q \times p$ 행렬 $\mathbf{C}$에 대해 $H_0: \mathbf{C}\boldsymbol{\beta} = \mathbf{0}$을 검정하는 것을 생각한다.
 
-!!! info "정리 — 선형가설에 대한 F-분포"
-    $H_0: \mathbf{C}\boldsymbol{\beta} = \mathbf{0}$ 아래에서
+<div class="thmbox" markdown>
 
-    $$
-    F = \frac{(\mathbf{C}\hat{\boldsymbol{\beta}})^T[\mathbf{C}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{C}^T]^{-1}(\mathbf{C}\hat{\boldsymbol{\beta}})/q}{s^2} \sim F_{q,\,n-p}
-    $$
+### 정리 5. 선형가설에 대한 F-분포 { .thm }
 
-**증명 개요.** $H_0$ 아래에서 $\mathbf{C}\hat{\boldsymbol{\beta}} \sim N(\mathbf{0}, \sigma^2\mathbf{C}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{C}^T)$이다. 분자의 이차형식을 $\sigma^2$으로 나누면 (정규벡터 이차형식에 대한 카이제곱 정리에 의해) $\chi^2_q$이다. 이는 ($\text{SSE}/(n-p)$에 근거한) $s^2$과 독립이다. 독립인 두 카이제곱 변수를 각자의 자유도로 나눈 비는 $F_{q,\,n-p}$이다. $\square$
+$H_0: \mathbf{C}\boldsymbol{\beta} = \mathbf{0}$ 아래에서
+
+$$
+F = \frac{(\mathbf{C}\hat{\boldsymbol{\beta}})^T[\mathbf{C}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{C}^T]^{-1}(\mathbf{C}\hat{\boldsymbol{\beta}})/q}{s^2} \sim F_{q,\,n-p}
+$$
+
+</div>
+
+??? proof "증명 개요"
+
+    $H_0$ 아래에서 $\mathbf{C}\hat{\boldsymbol{\beta}} \sim N(\mathbf{0}, \sigma^2\mathbf{C}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{C}^T)$이다. 분자의 이차형식을 $\sigma^2$으로 나누면 (정규벡터 이차형식에 대한 카이제곱 정리에 의해) $\chi^2_q$이다. 이는 ($\text{SSE}/(n-p)$에 근거한) $s^2$과 독립이다. 독립인 두 카이제곱 변수를 각자의 자유도로 나눈 비는 $F_{q,\,n-p}$이다. $\square$
 
 ### 특수한 경우: 전체 F-검정
 
@@ -174,16 +208,23 @@ $$
 
 정규성을 가정하지 않아도 최소제곱추정량은 최적성을 갖는다.
 
-!!! info "정리 — 가우스–마르코프"
-    가정 $E[\boldsymbol{\varepsilon}] = \mathbf{0}$과 $\operatorname{Var}(\boldsymbol{\varepsilon}) = \sigma^2\mathbf{I}_n$ 아래에서(정규성은 필요 없다) 최소제곱추정량 $\hat{\boldsymbol{\beta}}$은 **최량선형불편추정량(BLUE)** 이다. 즉 $\boldsymbol{\beta}$의 모든 선형불편추정량 가운데 최소제곱추정량이 (행렬 순서의 의미에서) 가장 작은 분산을 갖는다.
+<div class="thmbox" markdown>
 
-**증명 개요.** $\tilde{\boldsymbol{\beta}} = \mathbf{A}\mathbf{y}$을 임의의 선형불편추정량이라 하자. 불편성은 $\mathbf{A}\mathbf{X} = \mathbf{I}_p$를 요구한다. $\mathbf{D}\mathbf{X} = \mathbf{0}$인 $\mathbf{D}$에 대해 $\mathbf{A} = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T + \mathbf{D}$로 쓰면
+### 정리 6. 가우스–마르코프 { .thm }
 
-$$
-\operatorname{Var}(\tilde{\boldsymbol{\beta}}) = \sigma^2\mathbf{A}\mathbf{A}^T = \sigma^2(\mathbf{X}^T\mathbf{X})^{-1} + \sigma^2\mathbf{D}\mathbf{D}^T
-$$
+가정 $E[\boldsymbol{\varepsilon}] = \mathbf{0}$과 $\operatorname{Var}(\boldsymbol{\varepsilon}) = \sigma^2\mathbf{I}_n$ 아래에서(정규성은 필요 없다) 최소제곱추정량 $\hat{\boldsymbol{\beta}}$은 **최량선형불편추정량(BLUE)** 이다. 즉 $\boldsymbol{\beta}$의 모든 선형불편추정량 가운데 최소제곱추정량이 (행렬 순서의 의미에서) 가장 작은 분산을 갖는다.
 
-이다. $\mathbf{D}\mathbf{D}^T \succeq 0$이므로 양반정치 순서에서 $\operatorname{Var}(\tilde{\boldsymbol{\beta}}) \succeq \operatorname{Var}(\hat{\boldsymbol{\beta}})$이다. $\square$
+</div>
+
+??? proof "증명 개요"
+
+    $\tilde{\boldsymbol{\beta}} = \mathbf{A}\mathbf{y}$을 임의의 선형불편추정량이라 하자. 불편성은 $\mathbf{A}\mathbf{X} = \mathbf{I}_p$를 요구한다. $\mathbf{D}\mathbf{X} = \mathbf{0}$인 $\mathbf{D}$에 대해 $\mathbf{A} = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T + \mathbf{D}$로 쓰면
+
+    $$
+    \operatorname{Var}(\tilde{\boldsymbol{\beta}}) = \sigma^2\mathbf{A}\mathbf{A}^T = \sigma^2(\mathbf{X}^T\mathbf{X})^{-1} + \sigma^2\mathbf{D}\mathbf{D}^T
+    $$
+
+    이다. $\mathbf{D}\mathbf{D}^T \succeq 0$이므로 양반정치 순서에서 $\operatorname{Var}(\tilde{\boldsymbol{\beta}}) \succeq \operatorname{Var}(\hat{\boldsymbol{\beta}})$이다. $\square$
 
 ## 핵심 분포 요약
 

@@ -17,11 +17,16 @@
 
 ## 대칭성과 양반정치성
 
-!!! info "정리 — 그람 행렬은 대칭 양반정치다"
-    임의의 행렬 $\mathbf{X} \in \mathbb{R}^{n \times p}$에 대해 그람 행렬 $\mathbf{G} = \mathbf{X}^T\mathbf{X}$는
+<div class="thmbox" markdown>
 
-    1. **대칭이다**: $\mathbf{G}^T = (\mathbf{X}^T\mathbf{X})^T = \mathbf{X}^T\mathbf{X} = \mathbf{G}$
-    2. **양반정치다**: 모든 $\mathbf{y} \in \mathbb{R}^p$에 대해 $\mathbf{y}^T\mathbf{G}\mathbf{y} \geq 0$
+### 정리 1. 그람 행렬은 대칭 양반정치다 { .thm }
+
+임의의 행렬 $\mathbf{X} \in \mathbb{R}^{n \times p}$에 대해 그람 행렬 $\mathbf{G} = \mathbf{X}^T\mathbf{X}$는
+
+1. **대칭이다**: $\mathbf{G}^T = (\mathbf{X}^T\mathbf{X})^T = \mathbf{X}^T\mathbf{X} = \mathbf{G}$
+2. **양반정치다**: 모든 $\mathbf{y} \in \mathbb{R}^p$에 대해 $\mathbf{y}^T\mathbf{G}\mathbf{y} \geq 0$
+
+</div>
 
 **양반정치성의 증명.** 임의의 $\mathbf{y} \in \mathbb{R}^p$에 대해
 
@@ -33,12 +38,19 @@ $$
 
 ## 그람 행렬이 언제 양정치인가
 
-!!! info "정리 — 그람 행렬의 양정치성"
-    그람 행렬 $\mathbf{G} = \mathbf{X}^T\mathbf{X}$가 양정치일 필요충분조건은 $\mathbf{X}$가 완전 열계수를 갖는 것이다(즉 $\operatorname{rank}(\mathbf{X}) = p$).
+<div class="thmbox" markdown>
 
-**증명.** 위 계산에서 $\mathbf{y}^T\mathbf{G}\mathbf{y} = \lVert\mathbf{X}\mathbf{y}\rVert^2$이다. 이것이 모든 $\mathbf{y} \neq \mathbf{0}$에 대해 엄격히 양수일 필요충분조건은 모든 $\mathbf{y} \neq \mathbf{0}$에 대해 $\mathbf{X}\mathbf{y} \neq \mathbf{0}$인 것이고, 이는 $\ker(\mathbf{X}) = \{\mathbf{0}\}$, 즉 $\mathbf{X}$가 완전 열계수를 갖는 것과 동치다. $\square$
+### 정리 2. 그람 행렬의 양정치성 { .thm }
 
-**회귀에 대한 귀결.** 최소제곱추정량 $\hat{\boldsymbol{\beta}} = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}$이 존재하고 유일할 필요충분조건은 $\mathbf{X}^T\mathbf{X}$가 양정치인 것이며, 이는 예측변수 열들이 일차독립일 때에 한해 성립한다.
+그람 행렬 $\mathbf{G} = \mathbf{X}^T\mathbf{X}$가 양정치일 필요충분조건은 $\mathbf{X}$가 완전 열계수를 갖는 것이다(즉 $\operatorname{rank}(\mathbf{X}) = p$).
+
+</div>
+
+??? proof "증명"
+
+    위 계산에서 $\mathbf{y}^T\mathbf{G}\mathbf{y} = \lVert\mathbf{X}\mathbf{y}\rVert^2$이다. 이것이 모든 $\mathbf{y} \neq \mathbf{0}$에 대해 엄격히 양수일 필요충분조건은 모든 $\mathbf{y} \neq \mathbf{0}$에 대해 $\mathbf{X}\mathbf{y} \neq \mathbf{0}$인 것이고, 이는 $\ker(\mathbf{X}) = \{\mathbf{0}\}$, 즉 $\mathbf{X}$가 완전 열계수를 갖는 것과 동치다. $\square$
+
+    **회귀에 대한 귀결.** 최소제곱추정량 $\hat{\boldsymbol{\beta}} = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}$이 존재하고 유일할 필요충분조건은 $\mathbf{X}^T\mathbf{X}$가 양정치인 것이며, 이는 예측변수 열들이 일차독립일 때에 한해 성립한다.
 
 ## 그람 행렬의 고윳값
 

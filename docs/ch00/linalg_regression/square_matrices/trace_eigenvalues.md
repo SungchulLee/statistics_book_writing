@@ -25,26 +25,33 @@ $$
 
 통계에서 가장 자주 쓰이는 대각합 항등식이 **순환 성질**이다.
 
-!!! info "정리 — 대각합의 순환 성질"
-    행렬 $\mathbf{A} \in \mathbb{R}^{m \times n}$과 $\mathbf{B} \in \mathbb{R}^{n \times m}$에 대해
+<div class="thmbox" markdown>
 
-    $$
-    \operatorname{tr}(\mathbf{A}\mathbf{B}) = \operatorname{tr}(\mathbf{B}\mathbf{A})
-    $$
+### 정리 1. 대각합의 순환 성질 { .thm }
 
-    더 일반적으로, 곱이 정의되도록 차원이 맞는 행렬 $\mathbf{A}_1, \dots, \mathbf{A}_k$에 대해
-
-    $$
-    \operatorname{tr}(\mathbf{A}_1\mathbf{A}_2\cdots\mathbf{A}_k) = \operatorname{tr}(\mathbf{A}_k\mathbf{A}_1\cdots\mathbf{A}_{k-1})
-    $$
-
-**증명.** $\mathbf{A} \in \mathbb{R}^{m \times n}$, $\mathbf{B} \in \mathbb{R}^{n \times m}$인 두 행렬의 경우
+행렬 $\mathbf{A} \in \mathbb{R}^{m \times n}$과 $\mathbf{B} \in \mathbb{R}^{n \times m}$에 대해
 
 $$
-\operatorname{tr}(\mathbf{A}\mathbf{B}) = \sum_{i=1}^m [\mathbf{A}\mathbf{B}]_{ii} = \sum_{i=1}^m \sum_{j=1}^n a_{ij}b_{ji} = \sum_{j=1}^n \sum_{i=1}^m b_{ji}a_{ij} = \sum_{j=1}^n [\mathbf{B}\mathbf{A}]_{jj} = \operatorname{tr}(\mathbf{B}\mathbf{A})
+\operatorname{tr}(\mathbf{A}\mathbf{B}) = \operatorname{tr}(\mathbf{B}\mathbf{A})
 $$
 
-이다. 일반적인 경우는 마지막 행렬을 첫 번째와 묶어 귀납법으로 따라온다. $\square$
+더 일반적으로, 곱이 정의되도록 차원이 맞는 행렬 $\mathbf{A}_1, \dots, \mathbf{A}_k$에 대해
+
+$$
+\operatorname{tr}(\mathbf{A}_1\mathbf{A}_2\cdots\mathbf{A}_k) = \operatorname{tr}(\mathbf{A}_k\mathbf{A}_1\cdots\mathbf{A}_{k-1})
+$$
+
+</div>
+
+??? proof "증명"
+
+    $\mathbf{A} \in \mathbb{R}^{m \times n}$, $\mathbf{B} \in \mathbb{R}^{n \times m}$인 두 행렬의 경우
+
+    $$
+    \operatorname{tr}(\mathbf{A}\mathbf{B}) = \sum_{i=1}^m [\mathbf{A}\mathbf{B}]_{ii} = \sum_{i=1}^m \sum_{j=1}^n a_{ij}b_{ji} = \sum_{j=1}^n \sum_{i=1}^m b_{ji}a_{ij} = \sum_{j=1}^n [\mathbf{B}\mathbf{A}]_{jj} = \operatorname{tr}(\mathbf{B}\mathbf{A})
+    $$
+
+    이다. 일반적인 경우는 마지막 행렬을 첫 번째와 묶어 귀납법으로 따라온다. $\square$
 
 !!! warning "주의: 순환일 뿐 임의의 치환이 아니다"
     순환 성질은 인자들의 순환 치환만 허용한다: $\operatorname{tr}(\mathbf{A}\mathbf{B}\mathbf{C}) = \operatorname{tr}(\mathbf{C}\mathbf{A}\mathbf{B}) = \operatorname{tr}(\mathbf{B}\mathbf{C}\mathbf{A})$. 임의의 재배열은 **허용되지 않는다**. 일반적으로 $\operatorname{tr}(\mathbf{A}\mathbf{B}\mathbf{C}) \neq \operatorname{tr}(\mathbf{A}\mathbf{C}\mathbf{B})$이다.
@@ -71,12 +78,17 @@ $$
 
 ## 대각합은 고윳값의 합과 같다
 
-!!! info "정리 — 대각합과 고윳값의 항등식"
-    $\mathbf{A} \in \mathbb{R}^{n \times n}$(또는 $\mathbb{C}^{n \times n}$)이 (대수적 중복도를 세어, 복소수일 수도 있는) 고윳값 $\lambda_1, \lambda_2, \dots, \lambda_n$을 갖는다고 하자. 그러면
+<div class="thmbox" markdown>
 
-    $$
-    \operatorname{tr}(\mathbf{A}) = \sum_{i=1}^n \lambda_i
-    $$
+### 정리 2. 대각합과 고윳값의 항등식 { .thm }
+
+$\mathbf{A} \in \mathbb{R}^{n \times n}$(또는 $\mathbb{C}^{n \times n}$)이 (대수적 중복도를 세어, 복소수일 수도 있는) 고윳값 $\lambda_1, \lambda_2, \dots, \lambda_n$을 갖는다고 하자. 그러면
+
+$$
+\operatorname{tr}(\mathbf{A}) = \sum_{i=1}^n \lambda_i
+$$
+
+</div>
 
 **특성다항식을 이용한 증명.** $\mathbf{A}$의 특성다항식은
 
@@ -102,14 +114,21 @@ $$
 
 이와 짝을 이루는 결과가 행렬식과 고윳값을 잇는다.
 
-!!! info "정리 — 행렬식과 고윳값의 항등식"
-    고윳값이 $\lambda_1, \dots, \lambda_n$인 같은 행렬 $\mathbf{A}$에 대해
+<div class="thmbox" markdown>
 
-    $$
-    \det(\mathbf{A}) = \prod_{i=1}^n \lambda_i
-    $$
+### 정리 3. 행렬식과 고윳값의 항등식 { .thm }
 
-**증명.** 특성다항식에서 $\lambda = 0$으로 두면 $\det(-\mathbf{A}) = (-1)^n\det(\mathbf{A}) = (-\lambda_1)(-\lambda_2)\cdots(-\lambda_n) = (-1)^n\prod_i\lambda_i$이다. $\square$
+고윳값이 $\lambda_1, \dots, \lambda_n$인 같은 행렬 $\mathbf{A}$에 대해
+
+$$
+\det(\mathbf{A}) = \prod_{i=1}^n \lambda_i
+$$
+
+</div>
+
+??? proof "증명"
+
+    특성다항식에서 $\lambda = 0$으로 두면 $\det(-\mathbf{A}) = (-1)^n\det(\mathbf{A}) = (-\lambda_1)(-\lambda_2)\cdots(-\lambda_n) = (-1)^n\prod_i\lambda_i$이다. $\square$
 
 ## 예
 

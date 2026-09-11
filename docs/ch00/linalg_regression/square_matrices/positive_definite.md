@@ -19,26 +19,32 @@
 
 대칭행렬 $\mathbf{A} \in \mathbb{R}^{n \times n}$에 대해 다음 조건들은 서로 동치다.
 
-!!! info "정리 — 양정치성의 동치 조건"
-    다음은 서로 동치다.
+<div class="thmbox" markdown>
 
-    1. $\mathbf{A} \succ 0$ (이차형식 조건).
-    2. $\mathbf{A}$의 모든 고윳값이 엄격히 양수다: $i = 1, \dots, n$에 대해 $\lambda_i > 0$.
-    3. 모든 **선행 주소행렬식**이 양수다: $k = 1, \dots, n$에 대해 $\det(\mathbf{A}_k) > 0$이며, 여기서 $\mathbf{A}_k$는 왼쪽 위 $k \times k$ 부분행렬이다.
-    4. $\mathbf{A}$가 **촐레스키 분해**를 갖는다: 대각 성분이 양수인 유일한 하삼각행렬 $\mathbf{L}$에 대해 $\mathbf{A} = \mathbf{L}\mathbf{L}^T$.
-    5. $\mathbf{A} = \mathbf{B}^T\mathbf{B}$인 가역행렬 $\mathbf{B}$가 존재한다.
+### 정리 1. 양정치성의 동치 조건 { .thm }
 
-### 증명 개요 (고윳값에 의한 특성화)
+다음은 서로 동치다.
 
-스펙트럼 정리에 의해 직교행렬 $\mathbf{Q}$에 대해 $\mathbf{A} = \mathbf{Q}\boldsymbol{\Lambda}\mathbf{Q}^T$이다. $\mathbf{z} = \mathbf{Q}^T\mathbf{x}$로 두면($\mathbf{Q}$가 직교행렬이므로 전단사다)
+1. $\mathbf{A} \succ 0$ (이차형식 조건).
+2. $\mathbf{A}$의 모든 고윳값이 엄격히 양수다: $i = 1, \dots, n$에 대해 $\lambda_i > 0$.
+3. 모든 **선행 주소행렬식**이 양수다: $k = 1, \dots, n$에 대해 $\det(\mathbf{A}_k) > 0$이며, 여기서 $\mathbf{A}_k$는 왼쪽 위 $k \times k$ 부분행렬이다.
+4. $\mathbf{A}$가 **촐레스키 분해**를 갖는다: 대각 성분이 양수인 유일한 하삼각행렬 $\mathbf{L}$에 대해 $\mathbf{A} = \mathbf{L}\mathbf{L}^T$.
+5. $\mathbf{A} = \mathbf{B}^T\mathbf{B}$인 가역행렬 $\mathbf{B}$가 존재한다.
 
-$$
-\mathbf{x}^T\mathbf{A}\mathbf{x} = \mathbf{z}^T\boldsymbol{\Lambda}\mathbf{z} = \sum_{i=1}^n \lambda_i z_i^2
-$$
+</div>
 
-이다. 이것이 모든 $\mathbf{z} \neq \mathbf{0}$에 대해 양수일 필요충분조건은 모든 $\lambda_i > 0$인 것이다. $\square$
+??? proof "증명 개요 (고윳값에 의한 특성화)"
 
-**양반정치성**의 경우 위 조건들에서 고윳값과 선행 소행렬식에 대한 조건이 "$\geq 0$"으로 완화되고, 조건 (5)에서는 $\mathbf{B}$가 계수 부족이어도 된다.
+
+    스펙트럼 정리에 의해 직교행렬 $\mathbf{Q}$에 대해 $\mathbf{A} = \mathbf{Q}\boldsymbol{\Lambda}\mathbf{Q}^T$이다. $\mathbf{z} = \mathbf{Q}^T\mathbf{x}$로 두면($\mathbf{Q}$가 직교행렬이므로 전단사다)
+
+    $$
+    \mathbf{x}^T\mathbf{A}\mathbf{x} = \mathbf{z}^T\boldsymbol{\Lambda}\mathbf{z} = \sum_{i=1}^n \lambda_i z_i^2
+    $$
+
+    이다. 이것이 모든 $\mathbf{z} \neq \mathbf{0}$에 대해 양수일 필요충분조건은 모든 $\lambda_i > 0$인 것이다. $\square$
+
+    **양반정치성**의 경우 위 조건들에서 고윳값과 선행 소행렬식에 대한 조건이 "$\geq 0$"으로 완화되고, 조건 (5)에서는 $\mathbf{B}$가 계수 부족이어도 된다.
 
 ## 촐레스키 분해
 
@@ -95,9 +101,11 @@ $\mathbf{A} \succ 0$이고 $\mathbf{B} \succ 0$이면 $\mathbf{A} + \mathbf{B} \
 
 $\mathbf{A} \succ 0$이고 $\mathbf{B}$가 $\operatorname{rank}(\mathbf{B}) = m$인 $n \times m$ 행렬이면 $\mathbf{B}^T\mathbf{A}\mathbf{B} \succ 0$이다($\mathbb{R}^{m \times m}$에서).
 
-**증명.** $\mathbb{R}^m$의 임의의 $\mathbf{y} \neq \mathbf{0}$에 대해 $\mathbf{x} = \mathbf{B}\mathbf{y}$로 두자. $\mathbf{B}$가 완전 열계수를 가지므로 $\mathbf{x} \neq \mathbf{0}$이고, 따라서 $\mathbf{y}^T(\mathbf{B}^T\mathbf{A}\mathbf{B})\mathbf{y} = \mathbf{x}^T\mathbf{A}\mathbf{x} > 0$이다. $\square$
+??? proof "증명"
 
-이 결과가 $\mathbf{X}$가 완전 열계수를 가질 때 $\mathbf{X}^T\mathbf{X}$가 양정치인 이유를 설명한다. $\mathbf{I}_n \succ 0$을 $\mathbf{X}$로 합동변환한 것이기 때문이다.
+    $\mathbb{R}^m$의 임의의 $\mathbf{y} \neq \mathbf{0}$에 대해 $\mathbf{x} = \mathbf{B}\mathbf{y}$로 두자. $\mathbf{B}$가 완전 열계수를 가지므로 $\mathbf{x} \neq \mathbf{0}$이고, 따라서 $\mathbf{y}^T(\mathbf{B}^T\mathbf{A}\mathbf{B})\mathbf{y} = \mathbf{x}^T\mathbf{A}\mathbf{x} > 0$이다. $\square$
+
+    이 결과가 $\mathbf{X}$가 완전 열계수를 가질 때 $\mathbf{X}^T\mathbf{X}$가 양정치인 이유를 설명한다. $\mathbf{I}_n \succ 0$을 $\mathbf{X}$로 합동변환한 것이기 때문이다.
 
 ### 슈어 여인수
 

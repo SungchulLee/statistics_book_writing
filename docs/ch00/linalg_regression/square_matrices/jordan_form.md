@@ -17,14 +17,19 @@ $1 \times 1$ 조르당 블록 $\mathbf{J}_1(\lambda) = (\lambda)$는 단순한 �
 
 ## 조르당 표준형 정리
 
-!!! info "정리 — 조르당 표준형"
-    모든 정사각행렬 $\mathbf{A} \in \mathbb{R}^{n \times n}$(또는 $\mathbb{C}^{n \times n}$)은 **조르당 행렬**
+<div class="thmbox" markdown>
 
-    $$
-    \mathbf{J} = \begin{pmatrix} \mathbf{J}_{k_1}(\lambda_1) & & \\ & \ddots & \\ & & \mathbf{J}_{k_r}(\lambda_r) \end{pmatrix}
-    $$
+### 정리 1. 조르당 표준형 { .thm }
 
-    과 닮았다. 여기서 $k_1 + k_2 + \cdots + k_r = n$이다. 즉 $\mathbf{A} = \mathbf{P}\mathbf{J}\mathbf{P}^{-1}$인 가역행렬 $\mathbf{P}$가 존재한다. 조르당 형은 블록의 순서를 제외하면 유일하다.
+모든 정사각행렬 $\mathbf{A} \in \mathbb{R}^{n \times n}$(또는 $\mathbb{C}^{n \times n}$)은 **조르당 행렬**
+
+$$
+\mathbf{J} = \begin{pmatrix} \mathbf{J}_{k_1}(\lambda_1) & & \\ & \ddots & \\ & & \mathbf{J}_{k_r}(\lambda_r) \end{pmatrix}
+$$
+
+과 닮았다. 여기서 $k_1 + k_2 + \cdots + k_r = n$이다. 즉 $\mathbf{A} = \mathbf{P}\mathbf{J}\mathbf{P}^{-1}$인 가역행렬 $\mathbf{P}$가 존재한다. 조르당 형은 블록의 순서를 제외하면 유일하다.
+
+</div>
 
 고윳값 $\lambda_1, \dots, \lambda_r$이 서로 달라야 할 필요는 없다. 같은 고윳값이 크기가 다른 여러 블록에 나타날 수 있다.
 

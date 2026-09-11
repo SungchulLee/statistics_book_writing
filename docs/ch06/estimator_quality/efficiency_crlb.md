@@ -36,19 +36,24 @@ $$
 
 Fisher 정보량을 손에 넣었으니 근본적인 결과를 서술할 수 있다.
 
-!!! info "정리 (Cramér-Rao 하한)"
+<div class="thmbox" markdown>
 
-    $X_1, \ldots, X_n$을 다음 정칙 조건을 만족하는 밀도함수 또는 질량함수 $f(x; \theta)$를 갖는 i.i.d. 확률변수라 하자:
+### 정리 1. (Cramér-Rao 하한) { .thm }
 
-    1. 지지집합 $\{x : f(x; \theta) > 0\}$이 $\theta$에 의존하지 않는다.
-    2. 도함수 $\frac{\partial}{\partial \theta} f(x; \theta)$와 $\frac{\partial^2}{\partial \theta^2} f(x; \theta)$가 존재하고 연속이다.
-    3. 미분과 적분(또는 합)을 교환할 수 있다.
 
-    그러면 임의의 불편추정량 $\hat{\theta} = \hat{\theta}(X_1, \ldots, X_n)$에 대해:
+$X_1, \ldots, X_n$을 다음 정칙 조건을 만족하는 밀도함수 또는 질량함수 $f(x; \theta)$를 갖는 i.i.d. 확률변수라 하자:
 
-    $$
-    \text{Var}(\hat{\theta}) \geq \frac{1}{n I(\theta)}
-    $$
+1. 지지집합 $\{x : f(x; \theta) > 0\}$이 $\theta$에 의존하지 않는다.
+2. 도함수 $\frac{\partial}{\partial \theta} f(x; \theta)$와 $\frac{\partial^2}{\partial \theta^2} f(x; \theta)$가 존재하고 연속이다.
+3. 미분과 적분(또는 합)을 교환할 수 있다.
+
+그러면 임의의 불편추정량 $\hat{\theta} = \hat{\theta}(X_1, \ldots, X_n)$에 대해:
+
+$$
+\text{Var}(\hat{\theta}) \geq \frac{1}{n I(\theta)}
+$$
+
+</div>
 
 $1 / (nI(\theta))$가 Cramér-Rao 하한이다. 어떤 불편추정량도 이 문턱 아래의 분산을 가질 수 없다.
 

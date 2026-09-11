@@ -17,55 +17,69 @@
 
 직교사영을 규정하는 기하적 성질은 가장 가까운 점 문제를 푼다는 것이다.
 
-!!! info "정리 — 최선근사"
-    $\mathbf{P}$가 부분공간 $\mathcal{V} \subseteq \mathbb{R}^n$ 위로의 직교사영이라 하자. 임의의 $\mathbf{x} \in \mathbb{R}^n$에 대해 벡터 $\mathbf{P}\mathbf{x}$는 $\mathbf{x}$까지의 거리를 최소화하는 $\mathcal{V}$의 유일한 원소다.
+<div class="thmbox" markdown>
+
+### 정리 1. 최선근사 { .thm }
+
+$\mathbf{P}$가 부분공간 $\mathcal{V} \subseteq \mathbb{R}^n$ 위로의 직교사영이라 하자. 임의의 $\mathbf{x} \in \mathbb{R}^n$에 대해 벡터 $\mathbf{P}\mathbf{x}$는 $\mathbf{x}$까지의 거리를 최소화하는 $\mathcal{V}$의 유일한 원소다.
+
+$$
+\mathbf{P}\mathbf{x} = \arg\min_{\mathbf{v} \in \mathcal{V}} \lVert\mathbf{x} - \mathbf{v}\rVert
+$$
+
+</div>
+
+??? proof "증명 개요"
+
+    $\mathbf{v} \in \mathcal{V}$를 임의로 잡자. 그러면
 
     $$
-    \mathbf{P}\mathbf{x} = \arg\min_{\mathbf{v} \in \mathcal{V}} \lVert\mathbf{x} - \mathbf{v}\rVert
+    \lVert\mathbf{x} - \mathbf{v}\rVert^2 = \lVert(\mathbf{x} - \mathbf{P}\mathbf{x}) + (\mathbf{P}\mathbf{x} - \mathbf{v})\rVert^2
     $$
 
-**증명 개요.** $\mathbf{v} \in \mathcal{V}$를 임의로 잡자. 그러면
+    이다. ($\mathbf{P}$가 직교사영이므로) $\mathbf{x} - \mathbf{P}\mathbf{x} \in \mathcal{V}^\perp$이고 $\mathbf{P}\mathbf{x} - \mathbf{v} \in \mathcal{V}$이므로 이 두 벡터는 직교한다. 피타고라스 정리에 의해
 
-$$
-\lVert\mathbf{x} - \mathbf{v}\rVert^2 = \lVert(\mathbf{x} - \mathbf{P}\mathbf{x}) + (\mathbf{P}\mathbf{x} - \mathbf{v})\rVert^2
-$$
+    $$
+    \lVert\mathbf{x} - \mathbf{v}\rVert^2 = \lVert\mathbf{x} - \mathbf{P}\mathbf{x}\rVert^2 + \lVert\mathbf{P}\mathbf{x} - \mathbf{v}\rVert^2 \geq \lVert\mathbf{x} - \mathbf{P}\mathbf{x}\rVert^2
+    $$
 
-이다. ($\mathbf{P}$가 직교사영이므로) $\mathbf{x} - \mathbf{P}\mathbf{x} \in \mathcal{V}^\perp$이고 $\mathbf{P}\mathbf{x} - \mathbf{v} \in \mathcal{V}$이므로 이 두 벡터는 직교한다. 피타고라스 정리에 의해
+    이다. 등호는 $\mathbf{v} = \mathbf{P}\mathbf{x}$일 때에 한해 성립한다. $\square$
 
-$$
-\lVert\mathbf{x} - \mathbf{v}\rVert^2 = \lVert\mathbf{x} - \mathbf{P}\mathbf{x}\rVert^2 + \lVert\mathbf{P}\mathbf{x} - \mathbf{v}\rVert^2 \geq \lVert\mathbf{x} - \mathbf{P}\mathbf{x}\rVert^2
-$$
-
-이다. 등호는 $\mathbf{v} = \mathbf{P}\mathbf{x}$일 때에 한해 성립한다. $\square$
-
-바로 이것이 최소제곱이 잔차제곱합을 최소화하는 이유다. $\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}$가 $\operatorname{col}(\mathbf{X})$ 안에서 $\mathbf{y}$에 가장 가까운 점이다.
+    바로 이것이 최소제곱이 잔차제곱합을 최소화하는 이유다. $\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}$가 $\operatorname{col}(\mathbf{X})$ 안에서 $\mathbf{y}$에 가장 가까운 점이다.
 
 ## 열공간 위로의 직교사영 공식
 
-!!! info "정리 — 사영 공식"
-    $\mathbf{X} \in \mathbb{R}^{n \times p}$가 완전 열계수를 갖는다고 하자($\operatorname{rank}(\mathbf{X}) = p$). $\operatorname{col}(\mathbf{X})$ 위로의 직교사영은
+<div class="thmbox" markdown>
+
+### 정리 2. 사영 공식 { .thm }
+
+$\mathbf{X} \in \mathbb{R}^{n \times p}$가 완전 열계수를 갖는다고 하자($\operatorname{rank}(\mathbf{X}) = p$). $\operatorname{col}(\mathbf{X})$ 위로의 직교사영은
+
+$$
+\mathbf{P}_{\mathbf{X}} = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T
+$$
+
+이다.
+
+</div>
+
+??? proof "증명"
+
+    두 가지 규정 성질을 확인한다.
+
+    *멱등성:*
 
     $$
-    \mathbf{P}_{\mathbf{X}} = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T
+    \mathbf{P}_{\mathbf{X}}^2 = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T = \mathbf{P}_{\mathbf{X}}
     $$
 
-    이다.
+    *대칭성:*
 
-**증명.** 두 가지 규정 성질을 확인한다.
+    $$
+    \mathbf{P}_{\mathbf{X}}^T = (\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T)^T = \mathbf{X}((\mathbf{X}^T\mathbf{X})^{-1})^T\mathbf{X}^T = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T = \mathbf{P}_{\mathbf{X}}
+    $$
 
-*멱등성:*
-
-$$
-\mathbf{P}_{\mathbf{X}}^2 = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T = \mathbf{P}_{\mathbf{X}}
-$$
-
-*대칭성:*
-
-$$
-\mathbf{P}_{\mathbf{X}}^T = (\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T)^T = \mathbf{X}((\mathbf{X}^T\mathbf{X})^{-1})^T\mathbf{X}^T = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T = \mathbf{P}_{\mathbf{X}}
-$$
-
-마지막 단계에서는 $(\mathbf{X}^T\mathbf{X})^{-1}$이 대칭이라는 사실을 썼다(대칭행렬의 역행렬은 대칭이다). $\square$
+    마지막 단계에서는 $(\mathbf{X}^T\mathbf{X})^{-1}$이 대칭이라는 사실을 썼다(대칭행렬의 역행렬은 대칭이다). $\square$
 
 ## 성질
 

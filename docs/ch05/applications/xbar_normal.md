@@ -99,8 +99,13 @@ plt.show()
 
 ## 정확한 정규성의 증명
 
-!!! info "정리"
-    $X_1, \ldots, X_n \overset{\text{iid}}{\sim} N(\mu, \sigma^2)$이면 $\bar{X} \sim N(\mu, \sigma^2/n)$이다.
+<div class="thmbox" markdown>
+
+### 정리 1. { .thm }
+
+$X_1, \ldots, X_n \overset{\text{iid}}{\sim} N(\mu, \sigma^2)$이면 $\bar{X} \sim N(\mu, \sigma^2/n)$이다.
+
+</div>
 
 **증명.** $X_i$의 적률생성함수(MGF)는:
 

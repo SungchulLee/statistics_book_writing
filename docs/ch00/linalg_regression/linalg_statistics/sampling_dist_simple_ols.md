@@ -53,57 +53,69 @@ $\hat{\beta}_1$이 독립인 정규확률변수들의 선형결합이므로 그 
 
 ## 기울기의 표본분포
 
-!!! info "정리 — 기울기 추정량의 분포"
-    정규오차를 갖는 단순선형회귀 모형 아래에서
+<div class="thmbox" markdown>
+
+### 정리 1. 기울기 추정량의 분포 { .thm }
+
+정규오차를 갖는 단순선형회귀 모형 아래에서
+
+$$
+\hat{\beta}_1 \sim N\!\left(\beta_1,\; \frac{\sigma^2}{S_{xx}}\right)
+$$
+
+</div>
+
+??? proof "증명"
+
+
+    *평균:*
 
     $$
-    \hat{\beta}_1 \sim N\!\left(\beta_1,\; \frac{\sigma^2}{S_{xx}}\right)
+    E[\hat{\beta}_1] = \sum_i c_i E[Y_i] = \sum_i c_i(\beta_0 + \beta_1 x_i) = \beta_0\sum_i c_i + \beta_1\sum_i c_i x_i
     $$
 
-**증명.**
+    $\sum_i c_i = 0$이고 $\sum_i c_i x_i = \sum_i \frac{(x_i - \bar{x})x_i}{S_{xx}} = \frac{S_{xx}}{S_{xx}} = 1$이므로
 
-*평균:*
+    $$
+    E[\hat{\beta}_1] = \beta_1
+    $$
 
-$$
-E[\hat{\beta}_1] = \sum_i c_i E[Y_i] = \sum_i c_i(\beta_0 + \beta_1 x_i) = \beta_0\sum_i c_i + \beta_1\sum_i c_i x_i
-$$
+    이다. 따라서 $\hat{\beta}_1$은 **불편**이다.
 
-$\sum_i c_i = 0$이고 $\sum_i c_i x_i = \sum_i \frac{(x_i - \bar{x})x_i}{S_{xx}} = \frac{S_{xx}}{S_{xx}} = 1$이므로
+    *분산:*
 
-$$
-E[\hat{\beta}_1] = \beta_1
-$$
+    $$
+    \operatorname{Var}(\hat{\beta}_1) = \sum_i c_i^2 \operatorname{Var}(Y_i) = \sigma^2 \sum_i c_i^2 = \frac{\sigma^2}{S_{xx}}
+    $$
 
-이다. 따라서 $\hat{\beta}_1$은 **불편**이다.
-
-*분산:*
-
-$$
-\operatorname{Var}(\hat{\beta}_1) = \sum_i c_i^2 \operatorname{Var}(Y_i) = \sigma^2 \sum_i c_i^2 = \frac{\sigma^2}{S_{xx}}
-$$
-
-*정규성:* $\hat{\beta}_1$이 독립인 정규확률변수들의 선형결합이므로 정규분포를 따른다. $\square$
+    *정규성:* $\hat{\beta}_1$이 독립인 정규확률변수들의 선형결합이므로 정규분포를 따른다. $\square$
 
 ## 절편의 표본분포
 
-!!! info "정리 — 절편 추정량의 분포"
-    같은 모형 아래에서
+<div class="thmbox" markdown>
 
-    $$
-    \hat{\beta}_0 \sim N\!\left(\beta_0,\; \sigma^2\left(\frac{1}{n} + \frac{\bar{x}^2}{S_{xx}}\right)\right)
-    $$
+### 정리 2. 절편 추정량의 분포 { .thm }
 
-**증명.**
-
-*평균:* $E[\hat{\beta}_0] = E[\bar{Y}] - E[\hat{\beta}_1]\bar{x} = (\beta_0 + \beta_1\bar{x}) - \beta_1\bar{x} = \beta_0$. 불편이다.
-
-*분산:* $\hat{\beta}_0 = \bar{Y} - \hat{\beta}_1\bar{x}$이고 ($\sum_i c_i = 0$이므로) $\operatorname{Cov}(\bar{Y}, \hat{\beta}_1) = 0$이므로
+같은 모형 아래에서
 
 $$
-\operatorname{Var}(\hat{\beta}_0) = \operatorname{Var}(\bar{Y}) + \bar{x}^2\operatorname{Var}(\hat{\beta}_1) = \frac{\sigma^2}{n} + \frac{\bar{x}^2\sigma^2}{S_{xx}} = \sigma^2\!\left(\frac{1}{n} + \frac{\bar{x}^2}{S_{xx}}\right)
+\hat{\beta}_0 \sim N\!\left(\beta_0,\; \sigma^2\left(\frac{1}{n} + \frac{\bar{x}^2}{S_{xx}}\right)\right)
 $$
 
-$\square$
+</div>
+
+??? proof "증명"
+
+
+    *평균:* $E[\hat{\beta}_0] = E[\bar{Y}] - E[\hat{\beta}_1]\bar{x} = (\beta_0 + \beta_1\bar{x}) - \beta_1\bar{x} = \beta_0$. 불편이다.
+
+    *분산:* $\hat{\beta}_0 = \bar{Y} - \hat{\beta}_1\bar{x}$이고 ($\sum_i c_i = 0$이므로) $\operatorname{Cov}(\bar{Y}, \hat{\beta}_1) = 0$이므로
+
+    $$
+    \operatorname{Var}(\hat{\beta}_0) = \operatorname{Var}(\bar{Y}) + \bar{x}^2\operatorname{Var}(\hat{\beta}_1) = \frac{\sigma^2}{n} + \frac{\bar{x}^2\sigma^2}{S_{xx}} = \sigma^2\!\left(\frac{1}{n} + \frac{\bar{x}^2}{S_{xx}}\right)
+    $$
+
+    $\square$
 
 ## 잔차제곱합과 분산의 추정
 
@@ -115,14 +127,19 @@ $$
 
 이다.
 
-!!! info "정리 — SSE의 분포"
-    정규 단순선형회귀 모형 아래에서
+<div class="thmbox" markdown>
 
-    $$
-    \frac{\text{SSE}}{\sigma^2} \sim \chi^2_{n-2}
-    $$
+### 정리 3. SSE의 분포 { .thm }
 
-    이고 SSE는 $(\hat{\beta}_0, \hat{\beta}_1)$과 독립이다.
+정규 단순선형회귀 모형 아래에서
+
+$$
+\frac{\text{SSE}}{\sigma^2} \sim \chi^2_{n-2}
+$$
+
+이고 SSE는 $(\hat{\beta}_0, \hat{\beta}_1)$과 독립이다.
+
+</div>
 
 자유도가 $n - 2$인 것은 두 개의 모수($\beta_0$과 $\beta_1$)를 추정했기 때문이다. $\sigma^2$의 불편추정량은
 
@@ -136,24 +153,31 @@ $$
 
 실무에서는 $\sigma^2$을 모르므로 표준오차에서 이를 $s^2$으로 대체한다. 그러면 정규분포가 t-분포로 바뀐다.
 
-!!! info "정리 — 기울기의 t-분포"
-    통계량
+<div class="thmbox" markdown>
 
-    $$
-    T = \frac{\hat{\beta}_1 - \beta_1}{s / \sqrt{S_{xx}}} \sim t_{n-2}
-    $$
+### 정리 4. 기울기의 t-분포 { .thm }
 
-    은 자유도 $n - 2$인 스튜던트 t-분포를 따른다.
-
-**증명 개요.** 분자 $(\hat{\beta}_1 - \beta_1)/(\sigma/\sqrt{S_{xx}}) \sim N(0,1)$이고 분모에는 $s/\sigma = \sqrt{\text{SSE}/((n-2)\sigma^2)}$이 들어 있다. $\text{SSE}/\sigma^2 \sim \chi^2_{n-2}$이고 $\hat{\beta}_1$과 독립이므로, 이 비는 $N(0,1)/\sqrt{\chi^2_{n-2}/(n-2)}$ 형태이며 이것이 $t_{n-2}$ 분포의 정의다. $\square$
-
-절편에 대해서도 마찬가지로
+통계량
 
 $$
-\frac{\hat{\beta}_0 - \beta_0}{s\sqrt{1/n + \bar{x}^2/S_{xx}}} \sim t_{n-2}
+T = \frac{\hat{\beta}_1 - \beta_1}{s / \sqrt{S_{xx}}} \sim t_{n-2}
 $$
 
-이다.
+은 자유도 $n - 2$인 스튜던트 t-분포를 따른다.
+
+</div>
+
+??? proof "증명 개요"
+
+    분자 $(\hat{\beta}_1 - \beta_1)/(\sigma/\sqrt{S_{xx}}) \sim N(0,1)$이고 분모에는 $s/\sigma = \sqrt{\text{SSE}/((n-2)\sigma^2)}$이 들어 있다. $\text{SSE}/\sigma^2 \sim \chi^2_{n-2}$이고 $\hat{\beta}_1$과 독립이므로, 이 비는 $N(0,1)/\sqrt{\chi^2_{n-2}/(n-2)}$ 형태이며 이것이 $t_{n-2}$ 분포의 정의다. $\square$
+
+    절편에 대해서도 마찬가지로
+
+    $$
+    \frac{\hat{\beta}_0 - \beta_0}{s\sqrt{1/n + \bar{x}^2/S_{xx}}} \sim t_{n-2}
+    $$
+
+    이다.
 
 ## 신뢰구간
 

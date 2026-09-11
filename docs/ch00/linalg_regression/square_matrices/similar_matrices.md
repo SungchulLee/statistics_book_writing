@@ -39,35 +39,42 @@ $$
 
 닮음이 중요한 핵심 이유는 많은 중요한 행렬 관련 양이 **불변량**이라는 데 있다. 즉 한 닮음류에 속한 모든 행렬에 대해 같은 값을 갖는다.
 
-!!! info "정리 — 닮음 불변량"
-    $\mathbf{B} = \mathbf{P}^{-1}\mathbf{A}\mathbf{P}$이면 $\mathbf{A}$와 $\mathbf{B}$는 다음 성질을 공유한다.
+<div class="thmbox" markdown>
 
-    1. **고윳값**(대수적 중복도 포함)
-    2. **특성다항식**: $\det(\mathbf{B} - \lambda\mathbf{I}) = \det(\mathbf{A} - \lambda\mathbf{I})$
-    3. **대각합**: $\operatorname{tr}(\mathbf{B}) = \operatorname{tr}(\mathbf{A})$
-    4. **행렬식**: $\det(\mathbf{B}) = \det(\mathbf{A})$
-    5. **계수**: $\operatorname{rank}(\mathbf{B}) = \operatorname{rank}(\mathbf{A})$
-    6. **최소다항식**
+### 정리 1. 닮음 불변량 { .thm }
 
-### 증명 개요 (특성다항식)
+$\mathbf{B} = \mathbf{P}^{-1}\mathbf{A}\mathbf{P}$이면 $\mathbf{A}$와 $\mathbf{B}$는 다음 성질을 공유한다.
 
-$\mathbf{B}$의 특성다항식은
+1. **고윳값**(대수적 중복도 포함)
+2. **특성다항식**: $\det(\mathbf{B} - \lambda\mathbf{I}) = \det(\mathbf{A} - \lambda\mathbf{I})$
+3. **대각합**: $\operatorname{tr}(\mathbf{B}) = \operatorname{tr}(\mathbf{A})$
+4. **행렬식**: $\det(\mathbf{B}) = \det(\mathbf{A})$
+5. **계수**: $\operatorname{rank}(\mathbf{B}) = \operatorname{rank}(\mathbf{A})$
+6. **최소다항식**
 
-$$
-\det(\mathbf{B} - \lambda\mathbf{I}) = \det(\mathbf{P}^{-1}\mathbf{A}\mathbf{P} - \lambda\mathbf{P}^{-1}\mathbf{I}\mathbf{P})
-$$
+</div>
 
-이다. 왼쪽에서 $\mathbf{P}^{-1}$을, 오른쪽에서 $\mathbf{P}$를 묶어내면
+??? proof "증명 개요 (특성다항식)"
 
-$$
-= \det\!\bigl(\mathbf{P}^{-1}(\mathbf{A} - \lambda\mathbf{I})\mathbf{P}\bigr) = \det(\mathbf{P}^{-1})\,\det(\mathbf{A} - \lambda\mathbf{I})\,\det(\mathbf{P})
-$$
 
-이다. $\det(\mathbf{P}^{-1})\det(\mathbf{P}) = 1$이므로 두 특성다항식이 같다. 고윳값은 특성다항식의 근이므로 고윳값도 일치한다. 대각합은 (중복도를 포함한) 고윳값의 합이고 행렬식은 그 곱이므로 둘 다 불변이다. $\square$
+    $\mathbf{B}$의 특성다항식은
 
-### 증명 개요 (계수)
+    $$
+    \det(\mathbf{B} - \lambda\mathbf{I}) = \det(\mathbf{P}^{-1}\mathbf{A}\mathbf{P} - \lambda\mathbf{P}^{-1}\mathbf{I}\mathbf{P})
+    $$
 
-가역인 $\mathbf{P}$에 대해 사상 $\mathbf{x} \mapsto \mathbf{P}\mathbf{x}$는 $\mathbb{R}^n$ 위의 전단사다. 따라서 $\dim(\operatorname{col}(\mathbf{B})) = \dim(\operatorname{col}(\mathbf{P}^{-1}\mathbf{A}\mathbf{P})) = \dim(\operatorname{col}(\mathbf{A}))$이다. $\square$
+    이다. 왼쪽에서 $\mathbf{P}^{-1}$을, 오른쪽에서 $\mathbf{P}$를 묶어내면
+
+    $$
+    = \det\!\bigl(\mathbf{P}^{-1}(\mathbf{A} - \lambda\mathbf{I})\mathbf{P}\bigr) = \det(\mathbf{P}^{-1})\,\det(\mathbf{A} - \lambda\mathbf{I})\,\det(\mathbf{P})
+    $$
+
+    이다. $\det(\mathbf{P}^{-1})\det(\mathbf{P}) = 1$이므로 두 특성다항식이 같다. 고윳값은 특성다항식의 근이므로 고윳값도 일치한다. 대각합은 (중복도를 포함한) 고윳값의 합이고 행렬식은 그 곱이므로 둘 다 불변이다. $\square$
+
+??? proof "증명 개요 (계수)"
+
+
+    가역인 $\mathbf{P}$에 대해 사상 $\mathbf{x} \mapsto \mathbf{P}\mathbf{x}$는 $\mathbb{R}^n$ 위의 전단사다. 따라서 $\dim(\operatorname{col}(\mathbf{B})) = \dim(\operatorname{col}(\mathbf{P}^{-1}\mathbf{A}\mathbf{P})) = \dim(\operatorname{col}(\mathbf{A}))$이다. $\square$
 
 ## 불변량이 아닌 성질
 

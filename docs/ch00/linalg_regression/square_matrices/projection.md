@@ -20,21 +20,28 @@
 
 ## 공간의 분해
 
-!!! info "정리 — 직합 분해"
-    $\mathbf{P}$가 사영이면 $\mathbb{R}^n = \operatorname{col}(\mathbf{P}) \oplus \ker(\mathbf{P})$이고, 모든 $\mathbf{x} \in \mathbb{R}^n$에 대해
+<div class="thmbox" markdown>
 
-    $$
-    \mathbf{x} = \mathbf{P}\mathbf{x} + (\mathbf{I} - \mathbf{P})\mathbf{x}
-    $$
+### 정리 1. 직합 분해 { .thm }
 
-    이며, 여기서 $\mathbf{P}\mathbf{x} \in \operatorname{col}(\mathbf{P})$이고 $(\mathbf{I} - \mathbf{P})\mathbf{x} \in \ker(\mathbf{P})$이다.
+$\mathbf{P}$가 사영이면 $\mathbb{R}^n = \operatorname{col}(\mathbf{P}) \oplus \ker(\mathbf{P})$이고, 모든 $\mathbf{x} \in \mathbb{R}^n$에 대해
 
-**증명.** 분해 $\mathbf{x} = \mathbf{P}\mathbf{x} + (\mathbf{I} - \mathbf{P})\mathbf{x}$는 자명하게 참이다. 주장된 부분공간 소속을 확인한다.
+$$
+\mathbf{x} = \mathbf{P}\mathbf{x} + (\mathbf{I} - \mathbf{P})\mathbf{x}
+$$
 
-- 정의에 의해 $\mathbf{P}\mathbf{x} \in \operatorname{col}(\mathbf{P})$이다.
-- $\mathbf{P}\bigl((\mathbf{I} - \mathbf{P})\mathbf{x}\bigr) = (\mathbf{P} - \mathbf{P}^2)\mathbf{x} = (\mathbf{P} - \mathbf{P})\mathbf{x} = \mathbf{0}$이므로 $(\mathbf{I} - \mathbf{P})\mathbf{x} \in \ker(\mathbf{P})$이다.
+이며, 여기서 $\mathbf{P}\mathbf{x} \in \operatorname{col}(\mathbf{P})$이고 $(\mathbf{I} - \mathbf{P})\mathbf{x} \in \ker(\mathbf{P})$이다.
 
-합이 직합임을 보이려면, $\mathbf{v} \in \operatorname{col}(\mathbf{P}) \cap \ker(\mathbf{P})$라 하자. 그러면 어떤 $\mathbf{u}$에 대해 $\mathbf{v} = \mathbf{P}\mathbf{u}$이고 $\mathbf{P}\mathbf{v} = \mathbf{0}$이다. 그런데 $\mathbf{P}\mathbf{v} = \mathbf{P}^2\mathbf{u} = \mathbf{P}\mathbf{u} = \mathbf{v}$이므로 $\mathbf{v} = \mathbf{0}$이다. $\square$
+</div>
+
+??? proof "증명"
+
+    분해 $\mathbf{x} = \mathbf{P}\mathbf{x} + (\mathbf{I} - \mathbf{P})\mathbf{x}$는 자명하게 참이다. 주장된 부분공간 소속을 확인한다.
+
+    - 정의에 의해 $\mathbf{P}\mathbf{x} \in \operatorname{col}(\mathbf{P})$이다.
+    - $\mathbf{P}\bigl((\mathbf{I} - \mathbf{P})\mathbf{x}\bigr) = (\mathbf{P} - \mathbf{P}^2)\mathbf{x} = (\mathbf{P} - \mathbf{P})\mathbf{x} = \mathbf{0}$이므로 $(\mathbf{I} - \mathbf{P})\mathbf{x} \in \ker(\mathbf{P})$이다.
+
+    합이 직합임을 보이려면, $\mathbf{v} \in \operatorname{col}(\mathbf{P}) \cap \ker(\mathbf{P})$라 하자. 그러면 어떤 $\mathbf{u}$에 대해 $\mathbf{v} = \mathbf{P}\mathbf{u}$이고 $\mathbf{P}\mathbf{v} = \mathbf{0}$이다. 그런데 $\mathbf{P}\mathbf{v} = \mathbf{P}^2\mathbf{u} = \mathbf{P}\mathbf{u} = \mathbf{v}$이므로 $\mathbf{v} = \mathbf{0}$이다. $\square$
 
 ## 여집합 사영
 
@@ -107,8 +114,13 @@ $$
 
 ## 유일성
 
-!!! info "정리 — 사영의 유일성"
-    직합 분해 $\mathbb{R}^n = \mathcal{V} \oplus \mathcal{W}$가 주어지면 $\operatorname{col}(\mathbf{P}) = \mathcal{V}$이고 $\ker(\mathbf{P}) = \mathcal{W}$인 사영 $\mathbf{P}$가 유일하게 존재한다.
+<div class="thmbox" markdown>
+
+### 정리 2. 사영의 유일성 { .thm }
+
+직합 분해 $\mathbb{R}^n = \mathcal{V} \oplus \mathcal{W}$가 주어지면 $\operatorname{col}(\mathbf{P}) = \mathcal{V}$이고 $\ker(\mathbf{P}) = \mathcal{W}$인 사영 $\mathbf{P}$가 유일하게 존재한다.
+
+</div>
 
 이는 목표 부분공간 $\mathcal{V}$만 지정해서는 사영이 유일하게 결정되지 않음을 뜻한다. 눌러 없애는 방향 $\mathcal{W}$도 함께 지정해야 한다. $\mathcal{W} = \mathcal{V}^\perp$일 때 그 사영은 직교사영이 되고, 이 특수한 경우에는 $\mathcal{V}$만으로 사영이 결정된다.
 

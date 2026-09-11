@@ -17,18 +17,25 @@ $\mathbf{P}$의 열은 $\mathbf{A}$의 고유벡터이고, $\boldsymbol{\Lambda}
 
 ## 언제 행렬이 대각화 가능한가
 
-!!! info "정리 — 대각화 가능성의 판정"
-    행렬 $\mathbf{A} \in \mathbb{R}^{n \times n}$이 대각화 가능할 필요충분조건은 일차독립인 고유벡터를 $n$개 갖는 것이다.
+<div class="thmbox" markdown>
 
-**증명 개요.** $\mathbf{A}$가 일차독립인 고유벡터 $\mathbf{v}_1, \dots, \mathbf{v}_n$을 가지면 이들을 $\mathbf{P}$의 열로 놓는다. 그러면 $\mathbf{P}$는 (열들이 일차독립이므로) 가역이고, 고윳값 관계에 의해
+### 정리 1. 대각화 가능성의 판정 { .thm }
 
-$$
-\mathbf{A}\mathbf{P} = \mathbf{A}(\mathbf{v}_1 \mid \cdots \mid \mathbf{v}_n) = (\lambda_1\mathbf{v}_1 \mid \cdots \mid \lambda_n\mathbf{v}_n) = \mathbf{P}\boldsymbol{\Lambda}
-$$
+행렬 $\mathbf{A} \in \mathbb{R}^{n \times n}$이 대각화 가능할 필요충분조건은 일차독립인 고유벡터를 $n$개 갖는 것이다.
 
-이다. 양변 왼쪽에 $\mathbf{P}^{-1}$을 곱하면 $\boldsymbol{\Lambda} = \mathbf{P}^{-1}\mathbf{A}\mathbf{P}$를 얻는다.
+</div>
 
-역으로 $\mathbf{A} = \mathbf{P}\boldsymbol{\Lambda}\mathbf{P}^{-1}$이면 $\mathbf{A}\mathbf{P} = \mathbf{P}\boldsymbol{\Lambda}$이므로 $\mathbf{P}$의 각 열은 $\mathbf{A}$의 고유벡터다. $\mathbf{P}$가 가역이므로 이 $n$개의 고유벡터는 일차독립이다. $\square$
+??? proof "증명 개요"
+
+    $\mathbf{A}$가 일차독립인 고유벡터 $\mathbf{v}_1, \dots, \mathbf{v}_n$을 가지면 이들을 $\mathbf{P}$의 열로 놓는다. 그러면 $\mathbf{P}$는 (열들이 일차독립이므로) 가역이고, 고윳값 관계에 의해
+
+    $$
+    \mathbf{A}\mathbf{P} = \mathbf{A}(\mathbf{v}_1 \mid \cdots \mid \mathbf{v}_n) = (\lambda_1\mathbf{v}_1 \mid \cdots \mid \lambda_n\mathbf{v}_n) = \mathbf{P}\boldsymbol{\Lambda}
+    $$
+
+    이다. 양변 왼쪽에 $\mathbf{P}^{-1}$을 곱하면 $\boldsymbol{\Lambda} = \mathbf{P}^{-1}\mathbf{A}\mathbf{P}$를 얻는다.
+
+    역으로 $\mathbf{A} = \mathbf{P}\boldsymbol{\Lambda}\mathbf{P}^{-1}$이면 $\mathbf{A}\mathbf{P} = \mathbf{P}\boldsymbol{\Lambda}$이므로 $\mathbf{P}$의 각 열은 $\mathbf{A}$의 고유벡터다. $\mathbf{P}$가 가역이므로 이 $n$개의 고유벡터는 일차독립이다. $\square$
 
 ### 충분조건
 

@@ -19,46 +19,53 @@ $\mathbf{A} = \mathbf{A}^T$를 만족하는 대칭행렬은 통계에서 가장 
 
 스펙트럼 정리는 대칭행렬에 관한 가장 중요한 결과다.
 
-!!! info "정리 — 스펙트럼 정리 (실대칭행렬)"
-    $\mathbf{A} \in \mathbb{R}^{n \times n}$이 대칭이라 하자. 그러면
+<div class="thmbox" markdown>
 
-    1. $\mathbf{A}$의 모든 고윳값이 **실수**다.
-    2. **서로 다른** 고윳값에 대응하는 고유벡터는 **직교**한다.
-    3. $\mathbf{A}$는 **스펙트럼 분해**
+### 정리 1. 스펙트럼 정리 (실대칭행렬) { .thm }
+
+$\mathbf{A} \in \mathbb{R}^{n \times n}$이 대칭이라 하자. 그러면
+
+1. $\mathbf{A}$의 모든 고윳값이 **실수**다.
+2. **서로 다른** 고윳값에 대응하는 고유벡터는 **직교**한다.
+3. $\mathbf{A}$는 **스펙트럼 분해**
+
+$$
+\mathbf{A} = \mathbf{Q}\boldsymbol{\Lambda}\mathbf{Q}^T
+$$
+
+를 갖는다. 여기서 $\mathbf{Q}$는 정규직교 고유벡터를 열로 갖는 직교행렬($\mathbf{Q}^T\mathbf{Q} = \mathbf{I}$)이고 $\boldsymbol{\Lambda} = \operatorname{diag}(\lambda_1, \dots, \lambda_n)$이다.
+
+</div>
+
+??? proof "증명 개요 (고윳값이 실수임)"
+
+
+    $\lambda \in \mathbb{C}$가 고유벡터 $\mathbf{v} \ne \mathbf{0}$을 갖는 고윳값이라 하자. 그러면 $\mathbf{A}\mathbf{v} = \lambda\mathbf{v}$이다. $\mathbf{A}$가 실대칭이므로 켤레전치를 취하면
 
     $$
-    \mathbf{A} = \mathbf{Q}\boldsymbol{\Lambda}\mathbf{Q}^T
+    \overline{\mathbf{v}}^T \mathbf{A} = \overline{\lambda}\, \overline{\mathbf{v}}^T
     $$
 
-    를 갖는다. 여기서 $\mathbf{Q}$는 정규직교 고유벡터를 열로 갖는 직교행렬($\mathbf{Q}^T\mathbf{Q} = \mathbf{I}$)이고 $\boldsymbol{\Lambda} = \operatorname{diag}(\lambda_1, \dots, \lambda_n)$이다.
+    이다. 오른쪽에 $\mathbf{v}$를 곱하면
 
-### 증명 개요 (고윳값이 실수임)
+    $$
+    \lambda\, \overline{\mathbf{v}}^T \mathbf{v} = \overline{\mathbf{v}}^T \mathbf{A}\mathbf{v} = \overline{\lambda}\, \overline{\mathbf{v}}^T \mathbf{v}
+    $$
 
-$\lambda \in \mathbb{C}$가 고유벡터 $\mathbf{v} \ne \mathbf{0}$을 갖는 고윳값이라 하자. 그러면 $\mathbf{A}\mathbf{v} = \lambda\mathbf{v}$이다. $\mathbf{A}$가 실대칭이므로 켤레전치를 취하면
+    이다. $\overline{\mathbf{v}}^T \mathbf{v} = \|\mathbf{v}\|^2 > 0$이므로 $\lambda = \overline{\lambda}$, 즉 $\lambda \in \mathbb{R}$이다. $\square$
 
-$$
-\overline{\mathbf{v}}^T \mathbf{A} = \overline{\lambda}\, \overline{\mathbf{v}}^T
-$$
+??? proof "증명 개요 (고유벡터의 직교성)"
 
-이다. 오른쪽에 $\mathbf{v}$를 곱하면
 
-$$
-\lambda\, \overline{\mathbf{v}}^T \mathbf{v} = \overline{\mathbf{v}}^T \mathbf{A}\mathbf{v} = \overline{\lambda}\, \overline{\mathbf{v}}^T \mathbf{v}
-$$
+    $\alpha \ne \beta$에 대해 $\mathbf{A}\mathbf{u} = \alpha\mathbf{u}$, $\mathbf{A}\mathbf{v} = \beta\mathbf{v}$라 하자. 그러면
 
-이다. $\overline{\mathbf{v}}^T \mathbf{v} = \|\mathbf{v}\|^2 > 0$이므로 $\lambda = \overline{\lambda}$, 즉 $\lambda \in \mathbb{R}$이다. $\square$
+    $$
+    \alpha\, \mathbf{u}^T\mathbf{v} = (\mathbf{A}\mathbf{u})^T \mathbf{v} = \mathbf{u}^T \mathbf{A}^T \mathbf{v} = \mathbf{u}^T \mathbf{A}\mathbf{v} = \beta\, \mathbf{u}^T \mathbf{v}
+    $$
 
-### 증명 개요 (고유벡터의 직교성)
+    이다. 따라서 $(\alpha - \beta)\mathbf{u}^T\mathbf{v} = 0$이고 $\alpha \ne \beta$이므로 $\mathbf{u}^T\mathbf{v} = 0$이다. $\square$
 
-$\alpha \ne \beta$에 대해 $\mathbf{A}\mathbf{u} = \alpha\mathbf{u}$, $\mathbf{A}\mathbf{v} = \beta\mathbf{v}$라 하자. 그러면
-
-$$
-\alpha\, \mathbf{u}^T\mathbf{v} = (\mathbf{A}\mathbf{u})^T \mathbf{v} = \mathbf{u}^T \mathbf{A}^T \mathbf{v} = \mathbf{u}^T \mathbf{A}\mathbf{v} = \beta\, \mathbf{u}^T \mathbf{v}
-$$
-
-이다. 따라서 $(\alpha - \beta)\mathbf{u}^T\mathbf{v} = 0$이고 $\alpha \ne \beta$이므로 $\mathbf{u}^T\mathbf{v} = 0$이다. $\square$
-
-중복 고윳값의 경우 각 고유공간 안에서 그람–슈미트를 적용하면 정규직교기저를 얻는다. 이 기저들을 이어 붙이면 $\mathbf{Q}$가 만들어진다.
+    중복 고윳값의 경우 각 고유공간 안에서 그람–슈미트를 적용하면 정규직교기저를 얻는다. 이 기저들을 이어 붙이면 $\mathbf{Q}$가 만들어진다.
 
 ## 외적 형태
 

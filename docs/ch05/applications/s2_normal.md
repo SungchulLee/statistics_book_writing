@@ -20,14 +20,19 @@ $$
 
 ## 정규모집단에 대한 정확한 결과
 
-!!! info "정리"
-    $X_1, \ldots, X_n \overset{\text{iid}}{\sim} N(\mu, \sigma^2)$이면:
+<div class="thmbox" markdown>
 
-    $$
-    \frac{(n-1)S^2}{\sigma^2} \sim \chi^2(n-1)
-    $$
+### 정리 1. { .thm }
 
-    또한 $\bar{X}$와 $S^2$은 독립이다.
+$X_1, \ldots, X_n \overset{\text{iid}}{\sim} N(\mu, \sigma^2)$이면:
+
+$$
+\frac{(n-1)S^2}{\sigma^2} \sim \chi^2(n-1)
+$$
+
+또한 $\bar{X}$와 $S^2$은 독립이다.
+
+</div>
 
 이 결과로부터 $S^2$ 자체의 분포는 다음과 같이 쓸 수 있다:
 

@@ -52,9 +52,14 @@ $$
 
 충분성과 완비성을 결합한 결실이 Lehmann-Scheffé 정리이며, 유일한 최량 불편추정량을 확인해 준다.
 
-!!! info "정리 (Lehmann-Scheffé)"
+<div class="thmbox" markdown>
 
-    $T$가 $\theta$에 대한 완비충분통계량이라 하자. $h(T)$가 함수 $\tau(\theta)$의 임의의 불편추정량이면 — 즉 모든 $\theta$에 대해 $E_\theta[h(T)] = \tau(\theta)$이면 — $h(T)$는 $\tau(\theta)$의 유일한 **균일최소분산불편추정량(UMVUE)**이다.
+### 정리 1. (Lehmann-Scheffé) { .thm }
+
+
+$T$가 $\theta$에 대한 완비충분통계량이라 하자. $h(T)$가 함수 $\tau(\theta)$의 임의의 불편추정량이면 — 즉 모든 $\theta$에 대해 $E_\theta[h(T)] = \tau(\theta)$이면 — $h(T)$는 $\tau(\theta)$의 유일한 **균일최소분산불편추정량(UMVUE)**이다.
+
+</div>
 
 증명은 두 가지 사실에 기댄다. 첫째, Rao-Blackwell 정리에 의해 임의의 불편추정량을 충분통계량으로 조건부기댓값을 취하면 분산이 커지지 않는다. 둘째, 완비성은 각 목표 $\tau(\theta)$에 대해 $T$의 불편인 함수가 하나뿐임을 보장하므로 Rao-Blackwell화한 추정량이 유일하다.
 

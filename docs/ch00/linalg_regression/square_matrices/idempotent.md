@@ -17,29 +17,43 @@
 
 ## 멱등행렬의 고윳값
 
-!!! info "정리 — 고윳값은 0 또는 1"
-    $\mathbf{A}$가 멱등이고 $\lambda$가 $\mathbf{A}$의 고윳값이면 $\lambda \in \{0, 1\}$이다.
+<div class="thmbox" markdown>
 
-**증명.** $\mathbf{v} \ne \mathbf{0}$에 대해 $\mathbf{A}\mathbf{v} = \lambda\mathbf{v}$라 하자. 그러면
+### 정리 1. 고윳값은 0 또는 1 { .thm }
 
-$$
-\mathbf{A}^2\mathbf{v} = \mathbf{A}(\lambda\mathbf{v}) = \lambda^2 \mathbf{v}
-$$
+$\mathbf{A}$가 멱등이고 $\lambda$가 $\mathbf{A}$의 고윳값이면 $\lambda \in \{0, 1\}$이다.
 
-이다. 그런데 $\mathbf{A}^2 = \mathbf{A}$이므로 $\mathbf{A}^2\mathbf{v} = \mathbf{A}\mathbf{v} = \lambda\mathbf{v}$이기도 하다. 두 식을 같다고 놓으면 $(\lambda^2 - \lambda)\mathbf{v} = \mathbf{0}$이므로 $\lambda(\lambda - 1) = 0$이다. $\square$
+</div>
+
+??? proof "증명"
+
+    $\mathbf{v} \ne \mathbf{0}$에 대해 $\mathbf{A}\mathbf{v} = \lambda\mathbf{v}$라 하자. 그러면
+
+    $$
+    \mathbf{A}^2\mathbf{v} = \mathbf{A}(\lambda\mathbf{v}) = \lambda^2 \mathbf{v}
+    $$
+
+    이다. 그런데 $\mathbf{A}^2 = \mathbf{A}$이므로 $\mathbf{A}^2\mathbf{v} = \mathbf{A}\mathbf{v} = \lambda\mathbf{v}$이기도 하다. 두 식을 같다고 놓으면 $(\lambda^2 - \lambda)\mathbf{v} = \mathbf{0}$이므로 $\lambda(\lambda - 1) = 0$이다. $\square$
 
 ## 대각합은 계수와 같다
 
-!!! info "정리 — 멱등행렬의 대각합–계수 항등식"
-    $\mathbf{A} \in \mathbb{R}^{n \times n}$이 멱등이면
+<div class="thmbox" markdown>
 
-    $$
-    \operatorname{tr}(\mathbf{A}) = \operatorname{rank}(\mathbf{A})
-    $$
+### 정리 2. 멱등행렬의 대각합–계수 항등식 { .thm }
 
-**증명.** 대각합은 (중복도를 포함한) 고윳값의 합과 같다. 고윳값이 0 아니면 1이므로 대각합은 $1$의 개수를 세는 셈이고, 이는 고윳값 1의 고유공간의 차원과 같다. 멱등행렬에서 이 고유공간은 정확히 열공간이므로(연습문제 1) 그 차원이 계수와 같다. $\square$
+$\mathbf{A} \in \mathbb{R}^{n \times n}$이 멱등이면
 
-이 항등식은 직접적인 통계적 해석을 갖는다. 모자 행렬의 대각합은 추정된 모수의 개수와 같고, 잔차생성행렬의 대각합은 잔차 자유도와 같다.
+$$
+\operatorname{tr}(\mathbf{A}) = \operatorname{rank}(\mathbf{A})
+$$
+
+</div>
+
+??? proof "증명"
+
+    대각합은 (중복도를 포함한) 고윳값의 합과 같다. 고윳값이 0 아니면 1이므로 대각합은 $1$의 개수를 세는 셈이고, 이는 고윳값 1의 고유공간의 차원과 같다. 멱등행렬에서 이 고유공간은 정확히 열공간이므로(연습문제 1) 그 차원이 계수와 같다. $\square$
+
+    이 항등식은 직접적인 통계적 해석을 갖는다. 모자 행렬의 대각합은 추정된 모수의 개수와 같고, 잔차생성행렬의 대각합은 잔차 자유도와 같다.
 
 ## 핵심 성질
 
