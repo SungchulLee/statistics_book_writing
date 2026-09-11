@@ -47,7 +47,6 @@ nav:
             - 장 개요: ch00/linalg_regression/index.md
             - 닮은 행렬: ch00/linalg_regression/square_matrices/similar_matrices.md
             - 대각화 가능 행렬의 대각형: ch00/linalg_regression/square_matrices/diagonalizable.md
-            - 조르당 표준형: ch00/linalg_regression/square_matrices/jordan_form.md
             - 대각합과 고윳값: ch00/linalg_regression/square_matrices/trace_eigenvalues.md
             - 멱등행렬: ch00/linalg_regression/square_matrices/idempotent.md
             - 대칭행렬: ch00/linalg_regression/square_matrices/symmetric.md
