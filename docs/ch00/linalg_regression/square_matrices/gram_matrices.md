@@ -4,14 +4,19 @@
 
 ## 정의
 
-!!! info "정의 — 그람 행렬"
-    $\mathbf{v}_1, \mathbf{v}_2, \dots, \mathbf{v}_p \in \mathbb{R}^n$을 벡터들의 모임이라 하고, 이 벡터들을 열로 갖는 행렬을 $\mathbf{X} = (\mathbf{v}_1 \mid \mathbf{v}_2 \mid \cdots \mid \mathbf{v}_p) \in \mathbb{R}^{n \times p}$이라 하자. **그람 행렬**은
+<div class="defn" markdown>
 
-    $$
-    \mathbf{G} = \mathbf{X}^T\mathbf{X} \in \mathbb{R}^{p \times p}
-    $$
+**정의 1.** [그람 행렬]
 
-    이며, 그 $(i,j)$ 성분은 내적 $[\mathbf{G}]_{ij} = \mathbf{v}_i^T\mathbf{v}_j$이다.
+$\mathbf{v}_1, \mathbf{v}_2, \dots, \mathbf{v}_p \in \mathbb{R}^n$을 벡터들의 모임이라 하고, 이 벡터들을 열로 갖는 행렬을 $\mathbf{X} = (\mathbf{v}_1 \mid \mathbf{v}_2 \mid \cdots \mid \mathbf{v}_p) \in \mathbb{R}^{n \times p}$이라 하자. **그람 행렬**은
+
+$$
+\mathbf{G} = \mathbf{X}^T\mathbf{X} \in \mathbb{R}^{p \times p}
+$$
+
+이며, 그 $(i,j)$ 성분은 내적 $[\mathbf{G}]_{ij} = \mathbf{v}_i^T\mathbf{v}_j$이다.
+
+</div>
 
 대각 성분 $g_{ii} = \mathbf{v}_i^T\mathbf{v}_i = \lVert\mathbf{v}_i\rVert^2$는 벡터 길이의 제곱이고, 비대각 성분 $g_{ij} = \mathbf{v}_i^T\mathbf{v}_j$는 두 벡터가 얼마나 같은 방향을 향하는지를 잰다.
 

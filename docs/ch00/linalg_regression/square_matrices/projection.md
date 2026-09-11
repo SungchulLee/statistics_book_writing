@@ -4,14 +4,19 @@
 
 ## 정의
 
-!!! info "정의 — 사영(일반)"
-    정사각행렬 $\mathbf{P} \in \mathbb{R}^{n \times n}$이
+<div class="defn" markdown>
 
-    $$
-    \mathbf{P}^2 = \mathbf{P}
-    $$
+**정의 1.** [사영(일반)]
 
-    를 만족하면 **사영행렬**(또는 **사영자**)이라 한다. 즉 $\mathbf{P}$는 멱등이다.
+정사각행렬 $\mathbf{P} \in \mathbb{R}^{n \times n}$이
+
+$$
+\mathbf{P}^2 = \mathbf{P}
+$$
+
+를 만족하면 **사영행렬**(또는 **사영자**)이라 한다. 즉 $\mathbf{P}$는 멱등이다.
+
+</div>
 
 사영행렬에는 두 부분공간이 딸려 있다.
 

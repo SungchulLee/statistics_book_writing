@@ -10,7 +10,7 @@
 
 <div class="defn" markdown>
 
-**정의 1.**
+**정의 1.** [Geometric 분포]
 
 성공확률이 $p$인 독립 Bernoulli 시행을 첫 성공이 나올 때까지 반복할 때, 시행 횟수 $X$는 Geometric 분포를 따른다:
 
@@ -84,7 +84,7 @@ $$
 
 <div class="defn" markdown>
 
-**정의 2.**
+**정의 2.** [Negative Binomial 분포]
 
 독립 Bernoulli 시행에서 $r$번의 성공을 얻는 데 필요한 시행 횟수 $Y$는 **Negative Binomial 분포**를 따른다:
 

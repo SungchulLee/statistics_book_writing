@@ -4,12 +4,17 @@
 
 ## 정의와 기본 성질
 
-!!! info "정의 — 대각합"
-    정사각행렬 $\mathbf{A} \in \mathbb{R}^{n \times n}$의 **대각합(trace)** 은 대각 성분의 합이다.
+<div class="defn" markdown>
 
-    $$
-    \operatorname{tr}(\mathbf{A}) = \sum_{i=1}^n a_{ii}
-    $$
+**정의 1.** [대각합]
+
+정사각행렬 $\mathbf{A} \in \mathbb{R}^{n \times n}$의 **대각합(trace)** 은 대각 성분의 합이다.
+
+$$
+\operatorname{tr}(\mathbf{A}) = \sum_{i=1}^n a_{ii}
+$$
+
+</div>
 
 ### 선형성
 

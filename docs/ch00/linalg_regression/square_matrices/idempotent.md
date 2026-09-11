@@ -4,14 +4,19 @@
 
 ## 정의
 
-!!! info "정의 — 멱등행렬"
-    정사각행렬 $\mathbf{A} \in \mathbb{R}^{n \times n}$이
+<div class="defn" markdown>
 
-    $$
-    \mathbf{A}^2 = \mathbf{A}
-    $$
+**정의 1.** [멱등행렬]
 
-    를 만족하면 **멱등**이라 한다. 동등하게 $\mathbf{A}(\mathbf{A} - \mathbf{I}) = \mathbf{0}$이다.
+정사각행렬 $\mathbf{A} \in \mathbb{R}^{n \times n}$이
+
+$$
+\mathbf{A}^2 = \mathbf{A}
+$$
+
+를 만족하면 **멱등**이라 한다. 동등하게 $\mathbf{A}(\mathbf{A} - \mathbf{I}) = \mathbf{0}$이다.
+
+</div>
 
 단위행렬 $\mathbf{I}$와 영행렬 $\mathbf{0}$은 자명하게 멱등이다. 흥미로운 경우는 사영행렬에서 나오는데, 이들은 멱등이면서 $\mathbf{I}$도 $\mathbf{0}$도 아니다.
 

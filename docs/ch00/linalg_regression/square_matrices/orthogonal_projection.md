@@ -4,12 +4,17 @@
 
 ## 정의
 
-!!! info "정의 — 직교사영행렬"
-    정사각행렬 $\mathbf{P} \in \mathbb{R}^{n \times n}$이 멱등이면서 대칭이면 **직교사영행렬**이라 한다.
+<div class="defn" markdown>
 
-    $$
-    \mathbf{P}^2 = \mathbf{P} \quad \text{and} \quad \mathbf{P}^T = \mathbf{P}
-    $$
+**정의 1.** [직교사영행렬]
+
+정사각행렬 $\mathbf{P} \in \mathbb{R}^{n \times n}$이 멱등이면서 대칭이면 **직교사영행렬**이라 한다.
+
+$$
+\mathbf{P}^2 = \mathbf{P} \quad \text{and} \quad \mathbf{P}^T = \mathbf{P}
+$$
+
+</div>
 
 대칭성 조건이 직교사영을 빗각 사영과 구별해 준다. 어떤 사영이 직교사영일 필요충분조건은 영공간이 열공간의 직교여공간인 것이다: $\ker(\mathbf{P}) = \operatorname{col}(\mathbf{P})^\perp$.
 

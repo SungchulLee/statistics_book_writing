@@ -4,14 +4,19 @@
 
 ## 정의
 
-!!! info "정의 — 대각화 가능 행렬"
-    정사각행렬 $\mathbf{A} \in \mathbb{R}^{n \times n}$이 대각행렬과 닮았으면 **대각화 가능(diagonalizable)** 하다고 한다. 즉 가역행렬 $\mathbf{P} \in \mathbb{R}^{n \times n}$과 대각행렬 $\boldsymbol{\Lambda} = \operatorname{diag}(\lambda_1, \dots, \lambda_n)$이 존재하여
+<div class="defn" markdown>
 
-    $$
-    \mathbf{A} = \mathbf{P}\boldsymbol{\Lambda}\mathbf{P}^{-1}
-    $$
+**정의 1.** [대각화 가능 행렬]
 
-    이 성립한다는 뜻이다. 동등하게 $\boldsymbol{\Lambda} = \mathbf{P}^{-1}\mathbf{A}\mathbf{P}$이다.
+정사각행렬 $\mathbf{A} \in \mathbb{R}^{n \times n}$이 대각행렬과 닮았으면 **대각화 가능(diagonalizable)** 하다고 한다. 즉 가역행렬 $\mathbf{P} \in \mathbb{R}^{n \times n}$과 대각행렬 $\boldsymbol{\Lambda} = \operatorname{diag}(\lambda_1, \dots, \lambda_n)$이 존재하여
+
+$$
+\mathbf{A} = \mathbf{P}\boldsymbol{\Lambda}\mathbf{P}^{-1}
+$$
+
+이 성립한다는 뜻이다. 동등하게 $\boldsymbol{\Lambda} = \mathbf{P}^{-1}\mathbf{A}\mathbf{P}$이다.
+
+</div>
 
 $\mathbf{P}$의 열은 $\mathbf{A}$의 고유벡터이고, $\boldsymbol{\Lambda}$의 대각 성분은 그에 대응하는 고윳값이다. $\mathbf{P} = (\mathbf{v}_1 \mid \mathbf{v}_2 \mid \cdots \mid \mathbf{v}_n)$으로 쓰면 분해 $\mathbf{A}\mathbf{P} = \mathbf{P}\boldsymbol{\Lambda}$는 각 $i$에 대해 $\mathbf{A}\mathbf{v}_i = \lambda_i \mathbf{v}_i$인 것과 동등하다.
 

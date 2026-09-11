@@ -4,14 +4,19 @@
 
 ## 카이제곱분포 복습
 
-!!! info "정의 — 카이제곱분포"
-    $Z_1, Z_2, \dots, Z_k$가 독립인 표준정규 확률변수($Z_i \sim N(0,1)$)이면
+<div class="defn" markdown>
 
-    $$
-    Q = \sum_{i=1}^k Z_i^2 \sim \chi^2_k
-    $$
+**정의 1.** [카이제곱분포]
 
-    이다. 이 분포는 **자유도**가 $k$다. 벡터 표기로는 $\mathbf{z} \sim N(\mathbf{0}, \mathbf{I}_k)$이면 $\mathbf{z}^T\mathbf{z} \sim \chi^2_k$이다.
+$Z_1, Z_2, \dots, Z_k$가 독립인 표준정규 확률변수($Z_i \sim N(0,1)$)이면
+
+$$
+Q = \sum_{i=1}^k Z_i^2 \sim \chi^2_k
+$$
+
+이다. 이 분포는 **자유도**가 $k$다. 벡터 표기로는 $\mathbf{z} \sim N(\mathbf{0}, \mathbf{I}_k)$이면 $\mathbf{z}^T\mathbf{z} \sim \chi^2_k$이다.
+
+</div>
 
 핵심 성질:
 

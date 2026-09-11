@@ -13,7 +13,7 @@
 
 <div class="defn" markdown>
 
-**정의 1.**
+**정의 1.** [Cook 거리]
 
 각 관측값 $i$에 대해 Cook 거리 $D_i$는
 

@@ -4,14 +4,19 @@ $\mathbf{A} = \mathbf{A}^T$를 만족하는 대칭행렬은 통계에서 가장 
 
 ## 정의
 
-!!! info "정의 — 대칭행렬"
-    정사각행렬 $\mathbf{A} \in \mathbb{R}^{n \times n}$이
+<div class="defn" markdown>
 
-    $$
-    \mathbf{A} = \mathbf{A}^T
-    $$
+**정의 1.** [대칭행렬]
 
-    를 만족하면 **대칭**이라 한다. 동등하게 모든 $i, j$에 대해 $a_{ij} = a_{ji}$이다.
+정사각행렬 $\mathbf{A} \in \mathbb{R}^{n \times n}$이
+
+$$
+\mathbf{A} = \mathbf{A}^T
+$$
+
+를 만족하면 **대칭**이라 한다. 동등하게 모든 $i, j$에 대해 $a_{ij} = a_{ji}$이다.
+
+</div>
 
 대칭행렬은 대각과 그 위쪽 성분만으로 결정된다. $n^2$개의 성분 중 $n(n+1)/2$개만 자유롭다.
 

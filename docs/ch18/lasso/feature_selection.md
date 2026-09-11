@@ -24,7 +24,9 @@ $$
 
 <div class="defn" markdown>
 
-**정의.** 라쏘가 **모형선택 일치성**을 갖는다는 것은 $P\bigl(\hat{S}(\lambda_n) = S^*\bigr) \to 1$이 되는 $\lambda_n$의 열이 존재한다는 뜻이다.
+**정의 1.** [모형선택 일치성]
+
+라쏘가 **모형선택 일치성**을 갖는다는 것은 $P\bigl(\hat{S}(\lambda_n) = S^*\bigr) \to 1$이 되는 $\lambda_n$의 열이 존재한다는 뜻이다.
 
 Zhao와 Yu(2006)는 모형선택 일치성이 **비대표 조건**(irrepresentable condition)을 요구함을 보였다. $\frac{1}{n}\mathbf{X}^\top\mathbf{X}$를 $S$와 $S^c$로 분할했을 때
 

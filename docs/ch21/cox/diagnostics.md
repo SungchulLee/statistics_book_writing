@@ -14,7 +14,7 @@
 
 <div class="defn" markdown>
 
-**정의 1.**
+**정의 1.** [쇤펠트 잔차]
 
 각 사건시간 $t_{(j)}$에서 공변량 $k$의 쇤펠트 잔차는
 
@@ -64,7 +64,7 @@ $$
 
 <div class="defn" markdown>
 
-**정의 2.**
+**정의 2.** [마팅게일 잔차]
 
 대상 $i$의 마팅게일 잔차는
 
@@ -111,7 +111,7 @@ $$
 
 <div class="defn" markdown>
 
-**정의 3.**
+**정의 3.** [이탈도 잔차]
 
 $$
 \hat{d}_i = \text{sign}(\hat{M}_i) \sqrt{-2\bigl[\hat{M}_i + \delta_i \ln(\delta_i - \hat{M}_i)\bigr]}

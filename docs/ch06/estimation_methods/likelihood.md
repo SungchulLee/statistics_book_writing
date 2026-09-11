@@ -39,7 +39,7 @@ $$\ell(\theta) = \log L(\theta) = \sum_{i=1}^n \log f(x_i; \theta)$$
 
 <div class="defn" markdown>
 
-**정의 1.**
+**정의 1.** [최대가능도추정량]
 
 **최대가능도추정량(MLE)**은 가능도함수를 최대화하는 $\theta$ 값이다:
 

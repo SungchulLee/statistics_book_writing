@@ -4,13 +4,18 @@
 
 ## 정의
 
-!!! info "정의 — 양정치와 양반정치"
-    대칭행렬 $\mathbf{A} \in \mathbb{R}^{n \times n}$이
+<div class="defn" markdown>
 
-    - 모든 $\mathbf{x} \neq \mathbf{0}$에 대해 $\mathbf{x}^T\mathbf{A}\mathbf{x} > 0$이면 **양정치**($\mathbf{A} \succ 0$).
-    - 모든 $\mathbf{x}$에 대해 $\mathbf{x}^T\mathbf{A}\mathbf{x} \geq 0$이면 **양반정치**($\mathbf{A} \succeq 0$).
-    - $-\mathbf{A} \succ 0$이면 **음정치**($\mathbf{A} \prec 0$).
-    - $\mathbf{x}^T\mathbf{A}\mathbf{x}$가 양수와 음수를 모두 취하면 **부정치**.
+**정의 1.** [양정치와 양반정치]
+
+대칭행렬 $\mathbf{A} \in \mathbb{R}^{n \times n}$이
+
+- 모든 $\mathbf{x} \neq \mathbf{0}$에 대해 $\mathbf{x}^T\mathbf{A}\mathbf{x} > 0$이면 **양정치**($\mathbf{A} \succ 0$).
+- 모든 $\mathbf{x}$에 대해 $\mathbf{x}^T\mathbf{A}\mathbf{x} \geq 0$이면 **양반정치**($\mathbf{A} \succeq 0$).
+- $-\mathbf{A} \succ 0$이면 **음정치**($\mathbf{A} \prec 0$).
+- $\mathbf{x}^T\mathbf{A}\mathbf{x}$가 양수와 음수를 모두 취하면 **부정치**.
+
+</div>
 
 !!! warning "대칭성을 전제한다"
     대칭이 아닌 행렬에 대해서도 양정치성을 정의하는 문헌이 있지만, 이 책에서는(그리고 통계학의 거의 전부에서는) 양정치성이 언제나 대칭행렬을 가리킨다.
@@ -48,14 +53,19 @@
 
 ## 촐레스키 분해
 
-!!! info "정의 — 촐레스키 분해"
-    양정치행렬 $\mathbf{A}$의 **촐레스키 분해**는 유일한 인수분해
+<div class="defn" markdown>
 
-    $$
-    \mathbf{A} = \mathbf{L}\mathbf{L}^T
-    $$
+**정의 2.** [촐레스키 분해]
 
-    이며, 여기서 $\mathbf{L}$은 대각 성분이 엄격히 양수인 하삼각행렬이다.
+양정치행렬 $\mathbf{A}$의 **촐레스키 분해**는 유일한 인수분해
+
+$$
+\mathbf{A} = \mathbf{L}\mathbf{L}^T
+$$
+
+이며, 여기서 $\mathbf{L}$은 대각 성분이 엄격히 양수인 하삼각행렬이다.
+
+</div>
 
 촐레스키 분해는 양수의 제곱근을 취하는 것에 대응하는 행렬판이다. 수치적으로 안정적이고 대략 $n^3/3$번의 연산이 필요하며(일반적인 $\mathbf{LU}$ 분해의 절반 비용), 양정치행렬이 관여하는 연립방정식을 푸는 데 선호되는 방법이다.
 

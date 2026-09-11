@@ -4,14 +4,19 @@
 
 ## 정의
 
-!!! info "정의 — 닮은 행렬"
-    두 정사각행렬 $\mathbf{A}, \mathbf{B} \in \mathbb{R}^{n \times n}$이 **닮았다**는 것은 가역행렬 $\mathbf{P} \in \mathbb{R}^{n \times n}$이 존재하여
+<div class="defn" markdown>
 
-    $$
-    \mathbf{B} = \mathbf{P}^{-1}\mathbf{A}\mathbf{P}
-    $$
+**정의 1.** [닮은 행렬]
 
-    가 성립한다는 뜻이다. 동등하게 $\mathbf{A} = \mathbf{P}\mathbf{B}\mathbf{P}^{-1}$이다. 행렬 $\mathbf{P}$를 **기저변환행렬**이라 한다.
+두 정사각행렬 $\mathbf{A}, \mathbf{B} \in \mathbb{R}^{n \times n}$이 **닮았다**는 것은 가역행렬 $\mathbf{P} \in \mathbb{R}^{n \times n}$이 존재하여
+
+$$
+\mathbf{B} = \mathbf{P}^{-1}\mathbf{A}\mathbf{P}
+$$
+
+가 성립한다는 뜻이다. 동등하게 $\mathbf{A} = \mathbf{P}\mathbf{B}\mathbf{P}^{-1}$이다. 행렬 $\mathbf{P}$를 **기저변환행렬**이라 한다.
+
+</div>
 
 기하적 직관은 간단하다. $\mathbf{A}$가 표준기저에 대해 선형사상 $T: \mathbb{R}^n \to \mathbb{R}^n$을 나타내고 $\mathbf{P}$의 열들이 새 기저의 벡터들이라면, $\mathbf{B} = \mathbf{P}^{-1}\mathbf{A}\mathbf{P}$는 같은 사상 $T$를 새 기저로 표현한 행렬이다.
 
