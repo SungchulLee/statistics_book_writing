@@ -266,7 +266,7 @@ if __name__ == "__main__":
 
 <div class="defn" markdown>
 
-### 정의
+**정의 1.**
 
 $$
 \text{Skewness}(X) = E\left(\frac{X - \mu}{\sigma}\right)^3 \approx \frac{1}{n}\sum_{i=1}^{n}\left(\frac{x_i - \bar{x}}{s}\right)^3
@@ -372,7 +372,7 @@ Symmetric Distribution
 
 <div class="defn" markdown>
 
-### 정의
+**정의 2.**
 
 첨도는 분포의 "꼬리성", 즉 중심에 비해 꼬리에 확률 질량이 얼마나 있는지를 잰다.
 

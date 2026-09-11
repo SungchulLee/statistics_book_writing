@@ -69,9 +69,13 @@ $$\mu_k'(\theta) = m_k', \quad k = 1, 2, \ldots, p$$
 
 ## 예제
 
-### 예제 1: Normal 분포
+<div class="exbox" markdown>
+
+**보기 1.** Normal 분포.
 
 $X_1, \ldots, X_n \sim N(\mu, \sigma^2)$이라 하자. 미지 모수가 둘이므로 적률방정식도 둘이 필요하다.
+
+</div>
 
 **모집단 적률:**
 
@@ -92,9 +96,13 @@ $$\hat{\sigma}^2_{\text{MoM}} = m_2' - (m_1')^2 = \frac{1}{n}\sum X_i^2 - \bar{X
 
 $\hat{\sigma}^2_{\text{MoM}}$이 MLE와 마찬가지로 $n$으로 나누므로(편향) 이 경우 적률법과 MLE가 같은 추정량을 준다.
 
-### 예제 2: Exponential 분포
+<div class="exbox" markdown>
+
+**보기 2.** Exponential 분포.
 
 $E[X] = 1/\lambda$인 $X_1, \ldots, X_n \sim \text{Exp}(\lambda)$라 하자. 모수가 하나이므로 적률방정식도 하나면 된다.
+
+</div>
 
 **적률방정식:**
 
@@ -106,9 +114,13 @@ $$\hat{\lambda}_{\text{MoM}} = \frac{1}{\bar{X}}$$
 
 이는 MLE와 일치한다.
 
-### 예제 3: Gamma 분포
+<div class="exbox" markdown>
+
+**보기 3.** Gamma 분포.
 
 밀도가 $f(x) = \frac{\beta^\alpha}{\Gamma(\alpha)} x^{\alpha-1} e^{-\beta x}$인 $X_1, \ldots, X_n \sim \text{Gamma}(\alpha, \beta)$라 하자. 모수가 둘이므로 방정식도 둘이 필요하다.
+
+</div>
 
 **모집단 적률:**
 
@@ -127,9 +139,13 @@ $$\hat{\beta}_{\text{MoM}} = \frac{\bar{X}}{m_2}, \qquad \hat{\alpha}_{\text{MoM
 
 적률법 추정량은 닫힌 형태로 주어지는 반면 Gamma 분포의 MLE는 수치 최적화가 필요하다. 이것이 실무적으로 중요한 장점이다.
 
-### 예제 4: Uniform 분포
+<div class="exbox" markdown>
+
+**보기 4.** Uniform 분포.
 
 $X_1, \ldots, X_n \sim \text{Uniform}(a, b)$라 하자. 모수가 둘이므로 방정식도 둘이 필요하다.
+
+</div>
 
 **모집단 적률:**
 
@@ -146,9 +162,13 @@ $$\hat{a}_{\text{MoM}} = \bar{X} - \sqrt{3 m_2}, \qquad \hat{b}_{\text{MoM}} = \
 
 **참고:** 이 추정값들이 자료의 범위 안쪽으로 들어올 수 있다(즉 $\hat{a} > \min(X_i)$이거나 $\hat{b} < \max(X_i)$일 수 있다). 이는 논리적으로 모순이다. 적률법이 분포의 지지집합 제약을 언제나 지키지는 않는다는 알려진 한계이다. MLE($\hat{a} = \min(X_i)$, $\hat{b} = \max(X_i)$)에는 이런 문제가 없다.
 
-### 예제 5: Beta 분포
+<div class="exbox" markdown>
+
+**보기 5.** Beta 분포.
 
 $X_1, \ldots, X_n \sim \text{Beta}(\alpha, \beta)$라 하자.
+
+</div>
 
 **모집단 적률:**
 

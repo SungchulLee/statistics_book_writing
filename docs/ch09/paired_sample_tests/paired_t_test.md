@@ -45,15 +45,21 @@ $$ t = \frac{\bar{d}}{s_d / \sqrt{n}} $$
 
 ## 예제
 
-### 예제: 러닝화
+<div class="exbox" markdown>
+
+**보기 1.** 러닝화.
 
 올림픽 육상팀 감독은 Harpo 신발이 Zeppo 신발보다 기록을 낮출 수 있다고 의심한다. 러너 여섯 명이 각각 두 바퀴(신발마다 한 바퀴)를 달리며, 순서는 동전 던지기로 정한다.
+
+</div>
 
 **검정**: 대응표본 t 검정
 
 $$H_0 : \mu_{\text{Harpo}-\text{Zeppo}} = 0 \quad\text{vs}\quad H_1: \mu_{\text{Harpo}-\text{Zeppo}} < 0$$
 
-### 예제: 사전/사후 시험 점수
+<div class="exbox" markdown>
+
+**보기 2.** 사전/사후 시험 점수.
 
 | 학생 | 사후 | 사전 | 차이 |
 |:---:|:---:|:---:|:---:|
@@ -76,6 +82,8 @@ $$H_0 : \mu_{\text{Harpo}-\text{Zeppo}} = 0 \quad\text{vs}\quad H_1: \mu_{\text{
 **가설:**
 
 $$H_0 : \mu_{\text{Post}-\text{Pre}} = 0 \quad\text{vs}\quad H_1: \mu_{\text{Post}-\text{Pre}} \neq 0$$
+
+</div>
 
 ```python
 import numpy as np
@@ -144,7 +152,9 @@ ttest_ind (틀린 분석): t = 1.3354, p = 0.1925
 
 $$Z = \frac{W - \frac{n(n+1)}{4}}{\sqrt{\frac{n(n+1)(2n+1)}{24}}}$$
 
-### 예제: 교수법의 개선 효과
+<div class="exbox" markdown>
+
+**보기 3.** 교수법의 개선 효과.
 
 어떤 연구자가 학생 10명에 대해 새 교수법이 시험 점수를 높이는지 검정한다.
 
@@ -152,6 +162,8 @@ $$Z = \frac{W - \frac{n(n+1)}{4}}{\sqrt{\frac{n(n+1)(2n+1)}{24}}}$$
 - 사후: $[72, 69, 78, 85, 75, 76, 70, 79, 74, 80]$
 
 차이가 모두 양수이므로($d = [2, 1, 3, 5, 3, 2, 1, 2, 1, 4]$) $W^+ = 55$, $W^- = 0$이 되어 $W = 0$이다. $W = 0 < 8$($n=10$, $\alpha=0.05$의 임계값)이므로 $H_0$을 기각한다.
+
+</div>
 
 ```python
 import numpy as np

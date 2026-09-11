@@ -53,7 +53,7 @@ def test_prop_one_sample(k, n, p0=0.5, method="wald",
     return z, p, (p < alpha), "wald z-test"
 ```
 
-### 예제
+**보기 1.**
 
 ```python
 stat, p, reject, label = test_prop_one_sample(

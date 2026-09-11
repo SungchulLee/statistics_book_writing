@@ -65,7 +65,7 @@ def test_diff_two_props(k1, n1, k2, n2, delta0=0.0,
     return z, p, (p < alpha), label
 ```
 
-### 예제
+**보기 1.**
 
 ```python
 z, p, reject, label = test_diff_two_props(

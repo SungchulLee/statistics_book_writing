@@ -112,6 +112,8 @@ $X \perp Y$이면 $\text{Var}(X + Y) = \text{Var}(X) + \text{Var}(Y)$이다.
 
 ## 예제: 이산 결합분포
 
+<div class="probox" markdown>
+
 **문제:** 두 자산 $X$와 $Y$의 결합 PMF가 다음과 같다:
 
 | | $Y=0$ | $Y=1$ | $Y=2$ |
@@ -121,6 +123,8 @@ $X \perp Y$이면 $\text{Var}(X + Y) = \text{Var}(X) + \text{Var}(Y)$이다.
 | $X=2$ | 0.05 | 0.10 | 0.10 |
 
 $P(X + Y \leq 2)$와 $E[XY]$를 계산하라.
+
+</div>
 
 **풀이:**
 
@@ -136,7 +140,11 @@ $$
 
 ## 예제: 연속 결합분포
 
+<div class="probox" markdown>
+
 **문제:** $0 \leq x \leq y \leq 1$에서 $f_{X,Y}(x,y) = 6(1-y)$라 하자. 이것이 올바른 PDF임을 확인하고 $P(X < 1/2, Y < 1/2)$를 구하라.
+
+</div>
 
 **풀이:** 먼저 확인한다:
 

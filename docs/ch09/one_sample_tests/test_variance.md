@@ -51,7 +51,7 @@ def test_variance_one_sample(n, s2, sigma0, alt="two-sided", alpha=0.05):
     return chi2_stat, p, (p < alpha)
 ```
 
-### 예제
+**보기 1.**
 
 ```python
 stat, p, reject = test_variance_one_sample(

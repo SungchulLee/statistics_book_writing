@@ -255,7 +255,11 @@ if __name__ == "__main__":
 
 > **출처:** [Khan Academy — Introduction to Sampling Distributions](https://www.khanacademy.org/math/ap-statistics/sampling-distribution-ap/what-is-sampling-distribution/v/introduction-to-sampling-distributions)
 
+<div class="probox" markdown>
+
 **문제.** 항아리에 1, 2, 3번이 매겨진 공 세 개가 있다. 모평균은 $\mu = 2$이다. 복원추출로 공 두 개를 뽑아 평균을 구한다. 이 표본평균의 분포, 즉 $\bar{X}$의 표본분포를 구하라.
+
+</div>
 
 **풀이.** 동일한 확률을 갖는 $3^2 = 9$가지 결과가 있다:
 

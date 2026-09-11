@@ -39,7 +39,7 @@ $$\ell(\theta) = \log L(\theta) = \sum_{i=1}^n \log f(x_i; \theta)$$
 
 <div class="defn" markdown>
 
-### 정의
+**정의 1.**
 
 **최대가능도추정량(MLE)**은 가능도함수를 최대화하는 $\theta$ 값이다:
 
@@ -65,9 +65,13 @@ $$\frac{\partial \ell}{\partial \theta_j} = 0, \quad j = 1, \ldots, k$$
 
 ## 예제
 
-### 예제 1: Normal 분포 — 평균이 미지
+<div class="exbox" markdown>
+
+**보기 1.** Normal 분포 — 평균이 미지.
 
 $\sigma^2$이 알려진 $X_1, \ldots, X_n \sim N(\mu, \sigma^2)$이라 하자. $\mu$의 MLE를 구한다.
+
+</div>
 
 **가능도:**
 
@@ -87,9 +91,13 @@ $$\hat{\mu}_{\text{MLE}} = \frac{1}{n}\sum_{i=1}^n x_i = \bar{x}$$
 
 평균의 MLE는 표본평균이며 불편이고 효율적이다.
 
-### 예제 2: Normal 분포 — 두 모수 모두 미지
+<div class="exbox" markdown>
+
+**보기 2.** Normal 분포 — 두 모수 모두 미지.
 
 $\mu$와 $\sigma^2$이 모두 미지인 $X_1, \ldots, X_n \sim N(\mu, \sigma^2)$이라 하자.
+
+</div>
 
 **로그가능도:**
 
@@ -103,9 +111,13 @@ $$\frac{\partial \ell}{\partial \sigma^2} = -\frac{n}{2\sigma^2} + \frac{1}{2\si
 
 **참고:** $\sigma^2$의 MLE는 $n-1$이 아니라 $n$으로 나눈다. 편향되어 있다: $E[\hat{\sigma}^2_{\text{MLE}}] = \frac{n-1}{n}\sigma^2$. MLE가 언제나 불편인 것은 아님을 보여 준다.
 
-### 예제 3: Bernoulli 분포
+<div class="exbox" markdown>
+
+**보기 3.** Bernoulli 분포.
 
 $X_1, \ldots, X_n \sim \text{Bernoulli}(p)$라 하자.
+
+</div>
 
 **로그가능도:**
 
@@ -123,9 +135,13 @@ $$\hat{p}_{\text{MLE}} = \frac{k}{n} = \bar{x}$$
 
 MLE는 표본비율이며 직관적으로 자연스럽고 불편이다.
 
-### 예제 4: Exponential 분포
+<div class="exbox" markdown>
+
+**보기 4.** Exponential 분포.
 
 $x > 0$에서 밀도가 $f(x; \lambda) = \lambda e^{-\lambda x}$인 $X_1, \ldots, X_n \sim \text{Exp}(\lambda)$라 하자.
+
+</div>
 
 **로그가능도:**
 
@@ -139,9 +155,13 @@ $$\hat{\lambda}_{\text{MLE}} = \frac{n}{\sum_{i=1}^n x_i} = \frac{1}{\bar{x}}$$
 
 **2계도함수 확인:** $\frac{d^2\ell}{d\lambda^2} = -n/\lambda^2 < 0$이므로 최댓값이다.
 
-### 예제 5: Poisson 분포
+<div class="exbox" markdown>
+
+**보기 5.** Poisson 분포.
 
 $X_1, \ldots, X_n \sim \text{Poisson}(\lambda)$라 하자.
+
+</div>
 
 **로그가능도:**
 

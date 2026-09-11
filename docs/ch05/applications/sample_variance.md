@@ -84,9 +84,17 @@ $$
 
 ## 예제
 
-### 예제 1: S-squared의 기댓값과 분산
+<div class="exbox" markdown>
+
+**보기 1.** S-squared의 기댓값과 분산.
+
+</div>
+
+<div class="probox" markdown>
 
 **문제.** $N(\mu, 25)$에서 $n = 10$인 표본을 뽑는다. $E[S^2]$과 $\text{Var}(S^2)$을 구하라.
+
+</div>
 
 **풀이.** $Y \sim \chi^2_{n-1}$에 대해 $EY = n-1$이고 $\text{Var}(Y) = 2(n-1)$이다.
 
@@ -102,9 +110,17 @@ $$
 \text{Var}(S^2) = \frac{2\sigma^4}{n-1} = \frac{2(25^2)}{9} = \frac{1250}{9} \approx 138.89
 $$
 
-### 예제 2: S-squared에 관한 확률 (정규모집단)
+<div class="exbox" markdown>
+
+**보기 2.** S-squared에 관한 확률 (정규모집단).
+
+</div>
+
+<div class="probox" markdown>
 
 **문제.** $N(\mu, 25)$에서 $n = 10$인 표본을 뽑는다. $P(S^2 > 30)$을 구하라.
+
+</div>
 
 **풀이.**
 
@@ -130,9 +146,17 @@ print(f"P(S^2 > 30) = {p_value:.4f}")
 P(S^2 > 30) = 0.2897
 ```
 
-### 예제 3: 정규성 가정 없이
+<div class="exbox" markdown>
+
+**보기 3.** 정규성 가정 없이.
+
+</div>
+
+<div class="probox" markdown>
 
 **문제.** 분산이 25인 모집단에서 $n = 10$인 표본을 뽑는다(정규성은 가정하지 않는다). $P(S^2 > 30)$에 관해 무엇을 말할 수 있는가?
+
+</div>
 
 **풀이.** 정규성이 없으면 $\frac{(n-1)S^2}{\sigma^2}$은 카이제곱 분포를 따르지 **않는다**. $E[S^2] = 25$임은 알지만, 모집단 모양에 관한 추가 정보 없이는 $P(S^2 > 30)$을 구할 수 없다.
 

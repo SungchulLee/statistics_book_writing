@@ -44,7 +44,7 @@ def test_paired_mean(n, dbar, sd_d, mu_d0=0.0,
     return t, p, (p < alpha)
 ```
 
-### 예제
+**보기 1.**
 
 ```python
 t_stat, p, reject = test_paired_mean(

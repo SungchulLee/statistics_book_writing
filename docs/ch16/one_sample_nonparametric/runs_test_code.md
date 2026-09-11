@@ -67,9 +67,13 @@ def runs_test(data):
     return statistic, p_value
 ```
 
-### 예제: 뭉친 수열
+<div class="exbox" markdown>
+
+**보기 1.** 뭉친 수열.
 
 뭉침이 심한 수열은 런이 매우 적다.
+
+</div>
 
 ```python
 data = np.array([1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
@@ -78,9 +82,13 @@ z, p = runs_test(data * 2 - 1)
 # z = -3.7335, p = 0.0002 → 무작위성 기각
 ```
 
-### 예제: 지나치게 교대하는 수열
+<div class="exbox" markdown>
+
+**보기 2.** 지나치게 교대하는 수열.
 
 빈번한 교대 역시 무작위성으로부터의 이탈이다.
+
+</div>
 
 ```python
 data = np.array([1, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0])

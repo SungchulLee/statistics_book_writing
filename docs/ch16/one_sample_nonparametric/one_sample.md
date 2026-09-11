@@ -102,7 +102,7 @@ def runs_test(data):
     return statistic, p_value
 ```
 
-### 예제
+**보기 1.**
 
 **예제 1 --- 뭉친 자료 (무작위가 아님):**
 

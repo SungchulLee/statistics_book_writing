@@ -76,7 +76,11 @@ $$
 
 ## 7. Python 구현
 
-### 예제: 분산이 다른 경우의 Welch 분산분석
+<div class="exbox" markdown>
+
+**보기 1.** 분산이 다른 경우의 Welch 분산분석.
+
+</div>
 
 ```python
 import pingouin as pg

@@ -25,7 +25,9 @@ $$CI_{1-\alpha} = \{\theta_0 : \text{fail to reject } H_0: \theta = \theta_0 \te
 
 ## 예제
 
-### 예제 1: 일표본 평균
+<div class="exbox" markdown>
+
+**보기 1.** 일표본 평균.
 
 $H_0: \mu = \mu_0$ 대 $H_a: \mu \neq \mu_0$의 일표본 z-검정에서:
 
@@ -34,11 +36,15 @@ $H_0: \mu = \mu_0$ 대 $H_a: \mu \neq \mu_0$의 일표본 z-검정에서:
 
 이 검정이 $H_0$을 기각할 필요충분조건은 $\mu_0$이 신뢰구간 밖에 있는 것이다.
 
+</div>
+
 **동등성의 증명:**
 
 $$|z| > z_{\alpha/2} \iff \left|\frac{\bar{x} - \mu_0}{\sigma/\sqrt{n}}\right| > z_{\alpha/2} \iff \mu_0 \notin \left(\bar{x} - z_{\alpha/2}\frac{\sigma}{\sqrt{n}},\ \bar{x} + z_{\alpha/2}\frac{\sigma}{\sqrt{n}}\right)$$
 
-### 예제 2: 두 품종의 배
+<div class="exbox" markdown>
+
+**보기 2.** 두 품종의 배.
 
 Yuna가 Bosc 배와 Anjou 배의 열량을 비교한다. $\mu_{\text{Bosc}} - \mu_{\text{Anjou}}$의 99% 신뢰구간은 $4 \pm 6.44 = (-2.44, 10.44)$이다.
 
@@ -46,13 +52,19 @@ $\alpha = 0.01$에서 $H_0: \mu_{\text{Bosc}} = \mu_{\text{Anjou}}$(즉 $\mu_{\t
 
 $0 \in (-2.44, 10.44)$이므로 $H_0$을 **기각하지 못한다**. 열량이 다르다고 결론지을 증거가 부족하다.
 
-### 예제 3: 대면 수업과 온라인 수업
+</div>
+
+<div class="exbox" markdown>
+
+**보기 3.** 대면 수업과 온라인 수업.
 
 $p_{\text{in\_person}} - p_{\text{online}}$의 95% 신뢰구간이 $(-0.04, 0.14)$이다.
 
 $\alpha = 0.05$에서 $H_0: p_{\text{in\_person}} = p_{\text{online}}$을 검정하면:
 
 $0 \in (-0.04, 0.14)$이므로 $H_0$을 **기각하지 못한다**. 합격률에 유의한 차이가 없다.
+
+</div>
 
 ## 단측검정과 신뢰구간
 

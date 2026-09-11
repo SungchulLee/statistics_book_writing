@@ -207,9 +207,13 @@ $$
 
 ## 예제: 선형회귀 출력 재현
 
-### 문제
+<div class="probox" markdown>
+
+**문제 1.**
 
 Advertising 자료를 써서 모형 $\text{Sales} \sim \text{TV} + \text{Radio} + \text{Newspaper}$의 주요 회귀 출력 — 계수, 표준오차, $t$ 통계량, $p$값, 신뢰구간 — 을 밑바닥부터 계산해 재현하라.
+
+</div>
 
 !!! info "참고"
 

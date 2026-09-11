@@ -113,7 +113,11 @@ $$
 
 ## 예: 두 교대조의 컵케이크
 
+<div class="probox" markdown>
+
 **문제.** 어떤 제과점에 두 교대조가 있다. A 교대조: $\mu_A = 130$g, $\sigma_A = 4$g. B 교대조: $\mu_B = 125$g, $\sigma_B = 3$g. $n_A = n_B = 40$일 때 $P(|\bar{X}_A - \bar{X}_B| > 6)$을 구하라.
+
+</div>
 
 **풀이.** $\sigma_A, \sigma_B$를 알고 있으므로 경우 A이다:
 
@@ -162,7 +166,11 @@ P(|X_bar_A - X_bar_B| > 6) = 0.1030
 
 ## 예: 차의 표준오차
 
+<div class="probox" markdown>
+
 **문제.** 모집단 A: $\mu_A = 100$, $\sigma_A = 15$, $n_A = 36$. 모집단 B: $\mu_B = 110$, $\sigma_B = 20$, $n_B = 49$. $\text{SE}(\bar{X}_A - \bar{X}_B)$를 구하라.
+
+</div>
 
 **풀이.**
 

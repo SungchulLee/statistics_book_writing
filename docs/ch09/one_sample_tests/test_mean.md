@@ -64,7 +64,7 @@ def test_mean_one_sample(xbar, n, mu0=0.0, sd=None, known_sigma=None,
     return t, p, (p < alpha), f"t-test (df={df})"
 ```
 
-### 예제
+**보기 1.**
 
 ```python
 stat, p, reject, label = test_mean_one_sample(

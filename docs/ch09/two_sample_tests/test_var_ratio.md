@@ -50,7 +50,7 @@ def test_ratio_two_variances(n1, s1, n2, s2, theta0=1.0,
     return F_stat, p, (p < alpha)
 ```
 
-### 예제
+**보기 1.**
 
 ```python
 F_stat, p, reject = test_ratio_two_variances(

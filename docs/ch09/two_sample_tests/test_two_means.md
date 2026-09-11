@@ -70,7 +70,7 @@ def test_diff_two_means(n1, m1, s1, n2, m2, s2, method="welch",
     return t, df, p, (p < alpha)
 ```
 
-### 예제
+**보기 1.**
 
 ```python
 t, df, p, reject = test_diff_two_means(
