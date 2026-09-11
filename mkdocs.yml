@@ -65,7 +65,7 @@ nav:
         - 1.1 기초 개념:
             - 모집단과 표본: ch01/classical/population_sample.md
             - 모수 대 통계량: ch01/classical/parameters_statistics.md
-            - 교란과 연관성 대 인과관계: ch01/classical/confounding_causation.md
+            - 교란과 인과관계: ch01/classical/confounding_causation.md
         - 1.2 통계학 학습 패러다임:
             - 자료 수집을 설계하라: ch01/contrast/design_data.md
             - 관찰연구: ch01/classical/observational.md
