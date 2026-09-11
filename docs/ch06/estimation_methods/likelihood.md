@@ -37,6 +37,8 @@ $$\ell(\theta) = \log L(\theta) = \sum_{i=1}^n \log f(x_i; \theta)$$
 
 ## 최대가능도추정
 
+<div class="defn" markdown>
+
 ### 정의
 
 **최대가능도추정량(MLE)**은 가능도함수를 최대화하는 $\theta$ 값이다:
@@ -44,6 +46,8 @@ $$\ell(\theta) = \log L(\theta) = \sum_{i=1}^n \log f(x_i; \theta)$$
 $$\hat{\theta}_{\text{MLE}} = \arg\max_{\theta \in \Theta} L(\theta) = \arg\max_{\theta \in \Theta} \ell(\theta)$$
 
 MLE는 "어떤 모수값이 관측된 자료를 가장 그럴듯하게 만드는가?"라는 물음에 답한다.
+
+</div>
 
 ### MLE 찾기
 

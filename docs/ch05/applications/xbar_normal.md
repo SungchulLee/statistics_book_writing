@@ -107,25 +107,27 @@ $X_1, \ldots, X_n \overset{\text{iid}}{\sim} N(\mu, \sigma^2)$이면 $\bar{X} \s
 
 </div>
 
-**증명.** $X_i$의 적률생성함수(MGF)는:
+??? proof "증명"
 
-$$
-M_{X_i}(t) = \exp\!\left(\mu t + \frac{\sigma^2 t^2}{2}\right)
-$$
+    $X_i$의 적률생성함수(MGF)는:
 
-$X_i$들이 독립이므로:
+    $$
+    M_{X_i}(t) = \exp\!\left(\mu t + \frac{\sigma^2 t^2}{2}\right)
+    $$
 
-$$
-M_{S_n}(t) = \prod_{i=1}^n M_{X_i}(t) = \exp\!\left(n\mu t + \frac{n\sigma^2 t^2}{2}\right)
-$$
+    $X_i$들이 독립이므로:
 
-$\bar{X} = S_n / n$의 MGF는:
+    $$
+    M_{S_n}(t) = \prod_{i=1}^n M_{X_i}(t) = \exp\!\left(n\mu t + \frac{n\sigma^2 t^2}{2}\right)
+    $$
 
-$$
-M_{\bar{X}}(t) = M_{S_n}(t/n) = \exp\!\left(\mu t + \frac{\sigma^2 t^2}{2n}\right)
-$$
+    $\bar{X} = S_n / n$의 MGF는:
 
-이는 $N(\mu, \sigma^2/n)$의 MGF이다. MGF가 분포를 유일하게 결정하므로 $\bar{X} \sim N(\mu, \sigma^2/n)$이다. $\square$
+    $$
+    M_{\bar{X}}(t) = M_{S_n}(t/n) = \exp\!\left(\mu t + \frac{\sigma^2 t^2}{2n}\right)
+    $$
+
+    이는 $N(\mu, \sigma^2/n)$의 MGF이다. MGF가 분포를 유일하게 결정하므로 $\bar{X} \sim N(\mu, \sigma^2/n)$이다. $\square$
 
 ## 연습문제
 

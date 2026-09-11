@@ -69,15 +69,16 @@ $$
 P(X > s + t \mid X > s) = P(X > t) \quad \text{for all } s, t \geq 0
 $$
 
-### 증명
+??? proof "증명"
 
-$$
-P(X > s + t \mid X > s) = \frac{P(X > s + t)}{P(X > s)} = \frac{e^{-\lambda(s+t)}}{e^{-\lambda s}} = e^{-\lambda t} = P(X > t)
-$$
 
-**해석:** 이미 $s$만큼의 시간을 기다렸더라도 남은 대기 시간의 분포는 방금 시작했을 때와 같다. 이 과정은 자신의 이력을 "잊어버린다".
+    $$
+    P(X > s + t \mid X > s) = \frac{P(X > s + t)}{P(X > s)} = \frac{e^{-\lambda(s+t)}}{e^{-\lambda s}} = e^{-\lambda t} = P(X > t)
+    $$
 
----
+    **해석:** 이미 $s$만큼의 시간을 기다렸더라도 남은 대기 시간의 분포는 방금 시작했을 때와 같다. 이 과정은 자신의 이력을 "잊어버린다".
+
+    ---
 
 ## Poisson 과정과의 연결
 
@@ -101,15 +102,16 @@ $$
 \min(X_1, X_2) \sim \text{Exp}(\lambda_1 + \lambda_2)
 $$
 
-### 증명
+??? proof "증명"
 
-$$
-P(\min(X_1, X_2) > t) = P(X_1 > t) \cdot P(X_2 > t) = e^{-\lambda_1 t} \cdot e^{-\lambda_2 t} = e^{-(\lambda_1 + \lambda_2)t}
-$$
 
-이는 $n$개의 독립인 Exponential 확률변수로 일반화된다: $\min(X_1, \ldots, X_n) \sim \text{Exp}\left(\sum_{i=1}^n \lambda_i\right)$.
+    $$
+    P(\min(X_1, X_2) > t) = P(X_1 > t) \cdot P(X_2 > t) = e^{-\lambda_1 t} \cdot e^{-\lambda_2 t} = e^{-(\lambda_1 + \lambda_2)t}
+    $$
 
----
+    이는 $n$개의 독립인 Exponential 확률변수로 일반화된다: $\min(X_1, \ldots, X_n) \sim \text{Exp}\left(\sum_{i=1}^n \lambda_i\right)$.
+
+    ---
 
 ## 예제
 

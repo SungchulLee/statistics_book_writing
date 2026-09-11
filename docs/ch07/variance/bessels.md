@@ -18,19 +18,20 @@ $$S^2 = \frac{1}{n-1}\sum_{i=1}^n (X_i - \bar{X})^2$$
 
 $$E[S^2] = \sigma^2$$
 
-### 증명
+??? proof "증명"
 
-핵심 항등식에서 출발한다:
 
-$$\sum_{i=1}^n (X_i - \bar{X})^2 = \sum_{i=1}^n (X_i - \mu)^2 - n(\bar{X} - \mu)^2$$
+    핵심 항등식에서 출발한다:
 
-기댓값을 취하면:
+    $$\sum_{i=1}^n (X_i - \bar{X})^2 = \sum_{i=1}^n (X_i - \mu)^2 - n(\bar{X} - \mu)^2$$
 
-$$E\left[\sum_{i=1}^n (X_i - \bar{X})^2\right] = n\sigma^2 - n \cdot \frac{\sigma^2}{n} = (n-1)\sigma^2$$
+    기댓값을 취하면:
 
-따라서:
+    $$E\left[\sum_{i=1}^n (X_i - \bar{X})^2\right] = n\sigma^2 - n \cdot \frac{\sigma^2}{n} = (n-1)\sigma^2$$
 
-$$E\left[\frac{1}{n-1}\sum_{i=1}^n (X_i - \bar{X})^2\right] = \frac{(n-1)\sigma^2}{n-1} = \sigma^2$$
+    따라서:
+
+    $$E\left[\frac{1}{n-1}\sum_{i=1}^n (X_i - \bar{X})^2\right] = \frac{(n-1)\sigma^2}{n-1} = \sigma^2$$
 
 ### 왜 n-1인가? 자유도 논증
 $n$개의 편차 $d_i = X_i - \bar{X}$는 다음 제약을 받는다:

@@ -32,53 +32,54 @@ $$
 
 **기울기의 표준오차**: 분모 $s \sqrt{1 / SS_x}$는 표집변동으로 인한 $\hat{\beta}_1$의 불확실성을 수량화하며, 잔차의 산포와 설명변수의 산포를 결합한다.
 
-### 증명
+??? proof "증명"
 
-**1단계: 모형 가정.** 단순선형회귀 모형을 생각하자.
 
-$$
-y_i = \beta_0 + \beta_1 x_i + \varepsilon_i
-$$
+    **1단계: 모형 가정.** 단순선형회귀 모형을 생각하자.
 
-여기서 $\varepsilon_i \overset{\text{i.i.d.}}{\sim} N(0, \sigma^2)$이다.
+    $$
+    y_i = \beta_0 + \beta_1 x_i + \varepsilon_i
+    $$
 
-**2단계: OLS 추정량.** $\beta_1$의 최소제곱 추정량은
+    여기서 $\varepsilon_i \overset{\text{i.i.d.}}{\sim} N(0, \sigma^2)$이다.
 
-$$
-\hat{\beta}_1 = \frac{\sum_{i=1}^n (x_i - \bar{x})(y_i - \bar{y})}{\sum_{i=1}^n (x_i - \bar{x})^2}
-$$
+    **2단계: OLS 추정량.** $\beta_1$의 최소제곱 추정량은
 
-**3단계: $\hat{\beta}_1$의 분포.** $\hat{\beta}_1$은 정규분포를 따르는 $y_i$들의 선형결합이므로
+    $$
+    \hat{\beta}_1 = \frac{\sum_{i=1}^n (x_i - \bar{x})(y_i - \bar{y})}{\sum_{i=1}^n (x_i - \bar{x})^2}
+    $$
 
-$$
-\hat{\beta}_1 \sim N\!\left(\beta_1,\; \frac{\sigma^2}{\sum_{i=1}^n (x_i - \bar{x})^2}\right)
-$$
+    **3단계: $\hat{\beta}_1$의 분포.** $\hat{\beta}_1$은 정규분포를 따르는 $y_i$들의 선형결합이므로
 
-**4단계: $\sigma$를 알 때의 표준화.** 참 표준편차로 나누면 표준정규가 된다.
+    $$
+    \hat{\beta}_1 \sim N\!\left(\beta_1,\; \frac{\sigma^2}{\sum_{i=1}^n (x_i - \bar{x})^2}\right)
+    $$
 
-$$
-\frac{\hat{\beta}_1 - \beta_1}{\sigma\sqrt{\dfrac{1}{\sum_{i=1}^n(x_i - \bar{x})^2}}} \sim N(0, 1)
-$$
+    **4단계: $\sigma$를 알 때의 표준화.** 참 표준편차로 나누면 표준정규가 된다.
 
-**5단계: $\sigma^2$의 추정.** $\sigma^2$을 모르므로 불편추정량을 쓴다.
+    $$
+    \frac{\hat{\beta}_1 - \beta_1}{\sigma\sqrt{\dfrac{1}{\sum_{i=1}^n(x_i - \bar{x})^2}}} \sim N(0, 1)
+    $$
 
-$$
-s^2 = \frac{\sum_{i=1}^n (y_i - \hat{y}_i)^2}{n - 2}
-$$
+    **5단계: $\sigma^2$의 추정.** $\sigma^2$을 모르므로 불편추정량을 쓴다.
 
-**6단계: 대입.** $\sigma$를 $s$로 바꾸면
+    $$
+    s^2 = \frac{\sum_{i=1}^n (y_i - \hat{y}_i)^2}{n - 2}
+    $$
 
-$$
-\frac{\hat{\beta}_1 - \beta_1}{s\sqrt{\dfrac{1}{\sum_{i=1}^n(x_i - \bar{x})^2}}}
-$$
+    **6단계: 대입.** $\sigma$를 $s$로 바꾸면
 
-**7단계: $t$ 분포 결과.** 분자는 정규이고, $s^2$은 자유도 $n - 2$의 척도조정된 카이제곱분포를 따르며, 둘은 독립이다. 표준정규를 독립인 카이제곱을 자유도로 나눈 것의 제곱근으로 나눈 것이 $t$ 분포라는 정의에 따라
+    $$
+    \frac{\hat{\beta}_1 - \beta_1}{s\sqrt{\dfrac{1}{\sum_{i=1}^n(x_i - \bar{x})^2}}}
+    $$
 
-$$
-\frac{\hat{\beta}_1 - \beta_1}{s\sqrt{\dfrac{1}{\sum_{i=1}^n(x_i - \bar{x})^2}}} \sim t_{n-2} \qquad \square
-$$
+    **7단계: $t$ 분포 결과.** 분자는 정규이고, $s^2$은 자유도 $n - 2$의 척도조정된 카이제곱분포를 따르며, 둘은 독립이다. 표준정규를 독립인 카이제곱을 자유도로 나눈 것의 제곱근으로 나눈 것이 $t$ 분포라는 정의에 따라
 
----
+    $$
+    \frac{\hat{\beta}_1 - \beta_1}{s\sqrt{\dfrac{1}{\sum_{i=1}^n(x_i - \bar{x})^2}}} \sim t_{n-2} \qquad \square
+    $$
+
+    ---
 
 ## 2. 주어진 점에서의 반응의 기댓값
 
@@ -101,41 +102,42 @@ $$
 
 따라서 평균반응의 신뢰띠는 $\bar{x}$에서 가장 좁고 $x_0$이 자료의 중심에서 멀어질수록 넓어진다.
 
-### 증명
+??? proof "증명"
 
-**1단계: 예측오차의 분해.** 추정된 평균반응과 참 평균반응의 차이는
 
-$$
-(\hat{\beta}_0 + \hat{\beta}_1 x_0) - (\beta_0 + \beta_1 x_0) = (\hat{\beta}_0 - \beta_0) + (\hat{\beta}_1 - \beta_1)x_0
-$$
+    **1단계: 예측오차의 분해.** 추정된 평균반응과 참 평균반응의 차이는
 
-두 추정량이 모두 불편이므로 이 값의 평균은 0이다.
+    $$
+    (\hat{\beta}_0 + \hat{\beta}_1 x_0) - (\beta_0 + \beta_1 x_0) = (\hat{\beta}_0 - \beta_0) + (\hat{\beta}_1 - \beta_1)x_0
+    $$
 
-**2단계: 분산 계산.** OLS의 분산·공분산 결과를 쓴다.
+    두 추정량이 모두 불편이므로 이 값의 평균은 0이다.
 
-- $\text{Var}(\hat{\beta}_0) = \sigma^2\!\left(\dfrac{1}{n} + \dfrac{\bar{x}^2}{SS_x}\right)$
-- $\text{Var}(\hat{\beta}_1) = \dfrac{\sigma^2}{SS_x}$
-- $\text{Cov}(\hat{\beta}_0, \hat{\beta}_1) = -\dfrac{\sigma^2 \bar{x}}{SS_x}$
+    **2단계: 분산 계산.** OLS의 분산·공분산 결과를 쓴다.
 
-$\text{Var}(\hat{\beta}_0 + \hat{\beta}_1 x_0) = \text{Var}(\hat{\beta}_0) + x_0^2\,\text{Var}(\hat{\beta}_1) + 2x_0\,\text{Cov}(\hat{\beta}_0, \hat{\beta}_1)$으로 결합하면
+    - $\text{Var}(\hat{\beta}_0) = \sigma^2\!\left(\dfrac{1}{n} + \dfrac{\bar{x}^2}{SS_x}\right)$
+    - $\text{Var}(\hat{\beta}_1) = \dfrac{\sigma^2}{SS_x}$
+    - $\text{Cov}(\hat{\beta}_0, \hat{\beta}_1) = -\dfrac{\sigma^2 \bar{x}}{SS_x}$
 
-$$
-\text{Var}(\hat{\beta}_0 + \hat{\beta}_1 x_0) = \sigma^2\!\left(\frac{1}{n} + \frac{(x_0 - \bar{x})^2}{SS_x}\right)
-$$
+    $\text{Var}(\hat{\beta}_0 + \hat{\beta}_1 x_0) = \text{Var}(\hat{\beta}_0) + x_0^2\,\text{Var}(\hat{\beta}_1) + 2x_0\,\text{Cov}(\hat{\beta}_0, \hat{\beta}_1)$으로 결합하면
 
-**3단계: 표준화.** $\sigma$를 알면
+    $$
+    \text{Var}(\hat{\beta}_0 + \hat{\beta}_1 x_0) = \sigma^2\!\left(\frac{1}{n} + \frac{(x_0 - \bar{x})^2}{SS_x}\right)
+    $$
 
-$$
-\frac{(\hat{\beta}_0 + \hat{\beta}_1 x_0) - (\beta_0 + \beta_1 x_0)}{\sigma\sqrt{\dfrac{1}{n} + \dfrac{(x_0 - \bar{x})^2}{SS_x}}} \sim N(0, 1)
-$$
+    **3단계: 표준화.** $\sigma$를 알면
 
-**4단계: $\sigma$ 대신 $s$.** $\sigma$를 잔차 표준오차 $s$로 바꾸고 앞과 같은 $t$ 분포 논증을 적용하면
+    $$
+    \frac{(\hat{\beta}_0 + \hat{\beta}_1 x_0) - (\beta_0 + \beta_1 x_0)}{\sigma\sqrt{\dfrac{1}{n} + \dfrac{(x_0 - \bar{x})^2}{SS_x}}} \sim N(0, 1)
+    $$
 
-$$
-\frac{(\hat{\beta}_0 + \hat{\beta}_1 x_0) - (\beta_0 + \beta_1 x_0)}{s\sqrt{\dfrac{1}{n} + \dfrac{(x_0 - \bar{x})^2}{SS_x}}} \sim t_{n-2} \qquad \square
-$$
+    **4단계: $\sigma$ 대신 $s$.** $\sigma$를 잔차 표준오차 $s$로 바꾸고 앞과 같은 $t$ 분포 논증을 적용하면
 
----
+    $$
+    \frac{(\hat{\beta}_0 + \hat{\beta}_1 x_0) - (\beta_0 + \beta_1 x_0)}{s\sqrt{\dfrac{1}{n} + \dfrac{(x_0 - \bar{x})^2}{SS_x}}} \sim t_{n-2} \qquad \square
+    $$
+
+    ---
 
 ## 3. 주어진 점에서의 반응(예측)
 
@@ -159,33 +161,34 @@ $$
 
 앞머리의 $1$이 평균반응의 경우와 결정적으로 다른 점이다. 이 항 때문에 개별 관측값에 대한 예측구간은 언제나 평균반응에 대한 신뢰구간보다 넓다.
 
-### 증명
+??? proof "증명"
 
-**1단계: 예측오차.** 예측오차를 정의하면
 
-$$
-\hat{y}_0 - y_0 = (\hat{\beta}_0 + \hat{\beta}_1 x_0) - (\beta_0 + \beta_1 x_0 + \varepsilon) = (\hat{\beta}_0 - \beta_0) + (\hat{\beta}_1 - \beta_1)x_0 - \varepsilon
-$$
+    **1단계: 예측오차.** 예측오차를 정의하면
 
-**2단계: 분산의 분해.** 오차 $\varepsilon$은 (훈련자료에 의존하는) 추정량 $\hat{\beta}_0$, $\hat{\beta}_1$과 독립이므로
+    $$
+    \hat{y}_0 - y_0 = (\hat{\beta}_0 + \hat{\beta}_1 x_0) - (\beta_0 + \beta_1 x_0 + \varepsilon) = (\hat{\beta}_0 - \beta_0) + (\hat{\beta}_1 - \beta_1)x_0 - \varepsilon
+    $$
 
-$$
-\text{Var}(\hat{y}_0 - y_0) = \underbrace{\sigma^2\!\left(\frac{1}{n} + \frac{(x_0 - \bar{x})^2}{SS_x}\right)}_{\text{추정의 불확실성}} + \underbrace{\sigma^2}_{\text{줄일 수 없는 잡음}} = \sigma^2\!\left(1 + \frac{1}{n} + \frac{(x_0 - \bar{x})^2}{SS_x}\right)
-$$
+    **2단계: 분산의 분해.** 오차 $\varepsilon$은 (훈련자료에 의존하는) 추정량 $\hat{\beta}_0$, $\hat{\beta}_1$과 독립이므로
 
-**3단계: $\sigma$를 알 때의 표준화.** 예측오차는 평균이 0인 정규분포를 따른다.
+    $$
+    \text{Var}(\hat{y}_0 - y_0) = \underbrace{\sigma^2\!\left(\frac{1}{n} + \frac{(x_0 - \bar{x})^2}{SS_x}\right)}_{\text{추정의 불확실성}} + \underbrace{\sigma^2}_{\text{줄일 수 없는 잡음}} = \sigma^2\!\left(1 + \frac{1}{n} + \frac{(x_0 - \bar{x})^2}{SS_x}\right)
+    $$
 
-$$
-\frac{\hat{y}_0 - y_0}{\sigma\sqrt{1 + \dfrac{1}{n} + \dfrac{(x_0 - \bar{x})^2}{SS_x}}} \sim N(0, 1)
-$$
+    **3단계: $\sigma$를 알 때의 표준화.** 예측오차는 평균이 0인 정규분포를 따른다.
 
-**4단계: $\sigma$ 대신 $s$.** $\sigma$를 $s$로 바꾸면 $t$ 분포를 얻는다.
+    $$
+    \frac{\hat{y}_0 - y_0}{\sigma\sqrt{1 + \dfrac{1}{n} + \dfrac{(x_0 - \bar{x})^2}{SS_x}}} \sim N(0, 1)
+    $$
 
-$$
-\frac{(\hat{\beta}_0 + \hat{\beta}_1 x_0) - (\beta_0 + \beta_1 x_0 + \varepsilon)}{s\sqrt{1 + \dfrac{1}{n} + \dfrac{(x_0 - \bar{x})^2}{SS_x}}} \sim t_{n-2} \qquad \square
-$$
+    **4단계: $\sigma$ 대신 $s$.** $\sigma$를 $s$로 바꾸면 $t$ 분포를 얻는다.
 
----
+    $$
+    \frac{(\hat{\beta}_0 + \hat{\beta}_1 x_0) - (\beta_0 + \beta_1 x_0 + \varepsilon)}{s\sqrt{1 + \dfrac{1}{n} + \dfrac{(x_0 - \bar{x})^2}{SS_x}}} \sim t_{n-2} \qquad \square
+    $$
+
+    ---
 
 ## 요약 비교
 

@@ -8,6 +8,8 @@
 
 ## Bernoulli 분포
 
+<div class="defn" markdown>
+
 ### 정의
 
 확률변수 $X$가 확률 $p$로 값 1(성공)을, 확률 $1 - p$로 값 0(실패)을 가지면 $X$는 Bernoulli 분포를 따른다:
@@ -15,6 +17,8 @@
 $$
 X \sim \text{Bernoulli}(p), \qquad P(X = x) = p^x (1 - p)^{1-x}, \quad x \in \{0, 1\}
 $$
+
+</div>
 
 ### 성질
 
@@ -40,6 +44,8 @@ $$
 
 ## Binomial 분포
 
+<div class="defn" markdown>
+
 ### 정의
 
 $X_1, X_2, \ldots, X_n$이 독립인 $\text{Bernoulli}(p)$ 확률변수이면, $Y = \sum_{i=1}^n X_i$는 **Binomial 분포**를 따른다:
@@ -49,6 +55,8 @@ Y \sim \text{Binomial}(n, p), \qquad P(Y = k) = \binom{n}{k} p^k (1 - p)^{n-k}, 
 $$
 
 이항계수 $\binom{n}{k} = \frac{n!}{k!(n-k)!}$는 $n$번의 시행에서 $k$번의 성공을 고르는 경우의 수를 센다.
+
+</div>
 
 ### 성질
 

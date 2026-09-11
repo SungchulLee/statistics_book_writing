@@ -47,15 +47,17 @@ $$
 P(T > t + s \mid T > t) = P(T > s) \qquad \text{for all } t, s \geq 0
 $$
 
-**증명.** 생존함수를 쓰면
+??? proof "증명"
 
-$$
-P(T > t + s \mid T > t) = \frac{S(t + s)}{S(t)} = \frac{e^{-\lambda(t+s)}}{e^{-\lambda t}} = e^{-\lambda s} = S(s)
-$$
+    생존함수를 쓰면
 
-$\square$
+    $$
+    P(T > t + s \mid T > t) = \frac{S(t + s)}{S(t)} = \frac{e^{-\lambda(t+s)}}{e^{-\lambda t}} = e^{-\lambda s} = S(s)
+    $$
 
-이 성질을 갖는 연속분포는 지수분포가 유일하다.
+    $\square$
+
+    이 성질을 갖는 연속분포는 지수분포가 유일하다.
 
 !!! example "무기억성을 갖는 부도"
 

@@ -44,35 +44,36 @@ $$
 - **평균**: $E(\hat{\beta}) = \beta$ (불편),
 - **공분산**: $\text{Var}(\hat{\beta}) = \sigma^2 (\mathbf{X}^T \mathbf{X})^{-1}$.
 
-### 증명
+??? proof "증명"
 
-OLS 공식에 $\mathbf{y} = \mathbf{X}\beta + \varepsilon$을 대입하면
 
-$$
-\hat{\beta} = (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T (\mathbf{X}\beta + \varepsilon) = \beta + (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T \varepsilon
-$$
+    OLS 공식에 $\mathbf{y} = \mathbf{X}\beta + \varepsilon$을 대입하면
 
-**불편성**: $E(\varepsilon) = \mathbf{0}$이므로
+    $$
+    \hat{\beta} = (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T (\mathbf{X}\beta + \varepsilon) = \beta + (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T \varepsilon
+    $$
 
-$$
-E(\hat{\beta}) = \beta + (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T E(\varepsilon) = \beta
-$$
+    **불편성**: $E(\varepsilon) = \mathbf{0}$이므로
 
-**공분산**: $\mathbf{A} = (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T$라 두면 $\hat{\beta} - \beta = \mathbf{A}\varepsilon$이고
+    $$
+    E(\hat{\beta}) = \beta + (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T E(\varepsilon) = \beta
+    $$
 
-$$
-\text{Var}(\hat{\beta}) = \mathbf{A}\,\text{Var}(\varepsilon)\,\mathbf{A}^T = \mathbf{A}(\sigma^2 I_N)\mathbf{A}^T = \sigma^2 \mathbf{A}\mathbf{A}^T
-$$
+    **공분산**: $\mathbf{A} = (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T$라 두면 $\hat{\beta} - \beta = \mathbf{A}\varepsilon$이고
 
-$\mathbf{A}\mathbf{A}^T$를 계산하면
+    $$
+    \text{Var}(\hat{\beta}) = \mathbf{A}\,\text{Var}(\varepsilon)\,\mathbf{A}^T = \mathbf{A}(\sigma^2 I_N)\mathbf{A}^T = \sigma^2 \mathbf{A}\mathbf{A}^T
+    $$
 
-$$
-\mathbf{A}\mathbf{A}^T = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1} = (\mathbf{X}^T\mathbf{X})^{-1}
-$$
+    $\mathbf{A}\mathbf{A}^T$를 계산하면
 
-따라서 $\text{Var}(\hat{\beta}) = \sigma^2(\mathbf{X}^T\mathbf{X})^{-1}$이다.
+    $$
+    \mathbf{A}\mathbf{A}^T = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1} = (\mathbf{X}^T\mathbf{X})^{-1}
+    $$
 
-**정규성**: $\hat{\beta} - \beta = \mathbf{A}\varepsilon$은 다변량정규벡터 $\varepsilon$의 선형변환이므로 $\hat{\beta}$ 자체도 다변량정규이다. $\square$
+    따라서 $\text{Var}(\hat{\beta}) = \sigma^2(\mathbf{X}^T\mathbf{X})^{-1}$이다.
+
+    **정규성**: $\hat{\beta} - \beta = \mathbf{A}\varepsilon$은 다변량정규벡터 $\varepsilon$의 선형변환이므로 $\hat{\beta}$ 자체도 다변량정규이다. $\square$
 
 ### 함의
 
@@ -110,37 +111,38 @@ $$
 
 **$\hat{\beta}$와의 독립성**: 정규성 가정 아래에서 $s^2$과 $\hat{\beta}$는 통계적으로 독립이다. 이 독립성은 $t$ 검정이 타당하기 위한 필수 조건이다.
 
-### 증명
+??? proof "증명"
 
-**1단계: 잔차를 사영으로 표현.** 모자행렬 $\mathbf{P} = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T$와 잔차생성행렬 $\mathbf{M} = I_N - \mathbf{P}$를 정의하자. 잔차벡터는
 
-$$
-\mathbf{e} = \mathbf{y} - \mathbf{X}\hat{\beta} = (I_N - \mathbf{P})\mathbf{y} = \mathbf{M}\varepsilon
-$$
+    **1단계: 잔차를 사영으로 표현.** 모자행렬 $\mathbf{P} = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T$와 잔차생성행렬 $\mathbf{M} = I_N - \mathbf{P}$를 정의하자. 잔차벡터는
 
-마지막 등식에는 $\mathbf{M}\mathbf{X} = \mathbf{0}$을 썼다.
+    $$
+    \mathbf{e} = \mathbf{y} - \mathbf{X}\hat{\beta} = (I_N - \mathbf{P})\mathbf{y} = \mathbf{M}\varepsilon
+    $$
 
-**2단계: 잔차제곱합을 이차형식으로.**
+    마지막 등식에는 $\mathbf{M}\mathbf{X} = \mathbf{0}$을 썼다.
 
-$$
-\text{RSS} = \mathbf{e}^T\mathbf{e} = \varepsilon^T \mathbf{M}^T \mathbf{M}\,\varepsilon = \varepsilon^T \mathbf{M}\,\varepsilon
-$$
+    **2단계: 잔차제곱합을 이차형식으로.**
 
-$\mathbf{M}$이 대칭이고 멱등($\mathbf{M}^2 = \mathbf{M}$)이기 때문이다.
+    $$
+    \text{RSS} = \mathbf{e}^T\mathbf{e} = \varepsilon^T \mathbf{M}^T \mathbf{M}\,\varepsilon = \varepsilon^T \mathbf{M}\,\varepsilon
+    $$
 
-**3단계: 카이제곱분포.** $\varepsilon \sim N(\mathbf{0}, \sigma^2 I_N)$이고 $\mathbf{M}$이 계수 $\text{tr}(\mathbf{M}) = N - (p+1) = N - p - 1$인 대칭 멱등행렬이므로
+    $\mathbf{M}$이 대칭이고 멱등($\mathbf{M}^2 = \mathbf{M}$)이기 때문이다.
 
-$$
-\frac{\varepsilon^T \mathbf{M}\,\varepsilon}{\sigma^2} = \frac{\text{RSS}}{\sigma^2} \sim \chi^2_{N-p-1}
-$$
+    **3단계: 카이제곱분포.** $\varepsilon \sim N(\mathbf{0}, \sigma^2 I_N)$이고 $\mathbf{M}$이 계수 $\text{tr}(\mathbf{M}) = N - (p+1) = N - p - 1$인 대칭 멱등행렬이므로
 
-**4단계: 결론.** 자유도로 나누면
+    $$
+    \frac{\varepsilon^T \mathbf{M}\,\varepsilon}{\sigma^2} = \frac{\text{RSS}}{\sigma^2} \sim \chi^2_{N-p-1}
+    $$
 
-$$
-s^2 = \frac{\text{RSS}}{N - p - 1} \sim \sigma^2\frac{\chi^2_{N-p-1}}{N - p - 1} \qquad \square
-$$
+    **4단계: 결론.** 자유도로 나누면
 
----
+    $$
+    s^2 = \frac{\text{RSS}}{N - p - 1} \sim \sigma^2\frac{\chi^2_{N-p-1}}{N - p - 1} \qquad \square
+    $$
+
+    ---
 
 ## 3. 개별 회귀계수의 t 통계량
 
@@ -164,33 +166,34 @@ $$
 \text{SE}(\hat{\beta}_j) = s\sqrt{v_j}
 $$
 
-### 증명
+??? proof "증명"
 
-**1단계: $H_0$ 아래 $\hat{\beta}_j$의 분포.** $\hat{\beta}$의 표집분포에서 각 성분은
 
-$$
-\hat{\beta}_j \sim N(\beta_j, \sigma^2 v_j)
-$$
+    **1단계: $H_0$ 아래 $\hat{\beta}_j$의 분포.** $\hat{\beta}$의 표집분포에서 각 성분은
 
-$H_0: \beta_j = 0$ 아래에서는
+    $$
+    \hat{\beta}_j \sim N(\beta_j, \sigma^2 v_j)
+    $$
 
-$$
-\frac{\hat{\beta}_j}{\sigma\sqrt{v_j}} \sim N(0, 1)
-$$
+    $H_0: \beta_j = 0$ 아래에서는
 
-**2단계: 분모의 독립 카이제곱.** $s^2$의 분포에서
+    $$
+    \frac{\hat{\beta}_j}{\sigma\sqrt{v_j}} \sim N(0, 1)
+    $$
 
-$$
-\frac{(N-p-1)s^2}{\sigma^2} \sim \chi^2_{N-p-1}
-$$
+    **2단계: 분모의 독립 카이제곱.** $s^2$의 분포에서
 
-이고 이는 $\hat{\beta}_j$와 독립이다($\hat{\beta}$는 $\mathbf{P}\varepsilon$에, $s^2$은 $\mathbf{M}\varepsilon$에 의존하며 $\mathbf{PM} = \mathbf{0}$이기 때문이다).
+    $$
+    \frac{(N-p-1)s^2}{\sigma^2} \sim \chi^2_{N-p-1}
+    $$
 
-**3단계: $t$ 비 만들기.** $t$ 분포의 정의에 따라
+    이고 이는 $\hat{\beta}_j$와 독립이다($\hat{\beta}$는 $\mathbf{P}\varepsilon$에, $s^2$은 $\mathbf{M}\varepsilon$에 의존하며 $\mathbf{PM} = \mathbf{0}$이기 때문이다).
 
-$$
-t_j = \frac{\hat{\beta}_j / (\sigma\sqrt{v_j})}{\sqrt{s^2/\sigma^2}} = \frac{\hat{\beta}_j}{s\sqrt{v_j}} \sim t_{N-p-1} \qquad \square
-$$
+    **3단계: $t$ 비 만들기.** $t$ 분포의 정의에 따라
+
+    $$
+    t_j = \frac{\hat{\beta}_j / (\sigma\sqrt{v_j})}{\sqrt{s^2/\sigma^2}} = \frac{\hat{\beta}_j}{s\sqrt{v_j}} \sim t_{N-p-1} \qquad \square
+    $$
 
 ### 일반 신뢰구간
 

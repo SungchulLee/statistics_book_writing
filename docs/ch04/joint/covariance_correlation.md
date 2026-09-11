@@ -8,11 +8,15 @@
 
 ## 공분산
 
+<div class="defn" markdown>
+
 ### 정의
 
 $$
 \text{Cov}(X, Y) = E[(X - \mu_X)(Y - \mu_Y)] = E[XY] - E[X]E[Y]
 $$
+
+</div>
 
 ### 두 표현이 같음을 증명
 
@@ -61,6 +65,8 @@ $$
 
 ## 상관계수
 
+<div class="defn" markdown>
+
 ### 정의
 
 **Pearson 상관계수**는 공분산을 표준편차로 나누어 표준화한다:
@@ -68,6 +74,8 @@ $$
 $$
 \rho(X, Y) = \text{Corr}(X, Y) = \frac{\text{Cov}(X, Y)}{\sigma_X \sigma_Y} = \frac{\text{Cov}(X, Y)}{\sqrt{\text{Var}(X)\,\text{Var}(Y)}}
 $$
+
+</div>
 
 ### 성질
 

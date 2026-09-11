@@ -20,13 +20,15 @@ $$\tilde{S}^2 = \frac{1}{n}\sum_{i=1}^n (X_i - \bar{X})^2$$
 
 $$\sum_{i=1}^n (X_i - \bar{X})^2 = \sum_{i=1}^n (X_i - \mu)^2 - n(\bar{X} - \mu)^2$$
 
-**증명:** $(X_i - \bar{X})^2 = (X_i - \mu - (\bar{X} - \mu))^2$을 전개하면:
+??? proof "증명"
 
-$$\sum_{i=1}^n (X_i - \bar{X})^2 = \sum_{i=1}^n(X_i - \mu)^2 - 2(\bar{X} - \mu)\sum_{i=1}^n(X_i - \mu) + n(\bar{X} - \mu)^2$$
+    $(X_i - \bar{X})^2 = (X_i - \mu - (\bar{X} - \mu))^2$을 전개하면:
 
-$\sum(X_i - \mu) = n(\bar{X} - \mu)$이므로 가운데 항은 $-2n(\bar{X} - \mu)^2$이 되어:
+    $$\sum_{i=1}^n (X_i - \bar{X})^2 = \sum_{i=1}^n(X_i - \mu)^2 - 2(\bar{X} - \mu)\sum_{i=1}^n(X_i - \mu) + n(\bar{X} - \mu)^2$$
 
-$$= \sum_{i=1}^n(X_i - \mu)^2 - n(\bar{X} - \mu)^2$$
+    $\sum(X_i - \mu) = n(\bar{X} - \mu)$이므로 가운데 항은 $-2n(\bar{X} - \mu)^2$이 되어:
+
+    $$= \sum_{i=1}^n(X_i - \mu)^2 - n(\bar{X} - \mu)^2$$
 
 ### 기댓값의 계산
 
