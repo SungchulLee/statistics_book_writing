@@ -166,8 +166,3 @@ $\beta$가 작을수록 거짓인 귀무가설을 유지할 위험이 작다.
     - **Benjamini-Hochberg (FDR):** 양성으로 선언한 것 중 잘못된 기각의 기대 비율을 통제한다. 덜 보수적이다.
 
     고차원 상황(유전체학, A/B 검정 플랫폼)에서 타당한 추론을 하려면 사전등록과 Bonferroni류 보정이 필수적이다.
-
-!!! tip "더 연습하기"
-    Khan Academy의 대화형 연습 문제.
-
-    - [Type I vs Type II Error (Khan Academy)](https://www.khanacademy.org/math/ap-statistics/xfb5d8e68:inference-categorical-proportions/error-probabilities-power/e/type-i-error-type-ii-error-power)
