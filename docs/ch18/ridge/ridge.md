@@ -90,7 +90,7 @@ $\lambda$가 커지면 편향은 커지고 분산은 작아지며, 전체 MSE를
 
 **정리 (Hoerl and Kennard, 1970).** $\text{MSE}(\hat{\boldsymbol{\beta}}_{\text{ridge}}) < \text{MSE}(\hat{\boldsymbol{\beta}}_{\text{OLS}})$가 되는 $\lambda > 0$이 언제나 존재한다.
 
-## $\lambda$의 선택: 교차검증
+## λ의 선택: 교차검증
 
 최적 $\lambda$는 알려져 있지 않으므로 자료에서 추정해야 한다. 표준적인 접근은 **$k$-겹 교차검증**이다.
 

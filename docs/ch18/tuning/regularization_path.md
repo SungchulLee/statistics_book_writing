@@ -136,7 +136,7 @@ CV 오차가 최소인 lambda 선택
 
 ## 경로의 시각화
 
-### 그림 1: 계수 대 $\lambda$
+### 그림 1: 계수 대 λ
 
 ```python
 import matplotlib.pyplot as plt

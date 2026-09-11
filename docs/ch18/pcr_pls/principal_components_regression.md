@@ -37,7 +37,7 @@ $$\text{Var}(Z_1) \geq \text{Var}(Z_2) \geq \cdots \geq \text{Var}(Z_p)$$
 
 $$y = \beta_0 + \beta_1 Z_1 + \cdots + \beta_M Z_M + \epsilon$$
 
-### 4단계: 교차검증으로 $M$ 선택
+### 4단계: 교차검증으로 M 선택
 
 성분 수 $M$은 조정모수다.
 

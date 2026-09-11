@@ -78,7 +78,7 @@ $$
 
 이며 $\lambda \geq \lambda_{\max}$에서 라쏘 해는 $\hat{\boldsymbol{\beta}} = \mathbf{0}$이다.
 
-## $\lambda$의 선택
+## λ의 선택
 
 능형에서처럼 **교차검증**으로 고른다. 표준 관행은 $\lambda_{\max}$에서 $0.001 \cdot \lambda_{\max}$까지 로그 척도로 100개 정도의 격자를 잡아 전체 해 경로를 계산하고, 각 점에서 CV 오차를 구해 최적 $\lambda$를 고르는 것이다.
 

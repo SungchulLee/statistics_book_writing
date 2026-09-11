@@ -12,7 +12,7 @@
 
 <div class="thmbox" markdown>
 
-### 정리 1. 베리–에센 부등식 — 오차는 $O(1/\sqrt n)$ 이하 { .thm }
+### 정리 1. 베리–에센 부등식 — 오차는 1/√n 규모 이하 { .thm }
 
 $X_1, \ldots, X_n$이 i.i.d.이고 평균 $\mu$, 분산 $\sigma^2 > 0$, **3차 절대적률** $\rho = E\big[|X_i - \mu|^3\big] < \infty$를 가진다고 하자.
 
