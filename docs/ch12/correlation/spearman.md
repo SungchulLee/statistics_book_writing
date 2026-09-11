@@ -18,7 +18,11 @@ Spearman 상관의 핵심 착상은 간단하다. 각 관측값을 그 순위로
 
 ---
 
-## 정의
+## Spearman 순위상관계수
+
+<div class="defn" markdown>
+
+**정의 1.** [Spearman 순위상관계수]
 
 **Spearman 순위상관계수** $r_s$는
 
@@ -27,6 +31,8 @@ r_s = \frac{\sum_{i=1}^n (R(x_i) - \bar{R}_x)(R(y_i) - \bar{R}_y)}{\sqrt{\sum_{i
 $$
 
 이며 $\bar{R}_x$와 $\bar{R}_y$는 평균 순위이다. (동점이 없으면) 순위가 $1, 2, \ldots, n$이므로 평균 순위는 $\bar{R} = (n+1)/2$이다.
+
+</div>
 
 ### 간편 공식 (동점이 없을 때)
 

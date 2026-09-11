@@ -6,7 +6,11 @@
 
 ---
 
-## 정의
+## 연속 균등분포와 누적분포함수
+
+<div class="defn" markdown>
+
+**정의 1.** [연속 균등분포]
 
 확률변수 $X$가 $[a, b]$ 위의 연속 균등분포를 따른다는 것은 다음을 뜻한다:
 
@@ -15,6 +19,8 @@ X \sim \text{Uniform}(a, b), \qquad f(x) = \begin{cases} \frac{1}{b - a} & \text
 $$
 
 PDF는 구간에서 상수이며, 이는 모든 값이 동일하게 나타날 수 있음을 반영한다.
+
+</div>
 
 ### CDF
 

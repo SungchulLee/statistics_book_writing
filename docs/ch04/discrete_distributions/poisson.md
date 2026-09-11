@@ -6,7 +6,11 @@
 
 ---
 
-## 정의
+## Poisson 분포와 PMF
+
+<div class="defn" markdown>
+
+**정의 1.** [Poisson 분포]
 
 확률변수 $X$가 비율 모수 $\lambda > 0$인 Poisson 분포를 따른다는 것은 다음을 뜻한다:
 
@@ -15,6 +19,8 @@ X \sim \text{Poisson}(\lambda), \qquad P(X = k) = \frac{e^{-\lambda} \lambda^k}{
 $$
 
 모수 $\lambda$는 이 분포의 평균이자 분산이다.
+
+</div>
 
 ### PMF의 합이 1임을 확인하기
 

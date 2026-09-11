@@ -6,7 +6,11 @@
 
 ---
 
-## 정의
+## 정규분포와 표준정규분포
+
+<div class="defn" markdown>
+
+**정의 1.** [정규분포]
 
 정규분포는 평균 $\mu$(중심)와 분산 $\sigma^2$(퍼짐)로 규정된다. PDF는 다음과 같다:
 
@@ -15,6 +19,8 @@ f(x; \mu, \sigma^2) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{(x - \mu)^2
 $$
 
 이를 $X \sim N(\mu, \sigma^2)$로 쓴다.
+
+</div>
 
 ### 표준정규분포
 

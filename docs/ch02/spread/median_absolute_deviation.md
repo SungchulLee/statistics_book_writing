@@ -6,7 +6,11 @@
 
 ---
 
-## 정의
+## MAD의 정의와 표준화
+
+<div class="defn" markdown>
+
+**정의 1.** [중앙값 절대편차]
 
 MAD는 세 단계로 계산한다.
 
@@ -17,6 +21,8 @@ MAD는 세 단계로 계산한다.
 $$
 \text{MAD} = \text{median}(|x_i - \text{median}(x)|)
 $$
+
+</div>
 
 ### 표준화 상수
 

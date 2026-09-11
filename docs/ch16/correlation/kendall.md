@@ -12,9 +12,12 @@ $n$개의 대응 관측값 $(X_1, Y_1), \ldots, (X_n, Y_n)$에서 $i < j$인 모
 
 부합쌍의 개수를 $C$, 비부합쌍의 개수를 $D$라 하자.
 
-## 정의
+## Kendall tau
 
-### Kendall tau-a (동점 없음)
+
+<div class="defn" markdown>
+
+**정의 1.** [Kendall tau-a (동점 없음)]
 
 동점이 없을 때
 
@@ -24,7 +27,11 @@ $$
 
 분자 $S = C - D$를 **Kendall S 통계량**이라 부른다.
 
-### Kendall tau-b (동점 있음)
+</div>
+
+<div class="defn" markdown>
+
+**정의 2.** [Kendall tau-b (동점 있음)]
 
 동점이 있으면 tau-b가 분모를 조정한다.
 
@@ -41,6 +48,8 @@ $$
 이다.
 
 tau-b는 $-1 \le \tau_b \le 1$을 만족하며, 자료가 (동점을 고려하여) 완전한 단조 관계로 기술될 때만 $\pm 1$이 된다.
+
+</div>
 
 ## 가설검정
 

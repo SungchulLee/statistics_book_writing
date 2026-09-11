@@ -6,7 +6,11 @@
 
 ---
 
-## 정의
+## Exponential 분포와 누적분포함수
+
+<div class="defn" markdown>
+
+**정의 1.** [Exponential 분포]
 
 확률변수 $X$가 비율 모수 $\lambda > 0$인 Exponential 분포를 따른다는 것은 다음을 뜻한다:
 
@@ -15,6 +19,8 @@ X \sim \text{Exponential}(\lambda), \qquad f(x) = \lambda e^{-\lambda x}, \quad 
 $$
 
 **다른 모수화:** 어떤 교재에서는 척도 모수 $\beta = 1/\lambda$를 사용하여 $f(x) = \frac{1}{\beta}e^{-x/\beta}$로 쓴다. SciPy는 척도 모수화를 사용한다.
+
+</div>
 
 ### CDF
 

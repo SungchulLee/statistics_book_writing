@@ -2,13 +2,20 @@
 
 선형대수는 다변량 통계의 언어다. 회귀, 다변량 분석, 차원축소, 그리고 현대 추정 이론에 등장하는 거의 모든 양이 벡터나 행렬 표현이다. 이 절은 책 전체에서 쓰는 표기를 정하고, 가장 자주 되풀이되는 연산과 항등식을 복습한다.
 
-## 정의
+## 벡터, 행렬, 부분공간
 
-### 벡터와 행렬
+
+<div class="defn" markdown>
+
+**정의 1.** [벡터와 행렬]
 
 벡터는 열벡터 $\mathbf{x} \in \mathbb{R}^n$이며 굵은 소문자로 쓴다. 행렬은 $\mathbf{A} \in \mathbb{R}^{m \times n}$이며 굵은 대문자로 쓴다. 전치는 $\mathbf{A}^T$, 역행렬은(존재할 때) $\mathbf{A}^{-1}$로 나타낸다. 단위행렬은 $\mathbf{I}_n$, 영행렬은 $\mathbf{0}$이다.
 
-### 핵심 연산
+</div>
+
+<div class="defn" markdown>
+
+**정의 2.** [핵심 연산]
 
 $$
 \mathbf{x}^T \mathbf{y} = \sum_{i=1}^n x_i y_i, \qquad \|\mathbf{x}\| = \sqrt{\mathbf{x}^T \mathbf{x}}, \qquad [\mathbf{A}\mathbf{B}]_{ij} = \sum_{\ell} a_{i\ell} b_{\ell j}
@@ -16,11 +23,19 @@ $$
 
 **외적** $\mathbf{x} \mathbf{y}^T \in \mathbb{R}^{n \times m}$은 계수가 많아야 1이다. **대각합**은 $\mathrm{tr}(\mathbf{A}) = \sum_i a_{ii}$이다. **행렬식** $\det(\mathbf{A})$는 부호를 가진 부피 배율을 나타내며, $\mathbf{A}$가 가역일 때에 한해 0이 아니다.
 
-### 계획행렬
+</div>
+
+<div class="defn" markdown>
+
+**정의 3.** [계획행렬]
 
 **계획행렬(design matrix)** $\mathbf{X} \in \mathbb{R}^{n \times p}$는 $p$개 예측변수에 대한 $n$개의 관측을 행 방향으로 쌓은 것이다. $i$번째 행에는 관측 $i$의 예측변수 값이 들어 있다. $\mathbf{X}$의 열공간은 $p$개 열의 모든 선형결합으로 이루어진 집합, 즉 최소제곱으로 도달할 수 있는 적합값의 공간이다.
 
-### 계수, 영공간, 네 가지 기본 부분공간
+</div>
+
+<div class="defn" markdown>
+
+**정의 4.** [계수, 영공간, 네 가지 기본 부분공간]
 
 $\mathbf{A} \in \mathbb{R}^{m \times n}$에 대해:
 
@@ -30,6 +45,8 @@ $\mathbf{A} \in \mathbb{R}^{m \times n}$에 대해:
 - $\mathrm{Null}(\mathbf{A}^T) \subseteq \mathbb{R}^m$ (좌영공간)
 
 이고, $\mathrm{rank}(\mathbf{A}) + \dim \mathrm{Null}(\mathbf{A}) = n$(계수–퇴화차수 정리)이며 $\mathrm{Col}(\mathbf{A}^T) \perp \mathrm{Null}(\mathbf{A})$이다.
+
+</div>
 
 ## 설명
 
