@@ -1,4 +1,4 @@
-# X-bar의 표본분포 (Normal)
+# X̄의 표본분포 (Normal)
 
 ## 개요
 

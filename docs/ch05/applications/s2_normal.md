@@ -1,4 +1,4 @@
-# S-squared의 표본분포 (Normal)
+# S²의 표본분포 (Normal)
 
 ## 개요
 

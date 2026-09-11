@@ -1,4 +1,4 @@
-# X-bar의 표본분포 (Exponential)
+# X̄의 표본분포 (Exponential)
 
 ## 개요
 

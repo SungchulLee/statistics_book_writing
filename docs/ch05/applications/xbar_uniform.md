@@ -1,4 +1,4 @@
-# X-bar의 표본분포 (Uniform)
+# X̄의 표본분포 (Uniform)
 
 ## 개요
 

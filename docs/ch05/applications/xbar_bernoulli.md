@@ -1,4 +1,4 @@
-# X-bar의 표본분포 (Bernoulli)
+# X̄의 표본분포 (Bernoulli)
 
 ## 개요
 

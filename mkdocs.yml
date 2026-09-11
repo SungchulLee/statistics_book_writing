@@ -217,7 +217,7 @@ nav:
             - 편향–분산 맞바꿈: ch06/estimator_quality/bias_variance.md
             - 평균제곱오차: ch06/estimator_quality/mse.md
             - 일치성과 점근정규성: ch06/estimator_quality/consistency.md
-            - 효율성과 Cramér–Rao 하한: ch06/estimator_quality/efficiency_crlb.md
+            - 효율성과 Cramér-Rao 하한: ch06/estimator_quality/efficiency_crlb.md
             - 충분성과 최소충분성: ch06/estimator_quality/sufficiency.md
         - 6.2 최대가능도추정:
             - 가능도함수: ch06/mle/likelihood.md
@@ -350,7 +350,7 @@ nav:
             - p-해킹 시연: ch09/multiple_testing/p_hacking_demo.md
             - 가족단위 오류율: ch09/multiple_testing/fwer.md
             - Bonferroni와 Holm 보정: ch09/multiple_testing/bonferroni_holm.md
-            - 거짓발견율 (Benjamini–Hochberg): ch09/multiple_testing/fdr.md
+            - 거짓발견율 (Benjamini-Hochberg): ch09/multiple_testing/fdr.md
             - 다중검정 보정: ch09/multiple_testing/multiple_testing.md
             - 거짓발견율과 재표본추출 다중검정: ch09/multiple_testing/fdr_resampling_demo.md
 
@@ -394,7 +394,7 @@ nav:
             - Tukey 정직유의차: ch11/post_hoc/tukey.md
             - Bonferroni와 Scheffé 방법: ch11/post_hoc/bonferroni_scheffe.md
             - Dunnett 검정 (대조군과의 비교): ch11/post_hoc/dunnett.md
-            - Games–Howell (분산이 다를 때): ch11/post_hoc/games_howell.md
+            - Games-Howell (분산이 다를 때): ch11/post_hoc/games_howell.md
             - 사후비교 예제: ch11/post_hoc/post_hoc_comparisons.md
         - 11.4 Welch 분산분석:
             - Welch의 일원배치 분산분석: ch11/anova_welch/welch_one_way.md
