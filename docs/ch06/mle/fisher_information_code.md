@@ -4,7 +4,9 @@
 
 **Fisher 정보량**은 확률표본이 미지 모수에 관해 얼마나 많은 정보를 담고 있는지를 정량화한다. 추정이론에서 중심적인 역할을 한다. 달성 가능한 최선의 정밀도(Cramér-Rao 하한)를 결정하고, MLE의 점근분산을 지배하며, 실험설계를 이끈다. 이 페이지에서는 Fisher 정보량의 해석적 계산과 수치적 계산을 모두 보인다.
 
-## 정의
+<div class="defn" markdown>
+
+**정의 1.** [점수함수와 Fisher 정보량]
 
 $X$의 밀도(또는 PMF)가 $f(x; \theta)$라 하자. **점수함수**는:
 
@@ -25,6 +27,8 @@ I(\theta) = -E\left[\frac{\partial^2}{\partial\theta^2}\log f(X; \theta)\right]
 $$
 
 $n$개의 i.i.d. 관측값에서 전체 Fisher 정보량은 $I_n(\theta) = nI(\theta)$이다.
+
+</div>
 
 ## 주요 이론 결과
 

@@ -6,7 +6,9 @@ Student $t$ 분포는 알려진 모표준편차 $\sigma$ 대신 **표본표준�
 
 ---
 
-## 정의
+<div class="defn" markdown>
+
+**정의 1.** [Student t 분포]
 
 $Z \sim N(0,1)$과 $V \sim \chi^2_d$가 독립이라 하자. 그러면 다음 비:
 
@@ -17,6 +19,8 @@ $$
 는 자유도 $d$인 Student $t$ 분포를 따른다.
 
 ---
+
+</div>
 
 ## 자유도
 
