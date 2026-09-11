@@ -27,7 +27,7 @@ $$CI_{1-\alpha} = \{\theta_0 : \text{fail to reject } H_0: \theta = \theta_0 \te
 
 <div class="exbox" markdown>
 
-**보기 1.** 일표본 평균.
+### 보기 1. 일표본 평균 { .ex }
 
 $H_0: \mu = \mu_0$ 대 $H_a: \mu \neq \mu_0$의 일표본 z-검정에서:
 
@@ -44,7 +44,7 @@ $$|z| > z_{\alpha/2} \iff \left|\frac{\bar{x} - \mu_0}{\sigma/\sqrt{n}}\right| >
 
 <div class="exbox" markdown>
 
-**보기 2.** 두 품종의 배.
+### 보기 2. 두 품종의 배 { .ex }
 
 Yuna가 Bosc 배와 Anjou 배의 열량을 비교한다. $\mu_{\text{Bosc}} - \mu_{\text{Anjou}}$의 99% 신뢰구간은 $4 \pm 6.44 = (-2.44, 10.44)$이다.
 
@@ -56,7 +56,7 @@ $0 \in (-2.44, 10.44)$이므로 $H_0$을 **기각하지 못한다**. 열량이 �
 
 <div class="exbox" markdown>
 
-**보기 3.** 대면 수업과 온라인 수업.
+### 보기 3. 대면 수업과 온라인 수업 { .ex }
 
 $p_{\text{in\_person}} - p_{\text{online}}$의 95% 신뢰구간이 $(-0.04, 0.14)$이다.
 

@@ -78,7 +78,7 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** 분산이 다른 경우의 Welch 분산분석.
+### 보기 1. 분산이 다른 경우의 Welch 분산분석 { .ex }
 
 </div>
 

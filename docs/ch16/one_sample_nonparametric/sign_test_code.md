@@ -80,7 +80,7 @@ def sign_test(paired_data, test_type="two-sided"):
 
 <div class="exbox" markdown>
 
-**보기 1.** 학생의 처치 전후 점수.
+### 보기 1. 학생의 처치 전후 점수 { .ex }
 
 학생 15명을 처치 프로그램 전후에 측정했다.
 

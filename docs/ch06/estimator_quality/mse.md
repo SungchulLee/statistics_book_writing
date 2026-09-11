@@ -85,7 +85,7 @@ $$\text{MSE}(\hat{\theta}') \leq \text{MSE}(\hat{\theta}) \quad \text{for all } 
 
 <div class="exbox" markdown>
 
-**보기 1.** 표본평균의 평균제곱오차.
+### 보기 1. 표본평균의 평균제곱오차 { .ex }
 
 $X_1, \ldots, X_n$을 평균 $\mu$, 분산 $\sigma^2$인 i.i.d. 확률변수라 하자. 표본평균은 $\bar{X} = \frac{1}{n}\sum X_i$이다.
 
@@ -99,7 +99,7 @@ $X_1, \ldots, X_n$을 평균 $\mu$, 분산 $\sigma^2$인 i.i.d. 확률변수라 
 
 <div class="exbox" markdown>
 
-**보기 2.** 소박한 분산추정량의 평균제곱오차.
+### 보기 2. 소박한 분산추정량의 평균제곱오차 { .ex }
 
 소박한 분산추정량은 $\tilde{S}^2 = \frac{1}{n}\sum_{i=1}^n (X_i - \bar{X})^2$이다.
 
@@ -117,7 +117,7 @@ $$\text{MSE}(\tilde{S}^2) = \frac{2(n-1)}{n^2}\sigma^4 + \frac{\sigma^4}{n^2} = 
 
 <div class="exbox" markdown>
 
-**보기 3.** 편향 분산추정량과 불편 분산추정량의 비교.
+### 보기 3. 편향 분산추정량과 불편 분산추정량의 비교 { .ex }
 
 Bessel 수정된 추정량은 $S^2 = \frac{1}{n-1}\sum (X_i - \bar{X})^2$이다.
 
@@ -139,7 +139,7 @@ $n > 0$에서 $-3n + 1 < 0$이므로 $\text{MSE}(\tilde{S}^2) < \text{MSE}(S^2)$
 
 <div class="exbox" markdown>
 
-**보기 4.** 평균제곱오차 최적 분산추정량.
+### 보기 4. 평균제곱오차 최적 분산추정량 { .ex }
 
 상수 $c > 0$에 대해 $\hat{\sigma}^2_c = \frac{1}{c}\sum_{i=1}^n(X_i - \bar{X})^2$을 생각하자.
 

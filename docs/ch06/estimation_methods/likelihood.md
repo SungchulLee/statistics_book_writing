@@ -76,7 +76,7 @@ $$\frac{\partial \ell}{\partial \theta_j} = 0, \quad j = 1, \ldots, k$$
 
 <div class="exbox" markdown>
 
-**보기 1.** Normal 분포 — 평균이 미지.
+### 보기 1. Normal 분포 — 평균이 미지 { .ex }
 
 $\sigma^2$이 알려진 $X_1, \ldots, X_n \sim N(\mu, \sigma^2)$이라 하자. $\mu$의 MLE를 구한다.
 
@@ -102,7 +102,7 @@ $$\hat{\mu}_{\text{MLE}} = \frac{1}{n}\sum_{i=1}^n x_i = \bar{x}$$
 
 <div class="exbox" markdown>
 
-**보기 2.** Normal 분포 — 두 모수 모두 미지.
+### 보기 2. Normal 분포 — 두 모수 모두 미지 { .ex }
 
 $\mu$와 $\sigma^2$이 모두 미지인 $X_1, \ldots, X_n \sim N(\mu, \sigma^2)$이라 하자.
 
@@ -122,7 +122,7 @@ $$\frac{\partial \ell}{\partial \sigma^2} = -\frac{n}{2\sigma^2} + \frac{1}{2\si
 
 <div class="exbox" markdown>
 
-**보기 3.** Bernoulli 분포.
+### 보기 3. Bernoulli 분포 { .ex }
 
 $X_1, \ldots, X_n \sim \text{Bernoulli}(p)$라 하자.
 
@@ -146,7 +146,7 @@ MLE는 표본비율이며 직관적으로 자연스럽고 불편이다.
 
 <div class="exbox" markdown>
 
-**보기 4.** Exponential 분포.
+### 보기 4. Exponential 분포 { .ex }
 
 $x > 0$에서 밀도가 $f(x; \lambda) = \lambda e^{-\lambda x}$인 $X_1, \ldots, X_n \sim \text{Exp}(\lambda)$라 하자.
 
@@ -166,7 +166,7 @@ $$\hat{\lambda}_{\text{MLE}} = \frac{n}{\sum_{i=1}^n x_i} = \frac{1}{\bar{x}}$$
 
 <div class="exbox" markdown>
 
-**보기 5.** Poisson 분포.
+### 보기 5. Poisson 분포 { .ex }
 
 $X_1, \ldots, X_n \sim \text{Poisson}(\lambda)$라 하자.
 

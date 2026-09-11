@@ -80,7 +80,7 @@ $$\mu_k'(\theta) = m_k', \quad k = 1, 2, \ldots, p$$
 
 <div class="exbox" markdown>
 
-**보기 1.** Normal 분포.
+### 보기 1. Normal 분포 { .ex }
 
 $X_1, \ldots, X_n \sim N(\mu, \sigma^2)$이라 하자. 미지 모수가 둘이므로 적률방정식도 둘이 필요하다.
 
@@ -107,7 +107,7 @@ $\hat{\sigma}^2_{\text{MoM}}$이 MLE와 마찬가지로 $n$으로 나누므로(�
 
 <div class="exbox" markdown>
 
-**보기 2.** Exponential 분포.
+### 보기 2. Exponential 분포 { .ex }
 
 $E[X] = 1/\lambda$인 $X_1, \ldots, X_n \sim \text{Exp}(\lambda)$라 하자. 모수가 하나이므로 적률방정식도 하나면 된다.
 
@@ -125,7 +125,7 @@ $$\hat{\lambda}_{\text{MoM}} = \frac{1}{\bar{X}}$$
 
 <div class="exbox" markdown>
 
-**보기 3.** Gamma 분포.
+### 보기 3. Gamma 분포 { .ex }
 
 밀도가 $f(x) = \frac{\beta^\alpha}{\Gamma(\alpha)} x^{\alpha-1} e^{-\beta x}$인 $X_1, \ldots, X_n \sim \text{Gamma}(\alpha, \beta)$라 하자. 모수가 둘이므로 방정식도 둘이 필요하다.
 
@@ -150,7 +150,7 @@ $$\hat{\beta}_{\text{MoM}} = \frac{\bar{X}}{m_2}, \qquad \hat{\alpha}_{\text{MoM
 
 <div class="exbox" markdown>
 
-**보기 4.** Uniform 분포.
+### 보기 4. Uniform 분포 { .ex }
 
 $X_1, \ldots, X_n \sim \text{Uniform}(a, b)$라 하자. 모수가 둘이므로 방정식도 둘이 필요하다.
 
@@ -173,7 +173,7 @@ $$\hat{a}_{\text{MoM}} = \bar{X} - \sqrt{3 m_2}, \qquad \hat{b}_{\text{MoM}} = \
 
 <div class="exbox" markdown>
 
-**보기 5.** Beta 분포.
+### 보기 5. Beta 분포 { .ex }
 
 $X_1, \ldots, X_n \sim \text{Beta}(\alpha, \beta)$라 하자.
 

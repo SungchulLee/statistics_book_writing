@@ -86,10 +86,13 @@
     .md-typeset .diff.hard { background-color: #ef6a5c; }
 }
 
-/* 정리는 오른쪽 목차에서 바로 갈 수 있도록 제목(h3)으로 적되, 본문에서는
+/* 정리와 보기는 오른쪽 목차에서 바로 갈 수 있도록 제목(h3)으로 적되, 본문에서는
    다른 블록과 같은 크기의 굵은 도입어처럼 보이게 한다. 제목과 주장은
-   .thmbox 상자가 감싸고, 증명은 상자 밖에 붙는다. */
-.md-typeset h3.thm {
+   .thmbox / .exbox 상자가 감싸고, 증명은 상자 밖에 붙는다.
+   헤딩이므로 제목에 LaTeX 를 쓰지 않는다 — MathJax 가 목차를 처리하지 않아
+   `\(n\)` 같은 날글자가 그대로 보인다. */
+.md-typeset h3.thm,
+.md-typeset h3.ex {
     font-size: 1em;
     font-weight: 700;
     line-height: 1.6;

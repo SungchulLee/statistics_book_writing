@@ -49,7 +49,7 @@
 
 <div class="exbox" markdown>
 
-**보기 1.**
+### 보기 1. 순열검정 절차 { .ex }
 
 **자료:**
 

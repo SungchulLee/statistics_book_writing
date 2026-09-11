@@ -30,7 +30,7 @@ $p < \alpha$이면, 동등하게 $|t_j| > t^*_{n-k,\,\alpha/2}$이면, 동등하
 
 <div class="exbox" markdown>
 
-**보기 1.** 설명변수 두 개.
+### 보기 1. 설명변수 두 개 { .ex }
 
 </div>
 
@@ -92,7 +92,7 @@ Notes:
 
 <div class="exbox" markdown>
 
-**보기 2.** p값과 신뢰구간 뽑아내기.
+### 보기 2. p값과 신뢰구간 뽑아내기 { .ex }
 
 </div>
 
@@ -124,7 +124,7 @@ P-values: [2.09535133e-01 1.62497167e-09]
 
 <div class="exbox" markdown>
 
-**보기 3.** 여러 설명변수의 해석.
+### 보기 3. 여러 설명변수의 해석 { .ex }
 
 </div>
 

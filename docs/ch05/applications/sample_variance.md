@@ -86,7 +86,7 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** S-squared의 기댓값과 분산.
+### 보기 1. S-squared의 기댓값과 분산 { .ex }
 
 </div>
 
@@ -112,7 +112,7 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 2.** S-squared에 관한 확률 (정규모집단).
+### 보기 2. S-squared에 관한 확률 (정규모집단) { .ex }
 
 </div>
 
@@ -148,7 +148,7 @@ P(S^2 > 30) = 0.2897
 
 <div class="exbox" markdown>
 
-**보기 3.** 정규성 가정 없이.
+### 보기 3. 정규성 가정 없이 { .ex }
 
 </div>
 

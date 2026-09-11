@@ -69,7 +69,7 @@ def runs_test(data):
 
 <div class="exbox" markdown>
 
-**보기 1.** 뭉친 수열.
+### 보기 1. 뭉친 수열 { .ex }
 
 뭉침이 심한 수열은 런이 매우 적다.
 
@@ -84,7 +84,7 @@ z, p = runs_test(data * 2 - 1)
 
 <div class="exbox" markdown>
 
-**보기 2.** 지나치게 교대하는 수열.
+### 보기 2. 지나치게 교대하는 수열 { .ex }
 
 빈번한 교대 역시 무작위성으로부터의 이탈이다.
 
