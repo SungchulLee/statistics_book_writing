@@ -511,3 +511,18 @@ $$
 
     위 출력에서 PRESS가 SSE의 두 배쯤 된다는 점도 눈여겨보라. 같은 자료로 적합하고 같은 자료로 평가하면 성능이 낙관적으로 나온다는 사실이 한 줄로 드러난다. $\square$
 
+---
+
+## 정리하며
+
+이 절은 관측 $n$ 개와 예측변수 $p$ 개를 **하나의 식**으로 적는 표기를 세웠다.
+
+- **계획행렬 $\mathbf{X}$.** 행이 관측, 열이 예측변수다. $\mathrm{Col}(\mathbf{X})$ 가 최소제곱으로 도달할 수 있는 적합값 전체이며, 회귀란 $\mathbf{y}$ 를 이 공간으로 사영하는 일이다.
+- **네 가지 기본 부분공간과 계수–퇴화차수 정리.** 자유도가 어디서 오는지를 세는 장치다. 잔차가 $p$ 개의 제약을 받아 자유도가 $n-p$ 로 줄어든다는 사실이 여기서 나온다.
+- **스펙트럼 정리.** 대칭행렬은 $\mathbf{Q}\boldsymbol\Lambda\mathbf{Q}^T$ 로 분해된다. 공분산행렬, $\mathbf{X}^T\mathbf{X}$, 모자 행렬이 모두 대칭이므로 이 정리가 주성분분석·다변량 정규·이차형식의 카이제곱분포를 한꺼번에 떠받친다.
+- **양(반)정치성.** 공분산행렬은 언제나 $\succeq 0$ 이고, $\succ 0$ 인 것이 곧 $(\mathbf{X}^T\mathbf{X})^{-1}$ 이 존재해 최소제곱해가 유일해지는 조건이다.
+- **모자 행렬 $\mathbf{H}=\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T$.** 대칭이고 멱등이다. 이 두 성질만으로 잔차제곱합의 분포가 정해진다.
+
+**두 항등식이 특히 자주 쓰인다.** $\mathrm{Cov}(\mathbf{A}\mathbf{X}) = \mathbf{A}\,\mathrm{Cov}(\mathbf{X})\,\mathbf{A}^T$ 가 선형변환의 분산을 주고, $\mathbb{E}[\mathbf{X}^T\mathbf{A}\mathbf{X}] = \mathrm{tr}(\mathbf{A}\,\mathrm{Cov}(\mathbf{X})) + \boldsymbol\mu^T\mathbf{A}\boldsymbol\mu$ 가 이차형식의 기댓값을 준다. 뒤에서 $\mathbb{E}[\text{SSE}]$ 를 계산할 때 쓰는 것이 두 번째 식이다.
+
+다음 절부터는 **계산 도구**로 넘어간다. 파이썬·NumPy·pandas·Matplotlib 으로 여기 적은 연산을 실제로 수행하고, 자료를 눈으로 확인하는 법을 익힌다.
