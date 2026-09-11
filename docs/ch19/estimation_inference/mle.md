@@ -384,3 +384,21 @@ $(x_4, y_4) = (4, 1)$과 모형 $\log\frac{p}{1-p} = \beta_0 + \beta_1 x$가 주
     ```
 
     $\square$
+
+---
+
+## 정리하며
+
+점수함수가 **놀랍도록 단순한 형태**로 나온다.
+
+$$
+\nabla\ell(\boldsymbol\theta)=\mathbf X^\top(\mathbf y-\mathbf p)
+$$
+
+- **잔차와 설명변수의 곱이다.** 선형회귀의 정규방정식 $\mathbf X^\top(\mathbf y-\mathbf X\boldsymbol\beta)=\mathbf 0$ 과 **같은 모양**이며, 적합값이 $\mathbf X\boldsymbol\beta$ 에서 $\mathbf p$ 로 바뀐 것뿐이다.
+- **일반화선형모형의 공통 구조다.** 연결함수가 정준일 때 점수함수가 언제나 이 꼴이 된다.
+- **그래도 비선형이다.** $\mathbf p$ 가 $\boldsymbol\theta$ 의 비선형 함수라 닫힌 형태로 풀리지 않는다.
+- **기울기 하강에 바로 쓸 수 있다.** 이 식이 곧 갱신 방향이며, 기계학습에서 교차엔트로피의 기울기로 익숙한 형태다.
+- **헤세행렬이 $-\mathbf X^\top\mathbf W\mathbf X$ 다.** $\mathbf W=\mathrm{diag}(p_i(1-p_i))$ 이며 음정치이므로 오목성이 확인된다.
+
+다음 절 **알고리즘**으로 넘어간다.
