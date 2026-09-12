@@ -211,7 +211,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 정의로부터 상트페테르부르크 게임 상금의 기댓값을 계산하라. 급수의 표준 수렴 판정법은 어느 단계에서 실패하는가?
 
 </div>
@@ -227,7 +227,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 어떤 정수 $M \ge 1$에 대해 상금을 $2^M$으로 제한한다고 하자. $E[X_{\text{bounded}}]$를 $M$의 함수로 나타내는 공식을 유도하라.
 
 </div>
@@ -251,7 +251,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff easy" title="쉬움"></span>
 모수가 $\alpha$인 파레토분포는 $x \ge 1$에서 밀도가 $f(x) = \alpha / x^{\alpha+1}$이다. $\alpha$가 어떤 값일 때 $E[X]$가 존재하는가? $\text{Var}(X)$는 어떤 값일 때 존재하는가? 각 경우에 큰수의 법칙의 어떤 형태가 적용되는가?
 
 </div>
@@ -272,7 +272,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 분산 $\sigma^2$이 유한하다고 가정하고 체비쇼프 부등식을 이용해 약한 큰수의 법칙을 증명하라.
 
 </div>
@@ -296,7 +296,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 모의실험에서 유계 게임은 복원 표집(`np.random.geometric`)을 쓴다. 대신 $n$라운드의 고정된 수열을 진행하며 진행 중인 평균을 계산한다면 그림이 달라지겠는가? 모의실험 설계와 한 도박사의 경험 사이의 차이를 설명하라.
 
 </div>
@@ -310,7 +310,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 **도박사의 오류**는 나쁜 결과가 이어진 뒤에는 "좋은 결과가 나올 차례"라고 믿는 잘못된 생각이다. 큰수의 법칙이 이를 정당화하지 *않음*을 형식적으로 보여라. "평균은 기댓값으로 수렴한다"의 올바른 해석을 진술하라.
 
 </div>
@@ -326,7 +326,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 7.**
+**연습문제 7.** <span class="diff hard" title="어려움"></span>
 **유계** 확률변수($|X_i| \le M$)에 대해 $\{|\bar X_n - \mu| > \varepsilon\}$에 **보렐–칸텔리 보조정리**를 적용하여 강한 큰수의 법칙이 따라옴을 보여라.
 
 </div>
@@ -346,7 +346,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 8.**
+**연습문제 8.** <span class="diff hard" title="어려움"></span>
 상금에 상한을 두지 않은 원래 게임에서도 **극한은 존재한다.** 다만 나누는 것이 $n$이 아니다. **페러의 약한 법칙**을 확인하라.
 
 </div>
@@ -407,7 +407,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 9.**
+**연습문제 9.** <span class="diff hard" title="어려움"></span>
 **기댓값이 양수인 도박에서도 거의 모든 참가자가 파산한다.** 이것이 어떻게 가능한지 보이고, 올바른 기준이 무엇인지 밝혀라.
 
 </div>
@@ -507,7 +507,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 10.**
+**연습문제 10.** <span class="diff med" title="중간"></span>
 평균이 **존재하는데도** 표본평균이 신뢰하기 어려운 경우를 정량화하라. 총합을 몇 건이 지배하며, 표본평균은 어느 방향으로 틀리는가?
 
 </div>

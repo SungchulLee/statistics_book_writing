@@ -77,7 +77,7 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** 공정한 주사위. $X$를 눈의 수라 하면
+**보기 1.** <span class="diff easy" title="쉬움"></span> 공정한 주사위. $X$를 눈의 수라 하면
 
 $$
 P(X = x) = \tfrac{1}{6}, \qquad x = 1, 2, 3, 4, 5, 6
@@ -87,7 +87,7 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 2.** 동전 세 번에서 앞면의 개수. 가능한 값은 $\{0,1,2,3\}$이고
+**보기 2.** <span class="diff easy" title="쉬움"></span> 동전 세 번에서 앞면의 개수. 가능한 값은 $\{0,1,2,3\}$이고
 
 $$
 P(X=0) = \tfrac{1}{8}, \quad P(X=1) = \tfrac{3}{8}, \quad P(X=2) = \tfrac{3}{8}, \quad P(X=3) = \tfrac{1}{8}
@@ -99,7 +99,7 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 3.** 야구 카드. 휴고는 좋아하는 선수의 카드가 나올 때까지 팩을 사되 최대 네 팩까지만 산다. 각 팩에 그 카드가 있을 확률은 0.2다. $X$를 산 팩의 수라 하면
+**보기 3.** <span class="diff easy" title="쉬움"></span> 야구 카드. 휴고는 좋아하는 선수의 카드가 나올 때까지 팩을 사되 최대 네 팩까지만 산다. 각 팩에 그 카드가 있을 확률은 0.2다. $X$를 산 팩의 수라 하면
 
 $$
 \begin{aligned}
@@ -121,7 +121,7 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 4.** 삼면체 주사위 두 개의 차이. $D = |D_1 - D_2|$라 하자. 아홉 개의 결과가 세 값으로 옮겨진다.
+**보기 4.** <span class="diff easy" title="쉬움"></span> 삼면체 주사위 두 개의 차이. $D = |D_1 - D_2|$라 하자. 아홉 개의 결과가 세 값으로 옮겨진다.
 
 | $D_1 \backslash D_2$ | 1 | 2 | 3 |
 |:---:|:---:|:---:|:---:|
@@ -192,7 +192,7 @@ plot_pmf(values, probs, "PMF: Baseball Card Packs Purchased")
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 이산확률변수 $X$의 확률질량함수가 $P(X=0) = 0.1$, $P(X=1) = 0.3$, $P(X=2) = c$, $P(X=3) = 0.2$다. $c$의 값을 구하고 $P(X \geq 2)$를 계산하라.
 
 </div>
@@ -214,7 +214,7 @@ plot_pmf(values, probs, "PMF: Baseball Card Packs Purchased")
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff easy" title="쉬움"></span>
 공정한 사면체 주사위(면이 1, 2, 3, 4) 두 개를 굴린다. $S$를 두 주사위의 합이라 하자. $S$의 확률질량함수를 모두 쓰고 확률의 합이 1임을 확인하라.
 
 </div>
@@ -236,7 +236,7 @@ plot_pmf(values, probs, "PMF: Baseball Card Packs Purchased")
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff easy" title="쉬움"></span>
 치우친 동전의 $P(\text{앞면}) = 0.7$이다. 이 동전을 3번 던진다. $X$를 앞면의 개수라 할 때 $X$의 확률질량함수를 쓰라.
 
 </div>
@@ -270,7 +270,7 @@ plot_pmf(values, probs, "PMF: Baseball Card Packs Purchased")
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff easy" title="쉬움"></span>
 연속확률변수(예: 무작위로 고른 사람의 정확한 키)를 확률질량함수로 기술할 수 없는 이유를 설명하라. 연속인 경우에는 무엇이 확률질량함수를 대신하는가?
 
 </div>
@@ -282,7 +282,7 @@ plot_pmf(values, probs, "PMF: Baseball Card Packs Purchased")
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 **기하분포.** $X$ = i.i.d. Bernoulli($p$)에서 첫 성공까지의 시행 횟수. 확률질량함수, $\mathbb{E}[X]$, $\mathrm{Var}(X)$를 유도하라.
 
 </div>
@@ -300,7 +300,7 @@ plot_pmf(values, probs, "PMF: Baseball Card Packs Purchased")
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 **이항분포의 포아송 근사.** $np \to \lambda$가 상수인 채로 $n \to \infty$이면 Binomial$(n, p)$ → Poisson$(\lambda)$임을 보여라.
 
 </div>
@@ -326,7 +326,7 @@ plot_pmf(values, probs, "PMF: Baseball Card Packs Purchased")
 
 <div class="drillbox" markdown>
 
-**연습문제 7.**
+**연습문제 7.** <span class="diff med" title="중간"></span>
 연습문제 $5$의 기하분포를 일반화하라. **음이항분포**의 확률질량함수와 적률을 유도하고 확인하라.
 
 </div>
@@ -383,7 +383,7 @@ plot_pmf(values, probs, "PMF: Baseball Card Packs Purchased")
 
 <div class="drillbox" markdown>
 
-**연습문제 8.**
+**연습문제 8.** <span class="diff med" title="중간"></span>
 **포아송 분포와 지수분포는 같은 과정의 두 얼굴이다.** 그 관계를 진술하고 수치로 확인하라.
 
 </div>
@@ -454,7 +454,7 @@ plot_pmf(values, probs, "PMF: Baseball Card Packs Purchased")
 
 <div class="drillbox" markdown>
 
-**연습문제 9.**
+**연습문제 9.** <span class="diff med" title="중간"></span>
 연습문제 $6$이 이항의 극한을 다루었다면, 이항 자체가 **근사인 경우**도 있다. **초기하분포**를 유도하고 언제 이항으로 근사할 수 있는지 밝혀라.
 
 </div>
@@ -526,7 +526,7 @@ plot_pmf(values, probs, "PMF: Baseball Card Packs Purchased")
 
 <div class="drillbox" markdown>
 
-**연습문제 10.**
+**연습문제 10.** <span class="diff med" title="중간"></span>
 계수 자료가 포아송을 따르는지 **어떻게 확인하는가**? 과산포와 영과잉을 진단하라.
 
 </div>

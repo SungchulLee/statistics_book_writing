@@ -36,7 +36,7 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** 같은 시험을 치르는 두 학생. 학생 $A$와 $B$가 같은 시험을 친다. $C$ = "시험이 쉬웠다"라 하자.
+**보기 1.** <span class="diff easy" title="쉬움"></span> 같은 시험을 치르는 두 학생. 학생 $A$와 $B$가 같은 시험을 친다. $C$ = "시험이 쉬웠다"라 하자.
 
 시험 난이도를 알고 나면 $A$의 합격 여부는 $B$에 대해 거의 아무것도 말해 주지 않는다. 둘의 실력은 별개이기 때문이다. 그러나 난이도를 **모르는** 상태라면 $A$가 합격했다는 소식은 시험이 쉬웠을 가능성을 높이고, 따라서 $B$의 합격 가능성도 높인다.
 
@@ -70,7 +70,7 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 2.** 화재경보기. 경보($C$)는 화재($A$) 때문에 울릴 수도 있고 탄 토스트($B$) 때문에 울릴 수도 있다. 두 원인은 서로 무관하다.
+**보기 2.** <span class="diff easy" title="쉬움"></span> 화재경보기. 경보($C$)는 화재($A$) 때문에 울릴 수도 있고 탄 토스트($B$) 때문에 울릴 수도 있다. 두 원인은 서로 무관하다.
 
 $$
 P(A \cap B) = P(A)\,P(B)
@@ -150,7 +150,7 @@ Conditionally dependent (explaining away): True
 
 <div class="exbox" markdown>
 
-**보기 3.** 합이 알려진 주사위. 극단적인 경우도 있다. 공정한 주사위 두 개에서 $A$ = "1번이 4", $B$ = "2번이 3"이라 하면 이 둘은 독립이다. 그런데 $C$ = "합이 7"로 조건을 걸면
+**보기 3.** <span class="diff easy" title="쉬움"></span> 합이 알려진 주사위. 극단적인 경우도 있다. 공정한 주사위 두 개에서 $A$ = "1번이 4", $B$ = "2번이 3"이라 하면 이 둘은 독립이다. 그런데 $C$ = "합이 7"로 조건을 걸면
 
 $$
 P(A \mid C) = \tfrac{1}{6}, \quad P(B \mid C) = \tfrac{1}{6}, \quad P(A \cap B \mid C) = \tfrac{1}{6}
@@ -180,7 +180,7 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 4.** 어느 동전인지 모르는 두 번의 던지기. 동전을 무작위로 하나 고른다. 1번 동전은 $P(H) = 0.3$, 2번 동전은 $P(H) = 0.7$이다. $C$를 "어느 동전을 골랐는가", $A$와 $B$를 두 번의 던지기 결과라 하자.
+**보기 4.** <span class="diff easy" title="쉬움"></span> 어느 동전인지 모르는 두 번의 던지기. 동전을 무작위로 하나 고른다. 1번 동전은 $P(H) = 0.3$, 2번 동전은 $P(H) = 0.7$이다. $C$를 "어느 동전을 골랐는가", $A$와 $B$를 두 번의 던지기 결과라 하자.
 
 동전이 정해지고 나면 두 던지기는 명백히 독립이다.
 
@@ -266,7 +266,7 @@ Conditionally independent: True
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 구름 $C$, 비 $R$, 우산 $U$에 대해 $P(C) = 0.4$, $P(R \mid C) = 0.6$, $P(R \mid C^c) = 0.1$, $P(U \mid R) = 0.9$, $P(U \mid R^c) = 0.2$이고 $U \perp\!\!\!\perp C \mid R$을 가정한다. (a) $C$와 $U$는 독립인가? (b) $C \perp\!\!\!\perp U \mid R$을 확인하라.
 
 </div>
@@ -288,7 +288,7 @@ Conditionally independent: True
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 **버크슨의 역설.** $A, B$가 입원 $C$에 대한 서로 독립인 두 위험요인이라 하자. 전체적으로는 독립인데도 $C$를 조건으로 하면 $A$와 $B$가 음의 상관을 갖게 됨을 보여라.
 
 </div>
@@ -308,7 +308,7 @@ Conditionally independent: True
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 **혼합분포.** 동전을 무작위로 고르는데 1번 동전은 $P(H) = 0.3$, 2번 동전은 $P(H) = 0.7$이다. 고른 동전을 두 번 던져 $X_1, X_2$를 얻는다. $X_1 \perp\!\!\!\perp X_2$는 성립하지 않지만 $X_1 \perp\!\!\!\perp X_2 \mid \text{동전}$은 성립함을 보여라.
 
 </div>
@@ -328,7 +328,7 @@ Conditionally independent: True
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 **마르코프 연쇄.** 마르코프 연쇄 $X_0, X_1, X_2, \ldots$는 $X_n \perp\!\!\!\perp \{X_0, \ldots, X_{n-2}\} \mid X_{n-1}$을 만족한다. 이 성질을 말로 표현하고 그것이 어떻게 다루기 쉬운 추론을 가능하게 하는지 설명하라.
 
 </div>
@@ -348,7 +348,7 @@ Conditionally independent: True
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 **공통 원인 구조.** 세 변수 $X, Y, Z$가 "사슬" $X \to Z \to Y$을 이룬다. 분해 $P(X, Y, Z) = P(X) P(Z \mid X) P(Y \mid Z)$로부터 $X \perp\!\!\!\perp Y \mid Z$를 확인하라.
 
 </div>
@@ -366,7 +366,7 @@ Conditionally independent: True
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 **"해명" 효과.** 결과 $E$에 대해 두 원인 $A, B$가 있는 베이즈 망에서 $A$와 $B$의 사전확률이 독립이라 하자. $E$를 관측한 뒤 $A$가 일어났음을 알게 되면 $B$도 일어났을 사후확률이 *줄어든다*. $P(A) = P(B) = 0.1$, $P(E \mid A, B) = 1$, $P(E \mid A, B^c) = 0.8$, $P(E \mid A^c, B) = 0.8$, $P(E \mid A^c, B^c) = 0$으로 보여라.
 
 </div>
@@ -393,7 +393,7 @@ Conditionally independent: True
 
 <div class="drillbox" markdown>
 
-**연습문제 7.**
+**연습문제 7.** <span class="diff med" title="중간"></span>
 연습문제 $2$, $5$, $6$이 다룬 세 구조를 하나로 정리하라. **사슬·포크·충돌부**에서 조건을 걸면 각각 어떻게 되는가?
 
 </div>
@@ -459,7 +459,7 @@ Conditionally independent: True
 
 <div class="drillbox" markdown>
 
-**연습문제 8.**
+**연습문제 8.** <span class="diff hard" title="어려움"></span>
 주변 독립과 조건부 독립 사이에는 **어떤 함의도 없다.** 네 가지 조합이 모두 가능함을 보여라.
 
 </div>
@@ -525,7 +525,7 @@ Conditionally independent: True
 
 <div class="drillbox" markdown>
 
-**연습문제 9.**
+**연습문제 9.** <span class="diff med" title="중간"></span>
 **나이브 베이즈** 분류기는 "특징들이 클래스가 주어졌을 때 조건부 독립"이라고 가정한다. 이 가정이 깨지면 어떻게 되는가?
 
 </div>
@@ -593,7 +593,7 @@ Conditionally independent: True
 
 <div class="drillbox" markdown>
 
-**연습문제 10.**
+**연습문제 10.** <span class="diff hard" title="어려움"></span>
 연습문제 $3$의 혼합 구조를 일반화하라. **교환가능성**이란 무엇이며 조건부 독립과 어떤 관계인가?
 
 </div>

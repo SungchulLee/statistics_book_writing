@@ -74,7 +74,7 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** 항아리에서 공 뽑기. A 항아리에 빨간 공 3개와 파란 공 7개, B 항아리에 빨간 공 8개와 파란 공 2개가 있다. 항아리를 50 대 50으로 골라 빨간 공을 뽑았다. 그것이 B에서 나왔을 확률은?
+**보기 1.** <span class="diff easy" title="쉬움"></span> 항아리에서 공 뽑기. A 항아리에 빨간 공 3개와 파란 공 7개, B 항아리에 빨간 공 8개와 파란 공 2개가 있다. 항아리를 50 대 50으로 골라 빨간 공을 뽑았다. 그것이 B에서 나왔을 확률은?
 
 $$
 P(B \mid \text{빨강}) = \frac{0.8 \times 0.5}{0.3 \times 0.5 + 0.8 \times 0.5} = \frac{0.40}{0.55} \approx 0.727
@@ -86,7 +86,7 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 2.** 스팸 필터링. 이메일의 40%가 스팸이고, "free"라는 단어가 스팸의 80%, 정상 메일의 10%에 나타난다면
+**보기 2.** <span class="diff easy" title="쉬움"></span> 스팸 필터링. 이메일의 40%가 스팸이고, "free"라는 단어가 스팸의 80%, 정상 메일의 10%에 나타난다면
 
 $$
 P(\text{스팸} \mid \text{"free"}) = \frac{0.80 \times 0.40}{0.80 \times 0.40 + 0.10 \times 0.60} = \frac{0.32}{0.38} \approx 0.842
@@ -110,7 +110,7 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 3.** 의학 진단. 어떤 질병이 인구의 1%에 발생한다. 검사의 민감도는 95%, 특이도는 90%다. 양성 판정을 받은 사람이 실제로 병에 걸렸을 확률은?
+**보기 3.** <span class="diff easy" title="쉬움"></span> 의학 진단. 어떤 질병이 인구의 1%에 발생한다. 검사의 민감도는 95%, 특이도는 90%다. 양성 판정을 받은 사람이 실제로 병에 걸렸을 확률은?
 
 $$
 \begin{aligned}
@@ -220,7 +220,7 @@ bayes_update_visualization()
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 어떤 희귀질환 검사의 유병률이 $P(D) = 0.001$, 민감도가 $P(+ \mid D) = 0.99$, 특이도가 $P(- \mid D^c) = 0.95$다. (a) $P(D \mid +)$를 계산하라. (b) 왜 그렇게 낮은지 설명하라. (c) 유병률이 0.05일 때 다시 계산하라.
 
 </div>
@@ -234,7 +234,7 @@ bayes_update_visualization()
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 어떤 공장에 기계 세 대가 있어 생산량의 50%, 30%, 20%를 만들고 불량률은 각각 2%, 3%, 5%다. (a) 전체 불량률을 계산하라. (b) 불량품 하나가 주어졌을 때 그것이 3번 기계에서 나왔을 확률은 얼마인가?
 
 </div>
@@ -246,7 +246,7 @@ bayes_update_visualization()
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 조건부확률의 정의에서 **베이즈 정리를 증명하라**. 그런 다음 **승산 형태**를 진술하라: $P(H \mid E)/P(H^c \mid E) = [P(E \mid H)/P(E \mid H^c)] \cdot [P(H)/P(H^c)]$.
 
 </div>
@@ -272,7 +272,7 @@ bayes_update_visualization()
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 어떤 동전은 공정하거나($P = 0.5$) **아니면** 앞면 확률이 $P = 0.7$로 치우쳐 있다. 사전확률은 같다. 10번 던져 앞면이 8번 나오는 것을 관측했다. 이 동전이 치우쳐 있을 사후확률을 계산하라.
 
 </div>
@@ -296,7 +296,7 @@ bayes_update_visualization()
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 **순차적 갱신.** $E_1$ 다음에 새로운 증거 $E_2$가 도착한다. $E_1$을 관측한 뒤 $E_2$를 관측하는 베이즈 갱신이 (가설이 주어졌을 때 조건부 독립으로 다룰 때) 결합 가능도로 한 번에 갱신하는 것과 수학적으로 동등함을 보여라.
 
 </div>
@@ -322,7 +322,7 @@ bayes_update_visualization()
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 **기저율 무시.** **피고인의 오류**는 이렇게 주장한다. "검찰의 DNA가 피고인의 것과 일치했다. 무작위로 일치할 확률은 100만분의 1이다. 따라서 피고인은 합리적 의심을 넘어 유죄다." 이 논증이 왜 잘못되었으며 베이즈 정리는 그 오류를 어떻게 드러내는가?
 
 </div>
@@ -342,7 +342,7 @@ bayes_update_visualization()
 
 <div class="drillbox" markdown>
 
-**연습문제 7.**
+**연습문제 7.** <span class="diff med" title="중간"></span>
 연습문제 3의 **승산 형태**를 써서 증거가 쌓이는 과정을 추적하라. **베이즈 인자**란 무엇이며, 확신에 이르려면 자료가 얼마나 필요한가?
 
 </div>
@@ -419,7 +419,7 @@ bayes_update_visualization()
 
 <div class="drillbox" markdown>
 
-**연습문제 8.**
+**연습문제 8.** <span class="diff med" title="중간"></span>
 정리 $3$의 "사후확률은 사전확률에 붙들린다"는 언제 풀리는가? **사전이 언제까지 중요한지** 수치로 보여라.
 
 </div>
@@ -480,7 +480,7 @@ bayes_update_visualization()
 
 <div class="drillbox" markdown>
 
-**연습문제 9.**
+**연습문제 9.** <span class="diff med" title="중간"></span>
 연습문제 1의 낮은 $P(D \mid +)$를 개선하는 실무적 방법이 **재검사**다. 얼마나 효과적인지 계산하고, 그 계산이 무엇을 가정하는지 밝혀라.
 
 </div>
@@ -544,7 +544,7 @@ bayes_update_visualization()
 
 <div class="drillbox" markdown>
 
-**연습문제 10.**
+**연습문제 10.** <span class="diff med" title="중간"></span>
 지금까지는 가설이 유한개였다. 모수가 **연속**이면 어떻게 되는가? 베타–이항 갱신으로 미리 살펴보라.
 
 </div>

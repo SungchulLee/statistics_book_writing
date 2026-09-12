@@ -150,7 +150,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 $X_i \sim \mathrm{Uniform}(0,1)$이 i.i.d.다. (a) $\mathbb{E}[X]$, $\mathrm{Var}(X)$는? (b) $\bar X_n$에 대한 약한 큰수의 법칙을 진술하라. (c) $P(|\bar X_{100} - 1/2| \ge 0.05)$에 대한 체비쇼프 한계를 구하라. (d) $n = 10\,000$일 때의 한계를 구하라.
 
 </div>
@@ -166,7 +166,7 @@ $X_i \sim \mathrm{Uniform}(0,1)$이 i.i.d.다. (a) $\mathbb{E}[X]$, $\mathrm{Var
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 $\mathbb{E}[X] = \mu$이고 $\mathrm{Var}(X) = \sigma^2$이 유한한 i.i.d. $X_i$에 대해 체비쇼프 부등식으로부터 **약한 큰수의 법칙을 증명하라**.
 
 </div>
@@ -180,7 +180,7 @@ $\mathbb{E}[X] = \mu$이고 $\mathrm{Var}(X) = \sigma^2$이 유한한 i.i.d. $X_
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff hard" title="어려움"></span>
 **확률수렴과 거의 확실한 수렴을 구별하라.** $X_n \to 0$이 확률수렴하지만 거의 확실하게는 수렴하지 **않는** 열을 구성하라.
 
 </div>
@@ -201,7 +201,7 @@ $\mathbb{E}[X] = \mu$이고 $\mathrm{Var}(X) = \sigma^2$이 유한한 i.i.d. $X_
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 **수렴 속도.** 평균 $\mu$, 분산 $\sigma^2$인 i.i.d. $X_i$에 대해 $\sqrt n (\bar X_n - \mu) = O_P(1)$임을 보여라. 이것이 왜 거의 확실한 수렴에는 *충분히 빠르지 않은가*?
 
 </div>
@@ -217,7 +217,7 @@ $\mathbb{E}[X] = \mu$이고 $\mathrm{Var}(X) = \sigma^2$이 유한한 i.i.d. $X_
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 **코시분포에서는 큰수의 법칙이 실패한다.** 표준 코시분포의 밀도는 $f(x) = 1/(\pi(1+x^2))$이다. $\mathbb{E}[X]$가 정의되지 않는 이유는 무엇이며, $n \to \infty$일 때 $\bar X_n$은 어떻게 되는가?
 
 </div>
@@ -231,7 +231,7 @@ $\mathbb{E}[X] = \mu$이고 $\mathrm{Var}(X) = \sigma^2$이 유한한 i.i.d. $X_
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 **약한 큰수의 법칙은 빈도주의 확률을 정당화한다**: $P(A) = \lim_{n \to \infty} (1/n) \sum_{i=1}^n \mathbf 1(\omega_i \in A)$. 이 극한을 정확히 진술하고, 이것이 왜 확률을 단지 계산하는 것이 아니라 *정의하는* 것인지 설명하라.
 
 </div>
@@ -251,7 +251,7 @@ $\mathbb{E}[X] = \mu$이고 $\mathrm{Var}(X) = \sigma^2$이 유한한 i.i.d. $X_
 
 <div class="drillbox" markdown>
 
-**연습문제 7.**
+**연습문제 7.** <span class="diff hard" title="어려움"></span>
 연습문제 $2$의 증명은 **유한한 분산**을 썼다. 그런데 강한 큰수의 법칙은 $\mathbb{E}|X|<\infty$만 요구한다. **분산이 무한한데 평균은 유한한** 분포에서 무슨 일이 일어나는지 조사하라.
 
 </div>
@@ -315,7 +315,7 @@ $\mathbb{E}[X] = \mu$이고 $\mathrm{Var}(X) = \sigma^2$이 유한한 i.i.d. $X_
 
 <div class="drillbox" markdown>
 
-**연습문제 8.**
+**연습문제 8.** <span class="diff med" title="중간"></span>
 큰수의 법칙을 **수치적분 방법**으로 뒤집어 읽어라. 몬테카를로 적분의 오차가 왜 차원과 무관한지 보이고, 그 주장의 **한계**도 밝혀라.
 
 </div>
@@ -389,7 +389,7 @@ $\mathbb{E}[X] = \mu$이고 $\mathrm{Var}(X) = \sigma^2$이 유한한 i.i.d. $X_
 
 <div class="drillbox" markdown>
 
-**연습문제 9.**
+**연습문제 9.** <span class="diff med" title="중간"></span>
 큰수의 법칙은 **독립**을 가정한다. 관측이 서로 상관되어 있으면 어떻게 되는가? AR(1) 시계열로 확인하라.
 
 </div>
@@ -463,7 +463,7 @@ $\mathbb{E}[X] = \mu$이고 $\mathrm{Var}(X) = \sigma^2$이 유한한 i.i.d. $X_
 
 <div class="drillbox" markdown>
 
-**연습문제 10.**
+**연습문제 10.** <span class="diff hard" title="어려움"></span>
 $\theta$마다 큰수의 법칙이 성립한다고 하자. 그러면 $\hat\theta_n=\arg\max_\theta Q_n(\theta)$도 $\arg\max_\theta Q(\theta)$로 수렴하는가? **아니다.** 반례를 들고, 무엇이 더 필요한지 밝혀라.
 
 </div>

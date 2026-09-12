@@ -41,7 +41,7 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** 정규분포. 가장 널리 쓰이는 연속분포는 평균 $\mu$, 분산 $\sigma^2$인 **정규분포**이며 밀도는 다음과 같다.
+**보기 1.** <span class="diff easy" title="쉬움"></span> 정규분포. 가장 널리 쓰이는 연속분포는 평균 $\mu$, 분산 $\sigma^2$인 **정규분포**이며 밀도는 다음과 같다.
 
 $$
 f(x) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\!\left(-\frac{(x - \mu)^2}{2\sigma^2}\right)
@@ -79,7 +79,7 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 2.** 어밀리아의 최대 대기시간. 드라이브스루의 평균 대기시간이 $\mu = 185$초, $\sigma = 11$초인 근사 정규분포를 따른다. 어밀리아는 대기시간이 하위 10%에 드는 식당만 이용한다. 그가 받아들이는 최대 대기시간은?
+**보기 2.** <span class="diff easy" title="쉬움"></span> 어밀리아의 최대 대기시간. 드라이브스루의 평균 대기시간이 $\mu = 185$초, $\sigma = 11$초인 근사 정규분포를 따른다. 어밀리아는 대기시간이 하위 10%에 드는 식당만 이용한다. 그가 받아들이는 최대 대기시간은?
 
 넓이가 0.1이 되는 지점을 찾는 문제, 즉 10번째 백분위수를 구하는 문제다.
 
@@ -153,7 +153,7 @@ Maximum average wait time: 170.90 seconds
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 $0 \le x \le 2$에서 $f(x) = c x^2$이고 그 밖에서는 0이다. (a) $c$를 구하라. (b) $F(x)$를 계산하라. (c) $P(1 \le X \le 2)$를 구하라. (d) 중앙값을 구하라.
 
 </div>
@@ -169,7 +169,7 @@ $0 \le x \le 2$에서 $f(x) = c x^2$이고 그 밖에서는 0이다. (a) $c$를 
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 **연속인 $X$에 대해 $P(X = a) = 0$인 이유.** 누적분포함수로부터 엄밀하게 논증하라.
 
 </div>
@@ -189,7 +189,7 @@ $0 \le x \le 2$에서 $f(x) = c x^2$이고 그 밖에서는 0이다. (a) $c$를 
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 **연속 확률밀도함수의 변환 규칙.** $X$의 밀도가 $f_X$이고 $Y = g(X)$이며 $g$가 순증가하고 미분가능할 때 $Y$의 밀도를 유도하라.
 
 </div>
@@ -221,7 +221,7 @@ $0 \le x \le 2$에서 $f(x) = c x^2$이고 그 밖에서는 0이다. (a) $c$를 
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff easy" title="쉬움"></span>
 **연속확률변수의 기댓값.** $[0, 1]$에서 확률밀도함수가 $f(x) = 2x$인 $X$에 대해 $\mathbb{E}[X]$, $\mathbb{E}[X^2]$, $\mathrm{Var}(X)$를 계산하라.
 
 </div>
@@ -237,7 +237,7 @@ $0 \le x \le 2$에서 $f(x) = c x^2$이고 그 밖에서는 0이다. (a) $c$를 
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 **지수분포의 무기억 성질.** $X \sim \mathrm{Exp}(\lambda)$이면 모든 $s, t \ge 0$에 대해 $P(X > s + t \mid X > s) = P(X > t)$임을 증명하라. 그 해석은 무엇인가?
 
 </div>
@@ -263,7 +263,7 @@ $0 \le x \le 2$에서 $f(x) = c x^2$이고 그 밖에서는 0이다. (a) $c$를 
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 **혼합분포.** 순수하게 이산도 아니고 순수하게 연속도 아닌 확률변수 $X$의 예를 들어라. 그 누적분포함수에 도약과 연속 구간이 함께 있음을 보여라.
 
 </div>
@@ -289,7 +289,7 @@ $0 \le x \le 2$에서 $f(x) = c x^2$이고 그 밖에서는 0이다. (a) $c$를 
 
 <div class="drillbox" markdown>
 
-**연습문제 7.**
+**연습문제 7.** <span class="diff med" title="중간"></span>
 연습문제 $3$은 $g$가 **순증가**일 때의 변환 규칙이었다. $g$가 단조가 아니면 어떻게 되는가? $Y = X^2$으로 확인하라.
 
 </div>
@@ -362,7 +362,7 @@ $0 \le x \le 2$에서 $f(x) = c x^2$이고 그 밖에서는 0이다. (a) $c$를 
 
 <div class="drillbox" markdown>
 
-**연습문제 8.**
+**연습문제 8.** <span class="diff med" title="중간"></span>
 표본에서 **최솟값과 최댓값**의 분포는 어떻게 되는가? 순서통계량의 분포를 유도하고 확인하라.
 
 </div>
@@ -428,7 +428,7 @@ $0 \le x \le 2$에서 $f(x) = c x^2$이고 그 밖에서는 0이다. (a) $c$를 
 
 <div class="drillbox" markdown>
 
-**연습문제 9.**
+**연습문제 9.** <span class="diff med" title="중간"></span>
 연속분포라고 **적률이 존재한다는 보장은 없다.** 파레토분포로 확인하고 그 실무적 의미를 논하라.
 
 </div>
@@ -521,7 +521,7 @@ $0 \le x \le 2$에서 $f(x) = c x^2$이고 그 밖에서는 0이다. (a) $c$를 
 
 <div class="drillbox" markdown>
 
-**연습문제 10.**
+**연습문제 10.** <span class="diff hard" title="어려움"></span>
 연습문제 $5$의 무기억성을 일반화하라. **위험률**로 분포를 특징짓고, 지수분포가 어떤 위치를 차지하는지 밝혀라.
 
 </div>

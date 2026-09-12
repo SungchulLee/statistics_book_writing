@@ -106,7 +106,7 @@ plt.show()
 
 <div class="exbox" markdown>
 
-**보기 1.** 정규분포에서 구간의 확률. $X \sim N(50, 10^2)$일 때 $P(40 \le X \le 60)$은 $F(60) - F(40)$이다.
+**보기 1.** <span class="diff easy" title="쉬움"></span> 정규분포에서 구간의 확률. $X \sim N(50, 10^2)$일 때 $P(40 \le X \le 60)$은 $F(60) - F(40)$이다.
 
 </div>
 
@@ -287,7 +287,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 $X$ = 공정한 동전을 3번 던졌을 때 앞면의 개수. (a) 확률질량함수를 쓰라. (b) 누적분포함수를 쓰라. (c) $P(1 \le X \le 2)$를 두 가지 방법으로 계산하라.
 
 </div>
@@ -312,7 +312,7 @@ $X$ = 공정한 동전을 3번 던졌을 때 앞면의 개수. (a) 확률질량�
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff easy" title="쉬움"></span>
 $[0, 1]$에서 확률밀도함수가 $f(x) = c \cdot x^2$이고 그 밖에서는 0인 연속확률변수 $X$에 대해 (a) $c$를 구하라. (b) $F(x)$를 계산하라. (c) $P(0.3 < X < 0.7)$을 구하라.
 
 </div>
@@ -326,7 +326,7 @@ $[0, 1]$에서 확률밀도함수가 $f(x) = c \cdot x^2$이고 그 밖에서는
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff easy" title="쉬움"></span>
 **누적분포함수를 미분해 확률밀도함수 구하기.** $x \ge 0$에서 $F(x) = 1 - e^{-\lambda x}$인 연속확률변수 $X$에 대해 확률밀도함수 $f(x)$를 계산하라. 이것은 어떤 분포인가?
 
 </div>
@@ -341,7 +341,7 @@ $[0, 1]$에서 확률밀도함수가 $f(x) = c \cdot x^2$이고 그 밖에서는
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 **역변환 표집.** $U \sim \mathrm{Uniform}(0, 1)$이고 $F$가 연속인 순증가 누적분포함수이면 $X = F^{-1}(U)$의 누적분포함수가 $F$임을 보여라.
 
 </div>
@@ -361,7 +361,7 @@ $[0, 1]$에서 확률밀도함수가 $f(x) = c \cdot x^2$이고 그 밖에서는
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 **분위수, 백분위수, 분위수함수.** 이 세 용어를 예를 들어 명확히 구분하라. 분위수함수와 생존함수의 관계를 진술하라.
 
 </div>
@@ -379,7 +379,7 @@ $[0, 1]$에서 확률밀도함수가 $f(x) = c \cdot x^2$이고 그 밖에서는
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff hard" title="어려움"></span>
 **이상적분.** $x \ge 2$에서 $f(x) = 1/(x \ln^2 x)$을 확률밀도함수로 제안한다. 이것이 타당한 분포를 정의하는가? $\mathbb{E}[X]$를 계산하라.
 
 </div>
@@ -401,7 +401,7 @@ $[0, 1]$에서 확률밀도함수가 $f(x) = c \cdot x^2$이고 그 밖에서는
 
 <div class="drillbox" markdown>
 
-**연습문제 7.**
+**연습문제 7.** <span class="diff med" title="중간"></span>
 연습문제 $4$의 역변환 표집은 $F$가 **연속인 순증가 함수**일 때의 이야기였다. 이산분포나 도약이 있는 분포에서는 어떻게 하는가?
 
 </div>
@@ -469,7 +469,7 @@ $[0, 1]$에서 확률밀도함수가 $f(x) = c \cdot x^2$이고 그 밖에서는
 
 <div class="drillbox" markdown>
 
-**연습문제 8.**
+**연습문제 8.** <span class="diff med" title="중간"></span>
 누적분포함수 말고도 분포를 나타내는 함수가 여럿 있다. **생존함수, 위험률, 누적위험**의 관계를 정리하고 확인하라.
 
 </div>
@@ -530,7 +530,7 @@ $[0, 1]$에서 확률밀도함수가 $f(x) = c \cdot x^2$이고 그 밖에서는
 
 <div class="drillbox" markdown>
 
-**연습문제 9.**
+**연습문제 9.** <span class="diff med" title="중간"></span>
 확률변수가 둘이면 **결합 누적분포함수**를 쓴다. 그것이 주변분포와 의존구조를 어떻게 분리하는가?
 
 </div>
@@ -587,7 +587,7 @@ $[0, 1]$에서 확률밀도함수가 $f(x) = c \cdot x^2$이고 그 밖에서는
 
 <div class="drillbox" markdown>
 
-**연습문제 10.**
+**연습문제 10.** <span class="diff hard" title="어려움"></span>
 연습문제 $6$처럼 밀도가 그럴듯해 보여도 **분포가 성립하지 않거나 적률이 없을 수 있다.** 판정 절차를 세우되, **수치적분으로는 판정할 수 없음**을 함께 보여라.
 
 </div>

@@ -155,7 +155,7 @@ $n/N$이 작으면 수정계수가 1에 가까워 무시할 수 있다.
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 어떤 기계가 $\mu = 500$ ml, $\sigma = 10$ ml로 병을 채운다(정규분포가 아니다). (a) 중심극한정리에 따른 $\bar X_{36}$의 분포는? (b) $P(\bar X_{36} > 503)$은? (c) $P(|\bar X_n - 500| < 2) \ge 0.95$가 되려면 $n$은?
 
 </div>
@@ -169,7 +169,7 @@ $n/N$이 작으면 수정계수가 1에 가까워 무시할 수 있다.
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff hard" title="어려움"></span>
 평균 0, 분산 1이고 0의 근방에서 적률생성함수 $M(t)$가 유한한 i.i.d. $X_i$에 대해 **적률생성함수 방법으로 중심극한정리를 증명하라**. $\sqrt n \bar X_n$의 적률생성함수가 $e^{t^2/2}$로 수렴함을 보여라.
 
 </div>
@@ -191,7 +191,7 @@ $n/N$이 작으면 수정계수가 1에 가까워 무시할 수 있다.
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 심하게 치우친 분포에서 **중심극한정리의 느린 수렴을 보여라.** $X_i$가 평균 1인 지수분포를 따른다고 하자. $n = 30$일 때 $\bar X_n$의 왜도는 얼마인가? 정규 극한의 대칭성과 비교하라.
 
 </div>
@@ -211,7 +211,7 @@ $n/N$이 작으면 수정계수가 1에 가까워 무시할 수 있다.
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff hard" title="어려움"></span>
 **다변량 중심극한정리.** $\mathbf X_i \in \mathbb{R}^d$가 평균 $\boldsymbol\mu$, 공분산 $\boldsymbol\Sigma$인 i.i.d.라 하자. 다변량 중심극한정리를 진술하고, 그것이 다변량 정규분포에 근거한 신뢰타원체를 왜 정당화하는지 설명하라.
 
 </div>
@@ -231,7 +231,7 @@ $n/N$이 작으면 수정계수가 1에 가까워 무시할 수 있다.
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff hard" title="어려움"></span>
 **린데베르그 중심극한정리**는 동일분포가 아니어도 독립이기만 하면 되는 확률변수를 허용한다. **린데베르그 조건**을 진술하고 언제 성립하는지 설명하라.
 
 </div>
@@ -253,7 +253,7 @@ $n/N$이 작으면 수정계수가 1에 가까워 무시할 수 있다.
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff hard" title="어려움"></span>
 중심극한정리는 **유한한 분산**을 요구한다. 그 이유와, 분산이 무한할 때(꼬리가 두꺼운 분포) 어떻게 되는지 논하라. **안정분포**와 **알파-안정 중심극한정리**를 언급하라.
 
 </div>
@@ -275,7 +275,7 @@ $n/N$이 작으면 수정계수가 1에 가까워 무시할 수 있다.
 
 <div class="drillbox" markdown>
 
-**연습문제 7.**
+**연습문제 7.** <span class="diff med" title="중간"></span>
 중심극한정리는 $\sigma$를 **안다**고 가정한다. 실제로는 표본표준편차 $s$로 바꿔 쓴다. 그 대체를 정당화하는 **슬러츠키 정리**를 진술하고, 소표본에서 무엇이 대가로 치러지는지 확인하라.
 
 </div>
@@ -349,7 +349,7 @@ $n/N$이 작으면 수정계수가 1에 가까워 무시할 수 있다.
 
 <div class="drillbox" markdown>
 
-**연습문제 8.**
+**연습문제 8.** <span class="diff med" title="중간"></span>
 $\sqrt n(\bar X_n-\mu)\xrightarrow{d}N(0,\sigma^2)$이라고 해서 그 **분산이 $\sigma^2$로 수렴한다**고 말할 수 있는가? **분포수렴이 적률수렴을 함의하지 않음**을 보여라.
 
 </div>
@@ -420,7 +420,7 @@ $\sqrt n(\bar X_n-\mu)\xrightarrow{d}N(0,\sigma^2)$이라고 해서 그 **분산
 
 <div class="drillbox" markdown>
 
-**연습문제 9.**
+**연습문제 9.** <span class="diff med" title="중간"></span>
 정리 $3$의 "$n\ge30$" 규칙을 **꼬리에서** 검증하라. 근사가 중심부와 꼬리 중 어디에서 먼저 무너지는가?
 
 </div>
@@ -506,7 +506,7 @@ $\sqrt n(\bar X_n-\mu)\xrightarrow{d}N(0,\sigma^2)$이라고 해서 그 **분산
 
 <div class="drillbox" markdown>
 
-**연습문제 10.**
+**연습문제 10.** <span class="diff hard" title="어려움"></span>
 중심극한정리는 **표본평균**에만 적용되는가? **표본분위수의 중심극한정리**를 진술하고 확인하라.
 
 </div>

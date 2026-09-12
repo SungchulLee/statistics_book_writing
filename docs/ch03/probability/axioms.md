@@ -37,7 +37,7 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** 짝수 또는 홀수. 공정한 주사위에서 $A = \{2,4,6\}$, $B = \{1,3,5\}$라 하자. $A \cap B = \emptyset$이므로
+**보기 1.** <span class="diff easy" title="쉬움"></span> 짝수 또는 홀수. 공정한 주사위에서 $A = \{2,4,6\}$, $B = \{1,3,5\}$라 하자. $A \cap B = \emptyset$이므로
 
 $$
 P(A \cup B) = P(A) + P(B) = \tfrac{3}{6} + \tfrac{3}{6} = 1
@@ -167,7 +167,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 확률의 세 공리만을 사용해 임의의 사건 $A$에 대해 $P(A^c) = 1 - P(A)$임을 증명하라.
 
 </div>
@@ -195,7 +195,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 공리로부터 임의의 두 사건 $A$와 $B$에 대해 다음이 성립함을 증명하라.
 
 $$
@@ -233,7 +233,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 어떤 학생이 $P(A) = 0.4$, $P(B) = 0.5$, $P(A \cup B) = 0.8$이라고 주장한다. 다른 학생은 $P(A) = 0.7$, $P(B) = 0.6$, $P(A \cap B) = 0.1$이라고 주장한다. 각 배정이 공리와 모순되지 않는지 판정하라.
 
 </div>
@@ -245,7 +245,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff easy" title="쉬움"></span>
 공리를 사용해 $A \subseteq B$이면 $P(A) \leq P(B)$임을(확률의 단조성) 증명하라.
 
 </div>
@@ -267,7 +267,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 **본페로니 부등식.** 임의의 사건 $A_1, \ldots, A_n$에 대해 $P(\bigcup_i A_i) \le \sum_i P(A_i)$임을 증명하라. 이것은 언제 유용한가?
 
 </div>
@@ -293,7 +293,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 **$\sigma$-가법성 대 유한 가법성.** 차이를 진술하고 측도론적 확률이 왜 더 강한 성질을 요구하는지 설명하라.
 
 </div>
@@ -313,7 +313,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 7.**
+**연습문제 7.** <span class="diff hard" title="어려움"></span>
 연습문제 5의 본페로니 부등식은 포함배제 공식을 **첫 항에서 자른 것**이다. 더 자르면 어떻게 되는가? 절단 차수에 따라 상계와 하계가 번갈아 나옴을 보이고 수치로 확인하라.
 
 </div>
@@ -393,7 +393,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 8.**
+**연습문제 8.** <span class="diff hard" title="어려움"></span>
 정리 $3$의 **측도의 연속성**을 응용하라. **보렐–칸텔리 보조정리**를 진술하고 수치로 확인하라.
 
 </div>
@@ -459,7 +459,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 9.**
+**연습문제 9.** <span class="diff hard" title="어려움"></span>
 가산가법성이 **무엇을 금지하는지** 보여라. 자연수 전체에 "균등한" 확률을 줄 수 있는가?
 
 </div>
@@ -533,7 +533,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 10.**
+**연습문제 10.** <span class="diff hard" title="어려움"></span>
 공리는 확률을 **어떤 집합에 부여할지** 말해 주지 않는다. 왜 모든 부분집합에 확률을 줄 수 없으며, 그래서 무엇이 필요한가?
 
 </div>

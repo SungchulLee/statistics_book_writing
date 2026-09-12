@@ -56,7 +56,7 @@ $\rho/\sigma^3$은 왜도의 사촌이다. 왜도가 $E[(X-\mu)^3]/\sigma^3$인�
 
 <div class="exbox" markdown>
 
-**보기 1.** 공정한 동전. $X_i \sim \text{Bernoulli}(0.5)$이면 $\mu = 0.5$, $\sigma^2 = 0.25$, $\rho = 0.125$이므로
+**보기 1.** <span class="diff easy" title="쉬움"></span> 공정한 동전. $X_i \sim \text{Bernoulli}(0.5)$이면 $\mu = 0.5$, $\sigma^2 = 0.25$, $\rho = 0.125$이므로
 
 $$
 \text{상한} = \frac{0.4748 \times 0.125}{0.25^{3/2}\sqrt n} = \frac{0.4748}{\sqrt n}
@@ -68,7 +68,7 @@ $n = 100$에서 약 $0.0475$다. 누적분포함수가 어느 점에서도 정�
 
 <div class="exbox" markdown>
 
-**보기 2.** 지수분포. $X_i \sim \text{Exponential}(1)$이면 $\mu = 1$, $\sigma^2 = 1$, $\rho = 2 + e^{-1} \approx 2.368$이므로
+**보기 2.** <span class="diff easy" title="쉬움"></span> 지수분포. $X_i \sim \text{Exponential}(1)$이면 $\mu = 1$, $\sigma^2 = 1$, $\rho = 2 + e^{-1} \approx 2.368$이므로
 
 $$
 \text{상한} = \frac{0.4748 \times 2.368}{\sqrt n} \approx \frac{1.124}{\sqrt n}
@@ -265,7 +265,7 @@ convergence_rate_comparison()
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 베리–에센 정리는 $C \leq 0.4748$일 때 $\sup_x |F_n(x) - \mathcal{N}(x)| \leq \frac{C \rho}{\sigma^3 \sqrt{n}}$이라고 말한다. Bernoulli(0.5) 분포에서는 $\sigma^2 = 0.25$이고 $\rho = E[|X - \mu|^3] = 0.125$이다. 베리–에센 한계가 근사 오차 0.01 이하를 보장하려면 $n$이 얼마나 커야 하는가?
 
 </div>
@@ -299,7 +299,7 @@ convergence_rate_comparison()
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 $\mu = 1$, $\sigma = 1$, $\rho = E[|X-1|^3] \approx 2.368$인 Exponential(1) 분포를 생각하자. $n = 30$에서의 베리–에센 한계를 같은 표본 크기의 Bernoulli(0.5)와 비교하라. 어느 분포가 정규분포로 더 빨리 수렴하며 그 이유는 무엇인가?
 
 </div>
@@ -321,7 +321,7 @@ $\mu = 1$, $\sigma = 1$, $\rho = E[|X-1|^3] \approx 2.368$인 Exponential(1) 분
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff easy" title="쉬움"></span>
 중심극한정리가 이미 정규분포로의 수렴을 보장하는데도 베리–에센 정리가 필요한 이유를 설명하라.
 
 </div>
@@ -333,7 +333,7 @@ $\mu = 1$, $\sigma = 1$, $\rho = E[|X-1|^3] \approx 2.368$인 Exponential(1) 분
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff easy" title="쉬움"></span>
 베리–에센 한계는 $O(1/\sqrt{n})$으로 줄어든다. 근사 오차를 10분의 1로 줄이려면(예: 0.1에서 0.01로) 표본 크기를 몇 배로 늘려야 하는가?
 
 </div>
@@ -357,7 +357,7 @@ $\mu = 1$, $\sigma = 1$, $\rho = E[|X-1|^3] \approx 2.368$인 Exponential(1) 분
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff hard" title="어려움"></span>
 **에지워스 전개**가 중심극한정리를 2차까지 정밀화함을 보여라. $\gamma_1$이 왜도일 때 $\sqrt n (\bar X_n - \mu)/\sigma$의 누적분포함수를 $\Phi(x) + (\gamma_1/(6\sqrt n)) \phi(x) (1 - x^2) + O(1/n)$으로 근사할 수 있다. 이것이 순수한 중심극한정리보다 왜 더 정확한 근사인지 설명하라.
 
 </div>
@@ -379,7 +379,7 @@ $\mu = 1$, $\sigma = 1$, $\rho = E[|X-1|^3] \approx 2.368$인 Exponential(1) 분
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff hard" title="어려움"></span>
 **i.i.d.가 아닌** 합에 대한 베리–에센. 독립이지만 동일분포는 아닌 확률변수에 대한 일반화를 진술하라. 이것이 회귀와 시계열 분석에 왜 중요한가?
 
 </div>
@@ -403,7 +403,7 @@ $\mu = 1$, $\sigma = 1$, $\rho = E[|X-1|^3] \approx 2.368$인 Exponential(1) 분
 
 <div class="drillbox" markdown>
 
-**연습문제 7.**
+**연습문제 7.** <span class="diff med" title="중간"></span>
 베리–에센 한계는 **얼마나 느슨한가?** 실제 오차를 직접 계산해 한계와 비교하라.
 
 </div>
@@ -466,7 +466,7 @@ $\mu = 1$, $\sigma = 1$, $\rho = E[|X-1|^3] \approx 2.368$인 Exponential(1) 분
 
 <div class="drillbox" markdown>
 
-**연습문제 8.**
+**연습문제 8.** <span class="diff hard" title="어려움"></span>
 정리에 등장하는 상수 $C$의 **최적값은 아직 모른다.** 알려진 상한과 하한을 정리하고, 베르누이분포가 그 하한에 닿는지 확인하라.
 
 </div>
@@ -545,7 +545,7 @@ $\mu = 1$, $\sigma = 1$, $\rho = E[|X-1|^3] \approx 2.368$인 Exponential(1) 분
 
 <div class="drillbox" markdown>
 
-**연습문제 9.**
+**연습문제 9.** <span class="diff hard" title="어려움"></span>
 베리–에센 한계는 **모든 $x$에 같은 값**을 준다. 그런데 clt 문서 연습문제 $9$에서 보았듯 근사의 질은 중심과 꼬리에서 크게 다르다. **비균등 베리–에센 한계**를 진술하고 확인하라.
 
 </div>
@@ -604,7 +604,7 @@ $\mu = 1$, $\sigma = 1$, $\rho = E[|X-1|^3] \approx 2.368$인 Exponential(1) 분
 
 <div class="drillbox" markdown>
 
-**연습문제 10.**
+**연습문제 10.** <span class="diff med" title="중간"></span>
 연습문제 $7$에서 오차의 정체가 **이산성**임을 보았다. 그렇다면 **연속성 보정**으로 없앨 수 있는가? 대칭인 경우와 치우친 경우를 나누어 확인하라.
 
 </div>

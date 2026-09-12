@@ -32,7 +32,7 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** 육면체 주사위. 공정한 주사위를 굴릴 때
+**보기 1.** <span class="diff easy" title="쉬움"></span> 육면체 주사위. 공정한 주사위를 굴릴 때
 
 - 표본공간: $\Omega = \{1, 2, 3, 4, 5, 6\}$
 - 사건 $A$("짝수가 나옴"): $A = \{2, 4, 6\}$
@@ -44,7 +44,7 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 2.** 동전 세 개. 동전 세 개를 던지면
+**보기 2.** <span class="diff easy" title="쉬움"></span> 동전 세 개. 동전 세 개를 던지면
 
 - 표본공간: $\Omega = \{HHH, HHT, HTH, HTT, THH, THT, TTH, TTT\}$
 - 사건("앞면이 정확히 2개"): $A = \{HHT, HTH, THH\}$
@@ -139,7 +139,7 @@ P(2 heads) = 3/8 = 0.3750
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 주머니에 빨간 공 3개와 파란 공 2개가 있다. 공 두 개를 비복원으로 뽑는다. 순서쌍(예: $(R_1, B_1)$)을 써서 표본공간 $\Omega$를 모두 나열하고 빨간 공 두 개를 뽑을 확률을 계산하라.
 
 </div>
@@ -169,7 +169,7 @@ P(2 heads) = 3/8 = 0.3750
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff easy" title="쉬움"></span>
 공정한 주사위를 굴리고 공정한 동전을 던지는 실험이 있다. 표본공간을 모두 나열하라. 사건 $A$ = "주사위가 짝수이고 동전이 앞면"을 정의하고 $P(A)$를 계산하라.
 
 </div>
@@ -191,7 +191,7 @@ P(2 heads) = 3/8 = 0.3750
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff easy" title="쉬움"></span>
 $\Omega = \{a, b, c\}$이고 $P(a) = 0.5$, $P(b) = 0.3$, $P(c) = 0.2$라 하자. 가능한 모든 사건($\Omega$의 부분집합)을 나열하고 각각의 확률을 계산하라.
 
 </div>
@@ -212,7 +212,7 @@ $\Omega = \{a, b, c\}$이고 $P(a) = 0.5$, $P(b) = 0.3$, $P(c) = 0.2$라 하자.
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff easy" title="쉬움"></span>
 유한 표본공간, 가산무한 표본공간, 비가산 표본공간의 차이를 설명하라. 각 유형에 해당하는 실험의 예를 하나씩 들어라.
 
 </div>
@@ -226,7 +226,7 @@ $\Omega = \{a, b, c\}$이고 $P(a) = 0.5$, $P(b) = 0.3$, $P(c) = 0.2$라 하자.
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 원소가 $n$개인 표본공간 $\Omega$에 대해 **멱집합** $2^\Omega$의 원소는 $2^n$개다. 이를 귀납법으로 증명하라. 멱집합이 이산 확률에서 자연스러운 "사건 공간"인 이유는 무엇인가?
 
 </div>
@@ -242,7 +242,7 @@ $\Omega = \{a, b, c\}$이고 $P(a) = 0.5$, $P(b) = 0.3$, $P(c) = 0.2$라 하자.
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 **연속 표본공간과 "확률 0" 사건.** 균등확률을 갖는 $\Omega = [0, 1]$에 대해 확률이 0인 사건의 예를 두 개 들어라. 이들은 불가능한 사건인가?
 
 </div>
@@ -261,7 +261,7 @@ $\Omega = \{a, b, c\}$이고 $P(a) = 0.5$, $P(b) = 0.3$, $P(c) = 0.2$라 하자.
 
 <div class="drillbox" markdown>
 
-**연습문제 7.**
+**연습문제 7.** <span class="diff med" title="중간"></span>
 같은 문제를 서로 다른 표본공간으로 모형화할 수 있다. 답이 **같은가**? 항아리 문제로 확인하라.
 
 </div>
@@ -322,7 +322,7 @@ $\Omega = \{a, b, c\}$이고 $P(a) = 0.5$, $P(b) = 0.3$, $P(c) = 0.2$라 하자.
 
 <div class="drillbox" markdown>
 
-**연습문제 8.**
+**연습문제 8.** <span class="diff hard" title="어려움"></span>
 연습문제 4가 세 가지 크기를 구분했다. 표본공간이 **비가산**일 때 확률을 어떻게 정하는지, 그리고 그 선택이 유일하지 않음을 보여라.
 
 </div>
@@ -385,7 +385,7 @@ $\Omega = \{a, b, c\}$이고 $P(a) = 0.5$, $P(b) = 0.3$, $P(c) = 0.2$라 하자.
 
 <div class="drillbox" markdown>
 
-**연습문제 9.**
+**연습문제 9.** <span class="diff med" title="중간"></span>
 표본공간이 **가산무한**이면 유한과 무엇이 달라지는가? 확률보행의 원점 복귀로 확인하라.
 
 </div>
@@ -438,7 +438,7 @@ $\Omega = \{a, b, c\}$이고 $P(a) = 0.5$, $P(b) = 0.3$, $P(c) = 0.2$라 하자.
 
 <div class="drillbox" markdown>
 
-**연습문제 10.**
+**연습문제 10.** <span class="diff med" title="중간"></span>
 표본공간을 정하는 것은 **모형을 정하는 것**이다. 무엇을 $\Omega$에 넣을지가 답을 바꾸는 예를 들고, 실무 지침을 정리하라.
 
 </div>

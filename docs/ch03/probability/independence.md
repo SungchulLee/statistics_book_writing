@@ -40,7 +40,7 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** 동전 두 번. $A$ = "첫 번째가 앞면", $B$ = "두 번째가 앞면"이라 하면
+**보기 1.** <span class="diff easy" title="쉬움"></span> 동전 두 번. $A$ = "첫 번째가 앞면", $B$ = "두 번째가 앞면"이라 하면
 
 $$
 P(A) = \tfrac{1}{2}, \quad P(B) = \tfrac{1}{2}, \quad P(A \cap B) = \tfrac{1}{4} = P(A)\,P(B)
@@ -52,7 +52,7 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 2.** 주사위 한 번. $A$ = "짝수" = $\{2,4,6\}$, $B$ = "3 이하" = $\{1,2,3\}$이라 하면
+**보기 2.** <span class="diff easy" title="쉬움"></span> 주사위 한 번. $A$ = "짝수" = $\{2,4,6\}$, $B$ = "3 이하" = $\{1,2,3\}$이라 하면
 
 $$
 P(A) = \tfrac{1}{2}, \quad P(B) = \tfrac{1}{2}, \quad P(A \cap B) = P(\{2\}) = \tfrac{1}{6}
@@ -165,7 +165,7 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 3.** 반례 — 쌍별 독립이지만 서로 독립은 아닌 경우. 공정한 동전 두 개를 던지고
+**보기 3.** <span class="diff easy" title="쉬움"></span> 반례 — 쌍별 독립이지만 서로 독립은 아닌 경우. 공정한 동전 두 개를 던지고
 
 - $A$ = "첫 번째가 앞면"
 - $B$ = "두 번째가 앞면"
@@ -226,7 +226,7 @@ P(H₁) × P(H₂) = 0.2505
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 공정한 주사위를 두 번 굴린다. $A$ = "합이 7", $B$ = "첫 굴림이 3"이라 하자. (a) 표본공간의 크기는? (b) $A$, $B$, $A \cap B$를 나열하라. (c) $P(A), P(B), P(A \cap B)$를 계산하라. (d) $A$와 $B$는 독립인가?
 
 </div>
@@ -242,7 +242,7 @@ P(H₁) × P(H₂) = 0.2505
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 증명하라: $A$와 $B$가 독립이면 $A^c$와 $B$도 독립이다. 마찬가지로 $A$와 $B^c$, 그리고 $A^c$와 $B^c$도 독립이다.
 
 </div>
@@ -258,7 +258,7 @@ P(H₁) × P(H₂) = 0.2505
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 **쌍별 독립은 상호독립을 함의하지 않는다.** 공정한 동전 두 개를 던진다. $A$ = "첫 번째가 앞면", $B$ = "두 번째가 앞면", $C$ = "두 동전이 일치"라 하자. $\{A, B, C\}$가 쌍별 독립이지만 상호독립은 **아님**을 보여라.
 
 </div>
@@ -279,7 +279,7 @@ P(H₁) × P(H₂) = 0.2505
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 **독립성은 추이적이지 않다.** $A$가 $B$와 독립이고 $B$가 $C$와 독립이지만 $A$와 $C$는 독립이 **아닌** 세 사건 $A$, $B$, $C$를 구성하라.
 
 </div>
@@ -301,7 +301,7 @@ P(H₁) × P(H₂) = 0.2505
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 **여집합 정보의 독립.** $X$가 $\{1, 2, 3, 4\}$ 위에서 균등할 때 $A$ = "$X$가 짝수", $B$ = "$X \le 2$"를 생각하자. 이들이 독립임을 보여라. 일반화하라. 균등분포에서 어떤 대칭 조건이 있을 때 두 사건이 독립인 조각으로 분할되는가?
 
 </div>
@@ -315,7 +315,7 @@ P(H₁) × P(H₂) = 0.2505
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 **독립성은 구조적 성질이지 빈도 성질이 아니다.** 모집단에서 $A$와 $B$가 종속이더라도 크기 $n$인 표본에서 우연히 $\hat P(\hat A \cap \hat B) = \hat P(\hat A) \hat P(\hat B)$가 나올 수 있다. 표본 크기 $n$에서 독립이라는 귀무가설 아래 $|\hat P(A \cap B) - \hat P(A) \hat P(B)|$의 기댓값을 유도하라.
 
 </div>
@@ -337,7 +337,7 @@ P(H₁) × P(H₂) = 0.2505
 
 <div class="drillbox" markdown>
 
-**연습문제 7.**
+**연습문제 7.** <span class="diff med" title="중간"></span>
 지금까지는 **사건**의 독립을 다루었다. **확률변수**의 독립은 어떻게 정의하며, 사건의 독립과 어떻게 다른가?
 
 </div>
@@ -407,7 +407,7 @@ P(H₁) × P(H₂) = 0.2505
 
 <div class="drillbox" markdown>
 
-**연습문제 8.**
+**연습문제 8.** <span class="diff med" title="중간"></span>
 연습문제 6이 유도한 표본 변동을 검정의 언어로 바꾸어라. **독립이 아닌데 독립처럼 보일 확률**은 얼마인가?
 
 </div>
@@ -471,7 +471,7 @@ P(H₁) × P(H₂) = 0.2505
 
 <div class="drillbox" markdown>
 
-**연습문제 9.**
+**연습문제 9.** <span class="diff med" title="중간"></span>
 독립성을 **정도**로 재고 싶다면 어떻게 하는가? **상호정보량**을 정의하고 상관계수와 비교하라.
 
 </div>
@@ -540,7 +540,7 @@ P(H₁) × P(H₂) = 0.2505
 
 <div class="drillbox" markdown>
 
-**연습문제 10.**
+**연습문제 10.** <span class="diff med" title="중간"></span>
 독립 가정은 **실무에서 확률을 곱할 수 있게** 해 준다. 그 가정이 틀리면 얼마나 위험한가? 시스템 신뢰도로 확인하라.
 
 </div>

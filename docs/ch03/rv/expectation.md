@@ -36,7 +36,7 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** 공정한 주사위의 기댓값. 공정한 주사위의 눈 $X$에 대해
+**보기 1.** <span class="diff easy" title="쉬움"></span> 공정한 주사위의 기댓값. 공정한 주사위의 눈 $X$에 대해
 
 $$
 E[X] = \sum_{x=1}^{6} x \cdot \tfrac{1}{6} = \frac{1+2+3+4+5+6}{6} = 3.5
@@ -48,7 +48,7 @@ $3.5$는 주사위가 결코 낼 수 없는 값이다. 기댓값은 "기대되�
 
 <div class="exbox" markdown>
 
-**보기 2.** 지수분포의 기댓값. $x \ge 0$에서 $f(x) = \lambda e^{-\lambda x}$인 $X \sim \text{Exponential}(\lambda)$에 대해
+**보기 2.** <span class="diff easy" title="쉬움"></span> 지수분포의 기댓값. $x \ge 0$에서 $f(x) = \lambda e^{-\lambda x}$인 $X \sim \text{Exponential}(\lambda)$에 대해
 
 $$
 E[X] = \int_0^{\infty} x \, \lambda e^{-\lambda x}\,dx = \frac{1}{\lambda}
@@ -246,7 +246,7 @@ E[X] + E[Y] = 0.8321
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 이산확률변수 $X$의 분포가 $P(X=-1) = 0.3$, $P(X=0) = 0.4$, $P(X=2) = 0.3$이다. $E[X]$와 $E[X^2]$를 계산하라.
 
 </div>
@@ -266,7 +266,7 @@ E[X] + E[Y] = 0.8321
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff easy" title="쉬움"></span>
 $X_1, X_2, \ldots, X_{100}$을 독립인 동전 던지기 100번의 지시변수라 하자. $i$번째 던지기가 앞면(확률 0.5)이면 $X_i = 1$, 아니면 $X_i = 0$이다. 기댓값의 선형성을 이용해 $E\!\left[\sum_{i=1}^{100} X_i\right]$를 구하라.
 
 </div>
@@ -288,7 +288,7 @@ $X_1, X_2, \ldots, X_{100}$을 독립인 동전 던지기 100번의 지시변수
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff easy" title="쉬움"></span>
 공정한 육면체 주사위를 굴린다. $X$를 나온 수라 하고 $Y = (X - 3.5)^2$이라 하자. LOTUS를 써서 $E[Y]$를 계산하라.
 
 </div>
@@ -308,7 +308,7 @@ $X_1, X_2, \ldots, X_{100}$을 독립인 동전 던지기 100번의 지시변수
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 $X$와 $Y$가 독립이고 $E[X] = 2$, $E[Y] = 3$, $E[X^2] = 5$, $E[Y^2] = 11$이다. $E[XY]$와 $E[(X+Y)^2]$를 계산하라.
 
 </div>
@@ -334,7 +334,7 @@ $X$와 $Y$가 독립이고 $E[X] = 2$, $E[Y] = 3$, $E[X^2] = 5$, $E[Y^2] = 11$�
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 **기댓값의 꼬리합 공식.** 음이 아닌 확률변수 $X$에 대해 $\mathbb{E}[X] = \int_0^\infty P(X > t) dt$(연속) 또는 $\sum_{n=0}^\infty P(X > n)$(정숫값)임을 증명하라.
 
 </div>
@@ -358,7 +358,7 @@ $X$와 $Y$가 독립이고 $E[X] = 2$, $E[Y] = 3$, $E[X^2] = 5$, $E[Y^2] = 11$�
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 **확률변수로서의 조건부 기댓값.** $X, Y$가 결합분포를 갖는다고 하자. $g(y) = \mathbb{E}[X \mid Y = y]$와 확률변수 $\mathbb{E}[X \mid Y] = g(Y)$를 정의한다. **전기댓값의 법칙** $\mathbb{E}[X] = \mathbb{E}[\mathbb{E}[X \mid Y]]$를 증명하라.
 
 </div>
@@ -379,7 +379,7 @@ $X$와 $Y$가 독립이고 $E[X] = 2$, $E[Y] = 3$, $E[X^2] = 5$, $E[Y^2] = 11$�
 
 <div class="drillbox" markdown>
 
-**연습문제 7.**
+**연습문제 7.** <span class="diff med" title="중간"></span>
 기댓값이 **존재하지 않을** 수 있다. "무한하다"와 "정의되지 않는다"를 구분하고, 코시분포로 확인하라.
 
 </div>
@@ -431,7 +431,7 @@ $X$와 $Y$가 독립이고 $E[X] = 2$, $E[Y] = 3$, $E[X^2] = 5$, $E[Y^2] = 11$�
 
 <div class="drillbox" markdown>
 
-**연습문제 8.**
+**연습문제 8.** <span class="diff med" title="중간"></span>
 연습문제 $6$의 조건부기댓값이 왜 **"최적 예측"** 인지 보여라. 어떤 의미에서 최적인가?
 
 </div>
@@ -496,7 +496,7 @@ $X$와 $Y$가 독립이고 $E[X] = 2$, $E[Y] = 3$, $E[X^2] = 5$, $E[Y^2] = 11$�
 
 <div class="drillbox" markdown>
 
-**연습문제 9.**
+**연습문제 9.** <span class="diff hard" title="어려움"></span>
 항의 **개수 자체가 확률변수**인 합의 기댓값은 어떻게 되는가? **왈드 항등식**을 진술하고 확인하라.
 
 </div>
@@ -567,7 +567,7 @@ $X$와 $Y$가 독립이고 $E[X] = 2$, $E[Y] = 3$, $E[X^2] = 5$, $E[Y^2] = 11$�
 
 <div class="drillbox" markdown>
 
-**연습문제 10.**
+**연습문제 10.** <span class="diff med" title="중간"></span>
 연습문제 $2$의 지시변수 기법을 더 밀고 나가라. **쿠폰 수집가 문제**와 **매칭 문제**를 풀어라.
 
 </div>

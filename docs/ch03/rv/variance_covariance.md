@@ -43,7 +43,7 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** 공정한 주사위.
+**보기 1.** <span class="diff easy" title="쉬움"></span> 공정한 주사위.
 
 $$
 E[X] = 3.5, \qquad E[X^2] = \frac{1^2 + 2^2 + \cdots + 6^2}{6} = \frac{91}{6}
@@ -57,7 +57,7 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 2.** 베르누이. $X \sim \text{Bernoulli}(p)$이면 $X^2 = X$이므로 $E[X^2] = E[X] = p$이고
+**보기 2.** <span class="diff easy" title="쉬움"></span> 베르누이. $X \sim \text{Bernoulli}(p)$이면 $X^2 = X$이므로 $E[X^2] = E[X] = p$이고
 
 $$
 \text{Var}(X) = p - p^2 = p(1-p)
@@ -229,7 +229,7 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 3.** 포트폴리오 분산. 수익률 $R_1, R_2$인 두 자산에 가중치 $w_1, w_2$($w_1 + w_2 = 1$)로 투자하면
+**보기 3.** <span class="diff easy" title="쉬움"></span> 포트폴리오 분산. 수익률 $R_1, R_2$인 두 자산에 가중치 $w_1, w_2$($w_1 + w_2 = 1$)로 투자하면
 
 $$
 \text{Var}(R_p) = w_1^2\sigma_1^2 + w_2^2\sigma_2^2 + 2w_1 w_2 \,\text{Cov}(R_1, R_2)
@@ -285,7 +285,7 @@ $\rho = 1$인 곡선만 직선이고 나머지는 아래로 휘어 있다. 그 �
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 확률질량함수가 $P(X = 1, 2, 3, 4) = 0.1, 0.3, 0.4, 0.2$이다. (a) $\mathbb{E}[X]$를 구하라. (b) $\mathbb{E}[X^2]$와 $\mathrm{Var}(X)$를 구하라. (c) $Y = 3X + 5$일 때 $\mathbb{E}[Y]$와 $\mathrm{Var}(Y)$를 구하라.
 
 </div>
@@ -299,7 +299,7 @@ $\rho = 1$인 곡선만 직선이고 나머지는 아래로 휘어 있다. 그 �
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 **합의 분산 공식을 증명하라:** $\mathrm{Var}(X + Y) = \mathrm{Var}(X) + \mathrm{Var}(Y) + 2\mathrm{Cov}(X, Y)$.
 
 </div>
@@ -327,7 +327,7 @@ $\rho = 1$인 곡선만 직선이고 나머지는 아래로 휘어 있다. 그 �
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 **무상관 $\ne$ 독립.** $X \sim \mathrm{Uniform}(-1, 1)$이고 $Y = X^2$이라 하자. $\mathrm{Cov}(X, Y) = 0$이지만 $X$와 $Y$가 종속임을 보여라.
 
 </div>
@@ -343,7 +343,7 @@ $\rho = 1$인 곡선만 직선이고 나머지는 아래로 휘어 있다. 그 �
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff easy" title="쉬움"></span>
 **두 자산의 포트폴리오 분산.** 두 자산이 $\sigma_1 = 0.20$, $\sigma_2 = 0.30$, $\rho = 0.30$이다. 포트폴리오 분산을 최소화하는 가중치 $w_1, w_2$($w_1 + w_2 = 1$, 둘 다 음이 아님)를 구하라.
 
 </div>
@@ -375,7 +375,7 @@ $\rho = 1$인 곡선만 직선이고 나머지는 아래로 휘어 있다. 그 �
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 **공분산행렬.** $X \sim N(0, 1)$이고 $Z \sim N(0, \sigma_Z^2)$이 $X$와 독립일 때 $Y = aX + Z$인 $(X, Y)$의 $2 \times 2$ 공분산행렬을 계산하라. $\rho(X, Y)$는 얼마인가?
 
 </div>
@@ -410,7 +410,7 @@ $\rho = 1$인 곡선만 직선이고 나머지는 아래로 휘어 있다. 그 �
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 **표본에서의 분산 추정.** i.i.d. 표본 $X_1, \ldots, X_n$에 대해 **표본공분산** $\hat{\mathrm{Cov}}(X, Y) = \frac{1}{n-1}\sum_i (X_i - \bar X)(Y_i - \bar Y)$이 $\mathrm{Cov}(X, Y)$의 불편추정량임을 보여라.
 
 </div>
@@ -440,7 +440,7 @@ $\rho = 1$인 곡선만 직선이고 나머지는 아래로 휘어 있다. 그 �
 
 <div class="drillbox" markdown>
 
-**연습문제 7.**
+**연습문제 7.** <span class="diff med" title="중간"></span>
 아무 대칭행렬이나 공분산행렬이 될 수는 없다. **$\Sigma$가 반드시 양반정치여야 함**을 보이고, 그 제약이 상관계수들 사이에 어떤 관계를 강요하는지 밝혀라.
 
 </div>
@@ -508,7 +508,7 @@ $\rho = 1$인 곡선만 직선이고 나머지는 아래로 휘어 있다. 그 �
 
 <div class="drillbox" markdown>
 
-**연습문제 8.**
+**연습문제 8.** <span class="diff med" title="중간"></span>
 연습문제 $4$의 두 자산을 $n$개로 늘려라. **분산투자로 위험을 얼마나 줄일 수 있으며, 어디서 멈추는가?**
 
 </div>
@@ -569,7 +569,7 @@ $\rho = 1$인 곡선만 직선이고 나머지는 아래로 휘어 있다. 그 �
 
 <div class="drillbox" markdown>
 
-**연습문제 9.**
+**연습문제 9.** <span class="diff hard" title="어려움"></span>
 연습문제 $6$의 표본공분산은 불편추정량이다. 그런데도 **변수의 개수 $p$가 표본 크기 $n$에 가까워지면 표본공분산행렬 전체는 쓸모없어진다.** 왜 그런가?
 
 </div>
@@ -638,7 +638,7 @@ $\rho = 1$인 곡선만 직선이고 나머지는 아래로 휘어 있다. 그 �
 
 <div class="drillbox" markdown>
 
-**연습문제 10.**
+**연습문제 10.** <span class="diff hard" title="어려움"></span>
 연습문제 $9$의 처방으로 **축소추정**을 검토하라. 편향을 일부러 도입하는 것이 어떻게 도움이 되는가?
 
 </div>

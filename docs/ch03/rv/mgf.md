@@ -56,7 +56,7 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** 정규분포. $X \sim N(\mu, \sigma^2)$의 적률생성함수는
+**보기 1.** <span class="diff easy" title="쉬움"></span> 정규분포. $X \sim N(\mu, \sigma^2)$의 적률생성함수는
 
 $$
 M_X(t) = \exp\!\left(\mu t + \frac{\sigma^2 t^2}{2}\right)
@@ -188,7 +188,7 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 2.** 독립인 정규분포의 합. $X_1 \sim N(\mu_1, \sigma_1^2)$, $X_2 \sim N(\mu_2, \sigma_2^2)$이 독립이면
+**보기 2.** <span class="diff easy" title="쉬움"></span> 독립인 정규분포의 합. $X_1 \sim N(\mu_1, \sigma_1^2)$, $X_2 \sim N(\mu_2, \sigma_2^2)$이 독립이면
 
 $$
 M_{X_1+X_2}(t) = \exp\!\left((\mu_1+\mu_2)t + \frac{(\sigma_1^2+\sigma_2^2)t^2}{2}\right)
@@ -307,7 +307,7 @@ Var(X1+X2) = 25.1339 (theoretical: 25)
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 $X \sim \mathrm{Exp}(\lambda)$이다. (a) $M_X(t)$와 그 정의역을 유도하라. (b) $\mathbb{E}[X], \mathbb{E}[X^2]$를 계산하라. (c) $\mathrm{Var}(X) = 1/\lambda^2$임을 확인하라.
 
 </div>
@@ -321,7 +321,7 @@ $X \sim \mathrm{Exp}(\lambda)$이다. (a) $M_X(t)$와 그 정의역을 유도하
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 $M_{aX + b}(t) = e^{bt} M_X(at)$를 증명하고, $X$와 $Y$가 독립일 때 $M_{X + Y}(t) = M_X(t) M_Y(t)$임을 증명하라.
 
 </div>
@@ -347,7 +347,7 @@ $M_{aX + b}(t) = e^{bt} M_X(at)$를 증명하고, $X$와 $Y$가 독립일 때 $M
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 적률생성함수 방법으로 **독립인 포아송 확률변수 합의 분포**를 유도하라. $X_i \sim \mathrm{Poisson}(\lambda_i)$이 서로 독립일 때 $\sum_i X_i$의 분포는 무엇인가?
 
 </div>
@@ -363,7 +363,7 @@ $M_{aX + b}(t) = e^{bt} M_X(at)$를 증명하고, $X$와 $Y$가 독립일 때 $M
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 **적률생성함수로 구하는 왜도와 첨도.** 3차 및 4차 표준화 누율(왜도와 초과첨도)이 $M_X(t)$ 자체가 아니라 $\ln M_X(t)$의 도함수에서 나옴을 보여라.
 
 </div>
@@ -388,7 +388,7 @@ $M_{aX + b}(t) = e^{bt} M_X(at)$를 증명하고, $X$와 $Y$가 독립일 때 $M
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff hard" title="어려움"></span>
 **적률생성함수의 비존재.** 코시분포가 적률생성함수를 갖지 않음을 보여라. 대안인 **특성함수**는 무엇이며 왜 언제나 존재하는가?
 
 </div>
@@ -406,7 +406,7 @@ $M_{aX + b}(t) = e^{bt} M_X(at)$를 증명하고, $X$와 $Y$가 독립일 때 $M
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff hard" title="어려움"></span>
 **적률생성함수가 분포를 결정한다**(유일성 정리) — 다만 0의 근방에서 존재할 때만 그렇다. 모든 차수의 적률이 일치하는 서로 다른 두 분포를 구성하라. (이것이 **적률 문제**의 실패다.)
 
 </div>
@@ -430,7 +430,7 @@ $M_{aX + b}(t) = e^{bt} M_X(at)$를 증명하고, $X$와 $Y$가 독립일 때 $M
 
 <div class="drillbox" markdown>
 
-**연습문제 7.**
+**연습문제 7.** <span class="diff hard" title="어려움"></span>
 **체르노프 한계.** 적률생성함수가 존재하면 꼬리확률에 **지수적으로 감소하는** 상계를 얻을 수 있다. 이를 유도하고 마르코프·체비쇼프 한계와 비교하라.
 
 </div>
@@ -502,7 +502,7 @@ $M_{aX + b}(t) = e^{bt} M_X(at)$를 증명하고, $X$와 $Y$가 독립일 때 $M
 
 <div class="drillbox" markdown>
 
-**연습문제 8.**
+**연습문제 8.** <span class="diff hard" title="어려움"></span>
 이산확률변수에는 적률생성함수보다 편한 도구가 있다. **확률생성함수** $G_X(s)=\mathbb{E}[s^X]$의 성질을 정리하고, **분지과정의 소멸확률**을 구하라.
 
 </div>
@@ -578,7 +578,7 @@ $M_{aX + b}(t) = e^{bt} M_X(at)$를 증명하고, $X$와 $Y$가 독립일 때 $M
 
 <div class="drillbox" markdown>
 
-**연습문제 9.**
+**연습문제 9.** <span class="diff hard" title="어려움"></span>
 **누율은 독립합에 대해 더해진다.** 이를 보이고, 왜 정규분포가 "3차 이상 누율이 모두 0"인 유일한 분포인지 설명하라.
 
 </div>
@@ -643,7 +643,7 @@ $M_{aX + b}(t) = e^{bt} M_X(at)$를 증명하고, $X$와 $Y$가 독립일 때 $M
 
 <div class="drillbox" markdown>
 
-**연습문제 10.**
+**연습문제 10.** <span class="diff med" title="중간"></span>
 적률생성함수를 **자료로부터 추정할 수 있는가?** 경험적 적률생성함수 $\hat M(t)=\frac{1}{n}\sum_i e^{tX_i}$의 거동을 조사하라.
 
 </div>
