@@ -34,7 +34,7 @@
 
 <div class="codebox" markdown>
 
-**예제 .** 표본평균을 모아 표본분포 만들기
+**예제 1.** 표본평균을 모아 표본분포 만들기
 
 ```python
 import numpy as np
@@ -95,7 +95,7 @@ $n$이 커질수록 $\bar X_n$의 표본분포는 모집단의 모양(평평함,
 
 <div class="codebox" markdown>
 
-**예제 .** 표본 크기를 키우며 모양의 수렴 보기
+**예제 2.** 표본 크기를 키우며 모양의 수렴 보기
 
 ```python
 sample_sizes = [2, 10, 100]

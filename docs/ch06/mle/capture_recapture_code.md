@@ -54,6 +54,10 @@ $$
 
 ## 구현
 
+<div class="codebox" markdown>
+
+**예제 1.** 포획-재포획 MLE 구현
+
 ```python
 from scipy import special
 
@@ -85,7 +89,7 @@ def capture_recapture_mle(c, r, t):
     return mle_n, prob_list
 
 
-# Example: c=10 tagged, r=10 recaptured, t=3 tagged in recapture
+# 보기: 10마리에 표지, 10마리를 다시 잡았고 그중 3마리가 표지된 개체였다.
 c, r, t = 10, 10, 3
 mle_n, probs = capture_recapture_mle(c, r, t)
 print(f"Capture: {c} tagged, Recapture: {r} caught, {t} tagged")
@@ -101,9 +105,11 @@ MLE of N: 33
 Lincoln-Petersen estimate: 33
 ```
 
+</div>
+
 <div class="codebox" markdown>
 
-### 예제 1. 포획–재포획 최대가능도 { .eg }
+### 예제 2. 포획–재포획 최대가능도 { .eg }
 
 어떤 야생동물 생물학자가 새 $c = 5$마리를 잡아 표지하고 놓아 준 뒤, 나중에 $r = 6$마리를 재포획했더니 그중 $t = 2$마리가 표지되어 있었다고 하자.
 
@@ -145,6 +151,10 @@ Lincoln-Petersen 추정값은 $\hat{N} = \lfloor 5 \times 6 / 2 \rfloor = 15$이
 - ($r$과 $c$에 비해) $t$가 크면 추정이 정밀하다.
 - $t$가 작으면(예: $t = 1$) 추정을 신뢰할 수 없고 가능도함수가 평평하다.
 - $t = 0$이면 MLE가 정의되지 않는다(개체군이 얼마든지 클 수 있다).
+
+<div class="codebox" markdown>
+
+**예제 3.** 재포획 결과에 따른 민감도
 
 ```python
 from scipy import special
@@ -189,6 +199,8 @@ c = 10, r = 10
    9     11     11.1
   10     10     10.0
 ```
+
+</div>
 
 ## 해석
 

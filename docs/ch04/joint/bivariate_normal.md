@@ -29,7 +29,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 .** 공분산행렬에 따른 이변량 정규분포
+**예제 1.** 공분산행렬에 따른 이변량 정규분포
 
 ```python
 import numpy as np

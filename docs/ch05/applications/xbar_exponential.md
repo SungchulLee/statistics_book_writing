@@ -37,6 +37,10 @@ $$
 
 아래 코드는 $\text{Exp}(1)$ 모집단에서 크기 $n = 5$인 표본을 10,000개 뽑아 모집단, 하나의 표본, $\bar{X}$의 표본분포를 시각화한다.
 
+<div class="codebox" markdown>
+
+**예제 1.** 지수 모집단에서 표본평균의 표집분포
+
 ```python
 import matplotlib.pyplot as plt
 import numpy as np
@@ -47,20 +51,20 @@ sample_size = 5
 n_samples = 10_000
 n_population = 10_000
 
-# Generate a large population from Exp(1)
+# Exp(1)에서 큰 모집단을 만든다. 치우친 모집단이다.
 population = np.random.exponential(size=(n_population,))
 
 # 표본을 딱 하나 뽑는다. 현실에서 우리가 실제로 갖게 되는 것이 이것뿐이다.
 # 아래 가운데 패널에 점 몇 개로 그려진다.
 single_sample = np.random.choice(population, size=sample_size, replace=False)
 
-# Simulate the sampling distribution of X-bar
+# 표본을 되풀이해 뽑으며 표본평균을 기록한다. 이 값들의 분포가 표집분포다.
 sample_means = [
     np.mean(np.random.choice(population, size=sample_size, replace=False))
     for _ in range(n_samples)
 ]
 
-# Plot
+# 모집단과 표집분포를 나란히 그린다.
 # 세 패널을 sharex=True 로 묶는 것이 이 그림의 핵심 장치다.
 # 가로 눈금이 같아야 세 분포의 **퍼짐**을 직접 견줄 수 있다.
 #   위   모집단      : 가장 넓다
@@ -80,6 +84,8 @@ ax2.set_title("Sampling Distribution of X-bar")
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 ![Population Distribution (Exponential)](./img/xbar_exponential_40.png)
 
@@ -156,9 +162,9 @@ plt.show()
 
     ```python
     from scipy import stats
-    # Exact (Gamma)
+    # 정확한 값: 지수표본의 합은 감마분포를 따른다.
     p_exact = 1 - stats.gamma.cdf(10, a=5, scale=1)
-    # Normal approximation: mean=1, se=1/sqrt(5)
+    # 정규근사. 평균 1, 표준오차 1/sqrt(5) 이다.
     p_normal = 1 - stats.norm.cdf(2, loc=1, scale=1/5**0.5)
     print(f"Exact (Gamma):       {p_exact:.6f}")
     print(f"Normal approximation: {p_normal:.6f}")

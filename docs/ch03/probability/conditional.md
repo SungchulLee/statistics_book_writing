@@ -52,7 +52,7 @@ $B$에 배정된 전체 확률 가운데 $A$에도 속하는 부분의 비율이
 
 <div class="codebox" markdown>
 
-**예제 .** 주사위로 조건부확률 확인하기
+**예제 1.** 주사위로 조건부확률 확인하기
 
 ```python
 import numpy as np
@@ -186,7 +186,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 .** 전확률의 법칙 모의실험
+**예제 2.** 전확률의 법칙 모의실험
 
 ```python
 import numpy as np

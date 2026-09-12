@@ -107,6 +107,10 @@ $$
 | 95% | 0.05 | 1.960 |
 | 99% | 0.01 | 2.576 |
 
+<div class="codebox" markdown>
+
+**예제 1.** 정규분포의 임계값
+
 ```python
 from scipy import stats
 
@@ -122,6 +126,8 @@ Confidence 90%: z* = 1.645
 Confidence 95%: z* = 1.960
 Confidence 99%: z* = 2.576
 ```
+
+</div>
 
 ## 다른 분포와의 관계
 

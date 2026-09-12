@@ -89,7 +89,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 .** 정규분포의 적률생성함수로 적률 구하기
+**예제 1.** 정규분포의 적률생성함수로 적률 구하기
 
 ```python
 import numpy as np
@@ -231,7 +231,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 .** 네 분포의 적률생성함수 비교
+**예제 2.** 네 분포의 적률생성함수 비교
 
 ```python
 import numpy as np
@@ -285,7 +285,7 @@ plot_mgf_comparison()
 
 <div class="codebox" markdown>
 
-**예제 .** 독립인 정규분포의 합
+**예제 3.** 독립인 정규분포의 합
 
 ```python
 import numpy as np

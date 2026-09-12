@@ -33,7 +33,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 .** 공분산행렬의 고유분해와 등고선 축
+**예제 1.** 공분산행렬의 고유분해와 등고선 축
 
 ```python
 import numpy as np

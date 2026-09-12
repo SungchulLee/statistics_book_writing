@@ -133,7 +133,7 @@ Poisson 분포는 **Poisson 과정**과 밀접하게 연결되어 있다. 사건
 
 <div class="codebox" markdown>
 
-**예제 .** 포아송분포의 확률질량함수와 분포함수
+**예제 1.** 포아송분포의 확률질량함수와 분포함수
 
 ```python
 import matplotlib.pyplot as plt
@@ -163,7 +163,7 @@ plt.show()
 
 <div class="codebox" markdown>
 
-**예제 .** 비율모수에 따른 포아송 비교
+**예제 2.** 비율모수에 따른 포아송 비교
 
 ```python
 import matplotlib.pyplot as plt
@@ -192,7 +192,7 @@ plt.show()
 
 <div class="codebox" markdown>
 
-**예제 .** 이항분포의 극한으로서의 포아송
+**예제 3.** 이항분포의 극한으로서의 포아송
 
 ```python
 import matplotlib.pyplot as plt
@@ -227,7 +227,7 @@ plt.show()
 
 <div class="codebox" markdown>
 
-**예제 .** 포아송의 평균과 분산이 같음을 확인
+**예제 4.** 포아송의 평균과 분산이 같음을 확인
 
 ```python
 import numpy as np

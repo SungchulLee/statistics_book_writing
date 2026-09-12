@@ -145,11 +145,11 @@ $$
     ```python
     from scipy import stats
 
-    # Exact
+    # 정확한 값: 이항분포에서 바로 구한다.
     exact = 1 - stats.binom(n=10, p=0.3).cdf(3)
     print(f"Exact: {exact:.4f}")
 
-    # Normal approximation
+    # 정규근사로 구한 값. 둘을 견준다.
     approx = stats.norm.sf(0.345)
     print(f"Normal approx: {approx:.4f}")
     ```
@@ -175,6 +175,10 @@ $$
 $$
 
 ## 모의실험: p-hat의 표본분포
+
+<div class="codebox" markdown>
+
+**예제 1.** 표본비율의 표집분포 모의실험
 
 ```python
 import matplotlib.pyplot as plt
@@ -214,6 +218,8 @@ for ax in (ax0, ax1):
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 ## 대학원 수준의 보충
 

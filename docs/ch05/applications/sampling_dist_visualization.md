@@ -18,6 +18,10 @@
 
 다음 코드는 실제 소득 자료를 사용하여 표본크기가 커질 때 표본분포가 어떻게 좁아지는지 보인다:
 
+<div class="codebox" markdown>
+
+**예제 1.** 대출 소득 자료로 보는 표집분포
+
 ```python
 import numpy as np
 import pandas as pd
@@ -25,51 +29,51 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from pathlib import Path
 
-# Set random seed for reproducibility
+# 같은 결과가 다시 나오도록 난수 씨앗을 고정한다.
 np.random.seed(seed=1)
 
-# Load income data (or use simulated data with similar properties)
-# loans_income is a Series of income values
-# For demonstration, we'll create synthetic data with similar characteristics
+# 실제 소득 자료가 없으므로 성질이 비슷한 자료를 만들어 쓴다.
+# 원래 자료는 대출 신청자의 소득 한 열이다.
+# 오른쪽으로 치우친 모양만 같으면 논의에는 충분하다.
 np.random.seed(1)
-# Simulate left-skewed income distribution (like real loan data)
+# 로그정규는 실제 소득 자료처럼 오른쪽 꼬리가 길다.
 loans_income = np.random.exponential(scale=50000, size=10000) + 20000
 loans_income = pd.Series(loans_income)
 
-# Create three datasets:
-# 1. A sample of 1000 individual income values from the population
+# 비교할 자료 세 벌을 만든다.
+# 1. 개별 소득 1000개 — 모집단의 모양을 그대로 보여 준다.
 sample_data = pd.DataFrame({
     'income': loans_income.sample(1000),
     'type': 'Population Sample\n(n=1000)',
 })
 
-# 2. Sampling distribution when drawing samples of size 5
-# (Draw 1000 samples, compute mean of each)
+# 2. 크기 5 표본의 평균들 — 표집분포.
+#    표본 1000개를 뽑아 그때마다 평균을 낸다.
 sample_mean_05 = pd.DataFrame({
     'income': [loans_income.sample(5).mean() for _ in range(1000)],
     'type': 'Sampling Distribution\n(Mean of 5)',
 })
 
-# 3. Sampling distribution when drawing samples of size 20
+# 3. 크기 20 표본의 평균들 — 폭이 더 좁아진다.
 sample_mean_20 = pd.DataFrame({
     'income': [loans_income.sample(20).mean() for _ in range(1000)],
     'type': 'Sampling Distribution\n(Mean of 20)',
 })
 
-# Combine all three
+# 셋을 한 자료틀로 묶어 한 번에 그린다.
 results = pd.concat([sample_data, sample_mean_05, sample_mean_20], ignore_index=True)
 
 print("Summary of the three distributions:")
 print(results.groupby('type')['income'].agg(['count', 'mean', 'std', 'min', 'max']))
 print()
 
-# Visualize all three distributions
+# 세 분포를 나란히 놓고 폭이 어떻게 줄어드는지 본다.
 g = sns.FacetGrid(results, col='type', col_wrap=1, height=2.5, aspect=2.5)
 g.map(plt.hist, 'income', bins=40, range=[0, 200000], color='steelblue', edgecolor='black')
 g.set_axis_labels('Income ($)', 'Frequency')
 g.set_titles('{col_name}')
 
-# Adjust layout
+# 칸 사이 간격을 다듬는다.
 for ax in g.axes.flat:
     ax.spines[['top', 'right']].set_visible(False)
 
@@ -89,6 +93,8 @@ Sampling Distribution\n(Mean of 5)    1000  ...  167118.641562
 
 [3 rows x 5 columns]
 ```
+
+</div>
 
 ![표본분포 시각화: 표본크기의 효과](./img/sampling_dist_visualization_21.png)
 
@@ -131,6 +137,10 @@ $$SE(\bar{X}) = \frac{\sigma}{\sqrt{n}}$$
 
 $n=20$의 표준오차는 $n=5$의 대략 절반이며, 그만큼 추정이 정밀해진다.
 
+<div class="codebox" markdown>
+
+**예제 2.** 표본크기와 표준오차의 관계
+
 ```python
 # 1/sqrt(n) 법칙을 숫자로 확인한다.
 # n을 5에서 20으로 **네 배** 늘리면 표준오차는 sqrt(4) = 2배 줄어야 한다.
@@ -154,6 +164,8 @@ SE for n=20: $10,967
 Ratio SE(5)/SE(20): 2.00
 ```
 
+</div>
+
 ### 정규성으로의 수렴
 
 중심극한정리에 따르면 모집단 분포의 모양과 무관하게 $n$이 커질수록 평균의 표본분포가 정규분포에 가까워진다. 소득이 오른쪽으로 치우쳐 있어도 표본분포는 점점 정규분포에 가까워진다.
@@ -165,6 +177,10 @@ Ratio SE(5)/SE(20): 2.00
 3. **가설검정**: 표본이 클수록 참 효과를 탐지하는 통계적 검정력이 커진다.
 
 ## 정량적 비교
+
+<div class="codebox" markdown>
+
+**예제 3.** 표집분포를 숫자로 비교하기
 
 ```python
 import numpy as np
@@ -204,6 +220,8 @@ Std Dev              $            22,985 $            11,097
 75th percentile      $            82,813 $            76,721
 IQR                  $            29,850 $            14,907
 ```
+
+</div>
 
 ## 연습문제
 

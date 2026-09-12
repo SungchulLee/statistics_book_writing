@@ -107,13 +107,17 @@ Fisher 정보량을 닫힌 형태로 계산할 수 없을 때는 다음 방법�
 1. **점수 분산법**: $f(x; \theta)$에서 $X_1, \ldots, X_N$을 표본추출하고 각 점에서 점수를 계산한 뒤 $I(\theta) \approx \text{Var}(\{S_i\})$로 추정한다.
 2. **유한차분법**: 점수를 $S(\theta) \approx [\log f(X; \theta + \delta) - \log f(X; \theta - \delta)]/(2\delta)$로 근사한다.
 
+<div class="codebox" markdown>
+
+**예제 1.** 피셔 정보량을 수치로 구하기
+
 ```python
 import numpy as np
 from scipy import stats
 
 def fisher_information_numerical(dist_name="norm", true_params=None,
                                   param_name="loc", n_samples=100_000, delta=1e-5):
-    """Compute Fisher information numerically via the score variance."""
+    """점수함수의 분산으로 피셔 정보량을 수치적으로 구한다."""
     if true_params is None:
         true_params = {"loc": 5, "scale": 2}
 
@@ -142,7 +146,7 @@ def fisher_information_numerical(dist_name="norm", true_params=None,
     I_numerical = np.var(score)
     return I_numerical
 
-# Normal mean: theoretical I(mu) = 1/sigma^2
+# 정규분포 평균의 피셔 정보량은 이론적으로 1/sigma^2 이다.
 I_num = fisher_information_numerical("norm", {"loc": 5, "scale": 2}, "loc")
 I_theory = 1 / 2**2
 print(f"Normal mean Fisher information:")
@@ -158,15 +162,21 @@ Normal mean Fisher information:
   Theoretical: I(mu) = 0.250000
 ```
 
+</div>
+
 ## Cramér-Rao 한계 확인
 
 정규분포의 평균에 대해 표본평균이 CRLB를 달성하는지 확인할 수 있다.
+
+<div class="codebox" markdown>
+
+**예제 2.** 표본평균이 하한에 도달함을 확인하기
 
 ```python
 import numpy as np
 
 def verify_crlb(mu_true=5.0, sigma=2.0, n=50, n_sim=20_000):
-    """Verify that the sample mean achieves the CRLB."""
+    """표본평균이 크라메르-라오 하한에 도달함을 확인한다."""
     rng = np.random.default_rng(42)
     crlb = sigma**2 / n
 
@@ -197,6 +207,8 @@ Ratio            = 0.9847
 Var(median) = 0.121813
 Efficiency of median = 0.6567
 ```
+
+</div>
 
 !!! note "중앙값의 효율"
     정규분포에서 평균 대비 중앙값의 점근 상대효율은 $2/\pi \approx 0.637$이다. 중앙값은 자료가 담은 정보의 약 64%만 사용한다.

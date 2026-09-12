@@ -16,7 +16,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 .** 백분위점 함수로 분위수 구하기
+**예제 1.** 백분위점 함수로 분위수 구하기
 
 ```python
 import matplotlib.pyplot as plt

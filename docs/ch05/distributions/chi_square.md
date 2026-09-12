@@ -62,6 +62,10 @@ $$
 f(x; d) = \frac{1}{2^{d/2}\,\Gamma(d/2)} \, x^{(d/2)-1} \, e^{-x/2}, \quad x > 0
 $$
 
+<div class="codebox" markdown>
+
+**예제 1.** 자유도에 따른 카이제곱 밀도함수
+
 ```python
 import numpy as np
 import matplotlib.pyplot as plt
@@ -86,11 +90,17 @@ ax.grid(True, alpha=0.3)
 plt.show()
 ```
 
+</div>
+
 ![Chi-Square PDF for Various Degrees of Freedom](./img/chi_square_61.png)
 
 ---
 
 ## CDF
+
+<div class="codebox" markdown>
+
+**예제 2.** 카이제곱 분포함수
 
 ```python
 import numpy as np
@@ -113,11 +123,17 @@ ax.grid(True, alpha=0.3)
 plt.show()
 ```
 
+</div>
+
 ![Chi-Square CDF](./img/chi_square_84.png)
 
 ---
 
 ## PPF (역 CDF)
+
+<div class="codebox" markdown>
+
+**예제 3.** 카이제곱 백분위점
 
 ```python
 from scipy import stats
@@ -137,11 +153,17 @@ print(f"99th percentile of χ²(10): {chi2_99:.4f}")
 99th percentile of χ²(10): 23.2093
 ```
 
+</div>
+
 ---
 
 ## 확률표본
 
 ### 직접 표본추출
+
+<div class="codebox" markdown>
+
+**예제 4.** scipy 로 카이제곱 표본추출
 
 ```python
 import numpy as np
@@ -160,9 +182,15 @@ ax.legend()
 plt.show()
 ```
 
+</div>
+
 ![카이제곱 분포 (chi-squared)](./img/chi_square_124.png)
 
 ### 정의로부터의 표본추출 (정규확률변수의 제곱합)
+
+<div class="codebox" markdown>
+
+**예제 5.** 정규제곱합으로 카이제곱 만들기
 
 ```python
 import numpy as np
@@ -184,6 +212,8 @@ ax.plot(bins, stats.chi2(df).pdf(bins), '--r', lw=3, label='χ² PDF')
 ax.legend()
 plt.show()
 ```
+
+</div>
 
 ![카이제곱 분포 (chi-squared)](./img/chi_square_142.png)
 
@@ -207,6 +237,10 @@ $$
 - **정규가 아닌 모집단에서는**: 특히 $n$이 작을 때 카이제곱 근사를 믿을 수 없다. $S^2$의 분포가 극적으로 달라질 수 있다.
 
 ### 모의실험: 정규모집단
+
+<div class="codebox" markdown>
+
+**예제 6.** 정규모집단에서 표본분산의 분포
 
 ```python
 import matplotlib.pyplot as plt
@@ -232,9 +266,15 @@ ax.spines[['top', 'right']].set_visible(False)
 plt.show()
 ```
 
+</div>
+
 ![(n-1)S²/σ² from Normal Population → χ² Exact](./img/chi_square_179.png)
 
 ### 모의실험: 정규가 아닌 모집단
+
+<div class="codebox" markdown>
+
+**예제 7.** 정규가 아닌 모집단에서는 어떻게 되는가
 
 ```python
 import matplotlib.pyplot as plt
@@ -261,6 +301,8 @@ ax.legend()
 ax.spines[['top', 'right']].set_visible(False)
 plt.show()
 ```
+
+</div>
 
 ---
 

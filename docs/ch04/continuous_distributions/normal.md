@@ -164,7 +164,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 .** 정규분포의 밀도함수와 분포함수
+**예제 1.** 정규분포의 밀도함수와 분포함수
 
 ```python
 import matplotlib.pyplot as plt
@@ -195,7 +195,7 @@ plt.show()
 
 <div class="codebox" markdown>
 
-**예제 .** 정규 표본과 추정된 밀도
+**예제 2.** 정규 표본과 추정된 밀도
 
 ```python
 import numpy as np
@@ -224,7 +224,7 @@ plt.show()
 
 <div class="codebox" markdown>
 
-**예제 .** 68-95-99.7 규칙 확인
+**예제 3.** 68-95-99.7 규칙 확인
 
 ```python
 import pandas as pd
@@ -270,7 +270,7 @@ Within 3σ: 98.66%
 
 <div class="codebox" markdown>
 
-**예제 .** 정규곡선 아래 영역 색칠하기
+**예제 4.** 정규곡선 아래 영역 색칠하기
 
 ```python
 import matplotlib.pyplot as plt
@@ -337,7 +337,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 .** 난수 시드 고정하기
+**예제 5.** 난수 시드 고정하기
 
 ```python
 import numpy as np

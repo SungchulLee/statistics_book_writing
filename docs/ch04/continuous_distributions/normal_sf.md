@@ -16,7 +16,7 @@ $X$가 주어진 문턱값을 넘을 확률을 준다. 생존함수는 신뢰성
 
 <div class="codebox" markdown>
 
-**예제 .** 생존함수로 오른쪽 꼬리 보기
+**예제 1.** 생존함수로 오른쪽 꼬리 보기
 
 ```python
 import matplotlib.pyplot as plt
@@ -65,7 +65,7 @@ plt.show()
 
 <div class="codebox" markdown>
 
-**예제 .** 생존함수가 수치적으로 더 정확한 이유
+**예제 2.** 생존함수가 수치적으로 더 정확한 이유
 
 ```python
 from scipy import stats

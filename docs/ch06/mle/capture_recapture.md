@@ -119,7 +119,9 @@ $$
 - **개방 개체군**: Jolly-Seber 모형 같은 확장은 개체가 들어오고 나갈 수 있는 개체군을 다룰 수 있다.
 - **포획확률이 다른 경우**: Lincoln-Petersen 추정량이나 로지스틱 회귀 같은 모형으로 포획확률의 변동을 보정할 수 있다.
 
-## Python 구현
+<div class="codebox" markdown>
+
+**예제 1.** 포획-재포획으로 모집단 크기 추정하기
 
 ```python
 import matplotlib.pyplot as plt
@@ -157,11 +159,11 @@ def capture_recapture(c=10, r=10, t=3):
     """
     prob_list = []
 
-    # Calculate probability for each possible population size n
+    # 가능한 모집단 크기 n마다 확률을 구한다.
     for n in range(c + r - t, 10 * (c + r - t)):
         prob_list.append(prob(n, c, r, t))
 
-    # Determine the MLE for the population size
+    # 확률이 가장 큰 n이 모집단 크기의 MLE다.
     prob_max = max(prob_list)
     idx = prob_list.index(prob_max)
     mle_n = idx + (c + r - t)
@@ -184,22 +186,22 @@ def draw(prob_list, mle_n, c=10, r=10, t=3):
     ax.plot(range(c + r - t, 10 * (c + r - t)), prob_list, label='Probability')
     ax.plot([mle_n, mle_n], [0, prob_list[idx]], 'o--r', label=f'MLE: {mle_n}')
 
-    # Customize plot
+    # 축 이름과 범례를 다듬는다.
     ax.set_xlabel('Total Population Size (n)')
     ax.set_ylabel('Probability')
     ax.set_title('Capture-Recapture MLE for Population Size')
     ax.legend()
     plt.show()
 
-# Parameters for capture-recapture model
+# 포획-재포획 모형의 값들: 표지 수, 재포획 수, 그중 표지된 수.
 c = 5   # Birds captured and tagged in the first stage
 r = 6   # Birds recaptured in the second stage
 t = 2   # Tagged birds in the recapture stage
 
-# Calculate probabilities and MLE
+# 후보마다 확률을 구하고 가장 큰 것을 고른다.
 prob_list, mle_n = capture_recapture(c, r, t)
 
-# Plot the probability distribution and highlight the MLE
+# 확률을 후보별로 그리고 최댓값 자리를 표시한다.
 draw(prob_list, mle_n, c, r, t)
 ```
 
@@ -208,6 +210,8 @@ draw(prob_list, mle_n, c, r, t)
 ```
 MLE n: 14
 ```
+
+</div>
 
 ![Capture-Recapture MLE for Population Size](./img/capture_recapture_124.png)
 

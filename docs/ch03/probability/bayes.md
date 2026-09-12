@@ -143,7 +143,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 .** 베이즈 정리로 사후확률 구하기
+**예제 1.** 베이즈 정리로 사후확률 구하기
 
 ```python
 import numpy as np
@@ -185,7 +185,7 @@ Despite a 95% sensitive test, only 8.8% of positives truly have the disease.
 
 <div class="codebox" markdown>
 
-**예제 .** 유병률이 사후확률을 지배한다
+**예제 2.** 유병률이 사후확률을 지배한다
 
 ```python
 import numpy as np

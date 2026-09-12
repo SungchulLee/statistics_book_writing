@@ -165,7 +165,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 .** 쿠폰 수집가 문제
+**예제 1.** 쿠폰 수집가 문제
 
 ```python
 import numpy as np
@@ -214,7 +214,7 @@ Theoretical E[T] = n·Hₙ = 225.0
 
 <div class="codebox" markdown>
 
-**예제 .** 종속이어도 기댓값은 더해진다
+**예제 2.** 종속이어도 기댓값은 더해진다
 
 ```python
 import numpy as np

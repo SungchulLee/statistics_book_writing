@@ -78,6 +78,10 @@ $$
 
 **모의실험.**
 
+<div class="codebox" markdown>
+
+**예제 1.** 탁구공으로 보는 불편성
+
 ```python
 import matplotlib.pyplot as plt
 import numpy as np
@@ -132,6 +136,8 @@ if __name__ == "__main__":
 Population median: 16.0
 Mean of sample medians: 16.44
 ```
+
+</div>
 
 ![Simulation-Based Distribution of Sample Median](./img/statistics_as_rv_81.png)
 
@@ -206,6 +212,10 @@ $$
 \hat{p} = \frac{1}{m}\sum_{i=1}^m x^{(i)}
 $$
 
+<div class="codebox" markdown>
+
+**예제 2.** 베르누이 모수의 최대가능도추정
+
 ```python
 import numpy as np
 import matplotlib.pyplot as plt
@@ -246,6 +256,8 @@ ax.spines['right'].set_visible(False)
 plt.show()
 ```
 
+</div>
+
 ![확률변수로서의 통계량](./img/statistics_as_rv_192.png)
 
 ### 포획–재포획의 MLE
@@ -274,6 +286,10 @@ $$
 $$
 \hat{N} = \frac{50 \times 40}{10} = 200
 $$
+
+<div class="codebox" markdown>
+
+**예제 3.** 포획-재포획의 최대가능도추정
 
 ```python
 import matplotlib.pyplot as plt
@@ -326,6 +342,8 @@ plt.show()
 ```
 MLE of N: 199
 ```
+
+</div>
 
 ![Capture–Recapture: Likelihood vs Population Size](./img/statistics_as_rv_278.png)
 

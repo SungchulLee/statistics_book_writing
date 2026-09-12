@@ -58,14 +58,18 @@ $$
 
 ## 모의실험 1: 균등 모집단
 
+<div class="codebox" markdown>
+
+**예제 1.** 균등 모집단에서 반복추출
+
 ```python
 import matplotlib.pyplot as plt
 import numpy as np
 
-# Set a random seed for reproducibility
+# 같은 결과가 다시 나오도록 난수 씨앗을 고정한다.
 np.random.seed(1)
 
-# Define parameters for the population, sample size, and number of samples for the simulation
+# 모집단 크기, 표본크기, 반복 횟수를 정한다.
 sample_size = 5        # Size of a single random sample
 n_samples = 10_000     # Number of samples to draw for the sampling distribution
 n_population = 10_000  # Size of the population to simulate
@@ -75,34 +79,34 @@ def plot_distributions():
     Generates a plot showing the population distribution, sample distribution,
     and sampling distribution.
     """
-    # Generate a large population from a uniform distribution
+    # 균등분포에서 큰 모집단을 만든다. 10만 개면 사실상 무한 모집단으로 본다.
     population = np.random.uniform(size=(n_population,))
 
-    # Generate a single random sample from the population
+    # 모집단에서 표본 하나를 뽑는다. 가운데 패널에 그릴 자료다.
     single_sample = np.random.choice(population, size=sample_size, replace=False)
 
-    # Generate multiple samples and compute their means
+    # 같은 일을 여러 번 되풀이하며 그때마다 표본평균을 기록한다.
     sample_means = [
         np.mean(np.random.choice(population, size=sample_size, replace=False))
         for _ in range(n_samples)
     ]
 
-    # Create a 3-row subplot
+    # 세 칸을 위아래로 놓는다. 모집단 → 표본 하나 → 표집분포 순이다.
     fig, (ax0, ax1, ax2) = plt.subplots(3, 1, figsize=(12, 8), sharex=True)
 
-    # Plot the population distribution
+    # 첫째 칸: 모집단의 모양.
     ax0.hist(population, bins=np.linspace(0, 1, 100))
     ax0.set_title('Population Distribution', fontsize=20)
 
-    # Plot the sample distribution (scatter plot)
+    # 둘째 칸: 표본 하나를 점으로 흩뿌린다.
     ax1.scatter(single_sample, np.zeros_like(single_sample), s=100)
     ax1.set_title(f'Sample Distribution of {sample_size} Samples', fontsize=20)
 
-    # Plot the sampling distribution (histogram of sample means)
+    # 셋째 칸: 표본평균들의 히스토그램, 곧 표집분포다.
     ax2.hist(sample_means, bins=np.linspace(0, 1, 100))
     ax2.set_title('Sampling Distribution of $\\bar{X}$', fontsize=20)
 
-    # Adjust the aesthetics
+    # 축 이름과 간격을 다듬는다.
     for ax in (ax0, ax1, ax2):
         ax.spines['left'].set_visible(False)
         ax.spines['right'].set_visible(False)
@@ -117,21 +121,27 @@ if __name__ == "__main__":
     plot_distributions()
 ```
 
+</div>
+
 ![Population Distribution](./img/repeated_sampling_61.png)
 
 **관찰.** 모집단이 균등분포(평평한 모양)임에도 $\bar{X}$의 표본분포는 종 모양이고 훨씬 좁게 모여 있다. 중심극한정리를 미리 엿보는 셈이다.
 
 ## 모의실험 2: 지수 모집단
 
+<div class="codebox" markdown>
+
+**예제 2.** 지수 모집단에서 반복추출
+
 ```python
 import matplotlib.pyplot as plt
 import numpy as np
 from scipy import stats
 
-# Set a random seed for reproducibility
+# 같은 결과가 다시 나오도록 난수 씨앗을 고정한다.
 np.random.seed(1)
 
-# Define parameters
+# 모집단 크기, 표본크기, 반복 횟수를 정한다.
 sample_size = 30
 n_samples = 10_000
 n_population = 10_000
@@ -141,34 +151,34 @@ def plot_distributions():
     Generates a plot showing the population distribution, sample distribution,
     and sampling distribution for an exponential population.
     """
-    # Generate a large population from an exponential distribution
+    # 지수분포에서 큰 모집단을 만든다. 오른쪽으로 길게 늘어진 모양이다.
     population = stats.expon().rvs((n_population,))
 
-    # Generate a single random sample from the population
+    # 모집단에서 표본 하나를 뽑는다. 가운데 패널에 그릴 자료다.
     single_sample = np.random.choice(population, size=sample_size, replace=False)
 
-    # Generate multiple samples and compute their means
+    # 같은 일을 여러 번 되풀이하며 그때마다 표본평균을 기록한다.
     sample_means = [
         np.mean(np.random.choice(population, size=sample_size, replace=False))
         for _ in range(n_samples)
     ]
 
-    # Create a 3-row subplot
+    # 세 칸을 위아래로 놓는다. 모집단 → 표본 하나 → 표집분포 순이다.
     fig, (ax0, ax1, ax2) = plt.subplots(3, 1, figsize=(12, 8), sharex=True)
 
-    # Plot the population distribution
+    # 첫째 칸: 모집단의 모양.
     _, bins, _ = ax0.hist(population, bins=100)
     ax0.set_title('Population Distribution', fontsize=20)
 
-    # Plot the sample distribution (scatter plot)
+    # 둘째 칸: 표본 하나를 점으로 흩뿌린다.
     ax1.scatter(single_sample, np.zeros_like(single_sample), s=100)
     ax1.set_title(f'Sample Distribution of {sample_size} Samples', fontsize=20)
 
-    # Plot the sampling distribution (histogram of sample means)
+    # 셋째 칸: 표본평균들의 히스토그램, 곧 표집분포다.
     ax2.hist(sample_means, bins=bins)
     ax2.set_title('Sampling Distribution of $\\bar{X}$', fontsize=20)
 
-    # Adjust the aesthetics
+    # 축 이름과 간격을 다듬는다.
     for ax in (ax0, ax1, ax2):
         ax.spines['left'].set_visible(False)
         ax.spines['right'].set_visible(False)
@@ -183,21 +193,27 @@ if __name__ == "__main__":
     plot_distributions()
 ```
 
+</div>
+
 ![Population Distribution](./img/repeated_sampling_124.png)
 
 **관찰.** 지수 모집단은 오른쪽으로 심하게 치우쳐 있지만, $n = 30$일 때 $\bar{X}$의 표본분포는 근사적으로 정규분포이다. 중심극한정리가 작동하는 모습이다.
 
 ## 모의실험 3: Bernoulli 모집단
 
+<div class="codebox" markdown>
+
+**예제 3.** 베르누이 모집단에서 반복추출
+
 ```python
 import matplotlib.pyplot as plt
 import numpy as np
 from scipy import stats
 
-# Set a random seed for reproducibility
+# 같은 결과가 다시 나오도록 난수 씨앗을 고정한다.
 np.random.seed(1)
 
-# Define parameters
+# 모집단 크기, 표본크기, 반복 횟수를 정한다.
 sample_size = 30
 n_samples = 10_000
 n_population = 10_000
@@ -207,34 +223,34 @@ def plot_distributions():
     Generates a plot showing the population distribution, sample distribution,
     and sampling distribution for a Bernoulli population.
     """
-    # Generate a large population from a Bernoulli distribution
+    # 베르누이 모집단을 만든다. 값은 0과 1 둘뿐이다.
     population = stats.binom(n=1, p=0.3).rvs((n_population,))
 
-    # Generate a single random sample from the population
+    # 모집단에서 표본 하나를 뽑는다. 가운데 패널에 그릴 자료다.
     single_sample = np.random.choice(population, size=sample_size, replace=False)
 
-    # Generate multiple samples and compute their means
+    # 같은 일을 여러 번 되풀이하며 그때마다 표본평균을 기록한다.
     sample_means = [
         np.mean(np.random.choice(population, size=sample_size, replace=False))
         for _ in range(n_samples)
     ]
 
-    # Create a 3-row subplot
+    # 세 칸을 위아래로 놓는다. 모집단 → 표본 하나 → 표집분포 순이다.
     fig, (ax0, ax1, ax2) = plt.subplots(3, 1, figsize=(12, 8), sharex=True)
 
-    # Plot the population distribution
+    # 첫째 칸: 모집단의 모양.
     _, bins, _ = ax0.hist(population, bins=100)
     ax0.set_title('Population Distribution', fontsize=20)
 
-    # Plot the sample distribution (scatter plot)
+    # 둘째 칸: 표본 하나를 점으로 흩뿌린다.
     ax1.scatter(single_sample, np.zeros_like(single_sample), s=100)
     ax1.set_title(f'Sample Distribution of {sample_size} Samples', fontsize=20)
 
-    # Plot the sampling distribution (histogram of sample means)
+    # 셋째 칸: 표본평균들의 히스토그램, 곧 표집분포다.
     ax2.hist(sample_means, bins=10)
     ax2.set_title('Sampling Distribution of $\\bar{X}$', fontsize=20)
 
-    # Adjust the aesthetics
+    # 축 이름과 간격을 다듬는다.
     for ax in (ax0, ax1, ax2):
         ax.spines['left'].set_visible(False)
         ax.spines['right'].set_visible(False)
@@ -248,6 +264,8 @@ def plot_distributions():
 if __name__ == "__main__":
     plot_distributions()
 ```
+
+</div>
 
 ![Population Distribution](./img/repeated_sampling_188.png)
 

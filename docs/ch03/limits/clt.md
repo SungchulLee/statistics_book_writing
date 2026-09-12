@@ -66,7 +66,7 @@ $\sqrt n$이라는 배율이 정확히 맞는 것도 우연이 아니다. 3.4절
 
 <div class="codebox" markdown>
 
-**예제 .** 모집단이 달라도 표본평균은 정규로 간다
+**예제 1.** 모집단이 달라도 표본평균은 정규로 간다
 
 ```python
 import matplotlib.pyplot as plt

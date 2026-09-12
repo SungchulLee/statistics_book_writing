@@ -34,7 +34,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 .** 상트페테르부르크 게임의 표본평균
+**예제 1.** 상트페테르부르크 게임의 표본평균
 
 ```python
 import numpy as np
@@ -102,7 +102,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 .** 상금에 상한을 두면 평균이 안정된다
+**예제 2.** 상금에 상한을 두면 평균이 안정된다
 
 ```python
 def bounded_game_sample_means(n_max=10_000, tries=100, n_grid=200):
@@ -145,7 +145,7 @@ n = 10,000: 표본평균 100개의 중앙값   11.01, 표준편차    0.59
 
 <div class="codebox" markdown>
 
-**예제 .** 절단 전후의 표본평균 비교
+**예제 3.** 절단 전후의 표본평균 비교
 
 ```python
 fig, axes = plt.subplots(1, 2, figsize=(14, 5))

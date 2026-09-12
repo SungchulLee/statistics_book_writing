@@ -169,7 +169,7 @@ $P(Y = 1 \mid X = 1)$과 $E[Y \mid X = 1]$을 구하라.
 
 <div class="codebox" markdown>
 
-**예제 .** 이산형 주변분포와 조건부분포
+**예제 1.** 이산형 주변분포와 조건부분포
 
 ```python
 import numpy as np
@@ -220,7 +220,7 @@ E[Y|X=1] = 1.0000
 
 <div class="codebox" markdown>
 
-**예제 .** 적분으로 구하는 연속형 주변분포
+**예제 2.** 적분으로 구하는 연속형 주변분포
 
 ```python
 import numpy as np
@@ -260,7 +260,7 @@ E[Y] via Law of Total Expectation: 0.6667
 
 <div class="codebox" markdown>
 
-**예제 .** 조건부분포 시각화
+**예제 3.** 조건부분포 시각화
 
 ```python
 import numpy as np

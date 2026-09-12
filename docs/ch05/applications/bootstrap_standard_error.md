@@ -46,13 +46,17 @@ $$
 
 다음 코드는 31개의 가격 관측값 표본에 고전적 방법과 붓스트랩 방법을 모두 적용한다.
 
+<div class="codebox" markdown>
+
+**예제 1.** 붓스트랩으로 표준오차 구하기
+
 ```python
 import numpy as np
 import matplotlib.pyplot as plt
 
 np.random.seed(42)
 
-# Sample data (31 price observations)
+# 자료: 가격 관측값 31개.
 data = np.array([
     245.02, 244.88, 244.76, 244.65, 244.53, 244.42, 244.30,
     244.18, 244.08, 243.97, 243.85, 243.74, 243.63, 243.52,
@@ -80,7 +84,7 @@ boot_means = np.array([
 ])
 se_bootstrap = boot_means.std(ddof=1)
 
-# Bootstrap SE (squared-error approach)
+# 붓스트랩 표준오차: 재표본 통계량의 표준편차다.
 sq_errors = np.array([
     (np.random.choice(data, size=n, replace=True).mean() - data.mean()) ** 2
     for _ in range(n_boot)
@@ -100,7 +104,13 @@ Bootstrap SE:       0.1834
 Squared-error SE:   0.1810
 ```
 
+</div>
+
 ## 시각화
+
+<div class="codebox" markdown>
+
+**예제 2.** 붓스트랩 분포 시각화
 
 ```python
 fig, axes = plt.subplots(1, 2, figsize=(12, 4.5))
@@ -133,6 +143,8 @@ ax.set_title("Standard Error Decreases with n")
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 ![Standard Error Decreases with n](./img/bootstrap_standard_error_91.png)
 

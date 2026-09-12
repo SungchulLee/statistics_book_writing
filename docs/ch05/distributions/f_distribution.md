@@ -61,6 +61,10 @@ $$
 
 ### 직접 표본추출
 
+<div class="codebox" markdown>
+
+**예제 1.** scipy 로 F 표본추출
+
 ```python
 import numpy as np
 import matplotlib.pyplot as plt
@@ -81,9 +85,15 @@ ax.legend()
 plt.show()
 ```
 
+</div>
+
 ![F 분포](./img/f_distribution_60.png)
 
 ### 정의로부터의 표본추출 (카이제곱의 비)
+
+<div class="codebox" markdown>
+
+**예제 2.** 카이제곱의 비로 F 만들기
 
 ```python
 import numpy as np
@@ -94,7 +104,7 @@ np.random.seed(0)
 d1, d2, n = 5, 10, 10_000
 
 # 방법 2: 정의를 그대로 실행한다.
-# F = (chi2_{d1}/d1) / (chi2_{d2}/d2).
+# F = (chi2_{d1}/d1) / (chi2_{d2}/d2) — 정의를 그대로 옮긴 것이다.
 # 각 카이제곱을 **자기 자유도로 나눈다**는 점이 핵심이다.
 # 그래야 두 값의 기댓값이 모두 1이 되어 비율이 1 근처에 놓인다.
 # 이것이 분산분석에서 "두 분산추정값의 비"가 F를 따르는 이유다.
@@ -108,6 +118,8 @@ ax.plot(bins, stats.f(d1, d2).pdf(bins), '--r', lw=3, label=f'F({d1},{d2}) PDF')
 ax.legend()
 plt.show()
 ```
+
+</div>
 
 ![F 분포](./img/f_distribution_79.png)
 
@@ -169,10 +181,14 @@ F 분포 결과는 **정규성 아래에서만 정확하다**:
 
 ## PPF 예제
 
+<div class="codebox" markdown>
+
+**예제 3.** F 분포의 백분위점
+
 ```python
 from scipy import stats
 
-# 95th percentile of F(5, 20)
+# F(5, 20)의 95백분위점. 분산비 검정의 기각값으로 쓰인다.
 f_95 = stats.f(5, 20).ppf(0.95)
 print(f"F_0.95(5, 20) = {f_95:.4f}")
 ```
@@ -182,6 +198,8 @@ print(f"F_0.95(5, 20) = {f_95:.4f}")
 ```
 F_0.95(5, 20) = 2.7109
 ```
+
+</div>
 
 ---
 

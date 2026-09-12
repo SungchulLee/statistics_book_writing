@@ -46,6 +46,10 @@ $$
 
 다음 코드는 Uniform(0, 1) 모집단에서 $n = 5$로 표본평균 10,000개를 모의실험하여 경험적 표준오차를 계산하고 결과를 시각화한다.
 
+<div class="codebox" markdown>
+
+**예제 1.** 표본평균의 표준오차 모의실험
+
 ```python
 import matplotlib.pyplot as plt
 import numpy as np
@@ -69,7 +73,7 @@ standard_error = np.array(X_bar).std()
 print(f"Estimated Mean of X_bar:  {average:.4f}")
 print(f"Standard Error of X_bar:  {standard_error:.4f}")
 
-# Visualize
+# 히스토그램에 이론값을 겹쳐 그린다.
 fig, ax = plt.subplots(figsize=(12, 3))
 ax.set_title("Sampling Distribution of X-bar")
 ax.hist(X_bar, bins=100, density=True, alpha=0.3)
@@ -88,6 +92,8 @@ plt.show()
 Estimated Mean of X_bar:  0.4981
 Standard Error of X_bar:  0.1287
 ```
+
+</div>
 
 ![Sampling Distribution of X-bar](./img/se_xbar_45.png)
 

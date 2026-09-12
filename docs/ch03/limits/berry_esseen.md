@@ -142,7 +142,7 @@ $\rho/\sigma^3$은 왜도의 사촌이다. 왜도가 $E[(X-\mu)^3]/\sigma^3$인�
 
 <div class="codebox" markdown>
 
-**예제 .** 실제 오차와 베리-에센 상계 비교
+**예제 1.** 실제 오차와 베리-에센 상계 비교
 
 ```python
 import numpy as np
@@ -210,7 +210,7 @@ berry_esseen_visualization(
 
 <div class="codebox" markdown>
 
-**예제 .** 분포별 정규근사의 수렴 속도
+**예제 2.** 분포별 정규근사의 수렴 속도
 
 ```python
 import numpy as np

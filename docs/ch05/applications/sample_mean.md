@@ -277,6 +277,10 @@ $\text{SE} \propto 1/\sqrt{n}$이므로 $n$을 네 배로 늘리면 표준오차
 
 ## 모의실험: X-bar의 표본분포
 
+<div class="codebox" markdown>
+
+**예제 1.** 표본평균의 표집분포 모의실험
+
 ```python
 import matplotlib.pyplot as plt
 import numpy as np
@@ -319,6 +323,8 @@ for ax in (ax0, ax1):
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 ## 대학원 수준의 보충
 

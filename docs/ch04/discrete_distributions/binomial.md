@@ -135,7 +135,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 .** 이항분포의 확률질량함수와 분포함수
+**예제 1.** 이항분포의 확률질량함수와 분포함수
 
 ```python
 import matplotlib.pyplot as plt
@@ -167,7 +167,7 @@ plt.show()
 
 <div class="codebox" markdown>
 
-**예제 .** 모수에 따른 이항분포 비교
+**예제 2.** 모수에 따른 이항분포 비교
 
 ```python
 import matplotlib.pyplot as plt
@@ -198,7 +198,7 @@ plt.show()
 
 <div class="codebox" markdown>
 
-**예제 .** 이항 표본추출과 검증
+**예제 3.** 이항 표본추출과 검증
 
 ```python
 import numpy as np
@@ -235,7 +235,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 .** 이항분포의 정규근사
+**예제 4.** 이항분포의 정규근사
 
 ```python
 import matplotlib.pyplot as plt

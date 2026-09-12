@@ -36,6 +36,10 @@ $a + b$는 **사전 유효 표본크기**로 작동한다. 이 값이 클수록 
 
 핵심 계산은 놀랄 만큼 단순하다. 관측된 계수를 사전분포의 모수에 더하기만 하면 된다.
 
+<div class="codebox" markdown>
+
+**예제 1.** 베이즈 갱신 함수
+
 ```python
 import numpy as np
 from scipy.stats import beta
@@ -70,9 +74,15 @@ print(f"사후평균 {a/(a+b):.4f}   (MLE = {7/10:.4f})")
 사후평균 0.6667   (MLE = 0.7000)
 ```
 
+</div>
+
 ## 사전분포에 따른 민감도 분석
 
 여론조사 상황을 생각해 보자. 전체 $n = 581$명 중 $k = 281$명이 어떤 후보를 지지하여 MLE는 $\hat{\theta} = 281/581 \approx 0.4836$이다. 여섯 가지 사전분포가 사후분포에 어떤 영향을 주는지 살펴본다.
+
+<div class="codebox" markdown>
+
+**예제 2.** 사전분포에 따른 민감도 분석
 
 ```python
 n = 581
@@ -116,9 +126,15 @@ Prior skewed toward high p           a_post= 289  b_post= 302  mean=0.4890  P(p<
 Strong prior at 0.5                  a_post= 381  b_post= 400  mean=0.4878  P(p<0.5)=0.7518
 ```
 
+</div>
+
 ## 사전분포에서 사후분포로의 갱신 시각화
 
 각 사전분포에 대해 사전밀도(파란 점선), 사후밀도(빨간 실선), 음영으로 표시한 영역 $P(\theta < 0.5)$, 그리고 세로 점선으로 표시한 MLE를 그린다.
+
+<div class="codebox" markdown>
+
+**예제 3.** 사전에서 사후로 가는 과정 그리기
 
 ```python
 import matplotlib.pyplot as plt
@@ -156,6 +172,8 @@ for idx, (a, b, label) in enumerate(priors):
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 ![베이즈 Beta 켤레 사전분포](./img/bayesian_beta_conjugate_79.png)
 

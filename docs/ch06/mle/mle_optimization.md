@@ -28,6 +28,10 @@ $$
 
 가장 단순한 최적화 전략은 후보값 격자에서 $\ell(\theta)$를 평가하는 것이다. 모수가 하나나 둘일 때 실행 가능하며 가능도 곡면을 시각화하는 데 유용하다.
 
+<div class="codebox" markdown>
+
+**예제 1.** 격자탐색으로 MLE 찾기
+
 ```python
 import numpy as np
 from scipy import stats
@@ -50,7 +54,7 @@ def grid_search_normal_mean(data, mu_grid):
     best_idx = np.argmax(log_liks)
     return mu_grid[best_idx], log_liks
 
-# Example
+# 보기.
 rng = np.random.default_rng(42)
 data = rng.normal(loc=5.0, scale=2.0, size=100)
 mu_grid = np.linspace(3.0, 7.0, 500)
@@ -65,6 +69,8 @@ print(f"Closed-form MLE: mu_hat = {data.mean():.4f}")
 Grid search MLE: mu_hat = 4.8998
 Closed-form MLE: mu_hat = 4.8995
 ```
+
+</div>
 
 ## 기울기 기반 최적화
 
@@ -85,6 +91,10 @@ $$
 $$
 
 이렇게 하면 제약 문제가 제약 없는 문제로 바뀐다.
+
+<div class="codebox" markdown>
+
+**예제 2.** 재모수화로 제약 없애기
 
 ```python
 import numpy as np
@@ -134,6 +144,8 @@ Numerical MLE: mu = 4.8995, sigma^2 = 2.3888
 Closed-form:   mu = 4.8995, sigma^2 = 2.3888
 ```
 
+</div>
+
 ## Newton-Raphson 방법
 
 Newton-Raphson 방법은 (Hessian이라는) 2계 정보를 사용하여 더 빠르게 수렴한다:
@@ -157,12 +169,16 @@ $$
 
 볼록하지 않은 가능도(예: 혼합모형)에서는 최적화 결과가 출발점에 의존할 수 있다.
 
+<div class="codebox" markdown>
+
+**예제 3.** 출발값에 따른 수렴 위치
+
 ```python
 import numpy as np
 from scipy import optimize, stats
 
 def mixture_log_likelihood(params, data):
-    """Negative log-likelihood for a two-component Gaussian mixture."""
+    """성분 둘짜리 정규 혼합모형의 음의 로그가능도."""
     pi, mu1, mu2, sigma = params[0], params[1], params[2], np.exp(params[3])
     pi = 1 / (1 + np.exp(-pi))  # sigmoid transform for mixing weight
     ll = np.sum(np.log(
@@ -171,13 +187,13 @@ def mixture_log_likelihood(params, data):
     ))
     return -ll
 
-# Generate mixture data
+# 봉우리 둘짜리 혼합분포에서 자료를 만든다.
 rng = np.random.default_rng(42)
 n = 200
 z = rng.binomial(1, 0.4, n)
 data = np.where(z, rng.normal(0, 1, n), rng.normal(4, 1, n))
 
-# Try different starting values
+# 출발값을 바꿔 가며 어디로 수렴하는지 본다.
 starts = [[0, -1, 5, 0], [0, 2, 2, 0], [0, 0, 3, 0.5]]
 for i, x0 in enumerate(starts):
     result = optimize.minimize(mixture_log_likelihood, x0, args=(data,), method="Nelder-Mead")
@@ -193,6 +209,8 @@ Start 1: pi=0.374, mu1=0.154, mu2=3.900, nll=402.58
 Start 2: pi=0.626, mu1=3.900, mu2=0.154, nll=402.58
 Start 3: pi=0.374, mu1=0.154, mu2=3.899, nll=402.58
 ```
+
+</div>
 
 ## 해석
 
@@ -311,7 +329,7 @@ Start 3: pi=0.374, mu1=0.154, mu2=3.899, nll=402.58
     data = rng.binomial(1, 0.3, n)
     x_sum = data.sum()
 
-    # Newton-Raphson
+    # 뉴턴-랩슨: 관측정보량을 쓴다.
     p_nr = 0.5
     for i in range(10):
         score = x_sum / p_nr - (n - x_sum) / (1 - p_nr)
@@ -319,7 +337,7 @@ Start 3: pi=0.374, mu1=0.154, mu2=3.899, nll=402.58
         p_nr = p_nr - score / hessian
         print(f"NR  iter {i+1}: p = {p_nr:.8f}")
 
-    # Fisher scoring (use expected information)
+    # 피셔 스코어링: 기대정보량을 쓴다.
     p_fs = 0.5
     for i in range(10):
         score = x_sum / p_fs - (n - x_sum) / (1 - p_fs)

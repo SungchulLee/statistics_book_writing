@@ -143,7 +143,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 .** 지수분포의 밀도함수와 분포함수
+**예제 1.** 지수분포의 밀도함수와 분포함수
 
 ```python
 import matplotlib.pyplot as plt
@@ -173,7 +173,7 @@ plt.show()
 
 <div class="codebox" markdown>
 
-**예제 .** 비율모수에 따른 지수분포 비교
+**예제 2.** 비율모수에 따른 지수분포 비교
 
 ```python
 import matplotlib.pyplot as plt
@@ -201,7 +201,7 @@ plt.show()
 
 <div class="codebox" markdown>
 
-**예제 .** 지수 표본의 평균과 표준편차 확인
+**예제 3.** 지수 표본의 평균과 표준편차 확인
 
 ```python
 import numpy as np
@@ -232,7 +232,7 @@ Mean ≈ SD: True
 
 <div class="codebox" markdown>
 
-**예제 .** 무기억성 확인하기
+**예제 4.** 무기억성 확인하기
 
 ```python
 import numpy as np
@@ -268,7 +268,7 @@ P(X>0.5+1.0|X>0.5) = 0.1360,  P(X>1.0) = 0.1355
 
 <div class="codebox" markdown>
 
-**예제 .** 포아송 과정 모의실험
+**예제 5.** 포아송 과정 모의실험
 
 ```python
 import numpy as np

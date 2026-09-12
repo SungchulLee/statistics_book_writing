@@ -53,6 +53,10 @@ $$
 
 다음 코드는 여러 $p$ 값에 대해 Bernoulli 모집단에서 크기 $n = 100$인 표본을 뽑아 $\hat{p}$의 표본분포를 모의실험하고 이론적 정규근사를 겹쳐 그린다.
 
+<div class="codebox" markdown>
+
+**예제 1.** 베르누이 모집단에서 표본평균의 표집분포
+
 ```python
 import matplotlib.pyplot as plt
 import numpy as np
@@ -79,7 +83,7 @@ for ax, p in zip(axes, p_values):
         for _ in range(n_sim)
     ])
 
-    # Histogram of simulated values
+    # 모의실험으로 얻은 값들의 히스토그램.
     _, bins, _ = ax.hist(p_hat_sims, density=True, bins=15,
                          alpha=0.5, edgecolor="white",
                          label=r"simulated $\hat{p}$")
@@ -100,6 +104,8 @@ axes[-1].legend(fontsize=8)
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 ## 해석
 

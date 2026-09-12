@@ -25,7 +25,7 @@ SciPy는 `stats.uniform(loc=a, scale=b-a)`를 사용하며, `loc`은 왼쪽 끝�
 
 <div class="codebox" markdown>
 
-**예제 .** 구간에 따른 균등 밀도함수
+**예제 1.** 구간에 따른 균등 밀도함수
 
 ```python
 import matplotlib.pyplot as plt

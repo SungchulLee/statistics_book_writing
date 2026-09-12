@@ -65,17 +65,21 @@ $$
 \end{array}
 $$
 
-## Python 구현: 로그가능도와 MLE
+## 로그가능도 곡선 그려 보기
+
+<div class="codebox" markdown>
+
+**예제 1.** 베르누이 로그가능도와 MLE
 
 ```python
 import numpy as np
 import matplotlib.pyplot as plt
 
-# Set random seed for reproducibility
+# 같은 결과가 다시 나오도록 난수 씨앗을 고정한다.
 seed = 1
 np.random.seed(seed)
 
-# Define probability of heads and sample size
+# 앞면 확률과 던지는 횟수를 정한다.
 p = 0.7
 n_samples = 100
 
@@ -146,17 +150,17 @@ def compute_log_likelihood(coins, p):
         log_joint_prob += compute_log_prob(coin, p)
     return log_joint_prob
 
-# Simulate coin flips
+# 동전을 n번 던진다. 참 p 는 우리가 모르는 값이라고 둔다.
 coins = load_data()
 
-# Define range of probabilities to test for MLE
+# p 후보를 격자로 늘어놓는다. 이 중 로그가능도가 가장 큰 것을 고른다.
 ps = np.linspace(0.01, 0.99, 100)
 
-# Calculate log-likelihood for each probability
+# 후보마다 로그가능도를 계산한다.
 log_likelihood_list = [compute_log_likelihood(coins, p) for p in ps]
 log_likelihood = np.array(log_likelihood_list)
 
-# Find the probability with the highest log-likelihood (MLE)
+# 로그가능도가 가장 큰 후보가 최대가능도추정값이다.
 idx = np.argmax(log_likelihood)
 mle_p = ps[idx]
 log_likelihood_max = log_likelihood[idx]
@@ -164,13 +168,13 @@ print(f"MLE index: {idx}")
 print(f"MLE probability (p): {mle_p:.4f}")
 print(f"Max log-likelihood: {log_likelihood_max:.4f}\n")
 
-# Plot log-likelihood function and mark the MLE
+# 로그가능도 곡선을 그리고 최댓값 자리를 표시한다.
 fig, ax = plt.subplots(figsize=(12, 3))
 ax.plot(ps, log_likelihood, label="Log-likelihood")
 ax.plot([mle_p, mle_p], [0, log_likelihood_max], '--or', label="MLE")
 ax.legend(loc="lower right")
 
-# Customize plot appearance
+# 축 이름과 범례를 다듬는다.
 ax.spines['top'].set_visible(False)
 ax.spines['right'].set_visible(False)
 ax.spines['bottom'].set_position("zero")
@@ -187,6 +191,8 @@ MLE index: 74
 MLE probability (p): 0.7425
 Max log-likelihood: -57.3074
 ```
+
+</div>
 
 ![Bernoulli 분포의 MLE](./img/mle_bernoulli_70.png)
 

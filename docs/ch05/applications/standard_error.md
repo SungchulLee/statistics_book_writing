@@ -107,6 +107,10 @@ $$
 
 ### 단일 파일 버전
 
+<div class="codebox" markdown>
+
+**예제 1.** 표준오차를 한 파일로 구하기
+
 ```python
 import matplotlib.pyplot as plt
 import numpy as np
@@ -172,6 +176,8 @@ if __name__ == "__main__":
 Standard Error   of X_bar : 0.1287
 ```
 
+</div>
+
 ![Sampling Distribution of X_bar](./img/standard_error_106.png)
 
 ## 같은 코드를 파일 둘로 나눈다면
@@ -179,6 +185,10 @@ Standard Error   of X_bar : 0.1287
 위 예제는 한 덩어리로 실행하는 형태였다. 실제 프로젝트에서는 설정과 본문을 파일로 나누는 편이 낫다. 아래 두 블록은 **두 개의 `.py` 파일**을 각각 적은 것이므로, 문서에서 이어 붙여 실행할 수는 없다. 같은 디렉터리에 저장한 뒤 `python standard_error_of_x_bar.py --seed 7` 처럼 실행한다.
 
 ### 모듈 버전: `global_name_space.py`
+
+<div class="codebox" markdown>
+
+**예제 2.** 공유 설정 모듈
 
 ```python
 import argparse
@@ -196,7 +206,13 @@ ARGS = parser.parse_args()
 np.random.seed(ARGS.seed)
 ```
 
+</div>
+
 ### 모듈 버전: `standard_error_of_x_bar.py`
+
+<div class="codebox" markdown>
+
+**예제 3.** 표준오차를 그림에 표시하기
 
 ```python
 import matplotlib.pyplot as plt
@@ -250,9 +266,15 @@ if __name__ == "__main__":
     main()
 ```
 
+</div>
+
 ## Python: S-squared의 표준오차
 
 ### `standard_error_of_s_square.py`
+
+<div class="codebox" markdown>
+
+**예제 4.** 표본크기에 따른 표준오차 변화
 
 ```python
 import matplotlib.pyplot as plt
@@ -305,6 +327,8 @@ def main():
 if __name__ == "__main__":
     main()
 ```
+
+</div>
 
 ## 연습문제
 

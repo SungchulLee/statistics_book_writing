@@ -36,7 +36,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 .** 역변환 표집으로 지수분포 만들기
+**예제 1.** 역변환 표집으로 지수분포 만들기
 
 ```python
 import numpy as np
@@ -99,7 +99,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 .** 역변환 표집으로 코시분포 만들기
+**예제 2.** 역변환 표집으로 코시분포 만들기
 
 ```python
 # 코시분포의 CDF는 F(x) = 1/2 + arctan(x)/pi 이므로

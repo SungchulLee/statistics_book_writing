@@ -72,7 +72,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 .** 표본평균이 참 평균으로 수렴하는 모습
+**예제 1.** 표본평균이 참 평균으로 수렴하는 모습
 
 ```python
 import numpy as np

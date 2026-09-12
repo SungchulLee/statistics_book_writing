@@ -18,7 +18,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 .** 분포함수와 밀도함수를 두 축에 함께 보기
+**예제 1.** 분포함수와 밀도함수를 두 축에 함께 보기
 
 ```python
 import matplotlib.pyplot as plt

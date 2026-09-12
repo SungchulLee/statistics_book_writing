@@ -190,7 +190,7 @@ $\mathbf{R}$의 대각 성분은 모두 1이다.
 
 <div class="codebox" markdown>
 
-**예제 .** 자료에서 공분산과 상관계수 구하기
+**예제 1.** 자료에서 공분산과 상관계수 구하기
 
 ```python
 import numpy as np
@@ -236,7 +236,7 @@ Correlation matrix:
 
 <div class="codebox" markdown>
 
-**예제 .** 여러 상관계수를 그림으로 보기
+**예제 2.** 여러 상관계수를 그림으로 보기
 
 ```python
 import numpy as np
@@ -272,7 +272,7 @@ plt.show()
 
 <div class="codebox" markdown>
 
-**예제 .** 상관계수 열지도
+**예제 3.** 상관계수 열지도
 
 ```python
 import numpy as np
@@ -318,7 +318,7 @@ plt.show()
 
 <div class="codebox" markdown>
 
-**예제 .** 결합 확률질량함수에서 공분산 구하기
+**예제 4.** 결합 확률질량함수에서 공분산 구하기
 
 ```python
 import numpy as np

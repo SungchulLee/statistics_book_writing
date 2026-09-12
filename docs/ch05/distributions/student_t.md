@@ -63,6 +63,10 @@ $$
 
 $t$ 분포는 정규분포보다 **꼬리가 두꺼워** 극단값이 나타날 가능성이 더 크다:
 
+<div class="codebox" markdown>
+
+**예제 1.** t 분포의 두꺼운 꼬리
+
 ```python
 import matplotlib.pyplot as plt
 import numpy as np
@@ -89,9 +93,15 @@ plt.tight_layout()
 plt.show()
 ```
 
+</div>
+
 ![Full PDF](./img/student_t_61.png)
 
 ### 정규분포로의 수렴
+
+<div class="codebox" markdown>
+
+**예제 2.** 자유도가 커지면 t가 정규로 간다
 
 ```python
 import matplotlib.pyplot as plt
@@ -112,6 +122,8 @@ ax.set_title('t-Distribution Converges to Normal as df Increases')
 plt.show()
 ```
 
+</div>
+
 ![t-Distribution Converges to Normal as df Increases](./img/student_t_85.png)
 
 ---
@@ -130,6 +142,10 @@ $$
 2. $\frac{(n-1)S^2}{\sigma^2} \sim \chi^2_{n-1}$이다.
 3. $\bar{X}$와 $S^2$이 **독립**이다(정규분포만의 특별한 성질).
 4. 비 $\frac{N(0,1)}{\sqrt{\chi^2_{n-1}/(n-1)}}$은 정의에 의해 $t_{n-1}$이다.
+
+<div class="codebox" markdown>
+
+**예제 3.** 왜 t 분포가 필요한가
 
 ```python
 import numpy as np
@@ -159,6 +175,8 @@ ax.legend()
 ax.spines[['top', 'right']].set_visible(False)
 plt.show()
 ```
+
+</div>
 
 ![Student t 분포](./img/student_t_118.png)
 
@@ -190,6 +208,10 @@ $t$ 분포는 $n$이 작을 때 가장 중요하다. 두꺼운 꼬리가 $\sigma
 
 ## 확률표본
 
+<div class="codebox" markdown>
+
+**예제 4.** t 분포에서 표본추출
+
 ```python
 import numpy as np
 import matplotlib.pyplot as plt
@@ -212,6 +234,8 @@ ax.plot(bins, stats.norm(data.mean(), data.std()).pdf(bins),
 ax.legend()
 plt.show()
 ```
+
+</div>
 
 ![Student t 분포](./img/student_t_169.png)
 

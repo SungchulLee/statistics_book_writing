@@ -58,7 +58,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 .** 콜모고로프 공리를 수치로 확인하기
+**예제 1.** 콜모고로프 공리를 수치로 확인하기
 
 ```python
 import numpy as np

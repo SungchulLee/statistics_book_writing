@@ -56,6 +56,10 @@ $$
 
 다음 코드는 Uniform(0, 1) 모집단에서 $n = 5$로 $S^2$ 값을 10,000개 모의실험하고 추정된 평균과 표준오차를 함께 시각화한다.
 
+<div class="codebox" markdown>
+
+**예제 1.** 표본분산의 표준오차 모의실험
+
 ```python
 import matplotlib.pyplot as plt
 import numpy as np
@@ -80,7 +84,7 @@ standard_error = np.array(S_square).std()
 print(f"Estimated Mean of S^2:   {average:.4f}")
 print(f"Standard Error of S^2:   {standard_error:.4f}")
 
-# Visualize
+# 히스토그램에 이론값을 겹쳐 그린다.
 fig, ax = plt.subplots(figsize=(12, 3))
 ax.set_title("Sampling Distribution of S^2")
 ax.hist(S_square, bins=100, density=True, alpha=0.3)
@@ -101,6 +105,8 @@ plt.show()
 Estimated Mean of S^2:   0.0838
 Standard Error of S^2:   0.0425
 ```
+
+</div>
 
 ![Sampling Distribution of S^2](./img/se_s2_55.png)
 

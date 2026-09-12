@@ -43,6 +43,10 @@ $$
 
 다음 모의실험이 이 결과들을 경험적으로 확인해 준다.
 
+<div class="codebox" markdown>
+
+**예제 1.** 분산추정량 셋의 MSE 비교
+
 ```python
 import numpy as np
 
@@ -90,6 +94,8 @@ Bessel (n-1)        bias=+0.0057  var=3.5933  MSE=3.5934
 MSE-opt (n+1)       bias=-0.7226  var=2.4054  MSE=2.9276
 ```
 
+</div>
+
 !!! note "핵심 관찰"
     불편추정량 $S^2_{n-1}$의 평균제곱오차가 셋 중 **가장 크다**. $n+1$로 나누면 편향이 생기지만 평균제곱오차가 최소가 되며, 편향–분산 맞바꿈을 잘 보여 준다.
 
@@ -106,6 +112,10 @@ $$
 $$
 \lambda^* = \frac{\mu^2}{\mu^2 + \sigma^2/n}
 $$
+
+<div class="codebox" markdown>
+
+**예제 2.** 축소추정량의 MSE
 
 ```python
 import numpy as np
@@ -146,6 +156,8 @@ MSE at lambda=1 (unbiased): 0.2000
 MSE at lambda*:             0.1957
 ```
 
+</div>
+
 ## Normal 분포의 MLE
 
 $X_1, \ldots, X_n \overset{\text{iid}}{\sim} N(\mu, \sigma^2)$에 대해 MLE는 닫힌 형태의 해를 갖는다:
@@ -160,6 +172,10 @@ $$
 -\ell(\mu, \sigma^2) = \frac{n}{2}\log(2\pi\sigma^2) + \frac{1}{2\sigma^2}\sum_{i=1}^n (x_i - \mu)^2
 $$
 
+<div class="codebox" markdown>
+
+**예제 3.** 정규분포 모수의 최대가능도추정
+
 ```python
 import numpy as np
 from scipy import optimize
@@ -169,11 +185,11 @@ def mle_normal_demo(n=100):
     mu_true, sigma_true = 5.0, 2.0
     data = rng.normal(mu_true, sigma_true, n)
 
-    # Closed-form MLE
+    # 닫힌 형태의 MLE — 공식으로 바로 구한다.
     mu_hat = data.mean()
     sigma2_hat = np.mean((data - mu_hat) ** 2)
 
-    # Numerical MLE via optimization
+    # 수치 최적화로 구한 MLE. 위 공식과 같은 값이 나와야 한다.
     def neg_log_lik(params, x):
         mu, log_sigma2 = params
         sigma2 = np.exp(log_sigma2)
@@ -198,6 +214,8 @@ Closed-form: mu = 4.8995, sigma^2 = 2.3888
 Numerical:   mu = 4.8995, sigma^2 = 2.3889
 ```
 
+</div>
+
 ## Gamma 분포에서 MLE와 적률법
 
 $E[X] = \alpha\beta$이고 $\text{Var}(X) = \alpha\beta^2$인 $X \sim \text{Gamma}(\alpha, \beta)$에 대해 적률법 추정량은:
@@ -207,6 +225,10 @@ $$
 $$
 
 MLE는 닫힌 형태가 없어 수치 최적화가 필요하다.
+
+<div class="codebox" markdown>
+
+**예제 4.** 감마분포에서 MLE와 적률법 비교
 
 ```python
 import numpy as np
@@ -251,6 +273,8 @@ MLE: bias=+0.0399, MSE=0.088900
 MoM: bias=+0.0616, MSE=0.129929
 ```
 
+</div>
+
 !!! success "평균제곱오차에서 MLE의 승리"
     Gamma 분포에서 $\alpha$와 $\beta$ 모두에 대해 MLE의 평균제곱오차가 적률법보다 작다. 점근이론과 일치하는 결과이다. MLE는 (Cramér–Rao 한계를 달성하여) 효율적인 반면 적률법은 일반적으로 그렇지 않다.
 
@@ -263,6 +287,10 @@ $$
 $$
 
 여기서 $I(\theta)$는 Fisher 정보량이다. $N(\mu, \sigma^2)$의 평균을 추정할 때 CRLB는 $\sigma^2/n$이고 표본평균이 이 한계를 정확히 달성한다.
+
+<div class="codebox" markdown>
+
+**예제 5.** 크라메르-라오 하한 확인
 
 ```python
 import numpy as np
@@ -298,6 +326,8 @@ CRLB = sigma^2/n = 0.080000
 Var(X_bar)       = 0.078777  (ratio to CRLB: 0.9847)
 Var(median)      = 0.121813  (ratio to CRLB: 1.5227)
 ```
+
+</div>
 
 ## 해석
 
@@ -365,9 +395,9 @@ Var(median)      = 0.121813  (ratio to CRLB: 1.5227)
         data = rng.beta(a_true, b_true, n)
 
         # 적률법: 베타분포의 평균과 분산을 표본값과 맞추어 푼다.
-        #   E[X] = a/(a+b),  Var(X) = ab / [(a+b)^2 (a+b+1)]
+        #   E[X] = a/(a+b),  Var(X) = ab / [(a+b)^2 (a+b+1)] 를 뒤집어 푼다.
         # 이를 a, b에 대해 풀면 공통 인자 [E(1-E)/V - 1] 이 나오고
-        #   a = E * common,  b = (1-E) * common
+        #   a = E * common,  b = (1-E) * common 이 그 해다.
         m1 = data.mean()
         m2 = np.mean(data ** 2)
         v = m2 - m1 ** 2

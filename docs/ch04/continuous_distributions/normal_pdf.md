@@ -18,7 +18,7 @@ SciPy는 `stats.norm(loc=mu, scale=sigma)`로 정규분포를 나타내며, 이�
 
 <div class="codebox" markdown>
 
-**예제 .** scipy.stats 로 정규 밀도함수 그리기
+**예제 1.** scipy.stats 로 정규 밀도함수 그리기
 
 ```python
 import matplotlib.pyplot as plt

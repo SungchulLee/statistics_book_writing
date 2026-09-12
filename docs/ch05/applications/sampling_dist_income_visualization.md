@@ -43,6 +43,10 @@ $$
 
 ## 모의실험 코드
 
+<div class="codebox" markdown>
+
+**예제 1.** 치우친 소득 모집단에서의 표집분포
+
 ```python
 import numpy as np
 import pandas as pd
@@ -51,24 +55,24 @@ import seaborn as sns
 
 np.random.seed(1)
 
-# Generate a right-skewed income population
+# 로그정규로 오른쪽 꼬리가 긴 소득 모집단을 만든다.
 n_population = 10_000
 income = np.random.exponential(scale=50_000, size=n_population) + 20_000
 loans_income = pd.Series(income)
 
-# 1. Sample 1000 individual incomes
+# 1. 개별 소득 1000개 — 모집단의 모양을 그대로 보여 준다.
 sample_data = pd.DataFrame({
     "income": loans_income.sample(1000),
     "type": "Population Sample (n=1000)"
 })
 
-# 2. Distribution of means with n=5
+# 2. 크기 5 표본의 평균들 — 표집분포.
 sample_mean_05 = pd.DataFrame({
     "income": [loans_income.sample(5).mean() for _ in range(1000)],
     "type": "Sampling Distribution (Mean of 5)"
 })
 
-# 3. Distribution of means with n=20
+# 3. 크기 20 표본의 평균들 — 폭이 더 좁아진다.
 sample_mean_20 = pd.DataFrame({
     "income": [loans_income.sample(20).mean() for _ in range(1000)],
     "type": "Sampling Distribution (Mean of 20)"
@@ -77,7 +81,7 @@ sample_mean_20 = pd.DataFrame({
 results = pd.concat([sample_data, sample_mean_05, sample_mean_20],
                      ignore_index=True)
 
-# Visualize side by side
+# 세 분포를 나란히 놓고 폭이 어떻게 줄어드는지 본다.
 g = sns.FacetGrid(results, col="type", col_wrap=1, height=2.5, aspect=2.5)
 g.map(plt.hist, "income", bins=40, range=[0, 200_000],
       color="steelblue", edgecolor="black", alpha=0.8)
@@ -87,11 +91,17 @@ plt.tight_layout()
 plt.show()
 ```
 
+</div>
+
 ![소득 자료 표본분포 시각화](./img/sampling_dist_income_visualization_46.png)
 
 ## 표준오차 검증
 
 이론적 공식 $\text{SE} = \sigma / \sqrt{n}$을 모의실험한 표본분포의 경험적 표준편차와 비교하여 확인할 수 있다.
+
+<div class="codebox" markdown>
+
+**예제 2.** 표준오차 공식 검증
 
 ```python
 pop_std = loans_income.std()
@@ -112,6 +122,8 @@ Theoretical SE (n=5):    $21,934
 Theoretical SE (n=20):   $10,967
 Ratio SE(5)/SE(20):      2.00
 ```
+
+</div>
 
 비가 2.0에 가깝게 나와 제곱근 법칙을 확인해 준다.
 

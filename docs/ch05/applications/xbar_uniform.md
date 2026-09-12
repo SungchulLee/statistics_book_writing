@@ -42,6 +42,10 @@ $$
 
 다음 코드는 Uniform(0, 1) 모집단에서 크기 $n = 5$인 표본을 10,000개 뽑아 모집단, 하나의 표본, $\bar{X}$의 표본분포라는 세 분포를 나란히 그린다.
 
+<div class="codebox" markdown>
+
+**예제 1.** 균등 모집단에서 표본평균의 표집분포
+
 ```python
 import matplotlib.pyplot as plt
 import numpy as np
@@ -52,20 +56,20 @@ sample_size = 5
 n_samples = 10_000
 n_population = 10_000
 
-# Generate a large population from Uniform(0, 1)
+# Uniform(0,1)에서 큰 모집단을 만든다.
 population = np.random.uniform(size=(n_population,))
 
 # 표본을 딱 하나 뽑는다. 현실에서 우리가 실제로 갖게 되는 것이 이것뿐이다.
 # 아래 가운데 패널에 점 몇 개로 그려진다.
 single_sample = np.random.choice(population, size=sample_size, replace=False)
 
-# Simulate the sampling distribution of X-bar
+# 표본을 되풀이해 뽑으며 표본평균을 기록한다. 이 값들의 분포가 표집분포다.
 sample_means = [
     np.mean(np.random.choice(population, size=sample_size, replace=False))
     for _ in range(n_samples)
 ]
 
-# Plot
+# 모집단과 표집분포를 나란히 그린다.
 # 세 패널을 sharex=True 로 묶는 것이 이 그림의 핵심 장치다.
 # 가로 눈금이 같아야 세 분포의 **퍼짐**을 직접 견줄 수 있다.
 #   위   모집단      : 가장 넓다
@@ -85,6 +89,8 @@ ax2.set_title("Sampling Distribution of X-bar")
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 ![Population Distribution](./img/xbar_uniform_45.png)
 

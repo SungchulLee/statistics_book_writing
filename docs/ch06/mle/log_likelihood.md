@@ -69,20 +69,24 @@ $$
 
 ## 구현과 시각화
 
+<div class="codebox" markdown>
+
+**예제 1.** 로그가능도 구현과 시각화
+
 ```python
 import numpy as np
 
 def compute_log_prob(coin, p):
-    """Log-probability of a single Bernoulli outcome."""
+    """베르누이 시행 한 번의 로그확률."""
     return coin * np.log(p) + (1 - coin) * np.log(1 - p)
 
 
 def compute_log_likelihood(coins, p):
-    """Log-likelihood for a sequence of Bernoulli trials."""
+    """베르누이 시행 여러 번의 로그가능도."""
     return sum(compute_log_prob(coin, p) for coin in coins)
 
 
-# Simulate coin flips
+# 동전을 n번 던진다. 참 p 는 우리가 모르는 값이라고 둔다.
 rng = np.random.default_rng(1)
 p_true = 0.7
 n_samples = 100
@@ -92,11 +96,11 @@ k = coins.sum()
 print(f"Observed: {k} heads out of {n_samples} flips")
 print(f"MLE: p_hat = {k / n_samples:.4f}")
 
-# Evaluate log-likelihood over a grid
+# 격자 위에서 로그가능도를 계산한다.
 ps = np.linspace(0.01, 0.99, 200)
 log_liks = np.array([compute_log_likelihood(coins, p) for p in ps])
 
-# Find MLE numerically
+# 수치 최적화로 MLE를 찾는다.
 idx = np.argmax(log_liks)
 mle_p = ps[idx]
 print(f"Grid-search MLE: p_hat = {mle_p:.4f}")
@@ -112,6 +116,8 @@ Grid-search MLE: p_hat = 0.6699
 Max log-likelihood: -63.4179
 ```
 
+</div>
+
 !!! note "로그가능도의 모양"
     Bernoulli 로그가능도는 $(0, 1)$에서 $p$에 대해 오목한 함수이므로 유일한 전역 최댓값이 보장된다. 이 오목성은 모든 $p \in (0, 1)$에서 $\ell''(p) < 0$이라는 사실에서 따라 나온다.
 
@@ -119,16 +125,20 @@ Max log-likelihood: -63.4179
 
 로그가능도는 반복문 없이도 효율적으로 계산할 수 있다:
 
+<div class="codebox" markdown>
+
+**예제 2.** 로그가능도의 벡터화
+
 ```python
 import numpy as np
 
 def log_likelihood_vectorized(coins, p):
-    """Vectorized log-likelihood computation."""
+    """로그가능도를 벡터화해 한 번에 계산한다."""
     k = coins.sum()
     n = len(coins)
     return k * np.log(p) + (n - k) * np.log(1 - p)
 
-# Compare
+# 두 값을 견준다.
 rng = np.random.default_rng(1)
 coins = rng.binomial(1, 0.7, 100)
 ps = np.linspace(0.01, 0.99, 200)
@@ -144,9 +154,15 @@ print(f"Vectorized MLE: p = {ps[idx]:.4f}")
 Vectorized MLE: p = 0.6699
 ```
 
+</div>
+
 ## 가능도와 로그가능도의 비교
 
 로그변환이 왜 필수적인지 보이기 위해 원래 가능도 값을 살펴보자:
+
+<div class="codebox" markdown>
+
+**예제 3.** 가능도와 로그가능도의 수치 비교
 
 ```python
 import numpy as np
@@ -176,6 +192,8 @@ print(f"Log-likelihood at p=0.7: {log_likelihood:.4f}")
 Raw likelihood at p=0.7: 2.33e-28
 Log-likelihood at p=0.7: -63.6283
 ```
+
+</div>
 
 원래 가능도는 천문학적으로 작은 수인 반면 로그가능도는 다루기 좋은 음수이다.
 

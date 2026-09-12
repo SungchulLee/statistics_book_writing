@@ -83,6 +83,10 @@ pdf는 $\theta \in [0, 1]$에서 $f(\theta) = 2\theta$이며, 더 높은 부도�
 
 ## 모의실험 코드
 
+<div class="codebox" markdown>
+
+**예제 1.** 부도의 독립 여부에 따른 손실 분포
+
 ```python
 import numpy as np
 import matplotlib.pyplot as plt
@@ -127,7 +131,13 @@ P(D > 90):
   Dependent:       0.187854
 ```
 
+</div>
+
 ## 시각화
+
+<div class="codebox" markdown>
+
+**예제 2.** 세 분포를 나란히 보기
 
 ```python
 fig, axes = plt.subplots(1, 3, figsize=(18, 5))
@@ -181,6 +191,8 @@ ax.legend()
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 ![Default Distributions](./img/financial_crisis_clt_118.png)
 

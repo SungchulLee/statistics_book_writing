@@ -56,21 +56,25 @@ $$
 
 ### 시연
 
+<div class="codebox" markdown>
+
+**예제 1.** 베타-이항 켤레모형으로 비율 추정하기
+
 ```python
 import numpy as np
 from scipy import stats
 
 def demo_beta_binomial():
-    """Beta-Binomial conjugate model for estimating a proportion."""
+    """베타-이항 켤레모형으로 비율을 추정한다."""
     alpha_0, beta_0 = 2, 2  # weakly informative prior
 
     n, k = 50, 32  # observed data
 
-    # Posterior parameters
+    # 사후분포의 모수. 켤레사전분포라 형태가 그대로 유지된다.
     alpha_post = alpha_0 + k
     beta_post = beta_0 + (n - k)
 
-    # Point estimates
+    # 점추정값: 사후평균과 사후최빈값.
     map_est = (alpha_post - 1) / (alpha_post + beta_post - 2)
     post_mean = alpha_post / (alpha_post + beta_post)
     mle = k / n
@@ -82,7 +86,7 @@ def demo_beta_binomial():
     print(f"Post. mean = {post_mean:.4f}")
     print(f"MLE        = {mle:.4f}")
 
-    # 95% credible interval
+    # 95% 신용구간: 사후분포의 2.5·97.5 백분위점.
     ci_low = stats.beta.ppf(0.025, alpha_post, beta_post)
     ci_high = stats.beta.ppf(0.975, alpha_post, beta_post)
     print(f"95% CI:    [{ci_low:.4f}, {ci_high:.4f}]")
@@ -101,6 +105,8 @@ Post. mean = 0.6296
 MLE        = 0.6400
 95% CI:    [0.4980, 0.7521]
 ```
+
+</div>
 
 !!! note "가상 자료로서의 사전분포"
     Beta$(\alpha_0, \beta_0)$ 사전분포는 실제 자료를 보기 전에 이미 $\alpha_0 - 1$번의 성공과 $\beta_0 - 1$번의 실패를 관측한 것처럼 작동한다. $\alpha_0 = \beta_0 = 2$이면 사전분포가 총 2개의 "가상 관측값"에 해당하는 기여를 한다.
@@ -133,12 +139,16 @@ $$
 
 ### 시연
 
+<div class="codebox" markdown>
+
+**예제 2.** 정규-정규 켤레모형으로 평균 추정하기
+
 ```python
 import numpy as np
 from scipy import stats
 
 def demo_normal_normal():
-    """Normal-Normal conjugate model for estimating a mean."""
+    """정규-정규 켤레모형으로 평균을 추정한다."""
     sigma = 2.0        # known population std
     mu_true = 5.0      # true mean
     mu_0, tau_0 = 0, 10  # prior parameters
@@ -148,7 +158,7 @@ def demo_normal_normal():
     data = rng.normal(mu_true, sigma, n)
     x_bar = data.mean()
 
-    # Posterior parameters
+    # 사후분포의 모수. 켤레사전분포라 형태가 그대로 유지된다.
     tau_n_sq = 1 / (1 / tau_0**2 + n / sigma**2)
     mu_n = tau_n_sq * (mu_0 / tau_0**2 + n * x_bar / sigma**2)
     tau_n = np.sqrt(tau_n_sq)
@@ -169,6 +179,8 @@ Data:       n=25, x_bar=4.929
 Posterior:  N(4.921, 0.400^2)
 95% credible interval: [4.138, 5.705]
 ```
+
+</div>
 
 ## 자료에 따른 사후분포의 변화
 

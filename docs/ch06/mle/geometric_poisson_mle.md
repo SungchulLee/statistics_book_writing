@@ -38,30 +38,34 @@ $$
 
 ### 시연
 
+<div class="codebox" markdown>
+
+**예제 1.** 기하분포의 MLE
+
 ```python
 import numpy as np
 
 np.random.seed(42)
 
 def geometric_mle_demo(n_train=1000, n_test=1000, p_true=0.12):
-    """Geometric MLE: parametric vs nonparametric comparison."""
-    # Generate data: number of successes before first failure
+    """기하분포의 MLE — 모수적 적합과 비모수적 적합을 견준다."""
+    # 자료를 만든다. 첫 실패가 나올 때까지의 성공 횟수다.
     train = np.random.geometric(1 - p_true, n_train) - 1  # 0-indexed
     test = np.random.geometric(1 - p_true, n_test) - 1
 
-    # MLE
+    # 최대가능도추정값.
     p_hat = train.mean() / (1 + train.mean())
     k_max = max(train.max(), test.max()) + 1
     k_vals = np.arange(k_max)
 
-    # Parametric PMF from MLE
+    # 모수적 적합: MLE를 넣은 확률질량함수.
     pmf_param = (1 - p_hat) * p_hat ** k_vals
 
-    # Empirical PMF (nonparametric)
+    # 비모수적 적합: 자료의 상대도수를 그대로 쓴다.
     pmf_train = np.bincount(train, minlength=k_max) / n_train
     pmf_test = np.bincount(test, minlength=k_max) / n_test
 
-    # Test-set RMSE
+    # 시험자료에서의 RMSE.
     err_param = np.sqrt(np.mean((pmf_param - pmf_test)**2))
     err_nonparam = np.sqrt(np.mean((pmf_train - pmf_test)**2))
 
@@ -82,9 +86,15 @@ Test RMSE -- parametric: 0.00996
 Test RMSE -- nonparametric: 0.01164
 ```
 
+</div>
+
 ### 로그가능도 곡면
 
 로그가능도는 $p$에 대해 오목한 함수이며 유일한 전역 최댓값이 있음을 확인해 준다:
+
+<div class="codebox" markdown>
+
+**예제 2.** 기하분포 로그가능도 곡면
 
 ```python
 import matplotlib.pyplot as plt
@@ -116,6 +126,8 @@ plt.title("Geometric: Log-Likelihood Surface")
 plt.legend()
 plt.show()
 ```
+
+</div>
 
 ![Geometric: Log-Likelihood Surface](./img/geometric_poisson_mle_80.png)
 
@@ -155,11 +167,15 @@ Poisson 비율 모수의 MLE는 단순히 표본평균이다.
 
 ### 시연
 
+<div class="codebox" markdown>
+
+**예제 3.** 포아송분포의 MLE
+
 ```python
 from scipy import stats
 
 def poisson_mle_demo(n_train=200, n_test=200, lam_true=4.5):
-    """Poisson MLE: parametric vs nonparametric comparison."""
+    """포아송분포의 MLE — 모수적 적합과 비모수적 적합을 견준다."""
     np.random.seed(42)
     train = np.random.poisson(lam_true, n_train)
     test = np.random.poisson(lam_true, n_test)
@@ -168,14 +184,14 @@ def poisson_mle_demo(n_train=200, n_test=200, lam_true=4.5):
     k_max = max(train.max(), test.max()) + 1
     k_vals = np.arange(k_max)
 
-    # Parametric PMF from MLE
+    # 모수적 적합: MLE를 넣은 확률질량함수.
     pmf_param = stats.poisson.pmf(k_vals, lam_hat)
 
-    # Empirical PMF (nonparametric)
+    # 비모수적 적합: 자료의 상대도수를 그대로 쓴다.
     pmf_train = np.bincount(train, minlength=k_max) / n_train
     pmf_test = np.bincount(test, minlength=k_max) / n_test
 
-    # Test-set RMSE
+    # 시험자료에서의 RMSE.
     err_param = np.sqrt(np.mean((pmf_param - pmf_test)**2))
     err_nonparam = np.sqrt(np.mean((pmf_train - pmf_test)**2))
 
@@ -199,7 +215,13 @@ Test RMSE -- parametric: 0.01882
 Test RMSE -- nonparametric: 0.03342
 ```
 
+</div>
+
 ### 모수적 적합과 비모수적 적합의 비교
+
+<div class="codebox" markdown>
+
+**예제 4.** 모수적 적합과 비모수적 적합의 비교
 
 ```python
 import matplotlib.pyplot as plt
@@ -229,6 +251,8 @@ axes[1].legend()
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 ![Poisson: Train Fit](./img/geometric_poisson_mle_195.png)
 

@@ -164,6 +164,10 @@ $$
 
 ### 정규모집단
 
+<div class="codebox" markdown>
+
+**예제 1.** 정규모집단에서 표본분산의 표집분포
+
 ```python
 import matplotlib.pyplot as plt
 import numpy as np
@@ -205,9 +209,15 @@ plt.tight_layout()
 plt.show()
 ```
 
+</div>
+
 ![Population Distribution (Normal)](./img/sample_variance_156.png)
 
 ### 소득 (치우친) 모집단
+
+<div class="codebox" markdown>
+
+**예제 2.** 치우친 모집단에서 표본분산의 표집분포
 
 ```python
 import matplotlib.pyplot as plt
@@ -245,6 +255,8 @@ for ax in (ax0, ax1):
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 ## 연습문제
 
