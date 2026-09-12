@@ -19,21 +19,26 @@
 
 가장 간단한 진단은 설명변수 사이의 쌍별 상관을 살피는 것이다.
 
+<div class="codebox" markdown>
+
+**예제 1.** 상관행렬로 훑어보기
+
 ```python
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-# Example: California Housing data
+# 캘리포니아 주택 자료. 위도와 경도처럼 서로 얽힌 변수가 들어 있다.
 from sklearn.datasets import fetch_california_housing
 
 housing = fetch_california_housing()
 df = pd.DataFrame(housing.data, columns=housing.feature_names)
 
-# Compute correlation matrix
+# 상관행렬은 다중공선성을 훑어보는 첫걸음이다. 다만 쌍끼리의 상관만
+# 보므로, 세 변수 이상이 얽힌 경우는 놓친다. 그래서 VIF 가 필요하다.
 corr_matrix = df.corr()
 
-# Visualize with heatmap
+# 열지도로 한눈에 본다.
 plt.figure(figsize=(10, 8))
 plt.imshow(corr_matrix, cmap='coolwarm', vmin=-1, vmax=1)
 plt.colorbar(label='Correlation')
@@ -43,7 +48,7 @@ plt.title('Correlation Matrix: Housing Features')
 plt.tight_layout()
 plt.show()
 
-# Print high correlations
+# 눈으로 놓치기 쉬우므로 0.7 을 넘는 쌍만 따로 찍는다.
 print("High Correlations (|r| > 0.7):")
 for i in range(len(corr_matrix.columns)):
     for j in range(i+1, len(corr_matrix.columns)):
@@ -58,6 +63,8 @@ High Correlations (|r| > 0.7):
   AveRooms <-> AveBedrms: 0.848
   Latitude <-> Longitude: -0.925
 ```
+
+</div>
 
 ![상관 열지도](./img/multicollinearity_22.png)
 
@@ -90,14 +97,18 @@ $$
 
 #### statsmodels 사용하기
 
+<div class="codebox" markdown>
+
+**예제 2.** VIF 계산
+
 ```python
 import statsmodels.api as sm
 from statsmodels.stats.outliers_influence import variance_inflation_factor
 
-# Example data
+# 위도와 경도를 함께 넣으면 VIF 가 치솟는다. 캘리포니아가 북서에서 남동으로
+# 비스듬히 뻗어 있어 두 좌표가 강하게 얽히기 때문이다.
 X = sm.add_constant(df[['MedInc', 'AveRooms', 'AveOccup', 'Latitude', 'Longitude']])
 
-# Compute VIF for each predictor (excluding constant)
 vif_data = pd.DataFrame()
 vif_data['Feature'] = X.columns[1:]  # Skip constant
 vif_data['VIF'] = [variance_inflation_factor(X.values, i+1) for i in range(X.shape[1]-1)]
@@ -116,11 +127,17 @@ print(vif_data)
 4  Longitude  7.977739
 ```
 
+</div>
+
 Latitude와 Longitude의 VIF가 8을 넘는다. 캘리포니아의 지리적 모양 때문에 위도와 경도가 강하게 상관되어 있다.
 
 #### VIF를 직접 계산하기
 
 VIF가 어떻게 계산되는지 이해하면 더 깊은 통찰을 얻을 수 있다.
+
+<div class="codebox" markdown>
+
+**예제 3.** VIF를 정의대로 직접 구하기
 
 ```python
 import numpy as np
@@ -135,11 +152,13 @@ df = pd.DataFrame(housing.data, columns=housing.feature_names)
 features = ['MedInc', 'AveRooms', 'AveOccup', 'Latitude', 'Longitude']
 X = df[features]
 
+# VIF 를 정의대로 직접 구해 본다. 변수 하나를 반응으로 두고 나머지로
+# 회귀한 뒤, 그 R^2 에서 1/(1-R^2) 을 계산하는 것이 전부다.
 print("Manual VIF Calculation:")
 print("=" * 60)
 
 for j, target_feature in enumerate(features):
-    # Step 1: Regress target_feature on all other features
+    # 관심 변수를 나머지 변수들로 회귀한다.
     other_features = [f for f in features if f != target_feature]
     X_j = X[target_feature].values.reshape(-1, 1)
     X_others = X[other_features].values
@@ -148,13 +167,14 @@ for j, target_feature in enumerate(features):
     model = LinearRegression()
     model.fit(X_others, X_j.ravel())
 
-    # Compute R² for this regression
+    # 그 회귀의 R^2. 1 에 가까울수록 그 변수가 나머지로 거의 설명된다는 뜻이다.
     y_pred_j = model.predict(X_others)
     ss_res = np.sum((X_j.ravel() - y_pred_j) ** 2)
     ss_tot = np.sum((X_j.ravel() - X_j.mean()) ** 2)
     r2_j = 1 - (ss_res / ss_tot)
 
-    # VIF = 1 / (1 - R²)
+    # R^2 가 0.9 면 VIF 가 10, 0.99 면 100 이 된다. 계수의 표준오차가
+    # 그 제곱근만큼 부풀려진다는 뜻이다.
     vif_j = 1 / (1 - r2_j)
 
     print(f"{target_feature:12s}:  R² = {r2_j:.4f},  VIF = {vif_j:7.2f}")
@@ -174,6 +194,8 @@ Latitude    :  R² = 0.8778,  VIF =    8.18
 Longitude   :  R² = 0.8747,  VIF =    7.98
 ============================================================
 ```
+
+</div>
 
 VIF를 직접 계산해 확인했다. $\text{VIF}_j = 1/(1 - R_j^2)$이므로, 해당 변수를 나머지 변수들에 회귀시킨 $R_j^2$만 알면 된다.
 
@@ -202,38 +224,55 @@ Longitude   :  R² = 0.8747,  VIF =    7.98
 
 두 설명변수가 강하게 상관되어 있으면 하나를 뺀다.
 
+<div class="codebox" markdown>
+
+**예제 4.** 대책 1 — 변수 빼기
+
 ```python
-# Check which features contribute least (lowest VIF)
-# or have weakest relationship with the target
-# and remove those
-y = housing.target   # median house value
-features_reduced = ['MedInc', 'AveRooms', 'AveOccup']  # Drop Lat/Long
+# 대책 1: 얽힌 변수를 빼 버린다. 가장 간단하지만, 뺀 변수가 실제로
+# 반응을 설명하고 있었다면 남은 계수에 누락변수 편향이 생긴다.
+y = housing.target                                     # 주택가격 중앙값
+features_reduced = ['MedInc', 'AveRooms', 'AveOccup']  # 위도·경도를 뺀다
 X_reduced = sm.add_constant(df[features_reduced])
 model_reduced = sm.OLS(y, X_reduced).fit()
 ```
+
+</div>
 
 ### 방법 2: 상관된 설명변수 결합
 
 상관된 변수들로 합성 지표를 만든다.
 
+<div class="codebox" markdown>
+
+**예제 5.** 대책 2 — 변수 합치기
+
 ```python
-# Combine latitude and longitude into a single "location" index
+# 대책 2: 얽힌 변수를 하나로 합친다. 여기서는 위도와 경도를 평균 내
+# "위치" 지표 하나로 만들었다. 뜻이 통하는 합성이어야 쓸모가 있다.
 df['Location'] = (df['Latitude'] + df['Longitude']) / 2
 ```
+
+</div>
 
 ### 방법 3: 정칙화(릿지 회귀 또는 라쏘 회귀)
 
 계수를 축소하는 벌점 기반 방법을 쓴다.
 
+<div class="codebox" markdown>
+
+**예제 6.** 대책 3 — 능형회귀와 라쏘
+
 ```python
 from sklearn.linear_model import Ridge, Lasso
 
-# Ridge regression with alpha=1.0
+# 대책 3: 벌점회귀. 능형회귀는 계수를 0 쪽으로 줄여 분산을 낮춘다.
+# 편향이 조금 생기는 대신 분산이 크게 줄어드는 맞바꿈이다.
 ridge = Ridge(alpha=1.0)
 ridge.fit(X, y)
 print(ridge.coef_)
 
-# Lasso regression with alpha=0.1
+# 라쏘는 일부 계수를 정확히 0 으로 만들어 변수 선택까지 해 준다.
 lasso = Lasso(alpha=0.1)
 lasso.fit(X, y)
 print(lasso.coef_)
@@ -246,16 +285,23 @@ print(lasso.coef_)
 [ 0.37150935 -0.         -0.00281434 -0.18079981 -0.1744082 ]
 ```
 
+</div>
+
 OLS 계수와 릿지 계수를 비교한 것이다. 공선성이 있으면 OLS 계수가 크게 흔들리는 반면 릿지는 0 쪽으로 줄여 안정시킨다.
 
 ### 방법 4: 주성분분석(PCA)
 
 상관된 설명변수를 서로 무상관인 주성분으로 변환한다.
 
+<div class="codebox" markdown>
+
+**예제 7.** 대책 4 — 주성분회귀
+
 ```python
 from sklearn.decomposition import PCA
 
-# Create principal components
+# 대책 4: 주성분회귀. 서로 직교하는 성분으로 바꾸므로 다중공선성이
+# 원리적으로 사라진다. 대신 성분이 원래 변수의 섞임이라 해석이 어려워진다.
 pca = PCA(n_components=3)
 X_pca = pca.fit_transform(X)
 
@@ -270,6 +316,8 @@ print(f"Explained variance ratio: {pca.explained_variance_ratio_}")
 ```
 Explained variance ratio: [0.85492016 0.06636584 0.05359929]
 ```
+
+</div>
 
 주성분 셋이 분산의 85.5%, 6.6%, 5.4%를 설명한다. 첫 성분에 집중되어 있다는 것이 원래 변수들이 서로 강하게 얽혀 있다는 신호다.
 

@@ -26,8 +26,6 @@ $$
 
 $p < \alpha$이면, 동등하게 $|t_j| > t^*_{n-k,\,\alpha/2}$이면, 동등하게 $\beta_j$의 $(1-\alpha)$ 수준 신뢰구간이 0을 포함하지 않으면 유의수준 $\alpha$에서 $H_0$을 기각한다.
 
-## 코드
-
 <div class="exbox" markdown>
 
 **보기 1.** <span class="diff easy" title="쉬움"></span> 설명변수 두 개.

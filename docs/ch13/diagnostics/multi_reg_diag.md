@@ -47,9 +47,11 @@ $n > e^2 \approx 7.4$이면 BIC가 AIC보다 모형 복잡도에 더 무거운 �
 !!! note "statsmodels의 AIC와 위 공식은 상수만큼 다르다"
     위 공식은 모형 비교에 영향을 주지 않는 상수 $n\ln(2\pi) + n$을 뺀 간이형이다. `results.aic`는 $-2\ln L + 2k$를 그대로 계산하므로 절댓값이 다르다. 모형들 사이의 **차이**는 같으므로 비교 결과는 동일하다.
 
-## 코드
-
 ### 적합과 VIF 계산
+
+<div class="codebox" markdown>
+
+**예제 1.** VIF로 다중공선성 보기
 
 ```python
 import numpy as np
@@ -63,13 +65,16 @@ housing = fetch_california_housing()
 df = pd.DataFrame(housing.data, columns=housing.feature_names)
 df['PRICE'] = housing.target
 
+# 설명변수 셋으로 시작한다. 뒤에서 변수를 늘려 가며 견줄 것이다.
 features = ['MedInc', 'AveRooms', 'AveOccup']
 X = add_constant(df[features])
 y = df['PRICE']
 
 model = OLS(y, X).fit()
 
-# Compute VIF for each feature (skip index 0: the constant)
+# 분산팽창인자(VIF)는 그 변수를 나머지 변수들로 회귀했을 때의 R^2 로
+# 정해진다. VIF = 1/(1-R^2) 이므로, 다른 변수들로 잘 설명될수록 커진다.
+# 보통 5 나 10 을 넘으면 다중공선성을 의심한다. 상수항은 셈에서 뺀다.
 vif_data = pd.DataFrame()
 vif_data['Feature'] = X.columns[1:]
 vif_data['VIF'] = [variance_inflation_factor(X.values, i)
@@ -86,17 +91,24 @@ print(vif_data)
 2  AveOccup  1.000488
 ```
 
+</div>
+
 세 변수의 VIF가 모두 1.1 근처다. 서로 거의 독립이므로 다중공선성 걱정이 없다.
 
 세 설명변수 모두 VIF가 1에 가까워 다중공선성 문제가 없다. 이 모형의 $R^2$는 $0.4808$이다.
 
 ### 잔차 분석
 
+<div class="codebox" markdown>
+
+**예제 2.** 잔차 진단 그림
+
 ```python
 y_pred = model.predict(X)
 residuals = y - y_pred
 
-# Residuals vs Fitted
+# 왼쪽은 등분산성, 오른쪽은 정규성을 본다. 이 자료는 집값이 50만 달러에서
+# 잘려 있어 잔차 그림 오른쪽에 뚜렷한 사선이 생긴다.
 import matplotlib.pyplot as plt
 fig, axes = plt.subplots(1, 2, figsize=(14, 5))
 axes[0].scatter(y_pred, residuals, alpha=0.3, s=10)
@@ -104,11 +116,14 @@ axes[0].axhline(y=0, color='red', linestyle='--')
 axes[0].set_xlabel('Fitted Values')
 axes[0].set_ylabel('Residuals')
 
-# Q-Q Plot
+# line='45' 는 기울기 1 의 기준선이다. 표준화하지 않은 잔차에 쓰면
+# 점들이 그 선에서 벗어나 보이므로, 척도까지 맞추려면 line='s' 를 쓴다.
 sm.qqplot(residuals, line='45', ax=axes[1])
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 ![다중회귀 진단 패널](./img/multi_reg_diag_93.png)
 
@@ -118,7 +133,14 @@ plt.show()
 
 ### AIC와 BIC를 이용한 모형선택
 
+<div class="codebox" markdown>
+
+**예제 3.** AIC·BIC로 모형 고르기
+
 ```python
+# 변수를 늘려 가며 네 모형을 견준다. R^2 는 변수를 더하면 반드시 오르므로
+# 모형 고르기에 쓸 수 없다. 벌점이 붙는 AIC·BIC 를 본다.
+# BIC 의 벌점이 더 무거우므로 대개 더 작은 모형을 고른다.
 feature_sets = {
     'Model 1': ['MedInc'],
     'Model 2': ['MedInc', 'AveRooms'],
@@ -141,6 +163,8 @@ Model 2: AIC=51016.2, BIC=51040.1, R2=0.4794
 Model 3: AIC=50962.2, BIC=50994.0, R2=0.4808
 Model 4: AIC=45265.5, BIC=45337.0, R2=0.6062
 ```
+
+</div>
 
 여덟 개 특성을 모두 쓴 Model 4가 AIC와 BIC 모두에서 압도적으로 낫다($\Delta\text{AIC} \approx 5700$). $R^2$도 0.48에서 0.61로 크게 오른다.
 

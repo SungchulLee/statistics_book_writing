@@ -33,6 +33,10 @@ $$
 
 이 페이지의 진단은 모두 아래 자료와 모형 하나를 놓고 수행한다.
 
+<div class="codebox" markdown>
+
+**예제 1.** 진단에 쓸 모형 준비
+
 ```python
 import numpy as np
 import pandas as pd
@@ -62,6 +66,8 @@ print(f"R^2 = {model.rsquared:.4f}")
 beta_hat = [1.5933 1.5317]
 R^2 = 0.7813
 ```
+
+</div>
 
 기울기 추정값 1.53이 참값 1.5에 가깝다. 이분산이 있어도 OLS 추정값 자체는 불편이며, 흔들리는 것은 표준오차다.
 
@@ -104,10 +110,16 @@ $$
 
 **예시:**
 
+<div class="codebox" markdown>
+
+**예제 2.** Durbin-Watson 검정
+
 ```python
 from statsmodels.stats.stattools import durbin_watson
 
-# Assuming 'model' is your fitted OLS model
+# Durbin-Watson 통계량은 0 에서 4 사이이고 2 가 무상관이다. 2 보다 뚜렷이
+# 작으면 양의 자기상관, 크면 음의 자기상관을 뜻한다. 이 검정은 잔차를
+# 주어진 순서 그대로 보므로, 순서가 뜻을 갖는 자료에서만 쓸 수 있다.
 dw_stat = durbin_watson(model.resid)
 print(f'Durbin-Watson statistic: {dw_stat}')
 ```
@@ -117,6 +129,8 @@ print(f'Durbin-Watson statistic: {dw_stat}')
 ```
 Durbin-Watson statistic: 2.16161645652481
 ```
+
+</div>
 
 $d = 2.16$으로 2에 가까워 자기상관의 증거가 없다. 관측값을 서로 독립으로 생성했으니 옳은 판정이다.
 
@@ -141,10 +155,15 @@ $d = 2.16$으로 2에 가까워 자기상관의 증거가 없다. 관측값을 �
 
 **예시:**
 
+<div class="codebox" markdown>
+
+**예제 3.** 순서에 대한 잔차 그림
+
 ```python
 import matplotlib.pyplot as plt
 
-# Assuming 'model' is your fitted OLS model and 'X' is the time or order variable
+# 잔차를 시간 순서대로 잇는다. 위아래로 무작위하게 오가야 하고, 같은 쪽에
+# 여러 점이 몰려 다니면 독립이 깨진 것이다.
 plt.plot(X, model.resid)
 plt.xlabel('Time or Sequence')
 plt.ylabel('Residuals')
@@ -152,6 +171,8 @@ plt.title('Residuals vs. Time/Order')
 plt.axhline(y=0, color='red', linestyle='--')
 plt.show()
 ```
+
+</div>
 
 ![순서에 대한 잔차](./img/checking_independence_130.png)
 
@@ -196,10 +217,16 @@ $$
 
 **예시:**
 
+<div class="codebox" markdown>
+
+**예제 4.** Breusch-Godfrey 검정
+
 ```python
 from statsmodels.stats.diagnostic import acorr_breusch_godfrey
 
-# Perform the Breusch-Godfrey test
+# Breusch-Godfrey 검정은 Durbin-Watson 과 달리 시차를 여럿 한꺼번에 본다.
+# nlags=2 는 한 시점 전과 두 시점 전의 잔차를 함께 살핀다는 뜻이다.
+# 설명변수에 시차 종속변수가 들어 있어도 쓸 수 있다는 점이 이점이다.
 bg_test = acorr_breusch_godfrey(model, nlags=2)
 print(f'Breusch-Godfrey LM statistic: {bg_test[0]}')
 print(f'Breusch-Godfrey p-value: {bg_test[1]}')
@@ -211,6 +238,8 @@ print(f'Breusch-Godfrey p-value: {bg_test[1]}')
 Breusch-Godfrey LM statistic: 1.584101499228634
 Breusch-Godfrey p-value: 0.4529150269303661
 ```
+
+</div>
 
 Breusch-Godfrey 검정도 $p = 0.45$로 자기상관의 증거를 찾지 못한다. Durbin-Watson이 1차 자기상관만 보는 반면 이 검정은 더 높은 차수까지 볼 수 있다는 점이 다르다.
 

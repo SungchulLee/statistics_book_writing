@@ -55,6 +55,10 @@ $4/n$ 문턱값은 실용적인 출발점으로 널리 쓰인다. 자료 크기�
 
 ### 구현: Cook 거리로 이상점 제거하기
 
+<div class="codebox" markdown>
+
+**예제 1.** 이상치를 넣고 뺀 회귀 비교
+
 ```python
 import numpy as np
 import pandas as pd
@@ -62,26 +66,28 @@ import statsmodels.api as sm
 import matplotlib.pyplot as plt
 from sklearn.datasets import make_regression
 
-# Generate synthetic data
+# 깨끗한 선형 자료를 먼저 만든다.
 np.random.seed(0)
 X, y = make_regression(n_samples=100, n_features=1, noise=10)
 data = pd.DataFrame({'X': X.flatten(), 'y': y})
 
-# Add artificial outliers
+# 여기에 이상치 넷을 일부러 심는다. 위아래로 짝을 맞춰 넣었으므로
+# 기울기보다는 잔차의 퍼짐이 크게 흔들린다.
 data.loc[95, 'y'] += 80
 data.loc[96, 'y'] -= 80
 data.loc[97, 'y'] += 60
 data.loc[98, 'y'] -= 60
 
-# Fit model with outliers
+# 이상치가 든 채로 적합한다.
 X_with_const = sm.add_constant(data['X'])
 model = sm.OLS(data['y'], X_with_const).fit()
 
-# Calculate Cook's Distance
+# Cook 의 거리는 그 관측값 하나를 뺐을 때 적합값 전체가 얼마나 움직이는지를
+# 잰다. 잔차가 크다고 다 영향점인 것은 아니다 — 지렛값도 함께 커야 한다.
 influence = model.get_influence()
 cooks_d, _ = influence.cooks_distance
 
-# Identify influential points
+# 4/n 은 널리 쓰이는 어림 기준일 뿐 검정이 아니다.
 n = len(data)
 threshold = 4 / n
 outliers = np.where(cooks_d > threshold)[0]
@@ -89,7 +95,7 @@ outliers = np.where(cooks_d > threshold)[0]
 # Plot: with and without outliers
 fig, axes = plt.subplots(2, 2, figsize=(14, 10))
 
-# Row 1: Original data with outliers
+# 윗줄: 이상치가 든 자료. 회귀선과 잔차 그림을 나란히 본다.
 axes[0, 0].scatter(data['X'], data['y'], alpha=0.7, label='Data Points')
 axes[0, 0].plot(data['X'], model.fittedvalues, color='orange', label='Regression Line')
 axes[0, 0].set_title('Regression Plot (With Outliers)')
@@ -103,7 +109,9 @@ axes[0, 1].set_title('Residual Plot (With Outliers)')
 axes[0, 1].set_xlabel('Fitted Values')
 axes[0, 1].set_ylabel('Residuals')
 
-# Row 2: Data without outliers
+# 아랫줄: 문턱을 넘은 관측값을 뺀 뒤 다시 적합한 결과다.
+# 두 줄을 견주는 것이 이 그림의 목적이지, 이상치를 지우라는 뜻이 아니다.
+# 지울지 말지는 그 값이 왜 생겼는지를 알아본 뒤에 정할 일이다.
 data_no_outliers = data.drop(index=outliers)
 X_with_const_no_outliers = sm.add_constant(data_no_outliers['X'])
 model_no_outliers = sm.OLS(data_no_outliers['y'], X_with_const_no_outliers).fit()
@@ -124,6 +132,8 @@ axes[1, 1].set_ylabel('Residuals')
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 ![영향점 진단](./img/influence_54.png)
 

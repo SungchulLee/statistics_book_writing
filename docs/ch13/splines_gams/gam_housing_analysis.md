@@ -39,6 +39,10 @@ $y$의 $x_j$에 대한 **부분의존**은 함수 $f_j(x_j)$이며, 다른 설�
 
 ## 자료
 
+<div class="codebox" markdown>
+
+**예제 1.** 주택 자료 읽기
+
 ```python
 import pandas as pd
 
@@ -56,11 +60,15 @@ print(f"98105 지역 {len(house_98105)}건")
 98105 지역 313건
 ```
 
+</div>
+
 98105 지역 313건이다. 아래에서 선형, 다항, 스플라인, GAM을 같은 자료에 적용해 비교한다.
 
-## 코드
-
 ### 선형 모형과 다항 모형
+
+<div class="codebox" markdown>
+
+**예제 2.** 선형 모형과 다항 모형
 
 ```python
 import numpy as np
@@ -68,26 +76,39 @@ import pandas as pd
 import statsmodels.api as sm
 import statsmodels.formula.api as smf
 
+# 세 모형을 차례로 세워 견준다: 선형 → 다항 → GAM.
 predictors = ['SqFtTotLiving', 'SqFtLot', 'Bathrooms', 'Bedrooms', 'BldgGrade']
 outcome = 'AdjSalePrice'
 
-# Linear model
+# 1) 선형 모형 — 기준선
 X_linear = house_98105[predictors].assign(const=1)
 result_linear = sm.OLS(house_98105[outcome], X_linear).fit()
 
-# Polynomial model
+# 2) 다항 모형 — 면적에 이차항을 더한다. 곡선을 담을 수는 있지만
+# 다항식은 전 구간에 걸쳐 하나의 식이라, 한쪽 끝의 자료가 반대쪽 적합까지
+# 흔든다는 약점이 있다.
 formula_poly = ('AdjSalePrice ~ SqFtTotLiving + np.power(SqFtTotLiving, 2) + '
                 'SqFtLot + Bathrooms + Bedrooms + BldgGrade')
 result_poly = smf.ols(formula=formula_poly, data=house_98105).fit()
 ```
 
+</div>
+
 ### statsmodels로 만드는 GAM
+
+<div class="codebox" markdown>
+
+**예제 3.** statsmodels로 GAM 적합
 
 ```python
 from statsmodels.gam.api import GLMGam, BSplines
 
+# 3) GAM — 변수마다 매끄러운 함수를 따로 둔다. 스플라인은 구간마다
+# 다른 다항식을 이어 붙이므로 다항식의 위 약점이 없다.
+# 면적에만 자유도 10 을 주고 나머지는 3 으로 낮춰 두었다.
 x_spline = house_98105[predictors]
 bs = BSplines(x_spline, df=[10, 3, 3, 3, 3], degree=[3, 2, 2, 2, 2])
+# alpha 는 매끄러움에 주는 벌점이다. 0 이면 벌점 없이 자유도대로 맞춘다.
 alpha = np.array([0] * 5)
 
 gam_sm = GLMGam.from_formula(
@@ -97,9 +118,15 @@ gam_sm = GLMGam.from_formula(
 res_sm = gam_sm.fit()
 ```
 
+</div>
+
 `alpha`를 모두 0으로 두었으므로 평활 벌점이 없는 회귀 스플라인이다. 매끄러움은 오직 `df`(기저함수의 개수)로만 조절된다.
 
 ### pyGAM으로 만드는 GAM
+
+<div class="codebox" markdown>
+
+**예제 4.** pygam으로 GAM 적합
 
 ```python
 from pygam import LinearGAM, s, l
@@ -107,6 +134,7 @@ from pygam import LinearGAM, s, l
 X_gam = house_98105[predictors].values
 y_gam = house_98105[outcome].values
 
+# pygam 쪽은 항의 종류를 직접 고른다. s() 는 매끄러운 함수, l() 은 선형이다.
 gam_py = LinearGAM(
     s(0, n_splines=12) +  # SqFtTotLiving: smooth
     l(1) +                 # SqFtLot: linear
@@ -114,8 +142,12 @@ gam_py = LinearGAM(
     l(3) +                 # Bedrooms: linear
     l(4)                   # BldgGrade: linear
 )
+# gridsearch 가 벌점 lambda 를 자동으로 골라 준다. statsmodels 쪽에서
+# alpha 를 손으로 정한 것과 대비된다.
 gam_py.gridsearch(X_gam, y_gam)
 ```
+
+</div>
 
 ## 해석
 

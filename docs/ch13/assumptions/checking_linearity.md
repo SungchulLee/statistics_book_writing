@@ -6,6 +6,10 @@
 
 이 페이지의 진단은 모두 아래 자료와 모형 하나를 놓고 수행한다.
 
+<div class="codebox" markdown>
+
+**예제 1.** 진단에 쓸 모형 준비
+
 ```python
 import numpy as np
 import pandas as pd
@@ -36,6 +40,8 @@ beta_hat = [1.5933 1.5317]
 R^2 = 0.7813
 ```
 
+</div>
+
 기울기 추정값 1.53이 참값 1.5에 가깝다. 이분산이 있어도 OLS 추정값 자체는 불편이며, 흔들리는 것은 표준오차다.
 
 ## 1. 산점도를 이용한 시각적 점검
@@ -50,16 +56,23 @@ R^2 = 0.7813
 
 **예시:**
 
+<div class="codebox" markdown>
+
+**예제 2.** 산점도로 보기
+
 ```python
 import matplotlib.pyplot as plt
 
-# Assuming X is the independent variable and Y is the dependent variable
+# 설명변수가 하나뿐이면 산점도가 선형성을 보는 가장 곧은 방법이다.
+# 변수가 여럿이면 다른 변수의 효과가 섞이므로 아래 잔차 그림으로 가야 한다.
 plt.scatter(X, Y)
 plt.xlabel('Independent Variable')
 plt.ylabel('Dependent Variable')
 plt.title('Scatterplot of Y vs X')
 plt.show()
 ```
+
+</div>
 
 ![Y 대 X 산점도](./img/checking_linearity_53.png)
 
@@ -82,15 +95,23 @@ plt.show()
 
 **예시:**
 
+<div class="codebox" markdown>
+
+**예제 3.** 잔차 그림으로 보기
+
 ```python
 import statsmodels.api as sm
 import matplotlib.pyplot as plt
 
-# Assuming X is the independent variable and Y is the dependent variable
+# add_constant 는 1 로 채운 열을 붙여 절편을 만든다. statsmodels 의
+# OLS 는 절편을 자동으로 넣지 않으므로 이 줄을 빠뜨리면 원점을 지나는
+# 회귀가 되어 버린다.
 model = sm.OLS(Y, sm.add_constant(X)).fit()
 predictions = model.predict(sm.add_constant(X))
 residuals = Y - predictions
 
+# 선형 모형이 맞다면 잔차에 아무 무늬도 남지 않아야 한다. 굽은 무늬가
+# 보이면 관계가 곡선인데 직선으로 맞춘 것이다.
 plt.scatter(predictions, residuals)
 plt.xlabel('Predicted Values')
 plt.ylabel('Residuals')
@@ -98,6 +119,8 @@ plt.title('Residual Plot')
 plt.axhline(y=0, color='red', linestyle='--')
 plt.show()
 ```
+
+</div>
 
 ![잔차 대 적합값](./img/checking_linearity_81.png)
 
@@ -130,18 +153,26 @@ $$
 
 **예시:**
 
+<div class="codebox" markdown>
+
+**예제 4.** 성분-잔차 그림
+
 ```python
 import statsmodels.api as sm
 from statsmodels.graphics.regressionplots import plot_ccpr
 import matplotlib.pyplot as plt
 
-# Fit the full model first; exog_idx selects the predictor to examine
+# 성분-잔차 그림(CCPR)은 다른 변수의 효과를 걷어 낸 뒤, 관심 있는 변수
+# 하나와 반응의 관계만 남겨 보여 준다. 설명변수가 여럿일 때 선형성을
+# 변수별로 확인하는 방법이다. exog_idx 로 볼 변수를 고른다.
 results = sm.OLS(Y, sm.add_constant(X)).fit()
 
 fig, ax = plt.subplots(figsize=(8, 6))
 plot_ccpr(results, exog_idx=1, ax=ax)
 plt.show()
 ```
+
+</div>
 
 ![성분+잔차 그림](./img/checking_linearity_125.png)
 
@@ -183,10 +214,16 @@ $$
 
 **예시:**
 
+<div class="codebox" markdown>
+
+**예제 5.** 이차항을 넣어 견주기
+
 ```python
 import numpy as np
 import statsmodels.api as sm
 
+# 곡선이 의심되면 이차항을 넣어 견준다. R^2 는 항을 더하면 반드시 오르므로
+# 판단 근거가 되지 못한다. 벌점이 붙는 AIC 로 보아야 한다.
 X_poly = np.column_stack((X, X**2))
 model_quad = sm.OLS(Y, sm.add_constant(X_poly)).fit()
 
@@ -209,6 +246,8 @@ x2             0.0388      0.028      1.380      0.170      -0.017       0.094
 R^2: 선형 0.7813  →  이차 0.7848
 AIC: 선형 549.02  →  이차 549.08
 ```
+
+</div>
 
 이차 항을 넣어도 $R^2$가 0.7813에서 0.7848로 거의 오르지 않고, AIC는 549.02에서 549.08로 오히려 나빠진다. $x^2$의 계수도 $p = 0.170$으로 유의하지 않다.
 

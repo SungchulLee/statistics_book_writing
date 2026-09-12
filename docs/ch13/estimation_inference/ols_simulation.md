@@ -48,26 +48,37 @@ $$
 \mathrm{Var}(\hat{\boldsymbol{\beta}}) = \sigma^2(\mathbf{X}^\top\mathbf{X})^{-1}, \qquad \widehat{\mathrm{Var}}(\hat{\boldsymbol{\beta}}) = s^2(\mathbf{X}^\top\mathbf{X})^{-1}.
 $$
 
-## 코드
-
 ### 핵심 함수
+
+<div class="codebox" markdown>
+
+**예제 1.** 최소제곱의 행렬 연산
 
 ```python
 import numpy as np
 
 def gen_X(n, k):
+    """설계행렬. 첫 열의 1 이 절편에 대응한다."""
     return np.hstack([np.ones((n, 1)), np.random.randn(n, k - 1)])
 
 def ols(y, X):
+    """정규방정식의 해. 실제 계산에서는 역행렬 대신 solve 를 쓰는 편이 낫다."""
     return np.linalg.inv(X.T @ X) @ X.T @ y
 
 def proj_P(X):
+    """사영행렬 P. y 를 X 의 열공간 위로 떨어뜨린다. P @ y 가 곧 적합값이다."""
     return X @ np.linalg.inv(X.T @ X) @ X.T
 
 def proj_M(X):
+    """잔차생성행렬 M = I - P. M @ y 가 잔차이고, 열공간에 수직이다."""
     return np.eye(X.shape[0]) - proj_P(X)
 
 def anova_decomposition(y, X, beta_hat):
+    """TSS = ESS + RSS 로 갈라 본다.
+
+    적합값과 잔차가 서로 수직이므로 피타고라스 정리가 그대로 성립한다.
+    최소제곱의 기하가 이 한 줄에 들어 있다.
+    """
     y_bar = y.mean()
     y_hat = X @ beta_hat
     TSS = float(np.sum((y - y_bar) ** 2))
@@ -76,10 +87,21 @@ def anova_decomposition(y, X, beta_hat):
     return TSS, ESS, RSS
 ```
 
+</div>
+
 ### 몬테카를로 검증
+
+<div class="codebox" markdown>
+
+**예제 2.** 몬테카를로로 확인하는 불편성
 
 ```python
 def monte_carlo(n=100, beta_true=[2, 3, -1], sigma=1.0, n_sim=5000):
+    """같은 실험을 5000번 되풀이해 추정량의 분포를 본다.
+
+    참 계수를 우리가 정해 두었으므로, 추정값들의 평균이 참값에 붙는지
+    (불편성) 그리고 그 흩어짐이 얼마인지를 직접 확인할 수 있다.
+    """
     k = len(beta_true)
     estimates = np.empty((n_sim, k))
     for i in range(n_sim):
@@ -108,6 +130,8 @@ beta_0: true=2, MC mean=2.0009, MC std=0.1414
 beta_1: true=3, MC mean=3.0019, MC std=0.1425
 beta_2: true=-1, MC mean=-0.9994, MC std=0.1442
 ```
+
+</div>
 
 Monte Carlo 평균이 참값 $(2, 3, -1)$에 소수점 셋째 자리까지 맞는다. OLS가 불편추정량이라는 것을 모의실험으로 확인한 셈이다.
 

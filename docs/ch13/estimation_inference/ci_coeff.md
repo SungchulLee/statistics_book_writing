@@ -81,12 +81,18 @@ $S = 1.532$, $R^2 = 31.3\%$
 !!! note "$S$와 $R^2$는 이 문제에 쓰이지 않는다"
     기울기의 신뢰구간은 $\hat{\beta}_1$과 그 표준오차만으로 계산된다. $S$와 $R^2$는 참고용 수치이다. 다만 이 둘은 서로 무관하지 않다. $t = 2.862$, $\text{df} = 18$에서 $R^2 = t^2/(t^2 + \text{df}) = 8.19/26.19 = 0.313$이므로, 출력표의 $R^2$는 반드시 31.3%가 되어야 한다.
 
-### Python 구현
+<div class="codebox" markdown>
+
+**예제 1.** 출력표만으로 신뢰구간 만들기
 
 ```python
 from scipy import stats
 
 def main():
+    """회귀 출력표의 기울기와 표준오차만으로 신뢰구간을 만든다.
+
+    표준오차는 이미 주어진 값이라고 보고, t 임계값만 자유도 n-2 로 구한다.
+    """
     beta_1_hat = 0.164
     n = 20
     df = n - 2
@@ -109,6 +115,8 @@ if __name__ == "__main__":
 0.1640 ± 0.1198
 ```
 
+</div>
+
 기울기 추정값 0.164에 오차한계 0.120을 붙인 것이다. 구간 $(0.044, 0.284)$가 0을 담지 않으므로 5% 수준에서 기울기가 0이라는 가설을 기각한다.
 
 **출력**:
@@ -126,32 +134,37 @@ if __name__ == "__main__":
 
 ### 준비
 
+<div class="codebox" markdown>
+
+**예제 2.** 필요한 라이브러리
+
 ```python
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy import stats
 ```
 
+</div>
+
 ### 자료 생성
+
+<div class="codebox" markdown>
+
+**예제 3.** 자료 만들기
 
 ```python
 def generate_data(n, sigma, seed=0):
-    """
-    Generate synthetic linear regression data.
+    """모의 회귀자료를 만든다. 참 모형은 y = 1 + 2x + 잡음 이다.
 
-    Parameters
+    매개변수
+    --------
+    n : 관측 수
+    sigma : 잡음의 표준편차
+    seed : 난수 씨앗
+
+    돌려주는 값
     ----------
-    n : int
-        Number of observations.
-    sigma : float
-        Standard deviation of the noise term.
-    seed : int
-        Random seed for reproducibility.
-
-    Returns
-    -------
-    x, y : ndarray of shape (n, 1)
-        Predictor and response arrays.
+    x, y : 모양 (n, 1) 인 배열
     """
     np.random.seed(seed)
     x = np.random.randn(n, 1)
@@ -159,21 +172,26 @@ def generate_data(n, sigma, seed=0):
     return x, y
 ```
 
+</div>
+
 ### 회귀 추정
+
+<div class="codebox" markdown>
+
+**예제 4.** 회귀직선 추정
 
 ```python
 def estimate_regression_line(x, y):
-    """
-    Estimate slope and intercept via the correlation formula.
+    """상관계수 공식으로 기울기와 절편을 추정한다.
 
-    Returns
-    -------
-    y_hat : ndarray
-        Fitted values.
-    beta_hat : float
-        Estimated slope.
-    y_bar, x_bar : float
-        Sample means.
+    beta_hat = r * (s_y / s_x) 이다. 최소제곱해와 같은 값이지만, 회귀계수가
+    상관계수를 두 변수의 척도로 되돌린 것임이 이 꼴에서 드러난다.
+
+    돌려주는 값
+    ----------
+    y_hat : 적합값
+    beta_hat : 추정된 기울기
+    y_bar, x_bar : 표본평균
     """
     x_bar = x.mean()
     y_bar = y.mean()
@@ -185,46 +203,62 @@ def estimate_regression_line(x, y):
     return y_hat, beta_hat, y_bar, x_bar
 ```
 
+</div>
+
 ### 잔차분산
+
+<div class="codebox" markdown>
+
+**예제 5.** 잔차분산 구하기
 
 ```python
 def calculate_residual_variance(y, y_hat, n):
-    """
-    Compute the unbiased residual variance s² and standard deviation s.
+    """잔차분산 s^2 과 그 제곱근 s 를 구한다.
+
+    n 이 아니라 n-2 로 나눈다. 절편과 기울기 둘을 자료에서 추정하느라
+    자유도를 둘 잃었기 때문이다. 그래야 s^2 이 sigma^2 의 불편추정량이 된다.
     """
     s_square = np.sum((y - y_hat) ** 2) / (n - 2)
     s = np.sqrt(s_square)
     return s_square, s
 ```
 
+</div>
+
 ### 신뢰구간과 예측구간
+
+<div class="codebox" markdown>
+
+**예제 6.** 신뢰구간과 예측구간 계산
 
 ```python
 def confidence_intervals(x, y_hat, beta_hat, x_bar, y_bar, n, s):
-    """
-    Compute 95% confidence intervals for E[y|x] and for y|x.
+    """평균반응 E[y|x] 의 신뢰구간과 개별관측 y|x 의 예측구간을 구한다.
 
-    Returns
-    -------
-    x0 : ndarray
-        Grid of x values for plotting.
-    lower, upper : ndarray
-        Bounds for the mean response interval.
-    lower2, upper2 : ndarray
-        Bounds for the prediction interval.
+    두 구간의 차이는 근호 안의 1 하나뿐이다. 평균을 맞히는 일에는 추정의
+    오차만 들어가지만, 개별 관측값을 맞히려면 그 위에 잡음 자체의 분산이
+    더 얹히기 때문이다. 그래서 예측구간이 언제나 더 넓다.
+
+    돌려주는 값
+    ----------
+    x0 : 그림을 그릴 x 격자
+    lower, upper : 평균반응 신뢰구간의 위아래
+    lower2, upper2 : 예측구간의 위아래
     """
     x0 = np.linspace(x.min(), x.max(), 20)
     y0_hat = beta_hat * (x0 - x_bar) + y_bar
     t_val = stats.t(n - 2).ppf(0.975)
 
-    # Confidence interval for E[y | x = x0]
+    # 평균반응의 신뢰구간. (x0 - x_bar)^2 항 때문에 x 의 평균에서 멀어질수록
+    # 구간이 넓어진다. 그래서 띠가 가운데가 잘록한 모래시계 모양이 된다.
     margin = t_val * s * np.sqrt(
         (1 / n) + (x0 - x_bar) ** 2 / np.sum((x - x_bar) ** 2)
     )
     lower = y0_hat - margin
     upper = y0_hat + margin
 
-    # Prediction interval for y | x = x0
+    # 예측구간. 근호 안에 1 이 더 있다. 이 1 이 잡음의 분산 몫이며,
+    # n 을 아무리 키워도 사라지지 않는다.
     margin2 = t_val * s * np.sqrt(
         1 + (1 / n) + (x0 - x_bar) ** 2 / np.sum((x - x_bar) ** 2)
     )
@@ -234,14 +268,20 @@ def confidence_intervals(x, y_hat, beta_hat, x_bar, y_bar, n, s):
     return x0, lower, upper, lower2, upper2
 ```
 
+</div>
+
 ### 그리기
+
+<div class="codebox" markdown>
+
+**예제 7.** 두 구간 그리기
 
 ```python
 def plot_intervals(x, y, y_hat, x0, lower, upper, lower2, upper2):
-    """Plot confidence and prediction bands side by side."""
+    """두 구간을 나란히 그린다. 오른쪽 띠가 훨씬 넓은 것이 요점이다."""
     fig, (ax0, ax1) = plt.subplots(1, 2, figsize=(12, 4))
 
-    # Left: Confidence interval for E[y]
+    # 왼쪽: 평균반응의 신뢰구간
     ax0.plot(x, y, 'o', alpha=0.5)
     ax0.plot(x, y_hat, '--b', label='Fitted line')
     ax0.plot(x0, upper, '--r', label='95% CI bounds')
@@ -249,7 +289,7 @@ def plot_intervals(x, y, y_hat, x0, lower, upper, lower2, upper2):
     ax0.set_title('95% Confidence Interval for $E[y]$')
     ax0.legend()
 
-    # Right: Prediction interval for y
+    # 오른쪽: 개별 관측의 예측구간
     ax1.plot(x, y, 'o', alpha=0.5)
     ax1.plot(x, y_hat, '--b', label='Fitted line')
     ax1.plot(x0, upper2, '--r', label='95% PI bounds')
@@ -261,20 +301,24 @@ def plot_intervals(x, y, y_hat, x0, lower, upper, lower2, upper2):
     plt.show()
 ```
 
+</div>
+
 ### 전체 예제
 
+<div class="codebox" markdown>
+
+**예제 8.** 전체 실행
+
 ```python
-# Parameters
 n = 100
 sigma = 3
 
-# Generate data (true model: y = 1 + 2x + noise)
+# 참 모형은 y = 1 + 2x + 잡음 이다. 참 sigma 를 알고 있으므로 아래에서
+# 추정값 s^2 이 sigma^2 = 9 근처로 나오는지 확인할 수 있다.
 x, y = generate_data(n, sigma)
 
-# Fit regression
 y_hat, beta_hat, y_bar, x_bar = estimate_regression_line(x, y)
 
-# Residual variance
 s_square, s = calculate_residual_variance(y, y_hat, n)
 print(f"True σ²: {sigma**2}")
 print(f"Estimated s²: {s_square:.4f}")
@@ -294,6 +338,8 @@ plot_intervals(x, y, y_hat, x0, lower, upper, lower2, upper2)
 True σ²: 9
 Estimated s²: 9.7087
 ```
+
+</div>
 
 ![잔차분산의 추정](./img/ci_coeff_255.png)
 

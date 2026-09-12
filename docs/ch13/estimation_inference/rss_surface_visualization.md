@@ -26,20 +26,25 @@ $$
 
 이며 ($x_i$가 모두 같지 않다면) 양의 정부호이므로 RSS 곡면이 **강볼록**이고 유일한 전역 최솟값을 가짐이 보장된다.
 
-## 코드
-
 ### 자료 생성과 모형 적합
+
+<div class="codebox" markdown>
+
+**예제 1.** 자료와 최소제곱해
 
 ```python
 import numpy as np
 from sklearn.linear_model import LinearRegression
 from sklearn.preprocessing import StandardScaler
 
+# 광고비와 매출을 흉내 낸 자료. 참 기울기는 0.05 다.
 np.random.seed(42)
 n_samples = 100
 TV = np.random.uniform(0, 300, n_samples)
 Sales = 7 + 0.05 * TV + np.random.normal(0, 2, n_samples)
 
+# 중심화만 하고 척도는 건드리지 않는다(with_std=False). 중심화하면 절편과
+# 기울기의 추정이 서로 독립이 되어, 아래 등고선이 기울어지지 않고 바로 선다.
 X = TV.reshape(-1, 1)
 scaler = StandardScaler(with_mean=True, with_std=False)
 X_scaled = scaler.fit_transform(X)
@@ -50,11 +55,19 @@ beta_0 = model.intercept_
 beta_1 = model.coef_[0]
 ```
 
+</div>
+
 $X$를 중심화만 했으므로($\bar{x} = 0$) 절편은 `Sales`의 평균과 같다. 적합 결과는 $\hat{\beta}_0 = 14.0506$, $\hat{\beta}_1 = 0.046935$이다.
 
 ### RSS 곡면 계산
 
+<div class="codebox" markdown>
+
+**예제 2.** RSS 격자 계산
+
 ```python
+# 최적해 둘레로 격자를 깔고 칸마다 잔차제곱합을 계산한다.
+# 최소제곱이 무엇을 최소화하는지를 눈으로 보려는 것이다.
 B0_range = np.linspace(beta_0 - 2, beta_0 + 2, 50)
 B1_range = np.linspace(beta_1 - 0.05, beta_1 + 0.05, 50)
 B0_mesh, B1_mesh = np.meshgrid(B0_range, B1_range)
@@ -66,14 +79,20 @@ for i in range(B0_mesh.shape[0]):
         RSS[i, j] = np.sum((Sales - y_pred) ** 2)
 ```
 
+</div>
+
 ### 시각화
+
+<div class="codebox" markdown>
+
+**예제 3.** 등고선과 곡면으로 보기
 
 ```python
 import matplotlib.pyplot as plt
 
 fig = plt.figure(figsize=(16, 6))
 
-# Contour plot
+# 왼쪽: 등고선. 별표가 최소점이고, 그것이 곧 최소제곱추정값이다.
 ax1 = fig.add_subplot(121)
 contour = ax1.contour(B0_mesh, B1_mesh, RSS / 1000, levels=20, cmap='viridis')
 ax1.plot(beta_0, beta_1, 'r*', markersize=20, label='Optimal')
@@ -81,7 +100,8 @@ ax1.set_xlabel('beta_0 (Intercept)')
 ax1.set_ylabel('beta_1 (Slope)')
 ax1.set_title('RSS Contour Plot')
 
-# 3D surface
+# 오른쪽: 같은 것을 곡면으로. RSS 가 계수의 이차함수이므로 사발 모양이고,
+# 그래서 최소점이 하나뿐이며 닫힌 해가 존재한다.
 ax2 = fig.add_subplot(122, projection='3d')
 ax2.plot_surface(B0_mesh, B1_mesh, RSS / 1000, cmap='viridis', alpha=0.8)
 ax2.set_xlabel('beta_0')
@@ -92,6 +112,8 @@ ax2.set_title('RSS 3D Surface')
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 ![RSS 곡면](./img/rss_surface_visualization_71.png)
 

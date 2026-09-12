@@ -29,6 +29,10 @@ $$
 
 산점도는 전반적인 패턴을 드러낸다. 키가 큰 사람일수록 몸무게가 더 나가는 경향이 있으며, 이는 양의 연관을 시사한다.
 
+<div class="codebox" markdown>
+
+**예제 1.** 키와 몸무게의 산점도
+
 ```python
 import matplotlib.pyplot as plt
 import numpy as np
@@ -68,6 +72,8 @@ ax.legend()
 plt.show()
 ```
 
+</div>
+
 ![키와 몸무게 산점도](./img/simple_32.png)
 
 키가 큰 사람일수록 몸무게가 더 나가는 경향이 보인다. 다만 점들이 넓게 흩어져 있어 관계가 결정론적이지는 않다.
@@ -75,6 +81,10 @@ plt.show()
 ### 평균점
 
 **평균점** $(\bar{x}, \bar{y})$는 산점도의 중심이다. 모든 회귀직선은 이 점을 지난다.
+
+<div class="codebox" markdown>
+
+**예제 2.** 평균점 표시하기
 
 ```python
 import matplotlib.pyplot as plt
@@ -108,6 +118,8 @@ ax.legend()
 plt.show()
 ```
 
+</div>
+
 ![평균점](./img/simple_75.png)
 
 가로 평균과 세로 평균이 만나는 점이다. 모든 회귀직선은 반드시 이 점을 지난다.
@@ -117,6 +129,10 @@ plt.show()
 **2 SD 띠**는 구간 $[\bar{x} - 2\sigma_x,\; \bar{x} + 2\sigma_x]$ 또는 $[\bar{y} - 2\sigma_y,\; \bar{y} + 2\sigma_y]$를 표시한다. (정규성 아래에서) 자료의 약 95%가 이 띠 안에 들어온다.
 
 #### 2 SD x-띠(키)
+
+<div class="codebox" markdown>
+
+**예제 3.** 키의 2 SD 띠
 
 ```python
 import matplotlib.pyplot as plt
@@ -161,11 +177,17 @@ axis.legend()
 plt.show()
 ```
 
+</div>
+
 ![2 SD x-띠](./img/simple_113.png)
 
 키 평균에서 $\pm 2$ 표준편차 구간을 표시한 것이다.
 
 #### 2 SD y-띠(몸무게)
+
+<div class="codebox" markdown>
+
+**예제 4.** 몸무게의 2 SD 띠
 
 ```python
 import matplotlib.pyplot as plt
@@ -210,6 +232,8 @@ axis.legend()
 plt.show()
 ```
 
+</div>
+
 ![2 SD y-띠](./img/simple_158.png)
 
 몸무게 평균에서 $\pm 2$ 표준편차 구간이다. 자료가 정규에 가까우면 이 띠 안에 약 95%가 들어간다.
@@ -221,6 +245,10 @@ plt.show()
 #### 양의 SD 직선
 
 양의 SD 직선은 기울기가 $+\sigma_y / \sigma_x$이다. 키가 $\sigma_x$만큼 늘어날 때마다 몸무게가 $\sigma_y$만큼 늘어난다.
+
+<div class="codebox" markdown>
+
+**예제 5.** 양의 SD 직선
 
 ```python
 import matplotlib.pyplot as plt
@@ -273,6 +301,8 @@ axis.legend(fontsize=15)
 plt.show()
 ```
 
+</div>
+
 ![양의 SD 직선](./img/simple_209.png)
 
 SD 직선은 평균점을 지나고 기울기가 $s_y/s_x$인 직선이다. 삼각형이 "$x$가 1 SD 늘면 $y$도 1 SD 는다"를 나타낸다.
@@ -280,6 +310,10 @@ SD 직선은 평균점을 지나고 기울기가 $s_y/s_x$인 직선이다. 삼�
 #### 음의 SD 직선
 
 음의 SD 직선은 기울기가 $-\sigma_y / \sigma_x$이다. 키가 $\sigma_x$만큼 늘어날 때마다 몸무게가 $\sigma_y$만큼 *줄어든다*.
+
+<div class="codebox" markdown>
+
+**예제 6.** 음의 SD 직선
 
 ```python
 import matplotlib.pyplot as plt
@@ -331,6 +365,8 @@ axis.legend(fontsize=15)
 plt.show()
 ```
 
+</div>
+
 ![음의 SD 직선](./img/simple_264.png)
 
 상관이 음일 때의 SD 직선이다. 기울기의 부호만 바뀔 뿐 구조는 같다.
@@ -338,6 +374,10 @@ plt.show()
 ### 회귀직선과 SD 직선
 
 **회귀직선**의 기울기는 $r \cdot \sigma_y / \sigma_x$로, SD 직선의 기울기에 상관계수 $r$를 곱한 것이다. $|r| \leq 1$이므로 회귀직선은 항상 SD 직선보다 완만하거나 같다. 이 완만해짐이 곧 **회귀 효과**이며, 예측값이 평균 쪽으로 되돌아간다는 뜻이다.
+
+<div class="codebox" markdown>
+
+**예제 7.** 회귀직선과 SD 직선
 
 ```python
 import matplotlib.pyplot as plt
@@ -390,6 +430,8 @@ axis.legend(fontsize=15)
 plt.show()
 ```
 
+</div>
+
 ![회귀직선과 SD 직선](./img/simple_318.png)
 
 SD 직선의 기울기는 $s_y/s_x$이고 회귀직선의 기울기는 $r \cdot s_y/s_x$다. $|r| < 1$이므로 회귀직선이 언제나 SD 직선보다 완만하다. 이것이 평균으로의 회귀 현상이다.
@@ -406,6 +448,10 @@ SD 직선의 기울기는 $s_y/s_x$이고 회귀직선의 기울기는 $r \cdot 
 두 직선은 $|r| = 1$(완전상관)일 때만 일치한다. 그렇지 않으면 평균점 주위로 벌어지는 "V" 모양을 이룬다.
 
 ### 두 회귀직선을 함께 그리기
+
+<div class="codebox" markdown>
+
+**예제 8.** 두 회귀직선을 함께 그리기
 
 ```python
 import matplotlib.pyplot as plt
@@ -477,6 +523,8 @@ axis.spines['right'].set_visible(False)
 plt.show()
 ```
 
+</div>
+
 ![두 회귀직선](./img/simple_382.png)
 
 $Y$의 $X$에 대한 회귀와 $X$의 $Y$에 대한 회귀가 서로 다른 직선이다. 두 직선은 평균점에서 만나며, SD 직선이 그 사이에 놓인다.
@@ -486,6 +534,10 @@ $|r| < 1$이면 두 직선이 갈라지고 $|r| = 1$이면 하나로 겹친다.
 ### 세로 띠로 본 Y의 X에 대한 회귀
 
 (키 값을 고정한) 좁은 세로 띠를 골라 그 안의 평균 몸무게를 살펴보면, 회귀직선이 조건부 평균을 예측한다는 사실이 드러난다.
+
+<div class="codebox" markdown>
+
+**예제 9.** 세로 띠로 본 Y의 X에 대한 회귀
 
 ```python
 import matplotlib.pyplot as plt
@@ -545,6 +597,8 @@ axis.legend(fontsize=15)
 plt.show()
 ```
 
+</div>
+
 ![세로 띠로 본 Y의 X에 대한 회귀](./img/simple_456.png)
 
 키 구간마다 몸무게의 평균을 찍어 이으면 회귀직선에 가까워진다. 회귀직선이 "각 $x$에서의 조건부 평균"이라는 정의를 그림으로 보여준다.
@@ -552,6 +606,10 @@ plt.show()
 ### 가로 띠로 본 X의 Y에 대한 회귀
 
 마찬가지로 몸무게 값을 고정한 가로 띠는 키의 조건부 평균을 보여준다.
+
+<div class="codebox" markdown>
+
+**예제 10.** 가로 띠로 본 X의 Y에 대한 회귀
 
 ```python
 import matplotlib.pyplot as plt
@@ -611,6 +669,8 @@ axis.spines['top'].set_visible(False)
 axis.spines['right'].set_visible(False)
 plt.show()
 ```
+
+</div>
 
 ![가로 띠로 본 X의 Y에 대한 회귀](./img/simple_518.png)
 
@@ -690,6 +750,10 @@ $$
 
 ### AAPL 대 SPY 일간 수익률
 
+<div class="codebox" markdown>
+
+**예제 11.** AAPL의 베타
+
 ```python
 from sklearn.linear_model import LinearRegression
 import yfinance as yf
@@ -747,6 +811,8 @@ plt.tight_layout()
 plt.show()
 ```
 
+</div>
+
 !!! note "실행할 때마다 결과가 달라진다"
     이 블록은 `yfinance`로 시장 자료를 **내려받으므로** 실행하려면 네트워크가 필요하다. 기간은 $2020$-$01$-$02$부터 $2023$-$12$-$30$까지로 고정해 두었고 `auto_adjust=False`를 주었으므로, 내려받은 자료 자체는 언제 실행해도 같다. 곧 **추정된 베타와 알파도 재현된다.**
 
@@ -760,6 +826,10 @@ plt.show()
 ### WMT 대 SPY 일간 수익률
 
 이 예제는 산점도와 회귀직선 옆에 두 수익률 계열의 주변분포를 보여주는 결합 히스토그램을 함께 그린다.
+
+<div class="codebox" markdown>
+
+**예제 12.** WMT의 베타
 
 ```python
 import yfinance as yf
@@ -816,6 +886,8 @@ axes[1, 1].set_title(f"{ticker_wmt} Daily Returns Histogram")
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 !!! note "실행할 때마다 결과가 달라진다"
     이 블록은 `yfinance`로 **실행 시점의** 시장 자료를 내려받는다. 기간이 바뀌면 추정된 베타도 달라지므로 고정된 출력이나 그림을 싣지 않는다. 직접 실행해 얻은 값으로 읽으면 된다.

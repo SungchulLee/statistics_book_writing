@@ -8,22 +8,27 @@
 
 `LinearRegression` 클래스는 최소제곱으로 모형 $Y = \mathbf{X}\boldsymbol{\beta} + \varepsilon$을 적합한다. `statsmodels`와 달리 절편을 기본으로 자동 추가한다.
 
+<div class="codebox" markdown>
+
+**예제 1.** 모형 적합과 계수
+
 ```python
 import numpy as np
 from sklearn.linear_model import LinearRegression
 
-# Generate example data
+# 참 계수가 [3.0, 1.5], 절편이 2.0 인 자료다.
 np.random.seed(42)
 n = 100
 X = np.random.randn(n, 2)
 beta_true = np.array([3.0, 1.5])
 y = X @ beta_true + 2.0 + np.random.randn(n) * 0.5
 
-# Fit model
+# sklearn 은 절편을 자동으로 넣는다(fit_intercept 의 기본값이 True).
+# statsmodels 와 달리 1 로 채운 열을 붙일 필요가 없다.
 model = LinearRegression()
 model.fit(X, y)
 
-# Access coefficients
+# 적합 뒤에 만들어지는 속성은 이름 끝에 밑줄이 붙는다. sklearn 의 관례다.
 print("Intercept:", model.intercept_)
 print("Coefficients:", model.coef_)
 ```
@@ -34,6 +39,8 @@ print("Coefficients:", model.coef_)
 Intercept: 2.046396690621326
 Coefficients: [3.09536017 1.41392895]
 ```
+
+</div>
 
 참값이 절편 2.0, 계수 3.0과 1.5인데 추정값이 2.046, 3.095, 1.414다.
 
@@ -47,11 +54,14 @@ scikit-learn은 절편을 `intercept_`에, 기울기를 `coef_`에 따로 담는
 
 `predict` 메서드는 새 자료의 적합값을 계산한다.
 
+<div class="codebox" markdown>
+
+**예제 2.** 예측하기
+
 ```python
-# Predict on training data
 y_pred_train = model.predict(X)
 
-# Predict on new data
+# 새 자료로 예측할 때도 열의 개수와 순서가 훈련 때와 같아야 한다.
 X_new = np.array([[1.0, 0.5], [-0.5, 2.0]])
 y_pred_new = model.predict(X_new)
 print("Predictions:", y_pred_new)
@@ -63,6 +73,8 @@ print("Predictions:", y_pred_new)
 Predictions: [5.84872133 3.3265745 ]
 ```
 
+</div>
+
 적합된 모형으로 새 입력의 예측값을 얻는다. `predict`는 2차원 배열을 받으므로 관측값이 하나여도 `[[x1, x2]]` 모양으로 넣어야 한다.
 
 `predict`의 입력은 훈련자료와 열의 개수가 같아야 한다. 각 행이 새로운 관측값이며 출력은 예측값의 벡터 $\hat{y} = \hat{\beta}_0 + \mathbf{X}_{\text{new}} \hat{\boldsymbol{\beta}}$이다.
@@ -73,7 +85,12 @@ Predictions: [5.84872133 3.3265745 ]
 
 `score` 메서드는 주어진 자료에서의 $R^2$를 돌려준다.
 
+<div class="codebox" markdown>
+
+**예제 3.** 결정계수
+
 ```python
+# 회귀 모형의 score 는 R^2 다. 분류 모형이면 정확도를 돌려준다.
 r2_train = model.score(X, y)
 print(f"R-squared (training): {r2_train:.4f}")
 ```
@@ -84,15 +101,23 @@ print(f"R-squared (training): {r2_train:.4f}")
 R-squared (training): 0.9706
 ```
 
+</div>
+
 훈련 자료의 $R^2 = 0.9706$이다. 잡음의 표준편차를 0.5로 두었으므로 이 정도가 상한에 가깝다.
 
 다른 척도가 필요하면 `sklearn.metrics`를 쓴다.
+
+<div class="codebox" markdown>
+
+**예제 4.** 여러 성능 측도
 
 ```python
 from sklearn.metrics import mean_absolute_error, mean_squared_error, root_mean_squared_error
 
 y_pred = model.predict(X)
 
+# 셋 다 작을수록 좋다. RMSE 는 단위가 반응과 같아 읽기 편하고,
+# MAE 는 이상치에 덜 휘둘린다.
 mae = mean_absolute_error(y, y_pred)
 mse = mean_squared_error(y, y_pred)
 rmse = root_mean_squared_error(y, y_pred)
@@ -110,6 +135,8 @@ MSE:  0.2775
 RMSE: 0.5268
 ```
 
+</div>
+
 MAE 0.42, RMSE 0.53이다. RMSE가 MAE보다 큰 것은 언제나 성립한다. 제곱이 큰 오차에 더 큰 가중치를 주기 때문이며, 두 값의 차이가 벌어질수록 오차 분포에 꼬리가 있다는 신호다.
 
 !!! note "`root_mean_squared_error`는 scikit-learn 1.4부터"
@@ -121,9 +148,14 @@ MAE 0.42, RMSE 0.53이다. RMSE가 MAE보다 큰 것은 언제나 성립한다. 
 
 표본 밖 성능을 추정하려면 적합하기 전에 자료를 나눈다.
 
+<div class="codebox" markdown>
+
+**예제 5.** 훈련·시험 나누기
+
 ```python
 from sklearn.model_selection import train_test_split
 
+# 훈련자료에서 잰 성능은 과적합을 잡아내지 못한다. 그래서 자료를 나눈다.
 X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.2, random_state=42
 )
@@ -141,6 +173,8 @@ print(f"R-squared (test): {r2_test:.4f}")
 R-squared (test): 0.9855
 ```
 
+</div>
+
 시험 $R^2$가 훈련 $R^2$(0.9706)보다 오히려 높다. 과적합의 징후가 없다는 뜻이며, 설명변수가 둘뿐인 선형모형이라 예상할 만한 결과다.
 
 검정 $R^2$는 모형이 적합 과정에서 검정자료를 보지 않았으므로 훈련 $R^2$보다 예측 성능을 정직하게 추정한다.
@@ -151,9 +185,15 @@ R-squared (test): 0.9855
 
 scikit-learn은 훈련-검정 분할의 반복을 자동화하는 교차검증 도구를 제공한다.
 
+<div class="codebox" markdown>
+
+**예제 6.** 교차검증
+
 ```python
 from sklearn.model_selection import cross_val_score
 
+# 한 번 나누는 것보다 낫다. 모든 관측값이 한 번씩 검증에 쓰이고,
+# 겹마다의 점수가 흩어진 정도까지 알려 준다.
 model = LinearRegression()
 cv_scores = cross_val_score(model, X, y, cv=5, scoring='r2')
 
@@ -170,6 +210,8 @@ Mean CV R-squared: 0.9683
 Std CV R-squared: 0.0054
 ```
 
+</div>
+
 교차검증 $R^2$의 평균이 0.9683, 표준편차가 0.0054다. 겹마다 값이 크게 흔들리지 않으므로 모형이 안정적이다.
 
 `scoring` 인자는 scikit-learn의 어떤 채점기도 받는다. 회귀에서 흔한 선택은 `'r2'`, `'neg_mean_squared_error'`, `'neg_mean_absolute_error'`이다. "neg" 접두사가 붙는 것은 점수가 높을수록 좋다는 scikit-learn의 관례 때문이며, 그래서 오차 척도에 음수를 붙인다.
@@ -180,10 +222,17 @@ Std CV R-squared: 0.0054
 
 파이프라인은 전처리와 모형화 단계를 하나의 객체로 엮어, 훈련과 예측에서 변환이 일관되게 적용되도록 보장한다.
 
+<div class="codebox" markdown>
+
+**예제 7.** 파이프라인
+
 ```python
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler, PolynomialFeatures
 
+# 파이프라인은 전처리와 모형을 하나로 묶는다. 교차검증에 넣으면 각 겹에서
+# 표준화가 훈련 부분만 보고 이뤄지므로, 검증자료의 정보가 새지 않는다.
+# 전처리를 미리 해 두고 나누면 이 누수가 조용히 일어난다.
 pipeline = Pipeline([
     ('scaler', StandardScaler()),
     ('poly', PolynomialFeatures(degree=2, include_bias=False)),
@@ -200,6 +249,8 @@ print(f"Pipeline R-squared (test): {r2_pipeline:.4f}")
 ```
 Pipeline R-squared (test): 0.9858
 ```
+
+</div>
 
 파이프라인을 거친 시험 $R^2$가 0.9858로, 앞서 수동으로 표준화한 결과와 사실상 같다. 선형회귀에서 표준화는 예측 성능을 바꾸지 않는다. 계수의 해석과 규제(ridge, lasso)에서 의미가 생긴다.
 

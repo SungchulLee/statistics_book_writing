@@ -32,6 +32,10 @@ $$
 
 세 페이지가 공유하는 King County(시애틀) 주택 매매 자료를 읽는다.
 
+<div class="codebox" markdown>
+
+**예제 1.** 주택 자료 읽기
+
 ```python
 import pandas as pd
 
@@ -59,11 +63,15 @@ min          3368.0          370.0   1900.0
 max      11644855.0        10740.0   2015.0
 ```
 
+</div>
+
 22,687건이다. 가격이 3,368달러에서 1,164만 달러까지 퍼져 있어 오른쪽으로 크게 치우친 자료다.
 
-## 코드
-
 ### pd.cut으로 계단함수 만들기
+
+<div class="codebox" markdown>
+
+**예제 2.** 계단함수 회귀
 
 ```python
 import numpy as np
@@ -75,14 +83,14 @@ age = 2024 - house['YrBuilt'].values
 price = house['AdjSalePrice'].values
 df = pd.DataFrame({'age': age, 'price': price})
 
-# Define breakpoints
+# 계단함수는 연속변수를 구간으로 잘라 구간마다 상수를 맞추는 것이다.
+# 가장 거친 비선형 모형이지만 해석이 쉽다는 장점이 있다.
 knots = [0, 20, 40, 60, 80, 150]
 df['age_bin'] = pd.cut(df['age'], bins=knots, include_lowest=True)
 
-# Create dummy variables
+# 구간마다 가변수 하나씩을 만든다.
 df_dummies = pd.get_dummies(df['age_bin'], drop_first=False)
 
-# Fit step function regression
 X_step = df_dummies.values
 step_model = LinearRegression()
 step_model.fit(X_step, df['price'])
@@ -105,6 +113,8 @@ print(f"R^2 = {r2_score(df['price'], step_model.predict(X_step)):.4f}")
 R^2 = 0.0283
 ```
 
+</div>
+
 구간별 평균 가격이 나이에 따라 단조롭지 않다. 20년 미만이 64만, 60~80년이 48만으로 가장 낮고, 80년이 넘으면 57만으로 다시 오른다.
 
 **계단함수의 값어치가 여기 있다.** 선형 모형이라면 "나이가 들수록 싸진다" 같은 단조 관계만 잡아낼 수 있지만, 계단함수는 U자 모양을 그대로 담는다. 물론 $R^2 = 0.028$로 설명력 자체는 낮다.
@@ -114,7 +124,14 @@ R^2 = 0.0283
 
 ### 구간 개수 비교
 
+<div class="codebox" markdown>
+
+**예제 3.** 구간 수를 바꿔 가며
+
 ```python
+# 구간을 몇 개로 나눌지가 이 방법의 유일한 조절값이다. 늘리면 R^2 는
+# 반드시 오르지만 구간마다 자료가 줄어 추정이 불안해진다.
+# qcut 은 개수가 고르게 들어가도록 분위수로 자른다.
 results = []
 for n_bins in [3, 4, 5, 6, 8, 10]:
     df['bin_temp'] = pd.qcut(df['age'], q=n_bins, duplicates='drop')
@@ -140,21 +157,28 @@ print(pd.DataFrame(results).round(4).to_string(index=False))
      10 0.0334 378904.4326
 ```
 
+</div>
+
 구간을 3개에서 10개로 늘려도 $R^2$가 0.023에서 0.033으로 밖에 오르지 않는다.
 
 구간을 늘리면 모수가 늘어 훈련 자료에 대한 적합은 반드시 좋아진다. 그런데도 이만큼밖에 오르지 않는다는 것은 주택 나이 하나로 가격을 설명하는 데 한계가 있다는 뜻이다.
 
 ### 다른 방법과의 비교
 
+<div class="codebox" markdown>
+
+**예제 4.** 직선·다항식과 견주기
+
 ```python
-# Linear
+# 견줄 기준선 둘. 직선과 3차 다항식이다.
 linear_model = LinearRegression()
 linear_model.fit(df[['age']].values, df['price'])
 
-# Polynomial (degree 3)
 X_poly = np.column_stack([df['age'] ** i for i in range(1, 4)])
 poly_model = LinearRegression().fit(X_poly, df['price'])
 ```
+
+</div>
 
 ## 해석
 

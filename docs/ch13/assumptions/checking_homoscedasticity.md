@@ -27,6 +27,10 @@ $$
 
 이 페이지의 진단은 모두 아래 자료와 모형 하나를 놓고 수행한다.
 
+<div class="codebox" markdown>
+
+**예제 1.** 진단에 쓸 모형 준비
+
 ```python
 import numpy as np
 import pandas as pd
@@ -57,6 +61,8 @@ beta_hat = [1.5933 1.5317]
 R^2 = 0.7813
 ```
 
+</div>
+
 기울기 추정값 1.53이 참값 1.5에 가깝다. 이분산이 있어도 OLS 추정값 자체는 불편이며, 흔들리는 것은 표준오차다.
 
 ## 2. 잔차-적합값 그림
@@ -71,13 +77,19 @@ R^2 = 0.7813
 
 **예시:**
 
+<div class="codebox" markdown>
+
+**예제 2.** 잔차 대 적합값 그림
+
 ```python
 import matplotlib.pyplot as plt
 
-# Assuming 'model' is your fitted OLS model
+# 앞에서 적합한 model 을 그대로 쓴다.
 residuals = model.resid
 fitted = model.fittedvalues
 
+# 등분산성 진단의 기본 그림이다. 점들의 세로 폭이 왼쪽부터 오른쪽까지
+# 일정해야 한다. 깔때기처럼 벌어지면 분산이 적합값에 따라 커진다는 뜻이다.
 plt.scatter(fitted, residuals, alpha=0.5)
 plt.axhline(y=0, color='red', linestyle='--')
 plt.xlabel('Fitted Values')
@@ -85,6 +97,8 @@ plt.ylabel('Residuals')
 plt.title('Residuals vs. Fitted Values')
 plt.show()
 ```
+
+</div>
 
 ![잔차 대 적합값](./img/checking_homoscedasticity_70.png)
 
@@ -122,10 +136,16 @@ $$
 
 **예시:**
 
+<div class="codebox" markdown>
+
+**예제 3.** Breusch-Pagan 검정
+
 ```python
 from statsmodels.stats.diagnostic import het_breuschpagan
 
-# Assuming 'model' is your fitted OLS model and 'X' is the independent variable(s)
+# Breusch-Pagan 검정: 잔차의 제곱을 설명변수에 회귀해, 설명되는 몫이
+# 있는지를 본다. p-값이 작으면 등분산을 기각한다.
+# 분산이 설명변수의 선형함수로 커지는 경우를 잘 잡아낸다.
 bp_test = het_breuschpagan(model.resid, model.model.exog)
 labels = ['LM Statistic', 'LM p-value', 'F-Statistic', 'F p-value']
 for label, value in zip(labels, bp_test):
@@ -140,6 +160,8 @@ LM p-value: 0.0000
 F-Statistic: 31.7235
 F p-value: 0.0000
 ```
+
+</div>
 
 Breusch-Pagan 검정이 $p < 0.0001$로 등분산을 강하게 기각한다. 오차의 표준편차를 $0.5 + 0.35X$로 만들었으니 옳은 판정이다.
 
@@ -170,10 +192,15 @@ $$
 
 **예시:**
 
+<div class="codebox" markdown>
+
+**예제 4.** White 검정
+
 ```python
 from statsmodels.stats.diagnostic import het_white
 
-# Assuming 'model' is your fitted OLS model
+# White 검정: 설명변수의 제곱과 교차항까지 넣어 회귀한다. 그래서 선형이
+# 아닌 형태의 이분산도 잡지만, 항이 많아지는 만큼 검정력이 흩어진다.
 white_test = het_white(model.resid, model.model.exog)
 labels = ['LM Statistic', 'LM p-value', 'F-Statistic', 'F p-value']
 for label, value in zip(labels, white_test):
@@ -188,6 +215,8 @@ LM p-value: 0.0000
 F-Statistic: 16.3603
 F p-value: 0.0000
 ```
+
+</div>
 
 White 검정도 $p < 0.0001$로 등분산을 기각한다. Breusch-Pagan이 이분산의 형태를 선형으로 가정하는 반면 White는 그런 가정 없이 검정하므로, 두 검정이 모두 기각하면 결론이 더 단단하다.
 
@@ -210,13 +239,19 @@ White 검정도 $p < 0.0001$로 등분산을 기각한다. Breusch-Pagan이 이�
 
 **예시:**
 
+<div class="codebox" markdown>
+
+**예제 5.** 척도-위치 그림
+
 ```python
 import numpy as np
 import matplotlib.pyplot as plt
 
-# Assuming 'model' is your fitted OLS model
 residuals = model.resid
 fitted = model.fittedvalues
+
+# 척도-위치 그림은 부호를 없애고 크기만 본다. 제곱근을 씌워 큰 값이
+# 그림을 독차지하지 않게 한다.
 standardized_residuals = (residuals - np.mean(residuals)) / np.std(residuals)
 
 plt.scatter(fitted, np.sqrt(np.abs(standardized_residuals)), alpha=0.5)
@@ -224,12 +259,15 @@ plt.xlabel('Fitted Values')
 plt.ylabel('√|Standardized Residuals|')
 plt.title('Scale-Location Plot')
 
-# Add a lowess smoothing line for trend detection
+# 눈으로만 판단하기 어려우므로 평활선을 얹는다. 이 선이 평평하면
+# 등분산이고, 올라가거나 내려가면 분산이 적합값에 따라 달라진다는 뜻이다.
 from statsmodels.nonparametric.smoothers_lowess import lowess
 smooth = lowess(np.sqrt(np.abs(standardized_residuals)), fitted, frac=0.6)
 plt.plot(smooth[:, 0], smooth[:, 1], color='red', linewidth=2)
 plt.show()
 ```
+
+</div>
 
 ![척도-위치 그림](./img/checking_homoscedasticity_183.png)
 

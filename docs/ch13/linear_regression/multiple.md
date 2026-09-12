@@ -30,6 +30,10 @@ $$
 
 ### 무작위 훈련-검정 분할
 
+<div class="codebox" markdown>
+
+**예제 1.** 광고 자료로 다중회귀
+
 ```python
 import pandas as pd
 import numpy as np
@@ -37,42 +41,44 @@ import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 
-# Load the Advertising dataset
+# 광고비와 매출 자료. TV·라디오·신문 광고비와 매출이 들어 있다.
 url = 'https://raw.githubusercontent.com/justmarkham/scikit-learn-videos/master/data/Advertising.csv'
 df = pd.read_csv(url, usecols=[1, 2, 3, 4])
 print(df.head(), end="\n\n")
 
-# Add an interaction term between TV and Radio
+# 교호작용 항을 만든다. "TV 광고의 효과가 라디오 광고를 얼마나 하느냐에
+# 따라 달라진다"는 생각을 두 변수의 곱 하나로 담는 것이다.
 df['TV:Radio'] = df['TV'] * df['Radio']
 print(df.head(), end="\n\n")
 
-# Define test size ratio
+# 자료의 30%를 시험용으로 떼어 둔다. 훈련에 쓴 자료로 성능을 재면
+# 언제나 실제보다 좋게 나오기 때문이다.
 test_size_ratio = 0.3
 
-# Split data into features (X) and target (y)
+# 신문 광고는 뺀다. 뒤에서 보듯 계수가 유의하지 않기 때문이다.
 X = df[['TV', 'Radio', 'TV:Radio']]
 y = df['Sales']
 
-# Perform the train-test split
+# random_state 를 고정해야 나눈 결과가 매번 같아진다.
 x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=test_size_ratio, random_state=42)
 print("x_train.head()")
 print(x_train.head(), end="\n\n")
 print("y_train.head()")
 print(y_train.head(), end="\n\n")
 
-# Initialize and train the linear regression model
 model = LinearRegression()
 model.fit(x_train, y_train)
 
-# Make predictions on both the training and test data
 y_train_pred = model.predict(x_train)
 y_test_pred = model.predict(x_test)
 
-# Print model coefficients and intercept
+# 교호작용이 들어가면 TV 계수를 "TV 를 1 늘렸을 때의 효과"로 읽을 수 없다.
+# 그 효과가 라디오 값에 따라 달라지기 때문이다.
 print(f"Model Intercept: {model.intercept_:.4f}")
 print(f"Model Coefficients: {np.round(model.coef_, 4)}\n")
 
-# Visualize predictions
+# 실제값 대 예측값 그림. 점들이 붉은 대각선에 붙을수록 잘 맞은 것이다.
+# 훈련과 시험을 나란히 놓아 과적합 여부를 함께 본다.
 fig, axes = plt.subplots(1, 2, figsize=(12, 3))
 
 for ax, title, y_actual, y_pred in zip(axes, ("Train Set", "Test Set"), (y_train, y_test), (y_train_pred, y_test_pred)):
@@ -124,11 +130,17 @@ Model Intercept: 6.3749
 Model Coefficients: [0.0206 0.0474 0.001 ]
 ```
 
+</div>
+
 ![Advertising 자료](./img/multiple_33.png)
 
 시장 200곳의 광고비와 매출이다.
 
 ### 결정론적 훈련-검정 분할
+
+<div class="codebox" markdown>
+
+**예제 2.** 순서대로 나눈 훈련·시험
 
 ```python
 import pandas as pd
@@ -143,7 +155,9 @@ df = pd.read_csv(url, usecols=[1, 2, 3, 4])
 # Add interaction term
 df['TV:Radio'] = df['TV'] * df['Radio']
 
-# Deterministic split
+# 앞에서는 무작위로 나눴지만 여기서는 앞 70%, 뒤 30% 로 자른다.
+# 자료가 시간 순서로 쌓여 있다면 이쪽이 맞다 — 미래로 과거를 맞히는 일을
+# 막아 주기 때문이다.
 num_total_observations = df.shape[0]
 test_ratio = 0.3
 num_train_observations = int(num_total_observations * (1 - test_ratio))
@@ -188,6 +202,8 @@ Model Intercept: 6.8814
 Model Coefficients: [0.0183 0.0229 0.0011]
 ```
 
+</div>
+
 ![적합된 회귀](./img/multiple_133.png)
 
 세 계수가 각각 TV 0.0183, 라디오 0.0229, 신문 0.0011이다. 신문의 계수가 사실상 0이다.
@@ -197,6 +213,10 @@ Model Coefficients: [0.0183 0.0229 0.0011]
 `statsmodels` 라이브러리는 p값, 신뢰구간, 진단검정을 포함한 풍부한 통계 출력을 제공한다. scikit-learn과의 자세한 비교는 [패키지 비교](../package_usage/comparison.md)를 보라.
 
 ### Sales ~ TV + Radio + Newspaper
+
+<div class="codebox" markdown>
+
+**예제 3.** 세 매체를 모두 넣은 모형
 
 ```python
 import pandas as pd
@@ -225,7 +245,7 @@ num_train_observations = int(num_total_observations * (1 - test_ratio))
 train_data = data.iloc[:num_train_observations]
 test_data = data.iloc[num_train_observations:]
 
-# Fit model with TV, Radio, and Newspaper
+# 세 광고 매체를 모두 넣어 본다. 출력표에서 신문의 p-값을 눈여겨볼 것.
 model = sm.ols('Sales ~ TV + Radio + Newspaper', train_data).fit()
 print("Model with TV, Radio, and Newspaper as predictors:")
 print_summary(model)
@@ -286,6 +306,8 @@ Notes:
 [1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
 ```
 
+</div>
+
 ![세 설명변수 모형](./img/multiple_201.png)
 
 TV와 라디오의 계수는 강하게 유의하지만 신문은 $p = 0.86$으로 유의하지 않다.
@@ -294,7 +316,13 @@ TV와 라디오의 계수는 강하게 유의하지만 신문은 $p = 0.86$으�
 
 ### Sales ~ TV + Radio
 
+<div class="codebox" markdown>
+
+**예제 4.** 신문을 뺀 모형
+
 ```python
+# 신문을 뺀 모형. R^2 가 거의 줄지 않는다. 신문 광고가 설명하는 몫이
+# 사실상 없었다는 뜻이다.
 model = sm.ols('Sales ~ TV + Radio', train_data).fit()
 print("Model with TV and Radio as predictors:")
 print_summary(model)
@@ -332,13 +360,21 @@ Notes:
 [1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
 ```
 
+</div>
+
 신문을 뺀 모형이다. $R^2$가 세 변수 모형과 사실상 같다. 신문 광고의 계수가 유의하지 않았던 것과 일치한다.
 
 신문 광고를 뺀 모형이다. $R^2$가 세 변수 모형과 사실상 같다. 신문 광고의 계수가 유의하지 않았던 것과 일치한다.
 
 ### Sales ~ TV + Radio + TV:Radio
 
+<div class="codebox" markdown>
+
+**예제 5.** 교호작용을 넣은 모형
+
 ```python
+# 이번에는 교호작용을 넣는다. statsmodels 의 수식에서 콜론이 교호작용 항이다.
+# R^2 가 눈에 띄게 오른다 — 두 매체가 서로를 돕는다는 뜻이다.
 model = sm.ols('Sales ~ TV + Radio + TV:Radio', train_data).fit()
 print("Model with TV, Radio, and TV:Radio as predictors:")
 print_summary(model)
@@ -378,6 +414,8 @@ Notes:
 [2] The condition number is large, 1.84e+04. This might indicate that there are
 strong multicollinearity or other numerical problems.
 ```
+
+</div>
 
 교호작용을 넣으면 $R^2$가 0.897에서 0.968로 오른다. TV와 라디오가 함께 쓰일 때의 상승효과다.
 

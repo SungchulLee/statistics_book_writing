@@ -44,21 +44,26 @@ $$
 
 흔한 선택은 $K = 5$나 $K = 10$이다.
 
-## 코드
-
 ### 검증집합 방법
+
+<div class="codebox" markdown>
+
+**예제 1.** 검증집합을 스무 번 다시 나누기
 
 ```python
 import numpy as np
 from sklearn.preprocessing import PolynomialFeatures
 from sklearn.linear_model import LinearRegression
 
+# 참 모형은 이차식이다. 교차검증이 차수 2 를 골라내는지 보는 것이 목표다.
 np.random.seed(42)
 n = 200
 X = np.random.uniform(1, 10, n)
 y = 5 + 2 * X - 0.3 * X**2 + np.random.normal(0, 2, n)
 X_2d = X.reshape(-1, 1)
 
+# 검증집합 한 번만 떼어 보면 어떻게 나누느냐에 따라 결과가 들쭉날쭉하다.
+# 그래서 20번 다르게 나눠 보며 그 흔들림을 직접 확인한다.
 degrees = np.arange(1, 11)
 n_validations = 20
 val_mse_multiple = np.zeros((n_validations, len(degrees)))
@@ -75,6 +80,8 @@ for run in range(n_validations):
         val_mse_multiple[run, i] = np.mean((y[val_idx] - model.predict(X_va)) ** 2)
 ```
 
+</div>
+
 20번의 무작위 분할이 고른 최적 차수는
 
 ```text
@@ -85,9 +92,15 @@ for run in range(n_validations):
 
 ### LOOCV
 
+<div class="codebox" markdown>
+
+**예제 2.** 하나빼기 교차검증
+
 ```python
 from sklearn.model_selection import cross_val_score, LeaveOneOut
 
+# 하나빼기 교차검증은 관측값 하나씩을 검증집합으로 쓴다. 어떻게 나누느냐에
+# 따른 흔들림이 없다는 것이 장점이고, n 번 적합해야 해서 느린 것이 단점이다.
 loo = LeaveOneOut()
 loocv_mse = np.zeros(len(degrees))
 for i, degree in enumerate(degrees):
@@ -99,11 +112,19 @@ for i, degree in enumerate(degrees):
     loocv_mse[i] = -scores.mean()
 ```
 
+</div>
+
 ### k-겹 교차검증
+
+<div class="codebox" markdown>
+
+**예제 3.** 10겹 교차검증
 
 ```python
 from sklearn.model_selection import KFold
 
+# k겹 교차검증은 그 둘의 절충이다. 10번만 적합하면 되고, 하나빼기보다
+# 추정의 분산이 작다. 그래서 실제로는 이쪽을 가장 많이 쓴다.
 kfold = KFold(n_splits=10, shuffle=True, random_state=42)
 kfold_mse = np.zeros(len(degrees))
 for i, degree in enumerate(degrees):
@@ -114,6 +135,8 @@ for i, degree in enumerate(degrees):
                              scoring='neg_mean_squared_error')
     kfold_mse[i] = -scores.mean()
 ```
+
+</div>
 
 ### 결과
 

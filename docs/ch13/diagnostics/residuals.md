@@ -45,6 +45,10 @@ $$\begin{array}{lll}
 
 #### statsmodels로 구현하기
 
+<div class="codebox" markdown>
+
+**예제 1.** 모형이 잘 맞을 때의 잔차
+
 ```python
 import matplotlib.pyplot as plt
 import numpy as np
@@ -52,22 +56,20 @@ import pandas as pd
 import statsmodels.api as sm
 from sklearn.datasets import make_regression
 
-# Create synthetic dataset
+# 모형이 잘 맞는 경우를 먼저 본다. 잔차 그림에 아무 무늬도 없어야 한다.
 np.random.seed(0)
 X, y = make_regression(n_samples=100, n_features=1, noise=10)
 data = pd.DataFrame({'X': X.flatten(), 'y': y})
 
-# Fit OLS model
 X_with_const = sm.add_constant(data['X'])
 model = sm.OLS(data['y'], X_with_const).fit()
 
 data['Fitted'] = model.fittedvalues
 data['Residuals'] = model.resid
 
-# Create plots
+# 왼쪽은 회귀 그림, 오른쪽은 잔차 그림이다. 늘 짝으로 본다.
 fig, (ax0, ax1) = plt.subplots(1, 2, figsize=(12, 3))
 
-# Regression plot
 ax0.scatter(data['X'], data['y'], alpha=0.7, label='Data Points')
 ax0.plot(data['X'], data['Fitted'], color='orange', label='Regression Line')
 ax0.set_title('Regression Plot')
@@ -75,7 +77,7 @@ ax0.set_xlabel('Predictor (X)')
 ax0.set_ylabel('Response (y)')
 ax0.legend()
 
-# Residuals vs. Fitted Values Plot
+# 잔차가 0 선 둘레에 무늬 없이 흩어져 있으면 좋다. 이 자료가 그렇다.
 ax1.scatter(data['Fitted'], data['Residuals'], alpha=0.7)
 ax1.axhline(y=0, color='r', linestyle='--')
 ax1.set_title('Residuals vs. Fitted Values Plot')
@@ -85,6 +87,8 @@ ax1.set_ylabel('Residuals')
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 ![가정이 성립할 때의 잔차](./img/residuals_48.png)
 
@@ -100,12 +104,17 @@ plt.show()
 
 자료가 실제로 선형이고 선형모형을 적합하면 잔차가 일정한 분산으로 무작위로 흩어진다.
 
+<div class="codebox" markdown>
+
+**예제 2.** 회귀·잔차 그림 함수
+
 ```python
 import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.linear_model import LinearRegression
 
 def generate_data(n=50, noise_level=3.0, seed=0):
+    """기울기 2 의 직선 자료를 만든다. noise_level 로 잡음 크기를 조절한다."""
     np.random.seed(seed)
     x = np.random.randn(n, 1)
     x.sort(axis=0)
@@ -114,12 +123,14 @@ def generate_data(n=50, noise_level=3.0, seed=0):
     return x, y
 
 def perform_regression(x, y):
+    """최소제곱으로 적합하고 예측값까지 돌려준다."""
     model = LinearRegression()
     model.fit(x, y)
     y_pred = model.predict(x)
     return model, y_pred
 
 def plot_regression_and_residuals(x, y, y_pred):
+    """회귀 그림과 잔차 그림을 나란히 그린다. 아래에서 되풀이해 쓴다."""
     fig, (ax0, ax1) = plt.subplots(1, 2, figsize=(12, 3))
 
     ax0.plot(x, y, 'o', label="Data")
@@ -144,6 +155,8 @@ model, y_pred = perform_regression(x, y)
 plot_regression_and_residuals(x, y, y_pred)
 ```
 
+</div>
+
 ![이분산에서의 잔차](./img/residuals_99.png)
 
 오른쪽으로 갈수록 퍼지는 깔때기 모양이다.
@@ -152,8 +165,13 @@ plot_regression_and_residuals(x, y, y_pred)
 
 자료가 다항 관계를 갖는데 선형모형만 적합하면 잔차에 뚜렷한 곡선 패턴이 나타난다. 선형성이 위배되었다는 신호이다.
 
+<div class="codebox" markdown>
+
+**예제 3.** 이차 자료를 직선으로 맞추면
+
 ```python
 def generate_data(n=50, noise_level=3.0, d=1, seed=0):
+    """차수 d 인 다항 자료를 만든다. d=1 이면 앞과 같은 직선이다."""
     np.random.seed(seed)
     x = np.random.randn(n, 1)
     x.sort(axis=0)
@@ -161,11 +179,14 @@ def generate_data(n=50, noise_level=3.0, d=1, seed=0):
     y = (1 + np.sum([(k+1) * x**k for k in range(1, d+1)], axis=0) + noise_level * noise).reshape((-1,))
     return x, y
 
-# Generate quadratic data but fit linear model
+# 이차 자료를 직선으로 맞춘다. 회귀 그림만 보면 그럴듯해 보이지만
+# 잔차 그림에는 굽은 무늬가 또렷하게 남는다. 잔차 그림을 보는 까닭이다.
 x, y = generate_data(d=2)
 model, y_pred = perform_regression(x, y)
 plot_regression_and_residuals(x, y, y_pred)
 ```
+
+</div>
 
 ![이차 관계에서의 잔차](./img/residuals_147.png)
 
@@ -175,25 +196,29 @@ plot_regression_and_residuals(x, y, y_pred)
 
 모형 오설정을 더 잘 진단하려면 경쟁 모형들의 잔차를 직접 비교하는 것이 유용하다. 이차 관계를 따르는 자료를 생각하자.
 
+<div class="codebox" markdown>
+
+**예제 4.** 평활선으로 본 굽은 잔차
+
 ```python
 import numpy as np
 import matplotlib.pyplot as plt
 import statsmodels.api as sm
 from statsmodels.nonparametric.smoothers_lowess import lowess
 
-# Generate quadratic data
+# 같은 이야기를 평활선까지 얹어 더 또렷하게 본다.
 np.random.seed(42)
 x = np.random.uniform(-3, 3, 100)
 y_true = 2 + 0.5 * x - 1.5 * x**2
 y = y_true + np.random.normal(0, 1, len(x))
 
-# Fit linear model
+# 왼쪽에 쓸 선형 모형
 X_linear = sm.add_constant(x)
 model_linear = sm.OLS(y, X_linear).fit()
 residuals_linear = model_linear.resid
 y_pred_linear = model_linear.fittedvalues
 
-# Fit quadratic model
+# 오른쪽에 쓸 이차 모형
 X_quad = sm.add_constant(np.column_stack([x, x**2]))
 model_quad = sm.OLS(y, X_quad).fit()
 residuals_quad = model_quad.resid
@@ -206,7 +231,7 @@ fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 5))
 ax1.scatter(y_pred_linear, residuals_linear, alpha=0.6)
 ax1.axhline(y=0, color='r', linestyle='--', linewidth=2)
 
-# Add LOWESS smooth to highlight curvature
+# 평활선이 굽어 있으면 남은 구조가 있다는 신호다.
 lowess_result = lowess(residuals_linear, y_pred_linear, frac=0.3)
 ax1.plot(lowess_result[:, 0], lowess_result[:, 1], 'b-', linewidth=2.5,
          label='LOWESS Trend')
@@ -217,7 +242,7 @@ ax1.set_title('Linear Model: Clear Non-linearity Pattern')
 ax1.legend()
 ax1.grid(True, alpha=0.3)
 
-# Quadratic model residuals
+# 이차항을 넣고 나면 평활선이 평평해진다. 무늬가 사라진 것이다.
 ax2.scatter(y_pred_quad, residuals_quad, alpha=0.6)
 ax2.axhline(y=0, color='r', linestyle='--', linewidth=2)
 
@@ -253,6 +278,8 @@ Linear Model RSS:    1530.56
 Quadratic Model RSS: 77.72
 ```
 
+</div>
+
 ![그림](./img/residuals_166.png)
 
 이차 모형의 $R^2$가 0.083에서 0.953으로 뛴다. 선형 모형의 잔차 그림에 뚜렷한 곡선이 보였던 이유가 이것이다.
@@ -265,8 +292,17 @@ $R^2 = 0.083$이라는 값 자체보다, **잔차 그림이 그 원인을 알려
 
 참 자료생성과정에 맞추어 다항 특성을 추가하면 잔차의 패턴이 해소된다.
 
+<div class="codebox" markdown>
+
+**예제 5.** 다항회귀로 고치기
+
 ```python
 def perform_regression(x, y, d=1):
+    """차수 d 의 다항회귀. x, x^2, ... 를 열로 쌓아 넣기만 하면 된다.
+
+    항이 x 의 거듭제곱일 뿐 계수에 대해서는 여전히 선형이므로,
+    최소제곱을 그대로 쓸 수 있다. 다항회귀도 선형모형인 까닭이다.
+    """
     x_poly = np.concatenate([x**k for k in range(1, d+1)], axis=1)
     model = LinearRegression()
     model.fit(x_poly, y)
@@ -278,6 +314,8 @@ model, y_pred = perform_regression(x, y, d=2)
 plot_regression_and_residuals(x, y, y_pred)
 ```
 
+</div>
+
 ![표준화 잔차](./img/residuals_250.png)
 
 표준편차 단위로 바꾸면 $\pm 2$, $\pm 3$ 기준선과 곧바로 비교할 수 있다.
@@ -288,6 +326,10 @@ plot_regression_and_residuals(x, y, y_pred)
 ## 척도-위치 그림
 
 척도-위치 그림은 표준화 잔차 절댓값의 제곱근을 적합값에 대해 그려 **등분산성**을 확인한다. 그림 전체에 걸쳐 폭이 일정하면 상수분산을 뒷받침한다.
+
+<div class="codebox" markdown>
+
+**예제 6.** 척도-위치 그림까지
 
 ```python
 import matplotlib.pyplot as plt
@@ -305,6 +347,7 @@ model = sm.OLS(data['y'], X_with_const).fit()
 
 data['Fitted'] = model.fittedvalues
 data['Residuals'] = model.resid
+# 척도-위치 그림을 위해 잔차를 표준화하고 절댓값의 제곱근을 취한다.
 data['Standardized Residuals'] = data['Residuals'] / np.std(data['Residuals'])
 data['Sqrt Abs Standardized Residuals'] = np.sqrt(np.abs(data['Standardized Residuals']))
 
@@ -325,7 +368,8 @@ ax1.set_title('Residuals vs. Fitted Values Plot')
 ax1.set_xlabel('Fitted Values')
 ax1.set_ylabel('Residuals')
 
-# Scale-Location Plot
+# 척도-위치 그림은 등분산성만 본다. 부호를 없앴으므로 점들이 이루는 띠의
+# 높이가 일정한지만 보면 된다.
 ax2.scatter(data['Fitted'], data['Sqrt Abs Standardized Residuals'], alpha=0.7)
 ax2.axhline(y=0, color='r', linestyle='--')
 ax2.set_title('Scale-Location Plot')
@@ -335,6 +379,8 @@ ax2.set_ylabel(r'$\sqrt{|\text{Standardized Residuals}|}$')
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 ![잔차 진단 종합](./img/residuals_270.png)
 

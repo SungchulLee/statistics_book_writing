@@ -38,15 +38,22 @@ $$
 
 $\beta_j$의 95% 신뢰구간은 $\hat{\beta}_j \pm t^*_{n-k,\,0.025} \cdot \mathrm{SE}(\hat{\beta}_j)$이다.
 
-## 코드
-
 ### 정규방정식으로 OLS 적합하기
+
+<div class="codebox" markdown>
+
+**예제 1.** OLS 적합 함수
 
 ```python
 import numpy as np
 from scipy import stats
 
 def fit_ols(X, y):
+    """최소제곱 추정값과, 표준오차를 만드는 데 필요한 두 조각을 돌려준다.
+
+    s 는 잔차의 표준편차(자유도 n-k), cov_matrix 는 (X'X)^-1 이다.
+    계수 j 의 표준오차는 s * sqrt(cov_matrix[j, j]) 로 만들어진다.
+    """
     n, k = X.shape
     beta_hat = np.linalg.inv(X.T @ X) @ X.T @ y
     y_hat = X @ beta_hat
@@ -56,10 +63,22 @@ def fit_ols(X, y):
     return beta_hat, s, cov_matrix
 ```
 
+</div>
+
 ### 회귀표 만들기
+
+<div class="codebox" markdown>
+
+**예제 2.** 회귀 출력표 만들기
 
 ```python
 def regression_table(beta_hat, s, cov_matrix, n, k, var_names):
+    """회귀 출력표를 직접 만든다.
+
+    statsmodels 의 summary() 가 찍어 주는 계수 표와 같은 내용이다.
+    계수 → 표준오차 → t → p-값 → 신뢰구간이 어떤 순서로 만들어지는지를
+    보이려고 풀어 썼다.
+    """
     df = n - k
     t_crit = stats.t(df).ppf(0.975)
 
@@ -76,7 +95,13 @@ def regression_table(beta_hat, s, cov_matrix, n, k, var_names):
               f"CI=({ci_lo:.3f}, {ci_hi:.3f})")
 ```
 
+</div>
+
 ### Advertising 자료에서 실행하기
+
+<div class="codebox" markdown>
+
+**예제 3.** 광고 자료에 적용하기
 
 ```python
 import pandas as pd
@@ -84,10 +109,13 @@ import pandas as pd
 url = ('https://raw.githubusercontent.com/justmarkham/'
        'scikit-learn-videos/master/data/Advertising.csv')
 data = pd.read_csv(url, usecols=[1, 2, 3, 4])
+# 앞 70%만 훈련에 쓴다.
 training_data = data.iloc[:int(len(data) * 0.7)]
 
 y = np.array(training_data.Sales).reshape(-1, 1)
 n = y.shape[0]
+# 1 로 채운 열을 앞에 붙여 절편을 만든다. 마지막 열이 반응(Sales)이므로
+# iloc[:, :-1] 로 설명변수만 고른다.
 X = np.concatenate(
     (np.ones((n, 1)), np.array(training_data.iloc[:, :-1])), axis=1
 )
@@ -106,6 +134,8 @@ TV          coef=0.0470  SE=0.002  t=27.653  p=0.000  CI=(0.044, 0.050)
 Radio       coef=0.1797  SE=0.011  t=16.665  p=0.000  CI=(0.158, 0.201)
 Newspaper   coef=-0.0030  SE=0.007  t=-0.428  p=0.669  CI=(-0.017, 0.011)
 ```
+
+</div>
 
 요약표의 각 열을 따로 꺼내 인쇄했다. 계수, 표준오차, $t$, p-값, 신뢰구간이 어떻게 맞물리는지 한 줄로 볼 수 있다.
 

@@ -47,6 +47,10 @@ $H_0$(등분산) 아래에서 이 보조회귀의 검정통계량 $nR^2$은 $\ch
 
 King County(시애틀) 주택 매매 자료에서 우편번호 98105 지역만 골라 쓴다.
 
+<div class="codebox" markdown>
+
+**예제 1.** 주택 자료 읽기
+
 ```python
 import pandas as pd
 
@@ -75,11 +79,15 @@ min        119748.0          490.0       1.0
 max       3013254.0         5570.0       9.0
 ```
 
+</div>
+
 98105 지역 313건이다. 가격이 12만에서 301만 달러까지 25배 차이가 나고 표준편차가 평균의 절반이 넘는다. 이렇게 퍼진 자료에서는 이분산과 영향점이 함께 나타나기 쉽다.
 
-## 코드
-
 ### 기준 모형과 영향 진단
+
+<div class="codebox" markdown>
+
+**예제 2.** 영향점 진단량 구하기
 
 ```python
 import numpy as np
@@ -87,6 +95,8 @@ import pandas as pd
 import statsmodels.api as sm
 from statsmodels.stats.outliers_influence import OLSInfluence
 
+# assign(const=1) 이 절편 열을 만든다. statsmodels 의 OLS 는 절편을
+# 자동으로 넣지 않는다.
 predictors = ['SqFtTotLiving', 'SqFtLot', 'Bathrooms', 'Bedrooms', 'BldgGrade']
 X = house_98105[predictors].assign(const=1)
 y = house_98105['AdjSalePrice']
@@ -94,6 +104,9 @@ y = house_98105['AdjSalePrice']
 results = sm.OLS(y, X).fit()
 influence = OLSInfluence(results)
 
+# 세 진단량을 함께 본다. 스튜던트화 잔차는 그 점이 얼마나 벗어났는지,
+# 지렛값은 설명변수 쪽에서 얼마나 외따로 있는지, Cook 거리는 그 둘을
+# 합쳐 결론을 얼마나 흔드는지를 잰다.
 studentized_resids = influence.resid_studentized_internal
 hat_values = influence.hat_matrix_diag
 cooks_dist, _ = influence.cooks_distance
@@ -122,13 +135,21 @@ Cook 거리 최댓값 = 0.5608 (관측 152)
 문턱을 넘는 관측값 수 = 20
 ```
 
+</div>
+
 계수를 보면 거주면적 1제곱피트당 210달러, 건물 등급 한 단계당 13만 달러다. 침실 수의 계수가 **음수**($-26{,}320$)인 것이 눈에 띄는데, 면적을 고정한 채 침실을 늘리면 방이 작아지므로 값이 떨어진다는 뜻이다. 다중회귀 계수를 "다른 변수를 고정한 채"로 읽어야 하는 이유다.
 
 Cook 거리가 문턱 0.0128을 넘는 관측값이 20개이고, 그중 152번이 0.5608로 압도적이다.
 
 ### 영향점 제거의 효과
 
+<div class="codebox" markdown>
+
+**예제 3.** 영향점을 빼고 다시 적합
+
 ```python
+# 문턱을 넘는 관측값을 빼고 다시 적합해 계수가 얼마나 달라지는지 본다.
+# 크게 달라진다면 결론이 몇 채의 집에 기대고 있다는 뜻이다.
 threshold_cooks = 4 / len(y)
 mask_keep = cooks_dist < threshold_cooks
 
@@ -161,15 +182,23 @@ const         -772549.86 -644099.89
 R^2: 0.7954 -> 0.8415
 ```
 
+</div>
+
 영향점 20건을 빼면 $R^2$가 0.795에서 0.842로 오르고 계수도 눈에 띄게 움직인다. BldgGrade의 계수가 13.0만에서 11.1만으로 14% 줄었다.
 
 이만큼 움직인다는 것 자체가 보고해야 할 사실이다. 그렇다고 20건을 그냥 버려서는 안 된다. Cook 거리가 큰 관측값은 자료 오류일 수도, 정말로 특이한 거래(예: 재건축 예정 부지)일 수도 있으므로 개별적으로 확인해야 한다.
 
 ### 이분산 검정
 
+<div class="codebox" markdown>
+
+**예제 4.** 등분산 검정
+
 ```python
 from statsmodels.stats.diagnostic import het_breuschpagan
 
+# 집값 자료는 비싼 집일수록 오차도 커지는 것이 보통이라, 등분산 검정이
+# 기각되는 일이 흔하다. 그럴 때는 로그 변환이나 로버스트 표준오차로 간다.
 bp_stat, bp_pval, _, _ = het_breuschpagan(results.resid, X)
 print(f"Breusch-Pagan p-value: {bp_pval:.4f}")
 ```
@@ -179,6 +208,8 @@ print(f"Breusch-Pagan p-value: {bp_pval:.4f}")
 ```
 Breusch-Pagan p-value: 0.0000
 ```
+
+</div>
 
 $p < 0.0001$로 등분산을 강하게 기각한다. 주택 가격 자료에서 흔한 일이다. 비싼 집일수록 가격의 변동폭도 커지기 때문이며, 로그 변환이나 로버스트 표준오차가 표준적인 처방이다.
 

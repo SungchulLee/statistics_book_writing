@@ -30,14 +30,17 @@
 
 훈련 RSS는 $k$에 따라 언제나 줄어들므로, 최적 $k$는 남겨 둔 자료에서 계산한 기준(검증 RSS, 교차검증, AIC, BIC)을 최소화하여 고른다.
 
-## 코드
-
 ### 자료 생성
+
+<div class="codebox" markdown>
+
+**예제 1.** 실험용 자료
 
 ```python
 import numpy as np
 from sklearn.linear_model import LinearRegression
 
+# 앞의 넷만 참 계수가 0 이 아니다. 세 방법이 이 넷을 찾아내는지 견준다.
 np.random.seed(42)
 n, p = 200, 8
 X = np.random.randn(n, p)
@@ -46,12 +49,23 @@ y = X @ true_beta + np.random.normal(0, 2, n)
 names = [f"x{i+1}" for i in range(p)]
 ```
 
+</div>
+
 ### 최량 부분집합 선택
+
+<div class="codebox" markdown>
+
+**예제 2.** 최적 부분집합 선택
 
 ```python
 from itertools import combinations
 
 def best_subset(X, y, max_k=None):
+    """모든 부분집합을 다 따져 크기별 최선을 찾는다.
+
+    크기 k 마다 가능한 조합을 남김없이 본다. 답은 확실하지만 부분집합이
+    2^p 개라 변수가 스물만 넘어도 감당할 수 없다.
+    """
     n, p = X.shape
     if max_k is None:
         max_k = p
@@ -67,10 +81,21 @@ def best_subset(X, y, max_k=None):
     return results
 ```
 
+</div>
+
 ### 전진 단계적 선택
+
+<div class="codebox" markdown>
+
+**예제 3.** 전진 단계선택
 
 ```python
 def forward_stepwise(X, y):
+    """빈 모형에서 시작해 RSS 를 가장 많이 줄이는 변수를 하나씩 더한다.
+
+    따지는 모형이 p(p+1)/2 개로 줄어 훨씬 빠르다. 다만 한 번 들어간 변수는
+    빠지지 않으므로 최적 부분집합을 놓칠 수 있다.
+    """
     n, p = X.shape
     selected, remaining = [], list(range(p))
     results = {}
@@ -88,10 +113,21 @@ def forward_stepwise(X, y):
     return results
 ```
 
+</div>
+
 ### 후진 단계적 선택
+
+<div class="codebox" markdown>
+
+**예제 4.** 후진 단계선택
 
 ```python
 def backward_stepwise(X, y):
+    """전체 모형에서 시작해 RSS 를 가장 적게 늘리는 변수를 하나씩 뺀다.
+
+    시작점이 전체 모형이므로 n > p 여야 쓸 수 있다. 변수가 관측보다 많으면
+    전진선택으로 가야 한다.
+    """
     n, p = X.shape
     current = list(range(p))
     results = {}
@@ -110,6 +146,8 @@ def backward_stepwise(X, y):
         results[k] = {"features": tuple(current), "rss": best_rss}
     return results
 ```
+
+</div>
 
 ## 해석
 

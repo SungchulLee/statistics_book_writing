@@ -32,24 +32,43 @@ $$
 
 여기서 $\hat{y}_i^{(-k)}$는 겹 $k$ 없이 훈련한 모형이 내놓은 관측값 $i$의 예측값이다.
 
-## 코드
-
 ### 정보기준 함수
+
+<div class="codebox" markdown>
+
+**예제 1.** AIC와 BIC 구현
 
 ```python
 import numpy as np
 
 def aic(n, rss, k):
+    """AIC. 모수 하나당 벌점이 2 다."""
     return n * np.log(rss / n) + 2 * k
 
 def bic(n, rss, k):
+    """BIC. 벌점이 log(n) 이라 n>7 부터 AIC 보다 무겁다.
+
+    그래서 BIC 는 대개 더 작은 모형을 고른다. AIC 는 예측을 잘하는 모형을,
+    BIC 는 참 모형을 찾는 것을 겨냥한다고 흔히 말한다.
+    """
     return n * np.log(rss / n) + k * np.log(n)
 ```
 
+</div>
+
 ### 교차검증 MSE
+
+<div class="codebox" markdown>
+
+**예제 2.** 교차검증 구현
 
 ```python
 def cv_mse(X, y, folds=5):
+    """k겹 교차검증으로 예측오차를 추정한다.
+
+    AIC·BIC 가 공식으로 벌점을 매긴다면, 교차검증은 실제로 떼어 놓은
+    자료에서 재 본다. 가정이 적은 대신 계산이 많이 든다.
+    """
     n = len(y)
     indices = np.arange(n)
     np.random.shuffle(indices)
@@ -66,9 +85,17 @@ def cv_mse(X, y, folds=5):
     return np.mean(mses)
 ```
 
+</div>
+
 ### 전진 선택
 
+<div class="codebox" markdown>
+
+**예제 3.** 전진선택으로 변수 고르기
+
 ```python
+# 여덟 변수 중 앞의 셋만 실제로 쓰이고 나머지 다섯은 계수가 0 이다.
+# 전진선택이 그 셋을 먼저 집어내는지 보는 것이 이 실험의 목적이다.
 np.random.seed(42)
 n, p_total = 200, 8
 X_raw = np.random.randn(n, p_total)
@@ -79,6 +106,9 @@ remaining = list(range(p_total))
 selected = []
 aic_history, bic_history = [], []
 
+# 전진선택: 매 단계에서 AIC 를 가장 많이 낮추는 변수를 하나씩 더한다.
+# 모든 부분집합을 따지면 2^8 개지만, 이렇게 하면 훨씬 적게 본다.
+# 대신 최적 부분집합을 놓칠 수 있다.
 for step in range(p_total):
     best_score, best_j = np.inf, None
     for j in remaining:
@@ -99,6 +129,8 @@ for step in range(p_total):
     aic_history.append(aic(n, rss, k))
     bic_history.append(bic(n, rss, k))
 ```
+
+</div>
 
 ### 결과
 

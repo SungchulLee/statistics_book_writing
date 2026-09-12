@@ -38,6 +38,10 @@ $$
 
 세 페이지가 공유하는 King County(시애틀) 주택 매매 자료를 읽는다.
 
+<div class="codebox" markdown>
+
+**예제 1.** 주택 자료 읽기
+
 ```python
 import pandas as pd
 
@@ -65,11 +69,15 @@ min          3368.0          370.0   1900.0
 max      11644855.0        10740.0   2015.0
 ```
 
+</div>
+
 주택 22,687건이다. 건축연도가 1900년부터 2015년까지 걸쳐 있어 스플라인으로 나이-가격 관계를 살피기에 적당하다.
 
-## 코드
-
 ### B-스플라인 회귀
+
+<div class="codebox" markdown>
+
+**예제 2.** B-스플라인 기저 만들기
 
 ```python
 import numpy as np
@@ -78,19 +86,30 @@ from patsy import dmatrix, build_design_matrices
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import r2_score, mean_squared_error
 
+# 건축연도 대신 집의 나이를 쓴다. 나이와 가격의 관계는 직선이 아니다.
 age = 2024 - house['YrBuilt'].values
 df = pd.DataFrame({'age': age, 'price': house['AdjSalePrice'].values})
 
-# B-spline with df=4
+# patsy 의 bs() 가 B-스플라인 기저를 만들어 준다. df=4 면 매듭을 자료의
+# 분위수에 맞춰 알아서 놓는다. 끝의 -1 은 patsy 가 붙이는 절편을 빼는 것이고,
+# 절편은 아래 LinearRegression 이 따로 넣는다.
 bs_design = dmatrix("bs(age, df=4, degree=3, include_intercept=False) - 1",
                     {"age": df['age']}, return_type='dataframe')
 bs_model = LinearRegression().fit(bs_design, df['price'])
 bs_r2 = r2_score(df['price'], bs_model.predict(bs_design))
 ```
 
+</div>
+
 ### 사용자 지정 매듭을 쓰는 B-스플라인
 
+<div class="codebox" markdown>
+
+**예제 3.** 매듭 자리를 직접 정하기
+
 ```python
+# 매듭 자리를 직접 정할 수도 있다. 관계가 꺾인다고 볼 만한 근거가 있으면
+# 분위수에 맡기는 것보다 낫다.
 knots_custom = [20, 40, 60]
 bs_custom_design = dmatrix(
     f"bs(age, knots={knots_custom}, degree=3, include_intercept=False) - 1",
@@ -99,27 +118,45 @@ bs_custom_design = dmatrix(
 bs_custom_model = LinearRegression().fit(bs_custom_design, df['price'])
 ```
 
+</div>
+
 ### 자연 스플라인
 
+<div class="codebox" markdown>
+
+**예제 4.** 자연 3차 스플라인
+
 ```python
+# 자연 3차 스플라인. 양 끝에서 직선이 되도록 묶어 두어, 자료가 드문
+# 바깥쪽에서 곡선이 크게 튀는 일을 막는다. B-스플라인의 약점을 고친 것이다.
 cs_design = dmatrix("cr(age, df=4) - 1",
                     {"age": df['age']}, return_type='dataframe')
 cs_model = LinearRegression().fit(cs_design, df['price'])
 cs_r2 = r2_score(df['price'], cs_model.predict(cs_design))
 ```
 
+</div>
+
 ### 격자에서의 예측
+
+<div class="codebox" markdown>
+
+**예제 5.** 예측할 때 기저 재사용하기
 
 ```python
 age_grid = np.linspace(df['age'].min(), df['age'].max(), 300)
 
-# Reuse the ORIGINAL basis (same knots) via design_info
+# 예측할 때는 반드시 원래 기저를 그대로 써야 한다. 새 자료로 dmatrix 를
+# 다시 부르면 매듭이 그 자료의 분위수로 다시 정해져, 훈련 때와 다른 기저가
+# 만들어진다. design_info 를 넘겨 주는 것이 그 실수를 막는 방법이다.
 bs_grid = build_design_matrices([bs_design.design_info], {"age": age_grid})[0]
 bs_pred = bs_model.predict(np.asarray(bs_grid))
 
 cs_grid = build_design_matrices([cs_design.design_info], {"age": age_grid})[0]
 cs_pred = cs_model.predict(np.asarray(cs_grid))
 ```
+
+</div>
 
 !!! warning "새 자료에 `dmatrix`를 다시 부르면 안 된다"
     식 문자열로 `dmatrix`를 다시 호출하면 patsy가 **새로 넘긴 자료로 매듭을 다시 계산한다**. 그러면 훈련에 쓴 기저와 다른 기저가 만들어져 계수가 엉뚱한 기저에 곱해진다. 반드시 원래 설계행렬의 `design_info`를 `build_design_matrices`에 넘겨 같은 매듭을 재사용해야 한다.

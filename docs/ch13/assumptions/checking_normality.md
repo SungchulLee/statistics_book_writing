@@ -26,6 +26,10 @@ $$
 
 이 페이지의 진단은 모두 아래 자료와 모형 하나를 놓고 수행한다.
 
+<div class="codebox" markdown>
+
+**예제 1.** 진단에 쓸 모형 준비
+
 ```python
 import numpy as np
 import pandas as pd
@@ -56,6 +60,8 @@ beta_hat = [1.5933 1.5317]
 R^2 = 0.7813
 ```
 
+</div>
+
 기울기 추정값 1.53이 참값 1.5에 가깝다. 이분산이 있어도 OLS 추정값 자체는 불편이며, 흔들리는 것은 표준오차다.
 
 ## 2. 잔차의 히스토그램
@@ -70,18 +76,23 @@ R^2 = 0.7813
 
 **예시:**
 
+<div class="codebox" markdown>
+
+**예제 2.** 잔차의 히스토그램
+
 ```python
 import matplotlib.pyplot as plt
 import numpy as np
 from scipy.stats import norm
 
-# Assuming 'model' is your fitted OLS model
+# 정규성은 자료가 아니라 잔차에 요구되는 가정이다. 게다가 계수 추정의
+# 불편성에는 필요 없고, 작은 표본에서 t 검정과 신뢰구간을 쓰기 위해 필요하다.
 residuals = model.resid
 
 fig, ax = plt.subplots(figsize=(8, 5))
 ax.hist(residuals, bins=30, density=True, edgecolor='black', alpha=0.7, label='Residuals')
 
-# Overlay a normal distribution curve
+# 잔차의 평균과 표준편차로 만든 정규곡선을 겹쳐 그린다.
 x = np.linspace(residuals.min(), residuals.max(), 100)
 ax.plot(x, norm.pdf(x, loc=residuals.mean(), scale=residuals.std()),
         'r-', linewidth=2, label='Normal PDF')
@@ -92,6 +103,8 @@ ax.set_title('Histogram of Residuals with Normal Overlay')
 ax.legend()
 plt.show()
 ```
+
+</div>
 
 ![잔차의 Q-Q 그림](./img/checking_normality_69.png)
 
@@ -121,18 +134,25 @@ plt.show()
 
 **예시:**
 
+<div class="codebox" markdown>
+
+**예제 3.** Q-Q 그림
+
 ```python
 import scipy.stats as stats
 import matplotlib.pyplot as plt
 
-# Assuming 'model' is your fitted OLS model
 residuals = model.resid
 
+# Q-Q 그림이 히스토그램보다 낫다. 계급 수에 휘둘리지 않고, 정규에서
+# 벗어나는 자리가 꼬리인지 가운데인지까지 알려 준다.
 fig, ax = plt.subplots(figsize=(6, 6))
 stats.probplot(residuals, dist="norm", plot=ax)
 ax.set_title('Q-Q Plot of Residuals')
 plt.show()
 ```
+
+</div>
 
 ![잔차의 히스토그램](./img/checking_normality_116.png)
 
@@ -178,12 +198,17 @@ $$
 
 **예시:**
 
+<div class="codebox" markdown>
+
+**예제 4.** Shapiro-Wilk 검정
+
 ```python
 from scipy.stats import shapiro
 
-# Assuming 'model' is your fitted OLS model
 residuals = model.resid
 
+# Shapiro-Wilk 는 작은 표본에서 검정력이 좋다. 다만 표본이 수천을 넘으면
+# 실질적으로 무시할 만한 이탈에도 유의하게 나오므로 그림과 함께 읽는다.
 stat, p_value = shapiro(residuals)
 print(f'Shapiro-Wilk statistic: {stat:.4f}')
 print(f'Shapiro-Wilk p-value: {p_value:.4f}')
@@ -201,6 +226,8 @@ Shapiro-Wilk statistic: 0.9836
 Shapiro-Wilk p-value: 0.1524
 No significant evidence of non-normality (fail to reject H0)
 ```
+
+</div>
 
 Shapiro-Wilk가 $p = 0.15$로 정규성을 기각하지 못한다. 오차를 정규분포에서 만들었으니 옳은 판정이다. 분산이 $X$에 따라 달라도 각 오차는 여전히 정규라는 점에 주의하라. 이분산과 비정규성은 별개의 문제다.
 
@@ -233,12 +260,17 @@ $$
 
 **예시:**
 
+<div class="codebox" markdown>
+
+**예제 5.** Anderson-Darling 검정
+
 ```python
 from scipy.stats import anderson
 
-# Assuming 'model' is your fitted OLS model
 residuals = model.resid
 
+# Anderson-Darling 은 꼬리 쪽 이탈에 특히 민감하다. p-값 대신 유의수준별
+# 기각값을 돌려주므로, 통계량과 기각값을 견주어 판단한다.
 result = anderson(residuals, dist='norm')
 print(f'Anderson-Darling statistic: {result.statistic:.4f}')
 print()
@@ -260,6 +292,8 @@ At 5.0% significance: Critical value = 0.7630 → REJECT
 At 2.5% significance: Critical value = 0.8900 → REJECT
 At 1.0% significance: Critical value = 1.0590 → Fail to reject
 ```
+
+</div>
 
 Anderson-Darling은 유의수준 15%와 10%에서는 기각하고 5% 이하에서는 기각하지 못한다. 꼬리에 더 민감한 검정이라 Shapiro-Wilk보다 이 자료를 엄하게 본다.
 
@@ -294,12 +328,18 @@ $H_0$(정규성) 아래에서 $JB \sim \chi^2(2)$이다.
 
 **예시:**
 
+<div class="codebox" markdown>
+
+**예제 6.** Jarque-Bera 검정
+
 ```python
 from statsmodels.stats.stattools import jarque_bera
 
-# Assuming 'model' is your fitted OLS model
 residuals = model.resid
 
+# Jarque-Bera 는 왜도와 첨도만 본다. 정규분포는 왜도 0, 첨도 3 이므로
+# 이 둘이 얼마나 벗어났는지를 하나의 통계량으로 묶은 것이다.
+# 큰 표본에서만 믿을 만하다.
 jb_stat, jb_pvalue, skew, kurtosis = jarque_bera(residuals)
 print(f'Jarque-Bera statistic: {jb_stat:.4f}')
 print(f'Jarque-Bera p-value: {jb_pvalue:.4f}')
@@ -315,6 +355,8 @@ Jarque-Bera p-value: 0.4456
 Skewness: -0.0508
 Kurtosis: 3.5595
 ```
+
+</div>
 
 Jarque-Bera도 $p = 0.45$로 기각하지 못한다. 왜도 $-0.05$는 0에 가깝고 첨도 3.56은 정규분포의 3보다 조금 크다.
 

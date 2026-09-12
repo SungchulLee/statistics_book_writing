@@ -22,14 +22,17 @@ $$
 
 각 계수는 **부분적 해석**을 갖는다. $\hat{\beta}_1$은 $x_2$를 고정했을 때 $x_1$이 한 단위 늘어날 때 기대되는 $y$의 변화이다. 기하학적으로 $\hat{\beta}_1$은 $x_1$ 방향으로 잰 평면의 기울기이다.
 
-## 코드
-
 ### 자료 생성과 적합
+
+<div class="codebox" markdown>
+
+**예제 1.** 설명변수 둘인 자료와 적합
 
 ```python
 import numpy as np
 from sklearn.linear_model import LinearRegression
 
+# 설명변수가 둘이면 회귀선이 아니라 회귀평면이 된다. 그것을 눈으로 본다.
 np.random.seed(42)
 n = 150
 TV = np.random.uniform(0, 300, n)
@@ -47,9 +50,16 @@ beta_1 = model.coef_[0]  # Radio
 beta_2 = model.coef_[1]  # TV
 ```
 
+</div>
+
 ### 회귀평면 격자 만들기
 
+<div class="codebox" markdown>
+
+**예제 2.** 회귀평면 격자 만들기
+
 ```python
+# 평면을 그리려면 두 축의 격자를 만들고 칸마다 적합값을 계산한다.
 Radio_range = np.arange(0, 50, 5)
 TV_range = np.arange(0, 300, 30)
 Radio_mesh, TV_mesh = np.meshgrid(Radio_range, TV_range)
@@ -57,7 +67,13 @@ Radio_mesh, TV_mesh = np.meshgrid(Radio_range, TV_range)
 Sales_mesh = beta_0 + beta_1 * Radio_mesh + beta_2 * TV_mesh
 ```
 
+</div>
+
 ### 3차원 시각화
+
+<div class="codebox" markdown>
+
+**예제 3.** 평면과 잔차를 3차원으로
 
 ```python
 import matplotlib.pyplot as plt
@@ -65,14 +81,16 @@ import matplotlib.pyplot as plt
 fig = plt.figure(figsize=(14, 10))
 ax = fig.add_subplot(111, projection='3d')
 
-# Regression plane
+# 회귀평면. 반투명으로 그려 점이 앞뒤 어디에 있는지 보이게 한다.
 ax.plot_surface(Radio_mesh, TV_mesh, Sales_mesh,
                 alpha=0.3, cmap='coolwarm')
 
-# Data points
+# 관측점
 ax.scatter(Radio, TV, Sales, c='blue', s=50, alpha=0.6)
 
-# Residual lines (every 5th point)
+# 점에서 평면까지 수직으로 선을 긋는다. 그 길이가 잔차이고,
+# 최소제곱은 이 길이들의 제곱합을 가장 작게 만드는 평면을 고른 것이다.
+# 다 그리면 지저분하므로 다섯 점마다 하나씩만 그린다.
 y_pred = model.predict(X)
 for i in range(0, n, 5):
     ax.plot([X[i, 0], X[i, 0]], [X[i, 1], X[i, 1]],
@@ -84,6 +102,8 @@ ax.set_zlabel('Sales')
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 ![회귀평면](./img/regression_plane_3d_62.png)
 

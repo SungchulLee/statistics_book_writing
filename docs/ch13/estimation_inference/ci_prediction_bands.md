@@ -28,24 +28,38 @@ $$
 
 예측구간은 평균 추정의 불확실성과 줄일 수 없는 잡음 $\sigma^2$을 모두 반영하므로 언제나 더 넓다.
 
-## 코드
-
 ### 자료 생성
+
+<div class="codebox" markdown>
+
+**예제 1.** 자료 만들기
 
 ```python
 import numpy as np
 
 def generate_data(n, sigma, seed=0):
+    """자료를 만든다. 참 모형은 y = 1 + 2x + 잡음 이다."""
     np.random.seed(seed)
     x = np.random.randn(n, 1)
     y = 1 + 2 * x + sigma * np.random.randn(n, 1)
     return x, y
 ```
 
+</div>
+
 ### 회귀직선 추정
+
+<div class="codebox" markdown>
+
+**예제 2.** 회귀직선 추정
 
 ```python
 def estimate_regression_line(x, y):
+    """상관계수 공식으로 기울기와 절편을 구한다.
+
+    beta_hat = r * (s_y / s_x) 이다. 최소제곱해와 정확히 같은 값이지만,
+    회귀계수가 상관계수를 척도만 바꿔 옮긴 것임이 이 꼴에서 드러난다.
+    """
     x_bar = x.mean()
     y_bar = y.mean()
     s_x = x.std(ddof=1)
@@ -56,38 +70,62 @@ def estimate_regression_line(x, y):
     return y_hat, beta_hat, y_bar, x_bar
 ```
 
+</div>
+
 ### 잔차분산
+
+<div class="codebox" markdown>
+
+**예제 3.** 잔차분산 구하기
 
 ```python
 def calculate_residual_variance(y, y_hat, n):
+    """잔차분산 s^2 을 구한다.
+
+    n 이 아니라 n-2 로 나눈다. 절편과 기울기 둘을 자료에서 추정하느라
+    자유도를 둘 잃었기 때문이다.
+    """
     s_square = np.sum((y - y_hat) ** 2) / (n - 2)
     s = np.sqrt(s_square)
     return s_square, s
 ```
 
+</div>
+
 ### 신뢰구간과 예측구간
+
+<div class="codebox" markdown>
+
+**예제 4.** 두 구간 계산
 
 ```python
 from scipy import stats
 
 def confidence_intervals(x, y_hat, beta_hat, x_bar, y_bar, n, s):
+    """평균반응의 신뢰구간과 개별관측의 예측구간을 함께 구한다.
+
+    두 식의 차이는 근호 안의 1 뿐이다. 평균을 맞히는 데는 추정오차만 들지만,
+    개별 관측을 맞히려면 잡음 자체의 분산이 더 얹힌다.
+    """
     x0 = np.linspace(x.min(), x.max(), 20)
     y0_hat = beta_hat * (x0 - x_bar) + y_bar
     t_val = stats.t(n - 2).ppf(0.975)
     ss_x = np.sum((x - x_bar) ** 2)
 
-    # CI for E[y | x = x0]
+    # 평균반응의 신뢰구간. x 의 평균에서 멀어질수록 넓어진다.
     margin = t_val * s * np.sqrt((1 / n) + (x0 - x_bar) ** 2 / ss_x)
     lower = y0_hat - margin
     upper = y0_hat + margin
 
-    # PI for y | x = x0
+    # 예측구간. 근호 안의 1 이 잡음 몫이며, n 을 키워도 사라지지 않는다.
     margin2 = t_val * s * np.sqrt(1 + (1 / n) + (x0 - x_bar) ** 2 / ss_x)
     lower2 = y0_hat - margin2
     upper2 = y0_hat + margin2
 
     return x0, lower, upper, lower2, upper2
 ```
+
+</div>
 
 ## 해석
 

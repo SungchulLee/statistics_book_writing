@@ -28,52 +28,77 @@ $$
 
 WLS는 변환된 모형 $\sqrt{w_i}\,y_i = \sqrt{w_i}\,\mathbf{x}_i^\top\boldsymbol{\beta} + \sqrt{w_i}\,\varepsilon_i$에 OLS를 적용하는 것과 동등하다. 변환된 오차는 분산이 일정하다.
 
-## 코드
-
 ### OLS와 WLS 구현
+
+<div class="codebox" markdown>
+
+**예제 1.** OLS와 WLS 구현
 
 ```python
 import numpy as np
 
 def ols_fit(X, y):
+    """보통최소제곱. 모든 관측값에 같은 무게를 준다."""
     beta = np.linalg.lstsq(X, y, rcond=None)[0]
     return beta
 
 def wls_fit(X, y, w):
+    """가중최소제곱. 관측값마다 다른 무게 w 를 준다.
+
+    정규방정식의 X'X 와 X'y 사이에 가중행렬 W 가 끼어드는 것이 전부다.
+    분산이 큰 관측값에 작은 무게를 주면 추정의 분산이 줄어든다.
+    """
     W = np.diag(w)
     XtW = X.T @ W
     beta = np.linalg.solve(XtW @ X, XtW @ y)
     return beta
 ```
 
+</div>
+
 ### 이분산 자료 생성과 적합
+
+<div class="codebox" markdown>
+
+**예제 2.** 이분산 자료로 견주기
 
 ```python
 np.random.seed(42)
 n = 120
 x = np.random.uniform(1, 10, n)
-sigma = 0.5 + 1.5 * x  # variance grows with x
+
+# 잡음의 크기가 x 에 따라 커진다. 전형적인 이분산 자료다.
+sigma = 0.5 + 1.5 * x
 y = 3.0 + 2.0 * x + np.random.normal(0, sigma)
 
 X = np.column_stack([np.ones(n), x])
 
-# OLS
+# 두 방법 모두 불편추정량이라 계수 자체는 비슷하게 나온다.
 beta_ols = ols_fit(X, y)
 
-# WLS with weights = 1 / sigma^2
+# 분산의 역수를 무게로 쓰는 것이 최적이다. 여기서는 참 sigma 를 알고 있어
+# 그대로 썼지만, 실제로는 sigma 도 자료에서 추정해야 한다.
 w = 1.0 / sigma ** 2
 beta_wls = wls_fit(X, y, w)
 ```
 
+</div>
+
 ### 표준오차 비교
 
+<div class="codebox" markdown>
+
+**예제 3.** 표준오차의 차이
+
 ```python
-# OLS SE (assumes homoscedasticity)
+# 여기서 갈린다. OLS 의 표준오차 공식은 등분산을 전제하므로, 이분산
+# 자료에서는 그 값 자체를 믿을 수 없다.
 resid_ols = y - X @ beta_ols
 s2_ols = np.sum(resid_ols ** 2) / (n - 2)
 se_ols = np.sqrt(np.diag(s2_ols * np.linalg.inv(X.T @ X)))
 
-# WLS SE
+# WLS 의 표준오차는 이분산을 제대로 셈에 넣은 값이고, OLS 의 것보다 작다.
+# 같은 자료에서 더 정확한 결론을 얻는다는 뜻이다.
 W = np.diag(w)
 XtWX_inv = np.linalg.inv(X.T @ W @ X)
 se_wls = np.sqrt(np.diag(XtWX_inv))
@@ -83,6 +108,8 @@ print(f"OLS:  intercept={beta_ols[0]:.3f} (SE={se_ols[0]:.3f}), "
 print(f"WLS:  intercept={beta_wls[0]:.3f} (SE={se_wls[0]:.3f}), "
       f"slope={beta_wls[1]:.3f} (SE={se_wls[1]:.3f})")
 ```
+
+</div>
 
 출력(참값은 절편 3.0, 기울기 2.0):
 

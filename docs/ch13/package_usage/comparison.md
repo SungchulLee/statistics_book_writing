@@ -83,10 +83,16 @@ max      8.780   37.970   22.000   50.000
 
 ### statsmodels
 
+<div class="codebox" markdown>
+
+**예제 2.** statsmodels — 추론이 목적일 때
+
 ```python
 import statsmodels.api as sm
 import pandas as pd
 
+# statsmodels 는 추론이 목적일 때 쓴다. 표준오차·p-값·신뢰구간이
+# 출력표에 한꺼번에 나온다.
 X = sm.add_constant(df[['RM', 'LSTAT', 'PTRATIO']])
 y = df['PRICE']
 
@@ -104,7 +110,7 @@ def print_summary(res):
 model = sm.OLS(y, X).fit()
 print_summary(model)
 
-# Access specific results
+# 필요한 값은 속성으로 바로 꺼낼 수 있다.
 print(f"R²: {model.rsquared:.4f}")
 print(f"Adj. R²: {model.rsquared_adj:.4f}")
 print(f"AIC: {model.aic:.2f}")
@@ -159,11 +165,17 @@ LSTAT    -0.654775  -0.488836
 PTRATIO  -1.161877  -0.699568
 ```
 
+</div>
+
 $R^2 = 0.679$이고 세 계수 모두 $p < 10^{-13}$로 강하게 유의하다. 방이 하나 늘면 가격이 4.5(천 달러) 오르고, 저소득층 비율이 1%p 늘면 0.57 내린다.
 
 아래 진단 블록이 문제를 알려 준다. Durbin-Watson 0.901은 잔차에 강한 양의 자기상관이 있다는 뜻이고, Jarque-Bera $p \approx 10^{-222}$는 정규성이 심하게 깨졌다는 뜻이다. 공간자료라 이웃한 관측값끼리 닮았기 때문이며, 계수 추정값은 여전히 불편이지만 **p-값과 신뢰구간은 믿기 어렵다**.
 
 ### sklearn
+
+<div class="codebox" markdown>
+
+**예제 3.** sklearn — 예측이 목적일 때
 
 ```python
 from sklearn.linear_model import LinearRegression
@@ -171,6 +183,8 @@ from sklearn.model_selection import cross_val_score
 from sklearn.metrics import r2_score, mean_squared_error
 import numpy as np
 
+# sklearn 은 예측이 목적일 때 쓴다. 표준오차나 p-값은 아예 제공하지 않는
+# 대신, 교차검증·파이프라인·정규화가 한 틀로 묶여 있다.
 X = df[['RM', 'LSTAT', 'PTRATIO']]
 y = df['PRICE']
 
@@ -183,7 +197,7 @@ print(f"RMSE: {np.sqrt(mean_squared_error(y, y_pred)):.4f}")
 print(f"Coefficients: {model.coef_}")
 print(f"Intercept: {model.intercept_:.4f}")
 
-# Cross-validation
+# 훈련자료에서 잰 R^2 는 언제나 후하다. 교차검증 값이 실제 성능에 가깝다.
 cv_scores = cross_val_score(model, X, y, cv=5, scoring='r2')
 print(f"CV R² (mean ± std): {cv_scores.mean():.4f} ± {cv_scores.std():.4f}")
 ```
@@ -198,6 +212,8 @@ Intercept: 18.5671
 CV R² (mean ± std): 0.4300 ± 0.2997
 ```
 
+</div>
+
 sklearn이 statsmodels와 **같은 계수**를 준다(4.5154, $-0.5718$, $-0.9307$). 같은 최소제곱 문제를 푸니 당연한 일이다.
 
 다른 것은 무엇을 덤으로 주느냐다. statsmodels는 p-값과 신뢰구간을, sklearn은 교차검증 점수를 쉽게 준다. 훈련 $R^2$가 0.679인데 교차검증 $R^2$가 그보다 낮게 나오는 것도 눈여겨보라. 훈련 자료에서 잰 성능은 언제나 낙관적이다.
@@ -211,8 +227,13 @@ sklearn이 statsmodels와 **같은 계수**를 준다(4.5154, $-0.5718$, $-0.930
 1. `statsmodels`로 **탐색하고 진단한다**: OLS 모형을 적합하고, 요약을 살피고, VIF를 확인하고, 잔차 가정을 검정한다.
 2. `sklearn`으로 **예측하고 검증한다**: 교차검증, 정칙화 모형, 파이프라인으로 배포 가능한 예측을 만든다.
 
+<div class="codebox" markdown>
+
+**예제 4.** 둘을 함께 쓰기
+
 ```python
-# Step 1: Statistical analysis with statsmodels
+# 실무에서는 둘을 함께 쓴다. 먼저 statsmodels 로 무엇이 유의한지,
+# 가정이 지켜지는지를 살핀다.
 import pandas as pd
 import statsmodels.api as sm
 from statsmodels.stats.outliers_influence import variance_inflation_factor
@@ -221,14 +242,16 @@ X_sm = sm.add_constant(df[['RM', 'LSTAT', 'PTRATIO']])
 model_sm = sm.OLS(df['PRICE'], X_sm).fit()
 print_summary(model_sm)
 
-# Check VIF (skip column 0: the constant)
+# 다중공선성 점검. 상수항은 셈에서 뺀다.
 vif = pd.DataFrame({
     'Feature': X_sm.columns[1:],
     'VIF': [variance_inflation_factor(X_sm.values, i) for i in range(1, X_sm.shape[1])]
 })
 print(vif)
 
-# Step 2: Prediction pipeline with sklearn
+# 그다음 sklearn 으로 예측 파이프라인을 세운다. 표준화와 능형회귀를
+# 하나로 묶으면, 교차검증의 각 겹에서 표준화가 훈련 부분만 보고 이뤄진다.
+# 이렇게 해야 검증자료의 정보가 새어 들어가지 않는다.
 from sklearn.linear_model import Ridge
 from sklearn.model_selection import cross_val_score
 from sklearn.preprocessing import StandardScaler
@@ -280,6 +303,8 @@ Notes:
 2  PTRATIO  1.198101
 Ridge CV R²: 0.4304 ± 0.2994
 ```
+
+</div>
 
 두 라이브러리를 이어 쓰는 전형적인 흐름이다. statsmodels로 계수의 유의성과 VIF를 확인하고, sklearn으로 교차검증 성능을 잰다.
 

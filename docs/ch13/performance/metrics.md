@@ -116,7 +116,9 @@ $$
 - **MSE(평균제곱오차)**: 제곱차이의 평균이다. 큰 오차에 더 무거운 벌점을 준다. OLS의 손실함수로 쓰인다.
 - **RMSE(제곱근평균제곱오차)**: MSE의 제곱근이다. 오차를 반응변수의 원래 단위로 되돌려 MSE보다 해석하기 쉽다.
 
-### 구현
+<div class="codebox" markdown>
+
+**예제 1.** 네 성능 측도 한자리에
 
 ```python
 import pandas as pd
@@ -125,44 +127,44 @@ from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 from sklearn import metrics
 
-# Load the dataset
+# 앞 절과 같은 광고 자료를 쓴다.
 url = 'https://raw.githubusercontent.com/justmarkham/scikit-learn-videos/master/data/Advertising.csv'
 df = pd.read_csv(url, usecols=[1, 2, 3, 4])
 
-# Add interaction term
 df['TV:Radio'] = df['TV'] * df['Radio']
 
 X = df[['TV', 'Radio', 'TV:Radio']]
 y = df['Sales']
 
-# Split the data
 test_size_ratio = 0.3
 x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=test_size_ratio, random_state=42)
 
-# Train the model
 model = LinearRegression()
 model.fit(x_train, y_train)
 
 y_train_pred = model.predict(x_train)
 y_test_pred = model.predict(x_test)
 
-# Display coefficients
 print(f"Intercept: {model.intercept_}")
 print(f"Coefficients: {model.coef_}\n")
 
-# R-squared
+# 아래 네 측도를 훈련과 시험에서 각각 잰다. 시험 쪽 값이 훈련 쪽보다
+# 크게 나쁘면 과적합을 의심한다.
+# R^2 — 반응의 분산 중 모형이 설명하는 몫. 단위가 없어 견주기 좋다.
 print(f"Training R^2: {model.score(x_train, y_train)}")
 print(f"Testing R^2: {model.score(x_test, y_test)}\n")
 
-# MAE
+# MAE — 오차의 절댓값 평균. 단위가 반응과 같고 이상치에 덜 휘둘린다.
 print(f"Training MAE: {metrics.mean_absolute_error(y_train, y_train_pred)}")
 print(f"Testing MAE: {metrics.mean_absolute_error(y_test, y_test_pred)}\n")
 
-# MSE
+# MSE — 오차의 제곱 평균. 큰 오차에 더 무거운 벌을 준다. 단위가 제곱이라
+# 그대로 읽기는 어렵다.
 print(f"Training MSE: {metrics.mean_squared_error(y_train, y_train_pred)}")
 print(f"Testing MSE: {metrics.mean_squared_error(y_test, y_test_pred)}\n")
 
-# RMSE
+# RMSE — MSE 의 제곱근. 단위가 반응과 같아져 해석이 쉬워진다.
+# 큰 오차를 무겁게 보되 읽기도 편해, 회귀에서 가장 널리 쓰인다.
 print(f"Training RMSE: {np.sqrt(metrics.mean_squared_error(y_train, y_train_pred))}")
 print(f"Testing RMSE: {np.sqrt(metrics.mean_squared_error(y_test, y_test_pred))}\n")
 ```
@@ -185,6 +187,8 @@ Testing MSE: 0.8921262830343071
 Training RMSE: 0.9459054040754085
 Testing RMSE: 0.9445243686820934
 ```
+
+</div>
 
 훈련 $R^2$ 0.9659와 시험 $R^2$ 0.9673이 거의 같다. 두 값이 크게 벌어지면 과적합을 의심한다.
 

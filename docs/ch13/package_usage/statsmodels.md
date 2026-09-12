@@ -8,21 +8,26 @@
 
 최소제곱 회귀의 핵심 인터페이스는 `statsmodels.api.OLS`이다. 이 클래스는 사용자가 설명변수 행렬에 상수(절편) 열을 명시적으로 추가할 것을 요구한다.
 
+<div class="codebox" markdown>
+
+**예제 1.** OLS 적합과 출력표
+
 ```python
 import numpy as np
 import statsmodels.api as sm
 
-# Generate example data
+# 참 계수가 [3.0, 1.5], 절편이 2.0 인 자료다.
 np.random.seed(42)
 n = 100
 X = np.random.randn(n, 2)
 beta_true = np.array([3.0, 1.5])
 y = X @ beta_true + 2.0 + np.random.randn(n) * 0.5
 
-# Add constant for intercept
+# statsmodels 는 절편을 자동으로 넣지 않는다. 이 줄을 빠뜨리면 원점을
+# 지나는 회귀가 되므로 sklearn 과의 가장 흔한 차이가 여기서 생긴다.
 X_with_const = sm.add_constant(X)
 
-# Fit OLS model
+# OLS(y, X) 순서다. sklearn 의 fit(X, y) 와 반대이니 헷갈리기 쉽다.
 model = sm.OLS(y, X_with_const)
 results = model.fit()
 
@@ -75,6 +80,8 @@ Kurtosis:                       3.817   Cond. No.                         1.23
 Notes:
 [1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
 ```
+
+</div>
 
 요약표를 세 부분으로 나눠 읽는다.
 
@@ -132,18 +139,22 @@ p값이 0.05보다 작으면, 동등하게 95% 신뢰구간이 0을 포함하지
 
 `statsmodels`의 식 API는 `patsy` 식을 이용해 R과 비슷한 문법을 제공한다. 이 인터페이스는 절편을 자동으로 추가하고 범주형 변수를 알아서 처리한다.
 
+<div class="codebox" markdown>
+
+**예제 2.** 수식 API
+
 ```python
 import pandas as pd
 import statsmodels.formula.api as smf
 
-# Create a DataFrame
+# 수식 API 는 R 의 문법을 따른다. 이쪽에서는 절편이 자동으로 들어가고,
+# 범주형 변수도 알아서 가변수로 바뀐다.
 df = pd.DataFrame({
     'y': y,
     'x1': X[:, 0],
     'x2': X[:, 1]
 })
 
-# Fit using formula API
 results_formula = smf.ols('y ~ x1 + x2', data=df).fit()
 print_summary(results_formula)
 ```
@@ -179,6 +190,8 @@ Notes:
 [1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
 ```
 
+</div>
+
 식 API가 앞의 배열 API와 **완전히 같은 결과**를 준다. 계수 이름이 `const, x1, x2`에서 `Intercept, x1, x2`로 바뀐 것뿐이다.
 
 식 API는 절편을 자동으로 넣어 준다. 배열 API에서 `add_constant`를 빠뜨리는 실수를 막아 준다는 점이 실용적인 장점이다.
@@ -203,8 +216,12 @@ Notes:
 
 적합된 `results` 객체는 이후 분석에 필요한 모든 양을 담고 있다.
 
+<div class="codebox" markdown>
+
+**예제 3.** 결과에서 값 꺼내기
+
 ```python
-# Coefficient estimates
+# 적합 결과에서 꺼낼 수 있는 것들을 한자리에 모았다.
 print("Coefficients:", results.params)
 
 # Standard errors
@@ -247,6 +264,8 @@ AIC: 161.5973963941535
 BIC: 169.41290695211777
 ```
 
+</div>
+
 `params`, `bse`, `pvalues`, `conf_int()`로 요약표의 각 열을 배열로 꺼낼 수 있다. 보고서를 자동 생성하거나 여러 모형을 비교할 때 이 접근이 필요하다.
 
 ---
@@ -255,23 +274,28 @@ BIC: 169.41290695211777
 
 `results` 객체는 모형 진단을 위한 메서드를 제공한다.
 
+<div class="codebox" markdown>
+
+**예제 4.** 진단 도구들
+
 ```python
-# Influence diagnostics (leverage, Cook's distance)
+# 진단 도구가 갖춰져 있다는 점이 statsmodels 를 쓰는 큰 이유다.
+# sklearn 에는 이런 것이 아예 없다.
 influence = results.get_influence()
 cooks_d = influence.cooks_distance[0]
 leverage = influence.hat_matrix_diag
 
-# Heteroscedasticity tests
+# 등분산성 검정
 from statsmodels.stats.diagnostic import het_breuschpagan
 bp_stat, bp_pval, _, _ = het_breuschpagan(results.resid, results.model.exog)
 print(f"Breusch-Pagan p-value: {bp_pval:.4f}")
 
-# Normality test on residuals
+# 잔차의 정규성 검정
 from statsmodels.stats.stattools import jarque_bera
 jb_stat, jb_pval, skew, kurtosis = jarque_bera(results.resid)
 print(f"Jarque-Bera p-value: {jb_pval:.4f}")
 
-# Variance Inflation Factors (skip index 0: the constant column)
+# 다중공선성 점검. 상수항 열은 건너뛴다.
 from statsmodels.stats.outliers_influence import variance_inflation_factor
 for i in range(1, X_with_const.shape[1]):
     vif = variance_inflation_factor(X_with_const, i)
@@ -286,6 +310,8 @@ Jarque-Bera p-value: 0.1383
 VIF for variable 1: 1.00
 VIF for variable 2: 1.00
 ```
+
+</div>
 
 Breusch-Pagan과 Jarque-Bera 모두 기각하지 못하고 VIF도 1.00이다. 자료를 가정에 맞게 만들었으니 당연한 결과이며, 진단 도구가 제대로 작동한다는 확인이기도 하다.
 

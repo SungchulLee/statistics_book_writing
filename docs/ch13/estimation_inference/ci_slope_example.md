@@ -26,22 +26,24 @@ $$
 
 여기서 $t^*_{n-2,\,\alpha/2}$는 $t$ 분포의 임계값이다.
 
-## 코드
-
 다음 코드는 카페인 연구에서 기울기의 95% 신뢰구간을 계산한다.
+
+<div class="codebox" markdown>
+
+**예제 1.** 기울기의 신뢰구간
 
 ```python
 from scipy import stats
 
-# Regression output
-beta_1_hat = 0.164      # estimated slope
-standard_error = 0.057  # SE of the slope
+# 회귀 출력표에서 그대로 읽은 값이다.
+beta_1_hat = 0.164      # 추정된 기울기
+standard_error = 0.057  # 기울기의 표준오차
 
-# Sample size and degrees of freedom
+# 자유도는 n-2 다. 절편과 기울기를 자료에서 추정했기 때문이다.
 n = 20
 df = n - 2
 
-# 95% confidence interval
+# 표본이 20 으로 작아 t 임계값이 정규의 1.96 보다 눈에 띄게 크다.
 confidence_level = 0.95
 alpha = 1 - confidence_level
 t_star = stats.t(df).ppf(1 - alpha / 2)
@@ -72,6 +74,8 @@ Margin of error: 0.1198
 0.1640 +/- 0.1198
 (0.0442, 0.2838)
 ```
+
+</div>
 
 자유도가 $n - 2 = 18$이므로 $t^* = 2.1009$다. 정규분포의 1.96보다 큰 이 값이 $\sigma$를 추정한 대가다.
 

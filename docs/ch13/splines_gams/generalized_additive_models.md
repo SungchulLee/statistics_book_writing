@@ -128,11 +128,13 @@ $$f_j(X_j) = \sum_{k=1}^{K_j} b_{jk}(X_j) c_{jk}, \qquad \text{벌점: } \lambda
 
 ---
 
-## Python 구현
-
 ### statsmodels 사용하기
 
 `statsmodels.gam` 모듈이 GAM 적합을 제공한다.
+
+<div class="codebox" markdown>
+
+**예제 1.** statsmodels로 GAM 적합
 
 ```python
 import numpy as np
@@ -140,13 +142,13 @@ import pandas as pd
 from statsmodels.gam.api import GLMGam, BSplines
 import matplotlib.pyplot as plt
 
-# Sample data
+# 참 모형은 x0 에 대해 sin, x1 에 대해 선형, x2 는 무관하다.
+# GAM 이 이 구조를 그대로 찾아내는지 보는 것이 목표다.
 n = 500
 np.random.seed(42)
 X = np.random.uniform(0, 10, (n, 3))
 y = (np.sin(X[:, 0]) + 0.5 * X[:, 1] + np.random.normal(0, 0.5, n))
 
-# Create DataFrame
 df = pd.DataFrame({
     'y': y,
     'x0': X[:, 0],
@@ -154,11 +156,12 @@ df = pd.DataFrame({
     'x2': X[:, 2]
 })
 
-# Define smooth basis
+# 변수마다 기저의 자유도를 달리 준다. 굽은 관계가 있으리라 보는 x0 에만
+# 자유도 10 을 주고 나머지는 3 으로 묶었다. 자유도가 클수록 유연하지만
+# 그만큼 잡음까지 따라갈 위험이 커진다.
 x_spline = df[['x0', 'x1', 'x2']]
 bs = BSplines(x_spline, df=[10, 3, 3], degree=[3, 2, 2])
 
-# Fit GAM
 formula = 'y ~ x0 + x1 + x2'
 gam = GLMGam.from_formula(formula, data=df, smoother=bs)
 results = gam.fit()
@@ -193,6 +196,8 @@ x2_s1          0.0997      0.059      1.704      0.088      -0.015       0.214
 ==============================================================================
 ```
 
+</div>
+
 `Df Model: 13.00`이 이 GAM이 쓴 자유도다. 선형 항이었다면 1이었을 것이다.
 
 계수 표를 보면 스플라인 기저마다 계수가 하나씩 붙어 있다. GAM의 계수는 개별적으로 해석하는 것이 아니라 **합쳐서 하나의 곡선**으로 읽어야 한다.
@@ -201,19 +206,24 @@ x2_s1          0.0997      0.059      1.704      0.088      -0.015       0.214
 
 `pygam` 라이브러리는 격자탐색으로 람다를 자동 선택해 주는 더 친절한 인터페이스를 제공한다.
 
+<div class="codebox" markdown>
+
+**예제 2.** pygam과 부분의존도 그림
+
 ```python
 from pygam import LinearGAM, s, l
 
-# Fit GAM with smoothing spline on x0 and linear terms on x1, x2
+# x0 에만 스플라인을 씌우고 나머지는 선형으로 둔다.
 gam = LinearGAM(s(0, n_splines=12) + l(1) + l(2))
 
-# Automatic lambda selection via grid search
+# 격자탐색으로 벌점 lambda 를 고른다. 자료가 스스로 매끄러움을 정하는 셈이다.
 gam.gridsearch(X, y)
 
-# Print summary
 print(gam.summary())
 
-# Visualize partial dependence
+# 부분의존도 그림은 "다른 변수를 고정했을 때 이 변수 하나가 반응에 미치는
+# 몫"을 그린다. GAM 은 항이 더해지는 꼴이라 이런 그림이 그대로 뜻을 갖는다.
+# x0 의 곡선이 sin 모양으로 나오는지가 볼거리다.
 fig, axes = plt.subplots(1, 3, figsize=(14, 4))
 for i in range(3):
     XX = gam.generate_X_grid(term=i)
@@ -259,6 +269,8 @@ WARNING: p-values calculated in this manner behave correctly for un-penalized mo
          are typically lower than they should be, meaning that the tests reject the null too readily.
 None
 ```
+
+</div>
 
 ![pyGAM 요약과 부분 의존 그림](./img/generalized_additive_models_174.png)
 
@@ -331,21 +343,24 @@ None
 
 여러 특성으로 집값을 예측한다고 하자. GAM은 설명변수마다 다른 정도의 매끄러움을 허용한다.
 
+<div class="codebox" markdown>
+
+**예제 3.** 주택 자료에 GAM 적용
+
 ```python
 from pygam import LinearGAM, s, l
 import pandas as pd
 
-# Load housing data
 house = pd.read_csv("https://raw.githubusercontent.com/gedeck/"
                     "practical-statistics-for-data-scientists/master/data/"
                     "house_sales.csv", sep='\t')
 
-# Select predictors
 predictors = ['SqFtTotLiving', 'SqFtLot', 'Bathrooms', 'Bedrooms', 'BldgGrade']
 X = house[predictors].values
 y = house['AdjSalePrice'].values
 
-# Fit GAM: smooth spline on square footage, linear terms on others
+# 면적만 굽을 수 있다고 보고 나머지는 선형으로 둔다. 이렇게 섞어 쓸 수
+# 있다는 것이 GAM 의 실용적인 장점이다.
 gam = LinearGAM(
     s(0, n_splines=12) +     # SqFtTotLiving: smooth (likely non-linear)
     l(1) +                   # SqFtLot: linear
@@ -357,7 +372,7 @@ gam = LinearGAM(
 gam.gridsearch(X, y)
 print(gam.summary())
 
-# Predict on new data
+# 새 집 하나의 가격을 예측해 본다.
 new_house = pd.DataFrame({
     'SqFtTotLiving': [3000],
     'SqFtLot': [10000],
@@ -368,7 +383,7 @@ new_house = pd.DataFrame({
 prediction = gam.predict(new_house[predictors].values)
 print(f"Predicted price: ${prediction[0]:,.0f}")
 
-# Visualize the smooth term
+# 면적의 효과가 직선이 아님을 눈으로 확인한다.
 fig, ax = plt.subplots(figsize=(6, 4))
 XX = gam.generate_X_grid(term=0)
 ax.plot(XX[:, 0], gam.partial_dependence(term=0, X=XX))
@@ -412,6 +427,8 @@ WARNING: p-values calculated in this manner behave correctly for un-penalized mo
 None
 Predicted price: $915,154
 ```
+
+</div>
 
 ![pyGAM 적합 결과](./img/generalized_additive_models_267.png)
 
