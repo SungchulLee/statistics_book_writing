@@ -96,7 +96,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 공분산에 대한 **Ledoit-Wolf 축소.** 자산 $p = 30$개, $n = 60$으로 모의실험하라. 표본공분산과 비교하라.
 
 </div>
@@ -129,7 +129,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff easy" title="쉬움"></span>
 **로버스트 척도로서의 MAD.** $\{2, 4, 6, 8, 10, 100\}$에 대해 $\text{MAD}$와 축척된 MAD($1.4826 \cdot \mathrm{MAD}$)를 계산하라. 표본표준편차와 비교하라.
 
 </div>
@@ -147,7 +147,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 **분산추정량의 붕괴점.** 표본분산, MAD, IQR을 비교하라.
 
 </div>
@@ -163,7 +163,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff easy" title="쉬움"></span>
 **절사분산.** 정의하고 $\{1, 3, 5, 7, 9, 11, 100\}$에 대해 20% 절사로 계산하라.
 
 </div>
@@ -181,7 +181,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 **로버스트 공분산.** 표본공분산행렬이 다변량 이상점에 민감한 이유는 무엇이며, 어떤 대안 추정량이 있는가?
 
 </div>
@@ -200,7 +200,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 **로버스트 공분산은 언제 쓰는가.** 적용 맥락.
 
 </div>

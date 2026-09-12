@@ -247,7 +247,7 @@ estimation_horizon_analysis()
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 약대수의법칙(WLLN)을 진술하고 강대수의법칙(SLLN)과 어떻게 다른지 설명하라. 각각에 필요한 최소한의 적률 조건은 무엇인가?
 
 </div>
@@ -269,7 +269,7 @@ estimation_horizon_analysis()
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff hard" title="어려움"></span>
 i.i.d. Cauchy 확률변수의 $\bar{X}_n$이 Cauchy 관측값 하나와 같은 분포를 가짐을 보여라. (힌트: 특성함수를 쓰라.)
 
 </div>
@@ -291,7 +291,7 @@ i.i.d. Cauchy 확률변수의 $\bar{X}_n$이 Cauchy 관측값 하나와 같은 �
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 $|\rho| < 1$이고 $\epsilon_t \sim N(0, \sigma_\epsilon^2)$인 AR(1) 과정 $X_t = \rho X_{t-1} + \epsilon_t$에서 $\bar{X}_n$의 분산을 유도하고, 큰 $n$에서 $\frac{\sigma^2}{n}\cdot\frac{1+\rho}{1-\rho}$($\sigma^2 = \sigma_\epsilon^2/(1-\rho^2)$)에 근사함을 보여라.
 
 </div>
@@ -313,7 +313,7 @@ $|\rho| < 1$이고 $\epsilon_t \sim N(0, \sigma_\epsilon^2)$인 AR(1) 과정 $X_
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff easy" title="쉬움"></span>
 어떤 펀드의 참 연간 기대초과수익률이 3%, 연간 변동성이 20%이다. 표본평균 초과수익률이 양수일 확률이 90%를 넘으려면 몇 년치 자료가 필요한가?
 
 </div>
@@ -331,7 +331,7 @@ $|\rho| < 1$이고 $\epsilon_t \sim N(0, \sigma_\epsilon^2)$인 AR(1) 과정 $X_
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 중심극한정리가 Cauchy 분포에 적용되지 않는 이유를 설명하라. 그렇다면 Cauchy 표본평균에는 아무런 극한정리도 적용되지 않는가?
 
 </div>

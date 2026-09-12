@@ -168,7 +168,7 @@ Bessel 수정(분모의 $n-1$)은 모분산의 불편추정량을 만든다. 이
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 정규 자료에서 **$S^2$의 카이제곱분포.** (a) $(n-1)S^2/\sigma^2 \sim \chi^2_{n-1}$임을 보여라. (b) $n = 20, S^2 = 16$일 때 $\sigma^2$의 95% 신뢰구간. (c) 왜 비대칭인가?
 
 </div>
@@ -182,7 +182,7 @@ Bessel 수정(분모의 $n-1$)은 모분산의 불편추정량을 만든다. 이
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 **$S$의 편향.** (a) $\mathbb{E}[S] < \sigma$인 이유. (b) $n = 5$일 때 $c_4$를 계산하라. (c) 실무에서 쓰이는가?
 
 </div>
@@ -198,7 +198,7 @@ Bessel 수정(분모의 $n-1$)은 모분산의 불편추정량을 만든다. 이
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 **실현변동성.** 하루에 5분 수익률 78개. (a) 소박한 추정량의 편향 비율. (b) Bessel 수정이 중요한가? (c) 21일 이동창은?
 
 </div>
@@ -212,7 +212,7 @@ Bessel 수정(분모의 $n-1$)은 모분산의 불편추정량을 만든다. 이
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 **Bessel 수정의 일반화.** 모수가 $p$개인 회귀에서 잔차분산추정량은 $n - p$로 나눈다. 왜인가?
 
 </div>
@@ -228,7 +228,7 @@ Bessel 수정(분모의 $n-1$)은 모분산의 불편추정량을 만든다. 이
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 **하필 $n - 1$로 나누는 이유는?** 다른 분모를 정당화할 수 있는가?
 
 </div>
@@ -251,7 +251,7 @@ Bessel 수정(분모의 $n-1$)은 모분산의 불편추정량을 만든다. 이
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 **아주 작은 표본에서는 편향 보정이 중요하지만 큰 표본에서는 그렇지 않은 이유.** $n = 3, 10, 100$으로 구체적으로 보여라.
 
 </div>

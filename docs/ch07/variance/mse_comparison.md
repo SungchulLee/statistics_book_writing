@@ -95,7 +95,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 정규 자료에서 $\hat\sigma^2_c = (1/c)\sum(X_i - \bar X)^2$에 대해: (a) $\mathrm{MSE}$를 유도하라. (b) 최적 $c^*$를 구하라. (c) $n = 10$에서 확인하라.
 
 </div>
@@ -111,7 +111,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 분산추정에서 **세 가지 분모**(n, n-1, n+1)를 **비교**하라.
 
 </div>
@@ -129,7 +129,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 **평균제곱오차는 손실함수에 따라 달라진다.** 평균제곱오차가 표준이 된 이유는 무엇이며 어떤 대안이 있는가?
 
 </div>
@@ -152,7 +152,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff hard" title="어려움"></span>
 **축소와 James-Stein.** 다변량 정규 평균의 MLE는 각 성분의 표본평균이다. James-Stein은 $p \ge 3$일 때 이것이 **허용 불가능**함을 보였다. 그 아이디어를 스케치하라.
 
 </div>
@@ -170,7 +170,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 **표본크기와 평균제곱오차.** $S^2$에 대해 $n$을 네 배로 하면 $\sqrt{\mathrm{MSE}}$가 대략 절반이 됨을 보여라.
 
 </div>
@@ -184,7 +184,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 **점근적 최적성.** $n \to \infty$일 때 세 추정량(분모 $n$, $n-1$, $n+1$)의 점근 평균제곱오차가 같음을 보여라.
 
 </div>

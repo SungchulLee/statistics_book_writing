@@ -114,7 +114,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 정규분포 분산의 MLE $\hat{\sigma}^2_{\text{MLE}} = \frac{1}{n}\sum_{i=1}^n(X_i - \bar{X})^2$이 편향되어 있음을 보여라. 정확한 편향을 계산하라.
 
 </div>
@@ -140,7 +140,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 불편추정량 $S^2 = \frac{1}{n-1}\sum(X_i - \bar{X})^2$은 편향을 바로잡는다. $n \geq 2$에서 $\text{MSE}(\hat{\sigma}^2_{\text{MLE}}) < \text{MSE}(S^2)$임을 보여, 편향된 MLE의 평균제곱오차가 실제로 더 작음을 확인하라.
 
 </div>
@@ -172,7 +172,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff easy" title="쉬움"></span>
 $n = 5$, $\sigma^2 = 10$에 대해 $\hat{\sigma}^2_{\text{MLE}}$과 $S^2$의 편향, 분산, 평균제곱오차를 계산하라.
 
 </div>
@@ -194,7 +194,7 @@ $n = 5$, $\sigma^2 = 10$에 대해 $\hat{\sigma}^2_{\text{MLE}}$과 $S^2$의 편
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 정규분포에서 추정량 $\hat{\sigma}^2_c = \frac{1}{n+1}\sum(X_i - \bar{X})^2$은 $\hat{\sigma}^2_{\text{MLE}}$보다 평균제곱오차가 더 작다. 그 평균제곱오차를 계산하여 MLE와 비교해 확인하라.
 
 </div>

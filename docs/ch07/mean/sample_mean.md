@@ -153,7 +153,7 @@ $$\text{Var}(\bar{X}_w) = \frac{1}{\sum_{i=1}^n 1/\sigma_i^2}$$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 어떤 전략의 연평균 수익률이 5%, 변동성이 18%이다. (a) 10년 자료에서의 표준오차. (b) 95% 신뢰구간이 0을 배제하기까지 필요한 햇수. (c) 월별 자료를 쓰면 도움이 되는가?
 
 </div>
@@ -167,7 +167,7 @@ $$\text{Var}(\bar{X}_w) = \frac{1}{\sum_{i=1}^n 1/\sigma_i^2}$$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 분산이 유한한 임의의 분포에서 **$\bar X$가 $\mu$의 BLUE**(최량선형불편추정량)임을 증명하라.
 
 </div>
@@ -183,7 +183,7 @@ $$\text{Var}(\bar{X}_w) = \frac{1}{\sum_{i=1}^n 1/\sigma_i^2}$$
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 **로버스트성의 실패.** 표본에 이상점 하나를 추가하면 $\bar X$가 얼마든지 이동함을 보여라.
 
 </div>
@@ -199,7 +199,7 @@ $$\text{Var}(\bar{X}_w) = \frac{1}{\sum_{i=1}^n 1/\sigma_i^2}$$
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 **Bessel 수정.** $S^2 = \sum(X_i - \bar X)^2/(n-1)$의 분모가 왜 $n - 1$인가?
 
 </div>
@@ -219,7 +219,7 @@ $$\text{Var}(\bar{X}_w) = \frac{1}{\sum_{i=1}^n 1/\sigma_i^2}$$
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 **종속 자료의 표본평균.** $X_1, \ldots, X_n$이 AR(1)이다: $X_t = \rho X_{t-1} + \varepsilon_t$. $\rho$, $n$, $\sigma^2_\varepsilon$으로 $\mathrm{Var}(\bar X)$를 유도하라.
 
 </div>
@@ -239,7 +239,7 @@ $$\text{Var}(\bar{X}_w) = \frac{1}{\sum_{i=1}^n 1/\sigma_i^2}$$
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 **가중 표본평균.** 관측값의 분산이 서로 다를 때($\mathrm{Var}(X_i) = \sigma_i^2$), $w_i \propto 1/\sigma_i^2$인 역분산 가중평균 $\hat\mu = \sum w_i X_i$가 분산을 최소화한다. 최적 $w_i$를 유도하라.
 
 </div>

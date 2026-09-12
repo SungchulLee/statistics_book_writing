@@ -164,7 +164,7 @@ $$\bar{X} \pm t_{n-1,\alpha/2} \frac{S}{\sqrt{n}} \quad (\sigma \text{를 모르
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 $X_1, \ldots, X_n$이 $\mathbb{E}[X_i] = \mu$를 만족한다. $\bar X$가 불편임을 보여라. 여기에 독립성이 필요한가?
 
 </div>
@@ -176,7 +176,7 @@ $X_1, \ldots, X_n$이 $\mathbb{E}[X_i] = \mu$를 만족한다. $\bar X$가 불�
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 상관된 자료: $X_i$가 공통 평균 $\mu$, 분산 $\sigma^2$, 쌍별 상관계수 $\rho$를 갖는다. (a) $\mathrm{Var}(\bar X)$를 유도하라. (b) $\bar X$는 일치하는가? (c) 헤지펀드 20개로 이루어진 펀드, 변동성 15%, $\rho = 0.4$일 때 표준오차를 구하라.
 
 </div>
@@ -190,7 +190,7 @@ $X_1, \ldots, X_n$이 $\mathbb{E}[X_i] = \mu$를 만족한다. $\bar X$가 불�
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 **일치성의 정의.** 약대수의법칙과 강대수의법칙을 진술하고, 각각으로부터 $\bar X$가 $\mu$에 대해 일치함을 보여라.
 
 </div>
@@ -206,7 +206,7 @@ $X_1, \ldots, X_n$이 $\mathbb{E}[X_i] = \mu$를 만족한다. $\bar X$가 불�
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 중앙값의 **편향–분산 맞바꿈.** 정규 자료에서 표본중앙값이 $\mu$에 대해 **불편**이지만 그 **평균제곱오차가 점근적으로** 표본평균의 평균제곱오차를 **초과**함을 보여라.
 
 </div>
@@ -222,7 +222,7 @@ $X_1, \ldots, X_n$이 $\mathbb{E}[X_i] = \mu$를 만족한다. $\bar X$가 불�
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 **유한모집단 표본추출의 효과.** 크기 $N$, 평균 $\mu$인 유한모집단에서 비복원으로 $X_i$를 뽑는다. $\mathrm{Var}(\bar X)$를 유도하라.
 
 </div>
@@ -241,7 +241,7 @@ $X_1, \ldots, X_n$이 $\mathbb{E}[X_i] = \mu$를 만족한다. $\bar X$가 불�
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 **적률법 추정량의 편향.** $[1, \infty)$ 위의 Pareto$(\alpha)$에서 $\mathbb{E}[X] = \alpha/(\alpha - 1)$이다. 적률법: $\hat\alpha = \bar X/(\bar X - 1)$. 불편인가? 일치하는가?
 
 </div>

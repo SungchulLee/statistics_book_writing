@@ -61,7 +61,7 @@ Laplace 분포에서는 중앙값이 표본평균의 절반에 해당하는 관�
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 **중앙값과 평균의 ARE.** (a) 정규 자료에서 ARE가 $2/\pi$임을 보여라. (b) $t_3$ 자료에서는 어느 쪽이 이기는가?
 
 </div>
@@ -75,7 +75,7 @@ Laplace 분포에서는 중앙값이 표본평균의 절반에 해당하는 관�
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 **축소추정량.** $\hat\mu_\lambda = \lambda \bar X$. (a) 평균제곱오차를 유도하라. (b) 최적 $\lambda^*$. (c) $\lambda^*$를 직접 쓸 수 없는 이유는?
 
 </div>
@@ -91,7 +91,7 @@ Laplace 분포에서는 중앙값이 표본평균의 절반에 해당하는 관�
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff hard" title="어려움"></span>
 **James-Stein 추정량.** $p \ge 3$인 $\mathbf X \sim N(\boldsymbol\mu, I_p)$에서 $\hat{\boldsymbol\mu}_{\text{JS}} = (1 - (p-2)/\|\mathbf X\|^2)\mathbf X$와 MLE를 비교하라.
 
 </div>
@@ -123,7 +123,7 @@ Laplace 분포에서는 중앙값이 표본평균의 절반에 해당하는 관�
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 **효율적 = CRLB 달성.** $N(\mu, \sigma^2)$에서 $\bar X$가 점근적으로만이 아니라 모든 $n$에서 효율적임(CRLB를 달성함)을 보여라.
 
 </div>
@@ -139,7 +139,7 @@ Laplace 분포에서는 중앙값이 표본평균의 절반에 해당하는 관�
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 **효율성과 충분통계량.** 효율성을 충분성과 연결하라: $\bar X$는 $\mu$에 대해 충분하기 때문에 효율적이다.
 
 </div>
@@ -157,7 +157,7 @@ Laplace 분포에서는 중앙값이 표본평균의 절반에 해당하는 관�
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 **고차원에서의 맞바꿈.** 축소추정량이 고차원에서는 MLE를 지배하지만 저차원에서는 그렇지 않은 이유는 무엇인가?
 
 </div>

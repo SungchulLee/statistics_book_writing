@@ -247,7 +247,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 자료 $\{1, 2, 3, 4, 5, 6, 7, 8, 9, 100\}$에 대해 평균, 중앙값, 10% 절사평균을 계산하라. 어느 추정량이 "전형적인" 값을 가장 잘 나타내는가?
 
 </div>
@@ -263,7 +263,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 표본중앙값의 붕괴점이 $\lfloor(n-1)/2\rfloor / n$이며 큰 $n$에서 50%에 가까워짐을 증명하라.
 
 </div>
@@ -279,7 +279,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 $X \sim N(\mu, \sigma^2)$에서 $\text{MAD} = \mathcal{N}^{-1}(3/4) \cdot \sigma \approx 0.6745\sigma$임을 보이고, 따라서 $1.4826 \times \text{MAD}$가 $\sigma$의 일치추정량임을 보여라.
 
 </div>
@@ -299,7 +299,7 @@ $X \sim N(\mu, \sigma^2)$에서 $\text{MAD} = \mathcal{N}^{-1}(3/4) \cdot \sigma
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 관측값 200개의 자료에서 평균 50, 표준편차 10, 중앙값 49, MAD 6.5를 얻었다. 이상점이나 비정규성의 증거가 있는가? 고전적 추정량과 로버스트 추정량의 비를 써서 답을 정당화하라.
 
 </div>
@@ -317,7 +317,7 @@ $X \sim N(\mu, \sigma^2)$에서 $\text{MAD} = \mathcal{N}^{-1}(3/4) \cdot \sigma
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 $\alpha$-절사평균의 로버스트성–효율성 맞바꿈을 설명하라. $n = 100$인 정규 자료에서 표본평균 대비 10% 절사평균의 점근 상대효율은 얼마인가?
 
 </div>

@@ -185,7 +185,7 @@ Gaussian MLE — $\hat{\mu} = \bar{X}$과 $\hat{\sigma}^2 = \frac{1}{n}\sum(X_i 
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 $N(\mu, \sigma^2)$에 대해 $\hat\mu_{\text{MLE}} = \bar X$와 $\hat\sigma^2_{\text{MLE}} = (1/n)\sum(X_i - \bar X)^2$을 유도하고 2계 조건을 확인하라.
 
 </div>
@@ -201,7 +201,7 @@ $N(\mu, \sigma^2)$에 대해 $\hat\mu_{\text{MLE}} = \bar X$와 $\hat\sigma^2_{\
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 $N(\mu, \sigma^2)$의 **Fisher 정보행렬.** 비대각 성분이 0임을 보이고 $\bar X$가 CRLB를 정확히 달성함을 확인하라.
 
 </div>
@@ -217,7 +217,7 @@ $N(\mu, \sigma^2)$의 **Fisher 정보행렬.** 비대각 성분이 0임을 보�
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 **MLE의 불변성.** (a) $\sigma$, (b) $\mathrm{CV} = \sigma/\mu$, (c) 99번째 백분위수 $\mu + 2.326\sigma$의 MLE를 구하라.
 
 </div>
@@ -235,7 +235,7 @@ $N(\mu, \sigma^2)$의 **Fisher 정보행렬.** 비대각 성분이 0임을 보�
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 **$\mu = 0$이라는 제약 아래의 MLE.** $\mu$가 0임을 알 때 $\hat\sigma^2$을 유도하라. 제약 없는 MLE와 분산을 비교하라.
 
 </div>
@@ -251,7 +251,7 @@ $N(\mu, \sigma^2)$의 **Fisher 정보행렬.** 비대각 성분이 0임을 보�
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 **모수적 VaR.** 일별 수익률 252개에서 $\hat\mu = 0.0003$, $\hat\sigma = 0.012$를 얻었다. (a) 1일 99% VaR. (b) 제곱근 규칙에 의한 10일 VaR. (c) 참 초과첨도가 3이라면 정규 VaR는 위험을 과대평가하는가, 과소평가하는가?
 
 </div>
@@ -265,7 +265,7 @@ $N(\mu, \sigma^2)$의 **Fisher 정보행렬.** 비대각 성분이 0임을 보�
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 **몬테카를로 검증.** $N(5, 9)$에서 $n = 20$인 표본 10000개를 모의실험하라. $\mathbb{E}[\hat\mu], \mathbb{E}[\hat\sigma^2_{\text{MLE}}], \mathbb{E}[S^2]$을 확인하라.
 
 </div>

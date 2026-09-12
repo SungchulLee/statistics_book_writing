@@ -86,7 +86,7 @@ $T$가 $\theta$에 대한 완비충분통계량이라 하자. $h(T)$가 함수 $
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 $\text{Bernoulli}(p)$에서 뽑은 확률표본에 대해 $T = \sum X_i$가 완비충분통계량임을 보여라.
 
 </div>
@@ -104,7 +104,7 @@ $\text{Bernoulli}(p)$에서 뽑은 확률표본에 대해 $T = \sum X_i$가 완�
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff hard" title="어려움"></span>
 Lehmann-Scheffé 정리를 진술하고, 이를 이용해 Bernoulli 표본에서 $p(1-p)$의 UMVUE를 구하라.
 
 </div>
@@ -128,7 +128,7 @@ Lehmann-Scheffé 정리를 진술하고, 이를 이용해 Bernoulli 표본에서
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 완비성과, 충분통계량에 기반한 불편추정량의 유일성 사이의 관계를 설명하라.
 
 </div>
@@ -142,7 +142,7 @@ Lehmann-Scheffé 정리를 진술하고, 이를 이용해 Bernoulli 표본에서
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff hard" title="어려움"></span>
 Uniform$(0, \theta)$에서 $T = X_{(n)} = \max(X_1, \dots, X_n)$이 완비충분통계량임을 보여라. 그다음 Uniform$(\theta, \theta + 1)$에서 충분하지만 완비가 아닌 통계량의 예를 찾아라.
 
 </div>

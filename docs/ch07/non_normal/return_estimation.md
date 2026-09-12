@@ -211,7 +211,7 @@ Annualized (252 trading days):
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 어떤 펀드의 참 연간 기대수익률이 10%, 연간 변동성이 15%이다. 5년치 월별 자료로 추정한 연간 수익률의 표준오차를 계산하라. 추정 수익률이 음수일 확률은?
 
 </div>
@@ -231,7 +231,7 @@ Annualized (252 trading days):
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff hard" title="어려움"></span>
 델타 방법을 써서 추정 Sharpe 비율의 근사 표준오차 $\text{SE}(\widehat{\text{SR}}) \approx \sqrt{(1 + \text{SR}^2/2)/T}$를 유도하라.
 
 </div>
@@ -261,7 +261,7 @@ Annualized (252 trading days):
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 표본추출 빈도를 높이는 것이(예: 월별에서 일별로) 기대수익률 추정의 정밀도는 개선하지 못하면서 변동성 추정은 개선하는 이유를 설명하라.
 
 </div>
@@ -279,7 +279,7 @@ Annualized (252 trading days):
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 GARCH(1,1) 모형의 모수가 $\omega = 0.00001$, $\alpha = 0.08$, $\beta = 0.90$이다. 무조건(장기) 연율화 변동성을 계산하라. 이 과정은 정상인가?
 
 </div>
@@ -301,7 +301,7 @@ GARCH(1,1) 모형의 모수가 $\omega = 0.00001$, $\alpha = 0.08$, $\beta = 0.9
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 어떤 실무자가 일별 수익률이 대체로 i.i.d.이므로 월별 Sharpe 비율에 $\sqrt{12}$를 곱하면 연간 Sharpe 비율이 된다고 주장한다. 어떤 조건에서 맞고, 언제 틀릴 수 있는가?
 
 </div>

@@ -249,7 +249,7 @@ True TE: 3.464%
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 $X_i \sim N(\mu, \sigma^2)$일 때 제곱합을 독립인 표준정규들로 표현하여 $\frac{(n-1)S^2}{\sigma^2} \sim \chi^2_{n-1}$임을 보여라.
 
 </div>
@@ -269,7 +269,7 @@ $X_i \sim N(\mu, \sigma^2)$일 때 제곱합을 독립인 표준정규들로 표
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff hard" title="어려움"></span>
 지수 자료 $X_i \sim \text{Exp}(\lambda)$에서 표본평균 $\bar{X}$와 표본분산 $S^2$이 독립이 **아님**을 증명하라. (힌트: 3차 중심적률을 써서 $\text{Cov}(\bar{X}, S^2)$을 계산하라.)
 
 </div>
@@ -295,7 +295,7 @@ $X_i \sim N(\mu, \sigma^2)$일 때 제곱합을 독립인 표준정규들로 표
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 Jensen 부등식을 써서 $E[\sqrt{S^2}] < \sigma$인 이유를 설명하라. $n = 5$인 정규 자료에서 $c_4$의 정확한 값과 $\sigma$의 추정량으로서 $S$의 백분율 편향을 계산하라.
 
 </div>
@@ -321,7 +321,7 @@ Jensen 부등식을 써서 $E[\sqrt{S^2}] < \sigma$인 이유를 설명하라. $
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 어떤 포트폴리오 추적자가 36개월치 초과수익률을 갖고 있다. `ddof=1`로 추정한 연율화 추적오차가 3.8%이다. 정규성을 가정하고 참 연율화 추적오차의 95% 신뢰구간을 구성하라.
 
 </div>
@@ -349,7 +349,7 @@ Jensen 부등식을 써서 $E[\sqrt{S^2}] < \sigma$인 이유를 설명하라. $
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 자유도의 "일반 원리"를 설명하라: 모수가 $k$개인 모형을 적합한 뒤 분산을 추정할 때는 $n - k$로 나눈다. 예를 세 가지 들라.
 
 </div>

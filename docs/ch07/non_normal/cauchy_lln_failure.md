@@ -181,7 +181,7 @@ Cauchy 자료에서 표본평균이 쓸모없다면 어떤 대안이 통할까?
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 적분을 직접 계산하여 표준 Cauchy 분포에서 $E[|X|] = \infty$임을 보여라.
 
 </div>
@@ -197,7 +197,7 @@ Cauchy 자료에서 표본평균이 쓸모없다면 어떤 대안이 통할까?
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff hard" title="어려움"></span>
 특성함수를 써서, i.i.d. 표준 Cauchy 확률변수 $n$개의 $\bar{X}_n$이 표준 Cauchy 확률변수 하나와 같은 분포를 가짐을 증명하라.
 
 </div>
@@ -223,7 +223,7 @@ Cauchy 자료에서 표본평균이 쓸모없다면 어떤 대안이 통할까?
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff easy" title="쉬움"></span>
 Cauchy와 정규분포의 꼬리를 비교하라. 각각에서 $P(|X| > 10)$은 얼마인가? 이것이 표본평균의 거동에 대해 무엇을 함의하는가?
 
 </div>
@@ -239,7 +239,7 @@ Cauchy와 정규분포의 꼬리를 비교하라. 각각에서 $P(|X| > 10)$은 
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 표본중앙값은 Cauchy 위치모수에 대해 일치한다. 그 점근분산은 얼마인가? Cauchy 위치모수 MLE의 점근분산과 비교하라.
 
 </div>
@@ -267,7 +267,7 @@ Cauchy와 정규분포의 꼬리를 비교하라. 각각에서 $P(|X| > 10)$은 
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 "안정분포"가 무엇인지, Cauchy가 왜 안정분포인지 설명하라. Cauchy의 안정지수는 얼마이며, 그것이 꼬리 거동에 대해 무엇을 결정하는가?
 
 </div>

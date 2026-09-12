@@ -286,7 +286,7 @@ Estimator Comparison (Population mean = 0):
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 Cauchy 분포의 PDF는 $f(x) = \frac{1}{\pi(1+x^2)}$이다. $\int_{-\infty}^{\infty} |x| f(x)\,dx$가 발산함을 보여 평균이 존재하지 않음을 증명하라.
 
 </div>
@@ -306,7 +306,7 @@ Cauchy 분포의 PDF는 $f(x) = \frac{1}{\pi(1+x^2)}$이다. $\int_{-\infty}^{\i
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 자유도 $\nu$인 Student-$t$ 분포는 $\nu > 2$일 때만 분산이 유한하다. $\nu = 3$이면 분산은 $\sigma^2 = \nu/(\nu-2) = 3$이다. $t_3$에서 뽑은 관측값 $n = 100$개와 $N(0,3)$에서 뽑은 경우를 $\bar{X}$의 표준오차 관점에서 비교하라.
 
 </div>
@@ -320,7 +320,7 @@ Cauchy 분포의 PDF는 $f(x) = \frac{1}{\pi(1+x^2)}$이다. $\int_{-\infty}^{\i
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 정규 자료에서는 표본평균이 표준적인 선택인데도, Cauchy 분포의 중심 추정에서는 왜 중앙값이 더 나은지 설명하라.
 
 </div>
@@ -332,7 +332,7 @@ Cauchy 분포의 PDF는 $f(x) = \frac{1}{\pi(1+x^2)}$이다. $\int_{-\infty}^{\i
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 어떤 위험관리자가 정규 모형으로 일별 포트폴리오 손실의 99번째 백분위수를 추정하여 \$233만을 얻었다. 손실의 참 분포가 같은 척도의 $t_5$ 분포를 따른다면 참 99번째 백분위수는 얼마나 더 큰가?
 
 </div>

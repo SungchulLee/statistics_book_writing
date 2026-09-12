@@ -135,7 +135,7 @@ $$\text{Var}(\hat{\sigma}^2_\mu) = \frac{2\sigma^4}{n} < \frac{2\sigma^4}{n-1} =
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 $\mathbb{E}[(1/n)\sum(X_i - \bar X)^2] = (n-1)\sigma^2/n$임을 증명하라.
 
 </div>
@@ -151,7 +151,7 @@ $\mathbb{E}[(1/n)\sum(X_i - \bar X)^2] = (n-1)\sigma^2/n$임을 증명하라.
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 **평균을 아는 경우의 분산.** $\mu$가 알려져 있으면 $\hat\sigma^2 = (1/n)\sum(X_i - \mu)^2$이다. (a) 불편인가? (b) 정규성 아래에서의 분산. (c) $S^2$ 대비 효율 이득.
 
 </div>
@@ -167,7 +167,7 @@ $\mathbb{E}[(1/n)\sum(X_i - \bar X)^2] = (n-1)\sigma^2/n$임을 증명하라.
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 **편향은 왜 생기는가?** 직관적으로, 소박한 추정량이 $\sigma^2$을 과소추정하는 이유는?
 
 </div>
@@ -181,7 +181,7 @@ $\mathbb{E}[(1/n)\sum(X_i - \bar X)^2] = (n-1)\sigma^2/n$임을 증명하라.
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 **추정량 $\hat\sigma^2_{c}$ 계열.** $c = n, n-1, n+1$에 대해 $\hat\sigma^2_c = (1/c)\sum(X_i - \bar X)^2$의 편향을 구하라.
 
 </div>
@@ -197,7 +197,7 @@ $\mathbb{E}[(1/n)\sum(X_i - \bar X)^2] = (n-1)\sigma^2/n$임을 증명하라.
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 **평균을 아는 표본분산이 모르는 경우보다 낫다.** 구체적으로, 이 분산추정량은 보정 없이도 불편이다. 이것이 카이제곱분포를 보존함을 보여라.
 
 </div>
@@ -211,7 +211,7 @@ $\mathbb{E}[(1/n)\sum(X_i - \bar X)^2] = (n-1)\sigma^2/n$임을 증명하라.
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 **회귀 맥락에서의 소박한 분산.** 선형회귀가 $\mathrm{SSE}/n$이나 $\mathrm{SSE}/(n-1)$이 아니라 **잔차분산** $\hat\sigma^2 = \mathrm{SSE}/(n - p)$를 보고하는 이유는?
 
 </div>

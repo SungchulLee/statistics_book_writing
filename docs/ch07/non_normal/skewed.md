@@ -100,7 +100,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 비율이 $\lambda$인 지수분포의 왜도는 ($\lambda$와 무관하게) 2이다. 지수분포가 언제나 오른쪽으로 치우치는 이유를 직관적으로 설명하라.
 
 </div>
@@ -112,7 +112,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 치우친 분포에서 뽑은 표본에서 표본평균과 표본중앙값이 크게 다를 수 있는 이유를 설명하라. 오른쪽으로 치우친 소득 자료에서는 어느 쪽이 중심경향의 더 나은 측도인가?
 
 </div>
@@ -126,7 +126,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 로그 변환은 오른쪽 치우침을 줄이는 데 흔히 쓰인다. $X$가 log-normal이고 $\log X \sim N(\mu, \sigma^2)$이면 $\log X$의 분포는 무엇인가? 이 변환이 추론에 도움이 되는 이유는?
 
 </div>
@@ -144,7 +144,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 왜도 계수는 $\gamma_1 = E[(X - \mu)^3]/\sigma^3$이다. Bernoulli$(p)$ 분포의 $\gamma_1$을 계산하고 어느 $p$에서 분포가 대칭인지 구하라.
 
 </div>
