@@ -111,7 +111,7 @@ $k$가 커지면 다음 중 하나로 간다.
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 어떤 분석가가 변수 12개의 쌍그림을 그리고 "대부분의 쌍에서 뚜렷한 관계가 보이지 않는다"고 결론지었다. 이 결론의 문제를 지적하라.
 
 </div>
@@ -144,7 +144,7 @@ $k$가 커지면 다음 중 하나로 간다.
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 쌍그림에서 `hue`로 집단을 나누어 색칠했더니, 어떤 변수 쌍에서 두 집단이 깔끔하게 갈라졌다. 이것을 근거로 "이 두 변수로 집단을 완벽하게 분류할 수 있다"고 말하는 것의 위험은 무엇인가?
 
 </div>
@@ -172,7 +172,7 @@ $k$가 커지면 다음 중 하나로 간다.
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 본문 $4$절의 경고 상자를 정량화하라. 변수가 $k$개일 때 **우연히 관계가 있어 보이는** 쌍이 몇 개나 나오는가?
 
 </div>
@@ -235,7 +235,7 @@ $k$가 커지면 다음 중 하나로 간다.
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 쌍그림의 **대각선**에 무엇을 그릴지가 선택이다. 히스토그램, KDE, 아무것도 안 그리기 중 무엇이 좋은가?
 
 </div>
@@ -303,7 +303,7 @@ $k$가 커지면 다음 중 하나로 간다.
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 연습문제 2의 위험을 정량화하라. 집단이 깔끔하게 갈라져 보이는 것이 **우연**일 수 있는가?
 
 </div>
@@ -361,7 +361,7 @@ $k$가 커지면 다음 중 하나로 간다.
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 쌍그림에서 **표본 크기가 크면** 어떤 문제가 생기며 어떻게 다루는가?
 
 </div>
@@ -422,7 +422,7 @@ $k$가 커지면 다음 중 하나로 간다.
 
 <div class="drillbox" markdown>
 
-**연습문제 7.**
+**연습문제 7.** <span class="diff med" title="중간"></span>
 쌍그림은 **선형 관계**를 잘 보여 준다. 그렇다면 무엇을 놓치는가?
 
 </div>
@@ -492,7 +492,7 @@ $k$가 커지면 다음 중 하나로 간다.
 
 <div class="drillbox" markdown>
 
-**연습문제 8.**
+**연습문제 8.** <span class="diff med" title="중간"></span>
 쌍그림의 변수 **순서**와 **척도**가 읽기에 미치는 영향을 논하라.
 
 </div>
@@ -558,7 +558,7 @@ $k$가 커지면 다음 중 하나로 간다.
 
 <div class="drillbox" markdown>
 
-**연습문제 9.**
+**연습문제 9.** <span class="diff med" title="중간"></span>
 쌍그림에 **범주형 변수**가 섞여 있으면 어떻게 하는가?
 
 </div>
@@ -619,7 +619,7 @@ $k$가 커지면 다음 중 하나로 간다.
 
 <div class="drillbox" markdown>
 
-**연습문제 10.**
+**연습문제 10.** <span class="diff med" title="중간"></span>
 쌍그림을 **탐색적 자료분석의 첫 단계**로 쓸 때의 절차를 정리하라.
 
 </div>

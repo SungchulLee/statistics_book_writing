@@ -363,7 +363,7 @@ print(f"정수 부호화: {[vocab.index(w) for w in tokens]}")
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 다음 각각을 명목형·순서형·이산형·연속형으로 분류하라. (a) 택배 상자의 무게, (b) 한 시간 동안 도착한 택배 개수, (c) 배송 상태(접수/배송중/완료), (d) 송장번호, (e) 고객 평점(별 1~5개).
 
 </div>
@@ -381,7 +381,7 @@ print(f"정수 부호화: {[vocab.index(w) for w in tokens]}")
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff easy" title="쉬움"></span>
 어떤 설문의 만족도 응답이 매우 불만 $5$명, 불만 $10$명, 보통 $30$명, 만족 $40$명, 매우 만족 $15$명이었다. 이 자료의 중앙값과 최빈값을 구하고, 평균을 보고하는 것이 왜 조심스러운지 설명하라.
 
 </div>
@@ -416,7 +416,7 @@ print(f"정수 부호화: {[vocab.index(w) for w in tokens]}")
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff easy" title="쉬움"></span>
 섭씨온도가 구간척도임을 이용하여, "오늘 최고기온 $30^\circ\text{C}$는 어제 $15^\circ\text{C}$의 두 배로 덥다"는 서술이 왜 틀렸는지 보여라. 절대온도로 바꾸면 실제 비는 얼마인가?
 
 </div>
@@ -448,7 +448,7 @@ print(f"정수 부호화: {[vocab.index(w) for w in tokens]}")
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff easy" title="쉬움"></span>
 $256 \times 256$ 컬러 이미지 $500$장을 모아 각 이미지를 하나의 관측으로 보는 자료를 만들었다. 이 자료의 $n$과 $p$를 구하고, 이 장에서 배우는 표 자료용 방법을 그대로 적용하기 어려운 이유를 두 가지 쓰라.
 
 </div>
@@ -489,7 +489,7 @@ $256 \times 256$ 컬러 이미지 $500$장을 모아 각 이미지를 하나의 
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 설문 자료를 pandas로 읽었더니 만족도 열의 `dtype`이 `object`였다. 이 상태에서 `sort_values()`와 `median()`을 호출하면 각각 어떤 일이 일어나는가? 올바르게 고치는 방법을 쓰라.
 
 </div>
@@ -543,7 +543,7 @@ $256 \times 256$ 컬러 이미지 $500$장을 모아 각 이미지를 하나의 
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 연습문제 2에서 순서형의 평균을 보고하는 것이 조심스럽다고 했다. **얼마나** 조심스러운지 보여라. 같은 자료에 대해 코드 평균과 "$4$점 이상 비율"이 **정반대 결론**을 내는 경우를 만들어라.
 
 </div>
@@ -603,7 +603,7 @@ $256 \times 256$ 컬러 이미지 $500$장을 모아 각 이미지를 하나의 
 
 <div class="drillbox" markdown>
 
-**연습문제 7.**
+**연습문제 7.** <span class="diff med" title="중간"></span>
 순서형 변수를 회귀에 넣을 때 **정수 코드**를 그대로 쓰는 것과 **원-핫**으로 푸는 것이 어떻게 다른가? 효과가 등간격이 아닐 때 무슨 일이 일어나는지 수치로 보여라.
 
 </div>
@@ -662,7 +662,7 @@ $256 \times 256$ 컬러 이미지 $500$장을 모아 각 이미지를 하나의 
 
 <div class="drillbox" markdown>
 
-**연습문제 8.**
+**연습문제 8.** <span class="diff med" title="중간"></span>
 이산형(계수) 자료를 연속형처럼 다루면 무엇을 놓치는가? 포아송 자료의 **평균과 분산 관계**를 확인하고, 그 함의를 설명하라.
 
 </div>
@@ -704,7 +704,7 @@ $256 \times 256$ 컬러 이미지 $500$장을 모아 각 이미지를 하나의 
 
 <div class="drillbox" markdown>
 
-**연습문제 9.**
+**연습문제 9.** <span class="diff med" title="중간"></span>
 본문 $5$절이 말한 "오늘날의 자료"를 실제로 표로 바꾸어 보라. 텍스트 문서 몇 개를 수치 행렬로 만들고, 그 결과가 표 자료와 어떻게 다른지 설명하라.
 
 </div>
@@ -757,7 +757,7 @@ $256 \times 256$ 컬러 이미지 $500$장을 모아 각 이미지를 하나의 
 
 <div class="drillbox" markdown>
 
-**연습문제 10.**
+**연습문제 10.** <span class="diff med" title="중간"></span>
 본문 $6$절의 "실전 절차"를 실제 자료에 적용하라. 흔한 자료형 오류가 섞인 표를 읽어 무엇이 잘못되는지 확인하고 바로잡아라.
 
 </div>

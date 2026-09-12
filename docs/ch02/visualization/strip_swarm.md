@@ -107,7 +107,7 @@ C      6.63    6.80  0.82
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 위 출력에서 B와 C의 평균은 7.01과 6.63으로 비슷하다. 그런데 그림에서 두 집단은 뚜렷하게 달라 보인다. 무엇이 다르며, 상자그림만 보고도 그 차이를 알 수 있었겠는가?
 
 </div>
@@ -123,7 +123,7 @@ C      6.63    6.80  0.82
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 어떤 연구자가 각 집단 $n = 400$인 자료에 `swarmplot`을 그렸더니 경고가 났고, 점들이 범주 폭을 넘어 옆 집단까지 침범했다. 어떻게 해야 하는가?
 
 </div>
@@ -143,7 +143,7 @@ C      6.63    6.80  0.82
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 어떤 논문이 처리군과 대조군의 평균을 막대로, ±1 표준오차를 오차막대로 그렸다. 각 군 $n = 8$이고 막대는 거의 같은 높이인데 저자는 "차이가 없다"고 결론지었다. 이 그림과 결론을 비판하라.
 
 </div>
@@ -168,7 +168,7 @@ C      6.63    6.80  0.82
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 연습문제 2의 경고가 정확히 무엇을 뜻하는지 확인하라. 점이 **사라지는가**, 아니면 다른 일이 벌어지는가?
 
 </div>
@@ -226,7 +226,7 @@ C      6.63    6.80  0.82
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 본문 $2$절이 스트립은 무작위, 스웜은 결정적이라고 했다. 이를 직접 확인하고 **재현성** 관점에서 무엇을 뜻하는지 논하라.
 
 </div>
@@ -280,7 +280,7 @@ C      6.63    6.80  0.82
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 연습문제 3의 상황을 수치로 재현하라. $n = 8$인 두 군의 막대 + 오차막대가 무엇을 감추는가?
 
 </div>
@@ -342,7 +342,7 @@ C      6.63    6.80  0.82
 
 <div class="drillbox" markdown>
 
-**연습문제 7.**
+**연습문제 7.** <span class="diff med" title="중간"></span>
 점 그림을 **상자그림이나 바이올린과 겹쳐** 그리는 것이 표준 관행이 되었다. 겹쳐 그릴 때의 실무적 주의점을 정리하라.
 
 </div>
@@ -408,7 +408,7 @@ C      6.63    6.80  0.82
 
 <div class="drillbox" markdown>
 
-**연습문제 8.**
+**연습문제 8.** <span class="diff med" title="중간"></span>
 본문 $3$절의 셋째 항목 **"뭉침과 이산성"** 을 확인하라. 점 그림이 어떻게 그것을 드러내는가?
 
 </div>
@@ -470,7 +470,7 @@ C      6.63    6.80  0.82
 
 <div class="drillbox" markdown>
 
-**연습문제 9.**
+**연습문제 9.** <span class="diff med" title="중간"></span>
 집단마다 **표본 크기가 크게 다를 때** 점 그림에 어떤 문제가 생기며 어떻게 다루는가?
 
 </div>
@@ -532,7 +532,7 @@ C      6.63    6.80  0.82
 
 <div class="drillbox" markdown>
 
-**연습문제 10.**
+**연습문제 10.** <span class="diff med" title="중간"></span>
 이 절과 앞 절들을 종합해, **집단별 분포를 비교하는 그림**의 결정 규칙을 만들어라.
 
 </div>

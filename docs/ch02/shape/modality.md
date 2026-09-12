@@ -62,7 +62,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 남녀가 섞인 모집단에서 얻은 성인 키 자료가 163cm 근처와 176cm 근처에 두 개의 봉우리를 보인다. 이 분포는 단봉인가, 이봉인가, 다봉인가? 어떤 하위집단이 이 모양을 설명할 가능성이 높은가?
 
 </div>
@@ -72,7 +72,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff easy" title="쉬움"></span>
 어떤 연구자가 자료의 평균을 계산해 50을 얻었다. 히스토그램은 대략 30과 70에 봉우리가 있고 50 근처에 골이 있음을 보여준다. 이 경우 평균이 왜 오도하는 요약인지 설명하라.
 
 </div>
@@ -82,7 +82,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff easy" title="쉬움"></span>
 다음 각각에 해당하리라 예상되는 실제 자료의 예를 들어라. (a) 단봉, (b) 이봉, (c) 봉우리가 셋 이상인 다봉. 각 선택을 정당화하라.
 
 </div>
@@ -96,7 +96,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 어떤 히스토그램이 이봉으로 보인다고 하자. 더 분석하기 위한 서로 다른 두 전략을 서술하고, 각각이 무엇을 드러낼지 설명하라.
 
 </div>
@@ -108,7 +108,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 하티건과 하티건(1985)의 **딥 검정**은 분포가 단봉이라는 귀무가설을 형식적으로 검정한다. 어떻게 작동하는지 간략히 설명하고 다봉성에 대한 다른 비모수 검정 하나를 제시하라.
 
 </div>
@@ -122,7 +122,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 **혼합모형**은 성분들이 얼마나 떨어져 있느냐에 따라 이봉 분포를 낼 수도 있고 단봉 분포를 낼 수도 있다. 혼합 가중치가 같고 분산도 같은 두 성분 정규혼합에서 성분 간 분리 정도와 관측되는 봉우리 수의 관계를 서술하라.
 
 </div>
@@ -139,7 +139,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 7.**
+**연습문제 7.** <span class="diff hard" title="어려움"></span>
 연습문제 6의 관계를 정확히 구하라. 등가중·등분산 두 정규혼합이 **언제** 이봉이 되는가? 임계값을 유도하고 수치로 확인하라.
 
 </div>
@@ -221,7 +221,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 8.**
+**연습문제 8.** <span class="diff med" title="중간"></span>
 연습문제 5의 형식적 검정이 왜 필요한지 보여라. **KDE의 봉우리를 세는** 흔한 방법으로 이봉을 판정하면 어떤 일이 일어나는가?
 
 </div>
@@ -291,7 +291,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 9.**
+**연습문제 9.** <span class="diff med" title="중간"></span>
 이봉 분포가 **분석자 때문에** 만들어지는 경우가 있다. 자료 자체는 단봉인데 처리 과정에서 봉우리가 둘로 갈라지는 예를 두 가지 제시하고 모의실험하라.
 
 </div>
@@ -356,7 +356,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 10.**
+**연습문제 10.** <span class="diff med" title="중간"></span>
 이봉임을 확인했다면 다음 단계는 성분을 **분리해 내는 것**이다. 가우시안 혼합모형으로 성분을 추정하고, 언제 이것이 실패하는지 보여라.
 
 </div>

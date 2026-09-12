@@ -101,7 +101,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 $n = 20{,}000$인 자료에 `hexbin(gridsize=200)`을 썼더니 그림이 거의 균일한 옅은 색이 되었다. 무슨 일이 일어났고 어떻게 고쳐야 하는가?
 
 </div>
@@ -121,7 +121,7 @@ $n = 20{,}000$인 자료에 `hexbin(gridsize=200)`을 썼더니 그림이 거의
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 2차원 히스토그램과 2차원 커널밀도추정(등고선 그림)의 차이는 무엇인가? 어느 쪽을 언제 쓰겠는가?
 
 </div>
@@ -154,7 +154,7 @@ $n = 20{,}000$인 자료에 `hexbin(gridsize=200)`을 썼더니 그림이 거의
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 어떤 지도 위에 각 지점의 **평균 미세먼지 농도**를 hexbin으로 나타내려 한다. `C=pm25, reduce_C_function=np.mean`으로 그렸더니 지도 외곽에 극단적으로 진한 칸 몇 개가 나타났다. 원인과 대책을 설명하라.
 
 </div>
@@ -179,7 +179,7 @@ $n = 20{,}000$인 자료에 `hexbin(gridsize=200)`을 썼더니 그림이 거의
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 연습문제 1을 정량화하라. `gridsize`가 커지면 각 칸의 개수가 어떻게 변하는가? 본문 $3$절의 "가장 진한 칸에 수십에서 수백 개" 기준을 확인하라.
 
 </div>
@@ -240,7 +240,7 @@ $n = 20{,}000$인 자료에 `hexbin(gridsize=200)`을 썼더니 그림이 거의
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 밀도가 크게 치우친 자료에서는 `gridsize`를 잘 골라도 그림이 잘 읽히지 않는다. **색 척도**를 바꾸면 무엇이 달라지는가?
 
 </div>
@@ -310,7 +310,7 @@ $n = 20{,}000$인 자료에 `hexbin(gridsize=200)`을 썼더니 그림이 거의
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 연습문제 2의 비교를 실제로 해 보라. 같은 자료를 hexbin, 2차원 히스토그램, 2차원 KDE로 그리고 각각의 장단점을 확인하라.
 
 </div>
@@ -379,7 +379,7 @@ $n = 20{,}000$인 자료에 `hexbin(gridsize=200)`을 썼더니 그림이 거의
 
 <div class="drillbox" markdown>
 
-**연습문제 7.**
+**연습문제 7.** <span class="diff med" title="중간"></span>
 연습문제 3의 상황을 수치로 재현하라. `C=` 로 평균을 집계할 때 **표본이 작은 칸**이 만드는 문제를 확인하고 `mincnt` 의 효과를 보여라.
 
 </div>
@@ -458,7 +458,7 @@ $n = 20{,}000$인 자료에 `hexbin(gridsize=200)`을 썼더니 그림이 거의
 
 <div class="drillbox" markdown>
 
-**연습문제 8.**
+**연습문제 8.** <span class="diff med" title="중간"></span>
 hexbin으로 **두 집단을 비교**하려면 어떻게 해야 하는가? 나란히 그리는 것의 문제와 대안을 제시하라.
 
 </div>
@@ -533,7 +533,7 @@ hexbin으로 **두 집단을 비교**하려면 어떻게 해야 하는가? 나�
 
 <div class="drillbox" markdown>
 
-**연습문제 9.**
+**연습문제 9.** <span class="diff med" title="중간"></span>
 hexbin이 **부적절한** 경우를 정리하라. 어떤 자료에 쓰면 안 되는가?
 
 </div>
@@ -598,7 +598,7 @@ hexbin이 **부적절한** 경우를 정리하라. 어떤 자료에 쓰면 안 �
 
 <div class="drillbox" markdown>
 
-**연습문제 10.**
+**연습문제 10.** <span class="diff med" title="중간"></span>
 hexbin과 이 장의 다른 이변량 도구들을 **하나의 결정 규칙**으로 정리하라.
 
 </div>

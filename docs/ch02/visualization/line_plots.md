@@ -122,7 +122,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 다음 각 상황에서 가장 적절한 그림 유형을 밝히고 그 선택을 정당화하라. (a) 환자 세 집단의 나이 분포 비교, (b) 12개월에 걸친 주가 변화 표시, (c) 경쟁하는 다섯 브랜드의 시장 점유율 표시.
 
 </div>
@@ -136,7 +136,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 어떤 보고서가 두 회사의 매출을 한 선그림에 겹쳐 그렸는데, 왼쪽 축은 A사(단위: 억 원, 범위 100~120), 오른쪽 축은 B사(단위: 억 원, 범위 5~9)로 두었다. 그림에서 두 선이 여러 번 교차하며 "두 회사가 엎치락뒤치락한다"고 설명되어 있다. 무엇이 문제인가?
 
 </div>
@@ -163,7 +163,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 같은 시계열을 (a) 선그림, (b) 히스토그램, (c) 상자그림으로 그렸다. 각 그림에서 무엇을 알 수 있고 무엇을 잃는가?
 
 </div>
@@ -190,7 +190,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 연습문제 2의 이중 축 문제를 정량화하라. 축 범위를 바꾸는 것만으로 두 선의 **교차 횟수**가 달라지는가?
 
 </div>
@@ -260,7 +260,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 시계열에 **결측**이 있을 때 선그림은 무엇을 하는가? 그 결과가 왜 위험한지 보이고 올바른 처리법을 제시하라.
 
 </div>
@@ -316,7 +316,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 같은 시계열을 **평활**해서 그리면 이야기가 달라진다. 평활 창의 크기가 무엇을 바꾸는지 보이고, 어떻게 고를지 논하라.
 
 </div>
@@ -398,7 +398,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 7.**
+**연습문제 7.** <span class="diff med" title="중간"></span>
 연습문제 6의 계절성을 다른 방식으로 다루어라. **전년 동기 대비**가 왜 널리 쓰이며 무엇을 잃는가?
 
 </div>
@@ -464,7 +464,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 8.**
+**연습문제 8.** <span class="diff med" title="중간"></span>
 본문 $3$절의 **스파게티 그림** 문제를 다루어라. 계열이 몇 개부터 문제가 되며, 강조와 면 나누기는 각각 무엇을 해결하는가?
 
 </div>
@@ -538,7 +538,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 9.**
+**연습문제 9.** <span class="diff med" title="중간"></span>
 성장을 보여 주는 시계열에서 **로그 축**이 더 정직한 경우가 있다. 언제 그러하며 왜인가?
 
 </div>
@@ -603,7 +603,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 10.**
+**연습문제 10.** <span class="diff med" title="중간"></span>
 본문 $2$절이 "선을 그어도 되는가"를 다루었다. 그 판단이 애매한 경우를 하나 깊이 들여다보라. 관측 간격이 불규칙할 때 무엇이 문제인가?
 
 </div>

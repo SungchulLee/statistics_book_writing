@@ -316,7 +316,7 @@ plot_qq(sample_data, dist="norm")  # Systematic departure from the line
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 자료 $\{2, 5, 5, 7, 10\}$에 대해 (a) ECDF $\hat F(x)$를 구간별 함수로 쓰라. (b) $\hat F(5)$와 $\hat F(6)$을 계산하라. (c) 50번째 백분위수(중앙값)를 구하라.
 
 </div>
@@ -336,7 +336,7 @@ plot_qq(sample_data, dist="norm")  # Systematic departure from the line
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 **글리벤코–칸텔리 정리**를 진술하고, ECDF를 참된 누적분포함수의 추정량으로 쓰는 것에 대해 이 정리가 무엇을 말해주는지 해석하라.
 
 </div>
@@ -354,7 +354,7 @@ plot_qq(sample_data, dist="norm")  # Systematic departure from the line
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 분포 요약으로서 **ECDF**와 **히스토그램**을 비교하라. 각각의 장점을 두 가지씩 들어라.
 
 </div>
@@ -368,7 +368,7 @@ plot_qq(sample_data, dist="norm")  # Systematic departure from the line
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff easy" title="쉬움"></span>
 **분위수의 해석.** 어떤 표준화 시험이 한 학생을 85번째 백분위수라고 보고한다. 이것이 정확히 무슨 뜻인지 진술하라. 이것과 "시험에서 85%를 받았다"의 차이를 논하라.
 
 </div>
@@ -385,7 +385,7 @@ plot_qq(sample_data, dist="norm")  # Systematic departure from the line
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 **콜모고로프–스미르노프 통계량** $D_n = \sup_x |\hat F_n(x) - F_0(x)|$는 자료가 지정된 분포 $F_0$에서 왔는지를 검정한다. 이것이 왜 자연스러운 검정통계량이며, 그 귀무분포는 $F_0$에 어떻게 의존하는가?
 
 </div>
@@ -399,7 +399,7 @@ plot_qq(sample_data, dist="norm")  # Systematic departure from the line
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 **Q-Q 그림**은 자료의 분위수를 기준 분포의 분위수와 비교한다. 다음 패턴들을 해석하라. (a) 점들이 직선 위에 놓인다. (b) S자 곡선. (c) 아래로 볼록한 체계적 휘어짐. (d) 꼬리에서만 크게 벗어남.
 
 </div>
@@ -417,7 +417,7 @@ plot_qq(sample_data, dist="norm")  # Systematic departure from the line
 
 <div class="drillbox" markdown>
 
-**연습문제 7.**
+**연습문제 7.** <span class="diff hard" title="어려움"></span>
 연습문제 2의 글리벤코–칸텔리 정리는 ECDF가 참 분포함수로 **균등하게** 수렴한다고만 말한다. 얼마나 빨리 수렴하는가? **DKW 부등식**으로 신뢰띠를 만들고 실제 포함률을 확인하라.
 
 </div>
@@ -486,7 +486,7 @@ plot_qq(sample_data, dist="norm")  # Systematic departure from the line
 
 <div class="drillbox" markdown>
 
-**연습문제 8.**
+**연습문제 8.** <span class="diff med" title="중간"></span>
 "제$1$사분위수"에는 **하나의 정의만 있는 것이 아니다.** 같은 자료에 대해 여러 정의가 얼마나 다른 답을 주는지 확인하고, 실무에서 무엇을 조심해야 하는지 논하라.
 
 </div>
@@ -548,7 +548,7 @@ plot_qq(sample_data, dist="norm")  # Systematic departure from the line
 
 <div class="drillbox" markdown>
 
-**연습문제 9.**
+**연습문제 9.** <span class="diff med" title="중간"></span>
 연습문제 5의 KS 검정을 **두 표본** 상황으로 확장하라. 두 ECDF를 비교하는 것이 $t$ 검정보다 나은 경우를 보여라.
 
 </div>
@@ -615,7 +615,7 @@ plot_qq(sample_data, dist="norm")  # Systematic departure from the line
 
 <div class="drillbox" markdown>
 
-**연습문제 10.**
+**연습문제 10.** <span class="diff hard" title="어려움"></span>
 분위수마다 추정의 어려움이 다르다. 표본 분위수의 표준오차를 유도하고, 왜 **극단 분위수가 훨씬 부정확한지** 수치로 확인하라.
 
 </div>

@@ -157,7 +157,7 @@ print(stem_leaf(scores))
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 다음 15개 값에 대해 줄기 단위 10으로 줄기잎그림을 만들고, 분포의 모양(중심, 퍼짐, 치우침, 이상치)을 서술하라.
 
 ```
@@ -191,7 +191,7 @@ print(stem_leaf(scores))
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 자료 200개에 대해 점그림, 줄기잎그림, 히스토그램 중 무엇을 쓰겠는가? 각 도구가 200개에서 어떤 문제를 겪는지 구체적으로 설명하라.
 
 </div>
@@ -209,7 +209,7 @@ print(stem_leaf(scores))
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff easy" title="쉬움"></span>
 두 반의 시험 점수를 비교하려 한다. **등을 맞댄 줄기잎그림**(back-to-back stem-and-leaf)이란 무엇이며, 이 상황에서 왜 유용한가?
 
 </div>
@@ -235,7 +235,7 @@ print(stem_leaf(scores))
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 본문 $3$절의 "줄기가 $5$–$15$개" 기준을 규칙으로 만들어라. 자료가 주어졌을 때 줄기 단위를 어떻게 고르는가?
 
 </div>
@@ -302,7 +302,7 @@ print(stem_leaf(scores))
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 연습문제 3의 **등을 맞댄 줄기잎그림**을 실제로 만들어라. 두 집단 비교에서 상자그림과 비교하면 어떤가?
 
 </div>
@@ -366,7 +366,7 @@ print(stem_leaf(scores))
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 연습문제 2를 정량화하라. $n$이 커질 때 세 도구가 각각 언제 무너지는가?
 
 </div>
@@ -421,7 +421,7 @@ print(stem_leaf(scores))
 
 <div class="drillbox" markdown>
 
-**연습문제 7.**
+**연습문제 7.** <span class="diff med" title="중간"></span>
 점그림(dot plot)에는 두 가지 서로 다른 것이 있다. **클리블랜드 점그림**과 **윌킨슨 점그림**을 구별하고 각각의 용도를 밝혀라.
 
 </div>
@@ -492,7 +492,7 @@ print(stem_leaf(scores))
 
 <div class="drillbox" markdown>
 
-**연습문제 8.**
+**연습문제 8.** <span class="diff med" title="중간"></span>
 줄기잎그림이 히스토그램에 대해 갖는 고유한 장점을 하나 더 찾아라. **자료의 이상을 발견하는 데** 어떻게 쓰이는가?
 
 </div>
@@ -557,7 +557,7 @@ print(stem_leaf(scores))
 
 <div class="drillbox" markdown>
 
-**연습문제 9.**
+**연습문제 9.** <span class="diff med" title="중간"></span>
 줄기잎그림의 **잎을 정렬해야 하는가**? 정렬 여부가 무엇을 바꾸는지 논하라.
 
 </div>
@@ -616,7 +616,7 @@ print(stem_leaf(scores))
 
 <div class="drillbox" markdown>
 
-**연습문제 10.**
+**연습문제 10.** <span class="diff med" title="중간"></span>
 이 절의 두 도구가 현대적 시각화에서 차지하는 자리를 정리하라. **언제 여전히 최선인가?**
 
 </div>

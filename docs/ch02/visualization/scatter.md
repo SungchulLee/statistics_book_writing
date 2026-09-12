@@ -173,7 +173,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 두 변수의 산점도가 강한 곡선(이차) 관계를 보이는데 피어슨 상관계수는 0에 가깝다. 이런 일이 왜 생기는지, 그리고 산점도와 함께 상관계수를 요약으로 쓰는 것에 대해 무엇을 시사하는지 설명하라.
 
 </div>
@@ -195,7 +195,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 앤스컴의 4중주는 요약통계량(평균, 분산, 상관, 회귀직선)이 **동일**하면서도 산점도는 극적으로 다른 네 자료로 이루어져 있다. 이것이 탐색적 자료분석에 대해 어떤 교훈을 주는가?
 
 </div>
@@ -221,7 +221,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 어떤 분석가가 $n = 50{,}000$인 자료의 산점도를 그리고 "$x$와 $y$가 대략 타원형으로 퍼져 있으며 뚜렷한 구조가 없다"고 보고했다. 이 결론의 위험을 지적하고 대안을 제시하라.
 
 </div>
@@ -246,7 +246,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 본문 3절의 **지터**는 얼마나 주어야 하는가? 너무 크면 무엇을 잃는지 수치로 보여라.
 
 </div>
@@ -294,7 +294,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 같은 자료의 산점도가 **가로세로 비율**에 따라 전혀 다르게 읽힌다. 클리블랜드의 "$45^\circ$로 눕히기" 원칙을 설명하고 확인하라.
 
 </div>
@@ -349,7 +349,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 본문 2절의 과밀 문제를 다른 각도에서 보라. **치우친 자료**에서 산점도가 한 구석에 뭉치는 것을 로그 척도로 푸는 방법을 보이고, 그 대가를 밝혀라.
 
 </div>
@@ -409,7 +409,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 7.**
+**연습문제 7.** <span class="diff med" title="중간"></span>
 산점도에 **평활 곡선**을 더하면 관계가 뚜렷해 보인다. 평활의 강도가 결론을 어떻게 바꾸는지 보이고, 평활 곡선을 믿어도 되는지 판단하는 방법을 제시하라.
 
 </div>
@@ -477,7 +477,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 8.**
+**연습문제 8.** <span class="diff hard" title="어려움"></span>
 산점도는 두 변수의 **결합분포**를 보여 준다. 상관계수와 주변분포가 사실상 같으면서 결합 구조가 전혀 다른 두 자료를 만들어, 상관계수가 무엇을 놓치는지 보여라.
 
 </div>
@@ -552,7 +552,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 9.**
+**연습문제 9.** <span class="diff med" title="중간"></span>
 산점도에 **세 번째 변수**를 넣는 흔한 방법이 점의 크기다(버블 차트). 이 방식의 지각적 문제를 설명하고 대안을 제시하라.
 
 </div>
@@ -623,7 +623,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 10.**
+**연습문제 10.** <span class="diff med" title="중간"></span>
 본문 4절이 산점도에서 무엇을 읽는지 다루었다면, 마지막으로 **읽지 말아야 할 것**을 보라. 산점도에서 심슨의 역설이 어떻게 나타나는가?
 
 </div>

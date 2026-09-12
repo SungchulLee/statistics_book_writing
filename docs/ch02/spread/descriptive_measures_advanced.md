@@ -14,7 +14,7 @@
 
 <div class="probox" markdown>
 
-**문제 1.**
+**문제 1.** <span class="diff med" title="중간"></span>
 
 수익률의 열 $r_1, r_2, \ldots, r_T$에 대해 산술평균
 
@@ -214,7 +214,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 어떤 투자의 연간 수익률이 $+20\%$, $-20\%$, $+20\%$, $-20\%$다. 산술평균과 기하평균을 계산하라. 투자한 \$1000의 최종 가치는 얼마인가?
 
 </div>
@@ -234,7 +234,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 체비쇼프 부등식을 증명하라. 마르코프 부등식에서 출발하라: 음이 아닌 확률변수 $Y$와 $a > 0$에 대해 $P(Y \ge a) \le E[Y]/a$.
 
 </div>
@@ -262,7 +262,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 위의 모분산 모의실험에서 표본 크기 $n$이 커지면 ddof=0 추정량의 편향은 어떻게 되는가? 편향을 $n$과 $\sigma^2$의 함수로 나타내라.
 
 </div>
@@ -284,7 +284,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff easy" title="쉬움"></span>
 어떤 자료의 평균이 50이고 표준편차가 5다. 체비쇼프 부등식을 이용해 구간 $[35, 65]$에 있는 자료의 최소 비율을 구하라. 그런 다음 자료가 정규분포를 따를 때의 비율과 비교하라.
 
 </div>
@@ -300,7 +300,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 음이 아닌 값들에 대해 기하평균이 언제나 산술평균 이하임을 보여라. 등호는 언제 성립하는가?
 
 </div>
@@ -326,7 +326,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff hard" title="어려움"></span>
 양수 $a_1, \ldots, a_n$의 **조화평균**은 $H = n / \sum_i (1/a_i)$이다. 부등식 $H \le G \le A$(조화 $\le$ 기하 $\le$ 산술)를 증명하고, 조화평균이 *올바른* 평균인 경우를 설명하라.
 
 </div>
@@ -350,7 +350,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 7.**
+**연습문제 7.** <span class="diff med" title="중간"></span>
 표본평균과 중앙값은 둘 다 대칭 분포의 "중심"을 추정한다. (a) 정규분포와 (b) 라플라스(이중지수) 분포 아래에서 **둘의 상대 효율을 비교하라**.
 
 </div>
@@ -366,7 +366,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 8.**
+**연습문제 8.** <span class="diff med" title="중간"></span>
 체비쇼프 부등식은 양쪽 꼬리를 함께 다룬다. **한쪽 꼬리**만 관심이 있다면 더 날카로운 한계가 있는가? **칸텔리 부등식**을 진술하고 비교하라.
 
 </div>
@@ -424,7 +424,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 9.**
+**연습문제 9.** <span class="diff hard" title="어려움"></span>
 연습문제 4에서 체비쇼프 한계가 실제보다 훨씬 느슨함을 보았다. 그렇다면 이 한계는 **개선할 수 있는가**? 답을 하고 근거를 제시하라.
 
 </div>
@@ -484,7 +484,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 10.**
+**연습문제 10.** <span class="diff hard" title="어려움"></span>
 연습문제 5와 6의 AM–GM–HM 부등식은 사실 하나의 정리에서 나온다. **옌센 부등식**으로 통일하고, 이 책의 다른 결과들과 어떻게 연결되는지 보여라.
 
 </div>

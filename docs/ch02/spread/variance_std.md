@@ -271,7 +271,7 @@ Z-점수는 단위가 없다. 키(cm)와 몸무게(kg)처럼 단위가 아예 �
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 자료 $\{3, 7, 7, 9, 14\}$에 대해 (a) $\bar{x}$를 계산하라. (b) 베셀 보정을 적용해 $s^2$을 계산하라. (c) $s$를 계산하라. (d) 모든 관측값을 $c = 10$만큼 늘리면 평균, 분산, 표준편차는 어떻게 되는가?
 
 </div>
@@ -287,7 +287,7 @@ Z-점수는 단위가 없다. 키(cm)와 몸무게(kg)처럼 단위가 아예 �
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 평균 $\mu$, 분산 $\sigma^2$인 i.i.d. 자료에 대해 베셀 보정을 적용한 표본분산이 불편임을 증명하라: $\mathbb{E}[s^2] = \sigma^2$.
 
 </div>
@@ -311,7 +311,7 @@ Z-점수는 단위가 없다. 키(cm)와 몸무게(kg)처럼 단위가 아예 �
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 **척도 변환과 평행이동.** $X$의 분산이 $\sigma^2$이고 $Y = aX + b$일 때 $\mathrm{Var}(Y)$를 유도하라. 이것이 $\sigma$의 단위에 대해 무엇을 뜻하는가?
 
 </div>
@@ -329,7 +329,7 @@ Z-점수는 단위가 없다. 키(cm)와 몸무게(kg)처럼 단위가 아예 �
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 **합의 분산.** 독립인 확률변수 $X_1, \ldots, X_n$에 대해 $\mathrm{Var}(\sum_i X_i) = \sum_i \mathrm{Var}(X_i)$임을 보여라. 독립성은 어디에서 쓰이며, 변수들이 *상관*되어 있을 때의 공식은 무엇인가?
 
 </div>
@@ -353,7 +353,7 @@ Z-점수는 단위가 없다. 키(cm)와 몸무게(kg)처럼 단위가 아예 �
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 표본평균의 **표준오차**는 $\mathrm{SE}(\bar{X}) = \sigma/\sqrt{n}$이다. 분모가 왜 $n$이 아니라 $\sqrt{n}$인가? 이를 이용해 표본 크기를 네 배로 늘려야 표준오차가 절반이 되는 이유를 설명하라.
 
 </div>
@@ -371,7 +371,7 @@ Z-점수는 단위가 없다. 키(cm)와 몸무게(kg)처럼 단위가 아예 �
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 **변동계수** $\mathrm{CV} = \sigma/\mu$는 상대적 퍼짐을 재는 단위 없는 측도다. CV가 $\sigma$만 보는 것보다 유용한 때는 언제인가? $\sigma$는 같지만 CV는 크게 다른 두 분포의 예를 들어라.
 
 </div>
@@ -390,7 +390,7 @@ Z-점수는 단위가 없다. 키(cm)와 몸무게(kg)처럼 단위가 아예 �
 
 <div class="drillbox" markdown>
 
-**연습문제 7.**
+**연습문제 7.** <span class="diff med" title="중간"></span>
 **총분산의 법칙**은 전체 분산을 집단내 성분과 집단간 성분으로 쪼갠다.
 
 $$
@@ -456,7 +456,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 8.**
+**연습문제 8.** <span class="diff med" title="중간"></span>
 $s$는 $\sigma$의 추정값이며 그 자체가 확률변수다. 표본이 얼마나 있어야 $\sigma$를 믿을 만하게 알 수 있는가?
 
 </div>
@@ -514,7 +514,7 @@ $s$는 $\sigma$의 추정값이며 그 자체가 확률변수다. 표본이 얼�
 
 <div class="drillbox" markdown>
 
-**연습문제 9.**
+**연습문제 9.** <span class="diff med" title="중간"></span>
 표준편차의 해석으로 흔히 쓰는 "$68$–$95$–$99.7$ 규칙"은 정규분포에서만 성립한다. **어떤 분포에서든** 성립하는 보장은 무엇인가? 체비셰프 부등식과 실제 값을 비교하라.
 
 </div>
@@ -580,7 +580,7 @@ $s$는 $\sigma$의 추정값이며 그 자체가 확률변수다. 표본이 얼�
 
 <div class="drillbox" markdown>
 
-**연습문제 10.**
+**연습문제 10.** <span class="diff med" title="중간"></span>
 이 절의 $Z$-점수를 더 밀고 나가라. 표준화가 **보존하는 것과 바꾸는 것**은 각각 무엇인가?
 
 </div>

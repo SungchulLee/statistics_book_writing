@@ -228,7 +228,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 자료 $\{2, 4, 5, 7, 8, 9, 11, 13, 15, 80\}$을 생각하자. 범위, IQR, 표본표준편차를 계산하라. 80이라는 이상치에 가장 크게 영향받는 측도는 무엇인가?
 
 </div>
@@ -244,7 +244,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff easy" title="쉬움"></span>
 IQR의 붕괴점이 25%인 반면 범위의 붕괴점이 0%인 이유를 설명하라.
 
 </div>
@@ -258,7 +258,7 @@ IQR의 붕괴점이 25%인 반면 범위의 붕괴점이 0%인 이유를 설명�
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 어떤 자료의 $Q_1 = 20$, 중앙값 $= 30$, $Q_3 = 55$이다. 원자료를 보지 않고 이 세 수만으로 분포의 모양에 대해 무엇을 추론할 수 있는가?
 
 </div>
@@ -268,7 +268,7 @@ IQR의 붕괴점이 25%인 반면 범위의 붕괴점이 0%인 이유를 설명�
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff easy" title="쉬움"></span>
 표준정규분포 $N(0,1)$에서 이론적 사분위수는 $Q_1 \approx -0.6745$, $Q_3 \approx 0.6745$이다. 이론적 IQR을 계산하고 표준편차 $\sigma = 1$과 비교하라. 비 $\text{IQR}/\sigma$는 얼마인가?
 
 </div>
@@ -290,7 +290,7 @@ IQR의 붕괴점이 25%인 반면 범위의 붕괴점이 0%인 이유를 설명�
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 강건한 척도 추정량으로서 **절단 표준편차**(위아래 $p\%$를 제거한 뒤 계산)와 IQR을 비교하라. 절충 관계는 무엇인가?
 
 </div>
@@ -313,7 +313,7 @@ IQR의 붕괴점이 25%인 반면 범위의 붕괴점이 0%인 이유를 설명�
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 로그 척도에서 모수가 $(\mu, \sigma^2)$인 **로그정규분포**에서는 분산과 IQR이 극적으로 어긋날 수 있다. 그 이유와, 치우친 자료에서 퍼짐을 보고하는 데 이것이 뜻하는 바를 논하라.
 
 </div>
@@ -334,7 +334,7 @@ IQR의 붕괴점이 25%인 반면 범위의 붕괴점이 0%인 이유를 설명�
 
 <div class="drillbox" markdown>
 
-**연습문제 7.**
+**연습문제 7.** <span class="diff med" title="중간"></span>
 연습문제 4가 정규분포에서 $\mathrm{IQR}/\sigma$의 이론값을 구했다면, 실제로 **추정량으로서** 얼마나 좋은가? 여러 척도 추정량의 효율을 비교하라.
 
 </div>
@@ -405,7 +405,7 @@ IQR의 붕괴점이 25%인 반면 범위의 붕괴점이 0%인 이유를 설명�
 
 <div class="drillbox" markdown>
 
-**연습문제 8.**
+**연습문제 8.** <span class="diff med" title="중간"></span>
 연습문제 2가 범위의 붕괴점이 $0$임을 다루었다면, 더 근본적인 문제가 있다. **범위는 $n$이 커질수록 커진다.** 이를 확인하고 함의를 논하라.
 
 </div>
@@ -464,7 +464,7 @@ IQR의 붕괴점이 25%인 반면 범위의 붕괴점이 0%인 이유를 설명�
 
 <div class="drillbox" markdown>
 
-**연습문제 9.**
+**연습문제 9.** <span class="diff med" title="중간"></span>
 연습문제 5의 절단 표준편차를 실제로 구현하고 **윈저화 표준편차**와 비교하라. 두 방법 모두 그대로 쓰면 안 되는 이유는 무엇인가?
 
 </div>
@@ -535,7 +535,7 @@ IQR의 붕괴점이 25%인 반면 범위의 붕괴점이 0%인 이유를 설명�
 
 <div class="drillbox" markdown>
 
-**연습문제 10.**
+**연습문제 10.** <span class="diff med" title="중간"></span>
 연습문제 6의 로그정규 상황을 수치로 확인하라. 치우친 자료에서 퍼짐을 **무엇으로 보고해야 하는가**?
 
 </div>

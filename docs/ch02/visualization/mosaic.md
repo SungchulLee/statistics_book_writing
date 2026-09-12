@@ -194,7 +194,7 @@ P(Y=yes | X=yes)= 0.704
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 어떤 이원 도수분포표가 환자 200명에 대해 다음과 같은 도수를 보여준다.
 
 |  | 처리 A | 처리 B | 합계 |
@@ -226,7 +226,7 @@ P(Y=yes | X=yes)= 0.704
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 연습문제 1의 자료를 모자이크 그림으로 그린다면 어떤 모양이 되겠는가? 열의 너비와 분할선의 위치를 구체적으로 말하고, 그 그림에서 두 처리의 효과 차이가 어떻게 나타나는지 설명하라.
 
 </div>
@@ -247,7 +247,7 @@ P(Y=yes | X=yes)= 0.704
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 모자이크 그림과 100% 누적 막대그림은 둘 다 조건부확률을 높이로 나타낸다. 두 그림의 차이는 무엇이며, 어떤 경우에 모자이크 그림이 나은가?
 
 </div>
@@ -269,7 +269,7 @@ P(Y=yes | X=yes)= 0.704
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 본문 $3$절은 분할선의 **나란함**으로 독립을 판정했다. 이를 수치로 만들어라. **피어슨 잔차**란 무엇이며 모자이크 그림에서 어떻게 쓰이는가?
 
 </div>
@@ -342,7 +342,7 @@ P(Y=yes | X=yes)= 0.704
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 연습문제 3을 정량화하라. 모자이크 그림이 $100\%$ 누적 막대에 대해 갖는 고유한 정보는 무엇인가?
 
 </div>
@@ -407,7 +407,7 @@ P(Y=yes | X=yes)= 0.704
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 모자이크 그림으로 **심슨의 역설**을 보여라. $2 \times 2$ 표를 층별로 나누면 무엇이 달라지는가?
 
 </div>
@@ -467,7 +467,7 @@ P(Y=yes | X=yes)= 0.704
 
 <div class="drillbox" markdown>
 
-**연습문제 7.**
+**연습문제 7.** <span class="diff med" title="중간"></span>
 카이제곱 검정에는 **기대 도수에 대한 조건**이 있다. 그 조건이 깨지면 어떻게 되며, 모자이크 그림에서 어떻게 알아채는가?
 
 </div>
@@ -547,7 +547,7 @@ P(Y=yes | X=yes)= 0.704
 
 <div class="drillbox" markdown>
 
-**연습문제 8.**
+**연습문제 8.** <span class="diff med" title="중간"></span>
 모자이크 그림에서 **범주의 순서**가 해석을 어떻게 바꾸는가?
 
 </div>
@@ -609,7 +609,7 @@ P(Y=yes | X=yes)= 0.704
 
 <div class="drillbox" markdown>
 
-**연습문제 9.**
+**연습문제 9.** <span class="diff med" title="중간"></span>
 모자이크 그림이 **한계에 부딪히는** 경우를 정리하라. 범주가 많거나 칸이 비면 어떻게 되는가?
 
 </div>
@@ -669,7 +669,7 @@ P(Y=yes | X=yes)= 0.704
 
 <div class="drillbox" markdown>
 
-**연습문제 10.**
+**연습문제 10.** <span class="diff med" title="중간"></span>
 분할표를 다루는 도구들을 하나의 결정 규칙으로 정리하고, 이 장의 다른 그림들과 어떻게 이어지는지 밝혀라.
 
 </div>

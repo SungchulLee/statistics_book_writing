@@ -239,7 +239,7 @@ MAD (standardized): 2.22
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 어떤 품질관리 공정이 지름 측정값 10개(mm)를 기록했다: $10.1, 10.0, 9.9, 10.2, 10.0, 9.8, 10.1, 10.0, 15.3, 10.0$. (a) $s$를 계산하라. (b) MAD를 계산하라. (c) 척도를 맞춘 MAD($1.4826 \cdot \text{MAD}$)를 계산하라. 비교하고 설명하라.
 
 </div>
@@ -255,7 +255,7 @@ MAD (standardized): 2.22
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff hard" title="어려움"></span>
 정규분포 아래에서 MAD를 $\sigma$와 같게 만드는 일치성 상수 $1/\Phi^{-1}(0.75) \approx 1.4826$을 유도하라.
 
 </div>
@@ -273,7 +273,7 @@ MAD (standardized): 2.22
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 추정량의 **붕괴점**은 그 추정량을 참값에서 임의로 멀리 보낼 수 있게 되기까지 임의의 값으로 바꿔야 하는 자료의 비율이다. MAD의 붕괴점이 50%이고 표준편차의 붕괴점이 0%임을 보여라.
 
 </div>
@@ -287,7 +287,7 @@ MAD (standardized): 2.22
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 정규성 아래에서 MAD는 표준편차보다 **효율**이 낮아 가우시안 효율이 약 37%다. 통계적 효율을 정의하고, 그럼에도 많은 응용 맥락에서 MAD를 선호하는 것을 정당화하는 편향–분산 절충을 설명하라.
 
 </div>
@@ -304,7 +304,7 @@ MAD (standardized): 2.22
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 이상치 탐지를 위한 **수정 Z-점수**는 $M_i = 0.6745 \cdot (x_i - \tilde x) / \text{MAD}$이다. 이상치 탐지에서 이것이 고전적인 Z-점수 $Z_i = (x_i - \bar x) / s$보다 선호되는 이유는 무엇인가?
 
 </div>
@@ -318,7 +318,7 @@ MAD (standardized): 2.22
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 MAD는 여러 강건 척도 추정량 중 하나다. 이를 **사분위범위**(IQR) 및 **Qn 추정량**(Rousseeuw–Croux)과 간략히 비교하라. 각각은 언제 고르겠는가?
 
 </div>
@@ -338,7 +338,7 @@ MAD는 여러 강건 척도 추정량 중 하나다. 이를 **사분위범위**(
 
 <div class="drillbox" markdown>
 
-**연습문제 7.**
+**연습문제 7.** <span class="diff hard" title="어려움"></span>
 연습문제 4가 MAD의 가우시안 효율 $37\%$를 언급했고 연습문제 6이 Qn을 소개했다. 둘을 실제로 구현해 **Sn**까지 함께 비교하라.
 
 </div>
@@ -422,7 +422,7 @@ MAD는 여러 강건 척도 추정량 중 하나다. 이를 **사분위범위**(
 
 <div class="drillbox" markdown>
 
-**연습문제 8.**
+**연습문제 8.** <span class="diff med" title="중간"></span>
 MAD에는 효율 말고도 개념적 한계가 있다. **비대칭 분포**에서 MAD가 무엇을 재는지 확인하고, 그것이 왜 문제인지 설명하라.
 
 </div>
@@ -478,7 +478,7 @@ MAD에는 효율 말고도 개념적 한계가 있다. **비대칭 분포**에�
 
 <div class="drillbox" markdown>
 
-**연습문제 9.**
+**연습문제 9.** <span class="diff med" title="중간"></span>
 MAD가 실패하는 또 하나의 경우가 있다. **MAD $= 0$** 이 되는 상황을 만들고, 그때 무엇을 써야 하는지 논하라.
 
 </div>
@@ -547,7 +547,7 @@ MAD가 실패하는 또 하나의 경우가 있다. **MAD $= 0$** 이 되는 상
 
 <div class="drillbox" markdown>
 
-**연습문제 10.**
+**연습문제 10.** <span class="diff med" title="중간"></span>
 지금까지의 내용을 종합하라. 실무에서 **어떤 척도 추정량을 언제 고를 것인가**를 결정 규칙으로 정리하고, 그 근거를 이 절의 결과들로 뒷받침하라.
 
 </div>

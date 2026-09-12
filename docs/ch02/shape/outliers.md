@@ -149,7 +149,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 자료 $4, 7, 8, 12, 14, 15, 16, 18, 19, 22, 25, 55$에 대해 (a) $Q_1, Q_2, Q_3$을 구하라. (b) IQR을 계산하라. (c) $1.5 \times \mathrm{IQR}$ 규칙을 적용해 이상치를 찾아라. (d) 상자그림을 서술하라.
 
 </div>
@@ -165,7 +165,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff hard" title="어려움"></span>
 **상자그림 울타리 규칙에서 곱하는 수가 왜 $1.5$인가?** 정규분포 아래에서 이 수가 무엇에 대응하는지 유도하라.
 
 </div>
@@ -185,7 +185,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 **Z-점수 방법**은 $|Z| > 3$인 점을 표시한다. 정규분포 아래에서 자료의 몇 퍼센트가 표시되는가? 이상치가 여럿일 때 이 규칙은 왜 실패하는가?
 
 </div>
@@ -205,7 +205,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 이상치를 세 범주로 구분하라. (a) **오류 이상치**, (b) **혼합 이상치**, (c) **회귀에서 영향력 있는 이상치**. 각각에 대해 예와 권장 조치를 제시하라.
 
 </div>
@@ -221,7 +221,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 모수가 $p$개인 회귀에서 관측값 $i$의 **쿡 거리**는
 
 $$
@@ -244,7 +244,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 5%/95% 수준의 **윈저화**는 5번째 백분위수보다 작은 값을 5번째 백분위수 값으로, 95번째보다 큰 값을 95번째 백분위수 값으로 대체한다. 이를 **절단**(극단값 삭제) 및 **이상치를 그대로 두기**와 비교하라. 각각은 언제 적절한가?
 
 </div>
@@ -260,7 +260,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 7.**
+**연습문제 7.** <span class="diff med" title="중간"></span>
 연습문제 3에서 Z-점수 방법이 이상치가 여럿일 때 실패한다고 했다. 그 **가려짐(masking)** 을 수치로 보이고, 강건한 대안을 제시하라.
 
 </div>
@@ -322,7 +322,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 8.**
+**연습문제 8.** <span class="diff med" title="중간"></span>
 어떤 이상치는 **각 변수를 따로 보면 전혀 보이지 않는다.** 그런 점을 만들고 마할라노비스 거리로 탐지하라.
 
 </div>
@@ -387,7 +387,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 9.**
+**연습문제 9.** <span class="diff med" title="중간"></span>
 $1.5 \times \mathrm{IQR}$ 규칙이 정규분포에서 표시하는 비율을 계산하고, $n$이 커질 때 **기대 표시 개수**를 구하라. 이것이 "이상치"라는 말의 해석에 어떤 함의를 갖는가?
 
 </div>
@@ -445,7 +445,7 @@ $1.5 \times \mathrm{IQR}$ 규칙이 정규분포에서 표시하는 비율을 �
 
 <div class="drillbox" markdown>
 
-**연습문제 10.**
+**연습문제 10.** <span class="diff med" title="중간"></span>
 연습문제 6이 이상치를 **어떻게 처리할지** 다루었다면, 그 전에 물어야 할 것은 **얼마나 영향을 주는가**이다. 이상치 하나가 상관계수를 어디까지 움직일 수 있는지 보이고, 강건한 대안과 비교하라.
 
 </div>

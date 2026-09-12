@@ -329,7 +329,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 다섯 값 3, 7, 7, 10, 13에 대해 평균, 중앙값, 최빈값을 손으로 계산하라.
 
 </div>
@@ -342,7 +342,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 $E[s^2] = \sigma^2$(불편성)이라는 요구조건에서 출발해 표본분산 $s^2$의 공식을 유도하라. 분모가 왜 $n$이 아니라 $n - 1$인지 설명하라.
 
 </div>
@@ -370,7 +370,7 @@ $E[s^2] = \sigma^2$(불편성)이라는 요구조건에서 출발해 표본분�
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff easy" title="쉬움"></span>
 두 주식의 연간 수익률이 $X = (0.10, -0.05, 0.08)$과 $Y = (-0.02, 0.12, -0.03)$이다. $\text{Cov}(X, Y)$와 피어슨 상관 $r$을 손으로 계산하라.
 
 </div>
@@ -408,7 +408,7 @@ $E[s^2] = \sigma^2$(불편성)이라는 요구조건에서 출발해 표본분�
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 피어슨 상관계수가 $-1 \le r \le 1$을 만족함을 보여라. 등호는 어떤 조건에서 성립하는가?
 
 </div>
@@ -430,7 +430,7 @@ $E[s^2] = \sigma^2$(불편성)이라는 요구조건에서 출발해 표본분�
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff hard" title="어려움"></span>
 위의 CA 가격은 거의 선형으로 감소한다. 가격이 정확히 선형이라면(상수 $a, b > 0$과 $i = 1, \ldots, n$에 대해 $x_i = a - bi$) 표본평균이 $a - b \cdot \frac{n+1}{2}$과 같음을 보이고 표본분산의 닫힌 형태 표현을 구하라.
 
 </div>
@@ -464,7 +464,7 @@ $E[s^2] = \sigma^2$(불편성)이라는 요구조건에서 출발해 표본분�
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff easy" title="쉬움"></span>
 **변동계수** $\mathrm{CV} = s/\bar x$는 상대적 퍼짐을 재는 단위 없는 측도다. 위의 CA 가격은 $\bar x \approx 244$, $s \approx 9$이고 오리건(OR) 가격은 $\bar x \approx 209$, $s \approx 5$다. 각각의 CV를 계산하고 어느 주의 가격 변동성이 *상대적으로* 더 큰지 설명하라.
 
 </div>
@@ -481,7 +481,7 @@ $E[s^2] = \sigma^2$(불편성)이라는 요구조건에서 출발해 표본분�
 
 <div class="drillbox" markdown>
 
-**연습문제 7.**
+**연습문제 7.** <span class="diff med" title="중간"></span>
 **피어슨 상관은 왜 *선형* 연관만을 재는가?** $X$와 $Y$가 결정론적으로 완벽하게 관련되어 있지만($Y$가 $X$의 함수) 피어슨의 $r \approx 0$인 작은 자료를 만들어라.
 
 </div>
@@ -501,7 +501,7 @@ $E[s^2] = \sigma^2$(불편성)이라는 요구조건에서 출발해 표본분�
 
 <div class="drillbox" markdown>
 
-**연습문제 8.**
+**연습문제 8.** <span class="diff med" title="중간"></span>
 이 절의 가격 자료는 **시계열**이다. 시간에 따라 움직이는 두 계열의 상관을 계산할 때 특별히 조심해야 할 것이 있다. 독립인 두 확률보행의 상관을 계산해 무슨 일이 일어나는지 보여라.
 
 </div>
@@ -557,7 +557,7 @@ $E[s^2] = \sigma^2$(불편성)이라는 요구조건에서 출발해 표본분�
 
 <div class="drillbox" markdown>
 
-**연습문제 9.**
+**연습문제 9.** <span class="diff med" title="중간"></span>
 연습문제 7이 상관이 비선형 관계를 놓친다는 것을 보였다면, 더 극적인 예가 있다. **안스콤의 사중주**를 재현하고 무엇을 시사하는지 논하라.
 
 </div>
@@ -615,7 +615,7 @@ $E[s^2] = \sigma^2$(불편성)이라는 요구조건에서 출발해 표본분�
 
 <div class="drillbox" markdown>
 
-**연습문제 10.**
+**연습문제 10.** <span class="diff hard" title="어려움"></span>
 관측된 상관이 참 상관보다 작게 나오는 체계적인 이유가 있다. **측정오차에 의한 감쇠**를 유도하고 확인하라.
 
 </div>

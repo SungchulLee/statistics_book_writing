@@ -100,7 +100,7 @@ dtype: float64
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 어떤 고객센터가 한 달간 접수한 문의를 유형별로 집계했다. 결제 오류 340건, 배송 지연 210건, 상품 불량 95건, 회원가입 문제 60건, 환불 요청 45건, 기타 30건이다.
 
 **(a)** 누적 비율을 계산하라.
@@ -129,7 +129,7 @@ dtype: float64
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff easy" title="쉬움"></span>
 어떤 분석가가 월별 매출 자료(1월부터 12월까지)를 파레토 그림으로 그렸다. 이 선택의 문제를 지적하고 대안을 제시하라.
 
 </div>
@@ -155,7 +155,7 @@ dtype: float64
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 "$80$/$20$ 법칙"은 얼마나 자주 맞는가? 여러 분포에서 상위 $20\%$가 차지하는 비중을 계산하라.
 
 </div>
@@ -222,7 +222,7 @@ dtype: float64
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 연습문제 1의 자료로 파레토 그림을 그리고, **"기타" 범주**를 어떻게 다룰지 논하라.
 
 </div>
@@ -292,7 +292,7 @@ dtype: float64
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 파레토 그림은 **누적선**을 그린다. 그 선에서 무엇을 읽고 무엇을 읽으면 안 되는가?
 
 </div>
@@ -343,7 +343,7 @@ dtype: float64
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 연습문제 2를 일반화하라. 파레토 그림이 **정렬**을 요구한다는 사실이 왜 제약인가?
 
 </div>
@@ -397,7 +397,7 @@ dtype: float64
 
 <div class="drillbox" markdown>
 
-**연습문제 7.**
+**연습문제 7.** <span class="diff med" title="중간"></span>
 파레토 그림의 도수에 **불확실성**이 있다면 어떻게 다루는가?
 
 </div>
@@ -470,7 +470,7 @@ dtype: float64
 
 <div class="drillbox" markdown>
 
-**연습문제 8.**
+**연습문제 8.** <span class="diff med" title="중간"></span>
 파레토 그림의 도수를 **무엇으로 셀지**가 결론을 바꾼다. 건수, 비용, 시간 중 무엇을 써야 하는가?
 
 </div>
@@ -528,7 +528,7 @@ dtype: float64
 
 <div class="drillbox" markdown>
 
-**연습문제 9.**
+**연습문제 9.** <span class="diff med" title="중간"></span>
 파레토 그림을 **시간에 따라 반복해서** 그리면 무엇을 알 수 있는가?
 
 </div>
@@ -584,7 +584,7 @@ dtype: float64
 
 <div class="drillbox" markdown>
 
-**연습문제 10.**
+**연습문제 10.** <span class="diff med" title="중간"></span>
 파레토 그림을 이 장의 다른 도구들과 견주어 정리하라. **언제 쓰고 무엇으로 대체하는가?**
 
 </div>

@@ -236,7 +236,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 어떤 회사가 네 지역의 매출을 발표하면서 세로축을 900에서 1000까지로 설정한 막대그림을 썼다. 실제 매출은 920, 950, 940, 980이다. (a) 이 그림이 왜 문제인가? (b) 축을 0에서 시작하면 무엇이 달라 보이는가? (c) 작은 차이를 정직하게 강조하려면 어떻게 하면 되는가?
 
 </div>
@@ -254,7 +254,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 다음 각 상황에서 묶음 막대와 누적 막대 중 어느 것이 적절한지 고르고 이유를 밝혀라.
 
 **(a)** 세 회사의 연도별 총매출 추이와 그 안의 제품군별 구성
@@ -274,7 +274,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 범주가 20개인 자료를 막대그림으로 그리려 한다. 어떤 문제가 생기며 어떻게 대응할 수 있는가?
 
 </div>
@@ -295,7 +295,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 막대그림의 대안으로 흔히 원그림이 쓰인다. 두 방식의 **지각 정확도**를 비교하고, 부분–전체 비교에 무엇이 나은지 논하라.
 
 </div>
@@ -364,7 +364,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 본문 3절의 **누적 막대그림**에는 구조적 약점이 있다. 맨 아래 층을 제외한 층들을 비교하기 어려운 이유를 수치로 보여라.
 
 </div>
@@ -430,7 +430,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 막대그림으로 **집단별 평균**을 그리는 것은 매우 흔하다. 이것이 무엇을 감추는지 보여라.
 
 </div>
@@ -506,7 +506,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 7.**
+**연습문제 7.** <span class="diff med" title="중간"></span>
 본문의 "순서가 없는 범주는 정렬하라"를 더 밀고 나가라. 정렬이 **위험한** 경우는 언제인가?
 
 </div>
@@ -558,7 +558,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 8.**
+**연습문제 8.** <span class="diff med" title="중간"></span>
 **$100\%$ 누적 막대**(비율만 보여 주는 누적 막대)는 성분 구성의 변화를 보기에 좋다. 그런데 무엇을 감추는가?
 
 </div>
@@ -623,7 +623,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 9.**
+**연습문제 9.** <span class="diff med" title="중간"></span>
 연습문제 8의 "분모를 감춘다"를 정면으로 다루어라. 막대 높이를 **개수**로 할 것인가 **비율**로 할 것인가?
 
 </div>
@@ -675,7 +675,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 10.**
+**연습문제 10.** <span class="diff med" title="중간"></span>
 본문 $4$절의 "가장 흔한 거짓말"이 축 자르기였다면, 그 밖의 왜곡 기법들을 정리하라. 각각을 어떻게 알아채고 바로잡는가?
 
 </div>

@@ -128,7 +128,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 어떤 발표자가 일곱 개 부서의 예산 배분을 원그래프로 보여 주었다. 청중이 "영업과 마케팅 중 어디가 더 많나요?"라고 물었는데 발표자가 바로 답하지 못했다. 무엇이 잘못되었고 어떻게 고쳐야 하는가?
 
 </div>
@@ -149,7 +149,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff easy" title="쉬움"></span>
 원그래프로 나타내면 **안 되는** 자료의 예를 두 가지 들고 이유를 설명하라.
 
 </div>
@@ -171,7 +171,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff easy" title="쉬움"></span>
 어떤 원그래프의 조각이 각각 $12\%$, $13\%$, $14\%$, $61\%$이다. 세 작은 조각의 중심각을 구하고, 그 각도 차이를 눈으로 구별할 수 있을지 논하라.
 
 </div>
@@ -191,7 +191,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff easy" title="쉬움"></span>
 `ax.pie()`에 `sizes = [3, 1, 1]`을 주면 각 조각의 백분율은 얼마인가? 같은 함수에 `sizes = [0.6, 0.2, 0.2]`를 주면 어떻게 되는가? 이로부터 원그래프가 자료를 어떻게 다루는지 설명하라.
 
 </div>
@@ -226,7 +226,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 같은 자료를 원그래프와 정렬한 가로 막대그림으로 나란히 그리는 코드를 작성하라. 범주는 여섯 개로 하고, 두 그림에서 3위와 4위를 가려내는 난이도를 비교하라.
 
 </div>
@@ -272,7 +272,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 어떤 보고서에 값이 적히지 않은 원그래프가 실려 있다. 각도기로 잰 중심각이 각각 $126^\circ$, $90^\circ$, $72^\circ$, $72^\circ$였다. (a) 각 범주의 비율을 구하라. (b) 전체가 $4{,}500$건이라는 사실을 따로 알았다면 각 범주의 도수는 얼마인가? (c) 전체를 모른다면 도수를 알 수 있는가?
 
 </div>
@@ -313,7 +313,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 7.**
+**연습문제 7.** <span class="diff med" title="중간"></span>
 부분-전체 관계를 보이는 또 다른 방법으로 **100% 누적 막대**가 있다. 원그래프와 무엇이 같고 무엇이 다른가? 집단이 여럿일 때 어느 쪽이 나은지 코드로 확인하라.
 
 </div>
@@ -375,7 +375,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 8.**
+**연습문제 8.** <span class="diff easy" title="쉬움"></span>
 어떤 신문이 "응답자의 45%가 A를, 40%가 B를, 30%가 C를 지지한다"는 설문 결과를 원그래프로 실었다. 무엇이 잘못되었는가?
 
 </div>
@@ -403,7 +403,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 9.**
+**연습문제 9.** <span class="diff med" title="중간"></span>
 원그래프에서 한 조각이 정확히 $50\%$일 때는 다른 경우보다 읽기 쉽다. 왜 그런가? 이 성질을 이용할 수 있는 상황을 하나 들어라.
 
 </div>
@@ -419,7 +419,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 10.**
+**연습문제 10.** <span class="diff med" title="중간"></span>
 범주가 $k$개인 원그래프에서 조각의 크기가 모두 같다면 중심각은 $360/k$도다. $k$가 커질 때 이웃한 두 조각의 각도 차이를 사람이 구별할 수 있는 한계를 생각해 보자. 실무에서 원그래프의 범주 개수를 몇 개로 제한하는 것이 합리적인지 논하라.
 
 </div>

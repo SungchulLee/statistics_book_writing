@@ -135,7 +135,7 @@ Pclass Sex
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 두 식물 생장 실험의 결과가 다음과 같다. **처리 1**: $\{5, 6, 6, 7, 7, 7, 8, 8, 9\}$, **처리 2**: $\{3, 5, 7, 7, 7, 7, 7, 9, 11\}$. (a) 다섯 수치 요약을 구하라. (b) 상자그림이 비슷해 보이겠는가? (c) 바이올린 그림은 어떻게 다른가?
 
 </div>
@@ -157,7 +157,7 @@ Pclass Sex
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 바이올린 그림의 밀도는 **커널밀도추정**으로 계산된다. KDE 공식을 쓰고, 대역폭 $h$가 바이올린 그림의 모습에 어떤 영향을 주는지 논하라.
 
 </div>
@@ -181,7 +181,7 @@ Pclass Sex
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 **반쪽 바이올린(분할 바이올린) 그림**은 하나의 수직축 양쪽에 두 집단을 보여준다. 이 표현이 나란히 놓은 전체 바이올린보다 선호되는 때는 언제인가?
 
 </div>
@@ -201,7 +201,7 @@ Pclass Sex
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 어떤 의학 시험 결과 자료의 바이올린 그림이 물리적인 하한(예: 음이 아닌 양에 대한 0)에서 **잘려** 있다. KDE가 어떤 인공물을 만들어내며 어떻게 바로잡을 수 있는가?
 
 </div>
@@ -221,7 +221,7 @@ Pclass Sex
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 바이올린의 *폭*을 집단에 걸쳐 *정규화*하기도 하고(각 바이올린의 최대 폭이 같음) *정규화하지 않기도*(폭이 표본 크기를 반영) 하는 이유는 무엇인가? 각각은 언제 적절한가?
 
 </div>
@@ -240,7 +240,7 @@ Pclass Sex
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 바이올린 그림의 강점은 분포의 모양을 보여준다는 것이고, 약점은 대부분의 청중에게 낯설다는 것이다. 통계 전문가가 아닌 일반 청중에게 바이올린 그림을 제시할 때 합리적인 소통 전략은 무엇인가?
 
 </div>
@@ -258,7 +258,7 @@ Pclass Sex
 
 <div class="drillbox" markdown>
 
-**연습문제 7.**
+**연습문제 7.** <span class="diff med" title="중간"></span>
 바이올린 그림은 KDE를 그린 것이므로 **KDE의 약점을 그대로 물려받는다.** 표본이 작을 때 바이올린이 없는 구조를 만들어 내는 것을 확인하라.
 
 </div>
@@ -320,7 +320,7 @@ Pclass Sex
 
 <div class="drillbox" markdown>
 
-**연습문제 8.**
+**연습문제 8.** <span class="diff med" title="중간"></span>
 연습문제 2의 대역폭 효과를 그림으로 확인하라. 같은 자료에 대역폭만 바꾸면 바이올린이 어떻게 달라지는가?
 
 </div>
@@ -384,7 +384,7 @@ Pclass Sex
 
 <div class="drillbox" markdown>
 
-**연습문제 9.**
+**연습문제 9.** <span class="diff med" title="중간"></span>
 연습문제 4의 경계 인공물을 실제로 만들어 보고, 두 가지 교정법을 비교하라.
 
 </div>
@@ -453,7 +453,7 @@ Pclass Sex
 
 <div class="drillbox" markdown>
 
-**연습문제 10.**
+**연습문제 10.** <span class="diff med" title="중간"></span>
 바이올린 그림이 **적극적으로 나쁜** 경우가 있다. 이산 자료나 값의 종류가 적은 자료에 바이올린을 쓰면 어떻게 되는가?
 
 </div>
