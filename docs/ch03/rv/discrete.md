@@ -135,8 +135,6 @@ $$
 
 표의 대각선에 벽돌 3개, 그 양옆에 4개, 모서리에 2개가 쌓인다.
 
-</div>
-
 ```python
 import numpy as np
 import matplotlib.pyplot as plt
@@ -179,6 +177,8 @@ values = [1, 2, 3, 4]
 probs = [0.2, 0.16, 0.128, 0.512]
 plot_pmf(values, probs, "PMF: Baseball Card Packs Purchased")
 ```
+
+</div>
 
 ![이산확률변수](./img/discrete_112_0.png)
 

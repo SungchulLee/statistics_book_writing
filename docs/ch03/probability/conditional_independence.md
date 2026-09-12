@@ -84,8 +84,6 @@ $$
 
 화재가 아니라는 말을 듣는 순간 토스트 쪽으로 무게가 쏠린다. 한 원인이 결과를 "해명해 버리면" 다른 원인이 필요 없어지는 것이다.
 
-</div>
-
 ```python
 import numpy as np
 
@@ -141,6 +139,8 @@ P(fire | alarm, no toast) = 1.0000
 Conditionally dependent (explaining away): True
 ```
 
+</div>
+
 !!! warning "이것이 1장의 길이 편향·충돌변수와 같은 구조다"
     해명 효과는 확률의 퍼즐로 끝나지 않는다. 12장에서 **충돌변수(collider)** 라 부르는 것이 정확히 이 구조이며, 회귀에 변수를 무분별하게 넣으면 추정이 나아지기는커녕 나빠지는 이유가 여기에 있다.
 
@@ -189,8 +189,6 @@ P(A \cap B \mid C) = P(A \mid C)\,P(B \mid C)
 $$
 
 그러나 어느 동전인지 모르면 두 던지기는 **종속이다**. 첫 던지기가 앞면이면 앞면이 잘 나오는 동전일 가능성이 높아지고, 그러면 두 번째도 앞면일 확률이 올라간다. 첫 던지기가 두 번째에 대해 정보를 주는 것이다.
-
-</div>
 
 ```python
 import numpy as np
@@ -250,6 +248,8 @@ P(flip2=H | coin=0) = 0.3007
 P(flip2=H | flip1=H, coin=0) = 0.3004
 Conditionally independent: True
 ```
+
+</div>
 
 이 구조가 통계 모형의 표준 골격이다. **"모수 $\theta$가 주어지면 관측들은 i.i.d.이다"** 라는 문장이 바로 $X_i \perp\!\!\!\perp X_j \mid \theta$를 말하고 있다. $\theta$를 모르는 우리에게 관측들은 종속으로 보이며, 그 종속성이 바로 자료가 $\theta$에 대해 알려 주는 정보다.
 

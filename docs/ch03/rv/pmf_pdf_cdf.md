@@ -108,8 +108,6 @@ plt.show()
 
 **보기 1.** <span class="diff easy" title="쉬움"></span> 정규분포에서 구간의 확률. $X \sim N(50, 10^2)$일 때 $P(40 \le X \le 60)$은 $F(60) - F(40)$이다.
 
-</div>
-
 ```python
 from scipy import stats
 
@@ -130,6 +128,8 @@ print(f"P(X ≤ 55) = {prob_55 * 100:.2f}%")
 P(40 ≤ X ≤ 60) = 68.27%
 P(X ≤ 55) = 69.15%
 ```
+
+</div>
 
 ## 3. 누적분포함수를 뒤집으면 분위수가 나온다
 

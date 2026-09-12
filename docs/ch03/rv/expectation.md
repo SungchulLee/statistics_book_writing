@@ -44,20 +44,6 @@ $$
 
 $3.5$는 주사위가 결코 낼 수 없는 값이다. 기댓값은 "기대되는 값"이 아니라 **평균**이라는 점을 여기서 확인하고 넘어가는 것이 좋다.
 
-</div>
-
-<div class="exbox" markdown>
-
-**보기 2.** <span class="diff easy" title="쉬움"></span> 지수분포의 기댓값. $x \ge 0$에서 $f(x) = \lambda e^{-\lambda x}$인 $X \sim \text{Exponential}(\lambda)$에 대해
-
-$$
-E[X] = \int_0^{\infty} x \, \lambda e^{-\lambda x}\,dx = \frac{1}{\lambda}
-$$
-
-이다. 도착률이 $\lambda$면 평균 대기시간이 $1/\lambda$라는 익숙한 관계다.
-
-</div>
-
 ```python
 import numpy as np
 
@@ -79,6 +65,20 @@ print(f"Simulated mean = {rolls.mean():.4f}")
 E[fair die] = 3.5000
 Simulated mean = 3.5031
 ```
+
+</div>
+
+<div class="exbox" markdown>
+
+**보기 2.** <span class="diff easy" title="쉬움"></span> 지수분포의 기댓값. $x \ge 0$에서 $f(x) = \lambda e^{-\lambda x}$인 $X \sim \text{Exponential}(\lambda)$에 대해
+
+$$
+E[X] = \int_0^{\infty} x \, \lambda e^{-\lambda x}\,dx = \frac{1}{\lambda}
+$$
+
+이다. 도착률이 $\lambda$면 평균 대기시간이 $1/\lambda$라는 익숙한 관계다.
+
+</div>
 
 ## 2. 함수의 기댓값은 분포를 몰라도 된다
 

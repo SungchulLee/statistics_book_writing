@@ -83,8 +83,6 @@ $$
 
 넓이가 0.1이 되는 지점을 찾는 문제, 즉 10번째 백분위수를 구하는 문제다.
 
-</div>
-
 ```python
 import numpy as np
 import matplotlib.pyplot as plt
@@ -121,6 +119,8 @@ plt.show()
 ```
 Maximum average wait time: 170.90 seconds
 ```
+
+</div>
 
 ![연속확률변수](./img/continuous_72.png)
 

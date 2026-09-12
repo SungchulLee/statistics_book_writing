@@ -59,8 +59,6 @@
 - $H_0$: 두 집단의 평균이 같다.
 - $H_1$: 두 집단의 평균이 다르다.
 
-</div>
-
 ```python
 import numpy as np
 import matplotlib.pyplot as plt
@@ -126,6 +124,8 @@ plt.show()
 Observed Difference in Means: 3.00
 P-value: 0.0418
 ```
+
+</div>
 
 ![순열검정의 귀무분포](./img/permutation_62.png)
 

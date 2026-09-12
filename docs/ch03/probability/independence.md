@@ -60,8 +60,6 @@ $$
 
 이고 $\tfrac{1}{6} \neq \tfrac{1}{4}$이므로 **독립이 아니다**. 같은 주사위 한 번에서 나온 두 사건이라 서로 정보를 준다.
 
-</div>
-
 ```python
 import numpy as np
 from itertools import product
@@ -120,6 +118,8 @@ P(1st=H ∩ 2nd=H) = 0.2500
 P(1st=H) × P(2nd=H) = 0.2500
 Independent: True
 ```
+
+</div>
 
 ## 2. 독립과 배반은 정반대다
 

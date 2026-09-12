@@ -76,8 +76,6 @@ $$
 
 $n = 100$에서 약 $0.112$다. 대칭인 베르누이보다 **두 배 이상** 크다. 지수분포가 오른쪽으로 치우쳐 있기 때문이다.
 
-</div>
-
 ```python
 import numpy as np
 from scipy import stats
@@ -128,6 +126,8 @@ n =    30: Berry–Esseen bound = 0.2053
 n =   100: Berry–Esseen bound = 0.1124
 n =  1000: Berry–Esseen bound = 0.0356
 ```
+
+</div>
 
 !!! note "$n \ge 30$ 관례의 정체"
     지수분포에서 $n = 30$이면 상한이 $1.124/\sqrt{30} \approx 0.205$다. **누적분포함수 오차가 20%까지 허용된다**는 뜻이며, 신뢰구간을 만들기에는 전혀 안심할 수 없는 수준이다.

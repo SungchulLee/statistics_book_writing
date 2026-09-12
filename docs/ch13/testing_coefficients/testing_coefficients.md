@@ -32,8 +32,6 @@ $p < \alpha$이면, 동등하게 $|t_j| > t^*_{n-k,\,\alpha/2}$이면, 동등하
 
 **보기 1.** <span class="diff easy" title="쉬움"></span> 설명변수 두 개.
 
-</div>
-
 ```python
 import numpy as np
 import statsmodels.api as sm
@@ -88,13 +86,13 @@ Notes:
 [1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
 ```
 
+</div>
+
 요약표의 `P>|t|` 열이 각 계수에 대한 $H_0\colon \beta_j = 0$의 양측 p-값이다. 그 옆의 `[0.025 0.975]`가 95% 신뢰구간이고, 둘은 같은 정보를 다르게 표현한 것이다.
 
 <div class="exbox" markdown>
 
 **보기 2.** <span class="diff easy" title="쉬움"></span> p값과 신뢰구간 뽑아내기.
-
-</div>
 
 ```python
 np.random.seed(42)
@@ -120,13 +118,13 @@ P-values: [2.09535133e-01 1.62497167e-09]
  [ 1.43199824  2.6484553 ]]
 ```
 
+</div>
+
 `pvalues`와 `conf_int()`로 요약표의 값을 배열로 꺼낸다. 절편의 p-값은 0.21로 유의하지 않고 기울기는 $1.6 \times 10^{-9}$로 강하게 유의하다.
 
 <div class="exbox" markdown>
 
 **보기 3.** <span class="diff easy" title="쉬움"></span> 여러 설명변수의 해석.
-
-</div>
 
 ```python
 np.random.seed(42)
@@ -155,6 +153,8 @@ Intercept: coef=4.8212, p=1.754e-15 (Significant), 95% CI=(3.8122, 5.8303)
 Study Hours: coef=2.4317, p=2.171e-58 (Significant), 95% CI=(2.2992, 2.5641)
 Sleep Hours: coef=-1.3202, p=3.633e-28 (Significant), 95% CI=(-1.4883, -1.1521)
 ```
+
+</div>
 
 !!! warning "`conf_int()`의 반환 형식은 입력에 따라 달라진다"
     `sm.OLS`에 NumPy 배열을 넘기면 `conf_int()`가 `ndarray`를 돌려주므로 `conf[i]`로 색인해야 한다. pandas `Series`/`DataFrame`을 넘겼을 때에만 `DataFrame`이 반환되어 `.iloc[i]`를 쓸 수 있다. 배열 입력에 `.iloc`를 쓰면 `AttributeError`가 난다.

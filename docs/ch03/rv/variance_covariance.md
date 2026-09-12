@@ -53,20 +53,6 @@ $$
 \text{Var}(X) = \frac{91}{6} - 3.5^2 = \frac{35}{12} \approx 2.917
 $$
 
-</div>
-
-<div class="exbox" markdown>
-
-**보기 2.** <span class="diff easy" title="쉬움"></span> 베르누이. $X \sim \text{Bernoulli}(p)$이면 $X^2 = X$이므로 $E[X^2] = E[X] = p$이고
-
-$$
-\text{Var}(X) = p - p^2 = p(1-p)
-$$
-
-이다. $p = 0.5$에서 최대(가장 불확실)이고 $p = 0$이나 $1$에서 0(확실)이다. 직관과 정확히 맞는다.
-
-</div>
-
 ```python
 import numpy as np
 
@@ -98,6 +84,20 @@ E[X²] = 15.1667
 Var(X) = 2.9167
 SD(X) = 1.7078
 ```
+
+</div>
+
+<div class="exbox" markdown>
+
+**보기 2.** <span class="diff easy" title="쉬움"></span> 베르누이. $X \sim \text{Bernoulli}(p)$이면 $X^2 = X$이므로 $E[X^2] = E[X] = p$이고
+
+$$
+\text{Var}(X) = p - p^2 = p(1-p)
+$$
+
+이다. $p = 0.5$에서 최대(가장 불확실)이고 $p = 0$이나 $1$에서 0(확실)이다. 직관과 정확히 맞는다.
+
+</div>
 
 ## 2. 두 변수가 함께 움직이는 정도
 
@@ -237,8 +237,6 @@ $$
 
 이다. $\rho < 1$이면 교차항이 충분히 작아 포트폴리오의 분산이 개별 분산의 가중평균보다 **낮아진다**. 이것이 분산투자의 수학적 근거이며, 상관이 낮은 자산을 섞을수록 효과가 크다.
 
-</div>
-
 ```python
 import numpy as np
 import matplotlib.pyplot as plt
@@ -276,6 +274,8 @@ def portfolio_variance_demo():
 
 portfolio_variance_demo()
 ```
+
+</div>
 
 ![Diversification: Portfolio Risk vs. Allocation](./img/variance_covariance_187.png)
 

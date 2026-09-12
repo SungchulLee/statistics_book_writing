@@ -81,8 +81,6 @@ $$H_0 : \mu_{\text{Harpo}-\text{Zeppo}} = 0 \quad\text{vs}\quad H_1: \mu_{\text{
 
 $$H_0 : \mu_{\text{Post}-\text{Pre}} = 0 \quad\text{vs}\quad H_1: \mu_{\text{Post}-\text{Pre}} \neq 0$$
 
-</div>
-
 ```python
 import numpy as np
 import scipy.stats as stats
@@ -124,6 +122,8 @@ scipy: t = 3.4616, p = 0.0038
 ttest_ind (틀린 분석): t = 1.3354, p = 0.1925
 ```
 
+</div>
+
 같은 자료인데 결론이 정반대다. 대응검정은 $p = 0.0038$로 기각하고, 짝을 무시한 검정은 $p = 0.19$로 기각하지 못한다.
 
 이유는 산포에 있다. 점수 자체의 표준편차는 사전 12.1점, 사후 10.3점인데 사전-사후 **차이**의 표준편차는 6.1점뿐이다. 잘하는 학생은 두 번 다 잘하고 못하는 학생은 두 번 다 못하기 때문에, 짝을 지으면 그 개인차가 통째로 상쇄된다. 짝지어진 자료를 독립표본으로 분석하는 것은 검정력을 버리는 일이다.
@@ -159,8 +159,6 @@ $$Z = \frac{W - \frac{n(n+1)}{4}}{\sqrt{\frac{n(n+1)(2n+1)}{24}}}$$
 
 차이가 모두 양수이므로($d = [2, 1, 3, 5, 3, 2, 1, 2, 1, 4]$) $W^+ = 55$, $W^- = 0$이 되어 $W = 0$이다. $W = 0 < 8$($n=10$, $\alpha=0.05$의 임계값)이므로 $H_0$을 기각한다.
 
-</div>
-
 ```python
 import numpy as np
 from scipy.stats import wilcoxon
@@ -188,6 +186,8 @@ Test Statistic: 0.0
 P-value: 0.001953125
 Reject H0: Significant improvement in scores.
 ```
+
+</div>
 
 p-값 $0.001953125 = 1/512 = 2/2^{10}$이 딱 떨어지는 분수다. 우연이 아니다. $H_0$ 아래에서 10개의 부호가 각각 반반의 확률로 정해지므로 가능한 부호 배열이 $2^{10} = 1024$가지이고, 그중 "모두 같은 방향"인 배열은 양쪽 합해 둘뿐이다. 순위 자료를 다루는 비모수 검정에서는 이렇게 p-값이 조합론적으로 결정된다.
 
