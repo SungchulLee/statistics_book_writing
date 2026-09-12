@@ -24,6 +24,10 @@ Log-Normal 분포는 자산 가격, 소득처럼 반드시 양수이고 오른�
 
 SciPy는 `stats.lognorm(s=sigma, scale=np.exp(mu))`를 사용하며, `s`가 형상 모수 $\sigma$이고 `scale`이 중앙값 $e^\mu$이다.
 
+<div class="codebox" markdown>
+
+**예제 .** 로그정규분포의 SciPy 모수화
+
 ```python
 import matplotlib.pyplot as plt
 import numpy as np
@@ -52,6 +56,8 @@ ax.set_ylim(bottom=-0.02)
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 ![Log-Normal Distribution — PDF ($\mu=0$, varying $\sigma$)](./img/lognormal_pdf_27.png)
 

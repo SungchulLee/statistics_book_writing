@@ -29,6 +29,10 @@ $$
 
 ## 코드
 
+<div class="codebox" markdown>
+
+**예제 .** 형상모수에 따른 와이불 밀도와 위험함수
+
 ```python
 import matplotlib.pyplot as plt
 import numpy as np
@@ -81,6 +85,8 @@ for ax in axes:
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 ![Weibull PDF](./img/weibull_pdf_32.png)
 

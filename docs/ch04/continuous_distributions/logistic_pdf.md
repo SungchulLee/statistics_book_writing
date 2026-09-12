@@ -22,6 +22,10 @@ Logistic 분포는 정규분포와 비슷하지만 **꼬리가 더 두꺼워** �
 
 두 분포를 공정하게 비교하려면 분산을 맞춘다. Logistic 분포의 척도가 $s$이면 분산은 $s^2\pi^2/3$이다. 이에 맞추는 정규분포는 $\sigma = s\pi/\sqrt{3}$이다.
 
+<div class="codebox" markdown>
+
+**예제 .** 분산을 맞춘 로지스틱과 정규분포 비교
+
 ```python
 import matplotlib.pyplot as plt
 import numpy as np
@@ -49,6 +53,8 @@ ax.legend()
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 ![Logistic vs Normal Distribution — PDF](./img/logistic_pdf_25.png)
 

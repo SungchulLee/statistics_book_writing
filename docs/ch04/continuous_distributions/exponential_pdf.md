@@ -23,6 +23,10 @@ $$
 
 SciPy는 **척도** 모수화를 사용한다: `stats.expon(scale=1/lambda)`.
 
+<div class="codebox" markdown>
+
+**예제 .** 비율모수에 따른 지수 밀도함수
+
 ```python
 import matplotlib.pyplot as plt
 import numpy as np
@@ -47,6 +51,8 @@ ax.legend()
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 ![Exponential Distribution — PDF](./img/exponential_pdf_26.png)
 

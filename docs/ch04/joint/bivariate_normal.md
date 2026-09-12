@@ -27,6 +27,10 @@ $$
 
 ## 코드
 
+<div class="codebox" markdown>
+
+**예제 .** 공분산행렬에 따른 이변량 정규분포
+
 ```python
 import numpy as np
 import matplotlib.pyplot as plt
@@ -75,6 +79,8 @@ plt.suptitle("Bivariate Normal: 3D Surface (top) and Contour (bottom)")
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 ![Bivariate Normal: 3D Surface (top) and Contour (bottom)](./img/bivariate_normal_30.png)
 

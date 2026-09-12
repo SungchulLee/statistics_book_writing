@@ -8,6 +8,10 @@
 
 ## 표본 생성하기
 
+<div class="codebox" markdown>
+
+**예제 .** 정규 표본을 뽑아 이론 밀도와 견주기
+
 ```python
 import matplotlib.pyplot as plt
 import numpy as np
@@ -38,6 +42,8 @@ ax.legend()
 ax.grid(True, linestyle=':')
 plt.show()
 ```
+
+</div>
 
 ![정규 난수 생성](./img/normal_rvs_11.png)
 

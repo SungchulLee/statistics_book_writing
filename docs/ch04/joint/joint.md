@@ -165,6 +165,10 @@ $P(X + Y \leq 2)$와 $E[XY]$를 계산하라.
 
 ### 이산 결합 PMF 표
 
+<div class="codebox" markdown>
+
+**예제 .** 이산 결합 확률질량함수 표
+
 ```python
 import numpy as np
 import pandas as pd
@@ -197,7 +201,13 @@ X=2     0.05  0.10  0.10    0.25
 P(Y=y)  0.25  0.50  0.25    1.00
 ```
 
+</div>
+
 ### 연속 결합 PDF 시각화
+
+<div class="codebox" markdown>
+
+**예제 .** 연속 결합 밀도함수 시각화
 
 ```python
 import numpy as np
@@ -222,9 +232,15 @@ ax.set_title('Joint PDF: f(x,y) = 6(1-y)')
 plt.show()
 ```
 
+</div>
+
 ![Joint PDF: f(x,y) = 6(1-y)](./img/joint_180.png)
 
 ### 이변량 정규분포 표본추출
+
+<div class="codebox" markdown>
+
+**예제 .** 이변량 정규분포 표본추출
 
 ```python
 import numpy as np
@@ -247,6 +263,8 @@ ax.set_aspect('equal')
 ax.spines[['top', 'right']].set_visible(False)
 plt.show()
 ```
+
+</div>
 
 ![결합분포](./img/joint_202.png)
 

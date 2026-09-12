@@ -167,6 +167,10 @@ $P(Y = 1 \mid X = 1)$과 $E[Y \mid X = 1]$을 구하라.
 
 ### 이산형 주변분포와 조건부분포
 
+<div class="codebox" markdown>
+
+**예제 .** 이산형 주변분포와 조건부분포
+
 ```python
 import numpy as np
 import pandas as pd
@@ -210,7 +214,13 @@ P(Y|X=1): [0.22222222 0.55555556 0.22222222]
 E[Y|X=1] = 1.0000
 ```
 
+</div>
+
 ### 적분을 통한 연속형 주변분포
+
+<div class="codebox" markdown>
+
+**예제 .** 적분으로 구하는 연속형 주변분포
 
 ```python
 import numpy as np
@@ -244,7 +254,13 @@ print(f"E[Y] via Law of Total Expectation: {E_Y:.4f}")  # Should be 2/3
 E[Y] via Law of Total Expectation: 0.6667
 ```
 
+</div>
+
 ### 조건부분포 시각화
+
+<div class="codebox" markdown>
+
+**예제 .** 조건부분포 시각화
 
 ```python
 import numpy as np
@@ -274,6 +290,8 @@ ax.set_xlabel('Y')
 ax.legend()
 plt.show()
 ```
+
+</div>
 
 ![주변분포와 조건부분포](./img/marginal_conditional_221.png)
 

@@ -29,6 +29,10 @@ $$
 
 ## 코드
 
+<div class="codebox" markdown>
+
+**예제 .** 카이제곱 밀도함수 그리기
+
 ```python
 import numpy as np
 import matplotlib.pyplot as plt
@@ -57,6 +61,8 @@ ax.grid(True, linestyle=":")
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 ![Chi-square Distribution — PDF](./img/chi_square_pdf_32.png)
 

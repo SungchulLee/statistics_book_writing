@@ -34,6 +34,10 @@ $$
 F^{-1}(u) = -\frac{\ln(1 - u)}{\lambda}
 $$
 
+<div class="codebox" markdown>
+
+**예제 .** 역변환 표집으로 지수분포 만들기
+
 ```python
 import numpy as np
 import matplotlib.pyplot as plt
@@ -79,6 +83,8 @@ plt.tight_layout()
 plt.show()
 ```
 
+</div>
+
 ![Step 1: U ~ Uniform(0,1)](./img/inverse_transform_sampling_37.png)
 
 ---
@@ -90,6 +96,10 @@ plt.show()
 $$
 F^{-1}(u) = \tan\!\left(\pi\!\left(u - \frac{1}{2}\right)\right)
 $$
+
+<div class="codebox" markdown>
+
+**예제 .** 역변환 표집으로 코시분포 만들기
 
 ```python
 # 코시분포의 CDF는 F(x) = 1/2 + arctan(x)/pi 이므로
@@ -114,6 +124,8 @@ ax.legend()
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 ![Cauchy via Inverse Transform](./img/inverse_transform_sampling_94.png)
 

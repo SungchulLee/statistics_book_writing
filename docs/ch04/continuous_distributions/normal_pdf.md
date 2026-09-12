@@ -16,6 +16,10 @@ $$
 
 SciPy는 `stats.norm(loc=mu, scale=sigma)`로 정규분포를 나타내며, 이는 **고정된(frozen)** 분포 객체를 만든다. `loc` 모수가 $\mu$이고 `scale`이 $\sigma$이다($\sigma^2$이 아니다).
 
+<div class="codebox" markdown>
+
+**예제 .** scipy.stats 로 정규 밀도함수 그리기
+
 ```python
 import matplotlib.pyplot as plt
 import numpy as np
@@ -24,7 +28,7 @@ import scipy.stats as stats
 mu = 1       # mean
 sigma = 2    # standard deviation
 
-# x-grid covering mu +/- 3*sigma
+# 평균에서 좌우 3 표준편차까지. 확률의 99.7%가 이 안에 있다.
 x = np.linspace(mu - 3 * sigma, mu + 3 * sigma, 100)
 
 # Evaluate PDF
@@ -37,6 +41,8 @@ ax.set_ylabel("f(x)")
 ax.set_title(f"Normal({mu}, {sigma}²) PDF")
 plt.show()
 ```
+
+</div>
 
 ![scipy.stats로 그리는 정규 밀도함수](./img/normal_pdf_19.png)
 

@@ -31,6 +31,10 @@ $$
 
 ## 코드
 
+<div class="codebox" markdown>
+
+**예제 .** 공분산행렬의 고유분해와 등고선 축
+
 ```python
 import numpy as np
 import matplotlib.pyplot as plt
@@ -106,6 +110,8 @@ for i, cfg in enumerate(configs):
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 ![Contour + Eigenvectors](./img/gaussian_2d_eigendecomposition_34.png)
 

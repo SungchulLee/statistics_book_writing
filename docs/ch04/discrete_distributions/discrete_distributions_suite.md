@@ -16,6 +16,10 @@ $$
 
 **예:** 어떤 은행원이 한 달에 50명의 대출 신청자를 만난다. 그중 30%는 신용이 나쁘다.
 
+<div class="codebox" markdown>
+
+**예제 .** 이항분포
+
 ```python
 import numpy as np
 from scipy import stats
@@ -41,6 +45,8 @@ P(X <= 12) = 0.2229
 E[X] = 15.0, Var(X) = 10.50
 ```
 
+</div>
+
 ---
 
 ## 2. Poisson 분포
@@ -52,6 +58,10 @@ P(X = k) = \frac{\lambda^k e^{-\lambda}}{k!}, \qquad k = 0, 1, 2, \ldots
 $$
 
 **예:** 어떤 트레이더가 5년 동안 1200번 거래한다. 거래 한 번당 파산 확률이 1/1000이므로 $\lambda = 1.2$이다.
+
+<div class="codebox" markdown>
+
+**예제 .** 포아송분포
 
 ```python
 lam = 1.2
@@ -66,6 +76,8 @@ P(X = 2) = 0.2169
 P(X > 2) = 0.1205
 ```
 
+</div>
+
 ---
 
 ## 3. Geometric 분포
@@ -77,6 +89,10 @@ P(X = k) = (1-p)^k \, p, \qquad k = 0, 1, 2, \ldots
 $$
 
 **예:** 성공확률이 $p = 0.3$이다. 첫 성공 이전의 기대 실패 횟수는 $(1-p)/p \approx 2.33$이다.
+
+<div class="codebox" markdown>
+
+**예제 .** 기하분포
 
 ```python
 p = 0.3
@@ -91,6 +107,8 @@ P(5 failures before 1st success) = 0.0504
 E[failures] = 2.33
 ```
 
+</div>
+
 ---
 
 ## 4. Hypergeometric 분포
@@ -102,6 +120,10 @@ P(X = k) = \frac{\binom{K}{k}\binom{N-K}{n-k}}{\binom{N}{n}}
 $$
 
 **예:** 모집단 $N = 100$, 불량품 $K = 20$, 추출 $n = 5$.
+
+<div class="codebox" markdown>
+
+**예제 .** 초기하분포
 
 ```python
 from scipy import special
@@ -120,9 +142,15 @@ P(X = 2) = 0.2073  (manual = 0.2073)
 E[X] = 1.00
 ```
 
+</div>
+
 ---
 
 ## 시각화
+
+<div class="codebox" markdown>
+
+**예제 .** 네 이산분포 한눈에 보기
 
 ```python
 # 네 이산분포를 2x2 격자에 나란히 놓는다.
@@ -165,6 +193,8 @@ axes[1, 1].set_xlabel("k (defectives)")
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 ![Binomial(n=50, p=0.3)](./img/discrete_distributions_suite_95.png)
 

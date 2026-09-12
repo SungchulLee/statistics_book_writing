@@ -140,6 +140,10 @@ $$
 
 ### Geometric 분포
 
+<div class="codebox" markdown>
+
+**예제 .** 기하분포의 확률질량함수
+
 ```python
 import matplotlib.pyplot as plt
 import numpy as np
@@ -163,9 +167,15 @@ ax.legend()
 plt.show()
 ```
 
+</div>
+
 ![Geometric 분포와 Negative Binomial 분포](./img/geometric_131.png)
 
 ### Negative Binomial 분포
+
+<div class="codebox" markdown>
+
+**예제 .** 음이항분포의 SciPy 판본
 
 ```python
 import matplotlib.pyplot as plt
@@ -189,9 +199,15 @@ ax.legend()
 plt.show()
 ```
 
+</div>
+
 ![Geometric 분포와 Negative Binomial 분포](./img/geometric_151.png)
 
 ### 무기억성 확인하기
+
+<div class="codebox" markdown>
+
+**예제 .** 기하분포의 무기억성
 
 ```python
 import numpy as np
@@ -221,7 +237,13 @@ P(X>3+3|X>3) = 0.3430,  P(X>3) = 0.3433
 P(X>3+5|X>3) = 0.1690,  P(X>5) = 0.1681
 ```
 
+</div>
+
 ### 모수에 따른 비교
+
+<div class="codebox" markdown>
+
+**예제 .** 성공확률에 따른 기하분포 비교
 
 ```python
 import matplotlib.pyplot as plt
@@ -239,6 +261,8 @@ ax.set_xlabel('k')
 ax.legend()
 plt.show()
 ```
+
+</div>
 
 ![Geometric 분포와 Negative Binomial 분포](./img/geometric_188.png)
 

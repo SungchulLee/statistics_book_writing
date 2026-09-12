@@ -188,6 +188,10 @@ $\mathbf{R}$의 대각 성분은 모두 1이다.
 
 ### 자료로부터 공분산과 상관계수 구하기
 
+<div class="codebox" markdown>
+
+**예제 .** 자료에서 공분산과 상관계수 구하기
+
 ```python
 import numpy as np
 
@@ -226,7 +230,13 @@ Correlation matrix:
  [0.81273374 1.        ]]
 ```
 
+</div>
+
 ### 여러 상관계수 시각화
+
+<div class="codebox" markdown>
+
+**예제 .** 여러 상관계수를 그림으로 보기
 
 ```python
 import numpy as np
@@ -254,9 +264,15 @@ plt.tight_layout()
 plt.show()
 ```
 
+</div>
+
 ![공분산과 상관계수](./img/covariance_correlation_199.png)
 
 ### 상관계수 열지도
+
+<div class="codebox" markdown>
+
+**예제 .** 상관계수 열지도
 
 ```python
 import numpy as np
@@ -294,9 +310,15 @@ fig.colorbar(im, ax=ax)
 plt.show()
 ```
 
+</div>
+
 ![공분산과 상관계수](./img/covariance_correlation_223.png)
 
 ### 결합 PMF로부터 공분산 구하기
+
+<div class="codebox" markdown>
+
+**예제 .** 결합 확률질량함수에서 공분산 구하기
 
 ```python
 import numpy as np
@@ -334,6 +356,8 @@ E[X] = 0.7000, E[Y] = 0.5000, E[XY] = 0.4000
 Cov(X,Y) = 0.0500
 Corr(X,Y) = 0.2182
 ```
+
+</div>
 
 ---
 

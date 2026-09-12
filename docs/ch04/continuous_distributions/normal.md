@@ -162,6 +162,10 @@ $$
 
 ### PDF와 CDF
 
+<div class="codebox" markdown>
+
+**예제 .** 정규분포의 밀도함수와 분포함수
+
 ```python
 import matplotlib.pyplot as plt
 import numpy as np
@@ -183,9 +187,15 @@ ax.legend()
 plt.show()
 ```
 
+</div>
+
 ![Normal 분포](./img/normal_155.png)
 
 ### 표본추출과 추정된 PDF
+
+<div class="codebox" markdown>
+
+**예제 .** 정규 표본과 추정된 밀도
 
 ```python
 import numpy as np
@@ -206,9 +216,15 @@ ax.legend()
 plt.show()
 ```
 
+</div>
+
 ![Normal 분포](./img/normal_173.png)
 
 ### 68–95–99.7 규칙 확인
+
+<div class="codebox" markdown>
+
+**예제 .** 68-95-99.7 규칙 확인
 
 ```python
 import pandas as pd
@@ -234,6 +250,8 @@ Within 2σ: 95.00%
 Within 3σ: 98.66%
 ```
 
+</div>
+
 ---
 
 ## 표준정규곡선 아래의 넓이
@@ -249,6 +267,10 @@ Within 3σ: 98.66%
 | `ppf` | 백분위점 함수(CDF의 역함수) |
 
 ### 왼쪽 꼬리, 오른쪽 꼬리, 가운데 넓이
+
+<div class="codebox" markdown>
+
+**예제 .** 정규곡선 아래 영역 색칠하기
 
 ```python
 import matplotlib.pyplot as plt
@@ -293,6 +315,8 @@ P(Z ≥ 1.2) = 0.1151
 P(-2.1 ≤ Z ≤ 1.2) = 0.8671
 ```
 
+</div>
+
 ---
 
 ## 왜 정규분포인가?
@@ -311,6 +335,10 @@ $$
 
 `scipy.stats`는 NumPy의 난수 생성기를 사용하므로 `np.random.seed()`를 설정하면 재현성이 보장된다:
 
+<div class="codebox" markdown>
+
+**예제 .** 난수 시드 고정하기
+
 ```python
 import numpy as np
 import scipy.stats as stats
@@ -326,6 +354,8 @@ print(samples)  # Same output every time with seed 42
 [ 0.49671415 -0.1382643   0.64768854  1.52302986 -0.23415337 -0.23413696
   1.57921282  0.76743473 -0.46947439  0.54256004]
 ```
+
+</div>
 
 ---
 

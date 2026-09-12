@@ -132,6 +132,10 @@ $$
 
 ### PDF와 CDF
 
+<div class="codebox" markdown>
+
+**예제 .** 균등분포의 밀도함수와 분포함수
+
 ```python
 import matplotlib.pyplot as plt
 import numpy as np
@@ -152,9 +156,15 @@ ax.legend()
 plt.show()
 ```
 
+</div>
+
 ![Uniform 분포](./img/uniform_125.png)
 
 ### 표본추출과 히스토그램
+
+<div class="codebox" markdown>
+
+**예제 .** 균등 표본의 히스토그램
 
 ```python
 import numpy as np
@@ -176,9 +186,15 @@ ax.legend()
 plt.show()
 ```
 
+</div>
+
 ![Uniform 분포](./img/uniform_143.png)
 
 ### 역변환 표본추출
+
+<div class="codebox" markdown>
+
+**예제 .** 균등난수로 지수 표본 만들기
 
 ```python
 import numpy as np
@@ -204,6 +220,8 @@ ax.spines[['top', 'right']].set_visible(False)
 ax.legend()
 plt.show()
 ```
+
+</div>
 
 ![Uniform 분포](./img/uniform_163.png)
 

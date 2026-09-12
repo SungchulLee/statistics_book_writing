@@ -16,6 +16,10 @@ $$
 
 (이중 y축을 써서) CDF와 PDF를 같은 그림에 그리면 둘의 관계가 분명해진다. 임의의 점에서의 CDF 값은 그 점 왼쪽의 PDF 아래 넓이와 같다.
 
+<div class="codebox" markdown>
+
+**예제 .** 분포함수와 밀도함수를 두 축에 함께 보기
+
 ```python
 import matplotlib.pyplot as plt
 import numpy as np
@@ -56,6 +60,8 @@ ax_cdf.set_title(f"Normal({mu}, {sigma}) — CDF with PDF Overlay")
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 ![정규 누적분포함수와 분위수](./img/normal_cdf_19.png)
 

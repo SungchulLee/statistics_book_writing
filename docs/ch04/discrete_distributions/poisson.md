@@ -131,6 +131,10 @@ Poisson 분포는 **Poisson 과정**과 밀접하게 연결되어 있다. 사건
 
 ### PMF와 CDF
 
+<div class="codebox" markdown>
+
+**예제 .** 포아송분포의 확률질량함수와 분포함수
+
 ```python
 import matplotlib.pyplot as plt
 import numpy as np
@@ -151,9 +155,15 @@ ax.legend()
 plt.show()
 ```
 
+</div>
+
 ![Poisson 분포](./img/poisson_124.png)
 
 ### 비율에 따른 비교
+
+<div class="codebox" markdown>
+
+**예제 .** 비율모수에 따른 포아송 비교
 
 ```python
 import matplotlib.pyplot as plt
@@ -174,9 +184,15 @@ ax.legend()
 plt.show()
 ```
 
+</div>
+
 ![Poisson 분포](./img/poisson_144.png)
 
 ### Binomial 극한으로서의 Poisson 분포
+
+<div class="codebox" markdown>
+
+**예제 .** 이항분포의 극한으로서의 포아송
 
 ```python
 import matplotlib.pyplot as plt
@@ -203,9 +219,15 @@ ax.legend()
 plt.show()
 ```
 
+</div>
+
 ![Poisson 분포](./img/poisson_161.png)
 
 ### 표본추출과 평균–분산 점검
+
+<div class="codebox" markdown>
+
+**예제 .** 포아송의 평균과 분산이 같음을 확인
 
 ```python
 import numpy as np
@@ -231,6 +253,8 @@ Theoretical mean: 7,  Sample mean: 7.0065
 Theoretical var:  7,  Sample var:  7.0213
 Mean ≈ Var: True
 ```
+
+</div>
 
 ---
 

@@ -141,6 +141,10 @@ $$
 
 ### PDF와 CDF
 
+<div class="codebox" markdown>
+
+**예제 .** 지수분포의 밀도함수와 분포함수
+
 ```python
 import matplotlib.pyplot as plt
 import numpy as np
@@ -161,9 +165,15 @@ ax.legend()
 plt.show()
 ```
 
+</div>
+
 ![Exponential 분포](./img/exponential_132.png)
 
 ### 비율에 따른 비교
+
+<div class="codebox" markdown>
+
+**예제 .** 비율모수에 따른 지수분포 비교
 
 ```python
 import matplotlib.pyplot as plt
@@ -183,9 +193,15 @@ ax.legend()
 plt.show()
 ```
 
+</div>
+
 ![Exponential 분포](./img/exponential_150.png)
 
 ### 표본추출과 검증
+
+<div class="codebox" markdown>
+
+**예제 .** 지수 표본의 평균과 표준편차 확인
 
 ```python
 import numpy as np
@@ -210,7 +226,13 @@ Theoretical var:  0.1111,  Sample var:  0.1096
 Mean ≈ SD: True
 ```
 
+</div>
+
 ### 무기억성 확인하기
+
+<div class="codebox" markdown>
+
+**예제 .** 무기억성 확인하기
 
 ```python
 import numpy as np
@@ -240,7 +262,13 @@ P(X>0.5+0.5|X>0.5) = 0.3681,  P(X>0.5) = 0.3682
 P(X>0.5+1.0|X>0.5) = 0.1360,  P(X>1.0) = 0.1355
 ```
 
+</div>
+
 ### Poisson 과정 모의실험
+
+<div class="codebox" markdown>
+
+**예제 .** 포아송 과정 모의실험
 
 ```python
 import numpy as np
@@ -266,6 +294,8 @@ ax.set_ylabel('Cumulative events')
 ax.spines[['top', 'right']].set_visible(False)
 plt.show()
 ```
+
+</div>
 
 ![Exponential 분포](./img/exponential_199.png)
 

@@ -27,6 +27,10 @@ $$
 
 ## 코드
 
+<div class="codebox" markdown>
+
+**예제 .** 이변량 정규분포의 조건부분포
+
 ```python
 import numpy as np
 import matplotlib.pyplot as plt
@@ -92,6 +96,8 @@ for i, rho in enumerate(rho_vals):
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 ![2차원 Gaussian 조건부분포](./img/gaussian_2d_conditionals_30.png)
 

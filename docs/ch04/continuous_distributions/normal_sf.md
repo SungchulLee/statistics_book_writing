@@ -14,6 +14,10 @@ $X$가 주어진 문턱값을 넘을 확률을 준다. 생존함수는 신뢰성
 
 ## 코드
 
+<div class="codebox" markdown>
+
+**예제 .** 생존함수로 오른쪽 꼬리 보기
+
 ```python
 import matplotlib.pyplot as plt
 import numpy as np
@@ -49,6 +53,8 @@ plt.tight_layout()
 plt.show()
 ```
 
+</div>
+
 ![정규분포의 생존함수](./img/normal_sf_17.png)
 
 ---
@@ -56,6 +62,10 @@ plt.show()
 ## 생존함수를 쓰는 이유
 
 상단꼬리 확률이 극단적으로 작을 때 $1 - F(x)$를 직접 계산하면 $F(x)$가 1에 매우 가까워 부동소수점 상쇄가 일어날 수 있다. 전용 메서드 `sf()`는 꼬리 확률을 직접 계산하여 이 문제를 피한다.
+
+<div class="codebox" markdown>
+
+**예제 .** 생존함수가 수치적으로 더 정확한 이유
 
 ```python
 from scipy import stats
@@ -77,6 +87,8 @@ x=  8:  1-cdf = 6.661338e-16   sf = 6.220961e-16
 x= 10:  1-cdf = 0.000000e+00   sf = 7.619853e-24
 x= 12:  1-cdf = 0.000000e+00   sf = 1.776482e-33
 ```
+
+</div>
 
 세 단계로 나빠지는 것이 보인다.
 

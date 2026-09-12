@@ -25,6 +25,10 @@ $$
 
 ## 코드
 
+<div class="codebox" markdown>
+
+**예제 .** F 분포의 밀도함수
+
 ```python
 import numpy as np
 import matplotlib.pyplot as plt
@@ -56,6 +60,8 @@ ax.grid(True, linestyle=":")
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 ![F Distribution — PDF](./img/f_pdf_28.png)
 

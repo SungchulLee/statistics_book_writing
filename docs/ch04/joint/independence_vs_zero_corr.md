@@ -160,6 +160,10 @@ $$
 
 ### 무상관이지만 의존적인 경우: Y = X의 제곱
 
+<div class="codebox" markdown>
+
+**예제 .** 무상관인데 독립이 아닌 경우
+
 ```python
 import numpy as np
 import matplotlib.pyplot as plt
@@ -193,11 +197,17 @@ Correlation(X, X²) = 0.000122
 But Y is completely determined by X!
 ```
 
+</div>
+
 ![독립성과 무상관성의 차이](./img/independence_vs_zero_corr_153.png)
 
 ### 독립성 검정: 결합분포와 주변분포의 곱 비교
 
 독립의 정의는 **모든** 사건 쌍에 대해 $P(A \cap B) = P(A)P(B)$가 성립하는 것이다. 따라서 사건을 하나 골라 확인하는 것으로는 독립을 증명할 수 없고, **반례를 하나 찾으면 종속을 증명할 수 있다.**
+
+<div class="codebox" markdown>
+
+**예제 .** 결합분포와 주변분포를 견주어 독립성 확인
 
 ```python
 import numpy as np
@@ -235,11 +245,17 @@ A: |X|<0.5,  B: Y>1
   P(A∩B) = 0.0000,  P(A)P(B) = 0.1218  ->  다르다
 ```
 
+</div>
+
 **첫 번째 쌍이 통과했다고 독립인 것이 아니다.** 두 번째 쌍이 곱셈 규칙을 깨뜨리므로 $X$와 $Y$는 독립이 아니다. 반례 하나면 충분하다.
 
 이것이 상관계수만 보는 것의 위험과 같은 구조다. 상관은 사실상 "한 가지 방식으로만" 관계를 확인하는 것이고, 위의 첫 번째 검사도 한 가지 사건 쌍만 확인한 것이다. 어느 쪽이든 **통과했다는 사실은 아무것도 보장하지 않는다.**
 
 ### 결합정규일 때: 무상관 ↔ 독립
+
+<div class="codebox" markdown>
+
+**예제 .** 결합정규에서는 무상관이 곧 독립
 
 ```python
 import numpy as np
@@ -289,6 +305,8 @@ Jointly normal, ρ=0:
   P(X>1,Y>1) = 0.0255, P(X>1)P(Y>1) = 0.0253
   Independent? True
 ```
+
+</div>
 
 ![독립성과 무상관성의 차이](./img/independence_vs_zero_corr_198.png)
 

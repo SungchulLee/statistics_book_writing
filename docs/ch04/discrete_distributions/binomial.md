@@ -133,6 +133,10 @@ $$
 
 ### PMF와 CDF
 
+<div class="codebox" markdown>
+
+**예제 .** 이항분포의 확률질량함수와 분포함수
+
 ```python
 import matplotlib.pyplot as plt
 import numpy as np
@@ -155,9 +159,15 @@ ax.legend()
 plt.show()
 ```
 
+</div>
+
 ![Bernoulli 분포와 Binomial 분포](./img/binomial_125.png)
 
 ### 모수에 따른 비교
+
+<div class="codebox" markdown>
+
+**예제 .** 모수에 따른 이항분포 비교
 
 ```python
 import matplotlib.pyplot as plt
@@ -180,9 +190,15 @@ ax.legend()
 plt.show()
 ```
 
+</div>
+
 ![Bernoulli 분포와 Binomial 분포](./img/binomial_151.png)
 
 ### 표본추출과 검증
+
+<div class="codebox" markdown>
+
+**예제 .** 이항 표본추출과 검증
 
 ```python
 import numpy as np
@@ -203,6 +219,8 @@ Theoretical mean: 6.0000,  Sample mean: 6.0030
 Theoretical var:  2.4000,  Sample var:  2.3861
 ```
 
+</div>
+
 ---
 
 ## Binomial 분포의 정규근사
@@ -214,6 +232,10 @@ Y \sim \text{Binomial}(n, p) \approx N(np, \, np(1-p)) \quad \text{when } np \ge
 $$
 
 연속성 수정을 적용하면 $P(Y \leq k) \approx \mathcal{N}\left(\frac{k + 0.5 - np}{\sqrt{np(1-p)}}\right)$이다.
+
+<div class="codebox" markdown>
+
+**예제 .** 이항분포의 정규근사
 
 ```python
 import matplotlib.pyplot as plt
@@ -235,6 +257,8 @@ ax.spines[['top', 'right']].set_visible(False)
 ax.legend()
 plt.show()
 ```
+
+</div>
 
 ![Bernoulli 분포와 Binomial 분포](./img/binomial_186.png)
 

@@ -23,6 +23,10 @@ $$
 
 SciPy는 `stats.uniform(loc=a, scale=b-a)`를 사용하며, `loc`은 왼쪽 끝점이고 `scale`은 구간의 폭이다.
 
+<div class="codebox" markdown>
+
+**예제 .** 구간에 따른 균등 밀도함수
+
 ```python
 import matplotlib.pyplot as plt
 import numpy as np
@@ -49,6 +53,8 @@ ax.set_ylim(bottom=-0.05)
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 ![Uniform Distribution — PDF](./img/uniform_pdf_26.png)
 

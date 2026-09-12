@@ -14,6 +14,10 @@ $$
 
 ## 코드
 
+<div class="codebox" markdown>
+
+**예제 .** 백분위점 함수로 분위수 구하기
+
 ```python
 import matplotlib.pyplot as plt
 import numpy as np
@@ -46,6 +50,8 @@ ax.legend(loc='upper left', frameon=False)
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 ![정규분포의 백분위점 함수 (분위수 함수)](./img/normal_ppf_17.png)
 
