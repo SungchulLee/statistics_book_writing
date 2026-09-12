@@ -149,7 +149,7 @@ $\boldsymbol{\Sigma}$의 양정치성이 $|\boldsymbol{\Sigma}| > 0$을 보장�
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 선행 소행렬식 기준을 이용해 $\mathbf{A} = \begin{pmatrix} 4 & 2 \\ 2 & 3 \end{pmatrix}$이 양정치인지 판정하라.
 
 </div>
@@ -164,7 +164,7 @@ $\boldsymbol{\Sigma}$의 양정치성이 $|\boldsymbol{\Sigma}| > 0$을 보장�
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 $\mathbf{A}$가 양정치이면 모든 대각 성분 $a_{ii} > 0$임을 증명하라.
 
 </div>
@@ -180,7 +180,7 @@ $\mathbf{A}$가 양정치이면 모든 대각 성분 $a_{ii} > 0$임을 증명�
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff easy" title="쉬움"></span>
 $\mathbf{A} = \begin{pmatrix} 4 & 6 \\ 6 & 13 \end{pmatrix}$의 촐레스키 분해 $\mathbf{A} = \mathbf{L}\mathbf{L}^T$를 구하라.
 
 </div>
@@ -202,7 +202,7 @@ $\mathbf{A} = \begin{pmatrix} 4 & 6 \\ 6 & 13 \end{pmatrix}$의 촐레스키 분
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 어떤 공분산행렬 $\boldsymbol{\Sigma}$의 고윳값이 $\lambda_1 = 0.01$과 $\lambda_2 = 100$이다. $\boldsymbol{\Sigma}$는 양정치인가? $\boldsymbol{\Sigma}^{-1}$을 계산할 때의 실무적 함의를 논하라.
 
 </div>
@@ -218,7 +218,7 @@ $\mathbf{A} = \begin{pmatrix} 4 & 6 \\ 6 & 13 \end{pmatrix}$의 촐레스키 분
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 $\boldsymbol{\Sigma}$가 양정치이면 마할라노비스 거리 $d^2(\mathbf{x}) = (\mathbf{x} - \boldsymbol{\mu})^T\boldsymbol{\Sigma}^{-1}(\mathbf{x} - \boldsymbol{\mu})$이 0일 필요충분조건이 $\mathbf{x} = \boldsymbol{\mu}$임을 증명하라.
 
 </div>
@@ -234,7 +234,7 @@ $\boldsymbol{\Sigma}$가 양정치이면 마할라노비스 거리 $d^2(\mathbf{
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 $\mathbf{A}$가 양정치이면 $\mathbf{A}^{-1}$도 양정치임을 보여라. 또 $\mathbf{A}^{1/2}$(제곱근 행렬)이 존재함을 보여라.
 
 </div>
@@ -283,7 +283,7 @@ $\mathbf{A}$가 양정치이면 $\mathbf{A}^{-1}$도 양정치임을 보여라. 
 
 <div class="drillbox" markdown>
 
-**연습문제 7.**
+**연습문제 7.** <span class="diff med" title="중간"></span>
 $\mathbf{A}$, $\mathbf{B}$가 양정치이면 $\mathbf{A} + \mathbf{B}$도 양정치임을 보여라. 그렇다면 곱 $\mathbf{A}\mathbf{B}$는 어떠한가?
 
 </div>
@@ -330,7 +330,7 @@ $\mathbf{A}$, $\mathbf{B}$가 양정치이면 $\mathbf{A} + \mathbf{B}$도 양�
 
 <div class="drillbox" markdown>
 
-**연습문제 8.**
+**연습문제 8.** <span class="diff med" title="중간"></span>
 세 변수의 상관계수가 모두 $\rho$로 같다고 하자. 이 행렬이 올바른 상관행렬이 되기 위한 $\rho$의 범위를 구하라. $\rho = -0.8$은 가능한가?
 
 </div>
@@ -377,7 +377,7 @@ $\mathbf{A}$, $\mathbf{B}$가 양정치이면 $\mathbf{A} + \mathbf{B}$도 양�
 
 <div class="drillbox" markdown>
 
-**연습문제 9.**
+**연습문제 9.** <span class="diff med" title="중간"></span>
 촐레스키 분해 $\boldsymbol{\Sigma} = \mathbf{L}\mathbf{L}^T$를 이용해 공분산이 $\boldsymbol{\Sigma}$인 확률벡터를 생성하는 방법을 설명하고 수치로 확인하라.
 
 </div>
@@ -429,7 +429,7 @@ $\mathbf{A}$, $\mathbf{B}$가 양정치이면 $\mathbf{A} + \mathbf{B}$도 양�
 
 <div class="drillbox" markdown>
 
-**연습문제 10.**
+**연습문제 10.** <span class="diff med" title="중간"></span>
 $\mathbf{X}$가 완전 열계수를 갖지 않아 $\mathbf{X}^T\mathbf{X}$가 특이행렬일 때, $\lambda > 0$에 대해 $\mathbf{X}^T\mathbf{X} + \lambda\mathbf{I}$는 언제나 양정치임을 보여라.
 
 </div>

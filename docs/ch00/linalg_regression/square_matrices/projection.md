@@ -141,7 +141,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 $\mathbf{P} = \begin{pmatrix} 1 & 0 \\ 0 & 0 \end{pmatrix}$이 사영행렬임을 확인하라. 어느 부분공간 위로 사영하는가? 여집합 사영 $\mathbf{I} - \mathbf{P}$는 무엇인가?
 
 </div>
@@ -163,7 +163,7 @@ $\mathbf{P} = \begin{pmatrix} 1 & 0 \\ 0 & 0 \end{pmatrix}$이 사영행렬임�
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 $\mathbf{P}$가 멱등이면 $\operatorname{rank}(\mathbf{P}) = \operatorname{tr}(\mathbf{P})$임을 증명하라.
 
 </div>
@@ -177,7 +177,7 @@ $\mathbf{P}$가 멱등이면 $\operatorname{rank}(\mathbf{P}) = \operatorname{tr
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 빗각(직교가 아닌) 사영행렬의 예를 들어라. 멱등이지만 대칭이 아님을 확인하라.
 
 </div>
@@ -197,7 +197,7 @@ $\mathbf{P}$가 멱등이면 $\operatorname{rank}(\mathbf{P}) = \operatorname{tr
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 회귀 분해 $\mathbf{y} = \mathbf{H}\mathbf{y} + (\mathbf{I} - \mathbf{H})\mathbf{y}$에서 $\mathbf{H}\mathbf{y}$와 $(\mathbf{I} - \mathbf{H})\mathbf{y}$가 직교인 이유를 설명하라. 멱등성 외에 어떤 성질이 추가로 필요한가?
 
 </div>
@@ -213,7 +213,7 @@ $\mathbf{P}$가 멱등이면 $\operatorname{rank}(\mathbf{P}) = \operatorname{tr
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff hard" title="어려움"></span>
 $\mathcal{V} = \operatorname{col}(\mathbf{V})$ 위로, $\mathcal{W}$ 방향을 따라 사영하는 행렬을 만드는 일반 공식은 $\mathbf{P} = \mathbf{V}(\mathbf{U}^T\mathbf{V})^{-1}\mathbf{U}^T$이다. 여기서 $\mathbf{U}$의 열들은 $\mathcal{W}$의 직교여공간을 편다. 이 $\mathbf{P}$가 사영임을 보이고, 본문의 빗각 사영 예를 이 공식으로 재현하라.
 
 </div>
@@ -260,7 +260,7 @@ $\mathcal{V} = \operatorname{col}(\mathbf{V})$ 위로, $\mathcal{W}$ 방향을 �
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 모든 사영행렬은 대각화 가능하며, 적당한 기저에서 $\operatorname{diag}(1, \dots, 1, 0, \dots, 0)$과 닮았음을 보여라($1$이 $r = \operatorname{rank}(\mathbf{P})$개).
 
 </div>
@@ -285,7 +285,7 @@ $\mathcal{V} = \operatorname{col}(\mathbf{V})$ 위로, $\mathcal{W}$ 방향을 �
 
 <div class="drillbox" markdown>
 
-**연습문제 7.**
+**연습문제 7.** <span class="diff med" title="중간"></span>
 $\operatorname{col}(\mathbf{I} - \mathbf{P}) = \ker(\mathbf{P})$이고 $\ker(\mathbf{I} - \mathbf{P}) = \operatorname{col}(\mathbf{P})$임을 보여라. 이로부터 $\operatorname{rank}(\mathbf{P}) + \operatorname{rank}(\mathbf{I} - \mathbf{P}) = n$을 유도하라.
 
 </div>
@@ -327,7 +327,7 @@ $\operatorname{col}(\mathbf{I} - \mathbf{P}) = \ker(\mathbf{P})$이고 $\ker(\ma
 
 <div class="drillbox" markdown>
 
-**연습문제 8.**
+**연습문제 8.** <span class="diff hard" title="어려움"></span>
 $\mathbf{P}_1$과 $\mathbf{P}_2$가 사영일 때 $\mathbf{P}_1 + \mathbf{P}_2$가 사영이 될 필요충분조건이 $\mathbf{P}_1\mathbf{P}_2 = \mathbf{P}_2\mathbf{P}_1 = \mathbf{O}$임을 보여라.
 
 </div>
@@ -374,7 +374,7 @@ $\mathbf{P}_1$과 $\mathbf{P}_2$가 사영일 때 $\mathbf{P}_1 + \mathbf{P}_2$�
 
 <div class="drillbox" markdown>
 
-**연습문제 9.**
+**연습문제 9.** <span class="diff med" title="중간"></span>
 중심화행렬 $\mathbf{C} = \mathbf{I} - \frac{1}{n}\mathbf{J}$($\mathbf{J}$는 모든 성분이 1인 $n \times n$ 행렬)가 직교사영임을 보이고, 무엇 위로 사영하는지 밝혀라. $\operatorname{tr}(\mathbf{C})$는 얼마인가?
 
 </div>
@@ -421,7 +421,7 @@ $\mathbf{P}_1$과 $\mathbf{P}_2$가 사영일 때 $\mathbf{P}_1 + \mathbf{P}_2$�
 
 <div class="drillbox" markdown>
 
-**연습문제 10.**
+**연습문제 10.** <span class="diff med" title="중간"></span>
 빗각 사영은 거리를 최소화하지 않는다. 본문의 $\mathbf{P} = \begin{pmatrix} 1 & -1 \\ 0 & 0 \end{pmatrix}$과 같은 부분공간 위로의 직교사영을 $\mathbf{x} = (0, 1)^T$에 적용해 $\lVert\mathbf{x} - \mathbf{P}\mathbf{x}\rVert$를 비교하라.
 
 </div>

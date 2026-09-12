@@ -210,7 +210,7 @@ $n = 5$개의 자료점에서 $\bar{x} = 3$, $S_{xx} = 10$, $\hat{\beta}_1 = 2.5
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 자료점이 $n = 10$개이고 $\bar{x} = 4$, $S_{xx} = 20$, $\hat{\beta}_1 = 3.0$, $\text{SSE} = 16$인 단순선형회귀에서 기울기 $\beta_1$에 대한 95% 신뢰구간을 구성하라.
 
 </div>
@@ -238,7 +238,7 @@ $n = 5$개의 자료점에서 $\bar{x} = 3$, $S_{xx} = 10$, $\hat{\beta}_1 = 2.5
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 $c_i = (x_i - \bar{x})/S_{xx}$에 대해 $\hat{\beta}_1 = \sum_{i=1}^n c_i Y_i$임을 증명하고, 이를 이용해 $\operatorname{Var}(\hat{\beta}_1) = \sigma^2 / S_{xx}$을 유도하라.
 
 </div>
@@ -262,7 +262,7 @@ $c_i = (x_i - \bar{x})/S_{xx}$에 대해 $\hat{\beta}_1 = \sum_{i=1}^n c_i Y_i$�
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff easy" title="쉬움"></span>
 $\text{SSE}/\sigma^2 \sim \chi^2_{n-2}$의 자유도가 왜 $n$이 아니라 $n - 2$인지 설명하라.
 
 </div>
@@ -274,7 +274,7 @@ $\text{SSE}/\sigma^2 \sim \chi^2_{n-2}$의 자유도가 왜 $n$이 아니라 $n 
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 $\hat{\beta}_0$과 $\hat{\beta}_1$이 상관되어 있음을 보이고 $\operatorname{Cov}(\hat{\beta}_0, \hat{\beta}_1) = -\bar{x}\,\sigma^2/S_{xx}$을 유도하라.
 
 </div>
@@ -302,7 +302,7 @@ $\hat{\beta}_0$과 $\hat{\beta}_1$이 상관되어 있음을 보이고 $\operato
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 $\operatorname{Cov}(\hat{\beta}_0, \hat{\beta}_1) = -\dfrac{\sigma^2 \bar{x}}{S_{xx}}$임을 보여라. 두 추정량이 무상관이 되는 조건은 무엇인가?
 
 </div>
@@ -355,7 +355,7 @@ $\operatorname{Cov}(\hat{\beta}_0, \hat{\beta}_1) = -\dfrac{\sigma^2 \bar{x}}{S_
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 $x = x_0$에서의 평균반응 추정량 $\hat{\mu}_0 = \hat{\beta}_0 + \hat{\beta}_1 x_0$의 분산이
 
 $$
@@ -388,7 +388,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 7.**
+**연습문제 7.** <span class="diff easy" title="쉬움"></span>
 $\hat{\beta}_1 \sim N(\beta_1, \sigma^2/S_{xx})$를 모의실험으로 확인하라.
 
 </div>
@@ -436,7 +436,7 @@ $\hat{\beta}_1 \sim N(\beta_1, \sigma^2/S_{xx})$를 모의실험으로 확인하
 
 <div class="drillbox" markdown>
 
-**연습문제 8.**
+**연습문제 8.** <span class="diff med" title="중간"></span>
 잔차가 만족하는 두 제약 $\sum_i e_i = 0$과 $\sum_i x_i e_i = 0$을 유도하고, 이것이 자유도가 $n - 2$인 이유와 어떻게 연결되는지 설명하라.
 
 </div>
@@ -486,7 +486,7 @@ $\hat{\beta}_1 \sim N(\beta_1, \sigma^2/S_{xx})$를 모의실험으로 확인하
 
 <div class="drillbox" markdown>
 
-**연습문제 9.**
+**연습문제 9.** <span class="diff med" title="중간"></span>
 $(n-2)s^2/\sigma^2 \sim \chi^2_{n-2}$이고 이것이 $\hat{\beta}_1$과 독립임을 모의실험으로 확인하라. 이 두 사실이 왜 t-통계량에 필요한가?
 
 </div>
@@ -535,7 +535,7 @@ $(n-2)s^2/\sigma^2 \sim \chi^2_{n-2}$이고 이것이 $\hat{\beta}_1$과 독립�
 
 <div class="drillbox" markdown>
 
-**연습문제 10.**
+**연습문제 10.** <span class="diff hard" title="어려움"></span>
 $\operatorname{Var}(\hat{\beta}_1) = \sigma^2/S_{xx}$이므로 $x$를 넓게 퍼뜨릴수록 기울기를 정밀하게 추정한다. 예산이 $n = 10$으로 고정되어 있고 $x \in [0, 10]$에서 고를 수 있다면 어떻게 배치해야 하는가? 그 설계의 위험은 무엇인가?
 
 </div>

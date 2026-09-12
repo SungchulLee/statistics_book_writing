@@ -198,7 +198,7 @@ C        48.8  48.0  50.1  50.0
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 학생 다섯 명에 대해 `name`(문자열), `score`(정수), `passed`(불리언) 열을 갖는 `DataFrame`을 만들어라. `passed`가 `True`이고 **또한** `score`가 80보다 큰 행만 보이도록 걸러라.
 
 </div>
@@ -226,7 +226,7 @@ C        48.8  48.0  50.1  50.0
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff easy" title="쉬움"></span>
 다음 DataFrame이 주어졌을 때
 ```python
 df = pd.DataFrame({"group": ["A","A","B","B","B"], "x": [1, 3, 2, 8, 5]})
@@ -258,7 +258,7 @@ df = pd.DataFrame({"group": ["A","A","B","B","B"], "x": [1, 3, 2, 8, 5]})
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff easy" title="쉬움"></span>
 `df.loc[]`과 `df.iloc[]`의 차이를 설명하라. 같은 DataFrame에 대해 둘이 서로 다른 행을 반환하는 예를 제시하라.
 
 </div>
@@ -285,7 +285,7 @@ df = pd.DataFrame({"group": ["A","A","B","B","B"], "x": [1, 3, 2, 8, 5]})
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 다음 CSV 형식 문자열을 불러와 결측값을 열 중앙값으로 채우고 상관행렬을 계산하라.
 
 ```text
@@ -327,7 +327,7 @@ x,y,z
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff easy" title="쉬움"></span>
 `pd.Series.var()`의 기본값은 `ddof=1`이고 NumPy의 `np.var()`는 `ddof=0`이다. 값 다섯 개짜리 Series를 만들어 두 방식으로 분산을 계산하고, 어느 쪽이 불편추정량이며 그 이유가 무엇인지 설명하라.
 
 </div>
@@ -352,7 +352,7 @@ x,y,z
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 두 DataFrame을 `df1.merge(df2, on="id", how="left")`로 조인한다. `how="left"`가 무엇을 하는지, 결과의 행 수를 무엇이 결정하는지, 그리고 병합 직후에 반드시 실행해야 할 진단 하나를 설명하라.
 
 </div>
@@ -395,7 +395,7 @@ x,y,z
 
 <div class="drillbox" markdown>
 
-**연습문제 7.**
+**연습문제 7.** <span class="diff med" title="중간"></span>
 `SettingWithCopyWarning`은 pandas에서 가장 자주 마주치면서 가장 자주 무시되는 경고다. 이 경고를 재현하고, 무엇을 경고하는 것인지 설명하고, 올바른 대안을 제시하라.
 
 </div>
@@ -475,7 +475,7 @@ x,y,z
 
 <div class="drillbox" markdown>
 
-**연습문제 8.**
+**연습문제 8.** <span class="diff med" title="중간"></span>
 `groupby`로 심슨의 역설을 재현하라. 두 치료법의 성공률을 층별로, 그리고 전체로 계산하고 왜 순서가 뒤집히는지 설명하라. `transform`과 `agg`의 차이도 함께 보여라.
 
 </div>
@@ -561,7 +561,7 @@ x,y,z
 
 <div class="drillbox" markdown>
 
-**연습문제 9.**
+**연습문제 9.** <span class="diff med" title="중간"></span>
 같은 자료를 넓은 형식과 긴 형식으로 오가는 방법을 보여라. 반복측정 자료를 `melt`로 긴 형식으로 바꾸고 `pivot`으로 되돌린 뒤, 통계 도구들이 왜 긴 형식을 요구하는지 설명하라.
 
 </div>
@@ -624,7 +624,7 @@ x,y,z
 
 <div class="drillbox" markdown>
 
-**연습문제 10.**
+**연습문제 10.** <span class="diff med" title="중간"></span>
 `NaN`의 동작 방식을 정확히 파악하라. `count`, `mean`, `sum`, `groupby`가 결측을 각각 어떻게 다루는지 확인하고, 문자열 열을 `category`로 바꾸었을 때의 메모리 이득을 측정하라.
 
 </div>

@@ -155,7 +155,7 @@ P(A) estimate: 0.506 (true 1/2 since |A|=5 of 10)
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 다음 각 진술의 형식적 부정을 써라.
 
 **(a)** $\forall\, x \in \mathbb{R},\; x^2 \geq 0$
@@ -177,7 +177,7 @@ P(A) estimate: 0.506 (true 1/2 since |A|=5 of 10)
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff easy" title="쉬움"></span>
 $A = \{1, 2, 3, 4, 5\}$, $B = \{3, 4, 5, 6, 7\}$, $\Omega = \{1, 2, 3, 4, 5, 6, 7, 8\}$이라 하자.
 
 **(a)** $A \cap B$, $A \cup B$, $A \setminus B$, $A^c$, 그리고 $A \triangle B := (A \setminus B) \cup (B \setminus A)$를 계산하라.
@@ -192,7 +192,7 @@ $A = \{1, 2, 3, 4, 5\}$, $B = \{3, 4, 5, 6, 7\}$, $\Omega = \{1, 2, 3, 4, 5, 6, 
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 $\cup$, $\cap$, 여집합의 정의를 이용해 드모르간 법칙 $(A \cup B)^c = A^c \cap B^c$를 기본 원리로부터 증명하라.
 
 </div>
@@ -208,7 +208,7 @@ $\cup$, $\cap$, 여집합의 정의를 이용해 드모르간 법칙 $(A \cup B)
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff hard" title="어려움"></span>
 $f: A \to B$라 하자. $f$가 단사일 필요충분조건이 모든 부분집합 쌍 $S_1, S_2 \subseteq A$에 대해
 
 $$
@@ -226,7 +226,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 유리수 전체의 집합 $\mathbb{Q}$가 가산임을 보여라.
 
 </div>
@@ -242,7 +242,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 확률에서 흔한 오류는 "$P(A \mid B) > P(A)$이면 $A$가 $B$를 유발했다"고 주장하는 것이다. $P(B \mid A)$를 $P(A \mid B)$, $P(A)$, $P(B)$로 계산하여 **추론의 방향** 문제를 형식화하고, 원래 진술이 왜 근거가 없는지 평이한 말로 설명하라.
 
 </div>
@@ -258,7 +258,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 7.**
+**연습문제 7.** <span class="diff hard" title="어려움"></span>
 칸토어의 대각선 논법으로 $(0,1)$이 비가산임을 증명하라. 이 사실이 확률론에서 갖는 귀결은 무엇인가?
 
 </div>
@@ -292,7 +292,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 8.**
+**연습문제 8.** <span class="diff hard" title="어려움"></span>
 지시함수의 대수를 이용해 포함–배제 원리를 유도하라. 먼저 $\mathbf{1}_{A \cap B} = \mathbf{1}_A \mathbf{1}_B$와 $\mathbf{1}_{A^c} = 1 - \mathbf{1}_A$를 확인한 뒤,
 
 $$
@@ -363,7 +363,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 9.**
+**연습문제 9.** <span class="diff hard" title="어려움"></span>
 한정기호의 순서가 왜 중요한지 구체적으로 보여라. $f_n(x) = x^n$을 $[0,1)$ 위에서 생각하자.
 
 **(a)** $f_n \to 0$이 점별로 성립함을 보여라.
@@ -432,7 +432,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 10.**
+**연습문제 10.** <span class="diff med" title="중간"></span>
 로지스틱 함수 $\sigma(x) = 1/(1+e^{-x})$가 $\mathbb{R}$에서 $(0,1)$로 가는 전단사임을 보이고 역함수를 구하라. 항등식 $\sigma'(x) = \sigma(x)(1-\sigma(x))$와 $\sigma(-x) = 1-\sigma(x)$도 증명하라.
 
 </div>

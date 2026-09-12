@@ -151,7 +151,7 @@ Spectral reconstruction matches X'X: True
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 다음 계획행렬에 대해
 
 $$
@@ -177,7 +177,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 대각합의 순환 성질을 증명하라: $\mathbf{A} \in \mathbb{R}^{m \times n}$, $\mathbf{B} \in \mathbb{R}^{n \times m}$에 대해 $\mathrm{tr}(\mathbf{A}\mathbf{B}) = \mathrm{tr}(\mathbf{B}\mathbf{A})$.
 
 </div>
@@ -193,7 +193,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 $\mathbf{X} \in \mathbb{R}^{n \times p}$가 완전 열계수를 갖는다고 하자($\mathrm{rank}(\mathbf{X}) = p \le n$). $\mathbf{H} = \mathbf{X}(\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T$가 대칭이고 멱등이며 대각합이 $p$임을 증명하라.
 
 </div>
@@ -221,7 +221,7 @@ $\mathbf{X} \in \mathbb{R}^{n \times p}$가 완전 열계수를 갖는다고 하
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 $\mathbf{A} \in \mathbb{R}^{n \times n}$이 대칭이고 스펙트럼 분해가 $\mathbf{A} = \mathbf{Q} \boldsymbol{\Lambda} \mathbf{Q}^T$라 하자. $\mathrm{tr}(\mathbf{A}) = \sum_i \lambda_i$이고 $\det(\mathbf{A}) = \prod_i \lambda_i$임을 증명하라.
 
 </div>
@@ -243,7 +243,7 @@ $\mathbf{A} \in \mathbb{R}^{n \times n}$이 대칭이고 스펙트럼 분해가 
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 $\mathbf{X}$가 평균 $\boldsymbol{\mu}$, 공분산 $\boldsymbol{\Sigma}$인 확률벡터라 하자. 대칭행렬 $\mathbf{A}$에 대해
 
 $$
@@ -271,7 +271,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 $\mathbf{X}^T \mathbf{X}$가 특이행렬이면(즉 $\mathbf{X}$가 완전 열계수를 갖지 않으면) 최소제곱추정량 $\hat{\boldsymbol{\beta}}$이 유일하게 정해지지 않는 이유를 서로 보완적인 두 방식으로 설명하라. (a) 대수적으로, (b) 기하적으로.
 
 </div>
@@ -283,7 +283,7 @@ $\mathbf{X}^T \mathbf{X}$가 특이행렬이면(즉 $\mathbf{X}$가 완전 열�
 
 <div class="drillbox" markdown>
 
-**연습문제 7.**
+**연습문제 7.** <span class="diff med" title="중간"></span>
 계획행렬
 
 $$
@@ -342,7 +342,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 8.**
+**연습문제 8.** <span class="diff med" title="중간"></span>
 $\mathrm{Cov}(\mathbf{A}\mathbf{X}) = \mathbf{A}\,\mathrm{Cov}(\mathbf{X})\,\mathbf{A}^T$를 증명하고, 이로부터 공분산행렬이 항상 양반정치임을 보여라. 세 자산 포트폴리오에 적용해 분산투자 효과를 확인하라.
 
 </div>
@@ -402,7 +402,7 @@ $\mathrm{Cov}(\mathbf{A}\mathbf{X}) = \mathbf{A}\,\mathrm{Cov}(\mathbf{X})\,\mat
 
 <div class="drillbox" markdown>
 
-**연습문제 9.**
+**연습문제 9.** <span class="diff med" title="중간"></span>
 행렬 미적분으로 정규방정식을 유도하라. 필요한 기울기 규칙 $\nabla_{\mathbf{x}}(\mathbf{a}^T\mathbf{x}) = \mathbf{a}$와 $\nabla_{\mathbf{x}}(\mathbf{x}^T\mathbf{A}\mathbf{x}) = 2\mathbf{A}\mathbf{x}$($\mathbf{A}$ 대칭)를 먼저 증명하고, 헤세행렬을 확인해 얻은 점이 정말 최소점임을 보여라.
 
 </div>
@@ -477,7 +477,7 @@ $\mathrm{Cov}(\mathbf{A}\mathbf{X}) = \mathbf{A}\,\mathrm{Cov}(\mathbf{X})\,\mat
 
 <div class="drillbox" markdown>
 
-**연습문제 10.**
+**연습문제 10.** <span class="diff hard" title="어려움"></span>
 **(하나 빼기 항등식)** 관측 $i$를 빼고 적합한 회귀의 예측오차가
 
 $$

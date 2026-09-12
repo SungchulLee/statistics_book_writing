@@ -172,7 +172,7 @@ NumPy var (n-1):  18.500
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 수의 리스트를 받아 `"mean"`, `"variance"`, `"n"`, `"se_mean"`(평균의 표준오차 $s / \sqrt{n}$)을 키로 갖는 사전을 반환하는 함수 `summary_stats(data)`를 NumPy를 쓰지 않고 작성하라.
 
 </div>
@@ -202,7 +202,7 @@ NumPy var (n-1):  18.500
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff easy" title="쉬움"></span>
 원소별 산술 연산에서 파이썬 `list`와 NumPy `ndarray`의 차이를 설명하라. `[1, 2, 3] * 2`와 `np.array([1, 2, 3]) * 2`가 각각 무엇을 만들어내는지, 그리고 그 이유를 보여라.
 
 </div>
@@ -226,7 +226,7 @@ NumPy var (n-1):  18.500
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff easy" title="쉬움"></span>
 $1 \le i < j \le 5$인 모든 쌍 $(i, j)$를 하나의 표현식으로 생성하는 리스트 컴프리헨션을 작성하라. 그 개수가 $\binom{5}{2}$와 같음을 확인하라.
 
 </div>
@@ -251,7 +251,7 @@ $1 \le i < j \le 5$인 모든 쌍 $(i, j)$를 하나의 표현식으로 생성�
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff easy" title="쉬움"></span>
 `if __name__ == "__main__":`이 무엇을 하는지 설명하라. 이를 빠뜨렸을 때 임포트 시 원치 않는 동작이 생기는 예를 하나 들어라.
 
 </div>
@@ -283,7 +283,7 @@ $1 \le i < j \le 5$인 모든 쌍 $(i, j)$를 하나의 표현식으로 생성�
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 큰 부동소수를 많이 더하면 산술평균이 넘칠 수 있다. 다음 갱신 규칙을 이용해 한 번의 순회로 계산하는 온라인 평균을 작성하라.
 
 $$
@@ -324,7 +324,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff easy" title="쉬움"></span>
 이름으로 접근하는 분포 매개변수를 저장할 때 (3.7 이후의) 파이썬 `dict`가 `(키, 값)` 튜플의 `list`보다 나은 이유는 무엇인가? 점근적 복잡도와 코드의 명료성 측면에서 논하라.
 
 </div>
@@ -343,7 +343,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 7.**
+**연습문제 7.** <span class="diff med" title="중간"></span>
 다음 함수는 호출할 때마다 새 리스트를 돌려줄 것처럼 보이지만 그렇지 않다. 무슨 일이 일어나는지 설명하고 고쳐라.
 
 ```python
@@ -401,7 +401,7 @@ def collect(x, acc=[]):
 
 <div class="drillbox" markdown>
 
-**연습문제 8.**
+**연습문제 8.** <span class="diff med" title="중간"></span>
 `0.1 + 0.2 == 0.3`은 거짓이다. 이유를 설명하고, 부동소수를 비교하는 올바른 방법과 반올림 오차가 누적되는 예를 보여라.
 
 </div>
@@ -454,7 +454,7 @@ def collect(x, acc=[]):
 
 <div class="drillbox" markdown>
 
-**연습문제 9.**
+**연습문제 9.** <span class="diff med" title="중간"></span>
 리스트 컴프리헨션 `[f(x) for x in ...]`과 생성자 표현식 `(f(x) for x in ...)`의 차이를 메모리 관점에서 설명하라. 모의실험에서 어느 쪽을 언제 써야 하는가?
 
 </div>
@@ -511,7 +511,7 @@ def collect(x, acc=[]):
 
 <div class="drillbox" markdown>
 
-**연습문제 10.**
+**연습문제 10.** <span class="diff med" title="중간"></span>
 재현 가능한 난수를 만드는 올바른 방법을 보여라. `np.random.seed`의 전역 상태가 왜 문제인지 설명하고, 병렬 모의실험을 위한 **독립적인** 난수 스트림을 만들어라.
 
 </div>

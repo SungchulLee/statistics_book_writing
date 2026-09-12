@@ -330,7 +330,7 @@ np.column_stack([v1, v2])  # [[1 4], [2 5], [3 6]]
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 다음에 대해 최소제곱 정규방정식의 해를 손으로, 그리고 NumPy로 확인하라.
 
 $$
@@ -375,7 +375,7 @@ $\mathbf{X}^T\mathbf{X}$, $\mathbf{X}^T\mathbf{y}$, $\hat{\boldsymbol\beta}$, �
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff easy" title="쉬움"></span>
 파이썬 `for` 반복문 없이 $1000 \times 5$ 크기의 표준정규 난수 행렬을 만들고, 각 열을 표본평균 0, 표본분산 1이 되도록 표준화하라. `mean(axis=0)`과 `var(axis=0, ddof=1)`로 확인하라.
 
 </div>
@@ -400,7 +400,7 @@ $\mathbf{X}^T\mathbf{X}$, $\mathbf{X}^T\mathbf{y}$, $\hat{\boldsymbol\beta}$, �
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 `X`의 행들 사이의 유클리드 거리로 이루어진 $n \times n$ 행렬을 반환하는 벡터화된 함수 `pairwise_distances(X)`를 작성하라. 브로드캐스팅과 `np.sqrt`만 쓰고 명시적 반복문은 쓰지 마라.
 
 </div>
@@ -432,7 +432,7 @@ $\mathbf{X}^T\mathbf{X}$, $\mathbf{X}^T\mathbf{y}$, $\hat{\boldsymbol\beta}$, �
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 `np.linalg.solve(A, b)`가 `np.linalg.inv(A) @ b`보다 더 정확한 결과를 주는 이유는 무엇인가? $\mathbf{A}$가 거의 특이인 예를 만들어 두 답을 비교하라.
 
 </div>
@@ -473,7 +473,7 @@ $\mathbf{X}^T\mathbf{X}$, $\mathbf{X}^T\mathbf{y}$, $\hat{\boldsymbol\beta}$, �
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 모양이 $(5, 1)$과 $(1, 3)$인 두 배열이 있다. 이들의 원소별 곱의 모양은 무엇인가? 모양이 $(5,)$와 $(3,)$이라면 어떻게 되는가? 연산이 되는가?
 
 </div>
@@ -485,7 +485,7 @@ $\mathbf{X}^T\mathbf{X}$, $\mathbf{X}^T\mathbf{y}$, $\hat{\boldsymbol\beta}$, �
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff easy" title="쉬움"></span>
 기본값인 `np.var(x)`는 $n$으로 나누고 `np.var(x, ddof=1)`은 $n - 1$로 나눈다. `x`가 i.i.d. 표본일 때 $\mathrm{Var}(X)$의 불편추정량은 어느 쪽인가? $N(0, 1)$에서 크기 $n = 5$인 표본을 $10^4$번 뽑아 반복에 걸친 `var(ddof=0)`과 `var(ddof=1)`의 평균을 비교하여 편향을 실증적으로 보여라.
 
 </div>
@@ -511,7 +511,7 @@ $\mathbf{X}^T\mathbf{X}$, $\mathbf{X}^T\mathbf{y}$, $\hat{\boldsymbol\beta}$, �
 
 <div class="drillbox" markdown>
 
-**연습문제 7.**
+**연습문제 7.** <span class="diff med" title="중간"></span>
 NumPy에서 어떤 연산은 **뷰(view)** 를, 어떤 연산은 **복사본(copy)** 을 돌려준다. 슬라이싱과 팬시 인덱싱이 어느 쪽인지 확인하고, 이 차이가 만들어 내는 버그를 보여라. 어느 쪽인지 확실히 알아내는 방법은 무엇인가?
 
 </div>
@@ -572,7 +572,7 @@ NumPy에서 어떤 연산은 **뷰(view)** 를, 어떤 연산은 **복사본(cop
 
 <div class="drillbox" markdown>
 
-**연습문제 8.**
+**연습문제 8.** <span class="diff med" title="중간"></span>
 불리언 마스킹과 팬시 인덱싱으로 (a) 조건부 평균, (b) `np.where`를 이용한 절단, (c) 반복문 없는 부트스트랩을 구현하라. 부트스트랩 표준오차를 이론값 $s/\sqrt{n}$과 비교하라.
 
 </div>
@@ -623,7 +623,7 @@ NumPy에서 어떤 연산은 **뷰(view)** 를, 어떤 연산은 **복사본(cop
 
 <div class="drillbox" markdown>
 
-**연습문제 9.**
+**연습문제 9.** <span class="diff med" title="중간"></span>
 분산을 계산하는 두 공식
 
 $$
@@ -677,7 +677,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 10.**
+**연습문제 10.** <span class="diff hard" title="어려움"></span>
 `np.einsum`을 이용해 중간 행렬 전체를 만들지 않고 (a) 마할라노비스 거리와 (b) 모자 행렬의 대각 성분 $h_{ii}$를 계산하라. 왜 이것이 중요한가?
 
 </div>

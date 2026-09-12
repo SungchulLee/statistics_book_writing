@@ -141,7 +141,7 @@ $\mathbf{X}$가 중심화된 자료행렬(관측값에서 열 평균을 뺀 것)
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 $\mathbf{X} = \begin{pmatrix} 1 & 2 \\ 1 & 3 \\ 1 & 5 \end{pmatrix}$이라 하자. 그람 행렬 $\mathbf{X}^T\mathbf{X}$를 계산하고 그것이 대칭이며 양정치임을 확인하라.
 
 </div>
@@ -155,7 +155,7 @@ $\mathbf{X} = \begin{pmatrix} 1 & 2 \\ 1 & 3 \\ 1 & 5 \end{pmatrix}$이라 하�
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 임의의 실행렬 $\mathbf{X}$에 대해 $\mathbf{X}^T\mathbf{X}$가 언제나 양반정치이고, 양정치일 필요충분조건이 $\mathbf{X}$가 완전 열계수를 갖는 것임을 증명하라.
 
 </div>
@@ -171,7 +171,7 @@ $\mathbf{X} = \begin{pmatrix} 1 & 2 \\ 1 & 3 \\ 1 & 5 \end{pmatrix}$이라 하�
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 $\mathbf{X}$의 열들이 거의 공선적일 때 $\mathbf{X}^T\mathbf{X}$의 조건수가 최소제곱추정값의 안정성과 어떻게 관련되는지 설명하라. 조건수를 고윳값으로 나타내면 무엇인가?
 
 </div>
@@ -183,7 +183,7 @@ $\mathbf{X}$의 열들이 거의 공선적일 때 $\mathbf{X}^T\mathbf{X}$의 �
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 표본 공분산행렬 $\mathbf{S} = \frac{1}{n-1}\mathbf{X}_c^T\mathbf{X}_c$($\mathbf{X}_c$는 평균 중심화된 자료행렬)가 양반정치임을 보여라. 어떤 조건에서 양정치가 되는가?
 
 </div>
@@ -199,7 +199,7 @@ $\mathbf{X}$의 열들이 거의 공선적일 때 $\mathbf{X}^T\mathbf{X}$의 �
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 $\mathbf{X}$의 열들이 서로 직교하면 그람 행렬이 대각행렬이 됨을 보이고, 이때 최소제곱추정량이 $\hat{\beta}_j = \mathbf{v}_j^T\mathbf{y}/\lVert\mathbf{v}_j\rVert^2$로 분리되는 이유를 설명하라.
 
 </div>
@@ -249,7 +249,7 @@ $\mathbf{X}$의 열들이 서로 직교하면 그람 행렬이 대각행렬이 �
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 $\mathbf{X}^T\mathbf{X}$($p \times p$)와 $\mathbf{X}\mathbf{X}^T$($n \times n$)가 0이 아닌 고윳값을 공유함을 보이고, 수치로 확인하라. $p \gg n$일 때 어느 쪽으로 계산해야 하는가?
 
 </div>
@@ -291,7 +291,7 @@ $\mathbf{X}^T\mathbf{X}$($p \times p$)와 $\mathbf{X}\mathbf{X}^T$($n \times n$)
 
 <div class="drillbox" markdown>
 
-**연습문제 7.**
+**연습문제 7.** <span class="diff hard" title="어려움"></span>
 $\mathbf{X} \in \mathbb{R}^{n \times p}$의 열이 만드는 평행육면체의 $p$차원 부피 $V$에 대해 $\det(\mathbf{X}^T\mathbf{X}) = V^2$이 성립한다. 이 사실을 이용해 그람 행렬의 행렬식이 0이 되는 기하적 의미를 설명하라.
 
 </div>
@@ -331,7 +331,7 @@ $\mathbf{X} \in \mathbb{R}^{n \times p}$의 열이 만드는 평행육면체의 
 
 <div class="drillbox" markdown>
 
-**연습문제 8.**
+**연습문제 8.** <span class="diff med" title="중간"></span>
 $\mathbf{X}$의 각 열을 평균 0, 길이 1로 표준화한 행렬을 $\mathbf{Z}$라 하자. $\mathbf{Z}^T\mathbf{Z}$가 무엇이 되는지 밝히고, 그람 행렬과 상관행렬의 관계를 설명하라.
 
 </div>
@@ -387,7 +387,7 @@ $\mathbf{X}$의 각 열을 평균 0, 길이 1로 표준화한 행렬을 $\mathbf
 
 <div class="drillbox" markdown>
 
-**연습문제 9.**
+**연습문제 9.** <span class="diff med" title="중간"></span>
 기존 예측변수와 거의 같은 열을 하나 추가하면 조건수와 $\operatorname{Var}(\hat{\boldsymbol{\beta}})$가 어떻게 변하는지 수치로 보여라.
 
 </div>
@@ -429,7 +429,7 @@ $\mathbf{X}$의 각 열을 평균 0, 길이 1로 표준화한 행렬을 $\mathbf
 
 <div class="drillbox" markdown>
 
-**연습문제 10.**
+**연습문제 10.** <span class="diff hard" title="어려움"></span>
 임의의 실행렬 $\mathbf{X}$에 대해 $\operatorname{rank}(\mathbf{X}^T\mathbf{X}) = \operatorname{rank}(\mathbf{X})$임을 증명하라.
 
 </div>

@@ -194,7 +194,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 $\mathbf{X} = \begin{pmatrix} 1 & 1 \\ 1 & 2 \\ 1 & 3 \end{pmatrix}$이라 하자. 모자 행렬 $\mathbf{H} = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T$를 계산하고 $\operatorname{tr}(\mathbf{H}) = 2$임을 확인하라.
 
 </div>
@@ -216,7 +216,7 @@ $\mathbf{X} = \begin{pmatrix} 1 & 1 \\ 1 & 2 \\ 1 & 3 \end{pmatrix}$이라 하�
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 $\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}$, $\mathbf{e} = (\mathbf{I} - \mathbf{H})\mathbf{y}$일 때 피타고라스 분해 $\lVert \mathbf{y} \rVert^2 = \lVert \hat{\mathbf{y}} \rVert^2 + \lVert \mathbf{e} \rVert^2$를 증명하라.
 
 </div>
@@ -238,7 +238,7 @@ $\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}$, $\mathbf{e} = (\mathbf{I} - \mathbf{H
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff hard" title="어려움"></span>
 $\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}$가 $\text{col}(\mathbf{X})$ 안에서 $\mathbf{y}$에 가장 가까운 점임을 증명하여, 모자 행렬 $\mathbf{H}$가 $\lVert \mathbf{y} - \mathbf{X}\boldsymbol{\beta} \rVert^2$을 최소화함을 보여라.
 
 </div>
@@ -256,7 +256,7 @@ $\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}$가 $\text{col}(\mathbf{X})$ 안에서 
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 $\mathbf{y}$와 그 사영 $\hat{\mathbf{y}}$ 사이의 각이라는 관점에서 $R^2 = \lVert \hat{\mathbf{y}} \rVert^2 / \lVert \mathbf{y} \rVert^2$의 기하적 해석을 설명하라. $R^2 = 1$은 기하적으로 무엇을 뜻하는가?
 
 </div>
@@ -274,7 +274,7 @@ $\mathbf{y}$와 그 사영 $\hat{\mathbf{y}}$ 사이의 각이라는 관점에�
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 영이 아닌 벡터 $\mathbf{a}$ 하나가 펼치는 직선 위로의 직교사영이 $\mathbf{P} = \dfrac{\mathbf{a}\mathbf{a}^T}{\mathbf{a}^T\mathbf{a}}$임을 보이고, 이것이 절편 없는 단순회귀와 어떻게 연결되는지 설명하라.
 
 </div>
@@ -326,7 +326,7 @@ $\mathbf{y}$와 그 사영 $\hat{\mathbf{y}}$ 사이의 각이라는 관점에�
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 모자 행렬의 대각 성분 $h_{ii}$를 **지렛대**라 한다. $0 \le h_{ii} \le 1$이고 $\sum_i h_{ii} = p$임을 보여라. $h_{ii} = 1$이면 무엇을 뜻하는가?
 
 </div>
@@ -368,7 +368,7 @@ $\mathbf{y}$와 그 사영 $\hat{\mathbf{y}}$ 사이의 각이라는 관점에�
 
 <div class="drillbox" markdown>
 
-**연습문제 7.**
+**연습문제 7.** <span class="diff hard" title="어려움"></span>
 $\operatorname{col}(\mathbf{X}_1) \subseteq \operatorname{col}(\mathbf{X}_2)$이고 각각의 사영을 $\mathbf{H}_1$, $\mathbf{H}_2$라 하자. $\mathbf{H}_2\mathbf{H}_1 = \mathbf{H}_1\mathbf{H}_2 = \mathbf{H}_1$임을 보여라.
 
 </div>
@@ -394,7 +394,7 @@ $\operatorname{col}(\mathbf{X}_1) \subseteq \operatorname{col}(\mathbf{X}_2)$이
 
 <div class="drillbox" markdown>
 
-**연습문제 8.**
+**연습문제 8.** <span class="diff hard" title="어려움"></span>
 부분공간 $\mathcal{V}$가 주어지면 그 위로의 직교사영행렬은 **유일**함을 보여라.
 
 </div>
@@ -416,7 +416,7 @@ $\operatorname{col}(\mathbf{X}_1) \subseteq \operatorname{col}(\mathbf{X}_2)$이
 
 <div class="drillbox" markdown>
 
-**연습문제 9.**
+**연습문제 9.** <span class="diff med" title="중간"></span>
 $\mathbf{M}_1 = \mathbf{I} - \mathbf{H}_1$을 $\mathbf{X}_1$에 대한 잔차생성행렬이라 하자. $\mathbf{y}$를 $[\mathbf{X}_1, \mathbf{x}_2]$에 회귀했을 때 $\mathbf{x}_2$의 계수가, $\mathbf{M}_1\mathbf{y}$를 $\mathbf{M}_1\mathbf{x}_2$에 회귀한 계수와 같음을 수치로 확인하라.
 
 </div>
@@ -461,7 +461,7 @@ $\mathbf{M}_1 = \mathbf{I} - \mathbf{H}_1$을 $\mathbf{X}_1$에 대한 잔차생
 
 <div class="drillbox" markdown>
 
-**연습문제 10.**
+**연습문제 10.** <span class="diff med" title="중간"></span>
 계획행렬 하나를 잡아 $\mathbf{H}$의 성질(대칭·멱등·대각합), $\hat{\mathbf{y}} \perp \mathbf{e}$, 피타고라스 분해, 그리고 $R^2 = \cos^2\theta$(연습문제 4)를 모두 수치로 확인하라.
 
 </div>

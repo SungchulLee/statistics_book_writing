@@ -151,7 +151,7 @@ sin(n) / n^2 (O(1/n^2)): -0.00039723142555579834
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 $\varepsilon$–$N$ 정의로부터 직접
 
 $$
@@ -179,7 +179,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 **(a)** $\sum_{k=0}^\infty r^k$이 $|r| < 1$일 때에 한해 수렴함을 보이고 그 합을 구하라.
 **(b)** (a)를 이용해 $\displaystyle\sum_{k=1}^\infty \frac{3}{4^k}$을 계산하라.
 
@@ -202,7 +202,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 고정된 모든 $x \in \mathbb{R}$에 대해 $n \to \infty$일 때 $(1 + x/n)^n \to e^x$임을 보여라.
 
 </div>
@@ -224,7 +224,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 조임 정리를 증명하라: 충분히 큰 모든 $n$에 대해 $a_n \le b_n \le c_n$이고 $a_n, c_n \to L$이면 $b_n \to L$이다.
 
 </div>
@@ -242,7 +242,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff hard" title="어려움"></span>
 테일러 전개를 이용해, $X \sim \mathrm{Bernoulli}(p)$이고 표본평균이 $\bar{X}_n$일 때 분산안정화 변환 $g(p) = 2\arcsin(\sqrt{p})$가
 
 $$
@@ -270,7 +270,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 큰-O가 대칭이 아님을 보여라. 즉 $f(n) = O(g(n))$이지만 $g(n) \ne O(f(n))$인 수열을 제시하라. 그다음 "$f \asymp g$"($f = O(g)$ **그리고** $g = O(f)$를 뜻함)로 정의되는 자연스러운 동치관계를 진술하고, $f \asymp g$이지만 $f \not\sim g$인 두 수열의 예를 들어라.
 
 </div>
@@ -284,7 +284,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 7.**
+**연습문제 7.** <span class="diff hard" title="어려움"></span>
 **(체사로 평균)** $a_n \to L$이면 산술평균 $\bar{a}_n = \frac{1}{n}\sum_{k=1}^n a_k$도 $L$로 수렴함을 증명하라. 역은 성립하지 않음을 반례로 보여라.
 
 </div>
@@ -323,7 +323,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 8.**
+**연습문제 8.** <span class="diff hard" title="어려움"></span>
 **(2차 델타 방법)** $g'(\theta) = 0$이면 1차 델타 방법은 퇴화한 극한 $N(0,0)$을 준다. 이때
 
 $$
@@ -384,7 +384,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 9.**
+**연습문제 9.** <span class="diff hard" title="어려움"></span>
 **(스털링 근사)** $n! \sim \sqrt{2\pi n}\,(n/e)^n$을 이용해 중심이항계수의 점근식 $\binom{2n}{n} \sim 4^n/\sqrt{\pi n}$을 유도하고, 수치로 확인하라. 이 결과가 확률적으로 뜻하는 바는 무엇인가?
 
 </div>
@@ -451,7 +451,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 10.**
+**연습문제 10.** <span class="diff med" title="중간"></span>
 다음 점근 표기 규칙을 증명하라.
 
 **(a)** $O(a_n) + O(b_n) = O(\max(a_n, b_n))$
