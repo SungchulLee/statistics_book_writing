@@ -77,7 +77,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 $Q \sim \chi^2_k$에 대해 정의 $Q = \sum_{i=1}^k Z_i^2$로부터 $E[Q]$와 $\text{Var}(Q)$를 계산하라.
 
 </div>
@@ -93,7 +93,7 @@ $Q \sim \chi^2_k$에 대해 정의 $Q = \sum_{i=1}^k Z_i^2$로부터 $E[Q]$와 $
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 $X \sim \chi^2_m$과 $Y \sim \chi^2_n$이 독립이면 $X + Y \sim \chi^2_{m+n}$임을 보여라.
 
 </div>
@@ -109,7 +109,7 @@ $X \sim \chi^2_m$과 $Y \sim \chi^2_n$이 독립이면 $X + Y \sim \chi^2_{m+n}$
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 PDF를 미분하여 0으로 두고, $k \ge 2$일 때 $\chi^2_k$의 최빈값이 $k - 2$임을 보여라.
 
 </div>
@@ -125,7 +125,7 @@ PDF를 미분하여 0으로 두고, $k \ge 2$일 때 $\chi^2_k$의 최빈값이 
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff easy" title="쉬움"></span>
 $N(\mu, \sigma^2)$에서 크기 $n = 25$인 확률표본을 뽑아 $s^2 = 12$를 얻었다. 카이제곱 분포를 사용하여 $\sigma^2$에 대한 95% 신뢰구간을 구성하라.
 
 </div>
@@ -149,7 +149,7 @@ $N(\mu, \sigma^2)$에서 크기 $n = 25$인 확률표본을 뽑아 $s^2 = 12$를
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 $\chi^2_k$의 적률생성함수를 구하고, 그것으로 연습문제 $1$·$2$를 다시 유도하라. 왜도와 첨도는 얼마인가?
 
 </div>
@@ -207,7 +207,7 @@ $\chi^2_k$의 적률생성함수를 구하고, 그것으로 연습문제 $1$·$2
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff hard" title="어려움"></span>
 $\chi^2_k\approx N(k,2k)$는 실제로 얼마나 정확한가? **피셔 근사**와 **윌슨–힐퍼티 근사**와 비교하라.
 
 </div>
@@ -254,7 +254,7 @@ $\chi^2_k\approx N(k,2k)$는 실제로 얼마나 정확한가? **피셔 근사**
 
 <div class="drillbox" markdown>
 
-**연습문제 7.**
+**연습문제 7.** <span class="diff med" title="중간"></span>
 $\chi^2_k$가 감마분포의 특수한 경우임을 보이고, 표본분산이 왜 $\chi^2_{n-1}$을 따르는지(자유도가 왜 $n$이 아니라 $n-1$인지) 설명하라.
 
 </div>
@@ -324,7 +324,7 @@ $\chi^2_k$가 감마분포의 특수한 경우임을 보이고, 표본분산이 
 
 <div class="drillbox" markdown>
 
-**연습문제 8.**
+**연습문제 8.** <span class="diff med" title="중간"></span>
 적합도 검정통계량 $X^2=\sum_j (O_j-E_j)^2/E_j$가 왜 $\chi^2_{m-1}$로 가는지 설명하고 확인하라.
 
 </div>
@@ -374,7 +374,7 @@ $\chi^2_k$가 감마분포의 특수한 경우임을 보이고, 표본분산이 
 
 <div class="drillbox" markdown>
 
-**연습문제 9.**
+**연습문제 9.** <span class="diff hard" title="어려움"></span>
 대립가설 아래에서 $X^2$은 **비중심 카이제곱**을 따른다. 이를 이용해 검정력을 계산하라.
 
 </div>
@@ -437,7 +437,7 @@ $\chi^2_k$가 감마분포의 특수한 경우임을 보이고, 표본분산이 
 
 <div class="drillbox" markdown>
 
-**연습문제 10.**
+**연습문제 10.** <span class="diff med" title="중간"></span>
 연습문제 $4$의 신뢰구간은 **정규성**을 가정한다. 그 가정이 틀리면 얼마나 나빠지는가? 실제 포함률을 측정하라.
 
 </div>

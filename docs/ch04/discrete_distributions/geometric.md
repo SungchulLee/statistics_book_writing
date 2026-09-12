@@ -121,7 +121,7 @@ $$
 
 <div class="probox" markdown>
 
-**문제:** 어떤 트레이더의 전략은 각 거래에서 독립적으로 30%의 승률을 갖는다. 첫 승리까지 필요한 거래 횟수의 기댓값은 얼마인가? 첫 승리가 5번째 거래에서 일어날 확률은?
+**문제:** <span class="diff easy" title="쉬움"></span> 어떤 트레이더의 전략은 각 거래에서 독립적으로 30%의 승률을 갖는다. 첫 승리까지 필요한 거래 횟수의 기댓값은 얼마인가? 첫 승리가 5번째 거래에서 일어날 확률은?
 
 </div>
 
@@ -261,7 +261,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 영업 전화의 성공확률이 $p = 0.1$이다. $Y$를 첫 계약까지의 전화 횟수라 하자. (a) 분포는? (b) $P(Y = 5)$, $P(Y > 10)$. (c) 8번 실패했다는 조건 아래 $P(Y > 15)$. (d) 평균과 분산.
 
 </div>
@@ -277,7 +277,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 Geometric 분포의 **무기억성** $P(Y > m + n \mid Y > m) = P(Y > n)$을 증명하라.
 
 </div>
@@ -295,7 +295,7 @@ Geometric 분포의 **무기억성** $P(Y > m + n \mid Y > m) = P(Y > n)$을 증
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 **Negative Binomial 분포.** i.i.d. Bernoulli($p$) 시행에서 $r$번째 성공까지의 시행 횟수를 $Z$라 하자. PMF, $\mathbb{E}[Z]$, $\mathrm{Var}(Z)$를 유도하라.
 
 </div>
@@ -317,7 +317,7 @@ Geometric 분포의 **무기억성** $P(Y > m + n \mid Y > m) = P(Y > n)$을 증
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff hard" title="어려움"></span>
 **쿠폰 수집가 문제.** $n$가지 종류의 쿠폰을 모두 모으려면 (복원추출로) 독립적인 무작위 추출을 몇 번 해야 하는가? 전체 추출 횟수 $T$에 대해 $\mathbb{E}[T]$를 구하라.
 
 </div>
@@ -339,7 +339,7 @@ Geometric 분포의 **무기억성** $P(Y > m + n \mid Y > m) = P(Y > n)$을 증
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 **이산화된 Exponential 분포로서의 Geometric 분포.** $\Delta t$가 작을 때 $p$가 $\lambda \Delta t$에 대응하는 방식으로, Geometric 분포가 Exponential 분포의 이산시간 대응물로 나타남을 보여라.
 
 </div>
@@ -357,7 +357,7 @@ Geometric 분포의 **무기억성** $P(Y > m + n \mid Y > m) = P(Y > n)$을 증
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 **Geometric 분포의 역변환 표본추출.** $U \sim \mathrm{Uniform}(0, 1)$이 주어졌을 때 $X \sim \mathrm{Geometric}(p)$를 생성하는 공식을 유도하라.
 
 </div>

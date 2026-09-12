@@ -112,7 +112,7 @@ Poisson 분포는 **Poisson 과정**과 밀접하게 연결되어 있다. 사건
 
 <div class="probox" markdown>
 
-**문제:** 어떤 증권거래소는 시간당 평균 3건의 대량 블록 거래를 처리한다. 특정 한 시간 동안 정확히 5건의 블록 거래가 관측될 확률은? 2건 이하가 관측될 확률은?
+**문제:** <span class="diff easy" title="쉬움"></span> 어떤 증권거래소는 시간당 평균 3건의 대량 블록 거래를 처리한다. 특정 한 시간 동안 정확히 5건의 블록 거래가 관측될 확률은? 2건 이하가 관측될 확률은?
 
 </div>
 
@@ -239,7 +239,7 @@ Mean ≈ Var: True
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 콜센터에 분당 4건의 전화가 걸려 온다. (a) $N$의 분포는? (b) $P(N = 0)$, $P(N \ge 6)$. (c) $P(2\text{분 동안 10건 초과})$. (d) $P(N \ge 8)$의 정규근사.
 
 </div>
@@ -255,7 +255,7 @@ Mean ≈ Var: True
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 Poisson 근사: 500쪽의 책에서 각 쪽이 독립적으로 확률 $p = 0.004$로 오탈자를 포함한다. (a) 정확한 분포는? (b) Poisson 근사의 모수는? (c) Poisson 근사로 $P(X = 0)$, $P(X = 1)$, $P(X \ge 4)$를 구하라.
 
 </div>
@@ -271,7 +271,7 @@ Poisson 근사: 500쪽의 책에서 각 쪽이 독립적으로 확률 $p = 0.004
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 **도착 간 시간의 무기억성.** 사건이 비율 $\lambda$인 Poisson 과정에 따라 발생하면 도착 간 시간이 비율 $\lambda$인 Exponential 분포를 따름을 증명하라.
 
 </div>
@@ -287,7 +287,7 @@ Poisson 근사: 500쪽의 책에서 각 쪽이 독립적으로 확률 $p = 0.004
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 **합과 중첩.** 비율이 $\lambda_1, \lambda_2$인 독립 Poisson 과정을 중첩한다. 합쳐진 과정이 비율 $\lambda_1 + \lambda_2$인 Poisson 과정임을 보여라.
 
 </div>
@@ -305,7 +305,7 @@ Poisson 근사: 500쪽의 책에서 각 쪽이 독립적으로 확률 $p = 0.004
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 Poisson 분포에서 **분산이 평균과 같음**을 보여라. $X \sim \mathrm{Poisson}(\lambda)$에 대해 PMF로부터 직접 $\mathbb{E}[X], \mathbb{E}[X^2]$를 계산하라.
 
 </div>
@@ -329,7 +329,7 @@ Poisson 분포에서 **분산이 평균과 같음**을 보여라. $X \sim \mathr
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 **Poisson 가정에 대한 검정.** 계수 표본 $X_1, \ldots, X_n$이 주어졌을 때, 표본분산과 표본평균의 비를 이용한 간단한 **산포 검정**을 제안하라.
 
 </div>

@@ -63,7 +63,7 @@ $\sigma$가 커질수록 분포가 오른쪽으로 더 치우치고 최빈값은
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 $X \sim N(\mu, \sigma^2)$일 때 정규분포의 적률생성함수를 사용하여 $Y = e^X$의 $E[Y]$를 유도하라.
 
 </div>
@@ -79,7 +79,7 @@ $X \sim N(\mu, \sigma^2)$일 때 정규분포의 적률생성함수를 사용하
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 Log-Normal 분포의 중앙값이 $e^\mu$이며, 임의의 $\sigma > 0$에 대해 평균 $e^{\mu + \sigma^2/2}$보다 작음을 보여라.
 
 </div>
@@ -97,7 +97,7 @@ Log-Normal 분포의 중앙값이 $e^\mu$이며, 임의의 $\sigma > 0$에 대�
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff easy" title="쉬움"></span>
 주식 수익률이 (연율화된) $\mu = 0.05$, $\sigma = 0.2$인 Log-Normal 분포를 따른다면, 주가가 가치의 20% 넘게 하락할 확률은 얼마인가?
 
 </div>
@@ -113,7 +113,7 @@ Log-Normal 분포의 중앙값이 $e^\mu$이며, 임의의 $\sigma > 0$에 대�
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 독립인 Log-Normal 확률변수들의 곱이 다시 Log-Normal임을 증명하라.
 
 </div>

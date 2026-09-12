@@ -66,7 +66,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 $t_5$ 분포에 대해 공식 $\nu/(\nu-2)$로 분산을 계산하라. 표준정규분포의 분산보다 얼마나 큰가?
 
 </div>
@@ -80,7 +80,7 @@ $t_5$ 분포에 대해 공식 $\nu/(\nu-2)$로 분산을 계산하라. 표준정
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 $\sigma$를 모르는 상태에서 평균의 신뢰구간을 구성할 때 정규분포 대신 $t$ 분포를 쓰는 이유를 설명하라. $n$이 커지면 무엇이 달라지는가?
 
 </div>
@@ -92,7 +92,7 @@ $\sigma$를 모르는 상태에서 평균의 신뢰구간을 구성할 때 정�
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 $t_1$ 분포가 표준 Cauchy 분포임을 두 PDF가 같음을 보여 증명하라.
 
 </div>
@@ -114,7 +114,7 @@ $t_1$ 분포가 표준 Cauchy 분포임을 두 PDF가 같음을 보여 증명하
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff easy" title="쉬움"></span>
 SciPy를 사용하여 $\nu = 1, 5, 30, \infty$인 $t$ 분포 PDF를 같은 축에 그려라($\infty$는 `stats.norm`을 사용). 수렴 양상을 서술하라.
 
 </div>

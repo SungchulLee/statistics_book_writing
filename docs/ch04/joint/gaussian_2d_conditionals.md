@@ -113,7 +113,7 @@ $|\rho| \to 1$일 때 조건부분포는 회귀직선 주위로 모이고 조건
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 $\rho = 0.8$인 표준 이변량 정규분포에서 $a = 2$가 주어졌을 때 $b$의 조건부 평균과 분산을 계산하라.
 
 </div>
@@ -131,7 +131,7 @@ $\rho = 0.8$인 표준 이변량 정규분포에서 $a = 2$가 주어졌을 때 
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 표준 이변량 정규분포의 조건부분포 공식 $b \mid a = a_0 \sim N(\rho a_0, 1 - \rho^2)$을 증명하라.
 
 </div>
@@ -153,7 +153,7 @@ $\rho = 0.8$인 표준 이변량 정규분포에서 $a = 2$가 주어졌을 때 
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 조건부 평균 $E[b \mid a] = \rho \cdot a$와 $a$에 대한 $b$의 단순선형회귀 사이의 연결을 설명하라.
 
 </div>
@@ -163,7 +163,7 @@ $\rho = 0.8$인 표준 이변량 정규분포에서 $a = 2$가 주어졌을 때 
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff easy" title="쉬움"></span>
 $\rho = 0$이면 조건부분포는 무엇이 되는가? 이를 독립성 개념과 연결하라.
 
 </div>

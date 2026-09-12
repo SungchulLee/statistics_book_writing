@@ -90,7 +90,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 $k = 1$인 Weibull 분포가 비율 $1/\lambda$인 Exponential 분포로 환원됨을 보여라.
 
 </div>
@@ -106,7 +106,7 @@ $k = 1$인 Weibull 분포가 비율 $1/\lambda$인 Exponential 분포로 환원�
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 Weibull 분포의 CDF와 중앙값을 유도하라.
 
 </div>
@@ -126,7 +126,7 @@ Weibull 분포의 CDF와 중앙값을 유도하라.
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff easy" title="쉬움"></span>
 어떤 부품의 수명이 $k = 2$, $\lambda = 1000$시간인 Weibull 분포를 따른다. 500시간을 넘겨 생존할 확률은? 1500시간은?
 
 </div>
@@ -144,7 +144,7 @@ Weibull 분포의 CDF와 중앙값을 유도하라.
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 더 유연한 분포들이 있는데도 Weibull 분포가 신뢰성 공학에서 널리 쓰이는 이유를 설명하라.
 
 </div>

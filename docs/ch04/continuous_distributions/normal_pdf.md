@@ -61,7 +61,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 $X \sim N(1, 4)$에 대해 평균에서의 밀도 $f(1)$을 손으로 계산하라.
 
 </div>
@@ -75,7 +75,7 @@ $X \sim N(1, 4)$에 대해 평균에서의 밀도 $f(1)$을 손으로 계산하�
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 정규 PDF의 적분이 1임을 보여라. (힌트: $I = \int_{-\infty}^{\infty} e^{-x^2/2}\,dx$에 대해 $I^2$을 극좌표에서 계산하라.)
 
 </div>
@@ -97,7 +97,7 @@ $X \sim N(1, 4)$에 대해 평균에서의 밀도 $f(1)$을 손으로 계산하�
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 정규 PDF의 변곡점을 유도하라. 어떤 $x$ 값에서 곡률의 부호가 바뀌는가?
 
 </div>
@@ -123,7 +123,7 @@ $X \sim N(1, 4)$에 대해 평균에서의 밀도 $f(1)$을 손으로 계산하�
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff easy" title="쉬움"></span>
 SciPy를 사용하여 표준정규분포에 대해 68–95–99.7 규칙을 수치적으로 확인하라.
 
 </div>

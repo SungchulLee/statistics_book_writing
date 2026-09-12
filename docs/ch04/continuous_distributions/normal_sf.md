@@ -97,7 +97,7 @@ x= 12:  1-cdf = 0.000000e+00   sf = 1.776482e-33
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 $Z \sim N(0,1)$에 대해 CDF와 SF를 각각 사용하여 $P(Z > 2)$를 계산하고 두 결과가 일치함을 확인하라.
 
 </div>
@@ -111,7 +111,7 @@ $Z \sim N(0,1)$에 대해 CDF와 SF를 각각 사용하여 $P(Z > 2)$를 계산�
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff easy" title="쉬움"></span>
 임의의 연속확률변수에 대해 모든 $x$에서 $S(x) + F(x) = 1$임을 보여라.
 
 </div>
@@ -127,7 +127,7 @@ $Z \sim N(0,1)$에 대해 CDF와 SF를 각각 사용하여 $P(Z > 2)$를 계산�
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff easy" title="쉬움"></span>
 어떤 부품은 응력 $X \sim N(500, 2500)$이 문턱값 600을 넘으면 고장 난다. 고장 확률은 얼마인가?
 
 </div>
@@ -143,7 +143,7 @@ $Z \sim N(0,1)$에 대해 CDF와 SF를 각각 사용하여 $P(Z > 2)$를 계산�
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 **위험함수**는 $h(x) = f(x)/S(x)$로 정의된다. 표준정규분포에 대해 $h(0)$을 계산하고 $x > 0$에서 $h(x)$가 증가하는 이유를 설명하라.
 
 </div>

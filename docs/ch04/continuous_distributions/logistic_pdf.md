@@ -60,7 +60,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 로지스틱 CDF $F(x) = 1/(1 + e^{-(x-\mu)/s})$가 로지스틱 PDF의 부정적분임을 보여라.
 
 </div>
@@ -76,7 +76,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 로지스틱 분산 $s^2\pi^2/3$을 계산하고, 같은 척도 모수 $\sigma = s$를 갖는 정규분포의 분산보다 큼을 확인하라.
 
 </div>
@@ -86,7 +86,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 Logistic 분포는 로지스틱 회귀에서 핵심적인 역할을 한다. CDF $F(x) = 1/(1 + e^{-x})$가 선형 예측자를 확률로 옮기는 연결함수 역할을 어떻게 하는지 설명하라.
 
 </div>
@@ -96,7 +96,7 @@ Logistic 분포는 로지스틱 회귀에서 핵심적인 역할을 한다. CDF 
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 표준 Logistic 분포($\mu=0, s=1$)와 분산을 맞춘 정규분포에서 꼬리 확률 $P(|X| > 3)$을 비교하라. 어느 쪽의 꼬리 확률이 더 큰가?
 
 </div>

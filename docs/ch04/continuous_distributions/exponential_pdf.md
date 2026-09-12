@@ -70,7 +70,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 Exponential 분포의 무기억성을 증명하라.
 
 </div>
@@ -86,7 +86,7 @@ Exponential 분포의 무기억성을 증명하라.
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff easy" title="쉬움"></span>
 고객 도착이 시간당 $\lambda = 3$인 Poisson 과정을 따를 때, 다음 고객을 30분 넘게 기다릴 확률은 얼마인가?
 
 </div>
@@ -100,7 +100,7 @@ Exponential 분포의 무기억성을 증명하라.
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff hard" title="어려움"></span>
 Exponential 분포가 무기억성을 갖는 유일한 연속분포임을 보여라.
 
 </div>
@@ -112,7 +112,7 @@ Exponential 분포가 무기억성을 갖는 유일한 연속분포임을 보여
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 PDF로부터 Exponential 분포의 CDF, 중앙값, 평균을 유도하라.
 
 </div>

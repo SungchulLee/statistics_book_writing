@@ -174,7 +174,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 $np = \lambda$를 고정한 채 $n \to \infty$, $p \to 0$일 때 Poisson 분포가 Binomial 분포의 극한임을 보여라.
 
 </div>
@@ -196,7 +196,7 @@ $np = \lambda$를 고정한 채 $n \to \infty$, $p \to 0$일 때 Poisson 분포�
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 품질 검사원이 100개(불량 20개)로 이루어진 한 배치에서 5개를 뽑는다. Hypergeometric 분포(정확)와 Binomial 분포(근사)로 $P(X = 2)$를 각각 구해 비교하라. Binomial 근사는 언제 좋은가?
 
 </div>
@@ -210,7 +210,7 @@ $np = \lambda$를 고정한 채 $n \to \infty$, $p \to 0$일 때 Poisson 분포�
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 Geometric 분포가 무기억성을 가짐을 증명하라: $P(X > s + t \mid X > s) = P(X > t)$.
 
 </div>
@@ -226,7 +226,7 @@ Geometric 분포가 무기억성을 가짐을 증명하라: $P(X > s + t \mid X 
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 Hypergeometric 분포의 기댓값은 $E[X] = nK/N$이다. 이 결과를 유도하라.
 
 </div>

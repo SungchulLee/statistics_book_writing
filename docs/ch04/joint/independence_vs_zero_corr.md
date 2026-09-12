@@ -298,7 +298,7 @@ Jointly normal, ρ=0:
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 $X$가 대칭이고 $\mathbb{E}[X] = 0$, $\mathbb{E}[X^2] = 1$, $\mathbb{E}[X^3] = 0$이다. $Y = X^2$이라 하자. (a) $\mathrm{Cov}(X, Y)$. (b) $\rho(X, Y)$. (c) 둘은 독립인가?
 
 </div>
@@ -314,7 +314,7 @@ $X$가 대칭이고 $\mathbb{E}[X] = 0$, $\mathbb{E}[X^2] = 1$, $\mathbb{E}[X^3]
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 **무상관성이 독립성을 함의하는 경우.** 무상관성이 독립성을 보장하는 경우를 밝히고 증명하라.
 
 </div>
@@ -340,7 +340,7 @@ $X$가 대칭이고 $\mathbb{E}[X] = 0$, $\mathbb{E}[X^2] = 1$, $\mathbb{E}[X^3]
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff hard" title="어려움"></span>
 **거리 상관계수**는 독립일 때 그리고 그때만 0이 되어 Pearson 상관계수의 한계를 보완한다. 거리 상관계수를 개념적으로 정의하고 주된 장점을 서술하라.
 
 </div>
@@ -365,7 +365,7 @@ $X$가 대칭이고 $\mathbb{E}[X] = 0$, $\mathbb{E}[X^2] = 1$, $\mathbb{E}[X^3]
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff hard" title="어려움"></span>
 **상호정보량** $I(X; Y) = \mathbb{E}\!\left[\log \frac{p(X, Y)}{p(X) p(Y)}\right]$에 대해, $I(X; Y) \ge 0$이고 $I(X; Y) = 0$일 필요충분조건이 $X \perp\!\!\!\perp Y$임을 보여라.
 
 </div>
@@ -387,7 +387,7 @@ $X$가 대칭이고 $\mathbb{E}[X] = 0$, $\mathbb{E}[X^2] = 1$, $\mathbb{E}[X^3]
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 **순위 상관계수.** Spearman의 $\rho_S$는 순위들 사이의 Pearson 상관계수이다. Spearman의 $\rho_S$가 (선형 의존성만 잡는 Pearson과 달리) *단조* 의존성을 포착하며 임의의 단조변환에 불변임을 보여라.
 
 </div>
@@ -409,7 +409,7 @@ $X$가 대칭이고 $\mathbb{E}[X] = 0$, $\mathbb{E}[X^2] = 1$, $\mathbb{E}[X^3]
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 **독립성에 대한 실용적 검정.** 표본 $(X_i, Y_i)_{i=1}^n$이 주어졌을 때 서로 보완하는 두 가지 독립성 검정을 제안하고 각각이 언제 적절한지 논하라.
 
 </div>

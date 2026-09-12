@@ -79,7 +79,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 $X \sim N(0, 1)$에 대해 CDF를 사용하여 $P(-1.96 \le X \le 1.96)$을 계산하라.
 
 </div>
@@ -93,7 +93,7 @@ $X \sim N(0, 1)$에 대해 CDF를 사용하여 $P(-1.96 \le X \le 1.96)$을 계�
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff easy" title="쉬움"></span>
 표준정규 CDF의 대칭성 $\mathcal{N}(-x) = 1 - \mathcal{N}(x)$를 증명하라.
 
 </div>
@@ -115,7 +115,7 @@ $X \sim N(0, 1)$에 대해 CDF를 사용하여 $P(-1.96 \le X \le 1.96)$을 계�
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff easy" title="쉬움"></span>
 $X \sim N(5, 9)$일 때 표준화하여 $P(X > 8)$을 구하라.
 
 </div>
@@ -129,7 +129,7 @@ $X \sim N(5, 9)$일 때 표준화하여 $P(X > 8)$을 구하라.
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 미적분학의 기본정리를 사용하여 $F'(x) = f(x)$(CDF의 도함수가 PDF임)를 보여라. 이것이 그래프에서 무엇을 뜻하는지 설명하라.
 
 </div>

@@ -71,7 +71,7 @@ $F$ 분포는 ($[0, \infty)$ 위에 놓이므로) 언제나 오른쪽으로 치�
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 $F_{5, 12}$의 평균을 계산하고, $F$ 분포의 평균이 (존재할 때) 항상 1보다 큰 이유를 설명하라.
 
 </div>
@@ -83,7 +83,7 @@ $F_{5, 12}$의 평균을 계산하고, $F$ 분포의 평균이 (존재할 때) �
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 $T \sim t_\nu$이면 $T^2 \sim F_{1, \nu}$임을 보여라.
 
 </div>
@@ -99,7 +99,7 @@ $T \sim t_\nu$이면 $T^2 \sim F_{1, \nu}$임을 보여라.
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff easy" title="쉬움"></span>
 크기가 10인 세 집단으로 이루어진 일원배치 분산분석에서 $F$ 검정의 자유도는 얼마인가? 유의수준 5%에서 임계값은?
 
 </div>
@@ -115,7 +115,7 @@ $T \sim t_\nu$이면 $T^2 \sim F_{1, \nu}$임을 보여라.
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 $1/F_{d_1, d_2} \sim F_{d_2, d_1}$임을 보여라.
 
 </div>

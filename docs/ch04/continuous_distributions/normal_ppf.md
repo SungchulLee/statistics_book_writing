@@ -67,7 +67,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 PPF를 사용하여 $Z \sim N(0,1)$에 대해 $P(-z \le Z \le z) = 0.99$를 만족하는 $z$를 구하라.
 
 </div>
@@ -83,7 +83,7 @@ PPF를 사용하여 $Z \sim N(0,1)$에 대해 $P(-z \le Z \le z) = 0.99$를 만�
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff easy" title="쉬움"></span>
 $X \sim N(100, 225)$일 때 $X$의 90 백분위수를 구하라.
 
 </div>
@@ -97,7 +97,7 @@ $X \sim N(100, 225)$일 때 $X$의 90 백분위수를 구하라.
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 연속분포에 대해 모든 $q \in (0, 1)$에서 $F(F^{-1}(q)) = q$임을 증명하라.
 
 </div>
@@ -107,7 +107,7 @@ $X \sim N(100, 225)$일 때 $X$의 90 백분위수를 구하라.
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 PPF와 생존함수의 관계를 설명하라. $P(X > z) = 0.05$를 만족하는 $z$는 어떻게 계산하겠는가?
 
 </div>
