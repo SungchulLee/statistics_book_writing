@@ -96,20 +96,26 @@ $$
 3. **콕스-스넬 잔차**: 모형이 옳으면 콕스-스넬 잔차가 지수(1) 분포를 따른다. 잔차의 위험에 대한
    넬슨-알렌 추정치를 잔차 자체에 대해 그리면 45도 직선에 가까워야 한다.
 
+<div class="codebox" markdown>
+
+**예제 1.** Cox-Snell 잔차 진단
+
 ```python
 import numpy as np
 import matplotlib.pyplot as plt
 
 def cox_snell_diagnostic(residuals):
-    """
-    Plot Cox-Snell residual diagnostic.
+    """Cox-Snell 잔차 진단 그림.
 
-    If the model is correct, the cumulative hazard of the residuals
-    should follow a unit exponential, i.e., H(r) = r.
+    모형이 옳다면 잔차의 누적위험함수가 단위 지수분포를 따른다. 곧
+    H(r) = r 이므로 점들이 45도선 위에 놓인다. 생존분석에서 모형의
+    적합도를 보는 표준적인 그림이다.
     """
     sorted_r = np.sort(residuals)
     n = len(sorted_r)
-    # Nelson-Aalen estimate for the residuals
+
+    # 잔차의 누적위험함수를 Nelson-Aalen 방식으로 추정한다.
+    # 분모에 n+1 을 쓰는 것은 마지막 점에서 로그가 발산하는 것을 피하기 위함이다.
     H_na = -np.log(1 - np.arange(1, n + 1) / (n + 1))
 
     fig, ax = plt.subplots(figsize=(6, 6))
@@ -126,6 +132,8 @@ def cox_snell_diagnostic(residuals):
 rng = np.random.default_rng(0)
 cox_snell_diagnostic(rng.exponential(1.0, 200))
 ```
+
+</div>
 
 ![Cox-Snell 잔차 진단 그림](./img/model_comparison_code_99.png)
 

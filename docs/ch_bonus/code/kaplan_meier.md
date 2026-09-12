@@ -19,24 +19,29 @@ $$
 이다. 여기서 $t_{(1)} < t_{(2)} < \cdots < t_{(K)}$는 서로 다른 사건시간이고, $d_j$는
 $t_{(j)}$의 사건 수, $n_j$는 $t_{(j)}$ 직전에 위험에 있는 대상 수다.
 
-### 구현
+<div class="codebox" markdown>
+
+**예제 1.** 카플란-마이어 추정 구현
 
 ```python
 import numpy as np
 
 def kaplan_meier(times, censored):
-    """
-    Compute the Kaplan-Meier survival function estimate.
+    """카플란-마이어 생존함수 추정값을 구한다.
 
-    Parameters
+    사건이 일어난 시점마다 "그 직전까지 살아 있던 사람 중 그 시점을
+    넘긴 비율"을 곱해 나간다. 중도절단된 사람은 절단 시점까지만
+    위험집합에 남아 있다가 조용히 빠진다 — 이것이 중도절단 자료를
+    버리지 않고 쓰는 방법이다.
+
+    매개변수
+    --------
+    times    : 관측된 시각(사건 또는 절단)
+    censored : 1 이면 중도절단, 0 이면 사건이 관측됨
+
+    돌려주는 값
     ----------
-    times    : 1-d array   Observed times (event or censoring).
-    censored : 1-d array   1 = censored (no event), 0 = event observed.
-
-    Returns
-    -------
-    t_plot : array   Time points for step-plot (includes 0 and max time).
-    s_plot : array   Survival probabilities matching t_plot.
+    t_plot, s_plot : 계단그림에 쓸 시각과 생존확률
     """
     order = np.argsort(times)
     times = times[order]
@@ -51,6 +56,7 @@ def kaplan_meier(times, censored):
     s_list = [1.0]
 
     for t_j in unique_events:
+        # 위험집합: 그 시점에 아직 사건도 절단도 겪지 않은 사람 수
         n_at_risk = np.sum(times >= t_j)
         d_j = np.sum((times == t_j) & (censored == 0))
         s *= (n_at_risk - d_j) / n_at_risk
@@ -62,6 +68,8 @@ def kaplan_meier(times, censored):
 
     return np.array(t_list), np.array(s_list)
 ```
+
+</div>
 
 !!! warning "이 코드의 `censored`는 사건이 0이다"
     `censored == 1`이 절단, `censored == 0`이 사건을 뜻한다. `lifelines`의
@@ -115,19 +123,23 @@ $$
 
 이며 $O_1 = \sum d_{1j}$, $E_1 = \sum e_{1j}$, $V_1 = \sum v_j$이다.
 
-### 구현
+<div class="codebox" markdown>
+
+**예제 2.** 로그순위 검정 구현
 
 ```python
 from scipy import stats
 
 def logrank_test(times_1, censored_1, times_2, censored_2):
-    """
-    Two-sample log-rank test.
+    """이표본 로그순위 검정.
 
-    Returns
-    -------
-    chi2    : float   Test statistic (chi-square with 1 df).
-    p_value : float   p-value from chi-square(1).
+    사건 시점마다 2x2 분할표를 만들어 관측 사건 수와 기대 사건 수를
+    비교한다. 그 차이를 모든 시점에 걸쳐 누적한 것이 통계량이다.
+    두 생존곡선이 같다는 귀무가설 아래에서 자유도 1 인 카이제곱을 따른다.
+
+    돌려주는 값
+    ----------
+    chi2, p_value
     """
     event_1 = times_1[censored_1 == 0]
     event_2 = times_2[censored_2 == 0]
@@ -146,6 +158,8 @@ def logrank_test(times_1, censored_1, times_2, censored_2):
         d2 = np.sum(event_2 == t_j)
         d  = d1 + d2
 
+        # 두 집단의 생존이 같다면, 그 시점의 사건은 위험집합 크기에
+        # 비례해 나뉘어야 한다. 그것이 기대 사건 수 e1 이다.
         e1 = r1 * d / r if r > 0 else 0
         v  = r1 * r2 * d * (r - d) / (r**2 * (r - 1)) if r > 1 else 0
 
@@ -158,6 +172,8 @@ def logrank_test(times_1, censored_1, times_2, censored_2):
     return chi2, p_value
 ```
 
+</div>
+
 이 구현은 두 집단의 사건시간을 합친 뒤 각 사건시간을 순회하며 집단 1의 관측 사건 수, 기대
 사건 수, 분산을 누적한다.
 
@@ -165,28 +181,33 @@ def logrank_test(times_1, censored_1, times_2, censored_2):
 
 다음 코드는 모의자료를 생성하고 카플란-마이어 곡선을 그린다.
 
+<div class="codebox" markdown>
+
+**예제 3.** 전체 실행
+
 ```python
 import matplotlib.pyplot as plt
 
 def main():
     np.random.seed(0)
 
-    # Group 1: slower event rate (mean = 20)
+    # 1집단: 사건이 늦게 일어난다(평균 20). 20%는 중도절단된다.
     n1 = 40
     times_1 = np.random.exponential(scale=20, size=n1)
     censored_1 = (np.random.rand(n1) < 0.2).astype(int)
 
-    # Group 2: faster event rate (mean = 12)
+    # 2집단: 사건이 빨리 일어난다(평균 12).
     n2 = 40
     times_2 = np.random.exponential(scale=12, size=n2)
     censored_2 = (np.random.rand(n2) < 0.2).astype(int)
 
-    # Kaplan-Meier curves
     t1, s1 = kaplan_meier(times_1, censored_1)
     t2, s2 = kaplan_meier(times_2, censored_2)
 
     fig, ax = plt.subplots(figsize=(10, 5))
-    ax.step(t1, s1, where="post", linewidth=2, label="Group 1 (slow)")
+    # where="post" 가 계단을 오른쪽으로 뻗게 한다. 생존함수는 사건이 일어난
+# 그 순간에 떨어지고 다음 사건까지 평평하므로, 이 설정이라야 맞다.
+ax.step(t1, s1, where="post", linewidth=2, label="Group 1 (slow)")
     ax.step(t2, s2, where="post", linewidth=2, label="Group 2 (fast)")
     ax.set_xlabel("Time")
     ax.set_ylabel("Survival Probability")
@@ -196,7 +217,7 @@ def main():
     plt.tight_layout()
     plt.show()
 
-    # Log-rank test
+    # 그림으로 본 차이가 통계적으로도 뒷받침되는지 확인한다.
     chi2, p = logrank_test(times_1, censored_1, times_2, censored_2)
     print(f"Log-Rank Test:  chi2 = {chi2:.4f},  p = {p:.4f}")
 
@@ -210,6 +231,8 @@ if __name__ == "__main__":
 ```
 Log-Rank Test:  chi2 = 12.6889,  p = 0.0004
 ```
+
+</div>
 
 ![두 집단의 카플란-마이어 생존곡선](./img/kaplan_meier_168.png)
 

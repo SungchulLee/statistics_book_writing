@@ -134,37 +134,55 @@ $$
 
 ## 구현 스케치
 
+<div class="codebox" markdown>
+
+**예제 1.** 부분로그가능도 구현
+
 ```python
 import numpy as np
 
 def partial_log_likelihood(beta, X, times, events):
-    """
-    Compute the partial log-likelihood for the Cox model.
+    """Cox 모형의 부분로그가능도를 계산한다.
 
-    Parameters
+    "부분"이라 부르는 까닭은 기저위험함수를 아예 셈에서 빼기 때문이다.
+    사건이 일어난 시점마다 "그 순간 위험집합에 있던 사람들 중 하필 이
+    사람에게 사건이 일어날 확률"만 곱해 나가면, 기저위험이 분자와 분모에서
+    약분되어 사라진다. 그래서 위험함수의 모양을 가정하지 않고도 계수를
+    추정할 수 있다.
+
+    매개변수
+    --------
+    beta   : 길이 p 인 계수벡터
+    X      : (n, p) 공변량 행렬
+    times  : 관측된 시각
+    events : 사건 지시자 (1 = 사건, 0 = 중도절단)
+
+    돌려주는 값
     ----------
-    beta   : 1-d array   Coefficient vector (length p).
-    X      : 2-d array   Covariate matrix (n x p).
-    times  : 1-d array   Observed times.
-    events : 1-d array   Event indicators (1 = event, 0 = censored).
-
-    Returns
-    -------
-    ll : float   Partial log-likelihood value.
+    ll : 부분로그가능도 값
     """
-    risk_scores = X @ beta                # linear predictor for each subject
+    # 선형예측자. exp 를 씌운 값이 그 사람의 상대적 위험이 된다.
+    risk_scores = X @ beta
     exp_scores = np.exp(risk_scores)
 
-    order = np.argsort(-times)            # sort by decreasing time
+    # 시각을 내림차순으로 정렬한다. 이러면 누적합이 곧 "그 시점 이후까지
+    # 남아 있는 사람들", 곧 위험집합의 합이 된다.
+    order = np.argsort(-times)
     sorted_events = events[order]
     sorted_exp = exp_scores[order]
     sorted_scores = risk_scores[order]
 
-    cumsum_exp = np.cumsum(sorted_exp)    # cumulative risk set sum
+    # 위험집합의 합을 누적합 한 번으로 얻는다. 시점마다 집합을 다시
+    # 만들면 O(n^2) 이 되는 계산이 O(n log n) 으로 끝난다.
+    cumsum_exp = np.cumsum(sorted_exp)
 
+    # 사건이 관측된 사람만 더한다. 중도절단된 사람은 위험집합에 기여할
+    # 뿐 자기 항을 갖지 않는다.
     ll = np.sum(sorted_events * (sorted_scores - np.log(cumsum_exp)))
     return ll
 ```
+
+</div>
 
 이 구현은 대상을 시간 내림차순으로 정렬하여, 누적합으로 각 사건시간의 부분가능도 분모를
 효율적으로 계산한다.

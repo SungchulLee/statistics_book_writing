@@ -138,6 +138,10 @@ CV 오차가 최소인 lambda 선택
 
 ### 그림 1: 계수 대 λ
 
+<div class="codebox" markdown>
+
+**예제 1.** 라쏘 정칙화 경로 그리기
+
 ```python
 import matplotlib.pyplot as plt
 import numpy as np
@@ -151,12 +155,17 @@ beta = np.array([3.0, -2.0, 1.5, 1.0] + [0.0] * 8)
 y = X @ beta + rng.normal(0, 1, n)
 feature_names = [f"x{j+1}" for j in range(n_features)]
 
+# lasso_path 는 격자 위의 계수를 한꺼번에 계산한다. 하나씩 적합하는
+# 것보다 훨씬 빠른데, 앞 lambda 의 해를 다음 계산의 출발점으로 쓰기 때문이다.
 lambdas, coefs, _ = lasso_path(X, y, n_alphas=60)
 lasso_coefs = coefs.T                       # (n_lambda, n_features)
+# 교차검증으로 고른 lambda. 그림의 붉은 세로선이 이 자리다.
 lambda_opt = LassoCV(cv=5, random_state=0).fit(X, y).alpha_
 print(f"최적 lambda = {lambda_opt:.4f}, "
       f"그때 0이 아닌 계수 = {(np.abs(lasso_coefs[np.argmin(np.abs(lambdas - lambda_opt))]) > 1e-9).sum()}개")
 
+# 가로축이 오른쪽에서 왼쪽으로 갈수록 벌점이 약해진다. 가장 먼저 0 에서
+# 떨어져 나오는 선이 그만큼 중요한 변수다.
 fig, ax = plt.subplots(figsize=(10, 6))
 for j in range(n_features):
     ax.plot(np.log10(lambdas), lasso_coefs[:, j], label=feature_names[j])
@@ -175,6 +184,8 @@ plt.show()
 ```
 최적 lambda = 0.0589, 그때 0이 아닌 계수 = 6개
 ```
+
+</div>
 
 ![라쏘 정칙화 경로](./img/regularization_path_141.png)
 

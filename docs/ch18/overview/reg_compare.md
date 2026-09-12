@@ -27,15 +27,23 @@ $$
 다음 스크립트는 $\rho = 0.8$인 퇴플리츠 상관구조 $\Sigma_{ij} = \rho^{|i-j|}$를 갖는 설명변수
 $p = 20$개와 관측치 $n = 200$개를 생성한다.
 
+<div class="codebox" markdown>
+
+**예제 1.** 상관된 설명변수 자료 만들기
+
 ```python
 import numpy as np
 from sklearn.preprocessing import StandardScaler
 
 def generate_data(n=200, p=20, s=5, rho=0.8, noise=1.0):
-    """
-    Generate regression data with correlated predictors.
-    - n: samples, p: predictors, s: true nonzero coefficients
-    - rho: correlation between adjacent predictors
+    """서로 상관된 설명변수를 갖는 회귀자료를 만든다.
+
+    이웃한 변수끼리 rho, 두 칸 떨어지면 rho^2 로 상관이 줄어드는 구조다.
+    콜레스키 분해로 독립 정규에 이 상관을 입힌다. 세 벌점회귀가 갈리는
+    곳이 바로 이런 상관 구조에서다.
+
+    n: 관측 수, p: 변수 수, s: 참으로 0 이 아닌 계수의 수
+    rho: 이웃한 변수 사이의 상관
     """
     Sigma = np.array([[rho**abs(i-j) for j in range(p)] for i in range(p)])
     L = np.linalg.cholesky(Sigma)
@@ -53,15 +61,23 @@ scaler = StandardScaler()
 X_scaled = scaler.fit_transform(X)
 ```
 
+</div>
+
 20개 계수 중 5개만 0이 아니므로 참 구조는 희소하다.
 
 ## 코드: 교차검증 적합
 
 각 방법은 scikit-learn에 내장된 교차검증으로 최적 $\lambda$(엘라스틱넷은 $\alpha$까지)를 고른다.
 
+<div class="codebox" markdown>
+
+**예제 2.** 세 방법을 교차검증으로 적합
+
 ```python
 from sklearn.linear_model import RidgeCV, LassoCV, ElasticNetCV
 
+# 세 방법 모두 교차검증으로 벌점을 고른다. 엘라스틱넷은 벌점의 세기와
+# 배합비(l1_ratio) 둘을 함께 골라야 하므로 격자가 2차원이 된다.
 alphas = np.logspace(-4, 2, 100)
 
 ridge_cv = RidgeCV(alphas=alphas, cv=5)
@@ -76,6 +92,8 @@ enet_cv = ElasticNetCV(
 )
 enet_cv.fit(X_scaled, y)
 ```
+
+</div>
 
 !!! warning "`alpha`라는 이름의 두 가지 의미"
     scikit-learn에서 `Ridge`/`Lasso`/`ElasticNet`의 `alpha`는 이 절의 $\lambda$에 해당하고,
@@ -94,9 +112,16 @@ enet_cv.fit(X_scaled, y)
 - **라쏘**는 많은 계수를 정확히 0으로 만들어 참 희소 구조를 상당히 잘 되찾는다.
 - **엘라스틱넷**은 라쏘와 비슷하게 행동하지만 상관된 설명변수를 몇 개 더 남기는 경향이 있다.
 
+<div class="codebox" markdown>
+
+**예제 3.** 계수를 나란히 그리기
+
 ```python
 import matplotlib.pyplot as plt
 
+# 참 계수와 세 방법의 계수를 나란히 그린다. 0 이 아닌 계수를 붉게 칠해
+# 어느 방법이 몇 개를 살렸는지 한눈에 보이게 한다. 능형은 회색 막대가
+# 하나도 없을 것이다 — 정확히 0 이 되지 못하기 때문이다.
 fig, axes = plt.subplots(1, 4, figsize=(16, 4), sharey=True)
 p = X_scaled.shape[1]
 
@@ -117,6 +142,8 @@ plt.tight_layout()
 plt.show()
 ```
 
+</div>
+
 ![정칙화 방법의 계수 비교](./img/reg_compare_97.png)
 
 ## 정칙화 경로
@@ -127,19 +154,24 @@ plt.show()
 - **라쏘 경로:** 계수가 축소되다가 서로 다른 $\lambda$ 문턱에서 정확히 0이 되며, 경로가 조각별
   선형이다.
 
+<div class="codebox" markdown>
+
+**예제 4.** 능형과 라쏘의 경로
+
 ```python
 from sklearn.linear_model import Ridge, Lasso
 
 alphas_path = np.logspace(-3, 3, 200)
 
-# Ridge path
+# 능형 경로: 계수가 부드럽게 0 으로 다가가되 닿지는 않는다.
 ridge_coefs = []
 for a in alphas_path:
     model = Ridge(alpha=a).fit(X_scaled, y)
     ridge_coefs.append(model.coef_.copy())
 ridge_coefs = np.array(ridge_coefs)
 
-# Lasso path
+# 라쏘 경로: 계수가 하나씩 0 에 닿아 그대로 머문다. 두 그림의 이 차이가
+# 곧 변수 선택을 하느냐 못 하느냐의 차이다.
 lasso_coefs = []
 alphas_lasso = np.logspace(-4, 1, 200)
 for a in alphas_lasso:
@@ -147,6 +179,8 @@ for a in alphas_lasso:
     lasso_coefs.append(model.coef_.copy())
 lasso_coefs = np.array(lasso_coefs)
 ```
+
+</div>
 
 ## 축소 연산자
 
@@ -159,8 +193,19 @@ $$
 \hat{\beta}_j^{\text{Hard}} = \hat{\beta}_j^{\text{OLS}} \cdot \mathbf{1}(|\hat{\beta}_j^{\text{OLS}}| > \lambda).
 $$
 
+<div class="codebox" markdown>
+
+**예제 5.** 축소 연산자 그리기
+
 ```python
 def plot_shrinkage_operators(lam=1.0):
+    """정규직교 설계에서 세 축소 연산자가 최소제곱 추정값을 어떻게 바꾸는지 그린다.
+
+    설계행렬이 정규직교이면 세 방법의 해가 최소제곱 추정값의 간단한 함수로
+    나온다. 능형은 일정 비율로 줄이고(직선), 라쏘는 일정 크기만큼 깎아
+    작은 값은 0 으로 보내며(꺾인 직선), 경성 문턱은 문턱 아래를 통째로
+    0 으로 만든다(계단).
+    """
     z = np.linspace(-4, 4, 500)
     ridge = z / (1 + lam)
     lasso = np.sign(z) * np.maximum(np.abs(z) - lam, 0)
@@ -182,6 +227,8 @@ def plot_shrinkage_operators(lam=1.0):
 
 plot_shrinkage_operators()
 ```
+
+</div>
 
 ![직교설계에서의 축소 연산자](./img/reg_compare_160.png)
 

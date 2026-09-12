@@ -59,6 +59,10 @@ PLS는 다음과 같은 상황에서 PCR을 능가하는 경향이 있다.
 
 ## 코드: 자료 적재와 OLS 기준선
 
+<div class="codebox" markdown>
+
+**예제 1.** 주택 자료와 최소제곱 기준선
+
 ```python
 import numpy as np
 import pandas as pd
@@ -70,6 +74,8 @@ url = ("https://raw.githubusercontent.com/gedeck/"
        "practical-statistics-for-data-scientists/master/data/house_sales.csv")
 house = pd.read_csv(url, sep='\t')
 
+# 수치형 변수만 쓴다. 주성분은 분산을 기준으로 방향을 찾으므로
+# 범주형 가변수를 섞으면 뜻이 흐려진다.
 numeric_features = [
     'SqFtTotLiving', 'SqFtLot', 'Bathrooms', 'Bedrooms',
     'BldgGrade', 'NbrLivingUnits', 'SqFtFinBasement', 'YrBuilt', 'YrRenovated'
@@ -85,12 +91,21 @@ ols_r2 = r2_score(y, ols_model.predict(X_scaled))
 ols_rmse = np.sqrt(mean_squared_error(y, ols_model.predict(X_scaled)))
 ```
 
+</div>
+
 ## 코드: 교차검증을 곁들인 PCR
+
+<div class="codebox" markdown>
+
+**예제 2.** 주성분회귀
 
 ```python
 from sklearn.decomposition import PCA
 from sklearn.model_selection import cross_val_score, KFold
 
+# 주성분회귀(PCR): 먼저 주성분을 뽑고 그중 앞의 M 개로 회귀한다.
+# 주성분은 반응 y 를 전혀 보지 않고 X 의 분산만 보고 정해진다는 점이
+# 아래 PLS 와 갈리는 지점이다.
 pca = PCA()
 X_pca = pca.fit_transform(X_scaled)
 
@@ -100,6 +115,7 @@ cumsum_var = np.cumsum(explained_var)
 kfold = KFold(n_splits=10, shuffle=True, random_state=42)
 pcr_mse_scores = []
 
+# 몇 개의 성분을 쓸지는 교차검증으로 고른다.
 for M in range(1, X_scaled.shape[1] + 1):
     reg = LinearRegression()
     cv_scores = cross_val_score(
@@ -112,6 +128,8 @@ M_opt_pcr = np.argmin(pcr_mse_scores) + 1
 pcr_cv_rmse = np.sqrt(pcr_mse_scores[M_opt_pcr - 1])
 ```
 
+</div>
+
 설명분산의 스크리 그림을 보면 $X$의 변동 대부분을 몇 개의 성분이 포착하는지 가늠할 수 있다.
 
 !!! warning "이 코드의 자료 누설"
@@ -121,9 +139,16 @@ pcr_cv_rmse = np.sqrt(pcr_mse_scores[M_opt_pcr - 1])
 
 ## 코드: 교차검증을 곁들인 PLS
 
+<div class="codebox" markdown>
+
+**예제 3.** 부분최소제곱
+
 ```python
 from sklearn.cross_decomposition import PLSRegression
 
+# 부분최소제곱(PLS): 성분을 찾을 때 y 와의 공분산까지 함께 본다.
+# 그래서 같은 성분 수라면 대개 PCR 보다 낫지만, y 를 보고 방향을 정한
+# 만큼 과적합의 여지도 생긴다.
 pls_mse_scores = []
 for M in range(1, X_scaled.shape[1] + 1):
     pls = PLSRegression(n_components=M)
@@ -137,16 +162,27 @@ M_opt_pls = np.argmin(pls_mse_scores) + 1
 pls_cv_rmse = np.sqrt(pls_mse_scores[M_opt_pls - 1])
 ```
 
+</div>
+
 ## 코드: 비교용 능형회귀
+
+<div class="codebox" markdown>
+
+**예제 4.** 능형회귀와 견주기
 
 ```python
 from sklearn.linear_model import RidgeCV
 
+# 능형회귀와도 견준다. 셋 다 상관된 변수를 다루는 방법이지만, 능형은
+# 변수를 그대로 두고 계수만 줄이는 반면 PCR·PLS 는 변수를 적은 수의
+# 성분으로 갈아 끼운다.
 ridge_cv = RidgeCV(alphas=np.logspace(-2, 5, 100), cv=10)
 ridge_cv.fit(X_scaled, y)
 ridge_r2 = r2_score(y, ridge_cv.predict(X_scaled))
 ridge_rmse = np.sqrt(mean_squared_error(y, ridge_cv.predict(X_scaled)))
 ```
+
+</div>
 
 ## 모형 비교
 

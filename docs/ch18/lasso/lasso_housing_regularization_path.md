@@ -25,6 +25,10 @@ $$
 
 ## 코드: 자료 적재와 준비
 
+<div class="codebox" markdown>
+
+**예제 1.** 주택 자료와 표준화
+
 ```python
 import numpy as np
 import pandas as pd
@@ -35,6 +39,8 @@ url = ("https://raw.githubusercontent.com/gedeck/"
        "practical-statistics-for-data-scientists/master/data/house_sales.csv")
 house = pd.read_csv(url, sep='\t')
 
+# 설명변수를 열한 개로 늘렸다. 범주형(PropertyType)이 섞여 있어 가변수로
+# 바꾸면 열 수가 더 늘어난다. 변수가 많을 때 라쏘가 어떻게 걸러 내는지 본다.
 predictors = [
     'SqFtTotLiving', 'SqFtLot', 'Bathrooms', 'Bedrooms',
     'BldgGrade', 'PropertyType', 'NbrLivingUnits',
@@ -46,16 +52,25 @@ X = pd.get_dummies(house[predictors], drop_first=True)
 X['NewConstruction'] = X['NewConstruction'].astype(int)
 y = house[outcome]
 
+# 벌점회귀에서 표준화는 필수다. 면적(수천 단위)과 욕실 수(한 자리)를
+# 그대로 두면 벌점이 면적 계수에만 사실상 걸리지 않는다.
 scaler = StandardScaler()
 X_scaled = pd.DataFrame(scaler.fit_transform(X), columns=X.columns)
 ```
+
+</div>
 
 $L_1$ 벌점 $\lambda\|\beta\|_1$은 모든 계수를 동등하게 벌하므로 표준화가 필수적이다. 표준화하지
 않으면 단위가 다른 변수들이 서로 다른 정도로 벌을 받게 된다.
 
 ## 코드: OLS 기준선
 
+<div class="codebox" markdown>
+
+**예제 2.** 기준선 — 최소제곱
+
 ```python
+# 기준선이 될 최소제곱. 변수를 하나도 버리지 않으므로 계수가 전부 살아 있다.
 ols_model = LinearRegression().fit(X_scaled, y)
 ols_pred = ols_model.predict(X_scaled)
 
@@ -66,15 +81,23 @@ ols_r2 = r2_score(y, ols_pred)
 n_nonzero_ols = np.sum(np.abs(ols_model.coef_) > 1e-8)
 ```
 
+</div>
+
 OLS는 모든 특성을 0이 아닌 계수로 유지하며, 정칙화하지 않은 기준선 역할을 한다.
 
 ## 코드: 정칙화 경로
 
 로그 등간격 $\lambda$ 100개에 대해 라쏘를 적합하고 각 계수의 변화를 추적한다.
 
+<div class="codebox" markdown>
+
+**예제 3.** 라쏘 정칙화 경로
+
 ```python
 import matplotlib.pyplot as plt
 
+# alpha 를 큰 값에서 작은 값으로 훑으며 계수가 언제 살아나는지 기록한다.
+# sklearn 에서는 벌점 모수의 이름이 lambda 가 아니라 alpha 다.
 alphas = np.logspace(2, -2, 100)
 
 lasso_coefs = []
@@ -87,12 +110,20 @@ lasso_coefs = np.array(lasso_coefs)
 n_features_selected = (np.abs(lasso_coefs) > 1e-8).sum(axis=1)
 ```
 
+</div>
+
 정칙화 경로는 $\lambda$가 작아짐에 따라 특성들이 어떤 순서로 모형에 들어오는지 보여준다. 먼저
 등장하는 특성일수록 강한 예측변수다.
 
 ## 코드: 교차검증으로 람다 선택
 
+<div class="codebox" markdown>
+
+**예제 4.** 교차검증으로 고른 라쏘
+
 ```python
+# LassoCV 가 교차검증으로 alpha 를 스스로 고른다. 격자를 직접 주면
+# 그 안에서만 찾는다.
 lasso_cv = LassoCV(alphas=alphas, cv=5, random_state=42, max_iter=10000)
 lasso_cv.fit(X_scaled, y)
 
@@ -102,11 +133,20 @@ lasso_r2 = r2_score(y, lasso_pred)
 n_nonzero_lasso = np.sum(np.abs(lasso_cv.coef_) > 1e-8)
 ```
 
+</div>
+
 5-겹 교차검증 절차가 각 $\lambda$를 평가하여 평균 MSE가 가장 낮은 값을 고른다.
 
 ## 코드: 모형 비교
 
+<div class="codebox" markdown>
+
+**예제 5.** 능형회귀와 견주기
+
 ```python
+# 같은 자료에 능형회귀를 적용해 견준다. 능형은 계수를 0 으로 만들지
+# 못하므로 변수 수가 줄지 않는다. 예측력이 비슷하다면, 해석이 쉬운
+# 쪽을 고르는 것이 보통이다.
 ridge_cv = RidgeCV(alphas=np.logspace(-2, 5, 100), cv=5)
 ridge_cv.fit(X_scaled, y)
 
@@ -114,6 +154,8 @@ ridge_pred = ridge_cv.predict(X_scaled)
 ridge_rmse = np.sqrt(mean_squared_error(y, ridge_pred))
 ridge_r2 = r2_score(y, ridge_pred)
 ```
+
+</div>
 
 ## 시각화
 

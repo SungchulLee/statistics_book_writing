@@ -122,7 +122,9 @@ $$
 로그정규 위험은 **비단조**다. 처음에 증가했다가 감소한다. 그래서 위험이 중간 시점에 정점을
 이룬 뒤 내려가는 현상(예: 수술 후 회복, 특정 질병의 재발 양상)에 적합하다.
 
-## 구현
+<div class="codebox" markdown>
+
+**예제 1.** 세 모수적 생존모형의 로그가능도
 
 ```python
 import numpy as np
@@ -130,13 +132,22 @@ from scipy.optimize import minimize
 from scipy.stats import norm
 
 def neg_loglik_exponential(lam, times, events):
-    """Negative log-likelihood for the exponential model."""
+    """지수모형의 음의 로그가능도.
+
+    위험함수가 시간에 관계없이 일정하다고 본다. 가장 단순한 모형이라
+    사건 수와 총 관찰시간만 있으면 되고, MLE 도 그 비로 바로 나온다.
+    """
     d = events.sum()
     total_time = times.sum()
     return -(d * np.log(lam) - lam * total_time)
 
 def neg_loglik_weibull(params, times, events):
-    """Negative log-likelihood for the Weibull model."""
+    """와이불모형의 음의 로그가능도.
+
+    모양모수 k 가 위험함수의 방향을 정한다. k>1 이면 시간이 갈수록 위험이
+    커지고(마모), k<1 이면 작아지며(초기 결함), k=1 이면 지수모형이 된다.
+    지수모형을 특수한 경우로 품고 있는 셈이다.
+    """
     k, lam = params
     d = events.sum()
     ll = (d * np.log(k)
@@ -146,15 +157,24 @@ def neg_loglik_weibull(params, times, events):
     return -ll
 
 def neg_loglik_lognormal(params, times, events):
-    """Negative log-likelihood for the log-normal model."""
+    """로그정규모형의 음의 로그가능도.
+
+    위험함수가 올랐다가 다시 내려가는 모양이 된다. 수술 직후 위험이 높다가
+    회복하면서 낮아지는 자료처럼, 와이불로는 담기 어려운 경우에 쓴다.
+    """
     mu, sigma = params
+    # 1e-15 를 더하는 것은 시각이 0 일 때 로그가 발산하는 것을 막기 위함이다.
     z = (np.log(times + 1e-15) - mu) / sigma
+    # 사건이 관측된 사람은 밀도함수를, 중도절단된 사람은 생존함수(logsf)를
+    # 기여한다. 중도절단 자료를 다루는 가능도의 일반적인 꼴이다.
     ll = np.sum(
         events * norm.logpdf(z) - events * np.log(sigma * times + 1e-15)
         + (1 - events) * norm.logsf(z)
     )
     return -ll
 ```
+
+</div>
 
 각 함수는 표준 최소화 루틴을 쓸 수 있도록 음의 로그가능도를 계산한다. 사건 지시자
 `events[i]`는 관측된 사건이면 1, 절단이면 0이다. 절단된 대상은 생존함수 항 $\ln S(t_i)$을

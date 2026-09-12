@@ -46,31 +46,58 @@ $$
 
 ## 코드: 기본 시연
 
-다음 스크립트는 표본자료를 생성한다. 완전한 구현이라면 여기에서 두 벌점을 모두 갖는 좌표하강
-적합으로 확장하게 된다.
+서로 거의 같은 설명변수 셋을 만들어 놓고 라쏘와 엘라스틱넷을 나란히 적합한다. 두 방법이
+갈리는 자리가 어디인지 계수를 직접 보는 것이 목적이다.
+
+<div class="codebox" markdown>
+
+**예제 1.** 라쏘와 엘라스틱넷의 집단 선택
 
 ```python
 import numpy as np
-from scipy import stats
-import matplotlib.pyplot as plt
+from sklearn.linear_model import ElasticNet, Lasso
 
-np.random.seed(42)
+rng = np.random.default_rng(42)
 
+# 서로 거의 같은 설명변수 셋(x0, x1, x2)을 일부러 만든다. 라쏘는 이런 집단에서
+# 하나만 남기고 나머지를 0으로 보내지만, 엘라스틱넷은 셋을 함께 살린다.
 n = 100
-data = np.random.normal(loc=0, scale=1, size=n)
+z = rng.normal(size=n)
+X = np.column_stack([
+    z + rng.normal(0, 0.05, n),      # x0
+    z + rng.normal(0, 0.05, n),      # x1
+    z + rng.normal(0, 0.05, n),      # x2
+    rng.normal(size=(n, 3)),         # x3, x4, x5 — 잡음 변수
+])
+y = 3 * z + rng.normal(0, 1, n)
 
-print(f"Sample size: {n}")
-print(f"Sample mean: {data.mean():.4f}")
-print(f"Sample std:  {data.std(ddof=1):.4f}")
+# l1_ratio 는 두 벌점의 배합비다. 1 이면 순수 라쏘, 0 이면 순수 능형이다.
+lasso = Lasso(alpha=0.5).fit(X, y)
+enet = ElasticNet(alpha=0.5, l1_ratio=0.5).fit(X, y)
+
+print("계수 (x0~x2 가 서로 거의 같은 변수):")
+print(f"  라쏘      : {np.round(lasso.coef_, 3)}")
+print(f"  엘라스틱넷: {np.round(enet.coef_, 3)}")
+# 두 방법 모두 잡음 변수는 0 으로 보낸다. 갈리는 곳은 x0~x2 안에서다.
+# 라쏘는 셋에 제멋대로 나누어 주고, 엘라스틱넷은 거의 똑같이 나누어 준다.
+# 이 고르기가 곧 집단 선택이며, 능형 벌점이 하는 일이다.
+print(f"x0~x2 계수의 표준편차 — 라쏘 {lasso.coef_[:3].std():.3f}, "
+      f"엘라스틱넷 {enet.coef_[:3].std():.3f}")
 ```
 
 출력:
 
 ```
-Sample size: 100
-Sample mean: -0.1038
-Sample std:  0.9082
+계수 (x0~x2 가 서로 거의 같은 변수):
+  라쏘      : [ 0.505  0.555  0.941  0.    -0.    -0.   ]
+  엘라스틱넷: [ 0.705  0.707  0.71  -0.    -0.    -0.   ]
+x0~x2 계수의 표준편차 — 라쏘 0.195, 엘라스틱넷 0.002
 ```
+
+</div>
+
+라쏘는 세 변수에 계수를 제멋대로 나누어 주었고, 엘라스틱넷은 거의 똑같이 나누어 주었다.
+능형 벌점이 계수를 서로 끌어당기기 때문이며, 이를 집단 선택이라 한다.
 
 실무에서는 `sklearn.linear_model.ElasticNetCV`로 $\lambda$와 $\alpha$를 교차검증으로 함께
 고른다.

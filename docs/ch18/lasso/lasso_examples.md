@@ -35,11 +35,20 @@ $$
 
 다음은 순환 좌표하강으로 라쏘를 푸는 순수 NumPy 구현이다.
 
+<div class="codebox" markdown>
+
+**예제 1.** 좌표하강으로 라쏘 풀기
+
 ```python
 import numpy as np
 
 def soft_threshold(rho, lam):
-    """Soft-thresholding operator for coordinate descent."""
+    """연성 문턱 연산자. 좌표하강의 갱신식에 쓰인다.
+
+    |rho| 가 lam 보다 작으면 0 으로 보내고, 크면 그만큼 깎아 0 쪽으로 당긴다.
+    라쏘가 계수를 정확히 0 으로 만들 수 있는 까닭이 이 평평한 구간에 있다.
+    능형의 갱신식에는 이런 구간이 없어 0 이 될 수 없다.
+    """
     if rho > lam:
         return rho - lam
     elif rho < -lam:
@@ -47,24 +56,29 @@ def soft_threshold(rho, lam):
     return 0.0
 
 def lasso_cd(X, y, lam, max_iter=1000, tol=1e-6):
-    """
-    Lasso regression via coordinate descent.
+    """좌표하강으로 라쏘를 푼다.
 
-    Parameters
+    L1 벌점은 0 에서 미분이 되지 않아 정규방정식 같은 닫힌 해가 없다.
+    대신 계수를 하나씩 돌아가며 나머지를 고정한 채 최적화하면, 각 단계가
+    연성 문턱 한 줄로 끝난다. 라쏘의 표준적인 푸는 법이다.
+
+    매개변수
+    --------
+    X   : (n, p) 설계행렬. 미리 표준화해야 한다.
+    y   : (n,)   반응벡터
+    lam : L1 벌점 모수
+
+    돌려주는 값
     ----------
-    X   : (n, p) design matrix (should be standardised).
-    y   : (n,)   response vector.
-    lam : float  L1 penalty parameter.
-
-    Returns
-    -------
-    beta : (p,) coefficient vector.
+    beta : (p,) 계수벡터
     """
     n, p = X.shape
     beta = np.zeros(p)
     for _ in range(max_iter):
         beta_old = beta.copy()
         for j in range(p):
+            # j 번째 변수의 몫만 되살린 부분잔차. 나머지 변수의 설명은
+            # 이미 빼 놓은 상태이므로, 여기에 j 만 단순회귀하는 셈이 된다.
             r_j = y - X @ beta + X[:, j] * beta[j]
             rho_j = X[:, j] @ r_j / n
             beta[j] = soft_threshold(rho_j, lam)
@@ -73,6 +87,8 @@ def lasso_cd(X, y, lam, max_iter=1000, tol=1e-6):
     return beta
 ```
 
+</div>
+
 각 단계에서 알고리즘은 부분잔차 $r_j = y - X\beta + X_j \beta_j$를 계산하고, 일변량
 최소제곱 기울기 $\rho_j = X_j^\top r_j / n$을 구한 뒤 연성 문턱을 적용한다.
 
@@ -80,9 +96,18 @@ def lasso_cd(X, y, lam, max_iter=1000, tol=1e-6):
 
 $\lambda$ 격자를 큰 값에서 작은 값으로 훑으면 계수들이 어떤 순서로 모형에 들어오는지 볼 수 있다.
 
+<div class="codebox" markdown>
+
+**예제 2.** 계수 경로 구하기
+
 ```python
 def lasso_path(X, y, lambdas):
-    """Compute coefficient path over a grid of lambda values."""
+    """lambda 격자 위에서 계수 경로를 구한다.
+
+    lambda 를 크게 잡으면 모든 계수가 0 이고, 줄여 갈수록 하나씩 살아난다.
+    먼저 살아나는 변수가 그만큼 중요하다는 뜻이라, 경로 그림 자체가
+    변수 선택의 이야기를 담는다.
+    """
     coefs = []
     for lam in lambdas:
         beta = lasso_cd(X, y, lam)
@@ -90,13 +115,23 @@ def lasso_path(X, y, lambdas):
     return np.array(coefs)
 ```
 
+</div>
+
 ## 코드: 교차검증으로 람다 선택
 
 5-겹 교차검증으로 각 후보 $\lambda$의 예측오차를 추정한다.
 
+<div class="codebox" markdown>
+
+**예제 3.** 교차검증 MSE
+
 ```python
 def cv_lasso(X, y, lambdas, folds=5):
-    """K-fold cross-validated MSE for each lambda."""
+    """lambda 마다 k겹 교차검증 MSE 를 구한다.
+
+    벌점이 강할수록 훈련오차는 반드시 커진다. 그러니 lambda 는 훈련자료가
+    아니라 떼어 놓은 자료에서 재야 고를 수 있다.
+    """
     n = len(y)
     indices = np.arange(n)
     np.random.shuffle(indices)
@@ -115,30 +150,39 @@ def cv_lasso(X, y, lambdas, folds=5):
     return cv_mse / folds
 ```
 
+</div>
+
 ## 코드: 전체 시연
 
 설명변수 10개 중 3개만 실제로 관련 있는 인공자료를 만들어 전체 절차를 돌려 본다.
+
+<div class="codebox" markdown>
+
+**예제 4.** 경로와 교차검증 실행
 
 ```python
 import matplotlib.pyplot as plt
 
 np.random.seed(42)
 
+# 열 변수 중 참으로 쓰이는 것은 앞의 셋뿐이다. 교차검증으로 고른 라쏘가
+# 그 셋을 찾아내는지 보는 것이 목적이다.
 n, p = 150, 10
 X_raw = np.random.randn(n, p)
 beta_true = np.array([4.0, -3.0, 2.0, 0, 0, 0, 0, 0, 0, 0])
 y = X_raw @ beta_true + np.random.randn(n) * 2
 
-# Standardise columns
+# L1 벌점은 계수의 크기를 그대로 재므로, 변수의 단위가 다르면 벌점이
+# 불공평하게 걸린다. 표준화는 선택이 아니라 필수다.
 X_mean = X_raw.mean(axis=0)
 X_std = X_raw.std(axis=0)
 X = (X_raw - X_mean) / X_std
 
-# Regularisation path
+# lambda 격자는 로그 눈금으로 잡는다. 벌점이 곱셈으로 작동하기 때문이다.
 lambdas = np.logspace(1, -2, 60)
 path = lasso_path(X, y, lambdas)
 
-# Cross-validated lambda selection
+# 교차검증으로 lambda 고르기
 lambdas_cv = np.logspace(1, -2, 30)
 mse_cv = cv_lasso(X, y, lambdas_cv)
 best_idx = int(np.argmin(mse_cv))
@@ -159,6 +203,8 @@ Best lambda (5-fold CV):  0.2212
 Non-zero coefficients:    3  (true: 3)
 Min CV MSE:               4.774
 ```
+
+</div>
 
 실행하면 $\hat{\lambda} = 0.2212$, 0이 아닌 계수 3개(참값도 3개), 최소 CV MSE $4.774$를 얻는다.
 추정된 계수는 $(3.546,\, -2.912,\, 1.643,\, 0, \dots, 0)$으로, 참값 $(4, -3, 2, 0, \dots, 0)$을

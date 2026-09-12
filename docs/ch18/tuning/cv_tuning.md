@@ -48,31 +48,68 @@ $$
 
 ## 코드: 기본 교차검증 시연
 
+<div class="codebox" markdown>
+
+**예제 1.** 교차검증과 1-표준오차 규칙
+
 ```python
 import numpy as np
-from scipy import stats
-import matplotlib.pyplot as plt
+from sklearn.linear_model import Lasso
+from sklearn.model_selection import KFold
 
-np.random.seed(42)
+rng = np.random.default_rng(42)
 
-n = 100
-data = np.random.normal(loc=0, scale=1, size=n)
+# 참으로 쓰이는 변수는 앞의 셋뿐이고 나머지 열일곱은 잡음이다.
+n, p = 100, 20
+X = rng.normal(size=(n, p))
+beta_true = np.zeros(p)
+beta_true[:3] = [3.0, -2.0, 1.5]
+y = X @ beta_true + rng.normal(0, 1, n)
 
-print(f"Sample size: {n}")
-print(f"Sample mean: {data.mean():.4f}")
-print(f"Sample std:  {data.std(ddof=1):.4f}")
+# lambda 격자는 로그 눈금으로 잡는다. 벌점의 효과가 곱셈으로 작동하므로
+# 등간격보다 등비간격이 알맞다.
+lambdas = np.logspace(0.5, -2.5, 25)
+
+kf = KFold(n_splits=5, shuffle=True, random_state=0)
+
+# 겹마다의 MSE 를 따로 남긴다. 평균만 구하면 1-표준오차 규칙을 쓸 수 없다.
+fold_mse = np.zeros((5, len(lambdas)))
+for k, (tr, va) in enumerate(kf.split(X)):
+    for i, lam in enumerate(lambdas):
+        model = Lasso(alpha=lam, max_iter=10000).fit(X[tr], y[tr])
+        fold_mse[k, i] = np.mean((y[va] - model.predict(X[va])) ** 2)
+
+cv_mean = fold_mse.mean(axis=0)
+cv_se = fold_mse.std(axis=0, ddof=1) / np.sqrt(5)
+
+i_min = int(np.argmin(cv_mean))
+
+# 1-표준오차 규칙: 최솟값에서 1 표준오차 안에 드는 lambda 중 가장 큰 것을
+# 고른다. CV 곡선의 최소점은 그 자체가 흔들리는 추정값이므로, 조금 더
+# 단순한 모형 쪽으로 물러서는 편이 안전하다는 생각이다.
+threshold = cv_mean[i_min] + cv_se[i_min]
+i_1se = int(np.where(cv_mean <= threshold)[0][0])
+
+for name, i in [("최소 CV", i_min), ("1-표준오차", i_1se)]:
+    beta = Lasso(alpha=lambdas[i], max_iter=10000).fit(X, y).coef_
+    print(f"{name:>10}: lambda = {lambdas[i]:.4f}, "
+          f"CV MSE = {cv_mean[i]:.3f} (SE {cv_se[i]:.3f}), "
+          f"0 이 아닌 계수 = {np.sum(np.abs(beta) > 1e-8)}개")
+print("참으로 0 이 아닌 계수: 3개")
 ```
 
 출력:
 
 ```
-Sample size: 100
-Sample mean: -0.1038
-Sample std:  0.9082
+     최소 CV: lambda = 0.1000, CV MSE = 1.001 (SE 0.044), 0 이 아닌 계수 = 9개
+    1-표준오차: lambda = 0.1778, CV MSE = 1.038 (SE 0.083), 0 이 아닌 계수 = 5개
+참으로 0 이 아닌 계수: 3개
 ```
 
-완전한 구현에서는 자료를 겹으로 나누고, $\lambda$ 격자 위를 순회하며, 각 (겹, $\lambda$) 조합의
-MSE를 기록한다.
+</div>
+
+최소 CV 규칙은 잡음 변수를 여섯 개나 남겼지만, 1-표준오차 규칙은 다섯 개만 남겼다.
+참으로 쓰인 변수가 셋임을 생각하면 뒤쪽이 더 나은 선택이다.
 
 ## 1-표준오차 규칙
 

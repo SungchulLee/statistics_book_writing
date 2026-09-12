@@ -43,34 +43,59 @@ $\lambda$가 크면 분산은 작지만 편향이 크다. 최적의 $\lambda$는
 
 ## 코드: 자료 생성과 능형 적합
 
-다음 스크립트는 정규분포 표본을 생성하고 기본 요약통계량을 출력한다. 실제로는 이 자리에 완전한
-능형회귀 적합을 넣게 된다.
+$\lambda$를 키워 가며 계수가 어떻게 줄어드는지, 그리고 참값과의 거리가 어디에서 가장
+작아지는지를 본다.
+
+<div class="codebox" markdown>
+
+**예제 1.** 람다에 따른 축소와 편향-분산 절충
 
 ```python
 import numpy as np
-from scipy import stats
-import matplotlib.pyplot as plt
+from sklearn.linear_model import LinearRegression, Ridge
 
-np.random.seed(42)
+rng = np.random.default_rng(42)
 
-n = 100
-data = np.random.normal(loc=0, scale=1, size=n)
+# 설명변수 20개 중 참으로 쓰이는 것은 앞의 셋뿐이다. 관측은 40개로 변수 수에
+# 비해 적어, 최소제곱이 잡음까지 따라가기 좋은 상황이다.
+n, p = 40, 20
+X = rng.normal(size=(n, p))
+beta_true = np.zeros(p)
+beta_true[:3] = [3.0, -2.0, 1.5]
+y = X @ beta_true + rng.normal(0, 1, n)
 
-print(f"Sample size: {n}")
-print(f"Sample mean: {data.mean():.4f}")
-print(f"Sample std:  {data.std(ddof=1):.4f}")
+ols = LinearRegression().fit(X, y)
+
+# lambda 를 키울수록 계수가 0 쪽으로 줄어든다. 라쏘와 달리 정확히 0 이 되지는
+# 않고 작아지기만 한다. 그래서 능형은 변수를 고르지 못한다.
+print(f"{'lambda':>8}  {'계수의 L2 크기':>14}  {'참값과의 거리':>14}")
+print(f"{0.0:>8.1f}  {np.linalg.norm(ols.coef_):>14.3f}  "
+      f"{np.linalg.norm(ols.coef_ - beta_true):>14.3f}")
+for lam in [0.1, 1.0, 10.0, 100.0]:
+    ridge = Ridge(alpha=lam).fit(X, y)
+    print(f"{lam:>8.1f}  {np.linalg.norm(ridge.coef_):>14.3f}  "
+          f"{np.linalg.norm(ridge.coef_ - beta_true):>14.3f}")
+
+# 참값과의 거리가 lambda=0 일 때보다 중간 어딘가에서 작아진다. 편향을 조금
+# 받아들이는 대가로 분산을 크게 줄인 결과이며, 이것이 편향-분산 절충이다.
 ```
 
 출력:
 
 ```
-Sample size: 100
-Sample mean: -0.1038
-Sample std:  0.9082
+  lambda       계수의 L2 크기         참값과의 거리
+     0.0           4.202           1.081
+     0.1           4.169           1.048
+     1.0           3.929           0.880
+    10.0           2.891           1.404
+   100.0           1.091           3.026
 ```
 
-완전한 구현에서는 $X$와 $y$를 구성하고, 설명변수를 표준화한 뒤, $\lambda$ 격자 위에서
-$\hat{\beta}^{\text{ridge}}$를 구한다.
+</div>
+
+$\lambda = 0$인 최소제곱보다 $\lambda = 1$쪽이 참값에 더 가깝다. 편향을 조금 받아들이는
+대가로 분산을 크게 줄인 결과이며, 이것이 편향-분산 절충이다. 다만 $\lambda$를 더 키우면
+편향이 커져 다시 멀어진다.
 
 ## 표준화
 
