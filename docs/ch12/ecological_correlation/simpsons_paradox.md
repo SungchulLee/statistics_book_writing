@@ -134,7 +134,7 @@ Simpson의 역설은 **교란**이 드러난 형태이다. 교란변수 $Z$가 �
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 두 집단을 합쳤을 때 경향이 뒤집히는 모의 자료를 만들어라:
 
 1. 집단 A 생성: $x \sim U(0, 5)$, $y = -0.5x + 10 + \epsilon$
@@ -156,7 +156,7 @@ Simpson의 역설은 **교란**이 드러난 형태이다. 교란변수 $Z$가 �
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 UC 버클리 입학 자료를 써서 다음을 계산하라:
 
 1. 남성과 여성의 전체 합격률

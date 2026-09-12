@@ -153,7 +153,7 @@ Overall female admission rate: 30.33%
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 50개국에 대한 연구에서 국가 평균 소득과 국가 평균 기대수명의 상관이 $r = 0.78$이었다. 돈을 더 버는 특정 개인이 더 오래 산다고 결론짓는 것이 왜 틀렸는지 설명하라.
 
 </div>
@@ -165,7 +165,7 @@ Overall female admission rate: 30.33%
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 (집단 수준의) 생태학적 상관은 양수인데 모든 집단 안의 개인 수준 상관은 음수인 가상의 예를 구성하라.
 
 </div>
@@ -182,7 +182,7 @@ Overall female admission rate: 30.33%
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 자료를 더 높은 수준으로(예: 개인에서 카운티로) 집계하면 왜 대체로 관측되는 상관의 크기가 커지는지 설명하라. 이 효과를 이끄는 수학적 성질은 무엇인가?
 
 </div>

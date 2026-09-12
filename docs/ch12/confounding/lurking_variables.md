@@ -104,7 +104,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 아이스크림 판매량과 익사 사망은 양의 상관을 보인다. 잠복변수를 밝히고 인과 구조를 설명하라.
 
 </div>
@@ -118,7 +118,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff easy" title="쉬움"></span>
 어떤 연구가 화재 현장의 소방관 수와 피해액 사이에 강한 양의 상관을 발견했다. 시는 화재에 보내는 소방관 수를 줄여야 하는가?
 
 </div>
@@ -132,7 +132,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 Simpson의 역설을 정의하고, 잠복변수로 조건화한 뒤 연관의 방향이 뒤집히는 구체적인 예를 들어라.
 
 </div>
@@ -149,7 +149,7 @@ Simpson의 역설을 정의하고, 잠복변수로 조건화한 뒤 연관의 �
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 급여를 경력 연수에 회귀했더니 계수가 양수였다. "부서"를 통제변수로 넣자 경력의 계수가 음수가 되었다. 어떻게 이런 일이 가능하며 어느 결과가 더 믿을 만한지 설명하라.
 
 </div>

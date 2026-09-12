@@ -151,7 +151,7 @@ $\text{SNR} \to \infty$이면 $r^2 \to 1$이고, $\text{SNR} \to 0$이면 $r^2 \
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 모집단 상관 공식을 써서 $\beta_2 = 3$, $\sigma = 10$, $X \sim \text{Uniform}(1, 100)$일 때의 이론값 $\rho_{XY}$를 계산하라. 모의값과 비교하라. (힌트: $X \sim \text{Uniform}(a,b)$이면 $\text{Var}(X) = (b-a)^2/12$이다.)
 
 </div>
@@ -192,7 +192,7 @@ $\text{SNR} \to \infty$이면 $r^2 \to 1$이고, $\text{SNR} \to 0$이면 $r^2 \
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 $X \perp \varepsilon$인 $Y = \beta_1 + \beta_2 X + \varepsilon$에 대해, 공분산과 분산의 정의에서 출발하여 $\rho_{XY} = \frac{\beta_2 \sigma_X}{\sqrt{\beta_2^2 \sigma_X^2 + \sigma^2}}$를 유도하라.
 
 </div>
@@ -221,7 +221,7 @@ $X \perp \varepsilon$인 $Y = \beta_1 + \beta_2 X + \varepsilon$에 대해, 공�
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 $\sigma_X$와 $\sigma$가 고정되어 있을 때 $r^2 = 0.5$가 되는(즉 신호가 분산의 정확히 절반을 설명하는) $\beta_2$를 구하라. 답을 $\sigma_X$와 $\sigma$로 표현하라.
 
 </div>
@@ -252,7 +252,7 @@ $\sigma_X$와 $\sigma$가 고정되어 있을 때 $r^2 = 0.5$가 되는(즉 신�
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 행은 서로 다른 기울기($\beta_2 \in \{0.5, 2, 5\}$), 열은 서로 다른 잡음 수준($\sigma \in \{1, 5, 20\}$)에 대응하는 $3 \times 3$ 패널 그림을 만들어라. 각 패널에 표본 $r$를 주석으로 달고 그 패턴을 논하라.
 
 </div>
@@ -301,7 +301,7 @@ $\sigma_X$와 $\sigma$가 고정되어 있을 때 $r^2 = 0.5$가 되는(즉 신�
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 $\text{SNR} = \beta_2^2 \sigma_X^2 / \sigma^2$일 때 $r^2 = \frac{\text{SNR}}{1 + \text{SNR}}$임을 증명하라. 이어서 $\text{SNR} = \frac{r^2}{1 - r^2}$임을 보이고 이 역관계를 해석하라.
 
 </div>

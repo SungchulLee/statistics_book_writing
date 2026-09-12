@@ -52,7 +52,7 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** 아이스크림, 익사, 기온. 월별로 측정한 세 변수를 생각하자:
+**보기 1.** <span class="diff easy" title="쉬움"></span> 아이스크림, 익사, 기온. 월별로 측정한 세 변수를 생각하자:
 
 - $X$: 아이스크림 판매량(천 개)
 - $Y$: 익사 사고 건수
@@ -148,7 +148,7 @@ $X$(아이스크림 판매)와 $Y$(익사 사고)의 상관이 0.719인데, $Z$(
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 세 변수 사이의 상관이 $r_{XY} = 0.80$, $r_{XZ} = 0.90$, $r_{YZ} = 0.85$이다. 부분상관 $r_{XY \cdot Z}$를 계산하라.
 
 </div>
@@ -170,7 +170,7 @@ $X$(아이스크림 판매)와 $Y$(익사 사고)의 상관이 0.719인데, $Z$(
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 부분상관을 선형회귀 잔차로 해석하는 방법을 설명하라.
 
 </div>
@@ -187,7 +187,7 @@ $X$(아이스크림 판매)와 $Y$(익사 사고)의 상관이 0.719인데, $Z$(
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 부분상관 $r_{XY \cdot Z}$가 주변상관 $r_{XY}$와 부호가 반대인 예를 들어라.
 
 </div>
@@ -209,7 +209,7 @@ $X$(아이스크림 판매)와 $Y$(익사 사고)의 상관이 0.719인데, $Z$(
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 주변상관이 0이 아닌데도 부분상관이 0이 되는 것은 언제인가? 이는 $X$와 $Y$의 관계에 대해 무엇을 함의하는가?
 
 </div>

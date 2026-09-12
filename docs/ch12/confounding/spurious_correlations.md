@@ -108,7 +108,7 @@ $Z$로 조건화하면(예: $Z$가 특정 값인 개인만 고르면) $X$와 $Y$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 생존자 편향을 보이는 투자 시나리오를 모의실험하라:
 
 1. 10년 동안 $N(0.05, 0.3)$에서 뽑은 무작위 연수익률을 갖는 "기업" 1000개를 생성한다
@@ -153,7 +153,7 @@ print(f"생존 기업 평균 연수익률: {returns[survived].mean():.4f}")
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 아래 각 상황에서 생존자 편향을 지적하고 어떤 자료가 빠졌는지 설명하라:
 
 1. 어떤 보충제를 먹는 사람이 평균적으로 더 오래 산다는 연구 결과.

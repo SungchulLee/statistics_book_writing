@@ -106,7 +106,7 @@
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 생태학적 오류를 정의하고, 집단에 대한 결론을 개인에게 그대로 적용할 수 없는 이유를 설명하라.
 
 </div>
@@ -120,7 +120,7 @@
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 생태학적 상관은 양수인데 개인 수준 상관은 음수인 수치 예를 구성하라.
 
 </div>
@@ -137,7 +137,7 @@
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 한 신문이 "평균 소득이 높은 주일수록 범죄율이 낮다. 소득이 높아지면 범죄가 줄어든다는 증거이다"라고 보도했다. 생태학적 오류를 지적하고 더 나은 분석을 제안하라.
 
 </div>
@@ -153,7 +153,7 @@
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 "수정 가능한 공간 단위 문제(MAUP)"의 개념을 설명하고 생태학적 오류와 어떻게 관련되는지 밝혀라.
 
 </div>

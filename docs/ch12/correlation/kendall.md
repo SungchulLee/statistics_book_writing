@@ -168,7 +168,7 @@ Kendall의 $\tau = -0.60$이 Spearman의 $r_s = -0.70$보다 0에 가깝다. 우
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 자료 $X = (1, 2, 3, 4, 5)$, $Y = (2, 4, 1, 3, 5)$에 대해 Kendall의 $\tau$를 계산하라.
 
 </div>
@@ -197,7 +197,7 @@ Kendall의 $\tau = -0.60$이 Spearman의 $r_s = -0.70$보다 0에 가깝다. 우
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 둘 다 단조 연관을 재는데도 Kendall의 $\tau$와 Spearman의 $\rho$가 개념적으로 어떻게 다른지 설명하라.
 
 </div>
@@ -211,7 +211,7 @@ Kendall의 $\tau = -0.60$이 Spearman의 $r_s = -0.70$보다 0에 가깝다. 우
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 자료에 이상점이 있거나 관계가 비선형이면서 단조일 때 Pearson의 $r$보다 Kendall의 $\tau$가 선호되는 이유는?
 
 </div>
@@ -227,7 +227,7 @@ Kendall의 $\tau = -0.60$이 Spearman의 $r_s = -0.70$보다 0에 가깝다. 우
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 Kendall의 $\tau$에서 동점은 어떻게 처리하는가? (동점을 조정한 형태인) $\tau_b$의 공식을 진술하라.
 
 </div>

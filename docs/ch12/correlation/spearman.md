@@ -84,7 +84,7 @@ Pearson을 쓸 때:
 
 <div class="exbox" markdown>
 
-**보기 1.** 단조이지만 비선형인 관계. $X = 1, 2, \ldots, 8$에 대해 $Y = e^X$인 관계를 생각하자. 관계가 완전히 단조(증가)이지만 비선형이다. Spearman의 $r_s$는 이를 완벽히 포착하지만 Pearson의 $r$은 $1$보다 작다.
+**보기 1.** <span class="diff easy" title="쉬움"></span> 단조이지만 비선형인 관계. $X = 1, 2, \ldots, 8$에 대해 $Y = e^X$인 관계를 생각하자. 관계가 완전히 단조(증가)이지만 비선형이다. Spearman의 $r_s$는 이를 완벽히 포착하지만 Pearson의 $r$은 $1$보다 작다.
 
 | $x_i$ | $y_i = e^{x_i}$ | $R(x_i)$ | $R(y_i)$ | $d_i$ |
 |:---:|:---:|:---:|:---:|:---:|
@@ -156,7 +156,7 @@ $y = e^x$은 완전한 **단조** 관계지만 선형은 아니다. Spearman은 
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 $X = (10, 20, 30, 40, 50)$과 $Y = (15, 25, 5, 35, 45)$에 대해 Spearman 순위상관을 계산하라.
 
 </div>
@@ -178,7 +178,7 @@ $X = (10, 20, 30, 40, 50)$과 $Y = (15, 25, 5, 35, 45)$에 대해 Spearman 순�
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 Spearman의 $r_s$가 정확히 순위의 Pearson 상관인 이유를 설명하라. 이것이 왜 $r_s$를 이상점에 로버스트하게 만드는가?
 
 </div>
@@ -190,7 +190,7 @@ Spearman의 $r_s$가 정확히 순위의 Pearson 상관인 이유를 설명하�
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff easy" title="쉬움"></span>
 자료: $X = (1, 2, 3, 4, 5)$, $Y = (1, 4, 9, 16, 25)$(즉 $Y = X^2$). Pearson의 $r$과 Spearman의 $r_s$를 계산하라. 왜 다른가?
 
 </div>
@@ -216,7 +216,7 @@ Spearman의 $r_s$가 정확히 순위의 Pearson 상관인 이유를 설명하�
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 어떤 조건에서 Spearman의 $r_s$가 Pearson의 $r$과 정확히 같아지는가?
 
 </div>

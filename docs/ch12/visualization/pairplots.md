@@ -166,7 +166,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 쌍 그림(산점도 행렬)이 무엇을 보여주는지 기술하고, 변수가 4개일 때 무엇을 살펴야 하는지 설명하라.
 
 </div>
@@ -185,7 +185,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff easy" title="쉬움"></span>
 seaborn으로 붓꽃 자료의 쌍 그림을 종에 따라 색을 입혀 그리는 Python 코드를 작성하라.
 
 </div>
@@ -209,7 +209,7 @@ seaborn으로 붓꽃 자료의 쌍 그림을 종에 따라 색을 입혀 그리�
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 변수의 수 $p$가 클 때(예: $p > 10$) 쌍 그림이 왜 오도할 수 있는지 설명하고 대안을 제시하라.
 
 </div>
@@ -229,7 +229,7 @@ seaborn으로 붓꽃 자료의 쌍 그림을 종에 따라 색을 입혀 그리�
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 회귀 맥락에서 쌍 그림으로 다중공선성을 어떻게 시각적으로 탐지할 수 있는가?
 
 </div>

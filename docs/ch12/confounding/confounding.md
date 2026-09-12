@@ -27,7 +27,7 @@
 
 <div class="exbox" markdown>
 
-**보기 1.** 학력과 소득.
+**보기 1.** <span class="diff easy" title="쉬움"></span> 학력과 소득.
 
 - **관측**: 어떤 연구에서 높은 학력과 높은 소득 사이에 강한 상관을 발견했다.
 - **처음의 해석**: 높은 학력이 높은 소득을 일으킨다.
@@ -38,7 +38,7 @@
 
 <div class="exbox" markdown>
 
-**보기 2.** 비타민 섭취와 암 위험.
+**보기 2.** <span class="diff easy" title="쉬움"></span> 비타민 섭취와 암 위험.
 
 - **관측**: 비타민 보충제를 먹는 사람의 암 위험이 낮다.
 - **처음의 해석**: 비타민 보충제가 암 위험을 줄인다.
@@ -49,7 +49,7 @@
 
 <div class="exbox" markdown>
 
-**보기 3.** 커피 소비와 심장질환.
+**보기 3.** <span class="diff easy" title="쉬움"></span> 커피 소비와 심장질환.
 
 - **관측**: 커피를 많이 마시는 것이 심장질환 발생 증가와 상관된다.
 - **처음의 해석**: 커피가 심장질환을 일으킨다.
@@ -60,7 +60,7 @@
 
 <div class="exbox" markdown>
 
-**보기 4.** 운동과 체중 감량.
+**보기 4.** <span class="diff easy" title="쉬움"></span> 운동과 체중 감량.
 
 - **관측**: 규칙적으로 운동하는 사람이 체중을 줄이는 경향이 있다.
 - **처음의 해석**: 운동이 체중 감량을 일으킨다.
@@ -71,7 +71,7 @@
 
 <div class="exbox" markdown>
 
-**보기 5.** 업무 성과와 급여.
+**보기 5.** <span class="diff easy" title="쉬움"></span> 업무 성과와 급여.
 
 - **관측**: 성과가 좋은 직원이 급여를 더 많이 받는다.
 - **처음의 해석**: 좋은 업무 성과가 높은 급여로 이어진다.
@@ -82,7 +82,7 @@
 
 <div class="exbox" markdown>
 
-**보기 6.** 아이스크림 판매와 익사 사고.
+**보기 6.** <span class="diff easy" title="쉬움"></span> 아이스크림 판매와 익사 사고.
 
 - **관측**: 아이스크림 판매가 많을수록 익사 사고가 늘어나는 상관이 있다.
 - **처음의 해석**: 아이스크림을 먹으면 익사 위험이 높아질 수 있다.
@@ -315,7 +315,7 @@ New Correlation with Outliers: 0.6901
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 어떤 연구에서 아이스크림 판매와 익사 사망이 양의 상관($r = 0.85$)을 보였다. 가장 그럴듯한 교란요인을 밝히고 그것이 허위 연관을 만드는 기제를 설명하라.
 
 </div>
@@ -327,7 +327,7 @@ New Correlation with Outliers: 0.6901
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 다중회귀 모형에서 학력 통제변수를 추가하자 건강 결과에 대한 소득의 계수가 $\hat{\beta} = 0.45$에서 $\hat{\beta} = 0.12$로 줄었다. 이 변화를 교란의 관점에서 해석하라.
 
 </div>
@@ -339,7 +339,7 @@ New Correlation with Outliers: 0.6901
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 교란변수와 매개변수의 차이를 설명하라. 회귀모형에 어떤 변수를 넣을지 결정할 때 둘을 구별하는 일이 왜 중요한가?
 
 </div>
@@ -353,7 +353,7 @@ New Correlation with Outliers: 0.6901
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 Simpson의 역설은 집계 자료의 경향이 교란변수로 자료를 나누면 뒤집히는 현상이다. 처치가 둘, 하위집단이 둘일 때 치료 A의 전체 성공률이 더 높지만 모든 하위집단 안에서는 치료 B의 성공률이 더 높은 간단한 수치 예를 구성하라.
 
 </div>

@@ -56,7 +56,7 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** 공부 시간과 시험 점수. 어떤 연구자가 학생 $n = 25$명의 자료를 모아 공부 시간과 시험 점수 사이에 표본상관 $r = 0.45$를 얻었다.
+**보기 1.** <span class="diff easy" title="쉬움"></span> 공부 시간과 시험 점수. 어떤 연구자가 학생 $n = 25$명의 자료를 모아 공부 시간과 시험 점수 사이에 표본상관 $r = 0.45$를 얻었다.
 
 $$
 t = \frac{0.45\sqrt{25 - 2}}{\sqrt{1 - 0.45^2}} = \frac{0.45 \times 4.796}{\sqrt{0.7975}} = \frac{2.158}{0.8931} = 2.417
@@ -184,7 +184,7 @@ scipy의 p-값과 $t = r\sqrt{(n-2)/(1-r^2)}$로 손계산한 값이 일치한�
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 단조이지만 비선형인 관계의 자료를 생성하라:
 
 $$
@@ -202,7 +202,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 나이–소득 자료를 쓴다:
 
 ```python
@@ -257,7 +257,7 @@ Kendall   coef = 0.6727  p = 3.106e-03   (이상점 추가 후)
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 참 $\rho = 0.3$일 때:
 
 1. $n \in \{10, 30, 100, 500, 1000\}$인 이변량 정규 표본을 생성하라

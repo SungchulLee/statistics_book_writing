@@ -59,7 +59,7 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** 체질량과 대사율. 어떤 생물학자가 동물 12마리를 체질량($X$)과 대사율($Y$)로 순위를 매겨 $r_s = 0.72$를 얻었다.
+**보기 1.** <span class="diff easy" title="쉬움"></span> 체질량과 대사율. 어떤 생물학자가 동물 12마리를 체질량($X$)과 대사율($Y$)로 순위를 매겨 $r_s = 0.72$를 얻었다.
 
 $$
 t = 0.72 \sqrt{\frac{12 - 2}{1 - 0.72^2}} = 0.72 \sqrt{\frac{10}{0.4816}} = 0.72 \times 4.557 = 3.281
@@ -141,7 +141,7 @@ scipy의 p-값과 $t$ 근사로 손계산한 값이 소수점 넷째 자리까�
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 $n = 20$인 표본에서 얻은 Spearman의 $r_s = 0.55$가 $\alpha = 0.05$에서 0과 유의하게 다른지 검정하라.
 
 </div>
@@ -157,7 +157,7 @@ $n = 20$인 표본에서 얻은 Spearman의 $r_s = 0.55$가 $\alpha = 0.05$에�
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 Spearman 검정의 t-분포 근사가 $n$이 클 때 더 정확한 이유를 설명하라. 작은 $n$에 대한 정확검정은 무엇인가?
 
 </div>
@@ -171,7 +171,7 @@ Spearman 검정의 t-분포 근사가 $n$이 클 때 더 정확한 이유를 설
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 50개국 자료에서 1인당 GDP 순위와 기대수명 순위 사이의 Spearman $r_s = 0.72$를 얻었다. 모집단 $\rho_s$에 대한 근사 95% 신뢰구간을 만들어라.
 
 </div>
@@ -196,7 +196,7 @@ Spearman 검정의 t-분포 근사가 $n$이 클 때 더 정확한 이유를 설
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 Spearman 검정이 Pearson 상관 검정보다 선호되는 것은 언제인가? 세 가지 상황을 들어라.
 
 </div>

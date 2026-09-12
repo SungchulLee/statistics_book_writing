@@ -95,7 +95,7 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** Kendall 타우의 검정. [Kendall의 타우](../correlation/kendall.md) 절에서 $n = 5$일 때 $S = C - D = 3 - 7 = -4$를 계산했던 다섯 관측값을 생각하자.
+**보기 1.** <span class="diff easy" title="쉬움"></span> Kendall 타우의 검정. [Kendall의 타우](../correlation/kendall.md) 절에서 $n = 5$일 때 $S = C - D = 3 - 7 = -4$를 계산했던 다섯 관측값을 생각하자.
 
 정규근사를 쓰면
 
@@ -172,7 +172,7 @@ $n = 5$에서는 정규근사가 통하지 않기 때문이다. scipy는 표본�
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 $n = 8$인 관측값에서 Kendall의 $\tau = 0.43$일 때 정규근사로 $\alpha = 0.05$에서 $H_0: \tau = 0$을 검정하라.
 
 </div>
@@ -196,7 +196,7 @@ $n = 8$인 관측값에서 Kendall의 $\tau = 0.43$일 때 정규근사로 $\alp
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 $H_0$ 아래에서 Kendall $\tau$의 정확분포가 왜 분포에 의존하지 않는지 설명하고 어떻게 계산할 수 있는지 기술하라.
 
 </div>
@@ -208,7 +208,7 @@ $H_0$ 아래에서 Kendall $\tau$의 정확분포가 왜 분포에 의존하지 
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 단조 연관 탐지에서 Kendall $\tau$ 검정과 Spearman $\rho$ 검정의 검정력을 비교하라. 대체로 어느 쪽이 더 강력한가?
 
 </div>
@@ -222,7 +222,7 @@ $H_0$ 아래에서 Kendall $\tau$의 정확분포가 왜 분포에 의존하지 
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 어떤 연구자가 $n = 200$에서 Kendall의 $\tau = -0.12$와 $p = 0.03$을 얻었다. 통계적 유의성과 실질적 유의성의 관점에서 이 결과를 해석하라.
 
 </div>

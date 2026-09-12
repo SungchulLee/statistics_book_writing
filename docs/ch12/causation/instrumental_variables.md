@@ -126,7 +126,7 @@ IV 방법은 (모든 교란요인의 측정을 요구하는) 관찰연구와 (�
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 관측되지 않은 교란요인 $U$가 있을 때 $X$가 $Y$에 미치는 인과효과를 식별하기 위해 도구변수 $Z$가 만족해야 하는 두 핵심 조건을 진술하라.
 
 </div>
@@ -144,7 +144,7 @@ IV 방법은 (모든 교란요인의 측정을 요구하는) 관찰연구와 (�
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 교육의 수익에 관한 고전적 예에서 태어난 분기를 교육 연수의 도구로 써서 소득에 대한 인과효과를 추정한다. 태어난 분기가 관련성 조건을 만족하는 이유를 설명하고 배제 제약이 그럴듯한지 논하라.
 
 </div>
@@ -162,7 +162,7 @@ IV 방법은 (모든 교란요인의 측정을 요구하는) 관찰연구와 (�
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 "약한 도구" 문제를 설명하고 그것이 IV 추정에 왜 중요한지 밝혀라.
 
 </div>
@@ -180,7 +180,7 @@ IV 방법은 (모든 교란요인의 측정을 요구하는) 관찰연구와 (�
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 ($U$가 관측되지 않을 때) $U \to X$, $U \to Y$가 있는 DAG $Z \to X \to Y$를 써서 IV 추정량은 인과효과를 식별하지만 OLS는 그러지 못하는 이유를 그래프로 설명하라.
 
 </div>

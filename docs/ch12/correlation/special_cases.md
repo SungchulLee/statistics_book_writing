@@ -103,7 +103,7 @@ $H_0\!: \phi = 0$을 검정하는 것은 $2 \times 2$ 표의 카이제곱 독립
 
 <div class="exbox" markdown>
 
-**보기 1.** 점이연 상관. 어떤 연구자가 학생 10명을 스터디 그룹($X = 1$) 또는 무개입($X = 0$)에 배정하고 시험 점수를 기록했다:
+**보기 1.** <span class="diff easy" title="쉬움"></span> 점이연 상관. 어떤 연구자가 학생 10명을 스터디 그룹($X = 1$) 또는 무개입($X = 0$)에 배정하고 시험 점수를 기록했다:
 
 | 집단 ($X$) | 점수 ($Y$) |
 |:---:|:---|
@@ -122,7 +122,7 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 2.** 파이 계수. 어떤 조사가 200명에게 운동 습관($X$: 규칙적으로 운동함)과 수면의 질($Y$: 잘 잔다고 보고함)을 물었다:
+**보기 2.** <span class="diff easy" title="쉬움"></span> 파이 계수. 어떤 조사가 200명에게 운동 습관($X$: 규칙적으로 운동함)과 수면의 질($Y$: 잘 잔다고 보고함)을 물었다:
 
 |  | 잘 잠 ($Y=1$) | 못 잠 ($Y=0$) | 합계 |
 |:---:|:---:|:---:|:---:|
@@ -191,7 +191,7 @@ Phi coefficient  = 0.3015
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 성별(0 = 여성, 1 = 남성)과 시험 점수 사이의 점이연 상관을 계산하라. 자료는 여성 $\{78, 82, 85, 88\}$, 남성 $\{90, 92, 88, 95\}$이다.
 
 </div>
@@ -219,7 +219,7 @@ Phi coefficient  = 0.3015
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 점이연 상관이 이진 변수와 연속형 변수 사이의 Pearson 상관과 동등함을 보여라.
 
 </div>
@@ -241,7 +241,7 @@ Phi coefficient  = 0.3015
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff easy" title="쉬움"></span>
 다음 $2 \times 2$ 표에 대해 파이 계수를 계산하라:
 
 |  | 합격 | 불합격 |
@@ -266,7 +266,7 @@ Phi coefficient  = 0.3015
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 $2 \times 2$ 표에서 파이 계수와 카이제곱 검정통계량의 관계를 설명하라. 하나로부터 다른 하나를 어떻게 얻는가?
 
 </div>

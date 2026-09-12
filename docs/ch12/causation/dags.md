@@ -97,7 +97,7 @@ Pearl이 도입한 $\text{do}(\cdot)$ 표기는 개입 분포($X$를 어떤 값�
 
 <div class="exbox" markdown>
 
-**보기 1.** 뒷문 기준의 적용. 다음 DAG를 생각하자:
+**보기 1.** <span class="diff easy" title="쉬움"></span> 뒷문 기준의 적용. 다음 DAG를 생각하자:
 
 $$
 Z \rightarrow X \rightarrow Y, \quad Z \rightarrow Y
@@ -152,7 +152,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 다음 인과 구조를 나타내는 DAG를 그려라: 흡연이 폐암을 일으키고, 흡연이 치아 착색을 일으키며, 폐암은 치아 착색을 일으키지 않는다. 흡연–폐암 관계에서 치아 착색이 교란요인인지, 매개자인지, 충돌자인지 밝혀라.
 
 </div>
@@ -166,7 +166,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 DAG $X \to Z \to Y$에서 $Z$가 매개자인 이유와, $Z$로 조건화하면 $X$와 $Y$의 연관이 어떻게 되는지 설명하라.
 
 </div>
@@ -180,7 +180,7 @@ DAG $X \to Z \to Y$에서 $Z$가 매개자인 이유와, $Z$로 조건화하면 
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 DAG $X \to Z \leftarrow Y$를 생각하자. $Z$가 충돌자인 이유와 $Z$로 조건화할 때 생기는 역설적인 효과를 설명하라.
 
 </div>
@@ -194,7 +194,7 @@ DAG $X \to Z \leftarrow Y$를 생각하자. $Z$가 충돌자인 이유와 $Z$로
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 $U$가 관측되지 않을 때 $U \to X$, $U \to Y$, $X \to Y$인 DAG에서 교란 문제를 설명하고 $X$가 $Y$에 미치는 인과효과를 식별하기 위한 뒷문 기준을 진술하라.
 
 </div>

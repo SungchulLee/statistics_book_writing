@@ -163,7 +163,7 @@ SciPy r = 0.9996, p-value = 0.000000
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 키–몸무게 자료를 써서 다음 각각에 대해 Pearson 상관계수를 계산하라:
 
 1. 남성만
@@ -205,7 +205,7 @@ All     n = 507   r = 0.7173
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 $\rho \in \{-0.99, -0.8, -0.5, 0, 0.5, 0.8, 0.99\}$에 대해 이변량 정규 표본을 생성하여 한 행의 부분그림들에 표시하는 함수를 작성하라. 각 부분그림의 제목에 표본 Pearson $r$도 출력하라.
 
 </div>
@@ -216,7 +216,7 @@ $\rho \in \{-0.99, -0.8, -0.5, 0, 0.5, 0.8, 0.99\}$에 대해 이변량 정규 �
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 `scipy`를 쓰거나 직접 Anscombe의 사중주를 재현하라. 네 자료 각각에 대해 Pearson $r$을 계산하고, 산점도 패턴이 아주 다른데도 값이 거의 같음을 확인하라.
 
 ```python

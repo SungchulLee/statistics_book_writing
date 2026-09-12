@@ -138,7 +138,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 $r_{12} = 0.9$, $r_{13} = -0.7$, $r_{14} = 0$, $r_{23} = -0.5$, $r_{24} = 0.3$, $r_{34} = -0.2$인 $4 \times 4$ 상관행렬을 손으로 만들어라. 타원 함수로 그리고 타원 모양이 예상과 맞는지 눈으로 확인하라.
 
 </div>
@@ -174,7 +174,7 @@ $r_{12} = 0.9$, $r_{13} = -0.7$, $r_{14} = 0$, $r_{23} = -0.5$, $r_{24} = 0.3$, 
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 행렬 $\begin{pmatrix} 1 & 0.9 \\ 0.9 & 1 \end{pmatrix}$은 타당한 상관행렬이지만 $\begin{pmatrix} 1 & 1.2 \\ 1.2 & 1 \end{pmatrix}$은 그렇지 않은 이유를 설명하라. 어떤 행렬이 타당한 상관행렬이 되기 위한 필요충분조건을 진술하라.
 
 </div>
@@ -194,7 +194,7 @@ $r_{12} = 0.9$, $r_{13} = -0.7$, $r_{14} = 0$, $r_{23} = -0.5$, $r_{24} = 0.3$, 
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 각 타원 안에 상관 수치를 표시하도록 `plot_corr_ellipses` 함수를 고쳐라. $5 \times 5$ 행렬에서 시험하라.
 
 </div>
@@ -263,7 +263,7 @@ $r_{12} = 0.9$, $r_{13} = -0.7$, $r_{14} = 0$, $r_{23} = -0.5$, $r_{24} = 0.3$, 
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 $2 \times 2$ 상관행렬 $\mathbf{R} = \begin{pmatrix} 1 & r \\ r & 1 \end{pmatrix}$에 대해 $r$로 표현한 고윳값과 고유벡터를 유도하라. 이변량 정규분포 집중타원의 주축이 $\mathbf{R}$의 고유벡터와 일치함을 보여라.
 
 </div>
@@ -286,7 +286,7 @@ $2 \times 2$ 상관행렬 $\mathbf{R} = \begin{pmatrix} 1 & r \\ r & 1 \end{pmat
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 변수가 $k$개면 타원 그림에는 $k^2$개의 타원이 들어간다. 그중 몇 개가 중복인가(다른 타원으로부터 알 수 있는가)? 중복이 아닌 타원만 보이는 수정판을 제안하라.
 
 </div>

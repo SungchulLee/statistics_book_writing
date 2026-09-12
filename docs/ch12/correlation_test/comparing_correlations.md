@@ -58,7 +58,7 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** 두 독립 상관계수 비교. 어떤 연구자가 남성에서 $r_1 = 0.65$($n_1 = 50$), 여성에서 $r_2 = 0.40$($n_2 = 60$)을 얻었다.
+**보기 1.** <span class="diff easy" title="쉬움"></span> 두 독립 상관계수 비교. 어떤 연구자가 남성에서 $r_1 = 0.65$($n_1 = 50$), 여성에서 $r_2 = 0.40$($n_2 = 60$)을 얻었다.
 
 </div>
 
@@ -165,7 +165,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 두 독립 표본에서 $r_1 = 0.65$($n_1 = 50$)와 $r_2 = 0.40$($n_2 = 60$)을 얻었다. Fisher의 z 변환으로 $\alpha = 0.05$에서 두 모상관이 같은지 검정하라.
 
 </div>
@@ -191,7 +191,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 상관이 0에서 멀 때 변환 없이 상관을 직접 비교하는 것이 왜 문제가 되는지 설명하라.
 
 </div>
@@ -203,7 +203,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 **같은** 표본에서 $r_{XY} = 0.70$과 $r_{XZ} = 0.50$을 $n = 100$으로 계산했다. 왜 독립 표본 검정으로 이 둘을 비교할 수 없는가?
 
 </div>
@@ -217,7 +217,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 어떤 연구자가 $n = 2000$인 표본에서 키와 소득의 상관이 $r = 0.15$라고 보고했다. 이 "작은" 상관은 통계적으로 유의한가? 실질적으로 중요한가?
 
 </div>
