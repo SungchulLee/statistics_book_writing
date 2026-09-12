@@ -134,7 +134,7 @@ p-값과 미리 정한 유의수준에 따라 다음과 같이 판정한다:
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 **p-값을 형식적으로 정의**하고 $H_0$ 아래 검정통계량 분포와의 관계를 설명하라.
 
 </div>
@@ -150,7 +150,7 @@ p-값과 미리 정한 유의수준에 따라 다음과 같이 판정한다:
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff easy" title="쉬움"></span>
 **채식하는 청소년.** Evie가 학생 25명을 표본으로 뽑았더니 20%가 채식주의자였다. $H_0: p = 0.06$ 대 $H_1: p > 0.06$을 검정한다. 정확한 p-값을 계산하라.
 
 </div>
@@ -168,7 +168,7 @@ p-값과 미리 정한 유의수준에 따라 다음과 같이 판정한다:
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff easy" title="쉬움"></span>
 **여러 언어를 쓰는 미국인.** $\hat p = 40/120 \approx 0.333$으로 $H_0: p = 0.26$ 대 $H_1: p > 0.26$을 검정한다. 정규근사로 p-값을 계산하라.
 
 </div>
@@ -184,7 +184,7 @@ p-값과 미리 정한 유의수준에 따라 다음과 같이 판정한다:
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 **p-값에 대한 흔한 오해.** 세 가지를 들라.
 
 </div>
@@ -200,7 +200,7 @@ p-값과 미리 정한 유의수준에 따라 다음과 같이 판정한다:
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 **모의실험 기반 p-값.** 채식주의자 예제로 보여라.
 
 </div>
@@ -239,7 +239,7 @@ p-값과 미리 정한 유의수준에 따라 다음과 같이 판정한다:
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 **p-값과 효과크기.** p-값만으로 충분하지 않은 이유는?
 
 </div>

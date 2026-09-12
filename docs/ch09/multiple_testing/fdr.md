@@ -80,7 +80,7 @@ Benjamini와 Yekutieli(2001)는 이후 BH 절차가 **부분집합 각각에 대
 
 <div class="exbox" markdown>
 
-**보기 1.** 약물 선별. 한 제약회사가 표적에 대한 활성을 보려고 화합물 $m = 10$개를 선별하며, 화합물마다 $\alpha = 0.10$에서 가설검정을 한 번씩 한다. 얻은 p-값은:
+**보기 1.** <span class="diff easy" title="쉬움"></span> 약물 선별. 한 제약회사가 표적에 대한 활성을 보려고 화합물 $m = 10$개를 선별하며, 화합물마다 $\alpha = 0.10$에서 가설검정을 한 번씩 한다. 얻은 p-값은:
 
 | 화합물 | $p$-값 |
 |---|---|
@@ -225,7 +225,7 @@ statsmodels adjusted: [0.006  0.024  0.0615 0.0615 0.276  0.76  ]
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 p-값 6개 0.001, 0.008, 0.039, 0.041, 0.23, 0.76에 FDR 수준 $q = 0.10$에서 Benjamini-Hochberg(BH) 절차를 적용하라. 어느 가설이 기각되는가?
 
 </div>
@@ -246,7 +246,7 @@ p-값 6개 0.001, 0.008, 0.039, 0.041, 0.23, 0.76에 FDR 수준 $q = 0.10$에서
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 거짓발견율(FDR)을 정의하고 가족단위 오류율(FWER)과 어떻게 다른지 설명하라.
 
 </div>
@@ -271,7 +271,7 @@ p-값 6개 0.001, 0.008, 0.039, 0.041, 0.23, 0.76에 FDR 수준 $q = 0.10$에서
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff hard" title="어려움"></span>
 검정통계량이 독립일 때 BH 절차가 FDR을 수준 $q$로 통제함을 증명하라.
 
 </div>
@@ -291,7 +291,7 @@ p-값 6개 0.001, 0.008, 0.039, 0.041, 0.23, 0.76에 FDR 수준 $q = 0.10$에서
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 어떤 유전체 연구가 유전자 10,000개를 검정한다. $q = 0.05$의 BH로 가설 500개를 기각했다. 이 기각 중 거짓 발견은 몇 개로 기대되는가? FWER 통제(Bonferroni)와 비교하면 어떤가?
 
 </div>

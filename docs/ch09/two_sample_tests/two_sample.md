@@ -445,7 +445,7 @@ Mann-Whitney U 검정과 Wilcoxon 순위합 검정은 통계적으로 동등하�
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 독립인 두 표본: 집단 1 ($n_1 = 25$, $\bar{x}_1 = 78$, $s_1 = 10$), 집단 2 ($n_2 = 30$, $\bar{x}_2 = 72$, $s_2 = 12$). 합동 표준오차(등분산 가정)를 써서 $\alpha = 0.05$에서 $H_0: \mu_1 = \mu_2$의 이표본 $t$-검정을 하라.
 
 </div>
@@ -473,7 +473,7 @@ Mann-Whitney U 검정과 Wilcoxon 순위합 검정은 통계적으로 동등하�
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 합동 $t$-검정보다 Welch의 $t$-검정을 언제 선호해야 하는지, 그리고 분산이 다른데 합동 검정을 쓰면 무슨 일이 생기는지 설명하라.
 
 </div>
@@ -485,7 +485,7 @@ Mann-Whitney U 검정과 Wilcoxon 순위합 검정은 통계적으로 동등하�
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 어떤 연구에서 두 집단 사이에 $p = 0.001$로 통계적으로 유의한 차이를 찾았고 평균 차이는 0.5 단위였다. 두 집단의 표준편차는 모두 50이다. 이 결과의 실질적 유의성을 논하라.
 
 </div>
@@ -497,7 +497,7 @@ Mann-Whitney U 검정과 Wilcoxon 순위합 검정은 통계적으로 동등하�
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 이표본 $t$-검정보다 Mann-Whitney U 검정을 선호해야 하는 때는 언제인가?
 
 </div>

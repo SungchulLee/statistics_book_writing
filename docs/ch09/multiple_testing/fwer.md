@@ -77,7 +77,7 @@ Bonferroni 보정과 [Holm의 단계적 하강법](bonferroni_holm.md) 같은 �
 
 <div class="exbox" markdown>
 
-**보기 1.** 비료 다섯 가지의 검정. 어떤 연구자가 비료 다섯 가지 각각이 대조군에 비해 수확량을 늘리는지 $\alpha = 0.05$에서 t-검정으로 따로 검정한다. 실제로는 어느 비료도 효과가 없다면(다섯 귀무가설이 모두 참이라면) FWER은:
+**보기 1.** <span class="diff easy" title="쉬움"></span> 비료 다섯 가지의 검정. 어떤 연구자가 비료 다섯 가지 각각이 대조군에 비해 수확량을 늘리는지 $\alpha = 0.05$에서 t-검정으로 따로 검정한다. 실제로는 어느 비료도 효과가 없다면(다섯 귀무가설이 모두 참이라면) FWER은:
 
 $$
 \text{FWER} = 1 - (1 - 0.05)^5 = 1 - 0.9510 \approx 0.226
@@ -95,7 +95,7 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 2.** 유전체 선별. 전장유전체 연관분석에서 연구자가 유전 변이 $m = 500{,}000$개를 질병과의 연관에 대해 검정한다. 개별 수준 $\alpha = 0.05$에서:
+**보기 2.** <span class="diff easy" title="쉬움"></span> 유전체 선별. 전장유전체 연관분석에서 연구자가 유전 변이 $m = 500{,}000$개를 질병과의 연관에 대해 검정한다. 개별 수준 $\alpha = 0.05$에서:
 
 $$
 \text{FWER} \leq m\alpha = 500{,}000 \times 0.05 = 25{,}000
@@ -125,7 +125,7 @@ FWER 통제는 다음 경우에 가장 적절하다:
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 가족단위 오류율(FWER)을 정의하라. 모든 귀무가설이 참인 독립 검정 10개를 각각 $\alpha = 0.05$에서 수행하면 정확한 FWER은 얼마인가?
 
 </div>
@@ -147,7 +147,7 @@ FWER 통제는 다음 경우에 가장 적절하다:
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 FWER의 강한 통제와 약한 통제의 차이를 설명하라.
 
 </div>
@@ -161,7 +161,7 @@ FWER의 강한 통제와 약한 통제의 차이를 설명하라.
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 (모든 귀무가설이 참이고 검정이 독립일 때) 검정 수 $m \to \infty$이면 보정하지 않은 검정의 FWER이 1에 다가감을 보여라.
 
 </div>
@@ -189,7 +189,7 @@ FWER의 강한 통제와 약한 통제의 차이를 설명하라.
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 어떤 임상시험이 세 가지 주요 평가변수(혈압, 콜레스테롤, 체중)에 대해 약을 검정한다. 회사는 $\alpha = 0.05$에서 어느 한 변수라도 유의한 개선을 보이면 성공이라고 주장한다. 독립일 때의 FWER을 계산하고 규제기관이 다중검정 보정을 요구하는 이유를 설명하라.
 
 </div>

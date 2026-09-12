@@ -104,7 +104,7 @@ $p$-값은 $P(\chi^2_{24} > 36.6) \approx 0.048$이다.
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 어떤 제조사가 볼트 지름의 분산이 최대 $\sigma_0^2 = 0.04$ mm$^2$이라고 주장한다. 볼트 $n = 20$개의 표본에서 $s^2 = 0.06$을 얻었다. $\alpha = 0.05$에서 우측 카이제곱 검정을 수행하라.
 
 </div>
@@ -122,7 +122,7 @@ $p$-값은 $P(\chi^2_{24} > 36.6) \approx 0.048$이다.
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff easy" title="쉬움"></span>
 연습문제 1의 검정에 대해 p-값을 계산하고 해석하라.
 
 </div>
@@ -134,7 +134,7 @@ $p$-값은 $P(\chi^2_{24} > 36.6) \approx 0.048$이다.
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 분산에 대한 카이제곱 검정이 평균에 대한 $t$-검정보다 정규성 가정을 훨씬 엄격하게 요구하는 이유를 설명하라.
 
 </div>
@@ -146,7 +146,7 @@ $p$-값은 $P(\chi^2_{24} > 36.6) \approx 0.048$이다.
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 어떤 품질관리 공정이 충전기의 분산을 감시한다. 과거 자료에 따르면 충전량이 약간 오른쪽으로 치우쳐 있다. 분산이 달라졌는지 검정하는 데 카이제곱 검정을 써야 하는가? 아니라면 대안을 제안하라.
 
 </div>

@@ -97,7 +97,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.** 제조품 $n = 200$개의 표본에서 18개가 불량이다. $\alpha = 0.01$에서 $H_0\colon p = 0.05$ 대 $H_1\colon p > 0.05$를 검정하라.
+**연습문제 1.** <span class="diff easy" title="쉬움"></span> 제조품 $n = 200$개의 표본에서 18개가 불량이다. $\alpha = 0.01$에서 $H_0\colon p = 0.05$ 대 $H_1\colon p > 0.05$를 검정하라.
 
 </div>
 
@@ -113,7 +113,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.** 동전을 100번 던져 앞면이 60번 나왔다. $\alpha = 0.05$에서 Wald 검정과 정확한 이항검정으로 이 동전이 공정한지 검정하라. p-값을 비교하라.
+**연습문제 2.** <span class="diff easy" title="쉬움"></span> 동전을 100번 던져 앞면이 60번 나왔다. $\alpha = 0.05$에서 Wald 검정과 정확한 이항검정으로 이 동전이 공정한지 검정하라. p-값을 비교하라.
 
 </div>
 
@@ -133,7 +133,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** 이항분포에 중심극한정리를 적용하여 Wald 검정통계량을 유도하라.
+**연습문제 3.** <span class="diff med" title="중간"></span> 이항분포에 중심극한정리를 적용하여 Wald 검정통계량을 유도하라.
 
 </div>
 
@@ -149,7 +149,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 4.** 어떤 여론조사가 유권자 $n = 1000$명을 조사하여 540명이 한 후보를 지지함을 발견했다. $p$의 95% 신뢰구간을 구성하고 신뢰구간–검정 쌍대성으로 $H_0\colon p = 0.50$을 검정하라.
+**연습문제 4.** <span class="diff easy" title="쉬움"></span> 어떤 여론조사가 유권자 $n = 1000$명을 조사하여 540명이 한 후보를 지지함을 발견했다. $p$의 95% 신뢰구간을 구성하고 신뢰구간–검정 쌍대성으로 $H_0\colon p = 0.50$을 검정하라.
 
 </div>
 
@@ -165,7 +165,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 5.** $H_0\colon p = p_0$ 대 $H_1\colon p > p_0$에 대한 수준 $\alpha$의 정확한 이항검정이 $k \geq c$일 때 기각함을 보여라. 여기서 $c$는 $P(X \geq c \mid X \sim \text{Bin}(n, p_0)) \leq \alpha$를 만족하는 가장 작은 정수이다.
+**연습문제 5.** <span class="diff hard" title="어려움"></span> $H_0\colon p = p_0$ 대 $H_1\colon p > p_0$에 대한 수준 $\alpha$의 정확한 이항검정이 $k \geq c$일 때 기각함을 보여라. 여기서 $c$는 $P(X \geq c \mid X \sim \text{Bin}(n, p_0)) \leq \alpha$를 만족하는 가장 작은 정수이다.
 
 </div>
 

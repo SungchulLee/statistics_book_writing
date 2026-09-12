@@ -95,7 +95,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.** 두 생산라인의 표본에서 $s_1 = 4.2$ ($n_1 = 20$), $s_2 = 3.1$ ($n_2 = 25$)을 얻었다. $\alpha = 0.05$에서 $H_0\colon \sigma_1^2 = \sigma_2^2$ 대 $H_1\colon \sigma_1^2 \neq \sigma_2^2$을 검정하라.
+**연습문제 1.** <span class="diff easy" title="쉬움"></span> 두 생산라인의 표본에서 $s_1 = 4.2$ ($n_1 = 20$), $s_2 = 3.1$ ($n_2 = 25$)을 얻었다. $\alpha = 0.05$에서 $H_0\colon \sigma_1^2 = \sigma_2^2$ 대 $H_1\colon \sigma_1^2 \neq \sigma_2^2$을 검정하라.
 
 </div>
 
@@ -111,7 +111,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.** 독립인 두 카이제곱 확률변수의 비에서 F-검정통계량을 유도하라.
+**연습문제 2.** <span class="diff med" title="중간"></span> 독립인 두 카이제곱 확률변수의 비에서 F-검정통계량을 유도하라.
 
 </div>
 
@@ -127,7 +127,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** 분산에 대한 F-검정이 평균에 대한 t-검정보다 비정규성에 민감한 이유를 설명하라. 어떤 대안이 있는가?
+**연습문제 3.** <span class="diff med" title="중간"></span> 분산에 대한 F-검정이 평균에 대한 t-검정보다 비정규성에 민감한 이유를 설명하라. 어떤 대안이 있는가?
 
 </div>
 
@@ -144,7 +144,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 4.** $F \sim F_{\nu_1, \nu_2}$이면 $1/F \sim F_{\nu_2, \nu_1}$임을 보여라.
+**연습문제 4.** <span class="diff med" title="중간"></span> $F \sim F_{\nu_1, \nu_2}$이면 $1/F \sim F_{\nu_2, \nu_1}$임을 보여라.
 
 </div>
 
@@ -160,7 +160,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 5.** $\alpha = 0.10$, $n_1 = 10$, $n_2 = 8$인 양측 F-검정에서 $P(F_L < F < F_U) = 0.90$이 되는 임계값 $F_L$과 $F_U$를 구하라.
+**연습문제 5.** <span class="diff easy" title="쉬움"></span> $\alpha = 0.10$, $n_1 = 10$, $n_2 = 8$인 양측 F-검정에서 $P(F_L < F < F_U) = 0.90$이 되는 임계값 $F_L$과 $F_U$를 구하라.
 
 </div>
 

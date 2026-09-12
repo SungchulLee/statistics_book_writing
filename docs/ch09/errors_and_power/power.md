@@ -407,7 +407,7 @@ total_sample_size............. 128
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 어떤 검정의 $\alpha = 0.05$이고 검정력 $= 0.80$이다. 제1종 오류, 제2종 오류, 올바른 기각, 올바른 비기각의 확률은 각각 얼마인가?
 
 </div>
@@ -421,7 +421,7 @@ total_sample_size............. 128
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff easy" title="쉬움"></span>
 어떤 연구자가 $\alpha = 0.05$(양측, 이표본 $t$-검정)에서 효과크기 $d = 0.3$을 검정력 90%로 탐지하려 한다. 공식 $n = 2(z_{\alpha/2} + z_\beta)^2/d^2$으로 집단당 필요한 표본크기를 추정하라.
 
 </div>
@@ -437,7 +437,7 @@ total_sample_size............. 128
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 검정의 검정력을 높이는 방법 네 가지를 들라. 보통 어느 것이 가장 현실적인가?
 
 </div>
@@ -451,7 +451,7 @@ total_sample_size............. 128
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 표본크기가 고정되어 있을 때 제1종 오류($\alpha$)와 제2종 오류($\beta$) 사이의 맞바꿈을 설명하라. 둘을 동시에 얼마든지 작게 만들 수 없는 이유는?
 
 </div>

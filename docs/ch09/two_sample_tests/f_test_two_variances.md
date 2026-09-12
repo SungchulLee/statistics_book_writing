@@ -88,7 +88,7 @@ F-검정은 정규성에서 벗어나는 데 **극도로 민감하다**. 바탕 
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 정규모집단에서 뽑은 독립인 두 표본에서 $s_1^2 = 25$ ($n_1 = 16$), $s_2^2 = 10$ ($n_2 = 21$)을 얻었다. $\alpha = 0.05$에서 $H_0: \sigma_1^2 = \sigma_2^2$ 대 $H_a: \sigma_1^2 \neq \sigma_2^2$을 검정하라.
 
 </div>
@@ -108,7 +108,7 @@ F-검정은 정규성에서 벗어나는 데 **극도로 민감하다**. 바탕 
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 두 분산을 비교하는 F-검정이 정규성에서 벗어나는 데 민감한 이유를 설명하라. 어떤 대안 검정이 더 로버스트한가?
 
 </div>
@@ -126,7 +126,7 @@ F-검정은 정규성에서 벗어나는 데 **극도로 민감하다**. 바탕 
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 표본분산의 카이제곱분포에서 F-검정통계량을 유도하라. 즉 정규성 아래에서 $(s_1^2/\sigma_1^2)/(s_2^2/\sigma_2^2) \sim F_{n_1-1, n_2-1}$임을 보여라.
 
 </div>
@@ -148,7 +148,7 @@ F-검정은 정규성에서 벗어나는 데 **극도로 민감하다**. 바탕 
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 $F = s_1^2/s_2^2 \sim F_{d_1, d_2}$이면 $1/F = s_2^2/s_1^2 \sim F_{d_2, d_1}$임을 보여라. 이 성질이 양측검정에서 왜 중요한가?
 
 </div>

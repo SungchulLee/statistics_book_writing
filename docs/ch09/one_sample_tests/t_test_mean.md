@@ -115,7 +115,7 @@ $t$-검정은 정규성에서 벗어나도 꽤 로버스트하며, 특히 표본
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 시리얼: 주장된 평균 500 g. 표본 $n = 25$, $\bar X = 490$, $s = 15$. $\alpha = 0.01$에서 검정하라.
 
 </div>
@@ -131,7 +131,7 @@ $t$-검정은 정규성에서 벗어나도 꽤 로버스트하며, 특히 표본
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 **$t$-검정의 조건.** 진술하고 설명하라.
 
 </div>
@@ -147,7 +147,7 @@ $t$-검정은 정규성에서 벗어나도 꽤 로버스트하며, 특히 표본
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff easy" title="쉬움"></span>
 **단측검정.** 연습문제 1과 같은 자료로 $H_1: \mu < 500$(평균이 주장보다 낮다고 의심)을 검정하라.
 
 </div>
@@ -161,7 +161,7 @@ $t$-검정은 정규성에서 벗어나도 꽤 로버스트하며, 특히 표본
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff easy" title="쉬움"></span>
 **효과크기.** 시리얼 문제에서 Cohen의 $d$를 계산하라.
 
 </div>
@@ -181,7 +181,7 @@ $t$-검정은 정규성에서 벗어나도 꽤 로버스트하며, 특히 표본
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 **검정력을 위한 표본크기.** $\sigma \approx 15$라고 할 때 $\alpha = 0.01$에서 5 g 감소를 탐지할 검정력 90%를 얻으려면 $n$이 얼마여야 하는가?
 
 </div>
@@ -197,7 +197,7 @@ $t$-검정은 정규성에서 벗어나도 꽤 로버스트하며, 특히 표본
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff easy" title="쉬움"></span>
 **다중검정.** 어떤 품질보증 엔지니어가 생산라인 20곳에 $t$-검정을 돌린다. $\alpha = 0.05$에서 모든 귀무가설이 참일 때 가족단위 거짓 양성 비율은?
 
 </div>

@@ -94,7 +94,7 @@ $H_0$ 아래에서 $\chi^2 \sim \chi^2_{11}$이다. 단측 p-값 $P(\chi^2_{11} 
 
 <div class="drillbox" markdown>
 
-**연습문제 1.** 어떤 기계가 목표 분산 $\sigma_0^2 = 0.01$ mL$^2$으로 병을 채운다. 병 $n = 25$개의 표본에서 $s^2 = 0.015$를 얻었다. $\alpha = 0.05$에서 $H_0\colon \sigma^2 = 0.01$ 대 $H_1\colon \sigma^2 > 0.01$을 검정하라.
+**연습문제 1.** <span class="diff easy" title="쉬움"></span> 어떤 기계가 목표 분산 $\sigma_0^2 = 0.01$ mL$^2$으로 병을 채운다. 병 $n = 25$개의 표본에서 $s^2 = 0.015$를 얻었다. $\alpha = 0.05$에서 $H_0\colon \sigma^2 = 0.01$ 대 $H_1\colon \sigma^2 > 0.01$을 검정하라.
 
 </div>
 
@@ -110,7 +110,7 @@ $H_0$ 아래에서 $\chi^2 \sim \chi^2_{11}$이다. 단측 p-값 $P(\chi^2_{11} 
 
 <div class="drillbox" markdown>
 
-**연습문제 2.** 분산에 대한 카이제곱 검정이 정규성 가정에 민감한 이유를 설명하라. 모집단의 꼬리가 두꺼우면 어떻게 되는가?
+**연습문제 2.** <span class="diff med" title="중간"></span> 분산에 대한 카이제곱 검정이 정규성 가정에 민감한 이유를 설명하라. 모집단의 꼬리가 두꺼우면 어떻게 되는가?
 
 </div>
 
@@ -120,7 +120,7 @@ $H_0$ 아래에서 $\chi^2 \sim \chi^2_{11}$이다. 단측 p-값 $P(\chi^2_{11} 
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** 정규성 아래에서 $(n-1)S^2/\sigma^2$의 분포를 유도하라.
+**연습문제 3.** <span class="diff med" title="중간"></span> 정규성 아래에서 $(n-1)S^2/\sigma^2$의 분포를 유도하라.
 
 </div>
 
@@ -142,7 +142,7 @@ $H_0$ 아래에서 $\chi^2 \sim \chi^2_{11}$이다. 단측 p-값 $P(\chi^2_{11} 
 
 <div class="drillbox" markdown>
 
-**연습문제 4.** $n = 20$, $\alpha = 0.05$의 양측검정에서 임계값 $\chi^2_{L}$과 $\chi^2_{U}$ 및 $\chi^2$의 채택역을 구하라.
+**연습문제 4.** <span class="diff easy" title="쉬움"></span> $n = 20$, $\alpha = 0.05$의 양측검정에서 임계값 $\chi^2_{L}$과 $\chi^2_{U}$ 및 $\chi^2$의 채택역을 구하라.
 
 </div>
 
@@ -158,7 +158,7 @@ $H_0$ 아래에서 $\chi^2 \sim \chi^2_{11}$이다. 단측 p-값 $P(\chi^2_{11} 
 
 <div class="drillbox" markdown>
 
-**연습문제 5.** 어떤 품질 엔지니어가 측정값 $n = 15$개를 모아 $s = 3.2$를 얻었다. $\sigma^2$의 95% 신뢰구간을 구성하고 이를 써서 $H_0\colon \sigma^2 = 9$를 검정하라.
+**연습문제 5.** <span class="diff easy" title="쉬움"></span> 어떤 품질 엔지니어가 측정값 $n = 15$개를 모아 $s = 3.2$를 얻었다. $\sigma^2$의 95% 신뢰구간을 구성하고 이를 써서 $H_0\colon \sigma^2 = 9$를 검정하라.
 
 </div>
 

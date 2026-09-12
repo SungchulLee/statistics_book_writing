@@ -66,7 +66,7 @@ $$H_0: \mu = \mu_0 \quad \text{대} \quad H_a: \mu \neq \mu_0$$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 어떤 식당 주인이 음료 기계가 너무 많이 따른다고 의심한다(목표 530 mL). 표본 30개. 가설을 세워라.
 
 </div>
@@ -78,7 +78,7 @@ $$H_0: \mu = \mu_0 \quad \text{대} \quad H_a: \mu \neq \mu_0$$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff easy" title="쉬움"></span>
 다음에 대한 가설을 써라: (a) 약이 위약보다 혈압을 낮춘다. (b) 동전이 앞면 쪽으로 치우쳐 있다. (c) 두 공정의 분산이 다르다.
 
 </div>
@@ -94,7 +94,7 @@ $$H_0: \mu = \mu_0 \quad \text{대} \quad H_a: \mu \neq \mu_0$$
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff easy" title="쉬움"></span>
 음료 기계에 대한 **제1종 오류와 제2종 오류**를 각각 기술하라.
 
 </div>
@@ -108,7 +108,7 @@ $$H_0: \mu = \mu_0 \quad \text{대} \quad H_a: \mu \neq \mu_0$$
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 **단측 대 양측.** 언제 적절한가? 단측의 대가는?
 
 </div>
@@ -124,7 +124,7 @@ $$H_0: \mu = \mu_0 \quad \text{대} \quad H_a: \mu \neq \mu_0$$
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 **왜 $\alpha = 0.05$인가?** 언제 벗어나야 하는가?
 
 </div>
@@ -143,7 +143,7 @@ $$H_0: \mu = \mu_0 \quad \text{대} \quad H_a: \mu \neq \mu_0$$
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 **가설검정과 신뢰구간.** 각각 언제 쓰는가?
 
 </div>

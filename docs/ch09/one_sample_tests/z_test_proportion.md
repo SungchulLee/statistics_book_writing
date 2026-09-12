@@ -58,7 +58,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 동전 돌리기: 100번 돌려 앞면 59번. $\alpha = 0.05$에서 $H_0: p = 0.5$ 대 $H_1: p > 0.5$를 검정하라.
 
 </div>
@@ -72,7 +72,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff easy" title="쉬움"></span>
 차량 검사: 100대 중 74대 통과. $\alpha = 0.05$에서 80%라는 주장을 검정하라.
 
 </div>
@@ -86,7 +86,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff easy" title="쉬움"></span>
 **불량률의 변화.** 500개 중 28개 불량, 과거 불량률 4%. 변화가 있는지 검정하라.
 
 </div>
@@ -100,7 +100,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff easy" title="쉬움"></span>
 **단측 대 양측.** 연습문제 3을 $H_1: p > 0.04$(불량률이 올랐다고 의심)로 다시 계산하라.
 
 </div>
@@ -114,7 +114,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 **비율에 대한 $z$-검정의 조건.** 진술하고 연습문제 1에서 확인하라.
 
 </div>
@@ -128,7 +128,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 **표본크기 계획.** $\alpha = 0.05$(양측)에서 2퍼센트포인트 차이($p = 0.42$ 대 주장된 0.40)를 검정력 80%로 탐지하려면 $n$이 얼마여야 하는가?
 
 </div>

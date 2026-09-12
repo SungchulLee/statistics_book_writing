@@ -100,7 +100,7 @@ Bonferroni에서는 모든 가설이 문턱 $\alpha/m$을 마주한다. Holm에�
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 어떤 연구자가 가설검정 5개를 수행하여 p-값 0.008, 0.025, 0.040, 0.060, 0.120을 얻었다. $\alpha = 0.05$에서 Bonferroni 보정을 적용하고 어느 가설이 기각되는지 말하라.
 
 </div>
@@ -122,7 +122,7 @@ Bonferroni에서는 모든 가설이 문턱 $\alpha/m$을 마주한다. Holm에�
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff easy" title="쉬움"></span>
 연습문제 1과 같은 p-값에 $\alpha = 0.05$에서 Holm(단계적 하강) 절차를 적용하라. 결과를 Bonferroni와 비교하라.
 
 </div>
@@ -143,7 +143,7 @@ Bonferroni에서는 모든 가설이 문턱 $\alpha/m$을 마주한다. Holm에�
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 Bonferroni 보정이 가족단위 오류율(FWER)을 수준 $\alpha$로 통제함을 증명하라. 합집합 한계를 쓰라.
 
 </div>
@@ -161,7 +161,7 @@ Bonferroni 보정이 가족단위 오류율(FWER)을 수준 $\alpha$로 통제�
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 참인 귀무가설의 수 $m_0$이 $m$보다 훨씬 작을 때, 또는 검정이 양의 상관을 가질 때 Bonferroni가 보수적인(FWER $\ll \alpha$인) 이유를 설명하라.
 
 </div>

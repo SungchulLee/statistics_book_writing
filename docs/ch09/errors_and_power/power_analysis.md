@@ -146,7 +146,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 1.** 어떤 연구자가 $\alpha=0.01$에서 두 집단 사이의 $\delta=0.3$ 표준편차만큼의 차이를 검정력 90%로 탐지하려 한다. 집단당 몇 명이 필요한가?
+**연습문제 1.** <span class="diff easy" title="쉬움"></span> 어떤 연구자가 $\alpha=0.01$에서 두 집단 사이의 $\delta=0.3$ 표준편차만큼의 차이를 검정력 90%로 탐지하려 한다. 집단당 몇 명이 필요한가?
 
 </div>
 
@@ -168,7 +168,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 2.** ($\sigma$를 아는) 양측 일표본 z-검정에서 $\mu = \mu_0 + \delta$를 탐지하는 검정력을 다음과 같이 쓸 수 있음을 보여라.
+**연습문제 2.** <span class="diff med" title="중간"></span> ($\sigma$를 아는) 양측 일표본 z-검정에서 $\mu = \mu_0 + \delta$를 탐지하는 검정력을 다음과 같이 쓸 수 있음을 보여라.
 
 $$
 1 - \beta = \mathcal{N}\!\left(\frac{\delta\sqrt{n}}{\sigma} - z_{\alpha/2}\right) + \mathcal{N}\!\left(-\frac{\delta\sqrt{n}}{\sigma} - z_{\alpha/2}\right).
@@ -198,7 +198,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** 어떤 A/B 검정이 전환율 $p_1 = 0.05$와 $p_2 = 0.04$를 비교한다. $\alpha = 0.05$에서 검정력 80%를 위한 집단당 표본크기를 계산하라.
+**연습문제 3.** <span class="diff easy" title="쉬움"></span> 어떤 A/B 검정이 전환율 $p_1 = 0.05$와 $p_2 = 0.04$를 비교한다. $\alpha = 0.05$에서 검정력 80%를 위한 집단당 표본크기를 계산하라.
 
 </div>
 
@@ -220,7 +220,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 4.** Python으로 $\alpha = 0.05$에서 Cohen의 $d \in \{0.2, 0.5, 0.8\}$에 대해 일표본 t-검정의 검정력을 $n$(5부터 200까지)의 함수로 그려라. `statsmodels.stats.power.TTestPower`를 쓰라.
+**연습문제 4.** <span class="diff med" title="중간"></span> Python으로 $\alpha = 0.05$에서 Cohen의 $d \in \{0.2, 0.5, 0.8\}$에 대해 일표본 t-검정의 검정력을 $n$(5부터 200까지)의 함수로 그려라. `statsmodels.stats.power.TTestPower`를 쓰라.
 
 </div>
 
@@ -256,7 +256,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 5.** 유의수준 $\alpha$와 효과크기 $\delta > 0$이 고정되어 있을 때 $n \to \infty$이면 이표본 z-검정의 검정력이 1에 다가감을 증명하라.
+**연습문제 5.** <span class="diff med" title="중간"></span> 유의수준 $\alpha$와 효과크기 $\delta > 0$이 고정되어 있을 때 $n \to \infty$이면 이표본 z-검정의 검정력이 1에 다가감을 증명하라.
 
 </div>
 

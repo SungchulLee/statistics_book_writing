@@ -73,7 +73,7 @@
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 다음 각 상황에서 대응 검정과 이표본 검정 중 무엇이 적절한지 판단하라: (a) 교차 설계에서 카페인과 위약에 따른 참가자의 반응시간 비교, (b) 서로 다른 두 학교 학생들의 시험 점수 비교.
 
 </div>
@@ -85,7 +85,7 @@
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff easy" title="쉬움"></span>
 어떤 연구가 환자 20명의 불안 점수를 치료 전후로 측정했다. 평균 차이는 $\bar{d} = -5.2$이고 $s_d = 8.1$이다. $\alpha = 0.05$에서 $H_0: \mu_d = 0$의 대응 $t$-검정을 하라.
 
 </div>
@@ -101,7 +101,7 @@
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 짝 내 상관이 양수일 때 대응 검정이 일반적으로 이표본 검정보다 검정력이 큰 이유를 설명하라.
 
 </div>
@@ -117,7 +117,7 @@
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 어떤 연구자가 쌍둥이 쌍을 짝지어 서로 다른 두 처리에 배정했다. 그런데 15쌍 중 3쌍에서 한쪽 쌍둥이가 중도 탈락하여 짝이 맞지 않는 자료가 생겼다. 이 자료를 분석하는 선택지를 논하라.
 
 </div>

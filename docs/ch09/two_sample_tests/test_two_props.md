@@ -109,7 +109,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.** 어떤 임상시험에서 약을 받은 환자 200명 중 45명이, 위약을 받은 200명 중 30명이 회복했다. $\alpha = 0.05$에서 $H_0\colon p_1 = p_2$ 대 $H_1\colon p_1 > p_2$를 검정하라.
+**연습문제 1.** <span class="diff easy" title="쉬움"></span> 어떤 임상시험에서 약을 받은 환자 200명 중 45명이, 위약을 받은 200명 중 30명이 회복했다. $\alpha = 0.05$에서 $H_0\colon p_1 = p_2$ 대 $H_1\colon p_1 > p_2$를 검정하라.
 
 </div>
 
@@ -129,7 +129,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.** 합동 표준오차와 Wald 표준오차를 각각 언제 쓰는지 설명하라.
+**연습문제 2.** <span class="diff med" title="중간"></span> 합동 표준오차와 Wald 표준오차를 각각 언제 쓰는지 설명하라.
 
 </div>
 
@@ -141,7 +141,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** 어떤 웹사이트 A/B 검정에서 변형 A는 방문자 5000명 중 120명이, 변형 B는 5000명 중 95명이 전환했다. $\alpha = 0.05$에서 차이를 검정하고 $p_A - p_B$의 95% 신뢰구간을 계산하라.
+**연습문제 3.** <span class="diff easy" title="쉬움"></span> 어떤 웹사이트 A/B 검정에서 변형 A는 방문자 5000명 중 120명이, 변형 B는 5000명 중 95명이 전환했다. $\alpha = 0.05$에서 차이를 검정하고 $p_A - p_B$의 95% 신뢰구간을 계산하라.
 
 </div>
 
@@ -175,7 +175,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 4.** $H_0\colon p_1 = p_2$에 대한 가능도비 검정에서 합동 z-검정통계량을 유도하라.
+**연습문제 4.** <span class="diff hard" title="어려움"></span> $H_0\colon p_1 = p_2$에 대한 가능도비 검정에서 합동 z-검정통계량을 유도하라.
 
 </div>
 
@@ -197,7 +197,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 5.** 이항분포에 대한 정규근사가 $n_1\hat{p}_{\text{pool}} \geq 5$이고 $n_1(1-\hat{p}_{\text{pool}}) \geq 5$($n_2$에 대해서도 마찬가지)를 요구함을 보여라. 이 조건이 깨지면 어떤 대안을 쓸 수 있는가?
+**연습문제 5.** <span class="diff med" title="중간"></span> 이항분포에 대한 정규근사가 $n_1\hat{p}_{\text{pool}} \geq 5$이고 $n_1(1-\hat{p}_{\text{pool}}) \geq 5$($n_2$에 대해서도 마찬가지)를 요구함을 보여라. 이 조건이 깨지면 어떤 대안을 쓸 수 있는가?
 
 </div>
 

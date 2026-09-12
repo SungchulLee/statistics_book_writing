@@ -243,7 +243,7 @@ Welch 자유도가 12.42다. $n_1 + n_2 - 2 = 18$보다 눈에 띄게 작다. �
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 프로그램 A: $\bar X_1 = 55\,000, s_1 = 7\,500, n_1 = 14$. 프로그램 B: $\bar X_2 = 60\,000, s_2 = 8\,000, n_2 = 16$. $\alpha = 0.05$에서 합동 $t$-검정을 하라.
 
 </div>
@@ -257,7 +257,7 @@ Welch 자유도가 12.42다. $n_1 + n_2 - 2 = 18$보다 눈에 띄게 작다. �
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff easy" title="쉬움"></span>
 Norway ($\bar X = 64.3, s = 18.2, n = 65$) 대 US ($\bar X = 53.4, s = 23.9, n = 75$)의 소득. Welch 검정을 하라.
 
 </div>
@@ -273,7 +273,7 @@ Norway ($\bar X = 64.3, s = 18.2, n = 65$) 대 US ($\bar X = 53.4, s = 23.9, n =
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff easy" title="쉬움"></span>
 US ($\bar X = 25.5, s = 3.8, n = 108$) 대 Canada ($\bar X = 26.3, s = 3.2, n = 102$)의 초혼 연령. 합동 $t$-검정을 하라.
 
 </div>
@@ -289,7 +289,7 @@ US ($\bar X = 25.5, s = 3.8, n = 108$) 대 Canada ($\bar X = 26.3, s = 3.2, n = 
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff easy" title="쉬움"></span>
 전기차 모델 A ($\bar X = 168, s = 5.4, n = 5$) 대 B ($\bar X = 172, s = 7.5, n = 5$). Welch 검정을 하라.
 
 </div>
@@ -305,7 +305,7 @@ US ($\bar X = 25.5, s = 3.8, n = 108$) 대 Canada ($\bar X = 26.3, s = 3.2, n = 
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 **Welch 대 합동.** 분산이 다를 때 합동 $t$-검정은 언제 실패하는가(잘못된 $\alpha$를 주는가)?
 
 </div>
@@ -324,7 +324,7 @@ US ($\bar X = 25.5, s = 3.8, n = 108$) 대 Canada ($\bar X = 26.3, s = 3.2, n = 
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 이표본 $t$-검정의 **효과크기와 표본크기 계획.**
 
 </div>
@@ -344,7 +344,7 @@ US ($\bar X = 25.5, s = 3.8, n = 108$) 대 Canada ($\bar X = 26.3, s = 3.2, n = 
 
 <div class="drillbox" markdown>
 
-**연습문제 7.**
+**연습문제 7.** <span class="diff easy" title="쉬움"></span>
 **평균 교육연수: 이탈리아 대 프랑스.**
 |  | 이탈리아 | 프랑스 |
 |:---:|:---:|:---:|
@@ -361,7 +361,7 @@ US ($\bar X = 25.5, s = 3.8, n = 108$) 대 Canada ($\bar X = 26.3, s = 3.2, n = 
 
 <div class="drillbox" markdown>
 
-**연습문제 8.**
+**연습문제 8.** <span class="diff easy" title="쉬움"></span>
 **두 부서의 평균 연봉 (Welch $t$ 검정).**
 부서 A: $\bar{X}_1 = 60{,}000$, $s_1 = 8{,}000$, $n_1 = 12$. 부서 B: $\bar{X}_2 = 65{,}000$, $s_2 = 10{,}000$, $n_2 = 15$. 이분산. $\alpha = 0.05$에서 검정하라.
 

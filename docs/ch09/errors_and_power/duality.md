@@ -27,7 +27,7 @@ $$CI_{1-\alpha} = \{\theta_0 : \text{fail to reject } H_0: \theta = \theta_0 \te
 
 <div class="exbox" markdown>
 
-**보기 1.** 일표본 평균. $H_0: \mu = \mu_0$ 대 $H_a: \mu \neq \mu_0$의 일표본 z-검정에서:
+**보기 1.** <span class="diff easy" title="쉬움"></span> 일표본 평균. $H_0: \mu = \mu_0$ 대 $H_a: \mu \neq \mu_0$의 일표본 z-검정에서:
 
 - **검정**: $z = \frac{\bar{x} - \mu_0}{\sigma / \sqrt{n}}$일 때 $|z| > z_{\alpha/2}$이면 $H_0$을 기각한다.
 - **신뢰구간**: $\bar{x} \pm z_{\alpha/2} \cdot \frac{\sigma}{\sqrt{n}}$
@@ -42,7 +42,7 @@ $$|z| > z_{\alpha/2} \iff \left|\frac{\bar{x} - \mu_0}{\sigma/\sqrt{n}}\right| >
 
 <div class="exbox" markdown>
 
-**보기 2.** 두 품종의 배. Yuna가 Bosc 배와 Anjou 배의 열량을 비교한다. $\mu_{\text{Bosc}} - \mu_{\text{Anjou}}$의 99% 신뢰구간은 $4 \pm 6.44 = (-2.44, 10.44)$이다.
+**보기 2.** <span class="diff easy" title="쉬움"></span> 두 품종의 배. Yuna가 Bosc 배와 Anjou 배의 열량을 비교한다. $\mu_{\text{Bosc}} - \mu_{\text{Anjou}}$의 99% 신뢰구간은 $4 \pm 6.44 = (-2.44, 10.44)$이다.
 
 $\alpha = 0.01$에서 $H_0: \mu_{\text{Bosc}} = \mu_{\text{Anjou}}$(즉 $\mu_{\text{Bosc}} - \mu_{\text{Anjou}} = 0$)를 검정하면:
 
@@ -52,7 +52,7 @@ $0 \in (-2.44, 10.44)$이므로 $H_0$을 **기각하지 못한다**. 열량이 �
 
 <div class="exbox" markdown>
 
-**보기 3.** 대면 수업과 온라인 수업. $p_{\text{in\_person}} - p_{\text{online}}$의 95% 신뢰구간이 $(-0.04, 0.14)$이다.
+**보기 3.** <span class="diff easy" title="쉬움"></span> 대면 수업과 온라인 수업. $p_{\text{in\_person}} - p_{\text{online}}$의 95% 신뢰구간이 $(-0.04, 0.14)$이다.
 
 $\alpha = 0.05$에서 $H_0: p_{\text{in\_person}} = p_{\text{online}}$을 검정하면:
 
@@ -112,7 +112,7 @@ Both methods agree: True
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 $\mu$의 95% 신뢰구간이 $(12.3, 18.7)$이다. 검정통계량을 계산하지 않고 $\alpha = 0.05$에서 $H_0: \mu = 10$의 양측검정 결과를 판단하라.
 
 </div>
@@ -122,7 +122,7 @@ $\mu$의 95% 신뢰구간이 $(12.3, 18.7)$이다. 검정통계량을 계산하�
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff easy" title="쉬움"></span>
 어떤 연구자가 $H_0: \mu = 50$의 양측검정을 수행하여 p-값 0.03을 얻었다. 50이 95%와 99% 신뢰구간의 안에 있는지 밖에 있는지 무엇을 결론지을 수 있는가?
 
 </div>
@@ -134,7 +134,7 @@ $\mu$의 95% 신뢰구간이 $(12.3, 18.7)$이다. 검정통계량을 계산하�
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 수학적으로 동등한데도 신뢰구간이 가설검정보다 많은 정보를 주는 이유를 설명하라.
 
 </div>
@@ -150,7 +150,7 @@ $\mu$의 95% 신뢰구간이 $(12.3, 18.7)$이다. 검정통계량을 계산하�
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 신뢰구간과 가설검정의 쌍대성이 단측검정에서도 성립하는가? 그렇다면 대응하는 신뢰한계는 무엇인가?
 
 </div>

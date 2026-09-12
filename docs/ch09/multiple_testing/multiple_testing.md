@@ -129,7 +129,7 @@ Bonferroni가 "안전하다"는 것은 거짓 양성을 막는다는 뜻일 뿐,
 
 <div class="drillbox" markdown>
 
-**연습문제 1.** 어떤 연구자가 $\alpha = 0.05$에서 독립인 검정 $m = 100$개를 수행한다. 모든 귀무가설이 참이라면 거짓 양성이 적어도 하나 나올 확률은? Bonferroni 보정 문턱은 얼마여야 하는가?
+**연습문제 1.** <span class="diff easy" title="쉬움"></span> 어떤 연구자가 $\alpha = 0.05$에서 독립인 검정 $m = 100$개를 수행한다. 모든 귀무가설이 참이라면 거짓 양성이 적어도 하나 나올 확률은? Bonferroni 보정 문턱은 얼마여야 하는가?
 
 </div>
 
@@ -145,7 +145,7 @@ Bonferroni가 "안전하다"는 것은 거짓 양성을 막는다는 뜻일 뿐,
 
 <div class="drillbox" markdown>
 
-**연습문제 2.** $m=5$개 검정에서 정렬된 p-값 $p_{(1)} = 0.001$, $p_{(2)} = 0.008$, $p_{(3)} = 0.039$, $p_{(4)} = 0.041$, $p_{(5)} = 0.23$이 주어졌다. FDR 수준 $q = 0.05$에서 BH 절차를 적용하라. 어느 가설이 기각되는가?
+**연습문제 2.** <span class="diff easy" title="쉬움"></span> $m=5$개 검정에서 정렬된 p-값 $p_{(1)} = 0.001$, $p_{(2)} = 0.008$, $p_{(3)} = 0.039$, $p_{(4)} = 0.041$, $p_{(5)} = 0.23$이 주어졌다. FDR 수준 $q = 0.05$에서 BH 절차를 적용하라. 어느 가설이 기각되는가?
 
 </div>
 
@@ -165,7 +165,7 @@ Bonferroni가 "안전하다"는 것은 거짓 양성을 막는다는 뜻일 뿐,
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** Bonferroni 보정이 FWER을 수준 $\alpha$로 통제함을 증명하라. 즉 각 검정을 수준 $\alpha/m$에서 수행하면 $P(\text{잘못된 기각이 적어도 하나}) \leq \alpha$임을 보여라.
+**연습문제 3.** <span class="diff med" title="중간"></span> Bonferroni 보정이 FWER을 수준 $\alpha$로 통제함을 증명하라. 즉 각 검정을 수준 $\alpha/m$에서 수행하면 $P(\text{잘못된 기각이 적어도 하나}) \leq \alpha$임을 보여라.
 
 </div>
 
@@ -181,7 +181,7 @@ Bonferroni가 "안전하다"는 것은 거짓 양성을 막는다는 뜻일 뿐,
 
 <div class="drillbox" markdown>
 
-**연습문제 4.** $\alpha=0.05$에서 p-값 $p_1=0.01$, $p_2=0.04$, $p_3=0.03$, $p_4=0.005$에 Holm 절차를 적용하라. 어느 가설이 기각되는가?
+**연습문제 4.** <span class="diff easy" title="쉬움"></span> $\alpha=0.05$에서 p-값 $p_1=0.01$, $p_2=0.04$, $p_3=0.03$, $p_4=0.005$에 Holm 절차를 적용하라. 어느 가설이 기각되는가?
 
 </div>
 
@@ -199,7 +199,7 @@ Bonferroni가 "안전하다"는 것은 거짓 양성을 막는다는 뜻일 뿐,
 
 <div class="drillbox" markdown>
 
-**연습문제 5.** BH 절차가 Bonferroni보다 강력한 이유를 직관적으로 설명하라. BH 절차가 명목 수준에서 FDR을 통제하지 못하는 조건은 무엇인가?
+**연습문제 5.** <span class="diff med" title="중간"></span> BH 절차가 Bonferroni보다 강력한 이유를 직관적으로 설명하라. BH 절차가 명목 수준에서 FDR을 통제하지 못하는 조건은 무엇인가?
 
 </div>
 
