@@ -60,7 +60,7 @@ $W > F_{1-\alpha,\, k-1,\, N-k}$이면 $H_0$을 기각한다.
 
 <div class="exbox" markdown>
 
-**보기 1.** 세 집단의 Levene 검정. 세 집단의 관측값이 다음과 같다.
+**보기 1.** <span class="diff easy" title="쉬움"></span> 세 집단의 Levene 검정. 세 집단의 관측값이 다음과 같다.
 
 | 집단 1 | 집단 2 | 집단 3 |
 |---|---|---|
@@ -147,7 +147,7 @@ Levene (mean): reject H0 - variances differ.
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 세 집단의 학생에게 서로 다른 교수법을 적용했다. 학기 후 점수가 다음과 같이 기록되었다.
 
 - **집단 1:** $[78, 82, 85, 90, 87]$
@@ -204,7 +204,7 @@ Levene 검정으로 세 집단의 점수 분산이 같은지 판정하라.
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 두 모집단에서 표본을 뽑아 분석했다. Levene 검정은 높은 $p$값(등분산 $H_0$ 기각 실패)을 냈으나, 등분산을 가정한 $t$ 검정은 $p < 0.001$을 냈다. 이 두 결과를 어떻게 해석해야 하는가?
 
 </div>
@@ -219,7 +219,7 @@ Levene 검정으로 세 집단의 점수 분산이 같은지 판정하라.
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 본문 예제에서 평균 중심 Levene($p = 0.026$)과 중앙값 중심 Brown-Forsythe($p = 0.066$)의 결론이 갈렸다. 어느 쪽을 신뢰해야 하는지 판단하고, 그 판단의 근거를 제시하라.
 
 </div>
@@ -257,7 +257,7 @@ Levene 검정으로 세 집단의 점수 분산이 같은지 판정하라.
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 Levene 검정이 원자료의 4차 적률에 의존하지 않는다는 본문의 주장을 확인하라. 절대편차 $Z = |X - \mu|$의 분산이 원자료의 어떤 적률에 의존하는지 계산하라.
 
 </div>

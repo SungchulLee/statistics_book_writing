@@ -111,7 +111,7 @@ n1=n2=100: power = 0.977
 
 <div class="drillbox" markdown>
 
-**연습문제 1.** `estimate_power` 함수로 $n_1 = n_2 \in \{10, 25, 50, 100\}$과 $\sigma_2/\sigma_1 \in \{1.25, 1.5, 2.0, 3.0\}$, $\alpha = 0.05$에 대한 검정력 표를 만들어라.
+**연습문제 1.** <span class="diff med" title="중간"></span> `estimate_power` 함수로 $n_1 = n_2 \in \{10, 25, 50, 100\}$과 $\sigma_2/\sigma_1 \in \{1.25, 1.5, 2.0, 3.0\}$, $\alpha = 0.05$에 대한 검정력 표를 만들어라.
 
 </div>
 
@@ -179,7 +179,7 @@ n1=n2=100: power = 0.977
 
 <div class="drillbox" markdown>
 
-**연습문제 2.** 같은 모수 격자에 대해 **Levene 검정**(중앙값 중심)의 검정력을 추정하도록 모의실험을 수정하라. F 검정과 결과를 비교하라.
+**연습문제 2.** <span class="diff med" title="중간"></span> 같은 모수 격자에 대해 **Levene 검정**(중앙값 중심)의 검정력을 추정하도록 모의실험을 수정하라. F 검정과 결과를 비교하라.
 
 </div>
 
@@ -241,7 +241,7 @@ n1=n2=100: power = 0.977
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** 몬테카를로 검정력 추정의 표준오차 공식 $\text{SE}(\hat{\beta}) = \sqrt{\hat{\beta}(1-\hat{\beta})/B}$를 유도하라. 95% 신뢰수준에서 검정력을 $\pm 0.01$ 이내로 추정하려면 몇 번의 모의실험 $B$가 필요한가?
+**연습문제 3.** <span class="diff med" title="중간"></span> 몬테카를로 검정력 추정의 표준오차 공식 $\text{SE}(\hat{\beta}) = \sqrt{\hat{\beta}(1-\hat{\beta})/B}$를 유도하라. 95% 신뢰수준에서 검정력을 $\pm 0.01$ 이내로 추정하려면 몇 번의 모의실험 $B$가 필요한가?
 
 </div>
 
@@ -277,7 +277,7 @@ n1=n2=100: power = 0.977
 
 <div class="drillbox" markdown>
 
-**연습문제 4.** 검정력 곡선을 그려라. $n_1 = n_2 = 20$, $\alpha = 0.05$로 고정하고 $\sigma_2/\sigma_1$을 1.0에서 3.0까지 변화시킨다. $x$축에 분산비, $y$축에 추정 검정력을 그려라.
+**연습문제 4.** <span class="diff med" title="중간"></span> 검정력 곡선을 그려라. $n_1 = n_2 = 20$, $\alpha = 0.05$로 고정하고 $\sigma_2/\sigma_1$을 1.0에서 3.0까지 변화시킨다. $x$축에 분산비, $y$축에 추정 검정력을 그려라.
 
 </div>
 
@@ -332,7 +332,7 @@ n1=n2=100: power = 0.977
 
 <div class="drillbox" markdown>
 
-**연습문제 5.** 표본크기가 매우 불균형할 때(예: $n_1 = 5$, $n_2 = 100$) F 검정이 분산 차이를 탐지하는 검정력이 나쁜 이유를 설명하라. 모의실험으로 확인하라.
+**연습문제 5.** <span class="diff med" title="중간"></span> 표본크기가 매우 불균형할 때(예: $n_1 = 5$, $n_2 = 100$) F 검정이 분산 차이를 탐지하는 검정력이 나쁜 이유를 설명하라. 모의실험으로 확인하라.
 
 </div>
 

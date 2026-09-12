@@ -176,7 +176,7 @@ SciPy 결과와 정확히 일치한다. 보정인자가 $1.0635$로 통계량을
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff hard" title="어려움"></span>
 Bartlett 통계량의 분자가 항상 음이 아님을 산술평균-기하평균 부등식으로 증명하라. 등호 조건은 무엇인가?
 
 </div>
@@ -214,7 +214,7 @@ Bartlett 통계량의 분자가 항상 음이 아님을 산술평균-기하평�
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 보정인자 $C$가 항상 1보다 큼을 보이고, 집단 크기가 커질수록 1에 가까워짐을 확인하라. 이 보정이 필요한 이유를 설명하라.
 
 </div>
@@ -256,7 +256,7 @@ Bartlett 통계량의 분자가 항상 음이 아님을 산술평균-기하평�
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 본문 예제의 자료에 Bartlett, Levene, Brown-Forsythe, Fligner-Killeen 검정을 모두 적용하고 결과를 비교하라.
 
 </div>
@@ -300,7 +300,7 @@ Bartlett 통계량의 분자가 항상 음이 아님을 산술평균-기하평�
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 정규 자료에서 Bartlett 검정이 로버스트 검정들보다 검정력이 높은지 모의실험으로 확인하라. 세 집단, 각 $n = 20$, 표준편차 조합을 바꿔가며 비교하라.
 
 </div>

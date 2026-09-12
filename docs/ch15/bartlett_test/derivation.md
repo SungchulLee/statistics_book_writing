@@ -72,7 +72,7 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** 세 집단의 Bartlett 검정. 세 집단의 표본크기와 분산이 다음과 같다.
+**보기 1.** <span class="diff easy" title="쉬움"></span> 세 집단의 Bartlett 검정. 세 집단의 표본크기와 분산이 다음과 같다.
 
 | 집단 | $n_i$ | $S_i^2$ | $\nu_i = n_i - 1$ |
 |---|---|---|---|
@@ -168,7 +168,7 @@ P-value: 0.6815
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff hard" title="어려움"></span>
 $-2\ln\Lambda = (N-k)\ln S_p^2 - \sum_i \nu_i \ln S_i^2$을 정규 로그가능도에서 직접 유도하라.
 
 </div>
@@ -220,7 +220,7 @@ $-2\ln\Lambda = (N-k)\ln S_p^2 - \sum_i \nu_i \ln S_i^2$을 정규 로그가능�
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff hard" title="어려움"></span>
 $-2\ln\Lambda \geq 0$임을 Jensen 부등식으로 증명하라.
 
 </div>
@@ -246,7 +246,7 @@ $-2\ln\Lambda \geq 0$임을 Jensen 부등식으로 증명하라.
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 Bartlett 보정이 실제로 유한표본 크기를 개선하는지 모의실험으로 확인하라. 세 집단, 각 $n = 5$인 정규 자료에서 보정 있는 통계량과 없는 통계량의 경험적 크기를 비교하라.
 
 </div>
@@ -293,7 +293,7 @@ Bartlett 보정이 실제로 유한표본 크기를 개선하는지 모의실험
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 본문 예제에서 집단 2의 분산을 $S_2^2 = 8.1$에서 점점 키워가며 $T$가 임계값 $5.991$을 넘는 지점을 찾아라. 이것이 Bartlett 검정의 검정력에 대해 무엇을 말해 주는가?
 
 </div>

@@ -95,7 +95,7 @@ stat, pval = stats.levene(x, y, center='mean')
 
 <div class="drillbox" markdown>
 
-**연습문제 1.** 두 집단의 자료가 다음과 같다. 집단 A = $\{3, 7, 8, 5, 6\}$, 집단 B = $\{12, 14, 11, 19, 15\}$. 평균 중심화로 Levene 검정통계량 $W$를 손으로 계산하라.
+**연습문제 1.** <span class="diff easy" title="쉬움"></span> 두 집단의 자료가 다음과 같다. 집단 A = $\{3, 7, 8, 5, 6\}$, 집단 B = $\{12, 14, 11, 19, 15\}$. 평균 중심화로 Levene 검정통계량 $W$를 손으로 계산하라.
 
 </div>
 
@@ -149,7 +149,7 @@ stat, pval = stats.levene(x, y, center='mean')
 
 <div class="drillbox" markdown>
 
-**연습문제 2.** 절대편차 $|X_{ij} - \bar{X}_i|$에 분산분석을 적용하는 것이 왜 분산의 동일성을 검정하는 것인지 직관적으로 설명하라.
+**연습문제 2.** <span class="diff med" title="중간"></span> 절대편차 $|X_{ij} - \bar{X}_i|$에 분산분석을 적용하는 것이 왜 분산의 동일성을 검정하는 것인지 직관적으로 설명하라.
 
 </div>
 
@@ -171,7 +171,7 @@ stat, pval = stats.levene(x, y, center='mean')
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** $\text{Exp}(1)$에서 뽑은 자료에 대해 Levene 검정(평균 중심)과 Brown-Forsythe(중앙값 중심)의 제1종 오류율을 비교하는 모의실험을 작성하라. $k = 3$개 집단, $n = 20$, $\alpha = 0.05$를 쓴다.
+**연습문제 3.** <span class="diff med" title="중간"></span> $\text{Exp}(1)$에서 뽑은 자료에 대해 Levene 검정(평균 중심)과 Brown-Forsythe(중앙값 중심)의 제1종 오류율을 비교하는 모의실험을 작성하라. $k = 3$개 집단, $n = 20$, $\alpha = 0.05$를 쓴다.
 
 </div>
 
@@ -217,7 +217,7 @@ stat, pval = stats.levene(x, y, center='mean')
 
 <div class="drillbox" markdown>
 
-**연습문제 4.** 정규성 아래에서 크기가 같은 두 집단에 대해 Levene 검정(평균 중심)이 절대편차에 대한 이표본 $t$ 검정과 동등함을 증명하라.
+**연습문제 4.** <span class="diff med" title="중간"></span> 정규성 아래에서 크기가 같은 두 집단에 대해 Levene 검정(평균 중심)이 절대편차에 대한 이표본 $t$ 검정과 동등함을 증명하라.
 
 </div>
 
@@ -257,7 +257,7 @@ stat, pval = stats.levene(x, y, center='mean')
 
 <div class="drillbox" markdown>
 
-**연습문제 5.** 어떤 연구자에게 표본크기 25, 30, 28, 22인 처치집단 넷이 있다. Levene 검정을 수행하여 $W = 3.12$, $p = 0.028$을 얻었다. 일원분산분석을 계획하고 있다. 이 결과를 두고 취할 수 있는 두 가지 행동 방향을 기술하고 각각의 절충을 설명하라.
+**연습문제 5.** <span class="diff easy" title="쉬움"></span> 어떤 연구자에게 표본크기 25, 30, 28, 22인 처치집단 넷이 있다. Levene 검정을 수행하여 $W = 3.12$, $p = 0.028$을 얻었다. 일원분산분석을 계획하고 있다. 이 결과를 두고 취할 수 있는 두 가지 행동 방향을 기술하고 각각의 절충을 설명하라.
 
 </div>
 

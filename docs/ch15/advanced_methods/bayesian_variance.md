@@ -111,7 +111,7 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** 분산의 베이즈 추정. 관측값 $n = 20$개의 표본분산이 $S^2 = 15.3$이다. 약정보 사전분포 $\sigma^2 \sim \text{Inv-Gamma}(0.01, 0.01)$을 쓰면
+**보기 1.** <span class="diff easy" title="쉬움"></span> 분산의 베이즈 추정. 관측값 $n = 20$개의 표본분산이 $S^2 = 15.3$이다. 약정보 사전분포 $\sigma^2 \sim \text{Inv-Gamma}(0.01, 0.01)$을 쓰면
 
 $$
 \alpha_n = 0.01 + \frac{19}{2} = 9.51
@@ -215,7 +215,7 @@ P(sigma1^2 > sigma2^2 | data) = 0.835
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 무정보 사전분포 $\sigma^2 \sim \text{Inv-Gamma}(0.001, 0.001)$과 $\sum(x_i - \bar{x})^2 = 180$인 $n = 20$ 표본에 대해 사후분포와 $\sigma^2$의 95% 신용구간을 구하라.
 
 </div>
@@ -263,7 +263,7 @@ P(sigma1^2 > sigma2^2 | data) = 0.835
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 분산에 대한 Bayes 신용구간과 빈도주의 신뢰구간을 비교하라. 핵심적인 철학적 차이는 무엇인가?
 
 </div>
@@ -283,7 +283,7 @@ P(sigma1^2 > sigma2^2 | data) = 0.835
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 작은 표본에서 사전분포의 선택이 Bayes 분산 검정에 어떤 영향을 주는가? 강한 정보 사전분포로 예시하라.
 
 </div>
@@ -335,7 +335,7 @@ P(sigma1^2 > sigma2^2 | data) = 0.835
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 Bayes 인자로 분산에 대한 두 가설 $H_0: \sigma^2 = \sigma_0^2$과 $H_1: \sigma^2 \neq \sigma_0^2$을 비교하는 방법을 기술하라.
 
 </div>

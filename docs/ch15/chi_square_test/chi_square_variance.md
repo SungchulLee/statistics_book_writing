@@ -169,7 +169,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 어떤 품질관리 기술자가 제품 $n = 25$개의 중량을 측정하여 $s^2 = 4.5$를 얻었다. $\alpha = 0.05$에서 $H_0: \sigma^2 = 3.0$을 $H_a: \sigma^2 > 3.0$에 대해 검정하라.
 
 </div>
@@ -195,7 +195,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 정규성 아래에서 $S^2$의 표집분포로부터 카이제곱 검정통계량을 유도하라.
 
 </div>
@@ -215,7 +215,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 분산에 대한 카이제곱 검정이 평균에 대한 $t$ 검정보다 비정규성에 훨씬 민감한 이유를 설명하라.
 
 </div>
@@ -231,7 +231,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff easy" title="쉬움"></span>
 $n = 20$, $s^2 = 15$일 때 $\sigma^2$의 95% 신뢰구간을 구성하라.
 
 </div>

@@ -157,7 +157,7 @@ Bootstrap p-value: 0.0206
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 독립인 두 표본에 대해 $H_0: \sigma_1^2 = \sigma_2^2$을 검정하는 붓스트랩 절차를 기술하라.
 
 </div>
@@ -175,7 +175,7 @@ Bootstrap p-value: 0.0206
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 고전적 방법과 비교하여 붓스트랩이 분산 검정에 특히 유용한 이유는 무엇인가?
 
 </div>
@@ -189,7 +189,7 @@ Bootstrap p-value: 0.0206
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 붓스트랩 등분산 검정의 실제 크기를 모의실험으로 확인하라. 정규, $t_5$, 지수분포에서 균형 설계와 불균형 설계를 비교하라.
 
 </div>
@@ -252,7 +252,7 @@ Bootstrap p-value: 0.0206
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 신뢰할 만한 분산 검정을 위해 보통 몇 번의 붓스트랩 반복 $B$가 필요한가? 무엇이 이 선택을 결정하는가?
 
 </div>
@@ -278,7 +278,7 @@ Bootstrap p-value: 0.0206
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 붓스트랩 등분산 검정이 $p = 0.047$을, Levene 검정이 $p = 0.12$를 냈다. 불일치의 가능한 원인을 논하라.
 
 </div>

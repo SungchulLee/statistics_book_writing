@@ -264,7 +264,7 @@ Welch 분산분석은 집단 간 등분산을 가정하지 않고 집단평균�
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 "이분산이 있으면 회귀계수가 편향된다"는 서술이 왜 틀렸는지 설명하고, 실제로 무엇이 편향되는지 밝혀라.
 
 </div>
@@ -304,7 +304,7 @@ Welch 분산분석은 집단 간 등분산을 가정하지 않고 집단평균�
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 본문의 Levene 예제 자료가 왜 퇴화되어 있는지 보이고, 분산 차이가 있는 자료로 바꾸어 검정을 다시 수행하라.
 
 </div>
@@ -365,7 +365,7 @@ Welch 분산분석은 집단 간 등분산을 가정하지 않고 집단평균�
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 `sm.stats.anova_lm(model, typ=2, robust='hc3')`이 Welch 분산분석과 어떻게 다른지 구체적으로 설명하고, 두 결과를 비교하라.
 
 </div>
@@ -409,7 +409,7 @@ Welch 분산분석은 집단 간 등분산을 가정하지 않고 집단평균�
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 본문의 두 단계 흐름 대신 "처음부터 Welch + HC3"를 쓰는 대안이 제시되었다. 각 방식의 장단점을 정리하고 언제 어느 쪽을 택할지 논하라.
 
 </div>

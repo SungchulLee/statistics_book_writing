@@ -81,7 +81,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 $\operatorname{Var}(S^2) \approx \sigma^4(\gamma_2 + 2)/n$임을 이용하여, 정규성 아래에서 이 식이 $2\sigma^4/n$으로 환원됨을 보이고, 여러 분포에 대해 정규 대비 팽창 인자를 계산하라.
 
 </div>
@@ -122,7 +122,7 @@ $\operatorname{Var}(S^2) \approx \sigma^4(\gamma_2 + 2)/n$임을 이용하여, �
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 1차 자기회귀 과정 $X_t = \phi X_{t-1} + \varepsilon_t$($\varepsilon_t \sim \mathcal{N}(0,1)$)에서 $n = 50$인 자료를 생성하고, 참 주변분산 $\sigma^2 = 1/(1-\phi^2)$에 대한 카이제곱 분산 검정의 경험적 크기를 $\phi \in \{0, 0.3, 0.6, 0.8\}$에 대해 추정하라.
 
 </div>
@@ -185,7 +185,7 @@ $\operatorname{Var}(S^2) \approx \sigma^4(\gamma_2 + 2)/n$임을 이용하여, �
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 "중심극한정리가 $t$ 검정을 구원하지만 분산 검정은 구원하지 못한다"는 경고 상자의 주장을 정량적으로 뒷받침하라. $\bar{X}$와 $S^2$의 표집분포가 정규로 수렴하는 속도를 비교하라.
 
 </div>
@@ -213,7 +213,7 @@ $\operatorname{Var}(S^2) \approx \sigma^4(\gamma_2 + 2)/n$임을 이용하여, �
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 점검표는 정규성이 의심스러우면 로버스트 검정을 쓰라고 권한다. 그런데 "정규성 검정으로 확인한 뒤 결정한다"는 절차 자체에 문제가 있다. 그 문제를 설명하고 대안을 제시하라.
 
 </div>

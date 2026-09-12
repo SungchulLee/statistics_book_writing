@@ -67,7 +67,7 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** 두 집단의 Fligner-Killeen 검정. 두 집단을 생각하자.
+**보기 1.** <span class="diff easy" title="쉬움"></span> 두 집단의 Fligner-Killeen 검정. 두 집단을 생각하자.
 
 | 집단 1 | 집단 2 |
 |---|---|
@@ -159,7 +159,7 @@ Fligner-Killeen 검정은 오염이 심하다고 의심되거나 자료의 정�
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 정규점수 변환 $a = \Phi^{-1}((1 + R/(N+1))/2)$이 왜 양수만 만들어 내며, 왜 위쪽 꼬리를 압축하는지 설명하라. $N = 100$일 때 가장 큰 점수를 계산하라.
 
 </div>
@@ -213,7 +213,7 @@ Fligner-Killeen 검정은 오염이 심하다고 의심되거나 자료의 정�
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 세 검정(Bartlett, Brown-Forsythe, Fligner-Killeen)의 크기와 검정력을 오염된 자료에서 비교하는 모의실험을 수행하라.
 
 </div>
@@ -268,7 +268,7 @@ Fligner-Killeen 검정은 오염이 심하다고 의심되거나 자료의 정�
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 본문 예제에서 표본분산 비가 50배인데도 Fligner-Killeen이 기각하지 못했다. 이것이 이 검정의 결함인지, 아니면 올바른 동작인지 논하라.
 
 </div>
@@ -290,7 +290,7 @@ Fligner-Killeen 검정은 오염이 심하다고 의심되거나 자료의 정�
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 Fligner-Killeen 검정통계량의 분모가 $\frac{1}{N-1}\sum_{ij}(a_{ij} - \bar{a})^2$인 이유를 설명하라. 왜 집단내 변동이 아니라 전체 변동을 쓰는가?
 
 </div>

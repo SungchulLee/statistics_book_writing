@@ -94,7 +94,7 @@ F 분포는 여러 다른 분포와 연결된다.
 
 <div class="exbox" markdown>
 
-**보기 1.** 두 모분산의 F 검정. 정규 모집단에서 크기 $n_1 = 16$, $n_2 = 21$인 독립 표본을 뽑았다. 표본분산은 $S_1^2 = 45$, $S_2^2 = 28$이다. $H_0\colon \sigma_1^2 = \sigma_2^2$ 아래에서
+**보기 1.** <span class="diff easy" title="쉬움"></span> 두 모분산의 F 검정. 정규 모집단에서 크기 $n_1 = 16$, $n_2 = 21$인 독립 표본을 뽑았다. 표본분산은 $S_1^2 = 45$, $S_2^2 = 28$이다. $H_0\colon \sigma_1^2 = \sigma_2^2$ 아래에서
 
 $$
 F = \frac{45}{28} = 1.607
@@ -144,7 +144,7 @@ P-value: 0.3184
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 $F \sim F_{d_1,d_2}$의 평균이 $d_2 > 2$일 때 $d_2/(d_2-2)$임을 유도하라. 왜 이 값이 $d_1$에 의존하지 않는지 설명하라.
 
 </div>
@@ -180,7 +180,7 @@ $F \sim F_{d_1,d_2}$의 평균이 $d_2 > 2$일 때 $d_2/(d_2-2)$임을 유도하
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 $T \sim t_\nu$이면 $T^2 \sim F_{1,\nu}$임을 보이고, 이 관계가 이표본 $t$ 검정과 일원분산분석의 관계에 어떻게 나타나는지 설명하라.
 
 </div>
@@ -214,7 +214,7 @@ $T \sim t_\nu$이면 $T^2 \sim F_{1,\nu}$임을 보이고, 이 관계가 이표�
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 $d_2 \to \infty$일 때 $d_1 F \to \chi^2_{d_1}$임을 보이고, $d_1 = 5$에 대해 $d_2 \in \{10, 100, 10000\}$에서 이 근사의 정확도를 수치로 확인하라.
 
 </div>
@@ -267,7 +267,7 @@ $d_2 \to \infty$일 때 $d_1 F \to \chi^2_{d_1}$임을 보이고, $d_1 = 5$에 �
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 F 분포의 왜도가 자유도에 따라 어떻게 변하는지 조사하고, 이것이 왜 F 검정의 양측 임계값을 비대칭으로 만드는지 설명하라.
 
 </div>

@@ -84,7 +84,7 @@
 
 <div class="exbox" markdown>
 
-**보기 1.** 흐름. 어떤 연구자가 $k = 4$개 처치집단의 평균 점수를 비교한다. 각 집단은 $n_i = 15$개 관측값을 갖는다.
+**보기 1.** <span class="diff easy" title="쉬움"></span> 흐름. 어떤 연구자가 $k = 4$개 처치집단의 평균 점수를 비교한다. 각 집단은 $n_i = 15$개 관측값을 갖는다.
 
 **1단계.** 각 집단의 정규성을 확인한다(Shapiro-Wilk 검정 또는 Q-Q 그림). 네 집단이 모두 정규성 확인을 통과했다고 하자.
 
@@ -148,7 +148,7 @@ Welch ANOVA:    F = 9.7514, df = (3, 30.81), p = 0.000112
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 집단 4개, 각 $n = 15$, 표준편차 $(5, 5, 5, 10)$이고 평균이 모두 같은 상황에서 세 전략(항상 표준 분산분석, 항상 Welch, 두 단계)의 제1종 오류율을 모의실험으로 비교하라.
 
 </div>
@@ -208,7 +208,7 @@ Welch ANOVA:    F = 9.7514, df = (3, 30.81), p = 0.000112
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 등분산일 때 Welch 분산분석이 잃는 검정력을 모의실험으로 수량화하라. 그 손실이 받아들일 만한지 논하라.
 
 </div>
@@ -255,7 +255,7 @@ Welch ANOVA:    F = 9.7514, df = (3, 30.81), p = 0.000112
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 Welch 분산분석의 검정통계량과 자유도 공식을 서술하고, 등분산일 때 표준 분산분석으로 환원되는지 확인하라.
 
 </div>
@@ -297,7 +297,7 @@ Welch 분산분석의 검정통계량과 자유도 공식을 서술하고, 등�
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 "사전검정이 기각하지 못했으므로 등분산성이 확인되었다"는 서술이 왜 부적절한지 설명하고, 대신 어떻게 보고해야 하는지 제시하라.
 
 </div>

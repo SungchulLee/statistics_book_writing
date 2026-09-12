@@ -245,7 +245,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 $H = \sum_i n_i(\bar{R}_i - \bar{R})^2$ 형태의 통계량이 왜 카이제곱분포를 따를 수 없는지 차원 분석으로 설명하라.
 
 </div>
@@ -275,7 +275,7 @@ $H = \sum_i n_i(\bar{R}_i - \bar{R})^2$ 형태의 통계량이 왜 카이제곱�
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 본문 예제에서 세 집단의 편차가 모두 $\{0, 5, 5, 10, x\}$ 형태이고 $x$만 다르다. 이 구조가 검정력에 어떤 영향을 주는지 설명하고, 같은 분산비를 유지하면서 검정력이 더 높아지도록 자료를 재구성하라.
 
 </div>
@@ -329,7 +329,7 @@ $H = \sum_i n_i(\bar{R}_i - \bar{R})^2$ 형태의 통계량이 왜 카이제곱�
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 Levene 계열 검정이 정규성을 요구하지 않는다고 하지만, 어떤 형태의 가정은 여전히 필요하다. 어떤 가정인지 밝히고 위반 시 무슨 일이 일어나는지 설명하라.
 
 </div>
@@ -353,7 +353,7 @@ Levene 계열 검정이 정규성을 요구하지 않는다고 하지만, 어떤
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 $Z_{ij} = |X_{ij} - \tilde{X}_i|$에서 중앙값 $\tilde{X}_i$가 자료에서 추정된 값인데도, 분산분석 F 검정의 자유도를 $N - k$로 그대로 쓴다. 이 자유도가 정확한지 논하라.
 
 </div>

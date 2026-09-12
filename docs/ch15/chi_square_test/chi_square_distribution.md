@@ -104,7 +104,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 1.** $Q \sim \chi^2(10)$이라 하자. Python으로 $P(Q > 18.307)$과 $P(3.247 < Q < 20.483)$을 계산하라.
+**연습문제 1.** <span class="diff easy" title="쉬움"></span> $Q \sim \chi^2(10)$이라 하자. Python으로 $P(Q > 18.307)$과 $P(3.247 < Q < 20.483)$을 계산하라.
 
 </div>
 
@@ -135,7 +135,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 2.** 가법성을 증명하라. $Q_1 \sim \chi^2(d_1)$과 $Q_2 \sim \chi^2(d_2)$가 독립이면 $Q_1 + Q_2 \sim \chi^2(d_1 + d_2)$임을 보여라.
+**연습문제 2.** <span class="diff med" title="중간"></span> 가법성을 증명하라. $Q_1 \sim \chi^2(d_1)$과 $Q_2 \sim \chi^2(d_2)$가 독립이면 $Q_1 + Q_2 \sim \chi^2(d_1 + d_2)$임을 보여라.
 
 </div>
 
@@ -167,7 +167,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** $N(3, 4)$(곧 $\mu = 3$, $\sigma^2 = 4$)에서 $n = 50$개 표본을 뽑아 $(n-1)S^2/\sigma^2$을 계산하는 과정을 10,000회 반복하는 모의실험을 작성하라. 히스토그램을 그리고 $\chi^2(49)$ PDF를 겹쳐 이론적 결과를 확인하라.
+**연습문제 3.** <span class="diff easy" title="쉬움"></span> $N(3, 4)$(곧 $\mu = 3$, $\sigma^2 = 4$)에서 $n = 50$개 표본을 뽑아 $(n-1)S^2/\sigma^2$을 계산하는 과정을 10,000회 반복하는 모의실험을 작성하라. 히스토그램을 그리고 $\chi^2(49)$ PDF를 겹쳐 이론적 결과를 확인하라.
 
 </div>
 
@@ -224,7 +224,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 4.** $\chi^2(d)$의 적률생성함수(MGF)를 유도하고 이를 이용해 $E[Q]$와 $\operatorname{Var}(Q)$를 구하라.
+**연습문제 4.** <span class="diff med" title="중간"></span> $\chi^2(d)$의 적률생성함수(MGF)를 유도하고 이를 이용해 $E[Q]$와 $\operatorname{Var}(Q)$를 구하라.
 
 </div>
 
@@ -268,7 +268,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 5.** $d = 1, 5, 10, 30, 100$에 대해 공식 $\gamma_1 = \sqrt{8/d}$로 $\chi^2(d)$의 왜도를 계산하고 표본으로 수치 확인하라. $d$가 커질수록 정규근사가 개선되는 이유를 설명하라.
+**연습문제 5.** <span class="diff easy" title="쉬움"></span> $d = 1, 5, 10, 30, 100$에 대해 공식 $\gamma_1 = \sqrt{8/d}$로 $\chi^2(d)$의 왜도를 계산하고 표본으로 수치 확인하라. $d$가 커질수록 정규근사가 개선되는 이유를 설명하라.
 
 </div>
 

@@ -111,7 +111,7 @@ Bartlett 검정이 올바른 기준분포를 쓴다는 것이 확인된다.
 
 <div class="exbox" markdown>
 
-**보기 1.** 두 집단 분산의 가능도비 검정. $n_1 = 15$, $S_1^2 = 22.4$인 집단과 $n_2 = 18$, $S_2^2 = 35.1$인 집단이 있다.
+**보기 1.** <span class="diff easy" title="쉬움"></span> 두 집단 분산의 가능도비 검정. $n_1 = 15$, $S_1^2 = 22.4$인 집단과 $n_2 = 18$, $S_2^2 = 35.1$인 집단이 있다.
 
 **1단계.** 합동분산:
 
@@ -191,7 +191,7 @@ P-value: 0.3919
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 정규 자료에서 $H_0: \sigma^2 = \sigma_0^2$ 대 $H_a: \sigma^2 \neq \sigma_0^2$을 검정하는 가능도비 검정통계량을 쓰라.
 
 </div>
@@ -217,7 +217,7 @@ P-value: 0.3919
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 일표본 분산에 대한 가능도비 검정과 카이제곱 검정을 비교하라. 두 검정은 동등한가?
 
 </div>
@@ -274,7 +274,7 @@ P-value: 0.3919
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 $H_0: \sigma_1^2 = \sigma_2^2 = \dots = \sigma_k^2$의 검정에서 LRT 통계량이 Bartlett 검정과 어떻게 관련되는지 보여라.
 
 </div>
@@ -300,7 +300,7 @@ $H_0: \sigma_1^2 = \sigma_2^2 = \dots = \sigma_k^2$의 검정에서 LRT 통계�
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 분산에 대한 가능도비 검정이 비정규성에 민감한 이유는 무엇이며 어떤 대안이 있는가?
 
 </div>

@@ -86,7 +86,7 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** 모분산의 카이제곱 검정. 정규 모집단에서 $n = 21$개의 확률표본을 뽑았고 표본분산이 $S^2 = 18.5$였다고 하자. 유의수준 $\alpha = 0.05$에서 $H_0\colon \sigma^2 = 15$를 $H_1\colon \sigma^2 \neq 15$에 대해 검정하자.
+**보기 1.** <span class="diff easy" title="쉬움"></span> 모분산의 카이제곱 검정. 정규 모집단에서 $n = 21$개의 확률표본을 뽑았고 표본분산이 $S^2 = 18.5$였다고 하자. 유의수준 $\alpha = 0.05$에서 $H_0\colon \sigma^2 = 15$를 $H_1\colon \sigma^2 \neq 15$에 대해 검정하자.
 
 **1단계.** 검정통계량을 계산한다.
 
@@ -152,7 +152,7 @@ Fail to reject H0: insufficient evidence of a difference.
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 유도의 출발점이 되는 항등식
 
 $$
@@ -188,7 +188,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff hard" title="어려움"></span>
 정규 자료에서 $\bar{X}$와 $S^2$이 독립임을 보여라. 이 독립성이 정규분포에만 특유한 성질임을 설명하라.
 
 </div>
@@ -212,7 +212,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 $\chi^2_\nu$의 왜도가 $\sqrt{8/\nu}$임을 이용하여, 왜 $\sigma^2$의 신뢰구간이 비대칭이며 $\nu$가 커질수록 대칭에 가까워지는지 설명하라. $\nu = 5, 20, 50, 200$에서 정규근사와 Wilson-Hilferty 근사의 정확도를 비교하라.
 
 </div>
@@ -262,7 +262,7 @@ $\chi^2_\nu$의 왜도가 $\sqrt{8/\nu}$임을 이용하여, 왜 $\sigma^2$의 �
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 Cochran 정리 없이도 $\sum(X_i - \bar{X})^2/\sigma^2$의 **평균**은 $n-1$임을 정규성 가정 없이 보일 수 있다. 이를 증명하고, 왜 평균만으로는 카이제곱 검정을 정당화할 수 없는지 설명하라.
 
 </div>

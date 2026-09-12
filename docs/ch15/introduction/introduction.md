@@ -76,7 +76,7 @@ Fligner-Killeen 검정은 순위에 기반한 비모수 검정이다. 매우 로
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 크기가 각각 $n_1 = 10$, $n_2 = 12$, $n_3 = 15$이고 표본분산이 $s_1^2 = 4.2$, $s_2^2 = 9.8$, $s_3^2 = 6.1$인 세 집단이 있다. Bartlett 통계량을 손으로 계산하고 $\alpha = 0.05$에서 판정하라.
 
 </div>
@@ -146,7 +146,7 @@ Fligner-Killeen 검정은 순위에 기반한 비모수 검정이다. 매우 로
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 Bartlett 검정이 여러 집단에 대한 **가능도비 검정**임을 보이고, 왜 $\ln S_i^2$의 형태로 나타나는지 설명하라.
 
 </div>
@@ -178,7 +178,7 @@ Bartlett 검정이 여러 집단에 대한 **가능도비 검정**임을 보이�
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 표에서 카이제곱, F, Bartlett 검정만이 "정규성 필요: 예"로 표시되어 있다. 이 세 검정이 비정규성에 특별히 취약한 공통 이유를 설명하라.
 
 </div>
@@ -208,7 +208,7 @@ Bartlett 검정이 여러 집단에 대한 **가능도비 검정**임을 보이�
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 $\text{Lognormal}(0, 0.8)$에서 크기 40인 세 표본을 뽑아(모분산이 **정확히 같다**) Bartlett, Levene, Brown-Forsythe, Fligner-Killeen 검정을 모두 수행하라. 결과를 비교하고 해석하라.
 
 </div>

@@ -151,7 +151,7 @@ Fligner-Killeen: stat=9.563, p=0.0084
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 크기 표에서 Levene 검정이 $t_5$(0.064)보다 지수분포(0.192)에서 훨씬 나쁘다. 두 분포의 초과첨도가 모두 6인데도 그렇다. 이 차이의 원인을 설명하라.
 
 </div>
@@ -169,7 +169,7 @@ Fligner-Killeen: stat=9.563, p=0.0084
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 Bartlett 검정의 기각률이 정규 자료(0.692)와 $t_5$ 자료(0.693)에서 거의 같다. 이것이 왜 "검정력이 유지된다"는 뜻이 아닌지 설명하고, 공정한 비교 방법을 제시하라.
 
 </div>
@@ -233,7 +233,7 @@ Bartlett 검정의 기각률이 정규 자료(0.692)와 $t_5$ 자료(0.693)에�
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 판정 흐름도의 1단계는 "정규성이 확인되었는가"를 자료로 판정한다. 이 절차의 문제점을 지적하고, 흐름도를 어떻게 고치면 좋을지 제안하라.
 
 </div>
@@ -267,7 +267,7 @@ Bartlett 검정의 기각률이 정규 자료(0.692)와 $t_5$ 자료(0.693)에�
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 본문 소프트웨어 예제에서 네 검정이 모두 강하게 기각했다. 이렇게 결론이 일치하는 경우와 갈리는 경우 각각에서 실무자가 어떻게 행동해야 하는지 논하라.
 
 </div>

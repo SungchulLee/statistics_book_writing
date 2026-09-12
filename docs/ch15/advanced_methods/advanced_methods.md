@@ -228,7 +228,7 @@ print(pm.summary(trace, var_names=['var1', 'var2', 'ratio']))
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 분산에 대한 가설검정에서 가능도비 검정, Wald 검정, 스코어 검정을 비교하라. 어떤 조건에서 세 검정이 비슷한 결과를 주는가?
 
 </div>
@@ -254,7 +254,7 @@ print(pm.summary(trace, var_names=['var1', 'var2', 'ratio']))
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 고전적 카이제곱 검정보다 고급 분산 검정 방법(붓스트랩, Bayes)이 선호되는 상황을 기술하라.
 
 </div>
@@ -270,7 +270,7 @@ print(pm.summary(trace, var_names=['var1', 'var2', 'ratio']))
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 등분산에 대한 붓스트랩 검정은 귀무가설 아래에서 재표집한다. 그 재표집 절차를 기술하라.
 
 </div>
@@ -295,7 +295,7 @@ print(pm.summary(trace, var_names=['var1', 'var2', 'ratio']))
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 $\sigma^2$에 대한 Bayes 검정에서 정규 자료 분산의 켤레 사전분포는 역감마분포이다. 사전분포가 $\sigma^2 \sim \text{Inv-Gamma}(\alpha_0, \beta_0)$이고 자료점 $n$개를 관측했을 때 사후분포를 쓰라.
 
 </div>

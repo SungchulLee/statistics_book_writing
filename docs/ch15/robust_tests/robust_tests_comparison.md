@@ -149,7 +149,7 @@ Fligner-Killeen     : power = 0.7810
 
 <div class="drillbox" markdown>
 
-**연습문제 1.** 위 거짓 양성 모의실험을 $n = 30$ 대신 $n = 100$으로 실행하라. 표본크기를 늘리면 대수정규 자료에서 Bartlett 검정의 제1종 오류 조절이 개선되는가? 설명하라.
+**연습문제 1.** <span class="diff med" title="중간"></span> 위 거짓 양성 모의실험을 $n = 30$ 대신 $n = 100$으로 실행하라. 표본크기를 늘리면 대수정규 자료에서 Bartlett 검정의 제1종 오류 조절이 개선되는가? 설명하라.
 
 </div>
 
@@ -200,7 +200,7 @@ Fligner-Killeen     : power = 0.7810
 
 <div class="drillbox" markdown>
 
-**연습문제 2.** $k = 2$개 집단인 경우 F 검정(이표본판)을 비교에 추가하라. 대수정규 자료에서 그 제1종 오류율이 Bartlett과 어떻게 비교되는가?
+**연습문제 2.** <span class="diff med" title="중간"></span> $k = 2$개 집단인 경우 F 검정(이표본판)을 비교에 추가하라. 대수정규 자료에서 그 제1종 오류율이 Bartlett과 어떻게 비교되는가?
 
 </div>
 
@@ -244,7 +244,7 @@ Fligner-Killeen     : power = 0.7810
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** 집단 표준편차가 $\sigma_1 = 1$, $\sigma_2 = 1.5$, $\sigma_3 = 2$이고 자료가 $t(5)$ 분포에서 올 때 각 검정의 검정력을 추정하는 모의실험을 설계하라. 전체적으로 어느 검정이 가장 좋은지 논하라.
+**연습문제 3.** <span class="diff med" title="중간"></span> 집단 표준편차가 $\sigma_1 = 1$, $\sigma_2 = 1.5$, $\sigma_3 = 2$이고 자료가 $t(5)$ 분포에서 올 때 각 검정의 검정력을 추정하는 모의실험을 설계하라. 전체적으로 어느 검정이 가장 좋은지 논하라.
 
 </div>
 
@@ -307,7 +307,7 @@ Fligner-Killeen     : power = 0.7810
 
 <div class="drillbox" markdown>
 
-**연습문제 4.** Brown-Forsythe 검정이 평균 중심 Levene 검정보다 치우침에 로버스트한 이유를 수학적으로 설명하라.
+**연습문제 4.** <span class="diff med" title="중간"></span> Brown-Forsythe 검정이 평균 중심 Levene 검정보다 치우침에 로버스트한 이유를 수학적으로 설명하라.
 
 </div>
 
@@ -336,7 +336,7 @@ Fligner-Killeen     : power = 0.7810
 
 <div class="drillbox" markdown>
 
-**연습문제 5.** 결과가 오른쪽으로 치우쳐 있다고 알려진 임상시험 자료(예: 입원 기간)를 분석한다고 하자. 후속 분석을 결정하기 전에 세 처치군의 등분산을 확인해야 한다. 어떤 검정을 권하며 그 이유는 무엇인가? 대안을 최소 두 가지 논하라.
+**연습문제 5.** <span class="diff med" title="중간"></span> 결과가 오른쪽으로 치우쳐 있다고 알려진 임상시험 자료(예: 입원 기간)를 분석한다고 하자. 후속 분석을 결정하기 전에 세 처치군의 등분산을 확인해야 한다. 어떤 검정을 권하며 그 이유는 무엇인가? 대안을 최소 두 가지 논하라.
 
 </div>
 

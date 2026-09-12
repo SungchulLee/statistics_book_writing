@@ -190,7 +190,7 @@ Fail to reject H0: no significant difference in variances.
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 두 생산라인이 비슷한 제품을 만드는데, 제품 중량의 변동성이 두 라인 사이에 다를 것으로 의심된다. 다음 표본자료(그램)가 주어졌다.
 
 - **생산라인 1:** $[14.2, 13.8, 15.1, 14.7, 14.5, 14.6, 15.0, 14.8]$
@@ -249,7 +249,7 @@ F 검정으로 유의수준 5%에서 두 생산라인의 분산이 유의하게 
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 $F_{\alpha}(df_1, df_2) = 1/F_{1-\alpha}(df_2, df_1)$임을 증명하고, 이 관계가 왜 F 분포표를 절반으로 줄여 주는지 설명하라.
 
 </div>
@@ -281,7 +281,7 @@ $F_{\alpha}(df_1, df_2) = 1/F_{1-\alpha}(df_2, df_1)$임을 증명하고, 이 �
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 $n_1 = n_2 = n$인 균형 설계에서 $\alpha = 0.05$ 양측 F 검정이 탐지할 수 있는 최소 분산비를 $n \in \{5, 10, 20, 50, 100\}$에 대해 계산하라(임계값 기준). 결과가 실무에 주는 함의를 논하라.
 
 </div>
@@ -325,7 +325,7 @@ $n_1 = n_2 = n$인 균형 설계에서 $\alpha = 0.05$ 양측 F 검정이 탐지
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 F 검정이 두꺼운 꼬리에 얼마나 취약한지 모의실험으로 확인하라. 두 집단 모두 $n = 30$이고 분산이 같은 상황에서 정규, $t_{10}$, $t_5$, 지수분포에 대해 $\alpha = 0.05$ F 검정의 경험적 크기를 추정하라.
 
 </div>

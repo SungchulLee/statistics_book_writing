@@ -62,7 +62,7 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** 세 집단의 Brown-Forsythe 검정. 세 집단을 생각하자.
+**보기 1.** <span class="diff easy" title="쉬움"></span> 세 집단의 Brown-Forsythe 검정. 세 집단을 생각하자.
 
 | 집단 1 | 집단 2 | 집단 3 |
 |---|---|---|
@@ -152,7 +152,7 @@ Brown-Forsythe 검정은 대부분의 실무 상황에서 분산의 동질성을
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 Brown-Forsythe 검정의 크기가 여러 분포에서 안정적인지 모의실험으로 확인하고, 평균 중심 Levene과 비교하라.
 
 </div>
@@ -206,7 +206,7 @@ Brown-Forsythe 검정의 크기가 여러 분포에서 안정적인지 모의실
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 중앙값 중심화가 실제로 유리한 자료를 구성하라. 이상점 하나가 집단평균을 끌어당기는 상황에서 두 검정의 결과를 비교하라.
 
 </div>
@@ -261,7 +261,7 @@ Brown-Forsythe 검정의 크기가 여러 분포에서 안정적인지 모의실
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 중앙값의 붕괴점이 50%임을 설명하고, 평균의 붕괴점과 비교하라. 이것이 Brown-Forsythe 검정의 로버스트성과 어떻게 연결되는가?
 
 </div>
@@ -291,7 +291,7 @@ Brown-Forsythe 검정의 크기가 여러 분포에서 안정적인지 모의실
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 Brown-Forsythe 검정이 항상 최선인 것은 아니다. 이 검정보다 다른 검정을 써야 하는 두 가지 구체적 상황을 제시하고 이유를 설명하라.
 
 </div>

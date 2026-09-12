@@ -61,7 +61,7 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** 두 기간의 변동성 비교. 어떤 분석가가 중앙은행 정책 발표 후 주식의 일별 수익률 변동성이 변했는지 판정하려 한다. 자료는 발표 전 60거래일과 발표 후 60거래일이다.
+**보기 1.** <span class="diff easy" title="쉬움"></span> 두 기간의 변동성 비교. 어떤 분석가가 중앙은행 정책 발표 후 주식의 일별 수익률 변동성이 변했는지 판정하려 한다. 자료는 발표 전 60거래일과 발표 후 60거래일이다.
 
 **설정:**
 
@@ -172,7 +172,7 @@ F-test:          F = 0.3317, p = 3.791e-05 (unreliable for heavy-tailed data)
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 $t_5$ 수익률에서 F 검정, Brown-Forsythe, Fligner-Killeen의 경험적 크기를 모의실험으로 확인하라. 두 기간의 참 변동성은 같게 둔다.
 
 </div>
@@ -217,7 +217,7 @@ $t_5$ 수익률에서 F 검정, Brown-Forsythe, Fligner-Killeen의 경험적 크
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 변동성 군집이 있을 때 로버스트 검정도 무너짐을 모의실험으로 확인하라. GARCH(1,1) 자료로 두 인접 기간을 비교하라.
 
 </div>
@@ -279,7 +279,7 @@ $t_5$ 수익률에서 F 검정, Brown-Forsythe, Fligner-Killeen의 경험적 크
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 "일별 변동성 1.8%"를 $t_5$ 분포로 모의생성할 때 `standard_t(5) * 0.018`이 왜 틀렸는지 설명하고, 여러 자유도에 대한 보정계수를 계산하라.
 
 </div>
@@ -345,7 +345,7 @@ $t_5$ 수익률에서 F 검정, Brown-Forsythe, Fligner-Killeen의 경험적 크
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff easy" title="쉬움"></span>
 분석가가 논문에서 두 기간의 표본분산 $S_1^2 = 0.000324$, $S_2^2 = 0.000576$($n_1 = n_2 = 60$)만 보고했다. 이 정보만으로 로버스트 검정을 수행할 수 있는가? 할 수 없다면 무엇이 필요한가?
 
 </div>

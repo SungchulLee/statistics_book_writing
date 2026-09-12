@@ -151,7 +151,7 @@ F 검정에서는 분자와 분모가 모두 표본분산이다. 어느 쪽도 �
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff hard" title="어려움"></span>
 $\operatorname{Var}(S^2) = \frac{1}{n}\left(\mu_4 - \frac{n-3}{n-1}\sigma^4\right)$가 정규분포에서 $2\sigma^4/(n-1)$로 환원됨을 보여라.
 
 </div>
@@ -193,7 +193,7 @@ $\operatorname{Var}(S^2) = \frac{1}{n}\left(\mu_4 - \frac{n-3}{n-1}\sigma^4\righ
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 본문 표에서 $t_5$($\gamma_2 = 6$, 대칭)의 크기가 0.160인 반면 지수분포($\gamma_2 = 6$, 왜도 2)는 0.267이다. 첨도가 같은데 왜 다른지 설명하라.
 
 </div>
@@ -213,7 +213,7 @@ $\operatorname{Var}(S^2) = \frac{1}{n}\left(\mu_4 - \frac{n-3}{n-1}\sigma^4\righ
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 균등분포에서 F 검정의 크기가 0.005로 극단적으로 작다. 이것이 왜 "안전한" 것이 아닌지 설명하라.
 
 </div>
@@ -233,7 +233,7 @@ $\operatorname{Var}(S^2) = \frac{1}{n}\left(\mu_4 - \frac{n-3}{n-1}\sigma^4\righ
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 표본크기를 키우면 F 검정의 크기 왜곡이 오히려 **커진다**는 본문의 관찰을 설명하라. 이것이 대부분의 통계적 직관과 어떻게 어긋나는가?
 
 </div>

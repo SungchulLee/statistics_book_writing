@@ -91,7 +91,7 @@ Fligner-Killeen 검정이 가장 로버스트하지만 엄격한 정규성 아�
 
 <div class="drillbox" markdown>
 
-**연습문제 1.** 두 집단 $\mathbf{x}_1 = (3, 7, 5)$와 $\mathbf{x}_2 = (1, 10, 6, 4)$에 대해 Fligner-Killeen 검정통계량을 손으로 계산하라. 집단중앙값으로부터의 편차, 순위, 정규분위수 점수, 최종 $X^2$을 보여라.
+**연습문제 1.** <span class="diff easy" title="쉬움"></span> 두 집단 $\mathbf{x}_1 = (3, 7, 5)$와 $\mathbf{x}_2 = (1, 10, 6, 4)$에 대해 Fligner-Killeen 검정통계량을 손으로 계산하라. 집단중앙값으로부터의 편차, 순위, 정규분위수 점수, 최종 $X^2$을 보여라.
 
 </div>
 
@@ -141,7 +141,7 @@ Fligner-Killeen 검정이 가장 로버스트하지만 엄격한 정규성 아�
 
 <div class="drillbox" markdown>
 
-**연습문제 2.** 표준 Cauchy 분포(극단적으로 두꺼운 꼬리)에서 크기 40인 세 집단을 생성하라. Bartlett 검정, Brown-Forsythe 검정, Fligner-Killeen 검정을 $\alpha = 0.05$에서 2,000회 반복 적용하여 각각의 거짓 양성률을 보고하라. 어느 검정이 제1종 오류를 가장 잘 조절하는가?
+**연습문제 2.** <span class="diff easy" title="쉬움"></span> 표준 Cauchy 분포(극단적으로 두꺼운 꼬리)에서 크기 40인 세 집단을 생성하라. Bartlett 검정, Brown-Forsythe 검정, Fligner-Killeen 검정을 $\alpha = 0.05$에서 2,000회 반복 적용하여 각각의 거짓 양성률을 보고하라. 어느 검정이 제1종 오류를 가장 잘 조절하는가?
 
 </div>
 
@@ -199,7 +199,7 @@ Fligner-Killeen 검정이 가장 로버스트하지만 엄격한 정규성 아�
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** 원래의 순위 대신 정규분위수 점수 변환 $a = \Phi^{-1}((1 + R/(N+1))/2)$을 쓰는 이유를 설명하라. 원래의 순위를 그대로 쓰면 어떻게 되는가?
+**연습문제 3.** <span class="diff med" title="중간"></span> 원래의 순위 대신 정규분위수 점수 변환 $a = \Phi^{-1}((1 + R/(N+1))/2)$을 쓰는 이유를 설명하라. 원래의 순위를 그대로 쓰면 어떻게 되는가?
 
 </div>
 
@@ -219,7 +219,7 @@ Fligner-Killeen 검정이 가장 로버스트하지만 엄격한 정규성 아�
 
 <div class="drillbox" markdown>
 
-**연습문제 4.** 모의생성한 세 주식 포트폴리오의 월별 수익률 변동성을 Fligner-Killeen 검정으로 비교하라. 각각 60개월 수익률을 생성한다. 포트폴리오 A는 $\mathcal{N}(0.01, 0.04^2)$, B는 $\mathcal{N}(0.01, 0.06^2)$, C는 $\mathcal{N}(0.01, 0.08^2)$이다. 검정 결과를 보고하고 실무적 유의성을 논하라.
+**연습문제 4.** <span class="diff med" title="중간"></span> 모의생성한 세 주식 포트폴리오의 월별 수익률 변동성을 Fligner-Killeen 검정으로 비교하라. 각각 60개월 수익률을 생성한다. 포트폴리오 A는 $\mathcal{N}(0.01, 0.04^2)$, B는 $\mathcal{N}(0.01, 0.06^2)$, C는 $\mathcal{N}(0.01, 0.08^2)$이다. 검정 결과를 보고하고 실무적 유의성을 논하라.
 
 </div>
 
@@ -262,7 +262,7 @@ Fligner-Killeen 검정이 가장 로버스트하지만 엄격한 정규성 아�
 
 <div class="drillbox" markdown>
 
-**연습문제 5.** Fligner-Killeen 검정통계량의 점근 귀무분포를 유도하라. 구체적으로 $H_0$ 아래에서 집단 크기가 모두 $n$이고 집단이 $k$개일 때, $n \to \infty$이면 검정통계량이 $\chi^2(k-1)$로 수렴함을 보여라.
+**연습문제 5.** <span class="diff hard" title="어려움"></span> Fligner-Killeen 검정통계량의 점근 귀무분포를 유도하라. 구체적으로 $H_0$ 아래에서 집단 크기가 모두 $n$이고 집단이 $k$개일 때, $n \to \infty$이면 검정통계량이 $\chi^2(k-1)$로 수렴함을 보여라.
 
 </div>
 

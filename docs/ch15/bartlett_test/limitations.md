@@ -134,7 +134,7 @@ Bartlett은 1937년 F 검정을 $k > 2$개 집단으로 확장한 것으로서 �
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 정규분포를 따르지 않는 두 자료집합에 Bartlett 검정을 수행하여 낮은 $p$값(등분산 $H_0$ 기각)을 얻었다. 그러나 Levene 검정은 높은 $p$값(기각 실패)을 냈다. 이 두 결과를 어떻게 해석해야 하는가?
 
 </div>
@@ -150,7 +150,7 @@ Bartlett은 1937년 F 검정을 $k > 2$개 집단으로 확장한 것으로서 �
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff hard" title="어려움"></span>
 $\operatorname{Var}(\ln S^2) \approx (\gamma_2 + 2)/\nu$를 델타 방법으로 유도하고, 이것이 왜 Bartlett 검정을 F 검정보다 첨도에 민감하게 만드는지 설명하라.
 
 </div>
@@ -175,7 +175,7 @@ $\operatorname{Var}(\ln S^2) \approx (\gamma_2 + 2)/\nu$를 델타 방법으로 
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 균등분포 자료에서 Bartlett 검정의 크기가 0.003으로 극단적으로 작다. 이 "안전해 보이는" 결과가 실무에서 왜 위험한지, 특히 분산분석 사전검정 맥락에서 설명하라.
 
 </div>
@@ -193,7 +193,7 @@ $\operatorname{Var}(\ln S^2) \approx (\gamma_2 + 2)/\nu$를 델타 방법으로 
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 "Bartlett 검정이 유의하면 비정규성 때문일 수 있다"는 경고를 실제로 확인하라. 등분산인 지수분포 세 집단에서 Bartlett이 기각한 표본들을 모아 그 표본분산의 실제 흩어짐을 조사하라.
 
 </div>
