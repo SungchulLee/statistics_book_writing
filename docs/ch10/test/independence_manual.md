@@ -39,9 +39,11 @@ $$
 
 인 $\chi^2$ 분포를 따른다.
 
-## 코드
-
 ### 기대도수 계산
+
+<div class="codebox" markdown>
+
+**예제 1.** 기대도수 계산
 
 ```python
 import numpy as np
@@ -75,13 +77,21 @@ print("열합 일치:", np.allclose(E.sum(axis=0), demo.sum(axis=0)))
 열합 일치: True
 ```
 
+</div>
+
 주변 합계가 보존된다는 것이 자유도가 $rc$가 아니라 $(r-1)(c-1)$인 이유다. 행합과 열합이 고정되면 $3 \times 2$ 표에서 자유롭게 정할 수 있는 칸은 2개뿐이다.
 
 `keepdims=True` 인자는 2차원 모양을 유지하여 행렬 곱 `row_totals @ col_totals`이 $r \times c$ 기대도수 행렬로 올바르게 계산되도록 한다.
 
 ### 전체 계산
 
+<div class="codebox" markdown>
+
+**예제 2.** 독립성 검정 손계산
+
 ```python
+# 행이 한 변수의 수준, 열이 다른 변수의 수준이다.
+# 실수로 나눗셈을 하게 되므로 dtype=float 로 만들어 둔다.
 observed_counts = np.array([[934, 1070],
                             [113,   92],
                             [ 20,    8]], dtype=float)
@@ -103,13 +113,21 @@ chi_squared_statistic = 11.81
 p_value = 0.27%
 ```
 
+</div>
+
 `scipy.stats.chi2_contingency`에 같은 표를 넣어도 같은 값이 나온다. 다만 그 함수는 $2 \times 2$ 표에 한해 Yates 연속성 보정을 기본으로 적용하므로, 이 $3 \times 2$ 표에서만 결과가 일치한다.
 
 ### 시각화
 
+<div class="codebox" markdown>
+
+**예제 3.** 검정 결과를 그림으로
+
 ```python
 import matplotlib.pyplot as plt
 
+# 카이제곱 분포를 그리고 통계량을 경계로 좌우를 나눠 칠한다.
+# 오른쪽 넓이가 p-값이다. 이 검정은 방향이 없어 언제나 우측만 본다.
 fig, ax = plt.subplots(figsize=(12, 4))
 
 x_left = np.linspace(0, chi2, 200)
@@ -138,6 +156,8 @@ ax.spines["left"].set_position("zero")
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 ![카이제곱 분포와 p-값](./img/independence_manual_78.png)
 

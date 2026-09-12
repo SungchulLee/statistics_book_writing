@@ -27,9 +27,11 @@ $$
 
 이 보정은 검정통계량을 조금 줄여, 칸 도수가 작을 때 검정을 더 보수적으로 만든다.
 
-## 코드
-
 ### 템플릿 함수
+
+<div class="codebox" markdown>
+
+**예제 1.** 독립성 검정 템플릿 함수
 
 ```python
 import numpy as np
@@ -59,14 +61,21 @@ correction=False: 6.6516
 correction=True : 4.8869
 ```
 
+</div>
+
 같은 표에서 통계량이 6.65와 4.89로 달라진다. p-값으로는 0.0099와 0.0270이라 5% 기준에서는 둘 다 기각이지만, 1% 기준에서는 결론이 갈린다.
 
 ### 사용 예
+
+<div class="codebox" markdown>
+
+**예제 2.** 템플릿 사용 예
 
 ```python
 observed = np.array([[30, 20, 10],
                      [12, 25, 18]], dtype=float)
 
+# 2x2 표가 아니면 연속성 보정은 뜻이 없다. 그래서 correction=False 로 둔다.
 chi2, p, df, exp = chi2_independence(observed, correction=False)
 print(f"chi2 = {chi2:.3f}, p = {p:.4f}, df = {df}")
 print("expected:\n", exp)
@@ -80,6 +89,8 @@ expected:
  [[21.91304348 23.47826087 14.60869565]
  [20.08695652 21.52173913 13.39130435]]
 ```
+
+</div>
 
 자유도가 $(2-1)(3-1) = 2$이고, 기대도수는 주변 합계로부터 자동으로 계산된다.
 

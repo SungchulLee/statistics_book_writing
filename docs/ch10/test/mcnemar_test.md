@@ -49,9 +49,11 @@ $$
 
 이다. $b + c$가 충분히 크면(보통 $b + c \ge 25$) $H_0$ 아래에서 이 통계량은 근사적으로 $\chi^2(1)$ 분포를 따른다.
 
-## 코드
-
 ### 직접 구현
+
+<div class="codebox" markdown>
+
+**예제 1.** McNemar 검정 직접 구현
 
 ```python
 import numpy as np
@@ -87,13 +89,19 @@ def mcnemar_test(table):
     return chi2, p_value
 ```
 
+</div>
+
 ### 검정 실행
 
+<div class="codebox" markdown>
+
+**예제 2.** 치료 전후 자료로 검정하기
+
 ```python
-# Disease status before/after treatment
-#                  After+   After-
-# Before+           101      121
-# Before-            59       33
+# 치료 전후의 질병 상태. 같은 사람을 두 번 관찰한 대응자료다.
+#                  치료후+  치료후-
+# 치료전+            101      121
+# 치료전-             59       33
 table = np.array([[101, 121],
                   [ 59,  33]])
 
@@ -115,6 +123,8 @@ McNemar chi2 = 20.6722
 p-value      = 5.4501e-06
 Reject H0: significant change after treatment (alpha = 0.05).
 ```
+
+</div>
 
 **이 예제의 주요 값:**
 

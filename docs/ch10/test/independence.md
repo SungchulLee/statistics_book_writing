@@ -163,6 +163,10 @@ $$\text{두 변수는 독립이 아니다.}$$
 
 ### Python 구현 (`scipy.stats.chi2_contingency` 없이)
 
+<div class="codebox" markdown>
+
+**예제 1.** 정의대로 계산한 독립성 검정
+
 ```python
 import matplotlib.pyplot as plt
 import numpy as np
@@ -186,22 +190,22 @@ def compute_expected(observed_counts):
 
     return expected_counts
 
-# Observed counts in contingency table format
+# 분할표 형태의 관측도수
 observed_counts = np.array([[934, 1070], [113, 92], [20, 8]])
 expected_counts = compute_expected(observed_counts)
 
-# Degrees of freedom for chi-squared test
+# 자유도 = (행-1)(열-1)
 degrees_of_freedom = (observed_counts.shape[0] - 1) * (observed_counts.shape[1] - 1)
 
-# Chi-squared statistic calculation
+# 검정통계량 계산
 chi_squared_statistic = np.sum((observed_counts - expected_counts) ** 2 / expected_counts)
 p_value = stats.chi2(degrees_of_freedom).sf(chi_squared_statistic)
 
-# Print the chi-squared statistic and p-value
+# 통계량과 p-값 출력
 print(f"chi_squared_statistic = {chi_squared_statistic:.02f}")
 print(f"p_value = {p_value:.02%}")
 
-# Plot chi-squared distribution and highlight observed statistic
+# 카이제곱 분포를 그리고 관측된 통계량 자리를 표시한다
 fig, ax = plt.subplots(figsize=(12, 4))
 
 x_values = np.linspace(0, chi_squared_statistic, 100)
@@ -238,30 +242,36 @@ chi_squared_statistic = 11.81
 p_value = 0.27%
 ```
 
+</div>
+
 ![카이제곱 분포와 p-값](./img/independence_161.png)
 
 ### Python 구현 (`scipy.stats.chi2_contingency` 사용)
+
+<div class="codebox" markdown>
+
+**예제 2.** scipy로 계산한 독립성 검정
 
 ```python
 import matplotlib.pyplot as plt
 import numpy as np
 from scipy import stats
 
-# Observed counts in a contingency table format
+# 분할표 형태의 관측도수
 observed_counts = np.array([[934, 1070], [113, 92], [20, 8]])
 
 # chi2_contingency는 2x2 표에 한해 Yates 연속성 보정을 **기본으로 적용한다**.
 # 여기는 3x2라 보정이 없으므로 위의 수동 계산과 정확히 같은 값이 나온다.
 chi_squared_statistic, p_value, degrees_of_freedom, expected_counts = stats.chi2_contingency(observed_counts)
 
-# Print the chi-squared statistic and p-value
+# 통계량과 p-값 출력
 print(f"chi_squared_statistic = {chi_squared_statistic:.02f}")
 print(f"p_value = {p_value:.02%}", end="\n\n")
 
 print("expected_counts")
 print(expected_counts, end="\n\n")
 
-# Plot
+# 그림으로 확인한다
 fig, ax = plt.subplots(figsize=(12, 4))
 
 x_values = np.linspace(0, chi_squared_statistic, 100)
@@ -303,6 +313,8 @@ expected_counts
  [  13.35538668   14.64461332]]
 ```
 
+</div>
+
 ![카이제곱 분포와 p-값](./img/independence_234.png)
 
 수동 계산과 통계량이 소수점 둘째 자리까지 같다. `chi2_contingency`는 같은 식을 감싼 것이며, 덤으로 기대도수까지 돌려준다.
@@ -313,7 +325,7 @@ expected_counts
 
 <div class="codebox" markdown>
 
-### 예제 1. 더 긴 손과 더 긴 발 { .eg }
+### 예제 3. 더 긴 손과 더 긴 발 { .eg }
 
 > **출처**: [Khan Academy — Chi-Square Test Association Independence](https://www.khanacademy.org/math/ap-statistics/chi-square-tests/chi-square-tests-two-way-tables/v/chi-square-test-association-independence)
 
@@ -384,8 +396,6 @@ $\text{df} = 4$에서 $\chi^2 = 11.94$의 p-값은 약 **0.018**이다.
 
 **결론**: p-값(0.018)이 통상적인 유의수준 0.05보다 작으므로 귀무가설을 기각한다. 발 길이와 손 길이 사이에 연관이 있다는 증거가 있음을 시사한다.
 
-#### Python 구현
-
 ```python
 import matplotlib.pyplot as plt
 import numpy as np
@@ -449,7 +459,7 @@ p_value   = 1.78%
 
 <div class="codebox" markdown>
 
-### 예제 2. 기대도수 계산의 상세 { .eg }
+### 예제 4. 기대도수 계산의 상세 { .eg }
 
 이 예제는 더 큰 분할표에 대해 기대도수 계산을 처음부터 끝까지 단계별로 보여준다.
 
@@ -463,7 +473,7 @@ import numpy as np
 import pandas as pd
 from scipy import stats
 
-# Observed frequencies
+# 관측도수
 observed = np.array([
     [10, 20, 30, 40, 20],
     [5, 15, 40, 50, 10],
@@ -472,7 +482,7 @@ observed = np.array([
 
 alpha = 0.05
 
-# Calculate marginal totals
+# 행합과 열합, 곧 주변도수
 row_totals = observed.sum(axis=1)
 col_totals = observed.sum(axis=0)
 grand_total = observed.sum()
@@ -493,13 +503,13 @@ print("EXPECTED FREQUENCIES")
 print("=" * 70)
 print("Formula: E_ij = (Row_i_total × Column_j_total) / Grand_total\n")
 
-# Calculate expected frequencies
+# 주변도수의 곱으로 기대도수를 만든다
 expected = np.zeros_like(observed, dtype=float)
 for i in range(observed.shape[0]):
     for j in range(observed.shape[1]):
         expected[i, j] = (row_totals[i] * col_totals[j]) / grand_total
 
-# Display expected frequencies
+# 기대도수 출력
 exp_df = pd.DataFrame(expected,
                       index=['Row 1 (20)', 'Row 2 (30)', 'Row 3 (40)'],
                       columns=['Col 1', 'Col 2', 'Col 3', 'Col 4', 'Col 5'])
@@ -642,7 +652,7 @@ $p = 0.0595$로 5% 기준을 아슬아슬하게 넘어 기각하지 못한다. �
     import random
     from scipy import stats
 
-    # Click rates for three headlines
+    # 제목 세 가지의 클릭 수
     headlines = pd.DataFrame({
         'Click': [14, 8, 12],
         'No-click': [986, 992, 988],
@@ -673,6 +683,10 @@ $p = 0.0595$로 5% 기준을 아슬아슬하게 넘어 기각하지 못한다. �
 
 ### 재표본추출 접근 (비복원)
 
+<div class="codebox" markdown>
+
+**예제 5.** 재표본추출로 하는 검정 — 비복원
+
 ```python
 def chi2_stat(observed, expected):
     """Calculate chi-square statistic."""
@@ -682,7 +696,7 @@ def chi2_stat(observed, expected):
                                   for observe in row])
     return np.sum(pearson_residuals)
 
-# Observed chi-square
+# 관측된 카이제곱 통계량
 row_average = clicks.mean(axis=1)
 expected = np.array([[row_average['Click'], row_average['Click'], row_average['Click']],
                      [row_average['No-click'], row_average['No-click'], row_average['No-click']]])
@@ -690,7 +704,7 @@ expected = np.array([[row_average['Click'], row_average['Click'], row_average['C
 chi2_obs = chi2_stat(clicks.values, row_average.values)
 print(f"Observed chi-square: {chi2_obs:.4f}")
 
-# Resampling approach
+# 재표본추출 방법 — 분포를 가정하지 않는다
 def perm_fun_chisq(box):
     """
     Generate permuted contingency table by random allocation.
@@ -705,14 +719,14 @@ def perm_fun_chisq(box):
     float : Chi-square statistic for permuted table
     """
     random.shuffle(box)
-    # Allocate first 1000 to Headline A, next 1000 to B, last 1000 to C
+    # 앞 1000개를 A, 다음 1000개를 B, 마지막 1000개를 C에 배정한다
     sample_clicks = [sum(box[0:1000]),
                      sum(box[1000:2000]),
                      sum(box[2000:3000])]
     sample_noclicks = [1000 - n for n in sample_clicks]
     return chi2_stat([sample_clicks, sample_noclicks], row_average.values)
 
-# Create box: 1 for each click, 0 for each non-click
+# 상자를 만든다. 클릭은 1, 비클릭은 0 이다.
 box = [1] * 34 + [0] * 2966
 
 # 순열검정 실행
@@ -730,11 +744,17 @@ Observed chi-square: 1.6659
 Resampling p-value: 0.4750
 ```
 
+</div>
+
 상자에 클릭 34개와 비클릭 2,966개를 넣고 뒤섞은 뒤 1,000명씩 세 묶음으로 나눈다. 이것이 "헤드라인이 아무 영향도 주지 않는" 세상이며, 그 세상에서 카이제곱이 관측값 1.67 이상으로 나오는 비율이 곧 p-값이다.
 
 ### 재표본추출 접근 (복원)
 
 대신 상자에서 복원추출할 수도 있다:
+
+<div class="codebox" markdown>
+
+**예제 6.** 재표본추출로 하는 검정 — 복원
 
 ```python
 def sample_with_replacement(box):
@@ -761,12 +781,18 @@ print(f"Resampling (with replacement) p-value: {p_value_wr:.4f}")
 Resampling (with replacement) p-value: 0.6745
 ```
 
+</div>
+
 비복원의 0.475보다 눈에 띄게 크다. 복원추출에서는 전체 클릭 수가 34로 고정되지 않고 그 자체로 흔들리기 때문에 귀무분포가 더 퍼지고, 같은 관측값이 덜 극단적으로 보인다. 어느 쪽이 맞는가는 무엇을 고정된 것으로 볼지에 달려 있다. 전체 클릭 수를 주어진 것으로 본다면 비복원이 맞다.
 
 ### 비교: 재표본추출 대 모수적 방법
 
+<div class="codebox" markdown>
+
+**예제 7.** 재표본추출과 모수적 방법의 비교
+
 ```python
-# Parametric chi-square test
+# 모수적 카이제곱 검정
 chi2_param, p_param, df, expected_param = stats.chi2_contingency(clicks.values)
 
 print(f"\nComparison:")
@@ -785,18 +811,24 @@ Resampling (without repl): p-value: 0.4750
 Resampling (with repl): p-value: 0.6745
 ```
 
+</div>
+
 세 방법 모두 기각하지 못한다는 결론은 같지만 p-값은 0.43에서 0.67까지 벌어진다. 클릭 수가 10 안팎으로 작아 카이제곱 근사가 낙관적인 쪽으로 기울고, 비복원 재표본추출이 그보다 조금 보수적인 값을 준다.
 
 세 헤드라인의 클릭률 차이(1.4% 대 0.8%)를 이 표본으로는 가려낼 수 없다는 것이 결론이다. 이런 크기의 차이를 잡으려면 앞 장의 검정력 계산이 말해 주듯 집단당 수천 명이 필요하다.
 
 ### 시각화
 
+<div class="codebox" markdown>
+
+**예제 8.** 두 재표본 분포 그리기
+
 ```python
 import matplotlib.pyplot as plt
 
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 5))
 
-# Resampling distribution (without replacement)
+# 비복원 재표본 분포 — 순열검정에 해당한다
 ax1.hist(perm_chi2, bins=40, alpha=0.7, color='steelblue', edgecolor='black')
 ax1.axvline(chi2_obs, color='red', linewidth=2, label=f'Observed = {chi2_obs:.2f}')
 ax1.set_xlabel('Chi-square Statistic')
@@ -806,7 +838,7 @@ ax1.legend()
 ax1.spines['top'].set_visible(False)
 ax1.spines['right'].set_visible(False)
 
-# Resampling distribution (with replacement)
+# 복원 재표본 분포 — 붓스트랩에 해당한다
 ax2.hist(perm_chi2_wr, bins=40, alpha=0.7, color='forestgreen', edgecolor='black')
 ax2.axvline(chi2_obs, color='red', linewidth=2, label=f'Observed = {chi2_obs:.2f}')
 ax2.set_xlabel('Chi-square Statistic')
@@ -819,6 +851,8 @@ ax2.spines['right'].set_visible(False)
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 ![재표본추출 분포](./img/independence_628.png)
 

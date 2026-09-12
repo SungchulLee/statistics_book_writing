@@ -53,7 +53,9 @@ $$
 - $\text{OR} > 1$: 행 1이 행 2보다 열 1에 속할 가능성이 높다.
 - $\text{OR} < 1$: 행 1이 행 2보다 열 1에 속할 가능성이 낮다.
 
-## 코드
+<div class="codebox" markdown>
+
+**예제 1.** Fisher의 정확검정
 
 ```python
 import numpy as np
@@ -93,6 +95,8 @@ Odds ratio : 0.0500
 p-value    : 0.0350
 Reject H0: significant association (alpha = 0.05).
 ```
+
+</div>
 
 오즈비 $\text{OR} = (1 \times 2)/(5 \times 8) = 0.05$이고, p-값은 초기하분포로 정확히 계산되어 0.0350이다. 전체가 16명뿐인데도 유의하다.
 

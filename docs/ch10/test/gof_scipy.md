@@ -19,7 +19,9 @@ $$
 
 을 자유도 $\text{df} = k - 1$로 계산한다. 여기서 $k$는 범주의 개수이다.
 
-## 코드
+<div class="codebox" markdown>
+
+**예제 1.** scipy로 적합도 검정
 
 ```python
 from scipy import stats
@@ -47,6 +49,8 @@ chi_square_statistic = 5.25
 p_value = 0.07243975703425146
 ```
 
+</div>
+
 수동 계산 페이지의 결과와 정확히 같다. `chisquare`는 같은 식을 감싼 것일 뿐이다.
 
 **`stats.chisquare`의 주요 인자:**
@@ -66,6 +70,10 @@ p_value = 0.07243975703425146
 
 귀무가설이 균등분포를 지정한다면 `f_exp`를 아예 생략해도 된다:
 
+<div class="codebox" markdown>
+
+**예제 2.** 기대도수를 생략하는 경우
+
 ```python
 statistic, p = stats.chisquare(f_obs=[4, 13, 7])
 print(f"{statistic = }, {p = }")
@@ -77,11 +85,17 @@ print(f"{statistic = }, {p = }")
 statistic = 5.25, p = 0.07243975703425146
 ```
 
+</div>
+
 SciPy가 자동으로 각 기대도수를 $n / k$로 설정한다. 여기서 $n$은 전체 도수, $k$는 `f_obs`의 길이이다. 앞의 결과와 완전히 같다.
 
 ## 균등하지 않은 기대 비율
 
 귀무가설이 서로 다른 비율 $p_1, p_2, \ldots, p_k$를 지정하면 기대도수를 $E_i = n \cdot p_i$로 계산하여 명시적으로 넘긴다:
+
+<div class="codebox" markdown>
+
+**예제 3.** 기대 비율이 균등하지 않을 때
 
 ```python
 n = 300
@@ -98,6 +112,8 @@ print(f"{stat = :.4f}, {pval = :.4f}")
 ```
 stat = 1.3889, pval = 0.4994
 ```
+
+</div>
 
 관측 비율이 43.3%, 28.3%, 28.3%로 가설의 40%, 30%, 30%에 가까워 기각하지 못한다($p = 0.50$).
 

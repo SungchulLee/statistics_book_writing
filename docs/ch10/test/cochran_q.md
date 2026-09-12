@@ -29,9 +29,9 @@ $$
 
 $k = 2$일 때 Cochran의 Q는 McNemar 검정으로 환원된다. 구체적으로 $k = 2$인 Q 통계량은 (연속성 보정을 하지 않은) McNemar 카이제곱 통계량과 같다. 그래서 Cochran의 Q는 관련된 이진 결과를 셋 이상 비교할 때의 자연스러운 확장이 된다.
 
-## 코드
+<div class="codebox" markdown>
 
-### 구현
+**예제 1.** Cochran의 Q 검정 구현
 
 ```python
 import numpy as np
@@ -62,7 +62,13 @@ def cochran_q(data):
     return Q, p_value
 ```
 
+</div>
+
 ### 검정 실행
+
+<div class="codebox" markdown>
+
+**예제 2.** 세 과제의 성공률 비교
 
 ```python
 # 피험자 12명이 과제 3개를 수행한 결과 (성공=1, 실패=0)
@@ -99,6 +105,8 @@ Cochran's Q = 8.6667
 p-value     = 0.0131
 Reject H0: success rates differ across tasks.
 ```
+
+</div>
 
 피험자가 12명뿐인데도 기각된다. 같은 사람이 세 과제를 모두 수행하므로 개인차가 상쇄되기 때문이며, 대응설계가 버는 것이 여기서도 같다.
 

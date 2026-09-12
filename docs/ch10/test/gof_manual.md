@@ -25,9 +25,11 @@ $$
 
 인 $\chi^2$ 분포를 따른다.
 
-## 코드
-
 아래 스크립트는 통계량을 처음부터 계산하고 기각역을 색칠한 $\chi^2$ 밀도를 그린다.
+
+<div class="codebox" markdown>
+
+**예제 1.** 적합도 검정 손계산
 
 ```python
 import matplotlib.pyplot as plt
@@ -58,6 +60,8 @@ Chi-square Statistic = 5.2500
 p-value = 0.0724
 ```
 
+</div>
+
 기대도수가 모두 8로 5를 넘으므로 카이제곱 근사를 써도 되는 상황이다.
 
 **단계별 설명:**
@@ -74,10 +78,14 @@ $$
 
 ### 시각화
 
+<div class="codebox" markdown>
+
+**예제 2.** 검정 결과를 그림으로
+
 ```python
 fig, ax = plt.subplots(figsize=(12, 4))
 
-# Left portion of the chi-square pdf (non-rejection region)
+# 왼쪽 구간 — 기각하지 않는 쪽
 x_left = np.linspace(0, chi_square_statistic, 100)
 y_left = stats.chi2(degrees_of_freedom).pdf(x_left)
 ax.plot(x_left, y_left, linewidth=3)
@@ -85,7 +93,7 @@ x_fill_left = np.concatenate([[0], x_left, [chi_square_statistic], [0]])
 y_fill_left = np.concatenate([[0], y_left, [0], [0]])
 ax.fill(x_fill_left, y_fill_left, alpha=0.1)
 
-# Right tail (rejection region)
+# 오른쪽 꼬리 — 기각역
 x_right = np.linspace(chi_square_statistic, 20, 100)
 y_right = stats.chi2(degrees_of_freedom).pdf(x_right)
 ax.plot(x_right, y_right, linewidth=3)
@@ -95,7 +103,7 @@ x_fill_right = np.concatenate(
 y_fill_right = np.concatenate([[0], y_right, [0], [0]])
 ax.fill(x_fill_right, y_fill_right, alpha=0.1)
 
-# Annotate p-value
+# p-값을 표시한다
 ax.annotate(
     f"p-value = {p_value:.02%}",
     xy=((12.5 + 15.0) / 2, 0.01),
@@ -111,6 +119,8 @@ ax.spines["left"].set_position("zero")
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 ![카이제곱 분포와 p-값](./img/gof_manual_66.png)
 

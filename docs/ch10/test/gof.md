@@ -203,50 +203,50 @@ import matplotlib.pyplot as plt
 import numpy as np
 import scipy.stats as stats
 
-# Observed data and expected mean-based values
+# 관측도수와, 고르게 나온다고 볼 때의 기대도수
 observed_counts = np.array([4, 13, 7])
 expected_counts = np.ones(3) * observed_counts.mean()
 degrees_of_freedom = observed_counts.shape[0] - 1
 
-# Chi-square test statistic and p-value calculation
+# 검정통계량과 p-값 계산
 chi_square_statistic = np.sum((observed_counts - expected_counts) ** 2 / expected_counts)
 p_value = stats.chi2(degrees_of_freedom).sf(chi_square_statistic)
 
-# Display the statistic and p-value
+# 결과 출력
 print(f"Chi-square Statistic = {chi_square_statistic:.4f}")
 print(f"p-value = {p_value:.4f}\n")
 
-# Plotting setup
+# 그림 준비
 fig, ax = plt.subplots(figsize=(12, 4))
 
-# Chi-square distribution plot up to observed statistic
+# 통계량까지의 왼쪽 구간
 x_left = np.linspace(0, chi_square_statistic, 100)
 y_left = stats.chi2(degrees_of_freedom).pdf(x_left)
 ax.plot(x_left, y_left, color='b', linewidth=3)
 
-# Fill left area under the curve (non-significant region)
+# 왼쪽을 칠한다. 기각하지 않는 쪽이다.
 x_fill_left = np.concatenate([[0], x_left, [chi_square_statistic], [0]])
 y_fill_left = np.concatenate([[0], y_left, [0], [0]])
 ax.fill(x_fill_left, y_fill_left, color='b', alpha=0.1)
 
-# Chi-square distribution plot for tail area (significant region)
+# 통계량 오른쪽 꼬리
 x_right = np.linspace(chi_square_statistic, 20, 100)
 y_right = stats.chi2(degrees_of_freedom).pdf(x_right)
 ax.plot(x_right, y_right, color='r', linewidth=3)
 
-# Fill right area under the curve (significant region)
+# 오른쪽을 칠한다. 이 넓이가 곧 p-값이다.
 x_fill_right = np.concatenate([[chi_square_statistic], x_right, [20], [chi_square_statistic]])
 y_fill_right = np.concatenate([[0], y_right, [0], [0]])
 ax.fill(x_fill_right, y_fill_right, color='r', alpha=0.1)
 
-# Annotate p-value with an arrow
+# 화살표로 p-값을 가리킨다
 annotation_xy = ((12.5 + 15.0) / 2, 0.01)
 annotation_xytext = (16.5, 0.10)
 arrow_properties = dict(color='k', width=0.2, headwidth=8)
 ax.annotate(f'p-value = {p_value:.02%}', annotation_xy, xytext=annotation_xytext,
             fontsize=15, arrowprops=arrow_properties)
 
-# Customize plot aesthetics
+# 축과 테두리를 다듬는다
 ax.spines['right'].set_visible(False)
 ax.spines['top'].set_visible(False)
 ax.spines['bottom'].set_position("zero")
@@ -269,17 +269,17 @@ p-value = 0.0724
 ```python
 from scipy import stats
 
-# Observed frequencies for each outcome: Win, Loss, Tie
+# 결과별 관측도수: 승, 패, 무
 observed_frequencies = [4, 13, 7]
 
-# Expected frequencies assuming an even distribution
+# 세 결과가 고르게 나온다고 볼 때의 기대도수
 total_games = sum(observed_frequencies)
 expected_frequencies = [total_games / 3] * 3
 
-# Perform the chi-square goodness-of-fit test
+# 카이제곱 적합도 검정
 chi_square_statistic, p_value = stats.chisquare(f_obs=observed_frequencies, f_exp=expected_frequencies)
 
-# Output results
+# 결과 출력
 print(f"{chi_square_statistic = }")
 print(f"{p_value = }")
 ```
@@ -324,6 +324,10 @@ p_value = 0.07243975703425146
 
 눈 3이 60번 중 17번 나온 것을 보고 일표본 비율 z-검정을 시도할 수도 있다:
 
+<div class="codebox" markdown>
+
+**예제 2.** 범주별로 따로 검정하면 안 되는 이유
+
 ```python
 import numpy as np
 import scipy.stats as stats
@@ -351,6 +355,8 @@ statistic = 2.42
 p_value   = 1.53%
 ```
 
+</div>
+
 이것이 주사위가 조작되었다는 충분한 증거일까?
 
 성급하다. 각 행에 대해 비슷한 검정을 할 수 있고, 행이 많으면 언젠가는 아주 작은 p-값을 보게 된다. 러시안 룰렛과 같아서, 계속하다 보면 주사위가 공정하더라도 조만간 아주 작은 p-값을 만나게 된다. 따라서 한 범주만 보는 검정으로 주사위가 조작되었다고 결론지을 수 없다. **모든 범주를 동시에** 고려하는 검정이 필요하다.
@@ -366,6 +372,10 @@ $$
 $$
 
 ### 검정통계량
+
+<div class="codebox" markdown>
+
+**예제 3.** 적합도 검정통계량
 
 ```python
 import numpy as np
@@ -387,6 +397,8 @@ if __name__ == "__main__":
 ```
 statistic = 10.4
 ```
+
+</div>
 
 ### 기각역
 
@@ -435,14 +447,23 @@ $$\text{주사위는 조작되지 않았다.}$$
 
 ### Python 구현 (`scipy.stats.chisquare` 없이)
 
+<div class="codebox" markdown>
+
+**예제 4.** 정의대로 계산한 적합도 검정
+
 ```python
 import matplotlib.pyplot as plt
 import numpy as np
 import scipy.stats as stats
 
 def main():
+    """적합도 검정통계량을 정의대로 구하고 p-값을 그림으로 보인다."""
+    # 주사위를 60번 굴린 결과라고 하자. 고른 주사위라면 눈마다 10번씩 나온다.
     observed = np.array([5, 7, 17, 14, 8, 9])
     expected = np.array([10] * 6)
+
+    # 자유도는 범주 수에서 1을 뺀다. 도수의 합이 60으로 묶여 있어
+    # 다섯 칸을 알면 나머지 한 칸이 자동으로 정해지기 때문이다.
     df = observed.shape[0] - 1
 
     statistic = np.sum((observed - expected)**2 / expected)
@@ -450,6 +471,8 @@ def main():
     print(f"{statistic = :.02f}")
     print(f"{p_value    = :.02%}")
 
+    # 파랑은 통계량보다 작은 쪽, 빨강은 그보다 큰 쪽이다.
+    # 적합도 검정은 언제나 우측검정이므로 빨간 넓이가 곧 p-값이다.
     _, ax = plt.subplots(figsize=(12, 4))
 
     x = np.linspace(0, statistic)
@@ -491,6 +514,8 @@ statistic = 10.40
 p_value    = 6.47%
 ```
 
+</div>
+
 ![카이제곱 분포와 p-값](./img/gof_400.png)
 
 $p = 0.0647$로 5% 수준에서 기각하지 못한다. 눈 3만 따로 보았을 때의 $p = 0.0153$과 대조된다. 눈 하나를 골라 검정하면 유의하고, 여섯 눈을 함께 보면 유의하지 않다.
@@ -499,16 +524,22 @@ $p = 0.0647$로 5% 수준에서 기각하지 못한다. 눈 3만 따로 보았�
 
 ### Python 구현 (`scipy.stats.chisquare` 사용)
 
+<div class="codebox" markdown>
+
+**예제 5.** scipy로 계산한 적합도 검정
+
 ```python
 import matplotlib.pyplot as plt
 import numpy as np
 import scipy.stats as stats
 
 def main():
+    """앞의 손계산을 scipy 한 줄로 대신한다. 값이 같아야 한다."""
     observed = np.array([5, 7, 17, 14, 8, 9])
     expected = np.array([10] * 6)
     df = observed.shape[0] - 1
 
+    # chisquare 는 통계량과 p-값을 한꺼번에 돌려준다. 자유도는 알아서 정한다.
     statistic, p_value = stats.chisquare(observed, f_exp=expected)
     print(f"{statistic = :.02f}")
     print(f"{p_value    = :.02%}")
@@ -553,6 +584,8 @@ if __name__ == "__main__":
 statistic = 10.40
 p_value    = 6.47%
 ```
+
+</div>
 
 ![카이제곱 분포와 p-값](./img/gof_451.png)
 

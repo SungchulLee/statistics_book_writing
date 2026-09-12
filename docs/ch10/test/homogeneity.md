@@ -107,12 +107,21 @@ $$
 
 ### Python 구현 (`scipy.stats.chi2_contingency` 없이)
 
+<div class="codebox" markdown>
+
+**예제 1.** 정의대로 계산한 동질성 검정
+
 ```python
 import matplotlib.pyplot as plt
 import numpy as np
 import scipy.stats as stats
 
 def compute_expected(observed):
+    """행과 열이 무관하다는 가정 아래 기대도수를 구한다.
+
+    무관하다면 결합확률이 주변확률의 곱이 된다. 그 곱에 전체 도수를 곱한
+    것이 각 칸의 기대도수다.
+    """
     row_sum = observed.sum(axis=1)
     row_pmf = row_sum.reshape((-1, 1)) / row_sum.sum()
 
@@ -124,9 +133,14 @@ def compute_expected(observed):
     return expected
 
 def main():
+    """동질성 검정을 정의대로 계산하고 p-값을 그림으로 보인다."""
+    # 행이 나라, 열이 응답 범주다. 나라마다 응답 분포가 같은지를 묻는다.
     observed = np.array([[541, 75, 231], [498, 71, 213],
                          [779, 96, 321], [282, 50, 345], [65, 19, 120]])
     expected = compute_expected(observed)
+
+    # 자유도는 (행-1)(열-1). 행합과 열합이 묶여 있어 자유롭게 움직일 수 있는
+    # 칸이 그만큼뿐이다.
     df = (observed.shape[0] - 1) * (observed.shape[1] - 1)
 
     statistic = np.sum((observed - expected)**2 / expected)
@@ -175,6 +189,8 @@ statistic = 212.94
 p_value   = 0.00%
 ```
 
+</div>
+
 ![카이제곱 분포와 p-값](./img/homogeneity_105.png)
 
 $\chi^2 = 212.94$는 자유도 8인 카이제곱분포에서 사실상 불가능한 값이다. 세 나라의 만족도 분포가 같지 않다는 결론을 강하게 지지한다.
@@ -183,15 +199,21 @@ $\chi^2 = 212.94$는 자유도 8인 카이제곱분포에서 사실상 불가능
 
 ### Python 구현 (`scipy.stats.chi2_contingency` 사용)
 
+<div class="codebox" markdown>
+
+**예제 2.** scipy로 계산한 동질성 검정
+
 ```python
 import matplotlib.pyplot as plt
 import numpy as np
 import scipy.stats as stats
 
 def main():
+    """같은 계산을 scipy 의 chi2_contingency 로 대신한다."""
     observed = np.array([[541, 75, 231], [498, 71, 213],
                          [779, 96, 321], [282, 50, 345], [65, 19, 120]])
 
+    # 기대도수와 자유도까지 함께 돌려준다. 앞의 손계산과 값이 맞아야 한다.
     statistic, p_value, df, expected = stats.chi2_contingency(observed)
     print(f"{statistic = :.02f}")
     print(f"{p_value   = :.02%}")
@@ -237,6 +259,8 @@ statistic = 212.94
 p_value   = 0.00%
 ```
 
+</div>
+
 ![카이제곱 분포와 p-값](./img/homogeneity_168.png)
 
 `chi2_contingency`가 수동 계산과 같은 값을 준다.
@@ -244,6 +268,10 @@ p_value   = 0.00%
 ### 동질적인 경우와의 비교
 
 동질적인 분포가 어떻게 보이는지 보이기 위해, 원자료를 나라들 사이에 분포가 비슷한 경우와 비교해 보자:
+
+<div class="codebox" markdown>
+
+**예제 3.** 동질적인 자료와 견주기
 
 ```python
 import matplotlib.pyplot as plt
@@ -260,7 +288,8 @@ def compute_expected(observed):
     return expected
 
 def main():
-    # Homogeneous case — distributions are similar across countries
+    # 이번에는 세 나라의 분포를 비슷하게 맞춘 자료다. 앞과 같은 절차인데
+    # p-값이 크게 나온다. 검정이 무엇에 반응하는지가 이 대비에서 드러난다.
     observed = np.array([[541, 530, 550], [498, 490, 503],
                          [779, 750, 760], [282, 270, 265], [65, 60, 58]])
     expected = compute_expected(observed)
@@ -282,9 +311,15 @@ statistic = 1.10
 p_value   = 99.75%
 ```
 
+</div>
+
 앞의 자료와 대비된다. 나라별 분포가 거의 같으면 통계량이 1.10까지 떨어지고 p-값은 99.75%가 된다. 자유도 8인 카이제곱분포의 평균이 8이므로, 1.10은 오히려 "지나치게 잘 맞는" 축에 든다.
 
 ### 두 나라 비교 (US 대 Canada)
+
+<div class="codebox" markdown>
+
+**예제 4.** 두 나라만 비교하기
 
 ```python
 import matplotlib.pyplot as plt
@@ -292,6 +327,7 @@ import numpy as np
 import scipy.stats as stats
 
 def main():
+    """열을 둘로 줄여 두 나라만 견준다."""
     observed = np.array([[541, 75], [498, 71], [779, 96], [282, 50], [65, 19]])
 
     statistic, p_value, df, expected = stats.chi2_contingency(observed)
@@ -317,6 +353,8 @@ expected
  [ 73.44911147  10.55088853]]
 ```
 
+</div>
+
 세 나라 중 둘만 놓고 비교하면 $\chi^2$이 212.94에서 11.73으로 뚝 떨어진다. 앞의 큰 통계량은 대부분 세 번째 나라 때문이었다는 뜻이다.
 
 $p = 0.0195$로 여전히 5% 수준에서는 기각하지만, 1% 수준에서는 기각하지 못한다. 기대도수 중 가장 작은 값이 10.55로 경험칙을 만족한다.
@@ -325,7 +363,7 @@ $p = 0.0195$로 여전히 5% 수준에서는 기각하지만, 1% 수준에서는
 
 <div class="codebox" markdown>
 
-### 예제 1. 좋아하는 과목과 주로 쓰는 손 { .eg }
+### 예제 5. 좋아하는 과목과 주로 쓰는 손 { .eg }
 
 > **출처**: [Khan Academy — Chi-Square Test Homogeneity](https://www.khanacademy.org/math/ap-statistics/chi-square-tests/chi-square-tests-two-way-tables/v/chi-square-test-homogeneity)
 
@@ -342,8 +380,6 @@ $p = 0.0195$로 여전히 5% 수준에서는 기각하지만, 1% 수준에서는
 | 인문학 | 15    | 25   | **40**  |
 | 같음      | 15    | 5    | **20**  |
 | 합계      | **60**| **40** | **100** |
-
-#### Python 구현
 
 ```python
 import matplotlib.pyplot as plt

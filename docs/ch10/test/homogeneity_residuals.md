@@ -36,9 +36,11 @@ $$
 
 $p_{ij}^{\text{Bonf}} < \alpha$이면 그 칸을 유의하다고 표시한다.
 
-## 코드
-
 ### 잔차와 조정 p-값 계산
+
+<div class="codebox" markdown>
+
+**예제 1.** 잔차로 어느 칸이 어긋났는지 찾기
 
 ```python
 import numpy as np
@@ -88,6 +90,8 @@ Bonferroni-adjusted per-cell p-values:
  [1.        1.        1.        1.       ]]
 ```
 
+</div>
+
 전체 검정은 $p = 0.028$로 기각했는데(앞 페이지) 칸별로 보면 Bonferroni 보정 후 유의한 칸이 하나도 없다. 가장 큰 잔차인 2.415(모집단 2, 범주 3)조차 보정 후 $p = 0.189$다.
 
 이런 어긋남은 흔하다. 전체 검정은 12개 칸의 어긋남을 **모아서** 보고, 칸별 검정은 12번의 검정에 대한 대가를 각각 치른다. 전체 검정이 유의한데 어느 칸도 유의하지 않은 것은 모순이 아니라, 증거가 한 칸에 몰려 있지 않고 흩어져 있다는 뜻이다.
@@ -95,6 +99,10 @@ Bonferroni-adjusted per-cell p-values:
 여기서 Bonferroni는 상당히 보수적이기도 하다. 잔차들은 서로 독립이 아니라 주변 합계 제약으로 묶여 있으므로(제곱합이 카이제곱 통계량으로 고정된다) 12로 곱하는 것은 필요 이상이다.
 
 ### 열지도 시각화
+
+<div class="codebox" markdown>
+
+**예제 2.** 잔차를 열지도로 보기
 
 ```python
 import matplotlib.pyplot as plt
@@ -106,7 +114,7 @@ ax.set_xlabel("Category")
 ax.set_ylabel("Population")
 plt.colorbar(im, ax=ax, shrink=0.8)
 
-# Annotate significant cells after Bonferroni
+# 본페로니 보정 뒤에도 유의한 칸에 표시를 남긴다
 for i in range(observed.shape[0]):
     for j in range(observed.shape[1]):
         # 보정 후 유의한 칸에만 별표를 붙인다. 이 예제에서는 하나도 없다.
@@ -117,6 +125,8 @@ for i in range(observed.shape[0]):
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 ![표준화 잔차 열지도](./img/homogeneity_residuals_78.png)
 

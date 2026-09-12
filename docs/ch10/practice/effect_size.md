@@ -48,7 +48,9 @@ $$
 
 여기서 $\phi$는 **파이 계수**로, $2 \times 2$ 표에서 연관을 재는 또 다른 흔한 측도이다.
 
-## Python 구현
+<div class="codebox" markdown>
+
+**예제 1.** Cramer의 V로 효과크기 재기
 
 ```python
 import numpy as np
@@ -85,6 +87,8 @@ Chi-square statistic: 11.8061
 p-value: 0.0027
 Cramér's V: 0.0726
 ```
+
+</div>
 
 $p = 0.0027$로 강하게 기각되지만 Cramér의 V는 0.073에 불과하다. Cohen의 기준으로 "작음"인 0.10에도 못 미친다.
 
