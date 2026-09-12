@@ -84,7 +84,7 @@
 
 <div class="codebox" markdown>
 
-### 예제 1. 생존자 편향 { .eg }
+## 예제 1. 생존자 편향 { .eg }
 
 ```python
 import numpy as np

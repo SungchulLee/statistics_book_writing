@@ -107,7 +107,7 @@ $$
 
 <div class="codebox" markdown>
 
-### 예제 1. 집합, 함수, 논리 { .eg }
+## 예제 1. 집합, 함수, 논리 { .eg }
 
 ```python
 import numpy as np

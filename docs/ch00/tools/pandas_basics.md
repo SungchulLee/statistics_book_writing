@@ -135,7 +135,7 @@ drug           6  50.22  5.52
 
 <div class="codebox" markdown>
 
-### 예제 1. pandas로 자료 다루기 { .eg }
+## 예제 1. pandas로 자료 다루기 { .eg }
 
 ```python
 import numpy as np

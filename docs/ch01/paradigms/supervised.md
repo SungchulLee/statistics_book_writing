@@ -59,7 +59,7 @@ $$
 
 <div class="codebox" markdown>
 
-### 예제 1. 지도학습 { .eg }
+## 예제 1. 지도학습 { .eg }
 
 ```python
 import numpy as np

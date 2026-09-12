@@ -122,7 +122,7 @@ from scipy import stats
 
 <div class="codebox" markdown>
 
-### 예제 1. 파이썬과 주피터 기초 { .eg }
+## 예제 1. 파이썬과 주피터 기초 { .eg }
 
 ```python
 """Demonstrate core Python idioms used in statistics."""

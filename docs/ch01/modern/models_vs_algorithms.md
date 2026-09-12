@@ -25,7 +25,7 @@
 
 <div class="codebox" markdown>
 
-### 예제 1. 통계 모형 대 학습 알고리즘 { .eg }
+## 예제 1. 통계 모형 대 학습 알고리즘 { .eg }
 
 ```python
 import numpy as np

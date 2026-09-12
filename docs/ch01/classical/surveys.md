@@ -68,7 +68,7 @@ SRS에서 $\mathrm{SE}(\bar y) = \sigma/\sqrt{n}$이다. $n$을 네 배로 하�
 
 <div class="codebox" markdown>
 
-### 예제 1. 표본조사 { .eg }
+## 예제 1. 표본조사 { .eg }
 
 ```python
 """단순무작위추출과 층화추출을 인공 모집단에서 비교한다."""

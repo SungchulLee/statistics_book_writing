@@ -94,7 +94,7 @@ plt.show()
 
 <div class="codebox" markdown>
 
-### 예제 1. Matplotlib으로 기본 시각화하기 { .eg }
+## 예제 1. Matplotlib으로 기본 시각화하기 { .eg }
 
 ```python
 import numpy as np

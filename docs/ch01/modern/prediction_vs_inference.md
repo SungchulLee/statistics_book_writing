@@ -63,7 +63,7 @@ $$
 
 <div class="codebox" markdown>
 
-### 예제 1. 예측 대 추론 { .eg }
+## 예제 1. 예측 대 추론 { .eg }
 
 ```python
 """같은 자료, 서로 다른 두 목표."""

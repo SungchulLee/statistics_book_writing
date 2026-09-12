@@ -93,7 +93,7 @@ $$
 
 <div class="codebox" markdown>
 
-### 예제 1. 수열, 극한, 점근 { .eg }
+## 예제 1. 수열, 극한, 점근 { .eg }
 
 ```python
 import math
