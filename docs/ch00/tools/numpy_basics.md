@@ -18,14 +18,18 @@ import numpy as np
 
 ### 파이썬 리스트로부터
 
+<div class="codebox" markdown>
+
+**예제 1.** 리스트로 배열 만들기
+
 ```python
-# 1-D array
+# 리스트를 그대로 넘기면 NumPy 가 원소를 보고 dtype 을 정한다.
 a = np.array([1, 2, 3, 4, 5])
 print(a)          # [1 2 3 4 5]
-print(a.shape)    # (5,)
-print(a.dtype)    # int64
+print(a.shape)    # (5,) — 1차원이라 축이 하나뿐이다
+print(a.dtype)    # int64 — 정수만 있으므로 정수형이 된다
 
-# 2-D array (matrix)
+# 리스트의 리스트는 2차원이 된다. 안쪽 리스트 하나가 한 행이다.
 M = np.array([[1, 2, 3],
               [4, 5, 6]])
 print(M.shape)    # (2, 3)
@@ -40,16 +44,25 @@ int64
 (2, 3)
 ```
 
+</div>
+
 ### 내장 생성자로
 
+<div class="codebox" markdown>
+
+**예제 2.** 내장 생성자로 배열 만들기
+
 ```python
-np.zeros((3, 4))          # 3×4 matrix of zeros
-np.ones((2, 2))           # 2×2 matrix of ones
-np.full((3, 3), 7)        # 3×3 matrix filled with 7
-np.eye(4)                 # 4×4 identity matrix
-np.arange(0, 10, 2)       # array([0, 2, 4, 6, 8])
-np.linspace(0, 1, 5)      # array([0., 0.25, 0.5, 0.75, 1.])
+# 값을 하나하나 적지 않고 모양만 주어 배열을 만든다.
+np.zeros((3, 4))          # 0으로 채운 3×4
+np.ones((2, 2))           # 1로 채운 2×2
+np.full((3, 3), 7)        # 7로 채운 3×3
+np.eye(4)                 # 4×4 단위행렬
+np.arange(0, 10, 2)       # 간격 2로 끊는다: [0 2 4 6 8] — 끝점 10은 빠진다
+np.linspace(0, 1, 5)      # 개수 5로 끊는다: [0. 0.25 0.5 0.75 1.] — 끝점을 포함한다
 ```
+
+</div>
 
 `arange`는 파이썬의 `range`를 본뜬 것이다(간격 기반이라 끝점을 지나칠 수 있다). `linspace`는 끝점을 포함하는 구간에 정해진 개수의 점을 고르게 배치하므로, 어떤 정의역 위에서 함수를 그릴 때는 보통 이쪽이 낫다.
 
@@ -57,12 +70,19 @@ np.linspace(0, 1, 5)      # array([0., 0.25, 0.5, 0.75, 1.])
 
 예전의 `np.random.*` 함수도 여전히 작동하지만, NumPy 1.17에서 도입된 **`Generator`** API가 선호된다. 더 빠르고, 병렬 스트림을 지원하며, 전역 상태 변경으로부터 상태를 격리한다.
 
+<div class="codebox" markdown>
+
+**예제 3.** 재현 가능한 난수 배열
+
 ```python
-rng = np.random.default_rng(seed=42)         # reproducible generator
-rng.standard_normal((3, 3))                  # 3×3 standard normal draws
-rng.uniform(0, 1, size=(2, 5))               # 2×5 Uniform(0,1) draws
-rng.integers(0, 10, size=6)                  # 6 ints in [0, 10)
+# seed 를 주면 같은 난수열이 다시 나온다. 모의실험 결과를 남기려면 필수다.
+rng = np.random.default_rng(seed=42)
+rng.standard_normal((3, 3))                  # 표준정규에서 3×3
+rng.uniform(0, 1, size=(2, 5))               # Uniform(0,1)에서 2×5
+rng.integers(0, 10, size=6)                  # [0, 10) 의 정수 6개
 ```
+
+</div>
 
 ## 배열 속성
 
@@ -80,43 +100,60 @@ rng.integers(0, 10, size=6)                  # 6 ints in [0, 10)
 
 ### 1차원
 
+<div class="codebox" markdown>
+
+**예제 4.** 1차원 인덱싱과 슬라이싱
+
 ```python
 a = np.array([10, 20, 30, 40, 50])
 
-a[0]        # 10        — first element
-a[-1]       # 50        — last element
-a[1:4]      # [20 30 40] — slice (start inclusive, stop exclusive)
-a[::2]      # [10 30 50] — every other element
-a[::-1]     # [50 40 30 20 10] — reversed
+a[0]        # 10 — 첫 원소
+a[-1]       # 50 — 음수 색인은 뒤에서 센다
+a[1:4]      # [20 30 40] — 시작은 포함하고 끝은 제외한다
+a[::2]      # [10 30 50] — 콜론 뒤 세 번째 자리가 간격이다
+a[::-1]     # [50 40 30 20 10] — 간격을 -1로 주면 뒤집힌다
 ```
 
+</div>
+
 ### 2차원
+
+<div class="codebox" markdown>
+
+**예제 5.** 2차원 인덱싱
 
 ```python
 M = np.array([[1, 2, 3],
               [4, 5, 6],
               [7, 8, 9]])
 
-M[0, 1]       # 2          — row 0, col 1
-M[1, :]       # [4 5 6]    — entire row 1
-M[:, 2]       # [3 6 9]    — entire col 2
-M[:2, :2]     # [[1 2],    — upper-left 2×2 sub-matrix
-              #  [4 5]]
+# 쉼표 앞이 행, 뒤가 열이다. 콜론 하나는 그 축 전체를 뜻한다.
+M[0, 1]       # 2 — 0행 1열
+M[1, :]       # [4 5 6] — 1행 전체
+M[:, 2]       # [3 6 9] — 2열 전체
+M[:2, :2]     # 왼쪽 위 2×2 부분행렬
 ```
+
+</div>
 
 !!! note "뷰와 복사본"
     기본 슬라이싱(`a[1:4]`, `M[:2, :2]`)은 같은 메모리를 가리키는 **뷰**를 반환하므로, 슬라이스를 수정하면 원본이 바뀐다. 불리언 인덱싱과 팬시 인덱싱은 **복사본**을 반환한다. 헷갈릴 때는 `arr.copy()`로 의도를 분명히 하라.
 
 ### 불리언(팬시) 인덱싱
 
+<div class="codebox" markdown>
+
+**예제 6.** 불리언 인덱싱으로 걸러내기
+
 ```python
 a = np.array([3, 1, 4, 1, 5, 9])
 
+# 비교 연산은 원소마다 참·거짓을 내어 같은 모양의 불리언 배열을 만든다.
 mask = a > 3
 print(mask)       # [False False  True False  True  True]
-print(a[mask])    # [4 5 9]
+print(a[mask])    # [4 5 9] — 참인 자리만 골라낸다
 
-# Combine masks with bit-wise &, |, ~
+# 조건을 겹칠 때는 and/or 가 아니라 비트 연산 &, |, ~ 를 쓰고 각각 괄호로 묶는다.
 print(a[(a > 2) & (a < 6)])    # [3 4 5]
 ```
 
@@ -128,37 +165,53 @@ print(a[(a > 2) & (a < 6)])    # [3 4 5]
 [3 4 5]
 ```
 
+</div>
+
 불리언 인덱싱은 반복문 없이 자료를 걸러내는 자연스러운 방법이다.
 
 ## 벡터화 연산
 
 NumPy는 명시적 반복문 없이 원소별 산술을 수행하며, 이는 순수 파이썬보다 빠르면서도 읽기 좋다.
 
+<div class="codebox" markdown>
+
+**예제 7.** 반복문 없는 원소별 연산
+
 ```python
 a = np.array([1, 2, 3, 4, 5])
 b = np.array([10, 20, 30, 40, 50])
 
+# 스칼라는 모든 원소에 퍼지고, 모양이 같은 둘은 자리를 맞춰 계산한다.
 a + 10        # [11 12 13 14 15]
 a * 2         # [ 2  4  6  8 10]
 a ** 2        # [ 1  4  9 16 25]
 a + b         # [11 22 33 44 55]
-a * b         # [ 10  40  90 160 250]
+a * b         # [ 10  40  90 160 250] — 행렬곱이 아니라 원소별 곱이다
 np.sqrt(a)    # [1.    1.414 1.732 2.    2.236]
 ```
 
+</div>
+
 ### 왜 더 빠른가
 
+<div class="codebox" markdown>
+
+**예제 8.** 벡터화가 빠른 이유를 재어 보기
+
 ```python
+"""같은 계산을 파이썬 반복문과 NumPy 로 재어 속도 차이를 확인한다."""
 import time
 
 size = 1_000_000
 py_list = list(range(size))
 np_arr  = np.arange(size)
 
+# 파이썬 반복문: 원소마다 객체를 만들고 파이썬 바이트코드를 실행한다.
 t0 = time.perf_counter()
 [x ** 2 for x in py_list]
 t_list = time.perf_counter() - t0
 
+# NumPy: 같은 연산이 연속된 메모리 위에서 C 반복문 한 번으로 끝난다.
 t0 = time.perf_counter()
 np_arr ** 2
 t_numpy = time.perf_counter() - t0
@@ -172,6 +225,8 @@ print(f"NumPy가 최소 10배 이상 빠른가? {t_list > 10 * t_numpy}")
 ```
 NumPy가 최소 10배 이상 빠른가? True
 ```
+
+</div>
 
 !!! note "왜 초 단위를 출력하지 않는가"
     이 비교의 요점은 "몇 초"가 아니라 **얼마나 빠른가**이다. `time.perf_counter()`가
@@ -192,12 +247,18 @@ NumPy가 최소 10배 이상 빠른가? True
 1. 배열의 차원 수가 다르면 작은 쪽 모양 앞에 `1`을 채워 넣는다.
 2. 어떤 차원에서 두 모양이 같거나 **또는** 둘 중 하나가 1이면 그 차원은 호환된다. 브로드캐스트 결과는 더 큰 크기를 갖는다.
 
+<div class="codebox" markdown>
+
+**예제 9.** 모양이 다른 배열의 브로드캐스팅
+
 ```python
-# Scalar broadcast (shape () broadcasts to anything)
+# 스칼라는 모양 ()이라 어떤 배열과도 맞춰진다.
 a = np.array([1, 2, 3])
 a + 100            # [101 102 103]
 
-# Column vector (3,1) + row vector (3,) → (3,3)
+# (3,1)과 (3,)이 만나면 뒤쪽 모양 앞에 1이 채워져 (1,3)이 되고,
+# 두 축 모두 한쪽이 1이므로 각각 늘어나 (3,3)이 된다.
+# 열벡터의 값이 행마다, 행벡터의 값이 열마다 퍼지는 셈이다.
 col = np.array([[1], [2], [3]])
 row = np.array([10, 20, 30])
 print(col + row)
@@ -214,15 +275,24 @@ print(col + row)
  [13 23 33]]
 ```
 
+</div>
+
 ### 통계적 응용: 표준화
 
-```python
-rng = np.random.default_rng(42)
-X = rng.standard_normal((100, 5))            # (n=100) × (p=5)
+<div class="codebox" markdown>
 
+**예제 10.** 브로드캐스팅으로 열 표준화하기
+
+```python
+"""브로드캐스팅으로 자료행렬의 각 열을 평균 0, 표준편차 1로 맞춘다."""
+rng = np.random.default_rng(42)
+X = rng.standard_normal((100, 5))            # 관측 n=100, 변수 p=5
+
+# X.mean(axis=0) 은 길이 5짜리 열평균이다. (100, 5) 와 (5,) 가 브로드캐스팅으로
+# 맞춰지면서 열마다 다른 값을 빼 준다. 열을 도는 반복문이 필요 없는 이유다.
 X_std = (X - X.mean(axis=0)) / X.std(axis=0, ddof=1)
-print(X_std.mean(axis=0).round(8))           # ≈ zeros
-print(X_std.std(axis=0, ddof=1).round(8))    # ≈ ones
+print(X_std.mean(axis=0).round(8))           # 0에 가깝다
+print(X_std.std(axis=0, ddof=1).round(8))    # 1에 가깝다
 ```
 
 출력:
@@ -232,42 +302,61 @@ print(X_std.std(axis=0, ddof=1).round(8))    # ≈ ones
 [1. 1. 1. 1. 1.]
 ```
 
+</div>
+
 브로드캐스팅이 없다면 열마다 반복문을 돌려야 한다. 브로드캐스팅이 있으면 "각 열을 중심화한 뒤 그 표준편차로 나눈다"는 통계적 아이디어가 코드로 그대로 옮겨진다.
 
 ## 집계
+
+<div class="codebox" markdown>
+
+**예제 11.** 기본 집계 함수
 
 ```python
 a = np.array([4, 1, 7, 3, 9, 2])
 
 a.sum()        # 26
 a.mean()       # 4.333...
-a.std()        # 2.687...  (default ddof=0)
-a.std(ddof=1)  # 2.943...  (Bessel-corrected sample std)
+a.std()        # 2.687... — 기본값 ddof=0, 즉 n 으로 나눈 모표준편차
+a.std(ddof=1)  # 2.943... — ddof=1, 즉 베셀 보정을 적용한 표본표준편차
 a.var()        # 7.222...
 a.min()        # 1
 a.max()        # 9
-a.argmin()     # 1   — index of min
-a.argmax()     # 4   — index of max
+a.argmin()     # 1 — 최솟값이 **있는 자리**이지 최솟값이 아니다
+a.argmax()     # 4
 np.median(a)   # 3.5
 ```
+
+</div>
 
 ### 축을 따라 집계하기
 
 2차원 배열에서 `axis=0`은 *행*을 접어 열별 결과를 주고, `axis=1`은 *열*을 접어 행별 결과를 준다.
 
+<div class="codebox" markdown>
+
+**예제 12.** 축을 지정한 집계
+
 ```python
 M = np.array([[1, 2, 3],
               [4, 5, 6]])
 
-M.sum(axis=0)    # [5 7 9]   — column sums
-M.sum(axis=1)    # [6 15]    — row sums
+# axis 는 "접어 없앨 축"이다. axis=0 이면 행이 사라지고 열별 결과가 남는다.
+M.sum(axis=0)    # [5 7 9] — 열별 합
+M.sum(axis=1)    # [6 15] — 행별 합
 M.mean(axis=0)   # [2.5 3.5 4.5]
 ```
+
+</div>
 
 !!! warning "기본값은 `ddof=0`"
     NumPy의 `var`와 `std`는 기본값이 `ddof=0`이다($n$으로 나누는 모분산). 베셀 보정을 적용한 표본분산은 `ddof=1`로 $n - 1$로 나눈다. pandas의 기본값은 `ddof=1`이다. 한 분석 안에서 둘을 섞어 쓰는 것은 미묘한 하나 차이 버그의 고전적인 원천이다.
 
 ## 선형대수
+
+<div class="codebox" markdown>
+
+**예제 13.** 행렬 연산과 선형방정식
 
 ```python
 A = np.array([[1, 2],
@@ -275,33 +364,44 @@ A = np.array([[1, 2],
 B = np.array([[2, 3],
               [0, 1]])
 
-A @ B                  # preferred — matrix multiplication
+A @ B                  # 행렬곱. 아래 셋은 2차원에서 같은 결과이고 @ 를 권한다
 np.matmul(A, B)
-np.dot(A, B)           # identical for 2-D arrays
+np.dot(A, B)
 
-A.T                    # transpose
+A.T                    # 전치
 np.linalg.det(A)       # -2.0
-np.linalg.inv(A)       # inverse (use solve() when possible)
-np.linalg.eig(A)       # eigenvalues + eigenvectors
-np.linalg.eigh(A)      # for symmetric/Hermitian — faster and stable
+np.linalg.inv(A)       # 역행렬 — 될 수 있으면 solve 를 쓴다
+np.linalg.eig(A)       # 고윳값과 고유벡터
+np.linalg.eigh(A)      # 대칭·에르미트 전용. 더 빠르고 수치적으로 안정적이다
 
 b = np.array([5, 11])
-np.linalg.solve(A, b)  # [1. 2.] — solves Ax = b
+# 역행렬을 만들어 곱하는 것보다 정확하고 빠르다. 방정식을 바로 푼다.
+np.linalg.solve(A, b)  # [1. 2.]
 ```
+
+</div>
 
 ### 통계적 응용: 최소제곱
 
 최소제곱추정량 $\hat{\boldsymbol\beta} = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}$는 코드로 그대로 옮겨진다.
 
+<div class="codebox" markdown>
+
+**예제 14.** 정규방정식으로 최소제곱 풀기
+
 ```python
+"""정규방정식을 풀어 최소제곱추정값이 참값을 되찾는지 확인한다."""
 rng = np.random.default_rng(0)
 n, p = 50, 3
+# 첫 열의 1은 절편에 대응한다. 이 열이 있어야 beta[0] 가 절편이 된다.
 X = np.column_stack([np.ones(n), rng.standard_normal((n, p))])
 beta_true = np.array([2, -1, 0.5, 3])
-y = X @ beta_true + rng.standard_normal(n) * 0.5
+y = X @ beta_true + rng.standard_normal(n) * 0.5   # 표준편차 0.5의 잡음
 
+# inv(X.T @ X) @ X.T @ y 와 수학적으로 같지만, 역행렬을 만들지 않아
+# 수치적으로 더 안정적이다. n 이 작아 추정값은 참값에서 조금 벗어난다.
 beta_hat = np.linalg.solve(X.T @ X, X.T @ y)
-print(beta_hat.round(3))     # ≈ [2., -1., 0.5, 3.]
+print(beta_hat.round(3))     # 참값 [2, -1, 0.5, 3] 근처
 ```
 
 출력:
@@ -310,21 +410,29 @@ print(beta_hat.round(3))     # ≈ [2., -1., 0.5, 3.]
 [ 1.95  -0.918  0.427  3.029]
 ```
 
+</div>
+
 `np.linalg.inv(X.T @ X) @ X.T @ y`보다 `np.linalg.solve(X.T @ X, X.T @ y)`를 쓰라. 역행렬을 만드는 것보다 방정식을 푸는 편이 수치적으로 더 안정적이고 빠르다. 더 나은 선택은 `np.linalg.lstsq(X, y, rcond=None)`으로, 계수가 부족한 $\mathbf{X}$도 특이값분해로 처리한다.
 
 ## 모양 바꾸기와 쌓기
 
+<div class="codebox" markdown>
+
+**예제 15.** 모양 바꾸기와 쌓기
+
 ```python
 a = np.arange(12)
-M = a.reshape(3, 4)        # 3×4 view
-flat = M.ravel()           # back to 1-D view
+M = a.reshape(3, 4)        # 같은 메모리를 3×4 로 보는 뷰. 값을 복사하지 않는다
+flat = M.ravel()           # 다시 1차원으로 보는 뷰
 
 v1 = np.array([1, 2, 3])
 v2 = np.array([4, 5, 6])
-np.vstack([v1, v2])        # [[1 2 3], [4 5 6]]
-np.hstack([v1, v2])        # [1 2 3 4 5 6]
-np.column_stack([v1, v2])  # [[1 4], [2 5], [3 6]]
+np.vstack([v1, v2])        # 위아래로 쌓는다: [[1 2 3], [4 5 6]]
+np.hstack([v1, v2])        # 옆으로 잇는다: [1 2 3 4 5 6]
+np.column_stack([v1, v2])  # 각각을 열로 세운다: [[1 4], [2 5], [3 6]]
 ```
+
+</div>
 
 ## 연습문제
 
