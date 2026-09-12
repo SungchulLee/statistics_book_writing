@@ -121,7 +121,7 @@ $n$이 매우 작으면(예: $n < 10$) 경험분포 $\hat{F}_n$이 $F$의 거친
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 $X_t = 0.7 X_{t-1} + \varepsilon_t$, $\varepsilon_t \sim N(0, 1)$인 AR(1) 과정을 $n = 200$으로 모의생성하라.
 
 **(a)** 표준(iid) 붓스트랩으로 $E[X]$의 $95$% 신뢰구간을 구하라. 모의실험에서 포함확률이 얼마인가?
@@ -196,7 +196,7 @@ $X_t = 0.7 X_{t-1} + \varepsilon_t$, $\varepsilon_t \sim N(0, 1)$인 AR(1) 과�
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 $X_1, \ldots, X_n \sim \text{Uniform}(0, 1)$에서 $\theta = 1$의 신뢰구간을 추축량 $n(\theta - X_{(n)})$으로 만들 때, 완전 붓스트랩·$m$-out-of-$n$ 붓스트랩·모수적 붓스트랩의 포함확률을 비교하라. $n = 50$과 $n = 200$에서 $m = \lfloor\sqrt{n}\rfloor$과 $m = \lfloor n^{2/3}\rceil$을 시도하라.
 
 </div>
@@ -248,7 +248,7 @@ $X_1, \ldots, X_n \sim \text{Uniform}(0, 1)$에서 $\theta = 1$의 신뢰구간�
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 무한분산에서 붓스트랩 표준오차가 "크게 요동친다"는 것이 정확히 무엇을 뜻하는가? Cauchy 자료($n = 100$)에서 평균과 중앙값의 붓스트랩 표준오차를, 서로 다른 세 자료에 대해 각각 $200$번씩 계산하여 확인하라.
 
 </div>

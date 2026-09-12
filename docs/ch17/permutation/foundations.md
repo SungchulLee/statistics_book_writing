@@ -223,7 +223,7 @@ Conversion A/B test p-value: 0.6784
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 두 모집단의 평균은 같지만 분산이 다른($\sigma_X^2 \neq \sigma_Y^2$) 상황에서 $H_0: \mu_X = \mu_Y$에 대한 순열검정을 생각하자.
 
 **(a)** $H_0$ 아래에서 교환가능성 가정이 만족되는가?
@@ -332,7 +332,7 @@ Conversion A/B test p-value: 0.6784
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 $p$값 계산에서 `>` 대신 `>=`를 쓰고 $+1$ 보정을 더하는 것이 왜 중요한가? 이산자료에서 그 차이를 확인하라.
 
 </div>
@@ -392,7 +392,7 @@ $p$값 계산에서 `>` 대신 `>=`를 쓰고 $+1$ 보정을 더하는 것이 �
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 순열검정과 $t$ 검정의 검정력을 정규자료와 두꺼운 꼬리 자료에서 비교하라.
 
 </div>
@@ -458,7 +458,7 @@ $p$값 계산에서 `>` 대신 `>=`를 쓰고 $+1$ 보정을 더하는 것이 �
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 전환율 예제에서 순열검정 대신 초기하분포의 정확 $p$값을 쓸 수 있다고 했다. 두 값이 일치하는지 확인하고, 왜 그런지 설명하라.
 
 </div>

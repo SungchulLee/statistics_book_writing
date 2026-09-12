@@ -210,7 +210,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 네 가지 붓스트랩 신뢰구간(정규, 백분위수, 기본, BCa)의 포함확률을 치우친 통계량에서 비교하라. $\text{Exp}(1)$ 자료의 중앙값($m = \ln 2 = 0.6931$)을 대상으로 $n = 30$에서 모의실험하라.
 
 </div>
@@ -299,7 +299,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 잭나이프가 중앙값에서 "실패한다"는 것은 무슨 뜻인가? 잭나이프 표준오차와 붓스트랩 표준오차를 $n = 25, 101, 401$에서 비교하라.
 
 </div>
@@ -363,7 +363,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff hard" title="어려움"></span>
 기본(추축) 붓스트랩 구간의 공식을 추축량 $R = \hat{\theta} - \theta$에서 유도하라. 왜 분위수의 순서가 뒤바뀌는가?
 
 </div>
@@ -405,7 +405,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 BCa의 두 조정량 $\hat{z}_0$과 $\hat{a}$가 각각 무엇을 하는지 확인하라. 둘 다 $0$이면 BCa 구간이 무엇이 되는가?
 
 </div>

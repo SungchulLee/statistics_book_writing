@@ -143,7 +143,7 @@ def simulate_coverage(population, true_mean, n=20, B=1000, N=2000, rng=None):
 
 <div class="drillbox" markdown>
 
-**연습문제 1.** 같은 모집단에서 표본크기를 $n = 20$에서 $n = 100$으로 늘려라. $95$% 붓스트랩 구간의 폭이 어떻게 변하는가? 폭이 대략 $1/\sqrt{n}$로 줄어드는지 확인하라.
+**연습문제 1.** <span class="diff med" title="중간"></span> 같은 모집단에서 표본크기를 $n = 20$에서 $n = 100$으로 늘려라. $95$% 붓스트랩 구간의 폭이 어떻게 변하는가? 폭이 대략 $1/\sqrt{n}$로 줄어드는지 확인하라.
 
 </div>
 
@@ -202,7 +202,7 @@ def simulate_coverage(population, true_mean, n=20, B=1000, N=2000, rng=None):
 
 <div class="drillbox" markdown>
 
-**연습문제 2.** 포함확률 모의실험을 수정하여 백분위수법을 정규 붓스트랩 구간($\bar x \pm z_{1-\alpha/2}\cdot\widehat{\text{SE}}_{\text{boot}}$) 및 BCa 구간과 비교하라. 치우친 소득 자료에서 $n = 20$일 때 어느 것이 더 나은 포함확률을 달성하는가?
+**연습문제 2.** <span class="diff med" title="중간"></span> 포함확률 모의실험을 수정하여 백분위수법을 정규 붓스트랩 구간($\bar x \pm z_{1-\alpha/2}\cdot\widehat{\text{SE}}_{\text{boot}}$) 및 BCa 구간과 비교하라. 치우친 소득 자료에서 $n = 20$일 때 어느 것이 더 나은 포함확률을 달성하는가?
 
 </div>
 
@@ -253,7 +253,7 @@ def simulate_coverage(population, true_mean, n=20, B=1000, N=2000, rng=None):
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** 붓스트랩 재표집 횟수 $B$와 신뢰구간 끝점의 몬테카를로 오차 사이의 관계를 유도하라. 구체적으로 붓스트랩 분포의 $q$번째 분위수 추정값의 표준편차가 근사적으로 다음과 같음을 보여라.
+**연습문제 3.** <span class="diff hard" title="어려움"></span> 붓스트랩 재표집 횟수 $B$와 신뢰구간 끝점의 몬테카를로 오차 사이의 관계를 유도하라. 구체적으로 붓스트랩 분포의 $q$번째 분위수 추정값의 표준편차가 근사적으로 다음과 같음을 보여라.
 
 $$
 \text{SD}(\hat\theta^*_q) \approx \frac{\sqrt{q(1-q)}}{f(\hat\theta^*_q)\sqrt{B}}
@@ -301,7 +301,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 4.** 포함확률 모의실험이 $N = 100$번 반복을 쓴다고 하자. 포함확률 자체에 대한 $95$% 신뢰구간을 계산하라. (힌트: 포함 지시변수가 Bernoulli이므로 비율의 정규근사를 쓴다.)
+**연습문제 4.** <span class="diff med" title="중간"></span> 포함확률 모의실험이 $N = 100$번 반복을 쓴다고 하자. 포함확률 자체에 대한 $95$% 신뢰구간을 계산하라. (힌트: 포함 지시변수가 Bernoulli이므로 비율의 정규근사를 쓴다.)
 
 </div>
 
@@ -345,7 +345,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 5.** 소득처럼 치우친 분포에서 붓스트랩이 특히 값진 이유를 설명하라. 같은 표본에서 평균의 붓스트랩 신뢰구간과 중앙값의 붓스트랩 신뢰구간을 비교하고, "전형적인" 소득을 서술하는 것이 목표일 때 어느 것이 더 적절한지 논하라.
+**연습문제 5.** <span class="diff med" title="중간"></span> 소득처럼 치우친 분포에서 붓스트랩이 특히 값진 이유를 설명하라. 같은 표본에서 평균의 붓스트랩 신뢰구간과 중앙값의 붓스트랩 신뢰구간을 비교하고, "전형적인" 소득을 서술하는 것이 목표일 때 어느 것이 더 적절한지 논하라.
 
 </div>
 

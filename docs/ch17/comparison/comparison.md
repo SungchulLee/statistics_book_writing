@@ -172,7 +172,7 @@ Exact permutation p-value: 0.0397
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 위 예제에서 붓스트랩 신뢰구간 $[1.20, 4.80]$과 순열 $p$값 $0.0397$이 어긋났다.
 
 **(a)** 순열검정을 역변환하여 평균차의 $95$% 신뢰구간을 구하고 붓스트랩 구간·Welch 구간과 비교하라.
@@ -254,7 +254,7 @@ Exact permutation p-value: 0.0397
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 "붓스트랩은 신뢰구간, 순열검정은 $p$값"이라는 요약이 지나친 단순화인 지점을 세 가지 들어라.
 
 </div>
@@ -279,7 +279,7 @@ Exact permutation p-value: 0.0397
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 다음 각 상황에서 붓스트랩, 순열검정, 또는 둘 다 중 무엇을 쓰겠는가? 이유를 밝혀라.
 
 **(a)** 무작위 배정 임상시험에서 신약과 위약의 반응률 차이를 검정한다. 각 군 $40$명이다.

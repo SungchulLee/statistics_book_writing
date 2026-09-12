@@ -79,7 +79,7 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** 상관의 순열검정과 붓스트랩. 학생 $n = 25$명의 자료에서 공부시간과 시험점수의 상관이 $r_{\text{obs}} = 0.47$이었다.
+**보기 1.** <span class="diff easy" title="쉬움"></span> 상관의 순열검정과 붓스트랩. 학생 $n = 25$명의 자료에서 공부시간과 시험점수의 상관이 $r_{\text{obs}} = 0.47$이었다.
 
 **순열 접근으로 $H_0: \rho = 0$ 검정:**
 
@@ -114,7 +114,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 붓스트랩으로 두 변수 사이 **상관계수**의 표준오차와 95% 신뢰구간을 추정하라. $\rho = 0.6$인 이변량 정규분포에서 $n = 50$개를 생성하라.
 
 **(a)** $B = 5{,}000$으로 붓스트랩 표준오차를 계산하라.
@@ -218,7 +218,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 순열검정과 붓스트랩 신뢰구간 접근이 $H_0: \rho = 0$에 대해 같은 결론을 내는가? 두 방법의 제1종 오류율과 검정력을 비교하라.
 
 </div>
@@ -282,7 +282,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 이상치 하나가 상관 검정에 미치는 영향을 세 방법에서 비교하라.
 
 </div>
@@ -339,7 +339,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 Fisher $z$ 변환이 붓스트랩 백분위수 구간을 바꾸지 못한다는 것을 확인했다. 그렇다면 어떤 방법에서 이 변환이 실제로 도움이 되는가?
 
 </div>

@@ -135,7 +135,7 @@ def confidence_intervals(bootstrap_dist, confidence_levels=(90, 95, 99)):
 
 <div class="drillbox" markdown>
 
-**연습문제 1.** 표준정규분포에서 크기 $n = 50$인 표본을 생성하라. 중앙값의 붓스트랩 표준오차를 계산하고 이론값 $\sqrt{\pi/(2n)} \approx 1/(2f(0)\sqrt{n})$과 비교하라. 여기서 $f(0) = 1/\sqrt{2\pi}$이다.
+**연습문제 1.** <span class="diff easy" title="쉬움"></span> 표준정규분포에서 크기 $n = 50$인 표본을 생성하라. 중앙값의 붓스트랩 표준오차를 계산하고 이론값 $\sqrt{\pi/(2n)} \approx 1/(2f(0)\sqrt{n})$과 비교하라. 여기서 $f(0) = 1/\sqrt{2\pi}$이다.
 
 </div>
 
@@ -196,7 +196,7 @@ def confidence_intervals(bootstrap_dist, confidence_levels=(90, 95, 99)):
 
 <div class="drillbox" markdown>
 
-**연습문제 2.** 정규분포에서 중앙값의 평균 대비 **점근상대효율**(ARE)은 $\pi/2 \approx 1.571$이다. 중앙값의 분산이 약 $57$% 크다는 뜻이다. 같은 정규 표본에서 평균과 중앙값의 붓스트랩 표준오차를 비교하여 경험적으로 확인하라.
+**연습문제 2.** <span class="diff med" title="중간"></span> 정규분포에서 중앙값의 평균 대비 **점근상대효율**(ARE)은 $\pi/2 \approx 1.571$이다. 중앙값의 분산이 약 $57$% 크다는 뜻이다. 같은 정규 표본에서 평균과 중앙값의 붓스트랩 표준오차를 비교하여 경험적으로 확인하라.
 
 </div>
 
@@ -238,7 +238,7 @@ def confidence_intervals(bootstrap_dist, confidence_levels=(90, 95, 99)):
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** 중앙값의 붕괴점이 $50$%임을 증명하라. 즉 관측의 절반까지 임의의 값으로 바꾸어도 중앙값이 무한대로 발산하지 않음을 보여라. 평균의 붕괴점이 $0$%임(이상값 하나로 임의로 크게 만들 수 있음)도 보여라.
+**연습문제 3.** <span class="diff hard" title="어려움"></span> 중앙값의 붕괴점이 $50$%임을 증명하라. 즉 관측의 절반까지 임의의 값으로 바꾸어도 중앙값이 무한대로 발산하지 않음을 보여라. 평균의 붕괴점이 $0$%임(이상값 하나로 임의로 크게 만들 수 있음)도 보여라.
 
 </div>
 
@@ -275,7 +275,7 @@ def confidence_intervals(bootstrap_dist, confidence_levels=(90, 95, 99)):
 
 <div class="drillbox" markdown>
 
-**연습문제 4.** 중앙값의 붓스트랩 분포는 값이 반복되는 "덩어리진" 모양을 보일 수 있다. 왜 그런지 설명하고(힌트: 붓스트랩 표본의 동점을 생각하라), $B$나 $n$을 늘리면 매끄러움이 어떻게 달라지는지 서술하라.
+**연습문제 4.** <span class="diff med" title="중간"></span> 중앙값의 붓스트랩 분포는 값이 반복되는 "덩어리진" 모양을 보일 수 있다. 왜 그런지 설명하고(힌트: 붓스트랩 표본의 동점을 생각하라), $B$나 $n$을 늘리면 매끄러움이 어떻게 달라지는지 서술하라.
 
 </div>
 
@@ -306,7 +306,7 @@ def confidence_intervals(bootstrap_dist, confidence_levels=(90, 95, 99)):
 
 <div class="drillbox" markdown>
 
-**연습문제 5.** $\mu = 10.5$, $\sigma = 0.8$인 로그정규분포에서 크기 $n = 30$인 표본의 평균과 중앙값에 대한 붓스트랩 $95$% 신뢰구간을 계산하라. 그다음 $10^7$에 이상값 다섯 개를 추가하고 다시 계산하라. 두 통계량과 그 신뢰구간이 어떻게 영향받는지 논하라.
+**연습문제 5.** <span class="diff med" title="중간"></span> $\mu = 10.5$, $\sigma = 0.8$인 로그정규분포에서 크기 $n = 30$인 표본의 평균과 중앙값에 대한 붓스트랩 $95$% 신뢰구간을 계산하라. 그다음 $10^7$에 이상값 다섯 개를 추가하고 다시 계산하라. 두 통계량과 그 신뢰구간이 어떻게 영향받는지 논하라.
 
 </div>
 

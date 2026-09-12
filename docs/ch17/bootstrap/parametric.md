@@ -86,7 +86,7 @@ print("비모수 :", round(npb.std(ddof=1), 4))              # 0.8708
 
 <div class="exbox" markdown>
 
-**보기 1.** 지수모형. 대기시간을 $x_1, \ldots, x_n \overset{\text{iid}}{\sim} \text{Exp}(\lambda)$로 모형화하고 평균 $\mu = 1/\lambda$의 신뢰구간을 구하려 한다.
+**보기 1.** <span class="diff easy" title="쉬움"></span> 지수모형. 대기시간을 $x_1, \ldots, x_n \overset{\text{iid}}{\sim} \text{Exp}(\lambda)$로 모형화하고 평균 $\mu = 1/\lambda$의 신뢰구간을 구하려 한다.
 
 **모수적 붓스트랩 절차:**
 
@@ -135,7 +135,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 모형이 옳을 때와 틀릴 때 모수적 붓스트랩의 신뢰구간 포함확률이 어떻게 달라지는가?
 $\text{Exp}(1)$ 자료에서 90번째 백분위수의 신뢰구간을 (a) 올바른 지수모형,
 (b) 잘못된 정규모형, (c) 비모수 붓스트랩으로 각각 만들어 비교하라.
@@ -196,7 +196,7 @@ $\text{Exp}(1)$ 자료에서 90번째 백분위수의 신뢰구간을 (a) 올바
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 정규모형 예제에서 모수적 붓스트랩이 이론값 $\sigma^2\sqrt{2/(n-1)}$을 잘 재현하는 것을 확인했다. 자료가 정규가 아니면 어떻게 되는가? $t(5)$ 자료에서 같은 비교를 하라.
 
 </div>
@@ -256,7 +256,7 @@ $\text{Exp}(1)$ 자료에서 90번째 백분위수의 신뢰구간을 (a) 올바
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 모수적 붓스트랩이 유리한 상황을 하나 만들어라. 표본이 아주 작을 때($n = 8$) 모형이 옳다면 얼마나 이득인가?
 
 </div>
@@ -307,7 +307,7 @@ $\text{Exp}(1)$ 자료에서 90번째 백분위수의 신뢰구간을 (a) 올바
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 모수적 붓스트랩과 비모수 붓스트랩의 결과가 얼마나 다르면 "모형을 의심해야 하는" 신호인가?
 본문의 "두 결과를 비교하라"는 권고를 실제 진단 절차로 만들어 보고, 그 한계를 평가하라.
 

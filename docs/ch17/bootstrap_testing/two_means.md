@@ -99,7 +99,7 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** 처치군과 대조군의 평균 비교. 한 임상시험이 처치군($m = 18$, $\bar{x} = 5.8$, $s_x = 3.2$)과 대조군($n = 22$, $\bar{y} = 4.1$, $s_y = 2.5$)을 비교한다.
+**보기 1.** <span class="diff easy" title="쉬움"></span> 처치군과 대조군의 평균 비교. 한 임상시험이 처치군($m = 18$, $\bar{x} = 5.8$, $s_x = 3.2$)과 대조군($n = 22$, $\bar{y} = 4.1$, $s_y = 2.5$)을 비교한다.
 
 **관측 검정통계량** (Welch형):
 
@@ -126,7 +126,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 합친 붓스트랩과 중심화 붓스트랩의 제1종 오류율을 분산이 다른 상황에서 비교하라. 표본크기가 불균형할 때 어떤 일이 일어나는가?
 
 </div>
@@ -193,7 +193,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 합친 붓스트랩과 순열검정이 어떻게 다른지 수치로 확인하라. 두 방법의 $p$값이 얼마나 가까운가?
 
 </div>
@@ -272,7 +272,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 스튜던트화하지 않은 붓스트랩 검정이 분산 차이에 취약하다는 주장을 확인하라.
 
 </div>
@@ -330,7 +330,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 $H_0$ 아래에서 두 집단의 **모양**이 다르면(분산은 같고 왜도가 다르면) 세 방법이 어떻게 반응하는가?
 
 </div>

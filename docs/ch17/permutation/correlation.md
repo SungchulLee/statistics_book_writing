@@ -140,7 +140,7 @@ $H_0: \rho = 0$이라는 특정 가설에 대해서는 제1종 오류를 정확�
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 $n = 6$인 다음 자료에서 $6! = 720$가지 순열을 모두 열거하여 정확 $p$값을 구하라.
 
 $$
@@ -206,7 +206,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 정규성이 깨질 때 순열검정과 고전적 $t$ 검정의 제1종 오류율을 비교하라. $n = 15$에서 $X$와 $Y$를 독립으로 생성하되 주변분포를 정규, $\text{LogNormal}(0, 2^2)$, Cauchy로 바꾸어 가며 확인하라.
 
 </div>
@@ -255,7 +255,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 본문에서 순열검정이 검정하는 것은 $\rho = 0$이 아니라 독립성이라고 했다. $Y = X^2 + \varepsilon$처럼 $\rho = 0$이면서 강하게 종속인 경우에 이것이 무엇을 의미하는지 확인하라. $X \sim N(0,1)$, $\varepsilon \sim N(0, 0.5^2)$, $n = 30$에서 세 통계량 — Pearson $r$, Spearman $\rho$, 그리고 $|x_i - \text{med}(x)|$와 $y$의 상관 — 을 쓰는 순열검정의 검정력을 비교하라.
 
 </div>

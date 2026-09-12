@@ -189,7 +189,7 @@ def bootstrap_vs_permutation_comparison(x, y, B=9999, rng=None):
 
 <div class="drillbox" markdown>
 
-**연습문제 1.** 포함확률 모의실험을 $n = 30$ 대신 $n = 100$으로 실행하라. 표본크기를 늘리면 백분위수법의 포함확률이 어떻게 변하는가? 중심극한정리로 설명하라.
+**연습문제 1.** <span class="diff med" title="중간"></span> 포함확률 모의실험을 $n = 30$ 대신 $n = 100$으로 실행하라. 표본크기를 늘리면 백분위수법의 포함확률이 어떻게 변하는가? 중심극한정리로 설명하라.
 
 </div>
 
@@ -250,7 +250,7 @@ def bootstrap_vs_permutation_comparison(x, y, B=9999, rng=None):
 
 <div class="drillbox" markdown>
 
-**연습문제 2.** `permutation_test_two_sample`을 원래의 평균차 대신 Welch $t$ 통계량을 쓰도록 수정하라. 분산이 다른 자료 $X \sim N(5, 1)$, $Y \sim N(5, 3^2)$에 $n_x = 20$, $n_y = 50$으로 두 버전을 적용하고 제1종 오류율과 검정력을 비교하라.
+**연습문제 2.** <span class="diff med" title="중간"></span> `permutation_test_two_sample`을 원래의 평균차 대신 Welch $t$ 통계량을 쓰도록 수정하라. 분산이 다른 자료 $X \sim N(5, 1)$, $Y \sim N(5, 3^2)$에 $n_x = 20$, $n_y = 50$으로 두 버전을 적용하고 제1종 오류율과 검정력을 비교하라.
 
 </div>
 
@@ -305,7 +305,7 @@ def bootstrap_vs_permutation_comparison(x, y, B=9999, rng=None):
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** 대응 순열검정은 차이 $d_i$의 부호를 무작위로 뒤집는다. $n$쌍이면 서로 다른 순열이 몇 개인가? $n = 10$에서 전부 열거하는 것이 가능한가? 완전 열거로 정확 $p$값을 계산하는 코드를 작성하라.
+**연습문제 3.** <span class="diff easy" title="쉬움"></span> 대응 순열검정은 차이 $d_i$의 부호를 무작위로 뒤집는다. $n$쌍이면 서로 다른 순열이 몇 개인가? $n = 10$에서 전부 열거하는 것이 가능한가? 완전 열거로 정확 $p$값을 계산하는 코드를 작성하라.
 
 </div>
 
@@ -362,7 +362,7 @@ def bootstrap_vs_permutation_comparison(x, y, B=9999, rng=None):
 
 <div class="drillbox" markdown>
 
-**연습문제 4.** 붓스트랩-순열 비교에서 $0$을 제외하는 붓스트랩 신뢰구간과 $\alpha = 0.05$에서 기각하는 순열검정이 일치해야 한다고 했다. 두 결과가 어긋나는 상황을 구성하라.
+**연습문제 4.** <span class="diff med" title="중간"></span> 붓스트랩-순열 비교에서 $0$을 제외하는 붓스트랩 신뢰구간과 $\alpha = 0.05$에서 기각하는 순열검정이 일치해야 한다고 했다. 두 결과가 어긋나는 상황을 구성하라.
 
 </div>
 
@@ -403,7 +403,7 @@ def bootstrap_vs_permutation_comparison(x, y, B=9999, rng=None):
 
 <div class="drillbox" markdown>
 
-**연습문제 5.** Pearson 상관에 대한 순열검정에서 $x$를 고정한 채 $y$를 순열하는 것이 올바른 귀무분포를 생성함을 증명하라. 구체적으로, $(x_i, y_i)$가 독립이라는 가정 아래 $H_0\colon \rho = 0$에서 결합분포가 $y$값의 순열에 대해 불변임을 보여라.
+**연습문제 5.** <span class="diff hard" title="어려움"></span> Pearson 상관에 대한 순열검정에서 $x$를 고정한 채 $y$를 순열하는 것이 올바른 귀무분포를 생성함을 증명하라. 구체적으로, $(x_i, y_i)$가 독립이라는 가정 아래 $H_0\colon \rho = 0$에서 결합분포가 $y$값의 순열에 대해 불변임을 보여라.
 
 </div>
 

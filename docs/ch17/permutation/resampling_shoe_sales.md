@@ -160,7 +160,7 @@ def bootstrap_ci(before, after, n_boot=100_000, ci=95, rng=None):
 
 <div class="drillbox" markdown>
 
-**연습문제 1.** 위의 단측 순열검정을 양측검정으로 바꾸어라. 신발 판매 자료에서 다시 실행하고 단측 버전과 $p$값을 비교하라.
+**연습문제 1.** <span class="diff med" title="중간"></span> 위의 단측 순열검정을 양측검정으로 바꾸어라. 신발 판매 자료에서 다시 실행하고 단측 버전과 $p$값을 비교하라.
 
 </div>
 
@@ -196,7 +196,7 @@ def bootstrap_ci(before, after, n_boot=100_000, ci=95, rng=None):
 
 <div class="drillbox" markdown>
 
-**연습문제 2.** 자료는 대응자료이다(같은 주의 전후). 주별 차이 $d_i = x_i^{\text{후}} - x_i^{\text{전}}$의 부호를 무작위로 뒤집는 대응 순열검정을 구현하라. 비대응 검정과 $p$값을 비교하라.
+**연습문제 2.** <span class="diff med" title="중간"></span> 자료는 대응자료이다(같은 주의 전후). 주별 차이 $d_i = x_i^{\text{후}} - x_i^{\text{전}}$의 부호를 무작위로 뒤집는 대응 순열검정을 구현하라. 비대응 검정과 $p$값을 비교하라.
 
 </div>
 
@@ -256,7 +256,7 @@ def bootstrap_ci(before, after, n_boot=100_000, ci=95, rng=None):
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** 위의 붓스트랩 신뢰구간은 백분위수법을 쓴다. **기본 붓스트랩 신뢰구간**(추축법)을 구현하고 백분위수 구간과 비교하라.
+**연습문제 3.** <span class="diff med" title="중간"></span> 위의 붓스트랩 신뢰구간은 백분위수법을 쓴다. **기본 붓스트랩 신뢰구간**(추축법)을 구현하고 백분위수 구간과 비교하라.
 
 $$
 \text{CI} = \bigl(2\hat\theta - q_{1-\alpha/2},\;\; 2\hat\theta - q_{\alpha/2}\bigr)
@@ -301,7 +301,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 4.** 회사가 주당 최소 $2$켤레의 상승을 $80$% 검정력으로 탐지하고자 한다. 모의실험으로 순열검정에 필요한 표본크기(집단당 주 수)를 $\alpha = 0.05$에서 추정하라.
+**연습문제 4.** <span class="diff med" title="중간"></span> 회사가 주당 최소 $2$켤레의 상승을 $80$% 검정력으로 탐지하고자 한다. 모의실험으로 순열검정에 필요한 표본크기(집단당 주 수)를 $\alpha = 0.05$에서 추정하라.
 
 </div>
 
@@ -362,7 +362,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 5.** 교환가능성이라는 귀무가설이 성립할 때 순열검정이 제1종 오류를 통제함을 증명하라. 즉 모든 $\alpha \in (0,1)$에 대해 $P(p \le \alpha \mid H_0) \le \alpha$임을 보여라.
+**연습문제 5.** <span class="diff hard" title="어려움"></span> 교환가능성이라는 귀무가설이 성립할 때 순열검정이 제1종 오류를 통제함을 증명하라. 즉 모든 $\alpha \in (0,1)$에 대해 $P(p \le \alpha \mid H_0) \le \alpha$임을 보여라.
 
 </div>
 

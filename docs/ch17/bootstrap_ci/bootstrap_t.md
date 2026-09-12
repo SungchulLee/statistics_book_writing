@@ -59,7 +59,7 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** 평균의 붓스트랩-t 구간. $n = 20$인 표본에서 $\bar{x} = 7.3$, $s = 2.1$을 얻어 $\hat{\text{se}} = s/\sqrt{n} = 0.470$이라 하자.
+**보기 1.** <span class="diff easy" title="쉬움"></span> 평균의 붓스트랩-t 구간. $n = 20$인 표본에서 $\bar{x} = 7.3$, $s = 2.1$을 얻어 $\hat{\text{se}} = s/\sqrt{n} = 0.470$이라 하자.
 
 **붓스트랩-$t$ 절차:**
 
@@ -97,7 +97,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 붓스트랩-$t$가 정말로 백분위수법보다 나은지 확인하라. $\text{Exp}(1)$ 자료의 평균(참값 $=1$)에 대해 $n = 15, 30, 100$에서 포함확률과 구간 폭을 비교하라.
 
 </div>
@@ -155,7 +155,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 "꼬리가 불안정하다"는 한계를 실제로 보라. $n = 8$인 지수 자료에서 $t^*$ 분포가 어떻게 되는가?
 
 </div>
@@ -227,7 +227,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff hard" title="어려움"></span>
 붓스트랩-$t$ 구간의 분위수 반전이 왜 일어나는지 추축량 부등식에서 유도하라.
 
 </div>
@@ -271,7 +271,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 스튜던트화를 하지 않으면 무엇을 잃는가? 같은 붓스트랩 복제값에서 $(\hat\theta^* - \hat\theta)$의 분위수만 쓰는 기본 구간과 붓스트랩-$t$를 비교하라.
 
 </div>

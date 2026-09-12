@@ -142,7 +142,7 @@ print(np.median(income), se_med, bias)   # 31508  1912  269
 
 <div class="drillbox" markdown>
 
-**연습문제 1.** 표준정규분포에서 크기 $n = 40$인 표본을 뽑아라. $H_0\colon \mu = 0$에 대해 일표본 붓스트랩 검정을 수행하고, $H_0\colon \mu = 0.5$에 대해서도 반복하라. $p$값을 보고하고 결과가 다른 이유를 설명하라.
+**연습문제 1.** <span class="diff easy" title="쉬움"></span> 표준정규분포에서 크기 $n = 40$인 표본을 뽑아라. $H_0\colon \mu = 0$에 대해 일표본 붓스트랩 검정을 수행하고, $H_0\colon \mu = 0.5$에 대해서도 반복하라. $p$값을 보고하고 결과가 다른 이유를 설명하라.
 
 </div>
 
@@ -185,7 +185,7 @@ print(np.median(income), se_med, bias)   # 31508  1912  269
 
 <div class="drillbox" markdown>
 
-**연습문제 2.** 코드의 이표본 붓스트랩 검정은 합쳐진 자료에서 *복원*추출한다. 라벨을 *비복원*으로 섞는 순열검정과 개념적으로 어떻게 다른지 설명하라. 두 접근이 비슷한 $p$값을 주는 조건은 무엇인가?
+**연습문제 2.** <span class="diff med" title="중간"></span> 코드의 이표본 붓스트랩 검정은 합쳐진 자료에서 *복원*추출한다. 라벨을 *비복원*으로 섞는 순열검정과 개념적으로 어떻게 다른지 설명하라. 두 접근이 비슷한 $p$값을 주는 조건은 무엇인가?
 
 </div>
 
@@ -211,7 +211,7 @@ print(np.median(income), se_med, bias)   # 31508  1912  269
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** 중앙값의 붓스트랩 편향 공식을 유도하라. 중앙값의 붓스트랩 분포가 표본중앙값 $\tilde x$에 대해 대칭이면 편향이 $0$임을 보여라.
+**연습문제 3.** <span class="diff hard" title="어려움"></span> 중앙값의 붓스트랩 편향 공식을 유도하라. 중앙값의 붓스트랩 분포가 표본중앙값 $\tilde x$에 대해 대칭이면 편향이 $0$임을 보여라.
 
 </div>
 
@@ -248,7 +248,7 @@ print(np.median(income), se_med, bias)   # 31508  1912  269
 
 <div class="drillbox" markdown>
 
-**연습문제 4.** $\text{Gamma}(2, 1)$ 분포에서 $200$개의 관측을 생성하라. 붓스트랩으로 평균과 중앙값의 표준오차를 모두 추정하고, 평균의 이론적 표준오차 $\sigma/\sqrt{n}$과 비교하라. 중앙값에는 왜 유사한 공식이 없는가?
+**연습문제 4.** <span class="diff easy" title="쉬움"></span> $\text{Gamma}(2, 1)$ 분포에서 $200$개의 관측을 생성하라. 붓스트랩으로 평균과 중앙값의 표준오차를 모두 추정하고, 평균의 이론적 표준오차 $\sigma/\sqrt{n}$과 비교하라. 중앙값에는 왜 유사한 공식이 없는가?
 
 </div>
 
@@ -303,7 +303,7 @@ print(np.median(income), se_med, bias)   # 31508  1912  269
 
 <div class="drillbox" markdown>
 
-**연습문제 5.** 일표본 붓스트랩 검정이 일치성을 가짐을 증명하라. 즉 $\mu \neq \mu_0$이면 $n \to \infty$에서 $p$값이 $0$으로 수렴함을 보여라. (힌트: $|\bar x - \mu_0|$의 거동과 중심화된 자료에서의 $|\bar x^* - \mu_0|$의 붓스트랩 분포를 생각하라.)
+**연습문제 5.** <span class="diff hard" title="어려움"></span> 일표본 붓스트랩 검정이 일치성을 가짐을 증명하라. 즉 $\mu \neq \mu_0$이면 $n \to \infty$에서 $p$값이 $0$으로 수렴함을 보여라. (힌트: $|\bar x - \mu_0|$의 거동과 중심화된 자료에서의 $|\bar x^* - \mu_0|$의 붓스트랩 분포를 생각하라.)
 
 </div>
 

@@ -140,7 +140,7 @@ BCa 구간은 표준적인 2.5와 97.5 백분위수 대신 붓스트랩 분포�
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 **백분위수** 구간과 **BCa** 구간의 차이를 설명하라. BCa 구간이 백분위수 구간과 크게 달라지는 것은 언제인가?
 
 </div>
@@ -205,7 +205,7 @@ BCa 구간은 표준적인 2.5와 97.5 백분위수 대신 붓스트랩 분포�
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 BCa가 백분위수보다 실제로 나은지 모의실험으로 확인하라. $\text{Exp}(1)$ 자료의 분산(참값 $=1$)에 대해 $n = 20, 50, 200$에서 포함확률을 비교하라.
 
 </div>
@@ -264,7 +264,7 @@ BCa가 백분위수보다 실제로 나은지 모의실험으로 확인하라. $
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 BCa의 가속 $\hat{a}$는 잭나이프로 추정한다. 잭나이프가 실패하는 통계량에서는 어떻게 되는가?
 중앙값에 대해 $\hat{a}$를 계산해 보라.
 
@@ -341,7 +341,7 @@ BCa의 가속 $\hat{a}$는 잭나이프로 추정한다. 잭나이프가 실패�
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 BCa 구간의 변환 불변성을 수치로 확인하라. $\hat z_0$과 $\hat a$가 변환에 따라 어떻게 되는가?
 
 </div>
