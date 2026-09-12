@@ -4,7 +4,7 @@
 
 <div class="defn" markdown>
 
-**정의 1.** [사영(일반)]
+### 정의 1. 사영(일반) { .dfn }
 
 정사각행렬 $\mathbf{P} \in \mathbb{R}^{n \times n}$이
 

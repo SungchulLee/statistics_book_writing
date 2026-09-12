@@ -10,7 +10,7 @@
 
 <div class="defn" markdown>
 
-**정의 1.** [Bernoulli 분포]
+### 정의 1. Bernoulli 분포 { .dfn }
 
 확률변수 $X$가 확률 $p$로 값 1(성공)을, 확률 $1 - p$로 값 0(실패)을 가지면 $X$는 Bernoulli 분포를 따른다:
 
@@ -46,7 +46,7 @@ $$
 
 <div class="defn" markdown>
 
-**정의 2.** [Binomial 분포]
+### 정의 2. Binomial 분포 { .dfn }
 
 $X_1, X_2, \ldots, X_n$이 독립인 $\text{Bernoulli}(p)$ 확률변수이면, $Y = \sum_{i=1}^n X_i$는 **Binomial 분포**를 따른다:
 

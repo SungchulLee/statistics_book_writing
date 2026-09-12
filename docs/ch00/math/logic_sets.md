@@ -7,7 +7,7 @@
 
 <div class="defn" markdown>
 
-**정의 1.** [명제와 연결사]
+### 정의 1. 명제와 연결사 { .dfn }
 
 **명제(proposition)** 는 참이거나 거짓인 서술문이다. 기본 연결사는 다음과 같다.
 
@@ -25,7 +25,7 @@
 
 <div class="defn" markdown>
 
-**정의 2.** [집합과 집합 연산]
+### 정의 2. 집합과 집합 연산 { .dfn }
 
 **집합(set)** 은 서로 구별되는 대상들의 순서 없는 모임이다. "$x$가 $A$의 원소이다"를 $x \in A$로 쓴다. 공집합은 $\emptyset$이다. 부분집합은 $A \subseteq B$로 쓴다. 표준적인 연산은 다음과 같다.
 
@@ -43,7 +43,7 @@ $$
 
 <div class="defn" markdown>
 
-**정의 3.** [함수]
+### 정의 3. 함수 { .dfn }
 
 **함수(function)** $f: A \to B$는 각 $x \in A$에 정확히 하나의 $f(x) \in B$를 대응시킨다. $A$를 정의역, $B$를 공역이라 한다. **상(image)** 은 $f(A) = \{f(x) : x \in A\} \subseteq B$이다. 함수가
 

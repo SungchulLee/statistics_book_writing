@@ -6,7 +6,7 @@
 
 <div class="defn" markdown>
 
-**정의 1.** [Bessel 수정 표본분산]
+### 정의 1. Bessel 수정 표본분산 { .dfn }
 
 **Bessel 수정 표본분산**은:
 

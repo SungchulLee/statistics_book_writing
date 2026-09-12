@@ -4,7 +4,7 @@
 
 <div class="defn" markdown>
 
-**정의 1.** [닮은 행렬]
+### 정의 1. 닮은 행렬 { .dfn }
 
 두 정사각행렬 $\mathbf{A}, \mathbf{B} \in \mathbb{R}^{n \times n}$이 **닮았다**는 것은 가역행렬 $\mathbf{P} \in \mathbb{R}^{n \times n}$이 존재하여
 

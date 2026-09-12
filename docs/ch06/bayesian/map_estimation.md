@@ -4,7 +4,7 @@
 
 <div class="defn" markdown>
 
-**정의 1.** [MAP 추정량]
+### 정의 1. MAP 추정량 { .dfn }
 
 MAP 추정량은 사후밀도를 최대화하는 모수값을 고른다:
 

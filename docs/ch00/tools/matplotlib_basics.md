@@ -4,7 +4,7 @@ Matplotlib은 파이썬에서 그림을 그리는 토대가 되는 라이브러�
 
 <div class="defn" markdown>
 
-**정의 1.** [Figure와 Axes]
+### 정의 1. Figure와 Axes { .dfn }
 
 모든 Matplotlib 그림은 하나 이상의 **`Axes`** 객체(각각이 개별 패널이다)를 담고 있는 **`Figure`** 안에 존재한다. 이들을 만드는 권장 방식은 다음과 같다.
 

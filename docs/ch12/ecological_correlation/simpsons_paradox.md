@@ -6,7 +6,7 @@
 
 <div class="defn" markdown>
 
-**정의 1.** [Simpson의 역설]
+### 정의 1. Simpson의 역설 { .dfn }
 
 **Simpson의 역설**은 제3의 변수로 조건화(층화)한 뒤 두 변수 사이 연관의 방향이 뒤집힐 때 일어난다. 형식적으로 모든 $z$에 대해
 

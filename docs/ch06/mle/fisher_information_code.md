@@ -6,7 +6,7 @@
 
 <div class="defn" markdown>
 
-**정의 1.** [점수함수와 Fisher 정보량]
+### 정의 1. 점수함수와 Fisher 정보량 { .dfn }
 
 $X$의 밀도(또는 PMF)가 $f(x; \theta)$라 하자. **점수함수**는:
 

@@ -10,7 +10,7 @@
 
 <div class="defn" markdown>
 
-**정의 1.** [공분산]
+### 정의 1. 공분산 { .dfn }
 
 $$
 \text{Cov}(X, Y) = E[(X - \mu_X)(Y - \mu_Y)] = E[XY] - E[X]E[Y]
@@ -67,7 +67,7 @@ $$
 
 <div class="defn" markdown>
 
-**정의 2.** [Pearson 상관계수]
+### 정의 2. Pearson 상관계수 { .dfn }
 
 **Pearson 상관계수**는 공분산을 표준편차로 나누어 표준화한다:
 

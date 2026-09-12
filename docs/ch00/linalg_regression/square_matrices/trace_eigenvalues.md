@@ -6,7 +6,7 @@
 
 <div class="defn" markdown>
 
-**정의 1.** [대각합]
+### 정의 1. 대각합 { .dfn }
 
 정사각행렬 $\mathbf{A} \in \mathbb{R}^{n \times n}$의 **대각합(trace)** 은 대각 성분의 합이다.
 

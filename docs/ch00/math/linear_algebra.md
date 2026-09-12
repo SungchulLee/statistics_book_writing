@@ -7,7 +7,7 @@
 
 <div class="defn" markdown>
 
-**정의 1.** [벡터와 행렬]
+### 정의 1. 벡터와 행렬 { .dfn }
 
 벡터는 열벡터 $\mathbf{x} \in \mathbb{R}^n$이며 굵은 소문자로 쓴다. 행렬은 $\mathbf{A} \in \mathbb{R}^{m \times n}$이며 굵은 대문자로 쓴다. 전치는 $\mathbf{A}^T$, 역행렬은(존재할 때) $\mathbf{A}^{-1}$로 나타낸다. 단위행렬은 $\mathbf{I}_n$, 영행렬은 $\mathbf{0}$이다.
 
@@ -15,7 +15,7 @@
 
 <div class="defn" markdown>
 
-**정의 2.** [핵심 연산]
+### 정의 2. 핵심 연산 { .dfn }
 
 $$
 \mathbf{x}^T \mathbf{y} = \sum_{i=1}^n x_i y_i, \qquad \|\mathbf{x}\| = \sqrt{\mathbf{x}^T \mathbf{x}}, \qquad [\mathbf{A}\mathbf{B}]_{ij} = \sum_{\ell} a_{i\ell} b_{\ell j}
@@ -27,7 +27,7 @@ $$
 
 <div class="defn" markdown>
 
-**정의 3.** [계획행렬]
+### 정의 3. 계획행렬 { .dfn }
 
 **계획행렬(design matrix)** $\mathbf{X} \in \mathbb{R}^{n \times p}$는 $p$개 예측변수에 대한 $n$개의 관측을 행 방향으로 쌓은 것이다. $i$번째 행에는 관측 $i$의 예측변수 값이 들어 있다. $\mathbf{X}$의 열공간은 $p$개 열의 모든 선형결합으로 이루어진 집합, 즉 최소제곱으로 도달할 수 있는 적합값의 공간이다.
 
@@ -35,7 +35,7 @@ $$
 
 <div class="defn" markdown>
 
-**정의 4.** [계수, 영공간, 네 가지 기본 부분공간]
+### 정의 4. 계수, 영공간, 네 가지 기본 부분공간 { .dfn }
 
 $\mathbf{A} \in \mathbb{R}^{m \times n}$에 대해:
 

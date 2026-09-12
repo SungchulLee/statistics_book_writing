@@ -11,7 +11,7 @@
 
 <div class="defn" markdown>
 
-**정의 1.** [추정량의 편향]
+### 정의 1. 추정량의 편향 { .dfn }
 
 $\hat{\theta}$를 확률표본 $X_1, X_2, \ldots, X_n$에 기반한 모수 $\theta$의 추정량이라 하자. $\hat{\theta}$의 **편향**은 다음과 같이 정의된다:
 
@@ -30,7 +30,7 @@ $\text{Bias}(\hat{\theta}) = 0$이면, 즉 $E[\hat{\theta}] = \theta$이면 추�
 
 <div class="defn" markdown>
 
-**정의 2.** [추정량의 분산]
+### 정의 2. 추정량의 분산 { .dfn }
 
 추정량 $\hat{\theta}$의 **분산**은 표본이 달라질 때 그것이 얼마나 요동치는지를 잰다:
 

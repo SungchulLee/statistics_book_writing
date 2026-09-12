@@ -22,7 +22,7 @@ Spearman 상관의 핵심 착상은 간단하다. 각 관측값을 그 순위로
 
 <div class="defn" markdown>
 
-**정의 1.** [Spearman 순위상관계수]
+### 정의 1. Spearman 순위상관계수 { .dfn }
 
 **Spearman 순위상관계수** $r_s$는
 

@@ -4,7 +4,7 @@
 
 <div class="defn" markdown>
 
-**정의 1.** [대각화 가능 행렬]
+### 정의 1. 대각화 가능 행렬 { .dfn }
 
 정사각행렬 $\mathbf{A} \in \mathbb{R}^{n \times n}$이 대각행렬과 닮았으면 **대각화 가능(diagonalizable)** 하다고 한다. 즉 가역행렬 $\mathbf{P} \in \mathbb{R}^{n \times n}$과 대각행렬 $\boldsymbol{\Lambda} = \operatorname{diag}(\lambda_1, \dots, \lambda_n)$이 존재하여
 

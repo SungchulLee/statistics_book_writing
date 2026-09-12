@@ -4,7 +4,7 @@
 
 <div class="defn" markdown>
 
-**정의 1.** [켤레 사전분포]
+### 정의 1. 켤레 사전분포 { .dfn }
 
 $x = (x_1, \ldots, x_n)$을 가능도가 $f(x \mid \theta)$인 분포에서 얻은 i.i.d. 표본이라 하자. 사전분포족 $\mathcal{F}$가 가능도 $f(x \mid \theta)$에 대해 **켤레**라는 것은, 모든 사전분포 $\pi(\theta) \in \mathcal{F}$에 대해 사후분포 $\pi(\theta \mid x) \in \mathcal{F}$임을 뜻한다.
 

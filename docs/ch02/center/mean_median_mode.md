@@ -236,7 +236,7 @@ print(f"{'중앙값':10}{median_income:>14,.0f}{median_outliers:>18,.0f}"
 
 <div class="defn" markdown>
 
-**정의 1.** [절단평균]
+### 정의 1. 절단평균 { .dfn }
 
 $x_{(1)} \le x_{(2)} \le \cdots \le x_{(n)}$으로 정렬된 관측값 $n$개의 자료에서 $p$-절단평균은 각 꼬리에서 $\lceil p \cdot n / 2 \rceil$개의 관측값을 제거하고 남은 값들의 평균을 낸다.
 

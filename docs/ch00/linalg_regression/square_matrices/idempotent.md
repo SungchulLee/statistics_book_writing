@@ -4,7 +4,7 @@
 
 <div class="defn" markdown>
 
-**정의 1.** [멱등행렬]
+### 정의 1. 멱등행렬 { .dfn }
 
 정사각행렬 $\mathbf{A} \in \mathbb{R}^{n \times n}$이
 

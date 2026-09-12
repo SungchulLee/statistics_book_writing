@@ -24,7 +24,7 @@ $$
 
 <div class="defn" markdown>
 
-**정의 1.** [모형선택 일치성]
+### 정의 1. 모형선택 일치성 { .dfn }
 
 라쏘가 **모형선택 일치성**을 갖는다는 것은 $P\bigl(\hat{S}(\lambda_n) = S^*\bigr) \to 1$이 되는 $\lambda_n$의 열이 존재한다는 뜻이다.
 

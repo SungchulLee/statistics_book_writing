@@ -4,7 +4,7 @@
 
 <div class="defn" markdown>
 
-**정의 1.** [지도학습]
+### 정의 1. 지도학습 { .dfn }
 
 $(\mathbf{X}, Y)$가 $\mathbf{X} \in \mathcal{X} \subseteq \mathbb{R}^p$, $Y \in \mathcal{Y}$인 결합분포를 갖는 확률변수라고 하자. 이 결합분포에서 i.i.d.로 뽑은 훈련 표본 $\mathcal{D}_n = \{(\mathbf{x}_i, y_i)\}_{i=1}^n$을 관측하고, **기대손실**(또는 **위험**)
 

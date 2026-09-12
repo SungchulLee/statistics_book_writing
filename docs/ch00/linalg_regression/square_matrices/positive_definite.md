@@ -4,7 +4,7 @@
 
 <div class="defn" markdown>
 
-**정의 1.** [양정치와 양반정치]
+### 정의 1. 양정치와 양반정치 { .dfn }
 
 대칭행렬 $\mathbf{A} \in \mathbb{R}^{n \times n}$이
 
@@ -53,7 +53,7 @@
 
 <div class="defn" markdown>
 
-**정의 2.** [촐레스키 분해]
+### 정의 2. 촐레스키 분해 { .dfn }
 
 양정치행렬 $\mathbf{A}$의 **촐레스키 분해**는 유일한 인수분해
 

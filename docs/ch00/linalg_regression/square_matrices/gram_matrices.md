@@ -4,7 +4,7 @@
 
 <div class="defn" markdown>
 
-**정의 1.** [그람 행렬]
+### 정의 1. 그람 행렬 { .dfn }
 
 $\mathbf{v}_1, \mathbf{v}_2, \dots, \mathbf{v}_p \in \mathbb{R}^n$을 벡터들의 모임이라 하고, 이 벡터들을 열로 갖는 행렬을 $\mathbf{X} = (\mathbf{v}_1 \mid \mathbf{v}_2 \mid \cdots \mid \mathbf{v}_p) \in \mathbb{R}^{n \times p}$이라 하자. **그람 행렬**은
 

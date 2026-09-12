@@ -7,7 +7,7 @@
 
 <div class="defn" markdown>
 
-**정의 1.** [수열의 수렴]
+### 정의 1. 수열의 수렴 { .dfn }
 
 $\mathbb{R}$ 안의 수열 $(a_n)_{n \ge 1}$이 $L \in \mathbb{R}$로 **수렴한다**는 것은($a_n \to L$ 또는 $\lim_{n \to \infty} a_n = L$로 쓴다)
 
@@ -23,7 +23,7 @@ $$
 
 <div class="defn" markdown>
 
-**정의 2.** [급수의 수렴]
+### 정의 2. 급수의 수렴 { .dfn }
 
 급수 $\sum_{n=1}^\infty a_n$이 $S$로 수렴한다는 것은 부분합 $S_N = \sum_{n=1}^N a_n$이 $S$로 수렴한다는 뜻이다. 판정법으로는 비교, 비율, 근, 적분, 교대급수 판정법이 있다.
 
@@ -31,7 +31,7 @@ $$
 
 <div class="defn" markdown>
 
-**정의 3.** [큰-O와 작은-o]
+### 정의 3. 큰-O와 작은-o { .dfn }
 
 수열(및 $n$의 함수)에 대해,
 

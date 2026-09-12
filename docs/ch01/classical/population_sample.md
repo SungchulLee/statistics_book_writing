@@ -4,7 +4,7 @@
 
 <div class="defn" markdown>
 
-**정의 1.** [모집단과 표본]
+### 정의 1. 모집단과 표본 { .dfn }
 
 **모집단(population)** 은 관심 대상이 되는 개체 또는 관측값의 전체 집합이다. **표본(sample)** 은 측정을 위해 선택된 모집단의 부분집합이다. 모집단에 대한 양은 **모수(parameter)** 이고($\mu$, $\sigma^2$, $p$, $\beta$로 표기), 표본에 대한 양은 **통계량(statistic)** 이다($\bar{x}$, $s^2$, $\hat{p}$, $\hat\beta$로 표기).
 

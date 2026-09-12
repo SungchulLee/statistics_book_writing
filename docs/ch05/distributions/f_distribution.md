@@ -8,7 +8,7 @@
 
 <div class="defn" markdown>
 
-**정의 1.** [F 분포]
+### 정의 1. F 분포 { .dfn }
 
 $X_1^2 \sim \chi^2_{d_1}$과 $X_2^2 \sim \chi^2_{d_2}$가 독립이라 하자. 그러면:
 

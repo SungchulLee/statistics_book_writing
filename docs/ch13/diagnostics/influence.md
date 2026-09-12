@@ -13,7 +13,7 @@
 
 <div class="defn" markdown>
 
-**정의 1.** [Cook 거리]
+### 정의 1. Cook 거리 { .dfn }
 
 각 관측값 $i$에 대해 Cook 거리 $D_i$는
 

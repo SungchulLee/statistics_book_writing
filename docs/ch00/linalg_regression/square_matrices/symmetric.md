@@ -4,7 +4,7 @@ $\mathbf{A} = \mathbf{A}^T$를 만족하는 대칭행렬은 통계에서 가장 
 
 <div class="defn" markdown>
 
-**정의 1.** [대칭행렬]
+### 정의 1. 대칭행렬 { .dfn }
 
 정사각행렬 $\mathbf{A} \in \mathbb{R}^{n \times n}$이
 

@@ -11,7 +11,7 @@
 
 <div class="defn" markdown>
 
-**정의 1.** [가능도함수]
+### 정의 1. 가능도함수 { .dfn }
 
 $X_1, X_2, \ldots, X_n$을 확률밀도함수(또는 질량함수)가 $f(x; \theta)$인 분포에서 뽑은 확률표본이라 하고, $\theta \in \Theta$를 미지 모수(벡터일 수도 있다)라 하자. 자료 $x_1, x_2, \ldots, x_n$을 관측한 뒤 **가능도함수**는:
 
@@ -29,7 +29,7 @@ $$L(\theta) = L(\theta; x_1, \ldots, x_n) = \prod_{i=1}^n f(x_i; \theta)$$
 
 <div class="defn" markdown>
 
-**정의 2.** [로그가능도함수]
+### 정의 2. 로그가능도함수 { .dfn }
 
 가능도가 여러 항의 곱이므로 거의 언제나 **로그가능도**로 작업하는 편이 편리하다:
 
@@ -48,7 +48,7 @@ $$\ell(\theta) = \log L(\theta) = \sum_{i=1}^n \log f(x_i; \theta)$$
 
 <div class="defn" markdown>
 
-**정의 3.** [최대가능도추정량]
+### 정의 3. 최대가능도추정량 { .dfn }
 
 **최대가능도추정량(MLE)**은 가능도함수를 최대화하는 $\theta$ 값이다:
 

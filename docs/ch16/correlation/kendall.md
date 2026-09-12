@@ -17,7 +17,7 @@ $n$개의 대응 관측값 $(X_1, Y_1), \ldots, (X_n, Y_n)$에서 $i < j$인 모
 
 <div class="defn" markdown>
 
-**정의 1.** [Kendall tau-a (동점 없음)]
+### 정의 1. Kendall tau-a (동점 없음) { .dfn }
 
 동점이 없을 때
 
@@ -31,7 +31,7 @@ $$
 
 <div class="defn" markdown>
 
-**정의 2.** [Kendall tau-b (동점 있음)]
+### 정의 2. Kendall tau-b (동점 있음) { .dfn }
 
 동점이 있으면 tau-b가 분모를 조정한다.
 

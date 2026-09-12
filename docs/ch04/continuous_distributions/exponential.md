@@ -10,7 +10,7 @@
 
 <div class="defn" markdown>
 
-**정의 1.** [Exponential 분포]
+### 정의 1. Exponential 분포 { .dfn }
 
 확률변수 $X$가 비율 모수 $\lambda > 0$인 Exponential 분포를 따른다는 것은 다음을 뜻한다:
 

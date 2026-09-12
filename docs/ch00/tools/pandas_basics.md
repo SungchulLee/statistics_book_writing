@@ -4,7 +4,7 @@ pandas는 구조화된 자료를 불러오고, 정제하고, 변환하고, 요�
 
 <div class="defn" markdown>
 
-**정의 1.** [Series와 DataFrame]
+### 정의 1. Series와 DataFrame { .dfn }
 
 **`Series`** 는 1차원의 이름표 붙은 배열, 즉 값과 인덱스의 조합이다. **`DataFrame`** 은 2차원 표로, 각 열이 하나의 `Series`이며 서로 자료형이 다를 수 있지만 모두 같은 행 인덱스를 공유한다. 개념적으로 DataFrame은 열들의 사전이고, 기계적으로는 각 열이 NumPy 배열로 뒷받침된다.
 

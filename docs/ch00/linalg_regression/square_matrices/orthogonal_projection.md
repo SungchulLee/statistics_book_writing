@@ -4,7 +4,7 @@
 
 <div class="defn" markdown>
 
-**정의 1.** [직교사영행렬]
+### 정의 1. 직교사영행렬 { .dfn }
 
 정사각행렬 $\mathbf{P} \in \mathbb{R}^{n \times n}$이 멱등이면서 대칭이면 **직교사영행렬**이라 한다.
 

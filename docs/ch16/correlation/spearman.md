@@ -4,7 +4,7 @@ Spearman 순위상관계수 $r_s$는 [12장](../../ch12/correlation/spearman.md)
 
 <div class="defn" markdown>
 
-**정의 1.** [Spearman 순위상관계수]
+### 정의 1. Spearman 순위상관계수 { .dfn }
 
 대응 관측값 $(X_1, Y_1), (X_2, Y_2), \ldots, (X_n, Y_n)$이 주어졌을 때, $R_i$를 $X_1, \ldots, X_n$ 안에서 $X_i$의 순위, $S_i$를 $Y_1, \ldots, Y_n$ 안에서 $Y_i$의 순위라 하자. Spearman 상관은 순위에 대해 계산한 Pearson 상관이다.
 
