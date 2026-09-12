@@ -22,6 +22,10 @@ $$
 
 ECDF를 모수적 누적분포함수와 비교하는 것은 분포 가정을 평가하는 강력한 진단이다.
 
+<div class="codebox" markdown>
+
+**예제 1.** 경험적 누적분포함수와 이론적 누적분포함수 겹쳐 보기
+
 ```python
 import matplotlib.pyplot as plt
 import numpy as np
@@ -65,11 +69,17 @@ print(f"KS 검정 p값     = {pval:.4f}")
 KS 검정 p값     = 0.9863
 ```
 
+</div>
+
 ![경험적 누적분포함수와 분위수](./img/ecdf_25.png)
 
 경험적 곡선과 이론적 곡선이 가깝게 겹치면 모수 모형이 잘 맞는 것이다. 체계적으로 벗어나면 왜도, 두꺼운 꼬리, 또는 다봉성을 나타낸다.
 
 ### 누적분포함수와 확률밀도함수 나란히 보기
+
+<div class="codebox" markdown>
+
+**예제 2.** 누적분포함수와 확률밀도함수의 관계
 
 ```python
 import matplotlib.pyplot as plt
@@ -107,6 +117,8 @@ CDF(평균)     = 0.5000
 PDF 최댓값    = 0.1995  (x = 0.99)
 P(|X-mu|<3s)  = 0.9973
 ```
+
+</div>
 
 ![경험적 누적분포함수와 분위수](./img/ecdf_50.png)
 
@@ -148,6 +160,10 @@ $$
 
 흔히 쓰는 세 가지 방법이 모두 같은 결과를 낸다.
 
+<div class="codebox" markdown>
+
+**예제 3.** 세 라이브러리의 분위수 함수
+
 ```python
 import pandas as pd
 import numpy as np
@@ -156,14 +172,11 @@ from scipy import stats
 data = {'x': [4, 4, 6, 7, 10, 11, 12, 14, 15]}
 df = pd.DataFrame(data)
 
-# pandas: q in [0, 1]
-print(f"{df.x.quantile(0.75) = }")
-
-# numpy: q in [0, 100]
-print(f"{np.percentile(df.x.values, 75) = }")
-
-# scipy: q in [0, 100]
-print(f"{stats.scoreatpercentile(df.x.values, 75) = }")
+# 같은 75번째 백분위수를 세 라이브러리로 구한다. 인자의 단위가 서로 다르다.
+# 기본 보간법이 셋 다 선형이라 값은 일치한다.
+print(f"{df.x.quantile(0.75) = }")                   # pandas: 비율 [0, 1]
+print(f"{np.percentile(df.x.values, 75) = }")        # numpy: 백분율 [0, 100]
+print(f"{stats.scoreatpercentile(df.x.values, 75) = }")   # scipy: 백분율 [0, 100]
 ```
 
 출력:
@@ -174,9 +187,15 @@ np.percentile(df.x.values, 75) = 12.0
 stats.scoreatpercentile(df.x.values, 75) = 12.0
 ```
 
+</div>
+
 ## 예: 스타벅스 음료의 당 함량
 
 영양학자들이 스타벅스 음료 32종의 당 함량(그램)을 측정했다. 누적상대도수 그래프를 이용하면 다음과 같다.
+
+<div class="codebox" markdown>
+
+**예제 4.** 누적상대도수 곡선에서 백분위수 읽기
 
 ```python
 import numpy as np
@@ -210,6 +229,8 @@ P50 = 25.0 g
 P75 = 38.8 g
 ```
 
+</div>
+
 ![경험적 누적분포함수와 분위수](./img/ecdf_138.png)
 
 **질문과 답:**
@@ -226,17 +247,24 @@ $$
 \text{Min} \quad Q_1 \quad \text{Median} \quad Q_3 \quad \text{Max}
 $$
 
+<div class="codebox" markdown>
+
+**예제 5.** 다섯 수치 요약과 상자그림
+
 ```python
 import numpy as np
 import matplotlib.pyplot as plt
 
 data = np.array([1, 2, 0, 0, 0, 1, 3, 1, 2, 1, 2, 4, 5, -1, -2, 0, 8])
 
+# 다섯 수치 요약은 최소·Q1·중앙값·Q3·최대다. 모두 분위수이므로 q 만 바꿔 부른다.
 quantiles = {"Min": 0, "Q1": 0.25, "Median": 0.5, "Q3": 0.75, "Max": 1}
 
 for label, q in quantiles.items():
     print(f"{label:6} : {np.quantile(data, q)}")
 
+# 상자그림은 이 다섯 수를 그림으로 옮긴 것이다. 상자의 위아래가 Q3와 Q1,
+# 가운데 선이 중앙값이며, 수염 밖에 찍히는 점이 이상치 후보다.
 fig, ax = plt.subplots(figsize=(2, 3))
 ax.boxplot(data)
 ax.set_title("Boxplot of Data")
@@ -253,19 +281,29 @@ Q3     : 2.0
 Max    : 8
 ```
 
+</div>
+
 ## Q-Q 그림: 분위수 대 분위수 비교
 
 **Q-Q 그림**은 관측 자료의 분위수를 이론적 분포의 분위수와 비교한다. 자료가 기준 분포를 따르면 점들이 대각선 기준선을 따라 놓인다.
 
 ### 정규분포에 대한 Q-Q 그림
 
+<div class="codebox" markdown>
+
+**예제 6.** Q-Q 그림을 그리는 함수 만들기
+
 ```python
+"""표본의 분위수를 이론 분포의 분위수에 맞대어 그리는 Q-Q 그림을 만든다."""
 import numpy as np
 import matplotlib.pyplot as plt
 import scipy.stats as stats
 
 def plot_qq(data, dist="norm", sparams=(), figsize=(12, 3)):
+    """자료를 dist 의 분위수에 대해 그린다. 점이 직선 위에 놓이면 그 분포에 맞는다."""
     fig, ax = plt.subplots(figsize=figsize)
+    # sparams 는 분포의 모양모수다. 정규처럼 위치·척도만 있는 분포는 비워 두면
+    # probplot 이 자료에서 추정한다. 카이제곱처럼 모양모수가 있으면 넘겨야 한다.
     stats.probplot(data, dist=dist, sparams=sparams, plot=ax)
     ax.spines[["top", "right"]].set_visible(False)
     ax.set_title('Q-Q Plot')
@@ -275,28 +313,46 @@ def plot_qq(data, dist="norm", sparams=(), figsize=(12, 3)):
 
 np.random.seed(0)
 sample_data = np.random.normal(loc=0, scale=1, size=1000)
-plot_qq(sample_data, dist="norm")
+plot_qq(sample_data, dist="norm")    # 정규 자료를 정규에 맞댄다 — 직선이 나온다
 ```
+
+</div>
 
 ![Q-Q Plot](./img/ecdf_262.png)
 
 ### 지수분포에 대한 Q-Q 그림
 
+<div class="codebox" markdown>
+
+**예제 7.** 지수 자료를 지수 분위수에 맞대기
+
 ```python
+# 지수분포는 오른쪽으로 심하게 치우쳐 있다. 그래도 지수 분위수에 맞대면 직선이 된다.
+# Q-Q 그림이 보는 것은 치우침 자체가 아니라 "가정한 분포와 얼마나 맞는가"이다.
 np.random.seed(0)
 sample_data = np.random.exponential(scale=1, size=1000)
 plot_qq(sample_data, dist="expon")
 ```
 
+</div>
+
 ![지수분포에 대한 Q-Q 그림](./img/ecdf_285.png)
 
 ### 카이제곱분포에 대한 Q-Q 그림
 
+<div class="codebox" markdown>
+
+**예제 8.** 모양모수가 있는 분포의 Q-Q 그림
+
 ```python
+# 카이제곱은 자유도라는 모양모수가 있으므로 sparams=(10,) 으로 알려 주어야 한다.
+# 이 값을 틀리게 주면 자료가 맞는 분포에서 왔더라도 직선에서 벗어난다.
 np.random.seed(0)
 sample_data = np.random.chisquare(df=10, size=1000)
 plot_qq(sample_data, dist="chi2", sparams=(10,))
 ```
+
+</div>
 
 ![카이제곱분포에 대한 Q-Q 그림](./img/ecdf_293.png)
 
@@ -304,11 +360,19 @@ plot_qq(sample_data, dist="chi2", sparams=(10,))
 
 카이제곱 자료를 정규분포 기준으로 그리면 체계적인 휘어짐이 오른쪽 치우침을 드러내어, 정규 모형이 부적절함을 확인해 준다.
 
+<div class="codebox" markdown>
+
+**예제 9.** 분포를 잘못 가정했을 때의 Q-Q 그림
+
 ```python
+# 같은 카이제곱 자료를 이번에는 정규 분위수에 맞댄다.
+# 오른쪽 끝이 직선 위로 휘어 오르는 것이 "정규보다 오른쪽 꼬리가 두껍다"는 신호다.
 np.random.seed(0)
 sample_data = np.random.chisquare(df=10, size=1000)
-plot_qq(sample_data, dist="norm")  # Systematic departure from the line
+plot_qq(sample_data, dist="norm")
 ```
+
+</div>
 
 ![경험적 누적분포함수와 분위수](./img/ecdf_240.png)
 
